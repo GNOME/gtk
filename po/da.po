@@ -28,8 +28,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-07-31 16:57-0400\n"
-"PO-Revision-Date: 2002-07-19 23:26+0200\n"
+"POT-Creation-Date: 2002-09-28 18:17+0200\n"
+"PO-Revision-Date: 2002-09-28 18:17+0200\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -276,16 +276,16 @@ msgstr "Komprimerede ikoner er ikke understøttet"
 msgid "Unsupported icon type"
 msgstr "Ikke-understøttet ikontype"
 
-#: gdk-pixbuf/io-ico.c:499
+#: gdk-pixbuf/io-ico.c:500
 msgid "Not enough memory to load ICO file"
 msgstr "Ikke tilstrækkelig hukommelse til indlæsning af ICO-fil"
 
-#: gdk-pixbuf/io-jpeg.c:126
+#: gdk-pixbuf/io-jpeg.c:111
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Fejl ved fortolkning af JPEG-billedfil (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:307
+#: gdk-pixbuf/io-jpeg.c:346
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -293,11 +293,16 @@ msgstr ""
 "Ikke tilstrækkelig hukommelse til at indlæse billede, prøv at afslutte nogle "
 "programmer for at frigøre hukommelse."
 
-#: gdk-pixbuf/io-jpeg.c:417 gdk-pixbuf/io-jpeg.c:600 gdk-pixbuf/io-jpeg.c:767
+#: gdk-pixbuf/io-jpeg.c:380 gdk-pixbuf/io-jpeg.c:730
+#, c-format
+msgid "Unsupported JPEG color space (%s)"
+msgstr "Ikke-understøttet JPEG-farverum (%s)"
+
+#: gdk-pixbuf/io-jpeg.c:476 gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:844
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Kunne ikke allokere hukommelse til indlæsning af JPEG-fil"
 
-#: gdk-pixbuf/io-jpeg.c:721
+#: gdk-pixbuf/io-jpeg.c:798
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -306,7 +311,7 @@ msgstr ""
 "JPEG-kvalitet skal være en værdi mellem 0 og 100; værdien '%s' kunne ikke "
 "fortolkes."
 
-#: gdk-pixbuf/io-jpeg.c:736
+#: gdk-pixbuf/io-jpeg.c:813
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -1788,64 +1793,64 @@ msgstr "Markér ved fokus"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Om indholdet af indtastningsfeltet markeres når feltet modtager fokus"
 
-#: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Markér alt"
 
-#: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Indtastningsmetoder"
 
-#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr "_Indsæt Unicode-kontroltegn"
 
-#: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
 msgid "Filename"
 msgstr "Filnavn"
 
-#: gtk/gtkfilesel.c:537
+#: gtk/gtkfilesel.c:514
 msgid "The currently selected filename."
 msgstr "Navnet på den aktuelt valgte fil"
 
-#: gtk/gtkfilesel.c:543
+#: gtk/gtkfilesel.c:520
 msgid "Show file operations"
 msgstr "Vis filhandlingsknapper"
 
-#: gtk/gtkfilesel.c:544
+#: gtk/gtkfilesel.c:521
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "Vis knapper til oprettelse/manipulering af filer"
 
-#: gtk/gtkfilesel.c:551
+#: gtk/gtkfilesel.c:528
 msgid "Select multiple"
 msgstr "Markér flere"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:529
 msgid "Whether to allow multiple files to be selected."
 msgstr "Om mere end én fil kan vælges"
 
-#: gtk/gtkfilesel.c:707
+#: gtk/gtkfilesel.c:684
 msgid "Folders"
 msgstr "Mapper"
 
-#: gtk/gtkfilesel.c:711
+#: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
 msgstr "_Mapper"
 
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "_Filer"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
+#: gtk/gtkfilesel.c:799 gtk/gtkfilesel.c:2138
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Mappen kan ikke læses: %s"
 
-#: gtk/gtkfilesel.c:953
+#: gtk/gtkfilesel.c:930
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1856,25 +1861,25 @@ msgstr ""
 "tilgængelig for dette program.\n"
 "Er du sikker på at du vil vælge den?"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
 msgstr "_Ny mappe"
 
-#: gtk/gtkfilesel.c:1097
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
 msgstr "S_let fil"
 
-#: gtk/gtkfilesel.c:1108
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
 msgstr "_Omdøb fil"
 
-#: gtk/gtkfilesel.c:1386
+#: gtk/gtkfilesel.c:1363
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappenavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
 
-#: gtk/gtkfilesel.c:1388
+#: gtk/gtkfilesel.c:1365
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1883,33 +1888,33 @@ msgstr ""
 "Fejl ved oprettelse af mappen \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1602
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Du har sandsynligvis brug symboler der ikke er tilladate i filnavne."
 
-#: gtk/gtkfilesel.c:1397
+#: gtk/gtkfilesel.c:1374
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Fejl ved oprettelse af mappen \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1408
 msgid "New Folder"
 msgstr "Ny mappe"
 
-#: gtk/gtkfilesel.c:1446
+#: gtk/gtkfilesel.c:1423
 msgid "_Folder name:"
 msgstr "_Mappenavn:"
 
-#: gtk/gtkfilesel.c:1472
+#: gtk/gtkfilesel.c:1449
 msgid "Create"
 msgstr "Opret"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1490
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
 
-#: gtk/gtkfilesel.c:1516
+#: gtk/gtkfilesel.c:1493
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1918,31 +1923,31 @@ msgstr ""
 "Fejl ved sletning af filen \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1616
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 "Navnet indeholder sandsynligvis symboler der ikke er tilladate i filnavne."
 
-#: gtk/gtkfilesel.c:1527
+#: gtk/gtkfilesel.c:1504
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Fejl ved sletning af filen \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1547
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Vil du virkelig slette filen \"%s\"?"
 
-#: gtk/gtkfilesel.c:1575
+#: gtk/gtkfilesel.c:1552
 msgid "Delete File"
 msgstr "Slet fil"
 
-#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
+#: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1951,7 +1956,7 @@ msgstr ""
 "Fejl ved ændring af navn til \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1637
+#: gtk/gtkfilesel.c:1614
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1960,29 +1965,29 @@ msgstr ""
 "Fejl ved omdøbelse af filen \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1647
+#: gtk/gtkfilesel.c:1624
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Fejl ved omdøbelse af filen \"%s\" til \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1694
+#: gtk/gtkfilesel.c:1671
 msgid "Rename File"
 msgstr "Omdøb fil"
 
-#: gtk/gtkfilesel.c:1709
+#: gtk/gtkfilesel.c:1686
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Omdøb filen \"%s\" til:"
 
-#: gtk/gtkfilesel.c:1740
+#: gtk/gtkfilesel.c:1717
 msgid "Rename"
 msgstr "Omdøb"
 
-#: gtk/gtkfilesel.c:2131
+#: gtk/gtkfilesel.c:2117
 msgid "Selection: "
 msgstr "Valg: "
 
-#: gtk/gtkfilesel.c:3011
+#: gtk/gtkfilesel.c:3004
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -1991,15 +1996,15 @@ msgstr ""
 "Filnavnet \"%s\" kunne ikke konverteres til UTF-8 (prøv at sætte "
 "miljøvariablen G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3014
+#: gtk/gtkfilesel.c:3007
 msgid "Invalid Utf-8"
 msgstr "Ugyldig UTF-8"
 
-#: gtk/gtkfilesel.c:3880
+#: gtk/gtkfilesel.c:3873
 msgid "Name too long"
 msgstr "Navnet er for langt"
 
-#: gtk/gtkfilesel.c:3882
+#: gtk/gtkfilesel.c:3875
 msgid "Couldn't convert filename"
 msgstr "Kunne ikke konvertere filnavnet"
 
@@ -2152,80 +2157,80 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr "Fejl ved indlæsning af ikon: %s"
 
-#: gtk/gtkimage.c:129
+#: gtk/gtkimage.c:131
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:130
+#: gtk/gtkimage.c:132
 msgid "A GdkPixbuf to display."
 msgstr "En GdkPixbuf der skal fremvises"
 
-#: gtk/gtkimage.c:137
+#: gtk/gtkimage.c:139
 msgid "Pixmap"
 msgstr "Pixmap"
 
-#: gtk/gtkimage.c:138
+#: gtk/gtkimage.c:140
 msgid "A GdkPixmap to display."
 msgstr "En GdkPixmap der skal fremvises"
 
 # navn på struktur - se næste tekst for forklaring
-#: gtk/gtkimage.c:145
+#: gtk/gtkimage.c:147
 msgid "Image"
 msgstr "Image"
 
-#: gtk/gtkimage.c:146
+#: gtk/gtkimage.c:148
 msgid "A GdkImage to display."
 msgstr "En GdkImage der skal fremvises"
 
-#: gtk/gtkimage.c:153
+#: gtk/gtkimage.c:155
 msgid "Mask"
 msgstr "Maske"
 
-#: gtk/gtkimage.c:154
+#: gtk/gtkimage.c:156
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Maskebitkort der skal brugess med GdkImage eller GdkPixmap"
 
-#: gtk/gtkimage.c:162
+#: gtk/gtkimage.c:164
 msgid "Filename to load and display."
 msgstr "Filnavn der skal indlæses og vises"
 
-#: gtk/gtkimage.c:170
+#: gtk/gtkimage.c:172
 msgid "Stock ID"
 msgstr "Lager-id"
 
-#: gtk/gtkimage.c:171
+#: gtk/gtkimage.c:173
 msgid "Stock ID for a stock image to display."
 msgstr "Laged-id for et billede fra standardbilledlageret der skal fremvises"
 
-#: gtk/gtkimage.c:178
+#: gtk/gtkimage.c:180
 msgid "Icon set"
 msgstr "Ikonsæt"
 
-#: gtk/gtkimage.c:179
+#: gtk/gtkimage.c:181
 msgid "Icon set to display."
 msgstr "Ikonsæt der skal vises"
 
-#: gtk/gtkimage.c:186
+#: gtk/gtkimage.c:188
 msgid "Icon size"
 msgstr "Ikonstørrelse"
 
-#: gtk/gtkimage.c:187
+#: gtk/gtkimage.c:189
 msgid "Size to use for stock icon or icon set."
 msgstr "Størrelse der skal bruges for lagerikonet eller ikonsættet"
 
-#: gtk/gtkimage.c:195
+#: gtk/gtkimage.c:197
 msgid "Animation"
 msgstr "Animation"
 
-#: gtk/gtkimage.c:196
+#: gtk/gtkimage.c:198
 msgid "GdkPixbufAnimation to display."
 msgstr "GdkPixbufAnimation der skal fremvises"
 
-#: gtk/gtkimage.c:203
+#: gtk/gtkimage.c:205
 msgid "Storage type"
 msgstr "Lagringstype"
 
-#: gtk/gtkimage.c:204
+#: gtk/gtkimage.c:206
 msgid "The representation being used for image data."
 msgstr "Den repræsentation der bruges til billeddata"
 
@@ -2612,7 +2617,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Om faner skal have samme størrelser"
 
-#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4696
+#: gtk/gtknotebook.c:2450 gtk/gtknotebook.c:4706
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -3257,7 +3262,7 @@ msgid "_Copy"
 msgstr "_Kopiér"
 
 #: gtk/gtkstock.c:284
-msgid "C_ut"
+msgid "Cu_t"
 msgstr "K_lip"
 
 #: gtk/gtkstock.c:285
@@ -3848,7 +3853,7 @@ msgstr "Markør synlig"
 msgid "If the insertion cursor is shown"
 msgstr "Vis indsætningsmarkøren"
 
-#: gtk/gtktextview.c:6386
+#: gtk/gtktextview.c:6417
 msgid "Input _Methods"
 msgstr "Indtastnings_metoder"
 
