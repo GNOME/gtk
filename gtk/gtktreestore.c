@@ -444,7 +444,7 @@ gtk_tree_store_finalize (GObject *object)
 {
   GtkTreeStore *tree_store = GTK_TREE_STORE (object);
 
-  g_node_children_foreach (tree_store->root, G_TRAVERSE_LEAFS, node_free, tree_store->column_headers);
+  g_node_children_foreach (tree_store->root, G_TRAVERSE_ALL, node_free, tree_store->column_headers);
   _gtk_tree_data_list_header_free (tree_store->sort_list);
   g_free (tree_store->column_headers);
 
