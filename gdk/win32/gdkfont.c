@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#include <gdk/gdk.h>
+#include "gdkfont.h"
 #include "gdkprivate.h"
 
 GdkFont*

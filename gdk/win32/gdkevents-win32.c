@@ -29,13 +29,16 @@
 
 #include <stdio.h>
 
-#include <gdk/gdk.h>
-#include <gdk/gdkkeysyms.h>
+#include "gdk.h"
+#include "gdkprivate.h"
 #include "gdkx.h"
+
+#include "gdkkeysyms.h"
+
 #ifdef HAVE_WINTAB
 #include <wintab.h>
 #endif
-#include "gdkinput.h"
+#include "gdkinputprivate.h"
 
 #define PING() printf("%s: %d\n",__FILE__,__LINE__),fflush(stdout)
 
@@ -76,7 +79,8 @@ struct _GdkEventPrivate
  */
 
 static GdkEvent *gdk_event_new		(void);
-static gint	 gdk_event_apply_filters(MSG      *xevent,
+static GdkFilterReturn
+		gdk_event_apply_filters (MSG      *xevent,
 					 GdkEvent *event,
 					 GList    *filters);
 static gint	 gdk_event_translate	(GdkEvent *event, 
@@ -1037,7 +1041,7 @@ gdk_input_remove (gint tag)
   g_source_remove (tag);
 }
 
-static gint
+static GdkFilterReturn
 gdk_event_apply_filters (MSG      *xevent,
 			 GdkEvent *event,
 			 GList    *filters)
@@ -1157,6 +1161,7 @@ gdk_event_translate (GdkEvent *event,
   HBRUSH hbr;
   RECT rect;
   POINT pt;
+  MINMAXINFO *lpmmi;
   GdkWindowPrivate *curWnd_private;
   GdkEventMask mask;
   int button;
@@ -1211,15 +1216,6 @@ gdk_event_translate (GdkEvent *event,
 	  PostMessage (xevent->hwnd, xevent->message,
 		       xevent->wParam, xevent->lParam);
 	}
-      else if (xevent->message == WM_NCCREATE
-	       || xevent->message == WM_CREATE
-	       || xevent->message == WM_GETMINMAXINFO
-	       || xevent->message == WM_NCCALCSIZE
-	       || xevent->message == WM_NCDESTROY
-	       || xevent->message == WM_DESTROY)
-	{
-	  /* Nothing */
-	}
       return FALSE;
     }
   
@@ -1232,10 +1228,9 @@ gdk_event_translate (GdkEvent *event,
     {
       /* Check for filters for this window */
       GdkFilterReturn result;
-      result = gdk_event_apply_filters (xevent, event,
-					window_private
-					?window_private->filters
-					:gdk_default_filters);
+      result = gdk_event_apply_filters
+	(xevent, event,
+	 window_private ? window_private->filters : gdk_default_filters);
       
       if (result != GDK_FILTER_CONTINUE)
 	{
@@ -1430,7 +1425,9 @@ gdk_event_translate (GdkEvent *event,
 	case VK_BACK:
 	  event->key.keyval = GDK_BackSpace; break;
 	case VK_TAB:
-	  event->key.keyval = GDK_Tab; break;
+	  event->key.keyval = (GetKeyState(VK_SHIFT) < 0 ? 
+	    GDK_ISO_Left_Tab : GDK_Tab);
+	  break;
 	case VK_CLEAR:
 	  event->key.keyval = GDK_Clear; break;
 	case VK_RETURN:
@@ -2643,7 +2640,9 @@ gdk_event_translate (GdkEvent *event,
 	    gdk_input_vtable.configure_event (&event->configure, window);
 	}
       break;
-
+#if 0 /* Bernd Herd suggests responding to WM_GETMINMAXINFO instead,
+       * which indeed is much easier.
+       */
     case WM_SIZING:
       GDK_NOTE (EVENTS, g_print ("WM_SIZING: %#x\n", xevent->hwnd));
       if (ret_val_flagp == NULL)
@@ -2712,6 +2711,25 @@ gdk_event_translate (GdkEvent *event,
 	    }
 	}
       break;
+#else
+    case WM_GETMINMAXINFO:
+      GDK_NOTE (EVENTS, g_print ("WM_GETMINMAXINFO: %#x\n", xevent->hwnd));
+      lpmmi = (MINMAXINFO*) xevent->lParam;
+      if (window_private->hint_flags & GDK_HINT_MIN_SIZE)
+	{
+	  lpmmi->ptMinTrackSize.x = window_private->hint_min_width;
+	  lpmmi->ptMinTrackSize.y = window_private->hint_min_height;
+	}
+      if (window_private->hint_flags & GDK_HINT_MAX_SIZE)
+	{
+	  lpmmi->ptMaxTrackSize.x = window_private->hint_max_width;
+	  lpmmi->ptMaxTrackSize.y = window_private->hint_max_height;
+	    
+	  lpmmi->ptMaxSize.x = window_private->hint_max_width;
+	  lpmmi->ptMaxSize.y = window_private->hint_max_height;
+	}
+      break;
+#endif
 
     case WM_MOVE:
       GDK_NOTE (EVENTS, g_print ("WM_MOVE: %#x  +%d+%d\n",

@@ -27,7 +27,7 @@
 #include "config.h"
 #include <string.h>
 
-#include <gdk/gdk.h>
+#include "gdkgc.h"
 #include "gdkprivate.h"
 
 GdkGC*
@@ -1013,9 +1013,36 @@ gdk_gc_predraw (GdkWindowPrivate *window_private,
   if (SetTextColor (gc_private->xgc, fg) == CLR_INVALID)
     g_warning ("gdk_gc_predraw: SetTextColor failed");
 
+#if 0
+  switch (gc_private->fill_style)
+    {
+    case GDK_STIPPLED:
+      {
+	GdkPixmap *stipple = gc_private->stipple;
+	GdkPixmapPrivate *stipple_private = (GdkPixmapPrivate *) stipple;
+	HBITMAP hbm = stipple_private->xwindow;
+	if (NULL == (hbr = CreatePatternBrush (hbm)))
+	  g_warning ("gdk_gc_predraw: CreatePatternBrush failed");
+	
+#ifdef NATIVE_WIN16
+	SetBrushOrg  (gc_private->xgc, gc_private->ts_x_origin,
+		      gc_private->ts_y_origin);
+#else
+	SetBrushOrgEx(gc_private->xgc, gc_private->ts_x_origin,
+		      gc_private->ts_y_origin, NULL);
+#endif
+      }
+      break;
+    case GDK_SOLID:
+    default:
+      if ((hbr = CreateSolidBrush (fg)) == NULL)
+	g_warning ("gdk_gc_predraw: CreateSolidBrush failed");
+      break;
+  }
+#else
   if ((hbr = CreateSolidBrush (fg)) == NULL)
     g_warning ("gdk_gc_predraw: CreateSolidBrush failed");
-
+#endif
   if (SelectObject (gc_private->xgc, hbr) == NULL)
     g_warning ("gdk_gc_predraw: SelectObject #3 failed");
 

@@ -257,11 +257,6 @@ EXPORTS
 	gdk_threads_enter
 	gdk_threads_leave
 	gdk_threads_mutex
-	gdk_time_get
-	gdk_timer_disable
-	gdk_timer_enable
-	gdk_timer_get
-	gdk_timer_set
 	gdk_visual_get_best
 	gdk_visual_get_best_depth
 	gdk_visual_get_best_type

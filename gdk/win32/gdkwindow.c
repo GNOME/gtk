@@ -29,9 +29,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <gdk/gdk.h>
+
+#include "gdkevents.h"
+#include "gdkwindow.h"
 #include "gdkprivate.h"
-#include "gdkinput.h"
+#include "gdkinputprivate.h"
 
 /* The Win API function AdjustWindowRect may return negative values
  * resulting in obscured title bars. This helper function is coreccting it.

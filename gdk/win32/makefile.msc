@@ -32,7 +32,7 @@ GLIB_VER=1.3
 GTK_VER=1.3
 
 GLIB = ..\..\..\glib
-CFLAGS = -I. -I..\.. -I$(WTKIT)\include -I$(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
+CFLAGS = -I. -I.. -I..\.. -I$(WTKIT)\include -I$(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
 
 all: \
 	gdk\gdkprivate.h \

@@ -31,7 +31,11 @@
 
 #define INITGUID
 
+#include "gdkdnd.h"
+#include "gdkproperty.h"
+#include "gdkprivate.h"
 #include "gdkx.h"
+
 #ifdef OLE2_DND
 #include <ole2.h>
 #endif
@@ -58,6 +62,21 @@ typedef enum {
 } GdkDragKind;
 
 #ifdef OLE2_DND
+
+#define PRINT_RIID(riid) \
+  g_print ("riid = %.08x-%.04x-%.04x-%.02x%.02x-%.02x%.02x%.02x%.02x%.02x%.02x", \
+	   ((gulong *)  riid)[0], \
+	   ((gushort *) riid)[2], \
+	   ((gushort *) riid)[3], \
+	   ((guchar *)  riid)[8], \
+	   ((guchar *)  riid)[9], \
+	   ((guchar *)  riid)[10], \
+	   ((guchar *)  riid)[11], \
+	   ((guchar *)  riid)[12], \
+	   ((guchar *)  riid)[13], \
+	   ((guchar *)  riid)[14], \
+	   ((guchar *)  riid)[15]);
+
 
 HRESULT STDMETHODCALLTYPE
   m_query_interface_target (IDropTarget __RPC_FAR *This,
@@ -169,30 +188,20 @@ m_query_interface_target (IDropTarget __RPC_FAR *This,
 
   *ppvObject = NULL;
 
-  g_print ("riid = %.08x-%.04x-%.04x-%.02x%.02x-%.02x%.02x%.02x%.02x%.02x%.02x",
-	   ((gulong *) riid)[0],
-	   ((gushort *) riid)[2],
-	   ((gushort *) riid)[3],
-	   ((guchar *) riid)[8],
-	   ((guchar *) riid)[9],
-	   ((guchar *) riid)[10],
-	   ((guchar *) riid)[11],
-	   ((guchar *) riid)[12],
-	   ((guchar *) riid)[13],
-	   ((guchar *) riid)[14],
-	   ((guchar *) riid)[15]);
+  PRINT_RIID (riid);
+
   if (IsEqualGUID (riid, &IID_IUnknown))
     {
+      g_print ("...IUnknown\n");
       m_add_ref_target (This);
       *ppvObject = This;
-      g_print ("...IUnknown\n");
       return S_OK;
     }
   else if (IsEqualGUID (riid, &IID_IDropTarget))
     {
+      g_print ("...IDropTarget\n");
       m_add_ref_target (This);
       *ppvObject = This;
-      g_print ("...IDropTarget\n");
       return S_OK;
     }
   else
@@ -280,35 +289,19 @@ m_query_interface_source (IDropSource __RPC_FAR *This,
 
   *ppvObject = NULL;
 
-  g_print ("riid = %.02x%.02x%.02x%.02x-%.02x%.02x-%.02x%.02x-%.02x%.02x-%.02x%.02x%.02x%.02x%.02x%.02x",
-	   ((guchar *) riid)[0],
-	   ((guchar *) riid)[1],
-	   ((guchar *) riid)[2],
-	   ((guchar *) riid)[3],
-	   ((guchar *) riid)[4],
-	   ((guchar *) riid)[5],
-	   ((guchar *) riid)[6],
-	   ((guchar *) riid)[7],
-	   ((guchar *) riid)[8],
-	   ((guchar *) riid)[9],
-	   ((guchar *) riid)[10],
-	   ((guchar *) riid)[11],
-	   ((guchar *) riid)[12],
-	   ((guchar *) riid)[13],
-	   ((guchar *) riid)[14],
-	   ((guchar *) riid)[15]);
+  PRINT_RIID (riid);
   if (IsEqualGUID (riid, &IID_IUnknown))
     {
+      g_print ("...IUnknown\n");
       m_add_ref_source (This);
       *ppvObject = This;
-      g_print ("...IUnknown\n");
       return S_OK;
     }
   else if (IsEqualGUID (riid, &IID_IDropSource))
     {
+      g_print ("...IDropSource\n");
       m_add_ref_source (This);
       *ppvObject = This;
-      g_print ("...IDropSource\n");
       return S_OK;
     }
   else
@@ -817,6 +810,26 @@ gdk_drop_finish (GdkDragContext   *context,
 {
 }
 
+static GdkFilterReturn
+gdk_destroy_filter (GdkXEvent *xev,
+		    GdkEvent  *event,
+		    gpointer   data)
+{
+#ifdef OLE2_DND
+  MSG *msg = (MSG *) xev;
+
+  if (msg->message == WM_DESTROY)
+    {
+      IDropTarget *idtp = (IDropTarget *) data;
+
+      GDK_NOTE (DND, g_print ("gdk_destroy_filter: WM_DESTROY: %#x\n", msg->hwnd));
+      RevokeDragDrop (msg->hwnd);
+      CoLockObjectExternal (idtp, FALSE, TRUE);
+    }
+#endif
+  return GDK_FILTER_CONTINUE;
+}
+
 void
 gdk_window_register_dnd (GdkWindow      *window)
 {
@@ -854,6 +867,10 @@ gdk_window_register_dnd (GdkWindow      *window)
 	}
       else if (!SUCCEEDED (hres))
 	g_warning ("gdk_window_register_dnd: RegisterDragDrop failed");
+      else
+	{
+	  gdk_window_add_filter (window, gdk_destroy_filter, &context->idt);
+	}
     }
 #endif
 }

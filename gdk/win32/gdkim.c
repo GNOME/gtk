@@ -31,8 +31,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <gdk/gdk.h>
-#include <gdk/gdki18n.h>
+#include "gdkim.h"
+#include "gdkpixmap.h"
+#include "gdkprivate.h"
+#include "gdki18n.h"
 #include "gdkx.h"
 
 /* If this variable is FALSE, it indicates that we should

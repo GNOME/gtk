@@ -1,3 +1,27 @@
+1999-10-03  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkimage.h gdk/gdkpixmap.h: Change GDK_WINDOWING_WIN32 usage
+	to #ifdef also here.
+
+	* gdk/win32/*.h gdk/win32/*.c: Make corresponding changes as those
+	Owen did to the X11 backend.
+
+	* gdk/win32/gdkdraw.c (gdk_draw_pixmap): Fix it again, don't use
+	ScrollWindowEx when blitting inside a window, it can't be correct
+	in the general case.
+
+	* gdk/win32/gdkevents.c: Don't handle WM_SIZING, handling
+	WM_GETMINMAXINFO is easier.
+
+	* gdk/win32/gdkimage.c (gdk_image_new): Create new image with
+	depth equal to the bitspixel value, not the visual's depth.
+
+	* gdk/win32/gdkvisual.c (gdk_visual_init): Set the visual's depth
+	to 24 even if the bitspixel value is 32.
+
+	* gdk/gdkrgb.c (gdk_rgb_select_conv): After the above change, no
+	need to check for depth==32 when bpp==32, depth will always be 24.
+
 Fri Oct  1 18:03:36 1999  Owen Taylor  <otaylor@redhat.com>
 
         * docs/Changes-1.4.txt: Started

@@ -27,7 +27,8 @@
 #include "config.h"
 
 #include <math.h>
-#include <gdk/gdk.h>
+
+#include "gdkdrawable.h"
 #include "gdkprivate.h"
 
 #ifndef G_PI
@@ -558,35 +559,43 @@ gdk_draw_pixmap (GdkDrawable *drawable,
     }
   else
     {
-      if ((srcdc = GetDC (src_private->xwindow)) == NULL)
-	g_warning ("gdk_draw_pixmap: GetDC failed");
-      
-#if 0
-      if (!BitBlt (hdc, xdest, ydest, width, height,
-		   srcdc, xsrc, ysrc, SRCCOPY))
-	g_warning ("gdk_draw_pixmap: BitBlt failed");
-#else
-      /* If we are in fact just blitting inside one window,
-       * ScrollWindowEx works better.
-       * Thanks to Philippe Colantoni <colanton@aris.ss.uci.edu>
-       * for noticing and fixing this.
-       */
-      if (drawable_private->xwindow==src_private->xwindow)
+      if (drawable_private->xwindow == src_private->xwindow)
 	{
-	  if (!ScrollWindowEx (drawable_private->xwindow,-xsrc+xdest, -ysrc+ydest, NULL,
-			       NULL, NULL, NULL, SW_INVALIDATE))
-	    g_warning ("gdk_draw_pixmap: ScrollWindowEx failed");
+	  /* Blitting inside a window, use ScrollDC */
+	  RECT scrollRect, clipRect, emptyRect;
+	  HRGN updateRgn;
 
+	  scrollRect.left = MIN (xsrc, xdest);
+	  scrollRect.top = MIN (ysrc, ydest);
+	  scrollRect.right = MAX (xsrc + width + 1, xdest + width + 1);
+	  scrollRect.bottom = MAX (ysrc + height + 1, ydest + height + 1);
+
+	  clipRect.left = xdest;
+	  clipRect.top = ydest;
+	  clipRect.right = xdest + width + 1;
+	  clipRect.bottom = ydest + height + 1;
+
+	  SetRectEmpty (&emptyRect);
+	  updateRgn = CreateRectRgnIndirect (&emptyRect);
+	  if (!ScrollDC (hdc, xdest - xsrc, ydest - ysrc,
+			 &scrollRect, &clipRect,
+			 updateRgn, NULL))
+	    g_warning ("gdk_draw_pixmap: ScrollDC failed");
+	  if (!InvalidateRgn (drawable_private->xwindow, updateRgn, FALSE))
+	    g_warning ("gdk_draw_pixmap: InvalidateRgn failed");
 	  if (!UpdateWindow (drawable_private->xwindow))
 	    g_warning ("gdk_draw_pixmap: UpdateWindow failed");
 	}
       else
-	if (!BitBlt (hdc, xdest, ydest, width, height,
-		     srcdc, xsrc, ysrc, SRCCOPY))
-	  g_warning ("gdk_draw_pixmap: BitBlt failed");
-#endif
-      
-      ReleaseDC (src_private->xwindow, srcdc);
+	{
+	  if ((srcdc = GetDC (src_private->xwindow)) == NULL)
+	    g_warning ("gdk_draw_pixmap: GetDC failed");
+	  
+	  if (!BitBlt (hdc, xdest, ydest, width, height,
+		       srcdc, xsrc, ysrc, SRCCOPY))
+	    g_warning ("gdk_draw_pixmap: BitBlt failed");
+	  ReleaseDC (src_private->xwindow, srcdc);
+	}
     }
   gdk_gc_postdraw (drawable_private, gc_private);
 }

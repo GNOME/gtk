@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <gdk/gdk.h>
+#include "gdkpixmap.h"
 #include "gdkprivate.h"
 
 typedef struct

@@ -33,11 +33,10 @@
 #include <limits.h>
 #include <io.h>
 
-#include <gdk/gdk.h>
-#include <gdk/gdkkeysyms.h>
-#include <gdk/gdki18n.h>
-#include "gdkx.h"
-#include "gdkinput.h"
+#include "gdk.h"
+#include "gdkprivate.h"
+#include "gdkinputprivate.h"
+#include "gdkkeysyms.h"
 
 static void	 gdkx_XConvertCase	(KeySym	       symbol,
 					 KeySym	      *lower,
@@ -52,15 +51,6 @@ static void	    gdk_exit_func		 (void);
 static int gdk_initialized = 0;	/* 1 if the library is initialized,
 				 * 0 otherwise.
 				 */
-static guint start;		/* We use the millisecond
-				 * timestamps from GetTickCount
-				 */
-static gboolean timerp = TRUE;	/* If TRUE use timeouts when waiting
-				 * for Windows messages
-				 */
-static guint32 timer_val = 20;	/* Timeout in milliseconds.
-				 */
-
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
   {"events",	    GDK_DEBUG_EVENTS},
@@ -118,8 +108,6 @@ gdk_init_check (int    *argc,
   if (g_thread_supported ())
     gdk_threads_mutex = g_mutex_new ();
   
-  start = GetTickCount ();
-
 #ifdef G_ENABLE_DEBUG
   {
     gchar *debug_string = getenv("GDK_DEBUG");
@@ -323,113 +311,6 @@ gint
 gdk_get_use_xshm (void)
 {
   return TRUE;
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_time_get
- *
- *   Get the number of milliseconds since the library was
- *   initialized.
- *
- * Arguments:
- *
- * Results:
- *   The time since the library was initialized is returned.
- *   This time value is accurate to milliseconds even though
- *   a more accurate time down to the microsecond could be
- *   returned.
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-guint32
-gdk_time_get (void)
-{
-  guint32 milliseconds;
-  guint32 end = GetTickCount ();
-
-  if (end < start)
-    milliseconds = 0xFFFFFFFF - (start - end) + 1;
-  else
-    milliseconds = end - start;
-
-  return milliseconds;
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_timer_get
- *
- *   Returns the current timer.
- *
- * Arguments:
- *
- * Results:
- *   Returns the current timer interval. This interval is
- *   in units of milliseconds.
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-guint32
-gdk_timer_get (void)
-{
-  return timer_val;
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_timer_set
- *
- *   Sets the timer interval.
- *
- * Arguments:
- *   "milliseconds" is the new value for the timer.
- *
- * Results:
- *
- * Side effects:
- *   Calls to "gdk_event_get" will last for a maximum
- *   of time of "milliseconds". However, a value of 0
- *   milliseconds will cause "gdk_event_get" to block
- *   indefinately until an event is received.
- *
- *--------------------------------------------------------------
- */
-
-void
-gdk_timer_set (guint32 milliseconds)
-{
-  timer_val = milliseconds;
-#ifdef USE_PEEKNAMEDPIPE
-  /* When using PeekNamedPipe, can't have too long timeouts.
-   */
-  if (timer_val > 10)
-    timer_val = 10;
-  else if (timer_val == 0)
-    timer_val = 0;
-#endif
-}
-
-void
-gdk_timer_enable (void)
-{
-  timerp = TRUE;
-}
-
-void
-gdk_timer_disable (void)
-{
-#ifdef USE_PEEKNAMEDPIPE
-  /* Can't disable timeouts when using PeekNamedPipe */
-#else
-  timerp = FALSE;
-#endif
 }
 
 /*

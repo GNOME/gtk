@@ -31,7 +31,8 @@
 #include <string.h>
 #include <time.h>
 
-#include "gdkx.h"
+#include "gdkcolor.h"
+#include "gdkprivate.h"
 
 static gint  gdk_colormap_match_color (GdkColormap *cmap,
 				       GdkColor    *color,
@@ -173,7 +174,7 @@ terms specified in this license.
 static int
 alloc_color(Colormap  colormap,
 	    XColor   *color,
-	    guint    *pixelp)
+	    gulong   *pixelp)
 {
   PALETTEENTRY entry, closeEntry;
   HDC hdc;

@@ -28,6 +28,7 @@
 
 #include <stdio.h>
 #include <gdk/gdk.h>
+
 #include "gdkprivate.h"
 
 static guint gdk_xid_hash    (XID *xid);

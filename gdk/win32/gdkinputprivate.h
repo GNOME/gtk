@@ -24,8 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GDK_INPUT_H__
-#define __GDK_INPUT_H__
+#ifndef __GDK_INPUTPRIVATE_H__
+#define __GDK_INPUTPRIVATE_H__
 
 typedef struct _GdkAxisInfo    GdkAxisInfo;
 typedef struct _GdkInputVTable GdkInputVTable;
@@ -114,4 +114,4 @@ extern gint		gdk_input_ignore_wintab;
 
 void gdk_input_window_destroy (GdkWindow *window);
 
-#endif /* __GDK_INPUT_H__ */
+#endif /* __GDK_INPUTPRIVATE_H__ */

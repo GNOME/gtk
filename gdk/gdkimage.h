@@ -51,7 +51,7 @@ GdkImage*  gdk_image_new       (GdkImageType  type,
 				GdkVisual    *visual,
 				gint	      width,
 				gint	      height);
-#if GDK_WINDOWING == GDK_WINDOWING_WIN32
+#ifdef GDK_WINDOWING_WIN32
 GdkImage*  gdk_image_bitmap_new(GdkImageType  type,
 				GdkVisual    *visual,
 				gint	      width,

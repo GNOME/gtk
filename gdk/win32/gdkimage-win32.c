@@ -26,7 +26,8 @@
 
 #include "config.h"
 
-#include <gdk/gdk.h>
+#include "gdk.h"		/* For gdk_error_trap_* / gdk_flush_* */
+#include "gdkimage.h"
 #include "gdkprivate.h"
 
 static void gdk_image_put_normal (GdkDrawable *drawable,
@@ -276,7 +277,9 @@ gdk_image_new (GdkImageType  type,
 	       gint          width,
 	       gint          height)
 {
-  return gdk_image_new_with_depth (type, visual, width, height, visual->depth);
+  GdkVisualPrivate *visual_private = (GdkVisualPrivate *) visual;
+  return gdk_image_new_with_depth (type, visual, width, height,
+				   visual_private->xvisual->bitspixel);
 }
 
 GdkImage*

@@ -31,8 +31,8 @@
 #include <stdio.h>
 #include <math.h>
 
-#include <gdk/gdk.h>
-#include "gdkx.h"
+#include "gdkinput.h"
+#include "gdkprivate.h"
 
 #ifdef HAVE_WINTAB
 #include <wintab.h>
@@ -41,7 +41,7 @@
 #include <pktdef.h>
 #endif
 
-#include "gdkinput.h"
+#include "gdkinputprivate.h"
 
 struct _GdkDevicePrivate {
   GdkDeviceInfo  info;
@@ -920,8 +920,8 @@ gdk_input_win32_configure_event (GdkEventConfigure *event,
   input_window = gdk_input_window_find (window);
   g_return_if_fail (window != NULL);
 
-  gdk_input_get_root_relative_geometry (GDK_WINDOW_XWINDOW (window),
-					&root_x, &root_y);
+  gdk_input_get_root_relative_geometry
+    ((((GdkWindowPrivate*) window)->xwindow), &root_x, &root_y);
 
   input_window->root_x = root_x;
   input_window->root_y = root_y;
@@ -937,8 +937,8 @@ gdk_input_win32_enter_event (GdkEventCrossing *event,
   input_window = gdk_input_window_find (window);
   g_return_if_fail (window != NULL);
 
-  gdk_input_get_root_relative_geometry (GDK_WINDOW_XWINDOW (window),
-					&root_x, &root_y);
+  gdk_input_get_root_relative_geometry
+    ((((GdkWindowPrivate*) window)->xwindow), &root_x, &root_y);
 
   input_window->root_x = root_x;
   input_window->root_y = root_y;

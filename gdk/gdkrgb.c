@@ -2772,7 +2772,7 @@ gdk_rgb_select_conv (GdkImage *image)
   else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
 	   (mask_rgb && byte_order == GDK_MSB_FIRST))
     conv = gdk_rgb_convert_0888_br;
-  else if (bpp == 32 && (depth == 32 || depth == 24) && vtype == GDK_VISUAL_TRUE_COLOR &&
+  else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
 	   (mask_rgb && byte_order == GDK_LSB_FIRST))
     conv = gdk_rgb_convert_0888;
   else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&

@@ -65,10 +65,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "gdkcc.h"
+#include "gdkcolor.h"
 #include "gdkx.h"
 
 #define MAX_IMAGE_COLORS 256
 
+typedef struct _GdkColorContextPrivate GdkColorContextPrivate;
+
+struct _GdkColorContextPrivate
+{
+  GdkColorContext color_context;
+  XStandardColormap std_cmap;
+};
 
 static guint
 hash_color (gconstpointer key)
@@ -102,16 +111,11 @@ pixel_sort (const void *a, const void *b)
   return ((GdkColor *) a)->pixel - ((GdkColor *) b)->pixel;
 }
 
-/* XXX: This function does an XQueryColors() the hard way, because there is
- * no corresponding function in Gdk.
- */
-
 static void
 my_x_query_colors (GdkColormap *colormap,
 		   GdkColor    *colors,
 		   gint         ncolors)
 {
-  XColor *xcolors;
   gint    i;
   
   for (i = 0; i < ncolors; i++)
@@ -175,6 +179,7 @@ init_gray (GdkColorContext *cc)
   gdouble dinc;
   
   cc->num_colors = 256;		/* Bogus, but will never get here anyway? */
+  
   cc->clut = g_new (gulong, cc->num_colors);
   cstart = g_new (GdkColor, cc->num_colors);
   
@@ -379,8 +384,9 @@ init_palette (GdkColorContext *cc)
   
   if (cc->color_hash)
     {
-      /* XXX: quick-and-dirty way to remove everything */
-      
+      g_hash_table_foreach (cc->color_hash,
+			    free_hash_entry,
+			    NULL);
       g_hash_table_destroy (cc->color_hash);
       cc->color_hash = g_hash_table_new (hash_color, compare_colors);
     }
@@ -456,6 +462,7 @@ gdk_color_context_new (GdkVisual   *visual,
 	    init_bw (cc);
 	  else
 	    init_gray (cc);
+	  
 	  break;
 	  
 	case GDK_VISUAL_TRUE_COLOR: /* shifts */
@@ -496,11 +503,6 @@ gdk_color_context_new (GdkVisual   *visual,
   GDK_NOTE (COLOR_CONTEXT,
 	    g_message ("gdk_color_context_new: screen depth is %i, no. of colors is %i\n",
 		       cc->visual->depth, cc->num_colors));
-  
-  /* check if we need to initialize a hash table */
-  
-  if ((cc->mode == GDK_CC_MODE_STD_CMAP) || (cc->mode == GDK_CC_MODE_UNDEFINED))
-    cc->color_hash = g_hash_table_new (hash_color, compare_colors);
   
   return (GdkColorContext *) cc;
 }
@@ -555,16 +557,8 @@ gdk_color_context_free (GdkColorContext *cc)
     gdk_colormap_unref (cc->colormap);
   
   /* free any palette that has been associated with this GdkColorContext */
-  
+
   init_palette (cc);
-  
-  if (cc->color_hash)
-    {
-      g_hash_table_foreach (cc->color_hash,
-			    free_hash_entry,
-			    NULL);
-      g_hash_table_destroy (cc->color_hash);
-    }
   
   g_free (cc);
 }
@@ -581,7 +575,7 @@ gdk_color_context_get_pixel (GdkColorContext *cc,
   g_assert (failed != NULL);
   
   *failed = FALSE;
-
+  
   switch (cc->mode)
     {
     case GDK_CC_MODE_BW:
@@ -658,13 +652,14 @@ gdk_color_context_get_pixel (GdkColorContext *cc,
     default:
     {
       GdkColor color;
-      GdkColor *result;
+      GdkColor *result = NULL;
       
       color.red   = red;
       color.green = green;
       color.blue  = blue;
-      
-      result = g_hash_table_lookup (cc->color_hash, &color);
+
+      if (cc->color_hash)
+	result = g_hash_table_lookup (cc->color_hash, &color);
       
       if (!result)
 	{
@@ -709,6 +704,9 @@ gdk_color_context_get_pixel (GdkColorContext *cc,
 	      
 	      cnew = g_new (GdkColor, 1);
 	      *cnew = color;
+	      
+	      if (!cc->color_hash)
+		cc->color_hash = g_hash_table_new (hash_color, compare_colors);
 	      g_hash_table_insert (cc->color_hash, cnew, cnew);
 	      
 	      cc->clut[cc->num_allocated] = color.pixel;
@@ -1367,27 +1365,14 @@ gdk_color_context_add_palette (GdkColorContext *cc,
   /* restore previous mode if we aren't adding a new palette */
   
   if (num_palette == 0)
-    {
-      /* GDK_CC_MODE_STD_CMAP uses a hash table, so we'd better initialize one */
-      
-      /* XXX: here, the hash table is already initialized */
-      
-      return 0;
-    }
-  
-  /* Initialize a hash table for this palette (we need one for allocating
-   * the pixels in the palette using the current settings)
-   */
-  
-  if (cc->color_hash == NULL)
-    cc->color_hash = g_hash_table_new (hash_color, compare_colors);
+    return 0;
   
   /* copy incoming palette */
   
   cc->palette = g_new0(GdkColor, num_palette);
   
   j = 0;
-
+  
   for (i = 0; i < num_palette; i++)
     {
       erg = 0;
@@ -1427,6 +1412,9 @@ gdk_color_context_add_palette (GdkColorContext *cc,
   
   if (cc->color_hash)
     {
+      g_hash_table_foreach (cc->color_hash,
+			    free_hash_entry,
+			    NULL);
       g_hash_table_destroy (cc->color_hash);
       cc->color_hash = NULL;
     }

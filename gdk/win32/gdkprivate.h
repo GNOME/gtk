@@ -49,12 +49,32 @@ extern int *__imp___mb_cur_max;
 #endif
 
 #include <time.h>
+
+#include <gdk/gdkcursor.h>
+#include <gdk/gdkevents.h>
+#include <gdk/gdkfont.h>
+#include <gdk/gdkgc.h>
+#include <gdk/gdkim.h>
+#include <gdk/gdkimage.h>
+#include <gdk/gdkregion.h>
+#include <gdk/gdkvisual.h>
+#include <gdk/gdkwindow.h>
+
 #include <gdk/gdktypes.h>
+
+#define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
+#define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
+
+/* HFONTs clash with HWNDs, so add dithering to HFONTs... (hack) */
+#define HFONT_DITHER 43
+#define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup ((HANDLE) ((guint) xid + HFONT_DITHER)))
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /* Define corresponding Windows types for some X11 types, just for laziness.
  */
-
-#include <glib.h>
 
 typedef HANDLE XID;
 typedef PALETTEENTRY XColor;
@@ -114,21 +134,6 @@ typedef struct {
   unsigned long base_pixel;
 } XStandardColormap;
 
-extern LRESULT CALLBACK 
-gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
-
-#define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
-#define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
-
-/* HFONTs clash with HWNDs, so add dithering to HFONTs... (hack) */
-#define HFONT_DITHER 43
-#define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup ((HANDLE) ((guint) xid + HFONT_DITHER)))
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-
 typedef struct _GdkWindowPrivate       GdkWindowPrivate;
 typedef struct _GdkWindowPrivate       GdkPixmapPrivate;
 typedef struct _GdkImagePrivate	       GdkImagePrivate;
@@ -140,7 +145,6 @@ typedef struct _GdkFontPrivate	       GdkFontPrivate;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 typedef struct _GdkEventFilter	       GdkEventFilter;
 typedef struct _GdkClientFilter	       GdkClientFilter;
-typedef struct _GdkColorContextPrivate GdkColorContextPrivate;
 typedef struct _GdkRegionPrivate       GdkRegionPrivate;
 
 
@@ -313,12 +317,6 @@ struct _GdkICPrivate
 
 #endif /* USE_XIM */
 
-struct _GdkColorContextPrivate
-{
-  GdkColorContext color_context;
-  XStandardColormap std_cmap;
-};
-
 struct _GdkRegionPrivate
 {
   GdkRegion region;
@@ -410,6 +408,8 @@ extern UINT		 gdk_selection_clear_msg;
 extern GdkAtom		 gdk_clipboard_atom;
 extern GdkAtom		 gdk_win32_dropfiles_atom;
 extern GdkAtom		 gdk_ole2_dnd_atom;
+
+extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
 
 /* Debugging support */
 
