@@ -102,7 +102,7 @@ gtk_tree_store_append (store, &iter, NULL);  /* Acquire an iterator */
 gtk_tree_store_set (store, &iter,
                     TITLE_COLUMN, "The Principle of Reason",
                     AUTHOR_COLUMN, "Martin Heidegger",
-                    CHECKED_COLUMN, FALSE
+                    CHECKED_COLUMN, FALSE,
                     -1);
 ]]></programlisting></informalexample>
 

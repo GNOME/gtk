@@ -1,3 +1,7 @@
+Sun Nov 23 21:00:33 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tree_widget.sgml: Add a missing comma. 
+
 2003-08-11  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkwidget.sgml:  Document public GtkWidget members.  (#119463)
