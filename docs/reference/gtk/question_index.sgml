@@ -27,6 +27,22 @@ the question you have, this list is a good place to start.
 
 <qandaentry>
 <question><para>
+How do I get started with GTK+?
+</para></question>
+
+<answer><para>
+The GTK+ <ulink url="http://www.gtk.org">website</ulink> offers a 
+<ulink url="http://www.gtk.org/tutorial">tutorial</ulink> and a 
+<ulink url="http://www.gtk.org/faq">FAQ</ulink>. More documentation ranging
+from whitepapers to online books can be found at the
+<ulink url="http://developer.gnome.org/doc">GNOME developer's site</ulink>.
+After studying these materials you should be well prepared to come back to
+this reference manual for details.
+</para></answer>
+</qandaentry>
+
+<qandaentry>
+<question><para>
 Where can I get help with GTK+, submit a bug report, or make a feature 
 request?
 </para></question>

@@ -1,7 +1,7 @@
 2003-06-19  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/question_index.sgml: Add a question about changing fonts.
-	(#114747)
+	* gtk/question_index.sgml: Add a question about changing
+	fonts. And one about "Getting Started".  (#114747, #108015)	 
 
 2003-06-17  Matthias Clasen  <maclas@gmx.de>
 
