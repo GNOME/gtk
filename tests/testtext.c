@@ -519,6 +519,12 @@ fill_example_buffer (GtkTextBuffer *buffer)
                 NULL);
 
 
+  tag = gtk_text_buffer_create_tag (buffer, "negative_indent", NULL);
+      
+  g_object_set (G_OBJECT (tag),
+                "indent", -25,
+                NULL);
+  
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
 
   anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
@@ -600,7 +606,14 @@ fill_example_buffer (GtkTextBuffer *buffer)
       gtk_text_buffer_insert (buffer, &iter, "وقد بدأ ثلاث من أكثر المؤسسات تقدما في شبكة اكسيون برامجها كمنظمات لا تسعى للربح، ثم تحولت في السنوات الخمس الماضية إلى مؤسسات مالية منظمة، وباتت جزءا من النظام المالي في بلدانها، ولكنها تتخصص في خدمة قطاع المشروعات الصغيرة. وأحد أكثر هذه المؤسسات نجاحا هو »بانكوسول« في بوليفيا.\n", -1);
       gtk_text_buffer_get_iter_at_mark (buffer, &iter2, temp_mark);
       gtk_text_buffer_apply_tag_by_name (buffer, "rtl_quote", &iter2, &iter);
-	  
+
+      gtk_text_buffer_insert_with_tags (buffer, &iter,
+                                        "Paragraph with negative indentation. blah blah blah blah blah. The quick brown fox jumped over the lazy dog.\n",
+                                        -1,
+                                        gtk_text_tag_table_lookup (gtk_text_buffer_get_tag_table (buffer),
+                                                                   "negative_indent"),
+                                        NULL);
+      
       ++i;
     }
 

@@ -1,3 +1,8 @@
+2001-11-19  Havoc Pennington  <hp@pobox.com>
+
+	* tests/testtext.c (fill_example_buffer): put in a test for
+	negative indentation values
+
 Mon Nov 19 14:08:18 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_init): Change default for
