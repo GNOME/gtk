@@ -1,3 +1,9 @@
+Tue Jan 12 22:50:44 PST 1999 Manish Singh <yosh@gimp.org>
+
+	* acinclude.m4
+	* ltconfig
+	* ltmain.sh: upgrade to libtool 1.2d (with fixes for irix6 and osf)
+
 Tue Jan 12 18:30:51 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/testdnd.c (label_drag_data_received): Add 

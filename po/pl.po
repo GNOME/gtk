@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 1999-01-04 03:55-0600\n"
+"POT-Creation-Date: 1999-01-12 10:38-0800\n"
 "PO-Revision-Date: 1998-12-18 02:21+0100\n"
 "Last-Translator: Krzysztof Krzy¿aniak <eloy@venco.com.pl>\n"
 "Language-Team: Polish <plug@poznan.linux.org.pl>\n"
@@ -43,19 +43,19 @@ msgid "Opacity:"
 msgstr ""
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1637 gtk/gtkfilesel.c:462 gtk/gtkfontsel.c:3465
+#: gtk/gtkcolorsel.c:1640 gtk/gtkfilesel.c:462 gtk/gtkfontsel.c:3465
 #: gtk/gtkgamma.c:408
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1643 gtk/gtkfilesel.c:469 gtk/gtkfilesel.c:844
+#: gtk/gtkcolorsel.c:1646 gtk/gtkfilesel.c:469 gtk/gtkfilesel.c:844
 #: gtk/gtkfilesel.c:944 gtk/gtkfilesel.c:1059 gtk/gtkfontsel.c:3478
 #: gtk/gtkgamma.c:416
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: gtk/gtkcolorsel.c:1648
+#: gtk/gtkcolorsel.c:1651
 msgid "Help"
 msgstr ""
 
@@ -69,7 +69,7 @@ msgstr "Katalogi"
 msgid "Files"
 msgstr "Pliki"
 
-#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1455
+#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1454
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Nie mo¿na odczytaæ katalogu: %s"
@@ -122,6 +122,10 @@ msgstr "Skasuj"
 #: gtk/gtkfilesel.c:1050
 msgid "Rename"
 msgstr "Zmieñ nazwê"
+
+#: gtk/gtkfilesel.c:1433
+msgid "Selection: "
+msgstr ""
 
 #: gtk/gtkfontsel.c:203
 msgid "Foundry:"
@@ -432,7 +436,7 @@ msgstr ""
 msgid "clear"
 msgstr ""
 
-#: gtk/gtknotebook.c:1946 gtk/gtknotebook.c:3966
+#: gtk/gtknotebook.c:1966 gtk/gtknotebook.c:3985
 #, c-format
 msgid "Page %u"
 msgstr ""

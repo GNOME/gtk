@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 1999-01-04 03:55-0600\n"
+"POT-Creation-Date: 1999-01-12 10:38-0800\n"
 "PO-Revision-Date: 1998-12-18 12:15+0100\n"
 "Last-Translator: Sven Neumann <sven@gimp.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -42,19 +42,19 @@ msgid "Opacity:"
 msgstr "Deckkraft:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1637 gtk/gtkfilesel.c:462 gtk/gtkfontsel.c:3465
+#: gtk/gtkcolorsel.c:1640 gtk/gtkfilesel.c:462 gtk/gtkfontsel.c:3465
 #: gtk/gtkgamma.c:408
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1643 gtk/gtkfilesel.c:469 gtk/gtkfilesel.c:844
+#: gtk/gtkcolorsel.c:1646 gtk/gtkfilesel.c:469 gtk/gtkfilesel.c:844
 #: gtk/gtkfilesel.c:944 gtk/gtkfilesel.c:1059 gtk/gtkfontsel.c:3478
 #: gtk/gtkgamma.c:416
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: gtk/gtkcolorsel.c:1648
+#: gtk/gtkcolorsel.c:1651
 msgid "Help"
 msgstr "Hilfe"
 
@@ -68,7 +68,7 @@ msgstr "Verzeichnisse"
 msgid "Files"
 msgstr "Dateien"
 
-#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1455
+#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1454
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Verzeichnis unlesbar: %s"
@@ -121,6 +121,11 @@ msgstr "Löschen"
 #: gtk/gtkfilesel.c:1050
 msgid "Rename"
 msgstr "Umbenennen"
+
+#: gtk/gtkfilesel.c:1433
+#, fuzzy
+msgid "Selection: "
+msgstr "Schriftauswahl"
 
 #: gtk/gtkfontsel.c:203
 msgid "Foundry:"
@@ -429,7 +434,7 @@ msgstr "(ausgeschaltet)"
 msgid "clear"
 msgstr "gelöscht"
 
-#: gtk/gtknotebook.c:1946 gtk/gtknotebook.c:3966
+#: gtk/gtknotebook.c:1966 gtk/gtknotebook.c:3985
 #, c-format
 msgid "Page %u"
 msgstr "Seite %u"
