@@ -17,7 +17,7 @@ EXTRA_DIST =			\
 	README.cvs-commits	\
 	README.win32		\
 	config.h.win32		\
-	gtk-zip.sh		\
+	gtk-zip.sh.in		\
 	sanitize-la.sh		\
 	po/README.translators	\
 	po/makefile.mingw	\
