@@ -1,3 +1,7 @@
+2004-03-05  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk_pixbuf.def: Add missing entries. Thanks to J. Ali Harlow.
+
 Fri Mar  5 22:22:25 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* io-bmp.c (OneLine32): Don't try to load an alpha channel
