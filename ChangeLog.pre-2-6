@@ -1,3 +1,8 @@
+Fri Jan 23 16:58:28 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c (DEFAULT_POPUP_DELAY): Changing to 200 was a
+	mistake. Change back to 225.
+
 Thu Jan 22 18:46:05 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.3.2 ===
