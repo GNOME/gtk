@@ -209,7 +209,7 @@ gdk_font_from_description (PangoFontDescription *font_desc)
   g_return_val_if_fail (font_desc != NULL, NULL);
 
   font_map = pango_x_font_map_for_display (GDK_DISPLAY ());
-  font = pango_font_map_load_font (font_map, font_desc);
+  font = pango_font_map_load_font (font_map, NULL, font_desc);
 
   if (font)
     {

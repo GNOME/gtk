@@ -1,3 +1,8 @@
+2001-11-18  Alex Larsson  <alexl@redhat.com>
+
+	* gdk/x11/gdkfont-x11.c (gdk_font_from_description):
+	Update to new Pango API.
+	
 Sun Nov 18 19:47:29 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkobject.h docs/Changes-2.0.txt: Rename the
