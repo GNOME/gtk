@@ -1,3 +1,14 @@
+Tue May  7 00:50:20 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Merge TreeView fixes from HEAD:
+
+	(May  6):
+	* gtk/gtktreeview.c (gtk_tree_view_map_expanded_rows_helper): call
+        func on current node before the child nodes.
+
+	* gtk/gtktreeview.c (gtk_tree_view_motion_draw_column_motion_arrow):
+        unset user_data before destroying the window. (fixes #80065).
+
 Tue May  7 00:18:45 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_start_editing): add neighbor
