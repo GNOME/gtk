@@ -6698,15 +6698,15 @@ _gtk_text_btree_check (GtkTextBTree *tree)
   GtkTextLine *line;
   GtkTextLineSegment *seg;
   GtkTextTag *tag;
-  GSList *taglist = NULL;
+  GSList *all_tags, *taglist = NULL;
   int count;
   GtkTextTagInfo *info;
 
   /*
    * Make sure that the tag toggle counts and the tag root pointers are OK.
    */
-  for (taglist = list_of_tags (tree->table);
-       taglist != NULL ; taglist = taglist->next)
+  all_tags = list_of_tags (tree->table);
+  for (taglist = all_tags; taglist != NULL ; taglist = taglist->next)
     {
       tag = taglist->data;
       info = gtk_text_btree_get_existing_tag_info (tree, tag);
@@ -6790,8 +6790,7 @@ _gtk_text_btree_check (GtkTextBTree *tree)
         }
     }
 
-  g_slist_free (taglist);
-  taglist = NULL;
+  g_slist_free (all_tags);
 
   /*
    * Call a recursive procedure to do the main body of checks.

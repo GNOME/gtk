@@ -2258,7 +2258,6 @@ gtk_combo_box_cell_layout_clear_attributes (GtkCellLayout   *layout,
   ComboCellInfo *info;
   GtkComboBox *combo_box = GTK_COMBO_BOX (layout);
   GtkWidget *menu;
-  GSList *list;
 
   g_return_if_fail (GTK_IS_COMBO_BOX (layout));
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
@@ -2266,14 +2265,8 @@ gtk_combo_box_cell_layout_clear_attributes (GtkCellLayout   *layout,
   info = gtk_combo_box_get_cell_info (combo_box, cell);
   g_return_if_fail (info != NULL);
 
-  list = info->attributes;
-  while (list && list->next)
-    {
-      g_free (list->data);
-      list = list->next->next;
-    }
-  g_slist_free (list);
-
+  g_slist_foreach (info->attributes, (GFunc)g_free, NULL);
+  g_slist_free (info->attributes);
   info->attributes = NULL;
 
   if (combo_box->priv->cell_view)

@@ -1,5 +1,6 @@
-Fri Feb  6 22:56:05 2004  Matthias Clasen  <maclas@gmx.de>
+Fri Feb  6 23:08:29 2004  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtktextbtree.c (_gtk_text_btree_check): 
 	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_clear_attributes): 
 	* gtk/gtkcellview.c (gtk_cell_view_cell_layout_clear_attributes): 
 	Actually free the lists. Pointed out by Morten Welinder.

@@ -682,7 +682,6 @@ gtk_cell_view_cell_layout_clear_attributes (GtkCellLayout   *layout,
 {
   GtkCellViewCellInfo *info;
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
-  GSList *list;
 
   g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
@@ -690,15 +689,8 @@ gtk_cell_view_cell_layout_clear_attributes (GtkCellLayout   *layout,
   info = gtk_cell_view_get_cell_info (cellview, renderer);
   g_return_if_fail (info != NULL);
 
-  list = info->attributes;
-
-  while (list && list->next)
-    {
-      g_free (list->data);
-      list = list->next->next;
-    }
-  g_slist_free (list);
-
+  g_slist_foreach (info->attributes, (GFunc)g_free, NULL);
+  g_slist_free (info->attributes);
   info->attributes = NULL;
 }
 
