@@ -2653,10 +2653,11 @@ create_cursors ()
 				 GTK_SIGNAL_FUNC (gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
-    }
 
-  if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show_all (window);
+      gtk_widget_show_all (window);
+
+      set_cursor (spinner, darea);
+    }
   else
     gtk_widget_destroy (window);
 }
