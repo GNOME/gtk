@@ -749,9 +749,19 @@ gdk_window_move (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
-  
-  gdk_window_move_resize (window, x, y,
-			  impl->width, impl->height);
+
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
+	_gdk_window_move_resize_child (window, x, y,
+				       impl->width, impl->height);
+      else
+	{
+	  XMoveWindow (GDK_WINDOW_XDISPLAY (window),
+		       GDK_WINDOW_XID (window),
+		       x, y);
+	}
+    }
 }
 
 void
@@ -814,6 +824,7 @@ gdk_window_move_resize (GdkWindow *window,
 	  XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
 			     GDK_WINDOW_XID (window),
 			     x, y, width, height);
+	  private->resize_count += 1;
 	}
     }
 }
