@@ -1,3 +1,8 @@
+2004-04-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/properties.sgml: Document the only_if_exists argument
+	to gdk_atom_intern() as ignored.
+
 2004-04-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add GtkFileChooserEmbed to a 
