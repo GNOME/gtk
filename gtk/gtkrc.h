@@ -23,12 +23,12 @@
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkwidget.h>
 
+extern gchar *gtk_install_prefix;
 
 #ifdef __cplusplus
 extern "C" {
 #pragma }
 #endif /* __cplusplus */
-
 
 typedef enum {
   GTK_RC_FG   = 1 << 0,

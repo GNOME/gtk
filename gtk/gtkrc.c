@@ -96,6 +96,8 @@ static void        gtk_rc_append_default_pixmap_path (void);
 static void        gtk_rc_append_default_module_path (void);
 static void        gtk_rc_append_pixmap_path         (gchar *dir);
 
+gchar *gtk_install_prefix = GTK_INSTALL_PREFIX;
+
 
 static	GScannerConfig	gtk_rc_scanner_config =
 {

@@ -1,3 +1,10 @@
+Fri Aug 21 12:36:46 EDT 1998 The Rasterman <raster@redhat.com>
+	* fixed gtk_install_prefix global.
+	  
+Thu Aug 20 19:27:49 EDT 1998 The Rasterman <raster@redhat.com>
+	* added gtk_install_prefix global const variabel to find where gtk is
+	  installed.
+	  
 Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
 	* added ~/.gtk/lib/themes/engines/ to the defautl searchpath for
 	  gtk theme engines
