@@ -1,3 +1,10 @@
+2001-03-29  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_event_handler):
+	Don't return TRUE from the event handler, that blocks all
+	event signals on the tooltip widget. Now you can press buttons
+	in toolbars again.
+
 Wed Mar 28 19:20:43 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/testtext.c (create_buffer): Add missing NULL on

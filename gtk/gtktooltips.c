@@ -489,7 +489,7 @@ gtk_tooltips_event_handler (GtkWidget *widget,
       
     default:
       gtk_tooltips_set_active_widget (tooltips, NULL);
-      return TRUE;
+      return FALSE;
       break;
     }
 
