@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.5\n"
-"POT-Creation-Date: 1999-10-08 10:56-0500\n"
+"POT-Creation-Date: 2000-02-16 05:29-0600\n"
 "PO-Revision-Date: 1999-09-25 15:10+0300\n"
 "Last-Translator: Dan Damian <dand@dnttm.ro>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -44,14 +44,14 @@ msgid "Opacity:"
 msgstr "Opacitate:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3490
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
-#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3480
+#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3503
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Renunþã"
@@ -198,7 +198,7 @@ msgstr "Valoare actualã"
 msgid "Font"
 msgstr "Font"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2158 gtk/gtkfontsel.c:2388
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2181 gtk/gtkfontsel.c:2411
 msgid "Font:"
 msgstr "Font:"
 
@@ -281,23 +281,23 @@ msgstr "(nul)"
 msgid "regular"
 msgstr "regular"
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1950
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1973
 msgid "italic"
 msgstr "italic"
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1951
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1974
 msgid "oblique"
 msgstr "oblic"
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1952
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1975
 msgid "reverse italic"
 msgstr "italic inversat"
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1953
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1976
 msgid "reverse oblique"
 msgstr "oblic inversat"
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1977
 msgid "other"
 msgstr "altul"
 
@@ -309,51 +309,51 @@ msgstr "[M]"
 msgid "[C]"
 msgstr "[C]"
 
-#: gtk/gtkfontsel.c:1782
+#: gtk/gtkfontsel.c:1793
 msgid "The selected font is not available."
 msgstr "Fontul selectat nu este disponibil."
 
-#: gtk/gtkfontsel.c:1788
+#: gtk/gtkfontsel.c:1799
 msgid "The selected font is not a valid font."
 msgstr "Fontul selectat nu este un font valid."
 
-#: gtk/gtkfontsel.c:1846
+#: gtk/gtkfontsel.c:1857
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "Acesta este un font de 2-byte ºi s-ar putea sã nu fie afiºat corect."
 
-#: gtk/gtkfontsel.c:1938 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1961 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(necunoscut)"
 
-#: gtk/gtkfontsel.c:1949
+#: gtk/gtkfontsel.c:1972
 msgid "roman"
 msgstr "roman"
 
-#: gtk/gtkfontsel.c:1961
+#: gtk/gtkfontsel.c:1984
 msgid "proportional"
 msgstr "proporþional"
 
-#: gtk/gtkfontsel.c:1962
+#: gtk/gtkfontsel.c:1985
 msgid "monospaced"
 msgstr "monospaþiat"
 
-#: gtk/gtkfontsel.c:1963
+#: gtk/gtkfontsel.c:1986
 msgid "char cell"
 msgstr "celulã caracter"
 
-#: gtk/gtkfontsel.c:2163
+#: gtk/gtkfontsel.c:2186
 msgid "Font: (Filter Applied)"
 msgstr "Font: (filtru aplicat)"
 
-#: gtk/gtkfontsel.c:2639
+#: gtk/gtkfontsel.c:2662
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "S-a depãºit MAX_FONTS. Unele fonturi s-ar putea sã lipseascã."
 
-#: gtk/gtkfontsel.c:3474
+#: gtk/gtkfontsel.c:3497
 msgid "Apply"
 msgstr "Aplicã"
 
-#: gtk/gtkfontsel.c:3496
+#: gtk/gtkfontsel.c:3519
 msgid "Font Selection"
 msgstr "Selecþie font"
 
@@ -443,17 +443,17 @@ msgstr "(dezactivat)"
 msgid "clear"
 msgstr "ºterge"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
 
-#: gtk/gtkrc.c:1706
+#: gtk/gtkrc.c:1702
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Nu pot localiza fiºierul imagine în pixmap_path: \"%s\" line %d"
 
-#: gtk/gtkrc.c:1709
+#: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nu pot localiza fiºierul imagine în pixmap_path: \"%s\""

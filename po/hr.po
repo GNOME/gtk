@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.0\n"
-"POT-Creation-Date: 1999-10-08 10:56-0500\n"
+"POT-Creation-Date: 2000-02-16 05:29-0600\n"
 "PO-Revision-Date: 1999-02-28 02:00+0100\n"
 "Last-Translator: Tomislav Vujec <tvujec@carnet.hr>\n"
 "Language-Team: hr <LL@li.org>\n"
@@ -43,14 +43,14 @@ msgid "Opacity:"
 msgstr "Prozirnost:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3490
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
-#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3480
+#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3503
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Poni¹ti"
@@ -197,7 +197,7 @@ msgstr "Stvarna vrijednost"
 msgid "Font"
 msgstr "Pismo"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2158 gtk/gtkfontsel.c:2388
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2181 gtk/gtkfontsel.c:2411
 msgid "Font:"
 msgstr "Pismo:"
 
@@ -280,23 +280,23 @@ msgstr "(nil)"
 msgid "regular"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1950
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1973
 msgid "italic"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1951
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1974
 msgid "oblique"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1952
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1975
 msgid "reverse italic"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1953
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1976
 msgid "reverse oblique"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1977
 msgid "other"
 msgstr ""
 
@@ -308,51 +308,51 @@ msgstr ""
 msgid "[C]"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1782
+#: gtk/gtkfontsel.c:1793
 msgid "The selected font is not available."
 msgstr "Izabrano pismo nije raspolo¾ivo."
 
-#: gtk/gtkfontsel.c:1788
+#: gtk/gtkfontsel.c:1799
 msgid "The selected font is not a valid font."
 msgstr "Izabrano pismo je neispravno."
 
-#: gtk/gtkfontsel.c:1846
+#: gtk/gtkfontsel.c:1857
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "Ovo je dvobajtno pismo i mo¾e biti neispravno prikazano."
 
-#: gtk/gtkfontsel.c:1938 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1961 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(nepoznat)"
 
-#: gtk/gtkfontsel.c:1949
+#: gtk/gtkfontsel.c:1972
 msgid "roman"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1961
+#: gtk/gtkfontsel.c:1984
 msgid "proportional"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1962
+#: gtk/gtkfontsel.c:1985
 msgid "monospaced"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1963
+#: gtk/gtkfontsel.c:1986
 msgid "char cell"
 msgstr ""
 
-#: gtk/gtkfontsel.c:2163
+#: gtk/gtkfontsel.c:2186
 msgid "Font: (Filter Applied)"
 msgstr "Pismo: (S primjenjenim filterom)"
 
-#: gtk/gtkfontsel.c:2639
+#: gtk/gtkfontsel.c:2662
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS prekoraèeno. Neka pisma mogu nedostajati."
 
-#: gtk/gtkfontsel.c:3474
+#: gtk/gtkfontsel.c:3497
 msgid "Apply"
 msgstr "Primijeni"
 
-#: gtk/gtkfontsel.c:3496
+#: gtk/gtkfontsel.c:3519
 msgid "Font Selection"
 msgstr "Izbor pisma"
 
@@ -442,17 +442,17 @@ msgstr "(onemoguæen)"
 msgid "clear"
 msgstr "obri¹i"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Stranica %u"
 
-#: gtk/gtkrc.c:1706
+#: gtk/gtkrc.c:1702
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Ne mogu pronaæi slikovnu datoteku u pixmap_path: \"%s\" line %d"
 
-#: gtk/gtkrc.c:1709
+#: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ne mogu pronaæi slikovnu datoteku u pixmap_path: \"%s\""

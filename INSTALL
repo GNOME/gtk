@@ -7,8 +7,8 @@ you got this package.
 Simple install procedure
 ========================
 
-  % gzip -cd gtk+-1.2.6.tar.gz | tar xvf - # unpack the sources
-  % cd gtk+-1.2.6			   # change to the toplevel directory
+  % gzip -cd gtk+-1.2.7.tar.gz | tar xvf - # unpack the sources
+  % cd gtk+-1.2.7			   # change to the toplevel directory
   % ./configure				   # run the `configure' script
   % make				   # build GTK
   [ Become root if necessary ]
@@ -80,7 +80,6 @@ important ones:
  CC       : The C compiler to use
  CPPFLAGS : Flags for the C preprocesser such as -I and -D
  CFLAGS   : C compiler flags
- LDFLAGS  : Flags to pass to the linker.
 
 The most important use of this is to set the
 optimization/debugging flags. For instance, to compile with no
@@ -90,15 +89,7 @@ debugging information at all, run configure as:
 
 or,
 
- env CFLAGS -O2 ; ./configure  # csh and variants
-
-Another use of these flags is to add extra search locations
-for libraries and header files not in your compiler's default
-search paths. For instance, to enable configure find a library
-installed in /opt, you could run configure as:
-
-  CPPFLAGS=-I/opt/include LDFLAGS=-L/opt/lib ./configure
-
+ setenv CFLAGS -O2 ; ./configure  # csh and variants
 
 Native-Language Support and gettext()
 =====================================
@@ -120,7 +111,6 @@ NLS manually to get GTK+ to compile. You can do this
 by specifying the --disable-nls flag when configuring
 GTK+.
 
-
 Using an uninstalled copy of GLIB [ Unsupported ]
 =================================================
 
@@ -128,7 +118,7 @@ You can compile GTK+ against a copy of GLIB that you have not
 yet installed. To do this, give the --with-glib=DIR options
 to ./configure. For instance:
 
- ./configure --with-glib=../glib-1.2.6
+ ./configure --with-glib=../glib-1.2.7
 
 This, however, will not work if you built GLIB with different
 source and build directories.

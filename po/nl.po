@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 1999-10-08 10:56-0500\n"
+"POT-Creation-Date: 2000-02-16 05:29-0600\n"
 "PO-Revision-Date: 1999-01-31 23:04+0100\n"
 "Last-Translator: Paul Siegmann <pauls@euronet.nl>\n"
 "Language-Team: dutch <nl@li.org>\n"
@@ -42,14 +42,14 @@ msgid "Opacity:"
 msgstr "Doorschijnendheid:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3490
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
-#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3480
+#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3503
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Annuleren"
@@ -196,7 +196,7 @@ msgstr "Werkelijke Waarde"
 msgid "Font"
 msgstr "Lettertype"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2158 gtk/gtkfontsel.c:2388
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2181 gtk/gtkfontsel.c:2411
 msgid "Font:"
 msgstr "Lettertype:"
 
@@ -281,23 +281,23 @@ msgstr ""
 msgid "regular"
 msgstr "gewoon"
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1950
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1973
 msgid "italic"
 msgstr "schuingedrukt"
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1951
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1974
 msgid "oblique"
 msgstr "scheef"
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1952
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1975
 msgid "reverse italic"
 msgstr "omgekeerd schuingedrukt"
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1953
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1976
 msgid "reverse oblique"
 msgstr "omgekeerd scheef"
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1977
 msgid "other"
 msgstr "anders"
 
@@ -309,51 +309,51 @@ msgstr ""
 msgid "[C]"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1782
+#: gtk/gtkfontsel.c:1793
 msgid "The selected font is not available."
 msgstr "Het gekozen lettertype is niet beschikbaar."
 
-#: gtk/gtkfontsel.c:1788
+#: gtk/gtkfontsel.c:1799
 msgid "The selected font is not a valid font."
 msgstr "Het gekozen lettertype is niet een geldig lettertype."
 
-#: gtk/gtkfontsel.c:1846
+#: gtk/gtkfontsel.c:1857
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "Dit is een 2-byte lettertype en wordt mischien niet goed weergegeven."
 
-#: gtk/gtkfontsel.c:1938 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1961 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(onbekend)"
 
-#: gtk/gtkfontsel.c:1949
+#: gtk/gtkfontsel.c:1972
 msgid "roman"
 msgstr "romaans"
 
-#: gtk/gtkfontsel.c:1961
+#: gtk/gtkfontsel.c:1984
 msgid "proportional"
 msgstr "proportioneel"
 
-#: gtk/gtkfontsel.c:1962
+#: gtk/gtkfontsel.c:1985
 msgid "monospaced"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1963
+#: gtk/gtkfontsel.c:1986
 msgid "char cell"
 msgstr "karakter cel"
 
-#: gtk/gtkfontsel.c:2163
+#: gtk/gtkfontsel.c:2186
 msgid "Font: (Filter Applied)"
 msgstr "Lettertype: (Filter toegepast)"
 
-#: gtk/gtkfontsel.c:2639
+#: gtk/gtkfontsel.c:2662
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS overtreden. Sommige fonts kunnen ontbreken."
 
-#: gtk/gtkfontsel.c:3474
+#: gtk/gtkfontsel.c:3497
 msgid "Apply"
 msgstr "Toepassen"
 
-#: gtk/gtkfontsel.c:3496
+#: gtk/gtkfontsel.c:3519
 msgid "Font Selection"
 msgstr "Lettertype Selectie"
 
@@ -443,17 +443,17 @@ msgstr "(uitgeschakeld)"
 msgid "clear"
 msgstr "wissen"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
 
-#: gtk/gtkrc.c:1706
+#: gtk/gtkrc.c:1702
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" regel %d niet vinden"
 
-#: gtk/gtkrc.c:1709
+#: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan plaatjes bestand in pixmap_path: \"s\" niet vinden"
