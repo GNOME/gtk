@@ -1,3 +1,9 @@
+Fri May  1 12:28:35 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkcombo.c: Further changes to the way the window
+	is popped up so that it will be compatible with 
+	auto-scrolling in the future.
+
 Fri May  1 12:06:43 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkwindow.[ch] (gtk_widget_reset_rc_styles): New
