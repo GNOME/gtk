@@ -1,3 +1,9 @@
+Thu Jan 24 11:53:19 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_destroy): Don't clear
+	the model until we clean up all the other objects
+	that might refer to the object.
+
 2002-01-24  Mark McLoughlin  <mark@skynet.ie>
 
 	* gtk/gtkaccessible.h: include gtk/gtkwidget.h

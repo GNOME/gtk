@@ -1050,19 +1050,11 @@ gtk_tree_view_destroy (GtkObject *object)
       tree_view->priv->columns = NULL;
     }
 
-  gtk_tree_view_set_model (tree_view, NULL);
-
   if (tree_view->priv->tree != NULL)
     {
       gtk_tree_view_unref_and_check_selection_tree (tree_view, tree_view->priv->tree);
       _gtk_rbtree_free (tree_view->priv->tree);
       tree_view->priv->tree = NULL;
-    }
-
-  if (tree_view->priv->model != NULL)
-    {
-      g_object_unref (G_OBJECT (tree_view->priv->model));
-      tree_view->priv->model = NULL;
     }
 
   if (tree_view->priv->selection != NULL)
@@ -1122,6 +1114,9 @@ gtk_tree_view_destroy (GtkObject *object)
       (* tree_view->priv->search_destroy) (tree_view->priv->search_user_data);
       tree_view->priv->search_user_data = NULL;
     }
+
+  gtk_tree_view_set_model (tree_view, NULL);
+
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
