@@ -1,33 +1,36 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright © 2001-2003 Free Software Foundation, Inc.
 # Ales Nyakhaychyk <i18n@infonet.by>, 2001-2003.
+# Ales Nyakhaychyk <nab@mail.by>, 2003
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.2\n"
-"POT-Creation-Date: 2003-03-30 12:27+0200\n"
-"PO-Revision-Date: 2003-03-31 07:40+0300\n"
+"Project-Id-Version: gtk+.gtk-2-2.be\n"
+"POT-Creation-Date: 2003-03-08 12:30+0100\n"
+"PO-Revision-Date: 2003-05-01 12:29+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.6\n"
+"X-Generator: KBabel 1.0\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:736
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "Немагчыма адкрыць файл \"%s\": %s"
+msgstr "Немагчыма адчыніць файл \"%s\": %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:157 gdk-pixbuf/gdk-pixbuf-io.c:746
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "Файл з відарысам \"%s\" ня ўтрымлівае даньняў."
+msgstr "Файл з малюнкам \"%s\" не зьмяшчае даньняў."
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:197 gdk-pixbuf/gdk-pixbuf-io.c:780
 #, c-format
 msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Памылка загрузкі відарыса \"%s\": прычына невядома, хутчэй за ўсё файл пашкоджаны."
+msgstr ""
+"Памылка загрузкі малюнка \"%s\": прычына невядома, хутчэй за ўсё "
+"файлпашкоджаны."
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:225
 #, c-format
@@ -55,7 +58,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:564 gdk-pixbuf/gdk-pixbuf-io.c:612
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "Відарысы віду \"%s\" не падтрымліваецца."
+msgstr "Малюнкі віду \"%s\" не падтрымліваецца."
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:644
 #, c-format
@@ -269,7 +272,7 @@ msgstr "Непадтрымліваемы від значкі"
 msgid "Not enough memory to load ICO file"
 msgstr "Нехапае памяці для загрузкі ICO файла"
 
-#: gdk-pixbuf/io-ico.c:872
+#: gdk-pixbuf/io-ico.c:871
 msgid "The ICO image format"
 msgstr "ICO - фармат відарыса"
 
@@ -913,7 +916,7 @@ msgstr "Адлегласьць"
 msgid "The amount of space between children"
 msgstr "Памер прасторы паміж нашчадкамі"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:450
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:444
 msgid "Homogeneous"
 msgstr "Аднародны"
 
@@ -957,7 +960,7 @@ msgstr ""
 msgid "Pack type"
 msgstr "Від упакоўкі"
 
-#: gtk/gtkbox.c:168 gtk/gtknotebook.c:494
+#: gtk/gtkbox.c:168 gtk/gtknotebook.c:488
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -965,12 +968,12 @@ msgstr ""
 "GtkPackType паказвае ці будзе нашчадак упакаваны адносна пачатка ці канца "
 "бацькоўскага віджэта."
 
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:472 gtk/gtkpaned.c:218
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:466 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
 msgid "Position"
 msgstr "Становішча"
 
-#: gtk/gtkbox.c:175 gtk/gtknotebook.c:473
+#: gtk/gtkbox.c:175 gtk/gtknotebook.c:467
 msgid "The index of the child in the parent"
 msgstr "Індэкс нашчадка ў бацьку"
 
@@ -1986,7 +1989,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1107
 msgid "_New Folder"
-msgstr "Стварыць _тэчку"
+msgstr "Новы каталёг"
 
 #: gtk/gtkfilesel.c:1118
 msgid "De_lete File"
@@ -2021,7 +2024,7 @@ msgstr "Памылка стварэньня каталёгу \"%s\": %s\n"
 
 #: gtk/gtkfilesel.c:1470
 msgid "New Folder"
-msgstr "Стварыць тэчку"
+msgstr "Новы каталёг"
 
 #: gtk/gtkfilesel.c:1485
 msgid "_Folder name:"
@@ -2685,77 +2688,77 @@ msgstr "Запаўненьне па Y"
 msgid "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Памер прасторы зьверху й зьнізу ад віджэ�у ў піксэлях"
 
-#: gtk/gtknotebook.c:378
+#: gtk/gtknotebook.c:372
 msgid "Page"
 msgstr "Старонка"
 
-#: gtk/gtknotebook.c:379
+#: gtk/gtknotebook.c:373
 msgid "The index of the current page"
 msgstr "Індэкс бягучае старонкі"
 
-#: gtk/gtknotebook.c:387
+#: gtk/gtknotebook.c:381
 msgid "Tab Position"
 msgstr "Становішча лычкі"
 
-#: gtk/gtknotebook.c:388
+#: gtk/gtknotebook.c:382
 msgid "Which side of the notebook holds the tabs"
 msgstr "На якім баку нататніку зьмяшчаюцца лычкі"
 
-#: gtk/gtknotebook.c:395
+#: gtk/gtknotebook.c:389
 msgid "Tab Border"
 msgstr "Мяжы лычкі"
 
-#: gtk/gtknotebook.c:396
+#: gtk/gtknotebook.c:390
 msgid "Width of the border around the tab labels"
 msgstr "Шырыня мяжы вакол адмецін лычкі"
 
-#: gtk/gtknotebook.c:404
+#: gtk/gtknotebook.c:398
 msgid "Horizontal Tab Border"
 msgstr "Гарызантальная мяжа лычкі"
 
-#: gtk/gtknotebook.c:405
+#: gtk/gtknotebook.c:399
 msgid "Width of the horizontal border of tab labels"
 msgstr "Шырыня гарызантальнае мяжы адмецін лычкі"
 
-#: gtk/gtknotebook.c:413
+#: gtk/gtknotebook.c:407
 msgid "Vertical Tab Border"
 msgstr "Вэртыкальная мяжа лычкі"
 
-#: gtk/gtknotebook.c:414
+#: gtk/gtknotebook.c:408
 msgid "Width of the vertical border of tab labels"
 msgstr "Шырыня вэртыкальнае мяжы адмецін лычкі"
 
-#: gtk/gtknotebook.c:422
+#: gtk/gtknotebook.c:416
 msgid "Show Tabs"
 msgstr "Паказаць лычкі"
 
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:417
 msgid "Whether tabs should be shown or not"
 msgstr "Ці павінны адлюстроўвацца лычкі"
 
-#: gtk/gtknotebook.c:429
+#: gtk/gtknotebook.c:423
 msgid "Show Border"
 msgstr "Адлюстроўваць мяжу"
 
-#: gtk/gtknotebook.c:430
+#: gtk/gtknotebook.c:424
 msgid "Whether the border should be shown or not"
 msgstr "Ці павінна адлюстроўвацца мяжа"
 
-#: gtk/gtknotebook.c:436
+#: gtk/gtknotebook.c:430
 msgid "Scrollable"
 msgstr "Пракручваемае"
 
-#: gtk/gtknotebook.c:437
+#: gtk/gtknotebook.c:431
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Калі ІСЬЦІНА (TRUE), будуць далучаны стрэлкі пракруткі ўвыпадку,калі вельмі "
 "шмат укладак для адлюстраваньня."
 
-#: gtk/gtknotebook.c:443
+#: gtk/gtknotebook.c:437
 msgid "Enable Popup"
 msgstr "Уключыць усплываючае"
 
-#: gtk/gtknotebook.c:444
+#: gtk/gtknotebook.c:438
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -2763,47 +2766,47 @@ msgstr ""
 "Калі ІСЬЦІНА (TRUE), націсканьне правае кнопкі мышы на нататніку выклікае "
 "ўспываючае мэню, якое вы можаце выкарыстоўваць для пераходу на староку"
 
-#: gtk/gtknotebook.c:451
+#: gtk/gtknotebook.c:445
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Ці павінны укладкі мець аднолькавя памеры"
 
-#: gtk/gtknotebook.c:458
+#: gtk/gtknotebook.c:452
 msgid "Tab label"
 msgstr "Адмеціна ўкладкі"
 
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:453
 msgid "The string displayed on the childs tab label"
 msgstr "Радок, што будзе адлюстраваны на укладцы"
 
-#: gtk/gtknotebook.c:465
+#: gtk/gtknotebook.c:459
 msgid "Menu label"
 msgstr "Адмеціна мэню"
 
-#: gtk/gtknotebook.c:466
+#: gtk/gtknotebook.c:460
 msgid "The string displayed in the childs menu entry"
 msgstr "Радок, што адлюстроўваецца ў запісе мэню нашчадка"
 
-#: gtk/gtknotebook.c:479
+#: gtk/gtknotebook.c:473
 msgid "Tab expand"
 msgstr "Запаўненьне ўкладкі"
 
-#: gtk/gtknotebook.c:480
+#: gtk/gtknotebook.c:474
 msgid "Whether to expand the childs tab or not"
 msgstr "Ці будуць запаўняць прастору нашчадкі ўкладкі, ці не"
 
-#: gtk/gtknotebook.c:486
+#: gtk/gtknotebook.c:480
 msgid "Tab fill"
 msgstr "Укладкі напаўняюць"
 
-#: gtk/gtknotebook.c:487
+#: gtk/gtknotebook.c:481
 msgid "Wheather the childs tab should fill the allocated area or not"
 msgstr "Ці павінна ўкладка нашчадка запаўняць разьмеркаваную плошчу, ці не,"
 
-#: gtk/gtknotebook.c:493
+#: gtk/gtknotebook.c:487
 msgid "Tab pack type"
 msgstr "Від упакоўкі ўкладкі"
 
-#: gtk/gtknotebook.c:2474 gtk/gtknotebook.c:4821
+#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4787
 #, c-format
 msgid "Page %u"
 msgstr "Старонка %u"
@@ -2898,7 +2901,7 @@ msgstr ""
 "Лік паміж 0.0 і 1.0, які задае вэртыкальнаевыроўніваньне тэксту ў віджэце "
 "посьпеху"
 
-#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:290 gtk/gtkspinbutton.c:240
+#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:284 gtk/gtkspinbutton.c:240
 msgid "Adjustment"
 msgstr "Выроўніваньне"
 
@@ -2984,73 +2987,73 @@ msgstr "Група"
 msgid "The radio button whose group this widget belongs."
 msgstr "Радыё-кнопка, чыя група належыць гэтаму віджэту."
 
-#: gtk/gtkrange.c:281
+#: gtk/gtkrange.c:275
 msgid "Update policy"
 msgstr "Палітыка абнаўленьня"
 
-#: gtk/gtkrange.c:282
+#: gtk/gtkrange.c:276
 msgid "How the range should be updated on the screen"
 msgstr "Як павінен абнаўляцца прамежак на экране"
 
-#: gtk/gtkrange.c:291
+#: gtk/gtkrange.c:285
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment, які зьмяшчае бягучае значэньне для абьекту дыяпазону"
 
-#: gtk/gtkrange.c:298
+#: gtk/gtkrange.c:292
 msgid "Inverted"
 msgstr "Перавернуты"
 
-#: gtk/gtkrange.c:299
+#: gtk/gtkrange.c:293
 msgid "Invert direction slider moves to increase range value"
 msgstr "Перавернуць накірунак руху паўзунку, каб павялічыць значэньне дыяпазону"
 
-#: gtk/gtkrange.c:305
+#: gtk/gtkrange.c:299
 msgid "Slider Width"
 msgstr "Шырыня паўзунка"
 
-#: gtk/gtkrange.c:306
+#: gtk/gtkrange.c:300
 msgid "Width of scrollbar or scale thumb"
 msgstr "Шырыня паласы пракруткі ці пакажчыка маштабу"
 
-#: gtk/gtkrange.c:313
+#: gtk/gtkrange.c:307
 msgid "Trough Border"
 msgstr "Мяжа накіроўвываючай"
 
-#: gtk/gtkrange.c:314
+#: gtk/gtkrange.c:308
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Адлегласьць паміж указальнікам/кнопкамі і зьнешняй мяжой накіроўваючцай"
 
-#: gtk/gtkrange.c:321
+#: gtk/gtkrange.c:315
 msgid "Stepper Size"
 msgstr "Памер крочніку"
 
-#: gtk/gtkrange.c:322
+#: gtk/gtkrange.c:316
 msgid "Length of step buttons at ends"
 msgstr "Даўжыня кнопак кроку на прыканцах"
 
-#: gtk/gtkrange.c:329
+#: gtk/gtkrange.c:323
 msgid "Stepper Spacing"
 msgstr "Прастора крочніку"
 
-#: gtk/gtkrange.c:330
+#: gtk/gtkrange.c:324
 msgid "Spacing between step buttons and thumb"
 msgstr "Прастора паміж кнопкамі кроку й указальнікам"
 
-#: gtk/gtkrange.c:337
+#: gtk/gtkrange.c:331
 msgid "Arrow X Displacement"
 msgstr "Гарызантальнае зьмяшчэньне стрэлкі"
 
-#: gtk/gtkrange.c:338
+#: gtk/gtkrange.c:332
 msgid "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "На колькі далёка будзе перамяшчацца стрэлкапа x-накірунку, калі буце "
 "націснута кнопка"
 
-#: gtk/gtkrange.c:345
+#: gtk/gtkrange.c:339
 msgid "Arrow Y Displacement"
 msgstr "Вэртыкальнае зьмяшчэньне стрэлкі"
 
-#: gtk/gtkrange.c:346
+#: gtk/gtkrange.c:340
 msgid "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "На колькі далёка будзе перамяшчацца стрэлкапа y-накірунку, калі буце "
@@ -3519,7 +3522,7 @@ msgstr "У_гору"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
-msgstr "_Дапамога"
+msgstr "_Даведка"
 
 #: gtk/gtkstock.c:299
 msgid "_Home"
@@ -4946,7 +4949,7 @@ msgstr "Стыль стану мэтада ўвода"
 
 #: modules/input/gtkimcontextxim.c:275
 msgid "How to draw the input method statusbar"
-msgstr "Як адлюстроўваць палоску стану мэтада ўвода"
+msgstr "Як адлюстроўваецца палоска стану мэтада ўвода"
 
 #~ msgid "Don't know how to load the animation in file '%s'"
 #~ msgstr "Невядома, як загрузіць анімацыю з файла '%s'."
