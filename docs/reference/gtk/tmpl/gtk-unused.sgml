@@ -2345,14 +2345,6 @@ fundamental type.
 @window: 
 @Returns: 
 
-<!-- ##### FUNCTION gtk_window_get_resizeable ##### -->
-<para>
-
-</para>
-
-@window: 
-@Returns: 
-
 <!-- ##### FUNCTION gtk_window_set_decorations_hint ##### -->
 <para>
 
@@ -2368,12 +2360,4 @@ fundamental type.
 
 @window: 
 @functions: 
-
-<!-- ##### FUNCTION gtk_window_set_resizeable ##### -->
-<para>
-
-</para>
-
-@window: 
-@resizeable: 
 

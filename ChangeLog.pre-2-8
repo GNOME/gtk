@@ -1,3 +1,8 @@
+2001-08-30  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_check_cursor_blink): apply fix
+	to #58420 from Hidetoshi Tajima and Matthias Clasen
+
 Wed Aug 29 17:28:04 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render):

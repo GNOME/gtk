@@ -3744,12 +3744,6 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
   return;
 #endif
 
-  if (text_view->layout == NULL)
-    return;
-  
-  if (!text_view->cursor_visible)
-    return;
-
   if (text_view->layout != NULL &&
       text_view->cursor_visible &&
       GTK_WIDGET_HAS_FOCUS (text_view))
