@@ -104,7 +104,7 @@ gtk_model_simple_get_type (void)
 	NULL
       };
 
-      model_simple_type = g_type_register_static (GTK_TYPE_TREE_MODEL, "GtkModelSimple", &model_simple_info, 0);
+      model_simple_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkModelSimple", &model_simple_info, 0);
       g_type_add_interface_static (model_simple_type,
 				   GTK_TYPE_TREE_MODEL,
 				   &tree_model_info);

@@ -1,3 +1,8 @@
+2000-11-29  Elliot Lee  <sopwith@redhat.com>
+
+	* gtk/gtkmodelsimple.c: Inherits from GTK_TYPE_OBJECT, not
+	GTK_TYPE_TREE_MODEL.
+
 2000-11-29  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkfont-fb.c (gdk_font_from_description):
