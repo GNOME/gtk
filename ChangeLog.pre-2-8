@@ -1,3 +1,15 @@
+Sun Aug  8 23:36:55 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_setup): Ref
+	and sink the column.
+	(gtk_combo_box_menu_destroy): Unref the column.
+
+Sun Aug  8 23:35:00 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkdnd.c (gtk_drag_source_add_text_targets): 
+	(gtk_drag_dest_add_text_targets): Don't leak a reference 
+	to the target list.
+
 Sun Aug  8 22:52:26 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (find_menu_by_path): Don't stumble over

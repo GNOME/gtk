@@ -1039,10 +1039,13 @@ gtk_drag_dest_add_text_targets (GtkWidget *widget)
   GtkTargetList *target_list;
 
   target_list = gtk_drag_dest_get_target_list (widget);
-  if (!target_list)
+  if (target_list)
+    gtk_target_list_ref (target_list);
+  else
     target_list = gtk_target_list_new (NULL, 0);
   gtk_target_list_add_text_targets (target_list);
   gtk_drag_dest_set_target_list (widget, target_list);
+  gtk_target_list_unref (target_list);
 }
 
 /*************************************************************
@@ -2203,10 +2206,13 @@ gtk_drag_source_add_text_targets (GtkWidget *widget)
   GtkTargetList *target_list;
 
   target_list = gtk_drag_source_get_target_list (widget);
-  if (!target_list)
+  if (target_list)
+    gtk_target_list_ref (target_list);
+  else
     target_list = gtk_target_list_new (NULL, 0);
   gtk_target_list_add_text_targets (target_list);
   gtk_drag_source_set_target_list (widget, target_list);
+  gtk_target_list_unref (target_list);
 }
 
 static void

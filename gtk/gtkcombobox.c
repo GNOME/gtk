@@ -2279,6 +2279,8 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
 
   /* the column is needed in tree_column_row_is_sensitive() */
   combo_box->priv->column = gtk_tree_view_column_new ();
+  g_object_ref (combo_box->priv->column);
+  gtk_object_sink (GTK_OBJECT (combo_box->priv->column));
   gtk_combo_box_sync_cells (combo_box, 
 			    GTK_CELL_LAYOUT (combo_box->priv->column));
 }
@@ -2426,6 +2428,9 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
   combo_box->priv->button = NULL;
   combo_box->priv->arrow = NULL;
   combo_box->priv->separator = NULL;
+
+  g_object_unref (combo_box->priv->column);
+  combo_box->priv->column = NULL;
 
   /* changing the popup window will unref the menu and the children */
 }
@@ -4301,6 +4306,7 @@ gtk_combo_box_set_active_iter (GtkComboBox     *combo_box,
 
   path = gtk_tree_model_get_path (gtk_combo_box_get_model (combo_box), iter);
   gtk_combo_box_set_active_internal (combo_box, path);
+  gtk_tree_path_free (path);
 }
 
 /**
