@@ -727,10 +727,22 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
       img_buffer = stream;
       img_buffer_end = stream + stream_length;
 
+      APPEND (gstring, "#ifdef __SUNPRO_C\n");
+      APPEND (gstring, "#pragma align 4 (%s)\n", name);   
+      APPEND (gstring, "#endif\n");
+
+      APPEND (gstring, "#ifdef __GNUC__\n");
+      APPEND (gstring, "%s%s%s %s[] __attribute__ ((__aligned__ (4))) = \n",
+	      cdata.static_prefix, cdata.const_prefix,
+	      cdata.dump_gtypes ? "guint8" : "unsigned char",
+	      name);
+      APPEND (gstring, "#else\n");
       APPEND (gstring, "%s%s%s %s[] = \n",
 	      cdata.static_prefix, cdata.const_prefix,
 	      cdata.dump_gtypes ? "guint8" : "unsigned char",
 	      name);
+      APPEND (gstring, "#endif\n");
+
       APPEND (gstring, "{ \"\"\n  /* Pixbuf magic (0x%x) */\n  \"",
 	      GDK_PIXBUF_MAGIC_NUMBER);
       cdata.pos = 3;
