@@ -4224,7 +4224,7 @@ _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view)
   install_presize_handler (tree_view);
 }
 
-/**
+/*
  * This function works synchronously (due to the while (do_validate_rows...)
  * loop).
  *
@@ -10680,7 +10680,7 @@ gtk_tree_view_stop_editing (GtkTreeView *tree_view,
   if (tree_view->priv->edited_column == NULL)
     return;
 
-  /**
+  /*
    * This is very evil. We need to do this, because
    * gtk_cell_editable_editing_done may trigger gtk_tree_view_row_changed
    * later on. If gtk_tree_view_row_changed notices

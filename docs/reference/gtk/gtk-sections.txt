@@ -1690,7 +1690,6 @@ GTK_OBJECT_TYPE_NAME
 GtkObjectFlags
 GTK_OBJECT_FLAGS
 GTK_OBJECT_FLOATING
-GTK_OBJECT_CONNECTED
 GtkArgFlags
 gtk_object_new
 gtk_object_sink
