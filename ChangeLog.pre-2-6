@@ -1,3 +1,8 @@
+Tue Mar 12 23:14:23 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_unselect_iter): Fix
+	cut-n-paste bug.
+
 Sat Mar  9 18:23:25 2002  Richard Hestilow  <hestilow@ximian.com>
 
 	* gtk/gtkimage.c (gtk_image_set_from_filename): Allow NULL
