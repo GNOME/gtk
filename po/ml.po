@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:gtk+.gtk-2-2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-04 10:49-0400\n"
+"POT-Creation-Date: 2004-06-11 09:20-0400\n"
 "PO-Revision-Date: 2003-07-05 10:29+0530\n"
 "Last-Translator: FSF-India <locale@gnu.org.in>\n"
 "Language-Team: Malayalam <locale@gnu.org.in>\n"
@@ -15,25 +15,25 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:769
-#: gdk-pixbuf/gdk-pixbuf-io.c:902 tests/testfilechooser.c:192
+#: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:779
+#: gdk-pixbuf/gdk-pixbuf-io.c:926 tests/testfilechooser.c:192
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "%s തുറക്കുന്നതില്‌ പരാജയം : %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:779
+#: gdk-pixbuf/gdk-pixbuf-animation.c:165 gdk-pixbuf/gdk-pixbuf-io.c:793
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "ഛായാശേഖരം %sല്‌ വസ്തുതകള്‌ ഒന്നും ഇല്ല"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:813
-#: gdk-pixbuf/gdk-pixbuf-io.c:939 tests/testfilechooser.c:237
+#: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
+#: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:226
+#: gdk-pixbuf/gdk-pixbuf-animation.c:239
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -57,58 +57,58 @@ msgstr ""
 msgid "Image type '%s' is not supported"
 msgstr "ഛായാതരം %s നെ പിന്താങ്ങുന്നില്ല"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:657
+#: gdk-pixbuf/gdk-pixbuf-io.c:663
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "തിരിച്ചറിയാനാവത്ത ഛായവിവരശേഖര രീതി %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:663
+#: gdk-pixbuf/gdk-pixbuf-io.c:671
 msgid "Unrecognized image file format"
 msgstr "തിരിച്ചറിയാനാവത്ത ഛായവിവരശേഖര രീതി"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:824
+#: gdk-pixbuf/gdk-pixbuf-io.c:844
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "%s ചിത്രം നിറയ്‌ക്കുന്നതില്‌ പരാജയം : %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1127
+#: gdk-pixbuf/gdk-pixbuf-io.c:1158
 #, fuzzy, c-format
 msgid "Error writing to image file: %s"
 msgstr "JPEG ഛായാശേഖരം വ്യാഖ്യനിക്കുന്നതില്‌ പരാജയം (%s)"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1171 gdk-pixbuf/gdk-pixbuf-io.c:1287
+#: gdk-pixbuf/gdk-pixbuf-io.c:1202 gdk-pixbuf/gdk-pixbuf-io.c:1318
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1200
+#: gdk-pixbuf/gdk-pixbuf-io.c:1231
 #, fuzzy
 msgid "Insufficient memory to save image to callback"
 msgstr "XBM ഛായാശേഖരചിത്രം നിറയ്‌ക്കാന്‌ ആവശ്യമായ സ്ഥലമില്ല"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1212
+#: gdk-pixbuf/gdk-pixbuf-io.c:1243
 #, fuzzy
 msgid "Failed to open temporary file"
 msgstr "TIFF ശേഖരം തുറക്കുന്നതില്‌ പരാജയപ്പെടുന്നു"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1231
+#: gdk-pixbuf/gdk-pixbuf-io.c:1262
 #, fuzzy
 msgid "Failed to read from temporary file"
 msgstr "XBM ഛായാചിത്രം നിറ‌‌യ്‌ക്കുമ്പോള്‌ താല്‌ക്കാലിക ശേഖരത്തിലേക്ക് എഴുതന്നതില്‌ പരാജയം"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1411
+#: gdk-pixbuf/gdk-pixbuf-io.c:1444
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "%s എഴുതാനായി തുറക്കുന്നതില്‌ %s പരാജയം"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1432
+#: gdk-pixbuf/gdk-pixbuf-io.c:1469
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1618 gdk-pixbuf/gdk-pixbuf-io.c:1668
+#: gdk-pixbuf/gdk-pixbuf-io.c:1657 gdk-pixbuf/gdk-pixbuf-io.c:1707
 #, fuzzy
 msgid "Insufficient memory to save image into a buffer"
 msgstr "XBM ഛായാശേഖരചിത്രം നിറയ്‌ക്കാന്‌ ആവശ്യമായ സ്ഥലമില്ല"

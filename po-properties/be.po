@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-04 10:49-0400\n"
+"POT-Creation-Date: 2004-06-11 09:20-0400\n"
 "PO-Revision-Date: 2003-03-31 07:40+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -496,7 +496,7 @@ msgstr "Адлегласьць"
 msgid "The amount of space between children"
 msgstr "Памер прасторы паміж нашчадкамі"
 
-#: gtk/gtkbox.c:139 gtk/gtknotebook.c:469 gtk/gtktoolbar.c:531
+#: gtk/gtkbox.c:139 gtk/gtknotebook.c:469 gtk/gtktoolbar.c:533
 msgid "Homogeneous"
 msgstr "Аднародны"
 
@@ -504,7 +504,7 @@ msgstr "Аднародны"
 msgid "Whether the children should all be the same size"
 msgstr "Ці павінны нашчадкі быць аднолькавых памераў."
 
-#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:523
+#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:525
 #: gtk/gtktreeviewcolumn.c:295
 msgid "Expand"
 msgstr "Пашыраць"
@@ -1623,21 +1623,21 @@ msgstr "Адзначэньне пры засяроджваньні"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Ці зьмест запісу адзначаецца пры засяроджваньні."
 
-#: gtk/gtkentrycompletion.c:224
+#: gtk/gtkentrycompletion.c:229
 msgid "Completion Model"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:225
+#: gtk/gtkentrycompletion.c:230
 #, fuzzy
 msgid "The model to find matches in"
 msgstr "Разнавід для адлюстраваньня дрэва"
 
-#: gtk/gtkentrycompletion.c:231
+#: gtk/gtkentrycompletion.c:236
 #, fuzzy
 msgid "Minimum Key Length"
 msgstr "Найменьшая даўжыня паўзунку"
 
-#: gtk/gtkentrycompletion.c:232
+#: gtk/gtkentrycompletion.c:237
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
@@ -1964,7 +1964,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Віджэт, што будзе адлюстроўваны замест звычайнай адмеціны кадра."
 
 #: gtk/gtkhandlebox.c:203 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:200
-#: gtk/gtktoolbar.c:572 gtk/gtkviewport.c:151
+#: gtk/gtktoolbar.c:574 gtk/gtkviewport.c:151
 msgid "Shadow type"
 msgstr "Тып ценю"
 
@@ -2192,11 +2192,11 @@ msgstr "Шырыня разьмеркаваньня."
 msgid "The height of the layout"
 msgstr "Вышыня разьмеркаваньня."
 
-#: gtk/gtkmenu.c:520
+#: gtk/gtkmenu.c:518
 msgid "Tearoff Title"
 msgstr "Загаловак адарванага мэню"
 
-#: gtk/gtkmenu.c:521
+#: gtk/gtkmenu.c:519
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2204,103 +2204,103 @@ msgstr ""
 "Загаловак, які можа адлюстроўвацца аконным кіраўніком, пасля таго, як мэню "
 "будзе выключана."
 
-#: gtk/gtkmenu.c:527
+#: gtk/gtkmenu.c:525
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "Вэртыкальная запаўненьне"
 
-#: gtk/gtkmenu.c:528
+#: gtk/gtkmenu.c:526
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Памер прасторы зьверху й зьнізу ад віджэ�у ў піксэлях"
 
-#: gtk/gtkmenu.c:536
+#: gtk/gtkmenu.c:534
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "Вэртыкальнае маштабаваньне"
 
-#: gtk/gtkmenu.c:537
+#: gtk/gtkmenu.c:535
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:545
+#: gtk/gtkmenu.c:543
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "Гарызантальнае маштабаваньне"
 
-#: gtk/gtkmenu.c:546
+#: gtk/gtkmenu.c:544
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:554
 #, fuzzy
 msgid "Left Attach"
 msgstr "Левы дадатак"
 
-#: gtk/gtkmenu.c:557 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "Нумар слупка каб дадаць левы бок нашчадка да"
 
-#: gtk/gtkmenu.c:564
+#: gtk/gtkmenu.c:562
 #, fuzzy
 msgid "Right Attach"
 msgstr "Правы дадатак"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:563
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
 msgstr "Нумар слупка каб дадаць левы бок нашчадка да"
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:570
 #, fuzzy
 msgid "Top Attach"
 msgstr "Верхні дадатак"
 
-#: gtk/gtkmenu.c:573
+#: gtk/gtkmenu.c:571
 #, fuzzy
 msgid "The row number to attach the top of the child to"
 msgstr "нумар радка каб дадаць ніз віджэта-нашчадка да"
 
-#: gtk/gtkmenu.c:580
+#: gtk/gtkmenu.c:578
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "Ніжні дадатак"
 
-#: gtk/gtkmenu.c:581 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "нумар радка каб дадаць ніз віджэта-нашчадка да"
 
-#: gtk/gtkmenu.c:668
+#: gtk/gtkmenu.c:666
 msgid "Can change accelerators"
 msgstr "Можа зьмяняць \"гарычыя\" клявішы"
 
-#: gtk/gtkmenu.c:669
+#: gtk/gtkmenu.c:667
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Ці могуць быць зьменены \"гарачыя\" клявішы мэню, калі націснуць спалучэньне "
 "над пунктам мэню."
 
-#: gtk/gtkmenu.c:674
+#: gtk/gtkmenu.c:672
 msgid "Delay before submenus appear"
 msgstr "Затрымка перд зьяўленьнем падмэню"
 
-#: gtk/gtkmenu.c:675
+#: gtk/gtkmenu.c:673
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Час найменьшага знаходжаньня ўказальніка над мэню, пасьля якога зьявіцца "
 "падмэню."
 
-#: gtk/gtkmenu.c:682
+#: gtk/gtkmenu.c:680
 msgid "Delay before hiding a submenu"
 msgstr "Затрымка перд зьнікненьнем падмэню"
 
-#: gtk/gtkmenu.c:683
+#: gtk/gtkmenu.c:681
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2310,7 +2310,7 @@ msgstr "Час да схаваньня падмэню, калі ўказальн
 msgid "Style of bevel around the menubar"
 msgstr "Стыль скосу вакол палоскі мэню"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:548
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:550
 msgid "Internal padding"
 msgstr "Унутранае запаўненьне"
 
@@ -2680,7 +2680,7 @@ msgstr "Выроўніваньне"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "GtkAdjustment злучаны з палоскай посьпеху (Асуджан)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:497
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:499
 msgid "Orientation"
 msgstr "Спагляданьне"
 
@@ -3757,87 +3757,87 @@ msgstr "Адлюстроўваць паказальнік"
 msgid "If the toggle part of the button is displayed"
 msgstr "Калі адлюстравана пераключаемая частка кнопачкі"
 
-#: gtk/gtktoolbar.c:498
+#: gtk/gtktoolbar.c:500
 msgid "The orientation of the toolbar"
 msgstr "Мейсцазнаходжаньне палоскі прылад"
 
-#: gtk/gtktoolbar.c:506
+#: gtk/gtktoolbar.c:508
 msgid "Toolbar Style"
 msgstr "Выгляд панэлі прылад"
 
-#: gtk/gtktoolbar.c:507
+#: gtk/gtktoolbar.c:509
 msgid "How to draw the toolbar"
 msgstr "Як будзе адлюстроўвацца панэль прылад"
 
-#: gtk/gtktoolbar.c:514
+#: gtk/gtktoolbar.c:516
 #, fuzzy
 msgid "Show Arrow"
 msgstr "Адлюстроўваць мяжу"
 
-#: gtk/gtktoolbar.c:515
+#: gtk/gtktoolbar.c:517
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:526
 #, fuzzy
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Ці павінен нашчадак атрымліваць дадатковую прастору, калі бацькоўскі віджэт "
 "павялічвае ўласны памер."
 
-#: gtk/gtktoolbar.c:532
+#: gtk/gtktoolbar.c:534
 #, fuzzy
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Ці павінны нашчадкі быць аднолькавых памераў."
 
-#: gtk/gtktoolbar.c:539
+#: gtk/gtktoolbar.c:541
 msgid "Spacer size"
 msgstr "Памер прагалу"
 
-#: gtk/gtktoolbar.c:540
+#: gtk/gtktoolbar.c:542
 msgid "Size of spacers"
 msgstr "Памер прагалу"
 
-#: gtk/gtktoolbar.c:549
+#: gtk/gtktoolbar.c:551
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Памер прасторы між ценю палоскі прылад і кнопачкамі"
 
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:559
 msgid "Space style"
 msgstr "Выгляд падзяляльніку"
 
-#: gtk/gtktoolbar.c:558
+#: gtk/gtktoolbar.c:560
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Ці зьяўляецца падзяляльнік вэртыкальнай лініяй ці толькі прагалам"
 
-#: gtk/gtktoolbar.c:565
+#: gtk/gtktoolbar.c:567
 msgid "Button relief"
 msgstr "Выпукласьць кнопкі"
 
-#: gtk/gtktoolbar.c:566
+#: gtk/gtktoolbar.c:568
 msgid "Type of bevel around toolbar buttons"
 msgstr "Выгляд скосу вакол кнопачак панэлі прылад"
 
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:575
 msgid "Style of bevel around the toolbar"
 msgstr "Выгляд скосу вакол панэлі прылад"
 
-#: gtk/gtktoolbar.c:579
+#: gtk/gtktoolbar.c:581
 msgid "Toolbar style"
 msgstr "Стыль панэлі прылад"
 
-#: gtk/gtktoolbar.c:580
+#: gtk/gtktoolbar.c:582
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Ці мае неабумоўленая панэл прылад толькі �экст, тэкст і значкі, толькі "
 "значкі й інш."
 
-#: gtk/gtktoolbar.c:586
+#: gtk/gtktoolbar.c:588
 msgid "Toolbar icon size"
 msgstr "Памер значак панэлі прылад"
 
-#: gtk/gtktoolbar.c:587
+#: gtk/gtktoolbar.c:589
 msgid "Size of icons in default toolbars"
 msgstr "Памер значак паэлі прылад пры адсутнасьці абумоўленасьці"
 

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-04 10:49-0400\n"
+"POT-Creation-Date: 2004-06-11 09:20-0400\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -532,7 +532,7 @@ msgid "The amount of space between children"
 msgstr "Хүүхдүүдийн хоорондох зайн нийлбэр"
 
 # gtk/gtkbox.c:135 gtk/gtknotebook.c:434
-#: gtk/gtkbox.c:139 gtk/gtknotebook.c:469 gtk/gtktoolbar.c:531
+#: gtk/gtkbox.c:139 gtk/gtknotebook.c:469 gtk/gtktoolbar.c:533
 msgid "Homogeneous"
 msgstr "Нэг төрлийн"
 
@@ -541,7 +541,7 @@ msgstr "Нэг төрлийн"
 msgid "Whether the children should all be the same size"
 msgstr "Хүүхдүүд бүгд адил хэмжээтэй байх эсэх"
 
-#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:523
+#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:525
 #: gtk/gtktreeviewcolumn.c:295
 msgid "Expand"
 msgstr "Задлах"
@@ -1798,20 +1798,20 @@ msgstr "Фокус дахь сонголт"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Голлуулах үед бүртгэлийн агуулгыг сонгох эсэх."
 
-#: gtk/gtkentrycompletion.c:224
+#: gtk/gtkentrycompletion.c:229
 msgid "Completion Model"
 msgstr "Гүйцээлтийн загвар"
 
-#: gtk/gtkentrycompletion.c:225
+#: gtk/gtkentrycompletion.c:230
 msgid "The model to find matches in"
 msgstr "Сонголтоор хайгдах загвар"
 
 # gtk/gtkscrollbar.c:76
-#: gtk/gtkentrycompletion.c:231
+#: gtk/gtkentrycompletion.c:236
 msgid "Minimum Key Length"
 msgstr "Х/Б түлхүүрийн урт"
 
-#: gtk/gtkentrycompletion.c:232
+#: gtk/gtkentrycompletion.c:237
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Х/Б богино сонголтоор хайх түлхүүрийн урт"
 
@@ -2155,7 +2155,7 @@ msgstr "Энгийн кадрын нэрийн газарт удирдлагын
 # gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:151 gtk/gtkstatusbar.c:158
 # gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 #: gtk/gtkhandlebox.c:203 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:200
-#: gtk/gtktoolbar.c:572 gtk/gtkviewport.c:151
+#: gtk/gtktoolbar.c:574 gtk/gtkviewport.c:151
 msgid "Shadow type"
 msgstr "Сүүдрийн төрөл"
 
@@ -2404,105 +2404,105 @@ msgstr "Байрлалын өргөн"
 msgid "The height of the layout"
 msgstr "Байрлалын өндөр"
 
-#: gtk/gtkmenu.c:520
+#: gtk/gtkmenu.c:518
 msgid "Tearoff Title"
 msgstr "Буулгах гарчиг"
 
-#: gtk/gtkmenu.c:521
+#: gtk/gtkmenu.c:519
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Энэ цэс буусан үед цонхны удирдагчаар харуулагдах боломтой гарчиг"
 
-#: gtk/gtkmenu.c:527
+#: gtk/gtkmenu.c:525
 msgid "Vertical Padding"
 msgstr "Босоо доторлогоо"
 
-#: gtk/gtkmenu.c:528
+#: gtk/gtkmenu.c:526
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Цэсийн дээд ба доод зайн тусгай хэмжээ"
 
 # gtk/gtkalignment.c:130
-#: gtk/gtkmenu.c:536
+#: gtk/gtkmenu.c:534
 msgid "Vertical Offset"
 msgstr "Босоо оффсет"
 
-#: gtk/gtkmenu.c:537
+#: gtk/gtkmenu.c:535
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Хэрэв цэс дэд цэс бол, босоогоор энэ тооны цэг байрлуулна."
 
 # gtk/gtkalignment.c:121
-#: gtk/gtkmenu.c:545
+#: gtk/gtkmenu.c:543
 msgid "Horizontal Offset"
 msgstr "Хэвтээ оффсет"
 
-#: gtk/gtkmenu.c:546
+#: gtk/gtkmenu.c:544
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Хэрэв цэс дэд цэс бол, хэвтээгээр энэ тооны цэг байрлуулна."
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:554
 msgid "Left Attach"
 msgstr "Зүүн хавсралт"
 
-#: gtk/gtkmenu.c:557 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "Элементийн харьяалагдах зүүн талын баганы дугаар"
 
-#: gtk/gtkmenu.c:564
+#: gtk/gtkmenu.c:562
 msgid "Right Attach"
 msgstr "баруун хавсралт"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:563
 msgid "The column number to attach the right side of the child to"
 msgstr "Хүүгийн баруун талд харьяалагдах зүүн талын баганы дугаар"
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:570
 msgid "Top Attach"
 msgstr "Дээд хавсралт"
 
-#: gtk/gtkmenu.c:573
+#: gtk/gtkmenu.c:571
 msgid "The row number to attach the top of the child to"
 msgstr "Хүүгийн дээр харъяалагдах мөрийн дугаар"
 
-#: gtk/gtkmenu.c:580
+#: gtk/gtkmenu.c:578
 msgid "Bottom Attach"
 msgstr "Доод хавсралт"
 
-#: gtk/gtkmenu.c:581 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "Хүүгийн доор харъяалагдах мөрийн дугаар"
 
 # gtk/gtkmenu.c:260
-#: gtk/gtkmenu.c:668
+#: gtk/gtkmenu.c:666
 msgid "Can change accelerators"
 msgstr "Товчлууруудын комбинацийг өөрчилж болно."
 
-#: gtk/gtkmenu.c:669
+#: gtk/gtkmenu.c:667
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Цэсийн элемент дээр товч дарагдсан үед цэсийн хурдасгагч товчлууруудыг "
 "өөрчилж болох эсэх"
 
-#: gtk/gtkmenu.c:674
+#: gtk/gtkmenu.c:672
 msgid "Delay before submenus appear"
 msgstr "Дэд цэс харагдахаас өмнө түр завсарлах"
 
-#: gtk/gtkmenu.c:675
+#: gtk/gtkmenu.c:673
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Дэд цэс харагдахаас өмнө хулганын заагч цэс дээр байх хамгийн бага хугацаа."
 
-#: gtk/gtkmenu.c:682
+#: gtk/gtkmenu.c:680
 msgid "Delay before hiding a submenu"
 msgstr "Дэд цэс хаагдахаас өмнө түр завсарлах"
 
-#: gtk/gtkmenu.c:683
+#: gtk/gtkmenu.c:681
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2513,7 +2513,7 @@ msgstr "Хулганын заагч дэд цэс дээр очих үед дэ�
 msgid "Style of bevel around the menubar"
 msgstr "Цэсийн мөрийн орчим дахь ташуу гадаргуун загвар."
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:548
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:550
 msgid "Internal padding"
 msgstr "Дотоод дүүрэлт"
 
@@ -2905,7 +2905,7 @@ msgstr ""
 "GtkAdjustment процесийн индикатортой холбогдсон (Хэрэглэхгүй байсан нь дээр )"
 
 # gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:224
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:497
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:499
 msgid "Orientation"
 msgstr "Чиглэл"
 
@@ -4055,80 +4055,80 @@ msgid "If the toggle part of the button is displayed"
 msgstr "Хэрэв түлхүүр товч нь дарагдсан байдлаар дүрслэгдсэн байвал "
 
 # gtk/gtktoolbar.c:225
-#: gtk/gtktoolbar.c:498
+#: gtk/gtktoolbar.c:500
 msgid "The orientation of the toolbar"
 msgstr "Хэрэгслийн мөрийн байршил"
 
 # gtk/gtktoolbar.c:233
-#: gtk/gtktoolbar.c:506
+#: gtk/gtktoolbar.c:508
 msgid "Toolbar Style"
 msgstr "Хэрэгслийн мөрийн хэв маяг"
 
 # gtk/gtktoolbar.c:234
-#: gtk/gtktoolbar.c:507
+#: gtk/gtktoolbar.c:509
 msgid "How to draw the toolbar"
 msgstr "Хэрэгслийн мөрийг хэрхэн чирэх "
 
 # gtk/gtknotebook.c:413
-#: gtk/gtktoolbar.c:514
+#: gtk/gtktoolbar.c:516
 msgid "Show Arrow"
 msgstr "Сум харуулах"
 
-#: gtk/gtktoolbar.c:515
+#: gtk/gtktoolbar.c:517
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Хэрэв багаж самбарт таарахгүй бол сум харуулах уу?"
 
 # gtk/gtkbox.c:136
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:526
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Багаж самбар уртсахад элемент тусгай зай хүлээн авах эсэх"
 
 # gtk/gtkbox.c:136
-#: gtk/gtktoolbar.c:532
+#: gtk/gtktoolbar.c:534
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Элемент бусад янз бүрийн элементүүдтэй адил хэмжээтэй байх эсэх"
 
-#: gtk/gtktoolbar.c:539
+#: gtk/gtktoolbar.c:541
 msgid "Spacer size"
 msgstr "Зай авагчийн хэмжээ"
 
-#: gtk/gtktoolbar.c:540
+#: gtk/gtktoolbar.c:542
 msgid "Size of spacers"
 msgstr "Зай авагчийн хэмжээ"
 
-#: gtk/gtktoolbar.c:549
+#: gtk/gtktoolbar.c:551
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Товч болон хэрэгслийн мөрийн хоорондох сүүдрийн зай"
 
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:559
 msgid "Space style"
 msgstr "Зайн хэв маяг "
 
-#: gtk/gtktoolbar.c:558
+#: gtk/gtktoolbar.c:560
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Зай авагчид нь босоо шугам эсвэл зөвхөн хоосон зай авна"
 
 # gtk/gtktoolbar.c:269
-#: gtk/gtktoolbar.c:565
+#: gtk/gtktoolbar.c:567
 msgid "Button relief"
 msgstr "Тусламжийн товч"
 
 # gtk/gtktoolbar.c:270
-#: gtk/gtktoolbar.c:566
+#: gtk/gtktoolbar.c:568
 msgid "Type of bevel around toolbar buttons"
 msgstr "Налуу хэрэгслийн мөрийн товчнуудын төрөл"
 
 # gtk/gtktoolbar.c:278
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:575
 msgid "Style of bevel around the toolbar"
 msgstr "Налуу хэрэгслийн мөрийн хэв маяг"
 
 # gtk/gtktoolbar.c:284
-#: gtk/gtktoolbar.c:579
+#: gtk/gtktoolbar.c:581
 msgid "Toolbar style"
 msgstr "Хэрэгслийн мөрийн хэв маяг"
 
-#: gtk/gtktoolbar.c:580
+#: gtk/gtktoolbar.c:582
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
@@ -4136,12 +4136,12 @@ msgstr ""
 "гэх мэтчилэн байдаг "
 
 # gtk/gtktoolbar.c:291
-#: gtk/gtktoolbar.c:586
+#: gtk/gtktoolbar.c:588
 msgid "Toolbar icon size"
 msgstr "Хэрэгсэл мөрийн тэмдэгтийн хэмжээ."
 
 # gtk/gtktoolbar.c:292
-#: gtk/gtktoolbar.c:587
+#: gtk/gtktoolbar.c:589
 msgid "Size of icons in default toolbars"
 msgstr "Анхдагч хэрэгслийн мөр дэх тэмдэгтүүдийн хэмжээ."
 

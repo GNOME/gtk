@@ -1,3 +1,7 @@
+2004-06-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.4.3 ===
+
 Sat Jun  5 00:59:12 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-animation.c: 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-05-30 04:15+0200\n"
+"POT-Creation-Date: 2004-06-11 09:20-0400\n"
 "PO-Revision-Date: 2004-06-09 22:02+0200\n"
 "Last-Translator: Gabor Kelemen <kg0021@stud.unideb.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
@@ -19,24 +19,26 @@ msgstr ""
 "Plural-Forms:  nplurals=1; plural=0;\n"
 "X-Generator: KBabel 1.3.1\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:769
-#: gdk-pixbuf/gdk-pixbuf-io.c:902 tests/testfilechooser.c:192
+#: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:779
+#: gdk-pixbuf/gdk-pixbuf-io.c:926 tests/testfilechooser.c:192
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Nem sikerült megnyitni a(z) '%s' fájlt: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:779
+#: gdk-pixbuf/gdk-pixbuf-animation.c:165 gdk-pixbuf/gdk-pixbuf-io.c:793
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "A(z) '%s' képfájl nem tartalmaz adatokat"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:813
-#: gdk-pixbuf/gdk-pixbuf-io.c:939 tests/testfilechooser.c:237
+#: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
+#: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Nem sikerült betölteni a(z) '%s' képet: ok ismeretlen, talán sérült a képfájl"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Nem sikerült betölteni a(z) '%s' képet: ok ismeretlen, talán sérült a képfájl"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:226
+#: gdk-pixbuf/gdk-pixbuf-animation.c:239
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -62,55 +64,55 @@ msgstr ""
 msgid "Image type '%s' is not supported"
 msgstr "A(z) '%s' képtípus nem támogatott"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:657
+#: gdk-pixbuf/gdk-pixbuf-io.c:663
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Nem lehet azonosítani a(z) '%s' képfájl formátumát"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:663
+#: gdk-pixbuf/gdk-pixbuf-io.c:671
 msgid "Unrecognized image file format"
 msgstr "Azonosíthatatlan képfájl formátum"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:824
+#: gdk-pixbuf/gdk-pixbuf-io.c:844
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Nem sikerült betölteni a(z) '%s' képet: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1127
+#: gdk-pixbuf/gdk-pixbuf-io.c:1158
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Hiba képfájlba íráskor: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1171 gdk-pixbuf/gdk-pixbuf-io.c:1287
+#: gdk-pixbuf/gdk-pixbuf-io.c:1202 gdk-pixbuf/gdk-pixbuf-io.c:1318
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1200
+#: gdk-pixbuf/gdk-pixbuf-io.c:1231
 msgid "Insufficient memory to save image to callback"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1212
+#: gdk-pixbuf/gdk-pixbuf-io.c:1243
 msgid "Failed to open temporary file"
 msgstr "Nem sikerült megnyitni az átmeneti fájlt"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1231
+#: gdk-pixbuf/gdk-pixbuf-io.c:1262
 msgid "Failed to read from temporary file"
 msgstr "Nem sikerült olvasni az átmeneti fájlból"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1411
+#: gdk-pixbuf/gdk-pixbuf-io.c:1444
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "'%s' megnyitása írásra sikertelen: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1432
+#: gdk-pixbuf/gdk-pixbuf-io.c:1469
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1618 gdk-pixbuf/gdk-pixbuf-io.c:1668
+#: gdk-pixbuf/gdk-pixbuf-io.c:1657 gdk-pixbuf/gdk-pixbuf-io.c:1707
 msgid "Insufficient memory to save image into a buffer"
 msgstr ""
 
@@ -329,7 +331,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) '%d' érték nem "
 "megengedett."
@@ -429,7 +432,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Végzetes hiba a PNG képfájl olvasásakor: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:821
@@ -438,7 +442,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:994
@@ -772,14 +777,17 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"Az előzőleg kiválasztott szín, összehasonlításként a most kiválasztottal. Áthúzhatja ezt a "
-"színt egy palettabejegyzéshez, vagy kiválaszthatja mint jelenlegit a mellette lévő mezőbe húzással."
+"Az előzőleg kiválasztott szín, összehasonlításként a most kiválasztottal. "
+"Áthúzhatja ezt a színt egy palettabejegyzéshez, vagy kiválaszthatja mint "
+"jelenlegit a mellette lévő mezőbe húzással."
 
 #: gtk/gtkcolorsel.c:572
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr "Az ön által kiválasztott szín. Ezt a színt egy palettabejegyzésbe áthúzva elmentheti későbbi felhasználásra."
+msgstr ""
+"Az ön által kiválasztott szín. Ezt a színt egy palettabejegyzésbe áthúzva "
+"elmentheti későbbi felhasználásra."
 
 #: gtk/gtkcolorsel.c:933
 msgid "_Save color here"
@@ -789,19 +797,27 @@ msgstr "_Szín mentése ide"
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr "Kattintson erre a palettabejegyzésre hogy ez legyen a jelenlegi szín. A bejegyzés megváltoztatásához húzzon ide egy színt a pipetta melletti színmezőből vagy a felbukkanó menüből kattintson a \"Szín mentése ide\" pontra."
+msgstr ""
+"Kattintson erre a palettabejegyzésre hogy ez legyen a jelenlegi szín. A "
+"bejegyzés megváltoztatásához húzzon ide egy színt a pipetta melletti "
+"színmezőből vagy a felbukkanó menüből kattintson a \"Szín mentése ide\" "
+"pontra."
 
 #: gtk/gtkcolorsel.c:1846
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
-msgstr "Válassza ki a kívánt színt a külső gyűrűről. Válassza ki ezen szín a sötétségét vagy világosságát a belső háromszög használatával."
+msgstr ""
+"Válassza ki a kívánt színt a külső gyűrűről. Válassza ki ezen szín a "
+"sötétségét vagy világosságát a belső háromszög használatával."
 
 #: gtk/gtkcolorsel.c:1871
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr "Kattintson a pipettára, majd a képernyő bármely pontjára az ott lévő szín kiválasztásához."
+msgstr ""
+"Kattintson a pipettára, majd a képernyő bármely pontjára az ott lévő szín "
+"kiválasztásához."
 
 #: gtk/gtkcolorsel.c:1880
 msgid "_Hue:"
@@ -883,15 +899,15 @@ msgstr "Színkerék"
 msgid "Color Selection"
 msgstr "Szín kiválasztása"
 
-#: gtk/gtkentry.c:4215 gtk/gtktextview.c:6925
+#: gtk/gtkentry.c:4226 gtk/gtktextview.c:6925
 msgid "Select _All"
 msgstr "_Mindent kijelöl"
 
-#: gtk/gtkentry.c:4225 gtk/gtktextview.c:6935
+#: gtk/gtkentry.c:4236 gtk/gtktextview.c:6935
 msgid "Input _Methods"
 msgstr "Beviteli _módok"
 
-#: gtk/gtkentry.c:4235 gtk/gtktextview.c:6946
+#: gtk/gtkentry.c:4246 gtk/gtktextview.c:6946
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode vezérlőkarakter _beszúrása"
 
@@ -945,7 +961,7 @@ msgstr "Haza"
 msgid "Desktop"
 msgstr "Munkaasztal"
 
-#: gtk/gtkfilechooserdefault.c:1510
+#: gtk/gtkfilechooserdefault.c:1511
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -954,12 +970,12 @@ msgstr ""
 "Nem lehet létrehozni a(z) %s mappát:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1657
+#: gtk/gtkfilechooserdefault.c:1655
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Nem lehet könyvjelzőt adni ehhez: %s, mivel ez nem mappa"
 
-#: gtk/gtkfilechooserdefault.c:1735
+#: gtk/gtkfilechooserdefault.c:1733
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -968,23 +984,23 @@ msgstr ""
 "Nem lehet eltávolítani a könyvjelzőt ehhez: %s\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2329
+#: gtk/gtkfilechooserdefault.c:2327
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "%s érvénytelen útvonalnév, nem hozható létre könyvjelző."
 
-#: gtk/gtkfilechooserdefault.c:2520
+#: gtk/gtkfilechooserdefault.c:2518
 msgid "Folder"
 msgstr "Mappa"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2567 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2565 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "Hozzá_adás"
 
-#: gtk/gtkfilechooserdefault.c:2577 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2575 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_Eltávolítás"
 
@@ -1079,7 +1095,9 @@ msgstr "Ismeretlen"
 
 #: gtk/gtkfilechooserdefault.c:5178
 msgid "Cannot change to the folder you specified as it is an invalid path."
-msgstr "Nem lehet az ön által megadott mappába lépni mivel az egy érvénytelen útvonal."
+msgstr ""
+"Nem lehet az ön által megadott mappába lépni mivel az egy érvénytelen "
+"útvonal."
 
 #: gtk/gtkfilechooserdefault.c:5255
 #, c-format
@@ -1130,8 +1148,8 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"A(z) \"%s\" fájl egy másik (%s nevű) gépen helyezkedik el és nem érhető el ezen "
-"program számára.\n"
+"A(z) \"%s\" fájl egy másik (%s nevű) gépen helyezkedik el és nem érhető el "
+"ezen program számára.\n"
 "Valóban ki akarja választani? "
 
 #: gtk/gtkfilesel.c:1115
@@ -1148,8 +1166,10 @@ msgstr "Fájl át_nevezése"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) \"%s\" mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"A(z) \"%s\" mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: gtk/gtkfilesel.c:1441
 #, c-format
@@ -1184,7 +1204,8 @@ msgstr "Lét_rehozás"
 #: gtk/gtkfilesel.c:1566
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) \"%s\" fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgstr ""
+"A(z) \"%s\" fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: gtk/gtkfilesel.c:1569
 #, c-format
@@ -1216,7 +1237,8 @@ msgstr "Fájl törlése"
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) \"%s\" fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgstr ""
+"A(z) \"%s\" fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: gtk/gtkfilesel.c:1676
 #, c-format
@@ -1365,7 +1387,7 @@ msgstr "_Méret:"
 msgid "_Preview:"
 msgstr "_Előnézet:"
 
-#: gtk/gtkfontsel.c:1318
+#: gtk/gtkfontsel.c:1327
 msgid "Font Selection"
 msgstr "Betűkészlet választó"
 
@@ -1926,4 +1948,3 @@ msgstr "X Input Method"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nem lehet információt szerezni a(z) '%s' fájlról: %s"
-

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-04 10:49-0400\n"
+"POT-Creation-Date: 2004-06-11 09:20-0400\n"
 "PO-Revision-Date: 2004-03-14 16:47+0530\n"
 "Last-Translator: Amanpreet Singh Alam <amanlinux@netscape.net>\n"
 "Language-Team: Punjabi <indlinux-punjabi@lists.sourceforge.net>\n"
@@ -460,7 +460,7 @@ msgstr "ਖਾਲੀ ਥ੾"
 msgid "The amount of space between children"
 msgstr "ਚੈਲਡਰਨ ਵਿੱਚ ਕਿੰਨੀ ਥ੾ ਹੈ"
 
-#: gtk/gtkbox.c:139 gtk/gtknotebook.c:469 gtk/gtktoolbar.c:531
+#: gtk/gtkbox.c:139 gtk/gtknotebook.c:469 gtk/gtktoolbar.c:533
 msgid "Homogeneous"
 msgstr "ਸਮਰੂਪ"
 
@@ -468,7 +468,7 @@ msgstr "ਸਮਰੂਪ"
 msgid "Whether the children should all be the same size"
 msgstr "ਕੀ ਚੈਲਰਨ ੲਿੱਕੋ ਅਾਕਾਰ ਦੇ ਹੋਣ"
 
-#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:523
+#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:525
 #: gtk/gtktreeviewcolumn.c:295
 msgid "Expand"
 msgstr "ਖਿਲਾਰਿਅਾ"
@@ -1541,19 +1541,19 @@ msgstr "ਕੇਦਰਿਤ ਨੰੂ ਚੁਣੋ"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "ਕੀ ੲਿੰਦਰਾਜ਼ ਵਿੱਚਲੇ ਹਿੱਸੇ ਨੰੂ ਚੁਣਾ ਹੈ, ਜਦੋ ਕਿ ੲਿਹ ਕੇਦਰਿਤ ਹੋ ਜਾਵੇ"
 
-#: gtk/gtkentrycompletion.c:224
+#: gtk/gtkentrycompletion.c:229
 msgid "Completion Model"
 msgstr "ਪੂਰਤੀ ਨਮੂਨਾ"
 
-#: gtk/gtkentrycompletion.c:225
+#: gtk/gtkentrycompletion.c:230
 msgid "The model to find matches in"
 msgstr "ਨਮੂਨਾ ਜਿਸ ਵਿੱਚ ਮੇਲ ਲੱਭਣਾ ਹੈ"
 
-#: gtk/gtkentrycompletion.c:231
+#: gtk/gtkentrycompletion.c:236
 msgid "Minimum Key Length"
 msgstr "ਘੱਟੋ-ਘੱਟ ਕੀ ਦੀ ਲੰਬਾੲੀ"
 
-#: gtk/gtkentrycompletion.c:232
+#: gtk/gtkentrycompletion.c:237
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "ਮੇਲ ਲੱਭਣ ਲੲੀ ਖੋਜ ਕੀ ਦੀ ਘੱਟੋ-ਘੱਟ ਲੰਬਾੲੀ"
 
@@ -1849,7 +1849,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "ਫਾਰਮ ਦੇ ਲੇਬਲ ਲੲੀ ਥ੾ ਵੇਖਾੳੁਣ ਲੲੀ ਵਿਦਗਿਟ"
 
 #: gtk/gtkhandlebox.c:203 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:200
-#: gtk/gtktoolbar.c:572 gtk/gtkviewport.c:151
+#: gtk/gtktoolbar.c:574 gtk/gtkviewport.c:151
 msgid "Shadow type"
 msgstr "ਪਰਛਾਵੇ ਦੀ ਕਿਸਮ"
 
@@ -2068,99 +2068,99 @@ msgstr "ਖਾਕੇ ਦੀ ਚੌੜਾੲੀ"
 msgid "The height of the layout"
 msgstr "ਖਾਕੇ ਦੀ ੳੁਚਾੲੀ"
 
-#: gtk/gtkmenu.c:520
+#: gtk/gtkmenu.c:518
 msgid "Tearoff Title"
 msgstr "ਸਿਰਲੇਖ ਨੰੂ ਵੱਖ ਕਰ ਦਿੳੁ"
 
-#: gtk/gtkmenu.c:521
+#: gtk/gtkmenu.c:519
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "ਜਦੋ ਸੂਚੀ ਨੰੂ ਹਟਾੲਿਅਾ ਜਾਵੇ ਤ੾ ਝਰੋਖਾ ਪ੍ਬੰਧਕ ਦਾ ੳੁਪਲੱਬਧ ਸਿਰਲੇਖ ਜੋ ਕਿ ਦਿੱਸ ਸਕਦਾ ਹੈ"
 
-#: gtk/gtkmenu.c:527
+#: gtk/gtkmenu.c:525
 msgid "Vertical Padding"
 msgstr "ਲੰਬਕਾਰੀ ਚਿਣੋ"
 
-#: gtk/gtkmenu.c:528
+#: gtk/gtkmenu.c:526
 msgid "Extra space at the top and bottom of the menu"
 msgstr "ਸੂਚੀ ਦੇ ੳੁਪੱਰ ਅਤੇ ਹੇਠ੾ ਵਾਧੂ ਖਾਲੀ ਥ੾"
 
-#: gtk/gtkmenu.c:536
+#: gtk/gtkmenu.c:534
 msgid "Vertical Offset"
 msgstr "ਲੰਬਕਾਰੀ ਸੰਤੁਲਨ"
 
-#: gtk/gtkmenu.c:537
+#: gtk/gtkmenu.c:535
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "ਜਦੋ ਸੂਚੀ ਵਿੱਚ ਸਬ-ਸੂਚੀ ਹੋਵੇ ਤ੾, ੲਿਸ ਨੰੂ ੲਿੰਨੇ ਪਿਕਸਿਲ ਲੰਬਕਾਰ ਦਿਸ਼ਾ ਵਿੱਚ ਸੰਤੁਲਿਤ ਕਰੋ"
 
-#: gtk/gtkmenu.c:545
+#: gtk/gtkmenu.c:543
 msgid "Horizontal Offset"
 msgstr "ਲੇਟਵੀ ਸੰਤਲਨ"
 
-#: gtk/gtkmenu.c:546
+#: gtk/gtkmenu.c:544
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "ਜਦੋ ਸੂਚੀ ਵਿੱਚ ਸਬ-ਸੂਚੀ ਹੋਵੇ ਤ੾, ੲਿਸ ਨੰੂ ੲਿੰਨੇ ਪਿਕਸਿਲ ਲੇਟਵੀ ਦਿਸ਼ਾ ਸੰਤੁਲਿਤ ਕਰੋ"
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:554
 msgid "Left Attach"
 msgstr "ਖੱਬਾ ਜੋੜੋ"
 
-#: gtk/gtkmenu.c:557 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "ਚਲਾੲਿਡ ਨਾਲ ਖੱਬੇ ਪਾਸੇ ਜੋੜਨ ਲੲੀ ਕਾਲਮ ਦਾ ਨੰਬਰ"
 
-#: gtk/gtkmenu.c:564
+#: gtk/gtkmenu.c:562
 msgid "Right Attach"
 msgstr "ਸੱਜੇ ਜੋੜੋ"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:563
 msgid "The column number to attach the right side of the child to"
 msgstr "ਚਲਾੲਿਡ ਨਾਲ ਸੱਜੇ ਪਾਸੇ ਜੋੜਨ ਲੲੀ ਕਾਲਮ ਦਾ ਨੰਬਰ"
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:570
 msgid "Top Attach"
 msgstr "ੳੁਪੱਰ ਜੋੜੋ"
 
-#: gtk/gtkmenu.c:573
+#: gtk/gtkmenu.c:571
 msgid "The row number to attach the top of the child to"
 msgstr "ਚਲਾੲਿਡ ਨਾਲ ੳੁਪਰਲੇ ਪਾਸੇ ਜੋੜਨ ਲੲੀ ਸਤਰ ਦਾ ਨੰਬਰ"
 
-#: gtk/gtkmenu.c:580
+#: gtk/gtkmenu.c:578
 msgid "Bottom Attach"
 msgstr "ਹੇਠ੾ ਜੋੜੋ"
 
-#: gtk/gtkmenu.c:581 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "ਚਲਾੲਿਡ ਨਾਲ ਹੇਠਲੇ ਪਾਸੇ ਜੋੜਨ ਲੲੀ ਸਤਰ ਦਾ ਨੰਬਰ"
 
-#: gtk/gtkmenu.c:668
+#: gtk/gtkmenu.c:666
 msgid "Can change accelerators"
 msgstr "ਤੇਜ਼੾ ਨੰੂ ਤਬਦੀਲ ਸਕਦੇ ਹੋ"
 
-#: gtk/gtkmenu.c:669
+#: gtk/gtkmenu.c:667
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "ਕੀ ਸੂਚੀ-ਤੇਜ਼ ਸੂਚੀ ੳੁਪੱਰ ੲਿੱਕ ਕੀ ਦਬਾੳੁਣ ਨਾਲ ਤਬਦੀਲ ਹੋ ਜਾਣ"
 
-#: gtk/gtkmenu.c:674
+#: gtk/gtkmenu.c:672
 msgid "Delay before submenus appear"
 msgstr "ਸਬ-ਸੂਚੀ ਦੇ ੳੁਭੱਰਨ ਵਿੱਚ ਦੇਰੀ"
 
-#: gtk/gtkmenu.c:675
+#: gtk/gtkmenu.c:673
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "ਘੱਟੋ-ਘੱਟ ਸਮ੾, ਜਿਸ ਲੲੀ ਸਬ-ਸੂਚੀ ਦੇ ਖੁਲਣ ਤੋ ਪਹਿਲ੾ ਸੰਕੇਤਕ ਸੂਚੀ ਚੀਜ਼ ੳੁਪੱਰ ਹੀ ਰਹੇ ੤"
 
-#: gtk/gtkmenu.c:682
+#: gtk/gtkmenu.c:680
 msgid "Delay before hiding a submenu"
 msgstr "ੲਿੱਕ ਸਬ-ਸੂਚੀ ਨੰੂ ੳੁਹਲੇ ਹੋਣ ਵਿੱਚ ਦੇਰੀ"
 
-#: gtk/gtkmenu.c:683
+#: gtk/gtkmenu.c:681
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2170,7 +2170,7 @@ msgstr "ਸਮ੾ ੲਿੱਕ ਸਬ-ਸੂਚੀ ਨੰੂ ੳੁਹਲੇ ਹ
 msgid "Style of bevel around the menubar"
 msgstr "ਸੂਚੀ-ਪੱਟੀ ਦੇ ਦੁਅਾਲੇ ਬੀਵਲ ਦੀ ਸ਼ੈਲੀ"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:548
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:550
 msgid "Internal padding"
 msgstr "ਅੰਦਰੂਨੀ ਚਿਣਾੲੀ"
 
@@ -2521,7 +2521,7 @@ msgstr "ਅਨਕੂਲਤਾ"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "GtkAdjustment ਤਰੱਕੀ-ਪੱਟੀ ਨਾਲ ਜੁੜਿਅਾ ਹੈ (ਪ੍ਤੀਕੂਲ)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:497
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:499
 msgid "Orientation"
 msgstr "ਸਥਿਤੀ"
 
@@ -3544,80 +3544,80 @@ msgstr "ਸੰਕੇਤਕ ਖਿੱਚੋ"
 msgid "If the toggle part of the button is displayed"
 msgstr "ਕੀ ਬਟਨ ਦਾ ਬਦਲਵ੾ ਹਿੱਸਾ ਵੇਖਾੲਿਅਾ ਜਾਵੇ"
 
-#: gtk/gtktoolbar.c:498
+#: gtk/gtktoolbar.c:500
 msgid "The orientation of the toolbar"
 msgstr "ਸੰਦਖਾਨੇ ਦੀ ਸਥਿਤੀ"
 
-#: gtk/gtktoolbar.c:506
+#: gtk/gtktoolbar.c:508
 msgid "Toolbar Style"
 msgstr "ਸੰਦਖਾਨੇ ਦੀ ਸ਼ੈਲੀ"
 
-#: gtk/gtktoolbar.c:507
+#: gtk/gtktoolbar.c:509
 msgid "How to draw the toolbar"
 msgstr "ਸੰਦਖਾਨਾ ਨੰੂ ਕਿਵੇ ਬਣਾੳੁਣਾ ਹੈ"
 
-#: gtk/gtktoolbar.c:514
+#: gtk/gtktoolbar.c:516
 msgid "Show Arrow"
 msgstr "ਤੀਰ ਵੇਖਾੳੁ"
 
-#: gtk/gtktoolbar.c:515
+#: gtk/gtktoolbar.c:517
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "ਕੀ ਤੀਰ ਵੇਖਾੲਿਅਾ ਜਾਵੇ ਜਦੋ ਕਿ ਸੰਦਖਾਨਾ ਵਿੱਚ ਸਮਾ ਨਾ ਸਕੇ"
 
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:526
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "ਕੀ ਚੀਜ਼ ਹੋਰ ਵਾਧੂ ਥ੾ ਲਵੇ ਜਦੋ ਕਿ ਸੰਦਖਾਨਾ ਫੈਲੇ"
 
-#: gtk/gtktoolbar.c:532
+#: gtk/gtktoolbar.c:534
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "ਕੀ ਚੀਜ਼ ੳੁਸੇ ਅਾਕਾਰ ਦੀ ਹੋਵੇ ਜਿਸ ਦੀ ਹੋਰ ਸਮ-ਰੂਪ ਚੀਜ਼੾ ਹਨ"
 
-#: gtk/gtktoolbar.c:539
+#: gtk/gtktoolbar.c:541
 msgid "Spacer size"
 msgstr "ਖਾਲੀ ਥ੾ ਦਾ ਅਕਾਰ"
 
-#: gtk/gtktoolbar.c:540
+#: gtk/gtktoolbar.c:542
 msgid "Size of spacers"
 msgstr "ਖਾਲੀ ਥ੾ਵ੾ ਦਾ ਅਕਾਰ"
 
-#: gtk/gtktoolbar.c:549
+#: gtk/gtktoolbar.c:551
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "ਸੰਦਖਾਨੇ ਦੇ ਪਰਛਾਵੇ ਅਤੇ ਬਟਨ੾ ਵਿਚਕਾਰ ਹਾਸ਼ੀੲੇ ਦੀ ਥ੾ ਦੀ ਮਾਤਰਾ"
 
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:559
 msgid "Space style"
 msgstr "ਖਾਲੀ ਸ਼ੈਲੀ"
 
-#: gtk/gtktoolbar.c:558
+#: gtk/gtktoolbar.c:560
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "ਕੀ ਵੱਖਰਵੇ ਵਿੱਚ ਲੰਬਕਾਰੀ ਰੇਖਾਵ੾ ਹੋਣ ਜ੾ ਸਿਰਫ ਖਾਲੀ ਹੀ ਹੋਵੇ"
 
-#: gtk/gtktoolbar.c:565
+#: gtk/gtktoolbar.c:567
 msgid "Button relief"
 msgstr "ਬਟਨ ਛੌਟ"
 
-#: gtk/gtktoolbar.c:566
+#: gtk/gtktoolbar.c:568
 msgid "Type of bevel around toolbar buttons"
 msgstr "ਸੰਦਖਾਨੇ ਦੁਅਾਲੇ bevel ਦੀ ਕਿਸਮ"
 
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:575
 msgid "Style of bevel around the toolbar"
 msgstr "ਸੰਦਖਾਨੇ ਦੁਅਾਲੇ bevel ਦੀ ਸ਼ੈਲੀ"
 
-#: gtk/gtktoolbar.c:579
+#: gtk/gtktoolbar.c:581
 msgid "Toolbar style"
 msgstr "ਸੰਦਖਾਨੇ ਦੀ ਸ਼ੈਲੀ"
 
-#: gtk/gtktoolbar.c:580
+#: gtk/gtktoolbar.c:582
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "ਕੀ ਮੂਲ ਸੰਦਖਾਨੇ ਲੲੀ ਸ਼ਬਦ ਹੀ, ਸ਼ਬਦ ਤੇ ਅਾੲੀਕਾਨ, ਅਾੲੀਕਾਨ ਹੀ ਅਾਦਿ ਹੋਣ"
 
-#: gtk/gtktoolbar.c:586
+#: gtk/gtktoolbar.c:588
 msgid "Toolbar icon size"
 msgstr "ਸੰਦਖਾਨੇ ਦਾ ਅਾੲਿਕਾਨ ਦਾ ਅਾਕਾਰ"
 
-#: gtk/gtktoolbar.c:587
+#: gtk/gtktoolbar.c:589
 msgid "Size of icons in default toolbars"
 msgstr "ਮੂਲ ਸੰਦਖਾਨੇ ਵਿੱਚ ਅਾੲੀਕਾਨ ਦਾ ਅਾਕਾਰ"
 

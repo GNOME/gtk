@@ -1,3 +1,17 @@
+Overview of Changes from GTK+ 2.4.2 to GTK+ 2.4.3
+=================================================
+* GtkButton
+ - Give extra space to children of !CAN_FOCUS buttons [Matthias Clasen]
+* GtkFileChooser
+ - Make DND work when the dialog is modal [Federico Mena Quintero]
+* GtkToolbar
+ - Don't show empty overflow menu [Soeren Sandmann]
+ - Don't show initial separator in overflow menu [Soeren]
+ - Handle dynamic changes to overflow menu [Soeren]
+* Documentation improvements [Bastien Nocera, Matthias]
+* Other bug fixes [Matthias, Soeren, Sven Neumann]
+* Updated translations (hu,ne)
+
 Overview of Changes from GTK+ 2.4.1 to GTK+ 2.4.2
 =================================================
 * GtkUIManager
