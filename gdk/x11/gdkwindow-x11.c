@@ -318,7 +318,6 @@ gdk_window_new (GdkWindow     *parent,
 {
   GdkWindow *window;
   GdkWindowObject *private;
-  GdkWindowObject *parent_private;
   GdkWindowImplX11 *impl;
   GdkDrawableImplX11 *draw_impl;
   
@@ -347,7 +346,6 @@ gdk_window_new (GdkWindow     *parent,
 
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
   
-  parent_private = (GdkWindowObject*) parent;
   if (GDK_WINDOW_DESTROYED (parent))
     return NULL;
   
@@ -358,8 +356,14 @@ gdk_window_new (GdkWindow     *parent,
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
-  
+
   xdisplay = draw_impl->xdisplay = GDK_WINDOW_XDISPLAY (parent); 
+
+  /* Windows with a foreign parent are treated as if they are children
+   * of the root window, except for actual creation.
+   */
+  if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_FOREIGN)
+    parent = _gdk_parent_root;
   
   private->parent = (GdkWindowObject *)parent;
 
@@ -386,8 +390,7 @@ gdk_window_new (GdkWindow     *parent,
        * attributes->window_type for input-only windows
        * before
        */
-      if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_ROOT &&
-	  GDK_WINDOW_TYPE (parent) == GDK_WINDOW_FOREIGN)
+      if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_ROOT)
 	private->window_type = GDK_WINDOW_TEMP;
       else
 	private->window_type = GDK_WINDOW_CHILD;
@@ -424,7 +427,7 @@ gdk_window_new (GdkWindow     *parent,
   else
     xattributes.override_redirect = False;
 
-  if (parent_private && parent_private->guffaw_gravity)
+  if (private->parent && private->parent->guffaw_gravity)
     {
       xattributes.win_gravity = StaticGravity;
       xattributes_mask |= CWWinGravity;
@@ -436,8 +439,7 @@ gdk_window_new (GdkWindow     *parent,
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
-      if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT &&
-	  GDK_WINDOW_TYPE (parent) != GDK_WINDOW_FOREIGN)
+      if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
 	{
 	  g_warning (G_STRLOC "Toplevel windows must be created as children of\n"
 		     "of a window of type GDK_WINDOW_ROOT or GDK_WINDOW_FOREIGN");
@@ -527,8 +529,8 @@ gdk_window_new (GdkWindow     *parent,
 				  (attributes->cursor) :
 				  NULL));
   
-  if (parent_private)
-    parent_private->children = g_list_prepend (parent_private->children, window);
+  if (private->parent)
+    private->parent->children = g_list_prepend (private->parent->children, window);
   
   switch (GDK_WINDOW_TYPE (private))
     {
@@ -644,7 +646,6 @@ gdk_window_foreign_new (GdkNativeWindow anid)
 {
   GdkWindow *window;
   GdkWindowObject *private;
-  GdkWindowObject *parent_private;
   GdkWindowImplX11 *impl;
   GdkDrawableImplX11 *draw_impl;
   XWindowAttributes attrs;
@@ -675,11 +676,10 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   draw_impl->wrapper = GDK_DRAWABLE (window);
   
   private->parent = gdk_xid_table_lookup (parent);
+  if (!private->parent || GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_FOREIGN)
+    private->parent = (GdkWindowObject *)_gdk_parent_root;
   
-  parent_private = (GdkWindowObject *)private->parent;
-  
-  if (parent_private)
-    parent_private->children = g_list_prepend (parent_private->children, window);
+  private->parent->children = g_list_prepend (private->parent->children, window);
 
   draw_impl->xid = anid;
   draw_impl->xdisplay = gdk_display;
@@ -1210,6 +1210,12 @@ gdk_window_reparent (GdkWindow *window,
 		     GDK_WINDOW_XID (window),
 		     GDK_WINDOW_XID (new_parent),
 		     x, y);
+
+  /* From here on, we treat parents of type GDK_WINDOW_FOREIGN like
+   * the root window
+   */
+  if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
+    new_parent = _gdk_parent_root;
   
   window_private->parent = (GdkWindowObject *)new_parent;
 

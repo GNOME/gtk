@@ -320,7 +320,9 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	      private->bg_pixmap = NULL;
 	    }
 	  
-	  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+	  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_FOREIGN)
+	    g_assert (private->children == NULL);
+	  else
 	    {
 	      children = tmp = private->children;
 	      private->children = NULL;
@@ -695,7 +697,8 @@ gdk_window_get_toplevels (void)
   tmp_list = ((GdkWindowObject *)_gdk_parent_root)->children;
   while (tmp_list)
     {
-      new_list = g_list_prepend (new_list, tmp_list->data);
+      if (GDK_WINDOW_TYPE (tmp_list->data) != GDK_WINDOW_FOREIGN)
+	new_list = g_list_prepend (new_list, tmp_list->data);
       tmp_list = tmp_list->next;
     }
   

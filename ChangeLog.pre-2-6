@@ -1,3 +1,13 @@
+Tue Oct 23 17:31:42 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c gdk/win32/gdkwindow-win32.c: Always 
+	set window->parent (except or the root window itself); if 
+	the window's parent is not a GdkWindow, or is a window of 
+	type GDK_WINDOW_FOREIGN, set window->parent to the root parent.
+
+	* gdk/gdkwindow.c (gdk_window_get_toplevels): Don't include
+	windows of type GDK_WINDOW_FOREIGN.
+
 2001-10-24  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextiter.c (gtk_text_iter_backward_chars): if we move to

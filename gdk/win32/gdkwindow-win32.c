@@ -407,7 +407,6 @@ gdk_window_new (GdkWindow     *parent,
 {
   GdkWindow *window;
   GdkWindowObject *private;
-  GdkWindowObject *parent_private;
   GdkWindowImplWin32 *impl;
   GdkDrawableImplWin32 *draw_impl;
 
@@ -439,7 +438,6 @@ gdk_window_new (GdkWindow     *parent,
 			(attributes->window_type == GDK_WINDOW_TEMP ? "TEMP" :
 			 "???"))))));
 
-  parent_private = (GdkWindowObject*) parent;
   if (GDK_WINDOW_DESTROYED (parent))
     return NULL;
   
@@ -451,6 +449,12 @@ gdk_window_new (GdkWindow     *parent,
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
 
+  /* Windows with a foreign parent are treated as if they are children
+   * of the root window, except for actual creation.
+   */
+  if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_FOREIGN)
+    parent = _gdk_parent_root;
+  
   private->parent = (GdkWindowObject *)parent;
 
   if (attributes_mask & GDK_WA_X)
@@ -491,7 +495,7 @@ gdk_window_new (GdkWindow     *parent,
 
   impl->event_mask = GDK_STRUCTURE_MASK | attributes->event_mask;
       
-  if (parent_private && parent_private->guffaw_gravity)
+  if (private->parent && private->parent->guffaw_gravity)
     {
       /* XXX ??? */
     }
@@ -535,8 +539,8 @@ gdk_window_new (GdkWindow     *parent,
       GDK_NOTE (MISC, g_print ("...GDK_INPUT_ONLY, system colormap\n"));
     }
 
-  if (parent_private)
-    parent_private->children = g_list_prepend (parent_private->children, window);
+  if (private->parent)
+    private->parent->children = g_list_prepend (private->parent->children, window);
 
   switch (private->window_type)
     {
@@ -691,7 +695,6 @@ gdk_window_foreign_new (GdkNativeWindow anid)
 {
   GdkWindow *window;
   GdkWindowObject *private;
-  GdkWindowObject *parent_private;
   GdkWindowImplWin32 *impl;
   GdkDrawableImplWin32 *draw_impl;
 
@@ -707,11 +710,10 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   parent = GetParent ((HWND)anid);
   
   private->parent = gdk_win32_handle_table_lookup ((GdkNativeWindow) parent);
+  if (!private->parent || GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_FOREIGN)
+    private->parent = (GdkWindowObject *)_gdk_parent_root;
   
-  parent_private = (GdkWindowObject *)private->parent;
-  
-  if (parent_private)
-    parent_private->children = g_list_prepend (parent_private->children, window);
+  private->parent->children = g_list_prepend (private->parent->children, window);
 
   draw_impl->handle = (HWND) anid;
   GetClientRect ((HWND) anid, &rect);
@@ -1106,6 +1108,12 @@ gdk_window_reparent (GdkWindow *window,
 		       x, y, impl->width, impl->height, TRUE))
 	WIN32_API_FAILED ("MoveWindow");
     }
+
+  /* From here on, we treat parents of type GDK_WINDOW_FOREIGN like
+   * the root window
+   */
+  if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
+    new_parent = _gdk_parent_root;
   
   window_private->parent = (GdkWindowObject *)new_parent;
 
