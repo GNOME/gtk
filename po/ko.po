@@ -4,11 +4,11 @@
 # Changwoo Ryu <cwryu@debian.org>, 2002
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2002-04-15 00:23+0900\n"
-"PO-Revision-Date: 2002-04-15 00:23+0900\n"
+"Project-Id-Version: gtk+ 2.0.2\n"
+"POT-Creation-Date: 2002-05-06 23:24+0900\n"
+"PO-Revision-Date: 2002-05-06 23:26+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
-"Language-Team: Korean <ko@li.org>\n"
+"Language-Team: Korean <gnome-kr-translation@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1734,7 +1734,7 @@ msgstr "모두 선택"
 msgid "Input Methods"
 msgstr "입력기"
 
-#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
+#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6382
 msgid "_Insert Unicode control character"
 msgstr "유니코드 제어문자 삽입(_I)"
 
@@ -2342,7 +2342,7 @@ msgstr "세로 조정"
 msgid "The GtkAdjustment for the vertical position."
 msgstr "세로 위치의 GtkAdjustment"
 
-#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:190
+#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:191
 msgid "Width"
 msgstr "너비"
 
@@ -2363,7 +2363,7 @@ msgstr "레이아웃의 높이"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:731
+#: gtk/gtkmain.c:732
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2913,11 +2913,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "스크롤 막대의 반대쪽 끝에 표준 앞으로 가기 화살표 단추를 표시합니다"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:525
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
 msgstr "가로 조정"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:533
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:531
 msgid "Vertical Adjustment"
 msgstr "세로 조정"
 
@@ -3754,7 +3754,7 @@ msgstr "커서 보여주기"
 msgid "If the insertion cursor is shown"
 msgstr "삽입 커서를 보여줄 지 여부"
 
-#: gtk/gtktextview.c:6366
+#: gtk/gtktextview.c:6373
 msgid "Input _Methods"
 msgstr "입력방법(_M)"
 
@@ -3854,215 +3854,215 @@ msgstr "트리모델소트 모델"
 msgid "The model for the TreeModelSort to sort"
 msgstr "트리모델소트에서 정렬할 때 쓰는 모델"
 
-#: gtk/gtktreeview.c:517
+#: gtk/gtktreeview.c:515
 msgid "TreeView Model"
 msgstr "트리보기 모델"
 
-#: gtk/gtktreeview.c:518
+#: gtk/gtktreeview.c:516
 msgid "The model for the tree view"
 msgstr "트리 보기를 위한 모델"
 
-#: gtk/gtktreeview.c:526
+#: gtk/gtktreeview.c:524
 msgid "Horizontal Adjustment for the widget"
 msgstr "위젯의 가로 조정"
 
-#: gtk/gtktreeview.c:534
+#: gtk/gtktreeview.c:532
 msgid "Vertical Adjustment for the widget"
 msgstr "위젯의 세로 조정"
 
-#: gtk/gtktreeview.c:541 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:175 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "보임"
 
-#: gtk/gtktreeview.c:542
+#: gtk/gtktreeview.c:540
 msgid "Show the column header buttons"
 msgstr "열 헤더 단추 보여주기"
 
-#: gtk/gtktreeview.c:549
+#: gtk/gtktreeview.c:547
 msgid "Headers Clickable"
 msgstr "헤더 클릭 가능"
 
-#: gtk/gtktreeview.c:550
+#: gtk/gtktreeview.c:548
 msgid "Column headers respond to click events"
 msgstr "열 헤더가 클릭 이벤트에 반응하기"
 
-#: gtk/gtktreeview.c:557
+#: gtk/gtktreeview.c:555
 msgid "Expander Column"
 msgstr "확장 열"
 
-#: gtk/gtktreeview.c:558
+#: gtk/gtktreeview.c:556
 msgid "Set the column for the expander column"
 msgstr "이 열을 확장 열로 사용합니다."
 
-#: gtk/gtktreeview.c:565 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:274
 msgid "Reorderable"
 msgstr "순서 바꾸기 가능"
 
-#: gtk/gtktreeview.c:566
+#: gtk/gtktreeview.c:564
 msgid "View is reorderable"
 msgstr "뷰가 순서 바꾸기가 가능한지 여부"
 
-#: gtk/gtktreeview.c:573
+#: gtk/gtktreeview.c:571
 msgid "Rules Hint"
 msgstr "눈금자 힌트"
 
-#: gtk/gtktreeview.c:574
+#: gtk/gtktreeview.c:572
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "테마 엔진에 별도의 색으로 행을 그리는 힌트를 부여합니다"
 
-#: gtk/gtktreeview.c:581
+#: gtk/gtktreeview.c:579
 msgid "Enable Search"
 msgstr "찾기 사용"
 
-#: gtk/gtktreeview.c:582
+#: gtk/gtktreeview.c:580
 msgid "View allows user to search through columns interactively"
 msgstr "사용자가 뷰의 컬럼에서 대화적으로 찾기를 할 수 있도록 합니다"
 
-#: gtk/gtktreeview.c:589
+#: gtk/gtktreeview.c:587
 msgid "Search Column"
 msgstr "찾기 열"
 
-#: gtk/gtktreeview.c:590
+#: gtk/gtktreeview.c:588
 msgid "Model column to search through when searching through code"
 msgstr "찾기를 할 때 기준으로 삼을 모델 열"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:601
 msgid "Expander Size"
 msgstr "확장 크기"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:602
 msgid "Size of the expander arrow."
 msgstr "확장 화살표의 크기"
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:610
 msgid "Vertical Separator Width"
 msgstr "세로 구분선 너비"
 
-#: gtk/gtktreeview.c:613
+#: gtk/gtktreeview.c:611
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "셀 사이의 세로 방향 공간.  짝수이어야 합니다."
 
-#: gtk/gtktreeview.c:621
+#: gtk/gtktreeview.c:619
 msgid "Horizontal Separator Width"
 msgstr "가로 구분선 너비"
 
-#: gtk/gtktreeview.c:622
+#: gtk/gtktreeview.c:620
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "셀 사이의 가로 방향 공간.  짝수이어야 합니다."
 
-#: gtk/gtktreeview.c:630
+#: gtk/gtktreeview.c:628
 msgid "Allow Rules"
 msgstr "자 허용"
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:629
 msgid "Allow drawing of alternating color rows."
 msgstr "엇갈리는 색의 열을 그리도록 허용합니다."
 
-#: gtk/gtktreeview.c:637
+#: gtk/gtktreeview.c:635
 msgid "Indent Expanders"
 msgstr "확장 들여쓰기"
 
-#: gtk/gtktreeview.c:638
+#: gtk/gtktreeview.c:636
 msgid "Make the expanders indented."
 msgstr "확장을 들여쓸 것인지."
 
-#: gtk/gtktreeviewcolumn.c:175
+#: gtk/gtktreeviewcolumn.c:176
 msgid "Whether to display the column"
 msgstr "열을 표시할 것인지 여부"
 
-#: gtk/gtktreeviewcolumn.c:182 gtk/gtkwindow.c:441
+#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:441
 msgid "Resizable"
 msgstr "크기 조절 가능"
 
-#: gtk/gtktreeviewcolumn.c:183
+#: gtk/gtktreeviewcolumn.c:184
 msgid "Column is user-resizable"
 msgstr "사용자가 열의 크기를 조정할 수 있는지"
 
-#: gtk/gtktreeviewcolumn.c:191
+#: gtk/gtktreeviewcolumn.c:192
 msgid "Current width of the column"
 msgstr "열의 현재 너비"
 
-#: gtk/gtktreeviewcolumn.c:199
+#: gtk/gtktreeviewcolumn.c:200
 msgid "Sizing"
 msgstr "크기 조절"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Resize mode of the column"
 msgstr "열의 크기조절 모드"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:209
 msgid "Fixed Width"
 msgstr "고정 너비"
 
-#: gtk/gtktreeviewcolumn.c:209
+#: gtk/gtktreeviewcolumn.c:210
 msgid "Current fixed width of the column"
 msgstr "열의 현재 고정 너비"
 
-#: gtk/gtktreeviewcolumn.c:218
+#: gtk/gtktreeviewcolumn.c:219
 msgid "Minimum Width"
 msgstr "최소 너비"
 
-#: gtk/gtktreeviewcolumn.c:219
+#: gtk/gtktreeviewcolumn.c:220
 msgid "Minimum allowed width of the column"
 msgstr "열의 최소 가능 너비"
 
-#: gtk/gtktreeviewcolumn.c:228
+#: gtk/gtktreeviewcolumn.c:229
 msgid "Maximum Width"
 msgstr "최대 너비"
 
-#: gtk/gtktreeviewcolumn.c:229
+#: gtk/gtktreeviewcolumn.c:230
 msgid "Maximum allowed width of the column"
 msgstr "열의 최대 가능 너비"
 
-#: gtk/gtktreeviewcolumn.c:238
+#: gtk/gtktreeviewcolumn.c:239
 msgid "Title"
 msgstr "제목"
 
-#: gtk/gtktreeviewcolumn.c:239
+#: gtk/gtktreeviewcolumn.c:240
 msgid "Title to appear in column header"
 msgstr "열 헤더에 나타날 제목"
 
-#: gtk/gtktreeviewcolumn.c:246
+#: gtk/gtktreeviewcolumn.c:247
 msgid "Clickable"
 msgstr "클릭 가능"
 
-#: gtk/gtktreeviewcolumn.c:247
+#: gtk/gtktreeviewcolumn.c:248
 msgid "Whether the header can be clicked"
 msgstr "헤더가 클릭 가능한지"
 
-#: gtk/gtktreeviewcolumn.c:255
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Widget"
 msgstr "위젯"
 
-#: gtk/gtktreeviewcolumn.c:256
+#: gtk/gtktreeviewcolumn.c:257
 msgid "Widget to put in column header button instead of column title"
 msgstr "열 제목 대신에 열 헤더 단추 안에 넣을 위젯"
 
-#: gtk/gtktreeviewcolumn.c:263
+#: gtk/gtktreeviewcolumn.c:264
 msgid "Alignment"
 msgstr "맞춤"
 
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "X Alignment of the column header text or widget"
 msgstr "열 헤더 텍스트 혹은 위젯의 가로 맞춤"
 
-#: gtk/gtktreeviewcolumn.c:274
+#: gtk/gtktreeviewcolumn.c:275
 msgid "Whether the column can be reordered around the headers"
 msgstr "헤더 기준으로 열의 순서를 바꿀 것인지 여부"
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:282
 msgid "Sort indicator"
 msgstr "정렬 표시기"
 
-#: gtk/gtktreeviewcolumn.c:282
+#: gtk/gtktreeviewcolumn.c:283
 msgid "Whether to show a sort indicator"
 msgstr "정렬 표시기를 보여줄 지 여부"
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:290
 msgid "Sort order"
 msgstr "정렬 순서"
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Sort direction the sort indicator should indicate"
 msgstr "정렬 표시기가 가리킬 정렬 방향"
 
@@ -4187,8 +4187,8 @@ msgid "Composite child"
 msgstr "하위 위젯 혼합"
 
 #: gtk/gtkwidget.c:480
-msgid "Whether the widget is composed of other widgets"
-msgstr "위젯이 다른 위젯 여러 개로 구성되어 있는지 여부"
+msgid "Whether the widget is part of a composite widget"
+msgstr "위젯이 합성 위젯의 일부인지 여부"
 
 #: gtk/gtkwidget.c:486
 msgid "Style"
@@ -4346,7 +4346,7 @@ msgstr "기본 너비"
 #: gtk/gtkwindow.c:467
 msgid ""
 "The default width of the window, used when initially showing the window."
-msgstr "창의 기본 너비는 창이 처음으로 보여질때 사용됩니다."
+msgstr "창이 처음으로 보여질때 사용되는 창의 기본 너비."
 
 #: gtk/gtkwindow.c:476
 msgid "Default Height"
@@ -4355,7 +4355,7 @@ msgstr "기본 높이"
 #: gtk/gtkwindow.c:477
 msgid ""
 "The default height of the window, used when initially showing the window."
-msgstr "창의 기본 높이는 창이 처음으로 보여질때 사용됩니다."
+msgstr "창이 처음으로 보여질때 사용되는 창의 기본 높이."
 
 #: gtk/gtkwindow.c:486
 msgid "Destroy with Parent"
