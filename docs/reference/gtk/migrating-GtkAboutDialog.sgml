@@ -1,0 +1,94 @@
+<chapter id="gtk-migrating-GtkAboutDialog">
+
+  <title>Migrating from GnomeAbout to GtkAboutDialog</title>
+
+  <para>
+    Since version 2.6, GTK+ provides the <link linkend="GtkIconView">GtkAboutDialog</link>
+    widget as a replacement for the GnomeAbout dialog in the libgnomeui library.
+    views.
+  </para>
+
+  <para>
+    <link linkend="GtkIconView">GtkAboutDialog</link> supports all features found in 
+    GnomeAbout. The GtkAboutDialog API is bigger, since it follows the GTK+ policy to
+    have getters and setters for all widget properties, but it isn't much more complex
+    than GnomeAbout.
+  </para>
+
+  <para>
+    To convert an application that uses GnomeAbout to <link linkend="GtkIconView">GtkAboutDialog</link>,
+    as a first step, replace calls like
+    <informalexample><programlisting>
+    const gchar *documentors[] = { 
+      "Documenter 1", 
+      "Documenter 2", 
+      NULL 
+    };
+
+    const gchar *documentors[] = { 
+      "Author 1", 
+      "Author 2", 
+      NULL 
+    };
+
+    GtkWidget *about = gnome_about_new ("GNOME Test Program", VERSION,
+					"(C) 1998-2001 The Free Software Foundation",
+					"Program to display GNOME functions.",
+					authors,
+					documenters,
+					_("translator-credits"),
+					"logo.png");
+    </programlisting></informalexample>
+    by something like 
+    <informalexample><programlisting>
+    GdkPixbuf *logo = gdk_pixbuf_new_from_file ("logo.png", NULL);
+    GtkWidget *about = g_object_new (GTK_TYPE_ABOUT_DIALOG,
+                                     "name", "GNOME Test Program", 
+                                     "version", VERSION,
+			             "copyright", "(C) 1998-2001 The Free Software Foundation",
+				     "comments", "Program to display GNOME functions.",
+			             "authors", authors,
+			             "documenters", documenters,
+			             "translator-credits", _("translator-credits"),
+				     "logo", logo,
+                                     NULL);
+    g_object_unref (pixbuf);
+    </programlisting></informalexample>
+    If the <link linkend="g-object-new"><function>g_object_new()</function></link> construction scares you, 
+    you can also use <link linkend="g-object-new"><function>gtk_about_dialog_new()</function></link> to
+    construct the dialog and then use the setters for the individual properties.
+  </para>
+
+  <para>
+    Once you are done with the initial conversion, you may want to look into using some of the
+    features of <link linkend="GtkIconView">GtkAboutDialog</link> which are not present in GnomeAbout.
+    <itemizedlist>
+      <listitem><para>
+        You can specify license information 
+        with the <link linkend="GtkAboutDialog--license">license</link> property
+      </para></listitem>
+      <listitem><para>
+        You can add separate credits for artists with the 
+        <link linkend="GtkAboutDialog--artists">artists</link> property
+      </para></listitem>
+      <listitem><para>
+        You can add a pointer to the website of your application, using the 
+        <link linkend="GtkAboutDialog--website">website</link> and
+        <link linkend="GtkAboutDialog--website-label">website-label</link> properties.
+      </para></listitem>
+      <listitem><para>
+        If your credits contain email addresses or urls, you can turn them into clickable
+        links using 
+        <link linkend="gtk-about-dialog-set-email-hook"><function>gtk_about_dialog_set_email_hook()</function></link> and 
+        <link linkend="gtk-about-dialog-set-url-hook"><function>gtk_about_dialog_set_url_hook()</function></link>. 
+      </para></listitem>   
+    </itemizedlist>
+  </para>
+</chapter>
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("gtk-docs.sgml" "book" "part" "chapter")
+End:
+-->

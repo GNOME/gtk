@@ -255,7 +255,7 @@ VARIABLES3 = \
 	stock_media_play_16	$(srcdir)/stock_media_play_16.png	\
 	stock_media_play_24	$(srcdir)/stock_media_play_24.png	\
 	stock_media_play_rtl_16	$(srcdir)/stock_media_play_rtl_16.png	\
-	stock_media_play_rtl_24	$(srcdir)/stock_media_play_24.png	\
+	stock_media_play_rtl_24	$(srcdir)/stock_media_play_rtl_24.png	\
 	stock_media_previous_16	$(srcdir)/stock_media_previous_16.png	\
 	stock_media_previous_24	$(srcdir)/stock_media_previous_24.png	\
 	stock_media_record_16	$(srcdir)/stock_media_record_16.png	\

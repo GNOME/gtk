@@ -537,7 +537,6 @@ The "Media Pause" item.
 <para>
 The "Media Play" item.
 <inlinegraphic fileref="stock_media_play_24.png" format="PNG"></inlinegraphic>
-</para>
 RTL variant
 <inlinegraphic fileref="stock_media_play_rtl_24.png" format="PNG"></inlinegraphic>
 </para>

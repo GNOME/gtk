@@ -192,6 +192,7 @@
 <!ENTITY gtk-migrating-GtkAction SYSTEM "migrating-GtkAction.sgml">
 <!ENTITY gtk-migrating-GtkComboBox SYSTEM "migrating-GtkComboBox.sgml">
 <!ENTITY gtk-migrating-GtkIconView SYSTEM "migrating-GtkIconView.sgml">
+<!ENTITY gtk-migrating-GtkAboutDialog SYSTEM "migrating-GtkAboutDialog.sgml">
 <!ENTITY version SYSTEM "version.xml">
 <!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
 <!ENTITY gtk-update-icon-cache SYSTEM "gtk-update-icon-cache.xml">
@@ -573,6 +574,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     &gtk-migrating-GtkAction;
     &gtk-migrating-GtkComboBox;
     &gtk-migrating-GtkIconView;
+    &gtk-migrating-GtkAboutDialog;
   </part>
 
   <part>

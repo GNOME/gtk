@@ -1,5 +1,7 @@
 2004-11-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/stock-icons/Makefile.am: Typo fix.
+
 	* gtk/gtkaboutdialog.c: Documentation updates.
 
 2004-11-04  Bastien Nocera  <hadess@hadess.net>

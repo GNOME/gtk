@@ -1,3 +1,15 @@
+2004-11-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkstock.sgml: Fix markup.
+
+2004-11-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-docs.sgml: 
+	* gtk/migrating-GtkAboutDialog.sgml: Add a first version
+	of a GnomeAbout --> GtkAboutDialog migration chapter.
+
+	* gtk/tmpl/gtkaboutdialog.sgml: Update.
+
 2004-11-04  Bastien Nocera  <hadess@hadess.net>
 
 	* gtk/tmpl/gtkstock.sgml: add RTL variants for all the media icons
@@ -5,6 +17,7 @@
 
 2004-11-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-docs.sgml: 
 	* gtk/migrating-GtkIconView.sgml: Add a first version of
 	a GnomeIconList --> GtkIconView migration chapter.
 
