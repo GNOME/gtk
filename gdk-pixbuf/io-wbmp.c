@@ -101,7 +101,7 @@ static GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f, GError **error)
 
 	}
 	if (State->pixbuf != NULL)
-		gdk_pixbuf_ref(State->pixbuf);
+		g_object_ref(State->pixbuf);
 
 	pb = State->pixbuf;
 
@@ -152,7 +152,7 @@ static gboolean gdk_pixbuf__wbmp_image_stop_load(gpointer data,
         
 	g_return_val_if_fail(context != NULL, TRUE);
 	if (context->pixbuf)
-	  gdk_pixbuf_unref(context->pixbuf);
+	  g_object_unref(context->pixbuf);
 
 	g_free(context);
 

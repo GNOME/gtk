@@ -211,7 +211,7 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 
                 animation = gdk_pixbuf_non_anim_new (pixbuf);
 
-                g_object_unref (G_OBJECT (pixbuf));
+                g_object_unref (pixbuf);
 	} else {
 		fseek (f, 0, SEEK_SET);
 		animation = (* image_module->load_animation) (f, error);
@@ -617,7 +617,7 @@ gdk_pixbuf_non_anim_finalize (GObject *object)
         GdkPixbufNonAnim *non_anim = GDK_PIXBUF_NON_ANIM (object);
 
         if (non_anim->pixbuf)
-                g_object_unref (G_OBJECT (non_anim->pixbuf));
+                g_object_unref (non_anim->pixbuf);
         
         G_OBJECT_CLASS (non_parent_class)->finalize (object);
 }
@@ -632,7 +632,7 @@ gdk_pixbuf_non_anim_new (GdkPixbuf *pixbuf)
         non_anim->pixbuf = pixbuf;
 
         if (pixbuf)
-                g_object_ref (G_OBJECT (pixbuf));
+                g_object_ref (pixbuf);
 
         return GDK_PIXBUF_ANIMATION (non_anim);
 }
@@ -681,7 +681,7 @@ gdk_pixbuf_non_anim_get_iter (GdkPixbufAnimation *anim,
 
         iter->non_anim = GDK_PIXBUF_NON_ANIM (anim);
 
-        g_object_ref (G_OBJECT (iter->non_anim));
+        g_object_ref (iter->non_anim);
         
         return GDK_PIXBUF_ANIMATION_ITER (iter);
 }
@@ -750,7 +750,7 @@ gdk_pixbuf_non_anim_iter_finalize (GObject *object)
 {
         GdkPixbufNonAnimIter *iter = GDK_PIXBUF_NON_ANIM_ITER (object);
 
-        g_object_unref (G_OBJECT (iter->non_anim));
+        g_object_unref (iter->non_anim);
         
         G_OBJECT_CLASS (non_iter_parent_class)->finalize (object);
 }

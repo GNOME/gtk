@@ -60,7 +60,7 @@ configure_cb (GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
       new_pixbuf = gdk_pixbuf_get_from_drawable (NULL, root, NULL,
 						 0, 0, 0, 0, evt->width, evt->height);
       g_object_set_data (G_OBJECT (drawing_area), "pixbuf", new_pixbuf);
-      gdk_pixbuf_unref (pixbuf);
+      g_object_unref (pixbuf);
    }
 
    return FALSE;

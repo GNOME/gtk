@@ -385,7 +385,7 @@ gdk_pixbuf__jpeg_image_stop_load (gpointer data, GError **error)
          */
         
 	if (context->pixbuf)
-		gdk_pixbuf_unref (context->pixbuf);
+		g_object_unref (context->pixbuf);
 
 	/* if we have an error? */
 	if (sigsetjmp (context->jerr.setjmp_buffer, 1)) {

@@ -1,3 +1,10 @@
+2001-12-13  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* demos/testpixbuf-drawable.c, demos/testpixbuf-save.c,
+	demos/testpixbuf-scale.c, demos/testpixbuf.c: Call g_object_ref
+	and g_object_unref instead of gdk_pixbuf_ref and gdk_pixbuf_unref
+	resp.
+
 Thu Dec 13 22:02:41 2001  Kristian Rietveld   <kris@gtk.org>
 
 	* gtk/gtktreeview.c (validate_visible_area): free path

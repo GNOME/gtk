@@ -163,7 +163,7 @@ gdk_pixbuf_loader_finalize (GObject *object)
     g_warning ("GdkPixbufLoader finalized without calling gdk_pixbuf_loader_close() - this is not allowed. You must explicitly end the data stream to the loader before dropping the last reference.");
   
   if (priv->animation)
-    gdk_pixbuf_animation_unref (priv->animation);
+    g_object_unref (priv->animation);
   
   g_free (priv);
   
@@ -180,13 +180,13 @@ gdk_pixbuf_loader_prepare (GdkPixbuf          *pixbuf,
   priv = GDK_PIXBUF_LOADER (loader)->priv;
 
   if (anim)
-    g_object_ref (G_OBJECT (anim));
+    g_object_ref (anim);
   else
     anim = gdk_pixbuf_non_anim_new (pixbuf);
   
   priv->animation = anim;
   
-  g_signal_emit (G_OBJECT (loader), pixbuf_loader_signals[AREA_PREPARED], 0);
+  g_signal_emit (loader, pixbuf_loader_signals[AREA_PREPARED], 0);
 }
 
 static void
@@ -201,7 +201,7 @@ gdk_pixbuf_loader_update (GdkPixbuf *pixbuf,
   
   priv = GDK_PIXBUF_LOADER (loader)->priv;
   
-  g_signal_emit (G_OBJECT (loader),
+  g_signal_emit (loader,
                  pixbuf_loader_signals[AREA_UPDATED],
                  0,
                  x, y,
@@ -424,7 +424,7 @@ gdk_pixbuf_loader_new_with_type (const char *image_type,
   if (tmp != NULL)
     {
       g_propagate_error (error, tmp);
-      g_object_unref (G_OBJECT (retval));
+      g_object_unref (retval);
       return NULL;
     }
 
@@ -541,7 +541,7 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
   
   priv->closed = TRUE;
   
-  g_signal_emit (G_OBJECT (loader), pixbuf_loader_signals[CLOSED], 0);
+  g_signal_emit (loader, pixbuf_loader_signals[CLOSED], 0);
 
   return retval;
 }

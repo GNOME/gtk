@@ -1,3 +1,25 @@
+2001-12-13  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* gdk-pixbuf-animation.c, gdk-pixbuf-loader.c, gdk-pixpuf.c,
+	io-gif-animation.c, io-gif.c, io-tiff.c, test-loaders.c: Remove
+	assorted G_OBJECT casts where unnecessary.
+
+	* gdk-pixbuf-loader.c: Call g_object_ref and g_object_unref
+	instead of gdk_pixbuf_animation_ref and gdk_pixbuf_animation_unref
+	resp.
+
+	* gdk-pixbuf-csource.c, io-bmp.c, io-gif-animation.c, io-ico.c,
+	io-jpeg.c, io-png.c, io-pnm.c, io-ras.c, io-tga.c, io-wbmp.c,
+	io-xbm.c, io-xpm.c, test-gdk-pixbuf.c: Dito for gdk_pixbuf_ref and
+	gdk_pixbuf_unref.
+	
+	* Makefile.am, pixops/Makefile.am: Compile everything with
+	-DG_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED
+
+	* gdk-pixdata.c: Use g_ascii_strup() instead of g_strup().
+
+	* io-xpm.c: Use g_ascii_strcasecmp() instead of g_strcasecmp().
+
 2001-12-12  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk-pixbuf-io.c: Markup fixes.

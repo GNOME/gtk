@@ -174,7 +174,7 @@ context_free (struct ico_progressive_state *context)
 		g_free (context->HeaderBuf);
 
 	if (context->pixbuf)
-		gdk_pixbuf_unref (context->pixbuf);
+		g_object_unref (context->pixbuf);
 
 	g_free (context);
 }
@@ -213,7 +213,7 @@ gdk_pixbuf__ico_image_load(FILE * f, GError **error)
 			}
 	}
 	if (State->pixbuf != NULL)
-		gdk_pixbuf_ref (State->pixbuf);
+		g_object_ref (State->pixbuf);
 	else {
 		g_set_error (error,
 			     GDK_PIXBUF_ERROR,

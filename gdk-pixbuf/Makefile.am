@@ -210,6 +210,8 @@ INCLUDES = @STRIP_BEGIN@ 			\
 	-I$(top_srcdir)/gdk-pixbuf 		\
 	-I$(top_builddir)/gdk-pixbuf 		\
 	-DGTK_VERSION=\"@GTK_VERSION@\"		\
+	-DG_DISABLE_DEPRECATED			\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED		\
 	@INCLUDED_LOADER_DEFINE@ 		\
 	@GTK_DEBUG_FLAGS@			\
 	@GDK_PIXBUF_DEP_CFLAGS@			\

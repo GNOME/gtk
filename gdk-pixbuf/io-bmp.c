@@ -225,7 +225,7 @@ static GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f, GError **error)
 
 	}
 	if (State->pixbuf != NULL)
-		gdk_pixbuf_ref(State->pixbuf);
+		g_object_ref(State->pixbuf);
 
 	pb = State->pixbuf;
 
@@ -516,7 +516,7 @@ static gboolean gdk_pixbuf__bmp_image_stop_load(gpointer data, GError **error)
 		g_free(context->Colormap);
 
 	if (context->pixbuf)
-		gdk_pixbuf_unref(context->pixbuf);
+		g_object_unref(context->pixbuf);
 
 	g_free(context->buff);
 	g_free(context);

@@ -625,8 +625,7 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
   height = pixdata->height;
   rowstride = pixdata->rowstride;
   rle_encoded = (pixdata->pixdata_type & GDK_PIXDATA_ENCODING_RLE) > 0;
-  macro_name = g_strdup (name);
-  g_strup (macro_name);
+  macro_name = g_ascii_strup (name, -1);
 
   cdata.dump_macros = (dump_type & GDK_PIXDATA_DUMP_MACROS) > 0;
   cdata.dump_struct = (dump_type & GDK_PIXDATA_DUMP_PIXDATA_STRUCT) > 0;

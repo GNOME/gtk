@@ -47,7 +47,7 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 				 event->area.width, event->area.height,
 				 GDK_RGB_DITHER_NORMAL, event->area.x, event->area.y);
   
-  gdk_pixbuf_unref (dest);
+  g_object_unref (dest);
   
   return TRUE;
 }

@@ -101,7 +101,7 @@ main (int   argc,
 	}
       
       print_csource (stdout, pixbuf);
-      gdk_pixbuf_unref (pixbuf);
+      g_object_unref (pixbuf);
     }
   else /* parse name, file pairs */
     {
@@ -125,7 +125,7 @@ main (int   argc,
 		  return 1;
 		}
 	      print_csource (stdout, pixbuf);
-	      gdk_pixbuf_unref (pixbuf);
+	      g_object_unref (pixbuf);
 	      p++;
 	    }
 	  toggle = !toggle;

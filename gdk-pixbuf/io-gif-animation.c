@@ -97,11 +97,11 @@ gdk_pixbuf_gif_anim_finalize (GObject *object)
         
         for (l = gif_anim->frames; l; l = l->next) {
                 frame = l->data;
-                gdk_pixbuf_unref (frame->pixbuf);
+                g_object_unref (frame->pixbuf);
                 if (frame->composited)
-                        gdk_pixbuf_unref (frame->composited);
+                        g_object_unref (frame->composited);
                 if (frame->revert)
-                        gdk_pixbuf_unref (frame->revert);
+                        g_object_unref (frame->revert);
                 g_free (frame);
         }
         
@@ -175,7 +175,7 @@ gdk_pixbuf_gif_anim_get_iter (GdkPixbufAnimation *anim,
 
         iter->gif_anim = GDK_PIXBUF_GIF_ANIM (anim);
 
-        g_object_ref (G_OBJECT (iter->gif_anim));
+        g_object_ref (iter->gif_anim);
         
         iter_restart (iter);
 
@@ -250,7 +250,7 @@ gdk_pixbuf_gif_anim_iter_finalize (GObject *object)
 
         iter_clear (iter);
 
-        g_object_unref (G_OBJECT (iter->gif_anim));
+        g_object_unref (iter->gif_anim);
         
         G_OBJECT_CLASS (iter_parent_class)->finalize (object);
 }
@@ -356,7 +356,7 @@ gdk_pixbuf_gif_anim_frame_composite (GdkPixbufGifAnim *gif_anim,
                         
                         if (f->need_recomposite) {
                                 if (f->composited) {
-                                        g_object_unref (G_OBJECT (f->composited));
+                                        g_object_unref (f->composited);
                                         f->composited = NULL;
                                 }
                         }
@@ -376,7 +376,7 @@ gdk_pixbuf_gif_anim_frame_composite (GdkPixbufGifAnim *gif_anim,
 
                         if (f->need_recomposite) {
                                 if (f->composited) {
-                                        g_object_unref (G_OBJECT (f->composited));
+                                        g_object_unref (f->composited);
                                         f->composited = NULL;
                                 }
                         }
@@ -457,7 +457,7 @@ gdk_pixbuf_gif_anim_frame_composite (GdkPixbufGifAnim *gif_anim,
                                                          (gif_anim->bg_blue << 8) |
                                                          prev_frame->bg_transparent ? 0 : 255);
 
-                                        g_object_unref (G_OBJECT (area));
+                                        g_object_unref (area);
                                         
                                 } else if (prev_frame->action == GDK_PIXBUF_FRAME_REVERT) {
                                         f->composited = gdk_pixbuf_copy (prev_frame->composited);
@@ -487,7 +487,7 @@ gdk_pixbuf_gif_anim_frame_composite (GdkPixbufGifAnim *gif_anim,
 
                                         f->revert = gdk_pixbuf_copy (area);
                                         
-                                        g_object_unref (G_OBJECT (area));
+                                        g_object_unref (area);
                                 }
 
                                 /* Put current frame onto f->composited */

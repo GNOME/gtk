@@ -83,6 +83,7 @@ gdk_pixbuf_finalize (GObject *object)
         
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
+
 
 /**
  * gdk_pixbuf_ref:
@@ -248,7 +249,7 @@ gdk_pixbuf_new_subpixbuf (GdkPixbuf *src_pixbuf,
                                         NULL, NULL);
 
         /* Keep a reference to src_pixbuf */
-        g_object_ref (G_OBJECT (src_pixbuf));
+        g_object_ref (src_pixbuf);
   
         g_object_set_qdata_full (G_OBJECT (sub),
                                  g_quark_from_static_string ("gdk-pixbuf-subpixbuf-src"),

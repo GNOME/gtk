@@ -454,7 +454,7 @@ gdk_pixbuf__png_image_stop_load (gpointer context, GError **error)
          */
         
         if (lc->pixbuf)
-                gdk_pixbuf_unref (lc->pixbuf);
+                g_object_unref (lc->pixbuf);
         
         png_destroy_read_struct(&lc->png_read_ptr, NULL, NULL);
         g_free(lc);
