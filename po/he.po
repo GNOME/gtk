@@ -4,11 +4,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-11-16 16:11-0500\n"
+"Project-Id-Version: gtk+ VERSION\n"
+"POT-Creation-Date: 2000-12-06 17:21+0100\n"
 "PO-Revision-Date: 2000-07-26 HO:MI+ZONE\n"
 "Last-Translator: Tzafrir Cohen <tzafrir@technion.ac.il>\n"
-"Language-Team: LANGUAGE <he@li.org>\n"
+"Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -39,43 +39,43 @@ msgstr ""
 msgid "GIF animation contained a frame with an incorrect size"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1422
+#: gtk/gtkcolorsel.c:1413
 msgid "Hue:"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1414
 msgid "Saturation:"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1424
+#: gtk/gtkcolorsel.c:1415
 msgid "Value:"
 msgstr "ערך:"
 
-#: gtk/gtkcolorsel.c:1425
+#: gtk/gtkcolorsel.c:1416
 msgid "Red:"
 msgstr "אדום:"
 
-#: gtk/gtkcolorsel.c:1426
+#: gtk/gtkcolorsel.c:1417
 msgid "Green:"
 msgstr "אדום:"
 
-#: gtk/gtkcolorsel.c:1427
+#: gtk/gtkcolorsel.c:1418
 msgid "Blue:"
 msgstr "כחול:"
 
-#: gtk/gtkcolorsel.c:1430
+#: gtk/gtkcolorsel.c:1421
 msgid "Opacity:"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1445
+#: gtk/gtkcolorsel.c:1436
 msgid "Hex Value:"
 msgstr "ערך הקס':"
 
-#: gtk/gtkcolorsel.c:1466
+#: gtk/gtkcolorsel.c:1457
 msgid "Custom Palette"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1471
+#: gtk/gtkcolorsel.c:1462
 msgid "Set Color"
 msgstr ""
 
@@ -330,7 +330,7 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#: gtk/gtknotebook.c:2012 gtk/gtknotebook.c:4098
 #, c-format
 msgid "Page %u"
 msgstr "דף %u"
