@@ -28,26 +28,28 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-
+  
+  
 /* The flags that are used by GtkWidget on top of the
  * flags field of GtkObject.
  */
 enum
 {
-  GTK_TOPLEVEL          = 1 <<  4,
-  GTK_NO_WINDOW         = 1 <<  5,
-  GTK_REALIZED          = 1 <<  6,
-  GTK_MAPPED            = 1 <<  7,
-  GTK_VISIBLE           = 1 <<  8,
-  GTK_SENSITIVE         = 1 <<  9,
-  GTK_PARENT_SENSITIVE  = 1 << 10,
-  GTK_CAN_FOCUS         = 1 << 11,
-  GTK_HAS_FOCUS         = 1 << 12,
-  GTK_CAN_DEFAULT       = 1 << 13,
-  GTK_HAS_DEFAULT       = 1 << 14,
-  GTK_HAS_GRAB          = 1 << 15,
-  GTK_BASIC		= 1 << 16
+  GTK_TOPLEVEL		= 1 <<	4,
+  GTK_NO_WINDOW		= 1 <<	5,
+  GTK_REALIZED		= 1 <<	6,
+  GTK_MAPPED		= 1 <<	7,
+  GTK_VISIBLE		= 1 <<	8,
+  GTK_SENSITIVE		= 1 <<	9,
+  GTK_PARENT_SENSITIVE	= 1 << 10,
+  GTK_CAN_FOCUS		= 1 << 11,
+  GTK_HAS_FOCUS		= 1 << 12,
+  GTK_CAN_DEFAULT	= 1 << 13,
+  GTK_HAS_DEFAULT	= 1 << 14,
+  GTK_HAS_GRAB		= 1 << 15,
+  GTK_BASIC		= 1 << 16,
+  GTK_RESERVED_3	= 1 << 17,
+  GTK_STYLE_SET		= 1 << 18
 };
 
 
@@ -67,8 +69,8 @@ enum
 
 /* Macros for extracting the widget flags from GtkWidget.
  */
-#define GTK_WIDGET_FLAGS(wid)             (GTK_OBJECT_FLAGS (wid))
-#define GTK_WIDGET_TOPLEVEL(wid)          (GTK_WIDGET_FLAGS (wid) & GTK_TOPLEVEL)
+#define GTK_WIDGET_FLAGS(wid)		  (GTK_OBJECT_FLAGS (wid))
+#define GTK_WIDGET_TOPLEVEL(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_TOPLEVEL)
 #define GTK_WIDGET_NO_WINDOW(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_NO_WINDOW)
 #define GTK_WIDGET_REALIZED(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_REALIZED)
 #define GTK_WIDGET_MAPPED(wid)		  (GTK_WIDGET_FLAGS (wid) & GTK_MAPPED)
@@ -84,19 +86,20 @@ enum
 #define GTK_WIDGET_HAS_DEFAULT(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_HAS_DEFAULT)
 #define GTK_WIDGET_HAS_GRAB(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_HAS_GRAB)
 #define GTK_WIDGET_BASIC(wid)		  (GTK_WIDGET_FLAGS (wid) & GTK_BASIC)
-      
+#define GTK_WIDGET_STYLE_SET(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_STYLE_SET)
+  
 /* Macros for setting and clearing widget flags.
  */
 #define GTK_WIDGET_SET_FLAGS(wid,flag)	  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) |= (flag)); }G_STMT_END
 #define GTK_WIDGET_UNSET_FLAGS(wid,flag)  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) &= ~(flag)); }G_STMT_END
-
+  
 /* Macros for testing whether "wid" is of type GtkWidget.
  */
 #define GTK_IS_WIDGET(wid)		  GTK_CHECK_TYPE ((wid), GTK_TYPE_WIDGET)
 #define GTK_TYPE_WIDGET			  (gtk_widget_get_type ())
-
-
-
+  
+  
+  
 typedef struct _GtkRequisition	  GtkRequisition;
 typedef struct _GtkAllocation	  GtkAllocation;
 typedef struct _GtkSelectionData GtkSelectionData;
@@ -162,19 +165,19 @@ struct _GtkWidget
    *  GtkObject pointer.
    */
   GtkObject object;
-
+  
   /* 16 bits of internally used private flags.
    * this will be packed into the same 4 byte alignment frame that
    * state and saved_state go. we therefore don't waste any new
    * space on this.
    */
   guint16 private_flags;
-
+  
   /* The state of the widget. There are actually only
    *  5 widget states (defined in "gtkenums.h").
    */
   guint8 state;
-
+  
   /* The saved state of the widget. When a widgets state
    *  is changed to GTK_STATE_INSENSITIVE via
    *  "gtk_widget_set_state" or "gtk_widget_set_sensitive"
@@ -182,7 +185,7 @@ struct _GtkWidget
    *  will be restored once the widget gets sensitive again.
    */
   guint8 saved_state;
-
+  
   /* The widgets name. If the widget does not have a name
    *  (the name is NULL), then its name (as returned by
    *  "gtk_widget_get_name") is its classes name.
@@ -190,28 +193,28 @@ struct _GtkWidget
    *  use for a widget.
    */
   gchar *name;
-
+  
   /* The style for the widget. The style contains the
    *  colors the widget should be drawn in for each state
    *  along with graphics contexts used to draw with and
    *  the font to use for text.
    */
   GtkStyle *style;
-
+  
   /* The widgets desired size.
    */
   GtkRequisition requisition;
-
+  
   /* The widgets allocated size.
    */
   GtkAllocation allocation;
-
+  
   /* The widgets window or its parent window if it does
    *  not have a window. (Which will be indicated by the
    *  GTK_NO_WINDOW flag being set).
    */
   GdkWindow *window;
-
+  
   /* The widgets parent.
    */
   GtkWidget *parent;
@@ -226,13 +229,13 @@ struct _GtkWidgetClass
    *  pointer.
    */
   GtkObjectClass parent_class;
-
+  
   /* The signal to emit when an object of this class is activated.
    *  This is used when activating the current focus widget and
    *  the default widget.
    */
   gint activate_signal;
-
+  
   /* basics */
   void (* show)		       (GtkWidget      *widget);
   void (* hide)		       (GtkWidget      *widget);
@@ -254,7 +257,9 @@ struct _GtkWidgetClass
 				guint		previous_state);
   void (* parent_set)	       (GtkWidget      *widget,
 				GtkWidget      *previous_parent);
-
+  void (* style_set)	       (GtkWidget      *widget,
+				GtkStyle       *previous_style);
+  
   /* accelerators */
   gint (* install_accelerator) (GtkWidget      *widget,
 				const gchar    *signal_name,
@@ -262,7 +267,7 @@ struct _GtkWidgetClass
 				guint8		modifiers);
   void (* remove_accelerator)  (GtkWidget      *widget,
 				const gchar    *signal_name);
-
+  
   /* events */
   gint (* event)		   (GtkWidget	       *widget,
 				    GdkEvent	       *event);
@@ -317,18 +322,18 @@ struct _GtkWidgetClass
   gint (* drop_leave_event)	   (GtkWidget	       *widget,
 				    GdkEventDropLeave  *event);
   gint (* drop_data_available_event)   (GtkWidget	  *widget,
-				    GdkEventDropDataAvailable *event);
+					GdkEventDropDataAvailable *event);
   gint (* other_event)		   (GtkWidget	       *widget,
 				    GdkEventOther      *event);
-
+  
   /* selection */
   void (* selection_received)  (GtkWidget      *widget,
 				GtkSelectionData *selection_data);
-
+  
   gint (* client_event)		   (GtkWidget	       *widget,
 				    GdkEventClient     *event);
-  gint (* no_expose_event)         (GtkWidget          *widget,
-				    GdkEventAny        *event);
+  gint (* no_expose_event)	   (GtkWidget	       *widget,
+				    GdkEventAny	       *event);
 };
 
 struct _GtkWidgetAuxInfo
@@ -353,11 +358,11 @@ GtkWidget* gtk_widget_new		  (guint		type,
 GtkWidget* gtk_widget_newv		  (guint		type,
 					   guint		nargs,
 					   GtkArg	       *args);
-void       gtk_widget_ref                 (GtkWidget           *widget);
-void       gtk_widget_unref               (GtkWidget           *widget);
-void       gtk_widget_destroy             (GtkWidget           *widget);
-void       gtk_widget_destroyed           (GtkWidget           *widget,
-					   GtkWidget          **widget_pointer);
+void	   gtk_widget_ref		  (GtkWidget	       *widget);
+void	   gtk_widget_unref		  (GtkWidget	       *widget);
+void	   gtk_widget_destroy		  (GtkWidget	       *widget);
+void	   gtk_widget_destroyed		  (GtkWidget	       *widget,
+					   GtkWidget	      **widget_pointer);
 void	   gtk_widget_get		  (GtkWidget	       *widget,
 					   GtkArg	       *arg);
 void	   gtk_widget_getv		  (GtkWidget	       *widget,
@@ -510,7 +515,7 @@ void	     gtk_widget_dnd_data_set (GtkWidget	    *widget,
 				      gpointer	     data,
 				      gulong	     data_numbytes);
 
-#if     defined (GTK_TRACE_OBJECTS) && defined (__GNUC__)
+#if	defined (GTK_TRACE_OBJECTS) && defined (__GNUC__)
 #  define gtk_widget_ref gtk_object_ref
 #  define gtk_widget_unref gtk_object_unref
 #endif	/* GTK_TRACE_OBJECTS && __GNUC__ */

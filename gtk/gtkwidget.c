@@ -46,6 +46,7 @@ enum {
   SIZE_ALLOCATE,
   STATE_CHANGED,
   PARENT_SET,
+  STYLE_SET,
   INSTALL_ACCELERATOR,
   REMOVE_ACCELERATOR,
   EVENT,
@@ -388,6 +389,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_widget_marshal_signal_6,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_OBJECT);
+  widget_signals[STYLE_SET] =
+    gtk_signal_new ("style_set",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, style_set),
+		    gtk_widget_marshal_signal_4,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_BOXED);
   widget_signals[INSTALL_ACCELERATOR] =
     gtk_signal_new ("install_accelerator",
 		    GTK_RUN_FIRST,
@@ -676,6 +685,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->size_allocate = gtk_widget_real_size_allocate;
   klass->state_changed = NULL;
   klass->parent_set = NULL;
+  klass->style_set = NULL;
   klass->install_accelerator = NULL;
   klass->remove_accelerator = NULL;
   klass->event = NULL;
@@ -2781,6 +2791,8 @@ gtk_widget_is_child (GtkWidget *widget,
 void
 gtk_widget_push_colormap (GdkColormap *cmap)
 {
+  g_return_if_fail (cmap != NULL);
+
   colormap_stack = g_slist_prepend (colormap_stack, cmap);
 }
 
@@ -2795,6 +2807,8 @@ gtk_widget_push_colormap (GdkColormap *cmap)
 void
 gtk_widget_push_visual (GdkVisual *visual)
 {
+  g_return_if_fail (visual != NULL);
+
   visual_stack = g_slist_prepend (visual_stack, visual);
 }
 
@@ -2809,6 +2823,8 @@ gtk_widget_push_visual (GdkVisual *visual)
 void
 gtk_widget_push_style (GtkStyle *style)
 {
+  g_return_if_fail (style != NULL);
+
   gtk_style_ref (style);
   style_stack = g_slist_prepend (style_stack, style);
 }
@@ -3032,7 +3048,9 @@ gtk_widget_marshal_signal_1 (GtkObject	    *object,
   
   rfunc = (GtkWidgetSignal1) func;
   
-  (* rfunc) (object, GTK_VALUE_POINTER (args[0]), func_data);
+  (* rfunc) (object,
+	     GTK_VALUE_POINTER (args[0]),
+	     func_data);
 }
 
 /*****************************************
@@ -3055,8 +3073,10 @@ gtk_widget_marshal_signal_2 (GtkObject	    *object,
   rfunc = (GtkWidgetSignal2) func;
   return_val = GTK_RETLOC_BOOL (args[3]);
   
-  *return_val = (* rfunc) (object, GTK_VALUE_STRING (args[0]),
-			   GTK_VALUE_CHAR (args[1]), GTK_VALUE_INT (args[2]),
+  *return_val = (* rfunc) (object,
+			   GTK_VALUE_STRING (args[0]),
+			   GTK_VALUE_CHAR (args[1]),
+			   GTK_VALUE_INT (args[2]),
 			   func_data);
 }
 
@@ -3078,7 +3098,9 @@ gtk_widget_marshal_signal_3 (GtkObject	    *object,
   
   rfunc = (GtkWidgetSignal3) func;
   
-  (* rfunc) (object, GTK_VALUE_STRING (args[0]), func_data);
+  (* rfunc) (object,
+	     GTK_VALUE_STRING (args[0]),
+	     func_data);
 }
 
 /*****************************************
@@ -3101,7 +3123,9 @@ gtk_widget_marshal_signal_4 (GtkObject	    *object,
   rfunc = (GtkWidgetSignal4) func;
   return_val = GTK_RETLOC_BOOL (args[1]);
   
-  *return_val = (* rfunc) (object, GTK_VALUE_BOXED (args[0]), func_data);
+  *return_val = (* rfunc) (object,
+			   GTK_VALUE_BOXED (args[0]),
+			   func_data);
 }
 
 /*****************************************
@@ -3122,7 +3146,9 @@ gtk_widget_marshal_signal_5 (GtkObject	    *object,
   
   rfunc = (GtkWidgetSignal5) func;
   
-  (* rfunc) (object, GTK_VALUE_UINT (args[0]), func_data);
+  (* rfunc) (object,
+	     GTK_VALUE_UINT (args[0]),
+	     func_data);
 }
 
 /*****************************************
@@ -3143,7 +3169,9 @@ gtk_widget_marshal_signal_6 (GtkObject	    *object,
   
   rfunc = (GtkWidgetSignal6) func;
   
-  (* rfunc) (object, GTK_VALUE_OBJECT (args[0]), func_data);
+  (* rfunc) (object,
+	     GTK_VALUE_OBJECT (args[0]),
+	     func_data);
 }
 
 static void
@@ -3174,8 +3202,10 @@ gtk_widget_real_destroy (GtkObject *object)
   if (widget->parent)
     gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  gtk_style_unref (widget->style);
+  widget->style = NULL;
+
+  parent_class->destroy (object);
 
   gtk_widget_unref (widget);
 }
@@ -3219,9 +3249,6 @@ gtk_widget_real_finalize (GtkObject *object)
       g_free (mode);
       gtk_object_remove_data (GTK_OBJECT (widget), extension_event_key);
     }
-
-  gtk_style_unref (widget->style);
-  widget->style = NULL;
 
   parent_class->finalize (object);
 }
