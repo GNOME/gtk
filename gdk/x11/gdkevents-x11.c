@@ -462,12 +462,15 @@ gdk_check_wm_desktop_changed (GdkWindow *window)
     {
       gulong *desktop;
       
+      type = None;
+      gdk_error_trap_push ();
       XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), 
 			  GDK_WINDOW_XID (window),
                           gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"),
 			  0, G_MAXLONG, False, XA_CARDINAL, &type, 
 			  &format, &nitems,
                           &bytes_after, (guchar **)&desktop);
+      gdk_error_trap_pop ();
 
       if (type != None)
         {
@@ -501,10 +504,13 @@ gdk_check_wm_state_changed (GdkWindow *window)
   toplevel->have_maxhorz = FALSE;
   toplevel->have_fullscreen = FALSE;
 
+  type = None;
+  gdk_error_trap_push ();
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
 		      0, G_MAXLONG, False, XA_ATOM, &type, &format, &nitems,
 		      &bytes_after, (guchar **)&atoms);
+  gdk_error_trap_pop ();
 
   if (type != None)
     {

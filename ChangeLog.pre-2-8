@@ -1,3 +1,9 @@
+Mon Aug  2 01:02:57 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkevents-x11.c (gdk_check_wm_state_changed): 
+	(gdk_check_wm_desktop_changed): Add missing error 
+	traps.  (#149011, Thomas Leonard)
+
 Mon Aug  2 00:21:26 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (blink_cb): Add the same warning
