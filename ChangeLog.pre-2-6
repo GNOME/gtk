@@ -1,5 +1,9 @@
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenuitem.c (gtk_real_menu_item_select): Reintroduce
+	the reverted change, since it is necessary to prevent lost
+	submenus. But make it work for torn-off menus as well.
+
 	* gtk/gtktearoffmenuitem.c (tearoff_state_changed): Fix the signature
 	to avoid overwriting a pspec.  
 
