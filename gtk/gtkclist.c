@@ -2472,11 +2472,12 @@ gtk_clist_size_allocate_title_buttons (GtkCList * clist)
 
   button_allocation.x = clist->hoffset;
   button_allocation.y = 0;
+  button_allocation.width = 0;
   button_allocation.height = clist->column_title_area.height;
 
   for (i = 0; i < clist->columns; i++)
     {
-      button_allocation.width = clist->column[i].width;
+      button_allocation.width += clist->column[i].width;
 
       if (i == clist->columns - 1)
 	{
@@ -2494,19 +2495,13 @@ gtk_clist_size_allocate_title_buttons (GtkCList * clist)
 	{
 	  gtk_widget_size_allocate (clist->column[last_button].button, &button_allocation);
 	  button_allocation.x += button_allocation.width;
+	  button_allocation.width = 0;
 
-	  if (clist->column[i + 1].button && i != (clist->columns - 1))
-	    {
-	      gdk_window_show (clist->column[last_button].window);
-	      gdk_window_move_resize (clist->column[last_button].window,
-				      button_allocation.x - (DRAG_WIDTH / 2), 
-				      0, DRAG_WIDTH, clist->column_title_area.height);
-	    }
-	  else
-	    {
-	      gdk_window_hide (clist->column[i].window);
-	    }
-
+	  gdk_window_show (clist->column[last_button].window);
+	  gdk_window_move_resize (clist->column[last_button].window,
+				  button_allocation.x - (DRAG_WIDTH / 2), 
+				  0, DRAG_WIDTH, clist->column_title_area.height);
+	  
 	  last_button = i + 1;
 	}
       else
@@ -2613,12 +2608,14 @@ new_column_width (GtkCList * clist,
     }
 
   /* don't grow past the end of the window */
+  /*
   if (cx > clist->clist_window_width)
     {
       *x = cx = clist->clist_window_width + GTK_WIDGET (clist)->style->klass->xthickness;
       cx -= GTK_WIDGET (clist)->style->klass->xthickness;
       rx = cx - clist->hoffset;
     }
+    */
 
   /* calculate new column width making sure it doesn't end up
    * less than the minimum width */
