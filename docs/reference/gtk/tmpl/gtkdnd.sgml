@@ -391,3 +391,19 @@ Undoes the effects of gtk_drag_source_set().
 @widget: 
 
 
+<!-- ##### FUNCTION gtk_drag_source_add_image_targets ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_drag_source_add_uri_targets ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+

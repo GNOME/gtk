@@ -42,6 +42,7 @@ To make a cell renderer activatable or editable, you have to
 implement the @activate or @start_editing virtual functions, 
 respectively.
 </para>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkCellRendererText,#GtkCellRendererPixbuf,#GtkCellRendererToggle

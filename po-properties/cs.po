@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-09 12:09+0100\n"
+"POT-Creation-Date: 2004-11-12 11:31-0500\n"
 "PO-Revision-Date: 2004-11-09 15:13+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -1551,7 +1551,7 @@ msgstr "Aktivní položka"
 msgid "The item which is currently active"
 msgstr "Položka, která je právě aktivní"
 
-#: gtk/gtkcombobox.c:588 gtk/gtkuimanager.c:221
+#: gtk/gtkcombobox.c:588 gtk/gtkuimanager.c:222
 msgid "Add tearoffs to menus"
 msgstr "Přidat odtrhávátka do menu"
 
@@ -2136,7 +2136,7 @@ msgstr "Vzhled okrajů rámu"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Widget používaný pro zobrazení místo obvyklého popisku rámu"
 
-#: gtk/gtkhandlebox.c:207 gtk/gtkmenubar.c:157 gtk/gtkstatusbar.c:201
+#: gtk/gtkhandlebox.c:207 gtk/gtkmenubar.c:157 gtk/gtkstatusbar.c:204
 #: gtk/gtktoolbar.c:582 gtk/gtkviewport.c:152
 msgid "Shadow type"
 msgstr "Typ stínu"
@@ -3487,15 +3487,15 @@ msgstr "Zobrazuje aktuální hodnotu, nebo nastavuje novou hodnotu"
 msgid "Style of bevel around the spin button"
 msgstr "Styl rámu okolo točivého tlačítka"
 
-#: gtk/gtkstatusbar.c:174
+#: gtk/gtkstatusbar.c:177
 msgid "Has Resize Grip"
 msgstr "Má úchyt pro změnu velikosti"
 
-#: gtk/gtkstatusbar.c:175
+#: gtk/gtkstatusbar.c:178
 msgid "Whether the statusbar has a grip for resizing the toplevel"
 msgstr "Jestli má stavová lišta úchyt pro změnu velikosti okna nejvyšší úrovně"
 
-#: gtk/gtkstatusbar.c:202
+#: gtk/gtkstatusbar.c:205
 msgid "Style of bevel around the statusbar text"
 msgstr "Styl okraje okolo textu ve stavové liště"
 
@@ -4382,15 +4382,15 @@ msgstr "Pořadí třídění"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Směr třídění, který označuje indikátor třídění"
 
-#: gtk/gtkuimanager.c:222
+#: gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Jestli mají být do menu přidávány položky pro odtržení"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 msgid "Merged UI definition"
 msgstr "Definice sloučeného UI"
 
-#: gtk/gtkuimanager.c:230
+#: gtk/gtkuimanager.c:231
 msgid "An XML string describing the merged UI"
 msgstr "Řetězec XML popisující sloučené UI"
 

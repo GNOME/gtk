@@ -220,6 +220,11 @@ described below.
 
 </para>
 
+<!-- ##### ARG GtkLabel:single-line-mode ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkLabel:use-markup ##### -->
 <para>
 
@@ -550,6 +555,15 @@ Gtk+ 1.0.x.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_label_get_single_line_mode ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_label_set_label ##### -->
 <para>
 
@@ -575,5 +589,14 @@ Gtk+ 1.0.x.
 
 @label: 
 @setting: 
+
+
+<!-- ##### FUNCTION gtk_label_set_single_line_mode ##### -->
+<para>
+
+</para>
+
+@label: 
+@single_line_mode: 
 
 

@@ -1,5 +1,11 @@
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.5.5 ===
+	
+	* gtk/Makefile.am (content_files): Add migrating-GtkColorButton.sgml
+
+2004-11-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk-pixbuf/tmpl/module_interface.sgml: Document 
 	GDK_PIXBUF_FORMAT_THREADSAFE.
 

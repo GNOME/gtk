@@ -330,6 +330,16 @@ Zero-terminates the stored data.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_selection_data_targets_include_image ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@writable: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_selection_data_targets_include_text ##### -->
 <para>
 

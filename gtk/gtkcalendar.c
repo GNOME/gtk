@@ -2,7 +2,7 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * GTK Calendar Widget
- * Copyright (C) 1998 Cesar Miquel, Shawn T. Amundson and Mattias Grönlund
+ * Copyright (C) 1998 Cesar Miquel, Shawn T. Amundson and Mattias Groenlund
  * 
  * lib_date routines
  * Copyright (c) 1995, 1996, 1997, 1998 by Steffen Beyer

@@ -299,6 +299,15 @@ and should not be accessed directly.
 @proxy: 
 
 
+<!-- ##### FUNCTION gtk_action_get_accel_path ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_action_set_accel_path ##### -->
 <para>
 

@@ -88,6 +88,11 @@ and should be accessed using the functions below.
 
 </para>
 
+<!-- ##### ARG GtkProgressBar:ellipsize ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkProgressBar:fraction ##### -->
 <para>
 
@@ -160,6 +165,15 @@ Creates a new #GtkProgressBar.
 @orientation: 
 
 
+<!-- ##### FUNCTION gtk_progress_bar_set_ellipsize ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@mode: 
+
+
 <!-- ##### ENUM GtkProgressBarOrientation ##### -->
 <para>
 An enumeration representing possible orientations and growth
@@ -199,6 +213,15 @@ directions for the visible progress bar.
 
 
 <!-- ##### FUNCTION gtk_progress_bar_get_orientation ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_get_ellipsize ##### -->
 <para>
 
 </para>

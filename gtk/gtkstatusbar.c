@@ -801,8 +801,8 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
-  gboolean extra_children;
-  GdkRectangle rect, overlap;
+  gboolean extra_children = FALSE;
+  GdkRectangle rect;
 
   if (statusbar->has_resize_grip)
     {

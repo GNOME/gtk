@@ -7508,7 +7508,7 @@ gtk_window_activate_key_after (GtkWindow   *window,
   GSList *entries;
   
   if (window->mnemonic_modifier == 0 ||
-      (gtk_accelerator_get_default_mod_mask () & event->state != 0))
+      ((gtk_accelerator_get_default_mod_mask () & event->state) != 0))
     return FALSE;
 
   entries = _gtk_key_hash_lookup (key_hash,

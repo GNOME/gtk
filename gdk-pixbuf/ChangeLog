@@ -1,5 +1,9 @@
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.5.5 ===
+	
+2004-11-12  Matthias Clasen  <mclasen@redhat.com>
+
 	Changes to make gdk-pixbuf threadsafe  (#157310, #157306, 
 	Colin Walters):
 	

@@ -372,6 +372,7 @@ compatibility reasons.
 @Returns: A new #GtkTreePath.
 @Deprecated: Use gtk_tree_path_new_first() instead.
 
+
 <!-- ##### FUNCTION gtk_tree_path_append_index ##### -->
 <para>
 

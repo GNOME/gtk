@@ -246,6 +246,15 @@ will not be used again.
 @len: 
 
 
+<!-- ##### FUNCTION gtk_clipboard_set_image ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@pixbuf: 
+
+
 <!-- ##### FUNCTION gtk_clipboard_request_contents ##### -->
 <para>
 
@@ -258,6 +267,16 @@ will not be used again.
 
 
 <!-- ##### FUNCTION gtk_clipboard_request_text ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@callback: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_clipboard_request_image ##### -->
 <para>
 
 </para>
@@ -296,7 +315,25 @@ will not be used again.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_clipboard_wait_for_image ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_clipboard_wait_is_text_available ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clipboard_wait_is_image_available ##### -->
 <para>
 
 </para>

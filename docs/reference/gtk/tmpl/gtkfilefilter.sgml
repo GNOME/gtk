@@ -95,6 +95,14 @@ A filter for selecting a file subset
 @pattern: 
 
 
+<!-- ##### FUNCTION gtk_file_filter_add_pixbuf_formats ##### -->
+<para>
+
+</para>
+
+@filter: 
+
+
 <!-- ##### FUNCTION gtk_file_filter_add_custom ##### -->
 <para>
 

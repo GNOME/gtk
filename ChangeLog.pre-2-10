@@ -1,5 +1,14 @@
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.5.5 ===
+	
+	* gtk/gtkwindow.c (gtk_window_activate_key_after): Add parentheses 
+	around comparison in operand of &.
+
+	* gtk/gtkcalendar.c: Replace a non-ASCII character in a comment.
+
+2004-11-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* tests/Makefile.am (pixbuf_threads_LDADD): Make pixbuf-threads
 	link.
 

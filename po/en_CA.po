@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-09 17:38-0500\n"
+"POT-Creation-Date: 2004-11-12 11:31-0500\n"
 "PO-Revision-Date: 2004-11-09 03:57-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
@@ -17,26 +17,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:151 gdk-pixbuf/gdk-pixbuf-io.c:788
-#: gdk-pixbuf/gdk-pixbuf-io.c:946 tests/testfilechooser.c:199
+#: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:821
+#: gdk-pixbuf/gdk-pixbuf-io.c:970 tests/testfilechooser.c:199
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Failed to open file '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:166 gdk-pixbuf/gdk-pixbuf-io.c:802
+#: gdk-pixbuf/gdk-pixbuf-animation.c:163 gdk-pixbuf/gdk-pixbuf-io.c:833
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Image file '%s' contains no data"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:840
-#: gdk-pixbuf/gdk-pixbuf-io.c:990 tests/testfilechooser.c:244
+#: gdk-pixbuf/gdk-pixbuf-animation.c:207 gdk-pixbuf/gdk-pixbuf-io.c:870
+#: gdk-pixbuf/gdk-pixbuf-io.c:1011 tests/testfilechooser.c:244
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:240
+#: gdk-pixbuf/gdk-pixbuf-animation.c:238
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -45,12 +45,12 @@ msgstr ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:416
+#: gdk-pixbuf/gdk-pixbuf-io.c:437
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Unable to load image-loading module: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:431
+#: gdk-pixbuf/gdk-pixbuf-io.c:452
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -59,53 +59,53 @@ msgstr ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:578 gdk-pixbuf/gdk-pixbuf-io.c:630
+#: gdk-pixbuf/gdk-pixbuf-io.c:612 gdk-pixbuf/gdk-pixbuf-io.c:664
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Image type '%s' is not supported"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:672
+#: gdk-pixbuf/gdk-pixbuf-io.c:704
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Couldn't recognize the image file format for file '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:680
+#: gdk-pixbuf/gdk-pixbuf-io.c:712
 msgid "Unrecognized image file format"
 msgstr "Unrecognized image file format"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:853
+#: gdk-pixbuf/gdk-pixbuf-io.c:879
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Failed to load image '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1211
+#: gdk-pixbuf/gdk-pixbuf-io.c:1236
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Error writing to image file: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1255 gdk-pixbuf/gdk-pixbuf-io.c:1371
+#: gdk-pixbuf/gdk-pixbuf-io.c:1281 gdk-pixbuf/gdk-pixbuf-io.c:1406
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "This build of gdk-pixbuf does not support saving the image format: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1284
+#: gdk-pixbuf/gdk-pixbuf-io.c:1313
 msgid "Insufficient memory to save image to callback"
 msgstr "Insufficient memory to save image to callback"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1296
+#: gdk-pixbuf/gdk-pixbuf-io.c:1325
 msgid "Failed to open temporary file"
 msgstr "Failed to open temporary file"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1315
+#: gdk-pixbuf/gdk-pixbuf-io.c:1349
 msgid "Failed to read from temporary file"
 msgstr "Failed to read from temporary file"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1497
+#: gdk-pixbuf/gdk-pixbuf-io.c:1534
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Failed to open '%s' for writing: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1522
+#: gdk-pixbuf/gdk-pixbuf-io.c:1558
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -114,16 +114,16 @@ msgstr ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1710 gdk-pixbuf/gdk-pixbuf-io.c:1760
+#: gdk-pixbuf/gdk-pixbuf-io.c:1746 gdk-pixbuf/gdk-pixbuf-io.c:1796
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Insufficient memory to save image into a buffer"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:379
+#: gdk-pixbuf/gdk-pixbuf-loader.c:383
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Incremental loading of image type '%s' is not supported"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:403 gdk-pixbuf/gdk-pixbuf-loader.c:505
+#: gdk-pixbuf/gdk-pixbuf-loader.c:412 gdk-pixbuf/gdk-pixbuf-loader.c:514
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -607,44 +607,44 @@ msgstr "Excess data in file"
 msgid "The Targa image format"
 msgstr "The Targa image format"
 
-#: gdk-pixbuf/io-tiff.c:177
+#: gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Could not get image width (bad TIFF file)"
 
-#: gdk-pixbuf/io-tiff.c:184
+#: gdk-pixbuf/io-tiff.c:180
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Could not get image height (bad TIFF file)"
 
-#: gdk-pixbuf/io-tiff.c:192
+#: gdk-pixbuf/io-tiff.c:188
 msgid "Width or height of TIFF image is zero"
 msgstr "Width or height of TIFF image is zero"
 
-#: gdk-pixbuf/io-tiff.c:201 gdk-pixbuf/io-tiff.c:210
+#: gdk-pixbuf/io-tiff.c:197 gdk-pixbuf/io-tiff.c:206
 msgid "Dimensions of TIFF image too large"
 msgstr "Dimensions of TIFF image too large"
 
-#: gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:241 gdk-pixbuf/io-tiff.c:292
-#: gdk-pixbuf/io-tiff.c:589
+#: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
+#: gdk-pixbuf/io-tiff.c:572
 msgid "Insufficient memory to open TIFF file"
 msgstr "Insufficient memory to open TIFF file"
 
-#: gdk-pixbuf/io-tiff.c:257 gdk-pixbuf/io-tiff.c:300
+#: gdk-pixbuf/io-tiff.c:251 gdk-pixbuf/io-tiff.c:294
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Failed to load RGB data from TIFF file"
 
-#: gdk-pixbuf/io-tiff.c:371
+#: gdk-pixbuf/io-tiff.c:361
 msgid "Failed to open TIFF image"
 msgstr "Failed to open TIFF image"
 
-#: gdk-pixbuf/io-tiff.c:384
+#: gdk-pixbuf/io-tiff.c:373
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose operation failed"
 
-#: gdk-pixbuf/io-tiff.c:519 gdk-pixbuf/io-tiff.c:532
+#: gdk-pixbuf/io-tiff.c:504 gdk-pixbuf/io-tiff.c:517
 msgid "Failed to load TIFF image"
 msgstr "Failed to load TIFF image"
 
-#: gdk-pixbuf/io-tiff.c:627
+#: gdk-pixbuf/io-tiff.c:610
 msgid "The TIFF image format"
 msgstr "The TIFF image format"
 
@@ -1600,7 +1600,7 @@ msgstr "_Gamma value"
 msgid "Error loading icon: %s"
 msgstr "Error loading icon: %s"
 
-#: gtk/gtkicontheme.c:1244
+#: gtk/gtkicontheme.c:1246
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1613,7 +1613,7 @@ msgstr ""
 "You can get a copy from:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1309
+#: gtk/gtkicontheme.c:1311
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Icon '%s' not present in theme"
@@ -2140,22 +2140,22 @@ msgstr "Unable to locate theme engine in module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- No Tip ---"
 
-#: gtk/gtkuimanager.c:1101
+#: gtk/gtkuimanager.c:1111
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Unknown attribute '%s' on line %d char %d"
 
-#: gtk/gtkuimanager.c:1319
+#: gtk/gtkuimanager.c:1311
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Unexpected start tag '%s' on line %d char %d"
 
-#: gtk/gtkuimanager.c:1404
+#: gtk/gtkuimanager.c:1396
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Unexpected character data on line %d char %d"
 
-#: gtk/gtkuimanager.c:2190
+#: gtk/gtkuimanager.c:2188
 msgid "Empty"
 msgstr "Empty"
 
