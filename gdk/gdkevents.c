@@ -603,7 +603,7 @@ gdk_event_get_coords (GdkEvent *event,
   if (x_win)
     *x_win = x;
   if (y_win)
-    *y_win = x;
+    *y_win = y;
 
   return fetched;
 }

@@ -1,7 +1,15 @@
+Fri Nov 23 19:22:50 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c: Handle events in windows other
+	than widget->event_window properly. (#65079, reported
+	by Damon Chaplin)
+
+	* gdk/gdkevents.c (gdk_event_get_coords): Fix x/y bug.
+
 Fri Nov 23 18:57:46 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmessagedialog.c (gtk_message_dialog_init): Align
-	the image at the top, #65020, request from Seth Nickell)
+	the image at the top. (#65020, request from Seth Nickell)
 
 Fri Nov 23 18:49:53 2001  Owen Taylor  <otaylor@redhat.com>
 

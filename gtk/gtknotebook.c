@@ -1315,8 +1315,8 @@ gtk_notebook_get_arrow (GtkNotebook *notebook,
       gtk_notebook_get_event_window_position (notebook, &event_window_pos);
       gtk_notebook_get_arrow_rect (notebook, &arrow_rect);
       
-      x -= arrow_rect.x - event_window_pos.x;
-      y -= arrow_rect.y - event_window_pos.y;
+      x -= arrow_rect.x;
+      y -= arrow_rect.y;
       
       if (y >= 0 && y < arrow_rect.height)
 	{
@@ -1381,6 +1381,40 @@ gtk_notebook_arrow_button_press (GtkNotebook    *notebook,
 }
 
 static gboolean
+get_widget_coordinates (GtkWidget *widget,
+			GdkEvent  *event,
+			gint      *x,
+			gint      *y)
+{
+  GdkWindow *window = ((GdkEventAny *)event)->window;
+  gdouble tx, ty;
+
+  if (!gdk_event_get_coords (event, &tx, &ty))
+    return FALSE;
+
+  while (window && window != widget->window)
+    {
+      gint window_x, window_y;
+      
+      gdk_window_get_position (window, &window_x, &window_y);
+      tx += window_x;
+      ty += window_y;
+
+      window = gdk_window_get_parent (window);
+    }
+
+  if (window)
+    {
+      *x = tx;
+      *y = ty;
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+static gboolean
 gtk_notebook_button_press (GtkWidget      *widget,
 			   GdkEventButton *event)
 {
@@ -1388,7 +1422,6 @@ gtk_notebook_button_press (GtkWidget      *widget,
   GtkNotebookPage *page;
   GList *children;
   GtkArrowType arrow;
-  GdkRectangle event_window_pos;
   gint num;
   gint x, y;
 
@@ -1396,7 +1429,10 @@ gtk_notebook_button_press (GtkWidget      *widget,
       notebook->button)
     return FALSE;
 
-  arrow = gtk_notebook_get_arrow (notebook, event->x, event->y);
+  if (!get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
+    return FALSE;
+
+  arrow = gtk_notebook_get_arrow (notebook, x, y);
   if (arrow)
     return gtk_notebook_arrow_button_press (notebook, arrow, event);
 
@@ -1407,12 +1443,6 @@ gtk_notebook_button_press (GtkWidget      *widget,
       return TRUE;
     }
 
-  /* Translate coordinates from event_window to widget->window
-   */
-  gtk_notebook_get_event_window_position (notebook, &event_window_pos);
-  x = event->x + event_window_pos.x;
-  y = event->y + event_window_pos.y;
-      
   num = 0;
   children = notebook->children;
   while (children)
@@ -1496,13 +1526,17 @@ gtk_notebook_enter_notify (GtkWidget        *widget,
 {
   GtkNotebook *notebook;
   GtkArrowType arrow;
+  gint x, y;
 
   g_return_val_if_fail (GTK_IS_NOTEBOOK (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   notebook = GTK_NOTEBOOK (widget);
 
-  arrow = gtk_notebook_get_arrow (notebook, event->x, event->y);
+  if (!get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
+    return FALSE;
+
+  arrow = gtk_notebook_get_arrow (notebook, x, y);
 
   if (arrow != notebook->in_child)
     {
@@ -1521,8 +1555,12 @@ gtk_notebook_leave_notify (GtkWidget        *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkArrowType arrow;
+  gint x, y;
 
-  arrow = gtk_notebook_get_arrow (notebook, event->x, event->y);
+  if (!get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
+    return FALSE;
+
+  arrow = gtk_notebook_get_arrow (notebook, x, y);
 
   if (notebook->in_child)
     {
@@ -1539,11 +1577,15 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkArrowType arrow;
-
+  gint x, y;
+  
   if (notebook->button)
     return FALSE;
 
-  arrow = gtk_notebook_get_arrow (notebook, event->x, event->y);
+  if (!get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
+    return FALSE;
+
+  arrow = gtk_notebook_get_arrow (notebook, x, y);
 
   if (arrow != notebook->in_child)
     {
