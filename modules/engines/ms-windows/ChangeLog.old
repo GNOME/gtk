@@ -1,3 +1,7 @@
+2003-10-20  Dom Lachowicz <cinamod@hotmail.com>
+
+	* configure.in: Bump version to the next release number (0.5.1)
+	
 2003-10-18  Raymond Penners  <raymond@dotsphinx.com>
 
 	* src/Theme/gtk-2.0/gtkrc: "GtkToolBar" should read "GtkToolbar"
