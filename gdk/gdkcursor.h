@@ -19,12 +19,12 @@ typedef enum
 struct _GdkCursor
 {
   GdkCursorType type;
-  guint refcount;
+  guint ref_count;
 };
 
 /* Cursors
  */
-GdkCursor* gdk_cursor_new		 (GdkCursorType	  cursor_type);
+GdkCursor* gdk_cursor_new		 (GdkCursorType	   cursor_type);
 GdkCursor* gdk_cursor_new_from_pixmap	 (GdkPixmap	  *source,
 					  GdkPixmap	  *mask,
 					  GdkColor	  *fg,

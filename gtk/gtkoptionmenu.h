@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_OPTION_MENU_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_OPTION_MENU, GtkOptionMenuClass))
 #define GTK_IS_OPTION_MENU(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_OPTION_MENU))
 #define GTK_IS_OPTION_MENU_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_OPTION_MENU))
+#define GTK_OPTION_MENU_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_OPTION_MENU, GtkOptionMenuClass))
 
 
 typedef struct _GtkOptionMenu       GtkOptionMenu;

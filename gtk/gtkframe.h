@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_FRAME_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FRAME, GtkFrameClass))
 #define GTK_IS_FRAME(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_FRAME))
 #define GTK_IS_FRAME_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FRAME))
+#define GTK_FRAME_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_FRAME, GtkFrameClass))
 
 
 typedef struct _GtkFrame       GtkFrame;

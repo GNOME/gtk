@@ -100,7 +100,7 @@ gtk_combo_class_init (GtkComboClass * klass)
   GtkObjectClass *oclass;
   GtkWidgetClass *widget_class;
 
-  parent_class = gtk_type_class (gtk_hbox_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_HBOX);
   oclass = (GtkObjectClass *) klass;
   widget_class = (GtkWidgetClass *) klass;
 
@@ -757,15 +757,15 @@ gtk_combo_get_type (void)
 	/* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
-      combo_type = gtk_type_unique (gtk_hbox_get_type (), &combo_info);
+      combo_type = gtk_type_unique (GTK_TYPE_HBOX, &combo_info);
     }
   return combo_type;
 }
 
-GtkWidget *
+GtkWidget*
 gtk_combo_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_combo_get_type ()));
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_COMBO));
 }
 
 void

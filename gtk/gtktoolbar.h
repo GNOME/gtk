@@ -47,6 +47,8 @@ extern "C" {
 #define GTK_TOOLBAR_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOOLBAR, GtkToolbarClass))
 #define GTK_IS_TOOLBAR(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TOOLBAR))
 #define GTK_IS_TOOLBAR_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOOLBAR))
+#define GTK_TOOLBAR_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TOOLBAR, GtkToolbarClass))
+
 
 typedef enum
 {

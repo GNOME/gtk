@@ -36,9 +36,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_PLUG(obj)          GTK_CHECK_CAST (obj, gtk_plug_get_type (), GtkPlug)
-#define GTK_PLUG_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_plug_get_type (), GtkPlugClass)
-#define GTK_IS_PLUG(obj)       GTK_CHECK_TYPE (obj, gtk_plug_get_type ())
+#define GTK_TYPE_PLUG            (gtk_plug_get_type ())
+#define GTK_PLUG(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_PLUG, GtkPlug))
+#define GTK_PLUG_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PLUG, GtkPlugClass))
+#define GTK_IS_PLUG(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_PLUG))
+#define GTK_IS_PLUG_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PLUG))
+#define GTK_PLUG_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_PLUG, GtkPlugClass))
 
 
 typedef struct _GtkPlug        GtkPlug;

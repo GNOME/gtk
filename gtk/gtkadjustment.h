@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_ADJUSTMENT_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ADJUSTMENT, GtkAdjustmentClass))
 #define GTK_IS_ADJUSTMENT(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_ADJUSTMENT))
 #define GTK_IS_ADJUSTMENT_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ADJUSTMENT))
+#define GTK_ADJUSTMENT_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_ADJUSTMENT, GtkAdjustmentClass))
 
 
 typedef struct _GtkAdjustment	    GtkAdjustment;

@@ -71,6 +71,7 @@ typedef enum
 #define GTK_WIDGET_CLASS(klass)		  (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_WIDGET, GtkWidgetClass))
 #define GTK_IS_WIDGET(widget)		  (GTK_CHECK_TYPE ((widget), GTK_TYPE_WIDGET))
 #define GTK_IS_WIDGET_CLASS(klass)	  (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WIDGET))
+#define GTK_WIDGET_GET_CLASS(obj)         (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_WIDGET, GtkWidgetClass))
 
 /* Macros for extracting various fields from GtkWidget and GtkWidgetClass.
  */

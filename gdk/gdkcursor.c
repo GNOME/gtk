@@ -30,7 +30,10 @@
 GdkCursor*
 gdk_cursor_ref (GdkCursor *cursor)
 {
-  cursor->refcount += 1;
+  g_return_val_if_fail (cursor != NULL, NULL);
+  g_return_val_if_fail (cursor->ref_count > 0, NULL);
+
+  cursor->ref_count += 1;
 
   return cursor;
 }
@@ -39,11 +42,11 @@ void
 gdk_cursor_unref (GdkCursor *cursor)
 {
   g_return_if_fail (cursor != NULL);
-  g_return_if_fail (cursor->refcount > 0);
+  g_return_if_fail (cursor->ref_count > 0);
 
-  cursor->refcount -= 1;
+  cursor->ref_count -= 1;
 
-  if (cursor->refcount == 0)
-    _gdk_cursor_destroy(cursor);
+  if (cursor->ref_count == 0)
+    _gdk_cursor_destroy (cursor);
 }
 

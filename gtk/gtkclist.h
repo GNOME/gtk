@@ -87,6 +87,8 @@ typedef enum
 #define GTK_CLIST_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CLIST, GtkCListClass))
 #define GTK_IS_CLIST(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_CLIST))
 #define GTK_IS_CLIST_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CLIST))
+#define GTK_CLIST_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CLIST, GtkCListClass))
+
 
 #define GTK_CLIST_FLAGS(clist)             (GTK_CLIST (clist)->flags)
 #define GTK_CLIST_SET_FLAG(clist,flag)     (GTK_CLIST_FLAGS (clist) |= (GTK_ ## flag))

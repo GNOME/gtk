@@ -2123,14 +2123,12 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 {
   CompletionDirSent* sent;
   DIR* directory;
-  gchar *buffer_ptr;
   struct dirent *dirent_ptr;
   gint entry_count = 0;
   gint i;
   struct stat ent_sbuf;
   GString *path;
-  gchar *xdir, *xname;
-  int entry_len;
+  gchar *xdir;
 
   sent = g_new(CompletionDirSent, 1);
   sent->mtime = sbuf->st_mtime;

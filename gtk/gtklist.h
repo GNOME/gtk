@@ -43,6 +43,7 @@ extern "C" {
 #define GTK_LIST_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_LIST, GtkListClass))
 #define GTK_IS_LIST(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_LIST))
 #define GTK_IS_LIST_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LIST))
+#define GTK_LIST_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_LIST, GtkListClass))
 
 
 typedef struct _GtkList	      GtkList;

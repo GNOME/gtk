@@ -33,9 +33,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_SOCKET(obj)          GTK_CHECK_CAST (obj, gtk_socket_get_type (), GtkSocket)
-#define GTK_SOCKET_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_socket_get_type (), GtkSocketClass)
-#define GTK_IS_SOCKET(obj)       GTK_CHECK_TYPE (obj, gtk_socket_get_type ())
+#define GTK_TYPE_SOCKET            (gtk_socket_get_type ())
+#define GTK_SOCKET(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_SOCKET, GtkSocket))
+#define GTK_SOCKET_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_SOCKET, GtkSocketClass))
+#define GTK_IS_SOCKET(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_SOCKET))
+#define GTK_IS_SOCKET_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SOCKET))
+#define GTK_SOCKET_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_SOCKET, GtkSocketClass))
 
 
 typedef struct _GtkSocket        GtkSocket;
@@ -64,7 +67,7 @@ struct _GtkSocketClass
 
 
 GtkWidget*     gtk_socket_new      (void);
-GtkType        gtk_socket_get_type (void );
+GtkType        gtk_socket_get_type (void);
 void           gtk_socket_steal    (GtkSocket *socket,
 				    guint32 wid);
 

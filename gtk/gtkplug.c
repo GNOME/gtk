@@ -73,7 +73,7 @@ gtk_plug_get_type ()
 	(GtkArgGetFunc) NULL
       };
 
-      plug_type = gtk_type_unique (gtk_window_get_type (), &plug_info);
+      plug_type = gtk_type_unique (GTK_TYPE_WINDOW, &plug_info);
     }
 
   return plug_type;
@@ -88,7 +88,7 @@ gtk_plug_class_init (GtkPlugClass *class)
   widget_class = (GtkWidgetClass *)class;
   window_class = (GtkWindowClass *)class;
 
-  parent_class = gtk_type_class (gtk_window_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_WINDOW);
 
   widget_class->realize = gtk_plug_realize;
   widget_class->unrealize = gtk_plug_unrealize;
@@ -128,7 +128,7 @@ gtk_plug_new (guint32 socket_id)
 {
   GtkPlug *plug;
 
-  plug = GTK_PLUG (gtk_type_new (gtk_plug_get_type ()));
+  plug = GTK_PLUG (gtk_type_new (GTK_TYPE_PLUG));
   gtk_plug_construct (plug, socket_id);
   return GTK_WIDGET (plug);
 }

@@ -42,9 +42,10 @@ extern "C" {
 #define GTK_INVISIBLE_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_INVISIBLE, GtkInvisibleClass))
 #define GTK_IS_INVISIBLE(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_INVISIBLE))
 #define GTK_IS_INVISIBLE_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_INVISIBLE))
+#define GTK_INVISIBLE_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_INVISIBLE, GtkInvisibleClass))
 
 
-typedef struct _GtkInvisible	  GtkInvisible;
+typedef struct _GtkInvisible	   GtkInvisible;
 typedef struct _GtkInvisibleClass  GtkInvisibleClass;
 
 struct _GtkInvisible

@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_EDITABLE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_EDITABLE, GtkEditableClass))
 #define GTK_IS_EDITABLE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_EDITABLE))
 #define GTK_IS_EDITABLE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_EDITABLE))
+#define GTK_EDITABLE_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_EDITABLE, GtkEditableClass))
 
 
 typedef struct _GtkEditable       GtkEditable;

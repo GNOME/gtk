@@ -35,11 +35,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
+
 #define GTK_TYPE_TOOLTIPS                  (gtk_tooltips_get_type ())
 #define GTK_TOOLTIPS(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TOOLTIPS, GtkTooltips))
 #define GTK_TOOLTIPS_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOOLTIPS, GtkTooltipsClass))
 #define GTK_IS_TOOLTIPS(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TOOLTIPS))
 #define GTK_IS_TOOLTIPS_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOOLTIPS))
+#define GTK_TOOLTIPS_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TOOLTIPS, GtkTooltipsClass))
+
 
 typedef struct _GtkTooltips	 GtkTooltips;
 typedef struct _GtkTooltipsClass GtkTooltipsClass;

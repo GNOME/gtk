@@ -34,11 +34,15 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GTK_COMBO(obj)			GTK_CHECK_CAST (obj, gtk_combo_get_type (), GtkCombo)
-#define GTK_COMBO_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gtk_combo_get_type (), GtkComboClass)
-#define GTK_IS_COMBO(obj)       GTK_CHECK_TYPE (obj, gtk_combo_get_type ())
+#define GTK_TYPE_COMBO              (gtk_combo_get_type ())
+#define GTK_COMBO(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_COMBO, GtkCombo))
+#define GTK_COMBO_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_COMBO, GtkComboClass))
+#define GTK_IS_COMBO(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_COMBO))
+#define GTK_IS_COMBO_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COMBO))
+#define GTK_COMBO_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_COMBO, GtkComboClass))
 
-typedef struct _GtkCombo		GtkCombo;
+
+typedef struct _GtkCombo	GtkCombo;
 typedef struct _GtkComboClass	GtkComboClass;
 
 /* you should access only the entry and list fields directly */
@@ -69,7 +73,7 @@ struct _GtkComboClass {
 
 GtkType    gtk_combo_get_type              (void);
 
-GtkWidget *gtk_combo_new                   (void);
+GtkWidget* gtk_combo_new                   (void);
 /* the text in the entry must be or not be in the list */
 void       gtk_combo_set_value_in_list     (GtkCombo*    combo, 
                                             gint         val,

@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_BIN_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_BIN, GtkBinClass))
 #define GTK_IS_BIN(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_BIN))
 #define GTK_IS_BIN_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BIN))
+#define GTK_BIN_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_BIN, GtkBinClass))
 
 
 typedef struct _GtkBin       GtkBin;

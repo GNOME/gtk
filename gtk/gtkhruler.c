@@ -65,7 +65,7 @@ gtk_hruler_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      hruler_type = gtk_type_unique (gtk_ruler_get_type (), &hruler_info);
+      hruler_type = gtk_type_unique (GTK_TYPE_RULER, &hruler_info);
     }
 
   return hruler_type;
@@ -100,7 +100,7 @@ gtk_hruler_init (GtkHRuler *hruler)
 GtkWidget*
 gtk_hruler_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_hruler_get_type ()));
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_HRULER));
 }
 
 static gint

@@ -36,12 +36,13 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_TYPE_LABEL			(gtk_label_get_type ())
-#define GTK_LABEL(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_LABEL, GtkLabel))
-#define GTK_LABEL_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_LABEL, GtkLabelClass))
-#define GTK_IS_LABEL(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_LABEL))
-#define GTK_IS_LABEL_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LABEL))
-
+#define GTK_TYPE_LABEL		  (gtk_label_get_type ())
+#define GTK_LABEL(obj)		  (GTK_CHECK_CAST ((obj), GTK_TYPE_LABEL, GtkLabel))
+#define GTK_LABEL_CLASS(klass)	  (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_LABEL, GtkLabelClass))
+#define GTK_IS_LABEL(obj)	  (GTK_CHECK_TYPE ((obj), GTK_TYPE_LABEL))
+#define GTK_IS_LABEL_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LABEL))
+#define GTK_LABEL_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_LABEL, GtkLabelClass))
+       
 
 typedef struct _GtkLabel       GtkLabel;
 typedef struct _GtkLabelClass  GtkLabelClass;

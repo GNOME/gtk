@@ -42,7 +42,7 @@ extern "C" {
 #define GTK_HSCALE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSCALE, GtkHScaleClass))
 #define GTK_IS_HSCALE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_HSCALE))
 #define GTK_IS_HSCALE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HSCALE))
-
+#define GTK_HSCALE_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_HSCALE, GtkHScaleClass))
 
 
 typedef struct _GtkHScale       GtkHScale;

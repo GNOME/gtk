@@ -36,9 +36,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_VBUTTON_BOX(obj)          GTK_CHECK_CAST (obj, gtk_vbutton_box_get_type (), GtkVButtonBox)
-#define GTK_VBUTTON_BOX_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_vbutton_box_get_type (), GtkVButtonBoxClass)
-#define GTK_IS_VBUTTON_BOX(obj)       GTK_CHECK_TYPE (obj, gtk_vbutton_box_get_type ())
+#define GTK_TYPE_VBUTTON_BOX            (gtk_vbutton_box_get_type ())
+#define GTK_VBUTTON_BOX(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_VBUTTON_BOX, GtkVButtonBox))
+#define GTK_VBUTTON_BOX_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VBUTTON_BOX, GtkVButtonBoxClass))
+#define GTK_IS_VBUTTON_BOX(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_VBUTTON_BOX))
+#define GTK_IS_VBUTTON_BOX_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VBUTTON_BOX))
+#define GTK_VBUTTON_BOX_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_VBUTTON_BOX, GtkVButtonBoxClass))
 
 
 typedef struct _GtkVButtonBox       GtkVButtonBox;

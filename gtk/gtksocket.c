@@ -71,7 +71,7 @@ static GdkFilterReturn gtk_socket_filter_func   (GdkXEvent *gdk_xevent,
 static GtkWidgetClass *parent_class = NULL;
 
 GtkType
-gtk_socket_get_type ()
+gtk_socket_get_type (void)
 {
   static GtkType socket_type = 0;
 
@@ -88,7 +88,7 @@ gtk_socket_get_type ()
 	(GtkArgGetFunc) NULL
       };
 
-      socket_type = gtk_type_unique (gtk_container_get_type (), &socket_info);
+      socket_type = gtk_type_unique (GTK_TYPE_CONTAINER, &socket_info);
     }
 
   return socket_type;
@@ -105,7 +105,7 @@ gtk_socket_class_init (GtkSocketClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  parent_class = gtk_type_class (gtk_widget_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
   widget_class->realize = gtk_socket_realize;
   widget_class->unrealize = gtk_socket_unrealize;
@@ -133,11 +133,11 @@ gtk_socket_init (GtkSocket *socket)
 }
 
 GtkWidget*
-gtk_socket_new ()
+gtk_socket_new (void)
 {
   GtkSocket *socket;
 
-  socket = gtk_type_new (gtk_socket_get_type ());
+  socket = gtk_type_new (GTK_TYPE_SOCKET);
 
   return GTK_WIDGET (socket);
 }
@@ -403,7 +403,7 @@ gtk_socket_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
   g_return_val_if_fail (GTK_IS_SOCKET (widget), FALSE);
   socket = GTK_SOCKET (widget);
 
-  toplevel = gtk_widget_get_ancestor (widget, gtk_window_get_type());
+  toplevel = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
   
   if (toplevel)
     {
@@ -698,7 +698,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	{
 #if 0
 	  GtkWidget *toplevel;
-	  toplevel = gtk_widget_get_ancestor (widget, gtk_window_get_type());
+	  toplevel = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
 	  
 	  if (toplevel)
 	    {
@@ -757,11 +757,11 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 
 #elif defined (GDK_WINDOWING_WIN32)
 
-guint
-gtk_socket_get_type ()
+GtkType
+gtk_socket_get_type (void)
 {
   g_error ("GtkSocket not implemented");
-  return 42;
+  return 0;
 }
 
 GtkWidget*

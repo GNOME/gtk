@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_MISC_CLASS(klass)	       (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MISC, GtkMiscClass))
 #define GTK_IS_MISC(obj)	       (GTK_CHECK_TYPE ((obj), GTK_TYPE_MISC))
 #define GTK_IS_MISC_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MISC))
+#define GTK_MISC_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_MISC, GtkMiscClass))
 
 
 typedef struct _GtkMisc	      GtkMisc;

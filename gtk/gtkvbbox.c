@@ -56,7 +56,7 @@ gtk_vbutton_box_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      vbutton_box_type = gtk_type_unique (gtk_button_box_get_type (), &vbutton_box_info);
+      vbutton_box_type = gtk_type_unique (GTK_TYPE_BUTTON_BOX, &vbutton_box_info);
     }
 
   return vbutton_box_type;
@@ -84,7 +84,7 @@ gtk_vbutton_box_new (void)
 {
   GtkVButtonBox *vbutton_box;
 
-  vbutton_box = gtk_type_new (gtk_vbutton_box_get_type ());
+  vbutton_box = gtk_type_new (GTK_TYPE_VBUTTON_BOX);
   return GTK_WIDGET (vbutton_box);
 }
 

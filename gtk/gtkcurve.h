@@ -41,6 +41,7 @@ extern "C" {
 #define GTK_CURVE_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CURVE, GtkCurveClass))
 #define GTK_IS_CURVE(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_CURVE))
 #define GTK_IS_CURVE_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CURVE))
+#define GTK_CURVE_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CURVE, GtkCurveClass))
 
 
 typedef struct _GtkCurve	GtkCurve;

@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_VSEPARATOR_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VSEPARATOR, GtkVSeparatorClass))
 #define GTK_IS_VSEPARATOR(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_VSEPARATOR))
 #define GTK_IS_VSEPARATOR_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VSEPARATOR))
+#define GTK_VSEPARATOR_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_VSEPARATOR, GtkVSeparatorClass))
 
 
 typedef struct _GtkVSeparator       GtkVSeparator;

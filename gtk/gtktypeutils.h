@@ -103,6 +103,7 @@ typedef enum
 #  define GTK_CHECK_CLASS_CAST(tclass,cast_type,cast) \
       ((cast*) gtk_type_check_class_cast ((GtkTypeClass*) (tclass), (cast_type)))
 #endif /* GTK_NO_CHECK_CASTS */
+#define GTK_CHECK_GET_CLASS(obj,type,klass)   ((klass*) (((GtkTypeObject*) (obj))->klass))
 
 /* Determines whether `type_object' and `type_class' are a type of `otype'.
  */

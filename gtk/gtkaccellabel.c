@@ -78,7 +78,7 @@ gtk_accel_label_get_type (void)
 	(GtkClassInitFunc) NULL,
       };
       
-      accel_label_type = gtk_type_unique (gtk_label_get_type (), &accel_label_info);
+      accel_label_type = gtk_type_unique (GTK_TYPE_LABEL, &accel_label_info);
     }
   
   return accel_label_type;
@@ -98,7 +98,7 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   misc_class = (GtkMiscClass*) class;
   label_class = (GtkLabelClass*) class;
   
-  parent_class = gtk_type_class (gtk_label_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_LABEL);
   
   gtk_object_add_arg_type ("GtkAccelLabel::accel_widget", GTK_TYPE_WIDGET, GTK_ARG_READWRITE, ARG_ACCEL_WIDGET);
 

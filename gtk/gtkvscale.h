@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_VSCALE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VSCALE, GtkVScaleClass))
 #define GTK_IS_VSCALE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_VSCALE))
 #define GTK_IS_VSCALE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VSCALE))
+#define GTK_VSCALE_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_VSCALE, GtkVScaleClass))
 
 
 typedef struct _GtkVScale       GtkVScale;

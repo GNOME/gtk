@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_IMAGE_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_IMAGE, GtkImageClass))
 #define GTK_IS_IMAGE(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_IMAGE))
 #define GTK_IS_IMAGE_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IMAGE))
+#define GTK_IMAGE_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_IMAGE, GtkImageClass))
 
 
 typedef struct _GtkImage       GtkImage;

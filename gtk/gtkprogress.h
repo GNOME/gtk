@@ -43,6 +43,7 @@ extern "C" {
 #define GTK_PROGRESS_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PROGRESS, GtkProgressClass))
 #define GTK_IS_PROGRESS(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_PROGRESS))
 #define GTK_IS_PROGRESS_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PROGRESS))
+#define GTK_PROGRESS_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_PROGRESS, GtkProgressClass))
 
 
 typedef struct _GtkProgress       GtkProgress;

@@ -63,7 +63,7 @@ gtk_hpaned_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      hpaned_type = gtk_type_unique (gtk_paned_get_type (), &hpaned_info);
+      hpaned_type = gtk_type_unique (GTK_TYPE_PANED, &hpaned_info);
     }
 
   return hpaned_type;
@@ -94,7 +94,7 @@ gtk_hpaned_new (void)
 {
   GtkHPaned *hpaned;
 
-  hpaned = gtk_type_new (gtk_hpaned_get_type ());
+  hpaned = gtk_type_new (GTK_TYPE_HPANED);
 
   return GTK_WIDGET (hpaned);
 }

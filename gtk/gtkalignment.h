@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_ALIGNMENT_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ALIGNMENT, GtkAlignmentClass))
 #define GTK_IS_ALIGNMENT(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_ALIGNMENT))
 #define GTK_IS_ALIGNMENT_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ALIGNMENT))
+#define GTK_ALIGNMENT_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_ALIGNMENT, GtkAlignmentClass))
 
 
 typedef struct _GtkAlignment       GtkAlignment;

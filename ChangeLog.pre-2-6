@@ -1,3 +1,19 @@
+Sun Feb 13 08:54:45 2000  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkcursor.h (struct _GdkCursor): s/refcount/ref_count/.
+	* gdk/x11/gdkcursor-x11.c (gdk_cursor_new_from_pixmap): 
+	* gdk/x11/gdkcursor-x11.c (_gdk_cursor_destroy): 
+	* gdk/gdkcursor.c (gdk_cursor_ref): insert assertments for the
+	parameters given and cursor->ref_count. coding style fixups.
+
+	* gtk/gtksocket.c (gtk_socket_class_init): parent class is GtkContainer,
+	not GtkWidget.
+	
+	* gtk/*.h: applied patch from Mathieu Lacage <lacage@email.enst.fr> to
+	fix up widget macros and add _GET_CLASS() variant.
+	
+	* gtk/*.c: some GtkType fixups.
+
 2000-02-09  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkproperty-win32.c

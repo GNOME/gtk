@@ -41,17 +41,21 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GTK_TYPE_FONT_SELECTION		     (gtk_font_selection_get_type ())
-#define GTK_FONT_SELECTION(obj)		     (GTK_CHECK_CAST ((obj), GTK_TYPE_FONT_SELECTION, GtkFontSelection))
-#define GTK_FONT_SELECTION_CLASS(klass)	     (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_SELECTION, GtkFontSelectionClass))
-#define GTK_IS_FONT_SELECTION(obj)	     (GTK_CHECK_TYPE ((obj), GTK_TYPE_FONT_SELECTION))
+#define GTK_TYPE_FONT_SELECTION              (gtk_font_selection_get_type ())
+#define GTK_FONT_SELECTION(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_FONT_SELECTION, GtkFontSelection))
+#define GTK_FONT_SELECTION_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_SELECTION, GtkFontSelectionClass))
+#define GTK_IS_FONT_SELECTION(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_FONT_SELECTION))
 #define GTK_IS_FONT_SELECTION_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_SELECTION))
+#define GTK_FONT_SELECTION_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_FONT_SELECTION, GtkFontSelectionClass))
 
-#define GTK_TYPE_FONT_SELECTION_DIALOG		    (gtk_font_selection_dialog_get_type ())
-#define GTK_FONT_SELECTION_DIALOG(obj)		    (GTK_CHECK_CAST ((obj), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialog))
-#define GTK_FONT_SELECTION_DIALOG_CLASS(klass)	    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialogClass))
-#define GTK_IS_FONT_SELECTION_DIALOG(obj)	    (GTK_CHECK_TYPE ((obj), GTK_TYPE_FONT_SELECTION_DIALOG))
+
+#define GTK_TYPE_FONT_SELECTION_DIALOG              (gtk_font_selection_dialog_get_type ())
+#define GTK_FONT_SELECTION_DIALOG(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialog))
+#define GTK_FONT_SELECTION_DIALOG_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialogClass))
+#define GTK_IS_FONT_SELECTION_DIALOG(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_FONT_SELECTION_DIALOG))
 #define GTK_IS_FONT_SELECTION_DIALOG_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_SELECTION_DIALOG))
+#define GTK_FONT_SELECTION_DIALOG_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialogClass))
+
 
 typedef struct _GtkFontSelection	     GtkFontSelection;
 typedef struct _GtkFontSelectionClass	     GtkFontSelectionClass;

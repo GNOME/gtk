@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_CHECK_BUTTON_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CHECK_BUTTON, GtkCheckButtonClass))
 #define GTK_IS_CHECK_BUTTON(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_CHECK_BUTTON))
 #define GTK_IS_CHECK_BUTTON_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CHECK_BUTTON))
+#define GTK_CHECK_BUTTON_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CHECK_BUTTON, GtkCheckButtonClass))
 
 
 typedef struct _GtkCheckButton       GtkCheckButton;
