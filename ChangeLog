@@ -1,3 +1,8 @@
+Tue Sep 24 05:16:25 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk+.spec.in: Fix up a bit to look for the loaders
+	in the right place. (#93011, Dennis Dementiev)
+
 Tue Sep 24 05:12:14 2002  Owen Taylor  <otaylor@redhat.com>
 
         * gtk/gtkimcontextsimple.c: Fixes to GtkIMContextSimple

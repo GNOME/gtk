@@ -1,10 +1,12 @@
+%define binary_version @GTK_BINARY_VERSION@
+
 Name:		 gtk2
 Summary:	 The Gimp Toolkit
 Version:	 @VERSION@
 Release:	 1
 License:	 LGPL
 Group:		 X11/Libraries
-Source:		 ftp://ftp.gimp.org/pub/gtk/v1.3/gtk+-%{version}.tar.gz
+Source:		 ftp://ftp.gimp.org/pub/gtk/v2.3/gtk+-%{version}.tar.gz
 BuildRoot:	 /var/tmp/%{name}-%{version}-root
 URL:		 http://www.gtk.org
 Requires:	 glib2 >= %{version}
@@ -84,7 +86,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/*
 %{_libdir}/libgtk*.so.*
 %{_libdir}/libgdk*.so.*
-%{_libdir}/gtk-2.0/%{version}/*/*.so
+%{_libdir}/gtk-2.0/%{binary_version}/*/*.so
 #%{_datadir}/locale/*/*/*
 %{_sysconfdir}/gtk-2.0/gtk.immodules
 
@@ -93,7 +95,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %{_libdir}/lib*.so
 %{_libdir}/*a
-%{_libdir}/gtk-2.0/%{version}/*/*a
+%{_libdir}/gtk-2.0/%{binary_version}/*/*a
 %{_libdir}/gtk-2.0/include
 %{_libdir}/pkgconfig/*.pc
 %{_includedir}/gtk-2.0		
@@ -103,6 +105,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Sep 11 2002 Dennis Dementiev <denm@asplinux.ru>
+- modules and loaders should be installed in under binary version
+  dir instead version
+
 * Mon Aug 27 2001 Jens Finke <jens@gnome.org>
 - Renamed package to gtk2.
 - Updated source url.
