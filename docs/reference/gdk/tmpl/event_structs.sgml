@@ -471,7 +471,9 @@ Specifies the state of a toplevel window.
 @GDK_WINDOW_STATE_ICONIFIED: the window is minimized.
 @GDK_WINDOW_STATE_MAXIMIZED: the window is maximized.
 @GDK_WINDOW_STATE_STICKY: the window is sticky.
-@GDK_WINDOW_STATE_FULLSCREEN: 
+@GDK_WINDOW_STATE_FULLSCREEN: the window is maximized without decorations. 
+@GDK_WINDOW_STATE_ABOVE: the window is kept above other windows.
+@GDK_WINDOW_STATE_BELOW: the window is kept below other windows.
 
 <!-- ##### ENUM GdkSettingAction ##### -->
 <para>

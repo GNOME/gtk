@@ -502,6 +502,10 @@ void          gdk_window_maximize        (GdkWindow       *window);
 void          gdk_window_unmaximize      (GdkWindow       *window);
 void          gdk_window_fullscreen      (GdkWindow       *window);
 void          gdk_window_unfullscreen    (GdkWindow       *window);
+void          gdk_window_set_keep_above  (GdkWindow       *window,
+                                          gboolean         setting);
+void          gdk_window_set_keep_below  (GdkWindow       *window,
+                                          gboolean         setting);
 
 void          gdk_window_register_dnd    (GdkWindow       *window);
 

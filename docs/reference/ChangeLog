@@ -1,3 +1,12 @@
+2003-08-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk-sections.txt: Add gdk_window_set_keep_above and gdk_window_set_keep_below.
+
+	* gtk/gtk-sections.txt: Add gtk_window_set_keep_above and gtk_window_set_keep_below.
+
+	* gdk/tmpl/event_structs.sgml: Document GDK_WINDOW_STATE_FULLSCREEN, 
+	GDK_WINDOW_STATE_ABOVE and GDK_WINDOW_STATE_BELOW.
+
 2003-08-10  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkwidget.sgml: Document public GtkWidget members.  (#119463)

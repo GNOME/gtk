@@ -1,5 +1,25 @@
 2003-08-11  Matthias Clasen  <maclas@gmx.de>
 
+	Add support for EWMH "Above" and "Below" window states.  (105100, Manuel Clos)
+	
+	* tests/testgtk.c: Add "Above" and "Below" to the the "Window State" demo.
+
+	* gtk/gtkwindow.h: Add gtk_window_set_keep_above and gtk_window_set_keep_below.
+
+	* gtk/gtk.def:  Add gtk_window_set_keep_above and gtk_window_set_keep_below.
+
+	* gtk/gtkwindow.c (gtk_window_set_keep_below): 
+	(gtk_window_set_keep_above): New functions, call the corresponding gdk functions.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_keep_below): New function, sets _NET_WM_STATE_BELOW.
+	(gdk_window_set_keep_above): New function, sets _NET_WM_STATE_ABOVE.
+
+	* gdk/gdkwindow.h: Add gdk_window_set_keep_above and gdk_window_set_keep_below.
+
+	* gdk/gdkevents.h (GdkWindowState): Add GDK_WINDOW_STATE_ABOVE and GDK_WINDOW_STATE_BELOW.
+
+	* gdk/gdk.def: Add gdk_window_set_keep_above and gdk_window_set_keep_below.
+
 	* acinclude.m4: Copy newer versions of JH_CHECK_XML_CATALOG and JH_PATH_XML_CATALOG from
 	gtk-doc to enable configuring without xmlcatalog in PATH.  (#119115)
 

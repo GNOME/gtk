@@ -521,6 +521,8 @@ EXPORTS
 	gdk_window_set_icon
 	gdk_window_set_icon_list
 	gdk_window_set_icon_name
+	gdk_window_set_keep_above
+	gdk_window_set_keep_below
 	gdk_window_set_modal_hint
 	gdk_window_set_override_redirect
 	gdk_window_set_role

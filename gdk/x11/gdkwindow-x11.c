@@ -3792,6 +3792,77 @@ gdk_window_unfullscreen (GdkWindow *window)
 				 0);
 }
 
+/**
+ * gdk_window_set_keep_above:
+ * @window: a toplevel #GdkWindow
+ * @setting: whether to keep @window above other windows
+ *
+ * Set if @window must be kept above other windows. If the
+ * window was already above, then this function does nothing.
+ * 
+ * On X11, asks the window manager to keep @window above, if the window
+ * manager supports this operation. Not all window managers support
+ * this, and some deliberately ignore it or don't have a concept of
+ * "keep above"; so you can't rely on the window being kept above.
+ * But it will happen with most standard window managers,
+ * and GDK makes a best effort to get it to happen.
+ *
+ * Since: 2.4
+ **/
+void
+gdk_window_set_keep_above (GdkWindow *window, gboolean setting)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    gdk_wmspec_change_state (setting, window,
+			     gdk_atom_intern ("_NET_WM_STATE_ABOVE", setting),
+			     setting ? gdk_atom_intern ("_NET_WM_STATE_BELOW", FALSE)
+			     	: GDK_NONE);
+  else
+    gdk_synthesize_window_state (window,
+    				 setting ? GDK_WINDOW_STATE_BELOW : GDK_WINDOW_STATE_ABOVE,
+				 setting ? GDK_WINDOW_STATE_ABOVE : 0);
+}
+
+/**
+ * gdk_window_set_keep_below:
+ * @window: a toplevel #GdkWindow
+ * @setting: whether to keep @window below other windows
+ *
+ * Set if @window must be kept below other windows. If the
+ * window was already below, then this function does nothing.
+ * 
+ * On X11, asks the window manager to keep @window below, if the window
+ * manager supports this operation. Not all window managers support
+ * this, and some deliberately ignore it or don't have a concept of
+ * "keep below"; so you can't rely on the window being kept below.
+ * But it will happen with most standard window managers,
+ * and GDK makes a best effort to get it to happen.
+ *
+ * Since: 2.4
+ **/
+void
+gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    gdk_wmspec_change_state (setting, window,
+			     gdk_atom_intern ("_NET_WM_STATE_BELOW", setting),
+			     setting ? gdk_atom_intern ("_NET_WM_STATE_ABOVE", FALSE)
+			         : GDK_NONE);
+  else
+    gdk_synthesize_window_state (window,
+				 setting ? GDK_WINDOW_STATE_ABOVE : GDK_WINDOW_STATE_BELOW,
+				 setting ? GDK_WINDOW_STATE_BELOW : 0);
+}
 
 /**
  * gdk_window_set_group:

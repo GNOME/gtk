@@ -96,6 +96,8 @@ struct _GtkWindow
   guint stick_initially : 1;
   guint maximize_initially : 1;
   guint decorated : 1;
+  guint above_initially : 1;
+  guint below_initially : 1;
   
   guint type_hint : 3; /* GdkWindowTypeHint */ 
   guint gravity : 5; /* GdkGravity */
@@ -286,6 +288,8 @@ void     gtk_window_maximize      (GtkWindow *window);
 void     gtk_window_unmaximize    (GtkWindow *window);
 void     gtk_window_fullscreen    (GtkWindow *window);
 void     gtk_window_unfullscreen  (GtkWindow *window);
+void     gtk_window_set_keep_above    (GtkWindow *window, gboolean setting);
+void     gtk_window_set_keep_below    (GtkWindow *window, gboolean setting);
 
 void gtk_window_begin_resize_drag (GtkWindow     *window,
                                    GdkWindowEdge  edge,

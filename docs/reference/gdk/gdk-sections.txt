@@ -614,6 +614,8 @@ gdk_window_maximize
 gdk_window_unmaximize
 gdk_window_fullscreen
 gdk_window_unfullscreen
+gdk_window_set_keep_above
+gdk_window_set_keep_below
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize

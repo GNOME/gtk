@@ -2367,6 +2367,8 @@ EXPORTS
 	gtk_window_set_icon
 	gtk_window_set_icon_from_file
 	gtk_window_set_icon_list
+	gtk_window_set_keep_above
+	gtk_window_set_keep_below
 	gtk_window_set_mnemonic_modifier
 	gtk_window_set_modal
 	gtk_window_set_policy

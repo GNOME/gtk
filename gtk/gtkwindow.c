@@ -3185,7 +3185,7 @@ gtk_window_get_size (GtkWindow *window,
  * <literal>gtk_window_move (window, gdk_screen_width () - window_width,
  * gdk_screen_height () - window_height)</literal>.
  *
- * The extended window manager hints specification at <ulink 
+ * The Extended Window Manager Hints specification at <ulink 
  * url="http://www.freedesktop.org/standards/wm-spec.html">
  * http://www.freedesktop.org/standards/wm-spec.html</ulink> has a 
  * nice table of gravities in the "implementation notes" section.
@@ -3671,6 +3671,10 @@ gtk_window_map (GtkWidget *widget)
   else
     gdk_window_unfullscreen (toplevel);
   
+  gdk_window_set_keep_above (toplevel, window->above_initially);
+
+  gdk_window_set_keep_below (toplevel, window->below_initially);
+
   /* No longer use the default settings */
   window->need_default_size = FALSE;
   window->need_default_position = FALSE;
@@ -3721,6 +3725,8 @@ gtk_window_unmap (GtkWidget *widget)
   window->iconify_initially = state & GDK_WINDOW_STATE_ICONIFIED;
   window->maximize_initially = state & GDK_WINDOW_STATE_MAXIMIZED;
   window->stick_initially = state & GDK_WINDOW_STATE_STICKY;
+  window->above_initially = state & GDK_WINDOW_STATE_ABOVE;
+  window->below_initially = state & GDK_WINDOW_STATE_BELOW;
 }
 
 static void
@@ -5943,6 +5949,105 @@ gtk_window_unfullscreen (GtkWindow *window)
     gdk_window_unfullscreen (toplevel);
 }
 
+/**
+ * gtk_window_set_keep_above:
+ * @window: a #GtkWindow
+ * @setting: whether to keep @window above other windows
+ *
+ * Asks to keep @window above, so that it stays on top. Note that
+ * you shouldn't assume the window is definitely above afterward,
+ * because other entities (e.g. the user or <link
+ * linkend="gtk-X11-arch">window manager</link>) could not keep it above,
+ * and not all window managers support keeping windows above. But
+ * normally the window will end kept above. Just don't write code
+ * that crashes if not.
+ *
+ * It's permitted to call this function before showing a window,
+ * in which case the window will be kept above when it appears onscreen
+ * initially.
+ *
+ * You can track the above state via the "window_state_event" signal
+ * on #GtkWidget.
+ *
+ * Note that, according to the <ulink 
+ * url="http://www.freedesktop.org/standards/wm-spec.html">Extended Window Manager Hints</ulink>
+ * specification, the above state is mainly meant for user preferences and should not be used 
+ * by applications e.g. for drawing attention to their dialogs.
+ *
+ * Since: 2.4
+ **/
+void
+gtk_window_set_keep_above (GtkWindow *window, gboolean setting)
+{
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+
+  window->above_initially = setting;
+  if (setting)
+    window->below_initially = FALSE;
+
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+
+  if (toplevel != NULL)
+    gdk_window_set_keep_above (toplevel, setting);
+}
+
+/**
+ * gtk_window_set_keep_below:
+ * @window: a #GtkWindow
+ * @setting: whether to keep @window below other windows
+ *
+ * Asks to keep @window below, so that it stays in bottom. Note that
+ * you shouldn't assume the window is definitely below afterward,
+ * because other entities (e.g. the user or <link
+ * linkend="gtk-X11-arch">window manager</link>) could not keep it below,
+ * and not all window managers support putting windows below. But
+ * normally the window will be kept below. Just don't write code
+ * that crashes if not.
+ *
+ * It's permitted to call this function before showing a window,
+ * in which case the window will be kept below when it appears onscreen
+ * initially.
+ *
+ * You can track the below state via the "window_state_event" signal
+ * on #GtkWidget.
+ *
+ * Note that, according to the <ulink 
+ * url="http://www.freedesktop.org/standards/wm-spec.html">Extended Window Manager Hints</ulink>
+ * specification, the above state is mainly meant for user preferences and should not be used 
+ * by applications e.g. for drawing attention to their dialogs.
+ *
+ * Since: 2.4
+ **/
+void
+gtk_window_set_keep_below (GtkWindow *window, gboolean setting)
+{
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+
+  window->below_initially = setting;
+  if (setting)
+    window->above_initially = FALSE;
+
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+
+  if (toplevel != NULL)
+    gdk_window_set_keep_below (toplevel, setting);
+}
 
 /**
  * gtk_window_set_resizable:
