@@ -359,15 +359,15 @@ gtk_dialog_map (GtkWidget *widget)
       while (GTK_IS_LABEL (window->focus_widget));
 
       tmp_list = children = gtk_container_get_children (GTK_CONTAINER (dialog->action_area));
-
+      
       while (tmp_list)
 	{
 	  GtkWidget *child = tmp_list->data;
-
-	  if (window->focus_widget == NULL ||
-	      (child == window->focus_widget && 
-	       child != window->default_widget && 
-	       window->default_widget))
+	  
+	  if ((window->focus_widget == NULL || 
+	       child == window->focus_widget) && 
+	      child != window->default_widget &&
+	      window->default_widget)
 	    {
 	      gtk_widget_grab_focus (window->default_widget);
 	      break;
@@ -375,7 +375,7 @@ gtk_dialog_map (GtkWidget *widget)
 	  
 	  tmp_list = tmp_list->next;
 	}
-
+      
       g_list_free (children);
     }
 }
