@@ -926,6 +926,13 @@ _gdk_input_other_event (GdkEvent  *event,
 					   &event->button.x, 
 					   &event->button.y);
 
+	  /* Also calculate root coordinates. Note that input_window->root_x
+	     is in Win32 screen coordinates. */
+	  event->button.x_root = event->button.x + input_window->root_x
+				 + _gdk_offset_x;
+	  event->button.y_root = event->button.y + input_window->root_y
+				 + _gdk_offset_y;
+
 	  event->button.state = ((gdkdev->button_state << 8)
 				 & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
 				    | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
@@ -951,6 +958,13 @@ _gdk_input_other_event (GdkEvent  *event,
 					   event->motion.axes,
 					   &event->motion.x, 
 					   &event->motion.y);
+
+	  /* Also calculate root coordinates. Note that input_window->root_x
+	     is in Win32 screen coordinates. */
+	  event->motion.x_root = event->motion.x + input_window->root_x
+				 + _gdk_offset_x;
+	  event->motion.y_root = event->motion.y + input_window->root_y
+				 + _gdk_offset_y;
 
 	  event->motion.state = ((gdkdev->button_state << 8)
 				 & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
