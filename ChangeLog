@@ -1,3 +1,8 @@
+2004-12-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmain.c (gtk_init_with_args): Typo fix.  (#162278,
+	Torsten Schoenfeld)
+
 2004-12-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooser.c (gtk_file_chooser_set_action): 

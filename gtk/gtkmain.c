@@ -588,7 +588,7 @@ gtk_get_option_group (gboolean open_default_display)
  *
  * This function does the same work as gtk_init_check(). 
  * Additionally, it allows you to add your own commandline options, 
- * and it automatically generated nicely formatted 
+ * and it automatically generates nicely formatted 
  * <option>--help</option> output. Note that your program will
  * be terminated after writing out the help output.
  *
