@@ -301,11 +301,11 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1770
 msgid "The selected font is not available."
-msgstr "Выбранный шрифт не доступен."
+msgstr "Выбран не доступный шрифт."
 
 #: gtk/gtkfontsel.c:1776
 msgid "The selected font is not a valid font."
-msgstr "Выбранный шрифт не правилен."
+msgstr "Выбран не правильный шрифт."
 
 #: gtk/gtkfontsel.c:1834
 msgid "This is a 2-byte font and may not be displayed correctly."
