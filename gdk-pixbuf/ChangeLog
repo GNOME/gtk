@@ -1,3 +1,8 @@
+Fri Nov  8 19:06:07 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (gdk-pixbuf.loaders): Make gdk-pixbuf.loaders
+	file depend on the loaders (#97096, Jeff Waugh)
+
 Wed Nov  6 15:19:53 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* io-gif.c (CHECK_LZW_SP): Fix trailing semicolon on macro,
