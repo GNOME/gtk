@@ -2494,6 +2494,7 @@ gdk_event_translate (GdkEvent *event,
       
       /* Tell XInput stuff about it if appropriate */
       if (window_private &&
+	  !window_private->destroyed &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_vtable.enter_event)
 	gdk_input_vtable.enter_event (&xevent->xcrossing, window);
@@ -2924,7 +2925,8 @@ gdk_event_translate (GdkEvent *event,
       
       if (window_private)
 	{
-	  if ((window_private->extension_events != 0) &&
+	  if (!window_private->destroyed &&
+	      (window_private->extension_events != 0) &&
 	      gdk_input_vtable.configure_event)
 	    gdk_input_vtable.configure_event (&xevent->xconfigure, window);
 	  
@@ -3287,6 +3289,7 @@ gdk_event_translate (GdkEvent *event,
       /* something else - (e.g., a Xinput event) */
       
       if (window_private &&
+	  !window_private->destroyed &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_vtable.other_event)
 	return_val = gdk_input_vtable.other_event(event, xevent, window);
