@@ -1,3 +1,14 @@
+Thu Aug 21 01:33:51 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from stable.
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_size_request): always round
+	approximate digit widths up, to avoid truncation, convert to
+	pango pixels when we have the full string width instead of converting
+	the approx digit width to pango pixels, take inner border and
+	interior focus into account correctly. (Fixes #116368, patch from
+	Morten Welinder).
+
 2003-08-20  Noah Levitt  <nlevitt@columbia.edu>
 
 	* gtk/queryimmodules.c: Don't look at the same directory twice (in

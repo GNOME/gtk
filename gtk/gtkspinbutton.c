@@ -652,7 +652,8 @@ gtk_spin_button_size_request (GtkWidget      *widget,
 					   pango_context_get_language (context));
 
       digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
-      digit_width = PANGO_PIXELS (digit_width);
+      digit_width = PANGO_SCALE *
+        ((digit_width + PANGO_SCALE - 1) / PANGO_SCALE);
 
       pango_font_metrics_unref (metrics);
       
@@ -664,15 +665,15 @@ gtk_spin_button_size_request (GtkWidget      *widget,
 
       string_len = compute_double_length (spin_button->adjustment->upper,
                                           spin_button->digits);
-      w = MIN (string_len, max_string_len) * digit_width;
+      w = PANGO_PIXELS (MIN (string_len, max_string_len) * digit_width);
       width = MAX (width, w);
       string_len = compute_double_length (spin_button->adjustment->lower,
 					  spin_button->digits);
-      w = MIN (string_len, max_string_len) * digit_width;
+      w = PANGO_PIXELS (MIN (string_len, max_string_len) * digit_width);
       width = MAX (width, w);
       
-      requisition->width = width;
-      if (interior_focus)
+      requisition->width = width + /* INNER_BORDER */ 2 * 2;
+      if (!interior_focus)
 	requisition->width += 2 * focus_width;
     }
 
