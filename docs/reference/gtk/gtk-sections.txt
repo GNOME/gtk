@@ -2887,6 +2887,24 @@ GtkToolItemPrivate
 </SECTION>
 
 <SECTION>
+<FILE>gtkseparatortoolitem</FILE>
+<TITLE>GtkSeparatorToolItem</TITLE>
+GtkSeparatorToolItem
+gtk_separator_tool_item_new
+
+<SUBSECTION Standard>
+GTK_TYPE_SEPARATOR_TOOL_ITEM
+GTK_SEPARATOR_TOOL_ITEM
+GTK_SEPARATOR_TOOL_ITEM_CLASS
+GTK_IS_SEPARATOR_TOOL_ITEM
+GTK_IS_SEPARATOR_TOOL_ITEM_CLASS
+GTK_SEPARATOR_TOOL_ITEM_GET_CLASS
+
+<SUBSECTION Private>
+gtk_separator_tool_item_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtktoolbutton</FILE>
 <TITLE>GtkToolButton</TITLE>
 GtkToolButton
@@ -2915,6 +2933,53 @@ GTK_TOOL_BUTTON_GET_PRIVATE
 <SUBSECTION Private>
 gtk_tool_button_get_type
 GtkToolButtonPrivate
+</SECTION>
+
+<SECTION>
+<FILE>gtkradiotoolbutton</FILE>
+<TITLE>GtkRadioToolButton</TITLE>
+GtkRadioToolButton
+gtk_radio_tool_button_new
+gtk_radio_tool_button_new_from_stock
+gtk_radio_tool_button_new_from_widget
+gtk_radio_tool_button_new_with_stock_from_widget
+gtk_radio_tool_button_get_group
+gtk_radio_tool_button_set_group
+
+<SUBSECTION Standard>
+GTK_TYPE_RADIO_TOOL_BUTTON
+GTK_RADIO_TOOL_BUTTON
+GTK_RADIO_TOOL_BUTTON_CLASS
+GTK_IS_RADIO_TOOL_BUTTON
+GTK_IS_RADIO_TOOL_BUTTON_CLASS
+GTK_RADIO_TOOL_BUTTON_GET_CLASS
+
+<SUBSECTION Private>
+gtk_radio_tool_button_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtktoggletoolbutton</FILE>
+<TITLE>GtkToggleToolButton</TITLE>
+GtkToggleToolButton
+gtk_toggle_tool_button_new
+gtk_toggle_tool_button_new_from_stock
+gtk_toggle_tool_button_set_active
+gtk_toggle_tool_button_get_active
+
+<SUBSECTION Standard>
+GtkToggleToolButtonClass
+GTK_TYPE_TOGGLE_TOOL_BUTTON
+GTK_TOGGLE_TOOL_BUTTON
+GTK_TOGGLE_TOOL_BUTTON_CLASS
+GTK_IS_TOGGLE_TOOL_BUTTON
+GTK_IS_TOGGLE_TOOL_BUTTON_CLASS
+GTK_TOGGLE_TOOL_BUTTON_GET_CLASS
+
+<SUBSECTION Private>
+gtk_toggle_tool_button_get_type
+GtkToggleToolButtonPrivate
+GTK_TOGGLE_TOOL_BUTTON_GET_PRIVATE
 </SECTION>
 
 <SECTION>
@@ -3593,6 +3658,7 @@ GTK_IS_VPANED_CLASS
 GTK_VPANED_GET_CLASS
 <SUBSECTION Private>
 gtk_vpaned_get_type
+GtkPanedPrivate
 </SECTION>
 
 <SECTION>

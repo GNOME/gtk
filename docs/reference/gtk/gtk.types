@@ -80,6 +80,7 @@ gtk_progress_bar_get_type
 gtk_progress_get_type
 gtk_radio_button_get_type
 gtk_radio_menu_item_get_type
+gtk_radio_tool_button_get_type
 gtk_range_get_type
 gtk_rc_style_get_type
 gtk_ruler_get_type
@@ -88,6 +89,7 @@ gtk_scrollbar_get_type
 gtk_scrolled_window_get_type
 gtk_separator_get_type
 gtk_separator_menu_item_get_type
+gtk_separator_tool_item_get_type
 gtk_settings_get_type
 gtk_size_group_get_type
 gtk_socket_get_type
@@ -105,6 +107,7 @@ gtk_text_tag_table_get_type
 gtk_text_view_get_type
 gtk_tips_query_get_type
 gtk_toggle_button_get_type
+gtk_toggle_tool_button_get_type
 gtk_toolbar_get_type
 gtk_tooltips_get_type
 gtk_tool_button_get_type

@@ -1,0 +1,30 @@
+<!-- ##### SECTION Title ##### -->
+GtkSeparatorToolItem
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkSeparatorToolItem ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_separator_tool_item_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

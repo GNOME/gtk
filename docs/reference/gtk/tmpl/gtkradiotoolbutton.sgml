@@ -1,0 +1,78 @@
+<!-- ##### SECTION Title ##### -->
+GtkRadioToolButton
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkRadioToolButton ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_radio_tool_button_new ##### -->
+<para>
+
+</para>
+
+@group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_tool_button_new_from_stock ##### -->
+<para>
+
+</para>
+
+@group: 
+@stock_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_tool_button_new_from_widget ##### -->
+<para>
+
+</para>
+
+@group: 
+@stock_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_tool_button_new_with_stock_from_widget ##### -->
+<para>
+
+</para>
+
+@group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_tool_button_get_group ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_tool_button_set_group ##### -->
+<para>
+
+</para>
+
+@button: 
+@group: 
+
+

@@ -1,0 +1,57 @@
+<!-- ##### SECTION Title ##### -->
+gtktoggletoolbutton
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkToggleToolButton ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_toggle_tool_button_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toggle_tool_button_new_from_stock ##### -->
+<para>
+
+</para>
+
+@stock_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toggle_tool_button_set_active ##### -->
+<para>
+
+</para>
+
+@button: 
+@is_active: 
+
+
+<!-- ##### FUNCTION gtk_toggle_tool_button_get_active ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+

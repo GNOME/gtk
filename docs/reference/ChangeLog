@@ -1,5 +1,18 @@
 2003-07-15  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/tmpl/gtkseparatortoolitem.sgml: 
+	* gtk/tmpl/gtkradiotoolbutton.sgml: 
+	* gtk/tmpl/gtktoggletoolbutton.sgml: New templates.
+
+	* gtk/gtk-docs.sgml: Include gtkseparatortoolitem.xml, gtkradiotoolbutton.xml and 
+	gtktoggletoolbutton.xml.
+
+	* gtk/gtk.types: Add gtk_separator_tool_item_get_type, gtk_radio_tool_button_get_type and 
+	gtk_toggle_tool_button_get_type.
+
+	* gtk/gtk-sections.txt: Add GtkSeparatorToolItem, GtkRadioToolButton and GtkToggleToolButton 
+	sections.
+
 	* gdk/tmpl/input_devices.sgml: Remove docs for gdk_device_get_history() which are now inline.
 
 	* gdk/gdk-sections.txt: Add gdk_display_flush.

@@ -73,6 +73,7 @@
 <!ENTITY GtkProgressBar SYSTEM "xml/gtkprogressbar.xml">
 <!ENTITY GtkRadioButton SYSTEM "xml/gtkradiobutton.xml">
 <!ENTITY GtkRadioMenuItem SYSTEM "xml/gtkradiomenuitem.xml">
+<!ENTITY GtkRadioToolButton SYSTEM "xml/gtkradiotoolbutton.xml">
 <!ENTITY GtkRange SYSTEM "xml/gtkrange.xml">
 <!ENTITY GtkRuler SYSTEM "xml/gtkruler.xml">
 <!ENTITY GtkScale SYSTEM "xml/gtkscale.xml">
@@ -80,6 +81,7 @@
 <!ENTITY GtkScrolledWindow SYSTEM "xml/gtkscrolledwindow.xml">
 <!ENTITY GtkSeparator SYSTEM "xml/gtkseparator.xml">
 <!ENTITY GtkSeparatorMenuItem SYSTEM "xml/gtkseparatormenuitem.xml">
+<!ENTITY GtkSeparatorToolItem SYSTEM "xml/gtkseparatortoolitem.xml">
 <!ENTITY GtkSizeGroup SYSTEM "xml/gtksizegroup.xml">
 <!ENTITY GtkSocket SYSTEM "xml/gtksocket.xml">
 <!ENTITY GtkSpinButton SYSTEM "xml/gtkspinbutton.xml">
@@ -95,6 +97,7 @@
 <!ENTITY GtkTextView SYSTEM "xml/gtktextview.xml">
 <!ENTITY GtkTipsQuery SYSTEM "xml/gtktipsquery.xml">
 <!ENTITY GtkToggleButton SYSTEM "xml/gtktogglebutton.xml">
+<!ENTITY GtkToggleToolButton SYSTEM "xml/gtktoggletoolbutton.xml">
 <!ENTITY GtkToolbar SYSTEM "xml/gtktoolbar.xml">
 <!ENTITY GtkToolButton SYSTEM "xml/gtktoolbutton.xml">
 <!ENTITY GtkToolItem SYSTEM "xml/gtktoolitem.xml">
@@ -383,7 +386,10 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkTearoffMenuItem;
         &GtkToolbar;
         &GtkToolItem;
+        &GtkSeparatorToolItem;
         &GtkToolButton;
+        &GtkToggleToolButton;
+        &GtkRadioToolButton;
     </chapter>
 
     <chapter id="SelectorWidgets">
