@@ -1,5 +1,9 @@
 2005-03-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c (update_combo_box): Remove
+	a call whose result was unused and leaked.  (#170776,
+	Kjartan Maraas)
+
 	Some cleanups to the GtkDialog code:  (#170746, 
 	Morten Welinder)
 	* gtk/gtkdialog.c (action_widget_activated): Simplify,
