@@ -1,3 +1,8 @@
+2001-01-16  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkdnd-fb.c:
+	Some cleanups.
+	
 2001-01-15  Havoc Pennington  <hp@pobox.com>
 
 	* tests/testtreeview.c: add test stuff for CellRendererToggle

@@ -48,7 +48,6 @@ struct _GdkDragContextPrivate {
   guint16 last_x;		/* Coordinates from last event */
   guint16 last_y;
   
-  guint local_have_actions : 1; /* Whether an XdndActionList was provided */
   guint drag_status : 4;	/* current status of drag */
 };
 
@@ -205,7 +204,7 @@ local_send_leave (GdkDragContext  *context,
       tmp_event.dnd.window = context->dest_window;
       /* Pass ownership of context to the event */
       tmp_event.dnd.context = current_dest_drag;
-      tmp_event.dnd.send_event = TRUE;
+      tmp_event.dnd.send_event = FALSE;
       tmp_event.dnd.time = GDK_CURRENT_TIME; /* FIXME? */
 
       current_dest_drag = NULL;
@@ -252,7 +251,7 @@ local_send_enter (GdkDragContext  *context,
 
   tmp_event.dnd.type = GDK_DRAG_ENTER;
   tmp_event.dnd.window = context->dest_window;
-  tmp_event.dnd.send_event = TRUE;
+  tmp_event.dnd.send_event = FALSE;
   tmp_event.dnd.context = new_context;
   gdk_drag_context_ref (new_context);
 
@@ -281,25 +280,25 @@ local_send_motion (GdkDragContext  *context,
     {
       tmp_event.dnd.type = GDK_DRAG_MOTION;
       tmp_event.dnd.window = current_dest_drag->dest_window;
-      tmp_event.dnd.send_event = TRUE;
+      tmp_event.dnd.send_event = FALSE;
       tmp_event.dnd.context = current_dest_drag;
       gdk_drag_context_ref (current_dest_drag);
 
       tmp_event.dnd.time = time;
 
       current_dest_drag->suggested_action = action;
-      //      if (!(GDK_DRAG_CONTEXT_PRIVATE_DATA (current_dest_drag))->local_have_actions)
-	current_dest_drag->actions = current_dest_drag->suggested_action;
+      current_dest_drag->actions = current_dest_drag->suggested_action;
 
       tmp_event.dnd.x_root = x_root;
       tmp_event.dnd.y_root = y_root;
 
       (GDK_DRAG_CONTEXT_PRIVATE_DATA (current_dest_drag))->last_x = x_root;
       (GDK_DRAG_CONTEXT_PRIVATE_DATA (current_dest_drag))->last_y = y_root;
+
+      GDK_DRAG_CONTEXT_PRIVATE_DATA (context)->drag_status = GDK_DRAG_STATUS_MOTION_WAIT;
       
       gdk_event_put (&tmp_event);
     }
-  GDK_DRAG_CONTEXT_PRIVATE_DATA (context)->drag_status = GDK_DRAG_STATUS_MOTION_WAIT;
 }
 
 static void
@@ -316,7 +315,7 @@ local_send_drop (GdkDragContext *context, guint32 time)
 
       tmp_event.dnd.type = GDK_DROP_START;
       tmp_event.dnd.window = current_dest_drag->dest_window;
-      tmp_event.dnd.send_event = TRUE;
+      tmp_event.dnd.send_event = FALSE;
 
       tmp_event.dnd.context = current_dest_drag;
       gdk_drag_context_ref (current_dest_drag);
@@ -591,7 +590,7 @@ gdk_drag_status (GdkDragContext   *context,
 
       tmp_event.dnd.type = GDK_DRAG_STATUS;
       tmp_event.dnd.window = src_context->source_window;
-      tmp_event.dnd.send_event = TRUE;
+      tmp_event.dnd.send_event = FALSE;
       tmp_event.dnd.context = src_context;
       gdk_drag_context_ref (src_context);
 
@@ -631,7 +630,7 @@ gdk_drop_finish (GdkDragContext   *context,
     {
       tmp_event.dnd.type = GDK_DROP_FINISHED;
       tmp_event.dnd.window = src_context->source_window;
-      tmp_event.dnd.send_event = TRUE;
+      tmp_event.dnd.send_event = FALSE;
       tmp_event.dnd.context = src_context;
       gdk_drag_context_ref (src_context);
 
