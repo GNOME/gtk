@@ -1,6 +1,2 @@
 EXPORTS
-	gdk_pixbuf__gif_image_load
-	gdk_pixbuf__gif_image_begin_load
-	gdk_pixbuf__gif_image_stop_load
-	gdk_pixbuf__gif_image_load_increment
-	gdk_pixbuf__gif_image_load_animation
+	gdk_pixbuf__gif_fill_vtable

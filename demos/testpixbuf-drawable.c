@@ -1,6 +1,10 @@
 #include <config.h>
 #include <gtk/gtk.h>
+#ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
+#elif defined (GDK_WINDOWING_WIN32)
+#include <gdk/win32/gdkwin32.h>
+#endif
 
 int close_app(GtkWidget *widget, gpointer data)
 {

@@ -348,7 +348,7 @@ _gdk_win32_get_image (GdkDrawable *drawable,
   g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable), NULL);
 
   GDK_NOTE (MISC, g_print ("_gdk_win32_get_image: %#x %dx%d@+%d+%d\n",
-			   (guint) GDK_DRAWABLE_HANDLE (drawable),
+			   (guint) GDK_DRAWABLE_IMPL_WIN32 (drawable)->handle,
 			   width, height, x, y));
 
   impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);

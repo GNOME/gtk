@@ -1,3 +1,12 @@
+2001-03-19  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdrawable-win32.c
+	* gdk/win32/gdkimage-win32.c: Use correct casts in debugging
+	output.
+
+	* demos/testpixbuf-drawable.c: If GDK_WINDOWING_WIN32, include
+	gdkwin32.h.
+
 2001-03-18  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (print_window_state): New function.

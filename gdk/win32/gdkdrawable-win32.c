@@ -228,7 +228,7 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
   gboolean ok = TRUE;
 
   GDK_NOTE (MISC, g_print ("gdk_win32_draw_rectangle: %#x (%p) %s%dx%d@+%d+%d\n",
-			   (guint) GDK_DRAWABLE_HANDLE (drawable),
+			   (guint) GDK_DRAWABLE_IMPL_WIN32 (drawable)->handle,
 			   gc_private,
 			   (filled ? "fill " : ""),
 			   width, height, x, y));
@@ -616,11 +616,11 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
   else
     src_handle = GDK_DRAWABLE_HANDLE (src);
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_pixmap: dest: %#x @+%d+%d"
-			   "src: %#x %dx%d@+%d+%d\n",
-		 	   (guint) GDK_DRAWABLE_HANDLE (drawable),
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_drawable: dest: %#x @+%d+%d"
+			   " src: %#x %dx%d@+%d+%d\n",
+		 	   (guint) impl->handle,
 			   xdest, ydest,
-			   (guint) GDK_PIXMAP_HBITMAP (src),
+			   (guint) src_handle,
 			   width, height, xsrc, ysrc));
 
   hdc = gdk_win32_hdc_get (drawable, gc, 0);

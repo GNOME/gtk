@@ -1,3 +1,11 @@
+2001-03-19  Tor Lillqvist  <tml@iki.fi>
+
+	* makefile.mingw.in: Handle gdk-pixbuf-marshal.c.
+
+	* gdk_pixbuf.def: Update.
+
+	* pixbufloader_*.def: Just export the fill_vtable functions now.
+
 2001-03-18  Mike Kestner  <mkestner@ameritech.net>
 
 	* make-inline-pixbuf.c (main): Added logic to remove output when

@@ -1,3 +1,2 @@
 EXPORTS
-	gdk_pixbuf__xpm_image_load
-	gdk_pixbuf__xpm_image_load_xpm_data
+	gdk_pixbuf__xpm_fill_vtable

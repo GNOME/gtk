@@ -1,4 +1,7 @@
 EXPORTS
+	_gdk_pixbuf_get_module
+	_gdk_pixbuf_get_named_module
+	_gdk_pixbuf_load_module
 	gdk_pixbuf_add_alpha
 	gdk_pixbuf_animation_get_frames
 	gdk_pixbuf_animation_get_height
@@ -26,23 +29,17 @@ EXPORTS
 	gdk_pixbuf_get_colorspace
 	gdk_pixbuf_get_has_alpha
 	gdk_pixbuf_get_height
-	gdk_pixbuf_get_module
 	gdk_pixbuf_get_n_channels
-	gdk_pixbuf_get_named_module
 	gdk_pixbuf_get_pixels
 	gdk_pixbuf_get_rowstride
 	gdk_pixbuf_get_type
 	gdk_pixbuf_get_width
-	gdk_pixbuf_init
-	gdk_pixbuf_load_module
 	gdk_pixbuf_new
 	gdk_pixbuf_new_from_data
 	gdk_pixbuf_new_from_file
 	gdk_pixbuf_new_from_inline
 	gdk_pixbuf_new_from_xpm_data
 	gdk_pixbuf_new_subpixbuf
-	gdk_pixbuf_postinit
-	gdk_pixbuf_preinit
 	gdk_pixbuf_ref
 	gdk_pixbuf_saturate_and_pixelate
 	gdk_pixbuf_save

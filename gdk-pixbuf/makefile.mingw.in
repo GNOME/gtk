@@ -28,7 +28,7 @@ all :						\
 	pixbufloader-xpm.dll			\
 	make-inline-pixbuf.exe			\
 	test-gdk-pixbuf.exe
-	
+
 gdk_pixbuf_OBJECTS =				\
 	gdk-pixbuf.o				\
 	gdk-pixbuf-animation.o			\
@@ -43,6 +43,11 @@ gdk_pixbuf_OBJECTS =				\
 
 gdk_pixbuf-$(GDK_PIXBUF_VER).dll : $(gdk_pixbuf_OBJECTS) gdk_pixbuf.def
 	$(GLIB)/build-dll gdk_pixbuf $(GDK_PIXBUF_VER) gdk_pixbuf.def $(gdk_pixbuf_OBJECTS) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS) $(INTL_LIBS)
+
+gdk-pixbuf.o:: gdk-pixbuf-marshal.c
+
+gdk-pixbuf-marshal.c :
+	$(GLIB_GENMARSHAL) --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >$@
 
 pixops/libpixops.a :
 	cd pixops && $(MAKE) -f makefile.mingw libpixops.a
@@ -112,8 +117,10 @@ make-inline-pixbuf.exe : make-inline-pixbuf.o gdk_pixbuf-$(GDK_PIXBUF_VER).dll
 test-gdk-pixbuf.exe : test-gdk-pixbuf.o gdk_pixbuf-$(GDK_PIXBUF_VER).dll
 	$(CC) $(CFLAGS) -o $@ test-gdk-pixbuf.o -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GTK_LIBS) $(GLIB_LIBS)
 
+ifeq ($(wildcard makefile.mingw.in),makefile.mingw.in)
 # Hack to get an updated makefile.mingw automatically after updating
 # makefile.mingw.in. Only for developer use.
 makefile.mingw: makefile.mingw.in
 	sed -e 's,@GDK_PIXBUF[_]MAJOR@,@GDK_PIXBUF_MAJOR@,' \
 	    -e 's,@GDK_PIXBUF[_]MINOR@,@GDK_PIXBUF_MINOR@,' <$< >$@
+endif
