@@ -483,10 +483,10 @@ gtk_menu_bar_hierarchy_changed (GtkWidget *widget,
 
   toplevel = gtk_widget_get_toplevel (widget);
 
-  if (old_toplevel && GTK_IS_WINDOW (old_toplevel))
+  if (old_toplevel)
     remove_from_window (old_toplevel, menubar);
   
-  if (toplevel && GTK_IS_WINDOW (toplevel))
+  if (GTK_WIDGET_TOPLEVEL (toplevel))
     add_to_window (GTK_WINDOW (toplevel), menubar);
 }
 

@@ -1,3 +1,59 @@
+Wed Jul  4 22:35:40 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c gtk/gtkmenubar.c gtk/gtktreeviewcolumn.c
+	  gtk/gtkwidget.c:
+	Check GTK_WIDGET_TOPLEVEL(gtk_widget_get_toplevel (widget)),
+	not GTK_WIDGET_GET_ANCESTOR ... see 
+	http://mail.gnome.org/archives/gtk-devel-list/2001-July/msg00072.html.
+	Indicate the best practice in the docs for gtk_widget_get_toplevel().
+
+	* gtk/gtkwidget.[ch]: Expose a private _gtk_widget_hierarchy_changed(),
+	so GtkPlug can give the correct signals when transforming
+	from a child to a toplevel.
+	
+	* gtk/gtkdnd.c (gtk_drag_dest_hierarchy_changed): Handle
+	reparentation correctly.
+
+	* gtk/gtkwidget.c (gtk_widget_propagate_hierarchy_changed):
+	Propagate the previous_toplevel argument down properly.
+
+	* gtk/gtklabel.c (gtk_label_finalize): Fix unrefing
+	of wrong atr list.
+
+	* gtk/gtkplug.[ch]: Add an "embedded" signal.
+
+	* gtk/gtksocket.[ch]: Add "child_added", "child_removed"
+	signals.
+
+	* gtk/gtkplug.[ch] gtk/gtksocket.[ch]: Add 
+	functions gtk_plug_get_id(), gtk_socket_get_id(),
+	to avoid the user having to worry about realization,
+	and gdkx.h.
+
+	* tests/testsocket.c: Extend to try out the new signals
+	and gtk_plug/socket_get_id().
+
+	* gtk/gtklabel.c (gtk_label_set_pattern_internal): Fix
+	setting of underline attributes.
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Ignore
+	DestroyNotify events from SubstructureNotifyMask
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_reparent):
+	Switch GDK_WINDOW_TYPE (window) as needed.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): Clean up,
+	allow creation of toplevel windows as children of
+	foreign windows.
+
+	* gtk/gtkplug.c: Remove hacks involving changing private
+	fields of GdkWindow.
+
+	* gtk/gtkplug.[ch] gtk/gtksocket.c: Work to make 
+	exactly the same signals and notification
+	be emitted for local embedding as for inter-process
+	embedding.
+
 2001-07-04  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtkliststore.h: add missing gtk_list_store_newv prototype.

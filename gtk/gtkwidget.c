@@ -210,8 +210,6 @@ static void		gtk_widget_set_style_recurse		(GtkWidget	  *widget,
 								 gpointer	   client_data);
 static gint		gtk_widget_event_internal		(GtkWidget	  *widget,
 								 GdkEvent	  *event);
-static void		gtk_widget_propagate_hierarchy_changed	(GtkWidget	  *widget,
-								 gpointer	   client_data);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
 								 gboolean	   group_cycling);
 static void		gtk_widget_aux_info_destroy		(GtkWidgetAuxInfo *aux_info);
@@ -1500,7 +1498,7 @@ gtk_widget_unparent (GtkWidget *widget)
     {
       gtk_container_set_focus_child (GTK_CONTAINER (widget->parent), NULL);
 
-      if (GTK_IS_WINDOW (toplevel))
+      if (GTK_WIDGET_TOPLEVEL (toplevel))
 	{
 	  GtkWidget *child;
       
@@ -1513,7 +1511,7 @@ gtk_widget_unparent (GtkWidget *widget)
 	    gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
 	}
     }
-  if (GTK_IS_WINDOW (toplevel))
+  if (GTK_WIDGET_TOPLEVEL (toplevel))
     {
       GtkWidget *child;
       
@@ -1611,7 +1609,7 @@ gtk_widget_unparent (GtkWidget *widget)
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], old_parent);
   if (toplevel)
     {
-      gtk_widget_propagate_hierarchy_changed (widget, toplevel);
+      _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
       g_object_unref (toplevel);
     }
       
@@ -3091,7 +3089,7 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
        * be set by the next loop.
        */
       toplevel = gtk_widget_get_toplevel (focus_widget);
-      if (GTK_IS_WINDOW (toplevel))
+      if (GTK_WIDGET_TOPLEVEL (toplevel))
 	{
 	  widget = GTK_WINDOW (toplevel)->focus_widget;
 	  
@@ -3255,7 +3253,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
 
   g_object_notify (G_OBJECT (widget), "name");
 }
-
+s
 /**
  * gtk_widget_get_name:
  * @widget: a #GtkWidget
@@ -3471,7 +3469,7 @@ gtk_widget_set_parent (GtkWidget *widget,
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], NULL);
   if (GTK_WIDGET_ANCHORED (widget->parent))
-    gtk_widget_propagate_hierarchy_changed (widget, NULL);
+    _gtk_widget_propagate_hierarchy_changed (widget, NULL);
   g_object_notify (G_OBJECT (widget), "parent");
 }
 
@@ -3928,12 +3926,13 @@ gtk_widget_set_style_recurse (GtkWidget *widget,
 }
 
 static void
-gtk_widget_propagate_hierarchy_changed (GtkWidget	*widget,
-					gpointer	 client_data)
+gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
+						gpointer   client_data)
 {
   gboolean new_anchored;
 
-  new_anchored = widget->parent && GTK_WIDGET_ANCHORED (widget->parent);
+  new_anchored = GTK_WIDGET_TOPLEVEL (widget) ||
+                 (widget->parent && GTK_WIDGET_ANCHORED (widget->parent));
 
   if (GTK_WIDGET_ANCHORED (widget) != new_anchored)
     {
@@ -3949,11 +3948,33 @@ gtk_widget_propagate_hierarchy_changed (GtkWidget	*widget,
   
       if (GTK_IS_CONTAINER (widget))
 	gtk_container_forall (GTK_CONTAINER (widget),
-			      gtk_widget_propagate_hierarchy_changed,
-			      NULL);
+			      gtk_widget_propagate_hierarchy_changed_recurse,
+			      client_data);
       
       gtk_widget_unref (widget);
     }
+}
+
+/**
+ * _gtk_widget_propagate_hierarchy_changed:
+ * @widget: a #GtkWidget
+ * @previous_toplevel: Previous toplevel
+ * 
+ * Propagate changes in the anchored state to a widget and all
+ * children, unsetting or setting the ANCHORED flag, and
+ * emitting hierarchy_changed.
+ **/
+void
+_gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
+					 GtkWidget    *previous_toplevel)
+{
+  if (previous_toplevel)
+    g_object_ref (previous_toplevel);
+
+  gtk_widget_propagate_hierarchy_changed_recurse (widget, previous_toplevel);
+  
+  if (previous_toplevel)
+    g_object_unref (previous_toplevel);
 }
 
 void
@@ -4556,14 +4577,16 @@ gtk_widget_set_extension_events (GtkWidget *widget,
  * seem unlikely, it actually happens when a GtkPlug is embedded
  * inside a GtkSocket within the same application
  * 
- * To reliably find for the toplevel GtkWindow, use
+ * To reliably find the toplevel GtkWindow, use
+ * gtk_widget_get_toplevel() and check if the TOPLEVEL flags
+ * is set on the result.
  * 
  *  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
- *  if (GTK_IS_WINDOW (toplevel))
+ *  if (GTK_WIDGET_TOPLEVEL (toplevel))
  *   {
- *     /* Perform action on toplevel.
+ *     [ Perform action on toplevel. ]
  *   }
- * 
+ *
  * Return value: the topmost ancestor of @widget, or @widget itself if there's no ancestor
  **/
 GtkWidget*

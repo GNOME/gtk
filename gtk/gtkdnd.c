@@ -197,30 +197,32 @@ static gboolean      gtk_drag_highlight_expose   (GtkWidget      *widget,
 					  	  GdkEventExpose *event,
 						  gpointer        data);
 
-static void     gtk_drag_selection_received (GtkWidget        *widget,
-					     GtkSelectionData *selection_data,
-					     guint32           time,
-					     gpointer          data);
-static void     gtk_drag_find_widget        (GtkWidget        *widget,
-					     GtkDragFindData  *data);
-static void     gtk_drag_proxy_begin        (GtkWidget        *widget,
-					     GtkDragDestInfo  *dest_info,
-					     guint32           time);
-static void     gtk_drag_dest_realized      (GtkWidget        *widget);
-static void     gtk_drag_dest_site_destroy  (gpointer          data);
-static void     gtk_drag_dest_leave         (GtkWidget        *widget,
-					     GdkDragContext   *context,
-					     guint             time);
-static gboolean gtk_drag_dest_motion        (GtkWidget        *widget,
-					     GdkDragContext   *context,
-					     gint              x,
-					     gint              y,
-					     guint             time);
-static gboolean gtk_drag_dest_drop          (GtkWidget        *widget,
-					     GdkDragContext   *context,
-					     gint              x,
-					     gint              y,
-					     guint             time);
+static void     gtk_drag_selection_received     (GtkWidget        *widget,
+						 GtkSelectionData *selection_data,
+						 guint32           time,
+						 gpointer          data);
+static void     gtk_drag_find_widget            (GtkWidget        *widget,
+						 GtkDragFindData  *data);
+static void     gtk_drag_proxy_begin            (GtkWidget        *widget,
+						 GtkDragDestInfo  *dest_info,
+						 guint32           time);
+static void     gtk_drag_dest_realized          (GtkWidget        *widget);
+static void     gtk_drag_dest_hierarchy_changed (GtkWidget        *widget,
+						 GtkWidget        *old_toplevel);
+static void     gtk_drag_dest_site_destroy      (gpointer          data);
+static void     gtk_drag_dest_leave             (GtkWidget        *widget,
+						 GdkDragContext   *context,
+						 guint             time);
+static gboolean gtk_drag_dest_motion            (GtkWidget        *widget,
+						 GdkDragContext   *context,
+						 gint              x,
+						 gint              y,
+						 guint             time);
+static gboolean gtk_drag_dest_drop              (GtkWidget        *widget,
+						 GdkDragContext   *context,
+						 gint              x,
+						 gint              y,
+						 guint             time);
 
 static GtkDragDestInfo *  gtk_drag_get_dest_info     (GdkDragContext *context,
 						      gboolean        create);
@@ -812,6 +814,8 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
 
   gtk_signal_connect (GTK_OBJECT (widget), "realize",
 		      GTK_SIGNAL_FUNC (gtk_drag_dest_realized), site);
+  gtk_signal_connect (GTK_OBJECT (widget), "hierarchy_changed",
+		      GTK_SIGNAL_FUNC (gtk_drag_dest_hierarchy_changed), site);
 
   gtk_object_set_data_full (GTK_OBJECT (widget), "gtk-drag-dest",
 			    site, gtk_drag_dest_site_destroy);
@@ -1428,7 +1432,18 @@ static void
 gtk_drag_dest_realized (GtkWidget *widget)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-  gdk_window_register_dnd (toplevel->window);
+
+  if (GTK_WIDGET_TOPLEVEL (toplevel))
+    gdk_window_register_dnd (toplevel->window);
+}
+
+static void
+gtk_drag_dest_hierarchy_changed (GtkWidget *widget)
+{
+  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GTK_WIDGET_TOPLEVEL (toplevel) && GTK_WIDGET_REALIZED (toplevel))
+    gdk_window_register_dnd (toplevel->window);
 }
 
 static void

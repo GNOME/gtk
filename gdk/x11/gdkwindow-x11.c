@@ -403,6 +403,26 @@ gdk_window_new (GdkWindow     *parent,
       xattributes_mask |= CWWinGravity;
     }
   
+  /* Sanity checks */
+  switch (private->window_type)
+    {
+    case GDK_WINDOW_TOPLEVEL:
+    case GDK_WINDOW_DIALOG:
+    case GDK_WINDOW_TEMP:
+      if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT &&
+	  GDK_WINDOW_TYPE (parent) != GDK_WINDOW_FOREIGN)
+	{
+	  g_warning (G_STRLOC "Toplevel windows must be created as children of\n"
+		     "of a window of type GDK_WINDOW_ROOT or GDK_WINDOW_FOREIGN");
+	  xparent = gdk_root_window;
+	}
+    case GDK_WINDOW_CHILD:
+      break;
+    default:
+      g_warning (G_STRLOC "cannot make windows of type %d", private->window_type);
+      return NULL;
+    }
+	  
   if (attributes->wclass == GDK_INPUT_OUTPUT)
     {
       class = InputOutput;
@@ -445,42 +465,16 @@ gdk_window_new (GdkWindow     *parent,
 	xattributes.bit_gravity = NorthWestGravity;
       
       xattributes_mask |= CWBitGravity;
-  
-      switch (private->window_type)
+
+      xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
+      xattributes_mask |= CWColormap;
+
+      if (private->window_type == GDK_WINDOW_TEMP)
 	{
-	case GDK_WINDOW_TOPLEVEL:
-	  xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
-	  xattributes_mask |= CWColormap;
-	  
-	  xparent = gdk_root_window;
-	  break;
-	  
-	case GDK_WINDOW_CHILD:
-	  xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
-	  xattributes_mask |= CWColormap;
-	  break;
-	  
-	case GDK_WINDOW_DIALOG:
-	  xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
-	  xattributes_mask |= CWColormap;
-	  
-	  xparent = gdk_root_window;
-	  break;
-	  
-	case GDK_WINDOW_TEMP:
-	  xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
-	  xattributes_mask |= CWColormap;
-	  
-	  xparent = gdk_root_window;
-	  
 	  xattributes.save_under = True;
 	  xattributes.override_redirect = True;
 	  xattributes.cursor = None;
 	  xattributes_mask |= CWSaveUnder | CWOverrideRedirect;
-	  break;
-	case GDK_WINDOW_ROOT:
-	  g_error ("cannot make windows of type GDK_WINDOW_ROOT");
-	  break;
 	}
     }
   else
@@ -1040,6 +1034,7 @@ gdk_window_reparent (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_ROOT);
   
   if (!new_parent)
     new_parent = gdk_parent_root;
@@ -1055,7 +1050,37 @@ gdk_window_reparent (GdkWindow *window,
 		     x, y);
   
   window_private->parent = (GdkWindowObject *)new_parent;
-  
+
+  /* Switch the window type as appropriate */
+
+  switch (GDK_WINDOW_TYPE (new_parent))
+    {
+    case GDK_WINDOW_ROOT:
+    case GDK_WINDOW_FOREIGN:
+      /* Now a toplevel */
+      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
+	{
+	  GDK_WINDOW_TYPE (window) = GDK_WINDOW_TOPLEVEL;
+	  XSetWMProtocols (GDK_WINDOW_XDISPLAY (window),
+			   GDK_WINDOW_XID (window),
+			   gdk_wm_window_protocols, 3);
+	}
+    case GDK_WINDOW_TOPLEVEL:
+    case GDK_WINDOW_CHILD:
+    case GDK_WINDOW_DIALOG:
+    case GDK_WINDOW_TEMP:
+      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
+	  GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+	{
+	  /* If we were being sophisticated, we'd save the old window type
+	   * here, and restore it if we were reparented back to the
+	   * toplevel. However, the difference between different types
+	   * of toplevels only really matters on creation anyways.
+	   */
+	  GDK_WINDOW_TYPE (window) = GDK_WINDOW_CHILD;
+	}
+    }
+
   if (old_parent_private)
     old_parent_private->children = g_list_remove (old_parent_private->children, window);
   

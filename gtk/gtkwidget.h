@@ -733,8 +733,10 @@ void            gtk_requisition_free (GtkRequisition       *requisition);
 #  define gtk_widget_unref gtk_object_unref
 #endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
 
-GtkWidgetAuxInfo *_gtk_widget_get_aux_info (GtkWidget *widget,
-					    gboolean   create);
+GtkWidgetAuxInfo *_gtk_widget_get_aux_info                (GtkWidget    *widget,
+							   gboolean      create);
+void              _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
+							   GtkWidget    *previous_toplevel);
 
 #ifdef __cplusplus
 }

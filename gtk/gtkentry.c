@@ -2030,7 +2030,7 @@ gtk_entry_real_activate (GtkEntry *entry)
   if (entry->activates_default)
     {
       toplevel = gtk_widget_get_toplevel (widget);
-      if (toplevel && GTK_IS_WINDOW (toplevel))
+      if (GTK_IS_WINDOW (toplevel))
 	{
 	  window = GTK_WINDOW (toplevel);
       

@@ -1216,14 +1216,20 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS,
 		g_message ("destroy notify:\twindow: %ld",
 			   xevent->xdestroywindow.window));
-      
-      event->any.type = GDK_DESTROY;
-      event->any.window = window;
-      
-      return_val = window_private && !GDK_WINDOW_DESTROYED (window);
-      
-      if (window && GDK_WINDOW_XID (window) != GDK_ROOT_WINDOW())
-	gdk_window_destroy_notify (window);
+
+      /* Ignore DestroyNotify from SubstructureNotifyMask */
+      if (xevent->xdestroywindow.window == xevent->xdestroywindow.event)
+	{
+	  event->any.type = GDK_DESTROY;
+	  event->any.window = window;
+	  
+	  return_val = window_private && !GDK_WINDOW_DESTROYED (window);
+	  
+	  if (window && GDK_WINDOW_XID (window) != GDK_ROOT_WINDOW())
+	    gdk_window_destroy_notify (window);
+	}
+      else
+	return_val = FALSE;
       break;
       
     case UnmapNotify:

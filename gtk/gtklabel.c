@@ -492,8 +492,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
     return;
   
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (label));
-  
-  if (GTK_IS_WINDOW (toplevel))
+  if (GTK_WIDGET_TOPLEVEL (toplevel))
     {
       gtk_window_add_mnemonic (GTK_WINDOW (toplevel),
 			       label->mnemonic_keyval,
@@ -953,7 +952,10 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
   g_return_if_fail (GTK_IS_LABEL (label));
   
   attrs = gtk_label_pattern_to_attrs (label, pattern);
-  gtk_label_set_attributes_internal (label, attrs);
+
+  if (label->effective_attrs)
+    pango_attr_list_unref (label->effective_attrs);
+  label->effective_attrs = attrs;
 }
 
 void
@@ -1092,7 +1094,7 @@ gtk_label_finalize (GObject *object)
     pango_attr_list_unref (label->attrs);
 
   if (label->effective_attrs)
-    pango_attr_list_unref (label->attrs);
+    pango_attr_list_unref (label->effective_attrs);
 
   g_free (label->select_info);
 
