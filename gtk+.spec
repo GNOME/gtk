@@ -43,6 +43,8 @@ and GTK is a widget set for creating user interfaces.
 
 - Added -k to the SMP make line.
 
+- Added lib/glib to file list.
+
 * Fri Mar 14 1998 Shawn T. Amundson <amundson@gimp.org>
 
 - Changed version to 0.99.7
@@ -113,6 +115,7 @@ fi
 
 %{prefix}/lib/lib*.so
 %{prefix}/lib/*a
+%{prefix}/lib/glib
 %{prefix}/include/*
 %{prefix}/info/*
 %{prefix}/share/aclocal/*
