@@ -122,7 +122,7 @@ enum {
   PROP_REORDERABLE,
   PROP_RULES_HINT,
   PROP_ENABLE_SEARCH,
-  PROP_SEARCH_COLUMN,
+  PROP_SEARCH_COLUMN
 };
 
 static void     gtk_tree_view_class_init           (GtkTreeViewClass *klass);

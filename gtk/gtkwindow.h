@@ -82,7 +82,7 @@ struct _GtkWindow
   guint need_default_position : 1;
   guint need_default_size : 1;
   guint position : 3;
-  GtkWindowType type : 4;
+  guint type : 4; /* GtkWindowType */ 
   guint has_user_ref_count : 1;
   guint has_focus : 1;
 
@@ -97,8 +97,8 @@ struct _GtkWindow
   guint maximize_initially : 1;
   guint decorated : 1;
   
-  GdkWindowTypeHint type_hint : 3;
-  GdkGravity gravity : 5;
+  guint type_hint : 3; /* GdkWindowTypeHint */ 
+  guint gravity : 5; /* GdkGravity */ 
   
   guint frame_left;
   guint frame_top;

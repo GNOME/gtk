@@ -36,7 +36,7 @@ typedef enum
 {
   XSETTINGS_ACTION_NEW,
   XSETTINGS_ACTION_CHANGED,
-  XSETTINGS_ACTION_DELETED,
+  XSETTINGS_ACTION_DELETED
 } XSettingsAction;
 
 typedef void (*XSettingsNotifyFunc) (const char       *name,

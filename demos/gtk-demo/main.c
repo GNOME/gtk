@@ -151,7 +151,7 @@ read_line (FILE *stream, GString *str)
  */
 enum {
   STATE_NORMAL,
-  STATE_IN_COMMENT,
+  STATE_IN_COMMENT
 };
 
 static gchar *tokens[] =

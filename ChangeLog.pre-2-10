@@ -1,3 +1,23 @@
+Fri Feb 22 18:36:45 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Fixes for AIX compilation from Miroslaw Dobrzanski-Neumann,
+	#72182.
+
+	* demos/gtk-demo/main.c gtk/gtktreeview.c gtk/gtktoolbar.c
+	gtk/gtkpaned.c gtk/gtkobject.c gtk/gtkcontainer.c 
+	gtk/gtkcolorsel.c gtk/gtkcellrender.c gdk/x11/xsettings-client.h:
+	Squash trailing commas on enumerations.
+
+	* gdk/gdktypes.h: Drop GDK_RELEASE_MASK to 1 << 30 instead
+	of 1 << 31 to work around AIX compiler problem. (C standard
+	seems to imply that compiler is required to use an unsigned
+	type for the enum value in this case.)
+
+	* gdk/gdkpixbuf-drawable.c: Fix lvalue casts.
+
+	* gtk/gtkwindow.h: Fix use of enum types for bitfields ... 
+	compilers may choose to use a signed type for bitfields.
+
 Sat Feb 23 00:34:01 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (validate_rows_handler): leave threads before

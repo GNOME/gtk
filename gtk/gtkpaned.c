@@ -1260,7 +1260,7 @@ gtk_paned_move_handle (GtkPaned      *paned,
       
       enum {
 	SINGLE_STEP_SIZE = 1,
-	PAGE_STEP_SIZE   = 75,
+	PAGE_STEP_SIZE   = 75
       };
       
       old_position = gtk_paned_get_position (paned);
