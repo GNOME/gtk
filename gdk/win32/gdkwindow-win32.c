@@ -48,8 +48,6 @@ static void gdk_window_impl_win32_finalize   (GObject                 *object);
 
 static gpointer parent_class = NULL;
 
-GdkWindow *_gdk_parent_root = NULL;
-
 GType
 _gdk_window_impl_win32_get_type (void)
 {
@@ -2460,6 +2458,20 @@ gdk_window_unmaximize (GdkWindow *window)
 }
 
 void
+gdk_window_fullscreen (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  g_warning ("gdk_window_fullscreen() not implemented.\n");
+}
+
+void
+gdk_window_unfullscreen (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+}
+
+void
 gdk_window_focus (GdkWindow *window,
                   guint32    timestamp)
 {
@@ -2494,6 +2506,20 @@ gdk_window_set_modal_hint (GdkWindow *window,
     if (!SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOPMOST,
 		       0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE))
       WIN32_API_FAILED ("SetWindowPos");
+}
+
+void
+gdk_window_set_skip_taskbar_hint (GdkWindow *window,
+				  gboolean   skips_taskbar)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+}
+
+void
+gdk_window_set_skip_pager_hint (GdkWindow *window,
+				gboolean   skips_pager)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
 }
 
 void

@@ -17,22 +17,15 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gdkscreen.h>
-#include "gdkprivate-win32.h" /* _gdk_parent_root */
-#include "gdk.h" /* gdk_screen_width(), ... */
+#include "gdk.h"
+#include "gdkprivate-win32.h"
 
 static GdkColormap *default_colormap = NULL;
 
 GdkDisplay *
 gdk_screen_get_display (GdkScreen *screen)
 {
-  return gdk_display_get_default ();
-}
-
-gint
-gdk_screen_get_screen_num (GdkScreen *screen)
-{
-  return 1;
+  return _gdk_display;
 }
 
 GdkWindow *
@@ -54,7 +47,7 @@ gdk_screen_set_default_colormap (GdkScreen   *screen,
   default_colormap = colormap;
 }
 
-gint 
+gint
 gdk_screen_get_n_monitors (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 1);

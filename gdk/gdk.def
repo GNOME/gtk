@@ -58,16 +58,23 @@ EXPORTS
 	gdk_device_set_source
 	gdk_devices_list
 	gdk_display_beep
+	gdk_display_get_core_pointer
 	gdk_display_get_default
 	gdk_display_get_default_screen
+	gdk_display_get_name
 	gdk_display_get_n_screens
+	gdk_display_get_pointer
 	gdk_display_get_screen
 	gdk_display_get_type
 	gdk_display_get_window_at_pointer
 	gdk_display_keyboard_ungrab
+	gdk_display_list_devices
+	gdk_display_manager_get
 	gdk_display_open
+	gdk_display_open_default_libgtk_only
 	gdk_display_pointer_is_grabbed
 	gdk_display_pointer_ungrab
+	gdk_display_set_double_click_time
 	gdk_display_sync
 	gdk_drag_abort
 	gdk_drag_action_get_type
@@ -78,6 +85,7 @@ EXPORTS
 	gdk_drag_context_unref
 	gdk_drag_drop
 	gdk_drag_find_window
+	gdk_drag_find_window_for_screen
 	gdk_drag_get_protocol
 	gdk_drag_get_selection
 	gdk_drag_motion
@@ -95,6 +103,7 @@ EXPORTS
 	gdk_draw_layout_with_colors
 	gdk_draw_line
 	gdk_draw_lines
+	gdk_draw_pixbuf
 	gdk_draw_point
 	gdk_draw_points
 	gdk_draw_polygon
@@ -134,11 +143,13 @@ EXPORTS
 	gdk_event_get_coords
 	gdk_event_get_graphics_expose
 	gdk_event_get_root_coords
+	gdk_event_get_screen
 	gdk_event_get_state
 	gdk_event_get_time
 	gdk_event_get_type
 	gdk_event_handler_set
 	gdk_event_mask_get_type
+	gdk_event_new
 	gdk_event_peek
 	gdk_event_put
 	gdk_event_send_client_message
@@ -197,6 +208,7 @@ EXPORTS
 	gdk_gc_unref
 	gdk_gc_values_mask_get_type
 	gdk_get_default_root_window
+	gdk_get_display
 	gdk_get_display_arg_name
 	gdk_get_program_class
 	gdk_get_show_events
@@ -248,6 +260,7 @@ EXPORTS
 	gdk_list_visuals
 	gdk_mbstowcs
 	gdk_modifier_type_get_type
+	gdk_notify_startup_complete
 	gdk_notify_type_get_type
 	gdk_overlap_type_get_type
 	gdk_pango_attr_embossed_new
@@ -257,6 +270,7 @@ EXPORTS
 	gdk_pango_context_set_colormap
 	gdk_pango_layout_get_clip_region
 	gdk_pango_layout_line_get_clip_region
+	gdk_parse_args
 	gdk_pixbuf_get_from_drawable
 	gdk_pixbuf_get_from_image
 	gdk_pixbuf_render_pixmap_and_mask
@@ -325,7 +339,9 @@ EXPORTS
 	gdk_screen_get_display
 	gdk_screen_get_height
 	gdk_screen_get_monitor_at_point
+	gdk_screen_get_monitor_at_window
 	gdk_screen_get_monitor_geometry
+	gdk_screen_get_n_monitors
 	gdk_screen_get_number
 	gdk_screen_get_rgb_colormap
 	gdk_screen_get_rgb_visual
@@ -419,6 +435,7 @@ EXPORTS
 	gdk_window_foreign_new
 	gdk_window_foreign_new_for_display
 	gdk_window_freeze_updates
+	gdk_window_fullscreen
 	gdk_window_get_children
 	gdk_window_get_deskrelative_origin
 	gdk_window_get_events
@@ -479,6 +496,8 @@ EXPORTS
 	gdk_window_set_modal_hint
 	gdk_window_set_override_redirect
 	gdk_window_set_role
+	gdk_window_set_skip_pager_hint
+	gdk_window_set_skip_taskbar_hint
 	gdk_window_set_static_gravities
 	gdk_window_set_title
 	gdk_window_set_transient_for
@@ -493,6 +512,7 @@ EXPORTS
 	gdk_window_thaw_updates
 	gdk_window_type_get_type
 	gdk_window_type_hint_get_type
+	gdk_window_unfullscreen
 	gdk_window_unmaximize
 	gdk_window_unstick
 	gdk_window_withdraw

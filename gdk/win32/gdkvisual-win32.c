@@ -303,9 +303,7 @@ gdk_visual_get_best_type (void)
 GdkVisual*
 gdk_screen_get_system_visual (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return ((GdkVisual*) system_visual);
+  return system_visual;
 }
 
 GdkVisual*

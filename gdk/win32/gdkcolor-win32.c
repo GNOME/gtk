@@ -30,7 +30,7 @@
 #include <string.h>
 
 #include "gdkcolor.h"
-#include "gdkscreen.h" /* gdk_screen_get_default() */
+#include "gdkscreen.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 
@@ -598,8 +598,6 @@ gdk_screen_get_system_colormap (GdkScreen *screen)
 {
   static GdkColormap *colormap = NULL;
   GdkColormapPrivateWin32 *private;
-
-  g_return_val_if_fail (screen == gdk_screen_get_default (), NULL);
 
   if (!colormap)
     {

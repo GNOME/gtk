@@ -17,13 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gdk.h" /* gdk_get_display_arg_name() */
-#include "gdkdisplay.h"
-#include "gdkscreen.h"
+#include "gdk.h"
 #include "gdkprivate-win32.h"
-
-GdkDisplay *_gdk_display = NULL;
-GdkScreen  *_gdk_screen  = NULL;
 
 void
 _gdk_windowing_set_default_display (GdkDisplay *display)
@@ -40,9 +35,6 @@ gdk_display_open (const gchar *display_name)
   _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);
   _gdk_screen = g_object_new (GDK_TYPE_SCREEN, NULL);
 
-  gdk_display_manager_set_default_display (gdk_display_manager_get (),
-					   _gdk_display);
-
   _gdk_visual_init ();
   gdk_screen_set_default_colormap (_gdk_screen,
                                    gdk_screen_get_system_colormap (_gdk_screen));
@@ -52,17 +44,20 @@ gdk_display_open (const gchar *display_name)
   _gdk_input_init (_gdk_display);
   _gdk_dnd_init ();
 
+  g_signal_emit_by_name (gdk_display_manager_get (),
+			 "display_opened", _gdk_display);
+
   return _gdk_display;
 }
 
-G_CONST_RETURN gchar*
-gdk_display_get_display_name (GdkDisplay *display)
+G_CONST_RETURN gchar *
+gdk_display_get_name (GdkDisplay *display)
 {
   return gdk_get_display_arg_name ();
 }
 
 gint
-gdk_display_get_n_screens (GdkDisplay * display)
+gdk_display_get_n_screens (GdkDisplay *display)
 {
   return 1;
 }
@@ -71,13 +66,11 @@ GdkScreen *
 gdk_display_get_screen (GdkDisplay *display,
 			gint        screen_num)
 {
-  g_return_val_if_fail (screen_num == 0, _gdk_screen);
-  
   return _gdk_screen;
 }
 
 GdkScreen *
-gdk_display_get_default_screen (GdkDisplay * display)
+gdk_display_get_default_screen (GdkDisplay *display)
 {
   return _gdk_screen;
 }

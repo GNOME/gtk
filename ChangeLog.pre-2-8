@@ -1,3 +1,34 @@
+2002-11-16  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdk.def: Add missing entries, needed by gtk.
+
+	* gdk/win32/gdkcolor-win32.c (gdk_screen_get_system_colormap):
+	Remove g_return_val_if_fail call. This function is called from
+	gdk_display_open() with the _gdk_screen it just created, but when
+	gdk_screen_get_default() still returns NULL.
+
+	* gdk/win32/gdkdisplay-win32.c
+	* gdk/win32/gdkscreen-win32.c: Make more like the linux-fb
+	versions. For instance, don't call
+	gdk_display_manager_set_default_display() from gdk_display_open().
+
+	* gdk/win32/gdkglobals-win32.c: Move _gdk_display, _gdk_screen and
+	_gdk_parent_root here.
+
+	* gdk/win32/gdkinput.c (gdk_display_list_devices): New function.
+
+	* gdk/win32/gdkmain-win32.c (gdk_get_display): New function.
+
+	* gdk/win32/gdkvisual-win32.c (gdk_screen_get_system_visual):
+	Don't require that the screen parameter is non-NULL. It can be,
+	and the linux-fb version doesn't check either.
+	
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_skip_taskbar_hint,
+	gdk_window_set_skip_pager_hint, gdk_window_fullscreen,
+	gdk_window_unfullscreen): Implement as no-ops.
+
+	* gtk/gtk.def: Remove obsolete entries.
+
 Fri Nov 15 19:12:56 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtksettings.c: Allow g_object_set to work with GtkSettings.
@@ -18,8 +49,7 @@ Fri Nov 15 19:12:56 2002  Jonathan Blandford  <jrb@gnome.org>
 	Seems to work fine, now the check marks show up in check buttons,
 	the stippled background and stippled text in gtk-demo's Text
 	Widget look as they should, and GtkText's line wrap arrow shows
-	correctly instead of an ugly rectangle. [This refers to the stable
-	branch, haven't actually checked HEAD.]
+	correctly instead of an ugly rectangle.
 
 	The implementation does do a lot of pixmap handling and blitting
 	back and forth, especially on Win9x. But performance is hopefully

@@ -456,6 +456,9 @@ extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM)
 extern HWND		 _gdk_root_window;
 extern GdkWindow        *_gdk_parent_root;
 
+extern GdkDisplay       *_gdk_display;
+extern GdkScreen        *_gdk_screen;
+
 extern HDC		 _gdk_display_hdc;
 extern HINSTANCE	 _gdk_dll_hinstance;
 extern HINSTANCE	 _gdk_app_hmodule;

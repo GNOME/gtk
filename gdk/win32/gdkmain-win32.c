@@ -212,6 +212,12 @@ _gdk_windowing_exit (void)
   _gdk_display_hdc = NULL;
 }
 
+gchar *
+gdk_get_display (void)
+{
+  return g_strdup (gdk_display_get_name (gdk_display_get_default ()));
+}
+
 void
 gdk_error_trap_push (void)
 {
