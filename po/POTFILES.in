@@ -123,7 +123,6 @@ modules/input/gtkimcontextxim.c
 modules/input/imam-et.c
 modules/input/imcedilla.c
 modules/input/imcyrillic-translit.c
-modules/input/imhangul.c
 modules/input/iminuktitut.c
 modules/input/imipa.c
 modules/input/imthai-broken.c
