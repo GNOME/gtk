@@ -128,7 +128,7 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
    */
   g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable), NULL);
 
-  gc = GDK_GC (g_type_create_instance (gdk_gc_x11_get_type ()));
+  gc = g_object_new (gdk_gc_x11_get_type (), NULL);
   private = GDK_GC_X11 (gc);
 
   private->dirty_mask = 0;

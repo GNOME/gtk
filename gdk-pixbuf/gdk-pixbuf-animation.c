@@ -159,7 +159,7 @@ gdk_pixbuf_animation_new_from_file (const char *filename)
 		frame->delay_time = -1;
 		frame->action = GDK_PIXBUF_FRAME_RETAIN;
 
-		animation = GDK_PIXBUF_ANIMATION (g_type_create_instance (GDK_TYPE_PIXBUF_ANIMATION));
+		animation = g_object_new (GDK_TYPE_PIXBUF_ANIMATION, NULL);
 
 		animation->n_frames = 1;
 		animation->frames = g_list_prepend (NULL, frame);

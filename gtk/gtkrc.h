@@ -42,11 +42,12 @@ extern "C" {
 #define GTK_IS_RC_STYLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RC_STYLE))
 #define GTK_RC_STYLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RC_STYLE, GtkRcStyleClass))
 
-typedef enum {
-  GTK_RC_FG   = 1 << 0,
-  GTK_RC_BG   = 1 << 1,
-  GTK_RC_TEXT = 1 << 2,
-  GTK_RC_BASE = 1 << 3
+typedef enum
+{
+  GTK_RC_FG		= 1 << 0,
+  GTK_RC_BG		= 1 << 1,
+  GTK_RC_TEXT		= 1 << 2,
+  GTK_RC_BASE		= 1 << 3
 } GtkRcFlags;
 
 typedef struct _GtkRcStyleClass GtkRcStyleClass;
@@ -66,6 +67,9 @@ struct _GtkRcStyle
   GdkColor   bg[5];
   GdkColor   text[5];
   GdkColor   base[5];
+
+  gint xthickness;
+  gint ythickness;
 
   GtkThemeEngine *engine;
   gpointer        engine_data;
@@ -132,8 +136,10 @@ typedef enum {
   GTK_RC_TOKEN_INSENSITIVE,
   GTK_RC_TOKEN_FG,
   GTK_RC_TOKEN_BG,
-  GTK_RC_TOKEN_BASE,
   GTK_RC_TOKEN_TEXT,
+  GTK_RC_TOKEN_BASE,
+  GTK_RC_TOKEN_XTHICKNESS,
+  GTK_RC_TOKEN_YTHICKNESS,
   GTK_RC_TOKEN_FONT,
   GTK_RC_TOKEN_FONTSET,
   GTK_RC_TOKEN_FONT_NAME,

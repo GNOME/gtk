@@ -147,7 +147,7 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
   Visual *xvisual;
   GdkImage *image;
   GdkImagePrivateX11 *private;
-  image = GDK_IMAGE (g_type_create_instance (gdk_image_get_type ()));
+  image = g_object_new (gdk_image_get_type (), NULL);
   private = PRIVATE_DATA (image);
   private->xdisplay = gdk_display;
   image->type = GDK_IMAGE_NORMAL;
@@ -227,7 +227,7 @@ gdk_image_new (GdkImageType  type,
       break;
 
     default:
-      image = GDK_IMAGE (g_type_create_instance (gdk_image_get_type ()));
+      image = g_object_new (gdk_image_get_type (), NULL);
       
       private = PRIVATE_DATA (image);
 
@@ -386,7 +386,7 @@ gdk_image_get (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 
-  image = GDK_IMAGE (g_type_create_instance (gdk_image_get_type ()));
+  image = g_object_new (gdk_image_get_type (), NULL);
   private = PRIVATE_DATA (image);
 
   private->xdisplay = gdk_display;

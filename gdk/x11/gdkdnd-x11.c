@@ -215,7 +215,7 @@ gdk_drag_context_finalize (GObject *object)
 GdkDragContext *
 gdk_drag_context_new        (void)
 {
-  return GDK_DRAG_CONTEXT (g_type_create_instance (gdk_drag_context_get_type ()));
+  return g_object_new (gdk_drag_context_get_type (), NULL);
 }
 
 void            
@@ -2761,6 +2761,7 @@ gdk_drag_do_leave (GdkDragContext *context, guint32 time)
 	  break;
 	case GDK_DRAG_PROTO_ROOTWIN:
 	case GDK_DRAG_PROTO_NONE:
+	default:
 	  break;
 	}
 
@@ -2985,6 +2986,7 @@ gdk_drag_motion (GdkDragContext *context,
 
 	    case GDK_DRAG_PROTO_ROOTWIN:
 	    case GDK_DRAG_PROTO_NONE:
+	    default:
 	      break;
 	    }
 	  private->old_action = suggested_action;
@@ -3061,6 +3063,8 @@ gdk_drag_motion (GdkDragContext *context,
 	    case GDK_DRAG_PROTO_NONE:
 	      g_warning ("GDK_DRAG_PROTO_NONE is not valid in gdk_drag_motion()");
 	      break;
+	    default:
+	      break;
 	    }
 	}
       else
@@ -3094,6 +3098,8 @@ gdk_drag_drop (GdkDragContext *context,
 	  break;
 	case GDK_DRAG_PROTO_NONE:
 	  g_warning ("GDK_DRAG_PROTO_NONE is not valid in gdk_drag_drop()");
+	  break;
+	default:
 	  break;
 	}
     }

@@ -100,13 +100,17 @@ static void        gtk_rc_parse_any                  (const gchar     *input_nam
                                                       const gchar     *input_string);
 static guint       gtk_rc_parse_statement            (GScanner        *scanner);
 static guint       gtk_rc_parse_style                (GScanner        *scanner);
-static guint       gtk_rc_parse_base                 (GScanner        *scanner,
-                                                      GtkRcStyle      *style);
 static guint       gtk_rc_parse_bg                   (GScanner        *scanner,
                                                       GtkRcStyle      *style);
 static guint       gtk_rc_parse_fg                   (GScanner        *scanner,
                                                       GtkRcStyle      *style);
 static guint       gtk_rc_parse_text                 (GScanner        *scanner,
+                                                      GtkRcStyle      *style);
+static guint       gtk_rc_parse_base                 (GScanner        *scanner,
+                                                      GtkRcStyle      *style);
+static guint       gtk_rc_parse_xthickness           (GScanner        *scanner,
+                                                      GtkRcStyle      *style);
+static guint       gtk_rc_parse_ythickness           (GScanner        *scanner,
                                                       GtkRcStyle      *style);
 static guint       gtk_rc_parse_bg_pixmap            (GScanner        *scanner,
                                                       GtkRcStyle      *rc_style);
@@ -191,8 +195,10 @@ static const struct
   { "INSENSITIVE", GTK_RC_TOKEN_INSENSITIVE },
   { "fg", GTK_RC_TOKEN_FG },
   { "bg", GTK_RC_TOKEN_BG },
-  { "base", GTK_RC_TOKEN_BASE },
   { "text", GTK_RC_TOKEN_TEXT },
+  { "base", GTK_RC_TOKEN_BASE },
+  { "xthickness", GTK_RC_TOKEN_XTHICKNESS },
+  { "ythickness", GTK_RC_TOKEN_YTHICKNESS },
   { "font", GTK_RC_TOKEN_FONT },
   { "fontset", GTK_RC_TOKEN_FONTSET },
   { "font_name", GTK_RC_TOKEN_FONT_NAME },
@@ -751,7 +757,25 @@ gtk_rc_style_get_type (void)
 static void
 gtk_rc_style_init (GtkRcStyle *style)
 {
-  
+  guint i;
+
+  style->name = NULL;
+  for (i = 0; i < 5; i++)
+    {
+      static const GdkColor init_color = { 0, 0, 0, 0, };
+
+      style->bg_pixmap_name[i] = NULL;
+      style->color_flags[i] = 0;
+      style->fg[i] = init_color;
+      style->bg[i] = init_color;
+      style->text[i] = init_color;
+      style->base[i] = init_color;
+    }
+  style->xthickness = -1;
+  style->ythickness = -1;
+  style->engine = NULL;
+  style->engine_data = NULL;
+  style->rc_style_lists = NULL;
 }
 
 static void
@@ -864,11 +888,11 @@ gtk_rc_style_finalize (GObject *object)
 }
 
 GtkRcStyle *
-gtk_rc_style_new              (void)
+gtk_rc_style_new (void)
 {
   GtkRcStyle *style;
   
-  style = GTK_RC_STYLE (g_type_create_instance (gtk_rc_style_get_type ()));
+  style = g_object_new (GTK_TYPE_RC_STYLE, NULL);
   
   return style;
 }
@@ -1314,6 +1338,11 @@ gtk_rc_style_to_style (GtkRcStyle *rc_style)
 	style->base[i] = rc_style->base[i];
     }
 
+  if (rc_style->xthickness >= 0)
+    style->xthickness = rc_style->xthickness;
+  if (rc_style->ythickness >= 0)
+    style->ythickness = rc_style->ythickness;
+
   if (rc_style->engine)
     {
       style->engine = rc_style->engine;
@@ -1328,29 +1357,28 @@ gtk_rc_style_to_style (GtkRcStyle *rc_style)
 static GtkStyle *
 gtk_rc_init_style (GSList *rc_styles)
 {
+  GtkStyle *style = NULL;
   gint i;
 
-  GtkStyle *style = NULL;
-
   if (!realized_style_ht)
-    realized_style_ht = g_hash_table_new ((GHashFunc)gtk_rc_styles_hash,
-					   (GCompareFunc)gtk_rc_styles_compare);
+    realized_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_styles_hash,
+					  (GCompareFunc) gtk_rc_styles_compare);
 
   style = g_hash_table_lookup (realized_style_ht, rc_styles);
 
   if (!style)
     {
       GtkRcStyle *proto_style;
-      GSList *tmp_styles;
+      GSList *tmp_style;
       
       proto_style = gtk_rc_style_new ();
 
-      tmp_styles = rc_styles;
-      while (tmp_styles)
+      tmp_style = rc_styles;
+      while (tmp_style)
 	{
-	  GtkRcStyle *rc_style = tmp_styles->data;
+	  GtkRcStyle *rc_style = tmp_style->data;
 
-	  for (i=0; i<5; i++)
+	  for (i = 0; i < 5; i++)
 	    {
 	      if (!proto_style->bg_pixmap_name[i] && rc_style->bg_pixmap_name[i])
 		proto_style->bg_pixmap_name[i] = g_strdup (rc_style->bg_pixmap_name[i]);
@@ -1381,6 +1409,11 @@ gtk_rc_init_style (GSList *rc_styles)
 		}
 	    }
 
+	  if (proto_style->xthickness < 0 && rc_style->xthickness >= 0)
+	    proto_style->xthickness = rc_style->xthickness;
+	  if (proto_style->ythickness < 0 && rc_style->ythickness >= 0)
+	    proto_style->ythickness = rc_style->ythickness;
+
 	  if (!proto_style->font_desc && rc_style->font_desc)
 	    proto_style->font_desc = pango_font_description_copy (rc_style->font_desc);
 
@@ -1399,10 +1432,10 @@ gtk_rc_init_style (GSList *rc_styles)
 	  if (!g_slist_find (rc_style->rc_style_lists, rc_styles))
 	    rc_style->rc_style_lists = g_slist_prepend (rc_style->rc_style_lists, rc_styles);
 
-	  tmp_styles = tmp_styles->next;
+	  tmp_style = tmp_style->next;
 	}
 
-      for (i=0; i<5; i++)
+      for (i = 0; i < 5; i++)
 	if (proto_style->bg_pixmap_name[i] &&
 	    (strcmp (proto_style->bg_pixmap_name[i], "<none>") == 0))
 	  {
@@ -1533,6 +1566,9 @@ gtk_rc_parse_style (GScanner *scanner)
 	      rc_style->text[i] = parent_style->text[i];
 	      rc_style->base[i] = parent_style->base[i];
 	    }
+
+	  rc_style->xthickness = parent_style->xthickness;
+	  rc_style->ythickness = parent_style->ythickness;
 	  
 	  if (parent_style->font_desc)
 	    {
@@ -1564,9 +1600,6 @@ gtk_rc_parse_style (GScanner *scanner)
     {
       switch (token)
 	{
-	case GTK_RC_TOKEN_BASE:
-	  token = gtk_rc_parse_base (scanner, rc_style);
-	  break;
 	case GTK_RC_TOKEN_BG:
 	  token = gtk_rc_parse_bg (scanner, rc_style);
 	  break;
@@ -1575,6 +1608,15 @@ gtk_rc_parse_style (GScanner *scanner)
 	  break;
 	case GTK_RC_TOKEN_TEXT:
 	  token = gtk_rc_parse_text (scanner, rc_style);
+	  break;
+	case GTK_RC_TOKEN_BASE:
+	  token = gtk_rc_parse_base (scanner, rc_style);
+	  break;
+	case GTK_RC_TOKEN_XTHICKNESS:
+	  token = gtk_rc_parse_xthickness (scanner, rc_style);
+	  break;
+	case GTK_RC_TOKEN_YTHICKNESS:
+	  token = gtk_rc_parse_ythickness (scanner, rc_style);
 	  break;
 	case GTK_RC_TOKEN_BG_PIXMAP:
 	  token = gtk_rc_parse_bg_pixmap (scanner, rc_style);
@@ -1644,29 +1686,6 @@ gtk_rc_parse_style (GScanner *scanner)
 }
 
 static guint
-gtk_rc_parse_base (GScanner   *scanner,
-		   GtkRcStyle *style)
-{
-  GtkStateType state;
-  guint token;
-  
-  token = g_scanner_get_next_token (scanner);
-  if (token != GTK_RC_TOKEN_BASE)
-    return GTK_RC_TOKEN_BASE;
-  
-  token = gtk_rc_parse_state (scanner, &state);
-  if (token != G_TOKEN_NONE)
-    return token;
-  
-  token = g_scanner_get_next_token (scanner);
-  if (token != G_TOKEN_EQUAL_SIGN)
-    return G_TOKEN_EQUAL_SIGN;
-
-  style->color_flags[state] |= GTK_RC_BASE;
-  return gtk_rc_parse_color (scanner, &style->base[state]);
-}
-
-static guint
 gtk_rc_parse_bg (GScanner   *scanner,
 		 GtkRcStyle *style)
 {
@@ -1733,6 +1752,65 @@ gtk_rc_parse_text (GScanner   *scanner,
   
   style->color_flags[state] |= GTK_RC_TEXT;
   return gtk_rc_parse_color (scanner, &style->text[state]);
+}
+
+static guint
+gtk_rc_parse_base (GScanner   *scanner,
+		   GtkRcStyle *style)
+{
+  GtkStateType state;
+  guint token;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != GTK_RC_TOKEN_BASE)
+    return GTK_RC_TOKEN_BASE;
+  
+  token = gtk_rc_parse_state (scanner, &state);
+  if (token != G_TOKEN_NONE)
+    return token;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_EQUAL_SIGN)
+    return G_TOKEN_EQUAL_SIGN;
+
+  style->color_flags[state] |= GTK_RC_BASE;
+  return gtk_rc_parse_color (scanner, &style->base[state]);
+}
+
+static guint
+gtk_rc_parse_xthickness (GScanner   *scanner,
+			 GtkRcStyle *style)
+{
+  if (g_scanner_get_next_token (scanner) != GTK_RC_TOKEN_XTHICKNESS)
+    return GTK_RC_TOKEN_XTHICKNESS;
+
+  if (g_scanner_get_next_token (scanner) != G_TOKEN_EQUAL_SIGN)
+    return G_TOKEN_EQUAL_SIGN;
+
+  if (g_scanner_get_next_token (scanner) != G_TOKEN_INT)
+    return G_TOKEN_INT;
+
+  style->xthickness = scanner->value.v_int;
+
+  return G_TOKEN_NONE;
+}
+
+static guint
+gtk_rc_parse_ythickness (GScanner   *scanner,
+			 GtkRcStyle *style)
+{
+  if (g_scanner_get_next_token (scanner) != GTK_RC_TOKEN_YTHICKNESS)
+    return GTK_RC_TOKEN_YTHICKNESS;
+
+  if (g_scanner_get_next_token (scanner) != G_TOKEN_EQUAL_SIGN)
+    return G_TOKEN_EQUAL_SIGN;
+
+  if (g_scanner_get_next_token (scanner) != G_TOKEN_INT)
+    return G_TOKEN_INT;
+
+  style->ythickness = scanner->value.v_int;
+
+  return G_TOKEN_NONE;
 }
 
 static guint

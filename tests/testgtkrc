@@ -146,3 +146,10 @@ binding "clist-test"
 }
 
 class "GtkCList" binding "clist-test"
+
+style "testthickness" {
+  xthickness = 15
+  ythickness = 15
+}
+
+#class "GtkFrame" style "testthickness"

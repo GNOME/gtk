@@ -274,7 +274,7 @@ gdk_pixbuf_loader_frame_done (GdkPixbufFrame *frame,
   
   if (priv->animation == NULL)
     {
-      priv->animation = GDK_PIXBUF_ANIMATION (g_type_create_instance (GDK_TYPE_PIXBUF_ANIMATION));
+      priv->animation = g_object_new (GDK_TYPE_PIXBUF_ANIMATION, NULL);
       
       priv->animation->n_frames = 0;
       priv->animation->width  = gdk_pixbuf_get_width  (frame->pixbuf) + frame->x_offset;

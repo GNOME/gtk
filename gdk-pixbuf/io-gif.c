@@ -1214,7 +1214,7 @@ gdk_pixbuf__gif_image_load_animation (FILE *file)
 	g_return_val_if_fail (file != NULL, NULL);
 
 	context = new_context ();
-	context->animation = GDK_PIXBUF_ANIMATION (g_type_create_instance (GDK_TYPE_PIXBUF_ANIMATION));
+	context->animation = g_object_new (GDK_TYPE_PIXBUF_ANIMATION, NULL);
 
 	context->animation->n_frames = 0;
 	context->animation->frames = NULL;

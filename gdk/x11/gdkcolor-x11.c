@@ -139,7 +139,7 @@ gdk_colormap_new (GdkVisual *visual,
   
   g_return_val_if_fail (visual != NULL, NULL);
 
-  colormap = GDK_COLORMAP (g_type_create_instance (gdk_colormap_get_type ()));
+  colormap = g_object_new (gdk_colormap_get_type (), NULL);
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
   colormap->visual = visual;
@@ -282,7 +282,7 @@ gdk_colormap_get_system (void)
 
   if (!colormap)
     {
-      colormap = GDK_COLORMAP (g_type_create_instance (gdk_colormap_get_type ()));
+      colormap = g_object_new (gdk_colormap_get_type (), NULL);
       private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
       private->xdisplay = gdk_display;
@@ -1001,7 +1001,7 @@ gdkx_colormap_get (Colormap xcolormap)
   if (xcolormap == DefaultColormap (gdk_display, gdk_screen))
     return gdk_colormap_get_system ();
 
-  colormap = GDK_COLORMAP (g_type_create_instance (gdk_colormap_get_type ()));
+  colormap = g_object_new (gdk_colormap_get_type (), NULL);
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
   private->xdisplay = gdk_display;

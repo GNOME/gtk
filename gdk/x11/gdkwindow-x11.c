@@ -253,7 +253,7 @@ _gdk_windowing_window_init (void)
 		&x, &y, &width, &height, &border_width, &depth);
   XGetWindowAttributes (gdk_display, gdk_root_window, &xattributes);
 
-  gdk_parent_root = GDK_WINDOW (g_type_create_instance (GDK_TYPE_WINDOW));
+  gdk_parent_root = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)gdk_parent_root;
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
@@ -311,7 +311,7 @@ gdk_window_new (GdkWindow     *parent,
   
   xparent = GDK_WINDOW_XID (parent);
   
-  window = GDK_WINDOW (g_type_create_instance (GDK_TYPE_WINDOW));
+  window = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)window;
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
@@ -591,7 +591,7 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   if (children)
     XFree (children);
   
-  window = GDK_WINDOW (g_type_create_instance (GDK_TYPE_WINDOW));
+  window = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)window;
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);

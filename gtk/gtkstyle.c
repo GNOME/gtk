@@ -558,7 +558,7 @@ gtk_style_new (void)
 {
   GtkStyle *style;
   
-  style = GTK_STYLE (g_type_create_instance (gtk_style_get_type ()));
+  style = g_object_new (GTK_TYPE_STYLE, NULL);
   
   return style;
 }
