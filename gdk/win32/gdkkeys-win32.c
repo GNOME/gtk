@@ -40,6 +40,7 @@
 
 guint _gdk_keymap_serial = 0;
 gboolean _gdk_keyboard_has_altgr = FALSE;
+static GdkModifierType gdk_shift_modifiers = GDK_SHIFT_MASK;
 
 static GdkKeymap *default_keymap = NULL;
 
@@ -51,7 +52,9 @@ print_keysym_tab (void)
 {
   gint vk;
   
-  g_print ("keymap:%s\n", _gdk_keyboard_has_altgr ? " (uses AltGr)" : "");
+  g_print ("keymap:%s%s\n",
+	   _gdk_keyboard_has_altgr ? " (uses AltGr)" : "",
+	   (gdk_shift_modifiers & GDK_LOCK_MASK) ? " (has ShiftLock)" : "");
   for (vk = 0; vk < 256; vk++)
     {
       gint state;
@@ -74,9 +77,9 @@ update_keymap (void)
 {
   static guint current_serial = 0;
   guchar key_state[256], temp_key_state[256];
-  wchar_t wcs[1];
   guint scancode;
   guint vk;
+  gboolean capslock_tested = FALSE;
 
   if (keysym_tab != NULL && current_serial == _gdk_keymap_serial)
     return;
@@ -89,6 +92,7 @@ update_keymap (void)
   memset (key_state, 0, sizeof (key_state));
 
   _gdk_keyboard_has_altgr = FALSE;
+  gdk_shift_modifiers = GDK_SHIFT_MASK;
 
   for (vk = 0; vk < 256; vk++)
     {
@@ -266,6 +270,7 @@ update_keymap (void)
 		}
 	      if (*ksymp == 0)
 		{
+		  wchar_t wcs[1];
 		  gint k = ToAsciiEx (vk, scancode, key_state,
 				      (LPWORD) chars, 0, _gdk_input_locale);
 #if 0
@@ -381,12 +386,53 @@ update_keymap (void)
 		*ksymp = GDK_VoidSymbol;
 	    }
 	  key_state[vk] = 0;
+
+	  /* Check if keyboard has an AltGr key by checking if
+	   * the mapping with Control+Alt is different.
+	   */
+	  if (!_gdk_keyboard_has_altgr)
+	    if ((keysym_tab[vk*4 + 2] != GDK_VoidSymbol &&
+		 keysym_tab[vk*4] != keysym_tab[vk*4 + 2]) ||
+		(keysym_tab[vk*4 + 3] != GDK_VoidSymbol &&
+		 keysym_tab[vk*4 + 1] != keysym_tab[vk*4 + 3]))
+	      _gdk_keyboard_has_altgr = TRUE;
+	  
+	  if (!capslock_tested)
+	    {
+	      /* Can we use this virtual key to determine the CapsLock
+	       * key behaviour: CapsLock or ShiftLock? If it generates
+	       * keysyms for printable characters and has a shifted
+	       * keysym that isn't just the upperacase of the
+	       * unshifted keysym, check the behaviour of VK_CAPITAL.
+	       */
+	      if (g_unichar_isgraph (gdk_keyval_to_unicode (keysym_tab[vk*4 + 0])) &&
+		  keysym_tab[vk*4 + 1] != keysym_tab[vk*4 + 0] &&
+		  g_unichar_isgraph (gdk_keyval_to_unicode (keysym_tab[vk*4 + 1])) &&
+		  keysym_tab[vk*4 + 1] != gdk_keyval_to_upper (keysym_tab[vk*4 + 0]))
+		{
+		  guchar chars[2];
+		  
+		  capslock_tested = TRUE;
+		  
+		  key_state[VK_SHIFT] = 0;
+		  key_state[VK_CONTROL] = key_state[VK_MENU] = 0;
+		  key_state[VK_CAPITAL] = 1;
+
+		  if (ToAsciiEx (vk, scancode, key_state,
+				 (LPWORD) chars, 0, _gdk_input_locale) == 1)
+		    {
+		      if (chars[0] >= GDK_space &&
+			  chars[0] <= GDK_asciitilde &&
+			  chars[0] == keysym_tab[vk*4 + 1])
+			{
+			  /* CapsLock acts as ShiftLock */
+			  gdk_shift_modifiers |= GDK_LOCK_MASK;
+			}
+		    }
+		  key_state[VK_CAPITAL] = 0;
+		}    
+	    }
 	}
-      if ((keysym_tab[vk*4 + 2] != GDK_VoidSymbol &&
-	   keysym_tab[vk*4] != keysym_tab[vk*4 + 2]) ||
-	  (keysym_tab[vk*4 + 3] != GDK_VoidSymbol &&
-	   keysym_tab[vk*4 + 1] != keysym_tab[vk*4 + 3]))
-	_gdk_keyboard_has_altgr = TRUE;
     }
   GDK_NOTE (EVENTS, print_keysym_tab ());
 } 
@@ -633,7 +679,6 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
                                      GdkModifierType *consumed_modifiers)
 {
   guint tmp_keyval;
-  guint tmp_modifiers;
   guint *keyvals;
   gint shift_level;
   gboolean ignore_shift = FALSE;
@@ -669,12 +714,15 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
   keyvals = keysym_tab + hardware_keycode*4;
 
-  if ((state & GDK_SHIFT_MASK) &&
-      (state & GDK_LOCK_MASK) &&
-      keyvals[group*2 + 1] == gdk_keyval_to_upper (keyvals[group*2 + 0]))
-    /* Shift disables caps lock */
-    shift_level = 0;		
-  else if (state & GDK_SHIFT_MASK)
+  if ((state & GDK_LOCK_MASK) &&
+      (state & GDK_SHIFT_MASK) &&
+      ((gdk_shift_modifiers & GDK_LOCK_MASK) ||
+       (keyvals[group*2 + 1] == gdk_keyval_to_upper (keyvals[group*2 + 0]))))
+    /* Shift always disables ShiftLock. Shift disables CapsLock for
+     * keys with lowercase/uppercase letter pairs.
+     */
+    shift_level = 0;
+  else if (state & gdk_shift_modifiers)
     shift_level = 1;
   else
     shift_level = 0;
@@ -720,28 +768,35 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
   tmp_keyval = keyvals[group*2 + shift_level];
 
-  tmp_modifiers = ignore_group ? 0 : GDK_MOD2_MASK;
-  tmp_modifiers |= ignore_shift ? 0 : (GDK_SHIFT_MASK | GDK_LOCK_MASK);
+  /* If a true CapsLock is toggled, and Shift is not down,
+   * and the shifted keysym is the uppercase of the unshifted,
+   * use it.
+   */
+  if (!(gdk_shift_modifiers & GDK_LOCK_MASK) &&
+      !(state & GDK_SHIFT_MASK) &&
+      (state & GDK_LOCK_MASK))
+    {
+      guint upper = gdk_keyval_to_upper (tmp_keyval);
+      if (upper == keyvals[group*2 + 1])
+	tmp_keyval = upper;
+    }
+
+  if (keyval)
+    *keyval = tmp_keyval;
 
   if (effective_group)
     *effective_group = group;
-
-  if (!(state & GDK_SHIFT_MASK) && (state & GDK_LOCK_MASK))
-    {
-      guint upper = gdk_keyval_to_upper (tmp_keyval);
-      if (upper != tmp_keyval)
-	tmp_keyval = upper;
-    }
 
   if (level)
     *level = shift_level;
 
   if (consumed_modifiers)
-    *consumed_modifiers = tmp_modifiers;
+    {
+      *consumed_modifiers =
+	(ignore_group ? 0 : GDK_MOD2_MASK) |
+	(ignore_shift ? 0 : (GDK_SHIFT_MASK|GDK_LOCK_MASK));
+    }
 				
-  if (keyval)
-    *keyval = tmp_keyval;
-
 #if 0
   GDK_NOTE (EVENTS, g_print ("...group=%d level=%d cmods=%#x keyval=%s\n",
 			     group, shift_level, tmp_modifiers, gdk_keyval_name (tmp_keyval)));

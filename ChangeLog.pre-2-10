@@ -1,3 +1,9 @@
+2005-01-19  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkkeys-win32.c (update_keymap,
+	gdk_keymap_translate_keyboard_state): Handle keyboards with
+	ShiftLock (and not CapsLock) correctly. (#161814)
+
 2005-01-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_should_respond):
