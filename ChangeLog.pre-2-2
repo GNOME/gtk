@@ -1,3 +1,17 @@
+Fri Oct 26 20:55:57 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbutton.c: Revert changes to GTK_RUN_LAST. 
+	Unfortunately, people apparently erroneously connect
+	to ::clicked for GtkToggleButton and expect
+	they know what happened in the default signal handler
+	instead of appropriately connecting to notification
+	signal ::toggled. When the revolution comes, such
+	people will be first against the wall.
+
+	We'll just have to go back to the old less-reliable
+	set-it-back hacks for handling model-view toggle
+	buttons and entries. :-(. 
+
 2001-10-27  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gtkbbox.c gtk/gtkctree.c gtk/gtkhbbox.c
