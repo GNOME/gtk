@@ -1109,7 +1109,7 @@ check_hex (GtkIMContextSimple *context_simple,
   context_simple->tentative_match = n;
   context_simple->tentative_match_len = n_compose;
   
-  g_signal_emit_by_name (context_simple, "preedit-changed");
+  g_signal_emit_by_name (context_simple, "preedit_changed");
   
   return TRUE;
 }

@@ -1,3 +1,9 @@
+Thu Nov  7 15:29:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontextsimple.c (check_hex): Use '_'
+	not '-' in signal name to be consistent with
+	what we do elsewhere (#97151, TOKUNAGA Hiroyuki)
+
 Thu Nov  7 14:51:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testcalendar.c (calendar_date_to_string): 
