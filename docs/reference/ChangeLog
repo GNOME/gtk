@@ -1,5 +1,13 @@
 2001-10-18  Matthias Clasen   <matthiasc@poet.de>
 
+	* gdk/tmpl/visuals.sgml: Resurrect 1.2 documentation. (#62604)
+
+	* gtk/tmpl/gtkpaned.sgml: Fixes. (#62146)
+
+	* gtk/tmpl/gtkgamma.sgml: Fixes. (#62155)
+
+	* gtk/Makefile.am (IGNORE_HFILES): Add xembed.h (#61929)
+
 	* gdk-pixbuf/gdk-pixbuf.types: Add GdkPixbuf, 
 	GdkPixbufAnimation and GdkPixbufAnimationIter. (#62590)
 

@@ -45,7 +45,8 @@ IGNORE_HFILES=			\
 	gtktextsegment.h	\
 	gtktexttagprivate.h	\
 	gtktexttypes.h		\
-	gtktypebuiltins.h
+	gtktypebuiltins.h	\
+	xembed.h
 
 # Images to copy into HTML directory
 HTML_IMAGES =
