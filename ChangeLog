@@ -1,3 +1,7 @@
+Wed Mar  4 16:02:44 GMT 1998 Tony Gale  <gale@gimp.org>
+
+	* docs/gtkfaq.sgml: widget hierarchy update from Tim Janik
+
 Mon Mar  2 19:57:27 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gdk/gdkproperty.c (gdk_atom_name): Initialize gdk_error_code to

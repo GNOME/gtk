@@ -389,78 +389,86 @@ give you a good grounding on what the widgets can do.
 <p>
 The GTK+ Tutorial lists the following widgets:
 <verb>
-         GtkObject
-         +-- GtkData
-         |   \-- GtkAdjustment
-         |
-         \-- GtkWidget
-             +-- GtkContainer
-             |   +-- GtkBin
-             |   |   +-- GtkAlignment
-             |   |   +-- GtkFrame
-             |   |   |   *-- GtkAspectFrame
-             |   |   |
-             |   |   +-- GtkItem
-             |   |   |   +-- GtkListItem
-             |   |   |   +-- GtkMenuItem
-             |   |   |   |   +-- GtkCheckMenuItem
-             |   |   |   |       *-- GtkRadioMenuItem
-             |   |   |   |
-             |   |   |   *-- GtkTreeItem
-             |   |   |
-             |   |   +-- GtkViewport
-             |   |   \-- GtkWindow
-             |   |       +-- GtkDialog
-             |   |       \-- GtkFileSelection
-             |   |
-             |   +-- GtkBox
-             |   |   +-- GtkHBox
-             |   |   \-- GtkVBox
-             |   |       +-- GtkColorSelection
-             |   |       \-- GtkCurve
-             |   |
-             |   +-- GtkButton
-             |   |   +-- GtkOptionMenu
-             |   |   \-- GtkToggleButton
-             |   |       \-- GtkCheckButton
-             |   |           \-- GtkRadioButton
-             |   |
-             |   +-- GtkList
-             |   +-- GtkMenuShell
-             |   |   +-- GtkMenu
-             |   |   \-- GtkMenuBar
-             |   |
-             |   +-- GtkNotebook
-             |   +-- GtkScrolledWindow
-             |   +-- GtkTable
-             |   \-- GtkTree
-             |
-             +-- GtkDrawingArea
-             +-- GtkEntry
-             +-- GtkMisc
-             |   +-- GtkArrow
-             |   +-- GtkImage
-             |   +-- GtkLabel
-             |   \-- GtkPixmap
-             |
-             +-- GtkPreview
-             +-- GtkProgressBar
-             +-- GtkRange
-             |   +-- GtkScale
-             |   |   +-- GtkHScale
-             |   |   \-- GtkVScale
-             |   |
-             |   \-- GtkScrollbar
-             |       +-- GtkHScrollbar
-             |       \-- GtkVScrollbar
-             |
-             +-- GtkRuler
-             |   +-- GtkHRuler
-             |   \-- GtkVRuler
-             |
-             \-- GtkSeparator
-                 +-- GtkHSeparator
-                 \-- GtkVSeparator
+  GtkObject
+   +GtkData
+   | +GtkAdjustment
+   | `GtkTooltips
+   `GtkWidget
+     +GtkContainer
+     | +GtkBin
+     | | +GtkAlignment
+     | | +GtkEventBox
+     | | +GtkFrame
+     | | | `GtkAspectFrame
+     | | +GtkHandleBox
+     | | +GtkItem
+     | | | +GtkListItem
+     | | | +GtkMenuItem
+     | | | | `GtkCheckMenuItem
+     | | | |   `GtkRadioMenuItem
+     | | | `GtkTreeItem
+     | | +GtkViewport
+     | | `GtkWindow
+     | |   +GtkColorSelectionDialog
+     | |   +GtkDialog
+     | |   | `GtkInputDialog
+     | |   `GtkFileSelection
+     | +GtkBox
+     | | +GtkButtonBox
+     | | | +GtkHButtonBox
+     | | | `GtkVButtonBox
+     | | +GtkHBox
+     | | | +GtkCombo
+     | | | `GtkStatusbar
+     | | `GtkVBox
+     | |   +GtkColorSelection
+     | |   `GtkGammaCurve
+     | +GtkButton
+     | | +GtkOptionMenu
+     | | `GtkToggleButton
+     | |   `GtkCheckButton
+     | |     `GtkRadioButton
+     | +GtkCList
+     | +GtkFixed
+     | +GtkList
+     | +GtkMenuShell
+     | | +GtkMenuBar
+     | | `GtkMenu
+     | +GtkNotebook
+     | +GtkPaned
+     | | +GtkHPaned
+     | | `GtkVPaned
+     | +GtkScrolledWindow
+     | +GtkTable
+     | +GtkToolbar
+     | `GtkTree
+     +GtkDrawingArea
+     | `GtkCurve
+     +GtkEditable
+     | +GtkEntry
+     | | `GtkSpinButton
+     | `GtkText
+     +GtkMisc
+     | +GtkArrow
+     | +GtkImage
+     | +GtkLabel
+     | | `GtkTipsQuery
+     | `GtkPixmap
+     +GtkPreview
+     +GtkProgressBar
+     +GtkRange
+     | +GtkScale
+     | | +GtkHScale
+     | | `GtkVScale
+     | `GtkScrollbar
+     |   +GtkHScrollbar
+     |   `GtkVScrollbar
+     +GtkRuler
+     | +GtkHRuler
+     | `GtkVRuler
+     `GtkSeparator
+       +GtkHSeparator
+       `GtkVSeparator
 </verb>
 
 <!-- ----------------------------------------------------------------- -->
@@ -715,7 +723,7 @@ this:
   gc = gdk_gc_new(widget->window);
 
   /* find proper dimensions for rectangle */
-  gdk_window_get_size(widget->window, &width, &height);
+  gdk_window_get_size(widget->window, &amp;width, &amp;height);
 
   /* the color we want to use */
   color = (GdkColor *)malloc(sizeof(GdkColor));
