@@ -4,9 +4,9 @@
 # Changwoo Ryu <cwryu@debian.org>, 2002
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.0.2\n"
-"POT-Creation-Date: 2002-06-16 00:04-0400\n"
-"PO-Revision-Date: 2002-05-06 23:26+0900\n"
+"Project-Id-Version: gtk+ 2.0.5\n"
+"POT-Creation-Date: 2002-06-21 16:00+0900\n"
+"PO-Revision-Date: 2002-06-21 16:01+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <gnome-kr-translation@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -3365,6 +3365,7 @@ msgid "_Yes"
 msgstr "예(_Y)"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
 msgstr "확대/축소 _100%"
 
@@ -3714,7 +3715,6 @@ msgid "ZWS _Zero width space"
 msgstr "ZWS 너비 0 공백(_Z)"
 
 #: gtk/gtktextutil.c:54
-#, fuzzy
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWS 너비 0 결합(_J)"
 
