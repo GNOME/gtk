@@ -1,3 +1,8 @@
+2002-07-16  Federico Mena Quintero  <federico@ximian.com>
+
+	* gdk/gdkpixbuf-drawable.c (rgb565lsb): Fixed the LSB -> MSB case.
+	Fixes #79463.
+
 2002-07-16  Sven Neumann  <sven@gimp.org>
 
 	* gdk/gdk.c
