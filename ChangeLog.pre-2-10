@@ -1,3 +1,9 @@
+Thu Jun 10 21:16:23 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_list_destroy): 
+	Check whether priv->box is NULL before disconnecting
+	from its signals.  Fix merged from HEAD.
+
 2004-06-10  Federico Mena Quintero  <federico@ximian.com>
 
 	Merge from HEAD:
