@@ -819,7 +819,8 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 
 /**
  * gdk_pixbuf_new_from_inline:
- * @data_length: Length in bytes of the @data argument
+ * @data_length: Length in bytes of the @data argument or -1 to 
+ *    disable length checks
  * @data: Byte data containing a serialized #GdkPixdata structure
  * @copy_pixels: Whether to copy the pixel data, or use direct pointers
  *               @data for the resulting pixbuf
@@ -847,13 +848,18 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
  * generally a bad idea.)
  *
  * If you create a pixbuf from const inline data compiled into your
- * program, it's probably safe to ignore errors, since things will
- * always succeed.  For non-const inline data, you could get out of
- * memory. For untrusted inline data located at runtime, you could
- * have corrupt inline data in addition.
+ * program, it's probably safe to ignore errors and disable length checks, 
+ * since things will always succeed:
+ * <informalexample><programlisting>
+ * pixbuf = gdk_pixbuf_new_from_inline (-1, myimage_inline, NULL);
+ * </programlisting></informalexample>
+ *
+ * For non-const inline data, you could get out of memory. For untrusted 
+ * inline data located at runtime, you could have corrupt inline data in 
+ * addition.
  *
  * Return value: A newly-created #GdkPixbuf structure with a reference,
- *   count of 1, or %NULL if error is set.
+ *   count of 1, or %NULL if an error occurred.
  **/
 GdkPixbuf*
 gdk_pixbuf_new_from_inline (gint          data_length,
