@@ -1,4 +1,12 @@
+1999-11-02  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_point):
+	Implemented the ::point() method.  We do a simple containment test
+	instead of a full distance calculation since the canvas is going
+	to change to that scheme, anyways.
+
 1999-11-02 Elliot Lee <sopwith@redhat.com>
+
 	* src/testpixbuf.c: Allow using $TBF_READLEN to specify the size of the chunks
 	that are read from the input file.
 
