@@ -20,38 +20,6 @@ or gtk_font_selection_dialog_get_font_name().
 To change the text which is shown in the preview area, use
 gtk_font_selection_dialog_set_preview_text().
 </para>
-<para>
-Filters can be used to limit the fonts shown. There are 2 filters in the
-#GtkFontSelectionDialog - a base filter and a user filter. The base filter
-can not be changed by the user, so this can be used when the user must choose
-from the restricted set of fonts (e.g. for a terminal-type application you may
-want to force the user to select a fixed-width font). The user filter can be
-changed or reset by the user, by using the 'Reset Filter' button or changing
-the options on the 'Filter' page of the dialog.
-</para>
-
-<example>
-<title>Setting a filter to show only fixed-width fonts.</title>
-<programlisting>
-  gchar *spacings[] = { "c", "m", NULL };
-  gtk_font_selection_dialog_set_filter (GTK_FONT_SELECTION_DIALOG (fontsel),
-				       GTK_FONT_FILTER_BASE, GTK_FONT_ALL,
-				       NULL, NULL, NULL, NULL, spacings, NULL);
-</programlisting>
-</example>
-
-<para>
-To allow only true scalable fonts to be selected use:
-</para>
-
-<example>
-<title>Setting a filter to show only true scalable fonts.</title>
-<programlisting>
-  gtk_font_selection_dialog_set_filter (GTK_FONT_SELECTION_DIALOG (fontsel),
-				       GTK_FONT_FILTER_BASE, GTK_FONT_SCALABLE,
-				       NULL, NULL, NULL, NULL, NULL, NULL);
-</programlisting>
-</example>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

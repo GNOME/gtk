@@ -23,15 +23,6 @@ or gtk_font_selection_get_font_name().
 To change the text which is shown in the preview area, use
 gtk_font_selection_set_preview_text().
 </para>
-<para>
-Filters can be used to limit the fonts shown. There are 2 filters in the
-#GtkFontSelection - a base filter and a user filter. The base filter
-can not be changed by the user, so this can be used when the user must choose
-from the restricted set of fonts (e.g. for a terminal-type application you may
-want to force the user to select a fixed-width font). The user filter can be
-changed or reset by the user, by using the 'Reset Filter' button or changing
-the options on the 'Filter' page of the widget.
-</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

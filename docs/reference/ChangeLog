@@ -1,3 +1,9 @@
+Fri Nov 21 00:09:36 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkfontsel.sgml: 
+	* gtk/tmpl/gtkfontseldlg.sgml: Remove leftover documentation of
+	the filter functionality that got removed long ago.
+
 2003-11-18  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/tmpl/gtkfilechooser.sgml: Added sections section about
