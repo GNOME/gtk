@@ -345,6 +345,7 @@ struct _GdkWin32SingleFont
   UINT charset;
   UINT codepage;
   FONTSIGNATURE fs;
+  GdkFont* font_set;
 };
 
 struct _GdkFontPrivateWin32
@@ -405,6 +406,10 @@ HDC	gdk_gc_predraw           (GdkDrawable        *drawable,
 void	gdk_gc_postdraw          (GdkDrawable        *drawable,
 				  GdkGCPrivate       *gc_private,
 				  GdkGCValuesMask     usage);
+
+void    gdk_win32_clear_hdc_cache (void);
+void    gdk_win32_clear_hdc_cache_for_hwnd (HWND hwnd);
+
 HRGN	BitmapToRegion           (HBITMAP hBmp);
 
 void    gdk_sel_prop_store       (GdkWindow *owner,

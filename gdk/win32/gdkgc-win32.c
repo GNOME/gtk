@@ -266,7 +266,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	  WIN32_GDI_FAILED ("DeleteObject");
       if (values->clip_mask != NULL)
 	{
-	  data->clip_region =
+	  data->clip_region = 
 	    BitmapToRegion ((HBITMAP) GDK_DRAWABLE_XID (values->clip_mask));
 	  data->values_mask |= GDK_GC_CLIP_MASK;
 	}
@@ -778,6 +778,396 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
   if (dst_data->stipple != NULL)
     gdk_drawable_ref (dst_data->stipple);
 }
+struct _GdkPenCacheEntry
+{
+  gboolean in_use;
+  HPEN hpen;
+  COLORREF fg;
+  DWORD pen_style;
+  gint width;
+  gint use_count;
+};
+
+typedef struct _GdkPenCacheEntry GdkPenCacheEntry;
+
+#define gdk_pen_cache_entry_count 5
+#define INIT_PEN_ENTRY { FALSE, NULL, 0, 0, 0, 0 }
+static GdkPenCacheEntry gdk_pen_cache[gdk_pen_cache_entry_count] = {
+  INIT_PEN_ENTRY,
+  INIT_PEN_ENTRY,
+  INIT_PEN_ENTRY,
+  INIT_PEN_ENTRY,
+  INIT_PEN_ENTRY,
+};
+
+static HPEN
+obtain_pen (COLORREF fg,
+            DWORD pen_style,
+            gint width)
+{
+  LOGBRUSH logbrush;
+  HPEN hpen;
+  GdkPenCacheEntry* unused_entry = NULL;
+  int i;
+
+  if (width < 1)
+    width = 1;
+    
+  for (i = 0; i < gdk_pen_cache_entry_count; i++)
+    {
+      GdkPenCacheEntry* entry = &gdk_pen_cache[i];
+      if (!entry->in_use)
+        {
+          if (entry->hpen != NULL && entry->fg == fg 
+              && entry->pen_style == pen_style && entry->width == width)
+            {
+              entry->in_use = TRUE;
+              entry->use_count += 2;
+              return entry->hpen;
+            }
+          if (entry->use_count > 0)
+            entry->use_count--;
+          if (unused_entry == NULL || entry->use_count < unused_entry->use_count)
+            unused_entry = entry;
+        }
+    }
+    
+  /* Create pen. */
+  logbrush.lbStyle = BS_SOLID;
+  logbrush.lbColor = fg;
+  logbrush.lbHatch = 0;
+
+  if ((hpen = ExtCreatePen (pen_style, width, &logbrush, 0, NULL)) == NULL)
+    {
+      WIN32_GDI_FAILED ("ExtCreatePen");
+      return NULL;
+    }
+    
+  if (unused_entry != NULL)
+    {
+      if (unused_entry->hpen != NULL)
+        {
+          if (!DeleteObject (unused_entry->hpen))
+            WIN32_GDI_FAILED ("DeleteObject");
+        }          
+      unused_entry->hpen = hpen;
+      unused_entry->fg = fg;
+      unused_entry->pen_style = pen_style;
+      unused_entry->width = width;
+      unused_entry->in_use = TRUE;
+      unused_entry->use_count += 2;
+    }
+    
+    return hpen;
+}
+
+static void
+release_pen (HPEN hpen)
+{
+  int i;
+
+  if (hpen == NULL)
+    return;
+    
+  for (i = 0; i < gdk_pen_cache_entry_count; i++)
+    {
+      GdkPenCacheEntry* entry = &gdk_pen_cache[i];
+      if (entry->hpen == hpen)
+        {
+          entry->in_use = FALSE;
+          return;
+        }
+    }
+
+  if (!DeleteObject (hpen))
+     WIN32_GDI_FAILED ("DeleteObject");
+}
+  
+struct _GdkHDCCacheEntry
+{
+  BOOL in_use;
+  BOOL offscreen;
+  HDC hdc;
+  HWND hwnd;
+  gboolean pen_set;
+  COLORREF pen_fg;
+  GdkLineStyle pen_style;
+  gint pen_width;
+};
+
+typedef struct _GdkHDCCacheEntry GdkHDCCacheEntry;
+
+#define gdk_hdc_cache_entry_count 5
+#define INIT_HDC_ENTRY   { FALSE, FALSE, NULL, NULL, FALSE, 0, 0, 0 }
+static GdkHDCCacheEntry gdk_hdc_cache[gdk_hdc_cache_entry_count] = {
+  INIT_HDC_ENTRY,
+  INIT_HDC_ENTRY,
+  INIT_HDC_ENTRY,
+  INIT_HDC_ENTRY,
+  INIT_HDC_ENTRY,
+};
+static gboolean gdk_hdc_clear_idle_proc_installed = FALSE;
+#undef INIT_HDC_ENTRY
+
+void
+gdk_win32_destroy_hdc (HWND hwnd,
+                       HDC hdc)
+{
+  HPEN hpen;
+  HBRUSH hbr;
+  
+  if ((hpen = GetCurrentObject (hdc, OBJ_PEN)) == NULL)
+    WIN32_GDI_FAILED ("GetCurrentObject");
+
+  if ((hbr = GetCurrentObject (hdc, OBJ_BRUSH)) == NULL)
+    WIN32_GDI_FAILED ("GetCurrentObject");
+
+    
+  if (hwnd == NULL)
+    {
+      if (!DeleteDC (hdc))
+	WIN32_GDI_FAILED ("DeleteDC");
+    }
+  else
+    {
+      if (!ReleaseDC (hwnd, hdc))
+        WIN32_GDI_FAILED ("ReleaseDC");
+    }
+
+  release_pen (hpen);
+  
+  if (!DeleteObject (hbr))
+    WIN32_GDI_FAILED ("DeleteObject");
+}
+
+static void
+clear_hdc_cache_entry (GdkHDCCacheEntry* entry)
+{
+  if (entry->hdc != NULL)
+    {
+      if (entry->offscreen)
+        gdk_win32_destroy_hdc (NULL, entry->hdc);
+      else
+        gdk_win32_destroy_hdc (entry->hwnd, entry->hdc);
+    }
+  entry->in_use = FALSE;
+  entry->offscreen = FALSE;
+  entry->hdc = NULL;
+  entry->hwnd = NULL;
+  entry->pen_set = FALSE;
+  entry->pen_fg = 0;
+  entry->pen_style = 0;
+  entry->pen_width = 0;
+}
+
+void gdk_win32_clear_hdc_cache ()
+{
+  int i;
+
+  for (i = 0; i < gdk_hdc_cache_entry_count; i++)
+    clear_hdc_cache_entry (&gdk_hdc_cache[i]);
+}
+
+static gboolean
+gdk_clear_hdc_cache_on_idle (gpointer arg)
+{
+  gdk_win32_clear_hdc_cache ();
+  gdk_hdc_clear_idle_proc_installed = FALSE;
+  return FALSE;
+}
+
+static GdkHDCCacheEntry*  
+find_free_hdc_entry()
+{
+  int i;
+  GdkHDCCacheEntry* not_in_use = NULL;
+
+  if (!gdk_hdc_clear_idle_proc_installed) 
+    {
+      g_idle_add_full (G_PRIORITY_HIGH, gdk_clear_hdc_cache_on_idle, NULL,
+                       NULL);
+      gdk_hdc_clear_idle_proc_installed = TRUE;
+    }
+
+  for (i = 0; i < gdk_hdc_cache_entry_count; i++)
+    {
+      if (gdk_hdc_cache[i].hdc == NULL)
+        return &gdk_hdc_cache[i];
+      else if (!gdk_hdc_cache[i].in_use)
+        not_in_use = &gdk_hdc_cache[i];
+    }
+
+  if (not_in_use != NULL)
+    {
+      clear_hdc_cache_entry (not_in_use);
+      return not_in_use;
+    }
+
+  return NULL;
+}
+ 
+static GdkHDCCacheEntry*  
+find_hdc_entry_for_hwnd (HWND hwnd)
+{
+  int i;
+
+  for (i = 0; i < gdk_hdc_cache_entry_count; i++)
+    {
+      if (gdk_hdc_cache[i].hwnd == hwnd)
+        return &gdk_hdc_cache[i];
+    }
+
+  return NULL;
+}
+ 
+static GdkHDCCacheEntry*  
+find_hdc_entry_for_hdc (HDC hdc)
+{
+  int i;
+
+  for (i = 0; i < gdk_hdc_cache_entry_count; i++)
+    {
+      if (gdk_hdc_cache[i].hdc == hdc)
+        return &gdk_hdc_cache[i];
+    }
+
+  return NULL;
+}
+
+void
+gdk_win32_clear_hdc_cache_for_hwnd (HWND hwnd)
+{
+  GdkHDCCacheEntry* entry;
+
+  entry = find_hdc_entry_for_hwnd (hwnd);
+  if (entry != NULL)
+    clear_hdc_cache_entry (entry);
+}
+
+HDC
+gdk_win32_obtain_window_hdc (HWND hwnd)
+{
+  HDC hdc;
+  GdkHDCCacheEntry* entry;
+
+  entry = find_hdc_entry_for_hwnd (hwnd);
+  if (entry != NULL && !entry->in_use)
+    {
+      entry->in_use = TRUE;
+      return entry->hdc;
+    }
+
+  hdc = GetDC(hwnd);
+  if (hdc == NULL)
+    WIN32_API_FAILED("GetDC");
+  else 
+    {
+      entry = find_free_hdc_entry ();
+      if (entry != NULL)
+        {
+          entry->in_use = TRUE;
+          entry->offscreen = FALSE;
+          entry->hdc = hdc;
+          entry->hwnd = hwnd;
+        }
+    }
+
+  return hdc;
+}
+
+void 
+gdk_win32_release_hdc (HWND hwnd,
+                       HDC  hdc)
+{
+  GdkHDCCacheEntry* entry;
+
+  entry = find_hdc_entry_for_hdc (hdc);
+  if (entry != NULL)
+    entry->in_use = FALSE;
+  else 
+    gdk_win32_destroy_hdc (hwnd, hdc);
+}
+
+HDC
+gdk_win32_obtain_offscreen_hdc (HWND hwnd)
+{
+  HDC hdc;
+  GdkHDCCacheEntry* entry;
+
+  entry = find_hdc_entry_for_hwnd (hwnd);
+  if (entry != NULL && !entry->in_use)
+    {
+      entry->in_use = TRUE;
+      return entry->hdc;
+    }
+
+  if ((hdc = CreateCompatibleDC (NULL)) == NULL)
+    {
+      WIN32_GDI_FAILED ("CreateCompatibleDC");
+      return  NULL;
+    }
+      
+  if (SelectObject (hdc, hwnd) == NULL)
+    {
+      WIN32_GDI_FAILED ("SelectObject");
+      return  NULL;
+    }
+
+  entry = find_free_hdc_entry ();
+  if (entry != NULL)
+    {
+      entry->in_use = TRUE;
+      entry->offscreen = TRUE;
+      entry->hdc = hdc;
+      entry->hwnd = hwnd;
+    }
+
+  return hdc;
+}
+
+static void
+set_hdc_pen (HDC          hdc,
+	     COLORREF     fg,
+	     GdkLineStyle style,
+	     gint         width)
+{
+  LOGBRUSH logbrush;
+  HPEN hpen, old_hpen;
+  GdkHDCCacheEntry* entry;
+
+  if (width < 1)
+    width = 1;
+    
+  entry = find_hdc_entry_for_hdc (hdc);
+  if (entry != NULL && entry->pen_set && entry->pen_fg == fg
+      && entry->pen_style == style && entry->pen_width == width)
+    return;
+    
+  /* Create and select pen. */
+  hpen = obtain_pen (fg, style, width);
+  if (hpen == NULL)
+    return;
+    
+  old_hpen = SelectObject (hdc, hpen);
+  if (old_hpen == NULL)
+    {
+      WIN32_GDI_FAILED ("SelectObject");
+      release_pen (hpen);
+      return;
+    }
+  else
+    {
+      release_pen (old_hpen);
+    }
+    
+  if (entry != NULL)
+    {
+      entry->pen_set = TRUE;
+      entry->pen_fg = fg;
+      entry->pen_style = style;
+      entry->pen_width = width;
+    }
+}
 
 static guint bitmask[9] = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
 
@@ -809,9 +1199,7 @@ predraw_set_foreground (GdkGCWin32Data          *data,
 			GdkColormapPrivateWin32 *colormap_private)
 {
   COLORREF fg;
-  LOGBRUSH logbrush;
-  HPEN hpen;
-  HBRUSH hbr;
+  HBRUSH hbr, old_hbr;
 
   if (colormap_private == NULL)
     {
@@ -867,19 +1255,8 @@ predraw_set_foreground (GdkGCWin32Data          *data,
   if (SetTextColor (data->xgc, fg) == CLR_INVALID)
     WIN32_GDI_FAILED ("SetTextColor");
 
-  /* Create and select pen and brush. */
-
-  logbrush.lbStyle = BS_SOLID;
-  logbrush.lbColor = fg;
-
-  if ((hpen = ExtCreatePen (data->pen_style,
-			    (data->pen_width > 0 ? data->pen_width : 1),
-			    &logbrush, 0, NULL)) == NULL)
-    WIN32_GDI_FAILED ("ExtCreatePen");
+  set_hdc_pen (data->xgc, fg, data->pen_style, data->pen_width);
   
-  if (SelectObject (data->xgc, hpen) == NULL)
-    WIN32_GDI_FAILED ("SelectObject");
-
   switch (data->fill_style)
     {
     case GDK_OPAQUE_STIPPLED:
@@ -897,15 +1274,23 @@ predraw_set_foreground (GdkGCWin32Data          *data,
 	WIN32_GDI_FAILED ("CreateSolidBrush");
       break;
   }
-  if (SelectObject (data->xgc, hbr) == NULL)
+  old_hbr = SelectObject (data->xgc, hbr);
+  if (old_hbr == NULL)
     WIN32_GDI_FAILED ("SelectObject");
+  else
+    {
+      if (!DeleteObject (old_hbr))
+        WIN32_GDI_FAILED ("DeleteObject");
+    }
 }  
 
 void
 predraw_set_background (GdkGCWin32Data          *data,
 			GdkColormapPrivateWin32 *colormap_private)
 {
-  COLORREF bg = gdk_colormap_color (colormap_private, data->background);
+  COLORREF bg;
+  
+  bg = gdk_colormap_color (colormap_private, data->background);
 
   if (SetBkColor (data->xgc, bg) == CLR_INVALID)
     WIN32_GDI_FAILED ("SetBkColor");
@@ -926,25 +1311,10 @@ gdk_gc_predraw (GdkDrawable    *drawable,
   data->hwnd = GDK_DRAWABLE_XID (drawable);
   
   if (GDK_DRAWABLE_TYPE (drawable) == GDK_DRAWABLE_PIXMAP)
-    {
-      if ((data->xgc = CreateCompatibleDC (NULL)) == NULL)
-	WIN32_GDI_FAILED ("CreateCompatibleDC");
-
-      if ((data->saved_dc = SaveDC (data->xgc)) == 0)
-	WIN32_GDI_FAILED ("SaveDC");
-      
-      if (SelectObject (data->xgc, data->hwnd) == NULL)
-	WIN32_GDI_FAILED ("SelectObject");
-    }
+    data->xgc = gdk_win32_obtain_offscreen_hdc (data->hwnd);
   else
-    {
-      if ((data->xgc = GetDC (data->hwnd)) == NULL)
-	WIN32_GDI_FAILED ("GetDC");
-      
-      if ((data->saved_dc = SaveDC (data->xgc)) == 0)
-	WIN32_GDI_FAILED ("SaveDC");
-    }
-  
+    data->xgc = gdk_win32_obtain_window_hdc (data->hwnd);
+
   if (usage & GDK_GC_FOREGROUND)
     predraw_set_foreground (data, colormap_private);
 
@@ -960,17 +1330,28 @@ gdk_gc_predraw (GdkDrawable    *drawable,
 	WIN32_GDI_FAILED ("SetTextAlign");
     }
   
-  if (data->rop2 != R2_COPYPEN)
-    if (SetROP2 (data->xgc, data->rop2) == 0)
-      WIN32_GDI_FAILED ("SetROP2");
+  if (SetROP2 (data->xgc, data->rop2) == 0)
+    WIN32_GDI_FAILED ("SetROP2");
 
   if ((data->values_mask & GDK_GC_CLIP_MASK)
       && data->clip_region != NULL)
     {
+      RECT gc_rect,  hdc_rect;
+      int gc_complex, hdc_complex;
+
       if (data->values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN))
 	OffsetRgn (data->clip_region,
 		   data->clip_x_origin, data->clip_y_origin);
-      SelectClipRgn (data->xgc, data->clip_region);
+      gc_complex = GetRgnBox(data->clip_region, &gc_rect);
+      hdc_complex = GetClipBox(data->xgc,  &hdc_rect);
+      if (gc_complex != SIMPLEREGION || hdc_complex != SIMPLEREGION
+          || !EqualRect(&gc_rect, &hdc_rect))
+        SelectClipRgn (data->xgc, data->clip_region);
+    }
+  else 
+    {
+      if (SelectClipRgn (data->xgc, NULL) == ERROR)
+        WIN32_GDI_FAILED("SelectClipRegion");
     }
 
   return data->xgc;
@@ -987,18 +1368,9 @@ gdk_gc_postdraw (GdkDrawable    *drawable,
   GdkGCWin32Data *data = GDK_GC_WIN32DATA (gc_private);
   HGDIOBJ hpen = NULL;
   HGDIOBJ hbr = NULL;
+  HWND active_hwnd = NULL;
 
-  if (usage & GDK_GC_FOREGROUND)
-    {
-      if ((hpen = GetCurrentObject (data->xgc, OBJ_PEN)) == NULL)
-	WIN32_GDI_FAILED ("GetCurrentObject");
-
-      if ((hbr = GetCurrentObject (data->xgc, OBJ_BRUSH)) == NULL)
-	WIN32_GDI_FAILED ("GetCurrentObject");
-    }
-
-  if (!RestoreDC (data->xgc, data->saved_dc))
-    WIN32_GDI_FAILED ("RestoreDC");
+    
 #if 0
   if (colormap_private != NULL
       && colormap_private->xcolormap->rc_palette
@@ -1010,23 +1382,10 @@ gdk_gc_postdraw (GdkDrawable    *drawable,
     }
 #endif
   if (GDK_DRAWABLE_TYPE (drawable) == GDK_DRAWABLE_PIXMAP)
-    {
-      if (!DeleteDC (data->xgc))
-	WIN32_GDI_FAILED ("DeleteDC");
-    }
-  else
-    {
-      ReleaseDC (data->hwnd, data->xgc);
-    }
-
-  if (hpen != NULL)
-    if (!DeleteObject (hpen))
-      WIN32_GDI_FAILED ("DeleteObject");
-  
-  if (hbr != NULL)
-    if (!DeleteObject (hbr))
-      WIN32_GDI_FAILED ("DeleteObject");
-
+    gdk_win32_release_hdc (NULL, data->xgc);
+  else 
+    gdk_win32_release_hdc (data->hwnd, data->xgc);
+      
   if ((data->values_mask & GDK_GC_CLIP_MASK)
       && data->clip_region != NULL
       && (data->values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN)))
@@ -1174,11 +1533,10 @@ BitmapToRegion (HBITMAP hBmp)
 
   holdBmp = (HBITMAP) SelectObject (hMemDC, hbm8);
 
-  /* Create a DC just to copy the bitmap into the memory DC*/
-  hDC = CreateCompatibleDC (hMemDC);
+  /* Obtain hdc with hBmp selected into it */
+  hDC = gdk_win32_obtain_offscreen_hdc (hBmp);
   if (!hDC)
     {
-      WIN32_GDI_FAILED ("CreateCompatibleDC #2");
       SelectObject (hMemDC, holdBmp);
       DeleteObject (hbm8);
       DeleteDC (hMemDC);
@@ -1198,19 +1556,17 @@ BitmapToRegion (HBITMAP hBmp)
   bm8.bmWidthBytes = (((bm8.bmWidthBytes-1)/4)+1)*4; /* dword aligned!! */
 
   /* Copy the bitmap into the memory DC*/
-  holdBmp2 = (HBITMAP) SelectObject (hDC, hBmp);
-
   if (!BitBlt (hMemDC, 0, 0, bm.bmWidth, bm.bmHeight, hDC, 0, 0, SRCCOPY))
     {
       WIN32_GDI_FAILED ("BitBlt");
-      SelectObject (hDC, holdBmp2);
+      gdk_win32_release_hdc (NULL, hDC);
       SelectObject (hMemDC, holdBmp);
       DeleteObject (hbm8);
       DeleteDC (hMemDC);
       return NULL;
     }
-  SelectObject (hDC, holdBmp2);
-  DeleteDC (hDC);
+  gdk_win32_release_hdc (NULL, hDC);
+  hDC = NULL;
 
   /* For better performances, we will use the ExtCreateRegion()
    * function to create the region. This function take a RGNDATA

@@ -405,14 +405,9 @@ gtk_init_check (int	 *argc,
 #ifndef G_OS_WIN32
   bindtextdomain("gtk+", GTK_LOCALEDIR);
 #else
-  {
-    /* GTk+ locale dir is %GtkDir%\locale */
-    extern char *get_gtk_sysconf_directory ();
-    bindtextdomain ("gtk+", g_strconcat (get_gtk_sysconf_directory (),
-					 G_DIR_SEPARATOR_S,
-					 "locale",
-					 NULL));
-  }
+  /* GTk+ locale dir is %GtkDir%\locale */
+  bindtextdomain ("gtk+", g_win32_get_package_installation_subdirectory
+		  ("gtk+", "gtk-1.3.dll", "locale"));
 #endif
 #endif  
 

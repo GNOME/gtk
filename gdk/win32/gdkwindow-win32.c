@@ -168,7 +168,7 @@ RegisterGdkClass (GdkDrawableType wtype)
   static WNDCLASSEX wcl; 
   ATOM klass = 0;
 
-  wcl.cbSize = sizeof(WNDCLASSEX);     
+  wcl.cbSize = sizeof (WNDCLASSEX);
   wcl.style = 0; /* DON'T set CS_<H,V>REDRAW. It causes total redraw
                   * on WM_SIZE and WM_MOVE. Flicker, Performance!
                   */
@@ -205,7 +205,7 @@ RegisterGdkClass (GdkDrawableType wtype)
 #define ONCE_PER_CLASS() \
   wcl.hIcon = CopyIcon (hAppIcon); \
   wcl.hIconSm = CopyIcon (hAppIcon); \
-  wcl.hbrBackground = CreateSolidBrush( RGB(0,0,0)); \
+  wcl.hbrBackground = NULL; \
   wcl.hCursor = LoadCursor (NULL, IDC_ARROW); 
   
   switch (wtype)
@@ -562,6 +562,8 @@ gdk_window_internal_destroy (GdkWindow *window,
     case GDK_WINDOW_FOREIGN:
       if (!GDK_DRAWABLE_DESTROYED (window))
 	{
+          gdk_win32_clear_hdc_cache_for_hwnd (GDK_DRAWABLE_XID (window));
+
 	  if (private->parent)
 	    {
 	      GdkWindowPrivate *parent_private = (GdkWindowPrivate *)private->parent;
@@ -710,13 +712,24 @@ gdk_window_show (GdkWindow *window)
 	}
       else
 	{
-	  ShowWindow (GDK_DRAWABLE_XID (window), SW_SHOWNORMAL);
-	  ShowWindow (GDK_DRAWABLE_XID (window), SW_RESTORE);
-	  SetForegroundWindow (GDK_DRAWABLE_XID (window));
-	  BringWindowToTop (GDK_DRAWABLE_XID (window));
+          if (GetWindowLong (GDK_DRAWABLE_XID (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
+	    {
+	      SetWindowPos(GDK_DRAWABLE_XID (window), HWND_TOP, 0, 0, 0, 0,
+			   SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE);
+	    }
+          else
+            {
+	      GdkWindow *parent = ((GdkWindowPrivate *)window)->parent;
+
+              ShowWindow (GDK_DRAWABLE_XID (window), SW_SHOWNORMAL);
+              ShowWindow (GDK_DRAWABLE_XID (window), SW_RESTORE);
+              if (parent == gdk_parent_root)
+                SetForegroundWindow (GDK_DRAWABLE_XID (window));
+              BringWindowToTop (GDK_DRAWABLE_XID (window));
 #if 0
-	  ShowOwnedPopups (GDK_DRAWABLE_XID (window), TRUE);
+	      ShowOwnedPopups (GDK_DRAWABLE_XID (window), TRUE);
 #endif
+	    }
 	}
     }
 }
@@ -734,13 +747,15 @@ gdk_window_hide (GdkWindow *window)
       ((GdkWindowPrivate *) window)->mapped = FALSE;
       if (GDK_DRAWABLE_TYPE (window) == GDK_WINDOW_TOPLEVEL)
 	ShowOwnedPopups (GDK_DRAWABLE_XID (window), FALSE);
-#if 1
-      ShowWindow (GDK_DRAWABLE_XID (window), SW_HIDE);
-#elif 0
-      ShowWindow (GDK_DRAWABLE_XID (window), SW_MINIMIZE);
-#else
-      CloseWindow (GDK_DRAWABLE_XID (window));
-#endif
+      if (GetWindowLong (GDK_DRAWABLE_XID (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
+	{
+	  SetWindowPos(GDK_DRAWABLE_XID (window), HWND_BOTTOM, 0, 0, 0, 0,
+		       SWP_HIDEWINDOW | SWP_NOREDRAW | SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE);
+	}
+      else
+	{
+	  ShowWindow (GDK_DRAWABLE_XID (window), SW_HIDE);
+	}
     }
 }
 
@@ -1475,7 +1490,8 @@ gdk_window_set_back_pixmap (GdkWindow *window,
 	}
       else if (!pixmap)
 	{
-	  
+          /* Is this right ?? */
+          GDK_WINDOW_WIN32DATA (window)->bg_type = GDK_WIN32_BG_TRANSPARENT;
 	}
       else
 	{
@@ -1495,6 +1511,7 @@ gdk_window_set_cursor (GdkWindow *window,
 {
   GdkCursorPrivate *cursor_private;
   HCURSOR xcursor;
+  HCURSOR prev_xcursor;
   POINT pt;
   
   g_return_if_fail (window != NULL);
@@ -1511,17 +1528,10 @@ gdk_window_set_cursor (GdkWindow *window,
 
       GDK_NOTE (MISC, g_print ("gdk_window_set_cursor: %#x %#x\n",
 			       GDK_DRAWABLE_XID (window), xcursor));
-
-      if (GDK_WINDOW_WIN32DATA (window)->xcursor != NULL)
-	{
-	  GDK_NOTE (MISC, g_print ("...DestroyCursor (%#x)\n",
-				   GDK_WINDOW_WIN32DATA (window)->xcursor));
-	  
-	  if (!DestroyCursor (GDK_WINDOW_WIN32DATA (window)->xcursor))
-	    WIN32_API_FAILED ("DestroyCursor");
-	  GDK_WINDOW_WIN32DATA (window)->xcursor = NULL;
-	}
-      if (xcursor != NULL)
+      prev_xcursor = GDK_WINDOW_WIN32DATA (window)->xcursor;
+      if (xcursor == NULL)
+        GDK_WINDOW_WIN32DATA (window)->xcursor = NULL;
+      else
 	{
 	  /* We must copy the cursor as it is OK to destroy the GdkCursor
 	   * while still in use for some window. See for instance
@@ -1538,6 +1548,15 @@ gdk_window_set_cursor (GdkWindow *window,
 	  if (ChildWindowFromPoint (GDK_DRAWABLE_XID (window), pt) == GDK_DRAWABLE_XID (window))
 	    SetCursor (GDK_WINDOW_WIN32DATA (window)->xcursor);
 	}
+
+      if (prev_xcursor != NULL)
+	{
+	  GDK_NOTE (MISC, g_print ("...DestroyCursor (%#x)\n",
+				   GDK_WINDOW_WIN32DATA (window)->xcursor));
+	  
+	  if (!DestroyCursor (prev_xcursor))
+	    WIN32_API_FAILED ("DestroyCursor");
+        }
     }
 }
 

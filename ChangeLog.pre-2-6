@@ -1,3 +1,80 @@
+2001-02-23  Tor Lillqvist  <tml@iki.fi>
+
+	From now on, changes to the Win32 production branch go into CVS
+	right away. This is the last batch of changes accumulated for some
+	time (since the 2000-12-26 snapshot).
+	
+	* README.win32: Update.
+
+	* gdk/gdk.def: Add gdk_ic_attr_{destroy,new}. 
+
+	* gdk/gdkdraw.c (gdk_drawable_unref): Remove silly leftover
+	debugging printout.
+
+	* gdk/win32/gdkfont-win32.c
+	* gtk/gtkfilesel.c
+	* gtk/gtkcalendat.c: Adapt to new API for
+	g_{filename,locale}_{from,to}_utf8.
+
+	* gdk/win32/gdkevents-win32.c (synthesize_crossing_events): New
+	implementaion that more closely mimics the events that an X server
+	would generate. Especially, properly generate GDK_NOTIFY_VIRTUAL and
+	GDK_NOTIFY_NONLINEAR_VIRTUAL crossing events. This makes buttons
+	with nested preview widgets, for instance, more responsive when
+	you move the mouse quickly into them.
+	(gdk_event_translate): Set send_event to the value of
+	InSendMessage (). This doesn't really mean the same as X11's
+	send_event flag, but is close enough, says jpe@archaeopteryx.com
+
+	* gdk/win32/gdkvisual-win32.c (gdk_visual_init): If the
+	environment variable GDK_WIN32_ENABLE_BROKEN_PSEUDOCOLOR_VISUAL is
+	set, do attempt to run on a palettized display.
+
+	* gtk/gtkmain.c (gtk_init_check): Use
+	g_win32_get_package_installation_subdirectory().
+
+	* gtk/gtkrc.c (get_gtk_sysconf_directory): Remove
+	(get_themes_directory): Use
+	g_win32_get_package_installation_subdirectory().
+	(gtk_rc_add_initial_default_files): Use
+	g_win32_get_package_installation_directory().
+
+	Optimisations by jpe@archaeopteryx.com:
+
+	* gdk/win32/gdkevents-win32.c: Implement better mouse
+	capturing. Do use SetCapture().
+	(find_window_for_pointer_event): New function.
+	(gdk_event_translate): Use it when handling mouse events.
+
+	* gdk/win32/gdkevents-win32.c (gdk_win32_erase_background): New
+	function, break out code from gdk_event_translate.
+
+	* gdk/win32/gdkdrawable-win32.c (struct gdk_draw_text_arg): Add a
+	total_len field.
+	(gdk_draw_text_handler): Don't call SelectObject() unless the font
+	would change. Don't call the slow GetTextExtentPoint32W() unless
+	necessary (when printing string in parts).
+	(gdk_win32_draw_text): Initialise total_len.
+	(gdk_win32_draw_drawable): Use new GC functions.
+	(gdk_win32_draw_segments): Use PatBlt() instead of LineTo() when
+	possible (solid single-pixel pen, R2_COPYPEN rop). It is claimed
+	to be much faster.
+
+	* gdk/win32/gdkfont-win32.c: Don't unnecessarily select and
+	unselect fonts in the global DC.
+	(gdk_text_width): Shortcut for strings of length one.
+
+	* gdk/win32/gdkgc-win32.c
+	* gdk/win32/gdkpixmap-win32.c: Cache pens and HDCs. Many new
+	functions.
+
+	* gdk/win32/gdkwindow-win32.c: Eliminate redraws when input-only
+	windows are shown and hidden. Don't call SetForegroundWindow() on
+	non-toplevel windows.
+
+	* gtk/gtklabel.c (gtk_label_finalize_lines): On Win32, draw
+	underlines at the font's descent - 1 under the baseline.
+
 2000-12-26  Tor Lillqvist  <tml@iki.fi>
 
 	Changes from the gtk+-src-20001226.zip snapshot:

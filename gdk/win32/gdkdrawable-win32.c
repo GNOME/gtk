@@ -473,6 +473,7 @@ typedef struct
 {
   gint x, y;
   HDC hdc;
+  int total_len;
 } gdk_draw_text_arg;
 
 static void
@@ -488,18 +489,34 @@ gdk_draw_text_handler (GdkWin32SingleFont *singlefont,
   if (!singlefont)
     return;
 
-  if ((oldfont = SelectObject (argp->hdc, singlefont->xfont)) == NULL)
+  oldfont = GetCurrentObject(argp->hdc, OBJ_FONT);
+  if (oldfont != singlefont->xfont) 
     {
-      WIN32_GDI_FAILED ("SelectObject");
-      return;
+      if (SelectObject (argp->hdc, singlefont->xfont) == NULL)
+        {
+          WIN32_GDI_FAILED ("SelectObject");
+          return;
+        }
     }
   
   if (!TextOutW (argp->hdc, argp->x, argp->y, wcstr, wclen))
     WIN32_GDI_FAILED ("TextOutW");
-  GetTextExtentPoint32W (argp->hdc, wcstr, wclen, &size);
-  argp->x += size.cx;
 
-  SelectObject (argp->hdc, oldfont);
+  /* Find width of string iff printing part of
+   * text. GetTextExtentPoint32W() is slow.
+   */
+  if (wclen < argp->total_len)
+     {
+       if (!GetTextExtentPoint32W (argp->hdc, wcstr, wclen, &size))
+         WIN32_GDI_FAILED  ("GetTextExtentPoint32W");
+       argp->x += size.cx;
+     }
+     
+  if (oldfont != singlefont->xfont) 
+    {
+      if (SelectObject (argp->hdc, oldfont) == NULL)
+	WIN32_GDI_FAILED ("SelectObject");
+    }
 }
 
 static void
@@ -529,6 +546,7 @@ gdk_win32_draw_text (GdkDrawable *drawable,
 
   arg.x = x;
   arg.y = y;
+
   arg.hdc = gdk_gc_predraw (drawable, gc_private,
 			    GDK_GC_FOREGROUND|GDK_GC_FONT);
 
@@ -542,8 +560,10 @@ gdk_win32_draw_text (GdkDrawable *drawable,
   if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
     g_warning ("gdk_draw_text: gdk_nmbstowchar_ts failed");
   else
-    gdk_wchar_text_handle (font, wcstr, wlen,
-			   gdk_draw_text_handler, &arg);
+    {
+      arg.total_len = wlen;
+      gdk_wchar_text_handle (font, wcstr, wlen, gdk_draw_text_handler, &arg);
+    }
 
   g_free (wcstr);
 
@@ -577,6 +597,7 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
 
   arg.x = x;
   arg.y = y;
+
   arg.hdc = gdk_gc_predraw (drawable, gc_private,
 			    GDK_GC_FOREGROUND|GDK_GC_FONT);
 
@@ -593,8 +614,8 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
   else
     wcstr = (wchar_t *) text;
 
-  gdk_wchar_text_handle (font, wcstr, text_length,
-			 gdk_draw_text_handler, &arg);
+  arg.total_len = text_length;
+  gdk_wchar_text_handle (font, wcstr, text_length, gdk_draw_text_handler, &arg);
 
   if (sizeof (wchar_t) != sizeof (GdkWChar))
     g_free (wcstr);
@@ -690,21 +711,14 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
    */
   if (src_private->window_type == GDK_DRAWABLE_PIXMAP)
     {
-      if ((srcdc = CreateCompatibleDC (hdc)) == NULL)
-	WIN32_GDI_FAILED ("CreateCompatibleDC");
-      
-      if ((hgdiobj = SelectObject (srcdc, GDK_DRAWABLE_XID (src))) == NULL)
-	WIN32_GDI_FAILED ("SelectObject");
-      
-      if (!BitBlt (hdc, xdest, ydest, width, height,
-		   srcdc, xsrc, ysrc, SRCCOPY))
-	WIN32_GDI_FAILED ("BitBlt");
-      
-      if ((SelectObject (srcdc, hgdiobj) == NULL))
-	WIN32_GDI_FAILED ("SelectObject");
-      
-      if (!DeleteDC (srcdc))
-	WIN32_GDI_FAILED ("DeleteDC");
+      srcdc = gdk_win32_obtain_offscreen_hdc (GDK_DRAWABLE_XID (src));
+      if (srcdc != NULL)
+        {
+          if (!BitBlt (hdc, xdest, ydest, width, height,
+                       srcdc, xsrc, ysrc, SRCCOPY))
+            WIN32_GDI_FAILED ("BitBlt");
+          gdk_win32_release_hdc (NULL, srcdc);
+        }
     }
   else
     {
@@ -824,17 +838,56 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
     }
   else
     {
-      for (i = 0; i < nsegs; i++)
+      const gboolean maybe_patblt =
+	gc_data->rop2 == R2_COPYPEN &&
+	gc_data->pen_width <= 1 &&
+	(gc_data->pen_style & PS_STYLE_MASK) == PS_SOLID;
+
+      for (i = 0; ok && i < nsegs; i++)
 	{
-	  if (!MoveToEx (hdc, segs[i].x1, segs[i].y1, NULL))
-	    WIN32_GDI_FAILED ("MoveToEx");
-	  if (!LineTo (hdc, segs[i].x2, segs[i].y2))
-	    WIN32_GDI_FAILED ("LineTo");
-	  
-	  /* Draw end pixel */
-	  if (gc_data->pen_width <= 1)
-	    if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
-	      WIN32_GDI_FAILED ("LineTo");
+	  /* PatBlt() is much faster than LineTo(), says
+           * jpe@archaeopteryx.com. Hmm. Use it if we have a solid
+           * colour pen, then we know that the brush is also solid and
+           * of the same colour.
+	   */
+	  if (maybe_patblt && segs[i].x1 == segs[i].x2)
+            {
+	      int y1, y2;
+
+	      if (segs[i].y1 <= segs[i].y2)
+		y1 = segs[i].y1, y2 = segs[i].y2;
+	      else
+		y1 = segs[i].y2, y2 = segs[i].y1;
+
+              if (!PatBlt (hdc, segs[i].x1, y1,
+			   1, y2 - y1 + 1, PATCOPY))
+                WIN32_GDI_FAILED ("PatBlt"), ok = FALSE;
+            }
+	  else if (maybe_patblt && segs[i].y1 == segs[i].y2)
+            {
+	      int x1, x2;
+
+	      if (segs[i].x1 <= segs[i].x2)
+		x1 = segs[i].x1, x2 = segs[i].x2;
+	      else
+		x1 = segs[i].x2, x2 = segs[i].x1;
+
+              if (!PatBlt (hdc, x1, segs[i].y1,
+			   x2 - x1 + 1, 1, PATCOPY))
+                WIN32_GDI_FAILED ("PatBlt"), ok = FALSE;
+            }
+          else
+            {
+	      if (!MoveToEx (hdc, segs[i].x1, segs[i].y1, NULL))
+		WIN32_GDI_FAILED ("MoveToEx"), ok = FALSE;
+	      if (!LineTo (hdc, segs[i].x2, segs[i].y2))
+		WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
+	      
+	      /* Draw end pixel */
+	      if (gc_data->pen_width <= 1)
+		if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
+		  WIN32_GDI_FAILED ("LineTo");
+	    }
 	}
     }
   gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);

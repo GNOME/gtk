@@ -683,7 +683,12 @@ gtk_label_finalize_lines (GtkLabel       *label,
 				       j-i, &lbearing,
 				       &rbearing, &width, NULL,
 				       &descent);
+#ifndef GDK_WINDOWING_WIN32
 		  y_max = MAX (descent + 2, y_max);
+#else
+		  descent = GTK_WIDGET (label)->style->font->descent;
+		  y_max = MAX (descent - 1, y_max);
+#endif
 		  uline = gtk_label_uline_alloc ();
 		  uline->x1 = offset + line->x + lbearing - 1;
 		  uline->x2 = offset + line->x + rbearing;

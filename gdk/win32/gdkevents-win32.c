@@ -37,6 +37,7 @@
 /* define USE_TRACKMOUSEEVENT */
 
 #include <stdio.h>
+#include <time.h>
 
 #include "gdk.h"
 #include "gdkwin32.h"
@@ -136,7 +137,7 @@ static GSourceFuncs event_funcs = {
   (GDestroyNotify)g_free
 };
 
-GPollFD event_poll_fd;
+static GPollFD event_poll_fd;
 
 static GdkWindow *curWnd = NULL;
 static HWND active = NULL;
@@ -547,11 +548,8 @@ gdk_pointer_grab (GdkWindow *	  window,
 	p_grab_owner_events = (owner_events != 0);
 	p_grab_automatic = FALSE;
 
-#if 0 /* Menus don't work if we use mouse capture. Pity, because many other
-       * things work better with mouse capture.
-       */
 	SetCapture (xwindow);
-#endif
+
 	return_val = GrabSuccess;
       }
       else
@@ -587,13 +585,68 @@ gdk_pointer_ungrab (guint32 time)
 {
   if (gdk_input_vtable.ungrab_pointer)
     gdk_input_vtable.ungrab_pointer (time);
-#if 0
   if (GetCapture () != NULL)
     ReleaseCapture ();
-#endif
   GDK_NOTE (EVENTS, g_print ("gdk_pointer_ungrab\n"));
 
   p_grab_window = NULL;
+}
+
+/*
+ *--------------------------------------------------------------
+ * find_window_for_pointer_event
+ *
+ *   Find the window a pointer event (mouse up, down, move) should
+ *   be reported to.  If the return value != reported_window then
+ *   the ref count of reported_window will be decremented and the
+ *   ref count of the return value will be incremented.
+ *
+ * Arguments:
+ *
+ *  "reported_window" is the gdk window the xevent was reported relative to
+ *  "xevent" is the win32 message
+ *
+ * Results:
+ *
+ * Side effects:
+ *
+ *--------------------------------------------------------------
+ */
+
+static GdkWindow* 
+find_window_for_pointer_event (GdkWindow*  reported_window,
+                               MSG*        xevent)
+{
+  HWND hwnd;
+  POINTS points;
+  POINT pt;
+  GdkWindow* other_window;
+
+  if (p_grab_window == NULL || !p_grab_owner_events)
+    return reported_window;
+
+  points = MAKEPOINTS(xevent->lParam);
+  pt.x = points.x;
+  pt.y = points.y;
+  ClientToScreen (xevent->hwnd, &pt);
+
+  GDK_NOTE (EVENTS, g_print ("Finding window for grabbed pointer event at (%d, %d)\n",
+                             pt.x, pt.y));
+
+  hwnd = WindowFromPoint(pt);
+  if (hwnd == NULL)
+    return reported_window;
+  other_window = gdk_window_lookup(hwnd);
+  if (other_window == NULL)
+    return reported_window;
+
+  GDK_NOTE (EVENTS, g_print ("Found window %x for point (%d, %d)\n", hwnd,
+                             pt.x, pt.y));
+
+  gdk_window_unref(reported_window);
+  gdk_window_ref(other_window);
+
+  return other_window;
 }
 
 /*
@@ -2723,100 +2776,200 @@ print_event (GdkEvent *event)
   g_print ("\n");
 }
 
+static gboolean
+gdk_window_is_child (GdkWindow *parent,
+		     GdkWindow *window)
+{
+  if (parent == NULL || window == NULL)
+    return FALSE;
+
+  return (gdk_window_get_parent (window) == parent ||
+	  gdk_window_is_child (parent, gdk_window_get_parent (window)));
+}
+
+static void
+synthesize_enter_or_leave_event (GdkWindow    *window,
+				 MSG          *xevent,
+				 GdkEventType  type,
+				 GdkNotifyType detail,
+				 gint          x,
+				 gint          y)
+{
+  GdkEvent *event;
+  
+  event = gdk_event_new ();
+  event->crossing.type = type;
+  event->crossing.window = window;
+  event->crossing.send_event = FALSE;
+  gdk_window_ref (event->crossing.window);
+  event->crossing.subwindow = NULL;
+  event->crossing.time = xevent->time;
+  event->crossing.x = x;
+  event->crossing.y = y;
+  event->crossing.x_root = xevent->pt.x;
+  event->crossing.y_root = xevent->pt.y;
+  event->crossing.mode = GDK_CROSSING_NORMAL;
+  event->crossing.detail = detail;
+  event->crossing.focus = TRUE; /* ??? */
+  event->crossing.state = 0; /* ??? */
+  
+  gdk_event_queue_append (event);
+  
+  if (type == GDK_ENTER_NOTIFY
+      && ((GdkWindowPrivate *) window)->extension_events != 0
+      && gdk_input_vtable.enter_event)
+    gdk_input_vtable.enter_event (&event->crossing, window);
+
+  GDK_NOTE (EVENTS, print_event (event));
+}
+
+static void
+synthesize_leave_event (GdkWindow    *window,
+			MSG          *xevent,
+			GdkNotifyType detail)
+{
+  POINT pt;
+
+  if (!GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_LEAVE_NOTIFY_MASK)
+    return;
+
+  /* Leave events are at (curX,curY) in curWnd */
+
+  if (curWnd != window)
+    {
+      pt.x = curX;
+      pt.y = curY;
+      ClientToScreen (GDK_DRAWABLE_XID (curWnd), &pt);
+      ScreenToClient (GDK_DRAWABLE_XID (window), &pt);
+      synthesize_enter_or_leave_event (window, xevent, GDK_LEAVE_NOTIFY, detail, pt.x, pt.y);
+    }
+  else
+    synthesize_enter_or_leave_event (window, xevent, GDK_LEAVE_NOTIFY, detail, curX, curY);
+
+}
+  
+static void
+synthesize_enter_event (GdkWindow    *window,
+			MSG          *xevent,
+			GdkNotifyType detail)
+{
+  POINT pt;
+
+  if (!GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_ENTER_NOTIFY_MASK)
+    return;
+
+  /* Enter events are at LOWORD (xevent->lParam), HIWORD
+   * (xevent->lParam) in xevent->hwnd */
+
+  pt.x = LOWORD (xevent->lParam);
+  pt.y = HIWORD (xevent->lParam);
+  if (xevent->hwnd != GDK_DRAWABLE_XID (window))
+    {
+      ClientToScreen (xevent->hwnd, &pt);
+      ScreenToClient (GDK_DRAWABLE_XID (window), &pt);
+    }
+  synthesize_enter_or_leave_event (window, xevent, GDK_ENTER_NOTIFY, detail, pt.x, pt.y);
+}
+  
+static void
+synthesize_enter_events (GdkWindow    *from,
+			 GdkWindow    *to,
+			 MSG          *xevent,
+			 GdkNotifyType detail)
+{
+  GdkWindow *prev = gdk_window_get_parent (to);
+  
+  if (prev != from)
+    synthesize_enter_events (from, prev, xevent, detail);
+  synthesize_enter_event (to, xevent, detail);
+}
+			 
+static void
+synthesize_leave_events (GdkWindow    *from,
+			 GdkWindow    *to,
+			 MSG          *xevent,
+			 GdkNotifyType detail)
+{
+  GdkWindow *next = gdk_window_get_parent (from);
+  
+  synthesize_leave_event (from, xevent, detail);
+  if (next != to)
+    synthesize_leave_events (next, to, xevent, detail);
+}
+			 
 static void
 synthesize_crossing_events (GdkWindow *window,
 			    MSG       *xevent)
 {
-  GdkEvent *event;
-  
-  /* If we are not using TrackMouseEvent, generate a leave notify
-   * event if necessary
-   */
-  if (p_TrackMouseEvent == NULL
-      && curWnd
-      && (GDK_WINDOW_WIN32DATA (curWnd)->event_mask & GDK_LEAVE_NOTIFY_MASK))
+  GdkWindow *intermediate, *tem, *common_ancestor;
+
+  if (gdk_window_is_child (curWnd, window))
     {
-      GDK_NOTE (EVENTS, g_print ("synthesizing LEAVE_NOTIFY event\n"));
-
-      event = gdk_event_new ();
-      event->crossing.type = GDK_LEAVE_NOTIFY;
-      event->crossing.window = curWnd;
-      gdk_window_ref (event->crossing.window);
-      event->crossing.subwindow = NULL;
-      event->crossing.time = xevent->time;
-      event->crossing.x = curX;
-      event->crossing.y = curY;
-      event->crossing.x_root = curXroot;
-      event->crossing.y_root = curYroot;
-      event->crossing.mode = GDK_CROSSING_NORMAL;
-      if (IsChild (GDK_DRAWABLE_XID (curWnd), GDK_DRAWABLE_XID (window)))
-	event->crossing.detail = GDK_NOTIFY_INFERIOR;
-      else if (IsChild (GDK_DRAWABLE_XID (window), GDK_DRAWABLE_XID (curWnd)))
-	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-      else
-	event->crossing.detail = GDK_NOTIFY_NONLINEAR;
-
-      event->crossing.focus = TRUE; /* ??? */
-      event->crossing.state = 0; /* ??? */
-
-      gdk_event_queue_append (event);
-      GDK_NOTE (EVENTS, print_event (event));
+      /* Pointer has moved to an inferior window. */
+      synthesize_leave_event (curWnd, xevent, GDK_NOTIFY_INFERIOR);
+      
+      /* If there are intermediate windows, generate ENTER_NOTIFY
+       * events for them
+       */
+      intermediate = gdk_window_get_parent (window);
+      if (intermediate != curWnd)
+	{
+	  synthesize_enter_events (curWnd, intermediate, xevent, GDK_NOTIFY_VIRTUAL);
+	}
+      
+      synthesize_enter_event (window, xevent, GDK_NOTIFY_ANCESTOR);
+    }
+  else if (gdk_window_is_child (window, curWnd))
+    {
+      /* Pointer has moved to an ancestor window. */
+      synthesize_leave_event (curWnd, xevent, GDK_NOTIFY_ANCESTOR);
+      
+      /* If there are intermediate windows, generate LEAVE_NOTIFY
+       * events for them
+       */
+      intermediate = gdk_window_get_parent (curWnd);
+      if (intermediate != window)
+	{
+	  synthesize_leave_events (intermediate, window, xevent, GDK_NOTIFY_VIRTUAL);
+	}
+    }
+  else if (curWnd)
+    {
+      /* Find least common ancestor of curWnd and window */
+      tem = curWnd;
+      do {
+	common_ancestor = gdk_window_get_parent (tem);
+	tem = common_ancestor;
+      } while (common_ancestor &&
+	       !gdk_window_is_child (common_ancestor, window));
+      if (common_ancestor)
+	{
+	  synthesize_leave_event (curWnd, xevent, GDK_NOTIFY_NONLINEAR);
+	  intermediate = gdk_window_get_parent (curWnd);
+	  if (intermediate != common_ancestor)
+	    {
+	      synthesize_leave_events (intermediate, common_ancestor,
+				       xevent, GDK_NOTIFY_NONLINEAR_VIRTUAL);
+	    }
+	  intermediate = gdk_window_get_parent (window);
+	  if (intermediate != common_ancestor)
+	    {
+	      synthesize_enter_events (common_ancestor, intermediate,
+				       xevent, GDK_NOTIFY_NONLINEAR_VIRTUAL);
+	    }
+	  synthesize_enter_event (window, xevent, GDK_NOTIFY_NONLINEAR);
+	}
+    }
+  else
+    {
+      /* Dunno where we are coming from */
+      synthesize_enter_event (window, xevent, GDK_NOTIFY_UNKNOWN);
     }
 
-  if (GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_ENTER_NOTIFY_MASK)
-    {
-      GDK_NOTE (EVENTS, g_print ("synthesizing ENTER_NOTIFY event\n"));
-      
-      event = gdk_event_new ();
-      event->crossing.type = GDK_ENTER_NOTIFY;
-      event->crossing.window = window;
-      gdk_window_ref (event->crossing.window);
-      event->crossing.subwindow = NULL;
-      event->crossing.time = xevent->time;
-      event->crossing.x = LOWORD (xevent->lParam);
-      event->crossing.y = HIWORD (xevent->lParam);
-      event->crossing.x_root = (gfloat) xevent->pt.x;
-      event->crossing.y_root = (gfloat) xevent->pt.y;
-      event->crossing.mode = GDK_CROSSING_NORMAL;
-      if (curWnd
-	  && IsChild (GDK_DRAWABLE_XID (curWnd), GDK_DRAWABLE_XID (window)))
-	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-      else if (curWnd
-	       && IsChild (GDK_DRAWABLE_XID (window), GDK_DRAWABLE_XID (curWnd)))
-	event->crossing.detail = GDK_NOTIFY_INFERIOR;
-      else
-	event->crossing.detail = GDK_NOTIFY_NONLINEAR;
-      
-      event->crossing.focus = TRUE; /* ??? */
-      event->crossing.state = 0; /* ??? */
-      
-      gdk_event_queue_append (event);
-
-      GDK_NOTE (EVENTS, print_event (event));
-
-      if (((GdkWindowPrivate *) window)->extension_events != 0
-	  && gdk_input_vtable.enter_event)
-	gdk_input_vtable.enter_event (&event->crossing, window);
-
-    }
-  
   if (curWnd)
     gdk_window_unref (curWnd);
   curWnd = window;
   gdk_window_ref (curWnd);
-#ifdef USE_TRACKMOUSEEVENT
-  if (p_TrackMouseEvent != NULL)
-    {
-      TRACKMOUSEEVENT tme;
-
-      tme.cbSize = sizeof (TRACKMOUSEEVENT);
-      tme.dwFlags = TME_LEAVE;
-      tme.hwndTrack = GDK_DRAWABLE_XID (curWnd);
-      tme.dwHoverTime = HOVER_DEFAULT;
-      
-      (*p_TrackMouseEvent) (&tme);
-    }
-#endif
 }
 
 static void
@@ -2989,6 +3142,138 @@ decode_key_lparam (LPARAM lParam)
   return buf;
 }
 
+static void
+gdk_win32_erase_background (GdkWindow *window,
+                            HDC        hdc)
+{
+  GdkColormapPrivateWin32 *colormap_private;
+  GdkEventMask mask;
+  GdkPixmap *pixmap;
+  GdkDrawablePrivate *pixmap_private;
+  HDC bgdc = NULL;
+  HBRUSH hbr = NULL;
+  COLORREF bg;
+  RECT rect;
+  int i, j;
+  HBITMAP oldbitmap = NULL;
+
+  if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_TRANSPARENT)
+    return;
+
+  colormap_private = (GdkColormapPrivateWin32 *) ((GdkWindowPrivate *) window)->drawable.colormap;
+  if (colormap_private
+      && colormap_private->xcolormap->rc_palette)
+    {
+      int k;
+
+      if (SelectPalette (hdc,  colormap_private->xcolormap->palette,
+			 FALSE) == NULL)
+        WIN32_GDI_FAILED ("SelectPalette");
+      if ((k = RealizePalette (hdc)) == GDI_ERROR)
+        WIN32_GDI_FAILED ("RealizePalette");
+#if 0
+      g_print ("WM_ERASEBKGND: selected %#x, realized %d colors\n",
+        colormap_private->xcolormap->palette, k);
+#endif
+    }
+
+  if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PARENT_RELATIVE)
+    {
+      /* If this window should have the same background as the
+       * parent, fetch the parent. (And if the same goes for
+       * the parent, fetch the grandparent, etc.) We don't need to
+       * ref the ancestors because they will be valid as long as
+       * the leaf is valid.
+    `  */
+      while (window
+             && GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PARENT_RELATIVE)
+        window = ((GdkWindowPrivate *) window)->parent;
+    }
+
+  if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PIXEL)
+    {
+      bg = gdk_colormap_color (colormap_private,
+                               GDK_WINDOW_WIN32DATA (window)->bg_pixel);
+      
+      GetClipBox (hdc, &rect);
+      GDK_NOTE (EVENTS, g_print ("...%dx%d@+%d+%d BG_PIXEL %.06x\n",
+			         rect.right - rect.left,
+			         rect.bottom - rect.top,
+                                 rect.left, rect.top,
+                                 bg));
+      hbr = CreateSolidBrush (bg);
+#if 0
+      g_print ("...CreateSolidBrush (%.08x) = %.08x\n", bg, hbr);
+#endif
+      if (!FillRect (hdc, &rect, hbr))
+        WIN32_GDI_FAILED ("FillRect");
+      DeleteObject (hbr);
+    }
+  else if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PIXMAP)
+    {
+      pixmap = GDK_WINDOW_WIN32DATA (window)->bg_pixmap;
+      pixmap_private = (GdkDrawablePrivate*) pixmap;
+      GetClipBox (hdc, &rect);
+      
+      if (pixmap_private->width <= 8
+          && pixmap_private->height <= 8)
+        {
+          GDK_NOTE (EVENTS, g_print ("...small pixmap, using brush\n"));
+          hbr = CreatePatternBrush (GDK_DRAWABLE_XID (pixmap));
+          if (!FillRect (hdc, &rect, hbr))
+            WIN32_GDI_FAILED ("FillRect");
+          DeleteObject (hbr);
+        }
+      else
+        {
+          GDK_NOTE (EVENTS, g_print ("...blitting pixmap %#x (%dx%d) "
+                                     "all over the place,\n"
+                                     "...clip box = %dx%d@+%d+%d\n",
+                                     GDK_DRAWABLE_XID (pixmap),
+                                     pixmap_private->width, pixmap_private->height,
+                                     rect.right - rect.left, rect.bottom - rect.top,
+                                     rect.left, rect.top));
+
+          bgdc = gdk_win32_obtain_offscreen_hdc (GDK_DRAWABLE_XID (pixmap));
+          i = 0;
+          while (i < rect.right)
+            {
+              j = 0;
+              while (j < rect.bottom)
+                {
+                  if (i + pixmap_private->width >= rect.left
+                      && j + pixmap_private->height >= rect.top)
+                    {
+                      if (!BitBlt (hdc, i, j,
+				   pixmap_private->width, pixmap_private->height,
+                                   bgdc, 0, 0, SRCCOPY))
+                        { 
+                          WIN32_GDI_FAILED ("BitBlt");
+                          goto cleanup;
+                        } 
+                    }
+                  j += pixmap_private->height;
+                }
+              i += pixmap_private->width;
+            }
+        }
+    }
+  else
+    {
+      GDK_NOTE (EVENTS, g_print ("...BLACK_BRUSH (?)\n"));
+      hbr = GetStockObject (BLACK_BRUSH);
+      GetClipBox (hdc, &rect);
+      if (!FillRect (hdc, &rect, hbr))
+        WIN32_GDI_FAILED ("FillRect");
+    }
+
+cleanup:
+  if (oldbitmap != NULL && bgdc != NULL)
+    SelectObject (bgdc, oldbitmap);
+  if (bgdc != NULL)
+    gdk_win32_release_hdc (NULL, bgdc);
+}
+
 static gboolean
 gdk_event_translate (GdkEvent *event,
 		     MSG      *xevent,
@@ -3000,8 +3285,6 @@ gdk_event_translate (GdkEvent *event,
   DWORD dwStyle;
   PAINTSTRUCT paintstruct;
   HDC hdc;
-  HDC bgdc;
-  HGDIOBJ oldbitmap;
   HBRUSH hbr;
   COLORREF bg;
   RECT rect;
@@ -3010,7 +3293,6 @@ gdk_event_translate (GdkEvent *event,
   HWND hwnd;
   HCURSOR xcursor;
   GdkWindow *window, *orig_window, *newwindow;
-  GdkColormapPrivateWin32 *colormap_private;
   GdkEventMask mask;
   GdkPixmap *pixmap;
   GdkDrawablePrivate *pixmap_private;
@@ -3028,6 +3310,11 @@ gdk_event_translate (GdkEvent *event,
 
   window = gdk_window_lookup (xevent->hwnd);
   orig_window = window;
+
+  /* InSendMessage() does not really mean the same as X11's send_event flag,
+   * but it is close enough, says jpe@archaeopteryx.com.
+   */
+  event->any.send_event = InSendMessage (); 
   
   if (window != NULL)
     gdk_window_ref (window);
@@ -3586,6 +3873,7 @@ gdk_event_translate (GdkEvent *event,
 	      GdkEvent *event2 = gdk_event_new ();
 	      build_keypress_event (GDK_WINDOW_WIN32DATA (window), event2, xevent);
 	      event2->key.window = window;
+	      event2->key.send_event = FALSE;
 	      gdk_window_ref (window);
 	      gdk_event_queue_append (event2);
 	      GDK_NOTE (EVENTS, print_event (event2));
@@ -3626,6 +3914,8 @@ gdk_event_translate (GdkEvent *event,
 			 xevent->hwnd,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
+      window = find_window_for_pointer_event(window, xevent);
+
       if (((GdkWindowPrivate *) window)->extension_events != 0
 	  && gdk_input_ignore_core)
 	{
@@ -3664,8 +3954,8 @@ gdk_event_translate (GdkEvent *event,
 	translate_mouse_coords (orig_window, window, xevent);
       event->button.x = curX = (gint16) LOWORD (xevent->lParam);
       event->button.y = curY = (gint16) HIWORD (xevent->lParam);
-      event->button.x_root = xevent->pt.x;
-      event->button.y_root = xevent->pt.y;
+      event->button.x_root = curXroot = xevent->pt.x;
+      event->button.y_root = curYroot = xevent->pt.y;
       event->button.pressure = 0.5;
       event->button.xtilt = 0;
       event->button.ytilt = 0;
@@ -3695,6 +3985,8 @@ gdk_event_translate (GdkEvent *event,
 			 xevent->hwnd,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
+      window = find_window_for_pointer_event(window, xevent);
+
       if (((GdkWindowPrivate *) window)->extension_events != 0
 	  && gdk_input_ignore_core)
 	{
@@ -3715,6 +4007,7 @@ gdk_event_translate (GdkEvent *event,
       event->button.time = xevent->time;
       if (window != orig_window)
 	translate_mouse_coords (orig_window, window, xevent);
+      /* Hmm, I wonder why I don't set cyrX/Y and curX/Yroot here, too? */
       event->button.x = (gint16) LOWORD (xevent->lParam);
       event->button.y = (gint16) HIWORD (xevent->lParam);
       event->button.x_root = xevent->pt.x;
@@ -3741,6 +4034,8 @@ gdk_event_translate (GdkEvent *event,
 		g_print ("WM_MOUSEMOVE: %#x  %#x (%d,%d)\n",
 			 xevent->hwnd, xevent->wParam,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
+
+      window = find_window_for_pointer_event(window, xevent);
 
       /* If we haven't moved, don't create any event.
        * Windows sends WM_MOUSEMOVE messages after button presses
@@ -3779,10 +4074,8 @@ gdk_event_translate (GdkEvent *event,
 	translate_mouse_coords (orig_window, window, xevent);
       event->motion.x = curX = (gint16) LOWORD (xevent->lParam);
       event->motion.y = curY = (gint16) HIWORD (xevent->lParam);
-      event->motion.x_root = xevent->pt.x;
-      event->motion.y_root = xevent->pt.y;
-      curXroot = event->motion.x_root;
-      curYroot = event->motion.y_root;
+      event->motion.x_root = curXroot = xevent->pt.x;
+      event->motion.y_root = curYroot = xevent->pt.y;
       event->motion.pressure = 0.5;
       event->motion.xtilt = 0;
       event->motion.ytilt = 0;
@@ -3954,135 +4247,9 @@ gdk_event_translate (GdkEvent *event,
       if (GDK_DRAWABLE_DESTROYED (window))
 	break;
 
-      colormap_private = (GdkColormapPrivateWin32 *) ((GdkWindowPrivate *) window)->drawable.colormap;
-      hdc = (HDC) xevent->wParam;
-      if (colormap_private
-	  && colormap_private->xcolormap->rc_palette)
-	{
-	  int k;
-
-	  if (SelectPalette (hdc,  colormap_private->xcolormap->palette,
-			     FALSE) == NULL)
-	    WIN32_GDI_FAILED ("SelectPalette");
-	  if ((k = RealizePalette (hdc)) == GDI_ERROR)
-	    WIN32_GDI_FAILED ("RealizePalette");
-#if 0
-	  g_print ("WM_ERASEBKGND: selected %#x, realized %d colors\n",
-		   colormap_private->xcolormap->palette, k);
-#endif
-	}
+      gdk_win32_erase_background(window, (HDC) xevent->wParam);
       *ret_val_flagp = TRUE;
-      *ret_valp = 1;
-
-      if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_TRANSPARENT)
-	break;
-
-      if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PARENT_RELATIVE)
-	{
-	  /* If this window should have the same background as the
-	   * parent, fetch the parent. (And if the same goes for
-	   * the parent, fetch the grandparent, etc.)
-	   */
-	  while (window
-		 && GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PARENT_RELATIVE)
-	    {
-	      gdk_window_unref (window);
-	      window = ((GdkWindowPrivate *) window)->parent;
-	      gdk_window_ref (window);
-	    }
-	}
-
-      if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PIXEL)
-	{
-	  bg = gdk_colormap_color (colormap_private,
-				   GDK_WINDOW_WIN32DATA (window)->bg_pixel);
-
-	  GetClipBox (hdc, &rect);
-	  GDK_NOTE (EVENTS,
-		    g_print ("...%dx%d@+%d+%d BG_PIXEL %.06x\n",
-			     rect.right - rect.left,
-			     rect.bottom - rect.top,
-			     rect.left, rect.top,
-			     bg));
-	  hbr = CreateSolidBrush (bg);
-#if 0
-	  g_print ("...CreateSolidBrush (%.08x) = %.08x\n", bg, hbr);
-#endif
-	  if (!FillRect (hdc, &rect, hbr))
-	    WIN32_GDI_FAILED ("FillRect");
-	  DeleteObject (hbr);
-	}
-      else if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PIXMAP)
-	{
-	  pixmap = GDK_WINDOW_WIN32DATA (window)->bg_pixmap;
-	  pixmap_private = (GdkDrawablePrivate*) pixmap;
-	  GetClipBox (hdc, &rect);
-
-	  if (pixmap_private->width <= 8
-	      && pixmap_private->height <= 8)
-	    {
-	      GDK_NOTE (EVENTS, g_print ("...small pixmap, using brush\n"));
-	      hbr = CreatePatternBrush (GDK_DRAWABLE_XID (pixmap));
-	      if (!FillRect (hdc, &rect, hbr))
-		WIN32_GDI_FAILED ("FillRect");
-	      DeleteObject (hbr);
-	    }
-	  else
-	    {
-	      GDK_NOTE (EVENTS,
-			g_print ("...blitting pixmap %#x (%dx%d) "
-				 "all over the place,\n"
-				 "...clip box = %dx%d@+%d+%d\n",
-				 GDK_DRAWABLE_XID (pixmap),
-				 pixmap_private->width, pixmap_private->height,
-				 rect.right - rect.left, rect.bottom - rect.top,
-				 rect.left, rect.top));
-
-	      if (!(bgdc = CreateCompatibleDC (hdc)))
-		{
-		  WIN32_GDI_FAILED ("CreateCompatibleDC");
-		  break;
-		}
-	      if (!(oldbitmap = SelectObject (bgdc, GDK_DRAWABLE_XID (pixmap))))
-		{
-		  WIN32_GDI_FAILED ("SelectObject");
-		  DeleteDC (bgdc);
-		  break;
-		}
-	      i = 0;
-	      while (i < rect.right)
-		{
-		  j = 0;
-		  while (j < rect.bottom)
-		    {
-		      if (i + pixmap_private->width >= rect.left
-			  && j + pixmap_private->height >= rect.top)
-			{
-			  if (!BitBlt (hdc, i, j,
-				       pixmap_private->width, pixmap_private->height,
-				       bgdc, 0, 0, SRCCOPY))
-			    {
-			      WIN32_GDI_FAILED ("BitBlt");
-			      goto loopexit;
-			    }
-			}
-		      j += pixmap_private->height;
-		    }
-		  i += pixmap_private->width;
-		}
-	    loopexit:
-	      SelectObject (bgdc, oldbitmap);
-	      DeleteDC (bgdc);
-	    }
-	}
-      else
-	{
-	  GDK_NOTE (EVENTS, g_print ("...BLACK_BRUSH (?)\n"));
-	  hbr = GetStockObject (BLACK_BRUSH);
-	  GetClipBox (hdc, &rect);
-	  if (!FillRect (hdc, &rect, hbr))
-	    WIN32_GDI_FAILED ("FillRect");
-	}
+      *ret_valp = TRUE;
       break;
 
     case WM_PAINT:
@@ -4513,6 +4680,9 @@ gdk_event_dispatch (GSource     *source,
       
       gdk_event_free (event);
     }
+
+  /* Release any allocated DC's */
+  gdk_win32_clear_hdc_cache ();
   
   GDK_THREADS_LEAVE ();
 

@@ -52,7 +52,6 @@
 #endif
 
 #ifdef G_OS_WIN32
-#include <windows.h>		/* For GetWindowsDirectory */
 #include <io.h>
 #endif
 
@@ -248,45 +247,14 @@ static GtkImageLoader image_loader = NULL;
 
 #ifdef G_OS_WIN32
 
-gchar *
-get_gtk_sysconf_directory (void)
-{
-  static gboolean been_here = FALSE;
-  static gchar gtk_sysconf_dir[200];
-  gchar win_dir[100];
-  HKEY reg_key = NULL;
-  DWORD type;
-  DWORD nbytes = sizeof (gtk_sysconf_dir);
-
-  if (been_here)
-    return gtk_sysconf_dir;
-
-  been_here = TRUE;
-
-  if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, "Software\\GNU\\GTk+", 0,
-		    KEY_QUERY_VALUE, &reg_key) != ERROR_SUCCESS
-      || RegQueryValueEx (reg_key, "InstallationDirectory", 0,
-			  &type, gtk_sysconf_dir, &nbytes) != ERROR_SUCCESS
-      || type != REG_SZ)
-    {
-      /* Uh oh. Use the old hard-coded %WinDir%\GTk+ value */
-      GetWindowsDirectory (win_dir, sizeof (win_dir));
-      sprintf (gtk_sysconf_dir, "%s\\gtk+", win_dir);
-    }
-
-  if (reg_key != NULL)
-    RegCloseKey (reg_key);
-
-  return gtk_sysconf_dir;
-}
-
 static gchar *
 get_themes_directory (void)
 {
-  static gchar themes_dir[200];
-
-  sprintf (themes_dir, "%s\\themes", get_gtk_sysconf_directory ());
-  return themes_dir;
+  /* This is pretty hypothetical, themes aren't supported any longer
+   * in this "production" version of GTK+ 1.3 for Win32.
+   */
+  return g_win32_get_package_installation_subdirectory ("gtk+", "gtk-1.3.dll",
+							"themes");
 }
 
 #endif
@@ -303,7 +271,7 @@ gtk_rc_get_theme_dir(void)
   else
     path = g_strdup_printf("%s%s", GTK_DATA_PREFIX, "/share/themes");
 #else
-  path = g_strdup (get_themes_directory ());
+  path = get_themes_directory ();
 #endif
 
   return path;
@@ -418,7 +386,7 @@ gtk_rc_add_initial_default_files (void)
 #ifndef G_OS_WIN32
       str = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk" G_DIR_SEPARATOR_S "gtkrc");
 #else
-      str = g_strdup_printf ("%s\\gtkrc", get_gtk_sysconf_directory ());
+      str = g_strdup_printf ("%s\\gtkrc", g_win32_get_package_installation_directory ("gtk+", "gtk-1.3.dll"));
 #endif
       gtk_rc_add_default_file (str);
       g_free (str);

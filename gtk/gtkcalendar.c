@@ -438,7 +438,7 @@ gtk_calendar_init (GtkCalendar *calendar)
       {
 	tmp_time= (i+3)*86400;
 	strftime ( buffer, sizeof (buffer), "%a", gmtime (&tmp_time));
-	default_abbreviated_dayname[i] = g_locale_to_utf8 (buffer, NULL);
+	default_abbreviated_dayname[i] = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
       }
   
   if (!default_monthname[0])
@@ -446,7 +446,7 @@ gtk_calendar_init (GtkCalendar *calendar)
       {
 	tmp_time=i*2764800;
 	strftime ( buffer, sizeof (buffer), "%B", gmtime (&tmp_time));
-	default_monthname[i] = g_locale_to_utf8 (buffer, NULL);
+	default_monthname[i] = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
       }
   
   /* Set defaults */

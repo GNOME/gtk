@@ -125,7 +125,6 @@ gdk_drawable_unref (GdkDrawable *drawable)
   private->ref_count -= 1;
   if (private->ref_count == 0)
     {
-      GDK_NOTE (MISC, g_print ("calling class destroy method\n"));
       private->klass->destroy (drawable);
       g_dataset_destroy (drawable);
       g_free (drawable);
