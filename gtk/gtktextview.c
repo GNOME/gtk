@@ -2547,7 +2547,7 @@ gtk_text_view_set_property (GObject         *object,
       break;
 
     case PROP_TABS:
-      gtk_text_view_set_tabs (text_view, g_value_get_object (value));
+      gtk_text_view_set_tabs (text_view, g_value_get_boxed (value));
       break;
 
     case PROP_CURSOR_VISIBLE:
@@ -2609,7 +2609,7 @@ gtk_text_view_get_property (GObject         *object,
       break;
 
     case PROP_TABS:
-      g_value_set_object (value, gtk_text_view_get_tabs (text_view));
+      g_value_set_boxed (value, text_view->tabs);
       break;
 
     case PROP_CURSOR_VISIBLE:

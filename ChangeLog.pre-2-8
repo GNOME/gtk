@@ -1,3 +1,9 @@
+Tue Jan 29 19:32:47 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_get/set_property): 
+	Fix wrong usage of g_value_set/get_object for PROP_TABS
+	and memory leak in getter for PROP_TABS. (Jeff Franks)
+
 Tue Jan 29 19:04:41 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c (gtk_style_render_icon): Document that
