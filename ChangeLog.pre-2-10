@@ -1,3 +1,9 @@
+2004-10-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_finalize): 
+	Drop the reference to the pixbuf, regardless whether it is
+	a stock pixbuf.  (#156863, Philip Langdale)
+
 2004-10-29  Hans Breuer  <hans@breuer.org>
 
 	* gdk/makefile.msc gtk/makefile.msc.in : updated

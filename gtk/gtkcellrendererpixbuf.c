@@ -194,7 +194,7 @@ gtk_cell_renderer_pixbuf_finalize (GObject *object)
 
   priv = GTK_CELL_RENDERER_PIXBUF_GET_PRIVATE (object);
 
-  if (cellpixbuf->pixbuf && priv->stock_id)
+  if (cellpixbuf->pixbuf)
     g_object_unref (cellpixbuf->pixbuf);
 
   if (priv->stock_id)
