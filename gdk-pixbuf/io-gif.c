@@ -137,9 +137,10 @@ struct _GifContext
 	gint lwz_oldcode;
 	gint lwz_clear_code;
 	gint lwz_end_code;
-	gint lwz_table[2][(1 << MAX_LWZ_BITS)];
-	gint lwz_stack[(1 << (MAX_LWZ_BITS)) * 2];
 	gint *lwz_sp;
+
+	gint lwz_table[2][(1 << MAX_LWZ_BITS)];
+	gint lwz_stack[(1 << (MAX_LWZ_BITS)) * 2 + 1];
 
 	/* painting context */
 	gint draw_xpos;
@@ -150,9 +151,11 @@ struct _GifContext
 static int GetDataBlock (GifContext *, unsigned char *);
 static int GetCode (GifContext *, int);
 
+#define IO_GIFDEBUG
+
+static int count = 0;
 /* Returns TRUE if Read is OK,
  * FALSE if more memory is needed. */
-static int count = 0;
 static int
 ReadOK (GifContext *context, guchar *buffer, size_t len)
 {
@@ -748,6 +751,7 @@ gif_prepare_lzw (GifContext *context)
 	context->lwz_fresh = TRUE;
 	context->code_curbit = 0;
 	context->code_lastbit = 0;
+	context->code_last_byte = 0;
 	context->code_done = FALSE;
 
 	for (i = 0; i < context->lwz_clear_code; ++i) {
