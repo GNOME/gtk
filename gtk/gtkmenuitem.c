@@ -202,6 +202,15 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                     _gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_INT);
+
+  gtk_widget_class_install_style_property_parser (widget_class,
+						  g_param_spec_enum ("selected_shadow_type",
+								     "Selected Shadow Type",
+								     "Shadow type when item is selected",
+								     GTK_TYPE_SHADOW_TYPE,
+								     GTK_SHADOW_OUT,
+								     G_PARAM_READABLE),
+						  gtk_rc_property_parse_enum);
 }
 
 static void
@@ -587,7 +596,7 @@ gtk_menu_item_paint (GtkWidget    *widget,
 {
   GtkMenuItem *menu_item;
   GtkStateType state_type;
-  GtkShadowType shadow_type;
+  GtkShadowType shadow_type, selected_shadow_type;
   gint width, height;
   gint x, y;
   gint border_width = GTK_CONTAINER (widget)->border_width;
@@ -605,13 +614,18 @@ gtk_menu_item_paint (GtkWidget    *widget,
       
       if ((state_type == GTK_STATE_PRELIGHT) &&
 	  (GTK_BIN (menu_item)->child))
-	gtk_paint_box (widget->style,
-		       widget->window,
-		       GTK_STATE_PRELIGHT,
-		       GTK_SHADOW_OUT,
-		       area, widget, "menuitem",
-		       x, y, width, height);
-
+	{
+	  gtk_widget_style_get (widget,
+				"selected_shadow_type", &selected_shadow_type,
+				NULL);
+	  gtk_paint_box (widget->style,
+			 widget->window,
+			 GTK_STATE_PRELIGHT,
+			 selected_shadow_type,
+			 area, widget, "menuitem",
+			 x, y, width, height);
+	}
+  
       if (menu_item->submenu && menu_item->show_submenu_indicator)
 	{
 	  GtkRequisition child_requisition;

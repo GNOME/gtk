@@ -1,3 +1,7 @@
+Sat Apr 20 21:15:11 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenuitem.c: add "selected_shadow_type" style property
+
 Sat Apr 20 12:07:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_modify_color_component): Accept
