@@ -1,0 +1,326 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ \n"
+"POT-Creation-Date: 2001-03-28 16:12-0500\n"
+"PO-Revision-Date: 1999-02-07 17:37+0100\n"
+"Last-Translator: Pawan Chitrakar <pawan@nplinux.org>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "%i fonts available with a total of %i styles."
+msgstr "%i à¤«à¤¨à¥à¤¤  %i estilos."
+
+msgid "(disabled)"
+msgstr "(à¤à¤¸à¤®à¤°à¥à¤¥)"
+
+msgid "(nil)"
+msgstr "(à¤¶à¥à¤¨à¥à¤¯)"
+
+msgid "(unknown)"
+msgstr "(à¤à¤ªà¤°à¤¿à¤à¤¿à¤¤)"
+
+msgid "*"
+msgstr "*"
+
+msgid "--- No Tip ---"
+msgstr "--- à¤¸à¥à¤à¤¾à¤¬ à¤à¥à¤¨ ---"
+
+msgid "Actual Font Name:"
+msgstr "à¤¯à¤¥à¤¾à¤°à¥à¤¥ à¤«à¤¨à¥à¤à¤à¥ à¤¨à¤¾à¤®:"
+
+msgid "Actual Value"
+msgstr "à¤¯à¤¥à¤¾à¤°à¥à¤¥  à¤®à¤¾à¤¨"
+
+msgid "Add Style:"
+msgstr "à¤¶à¥à¤²à¥ à¤¥à¤ªà¥à¤¨à¥:"
+
+msgid "Apply"
+msgstr "à¤²à¤¾à¤à¥ à¤à¤°à¥à¤¨à¥"
+
+msgid "Average Width:"
+msgstr " à¤à¤¸à¤¤ à¤à¥à¤¡à¤¾à¤:"
+
+msgid "Axes"
+msgstr "à¤à¤à¥à¤¸à¥à¤¸"
+
+msgid "Bitmap"
+msgstr "Bitmap"
+
+msgid "Blue:"
+msgstr "à¤¨à¤¿à¤²à¥:"
+
+msgid "Cancel"
+msgstr "à¤à¤¾à¤°à¥à¤à¥"
+
+msgid "Charset:"
+msgstr "Charset:"
+
+msgid "Close"
+msgstr "à¤¬à¤¨à¥à¤¦ à¤à¤°à¥à¤¨à¥"
+
+msgid "Create"
+msgstr "à¤¬à¤¨à¤¾à¤"
+
+msgid "Create Dir"
+msgstr "directory à¤¬à¤¨à¤¾à¤"
+
+msgid "Create Directory"
+msgstr "directory à¤¬à¤¨à¤¾à¤"
+
+msgid "Delete"
+msgstr "à¤®à¥à¤à¥à¤¨à¥"
+
+msgid "Delete File"
+msgstr "à¤«à¤¾à¤à¤² à¤®à¥à¤à¥à¤¨à¥"
+
+msgid "Device:"
+msgstr "à¤à¤ªà¤à¤°à¤£:"
+
+msgid "Directories"
+msgstr "Directories"
+
+msgid "Directory name:"
+msgstr "Directories à¤à¥ à¤¨à¤¾à¤®:"
+
+msgid "Directory unreadable: %s"
+msgstr "Directories à¤ªà¤¢à¥à¤¨ à¤¸à¤à¤¿à¤à¤¨: %s"
+
+msgid "Disabled"
+msgstr "à¤à¤¸à¤®à¤°à¥à¤¥"
+
+msgid "Error"
+msgstr "à¤¤à¥à¤°à¥à¤à¤¿"
+
+msgid "Family:"
+msgstr "à¤µà¤°à¥à¤:"
+
+msgid "Files"
+msgstr "à¤«à¤¾à¤à¤²à¤¹à¤°à¥"
+
+msgid "Filter"
+msgstr "à¤«à¤¿à¤²à¥à¤à¤°"
+
+msgid "Font"
+msgstr "à¤«à¤¨à¥à¤"
+
+msgid "Font Information"
+msgstr "à¤«à¤¨à¥à¤à¤à¥ à¤¬à¤¾à¤°à¥à¤®à¤¾ à¤¸à¥à¤à¤¨à¤¾"
+
+msgid "Font Property"
+msgstr "à¤«à¤¨à¥à¤ à¤¬à¤¿à¤¶à¥à¤·à¤¤à¤¾"
+
+msgid "Font Selection"
+msgstr "à¤«à¤¨à¥à¤ à¤à¤¨à¥à¤"
+
+msgid "Font Style:"
+msgstr "à¤«à¤¨à¥à¤ à¤¶à¥à¤²à¥:"
+
+msgid "Font Types:"
+msgstr "à¤«à¤¨à¥à¤à¤à¥ à¤ªà¥à¤°à¤à¤¾à¤°:"
+
+msgid "Font:"
+msgstr "à¤«à¤¨à¥à¤:"
+
+msgid "Font: (Filter Applied)"
+msgstr "à¤«à¤¨à¥à¤: (à¤«à¤¿à¤²à¥à¤à¤°)"
+
+msgid "Foundry:"
+msgstr "Foundry:"
+
+msgid "Gamma"
+msgstr "Gamma"
+
+msgid "Gamma value"
+msgstr "Gamma à¤®à¤¾à¤¨"
+
+msgid "Green:"
+msgstr "à¤¹à¤°à¤¿à¤¯à¥:"
+
+msgid "Help"
+msgstr "à¤¸à¤¹à¤¾à¤¯à¤"
+
+msgid "Hue:"
+msgstr "Hue:"
+
+msgid "Input"
+msgstr "Input"
+
+msgid "Keys"
+msgstr "Keys"
+
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr ""
+
+msgid "Metric:"
+msgstr ""
+
+msgid "Mode: "
+msgstr ""
+
+msgid "No input devices"
+msgstr ""
+
+msgid "OK"
+msgstr "à¤ à¥à¤ à¤"
+
+msgid "Opacity:"
+msgstr ""
+
+msgid "Page %u"
+msgstr "à¤ªà¥à¤·à¥à¤  %u"
+
+msgid "Pixel Size:"
+msgstr ""
+
+msgid "Pixels"
+msgstr "Pixeles"
+
+msgid "Point Size:"
+msgstr ""
+
+msgid "Points"
+msgstr ""
+
+msgid "Pressure"
+msgstr ""
+
+msgid "Preview:"
+msgstr "à¤¦à¥à¤·à¥à¤¯:"
+
+msgid "Red:"
+msgstr "à¤°à¤¾à¤¤à¥:"
+
+msgid "Rename"
+msgstr ""
+
+msgid "Rename File"
+msgstr ""
+
+msgid "Requested Font Name:"
+msgstr ""
+
+msgid "Requested Value"
+msgstr ""
+
+msgid "Reset Filter"
+msgstr ""
+
+msgid "Resolution X:"
+msgstr "Resolution X:"
+
+msgid "Resolution Y:"
+msgstr "Resolution Y:"
+
+msgid "Saturation:"
+msgstr "Saturation:"
+
+msgid "Save"
+msgstr "à¤¸à¥à¤­"
+
+msgid "Scalable"
+msgstr ""
+
+msgid "Scaled Bitmap"
+msgstr ""
+
+msgid "Screen"
+msgstr ""
+
+msgid "Selection: "
+msgstr "à¤à¤¨à¥à¤: "
+
+msgid "Set Width:"
+msgstr "à¤à¥à¤¡à¤¾à¤ à¤®à¤¿à¤²à¤¾à¤:"
+
+msgid "Size:"
+msgstr "à¤¸à¤¾à¤à¤:"
+
+msgid "Slant:"
+msgstr "à¤§à¤²à¥à¤à¤¾à¤:"
+
+msgid "Spacing:"
+msgstr "Spacing:"
+
+msgid "The selected font is not a valid font."
+msgstr ""
+
+msgid "The selected font is not available."
+msgstr ""
+
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr ""
+
+
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr ""
+
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr ""
+
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr ""
+
+msgid "Value:"
+msgstr "à¤®à¤¾à¤¨:"
+
+msgid "Weight:"
+msgstr ""
+
+msgid "Window"
+msgstr "à¤µà¤¿à¤¨à¥à¤¡à¥"
+
+msgid "X"
+msgstr "X"
+
+msgid "X Tilt"
+msgstr ""
+
+msgid "Y"
+msgstr "Y"
+
+msgid "Y Tilt"
+msgstr ""
+
+msgid "[C]"
+msgstr "[C]"
+
+msgid "[M]"
+msgstr "[M]"
+
+msgid "char cell"
+msgstr ""
+
+msgid "clear"
+msgstr "à¤¸à¤«à¤¾ à¤à¤°"
+
+msgid "italic"
+msgstr "italic"
+
+msgid "monospaced"
+msgstr ""
+
+msgid "none"
+msgstr "à¤à¥à¤¹à¤¿à¤ªà¤¨à¤¿ à¤à¥à¤¨"
+
+msgid "oblique"
+msgstr ""
+
+msgid "other"
+msgstr "à¤à¤°à¥"
+
+msgid "proportional"
+msgstr ""
+
+msgid "regular"
+msgstr "à¤¸à¤§à¥à¤"
+
+msgid "reverse italic"
+msgstr ""
+
+msgid "reverse oblique"
+msgstr ""
+
+msgid "roman"
+msgstr "roman"

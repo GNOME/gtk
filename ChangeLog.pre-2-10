@@ -1,3 +1,7 @@
+2003-08-22  Christian Rose  <menthos@menthos.com>
+
+	* configure.in: Added "ne" to ALL_LINGUAS.
+
 Thu Aug 21 16:00:36 2003  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkrc.c: Keep a list of current GtkRcFiles
