@@ -1,3 +1,7 @@
+Tue Mar  2 14:38:10 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* tests/testfilechooser.c (main): improve tests a little.
+
 Tue Mar  2 11:45:50 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcombobox.c: Always connect to the changed

@@ -25,6 +25,7 @@
 
 static GtkWidget *preview_label;
 static GtkWidget *preview_image;
+static GtkFileChooserAction action;
 
 static void
 print_current_folder (GtkFileChooser *chooser)
@@ -306,18 +307,48 @@ main (int argc, char **argv)
   GtkFileFilter *filter;
   GtkWidget *preview_vbox;
   GtkWidget *extra;
+  int i;
   
   gtk_init (&argc, &argv);
 
+  action = GTK_FILE_CHOOSER_ACTION_OPEN;
+
+  /* lame-o arg parsing */
+  for (i = 1; i < argc; i++)
+    {
+      if (! strcmp ("--action=open", argv[i]))
+	action = GTK_FILE_CHOOSER_ACTION_OPEN;
+      else if (! strcmp ("--action=save", argv[i]))
+	action = GTK_FILE_CHOOSER_ACTION_SAVE;
+      else if (! strcmp ("--action=select_folder", argv[i]))
+	action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
+      else if (! strcmp ("--action=create_folder", argv[i]))
+	action = GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
+    }
+
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
-			 "action", GTK_FILE_CHOOSER_ACTION_OPEN,
-			 "title", "Select a file",
+			 "action", action,
+			 "file-system-backend", "gnome-vfs",
 			 NULL);
-			 
-  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			  GTK_STOCK_OPEN, GTK_RESPONSE_OK,
-			  NULL);
+  switch (action)
+    {
+    case GTK_FILE_CHOOSER_ACTION_OPEN:
+    case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+      gtk_window_set_title (GTK_WINDOW (dialog), "Select a file");
+      gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+			      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			      GTK_STOCK_OPEN, GTK_RESPONSE_OK,
+			      NULL);
+      break;
+    case GTK_FILE_CHOOSER_ACTION_SAVE:
+    case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
+      gtk_window_set_title (GTK_WINDOW (dialog), "Save a file");
+      gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+			      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			      GTK_STOCK_SAVE, GTK_RESPONSE_OK,
+			      NULL);
+      break;
+    }
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   
   g_signal_connect (dialog, "selection-changed",
@@ -368,7 +399,7 @@ main (int argc, char **argv)
   /* Extra widget */
   extra = gtk_check_button_new_with_mnemonic ("Lar_t whoever asks about this button");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (extra), TRUE);
-  gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), extra);
+  //  gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), extra);
 
   /* Shortcuts */
 
