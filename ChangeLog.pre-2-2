@@ -19,7 +19,7 @@
  	and property stuff is a bit of a mess.)
 
 	* gdk/win32/gdkevents.c
-	* gdk/win32/gdkproperty.c: A bít more verbose logging.
+	* gdk/win32/gdkproperty.c: A bit more verbose logging.
 
 	* gdk/win32/gdkregion.c: Fix some memory leaks (temporary regions
  	that never got deleted). Revamp gdk_region_shrink.
