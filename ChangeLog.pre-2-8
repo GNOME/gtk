@@ -1,3 +1,9 @@
+2005-02-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_create_layout): Avoid spurious
+	selection of RTL direction if the widget does not have 
+	focus.  (#164125, Frederic Crozat)
+
 Thu Feb  3 19:15:55 2005  Manish Singh  <yosh@gimp.org>
 
 	* gdk/x11/gdkdrawable-x11.c: #include cairo-xlib.h
