@@ -373,8 +373,6 @@ gdk_x11_gc_set_values (GdkGC           *gc,
   XGCValues xvalues;
   unsigned long xvalues_mask = 0;
 
-  g_return_if_fail (GDK_IS_GC (gc));
-
   x11_gc = GDK_GC_X11 (gc);
 
   if (values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN))
