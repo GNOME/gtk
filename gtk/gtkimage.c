@@ -402,7 +402,7 @@ gtk_image_get_property (GObject     *object,
  * @mask: a #GdkBitmap, or %NULL
  * 
  * Creates a #GtkImage widget displaying @pixmap with a @mask.
- * A #GdkImage is a server-side image buffer in the pixel format of the
+ * A #GdkPixmap is a server-side image buffer in the pixel format of the
  * current display. The #GtkImage does not assume a reference to the
  * pixmap or mask; you still need to unref them if you own references.
  * #GtkImage will add its own reference rather than adopting yours.

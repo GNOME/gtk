@@ -1,3 +1,8 @@
+Mon May 31 02:39:32 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkimage.c (gtk_image_new_from_pixmap): Fix typo in 
+	docs.  (#142892, Tommi Komulainen)
+
 Mon May 31 02:16:37 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkhandlebox.c: Make detached handleboxes work when their
