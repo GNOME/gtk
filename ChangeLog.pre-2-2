@@ -1,3 +1,9 @@
+Mon Mar  9 11:44:33 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_update_history_menu): reverted
+	the changes ian introduced in r1.16 on Mar 06, since they broke the
+	history menu.
+
 Mon Mar  9 08:07:01 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkspinbutton.h: 

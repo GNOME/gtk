@@ -1066,7 +1066,6 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
   GList *list;
   gchar *current_dir;
   gchar *directory;
-  gchar *menu_text;
   gint dir_len;
   gint i;
   
@@ -1097,27 +1096,27 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 
   for (i = dir_len; i >= 0; i--)
     {
-      /* the i != dir_len is to watch out for the trailing '/' */
-	 
-      if (current_dir[i] == '/')
+      /* the i == dir_len is to catch the full path for the first 
+       * entry. */
+      if ( (current_dir[i] == '/') || (i == dir_len))
 	{
-	  
-	  menu_text = g_strconcat (&current_dir[i+1], "/", NULL);
-	  menu_item = gtk_menu_item_new_with_label (menu_text);
-	  g_free (menu_text);
-
-	  /* since the completion gets confused if you don't 
-	   * supply a trailing '/' on a dir entry */
-
-	  directory = g_strconcat (current_dir, "/", NULL);
-	  
-	  /* insert a \0 here so next time the strdup will get cut short */
-	  current_dir[i] = '\0';
+	  /* another small hack to catch the full path */
+	  if (i != dir_len) 
+		  current_dir[i + 1] = '\0';
+	  menu_item = gtk_menu_item_new_with_label (current_dir);
+	  directory = g_strdup (current_dir);
 	  
 	  callback_arg = g_new (HistoryCallbackArg, 1);
 	  callback_arg->menu_item = menu_item;
-	  callback_arg->directory = directory;
 	  
+	  /* since the autocompletion gets confused if you don't 
+	   * supply a trailing '/' on a dir entry, set the full
+	   * (current) path to "" which just refreshes the filesel */
+	  if (dir_len == i) {
+	    callback_arg->directory = g_strdup ("");
+	  } else {
+	    callback_arg->directory = directory;
+	  }
 	  
 	  fs->history_list = g_list_append (fs->history_list, callback_arg);
 	  
@@ -1128,28 +1127,11 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 	  gtk_widget_show (menu_item);
 	}
     }
-  
-  /* and one last entry for '/' */
-  menu_item = gtk_menu_item_new_with_label ("/");
-  directory = g_strdup ("/");
-  callback_arg = g_new (HistoryCallbackArg, 1);
-  callback_arg->menu_item = menu_item;
-  callback_arg->directory = directory;
-  fs->history_list = g_list_append (fs->history_list, callback_arg);
-  gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-		      (GtkSignalFunc) gtk_file_selection_history_callback,
-		      (gpointer) fs);
-  gtk_menu_append (GTK_MENU (fs->history_menu), menu_item);
-  gtk_widget_show (menu_item);
-  
-  
+
   gtk_option_menu_set_menu (GTK_OPTION_MENU (fs->history_pulldown), 
 			    fs->history_menu);
-
   g_free (current_dir);
 }
-
-
 
 static void
 gtk_file_selection_file_button (GtkWidget *widget,
