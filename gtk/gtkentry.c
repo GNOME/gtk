@@ -1667,8 +1667,6 @@ gtk_entry_insert_text (GtkEditable *editable,
   strncpy (text, new_text, new_text_length);
   
   g_signal_emit_by_name (editable, "insert_text", text, new_text_length, position);
-  g_signal_emit_by_name (editable, "changed");
-  g_object_notify (G_OBJECT (editable), "text");
 
   if (new_text_length > 63)
     g_free (text);
@@ -1693,8 +1691,6 @@ gtk_entry_delete_text (GtkEditable *editable,
   g_object_ref (G_OBJECT (editable));
 
   g_signal_emit_by_name (editable, "delete_text", start_pos, end_pos);
-  g_signal_emit_by_name (editable, "changed");
-  g_object_notify (G_OBJECT (editable), "text");
 
   g_object_unref (G_OBJECT (editable));
 }
@@ -1898,6 +1894,9 @@ gtk_entry_real_insert_text (GtkEditable *editable,
   *position += n_chars;
 
   gtk_entry_recompute (entry);
+
+  g_signal_emit_by_name (editable, "changed");
+  g_object_notify (G_OBJECT (editable), "text");
 }
 
 static void
@@ -1926,13 +1925,15 @@ gtk_entry_real_delete_text (GtkEditable *editable,
 
       if (entry->selection_bound > start_pos)
 	entry->selection_bound -= MIN (entry->selection_bound, end_pos) - start_pos;
+      /* We might have deleted the selection
+       */
+      gtk_entry_update_primary_selection (entry);
+      
+      gtk_entry_recompute (entry);
+      
+      g_signal_emit_by_name (editable, "changed");
+      g_object_notify (G_OBJECT (editable), "text");
     }
-
-  /* We might have deleted the selection
-   */
-  gtk_entry_update_primary_selection (entry);
-
-  gtk_entry_recompute (entry);
 }
 
 /* Compute the X position for an offset that corresponds to the "more important

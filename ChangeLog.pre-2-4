@@ -1,3 +1,8 @@
+Sat Feb 23 16:52:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c: Patch from Matthias Clasen to remove some
+	excessive ::changed signals for GtkEntry. (#53130)
+
 2002-02-23  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk-zip.sh.in: Include the gtkrc files for themes.
