@@ -645,21 +645,37 @@ gtk_tree_item_draw (GtkWidget    *widget,
 
       if(gdk_rectangle_intersect(&item_area, area, &child_area)) {
 	
-	if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
-	  gtk_style_set_background (widget->style, widget->window, 
-				    GTK_STATE_INSENSITIVE);
-	else if(GTK_TREE(widget->parent)->view_mode == GTK_TREE_VIEW_LINE &&
-		widget->state == GTK_STATE_SELECTED)
-	  gtk_style_set_background (widget->style, widget->window, widget->state);
-	else
-	  gdk_window_set_background (widget->window, 
-				     &widget->style->base[GTK_STATE_NORMAL]);
+	 if (widget->state == GTK_STATE_NORMAL)
+	   {
+	      gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+	      gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+	   }
+	 else 
+	   {
+	      if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
+		gtk_paint_flat_box(widget->style, widget->window,
+				   widget->state, GTK_STATE_INSENSITIVE,
+				   area, widget, "treeitem",
+				   0, 0, -1, -1);
+	      else
+		gtk_paint_flat_box(widget->style, widget->window,
+				   widget->state, GTK_SHADOW_ETCHED_OUT,
+				   area, widget, "treeitem",
+				   0, 0, -1, -1);
+	   }
+/*	 
+	 else if(GTK_TREE(widget->parent)->view_mode == GTK_TREE_VIEW_LINE &&
+		 widget->state == GTK_STATE_SELECTED)
+	   gtk_style_set_background (widget->style, widget->window, widget->state);
+	 else
+	   gdk_window_set_background (widget->window, 
+				      &widget->style->base[GTK_STATE_NORMAL]);
 
 	gdk_window_clear_area (widget->window, 
 			       child_area.x, child_area.y,
 			       child_area.width, child_area.height);
-
-/* 	gtk_tree_item_draw_lines(widget); */
+*/
+ 	gtk_tree_item_draw_lines(widget);
 
 	if (tree_item->pixmaps_box && 
 	    GTK_WIDGET_VISIBLE(tree_item->pixmaps_box) &&
@@ -669,7 +685,7 @@ gtk_tree_item_draw (GtkWidget    *widget,
 
       /* draw right side */
       if(gtk_widget_intersect (bin->child, area, &child_area)) {
-
+/*
 	if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
 	  gtk_style_set_background (widget->style, widget->window, 
 				    GTK_STATE_INSENSITIVE);
@@ -680,14 +696,19 @@ gtk_tree_item_draw (GtkWidget    *widget,
 
 	gdk_window_clear_area (widget->window, child_area.x, child_area.y,
 			       child_area.width+1, child_area.height);
-
+*/
 	if (bin->child && 
 	    GTK_WIDGET_VISIBLE(bin->child) &&
 	    gtk_widget_intersect (bin->child, area, &child_area))
 	  gtk_widget_draw (bin->child, &child_area);
       }
 
-      gtk_widget_draw_focus (widget);
+       if (GTK_WIDGET_HAS_FOCUS (widget))
+	 gtk_paint_focus (widget->style, widget->window,
+			  NULL, widget, "treeitem",
+			  0, 0,
+			  widget->allocation.width - 1,
+			  widget->allocation.height - 1);
     }
 }
 
@@ -700,34 +721,7 @@ gtk_tree_item_draw_focus (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (widget));
 
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-	gc = widget->style->black_gc;
-      else if (!GTK_WIDGET_IS_SENSITIVE (widget))
-	gc = widget->style->bg_gc[GTK_STATE_INSENSITIVE];
-      else if (widget->state == GTK_STATE_NORMAL)
-	gc = widget->style->base_gc[GTK_STATE_NORMAL];
-      else
-	gc = widget->style->bg_gc[widget->state];
-
-      dx = 0;
-
-      if(GTK_TREE(widget->parent)->view_mode == GTK_TREE_VIEW_ITEM) 
-	dx = GTK_TREE_ITEM(widget)->pixmaps_box->allocation.width + DEFAULT_DELTA +
-	  GTK_TREE(widget->parent)->current_indent+1;
-
-      gdk_draw_rectangle (widget->window, gc, FALSE, dx, 0,
-			  widget->allocation.width - 1 - dx,
-			  widget->allocation.height - 1);
-
-      if (GTK_TREE (widget->parent)->view_line &&
-	 (!GTK_IS_ROOT_TREE (widget->parent) ||
-	  (GTK_IS_ROOT_TREE (widget->parent) && GTK_TREE_ITEM(widget)->subtree))) 
-	{
-	  gtk_tree_item_draw_lines(widget);
-	}
-    }
+   gtk_widget_draw(widget, NULL);
 }
 
 static gint

@@ -379,20 +379,13 @@ gtk_progress_bar_paint (GtkProgress *progress)
 
   if (progress->offscreen_pixmap)
     {
-      gtk_draw_shadow (widget->style,
-		       progress->offscreen_pixmap,
-		       GTK_STATE_NORMAL, GTK_SHADOW_IN, 0, 0,
-		       widget->allocation.width,
-		       widget->allocation.height);
-	  
-      gdk_draw_rectangle (progress->offscreen_pixmap,
-			  widget->style->bg_gc[GTK_STATE_ACTIVE], TRUE,
-			  widget->style->klass->xthickness,
-			  widget->style->klass->ythickness,
-			  widget->allocation.width -
-			  widget->style->klass->xthickness * 2,
-			  widget->allocation.height -
-			  widget->style->klass->ythickness * 2);
+       gtk_paint_box (widget->style,
+		      progress->offscreen_pixmap,
+		      GTK_STATE_NORMAL, GTK_SHADOW_IN, 
+		      NULL, widget, "trough",
+		      0, 0,
+		      widget->allocation.width,
+		      widget->allocation.height);
 
       if (progress->activity_mode)
 	{
@@ -401,46 +394,28 @@ gtk_progress_bar_paint (GtkProgress *progress)
 	    {
 	      size = MAX (2, widget->allocation.width / pbar->activity_blocks);
 
-	      gdk_draw_rectangle (progress->offscreen_pixmap,
-				  widget->style->bg_gc[GTK_STATE_PRELIGHT],
-				  TRUE,
-				  pbar->activity_pos,
-				  widget->style->klass->ythickness,
-				  size,
-				  widget->allocation.height - 
-				  widget->style->klass->ythickness * 2);
-	      
-	      gtk_draw_shadow (widget->style,
-			       progress->offscreen_pixmap,
-			       GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-			       pbar->activity_pos,
-			       widget->style->klass->ythickness,
-			       size,
-			       widget->allocation.height -
-			       widget->style->klass->ythickness * 2);
+	       gtk_paint_box (widget->style,
+			      progress->offscreen_pixmap,
+			      GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+			      NULL, widget, "bar",
+			      pbar->activity_pos,
+			      widget->style->klass->ythickness,
+			      size,
+			      widget->allocation.height - widget->style->klass->ythickness * 2);
 	      return;
 	    }
 	  else
 	    {
 	      size = MAX (2, widget->allocation.height / pbar->activity_blocks);
 
-	      gdk_draw_rectangle (progress->offscreen_pixmap,
-				  widget->style->bg_gc[GTK_STATE_PRELIGHT],
-				  TRUE,
-				  widget->style->klass->xthickness,
-				  pbar->activity_pos,
-				  widget->allocation.width - 
-				  widget->style->klass->xthickness * 2,
-				  size);
-	      
-	      gtk_draw_shadow (widget->style,
-			       progress->offscreen_pixmap,
-			       GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-			       widget->style->klass->xthickness,
-			       pbar->activity_pos,
-			       widget->allocation.width -
-			       widget->style->klass->xthickness * 2,
-			       size);
+	       gtk_paint_box (widget->style,
+			      progress->offscreen_pixmap,
+			      GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+			      NULL, widget, "bar",
+			      widget->style->klass->xthickness,
+			      pbar->activity_pos,
+			      widget->allocation.width - widget->style->klass->xthickness * 2,
+			      size);
 	      return;
 	    }
 	}
@@ -456,22 +431,14 @@ gtk_progress_bar_paint (GtkProgress *progress)
 	      
 	      if (pbar->bar_style == GTK_PROGRESS_CONTINUOUS)
 		{
-		  gdk_draw_rectangle (progress->offscreen_pixmap,
-				      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-				      TRUE,
-				      widget->style->klass->xthickness,
-				      widget->style->klass->ythickness,
-				      amount,
-				      widget->allocation.height - 
-				      widget->style->klass->ythickness * 2);
-		  gtk_draw_shadow (widget->style,
-				   progress->offscreen_pixmap,
-				   GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-				   widget->style->klass->xthickness,
-				   widget->style->klass->ythickness,
-				   amount,
-				   widget->allocation.height -
-				   widget->style->klass->ythickness * 2);
+		   gtk_paint_box (widget->style,
+				  progress->offscreen_pixmap,
+				  GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+				  NULL, widget, "bar",
+				  widget->style->klass->xthickness,
+				  widget->style->klass->ythickness,
+				  amount,
+				  widget->allocation.height - widget->style->klass->ythickness * 2);
 		}
 	      else
 		{
@@ -482,24 +449,14 @@ gtk_progress_bar_paint (GtkProgress *progress)
 		      block_delta = (((i + 1) * space) / pbar->blocks)
 			- ((i * space) / pbar->blocks);
 		      
-		      gdk_draw_rectangle 
-			(progress->offscreen_pixmap,
-			 widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			 TRUE,
-			 x,
-			 widget->style->klass->ythickness,
-			 block_delta,
-			 widget->allocation.height - 
-			 widget->style->klass->ythickness * 2);
-
-		      gtk_draw_shadow (widget->style,
-				       progress->offscreen_pixmap,
-				       GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-				       x,
-				       widget->style->klass->ythickness,
-				       block_delta,
-				       widget->allocation.height -
-				       widget->style->klass->ythickness * 2);
+		       gtk_paint_box (widget->style,
+				      progress->offscreen_pixmap,
+				      GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+				      NULL, widget, "bar",
+				      x,
+				      widget->style->klass->ythickness,
+				      block_delta,
+				      widget->allocation.height - widget->style->klass->ythickness * 2);
 
 		      x +=  block_delta;
 		    }
@@ -510,24 +467,16 @@ gtk_progress_bar_paint (GtkProgress *progress)
 
 	      if (pbar->bar_style == GTK_PROGRESS_CONTINUOUS)
 		{
-		  gdk_draw_rectangle (progress->offscreen_pixmap,
-				      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-				      TRUE,
-				      widget->allocation.width - 
-				      widget->style->klass->xthickness - amount,
-				      widget->style->klass->ythickness,
-				      amount,
-				      widget->allocation.height - 
-				      widget->style->klass->ythickness * 2);
-		  gtk_draw_shadow (widget->style,
-				   progress->offscreen_pixmap,
-				   GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-				   widget->allocation.width - 
-				   widget->style->klass->xthickness - amount,
-				   widget->style->klass->ythickness,
-				   amount,
-				   widget->allocation.height -
-				   widget->style->klass->ythickness * 2);
+		   gtk_paint_box (widget->style,
+				  progress->offscreen_pixmap,
+				  GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+				  NULL, widget, "bar",
+				  widget->allocation.width - 
+				  widget->style->klass->xthickness - amount,
+				  widget->style->klass->ythickness,
+				  amount,
+				  widget->allocation.height -
+				  widget->style->klass->ythickness * 2);
 		}
 	      else
 		{
@@ -539,25 +488,17 @@ gtk_progress_bar_paint (GtkProgress *progress)
 		      block_delta = (((i + 1) * space) / pbar->blocks) -
 			((i * space) / pbar->blocks);
 
-		      x -=  block_delta;
-
-		      gdk_draw_rectangle (progress->offscreen_pixmap,
-				  widget->style->bg_gc[GTK_STATE_PRELIGHT],
-				  TRUE,
-				  x,
-				  widget->style->klass->ythickness,
-				  block_delta,
-				  widget->allocation.height - 
-				  widget->style->klass->ythickness * 2);
-
-		      gtk_draw_shadow (widget->style,
-				       progress->offscreen_pixmap,
-				       GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-				       x,
-				       widget->style->klass->ythickness,
-				       block_delta,
-				       widget->allocation.height -
-				       widget->style->klass->ythickness * 2);
+		       x -=  block_delta;
+		       
+		       gtk_paint_box (widget->style,
+				      progress->offscreen_pixmap,
+				      GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+				      NULL, widget, "bar",
+				      x,
+				      widget->style->klass->ythickness,
+				      block_delta,
+				      widget->allocation.height -
+				      widget->style->klass->ythickness * 2);
 		    }
 		}
 	      break;
@@ -566,24 +507,16 @@ gtk_progress_bar_paint (GtkProgress *progress)
 
 	      if (pbar->bar_style == GTK_PROGRESS_CONTINUOUS)
 		{
-		  gdk_draw_rectangle (progress->offscreen_pixmap,
-				      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-				      TRUE,
-				      widget->style->klass->xthickness,
-				      widget->allocation.height - 
-				      widget->style->klass->ythickness - amount,
-				      widget->allocation.width - 
-				      widget->style->klass->xthickness * 2,
-				      amount);
-		  gtk_draw_shadow (widget->style,
-				   progress->offscreen_pixmap,
-				   GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-				   widget->style->klass->xthickness,
-				   widget->allocation.height - 
-				   widget->style->klass->ythickness - amount,
-				   widget->allocation.width -
-				   widget->style->klass->xthickness * 2,
-				   amount);
+		   gtk_paint_box (widget->style,
+				  progress->offscreen_pixmap,
+				  GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+				  NULL, widget, "bar",
+				  widget->style->klass->xthickness,
+				  widget->allocation.height - 
+				  widget->style->klass->ythickness - amount,
+				  widget->allocation.width -
+				  widget->style->klass->xthickness * 2,
+				  amount);
 		}
 	      else
 		{
@@ -595,26 +528,17 @@ gtk_progress_bar_paint (GtkProgress *progress)
 		      block_delta = (((i + 1) * space) / pbar->blocks) -
 			((i * space) / pbar->blocks);
 		      
-		      y -= block_delta;
-
-		      gdk_draw_rectangle 
-			(progress->offscreen_pixmap,
-			 widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			 TRUE,
-			 widget->style->klass->xthickness,
-			 y,
-			 widget->allocation.width - 
-			 widget->style->klass->xthickness * 2,
-			 block_delta);
-
-		      gtk_draw_shadow (widget->style,
-				       progress->offscreen_pixmap,
-				       GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-				       widget->style->klass->xthickness,
-				       y,
-				       widget->allocation.width - 
-				       widget->style->klass->xthickness * 2,
-				       block_delta);
+		       y -= block_delta;
+		       
+		       gtk_paint_box (widget->style,
+				      progress->offscreen_pixmap,
+				      GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+				      NULL, widget, "bar",
+				      widget->style->klass->xthickness,
+				      y,
+				      widget->allocation.width - 
+				      widget->style->klass->xthickness * 2,
+				      block_delta);
 		    }
 		}
 	      break;
@@ -622,24 +546,17 @@ gtk_progress_bar_paint (GtkProgress *progress)
 	    case GTK_PROGRESS_TOP_TO_BOTTOM:
 
 	      if (pbar->bar_style == GTK_PROGRESS_CONTINUOUS)
-		{
-		  gdk_draw_rectangle (progress->offscreen_pixmap,
-				      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-				      TRUE,
-				      widget->style->klass->xthickness,
-				      widget->style->klass->ythickness,
-				      widget->allocation.width -
-				      widget->style->klass->xthickness * 2,
-				      amount);
-		  gtk_draw_shadow (widget->style,
+		 {
+		    gtk_paint_box (widget->style,
 				   progress->offscreen_pixmap,
 				   GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+				   NULL, widget, "bar",
 				   widget->style->klass->xthickness,
 				   widget->style->klass->ythickness,
 				   widget->allocation.width -
 				   widget->style->klass->xthickness * 2,
 				   amount);
-		}
+		 }
 	      else
 		{
 		  y = widget->style->klass->ythickness;
@@ -649,25 +566,16 @@ gtk_progress_bar_paint (GtkProgress *progress)
 
 		      block_delta = (((i + 1) * space) / pbar->blocks)
 			- ((i * space) / pbar->blocks);
-
-		      gdk_draw_rectangle
-			(progress->offscreen_pixmap,
-			 widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			 TRUE,
-			 widget->style->klass->xthickness,
-			 y,
-			 widget->allocation.width -
-			 widget->style->klass->xthickness * 2,
-			 block_delta);
-
-		      gtk_draw_shadow (widget->style,
-				       progress->offscreen_pixmap,
-				       GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-				       widget->style->klass->xthickness,
-				       y,
-				       widget->allocation.width -
-				       widget->style->klass->xthickness * 2,
-				       block_delta);
+		       
+		       gtk_paint_box (widget->style,
+				      progress->offscreen_pixmap,
+				      GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+				      NULL, widget, "bar",
+				      widget->style->klass->xthickness,
+				      y,
+				      widget->allocation.width -
+				      widget->style->klass->xthickness * 2,
+				      block_delta);
 
 		      y += block_delta;
 		    }

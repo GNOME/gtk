@@ -1244,7 +1244,6 @@ gtk_widget_unparent (GtkWidget *widget)
 
       toplevel = toplevel->parent;
     }
-  
   if (widget->window &&
       GTK_WIDGET_NO_WINDOW (widget) &&
       GTK_WIDGET_DRAWABLE (widget))
@@ -3755,6 +3754,7 @@ gtk_widget_get_default_visual (void)
   return default_visual;
 }
 
+
 static void
 gtk_widget_shutdown (GtkObject *object)
 {
@@ -4048,7 +4048,7 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  
+
   if (GTK_WIDGET_NO_WINDOW (widget) &&
       GTK_WIDGET_MAPPED (widget) &&
       ((widget->allocation.x != allocation->x) ||
@@ -4063,9 +4063,11 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
   
   if (GTK_WIDGET_REALIZED (widget) &&
       !GTK_WIDGET_NO_WINDOW (widget))
-    gdk_window_move_resize (widget->window,
-			    allocation->x, allocation->y,
-			    allocation->width, allocation->height);
+     {
+	gdk_window_move_resize (widget->window,
+				allocation->x, allocation->y,
+				allocation->width, allocation->height);
+     }
 }
 
 /*****************************************

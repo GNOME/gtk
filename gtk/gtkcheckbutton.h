@@ -42,6 +42,8 @@ typedef struct _GtkCheckButtonClass  GtkCheckButtonClass;
 struct _GtkCheckButton
 {
   GtkToggleButton toggle_button;
+
+   GdkWindow *event_window;
 };
 
 struct _GtkCheckButtonClass

@@ -428,9 +428,10 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   else
     y = y + widget->allocation.height + 4;
 
-  gtk_widget_set_usize (tooltips->tip_window, w + 1, h + 1);
+  gtk_widget_set_usize (tooltips->tip_window, w, h);
   gtk_widget_popup (tooltips->tip_window, x, y);
 
+/*   
   if (tooltips->gc == NULL)
     tooltips->gc = gdk_gc_new (tooltips->tip_window->window);
 
@@ -460,14 +461,25 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
     }
 
   gdk_draw_rectangle (tooltips->tip_window->window, tooltips->gc, FALSE, 0, 0, w, h);
-  y = style->font->ascent + 4;
+*/
+   gtk_paint_flat_box(tooltips->tip_window->style, 
+		      tooltips->tip_window->window,
+		      GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
+		      NULL, GTK_WIDGET(tooltips), "tooltip",
+		      0, 0, w, h);
+
+   y = style->font->ascent + 4;
 
   for (el = data->row; el; el = el->next)
     {
       if (el->data)
        {
-         gdk_draw_string (tooltips->tip_window->window, style->font,
-			  tooltips->gc, 4, y, el->data);
+/*         gdk_draw_string (tooltips->tip_window->window, style->font,
+			  tooltips->gc, 4, y, el->data);*/
+	  gtk_paint_string (tooltips->tip_window->style, tooltips->tip_window->window, 
+			    GTK_STATE_NORMAL, 
+			    NULL, GTK_WIDGET(tooltips), "tooltip",
+			    4, y, el->data);
          y += baseline_skip;
        }
       else

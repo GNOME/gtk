@@ -1288,16 +1288,17 @@ gtk_text_draw_focus (GtkWidget *widget)
 	  xextra -= 1;
 	  yextra -= 1;
 
-	  gdk_draw_rectangle (widget->window,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      FALSE, 0, 0,
-			      widget->allocation.width - 1,
-			      widget->allocation.height - 1);
+	  gtk_paint_focus (widget->style, widget->window,
+			   NULL, widget, "text",
+			   0, 0,
+			   widget->allocation.width - 1,
+			   widget->allocation.height - 1);
 	}
 
-      gtk_draw_shadow (widget->style, widget->window,
-		       GTK_STATE_NORMAL, GTK_SHADOW_IN,
-		       x, y, width, height);
+      gtk_paint_shadow (widget->style, widget->window,
+			GTK_STATE_NORMAL, GTK_SHADOW_IN,
+			NULL, widget, "text",
+			x, y, width, height);
 
       x += xthick; 
       y += ythick;
@@ -1316,14 +1317,6 @@ gtk_text_draw_focus (GtkWidget *widget)
 			    xextra, height - 2 * ythick);
 	  /* bottom rect */
 	  clear_focus_area (text, x, x + height - yextra, width, yextra);
-	}
-      else if (!GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	  gdk_draw_rectangle (widget->window,
-			      widget->style->base_gc[GTK_STATE_NORMAL], FALSE,
-			      x, y,
-			      width - 1,
-			      height - 1);
 	}
     }
   else
@@ -4390,13 +4383,11 @@ draw_line (GtkText* text,
       bg_gc = mark_bg_gc (text, &mark);
       
       if (bg_gc)
-	gdk_draw_rectangle (text->text_area,
-			    bg_gc,
-			    TRUE,
-			    0,
-			    pixel_start_height,
-			    running_offset,
-			    LINE_HEIGHT (*lp));
+	 gtk_paint_flat_box(GTK_WIDGET(text)->style, text->text_area,
+			    GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+			    NULL, GTK_WIDGET(text), "text",
+			    0, pixel_start_height,
+			    running_offset, LINE_HEIGHT (*lp));
       else if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
 	{
 	  GdkRectangle rect;
@@ -4441,13 +4432,11 @@ draw_line (GtkText* text,
 	  
 	  bg_gc = mark_bg_gc (text, &mark);
 	  if (bg_gc)
-	    gdk_draw_rectangle (text->text_area,
-				bg_gc,
-				TRUE,
-				running_offset,
-				pixel_start_height,
-				pixel_width,
-				LINE_HEIGHT(*lp));
+	 gtk_paint_flat_box(GTK_WIDGET(text)->style, text->text_area,
+			    GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+			    NULL, GTK_WIDGET(text), "text",
+			    running_offset, pixel_start_height,
+			    pixel_width, LINE_HEIGHT (*lp));
 	  else if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
 	    {
 	      GdkRectangle rect;
@@ -4503,14 +4492,12 @@ draw_line (GtkText* text,
 
 	      spaces_avail = pixels_remaining / space_width;
 	      spaces_avail = MIN (spaces_avail, tab_mark.to_next_tab);
-
-	      gdk_draw_rectangle (text->text_area,
-				  bg_gc,
-				  TRUE,
-				  running_offset,
-				  pixel_start_height,
-				  spaces_avail * space_width,
-				  LINE_HEIGHT (*lp));
+	       
+	       gtk_paint_flat_box(GTK_WIDGET(text)->style, text->text_area,
+				  GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+				  NULL, GTK_WIDGET(text), "text",
+				  running_offset, pixel_start_height,
+				  spaces_avail * space_width, LINE_HEIGHT (*lp));
 	    }
 
 	  running_offset += tab_mark.to_next_tab *

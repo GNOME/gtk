@@ -79,13 +79,13 @@ struct _GtkNotebookClass
 
 struct _GtkNotebookPage
 {
-  GtkWidget *child;
-  GtkWidget *tab_label;
-  GtkWidget *menu_label;
-  guint default_menu : 1;
-  guint default_tab  : 1;
-  GtkRequisition requisition;
-  GtkAllocation allocation;
+   GtkWidget *child;
+   GtkWidget *tab_label;
+   GtkWidget *menu_label;
+   guint default_menu : 1;
+   guint default_tab  : 1;
+   GtkRequisition requisition;
+   GtkAllocation allocation;
 };
 
 

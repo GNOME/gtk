@@ -229,6 +229,8 @@ gtk_hpaned_draw (GtkWidget    *widget,
       paned = GTK_PANED (widget);
       border_width = GTK_CONTAINER (paned)->border_width;
 
+      gdk_window_clear_area (widget->window,
+			     area->x, area->y, area->width, area->height);
       if (paned->child1 &&
 	  gtk_widget_intersect (paned->child1, area, &child_area))
         gtk_widget_draw (paned->child1, &child_area);

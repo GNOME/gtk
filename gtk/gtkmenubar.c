@@ -240,17 +240,6 @@ gtk_menu_bar_paint (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      gtk_draw_shadow (widget->style,
-		       widget->window,
-		       GTK_STATE_NORMAL,
-		       GTK_SHADOW_OUT,
-		       0, 0,
-		       widget->allocation.width,
-		       widget->allocation.height);
-    }
 }
 
 static void
@@ -268,7 +257,13 @@ gtk_menu_bar_draw (GtkWidget    *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      gtk_menu_bar_paint (widget);
+       gtk_paint_box (widget->style,
+		      widget->window,
+		      GTK_STATE_NORMAL,
+		      GTK_SHADOW_OUT,
+		      area, widget, "menubar",
+		      0, 0,
+		      -1,-1);
 
       menu_shell = GTK_MENU_SHELL (widget);
 
@@ -299,21 +294,7 @@ gtk_menu_bar_expose (GtkWidget      *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      gtk_menu_bar_paint (widget);
-
-      menu_shell = GTK_MENU_SHELL (widget);
-      child_event = *event;
-
-      children = menu_shell->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-
-	  if (GTK_WIDGET_NO_WINDOW (child) &&
-	      gtk_widget_intersect (child, &event->area, &child_event.area))
-	    gtk_widget_event (child, (GdkEvent*) &child_event);
-	}
+       gtk_menu_bar_draw(widget, &event->area);
     }
 
   return FALSE;

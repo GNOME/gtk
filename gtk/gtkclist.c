@@ -2384,6 +2384,7 @@ gtk_clist_realize (GtkWidget * widget)
 					  GDK_GC_FOREGROUND |
 					  GDK_GC_FUNCTION |
 					  GDK_GC_SUBWINDOW);
+
 }
 
 static void
@@ -2472,6 +2473,8 @@ gtk_clist_map (GtkWidget * widget)
       /* unfreeze the list */
       GTK_CLIST_UNSET_FLAG (clist, CLIST_FROZEN);
     }
+  if (GTK_WIDGET_REALIZED (widget))
+     gdk_window_set_child_shapes(widget->window);
 }
 
 static void
@@ -2489,13 +2492,14 @@ gtk_clist_unmap (GtkWidget * widget)
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
+      gdk_window_hide (widget->window);
+       
       for (i = 0; i < clist->columns; i++)
 	if (clist->column[i].window)
 	  gdk_window_hide (clist->column[i].window);
 
       gdk_window_hide (clist->clist_window);
       gdk_window_hide (clist->title_window);
-      gdk_window_hide (widget->window);
 
       /* unmap scrollbars */
       if (GTK_WIDGET_MAPPED (clist->vscrollbar))
@@ -2531,21 +2535,21 @@ gtk_clist_draw (GtkWidget * widget,
       clist = GTK_CLIST (widget);
       border_width = GTK_CONTAINER (widget)->border_width;
 
-      gdk_window_clear_area (widget->window,
-			     area->x - border_width, 
-			     area->y - border_width,
-			     area->width, area->height);
-
       /* draw list shadow/border */
-      gtk_draw_shadow (widget->style, widget->window,
-		       GTK_STATE_NORMAL, clist->shadow_type,
-		       0, 0, 
-		       clist->clist_window_width + (2 * widget->style->klass->xthickness),
-		       clist->clist_window_height + (2 * widget->style->klass->ythickness) +
-		       clist->column_title_area.height);
+       if (widget->parent && widget->parent->window)
+	 gtk_paint_shadow (widget->style, widget->parent->window,
+			   GTK_STATE_NORMAL, clist->shadow_type,
+			   area, widget, "clist",
+			   clist->internal_allocation.x + widget->allocation.x + 
+			   GTK_CONTAINER (widget)->border_width, 
+			   clist->internal_allocation.y + widget->allocation.y +
+			   GTK_CONTAINER (widget)->border_width, 
+			   clist->clist_window_width + (2 * widget->style->klass->xthickness),
+			   clist->clist_window_height + (2 * widget->style->klass->ythickness) +
+			   clist->column_title_area.height);
 
-      gdk_window_clear_area (clist->clist_window,
-			     0, 0, -1, -1);
+       gdk_window_clear_area (clist->clist_window,
+			      0, 0, -1, -1);
 
       draw_rows (clist, NULL);
     }
@@ -2567,13 +2571,18 @@ gtk_clist_expose (GtkWidget * widget,
 
       /* draw border */
       if (event->window == widget->window)
-	gtk_draw_shadow (widget->style, widget->window,
-			 GTK_STATE_NORMAL, clist->shadow_type,
-			 0, 0,
-			 clist->clist_window_width + (2 * widget->style->klass->xthickness),
-			 clist->clist_window_height + (2 * widget->style->klass->ythickness) +
-			 clist->column_title_area.height);
-
+       if (widget->parent && widget->parent->window)
+	   gtk_paint_shadow (widget->style, widget->parent->window,
+			     GTK_STATE_NORMAL, clist->shadow_type,
+			     &event->area, widget, "clist",
+			     clist->internal_allocation.x + widget->allocation.x +
+			     GTK_CONTAINER (widget)->border_width, 
+			     clist->internal_allocation.y + widget->allocation.y +
+			     GTK_CONTAINER (widget)->border_width, 
+			     clist->clist_window_width + (2 * widget->style->klass->xthickness),
+			     clist->clist_window_height + (2 * widget->style->klass->ythickness) +
+			     clist->column_title_area.height);
+       
       /* exposure events on the list */
       if (event->window == clist->clist_window)
 	draw_rows (clist, &event->area);
@@ -3353,6 +3362,10 @@ gtk_clist_size_allocate (GtkWidget * widget,
 	gtk_widget_hide (clist->hscrollbar);
     }
 
+   /* get rid of the ugly box border */
+  if (GTK_WIDGET_REALIZED (widget))
+     gdk_window_set_child_shapes(widget->window);
+   
   /* set the vscrollbar adjustments */
   adjust_scrollbars (clist);
 }
@@ -3951,10 +3964,10 @@ toggle_row (GtkCList * clist,
 	  unselect_row (clist, row, column, event);
 	  return;
 	}
-
-    case GTK_SELECTION_BROWSE:
-      select_row (clist, row, column, event);
-      break;
+       
+     case GTK_SELECTION_BROWSE:
+       select_row (clist, row, column, event);
+       break;
     }
 }
 
@@ -4349,6 +4362,9 @@ adjust_scrollbars (GtkCList * clist)
 
   gtk_signal_emit_by_name (GTK_OBJECT (GTK_RANGE (clist->vscrollbar)->adjustment), "changed");
   gtk_signal_emit_by_name (GTK_OBJECT (GTK_RANGE (clist->hscrollbar)->adjustment), "changed");
+
+  if (GTK_WIDGET_REALIZED (GTK_WIDGET(clist)))
+     gdk_window_set_child_shapes(GTK_WIDGET(clist)->window);
 }
 
 static void
@@ -4560,8 +4576,6 @@ hadjustment_value_changed (GtkAdjustment * adjustment,
 			    0,
 			    clist->clist_window_width - diff,
 			    clist->clist_window_height);
-
-      area.x = clist->clist_window_width - diff;
     }
   else
     {

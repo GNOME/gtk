@@ -28,8 +28,8 @@
 
 #define TAB_OVERLAP    2
 #define TAB_CURVATURE  1
-#define ARROW_SIZE     11
-#define ARROW_SPACING  3
+#define ARROW_SIZE     12
+#define ARROW_SPACING  0
 #define NOTEBOOK_INIT_SCROLL_DELAY (200)
 #define NOTEBOOK_SCROLL_DELAY      (100)
 
@@ -167,7 +167,7 @@ static void gtk_notebook_menu_item_create    (GtkNotebook      *notebook,
 static GtkType gtk_notebook_child_type       (GtkContainer     *container);
 static gint    gtk_notebook_find_page        (gconstpointer     a,
 					      gconstpointer     b);
-
+static void gtk_notebook_set_shape           (GtkNotebook *notebook);
 
 static GtkContainerClass *parent_class = NULL;
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
@@ -642,7 +642,7 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
   page->allocation.height = 0;
   page->default_menu = FALSE;
   page->default_tab = FALSE;
-
+   
   nchildren = g_list_length (notebook->children);
   if ((position < 0) || (position > nchildren))
     position = nchildren;
@@ -1333,7 +1333,8 @@ gtk_notebook_realize (GtkWidget *widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 
-  if (notebook->scrollable)
+   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+   if (notebook->scrollable)
     gtk_notebook_panel_realize (notebook);
 }
 
@@ -1378,7 +1379,8 @@ gtk_notebook_panel_realize (GtkNotebook *notebook)
 				    attributes_mask);
   gtk_style_set_background (widget->style, notebook->panel, 
 			    GTK_STATE_NORMAL);
-  gdk_window_set_user_data (notebook->panel, widget);
+   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+   gdk_window_set_user_data (notebook->panel, widget);
 }
 
 static void
@@ -1597,31 +1599,28 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 
       gtk_notebook_pages_allocate (notebook, allocation);
     }
+   gtk_notebook_set_shape(notebook);
 }
 
 static void
 gtk_notebook_paint (GtkWidget    *widget,
 		    GdkRectangle *area)
 {
-  GtkNotebook *notebook;
-  GtkNotebookPage *page;
-  GList *children;
-  GdkPoint points[6];
-  gint width, height;
-  gint x, y;
-  gint showarrow;
+   GtkNotebook *notebook;
+   GtkNotebookPage *page;
+   GList *children;
+   gint width, height;
+   gint x, y;
+   gint showarrow;
+   gint gap_side = 0, gap_x = 0, gap_width = 0;
+   
+   g_return_if_fail (widget != NULL);
+   g_return_if_fail (GTK_IS_NOTEBOOK (widget));
+   g_return_if_fail (area != NULL);
 
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_NOTEBOOK (widget));
-  g_return_if_fail (area != NULL);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      notebook = GTK_NOTEBOOK (widget);
-
-      gdk_window_clear_area (widget->window,
-			     area->x, area->y,
-			     area->width, area->height);
+   if (GTK_WIDGET_DRAWABLE (widget))
+     {
+	notebook = GTK_NOTEBOOK (widget);
 
       if (notebook->show_tabs || notebook->show_border)
 	{
@@ -1656,9 +1655,10 @@ gtk_notebook_paint (GtkWidget    *widget,
 			widget->style->klass->xthickness;
 		    break;
 		    }
-		  gtk_draw_shadow (widget->style, widget->window,
-				   GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-				   x, y, width, height);
+                   gtk_paint_box(widget->style, widget->window,
+				 GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+				 area, widget, "notebook",
+				 x, y, width, height);
 		}
 	      else
 		{
@@ -1676,89 +1676,38 @@ gtk_notebook_paint (GtkWidget    *widget,
 		      break;
 		    }
 
-		  switch (notebook->tab_pos)
-		    {
-		    case GTK_POS_TOP:
-		      points[0].x = notebook->cur_page->allocation.x;
-		      points[0].y = y;
-		      points[1].x = x;
-		      points[1].y = y;
-		      points[2].x = x;
-		      points[2].y = y + height - 1;
-		      points[3].x = x + width - 1;
-		      points[3].y = y + height - 1;
-		      points[4].x = x + width - 1;
-		      points[4].y = y;
-		      points[5].x = (notebook->cur_page->allocation.x +
-				     notebook->cur_page->allocation.width -
-				     widget->style->klass->xthickness);
-		      points[5].y = y;
-
-		      if (points[5].x == (x + width))
-			points[5].x -= 1;
-		      break;
-		    case GTK_POS_BOTTOM:
-		      points[0].x = (notebook->cur_page->allocation.x +
-				     notebook->cur_page->allocation.width -
-				     widget->style->klass->xthickness);
-		      points[0].y = y + height - 1;
-		      points[1].x = x + width - 1;
-		      points[1].y = y + height - 1;
-		      points[2].x = x + width - 1;
-		      points[2].y = y;
-		      points[3].x = x;
-		      points[3].y = y;
-		      points[4].x = x;
-		      points[4].y = y + height - 1;
-		      points[5].x = notebook->cur_page->allocation.x;
-		      points[5].y = y + height - 1;
-
-		      if (points[0].x == (x + width))
-			points[0].x -= 1;
-		      break;
-		    case GTK_POS_LEFT:
-		      points[0].x = x;
-		      points[0].y = (notebook->cur_page->allocation.y +
-				     notebook->cur_page->allocation.height -
-				     widget->style->klass->ythickness);
-		      points[1].x = x;
-		      points[1].y = y + height - 1;
-		      points[2].x = x + width - 1;
-		      points[2].y = y + height - 1;
-		      points[3].x = x + width - 1;
-		      points[3].y = y;
-		      points[4].x = x;
-		      points[4].y = y;
-		      points[5].x = x;
-		      points[5].y = notebook->cur_page->allocation.y;
-		      
-		      if (points[0].y == (y + height))
-			points[0].y -= 1;
-		      break;
-		    case GTK_POS_RIGHT:
-		      points[0].x = x + width - 1;
-		      points[0].y = notebook->cur_page->allocation.y;
-		      points[1].x = x + width - 1;
-		      points[1].y = y;
-		      points[2].x = x;
-		      points[2].y = y;
-		      points[3].x = x;
-		      points[3].y = y + height - 1;
-		      points[4].x = x + width - 1;
-		      points[4].y = y + height - 1;
-		      points[5].x = x + width - 1;
-		      points[5].y = (notebook->cur_page->allocation.y +
-				     notebook->cur_page->allocation.height -
-				     widget->style->klass->ythickness);
-
-		      if (points[5].y == (y + height))
-			points[5].y -= 1;
-		      break;
-		    }
-		  
-		  gtk_draw_polygon (widget->style, widget->window,
-				    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-				    points, 6, FALSE);
+                  switch (notebook->tab_pos)
+		     {
+		      case GTK_POS_TOP:
+			gap_side = 0;
+			gap_x = notebook->cur_page->allocation.x -
+			  GTK_CONTAINER(notebook)->border_width;
+			gap_width = notebook->cur_page->allocation.width;
+			break;
+		      case GTK_POS_BOTTOM:
+			gap_side = 1;
+			gap_x = notebook->cur_page->allocation.x -
+			  GTK_CONTAINER(notebook)->border_width;
+			gap_width = notebook->cur_page->allocation.width;
+			break;
+		      case GTK_POS_LEFT:
+			gap_side = 2;
+			gap_x = notebook->cur_page->allocation.y -
+			  GTK_CONTAINER(notebook)->border_width;
+			gap_width = notebook->cur_page->allocation.height;
+			break;
+		      case GTK_POS_RIGHT:
+			gap_side = 3;
+			gap_x = notebook->cur_page->allocation.y -
+			  GTK_CONTAINER(notebook)->border_width;
+			gap_width = notebook->cur_page->allocation.height;
+			break;
+		     }
+		   gtk_paint_box_gap(widget->style, widget->window,
+				     GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+				     area, widget, "notebook",
+				     x, y, width, height,
+				     gap_side, gap_x, gap_width);
 		}
 	      children = g_list_last (notebook->children);
 	      showarrow = FALSE;
@@ -1786,9 +1735,10 @@ gtk_notebook_paint (GtkWidget    *widget,
 	    }
 	  else if (notebook->show_border)
 	    {
-	      gtk_draw_shadow (widget->style, widget->window,
-			       GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-			       x, y, width, height);
+	       gtk_paint_box(widget->style, widget->window,
+			     GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+			     area, widget, "notebook",
+			     x, y, width, height);
 	    }
 	}
     }
@@ -1967,6 +1917,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
       if (!children && !GTK_WIDGET_HAS_FOCUS (widget))
 	gtk_widget_grab_focus (widget);
     }
+   gtk_notebook_set_shape(notebook);
   return FALSE;
 }
 
@@ -2245,6 +2196,7 @@ gtk_real_notebook_switch_page (GtkNotebook     *notebook,
   
   if (GTK_WIDGET_DRAWABLE (notebook))
     gtk_widget_queue_draw (GTK_WIDGET (notebook));
+   gtk_notebook_set_shape(notebook);
 }
 
 static void
@@ -2252,12 +2204,11 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 		       GtkNotebookPage *page,
 		       GdkRectangle    *area)
 {
-  GdkRectangle child_area;
-  GdkRectangle page_area;
-  GtkStateType state_type;
-  GdkPoint points[6];
-  gint n = 0;
- 
+   GdkRectangle child_area;
+   GdkRectangle page_area;
+   GtkStateType state_type;
+   gint gap_side;
+   
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (page != NULL);
   g_return_if_fail (area != NULL);
@@ -2274,209 +2225,48 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
     {
       GtkWidget *widget;
 
+       gap_side = 0;
       switch (notebook->tab_pos)
 	{
-	case GTK_POS_TOP:
-	  if (child_area.x + child_area.width > 
-	      page->allocation.x + page->allocation.width - TAB_OVERLAP) 
-	    {
-	      points[0].x = page->allocation.x + page->allocation.width - 1;
-	      points[0].y = page->allocation.y + page->allocation.height - 1;
-
-	      points[1].x = page->allocation.x + page->allocation.width - 1;
-	      points[1].y = page->allocation.y + TAB_CURVATURE;
-
-	      points[2].x = page->allocation.x + page->allocation.width 
-		- TAB_CURVATURE - 1;
-	      points[2].y = page->allocation.y;
-	      n = 3;
-	    }
-	  else 
-	    {
-	      points[0].x = page->allocation.x + page->allocation.width 
-		- TAB_OVERLAP - 1;
-	      points[0].y = page->allocation.y;
-	      n = 1;
-	    }
-	  
-	  if ( (child_area.x < page->allocation.x + TAB_OVERLAP) &&
-	       (page == notebook->cur_page || 
-		page == (GtkNotebookPage *)(notebook->children->data) ||
-		(notebook->scrollable && 
-		 page == (GtkNotebookPage *)(notebook->first_tab->data))) ) 
-	    {
-	      points[n].x = page->allocation.x + TAB_CURVATURE;
-	      points[n++].y = page->allocation.y;
-	    
-	      points[n].x = page->allocation.x;
-	      points[n++].y = page->allocation.y + TAB_CURVATURE;
-
-	      points[n].x = page->allocation.x;
-	      points[n++].y = page->allocation.y + page->allocation.height - 1;
-	    }
-	  else 
-	    {
-	      points[n].x = page->allocation.x + TAB_OVERLAP;
-	      points[n++].y = page->allocation.y;
-	    }
-	  break;
-	case GTK_POS_BOTTOM:
-	  if ( (child_area.x < page->allocation.x + TAB_OVERLAP) &&
-	       (page == notebook->cur_page || 
-		page == (GtkNotebookPage *)(notebook->children->data) ||
-		(notebook->scrollable && 
-		 page == (GtkNotebookPage *)(notebook->first_tab->data))) ) 
-	    {
-	      points[0].x = page->allocation.x;
-	      points[0].y = page->allocation.y;
-
-	      points[1].x = page->allocation.x;
-	      points[1].y = page->allocation.y + page->allocation.height 
-		- TAB_CURVATURE - 1;
-
-	      points[2].x = page->allocation.x + TAB_CURVATURE;
-	      points[2].y = page->allocation.y + page->allocation.height - 1;
-	      n = 3;
-	    }
-	  else 
-	    {
-	      points[0].x = page->allocation.x + TAB_OVERLAP;
-	      points[0].y = page->allocation.y + page->allocation.height - 1;
-	      n = 1;
-	    }
-
-	  if (child_area.x + child_area.width > 
-	      page->allocation.x + page->allocation.width - TAB_OVERLAP)
-	    {
-	      points[n].x = page->allocation.x + page->allocation.width 
-		- TAB_CURVATURE - 1;
-	      points[n++].y = page->allocation.y + page->allocation.height - 1;
-
-	      points[n].x = page->allocation.x + page->allocation.width - 1;
-	      points[n++].y = page->allocation.y + page->allocation.height 
-		- TAB_CURVATURE - 1;
-	    
-	      points[n].x = page->allocation.x + page->allocation.width - 1;
-	      points[n++].y = page->allocation.y;
-	    }
-	  else 
-	    {
-	      points[n].x = page->allocation.x + page->allocation.width 
-		- TAB_OVERLAP - 1;
-	      points[n++].y = page->allocation.y + page->allocation.height - 1;
-	    }
-	  break;
-	case GTK_POS_LEFT:
-	  if ( (child_area.y < page->allocation.y + TAB_OVERLAP) &&
-	       (page == notebook->cur_page || 
-		page == (GtkNotebookPage *)(notebook->children->data) ||
-		(notebook->scrollable && 
-		 page == (GtkNotebookPage *)(notebook->first_tab->data))) )
-	    {
-	      points[0].x = page->allocation.x + page->allocation.width - 1;
-	      points[0].y = page->allocation.y;
-	      
-	      points[1].x = page->allocation.x + TAB_CURVATURE;
-	      points[1].y = page->allocation.y;
-
-	      points[2].x = page->allocation.x;
-	      points[2].y = page->allocation.y + TAB_CURVATURE;
-	      n = 3;
-	    }
-	  else 
-	    {
-	      points[0].x = page->allocation.x;
-	      points[0].y = page->allocation.y + TAB_OVERLAP;
-	      n = 1;
-	    }
-
-	  if (child_area.y + child_area.height > 
-	      page->allocation.y + page->allocation.height - TAB_OVERLAP) 
-	    {
-	      points[n].x = page->allocation.x;
-	      points[n++].y = page->allocation.y + page->allocation.height 
-		- TAB_CURVATURE - 1;
-
-	      points[n].x = page->allocation.x + TAB_CURVATURE;
-	      points[n++].y = page->allocation.y + page->allocation.height - 1;
-
-	      points[n].x = page->allocation.x + page->allocation.width - 1;
-	      points[n++].y = page->allocation.y + page->allocation.height - 1;
-	    }
-	  else 
-	    {
-	      points[n].x = page->allocation.x;
-	      points[n++].y = page->allocation.y + page->allocation.height 
-		- TAB_OVERLAP - 1;
-	    }
-	  break;
-	case GTK_POS_RIGHT:
-	  if (child_area.y + child_area.height > 
-	      page->allocation.y + page->allocation.height - TAB_OVERLAP) 
-	    {
-	      points[0].x = page->allocation.x;
-	      points[0].y = page->allocation.y + page->allocation.height - 1;
-
-	      points[1].x = page->allocation.x + page->allocation.width 
-		- TAB_CURVATURE - 1;
-	      points[1].y = page->allocation.y + page->allocation.height - 1;
-	      
-	      points[2].x = page->allocation.x + page->allocation.width - 1;
-	      points[2].y = page->allocation.y + page->allocation.height 
-		- TAB_CURVATURE - 1;
-	      n = 3;
-	    }
-	  else 
-	    {
-	      points[0].x = page->allocation.x + page->allocation.width - 1;
-	      points[0].y = page->allocation.y + page->allocation.height 
-		- TAB_OVERLAP - 1;
-	      n = 1;
-	    }
-
-	  if ( (child_area.y < page->allocation.y + TAB_OVERLAP) && 
-	       (page == notebook->cur_page || 
-		page == (GtkNotebookPage *)(notebook->children->data) ||
-		(notebook->scrollable && 
-		 page == (GtkNotebookPage *)(notebook->first_tab->data))) ) 
-	    {
-	      points[n].x = page->allocation.x + page->allocation.width - 1;
-	      points[n++].y = page->allocation.y + TAB_CURVATURE;
-
-	      points[n].x = page->allocation.x + page->allocation.width 
-		- TAB_CURVATURE - 1;
-	      points[n++].y = page->allocation.y;
-
-	      points[n].x = page->allocation.x;
-	      points[n++].y = page->allocation.y;
-	    }
-	  else 
-	    {
-	      points[n].x = page->allocation.x + page->allocation.width - 1;
-	      points[n++].y = page->allocation.y + TAB_OVERLAP;
-	    }
-	  break;
+	 case GTK_POS_TOP:
+	   gap_side = 0;
+	   break;
+	 case GTK_POS_BOTTOM:
+	   gap_side = 1;
+	   break;
+	 case GTK_POS_LEFT:
+	   gap_side = 2;
+	   break;
+	 case GTK_POS_RIGHT:
+	   gap_side = 3;
+	   break;
 	}
-
+       
       widget = GTK_WIDGET(notebook);
 
       if (notebook->cur_page == page)
-	{
-	  state_type = GTK_STATE_NORMAL;
-	}
+	 state_type = GTK_STATE_NORMAL;
       else 
-	{
-	  state_type = GTK_STATE_ACTIVE;
-	  gdk_draw_rectangle (widget->window, widget->style->bg_gc[state_type],
-			      TRUE, child_area.x, child_area.y,
-			      child_area.width, child_area.height);
-	}
-      
-      gtk_draw_polygon (widget->style, widget->window, state_type, 
-			GTK_SHADOW_OUT,	points, n, FALSE);
-
-      if (gtk_widget_intersect (page->tab_label, area, &child_area))
-	gtk_widget_draw (page->tab_label, &child_area);
+	 state_type = GTK_STATE_ACTIVE;
+       gtk_paint_extension(widget->style, widget->window,
+			   state_type, GTK_SHADOW_OUT,
+			   area, widget, "tab",
+			   page_area.x, page_area.y,
+			   page_area.width, page_area.height,
+			   gap_side);
+       if ((GTK_WIDGET_HAS_FOCUS (widget)) &&
+	   (GTK_NOTEBOOK(widget)->focus_tab->data == page) &&
+	   (page))
+	 {
+	    gtk_paint_focus (widget->style, widget->window,
+			     area, widget, "tab",
+			     page->tab_label->allocation.x - 1,
+			     page->tab_label->allocation.y - 1,
+			     page->tab_label->allocation.width + 1,
+			     page->tab_label->allocation.height + 1);
+	 }
+       if (gtk_widget_intersect (page->tab_label, area, &child_area))
+	 gtk_widget_draw (page->tab_label, &child_area);
     }
 }
 
@@ -2556,24 +2346,17 @@ gtk_notebook_draw_focus (GtkWidget *widget)
   if (GTK_WIDGET_DRAWABLE (widget) && notebook->show_tabs &&
       notebook->focus_tab)
     {
-      GtkNotebookPage *page;
-      GdkGC *gc;
-
-      page = notebook->focus_tab->data;
-
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-        gc = widget->style->black_gc;
-      else if (page == notebook->cur_page)
-        gc = widget->style->bg_gc[GTK_STATE_NORMAL];
-      else
-        gc = widget->style->bg_gc[GTK_STATE_ACTIVE];
-
-      gdk_draw_rectangle (widget->window, 
-			  gc, FALSE, 
-			  page->tab_label->allocation.x - 1, 
-			  page->tab_label->allocation.y - 1,
-			  page->tab_label->allocation.width + 1, 
-			  page->tab_label->allocation.height + 1);
+       GtkNotebookPage *page;
+       GdkRectangle area;
+       
+       page = notebook->focus_tab->data;
+       
+       area.x = widget->allocation.x;
+       area.y = widget->allocation.y;
+       area.width = widget->allocation.width;
+       area.height = widget->allocation.height;
+       
+       gtk_notebook_draw_tab(GTK_NOTEBOOK(widget), page, &area);
     }
 }
 
@@ -2940,6 +2723,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 	    gtk_widget_map (page->tab_label);
 	}
     }
+   gtk_notebook_set_shape(notebook);
 }
 
 static void
@@ -3286,6 +3070,7 @@ gtk_notebook_switch_focus_tab (GtkNotebook *notebook,
 				   &(GTK_WIDGET (notebook)->allocation));
       gtk_notebook_expose_tabs (notebook);
     }
+   gtk_notebook_set_shape(notebook);
 }
 
 static gint
@@ -3483,4 +3268,121 @@ gtk_notebook_find_page (gconstpointer    a,
 			gconstpointer    b)
 {
   return (((GtkNotebookPage *) a)->child != b);
+}
+
+static void
+gtk_notebook_set_shape (GtkNotebook *notebook)
+{
+   GtkWidget       *widget = NULL;
+   GdkPixmap       *pm = NULL;
+   GdkGC           *pmgc = NULL;
+   GdkColor         col;
+   gint             x, y, width, height, w, h, depth;
+   GtkNotebookPage *page;
+   GList           *children;
+   
+   if (!GTK_WIDGET(notebook)->window)
+     return;
+
+   widget = GTK_WIDGET(notebook);
+   
+   w = widget->allocation.width;
+   h = widget->allocation.height;
+   
+   pm = gdk_pixmap_new (widget->window, w, h, 1);
+   pmgc = gdk_gc_new (pm);
+
+   /* clear the shape mask */
+   col.pixel = 0;
+   gdk_gc_set_foreground(pmgc, &col);
+   gdk_draw_rectangle(pm, pmgc, TRUE, 0, 0, w, h);
+
+   col.pixel = 1;
+   gdk_gc_set_foreground(pmgc, &col);
+
+   /* draw the shape for the notebook page itself */
+   x = GTK_CONTAINER(notebook)->border_width;
+   y = GTK_CONTAINER(notebook)->border_width;
+   width = widget->allocation.width - x * 2;
+   height = widget->allocation.height - y * 2;
+
+   if (notebook->show_tabs && notebook->children)
+     {
+	if (!(notebook->show_tabs))
+	  {
+	     page = notebook->first_tab->data;
+	     switch (notebook->tab_pos)
+	       {
+		case GTK_POS_TOP:
+		  y += page->allocation.height +
+		    widget->style->klass->ythickness;
+		case GTK_POS_BOTTOM:
+		  height -= page->allocation.height +
+		    widget->style->klass->ythickness;
+		  break;
+		case GTK_POS_LEFT:
+		  x += page->allocation.width +
+		    widget->style->klass->xthickness;
+		case GTK_POS_RIGHT:
+		  width -= page->allocation.width +
+		    widget->style->klass->xthickness;
+		  break;
+	       }
+	  }
+	else
+	  {
+	     page =  notebook->cur_page;
+	     if (!GTK_WIDGET_MAPPED (page->tab_label))
+	       {
+		  if (notebook->tab_pos == GTK_POS_LEFT)
+		    {
+		       x -= widget->style->klass->xthickness * 2;
+		       width += widget->style->klass->xthickness * 2;
+		    }
+		  else if (notebook->tab_pos == GTK_POS_RIGHT)
+		    width += widget->style->klass->xthickness * 2;
+	       }
+	     switch (notebook->tab_pos)
+	       {
+		case GTK_POS_TOP:
+		  y += page->allocation.height;
+		case GTK_POS_BOTTOM:
+		  height -= page->allocation.height;
+		  break;
+		case GTK_POS_LEFT:
+		  x += page->allocation.width;
+		case GTK_POS_RIGHT:
+		  width -= page->allocation.width;
+		  break;
+	       }
+	  }
+     }
+   gdk_draw_rectangle(pm, pmgc, TRUE, x, y, width, height);
+
+   /* if theres an area for scrollign arrows draw the shape for them */
+   if (notebook->panel)
+     {
+	gdk_window_get_geometry(notebook->panel, &x, &y, &width, &height, &depth);
+	gdk_draw_rectangle(pm, pmgc, TRUE, x, y, width, height);
+     }
+   
+   /* draw the shapes of all the children */
+   children = notebook->children;
+   while (children)
+     {
+	page = children->data;
+	if (GTK_WIDGET_MAPPED (page->tab_label))
+	  {
+	     x = page->allocation.x;
+	     y = page->allocation.y;
+	     width = page->allocation.width;
+	     height = page->allocation.height;
+	     gdk_draw_rectangle(pm, pmgc, TRUE, x, y, width, height);
+	  }
+	children = children->next;
+     }
+   /* set the mask */
+   gdk_window_shape_combine_mask(widget->window, pm, 0, 0);
+   gdk_pixmap_unref(pm);
+   gdk_gc_destroy(pmgc);
 }

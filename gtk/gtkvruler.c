@@ -162,7 +162,13 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
   width = widget->allocation.height;
   height = widget->allocation.width - ythickness * 2;
 
-  gdk_draw_line (ruler->backing_store, gc,
+   gtk_paint_box (widget->style, ruler->backing_store,
+		  GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
+		  NULL, widget, "vruler",
+		  0, 0, 
+		  widget->allocation.width, widget->allocation.height);
+
+   gdk_draw_line (ruler->backing_store, gc,
 		 height + xthickness,
 		 ythickness,
 		 height + xthickness,
@@ -234,12 +240,6 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 	      for (j = 0; j < (int) strlen (unit_str); j++)
 		{
 		  digit_str[0] = unit_str[j];
-		  gdk_draw_rectangle (ruler->backing_store,
-				      bg_gc, TRUE,
-				      xthickness + 1,
-				      pos + digit_height * j + 1,
-				      gdk_string_width(font, digit_str),
-				      digit_height);
 		  gdk_draw_string (ruler->backing_store, font, gc,
 				   xthickness + 1,
 				   pos + digit_height * (j + 1) + 1,

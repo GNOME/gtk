@@ -272,26 +272,16 @@ gtk_toggle_button_draw_focus (GtkWidget *widget)
 	  width -= 2;
 	  height -= 2;
 	}
-      else
-	{
-	  if (GTK_WIDGET_STATE (toggle_button) == GTK_STATE_ACTIVE)
-	    gdk_draw_rectangle (widget->window,
-				widget->style->bg_gc[GTK_WIDGET_STATE (widget)], FALSE,
-				x + 1, y + 1, width - 4, height - 4);
-	  else
-	    gdk_draw_rectangle (widget->window,
-				widget->style->bg_gc[GTK_WIDGET_STATE (widget)], FALSE,
-				x + 2, y + 2, width - 5, height - 5);
-	}
 
       if (toggle_button->active)
 	shadow_type = GTK_SHADOW_IN;
       else
 	shadow_type = GTK_SHADOW_OUT;
 
-      gtk_draw_shadow (widget->style, widget->window,
-		       GTK_WIDGET_STATE (widget), shadow_type,
-		       x, y, width, height);
+       gtk_paint_box (widget->style, widget->window,
+		      GTK_WIDGET_STATE (widget), shadow_type,
+		      NULL, widget, "togglebutton",
+		      x, y, width, height);
 
       if (GTK_WIDGET_HAS_FOCUS (widget))
 	{
@@ -300,10 +290,11 @@ gtk_toggle_button_draw_focus (GtkWidget *widget)
 	  width += 2;
 	  height += 2;
 
-	  gdk_draw_rectangle (widget->window,
-			      widget->style->black_gc, FALSE,
-			      x, y, width - 1, height - 1);
+	  gtk_paint_focus (widget->style, widget->window,
+			   NULL, widget, "togglebutton",
+			   x, y, width - 1, height - 1);
 	}
+       gtk_widget_draw (GTK_BIN (widget)->child, NULL);
     }
 }
 

@@ -244,8 +244,6 @@ gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 	   widget->style->klass->xthickness + 2);
       y = (widget->allocation.height - height) / 2;
 
-      gdk_window_clear_area (widget->window, x, y, width, height);
-
       if (check_menu_item->active ||
 	  check_menu_item->always_show_toggle ||
 	  (GTK_WIDGET_STATE (check_menu_item) == GTK_STATE_PRELIGHT))
@@ -256,22 +254,10 @@ gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 	    shadow_type = GTK_SHADOW_IN;
 	  else
 	    shadow_type = GTK_SHADOW_OUT;
-
-	  pts[0].x = x + width / 2;
-	  pts[0].y = y;
-	  pts[1].x = x + width;
-	  pts[1].y = y + height / 2;
-	  pts[2].x = pts[0].x;
-	  pts[2].y = y + height;
-	  pts[3].x = x;
-	  pts[3].y = pts[1].y;
-
-	  gdk_draw_polygon (widget->window,
-			    widget->style->bg_gc[state_type],
-			    TRUE, pts, 4);
-	  gtk_draw_diamond (widget->style, widget->window,
-			    state_type, shadow_type,
-			    x, y, width, height);
+	   gtk_paint_option (widget->style, widget->window,
+			     state_type, shadow_type,
+			     area, widget, "option",
+			     x, y, width, height);
 	}
     }
 }

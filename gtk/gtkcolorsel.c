@@ -1220,6 +1220,38 @@ gtk_color_selection_draw_wheel (GtkColorSelection *colorsel,
       gtk_preview_draw_row (GTK_PREVIEW (colorsel->wheel_area), colorsel->wheel_buf, 0, y, wid);
     }
 
+     {
+	GdkPixmap *pm = NULL;
+	GdkGC     *pmgc = NULL;
+	GdkColor   col;
+	gint w, h;
+	
+	pm = gdk_pixmap_new (colorsel->wheel_area->window, wid, heig, 1);
+	pmgc = gdk_gc_new (pm);
+	
+	col.pixel = 0;
+	gdk_gc_set_foreground(pmgc, &col);
+	gdk_draw_rectangle(pm, pmgc, TRUE, 0, 0, wid, heig);
+	col.pixel = 1;
+	
+	gdk_gc_set_foreground(pmgc, &col);
+	gdk_draw_arc (pm, pmgc, TRUE, 0, 0, wid, heig, 0, 360*64);
+
+	w = colorsel->wheel_area->allocation.width;
+	h = colorsel->wheel_area->allocation.height;
+	
+	gdk_draw_arc (pm, pmgc,
+		      FALSE, 1, 1, w - 1, h - 1, 30 * 64, 180 * 64);
+	gdk_draw_arc (pm, pmgc,
+		      FALSE, 0, 0, w, h, 30 * 64, 180 * 64);
+	gdk_draw_arc (pm, pmgc,
+		      FALSE, 1, 1, w - 1, h - 1, 210 * 64, 180 * 64);
+	gdk_draw_arc (pm, pmgc,
+		      FALSE, 0, 0, w, h, 210 * 64, 180 * 64);
+	gdk_window_shape_combine_mask(colorsel->wheel_area->window, pm, 0, 0);
+	gdk_pixmap_unref(pm);
+	gdk_gc_destroy(pmgc);
+     }
   gtk_widget_draw (colorsel->wheel_area, NULL);
 }
 

@@ -717,7 +717,6 @@ gtk_range_expose (GtkWidget      *widget,
        * trough-drawing handler. (Probably should really pass another
        * argument - the redrawn area to all the drawing functions)
        */
-
       gint xt = widget->style->klass->xthickness;
       gint yt = widget->style->klass->ythickness;
       
@@ -1108,49 +1107,39 @@ gtk_real_range_draw_trough (GtkRange *range)
   g_return_if_fail (GTK_IS_RANGE (range));
 
   if (range->trough)
-    {
-      gtk_draw_shadow (GTK_WIDGET (range)->style, range->trough,
-                       GTK_STATE_NORMAL, GTK_SHADOW_IN,
-                       0, 0, -1, -1);
-
-      if (GTK_WIDGET_HAS_FOCUS (range))
-        gdk_draw_rectangle (GTK_WIDGET (range)->window,
-                            GTK_WIDGET (range)->style->black_gc,
-                            FALSE, 0, 0,
-                            GTK_WIDGET (range)->allocation.width - 1,
-                            GTK_WIDGET (range)->allocation.height - 1);
-      else if (range->trough != GTK_WIDGET (range)->window)
-        gdk_draw_rectangle (GTK_WIDGET (range)->window,
-                            GTK_WIDGET (range)->style->bg_gc[GTK_STATE_NORMAL],
-                            FALSE, 0, 0,
-                            GTK_WIDGET (range)->allocation.width - 1,
-                            GTK_WIDGET (range)->allocation.height - 1);
+     {
+	gtk_paint_box (GTK_WIDGET (range)->style, range->trough,
+		       GTK_STATE_ACTIVE, GTK_SHADOW_IN,
+		       NULL, GTK_WIDGET(range), "trough",
+		       0, 0, -1, -1);
+	if (GTK_WIDGET_HAS_FOCUS (range))
+	  gtk_paint_focus (GTK_WIDGET (range)->style,
+			  range->trough,
+			   NULL, GTK_WIDGET(range), "trough",
+			  0, 0, -1, -1);
     }
 }
 
 static void
 gtk_real_range_draw_slider (GtkRange *range)
 {
-  GtkStateType state_type;
-
-  g_return_if_fail (range != NULL);
-  g_return_if_fail (GTK_IS_RANGE (range));
-
-  if (range->slider)
-    {
-      if ((range->in_child == RANGE_CLASS (range)->slider) ||
-	  (range->click_child == RANGE_CLASS (range)->slider))
-	state_type = GTK_STATE_PRELIGHT;
-      else
-	state_type = GTK_STATE_NORMAL;
-
-      gtk_style_set_background (GTK_WIDGET (range)->style, range->slider, state_type);
-      gdk_window_clear (range->slider);
-
-      gtk_draw_shadow (GTK_WIDGET (range)->style, range->slider,
+   GtkStateType state_type;
+   
+   g_return_if_fail (range != NULL);
+   g_return_if_fail (GTK_IS_RANGE (range));
+   
+   if (range->slider)
+     {
+	if ((range->in_child == RANGE_CLASS (range)->slider) ||
+	    (range->click_child == RANGE_CLASS (range)->slider))
+	  state_type = GTK_STATE_PRELIGHT;
+	else
+	  state_type = GTK_STATE_NORMAL;
+	gtk_paint_box (GTK_WIDGET (range)->style, range->slider,
 		       state_type, GTK_SHADOW_OUT,
+		       NULL, GTK_WIDGET (range), "slider",
 		       0, 0, -1, -1);
-    }
+     }
 }
 
 static gint

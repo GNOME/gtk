@@ -305,7 +305,6 @@ static void
 gtk_hscale_draw_slider (GtkRange *range)
 {
   GtkStateType state_type;
-  gint width, height;
 
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_HSCALE (range));
@@ -318,16 +317,11 @@ gtk_hscale_draw_slider (GtkRange *range)
       else
         state_type = GTK_STATE_NORMAL;
 
-      gtk_style_set_background (GTK_WIDGET (range)->style, range->slider, state_type);
-      gdk_window_clear (range->slider);
-
-      gdk_window_get_size (range->slider, &width, &height);
-      gtk_draw_vline (GTK_WIDGET (range)->style, range->slider,
-		      state_type, 1, height - 2, width / 2);
-
-      gtk_draw_shadow (GTK_WIDGET (range)->style, range->slider,
-                       state_type, GTK_SHADOW_OUT,
-                       0, 0, -1, -1);
+       gtk_paint_slider(GTK_WIDGET (range)->style, range->slider, state_type, 
+			GTK_SHADOW_OUT,
+			NULL, GTK_WIDGET (range), "hscale",
+			0, 0, -1, -1, 
+			GTK_ORIENTATION_HORIZONTAL); 
     }
 }
 
@@ -397,9 +391,11 @@ gtk_hscale_draw_value (GtkScale *scale)
       if (!GTK_WIDGET_IS_SENSITIVE (scale))
 	state_type = GTK_STATE_INSENSITIVE;
 
-      gtk_draw_string (GTK_WIDGET (scale)->style,
-		       GTK_WIDGET (scale)->window,
-		       state_type, x, y, buffer);
+       gtk_paint_string (GTK_WIDGET (scale)->style,
+			 GTK_WIDGET (scale)->window,
+			 state_type, 
+			 NULL, GTK_WIDGET (scale), "hscale", 
+			 x, y, buffer);
     }
 }
 

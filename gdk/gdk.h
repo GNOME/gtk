@@ -196,6 +196,21 @@ void gdk_window_shape_combine_mask (GdkWindow	    *window,
 				    GdkBitmap	    *shape_mask,
 				    gint	     offset_x,
 				    gint	     offset_y);
+/*
+ * This routine allows you to quickly take the shapes of all the child windows
+ * of a window and use their shapes as the shape mask for this window - useful
+ * for container windows that dont want to look like a big box
+ * 
+ * - Raster
+ */
+void gdk_window_set_child_shapes (GdkWindow *window);
+/*
+ * This routine allows you to combine 9ie ADD) child shapes to your own window's
+ * shape keeping its current shape and ADDING the shild shapes to it.
+ * 
+ * - Raster
+ */
+void gdk_window_combine_child_shapes (GdkWindow *window);
 
 /* 
  * Drag & Drop
@@ -841,6 +856,7 @@ guint    gdk_keyval_to_upper		  (guint	keyval);
 guint    gdk_keyval_to_lower		  (guint	keyval);
 gboolean gdk_keyval_is_upper		  (guint	keyval);
 gboolean gdk_keyval_is_lower		  (guint	keyval);
+
 
 #include <gdk/gdkrgb.h>
 

@@ -2075,3 +2075,513 @@ gdk_window_get_toplevels (void)
   return new_list;
 }
 
+/* 
+ * propagate the shapes from all child windows of a GDK window to the parent 
+ * window. Shamelessly ripped from Enlightenment's code
+ * 
+ * - Raster
+ */
+
+struct _gdk_span
+{
+   gint                start;
+   gint                end;
+   struct _gdk_span    *next;
+};
+
+void
+gdk_add_to_span(struct _gdk_span **s, int x, int xx)
+{
+   struct _gdk_span   *ptr1, *ptr2, *noo, *ss;
+   gchar               spanning;
+   
+   ptr2 = NULL;
+   ptr1 = *s;
+   spanning = 0;
+   ss = NULL;
+   /* scan the spans for this line */
+   while (ptr1)
+     {
+	/* -- -> new span */
+	/* == -> existing span */
+	/* ## -> spans intersect */
+	/* if we are in the middle of spanning the span into the line */
+	if (spanning)
+	  {
+	     /* case: ---- ==== */
+	     if (xx < ptr1->start - 1)
+	       {
+		  /* ends before next span - extend to here */
+		  ss->end = xx;
+		  return;
+	       }
+	     /* case: ----##=== */
+	     else if (xx <= ptr1->end)
+	       {
+		  /* crosses into next span - delete next span and append */
+		  ss->end = ptr1->end;
+		  ss->next = ptr1->next;
+		  g_free(ptr1);
+		  return;
+	       }
+	     /* case: ---###--- */
+	     else
+	       {
+		  /* overlaps next span - delete and keep checking */
+		  ss->next = ptr1->next;
+		  g_free(ptr1);
+		  ptr1 = ss;
+	       }
+	  }
+	/* otherwise havent started spanning it in yet */
+	else
+	  {
+	     /* case: ---- ==== */
+	     if (xx < ptr1->start - 1)
+	       {
+		  /* insert span here in list */
+		  noo = g_malloc(sizeof(struct _gdk_span));
+		  
+		  if (noo)
+		    {
+		       noo->start = x;
+		       noo->end = xx;
+		       noo->next = ptr1;
+		       if (ptr2)
+			 ptr2->next = noo;
+		       else
+			 *s = noo;
+		    }
+		  return;
+	       }
+	     /* case: ----##=== */
+	     else if ((x < ptr1->start) && (xx <= ptr1->end))
+	       {
+		  /* expand this span to the left point of the new one */
+		  ptr1->start = x;
+		  return;
+	       }
+	     /* case: ===###=== */
+	     else if ((x >= ptr1->start) && (xx <= ptr1->end))
+	       {
+		  /* throw the span away */
+		  return;
+	       }
+	     /* case: ---###--- */
+	     else if ((x < ptr1->start) && (xx > ptr1->end))
+	       {
+		  ss = ptr1;
+		  spanning = 1;
+		  ptr1->start = x;
+		  ptr1->end = xx;
+	       }
+	     /* case: ===##---- */
+	     else if ((x >= ptr1->start) && (x <= ptr1->end + 1) && (xx > ptr1->end))
+	       {
+		  ss = ptr1;
+		  spanning = 1;
+		  ptr1->end = xx;
+	       }
+	     /* case: ==== ---- */
+	     /* case handled by next loop iteration - first case */
+	  }
+	ptr2 = ptr1;
+	ptr1 = ptr1->next;
+     }
+   /* it started in the middle but spans beyond your current list */
+   if (spanning)
+     {
+	ptr2->end = xx;
+	return;
+     }
+   /* it does not start inside a span or in the middle, so add it to the end */
+   noo = g_malloc(sizeof(struct _gdk_span));
+   
+   if (noo)
+     {
+	noo->start = x;
+	noo->end = xx;
+	if (ptr2)
+	  {
+	     noo->next = ptr2->next;
+	     ptr2->next = noo;
+	  }
+	else
+	  {
+	     noo->next = NULL;
+	     *s = noo;
+	  }
+     }
+   return;
+}
+
+void
+gdk_propagate_shapes(Display *disp, Window win)
+{
+   Window              rt, par, *list = NULL;
+   gint                a, k, i, j, num = 0, num_rects = 0, rn = 0, ord;
+   gint                x, y, contig, x1, y1, x2, y2;
+   guint               w, h, d;
+   gint                baseh, basew;
+   XRectangle         *rects = NULL, *rl = NULL;
+   struct _gdk_span  **spans = NULL, *ptr1, *ptr2, *ptr3;
+   XWindowAttributes   xatt;
+   
+   XGetGeometry(disp, win, &rt, &x, &y, &w, &h, &d, &d);
+   if (h <= 0)
+     return;
+   basew = w;
+   baseh = h;
+   spans = g_malloc(sizeof(struct _gdk_span *) * h);
+   
+   for (i = 0; i < h; i++)
+     spans[i] = NULL;
+   XQueryTree(disp, win, &rt, &par, &list, (unsigned int *)&num);
+   if (list)
+     {
+	/* go through all child windows and create/insert spans */
+	for (i = 0; i < num; i++)
+	  {
+	     if (XGetWindowAttributes(disp, list[i], &xatt))
+	       {
+		  if (XGetGeometry(disp, list[i], &rt, &x, &y, &w, &h, &d, &d))
+		    {
+		       rl = XShapeGetRectangles(disp, list[i], ShapeBounding, &rn, &ord);
+		       if ((rl) && (xatt.map_state != IsUnmapped))
+			 {
+			    /* go through all clip rects in this window's shape */
+			    for (k = 0; k < rn; k++)
+			      {
+				 /* for each clip rect, add it to each line's spans */
+				 x1 = x + rl[k].x;
+				 x2 = x + rl[k].x + (rl[k].width - 1);
+				 y1 = y + rl[k].y;
+				 y2 = y + rl[k].y + (rl[k].height - 1);
+				 if (x1 < 0)
+				   x1 = 0;
+				 if (y1 < 0)
+				   y1 = 0;
+				 if (x2 >= basew)
+				   x2 = basew - 1;
+				 if (y2 >= baseh)
+				   y2 = baseh - 1;
+				 for (a = y1; a <= y2; a++)
+				   {
+				      if ((x2 - x1) >= 0)
+					gdk_add_to_span(&spans[a], x1, x2);
+				   }
+			      }
+			    XFree(rl);
+			 }
+		    }
+	       }
+	  }
+	/* go through the spans list and build a list of rects */
+	rects = g_malloc(sizeof(XRectangle) * 256);
+	num_rects = 0;
+	for (i = 0; i < baseh; i++)
+	  {
+	     ptr1 = spans[i];
+	     /* go through the line for all spans */
+	     while (ptr1)
+	       {
+		  rects[num_rects].x = ptr1->start;
+		  rects[num_rects].y = i;
+		  rects[num_rects].width = ptr1->end - ptr1->start + 1;
+		  rects[num_rects].height = 1;
+		  j = i + 1;
+		  /* if there are more lines */
+		  contig = 1;
+		  /* while contigous rects (same start/end coords) exist */
+		  while ((contig) && (j < baseh))
+		    {
+		       /* search next line for spans matching this one */
+		       contig = 0;
+		       ptr2 = spans[j];
+		       ptr3 = NULL;
+		       while (ptr2)
+			 {
+			    /* if we have an exact span match set contig */
+			    if ((ptr2->start == ptr1->start) &&
+				(ptr2->end == ptr1->end))
+			      {
+				 contig = 1;
+				 /* remove the span - not needed */
+				 if (ptr3)
+				   {
+				      ptr3->next = ptr2->next;
+				      g_free(ptr2);
+				      ptr2 = NULL;
+				   }
+				 else
+				   {
+				      spans[j] = ptr2->next;
+				      g_free(ptr2);
+				      ptr2 = NULL;
+				   }
+				 break;
+			      }
+			    /* gone past the span point no point looking */
+			    else if (ptr2->start < ptr1->start)
+			      break;
+			    if (ptr2)
+			      {
+				 ptr3 = ptr2;
+				 ptr2 = ptr2->next;
+			      }
+			 }
+		       /* if a contiguous span was found increase the rect h */
+		       if (contig)
+			 {
+			    rects[num_rects].height++;
+			    j++;
+			 }
+		    }
+		  /* up the rect count */
+		  num_rects++;
+		  /* every 256 new rects increase the rect array */
+		  if ((num_rects % 256) == 0)
+		    rects = g_realloc(rects, sizeof(XRectangle) * (num_rects + 256));
+		  ptr1 = ptr1->next;
+	       }
+	  }
+	/* set the rects as the shape mask */
+	if (rects)
+	  {
+	     XShapeCombineRectangles(disp, win, ShapeBounding, 0, 0, rects, num_rects,
+				     ShapeSet, YXSorted);
+	     g_free(rects);
+	  }
+	XFree(list);
+     }
+   /* free up all the spans we made */
+   for (i = 0; i < baseh; i++)
+     {
+	ptr1 = spans[i];
+	while (ptr1)
+	  {
+	     ptr2 = ptr1;
+	     ptr1 = ptr1->next;
+	     g_free(ptr2);
+	  }
+     }
+   g_free(spans);
+}
+
+void
+gdk_propagate_combine_shapes(Display *disp, Window win)
+{
+   Window              rt, par, *list = NULL;
+   gint                a, k, i, j, num = 0, num_rects = 0, rn = 0, ord;
+   gint                x, y, contig, x1, y1, x2, y2;
+   guint               w, h, d;
+   gint                baseh, basew;
+   XRectangle         *rects = NULL, *rl = NULL;
+   struct _gdk_span  **spans = NULL, *ptr1, *ptr2, *ptr3;
+   XWindowAttributes   xatt;
+   
+   XGetGeometry(disp, win, &rt, &x, &y, &w, &h, &d, &d);
+   if (h <= 0)
+     return;
+   basew = w;
+   baseh = h;
+   spans = g_malloc(sizeof(struct _gdk_span *) * h);
+   
+   for (i = 0; i < h; i++)
+     spans[i] = NULL;
+   XQueryTree(disp, win, &rt, &par, &list, (unsigned int *)&num);
+   if (list)
+     {
+	list = realloc(list, ++num * sizeof(Window));
+	list[num - 1] = win;
+	/* go through all child windows and create/insert spans */
+	for (i = 0; i < num; i++)
+	  {
+	     if (XGetWindowAttributes(disp, list[i], &xatt))
+	       {
+		  if (XGetGeometry(disp, list[i], &rt, &x, &y, &w, &h, &d, &d))
+		    {
+		       if (i == (num - 1))
+			 {
+			    x = 0;
+			    y = 0;
+			 }
+		       rl = XShapeGetRectangles(disp, list[i], ShapeBounding, &rn, &ord);
+		       if ((rl) && ((xatt.map_state != IsUnmapped) || (i == (num - 1))))
+			 {
+			    /* go through all clip rects in this window's shape */
+			    for (k = 0; k < rn; k++)
+			      {
+				 /* for each clip rect, add it to each line's spans */
+				 x1 = x + rl[k].x;
+				 x2 = x + rl[k].x + (rl[k].width - 1);
+				 y1 = y + rl[k].y;
+				 y2 = y + rl[k].y + (rl[k].height - 1);
+				 if (x1 < 0)
+				   x1 = 0;
+				 if (y1 < 0)
+				   y1 = 0;
+				 if (x2 >= basew)
+				   x2 = basew - 1;
+				 if (y2 >= baseh)
+				   y2 = baseh - 1;
+				 for (a = y1; a <= y2; a++)
+				   {
+				      if ((x2 - x1) >= 0)
+					gdk_add_to_span(&spans[a], x1, x2);
+				   }
+			      }
+			    XFree(rl);
+			 }
+		    }
+	       }
+	  }
+	/* go through the spans list and build a list of rects */
+	rects = g_malloc(sizeof(XRectangle) * 256);
+	num_rects = 0;
+	for (i = 0; i < baseh; i++)
+	  {
+	     ptr1 = spans[i];
+	     /* go through the line for all spans */
+	     while (ptr1)
+	       {
+		  rects[num_rects].x = ptr1->start;
+		  rects[num_rects].y = i;
+		  rects[num_rects].width = ptr1->end - ptr1->start + 1;
+		  rects[num_rects].height = 1;
+		  j = i + 1;
+		  /* if there are more lines */
+		  contig = 1;
+		  /* while contigous rects (same start/end coords) exist */
+		  while ((contig) && (j < baseh))
+		    {
+		       /* search next line for spans matching this one */
+		       contig = 0;
+		       ptr2 = spans[j];
+		       ptr3 = NULL;
+		       while (ptr2)
+			 {
+			    /* if we have an exact span match set contig */
+			    if ((ptr2->start == ptr1->start) &&
+				(ptr2->end == ptr1->end))
+			      {
+				 contig = 1;
+				 /* remove the span - not needed */
+				 if (ptr3)
+				   {
+				      ptr3->next = ptr2->next;
+				      g_free(ptr2);
+				      ptr2 = NULL;
+				   }
+				 else
+				   {
+				      spans[j] = ptr2->next;
+				      g_free(ptr2);
+				      ptr2 = NULL;
+				   }
+				 break;
+			      }
+			    /* gone past the span point no point looking */
+			    else if (ptr2->start < ptr1->start)
+			      break;
+			    if (ptr2)
+			      {
+				 ptr3 = ptr2;
+				 ptr2 = ptr2->next;
+			      }
+			 }
+		       /* if a contiguous span was found increase the rect h */
+		       if (contig)
+			 {
+			    rects[num_rects].height++;
+			    j++;
+			 }
+		    }
+		  /* up the rect count */
+		  num_rects++;
+		  /* every 256 new rects increase the rect array */
+		  if ((num_rects % 256) == 0)
+		    rects = g_realloc(rects, sizeof(XRectangle) * (num_rects + 256));
+		  ptr1 = ptr1->next;
+	       }
+	  }
+	/* set the rects as the shape mask */
+	if (rects)
+	  {
+	     XShapeCombineRectangles(disp, win, ShapeBounding, 0, 0, rects, num_rects,
+				     ShapeSet, YXSorted);
+	     g_free(rects);
+	  }
+	XFree(list);
+     }
+   /* free up all the spans we made */
+   for (i = 0; i < baseh; i++)
+     {
+	ptr1 = spans[i];
+	while (ptr1)
+	  {
+	     ptr2 = ptr1;
+	     ptr1 = ptr1->next;
+	     g_free(ptr2);
+	  }
+     }
+   g_free(spans);
+}
+
+void
+gdk_window_set_child_shapes (GdkWindow *window)
+{
+   enum { UNKNOWN, NO, YES };
+   static gint have_shape = UNKNOWN;
+   GdkWindowPrivate *private;
+   
+   g_return_if_fail (window != NULL);
+   
+#ifdef HAVE_SHAPE_EXT
+   if (have_shape == UNKNOWN)
+     {
+	int ignore;
+	if (XQueryExtension(gdk_display, "SHAPE", &ignore, &ignore, &ignore))
+	  have_shape = YES;
+	else
+	  have_shape = NO;
+     }
+   
+   if (have_shape == YES)
+     {
+	private = (GdkWindowPrivate*) window;
+	if (private->destroyed)
+	  return;
+	gdk_propagate_shapes (private->xdisplay, private->xwindow);
+     }
+#endif   
+}
+
+void
+gdk_window_combine_child_shapes (GdkWindow *window)
+{
+   enum { UNKNOWN, NO, YES };
+   static gint have_shape = UNKNOWN;
+   GdkWindowPrivate *private;
+   
+   g_return_if_fail (window != NULL);
+   
+#ifdef HAVE_SHAPE_EXT
+   if (have_shape == UNKNOWN)
+     {
+	int ignore;
+	if (XQueryExtension(gdk_display, "SHAPE", &ignore, &ignore, &ignore))
+	  have_shape = YES;
+	else
+	  have_shape = NO;
+     }
+   
+   if (have_shape == YES)
+     {
+	private = (GdkWindowPrivate*) window;
+	if (private->destroyed)
+	  return;
+	gdk_propagate_combine_shapes (private->xdisplay, private->xwindow);
+     }
+#endif   
+}

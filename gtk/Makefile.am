@@ -85,6 +85,7 @@ libgtk_1_1_la_SOURCES = \
 	gtkstatusbar.c		\
 	gtktable.c		\
 	gtktext.c		\
+	gtkthemes.c		\
 	gtktipsquery.c		\
 	gtktogglebutton.c	\
 	gtktoolbar.c		\
@@ -191,6 +192,7 @@ gtkinclude_HEADERS = \
 	gtkstatusbar.h		\
 	gtktable.h		\
 	gtktext.h		\
+	gtkthemes.h		\
 	gtktipsquery.h		\
 	gtktogglebutton.h	\
 	gtktoolbar.h		\
@@ -309,7 +311,8 @@ LDADDS = \
 	@x_ldflags@					\
 	@x_libs@					\
 	@GLIB_LIBS@                                     \
-	-lm
+	-lm -ldl                                        \
+	-lgdk_imlib -ljpeg -ltiff -lgif -lpng -lz -lm
 
 testgtk_DEPENDENCIES = $(DEPS)
 testinput_DEPENDENCIES = $(DEPS)

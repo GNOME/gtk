@@ -222,6 +222,25 @@ gtk_list_item_draw (GtkWidget    *widget,
     {
       bin = GTK_BIN (widget);
 
+       if (widget->state == GTK_STATE_NORMAL)
+	 {
+	    gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+	    gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+	 }
+       else
+	 {
+	    if (!GTK_WIDGET_IS_SENSITIVE (widget))
+	      gtk_paint_flat_box(widget->style, widget->window, 
+				 widget->state, GTK_STATE_INSENSITIVE,
+				 area, widget, "listitem",
+				 0, 0, -1, -1);
+	    else
+	      gtk_paint_flat_box(widget->style, widget->window, 
+				 widget->state, GTK_SHADOW_ETCHED_OUT,
+				 area, widget, "listitem",
+				 0, 0, -1, -1);	      
+	 }
+/*       
       if (!GTK_WIDGET_IS_SENSITIVE (widget))
 	gtk_style_set_background (widget->style, widget->window, GTK_STATE_INSENSITIVE);
       else if (widget->state == GTK_STATE_NORMAL)
@@ -232,37 +251,26 @@ gtk_list_item_draw (GtkWidget    *widget,
 
       gdk_window_clear_area (widget->window, area->x, area->y,
 			     area->width, area->height);
-
+*/
       if (bin->child && gtk_widget_intersect (bin->child, area, &child_area))
 	gtk_widget_draw (bin->child, &child_area);
 
-      gtk_widget_draw_focus (widget);
+       if (GTK_WIDGET_HAS_FOCUS (widget))
+	 gtk_paint_focus (widget->style, widget->window,
+			  NULL, widget, "listitem",
+			  0, 0,
+			  widget->allocation.width - 1,
+			  widget->allocation.height - 1);
     }
 }
 
 static void
 gtk_list_item_draw_focus (GtkWidget *widget)
 {
-  GdkGC *gc;
+   g_return_if_fail (widget != NULL);
+   g_return_if_fail (GTK_IS_LIST_ITEM (widget));
 
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_LIST_ITEM (widget));
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-	gc = widget->style->black_gc;
-      else if (!GTK_WIDGET_IS_SENSITIVE (widget))
-	gc = widget->style->bg_gc[GTK_STATE_INSENSITIVE];
-      else if (widget->state == GTK_STATE_NORMAL)
-	gc = widget->style->base_gc[GTK_STATE_NORMAL];
-      else
-	gc = widget->style->bg_gc[widget->state];
-
-      gdk_draw_rectangle (widget->window, gc, FALSE, 0, 0,
-			  widget->allocation.width - 1,
-			  widget->allocation.height - 1);
-    }
+   gtk_widget_draw(widget, NULL);
 }
 
 static gint

@@ -19,7 +19,6 @@
 #ifndef __GTK_WIDGET_H__
 #define __GTK_WIDGET_H__
 
-
 #include <gdk/gdk.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkobject.h>
@@ -99,7 +98,10 @@ typedef enum
 typedef struct _GtkRequisition	  GtkRequisition;
 typedef struct _GtkAllocation	  GtkAllocation;
 typedef struct _GtkSelectionData GtkSelectionData;
-typedef struct _GtkWidget	  GtkWidget;
+#ifndef __TYPEDEFED_GTK_WIDGET__
+typedef struct _GtkWidget         GtkWidget;
+#define __TYPEDEFED_GTK_WIDGET__
+#endif
 typedef struct _GtkWidgetClass	  GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo  GtkWidgetAuxInfo;
 typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;

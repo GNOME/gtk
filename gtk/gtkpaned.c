@@ -251,13 +251,12 @@ gtk_paned_expose (GtkWidget      *widget,
       /* An expose event for the handle */
       if (event->window == paned->handle)
 	{
-	  gdk_window_set_background (paned->handle,
-				     &widget->style->bg[widget->state]);
-	  gdk_window_clear (paned->handle);
-	  gtk_draw_shadow (widget->style, paned->handle,
-			   GTK_WIDGET_STATE(widget),
-			   GTK_SHADOW_OUT, 0, 0,
-			   paned->handle_size, paned->handle_size);
+	   gtk_paint_box (widget->style, paned->handle,
+			  GTK_WIDGET_STATE(widget),
+			  GTK_SHADOW_OUT, 
+			  &event->area, widget, "paned",
+			  0, 0,
+			  paned->handle_size, paned->handle_size);
 	}
       else
 	{

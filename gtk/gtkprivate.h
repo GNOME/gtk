@@ -22,6 +22,7 @@
 
 #include <gtk/gtkobject.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkthemes.h>
 
 
 #ifdef __cplusplus

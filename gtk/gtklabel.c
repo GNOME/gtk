@@ -145,7 +145,6 @@ gtk_label_init (GtkLabel *label)
   label->row = NULL;
   label->max_width = 0;
   label->jtype = GTK_JUSTIFY_CENTER;
-  label->needs_clear = FALSE;
   
   gtk_label_set (label, "");
 }
@@ -210,7 +209,7 @@ gtk_label_set_justify (GtkLabel	       *label,
 	{
 	  if (GTK_WIDGET_MAPPED (label))
 	    gtk_widget_queue_clear (GTK_WIDGET (label));
-	  
+
 	  gtk_widget_queue_resize (GTK_WIDGET (label));
 	}
     }
@@ -308,7 +307,7 @@ gtk_label_expose (GtkWidget	 *widget,
        */
       gdk_gc_set_clip_rectangle (widget->style->white_gc, &event->area);
       gdk_gc_set_clip_rectangle (widget->style->fg_gc[state], &event->area);
-  
+
       x = widget->allocation.x + misc->xpad +
 	(widget->allocation.width - (label->max_width + label->misc.xpad * 2))
 	* misc->xalign + 0.5;
@@ -330,16 +329,11 @@ gtk_label_expose (GtkWidget	 *widget,
 	  else if (label->jtype == GTK_JUSTIFY_RIGHT)
 	    offset = (label->max_width - gdk_text_width (widget->style->font, row->data, len));
 	  
-	  if (state == GTK_STATE_INSENSITIVE)
-	    gdk_draw_text (widget->window, widget->style->font,
-			   widget->style->white_gc,
-			   offset + x + 1, y + 1, row->data, len);
-	  
-	  gdk_draw_text (widget->window, widget->style->font,
-			 widget->style->fg_gc[state],
-			 offset + x, y, row->data, len);
-	  row = row->next;
-	  y += widget->style->font->ascent + widget->style->font->descent + 2;
+	   gtk_paint_string(widget->style, widget->window, state,
+			    &event->area, widget, "label", x, y, row->data);
+
+	   row = row->next;
+	   y += widget->style->font->ascent + widget->style->font->descent + 2;
 	}
       
       /* 
@@ -354,18 +348,12 @@ gtk_label_expose (GtkWidget	 *widget,
       
       else if (label->jtype == GTK_JUSTIFY_RIGHT)
 	offset = (label->max_width - gdk_string_width (widget->style->font, row->data));
-      
-      if (state == GTK_STATE_INSENSITIVE)
-	gdk_draw_string (widget->window, widget->style->font,
-			 widget->style->white_gc,
-			 offset + x + 1, y + 1, row->data);
-      
-      gdk_draw_string (widget->window, widget->style->font,
-		       widget->style->fg_gc[state],
-		       offset + x, y, row->data);
-      
-      gdk_gc_set_clip_mask (widget->style->white_gc, NULL);
-      gdk_gc_set_clip_mask (widget->style->fg_gc[state], NULL);
+
+       gtk_paint_string(widget->style, widget->window, state,
+			&event->area, widget, "label", x, y, row->data);
+
+      gdk_gc_set_clip_rectangle (widget->style->white_gc, NULL);
+      gdk_gc_set_clip_rectangle (widget->style->fg_gc[state], NULL);
       
     }
   return TRUE;

@@ -439,7 +439,12 @@ gtk_viewport_realize (GtkWidget *widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
   gtk_style_set_background (widget->style, viewport->bin_window, GTK_STATE_NORMAL);
-  
+
+   gtk_paint_flat_box(widget->style, viewport->bin_window, GTK_STATE_NORMAL,
+		      GTK_SHADOW_NONE,
+		      NULL, widget, "viewportbin",
+		      0, 0, -1, -1);
+   
   gdk_window_show (viewport->bin_window);
   gdk_window_show (viewport->view_window);
 }
@@ -642,6 +647,10 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
 			      child_allocation.y,
 			      child_allocation.width,
 			      child_allocation.height);
+       gtk_paint_flat_box(widget->style, viewport->bin_window, GTK_STATE_NORMAL,
+			  GTK_SHADOW_NONE,
+			  NULL, widget, "viewportbin",
+			  0, 0, -1, -1);
     }
 
   viewport->hadjustment->page_size = child_allocation.width;

@@ -80,15 +80,15 @@ GtkWidget*
 gtk_pixmap_new (GdkPixmap *val,
 		GdkBitmap *mask)
 {
-  GtkPixmap *pixmap;
+   GtkPixmap *pixmap;
+   
+   g_return_val_if_fail (val != NULL, NULL);
+   
+   pixmap = gtk_type_new (gtk_pixmap_get_type ());
+   
+   gtk_pixmap_set (pixmap, val, mask);
 
-  g_return_val_if_fail (val != NULL, NULL);
-
-  pixmap = gtk_type_new (gtk_pixmap_get_type ());
-
-  gtk_pixmap_set (pixmap, val, mask);
-
-  return GTK_WIDGET (pixmap);
+   return GTK_WIDGET (pixmap);
 }
 
 static void
@@ -184,6 +184,17 @@ gtk_pixmap_expose (GtkWidget      *widget,
       pixmap = GTK_PIXMAP (widget);
       misc = GTK_MISC (widget);
 
+/*       
+	x = widget->allocation.x +
+	  (gint)((gfloat)((widget->allocation.width - 
+			   widget->requisition.width) 
+			   + (misc->xpad * 2)) * misc->xalign);
+	y = widget->allocation.y +
+	  (gint)((gfloat)((widget->allocation.height - 
+			   widget->requisition.height) 
+			  + (misc->ypad * 2)) * misc->yalign);
+*/
+       
       x = (widget->allocation.x * (1.0 - misc->xalign) +
 	   (widget->allocation.x + widget->allocation.width
 	    - (widget->requisition.width - misc->xpad * 2)) *
@@ -210,6 +221,5 @@ gtk_pixmap_expose (GtkWidget      *widget,
 	  gdk_gc_set_clip_origin (widget->style->black_gc, 0, 0);
 	}
     }
-
   return FALSE;
 }

@@ -334,22 +334,19 @@ gtk_option_menu_paint (GtkWidget    *widget,
 
       if (gdk_rectangle_intersect (area, &restrict_area, &new_area))
 	{
-	  gtk_style_set_background (widget->style, widget->window, GTK_WIDGET_STATE (widget));
-	  gdk_window_clear_area (widget->window,
-				 new_area.x, new_area.y,
-				 new_area.width, new_area.height);
+	   gtk_paint_box(widget->style, widget->window,
+			 GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
+			 &new_area, widget, "optionmenu",
+			 restrict_area.x, restrict_area.y,
+			 restrict_area.width, restrict_area.height);
 
-	  gtk_draw_shadow (widget->style, widget->window,
-			   GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
-			   restrict_area.x, restrict_area.y,
-			   restrict_area.width, restrict_area.height);
-
-	  gtk_draw_shadow (widget->style, widget->window,
-			   GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
-			   restrict_area.x + restrict_area.width - restrict_area.x -
-			   OPTION_INDICATOR_WIDTH - OPTION_INDICATOR_SPACING * 4,
-			   restrict_area.y + (restrict_area.height - OPTION_INDICATOR_HEIGHT) / 2,
-			   OPTION_INDICATOR_WIDTH, OPTION_INDICATOR_HEIGHT);
+	   gtk_paint_tab (widget->style, widget->window,
+			  GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
+			 &new_area, widget, "optionmenutab",
+			  restrict_area.x + restrict_area.width - restrict_area.x -
+			  OPTION_INDICATOR_WIDTH - OPTION_INDICATOR_SPACING * 4,
+			  restrict_area.y + (restrict_area.height - OPTION_INDICATOR_HEIGHT) / 2,
+			  OPTION_INDICATOR_WIDTH, OPTION_INDICATOR_HEIGHT);
 	}
     }
 }
