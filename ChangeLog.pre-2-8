@@ -1,3 +1,9 @@
+Tue Dec 18 16:07:28 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkkeys.h (struct _GdkKeymapClass): Fix 
+	prototype for direction_changed. (Reported by
+	Jeff Franks.)
+
 2001-12-18  Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_get_expander_column):
