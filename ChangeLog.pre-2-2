@@ -1,3 +1,11 @@
+Thu May 16 23:59:56 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from gtk-2-0.
+
+	* gtk/gtktreestore.c (gtk_tree_store_sort_iter_changed): set the prev
+	of the next node correctly, so we don't corrupt the list and cause
+	bad things. (fixes #71374)
+ 
 Thu May 16 17:29:08 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkrbtree.c (_gtk_rbtree_remove): include missing #ifdef G_ENABLE_DEBUG
