@@ -1,3 +1,48 @@
+2001-01-10  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_insert_before): handle case
+	where sibling == iter
+	(gtk_tree_store_insert_after): handle sibling == iter
+	(gtk_tree_store_prepend): remove stamp checks
+	(gtk_tree_store_insert_before): ditto
+	(gtk_tree_store_append): ditto
+	(gtk_tree_store_get_path): ditto
+	(gtk_tree_store_get_value): ditto
+	(gtk_tree_store_iter_has_child): ditto
+	(gtk_tree_store_iter_n_children): ditto
+	(gtk_tree_store_iter_nth_child): ditto
+	(gtk_tree_store_insert_after): ditto
+	(gtk_tree_store_is_ancestor): ditto
+	(gtk_tree_store_iter_depth): ditto
+	(gtk_tree_store_insert_before): assert that sibling's parent is
+	the same as the passed-in parent
+	(gtk_tree_store_insert_after): assert that sibling's parent is
+	the same as the passed-in parent
+
+	
+	* gtk/gtktreemodel.c (gtk_tree_model_get_first): new convenience 
+	function to get the first iterator in a model
+	
+	* gtk/gtktreestore.c (gtk_tree_store_get_root_iter): remove,
+	conventionally the "root" in this sense is just NULL afaict.
+
+	* gtk/gtkliststore.c (gtk_list_store_insert_before): handle case
+	where sibling == iter
+	(gtk_list_store_insert_after): handle case where sibling == iter
+
+	* tests/testtreeview.c (run_automated_tests): fairly lame basic
+	automated tests for ListStore, TreeStore
+
+        * gtk/gtkliststore.c (gtk_list_store_remove): update tail pointer
+	(gtk_list_store_insert): update tail pointer, and fix it to work
+	(gtk_list_store_insert_before): update tail pointer, and fix it to work
+	(gtk_list_store_append): use tail to be faster
+	(gtk_list_store_prepend): fix it, update tail pointer
+	(gtk_list_store_insert_after): fix it, update tail pointer
+
+	* gtk/gtkliststore.h (struct _GtkListStore): add tail pointer for 
+	the list
+
 2001-01-09  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_expose): don't draw if label->layout

@@ -543,6 +543,36 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
 }
 
 /**
+ * gtk_tree_model_get_first:
+ * @tree_model: a #GtkTreeModel
+ * @iter: iterator to initialize
+ * 
+ * Initialized @iter with the first iterator in the tree (the one at the
+ * root path) and returns %TRUE, or returns %FALSE if there are no
+ * iterable locations in the model (i.e. the tree is empty).
+ * 
+ * Return value: %TRUE if @iter was initialized
+ **/
+gboolean
+gtk_tree_model_get_first (GtkTreeModel *tree_model,
+                          GtkTreeIter  *iter)
+{
+  gboolean retval;
+  GtkTreePath *path;
+  
+  g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  path = gtk_tree_path_new_root ();
+
+  retval = gtk_tree_model_get_iter (tree_model, iter, path);
+
+  gtk_tree_path_free (path);
+
+  return retval;
+}
+
+/**
  * gtk_tree_model_get_path:
  * @tree_model: A #GtkTreeModel.
  * @iter: The #GtkTreeIter.

@@ -1372,10 +1372,184 @@ create_prop_editor (GObject *object)
  */
 
 static void
+treestore_torture_recurse (GtkTreeStore *store,
+                           GtkTreeIter  *root,
+                           gint          depth)
+{
+  GtkTreeModel *model;
+  gint i;
+  GtkTreeIter iter;  
+  
+  model = GTK_TREE_MODEL (store);    
+
+  if (depth > 2)
+    return;
+
+  ++depth;
+
+  gtk_tree_store_append (store, &iter, root);
+  
+  gtk_tree_model_iter_children (model, &iter, root);
+  
+  i = 0;
+  while (i < 100)
+    {
+      gtk_tree_store_append (store, &iter, root);
+      ++i;
+    }
+
+  while (gtk_tree_model_iter_children (model, &iter, root))
+    gtk_tree_store_remove (store, &iter);
+
+  gtk_tree_store_append (store, &iter, root);
+
+  /* inserts before last node in tree */
+  i = 0;
+  while (i < 100)
+    {
+      gtk_tree_store_insert_before (store, &iter, root, &iter);
+      ++i;
+    }
+
+  /* inserts after the node before the last node */
+  i = 0;
+  while (i < 100)
+    {
+      gtk_tree_store_insert_after (store, &iter, root, &iter);
+      ++i;
+    }
+
+  /* inserts after the last node */
+  gtk_tree_store_append (store, &iter, root);
+    
+  i = 0;
+  while (i < 100)
+    {
+      gtk_tree_store_insert_after (store, &iter, root, &iter);
+      ++i;
+    }
+
+  /* remove everything again */
+  while (gtk_tree_model_iter_children (model, &iter, root))
+    gtk_tree_store_remove (store, &iter);
+
+
+    /* Prepends */
+  gtk_tree_store_prepend (store, &iter, root);
+    
+  i = 0;
+  while (i < 100)
+    {
+      gtk_tree_store_prepend (store, &iter, root);
+      ++i;
+    }
+
+  /* remove everything again */
+  while (gtk_tree_model_iter_children (model, &iter, root))
+    gtk_tree_store_remove (store, &iter);
+
+  gtk_tree_store_append (store, &iter, root);
+  gtk_tree_store_append (store, &iter, root);
+  gtk_tree_store_append (store, &iter, root);
+  gtk_tree_store_append (store, &iter, root);
+
+  while (gtk_tree_model_iter_children (model, &iter, root))
+    {
+      treestore_torture_recurse (store, &iter, depth);
+      gtk_tree_store_remove (store, &iter);
+    }
+}
+
+static void
 run_automated_tests (void)
 {
+  g_print ("Running automated tests...\n");
+  
   /* FIXME TreePath basic verification */
 
-  /* FIXME consistency checks on the models */
-  
+  /* FIXME generic consistency checks on the models */
+
+  {
+    /* Make sure list store mutations don't crash anything */
+    GtkListStore *store;
+    GtkTreeModel *model;
+    gint i;
+    GtkTreeIter iter;
+    
+    store = gtk_list_store_new_with_types (1, G_TYPE_INT);
+
+    model = GTK_TREE_MODEL (store);
+    
+    i = 0;
+    while (i < 100)
+      {
+        gtk_list_store_append (store, &iter);
+        ++i;
+      }
+
+    while (gtk_tree_model_get_first (model, &iter))
+      gtk_list_store_remove (store, &iter);
+
+    gtk_list_store_append (store, &iter);
+
+    /* inserts before last node in list */
+    i = 0;
+    while (i < 100)
+      {
+        gtk_list_store_insert_before (store, &iter, &iter);
+        ++i;
+      }
+
+    /* inserts after the node before the last node */
+    i = 0;
+    while (i < 100)
+      {
+        gtk_list_store_insert_after (store, &iter, &iter);
+        ++i;
+      }
+
+    /* inserts after the last node */
+    gtk_list_store_append (store, &iter);
+    
+    i = 0;
+    while (i < 100)
+      {
+        gtk_list_store_insert_after (store, &iter, &iter);
+        ++i;
+      }
+
+    /* remove everything again */
+    while (gtk_tree_model_get_first (model, &iter))
+      gtk_list_store_remove (store, &iter);
+
+
+    /* Prepends */
+    gtk_list_store_prepend (store, &iter);
+    
+    i = 0;
+    while (i < 100)
+      {
+        gtk_list_store_prepend (store, &iter);
+        ++i;
+      }
+
+    /* remove everything again */
+    while (gtk_tree_model_get_first (model, &iter))
+      gtk_list_store_remove (store, &iter);
+    
+    g_object_unref (G_OBJECT (store));
+  }
+
+  {
+    /* Make sure tree store mutations don't crash anything */
+    GtkTreeStore *store;
+    
+    store = gtk_tree_store_new_with_types (1, G_TYPE_INT);
+    
+    treestore_torture_recurse (store, NULL, 0);
+    
+    g_object_unref (G_OBJECT (store));
+  }
+
+  g_print ("Passed.\n");
 }

@@ -113,8 +113,6 @@ void          gtk_tree_store_prepend         (GtkTreeStore *tree_store,
 void          gtk_tree_store_append          (GtkTreeStore *tree_store,
 					      GtkTreeIter  *iter,
 					      GtkTreeIter  *parent);
-void          gtk_tree_store_get_root_iter   (GtkTreeStore *tree_store,
-					      GtkTreeIter  *iter);
 gboolean      gtk_tree_store_is_ancestor     (GtkTreeStore *tree_store,
 					      GtkTreeIter  *iter,
 					      GtkTreeIter  *descendant);

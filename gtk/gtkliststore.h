@@ -42,6 +42,7 @@ struct _GtkListStore
   /*< private >*/
   gint stamp;
   gpointer root;
+  GSList *tail;
   gint n_columns;
   GType *column_headers;
 };
