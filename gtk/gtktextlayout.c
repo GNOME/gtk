@@ -1069,7 +1069,7 @@ set_para_values (GtkTextLayout      *layout,
   else
     display->layout = pango_layout_new (layout->rtl_context);
 
-  switch (style->justify)
+  switch (style->justification)
     {
     case GTK_JUSTIFY_LEFT:
       pango_align = (style->direction == GTK_TEXT_DIR_LTR) ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT;
@@ -1122,11 +1122,17 @@ set_para_values (GtkTextLayout      *layout,
   switch (style->wrap_mode)
     {
     case GTK_WRAPMODE_CHAR:
-      /* FIXME: Handle this; for now, fall-through */
+      layout_width = layout->screen_width - display->left_margin - display->right_margin;
+      pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
+      pango_layout_set_wrap (display->layout, PANGO_WRAP_CHAR);
+      break;
+
     case GTK_WRAPMODE_WORD:
       layout_width = layout->screen_width - display->left_margin - display->right_margin;
       pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
+      pango_layout_set_wrap (display->layout, PANGO_WRAP_WORD);
       break;
+
     case GTK_WRAPMODE_NONE:
       break;
     }

@@ -93,16 +93,17 @@ typedef struct {
 	struct error_handler_data     jerr;
 } JpegProgContext;
 
-GdkPixbuf *gdk_pixbuf__jpeg_image_load (FILE *f, GError **error);
-gpointer gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc func, 
-					    ModuleUpdatedNotifyFunc func2,
-					    ModuleFrameDoneNotifyFunc func3,
-					    ModuleAnimationDoneNotifyFunc func4,
-					    gpointer user_data,
-                                            GError **error);
-void gdk_pixbuf__jpeg_image_stop_load (gpointer context);
-gboolean gdk_pixbuf__jpeg_image_load_increment(gpointer context, guchar *buf, guint size,
-                                               GError **error);
+static GdkPixbuf *gdk_pixbuf__jpeg_image_load (FILE *f, GError **error);
+static gpointer gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc func, 
+                                                   ModuleUpdatedNotifyFunc func2,
+                                                   ModuleFrameDoneNotifyFunc func3,
+                                                   ModuleAnimationDoneNotifyFunc func4,
+                                                   gpointer user_data,
+                                                   GError **error);
+static gboolean gdk_pixbuf__jpeg_image_stop_load (gpointer context, GError **error);
+static gboolean gdk_pixbuf__jpeg_image_load_increment(gpointer context,
+                                                      const guchar *buf, guint size,
+                                                      GError **error);
 
 
 static void
@@ -179,7 +180,7 @@ explode_gray_into_buf (struct jpeg_decompress_struct *cinfo,
 }
 
 /* Shared library entry point */
-GdkPixbuf *
+static GdkPixbuf *
 gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 {
 	gint w, h, i;
@@ -367,13 +368,17 @@ gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func,
  *
  * free context, unref gdk_pixbuf
  */
-void
-gdk_pixbuf__jpeg_image_stop_load (gpointer data)
+static gboolean
+gdk_pixbuf__jpeg_image_stop_load (gpointer data, GError **error)
 {
 	JpegProgContext *context = (JpegProgContext *) data;
 
-	g_return_if_fail (context != NULL);
+	g_return_val_if_fail (context != NULL, TRUE);
 
+        /* FIXME this thing needs to report errors if
+         * we have unused image data
+         */
+        
 	if (context->pixbuf)
 		gdk_pixbuf_unref (context->pixbuf);
 
@@ -392,6 +397,8 @@ gdk_pixbuf__jpeg_image_stop_load (gpointer data)
 	}
 
 	g_free (context);
+
+        return TRUE;
 }
 
 
@@ -404,8 +411,9 @@ gdk_pixbuf__jpeg_image_stop_load (gpointer data)
  *
  * append image data onto inrecrementally built output image
  */
-gboolean
-gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size,
+static gboolean
+gdk_pixbuf__jpeg_image_load_increment (gpointer data,
+                                       const guchar *buf, guint size,
                                        GError **error)
 {
 	JpegProgContext *context = (JpegProgContext *)data;
@@ -415,7 +423,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size,
 	guint       last_bytes_left;
 	guint       spinguard;
 	gboolean    first;
-	guchar *bufhd;
+	const guchar *bufhd;
 
 	g_return_val_if_fail (context != NULL, FALSE);
 	g_return_val_if_fail (buf != NULL, FALSE);
@@ -519,8 +527,11 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size,
 							 cinfo->image_height);
 
 			if (context->pixbuf == NULL) {
-				/* Failed to allocate memory */
-				g_error ("Couldn't allocate gdkpixbuf");
+                                g_set_error (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Couldn't allocate memory for loading JPEG file"));
+                                return FALSE;
 			}
 
 			/* Use pixbuf buffer to store decompressed data */
@@ -610,7 +621,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size,
 	return TRUE;
 }
 
-gboolean
+static gboolean
 gdk_pixbuf__jpeg_image_save (FILE          *f, 
                              GdkPixbuf     *pixbuf, 
                              gchar        **keys,
@@ -732,4 +743,14 @@ gdk_pixbuf__jpeg_image_save (FILE          *f,
        jpeg_finish_compress (&cinfo);   
        free (buf);
        return TRUE;
+}
+
+void
+gdk_pixbuf__jpeg_fill_vtable (GdkPixbufModule *module)
+{
+  module->load = gdk_pixbuf__jpeg_image_load;
+  module->begin_load = gdk_pixbuf__jpeg_image_begin_load;
+  module->stop_load = gdk_pixbuf__jpeg_image_stop_load;
+  module->load_increment = gdk_pixbuf__jpeg_image_load_increment;
+  module->save = gdk_pixbuf__jpeg_image_save;
 }

@@ -32,6 +32,7 @@
 #include <unistd.h>
 #endif
 #include <tiffio.h>
+#include <errno.h>
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
@@ -55,8 +56,8 @@ struct _TiffData
 
 
 
-GdkPixbuf *
-gdk_pixbuf__tiff_image_load_real (FILE *f, TiffData *context)
+static GdkPixbuf *
+gdk_pixbuf__tiff_image_load_real (FILE *f, TiffData *context, GError **error)
 {
 	TIFF *tiff;
 	guchar *pixels = NULL;
@@ -68,14 +69,28 @@ gdk_pixbuf__tiff_image_load_real (FILE *f, TiffData *context)
 	fd = fileno (f);
 	tiff = TIFFFdOpen (fd, "libpixbuf-tiff", "r");
 
-	if (!tiff)
+	if (!tiff) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Failed to open TIFF image"));
 		return NULL;
-
+        }
+                
 	TIFFGetField (tiff, TIFFTAG_IMAGEWIDTH, &w);
 	TIFFGetField (tiff, TIFFTAG_IMAGELENGTH, &h);
 	num_pixs = w * h;
 	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
 
+        if (!pixbuf) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                             _("Insufficient memory to open TIFF file"));
+		TIFFClose (tiff);
+		return NULL;
+        }
+        
 	if (context)
 		(* context->prepare_func) (pixbuf, context->user_data);
 
@@ -83,17 +98,19 @@ gdk_pixbuf__tiff_image_load_real (FILE *f, TiffData *context)
 	rast = (uint32 *) _TIFFmalloc (num_pixs * sizeof (uint32));
 
 	if (!rast) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                             _("Insufficient memory to open TIFF file"));
 		TIFFClose (tiff);
 		return NULL;
 	}
 
 	if (TIFFReadRGBAImage (tiff, w, h, rast, 0)) {
 		pixels = gdk_pixbuf_get_pixels (pixbuf);
-		if (!pixels) {
-			_TIFFfree (rast);
-			TIFFClose (tiff);
-			return NULL;
-		}
+
+                g_assert (pixels);
+                
 		tmppix = pixels;
 
 		for (y = 0; y < h; y++) {
@@ -128,10 +145,10 @@ gdk_pixbuf__tiff_image_load_real (FILE *f, TiffData *context)
 
 /* Static loader */
 
-GdkPixbuf *
-gdk_pixbuf__tiff_image_load (FILE *f)
+static GdkPixbuf *
+gdk_pixbuf__tiff_image_load (FILE *f, GError **error)
 {
-	return gdk_pixbuf__tiff_image_load_real (f, NULL);
+	return gdk_pixbuf__tiff_image_load_real (f, NULL, error);
 }
 
 
@@ -143,7 +160,7 @@ gdk_pixbuf__tiff_image_load (FILE *f)
  */
 
 
-gpointer
+static gpointer
 gdk_pixbuf__tiff_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 				   ModuleUpdatedNotifyFunc update_func,
 				   ModuleFrameDoneNotifyFunc frame_done_func,
@@ -176,26 +193,35 @@ gdk_pixbuf__tiff_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 	return context;
 }
 
-void
-gdk_pixbuf__tiff_image_stop_load (gpointer data)
+static gboolean
+gdk_pixbuf__tiff_image_stop_load (gpointer data,
+                                  GError **error)
 {
 	TiffData *context = (TiffData*) data;
-
-	g_return_if_fail (data != NULL);
+        gboolean retval = FALSE;
+        
+	g_return_val_if_fail (data != NULL, TRUE);
 
 	fflush (context->file);
 	rewind (context->file);
-	if (context->all_okay)
-		gdk_pixbuf__tiff_image_load_real (context->file, context);
+	if (context->all_okay) {
+                GdkPixbuf *pixbuf;
+		pixbuf = gdk_pixbuf__tiff_image_load_real (context->file, context, error);
+                if (pixbuf != NULL)
+                        retval = TRUE;
+        }
 
 	fclose (context->file);
 	unlink (context->tempname);
 	g_free (context->tempname);
 	g_free ((TiffData *) context);
+
+        return TRUE;
 }
 
-gboolean
-gdk_pixbuf__tiff_image_load_increment (gpointer data, guchar *buf, guint size)
+static gboolean
+gdk_pixbuf__tiff_image_load_increment (gpointer data, const guchar *buf,
+                                       guint size, GError **error)
 {
 	TiffData *context = (TiffData *) data;
 
@@ -203,9 +229,22 @@ gdk_pixbuf__tiff_image_load_increment (gpointer data, guchar *buf, guint size)
 
 	if (fwrite (buf, sizeof (guchar), size, context->file) != size) {
 		context->all_okay = FALSE;
+                g_set_error (error,
+                             G_FILE_ERROR,
+                             g_file_error_from_errno (errno),
+                             _("Failed to write to temporary file when loading TIFF image"));
 		return FALSE;
 	}
 
 	return TRUE;
+}
+
+void
+gdk_pixbuf__tiff_fill_vtable (GdkPixbufModule *module)
+{
+  module->load = gdk_pixbuf__tiff_image_load;
+  module->begin_load = gdk_pixbuf__tiff_image_begin_load;
+  module->stop_load = gdk_pixbuf__tiff_image_stop_load;
+  module->load_increment = gdk_pixbuf__tiff_image_load_increment;
 }
 

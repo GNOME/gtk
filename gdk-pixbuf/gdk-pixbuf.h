@@ -284,12 +284,7 @@ void                 gdk_pixbuf_frame_free           (GdkPixbufFrame *frame);
 GType                gdk_pixbuf_frame_get_type       (void) G_GNUC_CONST;
 #define              GDK_TYPE_PIXBUF_FRAME gdk_pixbuf_frame_get_type ()
 
-
-/* General (presently empty) initialization hooks, primarily for gnome-libs */
-void gdk_pixbuf_preinit  (gpointer app, gpointer modinfo);
-void gdk_pixbuf_postinit (gpointer app, gpointer modinfo);
-/* A more user-friendly init function */
-void gdk_pixbuf_init     (void);
+#include <gdk-pixbuf/gdk-pixbuf-loader.h>
 
 
 

@@ -34,6 +34,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <errno.h>
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
@@ -262,8 +263,8 @@ read_bitmap_file_data (FILE *fstream,
 
 
 
-GdkPixbuf *
-gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context)
+static GdkPixbuf *
+gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context, GError **error)
 {
 	guint w, h;
 	int x_hot, y_hot;
@@ -277,11 +278,24 @@ gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context)
 	GdkPixbuf *pixbuf;
 
 	if (!read_bitmap_file_data (f, &w, &h, &data, &x_hot, &y_hot)) {
-		g_message ("Invalid XBM file: %s", context->tempname);
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Invalid XBM file: %s"),
+                             context->tempname);
 		return NULL;
 	}
 
 	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, w, h);
+
+        if (pixbuf == NULL) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                             _("Insufficient memory to load XBM image file"));
+                return NULL;
+        }
+        
 	pixels = gdk_pixbuf_get_pixels (pixbuf);
 	row_stride = gdk_pixbuf_get_rowstride (pixbuf);
 
@@ -324,10 +338,10 @@ gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context)
 
 /* Static loader */
 
-GdkPixbuf *
-gdk_pixbuf__xbm_image_load (FILE *f)
+static GdkPixbuf *
+gdk_pixbuf__xbm_image_load (FILE *f, GError **error)
 {
-	return gdk_pixbuf__xbm_image_load_real (f, NULL);
+	return gdk_pixbuf__xbm_image_load_real (f, NULL, error);
 }
 
 
@@ -338,7 +352,7 @@ gdk_pixbuf__xbm_image_load (FILE *f)
  * it to a file, then load the file when it's done.  It's not pretty.
  */
 
-gpointer
+static gpointer
 gdk_pixbuf__xbm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 				  ModuleUpdatedNotifyFunc update_func,
 				  ModuleFrameDoneNotifyFunc frame_done_func,
@@ -372,26 +386,38 @@ gdk_pixbuf__xbm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 	return context;
 }
 
-void
-gdk_pixbuf__xbm_image_stop_load (gpointer data)
+static gboolean
+gdk_pixbuf__xbm_image_stop_load (gpointer data,
+                                 GError **error)
 {
 	XBMData *context = (XBMData*) data;
+        gboolean retval = TRUE;
 
-	g_return_if_fail (data != NULL);
+	g_return_val_if_fail (data != NULL, TRUE);
 
 	fflush (context->file);
 	rewind (context->file);
-	if (context->all_okay)
-		gdk_pixbuf__xbm_image_load_real (context->file, context);
+	if (context->all_okay) {
+                GdkPixbuf *pixbuf;
+                pixbuf = gdk_pixbuf__xbm_image_load_real (context->file, context,
+                                                          error);
+                if (pixbuf == NULL)
+                        retval = FALSE;
+        }
 
 	fclose (context->file);
 	unlink (context->tempname);
 	g_free (context->tempname);
 	g_free ((XBMData *) context);
+
+        return retval;
 }
 
-gboolean
-gdk_pixbuf__xbm_image_load_increment (gpointer data, guchar *buf, guint size)
+static gboolean
+gdk_pixbuf__xbm_image_load_increment (gpointer data,
+                                      const guchar  *buf,
+                                      guint    size,
+                                      GError **error)
 {
 	XBMData *context = (XBMData *) data;
 
@@ -399,8 +425,21 @@ gdk_pixbuf__xbm_image_load_increment (gpointer data, guchar *buf, guint size)
 
 	if (fwrite (buf, sizeof (guchar), size, context->file) != size) {
 		context->all_okay = FALSE;
+                g_set_error (error,
+                             G_FILE_ERROR,
+                             g_file_error_from_errno (errno),
+                             _("Failed to write to temporary file when loading XBM image"));
 		return FALSE;
 	}
 
 	return TRUE;
+}
+
+void
+gdk_pixbuf__xbm_fill_vtable (GdkPixbufModule *module)
+{
+  module->load = gdk_pixbuf__xbm_image_load;
+  module->begin_load = gdk_pixbuf__xbm_image_begin_load;
+  module->stop_load = gdk_pixbuf__xbm_image_stop_load;
+  module->load_increment = gdk_pixbuf__xbm_image_load_increment;
 }

@@ -119,10 +119,10 @@ create_tags (GtkTextBuffer *buffer)
   g_object_set (G_OBJECT (tag), "wrap_mode", GTK_WRAPMODE_NONE, NULL);
   
   tag = gtk_text_buffer_create_tag (buffer, "center");
-  g_object_set (G_OBJECT (tag), "justify", GTK_JUSTIFY_CENTER, NULL);
+  g_object_set (G_OBJECT (tag), "justification", GTK_JUSTIFY_CENTER, NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "right_justify");
-  g_object_set (G_OBJECT (tag), "justify", GTK_JUSTIFY_RIGHT, NULL);
+  g_object_set (G_OBJECT (tag), "justification", GTK_JUSTIFY_RIGHT, NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "wide_margins");
   g_object_set (G_OBJECT (tag),

@@ -28,8 +28,9 @@
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-loader.h"
 #include "gdk-pixbuf-io.h"
+#include "gdk-pixbuf-marshal.h"
 
-#include "gtksignal.h"
+#include <gobject/gsignal.h>
 
 enum {
   AREA_UPDATED,
@@ -92,6 +93,8 @@ gdk_pixbuf_loader_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gdk_pixbuf_loader_init
       };
+
+      g_type_init ();
       
       loader_type = g_type_register_static (G_TYPE_OBJECT,
                                             "GdkPixbufLoader",
@@ -119,7 +122,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GdkPixbufLoaderClass, area_prepared),
                    NULL,
-                   gtk_marshal_VOID__VOID,
+                   gdk_pixbuf_marshal_VOID__VOID,
                    G_TYPE_NONE, 0);
   
   pixbuf_loader_signals[AREA_UPDATED] =
@@ -128,7 +131,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GdkPixbufLoaderClass, area_updated),
                    NULL,
-                   gtk_marshal_VOID__INT_INT_INT_INT,
+                   gdk_pixbuf_marshal_VOID__INT_INT_INT_INT,
                    G_TYPE_NONE, 4,
                    G_TYPE_INT,
                    G_TYPE_INT,
@@ -141,7 +144,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GdkPixbufLoaderClass, frame_done),
                    NULL,
-                   gtk_marshal_VOID__POINTER,
+                   gdk_pixbuf_marshal_VOID__POINTER,
                    G_TYPE_NONE, 1,
                    GDK_TYPE_PIXBUF_FRAME);
   
@@ -151,7 +154,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
                    G_SIGNAL_RUN_LAST,                   
                    G_STRUCT_OFFSET (GdkPixbufLoaderClass, animation_done),
                    NULL,
-                   gtk_marshal_VOID__VOID,
+                   gdk_pixbuf_marshal_VOID__VOID,
                    G_TYPE_NONE, 0);
   
   pixbuf_loader_signals[CLOSED] =
@@ -160,7 +163,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GdkPixbufLoaderClass, closed),
                    NULL,
-                   gtk_marshal_VOID__VOID,
+                   gdk_pixbuf_marshal_VOID__VOID,
                    G_TYPE_NONE, 0);
 }
 
@@ -421,7 +424,7 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader,
  * and FALSE if an error occurred.  In the latter case, the loader
  * will be closed, and will not accept further writes. If FALSE is
  * returned, @error will be set to an error from the #GDK_PIXBUF_ERROR
- * domain.
+ * or #G_FILE_ERROR domains.
  *
  * Return value: #TRUE if the write was successful, or #FALSE if the loader
  * cannot parse the buffer.
@@ -595,31 +598,46 @@ gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader)
 /**
  * gdk_pixbuf_loader_close:
  * @loader: A pixbuf loader.
+ * @error: return location for a #GError, or %NULL to ignore errors
  *
- * Informs a pixbuf loader that no further writes with gdk_pixbuf_loader_write()
- * will occur, so that it can free its internal loading structures.
+ * Informs a pixbuf loader that no further writes with
+ * gdk_pixbuf_loader_write() will occur, so that it can free its
+ * internal loading structures. Also, tries to parse any data that
+ * hasn't yet been parsed; if the remaining data is partial or
+ * corrupt, an error will be returned.  If FALSE is returned, @error
+ * will be set to an error from the #GDK_PIXBUF_ERROR or #G_FILE_ERROR
+ * domains. If you're just cancelling a load rather than expecting it
+ * to be finished, passing %NULL for @error to ignore it is
+ * reasonable.
+ *
+ * Returns: %TRUE if all image data written so far was successfully
+            passed out via the update_area signal
  **/
-void
-gdk_pixbuf_loader_close (GdkPixbufLoader *loader)
+gboolean
+gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
+                         GError         **error)
 {
   GdkPixbufLoaderPrivate *priv;
+  gboolean retval = TRUE;
   
-  g_return_if_fail (loader != NULL);
-  g_return_if_fail (GDK_IS_PIXBUF_LOADER (loader));
+  g_return_val_if_fail (loader != NULL, TRUE);
+  g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), TRUE);
   
   priv = loader->private;
   
   /* we expect it's not closed */
-  g_return_if_fail (priv->closed == FALSE);
+  g_return_val_if_fail (priv->closed == FALSE, TRUE);
   
   /* We have less the 128 bytes in the image.  Flush it, and keep going. */
   if (priv->image_module == NULL)
     gdk_pixbuf_loader_load_module (loader, NULL, NULL);
   
   if (priv->image_module && priv->image_module->stop_load)
-    priv->image_module->stop_load (priv->context);
+    retval = priv->image_module->stop_load (priv->context, error);
   
   priv->closed = TRUE;
   
   g_signal_emit (G_OBJECT (loader), pixbuf_loader_signals[CLOSED], 0);
+
+  return retval;
 }

@@ -166,7 +166,7 @@ INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
 	-I$(top_srcdir)/gdk-pixbuf \
 	-I$(top_builddir)/gdk-pixbuf \
 	@INCLUDED_LOADER_DEFINE@ \
-	$(GLIB_CFLAGS)
+	@GLIB_CFLAGS@
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(loaderdir)\""
 
 LDADDS = libgdk_pixbuf-1.3.la $(GLIB_LIBS) $(STATIC_LIB_DEPS)
@@ -185,6 +185,8 @@ GDK_PIXBUF_LIBS = $(GLIB_LIBS) $(INTLLIBS)
 # The GdkPixBuf library
 #
 
+BUILT_SOURCES=gdk-pixbuf-marshal.h gdk-pixbuf-marshal.c
+
 libgdk_pixbufincludedir = $(includedir)/gtk-2.0/gdk-pixbuf
 
 libgdk_pixbuf_1_3_la_SOURCES = 	\
@@ -193,6 +195,8 @@ libgdk_pixbuf_1_3_la_SOURCES = 	\
 	gdk-pixbuf-animation.c	\
 	gdk-pixbuf-data.c	\
 	gdk-pixbuf-io.c		\
+	gdk-pixbuf-loader.c	\
+	gdk-pixbuf-marshal.h	\
 	gdk-pixbuf-scale.c	\
 	gdk-pixbuf-util.c
 
@@ -205,6 +209,7 @@ libgdk_pixbuf_1_3_la_DEPENDENCIES = $(builtin_objs)
 
 libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h		\
+	gdk-pixbuf-loader.h	\
 	gdk-pixbuf-features.h
 
 noinst_HEADERS = 		\
@@ -227,3 +232,15 @@ EXTRA_DIST =			\
 	pixbufloader_wbmp.def		\
 	pixbufloader_xbm.def
 
+
+gdk-pixbuf-marshal.h: gdk-pixbuf-marshal.list
+	cd $(srcdir) \
+	&& glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >> xgen-gmh \
+	&& (cmp -s xgen-gmh gdk-pixbuf-marshal.h || cp xgen-gmh gdk-pixbuf-marshal.h) \
+	&& rm -f xgen-gmh xgen-gmh~
+
+gdk-pixbuf-marshal.c: gdk-pixbuf-marshal.list
+	cd $(srcdir) \
+	&& glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >> xgen-gmh \
+	&& (cmp -s xgen-gmh gdk-pixbuf-marshal.c || cp xgen-gmh gdk-pixbuf-marshal.c) \
+	&& rm -f xgen-gmh xgen-gmh~

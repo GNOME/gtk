@@ -135,7 +135,7 @@ struct _GifContext
 	ModuleFrameDoneNotifyFunc frame_done_func;
 	ModuleAnimationDoneNotifyFunc anim_done_func;
 	gpointer user_data;
-	guchar *buf;
+        guchar *buf;
 	guint ptr;
 	guint size;
 	guint amount_needed;
@@ -1125,7 +1125,7 @@ new_context (void)
 	return context;
 }
 /* Shared library entry point */
-GdkPixbuf *
+static GdkPixbuf *
 gdk_pixbuf__gif_image_load (FILE *file, GError **error)
 {
 	GifContext *context;
@@ -1145,7 +1145,7 @@ gdk_pixbuf__gif_image_load (FILE *file, GError **error)
 	return pixbuf;
 }
 
-gpointer
+static gpointer
 gdk_pixbuf__gif_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 				  ModuleUpdatedNotifyFunc update_func,
 				  ModuleFrameDoneNotifyFunc frame_done_func,
@@ -1169,23 +1169,30 @@ gdk_pixbuf__gif_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 	return (gpointer) context;
 }
 
-void
-gdk_pixbuf__gif_image_stop_load (gpointer data)
+static gboolean
+gdk_pixbuf__gif_image_stop_load (gpointer data, GError **error)
 {
 	GifContext *context = (GifContext *) data;
 
 	/* FIXME: free the animation data */
-
+        
+        /* FIXME this thing needs to report errors if
+         * we have unused image data
+         */
+        
 	if (context->pixbuf)
 		gdk_pixbuf_unref (context->pixbuf);
 	if (context->animation)
 		gdk_pixbuf_animation_unref (context->animation);
 /*  	g_free (context->buf);*/
 	g_free (context);
+
+        return TRUE;
 }
 
-gboolean
-gdk_pixbuf__gif_image_load_increment (gpointer data, guchar *buf, guint size,
+static gboolean
+gdk_pixbuf__gif_image_load_increment (gpointer data,
+                                      const guchar *buf, guint size,
                                       GError **error)
 {
 	gint retval;
@@ -1197,7 +1204,7 @@ gdk_pixbuf__gif_image_load_increment (gpointer data, guchar *buf, guint size,
 		/* we aren't looking for some bytes. */
 		/* we can use buf now, but we don't want to keep it around at all.
 		 * it will be gone by the end of the call. */
-		context->buf = buf;
+		context->buf = (guchar*) buf; /* very dubious const cast */
 		context->ptr = 0;
 		context->size = size;
 	} else {
@@ -1245,7 +1252,7 @@ gdk_pixbuf__gif_image_load_increment (gpointer data, guchar *buf, guint size,
 	return TRUE;
 }
 
-GdkPixbufAnimation *
+static GdkPixbufAnimation *
 gdk_pixbuf__gif_image_load_animation (FILE *file,
                                       GError **error)
 {
@@ -1271,4 +1278,14 @@ gdk_pixbuf__gif_image_load_animation (FILE *file,
 	animation = context->animation;
 	g_free (context);
 	return animation;
+}
+
+void
+gdk_pixbuf__gif_fill_vtable (GdkPixbufModule *module)
+{
+  module->load = gdk_pixbuf__gif_image_load;
+  module->begin_load = gdk_pixbuf__gif_image_begin_load;
+  module->stop_load = gdk_pixbuf__gif_image_stop_load;
+  module->load_increment = gdk_pixbuf__gif_image_load_increment;
+  module->load_animation = gdk_pixbuf__gif_image_load_animation;
 }

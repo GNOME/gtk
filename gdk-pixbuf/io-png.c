@@ -180,7 +180,7 @@ free_buffer (guchar *pixels, gpointer data)
 }
 
 /* Shared library entry point */
-GdkPixbuf *
+static GdkPixbuf *
 gdk_pixbuf__png_image_load (FILE *f, GError **error)
 {
 	png_structp png_ptr;
@@ -321,7 +321,7 @@ struct _LoadContext {
         GError **error;
 };
 
-gpointer
+static gpointer
 gdk_pixbuf__png_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 				  ModuleUpdatedNotifyFunc update_func,
 				  ModuleFrameDoneNotifyFunc frame_done_func,
@@ -394,21 +394,28 @@ gdk_pixbuf__png_image_begin_load (ModulePreparedNotifyFunc prepare_func,
         return lc;
 }
 
-void
-gdk_pixbuf__png_image_stop_load (gpointer context)
+static gboolean
+gdk_pixbuf__png_image_stop_load (gpointer context, GError **error)
 {
         LoadContext* lc = context;
 
-        g_return_if_fail(lc != NULL);
+        g_return_val_if_fail(lc != NULL, TRUE);
 
+        /* FIXME this thing needs to report errors if
+         * we have unused image data
+         */
+        
         gdk_pixbuf_unref(lc->pixbuf);
         
         png_destroy_read_struct(&lc->png_read_ptr, NULL, NULL);
         g_free(lc);
+
+        return TRUE;
 }
 
-gboolean
-gdk_pixbuf__png_image_load_increment(gpointer context, guchar *buf, guint size,
+static gboolean
+gdk_pixbuf__png_image_load_increment(gpointer context,
+                                     const guchar *buf, guint size,
                                      GError **error)
 {
         LoadContext* lc = context;
@@ -428,7 +435,8 @@ gdk_pixbuf__png_image_load_increment(gpointer context, guchar *buf, guint size,
                 lc->error = NULL;
 		return FALSE;
 	} else {
-		png_process_data(lc->png_read_ptr, lc->png_info_ptr, buf, size);
+		png_process_data(lc->png_read_ptr, lc->png_info_ptr,
+                                 (guchar*) buf, size);
 	}
 
         if (lc->fatal_error_occurred) {
@@ -621,7 +629,7 @@ png_warning_callback(png_structp png_read_ptr,
 
 /* Save */
 
-gboolean
+static gboolean
 gdk_pixbuf__png_image_save (FILE          *f, 
                             GdkPixbuf     *pixbuf, 
                             gchar        **keys,
@@ -743,3 +751,12 @@ gdk_pixbuf__png_image_save (FILE          *f,
 
 
 
+void
+gdk_pixbuf__png_fill_vtable (GdkPixbufModule *module)
+{
+  module->load = gdk_pixbuf__png_image_load;
+  module->begin_load = gdk_pixbuf__png_image_begin_load;
+  module->stop_load = gdk_pixbuf__png_image_stop_load;
+  module->load_increment = gdk_pixbuf__png_image_load_increment;
+  module->save = gdk_pixbuf__png_image_save;
+}

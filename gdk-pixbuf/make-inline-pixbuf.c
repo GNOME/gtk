@@ -152,8 +152,6 @@ main (int argc, char **argv)
   FILE *outfile;
   int i;
   
-  gdk_pixbuf_init ();
-  
   if (argc < 4)
     usage ();
 

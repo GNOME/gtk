@@ -1,3 +1,50 @@
+2001-01-22  Havoc Pennington  <hp@redhat.com>
+
+	* Makefile.am: Add built marshaller files to support
+	GdkPixbufLoader signals
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_load_module): have
+	GDK_PIXBUF_MODULEDIR unconditionally replace the compiled-in
+	module location, rather than acting as a fallback, because we are
+	using GDK_PIXBUF_MODULEDIR to use gdk-pixbuf before installing it.
+
+	* gdk-pixbuf.h: include gdk-pixbuf-loader.h
+
+        * gdk-pixbuf-loader.h, gdk-pixbuf-loader.c: Move back over here
+	from gtk, and add error to close(), because stop_load may do
+	parsing of the image.
+	
+	* pixops/have_mmx.S (_pixops_have_mmx): add newline at end of file
+
+        * io-*.c: make individual operations static, and add fill_vtable
+	functions which are exported. Fix the collection of type warnings
+	that surfaced, including a number of functions that didn't
+	properly take a GError and some that weren't
+	const-correct. Involved adding error handling for a few loaders.
+
+	* gdk-pixbuf-io.h: Add error reporting to stop_load function
+	
+	* gdk-pixbuf-io.c (gdk_pixbuf_load_module): change to just look up
+	a function that fills in the GdkPixbufModule vtable, instead of 
+	looking up all the image functions individually; this means we 
+	can get type safety within modules for the loader functions.
+	Also it means you don't have to keep the statically compiled and 
+	GModule versions in sync. 
+
+	* test-gdk-pixbuf.c (main): remove gdk_pixbuf_init()
+
+	* make-inline-pixbuf.c (main): remove call to gdk_pixbuf_init()
+
+	* gdk-pixbuf.h: nuke gdk_pixbuf_init()
+	
+	* gdk-pixbuf-animation.c (gdk_pixbuf_frame_get_type): g_type_init
+	() here
+
+	* gdk-pixbuf.c (gdk_pixbuf_get_type): g_type_init () here
+
+	* gdk-pixbuf-animation.c (gdk_pixbuf_animation_get_type):
+	g_type_init() here
+
 2001-01-20  John Harper  <jsh@eazel.com>
 
 	* io-xbm.c: new pixbuf loader, for X bitmap files. Basically a

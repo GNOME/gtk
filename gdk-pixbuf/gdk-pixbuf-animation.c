@@ -50,7 +50,9 @@ gdk_pixbuf_animation_get_type (void)
                         0,              /* n_preallocs */
                         (GInstanceInitFunc) NULL,
                 };
-      
+
+                g_type_init ();
+                
                 object_type = g_type_register_static (G_TYPE_OBJECT,
                                                       "GdkPixbufAnimation",
                                                       &object_info, 0);
@@ -457,6 +459,8 @@ gdk_pixbuf_frame_get_type (void)
 
   if (our_type == 0)
     {
+      g_type_init ();
+      
       our_type = g_boxed_type_register_static ("GdkPixbufFrame",
                                                gdk_pixbuf_frame_copy,
                                                gdk_pixbuf_frame_free);

@@ -81,16 +81,17 @@ typedef struct {
 	
 } PnmLoaderContext;
 
-GdkPixbuf   *gdk_pixbuf__pnm_image_load          (FILE *f, GError **error);
-gpointer    gdk_pixbuf__pnm_image_begin_load     (ModulePreparedNotifyFunc func, 
-						  ModuleUpdatedNotifyFunc func2,
-						  ModuleFrameDoneNotifyFunc frame_done_func,
-						  ModuleAnimationDoneNotifyFunc anim_done_func,
-						  gpointer user_data,
-						  GError **error);
-void        gdk_pixbuf__pnm_image_stop_load      (gpointer context);
-gboolean    gdk_pixbuf__pnm_image_load_increment (gpointer context, guchar *buf, guint size,
-						  GError **error);
+static GdkPixbuf   *gdk_pixbuf__pnm_image_load          (FILE *f, GError **error);
+static gpointer    gdk_pixbuf__pnm_image_begin_load     (ModulePreparedNotifyFunc func, 
+							 ModuleUpdatedNotifyFunc func2,
+							 ModuleFrameDoneNotifyFunc frame_done_func,
+							 ModuleAnimationDoneNotifyFunc anim_done_func,
+							 gpointer user_data,
+							 GError **error);
+static gboolean    gdk_pixbuf__pnm_image_stop_load      (gpointer context, GError **error);
+static gboolean    gdk_pixbuf__pnm_image_load_increment (gpointer context,
+							 const guchar *buf, guint size,
+							 GError **error);
 
 static void explode_bitmap_into_buf              (PnmLoaderContext *context);
 static void explode_gray_into_buf                (PnmLoaderContext *context);
@@ -644,7 +645,7 @@ pnm_read_scanline (PnmLoaderContext *context)
 }
 
 /* Shared library entry point */
-GdkPixbuf *
+static GdkPixbuf *
 gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
 {
 	PnmLoaderContext context;
@@ -759,7 +760,7 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
  * return context (opaque to user)
  */
 
-gpointer
+static gpointer
 gdk_pixbuf__pnm_image_begin_load (ModulePreparedNotifyFunc prepared_func, 
 				  ModuleUpdatedNotifyFunc  updated_func,
 				  ModuleFrameDoneNotifyFunc frame_done_func,
@@ -795,17 +796,29 @@ gdk_pixbuf__pnm_image_begin_load (ModulePreparedNotifyFunc prepared_func,
  *
  * free context, unref gdk_pixbuf
  */
-void
-gdk_pixbuf__pnm_image_stop_load (gpointer data)
+static gboolean
+gdk_pixbuf__pnm_image_stop_load (gpointer data,
+				 GError **error)
 {
 	PnmLoaderContext *context = (PnmLoaderContext *) data;
+	gboolean retval = TRUE;
 	
-	g_return_if_fail (context != NULL);
+	g_return_val_if_fail (context != NULL, TRUE);
 	
 	if (context->pixbuf)
 		gdk_pixbuf_unref (context->pixbuf);
+
+	if (context->inbuf.nbytes > 0) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("Unexpected end of PNM image data"));
+		retval = FALSE;
+	}
 	
 	g_free (context);
+
+	return retval;
 }
 
 /*
@@ -815,8 +828,9 @@ gdk_pixbuf__pnm_image_stop_load (gpointer data)
  *
  * append image data onto inrecrementally built output image
  */
-gboolean
-gdk_pixbuf__pnm_image_load_increment (gpointer data, guchar *buf, guint size,
+static gboolean
+gdk_pixbuf__pnm_image_load_increment (gpointer data,
+				      const guchar *buf, guint size,
 				      GError **error)
 {
 	PnmLoaderContext *context = (PnmLoaderContext *)data;
@@ -897,8 +911,11 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data, guchar *buf, guint size,
 							  context->height);
 			
 			if (context->pixbuf == NULL) {
-				/* Failed to allocate memory */
-				g_error ("Couldn't allocate gdkpixbuf");
+				g_set_error (error,
+					     GDK_PIXBUF_ERROR,
+					     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+					     _("Insufficient memory to load PNM file"));
+				return FALSE;
 			}
 			
 			context->pixels = context->pixbuf->pixels;
@@ -937,4 +954,13 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data, guchar *buf, guint size,
 	}
 	
 	return TRUE;
+}
+
+void
+gdk_pixbuf__pnm_fill_vtable (GdkPixbufModule *module)
+{
+  module->load = gdk_pixbuf__pnm_image_load;
+  module->begin_load = gdk_pixbuf__pnm_image_begin_load;
+  module->stop_load = gdk_pixbuf__pnm_image_stop_load;
+  module->load_increment = gdk_pixbuf__pnm_image_load_increment;
 }

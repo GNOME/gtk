@@ -1,3 +1,27 @@
+2001-01-22  Havoc Pennington  <hp@redhat.com>
+
+	* demos/testanimation.c: fix to reflect gdk-pixbuf changes
+
+	* demos/testpixbuf.c: fix to reflect gdk-pixbuf changes
+
+	* gtk/gdk-pixbuf-loader.c, gtk/gdk-pixbuf-loader.h: 
+	Remove, move back to gdk-pixbuf
+
+	* gtk/gtktextiter.c, gtk/gtktextiter.h: add sentence equivalents
+	to all the word functions
+
+	* gtk/gtktextview.c (gtk_text_view_start_cursor_blink): return
+	before doing anything on NULL layout or if we don't have the focus
+
+	* gtk/testtext.c (fill_example_buffer): "justification"
+
+	* gtk/gtktexttag.h, gtk/gtktexttag.c: change the tag attribute
+	to be called "justification" not "justify"
+
+	* demos/gtk-demo/textview.c (create_tags): "justification"
+	
+	* gtk/gtktextlayout.c (set_para_values): Handle char-wise wrapping
+
 2001-01-22    <alexl@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_invalidate_region):

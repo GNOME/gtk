@@ -1728,7 +1728,7 @@ gtk_text_view_set_justification (GtkTextView     *text_view,
 
       if (text_view->layout)
         {
-          text_view->layout->default_style->justify = justify;
+          text_view->layout->default_style->justification = justify;
           gtk_text_layout_default_style_changed (text_view->layout);
         }
     }
@@ -3458,8 +3458,14 @@ gtk_text_view_start_cursor_blink(GtkTextView *text_view,
 #ifdef DEBUG_VALIDATION_AND_SCROLLING
   return;
 #endif
+
+  if (text_view->layout == NULL)
+    return;
   
   if (!text_view->cursor_visible)
+    return;
+
+  if (!GTK_WIDGET_HAS_FOCUS (text_view))
     return;
   
   if (text_view->preblink_timeout != 0)
@@ -4140,7 +4146,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       style->tabs = text_view->tabs ? pango_tab_array_copy (text_view->tabs) : NULL;
 
       style->wrap_mode = text_view->wrap_mode;
-      style->justify = text_view->justify;
+      style->justification = text_view->justify;
       style->direction = gtk_widget_get_direction (GTK_WIDGET (text_view));
 
       gtk_text_layout_set_default_style (text_view->layout, style);

@@ -61,13 +61,14 @@ struct _GdkPixbufModule {
 
         /* Incremental loading */
 
-        gpointer (* begin_load) (ModulePreparedNotifyFunc prepare_func,
-				 ModuleUpdatedNotifyFunc update_func,
-				 ModuleFrameDoneNotifyFunc frame_done_func,
-				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data,
-                                 GError **error);
-        void (* stop_load)          (gpointer context);
+        gpointer (* begin_load)     (ModulePreparedNotifyFunc prepare_func,
+                                     ModuleUpdatedNotifyFunc update_func,
+                                     ModuleFrameDoneNotifyFunc frame_done_func,
+                                     ModuleAnimationDoneNotifyFunc anim_done_func,
+                                     gpointer user_data,
+                                     GError **error);
+        gboolean (* stop_load)      (gpointer context,
+                                     GError **error);
         gboolean (* load_increment) (gpointer      context,
                                      const guchar *buf,
                                      guint         size,
@@ -84,6 +85,7 @@ struct _GdkPixbufModule {
                            GError   **error);
 };
 
+typedef void (* ModuleFillVtableFunc) (GdkPixbufModule *module);
 
 GdkPixbufModule *gdk_pixbuf_get_module (guchar *buffer, guint size,
                                         const gchar *filename,

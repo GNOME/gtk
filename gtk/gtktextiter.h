@@ -128,6 +128,9 @@ gboolean gtk_text_iter_editable          (const GtkTextIter   *iter,
 gboolean gtk_text_iter_starts_word        (const GtkTextIter   *iter);
 gboolean gtk_text_iter_ends_word          (const GtkTextIter   *iter);
 gboolean gtk_text_iter_inside_word        (const GtkTextIter   *iter);
+gboolean gtk_text_iter_starts_sentence    (const GtkTextIter   *iter);
+gboolean gtk_text_iter_ends_sentence      (const GtkTextIter   *iter);
+gboolean gtk_text_iter_inside_sentence    (const GtkTextIter   *iter);
 gboolean gtk_text_iter_starts_line        (const GtkTextIter   *iter);
 gboolean gtk_text_iter_ends_line          (const GtkTextIter   *iter);
 gboolean gtk_text_iter_is_cursor_position (const GtkTextIter   *iter);
@@ -163,6 +166,13 @@ gboolean gtk_text_iter_forward_word_ends    (GtkTextIter *iter,
                                              gint         count);
 gboolean gtk_text_iter_backward_word_starts (GtkTextIter *iter,
                                              gint         count);
+
+gboolean gtk_text_iter_forward_sentence_end     (GtkTextIter *iter);
+gboolean gtk_text_iter_backward_sentence_start  (GtkTextIter *iter);
+gboolean gtk_text_iter_forward_sentence_ends    (GtkTextIter *iter,
+                                                 gint         count);
+gboolean gtk_text_iter_backward_sentence_starts (GtkTextIter *iter,
+                                                 gint         count);
 /* cursor positions are almost equivalent to chars, but not quite;
  * in some languages, you can't put the cursor between certain
  * chars. Also, you can't put the cursor between \r\n at the end

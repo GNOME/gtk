@@ -68,7 +68,7 @@ struct _GtkTextTag
   guint stretch_set : 1;
   guint size_set : 1;
   guint fg_stipple_set : 1;
-  guint justify_set : 1;
+  guint justification_set : 1;
   guint left_margin_set : 1;
   guint indent_set : 1;
   guint rise_set : 1;
@@ -148,7 +148,7 @@ struct _GtkTextAttributes
 
   GtkTextAppearance appearance;
 
-  GtkJustification justify;
+  GtkJustification justification;
   GtkTextDirection direction;
 
   /* Individual chunks of this can be set/unset as a group */

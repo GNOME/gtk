@@ -50,3 +50,4 @@ _pixops_have_mmx:
 .out:	
 	popl	%ebx
 	ret
+

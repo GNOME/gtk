@@ -260,281 +260,173 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 	char *module_name;
 	char *path;
 	GModule *module;
-	gpointer load_sym;
-        gpointer save_sym;
+	gpointer sym;
 	char *name;
+        gboolean retval;
+        char *dir;
 	
         g_return_val_if_fail (image_module->module == NULL, FALSE);
 
 	name = image_module->module_name;
 	
 	module_name = g_strconcat ("pixbufloader-", name, NULL);
-	path = g_module_build_path (PIXBUF_LIBDIR, module_name);
 
-	module = g_module_open (path, G_MODULE_BIND_LAZY);
-	if (!module) {
-                /* Debug feature, check in GDK_PIXBUF_MODULEDIR, or working directory */
-	        char *dir = g_getenv ("GDK_PIXBUF_MODULEDIR");
-		if (!dir)
-			dir = "";
-	  
-                g_free (path);
-                path = g_module_build_path (dir, module_name);
+        /* This would be an exploit in an suid binary using gdk-pixbuf,
+         * but see http://www.gtk.org/setuid.html or the BugTraq
+         * archives for why you should report this as a bug against
+         * setuid apps using this library rather than the library
+         * itself.
+         */
+        dir = g_getenv ("GDK_PIXBUF_MODULEDIR");
+
+        if (dir == NULL || *dir == '\0') {
+                
+                path = g_module_build_path (PIXBUF_LIBDIR, module_name);
                 module = g_module_open (path, G_MODULE_BIND_LAZY);
+        } else {
+                path = g_module_build_path (dir, module_name);
+                module = g_module_open (path, G_MODULE_BIND_LAZY);                
+        }        
 
-                if (!module) {
-                        g_set_error (error,
-                                     GDK_PIXBUF_ERROR,
-                                     GDK_PIXBUF_ERROR_FAILED,
-                                     _("Unable to load image-loading module: %s: %s"),
-                                     path, g_module_error ());
-                        g_free (module_name);
-                        g_free (path);
-                        return FALSE;
-                }
+        if (!module) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_FAILED,
+                             _("Unable to load image-loading module: %s: %s"),
+                             path, g_module_error ());
+                g_free (module_name);
                 g_free (path);
-	} else {
-                g_free (path);
+                return FALSE;
         }
 
         g_free (module_name);
 
-	image_module->module = module;
+	image_module->module = module;        
+        
+        if (pixbuf_module_symbol (module, name, "fill_vtable", &sym)) {
+                ModuleFillVtableFunc func = sym;
+                (* func) (image_module);
+                retval = TRUE;
+        } else {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_FAILED,
+                             _("Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"),
+                             path);
+                retval = FALSE;
+        }
 
-	if (pixbuf_module_symbol (module, name, "image_load", &load_sym))
-		image_module->load = load_sym;
+        g_free (path);
 
-        if (pixbuf_module_symbol (module, name, "image_load_xpm_data", &load_sym))
-		image_module->load_xpm_data = load_sym;
-
-        if (pixbuf_module_symbol (module, name, "image_begin_load", &load_sym))
-		image_module->begin_load = load_sym;
-
-        if (pixbuf_module_symbol (module, name, "image_stop_load", &load_sym))
-		image_module->stop_load = load_sym;
-
-        if (pixbuf_module_symbol (module, name, "image_load_increment", &load_sym))
-		image_module->load_increment = load_sym;
-
-        if (pixbuf_module_symbol (module, name, "image_load_animation", &load_sym))
-		image_module->load_animation = load_sym;
-
-        if (pixbuf_module_symbol (module, name, "image_save", &save_sym))
-          image_module->save = save_sym;
-
-        return TRUE;
+        return retval;
 }
 #else
 
 #define mname(type,fn) gdk_pixbuf__ ## type ## _image_ ##fn
-#define m_load(type)  extern GdkPixbuf * mname(type,load) (FILE *f, GError **error);
-#define m_load_xpm_data(type)  extern GdkPixbuf * mname(type,load_xpm_data) (const char **data);
-#define m_begin_load(type)  \
-   extern gpointer mname(type,begin_load) (ModulePreparedNotifyFunc prepare_func, \
-				 ModuleUpdatedNotifyFunc update_func, \
-				 ModuleFrameDoneNotifyFunc frame_done_func,\
-				 ModuleAnimationDoneNotifyFunc anim_done_func,\
-				 gpointer user_data,\
-				 GError **error);
-#define m_stop_load(type)  extern void mname(type,stop_load) (gpointer context);
-#define m_load_increment(type)  extern gboolean mname(type,load_increment) (gpointer context, const guchar *buf, guint size, GError **error);
-#define m_load_animation(type)  extern GdkPixbufAnimation * mname(type,load_animation) (FILE *f, GError **error);
-#define m_save(type) \
-   extern gboolean mname(type,save) (FILE          *f, \
-				     GdkPixbuf     *pixbuf, \
-                                     gchar        **keys, \
-				     gchar        **values, \
-				     GError       **error);
+#define m_fill_vtable(type) extern void mname(type,fill_vtable) (GdkPixbufModule *module)
 
-/* PNG */
-m_load (png);
-m_begin_load (png);
-m_load_increment (png);
-m_stop_load (png);
-m_save (png);
-/* BMP */
-m_load (bmp);
-m_begin_load (bmp);
-m_load_increment (bmp);
-m_stop_load (bmp);
-/* WBMP */
-m_load (wbmp);
-m_begin_load (wbmp);
-m_load_increment (wbmp);
-m_stop_load (wbmp);
-/* GIF */
-m_load (gif);
-m_begin_load (gif);
-m_load_increment (gif);
-m_stop_load (gif);
-m_load_animation (gif);
-/* ICO */
-m_load (ico);
-m_begin_load (ico);
-m_load_increment (ico);
-m_stop_load (ico);
-/* JPEG */
-m_load (jpeg);
-m_begin_load (jpeg);
-m_load_increment (jpeg);
-m_stop_load (jpeg);
-m_save (jpeg);
-/* PNM */
-m_load (pnm);
-m_begin_load (pnm);
-m_load_increment (pnm);
-m_stop_load (pnm);
-/* RAS */
-m_load (ras);
-m_begin_load (ras);
-m_load_increment (ras);
-m_stop_load (ras);
-/* TIFF */
-m_load (tiff);
-m_begin_load (tiff);
-m_load_increment (tiff);
-m_stop_load (tiff);
-/* XPM */
-m_load (xpm);
-m_load_xpm_data (xpm);
-/* XBM */
-m_load (xbm);
-m_begin_load (xbm);
-m_load_increment (xbm);
-m_stop_load (xbm);
+m_fill_vtable (png);
+m_fill_vtable (bmp);
+m_fill_vtable (wbmp);
+m_fill_vtable (gif);
+m_fill_vtable (ico);
+m_fill_vtable (jpeg);
+m_fill_vtable (pnm);
+m_fill_vtable (ras);
+m_fill_vtable (tiff);
+m_fill_vtable (xpm);
+m_fill_vtable (xbm);
 
 gboolean
 gdk_pixbuf_load_module (GdkPixbufModule *image_module,
                         GError         **error)
 {
+        ModuleFillVtableFunc fill_vtable = NULL;
 	image_module->module = (void *) 1;
 
+        if (FALSE) {
+                /* Ugly hack so we can use else if unconditionally below ;-) */
+        }
+        
 #ifdef INCLUDE_png	
-	if (strcmp (image_module->module_name, "png") == 0){
-		image_module->load           = mname (png,load);
-		image_module->begin_load     = mname (png,begin_load);
-		image_module->load_increment = mname (png,load_increment);
-		image_module->stop_load      = mname (png,stop_load);
-                image_module->save           = mname (png,save);
-		return TRUE;
+	else if (strcmp (image_module->module_name, "png") == 0){
+                fill_vtable = mname (png, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_bmp	
-	if (strcmp (image_module->module_name, "bmp") == 0){
-		image_module->load           = mname (bmp,load);
-		image_module->begin_load     = mname (bmp,begin_load);
-		image_module->load_increment = mname (bmp,load_increment);
-		image_module->stop_load      = mname (bmp,stop_load);
-		return TRUE;
+	else if (strcmp (image_module->module_name, "bmp") == 0){
+                fill_vtable = mname (bmp, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_wbmp
-	if (strcmp (image_module->module_name, "wbmp") == 0){
-		image_module->load           = mname (wbmp,load);
-		image_module->begin_load     = mname (wbmp,begin_load);
-		image_module->load_increment = mname (wbmp,load_increment);
-		image_module->stop_load      = mname (wbmp,stop_load);
-		return TRUE;
+	else if (strcmp (image_module->module_name, "wbmp") == 0){
+                fill_vtable = mname (wbmp, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_gif
-	if (strcmp (image_module->module_name, "gif") == 0){
-		image_module->load           = mname (gif,load);
-		image_module->begin_load     = mname (gif,begin_load);
-		image_module->load_increment = mname (gif,load_increment);
-		image_module->stop_load      = mname (gif,stop_load);
-		image_module->load_animation = mname (gif,load_animation);
-		return TRUE;
+	else if (strcmp (image_module->module_name, "gif") == 0){
+                fill_vtable = mname (gif, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_ico
-	if (strcmp (image_module->module_name, "ico") == 0){
-		image_module->load           = mname (ico,load);
-		image_module->begin_load     = mname (ico,begin_load);
-		image_module->load_increment = mname (ico,load_increment);
-		image_module->stop_load      = mname (ico,stop_load);
-		return TRUE;
+	else if (strcmp (image_module->module_name, "ico") == 0){
+                fill_vtable = mname (ico, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_jpeg
-	if (strcmp (image_module->module_name, "jpeg") == 0){
-		image_module->load           = mname (jpeg,load);
-		image_module->begin_load     = mname (jpeg,begin_load);
-		image_module->load_increment = mname (jpeg,load_increment);
-		image_module->stop_load      = mname (jpeg,stop_load);
-                image_module->save           = mname (jpeg,save);
-		return TRUE;
+	else if (strcmp (image_module->module_name, "jpeg") == 0){
+                fill_vtable = mname (jpeg, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_pnm
-	if (strcmp (image_module->module_name, "pnm") == 0){
-		image_module->load           = mname (pnm,load);
-		image_module->begin_load     = mname (pnm,begin_load);
-		image_module->load_increment = mname (pnm,load_increment);
-		image_module->stop_load      = mname (pnm,stop_load);
-		return TRUE;
+	else if (strcmp (image_module->module_name, "pnm") == 0){
+                fill_vtable = mname (pnm, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_ras
-	if (strcmp (image_module->module_name, "ras") == 0){
-		image_module->load           = mname (ras,load);
-		image_module->begin_load     = mname (ras,begin_load);
-		image_module->load_increment = mname (ras,load_increment);
-		image_module->stop_load      = mname (ras,stop_load);
-		return TRUE;
+	else if (strcmp (image_module->module_name, "ras") == 0){
+                fill_vtable = mname (ras, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_tiff
-	if (strcmp (image_module->module_name, "tiff") == 0){
-		image_module->load           = mname (tiff,load);
-		image_module->begin_load     = mname (tiff,begin_load);
-		image_module->load_increment = mname (tiff,load_increment);
-		image_module->stop_load      = mname (tiff,stop_load);
-		return TRUE;
+	else if (strcmp (image_module->module_name, "tiff") == 0){
+                fill_vtable = mname (tiff, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_xpm
-	if (strcmp (image_module->module_name, "xpm") == 0){
-		image_module->load           = mname (xpm,load);
-		image_module->load_xpm_data  = mname (xpm,load_xpm_data);
-		return TRUE;
+	else if (strcmp (image_module->module_name, "xpm") == 0){
+                fill_vtable = mname (xpm, fill_vtable);
 	}
 #endif
 
-#ifdef INCLUDE_xpm
-	if (strcmp (image_module->module_name, "xpm") == 0){
-		image_module->load           = mname (xpm,load);
-		image_module->load_xpm_data  = mname (xpm,load_xpm_data);
-		return TRUE;
+#ifdef INCLUDE_xbm
+	else if (strcmp (image_module->module_name, "xbm") == 0){
+                fill_vtable = mname (xbm, fill_vtable);
 	}
 #endif
 
-#ifdef INCLUDE_tiff
-	if (strcmp (image_module->module_name, "xbm") == 0){
-		image_module->load           = mname (xbm,load);
-		image_module->begin_load     = mname (xbm,begin_load);
-		image_module->load_increment = mname (xbm,load_increment);
-		image_module->stop_load      = mname (xbm,stop_load);
-		return TRUE;
-	}
-#endif
+        
+        if (fill_vtable) {
+                (* fill_vtable) (image_module);
+                return TRUE;
+        } else {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+                             _("Image type '%s' is not supported"),
+                             image_module->module_name);
 
-        g_set_error (error,
-                     GDK_PIXBUF_ERROR,
-                     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-                     _("Image type '%s' is not supported"),
-                     image_module->module_name);
-
-        return FALSE;
+                return FALSE;
+        }
 }
 
 

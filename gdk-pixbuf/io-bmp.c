@@ -171,7 +171,7 @@ struct bmp_progressive_state {
 	GdkPixbuf *pixbuf;	/* Our "target" */
 };
 
-gpointer
+static gpointer
 gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
@@ -179,16 +179,17 @@ gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 anim_done_func, gpointer user_data,
                                  GError **error);
 
-void gdk_pixbuf__bmp_image_stop_load(gpointer data);
-gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf,
-					      guint size,
-                                              GError **error);
+static gboolean gdk_pixbuf__bmp_image_stop_load(gpointer data, GError **error);
+static gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data,
+                                                     const guchar * buf,
+                                                     guint size,
+                                                     GError **error);
 
 
 
 /* Shared library entry point --> This should be removed when
    generic_image_load enters gdk-pixbuf-io. */
-GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f, GError **error)
+static GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f, GError **error)
 {
 	guchar membuf[4096];
 	size_t length;
@@ -210,7 +211,7 @@ GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f, GError **error)
                                                             membuf,
                                                             length,
                                                             error)) {
-                          gdk_pixbuf__bmp_image_stop_load (State);
+                          gdk_pixbuf__bmp_image_stop_load (State, NULL);
                           return NULL;
                   }
 
@@ -220,13 +221,18 @@ GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f, GError **error)
 
 	pb = State->pixbuf;
 
-	gdk_pixbuf__bmp_image_stop_load(State);
+	gdk_pixbuf__bmp_image_stop_load(State, NULL);
 	return pb;
 }
 
-static void DecodeHeader(unsigned char *BFH, unsigned char *BIH,
-			 struct bmp_progressive_state *State)
+static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
+                             struct bmp_progressive_state *State,
+                             GError **error)
 {
+        gboolean retval = TRUE;
+
+        /* FIXME this is totally unrobust against bogus image data. */
+        
 #if DUMPBIH
 	DumpBIH(BIH);
 #endif
@@ -284,9 +290,6 @@ static void DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 	if (State->LineBuf == NULL)
 		State->LineBuf = g_malloc(State->LineWidth);
 
-	g_assert(State->LineBuf != NULL);
-
-
 	if (State->pixbuf == NULL) {
 		if (State->Type == 32)
 			State->pixbuf =
@@ -299,12 +302,21 @@ static void DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 					   (gint) State->Header.width,
 					   (gint) State->Header.height);
 
+                if (State->pixbuf == NULL) {
+                        g_set_error (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Not enough memory to load bitmap image"));
+                        retval = FALSE;
+                }
+                
 		if (State->prepared_func != NULL)
 			/* Notify the client that we are ready to go */
 			(*State->prepared_func) (State->pixbuf, State->user_data);
 
 	}
 
+        return retval;
 }
 
 /* 
@@ -313,7 +325,7 @@ static void DecodeHeader(unsigned char *BFH, unsigned char *BIH,
  * return context (opaque to user)
  */
 
-gpointer
+static gpointer
 gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
@@ -357,13 +369,16 @@ gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
  *
  * free context, unref gdk_pixbuf
  */
-void gdk_pixbuf__bmp_image_stop_load(gpointer data)
+static gboolean gdk_pixbuf__bmp_image_stop_load(gpointer data, GError **error)
 {
 	struct bmp_progressive_state *context =
 	    (struct bmp_progressive_state *) data;
 
+        /* FIXME this thing needs to report errors if
+         * we have unused image data
+         */        
 
-	g_return_if_fail(context != NULL);
+	g_return_val_if_fail(context != NULL, TRUE);
 
 	if (context->LineBuf != NULL)
 		g_free(context->LineBuf);
@@ -377,6 +392,8 @@ void gdk_pixbuf__bmp_image_stop_load(gpointer data)
 		gdk_pixbuf_unref(context->pixbuf);
 
 	g_free(context);
+
+        return TRUE;
 }
 
 
@@ -555,8 +572,9 @@ static void OneLine(struct bmp_progressive_state *context)
 }
 
 /* DoCompressedByte handles 1 byte of incomming compressed data */
-void DoCompressedByte(struct bmp_progressive_state *context, guchar ** buf,
-		      gint * size)
+static void
+DoCompressedByte(struct bmp_progressive_state *context, guchar ** buf,
+                 gint * size)
 {
 	gint BytesToCopy;
 	switch (context->compr.phase) {
@@ -705,10 +723,11 @@ void DoCompressedByte(struct bmp_progressive_state *context, guchar ** buf,
  *
  * append image data onto inrecrementally built output image
  */
-gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data,
-                                              guchar * buf,
-					      guint size,
-                                              GError **error)
+static gboolean
+gdk_pixbuf__bmp_image_load_increment(gpointer data,
+                                     const guchar * buf,
+                                     guint size,
+                                     GError **error)
 {
 	struct bmp_progressive_state *context =
 	    (struct bmp_progressive_state *) data;
@@ -759,11 +778,22 @@ gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data,
 		}
 
 		if (context->HeaderDone >= 14 + 40)
-			DecodeHeader(context->HeaderBuf,
-				     context->HeaderBuf + 14, context);
+                        if (!DecodeHeader(context->HeaderBuf,
+                                          context->HeaderBuf + 14, context,
+                                          error))
+                                return FALSE;
 
 
 	}
 
 	return TRUE;
+}
+
+void
+gdk_pixbuf__bmp_fill_vtable (GdkPixbufModule *module)
+{
+  module->load = gdk_pixbuf__bmp_image_load;
+  module->begin_load = gdk_pixbuf__bmp_image_begin_load;
+  module->stop_load = gdk_pixbuf__bmp_image_stop_load;
+  module->load_increment = gdk_pixbuf__bmp_image_load_increment;
 }

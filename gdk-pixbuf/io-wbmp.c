@@ -62,7 +62,7 @@ struct wbmp_progressive_state {
   GdkPixbuf *pixbuf;	/* Our "target" */
 };
 
-gpointer
+static gpointer
 gdk_pixbuf__wbmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				  ModuleUpdatedNotifyFunc updated_func,
 				  ModuleFrameDoneNotifyFunc frame_done_func,
@@ -70,15 +70,16 @@ gdk_pixbuf__wbmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				  anim_done_func, gpointer user_data,
                                   GError **error);
 
-void gdk_pixbuf__wbmp_image_stop_load(gpointer data);
-gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data, guchar * buf,
-					       guint size,
-                                               GError **error);
+static gboolean gdk_pixbuf__wbmp_image_stop_load(gpointer data, GError **error);
+static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
+                                                      const guchar * buf,
+                                                      guint size,
+                                                      GError **error);
 
 
 /* Shared library entry point --> This should be removed when
    generic_image_load enters gdk-pixbuf-io. */
-GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f, GError **error)
+static GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f, GError **error)
 {
 	size_t length;
 	char membuf[4096];
@@ -106,7 +107,7 @@ GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f, GError **error)
 
 	pb = State->pixbuf;
 
-	gdk_pixbuf__wbmp_image_stop_load(State);
+	gdk_pixbuf__wbmp_image_stop_load(State, NULL);
 	return pb;
 }
 
@@ -116,7 +117,7 @@ GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f, GError **error)
  * return context (opaque to user)
  */
 
-gpointer
+static gpointer
 gdk_pixbuf__wbmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
                                   ModuleUpdatedNotifyFunc updated_func,
                                   ModuleFrameDoneNotifyFunc frame_done_func,
@@ -143,16 +144,23 @@ gdk_pixbuf__wbmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
  *
  * free context, unref gdk_pixbuf
  */
-void gdk_pixbuf__wbmp_image_stop_load(gpointer data)
+static gboolean gdk_pixbuf__wbmp_image_stop_load(gpointer data,
+                                                 GError **error)
 {
 	struct wbmp_progressive_state *context =
 	    (struct wbmp_progressive_state *) data;
 
-	g_return_if_fail(context != NULL);
+        /* FIXME this thing needs to report errors if
+         * we have unused image data
+         */
+        
+	g_return_val_if_fail(context != NULL, TRUE);
 	if (context->pixbuf)
 	  gdk_pixbuf_unref(context->pixbuf);
 
 	g_free(context);
+
+        return TRUE;
 }
 
 static gboolean
@@ -228,8 +236,9 @@ get_mbi(struct wbmp_progressive_state *context, guchar **buf, guint *buf_size, i
  *
  * append image data onto inrecrementally built output image
  */
-gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data, guchar * buf,
-                                               guint size, GError **error)
+static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
+                                                      const guchar * buf,
+                                                      guint size, GError **error)
 {
 	struct wbmp_progressive_state *context =
 	    (struct wbmp_progressive_state *) data;
@@ -323,4 +332,13 @@ gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data, guchar * buf,
 	  return save_rest(context, buf, size);
 	else
 	  return context->needmore;
+}
+
+void
+gdk_pixbuf__wbmp_fill_vtable (GdkPixbufModule *module)
+{
+  module->load = gdk_pixbuf__wbmp_image_load;
+  module->begin_load = gdk_pixbuf__wbmp_image_begin_load;
+  module->stop_load = gdk_pixbuf__wbmp_image_stop_load;
+  module->load_increment = gdk_pixbuf__wbmp_image_load_increment;
 }

@@ -90,7 +90,7 @@ enum {
   PROP_PIXELS_INSIDE_WRAP,
   PROP_EDITABLE,
   PROP_WRAP_MODE,
-  PROP_JUSTIFY,
+  PROP_JUSTIFICATION,
   PROP_DIRECTION,
   PROP_LEFT_MARGIN,
   PROP_INDENT,
@@ -121,7 +121,7 @@ enum {
   PROP_PIXELS_INSIDE_WRAP_SET,
   PROP_EDITABLE_SET,
   PROP_WRAP_MODE_SET,
-  PROP_JUSTIFY_SET,
+  PROP_JUSTIFICATION_SET,
   PROP_LEFT_MARGIN_SET,
   PROP_INDENT_SET,
   PROP_STRIKETHROUGH_SET,
@@ -364,8 +364,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));  
 
   g_object_class_install_property (object_class,
-                                   PROP_JUSTIFY,
-                                   g_param_spec_enum ("justify",
+                                   PROP_JUSTIFICATION,
+                                   g_param_spec_enum ("justification",
                                                       _("Justification"),
                                                       _("Left, right, or center justification"),
                                                       GTK_TYPE_JUSTIFICATION,
@@ -555,7 +555,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                 _("Font size set"),
                 _("Whether this tag affects the font size"));
 
-  ADD_SET_PROP ("justify_set", PROP_JUSTIFY_SET,
+  ADD_SET_PROP ("justification_set", PROP_JUSTIFICATION_SET,
                 _("Justification set"),
                 _("Whether this tag affects paragraph justification"));
   
@@ -998,10 +998,10 @@ gtk_text_tag_set_property (GObject      *object,
       size_changed = TRUE;
       break;
 
-    case PROP_JUSTIFY:
-      text_tag->justify_set = TRUE;
-      text_tag->values->justify = g_value_get_enum (value);
-      g_object_notify (G_OBJECT (text_tag), "justify_set");
+    case PROP_JUSTIFICATION:
+      text_tag->justification_set = TRUE;
+      text_tag->values->justification = g_value_get_enum (value);
+      g_object_notify (G_OBJECT (text_tag), "justification_set");
       size_changed = TRUE;
       break;
 
@@ -1169,8 +1169,8 @@ gtk_text_tag_set_property (GObject      *object,
       size_changed = TRUE;
       break;
 
-    case PROP_JUSTIFY_SET:
-      text_tag->justify_set = g_value_get_boolean (value);
+    case PROP_JUSTIFICATION_SET:
+      text_tag->justification_set = g_value_get_boolean (value);
       size_changed = TRUE;
       break;
       
@@ -1363,8 +1363,8 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_enum (value, tag->values->wrap_mode);
       break;
 
-    case PROP_JUSTIFY:
-      g_value_set_enum (value, tag->values->justify);
+    case PROP_JUSTIFICATION:
+      g_value_set_enum (value, tag->values->justification);
       break;
 
     case PROP_DIRECTION:
@@ -1474,8 +1474,8 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boolean (value, tag->wrap_mode_set);
       break;
 
-    case PROP_JUSTIFY_SET:
-      g_value_set_boolean (value, tag->justify_set);
+    case PROP_JUSTIFICATION_SET:
+      g_value_set_boolean (value, tag->justification_set);
       break;
       
     case PROP_LEFT_MARGIN_SET:
@@ -1952,8 +1952,8 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
       if (tag->size_set)
         dest->font.size = vals->font.size;
 
-      if (tag->justify_set)
-        dest->justify = vals->justify;
+      if (tag->justification_set)
+        dest->justification = vals->justification;
 
       if (vals->direction != GTK_TEXT_DIR_NONE)
         dest->direction = vals->direction;
@@ -2026,7 +2026,7 @@ _gtk_text_tag_affects_size (GtkTextTag *tag)
     tag->weight_set ||
     tag->size_set ||
     tag->stretch_set ||
-    tag->justify_set ||
+    tag->justification_set ||
     tag->left_margin_set ||
     tag->indent_set ||
     tag->rise_set ||

@@ -153,22 +153,23 @@ struct ico_progressive_state {
 	GdkPixbuf *pixbuf;	/* Our "target" */
 };
 
-gpointer
+static gpointer
 gdk_pixbuf__ico_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc anim_done_func,
 				 gpointer user_data,
                                  GError **error);
-void gdk_pixbuf__ico_image_stop_load(gpointer data);
-gboolean gdk_pixbuf__ico_image_load_increment(gpointer data, guchar * buf, guint size,
-                                              GError **error);
+static gboolean gdk_pixbuf__ico_image_stop_load(gpointer data, GError **error);
+static gboolean gdk_pixbuf__ico_image_load_increment(gpointer data,
+                                                     const guchar * buf, guint size,
+                                                     GError **error);
 
 
 
 /* Shared library entry point --> Can go when generic_image_load
    enters gdk-pixbuf-io */
-GdkPixbuf *
+static GdkPixbuf *
 gdk_pixbuf__ico_image_load(FILE * f, GError **error)
 {
 	guchar *membuf;
@@ -191,7 +192,7 @@ gdk_pixbuf__ico_image_load(FILE * f, GError **error)
 		if (length > 0)
                         if (!gdk_pixbuf__ico_image_load_increment(State, membuf, length,
                                                                   error)) {
-                                gdk_pixbuf__ico_image_stop_load (State);
+                                gdk_pixbuf__ico_image_stop_load (State, NULL);
                                 return NULL;
                         }
 	}
@@ -201,7 +202,7 @@ gdk_pixbuf__ico_image_load(FILE * f, GError **error)
 
 	pb = State->pixbuf;
 
-	gdk_pixbuf__ico_image_stop_load(State);
+	gdk_pixbuf__ico_image_stop_load(State, NULL);
 	return pb;
 }
 
@@ -374,7 +375,7 @@ static void DecodeHeader(guchar *Data, gint Bytes,
  * return context (opaque to user)
  */
 
-gpointer
+static gpointer
 gdk_pixbuf__ico_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
@@ -416,13 +417,17 @@ gdk_pixbuf__ico_image_begin_load(ModulePreparedNotifyFunc prepared_func,
  *
  * free context, unref gdk_pixbuf
  */
-void gdk_pixbuf__ico_image_stop_load(gpointer data)
+gboolean gdk_pixbuf__ico_image_stop_load(gpointer data,
+                                         GError **error)
 {
 	struct ico_progressive_state *context =
 	    (struct ico_progressive_state *) data;
 
+        /* FIXME this thing needs to report errors if
+         * we have unused image data
+         */
 
-	g_return_if_fail(context != NULL);
+	g_return_val_if_fail(context != NULL, TRUE);
 
 	if (context->LineBuf != NULL)
 		g_free(context->LineBuf);
@@ -434,6 +439,8 @@ void gdk_pixbuf__ico_image_stop_load(gpointer data)
 		gdk_pixbuf_unref(context->pixbuf);
 
 	g_free(context);
+
+        return TRUE;
 }
 
 
@@ -642,8 +649,10 @@ static void OneLine(struct ico_progressive_state *context)
  *
  * append image data onto inrecrementally built output image
  */
-gboolean
-gdk_pixbuf__ico_image_load_increment(gpointer data, guchar * buf, guint size,
+static gboolean
+gdk_pixbuf__ico_image_load_increment(gpointer data,
+                                     const guchar * buf,
+                                     guint size,
                                      GError **error)
 {
 	struct ico_progressive_state *context =
@@ -698,4 +707,13 @@ gdk_pixbuf__ico_image_load_increment(gpointer data, guchar * buf, guint size,
 	}
 
 	return TRUE;
+}
+
+void
+gdk_pixbuf__ico_fill_vtable (GdkPixbufModule *module)
+{
+  module->load = gdk_pixbuf__ico_image_load;
+  module->begin_load = gdk_pixbuf__ico_image_begin_load;
+  module->stop_load = gdk_pixbuf__ico_image_stop_load;
+  module->load_increment = gdk_pixbuf__ico_image_load_increment;
 }

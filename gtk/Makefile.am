@@ -131,7 +131,6 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkoptionmenu.h		\
 	gtkpacker.h		\
 	gtkpaned.h		\
-	gdk-pixbuf-loader.h	\
 	gtkpixmap.h		\
 	gtkplug.h		\
 	gtkpreview.h		\
@@ -357,7 +356,6 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkwindow-decorate.c    \
 	fnmatch.c		\
 	fnmatch.h		\
-	gdk-pixbuf-loader.c	\
 @STRIP_END@
 # Extra headers that are used for enum type array/id generation
 gdk_headers = @STRIP_BEGIN@ 	\

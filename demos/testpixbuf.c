@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <gtk/gtk.h>
-#include <gtk/gdk-pixbuf-loader.h>
+#include <gdk-pixbuf/gdk-pixbuf-loader.h>
 
 #include "test-inline-pixbufs.h"
 
@@ -459,8 +459,9 @@ update_timeout(gpointer data)
 
 	if (done) {
                 gtk_widget_queue_draw(*status->rgbwin);
-		gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (status->loader));
-		gtk_object_destroy (GTK_OBJECT(status->loader));
+                /* ignoring errors, we should not do that. */
+		gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (status->loader), NULL);
+		g_object_unref (G_OBJECT(status->loader));
 		fclose (status->imagefile);
 		g_free (status->buf);
 	}
@@ -596,15 +597,17 @@ main (int argc, char **argv)
 			status.rgbwin = &rgb_window;
 
 			status.buf = g_malloc (readlen);
-                        gtk_signal_connect(GTK_OBJECT(pixbuf_loader),
-                                           "area_prepared",
-                                           GTK_SIGNAL_FUNC(progressive_prepared_callback),
-                                           &rgb_window);
+                        g_signal_connect_data (G_OBJECT(pixbuf_loader),
+                                               "area_prepared",
+                                               GTK_SIGNAL_FUNC(progressive_prepared_callback),
+                                               &rgb_window,
+                                               NULL, FALSE, FALSE);
 
-                        gtk_signal_connect(GTK_OBJECT(pixbuf_loader),
-                                           "area_updated",
-                                           GTK_SIGNAL_FUNC(progressive_updated_callback),
-                                           &rgb_window);
+                        g_signal_connect_data (G_OBJECT(pixbuf_loader),
+                                               "area_updated",
+                                               GTK_SIGNAL_FUNC(progressive_updated_callback),
+                                               &rgb_window,
+                                               NULL, FALSE, FALSE);
 
 			
                         status.imagefile = fopen (argv[1], "r");

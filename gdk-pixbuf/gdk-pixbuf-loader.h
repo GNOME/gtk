@@ -26,8 +26,6 @@
 #ifndef GDK_PIXBUF_LOADER_H
 #define GDK_PIXBUF_LOADER_H
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -77,7 +75,8 @@ gboolean             gdk_pixbuf_loader_write         (GdkPixbufLoader *loader,
                                                       GError         **error);
 GdkPixbuf *          gdk_pixbuf_loader_get_pixbuf    (GdkPixbufLoader *loader);
 GdkPixbufAnimation * gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader);
-void                 gdk_pixbuf_loader_close         (GdkPixbufLoader *loader);
+gboolean             gdk_pixbuf_loader_close         (GdkPixbufLoader *loader,
+                                                      GError         **error);
 
 
 #ifdef __cplusplus

@@ -30,6 +30,7 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h> /* for unlink */
 #endif
+#include <errno.h>
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
@@ -1233,7 +1234,8 @@ free_buffer (guchar *pixels, gpointer data)
 
 /* This function does all the work. */
 static GdkPixbuf *
-pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handle), gpointer handle)
+pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handle), gpointer handle,
+                        GError **error)
 {
 	gint w, h, n_col, cpp;
 	gint cnt, xcnt, ycnt, wbytes, n, ns;
@@ -1249,12 +1251,18 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 
 	buffer = (*get_buf) (op_header, handle);
 	if (!buffer) {
-		g_warning ("No XPM header found");
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("No XPM header found"));
 		return NULL;
 	}
 	sscanf (buffer, "%d %d %d %d", &w, &h, &n_col, &cpp);
 	if (cpp >= 32) {
-		g_warning ("XPM has more than 31 chars per pixel.");
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("XPM has more than 31 chars per pixel"));
 		return NULL;
 	}
 
@@ -1269,7 +1277,10 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 
 		buffer = (*get_buf) (op_cmap, handle);
 		if (!buffer) {
-			g_warning ("Can't load XPM colormap");
+                        g_set_error (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("Can't read XPM colormap"));
 			g_hash_table_destroy (color_hash);
 			g_free (name_buf);
 			g_free (colors);
@@ -1299,11 +1310,15 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 	}
 
 	if (is_trans)
-		pixels = malloc (w * h * 4);
+		pixels = g_try_malloc (w * h * 4);
 	else
-		pixels = malloc (w * h * 3);
+		pixels = g_try_malloc (w * h * 3);
 
 	if (!pixels) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                             _("Can't allocate memory for loading XPM image"));
 		g_hash_table_destroy (color_hash);
 		g_free (colors);
 		g_free (name_buf);
@@ -1350,31 +1365,39 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 }
 
 /* Shared library entry point for file loading */
-GdkPixbuf *
-gdk_pixbuf__xpm_image_load (FILE *f)
+static GdkPixbuf *
+gdk_pixbuf__xpm_image_load (FILE *f,
+                            GError **error)
 {
 	GdkPixbuf *pixbuf;
 	struct file_handle h;
 
 	memset (&h, 0, sizeof (h));
 	h.infile = f;
-	pixbuf = pixbuf_create_from_xpm (file_buffer, &h);
+	pixbuf = pixbuf_create_from_xpm (file_buffer, &h, error);
 	g_free (h.buffer);
 
 	return pixbuf;
 }
 
 /* Shared library entry point for memory loading */
-GdkPixbuf *
+static GdkPixbuf *
 gdk_pixbuf__xpm_image_load_xpm_data (const gchar **data)
 {
         GdkPixbuf *pixbuf;
         struct mem_handle h;
-
+        GError *error = NULL;
+        
         h.data = data;
         h.offset = 0;
         
-	pixbuf = pixbuf_create_from_xpm (mem_buffer, &h);
+	pixbuf = pixbuf_create_from_xpm (mem_buffer, &h, &error);
+
+        if (error) {
+                g_warning ("Inline XPM data is broken: %s", error->message);
+                g_error_free (error);
+                error = NULL;
+        }
         
 	return pixbuf;
 }
@@ -1398,7 +1421,7 @@ struct _XPMContext
  * This is very broken but it should be relayively simple to fix
  * in the future.
  */
-gpointer
+static gpointer
 gdk_pixbuf__xpm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
                                   ModuleUpdatedNotifyFunc update_func,
                                   ModuleFrameDoneNotifyFunc frame_done_func,
@@ -1432,43 +1455,66 @@ gdk_pixbuf__xpm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
        return context;
 }
 
-void
-gdk_pixbuf__xpm_image_stop_load (gpointer data)
+static gboolean
+gdk_pixbuf__xpm_image_stop_load (gpointer data,
+                                 GError **error)
 {
        XPMContext *context = (XPMContext*) data;
        GdkPixbuf *pixbuf;
-
-       g_return_if_fail (data != NULL);
-       g_warning ("stopped loading");
+       gboolean retval = FALSE;
+       
+       g_return_val_if_fail (data != NULL, FALSE);
 
        fflush (context->file);
        rewind (context->file);
        if (context->all_okay) {
-               pixbuf = gdk_pixbuf__xpm_image_load (context->file);
+               pixbuf = gdk_pixbuf__xpm_image_load (context->file, error);
 
-               (* context->prepare_func) (pixbuf, context->user_data);
-               (* context->update_func) (pixbuf, 0, 0, pixbuf->width, pixbuf->height, context->user_data);
-               gdk_pixbuf_unref (pixbuf);
+               if (pixbuf != NULL) {
+                       (* context->prepare_func) (pixbuf, context->user_data);
+                       (* context->update_func) (pixbuf, 0, 0, pixbuf->width, pixbuf->height, context->user_data);
+                       gdk_pixbuf_unref (pixbuf);
+
+                       retval = TRUE;
+               }
        }
 
        fclose (context->file);
        unlink (context->tempname);
        g_free (context->tempname);
        g_free ((XPMContext *) context);
+
+       return retval;
 }
 
-gboolean
-gdk_pixbuf__xpm_image_load_increment (gpointer data, guchar *buf, guint size)
+static gboolean
+gdk_pixbuf__xpm_image_load_increment (gpointer data,
+                                      const guchar *buf,
+                                      guint    size,
+                                      GError **error)
 {
        XPMContext *context = (XPMContext *) data;
 
        g_return_val_if_fail (data != NULL, FALSE);
-       g_warning ("load increment");
 
        if (fwrite (buf, sizeof (guchar), size, context->file) != size) {
                context->all_okay = FALSE;
+               g_set_error (error,
+                            G_FILE_ERROR,
+                            g_file_error_from_errno (errno),
+                            _("Failed to write to temporary file when loading XPM image"));
                return FALSE;
        }
 
        return TRUE;
+}
+
+void
+gdk_pixbuf__xpm_fill_vtable (GdkPixbufModule *module)
+{
+  module->load = gdk_pixbuf__xpm_image_load;
+  module->load_xpm_data = gdk_pixbuf__xpm_image_load_xpm_data;
+  module->begin_load = gdk_pixbuf__xpm_image_begin_load;
+  module->stop_load = gdk_pixbuf__xpm_image_stop_load;
+  module->load_increment = gdk_pixbuf__xpm_image_load_increment;
 }

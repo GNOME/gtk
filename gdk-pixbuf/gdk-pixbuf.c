@@ -54,6 +54,8 @@ gdk_pixbuf_get_type (void)
                         (GInstanceInitFunc) NULL,
                 };
       
+                g_type_init ();
+                
                 object_type = g_type_register_static (G_TYPE_OBJECT,
                                                       "GdkPixbuf",
                                                       &object_info, 0);
@@ -398,24 +400,6 @@ const guint gdk_pixbuf_micro_version = GDK_PIXBUF_MICRO;
 
 const char *gdk_pixbuf_version = GDK_PIXBUF_VERSION;
 
-void
-gdk_pixbuf_preinit (gpointer app, gpointer modinfo)
-{
-        g_type_init ();
-}
-
-void
-gdk_pixbuf_postinit (gpointer app, gpointer modinfo)
-{
-}
-
-void
-gdk_pixbuf_init (void)
-{
-        gdk_pixbuf_preinit (NULL, NULL);
-        gdk_pixbuf_postinit (NULL, NULL);
-}
-
 /* Error quark */
 GQuark
 gdk_pixbuf_error_quark (void)
@@ -426,3 +410,7 @@ gdk_pixbuf_error_quark (void)
 
   return q;
 }
+
+/* Include the marshallers */
+#include <gobject/gvaluetypes.h>
+#include "gdk-pixbuf-marshal.c"

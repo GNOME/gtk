@@ -470,17 +470,17 @@ fill_example_buffer (GtkTextBuffer *buffer)
   color.blue = color.red = 0;
   color.green = 0xffff;
   g_object_set (G_OBJECT (tag),
-                  "background_gdk", &color,
-                  "size_points", 10.0,
-                  NULL);
+                "background_gdk", &color,
+                "size_points", 10.0,
+                NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "strikethrough");
 
   setup_tag (tag);
       
   g_object_set (G_OBJECT (tag),
-                  "strikethrough", TRUE,
-                  NULL);
+                "strikethrough", TRUE,
+                NULL);
 
 
   tag = gtk_text_buffer_create_tag (buffer, "underline");
@@ -488,30 +488,30 @@ fill_example_buffer (GtkTextBuffer *buffer)
   setup_tag (tag);
       
   g_object_set (G_OBJECT (tag),
-                  "underline", PANGO_UNDERLINE_SINGLE,
-                  NULL);
+                "underline", PANGO_UNDERLINE_SINGLE,
+                NULL);
 
   setup_tag (tag);
       
   g_object_set (G_OBJECT (tag),
-                  "underline", PANGO_UNDERLINE_SINGLE,
-                  NULL);
+                "underline", PANGO_UNDERLINE_SINGLE,
+                NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "centered");
       
   g_object_set (G_OBJECT (tag),
-                  "justify", GTK_JUSTIFY_CENTER,
-                  NULL);
+                "justification", GTK_JUSTIFY_CENTER,
+                NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "rtl_quote");
       
   g_object_set (G_OBJECT (tag),
-                  "wrap_mode", GTK_WRAPMODE_WORD,
-                  "direction", GTK_TEXT_DIR_RTL,
-                  "indent", 30,
-                  "left_margin", 20,
-                  "right_margin", 20,
-                  NULL);
+                "wrap_mode", GTK_WRAPMODE_WORD,
+                "direction", GTK_TEXT_DIR_RTL,
+                "indent", 30,
+                "left_margin", 20,
+                "right_margin", 20,
+                NULL);
 
 
 #if 0
@@ -1182,6 +1182,9 @@ view_init_menus (View *view)
     case GTK_WRAPMODE_WORD:
       menu_item = gtk_item_factory_get_widget (view->item_factory, "/Settings/Wrap Words");
       break;
+    case GTK_WRAPMODE_CHAR:
+      menu_item = gtk_item_factory_get_widget (view->item_factory, "/Settings/Wrap Chars");
+      break;
     default:
       break;
     }
@@ -1208,6 +1211,7 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Settings",   	  NULL,         0,                0, "<Branch>" },
   { "/Settings/Wrap _Off",   NULL,      do_wrap_changed,  GTK_WRAPMODE_NONE, "<RadioItem>" },
   { "/Settings/Wrap _Words", NULL,      do_wrap_changed,  GTK_WRAPMODE_WORD, "/Settings/Wrap Off" },
+  { "/Settings/Wrap _Chars", NULL,      do_wrap_changed,  GTK_WRAPMODE_CHAR, "/Settings/Wrap Off" },
   { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
   { "/Settings/Editable", NULL,      do_editable_changed,  TRUE, "<RadioItem>" },
   { "/Settings/Not editable",    NULL,      do_editable_changed,  FALSE, "/Settings/Editable" },

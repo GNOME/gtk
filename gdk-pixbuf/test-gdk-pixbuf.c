@@ -228,8 +228,6 @@ main (int argc, char **argv)
 	int result;
 
 	result = EXIT_SUCCESS;
-
-	gdk_pixbuf_init ();
 	
 	/* Run some tests. */
 	if (!simple_composite_test ()) {

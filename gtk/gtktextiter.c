@@ -2447,6 +2447,8 @@ typedef gboolean (* TestLogAttrFunc) (const PangoLogAttr *attrs,
                                       gint                min_offset,
                                       gint                len);
 
+/* Word funcs */
+
 static gboolean
 find_word_end_func (const PangoLogAttr *attrs,
                     gint          offset,
@@ -2519,6 +2521,82 @@ inside_word_func (const PangoLogAttr *attrs,
     --offset;
 
   return attrs[offset].is_word_start;
+}
+
+/* Sentence funcs */
+
+static gboolean
+find_sentence_end_func (const PangoLogAttr *attrs,
+                        gint          offset,
+                        gint          min_offset,
+                        gint          len,
+                        gint         *found_offset,
+                        gboolean      already_moved_initially)
+{
+  if (!already_moved_initially)
+    ++offset;
+
+  /* Find end of next sentence */
+  while (offset < min_offset + len &&
+         !attrs[offset].is_sentence_end)
+    ++offset;
+
+  *found_offset = offset;
+
+  return offset < min_offset + len;
+}
+
+static gboolean
+is_sentence_end_func (const PangoLogAttr *attrs,
+                      gint          offset,
+                      gint          min_offset,
+                      gint          len)
+{
+  return attrs[offset].is_sentence_end;
+}
+
+static gboolean
+find_sentence_start_func (const PangoLogAttr *attrs,
+                          gint          offset,
+                          gint          min_offset,
+                          gint          len,
+                          gint         *found_offset,
+                          gboolean      already_moved_initially)
+{
+  if (!already_moved_initially)
+    --offset;
+
+  /* Find start of prev sentence */
+  while (offset >= min_offset &&
+         !attrs[offset].is_sentence_start)
+    --offset;
+
+  *found_offset = offset;
+
+  return offset >= min_offset;
+}
+
+static gboolean
+is_sentence_start_func (const PangoLogAttr *attrs,
+                        gint          offset,
+                        gint          min_offset,
+                        gint          len)
+{
+  return attrs[offset].is_sentence_start;
+}
+
+static gboolean
+inside_sentence_func (const PangoLogAttr *attrs,
+                      gint          offset,
+                      gint          min_offset,
+                      gint          len)
+{
+  /* Find next sentence start or end */
+  while (offset >= min_offset &&
+         !(attrs[offset].is_sentence_start || attrs[offset].is_sentence_end))
+    --offset;
+
+  return attrs[offset].is_sentence_start;
 }
 
 static gboolean
@@ -2683,7 +2761,6 @@ gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
   return TRUE;
 }
 
-
 gboolean
 gtk_text_iter_starts_word (const GtkTextIter *iter)
 {
@@ -2700,6 +2777,86 @@ gboolean
 gtk_text_iter_inside_word (const GtkTextIter *iter)
 {
   return test_log_attrs (iter, inside_word_func);
+}
+
+gboolean
+gtk_text_iter_starts_sentence (const GtkTextIter *iter)
+{
+  return test_log_attrs (iter, is_sentence_start_func);
+}
+
+gboolean
+gtk_text_iter_ends_sentence (const GtkTextIter *iter)
+{
+  return test_log_attrs (iter, is_sentence_end_func);
+}
+
+gboolean
+gtk_text_iter_inside_sentence (const GtkTextIter *iter)
+{
+  return test_log_attrs (iter, inside_sentence_func);
+}
+
+gboolean
+gtk_text_iter_forward_sentence_end (GtkTextIter *iter)
+{
+  return find_by_log_attrs (iter, find_sentence_end_func, TRUE, FALSE);
+}
+
+gboolean
+gtk_text_iter_backward_sentence_start (GtkTextIter      *iter)
+{
+  return find_by_log_attrs (iter, find_sentence_start_func, FALSE, FALSE);
+}
+
+/* FIXME a loop around a truly slow function means
+ * a truly spectacularly slow function.
+ */
+gboolean
+gtk_text_iter_forward_sentence_ends (GtkTextIter      *iter,
+                                     gint              count)
+{
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  if (count == 0)
+    return FALSE;
+
+  if (count < 0)
+    return gtk_text_iter_backward_sentence_starts (iter, -count);
+
+  if (!gtk_text_iter_forward_sentence_end (iter))
+    return FALSE;
+  --count;
+
+  while (count > 0)
+    {
+      if (!gtk_text_iter_forward_sentence_end (iter))
+        break;
+      --count;
+    }
+  return TRUE;
+}
+
+gboolean
+gtk_text_iter_backward_sentence_starts (GtkTextIter      *iter,
+                                        gint               count)
+{
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  if (count < 0)
+    return gtk_text_iter_forward_sentence_ends (iter, -count);
+
+  if (!gtk_text_iter_backward_sentence_start (iter))
+    return FALSE;
+  --count;
+
+  while (count > 0)
+    {
+      if (!gtk_text_iter_backward_sentence_start (iter))
+        break;
+      --count;
+    }
+  return TRUE;
 }
 
 static gboolean
