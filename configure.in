@@ -1394,7 +1394,7 @@ GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $GDK_PAC
 
 #
 # If we aren't writing explicit dependencies, then don't put the extra libraries we need
-a# into the pkg-config files
+# into the pkg-config files
 #
 if test $enable_explicit_deps != yes ; then
   GDK_EXTRA_LIBS=
