@@ -1,3 +1,8 @@
+Wed Dec 12 14:27:30 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenubar.c (window_key_press_handler): Fix check for
+	modifiers.
+
 2001-12-12  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtkmenu.c (gtk_menu_key_press): check GTK_MENU_ITEM

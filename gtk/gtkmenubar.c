@@ -382,7 +382,8 @@ window_key_press_handler (GtkWidget   *widget,
        * AccelGroup changes etc.
        */
       if (event->keyval == keyval &&
-          (mods & event->state) == mods)
+          ((event->state & gtk_accelerator_get_default_mod_mask ()) ==
+	   (mods & gtk_accelerator_get_default_mod_mask ())))
         {
           GtkMenuBar *menubar;
           GtkMenuShell *menushell;
