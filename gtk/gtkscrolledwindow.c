@@ -26,6 +26,7 @@
 
 #include "gtkscrolledwindow.h"
 #include "gtksignal.h"
+#include "gtkintl.h"
 
 
 /* scrolled window policy and size requisition handling:
@@ -68,26 +69,29 @@
 #define DEFAULT_SCROLLBAR_SPACING  3
 
 enum {
-  ARG_0,
-  ARG_HADJUSTMENT,
-  ARG_VADJUSTMENT,
-  ARG_HSCROLLBAR_POLICY,
-  ARG_VSCROLLBAR_POLICY,
-  ARG_WINDOW_PLACEMENT,
-  ARG_SHADOW
+  PROP_0,
+  PROP_HADJUSTMENT,
+  PROP_VADJUSTMENT,
+  PROP_HSCROLLBAR_POLICY,
+  PROP_VSCROLLBAR_POLICY,
+  PROP_WINDOW_PLACEMENT,
+  PROP_SHADOW_TYPE,
+  PROP_LAST
 };
-
 
 static void gtk_scrolled_window_class_init         (GtkScrolledWindowClass *klass);
 static void gtk_scrolled_window_init               (GtkScrolledWindow      *scrolled_window);
-static void gtk_scrolled_window_set_arg		   (GtkObject              *object,
-						    GtkArg                 *arg,
-						    guint                   arg_id);
-static void gtk_scrolled_window_get_arg		   (GtkObject              *object,
-						    GtkArg                 *arg,
-						    guint                   arg_id);
 static void gtk_scrolled_window_destroy            (GtkObject              *object);
 static void gtk_scrolled_window_finalize           (GObject                *object);
+static void gtk_scrolled_window_set_property       (GObject                *object,
+					            guint                   prop_id,
+					            const GValue           *value,
+					            GParamSpec             *pspec);
+static void gtk_scrolled_window_get_property       (GObject                *object,
+					            guint                   prop_id,
+					            GValue                 *value,
+					            GParamSpec             *pspec);
+
 static gint gtk_scrolled_window_expose             (GtkWidget              *widget,
 						    GdkEventExpose         *event);
 static void gtk_scrolled_window_size_request       (GtkWidget              *widget,
@@ -151,9 +155,9 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   parent_class = gtk_type_class (GTK_TYPE_BIN);
 
   gobject_class->finalize = gtk_scrolled_window_finalize;
+  gobject_class->set_property = gtk_scrolled_window_set_property;
+  gobject_class->get_property = gtk_scrolled_window_get_property;
 
-  object_class->set_arg = gtk_scrolled_window_set_arg;
-  object_class->get_arg = gtk_scrolled_window_get_arg;
   object_class->destroy = gtk_scrolled_window_destroy;
 
   widget_class->expose_event = gtk_scrolled_window_expose;
@@ -167,105 +171,53 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 
   class->scrollbar_spacing = DEFAULT_SCROLLBAR_SPACING;
 
-  gtk_object_add_arg_type ("GtkScrolledWindow::hadjustment",
-			   GTK_TYPE_ADJUSTMENT,
-			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT,
-			   ARG_HADJUSTMENT);
-  gtk_object_add_arg_type ("GtkScrolledWindow::vadjustment",
-			   GTK_TYPE_ADJUSTMENT,
-			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT,
-			   ARG_VADJUSTMENT);
-  gtk_object_add_arg_type ("GtkScrolledWindow::hscrollbar_policy",
-			   GTK_TYPE_POLICY_TYPE,
-			   GTK_ARG_READWRITE,
-			   ARG_HSCROLLBAR_POLICY);
-  gtk_object_add_arg_type ("GtkScrolledWindow::vscrollbar_policy",
-			   GTK_TYPE_POLICY_TYPE,
-			   GTK_ARG_READWRITE,
-			   ARG_VSCROLLBAR_POLICY);
-  gtk_object_add_arg_type ("GtkScrolledWindow::window_placement",
-			   GTK_TYPE_CORNER_TYPE,
-			   GTK_ARG_READWRITE,
-			   ARG_WINDOW_PLACEMENT);
-  gtk_object_add_arg_type ("GtkScrolledWindow::shadow",
-			   GTK_TYPE_SHADOW_TYPE,
-			   GTK_ARG_READWRITE,
-			   ARG_SHADOW);
-}
+  g_object_class_install_property (gobject_class,
+				   PROP_HADJUSTMENT,
+				   g_param_spec_object ("hadjustment",
+							_("Horizontal Adjustment"),
+							_("The GtkAdjustment for the horizontal position."),
+							GTK_TYPE_ADJUSTMENT,
+							G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  g_object_class_install_property (gobject_class,
+				   PROP_VADJUSTMENT,
+				   g_param_spec_object ("vadjustment",
+							_("Vertical Adjustment"),
+							_("The GtkAdjustment for the vertical position."),
+							GTK_TYPE_ADJUSTMENT,
+							G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  g_object_class_install_property (gobject_class,
+                                   PROP_HSCROLLBAR_POLICY,
+                                   g_param_spec_enum ("hscrollbar_policy",
+                                                      _("Horizontal Scrollbar Policy"),
+                                                      _("When the horizontal scrollbar is displayed"),
+						      GTK_TYPE_POLICY_TYPE,
+						      GTK_POLICY_ALWAYS,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_VSCROLLBAR_POLICY,
+                                   g_param_spec_enum ("vscrollbar_policy",
+                                                      _("Vertical Scrollbar Policy"),
+                                                      _("When the vertical scrollbar is displayed"),
+						      GTK_TYPE_POLICY_TYPE,
+						      GTK_POLICY_ALWAYS,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
 
-static void
-gtk_scrolled_window_set_arg (GtkObject        *object,
-			     GtkArg           *arg,
-			     guint             arg_id)
-{
-  GtkScrolledWindow *scrolled_window;
-
-  scrolled_window = GTK_SCROLLED_WINDOW (object);
-
-  switch (arg_id)
-    {
-    case ARG_HADJUSTMENT:
-      gtk_scrolled_window_set_hadjustment (scrolled_window, GTK_VALUE_POINTER (*arg));
-      break;
-    case ARG_VADJUSTMENT:
-      gtk_scrolled_window_set_vadjustment (scrolled_window, GTK_VALUE_POINTER (*arg));
-      break;
-    case ARG_HSCROLLBAR_POLICY:
-      gtk_scrolled_window_set_policy (scrolled_window,
-				      GTK_VALUE_ENUM (*arg),
-				      scrolled_window->vscrollbar_policy);
-      break;
-    case ARG_VSCROLLBAR_POLICY:
-      gtk_scrolled_window_set_policy (scrolled_window,
-				      scrolled_window->hscrollbar_policy,
-				      GTK_VALUE_ENUM (*arg));
-      break;
-    case ARG_WINDOW_PLACEMENT:
-      gtk_scrolled_window_set_placement (scrolled_window,
-					 GTK_VALUE_ENUM (*arg));
-      break;
-    case ARG_SHADOW:
-      gtk_scrolled_window_set_shadow_type (scrolled_window,
-					   GTK_VALUE_ENUM (*arg));
-      break;
-    default:
-      break;
-    }
-}
-
-static void
-gtk_scrolled_window_get_arg (GtkObject        *object,
-			     GtkArg           *arg,
-			     guint             arg_id)
-{
-  GtkScrolledWindow *scrolled_window;
-
-  scrolled_window = GTK_SCROLLED_WINDOW (object);
-
-  switch (arg_id)
-    {
-    case ARG_HADJUSTMENT:
-      GTK_VALUE_POINTER (*arg) = gtk_scrolled_window_get_hadjustment (scrolled_window);
-      break;
-    case ARG_VADJUSTMENT:
-      GTK_VALUE_POINTER (*arg) = gtk_scrolled_window_get_vadjustment (scrolled_window);
-      break;
-    case ARG_HSCROLLBAR_POLICY:
-      GTK_VALUE_ENUM (*arg) = scrolled_window->hscrollbar_policy;
-      break;
-    case ARG_VSCROLLBAR_POLICY:
-      GTK_VALUE_ENUM (*arg) = scrolled_window->vscrollbar_policy;
-      break;
-    case ARG_WINDOW_PLACEMENT:
-      GTK_VALUE_ENUM (*arg) = scrolled_window->window_placement;
-      break;
-    case ARG_SHADOW:
-      GTK_VALUE_ENUM (*arg) = scrolled_window->shadow_type;
-      break;
-    default:
-      arg->type = GTK_TYPE_INVALID;
-      break;
-    }
+  g_object_class_install_property (gobject_class,
+                                   PROP_WINDOW_PLACEMENT,
+                                   g_param_spec_enum ("window_placement",
+                                                      _("Window Placement"),
+                                                      _("Where the contents are located with respect to the scrollbars"),
+						      GTK_TYPE_CORNER_TYPE,
+						      GTK_CORNER_TOP_LEFT,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHADOW_TYPE,
+                                   g_param_spec_enum ("shadow_type",
+                                                      _("Shadow Type"),
+                                                      _("Style of bevel around the contents"),
+						      GTK_TYPE_SHADOW_TYPE,
+						      GTK_SHADOW_NONE,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
 }
 
 static void
@@ -355,6 +307,8 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
     gtk_widget_set_scroll_adjustments (bin->child,
 				       gtk_range_get_adjustment (GTK_RANGE (scrolled_window->hscrollbar)),
 				       gtk_range_get_adjustment (GTK_RANGE (scrolled_window->vscrollbar)));
+
+  g_object_notify (G_OBJECT (scrolled_window), "hadjustment");
 }
 
 void
@@ -407,6 +361,8 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
     gtk_widget_set_scroll_adjustments (bin->child,
 				       gtk_range_get_adjustment (GTK_RANGE (scrolled_window->hscrollbar)),
 				       gtk_range_get_adjustment (GTK_RANGE (scrolled_window->vscrollbar)));
+
+  g_object_notify (G_OBJECT (scrolled_window), "vadjustment");
 }
 
 GtkAdjustment*
@@ -434,6 +390,8 @@ gtk_scrolled_window_set_policy (GtkScrolledWindow *scrolled_window,
 				GtkPolicyType      hscrollbar_policy,
 				GtkPolicyType      vscrollbar_policy)
 {
+  GObject *object = G_OBJECT (scrolled_window);
+  
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
 
   if ((scrolled_window->hscrollbar_policy != hscrollbar_policy) ||
@@ -443,6 +401,11 @@ gtk_scrolled_window_set_policy (GtkScrolledWindow *scrolled_window,
       scrolled_window->vscrollbar_policy = vscrollbar_policy;
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+
+      g_object_freeze_notify (object);
+      g_object_notify (object, "hscrollbar_policy");
+      g_object_notify (object, "vscrollbar_policy");
+      g_object_thaw_notify (object);
     }
 }
 
@@ -479,6 +442,8 @@ gtk_scrolled_window_set_placement (GtkScrolledWindow *scrolled_window,
       scrolled_window->window_placement = window_placement;
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+      
+      g_object_notify (G_OBJECT (scrolled_window), "window_placement");
     }
 }
 
@@ -523,6 +488,8 @@ gtk_scrolled_window_set_shadow_type (GtkScrolledWindow *scrolled_window,
 	gtk_widget_queue_clear (GTK_WIDGET (scrolled_window));
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+
+      g_object_notify (G_OBJECT (scrolled_window), "shadow_type");
     }
 }
 
@@ -569,6 +536,84 @@ gtk_scrolled_window_finalize (GObject *object)
   gtk_widget_unref (scrolled_window->vscrollbar);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+gtk_scrolled_window_set_property (GObject      *object,
+				  guint         prop_id,
+				  const GValue *value,
+				  GParamSpec   *pspec)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (object);
+  
+  switch (prop_id)
+    {
+    case PROP_HADJUSTMENT:
+      gtk_scrolled_window_set_hadjustment (scrolled_window,
+					   g_value_get_object (value));
+      break;
+    case PROP_VADJUSTMENT:
+      gtk_scrolled_window_set_vadjustment (scrolled_window,
+					   g_value_get_object (value));
+      break;
+    case PROP_HSCROLLBAR_POLICY:
+      gtk_scrolled_window_set_policy (scrolled_window,
+				      g_value_get_enum (value),
+				      scrolled_window->vscrollbar_policy);
+      break;
+    case PROP_VSCROLLBAR_POLICY:
+      gtk_scrolled_window_set_policy (scrolled_window,
+				      scrolled_window->hscrollbar_policy,
+				      g_value_get_enum (value));
+      break;
+    case PROP_WINDOW_PLACEMENT:
+      gtk_scrolled_window_set_placement (scrolled_window,
+					 g_value_get_enum (value));
+      break;
+    case PROP_SHADOW_TYPE:
+      gtk_scrolled_window_set_shadow_type (scrolled_window,
+					   g_value_get_enum (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_scrolled_window_get_property (GObject    *object,
+				  guint       prop_id,
+				  GValue     *value,
+				  GParamSpec *pspec)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (object);
+  
+  switch (prop_id)
+    {
+    case PROP_HADJUSTMENT:
+      g_value_set_object (value,
+			  G_OBJECT (gtk_scrolled_window_get_hadjustment (scrolled_window)));
+      break;
+    case PROP_VADJUSTMENT:
+      g_value_set_object (value,
+			  G_OBJECT (gtk_scrolled_window_get_vadjustment (scrolled_window)));
+      break;
+    case PROP_HSCROLLBAR_POLICY:
+      g_value_set_enum (value, scrolled_window->hscrollbar_policy);
+      break;
+    case PROP_VSCROLLBAR_POLICY:
+      g_value_set_enum (value, scrolled_window->vscrollbar_policy);
+      break;
+    case PROP_WINDOW_PLACEMENT:
+      g_value_set_enum (value, scrolled_window->window_placement);
+      break;
+    case PROP_SHADOW_TYPE:
+      g_value_set_enum (value, scrolled_window->shadow_type);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void

@@ -1,3 +1,8 @@
+Thu Jul 19 15:35:32 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_set_vadjustment):
+	Add property support. (#51858)
+
 Thu Jul 19 14:56:33 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccellabel.c (gtk_accel_label_class_init) 

@@ -198,7 +198,7 @@ Position of child window with respect to scrollbars; top left, top
 right, bottom left, bottom right.
 </para>
 
-<!-- ##### ARG GtkScrolledWindow:shadow ##### -->
+<!-- ##### ARG GtkScrolledWindow:shadow-type ##### -->
 <para>
 
 </para>

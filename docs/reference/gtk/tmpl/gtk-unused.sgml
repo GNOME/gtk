@@ -425,6 +425,18 @@ Define a function pointer.  Deprecated.
 @arg: 
 @arg_id: 
 
+<!-- ##### ARG GtkColorSelection:previous-alpha ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkColorSelection:previous-color ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### SIGNAL GtkContainer::focus ##### -->
 <para>
 
@@ -829,6 +841,12 @@ after other user handlers and the default handler.
 @PRIVATE_GTK_IN_REPARENT: 
 @PRIVATE_GTK_DIRECTION_SET: 
 @PRIVATE_GTK_DIRECTION_LTR: 
+
+<!-- ##### ARG GtkScrolledWindow:shadow ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### USER_FUNCTION GtkSignalDestroy ##### -->
 <para>
