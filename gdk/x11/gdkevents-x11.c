@@ -712,7 +712,8 @@ gdk_event_translate (GdkEvent *event,
 	}
       
       /* We treat button presses as scroll wheel events, so ignore the release */
-      if (xevent->xbutton.button == 4 || xevent->xbutton.button == 5)
+      if (xevent->xbutton.button == 4 || xevent->xbutton.button == 5 ||
+          xevent->xbutton.button == 6 || xevent->xbutton.button ==7)
 	{
 	  return_val = FALSE;
 	  break;

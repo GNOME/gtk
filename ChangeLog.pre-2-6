@@ -1,3 +1,8 @@
+2001-06-04  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Ignore 
+	releases for buttons 6, 7
+
 2001-06-04  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkseparatormenuitem.h: Fix a search-and-replace screwup
