@@ -1,3 +1,8 @@
+2004-09-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
+	Improve positioning of entry completion popup.
+
 2004-09-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/makegtkalias.pl: 

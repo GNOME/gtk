@@ -1279,7 +1279,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gdk_window_get_origin (completion->priv->entry->window, &x, &y);
   get_borders (GTK_ENTRY (completion->priv->entry), &x_border, &y_border);
 
-
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
 
   items = MIN (matches, 15);
