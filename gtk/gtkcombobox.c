@@ -4346,9 +4346,12 @@ gtk_combo_box_set_active_iter (GtkComboBox     *combo_box,
  * @combo_box: A #GtkComboBox.
  * @model: A #GtkTreeModel.
  *
- * Sets the model used by @combo_box to be @model. Will unset a
- * previously set model (if applicable).
- * If model is %NULL, then it will unset the model.
+ * Sets the model used by @combo_box to be @model. Will unset a previously set 
+ * model (if applicable). If model is %NULL, then it will unset the model.
+ *
+ * Note that this function does not clear the cell renderers, you have to 
+ * call gtk_combo_box_cell_layout_clear() yourself if you need to set up 
+ * different cell renderers for the new model.
  *
  * Since: 2.4
  */
