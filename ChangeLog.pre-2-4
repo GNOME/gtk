@@ -1,3 +1,16 @@
+2002-03-01  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkkeys.c (gdk_keyval_convert_case)
+	* gdk/x11/gdkkeys-x11.c (gdk_keyval_convert_case): If the keyval
+	to be converted is one of those that consist of a Unicode
+	character plus our special flag bit, use the
+	g_unichar_to{lower,upper} functions (Bug#73112).
+
+	* gdk/gdkkeys.c (gdk_keyval_convert_case): Drop the #ifdefs for
+	the GDK keysym symbols. As we include gdkkeysyms.h, we know they
+	are there. And if GDK keysyms some day are added/removed, this
+	function needs changes, too, anyway.
+
 Fri Mar  1 17:00:28 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpolyreg-generic.c: Fix some reported (but not significant)

@@ -892,6 +892,16 @@ gdk_keyval_convert_case (guint symbol,
   KeySym xlower = 0;
   KeySym xupper = 0;
 
+  /* Check for directly encoded 24-bit UCS characters: */
+  if ((symbol & 0xff000000) == 0x01000000)
+    {
+      if (lower)
+	*lower = gdk_unicode_to_keyval (g_unichar_tolower (symbol & 0x00ffffff));
+      if (upper)
+	*upper = gdk_unicode_to_keyval (g_unichar_toupper (symbol & 0x00ffffff));
+      return;
+    }
+  
   if (symbol)
     XConvertCase (symbol, &xlower, &xupper);
 
