@@ -5504,7 +5504,7 @@ gtk_widget_style_get_valist (GtkWidget   *widget,
 						   G_OBJECT_TYPE (widget),
 						   pspec,
 						   g_param_spec_get_qdata (pspec, quark_property_parser));
-      G_VALUE_LCOPY (peek_value, var_args, G_VALUE_NOCOPY_CONTENTS, &error);
+      G_VALUE_LCOPY (peek_value, var_args, 0, &error);
       if (error)
 	{
 	  g_warning ("%s: %s", G_STRLOC, error);

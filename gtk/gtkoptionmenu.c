@@ -41,11 +41,13 @@ typedef struct _GtkOptionMenuProps GtkOptionMenuProps;
 
 struct _GtkOptionMenuProps
 {
+  gboolean interior_focus;
   GtkRequisition indicator_size;
   GtkBorder indicator_spacing;
 };
 
 static GtkOptionMenuProps default_props = {
+  FALSE,
   { 12, 8 },
   { 3, 7, 2, 2 }		/* Left, right, top, bottom */
 };
@@ -336,6 +338,7 @@ gtk_option_menu_get_props (GtkOptionMenu       *option_menu,
   gtk_widget_style_get (GTK_WIDGET (option_menu),
 			"indicator_size", &indicator_size,
 			"indicator_spacing", &indicator_spacing,
+			"interior_focus", &props->interior_focus,
 			NULL);
 
   if (indicator_size)
@@ -439,19 +442,29 @@ gtk_option_menu_paint (GtkWidget    *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
+      gint border_width = GTK_CONTAINER (widget)->border_width;
+	
       gtk_option_menu_get_props (GTK_OPTION_MENU (widget), &props);
 
-      button_area.x = GTK_CONTAINER (widget)->border_width + 1;
-      button_area.y = GTK_CONTAINER (widget)->border_width + 1;
-      button_area.width = widget->allocation.width - button_area.x * 2;
-      button_area.height = widget->allocation.height - button_area.y * 2;
+      button_area.x = border_width;
+      button_area.y = border_width;
+      button_area.width = widget->allocation.width - 2 * border_width;
+      button_area.height = widget->allocation.height - 2 * border_width;
 
-      /* This is evil, and should be elimated here and in the button
-       * code. The point is to clear the focus, and make it
-       * sort of transparent if it isn't there.
-       */
-      gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
-      gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+      if (!props.interior_focus)
+	{
+	  button_area.x += 1;
+	  button_area.y += 1;
+	  button_area.width -= 2;
+	  button_area.height -= 2;
+
+	  /* This is evil, and should be elimated here and in the button
+	   * code. The point is to clear the focus, and make it
+	   * sort of transparent if it isn't there.
+	   */
+	  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+	  gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+	}
 
       gtk_paint_box(widget->style, widget->window,
 		    GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
@@ -469,12 +482,30 @@ gtk_option_menu_paint (GtkWidget    *widget,
 		     props.indicator_size.width, props.indicator_size.height);
       
       if (GTK_WIDGET_HAS_FOCUS (widget))
-	gtk_paint_focus (widget->style, widget->window,
-			 area, widget, "button",
-			 button_area.x - 1, 
-			 button_area.y - 1, 
-			 button_area.width + 1,
-			 button_area.height + 1);
+	{
+	  if (props.interior_focus)
+	    {
+	      button_area.x += widget->style->xthickness + 1;
+	      button_area.y += widget->style->ythickness + 1;
+	      button_area.width -= 2 * (widget->style->xthickness + 1)
+		+ props.indicator_spacing.left + props.indicator_spacing.right + props.indicator_size.width;
+	      button_area.height -= 2 * (widget->style->ythickness + 1);
+	    }
+	  else
+	    {
+	      button_area.x -= 1;
+	      button_area.y -= 1;
+	      button_area.width += 2;
+	      button_area.height += 2;
+	    }
+	    
+	  gtk_paint_focus (widget->style, widget->window,
+			   area, widget, "button",
+			   button_area.x, 
+			   button_area.y, 
+			   button_area.width - 1,
+			   button_area.height - 1);
+	}
     }
 }
 

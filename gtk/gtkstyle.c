@@ -281,6 +281,7 @@ static void gtk_default_draw_expander   (GtkStyle        *style,
 static void gtk_default_draw_layout     (GtkStyle        *style,
                                          GdkWindow       *window,
                                          GtkStateType     state_type,
+					 gboolean         use_text,
                                          GdkRectangle    *area,
                                          GtkWidget       *widget,
                                          const gchar     *detail,
@@ -1030,6 +1031,7 @@ void
 gtk_draw_layout (GtkStyle        *style,
                  GdkWindow       *window,
                  GtkStateType     state_type,
+		 gboolean         use_text,
                  gint             x,
                  gint             y,
                  PangoLayout     *layout)
@@ -1037,7 +1039,7 @@ gtk_draw_layout (GtkStyle        *style,
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_layout != NULL);
   
-  GTK_STYLE_GET_CLASS (style)->draw_layout (style, window, state_type,
+  GTK_STYLE_GET_CLASS (style)->draw_layout (style, window, state_type, use_text,
                                             NULL, NULL, NULL,
                                             x, y, layout);
 }
@@ -3903,6 +3905,7 @@ static void
 gtk_default_draw_layout (GtkStyle        *style,
                          GdkWindow       *window,
                          GtkStateType     state_type,
+			 gboolean         use_text,
                          GdkRectangle    *area,
                          GtkWidget       *widget,
                          const gchar     *detail,
@@ -3910,11 +3913,15 @@ gtk_default_draw_layout (GtkStyle        *style,
                          gint             y,
                          PangoLayout     *layout)
 {
+  GdkGC *gc;
+  
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (window != NULL);
+
+  gc = use_text ? style->text_gc[state_type] : style->fg_gc[state_type];
   
   if (area)
-    gdk_gc_set_clip_rectangle (style->text_gc[state_type], area);
+    gdk_gc_set_clip_rectangle (gc, area);
 
   if (state_type == GTK_STATE_INSENSITIVE)
     {
@@ -3922,17 +3929,17 @@ gtk_default_draw_layout (GtkStyle        *style,
 
       ins = get_insensitive_layout (layout);
       
-      gdk_draw_layout (window, style->text_gc[state_type], x, y, ins);
+      gdk_draw_layout (window, gc, x, y, ins);
 
       g_object_unref (G_OBJECT (ins));
     }
   else
     {
-      gdk_draw_layout (window, style->text_gc[state_type], x, y, layout);
+      gdk_draw_layout (window, gc, x, y, layout);
     }
 
   if (area)
-    gdk_gc_set_clip_rectangle (style->text_gc[state_type], NULL);
+    gdk_gc_set_clip_rectangle (gc, NULL);
 }
 
 static void
@@ -4561,6 +4568,7 @@ void
 gtk_paint_layout (GtkStyle        *style,
                   GdkWindow       *window,
                   GtkStateType     state_type,
+		  gboolean         use_text,
                   GdkRectangle    *area,
                   GtkWidget       *widget,
                   const gchar     *detail,
@@ -4571,7 +4579,7 @@ gtk_paint_layout (GtkStyle        *style,
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_layout != NULL);
   
-  GTK_STYLE_GET_CLASS (style)->draw_layout (style, window, state_type, area,
+  GTK_STYLE_GET_CLASS (style)->draw_layout (style, window, state_type, use_text, area,
                                             widget, detail, x, y, layout);
 }
 

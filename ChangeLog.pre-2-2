@@ -1,3 +1,19 @@
+Mon Apr 30 19:18:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.[ch] gtk/gtkaccellabel.c gtk/gtkcellrenderertext.c
+	  gtk/gtkhruler.c gtk/gtkhscale.c gtk/gtklabel.c gtk/gtkprogressbar.c
+	  gtk/gtkvruler.c gtk/gtkvscale.c: Add an extra parameter
+          use_text to gtk_paint_label() to deal with style->bg[] vs style->text[].
+
+	* gtk/gtkbbox.c gtk/gtkdialog.c: Tweak padding some to deal
+	  with GtkWidget::interior_focus = TRUE better.
+
+	* gtk/gtkbutton.c
+
+	* gtk/gtkwidget.c (gtk_widget_style_get_valist): Remove 
+	G_VALUE_NO_COPY_CONTENTS, to correspond with the recent
+	change that had to be made with g_object_get.
+
 Sun Apr 29 20:13:40 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_get_columns): new function.

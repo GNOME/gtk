@@ -264,6 +264,7 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
               gtk_paint_layout (widget->style,
                                 ruler->backing_store,
                                 GTK_WIDGET_STATE (widget),
+				FALSE,
                                 NULL,
                                 widget,
                                 "hruler",

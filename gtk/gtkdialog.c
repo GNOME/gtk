@@ -146,7 +146,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              _("Spacing between buttons"),
                                                              0,
                                                              G_MAXINT,
-                                                             1,
+                                                             10,
                                                              G_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,
@@ -155,7 +155,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              _("Width of border around the button area at the bottom of the dialog"),
                                                              0,
                                                              G_MAXINT,
-                                                             0,
+                                                             5,
                                                              G_PARAM_READABLE));
 }
 

@@ -588,6 +588,7 @@ gtk_hscale_draw_value (GtkScale *scale)
       gtk_paint_layout (widget->style,
                         widget->window,
                         state_type,
+			FALSE,
                         NULL,
                         widget,
                         "hscale",

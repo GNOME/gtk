@@ -33,7 +33,7 @@ static void gtk_button_box_init          (GtkButtonBox        *box);
 
 #define DEFAULT_CHILD_MIN_WIDTH 85
 #define DEFAULT_CHILD_MIN_HEIGHT 27
-#define DEFAULT_CHILD_IPAD_X 7
+#define DEFAULT_CHILD_IPAD_X 4
 #define DEFAULT_CHILD_IPAD_Y 0
 
 GtkType

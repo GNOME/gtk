@@ -833,6 +833,7 @@ gtk_progress_bar_paint (GtkProgress *progress)
           gtk_paint_layout (widget->style,
                             progress->offscreen_pixmap,
                             GTK_WIDGET_STATE (widget),
+			    FALSE,
                             &rect,
                             widget,
                             "progressbar",
