@@ -848,10 +848,15 @@ gtk_option_menu_calc_size (GtkOptionMenu *option_menu)
 
 	  if (GTK_WIDGET_VISIBLE (child))
 	    {
-	      gtk_widget_size_request (child, &child_requisition);
+	      GtkWidget *inner = GTK_BIN (child)->child;
 
-	      option_menu->width = MAX (option_menu->width, child_requisition.width);
-	      option_menu->height = MAX (option_menu->height, child_requisition.height);
+	      if (inner)
+		{
+		  gtk_widget_size_request (inner, &child_requisition);
+
+		  option_menu->width = MAX (option_menu->width, child_requisition.width);
+		  option_menu->height = MAX (option_menu->height, child_requisition.height);
+		}
 	    }
 	}
     }

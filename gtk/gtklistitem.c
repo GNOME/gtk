@@ -390,7 +390,8 @@ gtk_list_item_new_with_label (const gchar *label)
   list_item = gtk_list_item_new ();
   label_widget = gtk_label_new (label);
   gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
-
+  gtk_misc_set_padding (GTK_MISC (label_widget), 0, 1);
+  
   gtk_container_add (GTK_CONTAINER (list_item), label_widget);
   gtk_widget_show (label_widget);
 
