@@ -1,3 +1,11 @@
+2001-03-05  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtklabel.c: Made the "parent_class" pointer static. The
+	pixbuf-engine coincidentially also failed to make one of it's
+	parent_class pointers static, causing overwriting of GtkLabel's
+	parent_class pointer in pixbuf_style_class_init().
+	(Will commit the fix to the pixbuf-engine too).
+
 2001-03-05  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/gdkwindow.h:

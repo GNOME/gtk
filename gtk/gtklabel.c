@@ -118,7 +118,8 @@ static void gtk_label_select_region_index (GtkLabel *label,
                                            gint      end_index);
 
 
-GtkMiscClass *parent_class = NULL;
+static GtkMiscClass *parent_class = NULL;
+
 
 GtkType
 gtk_label_get_type (void)
