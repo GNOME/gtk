@@ -13,7 +13,7 @@
 	   "ARGS"=>"gpointer", "SIGNAL"=>"gpointer",
 	   "C_CALLBACK"=>"gpointer");
 
-open(IL, "<gtkmarshal.list") || die("Open failed: $!");
+open(IL, "<".$ENV{'srcdir'}."/gtkmarshal.list") || die("Open failed: $!");
 open(OH, ">gtkmarshal.h") || die("Open failed: $!");
 open(OS, ">gtkmarshal.c") || die("Open failed: $!");
 

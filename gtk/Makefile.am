@@ -324,4 +324,4 @@ test-debug: testgtk
 	$(SHELL) $$top_builddir/libtool --mode=execute gdb $$builddir/testgtk
 
 gtkmarshal.c gtkmarshal.h: gtkmarshal.list
-	perl $(srcdir)/genmarshal.pl
+	srcdir=$(srcdir) perl $(srcdir)/genmarshal.pl

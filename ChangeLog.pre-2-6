@@ -1,3 +1,9 @@
+1998-06-09  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gtk/Makefile.am (gtkmarshal.c gtkmarshal.h): Pass $srcdir in
+	environment to genmarshal.pl.
+	* gtk/genmarshal.pl: Look for `gtkmarshal.list' in $srcdir.
+
 Tue Jun  9 18:44:57 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkobject.c: Removed g_object_pointer_hash, which
