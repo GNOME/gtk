@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:22-0400\n"
-"PO-Revision-Date: 2004-07-18 10:52+0200\n"
+"POT-Creation-Date: 2004-09-25 20:06+0200\n"
+"PO-Revision-Date: 2004-09-26 00:05+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -58,16 +58,14 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:415
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Laden van module in module_path: %s mislukt: %s"
+msgstr "Laden van afbeeldingslader %s mislukt: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:430
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr ""
-"Afbeeldingslader %s geeft de verkeerde interface door ; misschien is het de "
-"lader van een andere GTK+ versie?"
+msgstr "Afbeeldingslader %s geeft de verkeerde interface door; misschien is het de lader van een andere GTK versie?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:625
 #, c-format
@@ -77,7 +75,7 @@ msgstr "Afbeeldingstype '%s' wordt niet ondersteund"
 #: gdk-pixbuf/gdk-pixbuf-io.c:663
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Afbeeldingstype van bestand '%s' niet herkend"
+msgstr "Afbeeldingstype van bestand '%s' werd niet herkend"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:671
 msgid "Unrecognized image file format"
@@ -122,27 +120,26 @@ msgstr "Openen van '%s' voor schrijven is mislukt: %s"
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr ""
-"Sluiten van '%s' tijdens het schrijven is mislukt; er kan data verloren zijn "
-"gegaan: %s"
+msgstr "Sluiten van '%s' tijdens het schrijven is mislukt; er kan data verloren gegaan zijn: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1657 gdk-pixbuf/gdk-pixbuf-io.c:1707
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Onvoldoende geheugen om afbeelding in een buffer op te slaan"
 
+# incrementeel is geen nederlands woord.
+# Hier wordt ws bedoeld:
+# Het gedeeltelijk laden en dan al gedeeltelijk weergaven van een afbeelding
 #: gdk-pixbuf/gdk-pixbuf-loader.c:378
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Incrementeel laden van afbeeldingstype '%s' wordt niet ondersteund"
+msgstr "Geleidelijk laden van afbeeldingstype '%s' wordt niet ondersteund"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:402 gdk-pixbuf/gdk-pixbuf-loader.c:504
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
-msgstr ""
-"Interne fout: afbeeldingslader '%s' startte niet met het laden van een "
-"afbeelding, maar gaf geen reden"
+msgstr "Interne fout: afbeeldingslader '%s' startte niet met het laden van een afbeelding, maar gaf geen reden daarvoor"
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
@@ -157,12 +154,14 @@ msgid "Image pixel data corrupt"
 msgstr "Afbeelding beeldpuntdata corrupt"
 
 # meervoud in nl van byte is byte
+# reserveren van %u byte geheugenruimte voor de afbeelding is mislukt
+# Niet mogelijk om afbeeldingsbuffer van %u byte te alloceren
 #: gdk-pixbuf/gdk-pixdata.c:430
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "Niet mogelijk om afbeeldingsbuffer van %u byte te alloceren"
-msgstr[1] "Niet mogelijk om afbeeldingsbuffer van %u byte te alloceren"
+msgstr[0] "reserveren van %u byte geheugenruimte voor de afbeelding is mislukt"
+msgstr[1] "reserveren van %u byte geheugenruimte voor de afbeelding is mislukt"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -213,13 +212,18 @@ msgstr "Lezen van GIF mislukt: %s"
 
 #: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1442 gdk-pixbuf/io-gif.c:1603
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF-bestand miste data (misschien was het afgebroken?)"
+msgstr "Er ontbrak data in het GIF-bestand (misschien was het afgebroken?)"
 
 #: gdk-pixbuf/io-gif.c:501
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Interne fout in de GIF-lader (%s)"
 
+# overlopende stapel
+# maar dit is toch een melding waar newbies niets mee kunnen.
+# Ze zouden deze melding eigenlijk niet mogen zien.
+# Om degene die wel weten wat ze ermee kunnen doen niet op een dwaalspoor
+# te zetten: Niet vertaald
 #: gdk-pixbuf/io-gif.c:575
 msgid "Stack overflow"
 msgstr "Stack overflow"
@@ -228,9 +232,10 @@ msgstr "Stack overflow"
 msgid "GIF image loader can't understand this image."
 msgstr "GIF-lader begrijpt deze afbeelding niet."
 
+# onjuiste code
 #: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
-msgstr "Foute code ontdekt"
+msgstr "Foutieve code ontdekt"
 
 #: gdk-pixbuf/io-gif.c:674
 msgid "Circular table entry in GIF file"
@@ -247,20 +252,18 @@ msgstr "GIF-bestand is beschadigd (incorrecte LZW-compressie)"
 
 #: gdk-pixbuf/io-gif.c:1145
 msgid "File does not appear to be a GIF file"
-msgstr "Bestand lijkt niet op een GIF-bestand"
+msgstr "Bestand lijkt geen GIF-bestand te zijn"
 
 #: gdk-pixbuf/io-gif.c:1157
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr "Versie %s van het GIF-type wordt niet ondersteund"
+msgstr "Versie %s van het GIF-bestandsformaat wordt niet ondersteund"
 
 #: gdk-pixbuf/io-gif.c:1266
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
-"GIF-bestand heeft geen globaal kleurenpalet, en een afbeelding erin heeft "
-"geen lokaal kleurenpalet"
+msgstr "GIF-bestand heeft geen algemeen kleurenpalet, en een kader daarbinnen heeft geen lokaal kleurenpalet"
 
 #: gdk-pixbuf/io-gif.c:1498
 msgid "GIF image was truncated or incomplete."
@@ -337,7 +340,7 @@ msgstr "Niet ondersteunde JPEG kleurruimte (%s)"
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
 #: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Allocatie van geheugen voor JPEG-bestand is mislukt"
+msgstr "Kon geen geheugenruimte reserveren voor laden van JPEG-bestand"
 
 #: gdk-pixbuf/io-jpeg.c:894
 #, c-format
@@ -361,11 +364,11 @@ msgstr "Het JPEG-bestandsformaat"
 
 #: gdk-pixbuf/io-pcx.c:191
 msgid "Couldn't allocate memory for header"
-msgstr "Kon geen geheugen voor de header alloceren"
+msgstr "Kon geen geheugenruimte reserveren voor de header"
 
 #: gdk-pixbuf/io-pcx.c:206 gdk-pixbuf/io-pcx.c:566
 msgid "Couldn't allocate memory for context buffer"
-msgstr "Kon geen geheugen voor de context-buffer alloceren"
+msgstr "Kon geen geheugenruimte reserveren voor de context-buffer"
 
 #: gdk-pixbuf/io-pcx.c:607
 msgid "Image has invalid width and/or height"
@@ -386,11 +389,11 @@ msgstr "Kon geen nieuwe pixbuf aanmaken"
 
 #: gdk-pixbuf/io-pcx.c:656
 msgid "Couldn't allocate memory for line data"
-msgstr "Kon geen geheugen voor lijn-data alloceren"
+msgstr "Kon geen geheugenruimte reserveren voor lijn-data"
 
 #: gdk-pixbuf/io-pcx.c:663
 msgid "Couldn't allocate memory for paletted data"
-msgstr "Kon geen geheugen voor 'paletted data' alloceren"
+msgstr "Kon geen geheugenruimte reserveren voor 'paletted data'"
 
 #: gdk-pixbuf/io-pcx.c:710
 msgid "Didn't get all lines of PCX image"
@@ -440,9 +443,7 @@ msgstr "Onvoldoende geheugen om PNG-bestand te laden"
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
-msgstr ""
-"Onvoldoende geheugen om een afbeelding van %ld bij %ld op te slaan; probeer "
-"enkele programma's af te sluiten om geheugen vrij te maken"
+msgstr "Onvoldoende geheugen om een afbeelding van %ld bij %ld op te slaan; probeer enkele toepassingen af te sluiten om geheugen vrij te maken"
 
 #: gdk-pixbuf/io-png.c:669
 msgid "Fatal error reading PNG image file"
@@ -456,9 +457,7 @@ msgstr "Fatale fout bij het lezen van PNG afbeelding: %s"
 #: gdk-pixbuf/io-png.c:813
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Sleutels voor PNG tekstblokken moeten minimaal 1, en maximaal 79 tekens "
-"hebben"
+msgstr "Sleutels voor PNG tekstblokken moeten minimaal 1, en maximaal 79 tekens bevatten"
 
 #: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -468,9 +467,7 @@ msgstr "Sleutels voor PNG tektblokken moeten uit ASCII tekens bestaan"
 #, c-format
 msgid ""
 "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
-msgstr ""
-"Waarde voor PNG tekstblok %s kan niet geconverteerd worden naar ISO-8859-1 "
-"codering"
+msgstr "Waarde voor PNG tekstblok %s kan niet naar tekenset ISO-8859-1 worden omgezet."
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -478,11 +475,11 @@ msgstr "Het PNG-bestandsformaat"
 
 #: gdk-pixbuf/io-pnm.c:249
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM-lader verwachtte een integer te vinden, maar deed dat niet"
+msgstr "PNM-lader verwachte een integer te vinden, maar deed dat niet"
 
 #: gdk-pixbuf/io-pnm.c:281
 msgid "PNM file has an incorrect initial byte"
-msgstr "PNM bestand heeft een incorrecte eerste byte"
+msgstr "PNM bestand heeft een onjuist eerste byte"
 
 #: gdk-pixbuf/io-pnm.c:311
 msgid "PNM file is not in a recognized PNM subformat"
@@ -579,23 +576,23 @@ msgstr "Allocatie van geheugen voor IOBUFFER gegevens niet gelukt"
 
 #: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
-msgstr "Kan IOBuffer gegevens niet heralloceren"
+msgstr "Kan geheugenruimte voor IOBuffer-gegevens niet opnieuw reserveren"
 
 #: gdk-pixbuf/io-tga.c:219
 msgid "Can't allocate temporary IOBuffer data"
-msgstr "Kan tijdelijke IOBuffer gegevens niet alloceren"
+msgstr "Kan geen geheugenruimte reserveren voor tijdelijke IOBuffer-gegevens "
 
 #: gdk-pixbuf/io-tga.c:353
 msgid "Can't allocate new pixbuf"
-msgstr "Kan nieuwe pixbuf niet alloceren"
+msgstr "Kan geen geheugenruimte reserveren voor nieuwe pixbuf"
 
 #: gdk-pixbuf/io-tga.c:692
 msgid "Can't allocate colormap structure"
-msgstr "Kan strctuur van kleurenkaart niet alloceren"
+msgstr "Kan geen geheugenruimte reserveren voor kleurenkaartstructuur"
 
 #: gdk-pixbuf/io-tga.c:699
 msgid "Can't allocate colormap entries"
-msgstr "Kan ingangen van kleurenkaart niet alloceren"
+msgstr "Kan geen geheugen reserveren voor kleurenkaart-items "
 
 #: gdk-pixbuf/io-tga.c:721
 msgid "Unexpected bitdepth for colormap entries"
@@ -603,21 +600,22 @@ msgstr "Onverwachte bitdiepte voor ingangen van kleurenkaart"
 
 #: gdk-pixbuf/io-tga.c:739
 msgid "Can't allocate TGA header memory"
-msgstr "Kan geheugen voor TGA-kop niet alloceren"
+msgstr "Kan geen geheugenruimte reserveren voor TGA-header"
 
 #: gdk-pixbuf/io-tga.c:772
 msgid "TGA image has invalid dimensions"
-msgstr "TGA afbeelding heeft ongeldige afmetingen"
+msgstr "TGA-afbeelding heeft ongeldige afmetingen"
 
 #: gdk-pixbuf/io-tga.c:778 gdk-pixbuf/io-tga.c:787 gdk-pixbuf/io-tga.c:797
 #: gdk-pixbuf/io-tga.c:807 gdk-pixbuf/io-tga.c:814
 msgid "TGA image type not supported"
-msgstr "TGA bestandstype wordt niet ondersteund"
+msgstr "Bestandstype TGA wordt niet ondersteund"
 
 #: gdk-pixbuf/io-tga.c:861
 msgid "Can't allocate memory for TGA context struct"
-msgstr "Allocatie van geheugen voor TGA-context struct mislukt"
+msgstr "Kan geen geheugen reserveren voor TGA-context struct"
 
+# te veel data in bestand
 #: gdk-pixbuf/io-tga.c:926
 msgid "Excess data in file"
 msgstr "Overbodige data in bestand"
@@ -628,11 +626,11 @@ msgstr "Het Targa-bestandsformaat"
 
 #: gdk-pixbuf/io-tiff.c:175
 msgid "Could not get image width (bad TIFF file)"
-msgstr "Kon afbeeldingsbreedte niet vinden (fout TIFF bestand)"
+msgstr "Kon afbeeldingsbreedte niet vinden (foutief TIFF-bestand)"
 
 #: gdk-pixbuf/io-tiff.c:182
 msgid "Could not get image height (bad TIFF file)"
-msgstr "Kon afbeeldingshoogte niet vinden (fout TIFF bestand)"
+msgstr "Kon afbeeldingshoogte niet vinden (foutief TIFF-bestand)"
 
 #: gdk-pixbuf/io-tiff.c:190
 msgid "Width or height of TIFF image is zero"
@@ -649,7 +647,7 @@ msgstr "Onvoldoende geheugen om TIFF-bestand te openen"
 
 #: gdk-pixbuf/io-tiff.c:255 gdk-pixbuf/io-tiff.c:298
 msgid "Failed to load RGB data from TIFF file"
-msgstr "Kon RGB-gegevens niet inlezen uit TIFF bestand"
+msgstr "Kon RGB-gegevens niet inlezen uit TIFF-bestand"
 
 #: gdk-pixbuf/io-tiff.c:369
 msgid "Failed to open TIFF image"
@@ -657,11 +655,11 @@ msgstr "Kon TIFF-afbeelding niet openen"
 
 #: gdk-pixbuf/io-tiff.c:382
 msgid "TIFFClose operation failed"
-msgstr "TIFFClose bewerking mislukt"
+msgstr "Bewerking: TIFFClose is mislukt"
 
 #: gdk-pixbuf/io-tiff.c:517 gdk-pixbuf/io-tiff.c:530
 msgid "Failed to load TIFF image"
-msgstr "Niet mogelijk om TIFF-afbeelding te laden"
+msgstr "Laden van TIFF-afbeelding is mislukt"
 
 #: gdk-pixbuf/io-tiff.c:625
 msgid "The TIFF image format"
@@ -709,13 +707,14 @@ msgstr "Het XBM-bestandsformaat"
 msgid "No XPM header found"
 msgstr "Geen XPM-header gevonden"
 
+# afbeelding ipv bestand gebruikt.
 #: gdk-pixbuf/io-xpm.c:1237
 msgid "XPM file has image width <= 0"
-msgstr "XPM-bestand heeft afbeeldingsbreedte <= 0"
+msgstr "XPM-afbeelding heeft breedte <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1245
 msgid "XPM file has image height <= 0"
-msgstr "XPM-bestand heeft afbeeldingshoogte <= 0"
+msgstr "XPM-afbeelding heeft hoogte <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1253
 msgid "XPM has invalid number of chars per pixel"
@@ -727,7 +726,7 @@ msgstr "XPM-bestand heeft ongeldig aantal kleuren"
 
 #: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
 msgid "Can't allocate memory for loading XPM image"
-msgstr "Kan geheugen voor het laden van XPM-afbeelding niet alloceren"
+msgstr "Kan geen geheugenruimte reserveren voor het laden van XPM-afbeelding"
 
 #: gdk-pixbuf/io-xpm.c:1295
 msgid "Can't read XPM colormap"
@@ -791,7 +790,7 @@ msgstr "calendar:MY"
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
-# gebiedende wijs hier beter dan: een kleur kiezen?
+# 'Kies een kleur'   hier beter dan:  'Een kleur kiezen' ?
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
 msgstr "Kies een kleur"
@@ -800,23 +799,20 @@ msgstr "Kies een kleur"
 msgid "Received invalid color data\n"
 msgstr "Ongeldige kleurgegevens ontvangen\n"
 
+# niet strikt vertaald.
 #: gtk/gtkcolorsel.c:567
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
-msgstr ""
-"De vorige geselecteerde kleur; voor vergelijking met de kleur die u nu "
-"selecteert. U kunt deze kleur slepen naar een kleurenpalet of deze kleur "
-"selecteren als huidige door het naar de kleurenstaal ernaast te slepen."
+msgstr "De oude kleur. Zo kunt u vergelijken met de kleur die u nu selecteert. U kunt deze kleur verslepen naar een kleurenpalet of de oude kleur behouden door het over de nieuwe kleur heen te slepen."
 
+# niet strikt vertaald
 #: gtk/gtkcolorsel.c:572
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr ""
-"De kleur die u gekozen heeft. U kunt de kleur naar een kleurenpalet slepen "
-"of bewaren voor toekomstig gebruik."
+msgstr "De nieuwe kleur die u gekozen heeft. U kunt deze verslepen naar een kleurenpaletom het te bewaren voor toekomstig gebruik."
 
 #: gtk/gtkcolorsel.c:933
 msgid "_Save color here"
@@ -831,13 +827,12 @@ msgstr ""
 "kleur te veranderen sleept u een kleurenstaal naar deze plek of klikt u met "
 "de rechter muisknop en selecteert \"Bewaar kleur hier\""
 
+# niet strikt vertaald
 #: gtk/gtkcolorsel.c:1846
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
-msgstr ""
-"Selecteer uw kleur in de buitenste ring. Stel de helderheid van de kleur in "
-"met de binnen-driehoek."
+msgstr "Selecteer een kleur in de buitenste ring. De helderheid van deze kleur kunt u instellen met de driehoek binnenin."
 
 #: gtk/gtkcolorsel.c:1871
 msgid ""
@@ -853,7 +848,7 @@ msgstr "_Tint:"
 
 #: gtk/gtkcolorsel.c:1881
 msgid "Position on the color wheel."
-msgstr "Positie op het kleurenwiel"
+msgstr "Positie op het kleurenwiel."
 
 #: gtk/gtkcolorsel.c:1883
 msgid "_Saturation:"
@@ -911,9 +906,7 @@ msgstr "Kleur_naam:"
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
-msgstr ""
-"U kunt in dit veld een hexadecimale kleurwaarde in HTML-stijl geven, of "
-"gewoon een kleur invoeren zoals 'orange'."
+msgstr "U kunt in dit veld een hexadecimale kleurwaarde in HTML-stijl geven, of gewoon een kleur (in het Engels) invoeren zoals 'orange'."
 
 #: gtk/gtkcolorsel.c:1955
 msgid "_Palette"
@@ -963,7 +956,7 @@ msgstr ""
 "Kon geen favoriet toevoegen voor %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5506
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1043,9 +1036,10 @@ msgstr "_Toevoegen"
 msgid "_Remove"
 msgstr "_Verwijderen"
 
+# _b zou conflicteren met: _Bladeren naar andere mappen
 #: gtk/gtkfilechooserdefault.c:2762
 msgid "Show _Hidden Files"
-msgstr "Ver_borgen bestanden tonen"
+msgstr "Verbo_rgen bestanden tonen"
 
 #: gtk/gtkfilechooserdefault.c:2877 gtk/gtkfilesel.c:766
 msgid "Files"
@@ -1059,9 +1053,14 @@ msgstr "Naam"
 msgid "Size"
 msgstr "Afmeting"
 
+# Was eerst: Aangepast
+# In overeenstemming met het label in Nautilus (lijstweergave) de vertaling
+# veranderd in Wijzigingsdatum.
+# 'Gewijzigd' zou ook kunnen (is korter) maar dan moet Nautilus ook aangepast
+# worden.
 #: gtk/gtkfilechooserdefault.c:2938
 msgid "Modified"
-msgstr "Aangepast"
+msgstr "Wijzigingsdatum"
 
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:2983
@@ -1077,13 +1076,24 @@ msgstr "_Naam:"
 msgid "_Browse for other folders"
 msgstr "_Bladeren naar andere mappen"
 
+# in het (uitgebreide) dialoog komen de volgende woorden voor:
+# _Naam | _Opslaan in map | _Bladeren naar andere mappen
+# _Toevoegen | _Verwijderen | _Annuleren | Op_slaan
+# _Map aanmaken:
+#
+# Als je _Opslaan in map zou wijzigen in Opslaan in _map, 
+# zou dat consistent kunnen worden met Aanmaken in _map,
+# maar dan moet _Map aanmaken worden: Map aanma_ken
+# wat lelijk is.
+# Vandaar dat we kiezen om Create in _folder te vertalen met
+# Aanma_ken in map
 #: gtk/gtkfilechooserdefault.c:3376
 msgid "Save in _folder:"
-msgstr "Opslaan in _map:"
+msgstr "_Opslaan in map:"
 
 #: gtk/gtkfilechooserdefault.c:3378
 msgid "Create in _folder:"
-msgstr "Aanmaken in _map:"
+msgstr "Aanma_ken in map:"
 
 #: gtk/gtkfilechooserdefault.c:4069
 msgid "Can't change to folder because it isn't local"
@@ -1096,51 +1106,51 @@ msgstr "Kon het pad niet vinden"
 #: gtk/gtkfilechooserdefault.c:4574
 #, c-format
 msgid "shortcut %s does not exist"
-msgstr "Snelkoppeling %s bestaat niet"
+msgstr "snelkoppeling %s bestaat niet"
 
-#: gtk/gtkfilechooserdefault.c:5272
+#: gtk/gtkfilechooserdefault.c:5279
 msgid "Type name of new folder"
 msgstr "Geef de naam van de nieuwe map"
 
-#: gtk/gtkfilechooserdefault.c:5301
+#: gtk/gtkfilechooserdefault.c:5308
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:5303
+#: gtk/gtkfilechooserdefault.c:5310
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5305
+#: gtk/gtkfilechooserdefault.c:5312
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5307
+#: gtk/gtkfilechooserdefault.c:5314
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5352
+#: gtk/gtkfilechooserdefault.c:5359
 msgid "Today"
 msgstr "Vandaag"
 
-#: gtk/gtkfilechooserdefault.c:5354
+#: gtk/gtkfilechooserdefault.c:5361
 msgid "Yesterday"
 msgstr "Gisteren"
 
-#: gtk/gtkfilechooserdefault.c:5365
+#: gtk/gtkfilechooserdefault.c:5372
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5467
 msgid "Cannot change to the folder you specified as it is an invalid path."
-msgstr "Kan niet naar de map gaan die u opgaf omdat het een ongeldig pad is."
+msgstr "Kan niet naar de door u opgegeven map gaan omdat het een ongeldig pad is."
 
-#: gtk/gtkfilechooserdefault.c:5537
+#: gtk/gtkfilechooserdefault.c:5544
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1149,15 +1159,15 @@ msgstr ""
 "Kon %s niet selecteren:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5576
+#: gtk/gtkfilechooserdefault.c:5583
 msgid "Open Location"
 msgstr "Locatie openen"
 
-#: gtk/gtkfilechooserdefault.c:5583
+#: gtk/gtkfilechooserdefault.c:5590
 msgid "Save in Location"
 msgstr "Opslaan in locatie"
 
-#: gtk/gtkfilechooserdefault.c:5602
+#: gtk/gtkfilechooserdefault.c:5609
 msgid "_Location:"
 msgstr "_Locatie:"
 
@@ -1185,8 +1195,7 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"Het bestand \"%s\" bevindt zich op een andere machine (genaamd %s) en is "
-"mogelijk iet beschikbaar voor dit programma.\n"
+"Het bestand \"%s\" bevindt zich op een andere machine (genaamd %s) en is mogelijk niet beschikbaar voor dit programma.\n"
 "Weet u zeker dat u het wilt selecteren?"
 
 #: gtk/gtkfilesel.c:1115
@@ -1221,9 +1230,7 @@ msgstr ""
 # tekens ipv symbolen?
 #: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
 msgid "You probably used symbols not allowed in filenames."
-msgstr ""
-"Je hebt waarschijnlijk symbolen gebruikt die niet toegestaan zijn in "
-"bestandsnamen."
+msgstr "U heeft waarschijnlijk symbolen gebruikt die niet toegestaan zijn in bestandsnamen."
 
 #: gtk/gtkfilesel.c:1450
 #, c-format
@@ -1238,9 +1245,10 @@ msgstr "Nieuwe map"
 msgid "_Folder name:"
 msgstr "_Mapnaam:"
 
+# _A conflicteert ws met _Annuleren
 #: gtk/gtkfilesel.c:1523
 msgid "C_reate"
-msgstr "_Aanmaken"
+msgstr "Aanma_ken"
 
 #: gtk/gtkfilesel.c:1566
 #, c-format
@@ -1332,9 +1340,7 @@ msgstr "_Selectie: "
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"De bestandsnaam \"%s\" kon niet geconverteerd worden in UTF-8. (Probeer de "
-"omgevingsvariabele G_FILENAME_ENCODING aan te zetten): %s"
+msgstr "De bestandsnaam \"%s\" kon niet geconverteerd worden in UTF-8. (Probeer de omgevingsvariabele G_FILENAME_ENCODING in te stellen): %s"
 
 #: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
@@ -1382,6 +1388,7 @@ msgstr "Bestandsysteem"
 msgid "Could not get a stock icon for %s"
 msgstr "Kon geen standaard pictogram verkrijgen voor %s"
 
+# Kies een andere naam
 #: gtk/gtkfilesystemunix.c:830
 #, c-format
 msgid ""
@@ -1590,7 +1597,7 @@ msgstr "Groep"
 
 #: gtk/gtkradiotoolbutton.c:91
 msgid "The radio tool button whose group this button belongs to."
-msgstr "De radioknop wiens groep deze knop toebehoort."
+msgstr "De radioknop aan wiens groep deze knop toebehoort."
 
 #: gtk/gtkrc.c:2391
 #, c-format
@@ -1720,17 +1727,17 @@ msgstr "_Harde schijf"
 msgid "_Help"
 msgstr "_Hulp"
 
+# honk/huis/thuis/persoonlijk/persoonlijke map
 #: gtk/gtkstock.c:318
 msgid "_Home"
 msgstr "_Thuis"
 
-# Inspringen verhogen
-# kan ook
+# Inspringen verhogen/Meer inspringen
 #: gtk/gtkstock.c:319
 msgid "Increase Indent"
 msgstr "Meer inspringen"
 
-# Inspringen verlagen kan ook
+# Inspringen verlagen/Minder inspringen<
 #: gtk/gtkstock.c:320
 msgid "Decrease Indent"
 msgstr "Minder inspringen"
@@ -1739,10 +1746,13 @@ msgstr "Minder inspringen"
 msgid "_Index"
 msgstr "_Index"
 
+# schuin/schuingedrukt
+# _u / _i
 #: gtk/gtkstock.c:322
 msgid "_Italic"
 msgstr "Schu_ingedrukt"
 
+# ga naar
 #: gtk/gtkstock.c:323
 msgid "_Jump to"
 msgstr "_Spring naar"
@@ -1751,6 +1761,7 @@ msgstr "_Spring naar"
 msgid "_Center"
 msgstr "Ge_centreerd"
 
+# vullen/uitvullen
 #: gtk/gtkstock.c:325
 msgid "_Fill"
 msgstr "Uit_vullen"
@@ -1775,6 +1786,7 @@ msgstr "_Nieuw"
 msgid "_No"
 msgstr "_Nee"
 
+# Ok/OK
 #: gtk/gtkstock.c:331
 msgid "_OK"
 msgstr "_OK"
@@ -1811,6 +1823,7 @@ msgstr "A_fsluiten"
 msgid "_Redo"
 msgstr "O_pnieuw"
 
+# herladen/verversen
 #: gtk/gtkstock.c:340
 msgid "_Refresh"
 msgstr "_Verversen"
@@ -1889,11 +1902,11 @@ msgstr "_Uitzoomen"
 
 #: gtk/gtktextutil.c:47
 msgid "LRM _Left-to-right mark"
-msgstr "LRM links-naar-rechts markering"
+msgstr "LRM _Links-naar-rechts markering"
 
 #: gtk/gtktextutil.c:48
 msgid "RLM _Right-to-left mark"
-msgstr "RLM Rechts-naar-links markering"
+msgstr "RLM _Rechts-naar-links markering"
 
 #: gtk/gtktextutil.c:49
 msgid "LRE Left-to-right _embedding"
@@ -1917,15 +1930,15 @@ msgstr "PDF _Pop richtingsformattering"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWS _Zero width space"
-msgstr "ZWS Spatie zonder breedte"
+msgstr "ZWS Spatie _zonder breedte"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWJ Zero width _joiner"
-msgstr "ZWJ koppelaar zonder breedte"
+msgstr "ZWJ _koppelaar zonder breedte"
 
 #: gtk/gtktextutil.c:56
 msgid "ZWNJ Zero width _non-joiner"
-msgstr "ZWNJ Niet-koppelaar zonder breedte"
+msgstr "ZWNJ Niet-k_oppelaar zonder breedte"
 
 #: gtk/gtkthemes.c:70
 #, c-format
@@ -1949,7 +1962,7 @@ msgstr "Onverwacht begin-tag '%s' bij regel %d teken %d"
 #: gtk/gtkuimanager.c:1403
 #, c-format
 msgid "Unexpected character data on line %d char %d"
-msgstr "Onverwacht teken  bij regel %d teken %d"
+msgstr "Onverwacht teken bij regel %d teken %d"
 
 # Legen
 #: gtk/gtkuimanager.c:2189
