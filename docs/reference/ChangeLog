@@ -1,3 +1,10 @@
+2003-09-16  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkaction.sgml: 
+	* gtk/tmpl/gtkradioaction.sgml: 
+	* gtk/tmpl/gtkactiongroup.sgml: 
+	* gtk/tmpl/gtkuimanager.sgml: Updates.
+
 2003-09-15  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkuimanager.sgml: Add a paragraph about smart separators.

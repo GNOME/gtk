@@ -415,7 +415,8 @@ gtk_ui_manager_set_add_tearoffs (GtkUIManager *self,
  * @pos: the position at which the group will be inserted.
  * 
  * Inserts an action group into the list of action groups associated 
- * with @self.
+ * with @self. Actions in earlier groups hide actions with the same 
+ * name in later groups. 
  *
  * Since: 2.4
  **/
@@ -510,7 +511,7 @@ gtk_ui_manager_get_accel_group (GtkUIManager *self)
  * The path consists of the names specified in the XML description of the UI. 
  * separated by '/'. Elements which don't have a name or action attribute in 
  * the XML (e.g. &lt;popup&gt;) can be addressed by their XML element name 
- * (e.g. "popup"). The root element (&lt;ui&gt;) can be omitted in the path.
+ * (e.g. "popup"). The root element ("/ui") can be omitted in the path.
  * 
  * Return value: the widget found by following the path, or %NULL if no widget
  *   was found.
@@ -1154,8 +1155,8 @@ add_ui_from_string (GtkUIManager *self,
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
  * @error: return location for an error
  * 
- * Parses a string containing a <link linkend="XML-UI">UI description</link> and 
- * merges it with the current contents of @self. An enclosing &lt;ui&gt; &lt;/ui&gt;
+ * Parses a string containing a <link linkend="XML-UI">UI definition</link> and 
+ * merges it with the current contents of @self. An enclosing &lt;ui&gt; 
  * element is added if it is missing.
  * 
  * Return value: The merge id for the merged UI. The merge id can be used
@@ -1197,7 +1198,7 @@ gtk_ui_manager_add_ui_from_string (GtkUIManager *self,
  * @filename: the name of the file to parse 
  * @error: return location for an error
  * 
- * Parses a file containing a <link linkend="XML-UI">UI description</link> and 
+ * Parses a file containing a <link linkend="XML-UI">UI definition</link> and 
  * merges it with the current contents of @self. 
  * 
  * Return value: The merge id for the merged UI. The merge id can be used
@@ -2191,7 +2192,7 @@ print_node (GtkUIManager *self,
  * gtk_ui_manager_get_ui:
  * @self: a #GtkUIManager
  * 
- * Creates a <link linkend="XML-UI">description</link> of the merged UI.
+ * Creates a <link linkend="XML-UI">UI definition</link> of the merged UI.
  * 
  * Return value: A newly allocated string containing an XML representation of 
  * the merged UI.

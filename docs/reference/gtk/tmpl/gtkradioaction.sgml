@@ -9,7 +9,7 @@ an action of which only one in a group can be active
 A #GtkRadioAction is similar to #GtkRadioMenuItem. A number of radio
 actions can be linked together so that only one may be active at any 
 one time.
-</para>   
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

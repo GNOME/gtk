@@ -269,18 +269,19 @@ members and should not be accessed directly.
 
 <!-- ##### ENUM GtkUIManagerItemType ##### -->
 <para>
-
+These enumeration values are used by gtk_ui_manager_add_ui() to determine
+what UI element to create.
 </para>
 
-@GTK_UI_MANAGER_AUTO: 
-@GTK_UI_MANAGER_MENUBAR: 
-@GTK_UI_MANAGER_MENU: 
-@GTK_UI_MANAGER_TOOLBAR: 
-@GTK_UI_MANAGER_PLACEHOLDER: 
-@GTK_UI_MANAGER_POPUP: 
-@GTK_UI_MANAGER_MENUITEM: 
-@GTK_UI_MANAGER_TOOLITEM: 
-@GTK_UI_MANAGER_SEPARATOR: 
+@GTK_UI_MANAGER_AUTO: Pick the type of the UI element according to context.
+@GTK_UI_MANAGER_MENUBAR: Create a menubar.
+@GTK_UI_MANAGER_MENU: Create a menu.
+@GTK_UI_MANAGER_TOOLBAR: Create a toolbar.
+@GTK_UI_MANAGER_PLACEHOLDER: Insert a placeholder.
+@GTK_UI_MANAGER_POPUP: Create a popup menu.
+@GTK_UI_MANAGER_MENUITEM: Create a menuitem.
+@GTK_UI_MANAGER_TOOLITEM: Create a toolitem.
+@GTK_UI_MANAGER_SEPARATOR: Create a separator.
 
 <!-- ##### FUNCTION gtk_ui_manager_add_ui ##### -->
 <para>

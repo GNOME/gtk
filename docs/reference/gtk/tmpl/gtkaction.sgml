@@ -161,6 +161,11 @@ and should not be accessed directly.
 
 @action: the object which received the signal.
 
+<!-- ##### ARG GtkAction:is-important ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkAction:label ##### -->
 <para>
 
