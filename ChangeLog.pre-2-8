@@ -1,3 +1,9 @@
+Tue Dec 15 10:26:23 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkevents.c: Keep separate putback_events and 
+	queued_events queues so that we get both FIFO and 
+	preemptive behavior for	gdk_event_put().
+
 Tue Dec 15 09:22:44 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkrc.c (gtk_rc_init): Removed unused 

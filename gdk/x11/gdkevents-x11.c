@@ -53,6 +53,7 @@ static Bool	 gdk_event_get_type	(Display      *display,
 					 XPointer      arg);
 #endif
 static void      gdk_events_queue       (void);
+static GdkEvent *gdk_event_unqueue      (void);
 
 static gboolean  gdk_event_prepare      (gpointer  source_data, 
 				 	 GTimeVal *current_time,
@@ -95,7 +96,15 @@ static GDestroyNotify event_notify;
 
 static GList *client_filters;	                    /* Filters for client messages */
 
+/* FIFO's for event queue, and for events put back using
+ * gdk_event_put(). We keep separate queues so that
+ * we can make the putback events both FIFO and preemptive
+ * of pending events.
+ */
 static GList *queued_events = NULL;
+static GList *queued_tail = NULL;
+static GList *putback_events = NULL;
+static GList *putback_tail = NULL;
 
 static GSourceFuncs event_funcs = {
   gdk_event_prepare,
@@ -448,35 +457,33 @@ gdk_event_handler_set (GdkEventFunc   func,
 GdkEvent *
 gdk_event_get (void)
 {
-  GdkEvent *event;
-  GList *temp_list;
-
   gdk_events_queue();
 
-  if (queued_events)
-    {
-      event = queued_events->data;
-      
-      temp_list = queued_events;
-      queued_events = g_list_remove_link (queued_events, temp_list);
-      g_list_free_1 (temp_list);
-      
-      return event;
-    }
-  else
-    return NULL;
+  return gdk_event_unqueue();
 }
 
 void
 gdk_event_put (GdkEvent *event)
 {
   GdkEvent *new_event;
+  GList *tmp_list;
   
   g_return_if_fail (event != NULL);
   
   new_event = gdk_event_copy (event);
-  
-  queued_events = g_list_prepend (queued_events, new_event);
+
+  tmp_list = g_list_alloc();
+  tmp_list->prev = putback_tail;
+  tmp_list->next = NULL;
+  tmp_list->data = new_event;
+
+  if (!putback_events)
+    {
+      putback_events = tmp_list;
+      putback_tail = tmp_list;
+    }
+  else
+    putback_tail->next = tmp_list;
 }
 
 /*
@@ -1861,7 +1868,20 @@ gdk_events_queue (void)
       event->any.send_event = xevent.xany.send_event;
       
       if (gdk_event_translate (event, &xevent))
-	queued_events = g_list_prepend (queued_events, event);
+	{
+	  GList *tmp_list = g_list_alloc();
+	  tmp_list->prev = queued_tail;
+	  tmp_list->next = NULL;
+	  tmp_list->data = event;
+
+	  if (!queued_events)
+	    {
+	      queued_events = tmp_list;
+	      queued_tail = queued_events;
+	    }
+	  else
+	    queued_tail->next = tmp_list;
+	}
       else
 	gdk_event_free (event);
     }
@@ -1875,7 +1895,7 @@ gdk_event_prepare (gpointer  source_data,
   *timeout = -1;
 
   gdk_events_queue ();
-  return (queued_events != NULL);
+  return (queued_events || putback_events);
 }
 
 static gboolean  
@@ -1883,12 +1903,39 @@ gdk_event_check   (gpointer  source_data,
 		   GTimeVal *current_time)
 {
   if (event_poll_fd.revents & G_IO_IN)
-    {
       gdk_events_queue ();
-      return (queued_events != NULL);
+
+  return (queued_events || putback_events);
+}
+
+static GdkEvent *
+gdk_event_unqueue (void)
+{
+  GdkEvent *event;
+  GList *tmp_list, **head, **tail;
+
+  if (putback_events)
+    {
+      head = &putback_events;
+      tail = &putback_tail;
+    }
+  else if (queued_events)
+    {
+      head = &queued_events;
+      tail = &queued_tail;
     }
   else
-    return FALSE;
+    return NULL;
+
+  if (*head == *tail)
+    *tail = NULL;
+    
+  tmp_list = *head;
+  event = tmp_list->data;
+  *head = g_list_remove_link (tmp_list, tmp_list);
+  g_list_free_1 (tmp_list);
+
+  return event;
 }
 
 static gboolean  
@@ -1896,19 +1943,16 @@ gdk_event_dispatch (gpointer  source_data,
 		    GTimeVal *current_time,
 		    gpointer  user_data)
 {
-  if (queued_events)
-    {
-      GdkEvent *event = queued_events->data;
-      GList *tmp_list = queued_events;
-      queued_events = g_list_remove_link (queued_events, queued_events);
-      g_list_free_1 (tmp_list);
+  GdkEvent *event = gdk_event_unqueue();
 
+  if (event)
+    {
       if (event_func)
 	(*event_func) (event, event_data);
-
+      
       gdk_event_free (event);
     }
-
+  
   return TRUE;
 }
 
