@@ -1580,7 +1580,6 @@ find_menu_position (GNode      *node,
 			NODE_INFO (node)->type == NODE_TYPE_SEPARATOR,
 			FALSE);
 
-  g_print ("find_menu_position %s\n", NODE_INFO (node)->name);
   /* first sibling -- look at parent */
   if (node->prev == NULL)
     {
@@ -1604,7 +1603,6 @@ find_menu_position (GNode      *node,
 	    pos = 1;
 	  else
 	    pos = 0;
-	  g_print ("parent is menu, pos %d\n", pos);
 	  g_list_free (siblings);
 	  break;
 	case NODE_TYPE_MENU_PLACEHOLDER:
@@ -1612,7 +1610,6 @@ find_menu_position (GNode      *node,
 	  g_return_val_if_fail (GTK_IS_MENU_SHELL (menushell), FALSE);
 	  pos = g_list_index (GTK_MENU_SHELL (menushell)->children,
 			      NODE_INFO (parent)->proxy) + 1;
-	  g_print ("parent is menu placeholder, pos %d\n", pos);
 	  break;
 	default:
 	  g_warning("%s: bad parent node type %d", G_STRLOC,
@@ -1636,9 +1633,6 @@ find_menu_position (GNode      *node,
       g_return_val_if_fail (GTK_IS_MENU_SHELL (menushell), FALSE);
 
       pos = g_list_index (GTK_MENU_SHELL (menushell)->children, prev_child) + 1;
-      g_print ("previous is %s, pos %d\n", 
-	       NODE_INFO (sibling)->type == NODE_TYPE_MENU_PLACEHOLDER ? "placeholder" : "menuitem", 
-	       pos);
     }
 
   if (menushell_p)
@@ -1770,7 +1764,6 @@ update_smart_separators (GtkWidget *proxy)
 {
   GtkWidget *parent = NULL;
   
-  g_print ("update_smart_separators %s\n", gtk_widget_get_name (proxy));
   if (GTK_IS_MENU (proxy) || GTK_IS_TOOLBAR (proxy))
     parent = proxy;
   else if (GTK_IS_MENU_ITEM (proxy) || GTK_IS_TOOL_ITEM (proxy))
@@ -1796,7 +1789,6 @@ update_smart_separators (GtkWidget *proxy)
       cur = children;
       while (cur) 
 	{
-	  g_print ("%d. %s\n", i++, G_OBJECT_TYPE_NAME (cur->data));
 	  if (g_object_get_data (cur->data, "gtk-empty-menu-item"))
 	    filler = cur->data;
 
@@ -1809,27 +1801,22 @@ update_smart_separators (GtkWidget *proxy)
 	      switch (mode) 
 		{
 		case SEPARATOR_MODE_VISIBLE:
-		  g_print ("visible\n");
 		  gtk_widget_show (GTK_WIDGET (cur->data));
 		  last = NULL;
 		  visible = FALSE;
 		  break;
 		case SEPARATOR_MODE_HIDDEN:
-		  g_print ("hidden\n");
 		  gtk_widget_hide (GTK_WIDGET (cur->data));
 		  break;
 		case SEPARATOR_MODE_SMART:
 		  if (visible)
 		    {
-		      g_print ("smart, visible\n");
 		      gtk_widget_show (GTK_WIDGET (cur->data));
 		      last = cur;
 		      visible = FALSE;
 		    }
 		  else 
-		    {  g_print ("smart, hidden\n");
-		      gtk_widget_hide (GTK_WIDGET (cur->data));
-		    }
+		    gtk_widget_hide (GTK_WIDGET (cur->data));
 		  break;
 		}
 	    }
@@ -1848,10 +1835,8 @@ update_smart_separators (GtkWidget *proxy)
 	  cur = cur->next;
 	}
 
-      if (last) {
-	g_print ("hide last separator\n");
+      if (last)
 	gtk_widget_hide (GTK_WIDGET (last->data));
-      }
 
       if (GTK_IS_MENU (parent)) 
 	{

@@ -1,3 +1,7 @@
+Mon Jan 12 00:10:20 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c: Remove accidentially committed debug spew.
+
 Sun Jan 11 01:55:07 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaccelmap.c: Remove accidentally committed notification stuff. 
