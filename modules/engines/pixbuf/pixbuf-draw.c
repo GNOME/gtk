@@ -403,7 +403,7 @@ draw_vline (GtkStyle     *style,
 			     x, y1, 2, (y2 - y1) + 1);
     }
   else
-    parent_class->draw_hline (style, window, state, area, widget, detail,
+    parent_class->draw_vline (style, window, state, area, widget, detail,
 			      y1, y2, x);
 }
 

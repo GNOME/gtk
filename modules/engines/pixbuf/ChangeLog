@@ -1,3 +1,8 @@
+2001-02-20  Sven Neumann  <sven@convergence.de>
+
+	* src/pixbuf-draw.c (draw_vline): use draw_vline method of 
+	parent_class, not draw_hline
+
 Wed Nov 15 21:56:28 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* src/pixbuf-*: A few updates for GTypePlugin.
