@@ -215,6 +215,15 @@ time.
 @Returns: 
 
 
+<!-- ##### USER_FUNCTION GtkColorSelectionChangePaletteFunc ##### -->
+<para>
+
+</para>
+
+@colors: 
+@n_colors: 
+
+
 <!-- ##### FUNCTION gtk_color_selection_set_color ##### -->
 <para>
 Sets the color in the #GtkColorSelection.  The widgets are updated

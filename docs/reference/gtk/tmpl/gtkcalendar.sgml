@@ -156,7 +156,7 @@ Remove all visual markers.
 Sets display options (whether to display the heading and the month headings).
 </para>
 
-@calendar: a #GtkCalendar. 
+@calendar: a #GtkCalendar.
 @flags: the display options to set.
 
 

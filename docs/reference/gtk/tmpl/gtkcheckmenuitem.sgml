@@ -58,12 +58,30 @@ Creates a new #GtkCheckMenuItem with a label.
 @Returns: a new #GtkCheckMenuItem.
 
 
+<!-- ##### FUNCTION gtk_check_menu_item_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
 <!-- ##### MACRO gtk_check_menu_item_set_state ##### -->
 <para>
 This macro is provided to preserve compatibility with older code.
 New code should use gtk_check_menu_item_set_active() function instead.
 </para>
 
+
+
+<!-- ##### FUNCTION gtk_check_menu_item_get_active ##### -->
+<para>
+
+</para>
+
+@check_menu_item: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_check_menu_item_set_active ##### -->

@@ -617,6 +617,18 @@ specific portions of a RC file.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_rc_get_style_by_paths ##### -->
+<para>
+
+</para>
+
+@settings: 
+@widget_path: 
+@class_path: 
+@type: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_rc_add_widget_name_style ##### -->
 <para>
 Add a RcStyle that will be looked up by a match against
@@ -680,6 +692,16 @@ Parse resource information directly from a string.
 <para>
 </para>
 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_rc_reparse_all_for_settings ##### -->
+<para>
+
+</para>
+
+@settings: 
+@force_load: 
 @Returns: 
 
 

@@ -152,6 +152,8 @@ X Window System Interaction
 
 </para>
 
+@cursor: 
+<!-- # Unused Parameters # -->
 @win: 
 
 
@@ -160,6 +162,8 @@ X Window System Interaction
 
 </para>
 
+@cursor: 
+<!-- # Unused Parameters # -->
 @win: 
 
 

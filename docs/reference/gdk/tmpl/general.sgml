@@ -121,7 +121,7 @@ commandline option, the default value is the program name (determined
 with g_get_prgname()) with the first character converted to uppercase. 
 </para>
 
-@Returns: the program class. 
+@Returns: the program class.
 
 
 <!-- ##### FUNCTION gdk_set_program_class ##### -->
@@ -375,13 +375,6 @@ Removes the X error trap installed with gdk_error_trap_push().
 
 
 <!-- ##### MACRO GDK_WINDOWING_WIN32 ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO GDK_WINDOWING_NANOX ##### -->
 <para>
 
 </para>

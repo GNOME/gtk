@@ -1,3 +1,12 @@
+Sat Oct 13 07:09:30 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbindings.c (gtk_binding_set_add_path): to compare pattern
+	specs, use g_pattern_spec_equal() instead of direct field accesses.
+	upon compressing two equal paths of the same type, the resulting
+	priority has to be the maximum.
+	* gtk/gtkenums.h (enum): take GTK_PATH_PRIO_MASK out of the
+	GtkPathPriorityType enum and make it a macro.
+
 2001-10-12  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkwidget.c: Fix some doc comments.

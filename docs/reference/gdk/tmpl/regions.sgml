@@ -297,8 +297,7 @@ at the pixel with coordinates @x, @y and ending before @x + @width, @y.
 
 @x: x coordinate of the first pixel.
 @y: y coordinate of the first pixel.
-@width: number of pixels in the span. 
-
+@width: number of pixels in the span.
 
 <!-- ##### USER_FUNCTION GdkSpanFunc ##### -->
 <para>
@@ -306,7 +305,7 @@ This defines the type of the function passed to
 gdk_region_spans_intersect_foreach(). 
 </para>
 
-@span: a #GdkSpan. 
+@span: a #GdkSpan.
 @data: the user data passed to gdk_region_spans_intersect_foreach().
 
 
@@ -316,7 +315,7 @@ Calls a function on each span in the intersection of @region and
 @spans.
 </para>
 
-@region: a #GdkRegion. 
+@region: a #GdkRegion.
 @spans: an array of #GdkSpans.
 @n_spans: the length of @spans.
 @sorted: %TRUE if @spans is sorted wrt. the y coordinate.

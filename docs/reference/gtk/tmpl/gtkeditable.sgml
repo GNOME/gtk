@@ -113,8 +113,8 @@ Gets the current selection bounds, if there is a selection.
 </para>
 
 @editable: a #GtkEditable widget.
-@start: location to store the starting position, or %NULL. 
-@end: location to store the end position, or %NULL. 
+@start: location to store the starting position, or %NULL.
+@end: location to store the end position, or %NULL.
 @Returns: %TRUE if there is a selection.
 
 

@@ -50,6 +50,12 @@ reached from the widget by a chain of size groups of type
 
 </para>
 
+<!-- ##### STRUCT GtkSizeGroup ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ENUM GtkSizeGroupMode ##### -->
 <para>
 

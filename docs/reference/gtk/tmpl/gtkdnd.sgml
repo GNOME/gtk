@@ -285,6 +285,28 @@ gtk_drag_source_set() is used.
 @hot_y: 
 
 
+<!-- ##### FUNCTION gtk_drag_set_icon_pixbuf ##### -->
+<para>
+
+</para>
+
+@context: 
+@pixbuf: 
+@hot_x: 
+@hot_y: 
+
+
+<!-- ##### FUNCTION gtk_drag_set_icon_stock ##### -->
+<para>
+
+</para>
+
+@context: 
+@stock_id: 
+@hot_x: 
+@hot_y: 
+
+
 <!-- ##### FUNCTION gtk_drag_set_icon_default ##### -->
 <para>
 </para>
@@ -340,6 +362,24 @@ widget. The widget must have a window.
 @colormap: 
 @pixmap: 
 @mask: 
+
+
+<!-- ##### FUNCTION gtk_drag_source_set_icon_pixbuf ##### -->
+<para>
+
+</para>
+
+@widget: 
+@pixbuf: 
+
+
+<!-- ##### FUNCTION gtk_drag_source_set_icon_stock ##### -->
+<para>
+
+</para>
+
+@widget: 
+@stock_id: 
 
 
 <!-- ##### FUNCTION gtk_drag_source_unset ##### -->

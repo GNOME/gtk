@@ -193,6 +193,26 @@ Functions to adapt C structures to native calling convention.
 Signal Marshallers
 
 
+<!-- ##### SECTION ./tmpl/gtkpacker.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkpacker.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkpacker.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtkpacker.sgml:Title ##### -->
+GtkPacker
+
+
 <!-- ##### SECTION ./tmpl/gtkprivate.sgml:Title ##### -->
 Private Information
 
@@ -449,6 +469,29 @@ The widget whose accelerators are to be shown by the #GtkAccelLabel.
 
 </para>
 
+
+<!-- ##### ENUM GtkAnchorType ##### -->
+<para>
+
+</para>
+
+@GTK_ANCHOR_CENTER: 
+@GTK_ANCHOR_NORTH: 
+@GTK_ANCHOR_NORTH_WEST: 
+@GTK_ANCHOR_NORTH_EAST: 
+@GTK_ANCHOR_SOUTH: 
+@GTK_ANCHOR_SOUTH_WEST: 
+@GTK_ANCHOR_SOUTH_EAST: 
+@GTK_ANCHOR_WEST: 
+@GTK_ANCHOR_EAST: 
+@GTK_ANCHOR_N: 
+@GTK_ANCHOR_NW: 
+@GTK_ANCHOR_NE: 
+@GTK_ANCHOR_S: 
+@GTK_ANCHOR_SW: 
+@GTK_ANCHOR_SE: 
+@GTK_ANCHOR_W: 
+@GTK_ANCHOR_E: 
 
 <!-- ##### USER_FUNCTION GtkArgGetFunc ##### -->
 <para>
@@ -843,6 +886,20 @@ after other user handlers and the default handler.
 @arg2: 
 @arg3: 
 
+<!-- ##### STRUCT GtkPacker ##### -->
+<para>
+
+</para>
+
+@parent: 
+@children: 
+@spacing: 
+@default_border_width: 
+@default_pad_x: 
+@default_pad_y: 
+@default_i_pad_x: 
+@default_i_pad_y: 
+
 <!-- ##### ARG GtkPacker:default-border-width ##### -->
 <para>
 
@@ -878,6 +935,31 @@ after other user handlers and the default handler.
 
 </para>
 
+
+<!-- ##### STRUCT GtkPackerChild ##### -->
+<para>
+
+</para>
+
+@widget: 
+@anchor: 
+@side: 
+@options: 
+@use_default: 
+@border_width: 
+@pad_x: 
+@pad_y: 
+@i_pad_x: 
+@i_pad_y: 
+
+<!-- ##### ENUM GtkPackerOptions ##### -->
+<para>
+
+</para>
+
+@GTK_PACK_EXPAND: 
+@GTK_FILL_X: 
+@GTK_FILL_Y: 
 
 <!-- ##### ARG GtkPaned:handle-size ##### -->
 <para>
@@ -916,6 +998,16 @@ after other user handlers and the default handler.
 
 </para>
 
+
+<!-- ##### ENUM GtkSideType ##### -->
+<para>
+
+</para>
+
+@GTK_SIDE_TOP: 
+@GTK_SIDE_BOTTOM: 
+@GTK_SIDE_LEFT: 
+@GTK_SIDE_RIGHT: 
 
 <!-- ##### USER_FUNCTION GtkSignalDestroy ##### -->
 <para>
@@ -2030,6 +2122,105 @@ Set an array of arguments.
 @n_args: the number of arguments to set.
 @args: the desired values, as an array of #GtkArgs (which contain 
 the names, types, and values of the arguments).
+
+<!-- ##### FUNCTION gtk_packer_add ##### -->
+<para>
+
+</para>
+
+@packer: 
+@child: 
+@side: 
+@anchor: 
+@options: 
+@border_width: 
+@pad_x: 
+@pad_y: 
+@i_pad_x: 
+@i_pad_y: 
+
+<!-- ##### FUNCTION gtk_packer_add_defaults ##### -->
+<para>
+
+</para>
+
+@packer: 
+@child: 
+@side: 
+@anchor: 
+@options: 
+
+<!-- ##### MACRO gtk_packer_configure ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_packer_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### FUNCTION gtk_packer_reorder_child ##### -->
+<para>
+
+</para>
+
+@packer: 
+@child: 
+@position: 
+
+<!-- ##### FUNCTION gtk_packer_set_child_packing ##### -->
+<para>
+
+</para>
+
+@packer: 
+@child: 
+@side: 
+@anchor: 
+@options: 
+@border_width: 
+@pad_x: 
+@pad_y: 
+@i_pad_x: 
+@i_pad_y: 
+
+<!-- ##### FUNCTION gtk_packer_set_default_border_width ##### -->
+<para>
+
+</para>
+
+@packer: 
+@border: 
+
+<!-- ##### FUNCTION gtk_packer_set_default_ipad ##### -->
+<para>
+
+</para>
+
+@packer: 
+@i_pad_x: 
+@i_pad_y: 
+
+<!-- ##### FUNCTION gtk_packer_set_default_pad ##### -->
+<para>
+
+</para>
+
+@packer: 
+@pad_x: 
+@pad_y: 
+
+<!-- ##### FUNCTION gtk_packer_set_spacing ##### -->
+<para>
+
+</para>
+
+@packer: 
+@spacing: 
 
 <!-- ##### FUNCTION gtk_paned_compute_position ##### -->
 <para>

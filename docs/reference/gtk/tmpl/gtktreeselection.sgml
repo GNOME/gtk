@@ -22,6 +22,7 @@ GtkTreeSelection
 @selection: 
 @model: 
 @path: 
+@path_currently_selected: 
 @data: 
 @Returns: 
 
@@ -123,6 +124,16 @@ GtkTreeSelection
 @path: 
 
 
+<!-- ##### FUNCTION gtk_tree_selection_path_is_selected ##### -->
+<para>
+
+</para>
+
+@selection: 
+@path: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_selection_select_iter ##### -->
 <para>
 
@@ -139,6 +150,16 @@ GtkTreeSelection
 
 @selection: 
 @iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_iter_is_selected ##### -->
+<para>
+
+</para>
+
+@selection: 
+@iter: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_tree_selection_select_all ##### -->

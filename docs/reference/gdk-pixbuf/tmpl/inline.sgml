@@ -19,49 +19,47 @@ Functions for inlined pixbuf handling.
 
   </para>
 
-@magic:
-@length:
-@pixdata_type:
-@rowstride:
-@width:
-@height:
-@pixel_data:
-
+@magic: 
+@length: 
+@pixdata_type: 
+@rowstride: 
+@width: 
+@height: 
+@pixel_data: 
 
 <!-- ##### ENUM GdkPixdataType ##### -->
   <para>
 
   </para>
 
-@GDK_PIXDATA_COLOR_TYPE_RGB:
-@GDK_PIXDATA_COLOR_TYPE_RGBA:
-@GDK_PIXDATA_COLOR_TYPE_MASK:
-@GDK_PIXDATA_SAMPLE_WIDTH_8:
-@GDK_PIXDATA_SAMPLE_WIDTH_MASK:
-@GDK_PIXDATA_ENCODING_RAW:
-@GDK_PIXDATA_ENCODING_RLE:
-@GDK_PIXDATA_ENCODING_MASK:
-
+@GDK_PIXDATA_COLOR_TYPE_RGB: 
+@GDK_PIXDATA_COLOR_TYPE_RGBA: 
+@GDK_PIXDATA_COLOR_TYPE_MASK: 
+@GDK_PIXDATA_SAMPLE_WIDTH_8: 
+@GDK_PIXDATA_SAMPLE_WIDTH_MASK: 
+@GDK_PIXDATA_ENCODING_RAW: 
+@GDK_PIXDATA_ENCODING_RLE: 
+@GDK_PIXDATA_ENCODING_MASK: 
 
 <!-- ##### ENUM GdkPixdataDumpType ##### -->
   <para>
 
   </para>
 
-@GDK_PIXDATA_DUMP_PIXDATA_STREAM:
-@GDK_PIXDATA_DUMP_PIXDATA_STRUCT:
-@GDK_PIXDATA_DUMP_MACROS:
-@GDK_PIXDATA_DUMP_GTYPES:
-@GDK_PIXDATA_DUMP_CTYPES:
-@GDK_PIXDATA_DUMP_STATIC:
-@GDK_PIXDATA_DUMP_CONST:
-@GDK_PIXDATA_DUMP_RLE_DECODER:
-
+@GDK_PIXDATA_DUMP_PIXDATA_STREAM: 
+@GDK_PIXDATA_DUMP_PIXDATA_STRUCT: 
+@GDK_PIXDATA_DUMP_MACROS: 
+@GDK_PIXDATA_DUMP_GTYPES: 
+@GDK_PIXDATA_DUMP_CTYPES: 
+@GDK_PIXDATA_DUMP_STATIC: 
+@GDK_PIXDATA_DUMP_CONST: 
+@GDK_PIXDATA_DUMP_RLE_DECODER: 
 
 <!-- ##### MACRO GDK_PIXBUF_MAGIC_NUMBER ##### -->
 <para>
 
 </para>
+
 
 
 <!-- ##### MACRO GDK_PIXDATA_HEADER_LENGTH ##### -->
@@ -70,15 +68,16 @@ Functions for inlined pixbuf handling.
 </para>
 
 
+
 <!-- ##### FUNCTION gdk_pixdata_from_pixbuf ##### -->
 <para>
 
 </para>
 
-@pixdata:
-@pixbuf:
-@use_rle:
-@Returns:
+@pixdata: 
+@pixbuf: 
+@use_rle: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_from_pixdata ##### -->
@@ -86,10 +85,10 @@ Functions for inlined pixbuf handling.
 
 </para>
 
-@pixdata:
-@copy_pixels:
-@error:
-@Returns:
+@pixdata: 
+@copy_pixels: 
+@error: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixdata_serialize ##### -->
@@ -97,9 +96,9 @@ Functions for inlined pixbuf handling.
 
 </para>
 
-@pixdata:
-@stream_length_p:
-@Returns:
+@pixdata: 
+@stream_length_p: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixdata_deserialize ##### -->
@@ -107,11 +106,11 @@ Functions for inlined pixbuf handling.
 
 </para>
 
-@pixdata:
-@stream_length:
-@stream:
-@error:
-@Returns:
+@pixdata: 
+@stream_length: 
+@stream: 
+@error: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixdata_to_csource ##### -->
@@ -119,9 +118,9 @@ Functions for inlined pixbuf handling.
 
 </para>
 
-@pixdata:
-@name:
-@dump_type:
-@Returns:
+@pixdata: 
+@name: 
+@dump_type: 
+@Returns: 
 
 

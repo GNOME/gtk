@@ -274,6 +274,15 @@ values, %TRUE, %TRUE, and 0, respectively.
 @widget: the #GtkWidget to be added to @box.
 
 
+<!-- ##### FUNCTION gtk_box_get_homogeneous ##### -->
+<para>
+
+</para>
+
+@box: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_box_set_homogeneous ##### -->
 <para>
 Sets the <structfield>homogeneous</structfield> field of
@@ -284,6 +293,15 @@ given equal space in the box.
 @box: a #GtkBox.
 @homogeneous: a boolean value, %TRUE to create equal allotments,
 %FALSE for variable allotments.
+
+
+<!-- ##### FUNCTION gtk_box_get_spacing ##### -->
+<para>
+
+</para>
+
+@box: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_box_set_spacing ##### -->
@@ -351,15 +369,6 @@ in #GtkBoxChild-struct.
 field in #GtkBoxChild-struct.
 @pack_type: the new value of the <structfield>pack</structfield> field
 in #GtkBoxChild-struct.
-
-
-<!-- ##### FUNCTION gtk_box_get_spacing ##### -->
-<para>
-
-</para>
-
-@box: 
-@Returns: 
 
 
 <!-- ##### ARG GtkBox:spacing ##### -->

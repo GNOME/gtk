@@ -28,3 +28,21 @@ GtkTreeView drag-and-drop
 </para>
 
 
+<!-- ##### STRUCT GtkTreeDragDestIface ##### -->
+<para>
+
+</para>
+
+@g_iface: 
+@drag_data_received: 
+@row_drop_possible: 
+
+<!-- ##### STRUCT GtkTreeDragSourceIface ##### -->
+<para>
+
+</para>
+
+@g_iface: 
+@drag_data_get: 
+@drag_data_delete: 
+

@@ -176,6 +176,7 @@ Returns the direction of the keymap.
 
 @keymap: a #GdkKeymap or %NULL to use the default keymap.
 Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_keyval_name ##### -->

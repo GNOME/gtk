@@ -159,6 +159,12 @@ the device ID for the core pointer device.
 
 @obj: 
 
+<!-- ##### MACRO GDK_WINDOWING_NANOX ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### STRUCT GdkColorContext ##### -->
 <para>
 

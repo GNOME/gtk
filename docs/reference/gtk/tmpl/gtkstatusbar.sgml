@@ -107,7 +107,7 @@ Forces the removal of a message from a statusbar's stack. The exact context_id a
 Sets whether the statusbar has a resize grip. %TRUE by default.
 </para>
 
-@statusbar: a #GtkStatusBar. 
+@statusbar: a #GtkStatusBar.
 @setting: %TRUE to have a resize grip.
 
 

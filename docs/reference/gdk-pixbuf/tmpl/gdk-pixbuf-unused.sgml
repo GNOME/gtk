@@ -365,6 +365,15 @@ XlibRGB
 
 @obj: A GTK+ object.
 
+<!-- ##### ENUM GdkPixbufFrameAction ##### -->
+<para>
+
+</para>
+
+@GDK_PIXBUF_FRAME_RETAIN: 
+@GDK_PIXBUF_FRAME_DISPOSE: 
+@GDK_PIXBUF_FRAME_REVERT: 
+
 <!-- ##### USER_FUNCTION GdkPixbufLastUnref ##### -->
   <para>
     A function of this type can be used to override the default
@@ -552,14 +561,14 @@ End:
   </para>
 
 
-<!-- ##### FUNCTION gdk_pixbuf_new_from_inline ##### -->
+<!-- ##### FUNCTION gdk_pixbuf_new_from_stream ##### -->
 <para>
 
 </para>
 
-@inline_pixbuf: 
+@stream_length: 
+@stream: 
 @copy_pixels: 
-@length: 
 @error: 
 @Returns: 
 

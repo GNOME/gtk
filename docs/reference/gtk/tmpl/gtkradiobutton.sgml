@@ -155,6 +155,7 @@ Deprecated compatibility macro. Use gtk_radio_button_get_group() instead.
 </para>
 
 
+
 <!-- ##### FUNCTION gtk_radio_button_set_group ##### -->
 <para>
 Sets a #GtkRadioButton's group. It should be noted that this does not change

@@ -306,6 +306,14 @@ GtkWidget
 @offset_y: 
 @shape_mask: 
 
+<!-- ##### ENUM GtkWidgetHelpType ##### -->
+<para>
+
+</para>
+
+@GTK_WIDGET_HELP_TOOLTIP: 
+@GTK_WIDGET_HELP_WHATS_THIS: 
+
 <!-- ##### FUNCTION gtk_widget_new ##### -->
 <para>
 

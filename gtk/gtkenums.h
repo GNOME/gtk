@@ -232,9 +232,9 @@ typedef enum
   GTK_PATH_PRIO_APPLICATION = 8,
   GTK_PATH_PRIO_THEME       = 10,
   GTK_PATH_PRIO_RC          = 12,
-  GTK_PATH_PRIO_HIGHEST     = 15,
-  GTK_PATH_PRIO_MASK        = 0x0f
+  GTK_PATH_PRIO_HIGHEST     = 15
 } GtkPathPriorityType;
+#define GTK_PATH_PRIO_MASK 0x0f
 
 /* widget path types */
 typedef enum
