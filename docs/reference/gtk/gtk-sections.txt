@@ -3030,7 +3030,8 @@ gtk_tree_store_clear
 gtk_tree_store_iter_is_valid
 gtk_tree_store_reorder
 gtk_tree_store_swap
-gtk_tree_store_move
+gtk_tree_store_move_before
+gtk_tree_store_move_after
 <SUBSECTION Standard>
 GTK_TREE_STORE
 GTK_IS_TREE_STORE

@@ -1,3 +1,8 @@
+2002-11-27  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Replace gtk_tree_store_move by
+	_move_before and _move_after.
+
 2002-11-26  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/tmpl/threads.sgml: Add hint about calling gdk_flush() before
