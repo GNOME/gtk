@@ -596,7 +596,7 @@ gtk_style_detach (GtkStyle *style)
           gtk_gc_release (style->text_gc[i]);
           gtk_gc_release (style->base_gc[i]);
 
-	  if (style->bg_pixmap[i])
+	  if (style->bg_pixmap[i] && style->bg_pixmap[i] != (GdkPixmap*) GDK_PARENT_RELATIVE)
 	    gdk_pixmap_unref (style->bg_pixmap[i]);
         }
       
