@@ -1,3 +1,11 @@
+Mon Sep 27 02:50:15 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkvscale.c (gtk_vscale_draw): Don't add in
+	allocation->x/y twice!
+
+	* gtk/gtkhscale.c: Make usage of gtk_hscale_pos_trough()
+	consistent with gtk_vscale_pos_trough().
+
 Sun Sep 26 19:44:34 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcontainer.c (gtk_container_queue_resize): We may
