@@ -1,3 +1,8 @@
+Tue Jul 13 01:50:06 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaboutdialog.c (display_credits_dialog): Don't
+	display untranslated translator credits. 
+
 Tue Jul 13 01:15:05 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkiconview.c: Some documentation updates.
