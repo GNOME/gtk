@@ -9,10 +9,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GTK+ 2.3.2\n"
+"Project-Id-Version: GTK+ 2.3.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-24 19:38-0500\n"
-"PO-Revision-Date: 2004-02-11 18:35+0100\n"
+"POT-Creation-Date: 2004-02-26 15:50+0100\n"
+"PO-Revision-Date: 2004-02-26 15:50+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -204,7 +204,7 @@ msgstr "Verbergen falls leer"
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Sollen leere Menüproxys für diese Aktion verborgen werden?"
 
-#: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkwidget.c:446
+#: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkwidget.c:448
 msgid "Sensitive"
 msgstr "Empfindlich"
 
@@ -213,7 +213,7 @@ msgid "Whether the action is enabled."
 msgstr "Soll das Widget aktiviert sein?"
 
 #: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:551
-#: gtk/gtktreeviewcolumn.c:222 gtk/gtkwidget.c:439
+#: gtk/gtktreeviewcolumn.c:222 gtk/gtkwidget.c:441
 msgid "Visible"
 msgstr "Sichtbar"
 
@@ -250,58 +250,48 @@ msgid "Value"
 msgstr "Wert"
 
 #: gtk/gtkadjustment.c:107
-#, fuzzy
 msgid "The value of the adjustment"
-msgstr "Der Name des Widgets"
+msgstr "Der Stellgrößenwert"
 
 #: gtk/gtkadjustment.c:116
-#, fuzzy
 msgid "Minimum Value"
-msgstr "Minimales X"
+msgstr "Mindestwert"
 
 #: gtk/gtkadjustment.c:117
-#, fuzzy
 msgid "The minimum value of the adjustment"
-msgstr "Der Name des Widgets"
+msgstr "Der Mindestwert der Stellgröße"
 
 #: gtk/gtkadjustment.c:126
-#, fuzzy
 msgid "Maximum Value"
-msgstr "Maximale Länge"
+msgstr "Höchstwert"
 
 #: gtk/gtkadjustment.c:127
-#, fuzzy
 msgid "The maximum value of the adjustment"
-msgstr "Der Name des Widgets"
+msgstr "Der Höchstwert der Stellgröße"
 
 #: gtk/gtkadjustment.c:136
-#, fuzzy
 msgid "Step Increment"
-msgstr "Bildschirm"
+msgstr "Schrittweite"
 
 #: gtk/gtkadjustment.c:137
-#, fuzzy
 msgid "The step increment of the adjustment"
-msgstr "Der Inhalt des Feldes"
+msgstr "Die Schrittweite der Stellgröße"
 
 #: gtk/gtkadjustment.c:146
 msgid "Page Increment"
-msgstr ""
+msgstr "Seitenweite"
 
 #: gtk/gtkadjustment.c:147
-#, fuzzy
 msgid "The page increment of the adjustment"
-msgstr "Der Inhalt des Feldes"
+msgstr "Die Seitenweite der Stellgröße"
 
 #: gtk/gtkadjustment.c:156
-#, fuzzy
 msgid "Page Size"
-msgstr "Max. Länge"
+msgstr "Seitengröße"
 
 #: gtk/gtkadjustment.c:157
-#, fuzzy
 msgid "The page size of the adjustment"
-msgstr "Der Schaltzustand des Knopfes"
+msgstr "Die Seitengröße der Stellgröße"
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -659,12 +649,11 @@ msgstr ""
 
 #: gtk/gtkbutton.c:375
 msgid "Show button images"
-msgstr ""
+msgstr "Knopfbilder anzeigen"
 
 #: gtk/gtkbutton.c:376
-#, fuzzy
 msgid "Whether stock icons should be shown in buttons"
-msgstr "Sollen die Reiter gezeigt werden?"
+msgstr "Sollen in Knöpfen Repertoire-Symbole angezeigt werden?"
 
 #: gtk/gtkcalendar.c:464
 msgid "Year"
@@ -867,9 +856,8 @@ msgid "Size"
 msgstr "Größe"
 
 #: gtk/gtkcellrendererpixbuf.c:169
-#, fuzzy
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
-msgstr "Die Größe des dargestellten Symbols"
+msgstr "Der GtkIconSize-Wert, der die Größe des dargestellten Symbols festlegt"
 
 #: gtk/gtkcellrendererpixbuf.c:178
 msgid "Detail"
@@ -1711,14 +1699,12 @@ msgid "The type of operation that the file selector is performing"
 msgstr "Der Typ der Aktion, die der Dateiwähler ausführt"
 
 #: gtk/gtkfilechooser.c:99
-#, fuzzy
 msgid "File System Backend"
-msgstr "Dateisystem"
+msgstr "Dateisystem-Backend"
 
 #: gtk/gtkfilechooser.c:100
-#, fuzzy
 msgid "Name of file system backend to use"
-msgstr "Der Name des zu verwendenden Symbolthemas"
+msgstr "Der Name des zu verwendenden Dateisystem-Backends"
 
 #: gtk/gtkfilechooser.c:105
 msgid "Filter"
@@ -2053,14 +2039,12 @@ msgid "Child widget to appear next to the menu text"
 msgstr "Das Kind-Widget, das neben dem Menütext erscheint"
 
 #: gtk/gtkimagemenuitem.c:143
-#, fuzzy
 msgid "Show menu images"
-msgstr "Wochennummern anzeigen"
+msgstr "Menübilder anzeigen"
 
 #: gtk/gtkimagemenuitem.c:144
-#, fuzzy
 msgid "Whether images should be shown in menus"
-msgstr "Sollen die Reiter gezeigt werden?"
+msgstr "Sollen in Menüs Bilder angezeigt werden?"
 
 #: gtk/gtkinvisible.c:114 gtk/gtkwindow.c:542
 msgid "Screen"
@@ -3096,43 +3080,43 @@ msgstr "Die Liste der Symbolgrößen (gtk-menu=16,16;gtk-button=20,20 usw.)"
 
 #: gtk/gtksettings.c:364
 msgid "Xft Antialias"
-msgstr ""
+msgstr "Xft-Kantenglättung"
 
 #: gtk/gtksettings.c:365
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "Sollen die Kanten von Xft-Schriten geglättet werden? 0: nein, 1: ja, -1: Vorgabe"
 
 #: gtk/gtksettings.c:374
 msgid "Xft Hinting"
-msgstr ""
+msgstr "Xft-Hinting"
 
 #: gtk/gtksettings.c:375
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "Soll für Xft-Schriten Hinting verwendet werden? 0: nein, 1: ja, -1: Vorgabe"
 
 #: gtk/gtksettings.c:384
 msgid "Xft Hint Style"
-msgstr ""
+msgstr "Xft-Hinting-Stil"
 
 #: gtk/gtksettings.c:385
 msgid "What degree of hinting to use; none, slight, medium, or full"
-msgstr ""
+msgstr "Wie stark soll Hinting verwendet werden? none (keins), slight (leicht), medium (mittel) oder full (stark)"
 
 #: gtk/gtksettings.c:394
 msgid "Xft RGBA"
-msgstr ""
+msgstr "Xft-RGBA"
 
 #: gtk/gtksettings.c:395
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
-msgstr ""
+msgstr "Typ der Subpixel-Kantenglättung; none (keine), rgb, bgr, vrgb, vbgr"
 
 #: gtk/gtksettings.c:404
 msgid "Xft DPI"
-msgstr ""
+msgstr "Xft-DPI"
 
 #: gtk/gtksettings.c:405
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr ""
+msgstr "Xft-Auflösung in 1024 * Punkt/Zoll. -1: Vorgabewert"
 
 #: gtk/gtksizegroup.c:241
 msgid "Mode"
@@ -4128,27 +4112,27 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 "Legt fest, wie der schattierte Rahmen um das Sichtfeld dargestellt wird"
 
-#: gtk/gtkwidget.c:406
+#: gtk/gtkwidget.c:408
 msgid "Widget name"
 msgstr "Widget-Name"
 
-#: gtk/gtkwidget.c:407
+#: gtk/gtkwidget.c:409
 msgid "The name of the widget"
 msgstr "Der Name des Widgets"
 
-#: gtk/gtkwidget.c:413
+#: gtk/gtkwidget.c:415
 msgid "Parent widget"
 msgstr "Eltern-Widget"
 
-#: gtk/gtkwidget.c:414
+#: gtk/gtkwidget.c:416
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Das Eltern-Widget dieses Widgets. Muss ein Container-Widget sein"
 
-#: gtk/gtkwidget.c:421
+#: gtk/gtkwidget.c:423
 msgid "Width request"
 msgstr "Breitenanforderung"
 
-#: gtk/gtkwidget.c:422
+#: gtk/gtkwidget.c:424
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -4156,11 +4140,11 @@ msgstr ""
 "Direkte Angabe für die Breitenanforderung des Widgets; -1, falls die "
 "natürliche Anforderung verwendet werden soll"
 
-#: gtk/gtkwidget.c:430
+#: gtk/gtkwidget.c:432
 msgid "Height request"
 msgstr "Höhenanforderung"
 
-#: gtk/gtkwidget.c:431
+#: gtk/gtkwidget.c:433
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -4168,84 +4152,84 @@ msgstr ""
 "Direkte Angabe für die Höhenanforderung des Widgets; -1, falls die "
 "natürliche Anforderung verwendet werden soll"
 
-#: gtk/gtkwidget.c:440
+#: gtk/gtkwidget.c:442
 msgid "Whether the widget is visible"
 msgstr "Soll das Widget sichtbar sein?"
 
-#: gtk/gtkwidget.c:447
+#: gtk/gtkwidget.c:449
 msgid "Whether the widget responds to input"
 msgstr "Soll das Widget auf Eingaben reagieren?"
 
-#: gtk/gtkwidget.c:453
+#: gtk/gtkwidget.c:455
 msgid "Application paintable"
 msgstr "Direktes Zeichnen"
 
-#: gtk/gtkwidget.c:454
+#: gtk/gtkwidget.c:456
 msgid "Whether the application will paint directly on the widget"
 msgstr "Kann die Anwendung direkt auf das Widget zeichnen?"
 
-#: gtk/gtkwidget.c:460
+#: gtk/gtkwidget.c:462
 msgid "Can focus"
 msgstr "Fokussierbar"
 
-#: gtk/gtkwidget.c:461
+#: gtk/gtkwidget.c:463
 msgid "Whether the widget can accept the input focus"
 msgstr "Soll das Widget den Eingabefokus akzeptieren können?"
 
-#: gtk/gtkwidget.c:467
+#: gtk/gtkwidget.c:469
 msgid "Has focus"
 msgstr "Hat Fokus"
 
-#: gtk/gtkwidget.c:468
+#: gtk/gtkwidget.c:470
 msgid "Whether the widget has the input focus"
 msgstr "Soll das Widget den Eingabefokus haben?"
 
-#: gtk/gtkwidget.c:474
+#: gtk/gtkwidget.c:476
 msgid "Is focus"
 msgstr "Ist Fokus"
 
-#: gtk/gtkwidget.c:475
+#: gtk/gtkwidget.c:477
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Ist das Widget das fokussierte Widget innerhalb der obersten Ebene?"
 
-#: gtk/gtkwidget.c:481
+#: gtk/gtkwidget.c:483
 msgid "Can default"
 msgstr "Kann Vorgabe"
 
-#: gtk/gtkwidget.c:482
+#: gtk/gtkwidget.c:484
 msgid "Whether the widget can be the default widget"
 msgstr "Soll das Widget das Vorgabe-Widget sein können?"
 
-#: gtk/gtkwidget.c:488
+#: gtk/gtkwidget.c:490
 msgid "Has default"
 msgstr "Ist Vorgabe"
 
-#: gtk/gtkwidget.c:489
+#: gtk/gtkwidget.c:491
 msgid "Whether the widget is the default widget"
 msgstr "Soll das Widget das Vorgabe-Widget sein?"
 
-#: gtk/gtkwidget.c:495
+#: gtk/gtkwidget.c:497
 msgid "Receives default"
 msgstr "Vorgabe erhalten"
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:498
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Falls WAHR, erhält das Widget die Vorgabe-Aktion, wenn es fokussiert ist"
 
-#: gtk/gtkwidget.c:502
+#: gtk/gtkwidget.c:504
 msgid "Composite child"
 msgstr "Zusammengesetztes Kind"
 
-#: gtk/gtkwidget.c:503
+#: gtk/gtkwidget.c:505
 msgid "Whether the widget is part of a composite widget"
 msgstr "Ist das Widget Teil eines zusammengesetzten Widgets?"
 
-#: gtk/gtkwidget.c:509
+#: gtk/gtkwidget.c:511
 msgid "Style"
 msgstr "Stil"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:512
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -4253,79 +4237,79 @@ msgstr ""
 "Der Stil des Widgets, der Informationen zu seinem Aussehen enthält (Farben "
 "etc.)"
 
-#: gtk/gtkwidget.c:516
+#: gtk/gtkwidget.c:518
 msgid "Events"
 msgstr "Ereignisse"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:519
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Die Ereignismaske, die entscheidet, welche GdkEvents dieses Widget erhält"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:526
 msgid "Extension events"
 msgstr "Erweiterungsereignisse"
 
-#: gtk/gtkwidget.c:525
+#: gtk/gtkwidget.c:527
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "Die Maske, die festlegt, welche Erweiterungsereignisse dieses Widget erhält"
 
-#: gtk/gtkwidget.c:532
+#: gtk/gtkwidget.c:534
 msgid "No show all"
 msgstr "Kein Show-All"
 
-#: gtk/gtkwidget.c:533
+#: gtk/gtkwidget.c:535
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Soll »gtk_widget_show_all()« dieses Widget nicht betreffen?"
 
-#: gtk/gtkwidget.c:1374
+#: gtk/gtkwidget.c:1376
 msgid "Interior Focus"
 msgstr "Interner Fokus"
 
-#: gtk/gtkwidget.c:1375
+#: gtk/gtkwidget.c:1377
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Soll der Fokusanzeiger in Widgets dargestellt werden?"
 
-#: gtk/gtkwidget.c:1381
+#: gtk/gtkwidget.c:1383
 msgid "Focus linewidth"
 msgstr "Länge der Fokuszeile"
 
-#: gtk/gtkwidget.c:1382
+#: gtk/gtkwidget.c:1384
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Die Breite der Fokusanzeiger-Linie in Pixel"
 
-#: gtk/gtkwidget.c:1388
+#: gtk/gtkwidget.c:1390
 msgid "Focus line dash pattern"
 msgstr "Strichelmuster der Fokuszeile"
 
-#: gtk/gtkwidget.c:1389
+#: gtk/gtkwidget.c:1391
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Das zum Zeichnen des Fokusanzeigers verwendete Strichelmuster"
 
-#: gtk/gtkwidget.c:1394
+#: gtk/gtkwidget.c:1396
 msgid "Focus padding"
 msgstr "Fokus-Polsterung"
 
-#: gtk/gtkwidget.c:1395
+#: gtk/gtkwidget.c:1397
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Der Abstand zwischen dem Fokusanzeiger und dem »Kasten« um das Widget in "
 "Pixel"
 
-#: gtk/gtkwidget.c:1400
+#: gtk/gtkwidget.c:1402
 msgid "Cursor color"
 msgstr "Cursorfarbe"
 
-#: gtk/gtkwidget.c:1401
+#: gtk/gtkwidget.c:1403
 msgid "Color with which to draw insertion cursor"
 msgstr "Die Farbe, in der der Einfügecursor gezeichnet werden soll"
 
-#: gtk/gtkwidget.c:1406
+#: gtk/gtkwidget.c:1408
 msgid "Secondary cursor color"
 msgstr "Zweite Cursorfarbe"
 
-#: gtk/gtkwidget.c:1407
+#: gtk/gtkwidget.c:1409
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4333,11 +4317,11 @@ msgstr ""
 "Die Farbe des zweiten Einfügecursors, wenn rechts- und linksläufiger Text "
 "gemischt bearbeitet werden."
 
-#: gtk/gtkwidget.c:1412
+#: gtk/gtkwidget.c:1414
 msgid "Cursor line aspect ratio"
 msgstr "Seitenverhältnis der Cursorzeile"
 
-#: gtk/gtkwidget.c:1413
+#: gtk/gtkwidget.c:1415
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Das Seitenverhältnis, in dem der Einfügecursor gezeichnet werden soll"
 
