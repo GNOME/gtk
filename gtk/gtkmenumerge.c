@@ -986,6 +986,8 @@ remove_ui (GNode   *node,
  * @merge_id: a merge id as returned by gtk_menu_merge_add_ui_from_string()
  * 
  * Unmerges the part of @self<!-- -->s content identified by @merge_id.
+ *
+ * Since: 2.4
  **/
 void
 gtk_menu_merge_remove_ui (GtkMenuMerge *self, 
@@ -1636,6 +1638,8 @@ print_node (GtkMenuMerge *self,
  * 
  * Return value: A newly allocated string containing an XML representation of 
  * the merged ui.
+ *
+ * Since: 2.4
  **/
 gchar*
 gtk_menu_merge_get_ui (GtkMenuMerge   *self)
