@@ -109,7 +109,6 @@ _gdk_visual_init (void)
   if (rastercaps & RC_PALETTE)
     {
       const int sizepalette = GetDeviceCaps (_gdk_display_hdc, SIZEPALETTE);
-      const int numcolors = GetDeviceCaps (_gdk_display_hdc, NUMCOLORS);
       gchar *max_colors = getenv ("GDK_WIN32_MAX_COLORS");
       system_visual->type = GDK_VISUAL_PSEUDO_COLOR;
 
