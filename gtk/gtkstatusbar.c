@@ -202,7 +202,6 @@ gtk_statusbar_push (GtkStatusbar *statusbar,
   g_return_val_if_fail (statusbar != NULL, 0);
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), 0);
   g_return_val_if_fail (text != NULL, 0);
-  g_return_val_if_fail (context_id > 0, 0);
 
   class = GTK_STATUSBAR_GET_CLASS (statusbar);
   msg = g_chunk_new (GtkStatusbarMsg, class->messages_mem_chunk);
@@ -228,7 +227,6 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
 
   g_return_if_fail (statusbar != NULL);
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
-  g_return_if_fail (context_id > 0);
 
   if (statusbar->messages)
     {
@@ -271,7 +269,6 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
 
   g_return_if_fail (statusbar != NULL);
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
-  g_return_if_fail (context_id > 0);
   g_return_if_fail (message_id > 0);
 
   msg = statusbar->messages ? statusbar->messages->data : NULL;

@@ -667,13 +667,10 @@ gtk_text_view_set_buffer (GtkTextView *text_view,
 							 "__drag_target",
 							 &start, FALSE);
 
-      /* Initialize. FIXME: Allow anonymous marks and use one here
-       */
-      mark_name = g_strdup_printf ("__first_para_%p", text_view);
       text_view->first_para_mark = gtk_text_buffer_create_mark (text_view->buffer,
-								mark_name,
+                                                                NULL,
 								&start, TRUE);
-      g_free (mark_name);
+      
       text_view->first_para_pixels = 0;
       
       gtk_signal_connect (GTK_OBJECT (text_view->buffer), "mark_set",

@@ -1,3 +1,11 @@
+2000-06-23  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_set_buffer): Use anonymous mark 
+	instead of making up a bogus name for first_para_mark
+
+	* gtk/gtkstatusbar.h, gtk/gtkstatusbar.c: Allow 
+	0 as a context ID
+
 Thu Jun 22 17:43:51 BST 2000  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: Change filename. Add Section 3.
