@@ -59,7 +59,7 @@ look like a #GtkButton.
 The #GtkFileChooserButton will ellipsize the label while in Open mode,
 and thus will thus request little horizontal space.  To give the button
 more space, you should call gtk_widget_size_request(),
-gtk_file_chooser_button_set_width_chars (), or pack the button in
+gtk_file_chooser_button_set_width_chars(), or pack the button in
 such a way that other interface elements give space to the widget.
 </para>
 </important>
@@ -71,30 +71,28 @@ such a way that other interface elements give space to the widget.
 
 <!-- ##### STRUCT GtkFileChooserButton ##### -->
 <para>
-This should not be accessed directly.  Use the accessor functions below.
+This should not be accessed directly.  Use the accessor functions below. 
 </para>
 
 
 <!-- ##### ARG GtkFileChooserButton:active ##### -->
 <para>
-%TRUE, if the #GtkFileChooserDialog associated with the button has been
-made visible.  This can also be set by the application, though it is
-rarely useful to do so.
+
 </para>
 
 <!-- ##### ARG GtkFileChooserButton:dialog ##### -->
 <para>
-Instance of the #GtkFileChooserDialog associated with the button.
+
 </para>
 
 <!-- ##### ARG GtkFileChooserButton:title ##### -->
 <para>
-Title to put on the #GtkFileChooserDialog associated with the button.
+
 </para>
 
 <!-- ##### ARG GtkFileChooserButton:width-chars ##### -->
 <para>
-The width of the entry and label inside the button, in characters.
+
 </para>
 
 <!-- ##### FUNCTION gtk_file_chooser_button_new ##### -->
