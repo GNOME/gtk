@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.7\n"
-"POT-Creation-Date: 2000-08-10 21:20-0400\n"
+"POT-Creation-Date: 2000-08-17 10:36-0600\n"
 "PO-Revision-Date: 2000-06-23 05:05+02:00\n"
 "Last-Translator: Christopher R. Gabriel <cgabriel@pluto.linux.it>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -54,14 +54,14 @@ msgid "Set Color"
 msgstr "Imposta il colore"
 
 #. The OK button
-#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
+#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:952
 #: gtk/gtkgamma.c:415
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
-#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
+#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:968
+#: gtk/gtkfilesel.c:1077 gtk/gtkfilesel.c:1201 gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
 msgstr "Annulla"
@@ -71,29 +71,29 @@ msgid "Help"
 msgstr "Aiuto"
 
 #. The directories clist
-#: gtk/gtkfilesel.c:514
+#: gtk/gtkfilesel.c:512
 msgid "Directories"
 msgstr "Directory"
 
 #. The files clist
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:532
 msgid "Files"
 msgstr "File"
 
-#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
+#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1639
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Directory illeggibile: %s"
 
-#: gtk/gtkfilesel.c:637
+#: gtk/gtkfilesel.c:635
 msgid "Create Dir"
 msgstr "Crea directory"
 
-#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
+#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1046
 msgid "Delete File"
 msgstr "Cancella File"
 
-#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
+#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1159
 msgid "Rename File"
 msgstr "Rinomina File"
 
@@ -102,39 +102,39 @@ msgstr "Rinomina File"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:828
+#: gtk/gtkfilesel.c:827
 msgid "Error"
 msgstr "Errore"
 
 #. close button
-#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
+#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:338
 msgid "Close"
 msgstr "Chiudi"
 
-#: gtk/gtkfilesel.c:927
+#: gtk/gtkfilesel.c:932
 msgid "Create Directory"
 msgstr "Crea Directory"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:946
 msgid "Directory name:"
 msgstr "Nome cartella:"
 
 #. buttons
-#: gtk/gtkfilesel.c:954
+#: gtk/gtkfilesel.c:959
 msgid "Create"
 msgstr "Crea"
 
 #. buttons
-#: gtk/gtkfilesel.c:1058
+#: gtk/gtkfilesel.c:1068
 msgid "Delete"
 msgstr "Cancella"
 
 #. buttons
-#: gtk/gtkfilesel.c:1173
+#: gtk/gtkfilesel.c:1192
 msgid "Rename"
 msgstr "Rinomina"
 
-#: gtk/gtkfilesel.c:1600
+#: gtk/gtkfilesel.c:1618
 msgid "Selection: "
 msgstr "Selezione: "
 
@@ -238,7 +238,7 @@ msgstr "Inclinazione Y"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
-msgstr ""
+msgstr "Ruota"
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
@@ -284,180 +284,3 @@ msgstr "Impossibile trovare il modulo nella cartella moduli: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Nessun aiuto ---"
-
-#~ msgid "Foundry:"
-#~ msgstr "Fornitore:"
-
-#~ msgid "Weight:"
-#~ msgstr "Peso:"
-
-#~ msgid "Slant:"
-#~ msgstr "Inclinazione:"
-
-#~ msgid "Set Width:"
-#~ msgstr "Seleziona Larghezza:"
-
-#~ msgid "Pixel Size:"
-#~ msgstr "Dimensione in Pixel:"
-
-#~ msgid "Point Size:"
-#~ msgstr "Dimensione in Punti:"
-
-#~ msgid "Resolution X:"
-#~ msgstr "Risoluzione X:"
-
-#~ msgid "Resolution Y:"
-#~ msgstr "Risoluzione Y:"
-
-#~ msgid "Spacing:"
-#~ msgstr "Spaziatura:"
-
-#~ msgid "Average Width:"
-#~ msgstr "Larghezza media:"
-
-#~ msgid "Charset:"
-#~ msgstr "Gruppo di caratteri:"
-
-#~ msgid "Font Property"
-#~ msgstr "Proprietà Tipo Carattere"
-
-#~ msgid "Requested Value"
-#~ msgstr "Valore richiesto"
-
-#~ msgid "Actual Value"
-#~ msgstr "Valore effettivo"
-
-#~ msgid "Font"
-#~ msgstr "Tipo di Carattere"
-
-#~ msgid "Font:"
-#~ msgstr "Carattere:"
-
-#~ msgid "Font Style:"
-#~ msgstr "Stile Carattere:"
-
-#~ msgid "Reset Filter"
-#~ msgstr "Azzera filtro"
-
-#~ msgid "Metric:"
-#~ msgstr "Metrica:"
-
-#~ msgid "Points"
-#~ msgstr "Punti"
-
-#~ msgid "Pixels"
-#~ msgstr "Pixel"
-
-#~ msgid "Font Information"
-#~ msgstr "Informazioni Font"
-
-#~ msgid "Requested Font Name:"
-#~ msgstr "Nome del font richiesto:"
-
-#~ msgid "Actual Font Name:"
-#~ msgstr "Nome effettivo del font:"
-
-#~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i font disponibili per un totale di %i stili."
-
-#~ msgid "Filter"
-#~ msgstr "Filtro"
-
-#~ msgid "Font Types:"
-#~ msgstr "Tipi di Font:"
-
-#~ msgid "Bitmap"
-#~ msgstr "Bitmap"
-
-#~ msgid "Scalable"
-#~ msgstr "Scalabili"
-
-#~ msgid "Scaled Bitmap"
-#~ msgstr "Bitmap scalabile"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "(nil)"
-#~ msgstr "(nil)"
-
-#~ msgid "regular"
-#~ msgstr "normale"
-
-#~ msgid "italic"
-#~ msgstr "corsivo"
-
-#~ msgid "oblique"
-#~ msgstr "obliquo"
-
-#~ msgid "reverse italic"
-#~ msgstr "corsivo inverso"
-
-#~ msgid "reverse oblique"
-#~ msgstr "obliquo inverso"
-
-#~ msgid "other"
-#~ msgstr "altro"
-
-#~ msgid "[M]"
-#~ msgstr "[M]"
-
-#~ msgid "[C]"
-#~ msgstr "[C]"
-
-#~ msgid "The selected font is not available."
-#~ msgstr "Il font selezionato non e' disponibile."
-
-#~ msgid "The selected font is not a valid font."
-#~ msgstr "Il font selezionato non e' valido."
-
-#~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr ""
-#~ "Questo e' un font a 2 byte e potrebbe non essere visualizzato correttamente."
-
-#~ msgid "roman"
-#~ msgstr "roman"
-
-#~ msgid "proportional"
-#~ msgstr "proporzionale"
-
-#~ msgid "monospaced"
-#~ msgstr "monospazio"
-
-#~ msgid "char cell"
-#~ msgstr "cella carattere"
-
-#~ msgid "Font: (Filter Applied)"
-#~ msgstr "Font: (con Filtro)"
-
-#~ msgid "heavy"
-#~ msgstr "forte"
-
-#~ msgid "extrabold"
-#~ msgstr "supergrassetto"
-
-#~ msgid "bold"
-#~ msgstr "grassetto"
-
-#~ msgid "demibold"
-#~ msgstr "semi-grassetto"
-
-#~ msgid "medium"
-#~ msgstr "medio"
-
-#~ msgid "normal"
-#~ msgstr "normale"
-
-#~ msgid "light"
-#~ msgstr "leggero"
-
-#~ msgid "extralight"
-#~ msgstr "leggero"
-
-#~ msgid "thin"
-#~ msgstr "fine"
-
-#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr ""
-#~ "E' stato superato il valore di MAX_FONTS. Alcuni fonts potrebbero non essere "
-#~ "visualizzati"
