@@ -1,3 +1,10 @@
+Thu Aug 14 17:58:23 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (get_current_dir_utf8): If getting
+	the current directory fails because of encoding
+	conversion problems, walk up textually to parent
+	directories until we can convert. (#113627)
+
 Wed Aug 13 17:01:49 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenushell.[ch] (gtk_menu_shell_enter_notify):

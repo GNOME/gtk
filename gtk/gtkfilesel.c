@@ -2605,19 +2605,55 @@ cmpl_is_a_completion (PossibleCompletion* pc)
 /*	                 Construction, deletion                       */
 /**********************************************************************/
 
+/* Get the nearest parent of the current directory for which
+ * we can convert the filename into UTF-8. With paranoia.
+ * Returns "." when all goes wrong.
+ */
+static gchar *
+get_current_dir_utf8 (void)
+{
+  gchar *dir = g_get_current_dir ();
+  gchar *dir_utf8 = NULL;
+
+  while (TRUE)
+    {
+      gchar *last_slash;
+
+      dir_utf8 = g_filename_to_utf8 (dir, -1, NULL, NULL, NULL);
+      if (dir_utf8)
+	break;
+
+      last_slash = strrchr (dir, G_DIR_SEPARATOR);
+      if (!last_slash)		/* g_get_current_dir() wasn't absolute! */
+	break;
+
+      if (last_slash + 1 == g_path_skip_root (dir)) /* Parent directory is a root directory */
+	{
+	  if (last_slash[1] == '\0') /* Root misencoded! */
+	    break;
+	  else
+	    last_slash[1] = '\0';
+	}
+      else
+	last_slash[0] = '\0';
+      
+      g_assert (last_slash);
+    }
+
+  g_free (dir);
+  
+  return dir_utf8 ? dir_utf8 : g_strdup (".");
+}
+
 static CompletionState*
 cmpl_init_state (void)
 {
-  gchar *sys_getcwd_buf;
   gchar *utf8_cwd;
   CompletionState *new_state;
 
   new_state = g_new (CompletionState, 1);
 
-  /* g_get_current_dir() returns a string in the "system" charset */
-  sys_getcwd_buf = g_get_current_dir ();
-  utf8_cwd = g_filename_to_utf8 (sys_getcwd_buf, -1, NULL, NULL, NULL);
-  g_free (sys_getcwd_buf);
+  utf8_cwd = get_current_dir_utf8 ();
 
 tryagain:
 
@@ -2912,10 +2948,7 @@ open_ref_dir (gchar           *text_to_complete,
       else
 	{
 	  /* If no possible candidates, use the cwd */
-	  gchar *sys_curdir = g_get_current_dir ();
-	  gchar *utf8_curdir = g_filename_to_utf8 (sys_curdir, -1, NULL, NULL, NULL);
-
-	  g_free (sys_curdir);
+	  gchar *utf8_curdir = get_current_dir_utf8 ();
 
 	  new_dir = open_dir (utf8_curdir, cmpl_state);
 
