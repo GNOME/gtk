@@ -371,11 +371,6 @@ gdk_fb_handle_key (guint hw_keycode,
 	gdk_fb_redraw_all ();
     }
 
-  /* Ctrl-Alt Return can't be pressed in the XLATE driver,
-   * use Shift F1 instead */
-  if (key_up && (keyval == GDK_F1) && (modifier_state & GDK_SHIFT_MASK))
-    gdk_fb_redraw_all ();
-  
   win = gdk_fb_window_find_focus ();
   event = gdk_event_make (win,
 			  key_up ? GDK_KEY_RELEASE : GDK_KEY_PRESS,
@@ -767,6 +762,12 @@ xlate_io (GIOChannel *gioc,
 		{
 		  if (iscode (xlate_codes[j].str, &buf[i], left))
 		    {
+		      /* Ctrl-Alt Return can't be pressed in the XLATE driver,
+		       * use Shift F1 instead */
+		      if ((xlate_codes[j].code == GDK_F1) &&
+			  (xlate_codes[j].modifier & GDK_SHIFT_MASK))
+			gdk_fb_redraw_all ();
+
 		      gdk_fb_handle_key (xlate_codes[j].code,
 					 xlate_codes[j].code,
 					 xlate_codes[j].modifier,

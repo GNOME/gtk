@@ -1,3 +1,15 @@
+2000-12-13    <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkmouse-fb.c (mouse_devs):
+	Add support for ps2 intellimouse.
+
+	* gdkkeyboard-fb.c:
+	Move shift-F1 repaint handling to xlate handler only.
+	
+	* docs/README.linux-fb:
+	Add imps2 to docs.
+	Document the new refresh keys.
+	
 Tue Dec 12 23:46:44 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/stock-icons/Makefile.am: doh, this was broken beyond believe.

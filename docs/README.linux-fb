@@ -103,6 +103,7 @@ GDK_DISPLAY:
 GDK_MOUSE_TYPE:
  Specify mouse type. Currently supported is:
   ps2 - PS/2 mouse
+  imps2 - PS/2 intellimouse (wheelmouse)
   ms - Microsoft serial mouse
   fidmour - touch screen
  Default is ps2.
@@ -124,9 +125,16 @@ GDK_KEYBOARD_TYPE:
 
 HACKING:
 --------
-Pressing shift-F1 forces a repaint of the whole screen.
 
-To be written.
+Pressing Ctrl-Alt-Return repaints the whole screen.
+Unfortunately this cannot be pressed when using the xlate keyboard
+driver, so instead you can use shift-F1 instead when using this
+driver.
+
+Pressing Ctrl-Alt-BackSpace kills the GtkFB program. (Can't be pressed
+in the xlate driver.
+
+More to be written.
 
    - Alexander Larsson <alexl@redhat.com>
      2000/12/06

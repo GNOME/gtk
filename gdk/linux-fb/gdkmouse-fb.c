@@ -232,6 +232,13 @@ static GdkFBMouseDevice mouse_devs[] =
     gdk_fb_mouse_ps2_packet,
     { 0xc0, 0x00 }
   },
+  { "imps2",
+    4,
+    gdk_fb_mouse_ps2_open,
+    gdk_fb_mouse_ps2_close,
+    gdk_fb_mouse_ps2_packet,
+    { 0xc0, 0x00 }
+  },
   { "ms",
     3,
     gdk_fb_mouse_ms_open,
