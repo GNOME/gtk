@@ -1,3 +1,8 @@
+Wed Oct 24 10:29:47 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkalignment.c (gtk_alignment_class_init): Improve
+	dreadful tooltips.
+
 Tue Oct 23 17:31:42 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c gdk/win32/gdkwindow-win32.c: Always 
