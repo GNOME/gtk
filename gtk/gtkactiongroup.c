@@ -308,8 +308,7 @@ gtk_action_group_finalize (GObject *object)
   if (self->private_data->translate_notify)
     self->private_data->translate_notify (self->private_data->translate_data);
 
-  if (parent_class->finalize)
-    (* parent_class->finalize) (object);
+  (* parent_class->finalize) (object);
 }
 
 static void

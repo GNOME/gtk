@@ -244,8 +244,7 @@ gtk_radio_action_finalize (GObject *object)
       tmp_action->private_data->group = action->private_data->group;
     }
 
-  if (parent_class->finalize)
-    (* parent_class->finalize) (object);
+  (* parent_class->finalize) (object);
 }
 
 static void

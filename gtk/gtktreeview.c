@@ -1246,8 +1246,7 @@ gtk_tree_view_finalize (GObject *object)
 
   g_free (tree_view->priv);
 
-  if (G_OBJECT_CLASS (parent_class)->finalize)
-    (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 

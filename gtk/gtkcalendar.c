@@ -3094,8 +3094,7 @@ gtk_calendar_finalize (GObject *object)
   
   g_free (private_data);
   
-  if (G_OBJECT_CLASS (parent_class)->finalize)
-    (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static gboolean

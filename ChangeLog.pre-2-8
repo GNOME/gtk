@@ -1,3 +1,13 @@
+Fri Jul 23 10:28:43 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeview.c (gtk_tree_view_finalize): 
+	* gtk/gtkradioaction.c (gtk_radio_action_finalize): 
+	* gtk/gtkfontsel.c (gtk_font_selection_finalize): 
+	* gtk/gtkcellview.c (gtk_cell_view_finalize): 
+	* gtk/gtkcalendar.c (gtk_calendar_finalize): 
+	* gtk/gtkactiongroup.c (gtk_action_group_finalize): Remove
+	unnecessary checks.  (#148175, Morten Welinder)
+
 Thu Jul 22 01:42:16 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init): 
