@@ -3101,7 +3101,7 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
   { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Square" },
   { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
-  { "/_Preferences/Shape/_Image",       NULL, gtk_ifactory_cb, 0, "<ImageItem>", (gchar**) apple, sizeof(apple) },
+  { "/_Preferences/Shape/_Image",       NULL, gtk_ifactory_cb, 0, "<ImageItem>", apple },
 
   /* For testing deletion of menus */
   { "/_Preferences/Should_NotAppear",          NULL, 0,               0, "<Branch>" },
