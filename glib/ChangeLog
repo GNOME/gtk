@@ -1,3 +1,8 @@
+Fri Apr  3 17:03:18 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gstring.c: corrected possible overrun when inserting into
+	GStrings (thanks Elrond)
+
 Fri Apr  3 18:05:45 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* testglib.c: Removed literal german from strings
@@ -13,7 +18,7 @@ Wed Mar 25 15:23:37 1998  Owen Taylor  <owt1@cornell.edu>
 	* Makefile.am: Switched glibconfig.h rule from HEADERS
 	to DATA, so that it is not added to DISTFILES
 
-Wed Mar 18 22:27:08 PST 1998
+Wed Mar 18 22:27:08 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* garray.c: g_rarray_truncate length done correctly
 
