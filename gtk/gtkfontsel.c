@@ -439,7 +439,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   GtkWidget *text_box, *frame;
   GtkWidget *table, *label, *hbox, *hbox2, *clist, *button, *vbox, *alignment;
   gint i, prop, row;
-  gchar *titles[] = { _("Font Property"), _("Requested Value"), _("Actual Value") };
+  gchar *titles[] = { NULL, NULL, NULL };
   gchar buffer[128];
   gchar *size;
   gint size_to_match;
@@ -447,6 +447,12 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gchar *property, *text;
   gboolean inserted;
   
+  /* Number of internationalized titles here must match number
+     of NULL initializers above */
+  titles[0] = _("Font Property");
+  titles[1] = _("Requested Value");
+  titles[2] = _("Actual Value");
+
   /* Initialize the GtkFontSelection struct. We do this here in case any
      callbacks are triggered while creating the interface. */
   fontsel->font = NULL;

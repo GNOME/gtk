@@ -16,7 +16,18 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include "config.h"
+#include <config.h>
+
+/* gcc -ansi -pedantic on GNU/Linux causes warnings and errors
+ * unless this is defined:
+ * warning: #warning "Files using this header must be compiled with _SVID_SOURCE or _XOPEN_SOURCE"
+ */
+#ifndef _XOPEN_SOURCE
+#  define _XOPEN_SOURCE 1
+#endif
+#ifdef HAVE_FEATURES_H
+#  include <features.h>
+#endif
 
 #include <stdlib.h>
 #include <sys/types.h>

@@ -64,7 +64,7 @@ enum {
 enum {
   TARGET_STRING,
   TARGET_TEXT,
-  TARGET_COMPOUND_TEXT,
+  TARGET_COMPOUND_TEXT
 };
 
 static void gtk_editable_class_init          (GtkEditableClass *klass);

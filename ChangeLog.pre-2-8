@@ -1,3 +1,26 @@
+1999-01-01  Jeff Garzik  <jgarzik@pobox.com>
+
+	* configure.in, config.h.in:
+	Check for features.h.
+
+	* gdk/gdkevents.c (gdk_event_put, gdk_events_queue):
+	Fixed bug in linked list append logic by replacing hand-coded
+	logic with a call to g_list_append.  Bug found by tml.
+
+	* gdk/gdkimage.c:
+	'gcc -ansi -pedantic' on GNU/Linux spews warnings and errors
+	in sys/ipc.h, including one specific admonishment to use
+	_SVID_SOURCE or _XOPEN_SOURCE.	Manually defined the latter, and
+	included features.h if present to obtain the necessary
+	side-effects.
+
+	* gtk/gtkclist.c, gtk/gtkeditable.c:
+	Eliminates comma-after-final-element warnings.
+
+	* gtk/gtkfontsel.c (gtk_font_selection_init):
+	Fixed bug where an intl string was declared as _("x") in
+	local var initializer.
+
 1998-12-31  Jeff Garzik  <jgarzik@pobox.com>
 
 	* gtk/gtklabel.c (gtk_label_split_text_wrapped):

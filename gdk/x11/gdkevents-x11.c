@@ -474,24 +474,17 @@ void
 gdk_event_put (GdkEvent *event)
 {
   GdkEvent *new_event;
-  GList *tmp_list;
   
   g_return_if_fail (event != NULL);
   
   new_event = gdk_event_copy (event);
 
-  tmp_list = g_list_alloc();
-  tmp_list->prev = putback_tail;
-  tmp_list->next = NULL;
-  tmp_list->data = new_event;
+  putback_tail = g_list_append(putback_tail, new_event);
 
   if (!putback_events)
-    {
-      putback_events = tmp_list;
-      putback_tail = tmp_list;
-    }
+    putback_events = putback_tail;
   else
-    putback_tail->next = tmp_list;
+    putback_tail = putback_tail->next;
 }
 
 /*
@@ -1877,18 +1870,12 @@ gdk_events_queue (void)
       
       if (gdk_event_translate (event, &xevent))
 	{
-	  GList *tmp_list = g_list_alloc();
-	  tmp_list->prev = queued_tail;
-	  tmp_list->next = NULL;
-	  tmp_list->data = event;
+	  queued_tail = g_list_append(queued_tail, event);
 
 	  if (!queued_events)
-	    {
-	      queued_events = tmp_list;
-	      queued_tail = queued_events;
-	    }
+	    queued_events = queued_tail;
 	  else
-	    queued_tail->next = tmp_list;
+	    queued_tail = queued_tail->next;
 	}
       else
 	gdk_event_free (event);
