@@ -1,3 +1,9 @@
+Fri Dec  6 17:50:57 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpixmap.c (PACKED_COLOR): Fix incorrect
+	masks in PACKED_COLOR definition. (#99795, 
+	John Finlay)
+
 Fri Dec  6 17:46:42 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_window_size_request): Use

@@ -496,7 +496,9 @@ make_solid_mask (GdkScreen *screen, gint width, gint height)
   return bitmap;
 }
 
-#define PACKED_COLOR(c) ((((c)->red & 0xff) << 8) | ((c)->green & 0xff) | ((c)->blue >> 8))
+#define PACKED_COLOR(c) ((((c)->red   & 0xff00)  << 8) |   \
+			  ((c)->green & 0xff00)        |   \
+			  ((c)->blue             >> 8))
 
 static GdkPixmap *
 gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
