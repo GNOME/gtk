@@ -1,3 +1,12 @@
+2004-02-24  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c: (shortcuts_append_desktop):
+	Translate the desktop label.
+	
+	(shortcuts_get_index), (shortcuts_add_bookmarks),
+	(shortcuts_insert_separator), (create_shortcuts_model):
+	Don't show the bookmark separator if there are no bookmarks.
+	
 Tue Feb 24 01:41:30 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (location_popup_handler): Make the

@@ -751,7 +751,7 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
   path = gtk_file_system_filename_to_path (impl->file_system, name);
   g_free (name);
 
-  impl->has_desktop = shortcuts_insert_path (impl, -1, FALSE, NULL, path, NULL, FALSE, NULL);
+  impl->has_desktop = shortcuts_insert_path (impl, -1, FALSE, NULL, path, _("Desktop"), FALSE, NULL);
   /* We do not actually pop up an error dialog if there is no desktop directory
    * because some people may really not want to have one.
    */
@@ -817,7 +817,8 @@ shortcuts_get_index (GtkFileChooserDefault *impl,
   if (where == SHORTCUTS_SEPARATOR)
     goto out;
 
-  n += 1;
+  /* If there are no bookmarks there won't be a separator */
+  n += impl->num_shortcuts > 0 ? 1 : 0;
 
   if (where == SHORTCUTS_BOOKMARKS)
     goto out;
@@ -919,30 +920,39 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
 {
   GSList *bookmarks;
 
-  shortcuts_remove_rows (impl,
-			 shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS),
-			 impl->num_bookmarks,
-			 remove_bookmark_cb);
+  if (impl->num_bookmarks > 0)
+    {
+      shortcuts_remove_rows (impl,
+			     shortcuts_get_index (impl, SHORTCUTS_SEPARATOR),
+			     impl->num_bookmarks + 1,
+			     remove_bookmark_cb);
 
+    }
+  
   bookmarks = gtk_file_system_list_bookmarks (impl->file_system);
   impl->num_bookmarks = shortcuts_append_paths (impl, bookmarks);
   gtk_file_paths_free (bookmarks);
+
+  if (impl->num_bookmarks > 0)
+    {
+      shortcuts_insert_separator (impl);
+    }
 }
 
-/* Appends the bookmarks separator node and the bookmarks from the file system. */
+/* Inserts the bookmarks separator node */
 static void
-shortcuts_append_bookmarks (GtkFileChooserDefault *impl)
+shortcuts_insert_separator (GtkFileChooserDefault *impl)
 {
   GtkTreeIter iter;
 
-  gtk_list_store_append (impl->shortcuts_model, &iter);
+  gtk_list_store_insert (impl->shortcuts_model, &iter,
+			 shortcuts_get_index (impl, SHORTCUTS_SEPARATOR));
   gtk_list_store_set (impl->shortcuts_model, &iter,
 		      SHORTCUTS_COL_PIXBUF, NULL,
 		      SHORTCUTS_COL_PIXBUF_VISIBLE, FALSE,
 		      SHORTCUTS_COL_NAME, NULL,
 		      SHORTCUTS_COL_PATH, NULL,
 		      -1);
-  shortcuts_add_bookmarks (impl);
 }
 
 /* Creates the GtkTreeStore used as the shortcuts model */
@@ -965,7 +975,7 @@ create_shortcuts_model (GtkFileChooserDefault *impl)
       shortcuts_append_home (impl);
       shortcuts_append_desktop (impl);
       shortcuts_add_volumes (impl);
-      shortcuts_append_bookmarks (impl);
+      shortcuts_add_bookmarks (impl);
     }
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->shortcuts_tree), GTK_TREE_MODEL (impl->shortcuts_model));
