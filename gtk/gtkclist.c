@@ -2069,10 +2069,7 @@ list_requisition_width (GtkCList *clist)
   gint width = CELL_SPACING;
   gint i;
 
-  for (i = clist->columns - 1; i >= 0 && !clist->column[i].visible; i--)
-    ;
-
-  for (; i >= 0; i--)
+  for (i = clist->columns - 1; i >= 0; i--)
     {
       if (!clist->column[i].visible)
 	continue;
@@ -2098,15 +2095,19 @@ new_column_width (GtkCList *clist,
   gint width;
   gint cx;
   gint dx;
+  gint last_column;
 
   /* first translate the x position from widget->window
    * to clist->clist_window */
   cx = *x - xthickness;
 
+  for (last_column = clist->columns - 1;
+       last_column >= 0 && !clist->column[last_column].visible; last_column--);
+
   /* calculate new column width making sure it doesn't end up
    * less than the minimum width */
   dx = (COLUMN_LEFT_XPIXEL (clist, column) + COLUMN_INSET +
-	(column < clist->columns - 1) * CELL_SPACING);
+	(column < last_column) * CELL_SPACING);
   width = cx - dx;
 
   if (width < MAX (COLUMN_MIN_WIDTH, clist->column[column].min_width))
@@ -5648,6 +5649,7 @@ draw_row (GtkCList     *clist,
   GdkRectangle cell_rectangle;
   GdkRectangle clip_rectangle;
   GdkRectangle intersect_rectangle;
+  gint last_column;
   gint state;
   gint i;
 
@@ -5753,6 +5755,10 @@ draw_row (GtkCList     *clist,
 	}	  
     }
   
+  for (last_column = clist->columns - 1;
+       last_column >= 0 && !clist->column[last_column].visible; last_column--)
+    ;
+
   /* iterate and draw all the columns (row cells) and draw their contents */
   for (i = 0; i < clist->columns; i++)
     {
@@ -5777,7 +5783,7 @@ draw_row (GtkCList     *clist,
       /* calculate clipping region clipping region */
       clip_rectangle.x -= COLUMN_INSET + CELL_SPACING;
       clip_rectangle.width += (2 * COLUMN_INSET + CELL_SPACING +
-			       (i + 1 == clist->columns) * CELL_SPACING);
+			       (i == last_column) * CELL_SPACING);
       
       if (area && !gdk_rectangle_intersect (area, &clip_rectangle,
 					    &intersect_rectangle))
@@ -5788,7 +5794,7 @@ draw_row (GtkCList     *clist,
 
       clip_rectangle.x += COLUMN_INSET + CELL_SPACING;
       clip_rectangle.width -= (2 * COLUMN_INSET + CELL_SPACING +
-			       (i + 1 == clist->columns) * CELL_SPACING);
+			       (i == last_column) * CELL_SPACING);
 
       /* calculate real width for column justification */
       pixmap_width = 0;
@@ -6701,6 +6707,7 @@ title_focus (GtkCList *clist,
 {
   GtkWidget *focus_child;
   gboolean return_val = FALSE;
+  gint last_column;
   gint d = 1;
   gint i = 0;
   gint j;
@@ -6709,6 +6716,10 @@ title_focus (GtkCList *clist,
     return FALSE;
 
   focus_child = GTK_CONTAINER (clist)->focus_child;
+
+  for (last_column = clist->columns - 1;
+       last_column >= 0 && !clist->column[last_column].visible; last_column--)
+    ;
   
   switch (dir)
     {
@@ -6719,7 +6730,7 @@ title_focus (GtkCList *clist,
 	  if (dir == GTK_DIR_UP)
 	    i = COLUMN_FROM_XPIXEL (clist, 0);
 	  else
-	    i = clist->columns - 1;
+	    i = last_column;
 	  focus_child = clist->column[i].button;
 	  dir = GTK_DIR_TAB_FORWARD;
 	}
@@ -6730,7 +6741,7 @@ title_focus (GtkCList *clist,
       d = -1;
       if (!focus_child)
 	{
-	  i = clist->columns - 1;
+	  i = last_column;
 	  focus_child = clist->column[i].button;
 	}
       break;
@@ -6798,7 +6809,7 @@ title_focus (GtkCList *clist,
       else if (COLUMN_LEFT_XPIXEL(clist, j) + clist->column[j].area.width >
 	       clist->clist_window_width)
 	{
-	  if (j == clist->columns-1)
+	  if (j == last_column)
 	    gtk_clist_moveto (clist, -1, j, 0, 0);
 	  else
 	    gtk_clist_moveto (clist, -1, j, 0, 1);
@@ -6884,12 +6895,17 @@ scroll_horizontal (GtkCList      *clist,
 		   gfloat         position)
 {
   gint column = 0;
+  gint last_column;
 
   g_return_if_fail (clist != 0);
   g_return_if_fail (GTK_IS_CLIST (clist));
 
   if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
     return;
+
+  for (last_column = clist->columns - 1;
+       last_column >= 0 && !clist->column[last_column].visible; last_column--)
+    ;
 
   switch (scroll_type)
     {
@@ -6900,13 +6916,13 @@ scroll_horizontal (GtkCList      *clist,
 	column--;
       break;
     case GTK_SCROLL_STEP_FORWARD:
-      column =  COLUMN_FROM_XPIXEL (clist, clist->clist_window_width);
+      column = COLUMN_FROM_XPIXEL (clist, clist->clist_window_width);
       if (column < 0)
 	return;
       if (COLUMN_LEFT_XPIXEL (clist, column) +
 	  clist->column[column].area.width +
 	  CELL_SPACING + COLUMN_INSET - 1 <= clist->clist_window_width &&
-	  column < clist->columns - 1)
+	  column < last_column)
 	column++;
       break;
     case GTK_SCROLL_PAGE_BACKWARD:
@@ -6914,7 +6930,22 @@ scroll_horizontal (GtkCList      *clist,
       return;
     case GTK_SCROLL_JUMP:
       if (position >= 0 && position <= 1)
-	column = position * (clist->columns - 1);
+	{
+	  gint vis_columns = 0;
+	  gint i;
+
+	  for (i = 0; i <= last_column; i++)
+ 	    if (clist->column[i].visible)
+	      vis_columns++;
+
+	  column = position * vis_columns;
+
+	  for (i = 0; i <= last_column && column > 0; i++)
+	    if (clist->column[i].visible)
+	      column--;
+
+	  column = i;
+	}
       else
 	return;
       break;
@@ -6927,7 +6958,7 @@ scroll_horizontal (GtkCList      *clist,
   else if (COLUMN_LEFT_XPIXEL (clist, column) + CELL_SPACING + COLUMN_INSET - 1
 	   + clist->column[column].area.width > clist->clist_window_width)
     {
-      if (column == clist->columns - 1)
+      if (column == last_column)
 	gtk_clist_moveto (clist, -1, column, 0, 0);
       else
 	gtk_clist_moveto (clist, -1, column, 0, 1);

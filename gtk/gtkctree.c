@@ -1580,6 +1580,7 @@ draw_row (GtkCList     *clist,
   GdkRectangle cell_rectangle; 
   GdkRectangle clip_rectangle;
   GdkRectangle intersect_rectangle;
+  gint last_column;
   gint column_left = 0;
   gint column_right = 0;
   gint offset = 0;
@@ -1729,6 +1730,10 @@ draw_row (GtkCList     *clist,
 	}
     }	  
 
+  for (last_column = clist->columns - 1;
+       last_column >= 0 && !clist->column[last_column].visible; last_column--)
+    ;
+
   /* iterate and draw all the columns (row cells) and draw their contents */
   for (i = 0; i < clist->columns; i++)
     {
@@ -1754,7 +1759,7 @@ draw_row (GtkCList     *clist,
 
       cell_rectangle.x = clip_rectangle.x - COLUMN_INSET - CELL_SPACING;
       cell_rectangle.width = (clip_rectangle.width + 2 * COLUMN_INSET +
-			      (1 + (i + 1 == clist->columns)) * CELL_SPACING);
+			      (1 + (i == last_column)) * CELL_SPACING);
       cell_rectangle.y = clip_rectangle.y;
       cell_rectangle.height = clip_rectangle.height;
 

@@ -1,3 +1,10 @@
+Sat Feb  6 00:21:14 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (draw_row): 
+	* gtk/gtkclist.c (draw_row) (new_column_width) (scroll_horizontal)
+	(title_focus): search last visible column instead of
+	using clist->columns.
+
 Fri Feb  5 13:23:50 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_move_resize): Adjust
