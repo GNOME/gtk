@@ -196,7 +196,9 @@ GtkTreeSortOrder        gtk_tree_view_column_get_sort_order      (GtkTreeViewCol
  */
 void                    gtk_tree_view_column_cell_set_cell_data  (GtkTreeViewColumn       *tree_column,
 								  GtkTreeModel            *tree_model,
-								  GtkTreeIter             *iter);
+								  GtkTreeIter             *iter,
+								  gboolean                 is_expander,
+								  gboolean                 is_expanded);
 void                    gtk_tree_view_column_cell_get_size       (GtkTreeViewColumn       *tree_column,
 								  GdkRectangle            *cell_area,
 								  gint                    *x_offset,

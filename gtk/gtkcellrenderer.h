@@ -62,6 +62,8 @@ struct _GtkCellRenderer
 
   guint can_activate : 1;
   guint visible : 1;
+  guint is_expander : 1;
+  guint is_expanded : 1;
 };
 
 struct _GtkCellRendererClass

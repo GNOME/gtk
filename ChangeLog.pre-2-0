@@ -1,3 +1,13 @@
+Sat Aug 18 04:34:31 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_class_init): 2 new
+	signals; is_expander/is_expanded.
+
+	* gtk/gtlcellrendererpixbuf.c: Allow other expanded and closed
+	pixbufs.
+
+	* gtk/gtktreeview.c: set above properties.
+
 Sat Aug 18 23:01:33 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.h: Really remove set_default_style().

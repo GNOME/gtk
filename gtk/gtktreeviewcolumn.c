@@ -2019,6 +2019,8 @@ gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn     *tree_column)
  * @tree_column: A #GtkTreeViewColumn.
  * @tree_model: The #GtkTreeModel to to get the cell renderers attributes from.
  * @iter: The #GtkTreeIter to to get the cell renderer's attributes from.
+ * @is_expander: TRUE, if the row has children
+ * @is_expanded: TRUE, if the row has visible children
  * 
  * Sets the cell renderer based on the @tree_model and @tree_node.  That is, for
  * every attribute mapping in @tree_column, it will get a value from the set
@@ -2028,7 +2030,9 @@ gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn     *tree_column)
 void
 gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
 					 GtkTreeModel      *tree_model,
-					 GtkTreeIter       *iter)
+					 GtkTreeIter       *iter,
+					 gboolean           is_expander,
+					 gboolean           is_expanded)
 {
   GSList *list;
   GValue value = { 0, };
@@ -2048,6 +2052,7 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
       list = info->attributes;
 
       g_object_freeze_notify (cell);
+      g_object_set (cell, "is_expander", is_expander, "is_expanded", is_expanded, NULL);
 
       while (list && list->next)
 	{

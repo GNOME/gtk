@@ -42,6 +42,8 @@ enum {
   PROP_YPAD,
   PROP_WIDTH,
   PROP_HEIGHT,
+  PROP_IS_EXPANDER,
+  PROP_IS_EXPANDED,
 };
 
 
@@ -182,6 +184,25 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						     -1,
 						     G_PARAM_READABLE |
 						     G_PARAM_WRITABLE));
+
+  g_object_class_install_property (object_class,
+				   PROP_IS_EXPANDER,
+				   g_param_spec_boolean ("is_expander",
+							 _("Is Expander"),
+							 _("Row has children."),
+							 FALSE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
+
+
+  g_object_class_install_property (object_class,
+				   PROP_IS_EXPANDED,
+				   g_param_spec_boolean ("is_expanded",
+							 _("Is Expanded"),
+							 _("Row is an expander row, and is expanded"),
+							 FALSE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
 }
 
 static void
@@ -217,6 +238,12 @@ gtk_cell_renderer_get_property (GObject     *object,
       break;
     case PROP_HEIGHT:
       g_value_set_int (value, cell->height);
+      break;
+    case PROP_IS_EXPANDER:
+      g_value_set_int (value, cell->is_expander);
+      break;
+    case PROP_IS_EXPANDED:
+      g_value_set_int (value, cell->is_expanded);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -266,6 +293,14 @@ gtk_cell_renderer_set_property (GObject      *object,
     case PROP_HEIGHT:
       cell->height = g_value_get_int (value);
       g_object_notify (object, "height");
+      break;
+    case PROP_IS_EXPANDER:
+      cell->is_expander = g_value_get_boolean (value);
+      g_object_notify (object, "is_expander");
+      break;
+    case PROP_IS_EXPANDED:
+      cell->is_expanded = g_value_get_boolean (value);
+      g_object_notify (object, "is_expanded");
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
