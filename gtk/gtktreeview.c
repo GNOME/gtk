@@ -3011,6 +3011,17 @@ gtk_tree_view_reordered (GtkTreeModel *model,
 			 GtkTreePath  *parent,
 			 gint         *new_order)
 {
+  GtkTreeView *tree_view = GTK_TREE_VIEW (model);
+  GtkTreeIter iter;
+  GArray *array;
+  gint len;
+
+  gtk_tree_model_get_iter (model, parent, &iter);
+  len = gtk_tree_model_iter_n_children (model, &iter);
+
+  if (len < 2)
+    return;
+
   
 }
 

@@ -28,7 +28,6 @@ extern "C" {
 
 typedef enum
 {
-  GTK_TREE_SORT_NONE,
   GTK_TREE_SORT_ASCENDING,
   GTK_TREE_SORT_DESCENDING
 } GtkTreeSortOrder;
@@ -71,19 +70,20 @@ struct _GtkTreeSortableIface
 };
 
 
-GType    gtk_tree_sortable_get_type         (void) G_GNUC_CONST;
+GType    gtk_tree_sortable_get_type                (void) G_GNUC_CONST;
 
-gboolean gtk_tree_sortable_get_sort_id      (GtkTreeSortable        *sortable,
-					     gint                   *sort_column_id,
-					     GtkTreeSortOrder       *order);
-void     gtk_tree_sortable_set_sort_id      (GtkTreeSortable        *sortable,
-					     gint                    sort_column_id,
-					     GtkTreeSortOrder        order);
-void     gtk_tree_sortable_sort_id_set_func (GtkTreeSortable        *sortable,
-					     gint                    sort_column_id,
-					     GtkTreeIterCompareFunc  func,
-					     gpointer                data,
-					     GtkDestroyNotify        destroy);
+gboolean gtk_tree_sortable_get_sort_column_id      (GtkTreeSortable        *sortable,
+						    gint                   *sort_column_id,
+						    GtkTreeSortOrder       *order);
+void     gtk_tree_sortable_set_sort_column_id      (GtkTreeSortable        *sortable,
+						    gint                    sort_column_id,
+						    GtkTreeSortOrder        order);
+void     gtk_tree_sortable_sort_column_id_set_func (GtkTreeSortable        *sortable,
+						    gint                    sort_column_id,
+						    GtkTreeIterCompareFunc  func,
+						    gpointer                data,
+						    GtkDestroyNotify        destroy);
+
 
 
 

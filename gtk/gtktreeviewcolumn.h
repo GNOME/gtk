@@ -64,8 +64,6 @@ struct _GtkTreeViewColumn
   GdkWindow *window;
   gfloat xalign;
 
-  gint id;
-
   gint width;
   gint min_width;
   gint max_width;
@@ -78,7 +76,13 @@ struct _GtkTreeViewColumn
   GtkCellRenderer *cell;
   GSList *attributes;
   GtkTreeViewColumnSizing column_type;
+
+  /* Sorting */
+  guint sort_signal;
+  gint sort_column_id;
   GtkTreeSortOrder sort_order;
+
+
   guint visible       : 1;
   guint button_active : 1;
   guint dirty         : 1;
@@ -147,6 +151,14 @@ GtkWidget            *gtk_tree_view_column_get_widget         (GtkTreeViewColumn
 void                  gtk_tree_view_column_set_alignment      (GtkTreeViewColumn *tree_column,
                                                                gfloat             xalign);
 gfloat                gtk_tree_view_column_get_alignment      (GtkTreeViewColumn *tree_column);
+
+
+/* You probably only want to use gtk_tree_view_column_set_sort_column_id.  The
+ * other sorting functions exist primarily to let others do their own custom sorting.
+ */
+
+void                  gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
+							       gint               sort_column_id);
 void                  gtk_tree_view_column_set_sort_indicator (GtkTreeViewColumn *tree_column,
                                                                gboolean           setting);
 gboolean              gtk_tree_view_column_get_sort_indicator (GtkTreeViewColumn *tree_column);

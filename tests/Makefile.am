@@ -31,21 +31,24 @@ LDADDS = @STRIP_BEGIN@ 					\
 @STRIP_END@
 
 noinst_PROGRAMS = 		\
-	testsocket		\
-	testsocket_child	\
+##	testsocket		\
+##	testsocket_child	\
 	testtreeview		\
 	testtreefocus		\
-	testtreecolumns
+	testtreecolumns		\
+	testtreesort
 
-testsocket_DEPENDENCIES = $(DEPS)
-testsocket_child_DEPENDENCIES = $(DEPS)
+#testsocket_DEPENDENCIES = $(DEPS)
+#testsocket_child_DEPENDENCIES = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
 testtreefocus_DEPENDENCIES = $(DEPS)
 testtreecolumns_DEPENDENCIES = $(DEPS)
+testtreesort_DEPENDENCIES = $(DEPS)
 
-testsocket_LDADD = $(LDADDS)
-testsocket_child_LDADD = $(LDADDS)
+#testsocket_LDADD = $(LDADDS)
+#testsocket_child_LDADD = $(LDADDS)
 testtreeview_LDADD = $(LDADDS)
 testtreefocus_LDADD = $(LDADDS)
 testtreecolumns_LDADD = $(LDADDS)
+testtreesort_LDADD = $(LDADDS)
 

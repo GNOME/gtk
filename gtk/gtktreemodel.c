@@ -112,9 +112,10 @@ gtk_tree_model_base_init (gpointer g_class)
 		     G_SIGNAL_RUN_LAST,
 		     G_STRUCT_OFFSET (GtkTreeModelIface, reordered),
 		     NULL, NULL,
-		     gtk_marshal_VOID__BOXED_POINTER,
-		     G_TYPE_NONE, 2,
+		     gtk_marshal_VOID__BOXED_BOXED_POINTER,
+		     G_TYPE_NONE, 3,
 		     GTK_TYPE_TREE_PATH,
+		     GTK_TYPE_TREE_ITER,
 		     G_TYPE_POINTER);
       initialized = TRUE;
     }

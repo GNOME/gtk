@@ -264,7 +264,8 @@ gtk_tree_data_list_compare_func (GtkTreeModel *model,
   GValue a_value = {0, };
   GValue b_value = {0, };
   gint retval;
-  
+  gchar *stra, *strb;
+
   gtk_tree_model_get_value (model, a, column, &a_value);
   gtk_tree_model_get_value (model, b, column, &b_value);
 
@@ -299,7 +300,13 @@ gtk_tree_data_list_compare_func (GtkTreeModel *model,
       retval = (g_value_get_double (&a_value) < g_value_get_double (&b_value));
       break;
     case G_TYPE_STRING:
-      retval = strcmp (g_value_get_string (&a_value), g_value_get_string (&b_value));
+      stra = g_value_get_string (&a_value);
+      strb = g_value_get_string (&b_value);
+      if (stra == NULL)
+	stra = "";
+      if (strb == NULL)
+	strb = "";
+      retval = strcmp (stra, strb);
       break;
     case G_TYPE_POINTER:
     case G_TYPE_BOXED:
@@ -355,4 +362,19 @@ _gtk_tree_data_list_header_free (GList *list)
       g_free (header);
     }
   g_list_free (list);
+}
+
+GtkTreeDataSortHeader *
+_gtk_tree_data_list_get_header (GList *header_list,
+				gint   sort_column_id)
+{
+  GtkTreeDataSortHeader *header = NULL;
+
+  for (; header_list; header_list = header_list->next)
+    {
+      header = (GtkTreeDataSortHeader*) header_list->data;
+      if (header->sort_column_id == sort_column_id)
+	return header;
+    }
+  return NULL;
 }

@@ -252,6 +252,8 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->dirty = TRUE;
   tree_column->sort_order = GTK_TREE_SORT_ASCENDING;
   tree_column->show_sort_indicator = FALSE;
+  tree_column->sort_signal = 0;
+  tree_column->sort_column_id = -1;
 }
 
 static void
@@ -1478,6 +1480,79 @@ gtk_tree_view_column_get_alignment (GtkTreeViewColumn *tree_column)
   return tree_column->xalign;
 }
 
+
+static void
+sort_clicked_func (GtkTreeViewColumn *tree_column,
+		   gpointer           data)
+{
+  GList *list;
+
+  g_return_if_fail (tree_column->tree_view != NULL);
+
+  if (tree_column->show_sort_indicator)
+    {
+      if (tree_column->sort_order == GTK_TREE_SORT_ASCENDING)
+	gtk_tree_view_column_set_sort_order (tree_column, GTK_TREE_SORT_DESCENDING);
+      else
+	gtk_tree_view_column_set_sort_order (tree_column, GTK_TREE_SORT_ASCENDING);
+    }
+  else
+    {
+      gtk_tree_view_column_set_sort_order (tree_column, GTK_TREE_SORT_ASCENDING);
+      gtk_tree_view_column_set_sort_indicator (tree_column, TRUE);
+    }
+
+  list = (GTK_TREE_VIEW (tree_column->tree_view)->priv->columns);
+  g_assert (list);
+  while (list)
+    {
+      GtkTreeViewColumn *tmp_column;
+
+      tmp_column = GTK_TREE_VIEW_COLUMN (list->data);
+      if (tmp_column->visible && tmp_column != tree_column)
+	gtk_tree_view_column_set_sort_indicator (tmp_column, FALSE);
+
+      list = list->next;
+    }
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (GTK_TREE_VIEW (tree_column->tree_view)->priv->model),
+					tree_column->sort_column_id,
+					tree_column->sort_order);
+}
+
+/**
+ * gtk_tree_view_column_set_sort_column_id:
+ * @tree_column: a #GtkTreeViewColumn
+ * @sort_column_id: The sort_column_id of the model to sort on.
+ * 
+ * Sets the sort_column_id that the column sorts on.
+ **/
+void
+gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
+					 gint               sort_column_id)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (sort_column_id >= 0);
+
+  if (tree_column->sort_column_id == sort_column_id)
+    return;
+
+  if (sort_column_id == -1)
+    {
+      if (tree_column->sort_signal)
+	g_signal_handler_disconnect (G_OBJECT (tree_column), tree_column->sort_signal);
+      return;
+    }
+
+  if (! tree_column->sort_signal)
+    tree_column->sort_signal = g_signal_connectc (G_OBJECT (tree_column),
+						  "clicked",
+						  G_CALLBACK (sort_clicked_func),
+						  NULL, FALSE);
+  tree_column->sort_column_id = sort_column_id;
+  gtk_tree_view_column_set_sort_indicator (tree_column, FALSE);
+  gtk_tree_view_column_set_sort_order (tree_column, GTK_TREE_SORT_ASCENDING);
+}
+
 /**
  * gtk_tree_view_column_set_sort_indicator:
  * @tree_column: a #GtkTreeViewColumn
@@ -1531,12 +1606,13 @@ gtk_tree_view_column_get_sort_indicator  (GtkTreeViewColumn     *tree_column)
  * @order: sort order that the sort indicator should indicate
  *
  * Changes the appearance of the sort indicator. (This <emphasis>does
- * not</emphasis> actually sort the model - for the models shipped
- * with GTK+, use at gtk_tree_sortable_set_sort_column() to do
- * that. For custom models, the mechanism will vary.) The sort
- * indicator changes direction to indicate normal sort or reverse
- * sort. Note that you must have the sort indicator enabled to see
- * anything when calling this function; see
+ * not</emphasis> actually sort the model.  Use
+ * gtk_tree_view_column_set_sort_column_id() if you want automatic sorting
+ * support.  This function is primarily for custom sorting behavior, and should
+ * be used in conjunction with #gtk_tree_sortable_set_sort_column() to do
+ * that. For custom models, the mechanism will vary.) The sort indicator changes
+ * direction to indicate normal sort or reverse sort. Note that you must have
+ * the sort indicator enabled to see anything when calling this function; see
  * gtk_tree_view_column_set_sort_indicator().
  * 
  **/

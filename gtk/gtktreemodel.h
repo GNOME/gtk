@@ -69,6 +69,7 @@ struct _GtkTreeModelIface
 				      GtkTreePath  *path);
   void         (* reordered)         (GtkTreeModel *tree_model,
 				      GtkTreePath  *path,
+				      GtkTreeIter  *iter,
 				      gint         *new_order);
 
   /* Virtual Table */
@@ -219,6 +220,7 @@ void gtk_tree_model_deleted           (GtkTreeModel *tree_model,
 				       GtkTreePath  *path);
 void gtk_tree_model_reordered         (GtkTreeModel *tree_model,
 				       GtkTreePath  *path,
+				       GtkTreeIter  *iter,
 				       gint         *new_order);
 
 
