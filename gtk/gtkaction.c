@@ -37,6 +37,7 @@
 #include "gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
+#include "gtkmarshalers.h"
 #include "gtkmenuitem.h"
 #include "gtkstock.h"
 #include "gtktoolbutton.h"
@@ -71,6 +72,8 @@ struct _GtkActionPrivate
 
 enum 
 {
+  CONNECT_PROXY,
+  DISCONNECT_PROXY,
   ACTIVATE,
   LAST_SIGNAL
 };
@@ -247,6 +250,47 @@ gtk_action_class_init (GtkActionClass *klass)
 		  G_STRUCT_OFFSET (GtkActionClass, activate),  NULL, NULL,
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkAction::connect-proxy:
+   * @action: the action
+   * @proxy: the proxy
+   *
+   * The connect_proxy signal is emitted after connecting a proxy to 
+   * an action. Note that the proxy may have been connected to a different
+   * action before.
+   *
+   * This is intended for simple customizations for which a custom action
+   * class would be too clumsy, e.g. showing tooltips for menuitems in the
+   * statusbar.
+   *
+   * Since: 2.4
+   */
+  action_signals[CONNECT_PROXY] =
+    g_signal_new ("connect_proxy",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  0, 0, NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, 
+		  GTK_TYPE_WIDGET);
+
+  /**
+   * GtkAction::disconnect-proxy:
+   * @action: the action
+   * @proxy: the proxy
+   *
+   * The disconnect_proxy signal is emitted after disconnecting a proxy 
+   * from an action. 
+   *
+   * Since: 2.4
+   */
+  action_signals[DISCONNECT_PROXY] =
+    g_signal_new ("disconnect_proxy",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  0, 0, NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, 
+		  GTK_TYPE_WIDGET);
 
   g_type_class_add_private (gobject_class, sizeof (GtkActionPrivate));
 }
@@ -709,6 +753,8 @@ connect_proxy (GtkAction     *action,
 			       G_CALLBACK (gtk_action_activate), action,
 			       G_CONNECT_SWAPPED);
     }
+
+  g_signal_emit (action, action_signals[CONNECT_PROXY], 0, proxy);
 }
 
 static void
@@ -749,6 +795,8 @@ disconnect_proxy (GtkAction *action,
   g_signal_handlers_disconnect_by_func (proxy,
 					G_CALLBACK (gtk_action_create_menu_proxy),
 					action);
+
+  g_signal_emit (action, action_signals[DISCONNECT_PROXY], 0, proxy);
 }
 
 /**

@@ -125,19 +125,19 @@ static GtkActionEntry entries[] = {
   { "JustifyMenuAction", NULL, "_Justify" },
   { "Test", NULL, "Test" },
 
-  { "QuitAction",  GTK_STOCK_QUIT,  NULL,     "<control>q", NULL, G_CALLBACK (gtk_main_quit) },
-  { "NewAction",   GTK_STOCK_NEW,   NULL,     "<control>n", NULL, G_CALLBACK (activate_action) },
-  { "New2Action",  GTK_STOCK_NEW,   NULL,     "<control>m", NULL, G_CALLBACK (activate_action) },
-  { "OpenAction",  GTK_STOCK_OPEN,  NULL,     "<control>o", NULL, G_CALLBACK (activate_action) },
-  { "CutAction",   GTK_STOCK_CUT,   NULL,     "<control>x", NULL, G_CALLBACK (activate_action) },
-  { "CopyAction",  GTK_STOCK_COPY,  NULL,     "<control>c", NULL, G_CALLBACK (activate_action) },
-  { "PasteAction", GTK_STOCK_PASTE, NULL,     "<control>v", NULL, G_CALLBACK (activate_action) },
-  { "AboutAction", NULL,            "_About", NULL,         NULL, G_CALLBACK (activate_action) },
+  { "QuitAction",  GTK_STOCK_QUIT,  NULL,     "<control>q", "Quit", G_CALLBACK (gtk_main_quit) },
+  { "NewAction",   GTK_STOCK_NEW,   NULL,     "<control>n", "Create something", G_CALLBACK (activate_action) },
+  { "New2Action",  GTK_STOCK_NEW,   NULL,     "<control>m", "Create something else", G_CALLBACK (activate_action) },
+  { "OpenAction",  GTK_STOCK_OPEN,  NULL,     "<control>o", "Open it", G_CALLBACK (activate_action) },
+  { "CutAction",   GTK_STOCK_CUT,   NULL,     "<control>x", "Knive", G_CALLBACK (activate_action) },
+  { "CopyAction",  GTK_STOCK_COPY,  NULL,     "<control>c", "Copy", G_CALLBACK (activate_action) },
+  { "PasteAction", GTK_STOCK_PASTE, NULL,     "<control>v", "Paste", G_CALLBACK (activate_action) },
+  { "AboutAction", NULL,            "_About", NULL,         "About", G_CALLBACK (activate_action) },
 };
 static guint n_entries = G_N_ELEMENTS (entries);
 
 static GtkToggleActionEntry toggle_entries[] = {
-  { "BoldAction",  GTK_STOCK_BOLD,  "_Bold",  "<control>b", NULL, G_CALLBACK (toggle_action), 
+  { "BoldAction",  GTK_STOCK_BOLD,  "_Bold",  "<control>b", "Make it bold", G_CALLBACK (toggle_action), 
     TRUE },
 };
 static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
@@ -442,13 +442,97 @@ activate_path (GtkWidget      *button,
     g_message ("no action found");
 }
 
+typedef struct _ActionStatus ActionStatus;
+
+struct _ActionStatus {
+  GtkAction *action;
+  GtkWidget *statusbar;
+};
+
+static void
+action_status_destroy (gpointer data)
+{
+  ActionStatus *action_status = data;
+
+  g_object_unref (action_status->action);
+  g_object_unref (action_status->statusbar);
+
+  g_free (action_status);
+}
+
+static void
+set_tip (GtkWidget *widget)
+{
+  ActionStatus *data;
+  gchar *tooltip;
+  
+  data = g_object_get_data (G_OBJECT (widget), "action-status");
+  
+  if (data) 
+    {
+      g_object_get (G_OBJECT (data->action), "tooltip", &tooltip, NULL);
+      
+      gtk_statusbar_push (GTK_STATUSBAR (data->statusbar), 0, 
+			  tooltip ? tooltip : "");
+      
+      g_free (tooltip);
+    }
+}
+
+static void
+unset_tip (GtkWidget *widget)
+{
+  ActionStatus *data;
+
+  data = g_object_get_data (G_OBJECT (widget), "action-status");
+
+  if (data)
+    gtk_statusbar_pop (GTK_STATUSBAR (data->statusbar), 0);
+}
+		    
+static void
+connect_proxy (GtkAction    *action,
+	       GtkWidget    *proxy,
+	       GtkWidget    *statusbar)
+{
+  if (GTK_IS_MENU_ITEM (proxy)) 
+    {
+      ActionStatus *data;
+
+      data = g_object_get_data (G_OBJECT (proxy), "action-status");
+      if (data)
+	{
+	  g_object_unref (data->action);
+	  g_object_unref (data->statusbar);
+
+	  data->action = g_object_ref (action);
+	  data->statusbar = g_object_ref (statusbar);
+	}
+      else
+	{
+	  data = g_new0 (ActionStatus, 1);
+
+	  data->action = g_object_ref (action);
+	  data->statusbar = g_object_ref (statusbar);
+
+	  g_object_set_data_full (G_OBJECT (proxy), "action-status", 
+				  data, action_status_destroy);
+	  
+	  g_signal_connect (proxy, "select",  G_CALLBACK (set_tip), 0);
+	  g_signal_connect (proxy, "deselect", G_CALLBACK (unset_tip), 0);
+	}
+    }
+}
+
 int
 main (int argc, char **argv)
 {
   GtkActionGroup *action_group;
+  GtkAction *action;
+  GList *tmp;
   GtkUIManager *merge;
   GtkWidget *window, *table, *frame, *menu_box, *vbox, *view;
-  GtkWidget *button, *area;
+  GtkWidget *button, *area, *statusbar;
   gint i;
   
   gtk_init (&argc, &argv);
@@ -482,7 +566,10 @@ main (int argc, char **argv)
   menu_box = gtk_vbox_new (FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (menu_box), 2);
   gtk_container_add (GTK_CONTAINER (frame), menu_box);
-  
+
+  statusbar = gtk_statusbar_new ();
+  gtk_box_pack_end (GTK_BOX (menu_box), statusbar, FALSE, FALSE, 0);
+    
   area = gtk_drawing_area_new ();
   gtk_widget_set_events (area, GDK_BUTTON_PRESS_MASK);
   gtk_widget_set_size_request (area, -1, 40);
@@ -494,17 +581,23 @@ main (int argc, char **argv)
   gtk_action_connect_proxy (gtk_action_group_get_action (action_group, "AboutAction"), 
 			    button);
   gtk_widget_show (button);
-  merge = gtk_ui_manager_new ();
 
   button = gtk_check_button_new ();
   gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE, 0);
   gtk_action_connect_proxy (gtk_action_group_get_action (action_group, "BoldAction"), 
 			    button);
   gtk_widget_show (button);
-  merge = gtk_ui_manager_new ();
 
-  g_signal_connect (area, "button_press_event",
-		    G_CALLBACK (area_press), merge);
+  for (tmp = gtk_action_group_list_actions (action_group);
+       tmp != NULL;
+       tmp = tmp->next)
+    {
+      action = tmp->data;
+      g_signal_connect (action, "connect-proxy", 
+			G_CALLBACK (connect_proxy), statusbar);
+    }
+  merge = gtk_ui_manager_new ();
+  g_signal_connect (area, "button_press_event", G_CALLBACK (area_press), merge);
 
   gtk_ui_manager_insert_action_group (merge, action_group, 0);
   g_signal_connect (merge, "add_widget", G_CALLBACK (add_widget), menu_box);

@@ -136,7 +136,6 @@ static void     node_remove_ui_reference    (Node              *node,
 					     guint              merge_id);
 
 
-
 enum 
 {
   ADD_WIDGET,
@@ -197,7 +196,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
   gobject_class->finalize = gtk_ui_manager_finalize;
   gobject_class->set_property = gtk_ui_manager_set_property;
   gobject_class->get_property = gtk_ui_manager_get_property;
-
+  
   /**
    * GtkUIManager:add-tearoffs:
    *
@@ -1856,6 +1855,7 @@ update_node (GtkUIManager *self,
 	      }
 	    else
 	      gtk_action_connect_proxy (action, info->proxy);
+
 	    if (prev_submenu)
 	      {
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy),
@@ -2029,11 +2029,13 @@ update_node (GtkUIManager *self,
 		  gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
 				      GTK_TOOL_ITEM (info->proxy), pos);
 
-		  /* FIXME: this is necessary, since tooltips on toolitems
-		   * can't be set before the toolitem is added to the toolbar.
-		   */
+                 /* FIXME: we must trigger the notify::tooltip handler, since 
+		  * tooltips on toolitems can't be set before the toolitem 
+		  * is added to the toolbar.
+                  */
 		  g_object_get (G_OBJECT (action), "tooltip", &tooltip, NULL);
 		  g_object_set (G_OBJECT (action), "tooltip", tooltip, NULL);
+		  g_free (tooltip);
 		}
 	    }
 	  else
@@ -2042,7 +2044,6 @@ update_node (GtkUIManager *self,
 						    G_CALLBACK (update_smart_separators),
 						    0);
 	      gtk_action_connect_proxy (action, info->proxy);
-
 	    }
 	  g_signal_connect (info->proxy, "notify::visible",
 			    G_CALLBACK (update_smart_separators), 0);

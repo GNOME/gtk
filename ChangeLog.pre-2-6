@@ -1,3 +1,15 @@
+2003-09-27  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testmerge.c: Demonstrate the use of the 
+	connect-proxy signal.
+
+	* gtk/gtkaction.c (connect_proxy): Add connect-proxy and 
+	disconnect-proxy signals to do small customizations 
+	like displaying tooltips in the statusbar without 
+	custom actions.  (#122894, Philip Langdale)
+
+	* gtk/gtkuimanager.c (update_node): Don't leak tooltip.
+
 Fri Sep 26 23:49:44 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Landing the new ComboBox. Note that only gtkcombobox.h and
