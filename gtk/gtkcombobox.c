@@ -1116,6 +1116,12 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
       gtk_menu_set_active (GTK_MENU (combo_box->priv->popup_widget),
 			   combo_box->priv->active_item);
 
+      if (combo_box->priv->wrap_width == 0)
+	{
+	  width = GTK_WIDGET (combo_box)->allocation.width;
+	  gtk_widget_set_size_request (combo_box->priv->popup_widget, width, -1);
+	}
+      
       gtk_menu_popup (GTK_MENU (combo_box->priv->popup_widget),
 		      NULL, NULL,
 		      gtk_combo_box_menu_position, combo_box,
@@ -1867,6 +1873,7 @@ gtk_combo_box_menu_button_press (GtkWidget      *widget,
                                  gpointer        user_data)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+  gint width;
 
   if (! GTK_IS_MENU (combo_box->priv->popup_widget))
     return FALSE;
@@ -1877,6 +1884,12 @@ gtk_combo_box_menu_button_press (GtkWidget      *widget,
       
       gtk_menu_set_active (GTK_MENU (combo_box->priv->popup_widget),
 			   combo_box->priv->active_item);
+
+      if (combo_box->priv->wrap_width == 0)
+	{
+	  width = GTK_WIDGET (combo_box)->allocation.width;
+	  gtk_widget_set_size_request (combo_box->priv->popup_widget, width, -1);
+	}
 
       gtk_menu_popup (GTK_MENU (combo_box->priv->popup_widget),
                       NULL, NULL,
