@@ -1,3 +1,31 @@
+2004-02-23  Federico Mena Quintero  <federico@ximian.com>
+
+	Rework the user interface of the file chooser, as per 
+	Seth Nickell's design.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_class_init): Add binding signals and bindings:
+		"location-popup" - C-l
+		"up-folder"      - C-Up
+		"home-folder"    - C-Home
+	(up_folder_handler): New function; moved the code from up_button_clicked().
+	(up_button_clicked_cb): Call up_folder_handler().
+	(home_folder_handler): New function.
+	(location_popup_handler): New function.
+	(struct _GtkFileChooserDefault): Add an hpaned field.
+	(gtk_file_chooser_default_set_current_name): Check that we are in
+	Save mode.
+	(save_widgets_create): New function, create the widgets specific
+	to Save mode.
+	(main_paned_create): New function, create the hpaned's widgets here.
+	(gtk_file_chooser_default_constructor): Create the open and save
+	widgets, and show only one set.
+	(gtk_file_chooser_default_set_property): Show/hide the save widgets.
+	(gtk_file_chooser_default_get_paths): Only pay attention to the
+	entry in Save mode.
+	(update_chooser_entry): Update the entry only in Save mode.
+	(entry_activate): Removed.
+
 Mon Feb 23 11:20:34 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Remove the configure.in check for fontconfig 
