@@ -1,5 +1,13 @@
 1999-06-01    <timj@dhcpd7.redhat.com>
 
+	* gtk/gtkwindow.c (gtk_window_new): added return if fail for invalid
+	window types.
+
+	* examples/packer/pack.c (main): use GTK_WINDOW_TOPLEVEL instead
+	of GTK_TOPLEVEL for creating the window.
+
+1999-06-01    <timj@dhcpd7.redhat.com>
+
 	* gtk/gtkmain.c (gtk_init_check): don't segfault when --gtk-module is
 	the last argument (reported by Per Winkvist).
 	

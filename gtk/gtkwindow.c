@@ -322,7 +322,9 @@ gtk_window_new (GtkWindowType type)
 {
   GtkWindow *window;
 
-  window = gtk_type_new (gtk_window_get_type ());
+  g_return_val_if_fail (type >= GTK_WINDOW_TOPLEVEL && type <= GTK_WINDOW_POPUP, NULL);
+
+  window = gtk_type_new (GTK_TYPE_WINDOW);
 
   window->type = type;
 
