@@ -109,6 +109,14 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                                              G_MAXINT,
                                                              8,
                                                              G_PARAM_READABLE));
+  /**
+   * GtkMessageDialog::use_separator
+   *
+   * Whether to draw a separator line between the message label and the buttons
+   * in the dialog.
+   *
+   * Since: 2.4
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("use_separator",
 								 P_("Use separator"),
