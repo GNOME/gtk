@@ -114,7 +114,7 @@ extern "C" {
 typedef struct _GtkArg	       	     GtkArg;
 typedef struct _GtkObject   	     GtkObject; /* object forward declaration */
 typedef struct _GtkTypeInfo 	     GtkTypeInfo;
-typedef gint (*GtkFunction)	    (gpointer      data);
+typedef gboolean (*GtkFunction)	    (gpointer      data);
 typedef void (*GtkDestroyNotify)    (gpointer      data);
 typedef void (*GtkCallbackMarshal)  (GtkObject    *object,
 				     gpointer      data,

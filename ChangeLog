@@ -1,3 +1,8 @@
+Thu Nov  1 16:54:00 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktypeutils.h: Make GtkFunction return boolean, not gint.
+	(Daniel Elstner).
+
 Thu Nov  1 16:20:56 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontext.[ch]: Add:
