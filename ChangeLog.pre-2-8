@@ -1,3 +1,9 @@
+2004-10-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_position_func): 
+	Fix positioning near the monitor boundaries.  (#154341,
+	Ken Harris)
+
 2004-10-01  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkglobals-win32.c: Enable wintab (tablets) by
