@@ -1,3 +1,8 @@
+2002-12-14  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_position_menu): Made
+	Xinerama-aware.  (#85711)
+
 Sat Dec 14 14:19:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c: Add a new binding signal, "move_scroll",

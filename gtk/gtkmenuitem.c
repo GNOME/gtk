@@ -922,11 +922,11 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   GtkWidget *widget;
   GtkWidget *parent_menu_item;
   GdkScreen *screen;
-  gint screen_width;
-  gint screen_height;
   gint twidth, theight;
   gint tx, ty;
   GtkTextDirection direction;
+  GdkRectangle monitor;
+  gint monitor_num;
 
   g_return_if_fail (menu != NULL);
   g_return_if_fail (x != NULL);
@@ -941,8 +941,10 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   theight = GTK_WIDGET (menu)->requisition.height;
 
   screen = gtk_widget_get_screen (widget);
-  screen_width = gdk_screen_get_width (screen);
-  screen_height = gdk_screen_get_height (screen);
+  monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+  if (monitor_num < 0)
+    monitor_num = 0;
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
   if (!gdk_window_get_origin (widget->window, &tx, &ty))
     {
@@ -964,11 +966,11 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 	  tx += widget->allocation.width - twidth;
 	}
 
-      if ((ty + widget->allocation.height + theight) <= screen_height)
+      if ((ty + widget->allocation.height + theight) <= monitor.y + monitor.height)
 	ty += widget->allocation.height;
-      else if ((ty - theight) >= 0)
+      else if ((ty - theight) >= monitor.y)
 	ty -= theight;
-      else if (screen_height - (ty + widget->allocation.height) > ty)
+      else if (monitor.y + monitor.height - (ty + widget->allocation.height) > ty)
 	ty += widget->allocation.height;
       else
 	ty -= theight;
@@ -988,7 +990,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
       switch (menu_item->submenu_direction)
 	{
 	case GTK_DIRECTION_LEFT:
-	  if ((tx - twidth) >= 0)
+	  if ((tx - twidth) >= monitor.x)
 	    tx -= twidth;
 	  else
 	    {
@@ -998,7 +1000,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 	  break;
 
 	case GTK_DIRECTION_RIGHT:
-	  if ((tx + widget->allocation.width + twidth - 5) <= screen_width)
+	  if ((tx + widget->allocation.width + twidth - 5) <= monitor.x + monitor.width)
 	    tx += widget->allocation.width - 5;
 	  else
 	    {
@@ -1011,14 +1013,14 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
       ty += widget->allocation.height / 4;
 
       /* If the height of the menu doesn't fit we move it upward. */
-      ty = CLAMP (ty, 0, MAX (0, screen_height - theight));
+      ty = CLAMP (ty, monitor.y, MAX (monitor.y, monitor.y + monitor.height - theight));
       break;
     }
 
   /* If we have negative, tx, here it is because we can't get
    * the menu all the way on screen. Favor the left portion.
    */
-  *x = CLAMP (tx, 0, MAX (0, screen_width - twidth));
+  *x = CLAMP (tx, monitor.x, MAX (monitor.x, monitor.x + monitor.width - twidth));
   *y = ty;
 }
 
