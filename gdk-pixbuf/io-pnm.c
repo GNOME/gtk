@@ -20,8 +20,18 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/* Notes (11/05/99):
+ *
+ * raw pnm, pgm, and pbm files will load now.
+ *
+ * ascii support coming soon.
+ *
+ * next will be incremental loading.
+ */
+ 
 
 #include <config.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -67,6 +77,7 @@ typedef struct {
 
 	guint                    width;
 	guint                    height;
+	guint                    maxval;
 	PnmFormat                type;
 
 	guint                    output_row;  /* last row to be completed */
@@ -81,6 +92,8 @@ gpointer image_begin_load (ModulePreparedNotifyFunc func,
 void image_stop_load (gpointer context);
 gboolean image_load_increment(gpointer context, guchar *buf, guint size);
 
+static void explode_bitmap_into_buf (PnmLoaderContext *context);
+static void explode_gray_into_buf (PnmLoaderContext *context);
 
 /* Destroy notification function for the libart pixbuf */
 static void
@@ -90,36 +103,70 @@ free_buffer (gpointer user_data, gpointer data)
 }
 
 
-/* explode bitmap data into rgb components */
+/* explode bitmap data into rgb components         */
+/* we need to know what the row so we can          */
+/* do sub-byte expansion (since 1 byte = 8 pixels) */
+/* context->dptr MUST point at first byte in incoming data  */
+/* which corresponds to first pixel of row y       */
 static void
-explode_bitmap_into_buf (guchar *dptr, guint w)
+explode_bitmap_into_buf (PnmLoaderContext *context)
 {
-	guchar *p;
-	guchar data;
-	gint   i;
-	
-	for (p = dptr; (p-dptr) < w; p++) {
-		data = *p;
+	gint j;
+	guchar *from, *to, data;
+	gint bit;
+	guchar *dptr;
+	gint wid, x, y;
 
-		for (i=0; i<8; i++, data >> 1)
-			*(p+i) = (data & 1) ? 0xff : 0x00;
+	g_return_if_fail (context != NULL);
+	g_return_if_fail (context->dptr != NULL);
+
+	/* I'm no clever bit-hacker so I'm sure this can be optimized */
+	dptr = context->dptr;
+	y    = context->output_row;
+	wid  = context->width;
+
+	from = dptr + (wid - 1)/8;
+	to   = dptr + (wid - 1) * 3;
+	bit  = 7 - (((y+1)*wid - 1) % 8);
+
+	/* get first byte and align properly */
+	data = from[0];
+	for (j = 0; j < bit; j++, data >>= 1);
+
+	for (x = wid-1; x >= 0; x--) {
+
+		to[0] = to[1] = to[2] = (data & 1) ? 0x00 : 0xff;
+
+		to -= 3;
+		bit++;
+
+		if (bit > 7) {
+			from--;
+			data = from[0];
+			bit = 0;
+		} else {
+			data >>= 1;
+		}
 	}
 }
 
 /* explode gray image row into rgb components in pixbuf */
 static void
-explode_gray_into_buf (guchar *dptr, guint w)
+explode_gray_into_buf (PnmLoaderContext *context)
 {
-	gint i, j;
+	gint j;
 	guchar *from, *to;
+	guint w;
 
-	g_return_if_fail (dptr != NULL);
+	g_return_if_fail (context != NULL);
+	g_return_if_fail (context->dptr != NULL);
 
 	/* Expand grey->colour.  Expand from the end of the
 	 * memory down, so we can use the same buffer.
 	 */
-	from = dptr + w - 1;
-	to = dptr + (w - 1) * 3;
+	w = context->width;
+	from = context->dptr + w - 1;
+	to = context->dptr + (w - 1) * 3;
 	for (j = w - 1; j >= 0; j--) {
 		to[0] = from[0];
 		to[1] = from[0];
@@ -141,8 +188,8 @@ skip_ahead_whitespace (PnmIOBuffer *inbuf)
 	guchar *ptr;
 	guint num_left;
 	
-	g_return_if_fail (inbuf != NULL);
-	g_return_if_fail (inbuf->next_byte != NULL);
+	g_return_val_if_fail (inbuf != NULL, NULL);
+	g_return_val_if_fail (inbuf->next_byte != NULL, NULL);
 	
 	in_comment = FALSE;
 	num_left = inbuf->bytes_left;
@@ -174,8 +221,8 @@ read_til_whitespace (PnmIOBuffer *inbuf, guchar *buf, guint size)
 	guchar *ptr;
 	guint num_left;
 
-	g_return_if_fail (inbuf != NULL);
-	g_return_if_fail (inbuf->next_byte != NULL);
+	g_return_val_if_fail (inbuf != NULL, NULL);
+	g_return_val_if_fail (inbuf->next_byte != NULL, NULL);
 	
 	p = buf;
 	num_left = inbuf->bytes_left;
@@ -207,9 +254,9 @@ read_next_number (PnmIOBuffer *inbuf, guint *value)
 	guint  old_bytes_left;
 	guchar buf[128];
 
-	g_return_if_fail (inbuf != NULL);
-	g_return_if_fail (inbuf->next_byte != NULL);
-	g_return_if_fail (value != NULL);
+	g_return_val_if_fail (inbuf != NULL, -1);
+	g_return_val_if_fail (inbuf->next_byte != NULL, -1);
+	g_return_val_if_fail (value != NULL, -1);
 
 	old_next_byte  = inbuf->next_byte;
 	old_bytes_left = inbuf->bytes_left;
@@ -241,7 +288,6 @@ pnm_read_header (PnmLoaderContext *context)
 	guchar *old_next_byte;
 	guint  old_bytes_left;
 	PnmIOBuffer *inbuf;
-	guint  maxval;
 	guint  w, h;
 	gint rc;
 	PnmFormat  type;
@@ -313,33 +359,195 @@ pnm_read_header (PnmLoaderContext *context)
 	case PNM_FORMAT_PPM_RAW:
 	case PNM_FORMAT_PGM:
 	case PNM_FORMAT_PGM_RAW:
-		if ((rc = read_next_number (inbuf, &maxval)) < 0) {
+		if ((rc = read_next_number (inbuf, &context->maxval)) < 0) {
 			inbuf->next_byte = old_next_byte;
 			inbuf->bytes_left = old_bytes_left;
 			return PNM_SUSPEND;
 		}
 		
-		g_print ("Maximum component value is %d\n", maxval);
+		g_print ("Maximum component value is %d\n", context->maxval);
 		break;
 	default:
 		break;
 	}
 
-	return 0;
+	return PNM_OK;
+}
+
+
+static gint
+pnm_read_raw_scanline (PnmLoaderContext *context)
+{
+	guint  numpix;
+	guint  numbytes, offset;
+	PnmIOBuffer *inbuf;
+
+	g_return_val_if_fail (context != NULL, PNM_FATAL_ERR);
+
+	inbuf = &context->inbuf;
+
+	switch (context->type) {
+	case PNM_FORMAT_PBM_RAW:
+		numpix = inbuf->bytes_left * 8;
+		break;
+	case PNM_FORMAT_PGM_RAW:
+		numpix = inbuf->bytes_left;
+		break;
+	case PNM_FORMAT_PPM_RAW:
+		numpix = inbuf->bytes_left/3;
+		break;
+	default:
+		g_warning ("io-pnm.c: Illegal raw pnm type!\n");
+		return PNM_FATAL_ERR;
+		break;
+	}
+	
+	numpix = MIN (numpix, context->width - context->output_col);
+	
+	if (numpix == 0)
+		return PNM_SUSPEND;
+	
+	context->dptr = context->pixels + 
+		context->output_row * context->width * 3;
+	
+	switch (context->type) {
+	case PNM_FORMAT_PBM_RAW:
+		numbytes = numpix/8;
+		offset = context->output_col/8;
+		break;
+	case PNM_FORMAT_PGM_RAW:
+		numbytes = numpix;
+		offset = context->output_col;
+		break;
+	case PNM_FORMAT_PPM_RAW:
+		numbytes = numpix*3;
+		offset = context->output_col*3;
+		break;
+	default:
+		g_warning ("io-pnm.c: Illegal raw pnm type!\n");
+		break;
+	}
+	
+	memcpy (context->dptr + offset,	inbuf->next_byte, numbytes);
+	
+	inbuf->next_byte  += numbytes;
+	inbuf->bytes_left -= numbytes;
+	
+	context->output_col += numpix;
+	if (context->output_col == context->width) {
+		if ( context->type == PNM_FORMAT_PBM_RAW )
+			explode_bitmap_into_buf(context);
+		else if ( context->type == PNM_FORMAT_PGM_RAW )
+			explode_gray_into_buf (context);
+		
+		context->output_col = 0;
+		context->output_row++;
+		
+	} else {
+		return PNM_SUSPEND;
+	}
+
+	return PNM_OK;
+}
+
+
+static gint
+pnm_read_ascii_scanline (PnmLoaderContext *context)
+{
+	guint  numpix;
+	guint  numbytes, offset;
+	gint   rc;
+	guint  value, numval, i;
+	guchar data;
+	guchar mask;
+	guchar *old_next_byte, *dptr;
+	guint  old_bytes_left;
+	PnmIOBuffer *inbuf;
+
+	g_return_val_if_fail (context != NULL, PNM_FATAL_ERR);
+
+	inbuf = &context->inbuf;
+
+	context->dptr = context->pixels + 
+		context->output_row * context->width * 3;
+
+	switch (context->type) {
+	case PNM_FORMAT_PBM:
+		mask = 0x80;
+		data = 0;
+		numval = 8;
+		break;
+	case PNM_FORMAT_PGM:
+		numval = 1;
+		break;
+	case PNM_FORMAT_PPM:
+		numval = 3;
+		break;
+		
+	default:
+		g_warning ("Can't happen\n");
+		return PNM_FATAL_ERR;
+	}
+
+	old_next_byte  = inbuf->next_byte;
+	old_bytes_left = inbuf->bytes_left;
+	dptr = context->dptr;
+
+	for (i=0; i<numval; i++) {
+		if ((rc = read_next_number (inbuf, &value))) {
+			inbuf->next_byte  = old_next_byte;
+			inbuf->bytes_left = old_bytes_left;
+			return PNM_SUSPEND;
+		}
+		printf ("0x%x ", value);
+		fflush (stdout);
+
+		switch (context->type) {
+		case PNM_FORMAT_PBM:
+			if (value)
+				data |= mask;
+			mask >>= 1;
+				
+			break;
+		case PNM_FORMAT_PGM:
+			*dptr++ = (guchar)(255.0*((double)value/(double)context->maxval));
+			break;
+		case PNM_FORMAT_PPM:
+			*dptr++ = (guchar)(255.0*((double)value/(double)context->maxval));
+			break;
+		default:
+			g_warning ("io-pnm.c: Illegal raw pnm type!\n");
+			break;
+		}
+	}
+
+	if (context->type == PNM_FORMAT_PBM)
+		*dptr++ = value;
+
+	context->output_col++;
+	if (context->output_col == context->width) {
+		if ( context->type == PNM_FORMAT_PBM_RAW )
+			explode_bitmap_into_buf(context);
+		else if ( context->type == PNM_FORMAT_PGM_RAW )
+			explode_gray_into_buf (context);
+		
+		context->output_col = 0;
+		context->output_row++;
+		
+	} else {
+		return PNM_SUSPEND;
+	}
+
+	return PNM_OK;
 }
 
 /* returns 1 if a scanline was converted,  0 means we ran out of data */
 static gint
 pnm_read_scanline (PnmLoaderContext *context)
 {
-	guint  numpix;
-	guint  numbytes;
-	guchar *dptr;
-	PnmIOBuffer *inbuf;
+	gint   rc;
 
 	g_return_val_if_fail (context != NULL, PNM_FATAL_ERR);
-
-	inbuf = &context->inbuf;
 
 	/* read in image data */
 	/* for raw formats this is trivial */
@@ -347,62 +555,36 @@ pnm_read_scanline (PnmLoaderContext *context)
 	case PNM_FORMAT_PBM_RAW:
 	case PNM_FORMAT_PGM_RAW:
 	case PNM_FORMAT_PPM_RAW:
-		switch (context->type) {
-		case PNM_FORMAT_PBM_RAW:
-			numpix = inbuf->bytes_left * 8;
-			break;
-		case PNM_FORMAT_PGM_RAW:
-			numpix = inbuf->bytes_left;
-			break;
-		case PNM_FORMAT_PPM_RAW:
-			numpix = inbuf->bytes_left;
-			break;
-		}
+		rc = pnm_read_raw_scanline (context);
+		if (rc == PNM_SUSPEND)
+			return rc;
+		break;
 
-		numpix = MIN (numpix, context->width - context->output_col);
+	case PNM_FORMAT_PBM:
+	case PNM_FORMAT_PGM:
+	case PNM_FORMAT_PPM:
+#if 0
 
-		if (numpix == 0)
-			return PNM_SUSPEND;
+		rc = pnm_read_ascii_scanline (context);
+		if (rc == PNM_SUSPEND)
+			return rc;
+		break;
+#endif
+		
 
-		switch (context->type) {
-		case PNM_FORMAT_PBM_RAW:
-			numbytes = numpix/8;
-			break;
-		case PNM_FORMAT_PGM_RAW:
-			numbytes = numpix;
-			break;
-		case PNM_FORMAT_PPM_RAW:
-			numbytes = numpix*3;
-			break;
-		}
-
-
-		dptr = context->pixels + 
-			context->output_row * context->width * 3 +
-			context->output_col;
-
-		memcpy (dptr, inbuf->next_byte, numpix);
-
-		if ( context->type == PNM_FORMAT_PBM_RAW )
-			explode_bitmap_info_buf (dptr, numpix);
-		else if ( context->type == PNM_FORMAT_PGM_RAW )
-			explode_gray_info_buf (dptr, numpix);
 	default:
 		g_print ("Cannot load these image types (yet)\n");
 		return PNM_FATAL_ERR;
 	}
+
+	return PNM_OK;
 }
 
 /* Shared library entry point */
 GdkPixbuf *
 image_load (FILE *f)
 {
-	guint   w, h, i;
-	guchar *pixels = NULL;
-	guchar *dptr;
-	guchar buf[PNM_BUF_SIZE];
 	guint  nbytes;
-	guint  chunksize;
 	gint   rc;
 
 	PnmLoaderContext context;
@@ -429,11 +611,12 @@ image_load (FILE *f)
 		/* keep buffer as full as possible */
 		num_to_read = PNM_BUF_SIZE - inbuf->bytes_left;
 
-		if (inbuf->next_byte != NULL)
+		if (inbuf->next_byte != NULL && inbuf->bytes_left > 0)
 			memmove (inbuf->buffer, inbuf->next_byte, 
 				 inbuf->bytes_left);
 
-		nbytes = fread (inbuf->buffer, 1, num_to_read, f);
+		nbytes = fread (inbuf->buffer+inbuf->bytes_left, 
+				1, num_to_read, f);
 		inbuf->bytes_left += nbytes;
 		inbuf->next_byte   = inbuf->buffer;
 		
@@ -469,9 +652,9 @@ image_load (FILE *f)
 			context.output_row = 0;
 			context.output_col = 0;
 
-			pixels = g_malloc (context.height * 
+			context.pixels = g_malloc (context.height * 
 					   context.width * 3);
-			if (!pixels)
+			if (!context.pixels)
 				return NULL;
 
 			g_print ("prescan complete\n");
@@ -479,13 +662,9 @@ image_load (FILE *f)
 
 		/* if we got here we're reading image data */
 		while (context.output_row < context.height) {
-
-			g_print ("reading row %d ...",context.output_row+1);
-
 			rc = pnm_read_scanline (&context);
 
 			if (rc == PNM_SUSPEND) {
-				g_print ("suspended\n");
 				break;
 			} else if (rc == PNM_FATAL_ERR) {
 				if (context.pixels)
@@ -493,7 +672,6 @@ image_load (FILE *f)
 				g_warning ("io-pnm.c: error reading rows..\n");
 				return NULL;
 			}
-			g_print ("completed\n");
 		}
 
 		if (context.output_row < context.height)
@@ -502,74 +680,9 @@ image_load (FILE *f)
 			break;
 	}
 
-		
-#if 0
-	dptr = buf;
-	
-	switch (type) {
-	case PNM_FORMAT_PPM:
-	case PNM_FORMAT_PGM:
-		if ((val = skip_ahead_whitespace (f)) < 0)
-			return NULL;
-		buf[0] = val;
-		if (read_til_whitespace (f, buf+1, PNM_BUF_SIZE) < 0)
-			return NULL;
-		
-		maxval = strtol (buf, &errptr, 10);
-		
-		g_print ("Maximum component value is %d\n", maxval);
-		if (*errptr != '\0')
-			return NULL;
-		break;
-	default:
-		break;
-	}
-	
-	fflush(stdout);
-	
-	/* read in image data */
-	/* for raw formats this is trivial */
-	switch (type) {
-	case PNM_FORMAT_PBM_RAW:
-		chunksize = w/8;
-	case PNM_FORMAT_PGM_RAW:
-		chunksize = w;
-	case PNM_FORMAT_PPM_RAW:
-		chunksize = 3*w;
-		
-		dptr = pixels;
-		while (!feof (f)) {
-			nbytes = fread (dptr, 1, chunksize, f);
-			if (nbytes < chunksize && nbytes != 0) {
-				g_free (pixels);
-				return NULL;
-			}
-			
-			if ( type == PNM_FORMAT_PBM_RAW )
-				explode_bitmap_info_buf (dptr, w);
-			else if ( type == PNM_FORMAT_PGM_RAW )
-				explode_gray_info_buf (dptr);
-			
-			dptr += 3*w;
-		}
-
-		/* did we get the entire image? */
-		if ((dptr - pixels) != 3*w*(h+1)) {
-			g_free (pixels);
-			return NULL;
-		}
-			
-		break;
-	default:
-		g_print ("Couldnt load image data (yet)\n");
-		fflush(stdout);
-		return NULL;
-	}
-
-	return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, FALSE,
-					 w, h, w * 3,
-					 free_buffer, NULL);
-#endif
+	return gdk_pixbuf_new_from_data (context.pixels, ART_PIX_RGB, FALSE,
+					 context.width, context.height, 
+					 context.width * 3, free_buffer, NULL);
 
 }
 

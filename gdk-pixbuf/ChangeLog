@@ -1,3 +1,9 @@
+1999-11-05  Michael Fulbright  <drmike@redhat.com>
+
+	* src/io-pnm.c: Implemented support for reading raw PBM/PGM/PPM
+	files from a file. Next step is support for ASCII files, and
+	then incremental loading.
+
 1999-11-04  Federico Mena Quintero  <federico@redhat.com>
 
 	* Makefile.am: Added doc to SUBDIRS.
