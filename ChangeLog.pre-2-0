@@ -1,3 +1,13 @@
+2001-12-12  Matthias Clasen  <matthiasc@poet.de>
+	
+	* gtk/gtktextlayout.c: Typo fixes
+	* gtk/gtkwindow.c (gtk_window_set_position): Typo fix. (#66746)
+
+	* gtk/gtkwidget.c (gtk_widget_send_expose, gtk_widget_get_toplevel, 
+	gtk_widget_get_default_direction): Doc fixes. (#66727, #66737, #66744)
+
+	* gtk/gtkstyle.h (GTK_STYLE_NUM_STYLECOLORS): Remove. (#66467)
+
 Wed Dec 12 16:43:10 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_unrealize): Remove

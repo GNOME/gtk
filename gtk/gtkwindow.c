@@ -1265,8 +1265,8 @@ gtk_window_get_mnemonic_modifier (GtkWindow *window)
  * @window: a #GtkWindow.
  * @position: a position constraint.
  *
- * Sets a position constaint for this window. If the old or new
- * constaint is %GTK_WIN_POS_CENTER_ALWAYS, this will also cause
+ * Sets a position constraint for this window. If the old or new
+ * constraint is %GTK_WIN_POS_CENTER_ALWAYS, this will also cause
  * the window to be repositioned to satisfy the new constraint. 
  **/
 void

@@ -14,12 +14,6 @@ Styles
 
 </para>
 
-<!-- ##### MACRO GTK_STYLE_NUM_STYLECOLORS ##### -->
-<para>
-The number of colors used in a style.
-</para>
-
-
 
 <!-- ##### MACRO GTK_STYLE_ATTACHED ##### -->
 <para>

@@ -6,7 +6,7 @@ Widget for packing a list of selectable items.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-The GtkList widget is a container whose children are displayed
+The #GtkList widget is a container whose children are displayed
 vertically in order, and can be selected.
 
 The list has many selection modes, which are programmer selective and
@@ -40,12 +40,12 @@ type.</para></listitem>
 Creates a new #GtkList.
 </para>
 
-@Returns: the newly created #GtkList
+@Returns: the newly-created #GtkList
 
 
 <!-- ##### FUNCTION gtk_list_insert_items ##### -->
 <para>
-Inserts @items into the @list at the position @position. The @GList items
+Inserts @items into the @list at the position @position. The #GList items
 must not be freed after.
 </para>
 
@@ -208,7 +208,7 @@ in #GTK_SELECTION_EXTENDED.
 @list: the list widget.
 @scroll_type: the direction and length.
 @position: the position if @scroll_type is #GTK_SCROLL_JUMP.
-@auto_start_selection: if #TRUE, gtk_list_start_selection is automatically
+@auto_start_selection: if %TRUE, gtk_list_start_selection() is automatically
 carried out before extending the selection.
 
 
@@ -223,11 +223,11 @@ Starts a selection (or part of selection) at the focused child. Only in
 
 <!-- ##### FUNCTION gtk_list_end_selection ##### -->
 <para>
-Ends the selection. Used with #gtk_list_extend_selection and
-#gtk_list_start_selection. Only in #GTK_SELECTION_EXTENDED.
+Ends the selection. Used with gtk_list_extend_selection() and
+gtk_list_start_selection(). Only in #GTK_SELECTION_EXTENDED mode.
 </para>
 
-@list: 
+@list: the list widget.
 
 
 <!-- ##### FUNCTION gtk_list_select_all ##### -->
@@ -285,7 +285,7 @@ scrolls to the ratio @position: 0 is top, 1 is bottom.
 <!-- ##### FUNCTION gtk_list_toggle_add_mode ##### -->
 <para>
 Toggles between adding to the selection and beginning a new selection. Only
-in #GTK_SELECTION_EXTENDED. Useful with #gtk_list_extend_selection.
+in #GTK_SELECTION_EXTENDED. Useful with gtk_list_extend_selection().
 </para>
 
 @list: the list widget.

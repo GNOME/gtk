@@ -1,3 +1,12 @@
+2001-12-12  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtklist.sgml: Markup fixes.
+
+	* gdk/tmpl/selections.sgml, gtk/tmpl/gtksocket.sgml: s/succesful/successful/g.
+
+	* gtk/gtk-sections.txt, gtk/tmpl/gtkstyle.sgml: Remove
+	GTK_STYLE_NUM_STYLECOLORS. (#66467)
+
 2001-12-12  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/text_widget.sgml: add another example

@@ -53,7 +53,7 @@ separate toplevel window. You can check if the plug
 has been created by examining the
 <StructField>plug_window</StructField> field of the
 #GtkSocket structure. If this field is non-NULL, 
-then the plug has been succesfully created inside
+then the plug has been successfully created inside
 of the socket.
 </para>
 

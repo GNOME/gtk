@@ -2937,7 +2937,7 @@ gtk_widget_event (GtkWidget *widget,
  * If you want to force an area of a window to be redrawn, 
  * use gdk_window_invalidate_rect() or gdk_window_invalidate_region().
  * To cause the redraw to be done immediately, follow that call
- * with a call to gdk_window_procss_updates().
+ * with a call to gdk_window_process_updates().
  * 
  * Return value: return from the event signal emission (%TRUE if the event was handled)
  **/
@@ -4965,21 +4965,20 @@ gtk_widget_set_extension_events (GtkWidget *widget,
  * window was inside a #GtkWindow-derived widget which was in turn
  * inside the toplevel #GtkWindow. While the second case may
  * seem unlikely, it actually happens when a #GtkPlug is embedded
- * inside a #GtkSocket within the same application
+ * inside a #GtkSocket within the same application.
  * 
  * To reliably find the toplevel #GtkWindow, use
  * gtk_widget_get_toplevel() and check if the %TOPLEVEL flags
  * is set on the result.
- * 
- *  <programlisting>
+ *  <informalexample><programlisting>
  *  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
  *  if (GTK_WIDGET_TOPLEVEL (toplevel))
  *   {
  *     [ Perform action on toplevel. ]
  *   }
- *  </programlisting>
+ *  </programlisting></informalexample>
  *
- * Return value: the topmost ancestor of @widget, or @widget itself if there's no ancestor
+ * Return value: the topmost ancestor of @widget, or @widget itself if there's no ancestor.
  **/
 GtkWidget*
 gtk_widget_get_toplevel (GtkWidget *widget)
@@ -5421,7 +5420,7 @@ gtk_widget_emit_direction_changed (GtkWidget        *widget,
  * reading directions can be done. Generally, applications will
  * let the default reading direction present, except for containers
  * where the containers are arranged in an order that is explicitely
- * visual rather than logical (such as buttons for text justificiation).
+ * visual rather than logical (such as buttons for text justification).
  *
  * If the direction is set to %GTK_TEXT_DIR_NONE, then the value
  * set by gtk_widget_set_default_direction() will be used.
@@ -5529,7 +5528,7 @@ gtk_widget_set_default_direction (GtkTextDirection dir)
  * gtk_widget_get_default_direction:
  * 
  * Obtains the current default reading direction. See
- * gtk_widget_set_direction().
+ * gtk_widget_set_default_direction().
  *
  * Return value: the current default direction. 
  **/

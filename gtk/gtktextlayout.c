@@ -751,7 +751,7 @@ gtk_text_layout_real_free_line_data (GtkTextLayout     *layout,
  *
  * Check if there are any invalid regions in a #GtkTextLayout's buffer
  *
- * Return value: #TRUE if any invalid regions were found
+ * Return value: %TRUE if any invalid regions were found
  **/
 gboolean
 gtk_text_layout_is_valid (GtkTextLayout *layout)

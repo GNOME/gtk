@@ -63,11 +63,6 @@ typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
  */
 typedef struct _GtkWidget      GtkWidget;
 
-/* This is used for having dynamic style changing stuff
- * fg, bg, light, dark, mid, text, base
- */
-#define GTK_STYLE_NUM_STYLECOLORS()	(7 * 5)
-
 #define GTK_STYLE_ATTACHED(style)	(GTK_STYLE (style)->attach_count > 0)
 
 struct _GtkStyle

@@ -92,7 +92,7 @@ Set the owner of the given selection.
 @send_event: if %TRUE, and the new owner is different
              from the current owner, the current owner
              will be sent a SelectionClear event.
-@Returns: %TRUE if the selection owner was succesfully
+@Returns: %TRUE if the selection owner was successfully
           changed to @owner, otherwise %FALSE.
 
 
