@@ -656,7 +656,7 @@ display_opened_cb (GdkDisplayManager *display_manager,
 }
 
 /**
- * gdk_parse_args:
+ * gtk_parse_args:
  * @argc: a pointer to the number of command line arguments.
  * @argv: a pointer to the array of command line arguments.
  * 
@@ -664,7 +664,7 @@ display_opened_cb (GdkDisplayManager *display_manager,
  * attributes of GTK+, but does not actually open a connection
  * to a display. (See gdk_display_open(), gdk_get_display_arg_name())
  *
- * Any arguments used by GTK or GDK are removed from the array and
+ * Any arguments used by GTK+ or GDK are removed from the array and
  * @argc and @argv are updated accordingly.
  *
  * You shouldn't call this function explicitely if you are using

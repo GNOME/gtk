@@ -1,3 +1,7 @@
+Thu Jun 10 22:12:26 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmain.c (gtk_parse_args): Typo fix.
+
 2004-06-10  Federico Mena Quintero  <federico@ximian.com>
 
 	Fixes #144110, patch by Bastien Nocera <hadess@hadess.net>.
