@@ -928,6 +928,7 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
+"Hvort nota skuli auka pláss í barnið eða sem fylling"
 
 #: gtk/gtkbox.c:160
 msgid "Padding"
@@ -946,6 +947,8 @@ msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
+"GtkPackType breyta sem gefur til kynna hvort barnið er pakkað við byrjun eða "
+"enda foreldris"
 
 #: gtk/gtkbox.c:174 gtk/gtknotebook.c:472 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
@@ -1006,7 +1009,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:278
 msgid "Default Outside Spacing"
-msgstr "Sjálfgefin ytra bil"
+msgstr "Sjálfgefið ytra bil"
 
 #: gtk/gtkbutton.c:279
 msgid ""
@@ -1016,21 +1019,23 @@ msgstr ""
 
 #: gtk/gtkbutton.c:284
 msgid "Child X Displacement"
-msgstr ""
+msgstr "X flutningur barns"
 
 #: gtk/gtkbutton.c:285
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
+"Hversu langt á X ásnum á að færa barnið þegar þrýst er á hnappinn"
 
 #: gtk/gtkbutton.c:292
 msgid "Child Y Displacement"
-msgstr ""
+msgstr "Y flutningur barns"
 
 #: gtk/gtkbutton.c:293
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
+"Hversu langt á Y ásnum á að færa barnið þegar þrýst er á hnappinn"
 
 #: gtk/gtkcellrenderer.c:116
 msgid "mode"
@@ -1362,83 +1367,83 @@ msgstr "Hvort þetta tag hefur áhrif á hvort breyta megi texta"
 
 #: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:532
 msgid "Font family set"
-msgstr ""
+msgstr "Letursfjölskylda"
 
 #: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:533
 msgid "Whether this tag affects the font family"
-msgstr ""
+msgstr "Hvort þetta tag hafi áhrif á letursfjölskylduna"
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:536
 msgid "Font style set"
-msgstr ""
+msgstr "Leturgerðastíll"
 
 #: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font style"
-msgstr ""
+msgstr "Hvort þetta tag hafi áhrif á stíl leturs"
 
 #: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:540
 msgid "Font variant set"
-msgstr ""
+msgstr "Leturtilbrigði"
 
 #: gtk/gtkcellrenderertext.c:383 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font variant"
-msgstr ""
+msgstr "Hvort þetta tag hafi áhrif á tilbrigði leturs"
 
 #: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:544
 msgid "Font weight set"
-msgstr ""
+msgstr "Þyngd leturs"
 
 #: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font weight"
-msgstr ""
+msgstr "Hvort þetta tag hafi áhrif á þyngd leturs"
 
 #: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:548
 msgid "Font stretch set"
-msgstr ""
+msgstr "Teyging leturs"
 
 #: gtk/gtkcellrenderertext.c:391 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font stretch"
-msgstr ""
+msgstr "Hvort þetta tag hafi áhrif á teyging leturs"
 
 #: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:552
 msgid "Font size set"
-msgstr ""
+msgstr "Letursstærð"
 
 #: gtk/gtkcellrenderertext.c:395 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font size"
-msgstr ""
+msgstr "Hvort þetta tag hafi áhrif á stærð leturs"
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:556
 msgid "Font scale set"
-msgstr ""
+msgstr "Skali leturs"
 
 #: gtk/gtkcellrenderertext.c:399 gtk/gtktexttag.c:557
 msgid "Whether this tag scales the font size by a factor"
-msgstr ""
+msgstr "Hvort þetta tag hafi áhrif á skala leturs"
 
 #: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:576
 msgid "Rise set"
-msgstr ""
+msgstr "Ris leturs"
 
 #: gtk/gtkcellrenderertext.c:403 gtk/gtktexttag.c:577
 msgid "Whether this tag affects the rise"
-msgstr ""
+msgstr "Hvort þetta tag hafi áhrif á ris letursins"
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:592
 msgid "Strikethrough set"
-msgstr ""
+msgstr "Yfirstrikun leturs"
 
 #: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:593
 msgid "Whether this tag affects strikethrough"
-msgstr ""
+msgstr "Hvort þetta tag hafi áhrif á yfirstrikun leturs"
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:600
 msgid "Underline set"
-msgstr ""
+msgstr "Undirstrikun leturs"
 
 #: gtk/gtkcellrenderertext.c:411 gtk/gtktexttag.c:601
 msgid "Whether this tag affects underlining"
-msgstr ""
+msgstr "Hvort þetta tag hafi áhrif á undirstrikun"
 
 #: gtk/gtkcellrenderertoggle.c:132
 msgid "Toggle state"
@@ -1516,10 +1521,12 @@ msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
+"Liturinn sem þú hefur valið. Þú getur dregið þennan lit á palettuna til að "
+"geyma hann."
 
 #: gtk/gtkcolorsel.c:927
 msgid "_Save color here"
-msgstr ""
+msgstr "_Vista litnum hér"
 
 #: gtk/gtkcolorsel.c:1132
 msgid ""
@@ -3509,7 +3516,7 @@ msgstr "_Prenta"
 
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
-msgstr "Prenta forsýn"
+msgstr "Prenta for_sýn"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
