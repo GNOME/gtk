@@ -1112,8 +1112,8 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
     {
       node->flags ^= GTK_RBNODE_IS_SELECTED;
 
-      /* FIXME: just draw the one node*/
-      gtk_widget_queue_draw (GTK_WIDGET (selection->tree_view));
+      _gtk_tree_view_queue_draw_node (selection->tree_view, tree, node, NULL);
+      
       return TRUE;
     }
 

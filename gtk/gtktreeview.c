@@ -273,10 +273,6 @@ static void     gtk_tree_view_add_move_binding               (GtkBindingSet     
 							      gint               count);
 static gint     gtk_tree_view_unref_and_check_selection_tree (GtkTreeView       *tree_view,
 							      GtkRBTree         *tree);
-static void     gtk_tree_view_queue_draw_node                (GtkTreeView       *tree_view,
-							      GtkRBTree         *tree,
-							      GtkRBNode         *node,
-							      GdkRectangle      *clip_rect);
 static void     gtk_tree_view_queue_draw_path                (GtkTreeView       *tree_view,
 							      GtkTreePath       *path,
 							      GdkRectangle      *clip_rect);
@@ -2497,24 +2493,24 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
     {
       if (old_prelight_node)
 	{
-	  gtk_tree_view_queue_draw_node (tree_view,
-                                       old_prelight_tree,
-                                       old_prelight_node,
-                                       NULL);
+	  _gtk_tree_view_queue_draw_node (tree_view,
+					  old_prelight_tree,
+					  old_prelight_node,
+					  NULL);
 	}
       if (tree_view->priv->prelight_node)
 	{
-	  gtk_tree_view_queue_draw_node (tree_view,
-                                       tree_view->priv->prelight_tree,
-                                       tree_view->priv->prelight_node,
-                                       NULL);
+	  _gtk_tree_view_queue_draw_node (tree_view,
+					  tree_view->priv->prelight_tree,
+					  tree_view->priv->prelight_node,
+					  NULL);
 	}
     }
   else if (old_arrow_prelit != GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT))
     {
       if (tree_view->priv->prelight_node)
 	{
-	  gtk_tree_view_queue_draw_node (tree_view,
+	  _gtk_tree_view_queue_draw_node (tree_view,
 					 tree_view->priv->prelight_tree,
 					 tree_view->priv->prelight_node,
 					 NULL);
@@ -3030,7 +3026,7 @@ gtk_tree_view_enter_notify (GtkWidget        *widget,
   do_prelight (tree_view, tree, node, event->x, event->y);
 
   if (tree_view->priv->prelight_node)
-    gtk_tree_view_queue_draw_node (tree_view,
+    _gtk_tree_view_queue_draw_node (tree_view,
                                    tree_view->priv->prelight_tree,
                                    tree_view->priv->prelight_node,
                                    NULL);
@@ -3052,7 +3048,7 @@ gtk_tree_view_leave_notify (GtkWidget        *widget,
   tree_view = GTK_TREE_VIEW (widget);
 
   if (tree_view->priv->prelight_node)
-    gtk_tree_view_queue_draw_node (tree_view,
+    _gtk_tree_view_queue_draw_node (tree_view,
                                    tree_view->priv->prelight_tree,
                                    tree_view->priv->prelight_node,
                                    NULL);
@@ -4985,8 +4981,7 @@ gtk_tree_view_row_has_child_toggled (GtkTreeModel *model,
     }
   else
     {
-      /* FIXME: Just redraw the node */
-      gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+      _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
     }
 
  done:
@@ -5860,11 +5855,11 @@ gtk_tree_view_queue_draw_arrow (GtkTreeView      *tree_view,
     }
 }
 
-static void
-gtk_tree_view_queue_draw_node (GtkTreeView  *tree_view,
-			       GtkRBTree    *tree,
-			       GtkRBNode    *node,
-			       GdkRectangle *clip_rect)
+void
+_gtk_tree_view_queue_draw_node (GtkTreeView  *tree_view,
+				GtkRBTree    *tree,
+				GtkRBNode    *node,
+				GdkRectangle *clip_rect)
 {
   GdkRectangle rect;
 
@@ -5902,7 +5897,7 @@ gtk_tree_view_queue_draw_path (GtkTreeView      *tree_view,
   _gtk_tree_view_find_node (tree_view, path, &tree, &node);
 
   if (tree)
-    gtk_tree_view_queue_draw_node (tree_view, tree, node, clip_rect);
+    _gtk_tree_view_queue_draw_node (tree_view, tree, node, clip_rect);
 }
 
 /* x and y are the mouse position
@@ -6163,7 +6158,7 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
 
   if (found_column)
     {
-      gtk_tree_view_queue_draw_node (tree_view,
+      _gtk_tree_view_queue_draw_node (tree_view,
 				     cursor_tree,
 				     cursor_node,
 				     NULL);
@@ -6270,7 +6265,7 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
   gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
 
   gtk_widget_grab_focus (GTK_WIDGET (tree_view));
-  gtk_tree_view_queue_draw_node (tree_view, cursor_tree, cursor_node, NULL);
+  _gtk_tree_view_queue_draw_node (tree_view, cursor_tree, cursor_node, NULL);
   gtk_tree_view_row_activated (tree_view, cursor_path, tree_view->priv->focus_column);
 
   gtk_tree_path_free (cursor_path);
@@ -8157,7 +8152,7 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
 						  node, tree, path,
 						  state);
       gtk_tree_view_clamp_node_visible (tree_view, tree, node);
-      gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
+      _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
     }
 
   g_signal_emit (G_OBJECT (tree_view), tree_view_signals[CURSOR_CHANGED], 0);

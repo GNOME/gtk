@@ -275,7 +275,10 @@ void         _gtk_tree_view_child_move_resize         (GtkTreeView       *tree_v
 						       gint               y,
 						       gint               width,
 						       gint               height);
-
+void         _gtk_tree_view_queue_draw_node           (GtkTreeView       *tree_view,
+						       GtkRBTree         *tree,
+						       GtkRBNode         *node,
+						       GdkRectangle      *clip_rect);
 
 void _gtk_tree_view_column_realize_button   (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column);
