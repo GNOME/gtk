@@ -669,6 +669,24 @@ gtk_menu_set_title (GtkMenu     *menu,
 			    g_strdup (title), (GtkDestroyNotify) g_free);
 }
 
+void
+gtk_menu_reorder_child (GtkMenu   *menu,
+                        GtkWidget *child,
+                        gint       position)
+{
+  GtkMenuShell *menu_shell;
+  g_return_if_fail (GTK_IS_MENU (menu));
+  g_return_if_fail (GTK_IS_MENU_ITEM (child));
+  menu_shell = GTK_MENU_SHELL (menu);
+  if (g_list_find (menu_shell->children, child))
+    {   
+      menu_shell->children = g_list_remove (menu_shell->children, child);
+      menu_shell->children = g_list_insert (menu_shell->children, child, position);   
+      if (GTK_WIDGET_VISIBLE (menu_shell))
+        gtk_widget_queue_resize (GTK_WIDGET (menu_shell));
+    }   
+}
+
 static void
 gtk_menu_realize (GtkWidget *widget)
 {

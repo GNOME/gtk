@@ -145,6 +145,10 @@ void       gtk_menu_set_tearoff_state     (GtkMenu             *menu,
 void       gtk_menu_set_title             (GtkMenu             *menu,
 					   const gchar         *title);
 
+void       gtk_menu_reorder_child         (GtkMenu             *menu,
+                                           GtkWidget           *child,
+                                           gint                position);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

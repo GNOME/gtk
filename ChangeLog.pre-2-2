@@ -1,3 +1,8 @@
+Thu Feb 25 02:13:20 CST 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkmenu.[ch]: New function gtk_menu_reorder_child()
+	  from Tim Janik.  
+
 Thu Feb 25 00:48:51 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfontsel.c: Don't access *bitmapped_sizes
