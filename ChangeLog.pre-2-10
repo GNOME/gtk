@@ -1,5 +1,8 @@
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimage.c (gtk_image_set_property): Add a missing break
+	statement.  (#161172, Damon Chaplin)
+
 	* NEWS: Updates
 
 	* gtk/gtkcellrenderertext.c: Add a width-chars property like

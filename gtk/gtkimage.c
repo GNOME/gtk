@@ -385,6 +385,8 @@ gtk_image_set_property (GObject      *object,
     case PROP_ICON_NAME:
       gtk_image_set_from_icon_name (image, g_value_get_string (value),
 				    image->icon_size);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
