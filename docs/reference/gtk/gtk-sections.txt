@@ -4148,30 +4148,3 @@ GTK_IS_ICON_FACTORY_CLASS
 gtk_icon_factory_get_type
 </SECTION>
 
-<SECTION>
-<FILE>gtkpacker</FILE>
-GtkPacker
-GtkPackerOptions
-GtkSideType
-GtkAnchorType
-GtkPackerChild
-<TITLE>GtkPacker</TITLE>
-gtk_packer_new
-gtk_packer_add_defaults
-gtk_packer_add
-gtk_packer_configure
-gtk_packer_reorder_child
-gtk_packer_set_spacing
-gtk_packer_set_default_border_width
-gtk_packer_set_default_pad
-gtk_packer_set_default_ipad
-gtk_packer_set_child_packing
-<SUBSECTION Standard>
-GTK_PACKER
-GTK_IS_PACKER
-GTK_TYPE_PACKER
-gtk_packer_get_type
-GTK_PACKER_CLASS
-GTK_IS_PACKER_CLASS
-GTK_PACKER_GET_CLASS
-</SECTION>

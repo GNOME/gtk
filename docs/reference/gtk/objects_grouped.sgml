@@ -24,7 +24,6 @@
     <link linkend="GtkFrame">GtkFrame</link>
     <link linkend="GtkAspectFrame">GtkAspectFrame</link>
     <link linkend="GtkFixed">GtkFixed</link>
-    <link linkend="GtkPacker">GtkPacker</link>
     <link linkend="GtkLayout">GtkLayout</link>
     <link linkend="GtkScrolledWindow">GtkScrolledWindow</link>
     <link linkend="GtkViewport">GtkViewport</link>
