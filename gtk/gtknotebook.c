@@ -260,8 +260,7 @@ gtk_notebook_destroy (GtkObject *object)
   if (notebook->menu)
     gtk_notebook_popup_disable (notebook);
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 void

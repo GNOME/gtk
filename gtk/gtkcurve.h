@@ -27,9 +27,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_CURVE(obj)        GTK_CHECK_CAST (obj, gtk_curve_get_type (), GtkCurve)
-#define GTK_CURVE_CLASS(klass) GTK_CHECK_CLASS_CAST (klass, gtk_curve_get_type, GtkCurveClass)
-#define GTK_IS_CURVE(obj)     GTK_CHECK_TYPE (obj, gtk_curve_get_type ())
+#define GTK_CURVE(obj)         (GTK_CHECK_CAST ((obj), gtk_curve_get_type (), GtkCurve))
+#define GTK_CURVE_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), gtk_curve_get_type (), GtkCurveClass))
+#define GTK_IS_CURVE(obj)      (GTK_CHECK_TYPE ((obj), gtk_curve_get_type ()))
 
 
 typedef struct _GtkCurve	GtkCurve;

@@ -37,12 +37,12 @@
 
 /* Private type definitions
  */
-typedef struct _GtkInitFunction	         GtkInitFunction;
-typedef struct _GtkQuitFunction	         GtkQuitFunction;
-typedef struct _GtkTimeoutFunction       GtkTimeoutFunction;
-typedef struct _GtkIdleFunction	         GtkIdleFunction;
-typedef struct _GtkInputFunction         GtkInputFunction;
-typedef struct _GtkKeySnooperData        GtkKeySnooperData;
+typedef struct _GtkInitFunction		 GtkInitFunction;
+typedef struct _GtkQuitFunction		 GtkQuitFunction;
+typedef struct _GtkTimeoutFunction	 GtkTimeoutFunction;
+typedef struct _GtkIdleFunction		 GtkIdleFunction;
+typedef struct _GtkInputFunction	 GtkInputFunction;
+typedef struct _GtkKeySnooperData	 GtkKeySnooperData;
 
 struct _GtkInitFunction
 {
@@ -52,7 +52,7 @@ struct _GtkInitFunction
 
 struct _GtkQuitFunction
 {
-  gint tag;
+  guint id;
   guint main_level;
   GtkCallbackMarshal marshal;
   GtkFunction function;
@@ -62,7 +62,7 @@ struct _GtkQuitFunction
 
 struct _GtkTimeoutFunction
 {
-  gint tag;
+  guint tag;
   guint32 start;
   guint32 interval;
   guint32 originterval;
@@ -74,7 +74,7 @@ struct _GtkTimeoutFunction
 
 struct _GtkIdleFunction
 {
-  gint tag;
+  guint tag;
   gint priority;
   GtkCallbackMarshal marshal;
   GtkFunction function;
@@ -93,17 +93,17 @@ struct _GtkKeySnooperData
 {
   GtkKeySnoopFunc func;
   gpointer func_data;
-  gint id;
+  guint id;
 };
 
 static void  gtk_exit_func		 (void);
-static gint  gtk_quit_invoke_function    (GtkQuitFunction    *quitf);
-static void  gtk_quit_destroy            (GtkQuitFunction    *quitf);
+static gint  gtk_quit_invoke_function	 (GtkQuitFunction    *quitf);
+static void  gtk_quit_destroy		 (GtkQuitFunction    *quitf);
 static void  gtk_timeout_insert		 (GtkTimeoutFunction *timeoutf);
 static void  gtk_handle_current_timeouts (guint32	      the_time);
 static void  gtk_handle_current_idles	 (void);
-static gint  gtk_invoke_key_snoopers     (GtkWidget          *grab_widget,
-					  GdkEvent           *event);
+static gint  gtk_invoke_key_snoopers	 (GtkWidget	     *grab_widget,
+					  GdkEvent	     *event);
 static void  gtk_handle_timeouts	 (void);
 static void  gtk_handle_idle		 (void);
 static void  gtk_handle_timer		 (void);
@@ -114,11 +114,11 @@ static void  gtk_warning		 (gchar		     *str);
 static void  gtk_message		 (gchar		     *str);
 static void  gtk_print			 (gchar		     *str);
 
-static gint  gtk_idle_compare            (gpointer            a, 
-					  gpointer            b);
+static gint  gtk_idle_compare		 (gpointer	      a, 
+					  gpointer	      b);
 
-static gint  gtk_timeout_compare         (gpointer            a, 
-					  gpointer            b);
+static gint  gtk_timeout_compare	 (gpointer	      a, 
+					  gpointer	      b);
 
 const guint gtk_major_version = GTK_MAJOR_VERSION;
 const guint gtk_minor_version = GTK_MINOR_VERSION;
@@ -401,7 +401,7 @@ gtk_main_iteration_do (gboolean blocking)
     }
   if (current_idles)
     {
-      gtk_handle_current_idles();
+      gtk_handle_current_idles ();
       return iteration_done;
     }
   
@@ -523,17 +523,17 @@ gtk_main_iteration_do (gboolean blocking)
 	  break;
 	  
 	case GDK_DELETE:
- 	  gtk_widget_ref (event_widget);
+	  gtk_widget_ref (event_widget);
 	  if (gtk_widget_event (event_widget, event))
 	    gtk_widget_destroy (event_widget);
- 	  gtk_widget_unref (event_widget);
+	  gtk_widget_unref (event_widget);
 	  break;
 	  
 	case GDK_DESTROY:
- 	  gtk_widget_ref (event_widget);
+	  gtk_widget_ref (event_widget);
 	  gtk_widget_event (event_widget, event);
 	  gtk_widget_destroy (event_widget);
- 	  gtk_widget_unref (event_widget);
+	  gtk_widget_unref (event_widget);
 	  break;
 	  
 	case GDK_PROPERTY_NOTIFY:
@@ -677,9 +677,9 @@ gtk_init_add (GtkFunction function,
   init_functions = g_list_prepend (init_functions, init);
 }
 
-gint
+guint
 gtk_key_snooper_install (GtkKeySnoopFunc snooper,
-			 gpointer        func_data)
+			 gpointer	 func_data)
 {
   GtkKeySnooperData *data;
   static guint snooper_id = 1;
@@ -696,7 +696,7 @@ gtk_key_snooper_install (GtkKeySnoopFunc snooper,
 }
 
 void
-gtk_key_snooper_remove (gint            snooper_id)
+gtk_key_snooper_remove (guint		 snooper_id)
 {
   GtkKeySnooperData *data = NULL;
   GSList *slist;
@@ -735,14 +735,14 @@ gtk_invoke_key_snoopers (GtkWidget *grab_widget,
   return return_val;
 }
 
-gint
-gtk_timeout_add_full (guint32            interval,
-		      GtkFunction        function,
+guint
+gtk_timeout_add_full (guint32		 interval,
+		      GtkFunction	 function,
 		      GtkCallbackMarshal marshal,
-		      gpointer           data,
-		      GtkDestroyNotify   destroy)
+		      gpointer		 data,
+		      GtkDestroyNotify	 destroy)
 {
-  static gint timeout_tag = 1;
+  static guint timeout_tag = 1;
   GtkTimeoutFunction *timeoutf;
   
   g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
@@ -778,7 +778,7 @@ gtk_timeout_destroy (GtkTimeoutFunction *timeoutf)
   g_mem_chunk_free (timeout_mem_chunk, timeoutf);
 }
 
-gint
+guint
 gtk_timeout_add (guint32     interval,
 		 GtkFunction function,
 		 gpointer    data)
@@ -786,7 +786,7 @@ gtk_timeout_add (guint32     interval,
   return gtk_timeout_add_full (interval, function, FALSE, data, NULL);
 }
 
-gint
+guint
 gtk_timeout_add_interp (guint32		   interval,
 			GtkCallbackMarshal function,
 			gpointer	   data,
@@ -796,7 +796,7 @@ gtk_timeout_add_interp (guint32		   interval,
 }
 
 void
-gtk_timeout_remove (gint tag)
+gtk_timeout_remove (guint tag)
 {
   GtkTimeoutFunction *timeoutf;
   GList *tmp_list;
@@ -850,14 +850,14 @@ gtk_idle_compare (gpointer a, gpointer b)
     ? -1 : 1;
 }
 
-gint
+guint
 gtk_quit_add_full (guint		main_level,
-		   GtkFunction	        function,
+		   GtkFunction		function,
 		   GtkCallbackMarshal	marshal,
 		   gpointer		data,
-		   GtkDestroyNotify     destroy)
+		   GtkDestroyNotify	destroy)
 {
-  static gint quit_tag = 1;
+  static guint quit_id = 1;
   GtkQuitFunction *quitf;
   
   g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
@@ -868,7 +868,7 @@ gtk_quit_add_full (guint		main_level,
   
   quitf = g_chunk_new (GtkQuitFunction, quit_mem_chunk);
   
-  quitf->tag = quit_tag++;
+  quitf->id = quit_id++;
   quitf->main_level = main_level;
   quitf->function = function;
   quitf->marshal = marshal;
@@ -877,17 +877,17 @@ gtk_quit_add_full (guint		main_level,
 
   quit_functions = g_list_prepend (quit_functions, quitf);
   
-  return quitf->tag;
+  return quitf->id;
 }
 
-gint
-gtk_idle_add_full (gint		        priority,
-		   GtkFunction	        function,
+guint
+gtk_idle_add_full (gint			priority,
+		   GtkFunction		function,
 		   GtkCallbackMarshal	marshal,
 		   gpointer		data,
-		   GtkDestroyNotify     destroy)
+		   GtkDestroyNotify	destroy)
 {
-  static gint idle_tag = 1;
+  static guint idle_tag = 1;
   GtkIdleFunction *idlef;
   
   g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
@@ -910,10 +910,10 @@ gtk_idle_add_full (gint		        priority,
   return idlef->tag;
 }
 
-gint
+guint
 gtk_idle_add_interp  (GtkCallbackMarshal   marshal,
 		      gpointer		   data,
-		      GtkDestroyNotify     destroy)
+		      GtkDestroyNotify	   destroy)
 {
   return gtk_idle_add_full (GTK_PRIORITY_DEFAULT, NULL, marshal, data, destroy);
 }
@@ -934,7 +934,7 @@ gtk_quit_destroy (GtkQuitFunction *quitf)
   g_mem_chunk_free (quit_mem_chunk, quitf);
 }
 
-gint
+guint
 gtk_quit_add (guint	  main_level,
 	      GtkFunction function,
 	      gpointer	  data)
@@ -942,23 +942,23 @@ gtk_quit_add (guint	  main_level,
   return gtk_quit_add_full (main_level, function, NULL, data, NULL);
 }
 
-gint
+guint
 gtk_idle_add (GtkFunction function,
 	      gpointer	  data)
 {
   return gtk_idle_add_full (GTK_PRIORITY_DEFAULT, function, NULL, data, NULL);
 }
 
-gint       
-gtk_idle_add_priority   (gint               priority,
-			 GtkFunction        function,
-			 gpointer           data)
+guint	    
+gtk_idle_add_priority	(gint		    priority,
+			 GtkFunction	    function,
+			 gpointer	    data)
 {
   return gtk_idle_add_full (priority, function, NULL, data, NULL);
 }
 
 void
-gtk_quit_remove (gint tag)
+gtk_quit_remove (guint id)
 {
   GtkQuitFunction *quitf;
   GList *tmp_list;
@@ -968,7 +968,7 @@ gtk_quit_remove (gint tag)
     {
       quitf = tmp_list->data;
       
-      if (quitf->tag == tag)
+      if (quitf->id == id)
 	{
 	  quit_functions = g_list_remove_link (quit_functions, tmp_list);
 	  g_list_free (tmp_list);
@@ -1006,7 +1006,7 @@ gtk_quit_remove_by_data (gpointer data)
 }
 
 void
-gtk_idle_remove (gint tag)
+gtk_idle_remove (guint tag)
 {
   GtkIdleFunction *idlef;
   GList *tmp_list;
@@ -1113,7 +1113,7 @@ gtk_destroy_input_function (GtkInputFunction *input)
   g_free (input);
 }
 
-gint
+guint
 gtk_input_add_full (gint source,
 		    GdkInputCondition condition,
 		    GdkInputFunction function,
@@ -1123,7 +1123,9 @@ gtk_input_add_full (gint source,
 {
   if (marshal)
     {
-      GtkInputFunction *input = g_new (GtkInputFunction, 1);
+      GtkInputFunction *input;
+
+      input = g_new (GtkInputFunction, 1);
       input->callback = marshal;
       input->data = data;
       input->destroy = destroy;
@@ -1138,7 +1140,7 @@ gtk_input_add_full (gint source,
     return gdk_input_add_full (source, condition, function, data, destroy);
 }
 
-gint
+guint
 gtk_input_add_interp (gint source,
 		      GdkInputCondition condition,
 		      GtkCallbackMarshal callback,
@@ -1149,7 +1151,7 @@ gtk_input_add_interp (gint source,
 }
 
 void
-gtk_input_remove (gint tag)
+gtk_input_remove (guint tag)
 {
   gdk_input_remove (tag);
 }

@@ -1,3 +1,11 @@
+Thu Mar 12 10:49:38 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkmain.h: 
+	* gtk/gtkmain.c: changed handler tags to be of type guint, reflecting
+	the internal tag handling.
+
+	* gtk/gtkcurve.h: macro fixups.
+
 Thu Mar 12 08:55:34 1998  Tim Janik  <timj@gimp.org>
 
 	* gtkitem.c:
