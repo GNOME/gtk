@@ -68,6 +68,8 @@ SOFTWARE.
  * the y-x-banding that's so nice to have...
  */
 
+#include <stdlib.h>
+#include <string.h>
 #include <gdkregion.h>
 #include "gdkregion-generic.h"
 

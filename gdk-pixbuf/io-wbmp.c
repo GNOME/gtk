@@ -225,7 +225,7 @@ gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data, guchar * buf,
 {
 	struct wbmp_progressive_state *context =
 	    (struct wbmp_progressive_state *) data;
-	gboolean bv;
+	gboolean bv = FALSE;
 
 	do
 	  {
