@@ -1,3 +1,14 @@
+Thu Sep  3 07:16:54 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkctree.h:
+	* gtk/gtkctree.c: `const' fixups.
+
+	* gtk/gtkclist.h:
+	* gtk/gtkclist.c: `const' fixups and some coding style adaptions.
+
+	* gtk/gtkctree.c (gtk_ctree_insert_node): don't dereference *text
+	if it is passed as NULL.
+
 Wed Sep  2 22:41:40 1998  Raph Levien  <raph@gimp.org>
 
 	* gdk/gdkrgb.c (gdk_rgb_select_conv): Fixed 32bpp image depth

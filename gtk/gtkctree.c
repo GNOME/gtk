@@ -74,13 +74,13 @@ static void set_cell_contents           (GtkCList      *clist,
 					 GtkCListRow   *clist_row,
 					 gint           column,
 					 GtkCellType    type,
-					 gchar         *text,
+					 const gchar   *text,
 					 guint8         spacing,
 					 GdkPixmap     *pixmap,
 					 GdkBitmap     *mask);
 static void set_node_info               (GtkCTree      *ctree,
 					 GtkCTreeNode  *node,
-					 gchar         *text,
+					 const gchar   *text,
 					 guint8         spacing,
 					 GdkPixmap     *pixmap_closed,
 					 GdkBitmap     *mask_closed,
@@ -3018,14 +3018,14 @@ real_tree_collapse (GtkCTree     *ctree,
 }
 
 static void
-set_cell_contents (GtkCList * clist,
-		   GtkCListRow * clist_row,
-		   gint column,
-		   GtkCellType type,
-		   gchar * text,
-		   guint8 spacing,
-		   GdkPixmap * pixmap,
-		   GdkBitmap * mask)
+set_cell_contents (GtkCList    *clist,
+		   GtkCListRow *clist_row,
+		   gint         column,
+		   GtkCellType  type,
+		   const gchar *text,
+		   guint8       spacing,
+		   GdkPixmap   *pixmap,
+		   GdkBitmap   *mask)
 {
   GtkCTree *ctree;
 
@@ -3133,7 +3133,7 @@ set_cell_contents (GtkCList * clist,
 static void 
 set_node_info (GtkCTree     *ctree,
 	       GtkCTreeNode *node,
-	       gchar        *text,
+	       const gchar  *text,
 	       guint8        spacing,
 	       GdkPixmap    *pixmap_closed,
 	       GdkBitmap    *mask_closed,
@@ -3803,7 +3803,7 @@ gtk_ctree_insert_node (GtkCTree     *ctree,
 	GTK_CLIST_CLASS_FW (clist)->set_cell_contents
 	  (clist, &(new_row->row), i, GTK_CELL_TEXT, text[i], 0, NULL, NULL);
 
-  set_node_info (ctree, node, text[ctree->tree_column], spacing, pixmap_closed,
+  set_node_info (ctree, node, text ? text[ctree->tree_column] : NULL, spacing, pixmap_closed,
 		 mask_closed, pixmap_opened, mask_opened, is_leaf, expanded);
 
   /* sorted insertion */
@@ -4641,7 +4641,7 @@ void
 gtk_ctree_node_set_text (GtkCTree     *ctree,
 			 GtkCTreeNode *node,
 			 gint          column,
-			 gchar        *text)
+			 const gchar  *text)
 {
   GtkCList *clist;
 
@@ -4695,7 +4695,7 @@ void
 gtk_ctree_node_set_pixtext (GtkCTree     *ctree,
 			    GtkCTreeNode *node,
 			    gint          column,
-			    gchar        *text,
+			    const gchar  *text,
 			    guint8        spacing,
 			    GdkPixmap    *pixmap,
 			    GdkBitmap    *mask)
@@ -4729,7 +4729,7 @@ gtk_ctree_node_set_pixtext (GtkCTree     *ctree,
 void 
 gtk_ctree_set_node_info (GtkCTree     *ctree,
 			 GtkCTreeNode *node,
-			 gchar        *text,
+			 const gchar  *text,
 			 guint8        spacing,
 			 GdkPixmap    *pixmap_closed,
 			 GdkBitmap    *mask_closed,
@@ -5068,6 +5068,8 @@ gtk_ctree_show_stub (GtkCTree *ctree,
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
+  show_stub = show_stub != FALSE;
+
   if (show_stub != ctree->show_stub)
     {
       GtkCList *clist;
@@ -5089,10 +5091,12 @@ gtk_ctree_set_reorderable (GtkCTree *ctree,
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
-  if (ctree->reorderable == (reorderable != 0))
+  reorderable = reorderable != FALSE;
+
+  if (ctree->reorderable == reorderable)
     return;
 
-  ctree->reorderable = (reorderable != 0);
+  ctree->reorderable = reorderable;
   
   if (GTK_WIDGET_REALIZED (ctree))
     {

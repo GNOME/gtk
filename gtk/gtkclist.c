@@ -285,23 +285,23 @@ static void hadjustment_value_changed (GtkAdjustment * adjustment,
 /* Memory Allocation/Distruction Routines */
 static GtkCListColumn *columns_new (GtkCList * clist);
 
-static void column_title_new (GtkCList * clist,
-			      gint column,
-			      gchar * title);
+static void column_title_new (GtkCList    *clist,
+			      gint         column,
+			      const gchar *title);
 static void columns_delete (GtkCList * clist);
 
 static GtkCListRow *row_new (GtkCList * clist);
 
 static void row_delete (GtkCList * clist,
 			GtkCListRow * clist_row);
-static void set_cell_contents (GtkCList * clist,
-			       GtkCListRow * clist_row,
-			       gint column,
-			       GtkCellType type,
-			       gchar * text,
-			       guint8 spacing,
-			       GdkPixmap * pixmap,
-			       GdkBitmap * mask);
+static void set_cell_contents (GtkCList    *clist,
+			       GtkCListRow *clist_row,
+			       gint         column,
+			       GtkCellType  type,
+			       const gchar *text,
+			       guint8       spacing,
+			       GdkPixmap   *pixmap,
+			       GdkBitmap   *mask);
 static gint real_insert_row (GtkCList * clist,
 			     gint row,
 			     gchar * text[]);
@@ -1074,9 +1074,9 @@ gtk_clist_column_titles_passive (GtkCList * clist)
 }
 
 void
-gtk_clist_set_column_title (GtkCList * clist,
-			    gint column,
-			    gchar * title)
+gtk_clist_set_column_title (GtkCList    *clist,
+			    gint         column,
+			    const gchar *title)
 {
   gint new_button = 0;
   GtkWidget *old_widget;
@@ -1348,10 +1348,10 @@ gtk_clist_get_cell_type (GtkCList * clist,
 }
 
 void
-gtk_clist_set_text (GtkCList * clist,
-		    gint row,
-		    gint column,
-		    gchar * text)
+gtk_clist_set_text (GtkCList    *clist,
+		    gint         row,
+		    gint         column,
+		    const gchar *text)
 {
   GtkCListRow *clist_row;
 
@@ -1471,13 +1471,13 @@ gtk_clist_get_pixmap (GtkCList * clist,
 }
 
 void
-gtk_clist_set_pixtext (GtkCList * clist,
-		       gint row,
-		       gint column,
-		       gchar * text,
-		       guint8 spacing,
-		       GdkPixmap * pixmap,
-		       GdkBitmap * mask)
+gtk_clist_set_pixtext (GtkCList    *clist,
+		       gint         row,
+		       gint         column,
+		       const gchar *text,
+		       guint8       spacing,
+		       GdkPixmap   *pixmap,
+		       GdkBitmap   *mask)
 {
   GtkCListRow *clist_row;
 
@@ -4676,9 +4676,9 @@ columns_new (GtkCList * clist)
 }
 
 static void
-column_title_new (GtkCList * clist,
-		  gint column,
-		  gchar * title)
+column_title_new (GtkCList    *clist,
+		  gint         column,
+		  const gchar *title)
 {
   if (clist->column[column].title)
     g_free (clist->column[column].title);
@@ -4741,14 +4741,14 @@ row_delete (GtkCList * clist,
 }
 
 static void
-set_cell_contents (GtkCList * clist,
-		   GtkCListRow * clist_row,
-		   gint column,
-		   GtkCellType type,
-		   gchar * text,
-		   guint8 spacing,
-		   GdkPixmap * pixmap,
-		   GdkBitmap * mask)
+set_cell_contents (GtkCList    *clist,
+		   GtkCListRow *clist_row,
+		   gint         column,
+		   GtkCellType  type,
+		   const gchar *text,
+		   guint8       spacing,
+		   GdkPixmap   *pixmap,
+		   GdkBitmap   *mask)
 {
   g_return_if_fail (clist_row != NULL);
 
