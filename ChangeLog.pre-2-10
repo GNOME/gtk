@@ -1,3 +1,9 @@
+2004-03-09  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_drag_data_received_cb):
+	Stop the emission so that GtkTreeView's handler won't try to poke
+	the filter model.  Fixes #136127.
+
 Tue Mar  9 13:49:14 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c (gtk_paint_polygon): Fix 

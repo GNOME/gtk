@@ -1724,6 +1724,8 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
     }
 
   g_slist_free (uris);
+
+  g_signal_stop_emission_by_name (widget, "drag-data-received");
 }
 
 /* Callback used when the selection in the shortcuts tree changes */
