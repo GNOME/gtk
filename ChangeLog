@@ -1,3 +1,13 @@
+2001-12-09  Anders Carlsson  <andersca@gnu.org>
+
+	* gdk/x11/gdkevents-x11.c: Update xsettings name.
+
+	* gtk/gtkdnd.c (gtk_drag_check_threshold): Use the
+	gtk-dnd-drag-threshold GtkSetting.
+
+	* gtk/gtksettings.c (gtk_settings_class_init): Add 
+	setting for dnd drag threshold.
+
 2001-12-09  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkcontainer.c: Add docs.
@@ -32,6 +42,7 @@ Sat Dec  8 20:57:24 2001  Kristian Rietveld  <kristian@planet.nl>
 	* gtk/gtkliststore.c (gtk_list_store_remove): nuke the stamp++,
 	per jrb's request
 
+>>>>>>> 1.2684
 2001-12-08  Anders Carlsson  <andersca@gnu.org>
 
 	* tests/testgtk.c (layout_expose_handler): Don't return TRUE

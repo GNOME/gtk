@@ -29,7 +29,8 @@ enum {
   PROP_SPLIT_CURSOR,
   PROP_THEME_NAME,
   PROP_KEY_THEME_NAME,
-  PROP_MENU_BAR_ACCEL
+  PROP_MENU_BAR_ACCEL,
+  PROP_DND_DRAG_THRESHOLD
 };
 
 
@@ -197,8 +198,17 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   "F10",
                                                                   G_PARAM_READWRITE),
                                              NULL);
-
   g_assert (result == PROP_MENU_BAR_ACCEL);
+
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-dnd-drag-threshold",
+							       _("Drag threshold"),
+							       _("Number of pixels the cursor can move before dragging"),
+							       1, G_MAXINT, 8,
+                                                               G_PARAM_READWRITE),
+					     NULL);
+  g_assert (result == PROP_DND_DRAG_THRESHOLD);
+  
 }
 
 static void

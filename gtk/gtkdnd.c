@@ -3129,8 +3129,12 @@ gtk_drag_check_threshold (GtkWidget *widget,
 			  gint       current_x,
 			  gint       current_y)
 {
-#define DRAG_THRESHOLD 8
+  gint drag_threshold;
 
-  return (ABS (current_x - start_x) > DRAG_THRESHOLD ||
-	  ABS (current_y - start_y) > DRAG_THRESHOLD);
+  g_object_get (gtk_widget_get_settings (widget),
+		"gtk-dnd-drag-threshold", &drag_threshold,
+		NULL);
+  
+  return (ABS (current_x - start_x) > drag_threshold ||
+	  ABS (current_y - start_y) > drag_threshold);
 }

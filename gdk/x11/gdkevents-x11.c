@@ -2057,7 +2057,7 @@ static struct
   const char *gdk_name;
 } settings_map[] = {
   { "Net/DoubleClickTime", "gtk-double-click-timeout" },
-  { "Net/DragThreshold", "gtk-drag-threshold" },
+  { "Net/DndDragThreshold", "gtk-dnd-drag-threshold" },
   { "Gtk/ColorPalette", "gtk-color-palette" },
   { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
   { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },
