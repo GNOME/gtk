@@ -1,3 +1,9 @@
+2001-04-27  Sven Neumann  <sven@gimp.org>
+
+	* Makefile.am: before creating links, check if pkg-config files
+	exist for the default target. Otherwise link to the pkg-config files
+	that got installed with this build.
+
 Thu Apr 26 19:11:46 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_motion): clean up column

@@ -134,8 +134,13 @@ pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-$(GDKTARGET)-2.0.pc gtk+-$(GDKTARGET)-2.0.
 DEFAULT_GDKTARGET=x11
 install-data-local:
 	(cd $(DESTDIR)$(pkgconfigdir) && \
+	 test -e gdk-$(DEFAULT_GDKTARGET)-2.0.pc && \
+	 test -e gtk+-$(DEFAULT_GDKTARGET)-2.0.pc && \
 	 $(LN_S) -f gdk-$(DEFAULT_GDKTARGET)-2.0.pc gdk-2.0.pc && \
-         $(LN_S) -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc gtk+-2.0.pc)
+	 $(LN_S) -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc gtk+-2.0.pc) || \
+	(cd $(DESTDIR)$(pkgconfigdir) && \
+	 $(LN_S) -f gdk-$(GDKTARGET)-2.0.pc gdk-2.0.pc && \
+	 $(LN_S) -f gtk+-$(GDKTARGET)-2.0.pc gtk+-2.0.pc)
 
 dist-hook: gtk+.spec
 	if test -e $(srcdir)/INSTALL.in && test -e $(srcdir)/README.in ; then \
