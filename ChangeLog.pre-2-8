@@ -1,3 +1,15 @@
+Sun Mar 14 01:01:18 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellview.c (gtk_cell_view_set_cell_data): Align
+	this function with gtk_tree_view_column_set_cell_data();
+	call the cell data func after setting the attributes.
+
+Sun Mar 14 01:00:08 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellview.c (gtk_cell_view_expose): One more try;
+	make sure not to call gtk_cell_view_set_cell_data() when
+	displayed_row is NULL.
+
 Sat Mar 13 18:13:13 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextlayout.c (gtk_text_layout_get_line_display): When not

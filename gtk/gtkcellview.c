@@ -437,11 +437,11 @@ gtk_cell_view_expose (GtkWidget      *widget,
       g_object_unref (G_OBJECT (gc));
     }
 
-  if (cellview->priv->model && !cellview->priv->displayed_row)
+  /* set cell data (if available) */
+  if (cellview->priv->displayed_row)
+    gtk_cell_view_set_cell_data (cellview);
+  else if (cellview->priv->model)
     return FALSE;
-    
-  /* set cell data */
-  gtk_cell_view_set_cell_data (cellview);
 
   /* render cells */
   area = widget->allocation;
@@ -539,15 +539,7 @@ gtk_cell_view_set_cell_data (GtkCellView *cellview)
       GSList *j;
       GtkCellViewCellInfo *info = i->data;
 
-      if (info->func)
-        {
-          (* info->func) (GTK_CELL_LAYOUT (cellview),
-                          info->cell,
-                          cellview->priv->model,
-                          &iter,
-                          info->func_data);
-          continue;
-        }
+      g_object_freeze_notify (G_OBJECT (info->cell));
 
       for (j = info->attributes; j && j->next; j = j->next->next)
         {
@@ -561,6 +553,15 @@ gtk_cell_view_set_cell_data (GtkCellView *cellview)
                                  property, &value);
           g_value_unset (&value);
         }
+
+      if (info->func)
+	(* info->func) (GTK_CELL_LAYOUT (cellview),
+			info->cell,
+			cellview->priv->model,
+			&iter,
+			info->func_data);
+
+      g_object_thaw_notify (G_OBJECT (info->cell));
     }
 }
 
