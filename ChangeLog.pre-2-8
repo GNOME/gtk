@@ -1,3 +1,11 @@
+2005-01-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaboutdialog.c (display_license_dialog): Make sure
+	the license dialog is initially displayed without a horizontal
+	scrollbar.  
+	(gtk_about_dialog_class_init): Document the fact that the 
+	license text is not wrapped.  (#165012, Christian Rose)
+
 2005-01-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbutton.c (gtk_button_set_image): Fix docs.  (#165180,
