@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-25 20:48+0100\n"
-"PO-Revision-Date: 2005-03-27 18:13-0300\n"
+"POT-Creation-Date: 2005-04-03 20:53+0200\n"
+"PO-Revision-Date: 2005-04-03 19:55-0300\n"
 "Last-Translator: Afonso Celso Medina <medina@maua.br>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -58,7 +58,9 @@ msgstr "Impossível carregar o módulo de carregamento de imagens: %s: %s"
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr "O módulo de carregamento de imagens %s não exporta a interface apropriada; talvez ele seja de uma versão diferente do GTK?"
+msgstr ""
+"O módulo de carregamento de imagens %s não exporta a interface apropriada; "
+"talvez ele seja de uma versão diferente do GTK?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:628 gdk-pixbuf/gdk-pixbuf-io.c:680
 #, c-format
@@ -112,7 +114,9 @@ msgstr "Falha ao abrir '%s' para escrita: %s"
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr "Falha ao fechar '%s' ao gravar a imagem, os dados podem não ter sido salvos: %s"
+msgstr ""
+"Falha ao fechar '%s' ao gravar a imagem, os dados podem não ter sido salvos: "
+"%s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1927 gdk-pixbuf/gdk-pixbuf-io.c:1977
 msgid "Insufficient memory to save image into a buffer"
@@ -128,7 +132,9 @@ msgstr "Carregamento incremental do tipo de imagem '%s' não é suportado"
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
-msgstr "Erro interno: O módulo carregador de imagens '%s' falhou ao começar o carregar uma imagem, mas não deu uma razão para essa falha"
+msgstr ""
+"Erro interno: O módulo carregador de imagens '%s' falhou ao começar o "
+"carregar uma imagem, mas não deu uma razão para essa falha"
 
 #: gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
@@ -174,24 +180,32 @@ msgstr "Pedaço malformado na animação"
 msgid "The ANI image format"
 msgstr "Formato de imagem ANI"
 
-#: gdk-pixbuf/io-bmp.c:227 gdk-pixbuf/io-bmp.c:383
-msgid "Not enough memory to load bitmap image"
-msgstr "Memória insuficiente para carregar imagem bitmap"
-
-#: gdk-pixbuf/io-bmp.c:269
-msgid "BMP image has unsupported header size"
-msgstr "A imagem BMP possui um tamanho de cabeçalho não suportado"
-
-#: gdk-pixbuf/io-bmp.c:288 gdk-pixbuf/io-bmp.c:320 gdk-pixbuf/io-bmp.c:343
-#: gdk-pixbuf/io-bmp.c:424
+#: gdk-pixbuf/io-bmp.c:228 gdk-pixbuf/io-bmp.c:301 gdk-pixbuf/io-bmp.c:333
+#: gdk-pixbuf/io-bmp.c:356 gdk-pixbuf/io-bmp.c:437
 msgid "BMP image has bogus header data"
 msgstr "A imagem BMP tem dados de cabeçalho incorretos"
 
-#: gdk-pixbuf/io-bmp.c:307
+#: gdk-pixbuf/io-bmp.c:239 gdk-pixbuf/io-bmp.c:396
+msgid "Not enough memory to load bitmap image"
+msgstr "Memória insuficiente para carregar imagem bitmap"
+
+#: gdk-pixbuf/io-bmp.c:282
+msgid "BMP image has unsupported header size"
+msgstr "A imagem BMP possui um tamanho de cabeçalho não suportado"
+
+#: gdk-pixbuf/io-bmp.c:320
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Imagens BMP topdown não podem ser compactadas"
 
-#: gdk-pixbuf/io-bmp.c:1154
+#: gdk-pixbuf/io-bmp.c:1198
+msgid "Couldn't allocate memory for saving BMP file"
+msgstr "Impossível alocar memória para salvar o arquivo BMP"
+
+#: gdk-pixbuf/io-bmp.c:1239
+msgid "Couldn't write to BMP file"
+msgstr "Impossível gravar no arquivo BMP"
+
+#: gdk-pixbuf/io-bmp.c:1288
 msgid "The BMP image format"
 msgstr "Formato de imagem BMP"
 
@@ -253,7 +267,9 @@ msgstr "A versão %s do formato de arquivos GIF não é suportada"
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr "A imagem GIF não tem um mapa de cores global, e um quadro dentro dela não tem um mapa de cores local."
+msgstr ""
+"A imagem GIF não tem um mapa de cores global, e um quadro dentro dela não "
+"tem um mapa de cores local."
 
 #: gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
@@ -318,7 +334,9 @@ msgstr "Erro ao interpretar o arquivo de imagem JPEG (%s)"
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr "Memória insuficiente para carregar a imagem, tente sair de alguns aplicativos para liberar memória"
+msgstr ""
+"Memória insuficiente para carregar a imagem, tente sair de alguns "
+"aplicativos para liberar memória"
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
@@ -335,13 +353,17 @@ msgstr "Impossível alocar memória para carregar o arquivo JPEG"
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr "A qualidade do JPEG deve ser um valor entre 0 e 100; o valor '%s' não pôde ser interpretado."
+msgstr ""
+"A qualidade do JPEG deve ser um valor entre 0 e 100; o valor '%s' não pôde "
+"ser interpretado."
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "A qualidade do JPEG deve ser um valor entre 0 e 100; o valor '%d' não é permitido."
+msgstr ""
+"A qualidade do JPEG deve ser um valor entre 0 e 100; o valor '%d' não é "
+"permitido."
 
 #: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
@@ -427,7 +449,9 @@ msgstr "Memória insuficiente para carregar o arquivo PNG"
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
-msgstr "Memória insuficiente para armazenar uma imagem de %ld por %ld; tente sair de algumas aplicações para reduzir o uso de memória"
+msgstr ""
+"Memória insuficiente para armazenar uma imagem de %ld por %ld; tente sair de "
+"algumas aplicações para reduzir o uso de memória"
 
 #: gdk-pixbuf/io-png.c:669
 msgid "Fatal error reading PNG image file"
@@ -441,7 +465,9 @@ msgstr "Erro fatal ao ler o arquivo de imagem PNG: %s"
 #: gdk-pixbuf/io-png.c:813
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "Chaves para blocos de texto PNG devem ter pelo menos 1 e no máximo 79 caracteres."
+msgstr ""
+"Chaves para blocos de texto PNG devem ter pelo menos 1 e no máximo 79 "
+"caracteres."
 
 #: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -450,7 +476,9 @@ msgstr "Chaves para blocos de texto PNG devem ser caracteres ASCII."
 #: gdk-pixbuf/io-png.c:854
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "O valor para blocos de texto PNG %s não pode ser convertido para a codificação ISO-8859-1."
+msgstr ""
+"O valor para blocos de texto PNG %s não pode ser convertido para a "
+"codificação ISO-8859-1."
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -486,7 +514,8 @@ msgstr "O valor máximo de cor do arquivo PNM é grande demais"
 
 #: gdk-pixbuf/io-pnm.c:399
 msgid "Cannot handle PNM files with maximum color values greater than 255"
-msgstr "Impossível lidar com arquivos PNM com valores máximos de cor maiores que 255"
+msgstr ""
+"Impossível lidar com arquivos PNM com valores máximos de cor maiores que 255"
 
 #: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
@@ -506,7 +535,9 @@ msgstr "Fim de arquivo prematuro encontrado"
 
 #: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "Formatos de PNM brutos requerem exatamente um espaço em branco antes dos dados de amostra"
+msgstr ""
+"Formatos de PNM brutos requerem exatamente um espaço em branco antes dos "
+"dados de amostra"
 
 #: gdk-pixbuf/io-pnm.c:777
 msgid "Cannot allocate memory for loading PNM image"
@@ -548,60 +579,60 @@ msgstr "Memória insuficiente para carregar a imagem RAS"
 msgid "The Sun raster image format"
 msgstr "Formato de imagem raster Sun"
 
-#: gdk-pixbuf/io-tga.c:159
+#: gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Impossível alocar memória para a estrutura IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:178
+#: gdk-pixbuf/io-tga.c:173
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Impossível alocar memória para os dados de IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:189
+#: gdk-pixbuf/io-tga.c:184
 msgid "Cannot realloc IOBuffer data"
 msgstr "Impossível realocar os dados de IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:219
+#: gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Impossível alocar os dados de IOBuffer temporários"
 
-#: gdk-pixbuf/io-tga.c:353
+#: gdk-pixbuf/io-tga.c:348
 msgid "Cannot allocate new pixbuf"
 msgstr "Impossível alocar novo pixbuf"
 
-#: gdk-pixbuf/io-tga.c:692
+#: gdk-pixbuf/io-tga.c:689
 msgid "Cannot allocate colormap structure"
 msgstr "Impossível alocar estrutura do mapa de cores"
 
-#: gdk-pixbuf/io-tga.c:699
+#: gdk-pixbuf/io-tga.c:696
 msgid "Cannot allocate colormap entries"
 msgstr "Impossível alocar entradas do mapa de cores"
 
-#: gdk-pixbuf/io-tga.c:721
+#: gdk-pixbuf/io-tga.c:718
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Profundidade de bits inesperada para as entradas do mapa de cores"
 
-#: gdk-pixbuf/io-tga.c:739
+#: gdk-pixbuf/io-tga.c:736
 msgid "Cannot allocate TGA header memory"
 msgstr "Impossível alocar a memória do cabeçalho TGA"
 
-#: gdk-pixbuf/io-tga.c:772
+#: gdk-pixbuf/io-tga.c:769
 msgid "TGA image has invalid dimensions"
 msgstr "A imagem TGA tem dimensões inválidas"
 
-#: gdk-pixbuf/io-tga.c:778 gdk-pixbuf/io-tga.c:787 gdk-pixbuf/io-tga.c:797
-#: gdk-pixbuf/io-tga.c:807 gdk-pixbuf/io-tga.c:814
+#: gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:784 gdk-pixbuf/io-tga.c:794
+#: gdk-pixbuf/io-tga.c:804 gdk-pixbuf/io-tga.c:811
 msgid "TGA image type not supported"
 msgstr "Tipo de imagem TGA não suportado"
 
-#: gdk-pixbuf/io-tga.c:861
+#: gdk-pixbuf/io-tga.c:858
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Impossível alocar memória para a estrutura de contexto TGA"
 
-#: gdk-pixbuf/io-tga.c:926
+#: gdk-pixbuf/io-tga.c:923
 msgid "Excess data in file"
 msgstr "Excesso de dados no arquivo"
 
-#: gdk-pixbuf/io-tga.c:995
+#: gdk-pixbuf/io-tga.c:992
 msgid "The Targa image format"
 msgstr "Formato de imagem Targa"
 
@@ -935,7 +966,9 @@ msgstr ""
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr "A cor que você escolheu. Você pode arrastar esta cor para uma entrada da paleta para utilizá-la no futuro."
+msgstr ""
+"A cor que você escolheu. Você pode arrastar esta cor para uma entrada da "
+"paleta para utilizá-la no futuro."
 
 #: gtk/gtkcolorsel.c:942
 msgid "_Save color here"
@@ -954,13 +987,17 @@ msgstr ""
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
-msgstr "Selecione a cor que você deseja a partir do anel externo. Selecione a luminosidade dessa cor utilizando o triângulo interno."
+msgstr ""
+"Selecione a cor que você deseja a partir do anel externo. Selecione a "
+"luminosidade dessa cor utilizando o triângulo interno."
 
 #: gtk/gtkcolorsel.c:1938
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr "Clique no conta-gotas, depois clique numa cor em qualquer ponto da tela para selecioná-la."
+msgstr ""
+"Clique no conta-gotas, depois clique numa cor em qualquer ponto da tela para "
+"selecioná-la."
 
 #: gtk/gtkcolorsel.c:1947
 msgid "_Hue:"
@@ -1065,12 +1102,12 @@ msgstr "Nome de arquivo inválido: %s"
 msgid "Select A File"
 msgstr "Selecione um Arquivo"
 
-#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1284
+#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1285
 #: gtk/gtkpathbar.c:996
 msgid "Home"
 msgstr "Pasta Pessoal"
 
-#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1311
+#: gtk/gtkfilechooserbutton.c:68 gtk/gtkfilechooserdefault.c:1312
 #: gtk/gtkpathbar.c:998
 msgid "Desktop"
 msgstr "Desktop"
@@ -1107,192 +1144,192 @@ msgstr "Nome de arquivo inválido"
 msgid "The folder contents could not be displayed"
 msgstr "Os conteúdos da pasta não puderam ser mostrados"
 
-#: gtk/gtkfilechooserdefault.c:1174
+#: gtk/gtkfilechooserdefault.c:1175
 #, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "Impossível obter informações sobre '%s': %s"
 
-#: gtk/gtkfilechooserdefault.c:2200
+#: gtk/gtkfilechooserdefault.c:2201
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Adiciona a pasta '%s' aos marcadores"
 
-#: gtk/gtkfilechooserdefault.c:2241
+#: gtk/gtkfilechooserdefault.c:2242
 msgid "Add the current folder to the bookmarks"
 msgstr "Adiciona a pasta atual aos marcadores"
 
-#: gtk/gtkfilechooserdefault.c:2243
+#: gtk/gtkfilechooserdefault.c:2244
 msgid "Add the selected folders to the bookmarks"
 msgstr "Adiciona as pastas selecionadas aos marcadores"
 
-#: gtk/gtkfilechooserdefault.c:2283
+#: gtk/gtkfilechooserdefault.c:2284
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Remove o marcador '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2696
+#: gtk/gtkfilechooserdefault.c:2697
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 "Impossível adicionar um marcador para '%s' porque ele não é um caminho "
 "válido."
 
-#: gtk/gtkfilechooserdefault.c:2874
+#: gtk/gtkfilechooserdefault.c:2875
 msgid "Shortcuts"
 msgstr "Atalhos"
 
-#: gtk/gtkfilechooserdefault.c:2928
+#: gtk/gtkfilechooserdefault.c:2929
 msgid "Folder"
 msgstr "Pasta"
 
-#: gtk/gtkfilechooserdefault.c:2980 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2981 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "_Adicionar"
 
-#: gtk/gtkfilechooserdefault.c:2987
+#: gtk/gtkfilechooserdefault.c:2988
 msgid "Add the selected folder to the bookmarks"
 msgstr "Adiciona a pasta selecionada aos marcadores"
 
-#: gtk/gtkfilechooserdefault.c:2992 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:2993 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_Remover"
 
-#: gtk/gtkfilechooserdefault.c:2999
+#: gtk/gtkfilechooserdefault.c:3000
 msgid "Remove the selected bookmark"
 msgstr "Remove o marcador selecionado"
 
-#: gtk/gtkfilechooserdefault.c:3102
+#: gtk/gtkfilechooserdefault.c:3103
 msgid "_Add to Shortcuts"
 msgstr "_Adicionar aos Atalhos"
 
-#: gtk/gtkfilechooserdefault.c:3112
+#: gtk/gtkfilechooserdefault.c:3113
 msgid "Open _Location"
 msgstr "Abrir _Localização"
 
-#: gtk/gtkfilechooserdefault.c:3124
+#: gtk/gtkfilechooserdefault.c:3125
 msgid "Show _Hidden Files"
 msgstr "Mostrar Arquivos _Ocultos"
 
-#: gtk/gtkfilechooserdefault.c:3248 gtk/gtkfilesel.c:768
+#: gtk/gtkfilechooserdefault.c:3249 gtk/gtkfilesel.c:768
 msgid "Files"
 msgstr "Arquivos"
 
-#: gtk/gtkfilechooserdefault.c:3279
+#: gtk/gtkfilechooserdefault.c:3280
 msgid "Name"
 msgstr "Nome"
 
-#: gtk/gtkfilechooserdefault.c:3304
+#: gtk/gtkfilechooserdefault.c:3305
 msgid "Size"
 msgstr "Tamanho"
 
-#: gtk/gtkfilechooserdefault.c:3317
+#: gtk/gtkfilechooserdefault.c:3318
 msgid "Modified"
 msgstr "Modificado"
 
-#: gtk/gtkfilechooserdefault.c:3349
+#: gtk/gtkfilechooserdefault.c:3350
 msgid "Select which types of files are shown"
 msgstr "Seleciona quais tipos de arquivos são mostrados"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3385
+#: gtk/gtkfilechooserdefault.c:3386
 msgid "Create Fo_lder"
 msgstr "Criar _Pasta"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3506
+#: gtk/gtkfilechooserdefault.c:3507
 msgid "_Name:"
 msgstr "_Nome:"
 
-#: gtk/gtkfilechooserdefault.c:3546
+#: gtk/gtkfilechooserdefault.c:3547
 msgid "_Browse for other folders"
 msgstr "_Navegar em outras pastas"
 
-#: gtk/gtkfilechooserdefault.c:3796
+#: gtk/gtkfilechooserdefault.c:3797
 msgid "Save in _folder:"
 msgstr "Salvar na _pasta:"
 
-#: gtk/gtkfilechooserdefault.c:3798
+#: gtk/gtkfilechooserdefault.c:3799
 msgid "Create in _folder:"
 msgstr "Criar na _pasta:"
 
-#: gtk/gtkfilechooserdefault.c:4738
+#: gtk/gtkfilechooserdefault.c:4739
 msgid "Cannot change to folder because it is not local"
 msgstr "Impossível ir para a pasta porque ela não é local"
 
-#: gtk/gtkfilechooserdefault.c:5254
+#: gtk/gtkfilechooserdefault.c:5255
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "O atalho %s não existe"
 
-#: gtk/gtkfilechooserdefault.c:5718
+#: gtk/gtkfilechooserdefault.c:5719
 #, c-format
 msgid "Could not mount %s"
 msgstr "Impossível montar %s"
 
-#: gtk/gtkfilechooserdefault.c:6011
+#: gtk/gtkfilechooserdefault.c:6012
 msgid "Type name of new folder"
 msgstr "Digite o nome da nova pasta"
 
-#: gtk/gtkfilechooserdefault.c:6053
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:6055
+#: gtk/gtkfilechooserdefault.c:6056
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6057
+#: gtk/gtkfilechooserdefault.c:6058
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6059
+#: gtk/gtkfilechooserdefault.c:6060
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6111
+#: gtk/gtkfilechooserdefault.c:6112
 msgid "Today"
 msgstr "Hoje"
 
-#: gtk/gtkfilechooserdefault.c:6113
+#: gtk/gtkfilechooserdefault.c:6114
 msgid "Yesterday"
 msgstr "Ontem"
 
-#: gtk/gtkfilechooserdefault.c:6124
+#: gtk/gtkfilechooserdefault.c:6125
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/gtkfilechooserdefault.c:6194
+#: gtk/gtkfilechooserdefault.c:6195
 msgid "Cannot change folder"
 msgstr "Impossível alterar a pasta"
 
-#: gtk/gtkfilechooserdefault.c:6195
+#: gtk/gtkfilechooserdefault.c:6196
 msgid "The folder you specified is an invalid path."
 msgstr "A pasta que você especificou tem um caminho inválido."
 
-#: gtk/gtkfilechooserdefault.c:6234
+#: gtk/gtkfilechooserdefault.c:6235
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Impossível construir o nome do arquivo a partir de '%s' e '%s'"
 
-#: gtk/gtkfilechooserdefault.c:6270
+#: gtk/gtkfilechooserdefault.c:6271
 msgid "Could not select item"
 msgstr "Impossível selecionar o item"
 
-#: gtk/gtkfilechooserdefault.c:6310
+#: gtk/gtkfilechooserdefault.c:6311
 msgid "Open Location"
 msgstr "Abrir Localização"
 
-#: gtk/gtkfilechooserdefault.c:6317
+#: gtk/gtkfilechooserdefault.c:6318
 msgid "Save in Location"
 msgstr "Salvar na Localização"
 
-#: gtk/gtkfilechooserdefault.c:6341
+#: gtk/gtkfilechooserdefault.c:6342
 msgid "_Location:"
 msgstr "_Localização:"
 
@@ -1461,7 +1498,9 @@ msgstr "_Seleção: "
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
-msgstr "O nome de arquivo \"%s\" não pôde ser convertido para UTF-8 (tente definir a variável de ambiente G_FILENAME_ENCODING): %s"
+msgstr ""
+"O nome de arquivo \"%s\" não pôde ser convertido para UTF-8 (tente definir a "
+"variável de ambiente G_FILENAME_ENCODING): %s"
 
 #: gtk/gtkfilesel.c:3156
 msgid "Invalid UTF-8"
