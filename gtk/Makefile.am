@@ -343,6 +343,7 @@ INCLUDES = \
 	-DG_LOG_DOMAIN=\"Gtk\"			\
 	-DGTK_EXE_PREFIX=\"$(exec_prefix)\"	\
 	-DGTK_DATA_PREFIX=\"$(prefix)\"		\
+	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"	\
 	-I$(top_srcdir)				\
 	@GTK_DEBUG_FLAGS@			\
 	@GTK_XIM_FLAGS@				\

@@ -12,7 +12,12 @@ What is new in GTK+ 1.1.6:
 * Lots of API clean ups.
 * Incremental freezing abilities.
 * Integrated widgets from the GNOME tree: GtkLayout, GtkPlug and GtkSocket.
-* Read doc/Changes-1.2 to properly adapt your code.
+* New window functions for transient relationship, default size, and 
+  geometry hints
+* Default rc files are now read in (<sysconfdir/etc/gtkrc and ~/.gtkrc)
+  GTK_RC_FILES environment variable and functions are provided to configure
+  this behavior
+* Read doc/Changes-1.2.txt to properly adapt your code.
 * Bug Fixes.
 
 What is new in GTK+ 1.1.5:

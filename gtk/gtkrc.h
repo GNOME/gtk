@@ -56,6 +56,9 @@ struct _GtkRcStyle
 };
 
 void	  gtk_rc_init			(void);
+void      gtk_rc_add_default_file    (const gchar *filename);
+void      gtk_rc_set_default_files      (gchar **filenames);
+gchar**   gtk_rc_get_default_files      (void);
 void	  gtk_rc_parse			(const gchar *filename);
 void	  gtk_rc_parse_string		(const gchar *rc_string);
 gboolean  gtk_rc_reparse_all		(void);

@@ -8350,6 +8350,8 @@ main (int argc, char *argv[])
 
   gtk_set_locale ();
 
+  gtk_rc_add_default_file ("testgtkrc");
+
   gtk_init (&argc, &argv);
 
   gdk_rgb_init ();
@@ -8362,8 +8364,6 @@ main (int argc, char *argv[])
 				"debug_msg",
 				1,
 				GTK_TYPE_STRING, "GtkWidgetClass <ctrl><release>9 test");
-
-  gtk_rc_parse ("testgtkrc");
 
   create_main_window ();
 

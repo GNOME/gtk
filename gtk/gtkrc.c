@@ -23,6 +23,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "gtkrc.h"
 #include "gtkbindings.h"
 #include "gtkthemes.h"
@@ -95,6 +96,7 @@ static void        gtk_rc_clear_styles               (void);
 static void        gtk_rc_append_default_pixmap_path (void);
 static void        gtk_rc_append_default_module_path (void);
 static void        gtk_rc_append_pixmap_path         (gchar *dir);
+static void        gtk_rc_add_initial_default_files  (void);
 
 
 static const GScannerConfig	gtk_rc_scanner_config =
@@ -179,6 +181,10 @@ static GHashTable *realized_style_ht = NULL;
 static GSList *gtk_rc_sets_widget = NULL;
 static GSList *gtk_rc_sets_widget_class = NULL;
 static GSList *gtk_rc_sets_class = NULL;
+
+#define GTK_RC_MAX_DEFAULT_FILES 128
+static gchar *gtk_rc_default_files[GTK_RC_MAX_DEFAULT_FILES];
+static gboolean gtk_rc_auto_parse = TRUE;
 
 #define GTK_RC_MAX_PIXMAP_PATHS 128
 static gchar *pixmap_path[GTK_RC_MAX_PIXMAP_PATHS];
@@ -303,15 +309,112 @@ gtk_rc_append_default_module_path(void)
   g_free(path);
 }
 
+static void
+gtk_rc_add_initial_default_files (void)
+{
+  static gint init = FALSE;
+  gchar *var, *str;
+  gchar **files;
+  gint i;
+
+  if (init)
+    return;
+  
+  gtk_rc_default_files[0] = NULL;
+  init = TRUE;
+
+  var = getenv("GTK_RC_FILES");
+  if (var)
+    {
+      files = g_strsplit (var, ":", 128);
+      i=0;
+      while (files[i])
+	{
+	  gtk_rc_add_default_file (files[i]);
+	  i++;
+	}
+    }
+  else
+    {
+      str = g_malloc (strlen(GTK_SYSCONFDIR) + strlen("/gtkrc"));
+      sprintf (str, "%s%s", GTK_SYSCONFDIR, "/gtkrc");
+      gtk_rc_add_default_file (str);
+
+      var = g_get_home_dir ();
+      str = g_malloc (strlen(var) + strlen("/.gtkrc"));
+      sprintf (str, "%s%s", var, "/.gtkrc");
+      gtk_rc_add_default_file (str);
+    }
+}
+
+void
+gtk_rc_add_default_file (const gchar *file)
+{
+  guint n;
+  
+  gtk_rc_add_initial_default_files ();
+
+  for (n = 0; gtk_rc_default_files[n]; n++) ;
+  if (n >= GTK_RC_MAX_DEFAULT_FILES - 1)
+    return;
+  
+  gtk_rc_default_files[n++] = g_strdup (file);
+  gtk_rc_default_files[n] = NULL;
+}
+
+void
+gtk_rc_set_default_files (gchar **files)
+{
+  gint i;
+
+  gtk_rc_add_initial_default_files ();
+
+  i = 0;
+  while (gtk_rc_default_files[i])
+    {
+      g_free (gtk_rc_default_files[i]);
+      i++;
+    }
+    
+  gtk_rc_default_files[0] = NULL;
+  gtk_rc_auto_parse = FALSE;
+
+  i = 0;
+  while (files[i] != NULL)
+    {
+      gtk_rc_add_default_file (files[i]);
+      i++;
+    }
+}
+
+gchar **
+gtk_rc_get_default_files (void)
+{
+  gtk_rc_add_initial_default_files ();
+
+  return gtk_rc_default_files;
+}
+
 void
 gtk_rc_init (void)
 {
+  guint i;
+
   rc_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_style_hash,
 				  (GCompareFunc) gtk_rc_style_compare);
   pixmap_path[0] = NULL;
   module_path[0] = NULL;
   gtk_rc_append_default_pixmap_path();
   gtk_rc_append_default_module_path();
+
+  gtk_rc_add_initial_default_files ();
+
+  i = 0;
+  while (gtk_rc_default_files[i] != NULL)
+    {
+      gtk_rc_parse (gtk_rc_default_files[i]);
+      i++;
+    }
 }
 
 void

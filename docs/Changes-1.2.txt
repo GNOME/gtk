@@ -100,3 +100,9 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
   gtk_clist_freeze (clist);
   [...]
   gtk_clist_thaw (clist);
+
+* All functions matching g_message* are deprecated
+
+* Functions *_interp are deprecated, *_full variants are available
+  instead
+

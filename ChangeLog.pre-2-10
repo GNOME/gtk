@@ -1,3 +1,14 @@
+Tue Dec  8 18:29:05 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.6
+
+	* NEWS: updated
+
+        * gtk/Makefile.am:
+          gtk/testgtk.c:
+          gtk/gtkrc.h:
+          gtk/gtkrc.c: Read in default files.
+
 Wed Dec  9 00:49:12 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.h:

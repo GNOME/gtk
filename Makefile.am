@@ -14,11 +14,14 @@ EXTRA_DIST =	\
 	NEWS.pre-1-0	\
 	ChangeLog.pre-1-0	\
 	README.cvs-commits	\
+	examples/Makefile	\
 	examples/README.1ST	\
 	examples/extract.awk	\
 	examples/extract.sh	\
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
+	examples/base/Makefile	\
+	examples/base/base.c \
 	examples/buttons/Makefile  \
 	examples/buttons/buttons.c  \
 	examples/buttons/info.xpm  \
