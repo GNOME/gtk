@@ -1,5 +1,11 @@
 2004-03-10  Morten Welinder  <terra@gnome.org>
 
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_add_shortcut_folder): Test validity of
+	path here.
+	(shortcuts_insert_path): Don't check here.
+	(get_file_info): Barf if name-only fails.
+
 	* tests/testfilechooser.c (main): Add support for --multiple.
 
 Wed Mar 10 02:41:05 2004  Jonathan Blandford  <jrb@gnome.org>
