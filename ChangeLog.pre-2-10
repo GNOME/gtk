@@ -1,5 +1,8 @@
 2003-01-31  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkselection.h: 
+	* gtk/gtkselection.c (gtk_selection_clear): Deprecate.  (#85683)
+
 	* gdk/gdkpixbuf.h: 
 	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_to_drawable): 
 	(gdk_pixbuf_render_to_drawable_alpha): Deprecate.  (#60582)

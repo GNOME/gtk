@@ -1028,14 +1028,15 @@ gtk_selection_init (void)
  * @event: the event
  * 
  * The default handler for the GtkWidget::selection_clear_event
- * signal. Instead of calling this function, chain up from
- * your selection_clear_event handler. Calling this function
- * from any other context is illegal. This function will
- * be deprecated in future versions of GTK+.
+ * signal. 
  * 
  * Return value: %TRUE if the event was handled, otherwise false
  * 
  * Since: 2.2
+ *
+ * Deprecated: Instead of calling this function, chain up from
+ * your selection_clear_event handler. Calling this function
+ * from any other context is illegal. 
  **/
 gboolean
 gtk_selection_clear (GtkWidget         *widget,
