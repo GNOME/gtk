@@ -1,5 +1,9 @@
 2001-10-27  Anders Carlsson  <andersca@gnu.org>
 
+	* gtk/tmpl/gtkspinbutton.sgml: Clarify that we're
+	returning a spin button in the _new function.
+	This fixes #54097.
+
 	* gtk/tmpl/gtktoolbar.sgml: Change docs for 
 	gtk_toolbar_append_item to say that it appends an item
 	to the end of a toolbar. This fixes #60428.
