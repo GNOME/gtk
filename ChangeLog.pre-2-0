@@ -1,3 +1,11 @@
+2000-10-25  Robert Brady  <robert@suse.co.uk>
+
+	* gtk/testtext.c (save_buffer): Allow creation of new files when
+	saving.
+
+	(fill_file_buffer): Don't die if a UTF-8 sequence is split across
+	calls to read().
+
 2000-10-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdkwindow.c: Include x11/gdkx.h only when building for X11.
