@@ -116,12 +116,10 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
       </note>
     </refsect2>
 
-
 <!-- ##### SECTION See_Also ##### -->
     <para>
       #GtkFileChooserDialog, #GtkFileChooserWidget
     </para>
-
 
 <!-- ##### STRUCT GtkFileChooser ##### -->
 <para>

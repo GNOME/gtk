@@ -77,6 +77,53 @@ child is attached or detached.</entry>
 </para>
 
 
+<!-- ##### SIGNAL GtkHandleBox::child-attached ##### -->
+<para>
+This signal is emitted when the contents of the
+handlebox are reattached to the main window.
+</para>
+
+@handlebox: the object which received the signal.
+@widget: the child widget of the handlebox.
+         (this argument provides no extra information
+          and is here only for backwards-compatibility)
+
+<!-- ##### SIGNAL GtkHandleBox::child-detached ##### -->
+<para>
+This signal is emitted when the contents of the
+handlebox are detached from the main window.
+</para>
+
+@handlebox: the object which received the signal.
+@widget: the child widget of the handlebox. 
+         (this argument provides no extra information
+          and is here only for backwards-compatibility)
+
+<!-- ##### ARG GtkHandleBox:handle-position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkHandleBox:shadow ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkHandleBox:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkHandleBox:snap-edge ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkHandleBox:snap-edge-set ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_handle_box_new ##### -->
 <para>
 Create a new handle box.
@@ -154,51 +201,4 @@ in the future.
 @handle_box: 
 @Returns: 
 
-
-<!-- ##### SIGNAL GtkHandleBox::child-attached ##### -->
-<para>
-This signal is emitted when the contents of the
-handlebox are reattached to the main window.
-</para>
-
-@handlebox: the object which received the signal.
-@widget: the child widget of the handlebox.
-         (this argument provides no extra information
-          and is here only for backwards-compatibility)
-
-<!-- ##### SIGNAL GtkHandleBox::child-detached ##### -->
-<para>
-This signal is emitted when the contents of the
-handlebox are detached from the main window.
-</para>
-
-@handlebox: the object which received the signal.
-@widget: the child widget of the handlebox. 
-         (this argument provides no extra information
-          and is here only for backwards-compatibility)
-
-<!-- ##### ARG GtkHandleBox:handle-position ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkHandleBox:shadow ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkHandleBox:shadow-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkHandleBox:snap-edge ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkHandleBox:snap-edge-set ##### -->
-<para>
-
-</para>
 

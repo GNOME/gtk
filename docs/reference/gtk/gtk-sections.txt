@@ -649,12 +649,15 @@ gtk_combo_box_set_row_span_column
 gtk_combo_box_set_column_span_column
 gtk_combo_box_get_active
 gtk_combo_box_set_active
+gtk_combo_box_get_active_iter
+gtk_combo_box_set_active_iter
 gtk_combo_box_get_model
 gtk_combo_box_set_model
 gtk_combo_box_new_text
 gtk_combo_box_append_text
 gtk_combo_box_insert_text
 gtk_combo_box_prepend_text
+gtk_combo_box_remove_text
 <SUBSECTION Standard>
 GTK_TYPE_COMBO_BOX
 GTK_COMBO_BOX
@@ -672,6 +675,8 @@ gtk_combo_box_get_type
 <TITLE>GtkComboBoxEntry</TITLE>
 GtkComboBoxEntry
 gtk_combo_box_entry_new
+gtk_combo_box_entry_new_with_model
+gtk_combo_box_entry_set_text_column
 gtk_combo_box_entry_get_text_column
 <SUBSECTION Standard>
 GTK_TYPE_COMBO_BOX_ENTRY
@@ -1052,6 +1057,8 @@ gtk_expander_set_label
 gtk_expander_get_label
 gtk_expander_set_use_underline
 gtk_expander_get_use_underline
+gtk_expander_set_use_markup
+gtk_expander_get_use_markup
 gtk_expander_set_label_widget
 gtk_expander_get_label_widget
 <SUBSECTION Standard>
@@ -3155,6 +3162,7 @@ gtk_toolbar_get_item_index
 gtk_toolbar_get_n_items
 gtk_toolbar_get_nth_item
 gtk_toolbar_get_drop_index
+gtk_toolbar_set_drop_highlight_item
 gtk_toolbar_set_show_arrow
 gtk_toolbar_set_orientation
 gtk_toolbar_set_tooltips
@@ -3240,6 +3248,8 @@ GtkToolItemPrivate
 <TITLE>GtkSeparatorToolItem</TITLE>
 GtkSeparatorToolItem
 gtk_separator_tool_item_new
+gtk_separator_tool_item_set_draw
+gtk_separator_tool_item_get_draw
 
 <SUBSECTION Standard>
 GTK_TYPE_SEPARATOR_TOOL_ITEM

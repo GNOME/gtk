@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-03 03:59+0100\n"
+"POT-Creation-Date: 2003-12-08 16:28-0500\n"
 "PO-Revision-Date: 2003-12-03 04:01+0100\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -1459,19 +1459,19 @@ msgstr "Особине"
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "Списак стилских особина текста који се исцртава"
 
-#: gtk/gtkcellrenderertext.c:199 gtk/gtkcellview.c:174 gtk/gtktexttag.c:205
+#: gtk/gtkcellrenderertext.c:199 gtk/gtkcellview.c:176 gtk/gtktexttag.c:205
 msgid "Background color name"
 msgstr "Име боје позадине"
 
-#: gtk/gtkcellrenderertext.c:200 gtk/gtkcellview.c:175 gtk/gtktexttag.c:206
+#: gtk/gtkcellrenderertext.c:200 gtk/gtkcellview.c:177 gtk/gtktexttag.c:206
 msgid "Background color as a string"
 msgstr "Боја позадине као низ знакова"
 
-#: gtk/gtkcellrenderertext.c:207 gtk/gtkcellview.c:181 gtk/gtktexttag.c:213
+#: gtk/gtkcellrenderertext.c:207 gtk/gtkcellview.c:183 gtk/gtktexttag.c:213
 msgid "Background color"
 msgstr "Боја позадине"
 
-#: gtk/gtkcellrenderertext.c:208 gtk/gtkcellview.c:182
+#: gtk/gtkcellrenderertext.c:208 gtk/gtkcellview.c:184
 msgid "Background color as a GdkColor"
 msgstr "Боја позадине као GdkColor"
 
@@ -1590,11 +1590,11 @@ msgstr "Подвлачење"
 msgid "Style of underline for this text"
 msgstr "Начин подвлачења за овај текст"
 
-#: gtk/gtkcellrenderertext.c:362 gtk/gtkcellview.c:189 gtk/gtktexttag.c:508
+#: gtk/gtkcellrenderertext.c:362 gtk/gtkcellview.c:191 gtk/gtktexttag.c:508
 msgid "Background set"
 msgstr "Постављена позадина"
 
-#: gtk/gtkcellrenderertext.c:363 gtk/gtkcellview.c:190 gtk/gtktexttag.c:509
+#: gtk/gtkcellrenderertext.c:363 gtk/gtkcellview.c:192 gtk/gtktexttag.c:509
 msgid "Whether this tag affects the background color"
 msgstr "Да ли ове поставке утичу на боју позадине"
 
@@ -2506,7 +2506,8 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1051
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
-msgstr "Не могу да додам обележивач за %s зато што представља неисправно име путање."
+msgstr ""
+"Не могу да додам обележивач за %s зато што представља неисправно име путање."
 
 #: gtk/gtkfilechooserdefault.c:1113
 msgid "Folder"
@@ -3246,11 +3247,11 @@ msgstr "Елемент пречице"
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Елемент који се активира када се притисне тастер пречице ове ознаке"
 
-#: gtk/gtklabel.c:3224
+#: gtk/gtklabel.c:3225
 msgid "Select All"
 msgstr "Изабери све"
 
-#: gtk/gtklabel.c:3234
+#: gtk/gtklabel.c:3235
 msgid "Input Methods"
 msgstr "Начини уноса"
 
@@ -3626,7 +3627,7 @@ msgstr "Корачница унапред"
 msgid "Display the standard forward arrow button"
 msgstr "Прикажи обично дугме са стрелицом унапред"
 
-#: gtk/gtknotebook.c:2645 gtk/gtknotebook.c:4971
+#: gtk/gtknotebook.c:2679 gtk/gtknotebook.c:5052
 #, c-format
 msgid "Page %u"
 msgstr "Лист %u"
@@ -5689,51 +5690,51 @@ msgstr "Без приказивања свега"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Да ли gtk_widget_show_all() не треба да утиче на овај елемент"
 
-#: gtk/gtkwidget.c:1350
+#: gtk/gtkwidget.c:1362
 msgid "Interior Focus"
 msgstr "Унутрашња жижа"
 
-#: gtk/gtkwidget.c:1351
+#: gtk/gtkwidget.c:1363
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Да ли исцртати показатељ жиже унутар елемената"
 
-#: gtk/gtkwidget.c:1357
+#: gtk/gtkwidget.c:1369
 msgid "Focus linewidth"
 msgstr "Дебљина жижне линије"
 
-#: gtk/gtkwidget.c:1358
+#: gtk/gtkwidget.c:1370
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Дебљина у тачкама линије коју показује елемент у жижи"
 
-#: gtk/gtkwidget.c:1364
+#: gtk/gtkwidget.c:1376
 msgid "Focus line dash pattern"
 msgstr "Образац црткања жижне линије"
 
-#: gtk/gtkwidget.c:1365
+#: gtk/gtkwidget.c:1377
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Образац по којем се цртка показатељ елемента у жижи"
 
-#: gtk/gtkwidget.c:1370
+#: gtk/gtkwidget.c:1382
 msgid "Focus padding"
 msgstr "Жижна попуна"
 
-#: gtk/gtkwidget.c:1371
+#: gtk/gtkwidget.c:1383
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Ширина у тачкама између показатеља елемента у жижи и оквира елемента"
 
-#: gtk/gtkwidget.c:1376
+#: gtk/gtkwidget.c:1388
 msgid "Cursor color"
 msgstr "Боја курсора"
 
-#: gtk/gtkwidget.c:1377
+#: gtk/gtkwidget.c:1389
 msgid "Color with which to draw insertion cursor"
 msgstr "Боја којом се исцртава курсор за унос"
 
-#: gtk/gtkwidget.c:1382
+#: gtk/gtkwidget.c:1394
 msgid "Secondary cursor color"
 msgstr "Друга боја курсора"
 
-#: gtk/gtkwidget.c:1383
+#: gtk/gtkwidget.c:1395
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -5741,11 +5742,11 @@ msgstr ""
 "Боја којом се исцртава други курсор за унос при уносу мешаног текста са "
 "десна на лево, и текста са лева на десно"
 
-#: gtk/gtkwidget.c:1388
+#: gtk/gtkwidget.c:1400
 msgid "Cursor line aspect ratio"
 msgstr "Размера курсорне линије"
 
-#: gtk/gtkwidget.c:1389
+#: gtk/gtkwidget.c:1401
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Размера у којој се црта курсор за унос"
 

@@ -43,6 +43,21 @@ only be accessed using the functions below.
 </para>
 
 
+<!-- ##### ARG GtkFontSelection:font ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFontSelection:font-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFontSelection:preview-text ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_font_selection_new ##### -->
 <para>
 Creates a new #GtkFontSelection.
@@ -97,19 +112,4 @@ Sets the text displayed in the preview area.
 @fontsel: a #GtkFontSelection.
 @text: the text to display in the preview area.
 
-
-<!-- ##### ARG GtkFontSelection:font ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFontSelection:font-name ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFontSelection:preview-text ##### -->
-<para>
-
-</para>
 

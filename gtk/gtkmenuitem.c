@@ -89,8 +89,8 @@ static void gtk_menu_item_forall         (GtkContainer    *container,
 					  gboolean         include_internals,
 					  GtkCallback      callback,
 					  gpointer         callback_data);
-static gboolean gtk_menu_item_real_can_activate_accel (GtkWidget *widget,
-                                                       guint      signal_id);
+static gboolean gtk_menu_item_can_activate_accel (GtkWidget *widget,
+						  guint      signal_id);
 
 
 static GtkItemClass *parent_class;
@@ -149,7 +149,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->hide_all = gtk_menu_item_hide_all;
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
   widget_class->parent_set = gtk_menu_item_parent_set;
-  widget_class->can_activate_accel = gtk_menu_item_real_can_activate_accel;
+  widget_class->can_activate_accel = gtk_menu_item_can_activate_accel;
   
   container_class->forall = gtk_menu_item_forall;
 
@@ -1218,10 +1218,10 @@ gtk_menu_item_hide_all (GtkWidget *widget)
 }
 
 static gboolean
-gtk_menu_item_real_can_activate_accel (GtkWidget *widget,
-                                       guint      signal_id)
+gtk_menu_item_can_activate_accel (GtkWidget *widget,
+				  guint      signal_id)
 {
-  /* defer to parent menu to allow accel activation */
+  /* Chain to the parent GtkMenu for further checks */
   return (GTK_WIDGET_IS_SENSITIVE (widget) && GTK_WIDGET_VISIBLE (widget) &&
           widget->parent && gtk_widget_can_activate_accel (widget->parent, signal_id));
 }

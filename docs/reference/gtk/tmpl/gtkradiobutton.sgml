@@ -91,6 +91,11 @@ functions below.
 </para>
 
 
+<!-- ##### ARG GtkRadioButton:group ##### -->
+<para>
+Sets a new group for a radio button.
+</para>
+
 <!-- ##### FUNCTION gtk_radio_button_new ##### -->
 <para>
 Creates a new #GtkRadioButton. To be of any practical value, a widget should
@@ -182,9 +187,4 @@ Retrieves the group assigned to a radio button.
 @Returns: a linked list containing all the radio buttons in the same group
 as @radio_button.
 
-
-<!-- ##### ARG GtkRadioButton:group ##### -->
-<para>
-Sets a new group for a radio button.
-</para>
 

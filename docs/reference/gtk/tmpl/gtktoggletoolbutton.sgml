@@ -47,6 +47,13 @@ A #GtkToolItem containing a toggle button.
 </para>
 
 
+<!-- ##### SIGNAL GtkToggleToolButton::toggled ##### -->
+<para>
+
+</para>
+
+@toggletoolbutton: the object which received the signal.
+
 <!-- ##### FUNCTION gtk_toggle_tool_button_new ##### -->
 <para>
 
@@ -81,11 +88,4 @@ A #GtkToolItem containing a toggle button.
 @button: 
 @Returns: 
 
-
-<!-- ##### SIGNAL GtkToggleToolButton::toggled ##### -->
-<para>
-
-</para>
-
-@toggletoolbutton: the object which received the signal.
 

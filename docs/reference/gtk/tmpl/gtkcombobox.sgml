@@ -20,7 +20,54 @@ GtkComboBox
 </para>
 
 
+<!-- ##### SIGNAL GtkComboBox::changed ##### -->
+<para>
+
+</para>
+
+@combobox: the object which received the signal.
+
+<!-- ##### ARG GtkComboBox:active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:column-span-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:model ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:row-span-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:wrap-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:appearance ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_combo_box_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+<!-- # Unused Parameters # -->
+@model: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_new_with_model ##### -->
 <para>
 
 </para>
@@ -74,6 +121,25 @@ GtkComboBox
 @index: 
 
 
+<!-- ##### FUNCTION gtk_combo_box_get_active_iter ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_active_iter ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@iter: 
+
+
 <!-- ##### FUNCTION gtk_combo_box_get_model ##### -->
 <para>
 
@@ -81,6 +147,15 @@ GtkComboBox
 
 @combo_box: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_model ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@model: 
 
 
 <!-- ##### FUNCTION gtk_combo_box_new_text ##### -->
@@ -119,40 +194,12 @@ GtkComboBox
 @text: 
 
 
-<!-- ##### SIGNAL GtkComboBox::changed ##### -->
+<!-- ##### FUNCTION gtk_combo_box_remove_text ##### -->
 <para>
 
 </para>
 
-@combobox: the object which received the signal.
+@combo_box: 
+@position: 
 
-<!-- ##### ARG GtkComboBox:active ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkComboBox:column-span-column ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkComboBox:model ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkComboBox:row-span-column ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkComboBox:wrap-width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkComboBox:appearance ##### -->
-<para>
-
-</para>
 

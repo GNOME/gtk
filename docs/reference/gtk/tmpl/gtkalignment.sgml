@@ -34,6 +34,46 @@ be accessed using the functions below.
 </para>
 
 
+<!-- ##### ARG GtkAlignment:bottom-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:left-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:right-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:top-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:xscale ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:yscale ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_alignment_new ##### -->
 <para>
 Creates a new #GtkAlignment.
@@ -95,44 +135,4 @@ unused space, from 0 to 1. The values are similar to @xscale.
 @padding_left: 
 @padding_right: 
 
-
-<!-- ##### ARG GtkAlignment:bottom-padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAlignment:left-padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAlignment:right-padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAlignment:top-padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAlignment:xalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAlignment:xscale ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAlignment:yalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAlignment:yscale ##### -->
-<para>
-
-</para>
 

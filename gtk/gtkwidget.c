@@ -1313,6 +1313,18 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_SCREEN);
+/**
+ * GtkWidget::can-activate-accel:
+ * @widget: the object which received the signal
+ * @signal_id: the ID of a signal installed on @widget
+ * @returns: %TRUE if the signal can be activated.
+ *
+ * Determines whether an accelerator that activates the signal
+ * identified by @signal_id can currently be activated.
+ * This signal is present to allow applications and derived
+ * widgets to override the default #GtkWidget handling
+ * for determining whether an accelerator can be activated.
+ */
   widget_signals[CAN_ACTIVATE_ACCEL] =
     g_signal_new ("can_activate_accel",
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -2904,6 +2916,21 @@ gtk_widget_real_can_activate_accel (GtkWidget *widget,
   return GTK_WIDGET_IS_SENSITIVE (widget) && GTK_WIDGET_DRAWABLE (widget) && gdk_window_is_viewable (widget->window);
 }
 
+/**
+ * gtk_widget_can_activate_accel:
+ * @widget: a #GtkWidget
+ * @signal_id: the ID of a signal installed on @widget
+ * 
+ * Determines whether an accelerator that activates the signal
+ * identified by @signal_id can currently be activated.
+ * This is done by emitting the GtkWidget::can-activate-accel
+ * signal on @widget; if the signal isn't overriden by a
+ * handler or in a derived widget, then the default check is
+ * that the widget must be sensitive, and the widget and all
+ * its parents mapped.
+ *
+ * Return value: %TRUE if the accelerator can be activated.
+ **/
 gboolean
 gtk_widget_can_activate_accel (GtkWidget *widget,
                                guint      signal_id)
@@ -2933,7 +2960,7 @@ closure_accel_activate (GClosure     *closure,
   if (can_activate)
     g_signal_emit (closure->data, aclosure->signal_id, 0);
 
-  /* wether accelerator was handled */
+  /* whether accelerator was handled */
   g_value_set_boolean (return_value, can_activate);
 }
 

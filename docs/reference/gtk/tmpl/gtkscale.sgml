@@ -50,6 +50,55 @@ slider.</entry>
 </para>
 
 
+<!-- ##### SIGNAL GtkScale::format-value ##### -->
+<para>
+Signal which allows you to change how the scale value is displayed.  Connect a
+signal handler which returns an allocated string representing @value.
+That string will then be used to display the scale's value.
+Here's an example signal handler which displays a value 1.0 as
+with "--&gt;1.0&lt;--".
+<informalexample><programlisting>
+static gchar*
+format_value_callback (GtkScale *scale,
+                       gdouble   value)
+{
+  return g_strdup_printf ("--&gt;&percnt;0.*g&lt;--",
+                          gtk_scale_get_digits (scale), value);
+}
+</programlisting></informalexample>
+</para>
+
+@scale: the object which received the signal.
+@arg1: 
+@Returns: allocated string representing @value
+<!-- # Unused Parameters # -->
+@value: value to format
+
+<!-- ##### ARG GtkScale:digits ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScale:draw-value ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScale:value-pos ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScale:slider-length ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScale:value-spacing ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_scale_set_digits ##### -->
 <para>
 Sets the number of decimal places that are displayed in the value.  Also causes
@@ -108,53 +157,4 @@ Gets the position in which the current value is displayed.
 @scale: a #GtkScale.
 @Returns: the position in which the current value is displayed.
 
-
-<!-- ##### SIGNAL GtkScale::format-value ##### -->
-<para>
-Signal which allows you to change how the scale value is displayed.  Connect a
-signal handler which returns an allocated string representing @value.
-That string will then be used to display the scale's value.
-Here's an example signal handler which displays a value 1.0 as
-with "--&gt;1.0&lt;--".
-<informalexample><programlisting>
-static gchar*
-format_value_callback (GtkScale *scale,
-                       gdouble   value)
-{
-  return g_strdup_printf ("--&gt;&percnt;0.*g&lt;--",
-                          gtk_scale_get_digits (scale), value);
-}
-</programlisting></informalexample>
-</para>
-
-@scale: the object which received the signal.
-@arg1: 
-@Returns: allocated string representing @value
-<!-- # Unused Parameters # -->
-@value: value to format
-
-<!-- ##### ARG GtkScale:digits ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkScale:draw-value ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkScale:value-pos ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkScale:slider-length ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkScale:value-spacing ##### -->
-<para>
-
-</para>
 

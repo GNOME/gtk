@@ -102,6 +102,8 @@ static void       gtk_cell_view_cell_layout_set_cell_data_func (GtkCellLayout   
                                                                 GDestroyNotify         destroy);
 
 
+#define GTK_CELL_VIEW_GET_PRIVATE(obj)    (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_VIEW, GtkCellViewPrivate))
+
 enum
 {
   PROP_0,

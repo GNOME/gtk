@@ -21,6 +21,53 @@ the triangles used in a #GtkTreeView.
 </para>
 
 
+<!-- ##### SIGNAL GtkExpander::activate ##### -->
+<para>
+
+</para>
+
+@expander: the object which received the signal.
+
+<!-- ##### ARG GtkExpander:expanded ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:label-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:use-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:use-underline ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:expander-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:expander-spacing ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_expander_new ##### -->
 <para>
 
@@ -111,6 +158,24 @@ the triangles used in a #GtkTreeView.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_expander_set_use_markup ##### -->
+<para>
+
+</para>
+
+@expander: 
+@use_markup: 
+
+
+<!-- ##### FUNCTION gtk_expander_get_use_markup ##### -->
+<para>
+
+</para>
+
+@expander: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_expander_set_label_widget ##### -->
 <para>
 
@@ -128,46 +193,4 @@ the triangles used in a #GtkTreeView.
 @expander: 
 @Returns: 
 
-
-<!-- ##### SIGNAL GtkExpander::activate ##### -->
-<para>
-
-</para>
-
-@expander: the object which received the signal.
-
-<!-- ##### ARG GtkExpander:expanded ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkExpander:label ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkExpander:label-widget ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkExpander:spacing ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkExpander:use-underline ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkExpander:expander-size ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkExpander:expander-spacing ##### -->
-<para>
-
-</para>
 

@@ -63,6 +63,51 @@ and should be accessed using the functions below.
 </para>
 
 
+<!-- ##### ARG GtkProgressBar:activity-blocks ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:activity-step ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:adjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:bar-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:discrete-blocks ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:fraction ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:orientation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:pulse-step ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:text ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_progress_bar_new ##### -->
 <para>
 Creates a new #GtkProgressBar.
@@ -230,49 +275,4 @@ gtk_progress_set_percentage() instead.
 @pbar: a #GtkProgressBar.
 @percentage: the new percent complete value.
 
-
-<!-- ##### ARG GtkProgressBar:activity-blocks ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:activity-step ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:adjustment ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:bar-style ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:discrete-blocks ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:fraction ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:orientation ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:pulse-step ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:text ##### -->
-<para>
-
-</para>
 

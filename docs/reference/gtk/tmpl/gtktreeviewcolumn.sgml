@@ -50,6 +50,88 @@ calling gtk_tree_view_column_set_cell_data_func()
 </para>
 
 
+<!-- ##### SIGNAL GtkTreeViewColumn::clicked ##### -->
+<para>
+
+</para>
+
+@treeviewcolumn: the object which received the signal.
+
+<!-- ##### ARG GtkTreeViewColumn:alignment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:clickable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:fixed-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:max-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:min-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:reorderable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:resizable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:sizing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:sort-indicator ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:sort-order ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:title ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:width ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_tree_view_column_new ##### -->
 <para>
 
@@ -509,86 +591,4 @@ calling gtk_tree_view_column_set_cell_data_func()
 @tree_column: 
 @cell: 
 
-
-<!-- ##### SIGNAL GtkTreeViewColumn::clicked ##### -->
-<para>
-
-</para>
-
-@treeviewcolumn: the object which received the signal.
-
-<!-- ##### ARG GtkTreeViewColumn:alignment ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:clickable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:expand ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:fixed-width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:max-width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:min-width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:reorderable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:resizable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:sizing ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:sort-indicator ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:sort-order ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:title ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:visible ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:widget ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeViewColumn:width ##### -->
-<para>
-
-</para>
 

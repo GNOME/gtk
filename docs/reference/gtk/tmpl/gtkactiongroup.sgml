@@ -40,6 +40,11 @@ members and should not be accessed directly.
 </para>
 
 
+<!-- ##### ARG GtkActionGroup:name ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_action_group_new ##### -->
 <para>
 

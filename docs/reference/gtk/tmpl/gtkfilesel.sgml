@@ -140,6 +140,21 @@ The #GtkFileSelection struct contains the following #GtkWidget fields:
 @button_area: 
 @action_area: 
 
+<!-- ##### ARG GtkFileSelection:filename ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileSelection:select-multiple ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileSelection:show-fileops ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_file_selection_new ##### -->
 <para>
 Creates a new file selection dialog box. By default it will contain a #GtkTreeView of the application's current working directory, and a file listing. Operation buttons that allow the user to create a directory, delete files and rename files, are also present.
@@ -219,19 +234,4 @@ Hides the file operation buttons that normally appear at the top of the dialog. 
 @filesel: 
 @Returns: 
 
-
-<!-- ##### ARG GtkFileSelection:filename ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileSelection:select-multiple ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFileSelection:show-fileops ##### -->
-<para>
-
-</para>
 

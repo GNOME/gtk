@@ -20,6 +20,13 @@ The interface for sortable models used by GtkTreeView
 </para>
 
 
+<!-- ##### SIGNAL GtkTreeSortable::sort-column-changed ##### -->
+<para>
+
+</para>
+
+@treesortable: the object which received the signal.
+
 <!-- ##### STRUCT GtkTreeSortableIface ##### -->
 <para>
 
@@ -105,11 +112,4 @@ The interface for sortable models used by GtkTreeView
 @sortable: 
 @Returns: 
 
-
-<!-- ##### SIGNAL GtkTreeSortable::sort-column-changed ##### -->
-<para>
-
-</para>
-
-@treesortable: the object which received the signal.
 

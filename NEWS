@@ -1,3 +1,72 @@
+Overview of Changes in GTK+-2.3.1
+=================================
+* Improve sanity checks on gdk-pixbuf loaders [Matthias Clasen]
+* GDK
+ - Add GDK_DEBUG=xinerama that fakes a 2x2 Xinerama mode [Matthias]
+ - Make gdk_drawable_copy_to_image public [Matthias, Peter Zelezny]
+* Misc Win32 bug fixes [Tor Lillqvist, John Ehresman, Tim Evans]
+* Action-based menu/toolbar API [Matthias]
+ - Add "name" construct-only parameter to GtkActionGroup
+ - Bug fixes [Marco Pesenti Gritti, Christian Persch]
+* Change ranges for Saturation/Value to be 0-100 in GtkColorSelection
+  [Gregory Merchan, Matthias]
+* GtkComboBox [Kristian Rietveld]
+ - Make model and text_column properties not construct-only [Murray Cumming]
+ - Fix sizing
+ - Add mouse wheel support [Matthias]
+* Various GtkEntryCompletion bug fixes [Kristian, Piers Cornwell, Marco]
+* GtkExpander
+ - Add a "use_markup" property, gtk_expander_set/get_use_markup
+ - Fix bugs when unrealizing/destroying [Mark McLoughlin]
+* GtkFileChooser [Federico Mena Quintero]
+ - Add a GtkFileSystemWin32 [Hans Breuer]
+ - Use GtkEntryCompletion in GtkFileChooserEntry 
+ - Add a render_icon to GtkFileSystemIface to allow the 
+   GnomeVFS backend to supply appropriate icons
+ - Improve selection handling in bookmarks list [Federico, Owen Taylor]
+ - Support drops on the bookmarks list
+ - Display error dialogs on failed operations
+ - Many UI tweaks [Federico, Iain Holmes,Hans-Petter Jansson]
+ - Ignore filters for folders [Dave Malcom]
+ - Misc file chooser bug fixes [Owen, Christian Persch, Taavi Talvik]
+* Menus
+ - Make torn-off menus transient-for the window they were torn from
+   [Matthias, Jon-Kare Hellan]
+ - Fix menu positioning for Xinerama, add gtk_menu_set_monitor()
+   for use by position functions [Matthias]
+ - Tweak menu delay parameters, add a default width [Soeren Sandmann]
+* Make g_message_dialog_new_with_markup() automatically escape
+  arguments, add g_message_dialog_set_markup() [Owen]
+* Add read-only min-position/max-position properties to GtkPaned
+* GtkToolbar [Soeren]
+ - Support gaps in the toolbar with expand=true/draw=false separators
+ - Improve drop-location preview handling
+ - Take a GtkRadioToolButton as the parameter to
+   gtk_radio_tool_button_new_from_widget [Murray Cumming]
+ - Many misc toolbar bug fixes [Soeren, Marco]
+* GtkTreeView bug fixes [Morten Welinder, David Hampton]
+* Add gtk_window_is_active()/gtk_has_toplevel_focus() getters
+  to go along with properties [Owen Taylor]
+* Add gtk_widget_can_activate_accel() / ::can-activate-accel
+  signal to fix handling of accelerators on insensitive parent
+  menu-items. [Tim Janik]. (*Note*: the details here will probably
+  change, since similar problems for mnemonics aren't handled.)
+* Implement or improve RTL support in GtkAlignment, GtkCombo, 
+  GtkNotebook, GtkScrolledWindow, GtkTreeView, GtkViewport.
+  [IBM L3 NLS Support Team]
+* Fix string setters for self-assignment [Matthias, Soeren]
+* Finish multi-head handling in gtk-demo [Matthias]
+* Fix install rules for generating gdk-pixbuf.loaders [Manish Singh]
+* Reference doc improvements [Matthias, Soeren,
+  Federico Mena Quintero, Michael Natterer, Owen Taylor, Olexiy Avramchenko]
+* FAQ updates [Tony Gale]
+* New and updated translations (ca,cs,cy,de,el,es,ja,mn,nl,nn,no,pl,pt,sr,
+  sr@Latn,sv,th)
+
+Other contributors: Jorn Baayen,Damon Chaplin, Jeff Franks, Diego Gonzalez,
+  Richard Hult, Egmont Koblinger, Thomas Leonard, Ross McFarland, 
+  Padraig O'Briain, Tomas Ögren, Danilo Segan
+
 Overview of Changes from GTK+-2.2.x to GTK+-2.3.0
 =================================================
 

@@ -79,9 +79,9 @@ about it. ;-)
 </para>
 
 @required_major: 
-@required_minor:
-@required_micro:
-@Returns:
+@required_minor: 
+@required_micro: 
+@Returns: 
 
 
 <!-- ##### MACRO GTK_MAJOR_VERSION ##### -->

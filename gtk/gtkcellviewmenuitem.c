@@ -29,6 +29,8 @@ static void gtk_cell_view_menu_item_init       (GtkCellViewMenuItem      *item);
 static void gtk_cell_view_menu_item_class_init (GtkCellViewMenuItemClass *klass);
 
 
+#define GTK_CELL_VIEW_MENU_ITEM_GET_PRIVATE(obj)  (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_VIEW_MENU_ITEM, GtkCellViewMenuItemPrivate))
+
 GType
 gtk_cell_view_menu_item_get_type (void)
 {

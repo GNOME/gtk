@@ -20,7 +20,23 @@ GtkComboBoxEntry
 </para>
 
 
+<!-- ##### ARG GtkComboBoxEntry:text-column ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_combo_box_entry_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+<!-- # Unused Parameters # -->
+@model: 
+@text_column: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_entry_new_with_model ##### -->
 <para>
 
 </para>
@@ -28,6 +44,15 @@ GtkComboBoxEntry
 @model: 
 @text_column: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_entry_set_text_column ##### -->
+<para>
+
+</para>
+
+@entry_box: 
+@text_column: 
 
 
 <!-- ##### FUNCTION gtk_combo_box_entry_get_text_column ##### -->
@@ -38,9 +63,4 @@ GtkComboBoxEntry
 @entry_box: 
 @Returns: 
 
-
-<!-- ##### ARG GtkComboBoxEntry:text-column ##### -->
-<para>
-
-</para>
 

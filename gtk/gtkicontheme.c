@@ -2558,7 +2558,7 @@ find_builtin_icon (const gchar *icon_name,
       smaller = size < min;
       if (size < min)
 	difference = min - size;
-      if (size > max)
+      else if (size > max)
 	difference = size - max;
       else
 	difference = 0;

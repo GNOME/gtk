@@ -85,6 +85,16 @@ should be accessed using the functions below.
 </para>
 
 
+<!-- ##### ARG GtkAccelLabel:accel-closure ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAccelLabel:accel-widget ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_accel_label_new ##### -->
 <para>
 Creates a new #GtkAccelLabel.
@@ -144,14 +154,4 @@ accelerators are added or removed from the associated widget.
 @accel_label: a #GtkAccelLabel.
 @Returns: always returns %FALSE.
 
-
-<!-- ##### ARG GtkAccelLabel:accel-closure ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAccelLabel:accel-widget ##### -->
-<para>
-
-</para>
 

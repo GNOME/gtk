@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-03 03:59+0100\n"
+"POT-Creation-Date: 2003-12-08 16:28-0500\n"
 "PO-Revision-Date: 2003-12-03 04:01+0100\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -110,8 +110,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Unutrašnja greška: Deo za učitavanje slika „%s“ nije uspeo da počne učitavanje "
-"slike, a nije naveo razlog neuspeha"
+"Unutrašnja greška: Deo za učitavanje slika „%s“ nije uspeo da počne "
+"učitavanje slike, a nije naveo razlog neuspeha"
 
 #: gdk-pixbuf/gdk-pixdata.c:145
 msgid "Image header corrupt"
@@ -231,7 +231,8 @@ msgstr "Izdanje %s GIF načina zapisa nije podržano"
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr "GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
+msgstr ""
+"GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
 
 #: gdk-pixbuf/io-gif.c:1498
 msgid "GIF image was truncated or incomplete."
@@ -821,7 +822,8 @@ msgstr "Isporučena ikona"
 #: gtk/gtkaction.c:215
 msgid "The stock icon displayed in widgets representing this action."
 msgstr ""
-"Isporučena ikona koja se prikazuje u elementima koji predstavljaju ovu akciju."
+"Isporučena ikona koja se prikazuje u elementima koji predstavljaju ovu "
+"akciju."
 
 #: gtk/gtkaction.c:221 gtk/gtktoolitem.c:168
 msgid "Is important"
@@ -874,8 +876,8 @@ msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
 msgstr ""
-"Vodoravna pozicija deteta u dostupnom prostoru. 0.0 označava levo poravnanje, "
-"1.0 desno poravnanje."
+"Vodoravna pozicija deteta u dostupnom prostoru. 0.0 označava levo "
+"poravnanje, 1.0 desno poravnanje."
 
 #: gtk/gtkalignment.c:126
 msgid "Vertical alignment"
@@ -1049,8 +1051,8 @@ msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 msgstr ""
-"Ukoliko je postavljeno, sadržani element se pojavljuje među drugim elementima, "
-"što je odgovarajuće za npr. dugmiće za pomoć."
+"Ukoliko je postavljeno, sadržani element se pojavljuje među drugim "
+"elementima, što je odgovarajuće za npr. dugmiće za pomoć."
 
 #: gtk/gtkbox.c:128 gtk/gtkexpander.c:226
 msgid "Spacing"
@@ -1086,8 +1088,8 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
-"Da li se dodatni prostor namenjen sadržanom elementu treba njemu dodeliti ili "
-"koristiti za popunu"
+"Da li se dodatni prostor namenjen sadržanom elementu treba njemu dodeliti "
+"ili koristiti za popunu"
 
 #: gtk/gtkbox.c:160
 msgid "Padding"
@@ -1096,8 +1098,8 @@ msgstr "Popuna"
 #: gtk/gtkbox.c:161
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr ""
-"Dodatni razmak koji se postavlja između sadržanog elementa i njegovih komšija, "
-"u tačkama"
+"Dodatni razmak koji se postavlja između sadržanog elementa i njegovih "
+"komšija, u tačkama"
 
 #: gtk/gtkbox.c:167
 msgid "Pack type"
@@ -1459,19 +1461,19 @@ msgstr "Osobine"
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "Spisak stilskih osobina teksta koji se iscrtava"
 
-#: gtk/gtkcellrenderertext.c:199 gtk/gtkcellview.c:174 gtk/gtktexttag.c:205
+#: gtk/gtkcellrenderertext.c:199 gtk/gtkcellview.c:176 gtk/gtktexttag.c:205
 msgid "Background color name"
 msgstr "Ime boje pozadine"
 
-#: gtk/gtkcellrenderertext.c:200 gtk/gtkcellview.c:175 gtk/gtktexttag.c:206
+#: gtk/gtkcellrenderertext.c:200 gtk/gtkcellview.c:177 gtk/gtktexttag.c:206
 msgid "Background color as a string"
 msgstr "Boja pozadine kao niz znakova"
 
-#: gtk/gtkcellrenderertext.c:207 gtk/gtkcellview.c:181 gtk/gtktexttag.c:213
+#: gtk/gtkcellrenderertext.c:207 gtk/gtkcellview.c:183 gtk/gtktexttag.c:213
 msgid "Background color"
 msgstr "Boja pozadine"
 
-#: gtk/gtkcellrenderertext.c:208 gtk/gtkcellview.c:182
+#: gtk/gtkcellrenderertext.c:208 gtk/gtkcellview.c:184
 msgid "Background color as a GdkColor"
 msgstr "Boja pozadine kao GdkColor"
 
@@ -1590,11 +1592,11 @@ msgstr "Podvlačenje"
 msgid "Style of underline for this text"
 msgstr "Način podvlačenja za ovaj tekst"
 
-#: gtk/gtkcellrenderertext.c:362 gtk/gtkcellview.c:189 gtk/gtktexttag.c:508
+#: gtk/gtkcellrenderertext.c:362 gtk/gtkcellview.c:191 gtk/gtktexttag.c:508
 msgid "Background set"
 msgstr "Postavljena pozadina"
 
-#: gtk/gtkcellrenderertext.c:363 gtk/gtkcellview.c:190 gtk/gtktexttag.c:509
+#: gtk/gtkcellrenderertext.c:363 gtk/gtkcellview.c:192 gtk/gtktexttag.c:509
 msgid "Whether this tag affects the background color"
 msgstr "Da li ove postavke utiču na boju pozadine"
 
@@ -2189,7 +2191,8 @@ msgstr "Najveća dužina"
 
 #: gtk/gtkentry.c:475
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "Najviše dozvoljenih znakova za ovo polje. Nula ukoliko nema ograničenja"
+msgstr ""
+"Najviše dozvoljenih znakova za ovo polje. Nula ukoliko nema ograničenja"
 
 #: gtk/gtkentry.c:483
 msgid "Visibility"
@@ -2200,8 +2203,8 @@ msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
-"Ukoliko nije postavljeno, prikazuje se „nevidljivi znak“ umesto pravog teksta "
-"(unos lozinke)"
+"Ukoliko nije postavljeno, prikazuje se „nevidljivi znak“ umesto pravog "
+"teksta (unos lozinke)"
 
 #: gtk/gtkentry.c:491
 msgid "Has Frame"
@@ -2506,7 +2509,9 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1051
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
-msgstr "Ne mogu da dodam obeleživač za %s zato što predstavlja neispravno ime putanje."
+msgstr ""
+"Ne mogu da dodam obeleživač za %s zato što predstavlja neispravno ime "
+"putanje."
 
 #: gtk/gtkfilechooserdefault.c:1113
 msgid "Folder"
@@ -3246,11 +3251,11 @@ msgstr "Element prečice"
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Element koji se aktivira kada se pritisne taster prečice ove oznake"
 
-#: gtk/gtklabel.c:3224
+#: gtk/gtklabel.c:3225
 msgid "Select All"
 msgstr "Izaberi sve"
 
-#: gtk/gtklabel.c:3234
+#: gtk/gtklabel.c:3235
 msgid "Input Methods"
 msgstr "Načini unosa"
 
@@ -3383,8 +3388,8 @@ msgstr "Vreme pre pojave podmenija"
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
-"Najmanje vreme koje se pokazivač miša mora zadržati preko stavke menija da bi "
-"se pojavio podmeni"
+"Najmanje vreme koje se pokazivač miša mora zadržati preko stavke menija da "
+"bi se pojavio podmeni"
 
 #: gtk/gtkmenu.c:511
 msgid "Delay before hiding a submenu"
@@ -3626,7 +3631,7 @@ msgstr "Koračnica unapred"
 msgid "Display the standard forward arrow button"
 msgstr "Prikaži obično dugme sa strelicom unapred"
 
-#: gtk/gtknotebook.c:2645 gtk/gtknotebook.c:4971
+#: gtk/gtknotebook.c:2679 gtk/gtknotebook.c:5052
 #, c-format
 msgid "Page %u"
 msgstr "List %u"
@@ -3693,8 +3698,8 @@ msgstr "Promeni veličinu"
 #: gtk/gtkpaned.c:308
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
-"Ukoliko je postavljeno, sadržani element se širi i skuplja zajedno sa okvirnim "
-"elementom"
+"Ukoliko je postavljeno, sadržani element se širi i skuplja zajedno sa "
+"okvirnim elementom"
 
 #: gtk/gtkpaned.c:323
 msgid "Shrink"
@@ -3787,7 +3792,8 @@ msgstr "Korak delovanja"
 #: gtk/gtkprogressbar.c:169
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr ""
-"Korak koji se koristi pri svakom uvećanju dok je delovanje u toku (prevaziđeno)"
+"Korak koji se koristi pri svakom uvećanju dok je delovanje u toku "
+"(prevaziđeno)"
 
 #: gtk/gtkprogressbar.c:178
 msgid "Activity Blocks"
@@ -4026,8 +4032,8 @@ msgstr "Utvrđena veličina klizača"
 #: gtk/gtkscrollbar.c:90
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr ""
-"Ne dozvoljava promenu veličine klizača, već je utvrđuje na najmanju dozvoljenu "
-"dužinu"
+"Ne dozvoljava promenu veličine klizača, već je utvrđuje na najmanju "
+"dozvoljenu dužinu"
 
 #: gtk/gtkscrollbar.c:114
 msgid ""
@@ -4593,7 +4599,8 @@ msgstr "Jednoobrazno"
 
 #: gtk/gtktable.c:195
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "Ukoliko je postavljeno, onda su sva polja tabele jednake širine i visine"
+msgstr ""
+"Ukoliko je postavljeno, onda su sva polja tabele jednake širine i visine"
 
 #: gtk/gtktable.c:202
 msgid "Left attachment"
@@ -4656,8 +4663,8 @@ msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
 msgstr ""
-"Dodatni razmak između sadržanog elementa i njegovog gornjeg i donjeg suseda, u "
-"tačkama"
+"Dodatni razmak između sadržanog elementa i njegovog gornjeg i donjeg suseda, "
+"u tačkama"
 
 #: gtk/gtktext.c:602
 msgid "Horizontal adjustment for the text widget"
@@ -5689,51 +5696,51 @@ msgstr "Bez prikazivanja svega"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Da li gtk_widget_show_all() ne treba da utiče na ovaj element"
 
-#: gtk/gtkwidget.c:1350
+#: gtk/gtkwidget.c:1362
 msgid "Interior Focus"
 msgstr "Unutrašnja žiža"
 
-#: gtk/gtkwidget.c:1351
+#: gtk/gtkwidget.c:1363
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Da li iscrtati pokazatelj žiže unutar elemenata"
 
-#: gtk/gtkwidget.c:1357
+#: gtk/gtkwidget.c:1369
 msgid "Focus linewidth"
 msgstr "Debljina žižne linije"
 
-#: gtk/gtkwidget.c:1358
+#: gtk/gtkwidget.c:1370
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Debljina u tačkama linije koju pokazuje element u žiži"
 
-#: gtk/gtkwidget.c:1364
+#: gtk/gtkwidget.c:1376
 msgid "Focus line dash pattern"
 msgstr "Obrazac crtkanja žižne linije"
 
-#: gtk/gtkwidget.c:1365
+#: gtk/gtkwidget.c:1377
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Obrazac po kojem se crtka pokazatelj elementa u žiži"
 
-#: gtk/gtkwidget.c:1370
+#: gtk/gtkwidget.c:1382
 msgid "Focus padding"
 msgstr "Žižna popuna"
 
-#: gtk/gtkwidget.c:1371
+#: gtk/gtkwidget.c:1383
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Širina u tačkama između pokazatelja elementa u žiži i okvira elementa"
 
-#: gtk/gtkwidget.c:1376
+#: gtk/gtkwidget.c:1388
 msgid "Cursor color"
 msgstr "Boja kursora"
 
-#: gtk/gtkwidget.c:1377
+#: gtk/gtkwidget.c:1389
 msgid "Color with which to draw insertion cursor"
 msgstr "Boja kojom se iscrtava kursor za unos"
 
-#: gtk/gtkwidget.c:1382
+#: gtk/gtkwidget.c:1394
 msgid "Secondary cursor color"
 msgstr "Druga boja kursora"
 
-#: gtk/gtkwidget.c:1383
+#: gtk/gtkwidget.c:1395
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -5741,11 +5748,11 @@ msgstr ""
 "Boja kojom se iscrtava drugi kursor za unos pri unosu mešanog teksta sa "
 "desna na levo, i teksta sa leva na desno"
 
-#: gtk/gtkwidget.c:1388
+#: gtk/gtkwidget.c:1400
 msgid "Cursor line aspect ratio"
 msgstr "Razmera kursorne linije"
 
-#: gtk/gtkwidget.c:1389
+#: gtk/gtkwidget.c:1401
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Razmera u kojoj se crta kursor za unos"
 
@@ -5783,8 +5790,8 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
-"Ukoliko je postavljeno, prozor nema najmanju dopuštenu veličinu. Uključivanje "
-"ovoga je u 99 odsto slučajeva neprikladno"
+"Ukoliko je postavljeno, prozor nema najmanju dopuštenu veličinu. "
+"Uključivanje ovoga je u 99 odsto slučajeva neprikladno"
 
 #: gtk/gtkwindow.c:471
 msgid "Allow Grow"
@@ -5793,8 +5800,8 @@ msgstr "Dopusti povećanje"
 #: gtk/gtkwindow.c:472
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
-"Ukoliko je postavljeno, korisnici mogu povećati prozor preko njegove najmanje "
-"veličine"
+"Ukoliko je postavljeno, korisnici mogu povećati prozor preko njegove "
+"najmanje veličine"
 
 #: gtk/gtkwindow.c:480
 msgid "If TRUE, users can resize the window"

@@ -440,3 +440,19 @@ Draws a pixmap, or a part of a pixmap, onto another drawable.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_drawable_copy_to_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@image: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@Returns: 
+
+

@@ -525,27 +525,6 @@ This is a private struct used by GTK+ internally, don't worry about it.
 @object: 
 @signal_id: 
 
-<!-- ##### SIGNAL GtkAccelGroup::accel-activate ##### -->
-<para>
-
-</para>
-
-@accelgroup: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkAccelGroup::accel-changed ##### -->
-<para>
-
-</para>
-
-@accelgroup: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
 <!-- ##### ARG GtkAccelLabel:accel-object ##### -->
 <para>
 
@@ -1086,91 +1065,7 @@ after other user handlers and the default handler.
 </para>
 
 
-<!-- ##### ARG GtkSettings:gtk-can-change-accels ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-cursor-blink ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-cursor-blink-time ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-dnd-drag-threshold ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-double-click-time ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-entry-select-on-focus ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-font-name ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-icon-sizes ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-icon-theme-name ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-key-theme-name ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-menu-bar-accel ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### ARG GtkSettings:gtk-menu-bar-popout-delay ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-menu-bar-popup-delay ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-menu-popdown-delay ##### -->
 <para>
 
 </para>
@@ -1182,37 +1077,7 @@ after other user handlers and the default handler.
 </para>
 
 
-<!-- ##### ARG GtkSettings:gtk-menu-popup-delay ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### ARG GtkSettings:gtk-menu-submenu-hysteresis ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-split-cursor ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-theme-name ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-toolbar-icon-size ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-toolbar-style ##### -->
 <para>
 
 </para>
