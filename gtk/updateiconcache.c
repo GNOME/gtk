@@ -29,6 +29,9 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
+static gboolean force_update = FALSE;
+static gboolean quiet = FALSE;
+
 #define CACHE_NAME "icon-theme.cache"
 
 #define HAS_SUFFIX_XPM (1 << 0)
@@ -606,13 +609,13 @@ build_cache (const gchar *path)
   utime_buf.modtime = cache_stat.st_mtime;
   utime (path, &utime_buf);
   
-  g_printerr ("Cache file created successfully.\n");
+  if (!quiet)
+    g_printerr ("Cache file created successfully.\n");
 }
 
-static gboolean force_update = FALSE;
-
 static GOptionEntry args[] = {
-  { "force", 0, 0, G_OPTION_ARG_NONE, &force_update, "Overwrite an existing cache, even if uptodate", NULL },
+  { "force", 'f', 0, G_OPTION_ARG_NONE, &force_update, "Overwrite an existing cache, even if uptodate", NULL },
+  { "quiet", 'q', 0, G_OPTION_ARG_NONE, &quiet, "Turn off verbose output", NULL },
   { NULL }
 };
 

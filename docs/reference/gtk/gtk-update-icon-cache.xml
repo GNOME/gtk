@@ -14,6 +14,7 @@
 <cmdsynopsis>
 <command>gtk-update-icon-cache</command>
 <arg choice="opt">--force</arg>
+<arg choice="opt">--quiet</arg>
 <arg choice="req">iconpath</arg>
 </cmdsynopsis>
 </refsynopsisdiv>
@@ -35,11 +36,23 @@ to avoid a lot of system call and disk seek overhead when the application starts
 Since the format of the cache files allows them to be mmap()ed shared between
 multiple applications, the overall memory consumption is reduced as well.
 </para>
-<para>
-If called with the --force argument, 
-<command>gtk-update-icon-cache</command> will overwrite an existing cache
-file even if it appears to be uptodate.
-</para>
+</refsect1>
+
+<refsect1><title>Options</title>
+<variablelist>
+  <varlistentry>
+    <term>--force</term>
+    <term>-f</term>
+    <listitem><para>Overwrite an existing cache file even if it appears to be uptodate.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>--quiet</term>
+    <term>-q</term>
+    <listitem><para>Turn off verbose output. 
+    </para></listitem>
+  </varlistentry>
+</variablelist>
 </refsect1>
 
 <refsect1><title>Bugs</title>
