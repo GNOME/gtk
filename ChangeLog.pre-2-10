@@ -1,3 +1,15 @@
+1999-08-23  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents.c (gdk_event_translate): Fix from Simon
+	Kelley: Set expose_count in GdkEventExposes correctly.
+
+	* gdk/win32/gdkwindow.c: Remove dead code (#ifdef
+	MULTIPLE_WINDOW_CLASSES).
+
+	* gdk/win32/gdkdraw.c (gdk_draw_line): Workaround from Hans Breuer
+	for bug in NT, apparently NT *does* draw the end pixel, too, in
+	LineTo with a one-pixel pen, so we don't have to do it ourselves.
+
 1999-08-21  Tor Lillqvist  <tml@iki.fi>
 
 	Improvements by Hans Breuer: 

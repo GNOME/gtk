@@ -2362,13 +2362,9 @@ gdk_event_translate (GdkEvent *event,
 				     rect.bottom - rect.top,
 				     rect.left, rect.top,
 				     gdk_color_to_string (&window_private->bg_pixel)));
-#ifdef MULTIPLE_WINDOW_CLASSES
-	  bg = PALETTEINDEX (window_private->bg_pixel.pixel);
-#else
 	  bg = GetNearestColor (hdc, RGB (window_private->bg_pixel.red >> 8,
 					  window_private->bg_pixel.green >> 8,
 					  window_private->bg_pixel.blue >> 8));
-#endif
 	  hbr = CreateSolidBrush (bg);
 #if 0
 	  g_print ("...CreateSolidBrush (%.08x) = %.08x\n", bg, hbr);
@@ -2446,12 +2442,7 @@ gdk_event_translate (GdkEvent *event,
       else
 	{
 	  GDK_NOTE (EVENTS, g_print ("...BLACK_BRUSH (?)\n"));
-#ifdef MULTIPLE_WINDOW_CLASSES
-	  hbr = (HBRUSH) GetClassLong (window_private->xwindow,
-				       GCL_HBRBACKGROUND);
-#else
 	  hbr = GetStockObject (BLACK_BRUSH);
-#endif
 	  GetClipBox (hdc, &rect);
 	  if (!FillRect (hdc, &rect, hbr))
 	    g_warning ("WM_ERASEBKGND: FillRect failed");
@@ -2482,12 +2473,24 @@ gdk_event_translate (GdkEvent *event,
       event->expose.area.y = paintstruct.rcPaint.top;
       event->expose.area.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
       event->expose.area.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
-      event->expose.count = 1;
+      event->expose.count = 0;
 
       return_val = window_private && !window_private->destroyed;
+      if (return_val)
+	{
+	  GList *list = queued_events;
+	  while (list != NULL )
+	    {
+	      if ((((GdkEvent *)list->data)->any.type == GDK_EXPOSE) &&
+		  (((GdkEvent *)list->data)->any.window == window) &&
+		  !(((GdkEventPrivate *)list->data)->flags & GDK_EVENT_PENDING))
+		((GdkEvent *)list->data)->expose.count++;
+	      
+	      list = list->next;
+	    }
+	}
       break;
 
-#ifndef MULTIPLE_WINDOW_CLASSES
     case WM_SETCURSOR:
       GDK_NOTE (EVENTS, g_print ("WM_SETCURSOR: %#x %#x %#x\n",
 				 xevent->hwnd,
@@ -2512,7 +2515,6 @@ gdk_event_translate (GdkEvent *event,
       *ret_val_flagp = TRUE;
       *ret_valp = FALSE;
       break;
-#endif
 
 #if 0
     case WM_QUERYOPEN:

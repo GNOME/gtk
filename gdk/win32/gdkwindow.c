@@ -144,10 +144,6 @@ RegisterGdkClass(GdkWindowType wtype)
   static WNDCLASSEX wcl; 
   ATOM klass = 0;
 
-#ifdef MULTIPLE_WINDOW_CLASSES
-Error: Not yet implemented!
-#endif
-
   wcl.cbSize = sizeof(WNDCLASSEX);     
   wcl.style = 0; /* DON'T set CS_<H,V>REDRAW. It causes total redraw
                   * on WM_SIZE and WM_MOVE. Flicker, Performance!
@@ -1495,49 +1491,8 @@ gdk_window_set_background (GdkWindow *window,
 	    }
 	  private->bg_type = GDK_WIN32_BG_NORMAL;
 	}
-#ifdef MULTIPLE_WINDOW_CLASSES
-      if (colormap_private != NULL
-	      && colormap_private->xcolormap->rc_palette)
-	{
-	  /* If we are on a palettized display we can't use the window
-	   * class background brush, but must handle WM_ERASEBKGND.
-	   * At least, I think so.
-	   */
-#endif
-	  private->bg_type = GDK_WIN32_BG_PIXEL;
-	  private->bg_pixel = *color;
-#ifdef MULTIPLE_WINDOW_CLASSES
-	}
-      else
-	{
-	  /* Non-palettized display; just set the window class background
-	     brush. */
-	  HBRUSH hbr;
-	  HGDIOBJ oldbrush;
-	  COLORREF background;
-
-	  background = RGB (color->red >> 8,
-			    color->green >> 8,
-			    color->blue >> 8);
-
-	  if ((hbr = CreateSolidBrush (GetNearestColor (gdk_DC,
-							background))) == NULL)
-	    {
-	      g_warning ("gdk_window_set_background: CreateSolidBrush failed");
-	      return;
-	    }
-
-	  oldbrush = (HGDIOBJ) GetClassLong (private->xwindow,
-					     GCL_HBRBACKGROUND);
-
-	  if (SetClassLong (private->xwindow, GCL_HBRBACKGROUND,
-			    (LONG) hbr) == 0)
-	    g_warning ("gdk_window_set_background: SetClassLong failed");
-
-	  if (!DeleteObject (oldbrush))
-	    g_warning ("gdk_window_set_background: DeleteObject failed");
-	}
-#endif
+      private->bg_type = GDK_WIN32_BG_PIXEL;
+      private->bg_pixel = *color;
     }
 }
 
@@ -1547,16 +1502,10 @@ gdk_window_set_back_pixmap (GdkWindow *window,
 			    gint       parent_relative)
 {
   GdkWindowPrivate *window_private;
-#ifdef MULTIPLE_WINDOW_CLASSES
-  GdkPixmapPrivate *pixmap_private;
-#endif
 
   g_return_if_fail (window != NULL);
   
   window_private = (GdkWindowPrivate*) window;
-#ifdef MULTIPLE_WINDOW_CLASSES
-  pixmap_private = (GdkPixmapPrivate*) pixmap;
-#endif
 
   if (!window_private->destroyed)
     {
@@ -1577,29 +1526,8 @@ gdk_window_set_back_pixmap (GdkWindow *window,
 	}
       else if (!pixmap)
 	{
-#ifdef MULTIPLE_WINDOW_CLASSES
-	  SetClassLong (window_private->xwindow, GCL_HBRBACKGROUND,
-			(LONG) GetStockObject (BLACK_BRUSH));
-#endif
+	  
 	}
-#ifdef MULTIPLE_WINDOW_CLASSES
-      else if (colormap_private->xcolormap->rc_palette)
-	{
-	  /* Must do the background painting in the
-	   * WM_ERASEBKGND handler.
-	   */
-	  window_private->bg_type = GDK_WIN32_BG_PIXMAP;
-	  window_private->bg_pixmap = pixmap;
-	  gdk_pixmap_ref (pixmap);
-	}
-      else if (pixmap_private->width <= 8
-	       && pixmap_private->height <= 8)
-	{
-	  /* We can use small pixmaps directly as background brush */
-	  SetClassLong (window_private->xwindow, GCL_HBRBACKGROUND,
-			(LONG) CreatePatternBrush (pixmap_private->xwindow));
-	}
-#endif
       else
 	{
 	  /* We must cache the pixmap in the WindowPrivate and
@@ -1634,12 +1562,7 @@ gdk_window_set_cursor (GdkWindow *window,
 
       GDK_NOTE (MISC, g_print ("gdk_window_set_cursor: %#x %#x\n",
 			       window_private->xwindow, xcursor));
-#ifdef MULTIPLE_WINDOW_CLASSES
-      if (!SetClassLong (window_private->xwindow, GCL_HCURSOR, (LONG) xcursor))
-	g_warning ("gdk_window_set_cursor: SetClassLong failed");
-#else
       window_private->xcursor = xcursor;
-#endif
       SetCursor (xcursor);
     }
 }

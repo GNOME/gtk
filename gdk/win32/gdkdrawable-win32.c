@@ -95,10 +95,11 @@ gdk_draw_line (GdkDrawable *drawable,
   if (!LineTo (hdc, x2, y2))
     g_warning ("gdk_draw_line: LineTo #1 failed");
   /* LineTo doesn't draw the last point, so if we have a pen width of 1,
-   * we draw the end pixel separately... With wider pens it hopefully
-   * doesn't matter?
+   * we draw the end pixel separately... With wider pens we don't care.
+   * //HB: But the NT developers don't read their API documentation ...
    */
-  if (gc_private->pen_width == 1)
+  if (gc_private->pen_width == 1
+      && GetVersion () > 0x80000000)
     if (!LineTo (hdc, x2 + 1, y2))
       g_warning ("gdk_draw_line: LineTo #2 failed");
   gdk_gc_postdraw (drawable_private, gc_private);
