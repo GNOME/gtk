@@ -1,3 +1,10 @@
+Wed Feb 24 23:12:09 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.h gtk/gtkclist.c: Make prototypes 
+	for drag_data_get and drag_data_received handlers
+	match the types used for gtk_singal_new; time needs
+	to be a uint, not a uint32. 
+	
 Wed Feb 24 20:34:59 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* README: Changed bug reporting instructions to

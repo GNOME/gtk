@@ -247,7 +247,7 @@ static void gtk_clist_drag_data_received (GtkWidget        *widget,
 					  gint              y,
 					  GtkSelectionData *selection_data,
 					  guint             info,
-					  guint32           time);
+					  guint             time);
 
 /* GtkContainer Methods */
 static void gtk_clist_set_focus_child (GtkContainer  *container,
@@ -7647,7 +7647,7 @@ gtk_clist_drag_data_received (GtkWidget        *widget,
 			      gint              y,
 			      GtkSelectionData *selection_data,
 			      guint             info,
-			      guint32           time)
+			      guint             time)
 {
   GtkCList *clist;
 
