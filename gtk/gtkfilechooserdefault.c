@@ -148,6 +148,9 @@ struct _GtkFileChooserDefault
   GtkTreeViewColumn *list_name_column;
   GtkCellRenderer *list_name_renderer;
 
+  GSource *edited_idle;
+  char *edited_new_text;
+
   guint settings_signal_id;
   int icon_size;
 
@@ -653,6 +656,8 @@ gtk_file_chooser_default_finalize (GObject *object)
     g_object_unref (impl->sort_model);
 
   g_free (impl->preview_display_name);
+
+  g_free (impl->edited_new_text);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -1482,6 +1487,69 @@ new_folder_button_clicked (GtkButton             *button,
 			    TRUE);
 }
 
+/* Idle handler for creating a new folder after editing its name cell, or for
+ * canceling the editing.
+ */
+static gboolean
+edited_idle_cb (GtkFileChooserDefault *impl)
+{
+  g_source_destroy (impl->edited_idle);
+  impl->edited_idle = NULL;
+
+  _gtk_file_system_model_remove_editable (impl->browse_files_model);
+  g_object_set (impl->list_name_renderer, "editable", FALSE, NULL);
+
+  if (impl->edited_new_text) /* not cancelled? */
+    {
+      GError *error;
+      GtkFilePath *file_path;
+
+      error = NULL;
+      file_path = gtk_file_system_make_path (impl->file_system, impl->current_folder, impl->edited_new_text,
+					     &error);
+      if (file_path)
+	{
+	  error = NULL;
+	  if (gtk_file_system_create_folder (impl->file_system, file_path, &error))
+	    change_folder_and_display_error (impl, file_path);
+	  else
+	    error_dialog (impl,
+			  _("Could not create folder %s:\n%s"),
+			  file_path, error);
+
+	  gtk_file_path_free (file_path);
+	}
+      else
+	error_building_filename_dialog (impl, impl->current_folder, impl->edited_new_text, error);
+
+      g_free (impl->edited_new_text);
+      impl->edited_new_text = NULL;
+    }
+
+  return FALSE;
+}
+
+static void
+queue_edited_idle (GtkFileChooserDefault *impl,
+		   const gchar           *new_text)
+{
+  /* We create the folder in an idle handler so that we don't modify the tree
+   * just now.
+   */
+
+  g_assert (!impl->edited_idle);
+  g_assert (!impl->edited_new_text);
+
+  impl->edited_idle = g_idle_source_new ();
+  g_source_set_closure (impl->edited_idle,
+			g_cclosure_new_object (G_CALLBACK (edited_idle_cb),
+					       G_OBJECT (impl)));
+  g_source_attach (impl->edited_idle, NULL);
+
+  if (new_text)
+    impl->edited_new_text = g_strdup (new_text);
+}
+
 /* Callback used from the text cell renderer when the new folder is named */
 static void
 renderer_edited_cb (GtkCellRendererText   *cell_renderer_text,
@@ -1489,29 +1557,7 @@ renderer_edited_cb (GtkCellRendererText   *cell_renderer_text,
 		    const gchar           *new_text,
 		    GtkFileChooserDefault *impl)
 {
-  GError *error;
-  GtkFilePath *file_path;
-
-  _gtk_file_system_model_remove_editable (impl->browse_files_model);
-  g_object_set (impl->list_name_renderer, "editable", FALSE, NULL);
-
-  error = NULL;
-  file_path = gtk_file_system_make_path (impl->file_system, impl->current_folder, new_text, &error);
-  if (!file_path)
-    {
-      error_building_filename_dialog (impl, impl->current_folder, new_text, error);
-      return;
-    }
-
-  error = NULL;
-  if (gtk_file_system_create_folder (impl->file_system, file_path, &error))
-    change_folder_and_display_error (impl, file_path);
-  else
-    error_dialog (impl,
-		  _("Could not create folder %s:\n%s"),
-		  file_path, error);
-
-  gtk_file_path_free (file_path);
+  queue_edited_idle (impl, new_text);
 }
 
 /* Callback used from the text cell renderer when the new folder edition gets
@@ -1521,8 +1567,7 @@ static void
 renderer_editing_canceled_cb (GtkCellRendererText   *cell_renderer_text,
 			      GtkFileChooserDefault *impl)
 {
-  _gtk_file_system_model_remove_editable (impl->browse_files_model);
-  g_object_set (impl->list_name_renderer, "editable", FALSE, NULL);
+  queue_edited_idle (impl, NULL);
 }
 
 /* Creates the widgets for the filter combo box */
