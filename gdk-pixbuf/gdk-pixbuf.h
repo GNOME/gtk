@@ -163,6 +163,13 @@ GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 					 int dest_x, int dest_y,
 					 int width, int height);
 
+/* Copy an area of a pixbuf into another one */
+void gdk_pixbuf_copy_area (GdkPixbuf *src_pixbuf,
+			   gint src_x, gint src_y,
+			   gint width, gint height,
+			   GdkPixbuf *dest_pixbuf,
+			   gint dest_x, gint dest_y);
+
 /* Scaling */
 
 void gdk_pixbuf_scale           (GdkPixbuf      *src,

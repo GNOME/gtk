@@ -2,7 +2,8 @@
  *
  * Copyright (C) 1999 The Free Software Foundation
  *
- * Author: Federico Mena-Quintero <federico@gimp.org>
+ * Authors: Federico Mena-Quintero <federico@gimp.org>
+ *          Cody Russell  <bratsche@dfw.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -92,4 +93,62 @@ gdk_pixbuf_add_alpha (GdkPixbuf *pixbuf, gboolean substitute_color, guchar r, gu
 	}
 
 	return new_pixbuf;
+}
+
+/**
+ * gdk_pixbuf_copy_area:
+ * @src_pixbuf: The pixbuf to be copied.
+ * @src_x: The X coordinate of the upper left corner of the area to copy.
+ * @src_y: The Y coordinate of the upper left corner of the area to copy.
+ * @width: The width of the area to copy.
+ * @height: The height of the area to copy.
+ * @dest_pixbuf: The pixbuf to store the copy in.
+ * @dest_x: X coordinate for the upper left corner of the rectangle to draw to in @dest_pixbuf.
+ * @dest_y: Y coordinate for the upper left corner of the rectangle to draw to in @dest_pixbuf.
+ *
+ * Takes a rectangle area beginning at (@src_x, @src_y) @width pixels wide
+ * and @height pixels high from @src_pixbuf and copy it into @dest_pixbuf
+ * at (@dest_x, @dest_y). @dest_pixbuf must already be created and must be
+ * large enough to hold the requested area.
+ *
+ * Return value: void
+ **/
+void gdk_pixbuf_copy_area(GdkPixbuf *src_pixbuf,
+			  gint src_x, gint src_y,
+			  gint width, gint height,
+			  GdkPixbuf *dest_pixbuf,
+			  gint dest_x, gint dest_y)
+{
+	gint src_width, src_height, dest_width, dest_height;
+
+	/* Ensure that we have a source pixbuf, and that the requested
+	 * area is not larger than that pixbuf.
+	 */
+	g_return_if_fail(src_pixbuf != NULL);
+
+	src_width = gdk_pixbuf_get_width(src_pixbuf);
+	src_height = gdk_pixbuf_get_height(src_pixbuf);
+
+	g_return_if_fail(src_x >= 0 && width <= src_width);
+	g_return_if_fail(src_y >= 0 && height <= src_height);
+
+	/* Ensure that we have a destination pixbuf, and that the
+	 * requested area is not larger than that pixbuf.
+	 */
+	g_return_if_fail(dest_pixbuf != NULL);
+
+	dest_width = gdk_pixbuf_get_width(dest_pixbuf);
+	dest_height = gdk_pixbuf_get_height(dest_pixbuf);
+
+	g_return_if_fail(dest_x >= 0 && width <= dest_width);
+	g_return_if_fail(dest_y >= 0 && height <= dest_height);
+
+	/* Scale 1:1 the source pixbuf into the destination pixbuf. */
+	gdk_pixbuf_scale(src_pixbuf,
+			 dest_pixbuf,
+			 dest_x, dest_y,
+			 width, height,
+			 (double)(dest_x - src_x),
+			 (double)(dest_y - src_y),
+			 1., 1., ART_FILTER_NEAREST);
 }

@@ -12,7 +12,6 @@ void expose_cb(GtkWidget *drawing_area, GdkEventExpose *evt, gpointer
 data)
 {
    GdkPixbuf *pixbuf;
-   gint x1, y1, x2, y2;
          
    pixbuf = (GdkPixbuf *) gtk_object_get_data(GTK_OBJECT(drawing_area),
                                               "pixbuf");
@@ -44,10 +43,11 @@ data)
                          pixbuf->art_pixbuf->rowstride);
    }
 }
+
 void configure_cb(GtkWidget *drawing_area, GdkEventConfigure *evt,
 gpointer data)
 {
-   GdkPixbuf *pixbuf, spb;
+   GdkPixbuf *pixbuf;
                            
    pixbuf = (GdkPixbuf *) gtk_object_get_data(GTK_OBJECT(drawing_area),   
                                               "pixbuf");
@@ -67,8 +67,6 @@ int main(int argc, char **argv)
    GtkWidget     *vbox;
    GtkWidget     *drawing_area;
    GdkPixbuf     *pixbuf;    
-   gint           width, height;
-   gint           x, y;
    
    gtk_init(&argc, &argv);   
    gdk_rgb_set_verbose(TRUE);
