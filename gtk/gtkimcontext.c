@@ -285,15 +285,15 @@ gtk_im_context_reset (GtkIMContext   *context)
 
 
 /**
- * gtk_im_context_set_cursor_pos:
+ * gtk_im_context_set_cursor_location:
  * @context: a #GtkIMContext
  *
  * Notify the input method that a change in cursor 
  * position has been made.
  **/
 void
-gtk_im_context_set_cursor_pos (GtkIMContext   *context,
-			       GdkRectangle    *area)
+gtk_im_context_set_cursor_location (GtkIMContext   *context,
+				    GdkRectangle    *area)
 {
   GtkIMContextClass *klass;
   
@@ -301,7 +301,7 @@ gtk_im_context_set_cursor_pos (GtkIMContext   *context,
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
 
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
-  if (klass->set_cursor_pos)
-    klass->set_cursor_pos (context, area);
+  if (klass->set_cursor_location)
+    klass->set_cursor_location (context, area);
 }
 

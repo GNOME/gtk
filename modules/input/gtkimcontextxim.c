@@ -40,7 +40,7 @@ static gboolean gtk_im_context_xim_filter_keypress    (GtkIMContext          *co
 static void     gtk_im_context_xim_reset              (GtkIMContext          *context);
 static void     gtk_im_context_xim_focus_in           (GtkIMContext          *context);
 static void     gtk_im_context_xim_focus_out          (GtkIMContext          *context);
-static void     gtk_im_context_xim_set_cursor_pos     (GtkIMContext          *context,
+static void     gtk_im_context_xim_set_cursor_location (GtkIMContext          *context,
 						       GdkRectangle		*area);
 static void     gtk_im_context_xim_get_preedit_string (GtkIMContext          *context,
 						       gchar                **str,
@@ -215,7 +215,7 @@ gtk_im_context_xim_class_init (GtkIMContextXIMClass *class)
   im_context_class->get_preedit_string = gtk_im_context_xim_get_preedit_string;
   im_context_class->focus_in = gtk_im_context_xim_focus_in;
   im_context_class->focus_out = gtk_im_context_xim_focus_out;
-  im_context_class->set_cursor_pos = gtk_im_context_xim_set_cursor_pos;
+  im_context_class->set_cursor_location = gtk_im_context_xim_set_cursor_location;
   gobject_class->finalize = gtk_im_context_xim_finalize;
 }
 
@@ -395,8 +395,8 @@ gtk_im_context_xim_focus_out (GtkIMContext *context)
 }
 
 static void
-gtk_im_context_xim_set_cursor_pos (GtkIMContext *context,
-				   GdkRectangle *area)
+gtk_im_context_xim_set_cursor_location (GtkIMContext *context,
+					GdkRectangle *area)
 {
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
   XIC ic = gtk_im_context_xim_get_ic (context_xim);

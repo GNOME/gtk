@@ -2030,7 +2030,7 @@ gtk_entry_reset_layout (GtkEntry *entry)
 }
 
 static void
-update_im_cursor_position (GtkEntry *entry)
+update_im_cursor_location (GtkEntry *entry)
 {
   GdkRectangle area;
   gint strong_x;
@@ -2055,7 +2055,7 @@ update_im_cursor_position (GtkEntry *entry)
   area.width = area_width;
   area.height = area_height;
 
-  gtk_im_context_set_cursor_pos (entry->im_context, &area);
+  gtk_im_context_set_cursor_location (entry->im_context, &area);
 }
 
 static gboolean
@@ -2068,7 +2068,7 @@ recompute_idle_func (gpointer data)
 
   entry->recompute_idle = FALSE;
   
-  update_im_cursor_position (entry);
+  update_im_cursor_location (entry);
 
   return FALSE;
 }
