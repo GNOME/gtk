@@ -585,6 +585,9 @@ GTK+ to do pending redraws. This priority is lower than %GTK_PRIORITY_RESIZE
 to avoid redrawing a widget just before resizing (and therefore redrawing
 it again).
 </para>
+<note><para>
+This macro is deprecated. You should use %GDK_PRIORITY_REDRAW instead.
+</para></note>
 
 
 

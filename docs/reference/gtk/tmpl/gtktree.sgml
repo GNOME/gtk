@@ -124,7 +124,7 @@ Removes a list of items from the #GtkTree in @tree.
 If only one item is to be removed from the #GtkTree, gtk_container_remove() can be used instead.
 </para>
 <para>
-Removing an item from a #GtkTree dereferences the item, and thus usually destroys the item and any subtrees it may contain. If the item is not to be destroyed, use gtk_object_ref() before removing it.
+Removing an item from a #GtkTree dereferences the item, and thus usually destroys the item and any subtrees it may contain. If the item is not to be destroyed, use g_object_ref() before removing it.
 </para>
 
 @tree: A pointer to a #GtkTree.
@@ -136,7 +136,7 @@ Removing an item from a #GtkTree dereferences the item, and thus usually destroy
 Removes the items at positions between @start and @end from the #GtkTree @tree.
 </para>
 <para>
-Removing an item from a #GtkTree dereferences the item, and thus usually destroys the item and any subtrees it may contain. If the item is not to be destroyed, use gtk_object_ref() before removing it.
+Removing an item from a #GtkTree dereferences the item, and thus usually destroys the item and any subtrees it may contain. If the item is not to be destroyed, use g_object_ref() before removing it.
 </para>
 
 @tree: A pointer to a #GtkTree.

@@ -1,5 +1,17 @@
 2001-12-30  Matthias Clasen  <matthiasc@poet.de>
 
+	* gtk/tmpl/gtkbbox.sgml: Remove references to nonexisting functions.
+	
+	* gtk/tmpl/gtkcolorseldlg.sgml, gtk/tmpl/gtkdrawingarea.sgml,
+	gtk/tmpl/gtkmain.sgml, gtk/tmpl/gtkhseparator.sgml, 
+	gtk/tmpl/gtktree.sgml, gtk/tmpl/gtkradiobutton.sgml,
+	gtk/tmpl/gtkradiomenuitem.sgml: 
+	Replace references to deprecated functions.
+
+	* gtk/tmpl/gtkhbbox.sgml,gtk/tmpl/gtkvbbox.sgml: Minor fixes.
+
+2001-12-30  Matthias Clasen  <matthiasc@poet.de>
+
 	* gtk/tmpl/gtkpixmap.sgml, gtk/tmpl/gtkscale.sgml,
 	gtk/tmpl/gtkmain.sgml, gtk/tmpl/gtkimcontextsimple.sgml: Additions.
 

@@ -30,7 +30,7 @@ gtk_radio_button_new_with_label_from_widget() is also provided.
 </para>
 <para>
 To retrieve the group a #GtkRadioButton is assigned to, use
-gtk_radio_button_group().
+gtk_radio_button_get_group().
 </para>
 <para>
 To remove a #GtkRadioButton from one group and make it part of a new one, use gtk_radio_button_set_group().

@@ -71,8 +71,6 @@ expose_event (GdkWidget *widget, GdkEventExpose *event, gpointer data)
 }
 [...]
   GtkWidget *drawing_area = gtk_drawing_area_new (<!>);
-  gtk_drawing_area_size (GTK_DRAWING_AREA (drawing_area),
-                         100, 100);
   gtk_signal_connect (GTK_OBJECT (drawing_area), 
 </programlisting>
 </example>

@@ -8,14 +8,14 @@ a container for arranging button horizontally.
 <para>
 A button box should be used to provide a consistent layout of buttons
 throughout your application. There is one default layout and a default
-spacing value that are persistant across all #HButtonBox widgets.
+spacing value that are persistant across all #GtkHButtonBox widgets.
 </para>
 <para>
 The layout/spacing can then be altered by the programmer, or if desired, by
 the user to alter the 'feel' of a program to a small degree.
 </para>
 <para>
-A #HButtonBox is created with gtk_hbutton_box_new(). Buttons are packed into
+A #GtkHButtonBox is created with gtk_hbutton_box_new(). Buttons are packed into
 a button box the same way as any other box, using gtk_box_pack_start() or
 gtk_box_pack_end().
 </para>
