@@ -72,7 +72,6 @@ gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data, guchar * buf,
 					       guint size);
 
 
-
 /* Shared library entry point --> This should be removed when
    generic_image_load enters gdk-pixbuf-io. */
 GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f)
@@ -219,7 +218,7 @@ get_mbi(struct wbmp_progressive_state *context, guchar **buf, guint *buf_size, i
  *
  * append image data onto inrecrementally built output image
  */
-gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf,
+gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data, guchar * buf,
 					      guint size)
 {
 	struct wbmp_progressive_state *context =
