@@ -489,7 +489,7 @@ progressive_updated_callback(GdkPixbufLoader* loader, guint x, guint y, guint wi
         return;
 }
 
-static int readlen = 1;
+static int readlen = 4096;
 
 int
 main (int argc, char **argv)
