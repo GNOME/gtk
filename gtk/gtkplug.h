@@ -53,6 +53,8 @@ struct _GtkPlug
   GtkWindow window;
 
   GdkWindow *socket_window;
+  GtkWidget *modality_window;
+  GtkWindowGroup *modality_group;
   gboolean   same_app;
 };
 

@@ -119,9 +119,7 @@ gtk_socket_class_init (GtkSocketClass *class)
   widget_class->size_request = gtk_socket_size_request;
   widget_class->size_allocate = gtk_socket_size_allocate;
   widget_class->hierarchy_changed = gtk_socket_hierarchy_changed;
-#if 0  
   widget_class->grab_notify = gtk_socket_grab_notify;
-#endif  
   widget_class->key_press_event = gtk_socket_key_press_event;
   widget_class->focus_in_event = gtk_socket_focus_in_event;
   widget_class->focus_out_event = gtk_socket_focus_out_event;

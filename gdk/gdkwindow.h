@@ -248,8 +248,6 @@ struct _GdkWindowObject
 struct _GdkWindowObjectClass
 {
   GdkDrawableClass parent_class;
-
-
 };
 
 /* Windows

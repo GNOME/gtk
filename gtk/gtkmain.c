@@ -110,6 +110,8 @@ static void  gtk_message		 (gchar		     *str);
 static void  gtk_print			 (gchar		     *str);
 #endif
 
+static GtkWindowGroup *gtk_main_get_window_group (GtkWidget   *widget);
+
 const guint gtk_major_version = GTK_MAJOR_VERSION;
 const guint gtk_minor_version = GTK_MINOR_VERSION;
 const guint gtk_micro_version = GTK_MICRO_VERSION;
@@ -122,9 +124,6 @@ static GList *current_events = NULL;
 
 static GSList *main_loops = NULL;      /* stack of currently executing main loops */
 
-static GSList *grabs = NULL;		   /* A stack of unique grabs. The grabbing
-					    *  widget is the first one on the list.
-					    */
 static GList *init_functions = NULL;	   /* A list of init functions.
 					    */
 static GList *quit_functions = NULL;	   /* A list of quit functions.
@@ -754,6 +753,7 @@ gtk_main_do_event (GdkEvent *event)
 {
   GtkWidget *event_widget;
   GtkWidget *grab_widget;
+  GtkWindowGroup *window_group;
   GdkEvent *next_event;
   GList *tmp_list;
 
@@ -818,12 +818,14 @@ gtk_main_do_event (GdkEvent *event)
    * gtk_current_event_get().
    */
   current_events = g_list_prepend (current_events, event);
+
+  window_group = gtk_main_get_window_group (event_widget);
   
   /* If there is a grab in effect...
    */
-  if (grabs)
+  if (window_group->grabs)
     {
-      grab_widget = grabs->data;
+      grab_widget = window_group->grabs->data;
       
       /* If the grab widget is an ancestor of the event widget
        *  then we send the event to the original event widget.
@@ -855,7 +857,7 @@ gtk_main_do_event (GdkEvent *event)
       
     case GDK_DELETE:
       gtk_widget_ref (event_widget);
-      if ((!grabs || gtk_widget_get_toplevel (grabs->data) == event_widget) &&
+      if ((!window_group->grabs || gtk_widget_get_toplevel (window_group->grabs->data) == event_widget) &&
 	  !gtk_widget_event (event_widget, event))
 	gtk_widget_destroy (event_widget);
       gtk_widget_unref (event_widget);
@@ -974,39 +976,131 @@ gtk_false (void)
   return FALSE;
 }
 
+static GtkWindowGroup *
+gtk_main_get_window_group (GtkWidget   *widget)
+{
+  GtkWidget *toplevel = NULL;
+
+  if (widget)
+    toplevel = gtk_widget_get_toplevel (widget);
+
+  if (toplevel && GTK_IS_WINDOW (toplevel))
+    return _gtk_window_get_group (GTK_WINDOW (toplevel));
+  else
+    return _gtk_window_get_group (NULL);
+}
+
+typedef struct
+{
+  gboolean was_grabbed;
+  GtkWidget *grab_widget;
+} GrabNotifyInfo;
+
+static void
+gtk_grab_notify_foreach (GtkWidget *child,
+			 gpointer   data)
+                        
+{
+  GrabNotifyInfo *info = data;
+
+  if (child != info->grab_widget)
+    {
+      g_object_ref (G_OBJECT (child));
+
+      gtk_signal_emit_by_name (GTK_OBJECT (child), "grab_notify", info->was_grabbed);
+
+      if (GTK_IS_CONTAINER (child))
+       gtk_container_foreach (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
+      
+      g_object_unref (G_OBJECT (child));
+    }
+}
+
+static void
+gtk_grab_notify (GtkWindowGroup *group,
+		 GtkWidget      *grab_widget,
+		 gboolean        was_grabbed)
+{
+  GList *toplevels;
+  GrabNotifyInfo info;
+
+  info.grab_widget = grab_widget;
+  info.was_grabbed = was_grabbed;
+
+  g_object_ref (group);
+  g_object_ref (grab_widget);
+
+  toplevels = gtk_window_list_toplevels ();
+  g_list_foreach (toplevels, (GFunc)g_object_ref, NULL);
+			    
+  while (toplevels)
+    {
+      GtkWindow *toplevel = toplevels->data;
+      toplevels = g_list_delete_link (toplevels, toplevels);
+
+      if (group == toplevel->group)
+	gtk_container_foreach (GTK_CONTAINER (toplevel), gtk_grab_notify_foreach, &info);
+      g_object_unref (toplevel);
+    }
+
+  g_object_unref (group);
+  g_object_unref (grab_widget);
+}
+
 void
 gtk_grab_add (GtkWidget *widget)
 {
+  GtkWindowGroup *group;
+  gboolean was_grabbed;
+  
   g_return_if_fail (widget != NULL);
   
-  if (!GTK_WIDGET_HAS_GRAB (widget))
+  if (!GTK_WIDGET_HAS_GRAB (widget) && GTK_WIDGET_IS_SENSITIVE (widget))
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_GRAB);
       
-      grabs = g_slist_prepend (grabs, widget);
+      group = gtk_main_get_window_group (widget);
+
+      was_grabbed = (group->grabs != NULL);
+      
       gtk_widget_ref (widget);
+      group->grabs = g_slist_prepend (group->grabs, widget);
+
+      if (!was_grabbed)
+	gtk_grab_notify (group, widget, FALSE);
     }
 }
 
 GtkWidget*
 gtk_grab_get_current (void)
 {
-  if (grabs)
-    return GTK_WIDGET (grabs->data);
+  GtkWindowGroup *group;
+
+  group = gtk_main_get_window_group (NULL);
+
+  if (group->grabs)
+    return GTK_WIDGET (group->grabs->data);
   return NULL;
 }
 
 void
 gtk_grab_remove (GtkWidget *widget)
 {
+  GtkWindowGroup *group;
+  
   g_return_if_fail (widget != NULL);
   
   if (GTK_WIDGET_HAS_GRAB (widget))
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_GRAB);
+
+      group = gtk_main_get_window_group (widget);
+      group->grabs = g_slist_remove (group->grabs, widget);
       
-      grabs = g_slist_remove (grabs, widget);
       gtk_widget_unref (widget);
+
+      if (!group->grabs)
+	gtk_grab_notify (group, widget, TRUE);
     }
 }
 

@@ -50,6 +50,8 @@ extern "C" {
 typedef struct _GtkWindow             GtkWindow;
 typedef struct _GtkWindowClass        GtkWindowClass;
 typedef struct _GtkWindowGeometryInfo GtkWindowGeometryInfo;
+typedef struct _GtkWindowGroup        GtkWindowGroup;
+typedef struct _GtkWindowGroupClass   GtkWindowGroupClass;
 
 struct _GtkWindow
 {
@@ -65,6 +67,7 @@ struct _GtkWindow
   GtkWindow *transient_parent;
   GtkWindowGeometryInfo *geometry_info;
   GdkWindow *frame;
+  GtkWindowGroup *group;
 
   guint16 resize_count;
 
@@ -123,6 +126,24 @@ struct _GtkWindowClass
                                         GtkDirectionType direction);  
 };
 
+#define GTK_TYPE_WINDOW_GROUP             (gtk_window_group_get_type ())
+#define GTK_WINDOW_GROUP(object)          (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_WINDOW_GROUP, GtkWindowGroup))
+#define GTK_WINDOW_GROUP_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_WINDOW_GROUP, GtkWindowGroupClass))
+#define GTK_IS_WINDOW_GROUP(object)       (G_TYPE_CHECK_INSTANCE_TYPE ((object), GTK_TYPE_WINDOW_GROUP))
+#define GTK_IS_WINDOW_GROUP_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WINDOW_GROUP))
+#define GTK_WINDOW_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WINDOW_GROUP, GtkWindowGroupClass))
+
+struct _GtkWindowGroup
+{
+  GObject parent_instance;
+
+  GSList *grabs;
+};
+
+struct _GtkWindowGroupClass
+{
+  GObjectClass parent_class;
+};
 
 GtkType    gtk_window_get_type                 (void) G_GNUC_CONST;
 GtkWidget* gtk_window_new                      (GtkWindowType        type);
@@ -175,9 +196,9 @@ void       gtk_window_set_decorated           (GtkWindow *window,
                                                gboolean   setting);
 
 /* If window is set modal, input will be grabbed when show and released when hide */
-void       gtk_window_set_modal                (GtkWindow           *window,
-                                                gboolean             modal);
-GList*	   gtk_window_list_toplevels           (void);
+void       gtk_window_set_modal      (GtkWindow *window,
+				      gboolean   modal);
+GList*     gtk_window_list_toplevels (void);
 
 void     gtk_window_add_mnemonic          (GtkWindow       *window,
 					   guint            keyval,
@@ -225,23 +246,34 @@ void       gtk_window_set_default_size         (GtkWindow           *window,
 						gint                 width,
 						gint                 height);
 
+/* Window groups
+ */
+GType            gtk_window_group_get_type      (void) G_GNUC_CONST;;
+
+GtkWindowGroup * gtk_window_group_new           (void);
+void             gtk_window_group_add_window    (GtkWindowGroup     *window_group,
+						 GtkWindow          *window);
+void             gtk_window_group_remove_window (GtkWindowGroup     *window_group,
+					         GtkWindow          *window);
+
 /* --- internal functions --- */
-void       gtk_window_set_focus                (GtkWindow           *window,
-						GtkWidget           *focus);
-void       gtk_window_set_default              (GtkWindow           *window,
-						GtkWidget           *defaultw);
-void       gtk_window_remove_embedded_xid      (GtkWindow           *window,
-				                guint                xid);
-void       gtk_window_add_embedded_xid         (GtkWindow           *window,
-						guint                xid);
-void       _gtk_window_reposition              (GtkWindow           *window,
-						gint                 x,
-						gint                 y);
-void       _gtk_window_constrain_size          (GtkWindow           *window,
-						gint                 width,
-						gint                 height,
-						gint                *new_width,
-						gint                *new_height);
+void            gtk_window_set_focus           (GtkWindow *window,
+						GtkWidget *focus);
+void            gtk_window_set_default         (GtkWindow *window,
+						GtkWidget *defaultw);
+void            gtk_window_remove_embedded_xid (GtkWindow *window,
+						guint      xid);
+void            gtk_window_add_embedded_xid    (GtkWindow *window,
+						guint      xid);
+void            _gtk_window_reposition         (GtkWindow *window,
+						gint       x,
+						gint       y);
+void            _gtk_window_constrain_size     (GtkWindow *window,
+						gint       width,
+						gint       height,
+						gint      *new_width,
+						gint      *new_height);
+GtkWindowGroup *_gtk_window_get_group          (GtkWindow *window);
 
 #ifdef __cplusplus
 }

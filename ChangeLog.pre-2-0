@@ -1,3 +1,17 @@
+Fri Jun  8 17:56:52 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.[ch] gtk/gtkmain.c: Add a GtkWindowGroup struct
+	that allows grouping together multiple windows so that grabs
+	within that set of windows only affect those windows.
+
+	* gtk/gtkmain.c gtk/gtkwidget.[ch]: Add a "grab_notify"
+	signal for notification when a widget becomes shadowed
+	by a grab or is no longer shadowed by a grab.
+
+	* gtk/gtkwidget.c (gtk_widget_propagate_state)
+	  gtk/gtkmain.c: (gtk_widget_grab_add): Don't allow
+	insenstive widgets to maintain a grab.
+
 2001-06-14  Alexander Larsson  <alexl@redhat.com>
 
         * docs/README.linux-fb:

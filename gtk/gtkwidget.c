@@ -65,6 +65,7 @@ enum {
   HIERARCHY_CHANGED,
   STYLE_SET,
   DIRECTION_CHANGED,
+  GRAB_NOTIFY,
   ADD_ACCELERATOR,
   REMOVE_ACCELERATOR,
   ACTIVATE_MNEMONIC,
@@ -632,6 +633,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_marshal_VOID__ENUM,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_TEXT_DIRECTION);
+  widget_signals[GRAB_NOTIFY] =
+    gtk_signal_new ("grab_notify",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkWidgetClass, grab_notify),
+		    gtk_marshal_VOID__BOOLEAN,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_BOOL);
   widget_signals[ADD_ACCELERATOR] =
     gtk_accel_group_create_add (GTK_CLASS_TYPE (object_class), GTK_RUN_LAST,
 				GTK_SIGNAL_OFFSET (GtkWidgetClass, add_accelerator));
@@ -5283,7 +5292,12 @@ gtk_widget_propagate_state (GtkWidget           *widget,
   if (old_state != GTK_WIDGET_STATE (widget))
     {
       gtk_widget_ref (widget);
+      
+      if (!GTK_WIDGET_IS_SENSITIVE (widget) && GTK_HAS_GRAB (widget))
+	gtk_grab_remove (widget);
+      
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[STATE_CHANGED], old_state);
+      
       
       if (GTK_IS_CONTAINER (widget))
 	{

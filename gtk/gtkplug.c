@@ -119,10 +119,6 @@ gtk_plug_init (GtkPlug *plug)
 
   window->type = GTK_WINDOW_TOPLEVEL;
   window->auto_shrink = TRUE;
-
-#if 0  
-  gtk_window_set_grab_group (window, window);
-#endif  
 }
 
 void
@@ -168,10 +164,11 @@ gtk_plug_unrealize (GtkWidget *widget)
       plug->socket_window = NULL;
     }
 
-#if 0  
   if (plug->modality_window)
     handle_modality_off (plug);
-#endif  
+
+  gtk_window_group_remove_window (plug->modality_group, GTK_WINDOW (plug));
+  g_object_unref (plug->modality_group);
   
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
@@ -236,6 +233,9 @@ gtk_plug_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 
   gdk_window_add_filter (widget->window, gtk_plug_filter_func, widget);
+
+  plug->modality_group = gtk_window_group_new ();
+  gtk_window_group_add_window (plug->modality_group, window);
 }
 
 static gboolean
@@ -574,27 +574,22 @@ focus_first_last (GtkPlug          *plug,
 static void
 handle_modality_on (GtkPlug *plug)
 {
-#if 0
   if (!plug->modality_window)
     {
       plug->modality_window = gtk_window_new (GTK_WINDOW_POPUP);
-      gtk_window_set_grab_group (GTK_WINDOW (plug->modality_window), GTK_WINDOW (plug));
+      gtk_window_group_add_window (plug->modality_group, GTK_WINDOW (plug->modality_window));
       gtk_grab_add (plug->modality_window);
     }
-#endif  
 }
 
 static void
 handle_modality_off (GtkPlug *plug)
 {
-#if 0  
   if (plug->modality_window)
     {
-      gtk_grab_remove (plug->modality_window);
       gtk_widget_destroy (plug->modality_window);
       plug->modality_window = NULL;
     }
-#endif  
 }
 
 static void

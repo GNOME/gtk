@@ -258,6 +258,8 @@ struct _GtkWidgetClass
 				GtkStyle         *previous_style);
   void (* direction_changed)   (GtkWidget        *widget,
 				GtkTextDirection  previous_direction);
+  void (* grab_notify)         (GtkWidget        *widget,
+				gboolean          was_grabbed);
   
   /* accelerators */
   void (* add_accelerator)     (GtkWidget      *widget,

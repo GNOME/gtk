@@ -1599,6 +1599,9 @@ gtk_window_destroy (GtkObject *object)
       gtk_widget_unref (GTK_WIDGET (window));
     }
 
+  if (window->group)
+    gtk_window_group_remove_window (window->group, window);
+
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
@@ -3159,8 +3162,6 @@ gtk_window_set_frame_dimensions (GtkWindow *window,
     }
 }
 
-
-
 /**
  * gtk_window_present:
  * @window: a #GtkWindow
@@ -3606,4 +3607,146 @@ gtk_window_begin_move_drag  (GtkWindow *window,
                               button,
                               root_x, root_y,
                               timestamp);
+}
+
+
+static void
+gtk_window_group_class_init (GtkWindowGroupClass *klass)
+{
+}
+
+GtkType
+gtk_window_group_get_type (void)
+{
+  static GtkType window_group_type = 0;
+
+  if (!window_group_type)
+    {
+      static const GTypeInfo window_group_info =
+      {
+	sizeof (GtkWindowGroupClass),
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_window_group_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkWindowGroup),
+	16,		/* n_preallocs */
+	(GInstanceInitFunc) NULL,
+      };
+
+      window_group_type = g_type_register_static (G_TYPE_OBJECT, "GtkWindowGroup", &window_group_info, 0);
+    }
+
+  return window_group_type;
+}
+
+/**
+ * gtk_window_group_new:
+ * 
+ * Create a new #GtkWindowGroup object. Grabs added with
+ * gtk_window_grab_add() only affect windows within the
+ * same #GtkWindowGroup
+ * 
+ * Return value: 
+ **/
+GtkWindowGroup *
+gtk_window_group_new (void)
+{
+  return g_object_new (GTK_TYPE_WINDOW_GROUP, NULL);
+}
+
+static void
+window_group_cleanup_grabs (GtkWindowGroup *group,
+			    GtkWindow      *window)
+{
+  GSList *tmp_list;
+  GSList *to_remove = NULL;
+
+  tmp_list = window_group->grabs;
+  while (tmp_list)
+    {
+      if (gtk_widget_get_toplevel (tmp_list->data) == window)
+	to_remove = g_slist_prepend (to_remove, g_object_ref (tmp_list->data));
+      tmp_list = tmp_list->next;
+    }
+
+  while (to_remove)
+    {
+      gtk_grab_remove (to_remove->data);
+      g_object_unref (to_remove->data);
+      to_remove = g_slist_delete_link (to_remove, to_remove);
+    }
+}
+
+/**
+ * gtk_window_group_add_widget:
+ * @window_group: a #GtkWindowGroup
+ * @window: the #GtkWindow to add
+ * 
+ * Add a window to a #GtkWindowGroup. 
+ **/
+void
+gtk_window_group_add_window (GtkWindowGroup *window_group,
+			     GtkWindow      *window)
+{
+  g_return_if_fail (GTK_IS_WINDOW_GROUP (window_group));
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (window->group != window_group)
+    {
+      g_object_ref (window);
+      g_object_ref (window_group);
+      
+      if (window->group)
+	gtk_window_group_remove_window (window->group, window);
+      else
+	window_group_cleanup_grabs (_gtk_window_get_group (NULL), window);
+
+      window->group = window_group;
+
+      g_object_unref (window);
+    }
+}
+
+/**
+ * gtk_window_group_remove_window:
+ * @window_group: a #GtkWindowGroup
+ * @window: the #GtkWindow to remove
+ * 
+ * Removes a window from a #GtkWindowGroup.
+ **/
+void
+gtk_window_group_remove_window (GtkWindowGroup *window_group,
+				GtkWindow      *window)
+{
+  g_return_if_fail (GTK_IS_WINDOW_GROUP (window_group));
+  g_return_if_fail (GTK_IS_WIDGET (window));
+  g_return_if_fail (window->group == window_group);
+
+  g_object_ref (window);
+
+  window_group_cleanup_grabs (window_group, window);
+  window->group = NULL;
+  
+  g_object_unref (G_OBJECT (window_group));
+  g_object_unref (window);
+}
+
+/* Return the group for the window or the default group
+ */
+GtkWindowGroup *
+_gtk_window_get_group (GtkWindow *window)
+{
+  if (window && window->group)
+    return window->group;
+  else
+    {
+      static GtkWindowGroup *default_group = NULL;
+
+      if (!default_group)
+	default_group = gtk_window_group_new ();
+
+      return default_group;
+    }
 }
