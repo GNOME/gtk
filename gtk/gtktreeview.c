@@ -12460,12 +12460,13 @@ gtk_tree_view_get_row_separator_func (GtkTreeView *tree_view)
 /**
  * gtk_tree_view_set_row_separator_func:
  * @tree_view: a #GtkTreeView
- * @func: a #GtkTreeRowSeparatorFunc
+ * @func: a #GtkTreeViewRowSeparatorFunc
  * @data: user data to pass to @func, or %NULL
  * @destroy: destroy notifier for @data, or %NULL
  * 
  * Sets the row separator function, which is used to determine
- * whether a row should be drawn as a separator.
+ * whether a row should be drawn as a separator. If the row separator
+ * function is %NULL, no separators are drawn. This is the default value.
  *
  * Since: 2.6
  **/
