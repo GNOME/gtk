@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.2\n"
-"POT-Creation-Date: 2001-02-06 16:45+0100\n"
-"PO-Revision-Date: 2001-02-06 16:47+0100\n"
+"POT-Creation-Date: 2001-02-20 16:40+0100\n"
+"PO-Revision-Date: 2001-02-20 16:47+0100\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@eikonex.org>\n"
 "Language-Team: GNOME French Team <gnomefr@gnomefr.traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -43,8 +43,8 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"Échec au chargement de l'animation « %s » : raison inconnu, probablement "
-"un fichier d'animation corrompu"
+"Échec au chargement de l'animation « %s » : raison inconnu, probablement un "
+"fichier d'animation corrompu"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:126
 msgid "Image data is partially missing"
@@ -55,14 +55,14 @@ msgid ""
 "Image has an incorrect pixel rowstride, perhaps the data was corrupted "
 "somehow."
 msgstr ""
-"L'image a une rangée de pixels incorrect, peut-être que les données ont "
-"été corrompues."
+"L'image a une rangée de pixels incorrect, peut-être que les données ont été "
+"corrompues."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:154
 msgid "Image size is impossibly large, perhaps the data was corrupted somehow"
 msgstr ""
-"La taille de l'image est vraiment trop grande, peut-être que les données "
-"ont été corrompues"
+"La taille de l'image est vraiment trop grande, peut-être que les données ont "
+"été corrompues"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:167
 msgid "Image data is partially missing, probably it was corrupted somehow."
@@ -85,8 +85,8 @@ msgid ""
 "Image has an improper number of bits per sample (%d), perhaps the image data "
 "was corrupted"
 msgstr ""
-"L'image a un nombre impropre de bits par échantillon (%d), peut-être que "
-"les données de l'image ont été corrompues"
+"L'image a un nombre impropre de bits par échantillon (%d), peut-être que les "
+"données de l'image ont été corrompues"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:201 gdk-pixbuf/gdk-pixbuf-data.c:210
 #, c-format
@@ -184,8 +184,7 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:426
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
-"Il manque au fichier GIF quelques données (peut-être a t'il été tronquée "
-"?)"
+"Il manque au fichier GIF quelques données (peut-être a t'il été tronquée ?)"
 
 #: gdk-pixbuf/io-gif.c:435
 #, c-format
@@ -240,8 +239,8 @@ msgstr ""
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %d » "
-"n'est pas autorisée"
+"La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %d » n'est "
+"pas autorisée"
 
 #: gdk-pixbuf/io-png.c:158
 #, c-format
@@ -326,8 +325,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Erreur interne : le module chargeur d'image « %s » a échoué à commencer "
-"le chargement d'une image, mais ne donne pas de raison pour son échec"
+"Erreur interne : le module chargeur d'image « %s » a échoué à commencer le "
+"chargement d'une image, mais ne donne pas de raison pour son échec"
 
 #: gtk/gtkcellrenderer.c:100
 msgid "xalign"
@@ -369,73 +368,230 @@ msgstr "Objet pixbuf"
 msgid "The pixbuf to render."
 msgstr "Le pixbuf à rendre."
 
-#: gtk/gtkcellrenderertext.c:117
-msgid "Text String"
-msgstr "Chaîne de texte"
+#: gtk/gtkcellrenderertext.c:147
+msgid "Text"
+msgstr "Texte"
 
-#: gtk/gtkcellrenderertext.c:118
-msgid "The text of the renderer."
-msgstr "Le texte du rendeur."
+#: gtk/gtkcellrenderertext.c:148
+msgid "Text to render"
+msgstr "Texte à rendre."
 
-#: gtk/gtkcellrenderertext.c:126
-msgid "Font String"
-msgstr "Chaîne de police"
+#: gtk/gtkcellrenderertext.c:155
+msgid "Background color name"
+msgstr "Nom de la couleur d'arrière-plan"
 
-#: gtk/gtkcellrenderertext.c:127
-msgid "The string of the font."
-msgstr "La chaîne de la police."
+#: gtk/gtkcellrenderertext.c:156
+msgid "Background color as a string"
+msgstr "Couleur d'arrière-plan comme chaine"
 
-#: gtk/gtkcellrenderertext.c:134
-msgid "Background Color string"
-msgstr "Chaîne de couleur d'arrière-plan"
+#: gtk/gtkcellrenderertext.c:163
+msgid "Background color"
+msgstr "Couleur d'arrière-plan"
 
-#: gtk/gtkcellrenderertext.c:135 gtk/gtkcellrenderertext.c:143
-msgid "The color for the background of the text."
-msgstr "La couleur de l'arrière-plan du texte."
+#: gtk/gtkcellrenderertext.c:164
+msgid "Background color as a GdkColor"
+msgstr "Couleur d'arrière-plan comme une GdkColor"
 
-#: gtk/gtkcellrenderertext.c:142
-msgid "Foreground Color string"
-msgstr "Chaîne de couleur d'avant-plan"
+#: gtk/gtkcellrenderertext.c:171
+msgid "Foreground color name"
+msgstr "Nom de la couleur de premier plan"
 
-#: gtk/gtkcellrenderertext.c:150
-msgid "Strikethrough"
-msgstr "Barré"
+#: gtk/gtkcellrenderertext.c:172
+msgid "Foreground color as a string"
+msgstr "Couleur de premier plan comme une chaine"
 
-#: gtk/gtkcellrenderertext.c:151
-msgid "Draw a line through the text."
-msgstr "Dessine une ligne à travers le texte."
+#: gtk/gtkcellrenderertext.c:179
+msgid "Foreground color"
+msgstr "Couleur de premier plan"
 
-#: gtk/gtkcellrenderertext.c:159
-msgid "Underline"
-msgstr "Soulignement"
+#: gtk/gtkcellrenderertext.c:180
+msgid "Foreground color as a GdkColor"
+msgstr "Couleur de premier plan comme une GdkColor"
 
-#: gtk/gtkcellrenderertext.c:160
-msgid "Underline the text."
-msgstr "Souligne le texte."
-
-#: gtk/gtkcellrenderertext.c:168
+#: gtk/gtkcellrenderertext.c:188
 msgid "Editable"
 msgstr "Éditable"
 
-#: gtk/gtkcellrenderertext.c:169
-msgid "Make the text editable."
-msgstr "Rend le texte éditable."
+#: gtk/gtkcellrenderertext.c:189
+msgid "Whether the text can be modified by the user"
+msgstr ""
 
-#: gtk/gtkcellrenderertext.c:177
-msgid "Italic"
-msgstr "Italique"
+#: gtk/gtkcellrenderertext.c:196 gtk/gtkcellrenderertext.c:204
+msgid "Font"
+msgstr "Police"
 
-#: gtk/gtkcellrenderertext.c:178
-msgid "Make the text italic."
-msgstr "Rend le texte en italique."
+#: gtk/gtkcellrenderertext.c:197
+msgid "Font description as a string"
+msgstr "Description de police comme une chaine"
 
-#: gtk/gtkcellrenderertext.c:185
-msgid "Bold"
-msgstr "Gras"
+#: gtk/gtkcellrenderertext.c:205
+msgid "Font description as a PangoFontDescription struct"
+msgstr "Description de police comme une structure PangoFontDescription"
 
-#: gtk/gtkcellrenderertext.c:186
-msgid "Make the text bold."
-msgstr "Rend le texte en gras."
+#: gtk/gtkcellrenderertext.c:213
+msgid "Font family"
+msgstr "Famille de police"
+
+#: gtk/gtkcellrenderertext.c:214
+msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
+msgstr "Nom de la famille de police, càd. Sans, Helvetica, Times, Monospace"
+
+#: gtk/gtkcellrenderertext.c:221 gtk/gtkcellrenderertext.c:222
+msgid "Font style"
+msgstr "Style de police"
+
+#: gtk/gtkcellrenderertext.c:230 gtk/gtkcellrenderertext.c:231
+msgid "Font variant"
+msgstr "Variante de police"
+
+#: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:240
+msgid "Font weight"
+msgstr "Épaisseur de police"
+
+#: gtk/gtkcellrenderertext.c:250 gtk/gtkcellrenderertext.c:251
+msgid "Font stretch"
+msgstr "Étirement de la police"
+
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkcellrenderertext.c:260
+msgid "Font size"
+msgstr "Taille de la police"
+
+#: gtk/gtkcellrenderertext.c:269
+msgid "Font points"
+msgstr "Points de la police"
+
+#: gtk/gtkcellrenderertext.c:270
+msgid "Font size in points"
+msgstr "Taille de la police en points"
+
+#: gtk/gtkcellrenderertext.c:279
+msgid "Rise"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:280
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:290
+msgid "Strikethrough"
+msgstr "Barré"
+
+#: gtk/gtkcellrenderertext.c:291
+#, fuzzy
+msgid "Whether to strike through the text"
+msgstr "Dessine une ligne à travers le texte."
+
+#: gtk/gtkcellrenderertext.c:298
+msgid "Underline"
+msgstr "Soulignement"
+
+#: gtk/gtkcellrenderertext.c:299
+#, fuzzy
+msgid "Style of underline for this text"
+msgstr "Souligne le texte."
+
+#: gtk/gtkcellrenderertext.c:309
+#, fuzzy
+msgid "Background set"
+msgstr "Chaîne de couleur d'arrière-plan"
+
+#: gtk/gtkcellrenderertext.c:310
+msgid "Whether this tag affects the background color"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:313
+#, fuzzy
+msgid "Foreground set"
+msgstr "Chaîne de couleur d'avant-plan"
+
+#: gtk/gtkcellrenderertext.c:314
+msgid "Whether this tag affects the foreground color"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:317
+#, fuzzy
+msgid "Editability set"
+msgstr "Éditable"
+
+#: gtk/gtkcellrenderertext.c:318
+msgid "Whether this tag affects text editability"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:321
+msgid "Font family set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:322
+msgid "Whether this tag affects the font family"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:325
+#, fuzzy
+msgid "Font style set"
+msgstr "Style de police :"
+
+#: gtk/gtkcellrenderertext.c:326
+msgid "Whether this tag affects the font style"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:329
+msgid "Font variant set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:330
+msgid "Whether this tag affects the font variant"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:333
+msgid "Font weight set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:334
+msgid "Whether this tag affects the font weight"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:337
+msgid "Font stretch set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:338
+msgid "Whether this tag affects the font stretch"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:341
+msgid "Font size set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:342
+msgid "Whether this tag affects the font size"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:345
+msgid "Rise set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:346
+msgid "Whether this tag affects the rise"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:349
+#, fuzzy
+msgid "Strikethrough set"
+msgstr "Barré"
+
+#: gtk/gtkcellrenderertext.c:350
+msgid "Whether this tag affects strikethrough"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:353
+#, fuzzy
+msgid "Underline set"
+msgstr "Soulignement"
+
+#: gtk/gtkcellrenderertext.c:354
+msgid "Whether this tag affects underlining"
+msgstr ""
 
 #: gtk/gtkcellrenderertextpixbuf.c:113
 msgid "Pixbuf location"
@@ -738,7 +894,7 @@ msgstr "effacer"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:425
+#: gtk/gtkmain.c:473
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -814,6 +970,33 @@ msgstr ""
 msgid "--- No Tip ---"
 msgstr "--- Pas de conseil du jour ---"
 
+#~ msgid "Text String"
+#~ msgstr "Chaîne de texte"
+
+#~ msgid "The text of the renderer."
+#~ msgstr "Le texte du rendeur."
+
+#~ msgid "The string of the font."
+#~ msgstr "La chaîne de la police."
+
+#~ msgid "The color for the background of the text."
+#~ msgstr "La couleur de l'arrière-plan du texte."
+
+#~ msgid "Make the text editable."
+#~ msgstr "Rend le texte éditable."
+
+#~ msgid "Italic"
+#~ msgstr "Italique"
+
+#~ msgid "Make the text italic."
+#~ msgstr "Rend le texte en italique."
+
+#~ msgid "Bold"
+#~ msgstr "Gras"
+
+#~ msgid "Make the text bold."
+#~ msgstr "Rend le texte en gras."
+
 #~ msgid "Foundry:"
 #~ msgstr "Fonderie :"
 
@@ -828,9 +1011,6 @@ msgstr "--- Pas de conseil du jour ---"
 
 #~ msgid "Pixel Size:"
 #~ msgstr "Taille en pixels :"
-
-#~ msgid "Point Size:"
-#~ msgstr "Taille en points :"
 
 #~ msgid "Resolution X:"
 #~ msgstr "Résolution X :"
@@ -847,23 +1027,14 @@ msgstr "--- Pas de conseil du jour ---"
 #~ msgid "Charset:"
 #~ msgstr "Jeu de caractères :"
 
-#~ msgid "Font Property"
-#~ msgstr "Propriétés de la police"
-
 #~ msgid "Requested Value"
 #~ msgstr "Valeur demandée"
 
 #~ msgid "Actual Value"
 #~ msgstr "Valeur effective"
 
-#~ msgid "Font"
-#~ msgstr "Police"
-
 #~ msgid "Font:"
 #~ msgstr "Police :"
-
-#~ msgid "Font Style:"
-#~ msgstr "Style de police :"
 
 #~ msgid "Reset Filter"
 #~ msgstr "R. à Z. du filtre"
