@@ -92,6 +92,9 @@ struct _GtkTextView
   guint  need_im_reset : 1;	/* If we have reset the IM since the last character entered */
   /* just selected a word or line via double/triple click */
   guint just_selected_element : 1;
+
+  /* disable scrolling to cursor on focus */
+  guint disable_scroll_on_focus : 1;
   
   /* debug flag - means that we've validated onscreen since the
    * last "invalidate" signal from the layout

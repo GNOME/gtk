@@ -1,3 +1,8 @@
+2001-10-23  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_grab_focus): scroll to cursor
+	on grab focus, unless it's caused by button click, #59708
+
 Tue Oct 23 11:53:00 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (INCLUDES): Remove G_DISABLE_CONST_RETURNS.

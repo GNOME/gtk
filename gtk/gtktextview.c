@@ -172,6 +172,7 @@ static gint gtk_text_view_motion_event         (GtkWidget        *widget,
 static gint gtk_text_view_expose_event         (GtkWidget        *widget,
                                                 GdkEventExpose   *expose);
 static void gtk_text_view_draw_focus           (GtkWidget        *widget);
+static void gtk_text_view_grab_focus           (GtkWidget        *widget);
 
 /* Source side drag signals */
 static void gtk_text_view_drag_begin       (GtkWidget        *widget,
@@ -3272,7 +3273,9 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
   text_view = GTK_TEXT_VIEW (widget);
 
+  text_view->disable_scroll_on_focus = TRUE;
   gtk_widget_grab_focus (widget);
+  text_view->disable_scroll_on_focus = FALSE;
 
   if (event->window != text_view->text_window->bin_window)
     {
@@ -3645,6 +3648,21 @@ gtk_text_view_draw_focus (GtkWidget *widget)
           gdk_window_clear (widget->window);
         }
     }
+}
+
+static void
+gtk_text_view_grab_focus (GtkWidget *widget)
+{
+  GtkTextView *text_view;
+
+  text_view = GTK_TEXT_VIEW (widget);
+  
+  GTK_WIDGET_CLASS (parent_class)->grab_focus (widget);
+
+  if (!text_view->disable_scroll_on_focus)
+    gtk_text_view_scroll_mark_onscreen (text_view,
+                                        gtk_text_buffer_get_mark (get_buffer (text_view),
+                                                                  "insert"));
 }
 
 /*
