@@ -67,6 +67,7 @@ libgtk_1_1_la_SOURCES = \
 	gtkpaned.c		\
 	gtkpixmap.c		\
 	gtkpreview.c		\
+	gtkprogress.c		\
 	gtkprogressbar.c	\
 	gtkradiobutton.c	\
 	gtkradiomenuitem.c	\
@@ -172,6 +173,7 @@ gtkinclude_HEADERS = \
 	gtkpixmap.h		\
 	gtkpreview.h		\
 	gtkprivate.h		\
+	gtkprogress.h		\
 	gtkprogressbar.h	\
 	gtkradiobutton.h	\
 	gtkradiomenuitem.h	\

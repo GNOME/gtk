@@ -84,6 +84,7 @@
 #include <gtk/gtkpaned.h>
 #include <gtk/gtkpixmap.h>
 #include <gtk/gtkpreview.h>
+#include <gtk/gtkprogress.h>
 #include <gtk/gtkprogressbar.h>
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkradiomenuitem.h>

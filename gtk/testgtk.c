@@ -5895,93 +5895,432 @@ create_wmhints (void)
 /*
  * Progress Bar
  */
-static int progress_timer = 0;
+
+typedef struct _ProgressData {
+  GtkWidget *window;
+  GtkWidget *pbar;
+  GtkWidget *block_spin;
+  GtkWidget *x_align_spin;
+  GtkWidget *y_align_spin;
+  GtkWidget *step_spin;
+  GtkWidget *label;
+  GtkWidget *omenu1;
+  GtkWidget *omenu3;
+  GtkWidget *entry;
+  int timer;
+} ProgressData;
+
 
 gint
 progress_timeout (gpointer data)
 {
   gfloat new_val;
+  GtkAdjustment *adj;
 
-  new_val = GTK_PROGRESS_BAR (data)->percentage;
-  if (new_val >= 1.0)
-    new_val = 0.0;
-  new_val += 0.02;
+  adj = GTK_PROGRESS (data)->adjustment;
 
-  gtk_progress_bar_update (GTK_PROGRESS_BAR (data), new_val);
+  new_val = adj->value + 1;
+  if (new_val > adj->upper)
+    new_val = adj->lower;
+
+  gtk_progress_set_value (GTK_PROGRESS (data), new_val);
 
   return TRUE;
 }
 
 static void
-destroy_progress (GtkWidget  *widget,
-		  GtkWidget **window)
+destroy_progress (GtkWidget     *widget,
+		  ProgressData **pdata)
 {
-  gtk_timeout_remove (progress_timer);
-  progress_timer = 0;
-  *window = NULL;
+  gtk_timeout_remove ((*pdata)->timer);
+  (*pdata)->timer = 0;
+  (*pdata)->window = NULL;
+  g_free (*pdata);
+  *pdata = NULL;
+}
+
+static void
+toggle_orientation (GtkWidget *widget, ProgressData *pdata)
+{
+  gint i;
+
+  if (!GTK_WIDGET_MAPPED (widget))
+    return;
+
+  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
+		    (((GtkOptionMenu *)(pdata->omenu1))->menu_item), i);
+
+  gtk_progress_bar_set_orientation (GTK_PROGRESS_BAR (pdata->pbar),
+			    (GtkProgressBarOrientation) (3-i));
+}
+
+static void
+toggle_show_text (GtkWidget *widget, ProgressData *pdata)
+{
+  gtk_progress_set_show_text (GTK_PROGRESS (pdata->pbar),
+			      GTK_TOGGLE_BUTTON (widget)->active);
+  gtk_widget_set_sensitive (pdata->entry, GTK_TOGGLE_BUTTON (widget)->active);
+  gtk_widget_set_sensitive (pdata->x_align_spin,
+			    GTK_TOGGLE_BUTTON (widget)->active);
+  gtk_widget_set_sensitive (pdata->y_align_spin,
+			    GTK_TOGGLE_BUTTON (widget)->active);
+}
+
+static void
+toggle_bar_style (GtkWidget *widget, ProgressData *pdata)
+{
+  gint i;
+
+  if (!GTK_WIDGET_MAPPED (widget))
+    return;
+
+  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
+		    (((GtkOptionMenu *)(pdata->omenu3))->menu_item), i);
+
+  i = 1 - i;
+
+  if (i == 1)
+    gtk_widget_set_sensitive (pdata->block_spin, TRUE);
+  else
+    gtk_widget_set_sensitive (pdata->block_spin, FALSE);
+
+  gtk_progress_bar_set_bar_style (GTK_PROGRESS_BAR (pdata->pbar),
+				  (GtkProgressBarStyle) i);
+}
+
+static void
+progress_value_changed (GtkAdjustment *adj, ProgressData *pdata)
+{
+  char buf[20];
+
+  if (GTK_PROGRESS (pdata->pbar)->activity_mode)
+    sprintf (buf, "???");
+  else
+    sprintf (buf, "%.0f%%", 100 *
+	     gtk_progress_get_current_percentage (GTK_PROGRESS (pdata->pbar)));
+  gtk_label_set (GTK_LABEL (pdata->label), buf);
+}
+
+static void
+adjust_blocks (GtkAdjustment *adj, ProgressData *pdata)
+{
+  gtk_progress_set_percentage (GTK_PROGRESS (pdata->pbar), 0);
+  gtk_progress_bar_set_number_of_blocks (GTK_PROGRESS_BAR (pdata->pbar),
+     gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (pdata->block_spin)));
+}
+
+static void
+adjust_step (GtkAdjustment *adj, ProgressData *pdata)
+{
+  gtk_progress_bar_set_activity_step (GTK_PROGRESS_BAR (pdata->pbar),
+     gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (pdata->step_spin)));
+}
+
+static void
+adjust_align (GtkAdjustment *adj, ProgressData *pdata)
+{
+  gtk_progress_set_text_alignment (GTK_PROGRESS (pdata->pbar),
+	 gtk_spin_button_get_value_as_float 
+				   (GTK_SPIN_BUTTON (pdata->x_align_spin)),
+	 gtk_spin_button_get_value_as_float
+				   (GTK_SPIN_BUTTON (pdata->y_align_spin)));
+}
+
+static void
+toggle_activity_mode (GtkWidget *widget, ProgressData *pdata)
+{
+  gtk_progress_set_activity_mode (GTK_PROGRESS (pdata->pbar),
+				  GTK_TOGGLE_BUTTON (widget)->active);
+  gtk_widget_set_sensitive (pdata->step_spin, 
+			    GTK_TOGGLE_BUTTON (widget)->active);
+}
+
+static void
+entry_changed (GtkWidget *widget, ProgressData *pdata)
+{
+  gtk_progress_set_format_string (GTK_PROGRESS (pdata->pbar),
+			  gtk_entry_get_text (GTK_ENTRY (pdata->entry)));
 }
 
 void
 create_progress_bar (void)
 {
-  static GtkWidget *window = NULL;
   GtkWidget *button;
   GtkWidget *vbox;
-  GtkWidget *pbar;
+  GtkWidget *vbox2;
+  GtkWidget *hbox;
+  GtkWidget *check;
+  GtkWidget *frame;
+  GtkWidget *tab;
   GtkWidget *label;
-  GtkTooltips *tooltips;
-  
-  if (!window)
+  GtkWidget *align;
+  GtkAdjustment *adj;
+  GtkWidget *menu_item;
+  GtkWidget *menu;
+  GtkWidget *submenu;
+  GSList *group;
+  static ProgressData *pdata = NULL;
+
+  if (!pdata)
+    pdata = g_new0 (ProgressData, 1);
+
+  if (!pdata->window)
     {
-      window = gtk_dialog_new ();
+      pdata->window = gtk_dialog_new ();
 
-      gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  GTK_SIGNAL_FUNC(destroy_progress),
-			  &window);
+      gtk_window_set_policy (GTK_WINDOW (pdata->window), FALSE, FALSE, TRUE);
 
-      gtk_window_set_title (GTK_WINDOW (window), "dialog");
-      gtk_container_border_width (GTK_CONTAINER (window), 0);
+      gtk_signal_connect (GTK_OBJECT (pdata->window), "destroy",
+			  GTK_SIGNAL_FUNC (destroy_progress),
+			  &pdata);
 
-      tooltips = gtk_tooltips_new();
+      pdata->timer = 0;
+
+      gtk_window_set_title (GTK_WINDOW (pdata->window), "GtkProgressBar");
+      gtk_container_border_width (GTK_CONTAINER (pdata->window), 0);
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_container_border_width (GTK_CONTAINER (vbox), 10);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
-			  vbox, TRUE, TRUE, 0);
-      gtk_widget_show (vbox);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (pdata->window)->vbox), 
+			  vbox, FALSE, TRUE, 0);
 
-      label = gtk_label_new ("progress...");
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
-      gtk_widget_show (label);
+      frame = gtk_frame_new ("Progress");
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, TRUE, 0);
 
-      pbar = gtk_progress_bar_new ();
-      gtk_widget_set_events (pbar, GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
-      gtk_widget_set_usize (pbar, 200, 20);
-      gtk_box_pack_start (GTK_BOX (vbox), pbar, TRUE, TRUE, 0);
-      gtk_widget_show (pbar);
-      gtk_tooltips_set_tip (tooltips, pbar, "Countdown is progressing yet!", "Secret!");
-      gtk_tooltips_set_delay (tooltips, 0);
+      vbox2 = gtk_vbox_new (FALSE, 5);
+      gtk_container_add (GTK_CONTAINER (frame), vbox2);
 
-      progress_timer = gtk_timeout_add (100, progress_timeout, pbar);
+      align = gtk_alignment_new (0.5, 0.5, 0, 0);
+      gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 5);
+
+      adj = (GtkAdjustment *) gtk_adjustment_new (0, 1, 300, 0, 0, 0);
+      gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+			  GTK_SIGNAL_FUNC (progress_value_changed), pdata);
+
+      pdata->pbar = gtk_progress_bar_new_with_adjustment (adj);
+      gtk_progress_set_format_string (GTK_PROGRESS (pdata->pbar),
+				      "%v from [%l,%u] (=%p%%)");
+      gtk_container_add (GTK_CONTAINER (align), pdata->pbar);
+      pdata->timer = gtk_timeout_add (100, progress_timeout, pdata->pbar);
+
+      align = gtk_alignment_new (0.5, 0.5, 0, 0);
+      gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 5);
+
+      hbox = gtk_hbox_new (FALSE, 5);
+      gtk_container_add (GTK_CONTAINER (align), hbox);
+      label = gtk_label_new ("Label updated by user :"); 
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+      pdata->label = gtk_label_new ("");
+      gtk_box_pack_start (GTK_BOX (hbox), pdata->label, FALSE, TRUE, 0);
+
+      frame = gtk_frame_new ("Options");
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, TRUE, 0);
+
+      vbox2 = gtk_vbox_new (FALSE, 5);
+      gtk_container_add (GTK_CONTAINER (frame), vbox2);
+
+      tab = gtk_table_new (6, 2, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox2), tab, FALSE, TRUE, 0);
+
+      label = gtk_label_new ("Orientation :");
+      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 0, 1,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+
+      pdata->omenu1 = gtk_option_menu_new ();
+
+      menu = gtk_menu_new ();
+      submenu = NULL;
+      group = NULL;
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Left-Right");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_orientation), 
+			  pdata);
+      gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Right-Left");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_orientation),
+			  pdata);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Bottom-Top");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_orientation),
+			  pdata);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Top-Bottom");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_orientation),
+			  pdata);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+      
+      gtk_option_menu_set_menu (GTK_OPTION_MENU (pdata->omenu1), menu);
+      gtk_option_menu_set_history (GTK_OPTION_MENU (pdata->omenu1), 0);
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 0, 1,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+      gtk_box_pack_start (GTK_BOX (hbox), pdata->omenu1, TRUE, TRUE, 0);
+      
+      check = gtk_check_button_new_with_label ("Show text");
+      gtk_signal_connect (GTK_OBJECT (check), "clicked",
+			  GTK_SIGNAL_FUNC (toggle_show_text),
+			  pdata);
+      gtk_table_attach (GTK_TABLE (tab), check, 0, 1, 1, 2,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 1, 2,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+
+      label = gtk_label_new ("Format : ");
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+
+      pdata->entry = gtk_entry_new ();
+      gtk_signal_connect (GTK_OBJECT (pdata->entry), "changed",
+			  GTK_SIGNAL_FUNC (entry_changed),
+			  pdata);
+      gtk_box_pack_start (GTK_BOX (hbox), pdata->entry, TRUE, TRUE, 0);
+      gtk_entry_set_text (GTK_ENTRY (pdata->entry), "%v from [%l,%u] (=%p%%)");
+      gtk_widget_set_usize (pdata->entry, 100, -1);
+      gtk_widget_set_sensitive (pdata->entry, FALSE);
+
+      label = gtk_label_new ("Text align :");
+      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 2, 3,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 2, 3,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+
+      label = gtk_label_new ("x :");
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 5);
+      
+      adj = (GtkAdjustment *) gtk_adjustment_new (0.5, 0, 1, 0.1, 0.1, 0);
+      pdata->x_align_spin = gtk_spin_button_new (adj, 0, 1);
+      gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+			  GTK_SIGNAL_FUNC (adjust_align), pdata);
+      gtk_box_pack_start (GTK_BOX (hbox), pdata->x_align_spin, FALSE, TRUE, 0);
+      gtk_widget_set_sensitive (pdata->x_align_spin, FALSE);
+
+      label = gtk_label_new ("y :");
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 5);
+
+      adj = (GtkAdjustment *) gtk_adjustment_new (0.5, 0, 1, 0.1, 0.1, 0);
+      pdata->y_align_spin = gtk_spin_button_new (adj, 0, 1);
+      gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+			  GTK_SIGNAL_FUNC (adjust_align), pdata);
+      gtk_box_pack_start (GTK_BOX (hbox), pdata->y_align_spin, FALSE, TRUE, 0);
+      gtk_widget_set_sensitive (pdata->y_align_spin, FALSE);
+
+      label = gtk_label_new ("Bar Style :");
+      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 3, 4,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+
+      pdata->omenu3 = gtk_option_menu_new ();
+
+      menu = gtk_menu_new ();
+      submenu = NULL;
+      group = NULL;
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Continuous");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_bar_style),
+			  pdata);
+      gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Discrete");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_bar_style),
+			  pdata);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+
+      gtk_option_menu_set_menu (GTK_OPTION_MENU (pdata->omenu3), menu);
+      gtk_option_menu_set_history (GTK_OPTION_MENU (pdata->omenu3), 0);
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 3, 4,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+      gtk_box_pack_start (GTK_BOX (hbox), pdata->omenu3, TRUE, TRUE, 0);
+
+      label = gtk_label_new ("Block count :");
+      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 4, 5,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 4, 5,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+      adj = (GtkAdjustment *) gtk_adjustment_new (10, 2, 20, 1, 5, 0);
+      pdata->block_spin = gtk_spin_button_new (adj, 0, 0);
+      gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+			  GTK_SIGNAL_FUNC (adjust_blocks), pdata);
+      gtk_box_pack_start (GTK_BOX (hbox), pdata->block_spin, FALSE, TRUE, 0);
+      gtk_widget_set_sensitive (pdata->block_spin, FALSE);
+
+      check = gtk_check_button_new_with_label ("Activity mode");
+      gtk_signal_connect (GTK_OBJECT (check), "clicked",
+			  GTK_SIGNAL_FUNC (toggle_activity_mode),
+			  pdata);
+      gtk_table_attach (GTK_TABLE (tab), check, 0, 1, 5, 6,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 5, 6,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+      label = gtk_label_new ("Step size : ");
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+      adj = (GtkAdjustment *) gtk_adjustment_new (3, 1, 20, 1, 5, 0);
+      pdata->step_spin = gtk_spin_button_new (adj, 0, 0);
+      gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+			  GTK_SIGNAL_FUNC (adjust_step), pdata);
+      gtk_box_pack_start (GTK_BOX (hbox), pdata->step_spin, FALSE, TRUE, 0);
+      gtk_widget_set_sensitive (pdata->step_spin, FALSE);
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
-				 GTK_OBJECT (window));
+				 GTK_SIGNAL_FUNC (gtk_widget_destroy),
+				 GTK_OBJECT (pdata->window));
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (pdata->window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
-      gtk_widget_show (button);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+  if (!GTK_WIDGET_VISIBLE (pdata->window))
+    gtk_widget_show_all (pdata->window);
   else
-    gtk_widget_destroy (window);
+    gtk_widget_destroy (pdata->window);
 }
-
 
 /*
  * Color Preview

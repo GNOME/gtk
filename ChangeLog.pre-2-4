@@ -1,3 +1,10 @@
+Sun Jul 19 12:19:16 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkprogress.c gtk/gtkprogress.h gtk/gtkprogressbar.c
+	  gtk/gtkprogressbar.h gtk/Makefile.am gtk/gtk.h gtk/testgtk.c:
+	Introduced generic GtkProgress widget. Derived GtkProgressBar from
+	GtkProgress. Made GtkProgressBar much more flexible (see testgtk).
+
 Fri Jul 17 23:49:28 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtktypeutils.h

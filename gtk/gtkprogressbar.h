@@ -16,12 +16,13 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
 #ifndef __GTK_PROGRESS_BAR_H__
 #define __GTK_PROGRESS_BAR_H__
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkwidget.h>
+#include <gtk/gtkprogress.h>
 
 
 #ifdef __cplusplus
@@ -37,24 +38,56 @@ extern "C" {
 typedef struct _GtkProgressBar       GtkProgressBar;
 typedef struct _GtkProgressBarClass  GtkProgressBarClass;
 
+typedef enum
+{
+  GTK_PROGRESS_CONTINUOUS,
+  GTK_PROGRESS_DISCRETE
+} GtkProgressBarStyle;
+
+typedef enum
+{
+  GTK_PROGRESS_LEFT_TO_RIGHT,
+  GTK_PROGRESS_RIGHT_TO_LEFT,
+  GTK_PROGRESS_BOTTOM_TO_TOP,
+  GTK_PROGRESS_TOP_TO_BOTTOM
+} GtkProgressBarOrientation;
+
 struct _GtkProgressBar
 {
-  GtkWidget widget;
+  GtkProgress progress;
 
-  GdkPixmap *offscreen_pixmap;
-  gfloat percentage;
+  GtkProgressBarStyle bar_style;
+  GtkProgressBarOrientation orientation;
+
+  guint blocks;
+  gint  in_block;
+
+  gint  activity_pos;
+  guint activity_step;
+  guint activity_dir : 1;
 };
 
 struct _GtkProgressBarClass
 {
-  GtkWidgetClass parent_class;
+  GtkProgressClass parent_class;
 };
 
 
-guint      gtk_progress_bar_get_type (void);
-GtkWidget* gtk_progress_bar_new      (void);
-void       gtk_progress_bar_update   (GtkProgressBar *pbar,
-				      gfloat          percentage);
+guint      gtk_progress_bar_get_type             (void);
+GtkWidget* gtk_progress_bar_new                  (void);
+GtkWidget* gtk_progress_bar_new_with_adjustment  (GtkAdjustment  *adjustment);
+void       gtk_progress_bar_construct            (GtkProgressBar *pbar,
+						  GtkAdjustment  *adjustment);
+void       gtk_progress_bar_set_bar_style        (GtkProgressBar *pbar,
+						  GtkProgressBarStyle style);
+void       gtk_progress_bar_set_number_of_blocks (GtkProgressBar *pbar,
+						  guint           blocks);
+void       gtk_progress_bar_set_activity_step    (GtkProgressBar *pbar,
+                                                  guint           step);
+void       gtk_progress_bar_set_orientation      (GtkProgressBar *pbar,
+						  GtkProgressBarOrientation orientation);
+void       gtk_progress_bar_update               (GtkProgressBar *pbar,
+						  gfloat          percentage);
 
 
 #ifdef __cplusplus

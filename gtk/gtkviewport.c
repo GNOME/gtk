@@ -272,11 +272,11 @@ gtk_viewport_set_hadjustment (GtkViewport   *viewport,
       gtk_object_sink (GTK_OBJECT (viewport->hadjustment));
       
       gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
-			  gtk_viewport_adjustment_changed,
-			  viewport);
+			  (GtkSignalFunc) gtk_viewport_adjustment_changed,
+			  (gpointer) viewport);
       gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-			  gtk_viewport_adjustment_value_changed,
-			  viewport);
+			  (GtkSignalFunc) gtk_viewport_adjustment_value_changed,
+			  (gpointer) viewport);
 
       gtk_viewport_adjustment_changed (adjustment, viewport);
     }
@@ -304,11 +304,11 @@ gtk_viewport_set_vadjustment (GtkViewport   *viewport,
       gtk_object_sink (GTK_OBJECT (viewport->vadjustment));
       
       gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
-			  gtk_viewport_adjustment_changed,
-			  viewport);
+			  (GtkSignalFunc) gtk_viewport_adjustment_changed,
+			  (gpointer) viewport);
       gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-			  gtk_viewport_adjustment_value_changed,
-			  viewport);
+			  (GtkSignalFunc) gtk_viewport_adjustment_value_changed,
+			  (gpointer) viewport);
 
       gtk_viewport_adjustment_changed (adjustment, viewport);
     }
