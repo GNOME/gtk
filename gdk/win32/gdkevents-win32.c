@@ -225,7 +225,7 @@ _gdk_win32_get_next_tick (gulong suggested_tick)
   if (suggested_tick == 0)
     suggested_tick = GetTickCount ();
   if (suggested_tick <= cur_tick)
-    return ++cur_tick;
+    return cur_tick;
   else
     return cur_tick = suggested_tick;
 }
