@@ -27,12 +27,6 @@ types related to the text widget and how they work together.
 </para>
 
 
-<!-- ##### STRUCT GtkTextBTreeNode ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### ENUM GtkWrapMode ##### -->
 <para>
 Describes a type of line wrapping.
@@ -62,6 +56,7 @@ Describes a type of line wrapping.
 @tabs: 
 @wrap_mode: 
 @language: 
+@padding1: 
 @invisible: 
 @bg_full_height: 
 @editable: 
@@ -120,11 +115,16 @@ Describes a type of line wrapping.
 @bg_stipple: 
 @fg_stipple: 
 @rise: 
+@padding1: 
 @underline: 
 @strikethrough: 
 @draw_bg: 
 @inside_selection: 
 @is_text: 
+@pad1: 
+@pad2: 
+@pad3: 
+@pad4: 
 
 <!-- ##### FUNCTION gtk_text_attributes_new ##### -->
 <para>

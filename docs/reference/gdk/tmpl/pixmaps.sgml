@@ -152,8 +152,9 @@ in which case a default color will be used.
 Deprecated equivalent of g_object_ref().
 </para>
 
-@pixmap: a #GdkPixmap
 @Returns: @pixmap
+<!-- # Unused Parameters # -->
+@pixmap: a #GdkPixmap
 
 
 <!-- ##### MACRO gdk_pixmap_unref ##### -->
@@ -161,6 +162,7 @@ Deprecated equivalent of g_object_ref().
 Deprecated equivalent of g_object_unref().
 </para>
 
+<!-- # Unused Parameters # -->
 @pixmap: a #GdkPixmap
 
 
@@ -180,6 +182,7 @@ Deprecated equivalent of g_object_ref().
 </para>
 
 @Returns: @pixmap
+<!-- # Unused Parameters # -->
 @pixmap: a #GdkBitmap
 
 
@@ -188,6 +191,7 @@ Deprecated equivalent of g_object_ref().
 Deprecated equivalent of g_object_unref().
 </para>
 
+<!-- # Unused Parameters # -->
 @pixmap: a #GdkBitmap
 
 

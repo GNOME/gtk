@@ -276,7 +276,6 @@ and is reference counted with gdk_font_ref() and gdk_font_unref()
 @descent: the maximum distance that the font, when drawn,
 descends below the baseline.
 
-
 <!-- ##### ENUM GdkFontType ##### -->
 <para>
 Indicates the type of a font. The possible values
@@ -285,7 +284,6 @@ are currently:
 
 @GDK_FONT_FONT: the font is a single font.
 @GDK_FONT_FONTSET: the font is a fontset.
-
 
 <!-- ##### FUNCTION gdk_font_load ##### -->
 <para>

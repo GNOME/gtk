@@ -99,7 +99,7 @@ to configure various aspects of the device.
 </para>
 
 @parent_instance: 
-@name: the name of this device. 
+@name: the name of this device.
 @source: the type of this device.
 @mode: the mode of this device
 @has_cursor: %TRUE if the pointer follows device motion.
@@ -108,12 +108,6 @@ to configure various aspects of the device.
 @num_keys: the length of the @keys array.
 @keys: an array of #GdkDeviceKey, describing the mapped macro buttons 
   of this device.
-
-<!-- ##### STRUCT GdkDeviceClass ##### -->
-<para>
-
-</para>
-
 
 <!-- ##### ENUM GdkInputSource ##### -->
 <para>
@@ -159,7 +153,7 @@ about the range and mapping of a device axis.
 </para>
 
 @use: specifies how the axis is used.
-@min: the minimal value that will be reported by this axis. 
+@min: the minimal value that will be reported by this axis.
 @max: the maximal value that will be reported by this axis.
 
 <!-- ##### ENUM GdkAxisUse ##### -->
@@ -257,9 +251,9 @@ Obtains the motion history for a device.
 </para>
 
 @device: a #GdkDevice.
-@window: the window wrt. which the event coordinates will be translated. 
-@start: only return events newer than this timestamp. 
-@stop: only return events older than this timestamp. 
+@window: the window wrt. which the event coordinates will be translated.
+@start: only return events newer than this timestamp.
+@stop: only return events older than this timestamp.
 @events: location to return a newly-allocated array of #GdkTimeCoord.
 @n_events: location to return the length of @events.
 @Returns: %TRUE if the @events were successfully filled.

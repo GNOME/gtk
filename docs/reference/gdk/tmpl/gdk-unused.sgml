@@ -138,59 +138,6 @@ support for internationalized text input.
 Input Methods
 
 
-<!-- ##### SECTION ./tmpl/selections.sgml:Long_Description ##### -->
-<para>
-The X selection mechanism provides a way to transfer
-arbitrary chunks of data between programs. 
-A <firstterm>selection</firstterm> is a essentially 
-a named clipboard, identified by a string interned
-as a #GdkAtom. By claiming ownership of a selection,
-an application indicates that it will be responsible
-for supplying its contents. The most common 
-selections are <literal>PRIMARY</literal> and 
-<literal>CLIPBOARD</literal>.
-</para>
-<para>
-The contents of a selection can be represented in
-a number of formats, called <firstterm>targets</firstterm>.
-Each target is identified by an atom. A list of
-all possible targets supported by the selection owner
-can be retrieved by requesting the special target
-<literal>TARGETS</literal>. When a selection is 
-retrieved, the data is accompanied by a type
-(an atom), and a format (an integer, representing
-the number of bits per item).
-See <link linkend="gdk-Properties-and-Atoms">Properties and Atoms</link>
-for more information.
-</para>
-<para>
-The functions in this section only contain the lowlevel
-parts of the selection protocol. A considerably more
-complicated implementation is needed on top of this.
-GTK+ contains such an implementation in the functions
-in <literal>gtkselection.h</literal> and programmers
-should use those functions instead of the ones presented 
-here. If you plan to implement selection handling
-directly on top of the functions here, you should refer
-to the X Inter-client Communication Conventions Manual
-(ICCCM).
-</para>
-
-
-<!-- ##### SECTION ./tmpl/selections.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/selections.sgml:Short_Description ##### -->
-functions for transfering data via the X selection mechanism.
-
-
-<!-- ##### SECTION ./tmpl/selections.sgml:Title ##### -->
-Selections
-
-
 <!-- ##### MACRO GDK_CORE_POINTER ##### -->
 <para>
 This macro contains an integer value representing
@@ -260,6 +207,12 @@ the device ID for the core pointer device.
 @GDK_CC_MODE_MY_GRAY: 
 @GDK_CC_MODE_PALETTE: 
 
+<!-- ##### STRUCT GdkDeviceClass ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### STRUCT GdkDeviceInfo ##### -->
 <para>
 The #GdkDeviceInfo structure contains information about a 
@@ -283,6 +236,18 @@ device. It has the following fields:
 @keys: a pointer to an array of #GdkDeviceKey structures  
        which describe what key press events are generated
        for each macro button.
+
+<!-- ##### STRUCT GdkDrawableClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GdkGCClass ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### STRUCT GdkIC ##### -->
 <para>
@@ -464,6 +429,21 @@ functions which are used to display status information.
 status information, so the application does not need to do anything.
 @GDK_IM_STATUS_NONE: The input method does not display status information.
 @GDK_IM_STATUS_MASK: A bit-mask containing all the status flags.
+
+<!-- ##### STRUCT GdkKeyInfo ##### -->
+<para>
+
+</para>
+
+@keycode: 
+@group: 
+@level: 
+
+<!-- ##### STRUCT GdkKeymapClass ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### ENUM GdkPixbufAlphaMode ##### -->
 <para>

@@ -44,19 +44,13 @@ elements.
 @ts_y_origin: 
 @colormap: 
 
-<!-- ##### STRUCT GdkGCClass ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### STRUCT GdkGCValues ##### -->
 <para>
 The #GdkGCValues structure holds a set of values used
 to create or modify a graphics context.
 </para>
 
-@foreground: the foreground color. 
+@foreground: the foreground color.
 @background: the background color.
 @font: the default font.
 @function: the bitwise operation used when drawing.
@@ -81,7 +75,7 @@ A set of bit flags used to indicate which fields
 #GdkGCValues structure are set.
 </para>
 
-@GDK_GC_FOREGROUND: the @foreground is set. 
+@GDK_GC_FOREGROUND: the @foreground is set.
 @GDK_GC_BACKGROUND: the @background is set.
 @GDK_GC_FONT: the @font is set.
 @GDK_GC_FUNCTION: the @function is set.
@@ -155,8 +149,8 @@ Create a new GC with the given initial values.
 
 </para>
 
-@gc:
-@Returns:
+@gc: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_gc_unref ##### -->
@@ -164,7 +158,7 @@ Create a new GC with the given initial values.
 
 </para>
 
-@gc:
+@gc: 
 
 
 <!-- ##### MACRO gdk_gc_destroy ##### -->
@@ -173,6 +167,7 @@ Identical to gdk_gc_unref(). This function is obsolete
 and should not be used.
 </para>
 
+<!-- # Unused Parameters # -->
 @gc: a #GdkGC.
 
 
@@ -268,16 +263,16 @@ Set the fill mode for a graphics context.
 Determines how primitives are drawn.
 </para>
 
-@GDK_SOLID: draw with the foreground color. 
+@GDK_SOLID: draw with the foreground color.
 @GDK_TILED: draw with a tiled pixmap.
 @GDK_STIPPLED: draw using the stipple bitmap. Pixels corresponding
   to bits in the stipple bitmap that are set will be drawn in the
   foreground color; pixels corresponding to bits that are
-  not set will be left untouched. 
+  not set will be left untouched.
 @GDK_OPAQUE_STIPPLED: draw using the stipple bitmap. Pixels corresponding
   to bits in the stipple bitmap that are set will be drawn in the
   foreground color; pixels corresponding to bits that are
-  not set will be drawn with the background color. 
+  not set will be drawn with the background color.
 
 <!-- ##### FUNCTION gdk_gc_set_tile ##### -->
 <para>
@@ -410,37 +405,35 @@ explanations of the arguments.
 Determines how lines are drawn.
 </para>
 
-@GDK_LINE_SOLID: lines are drawn solid. 
-@GDK_LINE_ON_OFF_DASH: even segments are drawn; odd segments are not drawn. 
+@GDK_LINE_SOLID: lines are drawn solid.
+@GDK_LINE_ON_OFF_DASH: even segments are drawn; odd segments are not drawn.
 @GDK_LINE_DOUBLE_DASH: even segments are normally. Odd segments are drawn
   in the background color if the fill style is %GDK_SOLID, or in the background
   color masked by the stipple if the fill style is %GDK_STIPPLED.
-
 
 <!-- ##### ENUM GdkCapStyle ##### -->
 <para>
 Determines how the end of lines are drawn.
 </para>
 
-@GDK_CAP_BUTT: the ends of the lines are drawn squared off and extending
-       to the coordinates of the end point. 
 @GDK_CAP_NOT_LAST: the same as %GDK_CAP_BUTT for lines of non-zero width.
-       for zero width lines, the final point on the line will not be drawn. 
+       for zero width lines, the final point on the line will not be drawn.
+@GDK_CAP_BUTT: the ends of the lines are drawn squared off and extending
+       to the coordinates of the end point.
 @GDK_CAP_ROUND: the ends of the lines are drawn as semicircles with the
-       diameter equal to the line width and centered at the end point. 
+       diameter equal to the line width and centered at the end point.
 @GDK_CAP_PROJECTING: the ends of the lines are drawn squared off and extending
-       half the width of the line beyond the end point. 
+       half the width of the line beyond the end point.
 
 <!-- ##### ENUM GdkJoinStyle ##### -->
 <para>
 Determines how the joins between segments of a polygon are drawn.
 </para>
 
-@GDK_JOIN_MITER: the sides of each line are extended to meet at an angle. 
-@GDK_JOIN_ROUND: the sides of the two lines are joined by a circular arc. 
+@GDK_JOIN_MITER: the sides of each line are extended to meet at an angle.
+@GDK_JOIN_ROUND: the sides of the two lines are joined by a circular arc.
 @GDK_JOIN_BEVEL: the sides of the two lines are joined by a straight line which
-       makes an equal angle with each line. 
-
+       makes an equal angle with each line.
 
 <!-- ##### FUNCTION gdk_gc_set_dashes ##### -->
 <para>
@@ -453,7 +446,7 @@ be changed with gdk_gc_set_line_attributes())
 </para>
 
 @gc: a #GdkGC.
-@dash_offset: the 
+@dash_offset: the
 @dash_list: an array of dash lengths.
 @n: the number of elements in @dash_list.
 

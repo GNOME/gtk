@@ -14,7 +14,6 @@ Styles
 
 </para>
 
-
 <!-- ##### MACRO GTK_STYLE_ATTACHED ##### -->
 <para>
 Returns whether the styleis attached to a window.
@@ -679,6 +678,7 @@ Returns whether the styleis attached to a window.
 
 @style: 
 @window: 
+@state_type: 
 @area: 
 @widget: 
 @detail: 

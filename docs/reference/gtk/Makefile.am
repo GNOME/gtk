@@ -43,6 +43,7 @@ IGNORE_HFILES=			\
 	gtktextsegment.h	\
 	gtktexttagprivate.h	\
 	gtktexttypes.h		\
+	gtktextutil.h		\
 	gtktypebuiltins.h	\
 	xembed.h
 

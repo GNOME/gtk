@@ -161,7 +161,7 @@ notes" section of the
 window manager hints</ulink> specification for more details.
 </para>
 
-@GDK_GRAVITY_NORTH_WEST: the reference point is at the top left corner. 
+@GDK_GRAVITY_NORTH_WEST: the reference point is at the top left corner.
 @GDK_GRAVITY_NORTH: the reference point is in the middle of the top edge.
 @GDK_GRAVITY_NORTH_EAST: the reference point is at the top right corner.
 @GDK_GRAVITY_WEST: the reference point is at the middle of the left edge.
@@ -172,7 +172,6 @@ window manager hints</ulink> specification for more details.
 @GDK_GRAVITY_SOUTH_EAST: the reference point is at the lower right corner.
 @GDK_GRAVITY_STATIC: the reference point is at the top left corner of the 
    window itself, ignoring window manager decorations.
-
 
 <!-- ##### ENUM GdkWindowEdge ##### -->
 <para>
@@ -187,7 +186,6 @@ Determines a window edge or corner.
 @GDK_WINDOW_EDGE_SOUTH_WEST: the lower left corner.
 @GDK_WINDOW_EDGE_SOUTH: the lower edge.
 @GDK_WINDOW_EDGE_SOUTH_EAST: the lower right corner.
-
 
 <!-- ##### ENUM GdkWindowTypeHint ##### -->
 <para>
@@ -239,6 +237,12 @@ corresponding flag in #GdkWindowAttributesType.
 @GDK_WA_VISUAL: Honor the visual field
 @GDK_WA_WMCLASS: Honor the wmclass_class and wmclass_name fields
 @GDK_WA_NOREDIR: Honor the override_redirect field
+
+<!-- ##### STRUCT GdkScreen ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### FUNCTION gdk_window_new ##### -->
 <para>
@@ -618,6 +622,17 @@ Registers a window as a potential drop destination.
 @invalidate_children: 
 
 
+<!-- ##### FUNCTION gdk_window_invalidate_maybe_recurse ##### -->
+<para>
+
+</para>
+
+@window: 
+@region: 
+@child_func: 
+@user_data: 
+
+
 <!-- ##### FUNCTION gdk_window_get_update_area ##### -->
 <para>
 
@@ -844,6 +859,7 @@ window.
 </para>
 
 
+
 <!-- ##### FUNCTION gdk_window_set_cursor ##### -->
 <para>
 
@@ -1023,10 +1039,10 @@ Hyper, Alt, Compose, Apple, CapsLock or ShiftLock.
 Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
 </para>
 
-@GDK_SHIFT_MASK: the Shift key. 
+@GDK_SHIFT_MASK: the Shift key.
 @GDK_LOCK_MASK: a Lock key (depending on the modifier mapping of the 
-  X server this may either be CapsLock or ShiftLock). 
-@GDK_CONTROL_MASK: the Control key. 
+  X server this may either be CapsLock or ShiftLock).
+@GDK_CONTROL_MASK: the Control key.
 @GDK_MOD1_MASK: the fourth modifier key (it depends on the modifier 
   mapping of the X server which key is interpreted as this modifier, but 
   normally it is the Alt key).
@@ -1040,11 +1056,11 @@ Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
   mapping of the X server which key is interpreted as this modifier).
 @GDK_BUTTON1_MASK: the first mouse button.
 @GDK_BUTTON2_MASK: the second mouse button.
-@GDK_BUTTON3_MASK: the third mouse button. 
+@GDK_BUTTON3_MASK: the third mouse button.
 @GDK_BUTTON4_MASK: the fourth mouse button.
 @GDK_BUTTON5_MASK: the fifth mouse button.
 @GDK_RELEASE_MASK: not used in GDK itself. GTK+ uses it to differentiate 
-  between (keyval, modifiers) pairs from key press and release events. 
+  between (keyval, modifiers) pairs from key press and release events.
 @GDK_MODIFIER_MASK: 
 
 <!-- ##### FUNCTION gdk_window_get_parent ##### -->
@@ -1200,7 +1216,7 @@ The hint must be set before mapping the window.
 </para>
 
 @GDK_FUNC_ALL: all functions should be offered.
-@GDK_FUNC_RESIZE: the window should be resizable. 
+@GDK_FUNC_RESIZE: the window should be resizable.
 @GDK_FUNC_MOVE: the window should be movable.
 @GDK_FUNC_MINIMIZE: the window should be minimizable.
 @GDK_FUNC_MAXIMIZE: the window should be maximizable.
@@ -1240,7 +1256,6 @@ Applications should never have any reason to use this facility
   returning the location of that window in @win_x, @win_y. Returns %NULL 
   if the window under the mouse pointer is not known to GDK (for example, 
   belongs to another application).
- 
 
 <!-- ##### FUNCTION gdk_set_pointer_hooks ##### -->
 <para>

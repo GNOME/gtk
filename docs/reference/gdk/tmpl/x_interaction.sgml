@@ -483,3 +483,39 @@ Returns the X visual belonging to a #GdkVisual.
 @Returns: an Xlib <type>Visual*</type>.
 
 
+<!-- ##### FUNCTION gdk_x11_atom_to_xatom ##### -->
+<para>
+
+</para>
+
+@atom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_xatom_to_atom ##### -->
+<para>
+
+</para>
+
+@xatom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_xatom_by_name ##### -->
+<para>
+
+</para>
+
+@atom_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_xatom_name ##### -->
+<para>
+
+</para>
+
+@xatom: 
+@Returns: 
+
+

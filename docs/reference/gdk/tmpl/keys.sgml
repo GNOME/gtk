@@ -91,12 +91,6 @@ in the keymap and see what keyval it corresponds to.
 
 @parent_instance: 
 
-<!-- ##### STRUCT GdkKeymapClass ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### STRUCT GdkKeymapKey ##### -->
 <para>
 A <structname>GdkKeymapKey</structname> is a hardware key that can 
@@ -113,16 +107,7 @@ be mapped to a keyval.
   exclamation point ("!") character on it. The level indicates whether to use 
   the "1" or the "!" symbol. The letter keys are considered to have a lowercase
   letter at level 0, and an uppercase letter at level 1, though only the 
-  uppercase letter is printed. 
-
-<!-- ##### STRUCT GdkKeyInfo ##### -->
-<para>
-
-</para>
-
-@keycode: 
-@group: 
-@level: 
+  uppercase letter is printed.
 
 <!-- ##### FUNCTION gdk_keymap_get_default ##### -->
 <para>

@@ -33,3 +33,13 @@ GtkCellRendererPixbuf
 
 </para>
 
+<!-- ##### ARG GtkCellRendererPixbuf:pixbuf-expander-open ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererPixbuf:pixbuf-expander-closed ##### -->
+<para>
+
+</para>
+

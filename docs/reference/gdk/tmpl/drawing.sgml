@@ -34,12 +34,6 @@ or a #GdkWindow.
 
 @user_data: 
 
-<!-- ##### STRUCT GdkDrawableClass ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### FUNCTION gdk_drawable_ref ##### -->
 <para>
 

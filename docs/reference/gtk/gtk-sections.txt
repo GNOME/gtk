@@ -2495,7 +2495,6 @@ gtk_text_mark_get_type
 <FILE>gtktexttag</FILE>
 <TITLE>GtkTextTag</TITLE>
 GtkTextTag
-GtkTextBTreeNode
 GtkWrapMode
 GtkTextAttributes
 gtk_text_tag_new
@@ -2574,6 +2573,7 @@ gtk_text_view_starts_display_line
 gtk_text_view_move_visually
 gtk_text_view_add_child_at_anchor
 GtkTextChildAnchor
+GtkTextChildAnchorClass
 gtk_text_child_anchor_new
 gtk_text_child_anchor_get_widgets
 gtk_text_child_anchor_get_deleted
@@ -3054,7 +3054,6 @@ gtk_tree_view_column_get_sort_order
 gtk_tree_view_column_cell_set_cell_data
 gtk_tree_view_column_cell_get_size
 gtk_tree_view_column_cell_render
-gtk_tree_view_column_cell_event
 gtk_tree_view_column_cell_focus
 gtk_tree_view_column_cell_draw_focus
 gtk_tree_view_column_cell_is_visible

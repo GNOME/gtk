@@ -77,6 +77,118 @@ compatibility with older programs.
 </para>
 
 
+<!-- ##### MACRO GDK_SELECTION_PRIMARY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_SECONDARY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_CLIPBOARD ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_TARGET_BITMAP ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_TARGET_COLORMAP ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_TARGET_DRAWABLE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_TARGET_PIXMAP ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_TARGET_STRING ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_ATOM ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_BITMAP ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_COLORMAP ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_DRAWABLE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_INTEGER ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_PIXMAP ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_WINDOW ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_SELECTION_TYPE_STRING ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gdk_selection_owner_set ##### -->
 <para>
 Set the owner of the given selection.

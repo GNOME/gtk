@@ -163,7 +163,7 @@ be %NULL.
 
 @toolbar: a #GtkToolbar.
 @type: a value of type #GtkToolbarChildType that determines what @widget will be.
-@widget: a #GtkWidget, or %NULL. 
+@widget: a #GtkWidget, or %NULL.
 @text: the element's label.
 @tooltip_text: the element's tooltip.
 @tooltip_private_text: used for context-sensitive help about this toolbar element.
@@ -186,7 +186,7 @@ be %NULL.
 
 @toolbar: a #GtkToolbar.
 @type: a value of type #GtkToolbarChildType that determines what @widget will be.
-@widget: a #GtkWidget, or %NULL 
+@widget: a #GtkWidget, or %NULL
 @text: the element's label.
 @tooltip_text: the element's tooltip.
 @tooltip_private_text: used for context-sensitive help about this toolbar element.
@@ -201,17 +201,17 @@ be %NULL.
 
 </para>
 
-@toolbar:
-@type:
-@widget:
+@toolbar: 
+@type: 
+@widget: 
 @text: 
 @tooltip_text: 
-@tooltip_private_text:
-@icon:
+@tooltip_private_text: 
+@icon: 
 @callback: 
-@user_data:
-@position:
-@Returns:
+@user_data: 
+@position: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_append_widget ##### -->

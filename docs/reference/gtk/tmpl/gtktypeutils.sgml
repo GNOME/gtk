@@ -68,7 +68,7 @@ Returns the type of @class.
 Returns %TRUE if @type is a %GTK_TYPE_OBJECT.
 </para>
 
-@type: a #GtkType. 
+@type: a #GtkType.
 
 
 <!-- ##### MACRO GTK_TYPE_FUNDAMENTAL_LAST ##### -->

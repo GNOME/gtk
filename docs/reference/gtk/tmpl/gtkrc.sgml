@@ -773,12 +773,14 @@ otherwise %NULL.
 <para>
 </para>
 
-@context: 
+@settings: 
 @scanner: a #GtkScanner. Used for printing out warning messages
 if the file is not found.
 @pixmap_file: The name of the file to search for.
 @Returns: The filename, if found. (Must be freed with g_free()),
 otherwise %NULL.
+<!-- # Unused Parameters # -->
+@context: 
 
 
 <!-- ##### FUNCTION gtk_rc_get_module_dir ##### -->

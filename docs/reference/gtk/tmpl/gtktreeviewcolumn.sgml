@@ -466,20 +466,6 @@ GtkTreeViewColumn
 @flags: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_column_cell_event ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@event: 
-@path_string: 
-@background_area: 
-@cell_area: 
-@flags: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_tree_view_column_cell_focus ##### -->
 <para>
 

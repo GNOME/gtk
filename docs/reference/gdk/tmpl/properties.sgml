@@ -49,6 +49,22 @@ of strings on the X server.
 </para>
 
 
+<!-- ##### MACRO GDK_ATOM_TO_POINTER ##### -->
+<para>
+
+</para>
+
+@atom: 
+
+
+<!-- ##### MACRO GDK_POINTER_TO_ATOM ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
 <!-- ##### MACRO GDK_NONE ##### -->
 <para>
 A null value for #GdkAtom, used in a similar way as <literal>None</literal>

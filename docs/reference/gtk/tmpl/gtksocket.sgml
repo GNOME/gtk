@@ -123,6 +123,8 @@ never be set by an application.)
 </para>
 
 @socket: 
+@window_id: 
+<!-- # Unused Parameters # -->
 @id: 
 
 

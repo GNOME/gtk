@@ -1,3 +1,17 @@
+Sat Dec 22 18:18:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (IGNORE_HFILES): Add gtktextutil.h
+
+	* gtk/text_widget.sgml (linkend): SGML fixes.
+
+	* gtk/gtk-sections.txt: Update
+
+	* gdk/gdk-sections.txt: Update.
+
+	* gdk/tmpl/cursors.sgml: SGML fix.
+
+	* gdk/gdk-docs.sgml: Add PNG handling magic.
+
 2001-12-21  Matthias Clasen  <matthiasc@poet.de>
 		
 	* gtk/text_widget.sgml: More precise wording. (#63388)

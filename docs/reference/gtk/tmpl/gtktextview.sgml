@@ -323,6 +323,44 @@ types related to the text widget and how they work together.
 @anchor: 
 
 
+<!-- ##### STRUCT GtkTextChildAnchor ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkTextChildAnchorClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_text_child_anchor_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_child_anchor_get_widgets ##### -->
+<para>
+
+</para>
+
+@anchor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_child_anchor_get_deleted ##### -->
+<para>
+
+</para>
+
+@anchor: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_view_add_child_in_window ##### -->
 <para>
 

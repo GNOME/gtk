@@ -29,12 +29,6 @@ Most of the #GtkText-struct struct members should not be accessed directly.
 Listed below are a few exceptions and how to use them.
 </para>
 
-@hadj: Allows you to see the state of an attached horizontal #GtkScrollbar.
-  See #GtkAdjustment for more info. This allows easy access to the adjustments
-  of the #GtkText struct without having to keep track of ones that you 
-  initialize at widget creation.
-@vadj: Same as @hadj except it involves the vertical #GtkScrollbar.
-
 
 <!-- ##### STRUCT GtkTextFont ##### -->
 <para>

@@ -54,6 +54,13 @@ begun with #GDK_THREADS_ENTER.
 
 
 
+<!-- ##### FUNCTION gdk_threads_init ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gdk_threads_enter ##### -->
 <para>
 Enters a critical region like #GDK_THREADS_ENTER.

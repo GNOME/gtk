@@ -237,10 +237,10 @@ Returned by gdk_pointer_grab() and gdk_keyboard_grab() to indicate
 success or the reason for the failure of the grab attempt.
 </para>
 
-@GDK_GRAB_SUCCESS: the resource was successfully grabbed. 
+@GDK_GRAB_SUCCESS: the resource was successfully grabbed.
 @GDK_GRAB_ALREADY_GRABBED: the resource is actively grabbed by another client.
 @GDK_GRAB_INVALID_TIME: the resource was grabbed more recently than the 
-  specified time. 
+  specified time.
 @GDK_GRAB_NOT_VIEWABLE: the grab window or the @confine_to window are not
   viewable.
 @GDK_GRAB_FROZEN: the resource is frozen by an active grab of another client.

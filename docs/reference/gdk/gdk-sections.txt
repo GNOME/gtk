@@ -483,6 +483,7 @@ GdkWindowEdge
 GdkWindowTypeHint
 GdkWindowAttr
 GdkWindowAttributesType
+GdkScreen
 gdk_window_new
 gdk_window_destroy
 gdk_window_ref
@@ -527,6 +528,7 @@ gdk_window_end_paint
 <SUBSECTION>
 gdk_window_invalidate_rect
 gdk_window_invalidate_region
+gdk_window_invalidate_maybe_recurse
 gdk_window_get_update_area
 gdk_window_freeze_updates
 gdk_window_thaw_updates
@@ -629,16 +631,35 @@ GdkWindowObjectClass
 GdkSelection
 GdkSelectionType
 GdkTarget
+GDK_SELECTION_PRIMARY
+GDK_SELECTION_SECONDARY
+GDK_SELECTION_CLIPBOARD
+GDK_TARGET_BITMAP
+GDK_TARGET_COLORMAP
+GDK_TARGET_DRAWABLE
+GDK_TARGET_PIXMAP
+GDK_TARGET_STRING
+GDK_SELECTION_TYPE_ATOM
+GDK_SELECTION_TYPE_BITMAP
+GDK_SELECTION_TYPE_COLORMAP
+GDK_SELECTION_TYPE_DRAWABLE
+GDK_SELECTION_TYPE_INTEGER
+GDK_SELECTION_TYPE_PIXMAP
+GDK_SELECTION_TYPE_WINDOW
+GDK_SELECTION_TYPE_STRING
 gdk_selection_owner_set
 gdk_selection_owner_get
 gdk_selection_convert
 gdk_selection_property_get
 gdk_selection_send_notify
+</SECTION>
 
 <SECTION>
 <TITLE>Properties and Atoms</TITLE>
 <FILE>properties</FILE>
 GdkAtom
+GDK_ATOM_TO_POINTER
+GDK_POINTER_TO_ATOM
 GDK_NONE
 gdk_text_property_to_text_list
 gdk_free_text_list
@@ -726,6 +747,7 @@ gdk_rectangle_get_type
 <FILE>threads</FILE>
 GDK_THREADS_ENTER
 GDK_THREADS_LEAVE
+gdk_threads_init
 gdk_threads_enter
 gdk_threads_leave
 gdk_threads_mutex
@@ -736,7 +758,6 @@ gdk_threads_mutex
 <FILE>keys</FILE>
 GdkKeymap
 GdkKeymapKey
-GdkKeyInfo
 gdk_keymap_get_default
 gdk_keymap_lookup_key
 gdk_keymap_translate_keyboard_state
@@ -1033,6 +1054,10 @@ gdk_x11_image_get_xdisplay
 gdk_x11_image_get_ximage
 gdk_x11_ungrab_server
 gdk_x11_visual_get_xvisual
+gdk_x11_atom_to_xatom
+gdk_x11_xatom_to_atom
+gdk_x11_get_xatom_by_name
+gdk_x11_get_xatom_name
 
 <SUBSECTION Private>
 gdk_display

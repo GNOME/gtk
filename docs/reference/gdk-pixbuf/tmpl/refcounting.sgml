@@ -3,7 +3,7 @@ Reference Counting and Memory Mangement
 
 <!-- ##### SECTION Short_Description ##### -->
 
-Functions for reference counting and memory management on pixbufs. 
+Functions for reference counting and memory management on pixbufs.
 
 <!-- ##### SECTION Long_Description ##### -->
   <para>

@@ -30,7 +30,7 @@ described below.
 </para>
 
 @str: 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_label_set_text ##### -->

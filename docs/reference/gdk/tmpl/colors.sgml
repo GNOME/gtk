@@ -57,7 +57,6 @@ allocated or unallocated color.
 @green: The blue component of the color.
 @blue: The green component of the color.
 
-
 <!-- ##### STRUCT GdkColormap ##### -->
 <para>
 The colormap structure contains the following public fields.
@@ -70,7 +69,6 @@ The colormap structure contains the following public fields.
   colormap. This can be used to map from pixel values
   back to RGB values. This is only meaningful for
   pseudo-color colormaps.
-
 
 <!-- ##### FUNCTION gdk_colormap_new ##### -->
 <para>
@@ -90,7 +88,7 @@ Creates a new colormap for the given visual.
 </para>
 
 @cmap: 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_colormap_unref ##### -->

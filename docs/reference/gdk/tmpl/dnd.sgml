@@ -128,7 +128,7 @@ This function is called by the drag source.
 
 @context: a #GdkDragContext.
 @dest_window: the new destination window, obtained by gdk_drag_find_window().
-@protocol: the DND protocol in use, obtained by gdk_drag_find_window(). 
+@protocol: the DND protocol in use, obtained by gdk_drag_find_window().
 @x_root: the x position of the pointer in root coordinates.
 @y_root: the y position of the pointer in root coordinates.
 @suggested_action: the suggested action.
@@ -172,9 +172,9 @@ which DND is done.
 @GDK_DRAG_PROTO_XDND: The Xdnd protocol.
 @GDK_DRAG_PROTO_ROOTWIN: An extension to the Xdnd protocol for
   unclaimed root window drops.
-@GDK_DRAG_PROTO_NONE: no protocol. 
+@GDK_DRAG_PROTO_NONE: no protocol.
 @GDK_DRAG_PROTO_WIN32_DROPFILES: The simple WM_DROPFILES protocol.
-@GDK_DRAG_PROTO_OLE2: The complex OLE2 DND protocol (not implemented). 
+@GDK_DRAG_PROTO_OLE2: The complex OLE2 DND protocol (not implemented).
 @GDK_DRAG_PROTO_LOCAL: Intra-application DND.
 
 <!-- ##### FUNCTION gdk_drag_context_unref ##### -->
@@ -191,18 +191,17 @@ A <structname>GdkDragContext</structname> holds information about a
 drag in progress. It is used on both source and destination sides.
 </para>
 
-@parent_instance:
+@parent_instance: 
 @protocol: the DND protocol which governs this drag.
 @is_source: %TRUE if the context is used on the source side.
 @source_window: the source of this drag.
-@dest_window: the destination window of this drag. 
+@dest_window: the destination window of this drag.
 @targets: a list of targets offered by the source.
 @actions: a bitmask of actions proposed by the source when 
    @suggested_action is %GDK_ACTION_ASK.
 @suggested_action: the action suggested by the source.
 @action: the action chosen by the destination.
 @start_time: a timestamp recording the start time of this drag.
-
 
 <!-- ##### ENUM GdkDragAction ##### -->
 <para>
@@ -211,14 +210,14 @@ should do with the dropped data.
 </para>
 
 @GDK_ACTION_DEFAULT: 
-@GDK_ACTION_COPY: Copy the data. 
+@GDK_ACTION_COPY: Copy the data.
 @GDK_ACTION_MOVE: Move the data, i.e. first copy it, then delete
   it from the source using the DELETE target of the X selection protocol.
 @GDK_ACTION_LINK: Add a link to the data. Note that this is only
   useful if source and destination agree on what it means.
 @GDK_ACTION_PRIVATE: Special action which tells the source that the
   destination will do something that the source doesn't understand.
-@GDK_ACTION_ASK: Ask the user what to do with the data. 
+@GDK_ACTION_ASK: Ask the user what to do with the data.
 
 <!-- ##### FUNCTION gdk_drag_status ##### -->
 <para>
@@ -233,3 +232,5 @@ gdk_drag_motion() called by the drag source.
 @action: the selected action which will be taken when a drop happens, 
   or 0 to indicate that a drop will not be accepted.
 @time: the timestamp for this operation.
+
+

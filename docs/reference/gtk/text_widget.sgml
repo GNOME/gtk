@@ -183,8 +183,8 @@ For other attributes there are dedicated methods on
   pango_font_description_free (font_desc);
 
   /* Change default color throughout the widget */
-  gdk_color_parse ("green", &color);
-  gtk_widget_modify_fg (view, GTK_STATE_NORMAL, &color);
+  gdk_color_parse ("green", &amp;color);
+  gtk_widget_modify_fg (view, GTK_STATE_NORMAL, &amp;color);
 
   /* Change left margin throughout the widget */
   gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 30);
@@ -192,9 +192,9 @@ For other attributes there are dedicated methods on
   /* Use a tag to change the color for just one part of the widget */
   tag = gtk_text_buffer_create_tag (buffer, "blue_foreground",
 	   		            "foreground", "blue", NULL);  
-  gtk_text_buffer_get_iter_at_offset (buffer, &start, 7);
-  gtk_text_buffer_get_iter_at_offset (buffer, &end, 12);
-  gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
+  gtk_text_buffer_get_iter_at_offset (buffer, &amp;start, 7);
+  gtk_text_buffer_get_iter_at_offset (buffer, &amp;end, 12);
+  gtk_text_buffer_apply_tag (buffer, tag, &amp;start, &amp;end);
 </programlisting>
 
 </para>
