@@ -1,3 +1,14 @@
+2002-02-24  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkfilesel.c: Move inclusion of <windows.h> before inclusion
+	of <winsock.h>, to actually get STRICT prototypes for Win32
+	API. Include glib.h early to get G_OS_WIN32 and G_WITH_CYGWIN.
+	Don't declare static functions that aren't defined if !HAVE_PWD_H
+	or if G_OS_WIN32.
+	(win32_gtk_add_drives_to_dir_list): Remove #if 0 code, reindent.
+	(gtk_file_selection_get_selections): Don't crash if nothing has
+	been selected.
+
 Sat Feb 23 20:33:29 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkplug.[ch] gtk/gtksocket.[ch] gtk/xembed.h: Implement 

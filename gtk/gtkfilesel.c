@@ -41,6 +41,16 @@
 #ifdef HAVE_PWD_H
 #include <pwd.h>
 #endif
+
+#include <glib.h>		/* Include early to get G_OS_WIN32 and
+				 * G_WITH_CYGWIN */
+
+#if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
+#include <ctype.h>
+#define STRICT
+#include <windows.h>
+#undef STRICT
+#endif /* G_OS_WIN32 || G_WITH_CYGWIN */
 #ifdef HAVE_WINSOCK_H
 #include <winsock.h>		/* For gethostname */
 #endif
@@ -72,9 +82,6 @@
 #include "gtkdnd.h"
 #include "gtkeventbox.h"
 
-#if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
-#define STRICT
-#include <windows.h>
 
 #ifdef G_OS_WIN32
 #include <direct.h>
@@ -83,10 +90,7 @@
 #ifndef S_ISDIR
 #define S_ISDIR(mode) ((mode)&_S_IFDIR)
 #endif
-
 #endif /* G_OS_WIN32 */
-
-#endif /* G_OS_WIN32 || G_WITH_CYGWIN */
 
 #define DIR_LIST_WIDTH   180
 #define DIR_LIST_HEIGHT  180
@@ -329,7 +333,9 @@ static CompletionDirSent* open_new_dir     (gchar* dir_name,
 static gint           correct_dir_fullname (CompletionDir* cmpl_dir);
 static gint           correct_parent       (CompletionDir* cmpl_dir,
 					    struct stat *sbuf);
+#ifndef G_OS_WIN32
 static gchar*         find_parent_dir_fullname    (gchar* dirname);
+#endif
 static CompletionDir* attach_dir           (CompletionDirSent* sent,
 					    gchar* dir_name,
 					    CompletionState *cmpl_state);
@@ -338,8 +344,10 @@ static void           free_dir      (CompletionDir  *dir);
 static void           prune_memory_usage(CompletionState *cmpl_state);
 
 /* Completion operations */
+#ifdef HAVE_PWD_H
 static PossibleCompletion* attempt_homedir_completion(gchar* text_to_complete,
 						      CompletionState *cmpl_state);
+#endif
 static PossibleCompletion* attempt_file_completion(CompletionState *cmpl_state);
 static CompletionDir* find_completion_dir(gchar* text_to_complete,
 					  gchar** remaining_text,
@@ -1913,39 +1921,28 @@ win32_gtk_add_drives_to_dir_list (GtkListStore *model)
 {
   gchar *textPtr;
   gchar buffer[128];
-  char volumeNameBuf[128];
   char formatBuffer[128];
   GtkTreeIter iter;
 
-  /* Get the Drives string */
+  /* Get the drives string */
   GetLogicalDriveStrings (sizeof (buffer), buffer);
 
   /* Add the drives as necessary */
   textPtr = buffer;
-  while (*textPtr != '\0') {
-    /* Get the volume information for this drive */
-    if ((tolower (textPtr[0]) != 'a') && (tolower (textPtr[0]) != 'b'))
-      {
-	/* Ignore floppies (?) */
-	DWORD maxComponentLength, flags;
+  while (*textPtr != '\0')
+    {
+      /* Ignore floppies (?) */
+      if ((tolower (textPtr[0]) != 'a') && (tolower (textPtr[0]) != 'b'))
+	{
+	  /* Build the actual displayable string */
+	  sprintf (formatBuffer, "%c:\\", toupper (textPtr[0]));
 
-	GetVolumeInformation (textPtr,
-			      volumeNameBuf, sizeof(volumeNameBuf),
-			      NULL, &maxComponentLength,
-			      &flags, NULL, 0);
-	/* Build the actual displayable string */
-
-	sprintf (formatBuffer, "%c:\\", toupper(textPtr[0]));
-#if 0 /* HB: removed to allow drive change AND directory update with one click */
-	if (strlen (volumeNameBuf) > 0)
-	  sprintf (formatBuffer, "%s (%s)", formatBuffer, volumeNameBuf);
-#endif
-	/* Add to the list */
-	gtk_list_store_append (model, &iter);
-	gtk_list_store_set (model, &iter, DIR_COLUMN, formatBuffer, -1);
-      }
-    textPtr += (strlen (textPtr) + 1);
-  }
+	  /* Add to the list */
+	  gtk_list_store_append (model, &iter);
+	  gtk_list_store_set (model, &iter, DIR_COLUMN, formatBuffer, -1);
+	}
+      textPtr += (strlen (textPtr) + 1);
+    }
 }
 #endif
 
@@ -2329,10 +2326,6 @@ gtk_file_selection_get_selections (GtkFileSelection *filesel)
 
   g_return_val_if_fail (GTK_IS_FILE_SELECTION (filesel), NULL);
 
-  names = filesel->selected_names;
-
-  selections = g_new (gchar *, names->len + 2);
-
   filename = g_strdup (gtk_file_selection_get_filename (filesel));
 
   if (strlen (filename) == 0)
@@ -2340,6 +2333,13 @@ gtk_file_selection_get_selections (GtkFileSelection *filesel)
       g_free (filename);
       return NULL;
     }
+
+  names = filesel->selected_names;
+
+  if (names != NULL)
+    selections = g_new (gchar *, names->len + 2);
+  else
+    selections = g_new (gchar *, 2);
 
   count = 0;
   selections[count++] = filename;
