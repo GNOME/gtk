@@ -1,3 +1,8 @@
+2003-11-19  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdialog.c (gtk_file_chooser_dialog_init): Turn
+	off the dialog's separator (thanks to Iain Holmes).
+
 Wed Nov 19 18:15:00 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenu.c (DEFAULT_POPUP_DELAY): set to 200 instead of 225
@@ -9,6 +14,16 @@ Wed Nov 19 18:11:08 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 	* gtk/gtktoolbar.c (struct _ToolbarContent): Add a new
 	"ItemState" field indicating the overflowed-ness etc. of the item.
 	(gtk_toolbar_size_allocate): update the field here.
+
+2003-11-19  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (create_filter): Don't add padding
+	to the alignment.  Use the HIG-specified spacing between the
+	filter label and the combo.
+	(create_filename_entry): Use HIG-specified spacing between the
+	location label and the entry.
+	(gtk_file_chooser_default_constructor): Don't use vertical padding
+	around the filename entry.
 
 2003-11-19  Federico Mena Quintero  <federico@ximian.com>
 

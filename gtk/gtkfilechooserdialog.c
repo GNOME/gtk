@@ -112,6 +112,8 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
 								   GTK_TYPE_FILE_CHOOSER_DIALOG,
 								   GtkFileChooserDialogPrivate);
   dialog->priv = priv;
+
+  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 }
 
 /* Callback used when the user activates a file in the file chooser widget */

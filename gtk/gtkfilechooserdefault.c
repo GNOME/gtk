@@ -764,10 +764,9 @@ create_filter (GtkFileChooserDefault *impl)
   GtkWidget *label;
 
   impl->filter_alignment = gtk_alignment_new (0.0, 0.5, 0.0, 1.0);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (impl->filter_alignment), 0, 6, 0, 0);
   /* Don't show filter initially -- don't gtk_widget_show() the filter_alignment here */
 
-  hbox = gtk_hbox_new (FALSE, 6);
+  hbox = gtk_hbox_new (FALSE, 12);
   gtk_container_add (GTK_CONTAINER (impl->filter_alignment), hbox);
   gtk_widget_show (hbox);
 
@@ -1123,7 +1122,7 @@ create_filename_entry (GtkFileChooserDefault *impl)
   GtkWidget *hbox;
   GtkWidget *label;
 
-  hbox = gtk_hbox_new (FALSE, 6);
+  hbox = gtk_hbox_new (FALSE, 12);
   gtk_widget_show (hbox);
 
   label = gtk_label_new_with_mnemonic (_("_Location:"));
@@ -1225,7 +1224,7 @@ gtk_file_chooser_default_constructor (GType                  type,
   gtk_table_attach (GTK_TABLE (table), entry_widget,
 		    0, 2,                   2, 3,
 		    GTK_EXPAND | GTK_FILL,  0,
-		    0,                      6);
+		    0,                      0);
 
   /* Preview */
 
