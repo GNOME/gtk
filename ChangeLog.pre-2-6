@@ -4,6 +4,7 @@
 	GtkUIManagerNode to shorten the names and to make the
 	GTK_UI_MANAGER_<TYPE> names available for a public enum.
 	
+	* gtk/gtkactiongroup.c:
 	* gtk/gtkuimanager.c: Various doc tweaks.	
 
 	* gtk/gtkuimanager.c (start_element_handler):

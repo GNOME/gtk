@@ -1,3 +1,7 @@
+2003-09-04  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkactiongroup.sgml: Doc tweaks.
+
 2003-09-02  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkactiongroup.sgml:	

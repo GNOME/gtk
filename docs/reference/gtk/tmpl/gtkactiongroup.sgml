@@ -20,9 +20,9 @@ act on that document (eg. save, cut/copy/paste, etc).  Each window's menus
 would be constructed from a combination of two action groups.
 </para>
 <para id="Action-Accel">
-Accelerators are handled by the GTK+ accelerator map. All actions are 
-assigned an accelerator path of the form
-<literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal> when they are added to an action group,
+Accelerators are handled by the GTK+ accelerator map. All actions are assigned an 
+accelerator path (which normally has the form 
+<literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>) 
 and a shortcut is associated with this accelerator path. All menuitems and 
 toolitems take on this accelerator path. The GTK+ accelerator map code makes 
 sure that the correct shortcut is displayed next to the menu item.

@@ -205,7 +205,7 @@ gtk_action_group_get_action (GtkActionGroup *action_group,
  * @action_group: the action group
  * @action: an action
  *
- * Adds an action object to the action group.
+ * Adds an action object to the action group. 
  *
  * Since: 2.4
  */
@@ -223,7 +223,7 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
 }
 
 /**
- * gtk_action_group_removes_action:
+ * gtk_action_group_remove_action:
  * @action_group: the action group
  * @action: an action
  *
@@ -284,9 +284,12 @@ gtk_action_group_list_actions (GtkActionGroup *action_group)
  * @n_entries: the number of entries
  * @user_data: data to pass to the action callbacks
  *
- * This is a convenience routine to create a number of actions and add
- * them to the action group.  Each member of the array describes an
- * action to create.
+ * This is a convenience function to create a number of actions and add them to the
+ * action group.
+ *
+ * The "activate" signals of the actions are connected to the callbacks and 
+ * their accel paths are set to 
+ * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
  * 
  * Since: 2.4
  */
@@ -397,9 +400,12 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
  * @on_change: the callback to connect to the changed signal
  * @user_data: data to pass to the action callbacks
  * 
- * This is a convenience routine to create a group of radio actions and 
- * add them to the action group.  Each member of the array describes a
- * radio action to create.
+ * This is a convenience routine to create a group of radio actions and
+ * add them to the action group. 
+ *
+ * The"changed" signal of the first radio action is connected to the @on_change 
+ * callback and the accel paths of the actions are set to 
+ * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
  * 
  * Since: 2.4
  **/
