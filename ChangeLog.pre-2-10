@@ -1,3 +1,9 @@
+Thu May 27 16:36:22 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_alloc_colors): Set
+	bits within visual->depth that aren't used for color to
+	1s, in case they are alpha.
+
 2004-05-27  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (save_folder_combo_create): 

@@ -1126,7 +1126,13 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
 
       for (i = 0; i < ncolors; i++)
 	{
-	  colors[i].pixel = (((colors[i].red >> (16 - visual->red_prec)) << visual->red_shift) +
+	  /* If bits not used for color are used for something other than padding,
+	   * it's likely alpha, so we set them to 1s.
+	   */
+	  guint32 unused = ~ (visual->red_mask | visual->green_mask | visual->blue_mask |
+			      (((~(guint32)0)) << visual->depth));
+	  colors[i].pixel = (unused +
+			     ((colors[i].red >> (16 - visual->red_prec)) << visual->red_shift) +
 			     ((colors[i].green >> (16 - visual->green_prec)) << visual->green_shift) +
 			     ((colors[i].blue >> (16 - visual->blue_prec)) << visual->blue_shift));
 	  success[i] = TRUE;
