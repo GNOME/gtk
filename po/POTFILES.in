@@ -56,6 +56,7 @@ gtk/gtkfilechooserdefault.c
 gtk/gtkfilesel.c
 gtk/gtkfilesystemmodel.c
 gtk/gtkfilesystemunix.c
+gtk/gtkfilesystemwin32.c
 gtk/gtkfixed.c
 gtk/gtkfontbutton.c
 gtk/gtkfontsel.c
