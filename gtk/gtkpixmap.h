@@ -45,6 +45,9 @@ struct _GtkPixmap
   
   GdkPixmap *pixmap;
   GdkBitmap *mask;
+
+  GdkPixmap *pixmap_insensitive;
+  guint build_insensitive : 1;
 };
 
 struct _GtkPixmapClass
@@ -62,6 +65,9 @@ void	   gtk_pixmap_set	 (GtkPixmap  *pixmap,
 void	   gtk_pixmap_get	 (GtkPixmap  *pixmap,
 				  GdkPixmap **val,
 				  GdkBitmap **mask);
+
+void       gtk_pixmap_set_build_insensitive (GtkPixmap *pixmap,
+		                             guint build);
 
 
 #ifdef __cplusplus

@@ -1,3 +1,11 @@
+Mon Nov 16 19:19:00 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkpixmap.h
+	  gtk/gtkpixmap.c: Pixmaps now grey out when insensitive,
+	  code thanks to GNOME stock by Eckehard Berns.  New function
+	  gtk_pixmap_set_build_insensitive to provide ability to turn 
+	  this off.
+
 Tue Nov 17 00:06:29 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtknotebook.h (struct _GtkNotebook): new flags : homogeneous;
