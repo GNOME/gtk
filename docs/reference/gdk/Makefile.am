@@ -20,6 +20,7 @@ CFILE_GLOB=$(top_srcdir)/gdk/*.c
 
 # Header files to ignore when scanning
 IGNORE_HFILES=			\
+	gdkalias.h		\
 	gdkintl.h		\
 	gdkmarshalers.h		\
 	gdkkeysyms.h		\

@@ -1,3 +1,9 @@
+Tue Aug 10 18:58:15 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/Makefile.am (IGNORE_HFILES): Add gdkalias.h
+	
+	* gtk/Makefile.am (IGNORE_HFILES): Add gtkalias.h.
+
 Mon Aug  9 10:52:23 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_entry_layout_index_to_text_index() 
