@@ -1,3 +1,10 @@
+2004-02-16  DindinX  <david@dindinx.org>
+
+	* gdk/gdkdraw.c (gdk_draw_segments): don't try to draw more than 32767
+	segments at a time, since XDrawSegments cannot handle more than this.
+
+	fixes bug #122026.
+	
 Mon Feb 16 18:26:39 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_set_child_property): Call

@@ -832,6 +832,16 @@ gdk_draw_segments (GdkDrawable *drawable,
   g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (nsegs >= 0);
 
+  while (num_segments >= 32000)
+    {
+      GDK_DRAWABLE_GET_CLASS (drawable)->draw_segments (drawable,
+                                                        gc, 
+                                                        segs,
+                                                        32000);
+      num_segments -= 32000;
+      segments     += 32000;
+    }
+
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_segments (drawable, gc, segs, nsegs);
 }
 
