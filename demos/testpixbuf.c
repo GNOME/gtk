@@ -522,7 +522,7 @@ main (int argc, char **argv)
 				int nbytes;
 				nbytes = fread(buf, 1, readlen, file);
 
-                                printf(".");
+                                //printf(".");
                                 fflush(stdout);
                                 
                                 if (gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (pixbuf_loader), buf, nbytes) == FALSE)

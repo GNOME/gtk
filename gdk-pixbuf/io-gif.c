@@ -39,7 +39,7 @@
 #define CM_GREEN         1
 #define CM_BLUE          2
 
-#define MAX_LWZ_BITS     12
+#define MAX_LZW_BITS     12
 
 #define INTERLACE          0x40
 #define LOCALCOLORMAP      0x80
@@ -127,20 +127,20 @@ struct _GifContext
 	int code_done;
 	int code_last_byte;
 	
-	/* lwz context */
-	gint lwz_fresh;
-	gint lwz_code_size;
-	guchar lwz_set_code_size;
-	gint lwz_max_code;
-	gint lwz_max_code_size;
-	gint lwz_firstcode;
-	gint lwz_oldcode;
-	gint lwz_clear_code;
-	gint lwz_end_code;
-	gint *lwz_sp;
+	/* lzw context */
+	gint lzw_fresh;
+	gint lzw_code_size;
+	guchar lzw_set_code_size;
+	gint lzw_max_code;
+	gint lzw_max_code_size;
+	gint lzw_firstcode;
+	gint lzw_oldcode;
+	gint lzw_clear_code;
+	gint lzw_end_code;
+	gint *lzw_sp;
 
-	gint lwz_table[2][(1 << MAX_LWZ_BITS)];
-	gint lwz_stack[(1 << (MAX_LWZ_BITS)) * 2 + 1];
+	gint lzw_table[2][(1 << MAX_LZW_BITS)];
+	gint lzw_stack[(1 << (MAX_LZW_BITS)) * 2 + 1];
 
 	/* painting context */
 	gint draw_xpos;
@@ -179,7 +179,7 @@ ReadOK (GifContext *context, guchar *buffer, size_t len)
 		return retval;
 	} else {
 #ifdef IO_GIFDEBUG
-		g_print ("\tlooking for %d bytes.  size == %d, ptr == %d\n", len, context->size, context->ptr);
+//		g_print ("\tlooking for %d bytes.  size == %d, ptr == %d\n", len, context->size, context->ptr);
 #endif
 		if ((context->size - context->ptr) >= len) {
 			count += len;
@@ -487,44 +487,44 @@ GetCode (GifContext *context,
  */
 
 static int
-lwz_read_byte (GifContext *context)
+lzw_read_byte (GifContext *context)
 {
 	int code, incode;
 	gint retval;
 	register int i;
 
-	if (context->lwz_fresh) {
-		context->lwz_fresh = FALSE;
+	if (context->lzw_fresh) {
+		context->lzw_fresh = FALSE;
 		do {
-			retval = GetCode (context, context->lwz_code_size);
+			retval = GetCode (context, context->lzw_code_size);
 			if (retval < 0) {
 				return retval;
 			}
 			
-			context->lwz_firstcode = context->lwz_oldcode = retval;
-		} while (context->lwz_firstcode == context->lwz_clear_code);
-		return context->lwz_firstcode;
+			context->lzw_firstcode = context->lzw_oldcode = retval;
+		} while (context->lzw_firstcode == context->lzw_clear_code);
+		return context->lzw_firstcode;
 	}
 
-	if (context->lwz_sp > context->lwz_stack)
-		return *--(context->lwz_sp);
+	if (context->lzw_sp > context->lzw_stack)
+		return *--(context->lzw_sp);
 
-	while ((code = GetCode (context, context->lwz_code_size)) >= 0) {
-		if (code == context->lwz_clear_code) {
-			for (i = 0; i < context->lwz_clear_code; ++i) {
-				context->lwz_table[0][i] = 0;
-				context->lwz_table[1][i] = i;
+	while ((code = GetCode (context, context->lzw_code_size)) >= 0) {
+		if (code == context->lzw_clear_code) {
+			for (i = 0; i < context->lzw_clear_code; ++i) {
+				context->lzw_table[0][i] = 0;
+				context->lzw_table[1][i] = i;
 			}
-			for (; i < (1 << MAX_LWZ_BITS); ++i)
-				context->lwz_table[0][i] = context->lwz_table[1][i] = 0;
-			context->lwz_code_size = context->lwz_set_code_size + 1;
-			context->lwz_max_code_size = 2 * context->lwz_clear_code;
-			context->lwz_max_code = context->lwz_clear_code + 2;
-			context->lwz_sp = context->lwz_stack;
-			context->lwz_firstcode = context->lwz_oldcode =
-				GetCode (context, context->lwz_code_size);
-			return context->lwz_firstcode;
-		} else if (code == context->lwz_end_code) {
+			for (; i < (1 << MAX_LZW_BITS); ++i)
+				context->lzw_table[0][i] = context->lzw_table[1][i] = 0;
+			context->lzw_code_size = context->lzw_set_code_size + 1;
+			context->lzw_max_code_size = 2 * context->lzw_clear_code;
+			context->lzw_max_code = context->lzw_clear_code + 2;
+			context->lzw_sp = context->lzw_stack;
+			context->lzw_firstcode = context->lzw_oldcode =
+				GetCode (context, context->lzw_code_size);
+			return context->lzw_firstcode;
+		} else if (code == context->lzw_end_code) {
 			int count;
 			unsigned char buf[260];
 
@@ -544,38 +544,38 @@ lwz_read_byte (GifContext *context)
 
 		incode = code;
 
-		if (code >= context->lwz_max_code) {
-			*(context->lwz_sp)++ = context->lwz_firstcode;
-			code = context->lwz_oldcode;
+		if (code >= context->lzw_max_code) {
+			*(context->lzw_sp)++ = context->lzw_firstcode;
+			code = context->lzw_oldcode;
 		}
 
-		while (code >= context->lwz_clear_code) {
-			*(context->lwz_sp)++ = context->lwz_table[1][code];
-			if (code == context->lwz_table[0][code]) {
+		while (code >= context->lzw_clear_code) {
+			*(context->lzw_sp)++ = context->lzw_table[1][code];
+			if (code == context->lzw_table[0][code]) {
 				/*g_message (_("GIF: circular table entry BIG ERROR\n"));*/
 				/*gimp_quit ();*/
 				return -2;
 			}
-			code = context->lwz_table[0][code];
+			code = context->lzw_table[0][code];
 		}
 
-		*(context->lwz_sp)++ = context->lwz_firstcode = context->lwz_table[1][code];
+		*(context->lzw_sp)++ = context->lzw_firstcode = context->lzw_table[1][code];
 
-		if ((code = context->lwz_max_code) < (1 << MAX_LWZ_BITS)) {
-			context->lwz_table[0][code] = context->lwz_oldcode;
-			context->lwz_table[1][code] = context->lwz_firstcode;
-			++context->lwz_max_code;
-			if ((context->lwz_max_code >= context->lwz_max_code_size) &&
-			    (context->lwz_max_code_size < (1 << MAX_LWZ_BITS))) {
-				context->lwz_max_code_size *= 2;
-				++context->lwz_code_size;
+		if ((code = context->lzw_max_code) < (1 << MAX_LZW_BITS)) {
+			context->lzw_table[0][code] = context->lzw_oldcode;
+			context->lzw_table[1][code] = context->lzw_firstcode;
+			++context->lzw_max_code;
+			if ((context->lzw_max_code >= context->lzw_max_code_size) &&
+			    (context->lzw_max_code_size < (1 << MAX_LZW_BITS))) {
+				context->lzw_max_code_size *= 2;
+				++context->lzw_code_size;
 			}
 		}
 
-		context->lwz_oldcode = incode;
+		context->lzw_oldcode = incode;
 
-		if (context->lwz_sp > context->lwz_stack)
-			return *--(context->lwz_sp);
+		if (context->lzw_sp > context->lzw_stack)
+			return *--(context->lzw_sp);
 	}
 	return code;
 }
@@ -660,7 +660,7 @@ gif_get_lzw (GifContext *context)
 
 	dest = gdk_pixbuf_get_pixels (context->pixbuf);
 	while (TRUE) {
-		v = lwz_read_byte (context);
+		v = lzw_read_byte (context);
 		if (v < 0) {
 			return v;
 		}
@@ -738,30 +738,30 @@ gif_prepare_lzw (GifContext *context)
 {
 	gint i;
 
-	if (!ReadOK (context, &(context->lwz_set_code_size), 1)) {
+	if (!ReadOK (context, &(context->lzw_set_code_size), 1)) {
 		/*g_message (_("GIF: EOF / read error on image data\n"));*/
 		return -1;
 	}
 
-	context->lwz_code_size = context->lwz_set_code_size + 1;
-	context->lwz_clear_code = 1 << context->lwz_set_code_size;
-	context->lwz_end_code = context->lwz_clear_code + 1;
-	context->lwz_max_code_size = 2 * context->lwz_clear_code;
-	context->lwz_max_code = context->lwz_clear_code + 2;
-	context->lwz_fresh = TRUE;
+	context->lzw_code_size = context->lzw_set_code_size + 1;
+	context->lzw_clear_code = 1 << context->lzw_set_code_size;
+	context->lzw_end_code = context->lzw_clear_code + 1;
+	context->lzw_max_code_size = 2 * context->lzw_clear_code;
+	context->lzw_max_code = context->lzw_clear_code + 2;
+	context->lzw_fresh = TRUE;
 	context->code_curbit = 0;
 	context->code_lastbit = 0;
 	context->code_last_byte = 0;
 	context->code_done = FALSE;
 
-	for (i = 0; i < context->lwz_clear_code; ++i) {
-		context->lwz_table[0][i] = 0;
-		context->lwz_table[1][i] = i;
+	for (i = 0; i < context->lzw_clear_code; ++i) {
+		context->lzw_table[0][i] = 0;
+		context->lzw_table[1][i] = i;
 	}
-	for (; i < (1 << MAX_LWZ_BITS); ++i)
-		context->lwz_table[0][i] = context->lwz_table[1][0] = 0;
+	for (; i < (1 << MAX_LZW_BITS); ++i)
+		context->lzw_table[0][i] = context->lzw_table[1][0] = 0;
 
-	context->lwz_sp = context->lwz_stack;
+	context->lzw_sp = context->lzw_stack;
 	gif_set_get_lzw (context);
 
 	return 0;
