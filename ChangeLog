@@ -1,3 +1,8 @@
+Tue Oct  8 15:25:53 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkhpaned.[ch] gtk/gtkpaned.[ch] gtk/gtkprogress.[ch]
+	gtk/gtkprogressbar.[ch] gtk/gtkvpaned.[ch]: Deprecation cleanup
+
 Tue Oct  8 14:49:56 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtktreemodel.h: restore gtkobject.h #include so we don't

@@ -35,7 +35,6 @@
 #endif
 
 #include "gtkprogressbar.h"
-#include "gtksignal.h"
 #include "gtkintl.h"
 
 
@@ -80,26 +79,29 @@ static void gtk_progress_bar_paint         (GtkProgress         *progress);
 static void gtk_progress_bar_act_mode_enter (GtkProgress        *progress);
 
 
-GtkType
+GType
 gtk_progress_bar_get_type (void)
 {
-  static GtkType progress_bar_type = 0;
+  static GType progress_bar_type = 0;
 
   if (!progress_bar_type)
     {
-      static const GtkTypeInfo progress_bar_info =
+      static const GTypeInfo progress_bar_info =
       {
-	"GtkProgressBar",
-	sizeof (GtkProgressBar),
 	sizeof (GtkProgressBarClass),
-	(GtkClassInitFunc) gtk_progress_bar_class_init,
-	(GtkObjectInitFunc) gtk_progress_bar_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_progress_bar_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkProgressBar),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_progress_bar_init,
       };
 
-      progress_bar_type = gtk_type_unique (GTK_TYPE_PROGRESS, &progress_bar_info);
+      progress_bar_type =
+	g_type_register_static (GTK_TYPE_PROGRESS, "GtkProgressBar",
+				&progress_bar_info, 0);
     }
 
   return progress_bar_type;
@@ -467,7 +469,7 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
       layout = gtk_widget_create_pango_layout (widget, buf);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	  
-      g_object_unref (G_OBJECT (layout));
+      g_object_unref (layout);
       g_free (buf);
     }
   
@@ -839,7 +841,7 @@ gtk_progress_bar_paint (GtkProgress *progress)
                             x, y,
                             layout);
 
-          g_object_unref (G_OBJECT (layout));
+          g_object_unref (layout);
 	  g_free (buf);
  	}
     }

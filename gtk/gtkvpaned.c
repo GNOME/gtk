@@ -35,26 +35,28 @@ static void     gtk_vpaned_size_allocate  (GtkWidget      *widget,
 
 static gpointer parent_class;
 
-GtkType
+GType
 gtk_vpaned_get_type (void)
 {
-  static GtkType vpaned_type = 0;
+  static GType vpaned_type = 0;
 
   if (!vpaned_type)
     {
-      static const GtkTypeInfo vpaned_info =
+      static const GTypeInfo vpaned_info =
       {
-	"GtkVPaned",
-	sizeof (GtkVPaned),
 	sizeof (GtkVPanedClass),
-	(GtkClassInitFunc) gtk_vpaned_class_init,
-	(GtkObjectInitFunc) gtk_vpaned_init,
-	/* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_vpaned_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkVPaned),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_vpaned_init,
       };
 
-      vpaned_type = gtk_type_unique (GTK_TYPE_PANED, &vpaned_info);
+      vpaned_type = g_type_register_static (GTK_TYPE_PANED, "GtkVPaned",
+					    &vpaned_info, 0);
     }
 
   return vpaned_type;
@@ -65,7 +67,7 @@ gtk_vpaned_class_init (GtkVPanedClass *class)
 {
   GtkWidgetClass *widget_class;
 
-  parent_class = gtk_type_class (GTK_TYPE_PANED);
+  parent_class = g_type_class_peek_parent (class);
   
   widget_class = (GtkWidgetClass *) class;
 
@@ -91,7 +93,7 @@ gtk_vpaned_new (void)
 {
   GtkVPaned *vpaned;
 
-  vpaned = gtk_type_new (GTK_TYPE_VPANED);
+  vpaned = g_object_new (GTK_TYPE_VPANED, NULL);
 
   return GTK_WIDGET (vpaned);
 }

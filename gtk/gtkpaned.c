@@ -102,30 +102,30 @@ static gboolean gtk_paned_move_handle           (GtkPaned         *paned,
 static gboolean gtk_paned_accept_position       (GtkPaned         *paned);
 static gboolean gtk_paned_cancel_position       (GtkPaned         *paned);
 static gboolean gtk_paned_toggle_handle_focus   (GtkPaned         *paned);
-static GtkType  gtk_paned_child_type            (GtkContainer     *container);
+static GType  gtk_paned_child_type            (GtkContainer     *container);
 
 static GtkContainerClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_paned_get_type (void)
 {
-  static GtkType paned_type = 0;
+  static GType paned_type = 0;
   
   if (!paned_type)
     {
       static const GTypeInfo paned_info =
       {
 	sizeof (GtkPanedClass),
-	NULL,            /* base_init */
-	NULL,            /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_paned_class_init,
-	NULL,            /* class_finalize */
-	NULL,            /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
 	sizeof (GtkPaned),
-	0,               /* n_preallocs */
+	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_paned_init,
-	NULL,            /* value_table */
+	NULL,		/* value_table */
       };
 
       paned_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkPaned",
@@ -175,7 +175,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   container_class = (GtkContainerClass *) class;
   paned_class = (GtkPanedClass *) class;
 
-  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
+  parent_class = g_type_class_peek_parent (class);
 
   object_class->set_property = gtk_paned_set_property;
   object_class->get_property = gtk_paned_get_property;
@@ -288,7 +288,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
 
-  binding_set = gtk_binding_set_by_class (object_class);
+  binding_set = gtk_binding_set_by_class (class);
 
   /* F6 and friends */
   gtk_binding_entry_add_signal (binding_set,				
@@ -359,13 +359,13 @@ gtk_paned_class_init (GtkPanedClass *class)
   add_move_binding (binding_set, GDK_KP_End, 0, GTK_SCROLL_END);
 }
 
-static GtkType
+static GType
 gtk_paned_child_type (GtkContainer *container)
 {
   if (!GTK_PANED (container)->child1 || !GTK_PANED (container)->child2)
     return GTK_TYPE_WIDGET;
   else
-    return GTK_TYPE_NONE;
+    return G_TYPE_NONE;
 }
 
 static void
@@ -454,7 +454,7 @@ gtk_paned_realize (GtkWidget *widget)
   paned = GTK_PANED (widget);
 
   widget->window = gtk_widget_get_parent_window (widget);
-  gdk_window_ref (widget->window);
+  g_object_ref (widget->window);
   
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_ONLY;
@@ -476,7 +476,7 @@ gtk_paned_realize (GtkWidget *widget)
   paned->handle = gdk_window_new (widget->window,
 				  &attributes, attributes_mask);
   gdk_window_set_user_data (paned->handle, paned);
-  gdk_cursor_destroy (attributes.cursor);
+  gdk_cursor_unref (attributes.cursor);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 
@@ -492,7 +492,7 @@ gtk_paned_unrealize (GtkWidget *widget)
 
   if (paned->xor_gc)
     {
-      gdk_gc_destroy (paned->xor_gc);
+      g_object_unref (paned->xor_gc);
       paned->xor_gc = NULL;
     }
 

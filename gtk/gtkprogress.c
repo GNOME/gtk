@@ -28,7 +28,6 @@
 #include <math.h>
 #include <string.h>
 #include "gtkprogress.h" 
-#include "gtksignal.h"
 #include "gtkintl.h"
 
 #define EPSILON  1e-5
@@ -61,6 +60,8 @@ static gint gtk_progress_expose          (GtkWidget        *widget,
 static void gtk_progress_size_allocate   (GtkWidget        *widget,
 				 	  GtkAllocation    *allocation);
 static void gtk_progress_create_pixmap   (GtkProgress      *progress);
+static void gtk_progress_value_changed   (GtkAdjustment    *adjustment,
+					  GtkProgress      *progress);
 
 
 static GtkWidgetClass *parent_class = NULL;
@@ -100,6 +101,7 @@ gtk_progress_class_init (GtkProgressClass *class)
 
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
+
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
 
   gobject_class->finalize = gtk_progress_finalize;
@@ -276,9 +278,10 @@ gtk_progress_destroy (GtkObject *object)
 
   if (progress->adjustment)
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (progress->adjustment),
-				     progress);
-      gtk_object_unref (GTK_OBJECT (progress->adjustment));
+      g_signal_handlers_disconnect_by_func (progress->adjustment,
+					    gtk_progress_value_changed,
+					    progress);
+      g_object_unref (progress->adjustment);
       progress->adjustment = NULL;
     }
 
@@ -295,7 +298,7 @@ gtk_progress_finalize (GObject *object)
   progress = GTK_PROGRESS (object);
 
   if (progress->offscreen_pixmap)
-    gdk_pixmap_unref (progress->offscreen_pixmap);
+    g_object_unref (progress->offscreen_pixmap);
 
   if (progress->format)
     g_free (progress->format);
@@ -311,13 +314,13 @@ gtk_progress_expose (GtkWidget      *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (GTK_WIDGET_DRAWABLE (widget))
-    gdk_draw_pixmap (widget->window,
-		     widget->style->black_gc,
-		     GTK_PROGRESS (widget)->offscreen_pixmap,
-		     event->area.x, event->area.y,
-		     event->area.x, event->area.y,
-		     event->area.width,
-		     event->area.height);
+    gdk_draw_drawable (widget->window,
+		       widget->style->black_gc,
+		       GTK_PROGRESS (widget)->offscreen_pixmap,
+		       event->area.x, event->area.y,
+		       event->area.x, event->area.y,
+		       event->area.width,
+		       event->area.height);
 
   return FALSE;
 }
@@ -353,7 +356,7 @@ gtk_progress_create_pixmap (GtkProgress *progress)
       widget = GTK_WIDGET (progress);
 
       if (progress->offscreen_pixmap)
-	gdk_pixmap_unref (progress->offscreen_pixmap);
+	g_object_unref (progress->offscreen_pixmap);
 
       progress->offscreen_pixmap = gdk_pixmap_new (widget->window,
 						   widget->allocation.width,
@@ -498,18 +501,19 @@ gtk_progress_set_adjustment (GtkProgress   *progress,
     {
       if (progress->adjustment)
         {
-          gtk_signal_disconnect_by_data (GTK_OBJECT (progress->adjustment),
-                                         (gpointer) progress);
-          gtk_object_unref (GTK_OBJECT (progress->adjustment));
+	  g_signal_handlers_disconnect_by_func (progress->adjustment,
+						gtk_progress_value_changed,
+						progress);
+          g_object_unref (progress->adjustment);
         }
       progress->adjustment = adjustment;
       if (adjustment)
         {
-          gtk_object_ref (GTK_OBJECT (adjustment));
+          g_object_ref (adjustment);
 	  gtk_object_sink (GTK_OBJECT (adjustment));
-          gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-			      (GtkSignalFunc) gtk_progress_value_changed,
-			      (gpointer) progress);
+          g_signal_connect (adjustment, "value_changed",
+			    G_CALLBACK (gtk_progress_value_changed),
+			    progress);
         }
     }
 }
@@ -538,9 +542,9 @@ gtk_progress_configure (GtkProgress *progress,
   adj->lower = min;
   adj->upper = max;
 
-  gtk_signal_emit_by_name (GTK_OBJECT (adj), "value_changed");
+  gtk_adjustment_value_changed (adj);
   if (changed)
-    gtk_signal_emit_by_name (GTK_OBJECT (progress->adjustment), "changed");
+    gtk_adjustment_changed (adj);
 }
 
 void
