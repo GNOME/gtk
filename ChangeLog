@@ -1,3 +1,9 @@
+2001-11-14  Alex Larsson  <alexl@redhat.com>
+
+	* gtk/gtklabel.c:
+	Don't recalculate the layout on each gkt_label_ensure_layout () for
+	wrapped labels.
+
 Wed Nov 14 17:40:23 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_get_expander_column): Return

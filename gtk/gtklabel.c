@@ -136,9 +136,7 @@ static void gtk_label_hierarchy_changed          (GtkWidget     *widget,
 static void gtk_label_create_window       (GtkLabel *label);
 static void gtk_label_destroy_window      (GtkLabel *label);
 static void gtk_label_clear_layout        (GtkLabel *label);
-static void gtk_label_ensure_layout       (GtkLabel *label,
-                                           gint     *widthp,
-                                           gint     *heightp);
+static void gtk_label_ensure_layout       (GtkLabel *label);
 static void gtk_label_select_region_index (GtkLabel *label,
                                            gint      anchor_index,
                                            gint      end_index);
@@ -1319,36 +1317,13 @@ gtk_label_clear_layout (GtkLabel *label)
 }
 
 static void
-gtk_label_ensure_layout (GtkLabel *label,
-                         gint     *widthp,
-                         gint     *heightp)
+gtk_label_ensure_layout (GtkLabel *label)
 {
   GtkWidget *widget;
   PangoRectangle logical_rect;
   gint rwidth, rheight;
 
   widget = GTK_WIDGET (label);
-
-  /*
-   * There are a number of conditions which will necessitate re-filling
-   * our text:
-   *
-   *     1. text changed.
-   *     2. justification changed either from to to GTK_JUSTIFY_FILL.
-   *     3. font changed.
-   *
-   * These have been detected elsewhere, and label->words will be zero,
-   * if one of the above has occured.
-   *
-   * Additionally, though, if GTK_JUSTIFY_FILL, we need to re-fill if:
-   *
-   *     4. gtk_widget_set_usize has changed the requested width.
-   *     5. gtk_misc_set_padding has changed xpad.
-   *     6.  maybe others?...
-   *
-   * Too much of a pain to detect all these case, so always re-fill.  I
-   * don't think it's really that slow.
-   */
 
   rwidth = label->misc.xpad * 2;
   rheight = label->misc.ypad * 2;
@@ -1383,107 +1358,74 @@ gtk_label_ensure_layout (GtkLabel *label,
 	}
 
       pango_layout_set_alignment (label->layout, align);
-    }
 
-  if (label->wrap)
-    {
-      GtkWidgetAuxInfo *aux_info;
-      gint longest_paragraph;
-      gint width, height;
-      gint real_width;
-
-      aux_info = _gtk_widget_get_aux_info (widget, FALSE);
-      if (aux_info && aux_info->width > 0)
+      if (label->wrap)
 	{
-	  pango_layout_set_width (label->layout, aux_info->width * PANGO_SCALE);
-	  pango_layout_get_extents (label->layout, NULL, &logical_rect);
-
-	  rwidth += aux_info->width;
-	  rheight += PANGO_PIXELS (logical_rect.height);
-	}
-      else
-	{
-	  pango_layout_set_width (label->layout, -1);
-	  pango_layout_get_extents (label->layout, NULL, &logical_rect);
-      
-	  width = logical_rect.width;
-	  height = logical_rect.height;
+	  GtkWidgetAuxInfo *aux_info;
+	  gint longest_paragraph;
+	  gint width, height;
 	  
-	  /* Try to guess a reasonable maximum width
-	   */
-	  longest_paragraph = width;
-
-	  width = MIN (width,
-		       PANGO_SCALE * gdk_string_width (gtk_style_get_font (GTK_WIDGET (label)->style),
-						"This long string gives a good enough length for any line to have."));
-	  width = MIN (width,
-		       PANGO_SCALE * (gdk_screen_width () + 1) / 2);
-
-	  pango_layout_set_width (label->layout, width);
-	  pango_layout_get_extents (label->layout, NULL, &logical_rect);
-	  real_width = logical_rect.width;
-	  height = logical_rect.height;
-	  
-	  /* Unfortunately, the above may leave us with a very unbalanced looking paragraph,
-	   * so we try short search for a narrower width that leaves us with the same height
-	   */
-	  if (longest_paragraph > 0)
+	  aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+	  if (aux_info && aux_info->width > 0)
+	    pango_layout_set_width (label->layout, aux_info->width * PANGO_SCALE);
+	  else
 	    {
-	      gint nlines, perfect_width;
+	      pango_layout_set_width (label->layout, -1);
+	      pango_layout_get_extents (label->layout, NULL, &logical_rect);
 
-	      nlines = pango_layout_get_line_count (label->layout);
-	      perfect_width = (longest_paragraph + nlines - 1) / nlines;
+	      width = logical_rect.width;
 	      
-	      if (perfect_width < width)
+	      /* Try to guess a reasonable maximum width */
+	      longest_paragraph = width;
+	      
+	      width = MIN (width,
+			   PANGO_SCALE * gdk_string_width (gtk_style_get_font (GTK_WIDGET (label)->style),
+							   "This long string gives a good enough length for any line to have."));
+	      width = MIN (width,
+			   PANGO_SCALE * (gdk_screen_width () + 1) / 2);
+	      
+	      pango_layout_set_width (label->layout, width);
+	      pango_layout_get_extents (label->layout, NULL, &logical_rect);
+	      height = logical_rect.height;
+	      
+	      /* Unfortunately, the above may leave us with a very unbalanced looking paragraph,
+	       * so we try short search for a narrower width that leaves us with the same height
+	       */
+	      if (longest_paragraph > 0)
 		{
-		  pango_layout_set_width (label->layout, perfect_width);
-		  pango_layout_get_extents (label->layout, NULL, &logical_rect);
+		  gint nlines, perfect_width;
 		  
-		  if (logical_rect.height <= height)
+		  nlines = pango_layout_get_line_count (label->layout);
+		  perfect_width = (longest_paragraph + nlines - 1) / nlines;
+		  
+		  if (perfect_width < width)
 		    {
-		      width = perfect_width;
-		      real_width = logical_rect.width;
-		      height = logical_rect.height;
-		    }
-		  else
-		    {
-		      gint mid_width = (perfect_width + width) / 2;
-
-		      if (mid_width > perfect_width)
+		      pango_layout_set_width (label->layout, perfect_width);
+		      pango_layout_get_extents (label->layout, NULL, &logical_rect);
+		      
+		      if (logical_rect.height <= height)
+			width = perfect_width;
+		      else
 			{
-			  pango_layout_set_width (label->layout, mid_width);
-			  pango_layout_get_extents (label->layout, NULL, &logical_rect);
-
-			  if (logical_rect.height <= height)
+			  gint mid_width = (perfect_width + width) / 2;
+			  
+			  if (mid_width > perfect_width)
 			    {
-			      width = mid_width;
-			      real_width = logical_rect.width;
-			      height = logical_rect.height;
+			      pango_layout_set_width (label->layout, mid_width);
+			      pango_layout_get_extents (label->layout, NULL, &logical_rect);
+			      
+			      if (logical_rect.height <= height)
+				width = mid_width;
 			    }
 			}
 		    }
 		}
+	      pango_layout_set_width (label->layout, width);
 	    }
-	  pango_layout_set_width (label->layout, width);
-
-	  rwidth += PANGO_PIXELS (real_width);
-	  rheight += PANGO_PIXELS (height);
 	}
+      else		/* !label->wrap */
+	pango_layout_set_width (label->layout, -1);
     }
-  else				/* !label->wrap */
-    {
-      pango_layout_set_width (label->layout, -1);
-      pango_layout_get_extents (label->layout, NULL, &logical_rect);
-
-      rwidth += PANGO_PIXELS (logical_rect.width);
-      rheight += PANGO_PIXELS (logical_rect.height);
-    }
-
-  if (widthp)
-    *widthp = rwidth;
-
-  if (heightp)
-    *heightp = rheight;
 }
 
 static void
@@ -1492,13 +1434,44 @@ gtk_label_size_request (GtkWidget      *widget,
 {
   GtkLabel *label;
   gint width, height;
+  PangoRectangle logical_rect;
+  GtkWidgetAuxInfo *aux_info;
   
   g_return_if_fail (GTK_IS_LABEL (widget));
   g_return_if_fail (requisition != NULL);
   
   label = GTK_LABEL (widget);
 
-  gtk_label_ensure_layout (label, &width, &height);
+  /*  
+   * If word wrapping is on, then the height requisition can depend
+   * on:
+   *
+   *   - Any width set on the widget via gtk_widget_set_usize().
+   *   - The padding of the widget (xpad, set by gtk_misc_set_padding)
+   *
+   * Instead of trying to detect changes to these quantities, if we
+   * are wrapping, we just rewrap for each size request. Since
+   * size requisitions are cached by the GTK+ core, this is not
+   * expensive.
+   */
+
+  if (label->wrap)
+    gtk_label_clear_layout (label);
+
+  gtk_label_ensure_layout (label);
+
+  width = label->misc.xpad * 2;
+  height = label->misc.ypad * 2;
+
+  pango_layout_get_extents (label->layout, NULL, &logical_rect);
+  
+  aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+  if (label->wrap && aux_info && aux_info->width > 0)
+    width += aux_info->width;
+  else 
+    width += PANGO_PIXELS (logical_rect.width);
+  
+  height += PANGO_PIXELS (logical_rect.height);
 
   requisition->width = width;
   requisition->height = height;
@@ -1658,7 +1631,7 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 
       widget_direction = gtk_widget_get_direction (widget);
 
-      gtk_label_ensure_layout (label, NULL, NULL);
+      gtk_label_ensure_layout (label);
       
       pango_layout_get_cursor_pos (label->layout, label->select_info->selection_end,
 				   &strong_pos, &weak_pos);
@@ -1726,7 +1699,7 @@ gtk_label_expose (GtkWidget      *widget,
   
   label = GTK_LABEL (widget);
 
-  gtk_label_ensure_layout (label, NULL, NULL);
+  gtk_label_ensure_layout (label);
   
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget) &&
       label->text && (*label->text != '\0'))
@@ -2095,7 +2068,7 @@ get_layout_index (GtkLabel *label,
 
   *index = 0;
   
-  gtk_label_ensure_layout (label, NULL, NULL);
+  gtk_label_ensure_layout (label);
   
   window_to_layout_coords (label, &x, &y);
 
@@ -2620,7 +2593,7 @@ gtk_label_get_layout (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
 
-  gtk_label_ensure_layout (label, NULL, NULL);
+  gtk_label_ensure_layout (label);
 
   return label->layout;
 }
@@ -2754,7 +2727,7 @@ get_better_cursor (GtkLabel *label,
 		"gtk-split-cursor", &split_cursor,
 		NULL);
 
-  gtk_label_ensure_layout (label, NULL, NULL);
+  gtk_label_ensure_layout (label);
   
   pango_layout_get_cursor_pos (label->layout, index,
 			       &strong_pos, &weak_pos);
@@ -2794,7 +2767,7 @@ gtk_label_move_logically (GtkLabel *label,
       gint n_attrs;
       gint length;
 
-      gtk_label_ensure_layout (label, NULL, NULL);
+      gtk_label_ensure_layout (label);
       
       length = g_utf8_strlen (label->label, -1);
 
@@ -2838,7 +2811,7 @@ gtk_label_move_visually (GtkLabel *label,
       gboolean split_cursor;
       gboolean strong;
 
-      gtk_label_ensure_layout (label, NULL, NULL);
+      gtk_label_ensure_layout (label);
 
       g_object_get (gtk_widget_get_settings (GTK_WIDGET (label)),
 		    "gtk-split-cursor", &split_cursor,
@@ -2892,7 +2865,7 @@ gtk_label_move_forward_word (GtkLabel *label,
       PangoLogAttr *log_attrs;
       gint n_attrs;
 
-      gtk_label_ensure_layout (label, NULL, NULL);
+      gtk_label_ensure_layout (label);
       
       pango_layout_get_log_attrs (label->layout, &log_attrs, &n_attrs);
       
@@ -2923,7 +2896,7 @@ gtk_label_move_backward_word (GtkLabel *label,
       PangoLogAttr *log_attrs;
       gint n_attrs;
 
-      gtk_label_ensure_layout (label, NULL, NULL);
+      gtk_label_ensure_layout (label);
       
       pango_layout_get_log_attrs (label->layout, &log_attrs, &n_attrs);
       
