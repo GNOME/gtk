@@ -38,7 +38,6 @@ static void
 iter_remove (GtkWidget *button, GtkTreeView *tree_view)
 {
   GtkTreeIter selected;
-  GtkTreeIter s_selected;
   GtkTreeModel *model;
 
   model = gtk_tree_view_get_model (tree_view);
@@ -201,19 +200,6 @@ iter_append (GtkWidget *button, GtkTreeView *tree_view)
 }
 
 static void
-uppercase_value (const GValue *src, GValue *dest, gpointer data)
-{
-  gchar *str;
-  
-  g_value_init (dest, G_TYPE_STRING);
-  str = g_strdup (g_value_get_string (src));
-  if (str)
-    g_strup (str);
-  g_value_set_string (dest, str);
-  g_free (str);
-}
-
-static void
 make_window (gint view_type)
 {
   GtkWidget *window;
@@ -257,6 +243,7 @@ make_window (gint view_type)
       break;
     default:
       g_assert_not_reached ();
+      tree_view = NULL; /* Quiet compiler */
       break;
     }
 

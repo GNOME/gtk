@@ -309,7 +309,6 @@ main (int argc, char *argv[])
   GtkCellRenderer *renderer;
   gint col_offset;
   GtkTreeViewColumn *column;
-  GtkTreeSelection *selection;
 
   gtk_init (&argc, &argv);
 

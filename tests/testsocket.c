@@ -206,7 +206,7 @@ add_child (GtkWidget *window,
       socket = create_socket ();
       gtk_box_pack_start (GTK_BOX (vbox), socket->box, TRUE, TRUE, 0);
       gtk_widget_show (socket->box);
-      sprintf(buffer, "%#lx", gtk_socket_get_id (GTK_SOCKET (socket->socket)));
+      sprintf(buffer, "%#lx", (gulong) gtk_socket_get_id (GTK_SOCKET (socket->socket)));
       argv[1] = buffer;
     }
   

@@ -643,7 +643,6 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
   if (statusbar->has_resize_grip)
     {
       GdkRectangle rect;
-      GtkAllocation hbox_allocation;
       GtkRequisition saved_req;
       
       widget->allocation = *allocation; /* get_grip_rect needs this info */

@@ -1129,7 +1129,6 @@ gtk_tree_model_sort_build_level (GtkTreeModelSort *tree_model_sort,
   GtkTreeIter *parent_iter = NULL;
   GtkTreeIter iter;
   SortElt elt;
-  SortData sort_data;
 
   if (place)
     parent_iter = & (place->iter);

@@ -213,7 +213,7 @@ main (int argc, char **argv)
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_widget_set_usize (window, back_width, back_height);
-	gtk_window_set_policy (GTK_WINDOW (window), FALSE, FALSE, FALSE);
+	gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
 	gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			    GTK_SIGNAL_FUNC (destroy_cb), NULL);

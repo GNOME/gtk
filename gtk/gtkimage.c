@@ -874,7 +874,7 @@ gtk_image_expose (GtkWidget      *widget,
     {
       GtkImage *image;
       GtkMisc *misc;
-      GdkRectangle area, image_bound, intersection;
+      GdkRectangle area, image_bound;
       gint x, y;
       GdkBitmap *mask = NULL;
       GdkPixbuf *stock_pixbuf = NULL;

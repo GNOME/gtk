@@ -314,7 +314,6 @@ gtk_settings_notify (GObject    *object,
 {
   guint property_id = pspec->param_id;
   gint double_click_time;
-  gchar *str_value;
   
 #if 1
   GValue tmp_value = { 0, };

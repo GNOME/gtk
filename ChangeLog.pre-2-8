@@ -1,3 +1,39 @@
+2001-07-17  Darin Adler  <darin@bentspoon.com>
+
+	* .cvsignore: Ignore the sgml directory made by gtkdoc.
+	* demos/pixbuf-demo.c: (main): Use gtk_window_set_resizable
+	instead of the deprecated gtk_window_set_policy.
+	* demos/testpixbuf-scale.c: Add missing <stdlib.h> include.
+	* gdk/gdkkeys.c: (gdk_keymap_class_init): Remove empty finalize
+	function to get rid of warning and some code too.
+	* gdk/x11/gdkfont-x11.c: (gdk_font_charset_for_locale): Add
+	missing const.
+	* gdk/x11/gdkmain-x11.c: (_gdk_windowing_init_check): Remove
+	unused local.
+	* gdk/x11/gdkpango-x11.c: (gdk_pango_context_get): Add missing
+	const.
+	* gdk/x11/gdkselection-x11.c: (gdk_text_property_to_utf8_list),
+	(gdk_utf8_to_compound_text): Add missing const.
+	* gtk/gtkimage.c: (gtk_image_expose): Remove unused local.
+	* gtk/gtkmenubar.c: (gtk_menu_bar_hierarchy_changed): Add missing
+	cast and get rid of an unnecessary one.
+	* gtk/gtksettings.c: (gtk_settings_notify): Remove unused local.
+	* gtk/gtkstatusbar.c: (gtk_statusbar_size_allocate): Remove unused
+	local.
+	* gtk/gtktreemodelsort.c: (gtk_tree_model_sort_build_level):
+	Remove unused local.
+	* modules/input/gtkimcontextxim.c: (gtk_im_context_xim_new): Add
+	missing const.
+	* tests/testsocket.c: (add_child): Add cast so the printf format
+	doesn't make us implicitly depend on what integer type
+	gtk_socket_get_id returns.
+	* tests/testtextbuffer.c: Add missing const.
+	* tests/testtreefocus.c: (main): Remove unused local.
+	* tests/treestoretest.c: (iter_remove): Remove unused local.
+	(uppercase_value): Remove unused function.
+	(make_window): Add statement to quiet the compiler's uninitialized
+	variable warning.
+
 Sat Jul 14 12:47:35 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkrange.c:

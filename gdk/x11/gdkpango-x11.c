@@ -34,7 +34,7 @@ gdk_pango_context_get (void)
   static gint use_xft = -1;
   if (use_xft == -1)
     {
-      char *val = g_getenv ("GDK_USE_XFT");
+      const char *val = g_getenv ("GDK_USE_XFT");
 
       use_xft = val && (atoi (val) != 0);
     }

@@ -34,7 +34,6 @@ enum {
 
 static void gdk_keymap_init       (GdkKeymap      *keymap);
 static void gdk_keymap_class_init (GdkKeymapClass *klass);
-static void gdk_keymap_finalize   (GObject              *object);
 
 static gpointer parent_class = NULL;
 
@@ -81,8 +80,6 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 
   parent_class = g_type_class_peek_parent (klass);
 
-  object_class->finalize = gdk_keymap_finalize;
-
   signals[DIRECTION_CHANGED] =
     g_signal_new ("direction_changed",
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -93,16 +90,6 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 		  G_TYPE_NONE,
 		  0);
 }
-
-static void
-gdk_keymap_finalize (GObject *object)
-{
-  GdkKeymap *keymap = GDK_KEYMAP (object);
-  
-  G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-
 
 /* Other key-handling stuff
  */

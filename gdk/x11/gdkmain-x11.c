@@ -170,7 +170,6 @@ _gdk_windowing_init_check (int argc, char **argv)
   {
     gint xkb_major = XkbMajorVersion;
     gint xkb_minor = XkbMinorVersion;
-    gint xkb_event_type;
     if (XkbLibraryVersion (&xkb_major, &xkb_minor))
       {
         xkb_major = XkbMajorVersion;
