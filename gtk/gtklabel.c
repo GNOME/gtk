@@ -929,7 +929,7 @@ gtk_label_expose (GtkWidget      *widget,
       
       y = (widget->allocation.y
 	   + (widget->allocation.height
-	      - widget->requisition.height - 2 * misc->ypad) * misc->yalign
+	      - widget->requisition.height) * misc->yalign
 	   + misc->ypad + 0.5);
       for (word = label->words; word; word = word->next)
 	{

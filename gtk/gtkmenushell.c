@@ -367,7 +367,6 @@ gtk_menu_shell_map (GtkWidget *widget)
 
   menu_shell = GTK_MENU_SHELL (widget);
   GTK_WIDGET_SET_FLAGS (menu_shell, GTK_MAPPED);
-  gdk_window_show (widget->window);
 
   children = menu_shell->children;
   while (children)
@@ -378,6 +377,8 @@ gtk_menu_shell_map (GtkWidget *widget)
       if (GTK_WIDGET_VISIBLE (child) && !GTK_WIDGET_MAPPED (child))
 	gtk_widget_map (child);
     }
+
+  gdk_window_show (widget->window);
 }
 
 static void

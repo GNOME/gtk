@@ -277,6 +277,7 @@ gdk_window_new (GdkWindow     *parent,
 
   private->xdisplay = parent_display;
   private->destroyed = FALSE;
+  private->mapped = FALSE;
   private->resize_count = 0;
   private->ref_count = 1;
   xattributes_mask = 0;
@@ -511,6 +512,7 @@ gdk_window_foreign_new (guint32 anid)
   private->ref_count = 1;
   private->window_type = GDK_WINDOW_FOREIGN;
   private->destroyed = FALSE;
+  private->mapped = (attrs.map_state != IsUnmapped);
   private->extension_events = 0;
 
   private->colormap = NULL;
@@ -716,6 +718,7 @@ gdk_window_show (GdkWindow *window)
   private = (GdkWindowPrivate*) window;
   if (!private->destroyed)
     {
+      private->mapped = TRUE;
       XRaiseWindow (private->xdisplay, private->xwindow);
       XMapWindow (private->xdisplay, private->xwindow);
     }
@@ -730,7 +733,10 @@ gdk_window_hide (GdkWindow *window)
 
   private = (GdkWindowPrivate*) window;
   if (!private->destroyed)
-    XUnmapWindow (private->xdisplay, private->xwindow);
+    {
+      private->mapped = FALSE;
+      XUnmapWindow (private->xdisplay, private->xwindow);
+    }
 }
 
 void
@@ -2470,6 +2476,55 @@ gdk_window_merge_child_shapes (GdkWindow *window)
 #endif   
 }
 
+/*************************************************************
+ * gdk_window_is_visible:
+ *     Check if the given window is mapped.
+ *   arguments:
+ *     window: 
+ *   results:
+ *     is the window mapped
+ *************************************************************/
+
+gboolean 
+gdk_window_is_visible (GdkWindow *window)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+
+  g_return_val_if_fail (window != NULL, FALSE);
+
+  return private->mapped;
+}
+
+/*************************************************************
+ * gdk_window_is_viewable:
+ *     Check if the window and all ancestors of the window
+ *     are mapped. (This is not necessarily "viewable" in
+ *     the X sense, since we only check as far as we have
+ *     GDK window parents, not to the root window)
+ *   arguments:
+ *     window:
+ *   results:
+ *     is the window viewable
+ *************************************************************/
+
+gboolean 
+gdk_window_is_viewable (GdkWindow *window)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+
+  g_return_val_if_fail (window != NULL, FALSE);
+
+  while (private && (private != &gdk_root_parent))
+    {
+      if (!private->mapped)
+	return FALSE;
+
+      private = (GdkWindowPrivate *)private->parent;
+    }
+
+  return TRUE;
+}
+
 void          
 gdk_drawable_set_data (GdkDrawable   *drawable,
 		       const gchar   *key,
@@ -2478,4 +2533,5 @@ gdk_drawable_set_data (GdkDrawable   *drawable,
 {
   g_dataset_set_data_full (drawable, key, data, destroy_func);
 }
+
 

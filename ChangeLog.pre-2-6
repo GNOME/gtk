@@ -1,3 +1,94 @@
+Fri Jan 15 10:22:21 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): 
+	nparams for selection_get should be 3, not 2.
+	[ From Damon Chaplin <damon@karuna.freeserve.co.uk> ]
+
+	* gtk/gtkeventbox.c (gtk_event_box_paint): Add a paint
+	routine so queued redraws work inside event boxes.
+
+Thu Jan 14 17:47:37 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_draw_cursor_on_drawable): Only
+ 	 redraw character under cursor when not displaying 
+	highlighted selection.
+
+	* gdk/gdkrgb.c (gdk_rgb_init): Add in a cast to
+	gpointer to make IRIX cc happy.
+
+Thu Jan 14 12:29:50 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcheckbutton.c (gtk_check_button_draw): Restructure
+	the drawing code to remove a bit of duplication - 
+	and to remove a call to gtk_widget_draw_focus()
+	that queues a redraw when an expose occurs.
+
+	* gtk/gtklabel.c (gtk_label_expose): Fix up handling
+	  of ypadding.
+
+	* gtk/gtknotebook.c (gtk_notebook_draw): If we redraw
+	  the whole widget, also redraw the corresponding
+	  areas of the child widget. (have_visible_child 
+	  still has some problems)
+
+	* gdk/gdkpixmap.c: Change some g_new's to g_new0 so
+	  that fields unused for pixmaps get initialzized
+	  sanely.
+
+        * gdk/gdk.h gdk/gdkwindow.c gdk/gdkprivate.h: Add new calls
+	  gdk_window_is_visible() and gdk_window_is_viewable()
+	  and a mapped flag to the window private structure.
+	
+        * gtk/gtkbin.c gtk/gtkclist.c gtk/gtkfixed.c gtk/gtkitem.c
+	  gtk/gtklayout.c gtk/gtklist.c gtk/gtkmenushell.c
+	  gtk/gtknotebook.c gtk/gtkpaned.c gtk/gtktree.c
+	  gtk/gtktreeitem.c gtk/gtkviewport.c: 
+	Map windows after mapping children.
+	
+	* gtk/gtkwidget.c (gtk_widget_clip_rect): Handle 
+	rectangles completely clipped away correctly.
+
+	* gtk/gtkwidget.c (gtk_widget_idle_draw): Don't
+	call gtk_widget_draw if width or height is 0.
+
+	* gtk/gtkwidget.c (gtk_widget_idle_draw): Don't
+	rely on GTK_REDRAW_PENDING after we've cleared
+	it. (This was causing draw-combining to not
+	happen at all).
+
+	* gtk/gtkbin.c gtk/gtkscale.c: Remove uneccessary calls
+	to gtk_widget_queue_draw() when mapping.
+
+Thu Jan 14 11:29:53 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_get_event_action): Make
+	MOD1-drag also do action ask.
+
+	* gtk/gtkdnd.c (gtk_drag_button_release_cb): Send the
+	button-release event we simulate to get grabs released,
+	with a window of GDK_ROOT_PARENT instead of the actual 
+	widget. This is a bad hack in some sense, but seems
+	to work nicely. (It's sort of like what you would
+	if you grabbed on button press, then the user 
+	released outside of the widget.)
+
+Thu Jan 14 20:29:16 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.[ch] (gtk_style_apply_default_background): 
+	Change copy_area => !set_bg. Use tile instead of 
+	gdk_window_copy_area when drawing without !set_bg.
+	
+	This does mess up timj's neat check-button example,
+	but is consistent with how we interpret background
+	pixmaps everywhere else in the default scheme.
+
+	Restructure code for clarity.
+
+Thu Jan 14 19:19:51 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkevents.c: Do all event processing in
+	dispatch() instead of prepare() and check().
+
 Wed Jan 13 22:34:29 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbutton.c gtk/gtkclist.c gtk/gtkhandlebox.c

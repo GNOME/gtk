@@ -562,8 +562,6 @@ gtk_tree_map (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
   tree = GTK_TREE (widget);
   
-  gdk_window_show (widget->window);
-  
   if(GTK_IS_TREE(widget->parent)) 
     {
       /* set root tree for this tree */
@@ -597,6 +595,8 @@ gtk_tree_map (GtkWidget *widget)
 	    gtk_widget_map (child);
 	}
     }
+
+  gdk_window_show (widget->window);
 }
 
 static gint

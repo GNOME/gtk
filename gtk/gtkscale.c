@@ -104,9 +104,6 @@ gtk_scale_map (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
   range = GTK_RANGE (widget);
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
-    gtk_widget_queue_draw (widget);
-
   gdk_window_show (range->trough);
 }
 

@@ -64,7 +64,7 @@ gdk_pixmap_new (GdkWindow *window,
   if (depth == -1)
     depth = gdk_window_get_visual (window)->depth;
 
-  private = g_new (GdkWindowPrivate, 1);
+  private = g_new0 (GdkWindowPrivate, 1);
   pixmap = (GdkPixmap*) private;
 
   private->xdisplay = window_private->xdisplay;
@@ -106,7 +106,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
   if (window_private->destroyed)
     return NULL;
 
-  private = g_new (GdkWindowPrivate, 1);
+  private = g_new0 (GdkWindowPrivate, 1);
   pixmap = (GdkPixmap*) private;
 
   private->parent = NULL;
@@ -158,7 +158,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
   if (depth == -1)
     depth = gdk_window_get_visual (window)->depth;
 
-  private = g_new (GdkWindowPrivate, 1);
+  private = g_new0 (GdkWindowPrivate, 1);
   pixmap = (GdkPixmap*) private;
 
   private->parent = NULL;

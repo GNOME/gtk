@@ -382,12 +382,12 @@ gtk_viewport_map (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
   bin = GTK_BIN (widget);
 
-  gdk_window_show (widget->window);
-
   if (bin->child &&
       GTK_WIDGET_VISIBLE (bin->child) &&
       !GTK_WIDGET_MAPPED (bin->child))
     gtk_widget_map (bin->child);
+
+  gdk_window_show (widget->window);
 }
 
 static void

@@ -147,14 +147,14 @@ gtk_item_map (GtkWidget *widget)
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
-  gdk_window_show (widget->window);
-
   bin = GTK_BIN (widget);
 
   if (bin->child &&
       GTK_WIDGET_VISIBLE (bin->child) &&
       !GTK_WIDGET_MAPPED (bin->child))
     gtk_widget_map (bin->child);
+
+  gdk_window_show (widget->window);
 }
 
 static void

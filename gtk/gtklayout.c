@@ -456,9 +456,6 @@ gtk_layout_map (GtkWidget *widget)
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
-  gdk_window_show (widget->window);
-  gdk_window_show (layout->bin_window);
-  
   tmp_list = layout->children;
   while (tmp_list)
     {
@@ -475,7 +472,9 @@ gtk_layout_map (GtkWidget *widget)
 
       tmp_list = tmp_list->next;
     }
-  
+
+  gdk_window_show (layout->bin_window);
+  gdk_window_show (widget->window);
 }
 
 static void 

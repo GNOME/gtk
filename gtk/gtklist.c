@@ -435,8 +435,6 @@ gtk_list_map (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
   list = GTK_LIST (widget);
 
-  gdk_window_show (widget->window);
-
   children = list->children;
   while (children)
     {
@@ -447,6 +445,8 @@ gtk_list_map (GtkWidget *widget)
 	  !GTK_WIDGET_MAPPED (child))
 	gtk_widget_map (child);
     }
+
+  gdk_window_show (widget->window);
 }
 
 static void

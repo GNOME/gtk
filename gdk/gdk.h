@@ -219,6 +219,15 @@ void gdk_window_set_child_shapes (GdkWindow *window);
 void gdk_window_merge_child_shapes (GdkWindow *window);
 
 /*
+ * Check if a window has been shown, and whether all it's
+ * parents up to a toplevel have been shown, respectively.
+ * Note that a window that is_viewable below is not necessarily
+ * viewable in the X sense.
+ */
+gboolean gdk_window_is_visible     (GdkWindow *window);
+gboolean gdk_window_is_viewable    (GdkWindow *window);
+
+/*
  * The following function adds a global filter for all client
  * messages of type message_type
  */

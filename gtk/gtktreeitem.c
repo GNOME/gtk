@@ -1006,8 +1006,6 @@ gtk_tree_item_map (GtkWidget *widget)
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
-  gdk_window_show (widget->window);
-
   if(item->pixmaps_box &&
      GTK_WIDGET_VISIBLE (item->pixmaps_box) &&
      !GTK_WIDGET_MAPPED (item->pixmaps_box))
@@ -1017,6 +1015,8 @@ gtk_tree_item_map (GtkWidget *widget)
       GTK_WIDGET_VISIBLE (bin->child) &&
       !GTK_WIDGET_MAPPED (bin->child))
     gtk_widget_map (bin->child);
+
+  gdk_window_show (widget->window);
 }
 
 static void

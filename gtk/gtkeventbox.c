@@ -27,10 +27,12 @@ static void gtk_event_box_size_request             (GtkWidget        *widget,
 						    GtkRequisition   *requisition);
 static void gtk_event_box_size_allocate            (GtkWidget        *widget,
 						    GtkAllocation    *allocation);
-static void gtk_event_box_draw                     (GtkWidget    *widget,
-						   GdkRectangle *area);
-static gint gtk_event_box_expose                   (GtkWidget      *widget,
-						   GdkEventExpose *event);
+static void gtk_event_box_paint                    (GtkWidget         *widget,
+						    GdkRectangle      *area);
+static void gtk_event_box_draw                     (GtkWidget         *widget,
+						   GdkRectangle       *area);
+static gint gtk_event_box_expose                   (GtkWidget         *widget,
+						   GdkEventExpose     *event);
 
 
 GtkType
@@ -182,8 +184,18 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
 }
 
 static void
+gtk_event_box_paint (GtkWidget    *widget,
+		     GdkRectangle *area)
+{
+  gtk_paint_flat_box (widget->style, widget->window,
+		      widget->state, GTK_SHADOW_NONE,
+		      area, widget, "eventbox",
+		      0, 0, -1, -1);
+}
+
+static void
 gtk_event_box_draw (GtkWidget    *widget,
-		   GdkRectangle *area)
+		    GdkRectangle *area)
 {
   GtkBin *bin;
   GdkRectangle tmp_area;
@@ -198,6 +210,8 @@ gtk_event_box_draw (GtkWidget    *widget,
       tmp_area = *area;
       tmp_area.x -= GTK_CONTAINER (widget)->border_width;
       tmp_area.y -= GTK_CONTAINER (widget)->border_width;
+
+      gtk_event_box_paint (widget, &tmp_area);
       
       if (bin->child)
 	{
@@ -222,6 +236,8 @@ gtk_event_box_expose (GtkWidget      *widget,
     {
       bin = GTK_BIN (widget);
 
+      gtk_event_box_paint (widget, &event->area);
+      
       child_event = *event;
       if (bin->child &&
 	  GTK_WIDGET_NO_WINDOW (bin->child) &&

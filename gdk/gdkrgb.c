@@ -642,7 +642,7 @@ gdk_rgb_init (void)
 	if (image_info->bitmap)
 	  /* Use malloc() instead of g_malloc since X will free() this mem */
 	  static_image[i] = gdk_image_new_bitmap (image_info->visual,
-						  malloc (IMAGE_WIDTH * IMAGE_HEIGHT >> 3),
+						  (gpointer) malloc (IMAGE_WIDTH * IMAGE_HEIGHT >> 3),
 						  IMAGE_WIDTH, IMAGE_HEIGHT);
 	else
 	  static_image[i] = gdk_image_new (GDK_IMAGE_FASTEST,

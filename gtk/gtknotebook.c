@@ -477,7 +477,6 @@ gtk_notebook_map (GtkWidget *widget)
   g_return_if_fail (GTK_IS_NOTEBOOK (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  gdk_window_show (widget->window);
 
   notebook = GTK_NOTEBOOK (widget);
 
@@ -503,6 +502,8 @@ gtk_notebook_map (GtkWidget *widget)
 	    gtk_widget_map (page->tab_label);
 	}
     }
+
+  gdk_window_show (widget->window);
 }
 
 static void
@@ -878,12 +879,15 @@ gtk_notebook_draw (GtkWidget    *widget,
 {
   GtkNotebook *notebook;
   GdkRectangle child_area;
+  GdkRectangle draw_area;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (widget));
   g_return_if_fail (area != NULL);
 
   notebook = GTK_NOTEBOOK (widget);
+
+  draw_area = *area;
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
@@ -893,22 +897,19 @@ gtk_notebook_draw (GtkWidget    *widget,
 
       if (have_visible_child != notebook->have_visible_child)
 	{
-	  GdkRectangle full_area;
-
 	  notebook->have_visible_child = have_visible_child;
-	  full_area.x = 0;
-	  full_area.y = 0;
-	  full_area.width = widget->allocation.width;
-	  full_area.height = widget->allocation.height;
-	  gtk_notebook_paint (widget, &full_area);
+	  draw_area.x = 0;
+	  draw_area.y = 0;
+	  draw_area.width = widget->allocation.width;
+	  draw_area.height = widget->allocation.height;
 	}
-      else
-	gtk_notebook_paint (widget, area);
+
+      gtk_notebook_paint (widget, &draw_area);
 
       gtk_widget_draw_focus (widget);
 
       if (notebook->cur_page && GTK_WIDGET_VISIBLE (notebook->cur_page->child) &&
-	  gtk_widget_intersect (notebook->cur_page->child, area, &child_area))
+	  gtk_widget_intersect (notebook->cur_page->child, &draw_area, &child_area))
 	gtk_widget_draw (notebook->cur_page->child, &child_area);
     }
   else

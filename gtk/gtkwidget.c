@@ -573,7 +573,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_get),
 		    gtk_marshal_NONE__POINTER_UINT_UINT,
-		    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_NONE, 3,
 		    GTK_TYPE_SELECTION_DATA,
 		    GTK_TYPE_UINT,
 		    GTK_TYPE_UINT);
@@ -1797,7 +1797,8 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_queue_draw_data (widget, x, y, width, height, NULL);
+  if (widget->window && gdk_window_is_viewable (widget->window))
+    gtk_widget_queue_draw_data (widget, x, y, width, height, NULL);
 }
 
 void	   
@@ -1806,7 +1807,8 @@ gtk_widget_queue_draw (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_queue_draw_data (widget, 0, 0, -1, -1, NULL);
+  if (widget->window && gdk_window_is_viewable (widget->window))
+    gtk_widget_queue_draw_data (widget, 0, 0, -1, -1, NULL);
 }
 
 void	   
@@ -1820,6 +1822,9 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (!(widget->window && gdk_window_is_viewable (widget->window)))
+    return;
 
   /* Find the correct widget */
 
@@ -1966,18 +1971,18 @@ gtk_widget_clip_rect (GtkWidget *widget,
       
       if (rect->x < 0)
 	{
-	  rect->width += rect->x;
+	  rect->width = (width > -rect->x) ? width + rect->x : 0;
 	  rect->x = 0;
 	}
       if (rect->y < 0)
 	{
-	  rect->height += rect->y;
+	  rect->height = (height > -rect->y) ? width + rect->y : 0;
 	  rect->y = 0;
 	}
       if (rect->x + rect->width > width)
-	rect->width = width - rect->x;
+	rect->width = (width > rect->x) ? width - rect->x : 0;
       if (rect->y + rect->height > height)
-	rect->height = height - rect->y;
+	rect->height = (height > rect->y) ? height - rect->y : 0;
     }
 
   if (!window)
@@ -2001,7 +2006,7 @@ gtk_widget_clip_rect (GtkWidget *widget,
 }
 
 static gint
-gtk_widget_idle_draw (gpointer data)
+gtk_widget_idle_draw (gpointer cb_data)
 {
   GSList *widget_list;
   GSList *old_queue;
@@ -2035,7 +2040,13 @@ gtk_widget_idle_draw (gpointer data)
       gtk_object_set_data_by_id (GTK_OBJECT (widget),
 				 draw_data_tmp_key_id,
 				 draw_data_list);
-
+     
+      /* XXX: Since we are unsetting this flag here, further
+       * down the only way we can check if a redraw is queued
+       * on a given widget is by calling gtk_object_get_data.
+       * for speed purposes we might well want a private
+       * flag GTK_REDRAW_PROCESSING or something.
+       */
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
 
       while (draw_data_list)
@@ -2149,8 +2160,8 @@ gtk_widget_idle_draw (gpointer data)
 
 	      if (parent)
 		parent = parent->parent;
-	      
-	      if (parent && GTK_WIDGET_REDRAW_PENDING (parent))
+
+	      if (parent)
 		parent_list = gtk_object_get_data_by_id (GTK_OBJECT (parent),
 							 draw_data_tmp_key_id);
 	      else
@@ -2191,7 +2202,8 @@ gtk_widget_idle_draw (gpointer data)
       while (draw_data_list)
 	{
 	  GtkDrawData *data = draw_data_list->data;
-	  gtk_widget_draw (widget, &data->rect);
+	  if ((data->rect.width != 0) || (data->rect.height != 0))
+	    gtk_widget_draw (widget, &data->rect);
 	  
 	  if (draw_data_list->next)
 	    draw_data_list = draw_data_list->next;
@@ -2379,8 +2391,8 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 	  needs_draw = TRUE;
 	}
     }
-  else if (widget->allocation.width != real_allocation.width ||
-	   widget->allocation.height != real_allocation.height)
+  else if ((widget->allocation.width != real_allocation.width ||
+	    widget->allocation.height != real_allocation.height))
     {
       needs_draw = TRUE;
     }

@@ -4615,10 +4615,6 @@ gtk_clist_map (GtkWidget *widget)
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
-      gdk_window_show (widget->window);
-      gdk_window_show (clist->title_window);
-      gdk_window_show (clist->clist_window);
-
       /* map column buttons */
       for (i = 0; i < clist->columns; i++)
 	if (clist->column[i].button &&
@@ -4631,6 +4627,10 @@ gtk_clist_map (GtkWidget *widget)
 	if (clist->column[i].window && clist->column[i].button)
 	  gdk_window_show (clist->column[i].window);
        
+      gdk_window_show (clist->title_window);
+      gdk_window_show (clist->clist_window);
+      gdk_window_show (widget->window);
+
       /* unfreeze the list */
       clist->freeze_count = 0;
     }

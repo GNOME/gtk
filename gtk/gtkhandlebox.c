@@ -259,8 +259,10 @@ gtk_handle_box_map (GtkWidget *widget)
   bin = GTK_BIN (widget);
   hb = GTK_HANDLE_BOX (widget);
 
-  gdk_window_show (hb->bin_window);
-  gdk_window_show (widget->window);
+  if (bin->child &&
+      GTK_WIDGET_VISIBLE (bin->child) &&
+      !GTK_WIDGET_MAPPED (bin->child))
+    gtk_widget_map (bin->child);
 
   if (hb->child_detached && !hb->float_window_mapped)
     {
@@ -268,10 +270,8 @@ gtk_handle_box_map (GtkWidget *widget)
       hb->float_window_mapped = TRUE;
     }
 
-  if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
-      !GTK_WIDGET_MAPPED (bin->child))
-    gtk_widget_map (bin->child);
+  gdk_window_show (hb->bin_window);
+  gdk_window_show (widget->window);
 }
 
 static void

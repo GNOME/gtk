@@ -186,8 +186,6 @@ gtk_paned_map (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
   paned = GTK_PANED (widget);
   
-  gdk_window_show (widget->window);
-  
   if (paned->child1 &&
       GTK_WIDGET_VISIBLE (paned->child1) &&
       !GTK_WIDGET_MAPPED (paned->child1))
@@ -196,6 +194,8 @@ gtk_paned_map (GtkWidget *widget)
       GTK_WIDGET_VISIBLE (paned->child2) &&
       !GTK_WIDGET_MAPPED (paned->child2))
     gtk_widget_map (paned->child2);
+
+  gdk_window_show (widget->window);
 }
 
 static void

@@ -37,6 +37,8 @@ static void gtk_check_button_size_allocate       (GtkWidget           *widget,
 						  GtkAllocation       *allocation);
 static gint gtk_check_button_expose              (GtkWidget           *widget,
 						  GdkEventExpose      *event);
+static void gtk_check_button_paint               (GtkWidget           *widget,
+						  GdkRectangle        *area);
 static void gtk_check_button_draw_indicator      (GtkCheckButton      *check_button,
 						  GdkRectangle        *area);
 static void gtk_real_check_button_draw_indicator (GtkCheckButton      *check_button,
@@ -119,6 +121,37 @@ gtk_check_button_new_with_label (const gchar *label)
   return check_button;
 }
 
+/* This should only be called when toggle_button->draw_indicator
+ * is true.
+ */
+static void
+gtk_check_button_paint (GtkWidget    *widget,
+			GdkRectangle *area)
+{
+  GtkCheckButton *check_button;
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_CHECK_BUTTON (widget));
+  
+  check_button = GTK_CHECK_BUTTON (widget);
+  
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      gint border_width;
+	  
+      gtk_check_button_draw_indicator (check_button, area);
+      
+      border_width = GTK_CONTAINER (widget)->border_width;
+      if (GTK_WIDGET_HAS_FOCUS (widget))
+	gtk_paint_focus (widget->style, widget->window,
+			 NULL, widget, "checkbutton",
+			 border_width + widget->allocation.x,
+			 border_width + widget->allocation.y,
+			 widget->allocation.width - 2 * border_width - 1,
+			 widget->allocation.height - 2 * border_width - 1);
+    }
+}
+
 static void
 gtk_check_button_draw (GtkWidget    *widget,
 		       GdkRectangle *area)
@@ -140,21 +173,9 @@ gtk_check_button_draw (GtkWidget    *widget,
     {
       if (toggle_button->draw_indicator)
 	{
-	  gint border_width;
-	  
-	  gtk_check_button_draw_indicator (check_button, area);
-	  
-	  border_width = GTK_CONTAINER (widget)->border_width;
-	  if (GTK_WIDGET_HAS_FOCUS (widget))
-	    gtk_paint_focus (widget->style, widget->window,
-			     NULL, widget, "checkbutton",
-			     border_width + widget->allocation.x,
-			     border_width + widget->allocation.y,
-			     widget->allocation.width - 2 * border_width - 1,
-			     widget->allocation.height - 2 * border_width - 1);
-	  
-	  if (bin->child && GTK_WIDGET_NO_WINDOW (bin->child) &&
-	      gtk_widget_intersect (bin->child, area, &child_area))
+	  gtk_check_button_paint (widget, area);
+
+	  if (bin->child && gtk_widget_intersect (bin->child, area, &child_area))
 	    gtk_widget_draw (bin->child, &child_area);
 	}
       else
@@ -280,14 +301,12 @@ gtk_check_button_expose (GtkWidget      *widget,
     {
       if (toggle_button->draw_indicator)
 	{
-	  gtk_check_button_draw_indicator (check_button, &event->area);
+	  gtk_check_button_paint (widget, &event->area);
 	  
 	  child_event = *event;
 	  if (bin->child && GTK_WIDGET_NO_WINDOW (bin->child) &&
 	      gtk_widget_intersect (bin->child, &event->area, &child_event.area))
 	    gtk_widget_event (bin->child, (GdkEvent*) &child_event);
-	  
-	  gtk_widget_draw_focus (widget);
 	}
       else
 	{

@@ -119,15 +119,13 @@ gtk_bin_map (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
   bin = GTK_BIN (widget);
 
-  if (!GTK_WIDGET_NO_WINDOW (widget))
-    gdk_window_show (widget->window);
-  else
-    gtk_widget_queue_draw (widget);
-
   if (bin->child &&
       GTK_WIDGET_VISIBLE (bin->child) &&
       !GTK_WIDGET_MAPPED (bin->child))
     gtk_widget_map (bin->child);
+
+  if (!GTK_WIDGET_NO_WINDOW (widget))
+    gdk_window_show (widget->window);
 }
 
 static void
