@@ -2520,7 +2520,7 @@ draw_row (GtkCList * clist,
       if (!gdk_rectangle_intersect (area, &row_rectangle, &intersect_rectangle))
 	return;
 
-      if (clist_row->state == GTK_STATE_SELECTED || clist_row->fg_set)
+      if (clist_row->state == GTK_STATE_SELECTED || clist_row->bg_set)
 	gdk_draw_rectangle (clist->clist_window,
 			    bg_gc,
 			    TRUE,
@@ -2559,7 +2559,7 @@ draw_row (GtkCList * clist,
 			      cell_rectangle.height);     
 	}	  
 
-      if (clist_row->state == GTK_STATE_SELECTED || clist_row->fg_set)
+      if (clist_row->state == GTK_STATE_SELECTED || clist_row->bg_set)
 	gdk_draw_rectangle (clist->clist_window,
 			    bg_gc,
 			    TRUE,

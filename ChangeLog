@@ -1,3 +1,13 @@
+1998-05-06  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (draw_row): Fixed incorrect painting of row
+	background (fg_set -> bg_set confusion).
+
+1998-05-04  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* configure.in: Added $x_libs in the other_libraries field in the
+	check for XShapeCombineMask.
+
 Tue May  5 17:04:14 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gdk/gdk.c (gdk_event_translate): A guint * was
