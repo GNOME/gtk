@@ -2557,7 +2557,10 @@ gtk_window_set_icon (GtkWindow  *window,
   g_return_if_fail (icon == NULL || GDK_IS_PIXBUF (icon));
 
   list = NULL;
-  list = g_list_append (list, icon);
+
+  if (icon)
+    list = g_list_append (list, icon);
+  
   gtk_window_set_icon_list (window, list);
   g_list_free (list);  
 }
@@ -2584,6 +2587,62 @@ gtk_window_get_icon (GtkWindow  *window)
     return GDK_PIXBUF (info->icon_list->data);
   else
     return NULL;
+}
+
+/* Load pixbuf, printing warning on failure if error == NULL
+ */
+static GdkPixbuf *
+load_pixbuf_verbosely (const char *filename,
+		       GError    **err)
+{
+  GError *local_err = NULL;
+  GdkPixbuf *pixbuf;
+
+  pixbuf = gdk_pixbuf_new_from_file (filename, &local_err);
+
+  if (!pixbuf)
+    {
+      if (err)
+	*err = local_err;
+      else
+	{
+	  g_warning ("Error loading icon from file '%s':\n\t%s",
+		     filename, local_err->message);
+	  g_error_free (local_err);
+	}
+    }
+
+  return pixbuf;
+}
+
+/**
+ * gtk_window_set_icon_from_file:
+ * @window: a #GtkWindow
+ * @list: a list of #GdkPixbuf
+ * @err: location to store error, or %NULL.
+ *
+ * Sets the icon for @wi
+ * had gtk_window_set_icon_list() called on them as a single file.
+ * Warns on failure if @err is %NULL.
+ *
+ * Returns: %TRUE if setting the icon succeeded.
+ **/
+gboolean
+gtk_window_set_icon_from_file (GtkWindow   *window,
+			       const gchar *filename,
+			       GError     **err)
+{
+  GdkPixbuf *pixbuf = load_pixbuf_verbosely (filename, err);
+
+  if (pixbuf)
+    {
+      gtk_window_set_icon (window, pixbuf);
+      g_object_unref (pixbuf);
+      
+      return TRUE;
+    }
+  else
+    return FALSE;
 }
 
 /**
@@ -2638,6 +2697,37 @@ gtk_window_set_default_icon_list (GList *list)
       tmp_list = tmp_list->next;
     }
   g_list_free (toplevels);
+}
+
+/**
+ * gtk_window_set_default_icon_from_file:
+ * @filename: location of icon file
+ * @err: location to store error, or %NULL.
+ *
+ * Sets an icon to be used as fallback for windows that haven't
+ * had gtk_window_set_icon_list() called on them from a file
+ * on disk. Warns on failure if @error is %NULL.
+ *
+ * Returns: %TRUE if setting the icon succeeded.
+ **/
+gboolean
+gtk_window_set_default_icon_from_file (const gchar *filename,
+				       GError     **err)
+{
+  GdkPixbuf *pixbuf = load_pixbuf_verbosely (filename, err);
+
+  if (pixbuf)
+    {
+      GList *list = g_list_prepend (NULL, pixbuf);
+      gtk_window_set_default_icon_list (list);
+      g_list_free (list);
+
+      g_object_unref (pixbuf);
+      
+      return TRUE;
+    }
+  else
+    return FALSE;
 }
 
 /**

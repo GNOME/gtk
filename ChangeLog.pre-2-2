@@ -1,3 +1,9 @@
+Mon Sep 30 14:28:58 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.[ch]: Add gtk_window_set_icon_from_file(),
+	gtk_window_set_default_icon_from_file() convenience
+	functions (#75178, suggestion from Havoc Pennington)
+
 2002-09-30  Daniel Elstner  <daniel.elstner@gmx.net>
 
 	* gtk/gtktextbuffer.c: Add construct-only property "tag_table"
