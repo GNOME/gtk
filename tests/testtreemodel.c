@@ -17,9 +17,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
+
+#include <string.h>
+
 #ifdef HAVE_MALLINFO
 #include <malloc.h>
 #endif
+
 #include <gtk/gtk.h>
 
 static gint repeats = 2;
@@ -187,7 +192,6 @@ tree_store_insert_deep (GtkTreeModel *model,
   GtkTreeIter iter;
   gchar *text;
   FindData data;
-  gint n;
 
   text = g_strdup_printf ("row %d", i);
   data.n = g_random_int_range (0, items);
@@ -195,7 +199,7 @@ tree_store_insert_deep (GtkTreeModel *model,
   data.found = FALSE;
   if (data.n < i)
     gtk_tree_model_foreach (model, find_nth, &data);
-  gtk_tree_store_insert (store, &iter, data.found ? &(data.iter) : NULL, n);
+  gtk_tree_store_insert (store, &iter, data.found ? &(data.iter) : NULL, data.n);
   gtk_tree_store_set (store, &iter, 0, i, 1, text, -1);
   g_free (text);
 }
@@ -207,12 +211,10 @@ test_run (gchar        *title,
 	  ClearFunc    *clear,
 	  InsertFunc   *insert)
 {
-  GtkTreeIter iter;
   gint i, k, d, items;
-  gchar *text;
   GTimer *timer;
   gdouble elapsed;
-  int uordblks_before, memused;
+  int uordblks_before = 0, memused;
 
   g_print ("%s (average over %d runs, time in milliseconds)\n"
 	   "items \ttime      \ttime/item \tused memory\n", title, repeats);
@@ -253,7 +255,6 @@ int
 main (int argc, char *argv[])
 {
   GtkTreeModel *model;
-  GOptionContext *context;
   
   gtk_init_with_args (&argc, &argv, NULL, entries, NULL, NULL);
 
