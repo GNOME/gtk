@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-27 12:31+0200\n"
+"POT-Creation-Date: 2004-10-27 16:36-0400\n"
 "PO-Revision-Date: 2004-10-27 12:39+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
@@ -903,6 +903,11 @@ msgstr "calendar:MY"
 #: gtk/gtkcalendar.c:710
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
+
+#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
+#, c-format
+msgid "progress bar label|%d %%"
+msgstr ""
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"

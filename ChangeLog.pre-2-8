@@ -1,5 +1,7 @@
 2004-10-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* Bump version
+
 	* === Released 2.5.4 ===
 
 	* Makefile.am (EXTRA_DIST): Remove po/makefile.mingw

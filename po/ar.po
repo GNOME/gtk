@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-19 00:26-0400\n"
+"POT-Creation-Date: 2004-10-27 16:36-0400\n"
 "PO-Revision-Date: 2004-08-30 19:23+0300\n"
 "Last-Translator: Ayman Hourieh <aymanh@gmail.com>\n"
 "Language-Team: Arabic <support@arabeyes.org>\n"
@@ -731,48 +731,169 @@ msgstr "فشلت الكتابة في ملف مؤقت عند تحميل صورة 
 msgid "The XPM image format"
 msgstr "تهيئة XPM للصورة"
 
-#: gtk/gtkaboutdialog.c:216 gtk/gtkaboutdialog.c:1722
+#. Description of --class=CLASS in --help output
+#: gdk/gdk.c:115
+msgid "Program class as used by the window manager"
+msgstr ""
+
+#. Placeholder in --class=CLASS in --help output
+#: gdk/gdk.c:116
+msgid "CLASS"
+msgstr ""
+
+#. Description of --name=NAME in --help output
+#: gdk/gdk.c:118
+msgid "Program name as used by the window manager"
+msgstr ""
+
+#. Placeholder in --name=NAME in --help output
+#: gdk/gdk.c:119
+msgid "NAME"
+msgstr ""
+
+#. Description of --display=DISPLAY in --help output
+#: gdk/gdk.c:121
+msgid "X display to use"
+msgstr ""
+
+#. Placeholder in --display=DISPLAY in --help output
+#: gdk/gdk.c:122
+#, fuzzy
+msgid "DISPLAY"
+msgstr "IPA"
+
+#. Description of --screen=SCREEN in --help output
+#: gdk/gdk.c:124
+msgid "X screen to use"
+msgstr ""
+
+#. Placeholder in --screen=SCREEN in --help output
+#: gdk/gdk.c:125
+msgid "SCREEN"
+msgstr ""
+
+#. Description of --gdk-debug=FLAGS in --help output
+#: gdk/gdk.c:128
+msgid "Gdk debugging flags to set"
+msgstr ""
+
+#. Placeholder in --gdk-debug=FLAGS in --help output
+#. Placeholder in --gdk-no-debug=FLAGS in --help output
+#. Placeholder in --gtk-debug=FLAGS in --help output
+#. Placeholder in --gtk-no-debug=FLAGS in --help output
+#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:404 gtk/gtkmain.c:407
+msgid "FLAGS"
+msgstr ""
+
+#. Description of --gdk-no-debug=FLAGS in --help output
+#: gdk/gdk.c:131
+msgid "Gdk debugging flags to unset"
+msgstr ""
+
+#. Description of --sync in --help output
+#: gdk/win32/gdkmain-win32.c:60
+msgid "Don't batch GDI requests"
+msgstr ""
+
+#. Description of --no-wintab in --help output
+#: gdk/win32/gdkmain-win32.c:62
+msgid "Don't use the Wintab API for tablet support"
+msgstr ""
+
+#. Description of --ignore-wintab in --help output
+#: gdk/win32/gdkmain-win32.c:64
+msgid "Same as --no-wintab"
+msgstr ""
+
+#. Description of --use-wintab in --help output
+#: gdk/win32/gdkmain-win32.c:66
+msgid "Do use the Wintab API [default]"
+msgstr ""
+
+#. Description of --max-colors=COLORS in --help output
+#: gdk/win32/gdkmain-win32.c:68
+msgid "Size of the palette in 8 bit mode"
+msgstr ""
+
+#. Placeholder in --max-colors=COLORS in --help output
+#: gdk/win32/gdkmain-win32.c:69
+msgid "COLORS"
+msgstr ""
+
+#. Description of --sync in --help output
+#: gdk/x11/gdkmain-x11.c:92
+msgid "Make X calls synchronous"
+msgstr ""
+
+#: gtk/gtkaboutdialog.c:217 gtk/gtkaboutdialog.c:1823
 msgid "License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:217
+#: gtk/gtkaboutdialog.c:218
 msgid "The license of the program"
 msgstr ""
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:358
+#: gtk/gtkaboutdialog.c:367
 msgid "_Credits"
 msgstr ""
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:367
+#: gtk/gtkaboutdialog.c:376
 msgid "_License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:538
+#: gtk/gtkaboutdialog.c:567
 #, c-format
 msgid "About %s"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:1659
+#: gtk/gtkaboutdialog.c:1760
 msgid "Credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:1684
+#: gtk/gtkaboutdialog.c:1785
 msgid "Written by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:1687
+#: gtk/gtkaboutdialog.c:1788
 msgid "Documented by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:1699
+#: gtk/gtkaboutdialog.c:1800
 msgid "Translated by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:1703
+#: gtk/gtkaboutdialog.c:1804
 msgid "Artwork by"
 msgstr ""
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the shift key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:119
+msgid "Shift"
+msgstr "Shift"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the control key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:125
+msgid "Ctrl"
+msgstr "Ctrl"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the alt key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:131
+msgid "Alt"
+msgstr "Alt"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -794,6 +915,11 @@ msgstr "calendar:MY"
 #: gtk/gtkcalendar.c:710
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
+
+#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
+#, c-format
+msgid "progress bar label|%d %%"
+msgstr ""
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -922,19 +1048,19 @@ msgstr "ل_وحة الألوان"
 msgid "Color Wheel"
 msgstr "عجلة اللّون"
 
-#: gtk/gtkcolorseldialog.c:117
+#: gtk/gtkcolorseldialog.c:123
 msgid "Color Selection"
 msgstr "اللون المنقى"
 
-#: gtk/gtkentry.c:4507 gtk/gtktextview.c:7010
+#: gtk/gtkentry.c:4507 gtk/gtktextview.c:6979
 msgid "Select _All"
 msgstr "اختيار ال_كلّ"
 
-#: gtk/gtkentry.c:4517 gtk/gtktextview.c:7020
+#: gtk/gtkentry.c:4517 gtk/gtktextview.c:6989
 msgid "Input _Methods"
 msgstr "طرق ال_إدخال"
 
-#: gtk/gtkentry.c:4528 gtk/gtktextview.c:7031
+#: gtk/gtkentry.c:4528 gtk/gtktextview.c:7000
 msgid "_Insert Unicode Control Character"
 msgstr "إ_دراج رمز تحكم يونيكود"
 
@@ -944,7 +1070,27 @@ msgstr "إ_دراج رمز تحكم يونيكود"
 msgid "Invalid filename: %s"
 msgstr "اسم ملف غير سليم: %s"
 
-#: gtk/gtkfilechooserdefault.c:802
+#: gtk/gtkfilechooserbutton.c:59
+#, fuzzy
+msgid "(None)"
+msgstr "لا شيء"
+
+#: gtk/gtkfilechooserbutton.c:253
+#, fuzzy
+msgid "Select a File"
+msgstr "حذف ملف"
+
+#: gtk/gtkfilechooserbutton.c:1230 gtk/gtkfilechooserdefault.c:1165
+#: gtk/gtkpathbar.c:981
+msgid "Home"
+msgstr "الدليل المنزلي"
+
+#: gtk/gtkfilechooserbutton.c:1237 gtk/gtkfilechooserdefault.c:1188
+#: gtk/gtkpathbar.c:983
+msgid "Desktop"
+msgstr "المكتب"
+
+#: gtk/gtkfilechooserdefault.c:816
 #, c-format
 msgid ""
 "Could not retrieve information about %s:\n"
@@ -953,7 +1099,7 @@ msgstr ""
 "لم أستطع سحب معلومات حول %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:813
+#: gtk/gtkfilechooserdefault.c:827
 #, c-format
 msgid ""
 "Could not add a bookmark for %s:\n"
@@ -962,7 +1108,7 @@ msgstr ""
 "لم أستطع إضافة علامة موقع لـ %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:828 gtk/gtkfilechooserdefault.c:5600
+#: gtk/gtkfilechooserdefault.c:842 gtk/gtkfilechooserdefault.c:5690
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -971,7 +1117,7 @@ msgstr ""
 "لم أستطع بناء اسم الملف من '%s' و '%s':\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:844
+#: gtk/gtkfilechooserdefault.c:858
 #, c-format
 msgid ""
 "Could not change the current folder to %s:\n"
@@ -980,15 +1126,7 @@ msgstr ""
 "لم أستطع تغيير الدليل الحالي لـ %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1154 gtk/gtkpathbar.c:845
-msgid "Home"
-msgstr "الدليل المنزلي"
-
-#: gtk/gtkfilechooserdefault.c:1177 gtk/gtkpathbar.c:847
-msgid "Desktop"
-msgstr "المكتب"
-
-#: gtk/gtkfilechooserdefault.c:1575
+#: gtk/gtkfilechooserdefault.c:1589
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -997,12 +1135,12 @@ msgstr ""
 "لم أستطع إنشاء الدليل %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1755
+#: gtk/gtkfilechooserdefault.c:1775
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "لم أستطع إضافة علامة موقع لـ %s لانه ليس دليلًا."
 
-#: gtk/gtkfilechooserdefault.c:1867
+#: gtk/gtkfilechooserdefault.c:1887
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1011,93 +1149,123 @@ msgstr ""
 "لم أستطع حذف علامة الموقع لـ %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2474
+#: gtk/gtkfilechooserdefault.c:2024
+#, c-format
+msgid "Add the folder '%s' to the bookmarks"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:2065
+msgid "Add the current folder to the bookmarks"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:2067
+msgid "Add the selected folders to the bookmarks"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:2107
+#, c-format
+msgid "Remove the bookmark '%s'"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:2512
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "لم أستطع إضافة علامة موقع لـ %s لانه اسم مسار غير صحيح."
 
-#: gtk/gtkfilechooserdefault.c:2654
+#: gtk/gtkfilechooserdefault.c:2690
 msgid "Shortcuts"
 msgstr "اختصارات"
 
-#: gtk/gtkfilechooserdefault.c:2708
+#: gtk/gtkfilechooserdefault.c:2744
 msgid "Folder"
 msgstr "دليل"
 
-#: gtk/gtkfilechooserdefault.c:2760 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2796 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "إ_ضافة"
 
-#: gtk/gtkfilechooserdefault.c:2770 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:2803
+msgid "Add the selected folder to the bookmarks"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:2808 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_حذف"
 
-#: gtk/gtkfilechooserdefault.c:2868
+#: gtk/gtkfilechooserdefault.c:2815
+msgid "Remove the selected bookmark"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:2908
 #, fuzzy
 msgid "_Add to Shortcuts"
 msgstr "اختصارات"
 
-#: gtk/gtkfilechooserdefault.c:2882
+#: gtk/gtkfilechooserdefault.c:2922
 msgid "Show _Hidden Files"
 msgstr "عرض الملفات ال_مخفيّة."
 
-#: gtk/gtkfilechooserdefault.c:3006 gtk/gtkfilesel.c:767
+#: gtk/gtkfilechooserdefault.c:3046 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "ملفات"
 
-#: gtk/gtkfilechooserdefault.c:3034
+#: gtk/gtkfilechooserdefault.c:3074
 msgid "Name"
 msgstr "الإ_سم"
 
-#: gtk/gtkfilechooserdefault.c:3059
+#: gtk/gtkfilechooserdefault.c:3099
 msgid "Size"
 msgstr "الحجم"
 
-#: gtk/gtkfilechooserdefault.c:3072
+#: gtk/gtkfilechooserdefault.c:3112
 msgid "Modified"
 msgstr "مغيَّر"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3117
+#: gtk/gtkfilechooserdefault.c:3158
 msgid "Create Fo_lder"
 msgstr "إنشاء _دليل"
 
+#: gtk/gtkfilechooserdefault.c:3192
+msgid "Select which types of files are shown"
+msgstr ""
+
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3231
+#: gtk/gtkfilechooserdefault.c:3281
 msgid "_Name:"
 msgstr "الإ_سم:"
 
-#: gtk/gtkfilechooserdefault.c:3275
+#: gtk/gtkfilechooserdefault.c:3325
 msgid "_Browse for other folders"
 msgstr "_تصفّح لأدلّة أخرى"
 
-#: gtk/gtkfilechooserdefault.c:3517
+#: gtk/gtkfilechooserdefault.c:3567
 msgid "Save in _folder:"
 msgstr "حفظ في ال_دليل:"
 
-#: gtk/gtkfilechooserdefault.c:3519
+#: gtk/gtkfilechooserdefault.c:3569
 msgid "Create in _folder:"
 msgstr "إنشاء في ال _دليل:"
 
-#: gtk/gtkfilechooserdefault.c:4210
+#: gtk/gtkfilechooserdefault.c:4260
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "لا يمكن التحويل إلى الدليل لأنه غير محلي."
 
-#: gtk/gtkfilechooserdefault.c:4354
+#: gtk/gtkfilechooserdefault.c:4404
 msgid "Could not find the path"
 msgstr "لم أستطع إيجاد المسار"
 
-#: gtk/gtkfilechooserdefault.c:4715
+#: gtk/gtkfilechooserdefault.c:4788
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "الاختصار %s غير موجود"
 
-#: gtk/gtkfilechooserdefault.c:5413
+#: gtk/gtkfilechooserdefault.c:5493
 msgid "Type name of new folder"
 msgstr "اسم نوع الدليل الجديد"
 
-#: gtk/gtkfilechooserdefault.c:5442
+#: gtk/gtkfilechooserdefault.c:5522
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1106,38 +1274,38 @@ msgstr[1] "%d ًبايتا"
 msgstr[2] "%d ًبايتا"
 msgstr[3] "%d ًبايتا"
 
-#: gtk/gtkfilechooserdefault.c:5444
+#: gtk/gtkfilechooserdefault.c:5524
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f كـ"
 
-#: gtk/gtkfilechooserdefault.c:5446
+#: gtk/gtkfilechooserdefault.c:5526
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f م"
 
-#: gtk/gtkfilechooserdefault.c:5448
+#: gtk/gtkfilechooserdefault.c:5528
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f غ"
 
-#: gtk/gtkfilechooserdefault.c:5493
+#: gtk/gtkfilechooserdefault.c:5573
 msgid "Today"
 msgstr "اليوم"
 
-#: gtk/gtkfilechooserdefault.c:5495
+#: gtk/gtkfilechooserdefault.c:5575
 msgid "Yesterday"
 msgstr "البارحة"
 
-#: gtk/gtkfilechooserdefault.c:5506
+#: gtk/gtkfilechooserdefault.c:5586
 msgid "Unknown"
 msgstr "مجهول"
 
-#: gtk/gtkfilechooserdefault.c:5561
+#: gtk/gtkfilechooserdefault.c:5651
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "لا أستطيع تغيير الدليل الذي حدّدته لأنّه مسار غير سليم."
 
-#: gtk/gtkfilechooserdefault.c:5638
+#: gtk/gtkfilechooserdefault.c:5728
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1146,15 +1314,15 @@ msgstr ""
 "لم أستطع إنتقاء %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5677
+#: gtk/gtkfilechooserdefault.c:5768
 msgid "Open Location"
 msgstr "فتح الموقع"
 
-#: gtk/gtkfilechooserdefault.c:5684
+#: gtk/gtkfilechooserdefault.c:5775
 msgid "Save in Location"
 msgstr "حفظ في مكان"
 
-#: gtk/gtkfilechooserdefault.c:5703
+#: gtk/gtkfilechooserdefault.c:5799
 msgid "_Location:"
 msgstr "ال_موقع:"
 
@@ -1170,12 +1338,12 @@ msgstr "_دلائل"
 msgid "_Files"
 msgstr "م_لفات"
 
-#: gtk/gtkfilesel.c:854 gtk/gtkfilesel.c:2244
+#: gtk/gtkfilesel.c:859 gtk/gtkfilesel.c:2249
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "الدليل غير قابل للقراءة: %s"
 
-#: gtk/gtkfilesel.c:985
+#: gtk/gtkfilesel.c:990
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1185,25 +1353,25 @@ msgstr ""
 "الملف \"%s\" موجود في جهاز آخر (باسم %s) وقد لا يكون متوفّراً لهذا البرنامج.\n"
 "هل أنت متأكّد من أنّك تريد انتقاءه؟"
 
-#: gtk/gtkfilesel.c:1116
+#: gtk/gtkfilesel.c:1121
 msgid "_New Folder"
 msgstr "دليل _جديد"
 
-#: gtk/gtkfilesel.c:1127
+#: gtk/gtkfilesel.c:1132
 msgid "De_lete File"
 msgstr "_مسح ملف"
 
-#: gtk/gtkfilesel.c:1138
+#: gtk/gtkfilesel.c:1143
 msgid "_Rename File"
 msgstr "إ_عادة تسمية ملف"
 
-#: gtk/gtkfilesel.c:1440
+#: gtk/gtkfilesel.c:1445
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "اسم الدليل \"%s\" يحوي رموزاً غير مسموح بها في أسماء الملفات"
 
-#: gtk/gtkfilesel.c:1442
+#: gtk/gtkfilesel.c:1447
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1212,33 +1380,33 @@ msgstr ""
 "خطأ عند إنشاء الدليل \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1443 gtk/gtkfilesel.c:1679
+#: gtk/gtkfilesel.c:1448 gtk/gtkfilesel.c:1684
 msgid "You probably used symbols not allowed in filenames."
 msgstr "ربما استخدمت رموزاً غير مسموح بها في أسماء الملفات."
 
-#: gtk/gtkfilesel.c:1451
+#: gtk/gtkfilesel.c:1456
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "خطأ عند إنشاء الدليل \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1485
+#: gtk/gtkfilesel.c:1490
 msgid "New Folder"
 msgstr "دليل جديد"
 
-#: gtk/gtkfilesel.c:1500
+#: gtk/gtkfilesel.c:1505
 msgid "_Folder name:"
 msgstr "ا_سم الدليل:"
 
-#: gtk/gtkfilesel.c:1524
+#: gtk/gtkfilesel.c:1529
 msgid "C_reate"
 msgstr "إن_شاء"
 
-#: gtk/gtkfilesel.c:1567
+#: gtk/gtkfilesel.c:1572
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "اسم الملف \"%s\" يحوي رموزا غير مسموح بها في أسماء الملفات"
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1575
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1247,30 +1415,30 @@ msgstr ""
 "خطأ عند حذف الملف \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1572 gtk/gtkfilesel.c:1693
+#: gtk/gtkfilesel.c:1577 gtk/gtkfilesel.c:1698
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "ربما يحوي رموزاً غير مسموح بها في أسماء الملفات."
 
-#: gtk/gtkfilesel.c:1581
+#: gtk/gtkfilesel.c:1586
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "خطأ عند حذف الملف \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1624
+#: gtk/gtkfilesel.c:1629
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "هل تريد حقاً حذف الملف \"%s\"?"
 
-#: gtk/gtkfilesel.c:1629
+#: gtk/gtkfilesel.c:1634
 msgid "Delete File"
 msgstr "حذف ملف"
 
-#: gtk/gtkfilesel.c:1675 gtk/gtkfilesel.c:1689
+#: gtk/gtkfilesel.c:1680 gtk/gtkfilesel.c:1694
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "اسم الملف \"%s\" يحوي رموزاً غير مسموح بها في أسماء الملفات"
 
-#: gtk/gtkfilesel.c:1677
+#: gtk/gtkfilesel.c:1682
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1279,7 +1447,7 @@ msgstr ""
 "خطأ عند إعادة تسمية الملف كـ \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1691
+#: gtk/gtkfilesel.c:1696
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1288,29 +1456,29 @@ msgstr ""
 "خطأ عند إعادة تسمية الملف كـ \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1701
+#: gtk/gtkfilesel.c:1706
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "خطأ عند إعادة تسمية الملف \"%s\" كـ \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1748
+#: gtk/gtkfilesel.c:1753
 msgid "Rename File"
 msgstr "إعادة تسمية ملف"
 
-#: gtk/gtkfilesel.c:1763
+#: gtk/gtkfilesel.c:1768
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "إعادة تسمية الملف \"%s\" إلى:"
 
-#: gtk/gtkfilesel.c:1792
+#: gtk/gtkfilesel.c:1797
 msgid "_Rename"
 msgstr "_إعادة تسمية"
 
-#: gtk/gtkfilesel.c:2224
+#: gtk/gtkfilesel.c:2229
 msgid "_Selection: "
 msgstr "ال_منتقى:"
 
-#: gtk/gtkfilesel.c:3140
+#: gtk/gtkfilesel.c:3145
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1319,15 +1487,15 @@ msgstr ""
 "لم أستطع تحويل اسم الملف \"%s\" إلى UTF-8 (حاول ضبط المتغير البيئي "
 "G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3143
+#: gtk/gtkfilesel.c:3148
 msgid "Invalid UTF-8"
 msgstr "يو تي أف-8 غير سليم"
 
-#: gtk/gtkfilesel.c:4020
+#: gtk/gtkfilesel.c:4025
 msgid "Name too long"
 msgstr "الإسم طويل جداً"
 
-#: gtk/gtkfilesel.c:4022
+#: gtk/gtkfilesel.c:4027
 msgid "Couldn't convert filename"
 msgstr "لم أستطع تحويل اسم الملف"
 
@@ -1422,7 +1590,7 @@ msgstr "الح_جم:"
 msgid "_Preview:"
 msgstr "_لمحة:"
 
-#: gtk/gtkfontsel.c:1375
+#: gtk/gtkfontsel.c:1382
 msgid "Font Selection"
 msgstr "الخط المنتقى"
 
@@ -1442,7 +1610,7 @@ msgstr "قيمة _جاما"
 msgid "Error loading icon: %s"
 msgstr "خطأ عند تحميل الأيقونة: %s"
 
-#: gtk/gtkicontheme.c:1196
+#: gtk/gtkicontheme.c:1243
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1455,7 +1623,7 @@ msgstr ""
 "يمكنك تلقي نسخة من:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1261
+#: gtk/gtkicontheme.c:1308
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "الأيقونة '%s' غير موجودة في التّيمة"
@@ -1543,42 +1711,36 @@ msgstr "(مجهول)"
 msgid "clear"
 msgstr "مسح"
 
-#: gtk/gtklabel.c:3427
+#: gtk/gtklabel.c:3479
 msgid "Select All"
 msgstr "إنتقاء الكلّ"
 
-#: gtk/gtklabel.c:3437
+#: gtk/gtklabel.c:3489
 msgid "Input Methods"
 msgstr "طرق الإدخال"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:406
+#: gtk/gtkmain.c:397
 msgid "Load additional GTK+ modules"
 msgstr ""
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:407
+#: gtk/gtkmain.c:398
 msgid "MODULES"
 msgstr ""
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:409
+#: gtk/gtkmain.c:400
 msgid "Make all warnings fatal"
 msgstr ""
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:412
+#: gtk/gtkmain.c:403
 msgid "GTK+ debugging flags to set"
 msgstr ""
 
-#. Placeholder in --gtk-debug=FLAGS in --help output
-#. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:413 gtk/gtkmain.c:416
-msgid "FLAGS"
-msgstr ""
-
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:415
+#: gtk/gtkmain.c:406
 msgid "GTK+ debugging flags to unset"
 msgstr ""
 
@@ -1612,17 +1774,17 @@ msgstr "المجموعة"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "زرّ أداة المذياعة الذي ينتمي هذا الزرّ إلى مجموعته."
 
-#: gtk/gtkrc.c:2393
+#: gtk/gtkrc.c:2394
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "لا يمكن إيجاد ملف الاحتواء: \"%s\""
 
-#: gtk/gtkrc.c:3032 gtk/gtkrc.c:3035
+#: gtk/gtkrc.c:3033 gtk/gtkrc.c:3036
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "لا يمكن إيجاد موقع ملف الصورة في pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3470
+#: gtk/gtkrc.c:3471
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "يجب أن يكون عنصر مسار البكسماب: \"%s\" مطلقاً، %s، السطر %d"
@@ -2029,7 +2191,8 @@ msgstr "سريالي·(منسوخ·بحروف·لغة·أخرى)"
 
 #. ID
 #: modules/input/iminuktitut.c:127
-msgid "Inukitut (Transliterated)"
+#, fuzzy
+msgid "Inuktitut (Transliterated)"
 msgstr "إنوكتوت·(منسوخة·بحروف·لغة·أخرى)"
 
 #. ID
@@ -2066,12 +2229,3 @@ msgstr "طريقة الإدخال X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "لم أستطع تلقي معلومات عن الملف '%s': %s"
-
-#~ msgid "Shift"
-#~ msgstr "Shift"
-
-#~ msgid "Ctrl"
-#~ msgstr "Ctrl"
-
-#~ msgid "Alt"
-#~ msgstr "Alt"
