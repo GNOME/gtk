@@ -1,3 +1,160 @@
+Sun Nov  5 04:24:53 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcellrenderertextpixbuf.c: Make parent_class
+	static.
+
+Tue Sep 19 10:54:22 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/{gtkimcontextxim.[ch],imxim.c}: Rip
+	out support for multiple locales; that simple doesn't
+	work reliably with current Xlib
+
+	* gtk/gtkimcontext*.[ch] gtk/gtkimmulticontext.[ch]
+	gtk/gtktextlayout.[ch] gtk/gtktextview.c gtk/gtkentry.c: 
+	Add support for positioning the cursor within the preedit string.
+
+Mon Sep 18 23:56:32 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/{imxim.c,gtkimcontextxim.[ch]}: Start
+	at XIM input method module.
+
+	* gtk/gtktextview.c: Check for bindings after passing
+	events to im context filter.
+
+Mon Sep 18 11:50:51 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (add_preedit_attrs): Handle
+	empty attribute lists properly.
+
+Sun Sep 17 10:08:16 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/queryimmodules.c (main): Return non-zero exit
+	status if errors were encountered querying any
+	modules.
+
+	* modules/input/Makefile.am (moduledir): remove
+	leftover bin program target.
+
+	* docs/make-todo: Fix typo in error message.
+
+Sat Sep 16 14:04:30 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Add modules/input/Makefile
+
+Sat Sep 16 14:01:52 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk.h: include gtkmodule.h gtkoldeditable.h,
+	don't include gtkthemes.h.
+
+	* gtk/testgtk.c gtk/testtext.c: Set environment variables
+	to point
+
+	* gtk/Makefile.am: Add new .c and .h files, build 
+	gtk-query-immodules and use it to create a gtk.immodules
+	file for use of test programs.
+
+	* gtk/gtkpreview.c: remove extra blank line.
+
+Sat Sep 16 13:21:04 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_add_table): 
+	Add the ability to add extra tables beyond the default
+	one, and also the ability to have compose sequences 
+	that are prefixes of other compose sequences. 
+
+	* gtk/gtkimcontextsimple.c: Export a preedit string which
+	consists of possible candidates for keystrokes that have
+	been entered but not yet committed.
+
+	* gtk/gtkimcontext.[ch] gtk/immulticontext.[ch]
+	gtk/gtkimcontextsimple.[ch]: add gtk_im_context_reset()
+
+	* gtk/gtkmulticontext.[ch] (gtk_im_multicontext_append_menuitems): 
+	Add a function to add input-method switching menu items
+	to a menu.
+
+	* gtk/gtkimmulticontext.[ch]: Properly handly set_client_window
+	when switching input methods.
+
+	* gtk/gtkimcontextsimple.[ch]: Change the format of
+	the compose table to allow compose tables of different
+	lengths / sequence.
+
+Sat Sep 16 13:05:48 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimmodule.[ch]: Support routines for loading
+	GtkIMContext implementations dynamically at runtime.
+
+	* modules/input/imcyrillic-translit.c: A sample input
+	method (based on GtkIMContextSimple with an extra table),
+	which demonstrates preedit strings and the module
+	system for input modules
+
+	* gtk/queryimmodules.c: Program to query the available
+	input modules and write the results into a file.
+	 
+	* gtk/gtkrc.[ch] (gtk_rc_get_im_module_file): Add
+	extra config options "im_module_file" (cache file for
+	input method modules), and "im_module_path" - path
+	to look for modules when generating cache file.
+
+	This doesn't scale.
+
+Sat Sep 16 13:09:06 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkthemes.[ch] gtk/gtkmodule.[ch]: Move most of the 
+	generic	code from gtkthemes into a new abstraction
+	GtkModule which has the logic for implementing
+	a loadable module which implements a number of 
+	GObject types.
+
+Sat Sep 16 13:07:13 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkeditable.[ch]: Convert GtkEditable from
+	a class into an interface  
+	
+	* gtk/gtkoldeditable.[ch]: Move the old editable
+	implementation into here, so legacy widgets can
+	still rely on the implemenation. GtkOldEditable
+	exports GtkEditable. Make selection handling
+	code use new text conversion functions (and
+	handle UTF-8 as a side-effect). Use GtkClipboard
+	for CLIPBOARD.
+
+	* gtk/gtktext.[ch] gtk/gtkcombo.c gtk/gtkspinbutton.c:
+	Adopt to match above changes.
+
+	* gtk/gtkentry.[ch]: Implement GtkEditable directly,
+	avoid GtkOldEditable implementation. Restructure
+        to reduce number of places that modify state directly.
+	Move to GtkBindingSet. Display the preedit string.
+	Queue recomputation of PangoLayout and scroll position
+	to improve effiency of doing complex changes naively.
+	Add a menu with cut/copy/paste and input method selection.
+
+Thu Sep 14 22:11:05 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.[ch]: Add gtk_text_layout_set_preedit_string()
+	to set preedit string and attributes; display preedit string by
+	inserting string and attributes at cursor when creating the
+	GtkTextLineDisplay.
+
+	* gtk/gtktextlayout.c: Move all conversions between byte
+	positions in PangoLayout and GtkTextIter into new functions
+	line_display_iter_to_index/index_to_iter that properly
+	handle the preedit string.
+
+	* gtk/gtktextmark.[ch]: Restore gtk_text_mark_get_name, modify
+	it to return const char * (eventually will end up
+	as GCONST char *, most likely.)
+
+	* gtk/gtktextview.[ch]: Handle the preedit string, call
+	gtk_im_context_reset() as necessary, add a menu to switch
+	input methods.
+	
+	* gtk/gtktextlayout.[ch]: Remove useless
+	gtk_text_layout_get_log_attrs() function.
+
 2000-11-11  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdk.def
@@ -1593,15 +1750,6 @@ Thu Sep 14 12:21:12 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkselection.c (gtk_selection_data_copy/free): Copy
 	and free selection_data->data properly
-
-Sat Sep  9 17:15:45 2000  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtkrc.[ch] (gtk_rc_get_im_module_file): Add
-	extra config options "im_module_file" (cache file for
-	input method modules), and "im_module_path" - path
-	to look for modules when generating cache file.
-
-	This doesn't scale.
 
 Sat Sep  9 10:23:53 2000  Owen Taylor  <otaylor@redhat.com>
 

@@ -1047,6 +1047,7 @@ gtk/gtkcompat.h
 gtk/stock-icons/Makefile
 modules/Makefile
 modules/linux-fb/Makefile
+modules/input/Makefile
 contrib/Makefile
 contrib/gdk-pixbuf-xlib/Makefile
 contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-2.0.pc
