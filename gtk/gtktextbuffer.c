@@ -323,8 +323,6 @@ gtk_text_buffer_new (GtkTextTagTable *table)
 
       g_object_ref (G_OBJECT (text_buffer->tag_table));
     }
-
-  g_object_ref (G_OBJECT (text_buffer));
   
   return text_buffer;
 }

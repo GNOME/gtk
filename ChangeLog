@@ -1,3 +1,9 @@
+Fri Aug 24 12:02:08 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_new): Remove
+	a stray g_object_ref() left over from gtk_object_ref/sink.
+	(Pointed out by Josh Pritikin.)
+
 Thu Aug 23 19:33:54 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcontainer.[ch]: Rename gtk_container_children()
