@@ -1,3 +1,8 @@
+Wed Nov 10 17:26:49 GMT 1999 Tony Gale  <gale@gtk.org>
+
+	* gtk/gtkclist.c: Fix off-by-one bug in parameter
+	check.
+
 Wed Nov 10 12:12:03 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkinput-{x11,xfree}.c: Call XFreeDeviceState()

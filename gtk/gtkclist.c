@@ -7862,7 +7862,7 @@ gtk_clist_set_button_actions (GtkCList *clist,
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
   
-  if (button <= MAX_BUTTON)
+  if (button < MAX_BUTTON)
     {
       if (gdk_pointer_is_grabbed () || GTK_WIDGET_HAS_GRAB (clist))
 	{
