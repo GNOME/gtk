@@ -25,7 +25,7 @@
 #include "pixbuf.h"
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-GCache *pixbuf_cache = NULL;
+static GCache *pixbuf_cache = NULL;
 
 static GdkPixbuf *
 bilinear_gradient (GdkPixbuf    *src,
