@@ -1214,13 +1214,9 @@ EXPORTS
 	gtk_selection_data_set
 	gtk_selection_data_set_text
 	gtk_selection_data_targets_include_text
-	gtk_selection_incr_event
 	gtk_selection_mode_get_type
-	gtk_selection_notify
 	gtk_selection_owner_set
-	gtk_selection_property_notify
 	gtk_selection_remove_all
-	gtk_selection_request
 	gtk_separator_get_type
 	gtk_separator_menu_item_get_type
 	gtk_separator_menu_item_new
