@@ -1,3 +1,16 @@
+Tue May 14 19:53:15 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/gtk-demo/geninclude.pl.in configure.in:
+	Subsitute in @PERL@ instead of hardcoded 
+	/usr/bin/perl. (#78355, Gareth Pearce. Fix based
+	on patch from Matthias Clasen)
+
+	* gdk/Makefile.am: Patch from Daniel Elstner to use glib-mkenums
+	instead of makeenums.pl.
+
+	* gdk/{x11,linux-fb,win32}/Makefile.am: Hack to
+	get gdkenumtypes.h built first.
+
 Tue May 14 18:41:58 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/stock-icons/Makefile.am (gtkstockpixbufs.h): 

@@ -168,7 +168,7 @@ lib_LTLIBRARIES = $(gdktargetlib)
 
 EXTRA_LTLIBRARIES = libgdk-x11-2.0.la libgdk-linux-fb-2.0.la libgdk-win32-2.0.la
 
-MAINTAINERCLEANFILES =
+MAINTAINERCLEANFILES = gdkenumtypes.h stamp-gdkenumtypes.h
 EXTRA_HEADERS =
 
 #
@@ -189,15 +189,33 @@ if DISABLE_EXPLICIT_DEPS
 endif
 
 #note: not gdkconfig.h
-BUILT_SOURCES = stamp-gc-h @REBUILD@ gdkenumtypes.c gdkenumtypes.h
+BUILT_SOURCES = stamp-gc-h @REBUILD@ gdkenumtypes.h
 
-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) $(srcdir)/makeenums.pl
-	cd $(srcdir) \
-	&& $(PERL) ./makeenums.pl include $(gdk_public_h_sources) > gdkenumtypes.h
+# Generate built header without using automake-1.4 BUILT_SOURCES
+$(libgdk_x11_2_0_la_OBJECTS) $(libgdk_linux_fb_2_0_la_OBJECTS) $(libgdk_win32_2_0_la_OBJECTS): gdkenumtypes.h
 
-gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) $(srcdir)/makeenums.pl
-	cd $(srcdir) \
-	&& $(PERL) ./makeenums.pl cfile $(gdk_public_h_sources) > gdkenumtypes.c
+$(srcdir)/gdkenumtypes.h: stamp-gdkenumtypes.h
+	@true
+stamp-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) Makefile
+	( cd $(srcdir) && glib-mkenums \
+			--fhead "#ifndef __GDK_ENUM_TYPES_H__\n#define __GDK_ENUM_TYPES_H__\n\n#include <glib-object.h>\n\nG_BEGIN_DECLS\n" \
+			--fprod "/* enumerations from \"@filename@\" */\n" \
+			--vhead "GType @enum_name@_get_type (void);\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n" \
+			--ftail "G_END_DECLS\n\n#endif /* __GDK_ENUM_TYPES_H__ */" \
+		$(gdk_public_h_sources) ) >> xgen-geth \
+	&& (cmp -s xgen-geth $(srcdir)/gdkenumtypes.h || cp xgen-geth $(srcdir)/gdkenumtypes.h ) \
+	&& rm -f xgen-geth \
+	&& echo timestamp > $(@F)
+$(srcdir)/gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) Makefile
+	( cd $(srcdir) && glib-mkenums \
+			--fhead "#define GDK_ENABLE_BROKEN\n#include \"gdk.h\"" \
+			--fprod "\n/* enumerations from \"@filename@\" */" \
+			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
+			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+			--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (\"@EnumName@\", values);\n  }\n  return etype;\n}\n" \
+		$(gdk_public_h_sources) ) > xgen-getc \
+	&& cp xgen-getc $(srcdir)/gdkenumtypes.c  \
+	&& rm -f xgen-getc
 
 gdkconfig.h: stamp-gc-h
 	@if test -f gdkconfig.h; then :; \
