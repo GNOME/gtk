@@ -173,7 +173,7 @@ static void     default_change_palette_func             (GdkScreen	   *screen,
 static gpointer parent_class = NULL;
 static guint color_selection_signals[LAST_SIGNAL] = { 0 };
 
-static gchar* default_colors = "black:white:gray50:red:purple:blue:light blue:green:yellow:orange:lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90";
+static const gchar default_colors[] = "black:white:gray50:red:purple:blue:light blue:green:yellow:orange:lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90";
 
 static GtkColorSelectionChangePaletteFunc noscreen_change_palette_hook = default_noscreen_change_palette_func;
 static GtkColorSelectionChangePaletteWithScreenFunc change_palette_hook = default_change_palette_func;

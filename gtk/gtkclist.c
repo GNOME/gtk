@@ -463,7 +463,7 @@ static void drag_dest_cell            (GtkCList         *clist,
 static GtkContainerClass *parent_class = NULL;
 static guint clist_signals[LAST_SIGNAL] = {0};
 
-static GtkTargetEntry clist_target_table = { "gtk-clist-drag-reorder", 0, 0};
+static const GtkTargetEntry clist_target_table = { "gtk-clist-drag-reorder", 0, 0};
 
 GtkType
 gtk_clist_get_type (void)

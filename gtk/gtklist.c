@@ -168,9 +168,9 @@ static void gtk_list_drag_begin (GtkWidget      *widget,
 static GtkContainerClass *parent_class = NULL;
 static guint list_signals[LAST_SIGNAL] = { 0 };
 
-static const gchar *vadjustment_key = "gtk-vadjustment";
+static const gchar vadjustment_key[] = "gtk-vadjustment";
 static guint        vadjustment_key_id = 0;
-static const gchar *hadjustment_key = "gtk-hadjustment";
+static const gchar hadjustment_key[] = "gtk-hadjustment";
 static guint        hadjustment_key_id = 0;
 
 GtkType

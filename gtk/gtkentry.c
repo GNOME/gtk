@@ -93,7 +93,7 @@ typedef enum {
   CURSOR_DND
 } CursorType;
 
-static GtkTargetEntry target_table[] = {
+static const GtkTargetEntry target_table[] = {
   { "UTF8_STRING",   0, 0 },
   { "COMPOUND_TEXT", 0, 0 },
   { "TEXT",          0, 0 },

@@ -48,7 +48,7 @@ struct _GtkOptionMenuProps
   gint focus_pad;
 };
 
-static GtkOptionMenuProps default_props = {
+static const GtkOptionMenuProps default_props = {
   TRUE,
   { 7, 13 },
   { 7, 5, 2, 2 },		/* Left, right, top, bottom */

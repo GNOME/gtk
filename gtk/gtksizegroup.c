@@ -47,7 +47,7 @@ static void add_widget_to_closure (GtkWidget         *widget,
 				   GSList           **widgets);
 
 static GQuark size_groups_quark;
-static const gchar *size_groups_tag = "gtk-size-groups";
+static const gchar size_groups_tag[] = "gtk-size-groups";
 
 static GSList *
 get_size_groups (GtkWidget *widget)

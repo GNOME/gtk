@@ -81,7 +81,7 @@
  *
  */
 
-#if 0
+#if 1
 #define DEBUG_VALIDATION_AND_SCROLLING
 #endif
 
@@ -399,7 +399,7 @@ enum
   TARGET_TEXT_BUFFER_CONTENTS
 };
 
-static GtkTargetEntry target_table[] = {
+static const GtkTargetEntry target_table[] = {
   { "GTK_TEXT_BUFFER_CONTENTS", GTK_TARGET_SAME_APP,
     TARGET_TEXT_BUFFER_CONTENTS },
   { "UTF8_STRING", 0, TARGET_UTF8_STRING },

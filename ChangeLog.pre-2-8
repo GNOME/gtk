@@ -1,3 +1,26 @@
+2002-12-10  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tree_plus.xpm: 
+	* gtk/tree_plus.xbm: 
+	* gtk/tree_minus.xpm: 
+	* gtk/tree_minus.xbm: 
+	* gtk/line-wrap.xbm: 
+	* gtk/line-arrow.xbm: 
+	* gtk/gtktextview.c: 
+	* gtk/gtktextutil.c: 
+	* gtk/gtkstyle.c: 
+	* gtk/gtkstock.c: 
+	* gtk/gtksizegroup.c: 
+	* gtk/gtkselection.c: 
+	* gtk/gtkoptionmenu.c: 
+	* gtk/gtklist.c: 
+	* gtk/gtkfilesel.c: 
+	* gtk/gtkentry.c: 
+	* gtk/gtkcolorsel.c: 
+	* gtk/gtkclist.c: 
+	* gtk/gtkclipboard.c: 
+	* gtk/gtkbutton.c: Data constness fixes.  (#75754)
+
 Tue Dec 10 14:37:41 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate)

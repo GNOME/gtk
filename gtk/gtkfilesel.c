@@ -1016,11 +1016,11 @@ static void
 file_selection_setup_dnd (GtkFileSelection *filesel)
 {
   GtkWidget *eventbox;
-  static GtkTargetEntry drop_types[] = {
+  static const GtkTargetEntry drop_types[] = {
     { "text/uri-list", 0, TARGET_URILIST}
   };
   static gint n_drop_types = sizeof(drop_types)/sizeof(drop_types[0]);
-  static GtkTargetEntry drag_types[] = {
+  static const GtkTargetEntry drag_types[] = {
     { "text/uri-list", 0, TARGET_URILIST},
     { "UTF8_STRING", 0, TARGET_UTF8_STRING },
     { "STRING", 0, 0 },
@@ -1199,7 +1199,7 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
 G_CONST_RETURN gchar*
 gtk_file_selection_get_filename (GtkFileSelection *filesel)
 {
-  static gchar nothing[2] = "";
+  static const gchar nothing[2] = "";
   static gchar something[MAXPATHLEN*2];
   char *sys_filename;
   const char *text;
@@ -2519,7 +2519,7 @@ static gchar*
 cmpl_completion_fullname (const gchar     *text,
 			  CompletionState *cmpl_state)
 {
-  static char nothing[2] = "";
+  static const char nothing[2] = "";
 
   if (!cmpl_state_okay (cmpl_state))
     {

@@ -260,7 +260,7 @@ gtk_stock_item_free (GtkStockItem *item)
   g_free (item);
 }
 
-static GtkStockItem builtin_items [] =
+static const GtkStockItem builtin_items [] =
 {
   /* KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate */ 
  
