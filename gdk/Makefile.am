@@ -1,5 +1,7 @@
 ## Makefile.am for gtk+/gdk
 
+SUBDIRS=x11
+
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gdk\"	\
 	-I$(top_srcdir)		\
@@ -26,6 +28,9 @@ libgdk_la_LDFLAGS = @STRIP_BEGIN@ \
 	@x_libs@	\
 	-lm		\
 @STRIP_END@
+
+libgdk_la_LIBADD = \
+	x11/libgdk-x11.la	
 
 #
 # setup source file variables
@@ -91,9 +96,6 @@ gdk_c_sources = @STRIP_BEGIN@ \
 	gdkwindow.c	\
 	gdkxid.c 	\
 	MwmUtil.h       \
-	gxid_lib.h	\
-	gxid_proto.h	\
-        gxid_lib.c	\
 @STRIP_END@
 
 #
@@ -137,21 +139,6 @@ gdkconfig.h: stamp-gc-h
 stamp-gc-h: ../config.status
 	cd .. && CONFIG_FILES= CONFIG_HEADERS= CONFIG_OTHER=gdk/gdkconfig.h ./config.status
 	echo timestamp > stamp-gc-h
-
-#
-# extra programs
-#
-EXTRA_PROGRAMS = gxid
-bin_PROGRAMS = @xinput_progs@
-LDADDS = @STRIP_BEGIN@ \
-	@x_ldflags@	\
-	@x_libs@	\
-	@GLIB_LIBS@	\
-	-lm		\
-@STRIP_END@
-gxid_SOURCES = gxid.c
-gxid_LDADD = $(LDADDS)
-
 
 .PHONY: files
 

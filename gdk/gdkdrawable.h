@@ -1,7 +1,7 @@
 #ifndef __GDK_DRAWABLE_H__
 #define __GDK_DRAWABLE_H__
 
-#include <gdktypes.h>
+#include <gdk/gdktypes.h>
 
 #ifdef __cplusplus
 extern "C" {

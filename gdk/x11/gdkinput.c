@@ -29,6 +29,7 @@
 #include <X11/Xutil.h>
 #include "config.h"
 
+#include "gdkx.h"
 #include "gdkinput.h"
 #include "gdkprivate.h"
 #include "gdkinputprivate.h"
