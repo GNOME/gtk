@@ -354,6 +354,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
   GtkRBNode *node;
   GtkTreePath *anchor_path;
   gboolean retval;
+  gboolean found_node;
 
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
   g_return_val_if_fail (selection->type != GTK_SELECTION_MULTIPLE, FALSE);
@@ -371,29 +372,30 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
   if (anchor_path == NULL)
     return FALSE;
 
-  if (iter == NULL)
-    {
-      gtk_tree_path_free (anchor_path);
-      return TRUE;
-    }
-
   retval = FALSE;
 
-  if (!_gtk_tree_view_find_node (selection->tree_view,
-                                 anchor_path,
-                                 &tree,
-                                 &node) &&
-      ! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+  found_node = !_gtk_tree_view_find_node (selection->tree_view,
+                                          anchor_path,
+                                          &tree,
+                                          &node);
+
+  if (found_node && GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+    {
+      /* we only want to return the anchor if it exists in the rbtree and
+       * is selected.
+       */
+      if (iter == NULL)
+	retval = TRUE;
+      else
+        retval = gtk_tree_model_get_iter (selection->tree_view->priv->model,
+                                          iter,
+                                          anchor_path);
+    }
+  else
     {
       /* We don't want to return the anchor if it isn't actually selected.
        */
       retval = FALSE;
-    }
-  else
-    {
-      retval = gtk_tree_model_get_iter (selection->tree_view->priv->model,
-                                        iter,
-                                        anchor_path);
     }
 
   gtk_tree_path_free (anchor_path);

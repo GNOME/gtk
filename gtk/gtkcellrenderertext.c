@@ -146,7 +146,6 @@ gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
   GTK_CELL_RENDERER (celltext)->yalign = 0.5;
   GTK_CELL_RENDERER (celltext)->xpad = 2;
   GTK_CELL_RENDERER (celltext)->ypad = 2;
-  GTK_CELL_RENDERER (celltext)->mode = GTK_CELL_RENDERER_MODE_EDITABLE;
   celltext->fixed_height_rows = -1;
   celltext->font = pango_font_description_new ();
 }
@@ -230,7 +229,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                    g_param_spec_boolean ("editable",
                                                          _("Editable"),
                                                          _("Whether the text can be modified by the user"),
-                                                         TRUE,
+                                                         FALSE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
@@ -979,6 +978,10 @@ gtk_cell_renderer_text_set_property (GObject      *object,
     case PROP_EDITABLE:
       celltext->editable = g_value_get_boolean (value);
       celltext->editable_set = TRUE;
+      if (celltext->editable)
+        GTK_CELL_RENDERER (celltext)->mode = GTK_CELL_RENDERER_MODE_EDITABLE;
+      else
+        GTK_CELL_RENDERER (celltext)->mode = GTK_CELL_RENDERER_MODE_INERT;
       g_object_notify (object, "editable_set");
       break;
 

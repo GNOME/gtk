@@ -1,3 +1,22 @@
+Sat Apr 13 22:49:45 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #75510
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_get_selected): make this
+	function work correctly and more sane
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): remove
+	node->children from rbtree before emitting GtkTreeSelection::changed
+
+Sat Apr 13 17:15:12 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_init): dont set
+	the mode to GTK_CELL_RENDERER_MODE_EDITABLE by default,
+	(gtk_cell_renderer_text_class_init): for some reason our default for
+	editable was TRUE, of course this is FALSE.
+	(gtk_cell_renderer_text_set_property): update mode when editable
+	has been changed.
+
 2002-04-12  jacob berkman  <jacob@ximian.com>
 
 	* gdk/x11/xsettings-client.c (fetch_card8): fix cut-n-paste bug

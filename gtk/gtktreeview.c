@@ -8837,8 +8837,12 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
     }
 
   if (gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children))
-    g_signal_emit_by_name (G_OBJECT (tree_view->priv->selection), "changed", 0);
-  _gtk_rbtree_remove (node->children);
+    {
+      _gtk_rbtree_remove (node->children);
+      g_signal_emit_by_name (G_OBJECT (tree_view->priv->selection), "changed", 0);
+    }
+  else
+    _gtk_rbtree_remove (node->children);
 
   if (tree_view->priv->expand_collapse_timeout)
     {
