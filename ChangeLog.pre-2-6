@@ -1,3 +1,8 @@
+Fri May 17 16:05:34 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (REBUILD_PNGS): Re-add REBUILD_PNGS
+	definition that got accidentally removed.
+
 Fri May 17 14:40:24 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimmulticontext.c (gtk_im_multicontext_set_slave): 
@@ -8,7 +13,7 @@ Fri May 17 14:40:24 2002  Owen Taylor  <otaylor@redhat.com>
 	* modules/input/gtkimcontextxim.c (status_window_free): 
 	Patch from Federico Mena Quintero to fix problem where
 	references to IMContextXIM were kept around after
-	module was unloaded.
+	module was unloaded. (#77008)
 
 	* gtk/gtkdnd.c (gtk_drag_dest_set): NULL initialize
 	proxy window.

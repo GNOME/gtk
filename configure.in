@@ -744,6 +744,12 @@ dnl Test for libpng
 *** from CVS.])
   fi
 
+  REBUILD_PNGS=\#
+  if test -z "$LIBPNG"; then
+     REBUILD_PNGS=
+  fi
+  AC_SUBST(REBUILD_PNGS)
+
 AC_SUBST(LIBTIFF)
 AC_SUBST(LIBJPEG)
 AC_SUBST(LIBPNG)
