@@ -1,3 +1,11 @@
+2002-01-30  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_destroy): remove unused
+	variable.
+
+	* gtk/gtkwindow.c (gtk_window_get_icon): function returns a value,
+	so return NULL with g_return_val_if_fail instead of g_return_if_fail.
+
 2002-01-30  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/*.c: Remove excess g_return_if_fail calls from static

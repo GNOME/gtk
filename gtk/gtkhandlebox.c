@@ -328,8 +328,6 @@ gtk_handle_box_new (void)
 static void
 gtk_handle_box_destroy (GtkObject *object)
 {
-  GtkHandleBox *hb = GTK_HANDLE_BOX (object);
-
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }

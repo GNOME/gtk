@@ -2251,7 +2251,7 @@ gtk_window_get_icon (GtkWindow  *window)
 {
   GtkWindowIconInfo *info;
 
-  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
   info = get_icon_info (window);
   if (info && info->icon_list)
