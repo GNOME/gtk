@@ -30,7 +30,10 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkwidget.h>
-
+#ifdef G_PLATFORM_WIN32
+#include <gtk/gtkbox.h>
+#include <gtk/gtkwindow.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
