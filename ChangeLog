@@ -1,5 +1,8 @@
 2004-11-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (new_folder_button_clicked): 
+	Don't leak the path.  (#157301, Carlos Garnacho Parro)
+
 	* gdk/x11/gdkdnd-x11.c (gdk_drag_motion): Handle the 
 	case that the protocol version in the context is not 
 	set yet.  (#157123, James Henstridge)

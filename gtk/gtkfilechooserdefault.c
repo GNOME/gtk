@@ -1557,6 +1557,8 @@ new_folder_button_clicked (GtkButton             *button,
 			    path,
 			    impl->list_name_column,
 			    TRUE);
+
+  gtk_tree_path_free (path);
 }
 
 /* Idle handler for creating a new folder after editing its name cell, or for
