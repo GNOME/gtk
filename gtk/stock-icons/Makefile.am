@@ -67,6 +67,7 @@ IMAGES = @STRIP_BEGIN@ 			\
 	stock_print_24.png 		\
 	stock_print_preview_16.png 	\
 	stock_print_preview_24.png 	\
+	stock_properties_16.png		\
 	stock_properties_24.png 	\
 	stock_redo_16.png		\
 	stock_redo_24.png 		\
@@ -193,6 +194,7 @@ VARIABLES4 = @STRIP_BEGIN@ 									\
                 stock_print_24			$(srcdir)/stock_print_24.png             	\
                 stock_print_preview_16		$(srcdir)/stock_print_preview_16.png    	\
                 stock_print_preview_24		$(srcdir)/stock_print_preview_24.png            \
+		stock_properties_16		$(srcdir)/stock_properties_16.png		\
                 stock_properties_24		$(srcdir)/stock_properties_24.png             	\
 		stock_redo_16			$(srcdir)/stock_redo_16.png			\
                 stock_redo_24			$(srcdir)/stock_redo_24.png             	\
@@ -204,9 +206,9 @@ VARIABLES4 = @STRIP_BEGIN@ 									\
 		stock_right_arrow_16		$(srcdir)/stock_right_arrow_16.png		\
                 stock_right_arrow_24		$(srcdir)/stock_right_arrow_24.png             	\
 		stock_save_16			$(srcdir)/stock_save_16.png			\
-		stock_save_24			$(srcdir)/stock_save_24.png			\
 @STRIP_END@
 VARIABLES5 = @STRIP_BEGIN@ 									\
+		stock_save_24			$(srcdir)/stock_save_24.png			\
 		stock_save_as_16		$(srcdir)/stock_save_as_16.png			\
                 stock_save_as_24		$(srcdir)/stock_save_as_24.png             	\
 		stock_search_16			$(srcdir)/stock_search_16.png			\
@@ -226,9 +228,9 @@ VARIABLES5 = @STRIP_BEGIN@ 									\
 		stock_text_italic_16		$(srcdir)/stock_text_italic_16.png		\
                 stock_text_italic_24		$(srcdir)/stock_text_italic_24.png             	\
 		stock_text_strikethrough_16	$(srcdir)/stock_text_strikethrough_16.png	\
-                stock_text_strikethrough_24	$(srcdir)/stock_text_strikethrough_24.png       \
 @STRIP_END@
 VARIABLES6 = @STRIP_BEGIN@ 									\
+                stock_text_strikethrough_24	$(srcdir)/stock_text_strikethrough_24.png       \
 		stock_text_underline_16		$(srcdir)/stock_text_underline_16.png		\
                 stock_text_underline_24		$(srcdir)/stock_text_underline_24.png           \
                 stock_top_16			$(srcdir)/stock_top_16.png             		\
