@@ -103,7 +103,6 @@ gboolean         gtk_tree_view_column_get_visible         (GtkTreeViewColumn    
 void             gtk_tree_view_column_set_col_type        (GtkTreeViewColumn     *tree_column,
 							   GtkTreeViewColumnType  type);
 gint             gtk_tree_view_column_get_col_type        (GtkTreeViewColumn     *tree_column);
-gint             gtk_tree_view_column_get_preferred_size  (GtkTreeViewColumn     *tree_column);
 gint             gtk_tree_view_column_get_size            (GtkTreeViewColumn     *tree_column);
 void             gtk_tree_view_column_set_size            (GtkTreeViewColumn     *tree_column,
 							   gint                   width);
