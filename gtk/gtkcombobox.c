@@ -632,11 +632,35 @@ gtk_combo_box_menu_hide (GtkWidget *menu,
 }
 
 static void
+gtk_combo_box_detacher (GtkWidget *widget,
+			GtkMenu	  *menu)
+{
+  GtkComboBox *combo_box;
+
+  g_return_if_fail (GTK_IS_COMBO_BOX (widget));
+
+  combo_box = GTK_COMBO_BOX (widget);
+  g_return_if_fail (combo_box->priv->popup_widget == (GtkWidget*) menu);
+
+  g_signal_handlers_disconnect_by_func (menu,
+					gtk_combo_box_menu_show,
+					combo_box);
+  g_signal_handlers_disconnect_by_func (menu,
+					gtk_combo_box_menu_hide,
+					combo_box);
+  
+  combo_box->priv->popup_widget = NULL;
+}
+
+static void
 gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
                                 GtkWidget   *popup)
 {
   if (GTK_IS_MENU (combo_box->priv->popup_widget))
-    combo_box->priv->popup_widget = NULL;
+    {
+      gtk_menu_detach (GTK_MENU (combo_box->priv->popup_widget));
+      combo_box->priv->popup_widget = NULL;
+    }
   else if (combo_box->priv->popup_widget)
     {
       gtk_container_remove (GTK_CONTAINER (combo_box->priv->popup_frame),
@@ -660,14 +684,18 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
       g_signal_connect (popup, "hide",
                         G_CALLBACK (gtk_combo_box_menu_hide), combo_box);
 
-      /* FIXME: need to attach to widget? */
+      gtk_menu_attach_to_widget (GTK_MENU (popup),
+				 GTK_WIDGET (combo_box),
+				 gtk_combo_box_detacher);
     }
   else
     {
       if (!combo_box->priv->popup_window)
         {
           combo_box->priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
-
+	  gtk_window_set_screen (combo_box->priv->popup_window, 
+				 gtk_widget_get_screen (combo_box));
+	  
           combo_box->priv->popup_frame = gtk_frame_new (NULL);
           gtk_frame_set_shadow_type (GTK_FRAME (combo_box->priv->popup_frame),
                                      GTK_SHADOW_NONE);

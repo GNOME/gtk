@@ -1,3 +1,9 @@
+Sun Feb  8 01:44:06 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_popup_widget): Make popups 
+	come up on the same screen as the combo box.  (#133544, 
+	Morten Welinder)
+
 Fri Feb  6 23:40:24 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (create_file_list): clean up the
