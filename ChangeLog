@@ -1,3 +1,16 @@
+Sun Oct 13 16:20:41 2002  Manish Singh  <yosh@gimp.org>
+
+	* tests/pixbuf-randomly-modified.c tests/prop-editor.c
+	tests/testcalendar.c tests/testdnd.c tests/testgtk.c tests/testinput.c
+	tests/testmultidisplay.c tests/testmultiscreen.c tests/testrgb.c
+	tests/testselection.c tests/testsocket.c tests/testsocket_common.c
+	tests/testtext.c tests/testtextbuffer.c tests/testtreecolumns.c
+	tests/testtreeedit.c tests/testtreeflow.c tests/testtreefocus.c
+	tests/testtreesort.c tests/testtreeview.c tests/testxinerama.c
+	tests/treestoretest.c: Deprecation cleanup
+
+	* tests/Makefile.am: Added disable deprecation flags
+
 Sun Oct 13 13:43:16 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkcurve.[ch] gtk/gtkgamma.[ch] gtk/gtklayout.[ch]

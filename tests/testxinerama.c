@@ -65,8 +65,8 @@ main (int argc, char *argv[])
       gtk_label_set_markup (GTK_LABEL (label), str);
       g_free (str);
       button = gtk_button_new_with_label ("Close");
-      g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (gtk_main_quit), NULL);
-      g_signal_connect (G_OBJECT (window), "configure-event", G_CALLBACK (request), label);
+      g_signal_connect (button, "clicked", G_CALLBACK (gtk_main_quit), NULL);
+      g_signal_connect (window, "configure-event", G_CALLBACK (request), label);
       vbox = gtk_vbox_new (TRUE, 1);
       gtk_container_add (GTK_CONTAINER (window), vbox);
       gtk_container_add (GTK_CONTAINER (vbox), label);

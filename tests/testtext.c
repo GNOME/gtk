@@ -75,14 +75,14 @@ GSList *views = NULL;
 static void
 push_active_window (GtkWindow *window)
 {
-  g_object_ref (G_OBJECT (window));
+  g_object_ref (window);
   active_window_stack = g_slist_prepend (active_window_stack, window);
 }
 
 static void
 pop_active_window (void)
 {
-  gtk_object_unref (active_window_stack->data);
+  g_object_unref (active_window_stack->data);
   active_window_stack = g_slist_delete_link (active_window_stack, active_window_stack);
 }
 
@@ -139,19 +139,19 @@ filesel_run (GtkWindow    *parent,
     gtk_file_selection_set_filename (GTK_FILE_SELECTION (filesel), start_file);
 
   
-  g_object_set_data (G_OBJECT (filesel), "ok-func", (gpointer)func);
+  g_object_set_data (G_OBJECT (filesel), "ok-func", func);
   g_object_set_data (G_OBJECT (filesel), "ok-data", data);
   g_object_set_data (G_OBJECT (filesel), "ok-result", &result);
 
-  gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filesel)->ok_button),
-		      "clicked",
-		      GTK_SIGNAL_FUNC (filesel_ok_cb), filesel);
-  gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (filesel)->cancel_button),
-			     "clicked",
-			     GTK_SIGNAL_FUNC (gtk_widget_destroy), GTK_OBJECT (filesel));
+  g_signal_connect (GTK_FILE_SELECTION (filesel)->ok_button,
+		    "clicked",
+		    G_CALLBACK (filesel_ok_cb), filesel);
+  g_signal_connect_swapped (GTK_FILE_SELECTION (filesel)->cancel_button,
+			    "clicked",
+			    G_CALLBACK (gtk_widget_destroy), filesel);
 
-  gtk_signal_connect (GTK_OBJECT (filesel), "destroy",
-		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  g_signal_connect (filesel, "destroy",
+		    G_CALLBACK (gtk_main_quit), NULL);
   gtk_window_set_modal (GTK_WINDOW (filesel), TRUE);
 
   gtk_widget_show (filesel);
@@ -183,7 +183,7 @@ msgbox_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
   if (event->keyval == GDK_Escape)
     {
-      gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+      g_signal_stop_emission_by_name (widget, "key_press_event");
       gtk_object_destroy (GTK_OBJECT (widget));
       return TRUE;
     }
@@ -226,13 +226,13 @@ msgbox_run (GtkWindow  *parent,
 
   /* Quit our recursive main loop when the dialog is destroyed.
    */
-  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
-		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  g_signal_connect (dialog, "destroy",
+		    G_CALLBACK (gtk_main_quit), NULL);
 
   /* Catch Escape key presses and have them destroy the dialog
    */
-  gtk_signal_connect (GTK_OBJECT (dialog), "key_press_event",
-		      GTK_SIGNAL_FUNC (msgbox_key_press_cb), NULL);
+  g_signal_connect (dialog, "key_press_event",
+		    G_CALLBACK (msgbox_key_press_cb), NULL);
 
   /* Fill in the contents of the widget
    */
@@ -264,8 +264,8 @@ msgbox_run (GtkWindow  *parent,
       if (default_index == 0)
 	gtk_widget_grab_default (button);
       
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC (msgbox_yes_cb), &result);
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (msgbox_yes_cb), &result);
     }
 
   /* When No is clicked, call the msgbox_no_cb
@@ -280,8 +280,8 @@ msgbox_run (GtkWindow  *parent,
       if (default_index == 0)
 	gtk_widget_grab_default (button);
       
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC (msgbox_no_cb), &result);
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (msgbox_no_cb), &result);
     }
 
   /* When Cancel is clicked, destroy the dialog
@@ -295,8 +295,8 @@ msgbox_run (GtkWindow  *parent,
       if (default_index == 1)
 	gtk_widget_grab_default (button);
       
-      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 GTK_SIGNAL_FUNC (gtk_object_destroy), GTK_OBJECT (dialog));
+      g_signal_connect_swapped (button, "clicked",
+				G_CALLBACK (gtk_object_destroy), dialog);
     }
 
   gtk_widget_show_all (dialog);
@@ -393,7 +393,7 @@ tag_event_handler (GtkTextTag *tag, GtkWidget *widget, GdkEvent *event,
 static void
 setup_tag (GtkTextTag *tag)
 {
-  g_signal_connect (G_OBJECT (tag),
+  g_signal_connect (tag,
 		    "event",
 		    G_CALLBACK (tag_event_handler),
 		    NULL);
@@ -529,7 +529,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
 
   anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
 
-  g_object_ref (G_OBJECT (anchor));
+  g_object_ref (anchor);
   
   g_object_set_data_full (G_OBJECT (buffer), "anchor", anchor,
                           (GDestroyNotify) g_object_unref);
@@ -617,7 +617,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
       ++i;
     }
 
-  g_object_unref (G_OBJECT (pixbuf));
+  g_object_unref (pixbuf);
   
   printf ("%d lines %d chars\n",
           gtk_text_buffer_get_line_count (buffer),
@@ -1198,7 +1198,7 @@ do_search (gpointer callback_data,
 
   search_text = gtk_text_view_new_with_buffer (buffer);
 
-  g_object_unref (G_OBJECT (buffer));
+  g_object_unref (buffer);
   
   gtk_box_pack_end (GTK_BOX (GTK_DIALOG (dialog)->vbox),
                     search_text,
@@ -1206,10 +1206,10 @@ do_search (gpointer callback_data,
 
   g_object_set_data (G_OBJECT (dialog), "buffer", buffer);
   
-  gtk_signal_connect (GTK_OBJECT (dialog),
-                      "response",
-                      GTK_SIGNAL_FUNC (dialog_response_callback),
-                      view);
+  g_signal_connect (dialog,
+                    "response",
+                    G_CALLBACK (dialog_response_callback),
+                    view);
 
   gtk_widget_show (search_text);
 
@@ -1352,7 +1352,7 @@ add_movable_child (GtkTextView      *text_view,
 
   gtk_widget_show_all (event_box);
 
-  g_signal_connect (G_OBJECT (event_box), "event",
+  g_signal_connect (event_box, "event",
                     G_CALLBACK (movable_child_callback),
                     text_view);
 
@@ -1852,10 +1852,9 @@ buffer_search (Buffer     *buffer,
                                    "%d strings found and marked in red",
                                    i);
 
-  gtk_signal_connect_object (GTK_OBJECT (dialog),
-                             "response",
-                             GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                             GTK_OBJECT (dialog));
+  g_signal_connect_swapped (dialog,
+                            "response",
+                            G_CALLBACK (gtk_widget_destroy), dialog);
   
   gtk_widget_show (dialog);
 }
@@ -1888,7 +1887,7 @@ buffer_unref (Buffer *buffer)
     {
       buffer_set_colors (buffer, FALSE);
       buffers = g_slist_remove (buffers, buffer);
-      g_object_unref (G_OBJECT (buffer->buffer));
+      g_object_unref (buffer->buffer);
       g_free (buffer->filename);
       g_free (buffer);
     }
@@ -2070,7 +2069,7 @@ close_view (View *view)
   views = g_slist_remove (views, view);
   buffer_unref (view->buffer);
   gtk_widget_destroy (view->window);
-  g_object_unref (G_OBJECT (view->item_factory));
+  g_object_unref (view->item_factory);
   
   g_free (view);
   
@@ -2397,7 +2396,7 @@ line_numbers_expose (GtkWidget      *widget,
   g_array_free (pixels, TRUE);
   g_array_free (numbers, TRUE);
   
-  g_object_unref (G_OBJECT (layout));
+  g_object_unref (layout);
 
   /* don't stop emission, need to draw children */
   return FALSE;
@@ -2420,8 +2419,8 @@ create_view (Buffer *buffer)
   view->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_object_set_data (G_OBJECT (view->window), "view", view);
   
-  gtk_signal_connect (GTK_OBJECT (view->window), "delete_event",
-		      GTK_SIGNAL_FUNC (delete_event_cb), NULL);
+  g_signal_connect (view->window, "delete_event",
+		    G_CALLBACK (delete_event_cb), NULL);
 
   view->accel_group = gtk_accel_group_new ();
   view->item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", view->accel_group);
@@ -2461,14 +2460,14 @@ create_view (Buffer *buffer)
                                         GTK_TEXT_WINDOW_BOTTOM,
                                         15);
 
-  gtk_signal_connect (GTK_OBJECT (view->text_view),
-                      "expose_event",
-                      GTK_SIGNAL_FUNC (tab_stops_expose),
-                      NULL);  
+  g_signal_connect (view->text_view,
+                    "expose_event",
+                    G_CALLBACK (tab_stops_expose),
+                    NULL);  
 
-  g_signal_connect (G_OBJECT (view->buffer->buffer),
+  g_signal_connect (view->buffer->buffer,
 		    "mark_set",
-		    GTK_SIGNAL_FUNC (cursor_set_callback),
+		    G_CALLBACK (cursor_set_callback),
 		    view->text_view);
   
   /* Draw line numbers in the side windows; we should really be
@@ -2482,10 +2481,10 @@ create_view (Buffer *buffer)
                                         GTK_TEXT_WINDOW_LEFT,
                                         30);
   
-  gtk_signal_connect (GTK_OBJECT (view->text_view),
-                      "expose_event",
-                      GTK_SIGNAL_FUNC (line_numbers_expose),
-                      NULL);
+  g_signal_connect (view->text_view,
+                    "expose_event",
+                    G_CALLBACK (line_numbers_expose),
+                    NULL);
   
   gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (sw), view->text_view);

@@ -139,7 +139,7 @@ main (int argc, char *argv[])
 				  "visible", TRUE,
 				  NULL);
   
-  g_signal_connect (G_OBJECT (moving_button), "clicked", 
+  g_signal_connect (moving_button, "clicked", 
 		    G_CALLBACK (move), moving_vbox);
   
   gtk_container_add (GTK_CONTAINER (moving_vbox), moving_button);

@@ -156,7 +156,7 @@ testrgb_rgb_test (GtkWidget *drawing_area)
 			   0, 0, 0, 0, WIDTH, HEIGHT,
 			   GDK_RGB_DITHER_NORMAL,
 			   0, 0);
-	  gdk_pixbuf_unref (pixbuf);
+	  g_object_unref (pixbuf);
 	}
       gdk_flush ();
       total_time = g_timer_elapsed (timer, NULL) - start_time;
@@ -286,22 +286,21 @@ new_testrgb_window (void)
 			   "GtkWindow::title", "testrgb",
 			   "GtkWindow::allow_shrink", FALSE,
 			   NULL);
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      (GtkSignalFunc) quit_func, NULL);
+  g_signal_connect (window, "destroy",
+		    G_CALLBACK (quit_func), NULL);
 
   vbox = gtk_vbox_new (FALSE, 0);
 
   drawing_area = gtk_drawing_area_new ();
 
-  gtk_widget_set_usize (drawing_area, WIDTH, HEIGHT);
+  gtk_widget_set_size_request (drawing_area, WIDTH, HEIGHT);
   gtk_box_pack_start (GTK_BOX (vbox), drawing_area, FALSE, FALSE, 0);
   gtk_widget_show (drawing_area);
 
   button = gtk_button_new_with_label ("Quit");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     (GtkSignalFunc) gtk_widget_destroy,
-			     GTK_OBJECT (window));
+  g_signal_connect_swapped (button, "clicked",
+			    G_CALLBACK (gtk_widget_destroy), window);
 
   gtk_widget_show (button);
 
@@ -320,9 +319,7 @@ main (int argc, char **argv)
 
   gdk_rgb_set_verbose (TRUE);
 
-  gdk_rgb_init ();
-
-  gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
+  gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
   new_testrgb_window ();
 
   gtk_main ();

@@ -61,7 +61,7 @@ randomly_modify (const guchar *image, guint size)
       loader = gdk_pixbuf_loader_new ();
       gdk_pixbuf_loader_write (loader, img_copy, size, NULL);
       gdk_pixbuf_loader_close (loader, NULL);
-      g_object_unref (G_OBJECT (loader));
+      g_object_unref (loader);
     }
   g_free (img_copy);
 }

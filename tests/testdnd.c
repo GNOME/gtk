@@ -293,7 +293,8 @@ target_drag_leave	   (GtkWidget	       *widget,
 {
   g_print("leave\n");
   have_drag = FALSE;
-  gtk_pixmap_set (GTK_PIXMAP (widget), trashcan_closed, trashcan_closed_mask);
+  gtk_image_set_from_pixmap (GTK_IMAGE (widget),
+			     trashcan_closed, trashcan_closed_mask);
 }
 
 gboolean
@@ -309,7 +310,8 @@ target_drag_motion	   (GtkWidget	       *widget,
   if (!have_drag)
     {
       have_drag = TRUE;
-      gtk_pixmap_set (GTK_PIXMAP (widget), trashcan_open, trashcan_open_mask);
+      gtk_image_set_from_pixmap (GTK_IMAGE (widget),
+				 trashcan_closed, trashcan_closed_mask);
     }
 
   source_widget = gtk_drag_get_source_widget (context);
@@ -341,7 +343,8 @@ target_drag_drop	   (GtkWidget	       *widget,
   g_print("drop\n");
   have_drag = FALSE;
 
-  gtk_pixmap_set (GTK_PIXMAP (widget), trashcan_closed, trashcan_closed_mask);
+  gtk_image_set_from_pixmap (GTK_IMAGE (widget),
+			     trashcan_closed, trashcan_closed_mask);
 
   if (context->targets)
     {
@@ -497,10 +500,10 @@ popup_cb (gpointer data)
 				   GTK_DEST_DEFAULT_ALL,
 				   target_table, n_targets - 1, /* no rootwin */
 				   GDK_ACTION_COPY | GDK_ACTION_MOVE);
-		gtk_signal_connect (GTK_OBJECT (button), "drag_motion",
-				    GTK_SIGNAL_FUNC (popup_motion), NULL);
-		gtk_signal_connect (GTK_OBJECT (button), "drag_leave",
-				    GTK_SIGNAL_FUNC (popup_leave), NULL);
+		g_signal_connect (button, "drag_motion",
+				  G_CALLBACK (popup_motion), NULL);
+		g_signal_connect (button, "drag_leave",
+				  G_CALLBACK (popup_leave), NULL);
 	      }
 
 	  gtk_widget_show_all (table);
@@ -579,8 +582,8 @@ main (int argc, char **argv)
   gtk_init (&argc, &argv); 
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_signal_connect (GTK_OBJECT(window), "destroy",
-		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy",
+		    G_CALLBACK (gtk_main_quit), NULL);
 
   
   table = gtk_table_new (2, 2, FALSE);
@@ -607,8 +610,8 @@ main (int argc, char **argv)
 		     target_table, n_targets - 1, /* no rootwin */
 		     GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
-  gtk_signal_connect( GTK_OBJECT(label), "drag_data_received",
-		      GTK_SIGNAL_FUNC( label_drag_data_received), NULL);
+  g_signal_connect (label, "drag_data_received",
+		    G_CALLBACK( label_drag_data_received), NULL);
 
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
@@ -625,28 +628,28 @@ main (int argc, char **argv)
 		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 		    0, 0);
 
-  gtk_signal_connect (GTK_OBJECT (label), "drag_motion",
-		      GTK_SIGNAL_FUNC (popsite_motion), NULL);
-  gtk_signal_connect (GTK_OBJECT (label), "drag_leave",
-		      GTK_SIGNAL_FUNC (popsite_leave), NULL);
+  g_signal_connect (label, "drag_motion",
+		    G_CALLBACK (popsite_motion), NULL);
+  g_signal_connect (label, "drag_leave",
+		    G_CALLBACK (popsite_leave), NULL);
   
-  pixmap = gtk_pixmap_new (trashcan_closed, trashcan_closed_mask);
+  pixmap = gtk_image_new_from_pixmap (trashcan_closed, trashcan_closed_mask);
   gtk_drag_dest_set (pixmap, 0, NULL, 0, 0);
   gtk_table_attach (GTK_TABLE (table), pixmap, 1, 2, 0, 1,
 		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 		    0, 0);
 
-  gtk_signal_connect (GTK_OBJECT (pixmap), "drag_leave",
-		      GTK_SIGNAL_FUNC (target_drag_leave), NULL);
+  g_signal_connect (pixmap, "drag_leave",
+		    G_CALLBACK (target_drag_leave), NULL);
 
-  gtk_signal_connect (GTK_OBJECT (pixmap), "drag_motion",
-		      GTK_SIGNAL_FUNC (target_drag_motion), NULL);
+  g_signal_connect (pixmap, "drag_motion",
+		    G_CALLBACK (target_drag_motion), NULL);
 
-  gtk_signal_connect (GTK_OBJECT (pixmap), "drag_drop",
-		      GTK_SIGNAL_FUNC (target_drag_drop), NULL);
+  g_signal_connect (pixmap, "drag_drop",
+		    G_CALLBACK (target_drag_drop), NULL);
 
-  gtk_signal_connect (GTK_OBJECT (pixmap), "drag_data_received",
-		      GTK_SIGNAL_FUNC (target_drag_data_received), NULL);
+  g_signal_connect (pixmap, "drag_data_received",
+		    G_CALLBACK (target_drag_data_received), NULL);
 
   /* Drag site */
 
@@ -659,17 +662,17 @@ main (int argc, char **argv)
 			    gtk_widget_get_colormap (window),
 			    drag_icon, drag_mask);
 
-  gdk_pixmap_unref (drag_icon);
-  gdk_pixmap_unref (drag_mask);
+  g_object_unref (drag_icon);
+  g_object_unref (drag_mask);
 
   gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 		    0, 0);
 
-  gtk_signal_connect (GTK_OBJECT (button), "drag_data_get",
-		      GTK_SIGNAL_FUNC (source_drag_data_get), NULL);
-  gtk_signal_connect (GTK_OBJECT (button), "drag_data_delete",
-		      GTK_SIGNAL_FUNC (source_drag_data_delete), NULL);
+  g_signal_connect (button, "drag_data_get",
+		    G_CALLBACK (source_drag_data_get), NULL);
+  g_signal_connect (button, "drag_data_delete",
+		    G_CALLBACK (source_drag_data_delete), NULL);
 
   gtk_widget_show_all (window);
 

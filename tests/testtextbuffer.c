@@ -119,7 +119,7 @@ main (int argc, char** argv)
   
   run_tests (buffer);
   
-  g_object_unref (G_OBJECT (buffer));
+  g_object_unref (buffer);
   
   g_print ("All tests passed.\n");
 
@@ -874,7 +874,7 @@ fill_buffer (GtkTextBuffer *buffer)
 
   gtk_text_buffer_apply_tag (buffer, tag, &iter, &iter2);  
 
-  gdk_pixbuf_unref (pixbuf);
+  g_object_unref (pixbuf);
 }
 
 
@@ -939,7 +939,7 @@ test_line_separation (const char* str,
 
   /* FIXME tests for backward line */
   
-  g_object_unref (G_OBJECT (buffer));
+  g_object_unref (buffer);
 }
 
 
@@ -1160,5 +1160,5 @@ logical_motion_tests (void)
   
   g_print ("Logical motion tests passed\n");
 
-  g_object_unref (G_OBJECT (buffer));
+  g_object_unref (buffer);
 }

@@ -117,7 +117,7 @@ main (gint argc, gchar **argv)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "GtkTreeView editing sample");
-  gtk_signal_connect (GTK_OBJECT (window), "destroy", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_ETCHED_IN);
@@ -144,7 +144,7 @@ main (gint argc, gchar **argv)
 				       "text", STRING_COLUMN,
 				       "editable", IS_EDITABLE_COLUMN,
 				       NULL);
-  g_signal_connect (G_OBJECT (renderer), "edited",
+  g_signal_connect (renderer, "edited",
 		    G_CALLBACK (edited), tree_model);
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
@@ -152,7 +152,7 @@ main (gint argc, gchar **argv)
 		  		       "text", STRING_COLUMN,
 				       "editable", IS_EDITABLE_COLUMN,
 				       NULL);
-  g_signal_connect (G_OBJECT (renderer), "edited",
+  g_signal_connect (renderer, "edited",
 		    G_CALLBACK (edited), tree_model);
 
   renderer = gtk_cell_renderer_pixbuf_new ();
@@ -162,7 +162,7 @@ main (gint argc, gchar **argv)
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
   renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect (G_OBJECT (renderer), "toggled",
+  g_signal_connect (renderer, "toggled",
 		    G_CALLBACK (toggled), tree_model);
   
   g_object_set (G_OBJECT (renderer),

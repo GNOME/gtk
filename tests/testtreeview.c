@@ -36,25 +36,25 @@ static void run_automated_tests (void);
 
 /* This custom model is to test custom model use. */
 
-#define GTK_TYPE_MODEL_TYPES			(gtk_tree_model_types_get_type ())
-#define GTK_TREE_MODEL_TYPES(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_MODEL_TYPES, GtkTreeModelTypes))
-#define GTK_TREE_MODEL_TYPES_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MODEL_TYPES, GtkTreeModelTypesClass))
-#define GTK_IS_TREE_MODEL_TYPES(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_MODEL_TYPES))
-#define GTK_IS_TREE_MODEL_TYPES_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_MODEL_TYPES))
+#define GTK_TYPE_MODEL_TYPES				(gtk_tree_model_types_get_type ())
+#define GTK_TREE_MODEL_TYPES(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MODEL_TYPES, GtkTreeModelTypes))
+#define GTK_TREE_MODEL_TYPES_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_MODEL_TYPES, GtkTreeModelTypesClass))
+#define GTK_IS_TREE_MODEL_TYPES(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_MODEL_TYPES))
+#define GTK_IS_TREE_MODEL_TYPES_GET_CLASS(klass)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MODEL_TYPES))
 
 typedef struct _GtkTreeModelTypes       GtkTreeModelTypes;
 typedef struct _GtkTreeModelTypesClass  GtkTreeModelTypesClass;
 
 struct _GtkTreeModelTypes
 {
-  GtkObject parent;
+  GObject parent;
 
   gint stamp;
 };
 
 struct _GtkTreeModelTypesClass
 {
-  GtkObjectClass parent_class;
+  GObjectClass parent_class;
 
   guint        (* get_flags)       (GtkTreeModel *tree_model);   
   gint         (* get_n_columns)   (GtkTreeModel *tree_model);
@@ -104,7 +104,7 @@ struct _GtkTreeModelTypesClass
 				    GtkTreePath  *path);
 };
 
-GtkType             gtk_tree_model_types_get_type      (void);
+GType              gtk_tree_model_types_get_type      (void) G_GNUC_CONST;
 GtkTreeModelTypes *gtk_tree_model_types_new           (void);
 
 typedef enum
@@ -159,9 +159,9 @@ static void
 setup_column (GtkTreeViewColumn *col)
 {
   gtk_tree_view_column_set_clickable (col, TRUE);
-  g_signal_connect (G_OBJECT (col),
+  g_signal_connect (col,
 		    "clicked",
-		    (GCallback) col_clicked_cb,
+		    G_CALLBACK (col_clicked_cb),
 		    NULL);
 }
 
@@ -297,8 +297,8 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       
       rend = gtk_cell_renderer_toggle_new ();
 
-      g_signal_connect (G_OBJECT (rend), "toggled",
-			GTK_SIGNAL_FUNC (toggled_callback), tree_view);
+      g_signal_connect (rend, "toggled",
+			G_CALLBACK (toggled_callback), tree_view);
       
       col = gtk_tree_view_column_new_with_attributes ("Column 3",
                                                       rend,
@@ -313,7 +313,7 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
 
       image = gtk_image_new_from_pixbuf (pixbuf);
 
-      g_object_unref (G_OBJECT (pixbuf));
+      g_object_unref (pixbuf);
       
       gtk_widget_show (image);
       
@@ -326,7 +326,7 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
        */
       g_object_set (G_OBJECT (rend), "radio", TRUE, NULL);
       
-      g_signal_connect (G_OBJECT (rend), "toggled",
+      g_signal_connect (rend, "toggled",
 			G_CALLBACK (toggled_callback), tree_view);
       
       col = gtk_tree_view_column_new_with_attributes ("Column 4",
@@ -633,11 +633,11 @@ main (int    argc,
 
   model = create_list_model ();
   models[MODEL_SORTED_LIST] = gtk_tree_model_sort_new_with_model (model);
-  g_object_unref (G_OBJECT (model));
+  g_object_unref (model);
 
   model = create_tree_model ();
   models[MODEL_SORTED_TREE] = gtk_tree_model_sort_new_with_model (model);
-  g_object_unref (G_OBJECT (model));
+  g_object_unref (model);
 
   models[MODEL_EMPTY_LIST] = GTK_TREE_MODEL (gtk_list_store_new (1, G_TYPE_INT));
   models[MODEL_EMPTY_TREE] = GTK_TREE_MODEL (gtk_tree_store_new (1, G_TYPE_INT));
@@ -702,10 +702,10 @@ main (int    argc,
                     0, 0, 
                     0, 0);
 
-  gtk_signal_connect (GTK_OBJECT (om),
-                      "changed",
-                      GTK_SIGNAL_FUNC (model_selected),
-                      tv);
+  g_signal_connect (om,
+                    "changed",
+                    G_CALLBACK (model_selected),
+		    tv);
   
   /* Columns menu */
 
@@ -738,10 +738,10 @@ main (int    argc,
   set_columns_type (GTK_TREE_VIEW (tv), COLUMNS_LOTS);
   gtk_option_menu_set_history (GTK_OPTION_MENU (om), COLUMNS_LOTS);
   
-  gtk_signal_connect (GTK_OBJECT (om),
-                      "changed",
-                      GTK_SIGNAL_FUNC (columns_selected),
-                      tv);
+  g_signal_connect (om,
+                    "changed",
+                    G_CALLBACK (columns_selected),
+                    tv);
   
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
@@ -796,10 +796,10 @@ static gboolean     gtk_real_model_types_iter_parent     (GtkTreeModel        *t
 							   GtkTreeIter         *child);
 
 
-GtkType
+GType
 gtk_tree_model_types_get_type (void)
 {
-  static GtkType model_types_type = 0;
+  static GType model_types_type = 0;
 
   if (!model_types_type)
     {
@@ -823,7 +823,9 @@ gtk_tree_model_types_get_type (void)
 	NULL
       };
 
-      model_types_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeModelTypes", &model_types_info, 0);
+      model_types_type = g_type_register_static (G_TYPE_OBJECT,
+						 "GtkTreeModelTypes",
+						 &model_types_info, 0);
       g_type_add_interface_static (model_types_type,
 				   GTK_TYPE_TREE_MODEL,
 				   &tree_model_info);
@@ -1340,7 +1342,7 @@ run_automated_tests (void)
     while (gtk_tree_model_get_iter_first (model, &iter))
       gtk_list_store_remove (store, &iter);
     
-    g_object_unref (G_OBJECT (store));
+    g_object_unref (store);
   }
 
   {
@@ -1353,7 +1355,7 @@ run_automated_tests (void)
     /* Remove test until it is rewritten to work */
     /*    treestore_torture_recurse (store, &root, 0);*/
     
-    g_object_unref (G_OBJECT (store));
+    g_object_unref (store);
   }
 
   g_print ("Passed.\n");

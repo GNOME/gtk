@@ -54,7 +54,7 @@ make_selection_dialog (GdkScreen * screen,
 			   "type", GTK_WINDOW_TOPLEVEL,
 			   "title", "MultiDisplay Cut & Paste",
 			   "border_width", 10, NULL);
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
 
@@ -72,7 +72,7 @@ make_selection_dialog (GdkScreen * screen,
 			  NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_APPLY);
 
-  g_signal_connect (G_OBJECT (window), "response",
+  g_signal_connect (window, "response",
 		    G_CALLBACK (entry_dialog_response), double_entry);
 
   gtk_widget_show_all (window);
@@ -109,8 +109,8 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), dialog_label);
   gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
 		     display_entry);
-  gtk_signal_connect (GTK_OBJECT (dialog), "response",
-		      GTK_SIGNAL_FUNC (get_screen_response), display_entry);
+  g_signal_connect (dialog, "response",
+		    G_CALLBACK (get_screen_response), display_entry);
 
   gtk_widget_grab_focus (display_entry);
   gtk_widget_show_all (GTK_BIN (dialog)->child);
@@ -119,7 +119,7 @@ main (int argc, char *argv[])
     {
       if (screen2_name)
 	{
-	  if (!g_strcasecmp (screen2_name, ""))
+	  if (!g_ascii_strcasecmp (screen2_name, ""))
 	    g_printerr ("No display name, reverting to default display\n");
 	  
 	  dpy2 = gdk_display_open (screen2_name);

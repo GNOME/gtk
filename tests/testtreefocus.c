@@ -314,7 +314,7 @@ main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Card planning sheet");
-  gtk_signal_connect (GTK_OBJECT (window), "destroy", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   vbox = gtk_vbox_new (FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Jonathan's Holiday Card Planning Sheet"), FALSE, FALSE, 0);
@@ -340,7 +340,7 @@ main (int argc, char *argv[])
 
   /* Alex Column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (alex_toggled), model);
+  g_signal_connect (renderer, "toggled", G_CALLBACK (alex_toggled), model);
 
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
@@ -357,7 +357,7 @@ main (int argc, char *argv[])
 
   /* Havoc Column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (havoc_toggled), model);
+  g_signal_connect (renderer, "toggled", G_CALLBACK (havoc_toggled), model);
 
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
@@ -373,7 +373,7 @@ main (int argc, char *argv[])
 
   /* Tim Column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (tim_toggled), model);
+  g_signal_connect (renderer, "toggled", G_CALLBACK (tim_toggled), model);
 
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
@@ -390,7 +390,7 @@ main (int argc, char *argv[])
 
   /* Owen Column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (owen_toggled), model);
+  g_signal_connect (renderer, "toggled", G_CALLBACK (owen_toggled), model);
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "Owen",
@@ -405,7 +405,7 @@ main (int argc, char *argv[])
 
   /* Owen Column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (dave_toggled), model);
+  g_signal_connect (renderer, "toggled", G_CALLBACK (dave_toggled), model);
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "Dave",
@@ -420,16 +420,16 @@ main (int argc, char *argv[])
 
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
 
-  gtk_signal_connect (GTK_OBJECT (tree_view), "realize",
-		      GTK_SIGNAL_FUNC (gtk_tree_view_expand_all),
-		      NULL);
+  g_signal_connect (tree_view, "realize",
+		    G_CALLBACK (gtk_tree_view_expand_all),
+		    NULL);
   gtk_window_set_default_size (GTK_WINDOW (window),
 			       650, 400);
   gtk_widget_show_all (window);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Model");
-  gtk_signal_connect (GTK_OBJECT (window), "destroy", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   vbox = gtk_vbox_new (FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("The model revealed"), FALSE, FALSE, 0);
@@ -442,7 +442,7 @@ main (int argc, char *argv[])
 
 
   tree_view = gtk_tree_view_new_with_model (model);
-  g_object_unref (G_OBJECT (model));
+  g_object_unref (model);
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view), TRUE);
 
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
@@ -485,9 +485,9 @@ main (int argc, char *argv[])
 					       gtk_cell_renderer_text_new (),
 					       "text", 7, NULL);
 
-  gtk_signal_connect (GTK_OBJECT (tree_view), "realize",
-		      GTK_SIGNAL_FUNC (gtk_tree_view_expand_all),
-		      NULL);
+  g_signal_connect (tree_view, "realize",
+		    G_CALLBACK (gtk_tree_view_expand_all),
+		    NULL);
 			   
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
 

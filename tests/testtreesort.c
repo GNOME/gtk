@@ -89,7 +89,7 @@ main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Words, words, words - Window 1");
-  gtk_signal_connect (GTK_OBJECT (window), "destroy", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   vbox = gtk_vbox_new (FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Jonathan and Kristian's list of cool words. (And Anders' cool list of numbers) \n\nThis is just a GtkTreeStore"), FALSE, FALSE, 0);
@@ -150,8 +150,8 @@ main (int argc, char *argv[])
   
   smodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (model));
   ssmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (smodel));
+  g_object_unref (model);
 
-  g_object_unref (G_OBJECT (model));
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view), TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
@@ -206,7 +206,7 @@ main (int argc, char *argv[])
       window2 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window2), 
 			    "Words, words, words - window 2");
-      gtk_signal_connect (GTK_OBJECT (window2), "destroy", gtk_main_quit, NULL);
+      g_signal_connect (window2, "destroy", gtk_main_quit, NULL);
       vbox2 = gtk_vbox_new (FALSE, 8);
       gtk_container_set_border_width (GTK_CONTAINER (vbox2), 8);
       gtk_box_pack_start (GTK_BOX (vbox2), 
@@ -278,7 +278,7 @@ main (int argc, char *argv[])
       window3 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window3), 
 			    "Words, words, words - Window 3");
-      gtk_signal_connect (GTK_OBJECT (window3), "destroy", gtk_main_quit, NULL);
+      g_signal_connect (window3, "destroy", gtk_main_quit, NULL);
       vbox3 = gtk_vbox_new (FALSE, 8);
       gtk_container_set_border_width (GTK_CONTAINER (vbox3), 8);
       gtk_box_pack_start (GTK_BOX (vbox3), 

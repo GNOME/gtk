@@ -18,10 +18,10 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <gtk/gtk.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <gtk/gtk.h>
 
 #define DEF_PAD 10
 #define DEF_PAD_SMALL 5
@@ -51,36 +51,36 @@ enum {
  * GtkCalendar
  */
 
-void calendar_date_to_string( CalendarData *data,
+void calendar_date_to_string (CalendarData *data,
 			      char         *buffer,
-			      gint          buff_len )
+			      gint          buff_len)
 {
   struct tm tm;
   time_t time;
 
   memset (&tm, 0, sizeof (tm));
-  gtk_calendar_get_date (GTK_CALENDAR(data->window),
+  gtk_calendar_get_date (GTK_CALENDAR (data->window),
 			 &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
   tm.tm_year -= TM_YEAR_BASE;
-  time = mktime(&tm);
-  strftime (buffer, buff_len-1, "%x", gmtime(&time));
+  time = mktime (&tm);
+  strftime (buffer, buff_len - 1, "%x", gmtime (&time));
 }
 
 void calendar_set_signal_strings (char         *sig_str,
 				  CalendarData *data)
 {
-  gchar *prev_sig;
+  const gchar *prev_sig;
 
-  gtk_label_get (GTK_LABEL (data->prev_sig), &prev_sig);
+  prev_sig = gtk_label_get_text (GTK_LABEL (data->prev_sig));
   gtk_label_set_text (GTK_LABEL (data->prev2_sig), prev_sig);
 
-  gtk_label_get (GTK_LABEL (data->last_sig), &prev_sig);
+  prev_sig = gtk_label_get_text (GTK_LABEL (data->last_sig));
   gtk_label_set_text (GTK_LABEL (data->prev_sig), prev_sig);
   gtk_label_set_text (GTK_LABEL (data->last_sig), sig_str);
 }
 
-void calendar_month_changed( GtkWidget    *widget,
-                             CalendarData *data )
+void calendar_month_changed (GtkWidget    *widget,
+                             CalendarData *data)
 {
   char buffer[256] = "month_changed: ";
 
@@ -88,8 +88,8 @@ void calendar_month_changed( GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 }
 
-void calendar_day_selected( GtkWidget    *widget,
-                            CalendarData *data )
+void calendar_day_selected (GtkWidget    *widget,
+                            CalendarData *data)
 {
   char buffer[256] = "day_selected: ";
 
@@ -97,8 +97,8 @@ void calendar_day_selected( GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 }
 
-void calendar_day_selected_double_click( GtkWidget    *widget,
-                                         CalendarData *data )
+void calendar_day_selected_double_click (GtkWidget    *widget,
+                                         CalendarData *data)
 {
   struct tm tm;
   char buffer[256] = "day_selected_double_click: ";
@@ -107,19 +107,19 @@ void calendar_day_selected_double_click( GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 
   memset (&tm, 0, sizeof (tm));
-  gtk_calendar_get_date (GTK_CALENDAR(data->window),
+  gtk_calendar_get_date (GTK_CALENDAR (data->window),
 			 &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
   tm.tm_year -= TM_YEAR_BASE;
 
-  if(GTK_CALENDAR(data->window)->marked_date[tm.tm_mday-1] == 0) {
-    gtk_calendar_mark_day(GTK_CALENDAR(data->window),tm.tm_mday);
+  if (GTK_CALENDAR (data->window)->marked_date[tm.tm_mday-1] == 0) {
+    gtk_calendar_mark_day (GTK_CALENDAR (data->window), tm.tm_mday);
   } else { 
-    gtk_calendar_unmark_day(GTK_CALENDAR(data->window),tm.tm_mday);
+    gtk_calendar_unmark_day (GTK_CALENDAR (data->window), tm.tm_mday);
   }
 }
 
-void calendar_prev_month( GtkWidget    *widget,
-                            CalendarData *data )
+void calendar_prev_month (GtkWidget    *widget,
+                          CalendarData *data)
 {
   char buffer[256] = "prev_month: ";
 
@@ -217,17 +217,16 @@ void calendar_select_font( GtkWidget    *button,
     
     gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
     
-    gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			GTK_SIGNAL_FUNC (gtk_widget_destroyed),
-			&calendar->font_dialog);
+    g_signal_connect (window, "destroy",
+		      G_CALLBACK (gtk_widget_destroyed),
+		      &calendar->font_dialog);
     
-    gtk_signal_connect (GTK_OBJECT (GTK_FONT_SELECTION_DIALOG (window)->ok_button),
-			"clicked", GTK_SIGNAL_FUNC(calendar_font_selection_ok),
-			calendar);
-    gtk_signal_connect_object (GTK_OBJECT (GTK_FONT_SELECTION_DIALOG (window)->cancel_button),
-			       "clicked",
-			       GTK_SIGNAL_FUNC (gtk_widget_destroy), 
-			       GTK_OBJECT (calendar->font_dialog));
+    g_signal_connect (GTK_FONT_SELECTION_DIALOG (window)->ok_button,
+		      "clicked", G_CALLBACK (calendar_font_selection_ok),
+		      calendar);
+    g_signal_connect_swapped (GTK_FONT_SELECTION_DIALOG (window)->cancel_button,
+			     "clicked", G_CALLBACK (gtk_widget_destroy), 
+			     calendar->font_dialog);
   }
   window=calendar->font_dialog;
   if (!GTK_WIDGET_VISIBLE (window))
@@ -273,18 +272,17 @@ void create_calendar()
   }
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title(GTK_WINDOW(window), "GtkCalendar Example");
+  gtk_window_set_title (GTK_WINDOW (window), "GtkCalendar Example");
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-  gtk_signal_connect(GTK_OBJECT(window), "destroy",
-		     GTK_SIGNAL_FUNC(gtk_main_quit),
-		     NULL);
-  gtk_signal_connect(GTK_OBJECT(window), "delete-event",
-		     GTK_SIGNAL_FUNC(gtk_false),
-		     NULL);
+  g_signal_connect (window, "destroy",
+		    G_CALLBACK (gtk_main_quit),
+		    NULL);
+  g_signal_connect (window, "delete-event",
+		    G_CALLBACK (gtk_false),
+		    NULL);
+  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
-  gtk_window_set_policy(GTK_WINDOW(window), FALSE, FALSE, TRUE);
-
-  vbox = gtk_vbox_new(FALSE, DEF_PAD);
+  vbox = gtk_vbox_new (FALSE, DEF_PAD);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   /*
@@ -304,29 +302,29 @@ void create_calendar()
   calendar=gtk_calendar_new();
   calendar_data.window = calendar;
   calendar_set_flags(&calendar_data);
-  gtk_calendar_mark_day ( GTK_CALENDAR(calendar), 19);	
-  gtk_container_add( GTK_CONTAINER( frame), calendar);
-  gtk_signal_connect (GTK_OBJECT (calendar), "month_changed", 
-                      GTK_SIGNAL_FUNC (calendar_month_changed),
-		      &calendar_data);
-  gtk_signal_connect (GTK_OBJECT (calendar), "day_selected", 
-                      GTK_SIGNAL_FUNC (calendar_day_selected),
-		      &calendar_data);
-  gtk_signal_connect (GTK_OBJECT (calendar), "day_selected_double_click", 
-                      GTK_SIGNAL_FUNC (calendar_day_selected_double_click),
-		      &calendar_data);
-  gtk_signal_connect (GTK_OBJECT (calendar), "prev_month", 
-                      GTK_SIGNAL_FUNC (calendar_prev_month),
-		      &calendar_data);
-  gtk_signal_connect (GTK_OBJECT (calendar), "next_month", 
-                      GTK_SIGNAL_FUNC (calendar_next_month),
-		      &calendar_data);
-  gtk_signal_connect (GTK_OBJECT (calendar), "prev_year", 
-                      GTK_SIGNAL_FUNC (calendar_prev_year),
-		      &calendar_data);
-  gtk_signal_connect (GTK_OBJECT (calendar), "next_year", 
-                      GTK_SIGNAL_FUNC (calendar_next_year),
-		      &calendar_data);
+  gtk_calendar_mark_day (GTK_CALENDAR (calendar), 19);	
+  gtk_container_add (GTK_CONTAINER (frame), calendar);
+  g_signal_connect (calendar, "month_changed", 
+		    G_CALLBACK (calendar_month_changed),
+		    &calendar_data);
+  g_signal_connect (calendar, "day_selected", 
+		    G_CALLBACK (calendar_day_selected),
+		    &calendar_data);
+  g_signal_connect (calendar, "day_selected_double_click", 
+		    G_CALLBACK (calendar_day_selected_double_click),
+		    &calendar_data);
+  g_signal_connect (calendar, "prev_month", 
+		    G_CALLBACK (calendar_prev_month),
+		    &calendar_data);
+  g_signal_connect (calendar, "next_month", 
+		    G_CALLBACK (calendar_next_month),
+		    &calendar_data);
+  g_signal_connect (calendar, "prev_year", 
+		    G_CALLBACK (calendar_prev_year),
+		    &calendar_data);
+  g_signal_connect (calendar, "next_year", 
+		    G_CALLBACK (calendar_next_year),
+		    &calendar_data);
 
 
   separator = gtk_vseparator_new ();
@@ -345,19 +343,19 @@ void create_calendar()
   for (i = 0; i < 5; i++)
     {
       toggle = gtk_check_button_new_with_label(flags[i].label);
-      gtk_signal_connect (GTK_OBJECT (toggle),
-			    "toggled",
-			    GTK_SIGNAL_FUNC(calendar_toggle_flag),
-			    &calendar_data);
+      g_signal_connect (toggle,
+			"toggled",
+			G_CALLBACK(calendar_toggle_flag),
+			&calendar_data);
       gtk_box_pack_start (GTK_BOX (vbox3), toggle, TRUE, TRUE, 0);
       calendar_data.flag_checkboxes[i]=toggle;
     }
   /* Build the right font-button */ 
   button = gtk_button_new_with_label("Font...");
-  gtk_signal_connect (GTK_OBJECT (button),
-		      "clicked",
-		      GTK_SIGNAL_FUNC(calendar_select_font),
-		      &calendar_data);
+  g_signal_connect (button,
+		    "clicked",
+		    G_CALLBACK(calendar_select_font),
+		    &calendar_data);
   gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE, 0);
 
   /*
@@ -396,9 +394,9 @@ void create_calendar()
   gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_END);
 
   button = gtk_button_new_with_label ("Close");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked", 
-		      GTK_SIGNAL_FUNC (gtk_main_quit), 
-		      NULL);
+  g_signal_connect (button, "clicked", 
+		    G_CALLBACK (gtk_main_quit), 
+		    NULL);
   gtk_container_add (GTK_CONTAINER (bbox), button);
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
   gtk_widget_grab_default (button);

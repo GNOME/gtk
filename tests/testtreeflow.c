@@ -113,7 +113,7 @@ main (int argc, char *argv[])
   path = gtk_tree_path_new_from_string ("80");
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Reflow test");
-  gtk_signal_connect (GTK_OBJECT (window), "destroy", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   vbox = gtk_vbox_new (FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Incremental Reflow Test"), FALSE, FALSE, 0);
@@ -143,8 +143,8 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_mnemonic ("<b>_Futz!!</b>");
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
   gtk_label_set_use_markup (GTK_LABEL (GTK_BIN (button)->child), TRUE);
-  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (futz), NULL);
-  g_signal_connect (G_OBJECT (button), "realize", G_CALLBACK (gtk_widget_grab_focus), NULL);
+  g_signal_connect (button, "clicked", G_CALLBACK (futz), NULL);
+  g_signal_connect (button, "realize", G_CALLBACK (gtk_widget_grab_focus), NULL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 400);
   gtk_widget_show_all (window);
   g_timeout_add (1000, (GSourceFunc) futz, NULL);

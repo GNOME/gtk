@@ -407,8 +407,8 @@ main (int argc, char *argv[])
   gtk_widget_set_name (dialog, "Test Input");
   gtk_container_set_border_width (GTK_CONTAINER(dialog), 0);
 
-  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
-		      GTK_SIGNAL_FUNC (quit), NULL);
+  g_signal_connect (dialog, "destroy",
+		    G_CALLBACK (quit), NULL);
 
   table = gtk_table_new (4, 2, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER(table), 10);
@@ -426,18 +426,18 @@ main (int argc, char *argv[])
 		    GTK_EXPAND | GTK_FILL, 0, 0, 0);
   gtk_widget_show (selection_button);
 
-  gtk_signal_connect (GTK_OBJECT(selection_button), "toggled",
-		      GTK_SIGNAL_FUNC (selection_toggled), NULL);
-  gtk_signal_connect (GTK_OBJECT(selection_widget), "selection_clear_event",
-		      GTK_SIGNAL_FUNC (selection_clear), NULL);
-  gtk_signal_connect (GTK_OBJECT(selection_widget), "selection_received",
-		      GTK_SIGNAL_FUNC (selection_received), NULL);
+  g_signal_connect (selection_button, "toggled",
+		    G_CALLBACK (selection_toggled), NULL);
+  g_signal_connect (selection_widget, "selection_clear_event",
+		    G_CALLBACK (selection_clear), NULL);
+  g_signal_connect (selection_widget, "selection_received",
+		    G_CALLBACK (selection_received), NULL);
 
   gtk_selection_add_targets (selection_widget, GDK_SELECTION_PRIMARY,
 			     targetlist, ntargets);
 
-  gtk_signal_connect (GTK_OBJECT(selection_widget), "selection_get",
-		      GTK_SIGNAL_FUNC (selection_get), NULL);
+  g_signal_connect (selection_widget, "selection_get",
+		    G_CALLBACK (selection_get), NULL);
 
   selection_text = gtk_text_new (NULL, NULL);
   gtk_table_attach_defaults (GTK_TABLE (table), selection_text, 0, 1, 1, 2);
@@ -470,17 +470,16 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Paste");
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->action_area), 
 		      button, TRUE, TRUE, 0);
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (paste), entry);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (paste), entry);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Quit");
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->action_area), 
 		      button, TRUE, TRUE, 0);
 
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     GTK_SIGNAL_FUNC (gtk_widget_destroy), 
-			     GTK_OBJECT (dialog));
+  g_signal_connect_swapped (button, "clicked",
+			    G_CALLBACK (gtk_widget_destroy), dialog);
   gtk_widget_show (button);
 
   gtk_widget_show (dialog);

@@ -59,17 +59,17 @@ add_buttons (GtkWidget *widget, GtkWidget *box)
   gtk_box_pack_start (GTK_BOX (box), add_button, TRUE, TRUE, 0);
   gtk_widget_show (add_button);
 
-  gtk_signal_connect (GTK_OBJECT (add_button), "clicked",
-		      GTK_SIGNAL_FUNC (add_buttons),
-		      box);
+  g_signal_connect (add_button, "clicked",
+		    G_CALLBACK (add_buttons),
+		    box);
 
   remove_button = gtk_button_new_with_mnemonic ("_Remove");
   gtk_box_pack_start (GTK_BOX (box), remove_button, TRUE, TRUE, 0);
   gtk_widget_show (remove_button);
 
-  gtk_signal_connect (GTK_OBJECT (remove_button), "clicked",
-		      GTK_SIGNAL_FUNC (remove_buttons),
-		      add_button);
+  g_signal_connect (remove_button, "clicked",
+		    G_CALLBACK (remove_buttons),
+		    add_button);
 }
 
 guint32
@@ -84,9 +84,10 @@ create_child_plug (guint32  xid,
 
   window = gtk_plug_new (xid);
 
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      local ? GTK_SIGNAL_FUNC (local_destroy) : GTK_SIGNAL_FUNC (remote_destroy),
-		      NULL);
+  g_signal_connect (window, "destroy",
+		    local ? G_CALLBACK (local_destroy)
+			  : G_CALLBACK (remote_destroy),
+		    NULL);
   gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
   hbox = gtk_hbox_new (FALSE, 0);
@@ -101,16 +102,15 @@ create_child_plug (guint32  xid,
   button = gtk_button_new_with_mnemonic ("_Close");
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			     GTK_OBJECT (window));
+  g_signal_connect_swapped (button, "clicked",
+			    G_CALLBACK (gtk_widget_destroy), window);
 
   button = gtk_button_new_with_mnemonic ("_Blink");
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (blink),
-		      GTK_OBJECT (window));
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (blink),
+		    window);
 
   add_buttons (NULL, hbox);
   

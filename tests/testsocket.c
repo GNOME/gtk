@@ -100,11 +100,11 @@ create_socket (void)
   sockets = g_slist_prepend (sockets, socket);
 
 
-  g_signal_connect (G_OBJECT (socket->socket), "destroy",
+  g_signal_connect (socket->socket, "destroy",
 		    G_CALLBACK (socket_destroyed), socket);
-  g_signal_connect (G_OBJECT (socket->socket), "plug_added",
+  g_signal_connect (socket->socket, "plug_added",
 		    G_CALLBACK (plug_added), socket);
-  g_signal_connect (G_OBJECT (socket->socket), "plug_removed",
+  g_signal_connect (socket->socket, "plug_removed",
 		    G_CALLBACK (plug_removed), socket);
 
   return socket;
@@ -176,7 +176,7 @@ child_read_watch (GIOChannel *channel, GIOCondition cond, gpointer data)
       return TRUE;
     case G_IO_STATUS_EOF:
       n_children--;
-      g_io_channel_close (channel);
+      g_io_channel_unref (channel);
       return FALSE;
     case G_IO_STATUS_ERROR:
       fprintf (stderr, "Error reading fd from child: %s\n", error->message);
@@ -217,6 +217,7 @@ add_child (GtkWidget *window,
 
   n_children++;
   channel = g_io_channel_unix_new (out_fd);
+  g_io_channel_set_close_on_unref (channel, TRUE);
   g_io_channel_set_flags (channel, G_IO_FLAG_NONBLOCK, &error);
   if (error)
     {
@@ -278,8 +279,8 @@ main (int argc, char *argv[])
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      (GtkSignalFunc) gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy",
+		    G_CALLBACK (gtk_main_quit), NULL);
   
   gtk_window_set_title (GTK_WINDOW (window), "Socket Test");
   gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -303,37 +304,32 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Add Active Child");
   gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
 
-  gtk_signal_connect_object (GTK_OBJECT(button), "clicked",
-			     GTK_SIGNAL_FUNC(add_active_child),
-			     GTK_OBJECT(vbox));
+  g_signal_connect_swapped (button, "clicked",
+			    G_CALLBACK (add_active_child), vbox);
 
   button = gtk_button_new_with_label ("Add Passive Child");
   gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
 
-  gtk_signal_connect_object (GTK_OBJECT(button), "clicked",
-			     GTK_SIGNAL_FUNC(add_passive_child),
-			     GTK_OBJECT(vbox));
+  g_signal_connect_swapped (button, "clicked",
+			    G_CALLBACK (add_passive_child), vbox);
 
   button = gtk_button_new_with_label ("Add Local Active Child");
   gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
 
-  gtk_signal_connect_object (GTK_OBJECT(button), "clicked",
-			     GTK_SIGNAL_FUNC(add_local_active_child),
-			     GTK_OBJECT(vbox));
+  g_signal_connect_swapped (button, "clicked",
+			    G_CALLBACK (add_local_active_child), vbox);
 
   button = gtk_button_new_with_label ("Add Local Passive Child");
   gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
 
-  gtk_signal_connect_object (GTK_OBJECT(button), "clicked",
-			     GTK_SIGNAL_FUNC(add_local_passive_child),
-			     GTK_OBJECT(vbox));
+  g_signal_connect_swapped (button, "clicked",
+			    G_CALLBACK (add_local_passive_child), vbox);
 
   button = gtk_button_new_with_label ("Remove Last Child");
   gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
 
-  gtk_signal_connect_object (GTK_OBJECT(button), "clicked",
-			     GTK_SIGNAL_FUNC(remove_child),
-			     GTK_OBJECT(vbox));
+  g_signal_connect_swapped (button, "clicked",
+			    G_CALLBACK (remove_child), vbox);
 
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
@@ -344,9 +340,9 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Steal");
   gtk_box_pack_start (GTK_BOX(hbox), button, FALSE, FALSE, 0);
 
-  gtk_signal_connect (GTK_OBJECT(button), "clicked",
-		      GTK_SIGNAL_FUNC(steal),
-		      entry);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (steal),
+		    entry);
 
   gtk_widget_show_all (window);
 
@@ -357,7 +353,7 @@ main (int argc, char *argv[])
       g_print ("Waiting for children to exit\n");
 
       while (n_children)
-	g_main_iteration (TRUE);
+	g_main_context_iteration (NULL, TRUE);
     }
 
   return 0;
