@@ -112,7 +112,8 @@ static void gtk_notebook_remove              (GtkContainer     *container,
 static void gtk_notebook_real_remove         (GtkNotebook      *notebook,
 					      GList            *list,
 					      guint             page_num);
-static void gtk_notebook_foreach             (GtkContainer     *container,
+static void gtk_notebook_forall              (GtkContainer     *container,
+					      gboolean		include_internals,
 					      GtkCallback       callback,
 					      gpointer          callback_data);
 static void gtk_notebook_switch_page         (GtkNotebook      *notebook,
@@ -149,7 +150,7 @@ static void gtk_notebook_calc_tabs           (GtkNotebook      *notebook,
 static void gtk_notebook_expose_tabs         (GtkNotebook      *notebook);
 static void gtk_notebook_switch_focus_tab    (GtkNotebook      *notebook, 
                                               GList            *new_child);
-static void gtk_real_notebook_switch_page    (GtkNotebook      *notebook,
+static void gtk_notebook_real_switch_page    (GtkNotebook      *notebook,
 					      GtkNotebookPage  *page,
 					      guint             page_num);
 static void gtk_notebook_menu_switch_page    (GtkWidget        *widget,
@@ -256,14 +257,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 
   container_class->add = gtk_notebook_add;
   container_class->remove = gtk_notebook_remove;
-  container_class->foreach = gtk_notebook_foreach;
+  container_class->forall = gtk_notebook_forall;
   container_class->focus = gtk_notebook_focus;
   container_class->set_focus_child = gtk_notebook_set_focus_child;
   container_class->get_child_arg = gtk_notebook_get_child_arg;
   container_class->set_child_arg = gtk_notebook_set_child_arg;
   container_class->child_type = gtk_notebook_child_type;
 
-  class->switch_page = gtk_real_notebook_switch_page;
+  class->switch_page = gtk_notebook_real_switch_page;
 }
 
 static void
@@ -780,6 +781,33 @@ gtk_notebook_remove (GtkContainer *container,
     }
 }
 
+gint
+gtk_notebook_page_num (GtkNotebook      *notebook,
+		       GtkWidget        *child)
+{
+  GList *children;
+  gint num;
+
+  g_return_val_if_fail (notebook != NULL, -1);
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), -1);
+
+  num = 0;
+  children = notebook->children;
+  while (children)
+    {
+      GtkNotebookPage *page;
+
+      page = children->data;
+      if (page->child == child)
+	return num;
+
+      children = children->next;
+      num++;
+    }
+
+  return -1;
+}
+
 static void
 gtk_notebook_real_remove (GtkNotebook *notebook,
 			  GList        *list,
@@ -1061,12 +1089,12 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 }
 
 static void
-gtk_notebook_foreach (GtkContainer *container,
-		      GtkCallback   callback,
-		      gpointer      callback_data)
+gtk_notebook_forall (GtkContainer *container,
+		     gboolean      include_internals,
+		     GtkCallback   callback,
+		     gpointer      callback_data)
 {
   GtkNotebook *notebook;
-  GtkNotebookPage *page;
   GList *children;
 
   g_return_if_fail (container != NULL);
@@ -1074,13 +1102,22 @@ gtk_notebook_foreach (GtkContainer *container,
   g_return_if_fail (callback != NULL);
 
   notebook = GTK_NOTEBOOK (container);
-
+  
   children = notebook->children;
   while (children)
     {
+      GtkNotebookPage *page;
+      
       page = children->data;
       children = children->next;
       (* callback) (page->child, callback_data);
+      if (include_internals)
+	{
+	  if (page->tab_label)
+	    (* callback) (page->tab_label, callback_data);
+	  if (page->menu_label)
+	    (* callback) (page->menu_label, callback_data);
+	}
     }
 }
 
@@ -1155,13 +1192,15 @@ gtk_notebook_set_tab_pos (GtkNotebook     *notebook,
 
 void
 gtk_notebook_set_show_tabs (GtkNotebook *notebook,
-			    gint         show_tabs)
+			    gboolean     show_tabs)
 {
   GtkNotebookPage *page;
   GList *children;
 
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
+
+  show_tabs = show_tabs != FALSE;
 
   if (notebook->show_tabs == show_tabs)
     return;
@@ -2261,7 +2300,7 @@ gtk_notebook_draw_arrow (GtkNotebook *notebook, guint arrow)
 }
 
 static void
-gtk_real_notebook_switch_page (GtkNotebook     *notebook,
+gtk_notebook_real_switch_page (GtkNotebook     *notebook,
 			       GtkNotebookPage *page,
 			       guint            page_num)
 {
@@ -2283,7 +2322,8 @@ gtk_real_notebook_switch_page (GtkNotebook     *notebook,
       g_list_find (notebook->children, notebook->cur_page);
 
   gtk_notebook_pages_allocate (notebook, &GTK_WIDGET (notebook)->allocation);
-
+  gtk_notebook_expose_tabs (notebook);
+  
   if (GTK_WIDGET_MAPPED (notebook))
     {
       if (GTK_WIDGET_REALIZED (notebook->cur_page->child))
@@ -3129,7 +3169,9 @@ gtk_notebook_focus (GtkContainer     *container,
 
   notebook = GTK_NOTEBOOK (container);
 
-  if (!GTK_WIDGET_SENSITIVE (container) || !notebook->children)
+  if (!GTK_WIDGET_DRAWABLE (notebook) ||
+      !GTK_WIDGET_SENSITIVE (container) ||
+      !notebook->children)
     return FALSE;
 
   focus_child = container->focus_child;
@@ -3137,12 +3179,12 @@ gtk_notebook_focus (GtkContainer     *container,
 
   if (!notebook->show_tabs)
     {
-      if (GTK_WIDGET_VISIBLE (notebook->cur_page->child))
+      if (GTK_WIDGET_DRAWABLE (notebook->cur_page->child) &&
+	  GTK_WIDGET_SENSITIVE (notebook->cur_page->child))
 	{
 	  if (GTK_IS_CONTAINER (notebook->cur_page->child))
 	    {
-	      if (gtk_container_focus 
-		  (GTK_CONTAINER (notebook->cur_page->child), direction))
+	      if (gtk_container_focus (GTK_CONTAINER (notebook->cur_page->child), direction))
 		return TRUE;
 	    }
 	  else if (GTK_WIDGET_CAN_FOCUS (notebook->cur_page->child))
@@ -3165,7 +3207,7 @@ gtk_notebook_focus (GtkContainer     *container,
   if (focus_child && old_page && focus_child == old_page->child &&
       notebook->child_has_focus)
     {
-      if (GTK_WIDGET_VISIBLE (old_page->child))
+      if (GTK_WIDGET_DRAWABLE (old_page->child))
 	{
 	  if (GTK_IS_CONTAINER (old_page->child) &&
 	      !GTK_WIDGET_HAS_FOCUS (old_page->child))
@@ -3204,8 +3246,7 @@ gtk_notebook_focus (GtkContainer     *container,
     case GTK_DIR_LEFT:
     case GTK_DIR_UP:
       if (!notebook->focus_tab)
-	gtk_notebook_switch_focus_tab
-	  (notebook, g_list_last (notebook->children));
+	gtk_notebook_switch_focus_tab (notebook, g_list_last (notebook->children));
       else
 	gtk_notebook_switch_focus_tab (notebook, notebook->focus_tab->prev);
       
@@ -3222,7 +3263,7 @@ gtk_notebook_focus (GtkContainer     *container,
 
   if (return_val)
     {
-      if (!GTK_WIDGET_HAS_FOCUS (container) )
+      if (!GTK_WIDGET_HAS_FOCUS (container))
 	gtk_widget_grab_focus (GTK_WIDGET (container));
 
       if (GTK_WIDGET_MAPPED (page->tab_label))

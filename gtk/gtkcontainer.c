@@ -28,7 +28,6 @@ enum {
   ADD,
   REMOVE,
   CHECK_RESIZE,
-  FOREACH,
   FOCUS,
   SET_FOCUS_CHILD,
   LAST_SIGNAL
@@ -178,14 +177,6 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_SIGNAL_OFFSET (GtkContainerClass, check_resize),
 		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
-  container_signals[FOREACH] =
-    gtk_signal_new ("foreach",
-                    GTK_RUN_FIRST,
-                    object_class->type,
-                    GTK_SIGNAL_OFFSET (GtkContainerClass, foreach),
-                    gtk_marshal_NONE__C_CALLBACK,
-		    GTK_TYPE_NONE, 1,
-                    GTK_TYPE_C_CALLBACK);
   container_signals[FOCUS] =
     gtk_signal_new ("focus",
                     GTK_RUN_LAST,
@@ -207,18 +198,14 @@ gtk_container_class_init (GtkContainerClass *class)
   object_class->get_arg = gtk_container_get_arg;
   object_class->set_arg = gtk_container_set_arg;
   object_class->destroy = gtk_container_destroy;
-  
-  /* Other container classes should overwrite show_all and hide_all,
-   * for the purpose of showing internal children also, which are not
-   * accessable through gtk_container_foreach.
-  */
+
   widget_class->show_all = gtk_container_show_all;
   widget_class->hide_all = gtk_container_hide_all;
-
+  
   class->add = gtk_container_add_unimplemented;
   class->remove = gtk_container_remove_unimplemented;
   class->check_resize = gtk_container_real_check_resize;
-  class->foreach = NULL;
+  class->forall = NULL;
   class->focus = gtk_container_real_focus;
   class->set_focus_child = gtk_container_real_set_focus_child;
   class->child_type = NULL;
@@ -621,8 +608,7 @@ gtk_container_destroy (GtkObject *object)
     }
   gtk_container_clear_resize_widgets (container);
   
-  gtk_container_foreach (container,
-			 (GtkCallback) gtk_widget_destroy, NULL);
+  gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
   
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -1103,17 +1089,37 @@ gtk_container_resize_children (GtkContainer *container)
 }
 
 void
-gtk_container_foreach (GtkContainer *container,
-		       GtkCallback   callback,
-		       gpointer      callback_data)
+gtk_container_forall (GtkContainer *container,
+		      GtkCallback   callback,
+		      gpointer      callback_data)
 {
+  GtkContainerClass *class;
+
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (callback != NULL);
 
-  gtk_signal_emit (GTK_OBJECT (container),
-                   container_signals[FOREACH],
-                   callback, callback_data);
+  class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
+
+  if (class->forall)
+    class->forall (container, TRUE, callback, callback_data);
+}
+
+void
+gtk_container_foreach (GtkContainer *container,
+		       GtkCallback   callback,
+		       gpointer      callback_data)
+{
+  GtkContainerClass *class;
+  
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (callback != NULL);
+
+  class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
+
+  if (class->forall)
+    class->forall (container, FALSE, callback, callback_data);
 }
 
 typedef struct _GtkForeachData	GtkForeachData;
@@ -1292,9 +1298,10 @@ gtk_container_real_focus (GtkContainer     *container,
   g_return_val_if_fail (container != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CONTAINER (container), FALSE);
 
-  /* Fail if the container is insensitive
+  /* Fail if the container is inappropriate for focus movement
    */
-  if (!GTK_WIDGET_SENSITIVE (container))
+  if (!GTK_WIDGET_DRAWABLE (container) ||
+      !GTK_WIDGET_SENSITIVE (container))
     return FALSE;
 
   return_val = FALSE;
@@ -1308,25 +1315,32 @@ gtk_container_real_focus (GtkContainer     *container,
     {
       /* Get a list of the containers children
        */
-      children = gtk_container_children (container);
+      children = NULL;
+      gtk_container_forall (container,
+			    gtk_container_children_callback,
+			    &children);
+      children = g_list_reverse (children);
+      /* children = gtk_container_children (container); */
 
       if (children)
 	{
-	  /* Remove any children which are insensitive
+	  /* Remove any children which are inappropriate for focus movement
 	   */
 	  tmp_list = children;
 	  while (tmp_list)
 	    {
-	      if (!GTK_WIDGET_SENSITIVE (tmp_list->data))
+	      if (GTK_WIDGET_SENSITIVE (tmp_list->data) &&
+		  GTK_WIDGET_DRAWABLE (tmp_list->data) &&
+		  (GTK_IS_CONTAINER (tmp_list->data) || GTK_WIDGET_CAN_FOCUS (tmp_list->data)))
+		tmp_list = tmp_list->next;
+	      else
 		{
 		  tmp_list2 = tmp_list;
 		  tmp_list = tmp_list->next;
-
+		  
 		  children = g_list_remove_link (children, tmp_list2);
 		  g_list_free_1 (tmp_list2);
 		}
-	      else
-		tmp_list = tmp_list->next;
 	    }
 
 	  switch (direction)
@@ -1668,14 +1682,14 @@ gtk_container_focus_move (GtkContainer     *container,
             {
               focus_child = NULL;
 
-              if (GTK_WIDGET_VISIBLE (child) &&
+              if (GTK_WIDGET_DRAWABLE (child) &&
 		  GTK_IS_CONTAINER (child) &&
 		  !GTK_WIDGET_HAS_FOCUS (child))
 		if (gtk_container_focus (GTK_CONTAINER (child), direction))
 		  return TRUE;
             }
         }
-      else if (GTK_WIDGET_VISIBLE (child))
+      else if (GTK_WIDGET_DRAWABLE (child))
         {
 	  if (GTK_IS_CONTAINER (child))
             {
@@ -1702,41 +1716,6 @@ gtk_container_children_callback (GtkWidget *widget,
 
   children = (GList**) client_data;
   *children = g_list_prepend (*children, widget);
-}
-
-static void
-gtk_container_show_all (GtkWidget *widget)
-{
-  GtkContainer *container;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (widget));
-  container = GTK_CONTAINER (widget);
-
-  /* First show children, then self.
-     This makes sure that toplevel windows get shown as last widget.
-     Otherwise the user would see the widgets get
-     visible one after another.
-  */
-  gtk_container_foreach (container, (GtkCallback) gtk_widget_show_all, NULL);
-  gtk_widget_show (widget);
-}
-
-
-static void
-gtk_container_hide_all (GtkWidget *widget)
-{
-  GtkContainer *container;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (widget));
-  container = GTK_CONTAINER (widget);
-
-  /* First hide self, then children.
-     This is the reverse order of gtk_container_show_all.
-  */
-  gtk_widget_hide (widget);  
-  gtk_container_foreach (container, (GtkCallback) gtk_widget_hide_all, NULL);
 }
 
 void
@@ -1773,4 +1752,29 @@ gtk_container_set_focus_hadjustment (GtkContainer  *container,
 				  hadjustment_key_id,
 				  adjustment,
 				  (GtkDestroyNotify) gtk_object_unref);
+}
+
+
+static void
+gtk_container_show_all (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (widget));
+
+  gtk_container_foreach (GTK_CONTAINER (widget),
+			 (GtkCallback) gtk_widget_show_all,
+			 NULL);
+  gtk_widget_show (widget);
+}
+
+static void
+gtk_container_hide_all (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (widget));
+
+  gtk_widget_hide (widget);
+  gtk_container_foreach (GTK_CONTAINER (widget),
+			 (GtkCallback) gtk_widget_hide_all,
+			 NULL);
 }

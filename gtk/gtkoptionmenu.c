@@ -20,6 +20,7 @@
 #include "gtkmenuitem.h"
 #include "gtkoptionmenu.h"
 #include "gtksignal.h"
+#include "gdk/gdkkeysyms.h"
 
 
 #define CHILD_LEFT_SPACING        5
@@ -46,6 +47,8 @@ static gint gtk_option_menu_expose          (GtkWidget          *widget,
 					     GdkEventExpose     *event);
 static gint gtk_option_menu_button_press    (GtkWidget          *widget,
 					     GdkEventButton     *event);
+static gint gtk_option_menu_key_press	    (GtkWidget          *widget,
+					     GdkEventKey        *event);
 static void gtk_option_menu_deactivate      (GtkMenuShell       *menu_shell,
 					     GtkOptionMenu      *option_menu);
 static void gtk_option_menu_update_contents (GtkOptionMenu      *option_menu);
@@ -59,6 +62,7 @@ static void gtk_option_menu_show_all        (GtkWidget          *widget);
 static void gtk_option_menu_hide_all        (GtkWidget          *widget);
 static GtkType gtk_option_menu_child_type   (GtkContainer       *container);
 
+				       
 
 static GtkButtonClass *parent_class = NULL;
 
@@ -106,11 +110,11 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   object_class->destroy = gtk_option_menu_destroy;
 
   widget_class->draw = gtk_option_menu_draw;
-  widget_class->draw_focus = NULL;
   widget_class->size_request = gtk_option_menu_size_request;
   widget_class->size_allocate = gtk_option_menu_size_allocate;
   widget_class->expose_event = gtk_option_menu_expose;
   widget_class->button_press_event = gtk_option_menu_button_press;
+  widget_class->key_press_event = gtk_option_menu_key_press;
   widget_class->show_all = gtk_option_menu_show_all;
   widget_class->hide_all = gtk_option_menu_hide_all;
 
@@ -126,7 +130,8 @@ gtk_option_menu_child_type (GtkContainer       *container)
 static void
 gtk_option_menu_init (GtkOptionMenu *option_menu)
 {
-  GTK_WIDGET_UNSET_FLAGS (option_menu, GTK_CAN_FOCUS);
+  GTK_WIDGET_SET_FLAGS (option_menu, GTK_CAN_FOCUS);
+  GTK_WIDGET_UNSET_FLAGS (option_menu, GTK_CAN_DEFAULT);
 
   option_menu->menu = NULL;
   option_menu->menu_item = NULL;
@@ -372,6 +377,7 @@ gtk_option_menu_draw (GtkWidget    *widget,
       child = GTK_BIN (widget)->child;
       if (child && gtk_widget_intersect (child, area, &child_area))
 	gtk_widget_draw (child, &child_area);
+      gtk_widget_draw_focus (widget);
     }
 }
 
@@ -434,6 +440,7 @@ gtk_option_menu_expose (GtkWidget      *widget,
 	gtk_widget_event (child, (GdkEvent*) &child_event);
 
 #endif /* 0 */
+      gtk_widget_draw_focus (widget);
     }
 
   return FALSE;
@@ -449,16 +456,42 @@ gtk_option_menu_button_press (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_OPTION_MENU (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
+  option_menu = GTK_OPTION_MENU (widget);
+
   if ((event->type == GDK_BUTTON_PRESS) &&
       (event->button == 1))
     {
-      option_menu = GTK_OPTION_MENU (widget);
       gtk_option_menu_remove_contents (option_menu);
       gtk_menu_popup (GTK_MENU (option_menu->menu), NULL, NULL,
 		      gtk_option_menu_position, option_menu,
 		      event->button, event->time);
     }
 
+  return FALSE;
+}
+
+static gint
+gtk_option_menu_key_press (GtkWidget   *widget,
+			   GdkEventKey *event)
+{
+  GtkOptionMenu *option_menu;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_OPTION_MENU (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  option_menu = GTK_OPTION_MENU (widget);
+
+  switch (event->keyval)
+    {
+    case GDK_space:
+      gtk_option_menu_remove_contents (option_menu);
+      gtk_menu_popup (GTK_MENU (option_menu->menu), NULL, NULL,
+		      gtk_option_menu_position, option_menu,
+		      0, event->time);
+      break;
+    }
+  
   return FALSE;
 }
 

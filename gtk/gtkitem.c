@@ -42,10 +42,10 @@ static gint gtk_item_leave      (GtkWidget        *widget,
 static guint item_signals[LAST_SIGNAL] = { 0 };
 
 
-guint
+GtkType
 gtk_item_get_type (void)
 {
-  static guint item_type = 0;
+  static GtkType item_type = 0;
 
   if (!item_type)
     {
@@ -61,7 +61,7 @@ gtk_item_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      item_type = gtk_type_unique (gtk_bin_get_type (), &item_info);
+      item_type = gtk_type_unique (GTK_TYPE_BIN, &item_info);
     }
 
   return item_type;
@@ -146,6 +146,7 @@ gtk_item_map (GtkWidget *widget)
   g_return_if_fail (GTK_IS_ITEM (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+
   gdk_window_show (widget->window);
 
   bin = GTK_BIN (widget);
@@ -163,6 +164,7 @@ gtk_item_unmap (GtkWidget *widget)
   g_return_if_fail (GTK_IS_ITEM (widget));
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+
   gdk_window_hide (widget->window);
 }
 

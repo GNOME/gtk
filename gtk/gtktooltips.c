@@ -43,16 +43,15 @@ static void gtk_tooltips_widget_remove     (GtkWidget   *widget,
 static void gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
                                             GtkWidget   *widget);
 static gint gtk_tooltips_timeout           (gpointer     data);
-static void gtk_tooltips_create_window     (GtkTooltips *tooltips);
 static void gtk_tooltips_draw_tips         (GtkTooltips *tooltips);
 
 static GtkDataClass *parent_class;
 static const gchar  *tooltips_data_key = "_GtkTooltipsData";
 
-guint
+GtkType
 gtk_tooltips_get_type (void)
 {
-  static guint tooltips_type = 0;
+  static GtkType tooltips_type = 0;
 
   if (!tooltips_type)
     {
@@ -68,7 +67,7 @@ gtk_tooltips_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      tooltips_type = gtk_type_unique (gtk_data_get_type (), &tooltips_info);
+      tooltips_type = gtk_type_unique (GTK_TYPE_DATA, &tooltips_info);
     }
 
   return tooltips_type;
@@ -80,7 +79,7 @@ gtk_tooltips_class_init (GtkTooltipsClass *class)
   GtkObjectClass *object_class;
 
   object_class = (GtkObjectClass*) class;
-  parent_class = gtk_type_class (gtk_data_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_DATA);
 
   object_class->destroy = gtk_tooltips_destroy;
 }
@@ -103,7 +102,7 @@ gtk_tooltips_init (GtkTooltips *tooltips)
 GtkTooltips *
 gtk_tooltips_new (void)
 {
-  return gtk_type_new (gtk_tooltips_get_type ());
+  return gtk_type_new (GTK_TYPE_TOOLTIPS);
 }
 
 static void
@@ -154,12 +153,8 @@ gtk_tooltips_destroy (GtkObject *object)
 	}
     }
 
-  if (tooltips->tip_window != NULL)
-    {
-      gtk_widget_destroy (tooltips->tip_window);
-      gtk_widget_unref (tooltips->tip_window);
-      tooltips->tip_window = NULL;
-    }
+  if (tooltips->tip_window)
+    gtk_widget_destroy (tooltips->tip_window);
 
   if (tooltips->gc != NULL)
     {
@@ -168,13 +163,22 @@ gtk_tooltips_destroy (GtkObject *object)
     }
 }
 
-static void
-gtk_tooltips_create_window (GtkTooltips *tooltips)
+void
+gtk_tooltips_force_window (GtkTooltips *tooltips)
 {
-  tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_widget_ref (tooltips->tip_window);
-  gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
-  gtk_widget_realize (tooltips->tip_window);
+  g_return_if_fail (tooltips != NULL);
+  g_return_if_fail (GTK_IS_TOOLTIPS (tooltips));
+
+  if (!tooltips->tip_window)
+    {
+      tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
+      gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
+      gtk_widget_realize (tooltips->tip_window);
+      gtk_signal_connect (GTK_OBJECT (tooltips->tip_window),
+			  "destroy",
+			  gtk_widget_destroyed,
+			  &tooltips->tip_window);
+    }
 }
 
 static void
@@ -184,8 +188,8 @@ gtk_tooltips_layout_text (GtkTooltips *tooltips, GtkTooltipsData *data)
   gint i, row_width, window_width = 0;
   size_t len;
 
-  if (tooltips->tip_window == NULL)
-    gtk_tooltips_create_window (tooltips);
+  if (!tooltips->tip_window)
+    gtk_tooltips_force_window (tooltips);
 
   g_list_foreach (data->row, gtk_tooltips_free_string, 0);
   if (data->row)
@@ -384,7 +388,7 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   GList *el;
 
   if (!tooltips->tip_window)
-    gtk_tooltips_create_window (tooltips);
+    gtk_tooltips_force_window (tooltips);
   else if (GTK_WIDGET_VISIBLE (tooltips->tip_window))
     gtk_widget_hide (tooltips->tip_window);
 

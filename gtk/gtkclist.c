@@ -194,9 +194,10 @@ static gint get_selection_info (GtkCList * clist,
 				gint * column);
 
 /* GtkContainer Methods */
-static void gtk_clist_foreach (GtkContainer * container,
-			       GtkCallback callback,
-			       gpointer callback_data);
+static void gtk_clist_forall (GtkContainer *container,
+			      gboolean      include_internals,
+			      GtkCallback   callback,
+			      gpointer      callback_data);
 
 /* Drawing */
 static void draw_row (GtkCList * clist,
@@ -530,7 +531,7 @@ gtk_clist_class_init (GtkCListClass * klass)
 
   /* container_class->add = NULL; use the default GtkContainerClass warning */
   /* container_class->remove = NULL; use the default GtkContainerClass warning */
-  container_class->foreach = gtk_clist_foreach;
+  container_class->forall = gtk_clist_forall;
   container_class->focus = gtk_clist_focus;
   container_class->set_focus_child = gtk_clist_set_focus_child;
 
@@ -3339,14 +3340,14 @@ gtk_clist_size_allocate (GtkWidget * widget,
 
 /* 
  * GTKCONTAINER
- *   gtk_clist_foreach
+ *   gtk_clist_forall
  */
 static void
-gtk_clist_foreach (GtkContainer * container,
-		   GtkCallback callback,
-		   gpointer callback_data)
+gtk_clist_forall (GtkContainer *container,
+		  gboolean      include_internals,
+		  GtkCallback   callback,
+		  gpointer      callback_data)
 {
-  gint i;
   GtkCList *clist;
 
   g_return_if_fail (container != NULL);
@@ -3354,17 +3355,22 @@ gtk_clist_foreach (GtkContainer * container,
   g_return_if_fail (callback != NULL);
 
   clist = GTK_CLIST (container);
-
-  /* callback for the column buttons */
-  for (i = 0; i < clist->columns; i++)
-    if (clist->column[i].button)
-      (*callback) (clist->column[i].button, callback_data);
-
-  /* callbacks for the scrollbars */
-  if (clist->vscrollbar)
-    (*callback) (clist->vscrollbar, callback_data);
-  if (clist->hscrollbar)
-    (*callback) (clist->hscrollbar, callback_data);
+      
+  if (include_internals)
+    {
+      guint i;
+      
+      /* callback for the column buttons */
+      for (i = 0; i < clist->columns; i++)
+	if (clist->column[i].button)
+	  (*callback) (clist->column[i].button, callback_data);
+      
+      /* callbacks for the scrollbars */
+      if (clist->vscrollbar)
+	(*callback) (clist->vscrollbar, callback_data);
+      if (clist->hscrollbar)
+	(*callback) (clist->hscrollbar, callback_data);
+    }
 }
 
 /*
@@ -4182,9 +4188,9 @@ column_button_create (GtkCList * clist,
   GtkWidget *button;
 
   button = clist->column[column].button = gtk_button_new ();
-  gtk_widget_set_parent (button, GTK_WIDGET (clist));
   if (GTK_WIDGET_REALIZED (clist) && clist->title_window)
     gtk_widget_set_parent_window (clist->column[column].button, clist->title_window);
+  gtk_widget_set_parent (button, GTK_WIDGET (clist));
   
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc) column_button_clicked,

@@ -57,8 +57,8 @@ static gint gtk_menu_key_press	    (GtkWidget	       *widget,
 static gint gtk_menu_motion_notify  (GtkWidget	       *widget,
 				     GdkEventMotion    *event);
 static void gtk_menu_deactivate	    (GtkMenuShell      *menu_shell);
-static void gtk_menu_show_all	    (GtkWidget	       *widget);
-static void gtk_menu_hide_all	    (GtkWidget	       *widget);
+static void gtk_menu_show_all       (GtkWidget         *widget);
+static void gtk_menu_hide_all       (GtkWidget         *widget);
 static void gtk_menu_position       (GtkMenu           *menu);
 static void gtk_menu_reparent       (GtkMenu           *menu, 
 				     GtkWidget         *new_parent, 
@@ -119,7 +119,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->key_press_event = gtk_menu_key_press;
   widget_class->motion_notify_event = gtk_menu_motion_notify;
   widget_class->show_all = gtk_menu_show_all;
-  widget_class->hide_all = gtk_menu_hide_all;  
+  widget_class->hide_all = gtk_menu_hide_all;
   
   menu_shell_class->submenu_placement = GTK_LEFT_RIGHT;
   menu_shell_class->deactivate = gtk_menu_deactivate;
@@ -989,33 +989,6 @@ gtk_menu_deactivate (GtkMenuShell *menu_shell)
 
 
 static void
-gtk_menu_show_all (GtkWidget *widget)
-{
-  GtkContainer *container;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MENU (widget));
-  container = GTK_CONTAINER (widget);
-  
-  /* Show children, but not self. */
-  gtk_container_foreach (container, (GtkCallback) gtk_widget_show_all, NULL);
-}
-
-
-static void
-gtk_menu_hide_all (GtkWidget *widget)
-{
-  GtkContainer *container;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MENU (widget));
-  container = GTK_CONTAINER (widget);
-  
-  /* Hide children, but not self. */
-  gtk_container_foreach (container, (GtkCallback) gtk_widget_hide_all, NULL);
-}
-
-static void
 gtk_menu_position (GtkMenu *menu)
 {
   GtkWidget *widget;
@@ -1072,8 +1045,8 @@ gtk_menu_reparent (GtkMenu      *menu,
 {
   GtkObject *object = GTK_OBJECT (menu);
   GtkWidget *widget = GTK_WIDGET (menu);
-  
   gboolean was_floating = GTK_OBJECT_FLOATING (object);
+
   gtk_object_ref (object);
   gtk_object_sink (object);
 
@@ -1093,7 +1066,23 @@ gtk_menu_reparent (GtkMenu      *menu,
     gtk_object_unref (object);
 }
 
+static void
+gtk_menu_show_all (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_MENU (widget));
+
+  /* Show children, but not self. */
+  gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_show_all, NULL);
+}
 
 
+static void
+gtk_menu_hide_all (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_MENU (widget));
 
-
+  /* Hide children, but not self. */
+  gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_hide_all, NULL);
+}

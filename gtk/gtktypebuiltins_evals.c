@@ -435,6 +435,7 @@ static GtkEnumValue _gtk_widget_flags_values[] = {
   { GTK_HAS_DEFAULT, "GTK_HAS_DEFAULT", "has-default" },
   { GTK_HAS_GRAB, "GTK_HAS_GRAB", "has-grab" },
   { GTK_RC_STYLE, "GTK_RC_STYLE", "rc-style" },
+  { GTK_COMPOSITE_CHILD, "GTK_COMPOSITE_CHILD", "composite-child" },
   { GTK_BASIC, "GTK_BASIC", "basic" },
   { 0, NULL, NULL }
 };

@@ -31,7 +31,8 @@ static void gtk_bin_add        (GtkContainer   *container,
 			        GtkWidget      *widget);
 static void gtk_bin_remove     (GtkContainer   *container,
 			        GtkWidget      *widget);
-static void gtk_bin_foreach    (GtkContainer   *container,
+static void gtk_bin_forall     (GtkContainer   *container,
+				gboolean	include_internals,
 			        GtkCallback     callback,
 			        gpointer        callback_data);
 static GtkType gtk_bin_child_type (GtkContainer*container);
@@ -85,7 +86,7 @@ gtk_bin_class_init (GtkBinClass *class)
 
   container_class->add = gtk_bin_add;
   container_class->remove = gtk_bin_remove;
-  container_class->foreach = gtk_bin_foreach;
+  container_class->forall = gtk_bin_forall;
   container_class->child_type = gtk_bin_child_type;
 }
 
@@ -261,9 +262,10 @@ gtk_bin_remove (GtkContainer *container,
 }
 
 static void
-gtk_bin_foreach (GtkContainer *container,
-		 GtkCallback   callback,
-		 gpointer      callback_data)
+gtk_bin_forall (GtkContainer *container,
+		gboolean      include_internals,
+		GtkCallback   callback,
+		gpointer      callback_data)
 {
   GtkBin *bin;
 

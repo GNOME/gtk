@@ -51,7 +51,8 @@ static void gtk_tree_size_allocate   (GtkWidget      *widget,
 				      GtkAllocation  *allocation);
 static void gtk_tree_add             (GtkContainer   *container,
 				      GtkWidget      *widget);
-static void gtk_tree_foreach         (GtkContainer   *container,
+static void gtk_tree_forall          (GtkContainer   *container,
+				      gboolean	      include_internals,
 				      GtkCallback     callback,
 				      gpointer        callback_data);
 
@@ -145,7 +146,7 @@ gtk_tree_class_init (GtkTreeClass *class)
   container_class->add = gtk_tree_add;
   container_class->remove = 
     (void (*)(GtkContainer *, GtkWidget *)) gtk_tree_remove_item;
-  container_class->foreach = gtk_tree_foreach;
+  container_class->forall = gtk_tree_forall;
   container_class->child_type = gtk_tree_child_type;
   
   class->selection_changed = NULL;
@@ -521,9 +522,10 @@ gtk_tree_expose (GtkWidget      *widget,
 }
 
 static void
-gtk_tree_foreach (GtkContainer *container,
-		  GtkCallback   callback,
-		  gpointer      callback_data)
+gtk_tree_forall (GtkContainer *container,
+		 gboolean      include_internals,
+		 GtkCallback   callback,
+		 gpointer      callback_data)
 {
   GtkTree *tree;
   GtkWidget *child;
@@ -543,9 +545,6 @@ gtk_tree_foreach (GtkContainer *container,
       children = children->next;
       
       (* callback) (child, callback_data);
-      
-      if(GTK_TREE_ITEM(child)->subtree)
-	(* callback)(GTK_TREE_ITEM(child)->subtree, callback_data);
     }
 }
 

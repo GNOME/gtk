@@ -103,6 +103,7 @@ enum {
   ARG_HAS_FOCUS,
   ARG_CAN_DEFAULT,
   ARG_HAS_DEFAULT,
+  ARG_COMPOSITE_CHILD,
   ARG_STYLE,
   ARG_EVENTS,
   ARG_EXTENSION_EVENTS
@@ -115,6 +116,7 @@ struct _GtkStateData
   GtkStateType  state;
   guint		state_restoration : 1;
   guint         parent_sensitive : 1;
+  guint		use_forall : 1;
 };
 
 static void gtk_widget_class_init		 (GtkWidgetClass    *klass);
@@ -178,7 +180,7 @@ static GtkStyle *gtk_default_style = NULL;
 static GSList *colormap_stack = NULL;
 static GSList *visual_stack = NULL;
 static GSList *style_stack = NULL;
-
+static guint   composite_child_stack = 0;
 static GSList *gtk_widget_redraw_queue = NULL;
 
 static const gchar *aux_info_key = "gtk-aux-info";
@@ -266,6 +268,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   gtk_object_add_arg_type ("GtkWidget::has_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_FOCUS);
   gtk_object_add_arg_type ("GtkWidget::can_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_DEFAULT);
   gtk_object_add_arg_type ("GtkWidget::has_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_DEFAULT);
+  gtk_object_add_arg_type ("GtkWidget::composite_child", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_COMPOSITE_CHILD);
   gtk_object_add_arg_type ("GtkWidget::style", GTK_TYPE_STYLE, GTK_ARG_READWRITE, ARG_STYLE);
   gtk_object_add_arg_type ("GtkWidget::events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EVENTS);
   gtk_object_add_arg_type ("GtkWidget::extension_events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EXTENSION_EVENTS);
@@ -664,9 +667,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   
   klass->activate_signal = 0;
   klass->show = gtk_widget_real_show;
+  klass->show_all = gtk_widget_show;
   klass->hide = gtk_widget_real_hide;
-  klass->show_all = gtk_widget_real_show;
-  klass->hide_all = gtk_widget_real_hide;
+  klass->hide_all = gtk_widget_hide;
   klass->map = gtk_widget_real_map;
   klass->unmap = gtk_widget_real_unmap;
   klass->realize = gtk_widget_real_realize;
@@ -780,6 +783,12 @@ gtk_widget_set_arg (GtkObject   *object,
       if (GTK_VALUE_BOOL (*arg))
 	gtk_widget_grab_default (widget);
       break;
+    case ARG_COMPOSITE_CHILD:
+      if (GTK_VALUE_BOOL(*arg))
+	GTK_WIDGET_SET_FLAGS (widget, GTK_COMPOSITE_CHILD);
+      else
+	GTK_WIDGET_UNSET_FLAGS (widget, GTK_COMPOSITE_CHILD);
+      break;
     case ARG_STYLE:
       gtk_widget_set_style (widget, (GtkStyle*) GTK_VALUE_BOXED (*arg));
       break;
@@ -873,6 +882,9 @@ gtk_widget_get_arg (GtkObject   *object,
     case ARG_HAS_DEFAULT:
       GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_HAS_DEFAULT (widget) != FALSE);
       break;
+    case ARG_COMPOSITE_CHILD:
+      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_COMPOSITE_CHILD (widget) != FALSE);
+      break;
     case ARG_STYLE:
       GTK_VALUE_BOXED (*arg) = (gpointer) gtk_widget_get_style (widget);
       break;
@@ -923,7 +935,10 @@ gtk_widget_init (GtkWidget *widget)
   widget->window = NULL;
   widget->parent = NULL;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_SENSITIVE | GTK_PARENT_SENSITIVE);
+  GTK_WIDGET_SET_FLAGS (widget,
+			GTK_SENSITIVE |
+			GTK_PARENT_SENSITIVE |
+			(composite_child_stack ? GTK_COMPOSITE_CHILD : 0));
 
   widget->style = gtk_widget_peek_style ();
   gtk_style_ref (widget->style);
@@ -1404,54 +1419,32 @@ gtk_widget_hide_on_delete (GtkWidget      *widget)
   return TRUE;
 }
 
-/*****************************************
- * gtk_widget_show_all:
- *
- *   Shows the widget and all children.
- *
- *   Container classes overwrite
- *   show_all and hide_all to call
- *   show_all (hide_all) on both themselves
- *   and on their child widgets.
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
 void
 gtk_widget_show_all (GtkWidget *widget)
 {
-  GtkWidgetClass *widget_class;
-  
-  g_return_if_fail (widget != NULL);
-  
-  /* show_all shouldn't be invoked through a signal,
-     because in this case it would be quite slow - there would
-     be a show and show_all signal emitted for every child widget.
-   */
-  widget_class = GTK_WIDGET_CLASS(GTK_OBJECT(widget)->klass);
-  widget_class->show_all (widget);
-}
+  GtkWidgetClass *class;
 
-/*****************************************
- * gtk_widget_hide_all:
- *
- *   Hides the widget and all children.
- *   See gtk_widget_show_all.
- *
- *   arguments:
- *
- *   results:
- *****************************************/
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  class = GTK_WIDGET_CLASS (GTK_OBJECT (widget)->klass);
+
+  if (class->show_all)
+    class->show_all (widget);
+}
 
 void
 gtk_widget_hide_all (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
-  g_assert (widget->parent);
+  GtkWidgetClass *class;
 
-  GTK_WIDGET_CLASS (GTK_OBJECT (widget)->klass)->hide_all (widget);
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  class = GTK_WIDGET_CLASS (GTK_OBJECT (widget)->klass);
+
+  if (class->hide_all)
+    class->hide_all (widget);
 }
 
 /*****************************************
@@ -1733,9 +1726,9 @@ gtk_widget_draw_children (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   
   if (GTK_IS_CONTAINER (widget))
-    gtk_container_foreach (GTK_CONTAINER (widget),
-			   gtk_widget_draw_children_recurse,
-			   NULL);
+    gtk_container_forall (GTK_CONTAINER (widget),
+			  gtk_widget_draw_children_recurse,
+			  NULL);
 }
 
 /*****************************************
@@ -2174,9 +2167,9 @@ gtk_widget_reparent_container_child(GtkWidget *widget,
 	gdk_window_ref (widget->window);
 
       if (GTK_IS_CONTAINER (widget))
-	gtk_container_foreach (GTK_CONTAINER (widget),
-			       gtk_widget_reparent_container_child,
-			       client_data);
+	gtk_container_forall (GTK_CONTAINER (widget),
+			      gtk_widget_reparent_container_child,
+			      client_data);
     }
   else
     gdk_window_reparent (widget->window, 
@@ -2225,9 +2218,9 @@ gtk_widget_reparent (GtkWidget *widget,
 	  if (GTK_WIDGET_NO_WINDOW (widget))
     	    {
 	      if (GTK_IS_CONTAINER (widget))
-		gtk_container_foreach (GTK_CONTAINER (widget),
-				       gtk_widget_reparent_container_child,
-				       gtk_widget_get_parent_window (widget));
+		gtk_container_forall (GTK_CONTAINER (widget),
+				      gtk_widget_reparent_container_child,
+				      gtk_widget_get_parent_window (widget));
 	      else
 		{
 		  GdkWindow *parent_window;
@@ -2484,6 +2477,7 @@ gtk_widget_set_state (GtkWidget           *widget,
 
       data.state = state;
       data.state_restoration = FALSE;
+      data.use_forall = FALSE;
       if (widget->parent)
 	data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget->parent) != FALSE);
       else
@@ -2529,6 +2523,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
       data.state = GTK_WIDGET_STATE (widget);
     }
   data.state_restoration = TRUE;
+  data.use_forall = TRUE;
 
   if (widget->parent)
     data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget->parent) != FALSE);
@@ -2572,6 +2567,7 @@ gtk_widget_set_parent (GtkWidget *widget,
     data.state = GTK_WIDGET_STATE (widget);
   data.state_restoration = FALSE;
   data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (parent) != FALSE);
+  data.use_forall = GTK_WIDGET_IS_SENSITIVE (parent) != GTK_WIDGET_IS_SENSITIVE (widget);
 
   gtk_widget_propagate_state (widget, &data);
   
@@ -2760,9 +2756,9 @@ gtk_widget_set_style_recurse (GtkWidget *widget,
     gtk_widget_set_rc_style (widget);
   
   if (GTK_IS_CONTAINER (widget))
-    gtk_container_foreach (GTK_CONTAINER (widget),
-			   gtk_widget_set_style_recurse,
-			   NULL);
+    gtk_container_forall (GTK_CONTAINER (widget),
+			  gtk_widget_set_style_recurse,
+			  NULL);
 }
 
 void
@@ -3285,6 +3281,19 @@ gtk_widget_push_visual (GdkVisual *visual)
   visual_stack = g_slist_prepend (visual_stack, visual);
 }
 
+void
+gtk_widget_push_composite (void)
+{
+  composite_child_stack++;
+}
+
+void
+gtk_widget_pop_composite (void)
+{
+  if (composite_child_stack)
+    composite_child_stack--;
+}
+
 /*****************************************
  * gtk_widget_pop_colormap:
  *
@@ -3639,9 +3648,9 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   /* Unrealize afterwards to improve visual effect */
 
   if (GTK_IS_CONTAINER (widget))
-    gtk_container_foreach (GTK_CONTAINER (widget),
-			   (GtkCallback) gtk_widget_unrealize,
-			   NULL);
+    gtk_container_forall (GTK_CONTAINER (widget),
+			  (GtkCallback) gtk_widget_unrealize,
+			  NULL);
 }
 
 /*****************************************
@@ -3749,18 +3758,6 @@ gtk_widget_peek_visual (void)
   return gtk_widget_get_default_visual ();
 }
 
-/*************************************************************
- * gtk_widget_propagate_state:
- *     Propagate a change in the widgets state down the tree
- *
- *   arguments:
- *     widget
- *     GtkStateData: state
- *                   parent_sensitive
- *
- *   results:
- *************************************************************/
-
 static void
 gtk_widget_propagate_state (GtkWidget           *widget,
 			    GtkStateData        *data)
@@ -3823,9 +3820,14 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 	{
 	  data->parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget) != FALSE);
 	  data->state = GTK_WIDGET_STATE (widget);
-	  gtk_container_foreach (GTK_CONTAINER (widget),
-				 (GtkCallback) gtk_widget_propagate_state,
-				 data);
+	  if (data->use_forall)
+	    gtk_container_forall (GTK_CONTAINER (widget),
+				  (GtkCallback) gtk_widget_propagate_state,
+				  data);
+	  else
+	    gtk_container_foreach (GTK_CONTAINER (widget),
+				   (GtkCallback) gtk_widget_propagate_state,
+				   data);
 	}
       gtk_widget_unref (widget);
     }

@@ -51,7 +51,8 @@ static void gtk_box_add        (GtkContainer   *container,
 			        GtkWidget      *widget);
 static void gtk_box_remove     (GtkContainer   *container,
 			        GtkWidget      *widget);
-static void gtk_box_foreach    (GtkContainer   *container,
+static void gtk_box_forall     (GtkContainer   *container,
+				gboolean	include_internals,
 			        GtkCallback     callback,
 			        gpointer        callback_data);
 static void gtk_box_set_child_arg (GtkContainer   *container,
@@ -124,7 +125,7 @@ gtk_box_class_init (GtkBoxClass *class)
 
   container_class->add = gtk_box_add;
   container_class->remove = gtk_box_remove;
-  container_class->foreach = gtk_box_foreach;
+  container_class->forall = gtk_box_forall;
   container_class->child_type = gtk_box_child_type;
   container_class->set_child_arg = gtk_box_set_child_arg;
   container_class->get_child_arg = gtk_box_get_child_arg;
@@ -746,9 +747,10 @@ gtk_box_remove (GtkContainer *container,
 }
 
 static void
-gtk_box_foreach (GtkContainer *container,
-		 GtkCallback   callback,
-		 gpointer      callback_data)
+gtk_box_forall (GtkContainer *container,
+		gboolean      include_internals,
+		GtkCallback   callback,
+		gpointer      callback_data)
 {
   GtkBox *box;
   GtkBoxChild *child;

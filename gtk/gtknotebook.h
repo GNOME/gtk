@@ -117,6 +117,8 @@ void       gtk_notebook_insert_page_menu  (GtkNotebook      *notebook,
 void       gtk_notebook_remove_page       (GtkNotebook      *notebook,
 				           gint              page_num);
 gint       gtk_notebook_current_page      (GtkNotebook      *notebook);
+gint	   gtk_notebook_page_num	  (GtkNotebook	    *notebook,
+					   GtkWidget	    *child);
 void       gtk_notebook_set_page          (GtkNotebook      *notebook,
 				           gint              page_num);
 void       gtk_notebook_next_page         (GtkNotebook      *notebook);
@@ -127,7 +129,7 @@ void       gtk_notebook_reorder_child     (GtkNotebook      *notebook,
 void       gtk_notebook_set_tab_pos       (GtkNotebook      *notebook,
 					   GtkPositionType   pos);
 void       gtk_notebook_set_show_tabs     (GtkNotebook      *notebook,
-					   gint              show_tabs);
+					   gboolean          show_tabs);
 void       gtk_notebook_set_show_border   (GtkNotebook      *notebook,
 					   gint              show_border);
 void       gtk_notebook_set_scrollable    (GtkNotebook      *notebook,

@@ -620,7 +620,6 @@ gtk_real_list_item_select (GtkItem *item)
   g_return_if_fail (GTK_IS_LIST_ITEM (item));
 
   gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_SELECTED);
-  gtk_widget_queue_draw (GTK_WIDGET (item));
 }
 
 static void
@@ -633,7 +632,6 @@ gtk_real_list_item_deselect (GtkItem *item)
     return;
 
   gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_NORMAL);
-  gtk_widget_queue_draw (GTK_WIDGET (item));
 }
 
 static void
@@ -656,7 +654,6 @@ gtk_real_list_item_toggle (GtkItem *item)
 	gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_NORMAL);
       else
 	gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_SELECTED);
-      gtk_widget_queue_draw (GTK_WIDGET (item));
     }
 }
 

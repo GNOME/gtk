@@ -52,7 +52,8 @@ static void gtk_scrolled_window_add                (GtkContainer           *cont
 						    GtkWidget              *widget);
 static void gtk_scrolled_window_remove             (GtkContainer           *container,
 						    GtkWidget              *widget);
-static void gtk_scrolled_window_foreach            (GtkContainer           *container,
+static void gtk_scrolled_window_forall             (GtkContainer           *container,
+						    gboolean		    include_internals,
 						    GtkCallback             callback,
 						    gpointer                callback_data);
 static void gtk_scrolled_window_viewport_allocate  (GtkWidget              *widget,
@@ -127,7 +128,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 
   container_class->add = gtk_scrolled_window_add;
   container_class->remove = gtk_scrolled_window_remove;
-  container_class->foreach = gtk_scrolled_window_foreach;
+  container_class->forall = gtk_scrolled_window_forall;
 
   class->scrollbar_spacing = 5;
 }
@@ -594,9 +595,10 @@ gtk_scrolled_window_remove (GtkContainer *container,
 }
 
 static void
-gtk_scrolled_window_foreach (GtkContainer *container,
-			     GtkCallback   callback,
-			     gpointer      callback_data)
+gtk_scrolled_window_forall (GtkContainer *container,
+			    gboolean	  include_internals,
+			    GtkCallback   callback,
+			    gpointer      callback_data)
 {
   GtkScrolledWindow *scrolled_window;
 
@@ -606,11 +608,16 @@ gtk_scrolled_window_foreach (GtkContainer *container,
 
   scrolled_window = GTK_SCROLLED_WINDOW (container);
 
-  if (scrolled_window->viewport)
-    (* callback) (scrolled_window->viewport, callback_data);
-
-  (* callback) (scrolled_window->vscrollbar, callback_data);
-  (* callback) (scrolled_window->hscrollbar, callback_data);
+  if (include_internals)
+    {
+      if (scrolled_window->viewport)
+	(* callback) (scrolled_window->viewport, callback_data);
+      
+      (* callback) (scrolled_window->vscrollbar, callback_data);
+      (* callback) (scrolled_window->hscrollbar, callback_data);
+    }
+  else if (scrolled_window->viewport)
+    gtk_container_foreach (GTK_CONTAINER (scrolled_window->viewport), callback, callback_data);
 }
 
 static void

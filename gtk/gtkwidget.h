@@ -50,7 +50,8 @@ typedef enum
   GTK_HAS_DEFAULT      = 1 << 14,
   GTK_HAS_GRAB	       = 1 << 15,
   GTK_RC_STYLE	       = 1 << 16,
-  GTK_BASIC	       = 1 << 17
+  GTK_COMPOSITE_CHILD  = 1 << 17,
+  GTK_BASIC	       = 1 << 18
 } GtkWidgetFlags;
 
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
@@ -86,8 +87,9 @@ typedef enum
 #define GTK_WIDGET_CAN_DEFAULT(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_CAN_DEFAULT) != 0)
 #define GTK_WIDGET_HAS_DEFAULT(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_DEFAULT) != 0)
 #define GTK_WIDGET_HAS_GRAB(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_GRAB) != 0)
-#define GTK_WIDGET_BASIC(wid)		  ((GTK_WIDGET_FLAGS (wid) & GTK_BASIC) != 0)
 #define GTK_WIDGET_RC_STYLE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_RC_STYLE) != 0)
+#define GTK_WIDGET_COMPOSITE_CHILD(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_COMPOSITE_CHILD) != 0)
+#define GTK_WIDGET_BASIC(wid)		  ((GTK_WIDGET_FLAGS (wid) & GTK_BASIC) != 0)
   
 /* Macros for setting and clearing widget flags.
  */
@@ -234,9 +236,9 @@ struct _GtkWidgetClass
   
   /* basics */
   void (* show)		       (GtkWidget      *widget);
+  void (* show_all)            (GtkWidget      *widget);
   void (* hide)		       (GtkWidget      *widget);
-  void (* show_all)	       (GtkWidget      *widget);
-  void (* hide_all)	       (GtkWidget      *widget);
+  void (* hide_all)            (GtkWidget      *widget);
   void (* map)		       (GtkWidget      *widget);
   void (* unmap)	       (GtkWidget      *widget);
   void (* realize)	       (GtkWidget      *widget);
@@ -498,12 +500,14 @@ void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
  * This will override the values that got set by the
  * gtk_widget_set_default_* () functions.
  */
-void	     gtk_widget_push_style	 (GtkStyle	*style);
-void	     gtk_widget_push_colormap	 (GdkColormap	*cmap);
-void	     gtk_widget_push_visual	 (GdkVisual	*visual);
-void	     gtk_widget_pop_style	 (void);
-void	     gtk_widget_pop_colormap	 (void);
-void	     gtk_widget_pop_visual	 (void);
+void	     gtk_widget_push_style	    (GtkStyle	 *style);
+void	     gtk_widget_push_colormap	    (GdkColormap *cmap);
+void	     gtk_widget_push_visual	    (GdkVisual	 *visual);
+void	     gtk_widget_push_composite_flag (void);
+void	     gtk_widget_pop_composite_flag  (void);
+void	     gtk_widget_pop_style	    (void);
+void	     gtk_widget_pop_colormap	    (void);
+void	     gtk_widget_pop_visual	    (void);
 
 /* Set certain default values to be used at widget creation time.
  */

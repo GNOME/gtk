@@ -1,3 +1,107 @@
+Thu Sep  3 04:22:20 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenushell.c (gtk_real_menu_shell_move_current):
+ 	GTK_MENU_DIR_CHILD: check for the existance of
+ 	menu_shell->active_menu_item before accessing its child.
+	GTK_MENU_DIR_PREV:
+	GTK_MENU_DIR_NEXT: if we haven't had an active item and still
+	don't, make a default selection.
+
+Wed Sep  2 00:28:58 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_propagate_state): iterate
+	the children with _forall for sensitivity changes and with
+	_foreach on pure state changes. this fixes a lot of the
+	old inclusions of internal widgets into _foreach calls.
+
+	* gtk/gtktree.c: removed gtk_tree_foreach, let gtk_tree_forall
+	do the work. don't walk the subtrees of first level children.
+
+	* gtk/gtktreeitem.c: provide a _forall implementation,
+	which walks the subtrees as well for include_internals.
+
+	* gtk/gtkmenuitem.c: provide a _forall implementation, which walks
+	the submenus as well for include_internals.
+
+	* gtk/gtkscrolledwindow.c: removed gtk_scrolled_window_foreach and
+	implemented gtk_scrolled_window_forall, which will iterate over
+	the viewport and the scrollbars for gtk_container_forall or
+	iterate over the viewports children for gtk_container_foreach.
+
+	* gtk/gtktoolbar.c: 
+	* gtk/gtktable.c: 
+	* gtk/gtkpaned.c:
+	* gtk/gtkpacker.c:
+	* gtk/gtkmenushell.c: 
+	* gtk/gtklist.c: 
+	* gtk/gtkfixed.c:
+	* gtk/gtkclist.c:
+	* gtk/gtkbox.c: 
+	* gtk/gtkbin.c: 
+	* gtk/gtknotebook.c:
+	removed the old gtk_*_foreach functions and provided gtk_*_forall.
+
+	* gtk/gtknotebook.c:
+ 	(gtk_notebook_real_switch_page): expose tabs.
+	(gtk_notebook_page_num): new function to return the page number
+	of a distinct child.
+	(gtk_notebook_focus): minor fixups. foxus handling is still screwed
+ 	under some circumstances.
+
+	* gtk/gtktreeitem.c:
+ 	(gtk_real_tree_item_select):
+	(gtk_real_tree_item_deselect): major fixes.
+	some general fixups wrt queue_redraw, and tree items not being
+ 	NO_WINDOW widgets.
+
+	* gtk/gtklistitem.c:
+ 	(gtk_real_list_item_select): 
+	(gtk_real_list_item_deselect): 
+	(gtk_real_list_item_toggle): 
+	removed unneccessary queue_redraw calls.
+
+Wed Aug 30 09:42:07 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkoptionmenu.c: allow optionmenus to have the focus and
+	automatically popup the menu on space bar.
+
+Wed Aug 26 06:40:34 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.h:
+	* gtk/gtkcontainer.c: implemented gtk_container_forall() (as a class
+	method), which acts similar to gtk_container_foreach(), but iterates
+	over internal children. the GtkContainer::foreach signal vanished in
+ 	favour of a new class method ->forall() that optionally includes
+ 	internal widgets.
+
+	* gtk/gtkclist.c (gtk_clist_init): provide no _foreach implementation
+	but a _forall implementation, since all child widgets we have are
+	internal ones.
+	(column_button_create): set the	parent window prior
+ 	to gtk_widget_set_parent().
+
+	* gtk/gtkwidget.c:
+	exchanged all calls to gtk_container_foreach() with
+ 	gtk_container_forall().
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: added the GTK_COMPOSITE_CHILD, exported through
+	the GtkWidget::composite_child argument. to have a widget created
+	with the flag initially, two new functions got added to wrap a widgets
+	creation:
+ 	gtk_widget_push_composite_flag() and gtk_widget_pop_composite_flag().
+
+Wed Aug 25 23:37:39 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktooltips.h:
+	* gtk/gtktooltips.c: exported gtk_tooltips_create_window() as
+	gtk_tooltips_force_window(), so tooltips->tip_window can be accessed
+	prior to the first tip being set.
+	don't put an extra reference on the window, since it is a toplevel,
+ 	it wont get destroyed from anywhere else.
+
+	* overall macro and GtkType fixups.
+
 1998-09-02  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkcolorsel.c: Replaced "foo == TRUE" and "foo == FALSE"
