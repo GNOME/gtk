@@ -95,16 +95,16 @@ terms specified in this license.
 
 
 #include "gtkpacker.h"
-
+#include "gtkintl.h"
 
 enum {
-  ARG_0,
-  ARG_SPACING,
-  ARG_D_BORDER_WIDTH,
-  ARG_D_PAD_X,
-  ARG_D_PAD_Y,
-  ARG_D_IPAD_X,
-  ARG_D_IPAD_Y
+  PROP_0,
+  PROP_SPACING,
+  PROP_D_BORDER_WIDTH,
+  PROP_D_PAD_X,
+  PROP_D_PAD_Y,
+  PROP_D_IPAD_X,
+  PROP_D_IPAD_Y
 };
 
 enum {
@@ -139,12 +139,14 @@ static void gtk_packer_forall        (GtkContainer   *container,
 				      gboolean        include_internals,
                                       GtkCallback     callback,
                                       gpointer        callback_data);
-static void gtk_packer_set_arg	     (GtkObject      *object,
-				      GtkArg         *arg,
-				      guint           arg_id);
-static void gtk_packer_get_arg	     (GtkObject      *object,
-				      GtkArg         *arg,
-				      guint           arg_id);
+static void gtk_packer_set_property  (GObject         *object,
+				      guint            prop_id,
+				      const GValue    *value,
+				      GParamSpec      *pspec);
+static void gtk_packer_get_property  (GObject         *object,
+				      guint            prop_id,
+				      GValue          *value,
+				      GParamSpec      *pspec);
 static void gtk_packer_get_child_arg (GtkContainer   *container,
 				      GtkWidget      *child,
 				      GtkArg         *arg,
@@ -187,21 +189,16 @@ static void
 gtk_packer_class_init (GtkPackerClass *klass)
 {
   GtkObjectClass *object_class;
+  GObjectClass   *gobject_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   
+  gobject_class = G_OBJECT_CLASS (klass);
   object_class = (GtkObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
   
-  gtk_object_add_arg_type ("GtkPacker::spacing", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_SPACING);
-  gtk_object_add_arg_type ("GtkPacker::default_border_width", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_D_BORDER_WIDTH);
-  gtk_object_add_arg_type ("GtkPacker::default_pad_x", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_D_PAD_X);
-  gtk_object_add_arg_type ("GtkPacker::default_pad_y", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_D_PAD_Y);
-  gtk_object_add_arg_type ("GtkPacker::default_ipad_x", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_D_IPAD_X);
-  gtk_object_add_arg_type ("GtkPacker::default_ipad_y", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_D_IPAD_Y);
-
   gtk_container_add_child_arg_type ("GtkPacker::side", GTK_TYPE_SIDE_TYPE, GTK_ARG_READWRITE, CHILD_ARG_SIDE);
   gtk_container_add_child_arg_type ("GtkPacker::anchor", GTK_TYPE_ANCHOR_TYPE, GTK_ARG_READWRITE, CHILD_ARG_ANCHOR);
   gtk_container_add_child_arg_type ("GtkPacker::expand", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_EXPAND);
@@ -215,8 +212,8 @@ gtk_packer_class_init (GtkPackerClass *klass)
   gtk_container_add_child_arg_type ("GtkPacker::ipad_y", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_I_PAD_Y);
   gtk_container_add_child_arg_type ("GtkPacker::position", GTK_TYPE_INT, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
 
-  object_class->set_arg = gtk_packer_set_arg;
-  object_class->get_arg = gtk_packer_get_arg;
+  gobject_class->set_property = gtk_packer_set_property;
+  gobject_class->get_property = gtk_packer_get_property;
 
   widget_class->map = gtk_packer_map;
   widget_class->unmap = gtk_packer_unmap;
@@ -230,44 +227,106 @@ gtk_packer_class_init (GtkPackerClass *klass)
   container_class->child_type = gtk_packer_child_type;
   container_class->get_child_arg = gtk_packer_get_child_arg;
   container_class->set_child_arg = gtk_packer_set_child_arg;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_SPACING,
+                                   g_param_spec_uint ("spacing",
+						      _("Spacing"),
+						      _("Width between child elements"),
+						      0,
+						      G_MAXUINT,
+						      0,
+						      G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_D_BORDER_WIDTH,
+                                   g_param_spec_uint ("default_border_width",
+						      _("Default Border"),
+						      _("Default border width"),
+						      0,
+						      G_MAXUINT,
+						      0,
+						      G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_D_PAD_X,
+                                   g_param_spec_uint ("default_pad_x",
+						      _("Default Pad X"),
+						      _("Default horizontal padding"),
+						      0,
+						      G_MAXUINT,
+						      0,
+						      G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_D_PAD_Y,
+                                   g_param_spec_uint ("default_pad_y",
+						      _("Default Pad Y"),
+						      _("Default vertical padding"),
+						      0,
+						      G_MAXUINT,
+						      0,
+						      G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_D_IPAD_X,
+                                   g_param_spec_uint ("default_ipad_x",
+						      _("Default IPad X"),
+						      _("Default horizontal internal padding"),
+						      0,
+						      G_MAXUINT,
+						      0,
+						      G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_D_IPAD_Y,
+                                   g_param_spec_uint ("default_ipad_y",
+						      _("Default IPad Y"),
+						      _("Default vertical internal padding"),
+						      0,
+						      G_MAXUINT,
+						      0,
+						      G_PARAM_READWRITE));
+
 }
 
 static void
-gtk_packer_set_arg (GtkObject	 *object,
-		    GtkArg       *arg,
-		    guint         arg_id)
+gtk_packer_set_property (GObject         *object,
+			 guint            prop_id,
+			 const GValue    *value,
+			 GParamSpec      *pspec)
 {
   GtkPacker *packer;
 
   packer = GTK_PACKER (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_SPACING:
-      gtk_packer_set_spacing (packer, GTK_VALUE_UINT (*arg));
+    case PROP_SPACING:
+      gtk_packer_set_spacing (packer, g_value_get_uint (value));
       break;
-    case ARG_D_BORDER_WIDTH:
-      gtk_packer_set_default_border_width (packer, GTK_VALUE_UINT (*arg));
+    case PROP_D_BORDER_WIDTH:
+      gtk_packer_set_default_border_width (packer, g_value_get_uint (value));
       break;
-    case ARG_D_PAD_X:
+    case PROP_D_PAD_X:
       gtk_packer_set_default_pad (packer,
-				  GTK_VALUE_UINT (*arg),
+				  g_value_get_uint (value),
 				  packer->default_pad_y);
       break;
-    case ARG_D_PAD_Y:
+    case PROP_D_PAD_Y:
       gtk_packer_set_default_pad (packer,
 				  packer->default_pad_x,
-				  GTK_VALUE_UINT (*arg));
+				  g_value_get_uint (value));
       break;
-    case ARG_D_IPAD_X:
+    case PROP_D_IPAD_X:
       gtk_packer_set_default_ipad (packer,
-				   GTK_VALUE_UINT (*arg),
+				   g_value_get_uint (value),
 				   packer->default_i_pad_y);
       break;
-    case ARG_D_IPAD_Y:
+    case PROP_D_IPAD_Y:
       gtk_packer_set_default_ipad (packer,
 				   packer->default_i_pad_x,
-				   GTK_VALUE_UINT (*arg));
+				   g_value_get_uint (value));
       break;
     default:
       break;
@@ -275,36 +334,37 @@ gtk_packer_set_arg (GtkObject	 *object,
 }
 
 static void
-gtk_packer_get_arg (GtkObject	 *object,
-		    GtkArg       *arg,
-		    guint         arg_id)
+gtk_packer_get_property (GObject         *object,
+			 guint            prop_id,
+			 GValue          *value,
+			 GParamSpec      *pspec)
 {
   GtkPacker *packer;
 
   packer = GTK_PACKER (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_SPACING:
-      GTK_VALUE_UINT (*arg) = packer->spacing;
+    case PROP_SPACING:
+      g_value_set_uint (value, packer->spacing);
       break;
-    case ARG_D_BORDER_WIDTH:
-      GTK_VALUE_UINT (*arg) = packer->default_border_width;
+    case PROP_D_BORDER_WIDTH:
+      g_value_set_uint (value, packer->default_border_width);
       break;
-    case ARG_D_PAD_X:
-      GTK_VALUE_UINT (*arg) = packer->default_pad_x;
+    case PROP_D_PAD_X:
+      g_value_set_uint (value, packer->default_pad_x);
       break;
-    case ARG_D_PAD_Y:
-      GTK_VALUE_UINT (*arg) = packer->default_pad_y;
+    case PROP_D_PAD_Y:
+      g_value_set_uint (value, packer->default_pad_y);
       break;
-    case ARG_D_IPAD_X:
-      GTK_VALUE_UINT (*arg) = packer->default_i_pad_x;
+    case PROP_D_IPAD_X:
+      g_value_set_uint (value, packer->default_i_pad_x);
       break;
-    case ARG_D_IPAD_Y:
-      GTK_VALUE_UINT (*arg) = packer->default_i_pad_y;
+    case PROP_D_IPAD_Y:
+      g_value_set_uint (value, packer->default_i_pad_y);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -510,6 +570,8 @@ gtk_packer_set_spacing (GtkPacker *packer,
     {
       packer->spacing = spacing;
       gtk_widget_queue_resize (GTK_WIDGET (packer));
+    
+      g_object_notify (G_OBJECT (packer), "spacing");
     }
 }
 
@@ -554,6 +616,8 @@ gtk_packer_set_default_border_width (GtkPacker *packer,
     {
       packer->default_border_width = border;;
       redo_defaults_children (packer);
+    
+      g_object_notify (G_OBJECT (packer), "default_border_width");
     }
 }
 void
@@ -570,6 +634,11 @@ gtk_packer_set_default_pad (GtkPacker *packer,
       packer->default_pad_x = pad_x;
       packer->default_pad_y = pad_y;
       redo_defaults_children (packer);
+    
+      if (packer->default_pad_x != pad_x)
+	g_object_notify (G_OBJECT (packer), "default_pad_x");
+      if (packer->default_pad_y != pad_y)	    
+	g_object_notify (G_OBJECT (packer), "default_pad_y");
     }
 }
 
@@ -587,6 +656,11 @@ gtk_packer_set_default_ipad (GtkPacker *packer,
     packer->default_i_pad_x = i_pad_x;
     packer->default_i_pad_y = i_pad_y;
     redo_defaults_children (packer);
+    
+    if (packer->default_i_pad_x != i_pad_x)
+      g_object_notify (G_OBJECT (packer), "default_ipad_x");
+    if (packer->default_i_pad_y != i_pad_y)	    
+      g_object_notify (G_OBJECT (packer), "default_ipad_y");
   }
 }
 

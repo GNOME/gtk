@@ -1,3 +1,8 @@
+2001-05-15  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gtk/gtkpacker.c: Apply patch from John Margaglione that converts
+	from args to properties.
+
 Tue May 15 10:11:59 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkpreview.c: Apply patch from John Margaglione converting
