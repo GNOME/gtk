@@ -1,3 +1,16 @@
+Sat Feb  2 21:54:01 2002  Owen Taylor  <otaylor@redhat.com>
+
+	RC file lookup improvements (#68234, suggestions
+	from Matthias Clasen.)
+
+	* gtk/gtkrc.c (gtk_rc_parse_file): Look for the 
+	locale suffix variants (gtkrc.en_US, gtkrc.en) for
+	all RC files we parse, not just the default RC
+	files.
+
+	* gtk/gtkrc.c (gtk_rc_parse_default_files): Remove
+	support for charset specific RC files.
+
 Sat Feb  2 20:16:04 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenushell.c (_gtk_menu_shell_select_first): 

@@ -525,55 +525,6 @@ gtk_rc_get_default_files (void)
   return gtk_rc_default_files;
 }
 
-/* The following routine is based on _nl_normalize_codeset from
- * the GNU C library. Contributed by
- *
- * Contributed by Ulrich Drepper <drepper@gnu.ai.mit.edu>, 1995.
- * Copyright (C) 1995, 1996, 1997, 1998, 1999 Free Software Foundation, Inc.
- * 
- * Normalize codeset name.  There is no standard for the codeset
- * names.  Normalization allows the user to use any of the common
- * names.
- */
-static gchar *
-_gtk_normalize_codeset (const gchar *codeset, gint name_len)
-{
-  gint len = 0;
-  gint only_digit = 1;
-  gchar *retval;
-  gchar *wp;
-  gint cnt;
-
-  for (cnt = 0; cnt < name_len; ++cnt)
-    if (isalnum (codeset[cnt]))
-      {
-       ++len;
-
-       if (isalpha (codeset[cnt]))
-	 only_digit = 0;
-      }
-
-  retval = g_malloc ((only_digit ? 3 : 0) + len + 1);
-
-  if (only_digit)
-    {
-      memcpy (retval, "iso", 4);
-      wp = retval + 3;
-    }
-  else
-    wp = retval;
-
-  for (cnt = 0; cnt < name_len; ++cnt)
-    if (isalpha (codeset[cnt]))
-      *wp++ = isupper(codeset[cnt]) ? tolower (codeset[cnt]) : codeset[cnt];
-    else if (isdigit (codeset[cnt]))
-      *wp++ = codeset[cnt];
-
-  *wp = '\0';
-
-  return retval;
-}
-
 static void
 gtk_rc_settings_changed (GtkSettings  *settings,
 			 GParamSpec   *pspec,
@@ -689,79 +640,10 @@ gtk_rc_parse_named (GtkRcContext *context,
 static void
 gtk_rc_parse_default_files (GtkRcContext *context)
 {
-  gchar *locale_suffixes[3];
-  gint n_locale_suffixes = 0;
-  gint i, j;
-  gint length;
-  gchar *locale;
-  gchar *p;
+  gint i;
 
-#ifdef G_OS_WIN32      
-  locale = g_win32_getlocale ();
-#else      
-  locale = setlocale (LC_CTYPE, NULL);
-#endif      
-
-  if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
-    {
-      /* Determine locale-specific suffixes for RC files
-       *
-       * We normalize the charset into a standard form,
-       * which has all '-' and '_' characters removed,
-       * and is lowercase.
-       */
-      gchar *normalized_locale;
-      
-      p = strchr (locale, '@');
-      length = p ? (p - locale) : strlen (locale);
-      
-      p = strchr (locale, '.');
-      if (p)
-	{
-	  gchar *tmp1 = g_strndup (locale, p - locale + 1);
-	  gchar *tmp2 = _gtk_normalize_codeset (p + 1, length - (p - locale + 1));
-	  
-	  normalized_locale = g_strconcat (tmp1, tmp2, NULL);
-	  g_free (tmp1);
-	  g_free (tmp2);
-	  
-	  locale_suffixes[n_locale_suffixes++] = g_strdup (normalized_locale);
-	  length = p - locale;
-	}
-      else
-	normalized_locale = g_strndup (locale, length);
-      
-      p = strchr (normalized_locale, '_');
-      if (p)
-	{
-	  locale_suffixes[n_locale_suffixes++] = g_strndup (normalized_locale, length);
-	  length = p - normalized_locale;
-	}
-      
-      locale_suffixes[n_locale_suffixes++] = g_strndup (normalized_locale, length);
-      
-      g_free (normalized_locale);
-    }
-  
   for (i = 0; gtk_rc_default_files[i] != NULL; i++)
-    {
-      /* Try to find a locale specific RC file corresponding to the
-       * current locale to parse before the default file.
-       */
-      for (j = n_locale_suffixes - 1; j >= 0; j--)
-	{
-	  gchar *name = g_strconcat (gtk_rc_default_files[i],
-				     ".",
-				     locale_suffixes[j],
-				     NULL);
-	  gtk_rc_parse_file (context, name, GTK_PATH_PRIO_RC, FALSE);
-	  g_free (name);
-	}
-      gtk_rc_parse_file (context, gtk_rc_default_files[i], GTK_PATH_PRIO_RC, FALSE);
-    }
-
-  for (j = 0; j < n_locale_suffixes; j++)
-    g_free (locale_suffixes[j]);
+    gtk_rc_parse_file (context, gtk_rc_default_files[i], GTK_PATH_PRIO_RC, FALSE);
 }
 
 void
@@ -786,7 +668,7 @@ void
 gtk_rc_parse_string (const gchar *rc_string)
 {
   GtkRcFile *rc_file;
-  /* This is wrong; once we have meaingful RC context, we need to parse the
+  /* This is wrong; once we have meaningful multiple RC contexts, we need to parse the
    * string in all contexts, and in fact, in future contexts as well.
    */
   GtkRcContext *context = gtk_rc_context_get (gtk_settings_get_default ());
@@ -806,10 +688,10 @@ gtk_rc_parse_string (const gchar *rc_string)
 }
 
 static void
-gtk_rc_parse_file (GtkRcContext *context,
-		   const gchar  *filename,
-		   gint          priority,
-		   gboolean      reload)
+gtk_rc_parse_one_file (GtkRcContext *context,
+		       const gchar  *filename,
+		       gint          priority,
+		       gboolean      reload)
 {
   GtkRcFile *rc_file = NULL;
   struct stat statbuf;
@@ -891,13 +773,96 @@ gtk_rc_parse_file (GtkRcContext *context,
   context->default_priority = saved_priority;
 }
 
+static gchar *
+strchr_len (const gchar *str, gint len, char c)
+{
+  while (len--)
+    {
+      if (*str == c)
+	return (gchar *)str;
+
+      str++;
+    }
+
+  return NULL;
+}
+
+static void
+gtk_rc_parse_file (GtkRcContext *context,
+		   const gchar  *filename,
+		   gint          priority,
+		   gboolean      reload)
+{
+  gchar *locale_suffixes[2];
+  gint n_locale_suffixes = 0;
+  gchar *p;
+  const gchar *locale;
+  gint length, j;
+  gboolean found = FALSE;
+
+  #ifdef G_OS_WIN32      
+  locale = g_win32_getlocale ();
+#else      
+  locale = setlocale (LC_CTYPE, NULL);
+#endif      
+
+  if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
+    {
+      /* Determine locale-specific suffixes for RC files
+       *
+       * We normalize the charset into a standard form,
+       * which has all '-' and '_' characters removed,
+       * and is lowercase.
+       */
+      length = strlen (locale);
+      
+      p = strchr (locale, '@');
+      if (p)
+	length = p - locale;
+
+      p = strchr_len (locale, length, '.');
+      if (p)
+	length = p - locale;
+      
+      locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+      
+      p = strchr_len (locale, length, '_');
+      if (p)
+	{
+	  length = p - locale;
+	  locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+	}
+    }
+  
+  gtk_rc_parse_one_file (context, filename, priority, reload);
+  for (j = 0; j < n_locale_suffixes; j++)
+    {
+      if (!found)
+	{
+	  gchar *name = g_strconcat (filename, ".", locale_suffixes[j], NULL);
+	  if (g_file_test (name, G_FILE_TEST_EXISTS))
+	    {
+	      gtk_rc_parse_one_file (context, name, priority, FALSE);
+	      found = TRUE;
+	    }
+	      
+	  g_free (name);
+	}
+      
+      g_free (locale_suffixes[j]);
+    }
+}
+
 void
 gtk_rc_parse (const gchar *filename)
 {
   g_return_if_fail (filename != NULL);
 
+  /* This is wrong; once we have meaningful multiple RC contexts, we need to parse the
+   * file in all contexts, and in fact, in future contexts as well.
+   */
   gtk_rc_parse_file (gtk_rc_context_get (gtk_settings_get_default ()),
-		     filename, GTK_PATH_PRIO_RC, TRUE); /* FIXME */
+		     filename, GTK_PATH_PRIO_RC, TRUE);
 }
 
 /* Handling of RC styles */
