@@ -1,3 +1,13 @@
+Thu Mar  8 19:18:27 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_unref_tree_helper): Actually
+	unref the nodes.   Fixes bug #50058.
+
+	* gtk/gtktreemodel.c (gtk_tree_model_ref_node): change
+	"::ref_iter" to "::ref_node".
+	(gtk_tree_model_unref_node): change "::unref_iter" to
+	"::unref_node". Fixes bug #50064.
+
 Thu Mar  8 17:40:09 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_create_row_drag_icon): add

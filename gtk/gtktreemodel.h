@@ -103,9 +103,9 @@ struct _GtkTreeModelIface
   gboolean     (* iter_parent)     (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter,
 				    GtkTreeIter  *child);
-  void         (* ref_iter)        (GtkTreeModel *tree_model,
+  void         (* ref_node)        (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter);
-  void         (* unref_iter)      (GtkTreeModel *tree_model,
+  void         (* unref_node)      (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter);
 };
 
@@ -194,9 +194,9 @@ gboolean          gtk_tree_model_iter_nth_child  (GtkTreeModel *tree_model,
 gboolean          gtk_tree_model_iter_parent     (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  GtkTreeIter  *child);
-void              gtk_tree_model_ref_iter        (GtkTreeModel *tree_model,
+void              gtk_tree_model_ref_node        (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
-void              gtk_tree_model_unref_iter      (GtkTreeModel *tree_model,
+void              gtk_tree_model_unref_node      (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
 void              gtk_tree_model_get             (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,

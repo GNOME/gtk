@@ -180,6 +180,8 @@ static void     gtk_tree_view_deleted              (GtkTreeModel     *model,
 						    gpointer          data);
 
 /* Internal functions */
+static void     gtk_tree_view_unref_tree           (GtkTreeView      *tree_view,
+						    GtkRBTree        *tree);
 static void     gtk_tree_view_queue_draw_node      (GtkTreeView      *tree_view,
 						    GtkRBTree        *tree,
 						    GtkRBNode        *node,
@@ -1951,6 +1953,8 @@ gtk_tree_view_button_release (GtkWidget      *widget,
 					    tree_view->priv->button_pressed_node->children,
 					    &iter,
 					    gtk_tree_path_get_depth (path));
+	      gtk_tree_view_unref_tree (GTK_TREE_VIEW (widget),
+					tree_view->priv->button_pressed_node->children);
 	      _gtk_rbtree_remove (tree_view->priv->button_pressed_node->children);
 	    }
 	  gtk_tree_path_free (path);
@@ -2701,7 +2705,7 @@ gtk_tree_view_inserted (GtkTreeModel *model,
     goto done;
 
   /* ref the node */
-  gtk_tree_model_ref_iter (tree_view->priv->model, iter);
+  gtk_tree_model_ref_node (tree_view->priv->model, iter);
   max_height = gtk_tree_view_insert_iter_height (tree_view,
 						 tree,
 						 iter,
@@ -2935,7 +2939,7 @@ gtk_tree_view_build_tree (GtkTreeView *tree_view,
 						       iter,
 						       depth);
 
-      gtk_tree_model_ref_iter (tree_view->priv->model, iter);
+      gtk_tree_model_ref_node (tree_view->priv->model, iter);
       temp = _gtk_rbtree_insert_after (tree, temp, max_height);
       if (recurse)
 	{
@@ -3349,6 +3353,58 @@ _gtk_tree_view_find_node (GtkTreeView  *tree_view,
       tmptree = tmpnode->children;
     }
   while (1);
+}
+
+static void
+gtk_tree_view_unref_tree_helper (GtkTreeModel *model,
+				 GtkTreeIter  *iter,
+				 GtkRBTree    *tree,
+				 GtkRBNode    *node)
+{
+  do
+    {
+      g_return_if_fail (node != NULL);
+
+      if (node->children)
+	{
+	  GtkTreeIter child;
+	  GtkRBTree *new_tree;
+	  GtkRBNode *new_node;
+
+	  new_tree = node->children;
+	  new_node = new_tree->root;
+
+	  while (new_node && new_node->left != new_tree->nil)
+	    new_node = new_node->left;
+
+	  g_return_if_fail (gtk_tree_model_iter_children (model, &child, iter));
+	  gtk_tree_view_unref_tree_helper (model, &child, new_tree, new_node);
+	}
+
+      gtk_tree_model_unref_node (model, iter);
+      node = _gtk_rbtree_next (tree, node);
+    }
+  while (gtk_tree_model_iter_next (model, iter));
+}
+
+static void
+gtk_tree_view_unref_tree (GtkTreeView *tree_view,
+			  GtkRBTree   *tree)
+{
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkRBNode *node;
+
+  node = tree->root;
+  while (node && node->left != tree->nil)
+    node = node->left;
+
+  g_return_if_fail (node != NULL);
+  path = _gtk_tree_view_find_path (tree_view, tree, node);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (tree_view->priv->model),
+			   &iter, path);
+  gtk_tree_view_unref_tree_helper (GTK_TREE_MODEL (tree_view->priv->model), &iter, tree, node);
+  gtk_tree_path_free (path);
 }
 
 static void

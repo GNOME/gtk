@@ -876,46 +876,53 @@ gtk_tree_model_iter_parent (GtkTreeModel *tree_model,
   return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_parent) (tree_model, iter, child);
 }
 
-/* FIXME explain what the method is supposed to do! */
 /**
- * gtk_tree_model_ref_iter:
+ * gtk_tree_model_ref_node:
  * @tree_model: A #GtkTreeModel.
  * @iter: The #GtkTreeIter.
  *
- * Ref's the iter.  This is an optional method for models to implement.  To be
- * more specific, models may ignore this call as it exists primarily for
- * performance reasons.
+ * Lets the tree ref the node.  This is an optional method for models to
+ * implement.  To be more specific, models may ignore this call as it exists
+ * primarily for performance reasons.
+ * 
+ * This function is primarily meant as a way for views to let caching model know
+ * when nodes are being displayed (and hence, whether or not to cache that
+ * node.)  For example, a file-system based model would not want to keep the
+ * entire file-heirarchy in memory, just the sections that are currently being
+ * displayed by every current view.
  **/
 void
-gtk_tree_model_ref_iter (GtkTreeModel *tree_model,
+gtk_tree_model_ref_node (GtkTreeModel *tree_model,
 			 GtkTreeIter  *iter)
 {
   g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
 
-  if (GTK_TREE_MODEL_GET_IFACE (tree_model)->ref_iter)
-    (* GTK_TREE_MODEL_GET_IFACE (tree_model)->ref_iter) (tree_model, iter);
+  if (GTK_TREE_MODEL_GET_IFACE (tree_model)->ref_node)
+    (* GTK_TREE_MODEL_GET_IFACE (tree_model)->ref_node) (tree_model, iter);
 }
 
-/* FIXME explain what the method is supposed to do! */
 /**
- * gtk_tree_model_unref_iter:
+ * gtk_tree_model_unref_node:
  * @tree_model: A #GtkTreeModel.
  * @iter: The #GtkTreeIter.
  *
- * Unref's the iter.  This is an optional method for models to implement.  To be
- * more specific, models may ignore this call as it exists primarily for
- * performance reasons.
+ * Lets the tree unref the node.  This is an optional method for models to
+ * implement.  To be more specific, models may ignore this call as it exists
+ * primarily for performance reasons.
+ *
+ * For more information on what this means, please see #gtk_tree_model_ref_node.
+ * Please note that nodes that are deleted are not unreffed.
  **/
 void
-gtk_tree_model_unref_iter (GtkTreeModel *tree_model,
+gtk_tree_model_unref_node (GtkTreeModel *tree_model,
 			   GtkTreeIter  *iter)
 {
   g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
 
-  if (GTK_TREE_MODEL_GET_IFACE (tree_model)->unref_iter)
-    (* GTK_TREE_MODEL_GET_IFACE (tree_model)->unref_iter) (tree_model, iter);
+  if (GTK_TREE_MODEL_GET_IFACE (tree_model)->unref_node)
+    (* GTK_TREE_MODEL_GET_IFACE (tree_model)->unref_node) (tree_model, iter);
 }
 
 /**

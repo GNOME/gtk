@@ -97,9 +97,9 @@ static gboolean     gtk_tree_model_sort_iter_nth_child  (GtkTreeModel          *
 static gboolean     gtk_tree_model_sort_iter_parent     (GtkTreeModel          *tree_model,
 							 GtkTreeIter           *iter,
 							 GtkTreeIter           *child);
-static void         gtk_tree_model_sort_ref_iter        (GtkTreeModel          *tree_model,
+static void         gtk_tree_model_sort_ref_node        (GtkTreeModel          *tree_model,
 							 GtkTreeIter           *iter);
-static void         gtk_tree_model_sort_unref_iter      (GtkTreeModel          *tree_model,
+static void         gtk_tree_model_sort_unref_node      (GtkTreeModel          *tree_model,
 							 GtkTreeIter           *iter);
 
 /* Internal functions */
@@ -184,8 +184,8 @@ gtk_tree_model_sort_tree_model_init (GtkTreeModelIface *iface)
   iface->iter_n_children = gtk_tree_model_sort_iter_n_children;
   iface->iter_nth_child = gtk_tree_model_sort_iter_nth_child;
   iface->iter_parent = gtk_tree_model_sort_iter_parent;
-  iface->ref_iter = gtk_tree_model_sort_ref_iter;
-  iface->unref_iter = gtk_tree_model_sort_unref_iter;
+  iface->ref_node = gtk_tree_model_sort_ref_node;
+  iface->unref_node = gtk_tree_model_sort_unref_node;
 }
 
 static void
@@ -843,13 +843,13 @@ gtk_tree_model_sort_iter_parent (GtkTreeModel *tree_model,
 }
 
 static void
-gtk_tree_model_sort_ref_iter (GtkTreeModel *tree_model,
+gtk_tree_model_sort_ref_node (GtkTreeModel *tree_model,
 			      GtkTreeIter  *iter)
 {
 }
 
 static void
-gtk_tree_model_sort_unref_iter (GtkTreeModel *tree_model,
+gtk_tree_model_sort_unref_node (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
 
