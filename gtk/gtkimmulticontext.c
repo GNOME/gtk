@@ -20,7 +20,6 @@
 #include <string.h>
 #include <locale.h>
 
-#include "gtksignal.h"
 #include "gtkimmulticontext.h"
 #include "gtkimmodule.h"
 #include "gtkradiomenuitem.h"
@@ -75,10 +74,10 @@ static GtkIMContextClass *parent_class;
 
 static const gchar *global_context_id = NULL;
 
-GtkType
+GType
 gtk_im_multicontext_get_type (void)
 {
-  static GtkType im_multicontext_type = 0;
+  static GType im_multicontext_type = 0;
  
   if (!im_multicontext_type)
     {
@@ -95,9 +94,9 @@ gtk_im_multicontext_get_type (void)
         (GInstanceInitFunc) gtk_im_multicontext_init,
       };
       
-      im_multicontext_type = g_type_register_static (GTK_TYPE_IM_CONTEXT,
-						     "GtkIMMulticontext",
-						     &im_multicontext_info, 0);
+      im_multicontext_type =
+	g_type_register_static (GTK_TYPE_IM_CONTEXT, "GtkIMMulticontext",
+				&im_multicontext_info, 0);
     }
 
   return im_multicontext_type;
@@ -141,7 +140,7 @@ gtk_im_multicontext_init (GtkIMMulticontext *multicontext)
 GtkIMContext *
 gtk_im_multicontext_new (void)
 {
-  return GTK_IM_CONTEXT (g_object_new (GTK_TYPE_IM_MULTICONTEXT, NULL));
+  return g_object_new (GTK_TYPE_IM_MULTICONTEXT, NULL);
 }
 
 static void
@@ -165,16 +164,16 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
 	gtk_im_context_reset (multicontext->slave);
       
       g_signal_handlers_disconnect_by_func (multicontext->slave,
-					    (gpointer) gtk_im_multicontext_preedit_start_cb,
+					    gtk_im_multicontext_preedit_start_cb,
 					    multicontext);
       g_signal_handlers_disconnect_by_func (multicontext->slave,
-					    (gpointer) gtk_im_multicontext_preedit_end_cb,
+					    gtk_im_multicontext_preedit_end_cb,
 					    multicontext);
       g_signal_handlers_disconnect_by_func (multicontext->slave,
-					    (gpointer) gtk_im_multicontext_preedit_changed_cb,
+					    gtk_im_multicontext_preedit_changed_cb,
 					    multicontext);
       g_signal_handlers_disconnect_by_func (multicontext->slave,
-					    (gpointer) gtk_im_multicontext_commit_cb,
+					    gtk_im_multicontext_commit_cb,
 					    multicontext);
 
       g_object_unref (multicontext->slave);
@@ -448,7 +447,7 @@ activate_cb (GtkWidget         *menuitem,
 {
   if (GTK_CHECK_MENU_ITEM (menuitem)->active)
     {
-      const gchar *id = gtk_object_get_data (GTK_OBJECT (menuitem), "gtk-context-id");
+      const gchar *id = g_object_get_data (G_OBJECT (menuitem), "gtk-context-id");
 
       gtk_im_context_reset (GTK_IM_CONTEXT (context));
       
@@ -489,12 +488,12 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem),
                                         TRUE);
       
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menuitem));
+      group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
       
-      gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-context-id",
-			   (char *)contexts[i]->context_id);
-      gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			  G_CALLBACK (activate_cb), context);
+      g_object_set_data (G_OBJECT (menuitem), "gtk-context-id",
+			 (char *)contexts[i]->context_id);
+      g_signal_connect (menuitem, "activate",
+			G_CALLBACK (activate_cb), context);
 
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (menushell, menuitem);

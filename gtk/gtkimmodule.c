@@ -179,7 +179,9 @@ gtk_im_module_get_type (void)
         NULL,           /* instance_init */
       };
 
-      im_module_type = g_type_register_static (G_TYPE_TYPE_MODULE, "GtkIMModule", &im_module_info, 0);
+      im_module_type =
+	g_type_register_static (G_TYPE_TYPE_MODULE, "GtkIMModule",
+				&im_module_info, 0);
     }
   
   return im_module_type;
@@ -375,7 +377,7 @@ gtk_im_module_init ()
 	}
       g_slist_free (infos);
 
-      g_object_unref (G_OBJECT (module));
+      g_object_unref (module);
     }
   else if (module)
     add_module (module, infos);

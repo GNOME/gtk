@@ -17,13 +17,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#define GTK_DISABLE_DEPRECATED
+#include <string.h>
 
 #include "gtkimcontext.h"
 #include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
-#include "string.h"
 
 enum {
   PREEDIT_START,
@@ -54,10 +52,10 @@ static void     gtk_im_context_real_set_surrounding    (GtkIMContext   *context,
 							gint            len,
 							gint            cursor_index);
 
-GtkType
+GType
 gtk_im_context_get_type (void)
 {
-  static GtkType im_context_type = 0;
+  static GType im_context_type = 0;
 
   if (!im_context_type)
     {
@@ -67,16 +65,17 @@ gtk_im_context_get_type (void)
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
         (GClassInitFunc) gtk_im_context_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
+        NULL,		/* class_finalize */
+        NULL,		/* class_data */
         sizeof (GtkIMContext),
-        0,              /* n_preallocs */
+        0,		/* n_preallocs */
         (GInstanceInitFunc) gtk_im_context_init,
-        NULL            /* value_table */
+        NULL,		/* value_table */
       };
       
-      im_context_type = g_type_register_static (G_TYPE_OBJECT, "GtkIMContext",
-						&im_context_info, G_TYPE_FLAG_ABSTRACT);
+      im_context_type =
+	g_type_register_static (G_TYPE_OBJECT, "GtkIMContext",
+				&im_context_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return im_context_type;
@@ -85,10 +84,6 @@ gtk_im_context_get_type (void)
 static void
 gtk_im_context_class_init (GtkIMContextClass *klass)
 {
-  GtkObjectClass *object_class;
-  
-  object_class = (GtkObjectClass*) klass;
-
   klass->get_preedit_string = gtk_im_context_real_get_preedit_string;
   klass->filter_keypress = gtk_im_context_real_filter_keypress;
   klass->get_surrounding = gtk_im_context_real_get_surrounding;
@@ -96,7 +91,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 
   im_context_signals[PREEDIT_START] =
     g_signal_new ("preedit_start",
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkIMContextClass, preedit_start),
 		  NULL, NULL,
@@ -105,7 +100,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
   
   im_context_signals[PREEDIT_END] =
     g_signal_new ("preedit_end",
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkIMContextClass, preedit_end),
 		  NULL, NULL,
@@ -114,7 +109,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
   
   im_context_signals[PREEDIT_CHANGED] =
     g_signal_new ("preedit_changed",
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkIMContextClass, preedit_changed),
 		  NULL, NULL,
@@ -123,7 +118,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
   
   im_context_signals[COMMIT] =
     g_signal_new ("commit",
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkIMContextClass, commit),
 		  NULL, NULL,
@@ -133,7 +128,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 
   im_context_signals[RETRIEVE_SURROUNDING] =
     g_signal_new ("retrieve_surrounding",
-                  G_TYPE_FROM_CLASS (object_class),
+                  G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkIMContextClass, retrieve_surrounding),
                   _gtk_boolean_handled_accumulator, NULL,
@@ -141,7 +136,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
                   G_TYPE_BOOLEAN, 0);
   im_context_signals[DELETE_SURROUNDING] =
     g_signal_new ("delete_surrounding",
-                  G_TYPE_FROM_CLASS (object_class),
+                  G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkIMContextClass, delete_surrounding),
                   _gtk_boolean_handled_accumulator, NULL,

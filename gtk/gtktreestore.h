@@ -29,11 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define GTK_TYPE_TREE_STORE			(gtk_tree_store_get_type ())
-#define GTK_TREE_STORE(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_TREE_STORE, GtkTreeStore))
-#define GTK_TREE_STORE_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_STORE, GtkTreeStoreClass))
-#define GTK_IS_TREE_STORE(obj)			(GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE_STORE))
-#define GTK_IS_TREE_STORE_CLASS(klass)		(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_STORE))
-#define GTK_TREE_STORE_GET_CLASS(obj)           (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TREE_STORE, GtkTreeStoreClass))
+#define GTK_TREE_STORE(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_STORE, GtkTreeStore))
+#define GTK_TREE_STORE_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_STORE, GtkTreeStoreClass))
+#define GTK_IS_TREE_STORE(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TREE_STORE))
+#define GTK_IS_TREE_STORE_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_STORE))
+#define GTK_TREE_STORE_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_STORE, GtkTreeStoreClass))
 
 typedef struct _GtkTreeStore       GtkTreeStore;
 typedef struct _GtkTreeStoreClass  GtkTreeStoreClass;
@@ -68,7 +68,7 @@ struct _GtkTreeStoreClass
 };
 
 
-GtkType       gtk_tree_store_get_type         (void);
+GType         gtk_tree_store_get_type         (void);
 GtkTreeStore *gtk_tree_store_new              (gint          n_columns,
 					       ...);
 GtkTreeStore *gtk_tree_store_newv             (gint          n_columns,

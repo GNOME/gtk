@@ -29,11 +29,11 @@ extern "C" {
 
 
 #define GTK_TYPE_IM_MULTICONTEXT              (gtk_im_multicontext_get_type ())
-#define GTK_IM_MULTICONTEXT(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_IM_MULTICONTEXT, GtkIMMulticontext))
-#define GTK_IM_MULTICONTEXT_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_MULTICONTEXT, GtkIMMulticontextClass))
-#define GTK_IS_IM_MULTICONTEXT(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_IM_MULTICONTEXT))
-#define GTK_IS_IM_MULTICONTEXT_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_MULTICONTEXT))
-#define GTK_IM_MULTICONTEXT_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_IM_MULTICONTEXT, GtkIMMulticontextClass))
+#define GTK_IM_MULTICONTEXT(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_MULTICONTEXT, GtkIMMulticontext))
+#define GTK_IM_MULTICONTEXT_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_MULTICONTEXT, GtkIMMulticontextClass))
+#define GTK_IS_IM_MULTICONTEXT(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IM_MULTICONTEXT))
+#define GTK_IS_IM_MULTICONTEXT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_MULTICONTEXT))
+#define GTK_IM_MULTICONTEXT_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IM_MULTICONTEXT, GtkIMMulticontextClass))
 
 
 typedef struct _GtkIMMulticontext       GtkIMMulticontext;
@@ -61,7 +61,7 @@ struct _GtkIMMulticontextClass
   void (*_gtk_reserved4) (void);
 };
 
-GtkType       gtk_im_multicontext_get_type (void) G_GNUC_CONST;
+GType         gtk_im_multicontext_get_type (void) G_GNUC_CONST;
 GtkIMContext *gtk_im_multicontext_new      (void);
 
 void          gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,

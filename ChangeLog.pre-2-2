@@ -1,3 +1,9 @@
+Thu Oct 10 15:13:48 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkimcontext.[ch] gtk/gtkimcontextsimple.[ch] gtk/gtkimmodule.c
+	gtk/gtkimmulticontext.[ch] gtk/gtktreestore.[ch]: Deprecation
+	cleanup
+
 Thu Oct 10 14:58:47 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkaccelgroup.c gtk/gtkarrow.[ch] gtk/gtkeventbox.[ch]

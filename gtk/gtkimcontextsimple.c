@@ -21,7 +21,6 @@
 
 #include <gdk/gdkkeysyms.h>
 #include "gtkaccelgroup.h"
-#include "gtksignal.h"
 #include "gtkimcontextsimple.h"
 
 typedef struct _GtkComposeTable GtkComposeTable;
@@ -864,10 +863,10 @@ static void     gtk_im_context_simple_get_preedit_string (GtkIMContext          
 
 static GObjectClass *parent_class;
 
-GtkType
+GType
 gtk_im_context_simple_get_type (void)
 {
-  static GtkType im_context_simple_type = 0;
+  static GType im_context_simple_type = 0;
 
   if (!im_context_simple_type)
     {
@@ -884,9 +883,9 @@ gtk_im_context_simple_get_type (void)
         (GInstanceInitFunc) gtk_im_context_simple_init,
       };
       
-      im_context_simple_type = g_type_register_static (GTK_TYPE_IM_CONTEXT,
-						       "GtkIMContextSimple",
-						       &im_context_simple_info, 0);
+      im_context_simple_type =
+	g_type_register_static (GTK_TYPE_IM_CONTEXT, "GtkIMContextSimple",
+				&im_context_simple_info, 0);
     }
 
   return im_context_simple_type;
@@ -937,7 +936,7 @@ gtk_im_context_simple_finalize (GObject *obj)
 GtkIMContext *
 gtk_im_context_simple_new (void)
 {
-  return GTK_IM_CONTEXT (g_object_new (GTK_TYPE_IM_CONTEXT_SIMPLE, NULL));
+  return g_object_new (GTK_TYPE_IM_CONTEXT_SIMPLE, NULL);
 }
 
 static void

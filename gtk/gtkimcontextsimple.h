@@ -28,11 +28,11 @@ extern "C" {
 
 
 #define GTK_TYPE_IM_CONTEXT_SIMPLE              (gtk_im_context_simple_get_type ())
-#define GTK_IM_CONTEXT_SIMPLE(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_IM_CONTEXT_SIMPLE, GtkIMContextSimple))
-#define GTK_IM_CONTEXT_SIMPLE_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT_SIMPLE, GtkIMContextSimpleClass))
-#define GTK_IS_IM_CONTEXT_SIMPLE(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_IM_CONTEXT_SIMPLE))
-#define GTK_IS_IM_CONTEXT_SIMPLE_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_CONTEXT_SIMPLE))
-#define GTK_IM_CONTEXT_SIMPLE_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT_SIMPLE, GtkIMContextSimpleClass))
+#define GTK_IM_CONTEXT_SIMPLE(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_SIMPLE, GtkIMContextSimple))
+#define GTK_IM_CONTEXT_SIMPLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT_SIMPLE, GtkIMContextSimpleClass))
+#define GTK_IS_IM_CONTEXT_SIMPLE(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IM_CONTEXT_SIMPLE))
+#define GTK_IS_IM_CONTEXT_SIMPLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_CONTEXT_SIMPLE))
+#define GTK_IM_CONTEXT_SIMPLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT_SIMPLE, GtkIMContextSimpleClass))
 
 
 typedef struct _GtkIMContextSimple       GtkIMContextSimple;
@@ -58,7 +58,7 @@ struct _GtkIMContextSimpleClass
   GtkIMContextClass parent_class;
 };
 
-GtkType       gtk_im_context_simple_get_type (void) G_GNUC_CONST;
+GType         gtk_im_context_simple_get_type  (void) G_GNUC_CONST;
 GtkIMContext *gtk_im_context_simple_new       (void);
 
 void          gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,

@@ -30,11 +30,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define GTK_TYPE_IM_CONTEXT              (gtk_im_context_get_type ())
-#define GTK_IM_CONTEXT(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_IM_CONTEXT, GtkIMContext))
-#define GTK_IM_CONTEXT_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT, GtkIMContextClass))
-#define GTK_IS_IM_CONTEXT(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_IM_CONTEXT))
-#define GTK_IS_IM_CONTEXT_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_CONTEXT))
-#define GTK_IM_CONTEXT_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT, GtkIMContextClass))
+#define GTK_IM_CONTEXT(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT, GtkIMContext))
+#define GTK_IM_CONTEXT_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT, GtkIMContextClass))
+#define GTK_IS_IM_CONTEXT(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IM_CONTEXT))
+#define GTK_IS_IM_CONTEXT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_CONTEXT))
+#define GTK_IM_CONTEXT_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT, GtkIMContextClass))
 
 
 typedef struct _GtkIMContext       GtkIMContext;
@@ -47,6 +47,9 @@ struct _GtkIMContext
 
 struct _GtkIMContextClass
 {
+  /* Yes, this should be GObjectClass, be we can't fix it without breaking
+   * binary compatibility - see bug #90935
+   */
   GtkObjectClass parent_class;
 
   /* Signals */
@@ -92,7 +95,7 @@ struct _GtkIMContextClass
   void (*_gtk_reserved6) (void);
 };
 
-GtkType       gtk_im_context_get_type           (void) G_GNUC_CONST;
+GType    gtk_im_context_get_type            (void) G_GNUC_CONST;
 
 void     gtk_im_context_set_client_window   (GtkIMContext   *context,
 					     GdkWindow      *window);
