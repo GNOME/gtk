@@ -78,16 +78,17 @@ GtkTreeModel *gtk_tree_model_sort_new_with_model (GtkTreeModel      *child_model
 						  gint               sort_col);
 void          gtk_tree_model_sort_set_model      (GtkTreeModelSort  *tree_model_sort,
 						  GtkTreeModel      *model);
-void          gtk_tree_model_sort_set_sort_col   (GtkTreeModelSort  *tree_model_sort,
-						  gint               sort_col);
-void          gtk_tree_model_sort_set_compare    (GtkTreeModelSort  *tree_model_sort,
-						  GValueCompareFunc *func);
-void          gtk_tree_model_sort_resort         (GtkTreeModelSort  *tree_model_sort);
 GtkTreePath  *gtk_tree_model_sort_convert_path   (GtkTreeModelSort  *tree_model_sort,
 						  GtkTreePath       *child_path);
-void          gtk_tree_model_sort_convert_iter   (GtkTreeModelSort  *tree_model_sort,
-						  GtkTreeIter       *sort_iter,
-						  GtkTreeIter       *child_iter);
+
+/* not implemented */
+void          gtk_tree_model_sort_set_sort_column (GtkTreeModelSort  *tree_model_sort,
+                                                   gint               sort_col);
+void          gtk_tree_model_sort_set_compare     (GtkTreeModelSort  *tree_model_sort,
+                                                   GValueCompareFunc  func);
+void          gtk_tree_model_sort_convert_iter    (GtkTreeModelSort  *tree_model_sort,
+                                                   GtkTreeIter       *sort_iter,
+                                                   GtkTreeIter       *child_iter);
 
 #ifdef __cplusplus
 }

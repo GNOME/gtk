@@ -77,9 +77,11 @@ gtk_tree_path_new (void)
  * gtk_tree_path_new_from_string:
  * @path: The string representation of a path.
  * 
- * Creates a new #GtkTreePath initialized to @path.  @path is expected to be a
- * colon separated list of numbers.  For example, the string "10:4:0" would
- * create a path of depth 3.
+ * Creates a new #GtkTreePath initialized to @path.  @path is expected
+ * to be a colon separated list of numbers.  For example, the string
+ * "10:4:0" would create a path of depth 3 pointing to the 11th child
+ * of the root node, the 5th child of that 11th child, and the 1st
+ * child of that 5th child.
  * 
  * Return value: A newly created #GtkTreePath.
  **/
@@ -343,7 +345,7 @@ gtk_tree_path_next (GtkTreePath *path)
  * 
  * Return value: TRUE if @path has a previous node, and the move was made.
  **/
-gint
+gboolean
 gtk_tree_path_prev (GtkTreePath *path)
 {
   g_return_val_if_fail (path != NULL, FALSE);
@@ -364,7 +366,7 @@ gtk_tree_path_prev (GtkTreePath *path)
  * 
  * Return value: TRUE if @path has a parent, and the move was made.
  **/
-gint
+gboolean
 gtk_tree_path_up (GtkTreePath *path)
 {
   g_return_val_if_fail (path != NULL, FALSE);
@@ -398,7 +400,7 @@ gtk_tree_path_down (GtkTreePath *path)
  * 
  * Creates a dynamically allocated tree iterator as a copy of @iter.  This
  * function is not intended for use in applications, because you can just copy
- * the structs by value (<literal>GtkTreeIter new_iter = iter;</literal>).  You
+ * the structs by value (GtkTreeIter new_iter = iter;).  You
  * must free this iter with gtk_tree_iter_free ().
  * 
  * Return value: a newly allocated copy of @iter.
@@ -436,13 +438,13 @@ gtk_tree_iter_free (GtkTreeIter *iter)
  * gtk_tree_model_get_flags:
  * @tree_model: A #GtkTreeModel.
  * 
- * Returns a list of flags supported by this interface.  The flags are a bitwise
+ * Returns a set of flags supported by this interface.  The flags are a bitwise
  * combination of #GtkTreeModelFlags.  It is expected that the flags supported
  * do not change for an interface.
  * 
  * Return value: The flags supported by this interface.
  **/
-guint
+GtkTreeModelFlags
 gtk_tree_model_get_flags (GtkTreeModel *tree_model)
 {
   g_return_val_if_fail (tree_model != NULL, 0);
@@ -733,6 +735,7 @@ gtk_tree_model_iter_parent (GtkTreeModel *tree_model,
   return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_parent) (tree_model, iter, child);
 }
 
+/* FIXME explain what the method is supposed to do! */
 /**
  * gtk_tree_model_ref_iter:
  * @tree_model: A #GtkTreeModel.
@@ -753,6 +756,7 @@ gtk_tree_model_ref_iter (GtkTreeModel *tree_model,
     (* GTK_TREE_MODEL_GET_IFACE (tree_model)->ref_iter) (tree_model, iter);
 }
 
+/* FIXME explain what the method is supposed to do! */
 /**
  * gtk_tree_model_unref_iter:
  * @tree_model: A #GtkTreeModel.

@@ -76,7 +76,8 @@ struct _GtkTreeModelIface
 				      gint         *new_order);
 
   /* VTable - not signals */
-  guint        (* get_flags)       (GtkTreeModel *tree_model);   
+  GtkTreeModelFlags (* get_flags)  (GtkTreeModel *tree_model);   
+
   gint         (* get_n_columns)   (GtkTreeModel *tree_model);
   GType        (* get_column_type) (GtkTreeModel *tree_model,
 				    gint          index);
@@ -128,8 +129,8 @@ GtkTreePath *gtk_tree_path_copy             (GtkTreePath       *path);
 gint         gtk_tree_path_compare          (const GtkTreePath *a,
 					     const GtkTreePath *b);
 void         gtk_tree_path_next             (GtkTreePath       *path);
-gint         gtk_tree_path_prev             (GtkTreePath       *path);
-gint         gtk_tree_path_up               (GtkTreePath       *path);
+gboolean     gtk_tree_path_prev             (GtkTreePath       *path);
+gboolean     gtk_tree_path_up               (GtkTreePath       *path);
 void         gtk_tree_path_down             (GtkTreePath       *path);
 
 
@@ -138,8 +139,8 @@ GtkTreeIter *gtk_tree_iter_copy             (GtkTreeIter       *iter);
 void         gtk_tree_iter_free             (GtkTreeIter       *iter);
 
 /* GtkTreeModel stuff */
-GtkType      gtk_tree_model_get_type        (void) G_GNUC_CONST;
-guint        gtk_tree_model_get_flags       (GtkTreeModel      *tree_model);
+GtkType           gtk_tree_model_get_type   (void) G_GNUC_CONST;
+GtkTreeModelFlags gtk_tree_model_get_flags  (GtkTreeModel      *tree_model);
 
 /* Column information */
 gint         gtk_tree_model_get_n_columns   (GtkTreeModel      *tree_model);

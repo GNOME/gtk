@@ -18,10 +18,7 @@
  */
 
 #include "gtkcellrenderer.h"
-
-#ifndef _
-#define _(x) x
-#endif
+#include "gtkintl.h"
 
 static void gtk_cell_renderer_init       (GtkCellRenderer      *cell);
 static void gtk_cell_renderer_class_init (GtkCellRendererClass *class);
@@ -150,19 +147,15 @@ gtk_cell_renderer_get_property (GObject     *object,
   switch (param_id)
     {
     case PROP_XALIGN:
-      g_value_init (value, G_TYPE_FLOAT);
       g_value_set_float (value, cell->xalign);
       break;
     case PROP_YALIGN:
-      g_value_init (value, G_TYPE_FLOAT);
       g_value_set_float (value, cell->yalign);
       break;
     case PROP_XPAD:
-      g_value_init (value, G_TYPE_INT);
       g_value_set_float (value, cell->xpad);
       break;
     case PROP_YPAD:
-      g_value_init (value, G_TYPE_INT);
       g_value_set_float (value, cell->ypad);
       break;
     default:
@@ -208,7 +201,8 @@ gtk_cell_renderer_get_size (GtkCellRenderer *cell,
 			    gint      *height)
 {
   /* It's actually okay to pass in a NULL cell, as we run into that
-   * a lot */
+   * a lot
+   */
   if (cell == NULL)
     return;
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
@@ -227,7 +221,8 @@ gtk_cell_renderer_render (GtkCellRenderer *cell,
 			  guint            flags)
 {
   /* It's actually okay to pass in a NULL cell, as we run into that
-   * a lot */
+   * a lot
+   */
   if (cell == NULL)
     return;
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
@@ -252,7 +247,8 @@ gtk_cell_renderer_event (GtkCellRenderer *cell,
 			 guint            flags)
 {
   /* It's actually okay to pass in a NULL cell, as we run into that
-   * a lot */
+   * a lot
+   */
   if (cell == NULL)
     return FALSE;
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);

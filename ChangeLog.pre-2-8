@@ -1,3 +1,77 @@
+2001-01-01  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktreeview.c: Adapt to GtkTreeSelection changes
+	
+	* gtk/gtktreeselection.c (_gtk_tree_selection_set_tree_view):
+	don't fill in tree_view->priv->selection, kind of an unexpected
+	side effect
+
+	* gtk/gtkcellrenderertext.c: Remove definition of _ and include
+	gtkintl.h
+	
+	* gtk/gtkcellrenderer.c: Remove definition of _ and include
+	gtkintl.h
+	(gtk_cell_renderer_get_property): remove calls to g_value_init
+
+	* gtk/gtkcellrendererpixbuf.c: Remove definition of _ and include
+	gtkintl.h
+
+	* gtk/gtkcellrenderertextpixbuf.c: Remove definition of _ macro
+	and include gtkintl.h
+	(gtk_cell_renderer_text_pixbuf_class_init): remove spaces from
+	property names
+
+	* gtk/gtktreeselection.c (_gtk_tree_selection_new): rename, return
+	GtkTreeSelection
+	(_gtk_tree_selection_new_from_with_view): rename, return
+	GtkTreeSelection
+	(_gtk_tree_selection_set_tree_view): rename with uscore
+	(gtk_tree_selection_get_selected): fill in the "model" out param
+	first, so it gets filled in even if we return at the top of the 
+	function
+	(gtk_tree_selection_real_select_all): add a comment and an else{}
+	to clarify this a bit
+	(gtk_tree_selection_real_unselect_all): add the same else{}
+
+	* gtk/gtktreeselection.h: Rename new, new_with_tree_view, and
+	set_tree_view to have underscore prefixes, move them to the
+	private header, fix return type of new_with_tree_view
+	(struct _GtkTreeSelection): mark struct
+	fields private	
+
+	* gtk/gtktreemodel.c (gtk_tree_model_get_flags): return
+	GtkTreeModelFlags, not a guint
+	(gtk_tree_path_prev): return gboolean not gint
+	(gtk_tree_path_up): return gboolean not gint
+
+	* gtk/gtktreemodel.h (struct _GtkTreeModelIface): make get_flags
+	return GtkTreeModelFlags, not a guint
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_finalize): check
+	that child model is non-null before unrefing it
+	(g_value_int_compare_func): make this a qsort compare func, not 
+	a boolean predicate
+
+	* gtk/gtktreemodelsort.h: rename gtk_tree_model_set_sort_column,
+	(add -umn to the end), and mark it unimplemented
+	(gtk_tree_model_sort_resort): remove, this wasn't implemented, and 
+	I don't see what it's for - doesn't the model always sort itself?
+	(gtk_tree_model_sort_set_compare): this had the wrong signature
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_attributes):
+	Fix the docs to say that it destructively replaces existing
+	attributes (previously said that it added attributes).
+	(gtk_tree_view_column_set_visible): canonicalize bool before
+	equality testing. Also, check for realization before
+	hiding/showing the tree_column->window; if this window could exist
+	before realization, then it's busted and needs fixing, we can't 
+	create GDK resources pre-realization. Also, remove
+	superfluous queue_resize(), since set_size() does that for us.
+	(gtk_tree_view_column_set_col_type): check realization before 
+	using tree_column->window
+
+	* gtk/gtktreedatalist.c: fix filename in copyright notice
+
 2000-12-31  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextview.c: Rearrange all the

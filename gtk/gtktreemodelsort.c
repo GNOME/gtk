@@ -352,7 +352,11 @@ gtk_tree_model_sort_finalize (GObject *object)
   if (tree_model_sort->root)
     gtk_tree_model_sort_free_level (tree_model_sort->root);
 
-  g_object_unref (G_OBJECT (tree_model_sort->child_model));
+  if (tree_model_sort->child_model)
+    {
+      g_object_unref (G_OBJECT (tree_model_sort->child_model));
+      tree_model_sort->child_model = NULL;
+    }
 }
 
 static void
@@ -1135,7 +1139,15 @@ static gint
 g_value_int_compare_func (const GValue *a,
 			  const GValue *b)
 {
-  return g_value_get_int (a) < g_value_get_int (b);
+  gint a_int = g_value_get_int (a);
+  gint b_int = g_value_get_int (b);
+
+  if (a_int < b_int)
+    return -1;
+  else if (a_int > b_int)
+    return 1;
+  else
+    return 0;
 }
 
 

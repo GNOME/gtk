@@ -19,10 +19,7 @@
 
 #include <stdlib.h>
 #include "gtkcellrenderertext.h"
-
-#ifndef _
-#define _(x) x
-#endif
+#include "gtkintl.h"
 
 static void gtk_cell_renderer_text_init       (GtkCellRendererText      *celltext);
 static void gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class);

@@ -19,10 +19,7 @@
 
 #include <stdlib.h>
 #include "gtkcellrenderertextpixbuf.h"
-
-#ifndef _
-#define _(x) x
-#endif
+#include "gtkintl.h"
 
 enum {
   PROP_ZERO,
@@ -132,7 +129,7 @@ gtk_cell_renderer_text_pixbuf_class_init (GtkCellRendererTextPixbufClass *class)
   
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_XALIGN,
-				   g_param_spec_float ("pixbuf xalign",
+				   g_param_spec_float ("pixbuf_xalign",
 						       _("pixbuf xalign"),
 						       _("The x-align of the pixbuf."),
 						       0.0,
@@ -143,7 +140,7 @@ gtk_cell_renderer_text_pixbuf_class_init (GtkCellRendererTextPixbufClass *class)
   
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_YALIGN,
-				   g_param_spec_float ("pixbuf yalign",
+				   g_param_spec_float ("pixbuf_yalign",
 						       _("pixbuf yalign"),
 						       _("The y-align of the pixbuf."),
 						       0.0,
@@ -154,7 +151,7 @@ gtk_cell_renderer_text_pixbuf_class_init (GtkCellRendererTextPixbufClass *class)
   
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_XPAD,
-				   g_param_spec_uint ("pixbuf xpad",
+				   g_param_spec_uint ("pixbuf_xpad",
 						      _("pixbuf xpad"),
 						      _("The xpad of the pixbuf."),
 						      0,
@@ -165,7 +162,7 @@ gtk_cell_renderer_text_pixbuf_class_init (GtkCellRendererTextPixbufClass *class)
   
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_YPAD,
-				   g_param_spec_uint ("pixbuf ypad",
+				   g_param_spec_uint ("pixbuf_ypad",
 						      _("pixbuf ypad"),
 						      _("The ypad of the pixbuf."),
 						      0,

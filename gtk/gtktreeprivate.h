@@ -182,6 +182,10 @@ void         _gtk_tree_view_set_size                  (GtkTreeView       *tree_v
 						       gint               height);
 
 
+GtkTreeSelection* _gtk_tree_selection_new                (void);
+GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);
+void              _gtk_tree_selection_set_tree_view      (GtkTreeSelection *selection,
+                                                          GtkTreeView      *tree_view);
 
 #ifdef __cplusplus
 }

@@ -19,11 +19,7 @@
 
 #include <stdlib.h>
 #include "gtkcellrendererpixbuf.h"
-
-#ifndef _
-#define _(x) x
-#endif
-
+#include "gtkintl.h"
 
 static void gtk_cell_renderer_pixbuf_get_property  (GObject                    *object,
 						    guint                       param_id,

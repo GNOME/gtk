@@ -275,11 +275,12 @@ gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_set_attributes:
  * @tree_column: A #GtkTreeViewColumn.
- * @Varargs: A NULL terminated listing of attributes to add.
+ * @Varargs: A NULL terminated listing of attributes.
  * 
- * Adds the attributes in the list the the @tree_column.  The attributes should
- * be in attribute/column order, as in @gtk_tree_view_column_add_attribute.  If
- * the list is empty, then all attributes are removed.
+ * Sets the attributes in the list as the attributes of @tree_column.
+ * The attributes should be in attribute/column order, as in
+ * @gtk_tree_view_column_add_attribute. All existing attributes
+ * are removed, and replaced with the new attributes.
  **/
 void
 gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
@@ -357,6 +358,8 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
   g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
+  visible = !! visible;
+  
   if (tree_column->visible == visible)
     return;
 
@@ -365,19 +368,18 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
   if (visible)
     {
       gtk_widget_show (tree_column->button);
-      gdk_window_show (tree_column->window);
+      if (GTK_WIDGET_REALIZED (tree_column->tree_view))
+        gdk_window_show (tree_column->window);
     }
   else
     {
       gtk_widget_hide (tree_column->button);
-      gdk_window_hide (tree_column->window);
+      if (GTK_WIDGET_REALIZED (tree_column->tree_view))
+        gdk_window_hide (tree_column->window);
     }
 
   if (GTK_WIDGET_REALIZED (tree_column->tree_view))
-    {
-      _gtk_tree_view_set_size (GTK_TREE_VIEW (tree_column->tree_view), -1, -1);
-      gtk_widget_queue_resize (tree_column->tree_view);
-    }
+    _gtk_tree_view_set_size (GTK_TREE_VIEW (tree_column->tree_view), -1, -1);
 }
 
 /**
@@ -421,11 +423,15 @@ gtk_tree_view_column_set_col_type (GtkTreeViewColumn     *tree_column,
     case GTK_TREE_VIEW_COLUMN_AUTOSIZE:
       tree_column->dirty = TRUE;
     case GTK_TREE_VIEW_COLUMN_FIXED:
-      gdk_window_hide (tree_column->window);
+      if (GTK_WIDGET_REALIZED (tree_column->tree_view))
+        gdk_window_hide (tree_column->window);
       break;
     default:
-      gdk_window_show (tree_column->window);
-      gdk_window_raise (tree_column->window);
+      if (GTK_WIDGET_REALIZED (tree_column->tree_view))
+        {
+          gdk_window_show (tree_column->window);
+          gdk_window_raise (tree_column->window);
+        }
       break;
     }
 

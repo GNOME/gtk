@@ -1227,7 +1227,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	}
       /* Handle the selection */
       if (tree_view->priv->selection == NULL)
-	gtk_tree_selection_new_with_tree_view (tree_view);
+	tree_view->priv->selection =
+          _gtk_tree_selection_new_with_tree_view (tree_view);
 
       _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
 						node,
@@ -1676,7 +1677,8 @@ gtk_tree_view_focus (GtkContainer     *container,
 	  gtk_widget_grab_focus (GTK_WIDGET (container));
 
 	  if (tree_view->priv->selection == NULL)
-	    gtk_tree_selection_new_with_tree_view (tree_view);
+	    tree_view->priv->selection =
+              _gtk_tree_selection_new_with_tree_view (tree_view);
 
 	  /* if there is no keyboard focus yet, we select the first node
 	   */
@@ -1707,7 +1709,8 @@ gtk_tree_view_focus (GtkContainer     *container,
       gtk_widget_grab_focus (GTK_WIDGET (container));
 
       if (tree_view->priv->selection == NULL)
-	gtk_tree_selection_new_with_tree_view (tree_view);
+	tree_view->priv->selection =
+          _gtk_tree_selection_new_with_tree_view (tree_view);
 
       if (tree_view->priv->cursor == NULL)
 	tree_view->priv->cursor = gtk_tree_path_new_root ();
@@ -3035,7 +3038,8 @@ gtk_tree_view_get_selection (GtkTreeView *tree_view)
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
 
   if (tree_view->priv->selection == NULL)
-    gtk_tree_selection_new_with_tree_view (tree_view);
+    tree_view->priv->selection =
+      _gtk_tree_selection_new_with_tree_view (tree_view);
 
   return tree_view->priv->selection;
 }
