@@ -136,7 +136,7 @@ How to compile GTK+ itself
 	  <ulink
 	  url="http://www.freedesktop.org/software/pkgconfig/">pkg-config</ulink>
 	  is a tool for tracking the compilation flags needed for
-	  libraries that is used by the GTK+ libraries. (For each
+	  libraries that are used by the GTK+ libraries. (For each
 	  library, a small <literal>.pc</literal> text file is installed in a standard
 	  location that contains the compilation flags needed for that
 	  library along with version number information.)  The version
@@ -168,7 +168,7 @@ How to compile GTK+ itself
 	<para>
 	  The GLib library provides core non-graphical functionality
 	  such as high level data types, Unicode manipulation, and
-	  a object and type system to C programs. It is available
+	  an object and type system to C programs. It is available
 	  from the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">GTK+
 	  FTP site.</ulink>
 	</para>
@@ -176,7 +176,7 @@ How to compile GTK+ itself
       <listitem>
 	<para>
 	  <ulink url="http://www.pango.org">Pango</ulink> is a library
-	  for internationalized text handling. Itis available from
+	  for internationalized text handling. It is available from
 	  the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">GTK+ FTP
 	  site.</ulink>. Either Pango-1.0 or Pango-1.2 can be used
 	  with GTK+-2.2, though Pango-1.2 is recommended.
@@ -240,8 +240,8 @@ How to compile GTK+ itself
 	  The <ulink url="http://www.fontconfig.org">fontconfig</ulink>
 	  library provides Pango with a standard way of locating
 	  fonts and matching them against font names. The Xft2
-	  library, distributed with fontconfig, provide support for
-	  scaleable and antialiased fonts on X. Pango includes two
+	  library, distributed with fontconfig, provides support for
+	  scalable and antialiased fonts on X. Pango includes two
 	  backends that work on top of fontconfig: an Xft2 backend
 	  and a backend that uses fontconfig and the underlying
 	  <ulink url="http://www.freetype.org">FreeType
