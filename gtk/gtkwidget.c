@@ -2674,7 +2674,8 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   alloc_needed = GTK_WIDGET_ALLOC_NEEDED (widget);
-  GTK_PRIVATE_UNSET_FLAG (widget, GTK_ALLOC_NEEDED);
+  if (!GTK_WIDGET_REQUEST_NEEDED (widget))      /* Preserve request/allocate ordering */
+    GTK_PRIVATE_UNSET_FLAG (widget, GTK_ALLOC_NEEDED);
 
   old_allocation = widget->allocation;
   real_allocation = *allocation;
