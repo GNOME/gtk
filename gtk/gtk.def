@@ -256,6 +256,8 @@ EXPORTS
 	gtk_check_menu_item_new
 	gtk_check_menu_item_new_with_label
 	gtk_check_menu_item_set_active
+	gtk_check_menu_item_set_inconsistent
+	gtk_check_menu_item_set_inconsistent
 	gtk_check_menu_item_set_show_toggle
 	gtk_check_menu_item_toggled
 	gtk_check_version
@@ -605,6 +607,8 @@ EXPORTS
 	gtk_image_get_stock
 	gtk_image_get_storage_type
 	gtk_image_get_type
+	gtk_image_menu_item_new
+	gtk_image_menu_item_new
 	gtk_image_new
 	gtk_image_new_from_file
 	gtk_image_new_from_icon_set
@@ -676,6 +680,8 @@ EXPORTS
 	gtk_label_set_markup
 	gtk_label_set_markup_with_accel
 	gtk_label_set_pattern
+	gtk_label_set_selectable
+	gtk_label_set_selectable
 	gtk_label_set_text
 	gtk_layout_freeze
 	gtk_layout_get_hadjustment
@@ -996,24 +1002,12 @@ EXPORTS
 	gtk_radio_menu_item_new
 	gtk_radio_menu_item_new_with_label
 	gtk_radio_menu_item_set_group
-	gtk_range_clear_background
-	gtk_range_default_hmotion
-	gtk_range_default_hslider_update
-	gtk_range_default_htrough_click
-	gtk_range_default_vmotion
-	gtk_range_default_vslider_update
-	gtk_range_default_vtrough_click
-	gtk_range_draw_background
-	gtk_range_draw_slider
-	gtk_range_draw_step_back
-	gtk_range_draw_step_forw
-	gtk_range_draw_trough
 	gtk_range_get_adjustment
 	gtk_range_get_type
 	gtk_range_set_adjustment
+	gtk_range_set_inverted
+	gtk_range_set_inverted
 	gtk_range_set_update_policy
-	gtk_range_slider_update
-	gtk_range_trough_click
 	gtk_rc_add_class_style
 	gtk_rc_add_default_file
 	gtk_rc_add_widget_class_style
@@ -1148,14 +1142,15 @@ EXPORTS
 	gtk_text_buffer_delete_mark_by_name
 	gtk_text_buffer_get_bounds
 	gtk_text_buffer_get_char_count
+	gtk_text_buffer_get_end_iter
 	gtk_text_buffer_get_insert
 	gtk_text_buffer_get_iter_at_line
 	gtk_text_buffer_get_iter_at_line_offset
 	gtk_text_buffer_get_iter_at_mark
 	gtk_text_buffer_get_iter_at_offset
-	gtk_text_buffer_get_last_iter
 	gtk_text_buffer_get_line_count
 	gtk_text_buffer_get_mark
+	gtk_text_buffer_get_modified
 	gtk_text_buffer_get_selection_bounds
 	gtk_text_buffer_get_slice
 	gtk_text_buffer_get_tag_table
@@ -1169,7 +1164,6 @@ EXPORTS
 	gtk_text_buffer_insert_range_interactive
 	gtk_text_buffer_insert_with_tags
 	gtk_text_buffer_insert_with_tags_by_name
-	gtk_text_buffer_modified
 	gtk_text_buffer_move_mark
 	gtk_text_buffer_move_mark_by_name
 	gtk_text_buffer_new
@@ -1208,7 +1202,7 @@ EXPORTS
 	gtk_text_iter_get_text
 	gtk_text_iter_get_toggled_tags
 	gtk_text_iter_in_range
-	gtk_text_iter_is_last
+	gtk_text_iter_is_end
 	gtk_text_iter_reorder
 	gtk_text_iter_spew
 	gtk_text_iter_toggles_tag
@@ -1270,6 +1264,8 @@ EXPORTS
 	gtk_toggle_button_new
 	gtk_toggle_button_new_with_label
 	gtk_toggle_button_set_active
+	gtk_toggle_button_set_inconsistent
+	gtk_toggle_button_set_inconsistent
 	gtk_toggle_button_set_mode
 	gtk_toggle_button_toggled
 	gtk_toolbar_append_element
@@ -1355,9 +1351,7 @@ EXPORTS
 	gtk_tree_set_view_lines
 	gtk_tree_set_view_mode
 	gtk_tree_store_append
-	gtk_tree_store_get
 	gtk_tree_store_get_type
-	gtk_tree_store_get_valist
 	gtk_tree_store_insert
 	gtk_tree_store_insert_after
 	gtk_tree_store_insert_before
@@ -1577,3 +1571,5 @@ EXPORTS
 	gtk_window_set_title
 	gtk_window_set_transient_for
 	gtk_window_set_wmclass
+
+

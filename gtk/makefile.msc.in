@@ -27,7 +27,8 @@ INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS)
 LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
 # Some files use near as an identifier
-DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear -DGTK_VERSION=\"@GTK_VERSION@\"
+# Don't define GTK_COMPILATION here, because it's for gtk-x.x.dll only
+DEFINES = -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear -DGTK_VERSION=\"$(GTK_VER)\"
 
 TOUCH = copy makefile.msc+nul
 
@@ -49,7 +50,7 @@ all :						\
 
 gtk_OBJECTS = 					\
 	fnmatch.obj				\
-	gdk-pixbuf-loader.obj			\
+#	gdk-pixbuf-loader.obj			\
 	gtkaccelgroup.obj			\
 	gtkaccellabel.obj			\
 	gtkadjustment.obj			\
@@ -102,6 +103,7 @@ gtk_OBJECTS = 					\
 	gtkhsv.obj				\
 	gtkiconfactory.obj			\
 	gtkimage.obj				\
+	gtkimagemenuitem.obj	\
 	gtkimcontext.obj			\
 	gtkimcontextsimple.obj			\
 	gtkimmodule.obj				\
@@ -136,6 +138,7 @@ gtk_OBJECTS = 					\
 	gtkradiobutton.obj			\
 	gtkradiomenuitem.obj			\
 	gtkrange.obj				\
+	gtkrbtree.obj	\
 	gtkrc.obj				\
 	gtkruler.obj				\
 	gtkscale.obj				\
@@ -143,6 +146,7 @@ gtk_OBJECTS = 					\
 	gtkscrolledwindow.obj			\
 	gtkselection.obj			\
 	gtkseparator.obj			\
+	gtkseparatormenuitem.obj \
 	gtksignal.obj				\
 	gtksocket.obj				\
 	gtkspinbutton.obj			\
@@ -170,8 +174,16 @@ gtk_OBJECTS = 					\
 	gtktoolbar.obj				\
 	gtktooltips.obj				\
 	gtktree.obj				\
+	gtktreedatalist.obj	\
+	gtktreednd.obj				\
 	gtktreeitem.obj				\
 	gtktreemodel.obj			\
+	gtktreemodelsimple.obj			\
+	gtktreemodelsort.obj			\
+	gtktreeselection.obj			\
+	gtktreestore.obj			\
+	gtktreeview.obj			\
+	gtktreeviewcolumn.obj			\
 	gtktypeutils.obj			\
 	gtkvbbox.obj				\
 	gtkvbox.obj				\
@@ -208,6 +220,7 @@ gtk_public_h_sources =		\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
 	gtkcombo.h		\
+	gtkcompat.h		\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
@@ -268,6 +281,7 @@ gtk_public_h_sources =		\
 	gtkoptionmenu.h		\
 	gtkpacker.h		\
 	gtkpaned.h		\
+#	gdk-pixbuf-loader.h	\
 	gtkpixmap.h		\
 	gtkplug.h		\
 	gtkpreview.h		\
@@ -307,9 +321,9 @@ gtk_public_h_sources =		\
 	gtktoolbar.h		\
 	gtktooltips.h		\
 	gtktree.h		\
-	gtktreednd.h		\
 	gtktreeitem.h		\
 	gtktreemodel.h		\
+	gtktreemodelsimple.h	\
 	gtktreemodelsort.h	\
 	gtktreeselection.h	\
 	gtktreesortable.h	\
@@ -460,6 +474,12 @@ simple.exe : gtk-win32-$(GTK_VER).dll simple.obj
 
 simple.obj : simple.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"simple\" simple.c
+
+$(EXAMPLE).obj : ..\examples\$(EXAMPLE)\$(EXAMPLE).c
+	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"$(EXAMPLE)\" ..\examples\$(EXAMPLE)\$(EXAMPLE).c
+
+$(EXAMPLE).exe : $(EXAMPLE).obj
+	$(CC) $(CFLAGS) $(EXAMPLE).obj $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
 
 makefile.msc: makefile.msc.in
 	sed -e s,@GTK[_]MAJOR_VERSION@,@GTK_MAJOR_VERSION@, \

@@ -2661,7 +2661,7 @@ gdk_event_translate (GdkEvent *event,
 	       GDK_WINDOW_OBJECT (window)->bg_pixmap != GDK_NO_BG)
 	{
 	  pixmap = GDK_WINDOW_OBJECT (window)->bg_pixmap;
-	  pixmap_impl = GDK_PIXMAP_IMPL_WIN32 (pixmap);
+	  pixmap_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
 	  GetClipBox (hdc, &rect);
 
 	  if (pixmap_impl->width <= 8 && pixmap_impl->height <= 8)

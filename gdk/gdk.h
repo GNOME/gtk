@@ -64,7 +64,7 @@ void 	  gdk_init		   	(gint	   	*argc,
 gboolean  gdk_init_check   	        (gint	   	*argc,
 					 gchar        ***argv);
 
-#ifdef GDK_DISABLE_DEPRECATED
+#ifndef GDK_DISABLE_DEPRECATED
 void  	  gdk_exit		   	(gint	    	 error_code);
 #endif /* GDK_DISABLE_DEPRECATED */
 gchar*	  gdk_set_locale	   	(void);
@@ -80,7 +80,7 @@ void	  gdk_set_use_xshm		(gboolean	 use_xshm);
 gboolean  gdk_get_use_xshm		(void);
 gchar*	  gdk_get_display		(void);
 
-#ifdef GDK_DISABLE_DEPRECATED
+#ifndef GDK_DISABLE_DEPRECATED
 gint gdk_input_add_full	  (gint		     source,
 			   GdkInputCondition condition,
 			   GdkInputFunction  function,

@@ -25,6 +25,7 @@
  */
 
 #include <ctype.h>
+#include <string.h> /* memset */
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtklabel.h"
