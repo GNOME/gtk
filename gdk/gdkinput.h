@@ -99,6 +99,7 @@ GdkTimeCoord *gdk_input_motion_events        (GdkWindow        *window,
 					      guint32           deviceid,
 					      guint32           start,
 					      guint32           stop,
+					      gint             *nevents_return);
 
 #ifdef __cplusplus
 }

@@ -1749,29 +1749,7 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
 
   /* Find the correct widget */
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
-    {
-      /* The following deals with the fact that while we are in
-       * a reparent, the widget and window heirarchies
-       * may be different, and the redraw queing code will be utterly
-       * screwed by that. 
-       *
-       * So, continuing at this point is a bad idea, and returning is
-       * generally harmless. (More redraws will be queued then necessary
-       * for a reparent in any case.) This can go away, when we
-       * make reparent simply ref/remove/add/unref.
-       */
-      if (GTK_WIDGET_IN_REPARENT (widget))
-	return;
-
-      parent = widget;
-      while (parent && GTK_WIDGET_NO_WINDOW (parent))
-	parent = parent->parent;
-      
-      if (parent)
-	gtk_widget_queue_draw_data (parent, x, y, width, height, widget->window);
-    }
-  else
+  if (!GTK_WIDGET_NO_WINDOW (widget))
     {
       if (widget->parent)
 	{

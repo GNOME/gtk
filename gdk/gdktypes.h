@@ -163,7 +163,6 @@ struct _GdkSegment
   gint y2;
 };
 
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
