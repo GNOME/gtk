@@ -6848,6 +6848,7 @@ widget_to_buffer (GtkTextView *text_view,
   gint focus_edge_width;
   gboolean interior_focus;
   gint focus_width;
+  gint border_width = GTK_CONTAINER (text_view)->border_width;
   
   gtk_widget_style_get (GTK_WIDGET (text_view),
 			"interior_focus", &interior_focus,
@@ -6861,14 +6862,14 @@ widget_to_buffer (GtkTextView *text_view,
   
   if (buffer_x)
     {
-      *buffer_x = widget_x - focus_edge_width + text_view->xoffset;
+      *buffer_x = widget_x - focus_edge_width - border_width + text_view->xoffset;
       if (text_view->left_window)
         *buffer_x -= text_view->left_window->allocation.width;
     }
 
   if (buffer_y)
     {
-      *buffer_y = widget_y - focus_edge_width + text_view->yoffset;
+      *buffer_y = widget_y - focus_edge_width - border_width + text_view->yoffset;
       if (text_view->top_window)
         *buffer_y -= text_view->top_window->allocation.height;
     }

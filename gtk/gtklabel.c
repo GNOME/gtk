@@ -1324,6 +1324,51 @@ gtk_label_clear_layout (GtkLabel *label)
     }
 }
 
+typedef struct _LabelWrapWidth LabelWrapWidth;
+struct _LabelWrapWidth
+{
+  gint width;
+  PangoFontDescription *font_desc;
+};
+
+static void
+label_wrap_width_free (gpointer data)
+{
+  LabelWrapWidth *wrap_width = data;
+  pango_font_description_free (wrap_width->font_desc);
+  g_free (wrap_width);
+}
+
+static gint
+get_label_wrap_width (GtkLabel *label)
+{
+  PangoLayout *layout;
+  GtkStyle *style = GTK_WIDGET (label)->style;
+
+  LabelWrapWidth *wrap_width = g_object_get_data (G_OBJECT (style), "gtk-label-wrap-width");
+  if (!wrap_width)
+    {
+      wrap_width = g_new0 (LabelWrapWidth, 1);
+      g_object_set_data_full (G_OBJECT (style), "gtk-label-wrap-width",
+			      wrap_width, label_wrap_width_free);
+    }
+
+  if (wrap_width->font_desc && pango_font_description_equal (wrap_width->font_desc, style->font_desc))
+    return wrap_width->width;
+
+  if (wrap_width->font_desc)
+    pango_font_description_free (wrap_width->font_desc);
+
+  wrap_width->font_desc = pango_font_description_copy (style->font_desc);
+
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET (label), 
+					   "This long string gives a good enough length for any line to have.");
+  pango_layout_get_size (layout, &wrap_width->width, NULL);
+  g_object_unref (layout);
+
+  return wrap_width->width;
+}
+
 static void
 gtk_label_ensure_layout (GtkLabel *label)
 {
@@ -1378,6 +1423,8 @@ gtk_label_ensure_layout (GtkLabel *label)
 	    pango_layout_set_width (label->layout, aux_info->width * PANGO_SCALE);
 	  else
 	    {
+	      gint wrap_width;
+	      
 	      pango_layout_set_width (label->layout, -1);
 	      pango_layout_get_extents (label->layout, NULL, &logical_rect);
 
@@ -1385,10 +1432,9 @@ gtk_label_ensure_layout (GtkLabel *label)
 	      
 	      /* Try to guess a reasonable maximum width */
 	      longest_paragraph = width;
-	      
-	      width = MIN (width,
-			   PANGO_SCALE * gdk_string_width (gtk_style_get_font (GTK_WIDGET (label)->style),
-							   "This long string gives a good enough length for any line to have."));
+
+	      wrap_width = get_label_wrap_width (label);
+	      width = MIN (width, wrap_width);
 	      width = MIN (width,
 			   PANGO_SCALE * (gdk_screen_width () + 1) / 2);
 	      
