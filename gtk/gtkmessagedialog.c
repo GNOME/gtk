@@ -305,7 +305,6 @@ gtk_message_dialog_new (GtkWindow     *parent,
   va_list args;
 
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
-  g_return_val_if_fail (message_format != NULL, NULL);
 
   widget = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
 			 "message_type", type,
@@ -363,26 +362,25 @@ gtk_message_dialog_new (GtkWindow     *parent,
  * When the user clicks a button a "response" signal is emitted with
  * response IDs from #GtkResponseType. See #GtkDialog for more details.
  *
- * Please note that if you have strings in the printf() arguments
- * passed to this function, you might need to protect against
- * them being interpreted as markup. You can do this using
- * g_markup_escape_text() as in the following example:
+ * Special XML characters in the printf() arguments passed to this
+ * function will automatically be escaped as necessary.
+ * (See g_markup_printf_escaped() for how this is implemented.)
+ * Usually this is what you want, but if you have an existing
+ * Pango markup string that you want to use literally as the
+ * label, then you need to use gtk_message_dialog_set_markup()
+ * instead, since you can't pass the markup string either
+ * as the format (it might contain '%' characters) or as a string
+ * argument.
+ *
  * <informalexample><programlisting>
- *   const gchar *error_text =
- *     "&lt;span weight=\"bold\" size=\"larger\"&gt;"
- *     "Could not open document '%s'."
- *     "&lt;/span&gt;\n\n"
- *     "You do not have appropriate permission to access this file.";
- *   gchar *tmp;
- *   GtkWidget *dialog;
- *   
- *   tmp = g_markup_escape_text (filename, -1);
- *   dialog = gtk_message_dialog_new_with_markup (main_application_window,
- *                                                GTK_DIALOG_DESTROY_WITH_PARENT,
- *                                                GTK_MESSAGE_ERROR,
- *                                                GTK_BUTTONS_CLOSE,
- *                                                error_text, tmp);
- *   g_free (tmp);
+ *  GtkWidget *dialog;
+ *  dialog = gtk_message_dialog_new (main_application_window,
+ *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+ *                                   GTK_MESSAGE_ERROR,
+ *                                   GTK_BUTTON_CLOSE,
+ *                                   NULL);
+ *  gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
+ *                                 markup);
  * </programlisting></informalexample>
  * 
  * Return value: a new #GtkMessageDialog
@@ -402,23 +400,41 @@ gtk_message_dialog_new_with_markup (GtkWindow     *parent,
   va_list args;
 
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
-  g_return_val_if_fail (message_format != NULL, NULL);
 
-  widget = gtk_message_dialog_new (parent, flags, type, buttons, "");
+  widget = gtk_message_dialog_new (parent, flags, type, buttons, NULL);
 
   if (message_format)
     {
       va_start (args, message_format);
-      msg = g_strdup_vprintf(message_format, args);
+      msg = g_markup_vprintf_escaped (message_format, args);
       va_end (args);
 
-      gtk_label_set_markup (GTK_LABEL (GTK_MESSAGE_DIALOG (widget)->label),
-                            msg);
+      gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (widget), msg);
 
       g_free (msg);
     }
 
   return widget;
+}
+
+/**
+ * gtk_message_dialog_set_markup:
+ * @message_dialog: a #GtkMessageDialog
+ * @str: markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)
+ * 
+ * Sets the text of the message dialog to be @str, which is marked
+ * up with the <link linkend="PangoMarkupFormat">Pango text markup
+ * language</link>.
+ *
+ * Since: 2.4
+ **/
+void
+gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
+			       const gchar      *str)
+{
+  g_return_if_fail (GTK_IS_MESSAGE_DIALOG (message_dialog));
+  
+  gtk_label_set_markup (GTK_LABEL (message_dialog->label), str);
 }
 
 static void

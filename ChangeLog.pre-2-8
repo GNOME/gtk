@@ -1,3 +1,16 @@
+Wed Oct 29 15:40:26 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_new/
+	gtk_message_dialog_new_with_format): Allow NULL
+	for message_format, as described in the docs and
+	as worked previously. (#125759, Richard Hult)
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_new_with_markup):
+	Use g_markup_vprintf_escaped() to escape argumetns.
+
+	* gtk/gtkmessagedialog.[ch]: Add gtk_message_dialog_set_markup()
+	so there is some way to set literal markup.
+
 Wed Oct 29 15:01:32 2003  Owen Taylor  <otaylor@redhat.com>
  
  	* gdk/x11/gdkimage-x11.c (_gdk_x11_copy_to_image): Move

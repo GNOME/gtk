@@ -98,9 +98,10 @@ GtkWidget* gtk_message_dialog_new_with_markup   (GtkWindow      *parent,
                                                  GtkButtonsType  buttons,
                                                  const gchar    *message_format,
                                                  ...) G_GNUC_PRINTF (5, 6);
- 
 
 
+void       gtk_message_dialog_set_markup  (GtkMessageDialog *message_dialog,
+					   const gchar      *str);
 
 #ifdef __cplusplus
 }
