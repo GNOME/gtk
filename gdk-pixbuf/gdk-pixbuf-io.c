@@ -136,6 +136,23 @@ pixbuf_check_sunras (guchar *buffer, int size)
 	return TRUE;
 }
 
+static gboolean
+pixbuf_check_ico (guchar *buffer, int size)
+{
+	/* Note that this may cause false positives, but .ico's don't
+	   have a magic number.*/
+	if (size < 6)
+		return FALSE;
+	if (buffer [0] != 0x0 ||
+	    buffer [1] != 0x0 ||
+	    buffer [2] != 0x1 ||
+	    buffer [3] != 0x0 ||
+	    buffer [5] != 0x0 )
+		return FALSE;
+
+	return TRUE;
+}
+
 
 static gboolean
 pixbuf_check_bmp (guchar *buffer, int size)
@@ -159,6 +176,7 @@ GdkPixbufModule file_formats [] = {
 	{ "xpm",  pixbuf_check_xpm, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "pnm",  pixbuf_check_pnm, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "ras",  pixbuf_check_sunras, NULL,  NULL, NULL, NULL, NULL, NULL },
+	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };

@@ -13,6 +13,8 @@ endif
 
 GIF_LIB = libpixbuf-gif.la
 
+ICO_LIB = libpixbuf-ico.la
+
 RAS_LIB = libpixbuf-ras.la
 
 if HAVE_TIFF
@@ -29,6 +31,7 @@ libexec_LTLIBRARIES =		\
 	$(PNG_LIB)	\
 	$(JPEG_LIB)	\
 	$(GIF_LIB)	\
+	$(ICO_LIB)	\
 	$(RAS_LIB)	\
 	$(XPM_LIB)	\
 	$(TIFF_LIB)	\
@@ -103,6 +106,13 @@ libpixbuf_xpm_la_LIBADD =
 libpixbuf_gif_la_SOURCES = io-gif.c
 libpixbuf_gif_la_LDFLAGS = -avoid-version -module
 libpixbuf_gif_la_LIBADD =
+
+#
+# The ICO loader
+#
+libpixbuf_ico_la_SOURCES = io-ico.c
+libpixbuf_ico_la_LDFLAGS = -avoid-version -module
+libpixbuf_ico_la_LIBADD =
 
 #
 # The RAS loader
