@@ -1,3 +1,7 @@
+2001-01-08  James Henstridge  <james@daa.com.au>
+
+	* gtk/gtkstyle.c: add trailing */ on doc comment.
+
 Mon Jan  7 22:19:32 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c (draw_with_pixmaps): Fix a

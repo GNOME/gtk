@@ -4741,6 +4741,7 @@ gtk_paint_hline (GtkStyle      *style,
  * 
  * Draws a vertical line from (@x, @y1) to (@x, @y1) in @window
  * using the given style and state.
+ */
 void
 gtk_paint_vline (GtkStyle      *style,
                  GdkWindow     *window,
