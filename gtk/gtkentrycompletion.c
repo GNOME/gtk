@@ -1048,7 +1048,8 @@ gtk_entry_completion_delete_action (GtkEntryCompletion *completion,
  * and to get those strings from @column in the model of @completion.
  *
  * This functions creates and adds a #GtkCellRendererText for the selected 
- * column.
+ * column. If you need to set the text column, but don't want the cell 
+ * renderer, use g_object_set() to set the ::text_column property directly.
  * 
  * Since: 2.4
  */

@@ -1,3 +1,8 @@
+Thu May 27 00:48:16 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_set_text_column): 
+	Add more docs.
+
 Thu May 27 00:45:07 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.h:
