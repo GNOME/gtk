@@ -1,3 +1,8 @@
+Thu Jun  3 08:07:59 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c: Revert previous commit. It caused the problem
+	of sticky right click menus to return.
+
 Wed Jun  2 01:56:02 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenu.c: Fix the stay up algorithm for combo boxes to
