@@ -662,6 +662,14 @@ _gtk_rc_init (void)
     }
   
   gtk_rc_reparse_all_for_settings (gtk_settings_get_default (), TRUE);
+
+  /* Default RC string */
+  gtk_rc_parse_string ("style \"gtk-default-tooltips-style\" {\n"
+		       "  bg[NORMAL] = \"#ffffc0\"\n"
+		       "  fg[NORMAL] = \"#000000\"\n"
+		       "}\n"
+		       "\n"
+		       "widget \"gtk-tooltips*\" style : gtk \"gtk-default-tooltips-style\"\n");
 }
   
 void
@@ -1320,7 +1328,8 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
   if (force_load || mtime_modified)
     {
       GSList *old_files;
-      
+
+      _gtk_binding_reset_parsed ();
       gtk_rc_clear_styles (context);
       g_object_freeze_notify (G_OBJECT (context->settings));
 

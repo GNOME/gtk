@@ -58,6 +58,7 @@ struct _GtkBindingSet
   GSList		*class_branch_pspecs;
   GtkBindingEntry	*entries;
   GtkBindingEntry	*current;
+  guint                  parsed : 1; /* From RC content */
 };
 
 struct _GtkBindingEntry
@@ -133,8 +134,6 @@ void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
 					 const gchar	*signal_name,
 					 GSList		*binding_args);
 guint	 gtk_binding_parse_binding	(GScanner	*scanner);
-
-
 
 
 #ifdef __cplusplus

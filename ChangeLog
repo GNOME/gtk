@@ -1,3 +1,25 @@
+Fri Feb  8 18:46:13 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbindings.[ch] (_gtk_binding_reset_parsed): Add
+	a function to delete all bindings add by
+	gtk_binding_parse_binding() when rereading RC files.
+
+	* gtk/gtkrc.c (gtk_rc_reparse_all_for_settings): Reset
+	binding set content as well as RC content.
+
+	* gtk/gtkbindings.c (binding_compose_params): Fix 
+	various GValue handling problems.
+
+	* gtk/gtkentry.c (gtk_entry_class_init): Remove bindings 
+	for C-b, C-f, M-b, M-f, C-a, C-e, C-w, C-y, M-space, C-u,
+	C-k, M-\, M-d, C-d.
+
+	* gtk/gtktextview.c (gtk_text_view_class_init): Remove
+	same bindings as GtkEntry, plus C-n, C-p, C-space
+
+        * gtk/gtkrc.key.default gtk/gtkrc.key.emacs gtk/Makefile.am:
+	Add Emacs and Default key themes.
+	
 2002-02-08  Darin Adler  <darin@bentspoon.com>
 
 	* gtk/gtktreeview.c: (gtk_tree_view_map_expanded_rows_helper):
@@ -11,7 +33,7 @@
 Fri Feb  8 14:30:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c (title_focus_in): Return FALSE if
-	not shoing the titles. (#70959, Thomas Leonard)
+	not showing the titles. (#70959, Thomas Leonard)
 
 2002-02-08  Darin Adler  <darin@bentspoon.com>
 

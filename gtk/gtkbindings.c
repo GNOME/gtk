@@ -313,6 +313,7 @@ binding_compose_params (GtkObject       *object,
 		    enum_value = g_enum_get_value_by_nick (class, args->d.string_data);
 		  if (enum_value)
 		    {
+		      g_value_init (&tmp_value, *types);
 		      g_value_set_enum (&tmp_value, enum_value->value);
 		      valid = TRUE;
 		    }
@@ -338,6 +339,7 @@ binding_compose_params (GtkObject       *object,
 		    flags_value = g_flags_get_value_by_nick (class, args->d.string_data);
 		  if (flags_value)
 		    {
+		      g_value_init (&tmp_value, *types);
 		      g_value_set_flags (&tmp_value, flags_value->value);
 		      valid = TRUE;
 		    }
@@ -356,10 +358,13 @@ binding_compose_params (GtkObject       *object,
 	  break;
 	}
 
-      if (valid && !g_value_transform (&tmp_value, params))
-	valid = FALSE;
+      if (valid)
+	{
+	  if (!g_value_transform (&tmp_value, params))
+	    valid = FALSE;
 
-      g_value_unset (&tmp_value);
+	  g_value_unset (&tmp_value);
+	}
       
       types++;
       params++;
@@ -1230,7 +1235,10 @@ gtk_binding_parse_binding (GScanner       *scanner)
 
   binding_set = gtk_binding_set_find (name);
   if (!binding_set)
-    binding_set = gtk_binding_set_new (name);
+    {
+      binding_set = gtk_binding_set_new (name);
+      binding_set->parsed = 1;
+    }
   g_free (name);
 
   g_scanner_peek_next_token (scanner);
@@ -1254,4 +1262,72 @@ gtk_binding_parse_binding (GScanner       *scanner)
   g_scanner_get_next_token (scanner);
 
   return G_TOKEN_NONE;
+}
+
+static void
+free_pattern_specs (GSList *pattern_specs)
+{
+  GSList *slist;
+
+  for (slist = pattern_specs; slist; slist = slist->next)
+    {
+      PatternSpec *pspec;
+
+      pspec = slist->data;
+
+      g_pattern_spec_free (pspec->pspec);
+      g_free (pspec);
+    }
+
+  g_slist_free (pattern_specs);
+}
+
+static void
+binding_set_delete (GtkBindingSet *binding_set)
+{
+  GtkBindingEntry *entry, *next;
+
+  entry = binding_set->entries;
+  while (entry)
+    {
+      next = entry->set_next;
+      binding_entry_destroy (entry);
+      entry = next;
+    }
+  
+  free_pattern_specs (binding_set->widget_path_pspecs);
+  free_pattern_specs (binding_set->widget_class_pspecs);
+  free_pattern_specs (binding_set->class_branch_pspecs);
+
+  g_free (binding_set->set_name);
+  g_free (binding_set);
+}
+
+/**
+ * _gtk_binding_reset_parsed:
+ * 
+ * Removing all binding sets that were added by
+ * gtk_binding_parse_binding()
+ **/
+void
+_gtk_binding_reset_parsed (void)
+{
+  GSList *slist, *next;
+  
+  slist = binding_set_list;
+  while (slist)
+    {
+      GtkBindingSet *binding_set;
+
+      binding_set = slist->data;
+      next = slist->next;
+
+      if (binding_set->parsed)
+	{
+	  binding_set_list = g_slist_delete_link (binding_set_list, slist);
+	  binding_set_delete (binding_set);
+	}
+
+      slist = next;
+    }
 }
