@@ -1,3 +1,8 @@
+2003-08-27  Anders Carlsson  <andersca@gnome.org>
+
+	* demos/gtk-demo/appwindow.c (do_appwindow): Focus the
+	text view, so the tool bar won't have focus.
+
 Tue Aug 26 09:57:38 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c (update_keymaps): Fix variable
