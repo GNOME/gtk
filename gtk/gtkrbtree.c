@@ -528,7 +528,7 @@ _gtk_rbtree_remove (GtkRBTree *tree)
     }
 
   tmp_tree = tree->parent_tree;
-  
+  tmp_node = tree->parent_node;
   _gtk_rbtree_free (tree);
 
   if (gtk_debug_flags & GTK_DEBUG_TREE)

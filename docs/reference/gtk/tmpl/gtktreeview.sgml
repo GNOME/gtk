@@ -777,6 +777,13 @@ GtkTreeView
 @arg1: 
 @arg2: 
 
+<!-- ##### SIGNAL GtkTreeView::select-all ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+
 <!-- ##### SIGNAL GtkTreeView::select-cursor-parent ##### -->
 <para>
 
@@ -790,6 +797,7 @@ GtkTreeView
 </para>
 
 @treeview: the object which received the signal.
+@arg1: 
 
 <!-- ##### SIGNAL GtkTreeView::set-scroll-adjustments ##### -->
 <para>

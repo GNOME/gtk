@@ -1262,24 +1262,7 @@ gtk_tree_view_realize (GtkWidget *widget)
 
   _gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
 
-  if (tree_view->priv->scroll_to_path != NULL ||
-      tree_view->priv->scroll_to_column != NULL)
-    {
-      gtk_tree_view_scroll_to_cell (tree_view,
-				    tree_view->priv->scroll_to_path,
-				    tree_view->priv->scroll_to_column,
-				    tree_view->priv->scroll_to_use_align,
-				    tree_view->priv->scroll_to_row_align,
-				    tree_view->priv->scroll_to_col_align);
-      if (tree_view->priv->scroll_to_path)
-	{
-	  gtk_tree_path_free (tree_view->priv->scroll_to_path);
-	  tree_view->priv->scroll_to_path = NULL;
-	}
-      tree_view->priv->scroll_to_column = NULL;
-    }
-
-  if (GTK_WIDGET_CLASS (parent_class)->map)
+if (GTK_WIDGET_CLASS (parent_class)->map)
     (* GTK_WIDGET_CLASS (parent_class)->map) (widget);
 }
 
@@ -1517,6 +1500,23 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 			      MAX (tree_view->priv->height - allocation->height, 0));
 
   gtk_signal_emit_by_name (GTK_OBJECT (tree_view->priv->vadjustment), "changed");
+
+  if (tree_view->priv->scroll_to_path != NULL ||
+      tree_view->priv->scroll_to_column != NULL)
+    {
+      gtk_tree_view_scroll_to_cell (tree_view,
+				    tree_view->priv->scroll_to_path,
+				    tree_view->priv->scroll_to_column,
+				    tree_view->priv->scroll_to_use_align,
+				    tree_view->priv->scroll_to_row_align,
+				    tree_view->priv->scroll_to_col_align);
+      if (tree_view->priv->scroll_to_path)
+	{
+	  gtk_tree_path_free (tree_view->priv->scroll_to_path);
+	  tree_view->priv->scroll_to_path = NULL;
+	}
+      tree_view->priv->scroll_to_column = NULL;
+    }
 
 }
 
@@ -4401,7 +4401,6 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
 
   /* Update all row-references */
   gtk_tree_row_reference_inserted (G_OBJECT (data), path);
-
   depth = gtk_tree_path_get_depth (path);
   indices = gtk_tree_path_get_indices (path);
 
@@ -6067,13 +6066,14 @@ gtk_tree_view_real_expand_collapse_cursor_row (GtkTreeView *tree_view,
   if (cursor_path == NULL)
     return;
 
+  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+  gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
+
   if (expand)
     gtk_tree_view_expand_row (tree_view, cursor_path, open_all);
   else
     gtk_tree_view_collapse_row (tree_view, cursor_path);
 
-  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
-  gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
   gtk_tree_path_free (cursor_path);
 }
 
@@ -7466,6 +7466,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
   GtkTreeIter temp;
   gboolean expand;
 
+
   if (node->children)
     return TRUE;
 
@@ -7513,7 +7514,6 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
     }
 
   g_signal_emit (G_OBJECT (tree_view), tree_view_signals[ROW_EXPANDED], 0, &iter, path);
-
   return TRUE;
 }
 
@@ -7914,7 +7914,7 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
  * @tree_view: A #GtkTreeView
  * @path: A pointer to be filled with the current cursor path, or %NULL
  * @focus_column: A pointer to be filled with the current focus column, or %NULL
- * 
+ *
  * Fills in @path and @focus_column with the current path and focus column.  If
  * the cursor isn't currently set, then *path will be %NULL.  If no column
  * currently has focus, then *focus_column will be %NULL.
@@ -8829,7 +8829,7 @@ gtk_tree_view_get_search_equal_func (GtkTreeView *tree_view)
  * @search_equal_func: the compare function to use during the search
  * @search_user_data: user data to pass to @search_equal_func, or %NULL
  * @search_destroy: Destroy notifier for @search_user_data, or %NULL
- * 
+ *
  * Sets the compare function for the interactive search capabilities.
  **/
 void

@@ -1,3 +1,15 @@
+Mon Oct  1 14:07:02 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): change
+	scroll_to_cell delayed code to happen in size_allocate.
+
+	* gtk/gtkstyle.c (gtk_default_draw_expander): change
+	prelight/normal arrow drawing.
+
+	* gtk/gtktreedatalist.c: Change compare func to use g_utf8_collate
+
+	* gtk/gtktreestore.c: refactor.
+
 Sun Sep 30 22:15:52 2001  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkcheckbutton.c (gtk_check_button_size_allocate): Applied

@@ -1213,25 +1213,29 @@ gtk_tree_row_ref_inserted_callback (GObject     *object,
     {
       GtkTreeRowReference *reference = tmp_list->data;
 
-      if (reference->path)
+      if (reference->path == NULL)
+	goto done;
+
+      if (reference->path->depth >= path->depth)
 	{
-	  gint depth = gtk_tree_path_get_depth (path);
-	  gint ref_depth = gtk_tree_path_get_depth (reference->path);
+	  gint i;
+	  gboolean ancestor = TRUE;
 
-	  if (ref_depth >= depth)
+	  for (i = 0; i < path->depth - 1; i ++)
 	    {
-	      gint *indices = gtk_tree_path_get_indices (path);
-	      gint *ref_indices = gtk_tree_path_get_indices (reference->path);
-	      gint i;
-
-	      /* This is the depth that might affect us. */
-	      i = depth - 1;
-
-	      if (indices[i] <= ref_indices[i])
-		ref_indices[i] += 1;
+	      if (path->indices[i] != reference->path->indices[i])
+		{
+		  ancestor = FALSE;
+		  break;
+		}
 	    }
-	}
+	  if (ancestor == FALSE)
+	    goto done;
 
+	  if (path->indices[path->depth-1] <= reference->path->indices[path->depth-1])
+	    reference->path->indices[path->depth-1] += 1;
+	}
+    done:
       tmp_list = g_slist_next (tmp_list);
     }
 }
@@ -1266,30 +1270,15 @@ gtk_tree_row_ref_deleted_callback (GObject     *object,
 
       if (reference->path)
 	{
-	  gint depth = gtk_tree_path_get_depth (path);
-	  gint ref_depth = gtk_tree_path_get_depth (reference->path);
-
-	  if (ref_depth >= depth)
+	  if (gtk_tree_path_is_ancestor (path, reference->path))
 	    {
-	      /* Need to adjust path upward */
-	      gint *indices = gtk_tree_path_get_indices (path);
-	      gint *ref_indices = gtk_tree_path_get_indices (reference->path);
-	      gint i;
-
-	      i = depth - 1;
-	      if (indices[i] < ref_indices[i])
-		ref_indices[i] -= 1;
-	      else if (indices[i] == ref_indices[i])
-		{
-		  /* the referenced node itself, or its parent, was
-		   * deleted, mark invalid
-		   */
-
-		  gtk_tree_path_free (reference->path);
-		  reference->path = NULL;
-		}
+	      reference->path->indices[path->depth-1]-=1;
 	    }
-
+	  else if (gtk_tree_path_compare (path, reference->path) == 0)
+	    {
+	      gtk_tree_path_free (reference->path);
+	      reference->path = NULL;
+	    }
 	}
       tmp_list = g_slist_next (tmp_list);
     }

@@ -4057,10 +4057,8 @@ gtk_default_draw_expander (GtkStyle        *style,
 
   if (state_type == GTK_STATE_PRELIGHT)
     {
-      gdk_draw_polygon (window, style->base_gc[GTK_STATE_NORMAL],
-			TRUE, points, 3);
       gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
-			FALSE, points, 3);
+			TRUE, points, 3);
     }
   else if (state_type == GTK_STATE_ACTIVE)
     {
@@ -4071,8 +4069,10 @@ gtk_default_draw_expander (GtkStyle        *style,
     }
   else
     {
-      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
+      gdk_draw_polygon (window, style->base_gc[GTK_STATE_NORMAL],
 			TRUE, points, 3);
+      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
+			FALSE, points, 3);
     }
   if (area)
     {
