@@ -81,7 +81,6 @@ struct _GtkSpinButton
   GdkWindow *panel;
   
   guint32 timer;
-  guint32 ev_time;
   
   gdouble climb_rate;
   gdouble timer_step;

@@ -2235,19 +2235,18 @@ draw_spin_entry_shadow (GtkStyle      *style,
 }
 
 static void
-draw_spinbutton_shadow (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state,
-			GdkRectangle  *area,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height)
+draw_spinbutton_shadow (GtkStyle        *style,
+			GdkWindow       *window,
+			GtkStateType     state,
+			GtkTextDirection direction,
+			GdkRectangle    *area,
+			gint             x,
+			gint             y,
+			gint             width,
+			gint             height)
 {
-  gint y_middle = y + height / 2;
-
   sanitize_size (window, &width, &height);
-  
+
   if (area)
     {
       gdk_gc_set_clip_rectangle (style->black_gc, area);
@@ -2255,33 +2254,42 @@ draw_spinbutton_shadow (GtkStyle      *style,
       gdk_gc_set_clip_rectangle (style->dark_gc[state], area);
       gdk_gc_set_clip_rectangle (style->light_gc[state], area);
     }
-  
-  gdk_draw_line (window, style->black_gc,
-		 x, y + 2, x, y + height - 3);
-  gdk_draw_line (window, style->black_gc,
-		 x, y + 1, x + width - 2, y + 1);
-  gdk_draw_line (window, style->black_gc,
-		 x + width - 2, y + 2, x + width - 2, y + height - 3);
-  
-  gdk_draw_line (window, style->bg_gc[state],
-		 x, y + height - 2, x + width - 2, y + height - 2);
 
-  gdk_draw_line (window, style->dark_gc[state],
-		 x, y, x + width - 1, y);
-  gdk_draw_line (window, style->dark_gc[state],
-		 x + 1, y_middle - 1, x + width - 3, y_middle - 1);
-  gdk_draw_line (window, style->dark_gc[state],
-		 x + 1, y + height - 3, x + width - 3, y + height - 3);
-
-  gdk_draw_line (window, style->light_gc[state],
-		 x + 1, y + 2, x + width - 3, y + 2);
-  gdk_draw_line (window, style->light_gc[state],
-		 x + 1, y_middle, x + width - 3, y_middle);
-  gdk_draw_line (window, style->light_gc[state],
-		 x + width - 1, y + 1, x + width - 1, y + height - 1);
-  gdk_draw_line (window, style->light_gc[state],
-		 x, y + height - 1, x + width - 2, y + height - 1);
-      
+  if (direction == GTK_TEXT_DIR_LTR)
+    {
+      gdk_draw_line (window, style->dark_gc[state],
+		     x, y, x + width - 1, y);
+      gdk_draw_line (window, style->black_gc,
+		     x, y + 1, x + width - 2, y + 1);
+      gdk_draw_line (window, style->black_gc,
+		     x + width - 2, y + 2, x + width - 2, y + height - 3);
+      gdk_draw_line (window, style->light_gc[state],
+		     x + width - 1, y + 1, x + width - 1, y + height - 2);
+      gdk_draw_line (window, style->light_gc[state],
+		     x, y + height - 1, x + width - 1, y + height - 1);
+      gdk_draw_line (window, style->bg_gc[state],
+		     x, y + height - 2, x + width - 2, y + height - 2);
+      gdk_draw_line (window, style->black_gc,
+		     x, y + 2, x, y + height - 3);
+    }
+  else
+    {
+      gdk_draw_line (window, style->dark_gc[state],
+		     x, y, x + width - 1, y);
+      gdk_draw_line (window, style->dark_gc[state],
+		     x, y + 1, x, y + height - 1);
+      gdk_draw_line (window, style->black_gc,
+		     x + 1, y + 1, x + width - 1, y + 1);
+      gdk_draw_line (window, style->black_gc,
+		     x + 1, y + 2, x + 1, y + height - 2);
+      gdk_draw_line (window, style->black_gc,
+		     x + width - 1, y + 2, x + width - 1, y + height - 3);
+      gdk_draw_line (window, style->light_gc[state],
+		     x + 1, y + height - 1, x + width - 1, y + height - 1);
+      gdk_draw_line (window, style->bg_gc[state],
+		     x + 2, y + height - 2, x + width - 1, y + height - 2);
+    }
+  
   if (area)
     {
       gdk_gc_set_clip_rectangle (style->black_gc, NULL);
@@ -2330,18 +2338,12 @@ gtk_default_draw_shadow (GtkStyle      *style,
 			    x, y, width, height);
 	  return;
 	}
-      else if (widget && GTK_IS_SPIN_BUTTON (widget) &&
-	       detail && strcmp (detail, "entry") == 0)
-	{
-	  draw_spin_entry_shadow (style, window, state_type, area,
-				  x, y, width, height);
-	  return;
-	}
-      else if (widget && GTK_IS_SPIN_BUTTON (widget) &&
-	       detail && strcmp (detail, "spinbutton") == 0)
+      if (widget && GTK_IS_SPIN_BUTTON (widget) &&
+	  detail && strcmp (detail, "spinbutton") == 0)
 	{
 	  draw_spinbutton_shadow (style, window, state_type,
-				  area, x, y, width, height);
+				  gtk_widget_get_direction (widget), area, x, y, width, height);
+	  
 	  return;
 	}
     }
@@ -2566,6 +2568,52 @@ gtk_default_draw_shadow (GtkStyle      *style,
       
       break;
     }
+
+  if (shadow_type == GTK_SHADOW_IN &&
+      widget && GTK_IS_SPIN_BUTTON (widget) &&
+      detail && strcmp (detail, "entry") == 0)
+    {
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+	{
+	  gdk_draw_line (window,
+			 style->base_gc[state_type],
+			 x + width - 1, y + 2,
+			 x + width - 1, y + height - 3);
+	  gdk_draw_line (window,
+			 style->base_gc[state_type],
+			 x + width - 2, y + 2,
+			 x + width - 2, y + height - 3);
+	  gdk_draw_point (window,
+			  style->black_gc,
+			  x + width - 1, y + 1);
+	  gdk_draw_point (window,
+			  style->bg_gc[state_type],
+			  x + width - 1, y + height - 2);
+	}
+      else
+	{
+	  gdk_draw_line (window,
+			 style->base_gc[state_type],
+			 x, y + 2,
+			 x, y + height - 3);
+	  gdk_draw_line (window,
+			 style->base_gc[state_type],
+			 x + 1, y + 2,
+			 x + 1, y + height - 3);
+	  gdk_draw_point (window,
+			  style->black_gc,
+			  x, y + 1);
+	  gdk_draw_line (window,
+			 style->bg_gc[state_type],
+			 x, y + height - 2,
+			 x + 1, y + height - 2);
+	  gdk_draw_point (window,
+			  style->light_gc[state_type],
+			  x, y + height - 1);
+	}
+    }
+
+
   if (area)
     {
       gdk_gc_set_clip_rectangle (gc1, NULL);
@@ -3120,10 +3168,41 @@ gtk_default_draw_box (GtkStyle      *style,
 		      gint           width,
 		      gint           height)
 {
+  gboolean is_spinbutton_box = FALSE;
+  
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (window != NULL);
   
   sanitize_size (window, &width, &height);
+
+  if (widget && GTK_IS_SPIN_BUTTON (widget) && detail)
+    {
+      if (strcmp (detail, "spinbutton_up") == 0)
+	{
+	  y += 2;
+	  width -= 3;
+	  height -= 2;
+
+	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	    x += 2;
+	  else
+	    x += 1;
+
+	  is_spinbutton_box = TRUE;
+	}
+      else if (strcmp (detail, "spinbutton_down") == 0)
+	{
+	  width -= 3;
+	  height -= 2;
+
+	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	    x += 2;
+	  else
+	    x += 1;
+
+	  is_spinbutton_box = TRUE;
+	}
+    }
   
   if (!style->bg_pixmap[state_type] || 
       GDK_IS_PIXMAP (window))
@@ -3140,7 +3219,35 @@ gtk_default_draw_box (GtkStyle      *style,
     gtk_style_apply_default_background (style, window,
                                         widget && !GTK_WIDGET_NO_WINDOW (widget),
                                         state_type, area, x, y, width, height);
-  
+
+  if (is_spinbutton_box)
+    {
+      GdkGC *upper_gc;
+      GdkGC *lower_gc;
+      
+      lower_gc = style->dark_gc[state_type];
+      if (shadow_type == GTK_SHADOW_OUT)
+	upper_gc = style->light_gc[state_type];
+      else
+	upper_gc = style->dark_gc[state_type];
+
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+	  gdk_gc_set_clip_rectangle (style->light_gc[state_type], area);
+	}
+      
+      gdk_draw_line (window, upper_gc, x, y, x + width - 1, y);
+      gdk_draw_line (window, lower_gc, x, y + height - 1, x + width - 1, y + height - 1);
+
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+	  gdk_gc_set_clip_rectangle (style->light_gc[state_type], NULL);
+	}
+      return;
+    }
+
   gtk_paint_shadow (style, window, state_type, shadow_type, area, widget, detail,
                     x, y, width, height);
 

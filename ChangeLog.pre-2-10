@@ -1,3 +1,11 @@
+Thu Feb 21 00:31:41 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkspinbutton.c: Many cleanups and fixes. Draw exclusively
+	in expose handler. Feedback when buttons are depressed.
+
+	* gtk/gtkstyle.c: update for changes in gtkspinbutton.c. Fix
+	spinbuttons for RTL langauges.
+
 Wed Feb 20 23:00:08 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkstyle.c: new radio buttons. handle inconsistent state for
