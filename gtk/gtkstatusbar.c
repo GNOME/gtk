@@ -526,10 +526,10 @@ get_grip_rect (GtkStatusbar *statusbar,
   w = 18;
   h = 18;
 
-  if (w > (widget->allocation.width))
+  if (w > widget->allocation.width)
     w = widget->allocation.width;
 
-  if (h > (widget->allocation.height - widget->style->ythickness))
+  if (h > widget->allocation.height - widget->style->ythickness)
     h = widget->allocation.height - widget->style->ythickness;
   
   rect->width = w;
@@ -591,6 +591,7 @@ gtk_statusbar_create_window (GtkStatusbar *statusbar)
 
   statusbar->grip_window = gdk_window_new (widget->window,
                                            &attributes, attributes_mask);
+
   gdk_window_set_user_data (statusbar->grip_window, widget);
 
   set_grip_cursor (statusbar);
@@ -753,19 +754,6 @@ gtk_statusbar_size_request   (GtkWidget      *widget,
   gtk_frame_set_shadow_type (GTK_FRAME (statusbar->frame), shadow_type);
   
   GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
-
-  if (statusbar->has_resize_grip)
-    {
-      GdkRectangle rect;
-
-      /* x, y in the grip rect depend on size allocation, but
-       * w, h do not so this is OK
-       */
-      get_grip_rect (statusbar, &rect);
-      
-      requisition->width += rect.width;
-      requisition->height = MAX (requisition->height, rect.height);
-    }
 }
 
 static void
@@ -776,30 +764,18 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
   
   statusbar = GTK_STATUSBAR (widget);
 
-  if (statusbar->has_resize_grip)
+  /* chain up normally */
+  GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
+
+  if (statusbar->has_resize_grip && statusbar->grip_window)
     {
       GdkRectangle rect;
-      GtkRequisition saved_req;
       
-      widget->allocation = *allocation; /* get_grip_rect needs this info */
       get_grip_rect (statusbar, &rect);
   
-      if (statusbar->grip_window)
         gdk_window_move_resize (statusbar->grip_window,
                                 rect.x, rect.y,
                                 rect.width, rect.height);
-      
-      /* enter the bad hack zone */      
-      saved_req = widget->requisition;
-      widget->requisition.width -= rect.width; /* HBox::size_allocate needs this */
-      if (widget->requisition.width < 0)
-        widget->requisition.width = 0;
-      GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
-      widget->requisition = saved_req;
-    }
-  else
-    {
-      /* chain up normally */
-      GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
     }
 }
+

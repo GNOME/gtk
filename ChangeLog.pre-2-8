@@ -1,5 +1,9 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstatusbar.c: Apply a patch by Owen Taylor to
+	get reasonable allocations for the statusbar and its
+	children.  (#73359)
+
 	* tests/testgtk.c: Apply a patch by Soeren Sandmann to 
 	test long statusbar texts.
 
