@@ -18,7 +18,7 @@ The length of time the user must keep the mouse over a widget before the tip is 
 To assign a tip to a particular #GtkWidget, gtk_tooltips_set_tip() is used.
 </para>
 <para>
-The default appearance of all tooltips in a program is determined by the current gtk theme that the user has selected. To change the tooltip appearance manually, use gtk_tooltips_set_colors(). Again, this is per group of tooltips.
+The default appearance of all tooltips in a program is determined by the current gtk theme that the user has selected.
 </para>
 <para>
 Information about the tooltip (if any) associated with an arbitrary widget can be retrieved using gtk_tooltips_data_get().
@@ -140,7 +140,8 @@ Adds a tooltip containing the message @tip_text to the specified #GtkWidget.
 
 <!-- ##### FUNCTION gtk_tooltips_set_colors ##### -->
 <para>
-Changes the foreground and background colors of a #GtkTooltips.
+This function is unimplemented because tooltip colors are instead
+determined by the theme.
 </para>
 
 @tooltips: a #GtkTooltip
