@@ -37,6 +37,7 @@ static PangoAttrType gdk_pango_attr_embossed_type;
 
 static void gdk_pango_get_item_properties (PangoItem      *item,
 					   PangoUnderline *uline,
+					   gboolean       *strikethrough,
                                            gint           *rise,
 					   PangoColor     *fg_color,
 					   gboolean       *fg_set,
@@ -193,13 +194,14 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
       PangoUnderline uline = PANGO_UNDERLINE_NONE;
       PangoLayoutRun *run = tmp_list->data;
       PangoColor fg_color, bg_color;
-      gboolean fg_set, bg_set, shape_set;
+      gboolean strike, fg_set, bg_set, shape_set;
       GdkGC *fg_gc;
       gint risen_y;
       
       tmp_list = tmp_list->next;
       
       gdk_pango_get_item_properties (run->item, &uline,
+				     &strike,
                                      &rise,
                                      &fg_color, &fg_set,
                                      &bg_color, &bg_set,
@@ -314,6 +316,17 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
                          risen_y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 1);
 	  break;
 	}
+
+      if (strike)
+      {
+	  int centerline = logical_rect.y + logical_rect.height / 2;
+	  
+	  gdk_draw_line (drawable, fg_gc,
+			 x + (x_off + logical_rect.x) / PANGO_SCALE - 1,
+			 risen_y + centerline / PANGO_SCALE,
+			 x + (x_off + logical_rect.x + logical_rect.width) / PANGO_SCALE + 1,
+			 risen_y + centerline / PANGO_SCALE);
+      }
       
       if (fg_gc != gc)
 	gdk_pango_free_gc (context, fg_gc);
@@ -427,6 +440,7 @@ gdk_draw_layout (GdkDrawable     *drawable,
 static void
 gdk_pango_get_item_properties (PangoItem      *item,
 			       PangoUnderline *uline,
+			       gboolean       *strikethrough,
                                gint           *rise,
 			       PangoColor     *fg_color,
 			       gboolean       *fg_set,
@@ -440,6 +454,9 @@ gdk_pango_get_item_properties (PangoItem      *item,
 {
   GSList *tmp_list = item->extra_attrs;
 
+  if (strikethrough)
+      *strikethrough = FALSE;
+  
   if (fg_set)
     *fg_set = FALSE;
   
@@ -468,7 +485,12 @@ gdk_pango_get_item_properties (PangoItem      *item,
 	  if (uline)
 	    *uline = ((PangoAttrInt *)attr)->value;
 	  break;
-	  
+
+	case PANGO_ATTR_STRIKETHROUGH:
+	    if (strikethrough)
+		*strikethrough = ((PangoAttrInt *)attr)->value;
+	    break;
+	    
 	case PANGO_ATTR_FOREGROUND:
 	  if (fg_color)
 	    *fg_color = ((PangoAttrColor *)attr)->color;
