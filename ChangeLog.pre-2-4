@@ -1,3 +1,8 @@
+Tue Apr 22 15:12:19 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): Fix PROP_HAS_FOCUS/
+	PROP_IS_FOCUS confusion. (#111333, Jody Goldberg)
+
 Mon Apr 21 19:02:16 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksocket.c (activate_key): Fix prototype for
