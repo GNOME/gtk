@@ -1,3 +1,10 @@
+2003-10-13  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): Don't do
+	operations on windows if the tree view is not mapped.
+	(gtk_tree_view_button_press): Compare equal types of pointers, not
+	GtkWidget* vs. GtkTreeView*.
+
 Mon Oct 13 21:01:43 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_popup): remove

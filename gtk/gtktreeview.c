@@ -2188,7 +2188,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       /* Save press to possibly begin a drag
        */
       grab_widget = gtk_grab_get_current ();
-      if ((grab_widget == NULL || grab_widget == tree_view) &&
+      if ((grab_widget == NULL || grab_widget == GTK_WIDGET (tree_view)) &&
           !column_handled_click &&
 	  tree_view->priv->pressed_button < 0)
         {
@@ -9895,29 +9895,33 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 
   g_signal_emit (tree_view, tree_view_signals[ROW_COLLAPSED], 0, &iter, path);
 
-  /* now that we've collapsed all rows, we want to try to set the prelight
-   * again. To do this, we fake a motion event and send it to ourselves. */
-
-  display = gdk_drawable_get_display (tree_view->priv->bin_window);
-  child = tree_view->priv->bin_window;
-  parent = gdk_window_get_parent (child);
-
-  if (gdk_window_get_pointer (parent, &x, &y, NULL) == child)
+  if (GTK_WIDGET_MAPPED (tree_view))
     {
-      GdkEventMotion event;
-      gint child_x, child_y;
+      /* now that we've collapsed all rows, we want to try to set the prelight
+       * again. To do this, we fake a motion event and send it to ourselves. */
 
-      gdk_window_get_position (child, &child_x, &child_y);
+      display = gdk_drawable_get_display (tree_view->priv->bin_window);
+      child = tree_view->priv->bin_window;
+      parent = gdk_window_get_parent (child);
 
-      event.window = tree_view->priv->bin_window;
-      event.x = x - child_x;
-      event.y = y - child_y;
+      if (gdk_window_get_pointer (parent, &x, &y, NULL) == child)
+	{
+	  GdkEventMotion event;
+	  gint child_x, child_y;
 
-      /* despite the fact this isn't a real event, I'm almost positive it will
-       * never trigger a drag event.  maybe_drag is the only function that uses
-       * more than just event.x and event.y. */
-      gtk_tree_view_motion_bin_window (GTK_WIDGET (tree_view), &event);
+	  gdk_window_get_position (child, &child_x, &child_y);
+
+	  event.window = tree_view->priv->bin_window;
+	  event.x = x - child_x;
+	  event.y = y - child_y;
+
+	  /* despite the fact this isn't a real event, I'm almost positive it will
+	   * never trigger a drag event.  maybe_drag is the only function that uses
+	   * more than just event.x and event.y. */
+	  gtk_tree_view_motion_bin_window (GTK_WIDGET (tree_view), &event);
+	}
     }
+
   return TRUE;
 }
 
