@@ -382,7 +382,8 @@ gdk_property_get (GdkWindow   *window,
 
   if (data)
     {
-      if (ret_prop_type == XA_ATOM)
+      if (ret_prop_type == XA_ATOM ||
+	  ret_prop_type == gdk_x11_get_xatom_by_name ("ATOM_PAIR"))
 	{
 	  /*
 	   * data is an array of X atom, we need to convert it
@@ -461,7 +462,7 @@ gdk_property_change (GdkWindow    *window,
       xwindow = _gdk_root_window;
     }
 
-  if (xtype == XA_ATOM)
+  if (xtype == XA_ATOM || xtype == gdk_x11_get_xatom_by_name ("ATOM_PAIR"))
     {
       /*
        * data is an array of GdkAtom, we need to convert it

@@ -1180,7 +1180,7 @@ gtk_selection_request (GtkWidget *widget,
   if (event->target == gtk_selection_atoms[MULTIPLE])
     {
       gdk_property_change (info->requestor, event->property,
-			   GDK_SELECTION_TYPE_ATOM, 32, 
+			   gdk_atom_intern ("ATOM_PAIR", FALSE), 32, 
 			   GDK_PROP_MODE_REPLACE,
 			   mult_atoms, 2*info->num_conversions);
       g_free (mult_atoms);

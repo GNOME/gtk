@@ -246,7 +246,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
     {
       *data = g_new (guchar, length);
 
-      if (prop_type == XA_ATOM)
+      if (prop_type == XA_ATOM || prop_type == gdk_x11_get_xatom_by_name ("ATOM_PAIR"))
 	{
 	  Atom* atoms = (Atom*) t;
 	  GdkAtom* atoms_dest = (GdkAtom*) *data;

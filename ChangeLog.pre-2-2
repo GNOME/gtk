@@ -1,3 +1,11 @@
+Wed Feb 20 21:52:13 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkselection.c (gtk_selection_request): Set the property
+	as type ATOM_PAIR, not ATOM. (#72074, Gregory Merchan.)
+
+	* gdk/x11/gdk{property,selecton}-x11.c: Auto-convert properties
+	of type ATOM_PAIR as well as properties of type ATOM.
+
 2002-02-21  Matthias Clasen  <maclas@gmx.de>
 
 	* docs/tutorial/images/*.png: screenshots of examples.
