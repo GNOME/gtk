@@ -1,3 +1,9 @@
+2001-08-07  James Henstridge  <james@daa.com.au>
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_set_accel_object): refetch
+	the accelerator when the accel object is changed.  Fixes bug
+	#58628.
+
 2001-08-06  HideToshi Tajima  <tajima@eng.sun.com>
 
 	* modules/input/gtkimcontextxim.c (mb_to_utf8), xim_text_to_utf8):
