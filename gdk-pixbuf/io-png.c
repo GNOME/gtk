@@ -166,4 +166,70 @@ GdkPixBuf *image_load(FILE * f)
 
 int image_save(GdkPixBuf *pixbuf, FILE *file)
 {
-     png_structp,
+     png_structp png_ptr;
+     png_infop info_ptr;
+     art_u8 *data;
+     gint y, h, w;
+     png_bytep row_ptr;
+     png_color_8 sig_bit;
+     gint type;
+     
+     g_return_val_if_fail(f != NULL, NULL);
+     g_return_val_if_fail(pixbuf != NULL, NULL);
+
+     h = pixbuf->art_pixbuf->height;
+     w = pixbuf->art_pixbuf->width;
+
+     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,
+				       NULL, NULL, NULL);
+     if (png_ptr == NULL) {
+	  fclose(file);
+	  return NULL;
+     }
+
+     info_ptr = png_create_info_struct(png_ptr);
+     if (info_ptr == NULL) {
+	  fclose(file);
+	  png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
+	  return NULL;
+     }
+
+     if (setjmp(png_ptr->jmpbuf)) {
+	  fclose(file);
+	  png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
+	  return NULL;
+     }
+
+     png_init_io(png_ptr, file);
+     if (pixbuf->art_pixbuf->has_alpha) {
+	  sig_bit.alpha = 8;
+	  type = PNG_COLOR_TYPE_RGB_ALPHA;
+     } else {
+	  sig_bit.alpha = 0;
+	  type = PNG_COLOR_TYPE_RGB;
+     }
+
+     sig_bit.red = sig_bit.green = sig_bit.blue = 8;
+     png_set_IHDR(png_ptr, info_ptr, w, h, 8, type, PNG_INTERLACE_NONE,
+		  PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+     png_set_sBIT(png_ptr, info_ptr, &sig_bit);
+     png_write_info(png_ptr, info_ptr);
+     png_set_shift(png_ptr, &sig_bit);
+     png_set_packing(png_ptr);
+
+     data = pixbuf->art_pixbuf->pixels;
+
+     for (y = 0; y < h; y++) {
+	  if (pixbuf->art_pixbuf->has_alpha)
+	       row_ptr[y] = data + (w * y * 4);
+	  else
+	       row_ptr[y] = data + (w * y * 3);
+     }
+
+     png_write_image(png_ptr, row_ptr);
+     png_write_end(png_ptr, info_ptr);
+     png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
+
+     return TRUE;
+}
+     
