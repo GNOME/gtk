@@ -1,5 +1,11 @@
 2005-02-10  Owen Taylor  <otaylor@redhat.com>
 
+	* gtk/gtkwindow.c: Add a resizable-background style property
+	that, if set, causes the entire widget to be queued for
+	redraw on ::size-allocate.
+
+2005-02-10  Owen Taylor  <otaylor@redhat.com>
+
 	* gtk/gtkwidget.c: Add a draw-border style property to allow
 	themes to draw outside the widget's allocation.
 

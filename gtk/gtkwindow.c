@@ -725,6 +725,14 @@ gtk_window_class_init (GtkWindowClass *klass)
   add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+  
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_boolean ("resizable-background",
+								 P_("Resizable Background"),
+								 P_("Whether to redraw the entire background on resize"),
+								 FALSE,
+								 G_PARAM_READABLE));
+
 }
 
 static void
@@ -4230,6 +4238,18 @@ gtk_window_size_allocate (GtkWidget     *widget,
       gdk_window_resize (window->frame,
 			 allocation->width + window->frame_left + window->frame_right,
 			 allocation->height + window->frame_top + window->frame_bottom);
+    }
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gboolean resizable_background;
+
+      gtk_widget_style_get (widget,
+			    "resizable-background", &resizable_background,
+			    NULL);
+
+      if (resizable_background)
+	gtk_widget_queue_draw (widget);
     }
 }
 
