@@ -1360,12 +1360,15 @@ gtk_range_scroll_event (GtkWidget      *widget,
   if (GTK_WIDGET_REALIZED (range))
     {
       GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
-      gdouble new_value = adj->value + ((event->direction == GDK_SCROLL_UP ||
-                                         event->direction == GDK_SCROLL_LEFT) ? 
-					-adj->page_increment / 2: 
-					adj->page_increment / 2);
-
-      gtk_range_internal_set_value (range, new_value);
+      gdouble increment = ((event->direction == GDK_SCROLL_UP ||
+			    event->direction == GDK_SCROLL_LEFT) ? 
+			   -adj->page_increment / 2: 
+			   adj->page_increment / 2);
+      
+      if (range->inverted)
+	increment = -increment;
+	  
+      gtk_range_internal_set_value (range, adj->value + increment);
 
       /* Policy DELAYED makes sense with scroll events,
        * but DISCONTINUOUS doesn't, so we update immediately
