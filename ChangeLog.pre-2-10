@@ -1,5 +1,8 @@
 2005-03-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaccelgroup.c (substitute_underscores): Remove
+	this unused function. It lives in gtkaccellabel.c now.  
+
 	* gtk/gtkiconview.c (gtk_icon_view_set_model): Queue a resize 
 	when the model is unset.  (#169528, Tomislav Jonjic)
 
