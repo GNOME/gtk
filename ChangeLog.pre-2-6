@@ -1,3 +1,7 @@
+Mon Jul 30 10:49:16 PDT 2001 Suresh Chandrasekharan <suresh.chandrasekharan@sun.com>
+	* gtk/gtksignal.h (gtk_signal_handler_pending): corrected the wrong
+	argument order for g_signal_has_handler_pending.
+
 Sun Jul 29 17:14:01 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_parse_rc): use g_file_test()
