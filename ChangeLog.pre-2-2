@@ -1,3 +1,7 @@
+2002-11-07  Anders Carlsson  <andersca@gnu.org>
+
+	* tests/testgtk.c (create_resize_grips): Add resize grips test.
+
 Sun Nov  3 21:26:20 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Bah, and of course I broke something ...
