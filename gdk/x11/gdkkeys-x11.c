@@ -839,7 +839,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
    * However, <shift>Tab is not _consistently_ GDK_ISO_Left_Tab, so people
    * can't bind to GDK_ISO_Left_Tab instead. So, we force consistency here.
    */
-  if (tmp_keyval == GDK_Tab && (tmp_modifiers & GDK_SHIFT_MASK == 0))
+  if (tmp_keyval == GDK_Tab && (tmp_modifiers & GDK_SHIFT_MASK) == 0)
     {
       tmp_keyval = GDK_ISO_Left_Tab;
       tmp_modifiers |= GDK_SHIFT_MASK;

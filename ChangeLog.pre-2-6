@@ -1,3 +1,8 @@
+Mon Feb 25 12:47:25 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state): 
+	Fix precendence problem. (Sven Neumann)
+
 Sun Feb 24 23:23:28 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testselection.c (main): Convert over to using
