@@ -1,3 +1,14 @@
+1999-10-22  Havoc Pennington  <hp@pobox.com>
+
+	* src/io-xpm.c (image_load_xpm_data): Export this symbol for 
+	loading an XPM from memory.
+
+	* src/gdk-pixbuf-io.c (gdk_pixbuf_new_from_xpm_data): New
+	function, loads pixbuf from xpm data
+	(image_handler_load): Add g_return_if_fail() to ensure the same
+	module isn't loaded twice. Add g_module_symbol() to scan for XPM 
+	loader function.
+
 1999-10-22  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/io-png.c (image_load): Patch from Kristian Hogsberg

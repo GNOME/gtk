@@ -57,7 +57,7 @@ struct file_handle {
 };
 
 struct mem_handle {
-	gchar **data;
+	const gchar **data;
 	int offset;
 };
 
@@ -435,5 +435,20 @@ image_load (FILE *f)
 	pixbuf = pixbuf_create_from_xpm (file_buffer, &h);
 	g_free (h.buffer);
 
+	return pixbuf;
+}
+
+/* Shared library entry point for memory loading */
+GdkPixbuf *
+image_load_xpm_data (const gchar **data)
+{
+        GdkPixbuf *pixbuf;
+        struct mem_handle h;
+
+        h.data = data;
+        h.offset = 0;
+        
+	pixbuf = pixbuf_create_from_xpm (mem_buffer, &h);
+        
 	return pixbuf;
 }

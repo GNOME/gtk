@@ -140,15 +140,17 @@ static struct {
 	gboolean (* format_check) (guchar *buffer, int size);
 	GModule *module;
 	GdkPixbuf *(* load) (FILE *f);
+        GdkPixbuf *(* load_xpm_data) (const gchar **data);
 } file_formats [] = {
-	{ "png",  pixbuf_check_png,  NULL, NULL },
-	{ "jpeg", pixbuf_check_jpeg, NULL, NULL },
-	{ "tiff", pixbuf_check_tiff, NULL, NULL },
-	{ "gif",  pixbuf_check_gif,  NULL, NULL },
-	{ "xpm",  pixbuf_check_xpm,  NULL, NULL },
+	{ "png",  pixbuf_check_png,  NULL, NULL, NULL },
+	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL },
+	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL },
+	{ "gif",  pixbuf_check_gif,  NULL, NULL, NULL },
+#define XPM_FILE_FORMAT_INDEX 4
+	{ "xpm",  pixbuf_check_xpm,  NULL, NULL, NULL },
 #if 0
-	{ "bmp",  pixbuf_check_bmp,  NULL, NULL },
-	{ "ppm",  pixbuf_check_ppm,  NULL, NULL },
+	{ "bmp",  pixbuf_check_bmp,  NULL, NULL, NULL },
+	{ "ppm",  pixbuf_check_ppm,  NULL, NULL, NULL },
 #endif
 	{ NULL, NULL, NULL, NULL }
 };
@@ -161,6 +163,8 @@ image_handler_load (int idx)
 	GModule *module;
 	void *load_sym;
 
+        g_return_if_fail(file_formats[idx].module == NULL);
+        
 	module_name = g_strconcat ("pixbuf-", file_formats [idx].module_name, NULL);
 	path = g_module_build_path (PIXBUF_LIBDIR, module_name);
 	g_free (module_name);
@@ -176,6 +180,9 @@ image_handler_load (int idx)
 
 	if (g_module_symbol (module, "image_load", &load_sym))
 		file_formats [idx].load = load_sym;
+
+        if (g_module_symbol (module, "image_load_xpm_data", &load_sym))
+		file_formats [idx].load_xpm_data = load_sym;
 }
 
 
@@ -224,3 +231,26 @@ gdk_pixbuf_new_from_file (const char *filename)
 	g_warning ("Unable to find handler for file: %s", filename);
 	return NULL;
 }
+
+GdkPixbuf *
+gdk_pixbuf_new_from_xpm_data (const gchar **data)
+{
+        GdkPixbuf *(* load_xpm_data) (const gchar **data);
+        GdkPixbuf *pixbuf;
+        
+        if (file_formats[XPM_FILE_FORMAT_INDEX].load_xpm_data == NULL) {
+                image_handler_load(XPM_FILE_FORMAT_INDEX);
+        }
+
+        if (file_formats[XPM_FILE_FORMAT_INDEX].load_xpm_data == NULL) {
+                g_warning("Can't find gdk-pixbuf module for parsing inline XPM data");
+                return NULL;
+        } else {
+                load_xpm_data = file_formats[XPM_FILE_FORMAT_INDEX].load_xpm_data;
+        }
+
+        pixbuf = load_xpm_data(data);
+
+        return pixbuf;
+}
+                              
