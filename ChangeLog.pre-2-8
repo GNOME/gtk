@@ -1,3 +1,23 @@
+2000-11-03  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktexttagtable.c: Docs
+	(gtk_text_tag_table_size): return a signed int
+
+	* gtk/gtktexttag.c: s/tkxt/text/g; write documentation
+	(gtk_text_tag_event): make the event_object a GObject
+
+	* gtk/gtktextview.c: Write API docs for all functions.
+
+	* gtk/gtktextview.h: add GTK_TEXT_WINDOW_PRIVATE as return value
+	for gtk_text_view_get_window_type() called on one of the private
+	windows.
+
+	* gtk/gtktextview.c: Instead of accessing text_view->buffer
+	directly, call get_buffer() which demand-creates a default
+	buffer. So gtk_text_view_new() can be used to create a view with a
+	default buffer in it, if you just want an empty text box users can
+	put data in. Useful for GUI builders also.
+
 2000-11-03  Pablo Saratxaga <pablo@mandrakesoft.com>
 
 	* gtk/gtkrc.zh_TW.*: moved gtkrc.zh_TW.Big5 to gtkrc.zh_TW.big5;

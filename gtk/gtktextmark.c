@@ -127,6 +127,15 @@ gtk_text_mark_finalize (GObject *obj)
     }
 }
 
+/**
+ * gtk_text_mark_is_visible:
+ * @mark: a #GtkTextMark
+ * 
+ * Returns %TRUE if the mark is visible (i.e. a cursor is displayed
+ * for it)
+ * 
+ * Return value: %TRUE if visible
+ **/
 gboolean
 gtk_text_mark_is_visible (GtkTextMark *mark)
 {
@@ -137,6 +146,14 @@ gtk_text_mark_is_visible (GtkTextMark *mark)
   return seg->body.mark.visible;
 }
 
+/**
+ * gtk_text_mark_get_name:
+ * @mark: a #GtkTextMark
+ * 
+ * Returns the mark name; returns NULL for anonymous marks.
+ * 
+ * Return value: mark name
+ **/
 const char *
 gtk_text_mark_get_name (GtkTextMark *mark)
 {
@@ -147,6 +164,16 @@ gtk_text_mark_get_name (GtkTextMark *mark)
   return seg->body.mark.name;
 }
 
+/**
+ * gtk_text_mark_get_deleted:
+ * @mark: a #GtkTextMark
+ * 
+ * Returns %TRUE if the mark has been removed from its buffer
+ * with gtk_text_buffer_delete_mark(). Marks can't be used
+ * once deleted.
+ * 
+ * Return value: whether the mark is deleted
+ **/
 gboolean
 gtk_text_mark_get_deleted (GtkTextMark *mark)
 {

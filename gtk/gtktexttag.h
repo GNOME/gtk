@@ -88,7 +88,7 @@ struct _GtkTextTagClass {
   GtkObjectClass parent_class;
 
   gint (* event) (GtkTextTag *tag,
-                  GtkObject *event_object,         /* widget, canvas item, whatever */
+                  GObject *event_object,           /* widget, canvas item, whatever */
                   GdkEvent *event,                 /* the event itself */
                   const GtkTextIter *iter);        /* location of event in buffer */
 };
@@ -99,7 +99,7 @@ gint         gtk_text_tag_get_priority (GtkTextTag        *tag);
 void         gtk_text_tag_set_priority (GtkTextTag        *tag,
                                         gint               priority);
 gint         gtk_text_tag_event        (GtkTextTag        *tag,
-                                        GtkObject         *event_object,
+                                        GObject           *event_object,
                                         GdkEvent          *event,
                                         const GtkTextIter *iter);
 
@@ -190,6 +190,7 @@ struct _GtkTextAttributes
   guint pad4 : 1;
 };
 
+/* FIXME _copy() has the wrong signature */
 GtkTextAttributes  *gtk_text_attributes_new       (void);
 void                gtk_text_attributes_copy      (GtkTextAttributes *src,
                                                    GtkTextAttributes *dest);

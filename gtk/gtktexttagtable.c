@@ -105,6 +105,13 @@ gtk_text_tag_table_init (GtkTextTagTable *table)
   table->hash = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
+/**
+ * gtk_text_tag_table_new:
+ * Creates a new #GtkTextTagTable. The table contains no tags by
+ * default.
+ * 
+ * Return value: a new #GtkTextTagTable
+ **/
 GtkTextTagTable*
 gtk_text_tag_table_new (void)
 {
@@ -183,8 +190,18 @@ gtk_text_tag_table_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
     }
 }
 
+/**
+ * gtk_text_tag_table_add:
+ * @table: a #GtkTextTagTable
+ * @tag: a #GtkTextTag
+ *
+ * Add a tag to the table. The tag is assigned the highest priority
+ * in the table.
+ * 
+ **/
 void
-gtk_text_tag_table_add (GtkTextTagTable *table, GtkTextTag *tag)
+gtk_text_tag_table_add (GtkTextTagTable *table,
+                        GtkTextTag      *tag)
 {
   guint size;
 
@@ -217,8 +234,18 @@ gtk_text_tag_table_add (GtkTextTagTable *table, GtkTextTag *tag)
   gtk_signal_emit (GTK_OBJECT (table), signals[TAG_ADDED], tag);
 }
 
+/**
+ * gtk_text_tag_table_lookup:
+ * @table: a #GtkTextTagTable 
+ * @name: name of a tag
+ * 
+ * Look up a named tag.
+ * 
+ * Return value: The tag, or %NULL if none by that name is in the table.
+ **/
 GtkTextTag*
-gtk_text_tag_table_lookup (GtkTextTagTable *table, const gchar *name)
+gtk_text_tag_table_lookup (GtkTextTagTable *table,
+                           const gchar     *name)
 {
   g_return_val_if_fail (GTK_IS_TEXT_TAG_TABLE (table), NULL);
   g_return_val_if_fail (name != NULL, NULL);
@@ -226,8 +253,18 @@ gtk_text_tag_table_lookup (GtkTextTagTable *table, const gchar *name)
   return g_hash_table_lookup (table->hash, name);
 }
 
+/**
+ * gtk_text_tag_table_remove:
+ * @table: a #GtkTextTagTable
+ * @tag: a #GtkTextTag
+ * 
+ * Remove a tag from the table. This will remove the table's
+ * reference to the tag, so be careful - the tag will end
+ * up destroyed if you don't have a reference to it.
+ **/
 void
-gtk_text_tag_table_remove (GtkTextTagTable *table, GtkTextTag *tag)
+gtk_text_tag_table_remove (GtkTextTagTable *table,
+                           GtkTextTag      *tag)
 {
   g_return_if_fail (GTK_IS_TEXT_TAG_TABLE (table));
   g_return_if_fail (GTK_IS_TEXT_TAG (tag));
@@ -279,6 +316,15 @@ list_foreach (gpointer data, gpointer user_data)
   (* fd->func) (data, fd->data);
 }
 
+/**
+ * gtk_text_tag_table_foreach:
+ * @table: a #GtkTextTagTable
+ * @func: a function to call on each tag
+ * @data: user data
+ *
+ * Calls @func on each tag in @table, with user data @data.
+ * 
+ **/
 void
 gtk_text_tag_table_foreach (GtkTextTagTable       *table,
                             GtkTextTagTableForeach func,
@@ -296,7 +342,15 @@ gtk_text_tag_table_foreach (GtkTextTagTable       *table,
   g_slist_foreach (table->anonymous, list_foreach, &d);
 }
 
-guint
+/**
+ * gtk_text_tag_table_size:
+ * @table: a #GtkTextTagTable
+ * 
+ * Returns the size of the table (number of tags)
+ * 
+ * Return value: number of tags in @table
+ **/
+gint
 gtk_text_tag_table_size (GtkTextTagTable *table)
 {
   g_return_val_if_fail (GTK_IS_TEXT_TAG_TABLE (table), 0);

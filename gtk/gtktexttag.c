@@ -120,7 +120,7 @@ enum {
   LAST_ARG
 };
 
-static void gtk_text_tag_init       (GtkTextTag      *tkxt_tag);
+static void gtk_text_tag_init       (GtkTextTag      *text_tag);
 static void gtk_text_tag_class_init (GtkTextTagClass *klass);
 static void gtk_text_tag_destroy    (GtkObject       *object);
 static void gtk_text_tag_finalize   (GObject         *object);
@@ -293,13 +293,22 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 }
 
 void
-gtk_text_tag_init (GtkTextTag *tkxt_tag)
+gtk_text_tag_init (GtkTextTag *text_tag)
 {
   /* 0 is basically a fine way to initialize everything in the
      entire struct */
 
 }
 
+/**
+ * gtk_text_tag_new:
+ * @name: tag name, or %NULL
+ * 
+ * Creates a #GtkTextTag. Configure the tag using object arguments,
+ * i.e. using g_object_set().
+ * 
+ * Return value: a new #GtkTextTag
+ **/
 GtkTextTag*
 gtk_text_tag_new (const gchar *name)
 {
@@ -317,19 +326,19 @@ gtk_text_tag_new (const gchar *name)
 static void
 gtk_text_tag_destroy (GtkObject *object)
 {
-  GtkTextTag *tkxt_tag;
+  GtkTextTag *text_tag;
 
-  tkxt_tag = GTK_TEXT_TAG (object);
+  text_tag = GTK_TEXT_TAG (object);
 
-  g_assert (!tkxt_tag->values->realized);
+  g_assert (!text_tag->values->realized);
 
-  if (tkxt_tag->table)
-    gtk_text_tag_table_remove (tkxt_tag->table, tkxt_tag);
+  if (text_tag->table)
+    gtk_text_tag_table_remove (text_tag->table, text_tag);
 
-  g_assert (tkxt_tag->table == NULL);
+  g_assert (text_tag->table == NULL);
 
-  gtk_text_attributes_unref (tkxt_tag->values);
-  tkxt_tag->values = NULL;
+  gtk_text_attributes_unref (text_tag->values);
+  text_tag->values = NULL;
 
   (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
@@ -337,12 +346,12 @@ gtk_text_tag_destroy (GtkObject *object)
 static void
 gtk_text_tag_finalize (GObject *object)
 {
-  GtkTextTag *tkxt_tag;
+  GtkTextTag *text_tag;
 
-  tkxt_tag = GTK_TEXT_TAG (object);
+  text_tag = GTK_TEXT_TAG (object);
 
-  g_free (tkxt_tag->name);
-  tkxt_tag->name = NULL;
+  g_free (text_tag->name);
+  text_tag->name = NULL;
 
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
@@ -378,18 +387,18 @@ set_fg_color (GtkTextTag *tag, GdkColor *color)
 static void
 gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 {
-  GtkTextTag *tkxt_tag;
+  GtkTextTag *text_tag;
   gboolean size_changed = FALSE;
 
-  tkxt_tag = GTK_TEXT_TAG (object);
+  text_tag = GTK_TEXT_TAG (object);
 
-  g_return_if_fail (!tkxt_tag->values->realized);
+  g_return_if_fail (!text_tag->values->realized);
 
   switch (arg_id)
     {
     case ARG_NAME:
-      g_return_if_fail (tkxt_tag->name == NULL);
-      tkxt_tag->name = g_strdup (GTK_VALUE_STRING (*arg));
+      g_return_if_fail (text_tag->name == NULL);
+      text_tag->name = g_strdup (GTK_VALUE_STRING (*arg));
       break;
 
     case ARG_BACKGROUND:
@@ -397,7 +406,7 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
         GdkColor color;
 
         if (gdk_color_parse (GTK_VALUE_STRING (*arg), &color))
-          set_bg_color (tkxt_tag, &color);
+          set_bg_color (text_tag, &color);
         else
           g_warning ("Don't know color `%s'", GTK_VALUE_STRING (*arg));
       }
@@ -408,7 +417,7 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
         GdkColor color;
 
         if (gdk_color_parse (GTK_VALUE_STRING (*arg), &color))
-          set_fg_color (tkxt_tag, &color);
+          set_fg_color (text_tag, &color);
         else
           g_warning ("Don't know color `%s'", GTK_VALUE_STRING (*arg));
       }
@@ -417,14 +426,14 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
     case ARG_BACKGROUND_GDK:
       {
         GdkColor *color = GTK_VALUE_POINTER (*arg);
-        set_bg_color (tkxt_tag, color);
+        set_bg_color (text_tag, color);
       }
       break;
 
     case ARG_FOREGROUND_GDK:
       {
         GdkColor *color = GTK_VALUE_POINTER (*arg);
-        set_fg_color (tkxt_tag, color);
+        set_fg_color (text_tag, color);
       }
       break;
 
@@ -432,17 +441,17 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       {
         GdkBitmap *bitmap = GTK_VALUE_POINTER (*arg);
 
-        tkxt_tag->bg_stipple_set = TRUE;
+        text_tag->bg_stipple_set = TRUE;
 
-        if (tkxt_tag->values->appearance.bg_stipple != bitmap)
+        if (text_tag->values->appearance.bg_stipple != bitmap)
           {
             if (bitmap != NULL)
               gdk_bitmap_ref (bitmap);
 
-            if (tkxt_tag->values->appearance.bg_stipple)
-              gdk_bitmap_unref (tkxt_tag->values->appearance.bg_stipple);
+            if (text_tag->values->appearance.bg_stipple)
+              gdk_bitmap_unref (text_tag->values->appearance.bg_stipple);
 
-            tkxt_tag->values->appearance.bg_stipple = bitmap;
+            text_tag->values->appearance.bg_stipple = bitmap;
           }
       }
       break;
@@ -451,17 +460,17 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       {
         GdkBitmap *bitmap = GTK_VALUE_POINTER (*arg);
 
-        tkxt_tag->fg_stipple_set = TRUE;
+        text_tag->fg_stipple_set = TRUE;
 
-        if (tkxt_tag->values->appearance.fg_stipple != bitmap)
+        if (text_tag->values->appearance.fg_stipple != bitmap)
           {
             if (bitmap != NULL)
               gdk_bitmap_ref (bitmap);
 
-            if (tkxt_tag->values->appearance.fg_stipple)
-              gdk_bitmap_unref (tkxt_tag->values->appearance.fg_stipple);
+            if (text_tag->values->appearance.fg_stipple)
+              gdk_bitmap_unref (text_tag->values->appearance.fg_stipple);
 
-            tkxt_tag->values->appearance.fg_stipple = bitmap;
+            text_tag->values->appearance.fg_stipple = bitmap;
           }
       }
       break;
@@ -476,11 +485,11 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
         if (name)
           font_desc = pango_font_description_from_string (name);
 
-        if (tkxt_tag->values->font_desc)
-          pango_font_description_free (tkxt_tag->values->font_desc);
+        if (text_tag->values->font_desc)
+          pango_font_description_free (text_tag->values->font_desc);
 
-        tkxt_tag->font_set = (font_desc != NULL);
-        tkxt_tag->values->font_desc = font_desc;
+        text_tag->font_set = (font_desc != NULL);
+        text_tag->values->font_desc = font_desc;
 
         size_changed = TRUE;
       }
@@ -492,110 +501,110 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
         font_desc = GTK_VALUE_BOXED (*arg);
 
-        if (tkxt_tag->values->font_desc)
-          pango_font_description_free (tkxt_tag->values->font_desc);
+        if (text_tag->values->font_desc)
+          pango_font_description_free (text_tag->values->font_desc);
 
         if (font_desc)
-          tkxt_tag->values->font_desc = pango_font_description_copy (font_desc);
+          text_tag->values->font_desc = pango_font_description_copy (font_desc);
         else
-          tkxt_tag->values->font_desc = NULL;
+          text_tag->values->font_desc = NULL;
 
-        tkxt_tag->font_set = (font_desc != NULL);
+        text_tag->font_set = (font_desc != NULL);
 
         size_changed = TRUE;
       }
       break;
 
     case ARG_PIXELS_ABOVE_LINES:
-      tkxt_tag->pixels_above_lines_set = TRUE;
-      tkxt_tag->values->pixels_above_lines = GTK_VALUE_INT (*arg);
+      text_tag->pixels_above_lines_set = TRUE;
+      text_tag->values->pixels_above_lines = GTK_VALUE_INT (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_PIXELS_BELOW_LINES:
-      tkxt_tag->pixels_below_lines_set = TRUE;
-      tkxt_tag->values->pixels_below_lines = GTK_VALUE_INT (*arg);
+      text_tag->pixels_below_lines_set = TRUE;
+      text_tag->values->pixels_below_lines = GTK_VALUE_INT (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_PIXELS_INSIDE_WRAP:
-      tkxt_tag->pixels_inside_wrap_set = TRUE;
-      tkxt_tag->values->pixels_inside_wrap = GTK_VALUE_INT (*arg);
+      text_tag->pixels_inside_wrap_set = TRUE;
+      text_tag->values->pixels_inside_wrap = GTK_VALUE_INT (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_EDITABLE:
-      tkxt_tag->editable_set = TRUE;
-      tkxt_tag->values->editable = GTK_VALUE_BOOL (*arg);
+      text_tag->editable_set = TRUE;
+      text_tag->values->editable = GTK_VALUE_BOOL (*arg);
       break;
 
     case ARG_WRAP_MODE:
-      tkxt_tag->wrap_mode_set = TRUE;
-      tkxt_tag->values->wrap_mode = GTK_VALUE_ENUM (*arg);
+      text_tag->wrap_mode_set = TRUE;
+      text_tag->values->wrap_mode = GTK_VALUE_ENUM (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_JUSTIFY:
-      tkxt_tag->justify_set = TRUE;
-      tkxt_tag->values->justify = GTK_VALUE_ENUM (*arg);
+      text_tag->justify_set = TRUE;
+      text_tag->values->justify = GTK_VALUE_ENUM (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_DIRECTION:
-      tkxt_tag->values->direction = GTK_VALUE_ENUM (*arg);
+      text_tag->values->direction = GTK_VALUE_ENUM (*arg);
       break;
 
     case ARG_LEFT_MARGIN:
-      tkxt_tag->left_margin_set = TRUE;
-      tkxt_tag->values->left_margin = GTK_VALUE_INT (*arg);
+      text_tag->left_margin_set = TRUE;
+      text_tag->values->left_margin = GTK_VALUE_INT (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_LEFT_WRAPPED_LINE_MARGIN:
-      tkxt_tag->left_wrapped_line_margin_set = TRUE;
-      tkxt_tag->values->left_wrapped_line_margin = GTK_VALUE_INT (*arg);
+      text_tag->left_wrapped_line_margin_set = TRUE;
+      text_tag->values->left_wrapped_line_margin = GTK_VALUE_INT (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_STRIKETHROUGH:
-      tkxt_tag->strikethrough_set = TRUE;
-      tkxt_tag->values->appearance.strikethrough = GTK_VALUE_BOOL (*arg);
+      text_tag->strikethrough_set = TRUE;
+      text_tag->values->appearance.strikethrough = GTK_VALUE_BOOL (*arg);
       break;
 
     case ARG_RIGHT_MARGIN:
-      tkxt_tag->right_margin_set = TRUE;
-      tkxt_tag->values->right_margin = GTK_VALUE_INT (*arg);
+      text_tag->right_margin_set = TRUE;
+      text_tag->values->right_margin = GTK_VALUE_INT (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_UNDERLINE:
-      tkxt_tag->underline_set = TRUE;
-      tkxt_tag->values->appearance.underline = GTK_VALUE_ENUM (*arg);
+      text_tag->underline_set = TRUE;
+      text_tag->values->appearance.underline = GTK_VALUE_ENUM (*arg);
       break;
 
     case ARG_OFFSET:
-      tkxt_tag->offset_set = TRUE;
-      tkxt_tag->values->offset = GTK_VALUE_INT (*arg);
+      text_tag->offset_set = TRUE;
+      text_tag->values->offset = GTK_VALUE_INT (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_BG_FULL_HEIGHT:
-      tkxt_tag->bg_full_height_set = TRUE;
-      tkxt_tag->values->bg_full_height = GTK_VALUE_BOOL (*arg);
+      text_tag->bg_full_height_set = TRUE;
+      text_tag->values->bg_full_height = GTK_VALUE_BOOL (*arg);
       break;
 
     case ARG_LANGUAGE:
-      tkxt_tag->language_set = TRUE;
-      tkxt_tag->values->language = g_strdup (GTK_VALUE_STRING (*arg));
+      text_tag->language_set = TRUE;
+      text_tag->values->language = g_strdup (GTK_VALUE_STRING (*arg));
       break;
 
     case ARG_TABS:
-      tkxt_tag->tabs_set = TRUE;
+      text_tag->tabs_set = TRUE;
 
-      if (tkxt_tag->values->tabs)
-        pango_tab_array_free (tkxt_tag->values->tabs);
+      if (text_tag->values->tabs)
+        pango_tab_array_free (text_tag->values->tabs);
 
-      tkxt_tag->values->tabs =
+      text_tag->values->tabs =
         pango_tab_array_copy (GTK_VALUE_POINTER (*arg));
 
       size_changed = TRUE;
@@ -605,95 +614,95 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
     case ARG_BACKGROUND_SET:
     case ARG_BACKGROUND_GDK_SET:
-      tkxt_tag->bg_color_set = GTK_VALUE_BOOL (*arg);
+      text_tag->bg_color_set = GTK_VALUE_BOOL (*arg);
       break;
 
     case ARG_FOREGROUND_SET:
     case ARG_FOREGROUND_GDK_SET:
-      tkxt_tag->fg_color_set = GTK_VALUE_BOOL (*arg);
+      text_tag->fg_color_set = GTK_VALUE_BOOL (*arg);
       break;
 
     case ARG_BACKGROUND_STIPPLE_SET:
-      tkxt_tag->bg_stipple_set = GTK_VALUE_BOOL (*arg);
+      text_tag->bg_stipple_set = GTK_VALUE_BOOL (*arg);
       break;
 
     case ARG_FOREGROUND_STIPPLE_SET:
-      tkxt_tag->fg_stipple_set = GTK_VALUE_BOOL (*arg);
+      text_tag->fg_stipple_set = GTK_VALUE_BOOL (*arg);
       break;
 
     case ARG_FONT_SET:
-      tkxt_tag->font_set = GTK_VALUE_BOOL (*arg);
+      text_tag->font_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_PIXELS_ABOVE_LINES_SET:
-      tkxt_tag->pixels_above_lines_set = GTK_VALUE_BOOL (*arg);
+      text_tag->pixels_above_lines_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_PIXELS_BELOW_LINES_SET:
-      tkxt_tag->pixels_below_lines_set = GTK_VALUE_BOOL (*arg);
+      text_tag->pixels_below_lines_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_PIXELS_INSIDE_WRAP_SET:
-      tkxt_tag->pixels_inside_wrap_set = GTK_VALUE_BOOL (*arg);
+      text_tag->pixels_inside_wrap_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_EDITABLE_SET:
-      tkxt_tag->editable_set = GTK_VALUE_BOOL (*arg);
+      text_tag->editable_set = GTK_VALUE_BOOL (*arg);
       break;
 
     case ARG_WRAP_MODE_SET:
-      tkxt_tag->wrap_mode_set = GTK_VALUE_BOOL (*arg);
+      text_tag->wrap_mode_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_JUSTIFY_SET:
-      tkxt_tag->justify_set = GTK_VALUE_BOOL (*arg);
+      text_tag->justify_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_LEFT_MARGIN_SET:
-      tkxt_tag->left_margin_set = GTK_VALUE_BOOL (*arg);
+      text_tag->left_margin_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_LEFT_WRAPPED_LINE_MARGIN_SET:
-      tkxt_tag->left_wrapped_line_margin_set = GTK_VALUE_BOOL (*arg);
+      text_tag->left_wrapped_line_margin_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_STRIKETHROUGH_SET:
-      tkxt_tag->strikethrough_set = GTK_VALUE_BOOL (*arg);
+      text_tag->strikethrough_set = GTK_VALUE_BOOL (*arg);
       break;
 
     case ARG_RIGHT_MARGIN_SET:
-      tkxt_tag->right_margin_set = GTK_VALUE_BOOL (*arg);
+      text_tag->right_margin_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_UNDERLINE_SET:
-      tkxt_tag->underline_set = GTK_VALUE_BOOL (*arg);
+      text_tag->underline_set = GTK_VALUE_BOOL (*arg);
       break;
 
     case ARG_OFFSET_SET:
-      tkxt_tag->offset_set = GTK_VALUE_BOOL (*arg);
+      text_tag->offset_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_BG_FULL_HEIGHT_SET:
-      tkxt_tag->bg_full_height_set = GTK_VALUE_BOOL (*arg);
+      text_tag->bg_full_height_set = GTK_VALUE_BOOL (*arg);
       break;
 
     case ARG_LANGUAGE_SET:
-      tkxt_tag->language_set = GTK_VALUE_BOOL (*arg);
+      text_tag->language_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
     case ARG_TABS_SET:
-      tkxt_tag->tabs_set = GTK_VALUE_BOOL (*arg);
+      text_tag->tabs_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
@@ -711,10 +720,10 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
   /* This is also somewhat weird since we emit another object's
      signal here, but the two objects are already tightly bound. */
 
-  if (tkxt_tag->table)
-    gtk_signal_emit_by_name (GTK_OBJECT (tkxt_tag->table),
+  if (text_tag->table)
+    gtk_signal_emit_by_name (GTK_OBJECT (text_tag->table),
                              "tag_changed",
-                             tkxt_tag, size_changed);
+                             text_tag, size_changed);
 }
 
 static void
@@ -942,6 +951,14 @@ delta_priority_foreach (GtkTextTag *tag, gpointer user_data)
     tag->priority += dd->delta;
 }
 
+/**
+ * gtk_text_tag_get_priority:
+ * @tag: a #GtkTextTag
+ * 
+ * Get the tag priority.
+ * 
+ * Return value: The tag's priority.
+ **/
 gint
 gtk_text_tag_get_priority (GtkTextTag *tag)
 {
@@ -950,6 +967,23 @@ gtk_text_tag_get_priority (GtkTextTag *tag)
   return tag->priority;
 }
 
+/**
+ * gtk_text_tag_set_priority:
+ * @tag: a #GtkTextTag
+ * @priority: the new priority
+ * 
+ * Sets the priority of a #GtkTextTag. Valid priorities are
+ * start at 0 and go to one less than gtk_text_tag_table_size().
+ * Each tag in a table has a unique priority; setting the priority
+ * of one tag shifts the priorities of all the other tags in the
+ * table to maintain a unique priority for each tag. Higher priority
+ * tags "win" if two tags both set the same text attribute. When adding
+ * a tag to a tag table, it will be assigned the highest priority in
+ * the table by default; so normally the precedence of a set of tags
+ * is the order in which they were added to the table, or created with
+ * gtk_text_buffer_create_tag(), which adds the tag to the buffer's table
+ * automatically.
+ **/
 void
 gtk_text_tag_set_priority (GtkTextTag *tag,
                            gint        priority)
@@ -984,10 +1018,21 @@ gtk_text_tag_set_priority (GtkTextTag *tag,
   tag->priority = priority;
 }
 
+/**
+ * gtk_text_tag_event:
+ * @tag: a #GtkTextTag
+ * @event_object: object that received the event, such as a widget
+ * @event: the event
+ * @iter: location where the event was received
+ * 
+ * Emits the "event" signal on the #GtkTextTag.
+ * 
+ * Return value: result of signal emission (whether the event was handled)
+ **/
 gint
-gtk_text_tag_event (GtkTextTag *tag,
-                    GtkObject *event_object,
-                    GdkEvent *event,
+gtk_text_tag_event (GtkTextTag        *tag,
+                    GObject           *event_object,
+                    GdkEvent          *event,
                     const GtkTextIter *iter)
 {
   gint retval = FALSE;
@@ -1070,6 +1115,14 @@ gtk_text_tag_array_sort (GtkTextTag** tag_array_p,
  * Attributes
  */
 
+/**
+ * gtk_text_attributes_new:
+ * 
+ * Creates a #GtkTextAttributes, which describes
+ * a set of properties on some text.
+ * 
+ * Return value: a new #GtkTextAttributes
+ **/
 GtkTextAttributes*
 gtk_text_attributes_new (void)
 {
@@ -1086,6 +1139,7 @@ gtk_text_attributes_new (void)
   return values;
 }
 
+/* FIXME change the signature of this to be correct */
 void
 gtk_text_attributes_copy (GtkTextAttributes *src,
                           GtkTextAttributes *dest)

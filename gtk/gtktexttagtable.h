@@ -48,7 +48,7 @@ GtkTextTag      *gtk_text_tag_table_lookup   (GtkTextTagTable        *table,
 void             gtk_text_tag_table_foreach  (GtkTextTagTable        *table,
                                               GtkTextTagTableForeach  func,
                                               gpointer                data);
-guint            gtk_text_tag_table_size     (GtkTextTagTable        *table);
+gint             gtk_text_tag_table_size     (GtkTextTagTable        *table);
 
 
 #ifdef __cplusplus
