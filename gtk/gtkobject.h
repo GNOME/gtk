@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -38,7 +38,7 @@ extern "C" {
  */
 #ifdef GTK_NO_CHECK_CASTS
 
-#define GTK_CHECK_CAST(obj,cast_type,cast)         ((cast*) (obj))
+#define GTK_CHECK_CAST(obj,cast_type,cast)	   ((cast*) (obj))
 #define GTK_CHECK_CLASS_CAST(klass,cast_type,cast) ((cast*) (klass))
 
 #else /* !GTK_NO_CHECK_CASTS */
@@ -54,7 +54,7 @@ extern "C" {
 
 /* Determines whether `obj' and `klass' are a type of `otype'.
  */
-#define GTK_CHECK_TYPE(obj,otype)          ( \
+#define GTK_CHECK_TYPE(obj,otype)	   ( \
   GTK_TYPE_IS_A (((GtkObject*) (obj))->klass->type, (otype)) \
 )
 #define GTK_CHECK_CLASS_TYPE(klass,otype)  ( \
@@ -89,10 +89,10 @@ extern "C" {
 
 /* Macros for extracting various fields from GtkObject and GtkObjectClass.
  */
-#define GTK_OBJECT_TYPE(obj)              (GTK_OBJECT (obj)->klass->type)
-#define GTK_OBJECT_SIGNALS(obj)           (GTK_OBJECT (obj)->klass->signals)
-#define GTK_OBJECT_NSIGNALS(obj)          (GTK_OBJECT (obj)->klass->nsignals)
-    
+#define GTK_OBJECT_TYPE(obj)		  (GTK_OBJECT (obj)->klass->type)
+#define GTK_OBJECT_SIGNALS(obj)		  (GTK_OBJECT (obj)->klass->signals)
+#define GTK_OBJECT_NSIGNALS(obj)	  (GTK_OBJECT (obj)->klass->nsignals)
+
 /* GtkObject only uses the first 4 bits of the flags field.
  * Derived objects may use the remaining bits. Though this
  * is a kinda nasty break up, it does make the size of
@@ -100,22 +100,23 @@ extern "C" {
  */
 enum
 {
-  GTK_DESTROYED         = 1 << 0,
-  GTK_FLOATING          = 1 << 1,
-  GTK_RESERVED_1        = 1 << 2,
-  GTK_RESERVED_2        = 1 << 3,
-  GTK_OBJECT_FLAG_LAST  = GTK_RESERVED_2
+  GTK_DESTROYED		= 1 << 0,
+  GTK_FLOATING		= 1 << 1,
+  GTK_CONNECTED		= 1 << 2,
+  GTK_RESERVED_2	= 1 << 3,
+  GTK_OBJECT_FLAG_LAST	= GTK_RESERVED_2
 };
-  
+
 /* Macros for extracting the object_flags from GtkObject.
  */
-#define GTK_OBJECT_FLAGS(obj)             (GTK_OBJECT (obj)->flags)
-#define GTK_OBJECT_DESTROYED(obj)         (GTK_OBJECT_FLAGS (obj) & GTK_DESTROYED)
-#define GTK_OBJECT_FLOATING(obj)          (GTK_OBJECT_FLAGS (obj) & GTK_FLOATING)
+#define GTK_OBJECT_FLAGS(obj)		  (GTK_OBJECT (obj)->flags)
+#define GTK_OBJECT_DESTROYED(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_DESTROYED)
+#define GTK_OBJECT_FLOATING(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_FLOATING)
+#define GTK_OBJECT_CONNECTED(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_CONNECTED)
 
 /* Macros for setting and clearing bits in the object_flags field of GtkObject.
  */
-#define GTK_OBJECT_SET_FLAGS(obj,flag)    G_STMT_START{ (GTK_OBJECT_FLAGS (obj) |= (flag)); }G_STMT_END
+#define GTK_OBJECT_SET_FLAGS(obj,flag)	  G_STMT_START{ (GTK_OBJECT_FLAGS (obj) |= (flag)); }G_STMT_END
 #define GTK_OBJECT_UNSET_FLAGS(obj,flag)  G_STMT_START{ (GTK_OBJECT_FLAGS (obj) &= ~(flag)); }G_STMT_END
 
 /* GtkArg flag bits for gtk_object_add_arg_type
@@ -131,7 +132,7 @@ enum
 };
 
 
-typedef struct _GtkObjectClass  GtkObjectClass;
+typedef struct _GtkObjectClass	GtkObjectClass;
 
 
 /* GtkObject is the base of the object hierarchy. It defines
@@ -144,19 +145,19 @@ struct _GtkObject
    *  GtkObjectClass).
    */
   GtkObjectClass *klass;
-
+  
   /* 32 bits of flags. GtkObject only uses 4 of these bits and
    *  GtkWidget uses the rest. This is done because structs are
    *  aligned on 4 or 8 byte boundaries. If a new bitfield were
    *  used in GtkWidget much space would be wasted.
    */
   guint32 flags;
-
+  
   /* reference count.
    * refer to the file REFCOUNTING on this issue.
    */
   guint ref_count;
-
+  
   /* The list of signal handlers and other data
    *  fields for this object.
    */
@@ -173,20 +174,20 @@ struct _GtkObjectClass
    *  one unique identifier per class.
    */
   GtkType type;
-
+  
   /* The signals this object class handles. "signals" is an
    *  array of signal ID's.
    */
   guint *signals;
-
+  
   /* The number of signals listed in "signals".
    */
   guint nsignals;
-
+  
   /* The number of arguments per class.
    */
   guint n_args;
-
+  
   /* The functions that will end an objects life time. In one way ore
    *  another all three of them are defined for all objects. If an
    *  object class overrides one of the methods in order to perform class
@@ -197,7 +198,7 @@ struct _GtkObjectClass
    */
   void (* shutdown) (GtkObject *object);
   void (* destroy) (GtkObject *object);
-
+  
   void (* finalize) (GtkObject *object);
 };
 
@@ -207,11 +208,11 @@ struct _GtkObjectClass
  */
 #define GTK_SIGNAL_FUNC(f)  ((GtkSignalFunc) f)
 
-typedef void (*GtkSignalFunc)       (void);
-typedef void (*GtkSignalMarshaller) (GtkObject      *object,
+typedef void (*GtkSignalFunc)	    (void);
+typedef void (*GtkSignalMarshaller) (GtkObject	    *object,
 				     GtkSignalFunc   func,
-				     gpointer        func_data,
-				     GtkArg         *args);
+				     gpointer	     func_data,
+				     GtkArg	    *args);
 
 
 /* Get the type identifier for GtkObject's.
@@ -221,16 +222,16 @@ GtkType	gtk_object_get_type		(void);
 /* Append "signals" to those already defined in "class".
  */
 void	gtk_object_class_add_signals	(GtkObjectClass	*klass,
-					 guint          *signals,
-					 guint           nsignals);
+					 guint		*signals,
+					 guint		 nsignals);
 
 /* Append a user defined signal without default handler to a class.
  */
-guint   gtk_object_class_add_user_signal (GtkObjectClass     *klass,
-					  const gchar        *name,
+guint	gtk_object_class_add_user_signal (GtkObjectClass     *klass,
+					  const gchar	     *name,
 					  GtkSignalMarshaller marshaller,
-					  GtkType             return_val,
-					  guint               nparams,
+					  GtkType	      return_val,
+					  guint		      nparams,
 					  ...);
 
 GtkObject*	gtk_object_new		(GtkType	type,
@@ -239,16 +240,16 @@ GtkObject*	gtk_object_new		(GtkType	type,
 GtkObject*	gtk_object_newv		(GtkType	type,
 					 guint		nargs,
 					 GtkArg		*args);
-void gtk_object_sink      (GtkObject        *object);
-void gtk_object_ref       (GtkObject        *object);
-void gtk_object_unref     (GtkObject        *object);
+void gtk_object_sink	  (GtkObject	    *object);
+void gtk_object_ref	  (GtkObject	    *object);
+void gtk_object_unref	  (GtkObject	    *object);
 
-void gtk_object_weakref   (GtkObject        *object,
+void gtk_object_weakref	  (GtkObject	    *object,
 			   GtkDestroyNotify  notify,
-			   gpointer          data);
-void gtk_object_weakunref (GtkObject        *object,
+			   gpointer	     data);
+void gtk_object_weakunref (GtkObject	    *object,
 			   GtkDestroyNotify  notify,
-			   gpointer          data);
+			   gpointer	     data);
 
 void gtk_object_destroy	  (GtkObject *object);
 
@@ -281,9 +282,9 @@ void	gtk_object_setv		(GtkObject	*object,
  * It is the callers response to do a
  * g_free (returned_args); g_free (*acess_masks).
  */
-GtkArg* gtk_object_query_args   (GtkType	class_type,
+GtkArg* gtk_object_query_args	(GtkType	class_type,
 				 guint32	**arg_flags,
-				 guint          *nargs);
+				 guint		*nargs);
 
 void	gtk_object_add_arg_type	(const gchar	*arg_name,
 				 GtkType	arg_type,
@@ -305,45 +306,45 @@ void gtk_object_set_data       (GtkObject   *object,
 /* Like gtk_object_set_data, but takes an additional argument
  * which is a function to be called when the data is removed.
  */
-void gtk_object_set_data_full       (GtkObject   *object,
+void gtk_object_set_data_full	    (GtkObject	 *object,
 				     const gchar *key,
-				     gpointer     data,
+				     gpointer	  data,
 				     GtkDestroyNotify destroy);
 
 /* Get the data associated with "key".
  */
-gpointer gtk_object_get_data       (GtkObject   *object,
+gpointer gtk_object_get_data	   (GtkObject	*object,
 				    const gchar *key);
 
 /* Remove the data associated with "key". This call is
  *  equivalent to 'gtk_object_set_data' where 'data' is NULL.
  */
-void gtk_object_remove_data       (GtkObject   *object,
+void gtk_object_remove_data	  (GtkObject   *object,
 				   const gchar *key);
 
 /* Object data functions that operate on key ids.
  *  These functions are meant for *internal* use only.
  */
-void gtk_object_set_data_by_id      (GtkObject       *object,
+void gtk_object_set_data_by_id	    (GtkObject	     *object,
 				     guint	      data_id,
-				     gpointer         data);
-void gtk_object_set_data_by_id_full (GtkObject       *object,
-				     guint            data_id,
-				     gpointer         data,
+				     gpointer	      data);
+void gtk_object_set_data_by_id_full (GtkObject	     *object,
+				     guint	      data_id,
+				     gpointer	      data,
 				     GtkDestroyNotify destroy);
-gpointer gtk_object_get_data_by_id  (GtkObject       *object,
-				     guint            data_id);
-void  gtk_object_remove_data_by_id  (GtkObject       *object,
+gpointer gtk_object_get_data_by_id  (GtkObject	     *object,
 				     guint	      data_id);
-guint gtk_object_data_try_key       (const gchar     *key);
-guint gtk_object_data_force_id      (const gchar     *key);
+void  gtk_object_remove_data_by_id  (GtkObject	     *object,
+				     guint	      data_id);
+guint gtk_object_data_try_key	    (const gchar     *key);
+guint gtk_object_data_force_id	    (const gchar     *key);
 
 /* Set the "user_data" object data field of "object". It should
  *  be noted that this is no different than calling 'gtk_object_set_data'
  *  with a key of "user_data". It is merely provided as a convenience.
  */
 void gtk_object_set_user_data (GtkObject *object,
-			       gpointer   data);
+			       gpointer	  data);
 
 /* Get the "user_data" object data field of "object". It should
  *  be noted that this is no different than calling 'gtk_object_get_data'
@@ -355,14 +356,14 @@ GtkObject* gtk_object_check_cast (GtkObject *obj,
 				  GtkType    cast_type);
 
 GtkObjectClass* gtk_object_check_class_cast (GtkObjectClass *klass,
-					     GtkType         cast_type);
+					     GtkType	     cast_type);
 
 void	gtk_trace_referencing	(gpointer    *object,
 				 const gchar *func,
-				 guint        local_frame,
-				 guint        line,
+				 guint	      local_frame,
+				 guint	      line,
 				 gboolean     do_ref);
-     
+
 #if G_ENABLE_DEBUG && defined (__GNUC__)
 #  define gtk_object_ref(o)   G_STMT_START{static guint f=0;gtk_trace_referencing((gpointer)o,__PRETTY_FUNCTION__,++f,__LINE__, 1);f--;}G_STMT_END
 #  define gtk_object_unref(o) G_STMT_START{static guint f=0;gtk_trace_referencing((gpointer)o,__PRETTY_FUNCTION__,++f,__LINE__, 0);f--;}G_STMT_END

@@ -392,7 +392,7 @@ gtk_signal_lookup (const gchar *name,
   GtkSignalHash hash;
   
   g_return_val_if_fail (name != NULL, 0);
-  g_return_val_if_fail (GTK_TYPE_IS_A (object_type, GTK_TYPE_OBJECT), 0);
+  g_return_val_if_fail (gtk_type_is_a (object_type, GTK_TYPE_OBJECT), 0);
   
   hash.name_key_id = gtk_object_data_try_key (name);
   if (hash.name_key_id)
@@ -1204,8 +1204,13 @@ gtk_signal_handler_unref (GtkHandler *handler,
       
       if (handler->prev)
 	handler->prev->next = handler->next;
-      else
+      else if (handler->next)
 	gtk_object_set_data_by_id (object, handler_key_id, handler->next);
+      else
+	{
+	  GTK_OBJECT_UNSET_FLAGS (object, GTK_CONNECTED);
+	  gtk_object_set_data_by_id (object, handler_key_id, NULL);
+	}
       if (handler->next)
 	handler->next->prev = handler->prev;
       
@@ -1225,7 +1230,10 @@ gtk_signal_handler_insert (GtkObject  *object,
   
   tmp = gtk_object_get_data_by_id (object, handler_key_id);
   if (!tmp)
-    gtk_object_set_data_by_id (object, handler_key_id, handler);
+    {
+      GTK_OBJECT_SET_FLAGS (object, GTK_CONNECTED);
+      gtk_object_set_data_by_id (object, handler_key_id, handler);
+    }
   else
     while (tmp)
       {
@@ -1266,7 +1274,7 @@ gtk_signal_real_emit (GtkObject *object,
   
   signal = LOOKUP_SIGNAL_ID (signal_id);
   g_return_if_fail (signal != NULL);
-  g_return_if_fail (GTK_TYPE_IS_A (GTK_OBJECT_TYPE (object), signal->object_type));
+  g_return_if_fail (gtk_type_is_a (GTK_OBJECT_TYPE (object), signal->object_type));
   
   if ((signal->run_type & GTK_RUN_NO_RECURSE) &&
       gtk_emission_check (current_emissions, object, signal_id))
@@ -1292,25 +1300,35 @@ gtk_signal_real_emit (GtkObject *object,
 				NULL, params);
     }
   
-  info.object = object;
-  info.marshaller = signal->marshaller;
-  info.params = params;
-  info.param_types = signal->params;
-  info.return_val = signal->return_val;
-  info.nparams = signal->nparams;
-  info.run_type = signal->run_type;
-  info.signal_id = signal_id;
-  
-  handlers = gtk_signal_get_handlers (object, signal_id);
-  switch (gtk_handlers_run (handlers, &info, FALSE))
+  if (GTK_OBJECT_CONNECTED (object))
     {
-    case  EMISSION_CONTINUE:
-      break;
-    case  EMISSION_RESTART:
-      goto emission_restart;
-    case  EMISSION_DONE:
-      goto emission_done;
+      handlers = gtk_signal_get_handlers (object, signal_id);
+      if (handlers)
+	{
+	  info.object = object;
+	  info.marshaller = signal->marshaller;
+	  info.params = params;
+	  info.param_types = signal->params;
+	  info.return_val = signal->return_val;
+	  info.nparams = signal->nparams;
+	  info.run_type = signal->run_type;
+	  info.signal_id = signal_id;
+
+	  switch (gtk_handlers_run (handlers, &info, FALSE))
+	    {
+	    case  EMISSION_CONTINUE:
+	      break;
+	    case  EMISSION_RESTART:
+	      goto emission_restart;
+	    case  EMISSION_DONE:
+	      goto emission_done;
+	    }
+	}
+      else
+	info.object = NULL;
     }
+  else
+    info.object = NULL;
   
   if (GTK_RUN_TYPE (signal->run_type) != GTK_RUN_FIRST	&& signal->function_offset != 0)
     {
@@ -1321,15 +1339,32 @@ gtk_signal_real_emit (GtkObject *object,
 				NULL, params);
     }
   
-  handlers = gtk_signal_get_handlers (object, signal_id);
-  switch (gtk_handlers_run (handlers, &info, TRUE))
+  if (GTK_OBJECT_CONNECTED (object))
     {
-    case  EMISSION_CONTINUE:
-      break;
-    case  EMISSION_RESTART:
-      goto emission_restart;
-    case  EMISSION_DONE:
-      goto emission_done;
+      handlers = gtk_signal_get_handlers (object, signal_id);
+      if (handlers)
+	{
+	  if (!info.object)
+	    {
+	      info.object = object;
+	      info.marshaller = signal->marshaller;
+	      info.params = params;
+	      info.param_types = signal->params;
+	      info.return_val = signal->return_val;
+	      info.nparams = signal->nparams;
+	      info.run_type = signal->run_type;
+	      info.signal_id = signal_id;
+	    }
+	  switch (gtk_handlers_run (handlers, &info, TRUE))
+	    {
+	    case  EMISSION_CONTINUE:
+	      break;
+	    case  EMISSION_RESTART:
+	      goto emission_restart;
+	    case  EMISSION_DONE:
+	      goto emission_done;
+	    }
+	}
     }
   
  emission_done:
@@ -1370,8 +1405,11 @@ gtk_signal_handler_pending (GtkObject		*object,
   
   g_return_val_if_fail (object != NULL, 0);
   g_return_val_if_fail (signal_id >= 1, 0);
-  
-  handlers = gtk_signal_get_handlers (object, signal_id);
+
+  if (GTK_OBJECT_CONNECTED (object))
+    handlers = gtk_signal_get_handlers (object, signal_id);
+  else
+    return 0;
   
   handler_id = 0;
   while (handlers && handlers->signal_id == signal_id)

@@ -231,7 +231,6 @@ gtk_object_init (GtkObject *object)
  * Functions to end a GtkObject's life time
  *
  ********************************************/
-
 void
 gtk_object_destroy (GtkObject *object)
 {
@@ -260,7 +259,8 @@ gtk_object_shutdown (GtkObject *object)
 static void
 gtk_object_real_destroy (GtkObject *object)
 {
-  gtk_signal_handlers_destroy (object);
+  if (GTK_OBJECT_CONNECTED (object))
+    gtk_signal_handlers_destroy (object);
 }
 
 static void
@@ -646,7 +646,7 @@ gtk_object_getv (GtkObject           *object,
 	  g_free (lookup_name);
 	  continue;
 	}
-      else if (!GTK_TYPE_IS_A (object->klass->type, info->class_type))
+      else if (!gtk_type_is_a (object->klass->type, info->class_type))
 	{
 	  g_warning ("invalid arg for %s: \"%s\"\n", gtk_type_name (object->klass->type), lookup_name);
 	  args[i].type = GTK_TYPE_INVALID;
@@ -710,7 +710,7 @@ gtk_object_query_args (GtkType	class_type,
     *arg_flags = NULL;
   g_return_val_if_fail (nargs != NULL, NULL);
   *nargs = 0;
-  g_return_val_if_fail (GTK_TYPE_IS_A (class_type, gtk_object_get_type ()), NULL);
+  g_return_val_if_fail (gtk_type_is_a (class_type, gtk_object_get_type ()), NULL);
 
   if (!arg_info_ht)
     return NULL;
@@ -850,7 +850,7 @@ gtk_object_setv (GtkObject *object,
 	  g_warning ("invalid arg type for: \"%s\"\n", lookup_name);
 	  arg_ok = FALSE;
 	}
-      else if (!GTK_TYPE_IS_A (object->klass->type, info->class_type))
+      else if (!gtk_type_is_a (object->klass->type, info->class_type))
 	{
 	  g_warning ("invalid arg for %s: \"%s\"\n", gtk_type_name (object->klass->type), lookup_name);
 	  arg_ok = FALSE;
@@ -1290,7 +1290,7 @@ gtk_object_check_cast (GtkObject *obj,
 		 gtk_object_descriptive_type_name (cast_type));
       return obj;
     }
-  if (!GTK_TYPE_IS_A (obj->klass->type, cast_type))
+  if (!gtk_type_is_a (obj->klass->type, cast_type))
     {
       g_warning ("invalid cast from `%s' to `%s'",
 		 gtk_object_descriptive_type_name (obj->klass->type),
@@ -1326,7 +1326,7 @@ gtk_object_check_class_cast (GtkObjectClass *klass,
 		 gtk_object_descriptive_type_name (cast_type));
       return klass;
     }
-  if (!GTK_TYPE_IS_A (klass->type, cast_type))
+  if (!gtk_type_is_a (klass->type, cast_type))
     {
       g_warning ("invalid class cast from `%s' to `%s'",
 		 gtk_object_descriptive_type_name (klass->type),

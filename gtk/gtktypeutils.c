@@ -364,25 +364,26 @@ gint
 gtk_type_is_a (GtkType type,
 	       GtkType is_a_type)
 {
-  register GtkTypeNode *node;
-
-  /* we already check for type==is_a_type in the
-   * wrapper macro GTK_TYPE_IS_A()
-   */
-
-  LOOKUP_TYPE_NODE (node, type);
-  if (node)
+  if (type == is_a_type)
+    return TRUE;
+  else
     {
-      register GtkTypeNode *a_node;
+      register GtkTypeNode *node;
 
-      LOOKUP_TYPE_NODE (a_node, is_a_type);
-      if (a_node)
+      LOOKUP_TYPE_NODE (node, type);
+      if (node)
 	{
-	  if (a_node->n_supers <= node->n_supers)
-	    return node->supers[node->n_supers - a_node->n_supers] == is_a_type;
+	  register GtkTypeNode *a_node;
+	  
+	  LOOKUP_TYPE_NODE (a_node, is_a_type);
+	  if (a_node)
+	    {
+	      if (a_node->n_supers <= node->n_supers)
+		return node->supers[node->n_supers - a_node->n_supers] == is_a_type;
+	    }
 	}
     }
-
+  
   return FALSE;
 }
 
@@ -462,7 +463,7 @@ gtk_type_class_init (GtkTypeNode *node)
 	    memcpy (node->klass, parent->klass, parent->type_info.class_size);
 	}
 
-      if (GTK_TYPE_IS_A (node->type, GTK_TYPE_OBJECT))
+      if (gtk_type_is_a (node->type, GTK_TYPE_OBJECT))
 	{
 	  GtkObjectClass *object_class;
 

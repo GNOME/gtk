@@ -74,10 +74,10 @@ extern GtkType gtk_type_builtins[];
 #define GTK_TYPE_MAKE(parent_t, seqno) 	(((seqno) << 8) | GTK_FUNDAMENTAL_TYPE (parent_t))
 #define GTK_FUNDAMENTAL_TYPE(type)	 	((GtkFundamentalType) ((type) & 0xFF))
 #define GTK_TYPE_SEQNO(type)	 	((type) > 0xFF ? (type) >> 8 : (type))
-#define GTK_TYPE_IS_A(type, is_a_type)	( \
-  ((GtkType) (type)) == ((GtkType) (is_a_type)) || \
-  gtk_type_is_a (((GtkType) (type)), ((GtkType) (is_a_type))) \
-)
+
+/* deprecated
+ */
+#define GTK_TYPE_IS_A			gtk_type_is_a
 
 typedef struct _GtkArg	       GtkArg;
 typedef struct _GtkObject      GtkObject;   /* forward declaration of object type */

@@ -999,7 +999,7 @@ gtk_widget_new (guint type,
   va_list args1;
   va_list args2;
   
-  g_return_val_if_fail (GTK_TYPE_IS_A (type, gtk_widget_get_type ()), NULL);
+  g_return_val_if_fail (gtk_type_is_a (type, gtk_widget_get_type ()), NULL);
   
   obj = gtk_type_new (type);
   
@@ -1029,7 +1029,7 @@ gtk_widget_newv (guint	 type,
 		 guint	 nargs,
 		 GtkArg *args)
 {
-  g_return_val_if_fail (GTK_TYPE_IS_A (type, gtk_widget_get_type ()), NULL);
+  g_return_val_if_fail (gtk_type_is_a (type, gtk_widget_get_type ()), NULL);
   
   return GTK_WIDGET (gtk_object_newv (type, nargs, args));
 }
@@ -2268,14 +2268,14 @@ gtk_widget_grab_focus (GtkWidget *widget)
       parent = widget->parent;
       child = widget;
       
-      while (parent && !GTK_TYPE_IS_A (GTK_WIDGET_TYPE (parent), window_type))
+      while (parent && !gtk_type_is_a (GTK_WIDGET_TYPE (parent), window_type))
 	{
 	  gtk_container_set_focus_child (GTK_CONTAINER (parent), child);
 	  child = parent;
 	  parent = parent->parent;
 	}
       
-      if (parent && GTK_TYPE_IS_A (GTK_WIDGET_TYPE (parent), window_type))
+      if (parent && gtk_type_is_a (GTK_WIDGET_TYPE (parent), window_type))
 	{
 	  gtk_container_set_focus_child (GTK_CONTAINER (parent), child);
 	  gtk_window_set_focus (GTK_WINDOW (parent), widget);
@@ -2303,10 +2303,10 @@ gtk_widget_grab_default (GtkWidget *widget)
   window_type = gtk_window_get_type ();
   window = widget->parent;
   
-  while (window && !GTK_TYPE_IS_A (GTK_WIDGET_TYPE (window), window_type))
+  while (window && !gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
     window = window->parent;
   
-  if (window && GTK_TYPE_IS_A (GTK_WIDGET_TYPE (window), window_type))
+  if (window && gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
     gtk_window_set_default (GTK_WINDOW (window), widget);
 }
 
@@ -2986,10 +2986,10 @@ gtk_widget_get_ancestor (GtkWidget *widget,
 {
   g_return_val_if_fail (widget != NULL, NULL);
   
-  while (widget && !GTK_TYPE_IS_A (GTK_WIDGET_TYPE (widget), widget_type))
+  while (widget && !gtk_type_is_a (GTK_WIDGET_TYPE (widget), widget_type))
     widget = widget->parent;
   
-  if (!(widget && GTK_TYPE_IS_A (GTK_WIDGET_TYPE (widget), widget_type)))
+  if (!(widget && gtk_type_is_a (GTK_WIDGET_TYPE (widget), widget_type)))
     return NULL;
   
   return widget;
