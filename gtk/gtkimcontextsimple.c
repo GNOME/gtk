@@ -71,12 +71,14 @@ static guint16 gtk_compose_seqs[] = {
   GDK_dead_acute,	GDK_space,	0,	0,	0,	0x0027,	/* APOSTROPHE */
   GDK_dead_acute,	GDK_apostrophe,	0,	0,	0,	0x00B4,	/* ACUTE_ACCENT */
   GDK_dead_acute,	GDK_A,	0,	0,	0,	0x00C1,	/* LATIN_CAPITAL_LETTER_A_WITH_ACUTE */
+  GDK_dead_acute,	GDK_C,	0,	0,	0,	0x00C7,	/* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
   GDK_dead_acute,	GDK_E,	0,	0,	0,	0x00C9,	/* LATIN_CAPITAL_LETTER_E_WITH_ACUTE */
   GDK_dead_acute,	GDK_I,	0,	0,	0,	0x00CD,	/* LATIN_CAPITAL_LETTER_I_WITH_ACUTE */
   GDK_dead_acute,	GDK_O,	0,	0,	0,	0x00D3,	/* LATIN_CAPITAL_LETTER_O_WITH_ACUTE */
   GDK_dead_acute,	GDK_U,	0,	0,	0,	0x00DA,	/* LATIN_CAPITAL_LETTER_U_WITH_ACUTE */
   GDK_dead_acute,	GDK_Y,	0,	0,	0,	0x00DD,	/* LATIN_CAPITAL_LETTER_Y_WITH_ACUTE */
   GDK_dead_acute,	GDK_a,	0,	0,	0,	0x00E1,	/* LATIN_SMALL_LETTER_A_WITH_ACUTE */
+  GDK_dead_acute,	GDK_c,	0,	0,	0,	0x00E7,	/* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
   GDK_dead_acute,	GDK_e,	0,	0,	0,	0x00E9,	/* LATIN_SMALL_LETTER_E_WITH_ACUTE */
   GDK_dead_acute,	GDK_i,	0,	0,	0,	0x00ED,	/* LATIN_SMALL_LETTER_I_WITH_ACUTE */
   GDK_dead_acute,	GDK_o,	0,	0,	0,	0x00F3,	/* LATIN_SMALL_LETTER_O_WITH_ACUTE */

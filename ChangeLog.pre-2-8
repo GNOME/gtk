@@ -1,3 +1,9 @@
+Wed Jun 12 14:18:45 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkimcontextsimple.c: Add compose sequences
+ 	of dead_acute + c/C => C WITH CEDDILLA.
+ 	(Nano Golveia, #83492)
+ 
 2002-06-10  Hans Breuer  <hans@breuer.org>
 
 	* gdk/makefile.msc : added gdkdisplay and gdkscreen
