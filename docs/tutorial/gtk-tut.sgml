@@ -1128,9 +1128,6 @@ different styles.</para>
 <imageobject>
 <imagedata fileref="gtk_tut_packbox1.jpg">
 </imageobject>
-<imageobject>
-<imagedata fileref="gtk_tut_packbox1.eps">
-</imageobject>
 </inlinemediaobject>
 </para>
 
@@ -1189,9 +1186,6 @@ following figure should make it clearer:</para>
 <inlinemediaobject>
 <imageobject>
 <imagedata fileref="gtk_tut_packbox2.jpg">
-</imageobject>
-<imageobject>
-<imagedata fileref="gtk_tut_packbox2.eps">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -1667,9 +1661,6 @@ Which means it should look something like this:</para>
 <inlinemediaobject>
 <imageobject>
 <imagedata fileref="gtk_tut_table.jpg">
-</imageobject>
-<imageobject>
-<imagedata fileref="gtk_tut_table.eps">
 </imageobject>
 </inlinemediaobject>
 </para>
