@@ -1,3 +1,10 @@
+2003-10-28  Padraig O'Briain  <padraig.obriain@sun.com>
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_remove_filter):
+	Changew index to filter_index to fix compilation error.
+
+	* gtk/gtkfilesystem.h: Correct definition of gtk_file_path_get_string.
+
 Mon Oct 27 15:47:58 2003  Manish Singh  <yosh@gimp.org>
 
 	* gdk/x11/gdkscreen-x11.c: #include <X11/extensions/Xrandr.h> if

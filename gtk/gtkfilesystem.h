@@ -295,7 +295,7 @@ GtkFileInfo *gtk_file_folder_get_info      (GtkFileFolder      *folder,
 #else /* __GNUC__ */
 #define gtk_file_path_new_dup(str)     ((GtkFilePath *)g_strdup(str))
 #define gtk_file_path_new_steal(str)   ((GtkFilePath *)(str))
-#define gtk_file_path_get_string(path) ((const gchar *)(str))
+#define gtk_file_path_get_string(str) ((const gchar *)(str))
 #define gtk_file_path_free(path)       g_free (path)
 #endif/* __GNUC__ */
 

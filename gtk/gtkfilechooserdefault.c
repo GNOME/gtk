@@ -1685,7 +1685,7 @@ gtk_file_chooser_default_remove_filter (GtkFileChooser *chooser,
 
   filter_index = g_slist_index (impl->filters, filter);
 
-  if (index < 0)
+  if (filter_index < 0)
     {
       g_warning ("gtk_file_chooser_remove_filter() called on filter not in list\n");
       return;
