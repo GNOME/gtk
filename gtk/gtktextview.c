@@ -6790,7 +6790,9 @@ popup_position_func (GtkMenu   *menu,
   GtkTextIter iter;
   GtkRequisition req;      
   GdkScreen *screen;
-  
+  gint monitor_num;
+  GdkRectangle monitor;
+      
   text_view = GTK_TEXT_VIEW (user_data);
   widget = GTK_WIDGET (text_view);
   
@@ -6832,13 +6834,19 @@ popup_position_func (GtkMenu   *menu,
       *x = root_x + (widget->allocation.width / 2 - req.width / 2);
       *y = root_y + (widget->allocation.height / 2 - req.height / 2);      
     }
-
+  
   /* Ensure sanity */
   *x = CLAMP (*x, root_x, (root_x + widget->allocation.width));
   *y = CLAMP (*y, root_y, (root_y + widget->allocation.height));
 
-  *x = CLAMP (*x, 0, MAX (0, gdk_screen_get_width (screen) - req.width));
-  *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (screen) - req.height));
+  monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
+  gtk_menu_set_monitor (menu, monitor_num);
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+  *x = CLAMP (*x, monitor.x, monitor.x + MAX (0, monitor.width - req.width));
+  *y = CLAMP (*y, monitor.y, monitor.y + MAX (0, monitor.height - req.height));
+
+  *push_in = FALSE;
 }
 
 typedef struct

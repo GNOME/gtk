@@ -2714,27 +2714,56 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
 }
 
 static void
+popup_position_func (GtkMenu   *menu,
+                     gint      *x,
+                     gint      *y,
+                     gboolean  *push_in,
+                     gpointer	user_data)
+{
+  GtkWidget *widget = GTK_WIDGET (user_data);
+  GdkScreen *screen = gtk_widget_get_screen (widget);
+  GtkRequisition req;
+  gint monitor_num;
+  GdkRectangle monitor;
+  
+  g_return_if_fail (GTK_WIDGET_REALIZED (widget));
+
+  gdk_window_get_origin (widget->window, x, y);      
+
+  gtk_widget_size_request (GTK_WIDGET (menu), &req);
+  
+  *x += (widget->allocation.width - req.width) / 2;
+  *y += (widget->allocation.height - req.height) / 2;
+
+  monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
+  gtk_menu_set_monitor (menu, monitor_num);
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+  *x = CLAMP (*x, monitor.x, monitor.x + MAX (0, monitor.width - req.width));
+  *y = CLAMP (*y, monitor.y, monitor.y + MAX (0, monitor.height - req.height));
+
+  *push_in = FALSE;
+}
+
+static void
 file_list_popup_menu (GtkFileChooserDefault *impl,
 		      GdkEventButton        *event)
 {
-  int button;
-  guint32 timestamp;
-
+  file_list_build_popup_menu (impl);
   if (event)
-    {
-      button = event->button;
-      timestamp = event->time;
-    }
+    gtk_menu_popup (GTK_MENU (impl->browse_files_popup_menu),
+		    NULL, NULL, NULL, NULL,
+		    event->button, event->time);
   else
     {
-      button = 0;
-      timestamp = GDK_CURRENT_TIME;
+      gtk_menu_popup (GTK_MENU (impl->browse_files_popup_menu),
+		      NULL, NULL, 
+		      popup_position_func, impl->browse_files_tree_view,
+		      0, GDK_CURRENT_TIME);
+      gtk_menu_shell_select_first (GTK_MENU_SHELL (impl->browse_files_popup_menu), 
+				   FALSE);
     }
 
-  file_list_build_popup_menu (impl);
-  gtk_menu_popup (GTK_MENU (impl->browse_files_popup_menu),
-		  NULL, NULL, NULL, NULL,
-		  button, timestamp);
 }
 
 /* Callback used for the GtkWidget::popup-menu signal of the file list */
