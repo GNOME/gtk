@@ -1413,10 +1413,9 @@ gdk_pixbuf__xpm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
        context->update_func = update_func;
        context->user_data = user_data;
        context->all_okay = TRUE;
-       context->tempname = g_strdup ("/tmp/gdkpixbuf-xpm-tmp.XXXXXX");
-       fd = mkstemp (context->tempname);
+       fd = g_file_open_tmp ("gdkpixbuf-xpm-tmp.XXXXXX", &context->tempname,
+			     NULL);
        if (fd < 0) {
-               g_free (context->tempname);
                g_free (context);
                return NULL;
        }

@@ -153,26 +153,15 @@ gdk_pixbuf__tiff_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 {
 	TiffData *context;
 	gint fd;
-	gchar *tmp = g_get_tmp_dir ();
 
 	context = g_new (TiffData, 1);
 	context->prepare_func = prepare_func;
 	context->update_func = update_func;
 	context->user_data = user_data;
 	context->all_okay = TRUE;
-	context->tempname =
-	  g_strconcat (tmp,
-		       tmp[strlen (tmp)] == G_DIR_SEPARATOR ? G_DIR_SEPARATOR_S : "",
-		       "gdkpixbuf-tif-tmp.XXXXXX",
-		       NULL);
-#ifdef HAVE_MKSTEMP
-	fd = mkstemp (context->tempname);
-#else
-	mktemp (context->tempname);
-	fd = open (context->tempname, O_RDWR);
-#endif
+	fd = g_file_open_tmp ("gdkpixbuf-tif-tmp.XXXXXX", &context->tempname,
+			      NULL);
 	if (fd < 0) {
-                g_free (context->tempname);
 		g_free (context);
 		return NULL;
 	}
