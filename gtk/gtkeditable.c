@@ -606,6 +606,8 @@ gtk_editable_claim_selection (GtkEditable *editable,
 			      guint32   time)
 {
   g_return_if_fail (GTK_WIDGET_REALIZED (editable));
+
+  editable->has_selection = FALSE;
   
   if (claim)
     {
