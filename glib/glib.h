@@ -715,7 +715,7 @@ gdouble g_timer_elapsed (GTimer	 *timer,
 
 /* Output
  */
-void g_error   (const gchar *format, ...) G_GNUC_PRINTF (1, 2) G_GNUC_NORETURN;
+void g_error   (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 void g_warning (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 void g_message (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 void g_print   (const gchar *format, ...) G_GNUC_PRINTF (1, 2);

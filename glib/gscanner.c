@@ -886,8 +886,6 @@ g_scanner_unexp_token (GScanner		*scanner,
 		     message);
     }
   
-  va_end (args);
-  
   g_free (token_string);
   g_free (expected_string);
 }

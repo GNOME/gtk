@@ -1,3 +1,9 @@
+Fri May 15 22:31:49 1998  Tim Janik  <timj@gtk.org>
+
+	* gscanner.c (g_scanner_unexp_token): removed sputious va_end(args) that
+	for some reason didn't produce a compiler wrning on my machine (is
+ 	va_end undefined for i386?).
+
 Fri May 15 12:32:08 1998  rodo  <doulik@karlin.mff.cuni.cz>
 
 	* gscanner.c: replaced some snprintf with g_snprintf
