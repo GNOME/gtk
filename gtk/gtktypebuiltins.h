@@ -76,6 +76,9 @@ extern GtkType GTK_TYPE_DEBUG_FLAG;
 extern GtkType GTK_TYPE_OBJECT_FLAGS;
 extern GtkType GTK_TYPE_ARG_FLAGS;
 extern GtkType GTK_TYPE_WIDGET_FLAGS;
+extern GtkType GTK_TYPE_PACKER_OPTIONS;
+extern GtkType GTK_TYPE_SIDE_TYPE;
+extern GtkType GTK_TYPE_ANCHOR_TYPE;
 extern GtkType GTK_TYPE_PRIVATE_FLAGS;
 extern GtkType GTK_TYPE_ACCEL_GROUP;
 extern GtkType GTK_TYPE_SELECTION_DATA;
@@ -87,4 +90,4 @@ extern GtkType GTK_TYPE_GDK_WINDOW;
 extern GtkType GTK_TYPE_GDK_EVENT;
 extern GtkType GTK_TYPE_GDK_COLOR;
 
-#define	GTK_TYPE_NUM_BUILTINS	(86)
+#define	GTK_TYPE_NUM_BUILTINS	(89)

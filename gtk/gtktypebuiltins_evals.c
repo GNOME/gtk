@@ -627,6 +627,31 @@ static GtkEnumValue _gtk_widget_flags_values[] = {
   { GTK_BASIC, "GTK_BASIC", "basic" },
   { 0, NULL, NULL }
 };
+static GtkEnumValue _gtk_packer_options_values[] = {
+  { GTK_PACK_EXPAND, "GTK_PACK_EXPAND", "pack-expand" },
+  { GTK_FILL_X, "GTK_FILL_X", "fill-x" },
+  { GTK_FILL_Y, "GTK_FILL_Y", "fill-y" },
+  { 0, NULL, NULL }
+};
+static GtkEnumValue _gtk_side_type_values[] = {
+  { GTK_SIDE_TOP, "GTK_SIDE_TOP", "top" },
+  { GTK_SIDE_BOTTOM, "GTK_SIDE_BOTTOM", "bottom" },
+  { GTK_SIDE_LEFT, "GTK_SIDE_LEFT", "left" },
+  { GTK_SIDE_RIGHT, "GTK_SIDE_RIGHT", "right" },
+  { 0, NULL, NULL }
+};
+static GtkEnumValue _gtk_anchor_type_values[] = {
+  { GTK_ANCHOR_CENTER, "GTK_ANCHOR_CENTER", "center" },
+  { GTK_ANCHOR_NORTH, "GTK_ANCHOR_NORTH", "north" },
+  { GTK_ANCHOR_NORTH_WEST, "GTK_ANCHOR_NORTH_WEST", "north-west" },
+  { GTK_ANCHOR_NORTH_EAST, "GTK_ANCHOR_NORTH_EAST", "north-east" },
+  { GTK_ANCHOR_SOUTH, "GTK_ANCHOR_SOUTH", "south" },
+  { GTK_ANCHOR_SOUTH_WEST, "GTK_ANCHOR_SOUTH_WEST", "south-west" },
+  { GTK_ANCHOR_SOUTH_EAST, "GTK_ANCHOR_SOUTH_EAST", "south-east" },
+  { GTK_ANCHOR_WEST, "GTK_ANCHOR_WEST", "west" },
+  { GTK_ANCHOR_EAST, "GTK_ANCHOR_EAST", "east" },
+  { 0, NULL, NULL }
+};
 static GtkEnumValue _gtk_private_flags_values[] = {
   { PRIVATE_GTK_USER_STYLE, "PRIVATE_GTK_USER_STYLE", "user-style" },
   { PRIVATE_GTK_REDRAW_PENDING, "PRIVATE_GTK_REDRAW_PENDING", "redraw-pending" },

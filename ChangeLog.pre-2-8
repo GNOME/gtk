@@ -1,3 +1,13 @@
+Fri Jun 12 09:24:47 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkpacker.h:
+	* gtk/gtkpacker.c: renamed enum GtkAnchor and GtkSide to GtkAnchorType
+ 	and GtkSideType, to be consistent with the rest of Gtk's enum
+ 	definitions. wrapped the enum definitions with the G_ eunm wrappers.
+	spelled out the GTK_ANCHOR_* enum values, since single letters don't
+	work out corectly as nick-names (left the old values as aliases).
+	some signdness corrections (border-width, spacing), could stand more.
+
 Thu Jun 11 14:38:33 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gtk/gtkpacker.c, gtk/gtkpacker.h, gtk/gtk.h, gtk/Makefile.am: 

@@ -568,6 +568,30 @@
   (rc-style GTK_RC_STYLE)
   (basic GTK_BASIC))
 
+; enumerations from "gtkpacker.h"
+
+(define-flags GtkPackerOptions
+  (pack-expand GTK_PACK_EXPAND)
+  (fill-x GTK_FILL_X)
+  (fill-y GTK_FILL_Y))
+
+(define-enum GtkSideType
+  (top GTK_SIDE_TOP)
+  (bottom GTK_SIDE_BOTTOM)
+  (left GTK_SIDE_LEFT)
+  (right GTK_SIDE_RIGHT))
+
+(define-enum GtkAnchorType
+  (center GTK_ANCHOR_CENTER)
+  (north GTK_ANCHOR_NORTH)
+  (north-west GTK_ANCHOR_NORTH_WEST)
+  (north-east GTK_ANCHOR_NORTH_EAST)
+  (south GTK_ANCHOR_SOUTH)
+  (south-west GTK_ANCHOR_SOUTH_WEST)
+  (south-east GTK_ANCHOR_SOUTH_EAST)
+  (west GTK_ANCHOR_WEST)
+  (east GTK_ANCHOR_EAST))
+
 ; enumerations from "gtkprivate.h"
 
 (define-flags GtkPrivateFlags
