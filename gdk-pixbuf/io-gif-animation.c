@@ -272,7 +272,7 @@ gdk_pixbuf_gif_anim_iter_advance (GdkPixbufAnimationIter *anim_iter,
         elapsed =
           (((iter->current_time.tv_sec - iter->start_time.tv_sec) * G_USEC_PER_SEC +
             iter->current_time.tv_usec - iter->start_time.tv_usec)) / 1000;
-        
+
         if (elapsed < 0) {
                 /* Try to compensate; probably the system clock
                  * was set backwards
@@ -280,13 +280,13 @@ gdk_pixbuf_gif_anim_iter_advance (GdkPixbufAnimationIter *anim_iter,
                 iter->start_time = iter->current_time;
                 elapsed = 0;
         }
+
+        g_assert (iter->gif_anim->total_time > 0);
         
         /* See how many times we've already played the full animation,
          * and subtract time for that.
          */
         elapsed = elapsed % iter->gif_anim->total_time;
-
-        g_assert (elapsed < iter->gif_anim->total_time);
 
         iter->position = elapsed;
         
