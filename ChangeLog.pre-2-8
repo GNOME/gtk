@@ -1,3 +1,8 @@
+2001-12-18  Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_expander_column):
+	Fix typo (list->data becomes list->next)
+
 2001-12-06  Havoc Pennington  <hp@redhat.com>
 
         Add Unicode control char menu, based on patch from Dov.

@@ -7329,7 +7329,7 @@ gtk_tree_view_get_expander_column (GtkTreeView *tree_view)
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
 
-  for (list = tree_view->priv->columns; list; list = list->data)
+  for (list = tree_view->priv->columns; list; list = list->next)
     if (gtk_tree_view_is_expander_column (tree_view, GTK_TREE_VIEW_COLUMN (list->data)))
       return (GtkTreeViewColumn *) list->data;
   return NULL;
