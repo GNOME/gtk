@@ -1,3 +1,8 @@
+2000-12-12  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkkeyboard-fb.c (xlate_close, raw_close):
+	Don't free gdk_fb_keyboard twice.
+
 Tue Dec 12 08:24:42 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/testgtk.c:

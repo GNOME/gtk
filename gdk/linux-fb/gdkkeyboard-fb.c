@@ -872,7 +872,6 @@ xlate_close (GdkFBKeyboard *kb)
   g_source_remove (kb->io_tag);
   g_io_channel_unref (kb->io);
   /* don't close kb->fd, it is the tty from gdk_display */
-  g_free (kb);
 }
 
 static guint
@@ -1384,7 +1383,6 @@ raw_close (GdkFBKeyboard *kb)
   g_source_remove (kb->io_tag);
   g_io_channel_unref (kb->io);
   /* don't close kb->fd, it is the tty from gdk_display */
-  g_free (kb);
 }
 
 static guint
