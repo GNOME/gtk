@@ -1209,11 +1209,15 @@ changed_handler (GtkTextLayout *layout,
   if (GTK_WIDGET_REALIZED (text_view))
     {
       gtk_text_view_get_visible_rect (text_view, &visible_rect);
-      
+
       redraw_rect.x = visible_rect.x;
       redraw_rect.width = visible_rect.width;
       redraw_rect.y = start_y;
-      redraw_rect.height = MAX (old_height, new_height);
+
+      if (old_height == new_height)
+	redraw_rect.height = old_height;
+      else
+	redraw_rect.height = MAX (0, visible_rect.y + visible_rect.height - start_y);
       
       if (gdk_rectangle_intersect (&redraw_rect, &visible_rect, &redraw_rect))
 	{

@@ -1,3 +1,7 @@
+Sat Jul 22 10:57:22 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (test_gdk_pixbuf_LDADD): Remove -lgmodule
+
 Tue Jul 11 11:26:42 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf.c: Add <string.h> include.

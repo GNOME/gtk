@@ -136,7 +136,7 @@ AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(loaderdir)\""
 
 LDADDS = libgdk_pixbuf-1.3.la $(GLIB_LIBS) $(STATIC_LIB_DEPS)
 
-test_gdk_pixbuf_LDADD = $(LDADDS) -lgmodule
+test_gdk_pixbuf_LDADD = $(LDADDS)
 
 GDK_PIXBUF_LIBS = $(GLIB_LIBS)
 

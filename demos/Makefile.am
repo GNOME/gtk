@@ -43,11 +43,11 @@ testpixbuf_scale_DEPENDENCIES = $(DEPS)
 testanimation_DEPENDENCIES = $(DEPS)
 pixbuf_demo_DEPENDENCIES = $(DEPS)
 
-testpixbuf_LDADD = $(LDADDS) -lgmodule
+testpixbuf_LDADD = $(LDADDS)
 testpixbuf_drawable_LDADD = $(LDADDS)
 testpixbuf_scale_LDADD = $(LDADDS)
-testanimation_LDADD = $(LDADDS) -lgmodule
-pixbuf_demo_LDADD = $(LDADDS) -lgmodule
+testanimation_LDADD = $(LDADDS)
+pixbuf_demo_LDADD = $(LDADDS)
 
 testpixbuf_SOURCES = testpixbuf.c pixbuf-init.c
 testpixbuf_drawable_SOURCES = testpixbuf-drawable.c pixbuf-init.c
