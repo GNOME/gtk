@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2003-02-13 18:23+0200\n"
-"PO-Revision-Date: 2003-02-19 12:20--500\n"
+"PO-Revision-Date: 2003-02-19 14:48--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -877,7 +877,7 @@ msgstr "Вторинний"
 
 #: gtk/gtkbbox.c:165
 msgid "If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons"
-msgstr "Якщо \"Істина\", то вкладений елемент з'являється у вторинній групі вкладених елементів; застосовується, наприклад, для кнопок виклику довідки"
+msgstr "Якщо істинно, то вкладений елемент з'явиться у вторинній групі вкладених елементів; застосовується, наприклад, для кнопок виклику довідки"
 
 #: gtk/gtkbox.c:128
 msgid "Spacing"
@@ -975,12 +975,11 @@ msgstr "Якщо встановлено, позначку буде викори�
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
-msgstr "Рельєф облямівки"
+msgstr "Рельєф границі"
 
 #: gtk/gtkbutton.c:214
-#, fuzzy
 msgid "The border relief style"
-msgstr "Стиль рельєфу облямівки"
+msgstr "Стиль рельєфу границі"
 
 #: gtk/gtkbutton.c:271
 msgid "Default Spacing"
@@ -2738,7 +2737,7 @@ msgstr "Прокручується"
 
 #: gtk/gtknotebook.c:431
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
-msgstr "Якщо \"Істина\", то стрілки прокрутки буде додано, коли з'явиться надто багато вкладок, щоб поміститися у вікні"
+msgstr "Якщо істинно, то стрілки прокрутки буде додано, коли з'явиться надто багато вкладок, щоб поміститися у вікні"
 
 #: gtk/gtknotebook.c:437
 msgid "Enable Popup"
@@ -2886,9 +2885,8 @@ msgid "Orientation"
 msgstr "Орієнтація"
 
 #: gtk/gtkprogressbar.c:151
-#, fuzzy
 msgid "Orientation and growth direction of the progress bar"
-msgstr "Текст, що показуватиметься у панелі поступу"
+msgstr "Орієнтація і напрямок росту панелі поступу"
 
 #: gtk/gtkprogressbar.c:159
 msgid "Bar style"
@@ -2912,7 +2910,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:179
 msgid "The number of blocks which can fit in the progress bar area in activity mode (Deprecated)"
-msgstr ""
+msgstr "Кількість блоків індикації, що вміщаються в ділянці індикатора поступу в режимі процесу (Застосовувати не рекомендується)"
 
 #: gtk/gtkprogressbar.c:188
 msgid "Discrete Blocks"
@@ -2928,15 +2926,15 @@ msgstr "Дріб"
 
 #: gtk/gtkprogressbar.c:199
 msgid "The fraction of total work that has been completed"
-msgstr ""
+msgstr "Виконана частина роботи"
 
 #: gtk/gtkprogressbar.c:208
 msgid "Pulse Step"
-msgstr ""
+msgstr "Крок приросту"
 
 #: gtk/gtkprogressbar.c:209
 msgid "The fraction of total progress to move the bouncing block when pulsed"
-msgstr ""
+msgstr "Частина загального поступу, під час винання якої стається приріст індикатора поступу"
 
 #: gtk/gtkprogressbar.c:219
 msgid "Text to be displayed in the progress bar"
@@ -2960,7 +2958,7 @@ msgstr "Як діапазон має поновлюватись на екран�
 
 #: gtk/gtkrange.c:285
 msgid "The GtkAdjustment that contains the current value of this range object"
-msgstr ""
+msgstr "Об'єкт GtkAdjustment, що містить поточне значення цього діапазонного об'єкта"
 
 #: gtk/gtkrange.c:292
 msgid "Inverted"
@@ -3663,7 +3661,7 @@ msgstr "Гомогенна"
 
 #: gtk/gtktable.c:195
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "Чи комірти таблиці мають однакову ширину і висоту"
+msgstr "Якщо істинно, то це означає, що комірки таблиці мають однакову ширину і висоту"
 
 #: gtk/gtktable.c:202
 msgid "Left attachment"
@@ -4246,7 +4244,7 @@ msgstr "Видимий"
 
 #: gtk/gtktreeview.c:544
 msgid "Show the column header buttons"
-msgstr ""
+msgstr "Показувати кнопки заголовків стовпчиків"
 
 #: gtk/gtktreeview.c:551
 msgid "Headers Clickable"
@@ -4258,20 +4256,20 @@ msgstr "Заголовки стовпчиків відповідають на п
 
 #: gtk/gtktreeview.c:559
 msgid "Expander Column"
-msgstr ""
+msgstr "Колонка-розширювач"
 
 #: gtk/gtktreeview.c:560
 msgid "Set the column for the expander column"
-msgstr ""
+msgstr "Встановити колонку для розширювача"
 
 #: gtk/gtktreeview.c:567
 #: gtk/gtktreeviewcolumn.c:284
 msgid "Reorderable"
-msgstr ""
+msgstr "Дозволено переставляння"
 
 #: gtk/gtktreeview.c:568
 msgid "View is reorderable"
-msgstr ""
+msgstr "Перегляд можна перегрупувати"
 
 #: gtk/gtktreeview.c:575
 msgid "Rules Hint"
@@ -4283,11 +4281,11 @@ msgstr ""
 
 #: gtk/gtktreeview.c:583
 msgid "Enable Search"
-msgstr ""
+msgstr "Дозволено пошук"
 
 #: gtk/gtktreeview.c:584
 msgid "View allows user to search through columns interactively"
-msgstr ""
+msgstr "Перегляд дозволяє користувачу виконувати пошук у стовпчиках в інтерактивному режимі"
 
 #: gtk/gtktreeview.c:591
 msgid "Search Column"
@@ -4299,7 +4297,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:605
 msgid "Expander Size"
-msgstr ""
+msgstr "Розмір розширювача"
 
 #: gtk/gtktreeview.c:606
 msgid "Size of the expander arrow"
@@ -4331,27 +4329,27 @@ msgstr ""
 
 #: gtk/gtktreeview.c:639
 msgid "Indent Expanders"
-msgstr ""
+msgstr "Відступ розширювачів"
 
 #: gtk/gtktreeview.c:640
 msgid "Make the expanders indented"
-msgstr ""
+msgstr "Зробити відступ розширювачам"
 
 #: gtk/gtktreeview.c:646
 msgid "Even Row Color"
-msgstr ""
+msgstr "Колір парних рядків"
 
 #: gtk/gtktreeview.c:647
 msgid "Color to use for even rows"
-msgstr ""
+msgstr "Колір, що використовуватиметься для парних рядків"
 
 #: gtk/gtktreeview.c:653
 msgid "Odd Row Color"
-msgstr ""
+msgstr "Колір непарних рядків"
 
 #: gtk/gtktreeview.c:654
 msgid "Color to use for odd rows"
-msgstr ""
+msgstr "Колір, що використовуватиметься для непарних рядків"
 
 #: gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
@@ -4416,7 +4414,7 @@ msgstr "Натискається"
 
 #: gtk/gtktreeviewcolumn.c:258
 msgid "Whether the header can be clicked"
-msgstr ""
+msgstr "Чи чутливий заголовок до натискань"
 
 #: gtk/gtktreeviewcolumn.c:266
 msgid "Widget"
@@ -4424,7 +4422,7 @@ msgstr "Віджет"
 
 #: gtk/gtktreeviewcolumn.c:267
 msgid "Widget to put in column header button instead of column title"
-msgstr ""
+msgstr "Віджет для заміни заголовка стовпчика кнопкою"
 
 #: gtk/gtktreeviewcolumn.c:274
 msgid "Alignment"
@@ -4432,11 +4430,11 @@ msgstr "Вирівнювання"
 
 #: gtk/gtktreeviewcolumn.c:275
 msgid "X Alignment of the column header text or widget"
-msgstr ""
+msgstr "Горизонтальне вирівнювання тексту чи віджета в заголовку стовпчика"
 
 #: gtk/gtktreeviewcolumn.c:285
 msgid "Whether the column can be reordered around the headers"
-msgstr ""
+msgstr "Чи можна переносити стовпчик в інше місце"
 
 #: gtk/gtktreeviewcolumn.c:292
 msgid "Sort indicator"
@@ -4456,15 +4454,15 @@ msgstr "Напрямок сортування має відображатись 
 
 #: gtk/gtkviewport.c:135
 msgid "The GtkAdjustment that determines the values of the horizontal position for this viewport"
-msgstr "GtkAdjustment, що визначає значення горизонтального положення для  цього погляду."
+msgstr "GtkAdjustment, що визначає значення горизонтального положення для порта перегляду"
 
 #: gtk/gtkviewport.c:143
 msgid "The GtkAdjustment that determines the values of the vertical position for this viewport"
-msgstr "GtkAdjustment, що визначає значення вертикального положення для  цього погляду."
+msgstr "GtkAdjustment, що визначає значення вертикального положення для порта перегляду"
 
 #: gtk/gtkviewport.c:151
 msgid "Determines how the shadowed box around the viewport is drawn"
-msgstr ""
+msgstr "Визначає спосіб малювання тіні навколо порта перегляду"
 
 #: gtk/gtkwidget.c:400
 msgid "Widget name"
@@ -4480,31 +4478,31 @@ msgstr "Батьківський віджет"
 
 #: gtk/gtkwidget.c:408
 msgid "The parent widget of this widget. Must be a Container widget"
-msgstr ""
+msgstr "Батьківський віджет для цього віджета. Має бути віджетом-контейнером"
 
 #: gtk/gtkwidget.c:415
 msgid "Width request"
-msgstr ""
+msgstr "Запит на встановлення ширини"
 
 #: gtk/gtkwidget.c:416
 msgid "Override for width request of the widget, or -1 if natural request should be used"
-msgstr ""
+msgstr "Змінити запит на встановлення ширини цього віджета чи -1, якщо потрібно використати звичайний запит"
 
 #: gtk/gtkwidget.c:424
 msgid "Height request"
-msgstr ""
+msgstr "Запит на встановлення висоти"
 
 #: gtk/gtkwidget.c:425
 msgid "Override for height request of the widget, or -1 if natural request should be used"
-msgstr ""
+msgstr "Змінити запит на встановлення висоти цього віджета чи -1, якщо потрібно використати звичайний запит"
 
 #: gtk/gtkwidget.c:434
 msgid "Whether the widget is visible"
-msgstr ""
+msgstr "Чи віджет видимий"
 
 #: gtk/gtkwidget.c:440
 msgid "Sensitive"
-msgstr ""
+msgstr "Чутливий"
 
 #: gtk/gtkwidget.c:441
 msgid "Whether the widget responds to input"
@@ -4512,11 +4510,11 @@ msgstr "Стан відповідання віджета на ввід"
 
 #: gtk/gtkwidget.c:447
 msgid "Application paintable"
-msgstr ""
+msgstr "Малюється додатком"
 
 #: gtk/gtkwidget.c:448
 msgid "Whether the application will paint directly on the widget"
-msgstr ""
+msgstr "Чи буде додаток малювати просто у віджеті"
 
 #: gtk/gtkwidget.c:454
 msgid "Can focus"
@@ -4568,7 +4566,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:496
 msgid "Composite child"
-msgstr ""
+msgstr "Складений вкладений елемент"
 
 #: gtk/gtkwidget.c:497
 msgid "Whether the widget is part of a composite widget"
@@ -4580,7 +4578,7 @@ msgstr "Стиль"
 
 #: gtk/gtkwidget.c:504
 msgid "The style of the widget, which contains information about how it will look (colors etc)"
-msgstr ""
+msgstr "Стиль віджета, що описує його зовнішній вигляд (кольори тощо)"
 
 #: gtk/gtkwidget.c:510
 msgid "Events"
@@ -4588,7 +4586,7 @@ msgstr "Події"
 
 #: gtk/gtkwidget.c:511
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr ""
+msgstr "Маска подіїй, що визначає, які події GdkEvents може отримувати цей віджет"
 
 #: gtk/gtkwidget.c:518
 msgid "Extension events"
@@ -4600,7 +4598,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:1098
 msgid "Interior Focus"
-msgstr ""
+msgstr "Внутрішні фокус"
 
 #: gtk/gtkwidget.c:1099
 msgid "Whether to draw the focus indicator inside widgets"
@@ -4608,7 +4606,7 @@ msgstr "Чи відображати індикатор фокусу у відж�
 
 #: gtk/gtkwidget.c:1105
 msgid "Focus linewidth"
-msgstr ""
+msgstr "Ширина лінії фокуса"
 
 #: gtk/gtkwidget.c:1106
 msgid "Width, in pixels, of the focus indicator line"
@@ -4616,7 +4614,7 @@ msgstr "Ширина, в точках, лінії індикатора фоку�
 
 #: gtk/gtkwidget.c:1112
 msgid "Focus line dash pattern"
-msgstr ""
+msgstr "Шрих лінії фокуса"
 
 #: gtk/gtkwidget.c:1113
 msgid "Dash pattern used to draw the focus indicator"
@@ -4624,7 +4622,7 @@ msgstr "Візерунок, що використовуватиметься дл
 
 #: gtk/gtkwidget.c:1118
 msgid "Focus padding"
-msgstr ""
+msgstr "Відступ фокуса"
 
 #: gtk/gtkwidget.c:1119
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
@@ -4636,7 +4634,7 @@ msgstr "Колір курсора"
 
 #: gtk/gtkwidget.c:1125
 msgid "Color with which to draw insertion cursor"
-msgstr ""
+msgstr "Колір курсора"
 
 #: gtk/gtkwidget.c:1130
 msgid "Secondary cursor color"
@@ -4644,15 +4642,15 @@ msgstr "Вторинний колір курсора"
 
 #: gtk/gtkwidget.c:1131
 msgid "Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text"
-msgstr ""
+msgstr "Колір дугого курсора, коли використовується змішаний (справа наліво і зліва направо) ввід тексту"
 
 #: gtk/gtkwidget.c:1136
 msgid "Cursor line aspect ratio"
-msgstr ""
+msgstr "Пропорції курсора"
 
 #: gtk/gtkwidget.c:1137
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr ""
+msgstr "Пропорції курсора"
 
 #: gtk/gtkwindow.c:456
 msgid "Window Type"
@@ -4672,24 +4670,24 @@ msgstr "Заголовок вікна"
 
 #: gtk/gtkwindow.c:474
 msgid "Allow Shrink"
-msgstr ""
+msgstr "Дозволити стиснення"
 
 #: gtk/gtkwindow.c:476
 #, no-c-format
 msgid "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea"
-msgstr ""
+msgstr "Якщо істинно, вікно не має мінімального розміру. Встановлення цього значення в 99% випадків є поганою ідеєю"
 
 #: gtk/gtkwindow.c:483
 msgid "Allow Grow"
-msgstr ""
+msgstr "Дозволити збільшення"
 
 #: gtk/gtkwindow.c:484
 msgid "If TRUE, users can expand the window beyond its minimum size"
-msgstr "Якщо ІСТИНА, користувач може збільшувати розмір вікна"
+msgstr "Якщо істинно, то користувач може збільшувати розмір вікна"
 
 #: gtk/gtkwindow.c:492
 msgid "If TRUE, users can resize the window"
-msgstr "Якщо ІСТИНА, користувач може змінювати розмір вікна"
+msgstr "Якщо істинно, то користувач може змінювати розмір вікна"
 
 #: gtk/gtkwindow.c:499
 msgid "Modal"
@@ -4697,7 +4695,7 @@ msgstr "Модальне"
 
 #: gtk/gtkwindow.c:500
 msgid "If TRUE, the window is modal (other windows are not usable while this one is up)"
-msgstr "Якщо ІСТИНА, вікно є модальним (інші вікна не можуть використовуватися, доки це вікно існує)"
+msgstr "Якщо істинно, то вікно є модальним (інші вікна не можуть використовуватися, доки це вікно існує)"
 
 #: gtk/gtkwindow.c:507
 msgid "Window Position"
@@ -4713,7 +4711,7 @@ msgstr "Типова ширина"
 
 #: gtk/gtkwindow.c:517
 msgid "The default width of the window, used when initially showing the window"
-msgstr ""
+msgstr "Початкова ширина вікна, використовується під час початкового відображення вікна"
 
 #: gtk/gtkwindow.c:526
 msgid "Default Height"
@@ -4721,7 +4719,7 @@ msgstr "Типова висота"
 
 #: gtk/gtkwindow.c:527
 msgid "The default height of the window, used when initially showing the window"
-msgstr ""
+msgstr "Початкова висота вікна, використовується під час початкового відображення вікна"
 
 #: gtk/gtkwindow.c:536
 msgid "Destroy with Parent"
@@ -4741,27 +4739,27 @@ msgstr "піктограма цього вікна"
 
 #: gtk/gtkwindow.c:560
 msgid "Is Active"
-msgstr "Є активним"
+msgstr "Активне"
 
 #: gtk/gtkwindow.c:561
 msgid "Whether the toplevel is the current active window"
-msgstr ""
+msgstr "Чи вікно найвищого рівня є поточним активним вікном"
 
 #: gtk/gtkwindow.c:568
 msgid "Focus in Toplevel"
-msgstr ""
+msgstr "Фокус у вікні найвищого рівня"
 
 #: gtk/gtkwindow.c:569
 msgid "Whether the input focus is within this GtkWindow"
-msgstr ""
+msgstr "Чи фокус вводу в цьому об'єкті GtkWindow"
 
 #: gtk/gtkwindow.c:576
 msgid "Type hint"
-msgstr ""
+msgstr "Вказівка типу"
 
 #: gtk/gtkwindow.c:577
 msgid "Hint to help the desktop environment understand what kind of window this is and how to treat it."
-msgstr ""
+msgstr "Вказівка, що допомагає середовищу стільниці зрозуміти якого типу є це вікно і як його необхідно обробляти"
 
 #: gtk/gtkwindow.c:585
 msgid "Skip taskbar"
@@ -4802,7 +4800,7 @@ msgstr "IPA"
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "Тайландське (з пропусками)"
 
 #. ID
 #: modules/input/imti-er.c:452
