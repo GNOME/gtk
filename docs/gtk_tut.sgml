@@ -10,7 +10,7 @@
 			      name="&lt;imain@gtk.org&gt;"></tt>,
 Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 			      name="&lt;gale@gtk.org&gt;"></tt>
-<date>May 29th, 1998
+<date>June 2nd, 1998
 
 <!-- ***************************************************************** -->
 <sect>Introduction
@@ -159,7 +159,7 @@ OK, now for a program with a widget (a button).  It's the classic hello
 world ala GTK.
 
 <tscreen><verb>
-/* example-start helloworld/helloworld.c */
+/* example-start helloworld helloworld.c */
 
 #include <gtk/gtk.h>
 
@@ -756,7 +756,7 @@ of callbacks.  This will also introduce us to our next topic, packing
 widgets.
 
 <tscreen><verb>
-/* example-start helloworld2/helloworld2.c */
+/* example-start helloworld2 helloworld2.c */
 
 #include <gtk/gtk.h>
 
@@ -983,7 +983,7 @@ yourself and play with it.
 <sect1>Packing Demonstration Program
 <p>
 <tscreen><verb>
-/* example-start packbox/packbox.c */
+/* example-start packbox packbox.c */
 
 #include "gtk/gtk.h"
 
@@ -1427,7 +1427,8 @@ ALT="Table Packing Example Image" WIDTH="180" HEIGHT="120">
 Here's the source code:
 
 <tscreen><verb>
-/* example-start table/table.c */
+/* example-start table table.c */
+
 #include <gtk/gtk.h>
 
 /* our callback.
@@ -1736,7 +1737,7 @@ picture and a label in it.  I've broken the code to create a box up from
 the rest so you can use it in your programs.
 
 <tscreen><verb>
-/* example-start buttons/buttons.c */
+/* example-start buttons buttons.c */
 
 #include <gtk/gtk.h>
 
@@ -1989,7 +1990,7 @@ same way.
 The following example creates a radio button group with three buttons.
 
 <tscreen><verb>
-/* example-start radiobuttons/radiobuttons.c */
+/* example-start radiobuttons radiobuttons.c */
 
 #include <gtk/gtk.h>
 #include <glib.h>
@@ -2063,6 +2064,7 @@ main(int argc,char *argv[])
   gtk_main();
   return(0);
 }
+/* example-end */
 </verb></tscreen>
 
 You can shorten this slightly by using the following syntax, which
@@ -2233,7 +2235,7 @@ Here is an example of the progress bar, updated using timeouts.  This
 code also shows you how to reset the Progress Bar.
 
 <tscreen><verb>
-/* example-start progressbar/progressbar.c */
+/* example-start progressbar progressbar.c */
 
 #include <gtk/gtk.h>
 
@@ -2543,7 +2545,7 @@ managing. Val is the pixmap created using GDK.
 The following is an example of using a pixmap in a button.
 
 <tscreen><verb>
-/* example-start pixmap/pixmap.c */
+/* example-start pixmap pixmap.c */
 
 #include <gtk/gtk.h>
 
@@ -2655,7 +2657,7 @@ icon. The following example displays a full wheelbarrow image on the
 desktop.
 
 <tscreen><verb>
-/* example-start wheelbarrow/wheelbarrow.c */
+/* example-start wheelbarrow wheelbarrow.c */
 
 #include <gtk/gtk.h>
 
@@ -2826,6 +2828,7 @@ int main (int argc, char *argv[])
           
     return 0;
 }
+/* example-end */
 </verb></tscreen>
 
 To make the wheelbarrow image sensitive, we could attach the button press
@@ -2927,7 +2930,7 @@ vertical ruler spans from 0 to 400 with a mark every 100 pixels.
 Placement of the drawing area and the rulers are done using a table.
 
 <tscreen><verb>
-/* example-start rulers/rulers.c */
+/* example-start rulers rulers.c */
 
 #include <gtk/gtk.h>
 
@@ -3057,7 +3060,7 @@ The following example creates a statusbar and two buttons, one for pushing items
 onto the statusbar, and one for popping the last item back off.
 
 <tscreen><verb>
-/* example-start statusbar/statusbar.c */
+/* example-start statusbar statusbar.c */
 
 #include <gtk/gtk.h>
 #include <glib.h>
@@ -3221,7 +3224,7 @@ changes at all, e.g. for every character entered or removed.
 The following code is an example of using an Entry widget.
 
 <tscreen><verb>
-/* example-start entry/entry.c */
+/* example-start entry entry.c */
 
 #include <gtk/gtk.h>
 
@@ -3413,7 +3416,7 @@ a color selection dialog, and changing the color in the color selection dialog
 changes the background color.
 
 <tscreen><verb>
-/* example-start colorsel/colorsel.c */
+/* example-start colorsel colorsel.c */
 
 #include <glib.h>
 #include <gdk/gdk.h>
@@ -3604,7 +3607,7 @@ selection widget.  While in this example the Help button appears on the
 screen, it does nothing as there is not a signal attached to it. 
 
 <tscreen><verb>
-/* example-start filesel/filesel.c */
+/* example-start filesel filesel.c */
 
 #include <gtk/gtk.h>
 
@@ -3787,7 +3790,7 @@ and border, remove a page, change pages in both a forward and backward manner,
 and exit the program. 
 
 <tscreen><verb>
-/* example-start notebooknotebook.c */
+/* example-start notebook notebook.c */
 
 #include <gtk/gtk.h>
 
@@ -4003,7 +4006,7 @@ Here is a simple example that packs 100 toggle buttons into a scrolled window.
 I've only commented on the parts that may be new to you.
 
 <tscreen><verb>
-/* example-start scrolledwin/scrolledwin.c */
+/* example-start scrolledwin scrolledwin.c */
 
 #include <gtk/gtk.h>
 
@@ -4146,7 +4149,7 @@ that when the bottom portion is made smaller, the correct portions
 shrink instead of being pushed off the bottom of the window.
 
 <tscreen><verb>
-/* example-start paned/paned.c */
+/* example-start paned paned.c */
 
 #include <gtk/gtk.h>
    
@@ -4326,7 +4329,7 @@ present a drawing area whose aspect ratio will always be 2:1, no
 matter how the user resizes the top-level window.
    
 <tscreen><verb>
-/* example-start aspectframe/aspectframe.c */
+/* example-start aspectframe aspectframe.c */
 
 #include <gtk/gtk.h>
    
@@ -4608,7 +4611,7 @@ of the selection of a GtkList, and lets you "arrest" list items
 into a prison by selecting them with the rightmost mouse button.
 
 <tscreen><verb>
-/* example-start list/list.c */
+/* example-start list list.c */
 
 /* include the gtk+ header files
  * include stdio.h, we need that for the printf() function
@@ -5196,7 +5199,7 @@ as shown in the sample code.
 That should about do it.  Let's take a look at an example to help clarify.
 
 <tscreen><verb>
-/* example-start menu/menu.c */
+/* example-start menu menu.c */
 
 #include <gtk/gtk.h>
 
@@ -5346,7 +5349,7 @@ menufactory.h.  We keep a separate menufactory.c and mfmain.c because
 of the global variables used in the menufactory.c file.  
 
 <tscreen><verb>
-/* example-start menu/menufactory.h */
+/* example-start menu menufactory.h */
 
 #ifndef __MENUFACTORY_H__
 #define __MENUFACTORY_H__
@@ -5369,7 +5372,7 @@ void menus_create(GtkMenuEntry *entries, int nmenu_entries);
 And here is the menufactory.c file.
 
 <tscreen><verb>
-/* example-start menu/menufactory.c */
+/* example-start menu menufactory.c */
 
 #include <gtk/gtk.h>
 #include <strings.h>
@@ -5524,7 +5527,7 @@ void menus_set_sensitive(char *path, int sensitive)
 And here's the mfmain.h
 
 <tscreen><verb>
-/* example-start menu/mfmain.h */
+/* example-start menu mfmain.h */
 
 #ifndef __MFMAIN_H__
 #define __MFMAIN_H__
@@ -5547,7 +5550,7 @@ void file_quit_cmd_callback(GtkWidget *widget, gpointer data);
 And mfmain.c
 
 <tscreen><verb>
-/* example-start menu/mfmain.c */
+/* example-start menu mfmain.c */
 
 #include <gtk/gtk.h>
 
@@ -6365,7 +6368,7 @@ is created that is clipped to a small box, and set up so that a
 mouse-click on the label causes the program to exit.
 
 <tscreen><verb>
-/* example-start eventbox/eventbox.c */
+/* example-start eventbox eventbox.c */
 
 #include <gtk/gtk.h>
 
@@ -6677,7 +6680,7 @@ which is a list of all targets into which the selection can be
 converted.
 
 <tscreen><verb>
-/* example-start selection/gettargets.c */
+/* example-start selection gettargets.c */
 
 #include <gtk/gtk.h>
 
@@ -6847,7 +6850,7 @@ itself), is the "STRING" target. When this target is requested, a
 string representation of the time is returned.
 
 <tscreen><verb>
-/* example-start selection/setselection.c */
+/* example-start selection setselection.c */
 
 #include <gtk/gtk.h>
 #include <time.h>
