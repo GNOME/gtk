@@ -1,3 +1,9 @@
+Tue Feb 24 01:41:30 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (location_popup_handler): Make the
+	dialog look like the nautilus dialog.
+	(expander_activate_cb): get the order correct.
+
 2004-02-23  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (list_selection_changed): Call

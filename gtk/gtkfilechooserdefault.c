@@ -1770,9 +1770,9 @@ expander_activate_cb (GtkExpander           *expander,
   active = gtk_expander_get_expanded (expander);
 
   if (active)
-    gtk_widget_show (impl->hpaned);
-  else
     gtk_widget_hide (impl->hpaned);
+  else
+    gtk_widget_show (impl->hpaned);
 }
 
 /* Creates the widgets specific to Save mode */
@@ -3552,13 +3552,17 @@ location_popup_handler (GtkFileChooserDefault *impl)
   dialog = gtk_dialog_new_with_buttons (_("Open Location"),
 					GTK_WINDOW (toplevel),
 					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
-					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 					NULL);
+  gtk_window_set_default_size (GTK_WINDOW (dialog), 300, -1);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 2);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
 
   label = gtk_label_new_with_mnemonic (_("_Location:"));
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
