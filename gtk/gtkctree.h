@@ -66,7 +66,7 @@ typedef enum
   GTK_CTREE_EXPANSION_COLLAPSE_RECURSIVE,
   GTK_CTREE_EXPANSION_TOGGLE,
   GTK_CTREE_EXPANSION_TOGGLE_RECURSIVE
-} GtkCTreeExpansion;
+} GtkCTreeExpansionType;
 
 typedef struct _GtkCTree      GtkCTree;
 typedef struct _GtkCTreeClass GtkCTreeClass;
@@ -125,7 +125,7 @@ struct _GtkCTreeClass
 			     GList    *new_parent,
 			     GList    *new_sibling);
   void (*change_focus_row_expansion) (GtkCTree *ctree,
-				      GtkCTreeExpansion action);
+				      GtkCTreeExpansionType action);
 };
 
 struct _GtkCTreeRow

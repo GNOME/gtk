@@ -125,3 +125,15 @@ binding "test2"
 class "GtkButton" binding "test1"           # implicit : rc
 class "GtkButton" binding : highest "test2" # override "rc" priority
 
+binding "clist-test"
+{
+  bind "j" {
+    "scroll-vertical" (step-backward, 0.0)
+  }
+  bind "k" {
+    "scroll-vertical" (step-forward, 0.0)
+  }
+}
+
+class "GtkCList" binding "clist-test"
+  

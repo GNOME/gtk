@@ -3,7 +3,7 @@
 extern GtkType GTK_TYPE_CELL_TYPE;
 extern GtkType GTK_TYPE_C_TREE_POS;
 extern GtkType GTK_TYPE_C_TREE_LINE_STYLE;
-extern GtkType GTK_TYPE_C_TREE_EXPANSION;
+extern GtkType GTK_TYPE_C_TREE_EXPANSION_TYPE;
 extern GtkType GTK_TYPE_DEBUG_FLAG;
 extern GtkType GTK_TYPE_ACCEL_FLAGS;
 extern GtkType GTK_TYPE_ARROW_TYPE;

@@ -133,7 +133,7 @@ static void tree_toggle_expansion       (GtkCTree      *ctree,
 					 GList         *node,
 					 gpointer       data);
 static void change_focus_row_expansion  (GtkCTree      *ctree,
-				         GtkCTreeExpansion expansion);
+				         GtkCTreeExpansionType expansion);
 static void real_select_row             (GtkCList      *clist,
 					 gint           row,
 					 gint           column,
@@ -225,7 +225,7 @@ typedef void (*GtkCTreeSignal3) (GtkObject *object,
 				 gpointer   data);
 
 typedef void (*GtkCTreeSignal4) (GtkObject         *object,
-				 GtkCTreeExpansion  arg1,
+				 GtkCTreeExpansionType arg1,
 				 gpointer           data);
 
 
@@ -317,7 +317,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass,
 				       change_focus_row_expansion),
 		    gtk_marshal_NONE__ENUM,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_ENUM);
+		    GTK_TYPE_NONE, 1, GTK_TYPE_C_TREE_EXPANSION_TYPE);
 
   gtk_object_class_add_signals (object_class, ctree_signals, LAST_SIGNAL);
 
@@ -2774,7 +2774,7 @@ real_tree_move (GtkCTree *ctree,
 
 static void
 change_focus_row_expansion (GtkCTree          *ctree,
-			    GtkCTreeExpansion  action)
+			    GtkCTreeExpansionType action)
 {
   GtkCList *clist;
   GList *node;

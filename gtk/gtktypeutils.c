@@ -553,7 +553,7 @@ gtk_type_enum_get_values (GtkType      enum_type)
 	return (GtkEnumValue*) node->type_info.reserved_1;
     }
   
-  g_warning ("gtk_type_enum_get_values(): type `%s' is not derived from `enum' or `flags'",
+  g_warning ("gtk_type_enum_get_values(): type `%s' is not derived from `GtkEnum' or `GtkFlags'",
 	     gtk_type_name (enum_type));
   
   return NULL;
@@ -563,6 +563,42 @@ GtkFlagValue*
 gtk_type_flags_get_values (GtkType	  flags_type)
 {
   return gtk_type_enum_get_values (flags_type);
+}
+
+GtkEnumValue*
+gtk_type_enum_find_value (GtkType        enum_type,
+			  const gchar    *value_name)
+{
+  g_return_val_if_fail (value_name != NULL, NULL);
+  
+  if (GTK_FUNDAMENTAL_TYPE (enum_type) == GTK_TYPE_ENUM ||
+      GTK_FUNDAMENTAL_TYPE (enum_type) == GTK_TYPE_FLAGS)
+    {
+      GtkEnumValue *vals;
+
+      vals = gtk_type_enum_get_values (enum_type);
+      while (vals)
+	{
+	  if (strcmp (vals->value_name, value_name) == 0 ||
+	      strcmp (vals->value_nick, value_name) == 0)
+	    return vals;
+	  vals++;
+	}
+    }
+  else
+    g_warning ("gtk_type_enum_find_value(): type `%s' is not derived from `GtkEnum' or `GtkFlags'",
+	       gtk_type_name (enum_type));
+
+  return NULL;
+}
+
+GtkFlagValue*
+gtk_type_flags_find_value (GtkType         flag_type,
+			   const gchar    *value_name)
+{
+  g_return_val_if_fail (value_name != NULL, NULL);
+
+  return gtk_type_enum_find_value (flag_type, value_name);
 }
 
 static inline GtkType

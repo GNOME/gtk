@@ -1,3 +1,21 @@
+Mon Jul 27 03:11:20 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbindings.c (binding_compose_params): fixup, so that enum
+	values are looked up.
+
+	* gtk/gtktypeutils.h:
+	* gtk/gtktypeutils.c: new functions gtk_type_flags_find_value and
+	gtk_type_enums_find_value to lookup enum values.
+
+	* gtk/gtkctree.h: 
+	* gtk/gtkctree.c: change enum name from GtkCTreeExpansion to
+ 	GtkCTreeExpansionType. fixed signal creations to pass the enum
+	types not just the base type GTK_TYPE_ENUM.
+
+	* gtk/gtkclist.h: 
+	* gtk/gtkclist.c: fixed signal creations to pass the real enum
+	types not just the base type GTK_TYPE_ENUM.
+
 Sun Jul 26 14:50:07 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/testgtk.c : 

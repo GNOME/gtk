@@ -477,21 +477,21 @@ gtk_clist_class_init (GtkCListClass * klass)
                     GTK_SIGNAL_OFFSET (GtkCListClass, extend_selection),
                     gtk_marshal_NONE__ENUM_FLOAT_BOOL,
                     GTK_TYPE_NONE, 3,
-		    GTK_TYPE_ENUM, GTK_TYPE_FLOAT, GTK_TYPE_BOOL);
+		    GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT, GTK_TYPE_BOOL);
   clist_signals[SCROLL_VERTICAL] =
     gtk_signal_new ("scroll_vertical",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkCListClass, scroll_vertical),
                     gtk_marshal_NONE__ENUM_FLOAT,
-                    GTK_TYPE_NONE, 2, GTK_TYPE_ENUM, GTK_TYPE_FLOAT);
+                    GTK_TYPE_NONE, 2, GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT);
   clist_signals[SCROLL_HORIZONTAL] =
     gtk_signal_new ("scroll_horizontal",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkCListClass, scroll_horizontal),
                     gtk_marshal_NONE__ENUM_FLOAT,
-                    GTK_TYPE_NONE, 2, GTK_TYPE_ENUM, GTK_TYPE_FLOAT);
+                    GTK_TYPE_NONE, 2, GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT);
   clist_signals[ABORT_COLUMN_RESIZE] =
     gtk_signal_new ("abort_column_resize",
                     GTK_RUN_LAST | GTK_RUN_ACTION,

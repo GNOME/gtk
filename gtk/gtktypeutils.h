@@ -263,9 +263,12 @@ GtkType		gtk_type_register_enum		(const gchar	*type_name,
 						 GtkEnumValue	*values);
 GtkType		gtk_type_register_flags		(const gchar	*type_name,
 						 GtkFlagValue	*values);
-GtkEnumValue*	gtk_type_enum_get_values	(GtkType	enum_type);
-GtkFlagValue*	gtk_type_flags_get_values	(GtkType	flags_type);
-
+GtkEnumValue*	gtk_type_enum_get_values	(GtkType	 enum_type);
+GtkFlagValue*	gtk_type_flags_get_values	(GtkType	 flags_type);
+GtkEnumValue*	gtk_type_enum_find_value	(GtkType	 enum_type,
+						 const gchar	*value_name);
+GtkFlagValue*	gtk_type_flags_find_value	(GtkType	 flag_type,
+						 const gchar	*value_name);
 
 #ifdef __cplusplus
 }

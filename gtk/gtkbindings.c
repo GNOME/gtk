@@ -310,8 +310,13 @@ binding_compose_params (GtkBindingArg	*args,
 		   (param_ftype == GTK_TYPE_ENUM ||
 		    param_ftype == GTK_TYPE_FLAGS))
 	    {
-	      /* FIXME: we need identifier lookups here */
-	      valid = FALSE;
+	      GtkEnumValue *value;
+
+	      value = gtk_type_enum_find_value (params->type, args->d.string_data);
+	      if (value)
+		GTK_VALUE_ENUM (*params) = value->value;
+	      else
+		valid = FALSE;
 	    }
 	  else
 	    valid = FALSE;

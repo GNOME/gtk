@@ -23,7 +23,7 @@
    (tabbed GTK_CTREE_LINES_TABBED)
    (none GTK_CTREE_LINES_NONE))
 
-(define-enum GtkCTreeExpansion
+(define-enum GtkCTreeExpansionType
    (expand GTK_CTREE_EXPANSION_EXPAND)
    (expand-recursive GTK_CTREE_EXPANSION_EXPAND_RECURSIVE)
    (collapse GTK_CTREE_EXPANSION_COLLAPSE)

@@ -21,7 +21,7 @@ static GtkEnumValue _gtk_c_tree_line_style_values[] = {
   { GTK_CTREE_LINES_NONE, "GTK_CTREE_LINES_NONE", "none" },
   { 0, NULL, NULL }
 };
-static GtkEnumValue _gtk_c_tree_expansion_values[] = {
+static GtkEnumValue _gtk_c_tree_expansion_type_values[] = {
   { GTK_CTREE_EXPANSION_EXPAND, "GTK_CTREE_EXPANSION_EXPAND", "expand" },
   { GTK_CTREE_EXPANSION_EXPAND_RECURSIVE, "GTK_CTREE_EXPANSION_EXPAND_RECURSIVE", "expand-recursive" },
   { GTK_CTREE_EXPANSION_COLLAPSE, "GTK_CTREE_EXPANSION_COLLAPSE", "collapse" },
