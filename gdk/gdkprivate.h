@@ -291,7 +291,7 @@ void   gdk_ic_cleanup		 (void);
 
 extern GdkICPrivate *gdk_xim_ic;		/* currently using IC */
 extern GdkWindow *gdk_xim_window;	        /* currently using Window */
-#endif USE_XIM
+#endif /* USE_XIM */
 
 /* Debugging support */
 

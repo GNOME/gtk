@@ -1,3 +1,11 @@
+Wed Dec  9 04:57:31 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdkprivate.h: put text after #endif in comment
+
+	* gdk/gdktypes.h: change whitespace in enum to shut up makeenums.pl
+
+	* gtk/testdnd.c: #include <string.h>
+
 Mon Dec  7 10:27:09 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c: Destroy widgets _after_ propagating unrealize

@@ -1,3 +1,4 @@
+#include <string.h>
 #include "gtk/gtk.h"
 
 /* Target side drag signals */
