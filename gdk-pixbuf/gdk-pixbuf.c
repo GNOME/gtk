@@ -412,5 +412,5 @@ gdk_pixbuf_error_quark (void)
 }
 
 /* Include the marshallers */
-#include <gobject/gvaluetypes.h>
+#include <glib-object.h>
 #include "gdk-pixbuf-marshal.c"
