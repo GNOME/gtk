@@ -48,7 +48,7 @@ AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 
 LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
 
-testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) $(GNOME_LIBS) \
+testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) \
 	-lgmodule
 
 #testpixbuf_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)

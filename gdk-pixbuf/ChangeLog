@@ -1,3 +1,7 @@
+1999-12-05  Jaka Mocnik  <jaka.mocnik@kiss.uni-lj.si>
+
+	* gdk-pixbuf/Makefile.am: removed GNOME_LIBS from testpixbuf_LDADD.
+	
 1999-12-05  Arjan van de Ven <arjan@fenrus.demon.nl>
 	
 	* gdk-pixbuf/io-ico.c: Bug in palet-size 
