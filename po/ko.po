@@ -3,10 +3,10 @@
 # Sung-Hyun Nam <namsh@lgic.co.kr>, 1998
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.12\n"
+"Project-Id-Version: gtk+ 1.1.15\n"
 "POT-Creation-Date: 1999-01-28 00:37-0600\n"
-"PO-Revision-Date: 1999-02-04 13:46:19+0900\n"
-"Last-Translator: Sung-Hyun Nam <namsh@lgic.co.kr>\n"
+"PO-Revision-Date: 1999-02-09 06:07+0900\n"
+"Last-Translator: Changwoo Ryu <cwryu@adam.kaist.ac.kr>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=euc-kr\n"
@@ -127,55 +127,55 @@ msgstr "선택:"
 
 #: gtk/gtkfontsel.c:203
 msgid "Foundry:"
-msgstr ""
+msgstr "만든곳:"
 
 #: gtk/gtkfontsel.c:204
 msgid "Family:"
-msgstr ""
+msgstr "가족:"
 
 #: gtk/gtkfontsel.c:205
 msgid "Weight:"
-msgstr ""
+msgstr "두께:"
 
 #: gtk/gtkfontsel.c:206
 msgid "Slant:"
-msgstr ""
+msgstr "기울어짐:"
 
 #: gtk/gtkfontsel.c:207
 msgid "Set Width:"
-msgstr ""
+msgstr "폭 결정:"
 
 #: gtk/gtkfontsel.c:208
 msgid "Add Style:"
-msgstr ""
+msgstr "스타일 추가:"
 
 #: gtk/gtkfontsel.c:209
 msgid "Pixel Size:"
-msgstr ""
+msgstr "화소 크기:"
 
 #: gtk/gtkfontsel.c:210
 msgid "Point Size:"
-msgstr ""
+msgstr "점 크기:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Resolution X:"
-msgstr ""
+msgstr "가로 해상도"
 
 #: gtk/gtkfontsel.c:212
 msgid "Resolution Y:"
-msgstr ""
+msgstr "세로 해상도"
 
 #: gtk/gtkfontsel.c:213
 msgid "Spacing:"
-msgstr ""
+msgstr "간격:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Average Width:"
-msgstr ""
+msgstr "평균 폭:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Charset:"
-msgstr ""
+msgstr "문자셋:"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
@@ -213,15 +213,15 @@ msgstr "필터 리셋"
 
 #: gtk/gtkfontsel.c:653
 msgid "Metric:"
-msgstr ""
+msgstr "미터법:"
 
 #: gtk/gtkfontsel.c:657
 msgid "Points"
-msgstr ""
+msgstr "포인트"
 
 #: gtk/gtkfontsel.c:664
 msgid "Pixels"
-msgstr ""
+msgstr "화소"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:680
@@ -243,7 +243,7 @@ msgstr "실제 글꼴 이름:"
 #: gtk/gtkfontsel.c:764
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr ""
+msgstr "%i개의 폰트가 있고, 전부 %i개의 스타일이 있습니다."
 
 #: gtk/gtkfontsel.c:779
 msgid "Filter"
@@ -259,44 +259,44 @@ msgstr "비트맵"
 
 #: gtk/gtkfontsel.c:806
 msgid "Scalable"
-msgstr ""
+msgstr "크기 조정 가능"
 
 #: gtk/gtkfontsel.c:812
 msgid "Scaled Bitmap"
-msgstr ""
+msgstr "크기 조정한 비트맵"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1208
 msgid "regular"
-msgstr ""
+msgstr "보통"
 
 #: gtk/gtkfontsel.c:1213 gtk/gtkfontsel.c:1938
 msgid "italic"
-msgstr ""
+msgstr "이탤릭"
 
 #: gtk/gtkfontsel.c:1214 gtk/gtkfontsel.c:1939
 msgid "oblique"
-msgstr ""
+msgstr "경사"
 
 #: gtk/gtkfontsel.c:1215 gtk/gtkfontsel.c:1940
 msgid "reverse italic"
-msgstr ""
+msgstr "반대 이탤릭"
 
 #: gtk/gtkfontsel.c:1216 gtk/gtkfontsel.c:1941
 msgid "reverse oblique"
-msgstr ""
+msgstr "반대 경사"
 
 #: gtk/gtkfontsel.c:1217 gtk/gtkfontsel.c:1942
 msgid "other"
-msgstr ""
+msgstr "그 외"
 
 #: gtk/gtkfontsel.c:1224
 msgid "[M]"
-msgstr ""
+msgstr "[M]"
 
 #: gtk/gtkfontsel.c:1225
 msgid "[C]"
-msgstr ""
+msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1770
 msgid "The selected font is not available."
@@ -320,15 +320,15 @@ msgstr "로만"
 
 #: gtk/gtkfontsel.c:1949
 msgid "proportional"
-msgstr ""
+msgstr "가변"
 
 #: gtk/gtkfontsel.c:1950
 msgid "monospaced"
-msgstr ""
+msgstr "같은 간격"
 
 #: gtk/gtkfontsel.c:1951
 msgid "char cell"
-msgstr ""
+msgstr "문자 셀"
 
 #: gtk/gtkfontsel.c:2151
 msgid "Font: (Filter Applied)"
@@ -348,11 +348,11 @@ msgstr "글꼴 선택"
 
 #: gtk/gtkgamma.c:388
 msgid "Gamma"
-msgstr ""
+msgstr "감마"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma value"
-msgstr ""
+msgstr "감마 값"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:192
@@ -369,7 +369,7 @@ msgstr "장치:"
 
 #: gtk/gtkinputdialog.c:245
 msgid "Disabled"
-msgstr ""
+msgstr "사용 안함"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Screen"
@@ -386,7 +386,7 @@ msgstr "모드: "
 #. The axis listbox
 #: gtk/gtkinputdialog.c:299
 msgid "Axes"
-msgstr ""
+msgstr "축"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:315
@@ -409,28 +409,28 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:494
 msgid "Pressure"
-msgstr ""
+msgstr "압력"
 
 #: gtk/gtkinputdialog.c:495
 msgid "X Tilt"
-msgstr ""
+msgstr "X 각도"
 
 #: gtk/gtkinputdialog.c:496
 msgid "Y Tilt"
-msgstr ""
+msgstr "Y 각도"
 
 #: gtk/gtkinputdialog.c:536
 msgid "none"
-msgstr ""
+msgstr "없음"
 
 #: gtk/gtkinputdialog.c:570 gtk/gtkinputdialog.c:606
 msgid "(disabled)"
-msgstr ""
+msgstr "(사용 안함)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:684
 msgid "clear"
-msgstr ""
+msgstr "지움"
 
 #: gtk/gtknotebook.c:2009 gtk/gtknotebook.c:4082
 #, c-format
