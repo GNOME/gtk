@@ -1,3 +1,8 @@
+Mon Mar  5 15:07:05 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c: Apply patch from John Margaglione to add
+	object properties.
+
 Mon Mar  5 14:55:19 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrenderertoggle.c: Apply patch from Lee Mallabone to

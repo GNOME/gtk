@@ -30,6 +30,7 @@
 #include "gtklabel.h"
 #include "gtkhbox.h"
 #include "gtkarrow.h"
+#include "gtkintl.h"
 
 #include <gdk/gdkkeysyms.h>
 
@@ -59,10 +60,30 @@ struct _GtkTreeViewChild
   gint y;
 };
 
+enum {
+  PROP_0,
+
+  PROP_MODEL,
+  PROP_HADJUSTMENT,
+  PROP_VADJUSTMENT,
+  PROP_HEADERS_VISIBLE,
+  PROP_HEADERS_CLICKABLE,
+  PROP_EXPANDER_COLUMN,
+  PROP_RULES_HINT
+};
 
 static void     gtk_tree_view_init                 (GtkTreeView      *tree_view);
 static void     gtk_tree_view_class_init           (GtkTreeViewClass *klass);
-
+static void     gtk_tree_view_set_property         (GObject         *object,
+						    guint            prop_id,
+						    const GValue    *value,
+						    GParamSpec      *pspec,
+						    const gchar     *trailer);
+static void     gtk_tree_view_get_property         (GObject         *object,
+						    guint            prop_id,
+						    GValue          *value,
+						    GParamSpec      *pspec,
+						    const gchar     *trailer);
 /* object signals */
 static void     gtk_tree_view_finalize             (GObject          *object);
 
@@ -261,6 +282,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   parent_class = g_type_class_peek_parent (class);
 
   o_class->finalize = gtk_tree_view_finalize;
+  o_class->set_property = gtk_tree_view_set_property;
+  o_class->get_property = gtk_tree_view_get_property;
 
   widget_class->realize = gtk_tree_view_realize;
   widget_class->unrealize = gtk_tree_view_unrealize;
@@ -291,6 +314,64 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   container_class->focus = gtk_tree_view_focus;
 
   class->set_scroll_adjustments = gtk_tree_view_set_adjustments;
+
+  g_object_class_install_property (o_class,
+                                   PROP_MODEL,
+                                   g_param_spec_object ("model",
+							_("TreeView Model"),
+                                                        _("The model for the tree view"),
+							GTK_TYPE_TREE_MODEL,
+                                                        G_PARAM_READWRITE));
+
+  g_object_class_install_property (o_class,
+                                   PROP_HADJUSTMENT,
+                                   g_param_spec_object ("hadjustment",
+							_("Horizontal Adjustment"),
+                                                        _("Set horizontal adjustments for the widget"),
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        G_PARAM_READWRITE));
+
+  g_object_class_install_property (o_class,
+                                   PROP_VADJUSTMENT,
+                                   g_param_spec_object ("vadjustment",
+							_("Vertical Adjustment"),
+                                                        _("Set vertical adjustments for the widget"),
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        G_PARAM_READWRITE));
+
+  g_object_class_install_property (o_class,
+                                   PROP_HEADERS_VISIBLE,
+                                   g_param_spec_boolean ("headers_visible",
+							 _("Visible"),
+							 _("If the column headers are visible"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (o_class,
+                                   PROP_HEADERS_CLICKABLE,
+                                   g_param_spec_boolean ("headers_clickable",
+							 _("Headers Clickable"),
+							 _("If the column headers respond to click events"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (o_class,
+                                   PROP_EXPANDER_COLUMN,
+                                   g_param_spec_uint ("expander_column",
+						      _("Expand Column"),
+						      _("Set the column number for the expander column"),
+						      0,
+						      G_MAXINT,
+						      0,
+						      G_PARAM_READWRITE));
+
+  g_object_class_install_property (o_class,
+                                   PROP_RULES_HINT,
+                                   g_param_spec_boolean ("rules_hint",
+							 _("Rules Hint"),
+							 _("If the requires reading across rows"),
+							 FALSE,
+							 G_PARAM_READWRITE));
 
   widget_class->set_scroll_adjustments_signal =
     gtk_signal_new ("set_scroll_adjustments",
@@ -353,6 +434,88 @@ gtk_tree_view_finalize (GObject *object)
   g_free (tree_view->priv);
   if (G_OBJECT_CLASS (parent_class)->finalize)
     (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+}
+
+/* Property handlers
+ */
+
+static void
+gtk_tree_view_set_property (GObject         *object,
+			    guint            prop_id,
+			    const GValue    *value,
+			    GParamSpec      *pspec,
+			    const gchar     *trailer)
+{
+  GtkTreeView *tree_view;
+
+  tree_view = GTK_TREE_VIEW (object);
+
+  switch (prop_id)
+    {
+    case PROP_MODEL:
+      gtk_tree_view_set_model (tree_view, g_value_get_object (value));
+      break;
+    case PROP_HADJUSTMENT:
+      gtk_tree_view_set_hadjustment (tree_view, g_value_get_object (value));
+      break;
+    case PROP_VADJUSTMENT:
+      gtk_tree_view_set_vadjustment (tree_view, g_value_get_object (value));
+      break;
+    case PROP_HEADERS_VISIBLE:
+      gtk_tree_view_set_headers_visible (tree_view, g_value_get_boolean (value));
+      break;
+    case PROP_HEADERS_CLICKABLE:
+      gtk_tree_view_set_headers_clickable (tree_view, g_value_get_boolean (value));
+      break;
+    case PROP_EXPANDER_COLUMN:
+      gtk_tree_view_set_expander_column (tree_view, g_value_get_uint (value));
+      break;
+    case PROP_RULES_HINT:
+      gtk_tree_view_set_rules_hint (tree_view, g_value_get_boolean (value));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_tree_view_get_property (GObject         *object,
+			    guint            prop_id,
+			    GValue          *value,
+			    GParamSpec      *pspec,
+			    const gchar     *trailer)
+{
+  GtkTreeView *tree_view;
+
+  tree_view = GTK_TREE_VIEW (object);
+  
+  switch (prop_id)
+    {
+    case PROP_MODEL:
+      g_value_set_object (value, G_OBJECT (tree_view->priv->model));
+      break;
+    case PROP_HADJUSTMENT:
+      g_value_set_object (value, G_OBJECT (tree_view->priv->hadjustment));
+      break;
+    case PROP_VADJUSTMENT:
+      g_value_set_object (value, G_OBJECT (tree_view->priv->vadjustment));
+      break;
+    case PROP_HEADERS_VISIBLE:
+      g_value_set_boolean (value, gtk_tree_view_get_headers_visible (tree_view));
+      break;
+    case PROP_HEADERS_CLICKABLE:
+      /* g_value_set_boolean (value, gtk_tree_view_get_headers_clickable (tree_view)); */
+      break;
+    case PROP_EXPANDER_COLUMN:
+      g_value_set_uint (value, tree_view->priv->expander_column);
+      break;
+    case PROP_RULES_HINT:
+      g_value_set_boolean (value, tree_view->priv->has_rules);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 /* Widget methods
@@ -3591,6 +3754,8 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       gtk_tree_view_setup_model (tree_view);
       _gtk_tree_view_update_size (tree_view);
     }
+
+  g_object_notify (G_OBJECT (tree_view), "model");
 }
 
 /**
@@ -3652,6 +3817,8 @@ gtk_tree_view_set_hadjustment (GtkTreeView   *tree_view,
   gtk_tree_view_set_adjustments (tree_view,
 				 adjustment,
 				 tree_view->priv->vadjustment);
+
+  g_object_notify (G_OBJECT (tree_view), "hadjustment");
 }
 
 /**
@@ -3692,6 +3859,8 @@ gtk_tree_view_set_vadjustment (GtkTreeView   *tree_view,
   gtk_tree_view_set_adjustments (tree_view,
 				 tree_view->priv->hadjustment,
 				 adjustment);
+
+  g_object_notify (G_OBJECT (tree_view), "vadjustment");
 }
 
 /**
@@ -3839,6 +4008,8 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
   gtk_signal_emit_by_name (GTK_OBJECT (tree_view->priv->vadjustment), "changed");
 
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+
+  g_object_notify (G_OBJECT (tree_view), "headers_visible");
 }
 
 
@@ -3890,6 +4061,8 @@ gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
 
   for (list = tree_view->priv->columns; list; list = list->next)
     gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (list->data), setting);
+
+  g_object_notify (G_OBJECT (tree_view), "headers_clickable");
 }
 
 /**
@@ -4109,7 +4282,7 @@ gtk_tree_view_set_expander_column (GtkTreeView *tree_view,
     {
       tree_view->priv->expander_column = col;
 
-      /*   g_object_notify (G_OBJECT (tree_view), "expander_column"); */
+      g_object_notify (G_OBJECT (tree_view), "expander_column");
     }
 }
 
@@ -4982,6 +5155,8 @@ gtk_tree_view_set_rules_hint (GtkTreeView  *tree_view,
       tree_view->priv->has_rules = setting;
       gtk_widget_queue_draw (GTK_WIDGET (tree_view));
     }
+
+  g_object_notify (G_OBJECT (tree_view), "rules_hint");
 }
 
 /**
