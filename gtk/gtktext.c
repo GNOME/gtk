@@ -1175,6 +1175,9 @@ gtk_text_set_position (GtkOldEditable *old_editable,
 		       gint            position)
 {
   GtkText *text = (GtkText *) old_editable;
+
+  if (position < 0)
+    position = gtk_text_get_length (text);                                    
   
   undraw_cursor (text, FALSE);
   text->cursor_mark = find_mark (text, position);

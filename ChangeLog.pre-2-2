@@ -1,3 +1,11 @@
+2001-11-01  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktext.c (gtk_text_set_position): handle -1 argument in
+	order to remove a workaround in Nautilus that forced
+	GTK_ENABLE_BROKEN
+
+	* gtk/gtkwidget.c (gtk_widget_modify_style): fix typos in the docs
+
 Thu Nov  1 20:09:31 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrange.c: Patch from George Lebl to 

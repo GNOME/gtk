@@ -3691,7 +3691,7 @@ gtk_widget_get_style (GtkWidget *widget)
  * @style: the #GtkRcStyle holding the style modifications
  * 
  * Modify style values on the widget. Modifications made using this
- * technique take precendence over style values set via an RC file,
+ * technique take precedence over style values set via an RC file,
  * however, they will be overriden if a style is explicitely set on
  * the widget using gtk_widget_set_style(). The #GtkRcStyle structure
  * is designed so each field can either be set or unset, so it is
@@ -3705,8 +3705,8 @@ gtk_widget_get_style (GtkWidget *widget)
  * make your modifications to the returned style, then call
  * gtk_widget_modify_style() with that style. On the other hand,
  * if you first call gtk_widget_modify_style(), subsequent calls
- * to such functions gtk_widget_modify_fg() will be have a cumulative
- * effect with the inital modifications.
+ * to such functions gtk_widget_modify_fg() will have a cumulative
+ * effect with the initial modifications.
  **/
 void       
 gtk_widget_modify_style (GtkWidget      *widget,
