@@ -669,7 +669,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_leave),
-		    gtk_marshal_VOID__BOXED_UINT,
+		    gtk_marshal_VOID__OBJECT_UINT,
 		    GTK_TYPE_NONE, 2,
 		    GDK_TYPE_DRAG_CONTEXT,
 		    GTK_TYPE_UINT);
@@ -678,7 +678,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_begin),
-		    gtk_marshal_VOID__BOXED,
+		    gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
 		    GDK_TYPE_DRAG_CONTEXT);
   widget_signals[DRAG_END] =
@@ -686,7 +686,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_end),
-		    gtk_marshal_VOID__BOXED,
+		    gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
 		    GDK_TYPE_DRAG_CONTEXT);
   widget_signals[DRAG_DATA_DELETE] =
@@ -694,7 +694,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_delete),
-		    gtk_marshal_VOID__BOXED,
+		    gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
 		    GDK_TYPE_DRAG_CONTEXT);
   widget_signals[DRAG_MOTION] =
@@ -702,7 +702,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_motion),
-		    gtk_marshal_BOOLEAN__BOXED_INT_INT_UINT,
+		    gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT,
 		    GTK_TYPE_BOOL, 4,
 		    GDK_TYPE_DRAG_CONTEXT,
 		    GTK_TYPE_INT,
@@ -713,7 +713,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_drop),
-		    gtk_marshal_BOOLEAN__BOXED_INT_INT_UINT,
+		    gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT,
 		    GTK_TYPE_BOOL, 4,
 		    GDK_TYPE_DRAG_CONTEXT,
 		    GTK_TYPE_INT,
@@ -724,7 +724,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_get),
-		    gtk_marshal_VOID__BOXED_BOXED_UINT_UINT,
+		    gtk_marshal_VOID__OBJECT_BOXED_UINT_UINT,
 		    GTK_TYPE_NONE, 4,
 		    GDK_TYPE_DRAG_CONTEXT,
 		    GTK_TYPE_SELECTION_DATA,
@@ -735,7 +735,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_received),
-		    gtk_marshal_VOID__BOXED_INT_INT_BOXED_UINT_UINT,
+		    gtk_marshal_VOID__OBJECT_INT_INT_BOXED_UINT_UINT,
 		    GTK_TYPE_NONE, 6,
 		    GDK_TYPE_DRAG_CONTEXT,
 		    GTK_TYPE_INT,

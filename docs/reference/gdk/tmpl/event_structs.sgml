@@ -201,6 +201,7 @@ redrawn.
 @window: the window which received the event.
 @send_event: TRUE if the event was sent explicitly (e.g. using XSendEvent).
 @area: the area that needs to be redrawn.
+@region: 
 @count: the number of contiguous %GDK_EXPOSE events following this one.
 The only use for this is "exposure compression", i.e. handling all contiguous
 %GDK_EXPOSE events in one go, though GDK performs some exposure compression

@@ -446,7 +446,7 @@ gtk_box_set_spacing (GtkBox *box,
 gint
 gtk_box_get_spacing (GtkBox *box)
 {
-  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_val_if_fail (GTK_IS_BOX (box), 0);
 
   return box->spacing;
 }

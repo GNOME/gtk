@@ -1077,6 +1077,22 @@ a gtk_object_unref().
 @line: line number (used within macros).
 @do_ref: whether to reference or unreference.
 
+<!-- ##### FUNCTION gtk_tree_model_ref_iter ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+
+<!-- ##### FUNCTION gtk_tree_model_unref_iter ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+
 <!-- ##### FUNCTION gtk_type_check_class_cast ##### -->
 <para>
 Given a GtkTypeClass pointer @klass, and a GtkType @cast_type, make

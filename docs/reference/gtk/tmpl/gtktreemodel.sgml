@@ -67,8 +67,8 @@ gtktreemodel
 @iter_n_children: 
 @iter_nth_child: 
 @iter_parent: 
-@ref_iter: 
-@unref_iter: 
+@ref_node: 
+@unref_node: 
 
 <!-- ##### ENUM GtkTreeModelFlags ##### -->
 <para>
@@ -347,23 +347,5 @@ gtktreemodel
 @iter: 
 @child: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_model_ref_iter ##### -->
-<para>
-
-</para>
-
-@tree_model: 
-@iter: 
-
-
-<!-- ##### FUNCTION gtk_tree_model_unref_iter ##### -->
-<para>
-
-</para>
-
-@tree_model: 
-@iter: 
 
 
