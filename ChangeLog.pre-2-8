@@ -1,3 +1,9 @@
+Sun Mar 17 01:11:16 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_request): use
+	do_validate_rows instead of validate_rows_handler (fix by
+	Mike Pieper, #74126)
+
 Sat Mar 16 23:54:56 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_set_static_bit_gravity): just

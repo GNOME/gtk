@@ -262,6 +262,7 @@ static gboolean validate_row             (GtkTreeView *tree_view,
 					  GtkTreePath *path);
 static void     validate_visible_area    (GtkTreeView *tree_view);
 static gboolean validate_rows_handler    (GtkTreeView *tree_view);
+static gboolean do_validate_rows	 (GtkTreeView *tree_view);
 static gboolean presize_handler_callback (gpointer     data);
 static void     install_presize_handler  (GtkTreeView *tree_view);
 static void     install_scroll_sync_handler (GtkTreeView *tree_view);
@@ -1490,7 +1491,7 @@ gtk_tree_view_size_request (GtkWidget      *widget,
 
   /* we validate 50 rows initially just to make sure we have some size */
   /* in practice, with a lot of static lists, this should get a good width */
-  validate_rows_handler (tree_view);
+  do_validate_rows (tree_view);
   gtk_tree_view_size_request_columns (tree_view);
   gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
 
