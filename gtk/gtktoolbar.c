@@ -78,7 +78,7 @@ enum {
   STYLE_CHANGED,
   POPUP_CONTEXT_MENU,
   MOVE_FOCUS,
-  FOCUS_ENDS,
+  FOCUS_HOME_OR_END,
   LAST_SIGNAL
 };
 
@@ -147,10 +147,10 @@ static void gtk_toolbar_real_orientation_changed (GtkToolbar      *toolbar,
 static void gtk_toolbar_real_style_changed       (GtkToolbar      *toolbar,
 						  GtkToolbarStyle  style);
 
-static gboolean gtk_toolbar_move_focus     (GtkToolbar       *toolbar,
-					    GtkDirectionType  dir);
-static gboolean gtk_toolbar_focus_ends     (GtkToolbar       *toolbar,
-					    gboolean	       home);
+static gboolean gtk_toolbar_move_focus        (GtkToolbar       *toolbar,
+					       GtkDirectionType  dir);
+static gboolean gtk_toolbar_focus_home_or_end (GtkToolbar       *toolbar,
+					       gboolean          focus_home);
 
 static gboolean             gtk_toolbar_button_press         (GtkWidget      *toolbar,
 							      GdkEventButton *event);
@@ -343,11 +343,11 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 			     _gtk_marshal_BOOLEAN__ENUM,
 			     G_TYPE_BOOLEAN, 1,
 			     GTK_TYPE_DIRECTION_TYPE);
-  toolbar_signals[FOCUS_ENDS] =
-    _gtk_binding_signal_new ("focus_ends",
+  toolbar_signals[FOCUS_HOME_OR_END] =
+    _gtk_binding_signal_new ("focus_home_or_end",
 			     G_OBJECT_CLASS_TYPE (klass),
 			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			     G_CALLBACK (gtk_toolbar_focus_ends),
+			     G_CALLBACK (gtk_toolbar_focus_home_or_end),
 			     NULL, NULL,
 			     _gtk_marshal_BOOLEAN__BOOLEAN,
 			     G_TYPE_BOOLEAN, 1,
@@ -468,20 +468,20 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   add_arrow_bindings (binding_set, GDK_Down, GTK_DIR_DOWN);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Home, 0,
-                                "focus_ends", 1,
+                                "focus_home_or_end", 1,
 				G_TYPE_BOOLEAN, TRUE);
   gtk_binding_entry_add_signal (binding_set, GDK_Home, 0,
-                                "focus_ends", 1,
+                                "focus_home_or_end", 1,
 				G_TYPE_BOOLEAN, TRUE);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_End, 0,
-                                "focus_ends", 1,
+                                "focus_home_or_end", 1,
 				G_TYPE_BOOLEAN, FALSE);
   gtk_binding_entry_add_signal (binding_set, GDK_End, 0,
-                                "focus_ends", 1,
+                                "focus_home_or_end", 1,
 				G_TYPE_BOOLEAN, FALSE);
 
-  add_ctrl_tab_bindings (binding_set, 0, GTK_DIR_RIGHT);
-  add_ctrl_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_LEFT);
+  add_ctrl_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
+  add_ctrl_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
   g_type_class_add_private (gobject_class, sizeof (GtkToolbarPrivate));  
 }
@@ -1271,7 +1271,10 @@ gtk_toolbar_list_children_in_focus_order (GtkToolbar       *toolbar,
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   GList *result = NULL;
   GList *list;
+  gboolean rtl;
 
+  /* generate list of children in reverse logical order */
+  
   for (list = priv->items; list != NULL; list = list->next)
     {
       GtkToolItem *item = list->data;
@@ -1288,32 +1291,41 @@ gtk_toolbar_list_children_in_focus_order (GtkToolbar       *toolbar,
     }
 
   result = g_list_prepend (result, priv->arrow_button);
-  
-  if (dir == GTK_DIR_RIGHT || dir == GTK_DIR_DOWN || dir == GTK_DIR_TAB_FORWARD)
-    result = g_list_reverse (result);
 
-  if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL)
-    result = g_list_reverse (result);
+  rtl = (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL);
+  
+  /* move in logical order when
+   *
+   *	- dir is TAB_FORWARD
+   *
+   *	- in RTL mode and moving left or up
+   *
+   *    - in LTR mode and moving right or down
+   */
+  if (dir == GTK_DIR_TAB_FORWARD                                        ||
+      (rtl  && (dir == GTK_DIR_UP   || dir == GTK_DIR_LEFT))		||
+      (!rtl && (dir == GTK_DIR_DOWN || dir == GTK_DIR_RIGHT)))
+    {
+      result = g_list_reverse (result);
+    }
 
   return result;
 }
 
 static gboolean
-gtk_toolbar_focus_ends (GtkToolbar *toolbar,
-			gboolean    home)
+gtk_toolbar_focus_home_or_end (GtkToolbar *toolbar,
+			       gboolean    focus_home)
 {
   GList *children, *list;
-  GtkDirectionType dir = home? GTK_DIR_RIGHT : GTK_DIR_LEFT;
+  GtkDirectionType dir = focus_home? GTK_DIR_RIGHT : GTK_DIR_LEFT;
 
   children = gtk_toolbar_list_children_in_focus_order (toolbar, dir);
 
   if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL)
     {
       children = g_list_reverse (children);
-      if (dir == GTK_DIR_RIGHT)
-	dir = GTK_DIR_LEFT;
-      else
-	dir = GTK_DIR_RIGHT;
+      
+      dir = (dir == GTK_DIR_RIGHT)? GTK_DIR_LEFT : GTK_DIR_RIGHT;
     }
 
   for (list = children; list != NULL; list = list->next)
@@ -1332,13 +1344,25 @@ gtk_toolbar_focus_ends (GtkToolbar *toolbar,
   return TRUE;
 }   
 
+/* Keybinding handler. This function is called when the user presses
+ * Ctrl TAB or an arrow key.
+ */
 static gboolean
 gtk_toolbar_move_focus (GtkToolbar       *toolbar,
 			GtkDirectionType  dir)
 {
   GList *list;
   gboolean try_focus = FALSE;
-  GList *children = gtk_toolbar_list_children_in_focus_order (toolbar, dir);
+  GList *children;
+  GtkContainer *container = GTK_CONTAINER (toolbar);
+
+  if (container->focus_child &&
+      gtk_widget_child_focus (container->focus_child, dir))
+    {
+      return TRUE;
+    }
+  
+  children = gtk_toolbar_list_children_in_focus_order (toolbar, dir);
 
   for (list = children; list != NULL; list = list->next)
     {
@@ -1356,8 +1380,8 @@ gtk_toolbar_move_focus (GtkToolbar       *toolbar,
   return TRUE;
 }
 
-/* The focus handler for the toolbar. It called when the user presses TAB or otherwise
- * tries to focus the toolbar.
+/* The focus handler for the toolbar. It called when the user presses
+ * TAB or otherwise tries to focus the toolbar.
  */
 static gboolean
 gtk_toolbar_focus (GtkWidget        *widget,
@@ -2078,9 +2102,11 @@ gtk_toolbar_remove_tool_item (GtkToolbar  *toolbar,
   g_return_if_fail (GTK_IS_TOOL_ITEM (item));
   
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  
-  for (tmp = priv->items; tmp != NULL; tmp = tmp->next)
+
+  tmp = priv->items;
+  while (tmp)
     {
+      GList *next = tmp->next;
       GtkWidget *child = tmp->data;
       
       if (child == GTK_WIDGET (item))
@@ -2098,6 +2124,8 @@ gtk_toolbar_remove_tool_item (GtkToolbar  *toolbar,
 
 	  break;
 	}
+      
+      tmp = next;
     }
 }
 
@@ -2588,8 +2616,8 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 					      icon, callback, user_data, position, FALSE);
 }
 
-static gchar *
-elide_underscores (const gchar *original)
+gchar *
+_gtk_toolbar_elide_underscores (const gchar *original)
 {
   gchar *q, *result;
   const gchar *p;
@@ -2660,7 +2688,7 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
       break;
 
     case GTK_TOOLBAR_CHILD_BUTTON:
-      item = gtk_tool_button_new ();
+      item = gtk_tool_button_new (NULL, NULL);
       child->widget = GTK_TOOL_BUTTON (item)->button;
       break;
       
@@ -2693,7 +2721,7 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
 	      gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (item), text);
 
 	      gtk_stock_lookup (text, &stock_item);
-	      label_text = elide_underscores (stock_item.label);
+	      label_text = _gtk_toolbar_elide_underscores (stock_item.label);
 	      child->label = GTK_WIDGET (gtk_label_new (label_text));
 	      g_free (label_text);
 	    }

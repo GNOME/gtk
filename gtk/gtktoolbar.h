@@ -157,6 +157,9 @@ GtkIconSize     gtk_toolbar_get_icon_size    (GtkToolbar      *toolbar);
 gboolean        gtk_toolbar_get_tooltips     (GtkToolbar      *toolbar);
 GtkReliefStyle  gtk_toolbar_get_relief_style (GtkToolbar      *toolbar);
 
+/* internal function */
+gchar *	_gtk_toolbar_elide_underscores (const gchar *original);
+
 #ifndef GTK_DISABLE_DEPRECATED
 /* Simple button items */
 void       gtk_toolbar_set_style     (GtkToolbar      *toolbar,

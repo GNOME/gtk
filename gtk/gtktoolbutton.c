@@ -30,6 +30,7 @@
 #include "gtkstock.h"
 #include "gtkvbox.h"
 #include "gtkintl.h"
+#include "gtktoolbar.h"
 
 #include <string.h>
 
@@ -46,7 +47,6 @@ enum {
   PROP_USE_UNDERLINE,
   PROP_LABEL_WIDGET,
   PROP_STOCK_ID,
-  PROP_ICON_SET,
   PROP_ICON_WIDGET,
 };
 
@@ -158,13 +158,6 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 							NULL,
 							G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
-				   PROP_ICON_SET,
-				   g_param_spec_boxed ("icon_set",
-						       _("Icon set"),
-						       _("Icon set to use to draw the item's icon"),
-						       GTK_TYPE_ICON_SET,
-						       G_PARAM_READWRITE));
-  g_object_class_install_property (object_class,
 				   PROP_ICON_WIDGET,
 				   g_param_spec_object ("icon_widget",
 							_("Icon widget"),
@@ -192,7 +185,7 @@ gtk_tool_button_init (GtkToolButton      *button,
 
   /* create button */
   button->button = g_object_new (klass->button_type, NULL);
-  gtk_button_set_focus_on_click (button->button, FALSE);
+  gtk_button_set_focus_on_click (GTK_BUTTON (button->button), FALSE);
   g_signal_connect_object (button->button, "clicked",
 			   G_CALLBACK (button_clicked), button, 0);
 
@@ -248,32 +241,6 @@ gtk_tool_button_size_allocate (GtkWidget     *widget,
       
       gtk_widget_size_allocate (child, &child_allocation);
     }
-}
-
-static gchar *
-elide_underscores (const gchar *original)
-{
-  gchar *q, *result;
-  const gchar *p;
-  gboolean last_underscore;
-
-  q = result = g_malloc (strlen (original) + 1);
-  last_underscore = FALSE;
-  
-  for (p = original; *p; p++)
-    {
-      if (!last_underscore && *p == '_')
-	last_underscore = TRUE;
-      else
-	{
-	  last_underscore = FALSE;
-	  *q++ = *p;
-	}
-    }
-  
-  *q = '\0';
-  
-  return result;
 }
 
 static void
@@ -345,7 +312,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	    label_text = "";
 
 	  if (elide)
-	    label_text = elide_underscores (label_text);
+	    label_text = _gtk_toolbar_elide_underscores (label_text);
 	  else
 	    label_text = g_strdup (label_text);
 
@@ -360,12 +327,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
   icon_size = gtk_tool_item_get_icon_size (GTK_TOOL_ITEM (button));
   if (need_icon)
     {
-      if (button->icon_set)
-	{
-	  icon = gtk_image_new_from_icon_set (button->icon_set, icon_size);
-	  gtk_widget_show (icon);
-	}
-      else if (button->icon_widget)
+      if (button->icon_widget)
 	{
 	  icon = button->icon_widget;
 	  
@@ -456,9 +418,6 @@ gtk_tool_button_set_property (GObject         *object,
     case PROP_STOCK_ID:
       gtk_tool_button_set_stock_id (button, g_value_get_string (value));
       break;
-    case PROP_ICON_SET:
-      gtk_tool_button_set_icon_set (button, g_value_get_boxed (value));
-      break;
     case PROP_ICON_WIDGET:
       gtk_tool_button_set_icon_widget (button, g_value_get_object (value));
       break;
@@ -488,9 +447,6 @@ gtk_tool_button_get_property (GObject         *object,
       break;
     case PROP_STOCK_ID:
       g_value_set_string (value, button->stock_id);
-      break;
-    case PROP_ICON_SET:
-      g_value_set_boxed (value, gtk_tool_button_get_icon_set (button));
       break;
     case PROP_ICON_WIDGET:
       g_value_set_object (value, button->icon_widget);
@@ -536,11 +492,7 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
   else
     menu_item = gtk_image_menu_item_new_with_label (label);
 
-  if (button->icon_set)
-    {
-      menu_image = gtk_image_new_from_icon_set (button->icon_set, GTK_ICON_SIZE_MENU);
-    }
-  else if (button->icon_widget && GTK_IS_IMAGE (button->icon_widget))
+  if (button->icon_widget && GTK_IS_IMAGE (button->icon_widget))
     {
       GtkImage *image = GTK_IMAGE (button->icon_widget);
       GtkImageType storage_type = gtk_image_get_storage_type (image);
@@ -605,12 +557,19 @@ gtk_tool_button_new_from_stock (const gchar *stock_id)
 }
 
 GtkToolItem *
-gtk_tool_button_new (void)
+gtk_tool_button_new (const gchar *label,
+		     GtkWidget	 *icon_widget)
 {
   GtkToolButton *button;
-  
+
   button = g_object_new (GTK_TYPE_TOOL_BUTTON,
 			 NULL);
+  
+  if (label)
+    gtk_tool_button_set_label (button, label);
+
+  if (icon_widget)
+    gtk_tool_button_set_icon_widget (button, icon_widget);
 
   return GTK_TOOL_ITEM (button);  
 }
@@ -703,8 +662,6 @@ gtk_tool_button_set_icon_widget (GtkToolButton *button,
 
   if (icon != button->icon_widget)
     {
-      g_object_freeze_notify (G_OBJECT (button));
-      
       if (button->icon_widget)
 	g_object_unref (G_OBJECT (button->icon_widget));
 
@@ -715,19 +672,10 @@ gtk_tool_button_set_icon_widget (GtkToolButton *button,
 	}
 
       button->icon_widget = icon;
-	
-      if (button->icon_widget && button->icon_set)
-	{
-	  gtk_icon_set_unref (button->icon_set);
-	  button->icon_set = NULL;
-	  
-	  g_object_notify (G_OBJECT (button), "icon_set");
-	}
 
       gtk_tool_button_construct_contents (GTK_TOOL_ITEM (button));
       
       g_object_notify (G_OBJECT (button), "icon_widget");
-      g_object_thaw_notify (G_OBJECT (button));
     }
 }
 
@@ -771,42 +719,4 @@ gtk_tool_button_get_icon_widget (GtkToolButton *button)
   g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
 
   return button->icon_widget;
-}
-
-void
-gtk_tool_button_set_icon_set (GtkToolButton *button,
-			      GtkIconSet    *icon_set)
-{
-  g_return_if_fail (GTK_IS_TOOL_BUTTON (button));
-
-  if (icon_set != button->icon_set)
-    {
-      g_object_freeze_notify (G_OBJECT (button));
-
-      if (button->icon_set)
-	gtk_icon_set_unref (button->icon_set);
-
-      button->icon_set = icon_set;
-
-      if (button->icon_set && button->icon_widget)
-	{
-	  g_object_unref (button->icon_widget);
-	  button->icon_widget = NULL;
-
-	  g_object_notify (G_OBJECT (button->icon_widget), "icon_widget");
-	}
-
-      gtk_tool_button_construct_contents (GTK_TOOL_ITEM (button));
-      
-      g_object_notify (G_OBJECT (button), "icon_set");
-      g_object_thaw_notify (G_OBJECT (button));
-    }
-}
-
-GtkIconSet *
-gtk_tool_button_get_icon_set (GtkToolButton *button)
-{
-  g_return_val_if_fail (GTK_IS_TOOL_BUTTON (button), NULL);
-  
-  return button->icon_set;
 }

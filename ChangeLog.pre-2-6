@@ -1,3 +1,39 @@
+Wed Jul  2 15:42:26 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtk.h: Add new toolbar headers
+
+	* tests/testtoolbar.c: new file
+
+	* tests/Makefile.am (noinst_PROGRAMS): Add testtoolbar.c
+
+	* gtk/gtkexpander.c (gtk_expander_class_init): Make it compile
+
+Tue Jul  1 22:49:25 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c:
+	(gtk_toolbar_remove_tool_item): Fix bug where list is changed
+	inside a for loop (pointed out by Morten Welinder).
+	(gtk_toolbar_focus_home_or_end): Minor formatting change
+
+	Comments from Owen:
+
+	* gtk/gtktoolbutton.c: remove copy of elide_underscores(). Use
+	gtk_toolbar_elide_underscores instead.
+
+	* gtk/gtktoolbar.c: rename signal from focus_ends to
+	focus_home_or_end.
+	(_gtk_toolbar_elide_underscores): export this as an internal
+	function.
+	(gtk_toolbar_move_focus): add comment explaining difference to
+	gtk_toolbar_focus();
+	(gtk_toolbar_list_children_in_focus_order): Make TAB_FORWARD and
+	TAB_BACKWARD focus the right widgets in RTL mode
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_new): Change to take
+	"label" and "icon" parameters
+
+	* gtk/gtktoolbutton.[ch]: remove icon_set property.
+
 2003-07-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_set_digits): Improve docs.  (116364, Morten Welinder)
@@ -64,20 +100,35 @@
 
 Mon Jun 30 01:20:19 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
-	* gtkradiotoolbutton.c
-	* gtkradiotoolbutton.h
-	* gtktoggletoolbutton.c
-	* gtktoggletoolbutton.h
-	* gtktoolbutton.c
-	* gtktoolbutton.h
-	* gtktoolitem.c
-	* gtktoolitem.h
-	* gtktoolbar.c
-	* gtktoolbar.h
-	* gtkseparatortoolitem.c
-	* gtkseparatortoolitem.h
+	* gtkradiotoolbutton.c:		new file
+	* gtkradiotoolbutton.h:		   "
+	* gtktoggletoolbutton.c:	   "
+	* gtktoggletoolbutton.h:	   "
+	* gtktoolbutton.c:		   "
+	* gtktoolbutton.h:		   "
+	* gtktoolitem.c:		   "
+	* gtktoolitem.h:		   "
+	* gtktoolbar.c: many changes
+	* gtktoolbar.h: many changes
+	* gtkseparatortoolitem.c:	new file
+	* gtkseparatortoolitem.h	   "
 
 	New toolbar.
+	
+	- Items on a toolbar are now separate widgets, instances of a
+	  subclass of GtkToolItem.
+
+	- Items there aren't room for on the toolbar are unmapped, and an
+	  overflow menu with a proxy menu item is added instead.
+
+	- The toolbar is keyboard navigatable. Press TAB to focus the
+	  first item, then use arrow keys and Ctrl TAB to move around the
+	  toolbar. TAB moves focus out of the toolbar.
+
+	- Bascially all of the old toolbar API is deprecated in favor of
+	  new API in gtktoolbar.h, gtktoolitem.h, gtktoolbutton.h
+
+	- The toolbar is backwards compatible with the old toolbar.
 
 2003-06-29  Matthias Clasen  <maclas@gmx.de>
 

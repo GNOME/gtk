@@ -40,6 +40,7 @@ noinst_PROGRAMS =			\
 	$(testsocket_programs)		\
 	testtext			\
         testtextbuffer			\
+	testtoolbar			\
 	testtreeedit			\
 	testtreeview			\
 	testtreefocus			\
@@ -89,6 +90,7 @@ testselection_LDADD = $(LDADDS)
 testsocket_LDADD = $(LDADDS)
 testsocket_child_LDADD = $(LDADDS)
 testtextbuffer_LDADD = $(LDADDS)
+testtoolbar_LDADD = $(LDADDS)
 testtreeedit_LDADD = $(LDADDS)
 testtreeview_LDADD = $(LDADDS)
 testtreefocus_LDADD = $(LDADDS)
@@ -117,6 +119,10 @@ testtreeview_SOURCES =	\
 testtext_SOURCES =	\
 	prop-editor.c	\
 	testtext.c 
+
+testtoolbar_SOURCES =	\
+	testtoolbar.c	\
+	prop-editor.c
 
 testsocket_SOURCES =    	\
 	testsocket.c		\
