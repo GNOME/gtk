@@ -1,6 +1,7 @@
 1999-09-10  Pablo Saratxaga <pablo@mandrakesoft.com>
 
 	* et.po: added Estonian language
+	* el.po: added Greek language from gtk+ HEAD cvs
 
 1999-09-04  Kjartan Maraas  <kmaraas@fib.hl.no>
 

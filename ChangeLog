@@ -1,6 +1,7 @@
 Fri Sep 10 21:31:00 1999 Pablo Saratxaga <pablo@mandrakesoft.com>
 
-	* po/et.po,configure.in: aded Estonian language file
+	* po/et.po,configure.in: added Estonian language file
+	* po/el.po: added Greek file from gtk+ HEAD cvs
 
 Fri Sep 10 15:22:50 1999  Owen Taylor  <otaylor@redhat.com>
 
