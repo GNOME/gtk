@@ -144,8 +144,8 @@ remove_item (GtkWidget *widget, gpointer data)
 
 static void
 cell_edited (GtkCellRendererText *cell,
-	     gchar               *path_string,
-	     gchar               *new_text,
+	     const gchar         *path_string,
+	     const gchar         *new_text,
 	     gpointer             data)
 {
   GtkTreeModel *model = (GtkTreeModel *)data;
