@@ -2138,6 +2138,9 @@ gtk_combo_box_cell_layout_pack_start (GtkCellLayout   *layout,
 
   combo_box = GTK_COMBO_BOX (layout);
 
+  g_object_ref (G_OBJECT (cell));
+  gtk_object_sink (GTK_OBJECT (cell));
+
   info = g_new0 (ComboCellInfo, 1);
   info->cell = cell;
   info->expand = expand;
@@ -2186,6 +2189,9 @@ gtk_combo_box_cell_layout_pack_end (GtkCellLayout   *layout,
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
   combo_box = GTK_COMBO_BOX (layout);
+
+  g_object_ref (G_OBJECT (cell));
+  gtk_object_sink (GTK_OBJECT (cell));
 
   info = g_new0 (ComboCellInfo, 1);
   info->cell = cell;
@@ -3005,6 +3011,7 @@ static void
 gtk_combo_box_finalize (GObject *object)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
+  GSList *i;
   
   gtk_combo_box_unset_model (combo_box);
 
@@ -3020,7 +3027,24 @@ gtk_combo_box_finalize (GObject *object)
   if (combo_box->priv->model)
     g_object_unref (combo_box->priv->model);
 
-   g_slist_foreach (combo_box->priv->cells, (GFunc)g_free, NULL);
+  for (i = combo_box->priv->cells; i; i = i->next)
+    {
+      ComboCellInfo *info = (ComboCellInfo *)i->data;
+      GSList *list = info->attributes;
+
+      if (info->destroy)
+	info->destroy (info->func_data);
+
+      while (list && list->next)
+	{
+	  g_free (list->data);
+	  list = list->next->next;
+	}
+      g_slist_free (info->attributes);
+
+      g_object_unref (G_OBJECT (info->cell));
+      g_free (info);
+    }
    g_slist_free (combo_box->priv->cells);
 
    G_OBJECT_CLASS (parent_class)->finalize (object);
