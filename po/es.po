@@ -295,26 +295,37 @@ msgstr "otro"
 
 msgid "*"
 msgstr "*"
+
 msgid "(nil)"
 msgstr "(nulo)"
+
 msgid "heavy"
 msgstr ""
+
 msgid "extrabold"
 msgstr ""
+
 msgid "bold"
 msgstr "negritas"
+
 msgid "demibold"
 msgstr ""
+
 msgid "medium"
 msgstr ""
+
 msgid "normal"
 msgstr "normal"
+
 msgid "light"
 msgstr ""
+
 msgid "extralight"
 msgstr ""
+
 msgid "thin"
 msgstr ""
+
 msgid "regular"
 msgstr "regular"
 
