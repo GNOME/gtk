@@ -1181,7 +1181,8 @@ GdkVisual*
 gdk_window_get_visual (GdkWindow *window)
 {
   GdkWindowPrivate *window_private;
-  
+  XWindowAttributes window_attributes;
+   
   g_return_val_if_fail (window != NULL, NULL);
   
   window_private = (GdkWindowPrivate*) window;
@@ -1190,7 +1191,15 @@ gdk_window_get_visual (GdkWindow *window)
   
   if (window_private && !window_private->destroyed)
     {
-      return ((GdkColormapPrivate *)window_private->colormap)->visual;
+       if (window_private->window_type == GDK_WINDOW_FOREIGN)
+	 {
+	    XGetWindowAttributes (window_private->xdisplay,
+				  window_private->xwindow,
+				  &window_attributes);
+	    return gdk_visual_lookup (window_attributes.visual);
+	 }
+       else
+	 return ((GdkColormapPrivate *)window_private->colormap)->visual;
     }
   
   return NULL;
