@@ -20,12 +20,6 @@ types related to the text widget and how they work together.
 
 </para>
 
-<!-- ##### STRUCT GtkTextBuffer ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### STRUCT GtkTextIter ##### -->
 <para>
 

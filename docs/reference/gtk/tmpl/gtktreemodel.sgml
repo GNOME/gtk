@@ -14,6 +14,12 @@ The tree interface used by #GtkTreeView
 #GtkTreeView, #GtkTreeStore, #GtkListStore
 </para>
 
+<!-- ##### STRUCT GtkTreeModel ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### STRUCT GtkTreeIter ##### -->
 <para>
 
@@ -31,12 +37,6 @@ The tree interface used by #GtkTreeView
 
 
 <!-- ##### STRUCT GtkTreeRowReference ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### STRUCT GtkTreeModel ##### -->
 <para>
 
 </para>

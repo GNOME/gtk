@@ -1158,12 +1158,6 @@ produce superscript and subscript.
 </para>
 
 
-<!-- ##### STRUCT GtkTreeModelSort ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### STRUCT GtkTreeSelectionClass ##### -->
 <para>
 
@@ -1177,14 +1171,6 @@ produce superscript and subscript.
 
 @GTK_TREE_SELECTION_SINGLE: 
 @GTK_TREE_SELECTION_MULTI: 
-
-<!-- ##### STRUCT GtkTreeView ##### -->
-<para>
-
-</para>
-
-@parent: 
-@priv: 
 
 <!-- ##### USER_FUNCTION GtkTreeViewDraggableFunc ##### -->
 <para>

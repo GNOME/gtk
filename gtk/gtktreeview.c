@@ -3497,7 +3497,6 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
   tree_view->priv->pressed_button = -1;
 
   gtk_tree_view_get_path_at_pos (tree_view,
-                                 tree_view->priv->bin_window,
                                  tree_view->priv->press_start_x,
                                  tree_view->priv->press_start_y,
                                  &path,
@@ -6000,6 +5999,7 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
 				     cursor_tree,
 				     cursor_node,
 				     NULL);
+      g_signal_emit (G_OBJECT (tree_view), tree_view_signals[CURSOR_CHANGED], 0);
     }
   gtk_tree_view_clamp_column_visible (tree_view, tree_view->priv->focus_column);
 }
@@ -8141,9 +8141,26 @@ gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
 
 
 /**
+ * gtk_tree_view_get_bin_window:
+ * @tree_view: A #GtkTreeView
+ * 
+ * Returns the window that @tree_view renders to.  This is used primarily to
+ * compare to <literal>event->window</literal> to confirm that the event on
+ * @tree_view is on the right window.
+ * 
+ * Return value: A #GdkWindow, or %NULL when @tree_view hasn't been realized yet
+ **/
+GdkWindow *
+gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
+
+  return tree_view->priv->bin_window;
+}
+
+/**
  * gtk_tree_view_get_path_at_pos:
  * @tree_view: A #GtkTreeView.
- * @window: The #GdkWindow to check against.
  * @x: The x position to be identified.
  * @y: The y position to be identified.
  * @path: A pointer to a #GtkTreePath pointer to be filled in, or %NULL
@@ -8151,22 +8168,20 @@ gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
  * @cell_x: A pointer where the X coordinate relative to the cell can be placed, or %NULL
  * @cell_y: A pointer where the Y coordinate relative to the cell can be placed, or %NULL
  *
- * Finds the path at the point (@x, @y) relative to @window.  If @window is
- * %NULL, then the point is found relative to the widget coordinates.  This
- * function is expected to be called after an event, with <literal>event->window</literal> being
- * passed in as @window.  It is primarily for things like popup menus.  If @path
- * is non-%NULL, then it will be filled with the #GtkTreePath at that point.
- * This path should be freed with gtk_tree_path_free().  If @column is non-%NULL,
- * then it will be filled with the column at that point. @cell_x and @cell_y
- * return the coordinates relative to the cell background (i.e. the
- * @background_area passed to gtk_cell_renderer_render()).  This function only
- * works if @tree_view is realized.
+ * Finds the path at the point (@x, @y), relative to widget coordinates.  That
+ * is, @x and @y are relative to an events coordinates.  It is primarily for
+ * things like popup menus.  If @path is non-%NULL, then it will be filled with
+ * the #GtkTreePath at that point.  This path should be freed with
+ * gtk_tree_path_free().  If @column is non-%NULL, then it will be filled with
+ * the column at that point. @cell_x and @cell_y return the coordinates relative
+ * to the cell background (i.e. the @background_area passed to
+ * gtk_cell_renderer_render()).  This function is only meaningful if @tree_view
+ * is realized.
  *
  * Return value: %TRUE if a row exists at that coordinate.
  **/
 gboolean
 gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
-			       GdkWindow          *window,
 			       gint                x,
 			       gint                y,
 			       GtkTreePath       **path,
@@ -8180,9 +8195,6 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
 
   g_return_val_if_fail (tree_view != NULL, FALSE);
   g_return_val_if_fail (tree_view->priv->bin_window != NULL, FALSE);
-
-  if (window)
-    g_return_val_if_fail (window == tree_view->priv->bin_window, FALSE);
 
   if (path)
     *path = NULL;
@@ -8239,21 +8251,12 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
         }
     }
 
-  if (window)
-    {
-      y_offset = _gtk_rbtree_find_offset (tree_view->priv->tree,
-                                          TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y),
-                                          &tree, &node);
-    }
-  else
-    {
-      if (y < TREE_VIEW_HEADER_HEIGHT (tree_view))
-	return FALSE;
+  if (y < TREE_VIEW_HEADER_HEIGHT (tree_view))
+    return FALSE;
 
-      y_offset = _gtk_rbtree_find_offset (tree_view->priv->tree,
-                                          TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y + tree_view->priv->vadjustment->value),
-                                          &tree, &node);
-    }
+  y_offset = _gtk_rbtree_find_offset (tree_view->priv->tree,
+				      TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y + tree_view->priv->vadjustment->value),
+				      &tree, &node);
 
   if (tree == NULL)
     return FALSE;
@@ -8690,7 +8693,6 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
    */
 
   if (!gtk_tree_view_get_path_at_pos (tree_view,
-                                      tree_view->priv->bin_window,
                                       x, y,
                                       &tmp_path,
                                       &column,

@@ -217,7 +217,6 @@ void                   gtk_tree_view_get_cursor                    (GtkTreeView 
 
 /* Layout information */
 gboolean               gtk_tree_view_get_path_at_pos               (GtkTreeView               *tree_view,
-								    GdkWindow                 *window,
 								    gint                       x,
 								    gint                       y,
 								    GtkTreePath              **path,
