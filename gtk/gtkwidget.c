@@ -1834,8 +1834,8 @@ gtk_widget_clip_rect (GtkWidget *widget,
 	  if (x_offset)
 	    *x_offset += x - widget->allocation.x;
 	  rect->y += y - widget->allocation.y;
-	  if (x_offset)
-	    *x_offset += y - widget->allocation.y;
+	  if (y_offset)
+	    *y_offset += y - widget->allocation.y;
 	}
     }
 }

@@ -1,3 +1,8 @@
+Mon Aug 10 23:03:55 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_clip_rect): Fixed up 
+	  queued area resizing once more.
+
 Mon Aug 10 23:09:30 EDT 1998
 	* Added a few drawing fixes for notebook and other widgets. finished
 	  pixmap theme up to the level that can be supported so far. (need to
@@ -32,8 +37,7 @@ Wed Aug  5 13:14:57 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbutton.c (gtk_button_paint): Restored paint function.
 	  Yes, it was needed. draw() and expose() are _not_
-	  identical.su
-	
+	  identical.
 
 Tue Aug  4 19:12:14 1998  Owen Taylor  <otaylor@redhat.com>
 
