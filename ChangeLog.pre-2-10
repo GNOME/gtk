@@ -1,3 +1,27 @@
+Sat Jul 14 12:47:35 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkrange.c:
+	(second_timeout): 
+	(initial_timeout): 
+	(update_timeout): add GDK_THREADS_ENTER/GDK_THREADS_LEAVE.
+	(gtk_range_calc_layout): compute the new layout based on an
+	adjustment->value being passed in as argument.
+	(gtk_range_button_press): for button2 slider warps, first recalc
+	the layout, then adjust the value. also, use update_slider_position()
+	for adjusting the value, so we keep pixel quantisation at which we
+	usually operate (upon motion or button releases). the reason for this
+	is that, we can't change the adjustment upon button2 presses to a non
+	quantised value and upon button2 release re-quantise the value since
+	that'd alter the value even if we didn't get any motion events (causing
+	unexpected scroll area warps upon release and/or slider pixel-jitter).
+	(gtk_range_motion_notify): update the slider position from queried
+	coordinates, not event coordinates.
+
+Fri Jul 13 09:47:52 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkstyle.c (gtk_default_draw_focus): fix line style resetting,
+	the default gc values are: width=0, CapBut, JoinMiter.
+
 2001-07-13  Anders Carlsson  <andersca@codefactory.se>
 
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render): Take

@@ -3826,7 +3826,7 @@ gtk_default_draw_focus (GtkStyle      *style,
   points[4] = points[0];
   
   gdk_draw_polygon (window, style->black_gc, FALSE, points, 4);
-  gdk_gc_set_line_attributes (style->black_gc, 1, GDK_LINE_SOLID, 0, 0);
+  gdk_gc_set_line_attributes (style->black_gc, 0, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 
   if (area)
     gdk_gc_set_clip_rectangle (style->black_gc, NULL);
