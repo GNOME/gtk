@@ -5,8 +5,21 @@ GtkContainer
 Base class for widgets which contain other widgets
 
 <!-- ##### SECTION Long_Description ##### -->
+<para id="child-properties">
+<structname>GtkContainer</structname> introduces <firstterm>child 
+properties</firstterm> - these are object properties that are not specific
+to either the container or the contained widget, but rather to their relation.
+Typical examples of child properties are the position or pack-type of a widget
+which is contained in a #GtkBox.</para>
 <para>
-
+Use gtk_container_class_install_child_property() to install child properties 
+for a container class and gtk_container_class_find_child_property() or
+gtk_container_class_list_child_properties() to get information about existing
+child properties. To set the value of a child property, use
+gtk_container_child_set_property(), gtk_container_child_set() or
+gtk_container_child_set_valist(). To obtain the value of a child property,
+use gtk_container_child_get_property(), gtk_container_child_get() or
+gtk_container_child_get_valist(). 
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

@@ -338,8 +338,8 @@ container_set_child_property (GtkContainer       *container,
  * gtk_container_child_get_valist:
  * @container: a #GtkContainer
  * @child: a widget which is a child of @container
- * @first_prop_name: the name of the first property to get
- * @va_list: a %NULL-terminated list of property names and #GValue*, 
+ * @first_property_name: the name of the first property to get
+ * @var_args: a %NULL-terminated list of property names and #GValue*, 
  *           starting with @first_prop_name.
  * 
  * Gets the values of one or more child properties for @child and @container.
@@ -482,8 +482,8 @@ gtk_container_child_get_property (GtkContainer *container,
  * gtk_container_child_set_valist:
  * @container: a #GtkContainer
  * @child: a widget which is a child of @container
- * @first_prop_name: the name of the first property to set
- * @va_list: a %NULL-terminated list of property names and values, starting
+ * @first_property_name: the name of the first property to set
+ * @var_args: a %NULL-terminated list of property names and values, starting
  *           with @first_prop_name.
  * 
  * Sets one or more child properties for @child and @container.

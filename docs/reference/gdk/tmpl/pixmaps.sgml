@@ -19,7 +19,7 @@ pixel can be either on or off).
 </para>
 
 <!-- ##### STRUCT GdkPixmap ##### -->
-<para><anchor id="GdkPixmap"/>
+<para>
 An opaque structure representing an offscreen drawable.
 Pointers to structures of type #GdkPixmap, #GdkBitmap,
 and #GdkWindow, can often be used interchangeably. 

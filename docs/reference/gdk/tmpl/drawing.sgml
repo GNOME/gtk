@@ -26,7 +26,7 @@ more information.
 </para>
 
 <!-- ##### STRUCT GdkDrawable ##### -->
-<para><anchor id="GdkDrawable"/>
+<para>
 An opaque structure representing an object that can be
 drawn onto. This can be a #GdkPixmap, a #GdkBitmap,
 or a #GdkWindow.

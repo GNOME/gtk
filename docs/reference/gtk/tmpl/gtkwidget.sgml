@@ -5,8 +5,21 @@ GtkWidget
 Base class for all widgets
 
 <!-- ##### SECTION Long_Description ##### -->
+<para id="style-properties">
+<structname>GtkWidget</structname> introduces <firstterm>style 
+properties</firstterm> - these are basically object properties that are stored
+not on the object, but in the style object associated to the widget. Style
+properties are set in <link linkend="gtk-Resource-Files">resource files</link>.
+This mechanism is used for configuring such things as the location of the
+scrollbar arrows through the theme, giving theme authors more control over the
+look of applications without the need to write a theme engine in C.
+</para>
 <para>
-
+Use gtk_widget_class_install_style_property() to install style properties for 
+a widget class, gtk_widget_class_find_style_property() or
+gtk_widget_class_list_style_properties() to get information about existing
+style properties and gtk_widget_style_get_property(), gtk_widget_style_get() or
+gtk_widget_style_get_valist() to obtain the value of a style property.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -36,6 +49,7 @@ handles the emission.
 Implementation of this signal is optional.
 </para>
 
+@parent_class: 
 @activate_signal: 
 @set_scroll_adjustments_signal: 
 
