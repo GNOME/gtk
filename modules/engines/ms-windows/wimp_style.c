@@ -219,11 +219,55 @@ sys_font_to_pango_font (SystemFontType type, char * buf)
 #endif
 
 static void
+setup_menu_settings (void)
+{
+	int menu_delay;
+	gboolean win95 = FALSE;
+
+	GtkSettings * settings;
+    OSVERSIONINFOEX osvi;
+
+	settings = gtk_settings_get_default ();
+	if (!settings)
+	    return;
+
+    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+
+    if (!GetVersionEx ( (OSVERSIONINFO *) &osvi))
+      win95 = TRUE; /* assume the worst */
+
+    if (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
+      if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
+		win95 = TRUE;
+
+	if (!win95) {
+	    if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0)) {
+		  GObjectClass * klazz = G_OBJECT_GET_CLASS(G_OBJECT(settings));
+
+		  if (klazz) {
+			if (g_object_class_find_property (klazz, "gtk-menu-bar-popup-delay")) {
+		      g_object_set (G_OBJECT (settings), "gtk-menu-bar-popup-delay",
+						    0, NULL);
+			}
+			if (g_object_class_find_property (klazz, "gtk-menu-popup-delay")) {
+		      g_object_set (G_OBJECT (settings), "gtk-menu-popup-delay",
+						    menu_delay, NULL);
+			}
+			if (g_object_class_find_property (klazz, "gtk-menu-popdown-delay")) {
+		      g_object_set (G_OBJECT (settings), "gtk-menu-popdown-delay",
+						    menu_delay, NULL);
+			}
+	  	  }
+	    }
+	}
+}
+
+static void
 setup_system_settings (void)
 {
   GtkSettings * settings;
-  int menu_delay, cursor_blink_time;
-  gboolean win95 = FALSE;
+  int cursor_blink_time;
 
   settings = gtk_settings_get_default ();
   if (!settings)
@@ -244,40 +288,8 @@ setup_system_settings (void)
   g_object_set (G_OBJECT (settings), "gtk-dnd-drag-threshold",
 		GetSystemMetrics (SM_CXDRAG), NULL);
 
-  {
-    OSVERSIONINFOEX osvi;
 
-    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-
-    if (!GetVersionEx ( (OSVERSIONINFO *) &osvi))
-      win95 = TRUE; /* assume the worst */
-
-    if (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
-      if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
-		win95 = TRUE;
-  }
-
-  if (!win95) {
-    if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0)) {
-	  GObjectClass * klazz = G_OBJECT_GET_CLASS(G_OBJECT(settings));
-
-	  if (klazz) {
-		if (g_object_class_find_property (klazz, "gtk-menu-bar-popup-delay")) {
-	      g_object_set (G_OBJECT (settings), "gtk-menu-bar-popup-delay",
-					    0, NULL);
-		}
-		if (g_object_class_find_property (klazz, "gtk-menu-popup-delay")) {
-	      g_object_set (G_OBJECT (settings), "gtk-menu-popup-delay",
-					    menu_delay, NULL);
-		}
-		if (g_object_class_find_property (klazz, "gtk-menu-popdown-delay")) {
-	      g_object_set (G_OBJECT (settings), "gtk-menu-popdown-delay",
-					    menu_delay, NULL);
-		}
-  	  }
-    }
-  }
+  setup_menu_settings ();
 
 #if 0
   /* TODO: there's an ICONMETRICS struct that we should probably use instead */
@@ -1524,6 +1536,7 @@ wimp_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
 {
   setup_system_font (style);
   setup_system_styles (style);
+  setup_menu_settings ();
   parent_class->init_from_rc(style, rc_style);
 }
 
