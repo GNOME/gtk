@@ -49,7 +49,7 @@ struct _GdkDisplayX11
   GdkDisplay parent_instance;
   Display *xdisplay;
   GdkScreen *default_screen;
-  GSList *screen_list;
+  GdkScreen **screens;
 
   gint grab_count;
 

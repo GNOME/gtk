@@ -302,7 +302,6 @@ _gdk_windowing_window_init (GdkScreen * screen)
   private->depth = depth;
   impl->width = width;
   impl->height = height;
-  screen_x11->colormap_initialised = TRUE;
   
   _gdk_xid_table_insert (screen_x11->display,
 			 &screen_x11->xroot_window,

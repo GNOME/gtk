@@ -41,13 +41,6 @@
 #include <X11/XKBlib.h>
 #endif
 
-#ifdef HAVE_SOLARIS_XINERAMA
-#include <X11/extensions/xinerama.h>
-#endif
-#ifdef HAVE_XFREE_XINERAMA
-#include <X11/extensions/Xinerama.h>
-#endif
-
 static void                 gdk_display_x11_class_init         (GdkDisplayX11Class *class);
 static gint                 gdk_display_x11_get_n_screens      (GdkDisplay         *display);
 static GdkScreen *          gdk_display_x11_get_screen         (GdkDisplay         *display,
@@ -101,120 +94,6 @@ gdk_display_x11_class_init (GdkDisplayX11Class * class)
   parent_class = g_type_class_peek_parent (class);
 }
 
-#ifdef HAVE_XINERAMA
-static gboolean
-check_solaris_xinerama (GdkScreen *screen)
-{
-#ifdef HAVE_SOLARIS_XINERAMA
-  
-  if (XineramaGetState (GDK_SCREEN_XDISPLAY (screen),
-			gdk_screen_get_number (screen)))
-    {
-      XRectangle monitors[MAXFRAMEBUFFERS];
-      char hints[16];
-      gint result;
-      GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
-
-      result = XineramaGetInfo (GDK_SCREEN_XDISPLAY (screen),
-				gdk_screen_get_number (screen),
-				monitors, hints,
-				&screen_x11->num_monitors);
-      /* Yes I know it should be Success but the current implementation 
-          returns the num of monitor*/
-      if (result == 0)
-	{
-	  /* FIXME: We need to trap errors, since XINERAMA isn't always XINERAMA.
-	   */ 
-	  g_error ("error while retrieving Xinerama information");
-	}
-      else
-	{
-	  int i;
-	  screen_x11->monitors = g_new0 (GdkRectangle, screen_x11->num_monitors);
-	  
-	  for (i = 0; i < screen_x11->num_monitors; i++)
-	    {
-	      screen_x11->monitors[i].x = monitors[i].x;
-	      screen_x11->monitors[i].y = monitors[i].y;
-	      screen_x11->monitors[i].width = monitors[i].width;
-	      screen_x11->monitors[i].height = monitors[i].height;
-	    }
-
-	  return TRUE;
-	}
-    }
-#endif /* HAVE_SOLARIS_XINERAMA */
-  
-  return FALSE;
-}
-
-static gboolean
-check_xfree_xinerama (GdkScreen *screen)
-{
-#ifdef HAVE_XFREE_XINERAMA
-  if (XineramaIsActive (GDK_SCREEN_XDISPLAY (screen)))
-    {
-      XineramaScreenInfo *monitors = XineramaQueryScreens (GDK_SCREEN_XDISPLAY (screen),
-							   &screen_x11->num_monitors);
-      if (screen_x11->num_monitors <= 0)
-	{
-	  /* FIXME: We need to trap errors, since XINERAMA isn't always XINERAMA.
-	   *        I don't think the num_monitors <= 0 check has any validity.
-	   */ 
-	  g_error ("error while retrieving Xinerama information");
-	}
-      else
-	{
-	  int i;
-	  screen_x11->monitors = g_new0 (GdkRectangle, screen_x11->num_monitors);
-	  
-	  for (i = 0; i < screen_x11->num_monitors; i++)
-	    {
-	      screen_x11->monitors[i].x = monitors[i].x_org;
-	      screen_x11->monitors[i].y = monitors[i].y_org;
-	      screen_x11->monitors[i].width = monitors[i].width;
-	      screen_x11->monitors[i].height = monitors[i].height;
-	    }
-
-	  XFree (monitors);
-
-	  return TRUE;
-	}
-    }
-#endif /* HAVE_XFREE_XINERAMA */
-  
-  return FALSE;
-}
-#endif /* HAVE_XINERAMA */
-
-static void
-init_xinerama_support (GdkScreen * screen)
-{
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
-  
-#ifdef HAVE_XINERAMA
-  int opcode, firstevent, firsterror;
-  gint result;
-  
-  if (XQueryExtension (GDK_SCREEN_XDISPLAY (screen), "XINERAMA",
-		       &opcode, &firstevent, &firsterror))
-    {
-      if (check_solaris_xinerama (screen) ||
-	  check_xfree_xinerama (screen))
-	return;
-    }
-#endif /* HAVE_XINERAMA */
-
-  /* No Xinerama
-   */
-  screen_x11->num_monitors = 1;
-  screen_x11->monitors = g_new0 (GdkRectangle, 1);
-  screen_x11->monitors[0].x = 0;
-  screen_x11->monitors[0].y = 0;
-  screen_x11->monitors[0].width = WidthOfScreen (screen_x11->xscreen);
-  screen_x11->monitors[0].height = HeightOfScreen (screen_x11->xscreen);
-}
-
 /**
  * gdk_open_display:
  * @display_name: the name of the display to open
@@ -247,36 +126,17 @@ gdk_open_display (const gchar *display_name)
   display_x11->use_xft = -1;
   display_x11->xdisplay = xdisplay;
   
-  /* populate the screen list and set default */
+  /* initialize the display's screens */ 
+  display_x11->screens = g_new (GdkScreen *, ScreenCount (display_x11->xdisplay));
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    {
-      GdkScreen *screen;
-      GdkScreenX11 *screen_x11;
-      
-      screen = g_object_new (GDK_TYPE_SCREEN_X11, NULL);
-      
-      screen_x11 = GDK_SCREEN_X11 (screen);
-      screen_x11->display = display;
-      screen_x11->xdisplay = display_x11->xdisplay;
-      screen_x11->xscreen = ScreenOfDisplay (display_x11->xdisplay, i);
-      screen_x11->screen_num = i;
-      screen_x11->xroot_window = (Window) RootWindow (display_x11->xdisplay, i);
-      screen_x11->wmspec_check_window = None;
-      screen_x11->visual_initialised = FALSE;
-      screen_x11->colormap_initialised = FALSE;
+    display_x11->screens[i] = _gdk_x11_screen_new (display, i);
 
-      
-      init_xinerama_support (screen);
-      if (screen_x11->xscreen == DefaultScreenOfDisplay (display_x11->xdisplay))
-        {
-          display_x11->default_screen = screen;
-          display_x11->leader_window = XCreateSimpleWindow (display_x11->xdisplay,
-							     screen_x11->xroot_window,
-							     10, 10, 10, 10, 0, 0, 0);
-        }
-      
-      display_x11->screen_list = g_slist_prepend (display_x11->screen_list, screen);
-    }
+  /*set the default screen */
+  display_x11->default_screen = display_x11->screens[DefaultScreen (display_x11->xdisplay)];
+  display_x11->leader_window = XCreateSimpleWindow (display_x11->xdisplay,
+						    GDK_SCREEN_X11 (display_x11->default_screen)->xroot_window,
+						    10, 10, 10, 10, 0, 0, 0);
+  
 
   if (_gdk_synchronize)
     XSynchronize (display_x11->xdisplay, True);
@@ -336,8 +196,6 @@ gdk_open_display (const gchar *display_name)
   }
 #endif
 
-  _gdk_visual_init (display_x11->default_screen);
-  _gdk_windowing_window_init (display_x11->default_screen);
   _gdk_windowing_image_init (display);
   _gdk_events_init (display);
   _gdk_input_init (display);
@@ -367,37 +225,10 @@ gdk_display_x11_get_screen (GdkDisplay *display,
 			    gint        screen_num)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
-  Screen *desired_screen;
-  GSList *tmp_list;
 
   g_return_val_if_fail (ScreenCount (display_x11->xdisplay) > screen_num, NULL);
   
-  desired_screen = ScreenOfDisplay (display_x11->xdisplay, screen_num);
-  
-  tmp_list = display_x11->screen_list;
-  while (tmp_list)
-    {
-      GdkScreenX11 *screen_x11 = tmp_list->data;
-      GdkScreen *screen = tmp_list->data;
-      
-      if (screen_x11->xscreen == desired_screen)
-        {
-          if (!screen_x11->visual_initialised)
-            _gdk_visual_init (screen);
-          if (!screen_x11->colormap_initialised)
-            _gdk_windowing_window_init (screen);
-	  
-          if (!screen_x11->xsettings_client)
-	    _gdk_x11_events_init_screen (screen);
-	  
-	  return screen;
-        }
-      
-      tmp_list = tmp_list->next;
-    }
-
-  g_assert_not_reached ();
-  return NULL;
+  return display_x11->screens[screen_num];
 }
 
 static GdkScreen *
@@ -414,22 +245,17 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
 {
   GdkDisplayX11 *display_x11;
   GSList *tmp_list;
+  gint i;
   
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
   
   display_x11 = GDK_DISPLAY_X11 (display);
   
-  tmp_list = display_x11->screen_list;
-  while (tmp_list)
+  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     {
-      GdkScreenX11 *screen_x11 = tmp_list->data;
-      
-      if (screen_x11->xroot_window == xroot_window)
-        return TRUE;
-      
-      tmp_list = tmp_list->next;
+      if (GDK_SCREEN_XROOTWIN (display_x11->screens[i]) == xroot_window)
+	return TRUE;
     }
-
   return FALSE;
 }
 
@@ -586,9 +412,9 @@ gdk_display_x11_finalize (GObject *object)
     g_object_unref (G_OBJECT (tmp->data));
   g_list_free (display_x11->input_windows);
   /* Free all GdkScreens */
-  for (stmp = display_x11->screen_list; stmp; stmp = stmp->next)
-    g_object_unref (G_OBJECT (stmp->data));
-  g_slist_free (display_x11->screen_list);
+  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
+    g_object_unref (G_OBJECT (display_x11->screens[i]));
+  g_free (display_x11->screens);
   XCloseDisplay (display_x11->xdisplay);
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

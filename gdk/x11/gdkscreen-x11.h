@@ -56,7 +56,6 @@ struct _GdkScreenX11
   Window wmspec_check_window;
   
   /* Visual Part */
-  gboolean visual_initialised;
   GdkVisualPrivate *system_visual;
   GdkVisualPrivate **visuals;
   gint nvisuals;
@@ -67,7 +66,6 @@ struct _GdkScreenX11
   GHashTable *visual_hash;
   
   /* Colormap Part */
-  gboolean colormap_initialised;
   GdkColormap *default_colormap;
   GdkColormap *system_colormap;
   
@@ -85,7 +83,8 @@ struct _GdkScreenX11Class
 };
 
 GType gdk_screen_x11_get_type ();
-
+GdkScreen * _gdk_x11_screen_new (GdkDisplay *display,
+				 gint	     screen_number);
 G_END_DECLS
 
 #endif /* __GDK_SCREEN_X11_H__ */

@@ -1,4 +1,17 @@
 2002-05-03 Erwann Chenede - <erwann.chenede@sun.com>
+
+	* gdk/x11/gdkvisual-x11.c:
+	* gdk/x11/gdkwindow-x11.c:
+	* gdk/x11/gdkdisplay-x11.[hc] (gdk_open_display) :
+	Rationalized the screen initialization process,
+	changed the GdkDisplayX11 screen list to an array.
+	
+	* gdk/x11/gdkscreen-x11.[hc] (_gdk_x11_screen_new) :
+	Moved the xinerama init functions to gdkdisplay-x11.c to
+	this file, create a single function to fully initialize
+	a GdkScreen. #79981
+	
+2002-05-03 Erwann Chenede - <erwann.chenede@sun.com>
   
         * gtk/gtkplug.[hc] (gtk_plug_construct_for_display):
 	changed the order of the arguments. #80278

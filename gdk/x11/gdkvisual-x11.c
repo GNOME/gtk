@@ -305,7 +305,6 @@ _gdk_visual_init (GdkScreen *screen)
 
   screen_x11->visuals = visuals;
   screen_x11->nvisuals = nvisuals;
-  screen_x11->visual_initialised = TRUE;
 }
 
 /**
