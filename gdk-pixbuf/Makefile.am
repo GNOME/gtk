@@ -68,6 +68,12 @@ libpixbufloader_bmp_la_SOURCES = io-bmp.c
 libpixbufloader_bmp_la_LDFLAGS = -version-info 1:0:0 -module
 libpixbufloader_bmp_la_LIBADD =
 
+#
+# The WBMP loader
+#
+libpixbufloader_wbmp_la_SOURCES = io-wbmp.c
+libpixbufloader_wbmp_la_LDFLAGS = -version-info 1:0:0 -module
+
 if HAVE_PNG
 PNG_LIB = libpixbufloader-png.la
 endif
@@ -92,6 +98,8 @@ PNM_LIB = libpixbufloader-pnm.la
 
 BMP_LIB = libpixbufloader-bmp.la
 
+WBMP_LIB = libpixbufloader-wbmp.la
+
 if BUILD_DYNAMIC_MODULES
 
 loader_LTLIBRARIES = 	\
@@ -103,7 +111,8 @@ loader_LTLIBRARIES = 	\
 	$(XPM_LIB)	\
 	$(TIFF_LIB)	\
 	$(PNM_LIB)	\
-	$(BMP_LIB)
+	$(BMP_LIB)	\
+	$(WBMP_LIB)
 
 
 extra_sources = 
@@ -119,7 +128,8 @@ extra_sources = $(libpixbufloader_png_la_SOURCES) 	\
 		$(libpixbufloader_ras_la_SOURCES) 	\
 		$(libpixbufloader_tiff_la_SOURCES) 	\
 		$(libpixbufloader_pnm_la_SOURCES) 	\
-		$(libpixbufloader_bmp_la_SOURCES)
+		$(libpixbufloader_bmp_la_SOURCES)	\
+		$(libpixbufloader_wbmp_la_SOURCES)
 
 builtin_libraries = 
 endif
@@ -180,7 +190,8 @@ EXTRA_DIST =			\
 	pixbuf_ras.def		\
 	pixbuf_gif.def		\
 	pixbuf_png.def		\
-	pixbuf_tiff.def
+	pixbuf_tiff.def		\
+	pixbuf_wbmp.def
 
 makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gdk-pixbuf/makefile.mingw.in
 	cd $(top_builddir) && CONFIG_FILES=gdk-pixbuf/$@ CONFIG_HEADERS= $(SHELL) ./config.status

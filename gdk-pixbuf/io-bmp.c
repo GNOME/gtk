@@ -186,7 +186,7 @@ gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf,
    generic_image_load enters gdk-pixbuf-io. */
 GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f)
 {
-	guchar *membuf;
+	guchar membuf[4096];
 	size_t length;
 	struct bmp_progressive_state *State;
 
@@ -194,22 +194,16 @@ GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f)
 
 	State =
 	    gdk_pixbuf__bmp_image_begin_load(NULL, NULL, NULL, NULL, NULL);
-	membuf = g_malloc(4096);
-
-	g_assert(membuf != NULL);
-
 
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
 		if (length > 0)
-
 			(void)
 			    gdk_pixbuf__bmp_image_load_increment(State,
 								 membuf,
 								 length);
 
 	}
-	g_free(membuf);
 	if (State->pixbuf != NULL)
 		gdk_pixbuf_ref(State->pixbuf);
 

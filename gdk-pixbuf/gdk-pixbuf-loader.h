@@ -72,6 +72,7 @@ struct _GdkPixbufLoaderClass
 
 GtkType              gdk_pixbuf_loader_get_type      (void);
 GdkPixbufLoader *    gdk_pixbuf_loader_new           (void);
+GdkPixbufLoader *    gdk_pixbuf_loader_new_with_type (const char *image_type);
 gboolean             gdk_pixbuf_loader_write         (GdkPixbufLoader *loader,
 						      const guchar    *buf,
 						      gsize            count);

@@ -73,6 +73,7 @@ struct _GdkPixbufModule {
 
 
 GdkPixbufModule *gdk_pixbuf_get_module (guchar *buffer, guint size);
+GdkPixbufModule *gdk_pixbuf_get_named_module (const char *name);
 void gdk_pixbuf_load_module (GdkPixbufModule *image_module);
 
 

@@ -172,6 +172,18 @@ pixbuf_check_bmp (guchar *buffer, int size)
 	return TRUE;
 }
 
+static gboolean
+pixbuf_check_wbmp (guchar *buffer, int size)
+{
+  if(size < 10) /* at least */
+    return FALSE;
+
+  if(buffer[0] == '\0' /* We only handle type 0 wbmp's for now */)
+    return TRUE;
+
+  return FALSE;
+}
+
 static GdkPixbufModule file_formats [] = {
 	{ "png",  pixbuf_check_png, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL, NULL },
@@ -183,6 +195,7 @@ static GdkPixbufModule file_formats [] = {
 	{ "ras",  pixbuf_check_sunras, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL },
+	{ "wbmp", pixbuf_check_wbmp, NULL, NULL, NULL, NULL, NULL, NULL }
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 
@@ -336,39 +349,53 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 #define m_load_increment(type)  extern gboolean mname(type,load_increment) (gpointer context, const guchar *buf, guint size);
 #define m_load_animation(type)  extern GdkPixbufAnimation * mname(type,load_animation) (FILE *f);
 
+/* PNG */
 m_load (png);
 m_begin_load (png);
 m_load_increment (png);
 m_stop_load (png);
+/* BMP */
 m_load (bmp);
 m_begin_load (bmp);
 m_load_increment (bmp);
 m_stop_load (bmp);
+/* WBMP */
+m_load (wbmp);
+m_begin_load (wbmp);
+m_load_increment (wbmp);
+m_stop_load (wbmp);
+/* GIF */
 m_load (gif);
 m_begin_load (gif);
 m_load_increment (gif);
 m_stop_load (gif);
 m_load_animation (gif);
+/* ICO */
 m_load (ico);
 m_begin_load (ico);
 m_load_increment (ico);
 m_stop_load (ico);
+/* JPEG */
 m_load (jpeg);
 m_begin_load (jpeg);
 m_load_increment (jpeg);
 m_stop_load (jpeg);
+/* PNM */
 m_load (pnm);
 m_begin_load (pnm);
 m_load_increment (pnm);
 m_stop_load (pnm);
+/* RAS */
 m_load (ras);
 m_begin_load (ras);
 m_load_increment (ras);
 m_stop_load (ras);
+/* TIFF */
 m_load (tiff);
 m_begin_load (tiff);
 m_load_increment (tiff);
 m_stop_load (tiff);
+/* XPM */
 m_load (xpm);
 m_load_xpm_data (xpm);
 
@@ -390,6 +417,14 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 		image_module->begin_load     = mname (bmp,begin_load);
 		image_module->load_increment = mname (bmp,load_increment);
 		image_module->stop_load      = mname (bmp,stop_load);
+		return;
+	}
+
+	if (strcmp (image_module->module_name, "wbmp") == 0){
+		image_module->load           = mname (wbmp,load);
+		image_module->begin_load     = mname (wbmp,begin_load);
+		image_module->load_increment = mname (wbmp,load_increment);
+		image_module->stop_load      = mname (wbmp,stop_load);
 		return;
 	}
 
@@ -449,6 +484,19 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 #endif
 
 
+
+GdkPixbufModule *
+gdk_pixbuf_get_named_module (const char *name)
+{
+	int i;
+
+	for (i = 0; file_formats [i].module_name; i++) {
+		if (!strcmp(name, file_formats[i].module_name))
+			return &(file_formats[i]);
+	}
+
+	return NULL;
+}
 
 GdkPixbufModule *
 gdk_pixbuf_get_module (guchar *buffer, guint size)

@@ -1,3 +1,9 @@
+2000-07-27  Elliot Lee  <sopwith@redhat.com>
+
+	* gtk/gdk-pixbuf-loader.[ch]: Add gdk_pixbuf_loader_new_with_type
+	function, to allow handling image formats that cannot be detected
+	by looking at content alone.
+
 Thu Jul 27 13:13:21 BST 2000  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/*.gif *.jpg *.eps

@@ -1,0 +1,129 @@
+#!/bin/sh
+
+glib_libs="@glib_libs@"
+glib_cflags="@glib_cflags@"
+glib_thread_libs="@glib_thread_libs@"
+glib_thread_cflags="@glib_thread_cflags@"
+
+target=@gdktarget@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+exec_prefix_set=no
+
+usage()
+{
+	cat <<EOF
+Usage: gtk-config [OPTIONS] [LIBRARIES]
+Options:
+	[--prefix[=DIR]]
+	[--exec-prefix[=DIR]]
+	[--target=gdktarget]
+	[--version]
+	[--libs]
+	[--cflags]
+Libraries:
+	gtk
+	gthread
+EOF
+	exit $1
+}
+
+if test $# -eq 0; then
+	usage 1 1>&2
+fi
+
+lib_gtk=yes
+
+while test $# -gt 0; do
+  case "$1" in
+  -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+  *) optarg= ;;
+  esac
+
+  case $1 in
+    --prefix=*)
+      prefix=$optarg
+      if test $exec_prefix_set = no ; then
+        exec_prefix=$optarg
+      fi
+      ;;
+    --prefix)
+      echo_prefix=yes
+      ;;
+    --exec-prefix=*)
+      exec_prefix=$optarg
+      exec_prefix_set=yes
+      ;;
+    --target=*)
+      target=$optarg
+      ;;
+    --exec-prefix)
+      echo_exec_prefix=yes
+      ;;
+    --version)
+      echo @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.@GTK_MICRO_VERSION@
+      ;;
+    --cflags)
+      echo_cflags=yes
+      ;;
+    --libs)
+      echo_libs=yes
+      ;;
+    gtk)
+      lib_gtk=yes
+      ;;
+    gthread)
+      lib_gthread=yes
+      ;;
+    *)
+      usage 1 1>&2
+      ;;
+  esac
+  shift
+done
+
+if test "$echo_prefix" = "yes"; then
+	echo $prefix
+fi
+
+if test "$echo_exec_prefix" = "yes"; then
+	echo $exec_prefix
+fi
+
+if test "$lib_gthread" = "yes"; then
+      glib_cflags="$glib_thread_cflags"
+      glib_libs="$glib_thread_libs"
+fi
+
+if test "$echo_cflags" = "yes"; then
+      if test @includedir@ != /usr/include ; then
+        includes=-I@includedir@
+        for i in $glib_cflags ; do
+          if test $i = -I@includedir@ ; then
+            includes=""
+          fi
+        done
+      fi
+      echo -I@libdir@/gtk+/include $includes $glib_cflags @PANGO_CFLAGS@ @more_cflags@ 
+fi
+
+if test "$echo_libs" = "yes"; then
+      my_glib_libs=
+      libdirs=-L@libdir@
+      for i in $glib_libs ; do
+        if test $i != -L@libdir@ ; then
+          if test -z "$my_glib_libs" ; then
+            my_glib_libs="$i"
+          else
+            my_glib_libs="$my_glib_libs $i"
+          fi
+        fi
+      done
+
+<<<<<<< gtk-config.in
+      echo $libdirs @x_ldflags@ -lgtk $my_glib_libs @INTLLIBS@ @x_libs@ @GDK_WLIBS@ @MATH_LIB@
+=======
+      echo $libdirs @more_ldflags@ -lgtk-$target -lgdk_pixbuf -lgdk-$target $my_glib_libs @INTLLIBS@ @PANGO_LIBS@ @more_libs@ @GDK_WLIBS@ @MATH_LIB@
+>>>>>>> 1.21
+fi      
+

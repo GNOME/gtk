@@ -337,25 +337,15 @@ gdk_pixbuf_loader_animation_done (GdkPixbuf *pixbuf,
   gtk_signal_emit (GTK_OBJECT (loader), pixbuf_loader_signals[ANIMATION_DONE]);
 }
 
-/**
- * gdk_pixbuf_loader_new:
- *
- * Creates a new pixbuf loader object.
- *
- * Return value: A newly-created pixbuf loader.
- **/
-GdkPixbufLoader *
-gdk_pixbuf_loader_new (void)
-{
-  return g_object_new (GDK_TYPE_PIXBUF_LOADER, NULL);
-}
-
 static gint
-gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader)
+gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader, const char *image_type)
 {
   GdkPixbufLoaderPrivate *priv = loader->private;
-  
-  priv->image_module = gdk_pixbuf_get_module (priv->header_buf, priv->header_buf_offset);
+
+  if(image_type)
+    priv->image_module = gdk_pixbuf_get_named_module (image_type);
+  else
+    priv->image_module = gdk_pixbuf_get_module (priv->header_buf, priv->header_buf_offset);
   
   if (priv->image_module == NULL)
     return 0;
@@ -387,7 +377,8 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader)
       return 0;
     }
   
-  if (priv->image_module->load_increment (priv->context, priv->header_buf, priv->header_buf_offset))
+  if (priv->header_buf_offset
+      && priv->image_module->load_increment (priv->context, priv->header_buf, priv->header_buf_offset))
     return priv->header_buf_offset;
   
   return 0;
@@ -463,6 +454,38 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
     return priv->image_module->load_increment (priv->context, buf, count);
   
   return TRUE;
+}
+
+/**
+ * gdk_pixbuf_loader_new:
+ *
+ * Creates a new pixbuf loader object.
+ *
+ * Return value: A newly-created pixbuf loader.
+ **/
+GdkPixbufLoader *
+gdk_pixbuf_loader_new (void)
+{
+  return g_object_new (GDK_TYPE_PIXBUF_LOADER, NULL);
+}
+
+/**
+ * gdk_pixbuf_loader_new_with_type:
+ *
+ * Creates a new pixbuf loader object.
+ *
+ * Return value: A newly-created pixbuf loader.
+ **/
+GdkPixbufLoader *
+gdk_pixbuf_loader_new_with_type (const char *image_type)
+{
+  GdkPixbufLoader *retval;
+
+  retval = g_object_new (GDK_TYPE_PIXBUF_LOADER, NULL);
+
+  gdk_pixbuf_loader_load_module(retval, image_type);
+
+  return retval;
 }
 
 /**
