@@ -246,7 +246,7 @@ gdk_input_wintab_init (void)
       wa.window_type = GDK_WINDOW_TOPLEVEL;
       if ((wintab_window = gdk_window_new (NULL, &wa, GDK_WA_X|GDK_WA_Y)) == NULL)
 	{
-	  g_warning ("_gdk_input_init: gdk_window_new failed");
+	  g_warning ("gdk_input_wintab_init: gdk_window_new failed");
 	  return;
 	}
       gdk_drawable_ref (wintab_window);
@@ -330,7 +330,7 @@ gdk_input_wintab_init (void)
 	  hctx = g_new (HCTX, 1);
           if ((*hctx = WTOpen (GDK_WINDOW_HWND (wintab_window), &lc, TRUE)) == NULL)
 	    {
-	      g_warning ("_gdk_input_init: WTOpen failed");
+	      g_warning ("gdk_input_wintab_init: WTOpen failed");
 	      return;
 	    }
 	  GDK_NOTE (INPUT, g_print ("opened Wintab device %d %p\n",

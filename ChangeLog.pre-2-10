@@ -1,5 +1,8 @@
 2002-09-12  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/gdkinput-win32.c (gdk_input_wintab_init): Use correct
+	function name in warning messages.
+
 	Merge from gtk-2-0:
 
 	* gdk/win32/gdkdrawable-win32.c
