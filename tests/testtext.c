@@ -7,6 +7,8 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
+#include "prop-editor.h"
+
 typedef struct _Buffer Buffer;
 typedef struct _View View;
 
@@ -1080,6 +1082,16 @@ do_remove_tags (gpointer callback_data,
     }
 }
 
+static void
+do_properties (gpointer callback_data,
+                guint callback_action,
+                GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+
+  create_prop_editor (G_OBJECT (view->text_view), 0);
+}
+
 enum
 {
   RESPONSE_FORWARD,
@@ -1253,6 +1265,7 @@ static GtkItemFactoryEntry menu_items[] =
   { "/Attributes/Color cycles",   	  NULL,         do_apply_colors, TRUE, NULL },
   { "/Attributes/No colors",   	          NULL,         do_apply_colors, FALSE, NULL },
   { "/Attributes/Remove all tags",       NULL, do_remove_tags, 0, NULL },
+  { "/Attributes/Properties",       NULL, do_properties, 0, NULL },
   { "/_Test",   	 NULL,         0,           0, "<Branch>" },
   { "/Test/_Example",  	 NULL,         do_example,  0, NULL },
 };

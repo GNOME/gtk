@@ -83,6 +83,10 @@ testtreeview_SOURCES =	\
 	prop-editor.c	\
 	testtreeview.c 
 
+testtext_SOURCES =	\
+	prop-editor.c	\
+	testtext.c 
+
 EXTRA_DIST += @STRIP_BEGIN@ 	\
 	prop-editor.h		\
 	testgtk.1 		\

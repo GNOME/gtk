@@ -35,6 +35,7 @@
 #include "gtktext.h"
 #include "line-wrap.xbm"
 #include "line-arrow.xbm"
+#include "gtkintl.h"
 
 
 #define INITIAL_BUFFER_SIZE      1024
@@ -95,11 +96,11 @@
 #define CACHE_DATA(c)               (*(LineParams*)(c)->data)
 
 enum {
-  ARG_0,
-  ARG_HADJUSTMENT,
-  ARG_VADJUSTMENT,
-  ARG_LINE_WRAP,
-  ARG_WORD_WRAP
+  PROP_0,
+  PROP_HADJUSTMENT,
+  PROP_VADJUSTMENT,
+  PROP_LINE_WRAP,
+  PROP_WORD_WRAP
 };
 
 typedef struct _TextProperty          TextProperty;
@@ -195,12 +196,14 @@ struct _LineParams
 
 
 static void  gtk_text_class_init     (GtkTextClass   *klass);
-static void  gtk_text_set_arg        (GtkObject      *object,
-				      GtkArg         *arg,
-				      guint           arg_id);
-static void  gtk_text_get_arg        (GtkObject      *object,
-				      GtkArg         *arg,
-				      guint           arg_id);
+static void  gtk_text_set_property   (GObject         *object,
+				      guint            prop_id,
+				      const GValue    *value,
+				      GParamSpec      *pspec);
+static void  gtk_text_get_property   (GObject         *object,
+				      guint            prop_id,
+				      GValue          *value,
+				      GParamSpec      *pspec);
 static void  gtk_text_init           (GtkText        *text);
 static void  gtk_text_destroy        (GtkObject      *object);
 static void  gtk_text_finalize       (GObject        *object);
@@ -533,20 +536,21 @@ gtk_text_get_type (void)
 static void
 gtk_text_class_init (GtkTextClass *class)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkOldEditableClass *old_editable_class;
-  
+
+  gobject_class = G_OBJECT_CLASS (class);
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   old_editable_class = (GtkOldEditableClass*) class;
   parent_class = gtk_type_class (GTK_TYPE_OLD_EDITABLE);
 
   gobject_class->finalize = gtk_text_finalize;
-
-  object_class->set_arg = gtk_text_set_arg;
-  object_class->get_arg = gtk_text_get_arg;
+  gobject_class->set_property = gtk_text_set_property;
+  gobject_class->get_property = gtk_text_get_property;
+  
   object_class->destroy = gtk_text_destroy;
   
   widget_class->realize = gtk_text_realize;
@@ -584,23 +588,38 @@ gtk_text_class_init (GtkTextClass *class)
 
   class->set_scroll_adjustments = gtk_text_set_adjustments;
 
-  gtk_object_add_arg_type ("GtkText::hadjustment",
-			   GTK_TYPE_ADJUSTMENT,
-			   GTK_ARG_READWRITE,
-			   ARG_HADJUSTMENT);
-  gtk_object_add_arg_type ("GtkText::vadjustment",
-			   GTK_TYPE_ADJUSTMENT,
-			   GTK_ARG_READWRITE,
-			   ARG_VADJUSTMENT);
-  gtk_object_add_arg_type ("GtkText::line_wrap",
-			   GTK_TYPE_BOOL,
-			   GTK_ARG_READWRITE,
-			   ARG_LINE_WRAP);
-  gtk_object_add_arg_type ("GtkText::word_wrap",
-			   GTK_TYPE_BOOL,
-			   GTK_ARG_READWRITE,
-			   ARG_WORD_WRAP);
-  
+  g_object_class_install_property (gobject_class,
+                                   PROP_HADJUSTMENT,
+                                   g_param_spec_object ("hadjustment",
+                                                        _("Horizontal Adjustment"),
+                                                        _("Horizontal adjustment for the text widget"),
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_VADJUSTMENT,
+                                   g_param_spec_object ("vadjustment",
+                                                        _("Vertical Adjustment"),
+                                                        _("Vertical adjustment for the text widget"),
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_LINE_WRAP,
+                                   g_param_spec_boolean ("line_wrap",
+							 _("Line Wrap"),
+							 _("Whether lines are wrapped at widget edges"),
+							 TRUE,
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_WORD_WRAP,
+                                   g_param_spec_boolean ("word_wrap",
+							 _("Word Wrap"),
+							 _("Whether words are wrapped at widget edges"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
   widget_class->set_scroll_adjustments_signal =
     gtk_signal_new ("set_scroll_adjustments",
 		    GTK_RUN_LAST,
@@ -611,62 +630,65 @@ gtk_text_class_init (GtkTextClass *class)
 }
 
 static void
-gtk_text_set_arg (GtkObject        *object,
-		  GtkArg           *arg,
-		  guint             arg_id)
+gtk_text_set_property (GObject         *object,
+		       guint            prop_id,
+		       const GValue    *value,
+		       GParamSpec      *pspec)
 {
   GtkText *text;
   
   text = GTK_TEXT (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_HADJUSTMENT:
+    case PROP_HADJUSTMENT:
       gtk_text_set_adjustments (text,
-				GTK_VALUE_POINTER (*arg),
+				g_value_get_object (value),
 				text->vadj);
       break;
-    case ARG_VADJUSTMENT:
+    case PROP_VADJUSTMENT:
       gtk_text_set_adjustments (text,
 				text->hadj,
-				GTK_VALUE_POINTER (*arg));
+				g_value_get_object (value));
       break;
-    case ARG_LINE_WRAP:
-      gtk_text_set_line_wrap (text, GTK_VALUE_BOOL (*arg));
+    case PROP_LINE_WRAP:
+      gtk_text_set_line_wrap (text, g_value_get_boolean (value));
       break;
-    case ARG_WORD_WRAP:
-      gtk_text_set_word_wrap (text, GTK_VALUE_BOOL (*arg));
+    case PROP_WORD_WRAP:
+      gtk_text_set_word_wrap (text, g_value_get_boolean (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_text_get_arg (GtkObject        *object,
-		  GtkArg           *arg,
-		  guint             arg_id)
+gtk_text_get_property (GObject         *object,
+		       guint            prop_id,
+		       GValue          *value,
+		       GParamSpec      *pspec)
 {
   GtkText *text;
   
   text = GTK_TEXT (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_HADJUSTMENT:
-      GTK_VALUE_POINTER (*arg) = text->hadj;
+    case PROP_HADJUSTMENT:
+      g_value_set_object (value, text->hadj);
       break;
-    case ARG_VADJUSTMENT:
-      GTK_VALUE_POINTER (*arg) = text->vadj;
+    case PROP_VADJUSTMENT:
+      g_value_set_object (value, text->vadj);
       break;
-    case ARG_LINE_WRAP:
-      GTK_VALUE_BOOL (*arg) = text->line_wrap;
+    case PROP_LINE_WRAP:
+      g_value_set_boolean (value, text->line_wrap);
       break;
-    case ARG_WORD_WRAP:
-      GTK_VALUE_BOOL (*arg) = text->word_wrap;
+    case PROP_WORD_WRAP:
+      g_value_set_boolean (value, text->word_wrap);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -757,6 +779,8 @@ gtk_text_set_word_wrap (GtkText *text,
       recompute_geometry (text);
       gtk_widget_queue_draw (GTK_WIDGET (text));
     }
+  
+  g_object_notify (G_OBJECT (text), "word_wrap");
 }
 
 void
@@ -773,6 +797,8 @@ gtk_text_set_line_wrap (GtkText *text,
       recompute_geometry (text);
       gtk_widget_queue_draw (GTK_WIDGET (text));
     }
+  
+  g_object_notify (G_OBJECT (text), "line_wrap");
 }
 
 void
@@ -848,6 +874,8 @@ gtk_text_set_adjustments (GtkText       *text,
 			  (GtkSignalFunc) gtk_text_adjustment_destroyed,
 			  text);
       gtk_text_adjustment (hadj, text);
+
+      g_object_notify (G_OBJECT (text), "hadjustment");
     }
   
   if (text->vadj != vadj)
@@ -866,6 +894,8 @@ gtk_text_set_adjustments (GtkText       *text,
 			  (GtkSignalFunc) gtk_text_adjustment_destroyed,
 			  text);
       gtk_text_adjustment (vadj, text);
+
+      g_object_notify (G_OBJECT (text), "vadjustment");
     }
 }
 

@@ -1,3 +1,19 @@
+2001-05-21  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkfontsel.c:
+	Added properties. Based on patch by Lee Mallabone.
+
+	* gtk/gtkruler.c:
+	* gtk/gtkhruler.c:
+	* gtk/gtkvruler.c:
+	* gtk/gtktext.c:
+	* gtk/gtktextview.c:
+	Converted GtkArg to GParam. Based on patches by John Margaglione.
+
+	* tests/Makefile.am:
+	* tests/testtext.c:
+	Add a property editor to testtext.
+	
 Mon May 21 11:29:21 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk{h,v,}paned.c: Only show the separator if 

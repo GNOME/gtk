@@ -76,7 +76,22 @@ static const guint16 font_sizes[] = {
   32, 36, 40, 48, 56, 64, 72
 };
 
+enum {
+   PROP_0,
+   PROP_FONT_NAME,
+   PROP_FONT,
+   PROP_PREVIEW_TEXT
+};
+
 static void    gtk_font_selection_class_init	     (GtkFontSelectionClass *klass);
+static void    gtk_font_selection_set_property       (GObject         *object,
+						      guint            prop_id,
+						      const GValue    *value,
+						      GParamSpec      *pspec);
+static void    gtk_font_selection_get_property       (GObject         *object,
+						      guint            prop_id,
+						      GValue          *value,
+						      GParamSpec      *pspec);
 static void    gtk_font_selection_init		     (GtkFontSelection      *fontsel);
 static void    gtk_font_selection_finalize	     (GObject               *object);
 
@@ -111,6 +126,8 @@ static void     gtk_font_selection_expose_list           (GtkWidget        *w,
 							  GdkEventExpose   *event,
 							  gpointer          data);
 
+static void     gtk_font_selection_preview_changed       (GtkWidget        *entry,
+							  GtkFontSelection *fontsel);
 
 /* Misc. utility functions. */
 static void     gtk_font_selection_load_font         (GtkFontSelection *fs);
@@ -160,8 +177,83 @@ gtk_font_selection_class_init(GtkFontSelectionClass *klass)
   
   font_selection_parent_class = gtk_type_class (GTK_TYPE_VBOX);
   
+  gobject_class->set_property = gtk_font_selection_set_property;
+  gobject_class->get_property = gtk_font_selection_get_property;
+   
+  g_object_class_install_property (gobject_class,
+                                   PROP_FONT_NAME,
+                                   g_param_spec_string ("font_name",
+                                                        _("Font name"),
+                                                        _("The X string that represents this font."),
+                                                        NULL,
+                                                        G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_FONT,
+				   g_param_spec_boxed ("font",
+						       _("Font"),
+						       _("The GdkFont that is currently selected."),
+						       GDK_TYPE_FONT,
+						       G_PARAM_READABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_PREVIEW_TEXT,
+                                   g_param_spec_string ("preview_text",
+                                                        _("Preview text"),
+                                                        _("The text to display in order to demonstrate the selected font."),
+                                                        PREVIEW_TEXT,
+                                                        G_PARAM_READWRITE));
   gobject_class->finalize = gtk_font_selection_finalize;
 }
+
+static void 
+gtk_font_selection_set_property (GObject         *object,
+				 guint            prop_id,
+				 const GValue    *value,
+				 GParamSpec      *pspec)
+{
+  GtkFontSelection *fontsel;
+
+  fontsel = GTK_FONT_SELECTION (object);
+
+  switch (prop_id)
+    {
+    case PROP_FONT_NAME:
+      gtk_font_selection_set_font_name (fontsel, g_value_get_string (value));
+      break;
+    case PROP_PREVIEW_TEXT:
+      gtk_font_selection_set_preview_text (fontsel, g_value_get_string (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void gtk_font_selection_get_property (GObject         *object,
+					     guint            prop_id,
+					     GValue          *value,
+					     GParamSpec      *pspec)
+{
+  GtkFontSelection *fontsel;
+
+  fontsel = GTK_FONT_SELECTION (object);
+
+  switch (prop_id)
+    {
+    case PROP_FONT_NAME:
+      g_value_set_string (value, gtk_font_selection_get_font_name (fontsel));
+      break;
+    case PROP_FONT:
+      g_value_set_object (value, G_OBJECT (gtk_font_selection_get_font (fontsel)));
+      break;
+    case PROP_PREVIEW_TEXT:
+      g_value_set_string (value, gtk_font_selection_get_preview_text (fontsel));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
 
 static void
 gtk_font_selection_init(GtkFontSelection *fontsel)
@@ -311,6 +403,9 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   
   fontsel->preview_entry = gtk_entry_new ();
   gtk_widget_show (fontsel->preview_entry);
+  gtk_signal_connect (GTK_OBJECT (fontsel->preview_entry), "changed",
+		      (GtkSignalFunc) gtk_font_selection_preview_changed,
+		      fontsel);
   gtk_widget_set_usize (fontsel->preview_entry, -1, INITIAL_PREVIEW_HEIGHT);
   gtk_box_pack_start (GTK_BOX (text_box), fontsel->preview_entry,
 		      TRUE, TRUE, 0);
@@ -347,6 +442,12 @@ gtk_font_selection_finalize (GObject *object)
     (* G_OBJECT_CLASS (font_selection_parent_class)->finalize) (object);
 }
 
+static void
+gtk_font_selection_preview_changed (GtkWidget        *entry,
+				    GtkFontSelection *fontsel)
+{
+  g_object_notify (G_OBJECT (fontsel), "preview_text");
+}
 
 /* This is called when the clist is exposed. Here we scroll to the current
    font if necessary. */
@@ -793,6 +894,8 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   pango_font_description_free (fontsel->font_desc);
   fontsel->font_desc = new_desc;
 
+  g_object_notify (G_OBJECT (fontsel), "font_name");
+  g_object_notify (G_OBJECT (fontsel), "font");
   return TRUE;
 }
 

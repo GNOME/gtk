@@ -122,6 +122,7 @@ gtk_hruler_motion_notify (GtkWidget      *widget,
     x = event->x;
 
   ruler->position = ruler->lower + ((ruler->upper - ruler->lower) * x) / widget->allocation.width;
+  g_object_notify (G_OBJECT (ruler), "position");
 
   /*  Make sure the ruler has been allocated already  */
   if (ruler->backing_store != NULL)
