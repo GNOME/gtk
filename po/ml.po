@@ -1332,7 +1332,7 @@ msgstr "അടി വര"
 
 #: gtk/gtkcellrenderertext.c:352 gtk/gtktexttag.c:472
 msgid "Style of underline for this text"
-msgstr ""
+msgstr "ഈ വാചകത്തിന്റെ  അടിവര രീതി"
 
 #: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:508
 msgid "Background set"
@@ -4122,15 +4122,15 @@ msgstr ""
 
 #: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
-msgstr ""
+msgstr "പിക്സലുകള് വരിക്കു മുകളില്"
 
 #: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
-msgstr ""
+msgstr "പിക്സലുകള് വരിക്കു താഴെ"
 
 #: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
-msgstr ""
+msgstr " "
 
 #: gtk/gtktextview.c:584
 msgid "Wrap Mode"
