@@ -3636,28 +3636,13 @@ void collapse_all (GtkWidget *widget, GtkCTree *ctree)
 
 void select_all (GtkWidget *widget, GtkCTree *ctree)
 {
-  if (GTK_CLIST (ctree)->selection_mode != GTK_SELECTION_MULTIPLE)
-    return;
   gtk_ctree_select_recursive (ctree, NULL);
   after_press (ctree, NULL);
 }
 
 void unselect_all (GtkWidget *widget, GtkCTree *ctree)
 {
-  GList *work;
-  GList *ptr;
-
-  if (GTK_CLIST (ctree)->selection_mode == GTK_SELECTION_BROWSE)
-    return;
-
-  work = GTK_CLIST (ctree)->selection;
-
-  while (work)
-    {
-      ptr = work->data;
-      work = work->next;
-      gtk_ctree_unselect (ctree, ptr);
-    }
+  gtk_ctree_unselect_recursive (ctree, NULL);
   after_press (ctree, NULL);
 }
 

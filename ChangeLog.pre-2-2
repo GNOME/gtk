@@ -1,3 +1,8 @@
+1998-05-06  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/testgtk.c (unselect_all): Removed code that caused an
+	endless loop.
+
 Wed May  6 02:16:34 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c: reimplemented the signal storage system to use a
