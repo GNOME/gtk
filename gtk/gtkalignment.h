@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_ALIGNMENT                  (gtk_alignment_get_type ())
-#define GTK_ALIGNMENT(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_ALIGNMENT, GtkAlignment))
-#define GTK_ALIGNMENT_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ALIGNMENT, GtkAlignmentClass))
-#define GTK_IS_ALIGNMENT(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_ALIGNMENT))
-#define GTK_IS_ALIGNMENT_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ALIGNMENT))
-#define GTK_ALIGNMENT_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_ALIGNMENT, GtkAlignmentClass))
+#define GTK_ALIGNMENT(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ALIGNMENT, GtkAlignment))
+#define GTK_ALIGNMENT_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ALIGNMENT, GtkAlignmentClass))
+#define GTK_IS_ALIGNMENT(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ALIGNMENT))
+#define GTK_IS_ALIGNMENT_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ALIGNMENT))
+#define GTK_ALIGNMENT_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ALIGNMENT, GtkAlignmentClass))
 
 
 typedef struct _GtkAlignment       GtkAlignment;
@@ -64,7 +64,7 @@ struct _GtkAlignmentClass
 };
 
 
-GtkType    gtk_alignment_get_type   (void) G_GNUC_CONST;
+GType      gtk_alignment_get_type   (void) G_GNUC_CONST;
 GtkWidget* gtk_alignment_new        (gfloat             xalign,
 				     gfloat             yalign,
 				     gfloat             xscale,

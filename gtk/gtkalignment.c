@@ -54,26 +54,28 @@ static void gtk_alignment_get_property (GObject         *object,
                                         GValue          *value,
                                         GParamSpec      *pspec);
 
-GtkType
+GType
 gtk_alignment_get_type (void)
 {
-  static GtkType alignment_type = 0;
+  static GType alignment_type = 0;
 
   if (!alignment_type)
     {
-      static const GtkTypeInfo alignment_info =
+      static const GTypeInfo alignment_info =
       {
-	"GtkAlignment",
-	sizeof (GtkAlignment),
 	sizeof (GtkAlignmentClass),
-	(GtkClassInitFunc) gtk_alignment_class_init,
-	(GtkObjectInitFunc) gtk_alignment_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_alignment_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkAlignment),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_alignment_init,
       };
 
-      alignment_type = gtk_type_unique (GTK_TYPE_BIN, &alignment_info);
+      alignment_type = g_type_register_static (GTK_TYPE_BIN, "GtkAlignment",
+					       &alignment_info, 0);
     }
 
   return alignment_type;
@@ -83,11 +85,9 @@ static void
 gtk_alignment_class_init (GtkAlignmentClass *class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = (GObjectClass*) class;
-  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   
   gobject_class->set_property = gtk_alignment_set_property;
@@ -155,7 +155,7 @@ gtk_alignment_new (gfloat xalign,
 {
   GtkAlignment *alignment;
 
-  alignment = gtk_type_new (gtk_alignment_get_type ());
+  alignment = g_object_new (GTK_TYPE_ALIGNMENT, NULL);
 
   alignment->xalign = CLAMP (xalign, 0.0, 1.0);
   alignment->yalign = CLAMP (yalign, 0.0, 1.0);

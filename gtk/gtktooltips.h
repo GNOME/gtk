@@ -36,11 +36,11 @@ extern "C" {
 
 
 #define GTK_TYPE_TOOLTIPS                  (gtk_tooltips_get_type ())
-#define GTK_TOOLTIPS(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TOOLTIPS, GtkTooltips))
-#define GTK_TOOLTIPS_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOOLTIPS, GtkTooltipsClass))
-#define GTK_IS_TOOLTIPS(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TOOLTIPS))
-#define GTK_IS_TOOLTIPS_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOOLTIPS))
-#define GTK_TOOLTIPS_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TOOLTIPS, GtkTooltipsClass))
+#define GTK_TOOLTIPS(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TOOLTIPS, GtkTooltips))
+#define GTK_TOOLTIPS_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOOLTIPS, GtkTooltipsClass))
+#define GTK_IS_TOOLTIPS(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TOOLTIPS))
+#define GTK_IS_TOOLTIPS_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOOLTIPS))
+#define GTK_TOOLTIPS_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TOOLTIPS, GtkTooltipsClass))
 
 
 typedef struct _GtkTooltips	 GtkTooltips;
@@ -83,7 +83,7 @@ struct _GtkTooltipsClass
   void (*_gtk_reserved4) (void);
 };
 
-GtkType		 gtk_tooltips_get_type	   (void) G_GNUC_CONST;
+GType		 gtk_tooltips_get_type	   (void) G_GNUC_CONST;
 GtkTooltips*	 gtk_tooltips_new	   (void);
 
 void		 gtk_tooltips_enable	   (GtkTooltips   *tooltips);

@@ -24,7 +24,6 @@
 
 #include <math.h>
 #include <string.h>
-#include "gtksignal.h"
 #include "gtkhsv.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
@@ -125,24 +124,26 @@ static GtkWidgetClass *parent_class;
  *
  * Return value: The type ID of the &GtkHSV class.
  **/
-GtkType
+GType
 gtk_hsv_get_type (void)
 {
-  static GtkType hsv_type = 0;
+  static GType hsv_type = 0;
   
   if (!hsv_type) {
-    static const GtkTypeInfo hsv_info = {
-      "GtkHSV",
-      sizeof (GtkHSV),
+    static const GTypeInfo hsv_info = {
       sizeof (GtkHSVClass),
-      (GtkClassInitFunc) gtk_hsv_class_init,
-      (GtkObjectInitFunc) gtk_hsv_init,
-      NULL, /* reserved_1 */
-      NULL, /* reserved_2 */
-      (GtkClassInitFunc) NULL
+      NULL,		/* base_init */
+      NULL,		/* base_finalize */
+      (GClassInitFunc) gtk_hsv_class_init,
+      NULL,		/* class_finalize */
+      NULL,		/* class_data */
+      sizeof (GtkHSV),
+      0,		/* n_preallocs */
+      (GInstanceInitFunc) gtk_hsv_init,
     };
     
-    hsv_type = gtk_type_unique (GTK_TYPE_WIDGET, &hsv_info);
+    hsv_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkHSV",
+				       &hsv_info, 0);
   }
   
   return hsv_type;
@@ -155,13 +156,13 @@ gtk_hsv_class_init (GtkHSVClass *class)
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkHSVClass    *hsv_class;
-  GtkBindingSet *binding_set;
+  GtkBindingSet  *binding_set;
   
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
   hsv_class = GTK_HSV_CLASS (class);
   
-  parent_class = gtk_type_class (GTK_TYPE_WIDGET);  
+  parent_class = g_type_class_peek_parent (class);
   
   object_class->destroy = gtk_hsv_destroy;
   
@@ -180,51 +181,54 @@ gtk_hsv_class_init (GtkHSVClass *class)
   hsv_class->move = gtk_hsv_move;
   
   hsv_signals[CHANGED] =
-    gtk_signal_new ("changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkHSVClass, changed),
-		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkHSVClass, changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 
   hsv_signals[MOVE] =
-    gtk_signal_new ("move",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkHSVClass, move),
-		    _gtk_marshal_VOID__ENUM,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_DIRECTION_TYPE);
+    g_signal_new ("move",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkHSVClass, move),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__ENUM,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_DIRECTION_TYPE);
 
   binding_set = gtk_binding_set_by_class (class);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Up, 0,
                                 "move", 1,
-                                GTK_TYPE_ENUM, GTK_DIR_UP);
+                                G_TYPE_ENUM, GTK_DIR_UP);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Up, 0,
                                 "move", 1,
-                                GTK_TYPE_ENUM, GTK_DIR_UP);
+                                G_TYPE_ENUM, GTK_DIR_UP);
   
   gtk_binding_entry_add_signal (binding_set, GDK_Down, 0,
                                 "move", 1,
-                                GTK_TYPE_ENUM, GTK_DIR_DOWN);
+                                G_TYPE_ENUM, GTK_DIR_DOWN);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Down, 0,
                                 "move", 1,
-                                GTK_TYPE_ENUM, GTK_DIR_DOWN);
+                                G_TYPE_ENUM, GTK_DIR_DOWN);
 
   
   gtk_binding_entry_add_signal (binding_set, GDK_Right, 0,
                                 "move", 1,
-                                GTK_TYPE_ENUM, GTK_DIR_RIGHT);
+                                G_TYPE_ENUM, GTK_DIR_RIGHT);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Right, 0,
                                 "move", 1,
-                                GTK_TYPE_ENUM, GTK_DIR_RIGHT);
+                                G_TYPE_ENUM, GTK_DIR_RIGHT);
   
   gtk_binding_entry_add_signal (binding_set, GDK_Left, 0,
                                 "move", 1,
-                                GTK_TYPE_ENUM, GTK_DIR_LEFT);
+                                G_TYPE_ENUM, GTK_DIR_LEFT);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, 0,
                                 "move", 1,
-                                GTK_TYPE_ENUM, GTK_DIR_LEFT);
+                                G_TYPE_ENUM, GTK_DIR_LEFT);
 }
 
 /* Object initialization function for the HSV color selector */
@@ -337,7 +341,7 @@ gtk_hsv_realize (GtkWidget *widget)
   parent_window = gtk_widget_get_parent_window (widget);
   
   widget->window = parent_window;
-  gdk_window_ref (widget->window);
+  g_object_ref (widget->window);
   
   priv->window = gdk_window_new (parent_window, &attr, attr_mask);
   gdk_window_set_user_data (priv->window, hsv);
@@ -363,7 +367,7 @@ gtk_hsv_unrealize (GtkWidget *widget)
   gdk_window_destroy (priv->window);
   priv->window = NULL;
   
-  gdk_gc_unref (priv->gc);
+  g_object_unref (priv->gc);
   priv->gc = NULL;
   
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
@@ -762,7 +766,7 @@ set_cross_grab (GtkHSV *hsv,
 		    NULL,
 		    cursor,
 		    time);
-  gdk_cursor_destroy (cursor);
+  gdk_cursor_unref (cursor);
 }
 
 /* Button_press_event handler for the HSV color selector */
@@ -1004,7 +1008,7 @@ paint_ring (GtkHSV      *hsv,
 		priv->size - 2 * priv->ring_width + 1, priv->size - 2 * priv->ring_width + 1,
 		0, 360 * 64);
   
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
   
   gdk_gc_set_clip_mask (priv->gc, mask);
   gdk_gc_set_clip_origin (priv->gc, 0, 0);
@@ -1035,7 +1039,7 @@ paint_ring (GtkHSV      *hsv,
 		 -y + center - sin (priv->h * 2.0 * G_PI) * center);
   
   gdk_gc_set_clip_mask (priv->gc, NULL);
-  gdk_bitmap_unref (mask);
+  g_object_unref (mask);
   
   g_free (buf);
   
@@ -1241,7 +1245,7 @@ paint_triangle (GtkHSV      *hsv,
   points[2].y = y3 - y;
   gdk_draw_polygon (mask, gc, TRUE, points, 3);
   
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
   
   gdk_gc_set_clip_mask (priv->gc, mask);
   gdk_gc_set_clip_origin (priv->gc, 0, 0);
@@ -1255,7 +1259,7 @@ paint_triangle (GtkHSV      *hsv,
 				x, y);
   
   gdk_gc_set_clip_mask (priv->gc, NULL);
-  gdk_bitmap_unref (mask);
+  g_object_unref (mask);
   
   g_free (buf);
   
@@ -1351,15 +1355,15 @@ gtk_hsv_expose (GtkWidget      *widget,
 	 dest.x - widget->allocation.x, dest.y - widget->allocation.y,
 	 dest.width, dest.height);
   
-  gdk_draw_pixmap (widget->window,
-		   priv->gc,
-		   pixmap,
-		   0, 0,
-		   dest.x,
-		   dest.y,
-		   event->area.width, event->area.height);
+  gdk_draw_drawable (widget->window,
+		     priv->gc,
+		     pixmap,
+		     0, 0,
+		     dest.x,
+		     dest.y,
+		     event->area.width, event->area.height);
   
-  gdk_pixmap_unref (pixmap);
+  g_object_unref (pixmap);
   
   return FALSE;
 }
@@ -1434,7 +1438,7 @@ gtk_hsv_focus (GtkWidget       *widget,
 GtkWidget*
 gtk_hsv_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (GTK_TYPE_HSV));
+  return g_object_new (GTK_TYPE_HSV, NULL);
 }
 
 /**
@@ -1467,7 +1471,7 @@ gtk_hsv_set_color (GtkHSV *hsv,
   priv->s = s;
   priv->v = v;
   
-  gtk_signal_emit (GTK_OBJECT (hsv), hsv_signals[CHANGED]);
+  g_signal_emit (hsv, hsv_signals[CHANGED], 0);
   
   gtk_widget_queue_draw (GTK_WIDGET (hsv));
 }

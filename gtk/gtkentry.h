@@ -40,11 +40,11 @@ extern "C" {
 
 
 #define GTK_TYPE_ENTRY                  (gtk_entry_get_type ())
-#define GTK_ENTRY(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_ENTRY, GtkEntry))
-#define GTK_ENTRY_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ENTRY, GtkEntryClass))
-#define GTK_IS_ENTRY(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_ENTRY))
-#define GTK_IS_ENTRY_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ENTRY))
-#define GTK_ENTRY_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_ENTRY, GtkEntryClass))
+#define GTK_ENTRY(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ENTRY, GtkEntry))
+#define GTK_ENTRY_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ENTRY, GtkEntryClass))
+#define GTK_IS_ENTRY(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ENTRY))
+#define GTK_IS_ENTRY_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ENTRY))
+#define GTK_ENTRY_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ENTRY, GtkEntryClass))
 
 
 typedef struct _GtkEntry       GtkEntry;
@@ -145,7 +145,7 @@ struct _GtkEntryClass
   void (*_gtk_reserved4) (void);
 };
 
-GtkType    gtk_entry_get_type       		(void) G_GNUC_CONST;
+GType      gtk_entry_get_type       		(void) G_GNUC_CONST;
 GtkWidget* gtk_entry_new            		(void);
 void       gtk_entry_set_visibility 		(GtkEntry      *entry,
 						 gboolean       visible);
