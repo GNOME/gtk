@@ -1,3 +1,9 @@
+2005-02-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_row_changed): 
+	Don't emit a warning if a parent node is filtered out. (#164726,
+	Olivier Sessink)
+
 2005-02-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_style_set): Revert the last 
