@@ -1,3 +1,8 @@
+Tue Aug 26 09:57:38 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkkeys-x11.c (update_keymaps): Fix variable
+	declaration not at start of block. (#120371, Damien Carbery)
+
 2003-08-26  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.[hc] (gtk_ui_manager_add_ui_from_string): Use gssize 
