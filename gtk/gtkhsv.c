@@ -1755,5 +1755,7 @@ gtk_hsv_get_focus_gc (GtkHSV *hsv,
   if (dash_list[0])
     gdk_gc_set_dashes (focus_gc, 0, dash_list, strlen (dash_list));
 
+  g_free (dash_list);
+  
   return focus_gc;
 }

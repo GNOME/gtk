@@ -676,6 +676,8 @@ get_focus_gc (GtkWidget *drawing_area,
   if (dash_list[0])
     gdk_gc_set_dashes (gc, 0, dash_list, strlen (dash_list));
 
+  g_free (dash_list);
+  
   return gc;
 }
 

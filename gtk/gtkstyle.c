@@ -3804,6 +3804,7 @@ gtk_default_draw_focus (GtkStyle      *style,
 {
   GdkPoint points[5];
   GdkGC    *gc;
+  gboolean free_dash_list = FALSE;
   gint line_width = 1;
   gchar *dash_list = "\1\1";
   gint dash_len;
@@ -3811,11 +3812,15 @@ gtk_default_draw_focus (GtkStyle      *style,
   gc = style->fg_gc[state_type];
 
   if (widget)
-    gtk_widget_style_get (widget,
-			  "focus-line-width", &line_width,
-			  "focus-line-pattern", (gchar *)&dash_list,
-			  NULL);
-  
+    {
+      gtk_widget_style_get (widget,
+			    "focus-line-width", &line_width,
+			    "focus-line-pattern", (gchar *)&dash_list,
+			    NULL);
+
+      free_dash_list = TRUE;
+  }
+
   sanitize_size (window, &width, &height);
   
   if (area)
@@ -3827,7 +3832,13 @@ gtk_default_draw_focus (GtkStyle      *style,
 
 
   if (detail && !strcmp (detail, "add-mode"))
-    dash_list = "\4\4";
+    {
+      if (free_dash_list)
+	g_free (dash_list);
+      
+      dash_list = "\4\4";
+      free_dash_list = FALSE;
+    }
 
   points[0].x = x + line_width / 2;
   points[0].y = y + line_width / 2;
@@ -3911,6 +3922,9 @@ gtk_default_draw_focus (GtkStyle      *style,
 
   if (area)
     gdk_gc_set_clip_rectangle (gc, NULL);
+
+  if (free_dash_list)
+    g_free (dash_list);
 }
 
 static void 

@@ -1,5 +1,15 @@
 2002-01-03  Anders Carlsson  <andersca@gnu.org>
 
+	* gtk/gtkstyle.c (gtk_default_draw_focus): Free dash list if
+	necessary.
+
+	* gtk/gtkhsv.c (gtk_hsv_get_focus_gc): Free dash list.
+
+	* gtk/gtkcolorsel.c (get_focus_gc): Free dash list.
+
+	* gtk/gtkdnd.c (set_icon_stock_pixbuf): Don't unref the mask
+	if it's NULL.
+
 	* gtk/gtktreeview.c: Rename gtk_tree_view_queue_draw_node to
 	_gtk_tree_view_queue_draw_node.
 	(gtk_tree_view_row_has_child_toggled): Only redraw one node.

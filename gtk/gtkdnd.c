@@ -2169,7 +2169,9 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
     gtk_widget_shape_combine_mask (window, mask, 0, 0);
 
   g_object_unref (G_OBJECT (pixmap));
-  g_object_unref (G_OBJECT (mask));
+
+  if (mask)
+    g_object_unref (G_OBJECT (mask));
 
   gtk_drag_set_icon_window (context, window, hot_x, hot_y, TRUE);
 }
