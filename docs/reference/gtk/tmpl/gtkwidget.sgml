@@ -1530,6 +1530,17 @@ GtkWidget
 @widget: the object which received the signal.
 @old_parent: 
 
+<!-- ##### SIGNAL GtkWidget::hierarchy-changed ##### -->
+<para>
+Emitted when there is a chance in the hierarchy to
+which a widget belong. More precisely, a widget is
+<firstterm>anchored</firstterm> when its toplevel
+ancestor is a #GtkWindow. This signal is emitted when 
+a widget changes from un-anchored to anchored or vice-versa.
+</para>
+
+@widget: the object which received the signal.
+
 <!-- ##### SIGNAL GtkWidget::property-notify-event ##### -->
 <para>
 
