@@ -1,3 +1,10 @@
+2002-03-04  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: Move GtkOldEditable to the "Deprecated" 
+	section.  (#68408)
+
+	* gtk/tmpl/gtktreeview.sgml: Close linkend attribute.  (#73364)
+
 Sun Mar  3 01:36:21 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/tmpl/gtktreeviewcolumn.sgml: Write documentation

@@ -7,7 +7,7 @@ A widget for displaying both trees and lists.
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 Widget that displays any object that implements the <link
-linkend="GtkTreeModel>GtkTreeModel</link> interface.
+linkend="GtkTreeModel">GtkTreeModel</link> interface.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
