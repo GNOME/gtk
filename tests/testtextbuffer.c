@@ -1039,9 +1039,9 @@ logical_motion_tests (void)
   memset (expected, 0, sizeof (expected));
 
   expected[0] = 24;
-  expected[1] = 22;
+  expected[1] = 21;
   expected[2] = 17;
-  expected[3] = 14;
+  expected[3] = 13;
   expected[4] = 9;
   expected[5] = 4;
   expected[6] = 0;

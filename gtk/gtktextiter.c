@@ -2569,7 +2569,7 @@ gtk_text_iter_backward_line (GtkTextIter *iter)
   /* Find first segment in line */
   real->any_segment = real->line->segments;
   real->segment = _gtk_text_line_byte_to_segment (real->line,
-                                                 0, &offset);
+                                                  0, &offset);
 
   g_assert (offset == 0);
 
@@ -2618,16 +2618,21 @@ gtk_text_iter_forward_lines (GtkTextIter *iter, gint count)
     {
       gint old_line;
 
+      if (gtk_text_iter_is_end (iter))
+        return FALSE;
+      
       old_line = gtk_text_iter_get_line (iter);
 
       gtk_text_iter_set_line (iter, old_line + count);
 
-      check_invariants (iter);
-
-      /* return whether it moved, and is dereferenceable. */
-      return
-        (gtk_text_iter_get_line (iter) != old_line) &&
-        !gtk_text_iter_is_end (iter);
+      if ((gtk_text_iter_get_line (iter) - old_line) < count)
+        {
+          /* count went past the last line, so move to end of last line */
+          if (!gtk_text_iter_is_end (iter))
+            gtk_text_iter_forward_to_end (iter);
+        }
+      
+      return !gtk_text_iter_is_end (iter);
     }
 }
 
@@ -3647,7 +3652,7 @@ gtk_text_iter_set_line (GtkTextIter *iter,
 
   check_invariants (iter);
 
-  line = _gtk_text_btree_get_line (real->tree, line_number, &real_line);
+  line = _gtk_text_btree_get_line_no_last (real->tree, line_number, &real_line);
 
   iter_set_from_char_offset (real, line, 0);
 
@@ -4887,7 +4892,7 @@ _gtk_text_btree_get_iter_at_char (GtkTextBTree *tree,
   g_return_if_fail (tree != NULL);
 
   line = _gtk_text_btree_get_line_at_char (tree, char_index,
-                                          &line_start, &real_char_index);
+                                           &line_start, &real_char_index);
 
   iter_init_from_char_offset (iter, tree, line, real_char_index - line_start);
 
@@ -4898,9 +4903,9 @@ _gtk_text_btree_get_iter_at_char (GtkTextBTree *tree,
 
 void
 _gtk_text_btree_get_iter_at_line_char (GtkTextBTree *tree,
-                                       GtkTextIter *iter,
-                                       gint line_number,
-                                       gint char_on_line)
+                                       GtkTextIter  *iter,
+                                       gint          line_number,
+                                       gint          char_on_line)
 {
   GtkTextRealIter *real = (GtkTextRealIter*)iter;
   GtkTextLine *line;
@@ -4909,7 +4914,7 @@ _gtk_text_btree_get_iter_at_line_char (GtkTextBTree *tree,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (tree != NULL);
 
-  line = _gtk_text_btree_get_line (tree, line_number, &real_line);
+  line = _gtk_text_btree_get_line_no_last (tree, line_number, &real_line);
   
   iter_init_from_char_offset (iter, tree, line, char_on_line);
 
@@ -4932,7 +4937,7 @@ _gtk_text_btree_get_iter_at_line_byte (GtkTextBTree   *tree,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (tree != NULL);
 
-  line = _gtk_text_btree_get_line (tree, line_number, &real_line);
+  line = _gtk_text_btree_get_line_no_last (tree, line_number, &real_line);
 
   iter_init_from_byte_offset (iter, tree, line, byte_index);
 

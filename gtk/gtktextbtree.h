@@ -87,6 +87,9 @@ void _gtk_text_btree_tag (const GtkTextIter *start,
 GtkTextLine * _gtk_text_btree_get_line          (GtkTextBTree      *tree,
                                                  gint               line_number,
                                                  gint              *real_line_number);
+GtkTextLine * _gtk_text_btree_get_line_no_last  (GtkTextBTree      *tree,
+                                                 gint               line_number,
+                                                 gint              *real_line_number);
 GtkTextLine * _gtk_text_btree_get_end_iter_line (GtkTextBTree      *tree);
 GtkTextLine * _gtk_text_btree_get_line_at_char  (GtkTextBTree      *tree,
                                                  gint               char_index,

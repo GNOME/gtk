@@ -287,13 +287,6 @@ to fit.
 
 @entry: the object which received the signal.
 
-<!-- ##### SIGNAL GtkEntry::changed ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-
 <!-- ##### SIGNAL GtkEntry::copy-clipboard ##### -->
 <para>
 
@@ -317,15 +310,6 @@ to fit.
 @arg1: 
 @arg2: 
 
-<!-- ##### SIGNAL GtkEntry::delete-text ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-@arg1: 
-@arg2: 
-
 <!-- ##### SIGNAL GtkEntry::insert-at-cursor ##### -->
 <para>
 
@@ -333,16 +317,6 @@ to fit.
 
 @entry: the object which received the signal.
 @arg1: 
-
-<!-- ##### SIGNAL GtkEntry::insert-text ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
 
 <!-- ##### SIGNAL GtkEntry::move-cursor ##### -->
 <para>

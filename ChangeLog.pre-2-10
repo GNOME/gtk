@@ -1,3 +1,22 @@
+2001-10-03  Havoc Pennington  <hp@redhat.com>
+
+	* tests/testtextbuffer.c (logical_motion_tests): fix test case, 
+	it previously verified incorrect behavior
+
+        Fixes for #61565
+	
+	* gtk/gtktextiter.c (gtk_text_iter_set_line): don't return lines
+	off the end
+	(_gtk_text_btree_get_iter_at_line_char): don't return lines off
+	the end
+	(_gtk_text_btree_get_iter_at_line_byte): don't return lines off
+	the end
+	(gtk_text_iter_forward_lines): if on the last line, move to end of
+	it
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_last_could_contain_tag):
+	don't return a line off the end
+
 Wed Oct  3 23:47:25  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtkeditable.[ch]: move insert_text and delete_text virtual
