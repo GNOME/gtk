@@ -1,3 +1,7 @@
+Tue Feb 22 13:54:12 GMT 2000  Tony Gale <gale@gtk.org>
+
+	* docs/gtkfaq.sgml: FAQ Update
+
 2000-02-19  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkrange.c (gtk_range_scroll_event): Return TRUE
