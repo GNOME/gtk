@@ -244,6 +244,8 @@ to a #GtkToolbar.
 
 @toolbar: 
 @tool_item: 
+@index_: 
+<!-- # Unused Parameters # -->
 @index: 
 
 

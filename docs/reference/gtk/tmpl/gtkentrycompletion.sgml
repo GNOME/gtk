@@ -77,6 +77,11 @@ The GtkEntryCompletion struct contains only private data.
 
 </para>
 
+<!-- ##### ARG GtkEntryCompletion:text-column ##### -->
+<para>
+
+</para>
+
 <!-- ##### USER_FUNCTION GtkEntryCompletionMatchFunc ##### -->
 <para>
 A function which decides whether the row indicated by @iter matches a given 
@@ -173,8 +178,10 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 </para>
 
 @completion: 
-@index: 
+@index_: 
 @text: 
+<!-- # Unused Parameters # -->
+@index: 
 
 
 <!-- ##### FUNCTION gtk_entry_completion_insert_action_markup ##### -->
@@ -183,8 +190,10 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 </para>
 
 @completion: 
-@index: 
+@index_: 
 @markup: 
+<!-- # Unused Parameters # -->
+@index: 
 
 
 <!-- ##### FUNCTION gtk_entry_completion_delete_action ##### -->
@@ -193,6 +202,8 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 </para>
 
 @completion: 
+@index_: 
+<!-- # Unused Parameters # -->
 @index: 
 
 
@@ -203,5 +214,14 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 
 @completion: 
 @column: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_get_text_column ##### -->
+<para>
+
+</para>
+
+@completion: 
+@Returns: 
 
 

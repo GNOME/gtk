@@ -9,18 +9,24 @@ A widget which displays a list of icons in a grid
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### STRUCT GtkIconView ##### -->
 <para>
 
 </para>
 
+
+<!-- ##### SIGNAL GtkIconView::activate-cursor-item ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+@Returns: 
 
 <!-- ##### SIGNAL GtkIconView::item-activated ##### -->
 <para>

@@ -951,9 +951,6 @@ has some similarity to strcmp() returning 0 for equal strings.
 @search_equal_func: 
 @search_user_data: 
 @search_destroy: 
-<!-- # Unused Parameters # -->
-@search_compare_func: 
-@search_data: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_get_fixed_height_mode ##### -->
@@ -971,7 +968,7 @@ has some similarity to strcmp() returning 0 for equal strings.
 </para>
 
 @tree_view: 
-@hover: 
+@enable: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_get_hover_selection ##### -->
@@ -1011,6 +1008,40 @@ has some similarity to strcmp() returning 0 for equal strings.
 @tree_view: 
 @func: 
 @data: 
+@destroy: 
+
+
+<!-- ##### USER_FUNCTION GtkTreeViewRowSeparatorFunc ##### -->
+<para>
+Function type for determining whether the row pointed to by @iter should
+be rendered as a separator. A common way to implement this is to have a
+boolean column in the model, whose values the #GtkTreeViewRowSeparatorFunc
+returns.
+</para>
+
+@model: the #GtkTreeModel
+@iter: a #GtkTreeIter pointing at a row in @model
+@data: user data 
+@Returns: %TRUE if the row is a separator
+
+
+<!-- ##### FUNCTION gtk_tree_view_get_row_separator_func ##### -->
+<para>
+
+</para>
+
+@tree_view:
+@Returns:
+
+
+<!-- ##### FUNCTION gtk_tree_view_set_row_separator_func ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@func:
+@data:
 @destroy: 
 
 

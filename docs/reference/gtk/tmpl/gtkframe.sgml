@@ -83,16 +83,16 @@ label can be controlled with gtk_frame_set_label_align().
 <para>
 </para>
 
-@frame:
-@xalign:
-@yalign:
+@frame: 
+@xalign: 
+@yalign: 
 
 
 <!-- ##### FUNCTION gtk_frame_set_shadow_type ##### -->
 <para>
 </para>
 
-@frame:
+@frame: 
 @type: 
 
 

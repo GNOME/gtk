@@ -108,6 +108,11 @@ it cannot be individually modified.
 
 </para>
 
+<!-- ##### ARG GtkCellRenderer:sensitive ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRenderer:visible ##### -->
 <para>
 

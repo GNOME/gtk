@@ -47,6 +47,11 @@ a widget used to choose from a list of items.
 
 </para>
 
+<!-- ##### ARG GtkComboBox:row-separator-column ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkComboBox:row-span-column ##### -->
 <para>
 
@@ -150,6 +155,8 @@ a widget used to choose from a list of items.
 </para>
 
 @combo_box: 
+@index_: 
+<!-- # Unused Parameters # -->
 @index: 
 
 
@@ -258,5 +265,41 @@ a widget used to choose from a list of items.
 </para>
 
 @combo_box: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_row_separator_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_row_separator_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_add_tearoffs ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@add_tearoffs: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_add_tearoffs ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
 
 

@@ -1,3 +1,15 @@
+2004-07-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/*: Misc additions.
+
+	* gtk/gtk-sections.txt: Updates.
+
+	* gtk/tmpl/gtkcellrendererprogress.sgml: New file.
+
+	* gtk/gtk-docs.sgml: Add GtkCellRendererProgress.
+
+	* gtk/Makefile.am (HTML_IMAGES): Add file and directory icons.
+
 2004-07-04  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-docs.sgml: 

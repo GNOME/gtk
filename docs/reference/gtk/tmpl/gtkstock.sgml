@@ -234,6 +234,14 @@ The "Warning" item.
 
 
 
+<!-- ##### MACRO GTK_STOCK_DIRECTORY ##### -->
+<para>
+The "Directory" icon.
+<inlinegraphic fileref="stock_directory_24.png" format="PNG"></inlinegraphic>
+</para>
+
+
+
 <!-- ##### MACRO GTK_STOCK_DND ##### -->
 <para>
 The "Drag-And-Drop" icon.
@@ -254,6 +262,16 @@ The "Drag-And-Drop multiple" icon.
 <para>
 The "Execute" item.
 <inlinegraphic fileref="stock_exec_24.png" format="PNG"></inlinegraphic>
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_FILE ##### -->
+<para>
+<para>
+The "File" icon.
+<inlinegraphic fileref="stock_file_24.png" format="PNG"></inlinegraphic>
+</para>
 </para>
 
 
