@@ -1074,12 +1074,13 @@ slide_idle_handler (gpointer data)
 
       if ((content->state == NOT_ALLOCATED) ||
 	  (content->state == NORMAL &&
+	   GTK_WIDGET_CHILD_VISIBLE (content->item) &&
 	   ((content->goal_allocation.x != widget->allocation.x ||
 	     content->goal_allocation.y != widget->allocation.y ||
 	     content->goal_allocation.width != widget->allocation.width ||
 	     content->goal_allocation.height != widget->allocation.height))) ||
 	  (content->is_placeholder && content->disappearing &&
-	   GTK_WIDGET_VISIBLE (content->item)))
+	   GTK_WIDGET_CHILD_VISIBLE (content->item)))
 	{
 	  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
 	  return TRUE;

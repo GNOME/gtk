@@ -1,3 +1,9 @@
+Sat Dec 27 23:17:56 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (slide_idle_handler): use CHILD_VISIBLE
+	instead of VISIBLE to determine whether we should stop
+	sliding. (#130018, reported by Christian Persch).
+
 Fri Dec 26 23:24:35 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkactiongroup.c (gtk_action_group_add_radio_actions_full): 
