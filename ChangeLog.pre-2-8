@@ -1,3 +1,8 @@
+Fri Jul  2 22:41:27 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkimage.c (gtk_image_expose): Properly align mask and
+	pixbuf if a subarea is exposed.  (#135423, fix by John Ehresman)
+
 Fri Jul  2 21:40:21 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtknotebook.c (gtk_notebook_realize): Add scroll events
