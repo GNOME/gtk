@@ -1,3 +1,10 @@
+Fri Jun 11 22:05:56 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilechooserdefault.c: Don't use
+	contractions like "don't" or "isn't" in error messages.
+	It isn't nice to use them in log entries either...
+	(#137774, Morten Welinder, patch by Alexander Winston)
+
 2004-06-11  Federico Mena Quintero  <federico@ximian.com>
 
 	Fixes #143578:

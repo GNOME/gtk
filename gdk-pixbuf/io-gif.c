@@ -632,7 +632,7 @@ lzw_read_byte (GifContext *context)
                         g_set_error (context->error,
                                      GDK_PIXBUF_ERROR,
                                      GDK_PIXBUF_ERROR_FAILED,
-                                     _("GIF image loader can't understand this image."));
+                                     _("GIF image loader cannot understand this image."));
                         return -2;
                         
 			if (ZeroDataBlock) {

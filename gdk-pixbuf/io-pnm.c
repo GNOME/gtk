@@ -393,7 +393,7 @@ pnm_read_header (PnmLoaderContext *context)
 				g_set_error (context->error,
 					     GDK_PIXBUF_ERROR,
 					     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
- 					     _("Can't handle PNM files with maximum color values greater than 255"));
+ 					     _("Cannot handle PNM files with maximum color values greater than 255"));
 				return PNM_FATAL_ERR;
 			}
 		}
@@ -767,7 +767,7 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
 				g_set_error (error,
 					     GDK_PIXBUF_ERROR,
 					     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-					     _("Can't allocate memory for loading PNM image"));
+					     _("Cannot allocate memory for loading PNM image"));
 				return NULL;
 			}
 

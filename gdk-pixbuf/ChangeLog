@@ -1,4 +1,11 @@
- Sat Jun  5 00:59:12 2004  Matthias Clasen  <maclas@gmx.de>
+Fri Jun 11 22:02:56 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* io-gif.c, io-pnm.c, io-tga.c, io-xpm.c: Don't use
+	contractions like "don't" or "isn't" in error messages.
+	It isn't nice to use them in log entries either...
+	(#137774, Morten Welinder, patch by Alexander Winston)
+
+Sat Jun  5 00:59:12 2004  Matthias Clasen  <maclas@gmx.de>
  
 	Merged from 2.4
 

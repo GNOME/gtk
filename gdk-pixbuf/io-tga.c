@@ -156,7 +156,7 @@ static IOBuffer *io_buffer_new(GError **err)
 	if (!buffer) {
 		g_set_error(err, GDK_PIXBUF_ERROR,
 			    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Can't allocate memory for IOBuffer struct"));
+			    _("Cannot allocate memory for IOBuffer struct"));
 		return NULL;
 	}
 	buffer->data = NULL;
@@ -175,7 +175,7 @@ static IOBuffer *io_buffer_append(IOBuffer *buffer,
 		if (!buffer->data) {
 			g_set_error(err, GDK_PIXBUF_ERROR,
 				    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				    _("Can't allocate memory for IOBuffer data"));
+				    _("Cannot allocate memory for IOBuffer data"));
 			g_free(buffer);
 			return NULL;
 		}
@@ -186,7 +186,7 @@ static IOBuffer *io_buffer_append(IOBuffer *buffer,
 		if (!tmp) {
 			g_set_error(err, GDK_PIXBUF_ERROR,
 				    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				    _("Can't realloc IOBuffer data"));
+				    _("Cannot realloc IOBuffer data"));
 			g_free(buffer);
 			return NULL;
 		}
@@ -216,7 +216,7 @@ static IOBuffer *io_buffer_free_segment(IOBuffer *buffer,
 		if (!new_buf) {
 			g_set_error(err, GDK_PIXBUF_ERROR,
 				    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				    _("Can't allocate temporary IOBuffer data"));
+				    _("Cannot allocate temporary IOBuffer data"));
 			g_free(buffer->data);
 			g_free(buffer);
 			return NULL;
@@ -350,7 +350,7 @@ static gboolean fill_in_context(TGAContext *ctx, GError **err)
 
 	if (!ctx->pbuf) {
 		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Can't allocate new pixbuf"));
+			    _("Cannot allocate new pixbuf"));
 		return FALSE;
 	}
 
@@ -689,14 +689,14 @@ static gboolean try_colormap(TGAContext *ctx, GError **err)
 	ctx->cmap = g_try_malloc(sizeof(TGAColormap));
 	if (!ctx->cmap) {
 		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Can't allocate colormap structure"));
+			    _("Cannot allocate colormap structure"));
 		return FALSE;
 	}
 	ctx->cmap->size = LE16(ctx->hdr->cmap_n_colors);
 	ctx->cmap->cols = g_try_malloc(sizeof(TGAColor) * ctx->cmap->size);
 	if (!ctx->cmap->cols) {
 		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Can't allocate colormap entries"));
+			    _("Cannot allocate colormap entries"));
 		return FALSE;
 	}
 
@@ -736,7 +736,7 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 			if (!ctx->hdr) {
 				g_set_error(err, GDK_PIXBUF_ERROR,
 					    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-					    _("Can't allocate TGA header memory"));
+					    _("Cannot allocate TGA header memory"));
 				return FALSE;
 			}
 			g_memmove(ctx->hdr, ctx->in->data, sizeof(TGAHeader));
@@ -858,7 +858,7 @@ static gpointer gdk_pixbuf__tga_begin_load(GdkPixbufModuleSizeFunc f0,
 	if (!ctx) {
 		g_set_error(err, GDK_PIXBUF_ERROR, 
 			    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Can't allocate memory for TGA context struct"));
+			    _("Cannot allocate memory for TGA context struct"));
 		return NULL;
 	}
 

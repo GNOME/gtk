@@ -3905,7 +3905,7 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_FAILED,
-		   _("Can't change to folder because it isn't local"));
+		   _("Cannot change to folder because it is not local"));
 
       return FALSE;
     }
