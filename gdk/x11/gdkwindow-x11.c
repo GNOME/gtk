@@ -1050,17 +1050,17 @@ gdk_toplevel_x11_free_contents (GdkDisplay *display,
       g_object_unref (toplevel->group_leader);
       toplevel->group_leader = NULL;
     }
+#ifdef HAVE_XSYNC
   if (toplevel->update_counter != None)
     {
-#ifdef HAVE_XSYNC
       XSyncDestroyCounter (GDK_DISPLAY_XDISPLAY (display), 
 			   toplevel->update_counter);
       toplevel->update_counter = None;
 
       XSyncIntToValue (&toplevel->current_counter_value, 0);
       XSyncIntToValue (&toplevel->pending_counter_value, 0);
-#endif
     }
+#endif
 }
 
 void

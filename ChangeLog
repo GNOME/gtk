@@ -1,3 +1,9 @@
+Mon Jul 12 01:56:26 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_toplevel_x11_free_contents): 
+	Include the update_counter check in the HAVE_XSYNC condition,
+	since update_counter isn't present in the !HAVE_XSYNC case.
+
 Mon Jul 12 00:52:04 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/stock-icons/Makefile.am: 
