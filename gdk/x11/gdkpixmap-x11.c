@@ -625,7 +625,7 @@ gdk_pixmap_colormap_create_from_xpm (GdkWindow   *window,
 
   return pixmap;
 }
->
+
 GdkPixmap*
 gdk_pixmap_create_from_xpm (GdkWindow  *window,
 			    GdkBitmap **mask,
