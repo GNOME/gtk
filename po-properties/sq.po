@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-18 04:03+0200\n"
+"POT-Creation-Date: 2004-08-19 12:03+0200\n"
 "PO-Revision-Date: 2004-03-03 10:48+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -472,9 +472,11 @@ msgstr ""
 "Nëse TRUE, instrumenti shfaqet në një grup dytësor instrumentësh bij, i "
 "përdorshëm, p.sh. për pulsantët e ndihmës"
 
+#. GRUT modified this item
+#. GRUT modified this item
 #: gtk/gtkbox.c:129 gtk/gtkexpander.c:229
 msgid "Spacing"
-msgstr "Hapësira"
+msgstr "Hapësira e ndërmjetme"
 
 #: gtk/gtkbox.c:130
 msgid "The amount of space between children"
@@ -830,9 +832,10 @@ msgstr "Pixbuf i zgjerueshëm i mbyllur"
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf për objektin e zgjerueshëm i mbyllur"
 
+#. GRUT modified this item
 #: gtk/gtkcellrendererpixbuf.c:161 gtk/gtkimage.c:177
 msgid "Stock ID"
-msgstr "ID e Rezervës"
+msgstr "ID e ikonës"
 
 #: gtk/gtkcellrendererpixbuf.c:162
 msgid "The stock ID of the stock icon to render"
@@ -870,9 +873,10 @@ msgstr "Markues"
 msgid "Marked up text to render"
 msgstr "Teksti i markuar që duhet vizatuar"
 
+#. GRUT modified this item
 #: gtk/gtkcellrenderertext.c:209 gtk/gtklabel.c:299
 msgid "Attributes"
-msgstr "Vlerat"
+msgstr "Veçoritë"
 
 #: gtk/gtkcellrenderertext.c:210
 msgid "A list of style attributes to apply to the text of the renderer"
@@ -898,7 +902,6 @@ msgstr "Ngjyra e sfondit e shprehur me një vlerë"
 msgid "Background color"
 msgstr "Ngjyra e sfondit"
 
-#. GRUT modified this item
 #: gtk/gtkcellrenderertext.c:235 gtk/gtkcellview.c:188
 msgid "Background color as a GdkColor"
 msgstr "Ngjyra e sfondit shprehur si GdkColor"
@@ -919,10 +922,11 @@ msgstr "Ngjyra ballore"
 msgid "Foreground color as a GdkColor"
 msgstr "Ngjyra e përparme e shprehur si GdkColor"
 
+#. GRUT modified this item
 #: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
-msgstr "E ndryshueshme"
+msgstr "Pjesë e ndryshueshme"
 
 #: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:275 gtk/gtktextview.c:588
 msgid "Whether the text can be modified by the user"
@@ -1302,9 +1306,10 @@ msgstr "Shigjetat (pulsantët) gjithmonë aktive"
 msgid "Obsolete property, ignored"
 msgstr "Veti e vjetëruar, shpërfillet"
 
+#. GRUT modified this item
 #: gtk/gtkcombo.c:158
 msgid "Case sensitive"
-msgstr "Gërma të mëdha/të vogla"
+msgstr "Ndjeshmëri gërma të mëdha/të vogla"
 
 #: gtk/gtkcombo.c:159
 msgid "Whether list item matching is case sensitive"
@@ -1990,9 +1995,10 @@ msgstr "Maskë bitmap për t'u përdorur me GdkImage ose GdkPixmap"
 msgid "Filename to load and display"
 msgstr "Emri i file për t'u ngarkuar dhe shfaqur"
 
+#. GRUT modified this item
 #: gtk/gtkimage.c:178
 msgid "Stock ID for a stock image to display"
-msgstr "ID e rezervës e një figurë rezervë për tu shfaqet"
+msgstr "ID e ikonës për figurën e ikonës që duhet shfaqur"
 
 #: gtk/gtkimage.c:185
 msgid "Icon set"
@@ -4225,7 +4231,6 @@ msgstr ""
 "Stili i \"widget\"-it, përmban informacione mbi pamjen e jashtme (ngjyra, "
 "etj)"
 
-#. GRUT modified this item
 #: gtk/gtkwidget.c:519
 msgid "Events"
 msgstr "Ndodhitë"
