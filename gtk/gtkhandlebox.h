@@ -53,6 +53,11 @@ struct _GtkHandleBoxClass
 
 guint          gtk_handle_box_get_type        (void);
 GtkWidget*     gtk_handle_box_new             (void);
+/* the x and y coordinates (relative to root window, of course)
+   are only needed if you pass in_root = TRUE */
+void           gtk_handle_box_set_location    (GtkWidget *widget,
+					       gboolean in_root,
+					       gint x, gint y);
 
 #ifdef __cplusplus
 }

@@ -869,7 +869,7 @@ gtk_widget_destroy (GtkWidget *widget)
       gtk_object_unref (GTK_OBJECT (widget));
       tag = (gint) gtk_object_get_data (GTK_OBJECT (widget), redraw_handler_key);
       gtk_idle_remove (tag);
-      gtk_object_set_data (GTK_OBJECT (widget), redraw_handler_key, (gpointer) 0);
+      gtk_object_remove_data (GTK_OBJECT (widget), redraw_handler_key);
     }
   
   if (GTK_WIDGET_ANCHORED (widget) &&
@@ -879,7 +879,7 @@ gtk_widget_destroy (GtkWidget *widget)
       gtk_object_unref (GTK_OBJECT (widget));
       tag = (gint) gtk_object_get_data (GTK_OBJECT (widget), resize_handler_key);
       gtk_idle_remove (tag);
-      gtk_object_set_data (GTK_OBJECT (widget), resize_handler_key, (gpointer) 0);
+      gtk_object_remove_data (GTK_OBJECT (widget), resize_handler_key);
       
       resize_widgets = gtk_object_get_data (GTK_OBJECT (widget), resize_widgets_key);
       

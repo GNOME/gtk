@@ -350,21 +350,23 @@ gtk_handle_box_button_changed(GtkWidget *widget,
   return TRUE;
 }
 
-static void
-gtk_handle_box_reparent      (GtkWidget *widget,
-			      gboolean in_root)
+void
+gtk_handle_box_set_location  (GtkWidget *widget,
+			      gboolean in_root,
+			      gint x, gint y)
 {
   GtkHandleBox *hb;
 
   hb = GTK_HANDLE_BOX(widget);
 
-  if(in_root)
+  if(in_root != FALSE)
     {
       GTK_HANDLE_BOX(widget)->is_onroot = TRUE;
+      if(x < 0) x = parentx;
+      if(y < 0) y = parenty;
       gdk_window_set_override_redirect(widget->window, TRUE);
       gdk_window_reparent(widget->window, GDK_ROOT_PARENT(),
-			  parentx,
-			  parenty);
+			  x, y);
       gdk_window_raise(widget->window);
       widget->requisition = hb->real_requisition;
       gtk_widget_queue_resize(widget->parent);
@@ -409,12 +411,12 @@ gtk_handle_box_motion        (GtkWidget *widget,
        && abs(parenty - newy) < 10)
       {
 	if(hb->is_onroot == TRUE)
-	  gtk_handle_box_reparent(widget, FALSE);
+	  gtk_handle_box_set_location(widget, FALSE, 0, 0);
       }
     else
       {
 	if(hb->is_onroot == FALSE)
-	  gtk_handle_box_reparent(widget, TRUE);
+	  gtk_handle_box_set_location(widget, TRUE, parentx, parenty);
 	gdk_window_move(widget->window, newx, newy);
       }
   }

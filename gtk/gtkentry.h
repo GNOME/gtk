@@ -43,16 +43,16 @@ struct _GtkEntry
   GdkWindow *text_area;
   gchar *text;
 
-  guint16 text_size;
-  guint16 text_length;
-  gint16  current_pos;
-  gint16  selection_start_pos;
-  gint16  selection_end_pos;
-  gint16  scroll_offset;
-  guint   have_selection : 1;
-  guint   visible : 1;
-  guint32 timer;
-  GdkIC   ic;
+  guint16  text_size;
+  guint16  text_length;
+  gint16   current_pos;
+  gint16   selection_start_pos;
+  gint16   selection_end_pos;
+  gint16   scroll_offset;
+  gboolean have_selection : 1;
+  gboolean visible : 1;
+  guint32  timer;
+  GdkIC    ic;
 
   gchar *clipboard_text;
 };
@@ -86,7 +86,7 @@ void       gtk_entry_set_position (GtkEntry      *entry,
 				   gint           position);
 gchar*     gtk_entry_get_text     (GtkEntry      *entry);
 void       gtk_entry_set_visibility (GtkEntry    *entry,
-               gint           visible);
+				     gint           visible);
 
 
 #ifdef __cplusplus
