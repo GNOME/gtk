@@ -152,7 +152,19 @@ static PFN_TrackMouseEvent track_mouse_event = NULL;
 static gboolean use_ime_composition = FALSE;
 
 static HKL latin_locale = NULL;
-static gboolean latin_locale_loaded = FALSE;
+
+gulong
+_gdk_win32_get_next_tick (gulong suggested_tick)
+{
+  static gulong cur_tick = 0;
+
+  if (suggested_tick == 0)
+    suggested_tick = GetTickCount ();
+  if (suggested_tick <= cur_tick)
+    return ++cur_tick;
+  else
+    return cur_tick = suggested_tick;
+}
 
 static LRESULT 
 real_window_procedure (HWND   hwnd,
@@ -160,8 +172,7 @@ real_window_procedure (HWND   hwnd,
 		       WPARAM wparam,
 		       LPARAM lparam)
 {
-  GdkEventPrivate event;
-  GdkEvent *eventp;
+  GdkEvent *event;
   MSG msg;
   DWORD pos;
 #ifdef HAVE_DIMM_H
@@ -174,65 +185,16 @@ real_window_procedure (HWND   hwnd,
   msg.message = message;
   msg.wParam = wparam;
   msg.lParam = lparam;
-  msg.time = GetTickCount ();
+  msg.time = _gdk_win32_get_next_tick (0);
   pos = GetMessagePos ();
   msg.pt.x = LOWORD (pos);
   msg.pt.y = HIWORD (pos);
 
-  event.flags = GDK_EVENT_PENDING;
-  if (gdk_event_translate (&event.event, &msg, &ret_val_flag, &ret_val, FALSE))
+  event = _gdk_event_new ();
+  ((GdkEventPrivate *)event)->flags = GDK_EVENT_PENDING;
+  if (gdk_event_translate (event, &msg, &ret_val_flag, &ret_val, FALSE))
     {
-      event.flags &= ~GDK_EVENT_PENDING;
-#if 1
-      if (event.event.any.type == GDK_CONFIGURE)
-	{
-	  /* Compress configure events */
-	  GList *list = _gdk_queued_events;
-
-	  while (list != NULL
-		 && (((GdkEvent *)list->data)->any.type != GDK_CONFIGURE
-		     || ((GdkEvent *)list->data)->any.window != event.event.any.window))
-	    list = list->next;
-	  if (list != NULL)
-	    {
-	      GDK_NOTE (EVENTS, g_print ("... compressing an CONFIGURE event\n"));
-
-	      *((GdkEvent *)list->data) = event.event;
-	      gdk_drawable_unref (event.event.any.window);
-	      /* Wake up WaitMessage */
-	      PostMessage (NULL, gdk_ping_msg, 0, 0);
-	      return FALSE;
-	    }
-	}
-      else if (event.event.any.type == GDK_EXPOSE)
-	{
-	  /* Compress expose events */
-	  GList *list = _gdk_queued_events;
-
-	  while (list != NULL
-		 && (((GdkEvent *)list->data)->any.type != GDK_EXPOSE
-		     || ((GdkEvent *)list->data)->any.window != event.event.any.window))
-	    list = list->next;
-	  if (list != NULL)
-	    {
-	      GdkRectangle u;
-
-	      GDK_NOTE (EVENTS, g_print ("... compressing an EXPOSE event\n"));
-	      gdk_rectangle_union (&event.event.expose.area,
-				   &((GdkEvent *)list->data)->expose.area,
-				   &u);
-	      ((GdkEvent *)list->data)->expose.area = u;
-	      gdk_drawable_unref (event.event.any.window);
-#if 0
-	      /* Wake up WaitMessage */
-	      PostMessage (NULL, gdk_ping_msg, 0, 0);
-#endif
-	      return FALSE;
-	    }
-	}
-#endif
-      eventp = _gdk_event_new ();
-      *((GdkEventPrivate *) eventp) = event;
+      ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
 
       /* Philippe Colantoni <colanton@aris.ss.uci.edu> suggests this
        * in order to handle events while opaque resizing neatly.  I
@@ -244,17 +206,17 @@ real_window_procedure (HWND   hwnd,
 	{
 	  GDK_THREADS_ENTER ();
 	  
-	  (*_gdk_event_func) (eventp, _gdk_event_data);
-	  gdk_event_free (eventp);
+	  (*_gdk_event_func) (event, _gdk_event_data);
+	  gdk_event_free (event);
 	  
 	  GDK_THREADS_LEAVE ();
 	}
       else
 	{
-	  _gdk_event_queue_append (eventp);
+	  _gdk_event_queue_append (event);
 
-	  if (eventp->type == GDK_BUTTON_PRESS)
-	    _gdk_event_button_generate (eventp);
+	  if (event->type == GDK_BUTTON_PRESS)
+	    _gdk_event_button_generate (event);
 #if 1
 	  /* Wake up WaitMessage */
 	  PostMessage (NULL, gdk_ping_msg, 0, 0);
@@ -266,6 +228,8 @@ real_window_procedure (HWND   hwnd,
       else
 	return FALSE;
     }
+  else
+    gdk_event_free (event);
 
   if (ret_val_flag)
     return ret_val;
@@ -292,12 +256,12 @@ _gdk_win32_window_procedure (HWND   hwnd,
   LRESULT retval;
 
   GDK_NOTE (MISC, g_print ("_gdk_win32_window_procedure: %p %s\n",
-			   hwnd, gdk_win32_message_name (message)));
+			   hwnd, gdk_win32_message_to_string (message)));
 
   retval = real_window_procedure (hwnd, message, wparam, lparam);
 
-  GDK_NOTE (MISC, g_print ("_gdk_win32_window_procedure: %p returns %ld\n",
-			   hwnd, retval));
+  GDK_NOTE (MISC, g_print ("_gdk_win32_window_procedure: %p %s return %ld\n",
+			   hwnd, gdk_win32_message_to_string (message), retval));
 
   return retval;
 }
@@ -396,8 +360,6 @@ _gdk_events_init (void)
 	  char id[9];
 	  sprintf (id, "%08x", MAKELANGID (latin_languages[i++], SUBLANG_DEFAULT));
 	  latin_locale = LoadKeyboardLayout (id, KLF_NOTELLSHELL|KLF_SUBSTITUTE_OK);
-	  if (latin_locale != NULL)
-	    latin_locale_loaded = TRUE;
 	}
     }
 
@@ -521,11 +483,17 @@ gdk_event_get_graphics_expose (GdkWindow *window)
       event = _gdk_event_new ();
       
       if (gdk_event_translate (event, &msg, NULL, NULL, TRUE))
-	return event;
+	{
+	  GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose: got it!\n"));
+	  return event;
+	}
       else
-	gdk_event_free (event);
+	{
+	  gdk_event_free (event);
+	}
     }
   
+  GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose: nope\n"));
   return NULL;	
 #endif
 }
@@ -1008,7 +976,7 @@ build_keypress_event (GdkEvent *event,
   wchar_t wbuf[100];
 
   event->key.type = GDK_KEY_PRESS;
-  event->key.time = msg->time;
+  event->key.time = _gdk_win32_get_next_tick (msg->time);
   event->key.state = 0;
   event->key.group = 0;		/* ??? */
   event->key.keyval = GDK_VoidSymbol;
@@ -1100,7 +1068,7 @@ build_keyrelease_event (GdkEvent *event,
   wchar_t wbuf;
 
   event->key.type = GDK_KEY_RELEASE;
-  event->key.time = msg->time;
+  event->key.time = _gdk_win32_get_next_tick (msg->time);
   event->key.state = 0;
   event->key.group = 0;		/* ??? */
 
@@ -1308,7 +1276,7 @@ synthesize_enter_or_leave_event (GdkWindow    *window,
   event->crossing.send_event = FALSE;
   gdk_window_ref (event->crossing.window);
   event->crossing.subwindow = NULL;
-  event->crossing.time = msg->time;
+  event->crossing.time = _gdk_win32_get_next_tick (msg->time);
   event->crossing.x = x;
   event->crossing.y = y;
   event->crossing.x_root = msg->pt.x;
@@ -1321,7 +1289,7 @@ synthesize_enter_or_leave_event (GdkWindow    *window,
   _gdk_event_queue_append (event);
   
   if (type == GDK_ENTER_NOTIFY
-      && GDK_WINDOW_OBJECT (window)->extension_events != 0)
+      && ((GdkWindowObject *) window)->extension_events != 0)
     _gdk_input_enter_event (&event->crossing, window);
 
   GDK_NOTE (EVENTS, print_event (event));
@@ -1789,12 +1757,18 @@ erase_background (GdkWindow *window,
   COLORREF bg;
   GdkColormap *colormap;
   GdkColormapPrivateWin32 *colormap_private;
-  int i, j;
+  int x, y;
+  int x_offset, y_offset;
   
-  if (GDK_WINDOW_OBJECT (window)->input_only ||
-      GDK_WINDOW_OBJECT (window)->bg_pixmap == GDK_NO_BG ||
-      GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->position_info.no_bg)
-    return;
+  if (((GdkWindowObject *) window)->input_only ||
+      ((GdkWindowObject *) window)->bg_pixmap == GDK_NO_BG ||
+      GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->position_info.no_bg)
+    {
+      GDK_NOTE (EVENTS, g_print (((GdkWindowObject *) window)->input_only ? "...input_only\n" :
+				 ((GdkWindowObject *) window)->bg_pixmap == GDK_NO_BG ? "GDK_NO_BG" :
+				 GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->position_info.no_bg ? "no_bg\n" : "???\n"));
+      return;
+    }
 
   colormap = gdk_drawable_get_colormap (window);
 
@@ -1811,31 +1785,41 @@ erase_background (GdkWindow *window,
       else if ((k = RealizePalette (hdc)) == GDI_ERROR)
 	WIN32_GDI_FAILED ("RealizePalette");
       else if (k > 0)
-	GDK_NOTE (COLORMAP, g_print ("gdk_win32_erase_background: realized %p: %d colors\n",
+	GDK_NOTE (COLORMAP, g_print ("erase_background: realized %p: %d colors\n",
 				     colormap_private->hpal, k));
     }
   
-  while (window && GDK_WINDOW_OBJECT (window)->bg_pixmap == GDK_PARENT_RELATIVE_BG)
+  x_offset = y_offset = 0;
+  while (window && ((GdkWindowObject *) window)->bg_pixmap == GDK_PARENT_RELATIVE_BG)
     {
       /* If this window should have the same background as the parent,
        * fetch the parent. (And if the same goes for the parent, fetch
        * the grandparent, etc.)
        */
-      window = GDK_WINDOW (GDK_WINDOW_OBJECT (window)->parent);
+      x_offset += ((GdkWindowObject *) window)->x;
+      y_offset += ((GdkWindowObject *) window)->y;
+      window = GDK_WINDOW (((GdkWindowObject *) window)->parent);
     }
   
-  if (GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->position_info.no_bg)
+  if (GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->position_info.no_bg)
     {
+      GDK_NOTE (EVENTS, g_print ("no_bg on ancestor (?)\n"));
       /* Improves scolling effect, e.g. main buttons of testgtk */
       return;
     }
 
-  if (GDK_WINDOW_OBJECT (window)->bg_pixmap == NULL)
+  GetClipBox (hdc, &rect);
+
+  GDK_NOTE (EVENTS, (hbr = GetStockObject (BLACK_BRUSH),
+		     FillRect (hdc, &rect, hbr),
+		     GdiFlush (),
+		     Sleep (200)));
+
+  if (((GdkWindowObject *) window)->bg_pixmap == NULL)
     {
-      bg = _gdk_win32_colormap_color (GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap,
-				      GDK_WINDOW_OBJECT (window)->bg_color.pixel);
+      bg = _gdk_win32_colormap_color (GDK_DRAWABLE_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->colormap,
+				      ((GdkWindowObject *) window)->bg_color.pixel);
       
-      GetClipBox (hdc, &rect);
       GDK_NOTE (EVENTS,
 		g_print ("...%ldx%ld@+%ld+%ld bg %06lx\n",
 			 rect.right - rect.left,
@@ -1849,15 +1833,13 @@ erase_background (GdkWindow *window,
       if (hbr != NULL)
 	DeleteObject (hbr);
     }
-  else if (GDK_WINDOW_OBJECT (window)->bg_pixmap != NULL &&
-	   GDK_WINDOW_OBJECT (window)->bg_pixmap != GDK_NO_BG)
+  else if (((GdkWindowObject *) window)->bg_pixmap != GDK_NO_BG)
     {
-      GdkPixmap *pixmap = GDK_WINDOW_OBJECT (window)->bg_pixmap;
+      GdkPixmap *pixmap = ((GdkWindowObject *) window)->bg_pixmap;
       GdkPixmapImplWin32 *pixmap_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
       
-      GetClipBox (hdc, &rect);
-      
-      if (pixmap_impl->width <= 8 && pixmap_impl->height <= 8)
+      if (x_offset == 0 && y_offset == 0 &&
+	  pixmap_impl->width <= 8 && pixmap_impl->height <= 8)
 	{
 	  GDK_NOTE (EVENTS, g_print ("...small pixmap, using brush\n"));
 	  if (!(hbr = CreatePatternBrush (GDK_PIXMAP_HBITMAP (pixmap))))
@@ -1873,8 +1855,7 @@ erase_background (GdkWindow *window,
 
 	  GDK_NOTE (EVENTS,
 		    g_print ("...blitting pixmap %p (%dx%d) "
-			     "all over the place,\n"
-			     "...clip box = %ldx%ld@+%ld+%ld\n",
+			     " clip box = %ldx%ld@+%ld+%ld\n",
 			     GDK_PIXMAP_HBITMAP (pixmap),
 			     pixmap_impl->width, pixmap_impl->height,
 			     rect.right - rect.left, rect.bottom - rect.top,
@@ -1891,40 +1872,34 @@ erase_background (GdkWindow *window,
 	      DeleteDC (bgdc);
 	      return;
 	    }
-	  i = 0;
-	  while (i < rect.right)
+	  x = -x_offset;
+	  while (x < rect.right)
 	    {
-	      j = 0;
-	      while (j < rect.bottom)
+	      if (x + pixmap_impl->width >= rect.left)
 		{
-		  if (i + pixmap_impl->width >= rect.left
-		      && j + pixmap_impl->height >= rect.top)
+		  y = -y_offset;
+		  while (y < rect.bottom)
 		    {
-		      if (!BitBlt (hdc, i, j,
-				   pixmap_impl->width, pixmap_impl->height,
-				   bgdc, 0, 0, SRCCOPY))
+		      if (y + pixmap_impl->height >= rect.top)
 			{
-			  WIN32_GDI_FAILED ("BitBlt");
-			  SelectObject (bgdc, oldbitmap);
-			  DeleteDC (bgdc);
-			  return;
+			  if (!BitBlt (hdc, x, y,
+				       pixmap_impl->width, pixmap_impl->height,
+				       bgdc, 0, 0, SRCCOPY))
+			    {
+			      WIN32_GDI_FAILED ("BitBlt");
+			      SelectObject (bgdc, oldbitmap);
+			      DeleteDC (bgdc);
+			      return;
+			    }
 			}
+		      y += pixmap_impl->height;
 		    }
-		  j += pixmap_impl->height;
 		}
-	      i += pixmap_impl->width;
+	      x += pixmap_impl->width;
 	    }
 	  SelectObject (bgdc, oldbitmap);
 	  DeleteDC (bgdc);
 	}
-    }
-  else
-    {
-      GDK_NOTE (EVENTS, g_print ("...BLACK_BRUSH (?)\n"));
-      hbr = GetStockObject (BLACK_BRUSH);
-      GetClipBox (hdc, &rect);
-      if (!FillRect (hdc, &rect, hbr))
-	WIN32_GDI_FAILED ("FillRect");
     }
 }
 
@@ -2007,7 +1982,6 @@ gdk_event_translate (GdkEvent *event,
 
   static gint update_colors_counter = 0;
   gint button;
-  gint k;
 
   gchar buf[256];
   gboolean return_val = FALSE;
@@ -2070,7 +2044,7 @@ gdk_event_translate (GdkEvent *event,
       else
       {
         GDK_NOTE (EVENTS, g_print ("gdk_event_translate: %s for %p (NULL)\n",
-                                   gdk_win32_message_name (msg->message),
+                                   gdk_win32_message_to_string (msg->message),
 				   msg->hwnd));
       }
 #endif
@@ -2085,7 +2059,7 @@ gdk_event_translate (GdkEvent *event,
       GdkFilterReturn result;
 
       result = gdk_event_apply_filters
-	(msg, event, GDK_WINDOW_OBJECT (window)->filters);
+	(msg, event, ((GdkWindowObject *) window)->filters);
       
       if (result != GDK_FILTER_CONTINUE)
 	{
@@ -2125,7 +2099,7 @@ gdk_event_translate (GdkEvent *event,
 	  gdk_drawable_ref (window);
 	}
 
-      if (GDK_WINDOW_OBJECT (window)->extension_events != 0
+      if (((GdkWindowObject *) window)->extension_events != 0
 	  && _gdk_input_ignore_core)
 	{
 	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
@@ -2144,7 +2118,7 @@ gdk_event_translate (GdkEvent *event,
       event->scroll.direction = ((int) msg->wParam > 0) ?
 	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
       event->scroll.window = window;
-      event->scroll.time = msg->time;
+      event->scroll.time = _gdk_win32_get_next_tick (msg->time);
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->scroll.x = (gint16) pt.x + xoffset;
       event->scroll.y = (gint16) pt.y + yoffset;
@@ -2520,7 +2494,7 @@ gdk_event_translate (GdkEvent *event,
       event->key.type = ((msg->message == WM_KEYDOWN
 			  || msg->message == WM_SYSKEYDOWN) ?
 			 GDK_KEY_PRESS : GDK_KEY_RELEASE);
-      event->key.time = msg->time;
+      event->key.time = _gdk_win32_get_next_tick (msg->time);
       event->key.state = 0;
       if (GetKeyState (VK_SHIFT) < 0)
 	event->key.state |= GDK_SHIFT_MASK;
@@ -2630,7 +2604,7 @@ gdk_event_translate (GdkEvent *event,
 			 msg->hwnd,
 			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
-      if (GDK_WINDOW_OBJECT (window)->extension_events != 0
+      if (((GdkWindowObject *) window)->extension_events != 0
 	  && _gdk_input_ignore_core)
 	{
 	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
@@ -2665,7 +2639,7 @@ gdk_event_translate (GdkEvent *event,
 	  p_grab_automatic = TRUE;
 	}
 
-      event->button.time = msg->time;
+      event->button.time = _gdk_win32_get_next_tick (msg->time);
       if (window != orig_window)
 	translate_mouse_coords (orig_window, window, msg);
       event->button.x = current_x = (gint16) LOWORD (msg->lParam);
@@ -2701,7 +2675,7 @@ gdk_event_translate (GdkEvent *event,
 
       ASSIGN_WINDOW (find_window_for_pointer_event (window, msg));
 
-      if (GDK_WINDOW_OBJECT (window)->extension_events != 0
+      if (((GdkWindowObject *) window)->extension_events != 0
 	  && _gdk_input_ignore_core)
 	{
 	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
@@ -2722,7 +2696,7 @@ gdk_event_translate (GdkEvent *event,
 	  ASSIGN_WINDOW (window);
 
 	  event->button.window = window;
-	  event->button.time = msg->time;
+	  event->button.time = _gdk_win32_get_next_tick (msg->time);
 	  if (window != orig_window)
 	    translate_mouse_coords (orig_window, window, msg);
 	  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
@@ -2770,7 +2744,7 @@ gdk_event_translate (GdkEvent *event,
       if (window != current_window)
 	synthesize_crossing_events (window, msg);
 
-      if (GDK_WINDOW_OBJECT (window)->extension_events != 0
+      if (((GdkWindowObject *) window)->extension_events != 0
 	  && _gdk_input_ignore_core)
 	{
 	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
@@ -2785,7 +2759,7 @@ gdk_event_translate (GdkEvent *event,
       ASSIGN_WINDOW (window);
 
       event->motion.window = window;
-      event->motion.time = msg->time;
+      event->motion.time = _gdk_win32_get_next_tick (msg->time);
       if (window != orig_window)
 	translate_mouse_coords (orig_window, window, msg);
       event->motion.x = current_x = (gint16) LOWORD (msg->lParam);
@@ -2817,7 +2791,7 @@ gdk_event_translate (GdkEvent *event,
 	  event->crossing.type = GDK_LEAVE_NOTIFY;
 	  event->crossing.window = current_window;
 	  event->crossing.subwindow = NULL;
-	  event->crossing.time = msg->time;
+	  event->crossing.time = _gdk_win32_get_next_tick (msg->time);
 	  _gdk_windowing_window_get_offsets (current_window, &xoffset, &yoffset);
 	  event->crossing.x = current_x + xoffset;
 	  event->crossing.y = current_y + yoffset;
@@ -2866,7 +2840,7 @@ gdk_event_translate (GdkEvent *event,
 	  gdk_drawable_ref (window);
 	}
 
-      if (GDK_WINDOW_OBJECT (window)->extension_events != 0
+      if (((GdkWindowObject *) window)->extension_events != 0
 	  && _gdk_input_ignore_core)
 	{
 	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
@@ -2885,7 +2859,7 @@ gdk_event_translate (GdkEvent *event,
       event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
 	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
       event->scroll.window = window;
-      event->scroll.time = msg->time;
+      event->scroll.time = _gdk_win32_get_next_tick (msg->time);
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->scroll.x = (gint16) pt.x + xoffset;
       event->scroll.y = (gint16) pt.y + yoffset;
@@ -2907,7 +2881,7 @@ gdk_event_translate (GdkEvent *event,
       event->crossing.type = GDK_LEAVE_NOTIFY;
       event->crossing.window = window;
       event->crossing.subwindow = NULL;
-      event->crossing.time = msg->time;
+      event->crossing.time = _gdk_win32_get_next_tick (msg->time);
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->crossing.x = current_x + xoffset;
       event->crossing.y = current_y + yoffset;
@@ -2987,8 +2961,8 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_ERASEBKGND:
-      GDK_NOTE (EVENTS, g_print ("WM_ERASEBKGND: %p  dc %#x\n",
-				 msg->hwnd, msg->wParam));
+      GDK_NOTE (EVENTS, g_print ("WM_ERASEBKGND: %p  dc %p\n",
+				 msg->hwnd, (HANDLE) msg->wParam));
       
       if (GDK_WINDOW_DESTROYED (window))
 	break;
@@ -2996,7 +2970,6 @@ gdk_event_translate (GdkEvent *event,
       erase_background (window, (HDC) msg->wParam);
       *ret_val_flagp = TRUE; /* always claim as handled */
       *ret_valp = 1;
-
       break;
 
     case WM_PAINT:
@@ -3006,51 +2979,60 @@ gdk_event_translate (GdkEvent *event,
 				     msg->hwnd));
 	  break;
 	}
+      hrgn = CreateRectRgn (0, 0, 0, 0);
+      if (GetUpdateRgn (msg->hwnd, hrgn, FALSE) == ERROR)
+	{
+	  WIN32_GDI_FAILED ("GetUpdateRgn");
+	  break;
+	}
 
       hdc = BeginPaint (msg->hwnd, &paintstruct);
 
       GDK_NOTE (EVENTS,
-		g_print ("WM_PAINT: %p  %ldx%ld@+%ld+%ld %s dc %p\n",
+		g_print ("WM_PAINT: %p  %ldx%ld@+%ld+%ld %s dc %p%s\n",
 			 msg->hwnd,
 			 paintstruct.rcPaint.right - paintstruct.rcPaint.left,
 			 paintstruct.rcPaint.bottom - paintstruct.rcPaint.top,
 			 paintstruct.rcPaint.left, paintstruct.rcPaint.top,
 			 (paintstruct.fErase ? "erase" : ""),
-			 hdc));
+			 hdc,
+			 (return_exposes ? " return_exposes" : "")));
 
       EndPaint (msg->hwnd, &paintstruct);
 
       /* HB: don't generate GDK_EXPOSE events for InputOnly
        * windows -> backing store now works!
        */
-      if (GDK_WINDOW_OBJECT (window)->input_only)
-	break;
+      if (((GdkWindowObject *) window)->input_only)
+	{
+	  DeleteObject (hrgn);
+	  break;
+	}
 
       if (!(private->event_mask & GDK_EXPOSURE_MASK))
-	break;
+	{
+	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
+	  DeleteObject (hrgn);
+	  break;
+	}
 
 #if 0 /* we need to process exposes even with GDK_NO_BG
        * Otherwise The GIMP canvas update is broken ....
        */
-      if (GDK_WINDOW_OBJECT (window)->bg_pixmap == GDK_NO_BG)
+      if (((GdkWindowObject *) window)->bg_pixmap == GDK_NO_BG)
 	break;
 #endif
 
       if ((paintstruct.rcPaint.right == paintstruct.rcPaint.left)
           || (paintstruct.rcPaint.bottom == paintstruct.rcPaint.top))
-        break;
+	{
+	  GDK_NOTE (EVENTS, g_print ("...empty paintstruct, ignored\n"));
+	  DeleteObject (hrgn);
+	  break;
+	}
 
       if (return_exposes)
         {
-	  hrgn = CreateRectRgn (0, 0, 0, 0);
-	  if ((k = GetUpdateRgn (msg->hwnd, hrgn, FALSE)) == ERROR)
-	    WIN32_GDI_FAILED ("GetUpdateRgn");
-	  else if (k == NULLREGION)
-	    {
-	      DeleteObject (hrgn);
-	      break;
-	    }
-
           event->expose.type = GDK_EXPOSE;
           event->expose.window = window;
           event->expose.area.x = paintstruct.rcPaint.left;
@@ -3058,24 +3040,26 @@ gdk_event_translate (GdkEvent *event,
           event->expose.area.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
           event->expose.area.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
           event->expose.region = _gdk_win32_hrgn_to_region (hrgn);
+	  DeleteObject (hrgn);
           event->expose.count = 0;
 
-	  DeleteObject (hrgn);
-
           return_val = !GDK_WINDOW_DESTROYED (window);
+#if 1
           if (return_val)
             {
               GList *list = _gdk_queued_events;
               while (list != NULL )
                 {
-                  if ((((GdkEvent *)list->data)->any.type == GDK_EXPOSE) &&
-    	                (((GdkEvent *)list->data)->any.window == window) &&
-    	                !(((GdkEventPrivate *)list->data)->flags & GDK_EVENT_PENDING))
-    	                ((GdkEvent *)list->data)->expose.count++;
+		  GdkEventPrivate *event = list->data;
+                  if (event->event.any.type == GDK_EXPOSE &&
+		      event->event.any.window == window &&
+		      !(event->flags & GDK_EVENT_PENDING))
+		    event->event.expose.count++;
 
-                    list = list->next;
+		  list = list->next;
                 }
             }
+#endif
         }
       else
         {
@@ -3087,7 +3071,7 @@ gdk_event_translate (GdkEvent *event,
           expose_rect.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
           expose_rect.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
 
-	  _gdk_window_process_expose (window, msg->time, &expose_rect);
+	  _gdk_window_process_expose (window, _gdk_win32_get_next_tick (msg->time), &expose_rect);
 	  return_val = FALSE;
         }
       break;
@@ -3379,7 +3363,7 @@ gdk_event_translate (GdkEvent *event,
 	}
       event->selection.property = _gdk_selection_property;
       event->selection.requestor = (guint32) msg->hwnd;
-      event->selection.time = msg->time;
+      event->selection.time = _gdk_win32_get_next_tick (msg->time);
       return_val = !GDK_WINDOW_DESTROYED (window);
 #else
       /* Test code, to see if SetClipboardData works when called from
@@ -3453,7 +3437,7 @@ gdk_event_translate (GdkEvent *event,
 
     default:
       GDK_NOTE (EVENTS, g_print ("%s: %p %#x %#lx\n",
-				 gdk_win32_message_name (msg->message),
+				 gdk_win32_message_to_string (msg->message),
 				 msg->hwnd, msg->wParam, msg->lParam));
     }
 
@@ -3599,240 +3583,3 @@ gdk_flush (void)
   GdiFlush ();
 }
 
-#ifdef G_ENABLE_DEBUG
-
-gchar *
-gdk_win32_message_name (UINT msg)
-{
-  static gchar bfr[100];
-
-  switch (msg)
-    {
-#define CASE(x) case x: return #x
-      CASE (WM_NULL);
-      CASE (WM_CREATE);
-      CASE (WM_DESTROY);
-      CASE (WM_MOVE);
-      CASE (WM_SIZE);
-      CASE (WM_ACTIVATE);
-      CASE (WM_SETFOCUS);
-      CASE (WM_KILLFOCUS);
-      CASE (WM_ENABLE);
-      CASE (WM_SETREDRAW);
-      CASE (WM_SETTEXT);
-      CASE (WM_GETTEXT);
-      CASE (WM_GETTEXTLENGTH);
-      CASE (WM_PAINT);
-      CASE (WM_CLOSE);
-      CASE (WM_QUERYENDSESSION);
-      CASE (WM_QUERYOPEN);
-      CASE (WM_ENDSESSION);
-      CASE (WM_QUIT);
-      CASE (WM_ERASEBKGND);
-      CASE (WM_SYSCOLORCHANGE);
-      CASE (WM_SHOWWINDOW);
-      CASE (WM_WININICHANGE);
-      CASE (WM_DEVMODECHANGE);
-      CASE (WM_ACTIVATEAPP);
-      CASE (WM_FONTCHANGE);
-      CASE (WM_TIMECHANGE);
-      CASE (WM_CANCELMODE);
-      CASE (WM_SETCURSOR);
-      CASE (WM_MOUSEACTIVATE);
-      CASE (WM_CHILDACTIVATE);
-      CASE (WM_QUEUESYNC);
-      CASE (WM_GETMINMAXINFO);
-      CASE (WM_PAINTICON);
-      CASE (WM_ICONERASEBKGND);
-      CASE (WM_NEXTDLGCTL);
-      CASE (WM_SPOOLERSTATUS);
-      CASE (WM_DRAWITEM);
-      CASE (WM_MEASUREITEM);
-      CASE (WM_DELETEITEM);
-      CASE (WM_VKEYTOITEM);
-      CASE (WM_CHARTOITEM);
-      CASE (WM_SETFONT);
-      CASE (WM_GETFONT);
-      CASE (WM_SETHOTKEY);
-      CASE (WM_GETHOTKEY);
-      CASE (WM_QUERYDRAGICON);
-      CASE (WM_COMPAREITEM);
-      CASE (WM_GETOBJECT);
-      CASE (WM_COMPACTING);
-      CASE (WM_WINDOWPOSCHANGING);
-      CASE (WM_WINDOWPOSCHANGED);
-      CASE (WM_POWER);
-      CASE (WM_COPYDATA);
-      CASE (WM_CANCELJOURNAL);
-      CASE (WM_NOTIFY);
-      CASE (WM_INPUTLANGCHANGEREQUEST);
-      CASE (WM_INPUTLANGCHANGE);
-      CASE (WM_TCARD);
-      CASE (WM_HELP);
-      CASE (WM_USERCHANGED);
-      CASE (WM_NOTIFYFORMAT);
-      CASE (WM_CONTEXTMENU);
-      CASE (WM_STYLECHANGING);
-      CASE (WM_STYLECHANGED);
-      CASE (WM_DISPLAYCHANGE);
-      CASE (WM_GETICON);
-      CASE (WM_SETICON);
-      CASE (WM_NCCREATE);
-      CASE (WM_NCDESTROY);
-      CASE (WM_NCCALCSIZE);
-      CASE (WM_NCHITTEST);
-      CASE (WM_NCPAINT);
-      CASE (WM_NCACTIVATE);
-      CASE (WM_GETDLGCODE);
-      CASE (WM_SYNCPAINT);
-      CASE (WM_NCMOUSEMOVE);
-      CASE (WM_NCLBUTTONDOWN);
-      CASE (WM_NCLBUTTONUP);
-      CASE (WM_NCLBUTTONDBLCLK);
-      CASE (WM_NCRBUTTONDOWN);
-      CASE (WM_NCRBUTTONUP);
-      CASE (WM_NCRBUTTONDBLCLK);
-      CASE (WM_NCMBUTTONDOWN);
-      CASE (WM_NCMBUTTONUP);
-      CASE (WM_NCMBUTTONDBLCLK);
-      CASE (WM_NCXBUTTONDOWN);
-      CASE (WM_NCXBUTTONUP);
-      CASE (WM_NCXBUTTONDBLCLK);
-      CASE (WM_KEYDOWN);
-      CASE (WM_KEYUP);
-      CASE (WM_CHAR);
-      CASE (WM_DEADCHAR);
-      CASE (WM_SYSKEYDOWN);
-      CASE (WM_SYSKEYUP);
-      CASE (WM_SYSCHAR);
-      CASE (WM_SYSDEADCHAR);
-      CASE (WM_KEYLAST);
-      CASE (WM_IME_STARTCOMPOSITION);
-      CASE (WM_IME_ENDCOMPOSITION);
-      CASE (WM_IME_COMPOSITION);
-      CASE (WM_INITDIALOG);
-      CASE (WM_COMMAND);
-      CASE (WM_SYSCOMMAND);
-      CASE (WM_TIMER);
-      CASE (WM_HSCROLL);
-      CASE (WM_VSCROLL);
-      CASE (WM_INITMENU);
-      CASE (WM_INITMENUPOPUP);
-      CASE (WM_MENUSELECT);
-      CASE (WM_MENUCHAR);
-      CASE (WM_ENTERIDLE);
-      CASE (WM_MENURBUTTONUP);
-      CASE (WM_MENUDRAG);
-      CASE (WM_MENUGETOBJECT);
-      CASE (WM_UNINITMENUPOPUP);
-      CASE (WM_MENUCOMMAND);
-      CASE (WM_CHANGEUISTATE);
-      CASE (WM_UPDATEUISTATE);
-      CASE (WM_QUERYUISTATE);
-      CASE (WM_CTLCOLORMSGBOX);
-      CASE (WM_CTLCOLOREDIT);
-      CASE (WM_CTLCOLORLISTBOX);
-      CASE (WM_CTLCOLORBTN);
-      CASE (WM_CTLCOLORDLG);
-      CASE (WM_CTLCOLORSCROLLBAR);
-      CASE (WM_CTLCOLORSTATIC);
-      CASE (WM_MOUSEMOVE);
-      CASE (WM_LBUTTONDOWN);
-      CASE (WM_LBUTTONUP);
-      CASE (WM_LBUTTONDBLCLK);
-      CASE (WM_RBUTTONDOWN);
-      CASE (WM_RBUTTONUP);
-      CASE (WM_RBUTTONDBLCLK);
-      CASE (WM_MBUTTONDOWN);
-      CASE (WM_MBUTTONUP);
-      CASE (WM_MBUTTONDBLCLK);
-      CASE (WM_MOUSEWHEEL);
-      CASE (WM_XBUTTONDOWN);
-      CASE (WM_XBUTTONUP);
-      CASE (WM_XBUTTONDBLCLK);
-      CASE (WM_PARENTNOTIFY);
-      CASE (WM_ENTERMENULOOP);
-      CASE (WM_EXITMENULOOP);
-      CASE (WM_NEXTMENU);
-      CASE (WM_SIZING);
-      CASE (WM_CAPTURECHANGED);
-      CASE (WM_MOVING);
-      CASE (WM_POWERBROADCAST);
-      CASE (WM_DEVICECHANGE);
-      CASE (WM_MDICREATE);
-      CASE (WM_MDIDESTROY);
-      CASE (WM_MDIACTIVATE);
-      CASE (WM_MDIRESTORE);
-      CASE (WM_MDINEXT);
-      CASE (WM_MDIMAXIMIZE);
-      CASE (WM_MDITILE);
-      CASE (WM_MDICASCADE);
-      CASE (WM_MDIICONARRANGE);
-      CASE (WM_MDIGETACTIVE);
-      CASE (WM_MDISETMENU);
-      CASE (WM_ENTERSIZEMOVE);
-      CASE (WM_EXITSIZEMOVE);
-      CASE (WM_DROPFILES);
-      CASE (WM_MDIREFRESHMENU);
-      CASE (WM_IME_SETCONTEXT);
-      CASE (WM_IME_NOTIFY);
-      CASE (WM_IME_CONTROL);
-      CASE (WM_IME_COMPOSITIONFULL);
-      CASE (WM_IME_SELECT);
-      CASE (WM_IME_CHAR);
-      CASE (WM_IME_REQUEST);
-      CASE (WM_IME_KEYDOWN);
-      CASE (WM_IME_KEYUP);
-      CASE (WM_MOUSEHOVER);
-      CASE (WM_MOUSELEAVE);
-      CASE (WM_NCMOUSEHOVER);
-      CASE (WM_NCMOUSELEAVE);
-      CASE (WM_CUT);
-      CASE (WM_COPY);
-      CASE (WM_PASTE);
-      CASE (WM_CLEAR);
-      CASE (WM_UNDO);
-      CASE (WM_RENDERFORMAT);
-      CASE (WM_RENDERALLFORMATS);
-      CASE (WM_DESTROYCLIPBOARD);
-      CASE (WM_DRAWCLIPBOARD);
-      CASE (WM_PAINTCLIPBOARD);
-      CASE (WM_VSCROLLCLIPBOARD);
-      CASE (WM_SIZECLIPBOARD);
-      CASE (WM_ASKCBFORMATNAME);
-      CASE (WM_CHANGECBCHAIN);
-      CASE (WM_HSCROLLCLIPBOARD);
-      CASE (WM_QUERYNEWPALETTE);
-      CASE (WM_PALETTEISCHANGING);
-      CASE (WM_PALETTECHANGED);
-      CASE (WM_HOTKEY);
-      CASE (WM_PRINT);
-      CASE (WM_PRINTCLIENT);
-      CASE (WM_APPCOMMAND);
-      CASE (WM_HANDHELDFIRST);
-      CASE (WM_HANDHELDLAST);
-      CASE (WM_AFXFIRST);
-      CASE (WM_AFXLAST);
-      CASE (WM_PENWINFIRST);
-      CASE (WM_PENWINLAST);
-      CASE (WM_APP);
-#undef CASE
-    default:
-      if (msg >= WM_HANDHELDFIRST && msg <= WM_HANDHELDLAST)
-	sprintf (bfr, "WM_HANDHELDFIRST+%d", msg - WM_HANDHELDFIRST);
-      else if (msg >= WM_AFXFIRST && msg <= WM_AFXLAST)
-	sprintf (bfr, "WM_AFXFIRST+%d", msg - WM_AFXFIRST);
-      else if (msg >= WM_PENWINFIRST && msg <= WM_PENWINLAST)
-	sprintf (bfr, "WM_PENWINFIRST+%d", msg - WM_PENWINFIRST);
-      else if (msg >= WM_USER && msg <= 0x7FFF)
-	sprintf (bfr, "WM_USER+%d", msg - WM_USER);
-      else if (msg >= 0xC000 && msg <= 0xFFFF)
-	sprintf (bfr, "reg-%#x", msg);
-      else
-	sprintf (bfr, "unk-%#x", msg);
-      return bfr;
-    }
-  g_assert_not_reached ();
-}
-      
-#endif /* G_ENABLE_DEBUG */

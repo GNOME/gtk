@@ -34,10 +34,6 @@
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
 
-static gboolean gdk_window_gravity_works (void);
-static void     gdk_window_set_static_win_gravity (GdkWindow *window, 
-						   gboolean   on);
-
 static GdkColormap* gdk_window_impl_win32_get_colormap (GdkDrawable *drawable);
 static void         gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
 							GdkColormap *cmap);
@@ -246,6 +242,8 @@ _gdk_windowing_window_init (void)
   private->depth = gdk_visual_get_system ()->depth;
   impl->width = width;
   impl->height = height;
+
+  _gdk_window_init_position (GDK_WINDOW (private));
 
   gdk_win32_handle_table_insert (&gdk_root_window, _gdk_parent_root);
 }
@@ -712,6 +710,8 @@ gdk_window_foreign_new (GdkNativeWindow anid)
     private->state |= GDK_WINDOW_STATE_WITHDRAWN;
   private->depth = gdk_visual_get_system ()->depth;
 
+  _gdk_window_init_position (GDK_WINDOW (private));
+
   gdk_drawable_ref (window);
   gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
 
@@ -1110,11 +1110,13 @@ gdk_window_reparent (GdkWindow *window,
     old_parent_private->children =
       g_list_remove (old_parent_private->children, window);
 
+#if 0
   if ((old_parent_private &&
        (!old_parent_private->guffaw_gravity != !parent_private->guffaw_gravity)) ||
       (!old_parent_private && parent_private->guffaw_gravity))
     gdk_window_set_static_win_gravity (window, parent_private->guffaw_gravity);
-  
+#endif
+
   parent_private->children = g_list_prepend (parent_private->children, window);
   _gdk_window_init_position (GDK_WINDOW (window_private));
 }
@@ -1703,6 +1705,26 @@ gdk_window_get_geometry (GdkWindow *window,
       if (!GetClientRect (GDK_WINDOW_HWND (window), &rect))
 	WIN32_API_FAILED ("GetClientRect");
 
+      if (window != _gdk_parent_root)
+	{
+	  POINT pt;
+	  GdkWindow *parent = gdk_window_get_parent (window);
+
+	  pt.x = rect.left;
+	  pt.y = rect.top;
+	  ClientToScreen (GDK_WINDOW_HWND (window), &pt);
+	  ScreenToClient (GDK_WINDOW_HWND (parent), &pt);
+	  rect.left = pt.x;
+	  rect.top = pt.y;
+
+	  pt.x = rect.right;
+	  pt.y = rect.bottom;
+	  ClientToScreen (GDK_WINDOW_HWND (window), &pt);
+	  ScreenToClient (GDK_WINDOW_HWND (parent), &pt);
+	  rect.right = pt.x;
+	  rect.bottom = pt.y;
+	}
+
       if (x)
 	*x = rect.left;
       if (y)
@@ -2275,85 +2297,6 @@ gdk_window_merge_child_shapes (GdkWindow *window)
   gdk_propagate_shapes (GDK_WINDOW_HWND (window), TRUE);
 }
 
-/* Support for windows that can be guffaw-scrolled
- * (See http://www.gtk.org/~otaylor/whitepapers/guffaw-scrolling.txt)
- */
-
-static gboolean
-gdk_window_gravity_works (void)
-{
-  enum { UNKNOWN, NO, YES };
-  static gint gravity_works = UNKNOWN;
-  
-  if (gravity_works == UNKNOWN)
-    {
-      GdkWindowAttr attr;
-      GdkWindow *parent;
-      GdkWindow *child;
-      gint y;
-      
-      attr.window_type = GDK_WINDOW_TEMP;
-      attr.wclass = GDK_INPUT_OUTPUT;
-      attr.x = 0;
-      attr.y = 0;
-      attr.width = 100;
-      attr.height = 100;
-      attr.event_mask = 0;
-      
-      parent = gdk_window_new (NULL, &attr, GDK_WA_X | GDK_WA_Y);
-      
-      attr.window_type = GDK_WINDOW_CHILD;
-      child = gdk_window_new (parent, &attr, GDK_WA_X | GDK_WA_Y);
-      
-      gdk_window_set_static_win_gravity (child, TRUE);
-      
-      gdk_window_resize (parent, 100, 110);
-      gdk_window_move (parent, 0, -10);
-      gdk_window_move_resize (parent, 0, 0, 100, 100);
-      
-      gdk_window_resize (parent, 100, 110);
-      gdk_window_move (parent, 0, -10);
-      gdk_window_move_resize (parent, 0, 0, 100, 100);
-      
-      gdk_window_get_geometry (child, NULL, &y, NULL, NULL, NULL);
-      
-      gdk_window_destroy (parent);
-      gdk_window_destroy (child);
-      
-      gravity_works = ((y == -20) ? YES : NO);
-    }
-  
-  return (gravity_works == YES);
-}
-
-static void
-gdk_window_set_static_bit_gravity (GdkWindow *window, gboolean on)
-{
-  g_return_if_fail (window != NULL);
-
-  GDK_NOTE (MISC, g_print ("gdk_window_set_static_bit_gravity: Not implemented\n"));
-}
-
-static void
-gdk_window_set_static_win_gravity (GdkWindow *window, gboolean on)
-{
-  g_return_if_fail (window != NULL);
-
-  GDK_NOTE (MISC, g_print ("gdk_window_set_static_win_gravity: Not implemented\n"));
-}
-
-/*************************************************************
- * gdk_window_set_static_gravities:
- *     Set the bit gravity of the given window to static,
- *     and flag it so all children get static subwindow
- *     gravity.
- *   arguments:
- *     window: window for which to set static gravity
- *     use_static: Whether to turn static gravity on or off.
- *   results:
- *     Does the XServer support static gravity?
- *************************************************************/
-
 gboolean 
 gdk_window_set_static_gravities (GdkWindow *window,
 				 gboolean   use_static)
@@ -2367,23 +2310,10 @@ gdk_window_set_static_gravities (GdkWindow *window,
   if (!use_static == !private->guffaw_gravity)
     return TRUE;
   
-  if (use_static && !gdk_window_gravity_works ())
+  if (use_static)
     return FALSE;
   
   private->guffaw_gravity = use_static;
-  
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      gdk_window_set_static_bit_gravity (window, use_static);
-      
-      tmp_list = private->children;
-      while (tmp_list)
-	{
-	  gdk_window_set_static_win_gravity (window, use_static);
-	  
-	  tmp_list = tmp_list->next;
-	}
-    }
   
   return TRUE;
 }
@@ -2576,7 +2506,7 @@ gdk_window_set_type_hint (GdkWindow        *window,
   /*
    * XXX ???
    */
-  GDK_NOTE (MISC, g_print ("gdk_window_set_type_hint (%p)\n",
+  GDK_NOTE (MISC, g_print ("gdk_window_set_type_hint: %p\n",
 			   GDK_WINDOW_HWND (window)));
 }
 

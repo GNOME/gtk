@@ -1,3 +1,131 @@
+2002-11-03  Tor Lillqvist  <tml@iki.fi>
+
+	Lots of changes to the Win32 backend:
+
+	One big improvement is that scrolling of windows with background
+	pixmaps now works much better. (This can be seen in for instance
+	testgtk's "text" test.) Blitting inside a window
+	(gdk_draw_drawable) also works much better now (can also seen in
+	the "text" test).
+
+	Another major change is we don't (try to) do guffaw scrolling as
+	there is no static window gravity on Windows. Guffaw scrolling
+	would be unnecessary anyway, as there is the ScrollWindow()
+	API. This improves the behaviour of the Text Widget demo in
+	gtk-demo a lot. But I have no idea how the lack of static win
+	gravity should be handled in other places where the X11 code uses
+	it. Especially _gdk_window_move_resize_child().
+
+	Big windows still don't work correctly, I assume.
+l
+	Another vague area is the translate_queue. I don't think the queue
+	items actually ever gets used, at least not in the code as of now.
+
+	There is still some problem in expose handling. By moving an
+	obscuring window back and forth over testgtk's main window, for
+	instance, every now and then you typically get narrow vertical or
+	horizontal strips of pixels that haven't been properly redrawn
+	after being exposed. A fencepost error somewhere?
+
+	* gdk/win32/gdkevents-win32.c: Cast known GdkWindowObjects
+	directly instead of using GDK_WINDOW_OBJECT(). Remove unused
+	latin_locale_loaded variable.
+
+	(_gdk_win32_get_next_tick): New function. Used to make sure
+	timestamps of events are always increasing, both in events
+	generated from the window procedure and in events gotten via
+	PeekMessage(). Not sure whether this is actually useful, but it
+	seemed as a good idea.
+
+	(real_window_procedure): Don't use a local GdkEventPrivate
+	variable. Don't attempt any compression of configure or expose
+	events here, handled elsewhere.
+
+	(erase_background): Accumulate window offsets when traversing up
+	the parent chain for GDK_PARENT_RELATIVE_BG, in order to get
+	correct alignment of background pixmaps. Don't fill with
+	BLACK_BRUSH if GDK_NO_BG.
+
+	(gdk_event_get_graphics_expose): A bit more verbose debugging output.
+
+	(gdk_event_translate): Use _gdk_win32_get_next_tick(). In the
+	WM_PAINT handler, call GetUpdateRgn() before calling BeginPaint()
+	and EndPaint() (which empty the update region).
+
+	* gdk/win32/gdkdnd-win32.c
+	* gdk/win32/gdkinput-win32.c:
+	Use _gdk_win32_get_next_tick().
+	
+	* gdk/win32/gdkfont-win32.c: Use %p to print HFONTs.
+
+	(gdk_text_size): Remove, unused.
+
+	* gdk/win32/gdkgeometry-win32.c
+	(_gdk_windowing_window_queue_antiexpose): Always return FALSE for
+	now, until figured out whether antiexposes actually can work on
+	Win32.
+
+	(gdk_window_copy_area_scroll): Scroll also children with the
+	ScrollWindowEx() call. No need to call gdk_window_move() on the
+	children.
+
+	(gdk_window_scroll): Don't do guffaw scrolling.
+
+	(gdk_window_compute_position): Fix typo, used win32_y where x was
+	intended.
+
+	(gdk_window_queue_append): Use GetTickCount() for serial number,
+	not GetMessageTime(), which can be very far back.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_gravity_works): Remove,
+	we know that there is no such thing on Windows.
+
+	(gdk_window_set_static_bit_gravity,
+	gdk_window_set_static_win_gravity): Ditto, remove, they didn't do
+	anything anyway.
+
+	(_gdk_windowing_window_init, gdk_window_foreign_new): Call
+	_gdk_window_init_position() like in the X11 backend.
+
+	(gdk_window_reparent): Don't call the now nonexistent
+	gdk_window_set_static_win_gravity(). No idea what should be done
+	instead.
+
+	(gdk_window_get_geometry): The returned x and y should be relative
+	to parent. Used to be always zero..
+
+	(gdk_window_set_static_gravities): Return FALSE if trying to set
+	static gravity.
+	
+	* gdk/win32/gdkdrawable-win32.c (_gdk_win32_draw_tiles):
+	Rewrite. Make static. Must take tile origin parameters, too.
+
+	(gdk_win32_draw_rectangle): Pass the tile/stipple origin to
+	_gdk_win32_draw_tiles(). Remove #if 0 code.
+
+	(blit_inside_window): Don't call ScrollDC(), that didn't work at
+	all like I thought. A simple call to BitBlt() is enough.
+	
+	* gdk/win32/gdkcolor-win32.c (gdk_win32_color_to_string,
+	gdk_win32_print_paletteentries, gdk_win32_print_system_palette,
+	gdk_win32_print_hpalette)
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_drawable_description)
+	* gdk/win32/gdkevents-win32.c (gdk_win32_message_name):
+	Move all debugging helper functions to gdkmain-win32.c.
+
+	* gdk/win32/gdkmain-win32.c: (gdk_win32_lbstyle_to_string,
+	gdk_win32_pstype_to_string, gdk_win32_psstyle_to_string,
+	gdk_win32_psendcap_to_string, gdk_win32_psjoin_to_string): New
+	debugging functions.
+
+	(static_printf): Helper function for the above. sprintfs into a
+	static circular buffer, return value should be used "soon".
+
+	* gdk/win32/gdkgc-win32.c: Use above debugging functions.
+
+	* gdk/win32/gdkprivate-win32.h: Declare new functions, remove
+	obsoleted ones.
+
 Sun Nov  3 21:26:20 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Bah, and of course I broke something ...

@@ -297,9 +297,10 @@ struct _GdkGCWin32Class
   GdkGCClass parent_class;
 };
 
+gulong _gdk_win32_get_next_tick (gulong suggested_tick);
+
 GType _gdk_gc_win32_get_type (void);
 
-/* Routines from gdkgeometry-win32.c */
 void _gdk_window_init_position     (GdkWindow *window);
 void _gdk_window_move_resize_child (GdkWindow *window,
 				    gint       x,
@@ -309,15 +310,6 @@ void _gdk_window_move_resize_child (GdkWindow *window,
 void _gdk_window_process_expose    (GdkWindow     *window,
                                     gulong         serial,
                                     GdkRectangle  *area);
-
-/* gdkdrawable-win32.c, background draw helper */
-void _gdk_win32_draw_tiles (GdkDrawable *drawable,
-                            GdkGC       *gc,
-                            GdkPixmap   *tile,
-                            gint        x, 
-                            gint        y, 
-                            gint        width, 
-                            gint        height);
 
 void _gdk_win32_selection_init (void);
 void _gdk_win32_dnd_exit (void);
@@ -374,8 +366,6 @@ COLORREF  _gdk_win32_colormap_color     (GdkColormap *colormap,
 
 HRGN	  _gdk_win32_bitmap_to_region   (GdkPixmap   *bitmap);
 
-gchar     *gdk_font_full_name_get         (GdkFont     *font);
-
 void    _gdk_selection_property_store (GdkWindow *owner,
                                        GdkAtom    type,
                                        gint       format,
@@ -404,17 +394,27 @@ void    _gdk_wchar_text_handle    (GdkFont       *font,
 				   void          *arg);
 
 #ifdef G_ENABLE_DEBUG
-gchar *gdk_win32_color_to_string      (const        GdkColor *color);
+gchar *gdk_win32_color_to_string      (const GdkColor *color);
+void   gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
+				       const int           nentries);
+void   gdk_win32_print_system_palette (void);
+void   gdk_win32_print_hpalette       (HPALETTE     hpal);
+void   gdk_win32_print_dc             (HDC          hdc);
+
 gchar *gdk_win32_cap_style_to_string  (GdkCapStyle  cap_style);
 gchar *gdk_win32_fill_style_to_string (GdkFill      fill);
 gchar *gdk_win32_function_to_string   (GdkFunction  function);
 gchar *gdk_win32_join_style_to_string (GdkJoinStyle join_style);
 gchar *gdk_win32_line_style_to_string (GdkLineStyle line_style);
-gchar *gdk_win32_message_name         (UINT         msg);
+gchar *gdk_win32_drawable_description (GdkDrawable *d);
 
-#define PING() printf(G_STRLOC),fflush(stdout)
-#else
-#define PING()
+gchar *gdk_win32_lbstyle_to_string    (UINT         brush_style);
+gchar *gdk_win32_pstype_to_string     (DWORD        pen_style);
+gchar *gdk_win32_psstyle_to_string    (DWORD        pen_style);
+gchar *gdk_win32_psendcap_to_string   (DWORD        pen_style);
+gchar *gdk_win32_psjoin_to_string     (DWORD        pen_style);
+gchar *gdk_win32_message_to_string    (UINT         msg);
+
 #endif
 
 gchar  *gdk_win32_last_error_string (void);

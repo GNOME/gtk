@@ -144,12 +144,13 @@ gdk_window_copy_area_scroll (GdkWindow    *window,
                            dx, dy, /* in: scroll offsets */
                            NULL, /* in: scroll rect, NULL == entire client area */
                            &clipRect, /* in: restrict to */
-                           NULL, /* out: update region */
+                           NULL, /* in: update region */
                            NULL, /* out: update rect */
-                           SW_INVALIDATE))
+                           SW_INVALIDATE | SW_SCROLLCHILDREN))
         WIN32_API_FAILED ("ScrollWindowEx");
     }
 
+#if 0 /* Not needed, ScrollWindowEx also scrolls the children. */
   tmp_list = obj->children;
   while (tmp_list)
     {
@@ -160,6 +161,7 @@ gdk_window_copy_area_scroll (GdkWindow    *window,
       
       tmp_list = tmp_list->next;
     }
+#endif
 }
 
 static void
@@ -208,6 +210,8 @@ compute_intermediate_position (GdkWin32PositionInfo *position_info,
   new_position->height = new_y1 - new_y0;
 }
 
+#if 0
+
 static void
 gdk_window_guffaw_scroll (GdkWindow    *window,
 			  gint          dx,
@@ -223,7 +227,7 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
   GdkWindowParentPos parent_pos;
   GList *tmp_list;
   
-  GDK_NOTE (EVENTS, g_print ("gdk_window_guffaw_scroll %p %d,%d\n",
+  GDK_NOTE (EVENTS, g_print ("gdk_window_guffaw_scroll: %p %d,%d\n",
 			     GDK_WINDOW_HWND (window), dx, dy));
 
   gdk_window_compute_parent_pos (impl, &parent_pos);
@@ -250,7 +254,7 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
    */
   if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
                      new_position.x, new_position.y,
-	               new_position.width, new_position.height,
+		     new_position.width, new_position.height,
                      SWP_NOACTIVATE | SWP_NOZORDER))
     WIN32_API_FAILED ("SetWindowPos");
   
@@ -291,6 +295,8 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
     }
 }
 
+#endif
+
 /**
  * gdk_window_scroll:
  * @window: a #GdkWindow
@@ -311,7 +317,9 @@ gdk_window_scroll (GdkWindow *window,
 		   gint       dx,
 		   gint       dy)
 {
+#if 0
   gboolean can_guffaw_scroll = FALSE;
+#endif
   GdkRegion *invalidate_region;
   GdkWindowImplWin32 *impl;
   GdkWindowObject *obj;
@@ -322,7 +330,7 @@ gdk_window_scroll (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
   
-  GDK_NOTE (EVENTS, g_print ("gdk_window_scroll %p %d,%d\n",
+  GDK_NOTE (EVENTS, g_print ("gdk_window_scroll: %p %d,%d\n",
 			     GDK_WINDOW_HWND (window), dx, dy));
 
   obj = GDK_WINDOW_OBJECT (window);
@@ -353,7 +361,7 @@ gdk_window_scroll (GdkWindow *window,
   
   gdk_window_invalidate_region (window, invalidate_region, TRUE);
   gdk_region_destroy (invalidate_region);
-
+#if 0
   /* We can guffaw scroll if we are a child window, and the parent
    * does not extend beyond our edges. Otherwise, we use XCopyArea, then
    * move any children later
@@ -364,11 +372,13 @@ gdk_window_scroll (GdkWindow *window,
       can_guffaw_scroll = ((dx == 0 || (obj->x <= 0 && obj->x + impl->width >= parent_impl->width)) &&
 			   (dy == 0 || (obj->y <= 0 && obj->y + impl->height >= parent_impl->height)));
     }
-
   if (!obj->children || !can_guffaw_scroll)
     gdk_window_copy_area_scroll (window, &dest_rect, dx, dy);
   else
     gdk_window_guffaw_scroll (window, dx, dy);
+#else
+  gdk_window_copy_area_scroll (window, &dest_rect, dx, dy);
+#endif
 }
 
 void
@@ -383,6 +393,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
   GdkWin32PositionInfo new_info;
   GdkWindowParentPos parent_pos;
   GList *tmp_list;
+  
   gint d_xoffset, d_yoffset;
   gint dx, dy;
   gboolean is_move;
@@ -394,8 +405,8 @@ _gdk_window_move_resize_child (GdkWindow *window,
   GDK_NOTE (MISC, g_print ("_gdk_window_move_resize_child: %p %dx%d@+%d+%d\n",
 			   GDK_WINDOW_HWND (window), width, height, x, y));
 
+  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
   obj = GDK_WINDOW_OBJECT (window);
-  impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);
   
   dx = x - obj->x;
   dy = y - obj->y;
@@ -403,11 +414,14 @@ _gdk_window_move_resize_child (GdkWindow *window,
   is_move = dx != 0 || dy != 0;
   is_resize = impl->width != width || impl->height != height;
 
-  GDK_NOTE (MISC, g_print ("...is_move:%d is_resize:%d\n", is_move, is_resize));
-
   if (!is_move && !is_resize)
-    return;
+    {
+      GDK_NOTE (MISC, g_print ("...neither move or resize\n"));
+      return;
+    }
   
+  GDK_NOTE (MISC, g_print ("...%s%s\n", is_move ? "is_move " : "", is_resize ? "is_resize" : ""));
+
   obj->x = x;
   obj->y = y;
   impl->width = width;
@@ -576,9 +590,9 @@ gdk_window_compute_position (GdkWindowImplWin32   *window,
       if (parent_pos->x + wrapper->x < -(SIZE_LIMIT/2))
 	{
 	  if (parent_pos->x + wrapper->x + window->width < (SIZE_LIMIT/2))
-	    info->x = parent_pos->x + wrapper->x + window->width - SIZE_LIMIT - parent_pos->win32_x;
+	    info->x = parent_pos->x + wrapper->x + window->width - info->width - parent_pos->win32_x;
 	  else
-	    info->x = -(SIZE_LIMIT/2) - parent_pos->win32_y;
+	    info->x = -(SIZE_LIMIT/2) - parent_pos->win32_x;
 	}
       else
 	info->x = parent_pos->x + wrapper->x - parent_pos->win32_x;
@@ -596,7 +610,7 @@ gdk_window_compute_position (GdkWindowImplWin32   *window,
       if (parent_pos->y + wrapper->y < -(SIZE_LIMIT/2))
 	{
 	  if (parent_pos->y + wrapper->y + window->height < (SIZE_LIMIT/2))
-	    info->y = parent_pos->y + wrapper->y + window->height - SIZE_LIMIT - parent_pos->win32_y;
+	    info->y = parent_pos->y + wrapper->y + window->height - info->height - parent_pos->win32_y;
 	  else
 	    info->y = -(SIZE_LIMIT/2) - parent_pos->win32_y;
 	}
@@ -660,7 +674,8 @@ gdk_window_compute_parent_pos (GdkWindowImplWin32      *window,
 
   g_return_if_fail (GDK_IS_WINDOW_IMPL_WIN32 (window));
 
-  wrapper = GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_WIN32 (window)->wrapper);
+  wrapper =
+    GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_WIN32 (window)->wrapper);
   
   parent_pos->x = 0;
   parent_pos->y = 0;
@@ -824,9 +839,28 @@ gdk_window_queue_append (GdkWindow          *window,
       GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
 
       GDK_NOTE (EVENTS, g_print ("gdk_window_queue_append: length >= 128\n"));
-      _gdk_window_process_expose (window, GetCurrentTime (), &impl->position_info.clip_rect);
+      _gdk_window_process_expose (window, _gdk_win32_get_next_tick (0),
+				  &impl->position_info.clip_rect);
     }
 
+  item->window = window;
+  item->serial = GetTickCount ();
+
+  GDK_NOTE (EVENTS, (g_print ("gdk_window_queue_append: %s %p %ld ",
+			      (item->type == GDK_WINDOW_QUEUE_TRANSLATE ?
+			       "TRANSLATE" : "ANTIEXPOSE"),
+			      GDK_WINDOW_HWND (window),
+			      item->serial),
+		     (item->type == GDK_WINDOW_QUEUE_TRANSLATE ?
+		      g_print ("%d,%d\n",
+			       item->u.translate.dx, item->u.translate.dy) :
+		      g_print ("(%d,%d)--(%d,%d)\n",
+			       item->u.antiexpose.area->extents.x1,
+			       item->u.antiexpose.area->extents.y1,
+			       item->u.antiexpose.area->extents.x2,
+			       item->u.antiexpose.area->extents.y2))));
+
+  gdk_drawable_ref (window);
   translate_queue = g_slist_append (translate_queue, item) ;
 }
 
@@ -836,18 +870,10 @@ gdk_window_queue_translation (GdkWindow *window,
 			      gint       dy)
 {
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
-  item->window = window;
-  item->serial = GetMessageTime ();
   item->type = GDK_WINDOW_QUEUE_TRANSLATE;
   item->u.translate.dx = dx;
   item->u.translate.dy = dy;
 
-  GDK_NOTE (EVENTS, g_print ("gdk_window_queue_translation %p %ld %d,%d\n",
-			     GDK_WINDOW_HWND (window),
-			     item->serial,
-			     dx, dy));
-
-  gdk_drawable_ref (window);
   gdk_window_queue_append (window, item);
 }
 
@@ -856,41 +882,15 @@ _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
 					GdkRegion *area)
 {
 #if 1
+  return FALSE;			/* XXX */
+#else
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
 
-  item->window = window;
-  item->serial = GetMessageTime ();
   item->type = GDK_WINDOW_QUEUE_ANTIEXPOSE;
   item->u.antiexpose.area = area;
 
-  GDK_NOTE (EVENTS, g_print ("_gdk_windowing_window_queue_antiexpose %p %ld %dx%d@+%d+%d\n",
-			     GDK_WINDOW_HWND (window),
-			     item->serial,
-			     area->extents.x2 - area->extents.x1,
-			     area->extents.y2 - area->extents.y1,
-			     area->extents.x1, area->extents.y1));
-
-  gdk_drawable_ref (window);
   gdk_window_queue_append (window, item);
 
-  return TRUE;
-#else
-  GdkRectangle r;
-  HRGN hrgn;
-
-  gdk_region_get_clipbox (area, &r);
-  hrgn = CreateRectRgn(r.x, r.y, r.width+1, r.height+1);
-
-  g_return_val_if_fail (area != NULL, FALSE);
-
-  GDK_NOTE (MISC, g_print ("_gdk_windowing_window_queue_antiexpose %p\n",
-			   GDK_WINDOW_HWND (window)));
-
-  /* HB: not quite sure if this is the right thing to do.
-   * (Region not to be proceesed by next WM_PAINT)
-   */
-  ValidateRgn(GDK_WINDOW_HWND (window), hrgn);
-  DeleteObject(hrgn);
   return TRUE;
 #endif
 }
@@ -907,7 +907,7 @@ _gdk_window_process_expose (GdkWindow    *window,
   
   impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
   
-  GDK_NOTE (EVENTS, g_print ("_gdk_window_process_expose %p %ld %dx%d@+%d+%d\n",
+  GDK_NOTE (EVENTS, g_print ("_gdk_window_process_expose: %p %ld %dx%d@+%d+%d\n",
 			     GDK_WINDOW_HWND (window), serial,
 			     area->width, area->height, area->x, area->y));
   
@@ -921,15 +921,34 @@ _gdk_window_process_expose (GdkWindow    *window,
 	  if (item->window == window)
 	    {
 	      if (item->type == GDK_WINDOW_QUEUE_TRANSLATE)
-		gdk_region_offset (invalidate_region, - item->u.translate.dx, - item->u.translate.dy);
+		{
+		  GDK_NOTE (EVENTS, g_print ("...item %ld xlating region by %d,%d\n",
+					     item->serial,
+					     item->u.translate.dx, item->u.translate.dy));
+		  gdk_region_offset (invalidate_region, - item->u.translate.dx, - item->u.translate.dy);
+		}
 	      else		/* anti-expose */
-		gdk_region_subtract (invalidate_region, item->u.antiexpose.area);
+		{
+#ifdef G_ENABLE_DEBUG
+		  GdkRectangle rect;
+
+		  GDK_NOTE (EVENTS,
+			    (gdk_region_get_clipbox (item->u.antiexpose.area, &rect),
+			     g_print ("...item %ld antiexposing %dx%d@+%d+%d\n",
+				      item->serial,
+				      rect.width, rect.height,
+				      rect.x, rect.y)));
+#endif
+		  gdk_region_subtract (invalidate_region, item->u.antiexpose.area);
+		}
 	    }
 	}
       else
 	{
 	  GSList *tmp_link = translate_queue;
 	  
+	  GDK_NOTE (EVENTS, g_print ("...item %ld being removed\n", item->serial));
+
 	  translate_queue = g_slist_remove_link (translate_queue, translate_queue);
 	  gdk_drawable_unref (item->window);
 
@@ -940,6 +959,8 @@ _gdk_window_process_expose (GdkWindow    *window,
 	  g_slist_free_1 (tmp_link);
 	}
     }
+
+  GDK_NOTE (EVENTS, g_print ("...queue length now %d\n", g_slist_length (translate_queue)));
 
   clip_region = gdk_region_rectangle (&impl->position_info.clip_rect);
   gdk_region_intersect (invalidate_region, clip_region);

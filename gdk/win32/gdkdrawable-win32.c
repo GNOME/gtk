@@ -120,39 +120,6 @@ static void gdk_drawable_impl_win32_finalize   (GObject *object);
 
 static gpointer parent_class = NULL;
 
-#ifdef G_ENABLE_DEBUG
-
-gchar *
-gdk_win32_drawable_description (GdkDrawable *d)
-{
-  GdkVisual *v;
-  static gchar buf[1000];
-  static gchar *bufp = buf;
-  gchar *msg;
-  gint width, height;
-  gchar *retval;
-
-  gdk_drawable_get_size (d, &width, &height);
-  msg = g_strdup_printf
-    ("%s:%p:%dx%dx%d",
-     G_OBJECT_TYPE_NAME (d),
-     GDK_DRAWABLE_HANDLE (d),
-     width, height,
-     (GDK_IS_PIXMAP (d) ? GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (d)->impl)->image->depth
-      : ((v = gdk_drawable_get_visual (d)) ? v->depth : gdk_visual_get_system ()->depth)));
-
-  if (bufp + strlen (msg) + 1 > buf + sizeof (buf))
-    bufp = buf;
-  retval = bufp;
-  strcpy (bufp, msg);
-  bufp += strlen (msg) + 1;
-  g_free (msg);
-
-  return retval;
-}
-
-#endif
-
 GType
 gdk_drawable_impl_win32_get_type (void)
 {
@@ -318,6 +285,59 @@ render_line_vertical (HDC    hdc,
 }
 
 static void
+_gdk_win32_draw_tiles (GdkDrawable *drawable,
+		       GdkGC       *gc,
+		       GdkPixmap   *tile,
+		       gint         dest_x,
+		       gint         dest_y,
+		       gint         tile_x_origin,
+		       gint         tile_y_origin,
+		       gint         width,
+		       gint         height)
+{
+  gint x, y;
+  gint tile_width, tile_height;
+
+  GDK_NOTE (MISC, g_print ("_gdk_win32_draw_tiles: %s +%d+%d tile=%s@+%d+%d %dx%d\n",
+			   gdk_win32_drawable_description (drawable),
+			   dest_x, dest_y,
+			   gdk_win32_drawable_description (tile),
+			   tile_x_origin, tile_y_origin,
+			   width, height));
+
+  gdk_drawable_get_size (tile, &tile_width, &tile_height);
+
+  y = tile_y_origin % tile_height;
+  if (y > 0)
+    y -= tile_height;
+  while (y < dest_y + height)
+    {
+      if (y + tile_height >= dest_y)
+	{
+	  x = tile_x_origin % tile_width;
+	  if (x > 0)
+	    x -= tile_width;
+	  while (x < dest_x + width)
+	    {
+	      if (x + tile_width >= dest_x)
+		{
+		  gint src_x = MAX (0, dest_x - x);
+		  gint src_y = MAX (0, dest_y - y);
+
+		  gdk_draw_drawable (drawable, gc, tile,
+				     src_x, src_y,
+				     x + src_x, y + src_y,
+				     MIN (tile_width, dest_x + width - (x + src_x)),
+				     MIN (tile_height, dest_y + height - (y + src_y)));
+		}
+	      x += tile_width;
+	    }
+	}
+      y += tile_height;
+    }
+}
+
+static void
 gdk_win32_draw_rectangle (GdkDrawable *drawable,
 			  GdkGC       *gc,
 			  gint         filled,
@@ -340,34 +360,20 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 			   width, height, x, y));
     
   if (filled 
-      && (gc_private->tile)
       && (gc_private->values_mask & GDK_GC_TILE)    
-      && (gc_private->values_mask & GDK_GC_FILL))
+      && (gc_private->tile)
+      && (gc_private->values_mask & GDK_GC_FILL)
+      && (gc_private->fill_style == GDK_TILED))
     {
-      _gdk_win32_draw_tiles (drawable, gc, gc_private->tile, x, y, width, height);
+      _gdk_win32_draw_tiles (drawable, gc, gc_private->tile,
+			     x, y,
+			     gc->ts_x_origin,
+			     gc->ts_y_origin,
+			     width, height);
       return;
     }
 
   hdc = gdk_win32_hdc_get (drawable, gc, mask);
-
-#if 0
-  {
-    HBRUSH hbr = GetCurrentObject (hdc, OBJ_BRUSH);
-    HPEN hpen = GetCurrentObject (hdc, OBJ_PEN);
-    LOGBRUSH lbr;
-    LOGPEN lpen;
-    GetObject (hbr, sizeof (lbr), &lbr);
-    GetObject (hpen, sizeof (lpen), &lpen);
-    
-    g_print ("current brush: style = %s, color = 0x%.08x\n",
-	     (lbr.lbStyle == BS_SOLID ? "SOLID" : "???"),
-	     lbr.lbColor);
-    g_print ("current pen: style = %s, width = %d, color = 0x%.08x\n",
-	     (lpen.lopnStyle == PS_SOLID ? "SOLID" : "???"),
-	     lpen.lopnWidth,
-	     lpen.lopnColor);
-  }
-#endif
 
   if (gc_private->fill_style == GDK_OPAQUE_STIPPLED)
     {
@@ -743,49 +749,6 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
   _gdk_win32_blit (FALSE, (GdkDrawableImplWin32 *) drawable,
 		   gc, src, xsrc, ysrc,
 		   xdest, ydest, width, height);
-}
-
-void
-_gdk_win32_draw_tiles (GdkDrawable *drawable,
-		       GdkGC       *gc,
-		       GdkPixmap   *tile,
-		       gint        x_from,
-		       gint        y_from,
-		       gint        max_width,
-		       gint        max_height)
-{
-  gint x = x_from, y = y_from;
-  gint tile_width, tile_height;
-  gint width, height;
-
-  GDK_NOTE (MISC, g_print ("_gdk_win32_draw_tiles: %s tile=%s +%d+%d %d,%d\n",
-			   gdk_win32_drawable_description (drawable),
-			   gdk_win32_drawable_description (tile),
-			   x_from, y_from, max_width, max_height));
-
-  gdk_drawable_get_size (drawable, &width, &height);
-  gdk_drawable_get_size (tile, &tile_width, &tile_height);
-
-  width  = MIN (width,  max_width);
-  height = MIN (height, max_height);
-
-  tile_width  = MIN (tile_width,  max_width);
-  tile_height = MIN (tile_height, max_height);
-
-  while (y < height)
-    {
-      x = x_from;
-      while (x < width)
-        {
-	  gdk_draw_drawable (drawable, gc, tile,
-			     x % tile_width,  /* xsrc */
-			     y % tile_height, /* ysrc */
-			     x, y, /* dest */
-			     tile_width, tile_height);
-	  x += tile_width;
-	}
-      y += tile_height;
-    }
 }
 
 static void
@@ -1230,34 +1193,11 @@ blit_inside_window (GdkDrawableImplWin32 *window,
 		    gint     		  height)
 
 {
-  RECT scrollRect, clipRect, emptyRect;
-  HRGN updateRgn;
-      
   GDK_NOTE (MISC, g_print ("blit_inside_window\n"));
 
-  scrollRect.left = MIN (xsrc, xdest);
-  scrollRect.top = MIN (ysrc, ydest);
-  scrollRect.right = MAX (xsrc + width + 1, xdest + width + 1);
-  scrollRect.bottom = MAX (ysrc + height + 1, ydest + height + 1);
-  
-  clipRect.left = xdest;
-  clipRect.top = ydest;
-  clipRect.right = xdest + width + 1;
-  clipRect.bottom = ydest + height + 1;
-  
-  SetRectEmpty (&emptyRect);
-  updateRgn = CreateRectRgnIndirect (&emptyRect);
-  if (!ScrollDC (hdc, xdest - xsrc, ydest - ysrc,
-		 &scrollRect, &clipRect,
-		 updateRgn, NULL))
-    WIN32_GDI_FAILED ("ScrollDC");
-  else if (!InvalidateRgn (window->handle, updateRgn, FALSE))
-    WIN32_GDI_FAILED ("InvalidateRgn");
-  else if (!UpdateWindow (window->handle))
-    WIN32_GDI_FAILED ("UpdateWindow");
-
-  if (!DeleteObject (updateRgn))
-    WIN32_GDI_FAILED ("DeleteObject");
+  if (!BitBlt (hdc, xdest, ydest, width, height,
+	       hdc, xsrc, ysrc, SRCCOPY))
+    WIN32_GDI_FAILED ("BitBlt");
 }
 
 static void
@@ -1323,7 +1263,7 @@ _gdk_win32_blit (gboolean              use_fg_bg,
   HRGN src_rgn, draw_rgn, outside_rgn;
   RECT r;
   GdkDrawableImplWin32 *draw_impl;
-  GdkDrawableImplWin32 *src_impl;
+  GdkDrawableImplWin32 *src_impl = NULL;
   gint src_width, src_height;
   
   GDK_NOTE (MISC, g_print ("_gdk_win32_blit: src:%s %dx%d@+%d+%d\n"

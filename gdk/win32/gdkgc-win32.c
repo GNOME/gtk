@@ -369,8 +369,6 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
             win32_gc->pen_num_dashes = 0;
 	    }
           win32_gc->pen_style &= ~(PS_STYLE_MASK);
-	  GDK_NOTE (GC, (g_print ("%sps|=LINE_SOLID", s),
-			 s = ","));
 	  win32_gc->pen_style |= PS_SOLID;
 	  break;
 	case GDK_LINE_ON_OFF_DASH:
@@ -382,12 +380,12 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
              * line endings ? --hb
              */
             win32_gc->pen_style &= ~(PS_STYLE_MASK);
-    	      GDK_NOTE (GC, (g_print ("%sps|=DASH", s),
-                                    s = ","));
-    	      win32_gc->pen_style |= PS_DASH;
+	    win32_gc->pen_style |= PS_DASH;
           }
 	  break;
 	}
+      GDK_NOTE (GC, (g_print ("%sps|=PS_STYLE_%s", s, gdk_win32_psstyle_to_string (win32_gc->pen_style)),
+		     s = ","));
       win32_gc->values_mask |= GDK_GC_LINE_STYLE;
     }
 
@@ -398,21 +396,17 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	{
 	case GDK_CAP_NOT_LAST:	/* ??? */
 	case GDK_CAP_BUTT:
-	  GDK_NOTE (GC, (g_print ("%sps|=ENDCAP_FLAT", s),
-			 s = ","));
 	  win32_gc->pen_style |= PS_ENDCAP_FLAT;
 	  break;
 	case GDK_CAP_ROUND:
-	  GDK_NOTE (GC, (g_print ("%sps|=ENDCAP_ROUND", s),
-			 s = ","));
 	  win32_gc->pen_style |= PS_ENDCAP_ROUND;
 	  break;
 	case GDK_CAP_PROJECTING:
-	  GDK_NOTE (GC, (g_print ("%sps|=ENDCAP_SQUARE", s),
-			 s = ","));
 	  win32_gc->pen_style |= PS_ENDCAP_SQUARE;
 	  break;
 	}
+      GDK_NOTE (GC, (g_print ("%sps|=PS_ENDCAP_%s", s, gdk_win32_psendcap_to_string (win32_gc->pen_style)),
+		     s = ","));
       win32_gc->values_mask |= GDK_GC_CAP_STYLE;
     }
 
@@ -422,21 +416,17 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
       switch (values->join_style)
 	{
 	case GDK_JOIN_MITER:
-	  GDK_NOTE (GC, (g_print ("%sps|=JOIN_MITER", s),
-			 s = ","));
 	  win32_gc->pen_style |= PS_JOIN_MITER;
 	  break;
 	case GDK_JOIN_ROUND:
-	  GDK_NOTE (GC, (g_print ("%sps|=JOIN_ROUND", s),
-			 s = ","));
 	  win32_gc->pen_style |= PS_JOIN_ROUND;
 	  break;
 	case GDK_JOIN_BEVEL:
-	  GDK_NOTE (GC, (g_print ("%sps|=JOIN_BEVEL", s),
-			 s = ","));
 	  win32_gc->pen_style |= PS_JOIN_BEVEL;
 	  break;
 	}
+      GDK_NOTE (GC, (g_print ("%sps|=PS_JOIN_%s", s, gdk_win32_psjoin_to_string (win32_gc->pen_style)),
+		     s = ","));
       win32_gc->values_mask |= GDK_GC_JOIN_STYLE;
     }
   GDK_NOTE (GC, g_print ("}\n"));
@@ -900,7 +890,6 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
   GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
   GdkDrawableImplWin32 *impl = NULL;
   gboolean ok = TRUE;
-  int flag;
 
   g_assert (win32_gc->hdc == NULL);
 
@@ -1045,73 +1034,10 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 		 win32_gc->values_mask & GDK_GC_CLIP_Y_ORIGIN ? gc->clip_y_origin : 0))
 	WIN32_API_FAILED ("OffsetClipRgn"), ok = FALSE;
     }
-#ifdef G_ENABLE_DEBUG
-  if (_gdk_debug_flags & GDK_DEBUG_GC)
-    {
-      HGDIOBJ obj;
-      LOGBRUSH logbrush;
-      EXTLOGPEN extlogpen;
-      HRGN hrgn;
-      RECT rect;
 
-      g_print ("gdk_win32_hdc_get: %p\n", win32_gc->hdc);
-      obj = GetCurrentObject (win32_gc->hdc, OBJ_BRUSH);
-      GetObject (obj, sizeof (LOGBRUSH), &logbrush);
-      g_print ("brush: style: %s color: %06lx hatch: %#lx\n",
-	       (logbrush.lbStyle == BS_HOLLOW ? "HOLLOW" :
-		(logbrush.lbStyle == BS_PATTERN ? "PATTERN" :
-		 (logbrush.lbStyle == BS_SOLID ? "SOLID" :
-		  "???"))),
-	       logbrush.lbColor,
-	       logbrush.lbHatch);
-      obj = GetCurrentObject (win32_gc->hdc, OBJ_PEN);
-      GetObject (obj, sizeof (EXTLOGPEN), &extlogpen);
-      g_print ("pen: type: %s style: %s endcap: %s join: %s width: %d brush: %s\n",
-	       ((extlogpen.elpPenStyle & PS_TYPE_MASK) ==
-		PS_GEOMETRIC ? "GEOMETRIC" : "COSMETIC"),
-	       ((extlogpen.elpPenStyle & PS_STYLE_MASK) ==
-		PS_NULL ? "NULL" :
-		((extlogpen.elpPenStyle & PS_STYLE_MASK) == PS_SOLID ? "SOLID" :
-		 ((extlogpen.elpPenStyle & PS_STYLE_MASK) == PS_DOT ? "DOT" :
-		  ((extlogpen.elpPenStyle & PS_STYLE_MASK) == PS_DASH ? "DASH" :
- 		   "???")))),
-	       ((extlogpen.elpPenStyle & PS_ENDCAP_MASK) ==
-		PS_ENDCAP_FLAT ? "FLAT" :
-		((extlogpen.elpPenStyle & PS_ENDCAP_MASK) ==
-		 PS_ENDCAP_ROUND ? "ROUND" :
-		 ((extlogpen.elpPenStyle & PS_ENDCAP_MASK) ==
-		  PS_ENDCAP_SQUARE ? "ROUND" :
-		  ((extlogpen.elpPenStyle & PS_ENDCAP_MASK) ==
-		   PS_ENDCAP_SQUARE ? "ROUND" : "???")))),
-	       ((extlogpen.elpPenStyle & PS_JOIN_MASK) ==
-		PS_JOIN_BEVEL ? "BEVEL" :
-		((extlogpen.elpPenStyle & PS_JOIN_MASK) ==
-		 PS_JOIN_MITER ? "MITER" :
-		 ((extlogpen.elpPenStyle & PS_JOIN_MASK) ==
-		  PS_JOIN_ROUND ? "ROUND" : "???"))),
-	       extlogpen.elpWidth,
-	       (extlogpen.elpBrushStyle == BS_DIBPATTERN ? "DIBPATTERN" :
-		(extlogpen.elpBrushStyle == BS_DIBPATTERNPT ? "DIBPATTERNPT" :
-		 (extlogpen.elpBrushStyle == BS_HATCHED ? "HATCHED" :
-		  (extlogpen.elpBrushStyle == BS_HOLLOW ? "HOLLOW" :
-		   (extlogpen.elpBrushStyle == BS_PATTERN ? "PATTERN" :
-		    (extlogpen.elpBrushStyle == BS_SOLID ? "SOLID" : "???")))))));
-      hrgn = CreateRectRgn (0, 0, 0, 0);
-      if ((flag = GetClipRgn (win32_gc->hdc, hrgn)) == -1)
-	WIN32_API_FAILED ("GetClipRgn");
-      else if (flag == 0)
-	g_print ("no clip region\n");
-      else if (flag == 1)
-	{
-	  GetRgnBox (hrgn, &rect);
-	  g_print ("clip region bbox: %ldx%ld@+%ld+%ld\n",
-		   rect.right - rect.left,
-		   rect.bottom - rect.top,
-		   rect.left, rect.top);
-	}
-      DeleteObject (hrgn);
-    }
-#endif
+  GDK_NOTE (GC, (g_print ("gdk_win32_hdc_get: "),
+		 gdk_win32_print_dc (win32_gc->hdc)));
+
   return win32_gc->hdc;
 }
 
@@ -1301,101 +1227,3 @@ _gdk_win32_bitmap_to_region (GdkPixmap *pixmap)
 
   return hRgn;
 }
-
-#ifdef G_ENABLE_DEBUG
-
-gchar *
-gdk_win32_cap_style_to_string (GdkCapStyle cap_style)
-{
-  switch (cap_style)
-    {
-#define CASE(x) case x: return #x + strlen ("GDK_CAP_")
-    CASE (GDK_CAP_NOT_LAST);
-    CASE (GDK_CAP_BUTT);
-    CASE (GDK_CAP_ROUND);
-    CASE (GDK_CAP_PROJECTING);
-#undef CASE
-    default: return ("illegal GdkCapStyle value");
-    }
-  /* NOTREACHED */
-  return NULL;
-}
-
-gchar *
-gdk_win32_fill_style_to_string (GdkFill fill)
-{
-  switch (fill)
-    {
-#define CASE(x) case x: return #x + strlen ("GDK_")
-    CASE (GDK_SOLID);
-    CASE (GDK_TILED);
-    CASE (GDK_STIPPLED);
-    CASE (GDK_OPAQUE_STIPPLED);
-#undef CASE
-    default: return ("illegal GdkFill value");
-    }
-  /* NOTREACHED */
-  return NULL;
-}
-
-gchar *
-gdk_win32_function_to_string (GdkFunction function)
-{
-  switch (function)
-    {
-#define CASE(x) case x: return #x + strlen ("GDK_")
-    CASE (GDK_COPY);
-    CASE (GDK_INVERT);
-    CASE (GDK_XOR);
-    CASE (GDK_CLEAR);
-    CASE (GDK_AND);
-    CASE (GDK_AND_REVERSE);
-    CASE (GDK_AND_INVERT);
-    CASE (GDK_NOOP);
-    CASE (GDK_OR);
-    CASE (GDK_EQUIV);
-    CASE (GDK_OR_REVERSE);
-    CASE (GDK_COPY_INVERT);
-    CASE (GDK_OR_INVERT);
-    CASE (GDK_NAND);
-    CASE (GDK_SET);
-#undef CASE
-    default: return ("illegal GdkFunction value");
-    }
-  /* NOTREACHED */
-  return NULL; 
-}
-
-gchar *
-gdk_win32_join_style_to_string (GdkJoinStyle join_style)
-{
-  switch (join_style)
-    {
-#define CASE(x) case x: return #x + strlen ("GDK_JOIN_")
-    CASE (GDK_JOIN_MITER);
-    CASE (GDK_JOIN_ROUND);
-    CASE (GDK_JOIN_BEVEL);
-#undef CASE
-    default: return ("illegal GdkJoinStyle value");
-    }
-  /* NOTREACHED */
-  return NULL; 
-}
-
-gchar *
-gdk_win32_line_style_to_string (GdkLineStyle line_style)
-{
-  switch (line_style)
-    {
-#define CASE(x) case x: return #x + strlen ("GDK_LINE_")
-    CASE(GDK_LINE_SOLID);
-    CASE(GDK_LINE_ON_OFF_DASH);  
-    CASE(GDK_LINE_DOUBLE_DASH);  
-#undef CASE
-    default: return ("illegal GdkLineStyle value");
-    }
-  /* NOTREACHED */
-  return NULL; 
-}
-
-#endif

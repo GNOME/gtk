@@ -904,8 +904,8 @@ gdk_font_load_logfont (LOGFONT *lfp)
   else
     singlefont->codepage = 0;
 
-  GDK_NOTE (MISC, (g_print ("... = %#x %s cs %s cp%d\n",
-			    (guint) singlefont->hfont, face,
+  GDK_NOTE (MISC, (g_print ("... = %p %s cs %s cp%d\n",
+			    singlefont->hfont, face,
 			    charset_name (singlefont->charset),
 			    singlefont->codepage),
 		   g_print ("... Unicode subranges:"),
@@ -1350,8 +1350,8 @@ _gdk_font_destroy (GdkFont *font)
   GSList *list;
 
   singlefont = (GdkWin32SingleFont *) private->fonts->data;
-  GDK_NOTE (MISC, g_print ("_gdk_font_destroy %#x\n",
-			   (guint)singlefont->hfont));
+  GDK_NOTE (MISC, g_print ("_gdk_font_destroy %p\n",
+			   singlefont->hfont));
 
   gdk_font_hash_remove (font->type, font);
   
@@ -1514,9 +1514,9 @@ _gdk_wchar_text_handle (GdkFont       *font,
       if (!list)
 	singlefont = NULL;
 
-      GDK_NOTE (MISC, g_print ("%d:%d:%d:%#x ",
+      GDK_NOTE (MISC, g_print ("%d:%d:%d:%p ",
 			       start-wcstr, wcp-wcstr, block,
-			       (singlefont ? (guint) singlefont->hfont : 0)));
+			       (singlefont ? singlefont->hfont : 0)));
 
       /* Call the callback function */
       (*handler) (singlefont, start, wcp+1 - start, arg);
@@ -1553,44 +1553,6 @@ gdk_text_size_handler (GdkWin32SingleFont *singlefont,
 
   arg->total.cx += this_size.cx;
   arg->total.cy = MAX (arg->total.cy, this_size.cy);
-}
-
-static gboolean
-gdk_text_size (GdkFont           *font,
-	       const gchar       *text,
-	       gint               text_length,
-	       gdk_text_size_arg *arg)
-{
-  gint wlen;
-  wchar_t *wcstr;
-
-  g_return_val_if_fail (font != NULL, FALSE);
-  g_return_val_if_fail (text != NULL, FALSE);
-
-  if (text_length == 0)
-    return 0;
-
-  g_assert (font->type == GDK_FONT_FONT || font->type == GDK_FONT_FONTSET);
-
-  wcstr = g_new (wchar_t, text_length);
-  if (text_length == 1)
-    {
-      /* For single characters, don't try to interpret as UTF-8.
-       */
-      wcstr[0] = (guchar) text[0];
-      _gdk_wchar_text_handle (font, wcstr, 1, gdk_text_size_handler, arg);
-    }
-  else
-    {
-      if ((wlen = _gdk_utf8_to_ucs2 (wcstr, text, text_length, text_length)) == -1)
-	g_warning ("gdk_text_size: _gdk_utf8_to_ucs2 failed");
-      else
-	_gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, arg);
-    }
-
-  g_free (wcstr);
-
-  return TRUE;
 }
 
 gint
