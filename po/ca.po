@@ -922,7 +922,7 @@ msgstr "calendar:week_start:1"
 #: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "etiqueta de la barra de progrés|%d %%"
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"

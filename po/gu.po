@@ -957,7 +957,7 @@ msgstr "કેલેન્ડર: અઠવાડિયાની શરુઆત
 #: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "પ્રગતિદર્શક પટ્ટી લેબલ|%d %%"
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
