@@ -18,6 +18,7 @@
 #include <X11/Xlocale.h>	/* so we get the right setlocale */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "gtkbutton.h"
 #include "gtkhscrollbar.h"
 #include "gtkhseparator.h"
@@ -215,31 +216,47 @@ gtk_init (int	 *argc,
       
       for (i = 1; i < *argc;)
 	{
-	  if (strcmp ("--gtk-debug", (*argv)[i]) == 0)
+	  if ((strcmp ("--gtk-debug", (*argv)[i]) == 0) ||
+	      (strncmp ("--gtk-debug=", (*argv)[i], 12) == 0))
 	    {
-	      (*argv)[i] = NULL;
+	      gchar *equal_pos = strchr ((*argv)[i], '=');
 
-	      if ((i + 1) < *argc && (*argv)[i + 1])
+	      if (equal_pos != NULL)
+		{
+		  gtk_debug_flags |= g_parse_debug_string (equal_pos+1,
+							   gtk_debug_keys,
+							   gtk_ndebug_keys);
+		}
+	      else if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  gtk_debug_flags |= g_parse_debug_string ((*argv)[i+1],
 							   gtk_debug_keys,
 							   gtk_ndebug_keys);
-		  (*argv)[i + 1] = NULL;
+		  (*argv)[i] = NULL;
 		  i += 1;
 		}
-	    }
-	  else if (strcmp ("--gtk-no-debug", (*argv)[i]) == 0)
-	    {
 	      (*argv)[i] = NULL;
+	    }
+	  else if ((strcmp ("--gtk-no-debug", (*argv)[i]) == 0) ||
+		   (strncmp ("--gtk-no-debug=", (*argv)[i], 15) == 0))
+	    {
+	      gchar *equal_pos = strchr ((*argv)[i], '=');
 
-	      if ((i + 1) < *argc && (*argv)[i + 1])
+	      if (equal_pos != NULL)
+		{
+		  gtk_debug_flags &= ~g_parse_debug_string (equal_pos+1,
+							    gtk_debug_keys,
+							    gtk_ndebug_keys);
+		}
+	      else if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  gtk_debug_flags &= ~g_parse_debug_string ((*argv)[i+1],
 							    gtk_debug_keys,
 							    gtk_ndebug_keys);
-		  (*argv)[i + 1] = NULL;
+		  (*argv)[i] = NULL;
 		  i += 1;
 		}
+	      (*argv)[i] = NULL;
 	    }
 	  i += 1;
 	}

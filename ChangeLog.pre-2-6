@@ -1,3 +1,8 @@
+Fri Apr  3 20:36:52 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdk.c gtk/gtkmain.c: Accept debug options 
+	in the form --g[td]k[-no]-debug=xxx as well
+
 Fri Apr  3 18:33:47 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk-config.in: Added flags --prefix[=dir] and

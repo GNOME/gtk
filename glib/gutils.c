@@ -873,7 +873,7 @@ g_parse_debug_string  (const gchar *string,
 
   g_return_val_if_fail (string != NULL, 0);
 
-  if (!strcmp (string, "ALL"))
+  if (!g_strcasecmp (string, "all"))
     {
       for (i=0; i<nkeys; i++)
 	result |= keys[i].value;
@@ -897,7 +897,7 @@ g_parse_debug_string  (const gchar *string,
 	  *q = 0;
 
 	  for (i=0; i<nkeys; i++)
-	    if (!strcmp(keys[i].key, p))
+	    if (!g_strcasecmp(keys[i].key, p))
 	      result |= keys[i].value;
 
 	  p = q+1;

@@ -1,3 +1,8 @@
+Fri Apr  3 20:36:35 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gutils.c (g_parse_debug_string): Make debug string
+	parsine case-insensitive
+
 Fri Apr  3 17:03:18 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gstring.c: corrected possible overrun when inserting into

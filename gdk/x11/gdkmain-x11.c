@@ -327,31 +327,47 @@ gdk_init (int    *argc,
       for (i = 1; i < *argc;)
 	{
 #ifdef G_ENABLE_DEBUG	  
-	  if (strcmp ("--gdk-debug", (*argv)[i]) == 0)
+	  if ((strcmp ("--gdk-debug", (*argv)[i]) == 0) ||
+	      (strncmp ("--gdk-debug=", (*argv)[i], 12) == 0))
 	    {
-	      (*argv)[i] = NULL;
-
-	      if ((i + 1) < *argc && (*argv)[i + 1])
+	      gchar *equal_pos = strchr ((*argv)[i], '=');
+	      
+	      if (equal_pos != NULL)
+		{
+		  gdk_debug_flags |= g_parse_debug_string (equal_pos+1,
+							   gdk_debug_keys,
+							   gdk_ndebug_keys);
+		}
+	      else if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  gdk_debug_flags |= g_parse_debug_string ((*argv)[i+1],
 							   gdk_debug_keys,
 							   gdk_ndebug_keys);
-		  (*argv)[i + 1] = NULL;
+		  (*argv)[i] = NULL;
 		  i += 1;
 		}
-	    }
-	  else if (strcmp ("--gdk-no-debug", (*argv)[i]) == 0)
-	    {
 	      (*argv)[i] = NULL;
+	    }
+	  else if ((strcmp ("--gdk-no-debug", (*argv)[i]) == 0) ||
+		   (strncmp ("--gdk-no-debug=", (*argv)[i], 15) == 0))
+	    {
+	      gchar *equal_pos = strchr ((*argv)[i], '=');
 
-	      if ((i + 1) < *argc && (*argv)[i + 1])
+	      if (equal_pos != NULL)
+		{
+		  gdk_debug_flags &= ~g_parse_debug_string (equal_pos+1,
+							    gdk_debug_keys,
+							    gdk_ndebug_keys);
+		}
+	      else if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  gdk_debug_flags &= ~g_parse_debug_string ((*argv)[i+1],
 							    gdk_debug_keys,
 							    gdk_ndebug_keys);
-		  (*argv)[i + 1] = NULL;
+		  (*argv)[i] = NULL;
 		  i += 1;
 		}
+	      (*argv)[i] = NULL;
 	    }
 	  else 
 #endif /* G_ENABLE_DEBUG */
