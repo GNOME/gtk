@@ -1,5 +1,7 @@
 2004-11-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am (content_files): Add new migration chapters.
+
 	* gtk/tmpl/gtkaboutdialog.sgml: Markup fix.
 
 	* gtk/tmpl/gtkstock.sgml: Fix markup.

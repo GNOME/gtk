@@ -96,6 +96,8 @@ content_files =					\
 	migrating-GtkAction.sgml		\
 	migrating-GtkComboBox.sgml		\
 	migrating-GtkFileChooser.sgml		\
+	migrating-GtkIconView.sgml		\
+	migrating-GtkAboutDialog.sgml		\
 	objects_grouped.sgml			\
 	question_index.sgml			\
 	resources.sgml				\
