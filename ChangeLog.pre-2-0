@@ -1,3 +1,10 @@
+Tue Feb 26 19:16:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/win32/gdkkeys-win32.c (gdk_keyval_name): 
+	* gdk/x11/gdkkeys-x11.c (gdk_keyval_name): 
+	Make sure Page_Up, Page_Down get those names, not Prior,
+	Next.
+
 Tue Feb 26 18:58:49 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccelgroup.c (gtk_accelerator_set_default_mod_mask):

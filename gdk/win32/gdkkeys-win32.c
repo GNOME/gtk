@@ -1836,8 +1836,8 @@ static struct gdk_key {
   { 0x00ff54, "Down" },
   { 0x00ff55, "Page_Up" },
   { 0x00ff55, "Prior" },
-  { 0x00ff56, "Next" },
   { 0x00ff56, "Page_Down" },
+  { 0x00ff56, "Next" },
   { 0x00ff57, "End" },
   { 0x00ff58, "Begin" },
   { 0x00ff60, "Select" },
@@ -1874,8 +1874,8 @@ static struct gdk_key {
   { 0x00ff99, "KP_Down" },
   { 0x00ff9a, "KP_Page_Up" },
   { 0x00ff9a, "KP_Prior" },
-  { 0x00ff9b, "KP_Next" },
   { 0x00ff9b, "KP_Page_Down" },
+  { 0x00ff9b, "KP_Next" },
   { 0x00ff9c, "KP_End" },
   { 0x00ff9d, "KP_Begin" },
   { 0x00ff9e, "KP_Insert" },
@@ -1963,12 +1963,22 @@ gdk_keys_keyval_compare (const void *pkey, const void *pbase)
 gchar*
 gdk_keyval_name (guint	      keyval)
 {
-  struct gdk_key *found =
-    bsearch (&keyval, gdk_keys_by_keyval,
-	     GDK_NUM_KEYS, sizeof (struct gdk_key),
-	     gdk_keys_keyval_compare);
+  struct gdk_key *found;
+
+  found = bsearch (&keyval, gdk_keys_by_keyval,
+		   GDK_NUM_KEYS, sizeof (struct gdk_key),
+		   gdk_keys_keyval_compare);
+
   if (found != NULL)
-    return (gchar *) found->name;
+    {
+      while (found > gdk_keys_by_keyval)
+	{
+	  if ((found - 1)->keyval == keyval)
+	    keyval--;
+	}
+	    
+      return (gchar *) found->name;
+    }
   else
     return NULL;
 }

@@ -860,6 +860,18 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 gchar*
 gdk_keyval_name (guint	      keyval)
 {
+  switch (keyval)
+    {
+    case GDK_Page_Up:
+      return "Page_Up";
+    case GDK_Page_Down:
+      return "Page_Down";
+    case GDK_KP_Page_Up:
+      return "KP_Page_Up";
+    case GDK_KP_Page_Down:
+      return "KP_Page_Down";
+    }
+  
   return XKeysymToString (keyval);
 }
 
