@@ -1,3 +1,10 @@
+Thu Oct 26 02:10:32 2000  Tim Janik  <timj@gtk.org>
+
+        [ Backport from 1.3 / otaylor, 29 Nov 2000 ]
+	
+	* gtk/Makefile.am: invoke maketypes.awk with LC_ALL=C to avoid
+	localization misbehaviour.
+
 2000-11-29  Martin Baulig  <baulig@suse.de>
 
 	* *.pc.in: Make the pkg-config scripts actually work.
