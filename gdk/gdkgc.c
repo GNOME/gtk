@@ -687,9 +687,7 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
 
   src_private = (GdkGCPrivate *) src_gc;
   dst_private = (GdkGCPrivate *) dst_gc;
-  /* Use a mask that covers all GC components. Could this generate
-   * a BadValue error ??? 
-   */
-  XCopyGC (src_private->xdisplay, src_private->xgc, 0xffffffff, 
+
+  XCopyGC (src_private->xdisplay, src_private->xgc, ~((~1) << GCLastBit),
 	   dst_private->xgc);
 }

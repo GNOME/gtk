@@ -4,6 +4,9 @@ Sat Feb  7 11:33:08 1998  Owen Taylor  <owt1@cornell.edu>
 	  instead of 0xffff, since there are 22 flags currently
 	  defined. (From: Jon Trowbridge <trow@emccta.com>)
 
+	  Changed to something better. ~((~1) << GCLastBit)
+		   (From: from Daniel Stephens <daniel@cheeseplant.org>)
+	
 Sat Feb  7 02:29:01 1998  Tim Janik  <timj@gimp.org>
 
 	* gdk/gdk.c (gdk_event_translate): don't wipe out window_private's x
