@@ -3645,9 +3645,9 @@ gtk_widget_modify_color_component (GtkWidget     *widget,
 
 /**
  * gtk_widget_modify_fg:
- * @widget: a #GtkWidget
+ * @widget: a #GtkWidget.
  * @state: the state for which to set the foreground color.
- * @color: the color to assign (does not need to be allocated)
+ * @color: the color to assign (does not need to be allocated).
  * 
  * Set the foreground color for a widget in a particular state.  All
  * other style values are left untouched. See also
@@ -3667,9 +3667,9 @@ gtk_widget_modify_fg (GtkWidget   *widget,
 
 /**
  * gtk_widget_modify_bg:
- * @widget: a #GtkWidget
- * @state: the state for which to set the foreground color.
- * @color: the color to assign (does not need to be allocated)
+ * @widget: a #GtkWidget.
+ * @state: the state for which to set the background color.
+ * @color: the color to assign (does not need to be allocated).
  * 
  * Set the background color for a widget in a particular state.  All
  * other style values are left untouched. See also
@@ -3688,10 +3688,10 @@ gtk_widget_modify_bg (GtkWidget   *widget,
 }
 
 /**
- * gtk_widget_modify_base:
- * @widget: a #GtkWidget
- * @state: the state for which to set the foreground color.
- * @color: the color to assign (does not need to be allocated)
+ * gtk_widget_modify_text:
+ * @widget: a #GtkWidget.
+ * @state: the state for which to set the text color.
+ * @color: the color to assign (does not need to be allocated).
  * 
  * Set the text color for a widget in a particular state.  All other
  * style values are left untouched. The text color is the foreground
@@ -3713,11 +3713,11 @@ gtk_widget_modify_text (GtkWidget   *widget,
 
 /**
  * gtk_widget_modify_base:
- * @widget: a #GtkWidget
- * @state: the state for which to set the foreground color.
- * @color: the color to assign (does not need to be allocated)
+ * @widget: a #GtkWidget.
+ * @state: the state for which to set the base color.
+ * @color: the color to assign (does not need to be allocated).
  * 
- * Set the text color for a widget in a particular state.
+ * Set the base color for a widget in a particular state.
  * All other style values are left untouched. The base color
  * is the background color used along with the text color
  * (see gtk_widget_modify_text) for widgets such as #GtkEntry

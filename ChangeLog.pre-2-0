@@ -1,3 +1,7 @@
+2001-10-12  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkwidget.c: Fix some doc comments.
+
 Fri Oct 12 11:39:20 2001  Joshua N Pritikin  <vishnu@pobox.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_get_path_at_pos): Fix to work
