@@ -1,3 +1,9 @@
+Thu Apr 25 20:24:37 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_size_allocate): use the child's
+	requisition.height, not allocation.height, as width of submenu
+	indicator. (#75948)
+
 Thu Apr 25 00:26:34 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_reset_default_sort_func):
