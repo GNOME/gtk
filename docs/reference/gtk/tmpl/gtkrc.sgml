@@ -265,6 +265,14 @@ elements are:
        </para>
      </listitem>
   </varlistentry>
+  <varlistentry>
+    <term><literal>stock[<replaceable>"stock-id"</replaceable>]</literal> = { <replaceable>icon source specifications</replaceable> }</literal></term>
+     <listitem>
+       <para>
+        Defines the icon for a stock item.
+       </para>
+     </listitem>
+  </varlistentry>
 </variablelist>
 </para>
 <para>
@@ -335,6 +343,70 @@ hex digits, or they can be specified as a triplet of floats
 <literal>{ <replaceable>r</replaceable>, <replaceable>g</replaceable>,
 <replaceable>b</replaceable>}</literal>.
 </para>
+
+<para>
+In a <literal>stock</literal> definition, icon sources are specified as a
+4-tuple of image filename, text direction, widget state, and size, in that
+order.  Each icon source specifies an image filename to use with a given
+direction, state, and size. The <literal>*</literal> character can be used as a
+wildcard, and if direction/state/size are omitted they default to
+<literal>*</literal>. So for example, the following specifies different icons to
+use for left-to-right and right-to-left languages:
+<programlisting>
+stock["my-stock-item"] = 
+{
+  { "itemltr.png", LTR, *, * },
+  { "itemrtl.png", RTL, *, * }
+}
+</programlisting>
+This could be abbreviated as follows:
+<programlisting>
+stock["my-stock-item"] = 
+{
+  { "itemltr.png", LTR },
+  { "itemrtl.png", RTL }
+}
+</programlisting>
+</para>
+
+<para>
+You can specify custom icons for specific sizes, as follows:
+<programlisting>
+stock["my-stock-item"] = 
+{
+  { "itemmenusize.png", *, *, "gtk-menu" },
+  { "itemtoolbarsize.png", *, *, "gtk-large-toolbar" }
+  { "itemgeneric.png" } /* implicit *, *, * as a fallback */
+}
+</programlisting>
+The sizes that come with GTK+ itself are <literal>"gtk-menu"</literal>,
+<literal>"gtk-small-toolbar"</literal>, <literal>"gtk-large-toolbar"</literal>,
+<literal>"gtk-button"</literal>, <literal>"gtk-dialog"</literal>. Applications
+can define other sizes.
+</para>
+
+<para>
+It's also possible to use custom icons for a given state, for example:
+You can specify custom icons for specific sizes, as follows:
+<programlisting>
+stock["my-stock-item"] = 
+{
+  { "itemprelight.png", *, PRELIGHT },
+  { "iteminsensitive.png", *, INSENSITIVE }, 
+  { "itemgeneric.png" } /* implicit *, *, * as a fallback */
+}
+</programlisting>
+</para>
+
+<para>
+When selecting an icon source to use, GTK+ will consider text direction most
+important, state second, and size third. It will select the best match based on
+those criteria. If an attribute matches exactly (e.g. you specified
+<literal>PRELIGHT</literal> or specified the size), GTK+ won't modify the image;
+if the attribute matches with a wildcard, GTK+ will scale or modify the image to
+match the state and size the user requested.
+</para>
+
 </refsect2>
 
 <refsect2><title>Key bindings</title>

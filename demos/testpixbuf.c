@@ -25,6 +25,8 @@
 #include <gtk/gtk.h>
 #include <gtk/gdk-pixbuf-loader.h>
 
+#include "test-inline-pixbufs.h"
+
 typedef struct {
 	FILE             *imagefile;
 	GdkPixbufLoader  *loader;
@@ -375,7 +377,7 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 	window = gtk_widget_new (gtk_window_get_type (),
 				 "GtkObject::user_data", NULL,
 				 "GtkWindow::type", GTK_WINDOW_TOPLEVEL,
-				 "GtkWindow::title", "testrgb",
+				 "GtkWindow::title", title ? title : "testrgb",
 				 "GtkWindow::allow_shrink", TRUE,
 				 NULL);
 	gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -535,6 +537,13 @@ main (int argc, char **argv)
                         new_testrgb_window (pixbuf, NULL);
                         ++xpmp;
                 }
+
+                /* Test loading from inline data. */
+                pixbuf = gdk_pixbuf_new_from_inline (apple_red, FALSE, -1);
+                new_testrgb_window (pixbuf, "Red apple from inline data");
+
+                pixbuf = gdk_pixbuf_new_from_inline (gnome_foot, TRUE, sizeof (gnome_foot));
+                new_testrgb_window (pixbuf, "Foot from inline data");
                 
 		found_valid = TRUE;
 	} else {
