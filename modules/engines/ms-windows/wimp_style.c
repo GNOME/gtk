@@ -1145,12 +1145,18 @@ draw_box (GtkStyle      *style,
       if (GTK_IS_SCROLLBAR(widget))
         {
           GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
+          gboolean is_v = GTK_IS_VSCROLLBAR(widget);
           if (xp_theme_draw(window,
-                            (GTK_IS_VSCROLLBAR(widget))
+                            is_v
                             ? XP_THEME_ELEMENT_SCROLLBAR_V
                             : XP_THEME_ELEMENT_SCROLLBAR_H,
                             style, x, y, width, height, state_type, area))
             {
+              xp_theme_draw(window,
+                            is_v
+                            ? XP_THEME_ELEMENT_GRIP_V
+                            : XP_THEME_ELEMENT_GRIP_H,
+                            style, x, y, width, height, state_type, area);
               return;
             }
         }

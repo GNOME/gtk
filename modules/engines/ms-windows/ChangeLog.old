@@ -1,3 +1,7 @@
+2003-10-20  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/wimp_style.c: Added grippers to XP scrollbars. 
+
 2003-10-20  Dom Lachowicz <cinamod@hotmail.com>
 
 	* configure.in: Bump version to the next release number (0.5.1)
