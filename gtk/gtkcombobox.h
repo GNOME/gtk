@@ -70,6 +70,10 @@ void          gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
 gint          gtk_combo_box_get_active       (GtkComboBox     *combo_box);
 void          gtk_combo_box_set_active       (GtkComboBox     *combo_box,
                                               gint             index);
+gboolean      gtk_combo_box_get_active_iter  (GtkComboBox     *combo_box,
+					      GtkTreeIter     *iter);
+void          gtk_combo_box_set_active_iter  (GtkComboBox     *combo_box,
+					      GtkTreeIter     *iter);
 
 /* getters and setters */
 GtkTreeModel *gtk_combo_box_get_model        (GtkComboBox     *combo_box);

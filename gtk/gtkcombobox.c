@@ -2392,6 +2392,65 @@ gtk_combo_box_set_active (GtkComboBox *combo_box,
   g_signal_emit_by_name (combo_box, "changed", NULL, NULL);
 }
 
+
+/**
+ * gtk_combo_box_get_active_iter:
+ * @combo_box: A #GtkComboBox
+ * @iter: The uninitialized #GtkTreeIter.
+ * 
+ * Set @iter to point to the current active item, if it exists.
+ * 
+ * Return value: %TRUE, if @iter was set
+ *
+ * Since: 2.4
+ **/
+gboolean
+gtk_combo_box_get_active_iter (GtkComboBox     *combo_box,
+                               GtkTreeIter     *iter)
+{
+  GtkTreePath *path;
+  gint active;
+  gboolean retval;
+
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), FALSE);
+
+  active = gtk_combo_box_get_active (combo_box);
+  if (active < 0)
+    return FALSE;
+
+  path = gtk_tree_path_new_from_indices (active, -1);
+  retval = gtk_tree_model_get_iter (gtk_combo_box_get_model (combo_box),
+                                    iter, path);
+  gtk_tree_path_free (path);
+
+  return retval;
+}
+
+/**
+ * gtk_combo_box_set_active_iter:
+ * @combo_box: A #GtkComboBox
+ * @iter: The #GtkTreeIter.
+ * 
+ * Sets the current active item to be the one referenced by @iter.
+ * 
+ * Since: 2.4
+ **/
+void
+gtk_combo_box_set_active_iter (GtkComboBox     *combo_box,
+                               GtkTreeIter     *iter)
+{
+  GtkTreePath *path;
+
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+
+  path = gtk_tree_model_get_path (gtk_combo_box_get_model (combo_box), iter);
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (gtk_tree_path_get_depth (path) != 1);
+  
+  gtk_combo_box_set_active (combo_box, gtk_tree_path_get_indices (path)[0]);
+  gtk_tree_path_free (path);
+}
+
 /**
  * gtk_combo_box_get_model
  * @combo_box: A #GtkComboBox.

@@ -1,3 +1,11 @@
+Tue Oct 14 16:10:21 2003  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_active_iter): New function
+	to set the active row by iter.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_get_active_iter): New function
+	to get the active row by iter.
+
 2003-10-13  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): Don't do
