@@ -1,3 +1,8 @@
+2004-10-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtktreesortable.sgml: Document GtkTreeIterCompareFunc
+	(#154943)
+
 2004-10-10  Matthias Clasen  <matthias@localhost.localdomain>
 
 	* gtk/images/progressbar.png:
