@@ -672,7 +672,7 @@ shortcuts_get_index (GtkFileChooserDefault *impl,
 
   if (where == SHORTCUTS_HOME)
     goto out;
-  
+
   n += impl->has_home ? 1 : 0;
 
   if (where == SHORTCUTS_DESKTOP)
@@ -1372,7 +1372,7 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
 
   g_signal_connect (selection, "changed",
 		    G_CALLBACK (shortcuts_selection_changed_cb), impl);
-  
+
   g_signal_connect (impl->shortcuts_tree, "row-activated",
 		    G_CALLBACK (shortcuts_row_activated_cb), impl);
 
@@ -1599,7 +1599,7 @@ gtk_file_chooser_default_constructor (GType                  type,
   focus_chain = g_list_append (focus_chain, hpaned);
   gtk_container_set_focus_chain (GTK_CONTAINER (vbox), focus_chain);
   g_list_free (focus_chain);
-    
+
   gtk_widget_pop_composite_child ();
 
   return object;
@@ -1642,6 +1642,21 @@ bookmarks_changed_cb (GtkFileSystem         *file_system,
   bookmarks_check_remove_sensitivity (impl);
 }
 
+/* Sets the file chooser to multiple selection mode */
+static void
+set_select_multiple (GtkFileChooserDefault *impl, gboolean select_multiple)
+{
+  /* FIXME: this does not work for folder mode */
+  GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
+
+  impl->select_multiple = select_multiple;
+  gtk_tree_selection_set_mode (selection,
+			       (select_multiple ?
+				GTK_SELECTION_MULTIPLE : GTK_SELECTION_BROWSE));
+  /* FIXME: See note in check_preview_change() */
+  check_preview_change (impl);
+}
+
 static void
 gtk_file_chooser_default_set_property (GObject      *object,
 				       guint         prop_id,
@@ -1656,7 +1671,16 @@ gtk_file_chooser_default_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_ACTION:
       impl->action = g_value_get_enum (value);
       if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-	gtk_widget_show (impl->new_folder_button);
+	{
+	  gtk_widget_show (impl->new_folder_button);
+
+	  if (impl->select_multiple)
+	    {
+	      g_warning ("Save mode cannot be set in conjunction with multiple selection mode.  "
+			 "Re-setting to single selection mode.");
+	      set_select_multiple (impl, FALSE);
+	    }
+	}
       else
 	gtk_widget_hide (impl->new_folder_button);
 
@@ -1733,16 +1757,7 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	  }
 
 	if (select_multiple != impl->select_multiple)
-	  {
-	    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
-
-	    impl->select_multiple = select_multiple;
-	    gtk_tree_selection_set_mode (selection,
-					 (select_multiple ?
-					  GTK_SELECTION_MULTIPLE : GTK_SELECTION_BROWSE));
-	    /* FIXME: See note in check_preview_change() */
-	    check_preview_change (impl);
-	  }
+	  set_select_multiple (impl, select_multiple);
       }
       break;
     case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
@@ -2346,7 +2361,7 @@ toolbar_show_filters (GtkFileChooserDefault *impl,
     gtk_widget_show (impl->filter_combo);
   else
     gtk_widget_hide (impl->filter_combo);
-}  
+}
 
 static void
 gtk_file_chooser_default_add_filter (GtkFileChooser *chooser,
@@ -2408,7 +2423,7 @@ gtk_file_chooser_default_remove_filter (GtkFileChooser *chooser,
   model = gtk_combo_box_get_model (GTK_COMBO_BOX (impl->filter_combo));
   gtk_tree_model_iter_nth_child  (model, &iter, NULL, filter_index);
   gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
-  
+
   g_object_unref (filter);
 
   if (!impl->filters)
@@ -2742,7 +2757,7 @@ shortcuts_row_activated_cb (GtkTreeView           *tree_view,
   GtkTreeIter iter;
   int selected, start_row;
   gpointer data;
-  
+
   if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->shortcuts_model), &iter, path))
     return;
 
@@ -2850,18 +2865,27 @@ entry_activate (GtkEntry              *entry,
   const gchar *file_part = _gtk_file_chooser_entry_get_file_part (chooser_entry);
   GtkFilePath *new_folder = NULL;
 
-  /* If the file part is non-empty, we need to figure out if it
-   * refers to a folder within folder. We could optimize the case
-   * here where the folder is already loaded for one of our tree models.
-   */
-  if (file_part[0] == '\0' && gtk_file_path_compare (impl->current_folder, folder_path) != 0)
-    new_folder = gtk_file_path_copy (folder_path);
+  if (!folder_path)
+    return; /* The entry got a nonexistent path */
+
+  if (file_part[0] == '\0')
+    {
+      if (gtk_file_path_compare (impl->current_folder, folder_path) != 0)
+	new_folder = gtk_file_path_copy (folder_path);
+      else
+	return;
+    }
   else
     {
       GtkFileFolder *folder = NULL;
       GtkFilePath *subfolder_path = NULL;
       GtkFileInfo *info = NULL;
       GError *error;
+
+      /* If the file part is non-empty, we need to figure out if it
+       * refers to a folder within folder. We could optimize the case
+       * here where the folder is already loaded for one of our tree models.
+       */
 
       error = NULL;
       folder = gtk_file_system_get_folder (impl->file_system, folder_path, GTK_FILE_INFO_IS_FOLDER, &error);
@@ -2894,8 +2918,7 @@ entry_activate (GtkEntry              *entry,
 
       if (!info)
 	{
-	  if ((gtk_file_chooser_get_action (GTK_FILE_CHOOSER (impl)) == GTK_FILE_CHOOSER_ACTION_SAVE &&
-	      !gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (impl))))
+	  if (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (impl)) == GTK_FILE_CHOOSER_ACTION_SAVE)
 	    {
 	      g_object_unref (folder);
 	      gtk_file_path_free (subfolder_path);
@@ -2984,7 +3007,7 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
 
   if (pixbuf)
     g_object_unref (pixbuf);
-		
+
 #if 0
   const GtkFileInfo *info = get_list_file_info (impl, iter);
 

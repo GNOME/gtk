@@ -1,3 +1,17 @@
+2004-01-19  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #131418.
+
+	* gtk/gtkfilechooserdefault.c (set_select_multiple): New helper
+	function.
+	(gtk_file_chooser_default_set_property): Use
+	set_select_multiple().  Also, re-set this mode to single if the
+	file chooser is set to Save mode.
+	(entry_activate): Handle the case where the entry is completely
+	empty *and* its current folder does exist.  Also, there is need to
+	test for select_multiple here now that we ensure that it won't
+	happen during Save mode.
+
 Sun Jan 18 15:25:39 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.[ch]: Add _gtk_toolbar_paint_space_line(),
