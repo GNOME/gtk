@@ -59,4 +59,4 @@ GtkIMContext *im_module_create (const gchar             *context_id);
 }
 #endif /* __cplusplus */
 
-#endif __GTK_IM_MODULE_H__
+#endif /* __GTK_IM_MODULE_H__ */
