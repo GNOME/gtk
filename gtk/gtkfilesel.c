@@ -286,26 +286,14 @@ static gint gtk_file_selection_key_press     (GtkWidget             *widget,
 static void gtk_file_selection_file_button (GtkWidget *widget,
 					    gint row, 
 					    gint column, 
-					    gint button,
+					    GdkEventButton *bevent,
 					    gpointer user_data);
-
-static void gtk_file_selection_file_button_double (GtkWidget *widget,
-						   gint row, 
-						   gint column, 
-						   gint button,
-						   gpointer user_data);
 
 static void gtk_file_selection_dir_button (GtkWidget *widget,
 					   gint row, 
 					   gint column, 
-					   gint button,
+					   GdkEventButton *bevent,
 					   gpointer data);
-
-static void gtk_file_selection_dir_button_double (GtkWidget *widget,
-						  gint row, 
-						  gint column, 
-						  gint button,
-						  gpointer data);
 
 static void gtk_file_selection_populate      (GtkFileSelection      *fs,
 					      gchar                 *rel_path,
@@ -440,9 +428,6 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_signal_connect (GTK_OBJECT (filesel->dir_list), "select_row",
 		      (GtkSignalFunc) gtk_file_selection_dir_button, 
 		      (gpointer) filesel);
-  gtk_signal_connect (GTK_OBJECT (filesel->dir_list), "mouse_double_click",
-		      (GtkSignalFunc) gtk_file_selection_dir_button_double, 
-		      (gpointer) filesel);
   gtk_clist_set_policy (GTK_CLIST (filesel->dir_list), GTK_POLICY_ALWAYS, GTK_POLICY_AUTOMATIC);
   gtk_clist_column_titles_passive (GTK_CLIST (filesel->dir_list));
   gtk_container_border_width (GTK_CONTAINER (filesel->dir_list), 5);
@@ -454,9 +439,6 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_set_usize (filesel->file_list, FILE_LIST_WIDTH, FILE_LIST_HEIGHT);
   gtk_signal_connect (GTK_OBJECT (filesel->file_list), "select_row",
 		      (GtkSignalFunc) gtk_file_selection_file_button, 
-		      (gpointer) filesel);
-  gtk_signal_connect (GTK_OBJECT (filesel->file_list), "mouse_double_click",
-		      (GtkSignalFunc) gtk_file_selection_file_button_double, 
 		      (gpointer) filesel);
   gtk_clist_set_policy (GTK_CLIST (filesel->file_list), GTK_POLICY_ALWAYS, GTK_POLICY_AUTOMATIC);
   gtk_clist_column_titles_passive (GTK_CLIST (filesel->file_list));
@@ -1110,10 +1092,10 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 
 static void
 gtk_file_selection_file_button (GtkWidget *widget,
-				gint row, 
-				gint column, 
-				gint button,
-				gpointer user_data)
+			       gint row, 
+			       gint column, 
+			       GdkEventButton *bevent,
+			       gpointer user_data)
 {
   GtkFileSelection *fs = NULL;
   gchar *filename;
@@ -1126,37 +1108,29 @@ gtk_file_selection_file_button (GtkWidget *widget,
 
   filename = gtk_clist_get_row_data (GTK_CLIST (fs->file_list), row);
   
-  if (filename)
-    gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-}
-
-static void
-gtk_file_selection_file_button_double (GtkWidget *widget,
-				       gint row, 
-				       gint column, 
-				       gint button,
-				       gpointer user_data)
-{
-  GtkFileSelection *fs = NULL;
-  gchar *filename;
-  
-  g_return_if_fail (GTK_IS_CLIST (widget));
-
-  fs = user_data;
-  g_return_if_fail (fs != NULL);
-  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
-
-  filename = gtk_clist_get_row_data (GTK_CLIST (fs->file_list), row);
-  
-  if (filename)
-    gtk_button_clicked (GTK_BUTTON (fs->ok_button));
+  if (bevent && filename)
+    {
+      switch (bevent->type)
+	{
+	case GDK_BUTTON_PRESS:
+	  gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+	  break;
+	  
+	case GDK_2BUTTON_PRESS:
+	  gtk_button_clicked (GTK_BUTTON (fs->ok_button));
+	  break;
+	  
+	default:
+	  break;
+	}
+    }
 }
 
 static void
 gtk_file_selection_dir_button (GtkWidget *widget,
 			       gint row, 
 			       gint column, 
-			       gint button,
+			       GdkEventButton *bevent,
 			       gpointer user_data)
 {
   GtkFileSelection *fs = NULL;
@@ -1170,30 +1144,22 @@ gtk_file_selection_dir_button (GtkWidget *widget,
 
   filename = gtk_clist_get_row_data (GTK_CLIST (fs->dir_list), row);
   
-  if (filename)
-    gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-}
-
-static void
-gtk_file_selection_dir_button_double (GtkWidget *widget,
-				      gint row, 
-				      gint column, 
-				      gint button,
-				      gpointer user_data)
-{
-  GtkFileSelection *fs = NULL;
-  gchar *filename;
+  if (bevent && filename) {
   
-  g_return_if_fail (GTK_IS_CLIST (widget));
-
-  fs = GTK_FILE_SELECTION (user_data);
-  g_return_if_fail (fs != NULL);
-  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
-
-  filename = gtk_clist_get_row_data (GTK_CLIST (fs->dir_list), row);
-  
-  if (filename)
-    gtk_file_selection_populate (fs, filename, FALSE);
+    switch (bevent->type)
+      {
+      case GDK_BUTTON_PRESS:
+	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+	break;
+      
+      case GDK_2BUTTON_PRESS:
+	gtk_file_selection_populate (fs, filename, FALSE);
+	break;
+	
+      default:
+	break;
+      }
+  }
 }
 
 static void

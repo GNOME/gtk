@@ -110,7 +110,7 @@ struct _GtkCList
   /* dynamicly allocated array of column structures */
   GtkCListColumn *column;
   
-  /* the scrolling window and it's height and width to
+  /*the scrolling window and it's height and width to
    * make things a little speedier */
   GdkWindow *clist_window;
   gint clist_window_width;
@@ -153,26 +153,14 @@ struct _GtkCListClass
 {
   GtkContainerClass parent_class;
   
-  void (*mouse_click) (GtkCList * clist,
-		       gint row,
-		       gint column,
-		       gint button);
-
-  void (*mouse_double_click) (GtkCList * clist,
-			      gint row,
-			      gint column,
-			      gint button);
-
   void (*select_row) (GtkCList * clist,
 		      gint row,
 		      gint column,
-		      gint button);
-
+		      GdkEventButton * event);
   void (*unselect_row) (GtkCList * clist,
 			gint row,
 			gint column,
-			gint button);
-
+			GdkEventButton * event);
   void (*click_column) (GtkCList * clist,
 			gint column);
 

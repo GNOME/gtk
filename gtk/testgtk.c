@@ -1660,30 +1660,10 @@ hide_titles_clist (GtkWidget *widget, gpointer data)
 }
 
 void
-mouse_click_clist (GtkWidget *widget,
-		   gint row, 
-		   gint column, 
-		   gint button)
-{
-  g_print ("GtkCList Mouse Click: row %d column %d button %d\n", 
-	   row, column, button);
-}
-
-void
-mouse_double_click_clist (GtkWidget *widget,
-			  gint row, 
-			  gint column, 
-			  gint button)
-{
-  g_print ("GtkCList Mouse Double Click: row %d column %d button %d\n", 
-	   row, column, button);
-}
-
-void
 select_clist (GtkWidget *widget,
 	      gint row, 
 	      gint column, 
-	      gint button)
+	      GdkEventButton * bevent)
 {
   gint i;
   guint8 spacing;
@@ -1692,7 +1672,7 @@ select_clist (GtkWidget *widget,
   GdkBitmap *mask;
 
   g_print ("GtkCList Selection: row %d column %d button %d\n", 
-	   row, column, button);
+	   row, column, bevent ? bevent->button : 0);
 
   for (i = 0; i < TESTGTK_CLIST_COLUMNS; i++)
     {
@@ -1728,55 +1708,6 @@ select_clist (GtkWidget *widget,
   g_print ("\n\n");
 
   clist_selected_row = row;
-}
-
-void
-unselect_clist (GtkWidget *widget,
-		gint row, 
-		gint column, 
-		gint button)
-{
-  gint i;
-  guint8 spacing;
-  gchar *text;
-  GdkPixmap *pixmap;
-  GdkBitmap *mask;
-
-  g_print ("GtkCList UnSelection: row %d column %d button %d\n", 
-	   row, column, button);
-
-  for (i = 0; i < TESTGTK_CLIST_COLUMNS; i++)
-    {
-      switch (gtk_clist_get_cell_type (GTK_CLIST (widget), row, i))
-	{
-	case GTK_CELL_TEXT:
-	  g_print ("CELL %d GTK_CELL_TEXT\n", i);
-	  gtk_clist_get_text (GTK_CLIST (widget), row, i, &text);
-	  g_print ("TEXT: %s\n", text);
-	  break;
-
-	case GTK_CELL_PIXMAP:
-	  g_print ("CELL %d GTK_CELL_PIXMAP\n", i);
-	  gtk_clist_get_pixmap (GTK_CLIST (widget), row, i, &pixmap, &mask);
-	  g_print ("PIXMAP: %d\n", (int) pixmap);
-	  g_print ("MASK: %d\n", (int) mask);
-	  break;
-
-	case GTK_CELL_PIXTEXT:
-	  g_print ("CELL %d GTK_CELL_PIXTEXT\n", i);
-	  gtk_clist_get_pixtext (GTK_CLIST (widget), row, i, &text, &spacing, &pixmap, &mask);
-	  g_print ("TEXT: %s\n", text);
-	  g_print ("SPACING: %d\n", spacing);
-	  g_print ("PIXMAP: %d\n", (int) pixmap);
-	  g_print ("MASK: %d\n", (int) mask);
-	  break;
-
-	default:
-	  break;
-	}
-    }
-
-  g_print ("\n\n");
 }
 
 void
@@ -1919,22 +1850,10 @@ create_clist ()
        * the rest of the clist configuration
        */
       gtk_clist_set_row_height (GTK_CLIST (clist), 20);
-      
-      gtk_signal_connect (GTK_OBJECT (clist), 
-			  "mouse_click",
-			  (GtkSignalFunc) mouse_click_clist, 
-			  NULL);
-      gtk_signal_connect (GTK_OBJECT (clist), 
-			  "mouse_double_click",
-			  (GtkSignalFunc) mouse_double_click_clist, 
-			  NULL);
+
       gtk_signal_connect (GTK_OBJECT (clist), 
 			  "select_row",
 			  (GtkSignalFunc) select_clist, 
-			  NULL);
-      gtk_signal_connect (GTK_OBJECT (clist), 
-			  "unselect_row",
-			  (GtkSignalFunc) unselect_clist, 
 			  NULL);
 
       gtk_clist_set_column_width (GTK_CLIST (clist), 0, 100);
