@@ -225,12 +225,8 @@ gtk_label_set (GtkLabel	   *label,
   if (GTK_WIDGET_VISIBLE (label))
     {
       if (GTK_WIDGET_MAPPED (label))
-	gdk_window_clear_area (GTK_WIDGET (label)->window,
-			       GTK_WIDGET (label)->allocation.x,
-			       GTK_WIDGET (label)->allocation.y,
-			       GTK_WIDGET (label)->allocation.width,
-			       GTK_WIDGET (label)->allocation.height);
-      
+	gtk_widget_queue_clear (label);
+
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }

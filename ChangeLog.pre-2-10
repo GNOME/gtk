@@ -1,3 +1,9 @@
+Sun Aug 30 16:48:27 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtklabel.c (gtk_label_set): Eliminate a 
+	gdk_window_clear_area() that snuck in with the
+	menu underlines merge.
+
 Tue Aug 25 16:52:47 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c (recompute_geometry): Make sure the
