@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.9pre1\n"
-"POT-Creation-Date: 2001-03-28 16:12-0500\n"
+"POT-Creation-Date: 2001-07-28 06:30+0200\n"
 "PO-Revision-Date: 2001-03-12 15:23+01:00\n"
 "Last-Translator: Hoang Ngoc Tu <hntu@gmx.de>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
@@ -338,7 +338,7 @@ msgstr "Ph«ng kh«ng theo tØ lÖ"
 
 #: gtk/gtkfontsel.c:1985
 msgid "char cell"
-msgstr ""
+msgstr "« ký tù"
 
 #: gtk/gtkfontsel.c:2185
 msgid "Font: (Filter Applied)"
@@ -447,12 +447,12 @@ msgstr "xãa"
 msgid "Page %u"
 msgstr "Trang %u"
 
-#: gtk/gtkrc.c:1703
+#: gtk/gtkrc.c:1758
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "TËp tin ®å häa kh«ng t×m ®­îc trong ®­êng dÉn pixmap: \"%s\" line %d"
 
-#: gtk/gtkrc.c:1706
+#: gtk/gtkrc.c:1761
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "TËp tin ®æ häa kh«ng t×m ®­îc trong ®­êng ®Én pixmap: \"%s\""
