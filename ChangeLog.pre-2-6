@@ -1,3 +1,7 @@
+2001-05-22  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkbin.c (gtk_bin_get_child): New function
+
 Wed May 23 20:07:53 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontextsimple.c: Add Mode_Switch to list of keys

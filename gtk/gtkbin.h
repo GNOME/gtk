@@ -63,6 +63,7 @@ struct _GtkBinClass
 
 GtkType  gtk_bin_get_type   (void) G_GNUC_CONST;
 
+GtkWidget *gtk_bin_get_child (GtkBin *bin);
 
 #ifdef __cplusplus
 }

@@ -115,6 +115,7 @@ GTK_BUTTON_BOX_GET_CLASS
 <FILE>gtkbin</FILE>
 <TITLE>GtkBin</TITLE>
 GtkBin
+gtk_bin_get_child
 <SUBSECTION Standard>
 GTK_BIN
 GTK_IS_BIN

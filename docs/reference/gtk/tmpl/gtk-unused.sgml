@@ -747,6 +747,12 @@ produce superscript and subscript.
 </para>
 
 
+<!-- ##### ARG GtkTextView:justify ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ARG GtkVScale:adjustment ##### -->
 <para>
 the #GtkAdjustment which sets the range of the scale.
