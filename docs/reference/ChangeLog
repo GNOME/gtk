@@ -1,3 +1,11 @@
+2004-12-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/images/colorsel.png:
+	* gtk/images/fontsel.png:
+	* gtk/images/filechooser.png:
+	* gtk/visual_index.xml: 
+	* gtk/Makefile.am (HTML_IMAGES): Add new images.
+
 2004-12-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.5.6 ===

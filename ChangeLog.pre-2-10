@@ -1,3 +1,10 @@
+2004-12-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* docs/tools/widgets.h (enum): Add an ASIS widget size.
+
+	* docs/tools/widgets.c (get_all_widgets): Add file chooser,
+	font selection and color selection dialogs.
+
 2004-12-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/input/gtkimcontextime.c: Prevent double commits,

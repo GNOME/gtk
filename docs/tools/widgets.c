@@ -68,6 +68,10 @@ adjust_size_callback (WidgetInfo *info)
       target_width = LARGE_WIDTH;
       target_height = LARGE_HEIGHT;
       break;
+    case ASIS:
+      target_width = twidth;
+      target_height = theight;
+      break;
     }
 
   if (twidth > target_width ||
@@ -569,6 +573,67 @@ create_window (void)
 }
 
 static WidgetInfo *
+create_colorsel (void)
+{
+  WidgetInfo *info;
+  GtkWidget *widget;
+  GtkColorSelection *colorsel;
+  GdkColor color;
+
+  widget = gtk_color_selection_dialog_new ("Color Selection Dialog");
+  colorsel = GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (widget)->colorsel);
+
+  color.red   = 0x7979;
+  color.green = 0xdbdb;
+  color.blue  = 0x9595;
+
+  gtk_color_selection_set_previous_color (colorsel, &color);
+  
+  color.red   = 0x7d7d;
+  color.green = 0x9393;
+  color.blue  = 0xc3c3;
+  
+  gtk_color_selection_set_current_color (colorsel, &color);
+
+  info = new_widget_info ("colorsel", widget, ASIS);
+  info->include_decorations = TRUE;
+
+  return info;
+}
+
+static WidgetInfo *
+create_fontsel (void)
+{
+  WidgetInfo *info;
+  GtkWidget *widget;
+
+  widget = gtk_font_selection_dialog_new ("Font Selection Dialog");
+  info = new_widget_info ("fontsel", widget, ASIS);
+  info->include_decorations = TRUE;
+
+  return info;
+}
+static WidgetInfo *
+create_filesel (void)
+{
+  WidgetInfo *info;
+  GtkWidget *widget;
+
+  widget = gtk_file_chooser_dialog_new ("File Chooser Dialog",
+					NULL,
+					GTK_FILE_CHOOSER_ACTION_OPEN,
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+					NULL); 
+  gtk_window_set_default_size (GTK_WINDOW (widget), 505, 305);
+  
+  info = new_widget_info ("filechooser", widget, ASIS);
+  info->include_decorations = TRUE;
+
+  return info;
+}
+
+static WidgetInfo *
 create_toolbar (void)
 {
   GtkWidget *widget, *menu;
@@ -786,7 +851,6 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_combo_box ());
   retval = g_list_prepend (retval, create_combo_box_entry ());
   retval = g_list_prepend (retval, create_entry ());
-  retval = g_list_prepend (retval, create_file_button ());
   retval = g_list_prepend (retval, create_font_button ());
   retval = g_list_prepend (retval, create_frame ());
   retval = g_list_prepend (retval, create_icon_view ());
@@ -808,6 +872,9 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_toolbar ());
   retval = g_list_prepend (retval, create_tree_view ());
   retval = g_list_prepend (retval, create_window ());
+  retval = g_list_prepend (retval, create_colorsel ());
+  retval = g_list_prepend (retval, create_filesel ());
+  retval = g_list_prepend (retval, create_fontsel ());
 
   return retval;
 }

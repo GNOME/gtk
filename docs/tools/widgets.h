@@ -8,7 +8,8 @@ typedef enum
 {
   SMALL,
   MEDIUM,
-  LARGE
+  LARGE,
+  ASIS
 } WidgetSize;
 
 typedef struct WidgetInfo

@@ -41,9 +41,6 @@
   <link linkend="GtkMenuBar">
     <inlinegraphic fileref="menubar.png" format="PNG"></inlinegraphic>
   </link>
-  <link linkend="GtkMessageDialog">
-    <inlinegraphic fileref="messagedialog.png" format="PNG"></inlinegraphic>
-  </link>
   <link linkend="GtkNotebook">
     <inlinegraphic fileref="notebook.png" format="PNG"></inlinegraphic>
   </link>
@@ -85,5 +82,17 @@
   </link>
   <link linkend="GtkWindow">
     <inlinegraphic fileref="window.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkMessageDialog">
+    <inlinegraphic fileref="messagedialog.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkFontSelectionDialog">
+    <inlinegraphic fileref="fontsel.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkColorSelectionDialog">
+    <inlinegraphic fileref="colorsel.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkFileChooserDialog">
+    <inlinegraphic fileref="filechooser.png" format="PNG"></inlinegraphic>
   </link>
 </para>
