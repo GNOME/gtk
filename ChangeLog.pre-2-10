@@ -1,3 +1,10 @@
+2005-02-01  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c
+	(browse_files_model_finished_loading_cb): Don't
+	g_assert_not_reached() if we are in any other state.  Another code
+	path may have triggered a folder reload.  Fixes #165556.
+
 2005-02-01  Michael Natterer  <mitch@gimp.org>
 
 	* configure.in: depend on stable pango-1.8, not unstable 1.7

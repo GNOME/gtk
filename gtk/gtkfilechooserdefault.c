@@ -4612,7 +4612,12 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
       /* Nothing */
     }
   else
-    g_assert_not_reached ();
+    {
+      /* We can't g_assert_not_reached(), as something other than us may have
+       *  initiated a folder reload.  See #165556.
+       */
+      return;
+    }
 
   g_assert (impl->load_timeout_id == 0);
 
