@@ -152,18 +152,59 @@ send_event_handler (Display *dpy,
   return False;
 }
 
+static void
+client_message_to_wire (XClientMessageEvent *ev,
+			xEvent              *event)
+{
+  int i;
+  event->u.clientMessage.window = ev->window;
+  event->u.u.type = ev->type;
+  event->u.u.detail = ev->format;
+  switch (ev->format)
+    {
+    case 8:	
+      event->u.clientMessage.u.b.type   = ev->message_type;
+      for (i = 0; i < 20; i++)
+	event->u.clientMessage.u.b.bytes[i] = ev->data.b[i];
+      break;
+    case 16:
+      event->u.clientMessage.u.s.type   = ev->message_type;
+      event->u.clientMessage.u.s.shorts0   = ev->data.s[0];
+      event->u.clientMessage.u.s.shorts1   = ev->data.s[1];
+      event->u.clientMessage.u.s.shorts2   = ev->data.s[2];
+      event->u.clientMessage.u.s.shorts3   = ev->data.s[3];
+      event->u.clientMessage.u.s.shorts4   = ev->data.s[4];
+      event->u.clientMessage.u.s.shorts5   = ev->data.s[5];
+      event->u.clientMessage.u.s.shorts6   = ev->data.s[6];
+      event->u.clientMessage.u.s.shorts7   = ev->data.s[7];
+      event->u.clientMessage.u.s.shorts8   = ev->data.s[8];
+      event->u.clientMessage.u.s.shorts9   = ev->data.s[9];
+      break;
+    case 32:
+      event->u.clientMessage.u.l.type   = ev->message_type;
+      event->u.clientMessage.u.l.longs0   = ev->data.l[0];
+      event->u.clientMessage.u.l.longs1   = ev->data.l[1];
+      event->u.clientMessage.u.l.longs2   = ev->data.l[2];
+      event->u.clientMessage.u.l.longs3   = ev->data.l[3];
+      event->u.clientMessage.u.l.longs4   = ev->data.l[4];
+      break;
+    default:
+      /* client passing bogus data, let server complain */
+      break;
+    }
+}
+
 void
-_gdk_x11_send_xevent_async (GdkDisplay           *display, 
-			    Window                window, 
-			    gboolean              propagate,
-			    glong                 event_mask,
-			    XEvent               *event_send,
-			    GdkSendXEventCallback callback,
-			    gpointer              data)
+_gdk_x11_send_client_message_async (GdkDisplay           *display, 
+				    Window                window, 
+				    gboolean              propagate,
+				    glong                 event_mask,
+				    XClientMessageEvent  *event_send,
+				    GdkSendXEventCallback callback,
+				    gpointer              data)
 {
   Display *dpy;
   SendEventState *state;
-  Status status;
   
   dpy = GDK_DISPLAY_XDISPLAY (display);
 
@@ -185,24 +226,8 @@ _gdk_x11_send_xevent_async (GdkDisplay           *display,
   {
     register xSendEventReq *req;
     xEvent ev;
-    register Status (**fp)();
     
-    /* call through display to find proper conversion routine */
-    
-    fp = &dpy->wire_vec[event_send->type & 0177];
-    if (*fp == NULL) *fp = _XEventToWire;
-    status = (**fp)(dpy, event_send, &ev);
-    
-    if (!status)
-      {
-	g_warning ("Error converting event to wire");
-	DeqAsyncHandler(dpy, &state->async);
-	UnlockDisplay(dpy);
-	SyncHandle();
-	g_free (state);
-
-	return;
-      }
+    client_message_to_wire (event_send, &ev);
       
     GetReq(SendEvent, req);
     req->destination = window;

@@ -44,17 +44,17 @@ struct _GdkChildInfoX11
   guint window_class : 2;
 };
 
-void _gdk_x11_send_xevent_async    (GdkDisplay            *display,
-				    Window                 window,
-				    gboolean               propagate,
-				    glong                  event_mask,
-				    XEvent                *event_send,
-				    GdkSendXEventCallback  callback,
-				    gpointer               data);
-void _gdk_x11_set_input_focus_safe (GdkDisplay            *display,
-				    Window                 window,
-				    int                    revert_to,
-				    Time                   time);
+void _gdk_x11_send_client_message_async (GdkDisplay            *display,
+					 Window                 window,
+					 gboolean               propagate,
+					 glong                  event_mask,
+					 XClientMessageEvent   *event_send,
+					 GdkSendXEventCallback  callback,
+					 gpointer               data);
+void _gdk_x11_set_input_focus_safe      (GdkDisplay            *display,
+					 Window                 window,
+					 int                    revert_to,
+					 Time                   time);
 
 gboolean _gdk_x11_get_window_child_info (GdkDisplay       *display,
 					 Window            window,

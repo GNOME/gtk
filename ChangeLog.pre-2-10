@@ -1,6 +1,15 @@
+Tue Jul  8 17:36:21 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkasync.[ch] gdk/gdkdnd-x11.c: 
+	Change _gdk_x11_send_xevent_async() to 
+	_gdk_x11_send_client_message_async() avoid using Xlib
+	internals that are different on Solaris. 
+	(#116917, Morten Welinder)
+
 2003-07-08  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkcontainer.c (gtk_container_remove): Doc addition. (#116501, Doug Quale)
+	* gtk/gtkcontainer.c (gtk_container_remove): Doc addition.
+	(#116501, Doug Quale)
 
 Tue Jul  8 21:35:22 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 

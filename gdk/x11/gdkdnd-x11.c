@@ -2100,9 +2100,9 @@ xdnd_set_actions (GdkDragContext *context)
 }
 
 static void
-send_xevent_async_cb (Window   window,
-		      gboolean success,
-		      gpointer data)
+send_client_message_async_cb (Window   window,
+			      gboolean success,
+			      gpointer data)
 {
   GdkDragContext *context = data;
   GDK_NOTE (DND,
@@ -2151,19 +2151,19 @@ gdk_drag_context_get_display (GdkDragContext *context)
 }
 
 static void
-send_xevent_async (GdkDragContext *context,
-		   Window          window, 
-		   gboolean        propagate,
-		   glong           event_mask,
-		   XEvent         *event_send)
+send_client_message_async (GdkDragContext      *context,
+			   Window               window, 
+			   gboolean             propagate,
+			   glong                event_mask,
+			   XClientMessageEvent *event_send)
 {
   GdkDisplay *display = gdk_drag_context_get_display (context);
   
   g_object_ref (context);
 
-  _gdk_x11_send_xevent_async (display, window,
-			      propagate, event_mask, event_send,
-			      send_xevent_async_cb, context);
+  _gdk_x11_send_client_message_async (display, window,
+				      propagate, event_mask, event_send,
+				      send_client_message_async_cb, context);
 }
 
 static gboolean
@@ -2176,9 +2176,10 @@ xdnd_send_xevent (GdkDragContext *context,
   Window xwindow;
   glong event_mask;
 
+  g_assert (event_send->xany.type == ClientMessage);
+
   /* We short-circuit messages to ourselves */
-  if (gdk_window_get_window_type (window) != GDK_WINDOW_FOREIGN &&
-      event_send->xany.type == ClientMessage)
+  if (gdk_window_get_window_type (window) != GDK_WINDOW_FOREIGN)
     {
       gint i;
       
@@ -2205,7 +2206,8 @@ xdnd_send_xevent (GdkDragContext *context,
   else
     event_mask = 0;
   
-  send_xevent_async (context, xwindow, propagate, event_mask, event_send);
+  send_client_message_async (context, xwindow, propagate, event_mask,
+			     &event_send->xclient);
 
   return TRUE;
 }
