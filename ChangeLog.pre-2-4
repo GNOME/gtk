@@ -1,3 +1,7 @@
+Sun Oct  3 14:26:15 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gxid* gdk/x11/gxid*: Move files into x11 subdirectory.
+
 Sun Oct  3 14:16:23 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdrawable.h: Include gdk/gdkdrawable.h with
