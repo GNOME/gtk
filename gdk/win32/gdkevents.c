@@ -1488,11 +1488,23 @@ gdk_event_translate (GdkEvent *event,
 	case VK_MULTIPLY:
 	  event->key.keyval = GDK_KP_Multiply; break;
 	case VK_ADD:
+#if 0
 	  event->key.keyval = GDK_KP_Add; break;
+#else
+	  /* Pass it on as an ASCII plus in WM_CHAR. */
+	  ignore_WM_CHAR = FALSE;
+	  break;
+#endif
 	case VK_SEPARATOR:
 	  event->key.keyval = GDK_KP_Separator; break;
 	case VK_SUBTRACT:
+#if 0
 	  event->key.keyval = GDK_KP_Subtract; break;
+#else
+	  /* Pass it on as an ASCII minus in WM_CHAR. */
+	  ignore_WM_CHAR = FALSE;
+	  break;
+#endif
 	case VK_DECIMAL:
 #if 0
 	  event->key.keyval = GDK_KP_Decimal; break;
@@ -1548,8 +1560,9 @@ gdk_event_translate (GdkEvent *event,
 	case '7':
 	case '8':
 	case '9':
-	  if (GetKeyState (VK_CONTROL) < 0)
-	    /* Control-digits won't come in as a WM_CHAR */
+	  if (!is_AltGr_key && (GetKeyState (VK_CONTROL) < 0
+				|| GetKeyState (VK_MENU) < 0))
+	    /* Control- or Alt-digits won't come in as a WM_CHAR */
 	    event->key.keyval = GDK_0 + (xevent->wParam - '0');
 	  else
 	    {
@@ -1744,7 +1757,12 @@ gdk_event_translate (GdkEvent *event,
 	}
       else
 	return_val = FALSE;
+#if 0 /* Don't reset is_AltGr_key here. Othewise we can't type several
+       * AltGr-accessed chars while keeping the AltGr pressed down
+       * all the time.
+       */
       is_AltGr_key = FALSE;
+#endif
       break;
 
     case WM_LBUTTONDOWN:

@@ -1,3 +1,10 @@
+1999-08-13  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents.c (gdk_event_translate): Fix a couple of bugs
+	in the key event handling: Now AltGr chars work again. Also,
+	now Alt-digits are passed up as well as Control-digits.
+	Pass keypad plus and minus as normal plus and minus.
+
 Wed Aug 11 13:38:26 BST 1999 Tony Gale  <gale@gtk.org>
 
         * docs/gtkfaq.sgml: FAQ Update
