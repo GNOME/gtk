@@ -914,7 +914,14 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
     tree->root = x;
 
   if (y != node)
-    node->children = y->children;
+    {
+      /* Copy the node over */
+      if (GTK_RBNODE_GET_COLOR (node) == GTK_RBNODE_BLACK)
+	node->flags = ((y->flags & (GTK_RBNODE_NON_COLORS)) | GTK_RBNODE_BLACK);
+      else
+	node->flags = ((y->flags & (GTK_RBNODE_NON_COLORS)) | GTK_RBNODE_RED);
+      node->children = y->children;
+    }
 
   if (GTK_RBNODE_GET_COLOR (y) == GTK_RBNODE_BLACK)
     _gtk_rbtree_remove_node_fixup (tree, x);

@@ -516,6 +516,69 @@ struct _RowRefList
   GSList *list;
 };
 
+
+/*
+ * row_reference 
+ */
+void
+_gtk_tree_row_reference_inserted (GtkTreeRowReference *reference,
+				  GtkTreePath         *path)
+{
+  if (reference->path)
+    {
+      gint depth = gtk_tree_path_get_depth (path);
+      gint ref_depth = gtk_tree_path_get_depth (reference->path);
+          
+      if (ref_depth >= depth)
+	{
+	  gint *indices = gtk_tree_path_get_indices (path);
+	  gint *ref_indices = gtk_tree_path_get_indices (reference->path);
+	  gint i;
+
+	  /* This is the depth that might affect us. */
+	  i = depth - 1;
+              
+	  if (indices[i] <= ref_indices[i])
+	    ref_indices[i] += 1;
+	}
+    }
+}
+
+/* Returns TRUE if the reference path was deleted; FALSE otherwise */
+gboolean
+_gtk_tree_row_reference_deleted (GtkTreeRowReference *reference,
+				 GtkTreePath         *path)
+{
+  if (reference->path)
+    {
+      gint depth = gtk_tree_path_get_depth (path);
+      gint ref_depth = gtk_tree_path_get_depth (reference->path);
+
+      if (ref_depth >= depth)
+	{
+	  /* Need to adjust path upward */
+	  gint *indices = gtk_tree_path_get_indices (path);
+	  gint *ref_indices = gtk_tree_path_get_indices (reference->path);
+	  gint i;
+	      
+	  i = depth - 1;
+	  if (indices[i] < ref_indices[i])
+	    ref_indices[i] -= 1;
+	  else if (indices[i] == ref_indices[i])
+	    {
+	      /* the referenced node itself, or its parent, was
+	       * deleted, mark invalid
+	       */
+
+	      gtk_tree_path_free (reference->path);
+	      reference->path = NULL;
+	      return TRUE;
+	    }
+	}
+    }
+  return FALSE;
+}
+
 static void
 release_row_references (gpointer data)
 {
@@ -562,28 +625,7 @@ inserted_callback (GtkTreeModel *tree_model,
     {
       GtkTreeRowReference *reference = tmp_list->data;
 
-      /* if reference->path == NULL then the reference was already
-       * deleted.
-       */
-      
-      if (reference->path)
-        {
-          gint depth = gtk_tree_path_get_depth (path);
-          gint ref_depth = gtk_tree_path_get_depth (reference->path);
-          
-          if (ref_depth >= depth)
-            {
-              gint *indices = gtk_tree_path_get_indices (path);
-              gint *ref_indices = gtk_tree_path_get_indices (reference->path);
-              gint i;
-
-              /* This is the depth that might affect us. */
-              i = depth - 1;
-              
-              if (indices[i] <= ref_indices[i])
-                ref_indices[i] += 1;
-            }
-        }
+      _gtk_tree_row_reference_inserted (reference, path);
 
       tmp_list = g_slist_next (tmp_list);
     }
@@ -614,36 +656,7 @@ deleted_callback (GtkTreeModel *tree_model,
     {
       GtkTreeRowReference *reference = tmp_list->data;
 
-      /* if reference->path == NULL then the reference was already
-       * deleted.
-       */
-      
-      if (reference->path)
-        {
-          gint depth = gtk_tree_path_get_depth (path);
-          gint ref_depth = gtk_tree_path_get_depth (reference->path);
-
-          if (ref_depth >= depth)
-            {
-              /* Need to adjust path upward */
-              gint *indices = gtk_tree_path_get_indices (path);
-              gint *ref_indices = gtk_tree_path_get_indices (reference->path);
-              gint i;
-
-              i = depth - 1;
-              if (indices[i] < ref_indices[i])
-                ref_indices[i] -= 1;
-              else if (indices[i] == ref_indices[i])
-                {
-                  /* the referenced node itself, or its parent, was
-                   * deleted, mark invalid
-                   */
-
-                  gtk_tree_path_free (reference->path);
-                  reference->path = NULL;
-                }
-            }
-        }
+      _gtk_tree_row_reference_deleted (reference, path);
 
       tmp_list = g_slist_next (tmp_list);
     }
@@ -673,7 +686,7 @@ connect_ref_callbacks (GtkTreeModel *model,
   /* FIXME */
   g_signal_connect_data (G_OBJECT (model),
                          "reordered",
-                         (GCallback) reorderedc_allback,
+                         (GCallback) reordered_callback,
                          refs,
                          NULL,
                          FALSE,
@@ -721,7 +734,20 @@ gtk_tree_row_reference_new (GtkTreeModel *model,
     }
   
   refs->list = g_slist_prepend (refs->list, reference);
+
+  return reference;
+}
+
+GtkTreeRowReference *
+_gtk_tree_row_reference_new_from_view (GtkTreePath *path)
+{
+  GtkTreeRowReference *reference;
   
+  reference = g_new (GtkTreeRowReference, 1);
+
+  reference->model = NULL;
+  reference->path = gtk_tree_path_copy (path);
+
   return reference;
 }
 

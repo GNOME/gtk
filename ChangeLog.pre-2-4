@@ -1,3 +1,25 @@
+Tue Feb 27 19:32:53 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (deleted_callback): Proxy out to
+	_gtk_tree_row_reference_deleted.
+	(inserted_callback): Proxy out to
+	_gtk_tree_row_reference_inserted.
+	(_gtk_tree_row_reference_new_from_view): Somewhat yukky hack to
+	get around signal emission ordering problem.
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_real_unselect_all):
+	fix to work with SINGLE 
+	(_gtk_tree_selection_internal_select_node): Major sanitization on
+	selections.  SINGLE now seems to work.
+
+	* tests/Makefile.am: add testtreecolumn.c:
+
+	* tests/testtreecolumn.c: New test.  Mostly points out selection
+	bugs currently, but will test columns later.
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_remove_node): Fix really nasty
+	selection bug.  I hate touching this code -- it's scary.
+
 2001-02-26  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/testgtk.c: test the window state stuff

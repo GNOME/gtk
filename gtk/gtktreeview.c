@@ -2742,7 +2742,8 @@ gtk_tree_view_deleted (GtkTreeModel *model,
 
   g_assert (tree_view->priv->prelight_node == NULL);
   
-  if (tree->root->count == 1)
+  if ((tree->root->count == 1) &&
+      (tree_view->priv->tree != tree))
     {
       _gtk_rbtree_remove (tree);
     }
@@ -3438,7 +3439,10 @@ _gtk_tree_view_update_size (GtkTreeView *tree_view)
       width += TREE_VIEW_COLUMN_WIDTH (column);
     }
 
-  height = tree_view->priv->tree->root->offset + TREE_VIEW_VERTICAL_SEPARATOR;
+  if (tree_view->priv->tree == NULL)
+    height = 0;
+  else
+    height = tree_view->priv->tree->root->offset + TREE_VIEW_VERTICAL_SEPARATOR;
 
   if (tree_view->priv->width != width)
     {
@@ -4414,6 +4418,13 @@ gtk_tree_view_get_background_xrange (GtkTreeView       *tree_view,
       else
         *x2 = total_width; /* width of 0 */
     }
+}
+
+void
+_gtk_tree_view_column_set_tree_view (GtkTreeViewColumn *column,
+				     GtkTreeView       *tree_view)
+{
+  column->tree_view = tree_view;
 }
 
 static void

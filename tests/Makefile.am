@@ -31,10 +31,17 @@ LDADDS = @STRIP_BEGIN@ 					\
 @STRIP_END@
 
 noinst_PROGRAMS = 		\
-	testtreeview
+	testtreeview		\
+	testtreecolumns
 
 testtreeview_DEPENDENCIES = $(DEPS)
 
 testtreeview_LDADD = $(LDADDS)
 
 testtreeview_SOURCES = testtreeview.c
+
+testtreecolumns_DEPENDENCIES = $(DEPS)
+
+testtreecolumns_LDADD = $(LDADDS)
+
+testtreecolumns_SOURCES = testtreecolumns.c

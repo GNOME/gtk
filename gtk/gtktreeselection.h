@@ -58,6 +58,7 @@ struct _GtkTreeSelection
   GtkTreeSelectionMode type;
   GtkTreeSelectionFunc user_func;
   gpointer user_data;
+  GtkDestroyNotify destroy;
 };
 
 struct _GtkTreeSelectionClass
@@ -74,7 +75,8 @@ void             gtk_tree_selection_set_mode            (GtkTreeSelection       
 							 GtkTreeSelectionMode         type);
 void             gtk_tree_selection_set_select_function (GtkTreeSelection            *selection,
 							 GtkTreeSelectionFunc         func,
-							 gpointer                     data);
+							 gpointer                     data,
+							 GtkDestroyNotify             destroy);
 gpointer         gtk_tree_selection_get_user_data       (GtkTreeSelection            *selection);
 GtkTreeView*     gtk_tree_selection_get_tree_view       (GtkTreeSelection            *selection);
 

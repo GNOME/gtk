@@ -1009,7 +1009,6 @@ gtk_list_store_append (GtkListStore *list_store,
 		       GtkTreeIter  *iter)
 {
   GtkTreePath *path;
-  gint i = 0;
 
   g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
@@ -1030,7 +1029,7 @@ gtk_list_store_append (GtkListStore *list_store,
   validate_list_store (list_store);
   
   path = gtk_tree_path_new ();
-  gtk_tree_path_append_index (path, i);
+  gtk_tree_path_append_index (path, list_store->length - 1);
   gtk_tree_model_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }
