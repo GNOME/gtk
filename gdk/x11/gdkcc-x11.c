@@ -126,14 +126,14 @@ my_x_query_colors(GdkColormap *colormap,
 }
 
 static void
-query_colors(GdkColorContextPrivate *cc)
+query_colors(GdkColorContext *cc)
 {
 	gint i;
-
+	GdkColorContextPrivate *ccp = (GdkColorContextPrivate *) cc;
 	cc->cmap = g_new(GdkColor, cc->num_colors);
 
 	for (i = 0; i < cc->num_colors; i++)
-		cc->cmap[i].pixel = cc->clut ? cc->clut[i] : cc->std_cmap.base_pixel + i;
+		cc->cmap[i].pixel = cc->clut ? cc->clut[i] : ccp->std_cmap.base_pixel + i;
 
 	my_x_query_colors(cc->colormap, cc->cmap, cc->num_colors);
 	
@@ -141,7 +141,7 @@ query_colors(GdkColorContextPrivate *cc)
 }
 
 static void
-init_bw(GdkColorContextPrivate *cc)
+init_bw(GdkColorContext *cc)
 {
 	GdkColor color;
 
@@ -165,12 +165,13 @@ init_bw(GdkColorContextPrivate *cc)
 }
 
 static void
-init_gray(GdkColorContextPrivate *cc)
+init_gray(GdkColorContext *cc)
 {
+	GdkColorContextPrivate *ccp = (GdkColorContextPrivate *) cc;
 	GdkColor *clrs, *cstart;
 	gint i;
 	gdouble dinc;
-
+	
 	cc->num_colors = GDK_VISUAL_XVISUAL(cc->visual)->map_entries;
 
 	cc->clut = g_new(gulong, cc->num_colors);
@@ -207,17 +208,17 @@ retrygray:
 	g_free(cstart);
 
 	/* XXX: is this the right thing to do? */
-	cc->std_cmap.colormap = GDK_COLORMAP_XCOLORMAP(cc->colormap);
-	cc->std_cmap.base_pixel = 0;
-	cc->std_cmap.red_max = cc->num_colors - 1;
-	cc->std_cmap.green_max = 0;
-	cc->std_cmap.blue_max = 0;
-	cc->std_cmap.red_mult = 1;
-	cc->std_cmap.green_mult = 0;
-	cc->std_cmap.blue_mult = 0;
+	ccp->std_cmap.colormap = GDK_COLORMAP_XCOLORMAP(cc->colormap);
+	ccp->std_cmap.base_pixel = 0;
+	ccp->std_cmap.red_max = cc->num_colors - 1;
+	ccp->std_cmap.green_max = 0;
+	ccp->std_cmap.blue_max = 0;
+	ccp->std_cmap.red_mult = 1;
+	ccp->std_cmap.green_mult = 0;
+	ccp->std_cmap.blue_mult = 0;
 
-	cc->white_pixel = WhitePixel(cc->xdisplay, gdk_screen);
-	cc->black_pixel = BlackPixel(cc->xdisplay, gdk_screen);
+	cc->white_pixel = WhitePixel(ccp->xdisplay, gdk_screen);
+	cc->black_pixel = BlackPixel(ccp->xdisplay, gdk_screen);
 
 	query_colors(cc);
 
@@ -225,8 +226,9 @@ retrygray:
 }
 
 static void
-init_color(GdkColorContextPrivate *cc)
+init_color(GdkColorContext *cc)
 {
+	GdkColorContextPrivate *ccp = (GdkColorContextPrivate *) cc;
 	gint cubeval;
 
 	cubeval = 1;
@@ -236,17 +238,17 @@ init_color(GdkColorContextPrivate *cc)
 
 	cc->num_colors = cubeval * cubeval * cubeval;
 
-	cc->std_cmap.red_max    = cubeval - 1;
-	cc->std_cmap.green_max  = cubeval - 1;
-	cc->std_cmap.blue_max   = cubeval - 1;
-	cc->std_cmap.red_mult   = cubeval * cubeval;
-	cc->std_cmap.green_mult = cubeval;
-	cc->std_cmap.blue_mult  = 1;
-	cc->std_cmap.base_pixel = 0;
+	ccp->std_cmap.red_max    = cubeval - 1;
+	ccp->std_cmap.green_max  = cubeval - 1;
+	ccp->std_cmap.blue_max   = cubeval - 1;
+	ccp->std_cmap.red_mult   = cubeval * cubeval;
+	ccp->std_cmap.green_mult = cubeval;
+	ccp->std_cmap.blue_mult  = 1;
+	ccp->std_cmap.base_pixel = 0;
 
-	cc->white_pixel = WhitePixel(cc->xdisplay, gdk_screen);
-	cc->black_pixel = BlackPixel(cc->xdisplay, gdk_screen);
-	cc->num_colors = DisplayCells(cc->xdisplay, gdk_screen);
+	cc->white_pixel = WhitePixel(ccp->xdisplay, gdk_screen);
+	cc->black_pixel = BlackPixel(ccp->xdisplay, gdk_screen);
+	cc->num_colors = DisplayCells(ccp->xdisplay, gdk_screen);
 
 	/* a CLUT for storing allocated pixel indices */
 
@@ -263,8 +265,9 @@ init_color(GdkColorContextPrivate *cc)
 
 
 static void
-init_true_color(GdkColorContextPrivate *cc)
+init_true_color(GdkColorContext *cc)
 {
+	GdkColorContextPrivate *ccp = (GdkColorContextPrivate *) cc;
 	gulong rmask, gmask, bmask;
 
 	cc->mode = GDK_CC_MODE_TRUE;
@@ -321,12 +324,12 @@ init_true_color(GdkColorContextPrivate *cc)
 	}
 
 	cc->num_colors = (cc->visual->red_mask | cc->visual->green_mask | cc->visual->blue_mask) + 1;
-	cc->white_pixel = WhitePixel(cc->xdisplay, gdk_screen);
-	cc->black_pixel = BlackPixel(cc->xdisplay, gdk_screen);
+	cc->white_pixel = WhitePixel(ccp->xdisplay, gdk_screen);
+	cc->black_pixel = BlackPixel(ccp->xdisplay, gdk_screen);
 }
 
 static void
-init_direct_color(GdkColorContextPrivate *cc)
+init_direct_color(GdkColorContext *cc)
 {
 	gint n, count;
 	GdkColor *clrs, *cstart;
@@ -425,7 +428,7 @@ retrydirect:
 }
 
 static void
-init_palette(GdkColorContextPrivate *cc)
+init_palette(GdkColorContext *cc)
 {
 	/* restore correct mode for this cc */
 	
@@ -479,17 +482,18 @@ GdkColorContext *
 gdk_color_context_new(GdkVisual   *visual,
 		      GdkColormap *colormap)
 {
+	GdkColorContextPrivate *ccp;
 	gint use_private_colormap = FALSE; /* XXX: maybe restore full functionality later? */
-	GdkColorContextPrivate *cc;
+	GdkColorContext *cc;
 	gint retry_count;
 	GdkColormap *default_colormap;
 
 	g_assert(visual != NULL);
 	g_assert(colormap != NULL);
 	
-	cc = g_new(GdkColorContextPrivate, 1);
-	
-	cc->xdisplay = gdk_display;
+	cc = g_new(GdkColorContext, 1);
+	ccp = (GdkColorContextPrivate *) cc;
+	ccp->xdisplay = gdk_display;
 	cc->visual = visual;
 	cc->colormap = colormap;
 	cc->clut = NULL;
@@ -599,14 +603,15 @@ GdkColorContext *
 gdk_color_context_new_mono(GdkVisual   *visual,
 			   GdkColormap *colormap)
 {
-	GdkColorContextPrivate *cc;
+	GdkColorContextPrivate *ccp;
+	GdkColorContext *cc;
 
 	g_assert(visual != NULL);
 	g_assert(colormap != NULL);
 
-	cc = g_new(GdkColorContextPrivate, 1);
-
-	cc->xdisplay = gdk_display;
+	cc = g_new(GdkColorContext, 1);
+	ccp = (GdkColorContextPrivate *) cc;
+	ccp->xdisplay = gdk_display;
 	cc->visual = visual;
 	cc->colormap = colormap;
 	cc->clut = NULL;
@@ -624,36 +629,32 @@ gdk_color_context_new_mono(GdkVisual   *visual,
 void
 gdk_color_context_free(GdkColorContext *cc)
 {
-	GdkColorContextPrivate *ccp;
-	
 	g_assert(cc != NULL);
 
-	ccp = (GdkColorContextPrivate *) cc;
-
-	if ((ccp->visual->type == GDK_VISUAL_STATIC_COLOR)
-	    || (ccp->visual->type == GDK_VISUAL_PSEUDO_COLOR)) {
-		gdk_colors_free(ccp->colormap, ccp->clut, ccp->num_allocated, 0);
-		g_free(ccp->clut);
-	} else if (ccp->clut != NULL) {
-		gdk_colors_free(ccp->colormap, ccp->clut, ccp->num_colors, 0);
-		g_free(ccp->clut);
+	if ((cc->visual->type == GDK_VISUAL_STATIC_COLOR)
+	    || (cc->visual->type == GDK_VISUAL_PSEUDO_COLOR)) {
+		gdk_colors_free(cc->colormap, cc->clut, cc->num_allocated, 0);
+		g_free(cc->clut);
+	} else if (cc->clut != NULL) {
+		gdk_colors_free(cc->colormap, cc->clut, cc->num_colors, 0);
+		g_free(cc->clut);
 	}
 
-	if (ccp->cmap != NULL)
-		g_free(ccp->cmap);
+	if (cc->cmap != NULL)
+		g_free(cc->cmap);
 
-	if (ccp->need_to_free_colormap)
-		gdk_colormap_destroy(ccp->colormap);
+	if (cc->need_to_free_colormap)
+		gdk_colormap_destroy(cc->colormap);
 
 	/* free any palette that has been associated with this GdkColorContext */
 
-	init_palette(ccp);
+	init_palette(cc);
 
-	if (ccp->color_hash) {
-		g_hash_table_foreach(ccp->color_hash,
+	if (cc->color_hash) {
+		g_hash_table_foreach(cc->color_hash,
 				     free_hash_entry,
 				     NULL);
-		g_hash_table_destroy(ccp->color_hash);
+		g_hash_table_destroy(cc->color_hash);
 	}
 
 	g_free(cc);
@@ -666,16 +667,13 @@ gdk_color_context_get_pixel(GdkColorContext *cc,
 			    gushort          blue,
 			    gint            *failed)
 {
-	GdkColorContextPrivate *ccp;
-	
+	GdkColorContextPrivate *ccp = (GdkColorContextPrivate *) cc;
 	g_assert(cc != NULL);
 	g_assert(failed != NULL);
 
-	ccp = (GdkColorContextPrivate *) cc;
-
 	*failed = FALSE;
 
-	switch (ccp->mode) {
+	switch (cc->mode) {
 		case GDK_CC_MODE_BW: {
 			gdouble value;
 
@@ -688,9 +686,9 @@ gdk_color_context_get_pixel(GdkColorContext *cc,
 				+ blue / 65535.0 * 0.11;
 
 			if (value > 0.5)
-				return ccp->white_pixel;
+				return cc->white_pixel;
 
-			return ccp->black_pixel;
+			return cc->black_pixel;
 		}
 
 		case GDK_CC_MODE_MY_GRAY: {
@@ -722,8 +720,8 @@ gdk_color_context_get_pixel(GdkColorContext *cc,
 
 			iblue *= ccp->std_cmap.blue_mult;
 
-			if (ccp->clut != NULL)
-				return ccp->clut[ccp->std_cmap.base_pixel + ired + igreen + iblue];
+			if (cc->clut != NULL)
+				return cc->clut[ccp->std_cmap.base_pixel + ired + igreen + iblue];
 
 			return ccp->std_cmap.base_pixel + ired + igreen + iblue;
 		}
@@ -735,21 +733,21 @@ gdk_color_context_get_pixel(GdkColorContext *cc,
 			green <<= 8;
 			blue  <<= 8;
 
-			if (ccp->clut == NULL) {
-				red   >>= 16 - ccp->bits.red;
-				green >>= 16 - ccp->bits.green;
-				blue  >>= 16 - ccp->bits.blue;
+			if (cc->clut == NULL) {
+				red   >>= 16 - cc->bits.red;
+				green >>= 16 - cc->bits.green;
+				blue  >>= 16 - cc->bits.blue;
 
-				ired   = (red << ccp->shifts.red) & ccp->masks.red;
-				igreen = (green << ccp->shifts.green) & ccp->masks.green;
-				iblue  = (blue << ccp->shifts.blue) & ccp->masks.blue;
+				ired   = (red << cc->shifts.red) & cc->masks.red;
+				igreen = (green << cc->shifts.green) & cc->masks.green;
+				iblue  = (blue << cc->shifts.blue) & cc->masks.blue;
 
 				return ired | igreen | iblue;
 			}
 
-			ired   = ccp->clut[red * ccp->max_entry / 65535] & ccp->masks.red;
-			igreen = ccp->clut[green * ccp->max_entry / 65535] & ccp->masks.green;
-			iblue  = ccp->clut[blue * ccp->max_entry / 65535] & ccp->masks.blue;
+			ired   = cc->clut[red * cc->max_entry / 65535] & cc->masks.red;
+			igreen = cc->clut[green * cc->max_entry / 65535] & cc->masks.green;
+			iblue  = cc->clut[blue * cc->max_entry / 65535] & cc->masks.blue;
 
 			return ired | igreen | iblue;
 		}
@@ -770,7 +768,7 @@ gdk_color_context_get_pixel(GdkColorContext *cc,
 			color.green = green;
 			color.blue  = blue;
 
-			result = g_hash_table_lookup(ccp->color_hash, &color);
+			result = g_hash_table_lookup(cc->color_hash, &color);
 
 			if (!result) {
 				color.red   = red;
@@ -778,7 +776,7 @@ gdk_color_context_get_pixel(GdkColorContext *cc,
 				color.blue  = blue;
 				color.pixel = 0;
 
-				if (!gdk_color_alloc(ccp->colormap, &color))
+				if (!gdk_color_alloc(cc->colormap, &color))
 					*failed = TRUE;
 				else {
 					GdkColor *cnew;
@@ -796,26 +794,26 @@ gdk_color_context_get_pixel(GdkColorContext *cc,
 					 * might be necessary for us to resize the CLUT.
 					 */
 
-					if (ccp->num_allocated == ccp->max_colors) {
-						ccp->max_colors *= 2;
+					if (cc->num_allocated == cc->max_colors) {
+						cc->max_colors *= 2;
 
 						if (gdk_debug_level >= 1)
 							g_print("gdk_color_context_get_pixel: "
 								"resizing CLUT to %i entries",
-								ccp->max_colors);
+								cc->max_colors);
 
-						ccp->clut = g_realloc(ccp->clut,
-								      ccp->max_colors * sizeof(gulong));
+						cc->clut = g_realloc(cc->clut,
+								      cc->max_colors * sizeof(gulong));
 					}
 
 					/* Key and value are the same color structure */
 
 					cnew = g_new(GdkColor, 1);
 					*cnew = color;
-					g_hash_table_insert(ccp->color_hash, cnew, cnew);
+					g_hash_table_insert(cc->color_hash, cnew, cnew);
 
-					ccp->clut[ccp->num_allocated] = color.pixel;
-					ccp->num_allocated++;
+					cc->clut[cc->num_allocated] = color.pixel;
+					cc->num_allocated++;
 					return color.pixel;
 				}
 			}
@@ -834,7 +832,6 @@ gdk_color_context_get_pixels(GdkColorContext *cc,
 			     gulong          *colors,
 			     gint            *nallocated)
 {
-	GdkColorContextPrivate *ccp;
 	gint i, k, idx;
 	gint cmapsize, ncols = 0, nopen = 0, counter = 0;
 	gint bad_alloc = FALSE;
@@ -848,8 +845,6 @@ gdk_color_context_get_pixels(GdkColorContext *cc,
 	g_assert(blues != NULL);
 	g_assert(colors != NULL);
 	g_assert(nallocated != NULL);
-
-	ccp = (GdkColorContextPrivate *) cc;
 
 	memset(defs, 0, MAX_IMAGE_COLORS * sizeof(GdkColor));
 	memset(failed, 0, MAX_IMAGE_COLORS * sizeof(gint));
@@ -894,7 +889,7 @@ gdk_color_context_get_pixels(GdkColorContext *cc,
 	if ((ncols == ncolors) || (nopen == 0)) {
 		if (gdk_debug_level >= 1)
 			g_print("gdk_color_context_get_pixels: got all %i colors; "
-				"(%i colors allocated so far", ncolors, ccp->num_allocated);
+				"(%i colors allocated so far", ncolors, cc->num_allocated);
 
 		return;
 	}
@@ -908,7 +903,7 @@ gdk_color_context_get_pixels(GdkColorContext *cc,
 
 	/* read up to MAX_IMAGE_COLORS colors of the current colormap */
 
-	cmapsize = MIN(ccp->num_colors, MAX_IMAGE_COLORS);
+	cmapsize = MIN(cc->num_colors, MAX_IMAGE_COLORS);
 
 	/* see if the colormap has any colors to read */
 
@@ -932,7 +927,7 @@ gdk_color_context_get_pixels(GdkColorContext *cc,
 
 	/* read the colormap */
 
-	my_x_query_colors(ccp->colormap, cmap, cmapsize);
+	my_x_query_colors(cc->colormap, cmap, cmapsize);
 
 	/* speedup: downscale here instead of in the matching code */
 
@@ -1017,7 +1012,7 @@ gdk_color_context_get_pixels(GdkColorContext *cc,
 		if (gdk_debug_level >= 1)
 			g_print("gdk_color_context_get_pixels: got %i colors, %i exact and "
 				"%i close (%i colors allocated so far)",
-				ncolors, exact_col, close_col, ccp->num_allocated);
+				ncolors, exact_col, close_col, cc->num_allocated);
 
 		return;
 	}
@@ -1061,7 +1056,7 @@ gdk_color_context_get_pixels(GdkColorContext *cc,
 		if (close < 0) {
 			/* too bad, map to black */
 
-			defs[i].pixel = ccp->black_pixel;
+			defs[i].pixel = cc->black_pixel;
 			defs[i].red = defs[i].green = defs[i].blue = 0;
 #ifdef DEBUG
 			black_col++;
@@ -1079,7 +1074,7 @@ gdk_color_context_get_pixels(GdkColorContext *cc,
 	if (gdk_debug_level >= 1)
 		g_print("gdk_color_context_get_pixels: got %i colors, %i exact, %i close, "
 			"%i substituted, %i to black (%i colors allocated so far)",
-			ncolors, exact_col, close_col, subst_col, black_col, ccp->num_allocated);
+			ncolors, exact_col, close_col, subst_col, black_col, cc->num_allocated);
 }
 
 void
@@ -1092,7 +1087,6 @@ gdk_color_context_get_pixels_incremental(GdkColorContext *cc,
 					 gulong          *colors,
 					 gint            *nallocated)
 {
-	GdkColorContextPrivate *ccp;
 	gint i, k, idx;
 	gint cmapsize, ncols = 0, nopen = 0, counter = 0;
 	gint bad_alloc = FALSE;
@@ -1107,8 +1101,6 @@ gdk_color_context_get_pixels_incremental(GdkColorContext *cc,
 	g_assert(used != NULL);
 	g_assert(colors != NULL);
 	g_assert(nallocated != NULL);
-
-	ccp = (GdkColorContextPrivate *) cc;
 
 	memset(defs, 0, MAX_IMAGE_COLORS * sizeof(GdkColor));
 	memset(failed, 0, MAX_IMAGE_COLORS * sizeof(gint));
@@ -1161,12 +1153,12 @@ gdk_color_context_get_pixels_incremental(GdkColorContext *cc,
 		if (gdk_debug_level >= 1)
 			g_print("gdk_color_context_get_pixels_incremental: got all %i colors "
 				"(%i colors allocated so far)",
-				ncolors, ccp->num_allocated);
+				ncolors, cc->num_allocated);
 
 		return;
 	}
 
-	cmapsize = MIN(ccp->num_colors, MAX_IMAGE_COLORS);
+	cmapsize = MIN(cc->num_colors, MAX_IMAGE_COLORS);
 
 	if (cmapsize < 0) {
 		g_warning("gdk_color_context_get_pixels_incremental: oops!  "
@@ -1187,7 +1179,7 @@ gdk_color_context_get_pixels_incremental(GdkColorContext *cc,
 
 	/* read and downscale */
 
-	my_x_query_colors(ccp->colormap, cmap, cmapsize);
+	my_x_query_colors(cc->colormap, cmap, cmapsize);
 
 	for (i = 0; i < cmapsize; i++) {
 		cmap[i].red   >>= 8;
@@ -1261,7 +1253,7 @@ gdk_color_context_get_pixels_incremental(GdkColorContext *cc,
 			g_print("gdk_color_context_get_pixels_incremental: "
 				"got %i colors, %i exact and %i close "
 				"(%i colors allocated so far)",
-				ncolors, exact_col, close_col, ccp->num_allocated);
+				ncolors, exact_col, close_col, cc->num_allocated);
 
 		return;
 	}
@@ -1305,7 +1297,7 @@ gdk_color_context_get_pixels_incremental(GdkColorContext *cc,
 		if (close < 0) {
 			/* too bad, map to black */
 
-			defs[i].pixel = ccp->black_pixel;
+			defs[i].pixel = cc->black_pixel;
 			defs[i].red = defs[i].green = defs[i].blue = 0;
 #ifdef DEBUG
 			black_col++;
@@ -1324,42 +1316,7 @@ gdk_color_context_get_pixels_incremental(GdkColorContext *cc,
 		g_print("gdk_color_context_get_pixels_incremental: "
 			"got %i colors, %i exact, %i close, %i substituted, %i to black "
 			"(%i colors allocated so far)",
-			ncolors, exact_col, close_col, subst_col, black_col, ccp->num_allocated);
-}
-
-gint
-gdk_color_context_get_num_colors(GdkColorContext *cc)
-{
-	g_assert(cc != NULL);
-	
-	return ((GdkColorContextPrivate *) cc)->num_colors;
-}
-
-gint
-gdk_color_context_get_depth(GdkColorContext *cc)
-{
-	GdkColorContextPrivate *ccp = (GdkColorContextPrivate *) cc;
-
-	g_assert(cc != NULL);
-
-	return ccp->visual->depth;
-}
-
-GdkColorContextMode
-gdk_color_context_get_mode(GdkColorContext *cc)
-{
-	g_assert(cc != NULL);
-
-	return ((GdkColorContextPrivate *) cc)->mode;
-	
-}
-
-GdkVisual *
-gdk_color_context_get_visual(GdkColorContext *cc)
-{
-	g_assert(cc != NULL);
-	
-	return ((GdkColorContextPrivate *) cc)->visual;
+			ncolors, exact_col, close_col, subst_col, black_col, cc->num_allocated);
 }
 
 gint
@@ -1374,19 +1331,16 @@ gdk_color_context_query_colors(GdkColorContext *cc,
 			       GdkColor        *colors,
 			       gint             num_colors)
 {
-	GdkColorContextPrivate *ccp;
 	gint i;
 	GdkColor *tc;
 	
 	g_assert(cc != NULL);
 	g_assert(colors != NULL);
 
-	ccp = (GdkColorContextPrivate *) cc;
-
-	switch (ccp->mode) {
+	switch (cc->mode) {
 		case GDK_CC_MODE_BW:
 			for (i = 0, tc = colors; i < num_colors; i++, tc++) {
-				if (tc->pixel == ccp->white_pixel)
+				if (tc->pixel == cc->white_pixel)
 					tc->red = tc->green = tc->blue = 65535;
 				else
 					tc->red = tc->green = tc->blue = 0;
@@ -1394,22 +1348,22 @@ gdk_color_context_query_colors(GdkColorContext *cc,
 			break;
 
 		case GDK_CC_MODE_TRUE:
-			if (ccp->clut == NULL)
+			if (cc->clut == NULL)
 				for (i = 0, tc = colors; i < num_colors; i++, tc++) {
-					tc->red   = (tc->pixel & ccp->masks.red) * 65535 / ccp->masks.red;
-					tc->green = (tc->pixel & ccp->masks.green) * 65535 / ccp->masks.green;
-					tc->blue  = (tc->pixel & ccp->masks.blue) * 65535 / ccp->masks.blue;
+					tc->red   = (tc->pixel & cc->masks.red) * 65535 / cc->masks.red;
+					tc->green = (tc->pixel & cc->masks.green) * 65535 / cc->masks.green;
+					tc->blue  = (tc->pixel & cc->masks.blue) * 65535 / cc->masks.blue;
 				}
 			else {
-				my_x_query_colors(ccp->colormap, colors, num_colors);
+				my_x_query_colors(cc->colormap, colors, num_colors);
 				return 1;
 			}
 			break;
 
 		case GDK_CC_MODE_STD_CMAP:
 		default:
-			if (ccp->cmap == NULL) {
-				my_x_query_colors(ccp->colormap, colors, num_colors);
+			if (cc->cmap == NULL) {
+				my_x_query_colors(cc->colormap, colors, num_colors);
 				return 1;
 			} else {
 				gint first, last, half;
@@ -1417,16 +1371,16 @@ gdk_color_context_query_colors(GdkColorContext *cc,
 
 				for (i = 0, tc = colors; i < num_colors; i++) {
 					first = 0;
-					last = ccp->num_colors - 1;
+					last = cc->num_colors - 1;
 
 					while (first <= last) {
 						half = (first + last) / 2;
-						half_pixel = ccp->cmap[half].pixel;
+						half_pixel = cc->cmap[half].pixel;
 
 						if (tc->pixel == half_pixel) {
-							tc->red   = ccp->cmap[half].red;
-							tc->green = ccp->cmap[half].green;
-							tc->blue  = ccp->cmap[half].blue;
+							tc->red   = cc->cmap[half].red;
+							tc->green = cc->cmap[half].green;
+							tc->blue  = cc->cmap[half].blue;
 							first = last + 1; /* false break */
 						} else {
 							if (tc->pixel > half_pixel)
@@ -1448,18 +1402,15 @@ gdk_color_context_add_palette(GdkColorContext *cc,
 			      GdkColor        *palette,
 			      gint             num_palette)
 {
-	GdkColorContextPrivate *ccp;
 	gint i, j, erg;
 	gushort r, g, b;
 	gulong pixel[1];
 
 	g_assert(cc != NULL);
 
-	ccp = (GdkColorContextPrivate *) cc;
-
 	/* initialize this palette (will also erase previous palette as well) */
 
-	init_palette(ccp);
+	init_palette(cc);
 
 	/* restore previous mode if we aren't adding a new palette */
 
@@ -1475,12 +1426,12 @@ gdk_color_context_add_palette(GdkColorContext *cc,
 	 * the pixels in the palette using the current settings)
 	 */
 
-	if (ccp->color_hash == NULL)
-		ccp->color_hash = g_hash_table_new(hash_color, compare_colors);
+	if (cc->color_hash == NULL)
+		cc->color_hash = g_hash_table_new(hash_color, compare_colors);
 
 	/* copy incoming palette */
 
-	ccp->palette = g_new0(GdkColor, num_palette);
+	cc->palette = g_new0(GdkColor, num_palette);
 
 	j = 0;
 
@@ -1501,10 +1452,10 @@ gdk_color_context_add_palette(GdkColorContext *cc,
 		if (erg) {
 			/* store in palette */
 
-			ccp->palette[j].red   = r;
-			ccp->palette[j].green = g;
-			ccp->palette[j].blue  = b;
-			ccp->palette[j].pixel = pixel[0];
+			cc->palette[j].red   = r;
+			cc->palette[j].green = g;
+			cc->palette[j].blue  = b;
+			cc->palette[j].pixel = pixel[0];
 
 			/* move to next slot */
 
@@ -1515,28 +1466,28 @@ gdk_color_context_add_palette(GdkColorContext *cc,
 	/* resize to fit */
 
 	if (j != num_palette)
-		ccp->palette = g_realloc(ccp->palette, j * sizeof(GdkColor));
+		cc->palette = g_realloc(cc->palette, j * sizeof(GdkColor));
 
 	/* clear the hash table, we don't use it when dithering */
 
-	if (ccp->color_hash) {
-		g_hash_table_destroy(ccp->color_hash);
-		ccp->color_hash = NULL;
+	if (cc->color_hash) {
+		g_hash_table_destroy(cc->color_hash);
+		cc->color_hash = NULL;
 	}
 
 	/* store real palette size */
 
-	ccp->num_palette = j;
+	cc->num_palette = j;
 
 	/* switch to palette mode */
 
-	ccp->mode = GDK_CC_MODE_PALETTE;
+	cc->mode = GDK_CC_MODE_PALETTE;
 
 	/* sort palette */
 
-	qsort(ccp->palette, ccp->num_palette, sizeof(GdkColor), pixel_sort);
+	qsort(cc->palette, cc->num_palette, sizeof(GdkColor), pixel_sort);
 
-	ccp->fast_dither = NULL;
+	cc->fast_dither = NULL;
 
 	return j;
 }
@@ -1544,18 +1495,15 @@ gdk_color_context_add_palette(GdkColorContext *cc,
 void
 gdk_color_context_init_dither(GdkColorContext *cc)
 {
-	GdkColorContextPrivate *ccp;
 	gint rr, gg, bb, err, erg, erb;
 	gint success = FALSE;
 
 	g_assert(cc != NULL);
 
-	ccp = (GdkColorContextPrivate *) cc;
-
 	/* now we can initialize the fast dither matrix */
 
-	if(ccp->fast_dither == NULL)
-		ccp->fast_dither = g_new(GdkColorContextDither, 1);
+	if(cc->fast_dither == NULL)
+		cc->fast_dither = g_new(GdkColorContextDither, 1);
 
 	/* Fill it.  We ignore unsuccessful allocations, they are just mapped
 	 * to black instead */
@@ -1567,27 +1515,23 @@ gdk_color_context_init_dither(GdkColorContext *cc)
 				erg = (gg << 3) | (gg >> 2);
 				erb = (bb << 3) | (bb >> 2);
 
-				ccp->fast_dither->fast_rgb[rr][gg][bb] =
+				cc->fast_dither->fast_rgb[rr][gg][bb] =
 					gdk_color_context_get_index_from_palette(cc, &err, &erg, &erb, &success);
-				ccp->fast_dither->fast_err[rr][gg][bb] = err;
-				ccp->fast_dither->fast_erg[rr][gg][bb] = erg;
-				ccp->fast_dither->fast_erb[rr][gg][bb] = erb;
+				cc->fast_dither->fast_err[rr][gg][bb] = err;
+				cc->fast_dither->fast_erg[rr][gg][bb] = erg;
+				cc->fast_dither->fast_erb[rr][gg][bb] = erb;
 			}
 }
 
 void
 gdk_color_context_free_dither(GdkColorContext *cc)
 {
-	GdkColorContextPrivate *ccp;
-
 	g_assert(cc != NULL);
 
-	ccp = (GdkColorContextPrivate *) cc;
+	if (cc->fast_dither)
+		g_free(cc->fast_dither);
 
-	if (ccp->fast_dither)
-		g_free(ccp->fast_dither);
-
-	ccp->fast_dither = NULL;
+	cc->fast_dither = NULL;
 }
 
 gulong
@@ -1597,7 +1541,6 @@ gdk_color_context_get_pixel_from_palette(GdkColorContext *cc,
 					 gushort         *blue,
 					 gint            *failed)
 {
-	GdkColorContextPrivate *ccp;
 	gulong pixel = 0;
 	gint dif, dr, dg, db, j = -1;
 	gint mindif = 0x7fffffff;
@@ -1610,21 +1553,19 @@ gdk_color_context_get_pixel_from_palette(GdkColorContext *cc,
 	g_assert(blue != NULL);
 	g_assert(failed != NULL);
 
-	ccp = (GdkColorContextPrivate *) cc;
-
 	*failed = FALSE;
 
-	for (i = 0; i < ccp->num_palette; i++) {
-		dr = *red - ccp->palette[i].red;
-		dg = *green - ccp->palette[i].green;
-		db = *blue - ccp->palette[i].blue;
+	for (i = 0; i < cc->num_palette; i++) {
+		dr = *red - cc->palette[i].red;
+		dg = *green - cc->palette[i].green;
+		db = *blue - cc->palette[i].blue;
 
 		dif = dr * dr + dg * dg + db * db;
 		
 		if (dif < mindif) {
 			mindif = dif;
 			j = i;
-			pixel = ccp->palette[i].pixel;
+			pixel = cc->palette[i].pixel;
 			err = dr;
 			erg = dg;
 			erb = db;
@@ -1654,7 +1595,6 @@ gdk_color_context_get_index_from_palette(GdkColorContext *cc,
 					 gint            *blue,
 					 gint            *failed)
 {
-	GdkColorContextPrivate *ccp;
 	gint dif, dr, dg, db, j = -1;
 	gint mindif = 0x7fffffff;
 	gint err = 0, erg = 0, erb = 0;
@@ -1666,14 +1606,12 @@ gdk_color_context_get_index_from_palette(GdkColorContext *cc,
 	g_assert(blue != NULL);
 	g_assert(failed != NULL);
 
-	ccp = (GdkColorContextPrivate *) cc;
-
 	*failed = FALSE;
 
-	for (i = 0; i < ccp->num_palette; i++) {
-		dr = *red - ccp->palette[i].red;
-		dg = *green - ccp->palette[i].green;
-		db = *blue - ccp->palette[i].blue;
+	for (i = 0; i < cc->num_palette; i++) {
+		dr = *red - cc->palette[i].red;
+		dg = *green - cc->palette[i].green;
+		db = *blue - cc->palette[i].blue;
 
 		dif = dr * dr + dg * dg + db * db;
 

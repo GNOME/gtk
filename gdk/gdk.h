@@ -680,10 +680,6 @@ void             gdk_color_context_get_pixels_incremental (GdkColorContext *cc,
 							   gulong          *colors,
 							   gint            *nallocated);
 
-gint             gdk_color_context_get_num_colors         (GdkColorContext *cc);
-gint             gdk_color_context_get_depth              (GdkColorContext *cc);
-GdkColorContextMode gdk_color_context_get_mode            (GdkColorContext *cc);
-GdkVisual       *gdk_color_context_get_visual             (GdkColorContext *cc);
 gint             gdk_color_context_query_color            (GdkColorContext *cc,
 							   GdkColor        *color);
 gint             gdk_color_context_query_colors           (GdkColorContext *cc,

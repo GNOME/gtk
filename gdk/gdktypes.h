@@ -752,7 +752,51 @@ struct _GdkColorContextDither
 
 struct _GdkColorContext
 {
-  gint dummy;
+  GdkVisual *visual;
+  GdkColormap *colormap;
+
+  gint num_colors;		/* available no. of colors in colormap */
+  gint max_colors;		/* maximum no. of colors */
+  gint num_allocated;		/* no. of allocated colors */
+
+  GdkColorContextMode mode;
+  gint need_to_free_colormap;
+  GdkAtom std_cmap_atom;
+
+  gulong *clut;			/* color look-up table */
+  GdkColor *cmap;		/* colormap */
+
+  GHashTable *color_hash;	/* hash table of allocated colors */
+  GdkColor *palette;		/* preallocated palette */
+  gint num_palette;		/* size of palette */
+
+  GdkColorContextDither *fast_dither;	/* fast dither matrix */
+
+  struct
+  {
+    gint red;
+    gint green;
+    gint blue;
+  } shifts;
+
+  struct
+  {
+    gulong red;
+    gulong green;
+    gulong blue;
+  } masks;
+
+
+  struct {
+    gint red;
+    gint green;
+    gint blue;
+  } bits;
+
+  gulong max_entry;
+
+  gulong black_pixel;
+  gulong white_pixel;
 };
 
 /* Types for XInput support */
