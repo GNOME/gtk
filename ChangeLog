@@ -1,3 +1,7 @@
+Thu May 16 17:29:08 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_remove): include missing #ifdef G_ENABLE_DEBUG
+
 Thu May 16 15:44:15 2002  Owen Taylor  <otaylor@redhat.com>
 
         * demos/gtk-demo/editable_cells.c (cell_edited): Fix

@@ -482,8 +482,10 @@ _gtk_rbtree_remove (GtkRBTree *tree)
 
   gint height = tree->root->offset;
 
+#ifdef G_ENABLE_DEBUG  
   if (gtk_debug_flags & GTK_DEBUG_TREE)
     _gtk_rbtree_test (G_STRLOC, tree);
+#endif
   
   tmp_tree = tree->parent_tree;
   tmp_node = tree->parent_node;
@@ -513,8 +515,10 @@ _gtk_rbtree_remove (GtkRBTree *tree)
   tmp_node = tree->parent_node;
   _gtk_rbtree_free (tree);
 
+#ifdef G_ENABLE_DEBUG  
   if (gtk_debug_flags & GTK_DEBUG_TREE)
     _gtk_rbtree_test (G_STRLOC, tmp_tree);
+#endif
 }
 
 
@@ -733,8 +737,10 @@ _gtk_rbtree_node_set_height (GtkRBTree *tree,
 	  tmp_tree = tmp_tree->parent_tree;
 	}
     }
+#ifdef G_ENABLE_DEBUG  
   if (gtk_debug_flags & GTK_DEBUG_TREE)
     _gtk_rbtree_test (G_STRLOC, tree);
+#endif
 }
 
 void
@@ -1219,9 +1225,11 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
     ;
   g_return_if_fail (x == tree->root);
 
+#ifdef G_ENABLE_DEBUG  
   if (gtk_debug_flags & GTK_DEBUG_TREE)
     _gtk_rbtree_test (G_STRLOC, tree);
-
+#endif
+  
   if (node->left == tree->nil || node->right == tree->nil)
     {
       y = node;
