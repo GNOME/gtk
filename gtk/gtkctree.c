@@ -2478,7 +2478,7 @@ change_focus_row_expansion (GtkCTree          *ctree,
 
   clist = GTK_CLIST (ctree);
 
-  if (gdk_pointer_is_grabbed_for_display (
+  if (gdk_display_is_pointer_grabbed (
 		gdk_window_get_display(GTK_WIDGET(ctree)->window)) && 
       GTK_WIDGET_HAS_GRAB (ctree))
     return;
@@ -4815,12 +4815,12 @@ gtk_ctree_node_set_shift (GtkCTree     *ctree,
 static void
 remove_grab (GtkCList *clist)
 {
-  if (gdk_pointer_is_grabbed_for_display (
+  if (gdk_display_is_pointer_grabbed (
 		gdk_window_get_display(GTK_WIDGET(clist)->window)) && 
       GTK_WIDGET_HAS_GRAB (clist))
     {
       gtk_grab_remove (GTK_WIDGET (clist));
-      gdk_pointer_ungrab_for_display (
+      gdk_display_pointer_ungrab (
 		      gdk_window_get_display(GTK_WIDGET(clist)->window),
 		      GDK_CURRENT_TIME);
     }

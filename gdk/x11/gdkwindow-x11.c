@@ -3551,7 +3551,7 @@ wmspec_moveresize (GdkWindow *window,
   XEvent xev;
 
   /* Release passive grab */
-  gdk_pointer_ungrab_for_display (GDK_WINDOW_DISPLAY(window),timestamp);
+  gdk_display_pointer_ungrab (GDK_WINDOW_DISPLAY(window),timestamp);
   
   xev.xclient.type = ClientMessage;
   xev.xclient.serial = 0;

@@ -75,11 +75,7 @@ gchar*	  gdk_set_locale	   	(void);
  */
 void      gdk_error_trap_push           (void);
 gint      gdk_error_trap_pop            (void);
-
-void	  gdk_set_use_xshm_for_display  (GdkDisplay * display, gboolean use_xshm);
 void	  gdk_set_use_xshm		(gboolean	 use_xshm);
-
-gboolean  gdk_get_use_xshm_for_display  (GdkDisplay * display);
 gboolean  gdk_get_use_xshm		(void);
 gchar*	  gdk_get_display		(void);
 gchar*	  gdk_get_display_arg_name	(void);
@@ -103,14 +99,10 @@ GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
 				      GdkWindow    *confine_to,
 				      GdkCursor    *cursor,
 				      guint32       time);
-void	      gdk_pointer_ungrab_for_display (GdkDisplay * display, 
-					      guint32 time);
 void          gdk_pointer_ungrab     (guint32       time);
 GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
 				      gboolean      owner_events,
 				      guint32       time);
-void	      gdk_keyboard_ungrab_for_display (GdkDisplay * display, 
-					       guint32 time);
 void          gdk_keyboard_ungrab    (guint32       time);
 gboolean      gdk_pointer_is_grabbed_for_display (GdkDisplay * display);
 gboolean      gdk_pointer_is_grabbed (void);

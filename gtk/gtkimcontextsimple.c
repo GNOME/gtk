@@ -1035,7 +1035,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       context_simple->compose_buffer[0] = 0;
       if (n_compose > 1)		/* Invalid sequence */
 	{
-	  gdk_beep_for_display (gdk_window_get_display(event->window));
+	  gdk_display_beep (gdk_window_get_display(event->window));
 	  return TRUE;
 	}
   

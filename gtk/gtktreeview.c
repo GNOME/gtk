@@ -1416,9 +1416,9 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
 
   allocation = tree_view->priv->drag_column->button->allocation;
   allocation.x = tree_view->priv->drag_column_x;
-  gdk_pointer_ungrab_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+  gdk_display_pointer_ungrab (GTK_WIDGET_GET_DISPLAY(widget),
 				  GDK_CURRENT_TIME);
-  gdk_keyboard_ungrab_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+  gdk_display_keyboard_ungrab (GTK_WIDGET_GET_DISPLAY(widget),
 				  GDK_CURRENT_TIME);
   gdk_window_reparent (tree_view->priv->drag_column->button->window,
 		       tree_view->priv->header_window,
@@ -1473,7 +1473,7 @@ gtk_tree_view_button_release_column_resize (GtkWidget      *widget,
   GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_IN_COLUMN_RESIZE);
   gtk_widget_get_pointer (widget, &x, NULL);
   gtk_grab_remove (widget);
-  gdk_pointer_ungrab_for_display (gdk_window_get_display(event->window), 
+  gdk_display_pointer_ungrab (gdk_window_get_display(event->window), 
 				  event->time);
 
   width = gtk_tree_view_new_column_width (GTK_TREE_VIEW (widget), i, &x);
@@ -5328,9 +5328,9 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
       gdk_window_set_user_data (tree_view->priv->drag_window, GTK_WIDGET (tree_view));
     }
 
-  gdk_pointer_ungrab_for_display (gdk_window_get_display(column->button->window), 
+  gdk_display_pointer_ungrab (gdk_window_get_display(column->button->window), 
 				  GDK_CURRENT_TIME);
-  gdk_keyboard_ungrab_for_display (gdk_window_get_display(column->button->window),
+  gdk_display_keyboard_ungrab (gdk_window_get_display(column->button->window),
 				   GDK_CURRENT_TIME);
 
   gtk_grab_remove (column->button);

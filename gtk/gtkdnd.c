@@ -2823,9 +2823,9 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   GtkWidget *source_widget = info->widget;
   GdkWindow *root_parent = gdk_screen_get_parent_root(source_widget->screen);
 
-  gdk_pointer_ungrab_for_display (gdk_window_get_display(source_widget->window),
+  gdk_display_pointer_ungrab (gdk_window_get_display(source_widget->window),
 				  time);
-  gdk_keyboard_ungrab_for_display(gdk_window_get_display(source_widget->window),
+  gdk_display_keyboard_ungrab(gdk_window_get_display(source_widget->window),
 				  time);
   gtk_grab_remove (info->ipc_widget);
 

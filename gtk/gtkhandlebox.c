@@ -999,7 +999,7 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
       if (event->window != widget->window)
 	return FALSE;
       
-      gdk_pointer_ungrab_for_display (gdk_window_get_display(event->window),
+      gdk_display_pointer_ungrab (gdk_window_get_display(event->window),
 				      GDK_CURRENT_TIME);
       hb->in_drag = FALSE;
       event_handled = TRUE;
@@ -1253,7 +1253,7 @@ gtk_handle_box_reattach (GtkHandleBox *hb)
     }
   if (hb->in_drag)
     {
-      gdk_pointer_ungrab_for_display (
+      gdk_display_pointer_ungrab (
 		      gdk_window_get_display(GTK_WIDGET(hb)->window),
 		      GDK_CURRENT_TIME);
       hb->in_drag = FALSE;

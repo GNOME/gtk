@@ -1395,7 +1395,7 @@ gtk_file_selection_insert_text (GtkWidget   *widget,
 
   if (!filename)
     {
-      gdk_beep_for_display (gdk_window_get_display(widget->window));
+      gdk_display_beep (gdk_window_get_display(widget->window));
       gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "insert_text");
       return FALSE;
     }

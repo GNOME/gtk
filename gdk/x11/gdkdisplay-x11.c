@@ -145,3 +145,45 @@ gboolean gdk_x11_display_impl_is_root_window(GdkDisplay *dpy, Window root_window
   }
   return FALSE;
 }
+
+void
+gdk_display_use_xshm_set (GdkDisplay * display, gboolean use_xshm)
+{
+  GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm = use_xshm;
+}
+
+gboolean
+gdk_display_use_xshm_get (GdkDisplay * display)
+{
+  return GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm;
+}
+
+
+void
+gdk_display_pointer_ungrab (GdkDisplay * display, guint32 time)
+{
+  _gdk_input_ungrab_pointer (time);
+
+  XUngrabPointer (GDK_DISPLAY_XDISPLAY (display), time);
+  GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window = NULL;
+}
+
+
+gboolean
+gdk_display_is_pointer_grabbed (GdkDisplay * display)
+{
+  return (GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window != NULL);
+}
+
+void
+gdk_display_keyboard_ungrab (GdkDisplay * display, guint32 time)
+{
+  XUngrabKeyboard (GDK_DISPLAY_XDISPLAY (display), time);
+}
+
+void
+gdk_display_beep (GdkDisplay * display)
+{
+  XBell (GDK_DISPLAY_XDISPLAY (display), 0);
+}
+

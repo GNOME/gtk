@@ -599,7 +599,7 @@ gtk_menu_popup (GtkMenu		    *menu,
                                  activate_time) == 0)
 	    GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
 	  else
-	    gdk_pointer_ungrab_for_display (
+	    gdk_display_pointer_ungrab (
 		 gdk_window_get_display(xgrab_shell->window),activate_time);
 	}
     }
@@ -658,10 +658,10 @@ gtk_menu_popdown (GtkMenu *menu)
 	   */
 	  if (menu_shell->have_xgrab)
 	    {
-	      gdk_pointer_ungrab_for_display (
+	      gdk_display_pointer_ungrab (
 		     gdk_window_get_display(menu->tearoff_window->window),
 		     GDK_CURRENT_TIME);
-	      gdk_keyboard_ungrab_for_display (
+	      gdk_display_keyboard_ungrab (
 		     gdk_window_get_display(menu->tearoff_window->window),
 		     GDK_CURRENT_TIME);
 	    }

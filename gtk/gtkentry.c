@@ -1736,7 +1736,7 @@ gtk_entry_real_insert_text (GtkEntry    *entry,
   n_chars = g_utf8_strlen (new_text, new_text_length);
   if (entry->text_max_length > 0 && n_chars + entry->text_length > entry->text_max_length)
     {
-      gdk_beep_for_display (gdk_window_get_display(GTK_WIDGET(entry)->window));
+      gdk_display_beep (gdk_window_get_display(GTK_WIDGET(entry)->window));
       n_chars = entry->text_max_length - entry->text_length;
       new_text_length = g_utf8_offset_to_pointer (new_text, n_chars) - new_text;
     }

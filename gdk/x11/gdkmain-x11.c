@@ -247,31 +247,20 @@ gdk_display_init_new(int argc, char **argv, char *display_name){
   return dpy;
 }
 
-void
-gdk_set_use_xshm_for_display (GdkDisplay * display, gboolean use_xshm)
-{
-  GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm = use_xshm;
-}
-
-gboolean
-gdk_get_use_xshm_for_display (GdkDisplay * display)
-{
-  return GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm;
-}
 
 
 void
 gdk_set_use_xshm (gboolean use_xshm)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_set_use_xshm_for_display instead\n"));
-  gdk_set_use_xshm_for_display(DEFAULT_GDK_DISPLAY,use_xshm);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_use_xshm_set instead\n"));
+  gdk_display_use_xshm_set (DEFAULT_GDK_DISPLAY,use_xshm);
 }
 
 gboolean
 gdk_get_use_xshm (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_get_use_xshm_for_display instead\n"));
-  return gdk_get_use_xshm_for_display(DEFAULT_GDK_DISPLAY);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_use_xshm_get instead\n"));
+  return gdk_display_use_xshm_get (DEFAULT_GDK_DISPLAY);
 }
 
 static GdkGrabStatus
@@ -389,16 +378,6 @@ gdk_pointer_grab (GdkWindow *	  window,
   return gdk_x11_convert_grab_status (return_val);
 }
 
-void
-gdk_pointer_ungrab_for_display (GdkDisplay * display, guint32 time)
-{
-  _gdk_input_ungrab_pointer (time);
-
-
-  XUngrabPointer (GDK_DISPLAY_XDISPLAY (display), time);
-  GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window = NULL;
-}
-
 /*
  *--------------------------------------------------------------
  * gdk_pointer_ungrab
@@ -417,8 +396,8 @@ gdk_pointer_ungrab_for_display (GdkDisplay * display, guint32 time)
 void
 gdk_pointer_ungrab (guint32 time)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_pointer_ungrab_for_display instead\n"));
-  gdk_pointer_ungrab_for_display(DEFAULT_GDK_DISPLAY,time);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_pointer_ungrab instead\n"));
+  gdk_display_pointer_ungrab (DEFAULT_GDK_DISPLAY,time);
 }
 
 /*
@@ -439,13 +418,8 @@ gdk_pointer_ungrab (guint32 time)
 gboolean
 gdk_pointer_is_grabbed (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_pointer_is_grabbed_for_display instead\n"));
-  return gdk_pointer_is_grabbed_for_display(DEFAULT_GDK_DISPLAY);
-}
-gboolean
-gdk_pointer_is_grabbed_for_display (GdkDisplay * display)
-{
-  return (GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window != NULL);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_is_pointer_grabbed instead\n"));
+  return gdk_display_is_pointer_grabbed (DEFAULT_GDK_DISPLAY);
 }
 
 
@@ -491,11 +465,6 @@ gdk_keyboard_grab (GdkWindow *	   window,
   return gdk_x11_convert_grab_status (return_val);
 }
 
-void
-gdk_keyboard_ungrab_for_display (GdkDisplay * display, guint32 time)
-{
-  XUngrabKeyboard (GDK_DISPLAY_XDISPLAY (display), time);
-}
 
 
 /*
@@ -516,8 +485,8 @@ gdk_keyboard_ungrab_for_display (GdkDisplay * display, guint32 time)
 void
 gdk_keyboard_ungrab (guint32 time)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_keyboard_ungrab_for_display instead\n"));	 
-  gdk_keyboard_ungrab_for_display(DEFAULT_GDK_DISPLAY,time);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_keyboard_ungrab instead\n"));	 
+  gdk_display_keyboard_ungrab (DEFAULT_GDK_DISPLAY,time);
 }
 
 /*
@@ -713,17 +682,12 @@ gdk_key_repeat_restore (void)
 
 */
 
-void
-gdk_beep_for_display (GdkDisplay * display)
-{
-  XBell (GDK_DISPLAY_XDISPLAY (display), 0);
-}
 
 void
 gdk_beep (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_beep_for_display instead\n"));
-  gdk_beep_for_display(DEFAULT_GDK_DISPLAY);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_beep instead\n"));
+  gdk_display_beep (DEFAULT_GDK_DISPLAY);
 }
 
 /* close all open display */

@@ -40,8 +40,16 @@ gdk_display_init_new(int argc, char **argv, char *display_name);
 GdkDisplay *	gdk_display_new			(gchar * display_name);	    
 gchar *		gdk_display_get_name		(GdkDisplay *dpy);	    
 gint		gdk_display_get_n_screens	(GdkDisplay *dpy);	    
-GdkScreen *	gdk_display_get_screen		(GdkDisplay *dpy,gint screen_num);
+GdkScreen *	gdk_display_get_screen		(GdkDisplay *dpy, gint screen_num);
 GdkScreen *	gdk_display_get_default_screen	(GdkDisplay *dpy);	  
+
+void		gdk_display_use_xshm_set	(GdkDisplay *display, gboolean use_xshm);
+gboolean        gdk_display_use_xshm_get        (GdkDisplay * display);
+void	        gdk_display_pointer_ungrab      (GdkDisplay * display, guint32 time);
+void	        gdk_display_keyboard_ungrab	(GdkDisplay * display, guint32 time);
+gboolean        gdk_display_is_pointer_grabbed  (GdkDisplay * display);
+void		gdk_display_beep		(GdkDisplay * display);
+
 
 #ifdef __cplusplus
 }
