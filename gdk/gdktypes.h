@@ -441,7 +441,8 @@ typedef enum
   GDK_BUTTON3_MASK  = 1 << 10,
   GDK_BUTTON4_MASK  = 1 << 11,
   GDK_BUTTON5_MASK  = 1 << 12,
-  GDK_MODIFIER_MASK = 0x1fff
+  GDK_RELEASE_MASK  = 1 << 13,
+  GDK_MODIFIER_MASK = 0x3fff
 } GdkModifierType;
 
 typedef enum

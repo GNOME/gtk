@@ -1,3 +1,11 @@
+Tue Jun 30 09:24:40 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_real_key_release_event): implemented
+	default handler for key-release events, which checks for activation
+	of GDK_RELEASE_MASK key bindings.
+
+	* gdk/gdktypes.h (enum): added GDK_RELEASE_MASK to GdkModifierType.
+
 Mon Jun 29 13:39:45 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkarrow.h: GtkType and macro fixups.

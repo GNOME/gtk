@@ -186,6 +186,8 @@ static void gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
 						  GtkAllocation	    *allocation);
 static gint gtk_widget_real_key_press_event      (GtkWidget         *widget,
 						  GdkEventKey       *event);
+static gint gtk_widget_real_key_release_event    (GtkWidget         *widget,
+						  GdkEventKey       *event);
 static void gtk_widget_style_set		 (GtkWidget	    *widget,
 						  GtkStyle          *previous_style);
      
@@ -720,7 +722,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->destroy_event = NULL;
   klass->expose_event = NULL;
   klass->key_press_event = gtk_widget_real_key_press_event;
-  klass->key_release_event = NULL;
+  klass->key_release_event = gtk_widget_real_key_release_event;
   klass->enter_notify_event = NULL;
   klass->leave_notify_event = NULL;
   klass->configure_event = NULL;
@@ -749,8 +751,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
     GtkBindingSet *binding_set;
 
     binding_set = gtk_binding_set_by_class (klass);
-    gtk_binding_entry_add_signal (binding_set, '9', GDK_CONTROL_MASK, "hide", 0);
-    gtk_binding_entry_add_signal (binding_set, '9', GDK_CONTROL_MASK, "show", 0);
+    gtk_binding_entry_add_signal (binding_set, '9', GDK_CONTROL_MASK|GDK_RELEASE_MASK, "hide", 0);
+    gtk_binding_entry_add_signal (binding_set, '9', GDK_CONTROL_MASK|GDK_RELEASE_MASK, "show", 0);
   }
 }
 
@@ -1956,7 +1958,26 @@ gtk_widget_real_key_press_event (GtkWidget         *widget,
 
   if (!handled)
     handled = gtk_bindings_activate (GTK_OBJECT (widget),
-				     event->keyval, event->state);
+				     event->keyval,
+				     event->state);
+
+  return handled;
+}
+
+static gint
+gtk_widget_real_key_release_event (GtkWidget         *widget,
+				   GdkEventKey       *event)
+{
+  gboolean handled = FALSE;
+
+  g_return_val_if_fail (widget != NULL, handled);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), handled);
+  g_return_val_if_fail (event != NULL, handled);
+
+  if (!handled)
+    handled = gtk_bindings_activate (GTK_OBJECT (widget),
+				     event->keyval,
+				     event->state | GDK_RELEASE_MASK);
 
   return handled;
 }
