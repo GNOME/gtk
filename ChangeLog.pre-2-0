@@ -223,7 +223,6 @@ Wed Jan  9 11:23:39 2002  Tim Janik  <timj@gtk.org>
 	* gtk/gtktreesortable.h : ditto.
 	* gtk/gtkwidget.h : Don't reference incomplete _GdkRectangle type.
 
->>>>>>> 1.2791
 2002-01-08  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkplug.c, gtk/gtksocket.c: Speak of window IDs rather 
