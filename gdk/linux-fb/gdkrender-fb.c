@@ -379,7 +379,7 @@ gdk_fb_fill_span_generic (GdkDrawable *drawable,
       gint relx, rely;
       int drawh;
       GdkFBDrawingContext *dc, dc_data;
-      
+
       dc = &dc_data;
       
       gdk_fb_drawing_context_init (dc, drawable, gc, FALSE, TRUE);
@@ -388,9 +388,9 @@ gdk_fb_fill_span_generic (GdkDrawable *drawable,
       ts_private = GDK_DRAWABLE_IMPL_FBDATA (ts);
       
       rely = y - private->abs_y;
-      drawh = (rely + gc_private->values.ts_y_origin) % ts_private->height;
+      drawh = (rely - gc_private->values.ts_y_origin) % ts_private->height;
       if (drawh < 0)
-	drawh += GDK_DRAWABLE_FBDATA (ts)->height;
+	drawh += ts_private->height;
       
       for (curx = left; curx < right; curx += xstep)
 	{
@@ -398,7 +398,7 @@ gdk_fb_fill_span_generic (GdkDrawable *drawable,
 	  
 	  relx = curx - private->abs_x;
 	  
-	  draww = (relx + gc_private->values.ts_x_origin) % ts_private->width;
+	  draww = (relx - gc_private->values.ts_x_origin) % ts_private->width;
 	  if (draww < 0)
 	    draww += ts_private->width;
 	  

@@ -1,3 +1,21 @@
+2001-05-10  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Make sure you can compile out the implementation/wrapper assert
+	macros.
+
+	* gdk/linux-fb/gdkdrawable-fb2.c:
+	Check implementation/wrappers, initialize type for pixmap dummys.
+
+	* gdk/linux-fb/gdkimage-fb.c (_gdk_fb_get_image):
+	Hide the cursor if reading from the screen.
+
+	* gdk/linux-fb/gdkrender-fb.c (gdk_fb_fill_span_generic):
+	Fix sign bug in tiling code.
+
+	* gdk/linux-fb/gdkwindow-fb.c (_gdk_windowing_window_clear_area):
+	Handle background pixmaps.
+
 Wed May  9 15:27:22 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_column_drag_function): New

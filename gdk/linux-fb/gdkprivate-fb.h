@@ -52,11 +52,17 @@
 #define GDK_FONT_FB(f)                ((GdkFontPrivateFB *)(f))
 #define GDK_CURSOR_FB(c)              ((GdkCursorPrivateFB *)(c))
 
+#define CHECK_IMPL_AND_INTF
+
+#ifdef CHECK_IMPL_AND_INTF
 #define GDK_CHECK_IMPL(drawable) \
  g_assert(G_OBJECT_TYPE(drawable) == _gdk_window_impl_get_type() || G_OBJECT_TYPE(drawable) == _gdk_pixmap_impl_get_type())
 #define GDK_CHECK_INTF(drawable) \
  g_assert(G_OBJECT_TYPE(drawable) == gdk_window_object_get_type() || G_OBJECT_TYPE(drawable) == gdk_pixmap_get_type())
-
+#else
+#define GDK_CHECK_IMPL(drawable) 
+#define GDK_CHECK_INTF(drawable)
+#endif
 typedef struct _GdkDrawableFBData GdkDrawableFBData;
 typedef struct _GdkWindowFBData GdkWindowFBData;
 typedef struct _GdkPixmapFBData GdkPixmapFBData;

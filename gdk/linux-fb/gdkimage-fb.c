@@ -172,6 +172,8 @@ _gdk_fb_get_image (GdkDrawable *drawable,
   GdkImage *image;
   GdkImagePrivateFB *private;
   GdkPixmapFBData fbd;
+  GdkRegion *region = NULL;
+  gboolean handle_cursor = FALSE;
 
   g_return_val_if_fail (drawable != NULL, NULL);
 
@@ -200,12 +202,24 @@ _gdk_fb_get_image (GdkDrawable *drawable,
   
   /* Fake its existence as a pixmap */
   memset (&fbd, 0, sizeof(fbd));
+  ((GTypeInstance *)&fbd)->g_class = g_type_class_peek (_gdk_pixmap_impl_get_type ());
   fbd.drawable_data.mem = image->mem;
   fbd.drawable_data.rowstride = image->bpl;
   fbd.drawable_data.width = fbd.drawable_data.lim_x = image->width;
   fbd.drawable_data.height = fbd.drawable_data.lim_y = image->height;
   fbd.drawable_data.depth = image->depth;
   fbd.drawable_data.window_type = GDK_DRAWABLE_PIXMAP;
+
+  if (GDK_DRAWABLE_FBDATA (drawable)->mem == GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->mem)
+    {
+      region = gdk_fb_clip_region (drawable, _gdk_fb_screen_gc, TRUE, FALSE, FALSE);
+
+      if (gdk_fb_cursor_region_need_hide (region))
+	{
+	  handle_cursor = TRUE;
+	  gdk_fb_cursor_hide ();
+	}
+    }
 
   gdk_fb_draw_drawable_2 ((GdkPixmap *)&fbd,
 			  _gdk_fb_screen_gc,
@@ -214,6 +228,12 @@ _gdk_fb_get_image (GdkDrawable *drawable,
 			  0, 0,
 			  width, height,
 			  TRUE, TRUE);
+
+  if (region)
+    gdk_region_destroy (region);
+  
+  if (handle_cursor)
+    gdk_fb_cursor_unhide ();
 
   return image;
 }

@@ -311,6 +311,8 @@ gdk_fb_clip_region (GdkDrawable *drawable,
   GdkDrawableFBData *private;
   GdkWindowObject *parent;
 
+  GDK_CHECK_IMPL (drawable);
+  
   private = GDK_DRAWABLE_FBDATA (drawable);
   
   g_assert(!GDK_IS_WINDOW (private->wrapper) ||
@@ -588,6 +590,8 @@ gdk_fb_drawing_context_init (GdkFBDrawingContext *dc,
   dc->bg_relto = private->wrapper;
   dc->draw_bg = draw_bg;
 
+  GDK_CHECK_IMPL (drawable);
+
   if (GDK_IS_WINDOW (private->wrapper))
     {
       dc->bgpm = GDK_WINDOW_P (private->wrapper)->bg_pixmap;
@@ -651,6 +655,9 @@ gdk_fb_draw_drawable_2 (GdkDrawable *drawable,
   GdkFBDrawingContext *dc, dc_data;
   dc = &dc_data;
 
+  GDK_CHECK_IMPL (src);
+  GDK_CHECK_IMPL (drawable);
+  
   gdk_fb_drawing_context_init (dc, drawable, gc, draw_bg, do_clipping);
   gdk_fb_draw_drawable_3 (drawable, gc, src, dc, xsrc, ysrc, xdest, ydest, width, height);
   gdk_fb_drawing_context_finalize (dc);
@@ -679,6 +686,9 @@ gdk_fb_draw_drawable_3 (GdkDrawable *drawable,
   GdkGCFBData *gc_private;
 
   g_assert (gc);
+
+  GDK_CHECK_IMPL (src);
+  GDK_CHECK_IMPL (drawable);
 
   if (GDK_IS_WINDOW (private->wrapper))
     {
@@ -797,6 +807,7 @@ gdk_fb_draw_drawable (GdkDrawable *drawable,
   else
     src_impl = GDK_DRAWABLE_IMPL (src);
 
+  GDK_CHECK_IMPL (drawable);
   
   gdk_fb_draw_drawable_2 (drawable, gc, src_impl , xsrc, ysrc, xdest, ydest, width, height, TRUE, TRUE);
 }
@@ -1188,6 +1199,7 @@ _gdk_fb_draw_glyphs (GdkDrawable      *drawable,
 
   /* Fake its existence as a pixmap */
 
+  ((GTypeInstance *)&pixmap)->g_class = g_type_class_peek (_gdk_pixmap_impl_get_type ());
   pixmap.drawable_data.abs_x = 0;
   pixmap.drawable_data.abs_y = 0;
   pixmap.drawable_data.depth = 78;
@@ -1275,6 +1287,9 @@ gdk_fb_draw_image (GdkDrawable *drawable,
 
   /* Fake its existence as a pixmap */
   memset (&fbd, 0, sizeof(fbd));
+
+  ((GTypeInstance *)&fbd)->g_class = g_type_class_peek (_gdk_pixmap_impl_get_type ());
+  
   fbd.drawable_data.mem = image->mem;
   fbd.drawable_data.rowstride = image->bpl;
   fbd.drawable_data.width = fbd.drawable_data.lim_x = image->width;

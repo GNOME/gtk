@@ -1243,42 +1243,44 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
   if (height == 0)
     height = GDK_DRAWABLE_IMPL_FBDATA (window)->height - y;
   
-#if 0  
-  for (relto = window; bgpm == GDK_PARENT_RELATIVE_BG && relto; relto = (GdkWindow *)GDK_WINDOW_P(relto)->parent)
-    bgpm = GDK_WINDOW_P (relto)->bg_pixmap;
-#endif
-
+  relto = window;
+  while ((bgpm == GDK_PARENT_RELATIVE_BG) && relto)
+    {
+      relto = (GdkWindow *)GDK_WINDOW_P(relto)->parent;
+      bgpm = GDK_WINDOW_P (relto)->bg_pixmap;
+    }
+  
   if (bgpm && bgpm != GDK_NO_BG)
     {
       int curx, cury;
-      int xtrans, ytrans;
       int xstep, ystep;
+      int xtrans, ytrans;
       GdkFBDrawingContext fbdc;
 
-      return; /* Don't bother doing this - gtk+ will do it itself using GC tiles. If removing this line,
-		 then also remove the #if 0 stuff */
+      gdk_fb_drawing_context_init (&fbdc, GDK_DRAWABLE_IMPL (window), NULL, FALSE, TRUE);
 
-      gdk_fb_drawing_context_init (&fbdc, window, NULL, FALSE, TRUE);
+      xtrans = GDK_DRAWABLE_IMPL_FBDATA (window)->abs_x - GDK_DRAWABLE_IMPL_FBDATA (relto)->abs_x;
+      ytrans = GDK_DRAWABLE_IMPL_FBDATA (window)->abs_y - GDK_DRAWABLE_IMPL_FBDATA (relto)->abs_y;
 
-      xtrans = GDK_DRAWABLE_IMPL_FBDATA (relto)->abs_x - GDK_DRAWABLE_IMPL_FBDATA (window)->abs_x;
-      ytrans = GDK_DRAWABLE_IMPL_FBDATA (relto)->abs_y - GDK_DRAWABLE_IMPL_FBDATA (window)->abs_y;
-
-      for (cury = y - ytrans; cury < (y - ytrans + height); cury += ystep)
+      for (cury = y; cury < (y + height); cury += ystep)
 	{
-	  int drawh = cury % GDK_DRAWABLE_FBDATA (bgpm)->height;
-	  ystep = GDK_DRAWABLE_FBDATA (bgpm)->height - drawh;
+	  int drawh = (cury + ytrans) % GDK_DRAWABLE_IMPL_FBDATA (bgpm)->height;
+	  ystep = GDK_DRAWABLE_IMPL_FBDATA (bgpm)->height - drawh;
 
-	  for(curx = x - xtrans; curx < (x - xtrans + width); curx += xstep)
+	  ystep = MIN (ystep, y + height - cury);
+
+	  for (curx = x; curx < (x + width); curx += xstep)
 	    {
-	      int draww = curx % GDK_DRAWABLE_IMPL_FBDATA (bgpm)->width;
+	      int draww = (curx + xtrans) % GDK_DRAWABLE_IMPL_FBDATA (bgpm)->width;
 	      xstep = GDK_DRAWABLE_IMPL_FBDATA (bgpm)->width - draww;
 
+	      xstep = MIN (xstep, x + width - curx);
 	      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL (window),
 				      _gdk_fb_screen_gc,
 				      GDK_DRAWABLE_IMPL (bgpm),
 				      &fbdc,
 				      draww, drawh,
-				      curx + xtrans, cury + ytrans,
+				      curx, cury,
 				      xstep, ystep);
 	    }
 	}
@@ -1286,7 +1288,20 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
       gdk_fb_drawing_context_finalize (&fbdc);
     }
   else if (!bgpm)
-    gdk_draw_rectangle (window, _gdk_fb_screen_gc, TRUE, x, y, width, height);
+    {
+      if (relto == window)
+	gdk_draw_rectangle (window, _gdk_fb_screen_gc, TRUE, x, y, width, height);
+      else
+	{
+	  /* GDK_PARENT_RELATIVE_BG, but no pixmap, get the color from the parent window. */
+	  GdkGC *gc;
+	  GdkGCValues values;
+	  values.foreground = GDK_WINDOW_P (relto)->bg_color;
+	  gc = gdk_gc_new_with_values (window, &values, GDK_GC_FOREGROUND);
+	  gdk_draw_rectangle (window, gc, TRUE, x, y, width, height);
+	  gdk_gc_unref (gc);
+	}
+    }
 }
 
 /* What's the diff? */
