@@ -56,15 +56,11 @@ struct _GtkButtonClass
 {
   GtkBinClass        parent_class;
   
-  void (* pressed)      (GtkButton *button);
-  void (* released)     (GtkButton *button);
-  void (* clicked)      (GtkButton *button);
-
-  /* these used to be enter and leave, but Digital decided they were more
-     important than us. They may have beaten us for now, but revenge is
-     a dish best served cold */
-  void (* enter_button) (GtkButton *button);
-  void (* leave_button) (GtkButton *button);
+  void (* pressed)  (GtkButton *button);
+  void (* released) (GtkButton *button);
+  void (* clicked)  (GtkButton *button);
+  void (* enter)    (GtkButton *button);
+  void (* leave)    (GtkButton *button);
 };
 
 
