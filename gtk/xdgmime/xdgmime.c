@@ -25,7 +25,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
 #include "xdgmime.h"
 #include "xdgmimeint.h"
 #include "xdgmimeglob.h"
@@ -250,4 +249,12 @@ xdg_mime_shutdown (void)
 
       initted = 0;
     }
+}
+
+int
+xdg_mime_get_max_buffer_extents (void)
+{
+  xdg_mime_init ();
+  
+  return _xdg_mime_magic_get_buffer_extents (global_magic);
 }

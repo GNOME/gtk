@@ -25,7 +25,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
 #include "xdgmimeint.h"
 #include <ctype.h>
 #include <string.h>
@@ -38,7 +37,7 @@
 #define	TRUE	(!FALSE)
 #endif
 
-const unsigned char _xdg_utf8_skip_data[256] = {
+static const unsigned char _xdg_utf8_skip_data[256] = {
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,

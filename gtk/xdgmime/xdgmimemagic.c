@@ -25,7 +25,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
 #include <assert.h>
 #include "xdgmimemagic.h"
 #include "xdgmimeint.h"
@@ -210,7 +209,7 @@ _xdg_mime_magic_read_a_number (FILE *magic_file,
 	  *end_of_file = TRUE;
 	  break;
 	}
-      if (! isdigit ((char) c))
+      if (! isdigit (c))
 	{
 	  ungetc (c, magic_file);
 	  break;
@@ -560,12 +559,12 @@ _xdg_mime_magic_matchlet_compare_level (XdgMimeMagicMatchlet *matchlet,
 					size_t                len,
 					int                   indent)
 {
-  while (matchlet != NULL && matchlet->indent == indent)
+  while ((matchlet != NULL) && (matchlet->indent == indent))
     {
       if (_xdg_mime_magic_matchlet_compare_to_data (matchlet, data, len))
 	{
-	  if (matchlet->next == NULL ||
-	      matchlet->next->indent <= indent)
+	  if ((matchlet->next == NULL) ||
+	      (matchlet->next->indent <= indent))
 	    return TRUE;
 
 	  if (_xdg_mime_magic_matchlet_compare_level (matchlet->next,
@@ -687,6 +686,31 @@ _xdg_mime_update_mime_magic_extents (XdgMimeMagic *mime_magic)
   mime_magic->max_extent = max_extent;
 }
 
+static XdgMimeMagicMatchlet *
+_xdg_mime_magic_matchlet_mirror (XdgMimeMagicMatchlet *matchlets)
+{
+  XdgMimeMagicMatchlet *new_list;
+  XdgMimeMagicMatchlet *tmp;
+  
+  if ((matchlets == NULL) || (matchlets->next == NULL)) 
+    return matchlets;
+
+  new_list = NULL;
+  tmp = matchlets;
+  while (tmp != NULL) 
+    {
+      XdgMimeMagicMatchlet *matchlet;
+
+      matchlet = tmp;
+      tmp = tmp->next;
+      matchlet->next = new_list;
+      new_list = matchlet;
+    }
+
+  return new_list;
+  
+}
+
 static void
 _xdg_mime_magic_read_magic_file (XdgMimeMagic *mime_magic,
 				 FILE         *magic_file)
@@ -708,8 +732,11 @@ _xdg_mime_magic_read_magic_file (XdgMimeMagic *mime_magic,
 	  break;
 	case XDG_MIME_MAGIC_MAGIC:
 	  state = _xdg_mime_magic_parse_magic_line (magic_file, match);
-	  if (state == XDG_MIME_MAGIC_SECTION)
-	    _xdg_mime_magic_insert_match (mime_magic, match);
+	  if (state == XDG_MIME_MAGIC_SECTION) 
+	    {
+	      match->matchlet = _xdg_mime_magic_matchlet_mirror (match->matchlet);
+	      _xdg_mime_magic_insert_match (mime_magic, match);
+	    }
 	  else if (state == XDG_MIME_MAGIC_EOF || state == XDG_MIME_MAGIC_ERROR)
 	    _xdg_mime_magic_match_free (match);
 	  break;

@@ -1,3 +1,7 @@
+Wed Mar 10 22:48:15 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* Sync from upstream
+
 Sun Feb  8 19:05:16 2004  Manish Singh  <yosh@gimp.org>
 
 	* xdgmimeint.h: declare _xdg_utf8_skip as extern to prevent multiple
