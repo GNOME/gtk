@@ -11,6 +11,12 @@
 	* gtk/gtkcalendar.c: Get the information about the first day of the week from
 	the locale using another instance of the "magic translated string" technique.
 	Ignore the display option GTK_CALENDAR_WEEK_START_MONDAY with a warning.  (#87977)
+
+	* gtk/gtkcalendar.c: Add DND support to GtkCalendar. The selected date is dragged
+	as text, formatted via strftime %x. Text drops are accepted if g_date_set_parse()
+	can make sense of the text. A dedicated data format for date DND has not been 
+	introduced yet, since there didn't seem to be sufficient consensus on such a format
+	on xdg-list.  (#117297)
 	
 2003-08-08  Matthias Clasen  <maclas@gmx.de>
 
