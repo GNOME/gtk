@@ -819,6 +819,7 @@ gtk_entry_completion_get_entry (GtkEntryCompletion *completion)
  *
  * Sets the model for a #GtkEntryCompletion. If @completion already has
  * a model set, it will remove it before setting the new model.
+ * If model is %NULL, then it will unset the model.
  *
  * Since: 2.4
  */

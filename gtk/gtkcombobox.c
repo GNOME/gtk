@@ -3519,6 +3519,7 @@ gtk_combo_box_set_active_iter (GtkComboBox     *combo_box,
  *
  * Sets the model used by @combo_box to be @model. Will unset a
  * previously set model (if applicable).
+ * If model is %NULL, then it will unset the model.
  *
  * Since: 2.4
  */
