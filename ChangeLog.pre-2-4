@@ -1,3 +1,31 @@
+Wed Nov 21 15:21:26 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (GTK_MICRO_VERSION): Version 1.3.11, 
+	interface, binary age 0.
+
+	* NEWS: Updates
+
+	* gtk/gtktreemodel.c gtk/gtkrc.c gtk/gtkentry.c: SGML
+	fixes in docs.
+
+	* gtk/gtkmain.h: Remove unused and misnamespaced
+	get_gtk_win32_directory() prototype.
+
+	* gdk/gdkimage.c (gdk_image_get): Fix parameter names
+	to match header.
+
+	* gdk/gdkwindow.h: Fix parameters to gdk_window_shape_combine_mask(),
+	gdk_window_set_transient_for(), gdk_window_set_geometry_hints(),
+	to match docs.
+
+	* gdk/gdkevents.c (gdk_event_get_coords)
+	  gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_get_active)
+	  gtk/gtkdnd.c (gtk_drag_set_icon_stock):
+	Fix parameter names in docs.
+	
+	* docs/faq/Makefile.am (FAQ_FILES): Add missing files.
+	(#64961, Akira Tagoh)
+
 Wed Nov 21 11:41:29 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testgtk.c (create_tooltips): Ref-sink the tooltips object.

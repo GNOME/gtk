@@ -4459,6 +4459,7 @@ emulate_move_drag (GdkWindow     *window,
 /**
  * gdk_window_begin_resize_drag:
  * @window: a #GdkWindow
+ * @edge: the edge or corner from which the drag is started
  * @button: the button being used to drag
  * @root_x: root window X coordinate of mouse click that began the drag
  * @root_y: root window Y coordinate of mouse click that began the drag

@@ -1,3 +1,38 @@
+Overview of Changes in GTK+ 1.3.11
+==================================
+
+* Massive rework of accelerator API and implementation (Tim Janik)
+* Major fixes to resizing and redrawing to eliminate hysteresis
+  and optimize. (Owen Taylor, Soeren Sandmann)
+* Make many widgets NO_WINDOW to improve appearance and reduce
+  drawing overhead (Owen)
+* Text view fixes (Havoc Pennington)
+* Make child widgets in GtkTextView work (Havoc)
+* GtkTreeModelSort fixage (Jonathan Blandford, Kristian Rietveld)
+* Clean up GtkTreeView drag and drop support (Owen)
+* Misc tree view fixes and improvements (Jonathan, Kristian, Anders, Matt Wilson)
+* Add gtk_window_get/set_focus(), gtk_window_set_default() as public
+  functions (Owen, Damian Ivereigh)
+* Fixes to GtkPlug/GtkSocket (Michael Meeks, Owen)
+* Change button ordering in standard dialogs to correspond to 
+  GNOME useability project proposal (Gregory Merchan)
+* Add support for context sensitivity in input methods (Owen)
+* Hook up gtk_im_context_set_use_preedit() (Hidetoshi Tajima)
+* Fix gdk_window_scroll() and other aspects of big windows (Owen)
+* Remove need for X connection for class initialization (Jacob Berkman)
+* Propagate key events to parents of focused widget (Owen)
+* Don't export normal GTK+ marshalers, export deprecated compat marshalers (Owen)
+* Many Win32 Fixes and improvements (Hans Breuer, Tor Lillqvist)
+* Bug and documentation fixing (Matthias Clasen, Anders Carlsson,
+  Jacob Berkman, others.)
+
+Other Contributors:
+  Darin Adler, Marius Andreiana, Erwann Chenede, Murray Cumming, Janet Davis, 
+  Daniel Egger, Daniel Elstner, Jeff Franks, Alex Larsson, George Lebl, 
+  Sergey Kuzminov, Eric Lemings, Arkadiusz Miskiewicz, Padraig O'Briain, Sven Neumann, 
+  Kristian Rietveld, Nicolas Setton, Manish Singh,  Vitaly Tishkov, Sebastian Wilhelmi, 
+  Michael Natterer
+
 Overview of Changes in GTK+ 1.3.10
 ==================================
 

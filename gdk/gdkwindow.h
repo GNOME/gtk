@@ -333,9 +333,9 @@ void          gdk_window_scroll                (GdkWindow *window,
  *  from gdk_pixmap_create_from_xpm.   Stefan Wille
  */
 void gdk_window_shape_combine_mask  (GdkWindow	    *window,
-                                     GdkBitmap	    *shape_mask,
-                                     gint	     offset_x,
-                                     gint	     offset_y);
+                                     GdkBitmap	    *mask,
+                                     gint	     x,
+                                     gint	     y);
 void gdk_window_shape_combine_region (GdkWindow	    *window,
                                       GdkRegion     *shape_region,
                                       gint	     offset_x,
@@ -399,7 +399,7 @@ void          gdk_window_set_modal_hint  (GdkWindow       *window,
 					  gboolean         modal);
 void          gdk_window_set_geometry_hints (GdkWindow        *window,
 					     GdkGeometry      *geometry,
-					     GdkWindowHints    flags);
+					     GdkWindowHints    geom_mask);
 void          gdk_set_sm_client_id         (const gchar *sm_client_id);
 
 void	      gdk_window_begin_paint_rect   (GdkWindow    *window,
@@ -413,7 +413,7 @@ void	      gdk_window_set_title	   (GdkWindow	  *window,
 void          gdk_window_set_role          (GdkWindow       *window,
 					    const gchar     *role);
 void          gdk_window_set_transient_for (GdkWindow       *window, 
-					    GdkWindow       *leader);
+					    GdkWindow       *parent);
 void	      gdk_window_set_background	 (GdkWindow	  *window,
 					  GdkColor	  *color);
 void	      gdk_window_set_back_pixmap (GdkWindow	  *window,

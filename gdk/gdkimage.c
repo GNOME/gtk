@@ -61,7 +61,7 @@ gdk_image_unref (GdkImage *image)
 
 /**
  * gdk_image_get:
- * @window: a #GdkWindow 
+ * @drawable: a #GdkDrawable
  * @x: x coordinate in @window
  * @y: y coordinate in @window
  * @width: width of area in @window
@@ -75,19 +75,19 @@ gdk_image_unref (GdkImage *image)
  * Return value: a new #GdkImage or %NULL
  **/
 GdkImage*
-gdk_image_get (GdkWindow *window,
+gdk_image_get (GdkWindow *drawable,
 	       gint       x,
 	       gint       y,
 	       gint       width,
 	       gint       height)
 {
-  g_return_val_if_fail (GDK_IS_DRAWABLE (window), NULL);
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
   g_return_val_if_fail (x >= 0, NULL);
   g_return_val_if_fail (y >= 0, NULL);
   g_return_val_if_fail (width >= 0, NULL);
   g_return_val_if_fail (height >= 0, NULL);
   
-  return gdk_drawable_get_image (window, x, y, width, height);
+  return gdk_drawable_get_image (drawable, y, width, height);
 }
 
 /**

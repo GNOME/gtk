@@ -960,7 +960,7 @@ gtk_tree_model_unref_node (GtkTreeModel *tree_model,
  * each column number followed by a place to store the value being
  * retrieved.  The list is terminated by a -1. For example, to get a
  * value from column 0 with type %G_TYPE_STRING, you would
- * write: gtk_tree_model_get (model, iter, 0, &place_string_here, -1),
+ * write: <literal>gtk_tree_model_get (model, iter, 0, &amp;place_string_here, -1)</literal>,
  * where place_string_here is a gchar* to be filled with the string.
  * If appropriate, the returned values have to be freed or unreferenced.
  *

@@ -396,7 +396,7 @@ gtk_cell_renderer_toggle_get_radio (GtkCellRendererToggle *toggle)
 
 /**
  * gtk_cell_renderer_toggle_get_active:
- * @check_menu_item: a #GtkCellRendererToggle
+ * @toggle: a #GtkCellRendererToggle
  *
  * Returns whether the cell renderer is active. See
  * gtk_cell_renderer_toggle_set_active().

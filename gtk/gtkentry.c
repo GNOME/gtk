@@ -3507,7 +3507,7 @@ gtk_entry_get_activates_default (GtkEntry *entry)
  *
  * Changes the size request of the entry to be about the right size
  * for @n_chars characters. Note that it changes the size
- * <emphasize>request</emphasize>, the size can still be affected by
+ * <emphasis>request</emphasis>, the size can still be affected by
  * how you pack the widget into containers. If @n_chars is -1, the
  * size reverts to the default entry size.
  * 

@@ -552,8 +552,8 @@ gdk_event_get_state (GdkEvent        *event,
 /**
  * gdk_event_get_coords:
  * @event: a #GdkEvent
- * @x_root: location to put event window x coordinate
- * @y_root: location to put event window y coordinate
+ * @x_win: location to put event window x coordinate
+ * @y_win: location to put event window y coordinate
  * 
  * Extract the event window relative x/y coordinates from an event.
  * 
