@@ -33,6 +33,8 @@
 #include "gdkinput.h"
 #include "gdkprivate.h"
 #include "gdkinputprivate.h"
+#include "gdkdisplay-x11.h"
+#include "gdkdisplaymgr-x11.h"
 
 static GdkDeviceAxis gdk_input_core_axes[] = {
   { GDK_AXIS_X, 0, 0 },
@@ -43,13 +45,11 @@ GdkDevice *gdk_core_pointer = NULL;
  
 /* Global variables  */
 
-/* information about network port and host for gxid daemon */
+/* information about network port and host for gxid daemon 
+ * use the GdkDisplayImplX11 equivalent members, these are 
+ * command line arguments */
 gchar            *gdk_input_gxid_host;
 gint              gdk_input_gxid_port;
-gint              gdk_input_ignore_core;
-
-GList            *gdk_input_devices;
-GList            *gdk_input_windows;
 
 void
 _gdk_init_input_core (void)
@@ -94,10 +94,19 @@ gdk_device_get_type (void)
   return object_type;
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 GList *
 gdk_devices_list (void)
 {
-  return gdk_input_devices;
+  return GDK_DISPLAY_IMPL_X11(gdk_get_default_display ())->gdk_input_devices;
+}
+#endif
+
+GList * 
+gdk_devices_list_for_display (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  return GDK_DISPLAY_IMPL_X11 (display)->gdk_input_devices;
 }
 
 void
@@ -232,8 +241,9 @@ GdkInputWindow *
 gdk_input_window_find(GdkWindow *window)
 {
   GList *tmp_list;
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY (window));
 
-  for (tmp_list=gdk_input_windows; tmp_list; tmp_list=tmp_list->next)
+  for (tmp_list=display_impl->gdk_input_windows; tmp_list; tmp_list=tmp_list->next)
     if (((GdkInputWindow *)(tmp_list->data))->window == window)
       return (GdkInputWindow *)(tmp_list->data);
 
@@ -253,11 +263,13 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
   GdkWindowObject *window_private;
   GList *tmp_list;
   GdkInputWindow *iw;
+  GdkDisplayImplX11 *display_impl;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   window_private = (GdkWindowObject*) window;
+  display_impl = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
@@ -275,7 +287,8 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
       iw->num_obscuring = 0;
       iw->grabbed = FALSE;
 
-      gdk_input_windows = g_list_append(gdk_input_windows,iw);
+      display_impl->gdk_input_windows = 
+	g_list_append(display_impl->gdk_input_windows,iw);
       window_private->extension_events = mask;
 
       /* Add enter window events to the event mask */
@@ -289,14 +302,15 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
       iw = gdk_input_window_find (window);
       if (iw)
 	{
-	  gdk_input_windows = g_list_remove(gdk_input_windows,iw);
+	  display_impl->gdk_input_windows = 
+	    g_list_remove(display_impl->gdk_input_windows,iw);
 	  g_free(iw);
 	}
 
       window_private->extension_events = 0;
     }
 
-  for (tmp_list = gdk_input_devices; tmp_list; tmp_list = tmp_list->next)
+  for (tmp_list = display_impl->gdk_input_devices; tmp_list; tmp_list = tmp_list->next)
     {
       GdkDevicePrivate *gdkdev = tmp_list->data;
 
@@ -315,11 +329,15 @@ void
 gdk_input_window_destroy (GdkWindow *window)
 {
   GdkInputWindow *input_window;
+  GdkDisplayImplX11 *display_impl = 
+    GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
 
   input_window = gdk_input_window_find (window);
   g_return_if_fail (input_window != NULL);
+  
 
-  gdk_input_windows = g_list_remove (gdk_input_windows,input_window);
+  display_impl->gdk_input_windows = g_list_remove (display_impl->gdk_input_windows,
+						   input_window);
   g_free(input_window);
 }
 
@@ -327,31 +345,38 @@ void
 gdk_input_exit (void)
 {
   GList *tmp_list;
+  GSList *display_list;
   GdkDevicePrivate *gdkdev;
+  GSList * open_displays = 
+    gdk_x11_display_manager_get_open_displays (gdk_get_display_manager());
 
-  for (tmp_list = gdk_input_devices; tmp_list; tmp_list = tmp_list->next)
+  for (display_list = open_displays ; display_list ; display_list = display_list->next)
     {
-      gdkdev = (GdkDevicePrivate *)(tmp_list->data);
-      if (!GDK_IS_CORE (gdkdev))
+      GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display_impl);
+      
+      for (tmp_list = display_impl->gdk_input_devices; tmp_list; tmp_list = tmp_list->next)
 	{
-	  gdk_device_set_mode (&gdkdev->info, GDK_MODE_DISABLED);
-
-	  g_free(gdkdev->info.name);
+	  gdkdev = (GdkDevicePrivate *)(tmp_list->data);
+	  if (!GDK_IS_CORE (gdkdev))
+	    {
+	      gdk_device_set_mode (&gdkdev->info, GDK_MODE_DISABLED);
+	      
+	      g_free(gdkdev->info.name);
 #ifndef XINPUT_NONE	  
-	  g_free(gdkdev->axes);
+	      g_free(gdkdev->axes);
 #endif	  
-	  g_free(gdkdev->info.axes);
-	  g_free(gdkdev->info.keys);
-	  g_free(gdkdev);
+	      g_free(gdkdev->info.axes);
+	      g_free(gdkdev->info.keys);
+	      g_free(gdkdev);
+	    }
 	}
+      g_list_free(display_impl->gdk_input_devices);
+      
+      for (tmp_list = display_impl->gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
+	g_free(tmp_list->data);
+      
+      g_list_free(display_impl->gdk_input_windows);
     }
-
-  g_list_free(gdk_input_devices);
-
-  for (tmp_list = gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
-    g_free(tmp_list->data);
-
-  g_list_free(gdk_input_windows);
 }
 
 /**

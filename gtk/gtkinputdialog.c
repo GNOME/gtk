@@ -174,7 +174,8 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
   GList *tmp_list;
   GList *device_info;
 
-  device_info = gdk_devices_list ();
+  device_info = 
+    gdk_devices_list_for_display (gtk_widget_get_display (GTK_WIDGET (inputd)));
 
   /* shell and main vbox */
 

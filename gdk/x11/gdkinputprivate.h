@@ -67,6 +67,8 @@ struct _GdkDevicePrivate
   GdkDevice info;
 
   guint32 deviceid;
+
+  GdkDisplay *display;
   
 
 #ifndef XINPUT_NONE
@@ -126,13 +128,9 @@ struct _GdkInputWindow
 
 #define GDK_IS_CORE(d) (((GdkDevice *)(d)) == gdk_core_pointer)
 
-extern GList *gdk_input_devices;
-extern GList *gdk_input_windows;
-
 /* information about network port and host for gxid daemon */
 extern gchar           *gdk_input_gxid_host;
 extern gint             gdk_input_gxid_port;
-extern gint             gdk_input_ignore_core;
 
 /* Function declarations */
 
@@ -163,7 +161,8 @@ gint             _gdk_input_grab_pointer     (GdkWindow        *window,
 					      GdkEventMask      event_mask,
 					      GdkWindow        *confine_to,
 					      guint32           time);
-void             _gdk_input_ungrab_pointer   (guint32           time);
+void             _gdk_input_ungrab_pointer   (GdkDisplay       *display,
+					      guint32           time);
 gboolean         _gdk_device_get_history     (GdkDevice         *device,
 					      GdkWindow         *window,
 					      guint32            start,
@@ -175,8 +174,15 @@ gboolean         _gdk_device_get_history     (GdkDevice         *device,
 
 #define GDK_MAX_DEVICE_CLASSES 13
 
+#ifndef GDK_MULTIHEAD_SAFE
+void             _gdk_input_ungrab_pointer   (guint32           time);
 gint               gdk_input_common_init                (gint              include_core);
 GdkDevicePrivate * gdk_input_find_device                (guint32           id);
+#endif 
+gint               gdk_input_common_init_for_display    (GdkDisplay	  *display,
+							 gint              include_core);
+GdkDevicePrivate * gdk_input_find_device_for_display    (GdkDisplay	  *display,
+							 guint32           id);
 void               gdk_input_get_root_relative_geometry (Display          *display,
 							 Window            w,
 							 int              *x_ret,

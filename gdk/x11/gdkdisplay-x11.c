@@ -229,7 +229,7 @@ void
 gdk_display_pointer_ungrab (GdkDisplay * display, guint32 time)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  _gdk_input_ungrab_pointer (time);
+  _gdk_input_ungrab_pointer (display, time);
 
   XUngrabPointer (GDK_DISPLAY_XDISPLAY (display), time);
   GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window = NULL;
@@ -305,6 +305,7 @@ gdk_display_init_new (int argc, char **argv, char *display_name)
   _gdk_windowing_window_init (screen);
   _gdk_windowing_image_init (display);
   gdk_events_init (display);
+  gdk_input_init (display);
   gdk_dnd_init (display);
   
   return display;

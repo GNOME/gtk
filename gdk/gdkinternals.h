@@ -213,7 +213,7 @@ void gdk_dnd_init		(GdkDisplay *display);
 void _gdk_windowing_image_init  (GdkDisplay *display);
 void gdk_image_exit  (void);
 
-void gdk_input_init  (void);
+void gdk_input_init  (GdkDisplay *display);
 void gdk_input_exit  (void);
 
 void gdk_windowing_exit (void);

@@ -28,6 +28,7 @@
 
 #include "gdkinputprivate.h"
 #include "gdkx.h"
+#include "gdkdisplay-x11.h"
 
 /* #define DEBUG_SWITCHING */
 
@@ -49,30 +50,37 @@ static GdkDevicePrivate *gdk_input_current_device;
 static GdkDevicePrivate *gdk_input_core_pointer;
 
 void
-gdk_input_init(void)
+gdk_input_init(GdkDisplay *display)
 {
   GList *tmp_list;
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
   
   _gdk_init_input_core ();
-  gdk_input_ignore_core = FALSE;
+  display_impl->gdk_input_ignore_core = FALSE;
   gdk_input_core_pointer = NULL;
 
-  if (!gdk_input_gxid_host) 
+  /* if display is not the default one, gxid_host and gxid_port
+   * need to be set explicitly */
+
+  if (display == gdk_get_default_display ())
     {
-      gdk_input_gxid_host = getenv("GXID_HOST");
-    }
-  if (!gdk_input_gxid_port) 
-    {
-      char *t = getenv("GXID_PORT");
-      if (t)
-	gdk_input_gxid_port = atoi(t);
+      if (!gdk_input_gxid_host) 
+	{
+	  display_impl->gdk_input_gxid_host = getenv("GXID_HOST");
+	}
+      if (!gdk_input_gxid_port) 
+	{
+	  char *t = getenv("GXID_PORT");
+	  if (t)
+	    display_impl->gdk_input_gxid_port = atoi(t);
+	}
     }
   
-  gdk_input_common_init(TRUE);
+  gdk_input_common_init_for_display (display, TRUE);
 
   /* find initial core pointer */
   
-  for (tmp_list = gdk_input_devices; tmp_list; tmp_list = tmp_list->next) 
+  for (tmp_list = display_impl->gdk_input_devices; tmp_list; tmp_list = tmp_list->next) 
     {
       GdkDevicePrivate *gdkdev = (GdkDevicePrivate *)tmp_list->data;
       if (gdk_input_is_extension_device (gdkdev))
@@ -91,10 +99,14 @@ static void
 gdk_input_gxi_select_notify (GdkDevicePrivate *gdkdev)
 {
   XEventClass class;
+  GdkDisplayImplX11 * display_impl = GDK_DISPLAY_IMPL_X11 (gdkdev->display);
 
   ChangeDeviceNotify  (gdkdev->xdevice, gdkdev->changenotify_type, class);
 
-  XSelectExtensionEvent (gdk_display, gdk_root_window, &class, 1);
+  /* FIXME should it be selected for all the managed screen of display ? */
+  XSelectExtensionEvent (GDK_DISPLAY_XDISPLAY (gdkdev->display), 
+			 GDK_SCREEN_XROOTWIN (display_impl->default_screen),
+			 &class, 1);
 }
 
 /* Set the core pointer. Device should already be enabled. */
@@ -129,7 +141,8 @@ gdk_input_gxi_set_core_pointer(GdkDevicePrivate *gdkdev)
       return TRUE;
     }
 
-  if ( XChangePointerDevice(gdk_display,gdkdev->xdevice, x_axis, y_axis) 
+  if ( XChangePointerDevice(GDK_DISPLAY_XDISPLAY(gdkdev->display),
+			    gdkdev->xdevice, x_axis, y_axis) 
        != Success )
     {
       return FALSE;
@@ -153,6 +166,7 @@ gdk_device_set_mode (GdkDevice      *device,
   GdkDevicePrivate *gdkdev;
   GdkInputMode old_mode;
   GdkInputWindow *input_window;
+  GdkDisplayImplX11 *display_impl;
 
   if (GDK_IS_CORE (device))
     return FALSE;
@@ -164,10 +178,12 @@ gdk_device_set_mode (GdkDevice      *device,
 
   old_mode = device->mode;
   device->mode = mode;
+  
+  display_impl = GDK_DISPLAY_IMPL_X11 (gdkdev->display);
 
   if (old_mode != GDK_MODE_DISABLED)
     {
-      for (tmp_list = gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
+      for (tmp_list = display_impl->gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
 	{
 	  input_window = (GdkInputWindow *)tmp_list->data;
 	  if (input_window->mode != GDK_EXTENSION_EVENTS_CURSOR)
@@ -177,7 +193,7 @@ gdk_device_set_mode (GdkDevice      *device,
   
   if (mode != GDK_MODE_DISABLED)
     {
-      for (tmp_list = gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
+      for (tmp_list = display_impl->gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
 	{
 	  input_window = (GdkInputWindow *)tmp_list->data;
 	  if (input_window->mode != GDK_EXTENSION_EVENTS_CURSOR)
@@ -201,7 +217,7 @@ gdk_input_is_extension_device (GdkDevicePrivate *private)
   if (GDK_IS_CORE (private))
     return FALSE;
   
-  devices = XListInputDevices(gdk_display, &num_devices);
+  devices = XListInputDevices(GDK_DISPLAY_XDISPLAY (private->display), &num_devices);
   for(loop=0; loop<num_devices; loop++)
     {
       if ((devices[loop].id == private->deviceid) &&
@@ -225,8 +241,9 @@ _gdk_input_configure_event (XConfigureEvent *xevent, GdkWindow *window)
   input_window = gdk_input_window_find(window);
   g_return_if_fail (input_window != NULL);
 
-  gdk_input_get_root_relative_geometry(gdk_display,GDK_WINDOW_XWINDOW(window),
-				 &root_x, &root_y, NULL, NULL);
+  gdk_input_get_root_relative_geometry(GDK_WINDOW_XDISPLAY (window),
+				       GDK_WINDOW_XWINDOW(window),
+				       &root_x, &root_y, NULL, NULL);
   input_window->root_x = root_x;
   input_window->root_y = root_y;
   gdk_input_compute_obscuring(input_window);
@@ -263,7 +280,8 @@ _gdk_input_other_event (GdkEvent *event,
      but it's potentially faster than scanning through the types of
      every device. If we were deceived, then it won't match any of
      the types for the device anyways */
-  gdkdev = gdk_input_find_device(((XDeviceButtonEvent *)xevent)->deviceid);
+  gdkdev = gdk_input_find_device_for_display (GDK_WINDOW_DISPLAY (window),
+					      ((XDeviceButtonEvent *)xevent)->deviceid);
 
   if (!gdkdev)
     {
@@ -309,20 +327,22 @@ static void
 gdk_input_gxi_update_device (GdkDevicePrivate *gdkdev)
 {
   GList *t;
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (gdkdev->display);
 
   if (gdk_input_is_extension_device (gdkdev))
     {
       if (!gdkdev->xdevice)
 	{
-	  gdkdev->xdevice = XOpenDevice(gdk_display, gdkdev->deviceid);
+	  gdkdev->xdevice = XOpenDevice(display_impl->xdisplay, 
+					gdkdev->deviceid);
 	  gdk_input_gxi_select_notify (gdkdev);
 	  gdkdev->needs_update = 1;
 	}
       if (gdkdev->needs_update && gdkdev->xdevice)
 	{
-	  for (t = gdk_input_windows; t; t = t->next)
+	  for (t = display_impl->gdk_input_windows; t; t = t->next)
 	    gdk_input_common_select_events (((GdkInputWindow *)t->data)->window,
-					 gdkdev);
+					    gdkdev);
 	  gdkdev->needs_update = 0;
 	}
     }
@@ -332,7 +352,8 @@ gint
 _gdk_input_window_none_event (GdkEvent *event, XEvent *xevent)
 {
   GdkDevicePrivate *gdkdev = 
-    gdk_input_find_device(((XDeviceButtonEvent *)xevent)->deviceid);
+    gdk_input_find_device_for_display (GDK_WINDOW_DISPLAY (event->any.window),
+				       ((XDeviceButtonEvent *)xevent)->deviceid);
 
   if (!gdkdev) {
     return -1;			/* we don't handle it - not an XInput event */
@@ -359,13 +380,16 @@ gboolean
 _gdk_input_enable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 {
   GdkInputWindow *input_window;
+  GdkDisplayImplX11 *display_impl = 
+    GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
 
   input_window = gdk_input_window_find (window);
   g_return_val_if_fail (input_window != NULL, FALSE);
 
   if (!gdkdev->claimed)
     {
-      if (gxid_claim_device(gdk_input_gxid_host, gdk_input_gxid_port,
+      if (gxid_claim_device(display_impl->gdk_input_gxid_host, 
+			    display_impl->gdk_input_gxid_port,
 			    gdkdev->deviceid,
 			    GDK_WINDOW_XWINDOW(window), FALSE) !=
 	  GXID_RETURN_OK)
@@ -388,13 +412,16 @@ gboolean
 _gdk_input_disable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 {
   GdkInputWindow *input_window;
+  GdkDisplayImplX11 *display_impl = 
+    GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
 
   input_window = gdk_input_window_find (window);
   g_return_val_if_fail (input_window != NULL, FALSE);
 
   if (gdkdev->claimed)
     {
-      gxid_release_device(gdk_input_gxid_host, gdk_input_gxid_port,
+      gxid_release_device(display_impl->gdk_input_gxid_host,
+			  display_impl->gdk_input_gxid_port,
 			  gdkdev->deviceid,
 			  GDK_WINDOW_XWINDOW(window));
 
@@ -457,15 +484,16 @@ gdk_input_compute_obscuring(GdkInputWindow *input_window)
   Window root,parent;
   Window *children;
   int nchildren;
+  Display *xdisplay = GDK_WINDOW_XDISPLAY (input_window->window);
 
   Window w = GDK_WINDOW_XWINDOW(input_window->window);
-  Window root_child = gdk_input_find_root_child(gdk_display,w);
-  gdk_input_get_root_relative_geometry(gdk_display,w,&x,&y,&width,&height);
+  Window root_child = gdk_input_find_root_child(xdisplay, w);
+  gdk_input_get_root_relative_geometry(xdisplay,w,&x,&y,&width,&height);
 
   input_window->root_x = x;
   input_window->root_y = y;
 
-  XQueryTree(gdk_display,GDK_ROOT_WINDOW(),
+  XQueryTree(xdisplay, GDK_WINDOW_XROOTWIN (input_window->window),
 	     &root,&parent,&children,&nchildren);
 
 
@@ -490,7 +518,7 @@ gdk_input_compute_obscuring(GdkInputWindow *input_window)
   for (i=i+1;i<nchildren;i++)
     {
       int xmin, xmax, ymin, ymax;
-      XGetGeometry(gdk_display,children[i],&root,&xc,&yc,&widthc,&heightc,
+      XGetGeometry(xdisplay,children[i],&root,&xc,&yc,&widthc,&heightc,
 		   &border_widthc, &depthc);
       xmin = xc>x ? xc : x;
       xmax = (xc+widthc)<(x+width) ? xc+widthc : x+width;
@@ -499,7 +527,7 @@ gdk_input_compute_obscuring(GdkInputWindow *input_window)
       if ((xmin < xmax) && (ymin < ymax))
 	{
 	  XWindowAttributes attributes;
-	  XGetWindowAttributes(gdk_display,children[i],&attributes);
+	  XGetWindowAttributes(xdisplay,children[i],&attributes);
 	  if (attributes.map_state == IsViewable)
 	    {
 	      GdkRectangle *rect = &input_window->obscuring[input_window->num_obscuring];
@@ -528,8 +556,10 @@ _gdk_input_grab_pointer (GdkWindow *     window,
   GList *tmp_list;
   GdkInputWindow *input_window;
   GdkDevicePrivate *gdkdev;
+  GdkDisplayImplX11 *display_impl =
+    GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
 
-  tmp_list = gdk_input_windows;
+  tmp_list = display_impl->gdk_input_windows;
   while (tmp_list)
     {
       input_window = (GdkInputWindow *)tmp_list->data;
@@ -542,7 +572,7 @@ _gdk_input_grab_pointer (GdkWindow *     window,
       tmp_list = tmp_list->next;
     }
 
-  tmp_list = gdk_input_devices;
+  tmp_list = display_impl->gdk_input_devices;
   while (tmp_list)
     {
       gdkdev = (GdkDevicePrivate *)tmp_list->data;
@@ -558,12 +588,12 @@ _gdk_input_grab_pointer (GdkWindow *     window,
 }
 
 void 
-_gdk_input_ungrab_pointer (guint32 time)
+_gdk_input_ungrab_pointer (GdkDisplay *display, guint32 time)
 {
   GdkInputWindow *input_window;
   GList *tmp_list;
 
-  tmp_list = gdk_input_windows;
+  tmp_list = GDK_DISPLAY_IMPL_X11 (display)->gdk_input_windows;
   while (tmp_list)
     {
       input_window = (GdkInputWindow *)tmp_list->data;

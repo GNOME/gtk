@@ -759,7 +759,7 @@ gdk_event_translate (GdkDisplay *display,
       
       if (window_private == NULL || 
 	  ((window_private->extension_events != 0) &&
-           gdk_input_ignore_core))
+           display_impl->gdk_input_ignore_core))
 	{
 	  return_val = FALSE;
 	  break;
@@ -822,7 +822,7 @@ gdk_event_translate (GdkDisplay *display,
       
       if (window_private == NULL ||
 	  ((window_private->extension_events != 0) &&
-           gdk_input_ignore_core))
+           display_impl->gdk_input_ignore_core))
 	{
 	  return_val = FALSE;
 	  break;
@@ -859,7 +859,7 @@ gdk_event_translate (GdkDisplay *display,
       
       if (window_private == NULL ||
 	  ((window_private->extension_events != 0) &&
-           gdk_input_ignore_core))
+           display_impl->gdk_input_ignore_core))
 	{
 	  return_val = FALSE;
 	  break;

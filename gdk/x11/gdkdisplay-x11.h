@@ -99,6 +99,20 @@ struct _GdkDisplayImplX11
 
   /* translation queue */
   GSList *translate_queue;
+
+  /* Input device */
+  /* input GdkDevice list */
+  GList *gdk_input_devices;
+
+  /* input GdkWindow list */
+  GList *gdk_input_windows;
+
+  gint gdk_input_ignore_core;
+  /* information about network port and host for gxid daemon */
+  gchar *gdk_input_gxid_host;
+  gint   gdk_input_gxid_port;
+
+  
 };
 
 struct _GdkDisplayImplX11Class

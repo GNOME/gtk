@@ -97,8 +97,11 @@ struct _GdkTimeCoord
 
 GType          gdk_device_get_type      (void);
 
+#ifndef GDK_MULTIHEAD_SAFE
 /* Returns a list of GdkDevice * */	  
 GList *        gdk_devices_list         (void);
+#endif
+GList *        gdk_devices_list_for_display  (GdkDisplay *display);
 
 /* Functions to configure a device */
 void           gdk_device_set_source    (GdkDevice      *device,

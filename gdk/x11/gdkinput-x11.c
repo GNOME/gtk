@@ -28,12 +28,14 @@
 #include "gdkinternals.h"
 #include "gdkx.h"
 #include "gdk.h"		/* For gdk_error_trap_push()/pop() */
+#include "gdkdisplay-x11.h"
 
 #include <string.h>
 
 /* Forward declarations */
-static GdkDevicePrivate *gdk_input_device_new(XDeviceInfo *device, 
-					      gint include_core);
+static GdkDevicePrivate *gdk_input_device_new(GdkDisplay     *display,
+					      XDeviceInfo    *device, 
+					      gint            include_core);
 static void gdk_input_translate_coordinates(GdkDevicePrivate *gdkdev,
 					    GdkInputWindow   *input_window,
 					    gint             *axis_data,
@@ -44,10 +46,28 @@ static guint gdk_input_translate_state(guint state, guint device_state);
 
 /* Global variables */
 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkDevicePrivate *
 gdk_input_find_device (guint32 id)
 {
-  GList *tmp_list = gdk_input_devices;
+  GList *tmp_list = 
+    GDK_DISPLAY_IMPL_X11 (gdk_get_default_display ())->gdk_input_devices;
+  GdkDevicePrivate *gdkdev;
+  while (tmp_list)
+    {
+      gdkdev = (GdkDevicePrivate *)(tmp_list->data);
+      if (gdkdev->deviceid == id)
+	return gdkdev;
+      tmp_list = tmp_list->next;
+    }
+  return NULL;
+}
+#endif
+GdkDevicePrivate *
+gdk_input_find_device_for_display (GdkDisplay *display,
+				   guint32 id)
+{
+  GList *tmp_list = GDK_DISPLAY_IMPL_X11 (display)->gdk_input_devices;
   GdkDevicePrivate *gdkdev;
   while (tmp_list)
     {
@@ -89,7 +109,9 @@ gdk_input_get_root_relative_geometry(Display *display, Window w, int *x_ret, int
 }
 
 static GdkDevicePrivate *
-gdk_input_device_new (XDeviceInfo *device, gint include_core)
+gdk_input_device_new (GdkDisplay *display,
+		      XDeviceInfo *device, 
+		      gint include_core)
 {
   GdkDevicePrivate *gdkdev;
   gchar *tmp_name;
@@ -99,6 +121,9 @@ gdk_input_device_new (XDeviceInfo *device, gint include_core)
   gdkdev = g_object_new (GDK_TYPE_DEVICE, NULL);
 
   gdkdev->deviceid = device->id;
+
+  gdkdev->display = display;
+
   if (device->name[0])
     gdkdev->info.name = g_strdup (device->name);
  else
@@ -218,7 +243,8 @@ gdk_input_device_new (XDeviceInfo *device, gint include_core)
   if (device->use != IsXPointer)
     {
       gdk_error_trap_push ();
-      gdkdev->xdevice = XOpenDevice(gdk_display, gdkdev->deviceid);
+      gdkdev->xdevice = XOpenDevice(GDK_DISPLAY_XDISPLAY (display),
+ 				    gdkdev->deviceid);
 
       /* return NULL if device is not ready */
       if (gdk_error_trap_pop ())
@@ -366,11 +392,12 @@ gdk_input_common_select_events(GdkWindow *window,
 				 ((GdkWindowObject *)window)->extension_events,
 				 classes, &num_classes);
   
-  XSelectExtensionEvent (gdk_display,
+  XSelectExtensionEvent (GDK_WINDOW_XDISPLAY (window),
 			 GDK_WINDOW_XWINDOW(window),
 			 classes, num_classes);
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 gint 
 gdk_input_common_init(gint include_core)
 {
@@ -378,34 +405,81 @@ gdk_input_common_init(gint include_core)
   XDeviceInfo   *devices;
   int num_devices;
   int num_extensions, loop;
-  Display *display = gdk_display;
+  GdkDisplayImplX11 *display_impl = gdk_get_default_display ();
 
   /* Init XInput extension */
   
-  extensions = XListExtensions(display, &num_extensions);
+  extensions = XListExtensions(display_impl->xdisplay, &num_extensions);
   for (loop = 0; loop < num_extensions &&
 	 (strcmp(extensions[loop], "XInputExtension") != 0); loop++);
   XFreeExtensionList(extensions);
-  gdk_input_devices = NULL;
+  display_impl->gdk_input_devices = NULL;
   if (loop < num_extensions)
     {
       /* XInput extension found */
 
-      devices = XListInputDevices(display, &num_devices);
+      devices = XListInputDevices(display_impl->xdisplay, &num_devices);
   
       for(loop=0; loop<num_devices; loop++)
 	{
-	  GdkDevicePrivate *gdkdev = gdk_input_device_new(&devices[loop],
-						      include_core);
+	  GdkDevicePrivate *gdkdev = gdk_input_device_new(display, 
+							  &devices[loop],
+							  include_core);
 	  if (gdkdev)
-	    gdk_input_devices = g_list_append(gdk_input_devices, gdkdev);
+	    display_impl->gdk_input_devices = 
+	      g_list_append(display_impl->gdk_input_devices, gdkdev);
 	}
       XFreeDeviceList(devices);
     }
 
-  gdk_input_devices = g_list_append (gdk_input_devices, gdk_core_pointer);
+  display_impl->gdk_input_devices = 
+    g_list_append (display_impl->gdk_input_devices, gdk_core_pointer);
 
   return TRUE;
+}
+#endif
+gint 
+gdk_input_common_init_for_display (GdkDisplay *display,
+				   gint include_core)
+{
+  char **extensions;
+  XDeviceInfo   *devices;
+  int num_devices;
+  int num_extensions, loop;
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
+
+  /* Init XInput extension */
+  
+  extensions = XListExtensions(display_impl->xdisplay, &num_extensions);
+  for (loop = 0; loop < num_extensions &&
+	 (strcmp(extensions[loop], "XInputExtension") != 0); loop++);
+  XFreeExtensionList(extensions);
+  display_impl->gdk_input_devices = NULL;
+  if (loop < num_extensions)
+    {
+      /* XInput extension found */
+
+      devices = XListInputDevices(display_impl->xdisplay, &num_devices);
+  
+      for(loop=0; loop<num_devices; loop++)
+	{
+	  GdkDevicePrivate *gdkdev = gdk_input_device_new(display,
+							  &devices[loop],
+							  include_core);
+	  if (gdkdev)
+	    {
+	      display_impl->gdk_input_devices = 
+		g_list_append(display_impl->gdk_input_devices, gdkdev);
+	    }
+	}
+      XFreeDeviceList(devices);
+    }
+
+  display_impl->gdk_input_devices = 
+    g_list_append (display_impl->gdk_input_devices, gdk_core_pointer);
+
+  return TRUE;
+  
 }
 
 static void
@@ -690,7 +764,7 @@ _gdk_device_get_history (GdkDevice         *device,
 
   g_return_val_if_fail (input_window != NULL, FALSE);
 
-  device_coords = XGetDeviceMotionEvents (gdk_display,
+  device_coords = XGetDeviceMotionEvents (GDK_WINDOW_XDISPLAY (window),
 					  gdkdev->xdevice,
 					  start, stop,
 					  n_events, &mode_return,
@@ -756,7 +830,8 @@ gdk_device_get_state (GdkDevice       *device,
       input_window = gdk_input_window_find (window);
       g_return_if_fail (input_window != NULL);
 
-      state = XQueryDeviceState (gdk_display, gdkdev->xdevice);
+      state = XQueryDeviceState (GDK_WINDOW_XDISPLAY (window),
+				 gdkdev->xdevice);
       input_class = state->data;
       for (i=0; i<state->num_classes; i++)
 	{
@@ -785,3 +860,4 @@ gdk_device_get_state (GdkDevice       *device,
       XFreeDeviceState (state);
     }
 }
+

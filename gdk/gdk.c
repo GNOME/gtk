@@ -339,7 +339,7 @@ gdk_init_check (int    *argc,
   _gdk_windowing_window_init (screen);
   _gdk_windowing_image_init (display);
   gdk_events_init (display);
-  gdk_input_init ();
+  gdk_input_init (display);
   gdk_dnd_init (display);
 
   gdk_initialized = 1;
