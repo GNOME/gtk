@@ -45,6 +45,7 @@ struct _GtkEntry
 
   guint16 text_size;
   guint16 text_length;
+  guint16 text_max_length;
   gint16  current_pos;
   gint16  selection_start_pos;
   gint16  selection_end_pos;
@@ -76,6 +77,7 @@ struct _GtkEntryClass
 
 guint      gtk_entry_get_type     (void);
 GtkWidget* gtk_entry_new          (void);
+GtkWidget* gtk_entry_new_with_max_length (guint16 max);
 void       gtk_entry_set_text     (GtkEntry      *entry,
 				   const gchar   *text);
 void       gtk_entry_append_text  (GtkEntry      *entry,

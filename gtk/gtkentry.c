@@ -320,6 +320,7 @@ gtk_entry_init (GtkEntry *entry)
   entry->text = NULL;
   entry->text_size = 0;
   entry->text_length = 0;
+  entry->text_max_length = 0;
   entry->current_pos = 0;
   entry->selection_start_pos = 0;
   entry->selection_end_pos = 0;
@@ -372,6 +373,15 @@ GtkWidget*
 gtk_entry_new ()
 {
   return GTK_WIDGET (gtk_type_new (gtk_entry_get_type ()));
+}
+
+GtkWidget*
+gtk_entry_new_with_max_length (guint16 max)
+{
+  GtkEntry *entry;
+  entry = gtk_type_new (gtk_entry_get_type ());
+  entry->text_max_length = max;
+  return GTK_WIDGET (entry);
 }
 
 void
@@ -1650,6 +1660,15 @@ gtk_real_entry_insert_text (GtkEntry *entry,
 
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  /* Make sure we do not exceed the maximum size of the entry. */
+  if (entry->text_max_length != 0 &&
+      new_text_length + entry->text_length > entry->text_max_length)
+    new_text_length = entry->text_max_length - entry->text_length;
+
+  /* Don't insert anything, if there was nothing to insert. */
+  if (new_text_length == 0)
+    return;
 
   start_pos = *position;
   end_pos = start_pos + new_text_length;

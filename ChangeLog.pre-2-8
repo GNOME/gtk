@@ -1,3 +1,9 @@
+Sat Jan  3 00:41:28 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkentry.c:
+	* gtk/gtkentry.h: applied Gordon Matzigkeit's patch to add
+	fixed-length entry fields (gtk_entry_new_with_max_length)
+	
 Fri Jay  2 23:52 PST 1998 Jay Painter <jpaint@serv.net>
 	* reverted glibconfig.h and glib.h files back to the
 	way they were before my ugly hack
