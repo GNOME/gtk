@@ -1109,7 +1109,7 @@ opaque.
 All widget creation routines in GTK return pointers to GtkWidget
 structures. In reality, all widget creation routines create structures
 that can be viewed as equivalent to the GtkWidget structure, but often
-have contain additional information. @xref{Object Implementation}
+have contain additional information. @xref{Object Implementation}.
 
 The widgets available for use are implemented in a hierarchy. Several
 widgets exist solely as common bases for more specific widgets. For
