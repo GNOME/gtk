@@ -1,3 +1,7 @@
+2002-01-28  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkcurve.c (gtk_curve_set_vector): Fix build.
+
 2002-01-28  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/{gtkalignment.c,gtkaspectframe.c,gtkbutton.c,

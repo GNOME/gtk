@@ -888,7 +888,7 @@ gtk_curve_set_vector (GtkCurve *c, int veclen, gfloat vector[])
   if (old_type != GTK_CURVE_TYPE_FREE)
     {
        gtk_signal_emit (GTK_OBJECT (c), curve_type_changed_signal);
-       g_object_notify (G_OBJECT (curve), "curve_type");
+       g_object_notify (G_OBJECT (c), "curve_type");
     }
 
   gtk_curve_draw (c, c->num_points, height);
