@@ -41,6 +41,7 @@
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreemodelsort.h>
 #include <gtk/gtktreeselection.h>
+#include <gtk/gtktreestore.h>
 #include <gtk/gtkvbox.h>
 
 #include <string.h>
@@ -63,6 +64,7 @@ struct _GtkFileChooserImplDefault
 
   GtkFileSystem *file_system;
   GtkFileSystemModel *tree_model;
+  GtkTreeStore *shortcuts_model;
   GtkFileSystemModel *list_model;
   GtkTreeModelSort *sort_model;
 
@@ -76,22 +78,36 @@ struct _GtkFileChooserImplDefault
 
   GtkWidget *preview_frame;
 
-  guint folder_mode : 1;
-  guint local_only : 1;
-  guint preview_widget_active : 1;
-  guint select_multiple : 1;
-  guint show_hidden : 1;
-
   GtkWidget *filter_alignment;
   GtkWidget *filter_option_menu;
   GtkWidget *tree_scrollwin;
   GtkWidget *tree;
+  GtkWidget *shortcuts_scrollwin;
+  GtkWidget *shortcuts_tree;
   GtkWidget *list_scrollwin;
   GtkWidget *list;
   GtkWidget *entry;
   GtkWidget *preview_widget;
   GtkWidget *extra_widget;
+
+  guint folder_mode : 1;
+  guint local_only : 1;
+  guint preview_widget_active : 1;
+  guint select_multiple : 1;
+  guint show_hidden : 1;
+  guint changing_folder : 1;
 };
+
+/* Column numbers for the shortcuts tree */
+enum {
+  SHORTCUTS_COL_PIXBUF,
+  SHORTCUTS_COL_NAME,
+  SHORTCUTS_COL_PATH,
+  SHORTCUTS_COL_NUM_COLUMNS
+};
+
+/* Standard icon size */
+#define ICON_SIZE 36
 
 static void gtk_file_chooser_impl_default_class_init   (GtkFileChooserImplDefaultClass *class);
 static void gtk_file_chooser_impl_default_iface_init   (GtkFileChooserIface            *iface);
@@ -139,6 +155,8 @@ static void filter_option_menu_changed (GtkOptionMenu             *option_menu,
 					GtkFileChooserImplDefault *impl);
 static void tree_selection_changed     (GtkTreeSelection          *tree_selection,
 					GtkFileChooserImplDefault *impl);
+static void shortcuts_selection_changed (GtkTreeSelection          *tree_selection,
+					 GtkFileChooserImplDefault *impl);
 static void list_selection_changed     (GtkTreeSelection          *tree_selection,
 					GtkFileChooserImplDefault *impl);
 static void list_row_activated         (GtkTreeView               *tree_view,
@@ -304,6 +322,142 @@ set_preview_widget (GtkFileChooserImplDefault *impl,
   update_preview_widget_visibility (impl);
 }
 
+/* Appends a directory to the shortcuts model at the specified iter */
+static void
+shortcuts_append_path (GtkFileChooserImplDefault *impl, GtkTreeIter *iter, GdkPixbuf *pixbuf, const char *label, GtkFilePath *path)
+{
+  GtkFilePath *path_copy;
+
+  path_copy = gtk_file_path_copy (path);
+
+  gtk_tree_store_set (impl->shortcuts_model, iter,
+		      SHORTCUTS_COL_PIXBUF, pixbuf,
+		      SHORTCUTS_COL_NAME, label,
+		      SHORTCUTS_COL_PATH, path_copy,
+		      -1);
+}
+
+/* Convenience function to get the display name and icon info for a path */
+static GtkFileInfo *
+get_file_info (GtkFileSystem *file_system, GtkFilePath *path, GError **error)
+{
+  GtkFilePath *parent_path;
+  GtkFileFolder *parent_folder;
+  GtkFileInfo *info;
+
+  if (!gtk_file_system_get_parent (file_system, path, &parent_path, error))
+    return NULL;
+
+  parent_folder = gtk_file_system_get_folder (file_system, parent_path,
+					      GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
+					      error);
+  gtk_file_path_free (parent_path);
+
+  if (!parent_folder)
+    return NULL;
+
+  info = gtk_file_folder_get_info (parent_folder, path, error);
+  g_object_unref (parent_folder);
+
+  return info;
+}
+
+/* Appends an item for the user's home directory to the shortcuts model */
+static void
+shortcuts_append_home (GtkFileChooserImplDefault *impl)
+{
+  GtkTreeIter iter;
+  const char *name;
+  const char *home;
+  GtkFilePath *home_path;
+  char *label;
+  GtkFileInfo *info;
+  GdkPixbuf *pixbuf;
+
+  name = g_get_user_name ();
+  label = g_strdup_printf ("%s's Home", name);
+
+  home = g_get_home_dir ();
+  home_path = gtk_file_system_filename_to_path (impl->file_system, home);
+
+  /* FIXME: use GError? */
+  info = get_file_info (impl->file_system, home_path, NULL);
+  if (!info)
+    goto out;
+
+  pixbuf = gtk_file_info_render_icon (info, impl->shortcuts_tree, ICON_SIZE);
+  gtk_file_info_free (info);
+
+  gtk_tree_store_append (impl->shortcuts_model, &iter, NULL);
+  shortcuts_append_path (impl, &iter, pixbuf, label, home_path);
+
+  if (pixbuf)
+    gdk_pixbuf_unref (pixbuf);
+
+ out:
+
+  g_free (label);
+  gtk_file_path_free (home_path);
+}
+
+/* Appends all the file system roots to the shortcuts model */
+static void
+shortcuts_append_file_system_roots (GtkFileChooserImplDefault *impl)
+{
+  GSList *roots, *l;
+
+  roots = gtk_file_system_list_roots (impl->file_system);
+
+  for (l = roots; l; l = l->next)
+    {
+      GtkFilePath *path, *path_copy;
+      GtkFileInfo *info;
+      GdkPixbuf *pixbuf;
+      GtkTreeIter iter;
+
+      path = l->data;
+      path_copy = gtk_file_path_copy (path);
+      gtk_file_path_free (path);
+
+      info = gtk_file_system_get_root_info (impl->file_system,
+					    path_copy,
+					    GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
+					    NULL); /* FIXME: Use GError? */
+      if (!info)
+	continue;
+
+      pixbuf = gtk_file_info_render_icon (info, impl->shortcuts_tree, ICON_SIZE);
+
+      gtk_tree_store_append (impl->shortcuts_model, &iter, NULL);
+      shortcuts_append_path (impl, &iter, pixbuf, gtk_file_info_get_display_name (info), path_copy);
+
+      gtk_file_info_free (info);
+
+      if (pixbuf)
+	gdk_pixbuf_unref (pixbuf);
+    }
+
+  g_slist_free (roots);
+}
+
+/* Creates the GtkTreeStore used as the shortcuts model */
+static void
+create_shortcuts_model (GtkFileChooserImplDefault *impl)
+{
+  g_assert (impl->shortcuts_model == NULL);
+
+  impl->shortcuts_model = gtk_tree_store_new (SHORTCUTS_COL_NUM_COLUMNS,
+					      GDK_TYPE_PIXBUF,	/* pixbuf */
+					      G_TYPE_STRING,	/* name */
+					      G_TYPE_POINTER);	/* path */
+
+  if (!impl->file_system)
+    return;
+
+  shortcuts_append_home (impl);
+  shortcuts_append_file_system_roots (impl);
+}
+
 /* Creates the widgets for the filter option menu */
 static GtkWidget *
 create_filter (GtkFileChooserImplDefault *impl)
@@ -385,6 +539,62 @@ create_folder_tree (GtkFileChooserImplDefault *impl)
   return impl->tree_scrollwin;
 }
 
+/* Creates the widgets for the shortcuts and bookmarks tree */
+static GtkWidget *
+create_shortcuts_tree (GtkFileChooserImplDefault *impl)
+{
+  GtkTreeSelection *selection;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
+
+  /* Scrolled window */
+
+  impl->shortcuts_scrollwin = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (impl->shortcuts_scrollwin),
+				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (impl->shortcuts_scrollwin),
+				       GTK_SHADOW_IN);
+  gtk_widget_show (impl->shortcuts_scrollwin);
+
+  /* Tree */
+
+  impl->shortcuts_tree = gtk_tree_view_new ();
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->shortcuts_tree), FALSE);
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
+  g_signal_connect (selection, "changed",
+		    G_CALLBACK (shortcuts_selection_changed), impl);
+
+  gtk_container_add (GTK_CONTAINER (impl->shortcuts_scrollwin), impl->shortcuts_tree);
+  gtk_widget_show (impl->shortcuts_tree);
+
+  /* Model */
+
+  create_shortcuts_model (impl);
+  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->shortcuts_tree), GTK_TREE_MODEL (impl->shortcuts_model));
+
+  /* Column */
+
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, "Folder");
+
+  renderer = gtk_cell_renderer_pixbuf_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_set_attributes (column, renderer,
+				       "pixbuf", 0,
+				       NULL);
+
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_set_attributes (column, renderer,
+				       "text", 1,
+				       NULL);
+
+  gtk_tree_view_append_column (GTK_TREE_VIEW (impl->shortcuts_tree), column);
+
+  return impl->shortcuts_scrollwin;
+}
+
 /* Creates the widgets for the folder tree */
 static GtkWidget *
 create_file_list (GtkFileChooserImplDefault *impl)
@@ -419,18 +629,17 @@ create_file_list (GtkFileChooserImplDefault *impl)
 
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_title (column, "File name");
+  gtk_tree_view_column_set_sort_column_id (column, 0);
 
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, renderer,
 					   list_icon_data_func, impl, NULL);
-  gtk_tree_view_column_set_sort_column_id (column, 0);
 
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, renderer,
 					   list_name_data_func, impl, NULL);
-  gtk_tree_view_column_set_sort_column_id (column, 0);
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
 #if 0
@@ -502,6 +711,7 @@ gtk_file_chooser_impl_default_constructor (GType                  type,
 #if 0
   GList *focus_chain;
 #endif
+  GtkWidget *hbox;
 
   object = parent_class->constructor (type,
 				      n_construct_properties,
@@ -539,8 +749,15 @@ gtk_file_chooser_impl_default_constructor (GType                  type,
 
   /* Folder tree */
 
+  hbox = gtk_hbox_new (FALSE, 6);
+  gtk_paned_add1 (GTK_PANED (hpaned), hbox);
+  gtk_widget_show (hbox);
+
   widget = create_folder_tree (impl);
-  gtk_paned_add1 (GTK_PANED (hpaned), widget);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+
+  widget = create_shortcuts_tree (impl);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
 
   /* File list */
 
@@ -758,6 +975,32 @@ expand_and_select_func (GtkFileSystemModel *model,
   gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (impl->tree), path, NULL, TRUE, 0.3, 0.5);
 }
 
+/* Used from gtk_tree_model_foreach(); selects the item that corresponds to the
+ * current path. */
+static gboolean
+set_current_shortcut_foreach_cb (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
+{
+  GtkFileChooserImplDefault *impl;
+  GtkFilePath *model_path;
+  GtkTreeSelection *selection;
+
+  impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (data);
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
+
+  gtk_tree_model_get (model, iter, SHORTCUTS_COL_PATH, &model_path, -1);
+
+  if (model_path && impl->current_folder && gtk_file_path_compare (model_path, impl->current_folder) == 0)
+    {
+      gtk_tree_selection_select_path (selection, path);
+      return TRUE;
+    }
+  else
+    gtk_tree_selection_unselect_path (selection, path);
+
+  return FALSE;
+}
+
 static void
 gtk_file_chooser_impl_default_set_current_folder (GtkFileChooser    *chooser,
 						  const GtkFilePath *path)
@@ -766,6 +1009,14 @@ gtk_file_chooser_impl_default_set_current_folder (GtkFileChooser    *chooser,
 
   _gtk_file_system_model_path_do (impl->tree_model, path,
 				  expand_and_select_func, impl);
+
+  /* Select the appropriate item in the shortcuts tree if there is an item that
+   * matches the selected path.
+   */
+  if (!impl->changing_folder)
+    gtk_tree_model_foreach (GTK_TREE_MODEL (impl->shortcuts_model),
+			    set_current_shortcut_foreach_cb,
+			    impl);
 }
 
 static GtkFilePath *
@@ -1383,12 +1634,42 @@ tree_selection_changed (GtkTreeSelection          *selection,
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->list),
 				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
 
+  impl->changing_folder = TRUE;
+  gtk_tree_model_foreach (GTK_TREE_MODEL (impl->shortcuts_model),
+			  set_current_shortcut_foreach_cb,
+			  impl);
+  impl->changing_folder = FALSE;
+
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 
   update_chooser_entry (impl);
   check_preview_change (impl);
 
   g_signal_emit_by_name (impl, "selection-changed", 0);
+}
+
+/* Callback used when the selection in the shortcuts list changes */
+static void
+shortcuts_selection_changed (GtkTreeSelection          *selection,
+			     GtkFileChooserImplDefault *impl)
+{
+  GtkTreeIter iter;
+  GtkFilePath *path;
+
+  if (impl->changing_folder)
+    return;
+
+  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+    return;
+
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, SHORTCUTS_COL_PATH, &path, -1);
+
+  if (!path)
+    return; /* The "Bookmarks" node does not have a path set --- we can't change to it */
+
+  impl->changing_folder = TRUE;
+  _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), path);
+  impl->changing_folder = FALSE;
 }
 
 static void
@@ -1421,14 +1702,9 @@ list_row_activated (GtkTreeView               *tree_view,
   if (gtk_file_info_get_is_folder (info))
     {
       const GtkFilePath *file_path;
-      char *uri;
 
       file_path = _gtk_file_system_model_get_path (impl->list_model, &child_iter);
-      uri = gtk_file_system_path_to_uri (impl->file_system, file_path);
-
-      gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (impl), uri);
-
-      g_free (uri);
+      _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), file_path);
 
       return;
     }
@@ -1541,7 +1817,7 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
   if (info)
     {
       GtkWidget *widget = GTK_TREE_VIEW_COLUMN (tree_column)->tree_view;
-      GdkPixbuf *pixbuf = gtk_file_info_render_icon (info, widget, 36);
+      GdkPixbuf *pixbuf = gtk_file_info_render_icon (info, widget, ICON_SIZE);
 
       g_object_set (cell,
 		    "pixbuf", pixbuf,

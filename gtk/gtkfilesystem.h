@@ -135,7 +135,7 @@ struct _GtkFileSystemIface
 					const GtkFilePath *path,
 					GtkFileInfoType    types,
 				        GError           **error);
-  
+
   GtkFileFolder *    (*get_folder)     (GtkFileSystem     *file_system,
 					const GtkFilePath *path,
 					GtkFileInfoType    types,
@@ -143,6 +143,13 @@ struct _GtkFileSystemIface
   gboolean           (*create_folder)  (GtkFileSystem     *file_system,
 					const GtkFilePath *path,
 			                GError           **error);
+
+  gboolean           (*supports_shortcuts) (GtkFileSystem *file_system);
+  GSList *           (*list_shortcuts)     (GtkFileSystem *file_system,
+					    GError       **error);
+  gboolean           (*set_shortcuts)      (GtkFileSystem *file_system,
+					    GSList        *shortcuts,
+					    GError       **error);
 
   /* Path Manipulation
    */
@@ -153,7 +160,7 @@ struct _GtkFileSystemIface
   GtkFilePath * (*make_path)        (GtkFileSystem     *file_system,
 				     const GtkFilePath *base_path,
 				     const gchar       *display_name,
-				     GError           **error);					
+				     GError           **error);
   gboolean      (*parse)            (GtkFileSystem     *file_system,
 				     const GtkFilePath *base_path,
 				     const gchar       *str,
@@ -181,7 +188,14 @@ GtkFileInfo *     gtk_file_system_get_root_info  (GtkFileSystem     *file_system
 						  const GtkFilePath *path,
 						  GtkFileInfoType    types,
 						  GError           **error);
-  
+
+gboolean          gtk_file_system_supports_shortcuts (GtkFileSystem *file_system);
+GSList *          gtk_file_system_list_shortcuts     (GtkFileSystem *file_system,
+						      GError       **error);
+gboolean          gtk_file_system_set_shortcuts      (GtkFileSystem *file_system,
+						      GSList        *shortcuts,
+						      GError       **error);
+
 gboolean          gtk_file_system_get_parent     (GtkFileSystem     *file_system,
 						  const GtkFilePath *path,
 						  GtkFilePath      **parent,
