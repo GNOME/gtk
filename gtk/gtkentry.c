@@ -4199,6 +4199,13 @@ blink_cb (gpointer data)
   GDK_THREADS_ENTER ();
 
   entry = GTK_ENTRY (data);
+
+  if (!GTK_WIDGET_HAS_FOCUS (entry))
+    {
+      g_warning ("GtkEntry - did not receive focus-out-event. If you\n"
+		 "connect a handler to this signal, it must return\n"
+		 "FALSE so the entry gets the event as well");
+    }
   
   g_assert (GTK_WIDGET_HAS_FOCUS (entry));
   g_assert (entry->selection_bound == entry->current_pos);
