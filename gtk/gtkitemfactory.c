@@ -48,7 +48,7 @@
 #endif
 #include	<stdio.h>
 
-#ifdef NATIVE_WIN32
+#ifdef G_OS_WIN32
 #include	<io.h>		/* For _open and _close */
 
 #ifndef S_ISREG

@@ -71,11 +71,11 @@
 #include "gtkdialog.h"
 #include "gtkintl.h"
 
-#ifdef WIN32
+#if defined(G_OS_WIN32) || defined(G_HAVE_CYGWIN)
 #define STRICT
 #include <windows.h>
 
-#ifdef NATIVE_WIN32
+#ifdef G_OS_WIN32
 #include <direct.h>
 #include <io.h>
 #define mkdir(p,m) _mkdir(p)
@@ -83,9 +83,9 @@
 #define S_ISDIR(mode) ((mode)&_S_IFDIR)
 #endif
 
-#endif /* NATIVE_WIN32 */
+#endif /* G_OS_WIN32 */
 
-#endif /* WIN32 */
+#endif /* G_OS_WIN32 || G_HAVE_CYGWIN */
 
 #define DIR_LIST_WIDTH   180
 #define DIR_LIST_HEIGHT  180
@@ -284,7 +284,7 @@ static gchar*              cmpl_completion_fullname (gchar*, CompletionState* cm
 static CompletionDir* open_ref_dir         (gchar* text_to_complete,
 					    gchar** remaining_text,
 					    CompletionState* cmpl_state);
-#ifndef WIN32
+#if !defined(G_OS_WIN32) && !defined(G_HAVE_CYGWIN)
 static gboolean       check_dir            (gchar *dir_name, 
 					    struct stat *result, 
 					    gboolean *stat_subdirs);
@@ -367,7 +367,7 @@ static GtkWindowClass *parent_class = NULL;
 /* Saves errno when something cmpl does fails. */
 static gint cmpl_errno;
 
-#ifdef __CYGWIN32__
+#ifdef G_HAVE_CYGWIN
 /*
  * Take the path currently in the file selection
  * entry field and translate as necessary from
@@ -743,7 +743,7 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
   g_return_val_if_fail (filesel != NULL, nothing);
   g_return_val_if_fail (GTK_IS_FILE_SELECTION (filesel), nothing);
 
-#ifdef __CYGWIN32__
+#ifdef G_HAVE_CYGWIN
   translate_win32_path(filesel);
 #endif
   text = gtk_entry_get_text (GTK_ENTRY (filesel->selection_entry));
@@ -1011,7 +1011,7 @@ gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
   if (fs->fileop_dialog)
 	  return;
 
-#ifdef __CYGWIN32__
+#ifdef G_HAVE_CYGWIN
   translate_win32_path(fs);
 #endif
 
@@ -1200,7 +1200,7 @@ gtk_file_selection_key_press (GtkWidget   *widget,
   if (event->keyval == GDK_Tab)
     {
       fs = GTK_FILE_SELECTION (user_data);
-#ifdef __CYGWIN32__
+#ifdef G_HAVE_CYGWIN
       translate_win32_path(fs);
 #endif
       text = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
@@ -1291,7 +1291,7 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 	  /* another small hack to catch the full path */
 	  if (i != dir_len) 
 		  current_dir[i + 1] = '\0';
-#ifdef __CYGWIN32__
+#ifdef G_HAVE_CYGWIN
 	  if (!strcmp(current_dir, "//"))
 	    continue;
 #endif
@@ -1343,7 +1343,7 @@ gtk_file_selection_file_button (GtkWidget *widget,
   gtk_clist_get_text (GTK_CLIST (fs->file_list), row, 0, &temp);
   filename = g_strdup (temp);
 
-#ifdef __CYGWIN32__
+#ifdef G_HAVE_CYGWIN
   /* Check to see if the selection was a drive selector */
   if (isalpha(filename[0]) && (filename[1] == ':')) {
     /* It is... map it to a CYGWIN32 drive */
@@ -1353,7 +1353,7 @@ gtk_file_selection_file_button (GtkWidget *widget,
     g_free(filename);
     filename = g_strdup(temp_filename);
   }
-#endif /* CYGWIN32 */
+#endif /* G_HAVE_CYGWIN */
 
   if (filename)
     {
@@ -1414,7 +1414,7 @@ gtk_file_selection_dir_button (GtkWidget *widget,
     }
 }
 
-#ifdef WIN32
+#if defined(G_OS_WIN32) || defined(G_HAVE_CYGWIN)
 
 static void
 win32_gtk_add_drives_to_dir_list(GtkWidget *the_dir_list)
@@ -1554,7 +1554,7 @@ gtk_file_selection_populate (GtkFileSelection *fs,
       poss = cmpl_next_completion (cmpl_state);
     }
 
-#ifdef WIN32
+#if defined(G_OS_WIN32) || defined(G_HAVE_CYGWIN)
   /* For Windows, add drives as potential selections */
   win32_gtk_add_drives_to_dir_list (fs->dir_list);
 #endif
@@ -1977,7 +1977,7 @@ open_ref_dir(gchar* text_to_complete,
 
   first_slash = strchr(text_to_complete, G_DIR_SEPARATOR);
 
-#ifdef __CYGWIN32__
+#ifdef G_HAVE_CYGWIN
   if (text_to_complete[0] == '/' && text_to_complete[1] == '/')
     {
       char root_dir[5];
@@ -2230,7 +2230,7 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
   return sent;
 }
 
-#ifndef WIN32
+#if !defined(G_OS_WIN32) && !defined(G_HAVE_CYGWIN)
 
 static gboolean
 check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
@@ -2296,7 +2296,7 @@ open_dir(gchar* dir_name, CompletionState* cmpl_state)
   CompletionDirSent *sent;
   GList* cdsl;
 
-#ifndef WIN32
+#if !defined(G_OS_WIN32) && !defined(G_HAVE_CYGWIN)
   if (!check_dir (dir_name, &sbuf, &stat_subdirs))
     return NULL;
 
@@ -2465,7 +2465,7 @@ correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
       return FALSE;
     }
 
-#ifndef NATIVE_WIN32		/* No inode numbers on Win32 */
+#ifndef G_OS_WIN32		/* No inode numbers on Win32 */
   if (parbuf.st_ino == sbuf->st_ino && parbuf.st_dev == sbuf->st_dev)
     /* it wasn't a link */
     return TRUE;
@@ -2490,7 +2490,7 @@ correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
   return TRUE;
 }
 
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
 
 static gchar*
 find_parent_dir_fullname(gchar* dirname)
@@ -2586,7 +2586,7 @@ attempt_homedir_completion(gchar* text_to_complete,
 
 #endif
 
-#ifdef WIN32
+#ifdef defined(G_OS_WIN32) || defined(G_HAVE_CYGWIN)
 #define FOLD(c) (tolower(c))
 #else
 #define FOLD(c) (c)
@@ -2960,7 +2960,7 @@ compare_user_dir(const void* a, const void* b)
 static gint
 compare_cmpl_dir(const void* a, const void* b)
 {
-#ifndef WIN32
+#if !defined(G_OS_WIN32) && !defined(G_HAVE_CYGWIN)
   return strcmp((((CompletionDirEntry*)a))->entry_name,
 		(((CompletionDirEntry*)b))->entry_name);
 #else

@@ -217,10 +217,12 @@ GTK_LIBS_EXTRA=
 AC_MSG_CHECKING(for the BeOS)
 case $host in
   *-*-beos*)
+    AC_MSG_RESULT(yes)
     GTK_LIBS_EXTRA="-L\$(top_builddir_full)/gdk/.libs -lgdk"
     MATH_LIB=
   ;;
-  default)
+  *)
+    AC_MSG_RESULT(no)
   ;;
 esac
 AC_SUBST(MATH_LIB)

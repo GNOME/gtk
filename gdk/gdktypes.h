@@ -31,7 +31,7 @@
  */
 #include <glib.h>
 
-#ifdef NATIVE_WIN32
+#ifdef G_OS_WIN32
 #  ifdef GDK_COMPILATION
 #    define GDKVAR __declspec(dllexport)
 #  else

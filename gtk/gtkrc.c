@@ -50,7 +50,7 @@
 #define lstat stat
 #endif
 
-#ifdef NATIVE_WIN32
+#ifdef G_OS_WIN32
 #include <io.h>
 #endif
 
@@ -230,10 +230,10 @@ static GtkImageLoader image_loader = NULL;
 /* RC file handling */
 
 
-#ifdef NATIVE_WIN32
+#ifdef G_OS_WIN32
 
 gchar *
-get_gtk_sysconf_directory ()
+get_gtk_sysconf_directory (void)
 {
   static gchar gtk_sysconf_dir[200];
   gchar win_dir[100];
@@ -244,7 +244,7 @@ get_gtk_sysconf_directory ()
 }
 
 static gchar *
-get_themes_directory ()
+get_themes_directory (void)
 {
   /* We really should fetch this from the Registry. The GIMP
    * installation program stores the Themes installation
@@ -264,7 +264,7 @@ gtk_rc_get_theme_dir(void)
 {
   gchar *var, *path;
 
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
   var = getenv("GTK_DATA_PREFIX");
   if (var)
     path = g_strdup_printf("%s%s", var, "/share/themes");
@@ -282,7 +282,7 @@ gtk_rc_get_module_dir(void)
 {
   gchar *var, *path;
 
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
     path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
@@ -301,7 +301,7 @@ gtk_rc_append_default_pixmap_path(void)
   gchar *var, *path;
   gint n;
 
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
   var = getenv("GTK_DATA_PREFIX");
   if (var)
     path = g_strdup_printf("%s%s", var, "/share/gtk/themes");
@@ -343,7 +343,7 @@ gtk_rc_append_default_module_path(void)
   if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
     return;
   
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
     path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
@@ -357,7 +357,7 @@ gtk_rc_append_default_module_path(void)
   var = g_get_home_dir ();
   if (var)
     {
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
       path = g_strdup_printf ("%s%s", var, "/.gtk/lib/themes/engines");
 #else
       path = g_strdup_printf ("%s%s", var, "\\_gtk\\themes\\engines");
@@ -395,7 +395,7 @@ gtk_rc_add_initial_default_files (void)
     }
   else
     {
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
       str = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk" G_DIR_SEPARATOR_S "gtkrc");
 #else
       str = g_strdup_printf ("%s\\gtkrc", get_gtk_sysconf_directory ());

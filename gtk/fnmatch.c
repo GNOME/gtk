@@ -36,7 +36,7 @@
 #endif
 #include "fnmatch.h"
 
-/* We need glib.h for G_DIR_SEPARATOR, WIN32 and NATIVE_WIN32 */
+/* We need glib.h for G_DIR_SEPARATOR and G_OS_WIN32 */
 #include <glib.h>
 #include <ctype.h>
 
@@ -67,7 +67,7 @@ fnmatch (pattern, string, flags)
   register char c;
 
 /* Note that this evalutes C many times.  */
-#ifndef WIN32
+#if !defined(G_OS_WIN32) && !defined(G_HAVE_CYGWIN)
 #define FOLD(c)	((flags & FNM_CASEFOLD) && isupper (c) ? tolower (c) : (c))
 #else
 #define FOLD(c)	(tolower (c))
@@ -88,7 +88,7 @@ fnmatch (pattern, string, flags)
 		   (n == string || ((flags & FNM_FILE_NAME) && n[-1] == G_DIR_SEPARATOR)))
 	    return FNM_NOMATCH;
 	  break;
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
 	case '\\':
 	  if (!(flags & FNM_NOESCAPE))
 	    {
@@ -113,7 +113,7 @@ fnmatch (pattern, string, flags)
 	    return 0;
 
 	  {
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
 	    char c1 = (!(flags & FNM_NOESCAPE) && c == '\\') ? *p : c;
 #else
 	    char c1 = c;
@@ -146,7 +146,7 @@ fnmatch (pattern, string, flags)
 	    for (;;)
 	      {
 		register char cstart = c, cend = c;
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
 		if (!(flags & FNM_NOESCAPE) && c == '\\')
 		  cstart = cend = *p++;
 #endif
@@ -166,7 +166,7 @@ fnmatch (pattern, string, flags)
 		if (c == '-' && *p != ']')
 		  {
 		    cend = *p++;
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
 		    if (!(flags & FNM_NOESCAPE) && cend == '\\')
 		      cend = *p++;
 #endif
@@ -196,7 +196,7 @@ fnmatch (pattern, string, flags)
 		  return FNM_NOMATCH;
 
 		c = *p++;
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
 		if (!(flags & FNM_NOESCAPE) && c == '\\')
 		  /* XXX 1003.2d11 is unclear if this is right.  */
 		  ++p;

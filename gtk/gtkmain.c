@@ -401,7 +401,7 @@ gtk_init_check (int	 *argc,
     }
 
 #ifdef ENABLE_NLS
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
   bindtextdomain("gtk+", GTK_LOCALEDIR);
 #else
   {
@@ -450,7 +450,7 @@ gtk_init_check (int	 *argc,
     }
   g_slist_free (gtk_modules);
   
-#ifndef NATIVE_WIN32
+#ifndef G_OS_WIN32
   /* No use warning on Win32, there aren't any non-devel versions anyhow... */
   g_warning (""              "YOU ARE USING THE DEVEL BRANCH 1.3.x OF GTK+ WHICH IS CURRENTLY\n"
 	     "                UNDER HEAVY DEVELOPMENT AND FREQUENTLY INTRODUCES INSTABILITIES.\n"

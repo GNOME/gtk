@@ -1,3 +1,14 @@
+Mon Oct  4 11:57:11 PDT 1999 Manish Singh <yosh@gimp.org>
+
+	* configure.in: correct checking for BeOS check
+
+	* gdk/gdktypes.h
+	* gtk/fnmatch.c
+	* gtk/gtkfilesel.c
+	* gtk/gtkitemfactory.c
+	* gtk/gtkmain.[ch]
+	* gtk/gtkrc.c: use G_OS_WIN32 and G_HAVE_CYGWIN #defines
+
 Mon Oct  4 16:16:53 1999  Pablo Saratxaga <pablo@mandrakesoft.com>
 
 	* gtk/gtkrc.{bg,iso88591[345]}: add gtkrc files for some new charset
