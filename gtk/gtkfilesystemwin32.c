@@ -27,6 +27,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #include <sys/types.h>
 
 #ifdef G_OS_WIN32
@@ -321,7 +322,7 @@ gtk_file_system_win32_get_volume_for_path (GtkFileSystem     *file_system,
                                            const GtkFilePath *path)
 {
   GtkFileSystemVolume *vol = g_new0 (GtkFileSystemVolume, 1);
-  gchar* p = g_strndup (path, 3);
+  gchar* p = g_strndup (gtk_file_path_get_string (path), 3);
 
   g_return_val_if_fail (p != NULL, NULL);
 
@@ -742,7 +743,7 @@ bookmarks_serialize (GSList  **bookmarks,
 
 	      for (i = 0; lines[i] != NULL; i++)
 		{
-		  if (lines[i][0] && !g_slist_find_custom (list, lines[i], strcmp))
+		  if (lines[i][0] && !g_slist_find_custom (list, lines[i], (GCompareFunc) strcmp))
 		    list = g_slist_append (list, g_strdup (lines[i]));
 		}
 	      g_strfreev (lines);
@@ -759,7 +760,7 @@ bookmarks_serialize (GSList  **bookmarks,
 	       * positon > length ?
 	       * 
 	       */
-	      if (!g_slist_find_custom (list, uri, strcmp))
+	      if (!g_slist_find_custom (list, uri, (GCompareFunc) strcmp))
                 list = g_slist_insert (list, g_strdup (uri), position);
 	      else
 	        {
@@ -1255,8 +1256,8 @@ filename_get_info (const gchar     *filename,
       GtkFileTime time = wfad.ftLastWriteTime.dwLowDateTime 
                        | ((guint64)wfad.ftLastWriteTime.dwHighDateTime) << 32;
       /* 100-nanosecond intervals since January 1, 1601, urgh! */
-      time /= 10000000I64; /* now seconds */
-      time -= 134774I64 * 24 * 3600; /* good old Unix time */
+      time /= G_GINT64_CONSTANT (10000000); /* now seconds */
+      time -= G_GINT64_CONSTANT (134774) * 24 * 3600; /* good old Unix time */
       gtk_file_info_set_modification_time (info, time);
     }
 

@@ -1,3 +1,8 @@
+2004-02-28  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkfilesystemwin32.c : applied patch from
+	J. Ali Harlow <ali@juiblex.co.uk>, fixes bug #135641
+
 Sat Feb 28 23:30:36 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_popup): Actually resize the
