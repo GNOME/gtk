@@ -3447,6 +3447,10 @@ toggle_row (GtkCList *clist,
     case GTK_SELECTION_MULTIPLE:
     case GTK_SELECTION_SINGLE:
       clist_row = g_list_nth (clist->row_list, row)->data;
+
+      if (!clist_row)
+	return;
+
       if (clist_row->state == GTK_STATE_SELECTED)
 	{
 	  gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW],
@@ -3466,8 +3470,9 @@ fake_toggle_row (GtkCList *clist,
 {
   GList *work;
 
-  if (!(work = g_list_nth (clist->row_list, row))||
-      !GTK_CLIST_ROW (work)->selectable)
+  work = g_list_nth (clist->row_list, row);
+
+  if (!work || !GTK_CLIST_ROW (work)->selectable)
     return;
   
   if (GTK_CLIST_ROW (work)->state == GTK_STATE_NORMAL)
@@ -5008,7 +5013,7 @@ gtk_clist_button_release (GtkWidget      *widget,
 	case GTK_SELECTION_MULTIPLE:
 	  if (get_selection_info (clist, event->x, event->y, &row, &column))
 	    {
-	      if (clist->anchor == clist->focus_row)
+	      if (row >= 0 && row < clist->rows && clist->anchor == row)
 		toggle_row (clist, row, column, (GdkEvent *) event);
 	    }
 	  clist->anchor = -1;

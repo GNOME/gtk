@@ -1,3 +1,9 @@
+Fri Dec  4 01:20:06 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_button_release): call toggle_row with
+	valid row numbers only
+	(toggle_row): check if clist_row != NULL
+
 Fri Dec  4 00:50:12 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (gtk_ctree_export_to_gnode): fixed for-loop.
