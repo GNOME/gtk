@@ -1,3 +1,15 @@
+Thu Jun  5 20:35:40 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/Makefile.am: Conditionalize deendencies for
+	gdk-pixbuf-csource on cross-compilation (#112391, J. Ali Harlowe). 
+	Buildtest-inline-pixbufs.h in srcdir. Don't try to build 
+	test-inline-pixbufs.h if we don't have libpng.
+
+	* gtk/stock-icons/Makefile.am (gtkstockpixbufs.h): 
+	Add a dependency on gdk-pixbuf.loaders when not 
+	cross-compiling, remove the dependency on gdk-pixbuf-csource
+	when not cross compiling.
+
 Thu Jun  5 20:12:51 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_get_default_size): Handle

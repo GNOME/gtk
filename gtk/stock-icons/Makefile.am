@@ -258,11 +258,13 @@ CLEANFILES = $(noinst_DATA)
 
 if CROSS_COMPILING
 pixbuf_csource=$(GDK_PIXBUF_CSOURCE)
+pixbuf_csource_deps=
 else
 pixbuf_csource=GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource
+pixbuf_csource_deps=$(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource $(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders 
 endif
 
-gtkstockpixbufs.h: @REBUILD_PNGS@ $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource $(IMAGES)
+gtkstockpixbufs.h: @REBUILD_PNGS@ $(pixbuf_csource_deps) $(IMAGES)
 	$(pixbuf_csource)						\
 	   --raw --build-list $(VARIABLES1) > gtkstockpixbufs.h ||	\
            ( rm -f gtkstockpixbufs.h && false )

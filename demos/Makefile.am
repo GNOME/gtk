@@ -23,26 +23,32 @@ LDADDS = 								\
 	$(top_builddir)/gtk/$(gtktargetlib)
 
 noinst_PROGRAMS = 		\
-	testpixbuf 		\
 	testpixbuf-drawable 	\
 	testanimation 		\
 	testpixbuf-save		\
 	testpixbuf-scale 	\
 	pixbuf-demo
 
-if CROSS_COMPILING
-pixbuf_csource=$(GDK_PIXBUF_CSOURCE)
-else
-pixbuf_csource=GDK_PIXBUF_MODULE_FILE=$$topdir/gdk-pixbuf/gdk-pixbuf.loaders $$topdir/gdk-pixbuf/gdk-pixbuf-csource
+# Need to build test-inline-pixbufs.h for testpixbuf
+if HAVE_PNG
+noinst_PROGRAMS += testpixbuf
+BUILT_SOURCES = test-inline-pixbufs.h
 endif
 
-BUILT_SOURCES = test-inline-pixbufs.h
+if CROSS_COMPILING
+pixbuf_csource=$(GDK_PIXBUF_CSOURCE)
+pixbuf_csource_deps=
+else
+pixbuf_csource=GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource
+pixbuf_csource_deps=$(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource $(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders 
+endif
 
-test-inline-pixbufs.h: $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource $(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders apple-red.png gnome-foot.png
-	(topdir=`cd $(top_builddir) && pwd` ; curdir=`pwd` ; \
-	  cd $(srcdir) &&				     \
-	      $(pixbuf_csource) --build-list \
-	        apple_red apple-red.png gnome_foot gnome-foot.png >$$curdir/test-inline-pixbufs.h || (rm -f $$curdir/test-inline-pixbufs.h && false))
+test-inline-pixbufs.h: $(pixbuf_csource_deps) apple-red.png gnome-foot.png
+	$(pixbuf_csource) --raw --build-list		\
+	        apple_red  $(srcdir)/apple-red.png	\
+                gnome_foot $(srcdir)/gnome-foot.png	\
+        > test-inline-pixbufs.h				\
+	|| (rm -f test-inline-pixbufs.h && false)
 
 testpixbuf_DEPENDENCIES = $(DEPS)
 testpixbuf_drawable_DEPENDENCIES = $(DEPS)
