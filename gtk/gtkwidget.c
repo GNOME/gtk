@@ -2673,7 +2673,29 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   gboolean position_changed;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
+ 
+#ifdef G_ENABLE_DEBUG
+  if (gtk_debug_flags & GTK_DEBUG_GEOMETRY)
+    {
+      gint depth;
+      GtkWidget *parent;
+      const gchar *name;
 
+      depth = 0;
+      parent = widget;
+      while (parent)
+	{
+	  depth++;
+	  parent = gtk_widget_get_parent (parent);
+	}
+      
+      name = g_type_name (G_OBJECT_TYPE (G_OBJECT (widget)));
+      g_print ("gtk_widget_size_allocate: %*s%s %d %d\n", 
+	       2 * depth, " ", name, 
+	       allocation->width, allocation->height);
+    }
+#endif /* G_ENABLE_DEBUG */
+ 
   alloc_needed = GTK_WIDGET_ALLOC_NEEDED (widget);
   if (!GTK_WIDGET_REQUEST_NEEDED (widget))      /* Preserve request/allocate ordering */
     GTK_PRIVATE_UNSET_FLAG (widget, GTK_ALLOC_NEEDED);
