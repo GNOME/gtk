@@ -487,6 +487,7 @@ gdk_window_new (GdkWindow     *parent,
     title = "GDK client window";
 
   impl->event_mask = GDK_STRUCTURE_MASK | attributes->event_mask;
+  private->event_mask = impl->event_mask;
       
   if (private->parent && private->parent->guffaw_gravity)
     {
@@ -1941,6 +1942,7 @@ gdk_window_set_events (GdkWindow   *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
   GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->event_mask = event_mask;
 }
 

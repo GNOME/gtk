@@ -1,9 +1,24 @@
+Wed Feb 27 19:16:50 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_events): 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_events): 
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_events): 
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new): 
+	* gdk/gdkwindow.h (struct _GdkWindowObject): 
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_set_events):
+	Save the window's event mask in window->event_mask.
+
+	* gdk/gdkwindow.c (gdk_window_process_updates_internal): Only
+	generate expose events if GDK_EXPOSE_MASK is included
+	window->event_mask. (#54506)
+
 Wed Feb 27 18:50:29 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_event): Allow focus-change
 	events to be sent to unrealized widgets; they aren't
 	really normal events in that they have anything to
-	do with widget->window. (#72914)
+	do with widget->window. (#72914, Andreas J. Guelzow)
 
 Wed Feb 27 18:39:25 2002  Owen Taylor  <otaylor@redhat.com>
 

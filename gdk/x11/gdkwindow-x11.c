@@ -414,6 +414,7 @@ gdk_window_new (GdkWindow     *parent,
       if (attributes->event_mask & (1 << (i + 1)))
 	xattributes.event_mask |= _gdk_event_mask_table[i];
     }
+  private->event_mask = attributes->event_mask;
   
   if (xattributes.event_mask)
     xattributes_mask |= CWEventMask;
@@ -2466,6 +2467,8 @@ gdk_window_get_events (GdkWindow *window)
 	  if (attrs.your_event_mask & _gdk_event_mask_table[i])
 	    event_mask |= 1 << (i + 1);
 	}
+
+      GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
   
       return event_mask;
     }
@@ -2494,6 +2497,7 @@ gdk_window_set_events (GdkWindow       *window,
   
   if (!GDK_WINDOW_DESTROYED (window))
     {
+      GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
       xevent_mask = StructureNotifyMask;
       for (i = 0; i < _gdk_nenvent_masks; i++)
 	{

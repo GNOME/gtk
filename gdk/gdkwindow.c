@@ -2065,7 +2065,8 @@ gdk_window_process_updates_internal (GdkWindow *window)
       GdkRegion *update_area = private->update_area;
       private->update_area = NULL;
       
-      if (_gdk_event_func && gdk_window_is_viewable (window))
+      if (_gdk_event_func && gdk_window_is_viewable (window) &&
+	  (private->event_mask & GDK_EXPOSURE_MASK))
 	{
 	  GdkEvent event;
 	  GdkRectangle window_rect;
