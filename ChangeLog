@@ -3,6 +3,7 @@
 	* gtk/gtkuimanager.c (update_node): Remove two more places
 	where we were unconditionally setting "visible", causing
 	unnecessary notifications.
+	(update_node): Fix some C99isms.
 
 	* gtk/gtkclipboard.c (gtk_clipboard_get_for_display): 
 	(gtk_clipboard_get): Clarify the docs.  (#156638, Torsten 
