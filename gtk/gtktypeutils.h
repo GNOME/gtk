@@ -132,6 +132,7 @@ GtkType		gtk_identifier_get_type		(void);
 typedef struct _GtkArg	       GtkArg;
 typedef struct _GtkObject      GtkObject;   /* forward declaration of object type */
 typedef struct _GtkTypeInfo    GtkTypeInfo;
+typedef struct _GtkTypeQuery   GtkTypeQuery;
 typedef struct _GtkEnumValue   GtkEnumValue;
 typedef struct _GtkEnumValue   GtkFlagValue;
 
@@ -302,6 +303,14 @@ struct _GtkTypeInfo
   GtkClassInitFunc	 base_class_init_func;
 };
 
+struct _GtkTypeQuery
+{
+  GtkType		 type;
+  const gchar		*type_name;
+  guint			 object_size;
+  guint			 class_size;
+};
+
 struct _GtkEnumValue
 {
   guint	 value;
@@ -347,6 +356,11 @@ GtkFlagValue*	gtk_type_flags_find_value	(GtkType	 flag_type,
 void		gtk_type_set_varargs_type	(GtkType	foreign_type,
 						 GtkType	varargs_type);
 GtkType		gtk_type_get_varargs_type	(GtkType	foreign_type);
+/* Report internal information about a type. The caller has the
+ * responsibility to invoke a subsequent g_free (returned_data); but
+ * must not modify data pointed to by the members of GtkTypeQuery
+ */
+GtkTypeQuery*	gtk_type_query			(GtkType	type);
 
 
 

@@ -1,3 +1,11 @@
+Wed Dec  9 00:49:12 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.h:
+	* gtk/gtktypeutils.c: added gtk_type_query() which returns a newly
+	allocated structure holding certain type specific informations.
+	fixed the big bunch of `discards const' warnings with the
+ 	initialization of enum/flags values.
+
 Tue Dec  8 15:10:17 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_transient_parent_realized):

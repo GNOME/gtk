@@ -798,9 +798,9 @@ gtk_type_get_varargs_type (GtkType foreign_type)
 }
 
 static inline GtkType
-gtk_type_register_intern (gchar	       *name,
-			  GtkType	parent,
-			  GtkEnumValue *values)
+gtk_type_register_intern (gchar	             *name,
+			  GtkType  	      parent,
+			  const GtkEnumValue *values)
 {
   GtkType type_id;
   GtkTypeInfo info;
@@ -810,7 +810,7 @@ gtk_type_register_intern (gchar	       *name,
   info.class_size = 0;
   info.class_init_func = NULL;
   info.object_init_func = NULL;
-  info.reserved_1 = values;
+  info.reserved_1 = (gpointer) values;
   info.reserved_2 = NULL;
   
   /* relookup pointers afterwards.
@@ -879,6 +879,26 @@ gtk_type_register_flags (const gchar	*type_name,
   return type_id;
 }
 
+GtkTypeQuery*
+gtk_type_query (GtkType type)
+{
+  GtkTypeNode *node;
+  
+  LOOKUP_TYPE_NODE (node, type);
+  if (node)
+    {
+      GtkTypeQuery *query;
+
+      query = g_new0 (GtkTypeQuery, 1);
+      query->type = type;
+      query->type_name = node->type_info.type_name;
+      query->object_size = node->type_info.object_size;
+      query->class_size = node->type_info.class_size;
+    }
+  
+  return NULL;
+}
+
 static guint
 gtk_type_name_hash (const char *key)
 {
@@ -945,7 +965,7 @@ gtk_type_init_builtin_types (void)
     gchar *type_name;
     GtkType *type_id;
     GtkType parent;
-    GtkEnumValue *values;
+    const GtkEnumValue *values;
   } builtin_info[GTK_TYPE_NUM_BUILTINS + 1] = {
 #include "gtktypebuiltins_ids.c"	/* type entries */
     { NULL }
