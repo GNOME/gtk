@@ -721,7 +721,7 @@ ps_out_font(GdkPsDrawable* d, GdkFont* font, GdkGC* gc) {
 	} else if ( (face = XInternAtom(fp->xdisplay, "_DEC_DEVICE_FONTNAMES", True)) != None ) {
 		if (XGetFontProperty(fp->xfont, face, &value)) {
 			pname = XGetAtomName(fp->xdisplay, value);
-			if ( (psname=ststr(pname, "PS=")) )
+			if ( pname && (psname=strstr(pname, "PS=")) )
 				psname = psname+3;
 		}
 	} else if ( (face = XInternAtom(fp->xdisplay, "FACE", True)) != None ) {

@@ -91,6 +91,7 @@ void page3(GdkDrawable* d, int print) {
 	GdkRectangle clip2 = {150, 150, 200, 100};
 	GdkRegion *region1;
 	GdkRegion *region2;
+	gint len;
 
 	region1 = gdk_region_new();
 	region2 = gdk_region_union_with_rect(region1, &clip1);
@@ -115,6 +116,8 @@ void page3(GdkDrawable* d, int print) {
 	gdk_draw_string(d, font, gc, 50, fsize*3, "Third line");
 	gdk_draw_string(d, font, gc, 50, fsize*4, "Fourth line");
 	gdk_draw_string(d, font, gc, 50, fsize*5, "Fifth line");
+	len = gdk_string_width(font, "Fifth line");
+	gdk_draw_string(d, font, gc, 50+len, fsize*5, "This continues right after line");
 	if (print)
 		gdk_ps_drawable_page_end(d);
 	else {

@@ -1,3 +1,8 @@
+Wed, 21 Oct 1998 19:29:03 +0200 Paolo Molaro <lupus@debian.org>
+
+	* gdk/gdkps.c: fixed silly error.
+	* gtk/testps.c: test for string length (X<->PS).
+	
 Wed, 21 Oct 1998 19:10:02 +0200 Paolo Molaro <lupus@debian.org>
 
 	* gdk/gdkps.c: better guessing of postscript font name.
