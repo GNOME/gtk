@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-05-24 17:01-0500\n"
+"POT-Creation-Date: 2002-06-14 16:34-0400\n"
 "PO-Revision-Date: 2002-05-31 19:12-0300\n"
 "Last-Translator: Isam Bayazidi <bayazidi@arabeyes.org>\n"
 "Language-Team: Arabic <support@arabeyes.org>\n"
@@ -14,12 +14,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.6\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
+#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:585
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "فشل في فتح الملف '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:591
+#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:595
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "ملف الصورة '%s' لا يحتوي على بيانات"
@@ -29,9 +29,10 @@ msgstr "ملف الصورة '%s' لا يحتوي على بيانات"
 msgid "Don't know how to load the animation in file '%s'"
 msgstr "لا أعرف كيف أحمل الرسوم المتحركة قي الملف '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
+#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "فشل في تحميل الصورة '%s': السبب غير معروف، ربما يكون ملف الصورة تالف"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
@@ -43,12 +44,12 @@ msgstr ""
 "فشل في تحميل الرسوم المتحركة '%s': السبب غير معروف، ربما يكون ملف الرسوم "
 "المتحركة تالف"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:354
+#: gdk-pixbuf/gdk-pixbuf-io.c:358
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "لم أتمكن من تحميل وحدة تحميل الصور: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:373
+#: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -57,48 +58,46 @@ msgstr ""
 "ملحق تحميل الصور %s لا يقوم بتصدير الواجهة الصحيحة؛ قد يكون من إصدارة جيتكيه "
 "أخرى؟"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
+#: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "نوع الصورة '%s' غير مدعوم"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:538
+#: gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "لم أستطع تمييز تهيئة ملف الصورة للملف '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:544
+#: gdk-pixbuf/gdk-pixbuf-io.c:548
 msgid "Unrecognized image file format"
 msgstr "تهيئة ملف صورة غير مميزة"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:614
+#: gdk-pixbuf/gdk-pixbuf-io.c:618
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
 msgstr "لا أعرف كيف أقوم بتحميل الصورة في الملف '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:647
+#: gdk-pixbuf/gdk-pixbuf-io.c:651
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "فشل تحميل الصورة '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:752
+#: gdk-pixbuf/gdk-pixbuf-io.c:756
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "هذا البناء من gdk-pixbuf لا يدعم حفظ تهيئة الصور: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:859
+#: gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "تعذر فتح '%s' لكتابة: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:880
+#: gdk-pixbuf/gdk-pixbuf-io.c:884
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr ""
-"تعذر إغلاق '%s' أثناء كتابة الصورة، كل البيانات قد لا يتم حفظها: % "
-"s"
+msgstr "تعذر إغلاق '%s' أثناء كتابة الصورة، كل البيانات قد لا يتم حفظها: % s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
@@ -131,15 +130,15 @@ msgstr "بيانات بيكسل معطوبة للصورة"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "فشلت عملية إيجاد ذاكرة مخبأة للصورة من %u بايت"
 
-#: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
+#: gdk-pixbuf/io-bmp.c:266 gdk-pixbuf/io-bmp.c:366
 msgid "Not enough memory to load bitmap image"
 msgstr "ليس هناك مساحة من الذاكرة كافية لتحميل صورة بتماب"
 
-#: gdk-pixbuf/io-bmp.c:275
+#: gdk-pixbuf/io-bmp.c:292
 msgid "BMP image has unsupported header size"
 msgstr "الصورة البكسلية لها حجم ترويسة غير مدعم"
 
-#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
+#: gdk-pixbuf/io-bmp.c:317 gdk-pixbuf/io-bmp.c:340 gdk-pixbuf/io-bmp.c:399
 msgid "BMP image has bogus header data"
 msgstr "الصورة البكسلية لها حجم ترويسة زائف"
 
@@ -275,7 +274,8 @@ msgstr "يجب أن تكون جودة JPEG قيمة بين 0 و 100، القيم
 
 #: gdk-pixbuf/io-jpeg.c:736
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "يجب أن تكون جودة JPEG قيمة بين 0 و 100، القيمة '%d' غير مسموح بها."
 
 #: gdk-pixbuf/io-png.c:55
@@ -326,7 +326,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "حدث خطأ فادح أثناء قراءة ملف صورة PNG: %s"
 
 #: gdk-pixbuf/io-png.c:765
-msgid "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr "يجب أن تكون لمفاتيح قطع PNG tEXt على اﻷقل رمز واحد وعلى اﻷكثر 79 رمزا."
 
 # fuzzy
@@ -436,11 +437,13 @@ msgstr "تعذر إيجاد ذاكرة مؤقتة لبيانات IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:282
 msgid "fread() failed -- premature end-of-file probably encountered"
-msgstr "لقد فشلت fread() -- من المحتمل أن يكون قد تمت مواجهة نهاية ملف سابقة ﻷوانها"
+msgstr ""
+"لقد فشلت fread() -- من المحتمل أن يكون قد تمت مواجهة نهاية ملف سابقة ﻷوانها"
 
 #: gdk-pixbuf/io-tga.c:292
 msgid "fseek() failed -- premature end-of-file probably encountered"
-msgstr "لقد فشلت fseek() -- من المحتمل أن يكون قد تمت مواجهة نهاية ملف سابقة ﻷوانها"
+msgstr ""
+"لقد فشلت fseek() -- من المحتمل أن يكون قد تمت مواجهة نهاية ملف سابقة ﻷوانها"
 
 #: gdk-pixbuf/io-tga.c:325
 msgid "Can't allocate new pixbuf"
@@ -575,15 +578,15 @@ msgstr "ليس هناك مساحة من الذاكرة كافية لتحميل �
 msgid "Couldn't save the rest"
 msgstr "لم أتمكن من حفظ الباقي"
 
-#: gdk-pixbuf/io-xbm.c:283
+#: gdk-pixbuf/io-xbm.c:284
 msgid "Invalid XBM file"
 msgstr "ملف XBM غير صحيح"
 
-#: gdk-pixbuf/io-xbm.c:293
+#: gdk-pixbuf/io-xbm.c:294
 msgid "Insufficient memory to load XBM image file"
 msgstr "عدم كفاية الذاكرة لفتح ملف XBM"
 
-#: gdk-pixbuf/io-xbm.c:427
+#: gdk-pixbuf/io-xbm.c:429
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "فشل الكتابة في ملف مؤقت أثناء تحميل صورة XBM"
 
@@ -857,7 +860,8 @@ msgid "Use stock"
 msgstr "استعمل السهم"
 
 #: gtk/gtkbutton.c:206
-msgid "If set, the label is used to pick a stock item instead of being displayed"
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
 msgstr "إذا تم تعيينه، فسيتم استخدام العنوان لاختيار عنصر سهم بدل عرضه"
 
 #: gtk/gtkbutton.c:213
@@ -884,14 +888,16 @@ msgstr "التوسيع الخارجي الافتراضي"
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr "المسافة الإضافية التي تضاف لأزرار CAN_DEFAULT التي ترسم خارج الحد دائماً"
+msgstr ""
+"المسافة الإضافية التي تضاف لأزرار CAN_DEFAULT التي ترسم خارج الحد دائماً"
 
 #: gtk/gtkbutton.c:278
 msgid "Child X Displacement"
 msgstr "إزاحة الابن في س"
 
 #: gtk/gtkbutton.c:279
-msgid "How far in the x direction to move the child when the button is depressed"
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
 msgstr "مقدار البعد في اتجاه س لتحريك الابن حينما يتم تحرير الزر"
 
 #: gtk/gtkbutton.c:286
@@ -899,7 +905,8 @@ msgid "Child Y Displacement"
 msgstr "إزاحة الابن في ص"
 
 #: gtk/gtkbutton.c:287
-msgid "How far in the y direction to move the child when the button is depressed"
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
 msgstr "مقدار البعد في اتجاه ص لتحريك الابن حينما يتم تحرير الزر"
 
 #: gtk/gtkcellrenderer.c:103
@@ -1138,8 +1145,10 @@ msgid "Rise"
 msgstr "الزيادة"
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:428
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr "مقدار التغيير للنص على السطر اﻷساس (تحت السطر اﻷساس إذا كانت الزيادة سالبة)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
+msgstr ""
+"مقدار التغيير للنص على السطر اﻷساس (تحت السطر اﻷساس إذا كانت الزيادة سالبة)"
 
 #: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:467
 msgid "Strikethrough"
@@ -1486,7 +1495,8 @@ msgid "Always enable arrows"
 msgstr "تفعيل الأسهم دائما"
 
 #: gtk/gtkcombo.c:147
-msgid "Whether the arrow keys work, even if the entry contents are not in the list"
+msgid ""
+"Whether the arrow keys work, even if the entry contents are not in the list"
 msgstr "إن كانت مفاتيح الأسهم تعمل حتى لو كانت محتويات الخانة ليست في القائمة"
 
 #: gtk/gtkcombo.c:153
@@ -1622,7 +1632,8 @@ msgid "Selection Bound"
 msgstr "حدود الاختيار"
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
-msgid "The position of the opposite end of the selection from the cursor in chars."
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars."
 msgstr "موقع النهاية المعاكسة للاختيار من المؤشر بمقدار الرموز."
 
 #: gtk/gtkentry.c:456
@@ -1671,7 +1682,8 @@ msgstr "تنشيط الافتراضي"
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
-msgstr "إن كان الكائن الافتراضي (مثل الزر الافتراضي في صندوق) سينشط حين كبس زر Enter."
+msgstr ""
+"إن كان الكائن الافتراضي (مثل الزر الافتراضي في صندوق) سينشط حين كبس زر Enter."
 
 #: gtk/gtkentry.c:503
 msgid "Width in chars"
@@ -1693,23 +1705,23 @@ msgstr "عدد نقاط المدخلة المحركة إلى يسار الشاش
 msgid "The contents of the entry"
 msgstr "محتويات المدخلة"
 
-#: gtk/gtkentry.c:728
+#: gtk/gtkentry.c:739
 msgid "Select on focus"
 msgstr "اختر حين التركيز"
 
-#: gtk/gtkentry.c:729
+#: gtk/gtkentry.c:740
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "ما إذا سيتم اختيار محتويات مدخلة حينما يتم التركيز عليها."
 
-#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3861 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr "اختيار الكل"
 
-#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3871 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "طرق إدخال"
 
-#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6382
+#: gtk/gtkentry.c:3881 gtk/gtktextview.c:6395
 msgid "_Insert Unicode control character"
 msgstr "أدخل رمز تحكم اليونيكود"
 
@@ -1753,12 +1765,12 @@ msgstr "ملفات"
 msgid "_Files"
 msgstr "ملفات"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
+#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "المجلد غير قابل للقراءة: %s"
 
-#: gtk/gtkfilesel.c:946
+#: gtk/gtkfilesel.c:953
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1769,24 +1781,25 @@ msgstr ""
 "البرنامج.\n"
 "هل أنت متأكد من أنك تريد اختياره؟"
 
-#: gtk/gtkfilesel.c:1076
+#: gtk/gtkfilesel.c:1086
 msgid "_New Folder"
 msgstr "مجلد جديد"
 
-#: gtk/gtkfilesel.c:1087
+#: gtk/gtkfilesel.c:1097
 msgid "De_lete File"
 msgstr "احذف ملفا"
 
-#: gtk/gtkfilesel.c:1098
+#: gtk/gtkfilesel.c:1108
 msgid "_Rename File"
 msgstr "أعد تسمية ملف"
 
-#: gtk/gtkfilesel.c:1358
+#: gtk/gtkfilesel.c:1386
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "اسم المجلد \"%s\" يحوي رموزا غير مسموح استخدامها في أسماء الملفات"
 
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilesel.c:1388
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1795,33 +1808,33 @@ msgstr ""
 "حدث خطأ في إنشاء المجلد \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
 msgid "You probably used symbols not allowed in filenames."
 msgstr "من المحتمل أنك استعملت رموزاً لا يسمح باستعمالها في أسماء الملفات."
 
-#: gtk/gtkfilesel.c:1369
+#: gtk/gtkfilesel.c:1397
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "حدث خطأ في إنشاء المجلد \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1403
+#: gtk/gtkfilesel.c:1431
 msgid "New Folder"
 msgstr "مجلد جديد"
 
-#: gtk/gtkfilesel.c:1418
+#: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
 msgstr "اسم المجلد:"
 
-#: gtk/gtkfilesel.c:1444
+#: gtk/gtkfilesel.c:1472
 msgid "Create"
 msgstr "انشيء"
 
-#: gtk/gtkfilesel.c:1485
+#: gtk/gtkfilesel.c:1513
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "اسم الملف \"%s\" يحوي رموزا غير مسموح استخدامها في أسماء الملفات"
 
-#: gtk/gtkfilesel.c:1488
+#: gtk/gtkfilesel.c:1516
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1830,30 +1843,30 @@ msgstr ""
 "حدث خطأ في حذف الملف \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
+#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "من المحتمل أنه يحتوي على رموز غير مسموح استخدامها في أسماء الملفات."
 
-#: gtk/gtkfilesel.c:1499
+#: gtk/gtkfilesel.c:1527
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "حدث خطأ في حذف الملف \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1542
+#: gtk/gtkfilesel.c:1570
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "هل أحذف الملف \"%s\" فعلا؟"
 
-#: gtk/gtkfilesel.c:1547
+#: gtk/gtkfilesel.c:1575
 msgid "Delete File"
 msgstr "احذف ملف"
 
-#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "اسم الملف \"%s\" يحوي رموزا غير مسموح استخدامها في أسماء الملفات"
 
-#: gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1623
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1862,7 +1875,7 @@ msgstr ""
 "حدث خطأ في إعادة تسمية الملف إلى \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1609
+#: gtk/gtkfilesel.c:1637
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1871,29 +1884,29 @@ msgstr ""
 "حدث خطأ في إعادة تسمية الملف \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1619
+#: gtk/gtkfilesel.c:1647
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "حدث خطأ في إعادة تسمية الملف \"%s\" إلى \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1694
 msgid "Rename File"
 msgstr "أعد تسمية ملف"
 
-#: gtk/gtkfilesel.c:1681
+#: gtk/gtkfilesel.c:1709
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "أعد تسمية الملف \"%s\" إلى:"
 
-#: gtk/gtkfilesel.c:1712
+#: gtk/gtkfilesel.c:1740
 msgid "Rename"
 msgstr "إعادة تسمية"
 
-#: gtk/gtkfilesel.c:2103
+#: gtk/gtkfilesel.c:2131
 msgid "Selection: "
 msgstr "التحديد:"
 
-#: gtk/gtkfilesel.c:2983
+#: gtk/gtkfilesel.c:3011
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -1902,15 +1915,15 @@ msgstr ""
 "لا يمكن تحويل اسم الملف \"%s\" إلى UTF-8 (جرب تعيين المتغير البيئي "
 "G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:2986
+#: gtk/gtkfilesel.c:3014
 msgid "Invalid Utf-8"
 msgstr "Utf-8 غير صحيح"
 
-#: gtk/gtkfilesel.c:3852
+#: gtk/gtkfilesel.c:3880
 msgid "Name too long"
 msgstr "الاسم طويل جدا"
 
-#: gtk/gtkfilesel.c:3854
+#: gtk/gtkfilesel.c:3882
 msgid "Couldn't convert filename"
 msgstr "تعذر تحويل اسم الملف"
 
@@ -2311,7 +2324,7 @@ msgstr "ضبط عمودي"
 msgid "The GtkAdjustment for the vertical position."
 msgstr "GtkAdjustment للموقع العمودي."
 
-#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:191
+#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:192
 msgid "Width"
 msgstr "العرض"
 
@@ -2336,21 +2349,21 @@ msgstr "ارتفاع المخطط."
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: gtk/gtkmenu.c:191
+#: gtk/gtkmenu.c:194
 msgid "Tearoff Title"
 msgstr "عنوان مخلوع"
 
-#: gtk/gtkmenu.c:192
+#: gtk/gtkmenu.c:195
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off."
 msgstr "العنوان الذي يتم عرضه بواسطة مدير النوافذ إذا لم تكن هذه القائمة تعمل."
 
-#: gtk/gtkmenu.c:260
+#: gtk/gtkmenu.c:264
 msgid "Can change accelerators"
 msgstr "من الممكن تغيير المسرعات"
 
-#: gtk/gtkmenu.c:261
+#: gtk/gtkmenu.c:265
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu "
 "item."
@@ -2413,7 +2426,8 @@ msgid "X pad"
 msgstr "حشو س"
 
 #: gtk/gtkmisc.c:118
-msgid "The amount of space to add on the left and right of the widget, in pixels"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
 msgstr "مقدار المسافة التي تضاف ليمين ويسار الكائن، بالبكسل"
 
 #: gtk/gtkmisc.c:127
@@ -2421,7 +2435,8 @@ msgid "Y pad"
 msgstr "حشو ص"
 
 #: gtk/gtkmisc.c:128
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "مقدار المسافة التي تضاف لأعلى وأسفل الكائن، بالبكسل"
 
 #: gtk/gtknotebook.c:362
@@ -2530,7 +2545,8 @@ msgid "Position"
 msgstr "الموقع"
 
 #: gtk/gtkpaned.c:209
-msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr "موقع الفاصل للوحة بالبكسل (0 تعني أن الكل باتجاه اليسار/الأعلى)"
 
 #: gtk/gtkpaned.c:217
@@ -2554,7 +2570,8 @@ msgid "Expand"
 msgstr "تمديد"
 
 #: gtk/gtkpreview.c:130
-msgid "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
 msgstr "ما إذا سيأخذ كائن المعاينة كل المساحة التي تم إيجادها"
 
 #: gtk/gtkprogress.c:122
@@ -2729,7 +2746,8 @@ msgid "Arrow X Displacement"
 msgstr "إزاحة السهم في س"
 
 #: gtk/gtkrange.c:330
-msgid "How far in the x direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
 msgstr "مقدار البعد في اتجاه س لتحريك السهم حينما يتم تحرير الزر"
 
 #: gtk/gtkrange.c:337
@@ -2737,20 +2755,21 @@ msgid "Arrow Y Displacement"
 msgstr "إزاحة السهم في ص"
 
 #: gtk/gtkrange.c:338
-msgid "How far in the y direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
 msgstr "مقدار البعد في اتجاه ص لتحريك السهم حينما يتم تحرير الزر"
 
-#: gtk/gtkrc.c:2280
+#: gtk/gtkrc.c:2282
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "تعذر إيجاد ملف الاحتواء: \"%s\""
 
-#: gtk/gtkrc.c:2922 gtk/gtkrc.c:2925
+#: gtk/gtkrc.c:2924 gtk/gtkrc.c:2927
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "تعذر إيجاد ملف الصورة في مسار بيكسماب: \"%s\""
 
-#: gtk/gtkrc.c:3360
+#: gtk/gtkrc.c:3362
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "عنصر مسار بيكسماب: \"%s\" يجب أن يكون مطلقا، %s، السطر %d"
@@ -2860,7 +2879,8 @@ msgid "Secondary backward stepper"
 msgstr "متخطي التراجع الثانوي"
 
 #: gtk/gtkscrollbar.c:110
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr "اعرض زر سهم التراجع الثانوي على النهاية المعاكسة لشريط التدرج"
 
 #: gtk/gtkscrollbar.c:117
@@ -2868,7 +2888,8 @@ msgid "Secondary forward stepper"
 msgstr "متخطي التقدم الثانوي"
 
 #: gtk/gtkscrollbar.c:118
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "اعرض زر سهم التقدم الثانوي على النهاية المعاكسة لشريط التدرج"
 
 #: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
@@ -2919,7 +2940,8 @@ msgstr "وقت النقر المزدوج"
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
-msgstr "الوقت اﻷقصى المسموح بين نقرتين لاحتسابهما كنقرة مزدوجة (بالميللي ثانية)"
+msgstr ""
+"الوقت اﻷقصى المسموح بين نقرتين لاحتسابهما كنقرة مزدوجة (بالميللي ثانية)"
 
 #: gtk/gtksettings.c:156
 msgid "Cursor Blink"
@@ -3046,8 +3068,10 @@ msgid "Update Policy"
 msgstr "سياسة التحديث"
 
 #: gtk/gtkspinbutton.c:290
-msgid "Whether the spin button should update always, or only when the value is legal"
-msgstr "ما إذا كان من الواجب تحديث زر اللف دائما، أو فقط حينما تكون القيمة مقبولة"
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
+msgstr ""
+"ما إذا كان من الواجب تحديث زر اللف دائما، أو فقط حينما تكون القيمة مقبولة"
 
 #: gtk/gtkspinbutton.c:298
 msgid "Value"
@@ -3318,7 +3342,6 @@ msgid "_Yes"
 msgstr "نعم"
 
 #: gtk/gtkstock.c:334
-#, c-format
 msgid "Zoom _100%"
 msgstr "تحجيم 100%"
 
@@ -3505,7 +3528,8 @@ msgid "Wrap mode"
 msgstr "نظام الالتواء"
 
 #: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "ما إذا لن يتم التواء الأسطر عند حدود الكلمات أو الرموز"
 
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
@@ -3665,7 +3689,8 @@ msgid "ZWS _Zero width space"
 msgstr "ZWS مسافة صفرية للعرض"
 
 #: gtk/gtktextutil.c:54
-msgid "ZWN Zero width _joiner"
+#, fuzzy
+msgid "ZWJ Zero width _joiner"
 msgstr "ZWN واصل صفري للعرض"
 
 #: gtk/gtktextutil.c:55
@@ -3704,7 +3729,7 @@ msgstr "المؤشر مرئي"
 msgid "If the insertion cursor is shown"
 msgstr "ما إذا كان مؤشر اﻹدخال سيتم عرضه"
 
-#: gtk/gtktextview.c:6373
+#: gtk/gtktextview.c:6386
 msgid "Input _Methods"
 msgstr "طرق إدخال"
 
@@ -3782,7 +3807,8 @@ msgid "Toolbar style"
 msgstr "نمط شريط الأدوات"
 
 #: gtk/gtktoolbar.c:285
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "ما إذا كانت أشرطة اﻷدوات الافتراضية لها نص فقط، نص مع أيقونات، أيقونات فقط، "
 "إلخ."
@@ -3819,7 +3845,7 @@ msgstr "الضبط الأفقي للكائن"
 msgid "Vertical Adjustment for the widget"
 msgstr "الضبط العمودي للكائن"
 
-#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:175 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:176 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "مرئي"
 
@@ -3843,7 +3869,7 @@ msgstr "عمود موسع"
 msgid "Set the column for the expander column"
 msgstr "تعين العمود للعمود الموسع"
 
-#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:274
+#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:275
 msgid "Reorderable"
 msgstr "قابل لإعادة الترتيب"
 
@@ -3915,103 +3941,103 @@ msgstr "إزاحة الموسعات"
 msgid "Make the expanders indented."
 msgstr "جعل الموسعات مزاحة."
 
-#: gtk/gtktreeviewcolumn.c:176
+#: gtk/gtktreeviewcolumn.c:177
 msgid "Whether to display the column"
 msgstr "ما إذا كان سيتم عرض العمود"
 
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
+#: gtk/gtktreeviewcolumn.c:184 gtk/gtkwindow.c:446
 msgid "Resizable"
 msgstr "قابل للتحجيم"
 
-#: gtk/gtktreeviewcolumn.c:184
+#: gtk/gtktreeviewcolumn.c:185
 msgid "Column is user-resizable"
 msgstr "العمود قابل للتحجيم من قبل المستخدم"
 
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Current width of the column"
 msgstr "العرض الحالي للعمود"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Sizing"
 msgstr "تحجيم"
 
-#: gtk/gtktreeviewcolumn.c:201
+#: gtk/gtktreeviewcolumn.c:202
 msgid "Resize mode of the column"
 msgstr "نظام التحجيم للعمود"
 
-#: gtk/gtktreeviewcolumn.c:209
+#: gtk/gtktreeviewcolumn.c:210
 msgid "Fixed Width"
 msgstr "العرض الثابت"
 
-#: gtk/gtktreeviewcolumn.c:210
+#: gtk/gtktreeviewcolumn.c:211
 msgid "Current fixed width of the column"
 msgstr "العرض الحالي الثابت للعمود"
 
-#: gtk/gtktreeviewcolumn.c:219
+#: gtk/gtktreeviewcolumn.c:220
 msgid "Minimum Width"
 msgstr "العرض الأصغر"
 
-#: gtk/gtktreeviewcolumn.c:220
+#: gtk/gtktreeviewcolumn.c:221
 msgid "Minimum allowed width of the column"
 msgstr "العرض الأصغر المسموح به للعمود"
 
-#: gtk/gtktreeviewcolumn.c:229
+#: gtk/gtktreeviewcolumn.c:230
 msgid "Maximum Width"
 msgstr "العرض الأكبر"
 
-#: gtk/gtktreeviewcolumn.c:230
+#: gtk/gtktreeviewcolumn.c:231
 msgid "Maximum allowed width of the column"
 msgstr "العرض الأكبر المسموح به للعمود"
 
-#: gtk/gtktreeviewcolumn.c:239
+#: gtk/gtktreeviewcolumn.c:240
 msgid "Title"
 msgstr "العنوان"
 
-#: gtk/gtktreeviewcolumn.c:240
+#: gtk/gtktreeviewcolumn.c:241
 msgid "Title to appear in column header"
 msgstr "العنوان الذي يتم عرضه في ترويسة العمود"
 
-#: gtk/gtktreeviewcolumn.c:247
+#: gtk/gtktreeviewcolumn.c:248
 msgid "Clickable"
 msgstr "قابل للنقر"
 
-#: gtk/gtktreeviewcolumn.c:248
+#: gtk/gtktreeviewcolumn.c:249
 msgid "Whether the header can be clicked"
 msgstr "ما إذا كانت الترويسة قابلة للنقر أم لا"
 
-#: gtk/gtktreeviewcolumn.c:256
+#: gtk/gtktreeviewcolumn.c:257
 msgid "Widget"
 msgstr "كائن"
 
-#: gtk/gtktreeviewcolumn.c:257
+#: gtk/gtktreeviewcolumn.c:258
 msgid "Widget to put in column header button instead of column title"
 msgstr "الكائن الذي يتم وضعه في زر ترويسة العمود بدل عنوان العمود"
 
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Alignment"
 msgstr "تنسيق"
 
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "X Alignment of the column header text or widget"
 msgstr "ضبط س لكائن أو نص ترويسة العمود"
 
-#: gtk/gtktreeviewcolumn.c:275
+#: gtk/gtktreeviewcolumn.c:276
 msgid "Whether the column can be reordered around the headers"
 msgstr "إذا ما كان من الممكن أن يعاد ترتيب العمود حول الترويسات"
 
-#: gtk/gtktreeviewcolumn.c:282
+#: gtk/gtktreeviewcolumn.c:283
 msgid "Sort indicator"
 msgstr "مؤشر الفرز"
 
-#: gtk/gtktreeviewcolumn.c:283
+#: gtk/gtktreeviewcolumn.c:284
 msgid "Whether to show a sort indicator"
 msgstr "ما إذا كان سيتم عرض مؤشر الفرز أم لا."
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Sort order"
 msgstr "ترتيب الفرز"
 
-#: gtk/gtktreeviewcolumn.c:291
+#: gtk/gtktreeviewcolumn.c:292
 msgid "Sort direction the sort indicator should indicate"
 msgstr "اتجاه الفرز الذي يتوجب على مؤشر الفرز أن يشير إليه"
 
@@ -4055,7 +4081,8 @@ msgstr "طلب عرض"
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used."
-msgstr "Override لطلب العرض للكائن، أو -1  إذا ما كان سيتم استخدام الطلب الطبيعي."
+msgstr ""
+"Override لطلب العرض للكائن، أو -1  إذا ما كان سيتم استخدام الطلب الطبيعي."
 
 #: gtk/gtkwidget.c:414
 msgid "Height request"
@@ -4065,7 +4092,8 @@ msgstr "طلب ارتفاع"
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used."
-msgstr "Override لطلب الارتفاع للكائن، أو -1  إذا ما كان سيتم استخدام الطلب الطبيعي."
+msgstr ""
+"Override لطلب الارتفاع للكائن، أو -1  إذا ما كان سيتم استخدام الطلب الطبيعي."
 
 #: gtk/gtkwidget.c:424
 msgid "Whether the widget is visible"
@@ -4125,7 +4153,8 @@ msgstr "استقبال الافتراض"
 
 #: gtk/gtkwidget.c:473
 msgid "If TRUE, the widget will receive the default action when it is focused."
-msgstr "إذا كان TRUE، فسيستقبل الكائن الحذث الافتراضي حينما يتم تسليط البؤرة عليه."
+msgstr ""
+"إذا كان TRUE، فسيستقبل الكائن الحذث الافتراضي حينما يتم تسليط البؤرة عليه."
 
 #: gtk/gtkwidget.c:479
 msgid "Composite child"
@@ -4256,7 +4285,8 @@ msgstr "اسمح للنمو"
 
 #: gtk/gtkwindow.c:439
 msgid "If TRUE, users can expand the window beyond its minimum size."
-msgstr "إذا كان TRUE، فإن باستطاعة المستخدمين تمديد النافذة لما وراء حجمها الأصغر."
+msgstr ""
+"إذا كان TRUE، فإن باستطاعة المستخدمين تمديد النافذة لما وراء حجمها الأصغر."
 
 #: gtk/gtkwindow.c:447
 msgid "If TRUE, users can resize the window."
@@ -4287,7 +4317,8 @@ msgid "Default Width"
 msgstr "العرض الافتراضي"
 
 #: gtk/gtkwindow.c:472
-msgid "The default width of the window, used when initially showing the window."
+msgid ""
+"The default width of the window, used when initially showing the window."
 msgstr "العرض الافتراضي للنافذة، ويتم استخدامه في بداية ظهور النافذة."
 
 #: gtk/gtkwindow.c:481
@@ -4295,7 +4326,8 @@ msgid "Default Height"
 msgstr "الارتفاع الافتراضي"
 
 #: gtk/gtkwindow.c:482
-msgid "The default height of the window, used when initially showing the window."
+msgid ""
+"The default height of the window, used when initially showing the window."
 msgstr "الارتفاع الافتراضي للنافذة، ويتم استخدامه في بداية ظهور النافذة."
 
 #: gtk/gtkwindow.c:491
@@ -4411,4 +4443,3 @@ msgstr "طريقة إدخال س"
 #, fuzzy
 #~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 #~ msgstr "تعذر إيجاد ملف صورة في مسار الرسمة البكسلية: \"%s\" السطر %d"
-

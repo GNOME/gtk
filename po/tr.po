@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ \n"
-"POT-Creation-Date: 2002-05-23 17:08-0400\n"
+"POT-Creation-Date: 2002-06-14 16:34-0400\n"
 "PO-Revision-Date: 2002-02-20 17:56+0200\n"
 "Last-Translator: Nilgün Belma Bugüner <nilgun@fide.org>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -16,13 +16,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 # gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:516
-#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
+#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:585
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "'%s' dosyası açılamadı: %s"
 
 # gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:526
-#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:591
+#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:595
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Resim dosyası '%s' hiç bilgi içermiyor."
@@ -34,7 +34,7 @@ msgid "Don't know how to load the animation in file '%s'"
 msgstr "'%s' dosyasındaki animasyon nasıl yüklenecek bilinmiyor"
 
 # gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:571
-#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
+#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -51,13 +51,13 @@ msgstr ""
 "olabilir"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:295
-#: gdk-pixbuf/gdk-pixbuf-io.c:354
+#: gdk-pixbuf/gdk-pixbuf-io.c:358
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Resim yükleme modülü bulunamadı: %s: %s"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:314
-#: gdk-pixbuf/gdk-pixbuf-io.c:373
+#: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -67,48 +67,48 @@ msgstr ""
 "sürümü olabilir mi?"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:425 gdk-pixbuf/gdk-pixbuf-io.c:451
-#: gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
+#: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Resim türü '%s' desteklenmiyor"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:473
-#: gdk-pixbuf/gdk-pixbuf-io.c:538
+#: gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "'%s' dosyasındaki resmin biçemi anlaşılamadı"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:479
-#: gdk-pixbuf/gdk-pixbuf-io.c:544
+#: gdk-pixbuf/gdk-pixbuf-io.c:548
 msgid "Unrecognized image file format"
 msgstr "Bilinmeyen resim dosyası biçemi"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:549
-#: gdk-pixbuf/gdk-pixbuf-io.c:614
+#: gdk-pixbuf/gdk-pixbuf-io.c:618
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
 msgstr "%s' dosyasındaki resim nasıl yüklenir bilinmiyor"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:582
-#: gdk-pixbuf/gdk-pixbuf-io.c:647
+#: gdk-pixbuf/gdk-pixbuf-io.c:651
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Resim '%s' yüklenemedi: %s"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:687
-#: gdk-pixbuf/gdk-pixbuf-io.c:752
+#: gdk-pixbuf/gdk-pixbuf-io.c:756
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "gdk-pixbuf'un bu kurgusu %s resim biçemi kaydını desteklemiyor"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:790
-#: gdk-pixbuf/gdk-pixbuf-io.c:859
+#: gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "'%s' dosyası yazmak için açılamıyor: %s"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:811
-#: gdk-pixbuf/gdk-pixbuf-io.c:880
+#: gdk-pixbuf/gdk-pixbuf-io.c:884
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -154,17 +154,17 @@ msgid "failed to allocate image buffer of %u bytes"
 msgstr "%u baytlık resim tamponu ayrılamadı"
 
 # gdk-pixbuf/io-bmp.c:325
-#: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
+#: gdk-pixbuf/io-bmp.c:266 gdk-pixbuf/io-bmp.c:366
 msgid "Not enough memory to load bitmap image"
 msgstr "Biteşlem resmi yüklemek için bellek yetersiz."
 
 # gdk-pixbuf/io-bmp.c:255
-#: gdk-pixbuf/io-bmp.c:275
+#: gdk-pixbuf/io-bmp.c:292
 msgid "BMP image has unsupported header size"
 msgstr "Bu BMP resminin başlık uzunluğu desteklenmiyor"
 
 # gdk-pixbuf/io-bmp.c:278 gdk-pixbuf/io-bmp.c:300
-#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
+#: gdk-pixbuf/io-bmp.c:317 gdk-pixbuf/io-bmp.c:340 gdk-pixbuf/io-bmp.c:399
 msgid "BMP image has bogus header data"
 msgstr "BMP resminin başlığı hatalı veri içeriyor"
 
@@ -686,17 +686,17 @@ msgid "Couldn't save the rest"
 msgstr ""
 
 # gdk-pixbuf/io-xbm.c:284
-#: gdk-pixbuf/io-xbm.c:283
+#: gdk-pixbuf/io-xbm.c:284
 msgid "Invalid XBM file"
 msgstr "Geçersiz XBM dosyası"
 
 # gdk-pixbuf/io-xbm.c:295
-#: gdk-pixbuf/io-xbm.c:293
+#: gdk-pixbuf/io-xbm.c:294
 msgid "Insufficient memory to load XBM image file"
 msgstr "XBM resim dosyasını yüklemek için bellek yetersiz"
 
 # gdk-pixbuf/io-xbm.c:429
-#: gdk-pixbuf/io-xbm.c:427
+#: gdk-pixbuf/io-xbm.c:429
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "XBM resmi yüklenirken geçici dosyaya yazılamadı"
 
@@ -2059,26 +2059,26 @@ msgid "The contents of the entry"
 msgstr "Girdi bağlamı"
 
 # gtk/gtkfilesel.c:1795
-#: gtk/gtkentry.c:728
+#: gtk/gtkentry.c:739
 msgid "Select on focus"
 msgstr "Odaklananı seç"
 
 # gtk/gtkentry.c:397
-#: gtk/gtkentry.c:729
+#: gtk/gtkentry.c:740
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Girdi içeriğinin odaklanma ile seçilmesi."
 
 # gtk/gtklabel.c:251
-#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3861 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr "Tümünü Seç"
 
 # gtk/gtkentry.c:3653 gtk/gtktextview.c:5336
-#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3871 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "Girdi Yöntemleri"
 
-#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6382
+#: gtk/gtkentry.c:3881 gtk/gtktextview.c:6395
 msgid "_Insert Unicode control character"
 msgstr "_Unicode denetim karakteri gir"
 
@@ -2135,12 +2135,12 @@ msgid "_Files"
 msgstr "_Dosyalar"
 
 # gtk/gtkfilesel.c:719 gtk/gtkfilesel.c:1816
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
+#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Dizin okunabilir değil: %s"
 
-#: gtk/gtkfilesel.c:946
+#: gtk/gtkfilesel.c:953
 #, fuzzy, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2151,29 +2151,29 @@ msgstr ""
 "olmayabilir.\n"
 "Onu seçmek istediğinizden emin misiniz?"
 
-#: gtk/gtkfilesel.c:1076
+#: gtk/gtkfilesel.c:1086
 msgid "_New Folder"
 msgstr "_Yeni Dizin"
 
 # gtk/gtkfilesel.c:762 gtk/gtkfilesel.c:1176
-#: gtk/gtkfilesel.c:1087
+#: gtk/gtkfilesel.c:1097
 msgid "De_lete File"
 msgstr "Dosya _Sil"
 
 # gtk/gtkfilesel.c:773 gtk/gtkfilesel.c:1318
-#: gtk/gtkfilesel.c:1098
+#: gtk/gtkfilesel.c:1108
 msgid "_Rename File"
 msgstr "Dosyayı İsi_mlendir"
 
 # gtk/gtkfilesel.c:1249 gtk/gtkfilesel.c:1263
-#: gtk/gtkfilesel.c:1358
+#: gtk/gtkfilesel.c:1386
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" dosya isimlerinde izin verilmeyen karakterler içeriyor"
 
 # gtk/gtkfilesel.c:1265
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilesel.c:1388
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2183,32 +2183,32 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1003 gtk/gtkfilesel.c:1253
-#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Dosya isimlerinde izin verilmeyen karakterler kullanmış olabilirsiniz."
 
 # gtk/gtkfilesel.c:1011
-#: gtk/gtkfilesel.c:1369
+#: gtk/gtkfilesel.c:1397
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "\"%s\" dizini oluşturulurken hata: %s\n"
 
-#: gtk/gtkfilesel.c:1403
+#: gtk/gtkfilesel.c:1431
 msgid "New Folder"
 msgstr "Yeni Dizin"
 
 # gtk/gtkfilesel.c:502
-#: gtk/gtkfilesel.c:1418
+#: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
 msgstr "Di_zin ismi:"
 
 # gtk/gtkfilesel.c:1073
-#: gtk/gtkfilesel.c:1444
+#: gtk/gtkfilesel.c:1472
 msgid "Create"
 msgstr "Oluştur"
 
 # gtk/gtkfilesel.c:1117
-#: gtk/gtkfilesel.c:1485
+#: gtk/gtkfilesel.c:1513
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
@@ -2216,7 +2216,7 @@ msgstr ""
 "içeriyor."
 
 # gtk/gtkfilesel.c:1120
-#: gtk/gtkfilesel.c:1488
+#: gtk/gtkfilesel.c:1516
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2226,35 +2226,35 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1122 gtk/gtkfilesel.c:1267
-#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
+#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Dosya isimlerinde izin verilmeyen karakterler kullanılmış olabilir."
 
 # gtk/gtkfilesel.c:1131
-#: gtk/gtkfilesel.c:1499
+#: gtk/gtkfilesel.c:1527
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "\"%s\" silinirken hata: %s"
 
 # gtk/gtkfilesel.c:1131
-#: gtk/gtkfilesel.c:1542
+#: gtk/gtkfilesel.c:1570
 #, fuzzy, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "\"%s\" silinirken hata: %s"
 
 # gtk/gtkfilesel.c:762 gtk/gtkfilesel.c:1176
-#: gtk/gtkfilesel.c:1547
+#: gtk/gtkfilesel.c:1575
 msgid "Delete File"
 msgstr "Dosya Sil"
 
 # gtk/gtkfilesel.c:1249 gtk/gtkfilesel.c:1263
-#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" dosya isimlerinde izin verilmeyen karakterler içeriyor"
 
 # gtk/gtkfilesel.c:1251
-#: gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1623
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2264,7 +2264,7 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1265
-#: gtk/gtkfilesel.c:1609
+#: gtk/gtkfilesel.c:1637
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2274,34 +2274,34 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1275
-#: gtk/gtkfilesel.c:1619
+#: gtk/gtkfilesel.c:1647
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Dosya ismi \"%s\", \"%s\" olarak değiştirilirken hata oluştu: %s"
 
 # gtk/gtkfilesel.c:773 gtk/gtkfilesel.c:1318
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1694
 msgid "Rename File"
 msgstr "Dosyayı İsimlendir"
 
 # gtk/gtkfilesel.c:773 gtk/gtkfilesel.c:1318
-#: gtk/gtkfilesel.c:1681
+#: gtk/gtkfilesel.c:1709
 #, fuzzy, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Dosyayı İsimlendir"
 
 # gtk/gtkfilesel.c:1351
-#: gtk/gtkfilesel.c:1712
+#: gtk/gtkfilesel.c:1740
 msgid "Rename"
 msgstr "Yeniden adlandır"
 
 # gtk/gtkfilesel.c:1795
-#: gtk/gtkfilesel.c:2103
+#: gtk/gtkfilesel.c:2131
 msgid "Selection: "
 msgstr "Seçim: "
 
 # gtk/gtkfilesel.c:2407
-#: gtk/gtkfilesel.c:2983
+#: gtk/gtkfilesel.c:3011
 #, fuzzy, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2311,18 +2311,18 @@ msgstr ""
 "kullanmayı deneyin."
 
 # gdk-pixbuf/io-xbm.c:284
-#: gtk/gtkfilesel.c:2986
+#: gtk/gtkfilesel.c:3014
 #, fuzzy
 msgid "Invalid Utf-8"
 msgstr "Geçersiz XBM dosyası"
 
 # gtk/gtkfilesel.c:3275
-#: gtk/gtkfilesel.c:3852
+#: gtk/gtkfilesel.c:3880
 msgid "Name too long"
 msgstr "İsim çok uzun"
 
 # gtk/gtkfilesel.c:3277
-#: gtk/gtkfilesel.c:3854
+#: gtk/gtkfilesel.c:3882
 msgid "Couldn't convert filename"
 msgstr "Dosya ismi dönüştürülemedi"
 
@@ -2807,7 +2807,7 @@ msgid "The GtkAdjustment for the vertical position."
 msgstr "Düşey konum için GtkAdjustment"
 
 # gtk/gtklayout.c:435 gtk/gtktreeviewcolumn.c:188 gtk/gtkwidget.c:424
-#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:191
+#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:192
 msgid "Width"
 msgstr "Genişlik"
 
@@ -2836,11 +2836,11 @@ msgstr "Yerleşim yüksekliği"
 msgid "default:LTR"
 msgstr "öntanımlı:LTR"
 
-#: gtk/gtkmenu.c:191
+#: gtk/gtkmenu.c:194
 msgid "Tearoff Title"
 msgstr "Koparılan Başlık"
 
-#: gtk/gtkmenu.c:192
+#: gtk/gtkmenu.c:195
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off."
@@ -2848,11 +2848,11 @@ msgstr ""
 "Bu menü kapandığında pencere yöneticisi tarafından gösterilebilecek başlık"
 
 # gtk/gtkmenubar.c:147
-#: gtk/gtkmenu.c:260
+#: gtk/gtkmenu.c:264
 msgid "Can change accelerators"
 msgstr "Hızlandırıcılar değiştirilebilir"
 
-#: gtk/gtkmenu.c:261
+#: gtk/gtkmenu.c:265
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu "
 "item."
@@ -3339,19 +3339,19 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Düğmeye basıldığında astın y yönünde ne kadar hareket edeceği"
 
-#: gtk/gtkrc.c:2280
+#: gtk/gtkrc.c:2282
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "içerilecek dosya bulunamıyor: \"%s\""
 
 # gtk/gtkrc.c:2799
-#: gtk/gtkrc.c:2922 gtk/gtkrc.c:2925
+#: gtk/gtkrc.c:2924 gtk/gtkrc.c:2927
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Resim dosyası konumlanamadı. pixmap_path: \"%s\""
 
 # gtk/gtkrc.c:3209
-#: gtk/gtkrc.c:3360
+#: gtk/gtkrc.c:3362
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Pixmap dosya yolu elemanı: \"%s\" mutlak olmalı, %s, %d. satır"
@@ -4483,7 +4483,8 @@ msgid "ZWS _Zero width space"
 msgstr "ZWS _Sıfır genişlik alanı"
 
 #: gtk/gtktextutil.c:54
-msgid "ZWN Zero width _joiner"
+#, fuzzy
+msgid "ZWJ Zero width _joiner"
 msgstr "ZWN sıfır genişlikte b_ağlantılı"
 
 #: gtk/gtktextutil.c:55
@@ -4531,7 +4532,7 @@ msgid "If the insertion cursor is shown"
 msgstr "Yerleştirme imleci gösterilmişse"
 
 # gtk/gtkentry.c:3653 gtk/gtktextview.c:5336
-#: gtk/gtktextview.c:6373
+#: gtk/gtktextview.c:6386
 msgid "Input _Methods"
 msgstr "Girdi _Yöntemleri"
 
@@ -4675,7 +4676,7 @@ msgid "Vertical Adjustment for the widget"
 msgstr "Parça için Düşey Hizalama"
 
 # gtk/gtktreeview.c:481 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:442
-#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:175 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:176 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Görünür"
 
@@ -4705,7 +4706,7 @@ msgid "Set the column for the expander column"
 msgstr "Sütünü genişleyen sütun yapar"
 
 # gtk/gtktreeview.c:505 gtk/gtktreeviewcolumn.c:253
-#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:274
+#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:275
 msgid "Reorderable"
 msgstr "Sıralanabilir"
 
@@ -4784,125 +4785,125 @@ msgid "Make the expanders indented."
 msgstr "Genişleticileri girintili yapar."
 
 # gtk/gtktreeviewcolumn.c:172
-#: gtk/gtktreeviewcolumn.c:176
+#: gtk/gtktreeviewcolumn.c:177
 msgid "Whether to display the column"
 msgstr "Sütun gösterilecek mi"
 
 # gtk/gtkwindow.c:364
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
+#: gtk/gtktreeviewcolumn.c:184 gtk/gtkwindow.c:446
 msgid "Resizable"
 msgstr "Boyutlandırılabilir"
 
-#: gtk/gtktreeviewcolumn.c:184
+#: gtk/gtktreeviewcolumn.c:185
 msgid "Column is user-resizable"
 msgstr "Sütun, kullanıcı tarafından boyutlandırılabilir türde"
 
 # gtk/gtktreeviewcolumn.c:189
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Current width of the column"
 msgstr "Sütunun mevcut genişliği"
 
 # gtk/gtktreeviewcolumn.c:179
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Sizing"
 msgstr "Boyutlandırma"
 
 # gtk/gtktreeviewcolumn.c:180
-#: gtk/gtktreeviewcolumn.c:201
+#: gtk/gtktreeviewcolumn.c:202
 msgid "Resize mode of the column"
 msgstr "Sütun boyutlandırma kipi"
 
 # gtk/gtkcellrenderer.c:168
-#: gtk/gtktreeviewcolumn.c:209
+#: gtk/gtktreeviewcolumn.c:210
 msgid "Fixed Width"
 msgstr "Sabit genişlik"
 
-#: gtk/gtktreeviewcolumn.c:210
+#: gtk/gtktreeviewcolumn.c:211
 msgid "Current fixed width of the column"
 msgstr "Sütunun mevcut sabit genişliği"
 
 # gtk/gtktreeviewcolumn.c:198
-#: gtk/gtktreeviewcolumn.c:219
+#: gtk/gtktreeviewcolumn.c:220
 msgid "Minimum Width"
 msgstr "En Dar"
 
 # gtk/gtktreeviewcolumn.c:199
-#: gtk/gtktreeviewcolumn.c:220
+#: gtk/gtktreeviewcolumn.c:221
 msgid "Minimum allowed width of the column"
 msgstr "Sütun için izin verilen en az genişlik"
 
 # gtk/gtktreeviewcolumn.c:208
-#: gtk/gtktreeviewcolumn.c:229
+#: gtk/gtktreeviewcolumn.c:230
 msgid "Maximum Width"
 msgstr "En Geniş"
 
 # gtk/gtktreeviewcolumn.c:209
-#: gtk/gtktreeviewcolumn.c:230
+#: gtk/gtktreeviewcolumn.c:231
 msgid "Maximum allowed width of the column"
 msgstr "Sütun için izin verilen en çok genişlik"
 
 # gtk/gtktreeviewcolumn.c:218
-#: gtk/gtktreeviewcolumn.c:239
+#: gtk/gtktreeviewcolumn.c:240
 msgid "Title"
 msgstr "Başlık"
 
 # gtk/gtktreeviewcolumn.c:219
-#: gtk/gtktreeviewcolumn.c:240
+#: gtk/gtktreeviewcolumn.c:241
 msgid "Title to appear in column header"
 msgstr "Sütun etiketi"
 
 # gtk/gtktreeviewcolumn.c:226
-#: gtk/gtktreeviewcolumn.c:247
+#: gtk/gtktreeviewcolumn.c:248
 msgid "Clickable"
 msgstr "Tıklanabilir"
 
 # gtk/gtktreeviewcolumn.c:227
-#: gtk/gtktreeviewcolumn.c:248
+#: gtk/gtktreeviewcolumn.c:249
 msgid "Whether the header can be clicked"
 msgstr "Başlık tıklama eylemine yanıt verecek mi"
 
 # gtk/gtktreeviewcolumn.c:235
-#: gtk/gtktreeviewcolumn.c:256
+#: gtk/gtktreeviewcolumn.c:257
 msgid "Widget"
 msgstr "Parçacık"
 
 # gtk/gtktreeviewcolumn.c:236
-#: gtk/gtktreeviewcolumn.c:257
+#: gtk/gtktreeviewcolumn.c:258
 msgid "Widget to put in column header button instead of column title"
 msgstr "Sütun başlığı yerine kullanılacak düğmeye konulacak parça"
 
 # gtk/gtktreeviewcolumn.c:243
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Alignment"
 msgstr "Hizalama"
 
 # gtk/gtktreeviewcolumn.c:244
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "X Alignment of the column header text or widget"
 msgstr "Sütün başlık metni ya da parçasının Yatay Hizalaması"
 
 # gtk/gtkcellrenderertext.c:212 gtk/gtktexttag.c:277 gtk/gtktextview.c:553
-#: gtk/gtktreeviewcolumn.c:275
+#: gtk/gtktreeviewcolumn.c:276
 msgid "Whether the column can be reordered around the headers"
 msgstr "Sütun başlıkların etrafında sıralanabilir mi"
 
 # gtk/gtktreeviewcolumn.c:261
-#: gtk/gtktreeviewcolumn.c:282
+#: gtk/gtktreeviewcolumn.c:283
 msgid "Sort indicator"
 msgstr "Sıralama belirteci"
 
 # gtk/gtktreeviewcolumn.c:262
-#: gtk/gtktreeviewcolumn.c:283
+#: gtk/gtktreeviewcolumn.c:284
 msgid "Whether to show a sort indicator"
 msgstr "Bir sıralama belirteci gösterilecek mi"
 
 # gtk/gtktreeviewcolumn.c:269
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Sort order"
 msgstr "Sıralama türü"
 
 # gtk/gtktreeviewcolumn.c:270
-#: gtk/gtktreeviewcolumn.c:291
+#: gtk/gtktreeviewcolumn.c:292
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Sıralama belirtecinin gösterdiği sıralama yönü"
 

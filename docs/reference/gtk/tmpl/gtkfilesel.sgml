@@ -135,8 +135,8 @@ Creates a new file selection dialog box. By default it will contain a #GtkCList 
 <para>
 </para>
 
-@filesel:
-@filename:
+@filesel: 
+@filename: 
 
 
 <!-- ##### FUNCTION gtk_file_selection_get_filename ##### -->

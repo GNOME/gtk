@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.2\n"
-"POT-Creation-Date: 2002-06-05 13:21+0400\n"
+"POT-Creation-Date: 2002-06-14 16:34-0400\n"
 "PO-Revision-Date: 2002-06-05 13:19+0400\n"
 "Last-Translator: Dmitry Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -158,17 +158,17 @@ msgid "failed to allocate image buffer of %u bytes"
 msgstr "Сбой при распределении памяти для буфера изображения в размере %u байт"
 
 # gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
-#: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
+#: gdk-pixbuf/io-bmp.c:266 gdk-pixbuf/io-bmp.c:366
 msgid "Not enough memory to load bitmap image"
 msgstr "Недостаточно памяти для загрузки изображения"
 
 # gdk-pixbuf/io-bmp.c:275
-#: gdk-pixbuf/io-bmp.c:275
+#: gdk-pixbuf/io-bmp.c:292
 msgid "BMP image has unsupported header size"
 msgstr "Изображение формата BMP имеет неподдерживаемый размер заголовка"
 
 # gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
-#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
+#: gdk-pixbuf/io-bmp.c:317 gdk-pixbuf/io-bmp.c:340 gdk-pixbuf/io-bmp.c:399
 msgid "BMP image has bogus header data"
 msgstr "Изображение формата BMP имеет неправильные данные в заголовке"
 
@@ -2136,27 +2136,27 @@ msgid "The contents of the entry"
 msgstr "Содержимое строки"
 
 # gtk/gtkentry.c:728
-#: gtk/gtkentry.c:728
+#: gtk/gtkentry.c:739
 msgid "Select on focus"
 msgstr "Выделение при фокусировании"
 
 # gtk/gtkentry.c:729
-#: gtk/gtkentry.c:729
+#: gtk/gtkentry.c:740
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Будет ли содержимое записи выделяться при фокусировании."
 
 # gtk/gtkentry.c:3850 gtk/gtklabel.c:3164
-#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3861 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr "Выделить все"
 
 # gtk/gtkentry.c:3860 gtk/gtklabel.c:3174
-#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3871 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "Методы ввода"
 
 # gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
-#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6382
+#: gtk/gtkentry.c:3881 gtk/gtktextview.c:6395
 msgid "_Insert Unicode control character"
 msgstr "Вс_тавить управляющий символ Unicode"
 
@@ -2211,13 +2211,13 @@ msgid "_Files"
 msgstr "Фай_лы"
 
 # gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
+#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Каталог нечитаем: %s"
 
 # gtk/gtkfilesel.c:946
-#: gtk/gtkfilesel.c:946
+#: gtk/gtkfilesel.c:953
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2229,29 +2229,29 @@ msgstr ""
 "Уверены в том, что хотите выбрать его?"
 
 # gtk/gtkfilesel.c:1076
-#: gtk/gtkfilesel.c:1076
+#: gtk/gtkfilesel.c:1086
 msgid "_New Folder"
 msgstr "_Создать каталог"
 
 # gtk/gtkfilesel.c:1087
-#: gtk/gtkfilesel.c:1087
+#: gtk/gtkfilesel.c:1097
 msgid "De_lete File"
 msgstr "У_далить файл"
 
 # gtk/gtkfilesel.c:1098
-#: gtk/gtkfilesel.c:1098
+#: gtk/gtkfilesel.c:1108
 msgid "_Rename File"
 msgstr "Переи_меновать файл"
 
 # gtk/gtkfilesel.c:1358
-#: gtk/gtkfilesel.c:1358
+#: gtk/gtkfilesel.c:1386
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Имя каталога \"%s\" содержит символы недопустимые в названиях файлов"
 
 # gtk/gtkfilesel.c:1360
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilesel.c:1388
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2261,39 +2261,39 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
-#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Возможно вы используете символы недопустимые в именах файлов."
 
 # gtk/gtkfilesel.c:1369
-#: gtk/gtkfilesel.c:1369
+#: gtk/gtkfilesel.c:1397
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Ошибка  создания каталога \"%s\": %s\n"
 
 # gtk/gtkfilesel.c:1403
-#: gtk/gtkfilesel.c:1403
+#: gtk/gtkfilesel.c:1431
 msgid "New Folder"
 msgstr "Создать каталог"
 
 # gtk/gtkfilesel.c:1418
-#: gtk/gtkfilesel.c:1418
+#: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
 msgstr "И_мя каталога:"
 
 # gtk/gtkfilesel.c:1444
-#: gtk/gtkfilesel.c:1444
+#: gtk/gtkfilesel.c:1472
 msgid "Create"
 msgstr "Создать"
 
 # gtk/gtkfilesel.c:1485
-#: gtk/gtkfilesel.c:1485
+#: gtk/gtkfilesel.c:1513
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Имя файла \"%s\" содержит символы недопустимые в названиях файлов"
 
 # gtk/gtkfilesel.c:1488
-#: gtk/gtkfilesel.c:1488
+#: gtk/gtkfilesel.c:1516
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2303,35 +2303,35 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
-#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
+#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Возможно содержит символы, недопустимые в именах файлов."
 
 # gtk/gtkfilesel.c:1499
-#: gtk/gtkfilesel.c:1499
+#: gtk/gtkfilesel.c:1527
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Ошибка удаления файла \"%s\": %s"
 
 # gtk/gtkfilesel.c:1542
-#: gtk/gtkfilesel.c:1542
+#: gtk/gtkfilesel.c:1570
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Действительно удалить файл \"%s\"?"
 
 # gtk/gtkfilesel.c:1547
-#: gtk/gtkfilesel.c:1547
+#: gtk/gtkfilesel.c:1575
 msgid "Delete File"
 msgstr "Удалить файл"
 
 # gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
-#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Имя файла \"%s\" содержит символы, недопустимые в названиях файлов"
 
 # gtk/gtkfilesel.c:1595
-#: gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1623
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2341,7 +2341,7 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1609
-#: gtk/gtkfilesel.c:1609
+#: gtk/gtkfilesel.c:1637
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2351,34 +2351,34 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1619
-#: gtk/gtkfilesel.c:1619
+#: gtk/gtkfilesel.c:1647
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Ошибка переименования файла \"%s\" в \"%s\": %s"
 
 # gtk/gtkfilesel.c:1666
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1694
 msgid "Rename File"
 msgstr "Переименовать файл"
 
 # gtk/gtkfilesel.c:1681
-#: gtk/gtkfilesel.c:1681
+#: gtk/gtkfilesel.c:1709
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Переименовать файл \"%s\" в:"
 
 # gtk/gtkfilesel.c:1712
-#: gtk/gtkfilesel.c:1712
+#: gtk/gtkfilesel.c:1740
 msgid "Rename"
 msgstr "Переименовать"
 
 # gtk/gtkfilesel.c:2103
-#: gtk/gtkfilesel.c:2103
+#: gtk/gtkfilesel.c:2131
 msgid "Selection: "
 msgstr "Выбор: "
 
 # gtk/gtkfilesel.c:2983
-#: gtk/gtkfilesel.c:2983
+#: gtk/gtkfilesel.c:3011
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2386,17 +2386,17 @@ msgid ""
 msgstr ""
 
 # gtk/gtkfilesel.c:2986
-#: gtk/gtkfilesel.c:2986
+#: gtk/gtkfilesel.c:3014
 msgid "Invalid Utf-8"
 msgstr "Недействительный текст Utf-8"
 
 # gtk/gtkfilesel.c:3852
-#: gtk/gtkfilesel.c:3852
+#: gtk/gtkfilesel.c:3880
 msgid "Name too long"
 msgstr "Имя слишком длинное"
 
 # gtk/gtkfilesel.c:3854
-#: gtk/gtkfilesel.c:3854
+#: gtk/gtkfilesel.c:3882
 msgid "Couldn't convert filename"
 msgstr "Не удалось преобразовать название файла"
 
@@ -2891,7 +2891,7 @@ msgid "The GtkAdjustment for the vertical position."
 msgstr ""
 
 # gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:190
-#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:191
+#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:192
 msgid "Width"
 msgstr "Ширина"
 
@@ -3425,19 +3425,19 @@ msgid ""
 msgstr ""
 
 # gtk/gtkrc.c:2270
-#: gtk/gtkrc.c:2280
+#: gtk/gtkrc.c:2282
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Не удалось найти подключаемый файл: \"%s\""
 
 # gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#: gtk/gtkrc.c:2922 gtk/gtkrc.c:2925
+#: gtk/gtkrc.c:2924 gtk/gtkrc.c:2927
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Файл с изображением не найден в pixmap_path: \"%s\""
 
 # gtk/gtkrc.c:3350
-#: gtk/gtkrc.c:3360
+#: gtk/gtkrc.c:3362
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -4580,9 +4580,8 @@ msgstr ""
 msgid "ZWS _Zero width space"
 msgstr ""
 
-# gtk/gtktextutil.c:54
 #: gtk/gtktextutil.c:54
-msgid "ZWN Zero width _joiner"
+msgid "ZWJ Zero width _joiner"
 msgstr ""
 
 # gtk/gtktextutil.c:55
@@ -4631,7 +4630,7 @@ msgid "If the insertion cursor is shown"
 msgstr "Показывается ли точка вставки"
 
 # gtk/gtktextview.c:6366
-#: gtk/gtktextview.c:6373
+#: gtk/gtktextview.c:6386
 msgid "Input _Methods"
 msgstr "_Методы ввода"
 
@@ -4773,7 +4772,7 @@ msgid "Vertical Adjustment for the widget"
 msgstr ""
 
 # gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
-#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:175 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:176 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Видимый"
 
@@ -4803,7 +4802,7 @@ msgid "Set the column for the expander column"
 msgstr ""
 
 # gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
-#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:274
+#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:275
 msgid "Reorderable"
 msgstr "Переставляемые"
 
@@ -4893,127 +4892,127 @@ msgid "Make the expanders indented."
 msgstr ""
 
 # gtk/gtktreeviewcolumn.c:175
-#: gtk/gtktreeviewcolumn.c:176
+#: gtk/gtktreeviewcolumn.c:177
 msgid "Whether to display the column"
 msgstr ""
 
 # gtk/gtktreeviewcolumn.c:182 gtk/gtkwindow.c:441
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
+#: gtk/gtktreeviewcolumn.c:184 gtk/gtkwindow.c:446
 msgid "Resizable"
 msgstr "С изменяемым размером"
 
 # gtk/gtktreeviewcolumn.c:183
-#: gtk/gtktreeviewcolumn.c:184
+#: gtk/gtktreeviewcolumn.c:185
 msgid "Column is user-resizable"
 msgstr "Размер столбца может быть изменён пользователем"
 
 # gtk/gtktreeviewcolumn.c:191
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Current width of the column"
 msgstr "Текущая ширина столбца"
 
 # gtk/gtktreeviewcolumn.c:199
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Sizing"
 msgstr ""
 
 # gtk/gtktreeviewcolumn.c:200
-#: gtk/gtktreeviewcolumn.c:201
+#: gtk/gtktreeviewcolumn.c:202
 msgid "Resize mode of the column"
 msgstr ""
 
 # gtk/gtktreeviewcolumn.c:208
-#: gtk/gtktreeviewcolumn.c:209
+#: gtk/gtktreeviewcolumn.c:210
 msgid "Fixed Width"
 msgstr "Фиксированная ширина"
 
 # gtk/gtktreeviewcolumn.c:209
-#: gtk/gtktreeviewcolumn.c:210
+#: gtk/gtktreeviewcolumn.c:211
 msgid "Current fixed width of the column"
 msgstr "Текущая фиксированная ширина столбца"
 
 # gtk/gtktreeviewcolumn.c:218
-#: gtk/gtktreeviewcolumn.c:219
+#: gtk/gtktreeviewcolumn.c:220
 msgid "Minimum Width"
 msgstr "Минимальная ширина"
 
 # gtk/gtktreeviewcolumn.c:219
-#: gtk/gtktreeviewcolumn.c:220
+#: gtk/gtktreeviewcolumn.c:221
 msgid "Minimum allowed width of the column"
 msgstr "Минимально допустимая ширина столбца"
 
 # gtk/gtktreeviewcolumn.c:228
-#: gtk/gtktreeviewcolumn.c:229
+#: gtk/gtktreeviewcolumn.c:230
 msgid "Maximum Width"
 msgstr "Максимальная ширина"
 
 # gtk/gtktreeviewcolumn.c:229
-#: gtk/gtktreeviewcolumn.c:230
+#: gtk/gtktreeviewcolumn.c:231
 msgid "Maximum allowed width of the column"
 msgstr "Максимально допустимая ширина столбца"
 
 # gtk/gtktreeviewcolumn.c:238
-#: gtk/gtktreeviewcolumn.c:239
+#: gtk/gtktreeviewcolumn.c:240
 msgid "Title"
 msgstr "Заголовок"
 
 # gtk/gtktreeviewcolumn.c:239
-#: gtk/gtktreeviewcolumn.c:240
+#: gtk/gtktreeviewcolumn.c:241
 msgid "Title to appear in column header"
 msgstr "Заголовок отображаемый в заголовке столбца"
 
 # gtk/gtktreeviewcolumn.c:246
-#: gtk/gtktreeviewcolumn.c:247
+#: gtk/gtktreeviewcolumn.c:248
 msgid "Clickable"
 msgstr "Чувствительный к нажатиям"
 
 # gtk/gtktreeviewcolumn.c:247
-#: gtk/gtktreeviewcolumn.c:248
+#: gtk/gtktreeviewcolumn.c:249
 msgid "Whether the header can be clicked"
 msgstr "Чувствителен ли заголовок к нажатиям"
 
 # gtk/gtktreeviewcolumn.c:255
-#: gtk/gtktreeviewcolumn.c:256
+#: gtk/gtktreeviewcolumn.c:257
 msgid "Widget"
 msgstr "Виджет"
 
 # gtk/gtktreeviewcolumn.c:256
-#: gtk/gtktreeviewcolumn.c:257
+#: gtk/gtktreeviewcolumn.c:258
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
 
 # gtk/gtktreeviewcolumn.c:263
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Alignment"
 msgstr "Выравнивание"
 
 # gtk/gtktreeviewcolumn.c:264
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "X Alignment of the column header text or widget"
 msgstr ""
 
 # gtk/gtktreeviewcolumn.c:274
-#: gtk/gtktreeviewcolumn.c:275
+#: gtk/gtktreeviewcolumn.c:276
 msgid "Whether the column can be reordered around the headers"
 msgstr ""
 
 # gtk/gtktreeviewcolumn.c:281
-#: gtk/gtktreeviewcolumn.c:282
+#: gtk/gtktreeviewcolumn.c:283
 msgid "Sort indicator"
 msgstr "Индикатор сортировки"
 
 # gtk/gtktreeviewcolumn.c:282
-#: gtk/gtktreeviewcolumn.c:283
+#: gtk/gtktreeviewcolumn.c:284
 msgid "Whether to show a sort indicator"
 msgstr ""
 
 # gtk/gtktreeviewcolumn.c:289
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Sort order"
 msgstr "Порядок сортировки"
 
 # gtk/gtktreeviewcolumn.c:290
-#: gtk/gtktreeviewcolumn.c:291
+#: gtk/gtktreeviewcolumn.c:292
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Направление сортировки должно отображаться индикатором"
 

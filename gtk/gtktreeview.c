@@ -4273,7 +4273,7 @@ _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view)
   install_presize_handler (tree_view);
 }
 
-/**
+/*
  * This function works synchronously (due to the while (validate_rows...)
  * loop).
  *

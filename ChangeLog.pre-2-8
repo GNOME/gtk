@@ -1,3 +1,12 @@
+Fri Jun 14 12:50:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* Released 2.0.4.
+
+	* configure.in: 2.0.3, interface, binary age 4.
+
+	* gtk/gtktreeselection.c gtk/gtktreeview.c gtk/gtkwindow.c
+	  gtk/gtkrc.c: Some doc SGML fixes.
+
 Fri Jun 14 15:41:50 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c: Fix bug #84268, where validate_rows sometimes

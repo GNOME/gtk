@@ -19,6 +19,7 @@ Overview of Changes in GTK+ 2.0.4
 * Fixes for DirectColor visuals [Shivaram Upadhyayula]
 * Memory leak and UMR fixes [Michael Meeks, Matthias Clasen, Valgrind]
 * Misc bug fixes
+* Updated translations (ca,cs,da,es,et,fr,ms,nl,pl,pt,pt_BR,ru,sv)
 
 Other contributors: Nicholas Allen, Jacob Berkman, Remus Draica, 
   Nano Golveia, Tim Janik, Sergey Kuzminov, George Lebl, Garrett Lesage, 
