@@ -65,7 +65,9 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_IMAGE_XDISPLAY(image)     (gdk_x11_image_get_xdisplay (image))
 #define GDK_IMAGE_XIMAGE(image)       (gdk_x11_image_get_ximage (image))
 
-#define GDK_DISPLAY()                 gdk_x11_get_default_xdisplay()
+#ifndef GDK_MULTIHEAD_SAFE
+#define GDK_DISPLAY()                 gdk_display
+#endif
 
 #ifdef INSIDE_GDK_X11
 

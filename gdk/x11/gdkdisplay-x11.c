@@ -198,6 +198,11 @@ GdkDisplay *_gdk_x11_display_impl_display_new (gchar * display_name)
       return NULL;
     }
 
+#ifndef GDK_MULTIHEAD_SAFE
+    gdk_display = display_impl->xdisplay;
+#endif
+    
+
   screen_num = ScreenCount (display_impl->xdisplay);
   default_screen = DefaultScreenOfDisplay (display_impl->xdisplay);
   /* populate the screen list and set default */
