@@ -1,3 +1,12 @@
+2001-04-02 Alexander Larsson   <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Add gdk_window_begin_resize_drag and gdk_window_begin_move_drag. Remove some
+	warnings that were spewed on startup.
+
+	* gtk/gtkwindow-decorate.c:
+	gtk_window_reposition -> _gtk_window_reposition
+
 Sun Apr  1 21:37:22 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.[ch] gtk/gtktypeutils.c gtk/gtk-boxed.defs:

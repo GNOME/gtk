@@ -361,7 +361,7 @@ gtk_decorated_window_motion_notify (GtkWidget       *widget,
       dx = x - deco->last_x;
       dy = y - deco->last_y;
 
-      gtk_window_reposition (window, win_x + dx, win_y + dy);
+      _gtk_window_reposition (window, win_x + dx, win_y + dy);
     }
 
   if (deco->resize != RESIZE_NONE)

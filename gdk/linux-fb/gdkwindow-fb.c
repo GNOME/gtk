@@ -2092,7 +2092,7 @@ gdk_window_unmaximize (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  g_warning ("gdk_window_unmaximize() not implemented.\n");
+  /*  g_warning ("gdk_window_unmaximize() not implemented.\n");*/
 }
 
 void
@@ -2110,7 +2110,7 @@ gdk_window_deiconify (GdkWindow *window)
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  g_warning ("gdk_window_deiconify() not implemented.\n");
+  /*  g_warning ("gdk_window_deiconify() not implemented.\n");*/
 }
 
 void
@@ -2135,6 +2135,28 @@ gdk_window_set_type_hint (GdkWindow        *window,
 void
 gdk_window_set_modal_hint (GdkWindow *window,
 			   gboolean   modal)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+}
+
+void
+gdk_window_begin_resize_drag (GdkWindow     *window,
+                              GdkWindowEdge  edge,
+                              gint           button,
+                              gint           root_x,
+                              gint           root_y,
+                              guint32        timestamp)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+}
+
+void
+gdk_window_begin_move_drag (GdkWindow *window,
+                            gint       button,
+                            gint       root_x,
+                            gint       root_y,
+                            guint32    timestamp)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 }
