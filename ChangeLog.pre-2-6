@@ -1,3 +1,8 @@
+2004-09-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_get_model): Resize the
+	popup if the model is replaced.  (#152333)
+
 Mon Sep 13 09:11:53 2004  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkrange.c: fix gtk_range_real_change_value args. Addresses part

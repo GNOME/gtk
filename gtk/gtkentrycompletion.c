@@ -905,6 +905,18 @@ gtk_entry_completion_get_entry (GtkEntryCompletion *completion)
   return completion->priv->entry;
 }
 
+static void
+filter_model_changed_cb (GtkTreeModel     *model,
+			 GtkTreePath      *path,
+			 GtkTreeIter      *iter,
+			 gpointer          user_data)
+{
+  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
+
+  if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
+    _gtk_entry_completion_resize_popup (completion);  
+}
+
 /**
  * gtk_entry_completion_set_model:
  * @completion: A #GtkEntryCompletion.
@@ -930,9 +942,13 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
                                           gtk_entry_completion_visible_func,
                                           completion,
                                           NULL);
+
   gtk_tree_view_set_model (GTK_TREE_VIEW (completion->priv->tree_view),
                            GTK_TREE_MODEL (completion->priv->filter_model));
   g_object_unref (G_OBJECT (completion->priv->filter_model));
+
+  if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
+    _gtk_entry_completion_resize_popup (completion);
 }
 
 /**
