@@ -1,3 +1,12 @@
+2004-08-23  Raymond Penners  <raymond@dotsphinx.com>
+	
+	* === Released 0.6.2 ===
+
+	* src/msw_style.c: Applied patch from Matthew Mastracci that draws
+	scrollbars as disabled (and pretends to ignore mouse clicks by
+	forcing GTK_SHADOW_OUT) when the page length is greater than the
+	maximum range of the scrollbar.
+
 2004-08-23  Dom Lachowicz <cinamod@hotmail.com>
 
 	* configure.in: Bump version number

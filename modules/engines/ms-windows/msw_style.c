@@ -1210,6 +1210,8 @@ draw_arrow (GtkStyle      *style,
   else if (detail && (!strcmp (detail, "vscrollbar")
                       || !strcmp (detail, "hscrollbar")))
     {
+      gboolean is_disabled = FALSE;
+      GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
       gint box_x = x;
       gint box_y = y;
       gint box_width = width;
@@ -1217,6 +1219,9 @@ draw_arrow (GtkStyle      *style,
       XpThemeElement xp_arrow;
       reverse_engineer_stepper_box (widget, arrow_type,
 				    &box_x, &box_y, &box_width, &box_height);
+
+      if (scrollbar->range.adjustment->page_size >= (scrollbar->range.adjustment->upper-scrollbar->range.adjustment->lower))
+        is_disabled = TRUE;
 
       switch (arrow_type)
         {
@@ -1241,7 +1246,7 @@ draw_arrow (GtkStyle      *style,
           x += (width - 7) / 2;
           y += (height - 5) / 2;
 
-          draw_varrow (window, style->fg_gc[state], shadow, area, arrow_type,
+          draw_varrow (window, is_disabled ? style->text_aa_gc[state] : style->fg_gc[state], shadow, area, arrow_type,
                        x, y, 7, 5);
         }
       else
@@ -1249,7 +1254,7 @@ draw_arrow (GtkStyle      *style,
           y += (height - 7) / 2;
           x += (width - 5) / 2;
 
-          draw_harrow (window, style->fg_gc[state], shadow, area, arrow_type,
+          draw_harrow (window, is_disabled ? style->text_aa_gc[state] : style->fg_gc[state], shadow, area, arrow_type,
                        x, y, 5, 7);
         }
     }
@@ -1409,6 +1414,11 @@ draw_box (GtkStyle      *style,
               xp_theme_draw(window, gripper, style, x, y, width, height, state_type, area);
               return;
             }
+          else
+          {
+            if (scrollbar->range.adjustment->page_size >= (scrollbar->range.adjustment->upper-scrollbar->range.adjustment->lower))
+              return;
+          }
         }
     }
   else if (detail && !strcmp (detail, "bar"))
@@ -1519,8 +1529,11 @@ draw_box (GtkStyle      *style,
     }
   else if (detail && (strcmp (detail, "vscrollbar") == 0 || strcmp (detail, "hscrollbar") == 0))
   {
+       GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
 	  if (shadow_type == GTK_SHADOW_IN)
 	  	shadow_type = GTK_SHADOW_ETCHED_IN;
+       if (scrollbar->range.adjustment->page_size >= (scrollbar->range.adjustment->upper-scrollbar->range.adjustment->lower))
+           shadow_type = GTK_SHADOW_OUT;
   }
   else
   {
