@@ -318,7 +318,6 @@ image_stop_load (gpointer data)
 	JpegProgContext *context = (JpegProgContext *) data;
 	g_return_if_fail (context != NULL);
 
-	/* XXXX - is this all I have to do to cleanup? */
 	if (context->pixbuf)
 		gdk_pixbuf_unref (context->pixbuf);
 
@@ -395,9 +394,6 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 		num_left -= num_copy;
 
 		/* try to load jpeg header */
-		/* XXXX - bad - assume we always have enough data */
-		/*              to determine header info in first */
-		/*              invocation of this function       */
 		if (!context->got_header) {
 			int rc;
 
@@ -425,8 +421,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 				g_assert ("Couldn't allocate gdkpixbuf\n");
 			}
 
-			/* Use pixbuf pixel buffer - BUT NOT SURE */
-			/* we handle rowstride correctly!!!!      */
+			/* Use pixbuf buffer to store decompressed data */
 			context->dptr = context->pixbuf->art_pixbuf->pixels;
 
 			/* Notify the client that we are ready to go */
@@ -456,10 +451,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 			gint   nlines, i;
 			gint   start_scanline;
 
-			/* THIS COULD BE BROKEN */
-			/* Assumes rowstride of gdkpixbuf pixel buffer */
-			/* is same as incoming jpeg data!              */
-
+			/* keep going until we've done all scanlines */
 			while (cinfo->output_scanline < cinfo->output_height) {
 				start_scanline = cinfo->output_scanline;
 				lptr = lines;
