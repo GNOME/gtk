@@ -1,3 +1,13 @@
+2002-01-25  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_delete): fix assertion
+	failure by creating the line data, but not validating it at this
+	stage. Also, remove old code related to the "bogus newline" mess
+	that removed all tags from the last char in the buffer if you
+	tried to delete it.
+	(_gtk_text_line_data_new): put this here and prepend underscore,
+	remove from gtktextlayout.c
+
 Mon Jan 28 19:57:39 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/imhangul.c modules/input/imhangul-defs.h

@@ -86,9 +86,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-static GtkTextLineData    *gtk_text_line_data_new                 (GtkTextLayout     *layout,
-                                                                   GtkTextLine       *line);
-
 static GtkTextLineData *gtk_text_layout_real_wrap (GtkTextLayout *layout,
                                                    GtkTextLine *line,
                                                    /* may be NULL */
@@ -925,7 +922,7 @@ gtk_text_layout_real_wrap (GtkTextLayout   *layout,
 
   if (line_data == NULL)
     {
-      line_data = gtk_text_line_data_new (layout, line);
+      line_data = _gtk_text_line_data_new (layout, line);
       _gtk_text_line_add_data (line, line_data);
     }
 
@@ -2034,24 +2031,6 @@ line_display_index_to_iter (GtkTextLayout      *layout,
     }
   
   gtk_text_iter_forward_chars (iter, trailing);
-}
-
-/* FIXME: This really doesn't belong in this file ... */
-static GtkTextLineData*
-gtk_text_line_data_new (GtkTextLayout *layout,
-                        GtkTextLine   *line)
-{
-  GtkTextLineData *line_data;
-
-  line_data = g_new (GtkTextLineData, 1);
-
-  line_data->view_id = layout;
-  line_data->next = NULL;
-  line_data->width = 0;
-  line_data->height = 0;
-  line_data->valid = FALSE;
-
-  return line_data;
 }
 
 static void

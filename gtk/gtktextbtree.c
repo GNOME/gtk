@@ -548,7 +548,7 @@ _gtk_text_btree_segments_changed (GtkTextBTree *tree)
 
 void
 _gtk_text_btree_delete (GtkTextIter *start,
-                       GtkTextIter *end)
+                        GtkTextIter *end)
 {
   GtkTextLineSegment *prev_seg;             /* The segment just before the start
                                              * of the deletion range. */
@@ -575,64 +575,6 @@ _gtk_text_btree_delete (GtkTextIter *start,
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
   
-  {
-    /* FIXME this code should no longer be required */
-    /*
-     * The code below is ugly, but it's needed to make sure there
-     * is always a dummy empty line at the end of the text.  If the
-     * final newline of the file (just before the dummy line) is being
-     * deleted, then back up index to just before the newline.  If
-     * there is a newline just before the first character being deleted,
-     * then back up the first index too, so that an even number of lines
-     * gets deleted.  Furthermore, remove any tags that are present on
-     * the newline that isn't going to be deleted after all (this simulates
-     * deleting the newline and then adding a "clean" one back again).
-     */
-
-    gint line1;
-    gint line2;
-
-    line1 = gtk_text_iter_get_line (start);
-    line2 = gtk_text_iter_get_line (end);
-
-    if (line2 == _gtk_text_btree_line_count (tree))
-      {
-        GtkTextTag** tags;
-        int array_size;
-        GtkTextIter orig_end;
-
-        orig_end = *end;
-        gtk_text_iter_backward_char (end);
-
-        --line2;
-
-        if (gtk_text_iter_get_line_offset (start) == 0 &&
-            line1 != 0)
-          {
-            gtk_text_iter_backward_char (start);
-            --line1;
-          }
-
-        tags = _gtk_text_btree_get_tags (end,
-                                         &array_size);
-
-        if (tags != NULL)
-          {
-            int i;
-
-            i = 0;
-            while (i < array_size)
-              {
-                _gtk_text_btree_tag (end, &orig_end, tags[i], FALSE);
-
-                ++i;
-              }
-
-            g_free (tags);
-          }
-      }
-  }
-
   /* Broadcast the need for redisplay before we break the iterators */
   _gtk_text_btree_invalidate_region (tree, start, end);
 
@@ -877,15 +819,21 @@ _gtk_text_btree_delete (GtkTextIter *start,
           if (deleted_width > 0 || deleted_height > 0)
             {
               ld = _gtk_text_line_get_data (start_line, view->view_id);
-
-              /* FIXME: ld is _NOT_ necessarily non-null here, but there is currently
-               * no way to add ld without also validating the node, which would
-               * be improper at this point.
-               */
-              /* This assertion does actually fail sometimes, must
-                 fix before stable release -hp */
-              g_assert (ld);
-
+              
+              if (ld == NULL)
+                {
+                  /* This means that start_line has never been validated.
+                   * We don't really want to do the validation here but
+                   * we do need to store our temporary sizes. So we
+                   * create the line data and assume a line w/h of 0.
+                   */
+                  ld = _gtk_text_line_data_new (view->layout, line);
+                  _gtk_text_line_add_data (line, ld);
+                  ld->width = 0;
+                  ld->height = 0;
+                  ld->valid = FALSE;
+                }
+              
               ld->width = MAX (deleted_width, ld->width);
               ld->height += deleted_height;
               ld->valid = FALSE;
@@ -3377,9 +3325,27 @@ _gtk_text_line_previous (GtkTextLine *line)
   return NULL;
 }
 
+
+GtkTextLineData*
+_gtk_text_line_data_new (GtkTextLayout *layout,
+                         GtkTextLine   *line)
+{
+  GtkTextLineData *line_data;
+
+  line_data = g_new (GtkTextLineData, 1);
+
+  line_data->view_id = layout;
+  line_data->next = NULL;
+  line_data->width = 0;
+  line_data->height = 0;
+  line_data->valid = FALSE;
+
+  return line_data;
+}
+
 void
 _gtk_text_line_add_data (GtkTextLine     *line,
-                        GtkTextLineData *data)
+                         GtkTextLineData *data)
 {
   g_return_if_fail (line != NULL);
   g_return_if_fail (data != NULL);
