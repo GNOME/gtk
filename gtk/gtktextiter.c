@@ -4682,7 +4682,7 @@ gtk_text_iter_in_range (const GtkTextIter *iter,
 }
 
 /**
- * gtk_text_iter_reorder:
+ * gtk_text_iter_order:
  * @first: a #GtkTextIter
  * @second: another #GtkTextIter
  *
@@ -4695,8 +4695,8 @@ gtk_text_iter_in_range (const GtkTextIter *iter,
  * 
  **/
 void
-gtk_text_iter_reorder         (GtkTextIter *first,
-                               GtkTextIter *second)
+gtk_text_iter_order (GtkTextIter *first,
+                     GtkTextIter *second)
 {
   g_return_if_fail (first != NULL);
   g_return_if_fail (second != NULL);

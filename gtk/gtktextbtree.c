@@ -569,7 +569,7 @@ _gtk_text_btree_delete (GtkTextIter *start,
   g_return_if_fail (_gtk_text_iter_get_btree (start) ==
                     _gtk_text_iter_get_btree (end));
 
-  gtk_text_iter_reorder (start, end);
+  gtk_text_iter_order (start, end);
 
   tree = _gtk_text_iter_get_btree (start);
 
@@ -1592,7 +1592,7 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
   start = *start_orig;
   end = *end_orig;
 
-  gtk_text_iter_reorder (&start, &end);
+  gtk_text_iter_order (&start, &end);
 
   tree = _gtk_text_iter_get_btree (&start);
 
@@ -2182,7 +2182,7 @@ _gtk_text_btree_get_text (const GtkTextIter *start_orig,
   start = *start_orig;
   end = *end_orig;
 
-  gtk_text_iter_reorder (&start, &end);
+  gtk_text_iter_order (&start, &end);
 
   retval = g_string_new ("");
 
@@ -2610,7 +2610,7 @@ _gtk_text_btree_get_selection_bounds (GtkTextBTree *tree,
     }
   else
     {
-      gtk_text_iter_reorder (&tmp_start, &tmp_end);
+      gtk_text_iter_order (&tmp_start, &tmp_end);
 
       if (start)
         *start = tmp_start;

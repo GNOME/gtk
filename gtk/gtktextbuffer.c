@@ -847,7 +847,7 @@ gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
   
   src_buffer = gtk_text_iter_get_buffer (orig_start);
   
-  gtk_text_iter_reorder (&start, &end);
+  gtk_text_iter_order (&start, &end);
 
   range_start = start;
   range_end = start;
@@ -1130,7 +1130,7 @@ gtk_text_buffer_emit_delete (GtkTextBuffer *buffer,
   if (gtk_text_iter_equal (start, end))
     return;
 
-  gtk_text_iter_reorder (start, end);
+  gtk_text_iter_order (start, end);
 
   /* Somewhat annoyingly, if you try to delete the final newline
    * the BTree will put it back; which means you can't deduce the
@@ -1213,7 +1213,7 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
 
   gtk_text_buffer_begin_user_action (buffer);
   
-  gtk_text_iter_reorder (start_iter, end_iter);
+  gtk_text_iter_order (start_iter, end_iter);
 
   start_mark = gtk_text_buffer_create_mark (buffer, NULL,
                                             start_iter, TRUE);
@@ -1966,7 +1966,7 @@ gtk_text_buffer_emit_tag (GtkTextBuffer *buffer,
 
   g_return_if_fail (tag != NULL);
 
-  gtk_text_iter_reorder (&start_tmp, &end_tmp);
+  gtk_text_iter_order (&start_tmp, &end_tmp);
 
   if (apply)
     g_signal_emit (G_OBJECT (buffer), signals[APPLY_TAG],
@@ -2148,7 +2148,7 @@ gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
   first = *start;
   second = *end;
 
-  gtk_text_iter_reorder (&first, &second);
+  gtk_text_iter_order (&first, &second);
 
   /* Get all tags turned on at the start */
   tags = gtk_text_iter_get_tags (&first);
@@ -3021,7 +3021,7 @@ cut_or_copy (GtkTextBuffer *buffer,
       else
         {
           gtk_text_buffer_get_iter_at_mark (buffer, &end, anchor);
-          gtk_text_iter_reorder (&start, &end);
+          gtk_text_iter_order (&start, &end);
         }
     }
 

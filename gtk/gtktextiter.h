@@ -256,7 +256,7 @@ gboolean gtk_text_iter_in_range        (const GtkTextIter *iter,
                                         const GtkTextIter *end);
 
 /* Put these two in ascending order */
-void     gtk_text_iter_reorder         (GtkTextIter *first,
+void     gtk_text_iter_order           (GtkTextIter *first,
                                         GtkTextIter *second);
 
 /* Debug */

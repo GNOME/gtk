@@ -1528,6 +1528,14 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_text_iter_reorder ##### -->
+<para>
+
+</para>
+
+@first: 
+@second: 
+
 <!-- ##### FUNCTION gtk_trace_referencing ##### -->
 <para>
 Private: print debugging information while doing a gtk_object_ref() or 

@@ -100,8 +100,10 @@ format_value_callback (GtkScale *scale,
 </para>
 
 @scale: the object which received the signal.
-@value: value to format
+@arg1: 
 @Returns: allocated string representing @value
+<!-- # Unused Parameters # -->
+@value: value to format
 
 <!-- ##### ARG GtkScale:digits ##### -->
 <para>
