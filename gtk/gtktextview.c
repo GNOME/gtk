@@ -94,6 +94,8 @@
 #define SCREEN_WIDTH(widget) text_window_get_width (GTK_TEXT_VIEW (widget)->text_window)
 #define SCREEN_HEIGHT(widget) text_window_get_height (GTK_TEXT_VIEW (widget)->text_window)
 
+#define SPACE_FOR_CURSOR 1
+
 struct _GtkTextPendingScroll
 {
   GtkTextMark   *mark;
@@ -1702,7 +1704,7 @@ gtk_text_view_update_adjustments (GtkTextView *text_view)
     gtk_text_layout_get_size (text_view->layout, &width, &height);
 
   /* Make room for the cursor after the last character in the widest line */
-  width++;
+  width += SPACE_FOR_CURSOR;
 
   if (text_view->width != width || text_view->height != height)
     {
@@ -1742,7 +1744,7 @@ gtk_text_view_update_layout_width (GtkTextView *text_view)
   gtk_text_view_ensure_layout (text_view);
 
   gtk_text_layout_set_screen_width (text_view->layout,
-                                    SCREEN_WIDTH (text_view));
+                                    MAX (1, SCREEN_WIDTH (text_view) - SPACE_FOR_CURSOR));
 }
 
 static void

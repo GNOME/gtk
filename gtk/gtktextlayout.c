@@ -122,6 +122,8 @@ enum {
   LAST_ARG
 };
 
+#define PIXEL_BOUND(d) (((d) + PANGO_SCALE - 1) / PANGO_SCALE)
+
 static void gtk_text_layout_init       (GtkTextLayout      *text_layout);
 static void gtk_text_layout_class_init (GtkTextLayoutClass *klass);
 static void gtk_text_layout_finalize   (GObject            *object);
@@ -1972,7 +1974,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
   pango_layout_get_extents (display->layout, NULL, &extents);
 
-  display->width = PANGO_PIXELS (extents.width) + display->left_margin + display->right_margin;
+  display->width = PIXEL_BOUND (extents.width) + display->left_margin + display->right_margin;
   display->height += PANGO_PIXELS (extents.height);
   
   /* Free this if we aren't in a loop */

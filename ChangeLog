@@ -1,3 +1,15 @@
+Mon Aug 25 19:55:55 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_update_layout_width): 
+	Since we add one to the layout's reported width to
+	account for the cursor, we need to subtract one when
+	setting the wrap width for the layout. (Fixes infinite
+	loop (#120325, Federico Crozat)
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_line_display): 
+	Be a bit more careful about rounding when converting
+	wrapped width from Pango units to pixels.
+
 2003-08-26  Matthias Clasen  <maclas@gmx.de>
 
         Rename GtkMenuMerge to GtkUIManager. 
