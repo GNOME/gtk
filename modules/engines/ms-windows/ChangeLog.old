@@ -1,3 +1,8 @@
+2004-08-13  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/msw_style.c: Proper gripper drawing for handle boxes/toolbars
+	* src/Theme/gtk-2.0/gtkrc: HandleBoxes and Toolbars are etched-in now
+
 2004-07-02  Raymond Penners  <raymond@dotsphinx.com>
 
 	* === Released 0.6.1 ===

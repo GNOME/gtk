@@ -1424,12 +1424,6 @@ draw_box (GtkStyle      *style,
             }
         }
     }
-  else if (detail && !strcmp (detail, "handlebox_bin")) {
-	if (xp_theme_draw (window, XP_THEME_ELEMENT_REBAR, style, x, y, width, height, state_type, area))
-	  {
-		return;
-  	  }
-  }
   else if (detail && strcmp (detail, "menuitem") == 0) {
     shadow_type = GTK_SHADOW_NONE;
       if (xp_theme_draw (window, XP_THEME_ELEMENT_MENU_ITEM, style, x, y, width, height, state_type, area))
@@ -1804,7 +1798,7 @@ draw_handle (GtkStyle        *style,
 	     gint             height,
 	     GtkOrientation   orientation)
 {
-  if (! GTK_IS_HANDLE_BOX (widget))
+  if (GTK_IS_HANDLE_BOX (widget))
     {
       XpThemeElement hndl;
 
