@@ -43,6 +43,7 @@ noinst_PROGRAMS =			\
 	testimage			\
 	testinput			\
 	testmenus			\
+	testmenubars			\
 	testmultidisplay		\
 	testmultiscreen			\
 	testrgb				\
@@ -86,6 +87,7 @@ testgtk_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testimage_DEPENDENCIES = $(TEST_DEPS)
 testmenus_DEPENDENCIES = $(TEST_DEPS)
+testmenubars_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
 testmultiscreen_DEPENDENCIES = $(TEST_DEPS)
 testrgb_DEPENDENCIES = $(TEST_DEPS)
@@ -123,6 +125,7 @@ testiconview_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testimage_LDADD = $(LDADDS)
 testmenus_LDADD = $(LDADDS)
+testmenubars_LDADD = $(LDADDS)
 testmultidisplay_LDADD = $(LDADDS)
 testmultiscreen_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)

@@ -1,3 +1,8 @@
+2005-02-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add GtkPackDirection and 
+	related functions.
+
 2005-02-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkuimanager.sgml: Mention the expanding

@@ -4068,15 +4068,27 @@ gtk_menu_move_current (GtkMenuShell *menu_shell,
                        GtkMenuDirectionType direction)
 {
   GtkMenu *menu = GTK_MENU (menu_shell);
+  gint i;
+  guint l, r, t, b;
+  GtkWidget *match = NULL;
+
+  if (gtk_widget_get_direction (GTK_WIDGET (menu_shell)) == GTK_TEXT_DIR_RTL)
+    {
+      switch (direction)
+	{
+	case GTK_MENU_DIR_CHILD:
+	  direction = GTK_MENU_DIR_PARENT;
+	  break;
+	case GTK_MENU_DIR_PARENT:
+	  direction = GTK_MENU_DIR_CHILD;
+	  break;
+	default: ;
+	}
+    }
 
   /* use special table menu key bindings */
   if (menu_shell->active_menu_item && gtk_menu_get_n_columns (menu) > 1)
     {
-      int i;
-      guint l, r, t, b;
-      gboolean rtl = (gtk_widget_get_direction (GTK_WIDGET (menu_shell)) == GTK_TEXT_DIR_RTL);
-      GtkWidget *match = NULL;
-
       get_effective_child_attach (menu_shell->active_menu_item, &l, &r, &t, &b);
 
       if (direction == GTK_MENU_DIR_NEXT)
@@ -4121,8 +4133,7 @@ gtk_menu_move_current (GtkMenuShell *menu_shell,
 		}
 	    }
 	}
-      else if ((!rtl && direction == GTK_MENU_DIR_PARENT)
-               || (rtl && direction == GTK_MENU_DIR_CHILD))
+      else if (direction == GTK_MENU_DIR_PARENT)
         {
           /* we go one left if possible */
           if (l > 0)
@@ -4137,8 +4148,7 @@ gtk_menu_move_current (GtkMenuShell *menu_shell,
                 match = menu_shell->active_menu_item;
             }
         }
-      else if ((!rtl && direction == GTK_MENU_DIR_CHILD)
-               || (rtl && direction == GTK_MENU_DIR_PARENT))
+      else if (direction == GTK_MENU_DIR_CHILD)
         {
           /* we go one right if possible */
 	  if (r < gtk_menu_get_n_columns (menu))

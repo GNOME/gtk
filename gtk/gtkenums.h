@@ -29,10 +29,7 @@
 
 #include <glib-object.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 /* Anchor types */
 typedef enum
@@ -453,9 +450,14 @@ typedef enum
   GTK_IM_STATUS_NONE
 } GtkIMStatusStyle;
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+typedef enum
+{
+  GTK_PACK_DIRECTION_LTR,
+  GTK_PACK_DIRECTION_RTL,
+  GTK_PACK_DIRECTION_TTB,
+  GTK_PACK_DIRECTION_BTT
+} GtkPackDirection;
 
+G_END_DECLS
 
 #endif /* __GTK_ENUMS_H__ */

@@ -1,5 +1,54 @@
 2005-02-11  Matthias Clasen  <mclasen@redhat.com>
 
+	Support vertical menubars  (#166632): 
+	
+	* gtk/gtkenums.h (GtkPackDirection): New enumeration for pack 
+	directions, with values for left-to-right, right-to-left, 
+	top-to-bottom and bottom-to-top.
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkmenubar.h: 
+	* gtk/gtkmenubar.c: Add two properties, pack-direction and
+	child-pack-direction, which specify how children and 
+	grandchildren of a menubar are packed, with getters and setters. 
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_set_property): 
+	(gtk_menu_bar_get_property): Implement set_property and get_property.
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_size_request): 
+	(gtk_menu_bar_size_allocate): Take pack direction into account.
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_move_current): Implement 
+	move_current here move all the menubar-specific direction 
+	tweaking from the generic menushell implementation here.
+
+	* gtk/gtkmenu.c (gtk_menu_move_current): Move  menu-specific 
+	direction tweaking from the generic menushell implementation here.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_size_request): 
+	(gtk_menu_bar_size_allocate): Take pack direction into account.
+
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_size_request) 
+	(gtk_image_menu_item_size_allocate): 
+	(gtk_image_menu_item_toggle_size_request): Take child pack 
+	direction into account and pack the image vertically if
+	necessary.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_real_select_item):
+	Set the submenu direction to left-right for menuitems in 
+	vertical menubars.
+	(gtk_real_menu_shell_move_current): Simplify by moving
+	direction tweaking to menu- and menubar-specific 
+	implementations. Take pack direction into account when
+	doing fallbacks.
+
+	* tests/testmenubars.c: Test menubars in various packing
+	direction combinations.
+
+	* tests/Makefile.am (noinst_PROGRAMS): Add testmenubars.
+
+2005-02-11  Matthias Clasen  <mclasen@redhat.com>
+
 	Complete the fix for #165770, Vincent Untz:
 	
 	* gtk/gtkfilechooserbutton.c (FALLBACK_ICON_SIZE): Make the

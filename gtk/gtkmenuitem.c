@@ -498,6 +498,8 @@ gtk_menu_item_size_request (GtkWidget      *widget,
   GtkBin *bin;
   guint accel_width;
   guint horizontal_padding;
+  GtkPackDirection pack_dir;
+  GtkPackDirection child_pack_dir;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
   g_return_if_fail (requisition != NULL);
@@ -509,10 +511,28 @@ gtk_menu_item_size_request (GtkWidget      *widget,
   bin = GTK_BIN (widget);
   menu_item = GTK_MENU_ITEM (widget);
 
+  if (GTK_IS_MENU_BAR (widget->parent))
+    {
+      pack_dir = gtk_menu_bar_get_pack_direction (GTK_MENU_BAR (widget->parent));
+      child_pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (widget->parent));
+    }
+  else
+    {
+      pack_dir = GTK_PACK_DIRECTION_LTR;
+      child_pack_dir = GTK_PACK_DIRECTION_LTR;
+    }
+
   requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->xthickness + horizontal_padding) * 2;
+			widget->style->xthickness) * 2;
   requisition->height = (GTK_CONTAINER (widget)->border_width +
 			 widget->style->ythickness) * 2;
+
+  if ((pack_dir == GTK_PACK_DIRECTION_LTR || pack_dir == GTK_PACK_DIRECTION_RTL) &&
+      (child_pack_dir == GTK_PACK_DIRECTION_LTR || child_pack_dir == GTK_PACK_DIRECTION_RTL))
+    requisition->width += 2 * horizontal_padding;
+  else if ((pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT) &&
+      (child_pack_dir == GTK_PACK_DIRECTION_TTB || child_pack_dir == GTK_PACK_DIRECTION_BTT))
+    requisition->height += 2 * horizontal_padding;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
@@ -558,6 +578,8 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkAllocation child_allocation;
   GtkTextDirection direction;
+  GtkPackDirection pack_dir;
+  GtkPackDirection child_pack_dir;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
   g_return_if_fail (allocation != NULL);
@@ -567,6 +589,17 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   
   direction = gtk_widget_get_direction (widget);
 
+  if (GTK_IS_MENU_BAR (widget->parent))
+    {
+      pack_dir = gtk_menu_bar_get_pack_direction (GTK_MENU_BAR (widget->parent));
+      child_pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (widget->parent));
+    }
+  else
+    {
+      pack_dir = GTK_PACK_DIRECTION_LTR;
+      child_pack_dir = GTK_PACK_DIRECTION_LTR;
+    }
+    
   widget->allocation = *allocation;
 
   if (bin->child)
@@ -577,17 +610,34 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
       gtk_widget_style_get (widget,
 			    "horizontal_padding", &horizontal_padding,
 			    NULL);
+
+      child_allocation.x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
+      child_allocation.y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness;
+
+      if ((pack_dir == GTK_PACK_DIRECTION_LTR || pack_dir == GTK_PACK_DIRECTION_RTL) &&
+	  (child_pack_dir == GTK_PACK_DIRECTION_LTR || child_pack_dir == GTK_PACK_DIRECTION_RTL))
+	child_allocation.x += horizontal_padding;
+      else if ((pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT) &&
+	       (child_pack_dir == GTK_PACK_DIRECTION_TTB || child_pack_dir == GTK_PACK_DIRECTION_BTT))
+	child_allocation.y += horizontal_padding;
       
-      child_allocation.x = (GTK_CONTAINER (widget)->border_width +
-                            widget->style->xthickness +
-			    horizontal_padding);
-      child_allocation.y = (GTK_CONTAINER (widget)->border_width +
-			    widget->style->ythickness);
       child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2);
       child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2);
-      if (direction == GTK_TEXT_DIR_LTR)
-	child_allocation.x += GTK_MENU_ITEM (widget)->toggle_size;
-      child_allocation.width -= GTK_MENU_ITEM (widget)->toggle_size;
+
+      if (child_pack_dir == GTK_PACK_DIRECTION_LTR ||
+	  child_pack_dir == GTK_PACK_DIRECTION_RTL)
+	{
+	  if ((direction == GTK_TEXT_DIR_LTR) == (child_pack_dir != GTK_PACK_DIRECTION_RTL))
+	    child_allocation.x += GTK_MENU_ITEM (widget)->toggle_size;
+	  child_allocation.width -= GTK_MENU_ITEM (widget)->toggle_size;
+	}
+      else
+	{
+	  if ((direction == GTK_TEXT_DIR_LTR) == (child_pack_dir != GTK_PACK_DIRECTION_BTT))
+	    child_allocation.y += GTK_MENU_ITEM (widget)->toggle_size;
+	  child_allocation.height -= GTK_MENU_ITEM (widget)->toggle_size;
+	}
+
       child_allocation.x += widget->allocation.x;
       child_allocation.y += widget->allocation.y;
 
@@ -1103,7 +1153,10 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
       break;
 
     case GTK_LEFT_RIGHT:
-      parent_menu_item = GTK_MENU (widget->parent)->parent_menu_item;
+      if (GTK_IS_MENU (widget->parent))
+	parent_menu_item = GTK_MENU (widget->parent)->parent_menu_item;
+      else
+	parent_menu_item = NULL;
       parent_xthickness = widget->parent->style->xthickness;
       if (parent_menu_item && !GTK_MENU (widget->parent)->torn_off)
 	menu_item->submenu_direction = GTK_MENU_ITEM (parent_menu_item)->submenu_direction;

@@ -44,7 +44,6 @@ extern "C" {
 #define GTK_IS_MENU_BAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU_BAR))
 #define GTK_MENU_BAR_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MENU_BAR, GtkMenuBarClass))
 
-
 typedef struct _GtkMenuBar       GtkMenuBar;
 typedef struct _GtkMenuBarClass  GtkMenuBarClass;
 
@@ -67,6 +66,13 @@ struct _GtkMenuBarClass
 
 GType      gtk_menu_bar_get_type        (void) G_GNUC_CONST;
 GtkWidget* gtk_menu_bar_new             (void);
+
+GtkPackDirection gtk_menu_bar_get_pack_direction (GtkMenuBar       *menubar);
+void             gtk_menu_bar_set_pack_direction (GtkMenuBar       *menubar,
+						  GtkPackDirection  pack_dir);
+GtkPackDirection gtk_menu_bar_get_child_pack_direction (GtkMenuBar       *menubar);
+void             gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menubar,
+							GtkPackDirection  child_pack_dir);
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_menu_bar_append(menu,child)	    gtk_menu_shell_append  ((GtkMenuShell *)(menu),(child))

@@ -42,6 +42,11 @@
 
 #define MENU_SHELL_TIMEOUT   500
 
+#define PACK_DIRECTION(m)                                 \
+   (GTK_IS_MENU_BAR (m)                                   \
+     ? gtk_menu_bar_get_pack_direction (GTK_MENU_BAR (m)) \
+     : GTK_PACK_DIRECTION_LTR)
+
 enum {
   DEACTIVATE,
   SELECTION_DONE,
@@ -104,6 +109,10 @@ typedef void (*GtkMenuShellSignal2) (GtkObject *object,
  *       - For 'child', if there is no child, then current is
  *         moved to the next item in the parent.
  *
+ *    Note that the above explanation of ::move_current was written
+ *    before menus and menubars had support for RTL flipping and
+ *    different packing directions, and therefore only applies for
+ *    when text direction and packing direction are both left-to-right.
  * 
  *  ::activate_current (GBoolean *force_hide)
  *     Activate the current item. If 'force_hide' is true, hide
@@ -874,14 +883,20 @@ static void
 gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
 				 GtkWidget    *menu_item)
 {
+  GtkPackDirection pack_dir = PACK_DIRECTION (menu_shell);
+
   gtk_menu_shell_deselect (menu_shell);
 
   if (!_gtk_menu_item_is_selectable (menu_item))
     return;
 
   menu_shell->active_menu_item = menu_item;
-  _gtk_menu_item_set_placement (GTK_MENU_ITEM (menu_shell->active_menu_item),
-			       GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement);
+  if (pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT)
+    _gtk_menu_item_set_placement (GTK_MENU_ITEM (menu_shell->active_menu_item),
+				  GTK_LEFT_RIGHT);
+  else
+    _gtk_menu_item_set_placement (GTK_MENU_ITEM (menu_shell->active_menu_item),
+				  GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement);
   gtk_menu_item_select (GTK_MENU_ITEM (menu_shell->active_menu_item));
 
   /* This allows the bizarre radio buttons-with-submenus-display-history
@@ -1091,31 +1106,7 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 
   if (menu_shell->parent_menu_shell)
     parent_menu_shell = GTK_MENU_SHELL (menu_shell->parent_menu_shell);
-  
-  if (gtk_widget_get_direction (GTK_WIDGET (menu_shell)) == GTK_TEXT_DIR_RTL)
-    {
-      switch (direction) 
-	{
-	case GTK_MENU_DIR_PARENT:
-	  if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement != GTK_TOP_BOTTOM)
-	    direction = GTK_MENU_DIR_CHILD;
-	  break;
-	case GTK_MENU_DIR_CHILD:
-	  if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement != GTK_TOP_BOTTOM)
-	    direction = GTK_MENU_DIR_PARENT;
-	  break;
-	case GTK_MENU_DIR_PREV:
-	  if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement == GTK_TOP_BOTTOM)
-	    direction = GTK_MENU_DIR_NEXT;
-	  break;
-	case GTK_MENU_DIR_NEXT:
-	  if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement == GTK_TOP_BOTTOM)
-	    direction = GTK_MENU_DIR_PREV;
-	  break;
-	default: ;
-	}
-    }
-  
+
   switch (direction)
     {
     case GTK_MENU_DIR_PARENT:
@@ -1126,7 +1117,10 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 	    gtk_menu_shell_deselect (menu_shell);
 	  else 
 	    {
-	      gtk_menu_shell_move_selected (parent_menu_shell, -1);
+	      if (PACK_DIRECTION (parent_menu_shell) == GTK_PACK_DIRECTION_LTR)
+		gtk_menu_shell_move_selected (parent_menu_shell, -1);
+	      else
+		gtk_menu_shell_move_selected (parent_menu_shell, 1);
 	      gtk_menu_shell_select_submenu_first (parent_menu_shell); 
 	    }
 	}
@@ -1170,7 +1164,11 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
       
       if (parent_menu_shell)
 	{
-	  gtk_menu_shell_move_selected (parent_menu_shell, 1);
+	  if (PACK_DIRECTION (parent_menu_shell) == GTK_PACK_DIRECTION_LTR)
+	    gtk_menu_shell_move_selected (parent_menu_shell, 1);
+	  else
+	    gtk_menu_shell_move_selected (parent_menu_shell, -1);
+
 	  gtk_menu_shell_select_submenu_first (parent_menu_shell);
 	}
       break;
@@ -1190,7 +1188,6 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 	gtk_menu_shell_select_first (menu_shell, TRUE);
       break;
     }
-  
 }
 
 static void
