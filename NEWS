@@ -1,3 +1,29 @@
+Overview of Changes in GTK+ 2.1.2
+=================================
+
+* Fixes for GtkIMContextXIM [HideToshi Tajima, Owen Taylor]
+* Remove usage of XLookupString outside of GtkIMContextXIM [Owen]
+* Handle Shift/Caps/Num_Lock properly for non-Xkb [Owen]
+* Add a --screen option to set default screen [Balamurali Viswanathan, Owen]
+* Handle focus indication for check and radio buttons without children
+  [Dave Camp, Owen]
+* Much work on improve submenu navigation [Soeren Sandmann]
+* Add "selected_shadow_type" property for menus [Soeren]
+* Add "scrollbar_spacing" style property [Anders Carlsson, Owen]
+* Rework GtkPaned keynav [Soeren, Calum Benson]
+* Sensitivity and keynav fixes for GtkFileSelection [Muktha Narayan, Owen]
+* Removed mnemonics for GtkToolbar Items [Mikael Hallendal]
+* Tree view fixes and speedups 
+  [Kristian Rietveld, Daniel Elstner, Havoc Pennington]
+* Allow themes to set GtkTreeView even/odd row colors [Kristian]
+* Doc fixes and improvements [Matthias Clasen, Vitaly Tishkov]
+* Win32 fixes [Tor Lillqvist]
+* Misc cleanups and bug fixes
+
+Other contributors: Phil Blundell, Erwanne Chenede, Jeremy Katz, 
+   Padraig O'Briain, Havoc Pennington, Timo Sirainen, Nam SungHyun,
+   Matt Wilson,
+
 Overview of Changes in GTK+ 2.1.1
 =================================
 * Cleanup of use of deprecated functions in GTK+ [Manish Singh]

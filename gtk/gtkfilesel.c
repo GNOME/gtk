@@ -800,6 +800,9 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_box_pack_start (GTK_BOX (entry_vbox), filesel->selection_entry, TRUE, TRUE, 0);
   gtk_widget_show (filesel->selection_entry);
 
+  gtk_label_set_mnemonic_widget (GTK_LABEL (filesel->selection_text),
+				 filesel->selection_entry);
+
   if (!cmpl_state_okay (filesel->cmpl_state))
     {
       gchar err_buf[256];
@@ -2035,6 +2038,22 @@ win32_gtk_add_drives_to_dir_list (GtkListStore *model)
 }
 #endif
 
+static gchar *
+escape_underscores (const gchar *str)
+{
+  GString *result = g_string_new (NULL);
+  while (*str)
+    {
+      if (*str == '_')
+	g_string_append_c (result, '_');
+
+      g_string_append_c (result, *str);
+      str++;
+    }
+
+  return g_string_free (result, FALSE);
+}
+
 static void
 gtk_file_selection_populate (GtkFileSelection *fs,
 			     gchar            *rel_path,
@@ -2165,11 +2184,11 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
       if (fs->selection_entry)
 	{
-	  sel_text = g_strconcat (_("Selection: "),
-				  cmpl_reference_position (cmpl_state),
-				  NULL);
+	  char *escaped = escape_underscores (cmpl_reference_position (cmpl_state));
+	  sel_text = g_strconcat (_("_Selection: "), escaped, NULL);
+	  g_free (escaped);
 
-	  gtk_label_set_text (GTK_LABEL (fs->selection_text), sel_text);
+	  gtk_label_set_text_with_mnemonic (GTK_LABEL (fs->selection_text), sel_text);
 	  g_free (sel_text);
 	}
 
