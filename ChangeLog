@@ -1,3 +1,11 @@
+Fri Jan  2 19:28:52 1988 Jay Painter <jpaint@serv.net>
+	* gtk/gtkclist.h:
+	* gtk/gtkclist.c:
+	* gtk/gtk.h:
+	* gtk/testgtk.c:
+	* gtk/testgtkrc: added GtkCList, column list widget, and a small test
+	to testgtk
+
 Fri Jan  2 15:42:51 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
 
 	* gtk/gtkmain.c (gtk_main_iteration): Make the big switch handle
