@@ -114,6 +114,7 @@ struct _GtkComboBoxPrivate
   guint is_cell_renderer : 1;
   guint editing_canceled : 1;
   guint auto_scroll : 1;
+  guint focus_on_click : 1;
 
   GtkTreeViewRowSeparatorFunc row_separator_func;
   gpointer                    row_separator_data;
@@ -191,7 +192,8 @@ enum {
   PROP_COLUMN_SPAN_COLUMN,
   PROP_ACTIVE,
   PROP_ADD_TEAROFFS,
-  PROP_HAS_FRAME
+  PROP_HAS_FRAME,
+  PROP_FOCUS_ON_CLICK
 };
 
 static GtkBinClass *parent_class = NULL;
@@ -604,6 +606,14 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 							 TRUE,
 							 G_PARAM_READWRITE));
   
+  g_object_class_install_property (object_class,
+                                   PROP_FOCUS_ON_CLICK,
+                                   g_param_spec_boolean ("focus_on_click",
+							 P_("Focus on click"),
+							 P_("Whether the combo box grabs focus when it is clicked with the mouse"),
+							 TRUE,
+							 G_PARAM_READWRITE));
+
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("appears-as-list",
                                                                  P_("Appears as list"),
@@ -653,6 +663,8 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   combo_box->priv->has_frame = TRUE;
   combo_box->priv->is_cell_renderer = FALSE;
   combo_box->priv->editing_canceled = FALSE;
+  combo_box->priv->auto_scroll = FALSE;
+  combo_box->priv->focus_on_click = TRUE;
 }
 
 static void
@@ -691,6 +703,10 @@ gtk_combo_box_set_property (GObject      *object,
 
       case PROP_HAS_FRAME:
         combo_box->priv->has_frame = g_value_get_boolean (value);
+        break;
+
+      case PROP_FOCUS_ON_CLICK:
+        combo_box->priv->focus_on_click = g_value_get_boolean (value);
         break;
 
       default:
@@ -734,6 +750,10 @@ gtk_combo_box_get_property (GObject    *object,
 
       case PROP_HAS_FRAME:
         g_value_set_boolean (value, combo_box->priv->has_frame);
+        break;
+
+      case PROP_FOCUS_ON_CLICK:
+        g_value_set_boolean (value, combo_box->priv->focus_on_click);
         break;
 
       default:
@@ -2574,6 +2594,10 @@ gtk_combo_box_menu_button_press (GtkWidget      *widget,
   if (GTK_IS_MENU (combo_box->priv->popup_widget) &&
       event->type == GDK_BUTTON_PRESS && event->button == 1)
     {
+      if (combo_box->priv->focus_on_click && 
+	  !GTK_WIDGET_HAS_FOCUS (combo_box->priv->button))
+	gtk_widget_grab_focus (combo_box->priv->button);
+
       gtk_combo_box_menu_popup (combo_box, event->button, event->time);
 
       return TRUE;
@@ -3179,6 +3203,10 @@ gtk_combo_box_list_button_pressed (GtkWidget      *widget,
   if ((ewidget != combo_box->priv->button && ewidget != combo_box->priv->box) ||
       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (combo_box->priv->button)))
     return FALSE;
+
+  if (combo_box->priv->focus_on_click && 
+      !GTK_WIDGET_HAS_FOCUS (combo_box->priv->button))
+    gtk_widget_grab_focus (combo_box->priv->button);
 
   gtk_combo_box_popup (combo_box);
 
@@ -4891,3 +4919,51 @@ gtk_combo_box_set_row_separator_func (GtkComboBox                 *combo_box,
 }
 
 
+/**
+ * gtk_combo_box_set_focus_on_click:
+ * @combo: a #GtkComboBox
+ * @focus_on_click: whether the combo box grabs focus when clicked 
+ *    with the mouse
+ * 
+ * Sets whether the combo box will grab focus when it is clicked with 
+ * the mouse. Making mouse clicks not grab focus is useful in places 
+ * like toolbars where you don't want the keyboard focus removed from 
+ * the main area of the application.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_combo_box_set_focus_on_click (GtkComboBox *combo,
+				  gboolean     focus_on_click)
+{
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo));
+  
+  focus_on_click = focus_on_click != FALSE;
+
+  if (combo->priv->focus_on_click != focus_on_click)
+    {
+      combo->priv->focus_on_click = focus_on_click;
+      
+      g_object_notify (G_OBJECT (combo), "focus_on_click");
+    }
+}
+
+/**
+ * gtk_combo_box_get_focus_on_click:
+ * @combo: a #GtkComboBox
+ * 
+ * Returns whether the combo box grabs focus when it is clicked 
+ * with the mouse. See gtk_combo_box_set_focus_on_click().
+ *
+ * Return value: %TRUE if the combo box grabs focus when it is 
+ *     clicked with the mouse.
+ *
+ * Since: 2.6
+ **/
+gboolean
+gtk_combo_box_get_focus_on_click (GtkComboBox *combo)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo), FALSE);
+  
+  return combo->priv->focus_on_click;
+}

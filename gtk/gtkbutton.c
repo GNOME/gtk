@@ -1420,7 +1420,7 @@ gtk_button_get_use_stock (GtkButton *button)
 /**
  * gtk_button_set_focus_on_click:
  * @button: a #GtkButton
- * @focus_on_click: whether the mouse grabs focus when clicked with the mouse
+ * @focus_on_click: whether the button grabs focus when clicked with the mouse
  * 
  * Sets whether the button will grab focus when it is clicked with the mouse.
  * Making mouse clicks not grab focus is useful in places like toolbars where
