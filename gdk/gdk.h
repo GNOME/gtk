@@ -456,6 +456,10 @@ void gdk_colormap_change (GdkColormap	*colormap,
 void gdk_colors_store	 (GdkColormap	*colormap,
 			  GdkColor	*colors,
 			  gint		 ncolors);
+
+GdkColor *gdk_color_copy (GdkColor *color);
+void      gdk_color_free (GdkColor *color);
+
 gint gdk_colors_alloc	 (GdkColormap	*colormap,
 			  gint		 contiguous,
 			  gulong	*planes,

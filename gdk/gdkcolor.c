@@ -365,6 +365,62 @@ gdk_colors_free (GdkColormap *colormap,
 	       pixels, npixels, planes);
 }
 
+/*
+ *--------------------------------------------------------------
+ * gdk_color_copy
+ *
+ *   Copy a color structure into new storage.
+ *
+ * Arguments:
+ *   "color" is the color struct to copy.
+ *
+ * Results:
+ *   A new color structure.  Free it with gdk_color_free.
+ *
+ *--------------------------------------------------------------
+ */
+
+static GMemChunk *color_chunk;
+
+GdkColor*
+gdk_color_copy (GdkColor *color)
+{
+  GdkColor *new_color;
+  
+  g_return_val_if_fail (color != NULL, NULL);
+
+  if (color_chunk == NULL)
+    color_chunk = g_mem_chunk_new ("colors",
+				   sizeof (GdkColor),
+				   4096,
+				   G_ALLOC_AND_FREE);
+
+  new_color = g_chunk_new (GdkColor, color_chunk);
+  *new_color = *color;
+  return new_color;
+}
+
+/*
+ *--------------------------------------------------------------
+ * gdk_color_free
+ *
+ *   Free a color structure obtained from gdk_color_copy.  Do not use
+ *   with other color structures.
+ *
+ * Arguments:
+ *   "color" is the color struct to free.
+ *
+ *-------------------------------------------------------------- */
+
+void
+gdk_color_free (GdkColor *color)
+{
+  g_assert (color_chunk != NULL);
+  g_return_if_fail (color != NULL);
+
+  g_mem_chunk_free (color_chunk, color);
+}
+
 gint
 gdk_color_white (GdkColormap *colormap,
 		 GdkColor    *color)
