@@ -19,18 +19,34 @@
 #include "gtkalignment.h"
 
 
+enum {
+  ARG_0,
+  ARG_XALIGN,
+  ARG_YALIGN,
+  ARG_XSCALE,
+  ARG_YSCALE
+};
+
+
 static void gtk_alignment_class_init    (GtkAlignmentClass *klass);
 static void gtk_alignment_init          (GtkAlignment      *alignment);
 static void gtk_alignment_size_request  (GtkWidget         *widget,
 					 GtkRequisition    *requisition);
 static void gtk_alignment_size_allocate (GtkWidget         *widget,
 					 GtkAllocation     *allocation);
+static void gtk_alignment_set_arg       (GtkObject         *object,
+					 GtkArg            *arg,
+					 guint              arg_id);
+static void gtk_alignment_get_arg       (GtkObject         *object,
+					 GtkArg            *arg,
+					 guint              arg_id);
 
 
-guint
+
+GtkType
 gtk_alignment_get_type (void)
 {
-  static guint alignment_type = 0;
+  static GtkType alignment_type = 0;
 
   if (!alignment_type)
     {
@@ -46,7 +62,7 @@ gtk_alignment_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      alignment_type = gtk_type_unique (gtk_bin_get_type (), &alignment_info);
+      alignment_type = gtk_type_unique (GTK_TYPE_BIN, &alignment_info);
     }
 
   return alignment_type;
@@ -55,9 +71,19 @@ gtk_alignment_get_type (void)
 static void
 gtk_alignment_class_init (GtkAlignmentClass *class)
 {
+  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
+  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
+
+  gtk_object_add_arg_type ("GtkAlignment::xalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_XALIGN);
+  gtk_object_add_arg_type ("GtkAlignment::yalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_YALIGN);
+  gtk_object_add_arg_type ("GtkAlignment::xscale", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_XSCALE);
+  gtk_object_add_arg_type ("GtkAlignment::yscale", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_YSCALE);
+
+  object_class->set_arg = gtk_alignment_set_arg;
+  object_class->get_arg = gtk_alignment_get_arg;
 
   widget_class->size_request = gtk_alignment_size_request;
   widget_class->size_allocate = gtk_alignment_size_allocate;
@@ -90,6 +116,79 @@ gtk_alignment_new (gfloat xalign,
   alignment->yscale = CLAMP (yscale, 0.0, 1.0);
 
   return GTK_WIDGET (alignment);
+}
+
+static void
+gtk_alignment_set_arg (GtkObject         *object,
+		       GtkArg            *arg,
+		       guint              arg_id)
+{
+  GtkAlignment *alignment;
+
+  alignment = GTK_ALIGNMENT (object);
+
+  switch (arg_id)
+    {
+    case ARG_XALIGN:
+      gtk_alignment_set (alignment,
+			 GTK_VALUE_FLOAT (*arg),
+			 alignment->yalign,
+			 alignment->xscale,
+			 alignment->yscale);
+      break;
+    case ARG_YALIGN:
+      gtk_alignment_set (alignment,
+			 alignment->xalign,
+			 GTK_VALUE_FLOAT (*arg),
+			 alignment->xscale,
+			 alignment->yscale);
+      break;
+    case ARG_XSCALE:
+      gtk_alignment_set (alignment,
+			 alignment->xalign,
+			 alignment->yalign,
+			 GTK_VALUE_FLOAT (*arg),
+			 alignment->yscale);
+      break;
+    case ARG_YSCALE:
+      gtk_alignment_set (alignment,
+			 alignment->xalign,
+			 alignment->yalign,
+			 alignment->xscale,
+			 GTK_VALUE_FLOAT (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_alignment_get_arg (GtkObject         *object,
+		       GtkArg            *arg,
+		       guint              arg_id)
+{
+  GtkAlignment *alignment;
+
+  alignment = GTK_ALIGNMENT (object);
+
+  switch (arg_id)
+    {
+    case ARG_XALIGN:
+      GTK_VALUE_FLOAT (*arg) = alignment->xalign;
+      break;
+    case ARG_YALIGN:
+      GTK_VALUE_FLOAT (*arg) = alignment->yalign;
+      break;
+    case ARG_XSCALE:
+      GTK_VALUE_FLOAT (*arg) = alignment->xscale;
+      break;
+    case ARG_YSCALE:
+      GTK_VALUE_FLOAT (*arg) = alignment->yscale;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 void
@@ -166,25 +265,25 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
   alignment = GTK_ALIGNMENT (widget);
   bin = GTK_BIN (widget);
-
+  
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
       x = GTK_CONTAINER (alignment)->border_width;
       y = GTK_CONTAINER (alignment)->border_width;
       width = MAX (allocation->width - 2 * x, 0);
       height = MAX (allocation->height - 2 * y, 0);
-
+      
       if (width > bin->child->requisition.width)
 	child_allocation.width = (bin->child->requisition.width *
 				  (1.0 - alignment->xscale) +
 				  width * alignment->xscale);
       else
 	child_allocation.width = width;
-
+      
       if (height > bin->child->requisition.height)
 	child_allocation.height = (bin->child->requisition.height *
-				  (1.0 - alignment->yscale) +
-				  height * alignment->yscale);
+				   (1.0 - alignment->yscale) +
+				   height * alignment->yscale);
       else
 	child_allocation.height = height;
 

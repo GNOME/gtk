@@ -29,9 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_BIN(obj)          GTK_CHECK_CAST (obj, gtk_bin_get_type (), GtkBin)
-#define GTK_BIN_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_bin_get_type (), GtkBinClass)
-#define GTK_IS_BIN(obj)       GTK_CHECK_TYPE (obj, gtk_bin_get_type ())
+#define GTK_TYPE_BIN                  (gtk_bin_get_type ())
+#define GTK_BIN(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_BIN, GtkBin))
+#define GTK_BIN_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_BIN, GtkBinClass))
+#define GTK_IS_BIN(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_BIN))
+#define GTK_IS_BIN_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BIN))
 
 
 typedef struct _GtkBin       GtkBin;
@@ -50,7 +52,7 @@ struct _GtkBinClass
 };
 
 
-guint  gtk_bin_get_type   (void);
+GtkType  gtk_bin_get_type   (void);
 
 
 #ifdef __cplusplus

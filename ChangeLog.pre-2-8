@@ -1,3 +1,12 @@
+Sun Jun 28 11:39:17 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkalignment.h:
+	* gtk/gtkbin.h: GtkType and macro fixups.
+	
+	* gtk/gtkalignment.c (gtk_alignment_class_init): widget argument
+	implementation: GtkAlignment::xalign, GtkAlignment::yalign,
+	GtkAlignment::xscale, GtkAlignment::yscale.
+
 Sun Jun 28 04:29:10 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.c (gtk_type_class_init): call the base class init

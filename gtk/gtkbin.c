@@ -40,7 +40,7 @@ static GtkType gtk_bin_child_type (GtkContainer*container);
 static GtkContainerClass *parent_class = NULL;
 
 
-guint
+GtkType
 gtk_bin_get_type (void)
 {
   static guint bin_type = 0;
@@ -59,7 +59,7 @@ gtk_bin_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      bin_type = gtk_type_unique (gtk_container_get_type (), &bin_info);
+      bin_type = gtk_type_unique (GTK_TYPE_CONTAINER, &bin_info);
     }
 
   return bin_type;
@@ -76,7 +76,7 @@ gtk_bin_class_init (GtkBinClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  parent_class = gtk_type_class (gtk_container_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
   widget_class->map = gtk_bin_map;
   widget_class->unmap = gtk_bin_unmap;

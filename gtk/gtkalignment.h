@@ -29,9 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_ALIGNMENT(obj)          GTK_CHECK_CAST (obj, gtk_alignment_get_type (), GtkAlignment)
-#define GTK_ALIGNMENT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_alignment_get_type (), GtkAlignmentClass)
-#define GTK_IS_ALIGNMENT(obj)       GTK_CHECK_TYPE (obj, gtk_alignment_get_type ())
+#define GTK_TYPE_ALIGNMENT                  (gtk_alignment_get_type ())
+#define GTK_ALIGNMENT(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_ALIGNMENT, GtkAlignment))
+#define GTK_ALIGNMENT_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ALIGNMENT, GtkAlignmentClass))
+#define GTK_IS_ALIGNMENT(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_ALIGNMENT))
+#define GTK_IS_ALIGNMENT_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ALIGNMENT))
 
 
 typedef struct _GtkAlignment       GtkAlignment;
@@ -53,7 +55,7 @@ struct _GtkAlignmentClass
 };
 
 
-guint      gtk_alignment_get_type   (void);
+GtkType    gtk_alignment_get_type   (void);
 GtkWidget* gtk_alignment_new        (gfloat             xalign,
 				     gfloat             yalign,
 				     gfloat             xscale,
