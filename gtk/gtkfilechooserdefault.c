@@ -2239,28 +2239,49 @@ shortcuts_drag_drop_cb (GtkWidget             *widget,
   return TRUE;
 }
 
-/* Converts raw selection data from text/uri-list to a list of strings */
+/* Converts raw selection data from text/uri-list to a list of strings. */
 static GSList *
 split_uris (const char *data)
 {
   GSList *uris;
-  const char *p, *start;
+  const char *p, *q;
 
   uris = NULL;
 
-  start = data;
+  p = data;
 
-  for (p = start; *p != 0; p++)
-    if (*p == '\r' && *(p + 1) == '\n')
-      {
-	char *name;
+  /* We don't actually try to validate the URI according to RFC
+   * 2396, or even check for allowed characters - we just ignore
+   * comments and trim whitespace off the ends.  We also
+   * allow LF delimination as well as the specified CRLF.
+   *
+   * We do allow comments like specified in RFC 2483.
+   */
+  while (p)
+    {
+      if (*p != '#')
+	{
+	  while (g_ascii_isspace (*p))
+	    p++;
 
-	name = g_strndup (start, p - start);
-	uris = g_slist_prepend (uris, name);
+	  q = p;
+	  while (*q && (*q != '\n') && (*q != '\r'))
+	    q++;
 
-	start = p + 2;
-	p = start;
-      }
+	  if (q > p)
+	    {
+	      q--;
+	      while (q > p && g_ascii_isspace (*q))
+		q--;
+
+	      if (q > p)
+		uris = g_slist_prepend (uris, g_strndup (p, q - p + 1));
+	    }
+	}
+      p = strchr (p, '\n');
+      if (p)
+	p++;
+    }
 
   uris = g_slist_reverse (uris);
   return uris;
@@ -5075,7 +5096,7 @@ location_entry_set_from_list (GtkFileChooserDefault *impl,
   gtk_tree_path_free (tree_path);
 
   gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, &iter);
- 
+
   info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
   if (!info)
     return;

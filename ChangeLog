@@ -1,3 +1,9 @@
+2004-04-15  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (split_uris): Use a variant of the
+	code from gtkfilesel.c to parse a "text/uri-list" blob.  Fixes
+	#140126.
+
 2004-04-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellrenderer.c (gtk_cell_renderer_class_init): 
