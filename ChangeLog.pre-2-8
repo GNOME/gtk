@@ -1,3 +1,10 @@
+2002-03-20  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkselection-win32.c (gdk_selection_convert): Don't
+	use return value from GlobalSize() as length of string when
+	calling MultiByteToWideChar(). Pass -1 instead (zero-terminated
+	string). Thanks to Iwasa Kazmi.
+
 2002-03-13  Tor Lillqvist  <tml@iki.fi>
 
 	* configure.in: Output the Makefiles in the build subdirectory.
