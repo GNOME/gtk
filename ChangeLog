@@ -1,3 +1,9 @@
+2002-07-25  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdkrgb.c (gdk_rgb_select_conv): Use gdk_rgb_convert_4,
+	not gdk_rgb_convert_8 for depth 4, bpp 8, PseudoColor visuals.
+	(#88697)
+	
 Thu Jul 25 14:14:46 2002  Owen Taylor  <otaylor@redhat.com>
 
         * gtk/gtkmenushell.c: When a menubar is up, use F10 to cycle

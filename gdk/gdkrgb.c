@@ -2997,6 +2997,7 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info)
     }
   else if (bpp == 8 &&
 	   depth <= 8 &&
+	   depth > 4 &&
 	   (vtype == GDK_VISUAL_PSEUDO_COLOR
 #ifdef ENABLE_GRAYSCALE
 	    || vtype == GDK_VISUAL_GRAYSCALE
