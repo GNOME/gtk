@@ -1,3 +1,12 @@
+2001-10-24  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_update_adjustments): don't
+	create layout if we didn't have one
+	(gtk_text_view_set_buffer): invalidate so we get the idle handlers
+	as appropriate
+	(gtk_text_view_invalidate): new function to do invalidation,
+	containing old guts of invalidated_handler
+
 Wed Oct 24 10:29:47 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkalignment.c (gtk_alignment_class_init): Improve

@@ -291,6 +291,7 @@ static void gtk_text_view_queue_scroll           (GtkTextView   *text_view,
 
 static gboolean gtk_text_view_flush_scroll       (GtkTextView *text_view);
 static void     gtk_text_view_update_adjustments (GtkTextView *text_view);
+static void     gtk_text_view_invalidate         (GtkTextView *text_view);
 
 static void gtk_text_view_update_im_spot_location (GtkTextView *text_view);
 
@@ -1096,9 +1097,11 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 	gtk_text_buffer_add_selection_clipboard (text_view->buffer,
 						 gtk_clipboard_get (GDK_SELECTION_PRIMARY));
     }
-
+  
   if (GTK_WIDGET_VISIBLE (text_view))
     gtk_widget_queue_draw (GTK_WIDGET (text_view));
+  
+  gtk_text_view_invalidate (text_view);
 }
 
 static GtkTextBuffer*
@@ -1563,8 +1566,9 @@ gtk_text_view_update_adjustments (GtkTextView *text_view)
   gint width = 0, height = 0;
 
   DV(g_print(">Updating adjustments ("G_STRLOC")\n"));
-  
-  gtk_text_layout_get_size (text_view->layout, &width, &height);
+
+  if (text_view->layout)
+    gtk_text_layout_get_size (text_view->layout, &width, &height);
 
   if (text_view->width != width || text_view->height != height)
     {
@@ -2796,13 +2800,8 @@ incremental_validate_callback (gpointer data)
 }
 
 static void
-invalidated_handler (GtkTextLayout *layout,
-                     gpointer       data)
+gtk_text_view_invalidate (GtkTextView *text_view)
 {
-  GtkTextView *text_view;
-
-  text_view = GTK_TEXT_VIEW (data);
-
   text_view->onscreen_validated = FALSE;
   
   DV(g_print(">Invalidate, onscreen_validated = FALSE ("G_STRLOC")\n"));
@@ -2820,6 +2819,17 @@ invalidated_handler (GtkTextLayout *layout,
       DV (g_print (G_STRLOC": adding incremental validate idle %d\n",
                    text_view->incremental_validate_idle));
     }
+}
+
+static void
+invalidated_handler (GtkTextLayout *layout,
+                     gpointer       data)
+{
+  GtkTextView *text_view;
+
+  text_view = GTK_TEXT_VIEW (data);
+
+  gtk_text_view_invalidate (text_view);
 }
 
 static void
