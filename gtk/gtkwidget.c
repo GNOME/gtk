@@ -3581,6 +3581,8 @@ gtk_widget_grab_default (GtkWidget *widget)
  * in the gtkrc file. See the documentation for gtkrc files (on the
  * same page as the docs for #GtkRcStyle).
  * 
+ * Note that widget names are separated by periods in paths (see 
+ * gtk_widget_path()), so names with embedded periods may cause confusion.
  **/
 void
 gtk_widget_set_name (GtkWidget	 *widget,

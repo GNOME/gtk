@@ -1,3 +1,8 @@
+2003-02-09  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c (gtk_widget_set_name): Add note about periods in 
+	names.  (#57680)
+
 2003-02-09  Christian Rose  <menthos@menthos.com>
 
 	* configure.in: Removed "en@IPA.po" from ALL_LINGUAS.
