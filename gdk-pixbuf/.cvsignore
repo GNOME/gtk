@@ -6,9 +6,6 @@ makefile.mingw
 .libs
 *.la
 *.lo
+make-inline-pixbuf
 test-gdk-pixbuf
-testpixbuf
-testpixbuf-drawable
-testpixbuf-scale
-testanimation
 gdk-pixbuf-features.h

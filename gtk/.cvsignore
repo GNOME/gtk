@@ -13,6 +13,7 @@ testrgb
 testselection
 testtext
 testtextbuffer
+treestoretest
 simple
 testtree
 gtkcompat.h

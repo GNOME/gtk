@@ -15,6 +15,9 @@ ABOUT-NLS
 intl
 stamp-h.in
 gtk+.spec
+gtk+-2.0.pc
+gdk-2.0.pc
+gdk-pixbuf-2.0.pc
 missing
 install-sh
 mkinstalldirs
