@@ -551,11 +551,13 @@ gdk_win32_gc_set_values (GdkGC           *gc,
 	  data->clip_region =
 	    BitmapToRegion (GDK_DRAWABLE_XID (values->clip_mask));
 	  data->values_mask |= GDK_GC_CLIP_MASK;
+	  GDK_NOTE (MISC, g_print (" clip=%#x", data->clip_region));
 	}
       else
 	{
 	  data->clip_region = NULL;
 	  data->values_mask &= ~GDK_GC_CLIP_MASK;
+	  GDK_NOTE (MISC, g_print (" clip=NULL"));
 	}
     }
 
@@ -568,24 +570,28 @@ gdk_win32_gc_set_values (GdkGC           *gc,
     {
       data->ts_x_origin = values->ts_x_origin;
       data->values_mask |= GDK_GC_TS_X_ORIGIN;
+      GDK_NOTE (MISC, g_print (" ts_x=%d", data->ts_x_origin));
     }
   
   if (values_mask & GDK_GC_TS_Y_ORIGIN)
     {
       data->ts_y_origin = values->ts_y_origin;
       data->values_mask |= GDK_GC_TS_Y_ORIGIN;
+      GDK_NOTE (MISC, g_print (" ts_y=%d", data->ts_y_origin));
     }
   
   if (values_mask & GDK_GC_CLIP_X_ORIGIN)
     {
       data->clip_x_origin = values->clip_x_origin;
       data->values_mask |= GDK_GC_CLIP_X_ORIGIN;
+      GDK_NOTE (MISC, g_print (" clip_x=%d", data->clip_x_origin));
     }
   
   if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
     {
       data->clip_y_origin = values->clip_y_origin;
       data->values_mask |= GDK_GC_CLIP_Y_ORIGIN;
+      GDK_NOTE (MISC, g_print (" clip_y=%d", data->clip_y_origin));
     }
   
   if (values_mask & GDK_GC_EXPOSURES)
@@ -597,6 +603,7 @@ gdk_win32_gc_set_values (GdkGC           *gc,
     {
       data->pen_width = values->line_width;
       data->values_mask |= GDK_GC_LINE_WIDTH;
+      GDK_NOTE (MISC, g_print (" pen_width=%d", data->pen_width));
     }
 
   if (values_mask & GDK_GC_LINE_STYLE)
@@ -611,6 +618,8 @@ gdk_win32_gc_set_values (GdkGC           *gc,
 	  data->pen_style |= PS_DASH; break;
 	}
       data->values_mask |= GDK_GC_LINE_STYLE;
+      GDK_NOTE (MISC, g_print (" line_style=%#x",
+			       (data->pen_style & PS_STYLE_MASK)));
     }
   
   if (values_mask & GDK_GC_CAP_STYLE)
@@ -629,6 +638,8 @@ gdk_win32_gc_set_values (GdkGC           *gc,
 	  data->pen_style |= PS_ENDCAP_SQUARE; break;
 	}
       data->values_mask |= GDK_GC_CAP_STYLE;
+      GDK_NOTE (MISC, g_print (" cap_style=%#x",
+			       (data->pen_style & PS_ENDCAP_MASK)));
     }
 
   if (values_mask & GDK_GC_JOIN_STYLE)
@@ -645,7 +656,10 @@ gdk_win32_gc_set_values (GdkGC           *gc,
 	  data->pen_style |= PS_JOIN_BEVEL; break;
 	}
       data->values_mask |= GDK_GC_JOIN_STYLE;
+      GDK_NOTE (MISC, g_print (" join_style=%#x",
+			       (data->pen_style & PS_JOIN_MASK)));
     }
+  GDK_NOTE (MISC, g_print ("}\n"));
 }
 
 static void
@@ -697,7 +711,7 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
       data->clip_region = NULL;
       data->values_mask &= ~GDK_GC_CLIP_MASK;
     }
-    data->values_mask &= ~(GDK_GC_CLIP_X_ORIGIN |GDK_GC_CLIP_Y_ORIGIN);
+    data->values_mask &= ~(GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN);
 } 
 
 void
@@ -998,6 +1012,11 @@ gdk_gc_postdraw (GdkDrawable  *drawable,
     if (!DeleteObject (hbr))
       g_warning ("gdk_gc_postdraw: DeleteObject #2 failed");
 
+  if (data->values_mask & GDK_GC_CLIP_MASK
+      && data->clip_region != NULL
+      && (data->values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN)))
+    OffsetRgn (data->clip_region,
+	       -data->clip_x_origin, -data->clip_y_origin);
   data->xgc = NULL;
 }
 

@@ -1,3 +1,22 @@
+1999-11-25  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkgc.c (gdk_gc_set_ts_origin, gdk_gc_set_clip_origin): 
+	Fix two copy&paste errors.
+
+	* gdk/makefile.cygwin: Also rebuild DLL when the static archive in
+	win32 has changed.
+
+	* gdk/win32/gdkprivate-win32.h: Don't need CPINFO in the
+	GdkWin32SingleFont struct.
+
+	* gdk/win32/gdkfont-win32.c: Some more debugging: Print Unicode
+	subranges of loaded fonts. Clear font signature first, in case
+	GetTextCharsetInfo fails. Pretend SYMBOL_CHARSET fonts have
+	ASCII+Basic Latin (i.e. 0x40--0xFF) as they are single-byte.
+
+	* gdk/win32/gdkgc-win32.c: Improved logging. (gdk_gc_postdraw):
+	Unoffset clip region.
+
 1999-11-23  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): set

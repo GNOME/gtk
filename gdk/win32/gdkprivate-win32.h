@@ -126,6 +126,7 @@ typedef struct _GdkDrawableWin32Data    GdkDrawableWin32Data;
 typedef struct _GdkWindowWin32Data      GdkWindowWin32Data;
 typedef struct _GdkColormapPrivateWin32 GdkColormapPrivateWin32;
 typedef struct _GdkCursorPrivate        GdkCursorPrivate;
+typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
 typedef struct _GdkFontPrivateWin32     GdkFontPrivateWin32;
 typedef struct _GdkImagePrivateWin32    GdkImagePrivateWin32;
 typedef struct _GdkVisualPrivate        GdkVisualPrivate;
@@ -215,19 +216,18 @@ struct _GdkCursorPrivate
   HCURSOR xcursor;
 };
 
-typedef struct
+struct _GdkWin32SingleFont
 {
   HFONT xfont;
   DWORD charset;
   UINT codepage;
-  CPINFO cpinfo;
   FONTSIGNATURE fs;
-} GdkWin32SingleFont;
+};
 
 struct _GdkFontPrivateWin32
 {
   GdkFontPrivate base;
-  GSList *fonts;		/* Points to a list of GdkWin32SingleFonts */
+  GSList *fonts;		/* List of GdkWin32SingleFonts */
   GSList *names;
 };
 
@@ -305,6 +305,7 @@ void gdk_wchar_text_handle       (GdkFont       *font,
 				  void          *arg);
 
 char *gdk_color_to_string        (const GdkColor *);
+void print_bitmap                (GdkBitmap *bm);
 
 extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
 

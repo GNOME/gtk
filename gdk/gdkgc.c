@@ -211,7 +211,7 @@ gdk_gc_set_ts_origin (GdkGC *gc,
   g_return_if_fail (gc != NULL);
 
   values.ts_x_origin = x;
-  values.ts_x_origin = y;
+  values.ts_y_origin = y;
   
   gdk_gc_set_values (gc, &values,
 		     GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN);
@@ -227,7 +227,7 @@ gdk_gc_set_clip_origin (GdkGC *gc,
   g_return_if_fail (gc != NULL);
 
   values.clip_x_origin = x;
-  values.clip_x_origin = y;
+  values.clip_y_origin = y;
   
   gdk_gc_set_values (gc, &values,
 		     GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN);
