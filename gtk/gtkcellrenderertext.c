@@ -71,6 +71,7 @@ enum {
   PROP_TEXT,
   PROP_MARKUP,
   PROP_ATTRIBUTES,
+  PROP_SINGLE_PARAGRAPH_MODE,
   
   /* Style args */
   PROP_BACKGROUND,
@@ -112,6 +113,15 @@ static gpointer parent_class;
 static guint text_cell_renderer_signals [LAST_SIGNAL];
 
 #define GTK_CELL_RENDERER_TEXT_PATH "gtk-cell-renderer-text-path"
+
+#define GTK_CELL_RENDERER_TEXT_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_RENDERER_TEXT, GtkCellRendererTextPrivate))
+
+typedef struct _GtkCellRendererTextPrivate GtkCellRendererTextPrivate;
+struct _GtkCellRendererTextPrivate
+{
+  guint single_paragraph : 1;
+};
+
 
 GType
 gtk_cell_renderer_text_get_type (void)
@@ -192,6 +202,15 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 						       _("A list of style attributes to apply to the text of the renderer"),
 						       PANGO_TYPE_ATTR_LIST,
 						       G_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_SINGLE_PARAGRAPH_MODE,
+                                   g_param_spec_boolean ("single_paragraph_mode",
+                                                         _("Single Paragraph Mode"),
+                                                         _("Whether or not to keep all text in a single paragraph"),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));
+
   
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND,
@@ -421,6 +440,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 		  G_TYPE_STRING,
 		  G_TYPE_STRING);
 
+  g_type_class_add_private (object_class, sizeof (GtkCellRendererTextPrivate));
 }
 
 static void
@@ -468,6 +488,9 @@ gtk_cell_renderer_text_get_property (GObject        *object,
 				     GParamSpec     *pspec)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (object);
+  GtkCellRendererTextPrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (object);
 
   switch (param_id)
     {
@@ -477,6 +500,10 @@ gtk_cell_renderer_text_get_property (GObject        *object,
 
     case PROP_ATTRIBUTES:
       g_value_set_boxed (value, celltext->extra_attrs);
+      break;
+
+    case PROP_SINGLE_PARAGRAPH_MODE:
+      g_value_set_boolean (value, priv->single_paragraph);
       break;
 
     case PROP_BACKGROUND_GDK:
@@ -801,6 +828,9 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 				     GParamSpec   *pspec)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (object);
+  GtkCellRendererTextPrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (object);
 
   switch (param_id)
     {
@@ -850,6 +880,10 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	celltext->text = text;
 	celltext->extra_attrs = attrs;
       }
+      break;
+
+    case PROP_SINGLE_PARAGRAPH_MODE:
+      priv->single_paragraph = g_value_get_boolean (value);
       break;
       
     case PROP_BACKGROUND:
@@ -1102,6 +1136,9 @@ get_layout (GtkCellRendererText *celltext,
   PangoAttrList *attr_list;
   PangoLayout *layout;
   PangoUnderline uline;
+  GtkCellRendererTextPrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (celltext);
   
   layout = gtk_widget_create_pango_layout (widget, celltext->text);
 
@@ -1109,6 +1146,8 @@ get_layout (GtkCellRendererText *celltext,
     attr_list = pango_attr_list_copy (celltext->extra_attrs);
   else
     attr_list = pango_attr_list_new ();
+
+  pango_layout_set_single_paragraph_mode (layout, priv->single_paragraph);
 
   if (will_render)
     {

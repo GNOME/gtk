@@ -1,3 +1,11 @@
+Thu Dec 18 00:24:32 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init),
+	(gtk_cell_renderer_text_get_property),
+	(gtk_cell_renderer_text_set_property), (get_layout): add a
+	single-paragraph-mode property, use private instance data.
+	(Fixes #114943, reported by Morten Welinder).
+
 Thu Dec 18 00:07:01 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodel.h (gtk_tree_path_new_root),
