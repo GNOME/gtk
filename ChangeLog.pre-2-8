@@ -1,5 +1,9 @@
 2004-10-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksizegroup.c (do_size_request): Unset GTK_REQUEST_NEEDED
+	before emitting ::size-request, following this weeks discussion
+	on gtk-devel-list@gnome.org.
+
 	* gtk/gtkcellview.c (gtk_cell_view_get_size_of_row): Restore 
 	the size info for the current row after measuring another 
 	row.  (#154945, William Jon McCann)

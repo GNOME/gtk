@@ -1041,6 +1041,7 @@ gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
                                GtkRequisition *requisition)
 {
   GtkTreeRowReference *tmp;
+  GtkRequisition req;
 
   g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
