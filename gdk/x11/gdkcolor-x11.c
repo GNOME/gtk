@@ -131,7 +131,8 @@ gdk_colormap_finalize (GObject *object)
 
   gdk_colormap_remove (colormap);
 
-  XFreeColormap (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap);
+  if (!private->screen->closed)
+    XFreeColormap (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap);
 
   if (private->hash)
     g_hash_table_destroy (private->hash);
@@ -278,7 +279,7 @@ gdk_colormap_sync_palette (GdkColormap *colormap)
 	  nlookup++;
 	}
     }
-  
+
   XQueryColors (GDK_SCREEN_XDISPLAY (private->screen),
 		private->xcolormap, xpalette, nlookup);
   
@@ -334,8 +335,11 @@ gdk_colormap_sync (GdkColormap *colormap,
 {
   time_t current_time;
   GdkColormapPrivateX11 *private = GDK_COLORMAP_PRIVATE_DATA (colormap);
-  
+
   g_return_if_fail (GDK_IS_COLORMAP (colormap));
+
+  if (private->screen->closed)
+    return;
 
   current_time = time (NULL);
   if (!force && ((current_time - private->last_sync_time) < MIN_SYNC_TIME))
@@ -434,6 +438,9 @@ gdk_colormap_change (GdkColormap *colormap,
 
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
+  if (private->screen->closed)
+    return;
+
   xdisplay = GDK_SCREEN_XDISPLAY (private->screen);
   palette = g_new (XColor, ncolors);
 
@@ -519,6 +526,9 @@ gdk_colors_alloc (GdkColormap   *colormap,
 
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
+  if (private->screen->closed)
+    return FALSE;
+
   return_val = XAllocColorCells (GDK_SCREEN_XDISPLAY (private->screen),
 				 private->xcolormap,contiguous, planes,
 				 nplanes, pixels, npixels);
@@ -577,7 +587,7 @@ gdk_colors_free (GdkColormap *colormap,
 	}
     }
 
-  if (npixels)
+  if (npixels && !private->screen->closed)
     XFreeColors (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap,
 		 pixels, npixels, planes);
   g_free (pixels);
@@ -625,7 +635,7 @@ gdk_colormap_free_colors (GdkColormap *colormap,
 	}
     }
 
-  if (npixels)
+  if (npixels && !private->screen->closed)
     XFreeColors (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap,
 		 pixels, npixels, 0);
 
@@ -979,10 +989,13 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
   gint nremaining = 0;
   XColor xcolor;
 
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), FALSE);
-  g_return_val_if_fail (colors != NULL, FALSE);
+  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), ncolors);
+  g_return_val_if_fail (colors != NULL, ncolors);
 
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+
+  if (private->screen->closed)
+    return ncolors;
 
   for (i=0; i<ncolors; i++)
     {
@@ -1051,7 +1064,7 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
  * #GdkImage contains image data in hardware format, a #GdkPixbuf
  * contains image data in a canonical 24-bit RGB format.)
  *
- * This function is rarely useful, it's used for example to
+ * This function is rarely useful; it's used for example to
  * implement the eyedropper feature in #GtkColorSelection.
  * 
  **/
@@ -1083,10 +1096,15 @@ gdk_colormap_query_color (GdkColormap *colormap,
     break;
   case GDK_VISUAL_STATIC_COLOR:
     xcolor.pixel = pixel;
-    XQueryColor (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap, &xcolor);
-    result->red = xcolor.red;
-    result->green = xcolor.green;
-    result->blue =  xcolor.blue;
+    if (!private->screen->closed)
+      {
+	XQueryColor (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap, &xcolor);
+	result->red = xcolor.red;
+	result->green = xcolor.green;
+	result->blue =  xcolor.blue;
+      }
+    else
+      result->red = result->green = result->blue = 0;
     break;
   case GDK_VISUAL_PSEUDO_COLOR:
     g_return_if_fail (pixel < colormap->size);
@@ -1117,7 +1135,8 @@ gdk_color_change (GdkColormap *colormap,
   xcolor.flags = DoRed | DoGreen | DoBlue;
 
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
-  XStoreColor (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap, &xcolor);
+  if (!private->screen->closed)
+    XStoreColor (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap, &xcolor);
 
   return TRUE;
 }
@@ -1252,10 +1271,6 @@ gdk_colormap_remove (GdkColormap *cmap)
 {
   GdkColormapPrivateX11 *private;
 
-  if (!colormap_hash)
-    colormap_hash = g_hash_table_new ((GHashFunc) gdk_colormap_hash,
-				      (GEqualFunc) gdk_colormap_equal);
-
   private = GDK_COLORMAP_PRIVATE_DATA (cmap);
 
   g_hash_table_remove (colormap_hash, &private->xcolormap);
@@ -1295,7 +1310,10 @@ gdk_x11_colormap_get_xcolormap (GdkColormap *colormap)
 
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
-  return private->xcolormap;
+  if (private->screen->closed)
+    return None;
+  else
+    return private->xcolormap;
 }
 
 /**

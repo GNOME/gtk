@@ -34,7 +34,7 @@ static void gdk_input_check_proximity (GdkDisplay *display);
 void 
 _gdk_input_init(GdkDisplay *display)
 {
-  _gdk_init_input_core ();
+  _gdk_init_input_core (display);
   GDK_DISPLAY_X11 (display)->input_ignore_core = FALSE;
   gdk_input_common_init (display, FALSE);
 }

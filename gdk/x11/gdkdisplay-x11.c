@@ -42,6 +42,7 @@
 #endif
 
 static void                 gdk_display_x11_class_init         (GdkDisplayX11Class *class);
+static void                 gdk_display_x11_dispose            (GObject            *object);
 static void                 gdk_display_x11_finalize           (GObject            *object);
 
 static void gdk_internal_connection_watch (Display  *display,
@@ -83,7 +84,10 @@ _gdk_display_x11_get_type (void)
 static void
 gdk_display_x11_class_init (GdkDisplayX11Class * class)
 {
-  G_OBJECT_CLASS (class)->finalize = gdk_display_x11_finalize;
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  
+  object_class->dispose = gdk_display_x11_dispose;
+  object_class->finalize = gdk_display_x11_finalize;
   
   parent_class = g_type_class_peek_parent (class);
 }
@@ -479,6 +483,23 @@ gdk_x11_display_ungrab (GdkDisplay * display)
 }
 
 static void
+gdk_display_x11_dispose (GObject *object)
+{
+  GdkDisplayX11 *display_x11;
+  gint i;
+  
+  display_x11 = GDK_DISPLAY_X11 (object);;
+  
+  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
+    _gdk_screen_close (display_x11->screens[i]);
+
+  XCloseDisplay (display_x11->xdisplay);
+  display_x11->xdisplay = NULL;
+
+  G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
+static void
 gdk_display_x11_finalize (GObject *object)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
@@ -517,7 +538,6 @@ gdk_display_x11_finalize (GObject *object)
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     g_object_unref (G_OBJECT (display_x11->screens[i]));
   g_free (display_x11->screens);
-  XCloseDisplay (display_x11->xdisplay);
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -582,5 +602,3 @@ gdk_x11_display_get_xdisplay (GdkDisplay  *display)
 {
   return GDK_DISPLAY_X11 (display)->xdisplay;
 }
-
-

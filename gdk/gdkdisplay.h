@@ -55,9 +55,10 @@ struct _GdkDisplay
   GdkWindow *button_window[2];  /* The last 2 windows to receive button presses. */
   guint button_number[2];       /* The last 2 buttons to be pressed. */
 
+  guint double_click_time;	/* Maximum time between clicks in msecs */
   GdkDevice *core_pointer;	/* Core pointer device */
 
-  guint double_click_time;	               /* Maximum time between clicks in msecs */
+  guint closed : 1;		/* Whether this display has been closed */
 };
 
 struct _GdkDisplayClass

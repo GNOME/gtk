@@ -171,6 +171,25 @@ gdk_device_set_axis_use (GdkDevice   *device,
     }
 }
 
+/**
+ * gdk_device_get_history:
+ * @device: a #GdkDevice
+ * @window: the window with respect to which which the event coordinates will be reported
+ * @start: starting timestamp for range of events to return
+ * @stop: ending timestamp for the range of events to return
+ * @events: location to store a newly-allocated array of #GdkTimeCoord, or %NULL
+ * @n_events: location to store the length of @events, or %NULL
+ * 
+ * Obtains the motion history for a device; given a starting and
+ * ending timestamp, return all events in the motion history for
+ * the device in the given range of time. Some windowing systems
+ * do not support motion history, in which case, %FALSE will
+ * be returned. (This is not distinguishable from the case where
+ * motion history is supported and no events were found.)
+ * 
+ * Return value: %TRUE if the windowing system supports motion history and
+ *  at least one event was found.
+ **/
 gboolean
 gdk_device_get_history  (GdkDevice         *device,
 			 GdkWindow         *window,
@@ -179,31 +198,26 @@ gdk_device_get_history  (GdkDevice         *device,
 			 GdkTimeCoord    ***events,
 			 gint              *n_events)
 {
-  GdkTimeCoord **coords;
+  GdkTimeCoord **coords = NULL;
+  gboolean result = FALSE;
+  int tmp_n_events = 0;
   int i;
 
-  g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-  g_return_val_if_fail (events != NULL, FALSE);
-  g_return_val_if_fail (n_events != NULL, FALSE);
-
-  *n_events = 0;
-  *events = NULL;
 
   if (GDK_WINDOW_DESTROYED (window))
-    return FALSE;
-    
-  if (GDK_IS_CORE (device))
+    /* Nothing */ ;
+  else if (GDK_IS_CORE (device))
     {
       XTimeCoord *xcoords;
       
       xcoords = XGetMotionEvents (GDK_DRAWABLE_XDISPLAY (window),
 				  GDK_DRAWABLE_XID (window),
-				  start, stop, n_events);
+				  start, stop, &tmp_n_events);
       if (xcoords)
 	{
-	  coords = _gdk_device_allocate_history (device, *n_events);
-	  for (i=0; i<*n_events; i++)
+	  coords = _gdk_device_allocate_history (device, tmp_n_events);
+	  for (i=0; i<tmp_n_events; i++)
 	    {
 	      coords[i]->time = xcoords[i].time;
 	      coords[i]->axes[0] = xcoords[i].x;
@@ -212,14 +226,22 @@ gdk_device_get_history  (GdkDevice         *device,
 
 	  XFree (xcoords);
 
-	  *events = coords;
-	  return TRUE;
+	  result = TRUE;
 	}
       else
-	return FALSE;
+	result = FALSE;
     }
   else
-    return _gdk_device_get_history (device, window, start, stop, events, n_events);
+    result = _gdk_device_get_history (device, window, start, stop, &coords, &tmp_n_events);
+
+  if (n_events)
+    *n_events = tmp_n_events;
+  if (events)
+    *events = coords;
+  else if (coords)
+    gdk_device_free_history (coords, tmp_n_events);
+
+  return result;
 }
 
 GdkTimeCoord ** 

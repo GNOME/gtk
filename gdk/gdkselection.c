@@ -32,6 +32,17 @@ gdk_selection_send_notify (guint32  requestor,
 					 target, property, time);
 }
 
+gint
+gdk_text_property_to_text_list (GdkAtom       encoding,
+				gint          format, 
+				const guchar *text,
+				gint          length,
+				gchar      ***list)
+{
+  return gdk_text_property_to_text_list_for_display (gdk_display_get_default (),
+						     encoding, format, text, length, list);
+}
+
 /**
  * gdk_text_property_to_utf8_list:
  * @encoding: an atom representing the encoding of the text
@@ -56,6 +67,18 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
 {
   return gdk_text_property_to_utf8_list_for_display (gdk_display_get_default (),
 						     encoding, format, text, length, list);
+}
+
+gint
+gdk_string_to_compound_text (const gchar *str,
+			     GdkAtom     *encoding,
+			     gint        *format,
+			     guchar     **ctext,
+			     gint        *length)
+{
+  return gdk_string_to_compound_text_for_display (gdk_display_get_default (),
+						  str, encoding, format, 
+						  ctext, length);
 }
 
 /**

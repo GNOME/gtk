@@ -216,7 +216,8 @@ GdkImage *_gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 void       _gdk_window_destroy           (GdkWindow   *window,
 					  gboolean     foreign_destroy);
 void       _gdk_window_clear_update_area (GdkWindow   *window);
-      
+
+void       _gdk_screen_close             (GdkScreen   *screen);
 
 /*****************************************
  * Interfaces provided by windowing code *

@@ -720,12 +720,7 @@ _gdk_device_get_history (GdkDevice         *device,
       return TRUE;
     }
   else
-    {
-      *events = NULL;
-      *n_events = 0;
-
-      return FALSE;
-    }
+    return FALSE;
 }
 
 void 

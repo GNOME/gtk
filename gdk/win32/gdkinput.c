@@ -184,8 +184,10 @@ gdk_device_get_history  (GdkDevice         *device,
   g_return_val_if_fail (events != NULL, FALSE);
   g_return_val_if_fail (n_events != NULL, FALSE);
 
-  *n_events = 0;
-  *events = NULL;
+  if (n_events)
+    *n_events = 0;
+  if (events)
+    *events = NULL;
 
   if (GDK_WINDOW_DESTROYED (window))
     return FALSE;

@@ -125,20 +125,24 @@ gdk_pixmap_impl_x11_finalize (GObject *object)
 {
   GdkPixmapImplX11 *impl = GDK_PIXMAP_IMPL_X11 (object);
   GdkPixmap *wrapper = GDK_PIXMAP (GDK_DRAWABLE_IMPL_X11 (impl)->wrapper);
+  GdkDisplay *display = GDK_PIXMAP_DISPLAY (wrapper);
 
+  if (!display->closed)
+    {
 #ifdef HAVE_XFT  
-  {
-    GdkDrawableImplX11 *draw_impl = GDK_DRAWABLE_IMPL_X11 (impl);
-
-    if (draw_impl->picture)
-      XRenderFreePicture (GDK_PIXMAP_XDISPLAY (wrapper), draw_impl->picture);
-  }
+      {
+	GdkDrawableImplX11 *draw_impl = GDK_DRAWABLE_IMPL_X11 (impl);
+	
+	if (draw_impl->picture)
+	  XRenderFreePicture (GDK_DISPLAY_XDISPLAY (display), draw_impl->picture);
+      }
 #endif /* HAVE_XFT */  
 
-  if (!impl->is_foreign)
-    XFreePixmap (GDK_PIXMAP_XDISPLAY (wrapper), GDK_PIXMAP_XID (wrapper));
-  
-  _gdk_xid_table_remove (GDK_PIXMAP_DISPLAY (wrapper), GDK_PIXMAP_XID (wrapper));
+      if (!impl->is_foreign)
+	XFreePixmap (GDK_DISPLAY_XDISPLAY (display), GDK_PIXMAP_XID (wrapper));
+    }
+      
+  _gdk_xid_table_remove (display, GDK_PIXMAP_XID (wrapper));
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

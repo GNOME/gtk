@@ -54,20 +54,16 @@ gdk_screen_get_type (void)
   return object_type;
 }
 
-
-/**
- * gdk_screen_close:
- * @screen: a #GdkScreen
- *
- * Closes the @screen connection and cleanup its resources.
- * Note that this function is called automatically by gdk_display_close().
- **/
 void 
-gdk_screen_close (GdkScreen *screen)
+_gdk_screen_close (GdkScreen *screen)
 {
   g_return_if_fail (GDK_IS_SCREEN (screen));
-  
-  g_object_run_dispose (G_OBJECT (screen));
+
+  if (!screen->closed)
+    {
+      screen->closed = TRUE;
+      g_object_run_dispose (G_OBJECT (screen));
+    }
 }
 
 /**

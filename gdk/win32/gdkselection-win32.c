@@ -560,11 +560,11 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
 /* Simplistic implementations of text list and compound text functions */
 
 gint
-gdk_text_property_to_text_list (GdkAtom       encoding,
-				gint          format, 
-				const guchar *text,
-				gint          length,
-				gchar      ***list)
+gdk_text_property_to_text_list_for_display (GdkAtom       encoding,
+					    gint          format, 
+					    const guchar *text,
+					    gint          length,
+					    gchar      ***list)
 {
   gchar *enc_name;
 
@@ -592,11 +592,11 @@ gdk_free_text_list (gchar **list)
 }
 
 gint
-gdk_string_to_compound_text (const gchar *str,
-			     GdkAtom     *encoding,
-			     gint        *format,
-			     guchar     **ctext,
-			     gint        *length)
+gdk_string_to_compound_text_for_display (const gchar *str,
+					 GdkAtom     *encoding,
+					 gint        *format,
+					 guchar     **ctext,
+					 gint        *length)
 {
   GDK_NOTE (DND, g_print ("gdk_string_to_compound_text: %.20s\n", str));
 

@@ -85,6 +85,7 @@ struct _GdkScreenX11Class
 GType       _gdk_screen_x11_get_type (void);
 GdkScreen * _gdk_x11_screen_new      (GdkDisplay *display,
 				      gint	  screen_number);
+
 G_END_DECLS
 
 #endif /* __GDK_SCREEN_X11_H__ */

@@ -1,3 +1,47 @@
+Thu Aug  1 11:26:03 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdisplay.[ch] gdk/gdkscreen.[ch] gdkinternals.h:
+	Start implementing display/screen closing scheme; keep a
+	flag for whether displays and screens are closed,
+	call g_object_run_dispose(). Remove public gdk_screen_close().
+
+	* gdk/x11/gdkdisplay-x11.c gdk/x11/gdkscreen-x11.c: Add 
+	dispose() methods; move appropriate parts of the finalize
+	there.
+
+	* gdk/x11/gdkcolor-x11.c gdk/x11/gdkimage-x11.c
+	gdk/x11/gdkmain-x11.c gdk/x11/gdkpango-x11.c 
+	gdk/x11/gdkpixmap-x11.c gdk/x11/gdkproperty-x11.c
+	gdk/x11/gdkselection-x11.c gdk/x11/gdkwindow-x11.c:
+	Start of making everything correctly ignore operations
+	when a display has been closed.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_decorations):
+	Handle decorations == NULL.
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_remove): 
+	Remove unnecessary hash table creation.
+
+	* gdk/x11/gdkinput.c gdk/x11/gdkinput-x11.c gdk/win32/gdkinput.c
+	Fix up gdk_device_get_history - handle events, n_events == NULL,
+	etc.
+
+	* gdk/x11/gdkproperty-x11.c (gdk_property_get):
+	Handle failure better.
+	
+	* gdk/x11/gdkselection-x11.c (gdk_selection_property_get):
+	Handle failure better, handle data == NULL, move docs
+	here, remove an excess round trip by asking for
+	all selection data at once.
+	
+	* gdk/gdkselection.c gdk/win32/{x11,win32}/gdkselection-{x11,win32}.c
+	  gdk/{x11,win32}/gdkmain-{x11,win32}.c	gdk/gdkdisplay.c: Move
+	gdk_text_property_to_text_list(), gdk_string_to_compound_text(),
+	gdk_display_set_sm_client_id() to display-independent part of GDK.
+
+	* gdk/Makefile.am (gdk_c_sources): Sort gdkdisplay/screen.[ch]
+	into the right place.
+
 2002-07-31  jacob berkman  <jacob@ximian.com>
 
 	* gtk/queryimmodules.c (print_escaped): escape_string() only takes

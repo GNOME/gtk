@@ -265,21 +265,13 @@ form.
 
 <!-- ##### FUNCTION gdk_selection_property_get ##### -->
 <para>
-Retrieves selection data that was stored by the selection
-data in response to a call to gdk_selection_convert().
 </para>
 
-@requestor: the window on which the data is stored
-@data: location to store a pointer to the retrieved data.
-       If the retrieval failed, %NULL we be stored here, otherwise, it
-       will be non-%NULL and the returned data should be freed with g_free()
-       when you are finished using it. The length of the
-       allocated memory is one more than the the length
-       of the returned data, and the final byte will always
-       be zero, to ensure nul-termination of strings.
-@prop_type: location to store the type of the property.
-@prop_format: location to store the format of the property.
-@Returns: the length of the retrieved data.
+@requestor: 
+@data: 
+@prop_type: 
+@prop_format: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_selection_send_notify ##### -->

@@ -91,6 +91,7 @@ gdk_public_h_sources = @STRIP_BEGIN@		\
 	gdk.h					\
 	gdkcolor.h				\
 	gdkcursor.h				\
+	gdkdisplay.h				\
 	gdkdnd.h				\
 	gdkdrawable.h				\
 	gdkevents.h				\
@@ -108,12 +109,11 @@ gdk_public_h_sources = @STRIP_BEGIN@		\
 	gdkproperty.h				\
 	gdkregion.h				\
 	gdkrgb.h				\
+	gdkscreen.h				\
 	gdkselection.h				\
 	gdktypes.h				\
 	gdkvisual.h				\
 	gdkwindow.h				\
-	gdkdisplay.h				\
-	gdkscreen.h				\
 @STRIP_END@
 
 gdk_headers = @STRIP_BEGIN@       \
@@ -126,6 +126,7 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 	gdk.c			\
 	gdkcolor.c		\
 	gdkcursor.c		\
+	gdkdisplay.c		\
 	gdkdraw.c		\
 	gdkevents.c     	\
 	gdkfont.c		\
@@ -147,11 +148,10 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 	gdkrectangle.c		\
 	gdkregion-generic.c	\
 	gdkregion-generic.h	\
+	gdkscreen.c		\
 	gdkselection.c		\
 	gdkvisual.c		\
 	gdkwindow.c		\
-	gdkdisplay.c		\
-	gdkscreen.c		\
 @STRIP_END@
 
 #

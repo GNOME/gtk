@@ -450,26 +450,6 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
 }
 
 /**
- * gdk_set_sm_client_id:
- * @sm_client_id: the client id assigned by the session manager when the
- *    connection was opened, or %NULL to remove the property.
- * 
- * Sets the <literal>SM_CLIENT_ID</literal> property on the application's leader window so that
- * the window manager can save the application's state using the X11R6 ICCCM
- * session management protocol.
- *
- * See the X Session Management Library documentation for more information on
- * session management and the Inter-Client Communication Conventions Manual
- * (ICCCM) for information on the <literal>WM_CLIENT_LEADER</literal> property. 
- * (Both documents are part of the X Window System distribution.)
- **/
-void
-gdk_set_sm_client_id (const gchar* sm_client_id)
-{
-  gdk_display_set_sm_client_id (gdk_display_get_default (),sm_client_id);
-}
-
-/**
  * gdk_display_set_sm_client_id:
  * @display: a #GdkDisplay
  * @sm_client_id: the client id assigned by the session manager when the
@@ -489,6 +469,9 @@ gdk_display_set_sm_client_id (GdkDisplay  *display,
 			      const gchar *sm_client_id)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+
+  if (display->closed)
+    return;
 
   if (sm_client_id && strcmp (sm_client_id, ""))
     {
@@ -738,6 +721,9 @@ _gdk_send_xevent (GdkDisplay *display,
 {
   gboolean result;
 
+  if (display->closed)
+    return FALSE;
+
   gdk_error_trap_push ();
   result = XSendEvent (GDK_DISPLAY_XDISPLAY (display), window, 
 		       propagate, event_mask, event_send);
@@ -787,8 +773,8 @@ gdk_x11_ungrab_server ()
  * Gets the default GTK+ screen number.
  * 
  * Return value: returns the screen number specified by
- *   the --display command line option on the DISPLAY environment
- *   variable gdk_init() calls XOpenDisplay().
+ *   the --display command line option or the DISPLAY environment
+ *   variable when gdk_init() calls XOpenDisplay().
  **/
 gint
 gdk_x11_get_default_screen (void)

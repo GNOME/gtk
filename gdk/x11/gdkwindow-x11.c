@@ -220,6 +220,9 @@ gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
   impl = GDK_WINDOW_IMPL_X11 (drawable);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
+  if (GDK_WINDOW_DESTROYED (draw_impl->wrapper))
+    return;
+
   /* chain up */
   GDK_DRAWABLE_CLASS (parent_class)->set_colormap (drawable, cmap);
 
@@ -2628,10 +2631,10 @@ gdk_window_add_colormap_windows (GdkWindow *window)
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  toplevel = gdk_window_get_toplevel (window);
-  if (GDK_WINDOW_DESTROYED (toplevel))
+
+  if (GDK_WINDOW_DESTROYED (window))
     return;
+  toplevel = gdk_window_get_toplevel (window);
   
   old_windows = NULL;
   if (!XGetWMColormapWindows (GDK_WINDOW_XDISPLAY (toplevel),
@@ -3513,11 +3516,13 @@ gdk_window_set_decorations (GdkWindow      *window,
  * Returns: TRUE if the window has decorations set, FALSE otherwise.
  **/
 gboolean
-gdk_window_get_decorations(GdkWindow *window,
+gdk_window_get_decorations(GdkWindow       *window,
 			   GdkWMDecoration *decorations)
 {
   MotifWmHints *hints;
   gboolean result = FALSE;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
   hints = gdk_window_get_mwm_hints (window);
   
@@ -3525,7 +3530,8 @@ gdk_window_get_decorations(GdkWindow *window,
     {
       if (hints->flags & MWM_HINTS_DECORATIONS)
 	{
-	  *decorations = hints->decorations;
+	  if (decorations)
+	    *decorations = hints->decorations;
 	  result = TRUE;
 	}
       

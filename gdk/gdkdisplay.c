@@ -29,6 +29,7 @@
 
 static void gdk_display_class_init (GdkDisplayClass *class);
 static void gdk_display_init       (GdkDisplay      *display);
+static void gdk_display_dispose    (GObject         *object);
 static void gdk_display_finalize   (GObject         *object);
 
 static GObjectClass *parent_class;
@@ -67,6 +68,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gdk_display_finalize;
+  object_class->dispose = gdk_display_dispose;
 }
 
 static void
@@ -79,6 +81,12 @@ gdk_display_init (GdkDisplay *display)
   display->button_number[0] = display->button_number[1] = -1;
 
   display->double_click_time = 250;
+}
+
+static void
+gdk_display_dispose (GObject *object)
+{
+  GdkDisplay *display = GDK_DISPLAY_OBJECT (object);
 }
 
 static void
@@ -99,13 +107,22 @@ gdk_display_finalize (GObject *object)
  * gdk_display_close:
  * @display: a #GdkDisplay
  *
- * Closes and cleanup the resources used by the @display
+ * Closes the connection windowing system for the given display,
+ * and cleans up associated resources.
  */
 void
 gdk_display_close (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  g_object_unref (G_OBJECT (display));
+
+  if (!display->closed)
+    {
+      display->closed = TRUE;
+
+      g_object_run_dispose (G_OBJECT (display));
+      
+      g_object_unref (G_OBJECT (display));
+    }
 }
 
 /**
@@ -294,3 +311,24 @@ gdk_display_get_core_pointer (GdkDisplay *display)
 {
   return display->core_pointer;
 }
+
+/**
+ * gdk_set_sm_client_id:
+ * @sm_client_id: the client id assigned by the session manager when the
+ *    connection was opened, or %NULL to remove the property.
+ * 
+ * Sets the <literal>SM_CLIENT_ID</literal> property on the application's leader window so that
+ * the window manager can save the application's state using the X11R6 ICCCM
+ * session management protocol.
+ *
+ * See the X Session Management Library documentation for more information on
+ * session management and the Inter-Client Communication Conventions Manual
+ * (ICCCM) for information on the <literal>WM_CLIENT_LEADER</literal> property. 
+ * (Both documents are part of the X Window System distribution.)
+ **/
+void
+gdk_set_sm_client_id (const gchar* sm_client_id)
+{
+  gdk_display_set_sm_client_id (gdk_display_get_default (), sm_client_id);
+}
+

@@ -111,7 +111,7 @@ static gchar *XAtomsStrings[] = {
   "CAP_HEIGHT",
   "WM_CLASS",
   "WM_TRANSIENT_FOR",
-  /* Below here, these our our additions. Increment N_CUSTOM_PREDEFINED
+  /* Below here, these are our additions. Increment N_CUSTOM_PREDEFINED
    * if you add any.
    */
   "CLIPBOARD"			/* = 69 */
@@ -160,6 +160,9 @@ gdk_x11_atom_to_xatom_for_display (GdkDisplay *display,
   Atom xatom = None;
   
   g_return_val_if_fail (GDK_IS_DISPLAY (display), None);
+
+  if (display->closed)
+    return None;
   
   display_x11 = GDK_DISPLAY_X11 (display); 
   
@@ -216,7 +219,10 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
   GdkDisplayX11 *display_x11;
   GdkAtom virtual_atom = GDK_NONE;
   
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), virtual_atom);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), GDK_NONE);
+
+  if (display->closed)
+    return GDK_NONE;
 
   display_x11 = GDK_DISPLAY_X11 (display);
   
@@ -425,6 +431,7 @@ gdk_property_get (GdkWindow   *window,
   guchar *ret_data;
   Atom xproperty;
   Atom xtype;
+  int res;
 
   g_return_val_if_fail (!window || GDK_IS_WINDOW (window), FALSE);
 
@@ -436,20 +443,23 @@ gdk_property_get (GdkWindow   *window,
       GDK_NOTE (MULTIHEAD, g_message ("gdk_property_get(): window is NULL\n"));
     }
 
+  if (GDK_WINDOW_DESTROYED (window))
+    return FALSE;
+
   display = gdk_drawable_get_display (window);
   xproperty = gdk_x11_atom_to_xatom_for_display (display, property);
   xtype = gdk_x11_atom_to_xatom_for_display (display, type);
 
   ret_data = NULL;
   
-  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
-		      GDK_WINDOW_XWINDOW (window), xproperty,
-		      offset, (length + 3) / 4, pdelete,
-		      xtype, &ret_prop_type, &ret_format,
-		      &ret_nitems, &ret_bytes_after,
-		      &ret_data);
+  res = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
+			    GDK_WINDOW_XWINDOW (window), xproperty,
+			    offset, (length + 3) / 4, pdelete,
+			    xtype, &ret_prop_type, &ret_format,
+			    &ret_nitems, &ret_bytes_after,
+			    &ret_data);
 
-  if ((ret_prop_type == None) && (ret_format == 0))
+  if (res != Success || (ret_prop_type == None && ret_format == 0))
     {
       return FALSE;
     }
@@ -548,6 +558,9 @@ gdk_property_change (GdkWindow    *window,
       GDK_NOTE (MULTIHEAD, g_message ("gdk_property_delete(): window is NULL\n"));
     }
 
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
 
   display = gdk_drawable_get_display (window);
   

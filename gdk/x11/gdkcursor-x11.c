@@ -109,7 +109,11 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  xcursor = XCreateFontCursor (GDK_DISPLAY_XDISPLAY (display), cursor_type);
+  if (display->closed)
+    xcursor = None;
+  else
+    xcursor = XCreateFontCursor (GDK_DISPLAY_XDISPLAY (display), cursor_type);
+  
   private = g_new (GdkCursorPrivate, 1);
   private->display = display;
   private->xcursor = xcursor;
@@ -153,8 +157,11 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   xbg.blue = bg->blue;
   xbg.green = bg->green;
   
-  xcursor = XCreatePixmapCursor (GDK_DISPLAY_XDISPLAY (display),
-				 source_pixmap, mask_pixmap, &xfg, &xbg, x, y);
+  if (display->closed)
+    xcursor = None;
+  else
+    xcursor = XCreatePixmapCursor (GDK_DISPLAY_XDISPLAY (display),
+				   source_pixmap, mask_pixmap, &xfg, &xbg, x, y);
   private = g_new (GdkCursorPrivate, 1);
   private->display = display;
   private->xcursor = xcursor;
@@ -174,7 +181,8 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   g_return_if_fail (cursor->ref_count == 0);
 
   private = (GdkCursorPrivate *) cursor;
-  XFreeCursor (GDK_DISPLAY_XDISPLAY (private->display), private->xcursor);
+  if (!private->display->closed && private->xcursor)
+    XFreeCursor (GDK_DISPLAY_XDISPLAY (private->display), private->xcursor);
 
   g_free (private);
 }

@@ -131,6 +131,9 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
+  if (display->closed)
+    return FALSE;
+
   if (owner) 
     {
       if (GDK_WINDOW_DESTROYED (owner))
@@ -198,6 +201,9 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
   Window xwindow;
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
+  if (display->closed)
+    return NULL;
+  
   xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display),
 				gdk_x11_atom_to_xatom_for_display (display, 
 								   selection));
@@ -227,6 +233,26 @@ gdk_selection_convert (GdkWindow *requestor,
 		     GDK_WINDOW_XID (requestor), time);
 }
 
+/**
+ * gdk_selection_property_get:
+ * @requestor: the window on which the data is stored
+ * @data: location to store a pointer to the retrieved data.
+       If the retrieval failed, %NULL we be stored here, otherwise, it
+       will be non-%NULL and the returned data should be freed with g_free()
+       when you are finished using it. The length of the
+       allocated memory is one more than the the length
+       of the returned data, and the final byte will always
+       be zero, to ensure nul-termination of strings.
+ * @prop_type: location to store the type of the property.
+ * @prop_format: location to store the format of the property.
+ * 
+ * Retrieves selection data that was stored by the selection
+ * data in response to a call to gdk_selection_convert(). This function
+ * will not be used by applications, who should use the #GtkClipboard
+ * API instead.
+ * 
+ * Return value: the length of the retrieved data.
+ **/
 gint
 gdk_selection_property_get (GdkWindow  *requestor,
 			    guchar    **data,
@@ -246,86 +272,75 @@ gdk_selection_property_get (GdkWindow  *requestor,
   
   display = GDK_WINDOW_DISPLAY (requestor);
 
-  /* If retrieved chunks are typically small, (and the ICCCM says the
-     should be) it would be a win to try first with a buffer of
-     moderate length, to avoid two round trips to the server */
-
   if (GDK_WINDOW_DESTROYED (requestor))
-    return 0;
+    goto err;
 
   t = NULL;
-  XGetWindowProperty (GDK_WINDOW_XDISPLAY (requestor),
-		      GDK_WINDOW_XID (requestor),
-		      gdk_x11_atom_to_xatom_for_display (display, _gdk_selection_property),
-		      0, 0, False,
-		      AnyPropertyType, &prop_type, 
-		      &prop_format, &nitems, &nbytes, &t);
-  if (ret_type)
-    *ret_type = gdk_x11_xatom_to_atom_for_display (display, prop_type);
-  if (ret_format)
-    *ret_format = prop_format;
-
-  if (prop_type == None)
-    {
-      *data = NULL;
-      return 0;
-    }
-  
-  if (t)
-    {
-      XFree (t);
-      t = NULL;
-    }
-
-  /* Add on an extra byte to handle null termination.  X guarantees
-     that t will be 1 longer than nbytes and null terminated */
-  length = nbytes + 1;
 
   /* We can't delete the selection here, because it might be the INCR
      protocol, in which case the client has to make sure they'll be
      notified of PropertyChange events _before_ the property is deleted.
      Otherwise there's no guarantee we'll win the race ... */
-  XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (requestor),
-		      GDK_DRAWABLE_XID (requestor),
-		      gdk_x11_atom_to_xatom_for_display (display, _gdk_selection_property),
-		      0, (nbytes + 3) / 4, False,
-		      AnyPropertyType, &prop_type, &prop_format,
-		      &nitems, &nbytes, &t);
-
+  if (XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (requestor),
+			  GDK_DRAWABLE_XID (requestor),
+			  gdk_x11_atom_to_xatom_for_display (display, _gdk_selection_property),
+			  0, 0x1FFFFFFF /* MAXINT32 / 4 */, False, 
+			  AnyPropertyType, &prop_type, &prop_format,
+			  &nitems, &nbytes, &t) != Success)
+    goto err;
+    
   if (prop_type != None)
     {
-      *data = g_new (guchar, length);
+      if (ret_type)
+	*ret_type = gdk_x11_xatom_to_atom_for_display (display, prop_type);
+      if (ret_format)
+	*ret_format = prop_format;
       
-      if (prop_type == XA_ATOM ||
-	  prop_type == gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
-	{
-	  Atom* atoms = (Atom*) t;
-	  GdkAtom* atoms_dest;
-	  gint num_atom, i;
+      /* Add on an extra byte to handle null termination.  X guarantees
+	 that t will be 1 longer than nbytes and null terminated */
+      length = nbytes + 1;
 
-	  num_atom = (length - 1) / sizeof (Atom);
-	  length = sizeof (GdkAtom) * num_atom + 1;
-	  *data = g_malloc (length);
-	  (*data)[length - 1] = '\0';
-	  atoms_dest = (GdkAtom *)(*data);
-	  
-	  for (i=0; i < num_atom; i++)
-	    atoms_dest[i] = gdk_x11_xatom_to_atom_for_display (display, atoms[i]);
-	}
-      else
+      if (data)
 	{
-	  *data = g_memdup (t, length);
+	  *data = g_new (guchar, length);
+      
+	  if (prop_type == XA_ATOM ||
+	      prop_type == gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
+	    {
+	      Atom* atoms = (Atom*) t;
+	      GdkAtom* atoms_dest;
+	      gint num_atom, i;
+	      
+	      num_atom = (length - 1) / sizeof (Atom);
+	      length = sizeof (GdkAtom) * num_atom + 1;
+	      *data = g_malloc (length);
+	      (*data)[length - 1] = '\0';
+	      atoms_dest = (GdkAtom *)(*data);
+	      
+	      for (i=0; i < num_atom; i++)
+		atoms_dest[i] = gdk_x11_xatom_to_atom_for_display (display, atoms[i]);
+	    }
+	  else
+	    {
+	      *data = g_memdup (t, length);
+	    }
 	}
       
       if (t)
 	XFree (t);
-      return length-1;
+      
+      return length - 1;
     }
-  else
-    {
-      *data = NULL;
-      return 0;
-    }
+
+ err:
+  if (ret_type)
+    *ret_type = GDK_NONE;
+  if (ret_format)
+    *ret_format = 0;
+  if (data)
+    *data = NULL;
+  
+  return 0;
 }
 
 /**
@@ -399,21 +414,20 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
   gchar **local_list;
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
+  if (list)
+    *list = NULL;
+
+  if (display->closed)
+    return 0;
+
   property.value = (guchar *)text;
   property.encoding = gdk_x11_atom_to_xatom_for_display (display, encoding);
   property.format = format;
   property.nitems = length;
   res = XmbTextPropertyToTextList (GDK_DISPLAY_XDISPLAY (display), &property, 
 				   &local_list, &count);
-
-  if (res == XNoMemory || res == XLocaleNotSupported || 
-      res == XConverterNotFound)
-    {
-      if (list)
-	*list = NULL;
-
-      return 0;
-    }
+  if (res == XNoMemory || res == XLocaleNotSupported || res == XConverterNotFound)
+    return 0;
   else
     {
       if (list)
@@ -423,17 +437,6 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
       
       return count;
     }
-}
-
-gint
-gdk_text_property_to_text_list (GdkAtom       encoding,
-				gint          format, 
-				const guchar *text,
-				gint          length,
-				gchar      ***list)
-{
-  return gdk_text_property_to_text_list_for_display (gdk_display_get_default (),
-						     encoding, format, text, length, list);
 }
 
 void
@@ -638,9 +641,12 @@ gdk_string_to_compound_text_for_display (GdkDisplay  *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
-  res = XmbTextListToTextProperty (GDK_DISPLAY_XDISPLAY (display), 
-				   (char **)&str, 1, XCompoundTextStyle,
-                               	   &property);
+  if (display->closed)
+    res = XLocaleNotSupported;
+  else
+    res = XmbTextListToTextProperty (GDK_DISPLAY_XDISPLAY (display), 
+				     (char **)&str, 1, XCompoundTextStyle,
+				     &property);
   if (res != Success)
     {
       property.encoding = None;
@@ -659,18 +665,6 @@ gdk_string_to_compound_text_for_display (GdkDisplay  *display,
     *length = property.nitems;
 
   return res;
-}
-
-gint
-gdk_string_to_compound_text (const gchar *str,
-			     GdkAtom     *encoding,
-			     gint        *format,
-			     guchar     **ctext,
-			     gint        *length)
-{
-  return gdk_string_to_compound_text_for_display (gdk_display_get_default (),
-						  str, encoding, format, 
-						  ctext, length);
 }
 
 /* The specifications for COMPOUND_TEXT and STRING specify that C0 and

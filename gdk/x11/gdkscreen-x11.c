@@ -36,6 +36,7 @@
 #endif
 
 static void         gdk_screen_x11_class_init  (GdkScreenX11Class *klass);
+static void         gdk_screen_x11_dispose     (GObject		  *object);
 static void         gdk_screen_x11_finalize    (GObject		  *object);
 static void	    init_xinerama_support      (GdkScreen	  *screen);
 
@@ -69,9 +70,13 @@ _gdk_screen_x11_get_type ()
 }
 
 void
-gdk_screen_x11_class_init (GdkScreenX11Class * klass)
+gdk_screen_x11_class_init (GdkScreenX11Class *klass)
 {
-  G_OBJECT_CLASS (klass)->finalize = gdk_screen_x11_finalize;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  
+  object_class->dispose = gdk_screen_x11_dispose;
+  object_class->finalize = gdk_screen_x11_finalize;
+
   parent_class = g_type_class_peek_parent (klass);
 }
 
@@ -223,6 +228,22 @@ gdk_screen_set_default_colormap (GdkScreen   *screen,
 }
 
 static void
+gdk_screen_x11_dispose (GObject *object)
+{
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
+
+  screen_x11->root_window = NULL;
+
+  screen_x11->xdisplay = NULL;
+  screen_x11->xscreen = NULL;
+  screen_x11->screen_num = -1;
+  screen_x11->xroot_window = None;
+  screen_x11->wmspec_check_window = None;
+
+  G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
+static void
 gdk_screen_x11_finalize (GObject *object)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
@@ -237,6 +258,9 @@ gdk_screen_x11_finalize (GObject *object)
   g_hash_table_destroy (screen_x11->visual_hash);
   /* X settings */
   g_free (screen_x11->xsettings_client);
+
+  g_free (screen_x11->monitors);
+  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 

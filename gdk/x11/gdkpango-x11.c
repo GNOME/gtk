@@ -49,6 +49,9 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
   GdkDisplayX11 *display_x11;
   
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  if (screen->closed)
+    return NULL;
   
   display_x11 = GDK_DISPLAY_X11 (GDK_SCREEN_DISPLAY (screen));
   
