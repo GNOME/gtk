@@ -1,5 +1,8 @@
 2005-01-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellrendererprogress.c (gtk_cell_renderer_progress_set_value): 
+	Add a translator hint.  (#163889)
+
 	* configure.in: Check for _NL_TIME_FIRST_WEEKDAY too, since it
 	is an enum value, not a define. Pointed out by Tommi Komulainen.
 	* gtk/gtkcalendar.c (gtk_calendar_init): Adapt.

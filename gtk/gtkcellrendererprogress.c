@@ -232,6 +232,7 @@ gtk_cell_renderer_progress_set_value (GtkCellRendererProgress *cellprogress,
   if (cellprogress->priv->text)
     text = g_strdup (cellprogress->priv->text);
   else
+    /* do not translate the part before the | */
     text = g_strdup_printf (Q_("progress bar label|%d %%"), 
 			    cellprogress->priv->value);
   
