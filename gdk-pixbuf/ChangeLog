@@ -1,5 +1,9 @@
 1999-11-09  Michael Fulbright  <drmike@redhat.com>
 
+        * src/testpixbuf.c: Fixed it to use timeout to read from file
+	for progressive loading. Set TBF_KBPS=n, where n is the number of
+	kilobytes/second to simulate in downloading. n has to be an integer.
+	
 	* src/io-jpeg.c: Slight cosmetic cleanup.
 
 	* src/io-pnm.c: Fixed raw PNM loading bug. Also discovered that ASCII

@@ -27,6 +27,16 @@
 #include "gdk-pixbuf-io.h"
 #include "gdk-pixbuf-loader.h"
 
+typedef struct {
+	FILE             *imagefile;
+	GdkPixbufLoader  *loader;
+	guchar           *buf;
+	guint            timeout;
+	guint            readlen;
+
+} ProgressFileStatus;
+
+
 #define DEFAULT_WIDTH  24
 #define DEFAULT_HEIGHT 24
 
@@ -417,17 +427,34 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
         return window;
 }
 
+
 static gint
 update_timeout(gpointer data)
 {
-        GtkWidget** window_loc = data;
+        ProgressFileStatus *status = data;
+	gboolean done;
 
-        if (*window_loc != NULL) {
-                gtk_widget_queue_draw(*window_loc);
-        }
+	done = TRUE;
+	if (!feof(status->imagefile)) {
+		gint nbytes;
 
-	return TRUE;
+		nbytes = fread(status->buf, 1, status->readlen, 
+			       status->imagefile);
+
+		done = !gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (status->loader), status->buf, nbytes);
+			
+	}
+
+	if (done) {
+		gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (status->loader));
+		gtk_object_destroy (GTK_OBJECT(status->loader));
+		fclose (status->imagefile);
+		g_free (status->buf);
+	}
+
+	return !done;
 }
+
 
 static void
 progressive_prepared_callback(GdkPixbufLoader* loader, gpointer data)
@@ -449,7 +476,14 @@ progressive_prepared_callback(GdkPixbufLoader* loader, gpointer data)
 static void
 progressive_updated_callback(GdkPixbufLoader* loader, guint x, guint y, guint width, guint height, gpointer data)
 {
-	g_print ("progressive_updated_callback:\n\t%d\t%d\t%d\t%d\n", x, y, width, height);
+        GtkWidget** window_loc = data;
+
+/*	g_print ("progressive_updated_callback:\n\t%d\t%d\t%d\t%d\n", x, y, width, height); */
+
+        if (*window_loc != NULL)
+                gtk_widget_queue_draw_area(*window_loc,
+					   x, y, width, height);
+
         return;
 }
 
@@ -477,6 +511,16 @@ main (int argc, char **argv)
 	{
 		char *tbf_readlen = getenv("TBF_READLEN");
 		if(tbf_readlen) readlen = atoi(tbf_readlen);
+	}
+
+	{
+		char *tbf_bps = getenv("TBF_KBPS");
+		guint bps;
+
+		if (tbf_bps) {
+			bps = atoi(tbf_bps);
+			readlen = (bps*1024)/10;
+		}
 	}
 
 	i = 1;
@@ -509,14 +553,15 @@ main (int argc, char **argv)
 				found_valid = TRUE;
 			}
 		}
-
+#if 1
                 {
                         GtkWidget* rgb_window = NULL;
-                        guint timeout;
-			char *buf;
+			ProgressFileStatus   status;
 
                         pixbuf_loader = gdk_pixbuf_loader_new ();
+			status.loader = pixbuf_loader;
 
+			status.buf = g_malloc (readlen);
                         gtk_signal_connect(GTK_OBJECT(pixbuf_loader),
                                            "area_prepared",
                                            GTK_SIGNAL_FUNC(progressive_prepared_callback),
@@ -527,35 +572,15 @@ main (int argc, char **argv)
                                            GTK_SIGNAL_FUNC(progressive_updated_callback),
                                            &rgb_window);
 
-                        timeout = gtk_timeout_add(1000, update_timeout, &rgb_window);
-                        
-                        file = fopen (argv[1], "r");
-                        g_assert (file != NULL);
-			buf = g_malloc(readlen);
+			
+                        status.imagefile = fopen (argv[1], "r");
+                        g_assert (status.imagefile != NULL);
 
-                        while (!feof(file)) {
-				int nbytes;
-				nbytes = fread(buf, 1, readlen, file);
+			status.readlen = readlen;
 
-                                //printf(".");
-                                fflush(stdout);
-                                
-                                if (gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (pixbuf_loader), buf, nbytes) == FALSE)
-                                        break;
-
-	                        while (gtk_events_pending())
-	                        	gtk_main_iteration();
-                        }
-			printf("\n");
-			gtk_timeout_remove (timeout);
-                        gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (pixbuf_loader));
-			gtk_object_destroy (GTK_OBJECT(pixbuf_loader));
-                        fclose (file);
-
-                        if (rgb_window != NULL)
-                                gtk_widget_queue_draw(rgb_window);
+                        status.timeout = gtk_timeout_add(100, update_timeout, &status);
                 }
-		
+#endif
 	}
 
 	if (found_valid)

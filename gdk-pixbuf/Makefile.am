@@ -21,13 +21,16 @@ endif
 
 XPM_LIB =	libpixbuf-xpm.la
 
+PNM_LIB =	libpixbuf-pnm.la
+
 libexec_LTLIBRARIES =		\
 	$(PNG_LIB)	\
 	$(JPEG_LIB)	\
 	$(GIF_LIB)	\
 	$(RAS_LIB)	\
 	$(XPM_LIB)	\
-	$(TIFF_LIB)
+	$(TIFF_LIB)	\
+	$(PNM_LIB)
 
 noinst_PROGRAMS = testpixbuf
 
@@ -105,3 +108,10 @@ libpixbuf_ras_la_LIBADD =
 libpixbuf_tiff_la_SOURCES = io-tiff.c
 libpixbuf_tiff_la_LDFLAGS = -avoid-version -module
 libpixbuf_tiff_la_LIBADD = $(LIBTIFF)
+
+#
+# The PNM loader
+#
+libpixbuf_pnm_la_SOURCES = io-pnm.c
+libpixbuf_pnm_la_LDFLAGS = -avoid-version -module
+libpixbuf_pnm_la_LIBADD = 
