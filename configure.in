@@ -172,13 +172,15 @@ AC_ARG_ENABLE(rebuilds, [  --disable-rebuilds      disable all source autogenera
 
 AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
 
-AC_ARG_WITH(wintab, [  --with-wintab=DIRECTORY  use Wintab API with win32 backend])
+AC_ARG_WITH(wintab, [  --with-wintab=DIRECTORY use Wintab API with win32 backend])
 
+GLIB_AC_DIVERT_BEFORE_HELP([
 if test "$platform_win32" = yes; then
   gdktarget=win32
 else
   gdktarget=x11
 fi
+])
 
 AC_ARG_WITH(gdktarget, [  --with-gdktarget=[x11/linux-fb/win32] select GDK target [default=$gdktarget]],
 	gdktarget=$with_gdktarget)

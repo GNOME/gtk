@@ -1,3 +1,8 @@
+2001-10-30  Sven Neumann  <sven@gimp.org>
+
+	* configure.in: use GLIB_AC_DIVERT_BEFORE_HELP() so we get proper
+	output for configure --help.
+
 2001-10-30  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextview.c (changed_handler): Update the IM spot location
