@@ -1351,7 +1351,9 @@ gtk_clipboard_set_can_store (GtkClipboard   *clipboard,
   };
   
   g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));
-  g_return_if_fail (clipboard->selection == GDK_SELECTION_CLIPBOARD);
+
+  if (clipboard->selection != GDK_SELECTION_CLIPBOARD)
+    return;
   
   g_free (clipboard->storable_targets);
   
@@ -1361,8 +1363,7 @@ gtk_clipboard_set_can_store (GtkClipboard   *clipboard,
    * gtk_clipboard_set_can_store hasn't been called since the
    * clipboard owner changed. We only want to add SAVE_TARGETS and 
    * ref the owner once , so we do that here
-   */
-  
+   */  
   if (clipboard->n_storable_targets == -1)
     {
       gtk_selection_add_targets (clipboard_widget, clipboard->selection,

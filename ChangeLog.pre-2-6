@@ -1,5 +1,8 @@
 2004-10-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkclipboard.c (gtk_clipboard_set_can_store): Silently
+	ignore non-CLIPBOARD clipboards.  (#156610, Christian Persch)
+
 	* gtk/gtksettings.c: Make it build on windows. (#156618,
 	Kazuki IWAMOTO)
 
