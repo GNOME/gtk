@@ -1,3 +1,9 @@
+Thu Jul 12 13:53:28 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Properly
+	clean up when handling events for move-resize emulation.
+	(Problem traced down by Matthias Clasen, #57271)
+
 Thu Jul 12 13:43:27 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c gtk/gtkcolorsel.c gtk/gtkcombo.c

@@ -541,7 +541,10 @@ gdk_event_translate (GdkEvent *event,
        * it as a foreign window
        */
       if (window == NULL)
-        return FALSE;
+	{
+	  return_val = FALSE;
+	  goto done;
+	}
     }
 
   if (window &&
@@ -550,8 +553,9 @@ gdk_event_translate (GdkEvent *event,
        xevent->xany.type == ButtonRelease))
     {
       _gdk_moveresize_handle_event (xevent);
-      gdk_window_unref (window);
-      return FALSE;
+      
+      return_val = FALSE;
+      goto done;
     }
   
   /* We do a "manual" conversion of the XEvent to a
