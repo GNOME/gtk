@@ -1,3 +1,69 @@
+Sun Nov 17 13:45:08 2002  Manish Singh  <yosh@gimp.org>
+
+	* gdk/Makefile.am: add -DGDK_DISABLE_DEPRECATED
+
+	* gdk/gdk.c (gdk_exit): remove obsolete comment
+
+	* gdk/gdk.h: declare gdk_input_add_full if GTK_COMPILATION for
+	gtk_input_add_full
+
+	* gdk/gdkcolor.c (gdk_color_white, gdk_color_black): use
+	gdk_colormap_alloc_color instead of gdk_color_alloc
+
+	* gdk/gdkcolor.h: declare gdk_colormap_change if GDK_COMPILATION for
+	gdk_colors_store. Also, gdk_colors_{alloc,free} for
+	gdk_rgb_try_colormap
+
+	* gdk/gdkdrawable.h: declare gdk_draw_string if GTK_COMPILATION for
+	gtk_default_draw_string. Also, gdk_draw_text and gdk_draw_text_wc
+	if GDK_COMPILATION for the respective gdk_window_ and gdk_pixmap_
+	functions.
+
+	* gdk/gdkfont.c: #undef GDK_DISABLE_DEPRECATED, completely compat
+	code here
+
+	* gdk/gdkfont.h: allow the GdkFont structure and a few gdk_font_
+	functions for compat code in GDK_COMPILATION and GTK_COMPILATION.
+
+	* gdk/gdkrgb.c (gdk_rgb_cmap_fail, gdk_rgb_try_colormap): use
+	gdk_colormap_free_colors instead of gdk_colors_free.
+
+	* gdk/gdkrgb.c (gdk_draw_rgb_image_core): no need to set fg/bg
+	for own_gc, unused.
+
+	* gdk/gdkwindow.h: declare gdk_window_get_deskrelative_origin if
+	GTK_COMPILATION for gtk_handle_box_button_changed.
+
+	* gdk/x11/Makefile.am: add -DGDK_DISABLE_DEPRECATED, renmae
+	-DINSIDE_GDK_X11 to -DGDK_COMPILATION
+
+	* gdk/x11/gdkcolor-x11.c: remove duplicate doc string for
+	gdk_colormap_alloc_colors.
+
+	* gdk/x11/gdkfont-x11.c:  #undef GDK_DISABLE_DEPRECATED, completely
+	compat code here
+
+	* gdk/x11/gdkx.h: use GDK_COMPILATION instead of INSIDE_GDK_X11,
+	allow a few gdk_x11_font_ functions if GDK_COMPILATION for compat
+	code
+
+	* gtk/Makefile.am: add -DGDK_DISABLE_DEPRECATED
+
+	* gtk/gtkclist.c
+	* gtk/gtkctree.c
+	* gtk/gtkpixmap.c
+	* gtk/gtkpreview.c
+	* gtk/gtktext.c: #undef GDK_DISABLE_DEPRECATED, deprecated widget
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_motion): use
+	gdk_window_set_geometry_hints instead of gdk_window_set_hints.
+
+	* gtk/gtkmain.c (gtk_exit): call exit directly
+
+	* gtktipsquery.c (gtk_tips_query_real_start_query)
+	* gtk/gtktreeitem.c (gtk_tree_item_add_pixmaps): remove some
+	deprecated GDK usage.
+
 Sun Nov 17 10:49:28 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtksettings.c (gtk_settings_get_property): remove bogus
