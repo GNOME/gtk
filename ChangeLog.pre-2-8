@@ -1,3 +1,10 @@
+Tue Nov 30 17:53:37 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtksequence.c (node_compare): Assign an arbitrary, but
+	consistent, order to nodes that the user function compares as
+	equal. Better fix for bug #157670 and a better way to make sorting
+	stable.
+
 2004-11-30  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkpixmap-win32.c : remove the disputable memset at 

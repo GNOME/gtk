@@ -152,16 +152,30 @@ struct SortInfo {
 static gint
 node_compare (gconstpointer n1, gconstpointer n2, gpointer data)
 {
-  SortInfo *info = data;
+  const SortInfo *info = data;
   const GtkSequenceNode *node1 = n1;
   const GtkSequenceNode *node2 = n2;
+  gint retval;
   
   if (node1->is_end)
+      return 1;
+
+  if (node2->is_end)
+      return -1;
+
+  retval = (* info->cmp) (node1, node2, info->data);
+
+  /* If the nodes are different, but the user-supplied compare function
+   * compares them equal, then force an arbitrary (but consistent) order
+   * on them, so that our sorts will be stable
+   */
+  if (retval != 0 || n1 == n2)
+    return retval;
+  
+  if (n1 > n2)
     return 1;
-  else if (node2->is_end)
-    return -1;
   else
-    return (* info->cmp) (node1, node2, info->data);
+    return -1;
 }
 
 void
@@ -256,8 +270,7 @@ _gtk_sequence_sort               (GtkSequence               *seq,
   
   while (_gtk_sequence_get_length (tmp) > 0)
     {
-      GtkSequenceNode *node = _gtk_sequence_get_end_ptr (tmp);
-      node = _gtk_sequence_node_prev (node);
+      GtkSequenceNode *node = _gtk_sequence_get_begin_ptr (tmp);
       _gtk_sequence_unlink (tmp, node);
       
       _gtk_sequence_node_insert_sorted (seq->node, node, cmp_func, cmp_data);
@@ -448,25 +461,6 @@ _gtk_sequence_ptr_move           (GtkSequencePtr             ptr,
   return _gtk_sequence_node_find_by_pos (ptr, new_pos);
 }
 
-static gboolean
-already_in_place (GtkSequencePtr	ptr,
-		  GCompareDataFunc	cmp_func,
-		  gpointer		data)
-{
-  SortInfo info;
-
-  info.cmp = cmp_func;
-  info.data = data;
-
-  if (node_compare (_gtk_sequence_node_prev (ptr), ptr, &info) <= 0	&&
-      node_compare (_gtk_sequence_node_next (ptr), ptr, &info) >= 0)
-  {
-      return TRUE;
-  }
-
-  return FALSE;
-}
-      
 void
 _gtk_sequence_sort_changed  (GtkSequencePtr	     ptr,
 			     GCompareDataFunc	     cmp_func,
@@ -478,9 +472,6 @@ _gtk_sequence_sort_changed  (GtkSequencePtr	     ptr,
   g_return_if_fail (ptr != NULL);
   g_return_if_fail (!ptr->is_end);
 
-  if (already_in_place (ptr, cmp_func, cmp_data))
-      return;
-  
   seq = _gtk_sequence_node_get_sequence (ptr);
   _gtk_sequence_unlink (seq, ptr);
   _gtk_sequence_node_insert_sorted (seq->node, ptr, cmp_func, cmp_data);
