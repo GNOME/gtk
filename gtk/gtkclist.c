@@ -4689,6 +4689,13 @@ gtk_clist_style_set (GtkWidget *widget,
 
   clist = GTK_CLIST (widget);
 
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gtk_style_set_background (widget->style, widget->window, widget->state);
+      gtk_style_set_background (widget->style, clist->title_window, GTK_STATE_SELECTED);
+      gdk_window_set_background (clist->clist_window, &widget->style->bg[GTK_STATE_PRELIGHT]);
+    }
+
   /* Fill in data after widget has correct style */
 
   /* text properties */

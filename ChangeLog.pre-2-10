@@ -1,3 +1,9 @@
+Fri Dec 11 05:49:30 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (gtk_clist_style_set): Add in a "style_set"
+	handler so that the background of the clist changes
+	with the theme.
+
 Thu Dec 10 22:02:49 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.1.7
