@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 12:36-0500\n"
+"POT-Creation-Date: 2004-12-16 13:24-0500\n"
 "PO-Revision-Date: 2004-10-17 02:51+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -1110,26 +1110,26 @@ msgstr "Ongeldige bestandsnaam: %s"
 # Dit is de titel van de persoonlijke map in de bestandkiezer
 # eigen map
 # persoonlijke map
-#: gtk/gtkfilechooserbutton.c:61 gtk/gtkfilechooserdefault.c:1212
+#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1212
 #: gtk/gtkpathbar.c:982
 msgid "Home"
 msgstr "Persoonlijk"
 
 # Werkblad
-#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1235
+#: gtk/gtkfilechooserbutton.c:63 gtk/gtkfilechooserdefault.c:1235
 #: gtk/gtkpathbar.c:984
 msgid "Desktop"
 msgstr "Bureaublad"
 
-#: gtk/gtkfilechooserbutton.c:63
+#: gtk/gtkfilechooserbutton.c:64
 msgid "(None)"
 msgstr "(Geen)"
 
-#: gtk/gtkfilechooserbutton.c:348
+#: gtk/gtkfilechooserbutton.c:349
 msgid "Select a File"
 msgstr "Een bestand selecteren"
 
-#: gtk/gtkfilechooserbutton.c:1502
+#: gtk/gtkfilechooserbutton.c:1503
 msgid "Other..."
 msgstr ""
 

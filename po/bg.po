@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.4.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 12:36-0500\n"
+"POT-Creation-Date: 2004-12-16 13:24-0500\n"
 "PO-Revision-Date: 2004-12-12 20:35+0200\n"
 "Last-Translator: Vladimir Petkov <vpetkov@i-space.org>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
@@ -1065,25 +1065,25 @@ msgstr "_Вмъкване на уникод контролен символ"
 msgid "Invalid filename: %s"
 msgstr "Невалидно име на файла: %s"
 
-#: gtk/gtkfilechooserbutton.c:61 gtk/gtkfilechooserdefault.c:1212
+#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1212
 #: gtk/gtkpathbar.c:982
 msgid "Home"
 msgstr "Домашна папка"
 
-#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1235
+#: gtk/gtkfilechooserbutton.c:63 gtk/gtkfilechooserdefault.c:1235
 #: gtk/gtkpathbar.c:984
 msgid "Desktop"
 msgstr "Работно Място"
 
-#: gtk/gtkfilechooserbutton.c:63
+#: gtk/gtkfilechooserbutton.c:64
 msgid "(None)"
 msgstr "(без)"
 
-#: gtk/gtkfilechooserbutton.c:348
+#: gtk/gtkfilechooserbutton.c:349
 msgid "Select a File"
 msgstr "Избор на файл"
 
-#: gtk/gtkfilechooserbutton.c:1502
+#: gtk/gtkfilechooserbutton.c:1503
 msgid "Other..."
 msgstr ""
 

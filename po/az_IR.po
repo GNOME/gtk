@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 12:36-0500\n"
+"POT-Creation-Date: 2004-12-16 13:24-0500\n"
 "PO-Revision-Date: 2004-09-27 14:58+0330\n"
 "Last-Translator: Amir Hedayaty <amir@bamdad.org>\n"
 "Language-Team: Iranian Azerbaijani <az-ir@lists.sharif.edu>\n"
@@ -1027,25 +1027,25 @@ msgstr ""
 msgid "Invalid filename: %s"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:61 gtk/gtkfilechooserdefault.c:1212
+#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1212
 #: gtk/gtkpathbar.c:982
 msgid "Home"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1235
+#: gtk/gtkfilechooserbutton.c:63 gtk/gtkfilechooserdefault.c:1235
 #: gtk/gtkpathbar.c:984
 msgid "Desktop"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:63
+#: gtk/gtkfilechooserbutton.c:64
 msgid "(None)"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:348
+#: gtk/gtkfilechooserbutton.c:349
 msgid "Select a File"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:1502
+#: gtk/gtkfilechooserbutton.c:1503
 msgid "Other..."
 msgstr ""
 

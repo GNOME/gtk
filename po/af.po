@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 12:36-0500\n"
+"POT-Creation-Date: 2004-12-16 13:24-0500\n"
 "PO-Revision-Date: 2004-03-30 17:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Afrikaans <translate-discuss-af@lists.sourceforge.net>\n"
@@ -1082,27 +1082,27 @@ msgstr "_Voer Unicode-beheer karakter in"
 msgid "Invalid filename: %s"
 msgstr "Ongeldige lêernaam: %s"
 
-#: gtk/gtkfilechooserbutton.c:61 gtk/gtkfilechooserdefault.c:1212
+#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1212
 #: gtk/gtkpathbar.c:982
 msgid "Home"
 msgstr "Tuis"
 
-#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1235
+#: gtk/gtkfilechooserbutton.c:63 gtk/gtkfilechooserdefault.c:1235
 #: gtk/gtkpathbar.c:984
 msgid "Desktop"
 msgstr "Werkarea"
 
-#: gtk/gtkfilechooserbutton.c:63
+#: gtk/gtkfilechooserbutton.c:64
 #, fuzzy
 msgid "(None)"
 msgstr "geen"
 
-#: gtk/gtkfilechooserbutton.c:348
+#: gtk/gtkfilechooserbutton.c:349
 #, fuzzy
 msgid "Select a File"
 msgstr "Skrap Lêer"
 
-#: gtk/gtkfilechooserbutton.c:1502
+#: gtk/gtkfilechooserbutton.c:1503
 msgid "Other..."
 msgstr ""
 

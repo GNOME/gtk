@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 12:36-0500\n"
+"POT-Creation-Date: 2004-12-16 13:24-0500\n"
 "PO-Revision-Date: 2004-12-04 16:17+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -1036,25 +1036,25 @@ msgstr "插入 Unicode 控制字符(_I)"
 msgid "Invalid filename: %s"
 msgstr "无效的文件名：%s"
 
-#: gtk/gtkfilechooserbutton.c:61 gtk/gtkfilechooserdefault.c:1212
+#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1212
 #: gtk/gtkpathbar.c:982
 msgid "Home"
 msgstr "主文件夹"
 
-#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1235
+#: gtk/gtkfilechooserbutton.c:63 gtk/gtkfilechooserdefault.c:1235
 #: gtk/gtkpathbar.c:984
 msgid "Desktop"
 msgstr "桌面"
 
-#: gtk/gtkfilechooserbutton.c:63
+#: gtk/gtkfilechooserbutton.c:64
 msgid "(None)"
 msgstr "(无)"
 
-#: gtk/gtkfilechooserbutton.c:348
+#: gtk/gtkfilechooserbutton.c:349
 msgid "Select a File"
 msgstr "选择文件"
 
-#: gtk/gtkfilechooserbutton.c:1502
+#: gtk/gtkfilechooserbutton.c:1503
 msgid "Other..."
 msgstr ""
 

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 12:37-0500\n"
+"POT-Creation-Date: 2004-12-16 13:24-0500\n"
 "PO-Revision-Date: 2004-11-15 16:25+0100\n"
 "Last-Translator: Hendrik Richter <hendrik@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -1262,7 +1262,7 @@ msgstr ""
 "Der bevorzugte Bereich zur Auslassung in der Zeichenkette, falls der "
 "Renderer der Zelle nicht genug Platz hat, um sie komplett anzuzeigen"
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:360
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
 #: gtk/gtklabel.c:453
 msgid "Width In Characters"
 msgstr "Breite in Zeichen"
@@ -1472,7 +1472,7 @@ msgstr "Alpha verwenden"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Soll der Farbe ein Alphawert gegeben werden?"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:346
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:347
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Titel"
@@ -2056,19 +2056,19 @@ msgstr "Verborgene anzeigen"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Sollen verborgene Dateien und Ordner angezeigt werden?"
 
-#: gtk/gtkfilechooserbutton.c:331
+#: gtk/gtkfilechooserbutton.c:332
 msgid "Dialog"
 msgstr "Dialog"
 
-#: gtk/gtkfilechooserbutton.c:332
+#: gtk/gtkfilechooserbutton.c:333
 msgid "The file chooser dialog to use."
 msgstr "Der Dateiwähler, der verwendet werden soll."
 
-#: gtk/gtkfilechooserbutton.c:347
+#: gtk/gtkfilechooserbutton.c:348
 msgid "The title of the file chooser dialog."
 msgstr "Der Titel des Dateiwählers."
 
-#: gtk/gtkfilechooserbutton.c:361
+#: gtk/gtkfilechooserbutton.c:362
 msgid "The desired width of the button widget, in characters."
 msgstr "Die gewünschte Breite des Knopfes in Zeichen"
 

@@ -2,6 +2,11 @@
 
 	* === Released 2.6.0 ===
 
+	* gtk/gtkmenuitem.c: Add a forgotten cast.  (Morten Welinder) 
+
+	* gtk/gtkfilechooserbutton.c: Add another forgotten include. (Morten
+	Welinder)
+
 2004-12-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c (dialog_response_cb): Only unblock the handlers

@@ -34,6 +34,7 @@
 #include "gtkintl.h"
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
+#include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcombobox.h"
 #include "gtkdnd.h"

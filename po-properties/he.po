@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 12:37-0500\n"
+"POT-Creation-Date: 2004-12-16 13:24-0500\n"
 "PO-Revision-Date: 2002-12-07 10:05+0200\n"
 "Last-Translator: Gil 'Dolfin' Osher <dolfin@rpg.org.il>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -1251,7 +1251,7 @@ msgid ""
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:360
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
 #: gtk/gtklabel.c:453
 #, fuzzy
 msgid "Width In Characters"
@@ -1467,7 +1467,7 @@ msgstr ""
 
 # hebrew note: "תיקיה" is "folder", but there is no better word for
 # "directory"
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:346
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:347
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "כותרת"
@@ -2051,20 +2051,20 @@ msgstr "הצג מלל"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "האם כפתורים ליצירת/שינוי קבצים צריכים להיות מוצגים"
 
-#: gtk/gtkfilechooserbutton.c:331
+#: gtk/gtkfilechooserbutton.c:332
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:332
+#: gtk/gtkfilechooserbutton.c:333
 msgid "The file chooser dialog to use."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:347
+#: gtk/gtkfilechooserbutton.c:348
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "הכותרת של החלון"
 
-#: gtk/gtkfilechooserbutton.c:361
+#: gtk/gtkfilechooserbutton.c:362
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 12:37-0500\n"
+"POT-Creation-Date: 2004-12-16 13:24-0500\n"
 "PO-Revision-Date: 2003-01-14 11:02+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
@@ -1207,7 +1207,7 @@ msgid ""
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:360
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
 #: gtk/gtklabel.c:453
 msgid "Width In Characters"
 msgstr ""
@@ -1416,7 +1416,7 @@ msgstr ""
 msgid "Whether or not to give the color an alpha value"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:346
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:347
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "አርእስት"
@@ -1976,20 +1976,20 @@ msgstr "ጽሑፍ አሳይ"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:331
+#: gtk/gtkfilechooserbutton.c:332
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:332
+#: gtk/gtkfilechooserbutton.c:333
 msgid "The file chooser dialog to use."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:347
+#: gtk/gtkfilechooserbutton.c:348
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "የመስኮቱ አርእስት"
 
-#: gtk/gtkfilechooserbutton.c:361
+#: gtk/gtkfilechooserbutton.c:362
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 

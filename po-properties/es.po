@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 12:37-0500\n"
+"POT-Creation-Date: 2004-12-16 13:24-0500\n"
 "PO-Revision-Date: 2004-11-29 20:40+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <es@li.org>\n"
@@ -1259,7 +1259,7 @@ msgstr ""
 "El lugar preferido para la elipsis de la cadena, si el renderizador de la "
 "celda no tiene espacio suficiente para mostrar la cadena completa"
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:360
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
 #: gtk/gtklabel.c:453
 msgid "Width In Characters"
 msgstr "Anchura en caracteres"
@@ -1473,7 +1473,7 @@ msgstr "Indica si debe darse o no un valor alfa al color"
 # #-#-#-#-#  memoria.po (memoria 1.0)  #-#-#-#-#
 # #-#-#-#-#  nautilus-es.po (Nautilus)  #-#-#-#-#
 # components/music/nautilus-music-view.c:198
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:346
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:347
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Título"
@@ -2052,19 +2052,19 @@ msgstr "Mostrar ocultos"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Indica si los archivos y carpetas ocultas deben ser mostrados"
 
-#: gtk/gtkfilechooserbutton.c:331
+#: gtk/gtkfilechooserbutton.c:332
 msgid "Dialog"
 msgstr "Diálogo"
 
-#: gtk/gtkfilechooserbutton.c:332
+#: gtk/gtkfilechooserbutton.c:333
 msgid "The file chooser dialog to use."
 msgstr "El diálogo del selector de archivos a usar."
 
-#: gtk/gtkfilechooserbutton.c:347
+#: gtk/gtkfilechooserbutton.c:348
 msgid "The title of the file chooser dialog."
 msgstr "El título del diálogo de selección de archivos"
 
-#: gtk/gtkfilechooserbutton.c:361
+#: gtk/gtkfilechooserbutton.c:362
 msgid "The desired width of the button widget, in characters."
 msgstr "La anchura deseada del widget del botón, en caracteres."
 

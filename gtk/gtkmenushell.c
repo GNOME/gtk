@@ -1071,7 +1071,7 @@ gtk_menu_shell_select_submenu_first (GtkMenuShell     *menu_shell)
   
   if (menu_item->submenu)
     {
-      _gtk_menu_item_popup_submenu (menu_item);
+      _gtk_menu_item_popup_submenu (GTK_WIDGET (menu_item));
       gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu), TRUE);
     }
 }
