@@ -100,6 +100,20 @@ Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
 	the a label to disappear on widgets which don't give their
 	child labels proper area!
 
+Mon, 17 Nov 1997 Michael K. Johnson <johnsonm@redhat.com>
+	* gtkwidget.c: gtk_set_style_recurse was not allowing updated
+	widget names to cause new styles to be applied.
+	* gtkentry.c gtkentry.h: The entry widget now has invisible
+	attribute.  The cursor does not move to show you typing; this
+	is an intentional design decision but I'm not so attached to it
+	that I'll reverse any patches that change it...  :-)
+
+	This patch is a modified version of a patch to which I have
+	lost the attribution.  I modified it by packing the "visible"
+	flag into the structure more tightly (without damaging backwards
+	compatibility on sane systems) and by allowing entry timers
+	to run.
+
 Mon Nov 17 1997 Jay Painter <jpaint@serv.net>
 	* gtkviewport.c: Raph's Mon, 10 Nov 1997 patch to gtk-list 
 	to fix some viewport bugs
