@@ -47,7 +47,7 @@ Overview of Changes from GTK+ 2.5.2 to GTK+ 2.5.3
 * GtkTreeView
  - Allow sorting of tree models to be turned off [Torsten Schoenfeld]
 * GtkRange
- - Add a::slider-moved signal [Thomas Fitzsimmons]
+ - Add a::change-value signal [Thomas Fitzsimmons]
 * GtkEntryCompletion
  - Improve positioning of popups [Matthias]
 * Make input methods respect editability [Noah Levitt]

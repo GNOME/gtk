@@ -1206,7 +1206,7 @@ Thu Aug 26 23:58:11 2004  Matthias Clasen  <maclas@gmx.de>
 Thu Aug 26 22:44:12 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Provide information about how an adjustment change in a range 
-	widget happened. Add a "slider-moved" signal which reports how 
+	widget happened. Add a "change-value" signal which reports how 
 	a user is interacting with the range, whether they are clicking 
 	on a stepper or the trough, or dragging the slider.  (#133263,
 	Thomas Fitzsimmons)
