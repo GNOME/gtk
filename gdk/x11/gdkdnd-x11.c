@@ -175,7 +175,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek (G_TYPE_OBJECT);
+  parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_drag_context_finalize;
 }

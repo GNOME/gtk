@@ -74,7 +74,7 @@ gdk_drawable_class_init (GdkDrawableClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek (G_TYPE_OBJECT);
+  parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_drawable_finalize;
 }
@@ -112,7 +112,7 @@ gdk_drawable_get_data (GdkDrawable   *drawable,
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
   
   return g_object_get_qdata (G_OBJECT (drawable),
-                             g_quark_from_string (key));
+                             g_quark_try_string (key));
 }
 
 void
@@ -161,11 +161,7 @@ gdk_drawable_get_colormap (GdkDrawable *drawable)
 GdkDrawable*
 gdk_drawable_ref (GdkDrawable *drawable)
 {
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-
-  g_object_ref (G_OBJECT (drawable));
-
-  return drawable;
+  return (GdkDrawable *) g_object_ref (G_OBJECT (drawable));
 }
 
 void

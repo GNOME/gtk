@@ -33,9 +33,7 @@
 GdkImage *
 gdk_image_ref (GdkImage *image)
 {
-  g_object_ref (G_OBJECT (image));
-  
-  return image;
+  return (GdkImage *) g_object_ref (G_OBJECT (image));
 }
 
 void

@@ -133,7 +133,7 @@ gdk_window_impl_class_init (GdkWindowImplClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
-  parent_class = g_type_class_peek (GDK_TYPE_DRAWABLE_IMPL);
+  parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_window_impl_finalize;
 

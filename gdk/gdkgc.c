@@ -74,7 +74,7 @@ gdk_gc_class_init (GdkGCClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek (G_TYPE_OBJECT);
+  parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_gc_finalize;
 }
@@ -128,9 +128,7 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
 GdkGC *
 gdk_gc_ref (GdkGC *gc)
 {
-  g_object_ref (G_OBJECT (gc));
-
-  return gc;
+  return (GdkGC *) g_object_ref (G_OBJECT (gc));
 }
 
 void

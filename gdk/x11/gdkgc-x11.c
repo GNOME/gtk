@@ -68,7 +68,7 @@ gdk_windowing_gc_class_init (GdkWindowingGCClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkGCClass *gc_class = GDK_GC_CLASS (klass);
   
-  parent_class = g_type_class_peek (GDK_TYPE_GC);
+  parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_windowing_gc_finalize;
 
