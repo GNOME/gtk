@@ -1777,7 +1777,7 @@ do_files_removed (GtkFileSystemModel *model,
 	  if (children->is_visible)
 	    n_visible--;
 	  
-	  if (n_visible == 0)
+	  if (parent_node && n_visible == 0)
 	    {
 	      FileModelNode *dummy = file_model_node_new (model, NULL);
 	      dummy->is_visible = TRUE;

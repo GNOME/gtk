@@ -1,3 +1,8 @@
+2004-06-01  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilesystemmodel.c (do_files_removed): Don't insert a
+	dummy node if there is no parent node.  Fixes #143362.
+
 2004-05-31  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (renderer_edited_cb): Change to the
