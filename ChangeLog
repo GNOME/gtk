@@ -1,3 +1,30 @@
+2002-01-12  Tor Lillqvist  <tml@iki.fi>
+
+	Fixes contributed by Archaeopteryx Software: This is a first small
+	part of their changes. Will commit more later.
+	
+	* gdk/win32/*.c: Add some more checks for failed GDI calls. If a
+	call fails, don't use bogus values.
+
+	* gdk/win32/gdkcursor-win32.c (_gdk_win32_data_to_wcursor): Plug
+	memory leak: g_free() the AND and XOR bitmaps after use.
+	(_gdk_cursor_destroy): If we are destroying the current Windows
+	cursor, set the Windows cursor to none first.
+
+	* gdk/win32/gdkgc-win32.c (predraw_set_foreground): Delete the old
+	brush that was in the DC, like the win32-procution branch does. I
+	guess this plugs a resource leak? With the HDC cache, the old
+	brush might be something we created ourselves, and not a stock
+	brush. And it doesn't do any harm to call DeleteObject on stock
+	brushes.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_impl_win32_finalize): If
+	the window has a cursor which is the current Windows cursor,
+	before destroying it set the current Windows cursor to none.
+	(gdk_window_set_cursor): Also here, if destroying the current
+	Windows cursor, set the current Windows cursor to none first.
+	(gdk_window_get_pointer): Revamp logic.
+	
 2002-01-10  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtkwidget.c (gtk_widget_add_events): actually iterate

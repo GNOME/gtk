@@ -948,8 +948,14 @@ predraw_set_foreground (GdkGC       *gc,
 	WIN32_GDI_FAILED ("CreateSolidBrush"), *ok = FALSE;
       break;
   }
-  if (*ok && SelectObject (win32_gc->hdc, hbr) == NULL)
-    WIN32_GDI_FAILED ("SelectObject"), *ok = FALSE;
+  if (*ok)
+    {
+      HBRUSH old_hbr = SelectObject (win32_gc->hdc, hbr);
+      if (old_hbr == NULL)
+	WIN32_GDI_FAILED ("SelectObject"), *ok = FALSE;
+      else if (!DeleteObject (old_hbr))
+	WIN32_GDI_FAILED ("DeleteObject");
+    }
 }  
 
 static void

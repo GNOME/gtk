@@ -473,7 +473,8 @@ create_colormap (HWND     w,
       for (i = logPalettePtr->palNumEntries; i < colormap->sizepalette; i++)
 	colormap->in_use[i] = FALSE;
     }
-  ReleaseDC (NULL, hdc);
+  if (!ReleaseDC (NULL, hdc))
+    WIN32_GDI_FAILED ("ReleaseDC");
 
   return colormap;
 }

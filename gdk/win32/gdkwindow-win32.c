@@ -140,6 +140,8 @@ gdk_window_impl_win32_finalize (GObject *object)
 
   if (window_impl->hcursor != NULL)
     {
+      if (GetCursor () == window_impl->hcursor)
+	SetCursor (NULL);
       if (!DestroyCursor (window_impl->hcursor))
         WIN32_GDI_FAILED("DestroyCursor");
       window_impl->hcursor = NULL;
@@ -1164,7 +1166,8 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
       hdc = GetDC (GDK_WINDOW_HWND (window));
       IntersectClipRect (hdc, x, y, x + width + 1, y + height + 1);
       SendMessage (GDK_WINDOW_HWND (window), WM_ERASEBKGND, (WPARAM) hdc, 0);
-      ReleaseDC (GDK_WINDOW_HWND (window), hdc);
+      if (!ReleaseDC (GDK_WINDOW_HWND (window), hdc))
+	WIN32_GDI_FAILED ("ReleaseDC");
     }
 }
 
@@ -1623,43 +1626,58 @@ gdk_window_set_cursor (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
   cursor_private = (GdkCursorPrivate*) cursor;
   
-  if (!GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (!cursor)
+    hcursor = NULL;
+  else
+    hcursor = cursor_private->hcursor;
+  
+  GDK_NOTE (MISC, g_print ("gdk_window_set_cursor: %#x %#x\n",
+			   (guint) GDK_WINDOW_HWND (window),
+			   (guint) hcursor));
+
+  /* First get the old cursor, if any (we wait to free the old one
+   * since it may be the current cursor set in the Win32 API right
+   * now).
+   */
+  hprevcursor = impl->hcursor;
+
+  if (hcursor == NULL)
+    impl->hcursor = NULL;
+  else
     {
-      if (!cursor)
-	hcursor = NULL;
-      else
-	hcursor = cursor_private->hcursor;
+      /* We must copy the cursor as it is OK to destroy the GdkCursor
+       * while still in use for some window. See for instance
+       * gimp_change_win_cursor() which calls gdk_window_set_cursor
+       * (win, cursor), and immediately afterwards gdk_cursor_destroy
+       * (cursor).
+       */
+      if ((impl->hcursor = CopyCursor (hcursor)) == NULL)
+	WIN32_API_FAILED ("CopyCursor");
+      GDK_NOTE (MISC, g_print ("...CopyCursor (%#x) = %#x\n",
+			       (guint) hcursor, (guint) impl->hcursor));
+    }
 
-      GDK_NOTE (MISC, g_print ("gdk_window_set_cursor: %#x %#x\n",
-			       (guint) GDK_WINDOW_HWND (window),
-			       (guint) hcursor));
-      hprevcursor = impl->hcursor;
-      if (hcursor == NULL)
-	impl->hcursor = NULL;
-      else
-	{
-	  /* We must copy the cursor as it is OK to destroy the GdkCursor
-	   * while still in use for some window. See for instance
-	   * gimp_change_win_cursor() which calls
-	   * gdk_window_set_cursor (win, cursor), and immediately
-	   * afterwards gdk_cursor_destroy (cursor).
-	   */
-	  impl->hcursor = CopyCursor (hcursor);
-	  GDK_NOTE (MISC, g_print ("...CopyCursor (%#x) = %#x\n",
-				   (guint) hcursor, (guint) impl->hcursor));
+   /* Set new cursor in all cases if we're over our window */
+  if (gdk_window_get_pointer(window, NULL, NULL, NULL) == window)
+    SetCursor (impl->hcursor);
 
-	  if (hprevcursor != NULL && GetCursor () == hprevcursor)
-	    SetCursor (impl->hcursor);
+  /* Destroy the previous cursor: Need to make sure it's no longer in
+   * use before we destroy it, in case we're not over our window but
+   * the cursor is still set to our old one.
+   */
+  if (hprevcursor != NULL)
+    {
+      if (GetCursor() == hprevcursor)
+ 	SetCursor (NULL);
 
-	  if (hprevcursor != NULL)
-	    {
-	      GDK_NOTE (MISC, g_print ("...DestroyCursor (%#x)\n",
-				       (guint) hprevcursor));
-	  
-	      if (!DestroyCursor (hprevcursor))
-		WIN32_API_FAILED ("DestroyCursor");
-	    }
-	}
+      GDK_NOTE (MISC, g_print ("...DestroyCursor (%#x)\n",
+			       (guint) hprevcursor));
+      
+      if (!DestroyCursor (hprevcursor))
+	WIN32_API_FAILED ("DestroyCursor");
     }
 }
 
@@ -1827,7 +1845,7 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
 				   GdkModifierType *mask)
 {
   GdkWindow *return_val;
-  POINT pointc, point;
+  POINT screen_point, point;
   HWND hwnd, hwndc;
 
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
@@ -1836,8 +1854,8 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
     window = _gdk_parent_root;
 
   return_val = NULL;
-  GetCursorPos (&pointc);
-  point = pointc;
+  GetCursorPos (&screen_point);
+  point = screen_point;
   ScreenToClient (GDK_WINDOW_HWND (window), &point);
 
   if (x)
@@ -1846,17 +1864,28 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
     *y = point.y;
 
   hwnd = WindowFromPoint (point);
-  point = pointc;
-  ScreenToClient (hwnd, &point);
-  
-  do {
-    hwndc = ChildWindowFromPoint (hwnd, point);
-    ClientToScreen (hwnd, &point);
-    ScreenToClient (hwndc, &point);
-  } while (hwndc != hwnd && (hwnd = hwndc, 1));	/* Ouch! */
-
-  return_val = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
-
+  if (hwnd != NULL)
+    {
+      gboolean done = FALSE;
+      
+      while (!done)
+	{
+	  point = screen_point;
+	  ScreenToClient (hwnd, &point);
+	  hwndc = ChildWindowFromPoint (hwnd, point);
+	  if (hwndc == NULL)
+	    done = TRUE;
+	  else if (hwndc == hwnd)
+	    done = TRUE;
+	  else
+	    hwnd = hwndc;
+	}
+      
+      return_val = gdk_window_lookup (hwnd);
+    }
+  else
+    return_val = NULL;
+      
   if (mask)
     {
       BYTE kbd[256];
