@@ -3,6 +3,9 @@
 /* Define to empty if the keyword does not work.  */
 #undef const
 
+/* Force recompilation when --enable-debug value changes */
+#undef G_COMPILED_WITH_DEBUGGING
+
 /* Define if you don't have vprintf but do have _doprnt.  */
 #undef HAVE_DOPRNT
 

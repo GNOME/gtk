@@ -32,6 +32,7 @@
 
 
 /* Other stuff */
+#undef G_COMPILED_WITH_DEBUGGING
 #undef HAVE_BROKEN_WCTYPE
 #undef HAVE_DOPRNT
 #undef HAVE_FLOAT_H

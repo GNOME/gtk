@@ -233,6 +233,9 @@ static GDebugKey gdk_debug_keys[] = {
   {"color-context", GDK_DEBUG_COLOR_CONTEXT},
   {"xim",           GDK_DEBUG_XIM}
 };
+
+static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
+
 #endif /* G_ENABLE_DEBUG */
 
 /*
@@ -267,10 +270,6 @@ gdk_init (int    *argc,
   int argc_orig = *argc;
   char **argv_orig;
 
-#ifdef G_ENABLE_DEBUG
-  gboolean debug_set = FALSE;
-#endif /* G_ENABLE_DEBUG */
-
   argv_orig = malloc ((argc_orig + 1) * sizeof (char*));
   for (i = 0; i < argc_orig; i++)
     argv_orig[i] = g_strdup ((*argv)[i]);
@@ -295,6 +294,16 @@ gdk_init (int    *argc,
 
   synchronize = FALSE;
 
+#ifdef G_ENABLE_DEBUG
+  {
+    gchar *debug_string = getenv("GDK_DEBUG");
+    if (debug_string != NULL)
+      gdk_debug_flags = g_parse_debug_string (debug_string,
+					      gdk_debug_keys,
+					      gdk_ndebug_keys);
+  }
+#endif	/* G_ENABLE_DEBUG */
+
   if (argc && argv)
     {
       if (*argc > 0)
@@ -303,7 +312,10 @@ gdk_init (int    *argc,
       for (i = 1; i < *argc;)
 	{
 	  if ((*argv)[i] == NULL)
-	    continue;
+	    {
+	      i += 1;
+	      continue;
+	    }
 	  
 #ifdef G_ENABLE_DEBUG	  
 	  if (strcmp ("--gdk-debug", (*argv)[i]) == 0)
@@ -312,15 +324,27 @@ gdk_init (int    *argc,
 
 	      if ((i + 1) < *argc && (*argv)[i + 1])
 		{
-		  gdk_debug_flags = g_parse_debug_string ((*argv)[i+1],
-							  gdk_debug_keys,
- 			          sizeof(gdk_debug_keys) / sizeof(GDebugKey));
-		  debug_set = TRUE;
+		  gdk_debug_flags |= g_parse_debug_string ((*argv)[i+1],
+							   gdk_debug_keys,
+							   gdk_ndebug_keys);
 		  (*argv)[i + 1] = NULL;
 		  i += 1;
 		}
 	    }
-#endif G_ENABLE_DEBUG
+	  else if (strcmp ("--gdk-no-debug", (*argv)[i]) == 0)
+	    {
+	      (*argv)[i] = NULL;
+
+	      if ((i + 1) < *argc && (*argv)[i + 1])
+		{
+		  gdk_debug_flags &= ~g_parse_debug_string ((*argv)[i+1],
+							    gdk_debug_keys,
+							    gdk_ndebug_keys);
+		  (*argv)[i + 1] = NULL;
+		  i += 1;
+		}
+	    }
+#endif /* G_ENABLE_DEBUG */
 	  else if (strcmp ("--display", (*argv)[i]) == 0)
 	    {
 	      (*argv)[i] = NULL;
@@ -437,17 +461,6 @@ gdk_init (int    *argc,
     {
       gdk_progname = "<unknown>";
     }
-
-#ifdef G_ENABLE_DEBUG
-  if (!debug_set)
-    {
-      gchar *debug_string = getenv("GDK_DEBUG");
-      if (debug_string != NULL)
-	gdk_debug_flags = g_parse_debug_string (debug_string,
-						gdk_debug_keys,
-			        sizeof(gdk_debug_keys) / sizeof(GDebugKey));
-    }
-#endif	/* G_ENABLE_DEBUG */
 
   gdk_display = XOpenDisplay (gdk_display_name);
   if (!gdk_display)
@@ -2180,12 +2193,14 @@ gdk_event_translate (GdkEvent *event,
 	  break;
 	}
 
+#ifdef G_ENABLE_DEBUG
         if ((gdk_debug_flags & GDK_DEBUG_DND) & dnd_drag_perhaps)
 	  {
 	    g_print("We may[%d] have a drag into %#lx = %#lx\n",
 		    gdk_dnd.drag_really,
 		    xevent->xcrossing.window, real_sw->xwindow);
 	  }
+#endif /* G_ENABLE_DEBUG */
 
 	if (dnd_drag_perhaps && gdk_dnd.drag_really && 
 	    (xevent->xcrossing.window == real_sw->xwindow))
@@ -2247,12 +2262,14 @@ gdk_event_translate (GdkEvent *event,
 	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
 	  break;
 	}
+#ifdef G_ENABLE_DEBUG
       if ((gdk_debug_flags & GDK_DEBUG_DND) & dnd_drag_perhaps)
 	{
 	  g_print("We may[%d] have a drag out of %#lx = %#lx\n",
 		  gdk_dnd.drag_really,
 		  xevent->xcrossing.window, real_sw->xwindow);
 	}
+#endif /* G_ENABLE_DEBUG */
       if (dnd_drag_perhaps && !gdk_dnd.drag_really &&
 	  (xevent->xcrossing.window == real_sw->xwindow))
 	{
@@ -2361,6 +2378,7 @@ gdk_event_translate (GdkEvent *event,
     case VisibilityNotify:
       /* Print debugging info.
        */
+#ifdef G_ENABLE_DEBUG
       if (gdk_debug_flags & GDK_DEBUG_EVENTS)
 	switch (xevent->xvisibility.state)
 	  {
@@ -2377,6 +2395,7 @@ gdk_event_translate (GdkEvent *event,
 		     xevent->xvisibility.window - base_id);
 	    break;
 	  }
+#endif /* G_ENABLE_DEBUG */
 
       event->visibility.type = GDK_VISIBILITY_NOTIFY;
       event->visibility.window = window;
@@ -3552,10 +3571,12 @@ gdk_ic_cleanup (void)
          destroyed++;
        }
     }
+#ifdef G_ENABLE_DEBUG
   if ((gdk_debug_flags & GDK_DEBUG_XIM) && destroyed > 0)
     {
       g_warning ("Cleaned up %i IC(s)\n", destroyed);
     }
+#endif /* G_ENABLE_DEBUG */
   g_list_free(xim_ic_list);
   xim_ic_list = NULL;
 }

@@ -141,22 +141,24 @@ static GdkColormap *gtk_colormap;	   /* The colormap to be used in creating new
 					    *  widgets.
 					    */
 
-guint gtk_debug_flags;		/* Global GTK debug flag */
+guint gtk_debug_flags = 0;		   /* Global GTK debug flag */
 
 #ifdef G_ENABLE_DEBUG
 static GDebugKey gtk_debug_keys[] = {
   {"objects", GTK_DEBUG_OBJECTS}
 };
+
+static const int gtk_ndebug_keys = sizeof(gtk_debug_keys)/sizeof(GDebugKey);
+
 #endif /* G_ENABLE_DEBUG */
+
+
+
 
 void
 gtk_init (int	 *argc,
 	  char ***argv)
 {
-#ifdef G_ENABLE_DEBUG
-  gboolean debug_set = FALSE;
-#endif
-
   if (0)
     {
       g_set_error_handler (gtk_error);
@@ -171,22 +173,48 @@ gtk_init (int	 *argc,
   gdk_init (argc, argv);
   
 #ifdef G_ENABLE_DEBUG
+  {
+    gchar *debug_string = getenv("GTK_DEBUG");
+    if (debug_string != NULL)
+      gtk_debug_flags = g_parse_debug_string (debug_string,
+					      gtk_debug_keys,
+					      gtk_ndebug_keys);
+  }
+
   if (argc && argv)
     {
       gint i;
       
       for (i = 1; i < *argc;)
 	{
-	  if ((*argv[i]) && strcmp ("--gtk-debug", (*argv)[i]) == 0)
+	  if ((*argv)[i] == NULL)
+	    {
+	      i += 1;
+	      continue;
+	    }
+
+	  if (strcmp ("--gtk-debug", (*argv)[i]) == 0)
 	    {
 	      (*argv)[i] = NULL;
 
 	      if ((i + 1) < *argc && (*argv)[i + 1])
 		{
-		  gtk_debug_flags = g_parse_debug_string ((*argv)[i+1],
-							  gtk_debug_keys,
- 			          sizeof(gtk_debug_keys) / sizeof(GDebugKey));
-		  debug_set = TRUE;
+		  gtk_debug_flags |= g_parse_debug_string ((*argv)[i+1],
+							   gtk_debug_keys,
+							   gtk_ndebug_keys);
+		  (*argv)[i + 1] = NULL;
+		  i += 1;
+		}
+	    }
+	  else if (strcmp ("--gtk-no-debug", (*argv)[i]) == 0)
+	    {
+	      (*argv)[i] = NULL;
+
+	      if ((i + 1) < *argc && (*argv)[i + 1])
+		{
+		  gtk_debug_flags &= ~g_parse_debug_string ((*argv)[i+1],
+							    gtk_debug_keys,
+							    gtk_ndebug_keys);
 		  (*argv)[i + 1] = NULL;
 		  i += 1;
 		}
@@ -195,14 +223,6 @@ gtk_init (int	 *argc,
 	}
     }
 
-  if (!debug_set)
-    {
-      gchar *debug_string = getenv("GTK_DEBUG");
-      if (debug_string != NULL)
-	gtk_debug_flags = g_parse_debug_string (debug_string,
-						gtk_debug_keys,
-			        sizeof(gtk_debug_keys) / sizeof(GDebugKey));
-    }
 #endif /* G_ENABLE_DEBUG */
 
   /* Initialize the default visual and colormap to be

@@ -42,20 +42,31 @@ time by the --enable-debug option.
 RUN TIME OPTIONS
 ----------------
 
-At run time, if GTK+ was compiled with debugging enabled, 
-different types of debugging information can be printed
-out by setting the --gtk-debug and --gdk-debug command line
-options, or the GTK_DEBUG and GDK_DEBUG environment 
-variables. (The command line options override the environment
-variables)
+At run time, if GTK+ was compiled with debugging enabled, different
+types of debugging information can be printed out. This is controlled
+by the:
+ 
+  GTK_DEBUG and GDK_DEBUG environment variables
+  --gtk-debug and --gdk-debug command line options
+  --gtk-no-debug and --gdk-no-debug command line options
 
-Each of these can either be the special value ALL,
-or a sequence of ':' separated options. (Note, case is
-significant)
+First the environment variables are applied, then the command line
+options are applied in the order given on the command line.
 
-As noted below, some of these are useful in application
-debugging, but most are only interested to those debugging
-the libraries
+Each of these can either be the special value ALL, or a sequence of
+':' separated options. (Note, case is significant). The environment
+variables and the --gtk-debug and --gdk-debug options add debugging
+options and the --gtk-no-debug and --gdk-no-debug options remove
+them.
+
+As noted below, some of these are useful in application debugging, but
+most are only interested to those debugging the libraries
+
+For instance:
+
+  GDK_DEBUG_FLAGS=misc:dnd testgtk --gdk-no-debug dnd --gdk-debug events
+
+runs testgtk with the 'misc' and 'events' debugging options.
 
  GTK_DEBUG
  ---------
@@ -81,3 +92,7 @@ the libraries
  'color-context' - Information about the internal workings of 
                    GdkColorContext
  'xim'           - Information about X Input Method support
+
+
+                                    - Owen Taylor <owt1@cornell.edu>
+                                      98/02/19
