@@ -389,7 +389,7 @@ read_settings (XSettingsClient *client)
 	    {
 	      fprintf (stderr, "Invalid type for XSETTINGS property");
 	    }
-	  eles if (format != 8)
+	  else if (format != 8)
 	    {
 	      fprintf (stderr, "Invalid format for XSETTINGS property %d", format);
 	    }

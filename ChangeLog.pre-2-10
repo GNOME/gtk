@@ -1,3 +1,7 @@
+Thu Feb 26 17:31:34 2004  Manish Singh  <yosh@gimp.org>
+
+	* gdk/x11/xsettings-client.c (read_settings): fix ytpo: s/eles/else/
+
 Thu Feb 26 19:53:32 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/xsettings-common.h (xsettings_client_process_event): 
