@@ -1320,7 +1320,8 @@ gtk_spin_button_spin (GtkSpinButton *spin_button,
 
   /* for compatibility with the 1.0.x version of this function */
   if (increment != 0 && increment != adj->step_increment &&
-      increment != adj->page_increment && direction != GTK_SPIN_USER_DEFINED)
+      (direction == GTK_SPIN_STEP_FORWARD ||
+       direction == GTK_SPIN_STEP_BACKWARD))
     {
       if (direction == GTK_SPIN_STEP_BACKWARD && increment > 0)
 	increment = -increment;
