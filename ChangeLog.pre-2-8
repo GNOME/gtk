@@ -1,3 +1,13 @@
+2001-11-03  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* gtk/gtkwindow.h (frame_event): Use GtkWindow* as first
+	signal argument (was GtkWidget*).
+
+	* gtk/gtkwindow.c (gtk_window_frame_event),
+	  gtk/gtkwindow-decorate.c (gtk_decorated_window_frame_event):
+	Fixed argument types as above, removed GTK_WINDOW casts and
+	added some GTK_WIDGET casts instead.
+
 2001-11-03  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_finalize) : chain

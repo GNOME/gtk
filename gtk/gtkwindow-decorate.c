@@ -95,7 +95,7 @@ static void gtk_decorated_window_recalculate_regions      (GtkWindow      *windo
 static GtkWindowRegionType gtk_decorated_window_region_type    (GtkWindow      *window,
 						 gint            x,
 						 gint            y);
-static gint gtk_decorated_window_frame_event    (GtkWidget *widget,
+static gint gtk_decorated_window_frame_event    (GtkWindow *window,
 						 GdkEvent *event);
 static gint gtk_decorated_window_button_press   (GtkWidget      *widget,
 						 GdkEventButton *event);
@@ -288,9 +288,10 @@ gtk_decorated_window_unrealize (GtkWindow   *window)
 }
 
 static gint
-gtk_decorated_window_frame_event (GtkWidget *widget, GdkEvent *event)
+gtk_decorated_window_frame_event (GtkWindow *window, GdkEvent *event)
 {
-  GtkWindowDecoration *deco = get_decoration (GTK_WINDOW (widget));
+  GtkWindowDecoration *deco = get_decoration (window);
+  GtkWidget *widget = GTK_WIDGET (window);
   GdkEventExpose *expose_event;
 
   switch (event->type)
@@ -302,7 +303,7 @@ gtk_decorated_window_frame_event (GtkWidget *widget, GdkEvent *event)
       return TRUE;
       break;
     case GDK_CONFIGURE:
-      gtk_decorated_window_recalculate_regions (GTK_WINDOW (widget));
+      gtk_decorated_window_recalculate_regions (window);
       break;
     case GDK_MOTION_NOTIFY:
       return gtk_decorated_window_motion_notify (widget, (GdkEventMotion *)event);

@@ -144,7 +144,7 @@ static void gtk_window_size_allocate      (GtkWidget         *widget,
 					   GtkAllocation     *allocation);
 static gint gtk_window_event              (GtkWidget *widget,
 					   GdkEvent *event);
-static gboolean gtk_window_frame_event    (GtkWidget *widget,
+static gboolean gtk_window_frame_event    (GtkWindow *window,
 					   GdkEvent *event);
 static gint gtk_window_configure_event    (GtkWidget         *widget,
 					   GdkEventConfigure *event);
@@ -3283,10 +3283,9 @@ gtk_window_event (GtkWidget *widget, GdkEvent *event)
 }
 
 static gboolean
-gtk_window_frame_event (GtkWidget *widget, GdkEvent *event)
+gtk_window_frame_event (GtkWindow *window, GdkEvent *event)
 {
   GdkEventConfigure *configure_event;
-  GtkWindow *window = GTK_WINDOW (widget);
   GdkRectangle rect;
 
   switch (event->type)
@@ -3305,7 +3304,7 @@ gtk_window_frame_event (GtkWidget *widget, GdkEvent *event)
       /* Pass on the (modified) configure event */
       configure_event->width -= window->frame_left + window->frame_right;
       configure_event->height -= window->frame_top + window->frame_bottom;
-      return gtk_window_configure_event (widget, configure_event);
+      return gtk_window_configure_event (GTK_WIDGET (window), configure_event);
       break;
     default:
       break;
