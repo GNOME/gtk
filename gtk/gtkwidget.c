@@ -1870,16 +1870,12 @@ gtk_widget_reparent (GtkWidget *widget,
   if (widget->parent != new_parent)
     {
       /* First try to see if we can get away without unrealizing
-       * the widget as we reparent it 
+       * the widget as we reparent it. if so we set a flag so
+       * that gtk_widget_unparent doesn't unrealize widget
        */
-
       if (GTK_WIDGET_REALIZED (widget) && GTK_WIDGET_REALIZED (new_parent))
- 	{
-	  /* Set a flag so that gtk_widget_unparent doesn't unrealize widget
-	   */
-	  GTK_PRIVATE_SET_FLAG (widget, GTK_IN_REPARENT);
-	}
-
+	GTK_PRIVATE_SET_FLAG (widget, GTK_IN_REPARENT);
+      
       gtk_widget_ref (widget);
       gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
       gtk_container_add (GTK_CONTAINER (new_parent), widget);
@@ -1887,6 +1883,8 @@ gtk_widget_reparent (GtkWidget *widget,
       
       if (GTK_WIDGET_IN_REPARENT (widget))
 	{
+	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_IN_REPARENT);
+	  
 	  /* OK, now fix up the widget's window. (And that for any
 	   * children, if the widget is NO_WINDOW and a container) 
 	   */
@@ -1913,8 +1911,6 @@ gtk_widget_reparent (GtkWidget *widget,
 	    }
 	  else
 	    gdk_window_reparent (widget->window, gtk_widget_get_parent_window (widget), 0, 0);
-
-	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_IN_REPARENT);
 	}
     }
 }
