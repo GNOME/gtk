@@ -61,7 +61,6 @@ struct _GdkScreenClass
   GdkWindow *   (*get_window_at_pointer) (GdkScreen    *screen,
 					  gint         *win_x,
 					  gint         *win_y);
-  gboolean      (*use_virtual_screen)    (GdkScreen    *screen);
   gint          (*get_n_monitors)        (GdkScreen    *screen);
   void          (*get_monitor_geometry)  (GdkScreen    *screen,
 					  gint          monitor_num,
@@ -96,7 +95,6 @@ GList *      gdk_screen_list_visuals          (GdkScreen   *screen);
 GList *      gdk_screen_get_toplevel_windows  (GdkScreen   *screen);
 
 
-gboolean      gdk_screen_use_virtual_screen    (GdkScreen *screen);
 gint          gdk_screen_get_n_monitors        (GdkScreen *screen);
 void          gdk_screen_get_monitor_geometry  (GdkScreen *screen,
 						gint       monitor_num,

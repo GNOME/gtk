@@ -75,7 +75,6 @@ struct _GdkScreenX11
   XSettingsClient *xsettings_client;
   
   /* Xinerama */
-  gboolean use_virtual_screen;
   gint     num_monitors;
   GdkRectangle *monitors;
 };

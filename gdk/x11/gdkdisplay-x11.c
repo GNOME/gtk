@@ -130,7 +130,6 @@ check_solaris_xinerama (GdkScreen *screen)
       else
 	{
 	  int i;
-	  screen_x11->use_virtual_screen = TRUE;
 	  screen_x11->monitors = g_new0 (GdkRectangle, screen_x11->num_monitors);
 	  
 	  for (i = 0; i < screen_x11->num_monitors; i++)
@@ -167,7 +166,6 @@ check_xfree_xinerama (GdkScreen *screen)
       else
 	{
 	  int i;
-	  screen_x11->use_virtual_screen = TRUE;
 	  screen_x11->monitors = g_new0 (GdkRectangle, screen_x11->num_monitors);
 	  
 	  for (i = 0; i < screen_x11->num_monitors; i++)
@@ -209,7 +207,6 @@ init_xinerama_support (GdkScreen * screen)
 
   /* No Xinerama
    */
-  screen_x11->use_virtual_screen = FALSE;
   screen_x11->num_monitors = 1;
   screen_x11->monitors = g_new0 (GdkRectangle, 1);
   screen_x11->monitors[0].x = 0;

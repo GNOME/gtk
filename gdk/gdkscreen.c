@@ -238,23 +238,6 @@ gdk_screen_close (GdkScreen *screen)
 }
 
 /**
- * gdk_screen_use_virtual_screen:
- * @screen : a #GdkScreen.
- *
- * Determines whether @screen is uses multiple monitors as
- * a single virtual screen (e.g. Xinerama mode under X).
- *
- * Returns: %TRUE if multiple monitors are used as a single screen
- ***/
-gboolean 
-gdk_screen_use_virtual_screen (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
-  
-  return GDK_SCREEN_GET_CLASS (screen)->use_virtual_screen (screen);
-}
-
-/**
  * gdk_screen_get_n_monitors:
  * @screen : a #GdkScreen.
  *

@@ -1,3 +1,12 @@
+2002-05-02 Erwann Chenede - <erwann.chenede@sun.com>
+
+	* gdk/x11/gdkscreen-x11.c (gdk_screen_x11_get_root_window):
+	removed unneeded ref. #79977
+	* gdk/x11/gdkscreen-x11.[hc] (gdk_screen_use_virtual_screen):
+	* gdk/x11/gdkdisplay-x11.c (check_*_xinerama):
+	removed gdk_screen_use_virtual_screen function and 
+	use_virtual_screen member variable from GdkScreenX11. #79957
+	
 2002-05-02  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktable.c (gtk_table_class_init): 

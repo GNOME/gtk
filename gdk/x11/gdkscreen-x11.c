@@ -45,7 +45,6 @@ static GdkWindow *  gdk_screen_x11_get_window_at_pointer (GdkScreen             
 							  gint                  *win_y);
 static void         gdk_screen_x11_finalize		 (GObject		*object);
 
-static gboolean      gdk_screen_x11_use_virtual_screen    (GdkScreen       *screen);
 static gint          gdk_screen_x11_get_n_monitors        (GdkScreen       *screen);
 static void          gdk_screen_x11_get_monitor_geometry  (GdkScreen       *screen,
 							   gint             num_monitor,
@@ -99,7 +98,6 @@ gdk_screen_x11_class_init (GdkScreenX11Class * klass)
   screen_class->get_default_colormap = gdk_screen_x11_get_default_colormap;
   screen_class->set_default_colormap = gdk_screen_x11_set_default_colormap;
   screen_class->get_window_at_pointer = gdk_screen_x11_get_window_at_pointer;
-  screen_class->use_virtual_screen = gdk_screen_x11_use_virtual_screen;
   screen_class->get_n_monitors = gdk_screen_x11_get_n_monitors;
   screen_class->get_monitor_geometry = gdk_screen_x11_get_monitor_geometry;
   screen_class->get_monitor_at_point = gdk_screen_x11_get_monitor_at_point;
@@ -169,7 +167,6 @@ gdk_screen_x11_get_root_window (GdkScreen *screen)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
 
-  gdk_drawable_ref (screen_x11->root_window);
   return screen_x11->root_window;
 }
 
@@ -242,13 +239,6 @@ gdk_screen_x11_finalize (GObject *object)
   /* X settings */
   g_free (screen_x11->xsettings_client);
   G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-static gboolean 
-gdk_screen_x11_use_virtual_screen (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
-  return GDK_SCREEN_X11 (screen)->use_virtual_screen;
 }
 
 static gint 
