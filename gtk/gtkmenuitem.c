@@ -972,6 +972,23 @@ gtk_menu_item_popup_submenu (gpointer data)
 }
 
 static void
+get_offsets (GtkMenu *menu,
+	     gint    *horizontal_offset,
+	     gint    *vertical_offset)
+{
+  gint vertical_padding;
+  
+  gtk_widget_style_get (GTK_WIDGET (menu),
+			"horizontal_offset", horizontal_offset,
+			"vertical_offset", vertical_offset,
+			"vertical_padding", &vertical_padding,
+			NULL);
+
+  *vertical_offset -= GTK_WIDGET (menu)->style->ythickness;
+  *vertical_offset -= vertical_padding;
+}
+
+static void
 gtk_menu_item_position_menu (GtkMenu  *menu,
 			     gint     *x,
 			     gint     *y,
@@ -987,6 +1004,9 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   GtkTextDirection direction;
   GdkRectangle monitor;
   gint monitor_num;
+  gint horizontal_offset;
+  gint vertical_offset;
+  gint parent_xthickness;
 
   g_return_if_fail (menu != NULL);
   g_return_if_fail (x != NULL);
@@ -994,6 +1014,9 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 
   menu_item = GTK_MENU_ITEM (user_data);
   widget = GTK_WIDGET (user_data);
+
+  if (push_in)
+    *push_in = FALSE;
 
   direction = gtk_widget_get_direction (widget);
 
@@ -1015,6 +1038,8 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   tx += widget->allocation.x;
   ty += widget->allocation.y;
 
+  get_offsets (menu, &horizontal_offset, &vertical_offset);
+  
   switch (menu_item->submenu_placement)
     {
     case GTK_TOP_BOTTOM:
@@ -1038,6 +1063,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 
     case GTK_LEFT_RIGHT:
       parent_menu_item = GTK_MENU (widget->parent)->parent_menu_item;
+      parent_xthickness = widget->parent->style->xthickness;
       if (parent_menu_item && 
 	  !GTK_MENU (widget->parent)->torn_off && 
 	  !GTK_MENU_SHELL (menu)->active)
@@ -1050,28 +1076,28 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
       switch (menu_item->submenu_direction)
 	{
 	case GTK_DIRECTION_LEFT:
-	  if ((tx - twidth) >= monitor.x)
-	    tx -= twidth;
+	  if ((tx - twidth - parent_xthickness - horizontal_offset) >= monitor.x)
+	    tx -= twidth + parent_xthickness + horizontal_offset;
 	  else
 	    {
 	      menu_item->submenu_direction = GTK_DIRECTION_RIGHT;
-	      tx += widget->allocation.width - 5;
+	      tx += widget->allocation.width + parent_xthickness + horizontal_offset;
 	    }
 	  break;
 
 	case GTK_DIRECTION_RIGHT:
-	  if ((tx + widget->allocation.width + twidth - 5) <= monitor.x + monitor.width)
-	    tx += widget->allocation.width - 5;
+	  if ((tx + widget->allocation.width + parent_xthickness + horizontal_offset + twidth) <= monitor.x + monitor.width)
+	    tx += widget->allocation.width + parent_xthickness + horizontal_offset;
 	  else
 	    {
 	      menu_item->submenu_direction = GTK_DIRECTION_LEFT;
-	      tx -= twidth;
+	      tx -= twidth + parent_xthickness + horizontal_offset;
 	    }
 	  break;
 	}
 
-      ty += widget->allocation.height / 4;
-
+      ty += vertical_offset;
+      
       /* If the height of the menu doesn't fit we move it upward. */
       ty = CLAMP (ty, monitor.y, MAX (monitor.y, monitor.y + monitor.height - theight));
       break;

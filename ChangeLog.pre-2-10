@@ -1,3 +1,13 @@
+Sun Jul 13 01:37:51 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c (gtk_menu_class_init): new properties
+	"horizontal-offset" and "vertical-offset" that determines the
+	position of the menu when it is a submenu. 
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_position_menu): position
+	submenus according to new vertical- and horizontal-offset
+	properties.
+
 Sat Jul 12 16:16:04 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.

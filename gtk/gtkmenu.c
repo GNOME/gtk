@@ -274,6 +274,24 @@ gtk_menu_class_init (GtkMenuClass *class)
 							     1,
 							     G_PARAM_READABLE));
 
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("vertical-offset",
+							     _("Vertical Offset"),
+							     _("When the menu is a submenu, position it this number of pixels offset vertically"),
+							     G_MININT,
+							     G_MAXINT,
+							     0,
+							     G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("horizontal-offset",
+							     _("Horizontal Offset"),
+							     _("When the menu is a submenu, position it this number of pixels offset horizontally"),
+							     G_MININT,
+							     G_MAXINT,
+							     -2,
+							     G_PARAM_READABLE));
+
   object_class->destroy = gtk_menu_destroy;
   
   widget_class->realize = gtk_menu_realize;
