@@ -76,7 +76,7 @@ struct _GtkEntryCompletionClass
 GType               gtk_entry_completion_get_type               (void);
 GtkEntryCompletion *gtk_entry_completion_new                    (void);
 
-GtkWidget          *gtk_entry_completion_get_entry              (GtkEntryCompletion          *entry);
+GtkWidget          *gtk_entry_completion_get_entry              (GtkEntryCompletion          *completion);
 
 void                gtk_entry_completion_set_model              (GtkEntryCompletion          *completion,
                                                                  GtkTreeModel                *model);

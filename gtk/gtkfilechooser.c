@@ -1338,7 +1338,7 @@ gtk_file_chooser_remove_filter (GtkFileChooser *chooser,
 
 /**
  * gtk_file_chooser_list_filters:
- * @choooser: a #GtkFileChooser
+ * @chooser: a #GtkFileChooser
  * 
  * Lists the current set of user-selectable filters; see
  * gtk_file_chooser_add_filter(), gtk_file_chooser_remove_filter().

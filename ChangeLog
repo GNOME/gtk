@@ -1,3 +1,9 @@
+Sun Nov 16 00:35:29 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilechooser.[hc]: 
+	* gtk/gtkentrycompletion.h: Fix parameter name mismatches which
+	confuse gtk-doc.
+
 2003-11-15  Hans Breuer  <hans@breuer.org>
 
 	* gdk/makefile.msc gdk/gdk.def 

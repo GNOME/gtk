@@ -1067,6 +1067,7 @@ GtkExpanderPrivate
 <SECTION>
 <FILE>gtkfilechooser</FILE>
 <TITLE>GtkFileChooser</TITLE>
+GtkFileChooser
 GtkFileChooserAction
 GTK_FILE_CHOOSER_ERROR
 GtkFileChooserError
@@ -1120,7 +1121,6 @@ GTK_FILE_CHOOSER
 GTK_IS_FILE_CHOOSER
 GTK_TYPE_FILE_CHOOSER
 <SUBSECTION Private>
-GtkFileChooser
 gtk_file_chooser_get_type
 </SECTION>
 
@@ -3203,8 +3203,6 @@ gtk_tool_item_set_homogeneous
 gtk_tool_item_get_homogeneous
 gtk_tool_item_set_expand
 gtk_tool_item_get_expand
-gtk_tool_item_set_pack_end
-gtk_tool_item_get_pack_end
 gtk_tool_item_set_tooltip
 gtk_tool_item_set_use_drag_window
 gtk_tool_item_get_use_drag_window

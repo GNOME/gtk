@@ -60,7 +60,7 @@ void                 gtk_file_chooser_set_folder_mode     (GtkFileChooser       
 							   gboolean              folder_mode);
 gboolean             gtk_file_chooser_get_folder_mode     (GtkFileChooser       *chooser);
 void                 gtk_file_chooser_set_local_only      (GtkFileChooser       *chooser,
-							   gboolean              files_only);
+							   gboolean              local_only);
 gboolean             gtk_file_chooser_get_local_only      (GtkFileChooser       *chooser);
 void                 gtk_file_chooser_set_select_multiple (GtkFileChooser       *chooser,
 							   gboolean              select_multiple);
@@ -109,8 +109,8 @@ void       gtk_file_chooser_set_preview_widget_active (GtkFileChooser *chooser,
 						       gboolean        active);
 gboolean   gtk_file_chooser_get_preview_widget_active (GtkFileChooser *chooser);
 
-char *gtk_file_chooser_get_preview_filename (GtkFileChooser *file_chooser);
-char *gtk_file_chooser_get_preview_uri      (GtkFileChooser *file_chooser);
+char *gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser);
+char *gtk_file_chooser_get_preview_uri      (GtkFileChooser *chooser);
 
 /* Extra widget
  */
@@ -143,10 +143,10 @@ gboolean gtk_file_chooser_remove_shortcut_folder (GtkFileChooser *chooser,
 GSList *gtk_file_chooser_list_shortcut_folders   (GtkFileChooser *chooser);
 
 gboolean gtk_file_chooser_add_shortcut_folder_uri    (GtkFileChooser *chooser,
-						      const char     *folder,
+						      const char     *uri,
 						      GError        **error);
 gboolean gtk_file_chooser_remove_shortcut_folder_uri (GtkFileChooser *chooser,
-						      const char     *folder,
+						      const char     *uri,
 						      GError        **error);
 GSList *gtk_file_chooser_list_shortcut_folder_uris   (GtkFileChooser *chooser);
 
