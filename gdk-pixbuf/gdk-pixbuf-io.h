@@ -39,8 +39,7 @@ struct _ModuleType {
         /* Incremental loading */
         gpointer   (* begin_load)    (ModulePreparedNotifyFunc func, gpointer user_data);
         void       (* stop_load)     (gpointer context);
-        void       (* load_increment)(gpointer context, guchar *buf, guint size);
-        GdkPixbuf *(* get_pixbuf)    (gpointer context);
+        gboolean   (* load_increment)(gpointer context, guchar *buf, guint size);
 };
 
 

@@ -1,3 +1,7 @@
+1999-10-26  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/gdk-pixbuf-loader.c: Finished initial cut at the object.
+
 1999-10-26  Havoc Pennington  <hp@pobox.com>
 
 	* src/gdk-pixbuf-loader.h: fix signals 

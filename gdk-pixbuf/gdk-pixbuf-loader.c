@@ -26,6 +26,12 @@
 #include "gdk-pixbuf-loader.h"
 #include "gdk-pixbuf-io.h"
 
+enum {
+	AREA_UPDATED,
+	AREA_PREPARED,
+	CLOSED,
+	LAST_SIGNAL
+};
 
 static GtkObjectClass *parent_class;
 
@@ -33,6 +39,7 @@ static void gdk_pixbuf_loader_class_init    (GdkPixbufLoaderClass   *klass);
 static void gdk_pixbuf_loader_init          (GdkPixbufLoader        *loader);
 static void gdk_pixbuf_loader_destroy       (GtkObject              *loader);
 static void gdk_pixbuf_loader_finalize      (GtkObject              *loader);
+
 
 /* Internal data */
 typedef struct _GdkPixbufLoaderPrivate GdkPixbufLoaderPrivate;
@@ -43,7 +50,34 @@ struct _GdkPixbufLoaderPrivate
 	gchar buf[128];
 	gint buf_offset;
 	ModuleType *image_module;
+	gpointer context;
 };
+static guint pixbuf_loader_signals[LAST_SIGNAL] = { 0 };
+
+
+/* our marshaller */
+typedef void (*GtkSignal_NONE__INT_INT_INT_INT) (GtkObject * object,
+							 gint arg1,
+							 gpointer arg2,
+							 gint arg3,
+							 gint arg4,
+							 gint arg5,
+							 gpointer user_data);
+void
+gtk_marshal_NONE__INT_INT_INT_INT (GtkObject * object,
+				   GtkSignalFunc func,
+				   gpointer func_data,
+				   GtkArg * args)
+{
+  GtkSignal_NONE__INT_INT_INT_INT rfunc;
+  rfunc = (GtkSignal_NONE__INT_INT_INT_INT) func;
+  (*rfunc) (object,
+	    GTK_VALUE_INT (args[0]),
+	    GTK_VALUE_INT (args[1]),
+	    GTK_VALUE_INT (args[2]),
+	    GTK_VALUE_INT (args[3]),
+	    func_data);
+}
 
 GtkType
 gdk_pixbuf_loader_get_type (void)
@@ -73,6 +107,32 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *klass)
 {
 	parent_class = GTK_OBJECT_CLASS (klass);
 
+	pixbuf_loader_signals[AREA_PREPARED] =
+		gtk_signal_new ("area_prepared",
+				GTK_RUN_LAST,
+				parent_class->type,
+				GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, area_prepared),
+				gtk_marshal_NONE__NONE,
+				GTK_TYPE_NONE, 0);
+
+	pixbuf_loader_signals[AREA_UPDATED] =
+		gtk_signal_new ("area_updated",
+				GTK_RUN_LAST,
+				parent_class->type,
+				GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, area_updated),
+				gtk_marshal_NONE__INT_INT_INT_INT,
+				GTK_TYPE_NONE, 4, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_INT);
+
+	pixbuf_loader_signals[CLOSED] =
+		gtk_signal_new ("closed",
+				GTK_RUN_LAST,
+				parent_class->type,
+				GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, closed),
+				gtk_marshal_NONE__NONE,
+				GTK_TYPE_NONE, 0);
+
+	gtk_object_class_add_signals (parent_class, pixbuf_loader_signals, LAST_SIGNAL);
+
 	parent_class->destroy = gdk_pixbuf_loader_destroy;
 	parent_class->finalize = gdk_pixbuf_loader_finalize;
 }
@@ -96,18 +156,35 @@ gdk_pixbuf_loader_destroy (GtkObject *loader)
 	GdkPixbufLoaderPrivate *priv = NULL;
 
 	priv = GDK_PIXBUF_LOADER (loader)->private;
-	gdk_pixbuf_unref (priv->pixbuf);
+
+	/* We want to close it if it's not already closed */
+	if (priv->closed)
+		gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (loader));
+
+	if (priv->pixbuf)
+		gdk_pixbuf_unref (priv->pixbuf);
 }
 
 static void
 gdk_pixbuf_loader_finalize (GtkObject *loader)
 {
-	GdkPixbufLoader *load;
 	GdkPixbufLoaderPrivate *priv = NULL;
 
-	load = GTK_CHECK_CAST (loader, GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoader);
 	priv = GDK_PIXBUF_LOADER (loader)->private;
 	g_free (priv);
+}
+
+static void
+gdk_pixbuf_loader_prepare (GdkPixbuf *pixbuf, gpointer loader)
+{
+	GdkPixbufLoaderPrivate *priv = NULL;
+
+	priv = GDK_PIXBUF_LOADER (loader)->private;
+	gdk_pixbuf_ref (pixbuf);
+	g_assert (priv->pixbuf == NULL);
+
+	priv->pixbuf = pixbuf;
+	gtk_signal_emit (GTK_OBJECT (loader), druid_page_signals[AREA_PREPARED]);
 }
 
 /* Public functions */
@@ -150,23 +227,46 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader, gchar *buf, gint count)
 	g_return_val_if_fail (priv->closed == FALSE, FALSE);
 
 	if (priv->image_module == NULL) {
+		gboolean retval = TRUE;
+
 		g_print ("buf_offset:%d:\n", priv->buf_offset);
 		memcpy (priv->buf + priv->buf_offset,
 			buf,
 			(priv->buf_offset + count) > 128 ? 128 - priv->buf_offset : count);
 		if ((priv->buf_offset + count) >= 128) {
+			/* We have enough data to start doing something with the image */
 			priv->image_module = gdk_pixbuf_get_module (priv->buf, 128);
 			if (priv->image_module == NULL) {
-				g_print ("no module loaded.  bummer\n");
+				return FALSE;
+			} else if ((priv->image_module->begin_load == NULL) ||
+				   (priv->image_module->begin_load == NULL) ||
+				   (priv->image_module->begin_load == NULL) ||
+				   (priv->image_module->begin_load == NULL)) {
+				g_warning ("module %s does not support incremental loading.\n", priv->image_module->module_name);
 				return FALSE;
 			} else {
 				g_print ("module loaded: name is %s\n", priv->image_module->module_name);
+				priv->context = (priv->image_module->begin_load) (gdk_pixbuf_loader_prepare, loader);
+				retval = (priv->image_module->load_increment) (priv->context, priv->buf, 128);
+
+				/* if we had more then 128 bytes total, we want to send the rest of the buffer */
+				if (retval && (priv->buf_offset + count) >= 128) {
+					retval = (priv->image_module->load_increment) (priv->context,
+										       buf,
+										       count + priv->buf_offset - 128);
+				}
 			}
 		} else {
 			priv->buf_offset += count;
 		}
+		return retval;
 	}
-	return TRUE;
+
+	if (priv->image_module->load_increment)
+		return (priv->image_module->load_increment) (priv->context,
+							     buf,
+							     count);
+	return (FALSE);
 }
 
 /**
@@ -213,6 +313,26 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader)
 
 	/* we expect it's not closed */
 	g_return_if_fail (priv->closed == FALSE);
+
+	/* We have less the 128 bytes in the image.  Flush it, and keep going. */
+	if (priv->module == NULL) {
+		priv->image_module = gdk_pixbuf_get_module (priv->buf, priv->buf_offset);
+		if (priv->image_module &&
+		    ((priv->image_module->begin_load == NULL) ||
+		     (priv->image_module->begin_load == NULL) ||
+		     (priv->image_module->begin_load == NULL) ||
+		     (priv->image_module->begin_load == NULL))) {
+			g_warning ("module %s does not support incremental loading.\n", priv->image_module->module_name);
+		} else if (priv->image_module) {
+			g_print ("module loaded: name is %s\n", priv->image_module->module_name);
+			priv->context = (priv->image_module->begin_load) (gdk_pixbuf_loader_prepare, loader);
+			(priv->image_module->load_increment) (priv->context, priv->buf, priv->buf_offset);
+		}
+	}
+
+	if (priv->image_module && priv->image_module->stop_load)
+		(priv->image_module->stop_load) (loader->context);
+
 	priv->closed = TRUE;
 }
 
