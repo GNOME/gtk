@@ -713,7 +713,7 @@ create_toolbar (void)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Toolbar test");
-      gtk_window_set_policy (GTK_WINDOW (window), FALSE, TRUE, TRUE);
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
@@ -1553,10 +1553,7 @@ create_handle_box (void)
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window),
 			  "Handle Box Test");
-    gtk_window_set_policy (GTK_WINDOW (window),
-			   TRUE,
-			   TRUE,
-			   TRUE);
+    gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
     
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC(gtk_widget_destroyed),

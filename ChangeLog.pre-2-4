@@ -1,3 +1,9 @@
+2001-08-16  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+
+	* tests/testgtk.c (create_handle_box): 
+	(create_toolbar): Replace gtk_window_set_policy calls by
+	gtk_window_set_resizable.
+
 2001-08-16  Jakub Steiner <jimmac@ximian.com>
 
 	* gtk/stock-icons/dialog_info.png: new style bulb
