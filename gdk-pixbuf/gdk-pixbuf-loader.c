@@ -529,9 +529,16 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
   
   /* We have less the 128 bytes in the image.  Flush it, and keep going. */
   if (priv->image_module == NULL)
-    gdk_pixbuf_loader_load_module (loader, NULL, NULL);
-  
-  if (priv->image_module && priv->image_module->stop_load && priv->context)
+    {
+      GError *tmp = NULL;
+      gdk_pixbuf_loader_load_module (loader, NULL, &tmp);
+      if (tmp != NULL)
+	{
+	  g_propagate_error (error, tmp);
+	  retval = FALSE;
+	}
+    }  
+  if (retval && priv->image_module && priv->image_module->stop_load && priv->context)
     retval = priv->image_module->stop_load (priv->context, error);
   
   priv->closed = TRUE;
@@ -540,3 +547,5 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
 
   return retval;
 }
+
+

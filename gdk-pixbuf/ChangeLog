@@ -1,3 +1,8 @@
+Thu Aug 30 08:30:03 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Propagate
+	errors from gdk_pixbuf_loader_load_module.
+
 Thu Aug 30 08:27:37 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* io-png.c (png_row_callback): Check that row_num is valid.
