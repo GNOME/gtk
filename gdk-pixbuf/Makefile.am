@@ -30,7 +30,8 @@ libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf-io.c
 
 libgdk_pixbufinclude_HEADERS =	\
-	gdk-pixbuf.h
+	gdk-pixbuf.h		\
+	gdk-pixbuf-io.h
 
 #
 # The PNG plugin.

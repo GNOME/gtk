@@ -273,7 +273,7 @@ static gchar *
 	xpm_read_string(h->infile, &h->buffer, &h->buffer_size);
 	return h->buffer;
     }
-    return NULL;
+    return 0;
 }
 
 /* This reads from memory */
@@ -341,12 +341,13 @@ static GdkPixBuf *
 	color->transparent = FALSE;
 
 	color_name = xpm_extract_color(buffer);
-
-	if ((!color_name) || (g_strcasecmp(color_name, "None") == 0)
+       
+	if ((color_name == NULL) || (g_strcasecmp(color_name, "None") == 0)
 	    || (gdk_color_parse(color_name, &color->color) == FALSE)) {
 	    color->transparent = TRUE;
 	    is_trans = TRUE;
 	}
+
 	g_free(color_name);
 	g_hash_table_insert(color_hash, color->color_string, color);
 
@@ -384,19 +385,18 @@ static GdkPixBuf *
 	    if (!color)
 		color = fallbackcolor;
 
-	    pixtmp[0] = color->color.red;
-	    pixtmp[1] = color->color.green;
-	    pixtmp[2] = color->color.blue;
+	    *pixtmp++ = (color->color.red)>>8;
+	    *pixtmp++ = (color->color.green)>>8;
+	    *pixtmp++ = (color->color.blue)>>8;
+
 	    if ((is_trans) && (color->transparent)) {
-		pixtmp[3] = 0;
-		pixtmp++;
+		*pixtmp++ = 0;
 	    } else if (is_trans) {
-		pixtmp[3] = 0xFF;
-		pixtmp++;
+		*pixtmp++ = 0xFF;
 	    }
-	    pixtmp += 3;
 	}
     }
+
     /* Ok, now stuff the GdkPixBuf with goodies */
 
     pixbuf = g_new(GdkPixBuf, 1);
@@ -427,9 +427,14 @@ GdkPixBuf *image_load(FILE * f)
 
     g_return_val_if_fail(f != NULL, NULL);
 
+    memset(&h, 0, sizeof(h));
     h.infile = f;
     pixbuf = _pixbuf_create_from_xpm(file_buffer, &h);
     g_free(h.buffer);
 
     return pixbuf;
+}
+
+image_save()
+{
 }
