@@ -2,7 +2,6 @@
 
 set -e
 install-info --quiet --remove gtk
-install-info --quiet --remove glib
 install-info --quiet --remove gdk
 
 #DEBHELPER#

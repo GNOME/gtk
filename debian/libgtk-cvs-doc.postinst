@@ -8,7 +8,4 @@ install-info --quiet --description="The GIMP Toolkit." \
 install-info --quiet --description="The GIMP Drawing Kit." \
  --section "The GIMP" "The GIMP" /usr/info/gdk.info.gz
 
-install-info --quiet --description="The GIMP Library." \
- --section "The GIMP" "The GIMP" /usr/info/glib.info.gz
-
 #DEBHELPER#

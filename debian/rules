@@ -1,26 +1,49 @@
 #!/usr/bin/make -f
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+# debian/rules file for gtk+ Debian package
+# written April 1998 by Ben Gertzfield <che@debian.org
 
 build: build-stamp
 build-stamp:
 	dh_testdir
-	# Add here commands to compile the package.
-	./configure --prefix=/usr --with-xinput=xfree
+	./autogen.sh --prefix=/usr --with-xinput=xfree
 	$(MAKE)
-	cd docs && make -f Makefile.sgml
+	cd docs && make distdocs
 	cd ..
 	touch build-stamp
+
+build-dbg: build-dbg-stamp
+build-dbg-stamp:
+	dh_testdir
+	./configure --prefix=/usr --with-xinput=xfree --enable-debug=yes
+	$(MAKE)
+	touch build-dbg-stamp
 
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp
+	rm -f build-stamp build-dbg-stamp install-stamp install-dbg-stamp
 	# Add here commands to clean up after the build process.
+	-$(MAKE) clean
+	cd docs 
+	-$(MAKE) maintainer-clean
+	cd ..
 	-$(MAKE) distclean
-	-rm docs/*.html
+	find . -name '*.o' -o -name '_libs' -o -name '*.lo' -o -name '*.a' -o -name '.deps' | xargs rm -rf
 	dh_clean
+
+clean-dbg:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp build-dbg-stamp install-stamp install-dbg-stamp
+	# Add here commands to clean up after the build process.
+	-$(MAKE) clean
+	cd docs
+	-$(MAKE) maintainer-clean
+	cd ..
+	-$(MAKE) distclean
+	find . -name '*.o' -o -name '_libs' -o -name '*.lo' -o -name '*.a' -o -name '.deps' | xargs rm -rf
+	dh_clean -k
 
 install: install-stamp
 install-stamp: build
@@ -30,88 +53,105 @@ install-stamp: build
 	$(MAKE) prefix=`pwd`/debian/tmp/usr install
 	touch install-stamp
 
+install-dbg: install-dbg-stamp
+install-dbg-stamp: build-dbg
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	$(MAKE) prefix=`pwd`/debian/libgtk-cvs-dbg/usr install
+	touch install-dbg-stamp
+
 # Build architecture-independent files here.
-binary-indep: build install libgtk-doc
+binary-indep: build install libgtk-cvs-doc
 # We have nothing to do by default.
 
 # Build architecture-dependent files here.
-binary-arch: build install libgtk-dev libgtk1
+binary-arch: build install libgtk-cvs-dev libgtk-cvs-1.1 libgtk-cvs-dbg
 
-libgtk1: build
-	dh_testdir -plibgtk1 
-	dh_testroot -plibgtk1
-#	dh_clean -plibgtk1
-	dh_installdirs -plibgtk1
+libgtk-cvs-1.1: build
+	dh_testdir -plibgtk-cvs-1.1 
+	dh_testroot -plibgtk-cvs-1.1
+	dh_installdirs -plibgtk-cvs-1.1
 	# Add here commands to install the files into debian/tmp
-	rm -rf debian/tmp/usr/bin debian/tmp/usr/include debian/tmp/usr/info debian/tmp/usr/lib/glib debian/tmp/usr/share
-#	dh_movefiles -plibgtk1
-#	$(MAKE) prefix=`pwd`/debian/tmp/usr install
-#	rmdir debian/tmp/usr/bin
-#	rm debian/tmp/usr/lib/*.{so,la,a}
-#	rm -rf debian/tmp/usr/{include,info}
-	dh_installdocs -plibgtk1
-	dh_installchangelogs -plibgtk1
-	dh_strip -plibgtk1
-	dh_compress -plibgtk1
-	dh_fixperms -plibgtk1
-	dh_installdeb -plibgtk1
-	dh_shlibdeps -plibgtk1
-	dh_gencontrol -plibgtk1
-	dh_makeshlibs -plibgtk1 -V 'libgtk1 (>= 1:0.99.7)'
-#	echo "libglib 1 libgtk1 (>=0.99.4)" >> debian/tmp/DEBIAN/shlibs
-#	echo "libgtk 1 libgtk1 (>=0.99.4)" >> debian/tmp/DEBIAN/shlibs
-#	echo "libgdk 1 libgtk1 (>=0.99.4)" >> debian/tmp/DEBIAN/shlibs
-	dh_md5sums -plibgtk1
-	dh_builddeb -plibgtk1
+	rm -rf debian/tmp/usr/bin debian/tmp/usr/include debian/tmp/usr/info debian/tmp/usr/lib/glib debian/tmp/usr/share/aclocal debian/tmp/usr/man debian/tmp/usr/lib/*.la
+	dh_installdocs -plibgtk-cvs-1.1
+	dh_installchangelogs -plibgtk-cvs-1.1
+	dh_strip -plibgtk-cvs-1.1
+	dh_compress -plibgtk-cvs-1.1
+	dh_fixperms -plibgtk-cvs-1.1
+	dh_installdeb -plibgtk-cvs-1.1
+	dh_shlibdeps -plibgtk-cvs-1.1
+	dh_gencontrol -plibgtk-cvs-1.1
+	dh_makeshlibs -plibgtk-cvs-1.1 -V'libgtk-cvs-1.1 (='`cat debian/version`')'
+	dh_md5sums -plibgtk-cvs-1.1
+	dh_builddeb -plibgtk-cvs-1.1
 
-libgtk-dev: build
-	dh_testdir -plibgtk-dev
-	dh_testroot -plibgtk-dev
-	dh_clean -plibgtk-dev -k
-	dh_installdirs -plibgtk-dev
+libgtk-cvs-dev: build
+	dh_testdir -plibgtk-cvs-dev
+	dh_testroot -plibgtk-cvs-dev
+	dh_clean -plibgtk-cvs-dev -k
+	dh_installdirs -plibgtk-cvs-dev
 	# Add here commands to install the files into debian/tmp
-	dh_movefiles -plibgtk-dev
+	dh_movefiles -plibgtk-cvs-dev
 	cp gtk-config debian/tmp/usr/bin
-#	$(MAKE) prefix=`pwd`/debian/libgtk-dev/usr install
-#	find debian/libgtk-dev/usr/lib \( -type f -or -type l \) -and ! \( -name \*.so -or -name \*.a \) | xargs rm
-#	cp gtk/.libs/testgtk debian/libgtk-dev/usr/bin
-#	cp debian/testgtk.1 debian/libgtk-dev/usr/man/man1
-	dh_installdocs -plibgtk-dev 
-	dh_installchangelogs -plibgtk-dev
-	dh_strip -plibgtk-dev
-	dh_compress -plibgtk-dev
-	dh_fixperms -plibgtk-dev
-	dh_installdeb -plibgtk-dev
-	dh_shlibdeps -plibgtk-dev
-	dh_gencontrol -plibgtk-dev
-	dh_makeshlibs -plibgtk-dev
-	dh_md5sums -plibgtk-dev
-	dh_builddeb -plibgtk-dev
+	dh_installdocs -plibgtk-cvs-dev 
+	dh_installchangelogs -plibgtk-cvs-dev
+	dh_strip -plibgtk-cvs-dev
+	dh_compress -plibgtk-cvs-dev
+	dh_fixperms -plibgtk-cvs-dev
+	dh_installdeb -plibgtk-cvs-dev
+	dh_shlibdeps -plibgtk-cvs-dev
+	dh_gencontrol -plibgtk-cvs-dev
+	dh_md5sums -plibgtk-cvs-dev
+	dh_builddeb -plibgtk-cvs-dev
 
-libgtk-doc:
-	dh_testdir -plibgtk-doc
-	dh_testroot -plibgtk-doc
-	dh_clean -plibgtk-doc -k
-	dh_installdirs -plibgtk-doc usr/doc/libgtk-doc/faq-html \
-	  usr/doc/libgtk-doc/tutorial-html usr/doc/libgtk-doc/italian-tutorial-html
-	# Add here commands to install the files into debian/tmp
-	dh_movefiles -plibgtk-doc
-	cp docs/gtkfaq*.html debian/libgtk-doc/usr/doc/libgtk-doc/faq-html
-	cp docs/gtk_tut-*.html debian/libgtk-doc/usr/doc/libgtk-doc/tutorial-html
-	cp docs/gtk_tut.html debian/libgtk-doc/usr/doc/libgtk-doc/tutorial-html
-	cp docs/gtk_tut_it*.html debian/libgtk-doc/usr/doc/libgtk-doc/italian-tutorial-html
-	dh_installdocs -plibgtk-doc docs/{debugging,developers,styles,text_widget,widget_system,gtk-config}.txt ChangeLog TODO NEWS
-	dh_installchangelogs -plibgtk-doc
-	dh_strip -plibgtk-doc
-	dh_compress -plibgtk-doc
-	dh_fixperms -plibgtk-doc
-	dh_installdeb -plibgtk-doc
-	dh_shlibdeps -plibgtk-doc
-	dh_gencontrol -plibgtk-doc
-	dh_makeshlibs -plibgtk-doc
-	dh_md5sums -plibgtk-doc
-	dh_builddeb -plibgtk-doc
+libgtk-cvs-doc:
+	dh_testdir -plibgtk-cvs-doc
+	dh_testroot -plibgtk-cvs-doc
+	dh_clean -plibgtk-cvs-doc -k
+	dh_installdirs -plibgtk-cvs-doc usr/doc/libgtk-cvs-doc/faq-html \
+	  usr/doc/libgtk-cvs-doc/tutorial-html usr/doc/libgtk-cvs-doc/italian-tutorial-html usr/doc/libgtk-cvs-doc/french-tutorial-html usr/doc/libgtk-cvs-doc/gdk-html
+	dh_movefiles -plibgtk-cvs-doc
+	cp docs/html/gtkfaq*.html debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/faq-html
+	cp docs/html/gtk_tut-*.html debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/tutorial-html
+	cp docs/html/*.gif debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/tutorial-html
+	cp docs/html/gtk_tut.html debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/tutorial-html
+	cp docs/html/gtk_tut_it*.html debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/italian-tutorial-html
+	cp docs/html/*.gif debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/italian-tutorial-html
+	cp docs/html/gtk_tut_fr*.html debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/french-tutorial-html
+	cp docs/html/*.gif debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/french-tutorial-html
+	cp docs/html/gdk* debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/gdk-html
+	cp docs/text/*.txt debian/libgtk-cvs-doc/usr/doc/libgtk-cvs-doc/
 
+	dh_installdocs -plibgtk-cvs-doc docs/{debugging,developers,styles,text_widget,widget_system,gtk-config,refcounting}.txt TODO NEWS
+	dh_installchangelogs -plibgtk-cvs-doc
+	dh_strip -plibgtk-cvs-doc
+	dh_compress -plibgtk-cvs-doc
+	dh_fixperms -plibgtk-cvs-doc
+	dh_installdeb -plibgtk-cvs-doc
+	dh_shlibdeps -plibgtk-cvs-doc
+	dh_gencontrol -plibgtk-cvs-doc
+	dh_md5sums -plibgtk-cvs-doc
+	dh_builddeb -plibgtk-cvs-doc
+
+libgtk-cvs-dbg: clean-dbg install-dbg
+	dh_testdir -plibgtk-cvs-dbg
+	dh_testroot -plibgtk-cvs-dbg
+	dh_installdirs -plibgtk-cvs-dbg
+	# Add here commands to install the files into debian/libgtk-cvs-dbg
+	rm -rf debian/libgtk-cvs-dbg/usr/bin debian/libgtk-cvs-dbg/usr/include debian/libgtk-cvs-dbg/usr/info debian/libgtk-cvs-dbg/usr/lib/glib debian/libgtk-cvs-dbg/usr/man debian/libgtk-cvs-dbg/usr/share debian/libgtk-cvs-dbg/usr/lib/*.{la,so*}
+	for file in `find debian/libgtk-cvs-dbg/usr/lib -name '*.a'` ; do \
+	  mv $$file debian/libgtk-cvs-dbg/usr/lib/`basename $$file .a`_g.a; \
+        done
+	dh_installdocs -plibgtk-cvs-dbg
+	dh_installchangelogs -plibgtk-cvs-dbg
+	dh_compress -plibgtk-cvs-dbg
+	dh_fixperms -plibgtk-cvs-dbg
+	dh_installdeb -plibgtk-cvs-dbg
+	dh_shlibdeps -plibgtk-cvs-dbg
+	dh_gencontrol -plibgtk-cvs-dbg
+	dh_md5sums -plibgtk-cvs-dbg
+	dh_builddeb -plibgtk-cvs-dbg
 
 source diff:                                                                  
 	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
