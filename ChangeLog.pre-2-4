@@ -1,3 +1,8 @@
+Mon Dec 11 10:02:26 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_finalize): 
+	Fix up finalizer to chain to its parent.
+
 2000-12-11  Alexander Larsson  <alexl@redhat.com>
 
 	* docs/README.linux-fb (GDK_KEYBOARD_TYPE):
@@ -115,8 +120,10 @@
 	function, noticed by Alex
 
 2000-12-06  Elliot Lee  <sopwith@redhat.com>
+
 	* configure.in: Detect freetype properly
-	* modules/basic/Makefile.am, gdk/linux-fb/Makefile.am: Make use of above.
+	* modules/basic/Makefile.am, gdk/linux-fb/Makefile.am: Make use of
+	above.
 
 2000-12-06  Alexander Larsson  <alexl@redhat.com>
 

@@ -802,7 +802,15 @@ gtk_im_context_simple_finalize (GObject *obj)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (obj);
 
-  g_slist_free (context_simple->tables);
+  if (context_simple->tables)
+    {
+      g_slist_foreach (context_simple->tables, (GFunc)g_free, NULL);
+      g_slist_free (context_simple->tables);
+
+      context_simple->tables = NULL;
+    }
+
+  parent_class->finalize (obj);
 }
 
 GtkIMContext *
