@@ -1196,8 +1196,9 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (iter != NULL);
-  g_return_if_fail (text_view->layout != NULL);
 
+  gtk_text_view_ensure_layout (text_view);
+  
   gtk_text_layout_get_iter_at_pixel (text_view->layout,
                                      iter,
                                      x,
@@ -1224,6 +1225,8 @@ gtk_text_view_get_iter_location (GtkTextView       *text_view,
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (gtk_text_iter_get_buffer (iter) == get_buffer (text_view));
 
+  gtk_text_view_ensure_layout (text_view);
+  
   gtk_text_layout_get_iter_location (text_view->layout, iter, location);
 }
 
@@ -1248,6 +1251,8 @@ gtk_text_view_get_line_yrange (GtkTextView       *text_view,
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (gtk_text_iter_get_buffer (iter) == get_buffer (text_view));
 
+  gtk_text_view_ensure_layout (text_view);
+  
   gtk_text_layout_get_line_yrange (text_view->layout,
                                    iter,
                                    y,
@@ -1275,6 +1280,8 @@ gtk_text_view_get_line_at_y (GtkTextView *text_view,
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
+  gtk_text_view_ensure_layout (text_view);
+  
   gtk_text_layout_get_line_at_y (text_view->layout,
                                  target_iter,
                                  y,

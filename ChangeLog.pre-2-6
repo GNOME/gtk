@@ -31,6 +31,19 @@ Tue Apr 30 14:15:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-04-30  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextlayout.c (gtk_text_layout_real_free_line_data): use
+	gtk_text_layout_invalidate_cache instead of cut-and-paste
+	(gtk_text_layout_real_invalidate): always invalidate cache, even
+	if the line has no stored line data. #78573
+
+	* gtk/gtktextview.c (gtk_text_view_get_iter_location): add call to
+	gtk_text_view_ensure_layout, #77388
+	(gtk_text_view_get_iter_at_location): ditto
+	(gtk_text_view_get_line_yrange): ditto
+	(gtk_text_view_get_line_at_y): ditto
+
+2002-04-30  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextbtree.c (gtk_text_btree_remove_tag_info): assign
 	something to "prev" so that removing tag info succeeds.
 	Part of #77301

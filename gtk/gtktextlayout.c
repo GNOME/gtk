@@ -719,11 +719,10 @@ gtk_text_layout_real_invalidate (GtkTextLayout *layout,
     {
       GtkTextLineData *line_data = _gtk_text_line_get_data (line, layout);
 
+      gtk_text_layout_invalidate_cache (layout, line);
+      
       if (line_data)
-        {
-          gtk_text_layout_invalidate_cache (layout, line);
-          _gtk_text_line_invalidate_wrap (line, line_data);
-        }
+        _gtk_text_line_invalidate_wrap (line, line_data);
 
       if (line == last_line)
         break;
@@ -739,12 +738,7 @@ gtk_text_layout_real_free_line_data (GtkTextLayout     *layout,
                                      GtkTextLine       *line,
                                      GtkTextLineData   *line_data)
 {
-  if (layout->one_display_cache && line == layout->one_display_cache->line)
-    {
-      GtkTextLineDisplay *tmp_display = layout->one_display_cache;
-      layout->one_display_cache = NULL;
-      gtk_text_layout_free_line_display (layout, tmp_display);
-    }
+  gtk_text_layout_invalidate_cache (layout, line);
 
   g_free (line_data);
 }
