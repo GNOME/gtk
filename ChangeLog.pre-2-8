@@ -1,3 +1,11 @@
+2004-11-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkstatusbar.c (gtk_statusbar_size_allocate): Also
+	reserve space for the resize grip if the grip_window is not
+	realized yet.  (#158010, Christian Persch)
+	(gtk_statusbar_button_press): Only start a resize if the
+	button press comes from the grip_window.  (#158011, Christian Persch)
+
 2004-11-11  Tor Lillqvist  <tml@iki.fi>
 
 	Fix for #137551, by Robert Ögren:

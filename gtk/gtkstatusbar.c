@@ -684,7 +684,8 @@ gtk_statusbar_button_press (GtkWidget      *widget,
   statusbar = GTK_STATUSBAR (widget);
   
   if (!statusbar->has_resize_grip ||
-    event->type != GDK_BUTTON_PRESS)
+      event->type != GDK_BUTTON_PRESS ||
+      event->window != statusbar->grip_window)
     return FALSE;
   
   ancestor = gtk_widget_get_toplevel (widget);
@@ -803,7 +804,7 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
   gboolean extra_children;
   GdkRectangle rect, overlap;
 
-  if (statusbar->has_resize_grip && statusbar->grip_window)
+  if (statusbar->has_resize_grip)
     {
       widget->allocation = *allocation;
       get_grip_rect (statusbar, &rect);    
@@ -828,12 +829,15 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
   /* chain up normally */
   GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
 
-  if (statusbar->has_resize_grip && statusbar->grip_window)
+  if (statusbar->has_resize_grip)
     {
-      gdk_window_raise (statusbar->grip_window);
-      gdk_window_move_resize (statusbar->grip_window,
-			      rect.x, rect.y,
-			      rect.width, rect.height);
+      if (statusbar->grip_window)
+	{
+	  gdk_window_raise (statusbar->grip_window);
+	  gdk_window_move_resize (statusbar->grip_window,
+				  rect.x, rect.y,
+				  rect.width, rect.height);
+	}
 
       if (extra_children) 
 	{
