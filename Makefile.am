@@ -23,6 +23,11 @@ EXTRA_DIST =			\
 	README.nanox		\
 	intl/libgettext.h	\
 	intl/po2tbl.sed.in	\
+	po/README.tools		\
+	po/README.translators	\
+	po/desk.pl		\
+	po/makefile.mingw	\
+	po/update.pl		\
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
 	examples/Makefile  \

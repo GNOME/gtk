@@ -8,6 +8,7 @@ EXTRA_DIST += \
 	Changes-1.2.txt			\
 	Changes-2.0.txt			\
 	debugging.txt			\
+	defsformat.txt			\
 	developers.txt			\
 	dnd_internals.txt		\
 	make-todo			\

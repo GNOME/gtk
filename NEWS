@@ -1,3 +1,66 @@
+Overview of Changes in GTK+ 1.3.2
+=================================
+
+GTK Core:
+
+* New stock-icon and stock-item system. Use themeable pixbufs in
+  dialogs, buttons, etc. [Havoc]
+* Theme engines reworked to use derivation and new object system. [Owen]
+* Added GtkClipboard object for simple selection handling. [Owen]
+* Make GtkEditable an interface, move implementation to GtkOldEditable for
+  compat. [Owen]
+* Better handling of default directionality. [Robert]
+* Use GSignal as backend for GtkSignal and other GObject stuff. [Tim]
+* Move theme engines to GTypePlugin. [Owen]
+
+GDK:
+
+* Beginning of implementation of client parts of new window manager spec. [Owen]
+* Make gdk_drawable_get_image() work with backing store. [Havoc]
+
+Widgets:
+
+* New text widget [Havoc]
+  - Adjustable tab handling.
+  - Ability to have scrolling side areas in new text widget for tabs/line numbers.
+  - Many cleanups and small improvements.
+* Improvements to submenu navigation [Nils Barth/David Santiago] and
+  scrolling menus. [Alex]
+* Simplification of progress bar API. [Havoc]
+* Make GtkImage a generic image-display widget. [Havoc]
+* New GtkTreeView tree widget. Model/view architecture, flexible renderering,
+  large datasets, etc. [Jonathan]
+* New GtkMessageBox widget for message display. [Havoc]
+* Allow labels to have contents set from XML-like markup language. [Havoc]
+* Make dialogs derive from GtkDialog and use stock buttons. [Havoc]
+
+Internationalization:
+
+* Proper character set conversion for clipboard/selection. [Owen]
+* New input method system via loadable modules; support on-the-spot
+  preedit in GtkEntry and new text widget; allow switchin input methods
+  on the fly; include modules for XIM and demo Cyrillic-tranliteration 
+  module. [Owen]
+* VIQR, Thai, and Inuktitut input methods. [Robert]
+* Convert po files to UTF-8. [Robert]
+
+gdk-pixbuf:
+
+* Full-alpha compositing for gdk-pixbuf on drawable. [Havoc]
+* Add simple saving to gdk-pixbuf. [David Welton/Havoc]
+* Add improved error handling with GError to gdk-pixbuf. [Havoc]
+
+Ports:
+
+* Much work on Win32 Port. [Tor/Hans]
+* Much work on Linux-FB Port. [Elliot/Alex]
+
+Misc:
+
+* Start of new gtk-demo demo program. [Owen/Jonathan]
+* Bug fixes and more bug fixes.
+
+
 Overview of Changes in GTK+ 1.3.1:
 
 * GTK+ now uses the Pango library for text manipulation. All
