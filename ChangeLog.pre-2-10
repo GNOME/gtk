@@ -1,3 +1,13 @@
+2003-04-13  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_column_cell_get_position): Document. 
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_select_range): 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_[sg]et_expand): 
+	* gtk/gtkbutton.c (gtk_button_[sg]et_focus_on_click): Document
+	these as 2.4 additions.
+
 2003-04-09  Matthias Clasen  <maclas@gmx.de>
 
 	* INSTALL.in: Fix the real thing.

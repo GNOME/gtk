@@ -2026,6 +2026,8 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
  * inefficient since the temporarily-selected region will force stuff
  * to be recalculated. This function moves them as a unit, which can
  * be optimized.
+ *
+ * Since: 2.4
  **/
 void
 gtk_text_buffer_select_range (GtkTextBuffer     *buffer,

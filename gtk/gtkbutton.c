@@ -1262,6 +1262,8 @@ gtk_button_get_use_stock (GtkButton *button)
  * Making mouse clicks not grab focus is useful in places like toolbars where
  * you don't want the keyboard focus removed from the main area of the
  * application.
+ *
+ * Since: 2.4
  **/
 void
 gtk_button_set_focus_on_click (GtkButton *button,
@@ -1288,6 +1290,8 @@ gtk_button_set_focus_on_click (GtkButton *button,
  *
  * Return value: %TRUE if the button grabs focus when it is clicked with
  *               the mouse.
+ *
+ * Since: 2.4
  **/
 gboolean
 gtk_button_get_focus_on_click (GtkButton *button)
