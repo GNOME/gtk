@@ -122,11 +122,15 @@ GdkVisual* gdkx_visual_get_for_screen (GdkScreen *screen,
 GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
 #endif
 
-/* XXX: Do not use this function until it is fixed. An X Colormap
- *      is useless unless we also have the visual. */
+#ifdef GDK_ENABLE_BROKEN
+/* XXX: An X Colormap is useless unless we also have the visual. */
 GdkColormap* gdkx_colormap_get (Colormap xcolormap);
+#endif
 
-/* Return the Gdk* for a particular XID */
+GdkColormap *gdk_x11_colormap_foreign_new (GdkVisual *visual,
+					   Colormap   xcolormap)
+
+     /* Return the Gdk* for a particular XID */
 gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,
 						XID         xid);
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);

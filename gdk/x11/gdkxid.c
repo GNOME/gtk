@@ -62,11 +62,8 @@ _gdk_xid_table_remove (GdkDisplay *display,
   
   display_x11 = GDK_DISPLAY_X11 (display);
   
-  if (!display_x11->xid_ht)
-    display_x11->xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
-					    (GEqualFunc) gdk_xid_equal);
-
-  g_hash_table_remove (display_x11->xid_ht, &xid);
+  if (display_x11->xid_ht)
+    g_hash_table_remove (display_x11->xid_ht, &xid);
 }
 
 /** 

@@ -1,3 +1,19 @@
+Tue Sep 24 16:04:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdkprivate-x11.h gdkcolor-x11.c gdkvisual-x11.c
+	gdkwindow-x11.c: Delete unused private gdk_visual_lookup(),
+	make gdk_colormap_lookup() private gdkcolor-x11.c.
+	make gdk_window_add_colormap_windows private to gdkwindow-x11.c
+	(#85674)
+
+	* gdk/x11/gdkx.h gdk/x11/gdkcolor-x11.c 
+	gdkscreen-x11.h: Add gdk_x11_colormap_foreign_new(), 
+	GDK_ENABLE_BROKEN gdkx_colormap_get(), make the
+	colormap hash per-screen. (#85697)
+
+	* gdk/x11/gdkxid.c (gdk_xid_table_lookup_for_display):
+	Remove a bit of unecessary code.
+
 Thu Aug  8 16:58:22 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkspinbutton.c (gtk_spin_button_real_change_value): 

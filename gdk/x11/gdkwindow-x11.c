@@ -82,6 +82,7 @@ static void     gdk_window_set_static_win_gravity (GdkWindow  *window,
 						   gboolean    on);
 static gboolean gdk_window_have_shape_ext         (GdkDisplay *display);
 static gboolean gdk_window_icon_name_set          (GdkWindow  *window);
+static void     gdk_window_add_colormap_windows   (GdkWindow  *window);
 
 static GdkColormap* gdk_window_impl_x11_get_colormap (GdkDrawable *drawable);
 static void         gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
@@ -2621,7 +2622,7 @@ gdk_window_set_events (GdkWindow       *window,
     }
 }
 
-void
+static void
 gdk_window_add_colormap_windows (GdkWindow *window)
 {
   GdkWindow *toplevel;

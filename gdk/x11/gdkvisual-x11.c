@@ -536,17 +536,6 @@ gdk_screen_list_visuals (GdkScreen *screen)
   return list;
 }
 
-GdkVisual*
-gdk_visual_lookup (Visual    *xvisual)
-{
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (gdk_screen_get_default ());
-  
-  if (!screen_x11->visual_hash)
-    return NULL;
-
-  return g_hash_table_lookup (screen_x11->visual_hash, xvisual);
-}
-
 /**
  * gdkx_visual_get_for_screen:
  * @screen: a #GdkScreen.

@@ -116,11 +116,6 @@ GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
 					 GdkGCValues     *values,
 					 GdkGCValuesMask  values_mask);
 
-GdkColormap * gdk_colormap_lookup      (Colormap         xcolormap);
-GdkVisual *   gdk_visual_lookup        (Visual          *xvisual);
-
-void gdk_window_add_colormap_windows (GdkWindow *window);
-
 GdkImage *_gdk_x11_copy_to_image       (GdkDrawable *drawable,
 					GdkImage    *image,
 					gint         src_x,

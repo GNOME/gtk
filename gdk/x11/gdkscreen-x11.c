@@ -264,6 +264,7 @@ gdk_screen_x11_finalize (GObject *object)
     g_object_unref (G_OBJECT (screen_x11->visuals[i]));*/
   g_free (screen_x11->visuals);
   g_hash_table_destroy (screen_x11->visual_hash);
+  g_hash_table_destroy (screen_x11->colormap_hash);
   /* X settings */
   g_free (screen_x11->xsettings_client);
 
