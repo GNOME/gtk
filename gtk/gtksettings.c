@@ -583,11 +583,8 @@ gtk_settings_set_property_value (GtkSettings            *settings,
   
   name = g_strdup (prop_name);
   g_strcanon (name, G_CSET_A_2_Z G_CSET_a_2_z G_CSET_DIGITS "-", '-');
-  name_quark = g_quark_try_string (name);
-  if (name_quark)
-    g_free (name);
-  else
-    name_quark = g_quark_from_string (name);
+  name_quark = g_quark_from_string (name);
+  g_free (name);
 
   qvalue = g_datalist_id_get_data (&settings->queued_settings, name_quark);
   if (!qvalue)

@@ -1,4 +1,9 @@
-Tue Dec  4 12:06:13 2001  Owen Taylor  <otaylor@redhat.com>
+Tue Dec  4 12:16:31 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksettings.c (gtk_settings_set_property_value):
+	Simplify, make more efficient and fix memory leak
+	when turning quark into a string. (#66103, HideToshi
+	Tajima)
 
 	* gtk/gtkcolorsel.c: Ref and sink priv->tooltips in
 	init() and unref priv->tooltips in destroy rather
