@@ -62,8 +62,6 @@ static void gtk_window_size_request       (GtkWidget         *widget,
 					   GtkRequisition    *requisition);
 static void gtk_window_size_allocate      (GtkWidget         *widget,
 					   GtkAllocation     *allocation);
-static gint gtk_window_expose_event       (GtkWidget         *widget,
-					   GdkEventExpose    *event);
 static gint gtk_window_configure_event    (GtkWidget         *widget,
 					   GdkEventConfigure *event);
 static gint gtk_window_key_press_event    (GtkWidget         *widget,
@@ -171,7 +169,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->realize = gtk_window_realize;
   widget_class->size_request = gtk_window_size_request;
   widget_class->size_allocate = gtk_window_size_allocate;
-  widget_class->expose_event = gtk_window_expose_event;
   widget_class->configure_event = gtk_window_configure_event;
   widget_class->key_press_event = gtk_window_key_press_event;
   widget_class->key_release_event = gtk_window_key_release_event;
@@ -730,21 +727,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate (window->bin.child, &child_allocation);
     }
-}
-
-static gint
-gtk_window_expose_event (GtkWidget      *widget,
-			 GdkEventExpose *event)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    if (GTK_WIDGET_CLASS (parent_class)->expose_event)
-      return (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
-  
-  return FALSE;
 }
 
 static gint

@@ -1,3 +1,9 @@
+Sat Nov 28 10:57:59 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_expose_event): Removed bogus
+	expose_event handler - we had two expose_event
+	handlers!
+
 Sat Nov 28 03:13:42 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkscrolledwindow.h: 
