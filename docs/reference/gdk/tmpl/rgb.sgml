@@ -433,13 +433,25 @@ visual should be used when creating windows that will be drawn in by GdkRGB.
 
 <!-- ##### FUNCTION gdk_rgb_ditherable ##### -->
 <para>
-Determines whether the visual is ditherable. This function may be
+Determines whether the preferred visual is ditherable. This function may be
 useful for presenting a user interface choice to the user about which
 dither mode is desired; if the display is not ditherable, it may make
 sense to gray out or hide the corresponding UI widget.
 </para>
 
-@Returns: %TRUE if the visual is ditherable.
+@Returns: %TRUE if the preferred visual is ditherable.
+
+
+<!-- ##### FUNCTION gdk_rgb_colormap_ditherable ##### -->
+<para>
+Determines whether the visual associated with @cmap is ditherable. This 
+function may be useful for presenting a user interface choice to the user 
+about which dither mode is desired; if the display is not ditherable, it may 
+make sense to gray out or hide the corresponding UI widget.
+</para>
+
+@cmap: a #GdkColormap 
+@Returns: %TRUE if the visual associated with @cmap is ditherable.
 
 
 <!-- ##### FUNCTION gdk_rgb_set_verbose ##### -->

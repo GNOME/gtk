@@ -407,17 +407,18 @@ Generated when a setting is modified.
 
 <!-- ##### STRUCT GdkEventOwnerChange ##### -->
 <para>
-
+Generated when the owner of a selection changes. On X11, this information is
+only available if the X server supports the XFIXES extension.
 </para>
 
-@type: 
-@window: 
-@send_event: 
-@owner: 
-@reason: 
-@selection: 
-@time: 
-@selection_time: 
+@type: the type of the event (%GDK_OWNER_CHANGE).
+@window: the window which received the event
+@send_event: %TRUE if the event was sent explicitly (e.g. using <function>XSendEvent</function>).
+@owner: the new owner of the selection
+@reason: the reason for the ownership change as a #GdkOwnerChange value
+@selection: the atom identifying the selection
+@time: the timestamp of the event 
+@selection_time: the time at which the selection ownership was taken over
 
 <!-- ##### ENUM GdkScrollDirection ##### -->
 <para>
@@ -502,10 +503,9 @@ Specifies the kind of modification applied to a setting in a #GdkEventSetting.
 
 <!-- ##### ENUM GdkOwnerChange ##### -->
 <para>
-
+Specifies why a selection ownership was changed.
 </para>
 
-@GDK_OWNER_CHANGE_NEW_OWNER: 
-@GDK_OWNER_CHANGE_DESTROY: 
-@GDK_OWNER_CHANGE_CLOSE: 
-
+@GDK_OWNER_CHANGE_NEW_OWNER: some other app claimed the ownership
+@GDK_OWNER_CHANGE_DESTROY: the window was destroyed
+@GDK_OWNER_CHANGE_CLOSE: the client was closed

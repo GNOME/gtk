@@ -1,3 +1,10 @@
+2004-09-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/event_structs.sgml: Document GdkEventOwnerChange and
+	GdkOwnerChange.
+
+	* gdk/tmpl/rgb.sgml: Document gdk_rgb_colormap_ditherable().
+
 2004-09-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-sections.txt: Updates.
