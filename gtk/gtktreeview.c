@@ -7194,9 +7194,9 @@ gtk_tree_view_scroll_to_point (GtkTreeView *tree_view,
  * if @path is NULL no vertical scrolling occurs.  @row_align determines where
  * the row is placed, and @col_align determines where @column is placed.  Both
  * are expected to be between 0.0 and 1.0. 0.0 means left/top alignment, 1.0
- * means right/bottom alignment, 0.5 means center.  If @use_align is %TRUE, then
- * the alignment arguments are ignored, and the tree does the minimum amount of
- * work to scroll the cell onto the screen.
+ * means right/bottom alignment, 0.5 means center.  If @use_align is %FALSE,
+ * then the alignment arguments are ignored, and the tree does the minimum
+ * amount of work to scroll the cell onto the screen.
  **/
 void
 gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,

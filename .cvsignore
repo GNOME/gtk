@@ -5,6 +5,7 @@ config.h.in
 libtool
 config.status
 stamp-h
+stamp-h1
 Makefile
 Makefile.in
 aclocal.m4

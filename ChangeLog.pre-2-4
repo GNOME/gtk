@@ -1,3 +1,8 @@
+Fri Oct 19 13:44:51 2001  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtktreeview.c (gtk_treeview_scroll_to_cell): correct docs
+	for use_align
+
 Fri Oct 19 15:34:06 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk.h gtk/Makefile.am: Export GtkIMContextSimple publically. (#61862)
