@@ -471,7 +471,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                 P_("Whether this tag affects the language the text is rendered as"));
 
   ADD_SET_PROP ("ellipsize_set", PROP_ELLIPSIZE_SET,
-                P_("Language set"),
+                P_("Ellipsize set"),
                 P_("Whether this tag affects the ellipsize mode"));
   
   text_cell_renderer_signals [EDITED] =
