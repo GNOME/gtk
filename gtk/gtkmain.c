@@ -804,7 +804,6 @@ gtk_handle_timeouts ()
   guint32 the_time;
   GList *tmp_list;
   GList *tmp_list2;
-  GList *tmp_list3;
   GtkTimeoutFunction *timeoutf;
   
   /* Caller must already have called gtk_handle_current_timeouts if
@@ -889,8 +888,6 @@ static void
 gtk_handle_idle ()
 {
   GtkIdleFunction *idlef;
-  GList *tmp_list;
-  GList *tmp_list2;
   
   /* Caller must already have called gtk_handle_current_idles if
      necessary */
