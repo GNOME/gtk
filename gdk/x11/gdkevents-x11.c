@@ -689,37 +689,37 @@ get_real_window (GdkDisplay *display,
 	{      
 	case CreateNotify:
 	  *event_window = event->xcreatewindow.window;
-	  
+	  break;
 	case DestroyNotify:
 	  *event_window = event->xdestroywindow.window;
-	  
+	  break;
 	case UnmapNotify:
 	  *event_window = event->xunmap.window;
-	  
+	  break;
 	case MapNotify:
 	  *event_window = event->xmap.window;
-	  
+	  break;
 	case MapRequest:
 	  *event_window = event->xmaprequest.window;
-	  
+	  break;
 	case ReparentNotify:
 	  *event_window = event->xreparent.window;
-	  
+	  break;
 	case ConfigureNotify:
 	  *event_window = event->xconfigure.window;
-	  
+	  break;
 	case ConfigureRequest:
 	  *event_window = event->xconfigurerequest.window;
-	  
+	  break;
 	case GravityNotify:
 	  *event_window = event->xgravity.window;
-	  
+	  break;
 	case CirculateNotify:
 	  *event_window = event->xcirculate.window;
-	  
+	  break;
 	case CirculateRequest:
 	  *event_window = event->xcirculaterequest.window;
-	  
+	  break;
 	default:
 	  *event_window = event->xany.window;
 	}

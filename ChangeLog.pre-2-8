@@ -1,3 +1,8 @@
+Mon Aug 11 12:07:14 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (get_real_window): Add missing
+	break statements (#119494, Soeren Sandmann)
+
 Mon Aug 11 11:10:07 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.h: Mark parent public as well; it's
