@@ -1,3 +1,9 @@
+Mon Aug 31 15:18:19 1998  Raph Levien  <raph@gimp.org>
+
+	* gdk/gdkrgb.[ch]: Added a gdk_draw_rgb_image_dithalign function,
+	which is good for images that scroll (makes the dither patterns
+	align correctly)
+
 Sat Aug 29 14:50:56 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gdk/gdkcolor.c:

@@ -87,6 +87,9 @@ struct _GdkRgbInfo
 
   gboolean dith_default;
 
+  gboolean bitmap; /* set true if in 1 bit per pixel mode */
+  GdkGC *own_gc;
+
   /* Convert functions */
   GdkRgbConvFunc conv;
   GdkRgbConvFunc conv_d;
@@ -539,7 +542,7 @@ gdk_rgb_init (void)
     g_error ("gdk_rgb_init: WORDS_BIGENDIAN is defined, but this is a little endian machine.\n\n");
 #else
   if (((char *)byte_order)[0] != 1)
-    g_error ("gdk_rgb_init: WORDS_BIGENDIAN is not defined, but this is a little endian machine.\n\n");
+    g_error ("gdk_rgb_init: WORDS_BIGENDIAN is not defined, but this is a big endian machine.\n\n");
 #endif
 
   if (image_info == NULL)
@@ -565,10 +568,16 @@ gdk_rgb_init (void)
 
       image_info->stage_buf = NULL;
 
+      image_info->own_gc = NULL;
+
       gdk_rgb_choose_visual ();
 
-      if (image_info->visual->depth == 4)
+      if ((image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR ||
+	   image_info->visual->type == GDK_VISUAL_STATIC_COLOR) &&
+	  image_info->visual->depth < 8 &&
+	  image_info->visual->depth >= 3)
 	{
+	  image_info->cmap = gdk_colormap_get_system ();
 	  gdk_rgb_colorcube_222 ();
 	}
       else if (image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR)
@@ -615,10 +624,17 @@ gdk_rgb_init (void)
 	    }
 	}
 
+      image_info->bitmap = (image_info->visual->depth == 1);
+
       for (i = 0; i < N_IMAGES; i++)
-	static_image[i] = gdk_image_new (GDK_IMAGE_FASTEST,
-					 image_info->visual,
-					 IMAGE_WIDTH, IMAGE_HEIGHT);
+	if (image_info->bitmap)
+	  static_image[i] = gdk_image_new_bitmap (image_info->visual,
+						  g_malloc (IMAGE_WIDTH * IMAGE_HEIGHT >> 3),
+						  IMAGE_WIDTH, IMAGE_HEIGHT);
+	else
+	  static_image[i] = gdk_image_new (GDK_IMAGE_FASTEST,
+					   image_info->visual,
+					   IMAGE_WIDTH, IMAGE_HEIGHT);
 
       image_info->bpp = static_image[0]->bpp;
 
@@ -637,7 +653,7 @@ gdk_rgb_xpixel_from_rgb (guint32 rgb)
     pixel = colorcube[((rgb & 0xf00000) >> 12) |
 		     ((rgb & 0xf000) >> 8) |
 		     ((rgb & 0xf0) >> 4)];
-  else if (image_info->visual->depth == 4 &&
+  else if (image_info->visual->depth < 8 &&
 	   image_info->visual->type == GDK_VISUAL_STATIC_COLOR)
     {
       pixel = colorcube_d[((rgb & 0x800000) >> 17) |
@@ -2108,7 +2124,7 @@ gdk_rgb_convert_truecolor_msb_d (GdkImage *image,
     }
 }
 
-#define IMAGE_8BPP
+/* This actually works for depths from 3 to 7 */
 static void
 gdk_rgb_convert_4 (GdkImage *image,
 		   gint x0, gint y0, gint width, gint height,
@@ -2132,7 +2148,6 @@ gdk_rgb_convert_4 (GdkImage *image,
       dmp = DM[(y_align + y) & (DM_HEIGHT - 1)];
       bp2 = bptr;
       obptr = obuf;
-#ifdef IMAGE_8BPP
       for (x = 0; x < width; x += 1)
 	{
 	  r = *bp2++;
@@ -2144,32 +2159,131 @@ gdk_rgb_convert_4 (GdkImage *image,
 				(((b + dith) & 0x100) >> 8)];
 	  obptr++;
 	}
-#else
-      for (x = 0; x < width; x += 2)
-	{
-	  r = *bp2++;
-	  g = *bp2++;
-	  b = *bp2++;
-	  dith = (dmp[(x_align + x) & (DM_WIDTH - 1)] << 2) | 3;
-	  pix0 = colorcube_d[(((r + dith) & 0x100) >> 2) |
-			    (((g + dith) & 0x100) >> 5) |
-			    (((b + dith) & 0x100) >> 8)];
-	  r = *bp2++;
-	  g = *bp2++;
-	  b = *bp2++;
-	  dith = (dmp[(x_align + x + 1) & (DM_WIDTH - 1)] << 2) | 3;
-	  pix1 = colorcube_d[(((r + dith) & 0x100) >> 2) |
-			    (((g + dith) & 0x100) >> 5) |
-			    (((b + dith) & 0x100) >> 8)];
-	  obptr[0] = (pix0 << 4) | pix1;
-	  obptr++;
-	}
-#endif
       bptr += rowstride;
       obuf += bpl;
     }
 }
 
+/* This actually works for depths from 3 to 7 */
+static void
+gdk_rgb_convert_gray4 (GdkImage *image,
+		       gint x0, gint y0, gint width, gint height,
+		       guchar *buf, int rowstride,
+		       gint x_align, gint y_align, GdkRgbCmap *cmap)
+{
+  int x, y;
+  gint bpl;
+  guchar *obuf, *obptr;
+  guchar *bptr, *bp2;
+  gint r, g, b;
+  gint shift;
+
+  bptr = buf;
+  bpl = image->bpl;
+  obuf = ((guchar *)image->mem) + y0 * bpl + x0;
+  shift = 9 - image_info->visual->depth;
+  for (y = 0; y < height; y++)
+    {
+      bp2 = bptr;
+      obptr = obuf;
+      for (x = 0; x < width; x++)
+	{
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  obptr[0] = (g + ((b + r) >> 1)) >> shift;
+	  obptr++;
+	}
+      bptr += rowstride;
+      obuf += bpl;
+    }
+}
+
+/* This actually works for depths from 3 to 7 */
+static void
+gdk_rgb_convert_gray4_d (GdkImage *image,
+		       gint x0, gint y0, gint width, gint height,
+		       guchar *buf, int rowstride,
+		       gint x_align, gint y_align, GdkRgbCmap *cmap)
+{
+  int x, y;
+  gint bpl;
+  guchar *obuf, *obptr;
+  guchar *bptr, *bp2;
+  gint r, g, b;
+  guchar *dmp;
+  gint prec, right;
+  gint gray;
+
+  bptr = buf;
+  bpl = image->bpl;
+  obuf = ((guchar *)image->mem) + y0 * bpl + x0;
+  prec = image_info->visual->depth;
+  right = 8 - prec;
+  for (y = 0; y < height; y++)
+    {
+      bp2 = bptr;
+      obptr = obuf;
+      for (x = 0; x < width; x++)
+	{
+	  dmp = DM[(y_align + y) & (DM_HEIGHT - 1)];
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  gray = (g + ((b + r) >> 1)) >> 1;
+	  gray += (dmp[(x_align + x) & (DM_WIDTH - 1)] << 2) >> prec;
+	  obptr[0] = (gray - (gray >> prec)) >> right;
+	  obptr++;
+	}
+      bptr += rowstride;
+      obuf += bpl;
+    }
+}
+
+static void
+gdk_rgb_convert_1 (GdkImage *image,
+		   gint x0, gint y0, gint width, gint height,
+		   guchar *buf, int rowstride,
+		   gint x_align, gint y_align,
+		   GdkRgbCmap *cmap)
+{
+  int x, y;
+  gint bpl;
+  guchar *obuf, *obptr;
+  guchar *bptr, *bp2;
+  gint r, g, b;
+  guchar *dmp;
+  gint dith;
+  guchar byte;
+
+  bptr = buf;
+  bpl = image->bpl;
+  obuf = ((guchar *)image->mem) + y0 * bpl + (x0 >> 3);
+  byte = 0; /* unnecessary, but it keeps gcc from complaining */
+  for (y = 0; y < height; y++)
+    {
+      dmp = DM[(y_align + y) & (DM_HEIGHT - 1)];
+      bp2 = bptr;
+      obptr = obuf;
+      for (x = 0; x < width; x++)
+	{
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  dith = (dmp[(x_align + x) & (DM_WIDTH - 1)] << 4) | 4;
+	  byte += byte + (r + g + g + b + dith > 1020);
+	  if ((x & 7) == 7)
+	    {
+	      obptr[0] = byte;
+	      obptr++;
+	    }
+	}
+      if (x & 7)
+	obptr[0] = byte << (8 - (x & 7));
+      bptr += rowstride;
+      obuf += bpl;
+    }
+}
 
 /* Returns a pointer to the stage buffer. */
 static guchar *
@@ -2391,6 +2505,10 @@ gdk_rgb_select_conv (GdkImage *image)
   bpp = image->bpp;
 
   byte_order = image->byte_order;
+  if (gdk_rgb_verbose)
+    g_print ("Chose visual 0x%x, image bpp=%d, %s first\n",
+	     (gint)(((GdkVisualPrivate *)image_info->visual)->xvisual->visualid),
+	     bpp, byte_order == GDK_LSB_FIRST ? "lsb" : "msb");
 
 #ifdef WORDS_BIGENDIAN
   byterev = (byte_order == GDK_LSB_FIRST);
@@ -2420,7 +2538,9 @@ gdk_rgb_select_conv (GdkImage *image)
 
   image_info->dith_default = FALSE;
 
-  if (bpp == 2 && depth == 16 && !byterev &&
+  if (image_info->bitmap)
+    conv = gdk_rgb_convert_1;
+  else if (bpp == 2 && depth == 16 && !byterev &&
       red_mask == 0xf800 && green_mask == 0x7e0 && blue_mask == 0x1f)
     {
       conv = gdk_rgb_convert_565;
@@ -2500,7 +2620,13 @@ gdk_rgb_select_conv (GdkImage *image)
       conv = gdk_rgb_convert_gray8;
       conv_gray = gdk_rgb_convert_gray8_gray;
     }
-  else if (depth == 4)
+  else if (depth < 8 && depth >= 3 && (vtype == GDK_VISUAL_STATIC_GRAY
+				       || vtype == GDK_VISUAL_GRAYSCALE))
+    {
+      conv = gdk_rgb_convert_gray4;
+      conv_d = gdk_rgb_convert_gray4_d;
+    }
+  else if (depth < 8 && depth >= 3)
     {
       conv = gdk_rgb_convert_4;
     }
@@ -2566,7 +2692,6 @@ gdk_rgb_alloc_scratch (gint width, gint height, gint *x0, gint *y0)
   GdkImage *image;
   gint idx;
 
-
   if (width >= (IMAGE_WIDTH >> 1))
     {
       if (height >= (IMAGE_HEIGHT >> 1))
@@ -2600,7 +2725,9 @@ gdk_rgb_alloc_scratch (gint width, gint height, gint *x0, gint *y0)
 	  idx = vert_idx;
 	  *x0 = vert_x;
 	  *y0 = 0;
-	  vert_x += (width + 3) & -4;
+	  /* using 3 and -4 would be slightly more efficient on 32-bit machines
+	     with > 1bpp displays */
+	  vert_x += (width + 7) & -8;
 	}
       else
 	{
@@ -2621,7 +2748,7 @@ gdk_rgb_alloc_scratch (gint width, gint height, gint *x0, gint *y0)
 	  idx = tile_idx;
 	  *x0 = tile_x;
 	  *y0 = tile_y1;
-	  tile_x += (width + 3) & -4;
+	  tile_x += (width + 7) & -8;
 	}
     }
   image = static_image[idx];
@@ -2643,7 +2770,9 @@ gdk_draw_rgb_image_core (GdkDrawable *drawable,
 			 gint pixstride,
 			 gint rowstride,
 			 GdkRgbConvFunc conv,
-			 GdkRgbCmap *cmap)
+			 GdkRgbCmap *cmap,
+			 gint xdith,
+			 gint ydith)
 {
   gint y0, x0;
   gint xs0, ys0;
@@ -2651,6 +2780,20 @@ gdk_draw_rgb_image_core (GdkDrawable *drawable,
   gint width1, height1;
   guchar *buf_ptr;
 
+  if (image_info->bitmap)
+    {
+      if (image_info->own_gc == NULL)
+	{
+	  GdkColor color;
+
+	  image_info->own_gc = gdk_gc_new (drawable);
+	  gdk_color_white (image_info->cmap, &color);
+	  gdk_gc_set_foreground (image_info->own_gc, &color);
+	  gdk_color_black (image_info->cmap, &color);
+	  gdk_gc_set_background (image_info->own_gc, &color);
+	}
+      gc = image_info->own_gc;
+    }
   for (y0 = 0; y0 < height; y0 += IMAGE_HEIGHT)
     {
       height1 = MIN (height - y0, IMAGE_HEIGHT);
@@ -2662,7 +2805,7 @@ gdk_draw_rgb_image_core (GdkDrawable *drawable,
 	  image = gdk_rgb_alloc_scratch (width1, height1, &xs0, &ys0);
 
 	  conv (image, xs0, ys0, width1, height1, buf_ptr, rowstride,
-		x + x0, y + y0, cmap);
+		x + x0 + xdith, y + y0 + ydith, cmap);
 
 #ifndef DONT_ACTUALLY_DRAW
 	  gdk_draw_image (drawable, gc,
@@ -2687,10 +2830,36 @@ gdk_draw_rgb_image (GdkDrawable *drawable,
   if (dith == GDK_RGB_DITHER_NONE || (dith == GDK_RGB_DITHER_NORMAL &&
 				      !image_info->dith_default))
     gdk_draw_rgb_image_core (drawable, gc, x, y, width, height,
-			     rgb_buf, 3, rowstride, image_info->conv, NULL);
+			     rgb_buf, 3, rowstride, image_info->conv, NULL,
+			     0, 0);
   else
     gdk_draw_rgb_image_core (drawable, gc, x, y, width, height,
-			     rgb_buf, 3, rowstride, image_info->conv_d, NULL);
+			     rgb_buf, 3, rowstride, image_info->conv_d, NULL,
+			     0, 0);
+}
+
+void
+gdk_draw_rgb_image_dithalign (GdkDrawable *drawable,
+			      GdkGC *gc,
+			      gint x,
+			      gint y,
+			      gint width,
+			      gint height,
+			      GdkRgbDither dith,
+			      guchar *rgb_buf,
+			      gint rowstride,
+			      gint xdith,
+			      gint ydith)
+{
+  if (dith == GDK_RGB_DITHER_NONE || (dith == GDK_RGB_DITHER_NORMAL &&
+				      !image_info->dith_default))
+    gdk_draw_rgb_image_core (drawable, gc, x, y, width, height,
+			     rgb_buf, 3, rowstride, image_info->conv, NULL,
+			     xdith, ydith);
+  else
+    gdk_draw_rgb_image_core (drawable, gc, x, y, width, height,
+			     rgb_buf, 3, rowstride, image_info->conv_d, NULL,
+			     xdith, ydith);
 }
 
 void
@@ -2708,11 +2877,11 @@ gdk_draw_rgb_32_image (GdkDrawable *drawable,
 				      !image_info->dith_default))
     gdk_draw_rgb_image_core (drawable, gc, x, y, width, height,
 			     buf, 4, rowstride,
-			     image_info->conv_32, NULL);
+			     image_info->conv_32, NULL, 0, 0);
   else
     gdk_draw_rgb_image_core (drawable, gc, x, y, width, height,
 			     buf, 4, rowstride,
-			     image_info->conv_32_d, NULL);
+			     image_info->conv_32_d, NULL, 0, 0);
 }
 
 static void
@@ -2747,11 +2916,11 @@ gdk_draw_gray_image (GdkDrawable *drawable,
 				      !image_info->dith_default))
     gdk_draw_rgb_image_core (drawable, gc, x, y, width, height,
 			     buf, 1, rowstride,
-			     image_info->conv_gray, NULL);
+			     image_info->conv_gray, NULL, 0, 0);
   else
     gdk_draw_rgb_image_core (drawable, gc, x, y, width, height,
 			     buf, 1, rowstride,
-			     image_info->conv_gray_d, NULL);
+			     image_info->conv_gray_d, NULL, 0, 0);
 }
 
 GdkRgbCmap *
@@ -2804,11 +2973,11 @@ gdk_draw_indexed_image (GdkDrawable *drawable,
 				      !image_info->dith_default))
     gdk_draw_rgb_image_core (drawable, gc, x, y, width, height,
 			     buf, 1, rowstride,
-			     image_info->conv_indexed, cmap);
+			     image_info->conv_indexed, cmap, 0, 0);
   else
     gdk_draw_rgb_image_core (drawable, gc, x, y, width, height,
 			     buf, 1, rowstride,
-			     image_info->conv_indexed_d, cmap);
+			     image_info->conv_indexed_d, cmap, 0, 0);
 }
 
 gboolean
