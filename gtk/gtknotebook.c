@@ -864,13 +864,23 @@ gtk_notebook_get_event_window_position (GtkNotebook  *notebook,
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
   gint border_width = GTK_CONTAINER (notebook)->border_width;
+  GtkNotebookPage *visible_page = NULL;
+  GList *tmp_list;
 
-  if (notebook->show_tabs && notebook->children)
+  for (tmp_list = notebook->children; tmp_list; tmp_list = tmp_list->next)
+    {
+      GtkNotebookPage *page = tmp_list->data;
+      if (GTK_WIDGET_VISIBLE (page->child))
+	{
+	  visible_page = page;
+	  break;
+	}
+    }
+
+  if (notebook->show_tabs && visible_page)
     {
       if (rectangle)
 	{
-	  GtkNotebookPage *page = notebook->children->data;
-
 	  rectangle->x = widget->allocation.x + border_width;
 	  rectangle->y = widget->allocation.y + border_width;
 	  
@@ -879,13 +889,13 @@ gtk_notebook_get_event_window_position (GtkNotebook  *notebook,
 	    case GTK_POS_TOP:
 	    case GTK_POS_BOTTOM:
 	      rectangle->width = widget->allocation.width - 2 * border_width;
-	      rectangle->height = page->requisition.height;
+	      rectangle->height = visible_page->requisition.height;
 	      if (notebook->tab_pos == GTK_POS_BOTTOM)
 		rectangle->y += widget->allocation.height - 2 * border_width - rectangle->height;
 	      break;
 	    case GTK_POS_LEFT:
 	    case GTK_POS_RIGHT:
-	      rectangle->width = page->requisition.width;
+	      rectangle->width = visible_page->requisition.width;
 	      rectangle->height = widget->allocation.height - 2 * border_width;
 	      if (notebook->tab_pos == GTK_POS_RIGHT)
 		rectangle->x += widget->allocation.width - 2 * border_width - rectangle->width;
