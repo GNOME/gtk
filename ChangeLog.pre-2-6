@@ -1,4 +1,12 @@
+Fri Dec 24 03:41:33 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/Makefile.am: reverted sopwith's changes to Makefile.am,
+	the builddir != srcdir case was already handled fine, and his
+	"fix" would produce multiple copies of the built sources.
+	for development you just need a writable srcdir.
+
 December 20, 1999 Elliot Lee <sopwith@redhat.com>
+
 	* gtk/Makefile.am: Fix builddir != srcdir for
 	  generation of gtktypebuiltins*.[ch]
 
