@@ -9,8 +9,8 @@ Fri Oct 26 20:55:57 2001  Owen Taylor  <otaylor@redhat.com>
 	people will be first against the wall.
 
 	We'll just have to go back to the old less-reliable
-	set-it-back hacks for handling model-view toggle
-	buttons and entries. :-(. 
+	set-it-back hacks for handling model-view check
+	buttons and radio buttons. :-(. 
 
 2001-10-27  Hans Breuer  <hans@breuer.org>
 
