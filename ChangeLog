@@ -1,3 +1,9 @@
+Fri Feb 13 00:33:26 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/testgtk.c (shape_create_icon): Realize window before
+	  creating xpm so it gets the right colormap/visual,
+	  instead of the default one.
+
 Thu Feb 12 23:59:49 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtksignal.[ch] gtk/gtkmain.[ch] gtk/gtkcontainer.[ch]

@@ -2015,7 +2015,7 @@ file_selection_ok (GtkWidget        *w,
 		   GtkFileSelection *fs)
 {
   g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-  gtk_widget_destroy (fs);
+  gtk_widget_destroy (GTK_WIDGET (fs));
 }
 
 void
@@ -2873,6 +2873,12 @@ shape_create_icon (char     *xpm_file,
   gtk_container_add (GTK_CONTAINER (window), fixed);
   gtk_widget_show (fixed);
   
+  gtk_widget_set_events (window, 
+			 gtk_widget_get_events (window) |
+			 GDK_BUTTON_MOTION_MASK |
+			 GDK_BUTTON_PRESS_MASK);
+
+  gtk_widget_realize (window);
   gdk_pixmap = gdk_pixmap_create_from_xpm (window->window, &gdk_pixmap_mask, 
 					   &style->bg[GTK_STATE_NORMAL],
 					   xpm_file);
@@ -2883,10 +2889,6 @@ shape_create_icon (char     *xpm_file,
   
   gtk_widget_shape_combine_mask (window, gdk_pixmap_mask, px,py);
 
-  gtk_widget_set_events (window, 
-			 gtk_widget_get_events (window) |
-			 GDK_BUTTON_MOTION_MASK |
-			 GDK_BUTTON_PRESS_MASK);
 
   gtk_signal_connect (GTK_OBJECT (window), "button_press_event",
 		      GTK_SIGNAL_FUNC (shape_pressed),NULL);
