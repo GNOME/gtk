@@ -1,3 +1,8 @@
+2002-01-23  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkentry.c (gtk_entry_set_text): use a variable that's actually
+	been declared.
+
 2002-01-23  Damon Chaplin  <damon@ximian.com>
 
 	* configure.in (gtk_doc_min_version): set minimum gtk-doc version to

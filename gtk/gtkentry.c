@@ -3241,7 +3241,7 @@ gtk_entry_set_text (GtkEntry *entry,
   gtk_editable_delete_text (GTK_EDITABLE (entry), 0, -1);
 
   tmp_pos = 0;
-  gtk_editable_insert_text (GTK_EDITABLE (editable), text, strlen (text), &tmp_pos);
+  gtk_editable_insert_text (GTK_EDITABLE (entry), text, strlen (text), &tmp_pos);
 }
 
 void
