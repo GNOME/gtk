@@ -1,3 +1,14 @@
+Thu Apr  8 20:10:33 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkentry.c (gtk_entry_key_press): use gtk_widget_activate()
+	rather than emit_by_name.
+
+	* gtk/gtkeditable.c (gtk_editable_insert_text): keep a reference
+	on the widget across multiple signal emissions.
+	(gtk_editable_delete_text): same here.
+	(gtk_editable_class_init): set widget_class->activate_signal after
+	editable_signals[ACTIVATE] has been created.
+
 Wed Apr  7 22:59:47 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkpaned.c (gtk_paned_set_position): Don't clamp

@@ -1115,7 +1115,7 @@ gtk_entry_key_press (GtkWidget   *widget,
       break;
     case GDK_Return:
       return_val = TRUE;
-      gtk_signal_emit_by_name (GTK_OBJECT (entry), "activate");
+      gtk_widget_activate (widget);
       break;
     /* The next two keys should not be inserted literally. Any others ??? */
     case GDK_Tab:
