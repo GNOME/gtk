@@ -1,3 +1,8 @@
+2003-07-21  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkdnd.sgml: It is GTK_DEST_DEFAULT_DROP, not GTK_DRAG_DEFAULT_DROP. (#117917, 
+	Tim-Philipp Müller)
+
 2003-07-19  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add GTK_STOCK_DIALOG_AUTHENTICATION.

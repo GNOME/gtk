@@ -157,7 +157,7 @@ is received or the retrieval fails, GTK+ will emit a
 "drag_data_received" signal. Failure of the retrieval
 is indicated by the length field of the @selection_data
 signal parameter being negative. However, when gtk_drag_get_data() 
-is called implicitely because the %GTK_DRAG_DEFAULT_DROP was set, 
+is called implicitely because the %GTK_DEST_DEFAULT_DROP was set, 
 then the widget will not receive notification of failed
 drops.
 </para>
@@ -203,21 +203,15 @@ a widget.
 
 <!-- ##### FUNCTION gtk_drag_begin ##### -->
 <para>
-Initiates a drag on the source side. The function
-only needs to be used when the application is
-starting drags itself, and is not needed when
-gtk_drag_source_set() is used.
+
 </para>
 
-@widget: the source widget.
-@targets: The targets (data formats) in which the
- source can provide the data.
-@actions: A bitmask of the allowed drag actions for this
-          drag.
-@button: The button the user clicked to start the drag.
-@event: The event that triggered the start of the
-        drag.
-@Returns: The context for this drag.
+@widget: 
+@targets: 
+@actions: 
+@button: 
+@event: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_drag_set_icon_widget ##### -->
