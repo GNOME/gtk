@@ -1,0 +1,155 @@
+/* GTK - The GIMP Toolkit
+ * gtkfilechooserwidget.c: Embeddable file selector widget
+ * Copyright (C) 2003, Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#include "gtkfilechooserwidget.h"
+#include "gtkfilechooserimpldefault.h"
+#include "gtkfilechooserenums.h"
+#include "gtkfilechooserutils.h"
+#include "gtkfilesystemunix.h"
+
+struct _GtkFileChooserWidgetPrivate
+{
+  GtkWidget *impl;
+};
+
+#define GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_WIDGET (o)->priv)
+
+static void gtk_file_chooser_widget_class_init   (GtkFileChooserWidgetClass *class);
+static void gtk_file_chooser_widget_init         (GtkFileChooserWidget      *chooser_widget);
+static void gtk_file_chooser_widget_set_property (GObject                   *object,
+						  guint                      prop_id,
+						  const GValue              *value,
+						  GParamSpec                *pspec);
+static void gtk_file_chooser_widget_get_property (GObject                   *object,
+						  guint                      prop_id,
+						  GValue                    *value,
+						  GParamSpec                *pspec);
+
+GType
+gtk_file_chooser_widget_get_type (void)
+{
+  static GType file_chooser_widget_type = 0;
+
+  if (!file_chooser_widget_type)
+    {
+      static const GTypeInfo file_chooser_widget_info =
+      {
+	sizeof (GtkFileChooserWidgetClass),
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_file_chooser_widget_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkFileChooserWidget),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_file_chooser_widget_init,
+      };
+      
+      static const GInterfaceInfo file_chooser_info =
+      {
+	(GInterfaceInitFunc) _gtk_file_chooser_delegate_iface_init, /* interface_init */
+	NULL,			                                    /* interface_finalize */
+	NULL			                                    /* interface_data */
+      };
+
+      file_chooser_widget_type = g_type_register_static (GTK_TYPE_VBOX, "GtkFileChooserWidget",
+							 &file_chooser_widget_info, 0);
+      g_type_add_interface_static (file_chooser_widget_type,
+				   GTK_TYPE_FILE_CHOOSER,
+				   &file_chooser_info);
+    }
+
+  return file_chooser_widget_type;
+}
+
+static void
+gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+
+  gobject_class->set_property = gtk_file_chooser_widget_set_property;
+  gobject_class->get_property = gtk_file_chooser_widget_get_property;
+
+  _gtk_file_chooser_install_properties (gobject_class);
+
+  g_type_class_add_private (class, sizeof (GtkFileChooserWidgetPrivate));
+}
+
+static void
+gtk_file_chooser_widget_init (GtkFileChooserWidget *chooser_widget)
+{
+  GtkFileChooserWidgetPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (chooser_widget,
+								   GTK_TYPE_FILE_CHOOSER_WIDGET,
+								   GtkFileChooserWidgetPrivate);
+  gchar *current_folder;
+  gchar *current_folder_uri;
+  
+  chooser_widget->priv = priv;
+  
+  gtk_widget_push_composite_child ();
+
+  priv->impl = _gtk_file_chooser_impl_default_new (g_object_new (GTK_TYPE_FILE_SYSTEM_UNIX, NULL));
+  gtk_box_pack_start (GTK_BOX (chooser_widget), priv->impl, TRUE, TRUE, 0);
+  gtk_widget_show (priv->impl);
+
+  current_folder = g_get_current_dir ();
+  current_folder_uri = g_filename_to_uri (current_folder, NULL, NULL);
+  if (current_folder_uri)
+    {
+      gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (priv->impl), current_folder_uri);
+      g_free (current_folder_uri);
+    }
+  g_free (current_folder);
+  
+  _gtk_file_chooser_set_delegate (GTK_FILE_CHOOSER (chooser_widget),
+				  GTK_FILE_CHOOSER (priv->impl));
+  
+  gtk_widget_pop_composite_child ();
+}
+
+static void
+gtk_file_chooser_widget_set_property (GObject         *object,
+				      guint            prop_id,
+				      const GValue    *value,
+				      GParamSpec      *pspec)
+{
+  GtkFileChooserWidgetPrivate *priv = GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE (object);
+  
+  g_object_set_property (G_OBJECT (priv->impl), pspec->name, value);
+}
+
+static void
+gtk_file_chooser_widget_get_property (GObject         *object,
+				      guint            prop_id,
+				      GValue          *value,
+				      GParamSpec      *pspec)
+{
+  GtkFileChooserWidgetPrivate *priv = GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE (object);
+  
+  g_object_get_property (G_OBJECT (priv->impl), pspec->name, value);
+}
+
+GtkWidget *
+gtk_file_chooser_widget_new (GtkFileChooserAction action)
+{
+  return g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET,
+		       "action", action,
+		       NULL);
+}
