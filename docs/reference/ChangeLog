@@ -1,3 +1,8 @@
+2001-02-20  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/tmpl/rgb.sgml: fix these docs to reflect the current state
+	of affairs
+
 2001-02-19  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/Makefile.am (SCAN_OPTIONS): add --deprecated-guards
