@@ -80,7 +80,7 @@ extern "C" {
 #define	gtk_signal_handler_unblock_by_data(object,data)                                \
    gtk_signal_compat_matched ((object), 0, (data), G_SIGNAL_MATCH_DATA, 2)
 #define	gtk_signal_handler_pending(object,signal_id,may_be_blocked)                    \
-   g_signal_has_handler_pending ((object), 0, (signal_id), (may_be_blocked))
+   g_signal_has_handler_pending ((object), (signal_id), 0, (may_be_blocked))
 #define	gtk_signal_handler_pending_by_func(object,signal_id,may_be_blocked,func,data)  \
    (g_signal_handler_find ((object), G_SIGNAL_MATCH_ID |                               \
                                      G_SIGNAL_MATCH_FUNC |                             \
