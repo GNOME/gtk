@@ -134,11 +134,11 @@ gdk_pango_free_gc (PangoContext *context,
  * @colormap: a #GdkColormap
  *
  * Sets the colormap to be used for drawing with @context.
+ *
  * If you obtained your context from gtk_widget_get_pango_context() or
  * gtk_widget_create_pango_context(), the colormap will already be set
  * to the colormap for the widget, so you shouldn't need this
  * function.
- * 
  **/
 void
 gdk_pango_context_set_colormap (PangoContext *context,
@@ -441,6 +441,9 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
  * Render a #PangoLayout onto a #GdkDrawable, overriding the
  * layout's normal colors with @foreground and/or @background.
  * @foreground and @background need not be allocated.
+ *
+ * If you're using GTK+, the ususal way to obtain a #PangoLayout
+ * is gtk_widget_create_pango_layout().
  */
 void 
 gdk_draw_layout_with_colors (GdkDrawable     *drawable,
@@ -515,6 +518,9 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
  * @layout:    a #PangoLayout
  *
  * Render a #PangoLayout onto a GDK drawable
+ *
+ * If you're using GTK+, the ususal way to obtain a #PangoLayout
+ * is gtk_widget_create_pango_layout().
  */
 void 
 gdk_draw_layout (GdkDrawable     *drawable,

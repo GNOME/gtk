@@ -1,4 +1,11 @@
+2003-09-12  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdkdraw.c (gdk_draw_string, gdk_draw_text) 
+	(gdk_draw_text_wc): Add deprecation notes.  (#121955, Martin Pool)
+
 2003-09-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdkpango.c: Doc tweaks.
 
 	* tests/testgtk.c: Add table menu tests.
 

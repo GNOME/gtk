@@ -1,3 +1,12 @@
+2003-09-12  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/drawing.sgml: Add deprecation note for gdk_draw_pixmap().
+
+2003-09-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/drawing.sgml: Add hints about obtaining Pango 
+	structures. (#121953, Martin Pool)
+
 2003-09-04  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add GtkUIManagerItemType.

@@ -519,6 +519,8 @@ gdk_draw_polygon (GdkDrawable *drawable,
  * @string:  the string of characters to draw.
  * 
  * Draws a string of characters in the given font or fontset.
+ * 
+ * Deprecated: Use gdk_draw_layout() instead.
  **/
 void
 gdk_draw_string (GdkDrawable *drawable,
@@ -548,6 +550,8 @@ gdk_draw_string (GdkDrawable *drawable,
  * @text_length: the number of characters of @text to draw.
  * 
  * Draws a number of characters in the given font or fontset.
+ *
+ * Deprecated: Use gdk_draw_layout() instead.
  **/
 void
 gdk_draw_text (GdkDrawable *drawable,
@@ -579,6 +583,8 @@ gdk_draw_text (GdkDrawable *drawable,
  * Draws a number of wide characters using the given font of fontset.
  * If the font is a 1-byte font, the string is converted into 1-byte 
  * characters (discarding the high bytes) before output.
+ * 
+ * Deprecated: Use gdk_draw_layout() instead.
  **/
 void
 gdk_draw_text_wc (GdkDrawable	 *drawable,

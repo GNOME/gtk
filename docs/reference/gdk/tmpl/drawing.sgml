@@ -19,6 +19,12 @@ the number of arguments needed for each drawing operation. See the
 <link linkend="gdk-Graphics-Contexts">Graphics Contexts</link> section for
 more information.
 </para>
+<para id="pango-data-structures">
+Some of the drawing operations take Pango data structures like #PangoContext,
+#PangoLayout or #PangoLayoutLine as arguments. If you're using GTK+, the ususal 
+way to obtain these structures is via gtk_widget_create_pango_context() or
+gtk_widget_create_pango_layout().
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -387,6 +393,7 @@ function.
 Draws a pixmap, or a part of a pixmap, onto another drawable.
 </para>
 
+@Deprecated: Use gdk_draw_drawable() instead.
 
 
 <!-- ##### FUNCTION gdk_draw_drawable ##### -->
