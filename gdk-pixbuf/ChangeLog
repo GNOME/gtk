@@ -1,3 +1,9 @@
+1999-10-18  Havoc Pennington  <hp@pobox.com>
+
+	* subautogen.sh: New name for macros/autogen.sh
+
+	* autogen.sh: use subautogen.sh
+
 1999-10-18  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/*: Reindented to use the GNOME Indentation.
