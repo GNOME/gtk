@@ -1,3 +1,10 @@
+Thu Mar 14 17:09:52 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_process_all_updates): Fix rather
+	improbable reentrancy problem if a window is destroyed
+	while updates are being processed on another window. (Noticed
+	by Michael Meeks, #74708)
+
 2002-03-14 Vitaly Tishkov <tvv@sparc.spb.su>
 
         * gtk/gtktreemodelsort.c

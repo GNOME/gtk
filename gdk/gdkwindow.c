@@ -2139,9 +2139,12 @@ gdk_window_process_all_updates (void)
   update_windows = NULL;
   update_idle = 0;
 
+  g_slist_foreach (old_update_windows, (GFunc)g_object_ref, NULL);
+  
   while (tmp_list)
     {
       gdk_window_process_updates_internal (tmp_list->data);
+      g_object_unref (tmp_list->data);
       tmp_list = tmp_list->next;
     }
 
