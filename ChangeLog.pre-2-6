@@ -1,3 +1,10 @@
+Fri Oct 31 02:43:34 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (get_item_requisition): delete this function
+	(toolbar_item_is_homogeneous): cache max_homogeneous_pixels
+	instead of re-calculating for each item.
+	(gtk_toolbar_size_allocate): Update comments
+
 Thu Oct 30 22:04:31 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_forall): Only include

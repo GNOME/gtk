@@ -174,10 +174,13 @@ static GtkWidget *gtk_toolbar_internal_insert_element (GtkToolbar          *tool
 						       gpointer             user_data,
 						       gint                 position,
 						       gboolean             use_stock);
-static void gtk_toolbar_insert_tool_item (GtkToolbar  *toolbar,
-					  GtkToolItem *item,
-					  gint         pos,
-					  gboolean     is_placeholder);
+
+typedef struct _ToolbarContent ToolbarContent;
+
+static ToolbarContent *gtk_toolbar_insert_tool_item (GtkToolbar  *toolbar,
+						     GtkToolItem *item,
+						     gint         pos,
+						     gboolean     is_placeholder);
 
 
 typedef enum {
@@ -187,7 +190,7 @@ typedef enum {
 } ApiMode;
 
 #define GTK_TOOLBAR_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TOOLBAR, GtkToolbarPrivate))
-typedef struct _ToolbarContent ToolbarContent;
+
 struct _ToolbarContent
 {
   GtkToolItem *item;
@@ -220,6 +223,7 @@ struct _GtkToolbarPrivate
   gboolean   in_dnd;
   gint	     n_overflow_items_when_dnd_started;
   GtkToolItem *highlight_tool_item;
+  gint	     max_homogeneous_pixels;
 };
 
 static GtkContainerClass *parent_class = NULL;
@@ -590,6 +594,8 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   priv->show_arrow = TRUE;
   priv->settings = NULL;
 
+  priv->max_homogeneous_pixels = -1;
+  
   priv->timer = g_timer_new ();
 }
 
@@ -623,17 +629,12 @@ toolbar_item_visible (GtkToolbar  *toolbar,
   return FALSE;
 }
 
-static gboolean
-toolbar_item_is_homogeneous (GtkToolbar  *toolbar,
-			     GtkToolItem *item)
+static gint
+calculate_max_homogeneous_pixels (GtkWidget *widget)
 {
-  gboolean result;
-  GtkWidget *widget = GTK_WIDGET (item);
-  GtkRequisition requisition;
   PangoContext *context;
   PangoFontMetrics *metrics;
-  int char_width;
-  gint max_homogeneous_pixels;
+  gint char_width;
 
   context = gtk_widget_get_pango_context (widget);
   metrics = pango_context_get_metrics (context,
@@ -642,16 +643,32 @@ toolbar_item_is_homogeneous (GtkToolbar  *toolbar,
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
   pango_font_metrics_unref (metrics);
       
-  max_homogeneous_pixels = PANGO_PIXELS (MAX_HOMOGENEOUS_N_CHARS * char_width);
-  
-  result = gtk_tool_item_get_homogeneous (item) && !GTK_IS_SEPARATOR_TOOL_ITEM (item);
+  return PANGO_PIXELS (MAX_HOMOGENEOUS_N_CHARS * char_width);
+}
+
+static gboolean
+toolbar_item_is_homogeneous (GtkToolbar  *toolbar,
+			     GtkToolItem *item)
+{
+  gboolean result;
+  GtkRequisition requisition;
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+
+  if (priv->max_homogeneous_pixels < 0)
+    {
+      priv->max_homogeneous_pixels =
+	calculate_max_homogeneous_pixels (GTK_WIDGET (toolbar));
+    }
+
+  result = gtk_tool_item_get_homogeneous (item) &&
+    !GTK_IS_SEPARATOR_TOOL_ITEM (item);
 
   gtk_widget_size_request (GTK_WIDGET (item), &requisition);
 
   if ((gtk_tool_item_get_is_important (item) &&
        toolbar->style == GTK_TOOLBAR_BOTH_HORIZ &&
        toolbar->orientation == GTK_ORIENTATION_HORIZONTAL) ||
-      requisition.width > max_homogeneous_pixels)
+      requisition.width > priv->max_homogeneous_pixels)
     {
       result = FALSE;
     }
@@ -1086,7 +1103,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
   n_overflowed = 0;
 
-  /* calculate widths of pack front items */
+  /* calculate widths of items */
   overflowing = FALSE;
   for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
     {
@@ -1112,6 +1129,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	}
     }
 
+  /* calculate width of arrow */  
   if (need_arrow)
     {
       arrow_allocation.width = arrow_size;
@@ -1163,7 +1181,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       g_assert (n_expand_items == 0);
     }
   
-  /* position regular items */
+  /* position items */
   pos = border_width;
   for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
     {
@@ -1265,6 +1283,10 @@ static void
 gtk_toolbar_style_set (GtkWidget *widget,
 		       GtkStyle  *prev_style)
 {
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (widget);
+
+  priv->max_homogeneous_pixels = -1;
+  
   if (GTK_WIDGET_REALIZED (widget))
     gtk_style_set_background (widget->style, widget->window, widget->state);
 
@@ -1816,25 +1838,6 @@ logical_to_physical (GtkToolbar *toolbar, gint logical)
   return physical;
 }
 
-static void
-get_item_requisition (GtkToolbar  *toolbar,
-		      GtkToolItem *tool_item,
-		      gint        *width,
-		      gint        *height)
-{
-  GtkRequisition requisition;
-  
-  g_object_ref (G_OBJECT (tool_item));
-  gtk_widget_set_parent (GTK_WIDGET (tool_item), GTK_WIDGET (toolbar));
-
-  gtk_widget_size_request (GTK_WIDGET (tool_item), &requisition);
-  *width = requisition.width;
-  *height = requisition.height;
-  
-  gtk_widget_unparent (GTK_WIDGET (tool_item));
-  g_object_unref (G_OBJECT (tool_item));
-}
-
 /**
  * gtk_toolbar_set_drop_highlight_item:
  * @toolbar: a #GtkToolbar
@@ -1939,12 +1942,13 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
   
   if (!content || !content->is_placeholder)
     {
-      GtkWidget *placeholder = GTK_WIDGET (gtk_separator_tool_item_new ());
+      GtkWidget *placeholder;
+
+      placeholder = GTK_WIDGET (gtk_separator_tool_item_new ());
       gtk_widget_set_size_request (placeholder, 0, 0);
-      gtk_toolbar_insert_tool_item (toolbar, GTK_TOOL_ITEM (placeholder),
-				    index, TRUE);
-      content = g_list_nth_data (priv->content, index);
-      g_assert (content->is_placeholder);
+      content = gtk_toolbar_insert_tool_item (toolbar,
+					      GTK_TOOL_ITEM (placeholder),
+					      index, TRUE);
       start_width = start_height = 0;
     }
   else
@@ -2402,7 +2406,7 @@ gtk_toolbar_check_new_api (GtkToolbar *toolbar)
   return TRUE;
 }
 
-static void
+static ToolbarContent *
 gtk_toolbar_insert_tool_item (GtkToolbar  *toolbar,
 			      GtkToolItem *item,
 			      gint         pos,
@@ -2419,6 +2423,7 @@ gtk_toolbar_insert_tool_item (GtkToolbar  *toolbar,
   priv->content = g_list_insert (priv->content, content, pos);
   
   gtk_widget_set_parent (GTK_WIDGET (item), GTK_WIDGET (toolbar));
+  return content;
 }
 
 static void

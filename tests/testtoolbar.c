@@ -625,7 +625,7 @@ main (gint argc, gchar **argv)
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   gtk_tool_item_set_expand (item, TRUE);
   gtk_separator_tool_item_set_draw (GTK_SEPARATOR_TOOL_ITEM (item), FALSE);
-  g_assert (gtk_toolbar_get_nth_item (toolbar, 0) != 0);
+  g_assert (gtk_toolbar_get_nth_item (GTK_TOOLBAR (toolbar), 0) != 0);
   
   item = gtk_radio_tool_button_new_from_stock (NULL, GTK_STOCK_JUSTIFY_LEFT);
   group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
@@ -634,9 +634,7 @@ main (gint argc, gchar **argv)
   
   
   item = gtk_radio_tool_button_new_from_stock (group, GTK_STOCK_JUSTIFY_CENTER);
-#if 0
   make_prop_editor (G_OBJECT (item));
-#endif
 
   group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
   add_item_to_list (store, item, "Center");
@@ -689,9 +687,7 @@ main (gint argc, gchar **argv)
 
   gtk_widget_show_all (window);
 
-#if 0
   make_prop_editor (G_OBJECT (toolbar));
-#endif
 
   g_signal_connect (window, "delete_event", G_CALLBACK (gtk_main_quit), NULL);
   
