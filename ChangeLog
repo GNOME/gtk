@@ -1,3 +1,8 @@
+2003-02-17  Mohammad DAMT  <mdamt@bisnisweb.com>
+
+	* po/id.po: Added Indonesian translation
+	* configure.in: Added "id" to ALL_LINGUAS
+
 2003-02-14  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (popup_targets_received): Remove bogus casts.
