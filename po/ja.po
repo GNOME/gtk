@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-05 18:09+0900\n"
-"PO-Revision-Date: 2005-02-05 18:02+0900\n"
+"POT-Creation-Date: 2005-02-05 23:52+0900\n"
+"PO-Revision-Date: 2005-02-05 23:51+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -926,7 +926,7 @@ msgstr "calendar:week_start:0"
 #: ../gtk/gtkcellrendererprogress.c:235 ../gtk/gtkcellrendererprogress.c:293
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "プログレスバーのラベル|%d %%"
+msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:220 ../gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
