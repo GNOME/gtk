@@ -1,3 +1,12 @@
+1998-06-22  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gtk/gtkentry.h, gtk/gtkentry.c: Export the
+	gtk_entry_adjust_scroll.  Required if you change the cursor
+	position and want to sync it up with your code (Midnight Commander
+	gtk front end needs this).
+
+	* gtk/gtktable.c: Deal with tables that have size 0, 0.
+
 Tue Jun 23 12:12:19 BST 1998  Tony Gale  <gale@gtk.org>
 
 	* examples/README.1ST: new file to explain how the
@@ -222,6 +231,7 @@ Wed Jun 17 03:47:40 1998  Tim Janik  <timj@gtk.org>
 
 	* more GtkType and macro fixups.
 
+>>>>>>> 1.476
 1998-06-16  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkhandlebox.c (draw_textured_frame): Now accepts an extra

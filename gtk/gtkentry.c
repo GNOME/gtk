@@ -72,7 +72,7 @@ static void gtk_entry_queue_draw          (GtkEntry          *entry);
 static gint gtk_entry_timer               (gpointer           data);
 static gint gtk_entry_position            (GtkEntry          *entry,
 					   gint               x);
-static void gtk_entry_adjust_scroll       (GtkEntry          *entry);
+void gtk_entry_adjust_scroll       (GtkEntry          *entry);
 static void gtk_entry_grow_text           (GtkEntry          *entry);
 static void gtk_entry_insert_text         (GtkEditable       *editable,
 					   const gchar       *new_text,

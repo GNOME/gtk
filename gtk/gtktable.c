@@ -378,8 +378,10 @@ gtk_table_new (guint	rows,
 {
   GtkTable *table;
 
-  g_return_val_if_fail (rows >= 1, NULL);
-  g_return_val_if_fail (columns >= 1, NULL);
+  if (rows == 0)
+	  rows = 1;
+  if (columns == 0)
+	  columns = 1;
   
   table = gtk_type_new (gtk_table_get_type ());
   
