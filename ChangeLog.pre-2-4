@@ -1,5 +1,10 @@
+Tue Oct 28 12:20:16 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_has_toplevel_focus): Remove
+	some accidentally committed duplicate code.
+
 Tue Oct 28 17:06:17 GMT 2003  Tony Gale <gale@gtk.org>
-                                                                                                                                   
+
         * docs/faq/gtk-faq.sgml: Update info on compiling GTK+
 
 Tue Oct 28 10:34:24 2003  Owen Taylor  <otaylor@redhat.com>

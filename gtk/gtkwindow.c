@@ -6389,29 +6389,6 @@ gtk_window_has_toplevel_focus (GtkWindow *window)
   return window->has_toplevel_focus;
 }
 
-/**
- * gtk_window_get_is_active:
- * @window: a #GtkWindow
- * 
- * Returns whether the window is part of the current active toplevel.
- * The return value is %TRUE if the window is active toplevel
- * itself, but also if it is a GtkPlug embedded in the active toplevel.
- * You might use this function if you wanted to draw a widget
- * differently in an active window from a widget in an inactive window.
- * 
- * Return value: %TRUE if the window is the current active window.
- *
- * Since: 2.4
- **/
-static gboolean
-gtk_window
-_is_active (GtkWIndow *window)
-{
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  return window->is_active;
-}
-
 static void
 gtk_window_group_class_init (GtkWindowGroupClass *klass)
 {
