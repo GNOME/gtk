@@ -360,7 +360,7 @@ msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG mətn parçaları açarları ASCII xarakterləri olmalıdırlar."
 
 #: gdk-pixbuf/io-png.c:812
-#, c-format
+#, fuzzy, c-format
 msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr "PNG tEXt parçaları qiyməti ISO-8859-1 kodlamasına dönüşdürülə bilməzlər"
 
