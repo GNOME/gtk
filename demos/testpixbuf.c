@@ -520,7 +520,7 @@ main (int argc, char **argv)
 				int nbytes;
 				nbytes = fread(buf, 1, readlen, file);
 
-                                printf(".");
+/*                                printf(".");*/
                                 fflush(stdout);
                                 
                                 if (gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (pixbuf_loader), buf, nbytes) == FALSE)
@@ -529,7 +529,7 @@ main (int argc, char **argv)
 	                        while (gtk_events_pending())
 	                        	gtk_main_iteration();
                         }
-			printf("\n");
+/*			printf("\n");*/
 			gtk_timeout_remove (timeout);
                         gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (pixbuf_loader));
 			gtk_object_destroy (GTK_OBJECT(pixbuf_loader));

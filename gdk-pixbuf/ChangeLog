@@ -1,3 +1,8 @@
+1999-11-02  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/io-gif.c (gif_main_loop): Now progressive gif loading works!
+	It's a little slow though. )-:
+
 1999-11-02 Elliot Lee <sopwith@redhat.com>
 	* src/gdk-pixbuf-loader.[ch], src/gdk-pixbuf-io.h: Make the arguments to the
 	write/load_increment operations const-correct.
