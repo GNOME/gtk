@@ -9,6 +9,7 @@ Makefile
 Makefile.in
 aclocal.m4
 configure
+config.h.win32
 gtk-config-2.0
 config.cache
 ABOUT-NLS
@@ -16,7 +17,13 @@ intl
 stamp-h.in
 gtk+.spec
 gtk+-2.0.pc
+gtk+-linux-fb-2.0.pc
+gtk+-nanox-2.0.pc
+gtk+-x11-2.0.pc
 gdk-2.0.pc
+gdk-linux-fb-2.0.pc
+gdk-nanox-2.0.pc
+gdk-x11-2.0.pc
 gdk-pixbuf-2.0.pc
 missing
 install-sh

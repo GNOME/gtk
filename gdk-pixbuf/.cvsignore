@@ -6,6 +6,8 @@ makefile.mingw
 .libs
 *.la
 *.lo
+gdk-pixbuf-marshal.c
+gdk-pixbuf-marshal.h
 make-inline-pixbuf
 test-gdk-pixbuf
 gdk-pixbuf-features.h
