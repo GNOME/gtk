@@ -1,3 +1,13 @@
+Mon Nov  8 16:18:25 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkinput-gxi.c: Add missing include,
+	  fix GdkWindowPrivate => GdkDrawablePrivate.
+
+	* gdk/x11/gdkinputprivate.h: include <X11/Xlib.h>.
+
+	* gdk/x11/Makefile.am (xinput_sources): Add missing
+	backslash to fix building with --with-xinput=none
+
 Mon Nov  8 14:47:04 1999  Owen Taylor  <otaylor@redhat.com>
 
 	Move all X specific code into the x11/ directory.

@@ -18,7 +18,6 @@
  */
 
 #include "gdkinputprivate.h"
-#include "gdkx.h"
 
 /*
  * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS

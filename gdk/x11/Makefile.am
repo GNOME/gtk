@@ -30,7 +30,7 @@ xinput_sources =	   \
 	gdkinput-x11.c	   \
 	gdkinput-xfree.c
 else
-xinput_sources =
+xinput_sources =	   \
 	gdkinput-none.c
 endif
 endif

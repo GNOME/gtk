@@ -30,6 +30,9 @@
 #include "config.h"
 #include "gdkinput.h"
 #include "gdkevents.h"
+#include "gdkx.h"
+
+#include <X11/Xlib.h>
 
 #ifndef XINPUT_NONE
 #include <X11/extensions/XInput.h>

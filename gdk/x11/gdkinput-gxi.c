@@ -24,6 +24,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <stdlib.h>
+
+#include "gdkinputprivate.h"
+#include "gdkx.h"
+
 /* #define DEBUG_SWITCHING */
 
 #include <gxid_lib.h>
@@ -312,8 +317,8 @@ gdk_input_gxi_other_event (GdkEvent *event,
   if (return_val > 0 && event->type == GDK_MOTION_NOTIFY &&
       (!gdkdev->button_state) && (!input_window->grabbed) &&
       ((event->motion.x < 0) || (event->motion.y < 0) ||
-       (event->motion.x > ((GdkWindowPrivate *)window)->width) || 
-       (event->motion.y > ((GdkWindowPrivate *)window)->height) ||
+       (event->motion.x > ((GdkDrawablePrivate *)window)->width) || 
+       (event->motion.y > ((GdkDrawablePrivate *)window)->height) ||
        gdk_input_is_obscured(input_window,event->motion.x,event->motion.y)))
     {
 #ifdef DEBUG_SWITCHING
