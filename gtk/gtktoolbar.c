@@ -361,7 +361,6 @@ gtk_toolbar_realize (GtkWidget *widget)
                 "gtk-toolbar-style",
                 &style,
                 NULL);
-
   
   toolbar->style_set_connection =
     g_signal_connect (G_OBJECT (gtk_settings_get_for_screen (screen)),
@@ -375,6 +374,10 @@ gtk_toolbar_realize (GtkWidget *widget)
 		      G_CALLBACK (icon_size_change_notify),
 		      toolbar);
 
+  /* set screen object on the toolbar for finalization purposes */
+  g_object_set_data (G_OBJECT (toolbar), "settings-screen", screen);
+  
+
   gtk_toolbar_set_style (toolbar, style);
   gtk_toolbar_set_icon_size (toolbar, icon_size);
 
@@ -387,7 +390,7 @@ static void
 gtk_toolbar_finalize (GObject *object)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (object);
-  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (object));
+  GdkScreen *screen = g_object_get_data (object, "settings-screen");
   
   g_signal_handler_disconnect (G_OBJECT (gtk_settings_get_for_screen (screen)),
                                toolbar->style_set_connection);
@@ -1629,6 +1632,7 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 		    
 		    box = gtk_vbox_new (FALSE, 0);
 		    gtk_widget_show (box);
+		    gtk_container_add (GTK_CONTAINER (child->widget), box);
 		    
 		    if (child->label)
 		    {
@@ -1640,8 +1644,6 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 			gtk_box_pack_end (GTK_BOX (box), child->icon, FALSE, FALSE, 0);
 			gtk_object_unref (GTK_OBJECT (child->icon));
 		    }
-		    gtk_container_add (GTK_CONTAINER (child->widget),
-				       box);
 		}
 		
 		break;
@@ -1673,6 +1675,7 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 
 		    box = gtk_hbox_new (FALSE, 0);
 		    gtk_widget_show (box);
+		    gtk_container_add (GTK_CONTAINER (child->widget), box);
 		    
 		    if (child->label)
 		    {
@@ -1684,7 +1687,6 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 			gtk_box_pack_end (GTK_BOX (box), child->icon, FALSE, FALSE, 0);
 			gtk_object_unref (GTK_OBJECT (child->icon));
 		    }
-		    gtk_container_add (GTK_CONTAINER (child->widget), box);
 		    
 		}
 		
