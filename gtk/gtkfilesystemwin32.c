@@ -606,7 +606,10 @@ gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
 
   g_return_val_if_fail (volume->drive != NULL, NULL);
 
-  if ((filename_is_drive_root (volume->drive) && volume->drive[0] >= 'C') ||
+  if (filename_is_drive_root (volume->drive) &&
+      volume->drive_type == DRIVE_REMOTE)
+    real_display_name = g_strdup (volume->drive);
+  else if ((filename_is_drive_root (volume->drive) && volume->drive[0] >= 'C') ||
       volume->drive_type != DRIVE_REMOVABLE)
     {
       gunichar2 *wdrive = g_utf8_to_utf16 (volume->drive, -1, NULL, NULL, NULL);
