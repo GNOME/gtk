@@ -752,19 +752,20 @@ draw_arrow (GtkStyle      *style,
   else if (height == -1)
     gdk_window_get_size (window, NULL, &height);
   
-  half_width = width / 2;
-  half_height = height / 2;
-
   xthik = style->klass->xthickness;
   ythik = style->klass->ythickness;
 
+  gc = style->black_gc;
+
   if ((detail) && (!strcmp(detail,"menuitem")))
-    border = 0;
+    {
+      border = 0;
+      gc = style->fg_gc[state_type];
+    }
   if ((fill) && (border))
     draw_box (style, window, state_type, shadow_type, area, widget, detail,
 	      x, y, width, height);
 
-  gc = style->black_gc;
 
   if (area)
     {
@@ -772,48 +773,61 @@ draw_arrow (GtkStyle      *style,
     }
   if (!border)
     {
-      xthik = 2;
-      ythik = 0;
+      x += 1;
+      y += 1;
+      width -= 2;
+      height -= 2;
     }
+  else
+    {
+      x += xthik;
+      y += ythik;
+      width -= xthik * 2;
+      height -= ythik * 2;
+    }
+
+  half_width = width / 2;
+  half_height = height / 2;
   
   switch (arrow_type)
     {
      case GTK_ARROW_UP:
-      points[0].x = x + half_width;
-      points[0].y = y + ythik;
-      points[1].x = x + xthik;
-      points[1].y = y - ythik + height - 1;
-      points[2].x = x - xthik + width - 1;
-      points[2].y = y - ythik + height - 1;
+      points[0].x = x;
+      points[0].y = y + half_height + (half_width / 2);
+      points[1].x = x + width - 1;
+      points[1].y = y + half_height + (half_width / 2);
+      points[2].x = x + half_width;
+      points[2].y = y + half_height - (half_width / 2);
+
       gdk_draw_polygon (window, gc, TRUE, points, 3);
       break;
      case GTK_ARROW_DOWN:
-      points[0].x = x + half_width;
-      points[0].y = y - ythik + height - 1;
-      points[1].x = x + xthik;
-      points[1].y = y + ythik;
-      points[2].x = x - xthik + width - 1;
-      points[2].y = y + ythik;
+      points[0].x = x;
+      points[0].y = y + half_height - (half_width / 2);
+      points[1].x = x + width - 1;
+      points[1].y = y + half_height - (half_width / 2);
+      points[2].x = x + half_width;
+      points[2].y = y + half_height + (half_width / 2);
 
       gdk_draw_polygon (window, gc, TRUE, points, 3);
       break;
      case GTK_ARROW_LEFT:
-      points[0].x = x + xthik;
-      points[0].y = y + half_height;
-      points[1].x = x - xthik + width - 1;
-      points[1].y = y - ythik + height - 1;
-      points[2].x = x - xthik + width - 1;
-      points[2].y = y + ythik;
+      points[0].x = x + half_width + (half_height / 2);
+      points[0].y = y;
+      points[1].x = x + half_width + (half_height / 2);
+      points[1].y = y + height - 1;
+      points[2].x = x + half_width - (half_height / 2);
+      points[2].y = y + half_height;
       
       gdk_draw_polygon (window, gc, TRUE, points, 3);
       break;
      case GTK_ARROW_RIGHT:
-      points[0].x = x - xthik + width - 1;
-      points[0].y = y + half_height;
-      points[1].x = x + xthik;
-      points[1].y = y + ythik;
-      points[2].x = x + xthik;
-      points[2].y = y - ythik + height - 1;
+      points[0].x = x + half_width - (half_height / 2);
+      points[0].y = y;
+      points[1].x = x + half_width - (half_height / 2);
+      points[1].y = y + height - 1;
+      points[2].x = x + half_width + (half_height / 2);
+      points[2].y = y + half_height;
       
       gdk_draw_polygon (window, gc, TRUE, points, 3);
       break;
@@ -1091,6 +1105,19 @@ draw_box     (GtkStyle      *style,
       if (area)
 	{
 	  gdk_gc_set_clip_rectangle (style->bg_gc[GTK_STATE_SELECTED], NULL);
+	}
+    }
+  else if ((detail) && (!strcmp("menubar", detail)))
+    {
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
+	}
+	  gdk_draw_rectangle(window, style->bg_gc[state_type], TRUE,
+			     x, y, width, height);
+      if (area)
+	{
+	  gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
 	}
     }
   else
