@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-06 21:46+0000\n"
+"POT-Creation-Date: 2004-09-18 14:22-0400\n"
 "PO-Revision-Date: 2004-09-06 22:02+0000\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@fys.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -33,7 +33,8 @@ msgstr "Biletefila «%s» inneheld ikkje data"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Klarte ikkje å lasta biletet «%s». Årsaken er ukjent, men truleg ei øydelagt "
 "biletefil"
@@ -259,12 +260,12 @@ msgstr "GIF-biletet var avkutta eller ufullstendig."
 msgid "The GIF image format"
 msgstr "GIF-bileteformatet"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "Ikkje nok minne til å lasta ikonet"
 
-#: gdk-pixbuf/io-ico.c:256
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "Ugyldig hovud i ikon"
 
@@ -276,32 +277,32 @@ msgstr "Ikonet har breidde null"
 msgid "Icon has zero height"
 msgstr "Ikonet har høgde null"
 
-#: gdk-pixbuf/io-ico.c:347
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr "Komprimerte ikon er ikkje støtta"
 
-#: gdk-pixbuf/io-ico.c:380
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "Ikontypen er ikkje støtta"
 
-#: gdk-pixbuf/io-ico.c:474
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "Ikkje nok minne til å lasta ICO-fila"
 
-#: gdk-pixbuf/io-ico.c:939
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr "Biletet er for stort til å lagrast som ICO"
 
-#: gdk-pixbuf/io-ico.c:950
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr "Peikarpunktet utanfor biletet"
 
-#: gdk-pixbuf/io-ico.c:973
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Djupna til biletet er for djup for ei ICO-fil: %d"
 
-#: gdk-pixbuf/io-ico.c:1202
+#: gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
 msgstr "ICO-bileteformatet"
 
@@ -323,12 +324,12 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Ustøtta JPEG-fargerom (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
-#: gdk-pixbuf/io-jpeg.c:950
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Kan ikkje setja av minne til å lasta JPEG-bilete"
 
-#: gdk-pixbuf/io-jpeg.c:893
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -337,12 +338,14 @@ msgstr ""
 "JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%s» kan ikkje "
 "tolkast."
 
-#: gdk-pixbuf/io-jpeg.c:908
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%d» er ikkje tillate."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%d» er ikkje tillate."
 
-#: gdk-pixbuf/io-jpeg.c:1069
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr "JPEG-bileteformatet"
 
@@ -442,7 +445,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Fatal feil under lesing av PNG-biletefil: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Nøklane til PNG-tekstbitar må ha mellom 1 og 79 teikn."
 
 #: gdk-pixbuf/io-png.c:821
@@ -451,7 +455,8 @@ msgstr "Nøklane til PNG-tekstbitar må vera ASCII-teikn."
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr "Verdien til PNG-tekstbiten %s kan ikkje konverterast til ISO-8859-1."
 
 #: gdk-pixbuf/io-png.c:994
@@ -697,26 +702,26 @@ msgid "XPM file has image height <= 0"
 msgstr "XBM-biletet har høgde mindre enn eller lik null"
 
 #: gdk-pixbuf/io-xpm.c:1253
-msgid "XPM file has invalid number of colors"
-msgstr "XPM-fila har ikkje gyldig tal fargar"
-
-#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM-fila har ugyldig tal på teikn per piksel"
 
-#: gdk-pixbuf/io-xpm.c:1279
-msgid "Can't read XPM colormap"
-msgstr "Kan ikkje lesa XPM-fargekart"
+#: gdk-pixbuf/io-xpm.c:1260
+msgid "XPM file has invalid number of colors"
+msgstr "XPM-fila har ikkje gyldig tal fargar"
 
-#: gdk-pixbuf/io-xpm.c:1317
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
 msgid "Can't allocate memory for loading XPM image"
 msgstr "Kan ikkje setja av minne til å lasta XPM-bilete"
 
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1295
+msgid "Can't read XPM colormap"
+msgstr "Kan ikkje lesa XPM-fargekart"
+
+#: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Klarte ikkje å skriva til mellombels fil medan XPM-fila vart lasta"
 
-#: gdk-pixbuf/io-xpm.c:1543
+#: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
 msgstr "XPM-bileteformatet"
 
@@ -942,7 +947,7 @@ msgstr ""
 "Klarte ikkje å leggja til bokmerke for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -980,7 +985,8 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1744
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr "Klarte ikkje å leggja til bokmerke for %s, fordi det ikkje er ei mappe."
+msgstr ""
+"Klarte ikkje å leggja til bokmerke for %s, fordi det ikkje er ei mappe."
 
 #: gtk/gtkfilechooserdefault.c:1849
 #, c-format
@@ -994,7 +1000,8 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:2431
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
-msgstr "Klarte ikkje å leggja til bokmerke for %s fordi det er eit ugyldig stinamn."
+msgstr ""
+"Klarte ikkje å leggja til bokmerke for %s fordi det er eit ugyldig stinamn."
 
 #: gtk/gtkfilechooserdefault.c:2572
 msgid "Shortcuts"
@@ -1057,62 +1064,62 @@ msgstr "Lagra i _mappe:"
 msgid "Create in _folder:"
 msgstr "Lag i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4069
 msgid "Can't change to folder because it isn't local"
 msgstr "Kan ikkje gå til mappa. Ho er ikkje lokal"
 
-#: gtk/gtkfilechooserdefault.c:4208
+#: gtk/gtkfilechooserdefault.c:4213
 msgid "Could not find the path"
 msgstr "Klarte ikkje finna stien"
 
-#: gtk/gtkfilechooserdefault.c:4569
+#: gtk/gtkfilechooserdefault.c:4574
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "snarvegen %s finst ikkje"
 
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5272
 msgid "Type name of new folder"
 msgstr "Skriv namnet på den nye mappa"
 
-#: gtk/gtkfilechooserdefault.c:5271
+#: gtk/gtkfilechooserdefault.c:5301
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:5273
+#: gtk/gtkfilechooserdefault.c:5303
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f Ki"
 
-#: gtk/gtkfilechooserdefault.c:5275
+#: gtk/gtkfilechooserdefault.c:5305
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f Mi"
 
-#: gtk/gtkfilechooserdefault.c:5277
+#: gtk/gtkfilechooserdefault.c:5307
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Gi"
 
-#: gtk/gtkfilechooserdefault.c:5322
+#: gtk/gtkfilechooserdefault.c:5352
 msgid "Today"
 msgstr "I dag"
 
-#: gtk/gtkfilechooserdefault.c:5324
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Yesterday"
 msgstr "I går"
 
-#: gtk/gtkfilechooserdefault.c:5335
+#: gtk/gtkfilechooserdefault.c:5365
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: gtk/gtkfilechooserdefault.c:5430
+#: gtk/gtkfilechooserdefault.c:5460
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Kan ikkje gå til den oppgjevne mappa. Stien er ugyldig."
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5537
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1121,15 +1128,15 @@ msgstr ""
 "Kunne ikkje merka %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5546
+#: gtk/gtkfilechooserdefault.c:5576
 msgid "Open Location"
 msgstr "Opna adresse"
 
-#: gtk/gtkfilechooserdefault.c:5553
+#: gtk/gtkfilechooserdefault.c:5583
 msgid "Save in Location"
 msgstr "Lagra i adresse"
 
-#: gtk/gtkfilechooserdefault.c:5572
+#: gtk/gtkfilechooserdefault.c:5602
 msgid "_Location:"
 msgstr "_Adresse:"
 
@@ -1175,7 +1182,8 @@ msgstr "_Gje fila nytt namn"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappenamnet «%s» inneheld symbol som ikkje er tillatne i filnamn"
 
 #: gtk/gtkfilesel.c:1441
@@ -1345,7 +1353,8 @@ msgstr "Klarte ikkje finna standardikon til %s"
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr "Namnet «%s» er ikkje gyldig. Det inneheld teiknet «%s». Prøv eit anna namn."
+msgstr ""
+"Namnet «%s» er ikkje gyldig. Det inneheld teiknet «%s». Prøv eit anna namn."
 
 #: gtk/gtkfilesystemunix.c:1438 gtk/gtkfilesystemwin32.c:923
 #, c-format
@@ -1962,4 +1971,3 @@ msgstr "X-inndatametode"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Klarte ikkje å henta informasjon om fila «%s»: %s"
-

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
+"POT-Creation-Date: 2004-09-18 14:22-0400\n"
 "PO-Revision-Date: 2004-07-25 00:24+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -263,12 +263,12 @@ msgstr "GIF 画像は切りつめられたか、不完全になっています"
 msgid "The GIF image format"
 msgstr "GIF 画像形式"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "アイコンを読み込むためのメモリが足りません"
 
-#: gdk-pixbuf/io-ico.c:256
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "アイコンのヘッダがおかしいです"
 
@@ -280,32 +280,32 @@ msgstr "アイコンの幅が 0 です"
 msgid "Icon has zero height"
 msgstr "アイコンの高さが 0 です"
 
-#: gdk-pixbuf/io-ico.c:347
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr "圧縮アイコンはサポートされていません"
 
-#: gdk-pixbuf/io-ico.c:380
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "サポートしていない種類のアイコンです"
 
-#: gdk-pixbuf/io-ico.c:474
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "アイコン・ファイルを読み込むためのメモリが足りません"
 
-#: gdk-pixbuf/io-ico.c:939
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr "アイコンとして保存するには画像が大きすぎます"
 
-#: gdk-pixbuf/io-ico.c:950
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr "カーソルのホットスポットより外側の画像です"
 
-#: gdk-pixbuf/io-ico.c:973
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "アイコン・ファイルとしてサポートされない色深度です: %d"
 
-#: gdk-pixbuf/io-ico.c:1202
+#: gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
 msgstr "ICO 画像形式"
 
@@ -327,12 +327,12 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "サポートしていない JPEG のカラー・スペースです (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
-#: gdk-pixbuf/io-jpeg.c:950
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG 画像を読み込むためのメモリを確保できませんでした"
 
-#: gdk-pixbuf/io-jpeg.c:893
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -341,14 +341,14 @@ msgstr ""
 "JPEG の \"クオリティ\" は 0〜100 の値にして下さい。値 '%s' を解析できませんで"
 "した"
 
-#: gdk-pixbuf/io-jpeg.c:908
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG の \"クオリティ\" は 0〜100 の値にして下さい。値 '%d' は確保されません"
 
-#: gdk-pixbuf/io-jpeg.c:1069
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr "JPEG 画像形式"
 
@@ -706,26 +706,26 @@ msgid "XPM file has image height <= 0"
 msgstr "XPM ファイルの画像の高さが 0 以下です"
 
 #: gdk-pixbuf/io-xpm.c:1253
-msgid "XPM file has invalid number of colors"
-msgstr "XPM ファイルの色の数がおかしいです"
-
-#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM のピクセル当たりの文字数がおかしいです"
 
-#: gdk-pixbuf/io-xpm.c:1279
-msgid "Can't read XPM colormap"
-msgstr "XPM のカラーマップを読めません"
+#: gdk-pixbuf/io-xpm.c:1260
+msgid "XPM file has invalid number of colors"
+msgstr "XPM ファイルの色の数がおかしいです"
 
-#: gdk-pixbuf/io-xpm.c:1317
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
 msgid "Can't allocate memory for loading XPM image"
 msgstr "XPM 画像を読み込むためのメモリを確保できません"
 
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1295
+msgid "Can't read XPM colormap"
+msgstr "XPM のカラーマップを読めません"
+
+#: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "XPM 画像を読み込む際に一時ファイルへの書き込みに失敗しました"
 
-#: gdk-pixbuf/io-xpm.c:1543
+#: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
 msgstr "XPM 画像形式"
 
@@ -947,7 +947,7 @@ msgstr ""
 "%s のブックマークに追加できませんでした:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1062,61 +1062,61 @@ msgstr "フォルダの中に保存(_F):"
 msgid "Create in _folder:"
 msgstr "フォルダの中に作成(_F):"
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4069
 msgid "Can't change to folder because it isn't local"
 msgstr "ローカルではないので、指定したフォルダへ移動できません。"
 
-#: gtk/gtkfilechooserdefault.c:4208
+#: gtk/gtkfilechooserdefault.c:4213
 msgid "Could not find the path"
 msgstr "パスが見つかりませんでした"
 
-#: gtk/gtkfilechooserdefault.c:4569
+#: gtk/gtkfilechooserdefault.c:4574
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "ショートカット %s は存在しません"
 
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5272
 msgid "Type name of new folder"
 msgstr "新しいフォルダの種類"
 
-#: gtk/gtkfilechooserdefault.c:5271
+#: gtk/gtkfilechooserdefault.c:5301
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d バイト"
 
-#: gtk/gtkfilechooserdefault.c:5273
+#: gtk/gtkfilechooserdefault.c:5303
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f Kバイト"
 
-#: gtk/gtkfilechooserdefault.c:5275
+#: gtk/gtkfilechooserdefault.c:5305
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f Mバイト"
 
-#: gtk/gtkfilechooserdefault.c:5277
+#: gtk/gtkfilechooserdefault.c:5307
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Gバイト"
 
-#: gtk/gtkfilechooserdefault.c:5322
+#: gtk/gtkfilechooserdefault.c:5352
 msgid "Today"
 msgstr "今日"
 
-#: gtk/gtkfilechooserdefault.c:5324
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Yesterday"
 msgstr "昨日"
 
-#: gtk/gtkfilechooserdefault.c:5335
+#: gtk/gtkfilechooserdefault.c:5365
 msgid "Unknown"
 msgstr "不明"
 
-#: gtk/gtkfilechooserdefault.c:5430
+#: gtk/gtkfilechooserdefault.c:5460
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "パス名が正しくないので、指定したフォルダへ移動できません。"
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5537
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1125,15 +1125,15 @@ msgstr ""
 "%s を選択できませんでした:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5546
+#: gtk/gtkfilechooserdefault.c:5576
 msgid "Open Location"
 msgstr "指定した場所を開きます"
 
-#: gtk/gtkfilechooserdefault.c:5553
+#: gtk/gtkfilechooserdefault.c:5583
 msgid "Save in Location"
 msgstr "指定した場所へ保存します"
 
-#: gtk/gtkfilechooserdefault.c:5572
+#: gtk/gtkfilechooserdefault.c:5602
 msgid "_Location:"
 msgstr "場所(_L):"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
+"POT-Creation-Date: 2004-09-18 14:22-0400\n"
 "PO-Revision-Date: 2004-03-15 19:30-0600\n"
 "Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
@@ -247,12 +247,12 @@ msgstr "แฟ้ม GIF ไม่สมบูรณ์"
 msgid "The GIF image format"
 msgstr "แฟ้มรูปชนิด GIF"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูปไอคอน"
 
-#: gdk-pixbuf/io-ico.c:256
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "หัวข้อมูลไอคอนเสีย"
 
@@ -264,32 +264,32 @@ msgstr "ไอคอนมีความกว้างศูนย์"
 msgid "Icon has zero height"
 msgstr "ไอคอนมีความสูงศูนย์"
 
-#: gdk-pixbuf/io-ico.c:347
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr "ไม่รองรับไอคอนแบบที่ถูกบีบอัด"
 
-#: gdk-pixbuf/io-ico.c:380
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "ไม่รองรับไอคอนชนิดนี้"
 
-#: gdk-pixbuf/io-ico.c:474
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "หน่วยความจำไม่พอที่จะอ่านแฟ้ม ICO"
 
-#: gdk-pixbuf/io-ico.c:939
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr "รูปใหญ่เกินไปสำหรับแฟ้มชนิด ICO"
 
-#: gdk-pixbuf/io-ico.c:950
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr "จุดเล็งของเคอร์เซอร์อยู่นอกรูป"
 
-#: gdk-pixbuf/io-ico.c:973
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "ความลึกที่ไม่รองรับสำหรับแฟ้ม ICO: %d"
 
-#: gdk-pixbuf/io-ico.c:1202
+#: gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
 msgstr "แฟ้มรูปชนิด ICO"
 
@@ -309,25 +309,25 @@ msgstr "หน่วยความจำไม่พอสำหรับอ่
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ไม่รองรับห้วงสีนี้สำหรับ JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
-#: gdk-pixbuf/io-jpeg.c:950
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป JPEG นี้"
 
-#: gdk-pixbuf/io-jpeg.c:893
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "คุณภาพของรูป JPEG ต้องอยู่ระหว่าง 0 และ 100  ค่า '%s' ที่ตั้งใช้ไม่ได้"
 
-#: gdk-pixbuf/io-jpeg.c:908
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "คุณภาพของรูป JPEG ต้องอยู่ระหว่าง 0 และ 100  ค่า '%d' ที่ตั้งใช้ไม่ได้"
 
-#: gdk-pixbuf/io-jpeg.c:1069
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr "แฟ้มรูปชนิด JPEG"
 
@@ -685,26 +685,26 @@ msgid "XPM file has image height <= 0"
 msgstr "แฟ้ม XPM ตั้งค่าความสูงรูปน้อยกว่าศูนย์"
 
 #: gdk-pixbuf/io-xpm.c:1253
-msgid "XPM file has invalid number of colors"
-msgstr "แฟ้ม XPM ตั้งค่าจำนวนสีที่ใช้ไม่ได้"
-
-#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "แฟ้ม XPM ตั้งค่าไบต์ต่อพิกเซลที่ใช้ไม่ได้"
 
-#: gdk-pixbuf/io-xpm.c:1279
-msgid "Can't read XPM colormap"
-msgstr "อ่านตารางสีของ XPM ไม่สำเร็จ"
+#: gdk-pixbuf/io-xpm.c:1260
+msgid "XPM file has invalid number of colors"
+msgstr "แฟ้ม XPM ตั้งค่าจำนวนสีที่ใช้ไม่ได้"
 
-#: gdk-pixbuf/io-xpm.c:1317
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
 msgid "Can't allocate memory for loading XPM image"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป XPM"
 
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1295
+msgid "Can't read XPM colormap"
+msgstr "อ่านตารางสีของ XPM ไม่สำเร็จ"
+
+#: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "เขียนลงแฟ้มชั่วคราวไม่สำเร็จ ขณะอ่านรูป XBM"
 
-#: gdk-pixbuf/io-xpm.c:1543
+#: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
 msgstr "แฟ้มรูปชนิด XPM"
 
@@ -916,7 +916,7 @@ msgstr ""
 "ไม่สามารถเพิ่มที่คั่นหน้าสำหรับ %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1034,64 +1034,64 @@ msgstr "บันทึกในโฟ_ลเดอร์"
 msgid "Create in _folder:"
 msgstr "สร้างโฟ_ลเดอร์"
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4069
 #, fuzzy
 msgid "Can't change to folder because it isn't local"
 msgstr "ไปโฟลเดอร์ที่ตั้งไม่สำเร็จ เพราะเป็นตำแหน่งที่ใช้ไม่ได้"
 
-#: gtk/gtkfilechooserdefault.c:4208
+#: gtk/gtkfilechooserdefault.c:4213
 #, fuzzy
 msgid "Could not find the path"
 msgstr "บันทึกที่เหลือไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:4569
+#: gtk/gtkfilechooserdefault.c:4574
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "จุดเชื่อม %s ไม่มีอยู่จริง"
 
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5272
 msgid "Type name of new folder"
 msgstr "พิมพ์ชื่อของโฟลเดอร์ใหม่"
 
-#: gtk/gtkfilechooserdefault.c:5271
+#: gtk/gtkfilechooserdefault.c:5301
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d ไบต์"
 msgstr[1] "%d ไบต์"
 
-#: gtk/gtkfilechooserdefault.c:5273
+#: gtk/gtkfilechooserdefault.c:5303
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5275
+#: gtk/gtkfilechooserdefault.c:5305
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5277
+#: gtk/gtkfilechooserdefault.c:5307
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5322
+#: gtk/gtkfilechooserdefault.c:5352
 msgid "Today"
 msgstr "วันนี้"
 
-#: gtk/gtkfilechooserdefault.c:5324
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Yesterday"
 msgstr "เมื่อวาน"
 
-#: gtk/gtkfilechooserdefault.c:5335
+#: gtk/gtkfilechooserdefault.c:5365
 msgid "Unknown"
 msgstr "ไม่รู้จัก"
 
-#: gtk/gtkfilechooserdefault.c:5430
+#: gtk/gtkfilechooserdefault.c:5460
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "ไปโฟลเดอร์ที่ตั้งไม่สำเร็จ เพราะเป็นตำแหน่งที่ใช้ไม่ได้"
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5537
 #, fuzzy, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1100,16 +1100,16 @@ msgstr ""
 "ไม่สามารถสร้างโฟลเดอร์ %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5546
+#: gtk/gtkfilechooserdefault.c:5576
 msgid "Open Location"
 msgstr "เปิดตำแหน่ง"
 
-#: gtk/gtkfilechooserdefault.c:5553
+#: gtk/gtkfilechooserdefault.c:5583
 #, fuzzy
 msgid "Save in Location"
 msgstr "เปิดตำแหน่ง"
 
-#: gtk/gtkfilechooserdefault.c:5572
+#: gtk/gtkfilechooserdefault.c:5602
 msgid "_Location:"
 msgstr "ตำ_แหน่ง:"
 

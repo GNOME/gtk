@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
+"POT-Creation-Date: 2004-09-18 14:22-0400\n"
 "PO-Revision-Date: 2004-08-02 02:17+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -248,12 +248,12 @@ msgstr "GIF 文件被截断或是不完整。"
 msgid "The GIF image format"
 msgstr "GIF 图像格式"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "内存不足以载入图标"
 
-#: gdk-pixbuf/io-ico.c:256
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "图标头无效"
 
@@ -265,32 +265,32 @@ msgstr "图标宽度为零"
 msgid "Icon has zero height"
 msgstr "图标高度为零"
 
-#: gdk-pixbuf/io-ico.c:347
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr "不支持压缩图标"
 
-#: gdk-pixbuf/io-ico.c:380
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "不支持的图标类型"
 
-#: gdk-pixbuf/io-ico.c:474
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "内存不足以载入 ICO 文件"
 
-#: gdk-pixbuf/io-ico.c:939
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr "图像太大，无法另存为 ICO"
 
-#: gdk-pixbuf/io-ico.c:950
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr "光标热点位于图像外"
 
-#: gdk-pixbuf/io-ico.c:973
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "不支持的 ICO 文件深度：%d"
 
-#: gdk-pixbuf/io-ico.c:1202
+#: gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
 msgstr "ICO 图像格式"
 
@@ -310,25 +310,25 @@ msgstr "内存不足以载入图像，试试关闭其它应用程序来释放内
 msgid "Unsupported JPEG color space (%s)"
 msgstr "不支持的 JPEG 颜色空间(%s)"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
-#: gdk-pixbuf/io-jpeg.c:950
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "无法分配内存来载入 JPEG 文件"
 
-#: gdk-pixbuf/io-jpeg.c:893
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "JPEG 质量一定要在 0 至 100 之间；无法解析数值“%s”。"
 
-#: gdk-pixbuf/io-jpeg.c:908
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG 质量一定要在 0 至 100 之间；不允许使用数值“%d”。"
 
-#: gdk-pixbuf/io-jpeg.c:1069
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr "JPEG 图像格式"
 
@@ -681,26 +681,26 @@ msgid "XPM file has image height <= 0"
 msgstr "XPM 文件图像高度 <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1253
-msgid "XPM file has invalid number of colors"
-msgstr "XPM 文件图像颜色数目不正确"
-
-#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM 每个像素占用的字节数目无效"
 
-#: gdk-pixbuf/io-xpm.c:1279
-msgid "Can't read XPM colormap"
-msgstr "无法读入 XPM 色彩表"
+#: gdk-pixbuf/io-xpm.c:1260
+msgid "XPM file has invalid number of colors"
+msgstr "XPM 文件图像颜色数目不正确"
 
-#: gdk-pixbuf/io-xpm.c:1317
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
 msgid "Can't allocate memory for loading XPM image"
 msgstr "无法分配内存来载入 XPM 图像"
 
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1295
+msgid "Can't read XPM colormap"
+msgstr "无法读入 XPM 色彩表"
+
+#: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "载入 XPM 图像时写入临时文件失败"
 
-#: gdk-pixbuf/io-xpm.c:1543
+#: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
 msgstr "XPM 图像格式"
 
@@ -914,7 +914,7 @@ msgstr ""
 "无法为 %s 添加书签：\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1029,61 +1029,61 @@ msgstr "保存于文件夹(_F)："
 msgid "Create in _folder:"
 msgstr "创建于文件夹(_F)："
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4069
 msgid "Can't change to folder because it isn't local"
 msgstr "无法更改文件夹，因为该文件夹并非本地"
 
-#: gtk/gtkfilechooserdefault.c:4208
+#: gtk/gtkfilechooserdefault.c:4213
 msgid "Could not find the path"
 msgstr "找不到路径"
 
-#: gtk/gtkfilechooserdefault.c:4569
+#: gtk/gtkfilechooserdefault.c:4574
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "快捷方式 %s 不存在"
 
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5272
 msgid "Type name of new folder"
 msgstr "输入新建文件夹的类型"
 
-#: gtk/gtkfilechooserdefault.c:5271
+#: gtk/gtkfilechooserdefault.c:5301
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d 字节"
 
-#: gtk/gtkfilechooserdefault.c:5273
+#: gtk/gtkfilechooserdefault.c:5303
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5275
+#: gtk/gtkfilechooserdefault.c:5305
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5277
+#: gtk/gtkfilechooserdefault.c:5307
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5322
+#: gtk/gtkfilechooserdefault.c:5352
 msgid "Today"
 msgstr "今天"
 
-#: gtk/gtkfilechooserdefault.c:5324
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Yesterday"
 msgstr "昨天"
 
-#: gtk/gtkfilechooserdefault.c:5335
+#: gtk/gtkfilechooserdefault.c:5365
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/gtkfilechooserdefault.c:5430
+#: gtk/gtkfilechooserdefault.c:5460
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "无法更改为您指定的文件夹，因为该文件夹的路径无效。"
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5537
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1092,15 +1092,15 @@ msgstr ""
 "无法选择 %s：\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5546
+#: gtk/gtkfilechooserdefault.c:5576
 msgid "Open Location"
 msgstr "打开位置"
 
-#: gtk/gtkfilechooserdefault.c:5553
+#: gtk/gtkfilechooserdefault.c:5583
 msgid "Save in Location"
 msgstr "保存于位置"
 
-#: gtk/gtkfilechooserdefault.c:5572
+#: gtk/gtkfilechooserdefault.c:5602
 msgid "_Location:"
 msgstr "位置(_L)："
 

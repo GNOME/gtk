@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
+"POT-Creation-Date: 2004-09-18 14:22-0400\n"
 "PO-Revision-Date: 2004-03-30 17:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Afrikaans <translate-discuss-af@lists.sourceforge.net>\n"
@@ -259,12 +259,12 @@ msgstr "GIF-beeld was afgeknot of onvolledig."
 msgid "The GIF image format"
 msgstr "Die GIF-beeldformaat"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "Nie genoeg geheue om ikoon te laai nie"
 
-#: gdk-pixbuf/io-ico.c:256
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "Ongeldige kopteks in ikoon"
 
@@ -276,32 +276,32 @@ msgstr "Ikoon het zero wydte"
 msgid "Icon has zero height"
 msgstr "Ikoon het zero hoogte"
 
-#: gdk-pixbuf/io-ico.c:347
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr "Ingepakte ikone word nie ondersteun nie"
 
-#: gdk-pixbuf/io-ico.c:380
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "Onondersteunde ikoon-tipe"
 
-#: gdk-pixbuf/io-ico.c:474
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "Nie genoeg geheue om ICO-lêer te laai nie"
 
-#: gdk-pixbuf/io-ico.c:939
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr "Beeld te groot om as ICO gestoor te word"
 
-#: gdk-pixbuf/io-ico.c:950
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr "Wyser-responskol buite beeld"
 
-#: gdk-pixbuf/io-ico.c:973
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Onondersteunde diepte vir ICO-lêer: %d"
 
-#: gdk-pixbuf/io-ico.c:1202
+#: gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
 msgstr "Die ICO-beeldformaat"
 
@@ -323,12 +323,12 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Onondersteunde JPEG-kleurspasie (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
-#: gdk-pixbuf/io-jpeg.c:950
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Kon nie geheue toewys vir laai van JPEG-lêer nie"
 
-#: gdk-pixbuf/io-jpeg.c:893
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -337,7 +337,7 @@ msgstr ""
 "JPEG kwaliteit moet 'n waarde tussen 0 en 100 wees; waarde '%s' kon nie "
 "ontleedword nie."
 
-#: gdk-pixbuf/io-jpeg.c:908
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -345,7 +345,7 @@ msgstr ""
 "JPEG kwaliteit moet 'n waarde tussen 0 en 100 wees; waarde '%d' word nie "
 "toegelaat nie."
 
-#: gdk-pixbuf/io-jpeg.c:1069
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr "Die JPEG-beeldformaat"
 
@@ -702,26 +702,26 @@ msgid "XPM file has image height <= 0"
 msgstr "XPM-lêer het beeldhoogte <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1253
-msgid "XPM file has invalid number of colors"
-msgstr "XPM-lêer het 'n ongeldige aantal kleure"
-
-#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM het 'n ongeldige hoeveelheid aantal karakters per pixel"
 
-#: gdk-pixbuf/io-xpm.c:1279
-msgid "Can't read XPM colormap"
-msgstr "Kan nie XPM-kleurkaart lees nie"
+#: gdk-pixbuf/io-xpm.c:1260
+msgid "XPM file has invalid number of colors"
+msgstr "XPM-lêer het 'n ongeldige aantal kleure"
 
-#: gdk-pixbuf/io-xpm.c:1317
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
 msgid "Can't allocate memory for loading XPM image"
 msgstr "Kan nie geheue vir laai van XPM-beeld toewys nie"
 
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1295
+msgid "Can't read XPM colormap"
+msgstr "Kan nie XPM-kleurkaart lees nie"
+
+#: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Kon nie na tydelike lêer skryf tydens laai van XPM-beeld nie"
 
-#: gdk-pixbuf/io-xpm.c:1543
+#: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
 msgstr "Die XPM-beeldformaat"
 
@@ -945,7 +945,7 @@ msgstr ""
 "Kon nie 'n boekmerk byvoeg vir %s nie:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1062,68 +1062,68 @@ msgstr "Stoor in _vouer:"
 msgid "Create in _folder:"
 msgstr "Skep in _vouer:"
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4069
 #, fuzzy
 msgid "Can't change to folder because it isn't local"
 msgstr ""
 "Kan nie verander na die vouer deur jou gespesifiseer nie,aangesien dit 'n "
 "ongeldige pad is."
 
-#: gtk/gtkfilechooserdefault.c:4208
+#: gtk/gtkfilechooserdefault.c:4213
 #, fuzzy
 msgid "Could not find the path"
 msgstr "Kon nie die res stoor nie"
 
-#: gtk/gtkfilechooserdefault.c:4569
+#: gtk/gtkfilechooserdefault.c:4574
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "kortpad %s bestaan nie"
 
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5272
 msgid "Type name of new folder"
 msgstr "Tik naam van nuwe vouer"
 
-#: gtk/gtkfilechooserdefault.c:5271
+#: gtk/gtkfilechooserdefault.c:5301
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d greep"
 msgstr[1] "%d grepe"
 
-#: gtk/gtkfilechooserdefault.c:5273
+#: gtk/gtkfilechooserdefault.c:5303
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5275
+#: gtk/gtkfilechooserdefault.c:5305
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5277
+#: gtk/gtkfilechooserdefault.c:5307
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5322
+#: gtk/gtkfilechooserdefault.c:5352
 msgid "Today"
 msgstr "Vandag"
 
-#: gtk/gtkfilechooserdefault.c:5324
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Yesterday"
 msgstr "Gister"
 
-#: gtk/gtkfilechooserdefault.c:5335
+#: gtk/gtkfilechooserdefault.c:5365
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: gtk/gtkfilechooserdefault.c:5430
+#: gtk/gtkfilechooserdefault.c:5460
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Kan nie verander na die vouer deur jou gespesifiseer nie, aangesien dit 'n "
 "ongeldige pad is."
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5537
 #, fuzzy, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1132,16 +1132,16 @@ msgstr ""
 "Kon nie vouer %s skep nie:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5546
+#: gtk/gtkfilechooserdefault.c:5576
 msgid "Open Location"
 msgstr "Open Ligging"
 
-#: gtk/gtkfilechooserdefault.c:5553
+#: gtk/gtkfilechooserdefault.c:5583
 #, fuzzy
 msgid "Save in Location"
 msgstr "Open Ligging"
 
-#: gtk/gtkfilechooserdefault.c:5572
+#: gtk/gtkfilechooserdefault.c:5602
 msgid "_Location:"
 msgstr "_Ligging:"
 

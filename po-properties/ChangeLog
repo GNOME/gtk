@@ -1,3 +1,7 @@
+2004-09-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.4.10 ===
+
 2004-09-12  Abel Cheung  <maddog@linuxhall.org>
 
 	* zh_TW.po: Updated traditional Chinese translation by GNOME HK Team.
@@ -11,9 +15,9 @@
 	* hu.po: Updated Hungarian translation by Gabor Kelemen.
 
 2004-09-08  David Lodge <dave@cirt.net>
-                                                                                
-        * ang.po: Updated Olde Englisc translation.
-                                                                                
+
+	* ang.po: Updated Olde Englisc translation.
+
 2004-09-07  Adam Weinberger  <adamw@gnome.org>
 
 	* en_CA.po: Updated Canadian English translation.

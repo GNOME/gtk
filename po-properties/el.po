@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-10 11:26-0300\n"
+"POT-Creation-Date: 2004-09-18 14:23-0400\n"
 "PO-Revision-Date: 2004-09-10 11:44-0300\n"
 "Last-Translator: Nikos Charonitakis <frolix68@yahoo.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -980,8 +980,7 @@ msgstr "Οικόγενεια γραμματοσειράς"
 #: gtk/gtkcellrenderertext.c:285 gtk/gtktexttag.c:300
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr ""
-"Όνομα της οικογένειας γραμματοσειράς, π.χ. Sans, Helvetica, Times, "
-"Monospace"
+"Όνομα της οικογένειας γραμματοσειράς, π.χ. Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
 #: gtk/gtktexttag.c:307
@@ -1096,7 +1095,8 @@ msgstr "Ορισμός οικογένειας γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:411 gtk/gtktexttag.c:534
 msgid "Whether this tag affects the font family"
-msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει την οικογένεια γραμματοσειράς"
+msgstr ""
+"Αν αυτή η αναγνωριστική ετικέτα επηρεάζει την οικογένεια γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:537
 msgid "Font style set"
@@ -1129,7 +1129,8 @@ msgstr "Ορισμός τεντώματος γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:427 gtk/gtktexttag.c:550
 msgid "Whether this tag affects the font stretch"
-msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει το τέντωμα της γραμματοσειράς"
+msgstr ""
+"Αν αυτή η αναγνωριστική ετικέτα επηρεάζει το τέντωμα της γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:430 gtk/gtktexttag.c:553
 msgid "Font size set"
@@ -1137,7 +1138,8 @@ msgstr "Ορισμός μεγέθους γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:431 gtk/gtktexttag.c:554
 msgid "Whether this tag affects the font size"
-msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει το μέγεθος της γραμματοσειράς"
+msgstr ""
+"Αν αυτή η αναγνωριστική ετικέτα επηρεάζει το μέγεθος της γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtktexttag.c:557
 msgid "Font scale set"
@@ -1145,7 +1147,8 @@ msgstr "Ορισμός κλίμακας γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:435 gtk/gtktexttag.c:558
 msgid "Whether this tag scales the font size by a factor"
-msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει την κλίμακα της γραμματοσειράς"
+msgstr ""
+"Αν αυτή η αναγνωριστική ετικέτα επηρεάζει την κλίμακα της γραμματοσειράς"
 
 #: gtk/gtkcellrenderertext.c:438 gtk/gtktexttag.c:577
 msgid "Rise set"
@@ -1699,7 +1702,9 @@ msgstr "Γραφικό συστατικό ετικέτας"
 
 #: gtk/gtkexpander.c:240
 msgid "A widget to display in place of the usual expander label"
-msgstr "Ένα γραφικό συστατικό που θα εμφανίζεται στην θέση της σύνηθους ετικέτας expander"
+msgstr ""
+"Ένα γραφικό συστατικό που θα εμφανίζεται στην θέση της σύνηθους ετικέτας "
+"expander"
 
 #: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
 msgid "Expander Size"

@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-16 04:09+0200\n"
+"POT-Creation-Date: 2004-09-18 14:22-0400\n"
 "PO-Revision-Date: 2004-09-17 02:08-0300\n"
 "Last-Translator: Afonso Celso Medina <medina@maua.,br>\n"
 "Language-Team: Português/Brasil <gnome-l10n-br@listas.cipsga.org.br>\n"
@@ -47,7 +47,8 @@ msgstr "O arquivo de imagem '%s' não contém dados"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Falha ao carregar a imagem '%s': razão desconhecida, provavelmente o arquivo "
 "está corrompido"
@@ -102,7 +103,8 @@ msgstr "Erro ao gravar no arquivo de imagem: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1202 gdk-pixbuf/gdk-pixbuf-io.c:1318
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Essa compilação do gdk-pixbuf não suporta salvar o formato de imagem: %s"
+msgstr ""
+"Essa compilação do gdk-pixbuf não suporta salvar o formato de imagem: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1231
 msgid "Insufficient memory to save image to callback"
@@ -355,7 +357,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "A qualidade JPEG deve ser um valor entre 0 e 100; o valor '%d' não é "
 "permitido."
@@ -427,7 +430,8 @@ msgstr "O PNG transformado não é RGB nem RGBA."
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "O PNG transformado tem um número de canais não suportado, deve ser 3 ou 4."
+msgstr ""
+"O PNG transformado tem um número de canais não suportado, deve ser 3 ou 4."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -457,7 +461,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Erro fatal carregando arquivo de imagem PNG: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Chaves para blocos de PNG text devem ter ao menos 1 e no máximo 79 "
 "caracteres."
@@ -468,7 +473,8 @@ msgstr "Chaves para blocos de PNG text devem ser caracteres ASCII."
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 "O valor para blocos PNG text %s não pode ser convertido para a codificação "
 "ISO-8859-1."
@@ -632,7 +638,8 @@ msgstr "Formato de imagem Targa"
 
 #: gdk-pixbuf/io-tiff.c:175
 msgid "Could not get image width (bad TIFF file)"
-msgstr "Não foi possível conseguir a largura da imagem (arquivo TIFF defeituoso)"
+msgstr ""
+"Não foi possível conseguir a largura da imagem (arquivo TIFF defeituoso)"
 
 #: gdk-pixbuf/io-tiff.c:182
 msgid "Could not get image height (bad TIFF file)"
@@ -701,7 +708,8 @@ msgstr "Memória insuficiente para carregar arquivo de imagem XBM"
 
 #: gdk-pixbuf/io-xbm.c:441
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Falha ao escrever para arquivo temporário enquanto carregava uma imagem XBM"
+msgstr ""
+"Falha ao escrever para arquivo temporário enquanto carregava uma imagem XBM"
 
 #: gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
@@ -727,17 +735,13 @@ msgstr "O XPM tem um número inválido de caracteres por pixel"
 msgid "XPM file has invalid number of colors"
 msgstr "O arquivo XPM tem um número de cores inválido"
 
-#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Impossível alocar memória para carregar imagem XPM"
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
+msgid "Can't allocate memory for loading XPM image"
+msgstr "Não foi possível alocar memória para carregar imagem XPM"
 
 #: gdk-pixbuf/io-xpm.c:1295
 msgid "Can't read XPM colormap"
 msgstr "Impossível ler o mapa de cores XPM"
-
-#: gdk-pixbuf/io-xpm.c:1333
-msgid "Can't allocate memory for loading XPM image"
-msgstr "Não foi possível alocar memória para carregar imagem XPM"
 
 #: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
@@ -968,7 +972,7 @@ msgstr ""
 "Impossível adicionar um marcador para %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1006,7 +1010,8 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1744
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr "Não foi possível adicionar um marcador para %s porque ele não é uma pasta."
+msgstr ""
+"Não foi possível adicionar um marcador para %s porque ele não é uma pasta."
 
 #: gtk/gtkfilechooserdefault.c:1849
 #, c-format
@@ -1085,64 +1090,64 @@ msgstr "Salvar na _pasta:"
 msgid "Create in _folder:"
 msgstr "Criar na _pasta:"
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4069
 msgid "Can't change to folder because it isn't local"
 msgstr "Não foi possível ir para a pasta porque ela não é local"
 
-#: gtk/gtkfilechooserdefault.c:4208
+#: gtk/gtkfilechooserdefault.c:4213
 msgid "Could not find the path"
 msgstr "Não foi possível achar o caminho"
 
-#: gtk/gtkfilechooserdefault.c:4569
+#: gtk/gtkfilechooserdefault.c:4574
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "o atalho %s não existe"
 
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5272
 msgid "Type name of new folder"
 msgstr "Digite o nome da nova pasta"
 
-#: gtk/gtkfilechooserdefault.c:5271
+#: gtk/gtkfilechooserdefault.c:5301
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:5273
+#: gtk/gtkfilechooserdefault.c:5303
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5275
+#: gtk/gtkfilechooserdefault.c:5305
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5277
+#: gtk/gtkfilechooserdefault.c:5307
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5322
+#: gtk/gtkfilechooserdefault.c:5352
 msgid "Today"
 msgstr "Hoje"
 
-#: gtk/gtkfilechooserdefault.c:5324
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Yesterday"
 msgstr "Ontem"
 
-#: gtk/gtkfilechooserdefault.c:5335
+#: gtk/gtkfilechooserdefault.c:5365
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/gtkfilechooserdefault.c:5430
+#: gtk/gtkfilechooserdefault.c:5460
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Impossível ir para a pasta que você especificou porque ela tem um caminho "
 "inválido."
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5537
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1151,15 +1156,15 @@ msgstr ""
 "Impossível selecionar %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5546
+#: gtk/gtkfilechooserdefault.c:5576
 msgid "Open Location"
 msgstr "Abrir Localização"
 
-#: gtk/gtkfilechooserdefault.c:5553
+#: gtk/gtkfilechooserdefault.c:5583
 msgid "Save in Location"
 msgstr "Salvar na Localização"
 
-#: gtk/gtkfilechooserdefault.c:5572
+#: gtk/gtkfilechooserdefault.c:5602
 msgid "_Location:"
 msgstr "_Localização:"
 
@@ -1205,7 +1210,8 @@ msgstr "_Renomear Arquivo"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "O nome de pasta \"%s\" contém símbolos que não são permitidos em nomes de "
 "arquivos"
@@ -1221,7 +1227,8 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
 msgid "You probably used symbols not allowed in filenames."
-msgstr "Provavelmente você utilizou símbolos não permitidos em nomes de arquivos."
+msgstr ""
+"Provavelmente você utilizou símbolos não permitidos em nomes de arquivos."
 
 #: gtk/gtkfilesel.c:1450
 #, c-format
@@ -1258,7 +1265,8 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1571 gtk/gtkfilesel.c:1692
 msgid "It probably contains symbols not allowed in filenames."
-msgstr "Provavelmente você utilizou símbolos não permitidos em nomes de arquivos."
+msgstr ""
+"Provavelmente você utilizou símbolos não permitidos em nomes de arquivos."
 
 #: gtk/gtkfilesel.c:1580
 #, c-format
@@ -2000,3 +2008,5 @@ msgstr "Método de Entrada do X"
 msgid "Could not get information for file '%s': %s"
 msgstr "Impossível obter informações sobre o arquivo '%s': %s"
 
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "Impossível alocar memória para carregar imagem XPM"

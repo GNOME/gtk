@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-17 04:06+0200\n"
+"POT-Creation-Date: 2004-09-18 14:22-0400\n"
 "PO-Revision-Date: 2004-09-17 10:00+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -32,7 +32,8 @@ msgstr "File '%s' nuk përmban të dhëna"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Leximi i figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i "
 "dëmtuar"
@@ -87,7 +88,8 @@ msgstr "Gabim gjatë shkrimit tek file i figurës: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1202 gdk-pixbuf/gdk-pixbuf-io.c:1318
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
+msgstr ""
+"Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1231
 msgid "Insufficient memory to save image to callback"
@@ -338,8 +340,10 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
 
 #: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
@@ -400,7 +404,8 @@ msgstr "Figura e transformuar në PNG ka gjerësi apo lartësi zero."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
+msgstr ""
+"Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
@@ -440,7 +445,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Gabim fatal gjatë leximit të file PNG: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Kyçet për segmentet e tekstit PNG duhet të kenë të paktën 1 dhe në maksimum "
 "79 simbole."
@@ -451,7 +457,8 @@ msgstr "Kyçet për segmentet e tekstit PNG duhet të jenë simbole ASCII."
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 "Vlera %s për segmentin e tekstit PNG nuk mund të konvertohet në familjen ISO-"
 "8859-1."
@@ -682,7 +689,8 @@ msgstr "Kujtesë e pamjaftueshme për ngarkimin e file XBM"
 
 #: gdk-pixbuf/io-xbm.c:441
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
+msgstr ""
+"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
 
 #: gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
@@ -708,21 +716,18 @@ msgstr "XPM ka numër të pavlefshëm simbolesh për pixel"
 msgid "XPM file has invalid number of colors"
 msgstr "File XPM ka numër të pavlefshëm ngjyrash"
 
-#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Nuk arrij të siguroj kujtesë të mjaftueshme për të ngarkuar figurën XPM"
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
+msgid "Can't allocate memory for loading XPM image"
+msgstr "Nuk arrij të siguroj kujtesë për ngarkimin e figurës XPM"
 
 #: gdk-pixbuf/io-xpm.c:1295
 msgid "Can't read XPM colormap"
 msgstr "I pamundur leximi i hartës së ngjyrave XPM"
 
-#: gdk-pixbuf/io-xpm.c:1333
-msgid "Can't allocate memory for loading XPM image"
-msgstr "Nuk arrij të siguroj kujtesë për ngarkimin e figurës XPM"
-
 #: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
+msgstr ""
+"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
 
 #: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
@@ -947,7 +952,7 @@ msgstr ""
 "I pamundur shtimi i një libërshënuesi për %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -985,7 +990,8 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1744
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr "I pamundur shtimi i një libërshënuesi për %s pasi nuk është një kartelë."
+msgstr ""
+"I pamundur shtimi i një libërshënuesi për %s pasi nuk është një kartelë."
 
 #: gtk/gtkfilechooserdefault.c:1849
 #, c-format
@@ -1064,64 +1070,64 @@ msgstr "Ruaje tek _kartela:"
 msgid "Create in _folder:"
 msgstr "Krijoje tek _kartela:"
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4069
 msgid "Can't change to folder because it isn't local"
 msgstr "I pamundur kalimi tek kartela pasi nuk është lokale"
 
-#: gtk/gtkfilechooserdefault.c:4208
+#: gtk/gtkfilechooserdefault.c:4213
 msgid "Could not find the path"
 msgstr "E pamundur gjetja e pozicionit"
 
-#: gtk/gtkfilechooserdefault.c:4569
+#: gtk/gtkfilechooserdefault.c:4574
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "shtegu %s nuk ekziston"
 
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5272
 msgid "Type name of new folder"
 msgstr "Shkruaj emrin e kartelës së re"
 
-#: gtk/gtkfilechooserdefault.c:5271
+#: gtk/gtkfilechooserdefault.c:5301
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:5273
+#: gtk/gtkfilechooserdefault.c:5303
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5275
+#: gtk/gtkfilechooserdefault.c:5305
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5277
+#: gtk/gtkfilechooserdefault.c:5307
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5322
+#: gtk/gtkfilechooserdefault.c:5352
 msgid "Today"
 msgstr "Sot"
 
-#: gtk/gtkfilechooserdefault.c:5324
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Yesterday"
 msgstr "Dje"
 
-#: gtk/gtkfilechooserdefault.c:5335
+#: gtk/gtkfilechooserdefault.c:5365
 msgid "Unknown"
 msgstr "Nuk njihet"
 
-#: gtk/gtkfilechooserdefault.c:5430
+#: gtk/gtkfilechooserdefault.c:5460
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "E pamundur lëvizja për tek kartela e dhënë nga ju pasi pozicioni i saj nuk "
 "është korrekt."
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5537
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1130,15 +1136,15 @@ msgstr ""
 "E pamundur zgjedhja e %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5546
+#: gtk/gtkfilechooserdefault.c:5576
 msgid "Open Location"
 msgstr "Hap pozicionin"
 
-#: gtk/gtkfilechooserdefault.c:5553
+#: gtk/gtkfilechooserdefault.c:5583
 msgid "Save in Location"
 msgstr "Ruaje tek Pozicioni"
 
-#: gtk/gtkfilechooserdefault.c:5572
+#: gtk/gtkfilechooserdefault.c:5602
 msgid "_Location:"
 msgstr "_Pozicioni:"
 
@@ -1184,7 +1190,8 @@ msgstr "_Riemërto File"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Emri i kartelës \"%s\" përmban simbole që nuk lejohen në emrat e files"
 
 #: gtk/gtkfilesel.c:1441
@@ -1571,7 +1578,8 @@ msgstr "E pamundur gjetja e file së figurës në pixmap_path: \"%s\""
 #: gtk/gtkrc.c:3468
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
+msgstr ""
+"Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:285
@@ -1973,3 +1981,6 @@ msgstr "Metodë Futjeje për X"
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacioneve për file '%s': %s"
 
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr ""
+#~ "Nuk arrij të siguroj kujtesë të mjaftueshme për të ngarkuar figurën XPM"

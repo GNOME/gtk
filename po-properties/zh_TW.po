@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-08 12:06+0200\n"
+"POT-Creation-Date: 2004-09-18 14:23-0400\n"
 "PO-Revision-Date: 2004-09-12 22:00+0800\n"
 "Last-Translator: Li-Jen Hsin <hsin@med.cgu.edu.tw>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -174,7 +174,8 @@ msgstr "重要的"
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr "是否該指令被視為重要指令。當設為 TRUE 時，代理此指令的工具列項目會依"
+msgstr ""
+"是否該指令被視為重要指令。當設為 TRUE 時，代理此指令的工具列項目會依"
 "GTK_TOOLBAR_BOTH_HORIZ 模式顯示對應文字。"
 
 #: gtk/gtkaction.c:250
@@ -280,9 +281,7 @@ msgstr "水平對齊設定"
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
-msgstr ""
-"子元件在提供的空間裡的水平對齊方式。0.0 表示靠左對齊，1.0 表示靠"
-"右對齊"
+msgstr "子元件在提供的空間裡的水平對齊方式。0.0 表示靠左對齊，1.0 表示靠右對齊"
 
 #: gtk/gtkalignment.c:127
 msgid "Vertical alignment"
@@ -292,9 +291,7 @@ msgstr "垂直對齊設定"
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
-msgstr ""
-"子元件在提供的空間裡的垂直對齊方式。0.0 表示靠頂對齊，1.0 表示"
-"靠底對齊"
+msgstr "子元件在提供的空間裡的垂直對齊方式。0.0 表示靠頂對齊，1.0 表示靠底對齊"
 
 #: gtk/gtkalignment.c:136
 msgid "Horizontal scale"
@@ -317,8 +314,8 @@ msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
-"指定當提供的垂直空間大於副元件所需的空間時，副元件會使用多少剩餘的空"
-"間。0.0 表示不使用，1.0 表示全部使用"
+"指定當提供的垂直空間大於副元件所需的空間時，副元件會使用多少剩餘的空間。0.0 "
+"表示不使用，1.0 表示全部使用"
 
 #: gtk/gtkalignment.c:163
 msgid "Top Padding"
@@ -441,8 +438,8 @@ msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
 msgstr ""
-"如何呈現按鈕方塊中的按鈕。可使用的值為『預設』、『分散』、『邊緣』、"
-"『開頭』及『結尾』"
+"如何呈現按鈕方塊中的按鈕。可使用的值為『預設』、『分散』、『邊緣』、『開頭』"
+"及『結尾』"
 
 #: gtk/gtkbbox.c:165
 msgid "Secondary"
@@ -488,8 +485,8 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
-"當分配了額外的空間給子元件時，該空間應增加於子元件內部的尺寸，還是"
-"作為元件外部填充使用"
+"當分配了額外的空間給子元件時，該空間應增加於子元件內部的尺寸，還是作為元件外"
+"部填充使用"
 
 #: gtk/gtkbox.c:161
 msgid "Padding"
@@ -508,8 +505,7 @@ msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
-"GtkPackType 意指子元件的排列方式是從主元件的開始位置，還是從結束位置"
-"進行排列"
+"GtkPackType 意指子元件的排列方式是從主元件的開始位置，還是從結束位置進行排列"
 
 #: gtk/gtkbox.c:175 gtk/gtknotebook.c:491 gtk/gtkpaned.c:239
 #: gtk/gtkruler.c:139
@@ -638,8 +634,7 @@ msgstr "日"
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
-msgstr "選取的日期(為 1 - 31 之間的數字，或為 0 表示解除選取目前選"
-"取的日期)"
+msgstr "選取的日期(為 1 - 31 之間的數字，或為 0 表示解除選取目前選取的日期)"
 
 #: gtk/gtkcalendar.c:493
 msgid "Show Heading"
@@ -1998,8 +1993,8 @@ msgid ""
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that"
 msgstr ""
-"標籤文字中每一行文字相對的排列方式。此設定並不會影響該文字標籤的配"
-"置位置。詳見 GtkMisc::xalign "
+"標籤文字中每一行文字相對的排列方式。此設定並不會影響該文字標籤的配置位置。詳"
+"見 GtkMisc::xalign "
 
 #: gtk/gtklabel.c:330
 msgid "Pattern"
@@ -2476,8 +2471,8 @@ msgid ""
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
 msgstr ""
-"若為 TRUE，GtkProgress 進入活動模式，代表他可以反應程序正處於進行狀態，"
-"但無法顯示已完成的進度。此模式通常在你無法測知全部的耗費時間時使用。"
+"若為 TRUE，GtkProgress 進入活動模式，代表他可以反應程序正處於進行狀態，但無法"
+"顯示已完成的進度。此模式通常在你無法測知全部的耗費時間時使用。"
 
 #: gtk/gtkprogress.c:138
 msgid "Show text"
@@ -2589,6 +2584,7 @@ msgid ""
 "is the current action of its group."
 msgstr ""
 "當此指令是該群組的目前指令時，gtk_radio_action_get_current_value() 所傳回值"
+
 #: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:112
 msgid "Group"
 msgstr "群組"
@@ -2660,8 +2656,7 @@ msgstr "箭頭水平偏離"
 #: gtk/gtkrange.c:341
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
-msgstr ""
-"當按鈕按下時要在水平方向移動多遠的距離"
+msgstr "當按鈕按下時要在水平方向移動多遠的距離"
 
 #: gtk/gtkrange.c:348
 msgid "Arrow Y Displacement"
@@ -2670,8 +2665,7 @@ msgstr "箭頭垂直偏離"
 #: gtk/gtkrange.c:349
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
-msgstr ""
-"當按鈕按下時要在垂直方向移動多遠的距離"
+msgstr "當按鈕按下時要在垂直方向移動多遠的距離"
 
 #: gtk/gtkruler.c:119
 msgid "Lower"
@@ -2841,7 +2835,8 @@ msgstr "雙擊間距"
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
-msgstr "代表雙擊的兩下按鍵之間可接受的最長距離 (像素)，如果再長則不視作雙擊處理"
+msgstr ""
+"代表雙擊的兩下按鍵之間可接受的最長距離 (像素)，如果再長則不視作雙擊處理"
 
 #: gtk/gtksettings.c:278
 msgid "Cursor Blink"
@@ -3262,9 +3257,8 @@ msgid ""
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
-"字型大小作為縮放比例，相對於預設文字大小。本屬性隨佈景主題等設定而改變，故建議使用。Pango"
-"預先定義了某些縮放比，例如 PANGO_SCALE_X_LARGE"
-
+"字型大小作為縮放比例，相對於預設文字大小。本屬性隨佈景主題等設定而改變，故建"
+"議使用。Pango預先定義了某些縮放比，例如 PANGO_SCALE_X_LARGE"
 
 #: gtk/gtktexttag.c:376 gtk/gtktextview.c:605
 msgid "Left, right, or center justification"
@@ -3623,8 +3617,8 @@ msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
 msgstr ""
-"若設置，在 label 屬性中的文字中含有(_)字元的下一個字母將被用來當作超出邊界選單的"
-"速記快捷鍵"
+"若設置，在 label 屬性中的文字中含有(_)字元的下一個字母將被用來當作超出邊界選"
+"單的速記快捷鍵"
 
 #: gtk/gtktoolbutton.c:195
 msgid "Widget to use as the item label"
@@ -3651,7 +3645,8 @@ msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 msgstr ""
-"是否工具列物件被視為重要的。若為 TRUE, 工具列按鈕以GTK_TOOLBAR_BOTH_HORIZ模式顯示文字"
+"是否工具列物件被視為重要的。若為 TRUE, 工具列按鈕以GTK_TOOLBAR_BOTH_HORIZ模式"
+"顯示文字"
 
 #: gtk/gtktreemodelsort.c:329
 msgid "TreeModelSort Model"
@@ -3905,15 +3900,13 @@ msgstr "描述整合 UI 的特定 XML 字串"
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport"
-msgstr ""
-"決定此視埠元件水平位置數值的 GtkAdjustment 值"
+msgstr "決定此視埠元件水平位置數值的 GtkAdjustment 值"
 
 #: gtk/gtkviewport.c:144
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
-msgstr ""
-"決定此視埠元件水平位置數值的 GtkAdjustment 值"
+msgstr "決定此視埠元件水平位置數值的 GtkAdjustment 值"
 
 #: gtk/gtkviewport.c:152
 msgid "Determines how the shadowed box around the viewport is drawn"
@@ -3943,8 +3936,7 @@ msgstr "指定寬度"
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
-msgstr ""
-"自行指定元件的寬度，使用 -1 則表示使用預設寬度"
+msgstr "自行指定元件的寬度，使用 -1 則表示使用預設寬度"
 
 #: gtk/gtkwidget.c:433
 msgid "Height request"
@@ -3954,8 +3946,7 @@ msgstr "指定高度"
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
-msgstr ""
-"自行指定元件的高度，使用 -1 則表示使用預設高度"
+msgstr "自行指定元件的高度，使用 -1 則表示使用預設高度"
 
 #: gtk/gtkwidget.c:443
 msgid "Whether the widget is visible"
@@ -4150,6 +4141,7 @@ msgid "Allow Shrink"
 msgstr "可縮小"
 
 #: gtk/gtkwindow.c:467
+#, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"

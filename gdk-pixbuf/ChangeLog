@@ -1,3 +1,7 @@
+2004-09-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.4.10 ===
+
 Thu Sep 16 23:24:36 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* io-xpm.c (pixbuf_create_from_xpm): Reuse existing message

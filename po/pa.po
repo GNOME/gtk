@@ -172,14 +172,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-4.pa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-16 12:07+0200\n"
+"POT-Creation-Date: 2004-09-18 14:22-0400\n"
 "PO-Revision-Date: 2004-09-16 19:10+0530\n"
 "Last-Translator: Amanpreet Singh Alam <aalam@redhat.com>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: Plural-Forms: Plural-Forms: nplurals=2; plural=(n != 1);\n\n"
+"Plural-Forms: Plural-Forms: Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"\n"
 "\n"
 "X-Generator: KBabel 1.3.1\n"
 
@@ -197,10 +198,11 @@ msgstr "ਚਿੱਤਰ ਫਾਇਲ '%s' ਵਿੱਚ ਕੋਈ ਡਾਟਾ �
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"ਚਿੱਤਰ '%s' ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: ਕਾਰਨ ਜਾਣਿਆ ਨਹੀ ਜਾ ਸਕਿਆ ਹੈ, ਸੰਭਵ ਹੈ "
-"ਕਿ ਚਿੱਤਰ ਫਾਇਲ ਨਿਕਾਰਾ ਹੈ"
+"ਚਿੱਤਰ '%s' ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: ਕਾਰਨ ਜਾਣਿਆ ਨਹੀ ਜਾ ਸਕਿਆ ਹੈ, ਸੰਭਵ ਹੈ ਕਿ ਚਿੱਤਰ ਫਾਇਲ "
+"ਨਿਕਾਰਾ ਹੈ"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:239
 #, c-format
@@ -208,8 +210,8 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"ਸਜੀਵਤਾ '%s' ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: ਕਾਰਨ ਜਾਣਿਆ ਨਹੀ ਜਾ ਸਕਿਆ ਹੈ, ਸੰਭਵ ਹੈ "
-"ਕਿ ਸਜੀਵਤਾ ਫਾਇਲ ਨਿਕਾਰਾ ਹੈ"
+"ਸਜੀਵਤਾ '%s' ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: ਕਾਰਨ ਜਾਣਿਆ ਨਹੀ ਜਾ ਸਕਿਆ ਹੈ, ਸੰਭਵ ਹੈ ਕਿ ਸਜੀਵਤਾ "
+"ਫਾਇਲ ਨਿਕਾਰਾ ਹੈ"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:415
 #, c-format
@@ -222,8 +224,7 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"ਚਿੱਤਰ- ਲੋਡਿੰਗ-ਮੈਡੀਊਲ %s ਦਾ ਦਰਿਸ਼ ਵਧੀਆ ਨਹੀ ਹੈ; ਸੰਭਵ ਹੈ ਕਿ ਇਹ ਵੱਖਰੇ "
-"ਜੀਟੀਕੇ(GTK) ਵਰਜਨ ਤੋ ਹੋਵੇ?"
+"ਚਿੱਤਰ- ਲੋਡਿੰਗ-ਮੈਡੀਊਲ %s ਦਾ ਦਰਿਸ਼ ਵਧੀਆ ਨਹੀ ਹੈ; ਸੰਭਵ ਹੈ ਕਿ ਇਹ ਵੱਖਰੇ ਜੀਟੀਕੇ(GTK) ਵਰਜਨ ਤੋ ਹੋਵੇ?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:625
 #, c-format
@@ -293,8 +294,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"ਅੰਦਰੂਨੀ ਗਲਤੀ: ਚਿੱਤਰ ਦੀ ਲੋਡਿੰਗ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਚਿੱਤਰ ਲੋਡਰ ਮੈਡੀਊਲ '%s' ਅਸਫਲ, "
-"ਪਰ ਗਲਤੀ ਦਾ ਕਾਰਨ ਇਹ ਦੱਸ ਨਹੀ ਸਕਿਆ"
+"ਅੰਦਰੂਨੀ ਗਲਤੀ: ਚਿੱਤਰ ਦੀ ਲੋਡਿੰਗ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਚਿੱਤਰ ਲੋਡਰ ਮੈਡੀਊਲ '%s' ਅਸਫਲ, ਪਰ ਗਲਤੀ ਦਾ ਕਾਰਨ "
+"ਇਹ ਦੱਸ ਨਹੀ ਸਕਿਆ"
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
@@ -410,8 +411,7 @@ msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
-"ਜੀਆਈਐਫ(GIF) ਚਿੱਤਰ ਕੋਲ ਗਲੋਬਲ ਰੰਗ-ਨਕਸਾ ਨਹੀ ਅਤੇ ਇਸ ਦੇ ਫਰੇਮ ਅੰਦਰ "
-"ਆਪਣਾ ਕੋਈ-ਸਥਾਨਿਕ ਨਹੀ ਹੈ।"
+"ਜੀਆਈਐਫ(GIF) ਚਿੱਤਰ ਕੋਲ ਗਲੋਬਲ ਰੰਗ-ਨਕਸਾ ਨਹੀ ਅਤੇ ਇਸ ਦੇ ਫਰੇਮ ਅੰਦਰ ਆਪਣਾ ਕੋਈ-ਸਥਾਨਿਕ ਨਹੀ ਹੈ।"
 
 #: gdk-pixbuf/io-gif.c:1498
 msgid "GIF image was truncated or incomplete."
@@ -476,9 +476,7 @@ msgstr "ਜੇਪੀਈਜੀ(JPEG) ਚਿੱਤਰ ਫਾਇਲ(%s) ਦੀ ਪ�
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr ""
-"ਚਿੱਤਰ ਫਾਇਲ ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ, ਕੁਝ ਕਾਰਜਾਂ ਨੂੰ ਬੰਦ ਕਰਕੇ ਮੈਮੋਰੀ "
-"ਖਾਲੀ ਕਰੋ"
+msgstr "ਚਿੱਤਰ ਫਾਇਲ ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ, ਕੁਝ ਕਾਰਜਾਂ ਨੂੰ ਬੰਦ ਕਰਕੇ ਮੈਮੋਰੀ ਖਾਲੀ ਕਰੋ"
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
@@ -496,12 +494,12 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"ਜੇਪੀਈਜੀ(JPEG) ਗੁਣ ਦਾ ਮੁੱਲ 0 ਤੇ 100 ਹੋਣਾ ਜ਼ਰੂਰੀ ਹੈ; ਮੁੱਲ '%s' ਨੂੰ ਪਾਰਸ ਨਹੀ ਕੀਤਾ "
-"ਜਾ ਸਕਦਾ ਹੈ।"
+"ਜੇਪੀਈਜੀ(JPEG) ਗੁਣ ਦਾ ਮੁੱਲ 0 ਤੇ 100 ਹੋਣਾ ਜ਼ਰੂਰੀ ਹੈ; ਮੁੱਲ '%s' ਨੂੰ ਪਾਰਸ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ।"
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "ਜੇਪੀਈਜੀ(JPEG) ਗੁਣ ਦਾ ਮੁੱਲ 0 ਤੇ 100 ਹੋਣਾ ਜ਼ਰੂਰੀ ਹੈ; ਮੁੱਲ '%d'' ਦੀ ਮਨਜ਼ੂਰੀ ਨਹੀ ਹੈ।"
 
 #: gdk-pixbuf/io-jpeg.c:1071
@@ -571,7 +569,8 @@ msgstr "ਤਬਦੀਲ ਪੀਐਨਜੀ(PNG) RGB ਜਾਂ RGBA ਨਹੀ ਹ
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "ਤਬਦੀਲ ਪੀਐਨਜੀ(PNG) ਵਿੱਚ ਬਿਨ-ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ ਚੈਨਲਾਂ ਦੀ ਗਿਣਤੀ, ਇਹ 3 ਜਾਂ 4 ਹੋਣੀ ਜ਼ਰੂਰੀ ਹੈ।"
+msgstr ""
+"ਤਬਦੀਲ ਪੀਐਨਜੀ(PNG) ਵਿੱਚ ਬਿਨ-ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ ਚੈਨਲਾਂ ਦੀ ਗਿਣਤੀ, ਇਹ 3 ਜਾਂ 4 ਹੋਣੀ ਜ਼ਰੂਰੀ ਹੈ।"
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -588,8 +587,8 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
-"%ld X %ld ਚਿੱਤਰ ਨੂੰ ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ, ਕੁਝ ਕਾਰਜ ਬੰਦ "
-"ਕਰਕੇ ਮੈਮੋਰੀ ਦੀ ਵਰਤੋ ਨੂੰ ਘੱਟ ਕਰੋ"
+"%ld X %ld ਚਿੱਤਰ ਨੂੰ ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ, ਕੁਝ ਕਾਰਜ ਬੰਦ ਕਰਕੇ ਮੈਮੋਰੀ ਦੀ ਵਰਤੋ ਨੂੰ ਘੱਟ "
+"ਕਰੋ"
 
 #: gdk-pixbuf/io-png.c:669
 msgid "Fatal error reading PNG image file"
@@ -601,8 +600,10 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "ਪੀਐਨਜੀ(PNG) ਚਿੱਤਰ ਫਾਇਲ ਪੜਨ ਵਿੱਚ ਘਾਤਕ ਗਲਤੀ: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "ਪੀਐਨਜੀ(PNG) ਵਿੱਚ ਪਾਠ ਹੋਣ ਲਈ ਅੱਖਰਾਂ ਦੀ ਗਿਣਤੀ ਨਿਊਨਤਮ 1 ਅਤੇ ਅਧਿਕਤਮ 79 ਹੋ ਸਕਦੀ ਹੈ।"
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr ""
+"ਪੀਐਨਜੀ(PNG) ਵਿੱਚ ਪਾਠ ਹੋਣ ਲਈ ਅੱਖਰਾਂ ਦੀ ਗਿਣਤੀ ਨਿਊਨਤਮ 1 ਅਤੇ ਅਧਿਕਤਮ 79 ਹੋ ਸਕਦੀ ਹੈ।"
 
 #: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -610,8 +611,10 @@ msgstr "ਪੀਐਨਜੀ(PNG) ਪਾਠ ਲਈ ਅੱਖਰ ASCII ਅੱਖਰ
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
-msgstr "ਪੀਐਨਜੀ(PNG) ਪਾਠ %s ਦਾ ਮੁੱਲ ਨੂੰ ISO-8859-1 ਇੰਕੋਡਿੰਗ ਵਿੱਚ ਤਬਦੀਲ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ"
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgstr ""
+"ਪੀਐਨਜੀ(PNG) ਪਾਠ %s ਦਾ ਮੁੱਲ ਨੂੰ ISO-8859-1 ਇੰਕੋਡਿੰਗ ਵਿੱਚ ਤਬਦੀਲ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ"
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -863,17 +866,13 @@ msgstr "ਐਸਪੀਐਮ(XPM) ਵਿੱਚ ਅੱਖਰ ਪ੍ਰਤੀ ਪਿ
 msgid "XPM file has invalid number of colors"
 msgstr "ਐਸਪੀਐਮ(XPM) ਫਾਇਲ ਵਿੱਚ ਰੰਗ ਦੀ ਗਿਣਤੀ ਗਲਤ ਹੈ"
 
-#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "ਐਸਪੀਐਮ(XPM) ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਜਾਰੀ ਨਹੀਂ ਹੋ ਸਕਦੀ ਹੈ"
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
+msgid "Can't allocate memory for loading XPM image"
+msgstr "ਐਸਪੀਐਮ(XPM) ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ"
 
 #: gdk-pixbuf/io-xpm.c:1295
 msgid "Can't read XPM colormap"
 msgstr "ਐਸਪੀਐਮ(XPM) ਰੰਗ-ਨਕਸ਼ਾ ਪੜਿਆ ਨਹੀ ਜਾ ਸਕਿਆ"
-
-#: gdk-pixbuf/io-xpm.c:1333
-msgid "Can't allocate memory for loading XPM image"
-msgstr "ਐਸਪੀਐਮ(XPM) ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ"
 
 #: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
@@ -945,16 +944,16 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"ਪਹਿਲਾਂ ਚੁਣਿਆ ਰੰਗ, ਮੌਜੂਦਾ ਤੁਹਾਡੇ ਦੁਆਰਾ ਰੰਗ ਦੇ ਮੁਕਾਬਲੇ। ਤੁਸੀ ਇਸ ਰੰਗ ਨੂੰ ਰੰਗ-ਪੱਟੀ "
-"ਇੰਦਰਾਜ਼ ਵਿੱਚ ਸੁੱਟ ਸਕਦੇ ਹੋ ਜਾਂ ਇਸ ਰੰਗ ਨੂੰ ਰੰਗ ਸਵਿੱਚ ਵਿੱਚ ਰੱਖ ਸਕਦੇ ਹੋ।"
+"ਪਹਿਲਾਂ ਚੁਣਿਆ ਰੰਗ, ਮੌਜੂਦਾ ਤੁਹਾਡੇ ਦੁਆਰਾ ਰੰਗ ਦੇ ਮੁਕਾਬਲੇ। ਤੁਸੀ ਇਸ ਰੰਗ ਨੂੰ ਰੰਗ-ਪੱਟੀ ਇੰਦਰਾਜ਼ ਵਿੱਚ ਸੁੱਟ "
+"ਸਕਦੇ ਹੋ ਜਾਂ ਇਸ ਰੰਗ ਨੂੰ ਰੰਗ ਸਵਿੱਚ ਵਿੱਚ ਰੱਖ ਸਕਦੇ ਹੋ।"
 
 #: gtk/gtkcolorsel.c:572
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
-"ਗੰਰ ਜੋ ਤੁਸੀ ਚੁਣਿਆ ਹੈ। ਤੁਸੀ ਇਸ ਨੂੰ ਰੰਗ-ਪੱਟੀ ਵਿੱਚ ਰੱਖ ਸਕਦੇ ਹੋ ਤਾਂ ਕਿ ਇਸ ਨੂੰ ਭਵਿੱਖ "
-"ਵਿੱਚ ਵੀ ਵਰਤਿਆ ਜਾ ਸਕੇ।"
+"ਗੰਰ ਜੋ ਤੁਸੀ ਚੁਣਿਆ ਹੈ। ਤੁਸੀ ਇਸ ਨੂੰ ਰੰਗ-ਪੱਟੀ ਵਿੱਚ ਰੱਖ ਸਕਦੇ ਹੋ ਤਾਂ ਕਿ ਇਸ ਨੂੰ ਭਵਿੱਖ ਵਿੱਚ ਵੀ ਵਰਤਿਆ "
+"ਜਾ ਸਕੇ।"
 
 #: gtk/gtkcolorsel.c:933
 msgid "_Save color here"
@@ -965,17 +964,16 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"ਇਸ ਰੰਗ-ਪੱਟੀ ਦੇ ਇੰਦਰਾਜ਼ ਨੂੰ ਦਬਾਉ ਤਾਂ ਇਹ ਮੌਜੂਦਾ ਰੰਗ ਬਣ ਜਾਵੇ। ਇਸ ਇੰਦਰਾਜ਼ ਨੂੰ "
-"ਤਬਦੀਲ਼ ਕਰਨ ਲਈ ਇੱਕ ਰੰਗ ਨੂੰ ਇਥੇ ਤਬਦੀਲ ਕਰ ਦਿਉ ਜਾਂ ਸੱਜਾ-ਬਟਨ ਦਬਾਉ ਤੇ "
-"'ਰੰਗ ਇਥੇ ਸੰਭਾਲੋ' ਨੂੰ ਚੁਣੋ।"
+"ਇਸ ਰੰਗ-ਪੱਟੀ ਦੇ ਇੰਦਰਾਜ਼ ਨੂੰ ਦਬਾਉ ਤਾਂ ਇਹ ਮੌਜੂਦਾ ਰੰਗ ਬਣ ਜਾਵੇ। ਇਸ ਇੰਦਰਾਜ਼ ਨੂੰ ਤਬਦੀਲ਼ ਕਰਨ ਲਈ ਇੱਕ ਰੰਗ "
+"ਨੂੰ ਇਥੇ ਤਬਦੀਲ ਕਰ ਦਿਉ ਜਾਂ ਸੱਜਾ-ਬਟਨ ਦਬਾਉ ਤੇ 'ਰੰਗ ਇਥੇ ਸੰਭਾਲੋ' ਨੂੰ ਚੁਣੋ।"
 
 #: gtk/gtkcolorsel.c:1846
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"ਬਾਹਰੀ ਚੱਕਰ ਵਿੱਚ ਰੰਗ ਜੋ ਤੁਸੀ ਚਾਹੁੰਦੇ ਹੋ ਨੂੰ ਚੁਣੋ। ਅੰਦਰੂਨੀ ਤਿਕੋਣ ਨਾਲ ਰੰਗ ਦਾ ਗੂੜਾਪਨ ਜਾਂ "
-"ਫਿੱਕਾਪਨ ਨਿਰਧਾਰਿਤ ਕਰੋ।"
+"ਬਾਹਰੀ ਚੱਕਰ ਵਿੱਚ ਰੰਗ ਜੋ ਤੁਸੀ ਚਾਹੁੰਦੇ ਹੋ ਨੂੰ ਚੁਣੋ। ਅੰਦਰੂਨੀ ਤਿਕੋਣ ਨਾਲ ਰੰਗ ਦਾ ਗੂੜਾਪਨ ਜਾਂ ਫਿੱਕਾਪਨ "
+"ਨਿਰਧਾਰਿਤ ਕਰੋ।"
 
 #: gtk/gtkcolorsel.c:1871
 msgid ""
@@ -1048,8 +1046,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"ਤੁਸੀ ਇਸ ਇੰਦਰਾਜ਼ ਵਿੱਚ HTML-ਸ਼ੈਲੀ ਵਾਂਗ ਹੈਕਸਾਡੈਸੀਮਲ ਮੁੱਲ ਵੀ ਦੇ ਸਕਦੇ ਹੋ ਜਾਂ ਰੰਗ "
-"ਦਾ ਨਾਂ ਵੀ ਭਰ ਸਕਦੇ ਜਿਵੇਂ ਕਿ 'orange'।"
+"ਤੁਸੀ ਇਸ ਇੰਦਰਾਜ਼ ਵਿੱਚ HTML-ਸ਼ੈਲੀ ਵਾਂਗ ਹੈਕਸਾਡੈਸੀਮਲ ਮੁੱਲ ਵੀ ਦੇ ਸਕਦੇ ਹੋ ਜਾਂ ਰੰਗ ਦਾ ਨਾਂ ਵੀ ਭਰ ਸਕਦੇ "
+"ਜਿਵੇਂ ਕਿ 'orange'।"
 
 #: gtk/gtkcolorsel.c:1955
 msgid "_Palette"
@@ -1099,7 +1097,7 @@ msgstr ""
 "%s ਲਈ ਬੁੱਕਮਾਰਕ ਜੋੜ ਨਹੀ ਸਕਿਆ:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1214,62 +1212,62 @@ msgstr "ਫੋ_ਲਡਰ ਵਿੱਚ ਸੰਭਾਲੋ:"
 msgid "Create in _folder:"
 msgstr "ਫੋ_ਲਡਰ ਵਿੱਚ ਬਣਾਉ:"
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4069
 msgid "Can't change to folder because it isn't local"
 msgstr "ਫੋਲਡਰ ਨੂੰ ਤਬਦੀਲ਼ ਨਹੀ ਕਰ ਸਕਿਆ, ਕਿਉਕਿ ਇਹ ਸਥਾਨਿਕ ਨਹੀਂ ਹੈ"
 
-#: gtk/gtkfilechooserdefault.c:4208
+#: gtk/gtkfilechooserdefault.c:4213
 msgid "Could not find the path"
 msgstr "ਰਸਤੇ ਨੂੰ ਲੱਭ ਨਹੀ ਸਕਿਆ"
 
-#: gtk/gtkfilechooserdefault.c:4569
+#: gtk/gtkfilechooserdefault.c:4574
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "ਸ਼ਾਰਟਕੱਟ %s ਮੌਜੂਦਾ ਨਹੀ ਹੈ"
 
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5272
 msgid "Type name of new folder"
 msgstr "ਨਵੇਂ ਫੋਲਡਰ ਦਾ ਨਾਂ ਲਿਖੋ"
 
-#: gtk/gtkfilechooserdefault.c:5271
+#: gtk/gtkfilechooserdefault.c:5301
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d ਬਾਈਟ"
 msgstr[1] "%d ਬਾਈਟ"
 
-#: gtk/gtkfilechooserdefault.c:5273
+#: gtk/gtkfilechooserdefault.c:5303
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f ਕੇ"
 
-#: gtk/gtkfilechooserdefault.c:5275
+#: gtk/gtkfilechooserdefault.c:5305
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f ਐਮ"
 
-#: gtk/gtkfilechooserdefault.c:5277
+#: gtk/gtkfilechooserdefault.c:5307
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f ਜੀ"
 
-#: gtk/gtkfilechooserdefault.c:5322
+#: gtk/gtkfilechooserdefault.c:5352
 msgid "Today"
 msgstr "ਅੱਜ"
 
-#: gtk/gtkfilechooserdefault.c:5324
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Yesterday"
 msgstr "ਕੱਲ੍ਹ"
 
-#: gtk/gtkfilechooserdefault.c:5335
+#: gtk/gtkfilechooserdefault.c:5365
 msgid "Unknown"
 msgstr "ਅਣਜਾਣ"
 
-#: gtk/gtkfilechooserdefault.c:5430
+#: gtk/gtkfilechooserdefault.c:5460
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "ਫੋਲਡਰ ਨੂੰ ਤਬਦੀਲ਼ ਨਹੀ ਕਰ ਸਕਿਆ, ਕਿਉਕਿ ਇਹ ਰਾਹ ਸਹੀ ਨਹੀ ਹੈ।।"
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5537
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1278,15 +1276,15 @@ msgstr ""
 "%s ਨੂੰ ਚੁਣਿਆ ਨਹੀ ਜਾ ਸਕਿਆ:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5546
+#: gtk/gtkfilechooserdefault.c:5576
 msgid "Open Location"
 msgstr "ਸਥਿਤੀ ਖੋਲੋ"
 
-#: gtk/gtkfilechooserdefault.c:5553
+#: gtk/gtkfilechooserdefault.c:5583
 msgid "Save in Location"
 msgstr "ਸਥਿਤੀ ਵਿੱਚ ਸੰਭਾਲੋ"
 
-#: gtk/gtkfilechooserdefault.c:5572
+#: gtk/gtkfilechooserdefault.c:5602
 msgid "_Location:"
 msgstr "_ਸਥਿਤੀ:"
 
@@ -1331,7 +1329,8 @@ msgstr "ਫਾਇਲ _ਨਾਂ-ਤਬਦੀਲ"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ਫੋਲਡਰ ਨਾਂ \"%s\" ਵਿੱਚ ਉਹ ਨਿਸ਼ਾਨ ਹਨ, ਜੋ ਕਿ ਫਾਇਲ ਨਾਂ ਵਿੱਚ ਨਹੀ ਹੋ ਸਕਦੇ"
 
 #: gtk/gtkfilesel.c:1441
@@ -1501,8 +1500,7 @@ msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
-"ਨਾਂ \"%s\" ਜਾਇਜ ਨਹੀਂ ਹੈ, ਕਿਉਕਿ ਇਸ ਵਿੱਚ ਅੱਖਰ \"%s\" ਹੈ, ਕਿਰਪਾ ਕਰਕੇ "
-"ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ।"
+"ਨਾਂ \"%s\" ਜਾਇਜ ਨਹੀਂ ਹੈ, ਕਿਉਕਿ ਇਸ ਵਿੱਚ ਅੱਖਰ \"%s\" ਹੈ, ਕਿਰਪਾ ਕਰਕੇ ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ।"
 
 #: gtk/gtkfilesystemunix.c:1438 gtk/gtkfilesystemwin32.c:923
 #, c-format
@@ -2120,3 +2118,5 @@ msgstr "X ਇੰਪੁੱਟ ਢੰਗ"
 msgid "Could not get information for file '%s': %s"
 msgstr "ਫਾਇਲ '%s' ਲਈ ਜਾਣਕਾਰੀ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ਼: %s"
 
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "ਐਸਪੀਐਮ(XPM) ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਜਾਰੀ ਨਹੀਂ ਹੋ ਸਕਦੀ ਹੈ"

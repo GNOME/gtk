@@ -17,7 +17,8 @@ Overview of Changes from GTK+ 2.4.9 to GTK+ 2.4.10
  - Fix loading of input modules on Win32 [Kazuki IWAMOTO]
 * Other bug fixes [Tim Janik, Bill Haneman, Padraig O'Briain,
   Frederic Croszat, Matthias, Felipe Heidrich, Lorenzo Gil
-  Sanchez, Olivier Andrieu, Jean Bréfort, Christian Persch]
+  Sanchez, Olivier Andrieu, Jean Bréfort, Christian Persch,
+  Edd Dumbhill, Marco Pesenti Gritti]
 * Updated translations (ang,bn,cs,cy,de,en_CA,hu,ne,nn,ro,tr,uk)
 
 Overview of Changes from GTK+ 2.4.7 to GTK+ 2.4.8

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
+"POT-Creation-Date: 2004-09-18 14:22-0400\n"
 "PO-Revision-Date: 2004-03-13 14:59+0530\n"
 "Last-Translator: Jitendra Shah <jitendras@vsnl.com>\n"
 "Language-Team:  Marathi <www.indictrans.org>\n"
@@ -313,13 +313,13 @@ msgstr "प्रतिमेची रचना अनोळखी आहे"
 
 # gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
 # gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "अक्षरमालिका भरण्यासाठी पुरेशी स्मरणशक्ती नाही"
 
 # gdk-pixbuf/io-ico.c:303
-#: gdk-pixbuf/io-ico.c:256
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "अक्षरमालिकेतील शिर्षकपट्टी अयोग्य आहे"
 
@@ -334,36 +334,36 @@ msgid "Icon has zero height"
 msgstr "अक्षरमालिकेची उंची शुन्य आहे"
 
 # gdk-pixbuf/io-ico.c:395
-#: gdk-pixbuf/io-ico.c:347
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr ""
 "संक्षेपित अक्षरमालिकेतील अक्षरांना मदत नसल्यामुळे त्या मालिकेचा वापर करता येनार नाही"
 
 # gdk-pixbuf/io-ico.c:428
-#: gdk-pixbuf/io-ico.c:380
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "या प्रकारच्या अक्षरमालिकेचा वापर केला जाऊ शकत नाही"
 
 # gdk-pixbuf/io-ico.c:499
-#: gdk-pixbuf/io-ico.c:474
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "ICO फाइल सुरू करण्यासाठी पुरेशी स्मरणशक्ती उपलब्ध नाही"
 
-#: gdk-pixbuf/io-ico.c:939
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:950
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:973
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr ""
 
 # gdk-pixbuf/gdk-pixdata.c:151
-#: gdk-pixbuf/io-ico.c:1202
+#: gdk-pixbuf/io-ico.c:1210
 #, fuzzy
 msgid "The ICO image format"
 msgstr "प्रतिमेची रचना अनोळखी आहे"
@@ -389,13 +389,13 @@ msgid "Unsupported JPEG color space (%s)"
 msgstr "JPEG मधील रंगसंगतीसाठी असणारी जागा निराधार आहे"
 
 # gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
-#: gdk-pixbuf/io-jpeg.c:950
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG मधील फाइल सुरु करण्यासाठी आवश्यक ती स्मरणशक्ती देता येत नाही"
 
 # gdk-pixbuf/io-jpeg.c:664
-#: gdk-pixbuf/io-jpeg.c:893
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -404,13 +404,13 @@ msgstr ""
 "JPEG ची  गुणवत्ता ० ते १०० दरम्यान असायला हवी; %s ची गुणवत्ता मोजली जाऊ शकत नाही."
 
 # gdk-pixbuf/io-jpeg.c:679
-#: gdk-pixbuf/io-jpeg.c:908
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG मधील गुणवत्ता किंमत  ० ते १०० दरम्यान असायला हवी; '%d' वैध नाही."
 
-#: gdk-pixbuf/io-jpeg.c:1069
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr ""
 
@@ -852,33 +852,33 @@ msgstr "XPM प्रतिमा फाइलची रुंदी <= ० आ�
 msgid "XPM file has image height <= 0"
 msgstr "XPM प्रतिमा फाइलची ऊंची  <= ० आहे"
 
-# gdk-pixbuf/io-xpm.c:1259
-#: gdk-pixbuf/io-xpm.c:1253
-msgid "XPM file has invalid number of colors"
-msgstr "XPM फाइल मध्ये रंगांची संख्या अवैध आहे"
-
 # gdk-pixbuf/io-xpm.c:1267
-#: gdk-pixbuf/io-xpm.c:1261
+#: gdk-pixbuf/io-xpm.c:1253
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM फाइलमध्ये प्रति ओळीतील अक्षर संख्या अवैध आहे "
 
-# gdk-pixbuf/io-xpm.c:1285
-#: gdk-pixbuf/io-xpm.c:1279
-msgid "Can't read XPM colormap"
-msgstr "XPM रंग वाचता येत नाहीत"
+# gdk-pixbuf/io-xpm.c:1259
+#: gdk-pixbuf/io-xpm.c:1260
+msgid "XPM file has invalid number of colors"
+msgstr "XPM फाइल मध्ये रंगांची संख्या अवैध आहे"
 
 # gdk-pixbuf/io-xpm.c:1326
-#: gdk-pixbuf/io-xpm.c:1317
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
 msgid "Can't allocate memory for loading XPM image"
 msgstr "XPM प्रतिमा सुरु करण्याकरिता पुरेशी जागा देता येत नाही "
 
+# gdk-pixbuf/io-xpm.c:1285
+#: gdk-pixbuf/io-xpm.c:1295
+msgid "Can't read XPM colormap"
+msgstr "XPM रंग वाचता येत नाहीत"
+
 # gdk-pixbuf/io-xpm.c:1509
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "XPM प्रतिमा सुरु करताना तात्पुरत्या फाइल मध्ये लेखन करण्यास असफल"
 
 # gdk-pixbuf/io-pnm.c:560 gdk-pixbuf/io-pnm.c:602
-#: gdk-pixbuf/io-xpm.c:1543
+#: gdk-pixbuf/io-xpm.c:1559
 #, fuzzy
 msgid "The XPM image format"
 msgstr "PNM प्रतिमेची रचना अवैध आहे."
@@ -1132,7 +1132,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1259,70 +1259,70 @@ msgstr ""
 msgid "Create in _folder:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4069
 msgid "Can't change to folder because it isn't local"
 msgstr ""
 
 # gdk-pixbuf/io-wbmp.c:366
-#: gtk/gtkfilechooserdefault.c:4208
+#: gtk/gtkfilechooserdefault.c:4213
 #, fuzzy
 msgid "Could not find the path"
 msgstr "उर्वरीत (माहीती) साठवता येऊ शकली नाही "
 
-#: gtk/gtkfilechooserdefault.c:4569
+#: gtk/gtkfilechooserdefault.c:4574
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr ""
 
 # gtk/gtkwidget.c:391
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5272
 #, fuzzy
 msgid "Type name of new folder"
 msgstr "विडगेटचे नाव"
 
-#: gtk/gtkfilechooserdefault.c:5271
+#: gtk/gtkfilechooserdefault.c:5301
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkfilechooserdefault.c:5273
+#: gtk/gtkfilechooserdefault.c:5303
 #, c-format
 msgid "%.1f K"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5275
+#: gtk/gtkfilechooserdefault.c:5305
 #, c-format
 msgid "%.1f M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5277
+#: gtk/gtkfilechooserdefault.c:5307
 #, c-format
 msgid "%.1f G"
 msgstr ""
 
 # gtk/gtkwindow.c:449
-#: gtk/gtkfilechooserdefault.c:5322
+#: gtk/gtkfilechooserdefault.c:5352
 #, fuzzy
 msgid "Today"
 msgstr "पध्दतविषयक"
 
-#: gtk/gtkfilechooserdefault.c:5324
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Yesterday"
 msgstr ""
 
 # gtk/gtkinputdialog.c:582
-#: gtk/gtkfilechooserdefault.c:5335
+#: gtk/gtkfilechooserdefault.c:5365
 #, fuzzy
 msgid "Unknown"
 msgstr "(अनोळखी)"
 
-#: gtk/gtkfilechooserdefault.c:5430
+#: gtk/gtkfilechooserdefault.c:5460
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5537
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1330,19 +1330,19 @@ msgid ""
 msgstr ""
 
 # gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:224
-#: gtk/gtkfilechooserdefault.c:5546
+#: gtk/gtkfilechooserdefault.c:5576
 #, fuzzy
 msgid "Open Location"
 msgstr "कल"
 
 # gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:224
-#: gtk/gtkfilechooserdefault.c:5553
+#: gtk/gtkfilechooserdefault.c:5583
 #, fuzzy
 msgid "Save in Location"
 msgstr "कल"
 
 # gtk/gtkcolorsel.c:1823
-#: gtk/gtkfilechooserdefault.c:5572
+#: gtk/gtkfilechooserdefault.c:5602
 #, fuzzy
 msgid "_Location:"
 msgstr "संर्पुक्तता(_S):"
