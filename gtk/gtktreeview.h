@@ -138,10 +138,10 @@ gint                   gtk_tree_view_insert_column_with_attributes (GtkTreeView 
 								    ...);
 GtkTreeViewColumn     *gtk_tree_view_get_column                    (GtkTreeView               *tree_view,
 								    gint                       n);
-void                   gtk_tree_view_move_column                   (GtkTreeView               *tree_view,
+GList                 *gtk_tree_view_get_columns                   (GtkTreeView               *tree_view);
+void                   gtk_tree_view_move_column_after             (GtkTreeView               *tree_view,
 								    GtkTreeViewColumn         *column,
-								    GtkTreeViewColumn         *base_column,
-								    gint                       left);
+								    GtkTreeViewColumn         *base_column);
 void                   gtk_tree_view_set_expander_column           (GtkTreeView               *tree_view,
 								    gint                       col);
 gint                   gtk_tree_view_get_expander_column           (GtkTreeView               *tree_view);

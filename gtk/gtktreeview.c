@@ -925,13 +925,6 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       tree_view->priv->drag_highlight_window = NULL;
     }
 
-  if (tree_view->priv->drag_header_window)
-    {
-      gdk_window_set_user_data (tree_view->priv->drag_header_window, NULL);
-      gdk_window_destroy (tree_view->priv->drag_header_window);
-      tree_view->priv->drag_header_window = NULL;
-    }
-
   gdk_cursor_destroy (tree_view->priv->cursor_drag);
   gdk_gc_destroy (tree_view->priv->xor_gc);
 
@@ -1337,12 +1330,6 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
   tree_view->priv->column_drag_info = NULL;
 
   gdk_window_hide (tree_view->priv->drag_highlight_window);
-
-  /* deal with headers */
-  gdk_window_reparent (tree_view->priv->header_window,
-		       widget->window,
-		       0, 0);
-  gdk_window_hide (tree_view->priv->drag_header_window);
 
   return TRUE;
 }
@@ -5055,9 +5042,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
       attributes.window_type = GDK_WINDOW_TEMP;
       tree_view->priv->drag_highlight_window = gdk_window_new (NULL, &attributes, attributes_mask);
       gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
-
-      tree_view->priv->drag_header_window = gdk_window_new (NULL, &attributes, attributes_mask);
-      gdk_window_set_user_data (tree_view->priv->drag_header_window, GTK_WIDGET (tree_view));
     }
 
   gdk_pointer_ungrab (GDK_CURRENT_TIME);
@@ -5107,9 +5091,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 
   gdk_window_get_origin (tree_view->priv->header_window, &x, &y);
   gdk_window_get_size (tree_view->priv->header_window, &width, &height);
-  gdk_window_move_resize (tree_view->priv->drag_header_window, x, y, width, height);
-  gdk_window_reparent (tree_view->priv->header_window, tree_view->priv->drag_header_window, 0, 0);
-  gdk_window_show (tree_view->priv->drag_header_window);
 
   while (gtk_events_pending ())
     gtk_main_iteration ();
@@ -5990,7 +5971,25 @@ gtk_tree_view_get_column (GtkTreeView *tree_view,
 }
 
 /**
- * gtk_tree_view_move_column:
+ * gtk_tree_view_get_columns:
+ * @tree_view: A #GtkTreeView
+ *
+ * Returns a #GList of all the #GtkTreeViewColumn s currently in @tree_view.
+ * The returned list must be freed with g_list_free ().
+ *
+ * Return value: A list of #GtkTreeViewColumn s
+ **/
+GList *
+gtk_tree_view_get_columns (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
+  g_return_val_if_fail (tree_view->priv->model != NULL, NULL);
+
+  return g_list_copy (tree_view->priv->columns);
+}
+
+/**
+ * gtk_tree_view_move_column_after:
  * @tree_view: A #GtkTreeView
  * @column: The #GtkTreeViewColumn to be moved.
  * @base_column: The #GtkTreeViewColumn to be moved relative to.

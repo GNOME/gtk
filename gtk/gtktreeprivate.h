@@ -89,7 +89,6 @@ struct _GtkTreeViewPrivate
   GdkWindow *header_window;
   GdkWindow *drag_window;
   GdkWindow *drag_highlight_window;
-  GdkWindow *drag_header_window;
   GtkTreeViewColumn *drag_column;
   gint drag_column_x;
 
