@@ -1,3 +1,9 @@
+Fri Feb 16 15:55:22 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktreeitem.c (gtk_tree_item_draw_lines): 
+	draw lines with text_gc rather than black_gc.
+	(Patch from Vlad Harchev <hvv hippo ru>, #50926)
+
 Tue Feb 13 15:39:28 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* 1.2.9pre1
