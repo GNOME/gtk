@@ -310,7 +310,6 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
 
 /**
  * gtk_plug_construct:
- * @display: the #GdkDisplay associated with @socket_id's #GtkSocket.
  * @plug: a #GtkPlug.
  * @socket_id: the XID of the socket's window.
  *

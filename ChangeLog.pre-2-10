@@ -1,6 +1,10 @@
+Tue Apr 30 14:15:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c gtk/gtkselection.c: Doc fixes.
+
 2002-04-30  Erwann Chenede - <erwann.chenede@sun.com>
 
-        * gdk/x11/gdkimage-x11.c : retionalized multihead code
+        * gdk/x11/gdkimage-x11.c : rationalized multihead code
         in _gdk_x11_copy_to_image. fixes #80256 and ungrab problems.
 
 2002-04-30  Havoc Pennington  <hp@redhat.com>

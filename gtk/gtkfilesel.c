@@ -1170,13 +1170,15 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
  * gtk_file_selection_get_filename:
  * @filesel: a #GtkFileSelection
  * 
- * This function returns the selected filename in encoding of
- * g_filename_from_utf8(), which may or may not be the same as that
+ * This function returns the selected filename in the on-disk encoding
+ * (See g_filename_from_utf8()), which may or may not be the same as that
  * used by GTK+ (UTF-8). To convert to UTF-8, call g_filename_to_utf8().
  * The returned string points to a statically allocated buffer and
  * should be copied if you plan to keep it around.
+ *
+ * If no file is selected then the selected directory path is returned.
  * 
- * Return value: currently-selected filename in locale's encoding
+ * Return value: currently-selected filename in the on-disk encoding.
  **/
 G_CONST_RETURN gchar*
 gtk_file_selection_get_filename (GtkFileSelection *filesel)
