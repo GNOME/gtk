@@ -1,3 +1,8 @@
+2004-02-25  Danilo Šegan  <dsegan@gmx.net>
+
+	* configure.in (ALL_LINGUAS): po-properties/sr@ije.po added, so
+	adding back sr@ije.
+
 2004-02-25  Federico Mena Quintero  <federico@ximian.com>
 
 	* configure.in (ALL_LINGUAS): Remove sr@ije until po-properties/
