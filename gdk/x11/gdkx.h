@@ -36,9 +36,10 @@
 #include <gdk/x11/gdkwindow-x11.h>
 #include <gdk/x11/gdkpixmap-x11.h>
 
+G_BEGIN_DECLS
+
 typedef struct _GdkColormapPrivateX11  GdkColormapPrivateX11;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
-typedef struct _GdkFontPrivateX        GdkFontPrivateX;
 typedef struct _GdkImagePrivateX11     GdkImagePrivateX11;
 typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 
@@ -47,17 +48,6 @@ struct _GdkCursorPrivate
   GdkCursor cursor;
   Cursor xcursor;
   Display *xdisplay;
-};
-
-struct _GdkFontPrivateX
-{
-  GdkFontPrivate base;
-  /* XFontStruct *xfont; */
-  /* generic pointer point to XFontStruct or XFontSet */
-  gpointer xfont;
-  Display *xdisplay;
-
-  GSList *names;
 };
 
 struct _GdkVisualPrivate
@@ -139,8 +129,6 @@ GType gdk_gc_x11_get_type (void);
 #define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivateX11 *)GDK_COLORMAP (cmap)->windowing_data)->xdisplay)
 #define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivateX11 *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
-#define GDK_FONT_XDISPLAY(font)       (((GdkFontPrivate *) font)->xdisplay)
-#define GDK_FONT_XFONT(font)          (((GdkFontPrivateX *)font)->xfont)
 
 #define GDK_GC_XGC(gc)       (GDK_GC_X11(gc)->xgc)
 #define GDK_GC_GET_XGC(gc)   (GDK_GC_X11(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : GDK_GC_XGC (gc))
@@ -186,8 +174,31 @@ void gdk_x11_ungrab_server (void);
 
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
-#define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
 
 GC _gdk_x11_gc_flush (GdkGC *gc);
+
+#ifndef GDK_DISABLE_DEPRECATED
+
+typedef struct _GdkFontPrivateX        GdkFontPrivateX;
+
+struct _GdkFontPrivateX
+{
+  GdkFontPrivate base;
+  /* XFontStruct *xfont; */
+  /* generic pointer point to XFontStruct or XFontSet */
+  gpointer xfont;
+  Display *xdisplay;
+
+  GSList *names;
+};
+
+#define GDK_FONT_XDISPLAY(font)       (((GdkFontPrivate *) font)->xdisplay)
+#define GDK_FONT_XFONT(font)          (((GdkFontPrivateX *)font)->xfont)
+
+#define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
+
+#endif /* GDK_DISABLE_DEPRECATED */
+
+G_END_DECLS
 
 #endif /* __GDK_X_H__ */

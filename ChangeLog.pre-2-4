@@ -1,3 +1,12 @@
+2001-07-31  Darin Adler  <darin@bentspoon.com>
+
+	* gdk/gdkprivate.h:
+	* gdk/x11/gdkx.h:
+	Put all mentions of GdkFont inside #ifndef GDK_DISABLE_DEPRECATED.
+
+	* demos/gtk-demo/menus.c: (do_menus): Cast to G_OBJECT, not
+	GTK_OBJECT.
+
 Tue Jul 31 15:34:57 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_remove_column): Whoops.  Stupid

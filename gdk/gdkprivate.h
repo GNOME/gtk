@@ -36,9 +36,7 @@
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GDK_PARENT_RELATIVE_BG ((GdkPixmap *)1L)
 #define GDK_NO_BG ((GdkPixmap *)2L)
@@ -47,15 +45,8 @@ extern "C" {
 #define GDK_WINDOW_DESTROYED(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->destroyed)
 
 typedef struct _GdkColorInfo           GdkColorInfo;
-typedef struct _GdkFontPrivate	       GdkFontPrivate;
 typedef struct _GdkEventFilter	       GdkEventFilter;
 typedef struct _GdkClientFilter	       GdkClientFilter;
-
-struct _GdkFontPrivate
-{
-  GdkFont font;
-  guint ref_count;
-};
 
 typedef enum {
   GDK_COLOR_WRITEABLE = 1 << 0
@@ -84,14 +75,18 @@ GDKVAR GdkWindow  	*gdk_parent_root;
 GDKVAR gint		 gdk_error_code;
 GDKVAR gint		 gdk_error_warnings;
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+#ifndef GDK_DISABLE_DEPRECATED
 
+typedef struct _GdkFontPrivate	       GdkFontPrivate;
+
+struct _GdkFontPrivate
+{
+  GdkFont font;
+  guint ref_count;
+};
+
+#endif /* GDK_DISABLE_DEPRECATED */
+
+G_END_DECLS
 
 #endif /* __GDK_PRIVATE_H__ */
-
-
-
-
-

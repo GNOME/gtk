@@ -100,7 +100,7 @@ do_menus (void)
 			  NULL);
       
       accel_group = gtk_accel_group_new ();
-      gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
+      gtk_accel_group_attach (accel_group, G_OBJECT (window));
 
       gtk_window_set_title (GTK_WINDOW (window), "menus");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
