@@ -1137,7 +1137,8 @@ draw_with_images (GdkDrawable       *drawable,
 		  gint               width,
 		  gint               height)
 {
-  Display *xdisplay = GDK_DRAWABLE_XDISPLAY (drawable);
+  GdkScreenImplX11 *screen = GDK_SCREEN_IMPL_X11 (GDK_DRAWABLE_IMPL_X11 (drawable)->screen);
+  Display *xdisplay = screen->xdisplay;
   GdkImage *image;
   GdkPixmap *pix;
   GdkGC *pix_gc;
@@ -1146,7 +1147,8 @@ draw_with_images (GdkDrawable       *drawable,
   Picture mask = None;
   gint x0, y0;
 
-  pix = gdk_pixmap_new (NULL, width, height, 32);
+  pix = gdk_pixmap_new (screen->root_window, width, height, 32);
+						  
   pict = XRenderCreatePicture (xdisplay, 
 			       GDK_PIXMAP_XID (pix),
 			       format, 0, NULL);
@@ -1168,7 +1170,7 @@ draw_with_images (GdkDrawable       *drawable,
 	  
 	  gint width1 = MIN (width - x0, GDK_SCRATCH_IMAGE_WIDTH);
 	  
-	  image = _gdk_image_get_scratch (GDK_DRAWABLE_SCREEN (drawable),
+	  image = _gdk_image_get_scratch (GDK_DRAWABLE_IMPL_X11 (drawable)->screen,
 					  width1, height1, 32, &xs0, &ys0);
 	  
 	  convert_to_format (src_rgb + y0 * src_rowstride + 4 * x0, src_rowstride,
@@ -1261,7 +1263,7 @@ draw_with_pixmaps (GdkDrawable       *drawable,
 		   gint               width,
 		   gint               height)
 {
-  Display *xdisplay = GDK_DRAWABLE_XDISPLAY (drawable);
+  Display *xdisplay = GDK_SCREEN_IMPL_X11 (GDK_DRAWABLE_IMPL_X11 (drawable)->screen)->xdisplay;
   GdkImage *image;
   Pixmap pix;
   Picture pict;
@@ -1280,7 +1282,7 @@ draw_with_pixmaps (GdkDrawable       *drawable,
 	  
 	  gint width1 = MIN (width - x0, GDK_SCRATCH_IMAGE_WIDTH);
 	  
-	  image = _gdk_image_get_scratch (GDK_DRAWABLE_SCREEN (drawable),
+	  image = _gdk_image_get_scratch (GDK_DRAWABLE_IMPL_X11 (drawable)->screen,
 					  width1, height1, 32, &xs0, &ys0);
 	  if (!get_shm_pixmap_for_image (xdisplay, image, 
 					 format, mask_format, 

@@ -1,3 +1,14 @@
+2002-02-01  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkentry.c (gtk_entry_motion_notify): Use gdk_cursor_new_for_screen.
+
+	* gdk/x11/gdkgc-x11.c (_gdk_x11_gc_get_fg_picture): Remove ;
+
+	* gdk/x11/gdkdrawable-x11.c (draw_with_pixmaps): The drawable is actually 
+	a GdkDrawableImplX11, so get the display from that.
+	(draw_with_images): Use the screen's root window when creating the pixmap.
+	(draw_with_images): Get the screen from the GdkDrawableImplX11.
+
 Thu Jan 31 18:46:10 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_row_reference_free): unref the
@@ -1273,6 +1284,7 @@ Tue Jan  8 14:19:43 2002  Owen Taylor  <otaylor@redhat.com>
 	directly instead of calling get_child_requisition()
 	(#68199, Damon Chaplin)
 
+>>>>>>> 1.2786
 2001-01-08  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtkstyle.c: add trailing */ on doc comment.

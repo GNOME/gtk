@@ -1487,7 +1487,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
     {
       GdkCursor *cursor;
       
-      cursor = gdk_cursor_new (GDK_XTERM);
+      cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget), GDK_XTERM);
       gdk_window_set_cursor (entry->text_area, cursor);
       gdk_cursor_unref (cursor);
       entry->mouse_cursor_obscured = FALSE;

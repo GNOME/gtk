@@ -831,7 +831,7 @@ _gdk_x11_gc_get_fg_picture (GdkGC *gc)
 
   x11_gc = GDK_GC_X11 (gc);
 
-  if (!_gdk_x11_have_render (GDK_GC_DISPLAY (gc)));
+  if (!_gdk_x11_have_render (GDK_GC_DISPLAY (gc)))
     return None;
 
   if (x11_gc->fg_picture == None)
