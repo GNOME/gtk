@@ -1958,15 +1958,23 @@ gdk_event_translate (GdkEvent *event,
 	  /* XXX there has to be a better way to do this, perhaps with
 	     XTranslateCoordinates or XQueryTree - I don't know how,
 	     and this sort of works */
-	  static Window lastwin = None, curwin = None;
+	  static Window lastwin = None, curwin = None, twin;
 	  Window childwin = gdk_root_window;
-	  int x, y;
+	  int x, y, ox, oy;
 	  lastwin = curwin;
+	  curwin = gdk_root_window;
+	  ox = x = xevent->xmotion.x_root;
+	  oy = y = xevent->xmotion.y_root;
 	  while(childwin != None)
 	    {
-	      curwin = childwin;
-	      XTranslateCoordinates(gdk_display, curwin, childwin,
-				x, y, &x, &y, &childwin);
+		ox = x; oy = y;
+		curwin = childwin;
+		XTranslateCoordinates(gdk_display, curwin, curwin,
+					x, y, &x, &y, &childwin);
+		if(childwin != None) {
+			XTranslateCoordinates(gdk_display, curwin, childwin,
+						x, y, &x, &y, &twin);
+		}
 	    }
 #ifdef DEBUG_DND
 	  g_print("Drag is now in window %#x, lastwin was %#x\n",
