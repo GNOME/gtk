@@ -22,3 +22,5 @@ gtktypebuiltins_vars.c
 gtktypebuiltins_evals.c
 gtk.defs
 testdnd
+stamp-d
+stamp-m

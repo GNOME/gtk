@@ -230,13 +230,14 @@ gtkinclude_HEADERS = 		\
 	gtkmarshal.h		\
 	gtktypebuiltins.h
 
+# note gtk.defs and gtkmarshal.[ch] aren't here, but their stamps are
 BUILT_SOURCES = \
-	gtktypebuiltins.h 		\
-	gtktypebuiltins_evals.c 	\
-	gtktypebuiltins_ids.c 		\
-        gtktypebuiltins_vars.c 		\
-	gtkmarshal.c 			\
-        gtkmarshal.h 
+	stamp-d				\
+	stamp-m				\
+	gtktypebuiltins.h		\
+	gtktypebuiltins_evals.c		\
+	gtktypebuiltins_ids.c		\
+        gtktypebuiltins_vars.c
 
 # cause the built sources to be rebuild when possible, even with --include-deps
 $(static_sources): $(BUILT_SOURCES)
@@ -247,11 +248,14 @@ gdk_headers = \
 	../gdk/gdkrgb.h
 
 # generate gtk.defs file from gtk-boxed.defs and *.h
-gtk.defs: @REBUILD@ makeenums.pl gtk-boxed.defs $(source_headers) $(gdk_headers)
+gtk.defs: @REBUILD@ stamp-d
+	@:
+stamp-d: @REBUILD@ makeenums.pl gtk-boxed.defs $(source_headers) $(gdk_headers)
 	cd $(srcdir) \
 	&& $(PERL) makeenums.pl defs $(source_headers) $(gdk_headers) > s-gd \
 	&& cat gtk-boxed.defs >> s-gd \
-	&& mv s-gd gtk.defs
+	&& (cmp -s s-gd gtk.defs || mv s-gd gtk.defs) && rm -f s-gd \
+	&& echo timestamp > stamp-d
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
 gtktypebuiltins.h: @REBUILD@ gtk.defs maketypes.awk
@@ -278,8 +282,13 @@ gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl gtk.defs
 	s-gtbe \
 	&& mv s-gtbe gtktypebuiltins_evals.c
 
-gtkmarshal.c gtkmarshal.h: @REBUILD@ gtkmarshal.list genmarshal.pl
-	srcdir=$(srcdir) INDENT=$(INDENT) $(PERL) $(srcdir)/genmarshal.pl
+gtkmarshal.c gtkmarshal.h: @REBUILD@ stamp-m
+	@:
+stamp-m: @REBUILD@ gtkmarshal.list genmarshal.pl
+	srcdir=$(srcdir) INDENT=$(INDENT) $(PERL) $(srcdir)/genmarshal.pl \
+	&& (cmp -s s-gmc gtkmarshal.c || mv s-gmc gtkmarshal.c) && rm -f s-gmc \
+	&& (cmp -s s-gmh gtkmarshal.h || mv s-gmh gtkmarshal.h) && rm -f s-gmh \
+	&& echo timestamp > stamp-m
 
 libgtk_la_LDFLAGS = \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -release $(LT_RELEASE)
