@@ -28,6 +28,7 @@ gtk/gtkbbox.c
 gtk/gtkbox.c
 gtk/gtkbutton.c
 gtk/gtkcalendar.c
+gtk/gtkcelllayout.c
 gtk/gtkcellrenderer.c
 gtk/gtkcellrendererpixbuf.c
 gtk/gtkcellrenderertext.c
@@ -41,6 +42,7 @@ gtk/gtkcontainer.c
 gtk/gtkcurve.c
 gtk/gtkdialog.c
 gtk/gtkentry.c
+gtk/gtkentrycompletion.c
 gtk/gtkfilesel.c
 gtk/gtkfixed.c
 gtk/gtkfontsel.c
@@ -89,6 +91,7 @@ gtk/gtkthemes.c
 gtk/gtktipsquery.c
 gtk/gtktogglebutton.c
 gtk/gtktoolbar.c
+gtk/gtktreemodelfilter.c
 gtk/gtktreemodelsort.c
 gtk/gtktreeview.c
 gtk/gtktreeviewcolumn.c

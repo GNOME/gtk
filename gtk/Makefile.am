@@ -102,6 +102,7 @@ gtk_public_h_sources =          \
 	gtkbutton.h		\
 	gtkcalendar.h		\
 	gtkcelleditable.h	\
+	gtkcelllayout.h		\
 	gtkcellrenderer.h	\
 	gtkcellrendererpixbuf.h	\
 	gtkcellrenderertext.h	\
@@ -124,6 +125,7 @@ gtk_public_h_sources =          \
 	gtkdrawingarea.h	\
 	gtkeditable.h           \
 	gtkentry.h		\
+	gtkentrycompletion.h	\
 	gtkenums.h		\
 	gtkeventbox.h		\
 	gtkexpander.h		\
@@ -221,6 +223,7 @@ gtk_public_h_sources =          \
 	gtktreednd.h		\
 	gtktreeitem.h		\
 	gtktreemodel.h		\
+	gtktreemodelfilter.h	\
 	gtktreemodelsort.h	\
 	gtktreeselection.h	\
 	gtktreesortable.h	\
@@ -241,6 +244,7 @@ gtk_public_h_sources =          \
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources =         \
+	gtkentryprivate.h	\
 	gtkrbtree.h 		\
 	gtktextbtree.h		\
 	gtktextchildprivate.h   \
@@ -277,6 +281,7 @@ gtk_c_sources =                 \
 	gtkbox.c		\
 	gtkbutton.c		\
 	gtkcalendar.c		\
+	gtkcelllayout.c		\
 	gtkcellrenderer.c	\
 	gtkcelleditable.c	\
 	gtkcellrenderertext.c	\
@@ -299,6 +304,7 @@ gtk_c_sources =                 \
 	gtkdrawingarea.c	\
 	gtkeditable.c           \
 	gtkentry.c		\
+	gtkentrycompletion.c	\
 	gtkeventbox.c		\
 	gtkexpander.c		\
 	gtkfilesel.c		\
@@ -403,6 +409,7 @@ gtk_c_sources =                 \
 	gtktreedatalist.c	\
 	gtktreednd.c		\
 	gtktreemodel.c		\
+	gtktreemodelfilter.c	\
 	gtktreemodelsort.c	\
 	gtktreeselection.c	\
 	gtktreesortable.c	\

@@ -47,10 +47,17 @@
 #include "gtkstock.h"
 #include "gtktextutil.h"
 #include "gtkwindow.h"
+#include "gtktreeview.h"
+#include "gtktreeselection.h"
+#include "gtkentryprivate.h"
+#include "gtkcelllayout.h"
+
+#define GTK_ENTRY_COMPLETION_KEY "gtk-entry-completion-key"
 
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
 #define INNER_BORDER     2
+#define COMPLETION_TIMEOUT 300
 
 /* Initial size of buffer, in bytes */
 #define MIN_SIZE 16
@@ -936,6 +943,8 @@ gtk_entry_finalize (GObject *object)
 {
   GtkEntry *entry = GTK_ENTRY (object);
 
+  gtk_entry_set_completion (entry, NULL);
+
   if (entry->cached_layout)
     g_object_unref (entry->cached_layout);
 
@@ -1664,6 +1673,7 @@ gtk_entry_focus_out (GtkWidget     *widget,
 		     GdkEventFocus *event)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
+  GtkEntryCompletion *completion;
   
   gtk_widget_queue_draw (widget);
 
@@ -1675,6 +1685,10 @@ gtk_entry_focus_out (GtkWidget     *widget,
   g_signal_handlers_disconnect_by_func (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
                                         gtk_entry_keymap_direction_changed,
                                         entry);
+
+  completion = gtk_entry_get_completion (entry);
+  if (completion)
+    _gtk_entry_completion_popdown (completion);
   
   return FALSE;
 }
@@ -4450,4 +4464,246 @@ gtk_entry_pend_cursor_blink (GtkEntry *entry)
 					    entry);
       show_cursor (entry);
     }
+}
+
+/* completion */
+static gint
+gtk_entry_completion_timeout (gpointer data)
+{
+  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (data);
+
+  GDK_THREADS_ENTER ();
+
+  completion->priv->completion_timeout = 0;
+
+  if (strlen (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry))) >= completion->priv->minimum_key_length)
+    {
+      gint matches;
+      gint actions;
+      GtkTreeSelection *s;
+
+      gtk_entry_completion_complete (completion);
+      matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
+
+      gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view)));
+
+      s = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view));
+
+      gtk_tree_selection_unselect_all (s);
+
+      actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
+
+      if (matches > 0 || actions > 0)
+        _gtk_entry_completion_popup (completion);
+    }
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
+}
+
+static gboolean
+gtk_entry_completion_key_press (GtkWidget   *widget,
+                                GdkEventKey *event,
+                                gpointer     user_data)
+{
+  gint matches, actions = 0;
+  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
+
+  if (!GTK_WIDGET_MAPPED (completion->priv->popup_window))
+    return FALSE;
+
+  matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
+
+  if (completion->priv->actions)
+    actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
+
+  if (event->keyval == GDK_Up || event->keyval == GDK_Down)
+    {
+      GtkTreePath *path = NULL;
+
+      if (event->keyval == GDK_Up)
+        {
+          completion->priv->current_selected--;
+          if (completion->priv->current_selected < 0)
+            completion->priv->current_selected = 0;
+        }
+      else
+        {
+          completion->priv->current_selected++;
+          if (completion->priv->current_selected >= matches + actions)
+            completion->priv->current_selected = 0;
+        }
+
+      if (completion->priv->current_selected < matches)
+        {
+          gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view)));
+
+          path = gtk_tree_path_new_from_indices (completion->priv->current_selected, -1);
+          gtk_tree_view_set_cursor (GTK_TREE_VIEW (completion->priv->tree_view),
+                                    path, NULL, FALSE);
+        }
+      else if (completion->priv->current_selected - matches >= 0)
+        {
+          gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view)));
+
+          path = gtk_tree_path_new_from_indices (completion->priv->current_selected - matches, -1);
+          gtk_tree_view_set_cursor (GTK_TREE_VIEW (completion->priv->action_view),
+                                    path, NULL, FALSE);
+        }
+
+      gtk_tree_path_free (path);
+
+      return TRUE;
+    }
+  else if (event->keyval == GDK_ISO_Enter ||
+           event->keyval == GDK_Return ||
+           event->keyval == GDK_Escape)
+    {
+      _gtk_entry_completion_popdown (completion);
+
+      if (event->keyval == GDK_Escape)
+        return TRUE;
+
+      if (completion->priv->current_selected < matches)
+        {
+          GtkTreeIter iter;
+          GtkTreeModel *model = NULL;
+          GtkTreeSelection *sel;
+          gboolean entry_set;
+
+          sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view));
+          gtk_tree_selection_get_selected (sel, &model, &iter);
+
+          g_signal_emit_by_name (completion, "match_selected",
+                                 model, &iter, &entry_set);
+
+          if (!entry_set)
+            {
+              gchar *str = NULL;
+
+              gtk_tree_model_get (model, &iter,
+                                  completion->priv->text_column, &str,
+                                  -1);
+
+              g_signal_handler_block (widget, completion->priv->changed_id);
+              gtk_entry_set_text (GTK_ENTRY (widget), str);
+              g_signal_handler_unblock (widget, completion->priv->changed_id);
+
+              /* move the cursor to the end */
+              gtk_editable_set_position (GTK_EDITABLE (widget), -1);
+
+              g_free (str);
+            }
+
+          return TRUE;
+        }
+      else if (completion->priv->current_selected - matches >= 0)
+        {
+          GtkTreePath *path;
+
+          path = gtk_tree_path_new_from_indices (completion->priv->current_selected - matches, -1);
+
+          g_signal_emit_by_name (completion, "action_activated",
+                                 gtk_tree_path_get_indices (path)[0]);
+          gtk_tree_path_free (path);
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_entry_completion_changed (GtkWidget *entry,
+                              gpointer   user_data)
+{
+  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
+
+  if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
+    _gtk_entry_completion_popdown (completion);
+
+  /* (re)install completion timeout */
+  if (completion->priv->completion_timeout)
+    g_source_remove (completion->priv->completion_timeout);
+
+  if (!gtk_entry_get_text (GTK_ENTRY (entry)))
+    return;
+
+  /* no need to normalize for this test */
+  if (! strcmp ("", gtk_entry_get_text (GTK_ENTRY (entry))))
+    return;
+
+  completion->priv->completion_timeout =
+    g_timeout_add (COMPLETION_TIMEOUT,
+                   gtk_entry_completion_timeout,
+                   completion);
+}
+
+void
+gtk_entry_set_completion (GtkEntry           *entry,
+                          GtkEntryCompletion *completion)
+{
+  GtkEntryCompletion *old;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (!completion || GTK_IS_ENTRY_COMPLETION (completion));
+
+  old = gtk_entry_get_completion (entry);
+
+  if (old)
+    {
+      if (old->priv->completion_timeout)
+        {
+          g_source_remove (old->priv->completion_timeout);
+          old->priv->completion_timeout = 0;
+        }
+
+      if (GTK_WIDGET_MAPPED (old->priv->popup_window))
+        _gtk_entry_completion_popdown (old);
+
+      gtk_cell_layout_clear (GTK_CELL_LAYOUT (old));
+      old->priv->text_column = -1;
+
+      if (g_signal_handler_is_connected (entry, old->priv->changed_id))
+        g_signal_handler_disconnect (entry, old->priv->changed_id);
+      if (g_signal_handler_is_connected (entry, old->priv->key_press_id))
+        g_signal_handler_disconnect (entry, old->priv->key_press_id);
+
+      old->priv->entry = NULL;
+
+      g_object_unref (old);
+    }
+
+  if (!completion)
+    {
+      g_object_set_data (G_OBJECT (entry), GTK_ENTRY_COMPLETION_KEY, NULL);
+      return;
+    }
+
+  /* hook into the entry */
+  g_object_ref (completion);
+
+  completion->priv->changed_id =
+    g_signal_connect (entry, "changed",
+                      G_CALLBACK (gtk_entry_completion_changed), completion);
+
+  completion->priv->key_press_id =
+    g_signal_connect (entry, "key_press_event",
+                      G_CALLBACK (gtk_entry_completion_key_press), completion);
+
+  completion->priv->entry = GTK_WIDGET (entry);
+  g_object_set_data (G_OBJECT (entry), GTK_ENTRY_COMPLETION_KEY, completion);
+}
+
+GtkEntryCompletion *
+gtk_entry_get_completion (GtkEntry *entry)
+{
+  GtkEntryCompletion *completion;
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  completion = GTK_ENTRY_COMPLETION (g_object_get_data (G_OBJECT (entry),
+                                     GTK_ENTRY_COMPLETION_KEY));
+
+  return completion;
 }

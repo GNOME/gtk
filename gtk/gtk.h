@@ -43,6 +43,7 @@
 #include <gtk/gtkbox.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkcalendar.h>
+#include <gtk/gtkcelllayout.h>
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkcellrenderertext.h>
@@ -63,6 +64,7 @@
 #include <gtk/gtkdrawingarea.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkentry.h>
+#include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkexpander.h>
@@ -152,6 +154,7 @@
 #include <gtk/gtktreednd.h>
 #include <gtk/gtktreeitem.h>
 #include <gtk/gtktreemodel.h>
+#include <gtk/gtktreemodelfilter.h>
 #include <gtk/gtktreemodelsort.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreestore.h>
