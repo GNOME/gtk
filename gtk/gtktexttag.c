@@ -195,7 +195,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /* Style args */
   gtk_object_add_arg_type ("GtkTextTag::background", GTK_TYPE_STRING,
                            GTK_ARG_WRITABLE, ARG_BACKGROUND);
-  gtk_object_add_arg_type ("GtkTextTag::background_gdk", GTK_TYPE_GDK_COLOR,
+  /* FIXME GTK_TYPE_GDK_COLOR */
+  gtk_object_add_arg_type ("GtkTextTag::background_gdk", GTK_TYPE_POINTER,
                            GTK_ARG_READWRITE, ARG_BACKGROUND_GDK);
   gtk_object_add_arg_type ("GtkTextTag::background_full_height", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_BG_FULL_HEIGHT);
@@ -208,7 +209,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_EDITABLE);
   gtk_object_add_arg_type ("GtkTextTag::font", GTK_TYPE_STRING,
                            GTK_ARG_READWRITE, ARG_FONT);
-  gtk_object_add_arg_type ("GtkTextTag::font_desc", GTK_TYPE_BOXED,
+  /* FIXME GTK_TYPE_PANGO_FONT_DESCRIPTION */
+  gtk_object_add_arg_type ("GtkTextTag::font_desc", GTK_TYPE_POINTER,
                            GTK_ARG_READWRITE, ARG_FONT_DESC);      
   gtk_object_add_arg_type ("GtkTextTag::family", GTK_TYPE_STRING,
                            GTK_ARG_READWRITE, ARG_FAMILY);
@@ -226,7 +228,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_SIZE_POINTS);
   gtk_object_add_arg_type ("GtkTextTag::foreground", GTK_TYPE_STRING,
                            GTK_ARG_WRITABLE, ARG_FOREGROUND);
-  gtk_object_add_arg_type ("GtkTextTag::foreground_gdk", GTK_TYPE_GDK_COLOR,
+  /* FIXME GTK_TYPE_GDK_COLOR */
+  gtk_object_add_arg_type ("GtkTextTag::foreground_gdk", GTK_TYPE_POINTER,
                            GTK_ARG_READWRITE, ARG_FOREGROUND_GDK);
   gtk_object_add_arg_type ("GtkTextTag::foreground_stipple",
                            GDK_TYPE_PIXMAP,
@@ -255,7 +258,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_UNDERLINE);
   gtk_object_add_arg_type ("GtkTextTag::wrap_mode", GTK_TYPE_ENUM,
                            GTK_ARG_READWRITE, ARG_WRAP_MODE);
-  gtk_object_add_arg_type ("GtkTextTag::tabs", GTK_TYPE_POINTER, /* FIXME */
+  /* FIXME GTK_TYPE_PANGO_TAB_ARRAY */
+  gtk_object_add_arg_type ("GtkTextTag::tabs", GTK_TYPE_POINTER,
                            GTK_ARG_READWRITE, ARG_TABS);
   gtk_object_add_arg_type ("GtkTextTag::invisible", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_INVISIBLE);
@@ -337,7 +341,8 @@ gtk_text_tag_init (GtkTextTag *text_tag)
 {
   /* 0 is basically a fine way to initialize everything in the
      entire struct */
-
+  
+  text_tag->values = gtk_text_attributes_new ();
 }
 
 /**
@@ -354,11 +359,9 @@ gtk_text_tag_new (const gchar *name)
 {
   GtkTextTag *tag;
 
-  tag = GTK_TEXT_TAG (gtk_type_new (gtk_text_tag_get_type ()));
-
-  tag->name = g_strdup (name);
-
-  tag->values = gtk_text_attributes_new ();
+  tag = GTK_TEXT_TAG (g_object_new (gtk_text_tag_get_type (),
+                                    "name", name,
+                                    NULL));
 
   return tag;
 }
@@ -717,6 +720,7 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       if (text_tag->values->tabs)
         pango_tab_array_free (text_tag->values->tabs);
 
+      /* FIXME I'm not sure if this is a memleak or not */
       text_tag->values->tabs =
         pango_tab_array_copy (GTK_VALUE_POINTER (*arg));
 

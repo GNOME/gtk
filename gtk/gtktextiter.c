@@ -2606,6 +2606,94 @@ gtk_text_iter_inside_word (const GtkTextIter *iter)
   return test_log_attrs (iter, inside_word_func, NULL);
 }
 
+static gboolean
+find_cursor_pos_func (const PangoLogAttr *attrs,
+                      gint          offset,
+                      gint          min_offset,
+                      gint          len,
+                      gint         *found_offset)
+{
+  ++offset; /* We always go to the NEXT position */
+
+  /* Find end of next word */
+  while (offset < min_offset + len &&
+         !attrs[offset].is_cursor_position)
+    ++offset;
+
+  *found_offset = offset;
+
+  return offset < min_offset + len;
+}
+
+static gboolean
+is_cursor_pos_func (const PangoLogAttr *attrs,
+                    gint          offset,
+                    gint          min_offset,
+                    gint          len,
+                    gint         *found_offset)
+{
+  return attrs[offset].is_cursor_position;
+}
+
+gboolean
+gtk_text_iter_forward_cursor_position (GtkTextIter *iter)
+{
+  return find_by_log_attrs (iter, find_cursor_pos_func, TRUE);  
+
+}
+
+gboolean
+gtk_text_iter_backward_cursor_position (GtkTextIter *iter)
+{
+  return find_by_log_attrs (iter, find_cursor_pos_func, FALSE);
+}
+
+gboolean
+gtk_text_iter_forward_cursor_positions (GtkTextIter *iter,
+                                        gint         count)
+{
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (count > 0, FALSE);
+
+  if (!gtk_text_iter_forward_cursor_position (iter))
+    return FALSE;
+  --count;
+
+  while (count > 0)
+    {
+      if (!gtk_text_iter_forward_cursor_position (iter))
+        break;
+      --count;
+    }
+  return TRUE;
+}
+
+gboolean
+gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
+                                         gint         count)
+{
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (count > 0, FALSE);
+
+  if (!gtk_text_iter_backward_cursor_position (iter))
+    return FALSE;
+  --count;
+
+  while (count > 0)
+    {
+      if (!gtk_text_iter_backward_cursor_position (iter))
+        break;
+      --count;
+    }
+  return TRUE;
+}
+
+gboolean
+gtk_text_iter_is_cursor_position (const GtkTextIter *iter)
+{
+  return test_log_attrs (iter, is_cursor_pos_func, NULL);
+}
+
 void
 gtk_text_iter_set_line_offset (GtkTextIter *iter,
                                gint char_on_line)
@@ -2732,8 +2820,19 @@ gtk_text_iter_forward_to_end  (GtkTextIter       *iter)
   gtk_text_buffer_get_last_iter (buffer, iter);
 }
 
+/**
+ * gtk_text_iter_forward_to_delimiters:
+ * @iter: a #GtkTextIter
+ * 
+ * Moves the iterator to point to the paragraph delimiter characters,
+ * which will be either a newline, a carriage return, a carriage
+ * return/newline in sequence, or the Unicode paragraph separator
+ * character.
+ * 
+ * Return value: %TRUE if we moved and the new location is not the end iterator
+ **/
 gboolean
-gtk_text_iter_forward_to_newline (GtkTextIter *iter)
+gtk_text_iter_forward_to_delimiters (GtkTextIter *iter)
 {
   gint current_offset;
   gint new_offset;
@@ -2757,8 +2856,8 @@ gtk_text_iter_forward_to_newline (GtkTextIter *iter)
           /* We don't want to move past all
            * empty lines.
            */
-          if (gtk_text_iter_get_char (iter) != '\n')
-            gtk_text_iter_forward_to_newline (iter);
+          if (!gtk_text_iter_ends_line (iter))
+            gtk_text_iter_forward_to_delimiters (iter);
           return TRUE;
         }
       else

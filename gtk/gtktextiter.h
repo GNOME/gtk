@@ -125,11 +125,12 @@ GSList  *gtk_text_iter_get_tags          (const GtkTextIter   *iter);
 gboolean gtk_text_iter_editable          (const GtkTextIter   *iter,
                                           gboolean             default_setting);
 
-gboolean gtk_text_iter_starts_word       (const GtkTextIter   *iter);
-gboolean gtk_text_iter_ends_word         (const GtkTextIter   *iter);
-gboolean gtk_text_iter_inside_word       (const GtkTextIter   *iter);
-gboolean gtk_text_iter_starts_line       (const GtkTextIter   *iter);
-gboolean gtk_text_iter_ends_line         (const GtkTextIter   *iter);
+gboolean gtk_text_iter_starts_word        (const GtkTextIter   *iter);
+gboolean gtk_text_iter_ends_word          (const GtkTextIter   *iter);
+gboolean gtk_text_iter_inside_word        (const GtkTextIter   *iter);
+gboolean gtk_text_iter_starts_line        (const GtkTextIter   *iter);
+gboolean gtk_text_iter_ends_line          (const GtkTextIter   *iter);
+gboolean gtk_text_iter_is_cursor_position (const GtkTextIter   *iter);
 
 gint     gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter);
 
@@ -143,8 +144,8 @@ gboolean gtk_text_iter_is_first          (const GtkTextIter    *iter);
  * Moving around the buffer
  */
 
-gboolean gtk_text_iter_forward_char            (GtkTextIter *iter);
-gboolean gtk_text_iter_backward_char            (GtkTextIter *iter);
+gboolean gtk_text_iter_forward_char         (GtkTextIter *iter);
+gboolean gtk_text_iter_backward_char        (GtkTextIter *iter);
 gboolean gtk_text_iter_forward_chars        (GtkTextIter *iter,
                                              gint         count);
 gboolean gtk_text_iter_backward_chars       (GtkTextIter *iter,
@@ -155,12 +156,24 @@ gboolean gtk_text_iter_forward_lines        (GtkTextIter *iter,
                                              gint         count);
 gboolean gtk_text_iter_backward_lines       (GtkTextIter *iter,
                                              gint         count);
+gboolean gtk_text_iter_forward_word_end     (GtkTextIter *iter);
+gboolean gtk_text_iter_backward_word_start  (GtkTextIter *iter);
 gboolean gtk_text_iter_forward_word_ends    (GtkTextIter *iter,
                                              gint         count);
 gboolean gtk_text_iter_backward_word_starts (GtkTextIter *iter,
                                              gint         count);
-gboolean gtk_text_iter_forward_word_end     (GtkTextIter *iter);
-gboolean gtk_text_iter_backward_word_start  (GtkTextIter *iter);
+/* cursor positions are almost equivalent to chars, but not quite;
+ * in some languages, you can't put the cursor between certain
+ * chars. Also, you can't put the cursor between \r\n at the end
+ * of a line.
+ */
+gboolean gtk_text_iter_forward_cursor_position   (GtkTextIter *iter);
+gboolean gtk_text_iter_backward_cursor_position  (GtkTextIter *iter);
+gboolean gtk_text_iter_forward_cursor_positions  (GtkTextIter *iter,
+                                                  gint         count);
+gboolean gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
+                                                  gint         count);
+
 
 void     gtk_text_iter_set_offset         (GtkTextIter *iter,
                                            gint         char_offset);
@@ -171,7 +184,7 @@ void     gtk_text_iter_set_line_offset    (GtkTextIter *iter,
 void     gtk_text_iter_set_line_index     (GtkTextIter *iter,
                                            gint         byte_on_line);
 void     gtk_text_iter_forward_to_end     (GtkTextIter *iter);
-gboolean gtk_text_iter_forward_to_newline (GtkTextIter *iter);
+gboolean gtk_text_iter_forward_to_delimiters (GtkTextIter *iter);
 
 
 /* returns TRUE if a toggle was found; NULL for the tag pointer

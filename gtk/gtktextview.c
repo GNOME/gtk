@@ -3123,7 +3123,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
   switch (step)
     {
     case GTK_MOVEMENT_CHARS:
-      gtk_text_iter_forward_chars (&newplace, count);
+      gtk_text_iter_forward_cursor_positions (&newplace, count);
       break;
 
     case GTK_MOVEMENT_POSITIONS:
@@ -3161,7 +3161,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
 
     case GTK_MOVEMENT_PARAGRAPH_ENDS:
       if (count > 0)
-        gtk_text_iter_forward_to_newline (&newplace);
+        gtk_text_iter_forward_to_delimiters (&newplace);
       else if (count < 0)
         gtk_text_iter_set_line_offset (&newplace, 0);
       break;
@@ -3334,7 +3334,7 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
   switch (type)
     {
     case GTK_DELETE_CHARS:
-      gtk_text_iter_forward_chars (&end, count);
+      gtk_text_iter_forward_cursor_positions (&end, count);
       break;
 
     case GTK_DELETE_WORD_ENDS:
@@ -3358,15 +3358,15 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
        * simply delete that newline, instead of
        * moving to the next one.
        */
-      if (gtk_text_iter_get_char (&end) == '\n')
+      if (gtk_text_iter_ends_line (&end))
         {
-          gtk_text_iter_forward_char (&end);
+          gtk_text_iter_forward_line (&end);
           --count;
         }
 
       while (count > 0)
         {
-          if (!gtk_text_iter_forward_to_newline (&end))
+          if (!gtk_text_iter_forward_to_delimiters (&end))
             break;
 
           --count;
@@ -3380,12 +3380,12 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
       if (count > 0)
         {
           gtk_text_iter_set_line_offset (&start, 0);
-          gtk_text_iter_forward_to_newline (&end);
+          gtk_text_iter_forward_to_delimiters (&end);
 
           /* Do the lines beyond the first. */
           while (count > 1)
             {
-              gtk_text_iter_forward_to_newline (&end);
+              gtk_text_iter_forward_to_delimiters (&end);
 
               --count;
             }

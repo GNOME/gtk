@@ -148,11 +148,16 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, insert_text),
-                    gtk_marshal_VOID__BOXED_BOXED_INT_BOOLEAN,
+                    gtk_marshal_VOID__BOXED_STRING_INT_BOOLEAN,
                     GTK_TYPE_NONE,
                     4,
+#if 0
+                    /* FIXME */
                     GTK_TYPE_TEXT_ITER,
-                    GTK_TYPE_TEXT_ITER,
+                    GTK_TYPE_STRING,
+#endif
+                    GTK_TYPE_POINTER,
+                    GTK_TYPE_POINTER,
                     GTK_TYPE_INT,
                     GTK_TYPE_BOOL);
 
@@ -164,8 +169,13 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     gtk_marshal_VOID__BOXED_BOXED_BOOLEAN,
                     GTK_TYPE_NONE,
                     3,
+#if 0
+                    /* FIXME */
                     GTK_TYPE_TEXT_ITER,
                     GTK_TYPE_TEXT_ITER,
+#endif
+                    GTK_TYPE_POINTER,
+                    GTK_TYPE_POINTER,
                     GTK_TYPE_BOOL);
 
   signals[CHANGED] =
@@ -410,10 +420,10 @@ gtk_text_buffer_real_insert_text (GtkTextBuffer *buffer,
 
 static void
 gtk_text_buffer_emit_insert (GtkTextBuffer *buffer,
-                             GtkTextIter *iter,
-                             const gchar *text,
-                             gint len,
-                             gboolean interactive)
+                             GtkTextIter   *iter,
+                             const gchar   *text,
+                             gint           len,
+                             gboolean       interactive)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (iter != NULL);
@@ -422,6 +432,8 @@ gtk_text_buffer_emit_insert (GtkTextBuffer *buffer,
   if (len < 0)
     len = strlen (text);
 
+  g_assert (g_utf8_validate (text, len, NULL));
+  
   if (len > 0)
     {
       gtk_signal_emit (GTK_OBJECT (buffer), signals[INSERT_TEXT],

@@ -1,3 +1,50 @@
+2000-12-14  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_validate_line): remove
+	unused call to get_last_line()
+
+	* gtk/gtkobject.c (gtk_object_add_arg_type): add G_TYPE_POINTER
+	here until boxed is working (and maybe after that - we should
+	really not gratuitously break old code)
+
+	* gtk/gtktexttag.c (gtk_text_tag_class_init): add commented-out
+	specific types for font_desc and tabs args, move them to
+	GTK_TYPE_POINTER for now, waiting on g_param_spec_boxed() to get 
+	fixed. Move GdkColor args to GTK_TYPE_POINTER also.
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): temporarily
+	use GTK_TYPE_POINTER for signal signatures as a hack-around
+
+	* gtk/gtk-boxed.defs: Add boxed types for PangoFontDescription and
+	PangoTabArray
+
+	* gtk/gtktextlayout.c (line_display_iter_to_index): 
+	make static
+	(line_display_index_to_iter): make static
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): fix marshaller
+	to marshal a string not a boxed
+
+	* gtk/gtkmarshal.list: add marshaller for GtkTextBuffer:insert_text
+
+	* gtk/testtext.c (fill_file_buffer): don't use g_utf8_next_char
+	since the UTF-8 isn't validated yet
+
+	* gtk/gtktextsegment.c (char_segment_check_func): don't require
+	lines to end in '\n'
+	
+	* gtk/gtktextview.c (gtk_text_view_move_cursor): update to use
+	forward_to_delimiters, and grapheme boundaries
+	(gtk_text_view_delete_from_cursor): properly handle non-newline
+	delimiters, and grapheme boundaries
+
+	* gtk/gtktextiter.c (gtk_text_iter_forward_to_newline): rename
+	to gtk_text_iter_forward_to_delimiters, and make it work properly
+	if empty lines end with a character other than '\n'
+
+	* gtk/gtktextiter.h, gtk/gtktextiter.c: Add movement by cursor
+	position
+
 2000-12-15  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/makefile.{mingw.in,msc} (gdk_OBJECTS): Add gdkkeys.
@@ -37,7 +84,7 @@
 
 	* gtk/gtktext*.[hc]: update to reflect renamed btree functions
 
-2000-12-13    <alexl@redhat.com>
+2000-12-13  Alex Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkmouse-fb.c (mouse_devs):
 	Add support for ps2 intellimouse.

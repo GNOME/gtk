@@ -392,14 +392,7 @@ char_segment_check_func (segPtr, line)
 {
   char_segment_self_check (segPtr);
 
-  if (segPtr->next == NULL)
-    {
-      if (segPtr->body.chars[segPtr->byte_count-1] != '\n')
-        {
-          g_error ("char_segment_check_func: line doesn't end with newline");
-        }
-    }
-  else
+  if (segPtr->next != NULL)
     {
       if (segPtr->next->type == &gtk_text_char_type)
         {

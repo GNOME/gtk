@@ -651,16 +651,13 @@ fill_file_buffer (GtkTextBuffer *buffer, const char *filename)
 	  if (!*leftover)
 	    break;
 	  
-	  next = g_utf8_next_char (next);
-	  if (next > buf+count+remaining) {
-	    next = NULL;
-	    break;
-	  }
+	  next = g_utf8_find_next_char (next, buf + count + remaining);
 	}
 
+      g_assert (g_utf8_validate (buf, leftover - buf, NULL));
       gtk_text_buffer_insert (buffer, &iter, buf, leftover - buf);
 
-      remaining = buf + remaining + count - leftover;
+      remaining = (buf + remaining + count) - leftover;
       g_memmove (buf, leftover, remaining);
 
       if (remaining > 6 || count < to_read)

@@ -785,7 +785,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
           gint old_height = line_data ? line_data->height : 0;
 
           _gtk_text_btree_validate_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                        line, layout);
+                                         line, layout);
           line_data = _gtk_text_line_get_data (line, layout);
 
           delta_height += line_data->height - old_height;
@@ -814,7 +814,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
           gint old_height = line_data ? line_data->height : 0;
 
           _gtk_text_btree_validate_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                        line, layout);
+                                         line, layout);
           line_data = _gtk_text_line_get_data (line, layout);
 
           delta_height += line_data->height - old_height;
@@ -842,7 +842,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
       update_layout_size (layout);
 
       line_top = _gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer),
-					       first_line, layout);
+                                                first_line, layout);
 
       gtk_text_layout_changed (layout,
                                line_top,
@@ -871,8 +871,8 @@ gtk_text_layout_validate (GtkTextLayout *layout,
 
   while (max_pixels > 0 &&
          _gtk_text_btree_validate (_gtk_text_buffer_get_btree (layout->buffer),
-                                  layout,  max_pixels,
-                                  &y, &old_height, &new_height))
+                                   layout,  max_pixels,
+                                   &y, &old_height, &new_height))
     {
       max_pixels -= new_height;
 
@@ -1623,7 +1623,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   display->insert_index = -1;
 
   _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                   &iter, line, 0);
+                                    &iter, line, 0);
 
   /* Special-case optimization for completely
    * invisible lines; makes it faster to deal
@@ -1872,7 +1872,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
   display->width = PANGO_PIXELS (extents.width) + display->left_margin + display->right_margin;
   display->height += PANGO_PIXELS (extents.height);
-
+  
   /* Free this if we aren't in a loop */
   if (layout->wrap_loop_count == 0)
     invalidate_cached_style (layout);
@@ -1910,7 +1910,7 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
 /* Functions to convert iter <=> index for the line of a GtkTextLineDisplay
  * taking into account the preedit string, if necessary.
  */
-gint
+static gint
 line_display_iter_to_index (GtkTextLayout      *layout,
 			    GtkTextLineDisplay *display,
 			    const GtkTextIter  *iter)
@@ -1927,7 +1927,7 @@ line_display_iter_to_index (GtkTextLayout      *layout,
   return index;
 }
 
-void
+static void
 line_display_index_to_iter (GtkTextLayout      *layout,
 			    GtkTextLineDisplay *display,
 			    GtkTextIter        *iter,

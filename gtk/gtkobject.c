@@ -290,6 +290,9 @@ gtk_object_add_arg_type (const gchar *arg_name,
     case G_TYPE_STRING:
       pspec = g_param_spec_string (pname, NULL, NULL, NULL, arg_flags);
       break;
+    case G_TYPE_POINTER:
+      pspec = g_param_spec_pointer (pname, NULL, NULL, arg_flags);
+      break;
     case G_TYPE_OBJECT:
       pspec = g_param_spec_object (pname, NULL, NULL, arg_type, arg_flags);
       break;

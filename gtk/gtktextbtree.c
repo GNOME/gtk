@@ -959,6 +959,8 @@ _gtk_text_btree_insert (GtkTextIter *iter,
   chars_changed (tree);
   segments_changed (tree);
 
+  g_assert (g_utf8_validate (text, len, NULL));
+  
   /*
    * Chop the text up into lines and create a new segment for
    * each line, plus a new line for the leftovers from the
@@ -971,6 +973,8 @@ _gtk_text_btree_insert (GtkTextIter *iter,
   char_count_delta = 0;
   while (eol < len)
     {
+      sol = eol;
+      
       pango_find_paragraph_boundary (text + sol,
                                      len - sol,
                                      &delim,
@@ -979,9 +983,16 @@ _gtk_text_btree_insert (GtkTextIter *iter,
       /* make these relative to the start of the text */
       delim += sol;
       eol += sol;
+
+      g_assert (eol >= sol);
+      g_assert (delim >= sol);
+      g_assert (eol >= delim);
+      g_assert (sol >= 0);
+      g_assert (eol <= len);
       
       chunk_len = eol - sol;
-      
+
+      g_assert (g_utf8_validate (&text[sol], chunk_len, NULL));
       seg = _gtk_char_segment_new (&text[sol], chunk_len);
 
       char_count_delta += seg->char_count;
@@ -998,8 +1009,11 @@ _gtk_text_btree_insert (GtkTextIter *iter,
         }
 
       if (delim == eol)
-        /* chunk didn't end with a paragraph separator */
-        break;
+        {
+          /* chunk didn't end with a paragraph separator */
+          g_assert (eol == len);
+          break;
+        }
 
       /*
        * The chunk ended with a newline, so create a new GtkTextLine
@@ -1015,8 +1029,6 @@ _gtk_text_btree_insert (GtkTextIter *iter,
       line = newline;
       cur_seg = NULL;
       line_count_delta++;
-
-      sol = eol;
     }
 
   /*
@@ -1215,9 +1227,9 @@ find_line_by_y (GtkTextBTree *tree, BTreeView *view,
 
 GtkTextLine *
 _gtk_text_btree_find_line_by_y (GtkTextBTree *tree,
-                               gpointer      view_id,
-                               gint          ypixel,
-                               gint         *line_top_out)
+                                gpointer      view_id,
+                                gint          ypixel,
+                                gint         *line_top_out)
 {
   GtkTextLine *line;
   BTreeView *view;
@@ -3240,7 +3252,7 @@ _gtk_text_line_get_data (GtkTextLine *line,
 
 void
 _gtk_text_line_invalidate_wrap (GtkTextLine *line,
-                               GtkTextLineData *ld)
+                                GtkTextLineData *ld)
 {
   /* For now this is totally unoptimized. FIXME?
 
@@ -3248,9 +3260,9 @@ _gtk_text_line_invalidate_wrap (GtkTextLine *line,
      is less than the max width for the parent node,
      and the case where the height is unchanged when we re-wrap.
   */
-
+  
   g_return_if_fail (ld != NULL);
-
+  
   ld->valid = FALSE;
   gtk_text_btree_node_invalidate_upward (line->parent, ld->view_id);
 }
@@ -4997,11 +5009,10 @@ gtk_text_btree_node_check_valid_downward (GtkTextBTreeNode *node,
  **/
 void
 _gtk_text_btree_validate_line (GtkTextBTree     *tree,
-                              GtkTextLine      *line,
-                              gpointer          view_id)
+                               GtkTextLine      *line,
+                               gpointer          view_id)
 {
   GtkTextLineData *ld;
-  GtkTextLine *last_line;
   BTreeView *view;
 
   g_return_if_fail (tree != NULL);
@@ -5009,13 +5020,12 @@ _gtk_text_btree_validate_line (GtkTextBTree     *tree,
 
   view = gtk_text_btree_get_view (tree, view_id);
   g_return_if_fail (view != NULL);
-
+  
   ld = _gtk_text_line_get_data (line, view_id);
   if (!ld || !ld->valid)
     {
       ld = gtk_text_layout_wrap (view->layout, line, ld);
-      last_line = get_last_line (tree);
-
+      
       gtk_text_btree_node_check_valid_upward (line->parent, view_id);
     }
 }

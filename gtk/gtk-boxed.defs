@@ -1286,6 +1286,14 @@
   gtk_text_iter_copy
   gtk_text_iter_free)
 
+(define-boxed PangoTabArray
+  pango_tab_array_copy
+  pango_tab_array_free)
+
+(define-boxed PangoFontDescription
+  pango_font_description_copy
+  pango_font_description_free)
+
 ;; TreeView
 (define-boxed GtkTreeIter
   gtk_tree_iter_copy
