@@ -2899,6 +2899,14 @@ gdk_window_set_cursor (GdkWindow *window,
  * #GdkEventConfigure. gdk_window_get_position() in contrast gets the
  * position from the most recent configure event.
  * 
+ * <note>
+ * If @window is not a toplevel, it is <emphasis>much</emphasis> better 
+ * to call gdk_window_get_position() and gdk_drawable_get_size() instead, 
+ * because it avoids the roundtrip to the X server and because 
+ * gdk_drawable_get_size() supports the full 32-bit coordinate space,
+ * whereas gdk_window_get_geometry() is restricted to the 16-bit
+ * coordinates of X11.
+ *</note>
  **/
 void
 gdk_window_get_geometry (GdkWindow *window,
