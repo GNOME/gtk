@@ -1,3 +1,9 @@
+Fri Dec 18 15:19:54 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksocket.c (gtk_socket_filter_func): Marked
+	plug window as destroyed before destroying the 
+	window.
+
 Fri Dec 18 14:17:14 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_popup): Set the usize on the

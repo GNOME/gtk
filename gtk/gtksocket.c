@@ -622,8 +622,8 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	    toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
 	    if (toplevel && GTK_IS_WINDOW (toplevel))
 	      gtk_window_remove_embedded_xid (GTK_WINDOW (toplevel), xdwe->window);
-	    gtk_widget_destroy (widget);
 	    gdk_window_destroy_notify (socket->plug_window);
+	    gtk_widget_destroy (widget);
 
 	    socket->plug_window = NULL;
 	    
