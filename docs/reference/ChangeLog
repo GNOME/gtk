@@ -1,3 +1,11 @@
+2001-10-10  Matthias Clasen   <matthiasc@poet.de>
+
+	* gdk-pixbuf/gdk-pixbuf.sgml: Add entity for tmpl/inline.sgml.
+
+	* gdk-pixbuf/tmpl/inline.sgml: Update.
+
+	* gtk/gtk-sections.sgml: Update.
+
 2001-10-08  Matthias Clasen   <matthiasc@poet.de>
 
 	* gdk-pixbuf/gdk-pixbuf-sections.txt,
