@@ -1,4 +1,4 @@
-#include "win95_theme.h"
+#include "metal_theme.h"
 
 /* Theme functions to export */
 void                theme_init(GtkThemeEngine * engine);
@@ -202,7 +202,7 @@ void
 theme_init(GtkThemeEngine * engine)
 {
 
-  printf("Win95 Theme Init\n");
+  printf("Metal Theme Init\n");
 
   engine->parse_rc_style = theme_parse_rc_style;
   engine->merge_rc_style = theme_merge_rc_style;
@@ -219,5 +219,5 @@ theme_init(GtkThemeEngine * engine)
 void
 theme_exit(void)
 {
-  printf("Win95 Theme Exit\n* Need to add memory deallocation code here *\n");
+  printf("Metal Theme Exit\n* Need to add memory deallocation code here *\n");
 }

@@ -1,3 +1,8 @@
+Thu Aug 20 18:25:07 EDT 1998 The Rasterman <raster@redhat.com>
+	* added metal theme, fixed pixmap theme now to use pixmap path - and
+          removed lots of annoying print's, added gtkr's for each theme data.. now all
+          your rc needs to do is include these rc's.
+
 Thu Jul 30 14:51:34 EDT 1998 The Rasterman <raster@redhat.com>
 	* Moved all the themes to install cleanly the engine *.so's in
 	  $(exec_prefix)/lib/gtk/themes/engines/ .

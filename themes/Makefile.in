@@ -64,8 +64,8 @@ VERSION = @VERSION@
 
 
 ########################################################
-lib_LTLIBRARIES = libpixmap.la libwin95.la libmotif.la
-lib_DATA = pixmap_data win95_data motif_data
+lib_LTLIBRARIES = libpixmap.la libwin95.la libmotif.la libmetal.la
+lib_DATA = pixmap_data win95_data motif_data metal_data
 
 ###### pixmap theme -> libpixmap.so
 
@@ -87,6 +87,16 @@ libwin95include_HEADERS = \
 	win95_theme.h
 
 libwin95_LDFLAGS = -lgdk_imlib -ljpeg -ltiff -lgif -lpng -lz @GTK_LIBS@
+
+###### metal theme -> libmetal.so
+libmetal_la_SOURCES = \
+	metal_theme_draw.c	\
+	metal_theme_main.c
+
+libmetalinclude_HEADERS = \
+	metal_theme.h
+
+libmetal_LDFLAGS = -lgdk_imlib -ljpeg -ltiff -lgif -lpng -lz @GTK_LIBS@
 
 ###### motif theme -> libmotif.so
 libmotif_la_SOURCES = \
@@ -118,6 +128,9 @@ libpixmap_la_OBJECTS =  pixmap_theme_draw.lo pixmap_theme_main.lo
 libwin95_la_LDFLAGS = 
 libwin95_la_LIBADD = 
 libwin95_la_OBJECTS =  win95_theme_draw.lo win95_theme_main.lo
+libmetal_la_LDFLAGS = 
+libmetal_la_LIBADD = 
+libmetal_la_OBJECTS =  metal_theme_draw.lo metal_theme_main.lo
 libmotif_la_LDFLAGS = 
 libmotif_la_LIBADD = 
 libmotif_la_OBJECTS =  motif_theme_draw.lo motif_theme_main.lo
@@ -135,10 +148,11 @@ GZIP = --best
 DEP_FILES =  \
 .deps/pixmap_theme_draw.P .deps/pixmap_theme_main.P \
 .deps/win95_theme_draw.P .deps/win95_theme_main.P \
+.deps/metal_theme_draw.P .deps/metal_theme_main.P \
 .deps/motif_theme_draw.P .deps/motif_theme_main.P
 
-SOURCES = $(libpixmap_la_SOURCES) $(libwin95_la_SOURCES) $(libmotif_la_SOURCES)
-OBJECTS = $(libpixmap_la_OBJECTS) $(libwin95_la_OBJECTS) $(libmotif_la_OBJECTS)
+SOURCES = $(libpixmap_la_SOURCES) $(libwin95_la_SOURCES) $(libmetal_la_SOURCES) $(libmotif_la_SOURCES)
+OBJECTS = $(libpixmap_la_OBJECTS) $(libwin95_la_OBJECTS) $(libmetal_la_SOURCES) $(libmotif_la_OBJECTS)
 
 all: Makefile $(LTLIBRARIES)
 
@@ -235,6 +249,10 @@ libpixmap.la: $(libpixmap_la_OBJECTS) $(libpixmap_la_DEPENDENCIES)
 
 libwin95.la: $(libwin95_la_OBJECTS) $(libwin95_la_DEPENDENCIES)
 	$(LINK) -rpath $(libdir) $(libwin95_la_LDFLAGS) $(libwin95_la_OBJECTS) $(libwin95_la_LIBADD) $(LIBS)
+
+
+libmetal.la: $(libmetal_la_OBJECTS) $(libmetal_la_DEPENDENCIES)
+	$(LINK) -rpath $(libdir) $(libmetal_la_LDFLAGS) $(libmetal_la_OBJECTS) $(libmetal_la_LIBADD) $(LIBS)
 
 
 libmotif.la: $(libmotif_la_OBJECTS) $(libmotif_la_DEPENDENCIES)

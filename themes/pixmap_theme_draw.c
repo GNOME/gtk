@@ -315,22 +315,7 @@ GtkStyleClass       th_default_class =
 static GdkImlibImage *
 load_image(char *name)
 {
-  static char        *themedir = NULL;
-  char                buf[1024];
-
-  if (!themedir)
-    {
-      char                buf2[1024];
-
-      g_snprintf(buf2, 1024, "%s/themes/", getenv("HOME"));
-      themedir = g_strdup(buf2);
-    }
-
-  strcpy(buf, themedir);
-  strncat(buf, name, 1023);
-  buf[1023] = '\0';
-
-  return gdk_imlib_load_image(buf);
+  return gdk_imlib_load_image(name);
 }
 
 struct theme_image *

@@ -1,0 +1,1050 @@
+# pixmap_path "<dir 1>:<dir 2>:<dir 3>:..."
+#
+# include "rc-file"
+#
+# style <name> [= <name>]
+# {
+#   <option>
+# }
+#
+# widget <widget_set> style <style_name>
+# widget_class <widget_class_set> style <style_name>
+
+# testgtkrc2 sets all the buttons in the main window to blue by default
+#include "testgtkrc2"
+
+#module_path ".:/home/raster/themes"
+
+style "default"
+{
+  font = "-*-helvetica-medium-r-normal--10-*-*-*-*-*-*-*"
+  fg[NORMAL]      = { 0.00, 0.00, 0.00 }
+  fg[PRELIGHT]    = { 0.25, 0.25, 0.25 }
+  fg[ACTIVE]      = { 0.00, 0.00, 0.00 }
+  fg[SELECTED]    = { 0.00, 0.00, 0.00 }
+  fg[INSENSITIVE] = { 0.90, 0.80, 0.70 }
+  bg[NORMAL]      = { 0.80, 0.70, 0.50 }
+  bg[PRELIGHT]    = { 0.70, 0.60, 0.40 }
+  bg[ACTIVE]      = { 0.90, 0.80, 0.70 }
+  bg[SELECTED]    = { 0.90, 0.80, 0.70 }
+  bg[INSENSITIVE] = { 0.80, 0.75, 0.70 }
+  engine "pixmap" 
+  {
+#
+# Button specific settings - should be moved to another style to apply to
+# buttons
+#
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "button"
+	state           = NORMAL
+	shadow          = OUT
+	file            = "button1.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "button"
+	state           = PRELIGHT
+	shadow          = OUT
+	file            = "button2.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "button"
+	state           = NORMAL
+	shadow          = IN
+	file            = "button4.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "button"
+	state           = INSENSITIVE
+	shadow          = IN
+	file            = "button6.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "button"
+	state           = INSENSITIVE
+	shadow          = OUT
+	file            = "button5.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "button"
+	state           = SELECTED
+	shadow          = IN
+	file            = "button4.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "button"
+	state           = ACTIVE
+	shadow          = IN
+	file            = "button3.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "buttondefault"
+	state           = NORMAL
+	shadow          = IN
+	file            = "button_def.png"
+	border          = { 9, 9, 9, 9 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "togglebutton"
+	shadow          = IN
+	file            = "button4.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "togglebutton"
+	shadow          = OUT
+	file            = "button1.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+#
+# Menu specific stuff - shoudl be moved to a menu specific style
+#      
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "menubar"
+	file            = "button1.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "menu"
+	file            = "button5.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "menuitem"
+	file            = "button7.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "slider"
+	state           = PRELIGHT
+	file            = "scrollbar_horiz1.png"
+	border          = { 13, 12, 2, 2 }
+	stretch         = TRUE
+	overlay_file    = "scrollbar_thumb2.png"
+	overlay_border  = { 1, 1, 1, 1 }
+	overlay_stretch = FALSE
+	orientation     = HORIZONTAL
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "slider"
+	state           = NORMAL
+	file            = "scrollbar_horiz1.png"
+	border          = { 13, 12, 2, 2 }
+	stretch         = TRUE
+	overlay_file    = "scrollbar_thumb.png"
+	overlay_border  = { 1, 1, 1, 1 }
+	overlay_stretch = FALSE
+	orientation     = HORIZONTAL
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "slider"
+	state           = PRELIGHT
+	file            = "scrollbar_vert1.png"
+	border          = { 2, 2, 13, 12 }
+	stretch         = TRUE
+	overlay_file    = "scrollbar_thumb2.png"
+	overlay_border  = { 0, 0, 0, 0 }
+	overlay_stretch = FALSE
+	orientation     = VERTICAL
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "slider"
+	file            = "scrollbar_vert1.png"
+	border          = { 2, 2, 13, 12 }
+	stretch         = TRUE
+	overlay_file    = "scrollbar_thumb.png"
+	overlay_border  = { 0, 0, 0, 0 }
+	overlay_stretch = FALSE
+	orientation     = VERTICAL
+      }
+#
+# Any trough....
+#
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "trough"
+	file            = "trough.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+#
+# Progressbar....
+#
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "bar"
+	file            = "progressbar.png"
+	border          = { 4, 4, 4, 4 }
+	stretch         = TRUE
+      }
+#
+# Rulers...
+#
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "vruler"
+	file            = "ruler_vert.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "hruler"
+	file            = "ruler_horiz.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+#
+# Optionmenu
+#      
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	state           = PRELIGHT
+	detail          = "optionmenu"
+	file            = "button2.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "optionmenu"
+	file            = "button1.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+#
+# Handlebox
+#
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "handlebox_bin"
+	file            = "ruler_horiz.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+#
+# Paned widget
+#
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "paned"
+	file            = "button5.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+#
+# Tooltips
+#
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	detail          = "tooltip"
+	file            = "button5.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+#
+# RadioButton
+#
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	detail          = "radiobutton"
+	file            = "button5.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+#
+# CheckButton
+#
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	detail          = "checkbutton"
+	file            = "button5.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+#      
+# Selected text in entries, text widget, lists and trees      
+#
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	state           = INSENSITIVE
+	detail          = "selected"
+	file            = "button5.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	detail          = "selected"
+	file            = "button2.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	state           = INSENSITIVE
+	detail          = "text"
+	file            = "button5.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	detail          = "text"
+	file            = "button2.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	state           = INSENSITIVE
+	detail          = "listitem"
+	file            = "button5.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	detail          = "listitem"
+	file            = "button2.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	state           = INSENSITIVE
+	detail          = "treeitem"
+	file            = "button5.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	detail          = "treeitem"
+	file            = "button2.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+#
+# Arrows for all occasions
+#
+    image 
+      {
+        function        = ARROW
+	recolorable     = TRUE
+	state           = NORMAL
+	file            = "arrow_up1.png"
+	stretch         = TRUE
+	arrow_direction = UP
+      }
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	detail          = "window"
+	file            = "brown_bg1.png"
+	stretch         = FALSE
+      }
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	detail          = "base"
+	file            = "brown_bg1.png"
+	stretch         = FALSE
+      }
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	detail          = "viewportbin"
+	file            = "brown_bg2.png"
+	stretch         = FALSE
+      }
+    image 
+      {
+        function        = FLAT_BOX
+	recolorable     = TRUE
+	detail          = "curve_bg"
+	file            = "curve_bg1.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = ARROW
+	recolorable     = TRUE
+	state           = PRELIGHT
+	file            = "arrow_up2.png"
+	stretch         = TRUE
+	arrow_direction = UP
+      }
+    image 
+      {
+        function        = ARROW
+	recolorable     = TRUE
+        shadow          = IN
+	file            = "arrow_up3.png"
+	stretch         = TRUE
+	arrow_direction = UP
+      }
+
+    image 
+      {
+        function        = ARROW
+	recolorable     = TRUE
+	state           = NORMAL
+	file            = "arrow_down1.png"
+	stretch         = TRUE
+	arrow_direction = DOWN
+      }
+    image 
+      {
+        function        = ARROW
+	recolorable     = TRUE
+	state           = PRELIGHT
+	file            = "arrow_down2.png"
+	stretch         = TRUE
+	arrow_direction = DOWN
+      }
+    image 
+      {
+        function        = ARROW
+	recolorable     = TRUE
+        shadow          = IN
+	file            = "arrow_down3.png"
+	stretch         = TRUE
+	arrow_direction = DOWN
+      }
+
+    image 
+      {
+        function        = ARROW
+	recolorable     = TRUE
+	state           = NORMAL
+	file            = "arrow_left1.png"
+	stretch         = TRUE
+	arrow_direction = LEFT
+      }
+    image 
+      {
+        function        = ARROW
+	recolorable     = TRUE
+	state           = PRELIGHT
+	file            = "arrow_left2.png"
+	stretch         = TRUE
+	arrow_direction = LEFT
+      }
+    image 
+      {
+        function        = ARROW
+	recolorable     = TRUE
+        shadow          = IN
+	file            = "arrow_left3.png"
+	stretch         = TRUE
+	arrow_direction = LEFT
+      }
+
+    image 
+      {
+        function        = ARROW
+	recolorable     = TRUE
+	state           = NORMAL
+	file            = "arrow_right1.png"
+	stretch         = TRUE
+	arrow_direction = RIGHT
+      }
+    image 
+      {
+        function        = ARROW
+	recolorable     = TRUE
+	state           = PRELIGHT
+	file            = "arrow_right2.png"
+	stretch         = TRUE
+	arrow_direction = RIGHT
+      }
+    image 
+      {
+        function        = ARROW
+	recolorable     = TRUE
+        shadow          = IN
+	file            = "arrow_right3.png"
+	stretch         = TRUE
+	arrow_direction = RIGHT
+      }
+#
+# Hline and Vline widgets
+#
+    image 
+      {
+        function        = HLINE
+	recolorable     = TRUE
+	file            = "hline.png"
+	border          = { 0, 0, 1, 1 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = VLINE
+	recolorable     = TRUE
+	file            = "vline.png"
+	border          = { 1, 1, 0, 0 }
+	stretch         = TRUE
+      }
+#
+# Check marks
+#
+    image 
+      {
+        function        = CHECK
+	recolorable     = TRUE
+	shadow          = OUT
+	overlay_file    = "check1.png"
+	overlay_stretch = FALSE
+      }
+    image 
+      {
+        function        = CHECK
+	recolorable     = TRUE
+	shadow          = IN
+	overlay_file    = "check2.png"
+	overlay_stretch = FALSE
+      }
+#
+# Option marks
+#
+    image 
+      {
+        function        = OPTION
+	recolorable     = TRUE
+	shadow          = OUT
+	overlay_file    = "option1.png"
+	overlay_border  = { 0, 0, 0, 0 }
+	overlay_stretch = FALSE
+      }
+    image 
+      {
+        function        = OPTION
+	recolorable     = TRUE
+	shadow          = IN
+	overlay_file    = "option2.png"
+	overlay_border  = { 0, 0, 0, 0 }
+	overlay_stretch = FALSE
+      }
+#
+# The "tab" on the OptionMenu
+#
+    image 
+      {
+        function        = TAB
+	recolorable     = TRUE
+	overlay_file    = "option_menu.png"
+	overlay_stretch = FALSE
+      }
+#
+# How to draw the focus aroudn a widget 
+#
+    image 
+      {
+        function        = FOCUS
+	recolorable     = TRUE
+	overlay_file    = "focus.png"
+	overlay_border  = { 4, 4, 4, 4 }
+	overlay_stretch = TRUE
+      }
+#
+# Fun with Scroolbars
+#      
+    image 
+      {
+        function        = SLIDER
+	recolorable     = TRUE
+	file            = "scrollbar_horiz1.png"
+	border          = { 13, 12, 2, 2 }
+	stretch         = TRUE
+	orientation     = HORIZONTAL
+      }
+    image 
+      {
+        function        = SLIDER
+	recolorable     = TRUE
+	file            = "scrollbar_vert1.png"
+	border          = { 2, 2, 13, 12 }
+	stretch         = TRUE
+	orientation     = VERTICAL
+      }
+#
+# The handle on Handleboxes
+#
+    image 
+      {
+        function        = HANDLE
+	recolorable     = TRUE
+	file            = "button5.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+	overlay_file    = "handle_vert_thumb.png"
+	overlay_border  = { 0, 0, 0, 0 }
+	overlay_stretch = FALSE
+	orientation     = VERTICAL
+      }
+#
+# The background for entry widgets
+#
+    image 
+      {
+        function        = ENTRY
+	recolorable     = TRUE
+	state           = INSENSITIVE
+	file            = "entry2.png"
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = ENTRY
+	recolorable     = TRUE
+	file            = "entry1.png"
+	stretch         = TRUE
+      }
+#
+# Extensions (ie the tabs on a notebook)
+#
+    image 
+      {
+        function        = EXTENSION
+	recolorable     = TRUE
+	state           = ACTIVE
+	file            = "button8.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = EXTENSION
+	recolorable     = TRUE
+	file            = "extension_top1.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+	gap_side        = BOTTOM
+      }
+    image 
+      {
+        function        = EXTENSION
+	recolorable     = TRUE
+	file            = "extension_bottom1.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+	gap_side        = TOP
+      }
+    image 
+      {
+        function        = EXTENSION
+	recolorable     = TRUE
+	file            = "extension_left1.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+	gap_side        = RIGHT
+      }
+    image 
+      {
+        function        = EXTENSION
+	recolorable     = TRUE
+	file            = "extension_right1.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+	gap_side        = LEFT
+      }
+#
+# How to draw shadows in general
+#
+    image 
+      {
+        function        = SHADOW
+	recolorable     = TRUE
+	shadow          = IN
+	file            = "shadow2.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = SHADOW
+	recolorable     = TRUE
+	shadow          = OUT
+	file            = "shadow1.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = SHADOW
+	recolorable     = TRUE
+	shadow          = ETCHED_IN
+	file            = "frame1.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = SHADOW
+	recolorable     = TRUE
+	shadow          = ETCHED_OUT
+	file            = "frame2.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+      }
+#
+# How to draw shadows with a gap on one side
+#
+    image 
+      {
+        function        = SHADOW_GAP
+	recolorable     = TRUE
+	file            = "frame_gap.png"
+	border          = { 2, 2, 2, 2 }
+	stretch         = TRUE
+	gap_start_file  = "frame_gap_top_start.png"
+	gap_start_border= { 0, 0, 1, 1 }
+	gap_end_file    = "frame_gap_top_end.png"
+	gap_end_border  = { 0, 0, 1, 1 }
+	gap_side        = TOP
+      }
+    image 
+      {
+        function        = BOX_GAP
+	recolorable     = TRUE
+	file            = "button7.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+	gap_file        = "gap_top.png"
+	gap_border      = { 0, 0, 0, 0 }
+	gap_start_file  = "gap_top_start.png"
+	gap_start_border= { 2, 0, 0, 0 }
+	gap_end_file    = "gap_top_end.png"
+	gap_end_border  = { 0, 2, 0, 0 }
+	gap_side        = TOP
+      }
+#
+# How to draw boxes with a gap on one side (ie the page of a notebook)
+#
+    image 
+      {
+        function        = BOX_GAP
+	recolorable     = TRUE
+	file            = "button7.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+	gap_file        = "gap_bottom.png"
+	gap_border      = { 0, 0, 0, 0 }
+	gap_start_file  = "gap_bottom_start.png"
+	gap_start_border= { 2, 0, 0, 0 }
+	gap_end_file    = "gap_bottom_end.png"
+	gap_end_border  = { 0, 2, 0, 0 }
+	gap_side        = BOTTOM
+      }
+    image 
+      {
+        function        = BOX_GAP
+	recolorable     = TRUE
+	file            = "button7.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+	gap_file        = "gap_left.png"
+	gap_border      = { 0, 0, 0, 0 }
+	gap_start_file  = "gap_left_start.png"
+	gap_start_border= { 0, 0, 2, 0 }
+	gap_end_file    = "gap_left_end.png"
+	gap_end_border  = { 0, 0, 0, 2 }
+	gap_side        = LEFT
+      }
+    image 
+      {
+        function        = BOX_GAP
+	recolorable     = TRUE
+	file            = "button7.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+	gap_file        = "gap_right.png"
+	gap_border      = { 0, 0, 0, 0 }
+	gap_start_file  = "gap_right_start.png"
+	gap_start_border= { 0, 0, 2, 0 }
+	gap_end_file    = "gap_right_end.png"
+	gap_end_border  = { 0, 0, 0, 2 }
+	gap_side        = RIGHT
+      }
+#
+# How to draw the box of a notebook when it isnt attached to a tab
+#
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	detail          = "notebook"
+	file            = "button7.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+	gap_side        = TOP
+      }
+#
+# Some defaults as to hwo to draw boxes If they haven't alreday  been covered
+#
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	shadow          = IN
+	file            = "button9.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+    image 
+      {
+        function        = BOX
+	recolorable     = TRUE
+	file            = "button7.png"
+	border          = { 3, 3, 3, 3 }
+	stretch         = TRUE
+      }
+   }
+}
+
+style "menu"
+{
+#  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
+}
+
+style "list"
+{
+#   bg[NORMAL] = { 0.9, 0.9, 0.9 }
+#   bg[PRELIGHT] = { 0.9, 0.9, 0.9 }
+}
+
+#widget_class "*MenuItem*" style "menu"
+#widget_class "*Menu*" style "menu"
+#widget_class "GtkCTree" style "list"
+#widget_class "GtkCList" style "list"
+
+style "window"
+{
+#  bg_pixmap[NORMAL] = "warning.xpm"
+}
+
+style "scale"
+{
+#  fg[NORMAL] = { 1.0, 0, 0 }
+#  bg[PRELIGHT] = { 1.0, 1.0, 0 }
+#  bg_pixmap[NORMAL] = "<parent>"
+}
+
+style "button"
+{
+#  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
+#  bg[PRELIGHT] = { 0, 0, 0.75 }
+#  bg[PRELIGHT] = { 0.75, 0, 0x00 }
+}
+
+style "toggle_button" = "button"
+{
+#  fg[NORMAL] = { 1.0, 0, 0 }
+#  fg[ACTIVE] = { 1.0, 0, 0 }
+#  bg_pixmap[NORMAL] = "<parent>"
+}
+
+style "text"
+{
+#  bg_pixmap[NORMAL] = "marble.xpm"
+#  text[NORMAL] = { 0.2, 0.2, 1.0 }
+#  fg[NORMAL] = { 1.0, 1.0, 1.0 }
+#  base[NORMAL] = { 0.0, 0.0, 0.0 }
+}
+
+style "slider"
+{
+#  fg[NORMAL] = { 1.0, 1.0, 1.0 }
+#  bg[NORMAL] = { 0.0, 0.0, 1.0 }
+#  bg[ACTIVE] = { 0.0 ,0.0, 0.5 }
+#  bg[PRELIGHT] = { 0.75 ,0.75, 1.0 }
+}
+
+style "ruler"
+{
+#  font = '-adobe-helvetica-medium-r-normal--*-80-*-*-*-*-*-*'
+}
+
+style "curve"
+{
+#  fg[NORMAL] = { 58000, 0, 0 }			# red
+}
+
+style "red-bar"
+{
+#  bg[PRELIGHT] = { 0.95, .55, 0.55 }
+}
+
+# override testgtk2, introduce the green color in the button list
+style 'button_list' = 'button'
+{
+#  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
+#  bg[PRELIGHT] = { 0, 0.75, 0x00 }
+}
+widget "main window.*GtkScrolledWindow.*GtkButton*" style "button_list"
+
+# common default
+class "GtkWidget" style "default"
+
+class "GtkScrollbar" style "red-bar"
+
+widget_class "GtkWindow" style "window"
+widget_class "GtkDialog" style "window"
+widget_class "GtkFileSelection" style "window"
+widget_class "*Gtk*Scale" style "scale"
+widget_class "*GtkCheckButton*" style "toggle_button"
+widget_class "*GtkRadioButton*" style "toggle_button"
+widget_class "*GtkButton*" style "button"
+widget_class "*Ruler" style "ruler"
+widget_class "*GtkText" style "text"
+widget "*GtkCurve" style "curve"
+
+binding "test1"
+{
+  bind "<ctrl>1" {
+    "debug-msg" ("hallo and") 
+    "debug-msg" ("huhu")
+  }
+}
+
+binding "test2"
+{
+  bind "<ctrl>1" {
+    "debug-msg" ("jup!") 
+  }
+}
+
+# possible priorities are (in ascending order):
+# lowest
+# gtk         (used by gtk for internal class bindings)
+# application (for hard coded bindings on application basis)
+# rc          (used implicitel by rc files)
+# highest
+class "GtkButton" binding "test1"           # implicit : rc
+class "GtkButton" binding : highest "test2" # override "rc" priority
+
+binding "clist-test"
+{
+  bind "j" {
+    "scroll-vertical" (step-backward, 0.0)
+  }
+  bind "k" {
+    "scroll-vertical" (step-forward, 0.0)
+  }
+}
+
+class "GtkCList" binding "clist-test"

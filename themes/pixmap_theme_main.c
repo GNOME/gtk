@@ -315,7 +315,7 @@ theme_parse_file(GScanner * scanner,
   token = g_scanner_get_next_token(scanner);
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
-  data->file = g_strdup(scanner->value.v_string);
+  data->file = gtk_rc_find_pixmap_in_path(scanner, scanner->value.v_string);
 
   return G_TOKEN_NONE;
 }
@@ -769,7 +769,7 @@ theme_parse_overlay_file(GScanner * scanner,
   token = g_scanner_get_next_token(scanner);
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
-  data->overlay_file = g_strdup(scanner->value.v_string);
+  data->overlay_file = gtk_rc_find_pixmap_in_path(scanner, scanner->value.v_string);
 
   return G_TOKEN_NONE;
 }
@@ -791,7 +791,7 @@ theme_parse_gap_file(GScanner * scanner,
   token = g_scanner_get_next_token(scanner);
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
-  data->gap_file = g_strdup(scanner->value.v_string);
+  data->gap_file = gtk_rc_find_pixmap_in_path(scanner, scanner->value.v_string);
 
   return G_TOKEN_NONE;
 }
@@ -813,7 +813,7 @@ theme_parse_gap_start_file(GScanner * scanner,
   token = g_scanner_get_next_token(scanner);
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
-  data->gap_start_file = g_strdup(scanner->value.v_string);
+  data->gap_start_file = gtk_rc_find_pixmap_in_path(scanner, scanner->value.v_string);
 
   return G_TOKEN_NONE;
 }
@@ -835,7 +835,7 @@ theme_parse_gap_end_file(GScanner * scanner,
   token = g_scanner_get_next_token(scanner);
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
-  data->gap_end_file = g_strdup(scanner->value.v_string);
+  data->gap_end_file = gtk_rc_find_pixmap_in_path(scanner, scanner->value.v_string);
 
   return G_TOKEN_NONE;
 }
