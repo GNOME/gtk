@@ -1,5 +1,13 @@
 2001-01-15  Alexander Larsson  <alexl@redhat.com>
 
+	* gdk/linux-fb/gdkdnd-fb.c:
+	Implemented drag and drop.
+	Seems to be mostly working. I sometimes get an assert from gtkdnd.c:2664
+	when it tries to free and then copy the same event (info->last_event).
+	I am not sure about why	this happens, but will continue looking.
+
+2001-01-15  Alexander Larsson  <alexl@redhat.com>
+
 	* gdk/linux-fb/gdkwindow-fb.c:
 	Use gdk_window_invalidate_rect instead of
 	gdk_window_invalidate_rect_clear to minimise flashing.
