@@ -2141,11 +2141,11 @@ changed_handler (GtkTextLayout *layout,
           yoffset_changed = TRUE;
         }
 
-      gtk_text_view_scroll_calc_now (text_view);
-
       if (yoffset_changed)
         gtk_adjustment_value_changed (get_vadjustment (text_view));
     }
+  
+  gtk_text_view_scroll_calc_now (text_view);
 }
 
 static void
@@ -3539,25 +3539,8 @@ gtk_text_view_scroll_calc_now (GtkTextView *text_view)
 
   gtk_text_layout_get_size (text_view->layout, &width, &height);
 
-#if 0
-  /* If the width is less than the screen width (likely
-     if we have wrapping turned on for the whole widget),
-     then we want to set the scroll region to the screen
-     width. If the width is greater (wrapping off) then we
-     probably want to set the scroll region to the width
-     of the layout. I guess.
-  */
-
-  width = MAX (text_view->layout->screen_width, width);
-  height = height;
-#endif
-
   if (text_view->width != width || text_view->height != height)
     {
-#if 0
-      printf ("layout size set, widget width is %d\n",
-              GTK_WIDGET (text_view)->allocation.width);
-#endif
       text_view->width = width;
       text_view->height = height;
 

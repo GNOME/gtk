@@ -480,16 +480,7 @@ gtk_text_layout_get_size (GtkTextLayout *layout,
                           gint *width,
                           gint *height)
 {
-  gint w, h;
-
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
-
-  gtk_text_btree_get_view_size (_gtk_text_buffer_get_btree (layout->buffer),
-                                layout,
-                                &w, &h);
-
-  layout->width = w;
-  layout->height = h;
 
   if (width)
     *width = layout->width;
@@ -739,6 +730,14 @@ gtk_text_layout_is_valid (GtkTextLayout *layout)
                                   layout);
 }
 
+static void
+update_layout_size (GtkTextLayout *layout)
+{
+  gtk_text_btree_get_view_size (_gtk_text_buffer_get_btree (layout->buffer),
+				layout,
+				&layout->width, &layout->height);
+}
+
 /**
  * gtk_text_layout_validate_yrange:
  * @layout: a #GtkTextLayout
@@ -835,13 +834,17 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
       line = gtk_text_line_next (line);
     }
 
-  /* If we found and validated any invalid lines, emit the changed singal
+  /* If we found and validated any invalid lines, update size and
+   * emit the changed signal
    */
   if (first_line)
     {
-      gint line_top =
-        gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer),
-                                      first_line, layout);
+      gint line_top;
+
+      update_layout_size (layout);
+
+      line_top = gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer),
+					       first_line, layout);
 
       gtk_text_layout_changed (layout,
                                line_top,
@@ -874,6 +877,8 @@ gtk_text_layout_validate (GtkTextLayout *layout,
                                   &y, &old_height, &new_height))
     {
       max_pixels -= new_height;
+
+      update_layout_size (layout);
       gtk_text_layout_changed (layout, y, old_height, new_height);
     }
 }
@@ -1475,7 +1480,7 @@ add_preedit_attrs (GtkTextLayout     *layout,
 	end = layout->preedit_len;
       
       pango_attr_iterator_get_font (iter, &style->font,
-				    &font_desc, size_only ? NULL : &extra_attrs);
+				    &font_desc, &extra_attrs);
       
       tmp_list = extra_attrs;
       while (tmp_list)

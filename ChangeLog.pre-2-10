@@ -1,3 +1,15 @@
+Wed Nov 15 16:02:20 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c (changed_handler): Call scroll_calc_now()
+	unconditionally, since we may need to update the horizontal
+	scrollbars even if the height didn't change.
+
+	* gtk/gtktextlayout.c (add_preedit_attrs): Always get
+	the extra attrs, since some of them affect size.
+
+	* gtk/gtktextdisplay.c (gtk_text_layout_draw): Factor in
+	x_offset correctly.
+
 2000-11-15  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextlayout.c (set_para_values): If indent is negative,

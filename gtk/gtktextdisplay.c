@@ -668,8 +668,8 @@ void
 gtk_text_layout_draw (GtkTextLayout *layout,
                       GtkWidget *widget,
                       GdkDrawable *drawable,
-                      /* Location of the layout
-                         in buffer coordinates */
+                      /* Location of the drawable
+                         in layout coordinates */
                       gint x_offset,
                       gint y_offset,
                       /* Region of the layout to
@@ -782,9 +782,9 @@ gtk_text_layout_draw (GtkTextLayout *layout,
             gc = widget->style->fg_gc[GTK_STATE_NORMAL];
 
           gdk_draw_line (drawable, gc,
-                         line_display->x_offset + cursor->x,
+                         line_display->x_offset + cursor->x - x_offset,
                          current_y + line_display->top_margin + cursor->y,
-                         line_display->x_offset + cursor->x,
+                         line_display->x_offset + cursor->x - x_offset,
                          current_y + line_display->top_margin + cursor->y + cursor->height - 1);
 
           cursor_list = cursor_list->next;
