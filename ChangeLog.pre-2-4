@@ -1,3 +1,8 @@
+2001-08-22  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkliststore.h (GTK_LIST_STORE_CLASS): Fix a small typo.
+	It's LIST_STORE, not LISTSTORE.
+
 Tue Aug 21 12:43:29 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk.h: Remove commented out gtkpacker reference.
