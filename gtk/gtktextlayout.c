@@ -1830,7 +1830,11 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
   GtkTextBTree *tree;
   GtkTextLineDisplay *display;
   gint byte_index;
-
+  PangoRectangle whole_para;      
+  gint total_width;
+  gint x_offset;
+  PangoAlignment align;
+  
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (gtk_text_iter_get_btree (iter) == _gtk_text_buffer_get_btree (layout->buffer));
   g_return_if_fail (rect != NULL);
@@ -1842,6 +1846,28 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
 
   rect->y = gtk_text_btree_find_line_top (tree, line, layout);
 
+  pango_layout_get_extents (display->layout, NULL, &whole_para);
+  
+  total_width = pango_layout_get_width (display->layout);
+  align = pango_layout_get_alignment (display->layout);
+  
+  if (total_width < 0)
+    total_width = display->total_width * PANGO_SCALE;
+  
+  x_offset = display->left_margin * PANGO_SCALE;
+  
+  switch (align)
+    {
+    case PANGO_ALIGN_RIGHT:
+      x_offset += total_width - whole_para.width;
+      break;
+    case PANGO_ALIGN_CENTER:
+      x_offset += (total_width - whole_para.width) / 2;
+      break;
+    default:
+      break;
+    }
+  
   /* pango_layout_index_to_pos () expects the index of a character within the layout,
    * so we have to special case the last character. FIXME: This should be moved
    * to Pango.
@@ -1852,10 +1878,10 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
 
       pango_layout_line_get_extents (last_line, NULL, &pango_rect);
 
-      rect->x = display->x_offset + (pango_rect.x + pango_rect.width) / PANGO_SCALE;
-      rect->y += display->top_margin;
+      rect->x = PANGO_PIXELS (x_offset + pango_rect.x + pango_rect.width);
+      rect->y += PANGO_PIXELS (whole_para.height - pango_rect.height) + display->top_margin;
       rect->width = 0;
-      rect->height = pango_rect.height / PANGO_SCALE;
+      rect->height = PANGO_PIXELS (pango_rect.height);
     }
   else
     {
@@ -1863,10 +1889,10 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
 
       pango_layout_index_to_pos (display->layout, byte_index, &pango_rect);
 
-      rect->x = display->x_offset + pango_rect.x / PANGO_SCALE;
-      rect->y += display->top_margin;
-      rect->width = pango_rect.width / PANGO_SCALE;
-      rect->height = pango_rect.height / PANGO_SCALE;
+      rect->x = PANGO_PIXELS (x_offset + pango_rect.x);
+      rect->y += PANGO_PIXELS (pango_rect.y) + display->top_margin;
+      rect->width = PANGO_PIXELS (pango_rect.width);
+      rect->height = PANGO_PIXELS (pango_rect.height);
     }
 
   gtk_text_layout_free_line_display (layout, display);

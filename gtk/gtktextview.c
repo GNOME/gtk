@@ -3414,7 +3414,6 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
                              guint             time)
 {
   gchar *str;
-  gint length;
   GtkTextIter start;
   GtkTextIter end;
   GtkTextView *text_view;
@@ -3422,14 +3421,11 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
   text_view = GTK_TEXT_VIEW (widget);
 
   str = NULL;
-  length = 0;
 
   if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view), &start, &end))
     {
       /* Extract the selected text */
       str = gtk_text_iter_get_visible_text (&start, &end);
-
-      length = strlen (str);
     }
 
   if (str)

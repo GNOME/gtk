@@ -1,5 +1,22 @@
 2000-11-07  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextlayout.c (gtk_text_layout_get_iter_location):
+	Half-ass somewhat fix this function, so that scrolling to the
+	insertion point works. Pango hacking is in the future to really
+	fix it.
+
+	* gtk/gtktextview.c (gtk_text_view_drag_data_get): Don't calculate
+	length of data, no longer used.
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_finalize): move destroy
+	method contents in here, get rid of destroy method
+	(gtk_text_buffer_insert_range): Fix some g_return_if_fail checks
+	that were backward. Remove debug spew.
+	(cut_or_copy): Make the clipboard work with insert_range to
+	preserve tags and pixbufs, not just the primary selection.
+
+2000-11-07  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextmark.c (gtk_text_mark_is_visible): rename 
 	to gtk_text_mark_get_visible
 

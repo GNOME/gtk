@@ -53,17 +53,21 @@ typedef struct _GtkTextBTree GtkTextBTree;
 
 typedef struct _GtkTextBufferClass GtkTextBufferClass;
 
-struct _GtkTextBuffer {
+struct _GtkTextBuffer
+{
   GtkObject parent_instance;
 
   GtkTextTagTable *tag_table;
   GtkTextBTree *btree;
 
+  GtkTextBuffer *clipboard_contents;
+  
   /* Whether the buffer has been modified since last save */
-  gboolean modified;
+  guint modified : 1;
 };
 
-struct _GtkTextBufferClass {
+struct _GtkTextBufferClass
+{
   GtkObjectClass parent_class;
 
   void (* insert_text)     (GtkTextBuffer *buffer,
