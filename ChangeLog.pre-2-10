@@ -1,3 +1,7 @@
+2004-01-26  Christian Rose  <menthos@menthos.com>
+
+	* configure.in: Added "mi" to ALL_LINGUAS.
+
 2004-01-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkproperty-win32.c (gdk_property_delete): If the

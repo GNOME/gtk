@@ -396,7 +396,7 @@ AC_SUBST(STRIP_BEGIN)
 AC_SUBST(STRIP_END)
 
 # i18n stuff
-ALL_LINGUAS="af am ar az be bg bn br ca cs cy da de el en_GB es et eu fa fi fr ga gl he hi hr hu ia id it ja ko li lt lv mk ml mn ms ne nl nn no pl pt pt_BR ro ru sk sl sq sr sr@Latn sv ta th tr uk uz uz@Cyrl vi wa yi zh_CN zh_TW"
+ALL_LINGUAS="af am ar az be bg bn br ca cs cy da de el en_GB es et eu fa fi fr ga gl he hi hr hu ia id it ja ko li lt lv mi mk ml mn ms ne nl nn no pl pt pt_BR ro ru sk sl sq sr sr@Latn sv ta th tr uk uz uz@Cyrl vi wa yi zh_CN zh_TW"
 AM_GLIB_GNU_GETTEXT
 LIBS="$LIBS $INTLLIBS"
 AC_OUTPUT_COMMANDS([case "$CONFIG_FILES" in *po-properties/Makefile.in*)
