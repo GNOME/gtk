@@ -665,36 +665,46 @@ gtk_file_system_render_icon (GtkFileSystem      *file_system,
 }
 
 /**
- * gtk_file_system_add_bookmark:
+ * gtk_file_system_insert_bookmark:
  * @file_system: a #GtkFileSystem
- * @bookmark: path of the bookmark to add
+ * @path: path of the bookmark to add
+ * @position: index in the bookmarks list at which the @path should be inserted; use 0
+ * for the beginning, and -1 or the number of bookmarks itself for the end of the list.
  * @error: location to store error, or %NULL
  * 
- * Adds a bookmark folder to the user's bookmarks list.  If the operation succeeds,
- * the "bookmarks_changed" signal will be emitted.
+ * Adds a path for a folder to the user's bookmarks list.  If the operation
+ * succeeds, the "bookmarks_changed" signal will be emitted.  Bookmark paths are
+ * unique; if you try to insert a @path that already exists, the operation will
+ * fail and the @error will be set to #GTK_FILE_SYSTEM_ERROR_ALREADY_EXISTS.  To
+ * reorder the list of bookmarks, use gtk_file_system_remove_bookmark() to
+ * remove the path in question, and call gtk_file_system_insert_bookmark() with
+ * the new position for the path.
  * 
  * Return value: TRUE if the operation succeeds, FALSE otherwise.  In the latter case,
  * the @error value will be set.
  **/
 gboolean
-gtk_file_system_add_bookmark (GtkFileSystem     *file_system,
-			      const GtkFilePath *path,
-			      GError           **error)
+gtk_file_system_insert_bookmark (GtkFileSystem     *file_system,
+				 const GtkFilePath *path,
+				 gint               position,
+				 GError           **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->add_bookmark (file_system, path, error);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->insert_bookmark (file_system, path, position, error);
 }
 
 /**
  * gtk_file_system_remove_bookmark:
  * @file_system: a #GtkFileSystem
- * @bookmark: path of the bookmark to remove
+ * @path: path of the bookmark to remove
  * @error: location to store error, or %NULL
  * 
  * Removes a bookmark folder from the user's bookmarks list.  If the operation
- * succeeds, the "bookmarks_changed" signal will be emitted.
+ * succeeds, the "bookmarks_changed" signal will be emitted.  If you try to remove
+ * a @path which does not exist in the bookmarks list, the operation will fail
+ * and the @error will be set to GTK_FILE_SYSTEM_ERROR_NONEXISTENT.
  * 
  * Return value: TRUE if the operation succeeds, FALSE otherwise.  In the latter
  * case, the @error value will be set.

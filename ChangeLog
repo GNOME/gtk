@@ -1,3 +1,23 @@
+2004-02-27  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilesystem.c (gtk_file_system_insert_bookmark): Added a
+	"position" argument.
+
+	* gtk/gtkfilesystem.h (GtkFileSystemError): Added value for 
+	GTK_FILE_SYSTEM_ERROR_ALREADY_EXISTS.
+	(struct _GtkFileSystemIface): Added a "position" argument to the
+	::insert_bookmark() method.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_insert_bookmark):
+	Updated; renamed from gtk_file_system_unix_add_bookmark().  Return
+	an error if the path already exists in the bookmarks list.
+	(gtk_file_system_unix_remove_bookmark): Return an error if the
+	path does not exist in the bookmarks list.
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_add_bookmark_from_path):
+	For now, use gtk_file_system_insert_bookmark() with -1 for the
+	position.  DnD will come next.
+
 Fri Feb 27 21:42:28 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_relayout): 

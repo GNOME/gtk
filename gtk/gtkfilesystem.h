@@ -70,6 +70,7 @@ typedef enum
   GTK_FILE_SYSTEM_ERROR_INVALID_URI,
   GTK_FILE_SYSTEM_ERROR_BAD_FILENAME,
   GTK_FILE_SYSTEM_ERROR_FAILED,
+  GTK_FILE_SYSTEM_ERROR_ALREADY_EXISTS
 } GtkFileSystemError;
 
 GQuark     gtk_file_system_error_quark      (void);
@@ -185,8 +186,9 @@ struct _GtkFileSystemIface
 
   /* Bookmarks */
 
-  gboolean       (*add_bookmark)           (GtkFileSystem     *file_system,
+  gboolean       (*insert_bookmark)        (GtkFileSystem     *file_system,
 					    const GtkFilePath *path,
+					    gint               position,
 					    GError           **error);
   gboolean       (*remove_bookmark)        (GtkFileSystem     *file_system,
 					    const GtkFilePath *path,
@@ -260,8 +262,9 @@ GdkPixbuf   *gtk_file_system_render_icon   (GtkFileSystem      *file_system,
 					    gint                pixel_size,
 					    GError            **error);
 
-gboolean gtk_file_system_add_bookmark    (GtkFileSystem     *file_system,
+gboolean gtk_file_system_insert_bookmark (GtkFileSystem     *file_system,
 					  const GtkFilePath *path,
+					  gint               position,
 					  GError           **error);
 gboolean gtk_file_system_remove_bookmark (GtkFileSystem     *file_system,
 					  const GtkFilePath *path,

@@ -1232,7 +1232,7 @@ shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
   else
     {
       error = NULL;
-      if (!gtk_file_system_add_bookmark (impl->file_system, path, &error))
+      if (!gtk_file_system_insert_bookmark (impl->file_system, path, -1, &error))
 	error_could_not_add_bookmark_dialog (impl, path, error);
     }
 }
