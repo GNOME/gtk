@@ -1,4 +1,5 @@
 /* GTK - The GIMP Toolkit
+ * Copyright (C) 2000 Red Hat, Inc. 
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -23,132 +24,87 @@
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
+#ifndef __GTK_COLOR_SELECTION_H__
+#define __GTK_COLOR_SELECTION_H__
 
-#ifndef __GTK_COLORSEL_H__
-#define __GTK_COLORSEL_H__
-
-#include <gtk/gtkwindow.h>
+#include <gtk/gtkdialog.h>
 #include <gtk/gtkvbox.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtkpreview.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkmisc.h>
-#include <gtk/gtkrange.h>
-#include <gtk/gtkscale.h>
-#include <gtk/gtkhscale.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkeventbox.h>
-
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+#define GTK_TYPE_COLOR_SELECTION			(gtk_color_selection_get_type ())
+#define GTK_COLOR_SELECTION(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelection))
+#define GTK_COLOR_SELECTION_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
+#define GTK_IS_COLOR_SELECTION(obj)			(GTK_CHECK_TYPE ((obj), GTK_TYPE_COLOR_SELECTION))
+#define GTK_IS_COLOR_SELECTION_CLASS(klass)		(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_COLOR_SELECTION))
+#define GTK_COLOR_SELECTION_GET_CLASS(obj)              (GTK_CHECK_GET_CLAS ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
 
-#define GTK_TYPE_COLOR_SELECTION            (gtk_color_selection_get_type ())
-#define GTK_COLOR_SELECTION(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelection))
-#define GTK_COLOR_SELECTION_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
-#define GTK_IS_COLOR_SELECTION(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_COLOR_SELECTION))
-#define GTK_IS_COLOR_SELECTION_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COLOR_SELECTION))
-#define GTK_COLOR_SELECTION_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
 
+/* Number of elements in the custom palatte */
+#define CUSTOM_PALETTE_WIDTH 10
+#define CUSTOM_PALETTE_HEIGHT 2
 
-#define GTK_TYPE_COLOR_SELECTION_DIALOG            (gtk_color_selection_dialog_get_type ())
-#define GTK_COLOR_SELECTION_DIALOG(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialog))
-#define GTK_COLOR_SELECTION_DIALOG_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialogClass))
-#define GTK_IS_COLOR_SELECTION_DIALOG(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG))
-#define GTK_IS_COLOR_SELECTION_DIALOG_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COLOR_SELECTION_DIALOG))
-#define GTK_COLOR_SELECTION_DIALOG_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialogClass))
-
-typedef struct _GtkColorSelection             GtkColorSelection;
-typedef struct _GtkColorSelectionClass        GtkColorSelectionClass;
-
-typedef struct _GtkColorSelectionDialog       GtkColorSelectionDialog;
-typedef struct _GtkColorSelectionDialogClass  GtkColorSelectionDialogClass;
+typedef struct _GtkColorSelection       GtkColorSelection;
+typedef struct _GtkColorSelectionClass  GtkColorSelectionClass;
 
 
 struct _GtkColorSelection
 {
-  GtkVBox vbox;
+  GtkVBox parent;
 
-  GtkWidget *wheel_area;
-  GtkWidget *value_area;
-  GtkWidget *sample_area;
-  GtkWidget *sample_area_eb;
-
-  GtkWidget *scales[8];
-  GtkWidget *entries[8];
-  GtkWidget *opacity_label;
-
-  GdkGC *wheel_gc;
-  GdkGC *value_gc;
-  GdkGC *sample_gc;
-
-  GtkUpdateType policy;
-  gint use_opacity;
-  gint timer_active;
-  gint timer_tag;
-  gdouble values[8];
-  gdouble old_values[8];
-
-  guchar *wheel_buf;
-  guchar *value_buf;
-  guchar *sample_buf;
+  /* < private > */
+  gpointer private;
 };
 
 struct _GtkColorSelectionClass
 {
   GtkVBoxClass parent_class;
 
-  void (* color_changed) (GtkColorSelection *colorsel);
-};
-
-struct _GtkColorSelectionDialog
-{
-  GtkWindow window;
-
-  GtkWidget *colorsel;
-  GtkWidget *main_vbox;
-  GtkWidget *ok_button;
-  GtkWidget *reset_button;
-  GtkWidget *cancel_button;
-  GtkWidget *help_button;
-};
-
-struct _GtkColorSelectionDialogClass
-{
-  GtkWindowClass parent_class;
+  void (*color_changed)	(GtkColorSelection *color_selection);
 };
 
 
-/* ColorSelection */
+/* ColorSelection */ 
 
 GtkType    gtk_color_selection_get_type          (void);
+GtkWidget *gtk_color_selection_new               (void);
+void       gtk_color_selection_set_update_policy (GtkColorSelection *colorsel,
+						  GtkUpdateType      policy);
+gboolean   gtk_color_selection_get_use_opacity   (GtkColorSelection *colorsel);
+void       gtk_color_selection_set_use_opacity   (GtkColorSelection *colorsel,
+						  gboolean           use_opacity);
+gboolean   gtk_color_selection_get_use_palette   (GtkColorSelection *colorsel);
+void       gtk_color_selection_set_use_palette   (GtkColorSelection *colorsel,
+						  gboolean           use_palette);
 
-GtkWidget* gtk_color_selection_new               (void);
-
-void       gtk_color_selection_set_update_policy (GtkColorSelection     *colorsel,
-                                                  GtkUpdateType          policy);
-
-void       gtk_color_selection_set_opacity       (GtkColorSelection     *colorsel,
-                                                  gint                   use_opacity);
-
-void       gtk_color_selection_set_color         (GtkColorSelection     *colorsel,
-					          gdouble               *color);
-
-void       gtk_color_selection_get_color         (GtkColorSelection     *colorsel,
-                                                  gdouble               *color);
-
-/* ColorSelectionDialog */
-
-GtkType    gtk_color_selection_dialog_get_type   (void);
-
-GtkWidget* gtk_color_selection_dialog_new        (const gchar *title);
+/* The Color set is an array of doubles, of the following format:
+ * color[0] = red_channel;
+ * color[1] = green_channel;
+ * color[2] = blue_channel;
+ * color[3] = alpha_channel;
+ */
+void       gtk_color_selection_set_color          (GtkColorSelection    *colorsel,
+						    gdouble               *color);
+void       gtk_color_selection_get_color          (GtkColorSelection    *colorsel,
+						    gdouble               *color);
+void       gtk_color_selection_set_old_color      (GtkColorSelection    *colorsel,
+						    gdouble               *color);
+void       gtk_color_selection_get_old_color      (GtkColorSelection    *colorsel,
+						    gdouble               *color);
+void       gtk_color_selection_set_palette_color  (GtkColorSelection   *colorsel,
+					 	    gint                  x,
+						    gint                  y,
+						    gdouble              *color);
+gboolean   gtk_color_selection_get_palette_color  (GtkColorSelection   *colorsel,
+						    gint                  x,
+						    gint                  y,
+						    gdouble              *color);
+void       gtk_color_selection_unset_palette_color(GtkColorSelection   *colorsel,
+						    gint                  x,
+						    gint                  y);
+gboolean   gtk_color_selection_is_adjusting       (GtkColorSelection    *colorsel);
 
 
 #ifdef __cplusplus
@@ -156,4 +112,4 @@ GtkWidget* gtk_color_selection_dialog_new        (const gchar *title);
 #endif /* __cplusplus */
 
 
-#endif /* __GTK_COLORSEL_H__ */
+#endif /* __GTK_COLOR_SELECTION_H__ */

@@ -1,7 +1,23 @@
+Wed May 10 16:38:17 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am docs/Changes-1.4.txt gtk/gtkcolorsel.[ch]
+	gtk/gtkhsv.[ch]: Color selection dialog rewrite.
+	
+	(Original triangle color selector from Simon Budig
+	<Simon.Budig@unix-ag.org>, Cleaned up and rewritten for GTK+ by
+	from Jonathan, Havoc, and Federico. Merge into GTK+ done by David
+	Santiago <mrcooger@cyberverse.com>)
+
+	* gtk/gtkcolorseldialog.[ch]: Split color selection dialog
+	out into a separate widget.
+
+	* gtk/testgtk.c: Add some checkbuttons for toggling palette
+	and opacity controls.
+
 Wed May 10 16:08:09 2000  Owen Taylor  <otaylor@redhat.com>
 
-	* configure.in (GTK_LIBS_EXTRA): Remove gobject that snuck
-	in prematurely.
+	* configure.in (GTK_LIBS_EXTRA): Remove references to gobject that 
+	snuck in prematurely.
 
 2000-05-07  Tor Lillqvist  <tml@iki.fi>
 

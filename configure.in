@@ -259,9 +259,9 @@ if test x$with_glib = x ; then
     gmodule gthread)
 
   # we do not want to make all gtk progs to link to thread libraries.
-  glib_cflags=`$GLIB_CONFIG glib gobject gmodule --cflags`
+  glib_cflags=`$GLIB_CONFIG glib gmodule --cflags`
   glib_thread_cflags="$GLIB_CFLAGS"
-  glib_libs=`$GLIB_CONFIG glib gobject gmodule --libs`
+  glib_libs=`$GLIB_CONFIG glib gmodule --libs`
   glib_thread_libs="$GLIB_LIBS"
   GLIB_LIBS="$glib_libs"
   GLIB_DEPLIBS="$glib_libs"
@@ -276,10 +276,10 @@ else
   fi
 
   # For use in gtk-config
-  glib_cflags=`$GLIB_CONFIG --cflags gobject gmodule`
-  glib_thread_cflags=`$GLIB_CONFIG --cflags gobject gmodule gthread`
-  glib_libs=`$GLIB_CONFIG --libs gobject gmodule`
-  glib_thread_libs=`$GLIB_CONFIG --libs gobject gmodule gthread`
+  glib_cflags=`$GLIB_CONFIG --cflags gmodule`
+  glib_thread_cflags=`$GLIB_CONFIG --cflags gmodule gthread`
+  glib_libs=`$GLIB_CONFIG --libs gmodule`
+  glib_thread_libs=`$GLIB_CONFIG --libs gmodule gthread`
 
   glib_release=`$GLIB_CONFIG --version | sed 's%\\.[[0-9]]*$%%'`
 
@@ -294,7 +294,7 @@ else
   esac
 
   GLIB_CFLAGS="-I$glib_dir -I$glib_dir/gmodule"
-  GLIB_LIBS="$glib_dir/libglib.la $glib_dir/gmodule/libgobject.la $glib_dir/gmodule/libgmodule.la"
+  GLIB_LIBS="$glib_dir/libglib.la $glib_dir/gmodule/libgmodule.la"
   GLIB_DEPLIBS=
 
   AC_SUBST(GLIB_CFLAGS)

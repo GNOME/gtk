@@ -21,3 +21,6 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
   window's owner.
 
 - The detail arguments in the GtkStyleClass structure are now 'const gchar *'.
+
+- GtkColorSelectionDialog has now been moved into it's own set of files,
+gtkcolorseldialog.c and gtkcolorseldialog.h. 

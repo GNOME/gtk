@@ -62,6 +62,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkcheckmenuitem.h	\
 	gtkclist.h		\
 	gtkcolorsel.h		\
+	gtkcolorseldialog.h	\
 	gtkcombo.h		\
 	gtkcompat.h		\
 	gtkcontainer.h		\
@@ -177,6 +178,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkcheckmenuitem.c	\
 	gtkclist.c		\
 	gtkcolorsel.c		\
+	gtkcolorseldialog.c	\
 	gtkcombo.c		\
 	gtkcontainer.c		\
 	gtkctree.c		\
@@ -202,6 +204,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkhscale.c		\
 	gtkhscrollbar.c		\
 	gtkhseparator.c		\
+	gtkhsv.c		\
 	gtkimage.c		\
 	gtkinputdialog.c	\
 	gtkintl.h		\

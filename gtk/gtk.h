@@ -46,6 +46,7 @@
 #include <gtk/gtkcheckmenuitem.h>
 #include <gtk/gtkclist.h>
 #include <gtk/gtkcolorsel.h>
+#include <gtk/gtkcolorseldialog.h>
 #include <gtk/gtkcombo.h>
 #include <gtk/gtkcompat.h>
 #include <gtk/gtkcontainer.h>

@@ -5179,6 +5179,28 @@ color_selection_changed (GtkWidget *w,
   gtk_color_selection_get_color(colorsel,color);
 }
 
+static void
+opacity_toggled_cb (GtkWidget *w,
+		    GtkColorSelectionDialog *cs)
+{
+  GtkColorSelection *colorsel;
+
+  colorsel = GTK_COLOR_SELECTION (cs->colorsel);
+  gtk_color_selection_set_use_opacity (colorsel,
+				       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)));
+}
+
+static void
+palette_toggled_cb (GtkWidget *w,
+		    GtkColorSelectionDialog *cs)
+{
+  GtkColorSelection *colorsel;
+
+  colorsel = GTK_COLOR_SELECTION (cs->colorsel);
+  gtk_color_selection_set_use_palette (colorsel,
+				       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)));
+}
+
 void
 create_color_selection (void)
 {
@@ -5186,21 +5208,36 @@ create_color_selection (void)
 
   if (!window)
     {
+      GtkWidget *options_hbox;
+      GtkWidget *check_button;
+      
       window = gtk_color_selection_dialog_new ("color selection dialog");
 
-      gtk_color_selection_set_opacity (
+      gtk_color_selection_set_use_opacity (
         GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (window)->colorsel),
 	TRUE);
-
-      gtk_color_selection_set_update_policy(
-        GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (window)->colorsel),
-	GTK_UPDATE_CONTINUOUS);
 
       gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
                           GTK_SIGNAL_FUNC(gtk_widget_destroyed),
                           &window);
+
+      options_hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), options_hbox, FALSE, FALSE, 0);
+      gtk_container_set_border_width (GTK_CONTAINER (options_hbox), 10);
+      
+      check_button = gtk_check_button_new_with_label ("Show Opacity");
+      gtk_box_pack_start (GTK_BOX (options_hbox), check_button, FALSE, FALSE, 0);
+      gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
+			  GTK_SIGNAL_FUNC (opacity_toggled_cb), window);
+
+      check_button = gtk_check_button_new_with_label ("Show Palette");
+      gtk_box_pack_end (GTK_BOX (options_hbox), check_button, FALSE, FALSE, 0);
+      gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
+			  GTK_SIGNAL_FUNC (palette_toggled_cb), window);
+
+      gtk_widget_show_all (options_hbox);
 
       gtk_signal_connect (
 	GTK_OBJECT (GTK_COLOR_SELECTION_DIALOG (window)->colorsel),
