@@ -713,7 +713,6 @@ gtk_query_arg_foreach (gpointer key,
 GtkArg*
 gtk_object_query_args (GtkType	class_type,
 		       guint32	**arg_flags,
-		       guint	**seq_ids,
 		       guint    *nargs)
 {
   GtkArg *args;
@@ -721,8 +720,6 @@ gtk_object_query_args (GtkType	class_type,
 
   if (arg_flags)
     *arg_flags = NULL;
-  if (seq_ids)
-    *seq_ids = NULL;
   g_return_val_if_fail (nargs != NULL, NULL);
   *nargs = 0;
   g_return_val_if_fail (gtk_type_is_a (class_type, gtk_object_get_type ()), NULL);
@@ -757,8 +754,6 @@ gtk_object_query_args (GtkType	class_type,
       *nargs = len;
       if (arg_flags)
 	*arg_flags = g_new (guint32, len);
-      if (seq_ids)
-	*seq_ids = g_new (guint, len);
 
       do
 	{
@@ -773,8 +768,6 @@ gtk_object_query_args (GtkType	class_type,
 	  args[info->seq_id - 1].name = info->name;
 	  if (arg_flags)
 	    (*arg_flags)[info->seq_id - 1] = info->arg_flags;
-	  if (seq_ids)
-	    (*seq_ids)[info->seq_id - 1] = info->seq_id;
 	}
       while (list);
 

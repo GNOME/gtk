@@ -1,95 +1,105 @@
-
 TODO BEFORE GTK 1.0
 -------------------
 
-BUGS
-----
- * Fix focus activation of list items. Does list item activation have to be
-   completely reorganized?
-
- * Lists should scroll to center the recently selected item if it isn't
-   visible.
-
- * Notebook: there are a few cosmetic problems left
-
+Bugs:
  * Vertical scrollbar: the expose event looks hosed and is causing 
    quite a bit of flickering
 
+ * signal parameters don't seem to get refreshed on recursive invokations
+   of GTK_NO_RECURSE signals, which causes the restarted emissions to loose
+   their actual point, i.e. parameter changes on the restarted emission,
+   needs further investigation.
+
+ * the GtkText widget needs to be fixed, that means no segfaults, full editing
+   facilities, omit the background pixmap for now.
+
+ * Widget redrawing when the window resizes sometimes messes up.
+   GtkWindows allow_shrink is buggy since we let all kinds of configure events
+   pass from Gdk to Gtk.
+   GtkLabels sometimes redraw without clearing up the underlying background on
+   window resizes.
+ 
+ * delay dnd settings to take effect once a widget is realized, this is
+   to avoid force realizations. i think this goes along with owens dnd
+   changes?
+    -timj
+   The way DND data types are set in GtkWidget really needs to be fixed.
+   This is pretty high on my priority list, and I'll get to it as soon as
+   the column list widget is done.  The correct way dnd data needs to be set
+   is to have a additional keyed data type with GtkWidget, which is applied to
+   the widget's window upon realize.
+   There also needs to be a way to set dnd-data on widget windows which are
+   not the main window (for widgets that create more than one window).
+    -Jay Painter
+   DnD seems to work for me, but yes, there needs to be some sort of
+   gtk_widget layer that makes it easier... Also, adding support for drop
+   zones might be nice.
+    -Elliot
+   This one is reproducabel for me:
+   testgtk --sync
+   popup colorselection
+   drag/drop works
+   start up preview color
+   drag works but not dropping
+   end preview color
+   drag/drop works
+   start up prewiev color
+   segfault in malloc
+    -timj
+
+Additions:
+ * Lists should scroll to center the recently selected item if it isn't
+   visible.
+
+ * enforce invariants on *_RESIZE* and *_REDRAW* flags.
+
+ * asure that child widgets are really get gtk_widget_destroy()ed in their
+   parents destroy handler, and not just unparented or somesuch.
+
+ * GtkToolTips:
+   allocate GtkTooltipsData from memchunks
+   look into incorporation of old/gtk-dairiki-971208-[01].patch.gz
+                          
+ * Make widget attributes configurable after the widget is created (timj).
+
+ * Implementation of owens widget style proposal.
+ 
+ * Are there still some GtkCList changes outstanding? (Jay Painter)
+   GtkCList is derived from GtkContainer but doesn't implement the
+   need_resize, focus, add and remove methods from containers.
+   it should at least issue a warning upon invokation of not supported
+   member functions.
+
+ * GtkTree and GtkList should express in their *_add implementations,
+   that they expect GtkListItems/GtkTreeItems as children. Similar
+   things might apply to other containers.
+
+
+TODO AFTER GTK 1.0
+------------------
+
+ * Make all widget attributes configurable after the widget is created (timj).
+ 
  * Make sure a widget added to a list is a list item and a widget added
    to a menu is a menu item, etc. GTK_BASIC was a first attempt at this,
    but it fails with subsequent container_add()s. maybe have another
    GTK_PARENT_BASIC (similar to GTK_PARENT_SENSITIVE) flag, to prevent
    tree iterations upon every container addition.
- 
- * GtkMenu needs to properly unref() accelerator tables upon destroy.
 
- * Using gtk_container_add() on an option menu to add a label works, but then
-   gtk_option_menu_button_press() segfaults. This is supposed to fail while
-   adding due to a g_return_if_fail (GTK_IS_MENU_ITEM (child));
-
- * enforce invariants on *_RESIZE* and *_REDRAW* flags.
- 
-   
-
-NEW FEATURES
-------------
  * gdk_expose_compress: ala-Xt, this would really help for opaque moves and
    such
 
-WIDGETS
--------
- * Column-list (Jay Painter)
- * Text widget (needs to be finished)
  * Entry should have a password mode (and it should show stars
-   for user feedback)
+   for user feedback).
 
-DND
----
-  It seems to be having problems again.  The way DND data types are set in
-  GtkWidget really needs to be fixed.  This is pretty high on my priority
-  list, and I'll get to it as soon as the column list widget is done.  The
-  correct way dnd data needs to be set is to have a additional keyed data
-  type with GtkWidget, which is applied to the widget's window upon realize.
-  There also needs to be a way to set dnd-data on widget windows which are
-  not the main window (for widgets that create more than one window).
-    -Jay Painter
-  DnD seems to work for me, but yes, there needs to be some sort of
-  gtk_widget layer that makes it easier... Also, adding support for drop
-  zones might be nice.
-    -- Elliot
-  This one is reproducabel for me:
-  testgtk --sync
-  popup colorselection
-  drag/drop works
-  start up preview color
-  drag works but not dropping
-  end preview color
-  drag/drop works
-  start up prewiev color
-  segfault in malloc
-  -timj
+ * More dialogs? Print, GtkFontSelector, maybe others...
 
-OTHER
------
- * Documentation
+ * Multiple document interface (MDI)?
 
-
-PLANNED FOR GTK AFTER 1.0
--------------------------
-(add your thoughts here)
-
-============================================================================
-Other stuff todo, as of yet not categorized into the above:
-
--Widget redrawing when the window resizes sometimes messes up.
-
--More dialogs? Print, font, etc?
-
--Multiple document interface (MDI)?
-
--Support another widget style? Should be possible using GtkStyle's, but
- there may be some work needed to remove any style dependencies in widget
- code. Maybe GtkStyle's should have 'draw_push_button', 'draw_check_button',
- etc, functions to draw the various widgets.
-
--Make all widget attributes configurable after the widget is created.
+ * Support another widget style? Should be possible using GtkStyle's, but
+   there may be some work needed to remove any style dependencies in widget
+   code. Maybe GtkStyle's should have 'draw_push_button', 'draw_check_button',
+   etc, functions to draw the various widgets.
+   This will be covered by upcoming themability, raster is working on it.
+ 
+ * More work on Documentation

@@ -255,7 +255,6 @@ void	gtk_object_setv		(GtkObject	*object,
  */
 GtkArg* gtk_object_query_args   (GtkType	class_type,
 				 guint32	**arg_flags,
-				 guint		**seq_ids,
 				 guint          *nargs);
 
 void	gtk_object_add_arg_type	(const gchar	*arg_name,

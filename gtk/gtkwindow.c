@@ -327,12 +327,10 @@ gtk_window_set_wmclass (GtkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (window->wmclass_name)
-    g_free (window->wmclass_name);
+  g_free (window->wmclass_name);
   window->wmclass_name = g_strdup (wmclass_name);
 
-  if (window->wmclass_class)
-    g_free (window->wmclass_class);
+  g_free (window->wmclass_class);
   window->wmclass_class = g_strdup (wmclass_class);
 
   if (GTK_WIDGET_REALIZED (window))
@@ -402,12 +400,21 @@ void
 gtk_window_remove_accelerator_table (GtkWindow           *window,
 				     GtkAcceleratorTable *table)
 {
+  GList *list;
+
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  window->accelerator_tables = g_list_remove (window->accelerator_tables,
-					      table);
-  gtk_accelerator_table_unref (table);
+  for (list = window->accelerator_tables; list; list = list->next)
+    {
+      if (list->data == table)
+	{
+	  gtk_accelerator_table_unref (table);
+	  window->accelerator_tables = g_list_remove_link (window->accelerator_tables, list);
+	  g_list_free_1 (list);
+	  break;
+	}
+    }
 }
 
 void
@@ -486,11 +493,18 @@ gtk_window_marshal_signal_2 (GtkObject      *object,
 static void
 gtk_window_destroy (GtkObject *object)
 {
+  GList *list;
+
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_WINDOW (object));
 
   gtk_container_unregister_toplevel (GTK_CONTAINER (object));
 
+  for (list = GTK_WINDOW (object)->accelerator_tables; list; list = list->next)
+    gtk_accelerator_table_unref (list->data);
+  g_list_free (GTK_WINDOW (object)->accelerator_tables);
+  GTK_WINDOW (object)->accelerator_tables = NULL;
+  
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
@@ -505,6 +519,8 @@ gtk_window_finalize (GtkObject *object)
 
   window = GTK_WINDOW (object);
   g_free (window->title);
+  g_free (window->wmclass_name);
+  g_free (window->wmclass_class);
 
   GTK_OBJECT_CLASS(parent_class)->finalize (object);
 }

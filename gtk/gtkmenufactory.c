@@ -87,7 +87,10 @@ gtk_menu_factory_destroy (GtkMenuFactory *factory)
     }
 
   if (factory->table)
-    gtk_accelerator_table_unref (factory->table);
+    {
+      gtk_accelerator_table_unref (factory->table);
+      factory->table = NULL;
+    }
   
   if (factory->widget)
     gtk_widget_unref (factory->widget);

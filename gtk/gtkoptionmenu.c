@@ -459,6 +459,9 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 	  if (child)
 	    {
 	      gtk_container_block_resize (GTK_CONTAINER (option_menu));
+	      if (GTK_BUTTON (option_menu)->child)
+		gtk_container_remove (GTK_CONTAINER (option_menu),
+				      GTK_BUTTON (option_menu)->child);
 	      if (GTK_WIDGET (option_menu)->state != child->state)
 		gtk_widget_set_state (child, GTK_WIDGET (option_menu)->state);
 	      gtk_widget_reparent (child, GTK_WIDGET (option_menu));

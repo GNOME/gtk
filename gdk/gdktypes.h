@@ -869,6 +869,7 @@ struct _GdkEventExpose
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   GdkRectangle area;
   gint count; /* If non-zero, how many more events follow. */
 };
@@ -877,6 +878,7 @@ struct _GdkEventNoExpose
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   /* XXX: does anyone need the X major_code or minor_code fields? */
 };
 
@@ -884,6 +886,7 @@ struct _GdkEventVisibility
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   GdkVisibilityState state;
 };
 
@@ -891,6 +894,7 @@ struct _GdkEventMotion
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   guint32 time;
   gdouble x;
   gdouble y;
@@ -908,6 +912,7 @@ struct _GdkEventButton
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   guint32 time;
   gdouble x;
   gdouble y;
@@ -925,6 +930,7 @@ struct _GdkEventKey
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   guint32 time;
   guint state;
   guint keyval;
@@ -936,6 +942,7 @@ struct _GdkEventCrossing
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   GdkWindow *subwindow;
   GdkNotifyType detail;
 };
@@ -944,6 +951,7 @@ struct _GdkEventFocus
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   gint16 in;
 };
 
@@ -951,6 +959,7 @@ struct _GdkEventConfigure
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   gint16 x, y;
   gint16 width;
   gint16 height;
@@ -960,6 +969,7 @@ struct _GdkEventProperty
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   GdkAtom atom;
   guint32 time;
   guint state;
@@ -969,6 +979,7 @@ struct _GdkEventSelection
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   GdkAtom selection;
   GdkAtom target;
   GdkAtom property;
@@ -983,6 +994,7 @@ struct _GdkEventProximity
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   guint32 time;
   GdkInputSource source;
   guint32 deviceid;
@@ -992,6 +1004,7 @@ struct _GdkEventDragRequest
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   guint32 requestor;
   union {
     struct {
@@ -1017,6 +1030,7 @@ struct _GdkEventDragBegin
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   union {
     struct {
       guint protocol_version:4;
@@ -1030,6 +1044,7 @@ struct _GdkEventDropEnter
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   guint32 requestor;
   union {
     struct {
@@ -1046,6 +1061,7 @@ struct _GdkEventDropLeave
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   guint32 requestor;
   union {
     struct {
@@ -1060,6 +1076,7 @@ struct _GdkEventDropDataAvailable
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   guint32 requestor;
   union {
     struct {
@@ -1078,6 +1095,7 @@ struct _GdkEventClient
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   GdkAtom message_type;
   gushort data_format;
   union {
@@ -1091,6 +1109,7 @@ struct _GdkEventOther
 {
   GdkEventType type;
   GdkWindow *window;
+  gint8 send_event;
   GdkXEvent *xevent;
 };
 

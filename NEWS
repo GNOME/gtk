@@ -2,6 +2,7 @@ Forthcoming Changes for GTK+ 0.99.4:
 
 * Reference counting revolution integrated.
   Refer to docs/refcounting.txt on this issue.
+* Implementation of a decent debugging system, see docs/debugging.txt.
 * Additions on the signal code for querying information about certain signals,
   and pending handlers of signals.
 * Support for user signals, and major changes to internal signal handler

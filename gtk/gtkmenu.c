@@ -135,11 +135,6 @@ gtk_menu_init (GtkMenu *menu)
   menu->position_func_data = NULL;
   
   GTK_MENU_SHELL (menu)->menu_flag = TRUE;
-  
-  /* we don't need to register as toplevel anymore,
-   * since there is the attach/detach functionality in place.
-   * gtk_container_register_toplevel (GTK_CONTAINER (menu));
-   */
 }
 
 static void
@@ -156,9 +151,7 @@ gtk_menu_destroy (GtkObject         *object)
   if (data)
     gtk_menu_detach (GTK_MENU (object));
 
-  /* we don't need this:
-   * gtk_container_unregister_toplevel (GTK_CONTAINER (object));
-   */
+  gtk_menu_set_accelerator_table (GTK_MENU (object), NULL);
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -191,7 +184,7 @@ gtk_menu_attach_to_widget (GtkMenu             *menu,
       return;
     }
 
-  gtk_widget_ref (menu);
+  gtk_widget_ref (GTK_WIDGET (menu));
   gtk_object_sink (GTK_OBJECT (menu));
 
   data = g_new (GtkMenuAttachData, 1);
