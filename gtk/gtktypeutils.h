@@ -39,27 +39,27 @@ G_BEGIN_DECLS
  * many of these are just aliases for GLib types to maintain
  * compatibility
  */
-typedef enum	/*< skip >*/
-{
-  GTK_TYPE_INVALID	= G_TYPE_INVALID,
-  GTK_TYPE_NONE		= G_TYPE_NONE,
-  GTK_TYPE_ENUM		= G_TYPE_ENUM,
-  GTK_TYPE_FLAGS	= G_TYPE_FLAGS,
 
-  /* GtkArg types */
-  GTK_TYPE_CHAR		= G_TYPE_CHAR,
-  GTK_TYPE_UCHAR	= G_TYPE_UCHAR,
-  GTK_TYPE_BOOL		= G_TYPE_BOOLEAN,
-  GTK_TYPE_INT		= G_TYPE_INT,
-  GTK_TYPE_UINT		= G_TYPE_UINT,
-  GTK_TYPE_LONG		= G_TYPE_LONG,
-  GTK_TYPE_ULONG	= G_TYPE_ULONG,
-  GTK_TYPE_FLOAT	= G_TYPE_FLOAT,
-  GTK_TYPE_DOUBLE	= G_TYPE_DOUBLE,
-  GTK_TYPE_STRING	= G_TYPE_STRING,
-  GTK_TYPE_BOXED	= G_TYPE_BOXED,
-  GTK_TYPE_POINTER	= G_TYPE_POINTER
-} GtkFundamentalType;
+#define GTK_TYPE_INVALID G_TYPE_INVALID
+#define GTK_TYPE_NONE    G_TYPE_NONE
+#define GTK_TYPE_ENUM    G_TYPE_ENUM
+#define GTK_TYPE_FLAGS   G_TYPE_FLAGS
+
+/* GtkArg types */
+#define GTK_TYPE_CHAR    G_TYPE_CHAR
+#define GTK_TYPE_UCHAR   G_TYPE_UCHAR
+#define GTK_TYPE_BOOL    G_TYPE_BOOLEAN
+#define GTK_TYPE_INT     G_TYPE_INT
+#define GTK_TYPE_UINT    G_TYPE_UINT
+#define GTK_TYPE_LONG    G_TYPE_LONG
+#define GTK_TYPE_ULONG   G_TYPE_ULONG
+#define GTK_TYPE_FLOAT   G_TYPE_FLOAT
+#define GTK_TYPE_DOUBLE  G_TYPE_DOUBLE
+#define GTK_TYPE_STRING  G_TYPE_STRING
+#define GTK_TYPE_BOXED   G_TYPE_BOXED
+#define GTK_TYPE_POINTER G_TYPE_POINTER
+
+typedef GType GtkFundamentalType;
 
 /* --- type macros --- */
 #define GTK_CLASS_NAME(class)		(g_type_name (G_TYPE_FROM_CLASS (class)))
