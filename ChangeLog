@@ -1,3 +1,9 @@
+Wed Feb 23 17:34:01 2005  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_node_queue_redraw): Patch from
+	jorn@nl.linux.org (Jorn Baayen) to notice changes to fixed-height
+	widgets.
+
 2005-02-23  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkkeys-win32.c (update_keymap): Workaround for bug in
