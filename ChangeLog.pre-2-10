@@ -1,3 +1,17 @@
+2003-12-08  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+	* gtk/gtkfilechooserdefault.c:
+	(gtk_file_chooser_default_get_paths), (entry_activate): Use the
+	behavior of the GtkFileSelection to determine selected paths in
+	single selected, GTK_FILE_CHOOSER_ACTION_SAVE mode.
+
+2003-12-08  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_get_paths): Don't declare the closure
+	struct twice.
+	(get_paths_foreach): Likewise.
+
 Tue Dec  9 00:12:36 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilesystemwin32.[hc]: s/Unix/Win32/g. 
