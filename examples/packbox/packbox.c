@@ -261,7 +261,7 @@ int main( int   argc,
     /* Setup the signal to terminate the program when the button is clicked */
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
 			      G_CALLBACK (gtk_main_quit),
-			      window);
+			      G_OBJECT (window));
     /* Pack the button into the quitbox.
      * The last 3 arguments to gtk_box_pack_start are:
      * expand, fill, padding. */

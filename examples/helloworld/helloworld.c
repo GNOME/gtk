@@ -79,7 +79,7 @@ int main( int   argc,
      * signal could come from here, or the window manager. */
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
 			      G_CALLBACK (gtk_widget_destroy),
-                              window);
+                              G_OBJECT (window));
     
     /* This packs the button into the window (a gtk container). */
     gtk_container_add (GTK_CONTAINER (window), button);

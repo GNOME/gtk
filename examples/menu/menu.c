@@ -54,7 +54,7 @@ int main( int   argc,
 	    /* Do something interesting when the menuitem is selected */
 	    g_signal_connect_swapped (G_OBJECT (menu_items), "activate",
 		                      G_CALLBACK (menuitem_response), 
-                                      g_strdup (buf));
+                                      (gpointer) g_strdup (buf));
 
             /* Show the widget */
             gtk_widget_show (menu_items);
@@ -85,7 +85,7 @@ int main( int   argc,
     button = gtk_button_new_with_label ("press me");
     g_signal_connect_swapped (G_OBJECT (button), "event",
 	                      G_CALLBACK (button_press), 
-                              menu);
+                              G_OBJECT (menu));
     gtk_box_pack_end (GTK_BOX (vbox), button, TRUE, TRUE, 2);
     gtk_widget_show (button);
 

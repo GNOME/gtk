@@ -22,13 +22,12 @@ int main( int   argc,
 	              G_CALLBACK (gtk_main_quit), NULL);
     /* Connect the ok_button to file_ok_sel function */
     g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (filew)->ok_button),
-		      "clicked", 
-                      G_CALLBACK (file_ok_sel), filew);
+		      "clicked", G_CALLBACK (file_ok_sel), (gpointer) filew);
     
     /* Connect the cancel_button to destroy the widget */
     g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (filew)->cancel_button),
-	                      "clicked", 
-                              G_CALLBACK (gtk_widget_destroy), filew);
+	                      "clicked", G_CALLBACK (gtk_widget_destroy),
+			      G_OBJECT (filew));
     
     /* Lets set the filename, as if this were a save dialog, and we are giving
      a default filename */

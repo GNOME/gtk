@@ -67,7 +67,7 @@ int main( int   argc,
     button = gtk_button_new_with_label ("close");
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
                               G_CALLBACK (close_application),
-                              window);
+                              G_OBJECT (window));
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
     gtk_widget_grab_default (button);

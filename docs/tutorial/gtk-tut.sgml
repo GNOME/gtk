@@ -5,7 +5,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>August 15, 2002</date>
+    <date>August 24, 2002</date>
     <title>GTK+ 2.0 Tutorial</title>
     <authorgroup>
       <author>
@@ -365,7 +365,7 @@ int main( int   argc,
      * signal could come from here, or the window manager. */
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
 			      G_CALLBACK (gtk_widget_destroy),
-                              window);
+                              G_OBJECT (window));
     
     /* This packs the button into the window (a gtk container). */
     gtk_container_add (GTK_CONTAINER (window), button);
@@ -982,7 +982,7 @@ is an object.</para>
 <sect1 id="sec-MoreOnSignalHandlers">
 <title>More on Signal Handlers</title>
 
-<para>Lets take another look at the gtk_signal_connect() declaration.</para>
+<para>Lets take another look at the g_signal_connect() declaration.</para>
 
 <programlisting role="C">
 gulong g_signal_connect( gpointer object,
@@ -1108,7 +1108,7 @@ int main( int   argc,
     /* Now when the button is clicked, we call the "callback" function
      * with a pointer to "button 1" as its argument */
     g_signal_connect (G_OBJECT (button), "clicked",
-		      G_CALLBACK (callback), "button 1");
+		      G_CALLBACK (callback), (gpointer) "button 1");
 
     /* Instead of gtk_container_add, we pack this button into the invisible
      * box, which has been packed into the window. */
@@ -1124,7 +1124,7 @@ int main( int   argc,
     /* Call the same callback function with a different argument,
      * passing a pointer to "button 2" instead. */
     g_signal_connect (G_OBJECT (button), "clicked",
-		      G_CALLBACK (callback), "button 2");
+		      G_CALLBACK (callback), (gpointer) "button 2");
 
     gtk_box_pack_start(GTK_BOX (box1), button, TRUE, TRUE, 0);
 
@@ -1551,7 +1551,7 @@ int main( int   argc,
     /* Setup the signal to terminate the program when the button is clicked */
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
 			      G_CALLBACK (gtk_main_quit),
-			      window);
+			      G_OBJECT (window));
     /* Pack the button into the quitbox.
      * The last 3 arguments to gtk_box_pack_start are:
      * expand, fill, padding. */
@@ -2522,7 +2522,7 @@ int main( int   argc,
     button = gtk_button_new_with_label ("close");
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
                               G_CALLBACK (close_application),
-                              window);
+                              G_OBJECT (window));
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
     gtk_widget_grab_default (button);
@@ -2728,7 +2728,7 @@ void cb_rotate_picture (GtkAdjustment *adj, GtkWidget *picture)
 
 <programlisting role="C">
 g_signal_connect (G_OBJECT (adj), "value_changed",
-	          G_CALLBACK (cb_rotate_picture), picture);
+	          G_CALLBACK (cb_rotate_picture), (gpointer) picture);
 </programlisting>
 
 <para>What about when a widget reconfigures the <literal>upper</literal> or <literal>lower</literal>
@@ -3129,7 +3129,7 @@ GtkWidget *make_menu_item (gchar     *name,
   
     item = gtk_menu_item_new_with_label (name);
     g_signal_connect (G_OBJECT (item), "activate",
-	              callback, data);
+	              callback, (gpointer) data);
     gtk_widget_show (item);
 
     return item;
@@ -3318,7 +3318,7 @@ void create_range_controls( void )
 
     adj2 = gtk_adjustment_new (1.0, 1.0, 101.0, 1.0, 1.0, 0.0);
     g_signal_connect (G_OBJECT (adj2), "value_changed",
-                      G_CALLBACK (cb_page_size), adj1);
+                      G_CALLBACK (cb_page_size), (gpointer) adj1);
     scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
     gtk_scale_set_digits (GTK_SCALE (scale), 0);
     gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
@@ -4010,7 +4010,7 @@ int main( int   argc,
 
     g_signal_connect (G_OBJECT (pdata-&gt;window), "destroy",
 	              G_CALLBACK (destroy_progress),
-                      pdata);
+                      (gpointer) pdata);
     gtk_window_set_title (GTK_WINDOW (pdata-&gt;window), "GtkProgressBar");
     gtk_container_set_border_width (GTK_CONTAINER (pdata-&gt;window), 0);
 
@@ -4049,7 +4049,7 @@ int main( int   argc,
 		      5, 5);
     g_signal_connect (G_OBJECT (check), "clicked",
                       G_CALLBACK (toggle_show_text),
-                      pdata);
+                      (gpointer) pdata);
     gtk_widget_show (check);
 
     /* Add a check button to toggle activity mode */
@@ -4059,7 +4059,7 @@ int main( int   argc,
                       5, 5);
     g_signal_connect (G_OBJECT (check), "clicked",
                       G_CALLBACK (toggle_activity_mode),
-                      pdata);
+                      (gpointer) pdata);
     gtk_widget_show (check);
 
     /* Add a check button to toggle orientation */
@@ -4069,14 +4069,14 @@ int main( int   argc,
                       5, 5);
     g_signal_connect (G_OBJECT (check), "clicked",
                       G_CALLBACK (toggle_orientation),
-                      pdata);
+                      (gpointer) pdata);
     gtk_widget_show (check);
 
     /* Add a button to exit the program */
     button = gtk_button_new_with_label ("close");
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
                               G_CALLBACK (gtk_widget_destroy),
-                              pdata-&gt;window);
+                              G_OBJECT (pdata-&gt;window));
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
     /* This makes it so the button is the default. */
@@ -4331,7 +4331,7 @@ int main( int   argc,
     gtk_ruler_set_range (GTK_RULER (hrule), 7, 13, 0, 20);
     g_signal_connect_swapped (G_OBJECT (area), "motion_notify_event",
                               G_CALLBACK (EVENT_METHOD (hrule, motion_notify_event)),
-                              hrule);
+                              G_OBJECT (hrule));
     gtk_table_attach (GTK_TABLE (table), hrule, 1, 2, 0, 1,
                       GTK_EXPAND|GTK_SHRINK|GTK_FILL, GTK_FILL, 0, 0);
     
@@ -4343,7 +4343,7 @@ int main( int   argc,
     gtk_ruler_set_range (GTK_RULER (vrule), 0, YSIZE, 10, YSIZE );
     g_signal_connect_swapped (G_OBJECT (area), "motion_notify_event",
                               G_CALLBACK (EVENT_METHOD (vrule, motion_notify_event)),
-                              vrule);
+                              G_OBJECT (vrule));
     gtk_table_attach (GTK_TABLE (table), vrule, 0, 1, 1, 2,
                       GTK_FILL, GTK_EXPAND|GTK_SHRINK|GTK_FILL, 0, 0);
 
@@ -4656,7 +4656,7 @@ int main( int   argc,
                       G_CALLBACK (gtk_main_quit), NULL);
     g_signal_connect_swapped (G_OBJECT (window), "delete_event",
                               G_CALLBACK (gtk_widget_destroy), 
-                              window);
+                              G_OBJECT (window));
 
     vbox = gtk_vbox_new (FALSE, 0);
     gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -4666,7 +4666,7 @@ int main( int   argc,
     gtk_entry_set_max_length (GTK_ENTRY (entry), 50);
     g_signal_connect (G_OBJECT (entry), "activate",
 		      G_CALLBACK (enter_callback),
-		      entry);
+		      (gpointer) entry);
     gtk_entry_set_text (GTK_ENTRY (entry), "hello");
     tmp_pos = GTK_ENTRY (entry)-&gt;text_length;
     gtk_editable_insert_text (GTK_EDITABLE (entry), " world", -1, &amp;tmp_pos);
@@ -4682,21 +4682,21 @@ int main( int   argc,
     check = gtk_check_button_new_with_label ("Editable");
     gtk_box_pack_start (GTK_BOX (hbox), check, TRUE, TRUE, 0);
     g_signal_connect (G_OBJECT (check), "toggled",
-	              G_CALLBACK (entry_toggle_editable), entry);
+	              G_CALLBACK (entry_toggle_editable), (gpointer) entry);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
     gtk_widget_show (check);
     
     check = gtk_check_button_new_with_label ("Visible");
     gtk_box_pack_start (GTK_BOX (hbox), check, TRUE, TRUE, 0);
     g_signal_connect (G_OBJECT (check), "toggled",
-	              G_CALLBACK (entry_toggle_visibility), entry);
+	              G_CALLBACK (entry_toggle_visibility), (gpointer) entry);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
     gtk_widget_show (check);
                                    
     button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
 			      G_CALLBACK (gtk_widget_destroy),
-			      window);
+			      G_OBJECT (window));
     gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
     GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
     gtk_widget_grab_default (button);
@@ -5105,7 +5105,7 @@ int main( int   argc,
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner2), TRUE);
   g_signal_connect (G_OBJECT (adj), "value_changed",
 		    G_CALLBACK (change_digits),
-		    spinner2);
+		    (gpointer) spinner2);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner2, FALSE, TRUE, 0);
   
   hbox = gtk_hbox_new (FALSE, 0);
@@ -5114,14 +5114,14 @@ int main( int   argc,
   button = gtk_check_button_new_with_label ("Snap to 0.5-ticks");
   g_signal_connect (G_OBJECT (button), "clicked",
 		    G_CALLBACK (toggle_snap),
-		    spinner1);
+		    (gpointer) spinner1);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
   
   button = gtk_check_button_new_with_label ("Numeric only input mode");
   g_signal_connect (G_OBJECT (button), "clicked",
 		    G_CALLBACK (toggle_numeric),
-		    spinner1);
+		    (gpointer) spinner1);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
   
@@ -5152,7 +5152,7 @@ int main( int   argc,
   button = gtk_button_new_with_label ("Close");
   g_signal_connect_swapped (G_OBJECT (button), "clicked",
                             G_CALLBACK (gtk_widget_destroy),
-			    window);
+			    G_OBJECT (window));
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
 
   gtk_widget_show_all (window);
@@ -5306,7 +5306,7 @@ accomplished using something like:</para>
 
 <programlisting role="C">
     g_signal_connect (G_OBJECT (GTK_COMBO (combo)->entry), "activate",
-                      G_CALLBACK (my_callback_function), my_data);
+                      G_CALLBACK (my_callback_function), (gpointer) my_data);
 </programlisting>
 
 <para>Getting the text at any arbitrary time is accomplished by simply using
@@ -5743,15 +5743,15 @@ void calendar_select_font( GtkWidget    *button,
     
     g_signal_connect (G_OBJECT (window), "destroy",
 	              G_CALLBACK (gtk_widget_destroyed),
-		      &amp;calendar-&gt;font_dialog);
+		      (gpointer) &amp;calendar-&gt;font_dialog);
     
     g_signal_connect (G_OBJECT (GTK_FONT_SELECTION_DIALOG (window)-&gt;ok_button),
 		      "clicked", G_CALLBACK (calendar_font_selection_ok),
-		      calendar);
+		      (gpointer) calendar);
     g_signal_connect_swapped (G_OBJECT (GTK_FONT_SELECTION_DIALOG (window)-&gt;cancel_button),
 			      "clicked",
 			      G_CALLBACK (gtk_widget_destroy), 
-			      calendar-&gt;font_dialog);
+			      G_OBJECT (calendar-&gt;font_dialog));
   }
   window=calendar-&gt;font_dialog;
   if (!GTK_WIDGET_VISIBLE (window))
@@ -5833,25 +5833,25 @@ void create_calendar()
   gtk_container_add( GTK_CONTAINER (frame), calendar);
   g_signal_connect (G_OBJECT (calendar), "month_changed", 
                     G_CALLBACK (calendar_month_changed),
-		    &amp;calendar_data);
+		    (gpointer) &amp;calendar_data);
   g_signal_connect (G_OBJECT (calendar), "day_selected", 
                     G_CALLBACK (calendar_day_selected),
-		    &amp;calendar_data);
+		    (gpointer) &amp;calendar_data);
   g_signal_connect (G_OBJECT (calendar), "day_selected_double_click", 
                     G_CALLBACK (calendar_day_selected_double_click),
-	            &amp;calendar_data);
+	            (gpointer) &amp;calendar_data);
   g_signal_connect (G_OBJECT (calendar), "prev_month", 
                     G_CALLBACK (calendar_prev_month),
-		    &amp;calendar_data);
+		    (gpointer) &amp;calendar_data);
   g_signal_connect (G_OBJECT (calendar), "next_month", 
                     G_CALLBACK (calendar_next_month),
-		    &amp;calendar_data);
+		    (gpointer) &amp;calendar_data);
   g_signal_connect (G_OBJECT (calendar), "prev_year", 
                     G_CALLBACK (calendar_prev_year),
-		    &amp;calendar_data);
+		    (gpointer) &amp;calendar_data);
   g_signal_connect (G_OBJECT (calendar), "next_year", 
                     G_CALLBACK (calendar_next_year),
-		    &amp;calendar_data);
+		    (gpointer) &amp;calendar_data);
 
 
   separator = gtk_vseparator_new ();
@@ -5873,7 +5873,7 @@ void create_calendar()
       g_signal_connect (G_OBJECT (toggle),
 			"toggled",
 			G_CALLBACK (calendar_toggle_flag),
-			&amp;calendar_data);
+			(gpointer) &amp;calendar_data);
       gtk_box_pack_start (GTK_BOX (vbox3), toggle, TRUE, TRUE, 0);
       calendar_data.flag_checkboxes[i] = toggle;
     }
@@ -5882,7 +5882,7 @@ void create_calendar()
   g_signal_connect (G_OBJECT (button),
 		    "clicked",
 		    G_CALLBACK (calendar_select_font),
-		    &amp;calendar_data);
+		    (gpointer) &amp;calendar_data);
   gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE, 0);
 
   /*
@@ -6105,7 +6105,7 @@ gint area_event( GtkWidget *widget,
       /* Connect to the "color_changed" signal, set the client-data
        * to the colorsel widget */
       g_signal_connect (G_OBJECT (colorsel), "color_changed",
-                        G_CALLBACK (color_changed_cb), (gpointer)colorsel);
+                        G_CALLBACK (color_changed_cb), (gpointer) colorsel);
 
       /* Show the dialog */
       response = gtk_dialog_run (GTK_DIALOG (colorseldlg));
@@ -6151,7 +6151,7 @@ gint main( gint   argc,
   /* Attach to the "delete" and "destroy" events so we can exit */
 
   g_signal_connect (GTK_OBJECT (window), "delete_event",
-                    GTK_SIGNAL_FUNC (destroy_window), (gpointer)window);
+                    GTK_SIGNAL_FUNC (destroy_window), (gpointer) window);
   
   /* Create drawingarea, set size and catch button events */
 
@@ -6167,7 +6167,7 @@ gint main( gint   argc,
   gtk_widget_set_events (drawingarea, GDK_BUTTON_PRESS_MASK);
 
   g_signal_connect (GTK_OBJECT (drawingarea), "event", 
-	            GTK_SIGNAL_FUNC (area_event), (gpointer)drawingarea);
+	            GTK_SIGNAL_FUNC (area_event), (gpointer) drawingarea);
   
   /* Add drawingarea to window, then show them both */
 
@@ -6274,13 +6274,12 @@ int main( int   argc,
 	              G_CALLBACK (gtk_main_quit), NULL);
     /* Connect the ok_button to file_ok_sel function */
     g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (filew)-&gt;ok_button),
-		      "clicked", 
-                      G_CALLBACK (file_ok_sel), filew);
+		      "clicked", G_CALLBACK (file_ok_sel), (gpointer) filew);
     
     /* Connect the cancel_button to destroy the widget */
     g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (filew)-&gt;cancel_button),
-	                      "clicked", 
-                              G_CALLBACK (gtk_widget_destroy), filew);
+	                      "clicked", G_CALLBACK (gtk_widget_destroy),
+			      G_OBJECT (filew));
     
     /* Lets set the filename, as if this were a save dialog, and we are giving
      a default filename */
@@ -6565,7 +6564,7 @@ int main( int   argc,
      * function move_button() passing it the Fixed Container as its
      * argument. */
     g_signal_connect (G_OBJECT (button), "clicked",
-		      G_CALLBACK (move_button), fixed);
+		      G_CALLBACK (move_button), (gpointer) fixed);
   
     /* This packs the button into the fixed containers window. */
     gtk_fixed_put (GTK_FIXED (fixed), button, i*50, i*50);
@@ -7253,7 +7252,7 @@ int main( int   argc,
     button = gtk_button_new_with_label ("close");
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
 			      G_CALLBACK (gtk_widget_destroy),
-			      window);
+			      G_OBJECT (window));
     
     /* this makes it so the button is the default. */
     
@@ -8137,35 +8136,35 @@ int main( int argc,
     button = gtk_button_new_with_label ("next page");
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
 			      G_CALLBACK (gtk_notebook_next_page),
-			      notebook);
+			      G_OBJECT (notebook));
     gtk_table_attach_defaults (GTK_TABLE (table), button, 1, 2, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("prev page");
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
 			      G_CALLBACK (gtk_notebook_prev_page),
-			      notebook);
+			      G_OBJECT (notebook));
     gtk_table_attach_defaults (GTK_TABLE (table), button, 2, 3, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("tab position");
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (rotate_book),
-	              notebook);
+	              (gpointer) notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 3, 4, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("tabs/border on/off");
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (tabsborder_book),
-                      notebook);
+                      (gpointer) notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 4, 5, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("remove page");
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (remove_book),
-                      notebook);
+                      (gpointer) notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 5, 6, 1, 2);
     gtk_widget_show (button);
     
@@ -8494,7 +8493,7 @@ int main( int   argc,
 	    /* Do something interesting when the menuitem is selected */
 	    g_signal_connect_swapped (G_OBJECT (menu_items), "activate",
 		                      G_CALLBACK (menuitem_response), 
-                                      g_strdup (buf));
+                                      (gpointer) g_strdup (buf));
 
             /* Show the widget */
             gtk_widget_show (menu_items);
@@ -8525,7 +8524,7 @@ int main( int   argc,
     button = gtk_button_new_with_label ("press me");
     g_signal_connect_swapped (G_OBJECT (button), "event",
 	                      G_CALLBACK (button_press), 
-                              menu);
+                              G_OBJECT (menu));
     gtk_box_pack_end (GTK_BOX (vbox), button, TRUE, TRUE, 2);
     gtk_widget_show (button);
 
@@ -9354,7 +9353,7 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), button);
 
   g_signal_connect (G_OBJECT (button), "clicked",
-		    G_CALLBACK (get_targets), window);
+		    G_CALLBACK (get_targets), (gpointer) window);
   g_signal_connect (G_OBJECT (window), "selection_received",
 		    G_CALLBACK (selection_received), NULL);
 
@@ -9443,6 +9442,7 @@ string representation of the time is returned.</para>
 #include &lt;stdlib.h&gt;
 #include &lt;gtk/gtk.h&gt;
 #include &lt;time.h&gt;
+#include &lt;string.h&gt;
 
 GtkWidget *selection_button;
 GtkWidget *selection_widget;
@@ -9531,16 +9531,16 @@ int main( int   argc,
   gtk_widget_show (selection_button);
 
   g_signal_connect (G_OBJECT (selection_button), "toggled",
-		    G_CALLBACK (selection_toggled), &amp;have_selection);
+		    G_CALLBACK (selection_toggled), (gpointer) &amp;have_selection);
   g_signal_connect (G_OBJECT (selection_widget), "selection_clear_event",
-		    G_CALLBACK (selection_clear), &amp;have_selection);
+		    G_CALLBACK (selection_clear), (gpointer) &amp;have_selection);
 
   gtk_selection_add_target (selection_widget,
 			    GDK_SELECTION_PRIMARY,
 			    GDK_SELECTION_TYPE_STRING,
 		            1);
   g_signal_connect (G_OBJECT (selection_widget), "selection_get",
-		    G_CALLBACK (selection_handle), &amp;have_selection);
+		    G_CALLBACK (selection_handle), (gpointer) &amp;have_selection);
 
   gtk_widget_show (selection_button);
   gtk_widget_show (window);
@@ -14335,7 +14335,7 @@ tictactoe_init (Tictactoe *ttt)
 	gtk_table_attach_defaults (GTK_TABLE (table), ttt-&gt;buttons[i][j], 
 				   i, i+1, j, j+1);
 	g_signal_connect (G_OBJECT (ttt-&gt;buttons[i][j]), "toggled",
-			  G_CALLBACK (tictactoe_toggle), ttt);
+			  G_CALLBACK (tictactoe_toggle), (gpointer) ttt);
 	gtk_widget_set_size_request (ttt-&gt;buttons[i][j], 20, 20);
 	gtk_widget_show (ttt-&gt;buttons[i][j]);
       }
@@ -15304,7 +15304,7 @@ int main( int   argc,
   gtk_widget_show (label);
 
   g_signal_connect (G_OBJECT (adjustment), "value_changed",
-		    G_CALLBACK (value_changed), label);
+		    G_CALLBACK (value_changed), (gpointer) label);
   
   gtk_widget_show (window);
   
@@ -15348,6 +15348,7 @@ int main( int   argc,
  * Boston, MA 02111-1307, USA.
  */
 
+#include &lt;stdlib.h&gt;
 #include &lt;gtk/gtk.h&gt;
 
 /* Backing pixmap for drawing area */
@@ -15499,7 +15500,7 @@ int main( int   argc,
 
   g_signal_connect_swapped (G_OBJECT (button), "clicked",
 			    G_CALLBACK (gtk_widget_destroy),
-			    window);
+			    G_OBJECT (window));
   gtk_widget_show (button);
 
   gtk_widget_show (window);
@@ -15679,11 +15680,11 @@ create_input_dialog ()
       inputd = gtk_input_dialog_new();
 
       g_signal_connect (G_OBJECT (inputd), "destroy",
-                        G_CALLBACK (input_dialog_destroy), &amp;inputd);
+                        G_CALLBACK (input_dialog_destroy), (gpointer) &amp;inputd);
       g_signal_connect_swapped (G_OBJECT (GTK_INPUT_DIALOG (inputd)-&gt;close_button),
                                 "clicked",
                                 G_CALLBACK (gtk_widget_hide),
-                                inputd);
+                                G_OBJECT (inputd));
       gtk_widget_hide (GTK_INPUT_DIALOG (inputd)-&gt;save_button);
 
       gtk_widget_show (inputd);
@@ -15769,7 +15770,7 @@ main (int argc, char *argv[])
 
   g_signal_connect_swapped (G_OBJECT (button), "clicked",
                             G_CALLBACK (gtk_widget_destroy),
-                            window);
+                            G_OBJECT (window));
   gtk_widget_show (button);
 
   gtk_widget_show (window);

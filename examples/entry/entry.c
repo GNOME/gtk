@@ -46,7 +46,7 @@ int main( int   argc,
                       G_CALLBACK (gtk_main_quit), NULL);
     g_signal_connect_swapped (G_OBJECT (window), "delete_event",
                               G_CALLBACK (gtk_widget_destroy), 
-                              window);
+                              G_OBJECT (window));
 
     vbox = gtk_vbox_new (FALSE, 0);
     gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -56,7 +56,7 @@ int main( int   argc,
     gtk_entry_set_max_length (GTK_ENTRY (entry), 50);
     g_signal_connect (G_OBJECT (entry), "activate",
 		      G_CALLBACK (enter_callback),
-		      entry);
+		      (gpointer) entry);
     gtk_entry_set_text (GTK_ENTRY (entry), "hello");
     tmp_pos = GTK_ENTRY (entry)->text_length;
     gtk_editable_insert_text (GTK_EDITABLE (entry), " world", -1, &tmp_pos);
@@ -72,21 +72,21 @@ int main( int   argc,
     check = gtk_check_button_new_with_label ("Editable");
     gtk_box_pack_start (GTK_BOX (hbox), check, TRUE, TRUE, 0);
     g_signal_connect (G_OBJECT (check), "toggled",
-	              G_CALLBACK (entry_toggle_editable), entry);
+	              G_CALLBACK (entry_toggle_editable), (gpointer) entry);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
     gtk_widget_show (check);
     
     check = gtk_check_button_new_with_label ("Visible");
     gtk_box_pack_start (GTK_BOX (hbox), check, TRUE, TRUE, 0);
     g_signal_connect (G_OBJECT (check), "toggled",
-	              G_CALLBACK (entry_toggle_visibility), entry);
+	              G_CALLBACK (entry_toggle_visibility), (gpointer) entry);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
     gtk_widget_show (check);
                                    
     button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
 			      G_CALLBACK (gtk_widget_destroy),
-			      window);
+			      G_OBJECT (window));
     gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
     GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
     gtk_widget_grab_default (button);

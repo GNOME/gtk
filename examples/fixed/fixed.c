@@ -53,7 +53,7 @@ int main( int   argc,
      * function move_button() passing it the Fixed Container as its
      * argument. */
     g_signal_connect (G_OBJECT (button), "clicked",
-		      G_CALLBACK (move_button), fixed);
+		      G_CALLBACK (move_button), (gpointer) fixed);
   
     /* This packs the button into the fixed containers window. */
     gtk_fixed_put (GTK_FIXED (fixed), button, i*50, i*50);

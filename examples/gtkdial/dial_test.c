@@ -57,7 +57,7 @@ int main( int   argc,
   gtk_widget_show (label);
 
   g_signal_connect (G_OBJECT (adjustment), "value_changed",
-		    G_CALLBACK (value_changed), label);
+		    G_CALLBACK (value_changed), (gpointer) label);
   
   gtk_widget_show (window);
   

@@ -220,15 +220,15 @@ void calendar_select_font( GtkWidget    *button,
     
     g_signal_connect (G_OBJECT (window), "destroy",
 	              G_CALLBACK (gtk_widget_destroyed),
-		      &calendar->font_dialog);
+		      (gpointer) &calendar->font_dialog);
     
     g_signal_connect (G_OBJECT (GTK_FONT_SELECTION_DIALOG (window)->ok_button),
 		      "clicked", G_CALLBACK (calendar_font_selection_ok),
-		      calendar);
+		      (gpointer) calendar);
     g_signal_connect_swapped (G_OBJECT (GTK_FONT_SELECTION_DIALOG (window)->cancel_button),
 			      "clicked",
 			      G_CALLBACK (gtk_widget_destroy), 
-			      calendar->font_dialog);
+			      G_OBJECT (calendar->font_dialog));
   }
   window=calendar->font_dialog;
   if (!GTK_WIDGET_VISIBLE (window))
@@ -310,25 +310,25 @@ void create_calendar()
   gtk_container_add( GTK_CONTAINER (frame), calendar);
   g_signal_connect (G_OBJECT (calendar), "month_changed", 
                     G_CALLBACK (calendar_month_changed),
-		    &calendar_data);
+		    (gpointer) &calendar_data);
   g_signal_connect (G_OBJECT (calendar), "day_selected", 
                     G_CALLBACK (calendar_day_selected),
-		    &calendar_data);
+		    (gpointer) &calendar_data);
   g_signal_connect (G_OBJECT (calendar), "day_selected_double_click", 
                     G_CALLBACK (calendar_day_selected_double_click),
-	            &calendar_data);
+	            (gpointer) &calendar_data);
   g_signal_connect (G_OBJECT (calendar), "prev_month", 
                     G_CALLBACK (calendar_prev_month),
-		    &calendar_data);
+		    (gpointer) &calendar_data);
   g_signal_connect (G_OBJECT (calendar), "next_month", 
                     G_CALLBACK (calendar_next_month),
-		    &calendar_data);
+		    (gpointer) &calendar_data);
   g_signal_connect (G_OBJECT (calendar), "prev_year", 
                     G_CALLBACK (calendar_prev_year),
-		    &calendar_data);
+		    (gpointer) &calendar_data);
   g_signal_connect (G_OBJECT (calendar), "next_year", 
                     G_CALLBACK (calendar_next_year),
-		    &calendar_data);
+		    (gpointer) &calendar_data);
 
 
   separator = gtk_vseparator_new ();
@@ -350,7 +350,7 @@ void create_calendar()
       g_signal_connect (G_OBJECT (toggle),
 			"toggled",
 			G_CALLBACK (calendar_toggle_flag),
-			&calendar_data);
+			(gpointer) &calendar_data);
       gtk_box_pack_start (GTK_BOX (vbox3), toggle, TRUE, TRUE, 0);
       calendar_data.flag_checkboxes[i] = toggle;
     }
@@ -359,7 +359,7 @@ void create_calendar()
   g_signal_connect (G_OBJECT (button),
 		    "clicked",
 		    G_CALLBACK (calendar_select_font),
-		    &calendar_data);
+		    (gpointer) &calendar_data);
   gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE, 0);
 
   /*

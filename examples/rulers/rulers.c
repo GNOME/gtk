@@ -47,7 +47,7 @@ int main( int   argc,
     gtk_ruler_set_range (GTK_RULER (hrule), 7, 13, 0, 20);
     g_signal_connect_swapped (G_OBJECT (area), "motion_notify_event",
                               G_CALLBACK (EVENT_METHOD (hrule, motion_notify_event)),
-                              hrule);
+                              G_OBJECT (hrule));
     gtk_table_attach (GTK_TABLE (table), hrule, 1, 2, 0, 1,
                       GTK_EXPAND|GTK_SHRINK|GTK_FILL, GTK_FILL, 0, 0);
     
@@ -59,7 +59,7 @@ int main( int   argc,
     gtk_ruler_set_range (GTK_RULER (vrule), 0, YSIZE, 10, YSIZE );
     g_signal_connect_swapped (G_OBJECT (area), "motion_notify_event",
                               G_CALLBACK (EVENT_METHOD (vrule, motion_notify_event)),
-                              vrule);
+                              G_OBJECT (vrule));
     gtk_table_attach (GTK_TABLE (table), vrule, 0, 1, 1, 2,
                       GTK_FILL, GTK_EXPAND|GTK_SHRINK|GTK_FILL, 0, 0);
 

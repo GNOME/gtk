@@ -112,7 +112,7 @@ int main( int   argc,
 
     g_signal_connect (G_OBJECT (pdata->window), "destroy",
 	              G_CALLBACK (destroy_progress),
-                      pdata);
+                      (gpointer) pdata);
     gtk_window_set_title (GTK_WINDOW (pdata->window), "GtkProgressBar");
     gtk_container_set_border_width (GTK_CONTAINER (pdata->window), 0);
 
@@ -151,7 +151,7 @@ int main( int   argc,
 		      5, 5);
     g_signal_connect (G_OBJECT (check), "clicked",
                       G_CALLBACK (toggle_show_text),
-                      pdata);
+                      (gpointer) pdata);
     gtk_widget_show (check);
 
     /* Add a check button to toggle activity mode */
@@ -161,7 +161,7 @@ int main( int   argc,
                       5, 5);
     g_signal_connect (G_OBJECT (check), "clicked",
                       G_CALLBACK (toggle_activity_mode),
-                      pdata);
+                      (gpointer) pdata);
     gtk_widget_show (check);
 
     /* Add a check button to toggle orientation */
@@ -171,14 +171,14 @@ int main( int   argc,
                       5, 5);
     g_signal_connect (G_OBJECT (check), "clicked",
                       G_CALLBACK (toggle_orientation),
-                      pdata);
+                      (gpointer) pdata);
     gtk_widget_show (check);
 
     /* Add a button to exit the program */
     button = gtk_button_new_with_label ("close");
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
                               G_CALLBACK (gtk_widget_destroy),
-                              pdata->window);
+                              G_OBJECT (pdata->window));
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
     /* This makes it so the button is the default. */

@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>February 27th 2001</date>
+  <date>August 24th 2002</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -601,12 +601,12 @@ successful, try executing it.</para>
 <title>Whats this CVS thing that everyone keeps talking about,
 and how do I access it?</title>
 
-<para>CVS is the Concurent Version System and is a very
+<para>CVS is the Concurrent Version System and is a very
 popular means of version control for software projects. It is
 designed to allow multiple  authors to be able to
 simultanously operate on the same source tree.  This source
 tree is centrally maintained, but each developer has a local
-mirror of this repository that they make there changes to.</para>
+mirror of this repository that they make their changes to.</para>
 
 <para>The GTK+ developers use a CVS repository to store the
 master copy of the current development version of GTK+. As
@@ -2098,13 +2098,13 @@ void gtk_window_set_policy (GtkWindow *window,
                             gint auto_shrink);
 </programlisting>
 
-<para><literal>Auto_shrink</literal> will automatically shrink
+<para><literal>auto_shrink</literal> will automatically shrink
 the window when the requested size of the child widgets goes
 below the current size of the
-window. <literal>Allow_shrink</literal> will give the user the
+window. <literal>allow_shrink</literal> will give the user the
 authorisation to make the window smaller that it should
-normally be. <literal>Allow_grow</literal> will give the user
-will have the ability to make the window bigger. The default
+normally be. <literal>allow_grow</literal> gives the user
+the ability to make the window bigger. The default
 values for these parameters are:</para>
 
 <programlisting role="C">
@@ -2334,7 +2334,7 @@ struct _GList
 </programlisting>
 
 <para>A GList structure is just a simple structure for doubly
-linked lists. there exist several g_list_*() functions to
+linked lists. There exist several g_list_*() functions to
 modify a linked list in glib.h.  However the
 GTK_LIST(MyGtkList)->selection is maintained by the
 gtk_list_*() functions and should not be modified.</para>
@@ -2706,7 +2706,7 @@ gtk_misc_set_alignment(GTK_MISC(label), 1.0f, 1.0f);
 <title>How do I set the background color of a GtkLabel
 widget?</title>
 
-<para>The Gtklabel widget is one of a few GTK+ widgets that
+<para>The GtkLabel widget is one of a few GTK+ widgets that
 don't create their own window to render themselves
 into. Instead, they draw themselves directly onto their
 parents window.</para>

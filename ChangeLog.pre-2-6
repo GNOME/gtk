@@ -1,3 +1,10 @@
+Sat Aug 24 12:46:37 BST 2002  Tony Gale <gale@gtk.org>
+
+	* docs/tutorial/gtk-tut.sgml, examples/*:
+	update g_connect_signal usage
+
+	* docs/faq/gtk-faq.html: spelling/grammar fixes
+
 2002-08-21  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/Makefile.am: Move GDK_DEP_LIBS from LDFLAGS to each of the

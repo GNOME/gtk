@@ -59,7 +59,7 @@ int main( int   argc,
     /* Now when the button is clicked, we call the "callback" function
      * with a pointer to "button 1" as its argument */
     g_signal_connect (G_OBJECT (button), "clicked",
-		      G_CALLBACK (callback), "button 1");
+		      G_CALLBACK (callback), (gpointer) "button 1");
 
     /* Instead of gtk_container_add, we pack this button into the invisible
      * box, which has been packed into the window. */
@@ -75,7 +75,7 @@ int main( int   argc,
     /* Call the same callback function with a different argument,
      * passing a pointer to "button 2" instead. */
     g_signal_connect (G_OBJECT (button), "clicked",
-		      G_CALLBACK (callback), "button 2");
+		      G_CALLBACK (callback), (gpointer) "button 2");
 
     gtk_box_pack_start(GTK_BOX (box1), button, TRUE, TRUE, 0);
 
