@@ -217,8 +217,8 @@ _gdk_windowing_image_init (GdkDisplay *display)
 					event_base, ShmNumberEvents);
 	}
       else
-	display_x11->use_xshm = TRUE;
 #endif /* USE_SHM */
+	display_x11->use_xshm = FALSE;
     }
 }
 
