@@ -490,12 +490,11 @@ gtk_color_selection_set_color (GtkColorSelection *colorsel,
 
   gtk_color_selection_update_inputs (colorsel, RGB_INPUTS | HSV_INPUTS | OPACITY_INPUTS, BOTH);
 
+  gtk_color_selection_draw_value_bar (colorsel, FALSE);
+  gtk_color_selection_draw_sample (colorsel, FALSE);
+
   if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (colorsel)))
-    {
-      gtk_color_selection_draw_value_bar (colorsel, FALSE);
-      gtk_color_selection_draw_sample (colorsel, FALSE);
-      gtk_color_selection_draw_wheel_marker (colorsel);
-    }
+    gtk_color_selection_draw_wheel_marker (colorsel);
 }
 
 void
@@ -819,8 +818,7 @@ gtk_color_selection_set_opacity (GtkColorSelection *colorsel,
       gtk_widget_show (colorsel->entries[OPACITY]);
     }
 
-  if (GTK_WIDGET_DRAWABLE (colorsel->sample_area))
-    gtk_color_selection_draw_sample (colorsel, FALSE);
+  gtk_color_selection_draw_sample (colorsel, FALSE);
 }
 
 static void

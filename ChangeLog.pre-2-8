@@ -1,3 +1,9 @@
+Mon Jan 25 17:48:03 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c: Removed some GTK_WIDGET_DRAWABLE()
+	tests - we need to update the value bar's contents
+	even when the widget is unmapped.
+
 Mon Jan 25 15:47:46 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* acinclude.m4 (ac_result): Don't define ENABLE_NLS
