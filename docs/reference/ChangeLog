@@ -1,3 +1,8 @@
+2002-02-23  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/Makefile.am (HTML_IMAGES): Rename strikeout to 
+	strikethrough.
+
 2002-02-22  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/Makefile.am (HTML_IMAGES): Update for name changes.

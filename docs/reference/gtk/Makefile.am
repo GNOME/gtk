@@ -113,7 +113,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_sort_descending_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_spellcheck_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_stop_24.png			\
-	$(top_srcdir)/gtk/stock-icons/stock_text_strikeout_24.png	\
+	$(top_srcdir)/gtk/stock-icons/stock_text_strikethrough_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_undelete_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_text_underline_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_undo_24.png			\
