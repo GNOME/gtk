@@ -1,3 +1,9 @@
+Mon Apr 21 18:13:46 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdnd-x11.c (gdk_window_cache_filter): Patch
+	from Alex Larsson fixing problem with restacking during
+	DND. (#108671)
+
 Mon Apr 21 15:07:29 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdisplay-x11.c (gdk_display_keyboard/pointer_ungrab):

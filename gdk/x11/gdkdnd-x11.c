@@ -356,7 +356,7 @@ gdk_window_cache_filter (GdkXEvent *xev,
 	      {
 		GList *above_node = g_hash_table_lookup (cache->child_hash, 
 							 GUINT_TO_POINTER (xce->above));
-		if (above_node && node->prev != above_node)
+		if (above_node && node->next != above_node)
 		  {
 		    /* Put the window above (before in the list) above_node
 		     */
