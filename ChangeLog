@@ -1,3 +1,15 @@
+2001-11-28  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/gdkcursor.h: Directly include the contents
+	of gdkcursors.h in the GdkCursorType enum.
+
+	* gdk/gdkcursors.h: Deleted.
+
+	* gdk/gdkkeysyms.h: Remove XFree86-specific keysyms, add 
+	header boilerplate.
+
+	* gdk/Makefile.am: Remove the X-derived-headers rule.
+
 Tue Nov 27 20:17:55 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_activate):
