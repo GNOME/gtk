@@ -513,7 +513,7 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
 
   /* keep a per-action list of the widgets on the factory
    */
-  if (callback_action)
+  if (callback)
     {
       GtkIFActionLink *link;
 

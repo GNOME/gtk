@@ -1,3 +1,9 @@
+Wed Sep 30 13:11:09 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_add_item): list all
+	widgets in the ->widgets_by_action list that have a callback
+	defined (not only those with a callback_action!=0).
+
 Sun Sep 27 22:02:48 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gtk/gtkcalendar.h:
