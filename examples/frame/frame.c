@@ -30,7 +30,7 @@ int main( int   argc,
   frame = gtk_frame_new(NULL);
   gtk_container_add(GTK_CONTAINER(window), frame);
 
-  /* Set the frames label */
+  /* Set the frame's label */
   gtk_frame_set_label( GTK_FRAME(frame), "GTK Frame Widget" );
 
   /* Align the label at the right of the frame */

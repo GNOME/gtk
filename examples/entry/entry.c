@@ -2,28 +2,30 @@
 
 #include <gtk/gtk.h>
 
-void enter_callback(GtkWidget *widget, GtkWidget *entry)
+void enter_callback( GtkWidget *widget,
+                     GtkWidget *entry )
 {
   gchar *entry_text;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
   printf("Entry contents: %s\n", entry_text);
 }
 
-void entry_toggle_editable (GtkWidget *checkbutton,
-				   GtkWidget *entry)
+void entry_toggle_editable( GtkWidget *checkbutton,
+                            GtkWidget *entry )
 {
   gtk_entry_set_editable(GTK_ENTRY(entry),
 			 GTK_TOGGLE_BUTTON(checkbutton)->active);
 }
 
-void entry_toggle_visibility (GtkWidget *checkbutton,
-				   GtkWidget *entry)
+void entry_toggle_visibility( GtkWidget *checkbutton,
+                              GtkWidget *entry )
 {
   gtk_entry_set_visibility(GTK_ENTRY(entry),
 			 GTK_TOGGLE_BUTTON(checkbutton)->active);
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
 
     GtkWidget *window;

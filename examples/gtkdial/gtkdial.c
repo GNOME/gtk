@@ -275,12 +275,14 @@ gtk_dial_expose (GtkWidget      *widget,
 		 GdkEventExpose *event)
 {
   GtkDial *dial;
-  GdkPoint points[3];
+  GdkPoint points[6];
   gdouble s,c;
-  gdouble theta;
+  gdouble theta, last, increment;
+  GtkStyle      *blankstyle;
   gint xc, yc;
+  gint upper, lower;
   gint tick_length;
-  gint i;
+  gint i, inc;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_DIAL (widget), FALSE);
@@ -291,37 +293,22 @@ gtk_dial_expose (GtkWidget      *widget,
   
   dial = GTK_DIAL (widget);
 
-  gdk_window_clear_area (widget->window,
+/*  gdk_window_clear_area (widget->window,
 			 0, 0,
 			 widget->allocation.width,
 			 widget->allocation.height);
-
+*/
   xc = widget->allocation.width/2;
   yc = widget->allocation.height/2;
 
-  /* Draw ticks */
+  upper = dial->adjustment->upper;
+  lower = dial->adjustment->lower;
 
-  for (i=0; i<25; i++)
-    {
-      theta = (i*M_PI/18. - M_PI/6.);
-      s = sin(theta);
-      c = cos(theta);
+  /* Erase old pointer */
 
-      tick_length = (i%6 == 0) ? dial->pointer_width : dial->pointer_width/2;
-      
-      gdk_draw_line (widget->window,
-		     widget->style->fg_gc[widget->state],
-		     xc + c*(dial->radius - tick_length),
-		     yc - s*(dial->radius - tick_length),
-		     xc + c*dial->radius,
-		     yc - s*dial->radius);
-    }
-
-  /* Draw pointer */
-
-  s = sin(dial->angle);
-  c = cos(dial->angle);
-
+  s = sin(dial->last_angle);
+  c = cos(dial->last_angle);
+  dial->last_angle = dial->angle;
 
   points[0].x = xc + s*dial->pointer_width/2;
   points[0].y = yc + c*dial->pointer_width/2;
@@ -329,14 +316,90 @@ gtk_dial_expose (GtkWidget      *widget,
   points[1].y = yc - s*dial->radius;
   points[2].x = xc - s*dial->pointer_width/2;
   points[2].y = yc - c*dial->pointer_width/2;
+  points[3].x = xc - c*dial->radius/10;
+  points[3].y = yc + s*dial->radius/10;
+  points[4].x = points[0].x;
+  points[4].y = points[0].y;
+
+  blankstyle = gtk_style_new ();
+  blankstyle->bg_gc[GTK_STATE_NORMAL] =
+                widget->style->bg_gc[GTK_STATE_NORMAL];
+  blankstyle->dark_gc[GTK_STATE_NORMAL] =
+                widget->style->bg_gc[GTK_STATE_NORMAL];
+  blankstyle->light_gc[GTK_STATE_NORMAL] =
+                widget->style->bg_gc[GTK_STATE_NORMAL];
+  blankstyle->black_gc =
+                widget->style->bg_gc[GTK_STATE_NORMAL];
+
+  gtk_draw_polygon (blankstyle,
+                    widget->window,
+                    GTK_STATE_NORMAL,
+                    GTK_SHADOW_OUT,
+                    points, 5,
+                    FALSE);
+
+  gtk_style_unref(blankstyle);
+
+
+  /* Draw ticks */
+
+  if ((upper - lower) == 0)
+    return;
+
+  increment = (100*M_PI)/(dial->radius*dial->radius);
+
+  inc = (upper - lower);
+
+  while (inc < 100) inc *=10;
+  while (inc >= 1000) inc /=10;
+  last = -1;
+
+  for (i=0; i<=inc; i++)
+    {
+      theta = ((gfloat)i*M_PI/(18*inc/24.) - M_PI/6.);
+
+      if ((theta - last) < (increment))
+	continue;     
+      last = theta;
+
+      s = sin(theta);
+      c = cos(theta);
+
+      tick_length = (i%(inc/10) == 0) ? dial->pointer_width : dial->pointer_width/2;
+
+      gdk_draw_line (widget->window,
+                     widget->style->fg_gc[widget->state],
+                     xc + c*(dial->radius - tick_length),
+                     yc - s*(dial->radius - tick_length),
+                     xc + c*dial->radius,
+                     yc - s*dial->radius);
+    }
+
+  /* Draw pointer */
+
+  s = sin(dial->angle);
+  c = cos(dial->angle);
+  dial->last_angle = dial->angle;
+
+  points[0].x = xc + s*dial->pointer_width/2;
+  points[0].y = yc + c*dial->pointer_width/2;
+  points[1].x = xc + c*dial->radius;
+  points[1].y = yc - s*dial->radius;
+  points[2].x = xc - s*dial->pointer_width/2;
+  points[2].y = yc - c*dial->pointer_width/2;
+  points[3].x = xc - c*dial->radius/10;
+  points[3].y = yc + s*dial->radius/10;
+  points[4].x = points[0].x;
+  points[4].y = points[0].y;
+
 
   gtk_draw_polygon (widget->style,
 		    widget->window,
 		    GTK_STATE_NORMAL,
 		    GTK_SHADOW_OUT,
-		    points, 3,
+		    points, 5,
 		    TRUE);
-  
+
   return FALSE;
 }
 

@@ -3,12 +3,13 @@
 #include <gtk/gtk.h>
 
 /* for all the GtkItem:: and GtkTreeItem:: signals */
-static void cb_itemsignal (GtkWidget *item, gchar *signame)
+static void cb_itemsignal( GtkWidget *item,
+                           gchar     *signame )
 {
   gchar *name;
   GtkLabel *label;
 
-  /* It's a GtkBin, so it has one child, which we know to be a
+  /* It's a Bin, so it has one child, which we know to be a
      label, so get that */
   label = GTK_LABEL (GTK_BIN (item)->child);
   /* Get the text of the label */
@@ -19,8 +20,9 @@ static void cb_itemsignal (GtkWidget *item, gchar *signame)
 }
 
 /* Note that this is never called */
-static void cb_unselect_child (GtkWidget *root_tree, GtkWidget *child,
-			       GtkWidget *subtree)
+static void cb_unselect_child( GtkWidget *root_tree,
+                               GtkWidget *child,
+                               GtkWidget *subtree )
 {
   g_print ("unselect_child called for root tree %p, subtree %p, child %p\n",
 	   root_tree, subtree, child);
@@ -35,7 +37,7 @@ static void cb_select_child (GtkWidget *root_tree, GtkWidget *child,
 	   root_tree, subtree, child);
 }
 
-static void cb_selection_changed (GtkWidget *tree)
+static void cb_selection_changed( GtkWidget *tree )
 {
   GList *i;
   
@@ -58,7 +60,8 @@ static void cb_selection_changed (GtkWidget *tree)
   }
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
   GtkWidget *window, *scrolled_win, *tree;
   static gchar *itemnames[] = {"Foo", "Bar", "Baz", "Quux",

@@ -19,12 +19,14 @@ void text_toggle_word_wrap (GtkWidget *checkbutton,
 			 GTK_TOGGLE_BUTTON(checkbutton)->active);
 }
 
-void close_application( GtkWidget *widget, gpointer data )
+void close_application( GtkWidget *widget,
+                        gpointer   data )
 {
        gtk_main_quit();
 }
 
-int main (int argc, char *argv[])
+int main( int argc,
+          char *argv[] )
 {
   GtkWidget *window;
   GtkWidget *box1;
@@ -37,7 +39,7 @@ int main (int argc, char *argv[])
   GtkWidget *vscrollbar;
   GtkWidget *text;
   GdkColormap *cmap;
-  GdkColor colour;
+  GdkColor color;
   GdkFont *fixed_font;
 
   FILE *infile;
@@ -85,28 +87,29 @@ int main (int argc, char *argv[])
 		    GTK_FILL, GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
   gtk_widget_show (vscrollbar);
 
-  /* Get the system colour map and allocate the colour red */
+  /* Get the system color map and allocate the color red */
   cmap = gdk_colormap_get_system();
-  colour.red = 0xffff;
-  colour.green = 0;
-  colour.blue = 0;
-  if (!gdk_color_alloc(cmap, &colour)) {
-    g_error("couldn't allocate colour");
+  color.red = 0xffff;
+  color.green = 0;
+  color.blue = 0;
+  if (!gdk_color_alloc(cmap, &color)) {
+    g_error("couldn't allocate color");
   }
 
   /* Load a fixed font */
   fixed_font = gdk_font_load ("-misc-fixed-medium-r-*-*-*-140-*-*-*-*-*-*");
 
-  /* Realizing a widget creates a window for it, ready for us to insert some text */
+  /* Realizing a widget creates a window for it,
+   * ready for us to insert some text */
   gtk_widget_realize (text);
 
   /* Freeze the text widget, ready for multiple updates */
   gtk_text_freeze (GTK_TEXT (text));
   
-  /* Insert some coloured text */
+  /* Insert some colored text */
   gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL,
 		   "Supports ", -1);
-  gtk_text_insert (GTK_TEXT (text), NULL, &colour, NULL,
+  gtk_text_insert (GTK_TEXT (text), NULL, &color, NULL,
 		   "colored ", -1);
   gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL,
 		   "text and different ", -1);

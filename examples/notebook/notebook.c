@@ -3,13 +3,15 @@
 #include <gtk/gtk.h>
 
 /* This function rotates the position of the tabs */
-void rotate_book (GtkButton *button, GtkNotebook *notebook)
+void rotate_book( GtkButton   *button,
+                  GtkNotebook *notebook )
 {
     gtk_notebook_set_tab_pos (notebook, (notebook->tab_pos +1) %4);
 }
 
 /* Add/Remove the page tabs and the borders */
-void tabsborder_book (GtkButton *button, GtkNotebook *notebook)
+void tabsborder_book( GtkButton   *button,
+                      GtkNotebook *notebook )
 {
     gint tval = FALSE;
     gint bval = FALSE;
@@ -23,7 +25,8 @@ void tabsborder_book (GtkButton *button, GtkNotebook *notebook)
 }
 
 /* Remove a page from the notebook */
-void remove_book (GtkButton *button, GtkNotebook *notebook)
+void remove_book( GtkButton   *button,
+                  GtkNotebook *notebook )
 {
     gint page;
     
@@ -34,12 +37,16 @@ void remove_book (GtkButton *button, GtkNotebook *notebook)
     gtk_widget_draw(GTK_WIDGET(notebook), NULL);
 }
 
-void delete (GtkWidget *widget, GtkWidget *event, gpointer data)
+gint delete( GtkWidget *widget,
+             GtkWidget *event,
+             gpointer   data )
 {
-    gtk_main_quit ();
+    gtk_main_quit();
+    return(FALSE);
 }
 
-int main (int argc, char *argv[])
+int main( int argc,
+          char *argv[] )
 {
     GtkWidget *window;
     GtkWidget *button;
@@ -70,7 +77,7 @@ int main (int argc, char *argv[])
     gtk_table_attach_defaults(GTK_TABLE(table), notebook, 0,6,0,1);
     gtk_widget_show(notebook);
     
-    /* Lets append a bunch of pages to the notebook */
+    /* Let's append a bunch of pages to the notebook */
     for (i=0; i < 5; i++) {
 	sprintf(bufferf, "Append Frame %d", i+1);
 	sprintf(bufferl, "Page %d", i+1);
@@ -88,7 +95,7 @@ int main (int argc, char *argv[])
 	gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
     }
       
-    /* Now lets add a page to a specific spot */
+    /* Now let's add a page to a specific spot */
     checkbutton = gtk_check_button_new_with_label ("Check me please!");
     gtk_widget_set_usize(checkbutton, 100, 75);
     gtk_widget_show (checkbutton);
@@ -96,7 +103,7 @@ int main (int argc, char *argv[])
     label = gtk_label_new ("Add page");
     gtk_notebook_insert_page (GTK_NOTEBOOK (notebook), checkbutton, label, 2);
     
-    /* Now finally lets prepend pages to the notebook */
+    /* Now finally let's prepend pages to the notebook */
     for (i=0; i < 5; i++) {
 	sprintf(bufferf, "Prepend Frame %d", i+1);
 	sprintf(bufferl, "PPage %d", i+1);
@@ -140,7 +147,8 @@ int main (int argc, char *argv[])
     
     button = gtk_button_new_with_label ("tab position");
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                        (GtkSignalFunc) rotate_book, GTK_OBJECT(notebook));
+                        (GtkSignalFunc) rotate_book,
+			GTK_OBJECT(notebook));
     gtk_table_attach_defaults(GTK_TABLE(table), button, 3,4,1,2);
     gtk_widget_show(button);
     

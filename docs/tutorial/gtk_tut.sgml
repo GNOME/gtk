@@ -11,7 +11,7 @@ Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 			      name="&lt;gale@gtk.org&gt;"></tt>,
 Ian Main <tt><htmlurl url="mailto:imain@gtk.org"
 			      name="&lt;imain@gtk.org&gt;"></tt>
-<date>April 10th, 1999
+<date>November 13th, 1999
 <abstract>
 This is a tutorial on how to use GTK (the GIMP Toolkit) through its C
 interface.
@@ -343,7 +343,7 @@ program "knows" what compiler switches are needed to compile programs
 that use GTK. <tt/gtk-config --cflags/ will output a list of include
 directories for the compiler to look in, and <tt>gtk-config --libs</>
 will output the list of libraries for the compiler to link with and
-the directories to find them in. In the aboce example they could have
+the directories to find them in. In the above example they could have
 been combined into a single instance, such as
 <tt/`gtk-config --cflags --libs`/.
 
@@ -768,7 +768,7 @@ events come.
 And the final return. Control returns here after gtk_quit() is called.
 
 <tscreen><verb>
-    return (0;
+    return (0);
 </verb></tscreen>
 
 Now, when we click the mouse button on a GTK button, the widget emits
@@ -870,11 +870,12 @@ void callback( GtkWidget *widget,
 }
 
 /* another callback */
-void delete_event( GtkWidget *widget,
+gint delete_event( GtkWidget *widget,
                    GdkEvent  *event,
-		   gpointer   data )
+                   gpointer   data )
 {
-    gtk_main_quit ();
+    gtk_main_quit();
+    return(FALSE);
 }
 
 int main( int   argc,
@@ -1094,13 +1095,15 @@ it. Compile it yourself and play with it.
 /* example-start packbox packbox.c */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "gtk/gtk.h"
 
-void delete_event( GtkWidget *widget,
+gint delete_event( GtkWidget *widget,
                    GdkEvent  *event,
-		   gpointer   data )
+                   gpointer   data )
 {
-    gtk_main_quit ();
+    gtk_main_quit();
+    return(FALSE);
 }
 
 /* Make a new hbox filled with button-labels. Arguments for the 
@@ -1558,11 +1561,12 @@ void callback( GtkWidget *widget,
 }
 
 /* This callback quits the program */
-void delete_event( GtkWidget *widget,
+gint delete_event( GtkWidget *widget,
                    GdkEvent  *event,
-		   gpointer   data )
+                   gpointer   data )
 {
     gtk_main_quit ();
+    return(FALSE);
 }
 
 int main( int   argc,
@@ -1952,7 +1956,6 @@ int main( int   argc,
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (gtk_exit), NULL);
 
-
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     gtk_widget_realize(window);
@@ -2182,11 +2185,12 @@ The following example creates a radio button group with three buttons.
 #include <gtk/gtk.h>
 #include <glib.h>
 
-void close_application( GtkWidget *widget,
+gint close_application( GtkWidget *widget,
                         GdkEvent  *event,
-			gpointer   data )
+                        gpointer   data )
 {
   gtk_main_quit();
+  return(FALSE);
 }
 
 int main( int   argc,
@@ -4159,18 +4163,24 @@ static const char * xpm_data[] = {
 
 /* when invoked (via signal delete_event), terminates the application.
  */
-void close_application( GtkWidget *widget, GdkEvent *event, gpointer data ) {
+gint close_application( GtkWidget *widget,
+                        GdkEvent  *event,
+                        gpointer   data )
+{
     gtk_main_quit();
+    return(FALSE);
 }
 
 
 /* is invoked when the button is clicked.  It just prints a message.
  */
-void button_clicked( GtkWidget *widget, gpointer data ) {
-    printf( "button clicked\n" );
+void button_clicked( GtkWidget *widget,
+                     gpointer   data ) {
+    g_print( "button clicked\n" );
 }
 
-int main( int argc, char *argv[] )
+int main( int   argc,
+          char *argv[] )
 {
     /* GtkWidget is the storage type for widgets */
     GtkWidget *window, *pixmapwid, *button;
@@ -4362,11 +4372,16 @@ static char * WheelbarrowFull_xpm[] = {
 
 
 /* When invoked (via signal delete_event), terminates the application */
-void close_application( GtkWidget *widget, GdkEvent *event, gpointer data ) {
+gint close_application( GtkWidget *widget,
+                        GdkEvent  *event,
+                        gpointer   data )
+{
     gtk_main_quit();
+    return(FALSE);
 }
 
-int main (int argc, char *argv[])
+int main (int argc,
+          char *argv[] )
 {
     /* GtkWidget is the storage type for widgets */
     GtkWidget *window, *pixmap, *fixed;
@@ -4523,12 +4538,17 @@ Placement of the drawing area and the rulers is done using a table.
 #define YSIZE  400
 
 /* This routine gets control when the close button is clicked */
-void close_application( GtkWidget *widget, GdkEvent *event, gpointer data ) {
+gint close_application( GtkWidget *widget,
+                        GdkEvent  *event,
+                        gpointer   data )
+{
     gtk_main_quit();
+    return(FALSE);
 }
 
 /* The main routine */
-int main( int argc, char *argv[] ) {
+int main( int   argc,
+          char *argv[] ) {
     GtkWidget *window, *table, *area, *hrule, *vrule;
 
     /* Initialize GTK and create the main window */
@@ -4654,7 +4674,8 @@ back off.
 
 GtkWidget *status_bar;
 
-void push_item (GtkWidget *widget, gpointer data)
+void push_item( GtkWidget *widget,
+                gpointer   data )
 {
   static int count = 1;
   char buff[20];
@@ -4665,13 +4686,15 @@ void push_item (GtkWidget *widget, gpointer data)
   return;
 }
 
-void pop_item (GtkWidget *widget, gpointer data)
+void pop_item( GtkWidget *widget,
+               gpointer   data )
 {
   gtk_statusbar_pop( GTK_STATUSBAR(status_bar), GPOINTER_TO_INT(data) );
   return;
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
 
     GtkWidget *window;
@@ -4821,28 +4844,30 @@ The following code is an example of using an Entry widget.
 
 #include <gtk/gtk.h>
 
-void enter_callback(GtkWidget *widget, GtkWidget *entry)
+void enter_callback( GtkWidget *widget,
+                     GtkWidget *entry )
 {
   gchar *entry_text;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
   printf("Entry contents: %s\n", entry_text);
 }
 
-void entry_toggle_editable (GtkWidget *checkbutton,
-				   GtkWidget *entry)
+void entry_toggle_editable( GtkWidget *checkbutton,
+                            GtkWidget *entry )
 {
   gtk_entry_set_editable(GTK_ENTRY(entry),
 			 GTK_TOGGLE_BUTTON(checkbutton)->active);
 }
 
-void entry_toggle_visibility (GtkWidget *checkbutton,
-				   GtkWidget *entry)
+void entry_toggle_visibility( GtkWidget *checkbutton,
+                              GtkWidget *entry )
 {
   gtk_entry_set_visibility(GTK_ENTRY(entry),
 			 GTK_TOGGLE_BUTTON(checkbutton)->active);
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
 
     GtkWidget *window;
@@ -5104,7 +5129,6 @@ void gtk_spin_button_set_update_policy( GtkSpinButton  *spin_button,
 
 The possible values of <tt/policy/ are either <tt/GTK_UPDATE_ALWAYS/ or
 <tt/GTK_UPDATE_IF_VALID/.
- 
 
 These policies affect the behavior of a Spin Button when parsing
 inserted text and syncing its value with the values of the
@@ -5446,6 +5470,10 @@ Here's a typical code segment for creating a set of options:
     gtk_combo_set_popdown_strings( GTK_COMBO(combo), glist) ;
 </verb></tscreen>
 
+The combo widget makes a copy of the strings passed to it in the glist
+structure. As a result, you need to make sure you free the memory used
+by the list if that is appropriate for your application.
+
 At this point you have a working combo box that has been set up.
 There are a few aspects of its behavior that you can change. These
 are accomplished with the functions: 
@@ -5655,7 +5683,8 @@ GtkWidget *drawingarea = NULL;
 
 /* Color changed handler */
 
-void color_changed_cb (GtkWidget *widget, GtkColorSelection *colorsel)
+void color_changed_cb( GtkWidget         *widget,
+                       GtkColorSelection *colorsel )
 {
   gdouble color[3];
   GdkColor gdk_color;
@@ -5691,7 +5720,9 @@ void color_changed_cb (GtkWidget *widget, GtkColorSelection *colorsel)
 
 /* Drawingarea event handler */
 
-gint area_event (GtkWidget *widget, GdkEvent *event, gpointer client_data)
+gint area_event( GtkWidget *widget,
+                 GdkEvent  *event,
+                 gpointer   client_data )
 {
   gint handled = FALSE;
   GtkWidget *colorsel;
@@ -5728,14 +5759,18 @@ gint area_event (GtkWidget *widget, GdkEvent *event, gpointer client_data)
 
 /* Close down and exit handler */
 
-void destroy_window (GtkWidget *widget, gpointer client_data)
+gint destroy_window( GtkWidget *widget,
+                     GdkEvent  *event,
+                     gpointer   client_data )
 {
   gtk_main_quit ();
+  return(TRUE);
 }
 
 /* Main */
 
-gint main (gint argc, gchar *argv[])
+gint main( gint   argc,
+           gchar *argv[] )
 {
   GtkWidget *window;
 
@@ -5752,9 +5787,6 @@ gint main (gint argc, gchar *argv[])
   /* Attach to the "delete" and "destroy" events so we can exit */
 
   gtk_signal_connect (GTK_OBJECT(window), "delete_event",
-    (GtkSignalFunc)destroy_window, (gpointer)window);
-
-  gtk_signal_connect (GTK_OBJECT(window), "destroy",
     (GtkSignalFunc)destroy_window, (gpointer)window);
   
   /* Create drawingarea, set size and catch button events */
@@ -5842,17 +5874,20 @@ screen, it does nothing as there is not a signal attached to it.
 #include <gtk/gtk.h>
 
 /* Get the selected filename and print it to the console */
-void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
+void file_ok_sel( GtkWidget        *w,
+                  GtkFileSelection *fs )
 {
     g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }
 
-void destroy (GtkWidget *widget, gpointer data)
+void destroy( GtkWidget *widget,
+              gpointer   data )
 {
     gtk_main_quit ();
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
     GtkWidget *filew;
     
@@ -5931,8 +5966,8 @@ window reveals varying amounts of the label.
 
 #include <gtk/gtk.h>
 
-int 
-main (int argc, char *argv[])
+int main( int argc,
+          char *argv[] )
 {
     GtkWidget *window;
     GtkWidget *event_box;
@@ -6367,8 +6402,8 @@ user resizes the top-level window.
 
 #include <gtk/gtk.h>
    
-int
-main (int argc, char *argv[])
+int main( int argc,
+          char *argv[] )
 {
     GtkWidget *window;
     GtkWidget *aspect_frame;
@@ -6473,8 +6508,7 @@ window.
 #include <gtk/gtk.h>
    
 /* Create the list of "messages" */
-GtkWidget *
-create_list (void)
+GtkWidget *create_list( void )
 {
 
     GtkWidget *scrolled_window;
@@ -6514,8 +6548,8 @@ when our window is realized. We could also force our window to be
 realized with gtk_widget_realize, but it would have to be part of
 a hierarchy first */
 
-void
-realize_text (GtkWidget *text, gpointer data)
+void realize_text( GtkWidget *text,
+                   gpointer data )
 {
     gtk_text_freeze (GTK_TEXT (text));
     gtk_text_insert (GTK_TEXT (text), NULL, &amp;text->style->black, NULL,
@@ -6532,8 +6566,7 @@ realize_text (GtkWidget *text, gpointer data)
 }
    
 /* Create a scrolled text area that displays a "message" */
-GtkWidget *
-create_text (void)
+GtkWidget *create_text( void )
 {
     GtkWidget *table;
     GtkWidget *text;
@@ -6570,8 +6603,8 @@ create_text (void)
     return table;
 }
    
-int
-main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
     GtkWidget *window;
     GtkWidget *vpaned;
@@ -6720,12 +6753,14 @@ new to you.
 
 #include <gtk/gtk.h>
 
-void destroy(GtkWidget *widget, gpointer data)
+void destroy( GtkWidget *widget,
+              gpointer   data )
 {
     gtk_main_quit();
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
     static GtkWidget *window;
     GtkWidget *scrolled_window;
@@ -6887,12 +6922,12 @@ for Button Boxes.
 #include <gtk/gtk.h>
 
 /* Create a Button Box with the specified parameters */
-GtkWidget *create_bbox (gint  horizontal,
-			char* title,
-			gint  spacing,
-			gint  child_w,
-			gint  child_h,
-			gint  layout)
+GtkWidget *create_bbox( gint  horizontal,
+                        char *title,
+                        gint  spacing,
+                        gint  child_w,
+                        gint  child_h,
+                        gint  layout )
 {
   GtkWidget *frame;
   GtkWidget *bbox;
@@ -7134,9 +7169,10 @@ additional explanations):
 
 /* This function is connected to the Close button or
  * closing the window from the WM */
-void delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
+gint delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
 {
   gtk_main_quit ();
+  return(FALSE);
 }
 </verb></tscreen>
 
@@ -7597,13 +7633,15 @@ backward manner, and exit the program.
 #include <gtk/gtk.h>
 
 /* This function rotates the position of the tabs */
-void rotate_book (GtkButton *button, GtkNotebook *notebook)
+void rotate_book( GtkButton   *button,
+                  GtkNotebook *notebook )
 {
     gtk_notebook_set_tab_pos (notebook, (notebook->tab_pos +1) %4);
 }
 
 /* Add/Remove the page tabs and the borders */
-void tabsborder_book (GtkButton *button, GtkNotebook *notebook)
+void tabsborder_book( GtkButton   *button,
+                      GtkNotebook *notebook )
 {
     gint tval = FALSE;
     gint bval = FALSE;
@@ -7617,7 +7655,8 @@ void tabsborder_book (GtkButton *button, GtkNotebook *notebook)
 }
 
 /* Remove a page from the notebook */
-void remove_book (GtkButton *button, GtkNotebook *notebook)
+void remove_book( GtkButton   *button,
+                  GtkNotebook *notebook )
 {
     gint page;
     
@@ -7628,12 +7667,16 @@ void remove_book (GtkButton *button, GtkNotebook *notebook)
     gtk_widget_draw(GTK_WIDGET(notebook), NULL);
 }
 
-void delete (GtkWidget *widget, GtkWidget *event, gpointer data)
+gint delete( GtkWidget *widget,
+             GtkWidget *event,
+             gpointer   data )
 {
-    gtk_main_quit ();
+    gtk_main_quit();
+    return(FALSE);
 }
 
-int main (int argc, char *argv[])
+int main( int argc,
+          char *argv[] )
 {
     GtkWidget *window;
     GtkWidget *button;
@@ -9102,7 +9145,8 @@ can see when they are emitted.
 #include <gtk/gtk.h>
 
 /* for all the GtkItem:: and GtkTreeItem:: signals */
-static void cb_itemsignal (GtkWidget *item, gchar *signame)
+static void cb_itemsignal( GtkWidget *item,
+                           gchar     *signame )
 {
   gchar *name;
   GtkLabel *label;
@@ -9118,8 +9162,9 @@ static void cb_itemsignal (GtkWidget *item, gchar *signame)
 }
 
 /* Note that this is never called */
-static void cb_unselect_child (GtkWidget *root_tree, GtkWidget *child,
-			       GtkWidget *subtree)
+static void cb_unselect_child( GtkWidget *root_tree,
+                               GtkWidget *child,
+                               GtkWidget *subtree )
 {
   g_print ("unselect_child called for root tree %p, subtree %p, child %p\n",
 	   root_tree, subtree, child);
@@ -9134,7 +9179,7 @@ static void cb_select_child (GtkWidget *root_tree, GtkWidget *child,
 	   root_tree, subtree, child);
 }
 
-static void cb_selection_changed (GtkWidget *tree)
+static void cb_selection_changed( GtkWidget *tree )
 {
   GList *i;
   
@@ -9157,7 +9202,8 @@ static void cb_selection_changed (GtkWidget *tree)
   }
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
   GtkWidget *window, *scrolled_win, *tree;
   static gchar *itemnames[] = {"Foo", "Bar", "Baz", "Quux",
@@ -9610,7 +9656,8 @@ int main( int   argc,
  * the button that was pressed.
  */
 
-static gint button_press (GtkWidget *widget, GdkEvent *event)
+static gint button_press( GtkWidget *widget,
+                          GdkEvent *event )
 {
 
     if (event->type == GDK_BUTTON_PRESS) {
@@ -9629,7 +9676,7 @@ static gint button_press (GtkWidget *widget, GdkEvent *event)
 
 /* Print a string when a menu item is selected */
 
-static void menuitem_response (gchar *string)
+static void menuitem_response( gchar *string )
 {
     printf ("%s\n", string);
 }
@@ -9727,7 +9774,7 @@ void get_main_menu( GtkWidget  *window,
   gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
 
   /* Attach the new accelerator group to the window. */
-  gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
+  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
   if (menubar)
     /* Finally, return the actual menu bar created by the item factory. */ 
@@ -10026,12 +10073,14 @@ void text_toggle_word_wrap (GtkWidget *checkbutton,
 			 GTK_TOGGLE_BUTTON(checkbutton)->active);
 }
 
-void close_application( GtkWidget *widget, gpointer data )
+void close_application( GtkWidget *widget,
+                        gpointer   data )
 {
        gtk_main_quit();
 }
 
-int main (int argc, char *argv[])
+int main( int argc,
+          char *argv[] )
 {
   GtkWidget *window;
   GtkWidget *box1;
@@ -11116,13 +11165,13 @@ converted.
 
 #include <gtk/gtk.h>
 
-void selection_received (GtkWidget *widget, 
-			 GtkSelectionData *selection_data, 
-			 gpointer data);
+void selection_received( GtkWidget        *widget, 
+                         GtkSelectionData *selection_data, 
+                         gpointer          data );
 
 /* Signal handler invoked when user clicks on the "Get Targets" button */
-void
-get_targets (GtkWidget *widget, gpointer data)
+void get_targets( GtkWidget *widget,
+                  gpointer data )
 {
   static GdkAtom targets_atom = GDK_NONE;
 
@@ -11136,9 +11185,9 @@ get_targets (GtkWidget *widget, gpointer data)
 }
 
 /* Signal handler called when the selections owner returns the data */
-void
-selection_received (GtkWidget *widget, GtkSelectionData *selection_data, 
-		    gpointer data)
+void selection_received( GtkWidget        *widget,
+                         GtkSelectionData *selection_data, 
+		         gpointer          data )
 {
   GdkAtom *atoms;
   GList *item_list;
@@ -11174,8 +11223,8 @@ selection_received (GtkWidget *widget, GtkSelectionData *selection_data,
   return;
 }
 
-int 
-main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
   GtkWidget *window;
   GtkWidget *button;
@@ -11219,27 +11268,24 @@ handlers that will be called when your selection is requested. For
 each selection/target pair you will handle, you make a call to:
 
 <tscreen><verb>
-void gtk_selection_add_handler( GtkWidget            *widget, 
-                                GdkAtom               selection,
-                                GdkAtom               target,
-                                GtkSelectionFunction  function,
-                                GtkRemoveFunction     remove_func,
-                                gpointer              data );
+void gtk_selection_add_target (GtkWidget           *widget, 
+                               GdkAtom              selection,
+                               GdkAtom              target,
+                               guint                info);
 </verb></tscreen>
 
 <tt/widget/, <tt/selection/, and <tt/target/ identify the requests
-this handler will manage.  <tt/remove_func/, if not
-NULL, will be called when the signal handler is removed. This is
-useful, for instance, for interpreted languages which need to
-keep track of a reference count for <tt/data/.
+this handler will manage. When a request for a selection is received,
+the "selection_get" signal will be called. <tt/info/ can be used as an
+enumerator to identify the specific target within the callback function.
 
 The callback function has the signature:
 
 <tscreen><verb>
-typedef void (*GtkSelectionFunction)( GtkWidget        *widget, 
-                                      GtkSelectionData *selection_data,
-                                      gpointer          data );
-
+void  "selection_get" (GtkWidget          *widget,
+                       GtkSelectionData   *selection_data,
+                       guint               info,
+                       guint               time);
 </verb></tscreen>
 
 The GtkSelectionData is the same as above, but this time, we're
@@ -11288,8 +11334,8 @@ string representation of the time is returned.
 #include <time.h>
 
 /* Callback when the user toggles the selection */
-void
-selection_toggled (GtkWidget *widget, gint *have_selection)
+void selection_toggled( GtkWidget *widget,
+                        gint      *have_selection )
 {
   if (GTK_TOGGLE_BUTTON(widget)->active)
     {
@@ -11316,9 +11362,9 @@ selection_toggled (GtkWidget *widget, gint *have_selection)
 }
 
 /* Called when another application claims the selection */
-gint
-selection_clear (GtkWidget *widget, GdkEventSelection *event,
-		 gint *have_selection)
+gint selection_clear( GtkWidget         *widget,
+                      GdkEventSelection *event,
+                      gint              *have_selection )
 {
   *have_selection = FALSE;
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), FALSE);
@@ -11327,15 +11373,16 @@ selection_clear (GtkWidget *widget, GdkEventSelection *event,
 }
 
 /* Supplies the current time as the selection. */
-void
-selection_handle (GtkWidget *widget, 
-		  GtkSelectionData *selection_data,
-		  gpointer data)
+void selection_handle( GtkWidget        *widget, 
+                       GtkSelectionData *selection_data,
+                       guint             info,
+                       guint             time_stamp,
+                       gpointer          data )
 {
   gchar *timestr;
   time_t current_time;
 
-  current_time = time (NULL);
+  current_time = time(NULL);
   timestr = asctime (localtime(&amp;current_time)); 
   /* When we return a single string, it should not be null terminated.
      That will be done for us */
@@ -11344,11 +11391,10 @@ selection_handle (GtkWidget *widget,
 			  8, timestr, strlen(timestr));
 }
 
-int
-main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
   GtkWidget *window;
-
   GtkWidget *selection_button;
 
   static int have_selection = FALSE;
@@ -11375,9 +11421,12 @@ main (int argc, char *argv[])
   gtk_signal_connect (GTK_OBJECT(selection_button), "selection_clear_event",
 		      GTK_SIGNAL_FUNC (selection_clear), &amp;have_selection);
 
-  gtk_selection_add_handler (selection_button, GDK_SELECTION_PRIMARY,
-			     GDK_SELECTION_TYPE_STRING,
-			     selection_handle, NULL);
+  gtk_selection_add_target (selection_button,
+			    GDK_SELECTION_PRIMARY,
+			    GDK_SELECTION_TYPE_STRING,
+		            1);
+  gtk_signal_connect (GTK_OBJECT(selection_button), "selection_get",
+		      GTK_SIGNAL_FUNC (selection_handle), &amp;have_selection);
 
   gtk_widget_show (selection_button);
   gtk_widget_show (window);
@@ -13974,13 +14023,7 @@ needs to be updated. X will eventually generate an expose event
 to copy the relevant portions to the screen.
 
 We have now covered the entire drawing program except for a few
-mundane details like creating the main window. The complete
-source code is available from the location from which you got
-this tutorial, or from:
-
-<htmlurl url="http://www.gtk.org/~otaylor/gtk/tutorial/"
-name="http://www.gtk.org/~otaylor/gtk/tutorial/">
-
+mundane details like creating the main window.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Adding XInput support
@@ -14297,13 +14340,7 @@ print_button_press (guint32 deviceid)
 }
 </verb></tscreen>
 
-That completes the changes to "XInputize" our program. As with
-the first version, the complete source is available at the location
-from which you got this tutorial, or from:
-
-<htmlurl url="http://www.gtk.org/~otaylor/gtk/tutorial/"
-name="http://www.gtk.org/~otaylor/gtk/tutorial/">
-
+That completes the changes to "XInputize" our program.
 
 <sect2> Further sophistications <label id="sec_Further_Sophistications">
 <p>
@@ -15862,15 +15899,15 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
 #include <gtk/gtk.h>
 #include "tictactoe.h"
 
-void
-win (GtkWidget *widget, gpointer data)
+void win( GtkWidget *widget,
+          gpointer   data )
 {
   g_print ("Yay!\n");
   tictactoe_clear (TICTACTOE (widget));
 }
 
-int 
-main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
   GtkWidget *window;
   GtkWidget *ttt;
@@ -15972,6 +16009,7 @@ struct _GtkDial
 
   /* Current angle */
   gfloat angle;
+  gfloat last_angle;
 
   /* Old values from adjustment stored so we know when something changes */
   gfloat old_value;
@@ -16139,8 +16177,7 @@ gtk_dial_new (GtkAdjustment *adjustment)
   dial = gtk_type_new (gtk_dial_get_type ());
 
   if (!adjustment)
-    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0,
-                                                      0.0, 0.0, 0.0);
+    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   gtk_dial_set_adjustment (dial, adjustment);
 
@@ -16192,8 +16229,7 @@ gtk_dial_set_adjustment (GtkDial      *dial,
 
   if (dial->adjustment)
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (dial->adjustment),
-                                     (gpointer) dial);
+      gtk_signal_disconnect_by_data (GTK_OBJECT (dial->adjustment), (gpointer) dial);
       gtk_object_unref (GTK_OBJECT (dial->adjustment));
     }
 
@@ -16241,9 +16277,7 @@ gtk_dial_realize (GtkWidget *widget)
   attributes.colormap = gtk_widget_get_colormap (widget);
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  widget->window = gdk_window_new (widget->parent->window,
-                                   &amp;attributes,
-                                   attributes_mask);
+  widget->window = gdk_window_new (widget->parent->window, &amp;attributes, attributes_mask);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 
@@ -16290,12 +16324,14 @@ gtk_dial_expose (GtkWidget      *widget,
 		 GdkEventExpose *event)
 {
   GtkDial *dial;
-  GdkPoint points[3];
+  GdkPoint points[6];
   gdouble s,c;
-  gdouble theta;
+  gdouble theta, last, increment;
+  GtkStyle      *blankstyle;
   gint xc, yc;
+  gint upper, lower;
   gint tick_length;
-  gint i;
+  gint i, inc;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_DIAL (widget), FALSE);
@@ -16306,37 +16342,22 @@ gtk_dial_expose (GtkWidget      *widget,
   
   dial = GTK_DIAL (widget);
 
-  gdk_window_clear_area (widget->window,
+/*  gdk_window_clear_area (widget->window,
 			 0, 0,
 			 widget->allocation.width,
 			 widget->allocation.height);
-
+*/
   xc = widget->allocation.width/2;
   yc = widget->allocation.height/2;
 
-  /* Draw ticks */
+  upper = dial->adjustment->upper;
+  lower = dial->adjustment->lower;
 
-  for (i=0; i<25; i++)
-    {
-      theta = (i*M_PI/18. - M_PI/6.);
-      s = sin(theta);
-      c = cos(theta);
+  /* Erase old pointer */
 
-      tick_length = (i%6 == 0) ? dial->pointer_width : dial->pointer_width/2;
-      
-      gdk_draw_line (widget->window,
-		     widget->style->fg_gc[widget->state],
-		     xc + c*(dial->radius - tick_length),
-		     yc - s*(dial->radius - tick_length),
-		     xc + c*dial->radius,
-		     yc - s*dial->radius);
-    }
-
-  /* Draw pointer */
-
-  s = sin(dial->angle);
-  c = cos(dial->angle);
-
+  s = sin(dial->last_angle);
+  c = cos(dial->last_angle);
+  dial->last_angle = dial->angle;
 
   points[0].x = xc + s*dial->pointer_width/2;
   points[0].y = yc + c*dial->pointer_width/2;
@@ -16344,14 +16365,90 @@ gtk_dial_expose (GtkWidget      *widget,
   points[1].y = yc - s*dial->radius;
   points[2].x = xc - s*dial->pointer_width/2;
   points[2].y = yc - c*dial->pointer_width/2;
+  points[3].x = xc - c*dial->radius/10;
+  points[3].y = yc + s*dial->radius/10;
+  points[4].x = points[0].x;
+  points[4].y = points[0].y;
+
+  blankstyle = gtk_style_new ();
+  blankstyle->bg_gc[GTK_STATE_NORMAL] =
+                widget->style->bg_gc[GTK_STATE_NORMAL];
+  blankstyle->dark_gc[GTK_STATE_NORMAL] =
+                widget->style->bg_gc[GTK_STATE_NORMAL];
+  blankstyle->light_gc[GTK_STATE_NORMAL] =
+                widget->style->bg_gc[GTK_STATE_NORMAL];
+  blankstyle->black_gc =
+                widget->style->bg_gc[GTK_STATE_NORMAL];
+
+  gtk_draw_polygon (blankstyle,
+                    widget->window,
+                    GTK_STATE_NORMAL,
+                    GTK_SHADOW_OUT,
+                    points, 5,
+                    FALSE);
+
+  gtk_style_unref(blankstyle);
+
+
+  /* Draw ticks */
+
+  if ((upper - lower) == 0)
+    return;
+
+  increment = (100*M_PI)/(dial->radius*dial->radius);
+
+  inc = (upper - lower);
+
+  while (inc < 100) inc *=10;
+  while (inc >= 1000) inc /=10;
+  last = -1;
+
+  for (i=0; i<=inc; i++)
+    {
+      theta = ((gfloat)i*M_PI/(18*inc/24.) - M_PI/6.);
+
+      if ((theta - last) < (increment))
+	continue;     
+      last = theta;
+
+      s = sin(theta);
+      c = cos(theta);
+
+      tick_length = (i%(inc/10) == 0) ? dial->pointer_width : dial->pointer_width/2;
+
+      gdk_draw_line (widget->window,
+                     widget->style->fg_gc[widget->state],
+                     xc + c*(dial->radius - tick_length),
+                     yc - s*(dial->radius - tick_length),
+                     xc + c*dial->radius,
+                     yc - s*dial->radius);
+    }
+
+  /* Draw pointer */
+
+  s = sin(dial->angle);
+  c = cos(dial->angle);
+  dial->last_angle = dial->angle;
+
+  points[0].x = xc + s*dial->pointer_width/2;
+  points[0].y = yc + c*dial->pointer_width/2;
+  points[1].x = xc + c*dial->radius;
+  points[1].y = yc - s*dial->radius;
+  points[2].x = xc - s*dial->pointer_width/2;
+  points[2].y = yc - c*dial->pointer_width/2;
+  points[3].x = xc - c*dial->radius/10;
+  points[3].y = yc + s*dial->radius/10;
+  points[4].x = points[0].x;
+  points[4].y = points[0].y;
+
 
   gtk_draw_polygon (widget->style,
 		    widget->window,
 		    GTK_STATE_NORMAL,
 		    GTK_SHADOW_OUT,
-		    points, 3,
+		    points, 5,
 		    TRUE);
-  
+
   return FALSE;
 }
 
@@ -16422,8 +16519,7 @@ gtk_dial_button_release (GtkWidget      *widget,
       
       if ((dial->policy != GTK_UPDATE_CONTINUOUS) &amp;&amp;
 	  (dial->old_value != dial->adjustment->value))
-	gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment),
-                                 "value_changed");
+	gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
     }
 
   return FALSE;
@@ -16481,8 +16577,7 @@ gtk_dial_timer (GtkDial *dial)
   g_return_val_if_fail (GTK_IS_DIAL (dial), FALSE);
 
   if (dial->policy == GTK_UPDATE_DELAYED)
-    gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment),
-                             "value_changed");
+    gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
 
   return FALSE;
 }
@@ -16518,8 +16613,7 @@ gtk_dial_update_mouse (GtkDial *dial, gint x, gint y)
     {
       if (dial->policy == GTK_UPDATE_CONTINUOUS)
 	{
-	  gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment),
-                                   "value_changed");
+	  gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
 	}
       else
 	{
@@ -16560,8 +16654,7 @@ gtk_dial_update (GtkDial *dial)
       gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
     }
 
-  dial->angle = 7.*M_PI/6. - (new_value - dial->adjustment->lower) * 
-                              4.*M_PI/3. /
+  dial->angle = 7.*M_PI/6. - (new_value - dial->adjustment->lower) * 4.*M_PI/3. /
     (dial->adjustment->upper - dial->adjustment->lower);
 
   gtk_widget_draw (GTK_WIDGET(dial), NULL);
@@ -16609,10 +16702,85 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
     }
 }
 /* example-end */
+
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2> dial_test.c
+<p>
+<tscreen><verb>
+#include <gtk/gtk.h>
+#include "gtkdial.h"
+
+void value_changed( GtkAdjustment *adjustment,
+                    GtkWidget     *label )
+{
+  char buffer[16];
+
+  sprintf(buffer,"%4.2f",adjustment->value);
+  gtk_label_set (GTK_LABEL (label), buffer);
+}
+
+int main( int   argc,
+          char *argv[])
+{
+  GtkWidget *window;
+  GtkAdjustment *adjustment;
+  GtkWidget *dial;
+  GtkWidget *frame;
+  GtkWidget *vbox;
+  GtkWidget *label;
+  
+  gtk_init (&amp;argc, &amp;argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  
+  gtk_window_set_title (GTK_WINDOW (window), "Dial");
+  
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (gtk_exit), NULL);
+  
+  gtk_container_border_width (GTK_CONTAINER (window), 10);
+
+  vbox = gtk_vbox_new (FALSE, 5);
+  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_widget_show(vbox);
+
+  frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
+  gtk_container_add (GTK_CONTAINER (vbox), frame);
+  gtk_widget_show (frame); 
+ 
+  adjustment = GTK_ADJUSTMENT(gtk_adjustment_new (0, 0, 100, 0.01, 0.1, 0));
+  
+  dial = gtk_dial_new(adjustment);
+  gtk_dial_set_update_policy (GTK_DIAL(dial), GTK_UPDATE_DELAYED);
+  /*  gtk_widget_set_usize (dial, 100, 100); */
+  
+  gtk_container_add (GTK_CONTAINER (frame), dial);
+  gtk_widget_show (dial);
+
+  label = gtk_label_new("0.00");
+  gtk_box_pack_end (GTK_BOX(vbox), label, 0, 0, 0);
+  gtk_widget_show (label);
+
+  gtk_signal_connect (GTK_OBJECT(adjustment), "value_changed",
+		      GTK_SIGNAL_FUNC (value_changed), label);
+  
+  gtk_widget_show (window);
+  
+  gtk_main ();
+  
+  return 0;
+}
+
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Scribble
+<p>
+<!-- ----------------------------------------------------------------- -->
+<sect2> scribble-simple.c
 <p>
 <tscreen><verb>
 /* example-start scribble-simple scribble-simple.c */
@@ -16642,8 +16810,8 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
 static GdkPixmap *pixmap = NULL;
 
 /* Create a new backing pixmap of the appropriate size */
-static gint
-configure_event (GtkWidget *widget, GdkEventConfigure *event)
+static gint configure_event( GtkWidget         *widget,
+                             GdkEventConfigure *event )
 {
   if (pixmap)
     gdk_pixmap_unref(pixmap);
@@ -16663,8 +16831,8 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
 }
 
 /* Redraw the screen from the backing pixmap */
-static gint
-expose_event (GtkWidget *widget, GdkEventExpose *event)
+static gint expose_event( GtkWidget      *widget,
+                          GdkEventExpose *event )
 {
   gdk_draw_pixmap(widget->window,
 		  widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
@@ -16677,8 +16845,9 @@ expose_event (GtkWidget *widget, GdkEventExpose *event)
 }
 
 /* Draw a rectangle on the screen */
-static void
-draw_brush (GtkWidget *widget, gdouble x, gdouble y)
+static void draw_brush( GtkWidget *widget,
+                        gdouble    x,
+                        gdouble    y)
 {
   GdkRectangle update_rect;
 
@@ -16694,8 +16863,8 @@ draw_brush (GtkWidget *widget, gdouble x, gdouble y)
   gtk_widget_draw (widget, &amp;update_rect);
 }
 
-static gint
-button_press_event (GtkWidget *widget, GdkEventButton *event)
+static gint button_press_event( GtkWidget      *widget,
+                                GdkEventButton *event )
 {
   if (event->button == 1 &amp;&amp; pixmap != NULL)
     draw_brush (widget, event->x, event->y);
@@ -16703,8 +16872,8 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
   return TRUE;
 }
 
-static gint
-motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
+static gint motion_notify_event( GtkWidget *widget,
+                                 GdkEventMotion *event )
 {
   int x, y;
   GdkModifierType state;
@@ -16724,14 +16893,13 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
   return TRUE;
 }
 
-void
-quit ()
+void quit ()
 {
   gtk_exit (0);
 }
 
-int
-main (int argc, char *argv[])
+int main( int   argc, 
+          char *argv[] )
 {
   GtkWidget *window;
   GtkWidget *drawing_area;
@@ -16786,6 +16954,282 @@ main (int argc, char *argv[])
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
 			     GTK_OBJECT (window));
+  gtk_widget_show (button);
+
+  gtk_widget_show (window);
+
+  gtk_main ();
+
+  return 0;
+}
+/* example-end */
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2> scribble-xinput.c
+<p>
+<tscreen><verb>
+/* example-start scribble-xinput scribble-xinput.c */
+
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#include <gtk/gtk.h>
+
+/* Backing pixmap for drawing area */
+static GdkPixmap *pixmap = NULL;
+
+/* Create a new backing pixmap of the appropriate size */
+static gint
+configure_event (GtkWidget *widget, GdkEventConfigure *event)
+{
+  if (pixmap)
+     gdk_pixmap_unref(pixmap);
+
+  pixmap = gdk_pixmap_new(widget->window,
+                          widget->allocation.width,
+                          widget->allocation.height,
+                          -1);
+  gdk_draw_rectangle (pixmap,
+                      widget->style->white_gc,
+                      TRUE,
+                      0, 0,
+                      widget->allocation.width,
+                      widget->allocation.height);
+
+  return TRUE;
+}
+
+/* Redraw the screen from the backing pixmap */
+static gint
+expose_event (GtkWidget *widget, GdkEventExpose *event)
+{
+  gdk_draw_pixmap(widget->window,
+                  widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                  pixmap,
+                  event->area.x, event->area.y,
+                  event->area.x, event->area.y,
+                  event->area.width, event->area.height);
+
+  return FALSE;
+}
+
+/* Draw a rectangle on the screen, size depending on pressure,
+   and color on the type of device */
+static void
+draw_brush (GtkWidget *widget, GdkInputSource source,
+            gdouble x, gdouble y, gdouble pressure)
+{
+  GdkGC *gc;
+  GdkRectangle update_rect;
+
+  switch (source)
+    {
+    case GDK_SOURCE_MOUSE:
+      gc = widget->style->dark_gc[GTK_WIDGET_STATE (widget)];
+      break;
+    case GDK_SOURCE_PEN:
+      gc = widget->style->black_gc;
+      break;
+    case GDK_SOURCE_ERASER:
+      gc = widget->style->white_gc;
+      break;
+    default:
+      gc = widget->style->light_gc[GTK_WIDGET_STATE (widget)];
+    }
+
+  update_rect.x = x - 10 * pressure;
+  update_rect.y = y - 10 * pressure;
+  update_rect.width = 20 * pressure;
+  update_rect.height = 20 * pressure;
+  gdk_draw_rectangle (pixmap, gc, TRUE,
+                      update_rect.x, update_rect.y,
+                      update_rect.width, update_rect.height);
+  gtk_widget_draw (widget, &amp;update_rect);
+}
+
+static void
+print_button_press (guint32 deviceid)
+{
+  GList *tmp_list;
+
+  /* gdk_input_list_devices returns an internal list, so we shouldn't
+     free it afterwards */
+  tmp_list = gdk_input_list_devices();
+
+  while (tmp_list)
+    {
+      GdkDeviceInfo *info = (GdkDeviceInfo *)tmp_list->data;
+
+      if (info->deviceid == deviceid)
+        {
+          g_print("Button press on device '%s'\n", info->name);
+          return;
+        }
+
+      tmp_list = tmp_list->next;
+    }
+}
+
+static gint
+button_press_event (GtkWidget *widget, GdkEventButton *event)
+{
+  print_button_press (event->deviceid);
+  
+  if (event->button == 1 &amp;&amp; pixmap != NULL)
+    draw_brush (widget, event->source, event->x, event->y, event->pressure);
+
+  return TRUE;
+}
+
+static gint
+motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
+{
+  gdouble x, y;
+  gdouble pressure;
+  GdkModifierType state;
+
+  if (event->is_hint)
+    gdk_input_window_get_pointer (event->window, event->deviceid,
+                                  &amp;x, &amp;y, &amp;pressure,
+				  NULL, NULL, &amp;state);
+  else
+    {
+      x = event->x;
+      y = event->y;
+      pressure = event->pressure;
+      state = event->state;
+    }
+    
+  if (state &amp; GDK_BUTTON1_MASK &amp;&amp; pixmap != NULL)
+    draw_brush (widget, event->source, x, y, pressure);
+  
+  return TRUE;
+}
+
+void
+input_dialog_destroy (GtkWidget *w, gpointer data)
+{
+  *((GtkWidget **)data) = NULL;
+}
+
+void
+create_input_dialog ()
+{
+  static GtkWidget *inputd = NULL;
+
+  if (!inputd)
+    {
+      inputd = gtk_input_dialog_new();
+
+      gtk_signal_connect (GTK_OBJECT(inputd), "destroy",
+                          (GtkSignalFunc)input_dialog_destroy, &amp;inputd);
+      gtk_signal_connect_object (GTK_OBJECT(GTK_INPUT_DIALOG(inputd)->close_button),
+                                 "clicked",
+                                 (GtkSignalFunc)gtk_widget_hide,
+                                 GTK_OBJECT(inputd));
+      gtk_widget_hide ( GTK_INPUT_DIALOG(inputd)->save_button);
+
+      gtk_widget_show (inputd);
+    }
+  else
+    {
+      if (!GTK_WIDGET_MAPPED(inputd))
+        gtk_widget_show(inputd);
+      else
+        gdk_window_raise(inputd->window);
+    }
+}
+
+void
+quit ()
+{
+  gtk_exit (0);
+}
+
+int
+main (int argc, char *argv[])
+{
+  GtkWidget *window;
+  GtkWidget *drawing_area;
+  GtkWidget *vbox;
+
+  GtkWidget *button;
+
+  gtk_init (&amp;argc, &amp;argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name (window, "Test Input");
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_widget_show (vbox);
+
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+                      GTK_SIGNAL_FUNC (quit), NULL);
+
+  /* Create the drawing area */
+
+  drawing_area = gtk_drawing_area_new ();
+  gtk_drawing_area_size (GTK_DRAWING_AREA (drawing_area), 200, 200);
+  gtk_box_pack_start (GTK_BOX (vbox), drawing_area, TRUE, TRUE, 0);
+
+  gtk_widget_show (drawing_area);
+
+  /* Signals used to handle backing pixmap */
+
+  gtk_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
+                      (GtkSignalFunc) expose_event, NULL);
+  gtk_signal_connect (GTK_OBJECT(drawing_area),"configure_event",
+                      (GtkSignalFunc) configure_event, NULL);
+
+  /* Event signals */
+
+  gtk_signal_connect (GTK_OBJECT (drawing_area), "motion_notify_event",
+                      (GtkSignalFunc) motion_notify_event, NULL);
+  gtk_signal_connect (GTK_OBJECT (drawing_area), "button_press_event",
+                      (GtkSignalFunc) button_press_event, NULL);
+
+  gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
+                         | GDK_LEAVE_NOTIFY_MASK
+                         | GDK_BUTTON_PRESS_MASK
+                         | GDK_POINTER_MOTION_MASK
+                         | GDK_POINTER_MOTION_HINT_MASK);
+
+  /* The following call enables tracking and processing of extension
+     events for the drawing area */
+  gtk_widget_set_extension_events (drawing_area, GDK_EXTENSION_EVENTS_CURSOR);
+
+  /* .. And some buttons */
+  button = gtk_button_new_with_label ("Input Dialog");
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                      GTK_SIGNAL_FUNC (create_input_dialog), NULL);
+  gtk_widget_show (button);
+
+  button = gtk_button_new_with_label ("Quit");
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+                             GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                             GTK_OBJECT (window));
   gtk_widget_show (button);
 
   gtk_widget_show (window);
@@ -17060,8 +17504,8 @@ static void  sigh_button_event( GtkWidget      *gtklist,
 
 /* Main function to set up the user interface */
 
-gint main (int    argc,
-           gchar *argv[])
+gint main( int    argc,
+           gchar *argv[] )
 {                                  
     GtkWidget *separator;
     GtkWidget *window;
@@ -17274,7 +17718,7 @@ void sigh_button_event( GtkWidget      *gtklist,
  * emits the "selection_changed" signal
  */
 void sigh_print_selection( GtkWidget *gtklist,
-                           gpointer   func_data)
+                           gpointer   func_data )
 {
     GList   *dlist;
     

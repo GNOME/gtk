@@ -120,11 +120,16 @@ static char * WheelbarrowFull_xpm[] = {
 
 
 /* When invoked (via signal delete_event), terminates the application */
-void close_application( GtkWidget *widget, GdkEvent *event, gpointer data ) {
+gint close_application( GtkWidget *widget,
+                        GdkEvent  *event,
+                        gpointer   data )
+{
     gtk_main_quit();
+    return(FALSE);
 }
 
-int main (int argc, char *argv[])
+int main (int argc,
+          char *argv[] )
 {
     /* GtkWidget is the storage type for widgets */
     GtkWidget *window, *pixmap, *fixed;

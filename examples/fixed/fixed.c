@@ -51,7 +51,7 @@ int main( int   argc,
     button = gtk_button_new_with_label ("Press me");
   
     /* When the button receives the "clicked" signal, it will call the
-     * function move_button() passing it the Fixed Containter as its
+     * function move_button() passing it the Fixed Container as its
      * argument. */
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			GTK_SIGNAL_FUNC (move_button), fixed);

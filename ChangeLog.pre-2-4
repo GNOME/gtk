@@ -1,3 +1,17 @@
+Sat Nov 13 22:30:29 GMT 1999 Tony Gale  <gale@gtk.org>
+
+	* docs/gtkfaq.sgml: threads example from Erik Mouw.
+	New question on GtkLabel background colors.
+
+	* docs/gtk_tut.sgml:
+	  - Correct the example code callback
+	    function definitions.
+	  - Update the gtkdial example code, from Frans van Schaik.
+	  - Update setselection.c to current API.
+
+        * examples/Makefile examples/*/*.c: Update to code
+        listed in tutorial.
+
 1999-11-10  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkfont-win32.c: Fix a couple of bugs. The Unicode

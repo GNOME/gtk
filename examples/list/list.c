@@ -1,6 +1,6 @@
 /* example-start list list.c */
 
-/* Include the gtk+ header files
+/* Include the GTK header files
  * Include stdio.h, we need that for the printf() function
  */
 #include        <gtk/gtk.h>
@@ -13,7 +13,7 @@ const gchar *list_item_data_key="list_item_data";
 
 
 /* prototypes for signal handler that we are going to connect
- * to the GtkList widget
+ * to the List widget
  */
 static void  sigh_print_selection( GtkWidget *gtklist,
                                    gpointer   func_data);
@@ -25,8 +25,8 @@ static void  sigh_button_event( GtkWidget      *gtklist,
 
 /* Main function to set up the user interface */
 
-gint main (int    argc,
-           gchar *argv[])
+gint main( int    argc,
+           gchar *argv[] )
 {                                  
     GtkWidget *separator;
     GtkWidget *window;
@@ -41,7 +41,7 @@ gint main (int    argc,
     gchar buffer[64];
     
     
-    /* Initialize gtk+ (and subsequently gdk) */
+    /* Initialize GTK (and subsequently GDK) */
 
     gtk_init(&argc, &argv);
     
@@ -65,15 +65,15 @@ gint main (int    argc,
     gtk_container_add(GTK_CONTAINER(window), vbox);
     gtk_widget_show(vbox);
     
-    /* This is the scrolled window to put the GtkList widget inside */
+    /* This is the scrolled window to put the List widget inside */
     scrolled_window=gtk_scrolled_window_new(NULL, NULL);
     gtk_widget_set_usize(scrolled_window, 250, 150);
     gtk_container_add(GTK_CONTAINER(vbox), scrolled_window);
     gtk_widget_show(scrolled_window);
     
-    /* Create the GtkList widget.
+    /* Create thekList widget.
      * Connect the sigh_print_selection() signal handler
-     * function to the "selection_changed" signal of the GtkList
+     * function to the "selection_changed" signal of the List
      * to print out the selected items each time the selection
      * has changed */
     gtklist=gtk_list_new();
@@ -93,7 +93,7 @@ gint main (int    argc,
     gtk_container_add(GTK_CONTAINER(vbox), frame);
     gtk_widget_show(frame);
     
-    /* Connect the sigh_button_event() signal handler to the GtkList
+    /* Connect the sigh_button_event() signal handler to the List
      * which will handle the "arresting" of list items
      */
     gtk_signal_connect(GTK_OBJECT(gtklist),
@@ -106,7 +106,7 @@ gint main (int    argc,
     gtk_container_add(GTK_CONTAINER(vbox), separator);
     gtk_widget_show(separator);
     
-    /* Finally create a button and connect it's "clicked" signal
+    /* Finally create a button and connect its "clicked" signal
      * to the destruction of the window */
     button=gtk_button_new_with_label("Close");
     gtk_container_add(GTK_CONTAINER(vbox), button);
@@ -117,8 +117,8 @@ gint main (int    argc,
 			      GTK_OBJECT(window));
     
     
-    /* Now we create 5 list items, each having it's own
-     * label and add them to the GtkList using gtk_container_add()
+    /* Now we create 5 list items, each having its own
+     * label and add them to the List using gtk_container_add()
      * Also we query the text string from the label and
      * associate it with the list_item_data_key for each list item
      */
@@ -176,7 +176,7 @@ gint main (int    argc,
 }
 
 /* This is the signal handler that got connected to button
- * press/release events of the GtkList
+ * press/release events of the List
  */
 void sigh_button_event( GtkWidget      *gtklist,
                         GdkEventButton *event,
@@ -218,7 +218,7 @@ void sigh_button_event( GtkWidget      *gtklist,
 	g_list_free(free_list);
 	
 	/* If we have a new prisoner, remove him from the
-	 * GtkList and put him into the frame "Prison".
+	 * List and put him into the frame "Prison".
 	 * We need to unselect the item first.
 	 */
 	if (new_prisoner) {
@@ -235,16 +235,16 @@ void sigh_button_event( GtkWidget      *gtklist,
     }
 }
 
-/* This is the signal handler that gets called if GtkList
+/* This is the signal handler that gets called if List
  * emits the "selection_changed" signal
  */
 void sigh_print_selection( GtkWidget *gtklist,
-                           gpointer   func_data)
+                           gpointer   func_data )
 {
     GList   *dlist;
     
     /* Fetch the doubly linked list of selected items
-     * of the GtkList, remember to treat this as read-only!
+     * of the List, remember to treat this as read-only!
      */
     dlist=GTK_LIST(gtklist)->selection;
     

@@ -50,7 +50,7 @@ int main( int   argc,
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     
     /* When the window is given the "delete_event" signal (this is given
-     * by the window manager, usually by the 'close' option, or on the
+     * by the window manager, usually by the "close" option, or on the
      * titlebar), we ask it to call the delete_event () function
      * as defined above. The data passed to the callback
      * function is NULL and is ignored in the callback function. */
@@ -59,7 +59,7 @@ int main( int   argc,
     
     /* Here we connect the "destroy" event to a signal handler.  
      * This event occurs when we call gtk_widget_destroy() on the window,
-     * or if we return 'FALSE' in the "delete_event" callback. */
+     * or if we return FALSE in the "delete_event" callback. */
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC (destroy), NULL);
     
