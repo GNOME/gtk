@@ -1,3 +1,7 @@
+Mon Sep 24 12:43:45 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk-sections.txt: Updates for removed/renamed functions.
+
 2001-09-08  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtk-sections.txt: move some of the accel group functions 

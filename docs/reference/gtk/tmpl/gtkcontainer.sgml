@@ -38,13 +38,6 @@ GtkContainer
 @pspec: 
 
 
-<!-- ##### MACRO GTK_HAVE_CONTAINER_FOCUS_ADJUSTMENTS ##### -->
-<para>
-
-</para>
-
-
-
 <!-- ##### MACRO gtk_container_border_width ##### -->
 <para>
 
@@ -185,22 +178,6 @@ GtkContainer
 @first_arg_name: 
 
 
-<!-- ##### FUNCTION gtk_container_queue_resize ##### -->
-<para>
-
-</para>
-
-@container: 
-
-
-<!-- ##### FUNCTION gtk_container_clear_resize_widgets ##### -->
-<para>
-
-</para>
-
-@container: 
-
-
 <!-- ##### FUNCTION gtk_container_forall ##### -->
 <para>
 
@@ -209,16 +186,6 @@ GtkContainer
 @container: 
 @callback: 
 @callback_data: 
-
-
-<!-- ##### FUNCTION gtk_container_child_composite_name ##### -->
-<para>
-
-</para>
-
-@container: 
-@child: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_set_border_width ##### -->

@@ -96,9 +96,9 @@ Creates a new #GtkMenu.
 Adds a new #GtkMenuItem to the end of the menu's item list.
 </para>
 
-<!-- # Unused Parameters # -->
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
+<!-- # Unused Parameters # -->
 @m: 
 @c: 
 
@@ -108,12 +108,12 @@ Adds a new #GtkMenuItem to the end of the menu's item list.
 Adds a new #GtkMenuItem to the beginning of the menu's item list.
 </para>
 
+@menu: a #GtkMenu.
+@child: The #GtkMenuItem to add.
 <!-- # Unused Parameters # -->
 @menu_child: 
 @m: 
 @c: 
-@menu: a #GtkMenu.
-@child: The #GtkMenuItem to add.
 
 
 <!-- ##### MACRO gtk_menu_insert ##### -->
@@ -122,10 +122,10 @@ Adds a new #GtkMenuItem to the menu's item list at the position
 indicated by @position. 
 </para>
 
-<!-- # Unused Parameters # -->
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
 @pos: 
+<!-- # Unused Parameters # -->
 @position: The position in the item list where @child is added.
 Positions are numbered from 0 to n-1.
 

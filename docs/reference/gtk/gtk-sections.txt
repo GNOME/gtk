@@ -449,7 +449,6 @@ GTK_COMBO_GET_CLASS
 GtkContainer
 GTK_IS_RESIZE_CONTAINER
 GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID
-GTK_HAVE_CONTAINER_FOCUS_ADJUSTMENTS
 <TITLE>GtkContainer</TITLE>
 gtk_container_border_width
 gtk_container_add
@@ -466,12 +465,8 @@ gtk_container_set_focus_hadjustment
 gtk_container_resize_children
 gtk_container_child_type
 gtk_container_child_set
-gtk_container_queue_resize
-gtk_container_clear_resize_widgets
 gtk_container_forall
-gtk_container_child_composite_name
 gtk_container_set_border_width
-gtk_container_dequeue_resize_handler
 gtk_container_propagate_expose
 gtk_container_set_focus_chain
 gtk_container_unset_focus_chain
@@ -1386,7 +1381,6 @@ gtk_menu_item_new_with_mnemonic
 gtk_menu_item_set_right_justified
 gtk_menu_item_set_submenu
 gtk_menu_item_remove_submenu
-gtk_menu_item_set_placement
 gtk_menu_item_select
 gtk_menu_item_deselect
 gtk_menu_item_activate
@@ -2812,7 +2806,6 @@ GtkCellRendererState
 GtkCellRenderer
 gtk_cell_renderer_get_size
 gtk_cell_renderer_render
-gtk_cell_renderer_event
 <SUBSECTION Standard>
 GTK_CELL_RENDERER
 GTK_IS_CELL_RENDERER
@@ -3174,7 +3167,6 @@ gtk_widget_get_child_visible
 gtk_widget_get_parent
 gtk_widget_get_settings
 gtk_widget_get_size_request
-gtk_widget_get_usize
 gtk_widget_pop_visual
 gtk_widget_push_visual
 gtk_widget_set_child_visible
