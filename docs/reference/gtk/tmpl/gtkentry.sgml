@@ -147,6 +147,15 @@ elsewhere.
           as plaintext.
 
 
+<!-- ##### FUNCTION gtk_entry_set_invisible_char ##### -->
+<para>
+
+</para>
+
+@entry: 
+@ch: 
+
+
 <!-- ##### FUNCTION gtk_entry_set_editable ##### -->
 <para>
 Determines if the user can edit the text in the editable
@@ -171,6 +180,104 @@ to fit.
 @max: the new maximum length.
 
 
+<!-- ##### SIGNAL GtkEntry::activate ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::changed ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::copy-clipboard ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::cut-clipboard ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::delete-from-cursor ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkEntry::delete-text ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkEntry::insert-at-cursor ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkEntry::insert-text ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkEntry::move-cursor ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkEntry::paste-clipboard ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::toggle-overwrite ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### ARG GtkEntry:text_position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:editable ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:max_length ##### -->
 <para>
 Determines the maximum allowed length of the contents
@@ -181,5 +288,10 @@ of the widget. See gtk_entry_set_max_length().
 <para>
 Determines whether the contents of the entry widget
 are visible or not. See gtk_entry_set_visibility().
+</para>
+
+<!-- ##### ARG GtkEntry:invisible_char ##### -->
+<para>
+
 </para>
 

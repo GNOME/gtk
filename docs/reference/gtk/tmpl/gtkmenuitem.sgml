@@ -124,6 +124,24 @@ Emits the "activate" signal on the given item
 @menu_item: the menu item
 
 
+<!-- ##### FUNCTION gtk_menu_item_toggle_size_request ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@requisition: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_toggle_size_allocate ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@allocation: 
+
+
 <!-- ##### FUNCTION gtk_menu_item_right_justify ##### -->
 <para>
 Sets the menu item to be right-justified. Only useful for menu bars.
@@ -146,4 +164,20 @@ submenu. For normal applications, the relevant signal is "activate".
 </para>
 
 @menuitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkMenuItem::toggle-size-allocate ##### -->
+<para>
+
+</para>
+
+@menuitem: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkMenuItem::toggle-size-request ##### -->
+<para>
+
+</para>
+
+@menuitem: the object which received the signal.
+@arg1: 
 

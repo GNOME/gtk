@@ -28,3 +28,12 @@ GtkIMMulticontext
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_im_multicontext_append_menuitems ##### -->
+<para>
+
+</para>
+
+@context: 
+@menushell: 
+
+

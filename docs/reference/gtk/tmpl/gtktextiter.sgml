@@ -232,6 +232,15 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_text_iter_get_tags ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_iter_editable ##### -->
 <para>
 
@@ -502,6 +511,7 @@ types related to the text widget and how they work together.
 @iter: 
 @pred: 
 @user_data: 
+@limit: 
 @Returns: 
 
 
@@ -513,6 +523,7 @@ types related to the text widget and how they work together.
 @iter: 
 @pred: 
 @user_data: 
+@limit: 
 @Returns: 
 
 
@@ -527,6 +538,7 @@ types related to the text widget and how they work together.
 @slice: 
 @match_start: 
 @match_end: 
+@limit: 
 @Returns: 
 
 
@@ -541,6 +553,7 @@ types related to the text widget and how they work together.
 @slice: 
 @match_start: 
 @match_end: 
+@limit: 
 @Returns: 
 
 

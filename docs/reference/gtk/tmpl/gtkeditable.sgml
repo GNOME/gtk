@@ -91,20 +91,6 @@ editable by the user.</entry>
 </tbody></tgroup></informaltable>
 </para>
 
-@current_pos: 
-@selection_start_pos: 
-@selection_end_pos: 
-@has_selection: 
-
-<!-- ##### USER_FUNCTION GtkTextFunction ##### -->
-<para>
-Callback function for old method of setting key bindings.
-No longer publically used. 
-</para>
-
-@editable: 
-@time: 
-
 
 <!-- ##### FUNCTION gtk_editable_select_region ##### -->
 <para>
@@ -119,6 +105,17 @@ of the text.
 @editable: a #GtkEditable widget.
 @start: the starting position.
 @end: the end position.
+
+
+<!-- ##### FUNCTION gtk_editable_get_selection_bounds ##### -->
+<para>
+
+</para>
+
+@editable: 
+@start: 
+@end: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_editable_insert_text ##### -->
@@ -196,28 +193,10 @@ the given widget at the current cursor position.
 @editable: a #GtkEditable widget.
 
 
-<!-- ##### FUNCTION gtk_editable_claim_selection ##### -->
-<para>
-Claim or disclaim ownership of the PRIMARY X selection.
-</para>
-
-@editable: a #GtkEditable widget.
-@claim: if %TRUE, claim the selection, otherwise, disclaim it.
-@time: the timestamp for claiming the selection.
-
-
 <!-- ##### FUNCTION gtk_editable_delete_selection ##### -->
 <para>
 Deletes the current contents of the widgets selection and
 disclaims the selection.
-</para>
-
-@editable: a #GtkEditable widget.
-
-
-<!-- ##### FUNCTION gtk_editable_changed ##### -->
-<para>
-Causes the "changed" signal to be emitted.
 </para>
 
 @editable: a #GtkEditable widget.
@@ -263,180 +242,4 @@ widget or not.
 @is_editable: %TRUE if the user is allowed to edit the text
   in the widget.
 
-
-<!-- ##### SIGNAL GtkEditable::activate ##### -->
-<para>
-Indicates that the user has activated the widget
-in some fashion. Generally, this will be done
-with a keystroke. (The default binding for this
-action is Return for #GtkEntry and
-Control-Return for #GtkText.)
-</para>
-
-@editable: the object which received the signal.
-
-<!-- ##### SIGNAL GtkEditable::changed ##### -->
-<para>
-Indicates that the user has changed the contents
-of the widget.
-</para>
-
-@editable: the object which received the signal.
-
-<!-- ##### SIGNAL GtkEditable::copy-clipboard ##### -->
-<para>
-An action signal. Causes the characters in the current selection to
-be copied to the clipboard.
-</para>
-
-@editable: the object which received the signal.
-
-<!-- ##### SIGNAL GtkEditable::cut-clipboard ##### -->
-<para>
-An action signal. Causes the characters in the current
-selection to be copied to the clipboard and then deleted from
-the widget.
-</para>
-
-@editable: the object which received the signal.
-
-<!-- ##### SIGNAL GtkEditable::delete-text ##### -->
-<para>
-This signal is emitted when text is deleted from
-the widget by the user. The default handler for
-this signal will normally be responsible for inserting
-the text, so by connecting to this signal and then
-stopping the signal with gtk_signal_emit_stop(), it
-is possible to modify the inserted text, or prevent
-it from being inserted entirely. The @start_pos
-and @end_pos parameters are interpreted as for
-gtk_editable_delete_text()
-</para>
-
-@editable: the object which received the signal.
-@start_pos: the starting position.
-@end_pos: the end position.
-
-<!-- ##### SIGNAL GtkEditable::insert-text ##### -->
-<para>
-This signal is emitted when text is inserted into
-the widget by the user. The default handler for
-this signal will normally be responsible for inserting
-the text, so by connecting to this signal and then
-stopping the signal with gtk_signal_emit_stop(), it
-is possible to modify the inserted text, or prevent
-it from being inserted entirely.
-</para>
-
-@editable: the object which received the signal.
-@new_text: the new text to insert.
-@new_text_length: the length of the new text.
-@position: the position at which to insert the new text.
-           this is an in-out paramter. After the signal
-           emission is finished, it should point after   
-           the newly inserted text.
-
-<!-- ##### SIGNAL GtkEditable::kill-char ##### -->
-<para>
-An action signal. Delete a single character.
-</para>
-
-@editable: the object which received the signal.
-@direction: the direction in which to delete. Positive
-   indicates forward deletion, negative, backwards deletion.
-
-<!-- ##### SIGNAL GtkEditable::kill-line ##### -->
-<para>
-An action signal. Delete a single line.
-</para>
-
-@editable: the object which received the signal.
-@direction: the direction in which to delete. Positive
-   indicates forward deletion, negative, backwards deletion.
-
-<!-- ##### SIGNAL GtkEditable::kill-word ##### -->
-<para>
-An action signal. Delete a single word.
-</para>
-
-@editable: the object which received the signal.
-@direction: the direction in which to delete. Positive
-   indicates forward deletion, negative, backwards deletion.
-
-<!-- ##### SIGNAL GtkEditable::move-cursor ##### -->
-<para>
-An action signal. Move the cursor position.
-</para>
-
-@editable: the object which received the signal.
-@x: horizontal distance to move the cursor.
-@y: vertical distance to move the cursor.
-
-<!-- ##### SIGNAL GtkEditable::move-page ##### -->
-<para>
-An action signal. Move the cursor by pages.
-</para>
-
-@editable: the object which received the signal.
-@x: Number of pages to move the cursor horizontally.
-@y: Number of pages to move the cursor vertically.
-
-<!-- ##### SIGNAL GtkEditable::move-to-column ##### -->
-<para>
-An action signal. Move the cursor to the given column.
-</para>
-
-@editable: the object which received the signal.
-@column: the column to move to. (A negative value indicates
-         the last column)
-
-<!-- ##### SIGNAL GtkEditable::move-to-row ##### -->
-<para>
-An action signal. Move the cursor to the given row.
-</para>
-
-@editable: the object which received the signal.
-@row: the row to move to. (A negative value indicates 
-      the last row)
-
-<!-- ##### SIGNAL GtkEditable::move-word ##### -->
-<para>
-An action signal. Move the cursor by words.
-</para>
-
-@editable: the object which received the signal.
-@num_words: The number of words to move the
-cursor. (Can be negative).
-
-<!-- ##### SIGNAL GtkEditable::paste-clipboard ##### -->
-<para>
-An action signal. Causes the contents of the clipboard to
-be pasted into the editable widget at the current cursor
-position.
-</para>
-
-@editable: the object which received the signal.
-
-<!-- ##### SIGNAL GtkEditable::set-editable ##### -->
-<para>
-Determines if the user can edit the text in the editable
-widget or not. This is meant to be overriden by 
-child classes and should not generally useful to
-applications.
-</para>
-
-@editable: the object which received the signal.
-@is_editable: %TRUE if the user is allowed to edit the text
-  in the widget.
-
-<!-- ##### ARG GtkEditable:text_position ##### -->
-<para>
-The position of the cursor.
-</para>
-
-<!-- ##### ARG GtkEditable:editable ##### -->
-<para>
-A boolean indicating whether the widget is editable by
-the user.
-</para>
 

@@ -388,3 +388,16 @@ the right edge of @image.
 to the bottom edge of @image.
 
 
+<!-- ##### FUNCTION gdk_drawable_get_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@x: 
+@y: 
+@width: 
+@height: 
+@Returns: 
+
+

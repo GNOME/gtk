@@ -30,6 +30,7 @@ GtkObject
             GtkFileSelection
             GtkFontSelectionDialog
             GtkInputDialog
+            GtkMessageDialog
           GtkPlug
         GtkEventBox
         GtkHandleBox
@@ -67,10 +68,8 @@ GtkObject
     GtkCalendar
     GtkDrawingArea
       GtkCurve
-    GtkEditable
-      GtkEntry
-        GtkSpinButton
-      GtkText
+    GtkEntry
+      GtkSpinButton
     GtkRuler
       GtkHRuler
       GtkVRuler
@@ -85,6 +84,8 @@ GtkObject
       GtkHSeparator
       GtkVSeparator
     GtkInvisible
+    GtkOldEditable
+      GtkText
     GtkPreview
     GtkProgress
       GtkProgressBar

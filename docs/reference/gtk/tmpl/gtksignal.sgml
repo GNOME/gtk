@@ -839,3 +839,10 @@ Delete an emission hook. (see gtk_signal_add_emission_hook())
 @hook_id: the id of the emission handler, returned by add_emission_hook().
 
 
+<!-- ##### MACRO gtk_signal_default_marshaller ##### -->
+<para>
+A marshaller that returns void and takes no extra parameters.
+</para>
+
+
+

@@ -65,6 +65,7 @@ gdk_pixbuf_new
 gdk_pixbuf_new_from_data
 gdk_pixbuf_new_from_xpm_data
 gdk_pixbuf_new_from_inline
+gdk_pixbuf_new_subpixbuf
 gdk_pixbuf_copy
 </SECTION>
 

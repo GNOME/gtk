@@ -2,6 +2,15 @@
 Debugging
 
 
+<!-- ##### SIGNAL GtkEditable::cut-clipboard ##### -->
+<para>
+An action signal. Causes the characters in the current
+selection to be copied to the clipboard and then deleted from
+the widget.
+</para>
+
+@editable: the object which received the signal.
+
 <!-- ##### SECTION ./tmpl/gtkdebug.sgml:Short_Description ##### -->
 
 
@@ -110,11 +119,28 @@ void marshal_INT__POINTER_POINTER_INT_INT(GtkObject*    object,
 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_theme_engine_create_rc_style ##### -->
+<para>
+
+</para>
+
+@engine: 
+@Returns: 
+
 <!-- ##### MACRO gtk_marshal_NONE__ENUM_FLOAT ##### -->
 <para>
 
 </para>
 
+
+<!-- ##### FUNCTION gtk_tree_store_new_with_values ##### -->
+<para>
+
+</para>
+
+@n_columns: 
+@Varargs: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkTextView::insert ##### -->
 <para>
@@ -149,6 +175,13 @@ void marshal_INT__POINTER_POINTER_INT_INT(GtkObject*    object,
 <!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_ENUM ##### -->
 <para>
 
+</para>
+
+
+<!-- ##### ARG GtkEditable:editable ##### -->
+<para>
+A boolean indicating whether the widget is editable by
+the user.
 </para>
 
 
@@ -210,13 +243,6 @@ A structure used to return values from @gtk_type_query.
 @object_size: 
 @class_size: 
 
-<!-- ##### MACRO gtk_widget_pop_visual ##### -->
-<para>
-
-</para>
-
-@v: 
-
 <!-- ##### FUNCTION gtk_text_buffer_get_clipboard_contents ##### -->
 <para>
 
@@ -224,6 +250,13 @@ A structure used to return values from @gtk_type_query.
 
 @buffer: 
 @Returns: 
+
+<!-- ##### MACRO gtk_widget_pop_visual ##### -->
+<para>
+
+</para>
+
+@v: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK ##### -->
 <para>
@@ -306,6 +339,21 @@ to gtk_signal_remove_emission_hook()).
 @x: 
 @y: 
 
+<!-- ##### STRUCT GtkThemeEngine ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_tags ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@Returns: 
+
 <!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Short_Description ##### -->
 
 
@@ -316,6 +364,14 @@ Get the type of GtkIdentifier.
 </para>
 
 @Returns: GtkType -- the enumerated type of something.
+
+<!-- ##### FUNCTION gtk_theme_engine_get ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
 
 <!-- ##### MACRO gtk_marshal_BOOL__POINTER_INT_INT_UINT ##### -->
 <para>
@@ -332,6 +388,13 @@ Get the type of GtkIdentifier.
 @func: 
 @func_data: 
 @args: 
+
+<!-- ##### FUNCTION gtk_theme_engine_ref ##### -->
+<para>
+
+</para>
+
+@engine: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__INT_INT ##### -->
 <para>
@@ -367,6 +430,35 @@ Get the type of GtkIdentifier.
 </para>
 
 
+<!-- ##### SIGNAL GtkEditable::set-editable ##### -->
+<para>
+Determines if the user can edit the text in the editable
+widget or not. This is meant to be overriden by 
+child classes and should not generally useful to
+applications.
+</para>
+
+@editable: the object which received the signal.
+@is_editable: %TRUE if the user is allowed to edit the text
+  in the widget.
+
+<!-- ##### SIGNAL GtkEditable::delete-text ##### -->
+<para>
+This signal is emitted when text is deleted from
+the widget by the user. The default handler for
+this signal will normally be responsible for inserting
+the text, so by connecting to this signal and then
+stopping the signal with gtk_signal_emit_stop(), it
+is possible to modify the inserted text, or prevent
+it from being inserted entirely. The @start_pos
+and @end_pos parameters are interpreted as for
+gtk_editable_delete_text()
+</para>
+
+@editable: the object which received the signal.
+@start_pos: the starting position.
+@end_pos: the end position.
+
 <!-- ##### FUNCTION gtk_ruler_draw_ticks ##### -->
 <para>
 
@@ -374,14 +466,14 @@ Get the type of GtkIdentifier.
 
 @ruler: the gtkruler
 
-<!-- ##### FUNCTION gtk_selection_data_set_text ##### -->
+<!-- ##### SIGNAL GtkEditable::kill-line ##### -->
 <para>
-
+An action signal. Delete a single line.
 </para>
 
-@selection_data: 
-@str: 
-@Returns: 
+@editable: the object which received the signal.
+@direction: the direction in which to delete. Positive
+   indicates forward deletion, negative, backwards deletion.
 
 <!-- ##### FUNCTION gtk_themes_init ##### -->
 <para>
@@ -485,6 +577,13 @@ Convert a gtk type into its sequence number
 
 @textview: the object which received the signal.
 
+<!-- ##### FUNCTION gtk_theme_engine_unref ##### -->
+<para>
+
+</para>
+
+@engine: 
+
 <!-- ##### STRUCT GtkDialogButton ##### -->
 <para>
 Deprecated.
@@ -516,6 +615,17 @@ Deprecated.
 @time: 
 @interactive: 
 @default_editable: 
+
+<!-- ##### SIGNAL GtkEditable::activate ##### -->
+<para>
+Indicates that the user has activated the widget
+in some fashion. Generally, this will be done
+with a keystroke. (The default binding for this
+action is Return for #GtkEntry and
+Control-Return for #GtkText.)
+</para>
+
+@editable: the object which received the signal.
 
 <!-- ##### ENUM GtkTextViewMovementStep ##### -->
 <para>
@@ -552,6 +662,14 @@ Deprecated.
 </para>
 
 @obj: 
+
+<!-- ##### SIGNAL GtkEditable::copy-clipboard ##### -->
+<para>
+An action signal. Causes the characters in the current selection to
+be copied to the clipboard.
+</para>
+
+@editable: the object which received the signal.
 
 <!-- ##### FUNCTION gtk_menu_factory_remove_entries ##### -->
 <para>
@@ -594,16 +712,6 @@ Deprecated.
 @func_data: 
 @args: 
 
-<!-- ##### FUNCTION gtk_paned_compute_position ##### -->
-<para>
-Internal function used by #GtkHPaned and #GtkVPaned
-</para>
-
-@paned: 
-@allocation: 
-@child1_req: 
-@child2_req: 
-
 <!-- ##### FUNCTION gtk_marshal_NONE__INT_FLOAT_BOOL ##### -->
 <para>
 
@@ -613,6 +721,16 @@ Internal function used by #GtkHPaned and #GtkVPaned
 @func: 
 @func_data: 
 @args: 
+
+<!-- ##### FUNCTION gtk_paned_compute_position ##### -->
+<para>
+Internal function used by #GtkHPaned and #GtkVPaned
+</para>
+
+@paned: 
+@allocation: 
+@child1_req: 
+@child2_req: 
 
 <!-- ##### MACRO gtk_marshal_NONE__POINTER_STRING_STRING ##### -->
 <para>
@@ -687,6 +805,15 @@ Return the pointer to the type's children's types.
 @type: GtkType
 @Returns: pointer to a GList
 
+<!-- ##### SIGNAL GtkEditable::move-page ##### -->
+<para>
+An action signal. Move the cursor by pages.
+</para>
+
+@editable: the object which received the signal.
+@x: Number of pages to move the cursor horizontally.
+@y: Number of pages to move the cursor vertically.
+
 <!-- ##### FUNCTION gtk_type_register_flags ##### -->
 <para>
 Register a new set of flags @values and give them the name in
@@ -704,14 +831,6 @@ Register a new set of flags @values and give them the name in
 
 @textview: the object which received the signal.
 @arg1: 
-
-<!-- ##### FUNCTION gtk_selection_clear_targets ##### -->
-<para>
-
-</para>
-
-@widget: 
-@selection: 
 
 <!-- ##### ENUM GtkPrivateFlags ##### -->
 <para>
@@ -766,6 +885,14 @@ show the size if @show_size is true.
 @type: GtkType
 @show_size: gboolean
 
+<!-- ##### FUNCTION gtk_text_mark_is_visible ##### -->
+<para>
+
+</para>
+
+@mark: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT_INT ##### -->
 <para>
 
@@ -775,6 +902,15 @@ show the size if @show_size is true.
 @func: 
 @func_data: 
 @args: 
+
+<!-- ##### SIGNAL GtkEditable::kill-char ##### -->
+<para>
+An action signal. Delete a single character.
+</para>
+
+@editable: the object which received the signal.
+@direction: the direction in which to delete. Positive
+   indicates forward deletion, negative, backwards deletion.
 
 <!-- ##### SECTION ./tmpl/gtkdebug.sgml:Long_Description ##### -->
 <para>
@@ -809,6 +945,25 @@ show the size if @show_size is true.
 @pixmap: 
 @mask: 
 @Returns: 
+
+<!-- ##### SIGNAL GtkEditable::kill-word ##### -->
+<para>
+An action signal. Delete a single word.
+</para>
+
+@editable: the object which received the signal.
+@direction: the direction in which to delete. Positive
+   indicates forward deletion, negative, backwards deletion.
+
+<!-- ##### FUNCTION gtk_im_context_simple_add_table ##### -->
+<para>
+
+</para>
+
+@context_simple: 
+@data: 
+@max_seq_len: 
+@n_seqs: 
 
 <!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_UINT ##### -->
 <para>
@@ -936,6 +1091,14 @@ Get the varargs type associated with @foreign_type
 
 @foreign_type: GtkType
 @Returns: GtkType
+
+<!-- ##### SIGNAL GtkEditable::changed ##### -->
+<para>
+Indicates that the user has changed the contents
+of the widget.
+</para>
+
+@editable: the object which received the signal.
 
 <!-- ##### STRUCT GtkMenuFactory ##### -->
 <para>
@@ -1068,14 +1231,6 @@ unless #may_be_blocked was specified.  FALSE otherwise.
 
 @wid: 
 
-<!-- ##### FUNCTION gtk_selection_data_get_text ##### -->
-<para>
-
-</para>
-
-@selection_data: 
-@Returns: 
-
 <!-- ##### FUNCTION gtk_marshal_BOOL__NONE ##### -->
 <para>
 
@@ -1126,6 +1281,17 @@ Given the type of an object and a pointer to it, the object is freed.
 Private Information
 
 
+<!-- ##### FUNCTION gtk_theme_engine_register_type ##### -->
+<para>
+
+</para>
+
+@engine: 
+@parent_type: 
+@type_name: 
+@type_info: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_menu_factory_find ##### -->
 <para>
 
@@ -1145,6 +1311,15 @@ Private Information
 @callback: 
 @callback_data: 
 @widget: 
+
+<!-- ##### SIGNAL GtkEditable::paste-clipboard ##### -->
+<para>
+An action signal. Causes the contents of the clipboard to
+be pasted into the editable widget at the current cursor
+position.
+</para>
+
+@editable: the object which received the signal.
 
 <!-- ##### FUNCTION gtk_window_add_embedded_xid ##### -->
 <para>
@@ -1200,6 +1375,15 @@ really an implementation detail).</para></listitem>
 </variablelist>
 </para>
 
+
+<!-- ##### SIGNAL GtkEditable::move-word ##### -->
+<para>
+An action signal. Move the cursor by words.
+</para>
+
+@editable: the object which received the signal.
+@num_words: The number of words to move the
+cursor. (Can be negative).
 
 <!-- ##### STRUCT GtkTreeViewPrivate ##### -->
 <para>
@@ -1263,6 +1447,17 @@ really an implementation detail).</para></listitem>
 @GTK_TEXT_DELETE_WHITESPACE: 
 @GTK_TEXT_DELETE_WHITESPACE_LEAVE_ONE: 
 
+<!-- ##### STRUCT GtkIMContextSimple ##### -->
+<para>
+
+</para>
+
+@object: 
+@tables: 
+@compose_buffer: 
+@tentative_match: 
+@tentative_match_len: 
+
 <!-- ##### MACRO GTK_TYPE_FLAT_FIRST ##### -->
 <para>
 The first "flat" (no struct) enumerated type value.
@@ -1290,12 +1485,6 @@ The first "flat" (no struct) enumerated type value.
 
 @buffer: 
 
-<!-- ##### MACRO gtk_signal_default_marshaller ##### -->
-<para>
-A marshaller that returns void and takes no extra parameters.
-</para>
-
-
 <!-- ##### STRUCT GtkTextTabArray ##### -->
 <para>
 
@@ -1307,6 +1496,20 @@ A marshaller that returns void and takes no extra parameters.
 
 </para>
 
+
+<!-- ##### MACRO GTK_TREE_SELECTION ##### -->
+<para>
+A macro that returns a GList that contains the selection of the root tree of @obj.
+</para>
+
+@obj: A pointer to the #GtkTree. @obj will accept any pointer, but it the pointer does not point to a #GtkTree, the results are undefined.
+
+<!-- ##### FUNCTION gtk_editable_changed ##### -->
+<para>
+Causes the "changed" signal to be emitted.
+</para>
+
+@editable: a #GtkEditable widget.
 
 <!-- ##### SIGNAL GtkTextView::move ##### -->
 <para>
@@ -1341,6 +1544,34 @@ A marshaller that returns void and takes no extra parameters.
 @mark: 
 @Returns: 
 
+<!-- ##### SIGNAL GtkEditable::insert-text ##### -->
+<para>
+This signal is emitted when text is inserted into
+the widget by the user. The default handler for
+this signal will normally be responsible for inserting
+the text, so by connecting to this signal and then
+stopping the signal with gtk_signal_emit_stop(), it
+is possible to modify the inserted text, or prevent
+it from being inserted entirely.
+</para>
+
+@editable: the object which received the signal.
+@new_text: the new text to insert.
+@new_text_length: the length of the new text.
+@position: the position at which to insert the new text.
+           this is an in-out paramter. After the signal
+           emission is finished, it should point after   
+           the newly inserted text.
+
+<!-- ##### FUNCTION gtk_editable_claim_selection ##### -->
+<para>
+Claim or disclaim ownership of the PRIMARY X selection.
+</para>
+
+@editable: a #GtkEditable widget.
+@claim: if %TRUE, claim the selection, otherwise, disclaim it.
+@time: the timestamp for claiming the selection.
+
 <!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT ##### -->
 <para>
 
@@ -1358,6 +1589,15 @@ Get the array of signals defined for this object.
 
 @obj: the object to fetch the signals from.
 
+<!-- ##### SIGNAL GtkEditable::move-to-column ##### -->
+<para>
+An action signal. Move the cursor to the given column.
+</para>
+
+@editable: the object which received the signal.
+@column: the column to move to. (A negative value indicates
+         the last column)
+
 <!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Title ##### -->
 gtkenums.sgml
 
@@ -1372,6 +1612,14 @@ gtkenums.sgml
 @func_data: 
 @args: 
 
+<!-- ##### USER_FUNCTION GtkMenuCallback ##### -->
+<para>
+
+</para>
+
+@widget: 
+@user_data: 
+
 <!-- ##### FUNCTION gtk_type_check_object_cast ##### -->
 <para>
 Given a pointer to a GtkTypeObject @type_object, and a GtkType @cast_type,
@@ -1381,14 +1629,6 @@ make sure that it's okay to cast @type_object into a @cast_type.
 @type_object: GtkTypeObject*
 @cast_type: GtkType
 @Returns: the same GtkTypeObject* as @type_object
-
-<!-- ##### USER_FUNCTION GtkMenuCallback ##### -->
-<para>
-
-</para>
-
-@widget: 
-@user_data: 
 
 <!-- ##### FUNCTION gtk_themes_exit ##### -->
 <para>
@@ -1407,13 +1647,19 @@ make sure that it's okay to cast @type_object into a @cast_type.
 @func_data: 
 @args: 
 
-<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Long_Description ##### -->
+<!-- ##### ARG GtkEditable:text_position ##### -->
+<para>
+The position of the cursor.
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
 <para>
 
 </para>
 
 
-<!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
+<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Long_Description ##### -->
 <para>
 
 </para>
@@ -1510,6 +1756,15 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_ARGS
 @entries: 
 @nentries: 
 
+<!-- ##### SIGNAL GtkEditable::move-to-row ##### -->
+<para>
+An action signal. Move the cursor to the given row.
+</para>
+
+@editable: the object which received the signal.
+@row: the row to move to. (A negative value indicates 
+      the last row)
+
 <!-- ##### FUNCTION gtk_signal_set_funcs ##### -->
 <para>
 These set default functions to call when the user didn't
@@ -1557,6 +1812,15 @@ gtk_font_selection_set_filter().
 @GTK_FONT_FILTER_BASE: the base filter, which can't be changed by the user.
 @GTK_FONT_FILTER_USER: the user filter, which can be changed from within the
 'Filter' page of the #GtkFontSelection widget.
+
+<!-- ##### SIGNAL GtkEditable::move-cursor ##### -->
+<para>
+An action signal. Move the cursor position.
+</para>
+
+@editable: the object which received the signal.
+@x: horizontal distance to move the cursor.
+@y: vertical distance to move the cursor.
 
 <!-- ##### FUNCTION gtk_type_parent_class ##### -->
 <para>
@@ -1722,11 +1986,12 @@ object.
 @arg1: 
 @arg2: 
 
-<!-- ##### MACRO gtk_marshal_ENUM__ENUM ##### -->
+<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
 <para>
 
 </para>
 
+@container: 
 
 <!-- ##### MACRO gtk_widget_push_visual ##### -->
 <para>
@@ -1736,12 +2001,11 @@ object.
 @v: 
 @visual: 
 
-<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
+<!-- ##### MACRO gtk_marshal_ENUM__ENUM ##### -->
 <para>
 
 </para>
 
-@container: 
 
 <!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:Title ##### -->
 GtkIMContextSimple

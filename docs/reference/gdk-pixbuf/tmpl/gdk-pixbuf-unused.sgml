@@ -65,6 +65,34 @@ End:
   </para>
 
 
+<!-- ##### SIGNAL GdkPixbufLoader::animation-done ##### -->
+  <para>
+    This signal is emitted when an animation is done loading.
+  </para>
+
+@gdkpixbufloader: the object which received the signal.
+@loader: Loader which emitted the signal.
+
+<!-- ##### SIGNAL GdkPixbufLoader::area-updated ##### -->
+  <para>
+    This signal is emitted when a significant area of the image being
+    loaded has been updated.  Normally it means that a complete
+    scanline has been read in, but it could be a different area as
+    well.  Applications can use this signal to know when to repaint
+    areas of an image that is being loaded.
+  </para>
+
+@gdkpixbufloader: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+@loader: Loader which emitted the signal.
+@x: X offset of upper-left corner of the updated area.
+@y: Y offset of upper-left corner of the updated area.
+@width: Width of updated area.
+@height: Height of updated area.
+
 <!-- ##### FUNCTION gdk_pixbuf_render_to_drawable ##### -->
 <para>
 
@@ -122,6 +150,17 @@ End:
   </para>
 
 
+<!-- ##### SIGNAL GdkPixbufLoader::frame-done ##### -->
+  <para>
+    This signal is emitted when a frame is done loading.  It will be
+    emitted for each frame in an animation data stream.
+  </para>
+
+@gdkpixbufloader: the object which received the signal.
+@arg1: 
+@loader: Loader which emitted the signal.
+@frame: Frame which just completed loading.
+
 <!-- ##### SECTION ./tmpl/xlib-init.sgml:Short_Description ##### -->
 Initializing the &gdk-pixbuf; Xlib library.
 
@@ -154,6 +193,24 @@ Initializing the &gdk-pixbuf; Xlib library.
     XlibRGB
   </para>
 
+
+<!-- ##### SIGNAL GdkPixbufLoader::closed ##### -->
+  <para>
+    This signal is emitted when gdk_pixbuf_loader_close() is called.
+    It can be used by different parts of an application to receive
+    notification when an image loader is closed by the code that
+    drives it.
+  </para>
+
+@gdkpixbufloader: the object which received the signal.
+@loader: Loader which emitted the signal.
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
 
 <!-- ##### ARG GnomeCanvasPixbuf:y_in_pixels ##### -->
   <para>
@@ -395,6 +452,18 @@ Rendering a pixbuf to a GDK drawable.
 Getting parts of an X drawable's image data into a pixbuf.
 
 
+<!-- ##### SIGNAL GdkPixbufLoader::area-prepared ##### -->
+  <para>
+    This signal is emitted when the pixbuf loader has been fed the
+    initial amount of data that is required to figure out the size and
+    format of the image that it will create.  After this signal is
+    emitted, applications can call gdk_pixbuf_loader_get_pixbuf() to
+    fetch the partially-loaded pixbuf.
+  </para>
+
+@gdkpixbufloader: the object which received the signal.
+@loader: Loader which emitted the signal.
+
 <!-- ##### SECTION ./tmpl/xlib-rgb.sgml:Title ##### -->
 XlibRGB
 
@@ -510,12 +579,6 @@ Getting parts of a drawable's image data into a pixbuf.
 
 
 <!-- ##### STRUCT GdkPixbufClass ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Long_Description ##### -->
 <para>
 
 </para>
@@ -688,6 +751,12 @@ Getting parts of a drawable's image data into a pixbuf.
       zero and thus be freed.
     </para>
   </refsect2>
+
+
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Long_Description ##### -->
+<para>
+
+</para>
 
 
 <!-- ##### SECTION ./tmpl/xlib-rendering.sgml:Title ##### -->

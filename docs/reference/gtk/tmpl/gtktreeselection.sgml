@@ -86,6 +86,7 @@ GtkTreeSelection
 </para>
 
 @selection: 
+@model: 
 @iter: 
 @Returns: 
 

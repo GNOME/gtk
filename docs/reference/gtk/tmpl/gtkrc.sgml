@@ -609,6 +609,8 @@ specific portions of a RC file.
 @GTK_RC_TOKEN_HIGHEST: 
 @GTK_RC_TOKEN_ENGINE: 
 @GTK_RC_TOKEN_MODULE_PATH: 
+@GTK_RC_TOKEN_IM_MODULE_PATH: 
+@GTK_RC_TOKEN_IM_MODULE_FILE: 
 @GTK_RC_TOKEN_STOCK: 
 @GTK_RC_TOKEN_LTR: 
 @GTK_RC_TOKEN_RTL: 
@@ -798,6 +800,22 @@ theme engines.
 </para>
 
 @Returns: The directory. (Must be freed with g_free())
+
+
+<!-- ##### FUNCTION gtk_rc_get_im_module_path ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_rc_get_im_module_file ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_rc_get_theme_dir ##### -->

@@ -57,12 +57,12 @@ If @obj is already a root tree, @obj is cast to #GtkTree and returned.
 @obj: A pointer to the #GtkTree. @obj will accept any pointer, but if the pointer does not point to a #GtkTree, the results are undefined.
 
 
-<!-- ##### MACRO GTK_TREE_SELECTION ##### -->
+<!-- ##### MACRO GTK_TREE_SELECTION_OLD ##### -->
 <para>
-A macro that returns a GList that contains the selection of the root tree of @obj.
+
 </para>
 
-@obj: A pointer to the #GtkTree. @obj will accept any pointer, but it the pointer does not point to a #GtkTree, the results are undefined.
+@obj: 
 
 
 <!-- ##### ENUM GtkTreeViewMode ##### -->

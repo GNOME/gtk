@@ -645,18 +645,16 @@ GTK_DRAWING_AREA_GET_CLASS
 <SECTION>
 <FILE>gtkeditable</FILE>
 GtkEditable
-GtkTextFunction
 <TITLE>GtkEditable</TITLE>
 gtk_editable_select_region
+gtk_editable_get_selection_bounds
 gtk_editable_insert_text
 gtk_editable_delete_text
 gtk_editable_get_chars
 gtk_editable_cut_clipboard
 gtk_editable_copy_clipboard
 gtk_editable_paste_clipboard
-gtk_editable_claim_selection
 gtk_editable_delete_selection
-gtk_editable_changed
 gtk_editable_set_position
 gtk_editable_get_position
 gtk_editable_set_editable
@@ -668,6 +666,23 @@ gtk_editable_get_type
 GTK_EDITABLE_CLASS
 GTK_IS_EDITABLE_CLASS
 GTK_EDITABLE_GET_CLASS
+</SECTION>
+
+<SECTION>
+<FILE>gtkoldeditable</FILE>
+<TITLE>GtkOldEditable</TITLE>
+GtkOldEditable
+GtkTextFunction
+gtk_old_editable_claim_selection
+gtk_old_editable_changed
+<SUBSECTION Standard>
+GTK_OLD_EDITABLE
+GTK_IS_OLD_EDITABLE
+GTK_TYPE_OLD_EDITABLE
+gtk_old_editable_get_type
+GTK_OLD_EDITABLE_CLASS
+GTK_IS_OLD_EDITABLE_CLASS
+GTK_OLD_EDITABLE_GET_CLASS
 </SECTION>
 
 <SECTION>
@@ -683,6 +698,7 @@ gtk_entry_set_position
 gtk_entry_get_text
 gtk_entry_select_region
 gtk_entry_set_visibility
+gtk_entry_set_invisible_char
 gtk_entry_set_editable
 gtk_entry_set_max_length
 <SUBSECTION Standard>
@@ -1002,6 +1018,7 @@ gtk_im_context_get_preedit_string
 gtk_im_context_filter_keypress
 gtk_im_context_focus_in
 gtk_im_context_focus_out
+gtk_im_context_reset
 <SUBSECTION Standard>
 GTK_IM_CONTEXT
 GTK_IS_IM_CONTEXT
@@ -1017,6 +1034,7 @@ GTK_IM_CONTEXT_GET_CLASS
 <TITLE>GtkIMMulticontext</TITLE>
 GtkIMMulticontext
 gtk_im_multicontext_new
+gtk_im_multicontext_append_menuitems
 <SUBSECTION Standard>
 GTK_IM_MULTICONTEXT
 GTK_IS_IM_MULTICONTEXT
@@ -1299,6 +1317,8 @@ gtk_menu_item_configure
 gtk_menu_item_select
 gtk_menu_item_deselect
 gtk_menu_item_activate
+gtk_menu_item_toggle_size_request
+gtk_menu_item_toggle_size_allocate
 gtk_menu_item_right_justify
 <SUBSECTION Standard>
 GTK_MENU_ITEM
@@ -2024,7 +2044,6 @@ gtk_text_buffer_get_iter_at_mark
 gtk_text_buffer_get_iter_at_child_anchor
 gtk_text_buffer_get_last_iter
 gtk_text_buffer_get_bounds
-gtk_text_buffer_get_tags
 gtk_text_buffer_modified
 gtk_text_buffer_set_modified
 gtk_text_buffer_delete_selection
@@ -2068,6 +2087,7 @@ gtk_text_iter_begins_tag
 gtk_text_iter_ends_tag
 gtk_text_iter_toggles_tag
 gtk_text_iter_has_tag
+gtk_text_iter_get_tags
 gtk_text_iter_editable
 gtk_text_iter_starts_line
 gtk_text_iter_ends_line
@@ -2112,7 +2132,7 @@ gtk_text_iter_spew
 <TITLE>GtkTextMark</TITLE>
 GtkTextMark
 gtk_text_mark_set_visible
-gtk_text_mark_is_visible
+gtk_text_mark_get_visible
 gtk_text_mark_get_deleted
 gtk_text_mark_get_name
 <SUBSECTION Standard>
@@ -2323,7 +2343,7 @@ GTK_TOOLTIPS_GET_CLASS
 GtkTree
 GTK_IS_ROOT_TREE
 GTK_TREE_ROOT_TREE
-GTK_TREE_SELECTION
+GTK_TREE_SELECTION_OLD
 GtkTreeViewMode
 <TITLE>GtkTree</TITLE>
 gtk_tree_new
@@ -2382,6 +2402,7 @@ GtkTreeIter
 GtkTreePath
 GtkTreeModel
 GtkTreeModelIface
+GtkTreeModelFlags
 gtk_tree_path_new
 gtk_tree_path_new_from_string
 gtk_tree_path_to_string
@@ -2397,6 +2418,9 @@ gtk_tree_path_next
 gtk_tree_path_prev
 gtk_tree_path_up
 gtk_tree_path_down
+gtk_tree_iter_copy
+gtk_tree_iter_free
+gtk_tree_model_get_flags
 gtk_tree_model_get_n_columns
 gtk_tree_model_get_column_type
 gtk_tree_model_get_iter
@@ -2408,11 +2432,34 @@ gtk_tree_model_iter_has_child
 gtk_tree_model_iter_n_children
 gtk_tree_model_iter_nth_child
 gtk_tree_model_iter_parent
+gtk_tree_model_ref_iter
+gtk_tree_model_unref_iter
 <SUBSECTION Standard>
 GTK_TREE_MODEL
 GTK_IS_TREE_MODEL
 GTK_TYPE_TREE_MODEL
 gtk_tree_model_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtktreemodelsort</FILE>
+<TITLE>GtkTreeModelSort</TITLE>
+GtkTreeModelSort
+GValueCompareFunc
+gtk_tree_model_sort_new
+gtk_tree_model_sort_new_with_model
+gtk_tree_model_sort_set_model
+gtk_tree_model_sort_set_sort_col
+gtk_tree_model_sort_set_compare
+gtk_tree_model_sort_resort
+gtk_tree_model_sort_convert_path
+<SUBSECTION Standard>
+GTK_TREE_MODEL_SORT
+GTK_IS_TREE_MODEL_SORT
+GTK_TYPE_TREE_MODEL_SORT
+gtk_tree_model_sort_get_type
+GTK_TREE_MODEL_SORT_CLASS
+GTK_IS_TREE_MODEL_SORT_CLASS
 </SECTION>
 
 <SECTION>
@@ -2450,7 +2497,7 @@ GTK_IS_TREE_SELECTION_CLASS
 <TITLE>GtkTreeStore</TITLE>
 GtkTreeStore
 gtk_tree_store_new
-gtk_tree_store_new_with_values
+gtk_tree_store_new_with_types
 gtk_tree_store_set_n_columns
 gtk_tree_store_set_column_type
 gtk_tree_store_set_cell
@@ -2557,6 +2604,7 @@ GtkTreeViewPrivate
 <SECTION>
 <FILE>gtkmodelsimple</FILE>
 <TITLE>GtkModelSimple</TITLE>
+GtkModelSimple
 gtk_model_simple_new
 gtk_model_simple_node_changed
 gtk_model_simple_node_inserted
@@ -3059,6 +3107,7 @@ gtk_key_snooper_remove
 
 <SUBSECTION>
 gtk_get_current_event
+gtk_get_current_event_time
 gtk_get_event_widget
 gtk_propagate_event
 
@@ -3188,12 +3237,14 @@ GTK_STYLE_GET_CLASS
 <SECTION>
 <FILE>gtkthemes</FILE>
 <TITLE>Themes</TITLE>
+<SUBSECTION Private>
 GtkThemeEngine
 gtk_theme_engine_get
-gtk_theme_engine_ref
-gtk_theme_engine_unref
 gtk_theme_engine_create_rc_style
-gtk_theme_engine_register_type
+GTK_THEME_ENGINE
+GTK_IS_THEME_ENGINE
+GTK_TYPE_THEME_ENGINE
+gtk_theme_engine_get_type
 </SECTION>
 
 <SECTION>
@@ -3220,6 +3271,8 @@ gtk_rc_parse_priority
 gtk_rc_find_module_in_path
 gtk_rc_find_pixmap_in_path
 gtk_rc_get_module_dir
+gtk_rc_get_im_module_path
+gtk_rc_get_im_module_file
 gtk_rc_get_theme_dir
 gtk_rc_set_image_loader
 gtk_rc_load_image
@@ -3290,8 +3343,11 @@ gtk_target_list_find
 gtk_selection_owner_set
 gtk_selection_add_target
 gtk_selection_add_targets
+gtk_selection_clear_targets
 gtk_selection_convert
 gtk_selection_data_set
+gtk_selection_data_set_text
+gtk_selection_data_get_text
 gtk_selection_remove_all
 gtk_selection_data_copy
 gtk_selection_data_free
@@ -3356,8 +3412,6 @@ gtk_drag_dest_handle_event
 <FILE>gtksignal</FILE>
 <TITLE>Signals</TITLE>
 GTK_SIGNAL_OFFSET
-GtkSignalMarshal
-GtkSignalDestroy
 GtkEmissionHook
 GtkSignalRunType
 gtk_signal_init
@@ -3389,12 +3443,12 @@ gtk_signal_handler_unblock_by_func
 gtk_signal_handler_unblock_by_data
 gtk_signal_handler_pending
 gtk_signal_handler_pending_by_func
-gtk_signal_handler_pending_by_id
-gtk_signal_handlers_destroy
-gtk_signal_set_funcs
 gtk_signal_add_emission_hook
-gtk_signal_add_emission_hook_full
 gtk_signal_remove_emission_hook
+gtk_signal_default_marshaller
+
+<SUBSECTION Private>
+gtk_signal_compat_matched
 </SECTION>
 
 <SECTION>

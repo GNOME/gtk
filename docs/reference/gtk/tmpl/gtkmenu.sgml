@@ -91,30 +91,33 @@ Creates a new #GtkMenu.
 @Returns: a new #GtkMenu.
 
 
-<!-- ##### FUNCTION gtk_menu_append ##### -->
+<!-- ##### MACRO gtk_menu_append ##### -->
 <para>
 Adds a new #GtkMenuItem to the end of the menu's item list.
 </para>
 
+<!-- # Unused Parameters # -->
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
 
 
-<!-- ##### FUNCTION gtk_menu_prepend ##### -->
+<!-- ##### MACRO gtk_menu_prepend ##### -->
 <para>
 Adds a new #GtkMenuItem to the beginning of the menu's item list.
 </para>
 
+<!-- # Unused Parameters # -->
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
 
 
-<!-- ##### FUNCTION gtk_menu_insert ##### -->
+<!-- ##### MACRO gtk_menu_insert ##### -->
 <para>
 Adds a new #GtkMenuItem to the menu's item list at the position
 indicated by @position. 
 </para>
 
+<!-- # Unused Parameters # -->
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
 @position: The position in the item list where @child is added.
@@ -289,6 +292,7 @@ and @y parameters to the coordinates where the menu is to be drawn.
 menu shall be drawn.  This is an output parameter.
 @y: address of the #gint representing the vertical position where the
 menu shall be drawn.  This is an output parameter.
+@push_in: 
 @user_data: the data supplied by the user in the gtk_menu_popup() @data
 parameter.
 

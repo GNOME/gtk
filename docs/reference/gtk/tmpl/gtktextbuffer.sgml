@@ -462,16 +462,6 @@ types related to the text widget and how they work together.
 @end: 
 
 
-<!-- ##### FUNCTION gtk_text_buffer_get_tags ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@iter: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_text_buffer_modified ##### -->
 <para>
 

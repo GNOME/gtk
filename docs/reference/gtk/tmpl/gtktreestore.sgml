@@ -34,7 +34,7 @@ GtkTreeStore
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_tree_store_new_with_values ##### -->
+<!-- ##### FUNCTION gtk_tree_store_new_with_types ##### -->
 <para>
 
 </para>

@@ -22,7 +22,6 @@ gtk_curve_get_type
 gtk_data_get_type
 gtk_dialog_get_type
 gtk_drawing_area_get_type
-gtk_editable_get_type
 gtk_entry_get_type
 gtk_event_box_get_type
 gtk_file_selection_get_type
@@ -54,8 +53,10 @@ gtk_menu_get_type
 gtk_menu_bar_get_type
 gtk_menu_item_get_type
 gtk_menu_shell_get_type
+gtk_message_dialog_get_type
 gtk_misc_get_type
 gtk_notebook_get_type
+gtk_old_editable_get_type
 gtk_object_get_type
 gtk_option_menu_get_type
 gtk_packer_get_type

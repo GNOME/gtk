@@ -310,6 +310,11 @@ A #PangoTabArray indicating tabs for this text.  Only used if the tag
 applies to the first character in a paragraph.
 </para>
 
+<!-- ##### ARG GtkTextTag:invisible ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTextTag:background_set ##### -->
 <para>
 
@@ -416,6 +421,11 @@ applies to the first character in a paragraph.
 </para>
 
 <!-- ##### ARG GtkTextTag:tabs_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:invisible_set ##### -->
 <para>
 
 </para>

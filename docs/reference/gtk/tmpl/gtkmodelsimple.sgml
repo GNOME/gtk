@@ -14,6 +14,14 @@ GtkModelSimple
 
 </para>
 
+<!-- ##### STRUCT GtkModelSimple ##### -->
+<para>
+
+</para>
+
+@parent: 
+@stamp: 
+
 <!-- ##### FUNCTION gtk_model_simple_new ##### -->
 <para>
 

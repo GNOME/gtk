@@ -184,6 +184,15 @@ for a given widget and selection.
 @ntargets: number of entries in @targets
 
 
+<!-- ##### FUNCTION gtk_selection_clear_targets ##### -->
+<para>
+
+</para>
+
+@widget: 
+@selection: 
+
+
 <!-- ##### FUNCTION gtk_selection_convert ##### -->
 <para>
 Request the contents of a selection. When received, 
@@ -212,6 +221,25 @@ Null terminates the stored data.
 @format: format (number of bits in a unit)
 @data: pointer to the data (will be copied)
 @length: length of the data
+
+
+<!-- ##### FUNCTION gtk_selection_data_set_text ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@str: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_get_text ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_selection_remove_all ##### -->

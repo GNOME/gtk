@@ -1,3 +1,11 @@
+Mon Nov 13 16:58:43 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* {gtk,gdk,gdk-pixbuf}/Makefile.am: cd to srcdir before
+	calling gtkdoc-fixref, distribute index.sgml.
+
+	* gtk/gtk-docs.sgml gtk/Makefile.am gtk/gtk-sections.txt
+	gtk/gtk.types: Update
+
 2000-11-05  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/tmpl/gtktexttag.sgml: documented some of the object args

@@ -29,6 +29,8 @@ gtktreemodel
 
 @stamp: 
 @tree_node: 
+@tree_node2: 
+@tree_node3: 
 
 <!-- ##### STRUCT GtkTreePath ##### -->
 <para>
@@ -52,6 +54,7 @@ gtktreemodel
 @inserted: 
 @child_toggled: 
 @deleted: 
+@get_flags: 
 @get_n_columns: 
 @get_column_type: 
 @get_iter: 
@@ -63,6 +66,15 @@ gtktreemodel
 @iter_n_children: 
 @iter_nth_child: 
 @iter_parent: 
+@ref_iter: 
+@unref_iter: 
+
+<!-- ##### ENUM GtkTreeModelFlags ##### -->
+<para>
+
+</para>
+
+@GTK_TREE_MODEL_ITERS_PERSIST: 
 
 <!-- ##### FUNCTION gtk_tree_path_new ##### -->
 <para>
@@ -195,6 +207,32 @@ gtktreemodel
 @path: 
 
 
+<!-- ##### FUNCTION gtk_tree_iter_copy ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_iter_free ##### -->
+<para>
+
+</para>
+
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_flags ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_model_get_n_columns ##### -->
 <para>
 
@@ -308,5 +346,23 @@ gtktreemodel
 @iter: 
 @child: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_ref_iter ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_unref_iter ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
 
 

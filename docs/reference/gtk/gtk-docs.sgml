@@ -22,7 +22,8 @@
 <!entity GtkData SYSTEM "sgml/gtkdata.sgml">
 <!entity GtkDialog SYSTEM "sgml/gtkdialog.sgml">
 <!entity GtkDrawingArea SYSTEM "sgml/gtkdrawingarea.sgml">
-<!entity GtkEditable SYSTEM "sgml/gtkeditable.sgml">
+<!entity gtk-GtkEditable SYSTEM "sgml/gtkeditable.sgml">
+<!entity GtkOldEditable SYSTEM "sgml/gtkoldeditable.sgml">
 <!entity GtkEntry SYSTEM "sgml/gtkentry.sgml">
 <!entity GtkEventBox SYSTEM "sgml/gtkeventbox.sgml">
 <!entity GtkFileSelection SYSTEM "sgml/gtkfilesel.sgml">
@@ -41,6 +42,7 @@
 <!entity GtkHSeparator SYSTEM "sgml/gtkhseparator.sgml">
 <!entity GtkImage SYSTEM "sgml/gtkimage.sgml">
 <!entity GtkIMContext SYSTEM "sgml/gtkimcontext.sgml">
+<!entity GtkIMContextSimple SYSTEM "sgml/gtkimcontextsimple.sgml">
 <!entity GtkIMMulticontext SYSTEM "sgml/gtkimmulticontext.sgml">
 <!entity GtkInputDialog SYSTEM "sgml/gtkinputdialog.sgml">
 <!entity GtkInvisible SYSTEM "sgml/gtkinvisible.sgml">
@@ -54,7 +56,7 @@
 <!entity GtkMenuBar SYSTEM "sgml/gtkmenubar.sgml">
 <!entity GtkMenuItem SYSTEM "sgml/gtkmenuitem.sgml">
 <!entity GtkMenuShell SYSTEM "sgml/gtkmenushell.sgml">
-<!entity gtk-GtkMessageDialog SYSTEM "sgml/gtkmessagedialog.sgml">
+<!entity GtkMessageDialog SYSTEM "sgml/gtkmessagedialog.sgml">
 <!entity GtkMisc SYSTEM "sgml/gtkmisc.sgml">
 <!entity GtkNotebook SYSTEM "sgml/gtknotebook.sgml">
 <!entity GtkObject SYSTEM "sgml/gtkobject.sgml">
@@ -92,7 +94,8 @@
 <!entity GtkTooltips SYSTEM "sgml/gtktooltips.sgml">
 <!entity GtkTree SYSTEM "sgml/gtktree.sgml">
 <!entity GtkTreeItem SYSTEM "sgml/gtktreeitem.sgml">
-<!entity gtk-gtktreemodel SYSTEM "sgml/gtktreemodel.sgml">
+<!entity gtk-GtkTreeModel SYSTEM "sgml/gtktreemodel.sgml">
+<!entity gtk-GtkTreeModelSort SYSTEM "sgml/gtktreemodelsort.sgml">
 <!entity gtk-GtkTreeSelection SYSTEM "sgml/gtktreeselection.sgml">
 <!entity gtk-GtkTreeStore SYSTEM "sgml/gtktreestore.sgml">
 <!entity gtk-GtkTreeViewColumn SYSTEM "sgml/gtktreeviewcolumn.sgml">
@@ -129,6 +132,8 @@
 <!entity gtk-Types SYSTEM "sgml/gtktypeutils.sgml">
 <!entity gtk-Bindings SYSTEM "sgml/gtkbindings.sgml">
 <!entity gtk-Standard-Enumerations SYSTEM "sgml/gtkenums.sgml">
+<!entity gtk-Stock-Items SYSTEM "sgml/gtkstock.sgml">
+<!entity gtk-Themeable-Stock-Images SYSTEM "sgml/gtkiconfactory.sgml">
 
 <!entity index-Object-Tree SYSTEM "sgml/tree_index.sgml">
 
@@ -193,13 +198,16 @@ An advanced widget set.
     &gtk-Feature-Test-Macros;
     &gtk-Graphics-Contexts;
     &gtk-Styles;
-    &gtk-Themes;
+<!--    &gtk-Themes; -->
     &gtk-Resource-Files;
     &gtk-Keyboard-Accelerators;
     &gtk-Selections;
+    &gtk-Clipboards;
     &gtk-Drag-and-Drop;
     &gtk-Signals;
     &gtk-Object-Properties;
+    &gtk-Stock-Items;
+    &gtk-Themeable-Stock-Images;
     &gtk-Types;
     &gtk-Bindings;
     &gtk-Standard-Enumerations;
@@ -218,6 +226,7 @@ An advanced widget set.
       <title>Windows</title>
         &GtkDialog;
         &GtkInvisible;
+        &GtkMessageDialog;
         &GtkPlug;
         &GtkWindow;
     </sect1>
@@ -262,12 +271,13 @@ An advanced widget set.
     <sect1 id="TreeWidgetObjects">
       <title>Tree and List Widget</title>
         &gtk-TreeWidget;
-        &gtk-gtktreemodel;
+        &gtk-GtkTreeModel;
         &gtk-GtkTreeSelection;
         &gtk-GtkTreeStore;
         &gtk-GtkTreeViewColumn;
         &gtk-GtkTreeView;
         &gtk-GtkModelSimple;
+        &gtk-GtkTreeModelSort;
         &gtk-GtkCellRenderer;
         &gtk-GtkCellRendererPixbuf;
         &gtk-GtkCellRendererText;
@@ -349,7 +359,8 @@ An advanced widget set.
         &GtkBin;
         &GtkBox;
         &GtkContainer;
-        &GtkEditable;
+        &gtk-GtkEditable;
+        &GtkOldEditable;
         &GtkButtonBox;
         &GtkMisc;
         &GtkObject;
