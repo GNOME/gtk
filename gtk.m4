@@ -47,7 +47,7 @@ main ()
   else
      no_gtk=yes
   fi
-  if test x$no_gtk == x ; then
+  if test "x$no_gtk" = x ; then
      AC_MSG_RESULT(yes)
      ifelse([$2], , :, [$2])     
   else

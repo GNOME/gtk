@@ -1,3 +1,7 @@
+Sat Mar 14 02:54:28 PST 1998 Manish Singh <yosh@gimp.org>
+
+        * gtk.m4: fixed a bashism in gtk tests
+
 Sat Mar 14 08:29:56 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkhandlebox.c (gtk_handle_box_size_allocate): refuse to allocate
