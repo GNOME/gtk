@@ -713,6 +713,7 @@ gtk_menu_popup (GtkMenu		    *menu,
        * try again.
        */
       menu_shell->parent_menu_shell = NULL;
+      menu_grab_transfer_window_destroy (menu);
       return;
     }
 

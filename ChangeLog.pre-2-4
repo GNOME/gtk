@@ -1,3 +1,10 @@
+2002-05-30  Michael Meeks  <michael@ximian.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): destroy the transfer
+	window if the grab fails so we don't get events on this
+	window after the menu is finalized with a duff GtkWidget
+	pointer: #82366
+
 Mon May 28 13:28:10  Shivram U  <shivaram.upadhyayula@wipro.com>
 
 	* gtk/gtktextbuffer.c (selection_data_get_buffer): Check if the owner
