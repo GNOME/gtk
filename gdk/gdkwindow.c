@@ -2124,10 +2124,7 @@ gdk_window_process_all_updates (void)
 {
   GSList *old_update_windows = update_windows;
   GSList *tmp_list = update_windows;
-  static GTimer *timer;
-  static double last_time;
-  double now;
-  
+
   if (update_idle)
     g_source_remove (update_idle);
   
@@ -2145,19 +2142,7 @@ gdk_window_process_all_updates (void)
 
   g_slist_free (old_update_windows);
 
-  if (!timer)
-    timer = g_timer_new ();
-  now = g_timer_elapsed (timer, NULL);
-  if (last_time != -1)
-    g_print ("approximate frame rate: %f\n", 1.0 / (now - last_time));
-  last_time = now;
-  
-#if 0
-  XFlush (gdk_display);
-#endif
-#if 0
-  gdk_flush ();
-#endif
+  gdk_flush();
 }
 
 static gboolean
