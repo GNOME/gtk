@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
-"POT-Creation-Date: 2004-03-01 08:50+0100\n"
-"PO-Revision-Date: 2004-03-01 08:50+0100\n"
+"POT-Creation-Date: 2004-03-01 22:20+0100\n"
+"PO-Revision-Date: 2004-03-01 22:20+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1756,6 +1756,14 @@ msgstr "Visa dolda"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Huruvida de dolda filerna och mapparna ska visas"
 
+#: gtk/gtkfilechooserdefault.c:460
+msgid "Default file chooser backend"
+msgstr "Standardbakände för filväljare"
+
+#: gtk/gtkfilechooserdefault.c:461
+msgid "Name of the GtkFileChooser backend to use by default"
+msgstr "Namn på den GtkFileChooser-bakände som ska användas som standard"
+
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Filnamn"
@@ -2979,85 +2987,85 @@ msgstr "Namn på ikontema"
 msgid "Name of icon theme to use"
 msgstr "Namn på ikontemat att använda"
 
-#: gtk/gtksettings.c:318
+#: gtk/gtksettings.c:319
 msgid "Key Theme Name"
 msgstr "Nyckeltemanamn"
 
-#: gtk/gtksettings.c:319
+#: gtk/gtksettings.c:320
 msgid "Name of key theme RC file to load"
 msgstr "Namn på den nyckeltema-RC-fil som ska läsas in"
 
-#: gtk/gtksettings.c:327
+#: gtk/gtksettings.c:328
 msgid "Menu bar accelerator"
 msgstr "Snabbtangent för menyrad"
 
-#: gtk/gtksettings.c:328
+#: gtk/gtksettings.c:329
 msgid "Keybinding to activate the menu bar"
 msgstr "Snabbtangent för att aktivera menyraden"
 
-#: gtk/gtksettings.c:336
+#: gtk/gtksettings.c:337
 msgid "Drag threshold"
 msgstr "Dragtröskel"
 
-#: gtk/gtksettings.c:337
+#: gtk/gtksettings.c:338
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Antalet bildpunkter markören kan flyttas innan drag"
 
-#: gtk/gtksettings.c:345
+#: gtk/gtksettings.c:346
 msgid "Font Name"
 msgstr "Typsnittsnamn"
 
-#: gtk/gtksettings.c:346
+#: gtk/gtksettings.c:347
 msgid "Name of default font to use"
 msgstr "Namn på standardtypsnittet att använda"
 
-#: gtk/gtksettings.c:354
+#: gtk/gtksettings.c:355
 msgid "Icon Sizes"
 msgstr "Ikonstorlekar"
 
-#: gtk/gtksettings.c:355
+#: gtk/gtksettings.c:356
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "Lista med ikonstorlekar (gtk-menu=16,16;gtk-button=20,20..."
 
-#: gtk/gtksettings.c:364
+#: gtk/gtksettings.c:365
 msgid "Xft Antialias"
 msgstr "Xft-kantutjämning"
 
-#: gtk/gtksettings.c:365
+#: gtk/gtksettings.c:366
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Huruvida Xft-typsnitt ska kantutjämnas; 0=nej, 1=ja, -1=standardvärdet"
 
-#: gtk/gtksettings.c:374
+#: gtk/gtksettings.c:375
 msgid "Xft Hinting"
 msgstr "Xft-hintning"
 
-#: gtk/gtksettings.c:375
+#: gtk/gtksettings.c:376
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Huruvida Xft-typsnitt ska hintas; 0=nej, 1=ja, -1=standardvärdet"
 
-#: gtk/gtksettings.c:384
+#: gtk/gtksettings.c:385
 msgid "Xft Hint Style"
 msgstr "Xft-hintningsstil"
 
-#: gtk/gtksettings.c:385
+#: gtk/gtksettings.c:386
 msgid "What degree of hinting to use; none, slight, medium, or full"
 msgstr ""
 "Vilken grad av hintning som ska användas; ingen, liten, mellan, eller "
 "fullständig"
 
-#: gtk/gtksettings.c:394
+#: gtk/gtksettings.c:395
 msgid "Xft RGBA"
 msgstr "Xft-RGBA"
 
-#: gtk/gtksettings.c:395
+#: gtk/gtksettings.c:396
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Typ av underbildpunktskantutjämning; ingen, rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:404
+#: gtk/gtksettings.c:405
 msgid "Xft DPI"
 msgstr "Xft-DPI"
 
-#: gtk/gtksettings.c:405
+#: gtk/gtksettings.c:406
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Upplösning för Xft, i 1024 × punkter/tum. -1 för att använda standardvärdet"
