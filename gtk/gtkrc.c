@@ -24,15 +24,31 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "config.h"
+
+#include "gdk/gdkx.h"
+
+#if GDK_WINDOWING == GDK_WINDOWING_X11
 #include <X11/Xlocale.h>	/* so we get the right setlocale */
+#else
+#include <locale.h>
+#endif
 #include <ctype.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <sys/stat.h>
+#ifdef HAVE_SYS_PARAM_H
 #include <sys/param.h>
+#endif
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef _MSC_VER
+#include <io.h>
+#endif
 
 #include "gtkrc.h"
 #include "gtkbindings.h"
@@ -113,7 +129,7 @@ static void        gtk_rc_add_initial_default_files  (void);
 static const GScannerConfig	gtk_rc_scanner_config =
 {
   (
-   " \t\n"
+   " \t\r\n"
    )			/* cset_skip_characters */,
   (
    G_CSET_a_2_z
@@ -210,16 +226,49 @@ static GtkImageLoader image_loader = NULL;
 /* RC file handling */
 
 
+#ifdef NATIVE_WIN32
+
+static gchar *
+get_gtk_sysconf_directory ()
+{
+  static gchar gtk_sysconf_dir[200];
+  gchar win_dir[100];
+
+  GetWindowsDirectory (win_dir, sizeof (win_dir));
+  sprintf (gtk_sysconf_dir, "%s\\gtk", win_dir);
+  return gtk_sysconf_dir;
+}
+
+static gchar *
+get_themes_directory ()
+{
+  /* We really should fetch this from the Registry. The GIMP
+   * installation program stores the Themes installation
+   * directory in HKLM\Software\GNU\GTk+\Themes\InstallDirectory.
+   * Later.
+   */
+  static gchar themes_dir[200];
+
+  sprintf (themes_dir, "%s\\themes", get_gtk_sysconf_directory ());
+  return themes_dir;
+}
+
+#endif
+ 
 gchar *
 gtk_rc_get_theme_dir(void)
 {
   gchar *var, *path;
 
+#ifndef NATIVE_WIN32
   var = getenv("GTK_DATA_PREFIX");
   if (var)
     path = g_strdup_printf("%s%s", var, "/share/themes");
   else
     path = g_strdup_printf("%s%s", GTK_DATA_PREFIX, "/share/themes");
+#else
+  path = g_strdup (get_themes_directory ());
+#endif
 
   return path;
 }
@@ -229,11 +278,15 @@ gtk_rc_get_module_dir(void)
 {
   gchar *var, *path;
 
+#ifndef NATIVE_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
     path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
   else
     path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
+#else
+  path = g_strdup_printf ("%s%s", get_themes_directory (), "\\engines");
+#endif
 
   return path;
 }
@@ -244,18 +297,24 @@ gtk_rc_append_default_pixmap_path(void)
   gchar *var, *path;
   gint n;
 
+#ifndef NATIVE_WIN32
   var = getenv("GTK_DATA_PREFIX");
   if (var)
     path = g_strdup_printf("%s%s", var, "/share/gtk/themes");
   else
     path = g_strdup_printf("%s%s", GTK_DATA_PREFIX, "/share/gtk/themes");
+#else
+  path = g_strdup (get_themes_directory ());
+#endif      
   
   for (n = 0; pixmap_path[n]; n++) ;
   if (n >= GTK_RC_MAX_PIXMAP_PATHS - 1)
-    return;
-  pixmap_path[n++] = g_strdup(path);
+    {
+      g_free (path);
+      return;
+    }
+  pixmap_path[n++] = path;
   pixmap_path[n] = NULL;
-  g_free(path);
 }
 
 static void
@@ -280,20 +339,28 @@ gtk_rc_append_default_module_path(void)
   if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
     return;
   
+#ifndef NATIVE_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
     path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
   else
     path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
-  module_path[n++] = g_strdup(path);
-  g_free(path);
+#else
+  path = g_strdup_printf ("%s%s", get_themes_directory (), "\\engines");
+#endif
+  module_path[n++] = path;
 
-  var = getenv("HOME");
+  var = g_get_home_dir ();
   if (var)
-    path = g_strdup_printf("%s%s", var, ".gtk/lib/themes/engines");
-  module_path[n++] = g_strdup(path);
+    {
+#ifndef NATIVE_WIN32
+      path = g_strdup_printf ("%s%s", var, "/.gtk/lib/themes/engines");
+#else
+      path = g_strdup_printf ("%s%s", var, "\\_gtk\\themes\\engines");
+#endif
+      module_path[n++] = path;
+    }
   module_path[n] = NULL;
-  g_free(path);
 }
 
 static void
@@ -310,10 +377,10 @@ gtk_rc_add_initial_default_files (void)
   gtk_rc_default_files[0] = NULL;
   init = TRUE;
 
-  var = getenv("GTK_RC_FILES");
+  var = g_getenv("GTK_RC_FILES");
   if (var)
     {
-      files = g_strsplit (var, ":", 128);
+      files = g_strsplit (var, G_SEARCHPATH_SEPARATOR_S, 128);
       i=0;
       while (files[i])
 	{
@@ -324,13 +391,21 @@ gtk_rc_add_initial_default_files (void)
     }
   else
     {
-      str = g_strdup_printf ("%s%s", GTK_SYSCONFDIR, "/gtk/gtkrc");
+#ifndef NATIVE_WIN32
+      str = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk" G_DIR_SEPARATOR_S "gtkrc");
+#else
+      str = g_strdup_printf ("%s\\gtkrc", get_gtk_sysconf_directory ());
+#endif
       gtk_rc_add_default_file (str);
       g_free (str);
 
-      str = g_strdup_printf ("%s%s", g_get_home_dir (), "/.gtkrc");
-      gtk_rc_add_default_file (str);
-      g_free (str);
+      var = g_get_home_dir ();
+      if (var)
+	{
+	  str = g_strdup_printf ("%s" G_DIR_SEPARATOR_S ".gtkrc", var);
+	  gtk_rc_add_default_file (str);
+	  g_free (str);
+	}
     }
 }
 
@@ -492,7 +567,7 @@ gtk_rc_parse_file (const gchar *filename, gboolean reload)
     {
       /* Get the absolute pathname */
 
-      if (rc_file->name[0] == '/')
+      if (g_path_is_absolute (rc_file->name))
 	rc_file->canonical_name = rc_file->name;
       else
 	{
@@ -503,7 +578,7 @@ gtk_rc_parse_file (const gchar *filename, gboolean reload)
 
 	  str = g_string_new (cwd);
 	  g_free (cwd);
-	  g_string_append_c (str, '/');
+	  g_string_append_c (str, G_DIR_SEPARATOR);
 	  g_string_append (str, rc_file->name);
 	  
 	  rc_file->canonical_name = str->str;
@@ -526,7 +601,7 @@ gtk_rc_parse_file (const gchar *filename, gboolean reload)
 	  gchar *dir;
 	  
 	  dir = g_strdup(rc_file->canonical_name);
-	  for (i = strlen(dir) - 1; (i >= 0) && (dir[i] != '/'); i--)
+	  for (i = strlen(dir) - 1; (i >= 0) && (dir[i] != G_DIR_SEPARATOR); i--)
 	    dir[i] = 0;
 	  gtk_rc_append_pixmap_path(dir);
 	  g_free(dir);
@@ -1513,7 +1588,8 @@ gtk_rc_find_pixmap_in_path (GScanner *scanner,
   
   for (i = 0; (i < GTK_RC_MAX_PIXMAP_PATHS) && (pixmap_path[i] != NULL); i++)
     {
-      buf = g_strdup_printf ("%s%c%s", pixmap_path[i], '/', pixmap_file);
+      buf = g_strdup_printf ("%s" G_DIR_SEPARATOR_S "%s",
+			     pixmap_path[i], pixmap_file);
       
       fd = open (buf, O_RDONLY);
       if (fd >= 0)
@@ -1544,7 +1620,8 @@ gtk_rc_find_module_in_path (const gchar *module_file)
   
   for (i = 0; (i < GTK_RC_MAX_MODULE_PATHS) && (module_path[i] != NULL); i++)
     {
-      buf = g_strdup_printf ("%s%c%s", module_path[i], '/', module_file);
+      buf = g_strdup_printf ("%s" G_DIR_SEPARATOR_S "%s",
+			     module_path[i], module_file);
       
       fd = open (buf, O_RDONLY);
       if (fd >= 0)
@@ -1908,7 +1985,7 @@ gtk_rc_parse_pixmap_path_string (gchar *pix_path)
   
   for (end_offset = 0; end_offset <= path_len; end_offset++)
     {
-      if ((buf[end_offset] == ':') ||
+      if ((buf[end_offset] == G_SEARCHPATH_SEPARATOR) ||
 	  (end_offset == path_len))
 	{
 	  buf[end_offset] = '\0';
@@ -1964,7 +2041,7 @@ gtk_rc_parse_module_path_string (gchar *mod_path)
   
   for (end_offset = 0; end_offset <= path_len; end_offset++)
     {
-      if ((buf[end_offset] == ':') ||
+      if ((buf[end_offset] == G_SEARCHPATH_SEPARATOR) ||
 	  (end_offset == path_len))
 	{
 	  buf[end_offset] = '\0';

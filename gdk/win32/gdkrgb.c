@@ -2679,9 +2679,9 @@ gdk_rgb_select_conv (GdkImage *image)
   gboolean mask_rgb, mask_bgr;
 
   depth = image_info->visual->depth;
-#if !defined (X_DISPLAY_MISSING)
+#if GDK_WINDOWING == GDK_WINDOWING_X11
   bpp = ((GdkImagePrivate *)image)->ximage->bits_per_pixel;
-#elif defined (WINDOWS_DISPLAY)
+#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
   bpp = ((GdkVisualPrivate *) gdk_visual_get_system())->xvisual->bitspixel;
 #endif
   byte_order = image->byte_order;

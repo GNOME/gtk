@@ -78,13 +78,14 @@ gtk_theme_engine_get (gchar *name)
 
   if (!result)
     {
-       gchar fullname[1024];
+       gchar *fullname;
        gchar *engine_path;
        GModule *library;
       
 #ifndef __EMX__
-       g_snprintf (fullname, 1024, "lib%s.so", name);
+       fullname = g_module_build_path (NULL, name);
 #else
+       fullname = g_malloc (13);
        gen_8_3_dll_name(name, fullname);
 #endif
        engine_path = gtk_rc_find_module_in_path (fullname);
@@ -102,8 +103,10 @@ gtk_theme_engine_get (gchar *name)
 	   g_warning (_("Unable to locate loadable module in module_path: \"%s\","),
 		      fullname);
 	   
+	   g_free (fullname);
 	   return NULL;
 	 }
+       g_free (fullname);
        
        /* load the lib */
 

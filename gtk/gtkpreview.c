@@ -24,11 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "config.h"
 
 #include <math.h>
 #include <string.h>
 #include <sys/types.h>
+#ifdef HAVE_SYS_PARAM_H
 #include <sys/param.h>
+#endif
 #include "gdk/gdkx.h"
 #include "gdk/gdkrgb.h"
 #include "gtkpreview.h"

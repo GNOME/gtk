@@ -999,6 +999,8 @@ gtk_range_motion_notify (GtkWidget      *widget,
 
       if (event->is_hint || (event->window != range->slider))
 	gdk_window_get_pointer (range->slider, &x, &y, &mods);
+      else
+	mods = event->state;
 
       switch (range->button)
 	{

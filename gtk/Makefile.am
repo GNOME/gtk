@@ -360,7 +360,9 @@ EXTRA_DIST = \
         circles.xbm		\
 	gtkrc.ja 		\
 	gtkrc.ko		\
-	gtkrc.ru
+	gtkrc.ru		\
+	gtk.def			\
+	makefile.msc
 
 INCLUDES = \
 	-DGTK_DISABLE_COMPAT_H				\

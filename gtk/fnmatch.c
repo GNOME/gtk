@@ -36,6 +36,8 @@
 #endif
 #include "fnmatch.h"
 
+/* We need glib.h for G_DIR_SEPARATOR, WIN32 and NATIVE_WIN32 */
+#include <glib.h>
 #include <ctype.h>
 
 
@@ -48,7 +50,6 @@
    it is simpler to just do this in the source for each such file.  */
 
 #if defined (_LIBC) || !defined (__GNU_LIBRARY__)
-
 
 #if !defined(__GNU_LIBRARY__) && !defined(STDC_HEADERS)
 extern int errno;
@@ -66,7 +67,11 @@ fnmatch (pattern, string, flags)
   register char c;
 
 /* Note that this evalutes C many times.  */
+#ifndef WIN32
 #define FOLD(c)	((flags & FNM_CASEFOLD) && isupper (c) ? tolower (c) : (c))
+#else
+#define FOLD(c)	(tolower (c))
+#endif
 
   while ((c = *p++) != '\0')
     {
@@ -77,13 +82,13 @@ fnmatch (pattern, string, flags)
 	case '?':
 	  if (*n == '\0')
 	    return FNM_NOMATCH;
-	  else if ((flags & FNM_FILE_NAME) && *n == '/')
+	  else if ((flags & FNM_FILE_NAME) && *n == G_DIR_SEPARATOR)
 	    return FNM_NOMATCH;
 	  else if ((flags & FNM_PERIOD) && *n == '.' &&
-		   (n == string || ((flags & FNM_FILE_NAME) && n[-1] == '/')))
+		   (n == string || ((flags & FNM_FILE_NAME) && n[-1] == G_DIR_SEPARATOR)))
 	    return FNM_NOMATCH;
 	  break;
-
+#ifndef NATIVE_WIN32
 	case '\\':
 	  if (!(flags & FNM_NOESCAPE))
 	    {
@@ -93,14 +98,14 @@ fnmatch (pattern, string, flags)
 	  if (FOLD (*n) != c)
 	    return FNM_NOMATCH;
 	  break;
-
+#endif
 	case '*':
 	  if ((flags & FNM_PERIOD) && *n == '.' &&
-	      (n == string || ((flags & FNM_FILE_NAME) && n[-1] == '/')))
+	      (n == string || ((flags & FNM_FILE_NAME) && n[-1] == G_DIR_SEPARATOR)))
 	    return FNM_NOMATCH;
 
 	  for (c = *p++; c == '?' || c == '*'; c = *p++, ++n)
-	    if (((flags & FNM_FILE_NAME) && *n == '/') ||
+	    if (((flags & FNM_FILE_NAME) && *n == G_DIR_SEPARATOR) ||
 		(c == '?' && *n == '\0'))
 	      return FNM_NOMATCH;
 
@@ -108,7 +113,11 @@ fnmatch (pattern, string, flags)
 	    return 0;
 
 	  {
+#ifndef NATIVE_WIN32
 	    char c1 = (!(flags & FNM_NOESCAPE) && c == '\\') ? *p : c;
+#else
+	    char c1 = c;
+#endif
 	    c1 = FOLD (c1);
 	    for (--p; *n != '\0'; ++n)
 	      if ((c == '[' || FOLD (*n) == c1) &&
@@ -126,7 +135,7 @@ fnmatch (pattern, string, flags)
 	      return FNM_NOMATCH;
 
 	    if ((flags & FNM_PERIOD) && *n == '.' &&
-		(n == string || ((flags & FNM_FILE_NAME) && n[-1] == '/')))
+		(n == string || ((flags & FNM_FILE_NAME) && n[-1] == G_DIR_SEPARATOR)))
 	      return FNM_NOMATCH;
 
 	    not = (*p == '!' || *p == '^');
@@ -137,10 +146,10 @@ fnmatch (pattern, string, flags)
 	    for (;;)
 	      {
 		register char cstart = c, cend = c;
-
+#ifndef NATIVE_WIN32
 		if (!(flags & FNM_NOESCAPE) && c == '\\')
 		  cstart = cend = *p++;
-
+#endif
 		cstart = cend = FOLD (cstart);
 
 		if (c == '\0')
@@ -150,15 +159,17 @@ fnmatch (pattern, string, flags)
 		c = *p++;
 		c = FOLD (c);
 
-		if ((flags & FNM_FILE_NAME) && c == '/')
+		if ((flags & FNM_FILE_NAME) && c == G_DIR_SEPARATOR)
 		  /* [/] can never match.  */
 		  return FNM_NOMATCH;
 
 		if (c == '-' && *p != ']')
 		  {
 		    cend = *p++;
+#ifndef NATIVE_WIN32
 		    if (!(flags & FNM_NOESCAPE) && cend == '\\')
 		      cend = *p++;
+#endif
 		    if (cend == '\0')
 		      return FNM_NOMATCH;
 		    cend = FOLD (cend);
@@ -185,9 +196,11 @@ fnmatch (pattern, string, flags)
 		  return FNM_NOMATCH;
 
 		c = *p++;
+#ifndef NATIVE_WIN32
 		if (!(flags & FNM_NOESCAPE) && c == '\\')
 		  /* XXX 1003.2d11 is unclear if this is right.  */
 		  ++p;
+#endif
 	      }
 	    if (not)
 	      return FNM_NOMATCH;
@@ -205,7 +218,7 @@ fnmatch (pattern, string, flags)
   if (*n == '\0')
     return 0;
 
-  if ((flags & FNM_LEADING_DIR) && *n == '/')
+  if ((flags & FNM_LEADING_DIR) && *n == G_DIR_SEPARATOR)
     /* The FNM_LEADING_DIR flag says that "foo*" matches "foobar/frobozz".  */
     return 0;
 

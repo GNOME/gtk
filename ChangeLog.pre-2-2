@@ -1,3 +1,65 @@
+1999-03-15  Tor Lillqvist  <tml@iki.fi>
+
+	Win32 merge and general portability stuff:
+		
+	* acconfig.h,configure.in: Check for <sys/time.h>.
+
+	* gdk/win32: New directory (actually, been there for a while).
+	
+	* gtk/fnmatch.c: Include <glib.h> for G_DIR_SEPARATOR, WIN32 and
+	NATIVE_WIN32, and use these. Always case fold on Win32. No
+	backslashed escapes on native Win32.
+
+	* gtk/{gtk.def,makefile.msc}: New files.
+
+	* gtk/Makefile.am: Add above new files.
+	
+	* gtk/{gtkaccelgroup,gtkbindings}.c: Include <string.h>
+ 	instead of <strings.h>.
+
+	* gtk/{gtkcalendar,gtkitemfactory,gtkpreview,gtkrc}.c: Include
+	config.h. Protect inclusion of <sys/param.h>, <sys/time.h>, and
+	<unistd.h> appropriately.
+
+	* gtk/gtkdnd.c: Merge in Win32 version (which doesn't do much).
+	Use ABS() (from <glib.h>) instead of abs().
+	
+	* gtk/gtkfilesel.c: Moved Win32-specific includes after inclusion
+	of gtk (and thus glib) headers, so that WIN32 will be
+	defined. With MS C, include <direct.h> for mkdir prototype.
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_callback_marshal): Add
+	some casts, needed by MS C.
+
+	* gtk/{gtklayout,gtkplug}.c: Merge in Win32 version (which isn't
+	implemented).
+
+	* gtk/gtkmain.c: Include gdk/gdkx.h for GDK_WINDOWING. Include
+	<X11/Xlocale.h> only on X11 platform, otherwise <locale.h>.  Use
+	G_SEARCHPATH_SEPARATOR_S and g_module_build_path.
+
+	* gtk/gtkmain.h: Mark variables for export/import on Win32.
+		
+	* gtk/gtkrange.c (gtk_range_motion_notify): Set mods also in case
+	the event is not a hint, or its window is not the slider. Needed
+	on Win32, at least.
+
+	* gtk/gtkrc.c: Include config.h and gdk/gdkx.h. Use <locale.h>
+	unless on X11. Skip \r chars, too. Use G_DIR_SEPARATOR and
+	G_SEARCHPATH_SEPARATOR(_S). Use g_path_is_absolute. On Win32, use
+	a subdirectory of the Windows directory as gtk system
+	configuration directory.
+
+	* gtk/gtkselection.c: No chunks on Win32.
+
+	* gtk/gtksocket.c: Not implemented on Win32.
+
+	* gtk/gtkthemes.c (gtk_theme_engine_get): Use g_module_build_path.
+
+	* gtk/makeenums.h: Include gdkprivate.h after gdk.h.
+
+	* gtk/testrgb.c: Use dynamically allocated buffer. Use GTimers.
+
 1999-03-13  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* configure.in (gdk_wc): Move widechar tests from `glib' to here,

@@ -24,7 +24,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "gdk/gdkx.h"		/* For GDK_WINDOWING */
+
+#if GDK_WINDOWING == GDK_WINDOWING_X11
 #include <X11/Xlocale.h>	/* so we get the right setlocale */
+#else
+#include <locale.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -233,7 +239,7 @@ gtk_init_check (int	 *argc,
       gchar **modules, **as;
 
 #ifndef __EMX__
-      modules = g_strsplit (env_string, ":", -1);
+      modules = g_strsplit (env_string, G_SEARCHPATH_SEPARATOR_S, -1);
 #else
       modules = g_strsplit (env_string, ";", -1);
 #endif
@@ -354,14 +360,11 @@ gtk_init_check (int	 *argc,
       module_name = slist->data;
       slist->data = NULL;
 #ifndef __EMX__
-      if (!(module_name[0] == '/' ||
-	    (module_name[0] == 'l' &&
-	     module_name[1] == 'i' &&
-	     module_name[2] == 'b')))
+      if (!g_path_is_absolute (module_name))
 	{
 	  gchar *old = module_name;
 	  
-	  module_name = g_strconcat ("lib", module_name, ".so", NULL);
+	  module_name = g_module_build_path (NULL, module_name);
 	  g_free (old);
 	}
 #else

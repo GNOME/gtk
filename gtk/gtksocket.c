@@ -32,6 +32,8 @@
 #include "gtksocket.h"
 #include "gtkdnd.h"
 
+#if GDK_WINDOWING == GDK_WINDOWING_X11
+
 /* Forward declararations */
 
 static void gtk_socket_class_init               (GtkSocketClass    *klass);
@@ -745,3 +747,20 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 
   return return_val;
 }
+
+#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+
+GtkWidget*
+gtk_socket_new ()
+{
+  g_error ("GtkSocket not implemented");
+  return NULL;
+}
+
+void           
+gtk_socket_steal (GtkSocket *socket, guint32 id)
+{
+  g_error ("GtkSocket not implemented");
+}
+
+#endif /* GDK_WINDOWING */

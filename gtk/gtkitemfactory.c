@@ -27,6 +27,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include	"config.h"
+
 #include	"gtkitemfactory.h"
 #include	"gtk/gtksignal.h"
 #include	"gtk/gtkoptionmenu.h"
@@ -41,9 +43,18 @@
 #include	<string.h>
 #include	<sys/stat.h>
 #include	<fcntl.h>
+#ifdef HAVE_UNISTD_H
 #include	<unistd.h>
+#endif
 #include	<stdio.h>
 
+#ifdef _MSC_VER
+#include	<io.h>		/* For _open and _close */
+
+#ifndef S_ISREG
+#define S_ISREG(mode) ((mode)&_S_IFREG)
+#endif
+#endif
 
 
 /* --- defines --- */
@@ -265,12 +276,12 @@ gtk_item_factory_callback_marshal (GtkWidget *widget,
 
   if (data->callback_type == 1)
     {
-      GtkItemFactoryCallback1 func1 = data->func;
+      GtkItemFactoryCallback1 func1 = (GtkItemFactoryCallback1) data->func;
       func1 (data->func_data, data->callback_action, widget);
     }
   else if (data->callback_type == 2)
     {
-      GtkItemFactoryCallback2 func2 = data->func;
+      GtkItemFactoryCallback2 func2 = (GtkItemFactoryCallback2) data->func;
       func2 (widget, data->func_data, data->callback_action);
     }
 }

@@ -271,9 +271,13 @@ gtk_plug_key_press_event (GtkWidget   *widget,
 	      gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 
 	      gdk_error_trap_push ();
+#if GDK_WINDOWING == GDK_WINDOWING_X11
 	      XSetInputFocus (GDK_DISPLAY (),
 			      GDK_WINDOW_XWINDOW (plug->socket_window),
 			      RevertToParent, event->time);
+#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+	      SetFocus (GDK_WINDOW_XWINDOW (plug->socket_window));
+#endif
 	      gdk_flush ();
 	      gdk_error_trap_pop ();
 
@@ -292,6 +296,7 @@ gtk_plug_key_press_event (GtkWidget   *widget,
 static void
 gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
 {
+#if GDK_WINDOWING == GDK_WINDOWING_X11
   XEvent xevent;
   
   xevent.xkey.type = KeyPress;
@@ -316,6 +321,147 @@ gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
 	      False, NoEventMask, &xevent);
   gdk_flush ();
   gdk_error_trap_pop ();
+#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+  /* This is pretty bogus, and not tested at all. */
+  WPARAM wParam;
+  LPARAM lParam;
+  gboolean no_WM_CHAR = TRUE;
+
+  lParam = 0;
+  switch (event->keyval)
+    {
+    case GDK_Cancel:
+      wParam = VK_CANCEL; break;
+    case GDK_BackSpace:
+      wParam = VK_BACK; break;
+    case GDK_Tab:
+      wParam = VK_TAB; break;
+    case GDK_Clear:
+      wParam = VK_CLEAR; break;
+    case GDK_Return:
+      wParam = VK_RETURN; break;
+    case GDK_Shift_L:
+      wParam = VK_SHIFT; break;
+    case GDK_Control_L:
+      wParam = VK_CONTROL; break;
+    case GDK_Control_R:
+      wParam = VK_CONTROL; lParam |= 0x01000000; break;
+    case GDK_Alt_L:
+      wParam = VK_MENU; break;
+    case GDK_Alt_R:
+      wParam = VK_MENU; lParam |= 0x01000000; break;
+    case GDK_Pause:
+      wParam = VK_PAUSE; break;
+    case GDK_Caps_Lock:
+      wParam = VK_CAPITAL; break;
+    case GDK_Escape:
+      wParam = VK_ESCAPE; break;
+    case GDK_Prior:
+      wParam = VK_PRIOR; break;
+    case GDK_Next:
+      wParam = VK_NEXT; break;
+    case GDK_End:
+      wParam = VK_END; break;
+    case GDK_Home:
+      wParam = VK_HOME; break;
+    case GDK_Left:
+      wParam = VK_LEFT; break;
+    case GDK_Up:
+      wParam = VK_UP; break;
+    case GDK_Right:
+      wParam = VK_RIGHT; break;
+    case GDK_Down:
+      wParam = VK_DOWN; break;
+    case GDK_Select:
+      wParam = VK_SELECT; break;
+    case GDK_Print:
+      wParam = VK_PRINT; break;
+    case GDK_Execute:
+      wParam = VK_EXECUTE; break;
+    case GDK_Insert:
+      wParam = VK_INSERT; break;
+    case GDK_Delete:
+      wParam = VK_DELETE; break;
+    case GDK_Help:
+      wParam = VK_HELP; break;
+    case GDK_KP_0:
+      wParam = VK_NUMPAD0; break;
+    case GDK_KP_1:
+      wParam = VK_NUMPAD1; break;
+    case GDK_KP_2:
+      wParam = VK_NUMPAD2; break;
+    case GDK_KP_3:
+      wParam = VK_NUMPAD3; break;
+    case GDK_KP_4:
+      wParam = VK_NUMPAD4; break;
+    case GDK_KP_5:
+      wParam = VK_NUMPAD5; break;
+    case GDK_KP_6:
+      wParam = VK_NUMPAD6; break;
+    case GDK_KP_7:
+      wParam = VK_NUMPAD7; break;
+    case GDK_KP_8:
+      wParam = VK_NUMPAD8; break;
+    case GDK_KP_9:
+      wParam = VK_NUMPAD9; break;
+    case GDK_KP_Multiply:
+      wParam = VK_MULTIPLY; break;
+    case GDK_KP_Add:
+      wParam = VK_ADD; break;
+    case GDK_KP_Separator:
+      wParam = VK_SEPARATOR; break;
+    case GDK_KP_Subtract:
+      wParam = VK_SUBTRACT; break;
+    case GDK_KP_Decimal:
+      wParam = VK_DECIMAL; break;
+    case GDK_KP_Divide:
+      wParam = VK_DIVIDE; break;
+    case GDK_F1:
+      wParam = VK_F1; break;
+    case GDK_F2:
+      wParam = VK_F2; break;
+    case GDK_F3:
+      wParam = VK_F3; break;
+    case GDK_F4:
+      wParam = VK_F4; break;
+    case GDK_F5:
+      wParam = VK_F5; break;
+    case GDK_F6:
+      wParam = VK_F6; break;
+    case GDK_F7:
+      wParam = VK_F7; break;
+    case GDK_F8:
+      wParam = VK_F8; break;
+    case GDK_F9:
+      wParam = VK_F9; break;
+    case GDK_F10:
+      wParam = VK_F10; break;
+    case GDK_F11:
+      wParam = VK_F11; break;
+    case GDK_F12:
+      wParam = VK_F12; break;
+    case GDK_F13:
+      wParam = VK_F13; break;
+    case GDK_F14:
+      wParam = VK_F14; break;
+    case GDK_F15:
+      wParam = VK_F15; break;
+    case GDK_F16:
+      wParam = VK_F16; break;
+    default:
+      wParam = event->keyval;
+      no_WM_CHAR = FALSE;
+      break;
+    }
+  
+  PostMessage (GDK_WINDOW_XWINDOW (plug->socket_window),
+	       WM_KEYDOWN, wParam, lParam);
+  if (!no_WM_CHAR)
+    PostMessage (GDK_WINDOW_XWINDOW (plug->socket_window),
+		 WM_CHAR, wParam, lParam);
+  PostMessage (GDK_WINDOW_XWINDOW (plug->socket_window),
+	       WM_KEYUP, wParam, lParam);
+#endif
 }
 
 /* Copied from Window, Ughh */
@@ -422,6 +568,7 @@ gtk_plug_set_focus (GtkWindow *window,
 
   if (focus && !GTK_WIDGET_HAS_FOCUS(window))
     {
+#if GDK_WINDOWING == GDK_WINDOWING_X11
       XEvent xevent;
 
       xevent.xfocus.type = FocusIn;
@@ -436,5 +583,8 @@ gtk_plug_set_focus (GtkWindow *window,
 		  False, NoEventMask, &xevent);
       gdk_flush ();
       gdk_error_trap_pop ();
+#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+      /* XXX Not implemented */
+#endif
     }
 }

@@ -17,6 +17,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
+
+#include <glib.h>
+
 /*
  * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
@@ -28,10 +32,10 @@
 /* Note: these #includes differ slightly from the testrgb.c file included
    in the GdkRgb release. */
 
-/* For gettimeofday */
-#include <sys/time.h>
 #include <stdlib.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <string.h>
 
 #include "gtk.h"
@@ -44,24 +48,12 @@ quit_func (GtkWidget *widget, gpointer dummy)
 
 #define WIDTH 320
 #define HEIGHT 200
-
-gdouble
-get_time (void)
-{
-  struct timeval tv;
-  struct timezone tz;
-
-  gettimeofday (&tv, &tz);
-
-  return tv.tv_sec + 1e-6 * tv.tv_usec;
-}
-
 #define NUM_ITERS 100
 
 static void
 testrgb_rgb_test (GtkWidget *drawing_area)
 {
-  guchar buf[WIDTH * HEIGHT * 6];
+  guchar *buf;
   gint i, j;
   gint offset;
   guchar val;
@@ -69,6 +61,9 @@ testrgb_rgb_test (GtkWidget *drawing_area)
   gint x, y;
   gboolean dither;
   int dith_max;
+  GTimer *timer;
+
+  buf = g_malloc (WIDTH * HEIGHT * 6);
 
   val = 0;
   for (j = 0; j < WIDTH * HEIGHT * 6; j++)
@@ -94,9 +89,10 @@ testrgb_rgb_test (GtkWidget *drawing_area)
   else
     dith_max = 1;
 
+  timer = g_timer_new ();
   for (dither = 0; dither < dith_max; dither++)
     {
-      start_time = get_time ();
+      start_time = g_timer_elapsed (timer, NULL);
       for (i = 0; i < NUM_ITERS; i++)
 	{
 	  offset = (rand () % (WIDTH * HEIGHT * 3)) & -4;
@@ -107,7 +103,7 @@ testrgb_rgb_test (GtkWidget *drawing_area)
 			      GDK_RGB_DITHER_NONE,
 			      buf + offset, WIDTH * 3);
 	}
-      total_time = get_time () - start_time;
+      total_time = g_timer_elapsed (timer, NULL) - start_time;
       g_print ("Color test%s time elapsed: %.2fs, %.1f fps, %.2f megapixels/s\n",
 	       dither ? " (dithered)" : "",
 	       total_time,
@@ -117,7 +113,7 @@ testrgb_rgb_test (GtkWidget *drawing_area)
 
   for (dither = 0; dither < dith_max; dither++)
     {
-      start_time = get_time ();
+      start_time = g_timer_elapsed (timer, NULL);
       for (i = 0; i < NUM_ITERS; i++)
 	{
 	  offset = (rand () % (WIDTH * HEIGHT)) & -4;
@@ -128,7 +124,7 @@ testrgb_rgb_test (GtkWidget *drawing_area)
 			       GDK_RGB_DITHER_NONE,
 			       buf + offset, WIDTH);
 	}
-      total_time = get_time () - start_time;
+      total_time = g_timer_elapsed (timer, NULL) - start_time;
       g_print ("Grayscale test%s time elapsed: %.2fs, %.1f fps, %.2f megapixels/s\n",
 	       dither ? " (dithered)" : "",
 	       total_time,

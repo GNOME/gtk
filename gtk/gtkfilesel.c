@@ -45,18 +45,6 @@
 #include <pwd.h>
 #endif
 
-#ifdef WIN32
-#define STRICT
-#include <windows.h>
-
-#ifdef _MSC_VER
-#ifndef S_ISDIR
-#define S_ISDIR(mode) ((mode)&_S_IFDIR)
-#endif
-#define mkdir(path,mode) mkdir(path)
-#endif
-#endif
-
 #include "fnmatch.h"
 
 #include "gdk/gdkkeysyms.h"
@@ -78,6 +66,19 @@
 #include "gtkclist.h"
 #include "gtkdialog.h"
 #include "gtkintl.h"
+
+#ifdef WIN32
+#define STRICT
+#include <windows.h>
+
+#ifdef _MSC_VER
+#include <direct.h>
+#ifndef S_ISDIR
+#define S_ISDIR(mode) ((mode)&_S_IFDIR)
+#endif
+#define mkdir(path,mode) mkdir(path)
+#endif
+#endif
 
 #define DIR_LIST_WIDTH   180
 #define DIR_LIST_HEIGHT  180

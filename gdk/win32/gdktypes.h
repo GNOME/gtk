@@ -33,7 +33,7 @@
 #include <glib.h>
 
 #ifdef NATIVE_WIN32
-#ifdef COMPILING_GDK
+#ifdef GDK_COMPILATION
 #define GDKVAR __declspec(dllexport)
 #else
 #define GDKVAR extern __declspec(dllimport)
@@ -42,6 +42,28 @@
 #define GDKVAR extern
 #endif
 
+/* The system specific file gdkconfig.h contains such configuration
+ * settings that are needed not only when compiling GDK (or GTK)
+ * itself, but also occasionally when compiling programs that use GDK
+ * (or GTK). One such setting is what windowing API backend is in use.
+ */
+#include <gdkconfig.h>
+
+/* Windowing API alternatives. Note that these macros indicate just
+ * what windowing system is in use, not what operating system. It is
+ * possible to built GDK for X11 in a Win32 environment, for instance.
+ *
+ * gdkconfig.h defines GDK_WINDOWING as one of the following. In
+ * addition to the original X11 only the Win32 implementation exists
+ * yet.
+ */
+#define GDK_WINDOWING_X11 1	/* X11 */
+#define GDK_WINDOWING_WIN32 2	/* Win32 GDI */
+#define GDK_WINDOWING_BEOS 3	/* BeOS */
+#define GDK_WINDOWING_MACOS 4	/* MacOS */
+#define GDK_WINDOWING_GGI 5	/* Linux GGI */
+
+/* some common magic values */
 #define GDK_NONE	     0L
 #define GDK_CURRENT_TIME     0L
 #define GDK_PARENT_RELATIVE  1L

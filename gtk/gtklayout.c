@@ -28,10 +28,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "gdk/gdkx.h"
+
 #include "gtklayout.h"
 #include "gtksignal.h"
 #include "gtkprivate.h"
-#include "gdk/gdkx.h"
 
 typedef struct _GtkLayoutAdjData GtkLayoutAdjData;
 typedef struct _GtkLayoutChild   GtkLayoutChild;
@@ -868,6 +869,8 @@ gtk_layout_expose_area (GtkLayout    *layout,
     }
 }
 
+#if GDK_WINDOWING == GDK_WINDOWING_X11
+
 /* This function is used to find events to process while scrolling
  */
 
@@ -883,6 +886,8 @@ gtk_layout_expose_predicate (Display *display,
   else
     return False;
 }
+
+#endif /* X11 */
 
 /* This is the main routine to do the scrolling. Scrolling is
  * done by "Guffaw" scrolling, as in the Mozilla XFE, with
@@ -915,8 +920,9 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 			       GtkLayout     *layout)
 {
   GtkWidget *widget;
+#if GDK_WINDOWING == GDK_WINDOWING_X11
   XEvent xevent;
-  
+#endif
   gint dx, dy;
 
   widget = GTK_WIDGET (layout);
@@ -1049,6 +1055,8 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
    */
 
   gdk_flush();
+
+#if GDK_WINDOWING == GDK_WINDOWING_X11
   while (XCheckIfEvent(GDK_WINDOW_XDISPLAY (layout->bin_window),
 		       &xevent,
 		       gtk_layout_expose_predicate,
@@ -1082,6 +1090,9 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 	    }
 	}
     }
+#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+  /* XXX Not implemented */
+#endif
 }
 
 /* The main event filter. Actually, we probably don't really need
@@ -1099,6 +1110,8 @@ gtk_layout_filter (GdkXEvent *gdk_xevent,
 		   GdkEvent  *event,
 		   gpointer   data)
 {
+#if GDK_WINDOWING == GDK_WINDOWING_X11
+
   XEvent *xevent;
   GtkLayout *layout;
 
@@ -1131,6 +1144,9 @@ gtk_layout_filter (GdkXEvent *gdk_xevent,
 	}
       break;
     }
+#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+  /* XXX Not implemented */
+#endif
   
   return GDK_FILTER_CONTINUE;
 }
@@ -1144,6 +1160,7 @@ gtk_layout_main_filter (GdkXEvent *gdk_xevent,
 			GdkEvent  *event,
 			gpointer   data)
 {
+#if GDK_WINDOWING == GDK_WINDOWING_X11
   XEvent *xevent;
   GtkLayout *layout;
 
@@ -1169,7 +1186,9 @@ gtk_layout_main_filter (GdkXEvent *gdk_xevent,
 
       return GDK_FILTER_REMOVE;
     }
-
+#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+  /* XXX Not implemented */
+#endif
   
   return GDK_FILTER_CONTINUE;
 }

@@ -56,11 +56,21 @@ typedef gint	(*GtkKeySnoopFunc)	(GtkWidget	*grab_widget,
 
 /* Gtk version.
  */
-extern const guint gtk_major_version;
-extern const guint gtk_minor_version;
-extern const guint gtk_micro_version;
-extern const guint gtk_binary_age;
-extern const guint gtk_interface_age;
+#ifdef NATIVE_WIN32
+#ifdef GTK_COMPILATION
+#define GTKMAIN_C_VAR __declspec(dllexport)
+#else
+#define GTKMAIN_C_VAR __declspec(dllimport) extern
+#endif
+#else
+#define GTKMAIN_C_VAR extern
+#endif
+
+GTKMAIN_C_VAR const guint gtk_major_version;
+GTKMAIN_C_VAR const guint gtk_minor_version;
+GTKMAIN_C_VAR const guint gtk_micro_version;
+GTKMAIN_C_VAR const guint gtk_binary_age;
+GTKMAIN_C_VAR const guint gtk_interface_age;
 gchar* gtk_check_version (guint	required_major,
 			  guint	required_minor,
 			  guint	required_micro);
