@@ -1,3 +1,12 @@
+2001-11-16  jacob berkman  <jacob@ximian.com>
+
+	* tests/testgtk.c (create_radio_buttons): add some no-indicator
+	radio buttons
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_init): since we are
+	initially active, also initially be depressed
+	(gtk_radio_button_clicked): also update our depressed state
+
 Thu Nov 15 12:54:36 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_key_press_event): Propagate
