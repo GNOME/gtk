@@ -5,6 +5,9 @@ Tue Mar 16 13:29:58 2004  Owen Taylor  <otaylor@redhat.com>
 	* configure.in: Version 2.4.0, interface age 0; 
 	require glib-2.4.0, pango-1.4.0.
 
+	* configure.in: Change gtk_binary_version to 2.4.0;
+	there are some compatibility issues with older theme engines.
+	
 	* NEWS: Updates
 
 	* README.in: Updates
