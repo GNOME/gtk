@@ -34,27 +34,37 @@ gdk_font_load (const gchar *font_name)
 {
   GdkFont *font;
   GdkFontPrivate *private;
+  XFontStruct *xfont;
 
-  private = g_new (GdkFontPrivate, 1);
-  font = (GdkFont*) private;
+  g_return_val_if_fail (font_name != NULL, NULL);
 
-  private->xdisplay = gdk_display;
-  private->xfont = XLoadQueryFont (private->xdisplay, font_name);
-  private->ref_count = 1;
+  xfont = XLoadQueryFont (gdk_display, font_name);
+  if (xfont == NULL)
+    return NULL;
 
-  if (!private->xfont)
+  font = gdk_font_lookup (xfont->fid);
+  if (font != NULL)
     {
-      g_free (font);
-      return NULL;
+      private = (GdkFontPrivate *) font;
+      if (xfont != private->xfont)
+	XFreeFont (gdk_display, xfont);
+
+      gdk_font_ref (font);
     }
   else
     {
-      font->type = GDK_FONT_FONT;
-      font->ascent =  ((XFontStruct *) private->xfont)->ascent;
-      font->descent = ((XFontStruct *) private->xfont)->descent;
-    }
+      private = g_new (GdkFontPrivate, 1);
+      private->xdisplay = gdk_display;
+      private->xfont = xfont;
+      private->ref_count = 1;
 
-  gdk_xid_table_insert (&((XFontStruct *) private->xfont)->fid, font);
+      font = (GdkFont*) private;
+      font->type = GDK_FONT_FONT;
+      font->ascent =  xfont->ascent;
+      font->descent = xfont->descent;
+
+      gdk_xid_table_insert (&xfont->fid, font);
+    }
 
   return font;
 }
