@@ -1,3 +1,13 @@
+Sat Dec 14 22:03:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/gtkimcontextxim.c (status_window_hide): Don't
+	call status_window_set_text() if the status window doesn't
+	already exist. (#100933, reported by Anand Subra)
+
+	* modules/input/gtkimcontextxim.c (status_window_show): 
+	Don't bother creating the status window here, wait for
+	the set_text(). (Fixes a warning)
+
 2002-12-15  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcalendar.c:

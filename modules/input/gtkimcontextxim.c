@@ -1300,8 +1300,6 @@ status_window_has_text (GtkWidget *status_window)
 static void
 status_window_show (GtkIMContextXIM *context_xim)
 {
-  GtkWidget *status_window = status_window_get (context_xim, TRUE);
-
   context_xim->status_visible = TRUE;
 }
 
@@ -1311,8 +1309,9 @@ status_window_hide (GtkIMContextXIM *context_xim)
   GtkWidget *status_window = status_window_get (context_xim, FALSE);
 
   context_xim->status_visible = FALSE;
-  
-  status_window_set_text (context_xim, "");
+
+  if (status_window)
+    status_window_set_text (context_xim, "");
 }
 
 static void
