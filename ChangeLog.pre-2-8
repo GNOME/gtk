@@ -20,7 +20,7 @@ Mon Aug 25 19:55:55 2003  Owen Taylor  <otaylor@redhat.com>
 	Since we add one to the layout's reported width to
 	account for the cursor, we need to subtract one when
 	setting the wrap width for the layout. (Fixes infinite
-	loop (#120325, Federico Crozat)
+	loop (#120325, Frederic Crozat)
 
 	* gtk/gtktextlayout.c (gtk_text_layout_get_line_display): 
 	Be a bit more careful about rounding when converting
