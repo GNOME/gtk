@@ -1,3 +1,27 @@
+1999-12-11  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkprivate.h: Must mark also gdk_error_warnings and
+	gdk_error_code as GDKVAR, as they are referred outside GDK.
+
+	* gdk/win32/gdkinput-win32.c: Remove debugging leftover.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new): Assure title is
+	non-NULL.
+
+	* gtk/gtkdnd.c
+	* gtk/gtklayout.c
+	* gtk/gtkplug.c
+	* gtk/gtkselection.c
+	* gtk/gtksocket.c
+	* gtk/gtkwindow.c: Include x11/gdkx.h *or* win32/gdkwin32.c as
+	appropriate. There must be a cleaner way to handle this?
+
+	* gtk/gtkrc.c: Must include windows.h on Win32.
+
+	* gtk/testgtk.c: No need to include gdkx.h.
+
+	* gtk/makefile.cygwin: Correct invokation of genmarshal.pl.
+
 1999-12-07  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkfont-win32.c: Fix string measurement code. For now,

@@ -96,8 +96,6 @@ struct _GdkDevicePrivate {
 
 #define TWOPI (2.*G_PI)
 
-#define PING() g_print("%s: %d\n",__FILE__,__LINE__)
-
 /* Forward declarations */
 
 static gint gdk_input_enable_window (GdkWindow *window,

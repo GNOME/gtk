@@ -36,7 +36,6 @@
 #include "gtk.h"
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
-#include "gdkx.h"
 
 #include "circles.xbm"
 

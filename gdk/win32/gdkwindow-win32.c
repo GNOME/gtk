@@ -314,6 +314,8 @@ gdk_window_new (GdkWindow     *parent,
     title = attributes->title;
   else
     title = g_get_prgname ();
+  if (!title)
+    title = "GDK client window";
 
   GDK_WINDOW_WIN32DATA (window)->event_mask = GDK_STRUCTURE_MASK | attributes->event_mask;
       

@@ -318,7 +318,7 @@ gtktypebuiltins_evals.c: makeenums.pl gtk.defs
 	$(PERL) makeenums.pl arrays $(source_headers) $(gdk_headers) >gtktypebuiltins_evals.c
 
 gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
-	$(PERL) genmarshal.pl
+	$(PERL) genmarshal.pl gtkmarshal.list s-gmh s-gmc
 	-rm gtkmarshal.c
 	mv s-gmc gtkmarshal.c
 	-rm gtkmarshal.h

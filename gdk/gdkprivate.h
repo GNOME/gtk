@@ -250,8 +250,8 @@ extern gint		 gdk_debug_level;
 extern gboolean		 gdk_show_events;
 extern gint		 gdk_screen;
 GDKVAR GdkWindow  	*gdk_parent_root;
-extern gint		 gdk_error_code;
-extern gint		 gdk_error_warnings;
+GDKVAR gint		 gdk_error_code;
+GDKVAR gint		 gdk_error_warnings;
 extern GList            *gdk_default_filters;
 
 GdkWindow* _gdk_window_alloc (void);
