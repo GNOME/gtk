@@ -3149,7 +3149,7 @@ msgstr "ወደ _ላይ"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
-msgstr "መረጃ"
+msgstr "ረዳት"
 
 #: gtk/gtkstock.c:299
 msgid "_Home"
