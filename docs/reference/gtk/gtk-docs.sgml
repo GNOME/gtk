@@ -184,7 +184,6 @@ An advanced widget set.
     &gtk-Selections;
     &gtk-Drag-and-Drop;
     &gtk-Signals;
-    &gtk-Signal-Marshallers;
     &gtk-Object-Properties;
     &gtk-Types;
     &gtk-Bindings;
