@@ -1,3 +1,12 @@
+Wed Dec 26 12:32:31 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/Changes-2.0.txt: Document the fact that
+	gtk_paned_set_handle_size() has been removed.
+
+	* gtk/gtkpaned.h Remove gtk_paned_handle_size() compat macro, 
+	since it pointed to gtk_paned_set_handle_size(), which
+	was removed. (#66760, Matt Wilson)
+
 Wed Dec 26 12:28:24 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_highlight): Connect 

@@ -20,6 +20,9 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   has been changed to include the entire area previously occupied by
   the gutter.
 
+* gtk_paned_set_handle_size() has been removed, in favor of a style property,
+  since this is an option that only makes sense for themes to adjust.
+
 * GDK no longer selects OwnerGrabButtonMask for button presses. This means  
   that the automatic grab that occurs when the user presses a button
   will have owner_events = FALSE, so all events are redirected to the
