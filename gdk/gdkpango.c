@@ -37,7 +37,9 @@ static void gdk_pango_get_item_properties (PangoItem      *item,
 					   gboolean       *fg_set,
 					   PangoAttrColor *bg_color,
 					   gboolean       *bg_set,
-					   gboolean       *shape_set);
+					   gboolean       *shape_set,
+					   PangoRectangle *ink_rect,
+					   PangoRectangle *logical_rect);
 
 static void
 gdk_pango_context_destroy (GdkPangoContextInfo *info)
@@ -174,14 +176,18 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
       
       tmp_list = tmp_list->next;
 
-      gdk_pango_get_item_properties (run->item, &uline, &fg_color, &fg_set, &bg_color, &bg_set, &shape_set);
+      gdk_pango_get_item_properties (run->item, &uline, &fg_color, &fg_set, &bg_color, &bg_set, &shape_set, &ink_rect,
+				     &logical_rect);
 
-      if (uline == PANGO_UNDERLINE_NONE)
-	pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
-				    NULL, &logical_rect);
-      else
-	pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
-				    &ink_rect, &logical_rect);
+      if (!shape_set)
+	{
+	  if (uline == PANGO_UNDERLINE_NONE)
+	    pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
+					NULL, &logical_rect);
+	  else
+	    pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
+					&ink_rect, &logical_rect);
+	}
 
       if (bg_set)
 	{
@@ -196,16 +202,14 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
 	  gdk_pango_free_gc (context, bg_gc);
 	}
 
-      if (shape_set)
-	goto next_run;
-
       if (fg_set)
 	fg_gc = gdk_pango_get_gc (context, &fg_color, gc);
       else
 	fg_gc = gc;
 
-      gdk_draw_glyphs (drawable, fg_gc, run->item->analysis.font,
-		       x + x_off / PANGO_SCALE, y, run->glyphs);
+      if (!shape_set)
+	gdk_draw_glyphs (drawable, fg_gc, run->item->analysis.font,
+			 x + x_off / PANGO_SCALE, y, run->glyphs);
 
       switch (uline)
 	{
@@ -231,7 +235,6 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
       if (fg_set)
 	gdk_pango_free_gc (context, fg_gc);
 
-    next_run:
       x_off += logical_rect.width;
     }
 }
@@ -329,7 +332,9 @@ gdk_pango_get_item_properties (PangoItem      *item,
 			       gboolean       *fg_set,
 			       PangoAttrColor *bg_color,
 			       gboolean       *bg_set,
-			       gboolean       *shape_set)
+			       gboolean       *shape_set,
+			       PangoRectangle *ink_rect,
+			       PangoRectangle *logical_rect)
 {
   GSList *tmp_list = item->extra_attrs;
 
@@ -372,6 +377,10 @@ gdk_pango_get_item_properties (PangoItem      *item,
 	case PANGO_ATTR_SHAPE:
 	  if (shape_set)
 	    *shape_set = TRUE;
+	  if (logical_rect)
+	    *logical_rect = ((PangoAttrShape *)attr)->logical_rect;
+	  if (ink_rect)
+	    *ink_rect = ((PangoAttrShape *)attr)->ink_rect;
 	  break;
 	  
 	default:
