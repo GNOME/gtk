@@ -1,3 +1,8 @@
+Mon Nov 10 00:40:41 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkeventbox.c (gtk_event_box_set_above_child): 
+	Remember the new value in all cases.  (#126276, Damon Chaplin)
+
 Sat Nov  8 23:06:02 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* demos/gtk-demo/main.c (row_activated_cb): Call the do_

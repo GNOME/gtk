@@ -364,6 +364,8 @@ gtk_event_box_set_above_child (GtkEventBox *event_box,
 
   if (priv->above_child != above_child)
     {
+      priv->above_child = above_child;
+
       if (GTK_WIDGET_REALIZED (widget))
 	{
 	  if (GTK_WIDGET_NO_WINDOW (widget))
@@ -381,7 +383,6 @@ gtk_event_box_set_above_child (GtkEventBox *event_box,
 		gtk_widget_hide (widget);
 	      
 	      gtk_widget_unrealize (widget);
-	      priv->above_child = above_child;
 	      
 	      gtk_widget_realize (widget);
 	      
@@ -389,8 +390,6 @@ gtk_event_box_set_above_child (GtkEventBox *event_box,
 		gtk_widget_show (widget);
 	    }
 	}
-      else
-	priv->above_child = above_child;
 
       if (GTK_WIDGET_VISIBLE (widget))
 	gtk_widget_queue_resize (widget);
