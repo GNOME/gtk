@@ -287,6 +287,7 @@ gtk_init_check (int	 *argc,
   if (!gdk_init_check (argc, argv))
     return FALSE;
 
+
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
   
 #ifdef G_ENABLE_DEBUG

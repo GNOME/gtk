@@ -8,7 +8,7 @@
 
 style "gtk-default-zh-tw" {
        fontset = "-adobe-helvetica-medium-r-normal--14-*-*-*-*-*-iso8859-*,\
-		  -*-*-medium-r-normal--14-*-*-*-*-*-big5-0"
+		  -*-mingliu-medium-r-normal--14-*-*-*-*-*-big5-0"
 }
 class "GtkWidget" style "gtk-default-zh-tw"
 

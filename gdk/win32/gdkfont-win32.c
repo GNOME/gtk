@@ -1348,6 +1348,11 @@ gdk_font_load_internal (GdkFont* font_set,
 	fdwCharSet = GB2312_CHARSET;
       else if (g_strcasecmp (registry, "big5") == 0)
 	fdwCharSet = CHINESEBIG5_CHARSET;
+      else if (g_strcasecmp (registry, "tcvn") == 0
+	       && strcmp (encoding, "5712") == 0)
+	fdwCharSet = VIETNAMESE_CHARSET;
+      else if (g_strcasecmp (registry, "tis620.2533") == 0)
+	fdwCharSet = THAI_CHARSET;
       else if (g_strcasecmp (registry, "windows") == 0
 	       || g_strcasecmp (registry, "microsoft") == 0)
 	if (g_strcasecmp (encoding, "symbol") == 0)
@@ -1370,6 +1375,10 @@ gdk_font_load_internal (GdkFont* font_set,
 	  fdwCharSet = GREEK_CHARSET;
 	else if (g_strcasecmp (encoding, "turkish") == 0)
 	  fdwCharSet = TURKISH_CHARSET;
+	else if (g_strcasecmp (encoding, "vietnamese") == 0)
+	  fdwCharSet = VIETNAMESE_CHARSET;
+	else if (g_strcasecmp (encoding, "thai") == 0)
+	  fdwCharSet = THAI_CHARSET;
 	else if (g_strcasecmp (encoding, "easteurope") == 0)
 	  fdwCharSet = EASTEUROPE_CHARSET;
 	else if (g_strcasecmp (encoding, "russian") == 0)

@@ -14,14 +14,10 @@
 ifndef PACKAGE
 PACKAGE = gtk+
 endif
-ifndef INSTALLSUBDIR
-INSTALLSUBDIR = $(PACKAGE)
-endif
 ifndef LOCALEDIR
-# This is what I use as installation target, from where the installer-builder
-# will pick it up. The user installation location will be asked by
-# the installer (typically %WinDir%\gtk+).
-LOCALEDIR = /install/$(INSTALLSUBDIR)/locale
+# This is what I use as installation target, from where installer-builders
+# or zip file creating scripts will pick it up. 
+LOCALEDIR = /target/lib/locale
 endif
 
 LANGUAGES = $(subst .po,,$(wildcard *.po))
@@ -39,7 +35,9 @@ install : all
 .SUFFIXES: .po .utf8 .gmo
 
 .utf8.gmo:
-	msgfmt -o $@ $<
+	sed -e 's,^"Content-Type: text/plain; charset=.*\\n","Content-Type: text/plain; charset=UTF-8\\n",' <$< >$<.xxx
+	msgfmt -o $@ $<.xxx
+	rm -f $<.xxx
 
 ca.utf8: ca.po
 	iconv -f ISO-8859-1 -t UTF-8 ca.po >$@
@@ -137,14 +135,8 @@ tr.utf8: tr.po
 wa.utf8: wa.po
 	iconv -f ISO-8859-1 -t UTF-8 wa.po >$@
 
-zh_CN.gmo: zh_CN.utf8
-	msgfmt -o $@ $<
-
 zh_CN.utf8: zh_CN.GB2312.po
 	iconv -f GB2312 -t UTF-8 zh_CN.GB2312.po >$@
-
-zh_TW.gmo: zh_TW.utf8
-	msgfmt -o $@ $<
 
 zh_TW.utf8: zh_TW.Big5.po
 	iconv -f BIG5 -t UTF-8 zh_TW.Big5.po >$@

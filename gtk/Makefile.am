@@ -433,7 +433,7 @@ gtkconfdir = $(sysconfdir)/gtk
 gtkconf_DATA = gtkrc.bg gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
 	gtkrc.ko gtkrc.ru gtkrc.tr gtkrc.th gtkrc.uk gtkrc.iso-8859-2 \
 	gtkrc.iso-8859-5 gtkrc.iso-8859-13 gtkrc.iso-8859-14 \
-	gtkrc.iso-8859-15 gtkrc.zh_CN gtkrc.zh_TW.Big5 \
+	gtkrc.iso-8859-15 gtkrc.zh_CN gtkrc.zh_TW \
 	gtkrc.ka_GE.georgianacademy gtkrc.ka_GE.georgianps \
 	gtkrc.vi_VN.tcvn gtkrc.vi_VN.viscii
 
@@ -446,22 +446,22 @@ install-data-local: install-data-local-ms-lib install-data-local-libtool-import-
 	cd $(DESTDIR)$(gtkconfdir) && \
 	  for i in cs hr hu pl ro sk sl sq ; do \
 	    rm -f gtkrc.$$i ; \
-	    ln -s gtkrc.iso-8859-2 gtkrc.$$i ; \
+	    cp gtkrc.iso-8859-2 gtkrc.$$i ; \
 	  done ; \
 	  for i in bg_BG.iso88595 mk sr ru_RU.iso88595 ; do \
 	    rm -f gtkrc.$$i ; \
-	    ln -s gtkrc.iso-8859-5 gtkrc.$$i ; \
+	    cp gtkrc.iso-8859-5 gtkrc.$$i ; \
 	  done ; \
 	rm -f gtkrc.lt gtkrc.cy gtkrc.ga gtkrc.et gtkrc.ka \
 	     gtkrc.vi_VN.viscii111 gtkrc.vi_VN.tcvn5712 gtkrc.vi ; \
-	ln -s gtkrc.iso-8859-13 gtkrc.lt ; \
-	ln -s gtkrc.iso-8859-14 gtkrc.cy ; \
-	ln -s gtkrc.iso-8859-14 gtkrc.ga ; \
-	ln -s gtkrc.iso-8859-15 gtkrc.et ; \
-	ln -s gtkrc.ka_GE.georgianacademy gtkrc.ka ; \
-	ln -s gtkrc.vi_VN.viscii gtkrc.vi_VN.viscii111 ; \
-	ln -s gtkrc.vi_VN.tcvn gtkrc.vi_VN.tcvn5712 ; \
-	ln -s gtkrc.vi_VN.tcvn5712 gtkrc.vi 
+	cp gtkrc.iso-8859-13 gtkrc.lt ; \
+	cp gtkrc.iso-8859-14 gtkrc.cy ; \
+	cp gtkrc.iso-8859-14 gtkrc.ga ; \
+	cp gtkrc.iso-8859-15 gtkrc.et ; \
+	cp gtkrc.ka_GE.georgianacademy gtkrc.ka ; \
+	cp gtkrc.vi_VN.viscii gtkrc.vi_VN.viscii111 ; \
+	cp gtkrc.vi_VN.tcvn gtkrc.vi_VN.tcvn5712 ; \
+	cp gtkrc.vi_VN.tcvn5712 gtkrc.vi 
 
 uninstall-local: uninstall-local-ms-lib uninstall-local-libtool-import-lib
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtkrc

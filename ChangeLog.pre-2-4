@@ -1,3 +1,30 @@
+2001-10-28  Tor Lillqvist  <tml@iki.fi>
+
+	* configure.in: Check also $CC for -fnative-struct before adding
+	it, to avoid (harmless) duplication.
+
+	* gdk/gdkconfig.h.win32: Use configure-generated version.
+
+	* gdk/win32/gdkfont-win32.c (gdk_font_load_internal): Recognize
+	also the tcvn and tis620.2533 registries as indicating Vietnamese
+	and Thai charsets respectively. Also recognize "windows" or
+	"microsoft" registry with "vietnamese" or "thai" encoding.
+
+	* gtk/gtkrc.zh_TW.Big5: Delete, no need for encoding as part of
+	the locale name on Win32, as GTK uses Unicode.
+
+	* gtk/gtkrc.zh_TW: Add this instead.
+
+	* gtk/Makefile.am: Corresponding change.
+	
+	* gtk/Makefile.am (install-data-local): Cannot use symbolic links
+	for gtkrc files. The non-cygwin gtk dll doesn't understand Cygwin
+	symbolic links.
+
+	* gtk/gtkrc.zh_CN: Look for the SimHei font. Otherwise we get a
+	match in Tahoma or somesuch, which claims to support the
+	GB2312_CHARSET, even if it doesn't.
+
 2001-10-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk-1.3-win32-production.pc.in: Use just @prefix@.

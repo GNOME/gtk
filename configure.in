@@ -165,7 +165,7 @@ if test "x$GCC" = "xyes"; then
   fi
 
   if test "$os_win32" = "yes"; then
-    case " $CFLAGS " in
+    case "$CC $CFLAGS " in
     *[[\ \	]]-fnative-struct[[\ \	]]*) ;;
     *) CFLAGS="$CFLAGS -fnative-struct" ;;
     esac

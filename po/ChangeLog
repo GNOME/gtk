@@ -1,3 +1,9 @@
+2001-10-28  Tor Lillqvist  <tml@iki.fi>
+
+	* makefile.cygwin: Change the Content-Type: header to
+	charset=UTF-8 after converting to UTF-8. Remove superfluos rules
+	for Chinese.
+
 2000-10-07  Tor Lillqvist  <tml@iki.fi>
 
 	Change from the 2000-10-07 snapshot:

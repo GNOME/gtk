@@ -8554,6 +8554,7 @@ main (int argc, char *argv[])
   /* bindings test
    */
   binding_set = gtk_binding_set_by_class (gtk_type_class (GTK_TYPE_WIDGET));
+
   gtk_binding_entry_add_signal (binding_set,
 				'9', GDK_CONTROL_MASK | GDK_RELEASE_MASK,
 				"debug_msg",
