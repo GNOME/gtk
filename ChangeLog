@@ -1,3 +1,8 @@
+Tue Mar  5 17:02:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/tutorial/gtk-tut.sgml: s/menu_new/menu_item_new/.
+	(#69199, Akira Tagoh.)
+
 Tue Mar  5 16:53:05 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* docs/faq/Makefile.am: Build the docbook version, not
