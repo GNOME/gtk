@@ -1,5 +1,8 @@
 2004-07-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c: Replace the EXPANDER_MAX macro by 
+	ROW_HEIGHT.  (#145528)
+
 	* gtk/gtkuimanager.c: Warning fixes.
 
 	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_set_background): Fix
