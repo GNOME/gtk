@@ -1,3 +1,14 @@
+2005-02-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkx.h: 
+	* gdk/x11/gdkdisplay-x11.c (gdk_x11_display_get_user_time_libgtk_only):
+	Add libgtk_only api to obtain the user_time of the display. 
+	This function will become generally available api in 2.8.
+
+	* gtk/gtkwindow.c (gtk_window_present): Use the timestamp of
+	the last user interaction when focusing the window.  (#166379, 
+	Elijah Newren)
+
 Thu Feb 17 14:52:57 2005  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkcombobox.c: Pass gtk_widget_get_toplevel() a GTK_WIDGET.

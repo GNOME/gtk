@@ -1184,3 +1184,9 @@ gdk_display_store_clipboard (GdkDisplay *display,
   gdk_error_trap_pop ();
 
 }
+
+guint32
+gdk_x11_display_get_user_time_libgtk_only (GdkDisplay *display)
+{
+  return GDK_DISPLAY_X11 (display)->user_time;
+}
