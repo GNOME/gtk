@@ -23,4 +23,5 @@ gtktypebuiltins_evals.c
 gtk.defs
 testdnd
 stamp-d
+stamp-t
 stamp-m

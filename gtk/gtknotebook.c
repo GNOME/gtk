@@ -1943,7 +1943,7 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
        list = gtk_notebook_search_page (notebook, list, STEP_NEXT, FALSE))
     {
       page = list->data;
-      sprintf (string, _("Page %u"), page_num++);
+      g_snprintf (string, sizeof(string), _("Page %u"), page_num++);
       if (notebook->show_tabs)
 	{
 	  if (page->default_tab)
@@ -3963,8 +3963,8 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
 	{
 	  gchar string[32];
 
-	  sprintf (string, _("Page %u"), 
-		   gtk_notebook_real_page_position (notebook, list));
+	  g_snprintf (string, sizeof(string), _("Page %u"), 
+		      gtk_notebook_real_page_position (notebook, list));
 	  page->tab_label = gtk_label_new (string);
 	  gtk_widget_set_parent (page->tab_label, GTK_WIDGET (notebook));
 	}

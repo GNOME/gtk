@@ -209,15 +209,10 @@ gtk_rc_get_theme_dir(void)
 
   var = getenv("GTK_DATA_PREFIX");
   if (var)
-    {
-      path = g_malloc(strlen(var) + strlen("/share/themes") +1);
-      sprintf(path, "%s%s", var, "/share/themes");
-    }
+    path = g_strdup_printf("%s%s", var, "/share/themes");
   else
-    {
-      path = g_malloc(strlen(GTK_DATA_PREFIX) + strlen("/share/themes") +1);
-      sprintf(path, "%s%s", GTK_DATA_PREFIX, "/share/themes");
-    }
+    path = g_strdup_printf("%s%s", GTK_DATA_PREFIX, "/share/themes");
+
   return path;
 }
 
@@ -228,15 +223,10 @@ gtk_rc_get_module_dir(void)
 
   var = getenv("GTK_EXE_PREFIX");
   if (var)
-    {
-      path = g_malloc(strlen(var) + strlen("/lib/gtk/themes/engines") +1);
-      sprintf(path, "%s%s", var, "/lib/gtk/themes/engines");
-    }
+    path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
   else
-    {
-      path = g_malloc(strlen(GTK_EXE_PREFIX) + strlen("/lib/gtk/themes/engines") +1);
-      sprintf(path, "%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
-    }
+    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
+
   return path;
 }
 
@@ -248,15 +238,9 @@ gtk_rc_append_default_pixmap_path(void)
 
   var = getenv("GTK_DATA_PREFIX");
   if (var)
-    {
-      path = g_malloc(strlen(var) + strlen("/share/gtk/themes") +1);
-      sprintf(path, "%s%s", var, "/share/gtk/themes");
-    }
+    path = g_strdup_printf("%s%s", var, "/share/gtk/themes");
   else
-    {
-      path = g_malloc(strlen(GTK_DATA_PREFIX) + strlen("/share/gtk/themes") +1);
-      sprintf(path, "%s%s", GTK_DATA_PREFIX, "/share/gtk/themes");
-    }
+    path = g_strdup_printf("%s%s", GTK_DATA_PREFIX, "/share/gtk/themes");
   
   for (n = 0; pixmap_path[n]; n++) ;
   if (n >= GTK_RC_MAX_PIXMAP_PATHS - 1)
@@ -290,23 +274,15 @@ gtk_rc_append_default_module_path(void)
   
   var = getenv("GTK_EXE_PREFIX");
   if (var)
-    {
-      path = g_malloc(strlen(var) + strlen("/lib/gtk/themes/engines") +1);
-      sprintf(path, "%s%s", var, "/lib/gtk/themes/engines");
-    }
+    path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
   else
-    {
-      path = g_malloc(strlen(GTK_EXE_PREFIX) + strlen("/lib/gtk/themes/engines") +1);
-      sprintf(path, "%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
-    }
+    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
   module_path[n++] = g_strdup(path);
   g_free(path);
+
   var = getenv("HOME");
   if (var)
-    {
-      path = g_malloc(strlen(var) + strlen(".gtk/lib/themes/engines") +1);
-      sprintf(path, "%s%s", var, ".gtk/lib/themes/engines");
-    }
+    path = g_strdup_printf("%s%s", var, ".gtk/lib/themes/engines");
   module_path[n++] = g_strdup(path);
   module_path[n] = NULL;
   g_free(path);
@@ -340,14 +316,13 @@ gtk_rc_add_initial_default_files (void)
     }
   else
     {
-      str = g_malloc (strlen(GTK_SYSCONFDIR) + strlen("/gtk/gtkrc") + 1);
-      sprintf (str, "%s%s", GTK_SYSCONFDIR, "/gtk/gtkrc");
+      str = g_strdup_printf ("%s%s", GTK_SYSCONFDIR, "/gtk/gtkrc");
       gtk_rc_add_default_file (str);
+      g_free (str);
 
-      var = g_get_home_dir ();
-      str = g_malloc (strlen(var) + strlen("/.gtkrc") + 1);
-      sprintf (str, "%s%s", var, "/.gtkrc");
+      str = g_strdup_printf ("%s%s", g_get_home_dir (), "/.gtkrc");
       gtk_rc_add_default_file (str);
+      g_free (str);
     }
 }
 
@@ -878,7 +853,7 @@ gtk_rc_parse_any (const gchar  *input_name,
   guint	   i;
   gboolean done;
   
-  scanner = g_scanner_new (&gtk_rc_scanner_config);
+  scanner = g_scanner_new ((GScannerConfig *) &gtk_rc_scanner_config);
   
   if (input_fd >= 0)
     {
@@ -1516,8 +1491,7 @@ gtk_rc_find_pixmap_in_path (GScanner *scanner,
   
   for (i = 0; (i < GTK_RC_MAX_PIXMAP_PATHS) && (pixmap_path[i] != NULL); i++)
     {
-      buf = g_malloc (strlen (pixmap_path[i]) + strlen (pixmap_file) + 2);
-      sprintf (buf, "%s%c%s", pixmap_path[i], '/', pixmap_file);
+      buf = g_strdup_printf ("%s%c%s", pixmap_path[i], '/', pixmap_file);
       
       fd = open (buf, O_RDONLY);
       if (fd >= 0)
@@ -1548,8 +1522,7 @@ gtk_rc_find_module_in_path (const gchar *module_file)
   
   for (i = 0; (i < GTK_RC_MAX_MODULE_PATHS) && (module_path[i] != NULL); i++)
     {
-      buf = g_malloc (strlen (module_path[i]) + strlen (module_file) + 2);
-      sprintf (buf, "%s%c%s", module_path[i], '/', module_file);
+      buf = g_strdup_printf ("%s%c%s", module_path[i], '/', module_file);
       
       fd = open (buf, O_RDONLY);
       if (fd >= 0)

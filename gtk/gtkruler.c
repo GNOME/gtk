@@ -108,7 +108,7 @@ gtk_ruler_set_metric (GtkRuler      *ruler,
   g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_RULER (ruler));
 
-  ruler->metric = &ruler_metrics[metric];
+  ruler->metric = (GtkRulerMetric *) &ruler_metrics[metric];
 
   if (GTK_WIDGET_DRAWABLE (ruler))
     gtk_widget_queue_draw (GTK_WIDGET (ruler));

@@ -1,3 +1,18 @@
+Fri Jan  1 18:41:09 PST 1999 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdk.c
+	* gdk/gdkinputnone.h
+	* gtk/gtkruler.c: casts to get rid of const warnings
+
+	* gtk/Makefile.am: fix gtktypebuiltins.h dependencies, and do a
+	cmp so people don't whine about rebuilds
+
+	* gtk/gtknotebook.c: use g_snprintf on translated strings, so we
+	don't get buffer overflows
+
+	* gtk/gtkrc.c: use g_strdup_printf instead of g_malloc/sprintf
+	Plug some memleaks.
+
 1999-01-01  Jeff Garzik  <jgarzik@pobox.com>
 
 	* configure.in, config.h.in:

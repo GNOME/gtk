@@ -235,11 +235,12 @@ gtkinclude_HEADERS = 		\
 	gtkmarshal.h		\
 	gtktypebuiltins.h
 
-# note gtk.defs and gtkmarshal.[ch] aren't here, but their stamps are
+# note gtk.defs, gtktypebuiltins.h, and gtkmarshal.[ch] aren't here, but their
+# stamps are
 BUILT_SOURCES = \
 	stamp-d				\
+	stamp-t				\
 	stamp-m				\
-	gtktypebuiltins.h		\
 	gtktypebuiltins_evals.c		\
 	gtktypebuiltins_ids.c		\
         gtktypebuiltins_vars.c
@@ -253,7 +254,7 @@ gdk_headers = \
 	../gdk/gdkrgb.h
 
 # generate gtk.defs file from gtk-boxed.defs and *.h
-gtk.defs: @REBUILD@ stamp-d
+$(srcdir)/gtk.defs: @REBUILD@ stamp-d
 	@:
 stamp-d: @REBUILD@ makeenums.pl gtk-boxed.defs $(source_headers) $(gdk_headers)
 	cd $(srcdir) \
@@ -263,10 +264,14 @@ stamp-d: @REBUILD@ makeenums.pl gtk-boxed.defs $(source_headers) $(gdk_headers)
 	&& echo timestamp > stamp-d
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
-gtktypebuiltins.h: #@REBUILD@ gtk.defs maketypes.awk
+$(srcdir)/gtktypebuiltins.h: @REBUILD@ stamp-t
+	@:
+stamp-t: $(srcdir)/gtk.defs $(srcdir)/maketypes.awk
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs macros > s-gtb \
-	&& mv s-gtb gtktypebuiltins.h
+	&& (cmp -s s-gtb gtktypebuiltins.h || mv s-gtb gtktypebuiltins.h) \
+	&& rm -f s-gtb \
+	&& echo timestamp > stamp-t
 
 # generate type identifier variables (GTK_TYPE_WIDGET_FLAGS)
 $(srcdir)/gtktypebuiltins_vars.c: @REBUILD@ $(srcdir)/gtk.defs $(srcdir)/maketypes.awk
@@ -289,18 +294,20 @@ $(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ $(srcdir)/makeenums.pl $(srcdir)/gt
 
 $(srcdir)/gtkmarshal.c $(srcdir)/gtkmarshal.h: @REBUILD@ stamp-m
 	@:
-
 stamp-m: @REBUILD@ $(srcdir)/gtkmarshal.list $(srcdir)/genmarshal.pl
 	(srcdir=$(srcdir) INDENT=$(INDENT) $(PERL) $(srcdir)/genmarshal.pl \
-	&& (cmp -s s-gmc gtkmarshal.c || mv s-gmc gtkmarshal.c) && rm -f s-gmc \
-	&& (cmp -s s-gmh gtkmarshal.h || mv s-gmh gtkmarshal.h) && rm -f s-gmh) \
+	&& (cmp -s s-gmc gtkmarshal.c || mv s-gmc gtkmarshal.c) \
+	&& rm -f s-gmc \
+	&& (cmp -s s-gmh gtkmarshal.h || mv s-gmh gtkmarshal.h) \
+	&& rm -f s-gmh) \
 	&& echo timestamp > stamp-m
 
 libgtk_la_LDFLAGS = \
-	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -release $(LT_RELEASE) \
-	@GLIB_LIBS@ 			\
-	@x_ldflags@			\
-	@x_libs@ 			\
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)	\
+	-release $(LT_RELEASE) 					\
+	@GLIB_LIBS@ 						\
+	@x_ldflags@						\
+	@x_libs@ 						\
 	-lm
 #	$(top_builddir)/gdk/libgdk.la
 
@@ -346,16 +353,16 @@ EXTRA_DIST = \
         circles.xbm
 
 INCLUDES = \
-	-DG_LOG_DOMAIN=\"Gtk\"			\
-	-DGTK_EXE_PREFIX=\"$(exec_prefix)\"	\
-	-DGTK_DATA_PREFIX=\"$(prefix)\"		\
-	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"	\
-	-DGTK_LOCALEDIR=\"$(datadir)/locale\"   \
-	-I$(top_srcdir)				\
-	@GTK_DEBUG_FLAGS@			\
-	@GTK_XIM_FLAGS@				\
-	@GTK_LOCALE_FLAGS@			\
-	@GLIB_CFLAGS@				\
+	-DG_LOG_DOMAIN=\"Gtk\"				\
+	-DGTK_EXE_PREFIX=\"$(exec_prefix)\"		\
+	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
+	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
+	-DGTK_LOCALEDIR=\"$(datadir)/locale\"		\
+	-I$(top_srcdir)					\
+	@GTK_DEBUG_FLAGS@				\
+	@GTK_XIM_FLAGS@					\
+	@GTK_LOCALE_FLAGS@				\
+	@GLIB_CFLAGS@					\
 	@x_cflags@
 
 noinst_PROGRAMS = testgtk testinput testselection testrgb testdnd simple 

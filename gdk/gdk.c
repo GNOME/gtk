@@ -175,7 +175,7 @@ gdk_init (int	 *argc,
     gchar *debug_string = getenv("GDK_DEBUG");
     if (debug_string != NULL)
       gdk_debug_flags = g_parse_debug_string (debug_string,
-					      gdk_debug_keys,
+					      (GDebugKey *) gdk_debug_keys,
 					      gdk_ndebug_keys);
   }
 #endif	/* G_ENABLE_DEBUG */
@@ -204,13 +204,13 @@ gdk_init (int	 *argc,
 	      if (equal_pos != NULL)
 		{
 		  gdk_debug_flags |= g_parse_debug_string (equal_pos+1,
-							   gdk_debug_keys,
+							   (GDebugKey *) gdk_debug_keys,
 							   gdk_ndebug_keys);
 		}
 	      else if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  gdk_debug_flags |= g_parse_debug_string ((*argv)[i+1],
-							   gdk_debug_keys,
+							   (GDebugKey *) gdk_debug_keys,
 							   gdk_ndebug_keys);
 		  (*argv)[i] = NULL;
 		  i += 1;
@@ -225,13 +225,13 @@ gdk_init (int	 *argc,
 	      if (equal_pos != NULL)
 		{
 		  gdk_debug_flags &= ~g_parse_debug_string (equal_pos+1,
-							    gdk_debug_keys,
+							    (GDebugKey *) gdk_debug_keys,
 							    gdk_ndebug_keys);
 		}
 	      else if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  gdk_debug_flags &= ~g_parse_debug_string ((*argv)[i+1],
-							    gdk_debug_keys,
+							    (GDebugKey *) gdk_debug_keys,
 							    gdk_ndebug_keys);
 		  (*argv)[i] = NULL;
 		  i += 1;

@@ -45,7 +45,7 @@ gdk_input_init (void)
   gdk_input_vtable.enable_window      = NULL;
   gdk_input_vtable.disable_window     = NULL;
 
-  gdk_input_devices = g_list_append (NULL, &gdk_input_core_info);
+  gdk_input_devices = g_list_append (NULL, (GdkDeviceInfo *) &gdk_input_core_info);
 
   gdk_input_ignore_core = FALSE;
 }
