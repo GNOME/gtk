@@ -1,3 +1,9 @@
+Thu Feb  7 10:53:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_draw_text): Use layout text
+	(which may be affected by invisible char) to compute
+	selection bounds, not entry text. (#70733, Alex Larsson)
+
 2002-02-07 Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtkwidget.[ch]:

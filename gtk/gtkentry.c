@@ -2677,8 +2677,9 @@ gtk_entry_draw_text (GtkEntry *entry)
 	  gint *ranges;
 	  gint n_ranges, i;
           PangoRectangle logical_rect;
-	  gint start_index = g_utf8_offset_to_pointer (entry->text, start_pos) - entry->text;
-	  gint end_index = g_utf8_offset_to_pointer (entry->text, end_pos) - entry->text;
+	  const gchar *text = pango_layout_get_text (layout);
+	  gint start_index = g_utf8_offset_to_pointer (text, start_pos) - text;
+	  gint end_index = g_utf8_offset_to_pointer (text, end_pos) - text;
 	  GdkRegion *clip_region = gdk_region_new ();
 	  GdkGC *text_gc;
 	  GdkGC *selection_gc;
