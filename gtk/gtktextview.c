@@ -6818,6 +6818,8 @@ popup_targets_received (GtkClipboard     *clipboard,
       
       menuitem = gtk_menu_item_new_with_mnemonic (_("Input _Methods"));
       gtk_widget_show (menuitem);
+      gtk_widget_set_sensitive (menuitem, can_insert);
+
       submenu = gtk_menu_new ();
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
       gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);

@@ -1,3 +1,8 @@
+2003-07-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c (popup_targets_received): Make the "Input Methods" insensitive
+	when editing isn't possible.  (#118150)
+
 2003-07-23  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcolorsel.c (gtk_color_selection_init): Make the hue 
