@@ -1239,9 +1239,21 @@ void
 gtk_widget_hide (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (GTK_WIDGET_VISIBLE (widget))
     gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
+}
+
+gint
+gtk_widget_delete_hides (GtkWidget      *widget)
+{
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  gtk_widget_hide (widget);
+
+  return TRUE;
 }
 
 /*****************************************

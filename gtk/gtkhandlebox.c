@@ -716,5 +716,5 @@ gtk_handle_box_delete_float (GtkWidget *widget,
   
   gtk_widget_queue_resize (GTK_WIDGET (hb));
 
-  return FALSE;
+  return TRUE;
 }

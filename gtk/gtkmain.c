@@ -524,7 +524,8 @@ gtk_main_iteration_do (gboolean blocking)
 	  
 	case GDK_DELETE:
 	  gtk_widget_ref (event_widget);
-	  if (gtk_widget_event (event_widget, event))
+	  if (!gtk_widget_event (event_widget, event) &&
+	      !GTK_OBJECT_DESTROYED (event_widget))
 	    gtk_widget_destroy (event_widget);
 	  gtk_widget_unref (event_widget);
 	  break;
@@ -532,7 +533,8 @@ gtk_main_iteration_do (gboolean blocking)
 	case GDK_DESTROY:
 	  gtk_widget_ref (event_widget);
 	  gtk_widget_event (event_widget, event);
-	  gtk_widget_destroy (event_widget);
+	  if (!GTK_OBJECT_DESTROYED (event_widget))
+	    gtk_widget_destroy (event_widget);
 	  gtk_widget_unref (event_widget);
 	  break;
 	  

@@ -347,7 +347,6 @@ static void
 gtk_statusbar_finalize (GtkObject *object)
 {
   GtkStatusbar *statusbar;
-  GSList *list;
 
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_STATUSBAR (object));

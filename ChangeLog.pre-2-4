@@ -1,3 +1,17 @@
+Thu Mar 12 20:17:47 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_delete_float): return TRUE for
+	GtkWidget::delete_event to avoid destruction of our float window.
+
+	* gtk/gtkmain.c (gtk_main_iteration_do): GDK_DELETE will destroy a
+	widget if the last handler returned FALSE or there was none connected.
+
+	* gtk/testgtk.c: adapted all delete_event/destroy case that were affected.
+
+	* gtk/gtkwidget.c (gtk_widget_delete_hides): new function that will hide
+	a widget and return TRUE to avoid window deletion if
+	connected to GtkWIdget::delete_event.
+
 Thu Mar 12 11:51:33 PST 1998 Shawn T. Amundson <amundson@gimp.org>
 
 	* docs/gtk.texi: Changed name of GTK to the GIMP Toolkit
