@@ -1,3 +1,7 @@
+Tue Nov 21 14:17:51 GMT 2000  Tony Gale <gale@gtk.org>
+
+	* docs/tutorial/gtk-tut.sgml: minor corrections
+
 2000-11-20  Jonathan Blandford <jrb@redhat.com>
 	* gtk/gtktreemodelsort.h: Add convertion functions to let you
 	  convert to and from relative path's and iters.

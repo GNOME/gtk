@@ -2,21 +2,21 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>July 21st 2000</date>
+    <date>November 21st 2000</date>
     <title>GTK+ 1.2 Tutorial</title>
     <authorgroup>
       <author>
-	<firstname>Tony</firstname>
-	<surname>Gale</surname>
+        <firstname>Tony</firstname>
+        <surname>Gale</surname>
       </author>
       <author>
-	<firstname>Ian</firstname>
-	<surname>Main</surname>
+        <firstname>Ian</firstname>
+        <surname>Main</surname>
       </author>
     </authorgroup>
     <abstract>
       <para> This is a tutorial on how to use GTK (the GIMP Toolkit) through its C
-	interface.</para>
+            interface.</para>
     </abstract>
   </bookinfo>
 
@@ -554,14 +554,14 @@ also be attached to these events. These events are:</para>
 </listitem>
 </itemizedlist>
 
-<para>In order to connect a callback function to one of these events, you
+<para>In order to connect a callback function to one of these events you
 use the function gtk_signal_connect, as described above, using one of
 the above event names as the <literal>name</literal> parameter. The callback
 function for events has a slightly different form than that for
 signals:</para>
 
 <programlisting role="C">
-void callback_func( GtkWidget *widget,
+gint callback_func( GtkWidget *widget,
                     GdkEvent  *event,
                     gpointer   callback_data );
 </programlisting>
@@ -569,7 +569,7 @@ void callback_func( GtkWidget *widget,
 <para>GdkEvent is a C <literal>union</literal> structure whose type will depend upon which
 of the above events has occurred. In order for us to tell which event
 has been issued each of the possible alternatives has a <literal>type</literal>
-parameter which reflects the event being issued. The other components
+member that reflects the event being issued. The other components
 of the event structure will depend upon the type of the
 event. Possible values for the type are:</para>
 
@@ -1084,7 +1084,7 @@ This is where packing comes in.</para>
 <sect1 id="sec-TheoryOfPackingBoxes">
 <title>Theory of Packing Boxes</title>
 
-<para>Most packing is done by creating boxes as in the example above. These
+<para>Most packing is done by creating boxes. These
 are invisible widget containers that we can pack our widgets into
 which come in two forms, a horizontal box, and a vertical box. When
 packing widgets into a horizontal box, the objects are inserted
@@ -2290,7 +2290,7 @@ GtkWidget *gtk_radio_button_new_with_label( GSList *group,
 
 <para>You'll notice the extra argument to these calls. They require a group
 to perform their duty properly. The first call to
-gtk_radio_button_new_with_label or gtk_radio_button_new_with_label
+gtk_radio_button_new or gtk_radio_button_new_with_label
 should pass NULL as the first argument. Then create a group using:</para>
 
 <programlisting role="C">
@@ -2823,17 +2823,17 @@ Adjustment. The update policies, defined in
 are:</para>
 
 <itemizedlist>
-<listitem><simpara>GTK_UPDATE_POLICY_CONTINUOUS - This is the default. The
+<listitem><simpara>GTK_UPDATE_CONTINUOUS - This is the default. The
 "value_changed" signal is emitted continuously, i.e., whenever the
 slider is moved by even the tiniest amount.</simpara>
 </listitem>
 
-<listitem><simpara>GTK_UPDATE_POLICY_DISCONTINUOUS - The "value_changed" signal is
+<listitem><simpara>GTK_UPDATE_DISCONTINUOUS - The "value_changed" signal is
 only emitted once the slider has stopped moving and the user has
 released the mouse button.</simpara>
 </listitem>
 
-<listitem><simpara>GTK_UPDATE_POLICY_DELAYED - The "value_changed" signal is emitted
+<listitem><simpara>GTK_UPDATE_DELAYED - The "value_changed" signal is emitted
 when the user releases the mouse button, or if the slider stops moving
 for a short period of time.</simpara>
 </listitem>
@@ -5686,6 +5686,8 @@ pointer to the GList.</para>
     glist = g_list_append(glist, "String 4");
 
     gtk_combo_set_popdown_strings( GTK_COMBO(combo), glist) ;
+    
+    /* can free glist now, combo takes a copy */
 </programlisting>
 
 <para>The combo widget makes a copy of the strings passed to it in the glist
@@ -9225,7 +9227,7 @@ void select_row_callback(GtkWidget *widget,
 
 <programlisting role="C">
 gtk_signal_connect(GTK_OBJECT( clist),
-		   "select_row"
+		   "select_row",
 		   GTK_SIGNAL_FUNC(select_row_callback),
 		   NULL);
 </programlisting>
@@ -10615,15 +10617,15 @@ standard <literal>File</literal> menu, with the options <literal>Open</literal>,
     gtk_menu_append (GTK_MENU (file_menu), quit_item);
 
     /* Attach the callback functions to the activate signal */
-    gtk_signal_connect_object (GTK_OBJECT (open_items), "activate",
+    gtk_signal_connect_object (GTK_OBJECT (open_item), "activate",
                                GTK_SIGNAL_FUNC (menuitem_response),
                                (gpointer) "file.open");
-    gtk_signal_connect_object (GTK_OBJECT (save_items), "activate",
+    gtk_signal_connect_object (GTK_OBJECT (save_item), "activate",
                                GTK_SIGNAL_FUNC (menuitem_response),
                                (gpointer) "file.save");
 
     /* We can attach the Quit menu item to our exit function */
-    gtk_signal_connect_object (GTK_OBJECT (quit_items), "activate",
+    gtk_signal_connect_object (GTK_OBJECT (quit_item), "activate",
                                GTK_SIGNAL_FUNC (destroy),
                                (gpointer) "file.quit");
 
@@ -15510,7 +15512,7 @@ such as:</para>
 </itemizedlist>
 
 <para>For information about the XInput extension, see the <ulink
-url="http://www.msc.cornell.edu/~otaylor/xinput/XInput-HOWTO.html">XInput-HOWTO</ulink>.</para>
+url="http://www.gtk.org/~otaylor/xinput/howto/index.html">XInput HOWTO</ulink>.</para>
 
 <para>If we examine the full definition of, for example, the GdkEventMotion
 structure, we see that it has fields to support extended device
