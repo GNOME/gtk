@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-12-16 13:24-0500\n"
-"PO-Revision-Date: 2004-11-29 20:40+0100\n"
+"PO-Revision-Date: 2004-12-18 13:53+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2295,58 +2295,48 @@ msgid "The model for the icon view"
 msgstr "El modelo para la vista de icono"
 
 #: gtk/gtkiconview.c:413
-#, fuzzy
 msgid "Number of columns"
-msgstr "Número de canales"
+msgstr "Número de columnas"
 
 #: gtk/gtkiconview.c:414
-#, fuzzy
 msgid "Number of columns to display"
-msgstr "El número de lugares decimales a mostrar"
+msgstr "El número de columnas que se mostrarán"
 
 #: gtk/gtkiconview.c:431
-#, fuzzy
 msgid "Width for each item"
-msgstr "Widget a usar como la etiqueta del elemento"
+msgstr "Anchura de cada elemento"
 
 #: gtk/gtkiconview.c:432
 msgid "The width used for each item"
-msgstr ""
+msgstr "La anchura usada por cada elemento"
 
 #: gtk/gtkiconview.c:448
-#, fuzzy
 msgid "Space which is inserted between cells of an item"
-msgstr "Espacio que se introduce entre las celdas"
+msgstr "Espacio que se introduce entre las celdas de un elemento"
 
 #: gtk/gtkiconview.c:463
-#, fuzzy
 msgid "Row Spacing"
 msgstr "Espaciado entre filas"
 
 #: gtk/gtkiconview.c:464
-#, fuzzy
 msgid "Space which is inserted between grid rows"
-msgstr "Espacio que se introduce entre las celdas"
+msgstr "Espacio que se introduce entre las filas de la rejilla"
 
 #: gtk/gtkiconview.c:479
-#, fuzzy
 msgid "Column Spacing"
-msgstr "Espaciado de la columna"
+msgstr "Espaciado entre columnas"
 
 #: gtk/gtkiconview.c:480
-#, fuzzy
 msgid "Space which is inserted between grid column"
-msgstr "Espacio que se introduce entre las celdas"
+msgstr "Espacio que se introduce entre las columnas de la rejilla"
 
 #: gtk/gtkiconview.c:495
-#, fuzzy
 msgid "Margin"
-msgstr "Margen izquierdo"
+msgstr "Margen"
 
 #: gtk/gtkiconview.c:496
-#, fuzzy
 msgid "Space which is inserted at the edges of the icon view"
-msgstr "Espacio que se introduce entre las celdas"
+msgstr "Espacio que se introduce entre los bordes de la vista de icono"
 
 #: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
@@ -2573,14 +2563,12 @@ msgid "Angle at which the label is rotated"
 msgstr "ángulo al cual la etiqueta se rota"
 
 #: gtk/gtklabel.c:513
-#, fuzzy
 msgid "Maximum Width In Characters"
-msgstr "Anchura en caracteres"
+msgstr "Anchura máxima en caracteres"
 
 #: gtk/gtklabel.c:514
-#, fuzzy
 msgid "The desired maximum width of the label, in characters"
-msgstr "La anchura deseada de la etiqueta, en caracteres"
+msgstr "La anchura máxima deseada de la etiqueta, en caracteres"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
