@@ -1000,10 +1000,10 @@ _gdk_input_grab_pointer (GdkWindow    *window,
   new_window = NULL;
   need_ungrab = FALSE;
 
-  GDK_NOTE (INPUT, g_print ("gdk_input_win32_grab_pointer: %#x %d %#x\n",
-			   (guint) GDK_WINDOW_HWND (window),
+  GDK_NOTE (INPUT, g_print ("gdk_input_win32_grab_pointer: %p %d %p\n",
+			   GDK_WINDOW_HWND (window),
 			   owner_events,
-			   (confine_to ? (guint) GDK_WINDOW_HWND (confine_to) : 0)));
+			   (confine_to ? GDK_WINDOW_HWND (confine_to) : 0)));
 
   while (tmp_list)
     {

@@ -1,3 +1,35 @@
+2002-03-06  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab,
+	gdk_pointer_ungrab): Bypass calls to the grab/ungrab functions in
+	gdkinput-win32.c, as they don't effectively do anything anyway.
+	(build_key_event_state): Set MOD2 bit if key is in AltGr group.
+	(gdk_event_translate): Call _gdk_windowing_window_get_offsets()
+	each time the offsets are used, on the window they refer to,
+	instead of once in the beginning. The window in question might
+	change due to event propagation.
+	(gdk_event_translate): Set key event group to 0 for non-AltGr
+	keys. Do set the SHIFT bit in the key event state also for
+	ISO_Left_Tab. Now backtabbing finally works again.
+
+	* gdk/win32/gdkunput-win32.c: Minor debugging output change.
+
+	* gdk/win32/gdkkeys-win32.c (update_keymap): Set VK_TAB mapping to
+	Gdk_Tab and GDK_ISO_Left_Tab, like on X11.
+	(gdk_keymap_translate_keyboard_state): Add similar code as in the
+	non-XKB case on X11 to generate a more correct
+	consumed_modifiers. Add debugging output.
+	(gdk_keyval_name): Use the U+xxxx format for UCS characters
+	encoded as keyvals. Never return NULL, but hex number
+	representation if keyval not in table.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_focus): Call
+	SetFocus(). Doesn't seem to have any harmful effect, and probably
+	is close to what this function is supposed to do. But it didn't
+	fix GtkCombo as I had hoped.
+	(gdk_window_set_type_hint): Don't intern the _NET_WM_* atoms that
+	weren't used and wouldn't have any meaning on Win32 anyway.
+
 Tue Mar  5 19:19:19 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_set_focus): When setting
@@ -107,7 +139,7 @@ Mon Mar  4 12:43:48 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state): 
 	When calling XKeycodeToKeysym, use group * keysyms_per_keycode / 2
-	not group * keysyms_per_keycode. (Tor Lillquist)
+	not group * keysyms_per_keycode. (Tor Lillqvist)
 
 	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state):
 	Remove the hack to fudge the return value for GDK_Tab + Shift

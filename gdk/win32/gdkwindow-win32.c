@@ -2302,8 +2302,7 @@ gdk_window_set_static_win_gravity (GdkWindow *window, gboolean on)
 {
   g_return_if_fail (window != NULL);
 
-  GDK_NOTE (MISC,
-	    g_print ("gdk_window_set_static_win_gravity: Not implemented\n"));
+  GDK_NOTE (MISC, g_print ("gdk_window_set_static_win_gravity: Not implemented\n"));
 }
 
 /*************************************************************
@@ -2485,7 +2484,10 @@ gdk_window_focus (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
   
+  GDK_NOTE (MISC, g_print ("gdk_window_focus: %p\n", GDK_WINDOW_HWND (window)));
+
   ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+  SetFocus (GDK_WINDOW_HWND (window));
 }
 
 void
@@ -2514,8 +2516,6 @@ void
 gdk_window_set_type_hint (GdkWindow        *window,
 			  GdkWindowTypeHint hint)
 {
-  GdkAtom atom;
-  
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -2525,27 +2525,22 @@ gdk_window_set_type_hint (GdkWindow        *window,
   switch (hint)
     {
     case GDK_WINDOW_TYPE_HINT_DIALOG:
-      atom = gdk_atom_intern ("_NET_WM_WINDOW_TYPE_DIALOG", FALSE);
       break;
     case GDK_WINDOW_TYPE_HINT_MENU:
-      atom = gdk_atom_intern ("_NET_WM_WINDOW_TYPE_MENU", FALSE);
       break;
     case GDK_WINDOW_TYPE_HINT_TOOLBAR:
-      atom = gdk_atom_intern ("_NET_WM_WINDOW_TYPE_TOOLBAR", FALSE);
       break;
     default:
       g_warning ("Unknown hint %d passed to gdk_window_set_type_hint", hint);
       /* Fall thru */
     case GDK_WINDOW_TYPE_HINT_NORMAL:
-      atom = gdk_atom_intern ("_NET_WM_WINDOW_TYPE_NORMAL", FALSE);
       break;
     }
   /*
    * XXX ???
    */
-  GDK_NOTE (MISC,
-            g_print ("gdk_window_set_type_hint (%p)\n",
-                     GDK_WINDOW_HWND (window)));
+  GDK_NOTE (MISC, g_print ("gdk_window_set_type_hint (%p)\n",
+			   GDK_WINDOW_HWND (window)));
 }
 
 void
