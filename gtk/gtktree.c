@@ -271,12 +271,10 @@ gtk_tree_add (GtkContainer *container,
 
   tree->children = g_list_append (tree->children, widget);
 
-#if 0
   if (!tree->selection && (tree->selection_mode == GTK_SELECTION_BROWSE))
     {
       gtk_tree_select_child (tree, widget);
     }
-#endif
 
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
     gtk_widget_queue_resize (widget);
@@ -946,6 +944,8 @@ gtk_real_tree_select_child (GtkTree   *tree,
 
       gtk_signal_emit (GTK_OBJECT (tree->root_tree), 
 		       tree_signals[SELECTION_CHANGED]);
+      break;
+
 
     case GTK_SELECTION_BROWSE:
       selection = root_selection;

@@ -478,6 +478,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
 {
   GtkNotebookPage *page;
   GList * next_list;
+  gint need_resize = FALSE;
       
   if (list->prev)
     {
@@ -494,13 +495,12 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   
   if (notebook->cur_page == list->data)
     { 
+      notebook->cur_page = NULL;
       if (next_list)
 	{
 	  page = next_list->data;
 	  gtk_notebook_switch_page (notebook, page, page_num);
 	}
-      else
-	notebook->cur_page = NULL;
     }
   
   if (list == notebook->first_tab)
@@ -510,6 +510,10 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   
   page = list->data;
   
+  if ((GTK_WIDGET_VISIBLE (page->child) || 
+       GTK_WIDGET_VISIBLE (page->tab_label)) && GTK_WIDGET_VISIBLE (notebook))
+    need_resize = TRUE;
+
   gtk_widget_unparent (page->child);
   gtk_widget_unparent (page->tab_label);
 
@@ -527,6 +531,10 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   notebook->children = g_list_remove_link (notebook->children, list);
   g_list_free (list);
   g_free (page);
+
+  if (need_resize)
+    gtk_widget_queue_resize (GTK_WIDGET (notebook));
+
 }
 
 gint

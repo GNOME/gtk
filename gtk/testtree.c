@@ -15,6 +15,8 @@ static void cb_tree_changed(GtkTree* tree) {
     GList* selected;
     gint nb_selected;
 
+    g_print("selection changed !\n");
+
     tree_buttons = gtk_object_get_user_data(GTK_OBJECT(tree));
 
     selected = tree->selection;

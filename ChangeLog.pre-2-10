@@ -1,3 +1,28 @@
+Sat Feb 21 14:49:17 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c: gtk_object_query_args takes an additional pointer
+ 	now which if supplied will point to an array holding the sequential
+	argument ids.
+
+	* gtk/gtktree.c: fix emission of selection_changed signal, supplied
+	by Bolliet Jerome.
+
+	* gtk/gtktreeitem.c: inline the plus and minus pixmaps, supplied by
+	Bolliet Jerome.
+
+	* gtk/gtknotebook.c: do a resize when a page is removed and don't
+	refer to the removed page on the switch signal, supplied by Lars Hamann
+	and Stefan Jeske.
+
+	* gtk/gtktoolbar.h:
+	* gtk/gtktoolbar.c:
+ 	gtk_toolbar_append_item, gtk_toolbar_prepend_item,
+ 	gtk_toolbar_insert_item, gtk_toolbar_append_widget,
+	gtk_toolbar_prepend_widget, gtk_toolbar_insert_widget: take an additional
+ 	gchar *tooltip_private_text as argument to fully support the underlying
+	call to gtk_tooltip_set_tip.
+
 Fri Feb 20 16:44:57 GMT 1998 Tony Gale <gale@gimp.org>
 
 	* docs/gtkfaq.sgml: added to list of GTK apps, added permissions notice

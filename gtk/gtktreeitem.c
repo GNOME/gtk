@@ -23,17 +23,10 @@
 #include "gtkmain.h"
 #include "gtksignal.h"
 
-/* remove comment if you want replace loading pixmap by static bitmap 
-   for icons 
-   experimental code and it is buggy */
-/* #define WITH_BITMAP */
+#include "tree_plus.xpm"
+#include "tree_minus.xpm"
 
 #define DEFAULT_DELTA 9
-
-#ifdef WITH_BITMAP
-#include "tree_plus.xbm"
-#include "tree_minus.xbm"
-#endif
 
 enum {
   COLLAPSE_TREE,
@@ -199,47 +192,27 @@ gtk_tree_item_init (GtkTreeItem *tree_item)
   GtkWidget *eventbox, *pixmapwid;
   static GdkPixmap *pixmap_plus = NULL;
   static GdkPixmap *pixmap_minus = NULL;
-#ifndef WITH_BITMAP
-  static GdkBitmap *mask = NULL; 
-#endif
-  static GtkStyle *style = NULL;
+  static GdkBitmap *mask_plus = NULL; 
+  static GdkBitmap *mask_minus = NULL;
+  GdkColor xpmcolor;
 
   tree_item->expanded = FALSE;
   tree_item->subtree = NULL;
   GTK_WIDGET_SET_FLAGS (tree_item, GTK_CAN_FOCUS);
 
-  if(style == NULL) 
+  /* check if icons are already created */
+  if(pixmap_plus == NULL && pixmap_minus == NULL) 
     {
-
-      style=gtk_widget_get_style(GTK_WIDGET(tree_item));
-
-#ifndef WITH_BITMAP
-      /* create pixmaps for one time, based on xpm file */
-      pixmap_plus = gdk_pixmap_create_from_xpm (GTK_WIDGET(tree_item)->window, &mask, 
-						&style->bg[GTK_STATE_NORMAL],
-						"tree_plus.xpm");
-      if(!pixmap_plus)
-	g_warning("gtk_tree_item_init: can't find tree_plus.xpm file !\n");
-
-      pixmap_minus = gdk_pixmap_create_from_xpm (GTK_WIDGET(tree_item)->window, &mask, 
-						 &style->bg[GTK_STATE_NORMAL],
-						 "tree_minus.xpm");      
-      if(!pixmap_minus)
-	g_warning("gtk_tree_item_init: can't find tree_minus.xpm file !\n");
-#else
-
-      pixmap_plus = gdk_pixmap_create_from_data(GTK_WIDGET(tree_item)->window,
-						(gchar*) tree_plus_bits,
-						tree_plus_width, tree_plus_height, -1,
-						&style->black,
-						&style->white);
-
-      pixmap_minus = gdk_pixmap_create_from_data(GTK_WIDGET(tree_item)->window,
-						 (gchar*) tree_minus_bits,
-						 tree_minus_width, tree_minus_height, -1,
-						 &style->black,
-						 &style->white);
-#endif /* WITH_BITMAP */
+      /* create pixmaps for plus icon */
+      pixmap_plus = gdk_pixmap_create_from_xpm_d(GTK_WIDGET(tree_item)->window,
+                                               &mask_plus,
+                                               &xpmcolor,
+                                               tree_plus);
+      /* create pixmaps for minus icon */
+      pixmap_minus = gdk_pixmap_create_from_xpm_d(GTK_WIDGET(tree_item)->window,
+                                                &mask_minus,
+                                                &xpmcolor,
+                                                tree_minus);
     }
   
   if(pixmap_plus && pixmap_minus) 
@@ -260,11 +233,7 @@ gtk_tree_item_init (GtkTreeItem *tree_item)
       tree_item->pixmaps_box = eventbox;
 
       /* create pixmap for button '+' */
-#ifndef WITH_BITMAP
-      pixmapwid = gtk_pixmap_new (pixmap_plus, mask);
-#else
-      pixmapwid = gtk_pixmap_new (pixmap_plus, NULL);
-#endif
+      pixmapwid = gtk_pixmap_new (pixmap_plus, mask_plus);
       if(!tree_item->expanded) 
 	gtk_container_add(GTK_CONTAINER(eventbox), pixmapwid);
       gtk_widget_show(pixmapwid);
@@ -273,11 +242,7 @@ gtk_tree_item_init (GtkTreeItem *tree_item)
       gtk_object_sink (GTK_OBJECT (tree_item->plus_pix_widget));
       
       /* create pixmap for button '-' */
-#ifndef WITH_BITMAP
-      pixmapwid = gtk_pixmap_new (pixmap_minus, mask);
-#else
-      pixmapwid = gtk_pixmap_new (pixmap_minus, NULL);
-#endif
+      pixmapwid = gtk_pixmap_new (pixmap_minus, mask_minus);
       if(tree_item->expanded) 
 	gtk_container_add(GTK_CONTAINER(eventbox), pixmapwid);
       gtk_widget_show(pixmapwid);
