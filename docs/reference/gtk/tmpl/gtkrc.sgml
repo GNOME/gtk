@@ -792,11 +792,9 @@ otherwise %NULL.
 
 <!-- ##### FUNCTION gtk_rc_get_module_dir ##### -->
 <para>
-Returns the directory in which GTK+ will look for
-theme engines.
 </para>
 
-@Returns: The directory. (Must be freed with g_free())
+@Returns:
 
 
 <!-- ##### FUNCTION gtk_rc_get_im_module_path ##### -->
