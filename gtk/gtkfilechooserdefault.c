@@ -3723,10 +3723,6 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
 
-  /* Test validity of path here.  */
-  if (!check_is_folder (impl->file_system, path, error))
-    return FALSE;
-
   if (impl->local_only &&
       !gtk_file_system_path_is_local (impl->file_system, path))
     {
@@ -3737,6 +3733,10 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 
       return FALSE;
     }
+
+  /* Test validity of path here.  */
+  if (!check_is_folder (impl->file_system, path, error))
+    return FALSE;
 
   if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, error))
     return FALSE;

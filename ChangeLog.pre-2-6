@@ -1,3 +1,9 @@
+2004-03-19  Morten Welinder  <terra@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_set_current_folder): Test existance of
+	the path after checking for locality, if needed.
+
 2004-03-19  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #137520.
