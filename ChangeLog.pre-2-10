@@ -1,5 +1,99 @@
 2000-07-25  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/testtext.c, gtk/testtextbuffer.c: update to reflect text
+	widget changes.
+
+	* gtk/gtktextview.h: To be consistent with usage of "line"
+	throughout the API to mean "newline-terminated thingy", change
+	MOVEMENT_LINE to be MOVEMENT_WRAPPED_LINE, and MOVEMENT_PARAGRAPH
+	to MOVEMENT_LINE.
+
+	(GtkTextView): Add flags for default editability, and whether to
+	show the cursor. Add functions to get/set that. Add 
+
+	(gtk_text_view_get_iter_location): new function
+
+	* gtk/gtktexttypes.h: Move GtkTextLine typedef from here to
+	gtktextlayout.h
+	(g_convert): Add g_convert temporarily, will go in glib in a bit
+	
+	* gtk/gtktexttagtable.h: include gtktexttag.h, and define
+	GtkTextTagTableForeach instead of brokenly using GHFunc.
+	Change gtk_text_tag_table_foreach() so it doesn't use GHFunc.
+
+	* gtk/gtktexttagprivate.h: Remove GtkTextStyleValues from here,
+	moved to public header.
+
+	* gtk/gtktexttag.h: Rename the "elide" attribute of tags to
+	"invisible", since "elide" was a bad name.
+	(gtk_text_tag_get_priority): Added
+
+	(GtkTextStyleValues): put this in public header, along with
+	functions to use it.
+
+	* gtk/gtktextmarkprivate.h: Include more headers, since we no
+	longer include gtktextbtree.h.
+
+	* gtk/gtktextmark.h: Add gtk_text_mark_ref, gtk_text_mark_unref,
+	gtk_text_mark_deleted
+
+	* gtk/gtktextlayout.h: Don't include the "really private" headers,
+	only buffer/iter. Forward declare GtkTextLIne and GtkTextLineData
+	to make this possible. Now we only need to install
+	gtktextlayout.h, not gtktextbtree.h and gtktext*private.h.
+	(However the Makefile.am isn't changed yet because of the
+	logistics of merging gtk-hp-patches piecemeal)
+
+	* gtk/gtktextiterprivate.h: include btree header, so it compiles;
+	rename gtk_text_iter_get_line to gtk_text_iter_get_text_line since
+	gtk_text_iter_get_line is now used in the public API for a
+	different purpose.
+
+	* gtk/gtktextiter.h: Clean up function names to be more
+	consistent. Always call char offset "offset" and byte index
+	"index". A "line" is always a line number. 
+
+	(gtk_text_iter_is_last): new function, more efficient than 
+	the existing way to check
+	(gtk_text_iter_is_first): new function, also more efficient
+
+	(gtk_text_iter_up_lines, gtk_text_iter_down_lines): Remove these
+
+	(gtk_text_iter_next_char, gtk_text_iter_prev_char): Renamed from 
+	gtk_text_iter_forward_char, etc.
+
+	(gtk_text_iter_forward_to_tag_toggle): Renamed from
+	forward_find_tag_toggle, since this isn't a linear search
+
+	(GtkTextCharPredicate): rename from GtkTextViewCharPredicate
+
+	(gtk_text_iter_forward_search, gtk_text_iter_backward_search): 
+	New functions, search for a buffer substring.
+
+	* gtk/gtktextbuffer.h: Add fields to store whether a paste is
+	interactive and default editable (since we need to store that info
+	until we receive the selection data).
+
+	Remove all the _at_char and at_line etc. versions of functions;
+	only have iterator versions.
+
+	Add _interactive() versions of functions, that consider the
+	editability of text. (FIXME add interactive flag to the 
+	insert/delete signals per Darin's suggestion)
+
+	(gtk_text_buffer_get_tag_table): new function, demand-creates the
+	tag table if necessary
+
+	Remove declaration of gtk_text_buffer_get_iter_from_string
+
+	(_gtk_text_buffer_get_btree): private/internal function, added.
+	
+
+	* gtk/gtktextbtree.h: Remove forward decl of GtkTextLineData.
+	(gtk_text_line_is_last): new function
+
+2000-07-25  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkprogressbar.h: Implement new sane, 5-function API for
 	using GtkProgressBar. See Changes-2.0.txt for details.
 

@@ -30,7 +30,7 @@ struct _GtkTextBuffer {
   GtkObject parent_instance;
 
   GtkTextTagTable *tag_table;
-  GtkTextBTree *tree;
+  GtkTextBTree *btree;
 
   /* Text currently pasted to the clipboard */
   gchar *clipboard_text;
@@ -42,6 +42,8 @@ struct _GtkTextBuffer {
   GtkWidget *selection_widget;
   gboolean have_selection;
   gboolean selection_handlers_installed;
+  gboolean paste_interactive;
+  gboolean paste_default_editable;
 };
 
 struct _GtkTextBufferClass {
@@ -95,6 +97,7 @@ gint           gtk_text_buffer_get_line_count (GtkTextBuffer   *buffer);
 gint           gtk_text_buffer_get_char_count (GtkTextBuffer   *buffer);
 
 
+GtkTextTagTable* gtk_text_buffer_get_tag_table (GtkTextBuffer  *buffer);
 
 /* Insert into the buffer */
 void gtk_text_buffer_insert            (GtkTextBuffer *buffer,
@@ -104,58 +107,38 @@ void gtk_text_buffer_insert            (GtkTextBuffer *buffer,
 void gtk_text_buffer_insert_at_cursor  (GtkTextBuffer *buffer,
                                         const gchar   *text,
                                         gint           len);
-void gtk_text_buffer_insert_at_char    (GtkTextBuffer *buffer,
-                                        gint           char_pos,
-                                        const gchar   *text,
-                                        gint           len);
-void gtk_text_buffer_insert_after_line (GtkTextBuffer *buffer,
-                                        gint           after_this_line,
-                                        const gchar   *text,
-                                        gint           len);
 
+gboolean gtk_text_buffer_insert_interactive           (GtkTextBuffer *buffer,
+                                                       GtkTextIter   *iter,
+                                                       const gchar   *text,
+                                                       gint           len,
+                                                       gboolean       default_editable);
+gboolean gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer,
+                                                       const gchar   *text,
+                                                       gint           len,
+                                                       gboolean       default_editable);
 
 
 /* Delete from the buffer */
+void     gtk_text_buffer_delete             (GtkTextBuffer *buffer,
+                                             GtkTextIter   *start_iter,
+                                             GtkTextIter   *end_iter);
+gboolean gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
+                                             GtkTextIter   *start_iter,
+                                             GtkTextIter   *end_iter,
+                                             gboolean       default_editable);
 
-void gtk_text_buffer_delete           (GtkTextBuffer *buffer,
-                                       GtkTextIter   *start_iter,
-                                       GtkTextIter   *end_iter);
-void gtk_text_buffer_delete_chars     (GtkTextBuffer *buffer,
-                                       gint           start_char,
-                                       gint           end_char);
-void gtk_text_buffer_delete_lines     (GtkTextBuffer *buffer,
-                                       gint           start_line,
-                                       gint           end_line);
-void gtk_text_buffer_delete_from_line (GtkTextBuffer *buffer,
-                                       gint           line,
-                                       gint           start_char,
-                                       gint           end_char);
+
+
 /* Obtain strings from the buffer */
 gchar          *gtk_text_buffer_get_text            (GtkTextBuffer     *buffer,
                                                      const GtkTextIter *start_iter,
                                                      const GtkTextIter *end_iter,
                                                      gboolean           include_hidden_chars);
-gchar          *gtk_text_buffer_get_text_chars      (GtkTextBuffer     *buffer,
-                                                     gint               start_char,
-                                                     gint               end_char,
-                                                     gboolean           include_hidden_chars);
-gchar          *gtk_text_buffer_get_text_from_line  (GtkTextBuffer     *buffer,
-                                                     gint               line,
-                                                     gint               start_char,
-                                                     gint               end_char,
-                                                     gboolean           include_hidden_chars);
+
 gchar          *gtk_text_buffer_get_slice           (GtkTextBuffer     *buffer,
                                                      const GtkTextIter *start_iter,
                                                      const GtkTextIter *end_iter,
-                                                     gboolean           include_hidden_chars);
-gchar          *gtk_text_buffer_get_slice_chars     (GtkTextBuffer     *buffer,
-                                                     gint               start_char,
-                                                     gint               end_char,
-                                                     gboolean           include_hidden_chars);
-gchar          *gtk_text_buffer_get_slice_from_line (GtkTextBuffer     *buffer,
-                                                     gint               line,
-                                                     gint               start_char,
-                                                     gint               end_char,
                                                      gboolean           include_hidden_chars);
 
 /* Insert a pixmap */
@@ -163,12 +146,6 @@ void gtk_text_buffer_insert_pixmap         (GtkTextBuffer *buffer,
                                             GtkTextIter   *iter,
                                             GdkPixmap     *pixmap,
                                             GdkBitmap     *mask);
-void gtk_text_buffer_insert_pixmap_at_char (GtkTextBuffer *buffer,
-                                            gint           char_index,
-                                            GdkPixmap     *pixmap,
-                                            GdkBitmap     *mask);
-
-
 
 /* Mark manipulation */
 GtkTextMark   *gtk_text_buffer_create_mark (GtkTextBuffer     *buffer,
@@ -191,67 +168,55 @@ void gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
 
 
 /* Tag manipulation */
-void gtk_text_buffer_apply_tag_to_chars    (GtkTextBuffer     *buffer,
-                                            const gchar       *name,
-                                            gint               start_char,
-                                            gint               end_char);
-void gtk_text_buffer_remove_tag_from_chars (GtkTextBuffer     *buffer,
-                                            const gchar       *name,
-                                            gint               start_char,
-                                            gint               end_char);
 void gtk_text_buffer_apply_tag             (GtkTextBuffer     *buffer,
-                                            const gchar       *name,
+                                            GtkTextTag        *tag,
                                             const GtkTextIter *start_index,
                                             const GtkTextIter *end_index);
 void gtk_text_buffer_remove_tag            (GtkTextBuffer     *buffer,
+                                            GtkTextTag        *tag,
+                                            const GtkTextIter *start_index,
+                                            const GtkTextIter *end_index);
+void gtk_text_buffer_apply_tag_by_name     (GtkTextBuffer     *buffer,
+                                            const gchar       *name,
+                                            const GtkTextIter *start_index,
+                                            const GtkTextIter *end_index);
+void gtk_text_buffer_remove_tag_by_name    (GtkTextBuffer     *buffer,
                                             const gchar       *name,
                                             const GtkTextIter *start_index,
                                             const GtkTextIter *end_index);
 
 
-
 /* You can either ignore the return value, or use it to
-   set the attributes of the tag */
+ * set the attributes of the tag. tag_name can be NULL
+ */
 GtkTextTag    *gtk_text_buffer_create_tag (GtkTextBuffer *buffer,
                                            const gchar   *tag_name);
 
 /* Obtain iterators pointed at various places, then you can move the
    iterator around using the GtkTextIter operators */
+void gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer *buffer,
+                                              GtkTextIter   *iter,
+                                              gint           line_number,
+                                              gint           char_offset);
+void gtk_text_buffer_get_iter_at_offset      (GtkTextBuffer *buffer,
+                                              GtkTextIter   *iter,
+                                              gint           char_offset);
+void gtk_text_buffer_get_iter_at_line        (GtkTextBuffer *buffer,
+                                              GtkTextIter   *iter,
+                                              gint           line_number);
+void gtk_text_buffer_get_last_iter           (GtkTextBuffer *buffer,
+                                              GtkTextIter   *iter);
+void gtk_text_buffer_get_bounds              (GtkTextBuffer *buffer,
+                                              GtkTextIter   *start,
+                                              GtkTextIter   *end);
+void gtk_text_buffer_get_iter_at_mark        (GtkTextBuffer *buffer,
+                                              GtkTextIter   *iter,
+                                              GtkTextMark   *mark);
 
-void     gtk_text_buffer_get_iter_at_line_char (GtkTextBuffer *buffer,
-                                                GtkTextIter   *iter,
-                                                gint           line_number,
-                                                gint           char_number);
-void     gtk_text_buffer_get_iter_at_char      (GtkTextBuffer *buffer,
-                                                GtkTextIter   *iter,
-                                                gint           char_index);
-void     gtk_text_buffer_get_iter_at_line      (GtkTextBuffer *buffer,
-                                                GtkTextIter   *iter,
-                                                gint           line_number);
-void     gtk_text_buffer_get_last_iter         (GtkTextBuffer *buffer,
-                                                GtkTextIter   *iter);
-void     gtk_text_buffer_get_bounds            (GtkTextBuffer *buffer,
-                                                GtkTextIter   *start,
-                                                GtkTextIter   *end);
-void     gtk_text_buffer_get_iter_at_mark      (GtkTextBuffer *buffer,
-                                                GtkTextIter   *iter,
-                                                GtkTextMark   *mark);
 
 
 /* There's no get_first_iter because you just get the iter for
    line or char 0 */
-
-/*
-  Parses a string, read the man page for the Tk text widget; the only
-  variation from that is we don't support getting the index at a
-  certain pixel since the buffer has no pixel knowledge.  This
-  function is mostly useful for language bindings I think.
-*/
-gboolean gtk_text_buffer_get_iter_from_string (GtkTextBuffer *buffer,
-                                               GtkTextIter   *iter,
-                                               const gchar   *iter_string);
-
-
 
 GSList         *gtk_text_buffer_get_tags (GtkTextBuffer     *buffer,
                                           const GtkTextIter *iter);
@@ -269,16 +234,26 @@ void            gtk_text_buffer_set_modified            (GtkTextBuffer *buffer,
 void            gtk_text_buffer_set_clipboard_contents  (GtkTextBuffer *buffer,
                                                          const gchar   *text);
 const gchar    *gtk_text_buffer_get_clipboard_contents  (GtkTextBuffer *buffer);
+
+
 void            gtk_text_buffer_paste_primary_selection (GtkTextBuffer *buffer,
                                                          GtkTextIter   *override_location,
-                                                         guint32        time);
-gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer);
+                                                         guint32        time,
+                                                         gboolean       interactive,
+                                                         gboolean       default_editable);
+gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer,
+                                                         gboolean       interactive,
+                                                         gboolean       default_editable);
 void            gtk_text_buffer_cut                     (GtkTextBuffer *buffer,
-                                                         guint32        time);
+                                                         guint32        time,
+                                                         gboolean       interactive,
+                                                         gboolean       default_editable);
 void            gtk_text_buffer_copy                    (GtkTextBuffer *buffer,
                                                          guint32        time);
 void            gtk_text_buffer_paste_clipboard         (GtkTextBuffer *buffer,
-                                                         guint32        time);
+                                                         guint32        time,
+                                                         gboolean       interactive,
+                                                         gboolean       default_editable);
 gboolean        gtk_text_buffer_get_selection_bounds    (GtkTextBuffer *buffer,
                                                          GtkTextIter   *start,
                                                          GtkTextIter   *end);
@@ -301,6 +276,8 @@ gboolean gtk_text_buffer_find_regexp(GtkTextBuffer *buffer,
 
 /* INTERNAL private stuff */
 void            gtk_text_buffer_spew                   (GtkTextBuffer      *buffer);
+
+GtkTextBTree*   _gtk_text_buffer_get_btree             (GtkTextBuffer      *buffer);
 
 #ifdef __cplusplus
 }

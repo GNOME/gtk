@@ -1,10 +1,6 @@
 #ifndef GTK_TEXT_LAYOUT_H
 #define GTK_TEXT_LAYOUT_H
 
-#include <gtk/gtktextbuffer.h>
-#include <gtk/gtktextiter.h>
-#include <gtk/gtktextbtree.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -16,6 +12,15 @@ extern "C" {
  * to use it. 
  */
 
+#include <gtk/gtktextbuffer.h>
+#include <gtk/gtktextiter.h>
+
+/* forward declarations that have to be here to avoid including
+ * gtktextbtree.h
+ */
+typedef struct _GtkTextLine     GtkTextLine;
+typedef struct _GtkTextLineData GtkTextLineData;
+
 #define GTK_TYPE_TEXT_LAYOUT             (gtk_text_layout_get_type())
 #define GTK_TEXT_LAYOUT(obj)             (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_LAYOUT, GtkTextLayout))
 #define GTK_TEXT_LAYOUT_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_LAYOUT, GtkTextLayoutClass))
@@ -23,6 +28,7 @@ extern "C" {
 #define GTK_IS_TEXT_LAYOUT_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_LAYOUT))
 #define GTK_TEXT_LAYOUT_GET_CLASS(obj)   (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TEXT_LAYOUT, GtkTextLayoutClass))
 
+typedef struct _GtkTextLayout      GtkTextLayout;
 typedef struct _GtkTextLayoutClass GtkTextLayoutClass;
 typedef struct _GtkTextLineDisplay GtkTextLineDisplay;
 typedef struct _GtkTextCursorDisplay GtkTextCursorDisplay;

@@ -126,14 +126,23 @@ gtk_text_tag_table_destroy (GtkObject *object)
 }
 
 static void
+foreach_unref (GtkTextTag *tag, gpointer data)
+{
+  g_object_unref (G_OBJECT (tag));
+}
+
+static void
 gtk_text_tag_table_finalize (GObject *object)
 {
   GtkTextTagTable *table;
 
   table = GTK_TEXT_TAG_TABLE(object);
 
-  g_hash_table_destroy(table->hash);
+  gtk_text_tag_table_foreach (table, foreach_unref, NULL);
   
+  g_hash_table_destroy(table->hash);
+  g_slist_free (table->anonymous);
+
   (* G_OBJECT_CLASS(parent_class)->finalize) (object);
 }
 
@@ -174,14 +183,23 @@ gtk_text_tag_table_add(GtkTextTagTable *table, GtkTextTag *tag)
 {
   guint size;
   
-  g_return_if_fail(GTK_IS_TEXT_TAG_TABLE(table));
-  g_return_if_fail(GTK_IS_OBJECT(tag));
-  g_return_if_fail(g_hash_table_lookup(table->hash, tag->name) == NULL);
+  g_return_if_fail(GTK_IS_TEXT_TAG_TABLE (table));
+  g_return_if_fail(GTK_IS_TEXT_TAG (tag));
+  g_return_if_fail(tag->name == NULL ||
+                   g_hash_table_lookup(table->hash, tag->name) == NULL);
   g_return_if_fail(tag->table == NULL);
-  
+
   gtk_object_ref(GTK_OBJECT(tag));
   gtk_object_sink(GTK_OBJECT(tag));
-  g_hash_table_insert(table->hash, tag->name, tag);
+
+  if (tag->name)
+    g_hash_table_insert(table->hash, tag->name, tag);
+  else
+    {
+      table->anonymous = g_slist_prepend (table->anonymous, tag);
+      table->anon_count += 1;
+    }
+  
   tag->table = table;
 
   /* We get the highest tag priority, as the most-recently-added
@@ -204,19 +222,11 @@ gtk_text_tag_table_lookup(GtkTextTagTable *table, const gchar *name)
 }
 
 void
-gtk_text_tag_table_remove(GtkTextTagTable *table, const gchar *name)
+gtk_text_tag_table_remove(GtkTextTagTable *table, GtkTextTag *tag)
 {
-  GtkTextTag *tag;
-  
-  g_return_if_fail(GTK_IS_TEXT_TAG_TABLE(table));
-  g_return_if_fail(name != NULL);
-  
-  tag = g_hash_table_lookup(table->hash, name);
-
-  if (tag == NULL)
-    return;
-
-  g_return_if_fail(tag->table == table);
+  g_return_if_fail (GTK_IS_TEXT_TAG_TABLE(table));
+  g_return_if_fail (GTK_IS_TEXT_TAG (tag));
+  g_return_if_fail (tag->table == table);  
 
   /* Set ourselves to the highest priority; this means
      when we're removed, there won't be any gaps in the
@@ -224,23 +234,48 @@ gtk_text_tag_table_remove(GtkTextTagTable *table, const gchar *name)
   gtk_text_tag_set_priority(tag, gtk_text_tag_table_size(table) - 1);
   
   tag->table = NULL;
-  
-  g_hash_table_remove(table->hash, name);
 
+  if (tag->name)
+    g_hash_table_remove(table->hash, tag->name);
+  else
+    {
+      table->anonymous = g_slist_remove (table->anonymous, tag);
+      table->anon_count -= 1;
+    }
+  
   gtk_signal_emit(GTK_OBJECT(table), signals[TAG_REMOVED], tag);
 
   gtk_object_unref(GTK_OBJECT(tag));
 }
 
-void
-gtk_text_tag_table_foreach(GtkTextTagTable *table,
-                            GHFunc func,
-                            gpointer data)
+struct ForeachData
 {
+  GtkTextTagTableForeach func;
+  gpointer data;
+};
+
+static void
+hash_foreach (gpointer key, gpointer value, gpointer data)
+{
+  struct ForeachData *fd = data;
+
+  (* fd->func) (value, fd->data);
+}
+
+void
+gtk_text_tag_table_foreach(GtkTextTagTable       *table,
+                           GtkTextTagTableForeach func,
+                           gpointer               data)
+{
+  struct ForeachData d;
+  
   g_return_if_fail(GTK_IS_TEXT_TAG_TABLE(table));
   g_return_if_fail(func != NULL);
 
-  g_hash_table_foreach(table->hash, func, data);
+  d.func = func;
+  d.data = data;
+  
+  g_hash_table_foreach(table->hash, hash_foreach, &d);
 }
 
 guint
@@ -248,5 +283,5 @@ gtk_text_tag_table_size(GtkTextTagTable *table)
 {
   g_return_val_if_fail(GTK_IS_TEXT_TAG_TABLE(table), 0);
 
-  return g_hash_table_size(table->hash);
+  return g_hash_table_size(table->hash) + table->anon_count;
 }

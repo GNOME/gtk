@@ -585,21 +585,23 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 	  GtkTextIter line_start, line_end;
 	  gint byte_count = gtk_text_line_byte_count (line);
 	  
-	  gtk_text_btree_get_iter_at_line (layout->buffer->tree, &line_start,
+	  gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
+                                           &line_start,
 					   line, 0);
-	  gtk_text_btree_get_iter_at_line (layout->buffer->tree, &line_end,
+	  gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
+                                           &line_end,
 					   line, byte_count - 1);
 
 	  if (gtk_text_iter_compare (&selection_start, &line_end) < 0 &&
 	      gtk_text_iter_compare (&selection_end, &line_start) > 0)
 	    {
 	      if (gtk_text_iter_compare (&selection_start, &line_start) >= 0)
-		selection_start_index = gtk_text_iter_get_line_byte (&selection_start);
+		selection_start_index = gtk_text_iter_get_line_index (&selection_start);
 	      else
 		selection_start_index = -1;
 
 	      if (gtk_text_iter_compare (&selection_end, &line_end) <= 0)
-		selection_end_index = gtk_text_iter_get_line_byte (&selection_end);
+		selection_end_index = gtk_text_iter_get_line_index (&selection_end);
 	      else
 		selection_end_index = byte_count;
 	    }

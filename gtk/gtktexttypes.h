@@ -1,16 +1,16 @@
 #ifndef GTK_TEXT_TYPES_H
 #define GTK_TEXT_TYPES_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include <glib.h>
 
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktexttagprivate.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
 
-typedef struct _GtkTextLine GtkTextLine;
 typedef struct _GtkTextCounter GtkTextCounter;
 typedef struct _GtkTextLineSegment GtkTextLineSegment;
 typedef struct _GtkTextLineSegmentClass GtkTextLineSegmentClass;
@@ -19,7 +19,6 @@ typedef struct _GtkTextViewSearch GtkTextViewSearch;
 typedef struct _GtkTextTab GtkTextTab;
 typedef struct _GtkTextViewStyle GtkTextViewStyle;
 typedef struct _GtkTextMarkBody GtkTextMarkBody;
-typedef struct _GtkTextLayout GtkTextLayout;
 
 /*
  * Search
@@ -126,6 +125,12 @@ gchar*   gtk_text_latin1_to_utf         (const gchar *latin1,
                                          gint         len);
 
 
+gchar*   g_convert (const gchar *str,
+                    gint         len,
+                    const gchar *to_codeset,
+                    const gchar *from_codeset,
+                    gint        *bytes_converted);
+       
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -7,10 +7,13 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#include <gtk/gtktextiter.h>
+#include <gtk/gtktextbtree.h>
+
 GtkTextLineSegment *gtk_text_iter_get_indexable_segment(const GtkTextIter *iter);
 GtkTextLineSegment *gtk_text_iter_get_any_segment(const GtkTextIter *iter);
 
-GtkTextLine *gtk_text_iter_get_line(const GtkTextIter *iter);
+GtkTextLine *gtk_text_iter_get_text_line(const GtkTextIter *iter);
 
 GtkTextBTree *gtk_text_iter_get_btree(const GtkTextIter *iter);
 

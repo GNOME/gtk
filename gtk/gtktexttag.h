@@ -77,7 +77,7 @@ struct _GtkTextTag {
   guint underline_set : 1;
   guint wrap_mode_set : 1;
   guint bg_full_height_set : 1;
-  guint elide_set : 1;
+  guint invisible_set : 1;
   guint editable_set : 1;
   guint language_set : 1;
   guint pad1 : 1;
@@ -96,12 +96,107 @@ struct _GtkTextTagClass {
 
 GtkType      gtk_text_tag_get_type     (void);
 GtkTextTag  *gtk_text_tag_new          (const gchar       *name);
+gint         gtk_text_tag_get_priority (GtkTextTag        *tag);
 void         gtk_text_tag_set_priority (GtkTextTag        *tag,
 					gint               priority);
 gint         gtk_text_tag_event        (GtkTextTag        *tag,
 					GtkObject         *event_object,
 					GdkEvent          *event,
 					const GtkTextIter *iter);
+
+/*
+ * Style object created by folding a set of tags together
+ */
+
+typedef struct _GtkTextAppearance GtkTextAppearance;
+
+struct _GtkTextAppearance
+{
+  GdkColor bg_color;
+  GdkColor fg_color;
+  GdkBitmap *bg_stipple;
+  GdkBitmap *fg_stipple;
+
+  guint underline : 4;		/* PangoUnderline */
+  guint overstrike : 1;
+
+  /* Whether to use background-related values; this is irrelevant for
+   * the values struct when in a tag, but is used for the composite
+   * values struct; it's true if any of the tags being composited
+   * had background stuff set. */
+  guint draw_bg : 1;
+
+  /* This is only used when we are actually laying out and rendering
+   * a paragraph; not when a GtkTextAppearance is part of a
+   * GtkTextStyleValues.
+   */
+  guint inside_selection : 1;
+};
+
+struct _GtkTextStyleValues
+{
+  guint refcount;
+
+  GtkTextAppearance appearance;
+  
+  gint border_width;
+  GtkShadowType relief;
+  GtkJustification justify;
+  GtkTextDirection direction;
+  
+  PangoFontDescription *font_desc;
+  
+  /* lMargin1 */
+  gint left_margin;
+  
+  /* lMargin2 */
+  gint left_wrapped_line_margin;
+
+  /* super/subscript offset, can be negative */
+  gint offset;
+  
+  gint right_margin;
+
+  gint pixels_above_lines;
+
+  gint pixels_below_lines;
+
+  gint pixels_inside_wrap;
+
+  GtkTextTabArray *tab_array;
+  
+  GtkWrapMode wrap_mode;	/* How to handle wrap-around for this tag.
+				 * Must be GTK_WRAPMODE_CHAR,
+				 * GTK_WRAPMODE_NONE, GTK_WRAPMODE_WORD
+                                 */
+
+  gchar *language;
+  
+  /* hide the text  */
+  guint invisible : 1;
+
+  /* Background is fit to full line height rather than
+   * baseline +/- ascent/descent (font height) */
+  guint bg_full_height : 1;
+  
+  /* can edit this text */
+  guint editable : 1;
+
+  /* colors are allocated etc. */
+  guint realized : 1;
+
+  guint pad1 : 1;
+  guint pad2 : 1;
+  guint pad3 : 1;
+  guint pad4 : 1;
+};
+
+GtkTextStyleValues *gtk_text_style_values_new       (void);
+void                gtk_text_style_values_copy      (GtkTextStyleValues *src,
+                                                     GtkTextStyleValues *dest);
+void                gtk_text_style_values_unref     (GtkTextStyleValues *values);
+void                gtk_text_style_values_ref       (GtkTextStyleValues *values);
+
 
 #ifdef __cplusplus
 }

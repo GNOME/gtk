@@ -7,6 +7,10 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#include <gtk/gtktexttag.h>
+
+typedef void (* GtkTextTagTableForeach) (GtkTextTag *tag, gpointer data);
+
 #define GTK_TYPE_TEXT_TAG_TABLE            (gtk_text_tag_table_get_type())
 #define GTK_TEXT_TAG_TABLE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_TAG_TABLE, GtkTextTagTable))
 #define GTK_TEXT_TAG_TABLE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_TAG_TABLE, GtkTextTagTableClass))
@@ -20,6 +24,8 @@ struct _GtkTextTagTable {
   GtkObject parent_instance;
   
   GHashTable *hash;
+  GSList *anonymous;
+  gint anon_count;
 };
 
 struct _GtkTextTagTableClass {
@@ -33,17 +39,17 @@ struct _GtkTextTagTableClass {
 GtkType          gtk_text_tag_table_get_type (void);
 
 GtkTextTagTable *gtk_text_tag_table_new      (void);
-void             gtk_text_tag_table_add      (GtkTextTagTable *table,
-					      GtkTextTag      *tag);
-GtkTextTag      *gtk_text_tag_table_lookup   (GtkTextTagTable *table,
-					      const gchar     *name);
-void             gtk_text_tag_table_remove   (GtkTextTagTable *table,
-					      const gchar     *name);
-void             gtk_text_tag_table_foreach  (GtkTextTagTable *table,
-					      GHFunc           func,
-					      gpointer         data);
+void             gtk_text_tag_table_add      (GtkTextTagTable        *table,
+                                              GtkTextTag             *tag);
+void             gtk_text_tag_table_remove   (GtkTextTagTable        *table,
+                                              GtkTextTag             *tag);
+GtkTextTag      *gtk_text_tag_table_lookup   (GtkTextTagTable        *table,
+                                              const gchar            *name);
+void             gtk_text_tag_table_foreach  (GtkTextTagTable        *table,
+                                              GtkTextTagTableForeach  func,
+                                              gpointer                data);
+guint            gtk_text_tag_table_size     (GtkTextTagTable        *table);
 
-guint            gtk_text_tag_table_size     (GtkTextTagTable *table);
 
 #ifdef __cplusplus
 }

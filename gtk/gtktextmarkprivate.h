@@ -1,11 +1,12 @@
 #ifndef GTK_TEXT_MARK_PRIVATE_H
 #define GTK_TEXT_MARK_PRIVATE_H
 
-#include <gtk/gtktexttypes.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+#include <gtk/gtktexttypes.h>
+#include <gtk/gtktextlayout.h>
 
 #define GTK_IS_TEXT_MARK(mark) (((GtkTextLineSegment*)mark)->type == &gtk_text_left_mark_type || \
                                 ((GtkTextLineSegment*)mark)->type == &gtk_text_right_mark_type)
