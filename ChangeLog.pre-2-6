@@ -1,3 +1,11 @@
+Thu Nov 25 14:32:35 2004  Manish Singh  <yosh@gimp.org>
+
+	* gdk/abicheck.sh
+	* gtk/abicheck.sh: filter out G_GNUC stuff when doing the compare.
+
+	* gtk/gtkmenuitem.c (gtk_menu_shell_button_release): add
+	GTK_MENU_ITEM() cast.
+
 2004-11-25  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* configure.in: Add forgotten «nb» to ALL_LINGUAS.

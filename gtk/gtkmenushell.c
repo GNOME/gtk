@@ -510,7 +510,7 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	      if (GTK_MENU_ITEM (menu_item)->submenu == NULL)
 		gtk_menu_shell_activate_item (menu_shell, menu_item, TRUE);
 	      else
-		gtk_menu_item_select (menu_item);
+		gtk_menu_item_select (GTK_MENU_ITEM (menu_item));
 	      return TRUE;
 	    }
 	  else if (menu_item &&
