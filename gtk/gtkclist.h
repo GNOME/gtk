@@ -125,6 +125,9 @@ struct _GtkCList
   /* the list's selection mode (gtkenums.h) */
   GtkSelectionMode selection_mode;
 
+  /* list of selected rows */
+  GList *selection;
+
   /* scrollbars */
   GtkWidget *vscrollbar;
   GtkWidget *hscrollbar;
@@ -310,7 +313,8 @@ void gtk_clist_set_row_height (GtkCList * clist,
 /* scroll the viewing area of the list to the given column
  * and row; row_align and col_align are between 0-1 representing the
  * location the row should appear on the screnn, 0.0 being top or left,
- * 1.0 being bottom or right */
+ * 1.0 being bottom or right; if row or column is -1 then then there
+ * is no change */
 void gtk_clist_moveto (GtkCList * clist,
 		       gint row,
 		       gint column,
