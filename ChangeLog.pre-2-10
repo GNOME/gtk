@@ -1,3 +1,12 @@
+2004-11-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): Don't
+	do the popup-on-click handling for menubars.  (#159931, 
+	Søren Sandmann)
+	
+	* gtk/gtkmenuitem.c (gtk_real_menu_item_select): Don't 
+	handle popup delay if the submenu is already mapped.	
+
 Mon Nov 29 16:56:33 2004  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkcellview.h: remove gtk_cell_view_set_cell_data() declaration.
@@ -8,7 +17,7 @@ Mon Nov 29 16:56:33 2004  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkfilechooserdefault.c (trap_activate_cb): Don't handle
 	Enter if we are in SELECT_FOLDER or CREATE_FOLDER actions.  This
-	lets us navigate thei file system more easily.
+	lets us navigate the file system more easily.
 	(gtk_file_chooser_default_should_respond): If we are in
 	SELECT_FOLDER or CREATE_FOLDER modes, return TRUE if something is
 	selected.

@@ -838,13 +838,15 @@ gtk_real_menu_item_select (GtkItem *item)
 
   menu_item = GTK_MENU_ITEM (item);
 
-  if (menu_item->submenu)
+  if (menu_item->submenu &&
+      !GTK_WIDGET_MAPPED (menu_item->submenu))
     {
       gint popup_delay;
 
       if (menu_item->timer)
 	{
 	  g_source_remove (menu_item->timer);
+	  menu_item->timer = 0;
 	  popup_delay = 0;
 	}
       else

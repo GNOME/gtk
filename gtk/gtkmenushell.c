@@ -508,10 +508,15 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	      _gtk_menu_item_is_selectable (menu_item))
 	    {
 	      if (GTK_MENU_ITEM (menu_item)->submenu == NULL)
-		gtk_menu_shell_activate_item (menu_shell, menu_item, TRUE);
-	      else
-		gtk_menu_item_select (GTK_MENU_ITEM (menu_item));
-	      return TRUE;
+		{
+		  gtk_menu_shell_activate_item (menu_shell, menu_item, TRUE);
+		  return TRUE;
+		}
+	      else if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement != GTK_TOP_BOTTOM)
+		{
+		  gtk_menu_item_select (GTK_MENU_ITEM (menu_item));
+		  return TRUE;
+		}
 	    }
 	  else if (menu_item &&
 		   !_gtk_menu_item_is_selectable (menu_item) &&
