@@ -647,19 +647,19 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
 	  if (!arg->d.string_data)
 	    {
 	      g_warning ("gtk_binding_entry_add_signal(): value of `string' arg[%u] is `NULL'", i);
-	      i = n_args + 2;
+	      i += n_args + 1;
 	    }
 	  break;
 	default:
 	  g_warning ("gtk_binding_entry_add_signal(): unsupported type `%s' for arg[%u]",
 		     gtk_type_name (arg->arg_type), i);
-	  i = n_args + 2;
+	  i += n_args + 1;
 	  break;
 	}
     }
   va_end (args);
 
-  if (i == n_args + 1 || i == 0)
+  if (i == n_args || i == 0)
     {
       slist = g_slist_reverse (slist);
       gtk_binding_entry_add_signall (binding_set, keyval, modifiers, signal_name, slist);

@@ -965,9 +965,9 @@ gchar*
 gtk_accelerator_name (guint           accelerator_key,
 		      GdkModifierType accelerator_mods)
 {
+  static const gchar text_release[] = "<Release>";
   static const gchar text_shift[] = "<Shift>";
   static const gchar text_control[] = "<Control>";
-  static const gchar text_release[] = "<Release>";
   static const gchar text_mod1[] = "<Alt>";
   static const gchar text_mod2[] = "<Mod2>";
   static const gchar text_mod3[] = "<Mod3>";
@@ -984,12 +984,12 @@ gtk_accelerator_name (guint           accelerator_key,
     keyval_name = "";
 
   l = 0;
+  if (accelerator_mods & GDK_RELEASE_MASK)
+    l += sizeof (text_release) - 1;
   if (accelerator_mods & GDK_SHIFT_MASK)
     l += sizeof (text_shift) - 1;
   if (accelerator_mods & GDK_CONTROL_MASK)
     l += sizeof (text_control) - 1;
-  if (accelerator_mods & GDK_RELEASE_MASK)
-    l += sizeof (text_release) - 1;
   if (accelerator_mods & GDK_MOD1_MASK)
     l += sizeof (text_mod1) - 1;
   if (accelerator_mods & GDK_MOD2_MASK)
@@ -1006,6 +1006,11 @@ gtk_accelerator_name (guint           accelerator_key,
 
   l = 0;
   accelerator[l] = 0;
+  if (accelerator_mods & GDK_RELEASE_MASK)
+    {
+      strcpy (accelerator + l, text_release);
+      l += sizeof (text_release) - 1;
+    }
   if (accelerator_mods & GDK_SHIFT_MASK)
     {
       strcpy (accelerator + l, text_shift);
@@ -1015,11 +1020,6 @@ gtk_accelerator_name (guint           accelerator_key,
     {
       strcpy (accelerator + l, text_control);
       l += sizeof (text_control) - 1;
-    }
-  if (accelerator_mods & GDK_RELEASE_MASK)
-    {
-      strcpy (accelerator + l, text_release);
-      l += sizeof (text_release) - 1;
     }
   if (accelerator_mods & GDK_MOD1_MASK)
     {

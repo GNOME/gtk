@@ -337,6 +337,10 @@ struct _GtkWidgetClass
   /* selection */
   void (* selection_received)      (GtkWidget          *widget,
 				    GtkSelectionData   *selection_data);
+
+  /* action signals */
+  void (* debug_msg)		   (GtkWidget	       *widget,
+				    const gchar	       *string);
 };
 
 struct _GtkWidgetAuxInfo

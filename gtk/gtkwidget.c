@@ -85,6 +85,7 @@ enum {
   CLIENT_EVENT,
   NO_EXPOSE_EVENT,
   VISIBILITY_NOTIFY_EVENT,
+  DEBUG_MSG,
   LAST_SIGNAL
 };
 
@@ -286,6 +287,13 @@ gtk_widget_get_type (void)
  *
  *   results:
  *****************************************/
+#include "stdio.h"
+static void
+gtk_widget_debug_msg (GtkWidget          *widget,
+		      const gchar        *string)
+{
+  fprintf (stderr, "Gtk-DEBUG: %s\n", string);
+}
 
 static void
 gtk_widget_class_init (GtkWidgetClass *klass)
@@ -687,6 +695,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_widget_marshal_signal_4,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
+  widget_signals[DEBUG_MSG] =
+    gtk_signal_new ("debug_msg",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, debug_msg),
+		    gtk_widget_marshal_signal_1,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_STRING);
 
   gtk_object_class_add_signals (object_class, widget_signals, LAST_SIGNAL);
 
@@ -742,8 +758,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drop_enter_event = NULL;
   klass->drop_leave_event = NULL;
   klass->drop_data_available_event = NULL;
-  klass->other_event = NULL;
   klass->no_expose_event = NULL;
+  klass->other_event = NULL;
+
+  klass->debug_msg = gtk_widget_debug_msg;
 
   /* bindings test
    */
@@ -751,8 +769,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
     GtkBindingSet *binding_set;
 
     binding_set = gtk_binding_set_by_class (klass);
-    gtk_binding_entry_add_signal (binding_set, '9', GDK_CONTROL_MASK|GDK_RELEASE_MASK, "hide", 0);
-    gtk_binding_entry_add_signal (binding_set, '9', GDK_CONTROL_MASK|GDK_RELEASE_MASK, "show", 0);
+    gtk_binding_entry_add_signal (binding_set,
+				  '9', GDK_CONTROL_MASK | GDK_RELEASE_MASK,
+				  "debug_msg",
+				  1,
+				  GTK_TYPE_STRING, "GtkWidgetClass test");
   }
 }
 

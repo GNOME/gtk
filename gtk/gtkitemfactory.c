@@ -579,10 +579,12 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
 		    NULL);
   gtk_object_ref (GTK_OBJECT (ifactory));
   gtk_object_sink (GTK_OBJECT (ifactory));
-  gtk_signal_connect_object_while_alive (GTK_OBJECT (ifactory->widget),
+  /*
+    gtk_signal_connect_object_while_alive (GTK_OBJECT (ifactory->widget),
 					 "destroy",
-					 GTK_SIGNAL_FUNC (gtk_widget_destroy),
+					 GTK_SIGNAL_FUNC (gtk_object_destroy),
 					 GTK_OBJECT (ifactory));
+  */
   gtk_item_factory_add_item (ifactory,
 			     "", NULL,
 			     NULL, 0, NULL, 0,

@@ -1,3 +1,12 @@
+Wed Jul  1 20:58:46 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c: temporary implementation of action signal "debug_msg"
+
+	* gtk/gtkbindings.c (gtk_binding_entry_add_signal): fixed an off-by-one
+	error that prevented signal to entry addition for signals with
+ 	parameters.
+
 Wed Jul  1 10:05:36 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* ltconfig: fix for properly detecting shared lib support on
