@@ -142,7 +142,7 @@ _gdk_win32_setup_pixmap_image (GdkPixmap *pixmap,
       image->bpp = 4;
       break;
     default:
-      g_warning ("_gdk_win32_setup_pixmap_image: depth=%d", image->depth);
+      g_warning ("_gdk_win32_setup_pixmap_image: depth=%d", depth);
       g_assert_not_reached ();
     }
   if (depth == 1)
@@ -153,6 +153,9 @@ _gdk_win32_setup_pixmap_image (GdkPixmap *pixmap,
     image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
   image->bits_per_pixel = image->depth;
   image->mem = bits;
+
+  GDK_NOTE (IMAGE, g_print ("_gdk_win32_setup_pixmap_image: %dx%dx%d (bpl:%d) = %p\n",
+			    width, height, depth, image->bpl, image));
 
   return image;
 }
@@ -369,6 +372,9 @@ gdk_win32_image_destroy (GdkImage *image)
 
   pixmap = image->windowing_data;
 
+  GDK_NOTE (IMAGE, g_print ("gdk_win32_image_destroy: %p pixmap=%p\n",
+			    image, pixmap));
+
   if (pixmap == NULL)		/* This means that _gdk_image_exit()
 				 * destroyed the image already, and
 				 * now we're called a second time from
@@ -376,9 +382,6 @@ gdk_win32_image_destroy (GdkImage *image)
 				 */
     return;
   
-  GDK_NOTE (IMAGE, g_print ("gdk_win32_image_destroy: %p\n",
-			    GDK_PIXMAP_HBITMAP (pixmap)));
-
   gdk_pixmap_unref (pixmap);
   image->windowing_data = NULL;
 }

@@ -34,6 +34,7 @@
 #include <io.h>
 
 #include "gdk.h"
+#include "gdkregion-generic.h"
 #include "gdkkeysyms.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
@@ -856,6 +857,31 @@ gdk_win32_message_to_string (UINT msg)
     }
   /* NOTREACHED */
   return NULL;
+}
+
+gchar *
+gdk_win32_rect_to_string (const RECT *rect)
+{
+  return static_printf ("%ldx%ld@+%ld+%ld",
+			(rect->right - rect->left), (rect->bottom - rect->top),
+			rect->left, rect->top);
+}
+
+gchar *
+gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect)
+{
+  return static_printf ("%dx%d@+%d+%d",
+			rect->width, rect->height,
+			rect->x, rect->y);
+}
+
+gchar *
+gdk_win32_gdkregion_to_string (const GdkRegion *rgn)
+{
+  return static_printf ("%dx%d@+%d+%d",
+			(rgn->extents.x2 - rgn->extents.x1),
+			(rgn->extents.y2 - rgn->extents.y1),
+			rgn->extents.x1, rgn->extents.y1);
 }
 
 gchar *

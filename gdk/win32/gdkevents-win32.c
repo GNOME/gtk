@@ -1180,11 +1180,8 @@ print_event (GdkEvent *event)
   switch (event->any.type)
     {
     case GDK_EXPOSE:
-      g_print ("%dx%d@+%d+%d %d",
-	       event->expose.area.width,
-	       event->expose.area.height,
-	       event->expose.area.x,
-	       event->expose.area.y,
+      g_print ("%s %d",
+	       gdk_win32_gdkrectangle_to_string (&event->expose.area),
 	       event->expose.count);
       break;
     case GDK_MOTION_NOTIFY:
@@ -1820,12 +1817,9 @@ erase_background (GdkWindow *window,
       bg = _gdk_win32_colormap_color (GDK_DRAWABLE_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->colormap,
 				      ((GdkWindowObject *) window)->bg_color.pixel);
       
-      GDK_NOTE (EVENTS,
-		g_print ("...%ldx%ld@+%ld+%ld bg %06lx\n",
-			 rect.right - rect.left,
-			 rect.bottom - rect.top,
-			 rect.left, rect.top,
-			 (gulong) bg));
+      GDK_NOTE (EVENTS, g_print ("...%s bg %06lx\n",
+				 gdk_win32_rect_to_string (&rect),
+				 (gulong) bg));
       if (!(hbr = CreateSolidBrush (bg)))
 	WIN32_GDI_FAILED ("CreateSolidBrush");
       else if (!FillRect (hdc, &rect, hbr))
@@ -1855,11 +1849,10 @@ erase_background (GdkWindow *window,
 
 	  GDK_NOTE (EVENTS,
 		    g_print ("...blitting pixmap %p (%dx%d) "
-			     " clip box = %ldx%ld@+%ld+%ld\n",
+			     " clip box = %s\n",
 			     GDK_PIXMAP_HBITMAP (pixmap),
 			     pixmap_impl->width, pixmap_impl->height,
-			     rect.right - rect.left, rect.bottom - rect.top,
-			     rect.left, rect.top));
+			     gdk_win32_rect_to_string (&rect)));
 	  
 	  if (!(bgdc = CreateCompatibleDC (hdc)))
 	    {
@@ -2973,12 +2966,6 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_PAINT:
-      if (!GetUpdateRect (msg->hwnd, NULL, FALSE))
-	{
-          GDK_NOTE (EVENTS, g_print ("WM_PAINT: %p no update rgn\n",
-				     msg->hwnd));
-	  break;
-	}
       hrgn = CreateRectRgn (0, 0, 0, 0);
       if (GetUpdateRgn (msg->hwnd, hrgn, FALSE) == ERROR)
 	{
@@ -2988,15 +2975,12 @@ gdk_event_translate (GdkEvent *event,
 
       hdc = BeginPaint (msg->hwnd, &paintstruct);
 
-      GDK_NOTE (EVENTS,
-		g_print ("WM_PAINT: %p  %ldx%ld@+%ld+%ld %s dc %p%s\n",
-			 msg->hwnd,
-			 paintstruct.rcPaint.right - paintstruct.rcPaint.left,
-			 paintstruct.rcPaint.bottom - paintstruct.rcPaint.top,
-			 paintstruct.rcPaint.left, paintstruct.rcPaint.top,
-			 (paintstruct.fErase ? "erase" : ""),
-			 hdc,
-			 (return_exposes ? " return_exposes" : "")));
+      GDK_NOTE (EVENTS, g_print ("WM_PAINT: %p  %s %s dc %p%s\n",
+				 msg->hwnd,
+				 gdk_win32_rect_to_string (&paintstruct.rcPaint),
+				 (paintstruct.fErase ? "erase" : ""),
+				 hdc,
+				 (return_exposes ? " return_exposes" : "")));
 
       EndPaint (msg->hwnd, &paintstruct);
 
@@ -3040,7 +3024,6 @@ gdk_event_translate (GdkEvent *event,
           event->expose.area.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
           event->expose.area.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
           event->expose.region = _gdk_win32_hrgn_to_region (hrgn);
-	  DeleteObject (hrgn);
           event->expose.count = 0;
 
           return_val = !GDK_WINDOW_DESTROYED (window);
@@ -3063,17 +3046,16 @@ gdk_event_translate (GdkEvent *event,
         }
       else
         {
-          GdkRectangle expose_rect;
+          GdkRegion *update_region = _gdk_win32_hrgn_to_region (hrgn);
 
 	  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
-          expose_rect.x = paintstruct.rcPaint.left + xoffset;
-          expose_rect.y = paintstruct.rcPaint.top + yoffset;
-          expose_rect.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
-          expose_rect.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
+	  gdk_region_offset (update_region, xoffset, yoffset);
 
-	  _gdk_window_process_expose (window, _gdk_win32_get_next_tick (msg->time), &expose_rect);
+	  _gdk_window_process_expose (window, update_region);
+	  gdk_region_destroy (update_region);
 	  return_val = FALSE;
         }
+      DeleteObject (hrgn);
       break;
 
     case WM_GETICON:

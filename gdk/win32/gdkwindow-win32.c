@@ -2017,7 +2017,7 @@ gdk_window_shape_combine_mask (GdkWindow *window,
       RECT rect;
 
       /* Convert mask bitmap to region */
-      hrgn = _gdk_win32_bitmap_to_region (mask);
+      hrgn = _gdk_win32_bitmap_to_hrgn (mask);
 
       GDK_NOTE (MISC, g_print ("gdk_window_shape_combine_mask: %p %p\n",
 			       GDK_WINDOW_HWND (window),
@@ -2268,6 +2268,7 @@ gdk_propagate_shapes (HANDLE   win,
 	     }
 	  }
        SetWindowRgn (win, region, TRUE);
+       g_free (list);
      }
    else
      DeleteObject (region);
@@ -2302,7 +2303,6 @@ gdk_window_set_static_gravities (GdkWindow *window,
 				 gboolean   use_static)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GList *tmp_list;
   
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);

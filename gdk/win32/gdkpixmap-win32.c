@@ -299,7 +299,7 @@ _gdk_win32_pixmap_new (GdkWindow *window,
   if (!ReleaseDC (GDK_WINDOW_HWND (window), hdc))
     WIN32_GDI_FAILED ("ReleaseDC");
 
-  GDK_NOTE (PIXMAP, g_print ("...=%p bits=%p\n", hbitmap, bits));
+  GDK_NOTE (PIXMAP, g_print ("...=%p bits=%p pixmap=%p\n", hbitmap, bits, pixmap));
 
   if (hbitmap == NULL)
     {

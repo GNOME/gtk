@@ -263,11 +263,7 @@ struct _GdkGCWin32
    * window or pixmap. We thus keep all the necessary values in the
    * GdkGCWin32 object.
    */
-  HDC hdc;
 
-  int saved_dc;
-
-  GdkRegion *clip_region;
   HRGN hcliprgn;
 
   GdkGCValuesMask values_mask;
@@ -286,8 +282,13 @@ struct _GdkGCWin32
   DWORD pen_style;
   DWORD *pen_dashes;		/* use for PS_USERSTYLE or step-by-step rendering */
   gint pen_num_dashes;
-  HANDLE hwnd;			/* If a HDC is allocated, for which window,
-				 * or what bitmap is selected into it
+
+  /* Following fields are valid while the GC exists as a Windows DC */
+  HDC hdc;
+  int saved_dc;
+
+  HANDLE hwnd;			/* For which window, or what bitmap is
+				 * selected into it
 				 */
   HPALETTE holdpal;
 };
@@ -307,9 +308,8 @@ void _gdk_window_move_resize_child (GdkWindow *window,
 				    gint       y,
 				    gint       width,
 				    gint       height);
-void _gdk_window_process_expose    (GdkWindow     *window,
-                                    gulong         serial,
-                                    GdkRectangle  *area);
+void _gdk_window_process_expose    (GdkWindow *window,
+                                    GdkRegion *invalidate_region);
 
 void _gdk_win32_selection_init (void);
 void _gdk_win32_dnd_exit (void);
@@ -364,7 +364,11 @@ void      _gdk_win32_blit               (gboolean              use_fg_bg,
 COLORREF  _gdk_win32_colormap_color     (GdkColormap *colormap,
 				         gulong       pixel);
 
-HRGN	  _gdk_win32_bitmap_to_region   (GdkPixmap   *bitmap);
+HRGN	  _gdk_win32_bitmap_to_hrgn     (GdkPixmap   *bitmap);
+
+HRGN	  _gdk_win32_gdkregion_to_hrgn  (GdkRegion   *region,
+					 gint         x_origin,
+					 gint         y_origin);
 
 void    _gdk_selection_property_store (GdkWindow *owner,
                                        GdkAtom    type,
@@ -414,6 +418,10 @@ gchar *gdk_win32_psstyle_to_string    (DWORD        pen_style);
 gchar *gdk_win32_psendcap_to_string   (DWORD        pen_style);
 gchar *gdk_win32_psjoin_to_string     (DWORD        pen_style);
 gchar *gdk_win32_message_to_string    (UINT         msg);
+gchar *gdk_win32_rect_to_string	      (const RECT  *rect);
+
+gchar *gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect);
+gchar *gdk_win32_gdkregion_to_string    (const GdkRegion    *box);
 
 #endif
 
