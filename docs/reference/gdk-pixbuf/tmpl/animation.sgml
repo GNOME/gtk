@@ -22,7 +22,14 @@ Animations as multi-frame structures.
 
 <!-- ##### ENUM GdkPixbufFrameAction ##### -->
   <para>
-    
+    Each animation frame can have several things happen to it when the
+    next frame is displayed.  The #GdkPixbufFrameAction determines this.
+    If a frame as marked as @GDK_PIXBUF_FRAME_RETAIN, then the image
+    will remain displayed, and will be potentially occluded by the next
+    frame.  If it is marked as @GDK_PIXBUF_FRAME_DISPOSE, then the
+    animation is reverted to the setting before the frame was shown.  If
+    it is marked as @GDK_PIXBUF_FRAME_REVERT, then the animation is
+    reverted to the first image before continuing.
   </para>
 
 @GDK_PIXBUF_FRAME_RETAIN: 
