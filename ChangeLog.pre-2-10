@@ -1,3 +1,8 @@
+Mon Oct 26 16:46:15 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcontainer.c (gtk_container_unregister_toplevel): 
+	remove_link(), not remove()
+
 Sun Oct 25 20:27:02 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_init): support an environment variable

@@ -1256,7 +1256,7 @@ gtk_container_unregister_toplevel (GtkContainer *container)
   node = g_list_find (toplevel_list, container);
   g_return_if_fail (node != NULL);
 
-  toplevel_list = g_list_remove (toplevel_list, node);
+  toplevel_list = g_list_remove_link (toplevel_list, node);
   g_list_free_1 (node);
 
   gtk_widget_unref (GTK_WIDGET (container));
