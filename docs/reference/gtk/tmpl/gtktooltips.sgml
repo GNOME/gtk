@@ -17,6 +17,14 @@ The length of time the user must keep the mouse over a widget before the tip is 
 <para>
 To assign a tip to a particular #GtkWidget, gtk_tooltips_set_tip() is used.
 </para>
+<note>
+<para>
+Tooltips can only be set on widgets which have their own X window.
+To check if a widget has its own window use 'GTK_WIDGET_NO_WINDOW (widget)'.
+To add a tooltip to a widget that doesn't have its own window, place the
+widget inside a #GtkEventBox and add a tooltip to that instead.
+</para>
+</note>
 <para>
 The default appearance of all tooltips in a program is determined by the current gtk theme that the user has selected.
 </para>
