@@ -1,5 +1,13 @@
 2004-05-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_tree_window_to_tree_coords): 
+	New function to go from tree window to tree coordinates, kept
+	static for now until we figure out the multiple coordinate
+	system mess in GtkTreeView API-wise.
+	(gtk_tree_view_scroll_to_cell): Transform the coordinates 
+	from tree window to tree coordinates, using the new function.
+	Previously, the x coordinate was wrongly transformed. (#142494)
+
 	* gdk/gdktypes.h (GdkModifierType): Add a comment about unused
 	bits.
 

@@ -418,6 +418,11 @@ static GtkTreeViewColumn *gtk_tree_view_get_drop_column (GtkTreeView       *tree
 							 GtkTreeViewColumn *column,
 							 gint               drop_position);
 
+static void gtk_tree_view_tree_window_to_tree_coords (GtkTreeView *tree_view,
+						      gint         wx,
+						      gint         wy,
+						      gint        *tx,
+						      gint        *ty);
 
 static GtkContainerClass *parent_class = NULL;
 static guint tree_view_signals [LAST_SIGNAL] = { 0 };
@@ -9636,7 +9641,7 @@ gtk_tree_view_scroll_to_point (GtkTreeView *tree_view,
 }
 
 /**
- * gtk_tree_view_scroll_to_cell
+ * gtk_tree_view_scroll_to_cell:
  * @tree_view: A #GtkTreeView.
  * @path: The path of the row to move to, or %NULL.
  * @column: The #GtkTreeViewColumn to move horizontally to, or %NULL.
@@ -9714,7 +9719,7 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
       gint dest_x, dest_y;
 
       gtk_tree_view_get_cell_area (tree_view, path, column, &cell_rect);
-      gtk_tree_view_widget_to_tree_coords (tree_view, cell_rect.x, cell_rect.y, &(cell_rect.x), &(cell_rect.y));
+      gtk_tree_view_tree_window_to_tree_coords (tree_view, cell_rect.x, cell_rect.y, &(cell_rect.x), &(cell_rect.y));
       gtk_tree_view_get_visible_rect (tree_view, &vis_rect);
 
       dest_x = vis_rect.x;
@@ -10748,11 +10753,11 @@ gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
  *
  * Finds the path at the point (@x, @y), relative to widget coordinates.  That
  * is, @x and @y are relative to an events coordinates. @x and @y must come
- * from an event on the @tree_view only where event->window ==
- * gtk_tree_view_get_bin (). It is primarily for things like popup menus.
- * If @path is non-%NULL, then it will be filled with the #GtkTreePath at that
- * point.  This path should be freed with gtk_tree_path_free().  If @column
- * is non-%NULL, then it will be filled with the column at that point.
+ * from an event on the @tree_view only where <literal>event->window ==
+ * gtk_tree_view_get_bin (<!-- -->)</literal>. It is primarily for things 
+ * like popup menus. If @path is non-%NULL, then it will be filled with the 
+ * #GtkTreePath at that point.  This path should be freed with gtk_tree_path_free().  
+ * If @column is non-%NULL, then it will be filled with the column at that point.
  * @cell_x and @cell_y return the coordinates relative to the cell background
  * (i.e. the @background_area passed to gtk_cell_renderer_render()).  This
  * function is only meaningful if @tree_view is realized.
@@ -10871,7 +10876,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
  * fields will be filled with 0.  The sum of all cell rects does not cover the
  * entire tree; there are extra pixels in between rows, for example. The
  * returned rectangle is equivalent to the @cell_area passed to
- * gtk_cell_renderer_render().  This function is only valid if #tree_view is
+ * gtk_cell_renderer_render().  This function is only valid if @tree_view is
  * realized.
  **/
 void
@@ -10918,7 +10923,8 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
       rect->y = CELL_FIRST_PIXEL (tree_view, tree, node, vertical_separator);
       rect->height = MAX (CELL_HEIGHT (node, vertical_separator), tree_view->priv->expander_size - vertical_separator);
 
-      if (gtk_tree_view_is_expander_column (tree_view, column) &&
+      if (column &&
+	  gtk_tree_view_is_expander_column (tree_view, column) &&
 	  TREE_VIEW_DRAW_EXPANDERS (tree_view))
 	{
 	  gint depth = gtk_tree_path_get_depth (path) - 1;
@@ -11033,15 +11039,30 @@ gtk_tree_view_get_visible_rect (GtkTreeView  *tree_view,
  **/
 void
 gtk_tree_view_widget_to_tree_coords (GtkTreeView *tree_view,
-                                     gint         wx,
-                                     gint         wy,
-                                     gint        *tx,
-                                     gint        *ty)
+				      gint         wx,
+				      gint         wy,
+				      gint        *tx,
+				      gint        *ty)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   if (tx)
     *tx = wx + tree_view->priv->hadjustment->value;
+  if (ty)
+    *ty = wy + tree_view->priv->dy;
+}
+
+static void
+gtk_tree_view_tree_window_to_tree_coords (GtkTreeView *tree_view,
+					  gint         wx,
+					  gint         wy,
+					  gint        *tx,
+					  gint        *ty)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  if (tx)
+    *tx = wx;
   if (ty)
     *ty = wy + tree_view->priv->dy;
 }
