@@ -1973,8 +1973,12 @@ gtk_icon_view_set_cursor_item (GtkIconView     *icon_view,
   /* Notify that accessible focus object has changed */
   obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
   item_obj = atk_object_ref_accessible_child (obj, item->index);
-  atk_focus_tracker_notify (item_obj);
-  g_object_unref (item_obj); 
+
+  if (item_obj != NULL)
+    {
+      atk_focus_tracker_notify (item_obj);
+      g_object_unref (item_obj); 
+    }
 }
 
 
@@ -3414,7 +3418,7 @@ gtk_icon_view_item_activated (GtkIconView      *icon_view,
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   g_return_if_fail (path != NULL);
   
-  g_signal_emit (G_OBJECT (icon_view), icon_view_signals[ITEM_ACTIVATED], 0, path);
+  g_signal_emit (icon_view, icon_view_signals[ITEM_ACTIVATED], 0, path);
 }
 
 /**
@@ -3527,7 +3531,7 @@ gtk_icon_view_item_accessible_idle_do_action (gpointer data)
   GtkTreePath *path;
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (data);
-  item->action_idle_handler = NULL;
+  item->action_idle_handler = 0;
 
   if (item->widget == NULL)
     return FALSE;
@@ -4215,7 +4219,6 @@ static gint
 gtk_icon_view_item_accessible_text_get_character_count (AtkText *text)
 {
   GtkIconViewItemAccessible *item;
-  GtkTextIter start, end;
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
 
@@ -4489,9 +4492,11 @@ gtk_icon_view_item_accessible_set_visibility (GtkIconViewItemAccessible *item,
                                               gboolean                   emit_signal)
 {
   if (gtk_icon_view_item_accessible_is_showing (item))
-    gtk_icon_view_item_accessible_add_state (item, ATK_STATE_SHOWING, emit_signal);
+    return gtk_icon_view_item_accessible_add_state (item, ATK_STATE_SHOWING,
+						    emit_signal);
   else
-    gtk_icon_view_item_accessible_remove_state (item, ATK_STATE_SHOWING, emit_signal);
+    return gtk_icon_view_item_accessible_remove_state (item, ATK_STATE_SHOWING,
+						       emit_signal);
 }
 
 static void
@@ -4760,7 +4765,6 @@ gtk_icon_view_accessible_get_n_children (AtkObject *accessible)
 {
   GtkIconView *icon_view;
   GtkWidget *widget;
-  gint i;
 
   widget = GTK_ACCESSIBLE (accessible)->widget;
   if (!widget)
@@ -4994,9 +4998,9 @@ gtk_icon_view_accessible_model_row_inserted (GtkTreeModel *tree_model,
       if (info->index != item->item->index)
         {
           if (info->index < index)
-            g_warning ("Unexpected index value on insetion %d %d", index, info->index);
+            g_warning ("Unexpected index value on insertion %d %d", index, info->index);
  
-          if (tmp_list = NULL)
+          if (tmp_list == NULL)
             tmp_list = items;
    
           info->index = item->item->index;
@@ -5033,6 +5037,7 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
   items = priv->items;
   tmp_list = NULL;
   deleted_item = NULL;
+  info = NULL;
   while (items)
     {
       info = items->data;
@@ -5043,7 +5048,7 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
         }
       if (info->index != item->item->index)
         {
-          if (tmp_list = NULL)
+          if (tmp_list == NULL)
             tmp_list = items;
           else    
             info->index = item->item->index;
@@ -5089,7 +5094,6 @@ gtk_icon_view_accessible_model_rows_reordered (GtkTreeModel *tree_model,
   GtkIconViewItemAccessible *item;
   GList *items;
   GList *tmp_list;
-  GList *new_list;
   AtkObject *atk_obj;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
@@ -5531,7 +5535,6 @@ gtk_icon_view_accessible_select_all_selection (AtkSelection *selection)
 {
   GtkWidget *widget;
   GtkIconView *icon_view;
-  GList *l;
 
   widget = GTK_ACCESSIBLE (selection)->widget;
   if (widget == NULL)

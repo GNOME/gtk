@@ -1,3 +1,11 @@
+Wed Aug 18 08:31:17 2004  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkiconview.c: Applied patch from Olivier Andrieu to fix
+	bug #150440.
+
+	* gtk/gtkicontheme.c (gtk_icon_theme_init): xdg_data_dirs should
+	match constness attributes of g_get_system_data_dirs ().
+
 2004-08-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkicontheme.c (gtk_icon_theme_init): Look up icon themes in the 

@@ -524,7 +524,7 @@ static void
 gtk_icon_theme_init (GtkIconTheme *icon_theme)
 {
   GtkIconThemePrivate *priv;
-  gchar **xdg_data_dirs;
+  const gchar * const *xdg_data_dirs;
   int i, j;
   
   priv = g_type_instance_get_private ((GTypeInstance *)icon_theme,
@@ -570,7 +570,7 @@ do_theme_change (GtkIconTheme *icon_theme)
   GtkIconThemePrivate *priv = icon_theme->priv;
   
   blow_themes (icon_theme);
-  g_signal_emit (G_OBJECT (icon_theme), signal_changed, 0);
+  g_signal_emit (icon_theme, signal_changed, 0);
   
   if (priv->screen && priv->is_screen_singleton)
     {
