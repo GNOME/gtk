@@ -1,3 +1,8 @@
+Tue Aug  3 14:50:14 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkicontheme.c (add_size): Add missing parens.
+	(#149190, Morten Welinder)
+
 Tue Aug  3 14:29:49 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_menu_fill): Remove 

@@ -1304,7 +1304,7 @@ add_size (gpointer  key,
 
   **res_p = GPOINTER_TO_INT (key);
 
-  *res_p++;
+  (*res_p)++;
 }
 
 /**
