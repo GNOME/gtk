@@ -1,0 +1,8 @@
+Makefile
+Makefile.in
+makefile.mingw
+makefile.msc
+.deps
+.libs
+testtreeview
+testtreecolumns
