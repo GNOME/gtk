@@ -75,6 +75,9 @@ struct _GtkMenuAttachData
 
 struct _GtkMenuPrivate 
 {
+  gboolean seen_motion;
+  gboolean seen_enter;
+    
   gboolean have_position;
   gint x;
   gint y;
@@ -1268,6 +1271,7 @@ gtk_menu_popup (GtkMenu		    *menu,
   GtkWidget *parent;
   GdkEvent *current_event;
   GtkMenuShell *menu_shell;
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
 
   g_return_if_fail (GTK_IS_MENU (menu));
   
@@ -1275,6 +1279,9 @@ gtk_menu_popup (GtkMenu		    *menu,
   menu_shell = GTK_MENU_SHELL (menu);
   
   menu_shell->parent_menu_shell = parent_menu_shell;
+
+  priv->seen_motion = FALSE;
+  priv->seen_enter = FALSE;
   
   /* Find the last viewable ancestor, and make an X grab on it
    */
@@ -2714,7 +2721,20 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
   gboolean need_enter;
 
   if (GTK_IS_MENU (widget))
-    gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
+    {
+      GtkMenuPrivate *priv = gtk_menu_get_private (GTK_MENU (widget));
+      
+      gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
+      priv->seen_motion = TRUE;
+      if (priv->seen_enter)
+	{
+	  /* After having seen both a motion event and an enter event,
+	   * button releases should be interpreted to mean "activate"
+	   */
+	  
+	  GTK_MENU_SHELL (widget)->activate_time = 0;
+	}
+    }
 
   /* We received the event for one of two reasons:
    *
@@ -2945,9 +2965,19 @@ gtk_menu_enter_notify (GtkWidget        *widget,
   if (widget && GTK_IS_MENU (widget))
     {
       GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
+      GtkMenuPrivate *priv = gtk_menu_get_private (GTK_MENU (widget));
 
       if (!menu_shell->ignore_enter)
 	gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
+
+      priv->seen_enter = TRUE;
+      if (priv->seen_motion)
+	{
+	  /* After having seen both a motion event and an enter event,
+	   * button releases should be interpreted to mean "activate"
+	   */
+	  menu_shell->activate_time = 0;
+	}
     }
   
   /* If this is a faked enter (see gtk_menu_motion_notify), 'widget'

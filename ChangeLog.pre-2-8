@@ -1,3 +1,14 @@
+Wed Jun  2 00:39:58 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): Make menus
+	only stay up if you release within 500 milliseconds.
+	(gtk_menu_shell_button_press): Set the activate_time to the event
+	time when a button is pressed.
+
+	* gtk/gtkmenu.c (gtk_menu_motion_notify, gtk_menu_enter_notify):
+	Interprete button releases as activate when we have seen both an
+	enter an a motion event.
+
 2004-06-01  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilesystemmodel.c (do_files_removed): Don't insert a
