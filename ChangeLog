@@ -1,3 +1,7 @@
+2000-04-05  Dan Damian  <dand@dnttm.ro>
+
+	* configure.in: Added "ro" to ALL_LINGUAS.
+
 Wed Apr  5 00:08:36 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkgc-x11.c (_gdk_x11_gc_new): Fix screwy
