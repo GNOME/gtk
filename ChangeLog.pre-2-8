@@ -1,3 +1,16 @@
+2002-04-30  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbtree.c (gtk_text_btree_remove_tag_info): assign
+	something to "prev" so that removing tag info succeeds.
+	Part of #77301
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_unref): reorder so that it
+	unrefs the tag table first, so that the btree is in a consistent
+	state when we're removing tags from it.	
+
+	* gtk/gtktexttagtable.c (_gtk_text_tag_table_remove_buffer): strip
+	all tags in the tag table out of the buffer. #77301
+
 Tue Apr 30 11:37:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/gtkimcontextxim.c: Make multihead-safe;

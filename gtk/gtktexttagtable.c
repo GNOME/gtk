@@ -160,7 +160,7 @@ gtk_text_tag_table_finalize (GObject *object)
   GtkTextTagTable *table;
 
   table = GTK_TEXT_TAG_TABLE (object);
-
+  
   gtk_text_tag_table_foreach (table, foreach_unref, NULL);
 
   g_hash_table_destroy (table->hash);
@@ -406,11 +406,23 @@ _gtk_text_tag_table_add_buffer (GtkTextTagTable *table,
   table->buffers = g_slist_prepend (table->buffers, buffer);
 }
 
+static void
+foreach_remove_tag (GtkTextTag *tag, gpointer data)
+{
+  GtkTextBuffer *buffer;
+
+  buffer = GTK_TEXT_BUFFER (data);
+
+  _gtk_text_buffer_notify_will_remove_tag (buffer, tag);
+}
+
 void
 _gtk_text_tag_table_remove_buffer (GtkTextTagTable *table,
                                    gpointer         buffer)
 {
   g_return_if_fail (GTK_IS_TEXT_TAG_TABLE (table));
 
+  gtk_text_tag_table_foreach (table, foreach_remove_tag, buffer);
+  
   table->buffers = g_slist_remove (table->buffers, buffer);
 }
