@@ -1046,7 +1046,7 @@ _gtk_tree_view_column_has_editable_cell (GtkTreeViewColumn *column)
 {
   GList *list;
 
-  for (list = column->cell_list; list; list = list ->next)
+  for (list = column->cell_list; list; list = list->next)
     if (((GtkTreeViewColumnCellInfo *)list->data)->cell->mode ==
 	GTK_CELL_RENDERER_MODE_EDITABLE)
       return TRUE;
@@ -1059,12 +1059,30 @@ _gtk_tree_view_column_get_editable_cell (GtkTreeViewColumn *column)
 {
   GList *list;
 
-  for (list = column->cell_list; list; list = list ->next)
+  for (list = column->cell_list; list; list = list->next)
     if (((GtkTreeViewColumnCellInfo *)list->data)->cell->mode ==
 	GTK_CELL_RENDERER_MODE_EDITABLE)
       return ((GtkTreeViewColumnCellInfo *)list->data)->cell;
 
   return NULL;
+}
+
+gint
+_gtk_tree_view_column_count_special_cells (GtkTreeViewColumn *column)
+{
+  gint i = 0;
+  GList *list;
+
+  for (list = column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *cellinfo = list->data;
+
+      if (cellinfo->cell->mode == GTK_CELL_RENDERER_MODE_EDITABLE ||
+	  cellinfo->cell->mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
+	i++;
+    }
+
+  return i;
 }
 
 /* Public Functions */
@@ -2418,8 +2436,18 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
 	  if (event)
 	    {
-	      if (real_cell_area.x <= ((GdkEventButton *)event)->x &&
+	      if (_gtk_tree_view_column_count_special_cells (tree_column) == 1)
+	        {
+		  /* only 1 activatably cell -> whole column can activate */
+		  if (cell_area->x <= ((GdkEventButton *)event)->x &&
+		      cell_area->x + cell_area->width > ((GdkEventButton *)event)->x)
+		    try_event = TRUE;
+		}
+	      else if (real_cell_area.x <= ((GdkEventButton *)event)->x &&
 		  real_cell_area.x + real_cell_area.width > ((GdkEventButton *)event)->x)
+		  /* only activate cell if the user clicked on an individual
+		   * cell
+		   */
 		try_event = TRUE;
 	    }
 	  else /* if (info->has_focus)*/

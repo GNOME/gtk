@@ -1,3 +1,16 @@
+Thu Apr 25 23:49:01 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #74206.
+
+	* gtk/gtktreeprivate.h: add _gtk_tree_view_column_count_special_cells
+
+	* gtk/gtktreeview.c (_gtk_tree_view_column_has_editable_cell),
+	(_gtk_tree_view_column_get_editable_cell): remove a space which made
+	the code look ugly
+	(_gtk_tree_view_column_count_special_cells): new function,
+	(gtk_tree_view_column_cell_process_action): if there's only one
+	activatable cell, the whole column will activate that renderer.
+
 Thu Apr 25 23:36:55 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_search_iter): make the search
