@@ -856,7 +856,7 @@ static GdkAtom motif_drag_receiver_info_atom = GDK_NONE;
 
 /* Target table handling */
 
-GdkFilterReturn
+static GdkFilterReturn
 motif_drag_window_filter (GdkXEvent *xevent,
 			  GdkEvent  *event,
 			  gpointer data)
@@ -911,7 +911,7 @@ motif_lookup_drag_window (Display *display)
 /* Finds the window where global Motif drag information is stored.
  * If it doesn't exist and 'create' is TRUE, create one.
  */
-Window 
+static Window 
 motif_find_drag_window (gboolean create)
 {
   if (!motif_drag_window)
@@ -1335,7 +1335,7 @@ motif_set_targets (GdkDragContext *context)
   private->motif_targets_set = 1;
 }
 
-guint32
+static guint32
 motif_check_dest (Window win)
 {
   gboolean retval = FALSE;
@@ -1671,7 +1671,7 @@ motif_top_level_enter (GdkEvent *event,
   return GDK_FILTER_TRANSLATE;
 }
 
-GdkFilterReturn
+static GdkFilterReturn
 motif_top_level_leave (GdkEvent *event,
 		       guint16   flags, 
 		       guint32   timestamp)
@@ -1695,7 +1695,7 @@ motif_top_level_leave (GdkEvent *event,
     return GDK_FILTER_REMOVE;
 }
 
-GdkFilterReturn
+static GdkFilterReturn
 motif_motion (GdkEvent *event,
 	      guint16   flags, 
 	      guint32   timestamp,
@@ -1735,7 +1735,7 @@ motif_motion (GdkEvent *event,
   return GDK_FILTER_REMOVE;
 }
 
-GdkFilterReturn
+static GdkFilterReturn
 motif_operation_changed (GdkEvent *event,
 			 guint16   flags, 
 			 guint32   timestamp)
@@ -1770,7 +1770,7 @@ motif_operation_changed (GdkEvent *event,
   return GDK_FILTER_REMOVE;
 }
 
-GdkFilterReturn
+static GdkFilterReturn
 motif_drop_start (GdkEvent *event,
 		  guint16   flags,
 		  guint32   timestamp,
@@ -1803,7 +1803,7 @@ motif_drop_start (GdkEvent *event,
   return GDK_FILTER_TRANSLATE;
 }  
 
-GdkFilterReturn
+static GdkFilterReturn
 motif_drag_status (GdkEvent *event,
 		   guint16   flags,
 		   guint32   timestamp)
@@ -1857,7 +1857,7 @@ motif_drag_status (GdkEvent *event,
   return GDK_FILTER_REMOVE;
 }
 
-GdkFilterReturn
+static GdkFilterReturn
 motif_dnd_filter (GdkXEvent *xev,
 		  GdkEvent  *event,
 		  gpointer data)
@@ -2156,7 +2156,7 @@ xdnd_set_actions (GdkDragContext *context)
  *   results:
  *************************************************************/
 
-gint
+static gint
 xdnd_send_xevent (Window window, gboolean propagate, 
 		  XEvent *event_send)
 {
