@@ -1,3 +1,12 @@
+2004-11-29  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (trap_activate_cb): Don't handle
+	Enter if we are in SELECT_FOLDER or CREATE_FOLDER actions.  This
+	lets us navigate thei file system more easily.
+	(gtk_file_chooser_default_should_respond): If we are in
+	SELECT_FOLDER or CREATE_FOLDER modes, return TRUE if something is
+	selected.
+
 2004-11-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkselection-x11.c (gdk_text_property_to_utf8_list_for_display): 
