@@ -1,3 +1,9 @@
+Thu Aug 23 16:26:47 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_finalize): 
+	* gtk/gtktextmark.c (gtk_text_mark_finalize): chain parent class
+	handlers, pointed out by Joshua N Pritikin <vishnu@pobox.com>.
+
 Wed Aug 22 19:15:39 2001  Owen Taylor  <otaylor@redhat.com>
 
 	[ Patch from Sebastian Wilhelmi, 52790 ]

@@ -303,7 +303,6 @@ gtk_tree_view_column_finalize (GObject *object)
   GtkTreeViewColumn *tree_column = (GtkTreeViewColumn *) object;
   GList *list;
 
-
   for (list = tree_column->cell_list; list; list = list->next)
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
@@ -315,6 +314,8 @@ gtk_tree_view_column_finalize (GObject *object)
     }
 
   g_free (tree_column->title);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
