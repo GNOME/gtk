@@ -19,7 +19,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "Teip as oscáil comhad '%s': %s"
+msgstr "Teip as oscail comhad '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:746
 #, c-format
@@ -1626,7 +1626,7 @@ msgstr "Ceart go _Leor"
 
 #: gtk/gtkstock.c:314
 msgid "_Open"
-msgstr "_Oscáil"
+msgstr "_Oscail"
 
 #: gtk/gtkstock.c:315
 msgid "_Paste"
@@ -1855,20 +1855,20 @@ msgstr ""
 msgid "Could not get information for file '%s': %s"
 msgstr ""
 
-#~ msgid "Add"
-#~ msgstr "Suimigh"
+msgid "Add"
+msgstr "Suimigh"
 
-#~ msgid "Remove"
-#~ msgstr "Scríos"
+msgid "Remove"
+msgstr "Scríos"
 
-#~ msgid "Up"
-#~ msgstr "Suas"
+msgid "Up"
+msgstr "Suas"
 
-#~ msgid "_Filename:"
-#~ msgstr "_Ainm Comhad:"
+msgid "_Filename:"
+msgstr "_Ainm Comhad:"
 
-#~ msgid "Current folder: %s"
-#~ msgstr "Fillteán reatha: %s"
+msgid "Current folder: %s"
+msgstr "Fillteán reatha: %s"
 
-#~ msgid "Zoom _100%"
-#~ msgstr "Súmáil _100%"
+msgid "Zoom _100%"
+msgstr "Súmáil _100%"
