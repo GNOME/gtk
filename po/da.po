@@ -41,43 +41,43 @@ msgstr "Version %s af GIF-filformatet er ikke understøttet"
 msgid "GIF animation contained a frame with an incorrect size"
 msgstr "GIF-animation indeholdt et billed med en forkert størrelse"
 
-#: gtk/gtkcolorsel.c:1422
+#: gtk/gtkcolorsel.c:1413
 msgid "Hue:"
 msgstr "Glød:"
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1414
 msgid "Saturation:"
 msgstr "Mætning:"
 
-#: gtk/gtkcolorsel.c:1424
+#: gtk/gtkcolorsel.c:1415
 msgid "Value:"
 msgstr "Værdi:"
 
-#: gtk/gtkcolorsel.c:1425
+#: gtk/gtkcolorsel.c:1416
 msgid "Red:"
 msgstr "Rød:"
 
-#: gtk/gtkcolorsel.c:1426
+#: gtk/gtkcolorsel.c:1417
 msgid "Green:"
 msgstr "Grøn:"
 
-#: gtk/gtkcolorsel.c:1427
+#: gtk/gtkcolorsel.c:1418
 msgid "Blue:"
 msgstr "Blå:"
 
-#: gtk/gtkcolorsel.c:1430
+#: gtk/gtkcolorsel.c:1421
 msgid "Opacity:"
 msgstr "Gennemsigtighed:"
 
-#: gtk/gtkcolorsel.c:1445
+#: gtk/gtkcolorsel.c:1436
 msgid "Hex Value:"
 msgstr "Hexværdi:"
 
-#: gtk/gtkcolorsel.c:1466
+#: gtk/gtkcolorsel.c:1457
 msgid "Custom Palette"
 msgstr "Personlig palette"
 
-#: gtk/gtkcolorsel.c:1471
+#: gtk/gtkcolorsel.c:1462
 msgid "Set Color"
 msgstr "Sæt farve"
 
@@ -327,7 +327,7 @@ msgstr "Ny"
 msgid "Open"
 msgstr "Åbn"
 
-#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#: gtk/gtknotebook.c:2012 gtk/gtknotebook.c:4098
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -371,7 +371,8 @@ msgstr "Véd ikke hvordan animationen i fil '%s' skal indlæses"
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"Kunne ikke indlæse billed '%s': årsag ukendt, formentlig en ødelagt billedfil"
+"Kunne ikke indlæse billed '%s': årsag ukendt, formentlig en ødelagt "
+"billedfil"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:225
 #, c-format
@@ -379,8 +380,8 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"Kunne ikke indlæse animation '%s': årsag ukendt, "
-"formentlig en ødelagt animationsfil"
+"Kunne ikke indlæse animation '%s': årsag ukendt, formentlig en ødelagt "
+"animationsfil"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:126
 msgid "Image data is partially missing"
@@ -391,18 +392,20 @@ msgid ""
 "Image has an incorrect pixel rowstride, perhaps the data was corrupted "
 "somehow."
 msgstr ""
-"Billedet har et forkert piksel rækkespecifikation, måske er data "
-"blevet ødelagt på en eller anden måde"
+"Billedet har et forkert piksel rækkespecifikation, måske er data blevet "
+"ødelagt på en eller anden måde"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:154
 msgid "Image size is impossibly large, perhaps the data was corrupted somehow"
-msgstr "Billedet er utroligt stort, måske er data "
-"blevet ødelagt på en eller anden måde"
+msgstr ""
+"Billedet er utroligt stort, måske er data blevet ødelagt på en eller "
+"anden måde"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:167
 msgid "Image data is partially missing, probably it was ocorrupted somehow."
-msgstr "Billeddata mangler delvis, "
-"måske er data blevet ødelagt på en eller anden måde"
+msgstr ""
+"Billeddata mangler delvis, måske er data blevet ødelagt på en eller anden "
+"måde"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:183
 #, c-format
@@ -410,8 +413,8 @@ msgid ""
 "Image has an unknown colorspace code (%d), perhaps the image data was "
 "corrupted"
 msgstr ""
-"Billedet har en ukendt farveområdekode (%d), "
-"måske er data blevet ødelagt på en eller anden måde"
+"Billedet har en ukendt farveområdekode (%d), måske er data blevet ødelagt "
+"på en eller anden måde"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:192
 #, c-format
@@ -419,8 +422,8 @@ msgid ""
 "Image has an improper number of bits per sample (%d), perhaps the image data "
 "was corrupted"
 msgstr ""
-"Billedet har et forkert antal bit per stikprøve (%d), "
-"måske er data blevet ødelagt på en eller anden måde"
+"Billedet har et forkert antal bit per stikprøve (%d), måske er data blevet "
+"ødelagt på en eller anden måde"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:201 gdk-pixbuf/gdk-pixbuf-data.c:210
 #, c-format
@@ -428,8 +431,8 @@ msgid ""
 "Image has an improper number of channels (%d), perhaps the image data was "
 "corrupted"
 msgstr ""
-"Billedet har et forkert antal kanaler (%d), "
-"måske er data blevet ødelagt på en eller anden måde"
+"Billedet har et forkert antal kanaler (%d), måske er data blevet ødelagt "
+"på en eller anden måde"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:228
 #, c-format
@@ -437,8 +440,8 @@ msgid ""
 "Not enough memory to store a %d by %d image; try exiting some applications "
 "to free memory."
 msgstr ""
-"Ikke nok hukommelse til at gemme et %d gange %d billede; prøv at "
-"afslutte nogle anvendelser for at frigøre hukommelse."
+"Ikke nok hukommelse til at gemme et %d gange %d billede; prøv at afslutte "
+"nogle anvendelser for at frigøre hukommelse."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:298
 msgid "Image contained no data."
@@ -485,7 +488,8 @@ msgstr "Kunne ikke indlæse '%s': %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:764
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Denne bugning af gdk-pixbuf understøtter ikke gemning af billedformat: %s"
+msgstr ""
+"Denne bugning af gdk-pixbuf understøtter ikke gemning af billedformat: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:867
 #, c-format
@@ -497,8 +501,9 @@ msgstr "Kunne ikke åbne '%s' for skrivning: %s"
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: "
 "%s"
-msgstr "Kunne ikke lukke '%s' ved skrivning af billede, formentlig er "
-"ikke alle data blevet gemt: %s"
+msgstr ""
+"Kunne ikke lukke '%s' ved skrivning af billede, formentlig er ikke alle data "
+"blevet gemt: %s"
 
 #: gdk-pixbuf/io-jpeg.c:126
 #, c-format
@@ -510,8 +515,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Ikke nok hukommelse til at indlæse billede, "
-"prøv at afslutte nogle anvendelser for at frigøre hukommelse."
+"Ikke nok hukommelse til at indlæse billede, prøv at afslutte nogle "
+"anvendelser for at frigøre hukommelse."
 
 #: gdk-pixbuf/io-jpeg.c:647
 #, c-format
@@ -519,16 +524,16 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"JPEG kvalitet skal være en værdi mellem 0 og 100; værdien '%s' kunne "
-"ikke fortolkes."
+"JPEG kvalitet skal være en værdi mellem 0 og 100; værdien '%s' kunne ikke "
+"fortolkes."
 
 #: gdk-pixbuf/io-jpeg.c:662
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"JPEG kvalitet skal være en værdi mellem 0 og 100; værdien '%d' er "
-"ikke tilladt."
+"JPEG kvalitet skal være en værdi mellem 0 og 100; værdien '%d' er ikke "
+"tilladt."
 
 #: gdk-pixbuf/io-png.c:158
 #, c-format
@@ -545,8 +550,8 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
-"Ikke nok hukommelse til at gemme et %ld gange %ld billede; prøv at "
-"afslutte nogle anvendelser for at frigøre hukommelse."
+"Ikke nok hukommelse til at gemme et %ld gange %ld billede; prøv at afslutte "
+"nogle anvendelser for at frigøre hukommelse."
 
 #: gdk-pixbuf/io-png.c:600
 #, c-format
@@ -604,8 +609,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Intern fejl: Billedindlæsermodul '%s' kunne ikke begynde indlæsning "
-"af et billede, men gav ikke nogen årsag til fejlen"
+"Intern fejl: Billedindlæsermodul '%s' kunne ikke begynde indlæsning af et "
+"billede, men gav ikke nogen årsag til fejlen"
 
 #: gtk/gtkcellrenderer.c:99
 msgid "xalign"
@@ -771,15 +776,15 @@ msgstr "Radio status"
 msgid "Draw the toggle button as a radio button."
 msgstr "Tegn skifteknappen som en radioknap."
 
-#: gtk/gtkentry.c:2510 gtk/gtktextview.c:4508
+#: gtk/gtkentry.c:2473 gtk/gtktextview.c:4495
 msgid "Cut"
 msgstr "Klip"
 
-#: gtk/gtkentry.c:2511 gtk/gtktextview.c:4509
+#: gtk/gtkentry.c:2474 gtk/gtktextview.c:4496
 msgid "Copy"
 msgstr "Kopiér"
 
-#: gtk/gtkentry.c:2512 gtk/gtktextview.c:4510
+#: gtk/gtkentry.c:2475 gtk/gtktextview.c:4497
 msgid "Paste"
 msgstr "Indsæt"
 
