@@ -1,3 +1,8 @@
+Mon Feb 16 19:13:21 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdraw.c: Revert last commit, please don't commit patches
+	without approval, this isn't the right way to do it.
+
 2004-02-16  DindinX  <david@dindinx.org>
 
 	* gdk/gdkdraw.c (gdk_draw_segments): don't try to draw more than 32767
