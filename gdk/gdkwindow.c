@@ -414,13 +414,21 @@ gdk_window_foreign_new (guint32 anid)
   GdkWindow *window;
   GdkWindowPrivate *private;
   XWindowAttributes attrs;
+  Window root, parent;
+  Window *children;
+  guint nchildren;
 
   private = g_new (GdkWindowPrivate, 1);
   window = (GdkWindow*) private;
 
   XGetWindowAttributes (gdk_display, anid, &attrs);
 
-  private->parent = NULL;
+  /* FIXME: This is pretty expensive. Maybe the caller should supply
+   *        the parent */
+  XQueryTree (gdk_display, anid, &root, &parent, &children, &nchildren);
+  XFree (children);
+  private->parent = gdk_xid_table_lookup (parent);
+
   private->xwindow = anid;
   private->xdisplay = gdk_display;
   private->x = attrs.x;
@@ -429,15 +437,20 @@ gdk_window_foreign_new (guint32 anid)
   private->height = attrs.height;
   private->resize_count = 0;
   private->ref_count = 1;
-  if (anid == attrs.root)
-    private->window_type = GDK_WINDOW_ROOT;
-  else
-    private->window_type = GDK_WINDOW_TOPLEVEL;
-  /* the above is probably wrong, but it may not be worth the extra
-     X call to get it right */
-    
+  private->window_type = GDK_WINDOW_FOREIGN;
   private->destroyed = FALSE;
   private->extension_events = 0;
+
+
+  private->dnd_drag_data_type = None;
+  private->dnd_drag_data_typesavail =
+    private->dnd_drop_data_typesavail = NULL;
+  private->dnd_drop_enabled = private->dnd_drag_enabled =
+    private->dnd_drag_accepted = private->dnd_drag_datashow =
+    private->dnd_drop_data_numtypesavail =
+    private->dnd_drag_data_numtypesavail = 0;
+  private->dnd_drag_eventmask = private->dnd_drag_savedeventmask = 0;
+
   private->filters = NULL;
 
   window->user_data = NULL;
@@ -455,7 +468,8 @@ gdk_window_foreign_new (guint32 anid)
    window.  */
 
 static void
-gdk_window_internal_destroy (GdkWindow *window, int xdestroy)
+gdk_window_internal_destroy (GdkWindow *window, gboolean xdestroy,
+			     gboolean our_destroy)
 {
   GdkWindowPrivate *private;
   GdkWindowPrivate *temp_private;
@@ -473,22 +487,27 @@ gdk_window_internal_destroy (GdkWindow *window, int xdestroy)
     case GDK_WINDOW_CHILD:
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
+    case GDK_WINDOW_FOREIGN:
       if (!private->destroyed)
 	{
-	  children = gdk_window_get_children (window);
-	  tmp = children;
-
-	  while (tmp)
+	  if (private->window_type != GDK_WINDOW_FOREIGN)
 	    {
-	      temp_window = tmp->data;
-	      tmp = tmp->next;
+	      children = gdk_window_get_children (window);
+	      tmp = children;
 
-	      temp_private = (GdkWindowPrivate*) temp_window;
-	      if (temp_private)
-		gdk_window_internal_destroy (temp_window, FALSE);
+	      while (tmp)
+		{
+		  temp_window = tmp->data;
+		  tmp = tmp->next;
+		  
+		  temp_private = (GdkWindowPrivate*) temp_window;
+		  if (temp_private)
+		    gdk_window_internal_destroy (temp_window, FALSE,
+						 our_destroy);
+		}
+	      
+	      g_list_free (children);
 	    }
-
-	  g_list_free (children);
 
 	  if (private->extension_events != 0)
 	    gdk_input_window_destroy (window);
@@ -504,8 +523,47 @@ gdk_window_internal_destroy (GdkWindow *window, int xdestroy)
 	      private->dnd_drop_data_typesavail = NULL;
 	    }
 
-	  if (xdestroy)
+	  if (private->filters)
+	    {
+	      tmp = private->filters;
+
+	      while (tmp)
+		{
+		  g_free (tmp->data);
+		  tmp = tmp->next;
+		}
+
+	      g_list_free (private->filters);
+	      private->filters = NULL;
+	    }
+	  
+	  if (private->window_type == GDK_WINDOW_FOREIGN)
+	    {
+	      if (our_destroy && (private->parent != NULL))
+		{
+		  /* It's somebody elses window, but in our heirarchy,
+		   * so reparent it to the root window, and then send
+		   * it a delete event, as if we were a WM
+		   */
+		  XClientMessageEvent xevent;
+		  
+		  gdk_window_hide (window);
+		  gdk_window_reparent (window, NULL, 0, 0);
+		  
+		  xevent.type = ClientMessage;
+		  xevent.window = private->xwindow;
+		  xevent.message_type = gdk_wm_protocols;
+		  xevent.format = 32;
+		  xevent.data.l[0] = gdk_wm_delete_window;
+		  xevent.data.l[1] = CurrentTime;
+		  
+		  XSendEvent (private->xdisplay, private->xwindow,
+			      False, 0, (XEvent *)&xevent);
+		}
+	    }
+	  else if (xdestroy)
 	    XDestroyWindow (private->xdisplay, private->xwindow);
+
 	  private->destroyed = TRUE;
 	}
       break;
@@ -526,7 +584,7 @@ gdk_window_internal_destroy (GdkWindow *window, int xdestroy)
 void
 gdk_window_destroy (GdkWindow *window)
 {
-  gdk_window_internal_destroy (window, TRUE);
+  gdk_window_internal_destroy (window, TRUE, TRUE);
   gdk_window_unref (window);
 }
 
@@ -541,6 +599,14 @@ gdk_window_destroy_notify (GdkWindow *window)
 
   private = (GdkWindowPrivate*) window;
 
+  if (!private->destroyed)
+    {
+      if (private->window_type == GDK_WINDOW_FOREIGN)
+	gdk_window_internal_destroy (window, FALSE, FALSE);
+      else
+	g_warning ("Window %#lx unexpectedly destroyed", private->xwindow);
+    }
+  
   gdk_xid_table_remove (private->xwindow);
   gdk_window_unref (window);
 }

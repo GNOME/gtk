@@ -110,6 +110,7 @@ typedef void*			  GdkIM;
  *	     and pixmaps transparently. (ie. You shouldn't pass a
  *	     pixmap to any procedure which accepts a window with the
  *	     exception of the drawing functions).
+ *   Foreign: A window that actually belongs to another application
  */
 typedef enum
 {
@@ -118,7 +119,8 @@ typedef enum
   GDK_WINDOW_CHILD,
   GDK_WINDOW_DIALOG,
   GDK_WINDOW_TEMP,
-  GDK_WINDOW_PIXMAP
+  GDK_WINDOW_PIXMAP,
+  GDK_WINDOW_FOREIGN
 } GdkWindowType;
 
 /* Classes of windows.

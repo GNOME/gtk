@@ -718,7 +718,8 @@ gtk_window_configure_event (GtkWidget         *widget,
   
   /* If the window was merely moved, do nothing */
   if ((widget->allocation.width == event->width) &&
-      (widget->allocation.height == event->height))
+      (widget->allocation.height == event->height) &&
+      (window->resize_count == 0))
     return FALSE;
   
   window = GTK_WINDOW (widget);
@@ -737,19 +738,7 @@ gtk_window_configure_event (GtkWidget         *widget,
     gtk_widget_map (window->bin.child);
   
   if (window->resize_count > 0)
-    {
-      window->resize_count -= 1;
-      
-      if ((window->resize_count == 0) &&
-	  ((event->width != widget->requisition.width) ||
-	   (event->height != widget->requisition.height)))
-	{
-	  window->resize_count = 1;
-	  gdk_window_resize (widget->window,
-			     widget->requisition.width,
-			     widget->requisition.height);
-	}
-    }
+    window->resize_count -= 1;
   
   window->handling_resize = FALSE;
   
@@ -1068,13 +1057,10 @@ gtk_real_window_move_resize (GtkWindow *window,
       (width < widget->requisition.width) ||
       (height < widget->requisition.height))
     {
-      if (window->resize_count == 0)
-	{
-	  window->resize_count = 1;
-	  gdk_window_resize (widget->window,
-			     widget->requisition.width,
-			     widget->requisition.height);
-	}
+      window->resize_count += 1;
+      gdk_window_resize (widget->window,
+			 widget->requisition.width,
+			 widget->requisition.height);
     }
   else
     {
