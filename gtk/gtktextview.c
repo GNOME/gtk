@@ -407,7 +407,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
                       GTK_SIGNAL_OFFSET (GtkTextViewClass, delete),
-                      gtk_marshal_VOID__INT_INT,
+                      gtk_marshal_VOID__ENUM_INT,
                       GTK_TYPE_NONE, 2, GTK_TYPE_DELETE_TYPE, GTK_TYPE_INT);
 
   signals[CUT_CLIPBOARD] =

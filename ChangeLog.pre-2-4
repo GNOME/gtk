@@ -1,8 +1,8 @@
 Sat Oct 28 02:33:09 2000  Robert Brady  <robert@suse.co.uk>
 
-	* gtk/gtkmarshal.list: add new marshaller for GtkTextView.
+	* gtk/gtkmarshal.list: add new marshallers for GtkTextView.
 
-	* gtk/gtktextview.c: Use correct marshaller.
+	* gtk/gtktextview.c: Use correct marshallers.
 
 Fri Oct 27 17:56:26 2000  Jonathan Blandford  <jrb@redhat.com>
 
