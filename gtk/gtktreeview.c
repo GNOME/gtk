@@ -5215,7 +5215,10 @@ _gtk_tree_view_find_node (GtkTreeView  *tree_view,
       if (tmptree == NULL)
 	{
 	  *node = tmpnode;
-	  *tree = tmptree;
+	  if (tmpnode == NULL)
+	    *tree = NULL;
+	  else
+	    *tree = tmptree;
 	  return TRUE;
 	}
       tmpnode = _gtk_rbtree_find_count (tmptree, indices[i] + 1);
@@ -5223,7 +5226,10 @@ _gtk_tree_view_find_node (GtkTreeView  *tree_view,
       if (i >= depth)
 	{
 	  *node = tmpnode;
-	  *tree = tmptree;
+	  if (tmpnode == NULL)
+	    *tree = NULL;
+	  else
+	    *tree = tmptree;
 	  return FALSE;
 	}
       tmptree = tmpnode->children;
@@ -6681,6 +6687,7 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
   g_return_val_if_fail (column->tree_view == NULL, -1);
 
   g_object_ref (G_OBJECT (column));
+  gtk_object_sink (GTK_OBJECT (column));
 
   if (tree_view->priv->n_columns == 0 &&
       GTK_WIDGET_REALIZED (tree_view) &&
@@ -6762,7 +6769,6 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
   va_end (args);
 
   gtk_tree_view_insert_column (tree_view, column, position);
-  g_object_unref (column);
 
   return tree_view->priv->n_columns;
 }
@@ -6804,8 +6810,6 @@ gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_vie
   gtk_tree_view_column_set_cell_data_func (column, cell, func, data, dnotify);
 
   gtk_tree_view_insert_column (tree_view, column, position);
-
-  g_object_unref (column);
 
   return tree_view->priv->n_columns;
 }

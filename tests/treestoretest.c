@@ -311,15 +311,11 @@ make_window (gint view_type)
   column = gtk_tree_view_column_new_with_attributes ("Node ID", cell, "markup", 0, NULL);
   gtk_tree_view_column_set_sort_column_id (column, 0);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-  g_object_unref (G_OBJECT (cell));
-  g_object_unref (G_OBJECT (column));
 
   cell = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("Random Number", cell, "text", 1, NULL);
   gtk_tree_view_column_set_sort_column_id (column, 1);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-  g_object_unref (G_OBJECT (cell));
-  g_object_unref (G_OBJECT (column));
 
   /* A few to start */
   if (view_type == 0)

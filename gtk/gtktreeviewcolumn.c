@@ -277,10 +277,6 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 static void
 gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
 {
-  /* FIXME remove on port to GtkObject */
-  gtk_object_ref (GTK_OBJECT (tree_column));
-  gtk_object_sink (GTK_OBJECT (tree_column));
-  
   tree_column->button = NULL;
   tree_column->xalign = 0.0;
   tree_column->width = 1;
@@ -1100,6 +1096,7 @@ gtk_tree_view_column_pack_start_cell_renderer (GtkTreeViewColumn  *tree_column,
   g_return_if_fail (! gtk_tree_view_column_get_cell_info (tree_column, cell));
 
   g_object_ref (G_OBJECT (cell));
+  gtk_object_sink (GTK_OBJECT (cell));
 
   cell_info = g_new0 (GtkTreeViewColumnCellInfo, 1);
   cell_info->cell = cell;
@@ -1125,6 +1122,7 @@ gtk_tree_view_column_pack_end_cell_renderer (GtkTreeViewColumn  *tree_column,
   g_return_if_fail (! gtk_tree_view_column_get_cell_info (tree_column, cell));
 
   g_object_ref (G_OBJECT (cell));
+  gtk_object_sink (GTK_OBJECT (cell));
 
   cell_info = g_new (GtkTreeViewColumnCellInfo, 1);
   cell_info->cell = cell;

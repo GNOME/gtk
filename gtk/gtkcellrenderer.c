@@ -76,10 +76,6 @@ gtk_cell_renderer_get_type (void)
 static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)
 {
-  /* FIXME remove on port to GtkObject */
-  gtk_object_ref (GTK_OBJECT (cell));
-  gtk_object_sink (GTK_OBJECT (cell));
-
   cell->can_activate = FALSE;
   cell->visible = TRUE;
   cell->width = -1;

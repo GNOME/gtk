@@ -337,7 +337,6 @@ main (int argc, char *argv[])
 							    "text", HOLIDAY_COLUMN, NULL);
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree_view), col_offset - 1);
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
-  g_object_unref (renderer);
 
   /* Alex Column */
   renderer = gtk_cell_renderer_toggle_new ();
@@ -355,7 +354,6 @@ main (int argc, char *argv[])
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column), GTK_TREE_VIEW_COLUMN_FIXED);
   gtk_tree_view_column_set_width (GTK_TREE_VIEW_COLUMN (column), 50);
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
-  g_object_unref (renderer);
 
   /* Havoc Column */
   renderer = gtk_cell_renderer_toggle_new ();
@@ -372,7 +370,6 @@ main (int argc, char *argv[])
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column), GTK_TREE_VIEW_COLUMN_FIXED);
   gtk_tree_view_column_set_width (GTK_TREE_VIEW_COLUMN (column), 50);
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
-  g_object_unref (renderer);
 
   /* Tim Column */
   renderer = gtk_cell_renderer_toggle_new ();
@@ -390,7 +387,6 @@ main (int argc, char *argv[])
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column), GTK_TREE_VIEW_COLUMN_FIXED);
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
   gtk_tree_view_column_set_width (GTK_TREE_VIEW_COLUMN (column), 50);
-  g_object_unref (renderer);
 
   /* Owen Column */
   renderer = gtk_cell_renderer_toggle_new ();
@@ -406,7 +402,6 @@ main (int argc, char *argv[])
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column), GTK_TREE_VIEW_COLUMN_FIXED);
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
   gtk_tree_view_column_set_width (GTK_TREE_VIEW_COLUMN (column), 50);
-  g_object_unref (renderer);
 
   /* Owen Column */
   renderer = gtk_cell_renderer_toggle_new ();
@@ -422,7 +417,6 @@ main (int argc, char *argv[])
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column), GTK_TREE_VIEW_COLUMN_FIXED);
   gtk_tree_view_column_set_width (GTK_TREE_VIEW_COLUMN (column), 50);
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
-  g_object_unref (renderer);
 
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
 
@@ -451,61 +445,45 @@ main (int argc, char *argv[])
   g_object_unref (G_OBJECT (model));
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view), TRUE);
 
-  renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "Holiday Column",
-					       renderer,
+					       gtk_cell_renderer_text_new (),
 					       "text", 0, NULL);
-  g_object_unref (renderer);
 
-  renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "Alex Column",
-					       renderer,
+					       gtk_cell_renderer_text_new (),
 					       "text", 1, NULL);
-  g_object_unref (renderer);
 
-  renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "Havoc Column",
-					       renderer,
+					       gtk_cell_renderer_text_new (),
 					       "text", 2, NULL);
-  g_object_unref (renderer);
 
-  renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "Tim Column",
-					       renderer,
+					       gtk_cell_renderer_text_new (),
 					       "text", 3, NULL);
-  g_object_unref (renderer);
 
-  renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "Owen Column",
-					       renderer,
+					       gtk_cell_renderer_text_new (),
 					       "text", 4, NULL);
-  g_object_unref (renderer);
 
-  renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "Dave Column",
-					       renderer,
+					       gtk_cell_renderer_text_new (),
 					       "text", 5, NULL);
-  g_object_unref (renderer);
 
-  renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "Visible Column",
-					       renderer,
+					       gtk_cell_renderer_text_new (),
 					       "text", 6, NULL);
-  g_object_unref (renderer);
 
-  renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "World Holiday",
-					       renderer,
+					       gtk_cell_renderer_text_new (),
 					       "text", 7, NULL);
-  g_object_unref (renderer);
 
   gtk_signal_connect (GTK_OBJECT (tree_view), "realize",
 		      GTK_SIGNAL_FUNC (gtk_tree_view_expand_all),

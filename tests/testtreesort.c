@@ -92,17 +92,12 @@ main (int argc, char *argv[])
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
   gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_1);
 
-  g_object_unref (column);
-  g_object_unref (renderer);
-
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("Second Word", renderer,
 						     "text", WORD_COLUMN_2,
 						     NULL);
   gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_2);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-  g_object_unref (column);
-  g_object_unref (renderer);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("Third Word", renderer,
@@ -110,8 +105,6 @@ main (int argc, char *argv[])
 						     NULL);
   gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_3);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-  g_object_unref (column);
-  g_object_unref (renderer);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("Fourth Word", renderer,
@@ -120,8 +113,6 @@ main (int argc, char *argv[])
   gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_4);
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-  g_object_unref (column);
-  g_object_unref (renderer);
 
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);

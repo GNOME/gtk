@@ -1,3 +1,20 @@
+Sun Aug 19 01:44:44 2001  Jonathan Blandford  <jrb@redhat.com>>
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_column_pack_{start,end}_cell_renderer): sink cell.
+
+	* gtk/gtktreeview.c (gtk_tree_view_insert_column): sink column.
+	(_gtk_tree_view_find_node): If *node is NULL,
+	*tree should be NULL too.
+
+	* demos/gtk-demo/stock_browser.c (do_stock_browser): don't unref
+	column/renderers.
+	* tests/testtreecolumns.c: ditto
+	* tests/testtreefocus.c: ditto
+	* tests/testtreesort.c: ditto
+	* tests/testtreeview.c: ditto
+	* tests/treestoretest.c: ditto
+
 Sat Aug 18 04:34:31 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrenderer.c (gtk_cell_renderer_class_init): 2 new

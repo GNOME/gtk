@@ -432,8 +432,6 @@ do_stock_browser (void)
                                                   macro_set_func,
                                                   NULL,
                                                   NULL);
-      g_object_unref (G_OBJECT (cell_renderer));
-
       cell_renderer = gtk_cell_renderer_text_new ();
 
       gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (treeview),
@@ -459,8 +457,6 @@ do_stock_browser (void)
                                                   id_set_func,
                                                   NULL,
                                                   NULL);
-      
-      g_object_unref (G_OBJECT (cell_renderer));
       
       align = gtk_alignment_new (0.5, 0.0, 0.0, 0.0);
       gtk_box_pack_end (GTK_BOX (hbox), align, FALSE, FALSE, 0);
