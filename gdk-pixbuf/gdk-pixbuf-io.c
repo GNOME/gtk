@@ -642,7 +642,7 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
 
 	gint score, best = 0;
 	GdkPixbufModule *selected = NULL;
-	gchar *utf8_filename = NULL;
+	gchar *display_name = NULL;
 
 	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
 		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
@@ -662,16 +662,14 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
 		return selected;
 
         if (filename)
-		utf8_filename = g_filename_to_utf8 (filename, -1,
-						    NULL, NULL, NULL);
-	
-	if (utf8_filename) {
+	{
+		display_name = g_filename_display_name (filename);
 		g_set_error (error,
 			     GDK_PIXBUF_ERROR,
 			     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
 			     _("Couldn't recognize the image file format for file '%s'"),
-			     utf8_filename);
-		g_free (utf8_filename);
+			     display_name);
+		g_free (display_name);
 	}
         else
                 g_set_error (error,
@@ -774,46 +772,47 @@ gdk_pixbuf_new_from_file (const char *filename,
 	FILE *f;
 	guchar buffer [128];
 	GdkPixbufModule *image_module;
+	gchar *display_name;
 
 	g_return_val_if_fail (filename != NULL, NULL);
         g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+	
+	display_name = g_filename_display_name (filename);	
 
 	f = fopen (filename, "rb");
 	if (!f) {
-                gchar *utf8_filename = g_filename_to_utf8 (filename, -1,
-                                                           NULL, NULL, NULL);
                 g_set_error (error,
                              G_FILE_ERROR,
                              g_file_error_from_errno (errno),
                              _("Failed to open file '%s': %s"),
-                             utf8_filename ? utf8_filename : "???",
+                             display_name,
                              g_strerror (errno));
-                g_free (utf8_filename);
+                g_free (display_name);
 		return NULL;
         }
 
 	size = fread (&buffer, 1, sizeof (buffer), f);
 	if (size == 0) {
-                gchar *utf8_filename = g_filename_to_utf8 (filename, -1,
-                                                           NULL, NULL, NULL);
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
                              _("Image file '%s' contains no data"),
-                             utf8_filename ? utf8_filename : "???");
-                g_free (utf8_filename);
+                             display_name);
+                g_free (display_name);
 		fclose (f);
 		return NULL;
 	}
 
 	image_module = _gdk_pixbuf_get_module (buffer, size, filename, error);
         if (image_module == NULL) {
+                g_free (display_name);
                 fclose (f);
                 return NULL;
         }
 
 	if (image_module->module == NULL)
                 if (!_gdk_pixbuf_load_module (image_module, error)) {
+			g_free (display_name);
                         fclose (f);
                         return NULL;
                 }
@@ -830,34 +829,26 @@ gdk_pixbuf_new_from_file (const char *filename,
                  * the invariant that error gets set if NULL is returned.
                  */
 
-                gchar *utf8_filename = g_filename_to_utf8 (filename, -1,
-                                                           NULL, NULL, NULL);
-
                 g_warning ("Bug! gdk-pixbuf loader '%s' didn't set an error on failure.", image_module->module_name);
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_FAILED,
                              _("Failed to load image '%s': reason not known, probably a corrupt image file"),
-                             utf8_filename ? utf8_filename : "???");
-                g_free (utf8_filename);
+                             display_name);
         } else if (error != NULL && *error != NULL) {
 
           /* Add the filename to the error message */
           GError *e = *error;
           gchar  *old;
-          gchar  *utf8_filename = g_filename_to_utf8 (filename, -1,
-                                                      NULL, NULL, NULL);
 
           old = e->message;
-
           e->message = g_strdup_printf (_("Failed to load image '%s': %s"),
-                                        utf8_filename ? utf8_filename : "???",
+                                        display_name,
                                         old);
-
-          g_free (utf8_filename);
           g_free (old);
         }
 
+	g_free (display_name);
 	return pixbuf;
 }
 
@@ -938,15 +929,14 @@ gdk_pixbuf_new_from_file_at_scale (const char *filename,
 
 	f = fopen (filename, "rb");
 	if (!f) {
-                gchar *utf8_filename = g_filename_to_utf8 (filename, -1,
-                                                           NULL, NULL, NULL);
+                gchar *display_name = g_filename_display_name (filename);
                 g_set_error (error,
                              G_FILE_ERROR,
                              g_file_error_from_errno (errno),
                              _("Failed to open file '%s': %s"),
-                             utf8_filename ? utf8_filename : "???",
+                             display_name,
                              g_strerror (errno));
-                g_free (utf8_filename);
+                g_free (display_name);
 		return NULL;
         }
 
@@ -979,17 +969,14 @@ gdk_pixbuf_new_from_file_at_scale (const char *filename,
 	pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
 
 	if (!pixbuf) {
-                gchar *utf8_filename = g_filename_to_utf8 (filename, -1,
-                                                           NULL, NULL, NULL);
-
+                gchar *display_name = g_filename_display_name (filename);
 		g_object_unref (loader);
-
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_FAILED,
                              _("Failed to load image '%s': reason not known, probably a corrupt image file"),
-                             utf8_filename ? utf8_filename : "???");
-                g_free (utf8_filename);
+                             display_name);
+                g_free (display_name);
 		return NULL;
 	}
 
@@ -1489,15 +1476,14 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
         f = fopen (filename, "wb");
         
         if (f == NULL) {
-                gchar *utf8_filename = g_filename_to_utf8 (filename, -1,
-                                                           NULL, NULL, NULL);
+                gchar *display_name = g_filename_display_name (filename);
                 g_set_error (error,
                              G_FILE_ERROR,
                              g_file_error_from_errno (errno),
                              _("Failed to open '%s' for writing: %s"),
-                             utf8_filename ? utf8_filename : "???",
+                             display_name,
                              g_strerror (errno));
-                g_free (utf8_filename);
+                g_free (display_name);
                 return FALSE;
         }
 
@@ -1514,15 +1500,14 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
        }
 
        if (fclose (f) < 0) {
-               gchar *utf8_filename = g_filename_to_utf8 (filename, -1,
-                                                           NULL, NULL, NULL);
+               gchar *display_name = g_filename_display_name (filename);
                g_set_error (error,
                             G_FILE_ERROR,
                             g_file_error_from_errno (errno),
                             _("Failed to close '%s' while writing image, all data may not have been saved: %s"),
-                            utf8_filename ? utf8_filename : "???",
+                            display_name,
                             g_strerror (errno));
-               g_free (utf8_filename);
+               g_free (display_name);
                return FALSE;
        }
        
