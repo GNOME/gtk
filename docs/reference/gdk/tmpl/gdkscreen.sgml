@@ -24,12 +24,10 @@ form a large screen area.
 
 <!-- ##### STRUCT GdkScreen ##### -->
 <para>
-This is a currently just a placeholder typedef for the first argument of 
-the @window_at_pointer function in #GdkPointerHooks. It will be used
-when GDK gets multihead support. 
+The <structname>GdkScreen</structname> struct is the GDK representation of a
+ physical screen. All its fields are private and should not be accessed directly. 
 </para>
 
-@parent_instance: 
 
 <!-- ##### FUNCTION gdk_screen_get_default_colormap ##### -->
 <para>
@@ -177,15 +175,6 @@ when GDK gets multihead support.
 
 
 <!-- ##### FUNCTION gdk_screen_get_toplevel_windows ##### -->
-<para>
-
-</para>
-
-@screen: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_screen_use_virtual_screen ##### -->
 <para>
 
 </para>

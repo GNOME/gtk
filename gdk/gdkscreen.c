@@ -317,14 +317,13 @@ gdk_screen_get_monitor_at_point (GdkScreen *screen,
 }
 
 /**
- * gdk_screen_get_monitor_num_at_window:
- * @screen : a #GdkScreen.
- * @anid : a #GdkDrawable ID.
+ * gdk_screen_get_monitor_at_window:
+ * @screen: a #GdkScreen.
+ * @window: a #GdkWindow
+ * @returns: the monitor number in which most of @window is located.
  *
- * Returns the monitor number in which the largest area of the bounding rectangle
- * of @anid resides. 
- *
- * Returns: the monitor number in which most of @anid is located.
+ * Returns the number of the monitor in which the largest area of the bounding rectangle
+ * of @window resides. 
  **/
 gint 
 gdk_screen_get_monitor_at_window (GdkScreen      *screen,

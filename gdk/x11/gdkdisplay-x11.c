@@ -215,6 +215,14 @@ init_xinerama_support (GdkScreen * screen)
   screen_x11->monitors[0].height = HeightOfScreen (screen_x11->xscreen);
 }
 
+/**
+ * gdk_open_display:
+ * @display_name: the name of the display to open
+ * @returns: a #GdkDisplay, or %NULL if the display
+ *  could not be opened.
+ *
+ * Opens a display.
+ */
 GdkDisplay *
 gdk_open_display (const gchar *display_name)
 {
@@ -634,8 +642,17 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
   return NULL;
 }
 
+/**
+ * gdk_x11_display_get_xdisplay:
+ * @display: a #GdkDisplay
+ * @returns: an X display.
+ *
+ * Returns the X display of a #GdkDisplay.
+ */
 Display *
 gdk_x11_display_get_xdisplay (GdkDisplay  *display)
 {
   return GDK_DISPLAY_X11 (display)->xdisplay;
 }
+
+

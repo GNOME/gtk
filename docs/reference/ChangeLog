@@ -1,4 +1,14 @@
-2002-05-02  Matthias Clasen  <maclas@gmx.de>
+2002-05-03  Matthias Clasen  <maclas@gmx.de>
+
+ 	* gdk/gdk-sections.txt: Remove gdk_screen_use_virtual_screen.
+
+	* gdk/tmpl/gdkscreen.sgml: Updates.
+
+	* gdk/tmpl/gdkdisplay.sgml: Document GdkDisplay.
+
+	* gdk/tmpl/x_interaction.sgml: Document GDK_DISPLAY_XDISPLAY,
+	GDK_SCREEN_XDISPLAY, GDK_SCREEN_XSCREEN, GDK_SCREEN_XNUMBER,
+	gdk_font_lookup_for_display.
 
 	* gdk/Makefile.am (GTKDOC_CFLAGS, GTKDOC_LIBS): set these. 
 

@@ -1,5 +1,17 @@
 2002-05-02  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/gdkscreen.c (gdk_screen_get_monitor_at_window): Fix doc comment.
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_open_display): 
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_get_default): 
+	* gdk/x11/gdkfont-x11.c (gdk_fontset_load_for_display): 
+	* gdk/x11/gdkfont-x11.c (gdk_font_from_description_for_display): 
+	* gdk/x11/gdkfont-x11.c (gdk_font_load_for_display): 
+	* gdk/x11/gdkscreen-x11.c (gdk_x11_screen_get_xscreen):
+	* gdk/x11/gdkscreen-x11.c (gdk_x11_screen_get_screen_number): 
+	* gdk/x11/gdkdisplay-x11.c (gdk_x11_display_get_xdisplay): 
+	* gdk/x11/gdkdnd-x11.c (gdk_drag_get_protocol_for_display): Document.
+
 	* gtk/gtknotebook.c (gtk_notebook_set_show_border): Typo fix.
 
 	* gtk/gtkwidget.c (gtk_widget_class_init): Correct the

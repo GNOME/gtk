@@ -166,12 +166,11 @@ get_xkb (GdkKeymapX11 *keymap_x11)
  */
 
 /** 
- * gdk_keymap_get_for_display :
- * @display : the #GdkDisplay.
+ * gdk_keymap_get_for_display:
+ * @display: the #GdkDisplay.
+ * @returns: the #GdkKeymap attached to @display.
  *
- * Returns the GdkKeymap attached to @display.
- *
- * Returns : the GdkKeymap attached to @display.
+ * Returns the #GdkKeymap attached to @display.
  **/
 GdkKeymap*
 gdk_keymap_get_for_display (GdkDisplay *display)
@@ -188,6 +187,12 @@ gdk_keymap_get_for_display (GdkDisplay *display)
   return display_x11->keymap;
 }
 
+/** 
+ * gdk_keymap_get_default:
+ * @returns: the #GdkKeymap attached to the default display.
+ *
+ * Returns the #GdkKeymap attached to the default display.
+ **/
 GdkKeymap*
 gdk_keymap_get_default (void)
 {

@@ -30,10 +30,10 @@ controls the keyboard/mouse pointer grabs and a set of <type>GdkScreen</type>s
 
 <!-- ##### STRUCT GdkDisplay ##### -->
 <para>
-
+The <structname>GdkDisplay</structname> struct is the GDK representation
+of an X display. All its fields are private and should not be accessed directly. 
 </para>
 
-@parent_instance: 
 
 <!-- ##### FUNCTION gdk_open_display ##### -->
 <para>

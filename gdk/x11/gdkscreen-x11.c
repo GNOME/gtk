@@ -255,12 +255,28 @@ gdk_screen_x11_get_monitor_geometry (GdkScreen    *screen,
   *dest = screen_x11->monitors[num_monitor];
 }
 
+/**
+ * gdk_x11_screen_get_xscreen:
+ * @screen: a #GdkScreen.
+ * @returns: an Xlib <type>Screen*</type>
+ *
+ * Returns the screen of a #GdkScreen.
+ */
 Screen *
 gdk_x11_screen_get_xscreen (GdkScreen *screen)
 {
   return GDK_SCREEN_X11 (screen)->xscreen;
 }
 
+
+/**
+ * gdk_x11_screen_get_screen_number:
+ * @screen: a #GdkScreen.
+ * @returns: the position of @screen among the screens of
+ *   its display.
+ *
+ * Returns the index of a #GdkScreen.
+ */
 int
 gdk_x11_screen_get_screen_number (GdkScreen *screen)
 {

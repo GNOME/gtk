@@ -162,6 +162,17 @@ gdk_font_hash_lookup (GdkDisplay  *display,
     }
 }
 
+/**
+ * gdk_font_load_for_display:
+ * @display: a #GdkDisplay
+ * @font_name: a XLFD describing the font to load.
+ * @returns: a #GdkFont, or %NULL if the font could not be loaded.
+ *
+ * Loads a font for use on @display.
+ *
+ * The font may be newly loaded or looked up the font in a cache. 
+ * You should make no assumptions about the initial reference count.
+ */
 GdkFont *
 gdk_font_load_for_display (GdkDisplay  *display, 
 			   const gchar *font_name)
@@ -254,6 +265,20 @@ gdk_font_charset_for_locale (void)
     return g_strdup ("iso8859-1");
 };
 
+/**
+ * gdk_font_from_description_for_display:
+ * @display: a #GdkDisplay
+ * @font_desc: a #PangoFontDescription.
+ * 
+ * Loads a #GdkFont based on a Pango font description for use on @display. 
+ * This font will only be an approximation of the Pango font, and
+ * internationalization will not be handled correctly. This function
+ * should only be used for legacy code that cannot be easily converted
+ * to use Pango. Using Pango directly will produce better results.
+ * 
+ * Return value: the newly loaded font, or %NULL if the font
+ * cannot be loaded.
+ */
 GdkFont *
 gdk_font_from_description_for_display (GdkDisplay           *display,
 				       PangoFontDescription *font_desc)
@@ -315,6 +340,18 @@ gdk_font_from_description (PangoFontDescription *font_desc)
   return gdk_font_from_description_for_display (gdk_get_default_display (),font_desc);
 }
 
+/**
+ * gdk_fontset_load_for_display:
+ * @display: a #GdkDisplay
+ * @fontset_name: a comma-separated list of XLFDs describing
+ *   the component fonts of the fontset to load.
+ * @returns: a #GdkFont, or %NULL if the fontset could not be loaded.
+ * 
+ * Loads a fontset for use on @display.
+ *
+ * The fontset may be newly loaded or looked up in a cache. 
+ * You should make no assumptions about the initial reference count.
+ */
 GdkFont *
 gdk_fontset_load_for_display (GdkDisplay  *display,
 			      const gchar *fontset_name)

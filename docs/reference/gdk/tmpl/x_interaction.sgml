@@ -78,10 +78,10 @@ Returns the X pixmap belonging to a #GdkPixmap.
 
 <!-- ##### MACRO GDK_DISPLAY_XDISPLAY ##### -->
 <para>
-
+Returns the display of a #GdkDisplay.
 </para>
 
-@display: 
+@display: a #GdkDisplay.
 
 
 <!-- ##### MACRO GDK_DRAWABLE_XDISPLAY ##### -->
@@ -149,26 +149,30 @@ Returns the X colormap belonging to a #GdkColormap.
 
 <!-- ##### MACRO GDK_SCREEN_XDISPLAY ##### -->
 <para>
-
+Returns the display of a #GdkScreen.
 </para>
 
-@screen: 
+@screen: a #GdkScreen.
+@Returns: an Xlib <type>Display*</type>.
 
 
 <!-- ##### MACRO GDK_SCREEN_XNUMBER ##### -->
 <para>
-
+Returns the index of a #GdkScreen.
 </para>
 
-@screen: 
+@screen: a #GdkScreen
+@Returns: the position of @screen among the screens of
+  its display.
 
 
 <!-- ##### MACRO GDK_SCREEN_XSCREEN ##### -->
 <para>
-
+Returns the screen of a #GdkScreen.
 </para>
 
-@screen: 
+@screen: a #GdkScreen
+@Returns: an Xlib <type>Screen*</type>.
 
 
 <!-- ##### MACRO GDK_VISUAL_XVISUAL ##### -->
@@ -370,7 +374,7 @@ a #GdkWindow or a #GdkFont.
 
 <!-- ##### MACRO gdk_font_lookup ##### -->
 <para>
-Obtains the #GdkFont for the given Xlib pixmap ID, or %NULL if no #GdkPixmap has
+Obtains the #GdkFont for the given Xlib font ID, or %NULL if no #GdkFont has
 been created for @xid.
 </para>
 
@@ -379,7 +383,8 @@ been created for @xid.
 
 <!-- ##### MACRO gdk_font_lookup_for_display ##### -->
 <para>
-
+Obtains the #GdkFont for the given Xlib font ID on @display, or %NULL if no
+#GdkFont has been created for @xid.
 </para>
 
 @display: 

@@ -2715,6 +2715,17 @@ gdk_drag_begin (GdkWindow     *window,
   return new_context;
 }
 
+/**
+ * gdk_drag_get_protocol_for_display:
+ * @display: the #GdkDisplay where the destination window resides
+ * @xid: the X id of the destination window.
+ * @protocol: location where the supported DND protocol is returned.
+ * @returns: the X id of the window where the drop should happen. This 
+ *     may be @xid or the X id of a proxy window, or None if @xid doesn't
+ *     support Drag and Drop.
+ *
+ * Finds out the DND protocol supported by a window.
+ */ 
 guint32
 gdk_drag_get_protocol_for_display (GdkDisplay      *display,
 				   guint32          xid,
