@@ -2104,7 +2104,7 @@ gtk_tree_store_swap (GtkTreeStore *tree_store,
   g_free (order);
 }
 
-/* WARNING: this function is *incredibly* fragily. Please smashtest after
+/* WARNING: this function is *incredibly* fragile. Please smashtest after
  * making changes here.
  *	-Kris
  */
@@ -2394,13 +2394,13 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
 	  order[i] = i;
     }
 
-  path = gtk_tree_path_new ();
+  if (depth)
+    path = gtk_tree_model_get_path (GTK_TREE_MODEL (tree_store), &parent_iter);
+  else
+    path = gtk_tree_path_new ();
+
   gtk_tree_model_rows_reordered (GTK_TREE_MODEL (tree_store),
 				 path, NULL, order);
-
-  for (i = 0; i < length; i++)
-    g_print ("%2d ", order[i]);
-  g_print ("\n");
 
   gtk_tree_path_free (path);
   if (position)

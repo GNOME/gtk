@@ -1,3 +1,69 @@
+Tue Jan 14 23:29:00 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render):
+	make sure exposed pixbufs are clipped to the exposed area before
+	drawing, which is a slight speedup. (#102379, patch from Soeren
+	Sandmann).
+
+Tue Jan 14 23:26:41 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (validate_visible_area): silly typo fix,
+	only free scroll_to_path when the complete tree has been validated.
+	This makes sure that we scrolled to the correct path.
+
+Tue Jan 14 23:25:32 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_style_set): update the
+	background of widget->window and bin->window. (Fixes #96650, reported
+	by Dave Camp).
+
+Tue Jan 14 23:24:02 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_clamp_node_visible): process
+	updates before scrolling, avoiding a "selection streak". (Fixes
+	#101235, patch from Soeren Sandmann).
+
+Tue Jan 14 23:22:13 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (validate_visible_area): actually put values
+	in the requisition using gtk_widget_size_request. (Fixes #100172,
+	reported by Kjartan Maraas).
+
+Tue Jan 14 23:19:45 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_rows_reordered): cancel the
+	arrow animation timeout before we actually reorder the rbtree. If
+	we don't do this we can get stuck arrows,
+	(cancel_arrow_animation): new function. (Fixes #93629, part 2,
+	reported and testcase provided by Hans Petter Jansson).
+
+Tue Jan 14 23:18:21 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_real_modify_range):
+	anchor_path should be start_path, not end_path. (Fixes #102618,
+	patch from Carlos Garnacho Parro).
+
+Tue Jan 14 23:16:15 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkliststore.c (gtk_list_store_move): also update the tail,
+	only correct new_pos if we don't move to the head/tail.
+
+Tue Jan 14 23:11:55 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreestore.c (gtk_tree_store_swap): take the path from
+	the parent_iter if depth >= 1, so we send the reordered signal to
+	the correct level, remove debugging printfs which I forgot the remove
+	earlier (2.2.0 shipped with this, oops). (Fixes #103198, Reported and
+	testcase provided by Matthew Tuck).
+
+Tue Jan 14 20:58:44 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (invalite_last_column): split out actual column
+	invalidation into invalite_column(),
+	(gtk_tree_view_size_allocate_columns): invalidate column if the
+	new width is larger than the old width.
+	(fixes #102890, reported by Alex Duggan).
+
 2003-01-14  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): Skip
