@@ -10,7 +10,6 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	-I$(top_builddir)/gdk	\
 	@GTK_DEBUG_FLAGS@ 	\
 	@GTK_XIM_FLAGS@		\
-	@GTK_LOCALE_FLAGS@	\
 	@PANGO_CFLAGS@		\
 	@GLIB_CFLAGS@		\
 	@FREETYPE_CFLAGS@	\

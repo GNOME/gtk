@@ -8,7 +8,6 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_XIM_FLAGS@					\
-	@GTK_LOCALE_FLAGS@				\
 	@PANGO_CFLAGS@					\
 	@GLIB_CFLAGS@					\
 	@more_cflags@					\

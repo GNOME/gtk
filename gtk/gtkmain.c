@@ -26,11 +26,7 @@
 
 #include "gdkconfig.h"
 
-#ifdef GDK_WINDOWING_X11
-#include <X11/Xlocale.h>	/* so we get the right setlocale */
-#else
 #include <locale.h>
-#endif
 
 #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
 #include <libintl.h>

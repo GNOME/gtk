@@ -116,7 +116,6 @@ AC_ARG_ENABLE(xim_inst, [  --disable-xim-inst      does not use xim instantiate 
 AC_ARG_ENABLE(xkb, [  --enable-xkb            support XKB [default=maybe]],
 			, enable_xkb="maybe")
 AC_ARG_ENABLE(rebuilds, [  --disable-rebuilds      disable all source autogeneration rules],,enable_rebuilds=yes)
-AC_ARG_WITH(locale, [  --with-locale=LOCALE    locale name you want to use ])
 
 AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
 
@@ -625,28 +624,6 @@ AC_SUBST(more_libs)
 AC_SUBST(gdktargetlib)
 AC_SUBST(gtktargetlib)
 
-
-# Check if X_LOCALE definition is necessary
-
-AC_MSG_CHECKING(need -DX_LOCALE)
-
-AC_TRY_RUN([
-#include <stdio.h>
-#include <locale.h>
-
-int
-main ()
-{
-  return setlocale (LC_ALL, "${with_locale}") == NULL;
-}],
-need_x_locale=no,
-need_x_locale=yes,
-need_x_locale=no)
-AC_MSG_RESULT($need_x_locale)
-
-if test $need_x_locale = yes; then
-  GTK_LOCALE_FLAGS="-DX_LOCALE"
-fi
 
 # Checks for header files.
 AC_HEADER_STDC

@@ -1,3 +1,13 @@
+Thu Apr 26 10:40:41 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.h: Remove deprecation of gtk_window_set_default_size()
+	until patch adding gtk_window_set_size() is recommitted. 
+
+	* **Makefile.am configure.in gdk/x11/gdkim-11.c
+	  gtk/gtkmain.c gtk/gtkimmulticontext.c gtk/gtkmain.c
+	  gtk/gtkrc.c: Remove all traces of -DX_LOCALE support.
+	  (#10784)
+
 Wed Apr 25 12:16:36 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/X11/gdkevents-x11.c (gdk_event_translate): Test for 

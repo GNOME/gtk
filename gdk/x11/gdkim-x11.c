@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include <X11/Xlocale.h>
+#include <locale.h>
 
 #include "gdk.h"		/* For gdk_flush() */
 #include "gdkpixmap.h"

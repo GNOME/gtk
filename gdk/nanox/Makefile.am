@@ -6,7 +6,6 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	-I$(top_srcdir)/gdk	\
 	@GTK_DEBUG_FLAGS@ 	\
 	@GTK_XIM_FLAGS@		\
-	@GTK_LOCALE_FLAGS@	\
 	@GLIB_CFLAGS@		\
 	@more_cflags@ 		\
 @STRIP_END@

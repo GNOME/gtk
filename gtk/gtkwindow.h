@@ -216,6 +216,7 @@ void       gtk_window_set_policy               (GtkWindow           *window,
 						gint                 allow_shrink,
 						gint                 allow_grow,
 						gint                 auto_shrink);
+#endif
 /* The following differs from gtk_widget_set_usize, in that
  * gtk_widget_set_usize() overrides the requisition, so sets a minimum
  * size, while this only sets the size requested from the WM.
@@ -223,7 +224,6 @@ void       gtk_window_set_policy               (GtkWindow           *window,
 void       gtk_window_set_default_size         (GtkWindow           *window,
 						gint                 width,
 						gint                 height);
-#endif
 
 /* --- internal functions --- */
 void       gtk_window_set_focus                (GtkWindow           *window,

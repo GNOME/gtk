@@ -18,12 +18,7 @@
  */
 
 #include <string.h>
-
-#ifdef GDK_WINDOWING_X11
-#include <X11/Xlocale.h>	/* so we get the right setlocale */
-#else
 #include <locale.h>
-#endif
 
 #include "gtksignal.h"
 #include "gtkimmulticontext.h"
