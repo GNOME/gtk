@@ -182,16 +182,18 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 # interface)
 
 gtk_semipublic_h_sources = @STRIP_BEGIN@ \
-	gtktextbtree.h		\
-	gtktextchild.h		\
 	gtktextdisplay.h	\
 	gtktextlayout.h		\
-	gtktextsegment.h	\
-	gtktexttypes.h		\
 @STRIP_END@	
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources = @STRIP_BEGIN@ \
+	gtktextbtree.h		\
+	gtktextchild.h		\
+	gtktextsegment.h	\
+	gtktexttypes.h		\
+	gtktextiterprivate.h	\
+	gtktextmarkprivate.h	\
 @STRIP_END@
 # GTK+ C sources to build the library from
 gtk_c_sources = @STRIP_BEGIN@ \

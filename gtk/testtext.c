@@ -934,8 +934,8 @@ do_search (gpointer callback_data,
   dialog = gtk_dialog_new_with_buttons ("Search",
                                         GTK_WINDOW (view->window),
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_STOCK_BUTTON_OK,
-                                        0, NULL);
+                                        GTK_STOCK_BUTTON_CLOSE,
+                                        GTK_RESPONSE_NONE, NULL);
 
   buffer = gtk_text_buffer_new (NULL);
 

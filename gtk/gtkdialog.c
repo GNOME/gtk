@@ -135,7 +135,7 @@ static gint
 gtk_dialog_key_press (GtkWidget   *widget,
                       GdkEventKey *key)
 {
-  GdkEventAny event = { GDK_DELETE, widget->window, FALSE };
+  GdkEventAny event = { GDK_DELETE, widget->window, TRUE };
 
   if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, key))
     return TRUE;
@@ -143,6 +143,7 @@ gtk_dialog_key_press (GtkWidget   *widget,
   if (key->keyval != GDK_Escape)
     return FALSE;
 
+  /* Synthesize delete_event on key press. */
   g_object_ref (G_OBJECT (event.window));
   
   gtk_main_do_event ((GdkEvent*)&event);
@@ -299,7 +300,8 @@ gtk_dialog_add_button (GtkDialog   *dialog,
   g_return_if_fail (GTK_IS_DIALOG (dialog));
   g_return_if_fail (button_text != NULL);
 
-  button = gtk_button_new_stock (button_text, NULL);
+  button = gtk_button_new_stock (button_text,
+                                 gtk_window_get_accel_group (GTK_WINDOW (dialog)));
 
   gtk_widget_show (button);
   

@@ -534,6 +534,29 @@ gtk_window_remove_accel_group (GtkWindow       *window,
   gtk_accel_group_detach (accel_group, GTK_OBJECT (window));
 }
 
+GtkAccelGroup*
+gtk_window_get_accel_group (GtkWindow *window)
+{
+  GtkAccelGroup *group;
+  
+  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+
+  group = gtk_object_get_data (GTK_OBJECT (window),
+                               "__gtk_accel_group");
+
+  if (group == NULL)
+    {
+      group = gtk_accel_group_new ();
+      gtk_window_add_accel_group (window, group);
+      gtk_object_set_data (GTK_OBJECT (window),
+                           "__gtk_accel_group",
+                           group);
+      gtk_accel_group_unref (group);
+    }
+
+  return group;
+}
+
 void
 gtk_window_set_position (GtkWindow         *window,
 			 GtkWindowPosition  position)

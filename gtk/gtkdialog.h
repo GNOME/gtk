@@ -55,7 +55,7 @@ typedef enum
 */
 typedef enum
 {
-  /* GTK returns this if an response widget has no response_id,
+  /* GTK returns this if a response widget has no response_id,
      or the dialog gets destroyed with no response */
   GTK_RESPONSE_NONE = 0,
   /* GTK won't return these unless you pass them in
@@ -119,8 +119,8 @@ void gtk_dialog_add_buttons        (GtkDialog   *dialog,
                                     ...);
 
 /* Emit response signal */
-void gtk_dialog_response             (GtkDialog *dialog,
-                                      gint       response_id);
+void gtk_dialog_response           (GtkDialog *dialog,
+                                    gint       response_id);
 
 /* Returns response_id */
 gint gtk_dialog_run                (GtkDialog *dialog);

@@ -2622,8 +2622,6 @@ gtk_text_btree_first_could_contain_tag (GtkTextBTree *tree,
           g_assert(node != NULL);
         }
       
-    done:
-      
       g_assert(node != NULL); /* The tag summaries said some node had
                                  tag toggles... */
       
@@ -3841,7 +3839,6 @@ gtk_text_line_next_could_contain_tag(GtkTextLine *line,
       g_assert(node != NULL);
     }
 
- done:
   g_assert(node != NULL);
   g_assert(node->level == 0);
   

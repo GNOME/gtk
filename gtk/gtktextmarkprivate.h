@@ -6,7 +6,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <gtk/gtktexttypes.h>
-
+#include <gtk/gtktextlayout.h>
 
 #define GTK_IS_TEXT_MARK(mark) (((GtkTextLineSegment*)mark)->type == &gtk_text_left_mark_type || \
                                 ((GtkTextLineSegment*)mark)->type == &gtk_text_right_mark_type)

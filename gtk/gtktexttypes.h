@@ -10,7 +10,6 @@ extern "C" {
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktexttagprivate.h>
 
-typedef struct _GtkTextLine GtkTextLine;
 typedef struct _GtkTextCounter GtkTextCounter;
 typedef struct _GtkTextLineSegment GtkTextLineSegment;
 typedef struct _GtkTextLineSegmentClass GtkTextLineSegmentClass;
@@ -19,7 +18,6 @@ typedef struct _GtkTextViewSearch GtkTextViewSearch;
 typedef struct _GtkTextTab GtkTextTab;
 typedef struct _GtkTextViewStyle GtkTextViewStyle;
 typedef struct _GtkTextMarkBody GtkTextMarkBody;
-typedef struct _GtkTextLayout GtkTextLayout;
 
 /*
  * Search

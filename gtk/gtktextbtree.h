@@ -163,8 +163,6 @@ GtkTextLine *       gtk_text_btree_last_could_contain_tag  (GtkTextBTree       *
 
 /* Chunk of data associated with a line; views can use this to store
    info at the line. They should "subclass" the header struct here. */
-typedef struct _GtkTextLineData GtkTextLineData;
-
 struct _GtkTextLineData {
   gpointer view_id;
   GtkTextLineData *next;

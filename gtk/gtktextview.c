@@ -57,6 +57,7 @@
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"
 #include "gdk/gdkkeysyms.h"
+#include "gtktexttypes.h"
 #include <string.h>
 
 enum {
