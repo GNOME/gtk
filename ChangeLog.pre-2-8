@@ -1,3 +1,7 @@
+2003-08-29  Laurent Dhima  <laurenti@alblinux.net>
+
+	* configure.in: Added "sq" to ALL_LINGUAS.
+	
 Tue Aug 26 19:44:02 BST 2003  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: Fix missing tag (#120713)
