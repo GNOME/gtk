@@ -10,14 +10,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 2.3.1\n"
-"POT-Creation-Date: 2004-01-17 01:51+0100\n"
-"PO-Revision-Date: 2004-01-14 22:14+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-01-19 18:09+0100\n"
+"PO-Revision-Date: 2004-01-19 18:09+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
@@ -440,7 +440,7 @@ msgstr "Abstand"
 msgid "The amount of space between children"
 msgstr "Der Abstand zwischen den Kindern"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:475
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:534
 msgid "Homogeneous"
 msgstr "Gleichmäßig"
 
@@ -448,7 +448,7 @@ msgstr "Gleichmäßig"
 msgid "Whether the children should all be the same size"
 msgstr "Sollen die Kinder alle gleich groß sein?"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:467
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
 #: gtk/gtktreeviewcolumn.c:294
 msgid "Expand"
 msgstr "Ausdehnen"
@@ -461,7 +461,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:153
 msgid "Fill"
-msgstr "Ausfüllen"
+msgstr "Füllen"
 
 #: gtk/gtkbox.c:154
 msgid ""
@@ -547,7 +547,7 @@ msgstr "Randrelief"
 
 #: gtk/gtkbutton.c:236
 msgid "The border relief style"
-msgstr "Der Reliefstil des Randes"
+msgstr "Der Reliefstil des Rands"
 
 #: gtk/gtkbutton.c:253
 msgid "Horizontal alignment for child"
@@ -574,7 +574,7 @@ msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
-"Der zusätzliche Raum für CAN_DEFAULT-Knöpfe, der immer außerhalb des Randes "
+"Der zusätzliche Raum für CAN_DEFAULT-Knöpfe, der immer außerhalb des Rands "
 "zugegeben werden soll"
 
 #: gtk/gtkbutton.c:353
@@ -880,7 +880,7 @@ msgstr "Die Vordergrundfarbe als GdkColor"
 #: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:585
 msgid "Editable"
-msgstr "Änderbar"
+msgstr "Bearbeitbar"
 
 #: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:274 gtk/gtktextview.c:586
 msgid "Whether the text can be modified by the user"
@@ -1361,7 +1361,7 @@ msgstr "Randbreite"
 
 #: gtk/gtkcontainer.c:212
 msgid "The width of the empty border outside the containers children"
-msgstr "Die Breite des leeren Randes um die Kinder des Containers"
+msgstr "Die Breite des leeren Rands um die Kinder des Containers"
 
 #: gtk/gtkcontainer.c:220
 msgid "Child"
@@ -1425,7 +1425,7 @@ msgstr "Rand um Inhaltsfläche"
 
 #: gtk/gtkdialog.c:163
 msgid "Width of border around the main dialog area"
-msgstr "Die Breite des Randes um den Hauptbereich des Dialoges"
+msgstr "Die Breite des Rands um den Hauptbereich des Dialoges"
 
 #: gtk/gtkdialog.c:170
 msgid "Button spacing"
@@ -1441,7 +1441,7 @@ msgstr "Rand um Aktionsfläche"
 
 #: gtk/gtkdialog.c:180
 msgid "Width of border around the button area at the bottom of the dialog"
-msgstr "Die Breite des Randes um den Knopfbereich unten im Dialog"
+msgstr "Die Breite des Rands um den Knopfbereich unten im Dialog"
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:368
 msgid "Cursor Position"
@@ -1453,7 +1453,7 @@ msgstr "Die momentane Position des Einfügecursors in Zeichen"
 
 #: gtk/gtkentry.c:456 gtk/gtklabel.c:378
 msgid "Selection Bound"
-msgstr "Gebundene Markierung"
+msgstr "Markierungsgrenze"
 
 #: gtk/gtkentry.c:457 gtk/gtklabel.c:379
 msgid ""
@@ -1704,7 +1704,7 @@ msgstr ""
 
 #: gtk/gtkfilechooser.c:141
 msgid "Select Multiple"
-msgstr "Mehrfach-Auswahl"
+msgstr "Mehrfachauswahl"
 
 #: gtk/gtkfilechooser.c:142 gtk/gtkfilesel.c:575
 msgid "Whether to allow multiple files to be selected"
@@ -1737,7 +1737,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:574
 msgid "Select multiple"
-msgstr "Mehrere markieren"
+msgstr "Mehrfachauswahl"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
@@ -1861,7 +1861,7 @@ msgstr ""
 "Ein Widget, das anstatt der üblichen Rahmenbeschriftung angezeigt werden soll"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:516 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Schattentyp"
 
@@ -2200,7 +2200,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Der Stil der Fase um die Menüleiste"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:492
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
 msgid "Internal padding"
 msgstr "Interne Polsterung"
 
@@ -2223,7 +2223,7 @@ msgstr "Bild-/Beschriftungsrand"
 #: gtk/gtkmessagedialog.c:107
 msgid "Width of border around the label and image in the message dialog"
 msgstr ""
-"Die Breite des Randes um die Beschriftung und das Bild im Hinweisdialog."
+"Die Breite des Rands um die Beschriftung und das Bild im Hinweisdialog."
 
 #: gtk/gtkmessagedialog.c:115
 msgid "Message Type"
@@ -2297,7 +2297,7 @@ msgstr "Reiterrand"
 
 #: gtk/gtknotebook.c:414
 msgid "Width of the border around the tab labels"
-msgstr "Die Breite des Randes um Reiterbeschriftungen"
+msgstr "Die Breite des Rands um Reiterbeschriftungen"
 
 #: gtk/gtknotebook.c:422
 msgid "Horizontal Tab Border"
@@ -2305,7 +2305,7 @@ msgstr "Horizontaler Reiterrand"
 
 #: gtk/gtknotebook.c:423
 msgid "Width of the horizontal border of tab labels"
-msgstr "Die Breite des horizontalen Randes um Reiterbeschriftungen"
+msgstr "Die Breite des horizontalen Rands um Reiterbeschriftungen"
 
 #: gtk/gtknotebook.c:431
 msgid "Vertical Tab Border"
@@ -2313,7 +2313,7 @@ msgstr "Vertikaler Reiterrand"
 
 #: gtk/gtknotebook.c:432
 msgid "Width of the vertical border of tab labels"
-msgstr "Die Breite des vertikalen Randes um Reiterbeschriftungen"
+msgstr "Die Breite des vertikalen Rands um Reiterbeschriftungen"
 
 #: gtk/gtknotebook.c:440
 msgid "Show Tabs"
@@ -2562,7 +2562,7 @@ msgstr "Stellgröße"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "Die mit dem Fortschrittsbalken verbundene Stellgröße (veraltet)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:441
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
 msgid "Orientation"
 msgstr "Ausrichtung"
 
@@ -2754,7 +2754,7 @@ msgstr "Die Obergrenze des Lineals"
 
 #: gtk/gtkruler.c:139
 msgid "Position of mark on the ruler"
-msgstr "Die Position der Marke auf dem Lineal"
+msgstr "Die Position der Markierung auf dem Lineal"
 
 #: gtk/gtkruler.c:148
 msgid "Max Size"
@@ -2885,11 +2885,11 @@ msgstr "Abstand der Rollbalken"
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Die Anzahl der Pixel zwischen den Rollbalken und dem gerollten Fenster"
 
-#: gtk/gtkseparatortoolitem.c:159
+#: gtk/gtkseparatortoolitem.c:134
 msgid "Draw"
 msgstr "Anzeigen"
 
-#: gtk/gtkseparatortoolitem.c:160
+#: gtk/gtkseparatortoolitem.c:135
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Soll der Trenner angezeigt werden oder einfach nur leer sein?"
 
@@ -3340,7 +3340,7 @@ msgstr "Linker Rand"
 
 #: gtk/gtktexttag.c:392 gtk/gtktextview.c:612
 msgid "Width of the left margin in pixels"
-msgstr "Die Breite des linken Randes in Pixel"
+msgstr "Die Breite des linken Rands in Pixel"
 
 #: gtk/gtktexttag.c:401
 msgid "Right margin"
@@ -3348,11 +3348,11 @@ msgstr "Rechter Rand"
 
 #: gtk/gtktexttag.c:402 gtk/gtktextview.c:622
 msgid "Width of the right margin in pixels"
-msgstr "Die Breite des rechten Randes in Pixel"
+msgstr "Die Breite des linken Rands in Pixel"
 
 #: gtk/gtktexttag.c:412 gtk/gtktextview.c:631
 msgid "Indent"
-msgstr "Einrücken"
+msgstr "Einrückung"
 
 #: gtk/gtktexttag.c:413 gtk/gtktextview.c:632
 msgid "Amount to indent the paragraph, in pixels"
@@ -3601,84 +3601,84 @@ msgstr "Indikator zeichnen"
 msgid "If the toggle part of the button is displayed"
 msgstr "Soll der Umschaltteil des Knopfes dargestellt werden?"
 
-#: gtk/gtktoolbar.c:442
+#: gtk/gtktoolbar.c:501
 msgid "The orientation of the toolbar"
 msgstr "Die Ausrichtung der Werkzeugleiste"
 
-#: gtk/gtktoolbar.c:450
+#: gtk/gtktoolbar.c:509
 msgid "Toolbar Style"
 msgstr "Werkzeugleisten-Stil"
 
-#: gtk/gtktoolbar.c:451
+#: gtk/gtktoolbar.c:510
 msgid "How to draw the toolbar"
 msgstr "Wie soll die Werkzeugleiste gezeichnet werden?"
 
-#: gtk/gtktoolbar.c:458
+#: gtk/gtktoolbar.c:517
 msgid "Show Arrow"
 msgstr "Pfeil anzeigen"
 
-#: gtk/gtktoolbar.c:459
+#: gtk/gtktoolbar.c:518
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Soll ein Pfeil angezeigt werden, falls die Werkzeugleiste nicht passt?"
 
-#: gtk/gtktoolbar.c:468
+#: gtk/gtktoolbar.c:527
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Soll dem Kind zusätzlicher Platz zugewiesen werden, wenn das Werkzeugleisten-"
 "Widget wächst?"
 
-#: gtk/gtktoolbar.c:476
+#: gtk/gtktoolbar.c:535
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Soll das Objekt gleich groß wie andere homogene Objekte sein?"
 
-#: gtk/gtktoolbar.c:483
+#: gtk/gtktoolbar.c:542
 msgid "Spacer size"
 msgstr "Trennergröße"
 
-#: gtk/gtktoolbar.c:484
+#: gtk/gtktoolbar.c:543
 msgid "Size of spacers"
 msgstr "Die Größe der Trenner"
 
-#: gtk/gtktoolbar.c:493
+#: gtk/gtktoolbar.c:552
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Der Abstand zwischen dem Schatten der Werkzeugleiste und den Knöpfen"
 
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:560
 msgid "Space style"
 msgstr "Trennerstil"
 
-#: gtk/gtktoolbar.c:502
+#: gtk/gtktoolbar.c:561
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Sollen Trenner vertikale Balken oder einfach nur leer sein?"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:568
 msgid "Button relief"
 msgstr "Knopfrelief"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:569
 msgid "Type of bevel around toolbar buttons"
 msgstr "Die Art der Fase um die Knöpfe der Werkzeugleiste"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:576
 msgid "Style of bevel around the toolbar"
 msgstr "Der Stil der Fase um die Werkzeugleiste"
 
-#: gtk/gtktoolbar.c:523
+#: gtk/gtktoolbar.c:582
 msgid "Toolbar style"
 msgstr "Werkzeugleisten-Stil"
 
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:583
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Sollen normale Werkzeugleisten nur Text, Text und Symbole, nur Symbole, etc. "
 "haben?"
 
-#: gtk/gtktoolbar.c:530
+#: gtk/gtktoolbar.c:589
 msgid "Toolbar icon size"
 msgstr "Symbolgröße in Werkzeugleiste"
 
-#: gtk/gtktoolbar.c:531
+#: gtk/gtktoolbar.c:590
 msgid "Size of icons in default toolbars"
 msgstr "Die Größe der Symbole in normalen Werkzeugleisten"
 
@@ -4083,7 +4083,7 @@ msgstr "Ist das Widget das fokussierte Widget innerhalb der obersten Ebene?"
 
 #: gtk/gtkwidget.c:481
 msgid "Can default"
-msgstr "Kann Vorgabe sein"
+msgstr "Kann Vorgabe"
 
 #: gtk/gtkwidget.c:482
 msgid "Whether the widget can be the default widget"
