@@ -3643,8 +3643,8 @@ create_item_factory (GtkWidget *widget)
 			    "Open a file", NULL);
       gtk_tooltips_set_tip (tooltips, gtk_item_factory_get_item (item_factory, "/File/Save"),
 			    "Safe file", NULL);
-      gtk_tooltips_set_tip (tooltips, gtk_item_factory_get_item (item_factory, "/File/Save As..."),
-			    "Save under a new name", NULL);
+      gtk_tooltips_set_tip (tooltips, gtk_item_factory_get_item (item_factory, "/Preferences/Color"),
+			    "Modify color", NULL);
 
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);

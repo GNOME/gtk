@@ -1,3 +1,14 @@
+Mon May 20 12:59:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c: Set the private LEAVE_PENDING
+	flag to fix problem where with menu items with
+	submenus, tooltips were getting stuck. (Effectively
+	disables tooltips for menu items with submenus.)
+	(Bug #75961, Soeren Sandmann)
+
+	* tests/testgtk.c: Set a tooltip on a menu item
+	with a submenu.
+
 Mon May 20 11:47:59 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkplug.c: Undo an accidental revert of

@@ -31,6 +31,7 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmenuitem.h"
+#include "gtkprivate.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtksignal.h"
@@ -609,6 +610,9 @@ gtk_tooltips_event_handler (GtkWidget *widget,
 	   */
 	  if (GTK_IS_MENU_ITEM (widget))
 	    {
+	      /* Completely evil hack to make sure we get the LEAVE_NOTIFY
+	       */
+	      GTK_PRIVATE_SET_FLAG (widget, GTK_LEAVE_PENDING);
 	      gtk_tooltips_set_active_widget (tooltips, NULL);
 	      gtk_tooltips_start_delay (tooltips, widget);
 	      break;
