@@ -1,5 +1,10 @@
 2004-09-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (select_func): Scroll to the selected
+	row.  (#143868, Christian Persch)
+
+2004-09-17  Matthias Clasen  <mclasen@redhat.com>
+
 	Improve the behaviour of the file chooser in save mode. Fixes bugs
 	#151031, #151608, #151994 reported by Owen Taylor and Alexander 
 	Larsson.
