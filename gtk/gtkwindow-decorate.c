@@ -326,7 +326,7 @@ gtk_decorated_window_focus_change (GtkWidget         *widget,
   GtkWindowDecoration *deco = get_decoration (window);
   deco->focused = event->in;
   gdk_window_invalidate_rect (window->frame, NULL, FALSE);
-  return TRUE;
+  return FALSE;
 }
 
 static gint
