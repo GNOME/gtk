@@ -1,3 +1,12 @@
+Thu Dec 18 01:21:59 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): Jonathan got
+	the logical flag backwards in the expand_collapse_cursor_row
+	bindings, fixing.
+	(gtk_tree_view_real_expand_collapse_cursor_row): invert expand
+	flag when !logical and in RTL. (Fixes #107527, reported by
+	Noah Levitt).
+
 Thu Dec 18 01:10:16 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): only start
