@@ -1,3 +1,8 @@
+Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* POTFILES.in: Add missing files (Christian Rose
+	#70165)
+
 2002-01-31  Christian Rose  <menthos@menthos.com>
 
 	* sv.po: Updated Swedish translation.

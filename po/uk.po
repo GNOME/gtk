@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-01-29 22:58-0500\n"
+"POT-Creation-Date: 2002-01-31 09:59-0500\n"
 "PO-Revision-Date: 2002-01-18 12:07+0200\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -120,6 +120,39 @@ msgstr ""
 #: gdk-pixbuf/io-bmp.c:341
 msgid "Not enough memory to load bitmap image"
 msgstr "Не вістачає пам'яті для завантаження растрового зображення"
+
+#: gdk-pixbuf/io-ico.c:204
+#, fuzzy, c-format
+msgid "Failure reading ICO: %s"
+msgstr "Збій зчитування GIF: %s"
+
+#: gdk-pixbuf/io-ico.c:221
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:259 gdk-pixbuf/io-ico.c:307 gdk-pixbuf/io-ico.c:370
+#: gdk-pixbuf/io-ico.c:423
+#, fuzzy
+msgid "Not enough memory to load icon"
+msgstr "Недостатньо пам'яті для завантаження файлу GIF"
+
+#: gdk-pixbuf/io-ico.c:329
+msgid "Icon has zero width"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:339
+msgid "Icon has zero height"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:384
+#, fuzzy
+msgid "Compressed icons are not supported"
+msgstr "Тип зображення \"%s\" не підтримується"
+
+#: gdk-pixbuf/io-ico.c:472
+#, fuzzy
+msgid "Not enough memory to load ICO file"
+msgstr "Недостатньо пам'яті для завантаження файлу GIF"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -316,6 +349,115 @@ msgstr "Неочікуване завершення даних зображен�
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "Недостатньо пам'яті для завантаження файлу PNM"
+
+#: gdk-pixbuf/io-tga.c:157
+#, fuzzy
+msgid "Can't allocate memory for IOBuffer struct"
+msgstr "Неможливо виділити пам'ять для завантаження файлу PNM"
+
+#: gdk-pixbuf/io-tga.c:176
+#, fuzzy
+msgid "Can't allocate memory for IOBuffer data"
+msgstr "Неможливо виділити пам'ять для завантаження файлу PNM"
+
+#: gdk-pixbuf/io-tga.c:187
+msgid "Can't realloc IOBuffer data"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:216
+#, fuzzy
+msgid "Can't allocate temporary IOBuffer data"
+msgstr "Неможливо виділити пам'ять для завантаження зображення XPM"
+
+#: gdk-pixbuf/io-tga.c:249
+msgid "fread() failed -- premature end-of-file probably encountered"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:259
+msgid "fseek() failed -- premature end-of-file probably encountered"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:288
+msgid "Can't allocate new pixbuf"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:557
+msgid "Can't allocate colormap structure"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:564
+msgid "Can't allocate colormap entries"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:587
+msgid "Unexpected bitdepth for colormap entries"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:607
+msgid "Can't allocate TGA header memory"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:619
+msgid "TGA image comment length is too long"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:628
+#, fuzzy
+msgid "TGA image type not supported"
+msgstr "Тип зображення \"%s\" не підтримується"
+
+#: gdk-pixbuf/io-tga.c:671
+#, fuzzy
+msgid "Can't allocate memory for TGA context struct"
+msgstr "Неможливо виділити пам'ять для завантаження зображення XPM"
+
+#: gdk-pixbuf/io-tga.c:735
+msgid "Excess data in file"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:776
+#, fuzzy
+msgid "Can't allocate memory for TGA header"
+msgstr "Неможливо виділити пам'ять для завантаження файлу PNM"
+
+#: gdk-pixbuf/io-tga.c:786
+msgid "Too big value in the infolen field of TGA header."
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:810
+#, fuzzy
+msgid "Can't allocate memory for TGA cmap temporary buffer"
+msgstr "Неможливо виділити пам'ять для завантаження зображення XPM"
+
+#: gdk-pixbuf/io-tga.c:822
+#, fuzzy
+msgid "Can't allocate memory for TGA colormap struct"
+msgstr "Неможливо виділити пам'ять для завантаження зображення XPM"
+
+#: gdk-pixbuf/io-tga.c:831
+#, fuzzy
+msgid "Can't allocate memory for TGA colormap entries"
+msgstr "Неможливо виділити пам'ять для завантаження зображення XPM"
+
+#: gdk-pixbuf/io-tga.c:841
+msgid "Unexpected bitdepth for TGA colormap"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:881
+msgid "Pseudo-Color image without colormap"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:888
+msgid "Can't seek to image offset -- end-of-file probably encountered"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:897 gdk-pixbuf/io-tga.c:993 gdk-pixbuf/io-tga.c:1059
+msgid "Can't allocate pixbuf"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:1125 gdk-pixbuf/io-tga.c:1154
+msgid "Unsupported TGA image type"
+msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:152
 msgid "Could not get image width (bad TIFF file)"
@@ -1332,35 +1474,35 @@ msgstr "Максимальне Y"
 msgid "Maximum possible value for Y"
 msgstr "Максимальне можливе значення Y"
 
-#: gtk/gtkdialog.c:126
+#: gtk/gtkdialog.c:128
 msgid "Has separator"
 msgstr ""
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:129
 msgid "The dialog has a separator bar above its buttons"
 msgstr ""
 
-#: gtk/gtkdialog.c:150
+#: gtk/gtkdialog.c:152
 msgid "Content area border"
 msgstr ""
 
-#: gtk/gtkdialog.c:151
+#: gtk/gtkdialog.c:153
 msgid "Width of border around the main dialog area"
 msgstr ""
 
-#: gtk/gtkdialog.c:158
+#: gtk/gtkdialog.c:160
 msgid "Button spacing"
 msgstr "Проміжок між кнопками"
 
-#: gtk/gtkdialog.c:159
+#: gtk/gtkdialog.c:161
 msgid "Spacing between buttons"
 msgstr "Проміжок між кнопками"
 
-#: gtk/gtkdialog.c:167
+#: gtk/gtkdialog.c:169
 msgid "Action area border"
 msgstr ""
 
-#: gtk/gtkdialog.c:168
+#: gtk/gtkdialog.c:170
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 
@@ -1475,7 +1617,7 @@ msgstr "методи вводу"
 msgid "_Insert Unicode control character"
 msgstr ""
 
-#: gtk/gtkfilesel.c:518
+#: gtk/gtkfilesel.c:518 gtk/gtkimage.c:161
 msgid "Filename"
 msgstr "Назва файлу"
 
@@ -1665,6 +1807,22 @@ msgstr "Назва надто довга"
 msgid "Couldn't convert filename"
 msgstr "Не вдалось перетворити назву файлу"
 
+#: gtk/gtkfixed.c:120 gtk/gtklayout.c:597
+msgid "X position"
+msgstr "Позиція по X"
+
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:598
+msgid "X position of child widget"
+msgstr "Горизонтальна позиція спадкоємного віджета"
+
+#: gtk/gtkfixed.c:130 gtk/gtklayout.c:607
+msgid "Y position"
+msgstr "Позиція по Y"
+
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
+msgid "Y position of child widget"
+msgstr "Вертикальна позиція спадкоємного віджета"
+
 #: gtk/gtkfontsel.c:195
 msgid "Font name"
 msgstr "Назва шрифту"
@@ -1795,6 +1953,88 @@ msgstr ""
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Помилка завантаження піктограми: %s"
+
+#: gtk/gtkimage.c:129
+msgid "Pixbuf"
+msgstr ""
+
+#: gtk/gtkimage.c:130
+msgid "A GdkPixbuf to display."
+msgstr ""
+
+#: gtk/gtkimage.c:137
+msgid "Pixmap"
+msgstr ""
+
+#: gtk/gtkimage.c:138
+msgid "A GdkPixmap to display."
+msgstr ""
+
+#: gtk/gtkimage.c:145
+#, fuzzy
+msgid "Image"
+msgstr "Сторінка"
+
+#: gtk/gtkimage.c:146
+msgid "A GdkImage to display."
+msgstr ""
+
+#: gtk/gtkimage.c:153
+msgid "Mask"
+msgstr ""
+
+#: gtk/gtkimage.c:154
+msgid "Mask bitmap to use with GdkImage or GdkPixmap"
+msgstr ""
+
+#: gtk/gtkimage.c:162
+#, fuzzy
+msgid "Filename to load and siplay."
+msgstr "Не вдалося завантажити зображення TIFF"
+
+#: gtk/gtkimage.c:170
+msgid "Stock ID"
+msgstr ""
+
+#: gtk/gtkimage.c:171
+msgid "Stock ID for a stock image to display."
+msgstr ""
+
+#: gtk/gtkimage.c:178
+#, fuzzy
+msgid "Icon set"
+msgstr "Піктограма"
+
+#: gtk/gtkimage.c:179
+msgid "Icon set to display."
+msgstr ""
+
+#: gtk/gtkimage.c:186
+#, fuzzy
+msgid "Icon size"
+msgstr "Розмір"
+
+#: gtk/gtkimage.c:187
+msgid "Size to use for stock icon or icon set."
+msgstr ""
+
+#: gtk/gtkimage.c:195
+#, fuzzy
+msgid "Animation"
+msgstr "Інформація"
+
+#: gtk/gtkimage.c:196
+msgid "GdkPixbufAnimation to display."
+msgstr ""
+
+#: gtk/gtkimage.c:203
+#, fuzzy
+msgid "Storage type"
+msgstr "Тип кривої"
+
+#: gtk/gtkimage.c:204
+msgid "The representation being used for image data."
+msgstr ""
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
@@ -1965,27 +2205,11 @@ msgstr ""
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr ""
 
-#: gtk/gtklayout.c:597
-msgid "X position"
-msgstr "Позиція по X"
-
-#: gtk/gtklayout.c:598
-msgid "X position of child widget"
-msgstr "Горизонтальна позиція спадкоємного віджета"
-
-#: gtk/gtklayout.c:607
-msgid "Y position"
-msgstr "Позиція по Y"
-
-#: gtk/gtklayout.c:608
-msgid "Y position of child widget"
-msgstr "Вертикальна позиція спадкоємного віджета"
-
 #: gtk/gtklayout.c:617 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
 msgstr ""
 
-#: gtk/gtklayout.c:618
+#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:178
 msgid "The GtkAdjustment for the horizontal position."
 msgstr ""
 
@@ -1993,7 +2217,7 @@ msgstr ""
 msgid "Vertical adjustment"
 msgstr ""
 
-#: gtk/gtklayout.c:626
+#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:185
 msgid "The GtkAdjustment for the vertical position."
 msgstr ""
 
@@ -2022,6 +2246,16 @@ msgstr "Яскравість кольору."
 #.
 #: gtk/gtkmain.c:614
 msgid "default:LTR"
+msgstr ""
+
+#: gtk/gtkmenu.c:189
+msgid "Tearoff Title"
+msgstr ""
+
+#: gtk/gtkmenu.c:190
+msgid ""
+"A title that may be displayed by the window manager when this menu is torn-"
+"off."
 msgstr ""
 
 #: gtk/gtkmenubar.c:151
@@ -2531,6 +2765,51 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
+#: gtk/gtkscrolledwindow.c:177 gtk/gtktext.c:604 gtk/gtktreeview.c:507
+msgid "Horizontal Adjustment"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:184 gtk/gtktext.c:612 gtk/gtktreeview.c:515
+msgid "Vertical Adjustment"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:191
+#, fuzzy
+msgid "Horizontal Scrollbar Policy"
+msgstr "Родина:"
+
+#: gtk/gtkscrolledwindow.c:192
+msgid "When the horizontal scrollbar is displayed"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:199
+#, fuzzy
+msgid "Vertical Scrollbar Policy"
+msgstr "Вертикальний проміжок між комірками"
+
+#: gtk/gtkscrolledwindow.c:200
+msgid "When the vertical scrollbar is displayed"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:208
+#, fuzzy
+msgid "Window Placement"
+msgstr "Заголовок вікна"
+
+#: gtk/gtkscrolledwindow.c:209
+msgid "Where the contents are located with respect to the scrollbars"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:216
+#, fuzzy
+msgid "Shadow Type"
+msgstr "Тип тіні"
+
+#: gtk/gtkscrolledwindow.c:217
+#, fuzzy
+msgid "Style of bevel around the contents"
+msgstr "Стиль фаски навколо панелі меню"
+
 #: gtk/gtksettings.c:147
 msgid "Double Click Time"
 msgstr ""
@@ -2983,16 +3262,8 @@ msgstr ""
 msgid "If TRUE this means the table cells are all the same width/height"
 msgstr ""
 
-#: gtk/gtktext.c:604 gtk/gtktreeview.c:507
-msgid "Horizontal Adjustment"
-msgstr ""
-
 #: gtk/gtktext.c:605
 msgid "Horizontal adjustment for the text widget"
-msgstr ""
-
-#: gtk/gtktext.c:612 gtk/gtktreeview.c:515
-msgid "Vertical Adjustment"
 msgstr ""
 
 #: gtk/gtktext.c:613
@@ -3250,6 +3521,46 @@ msgstr ""
 msgid "Whether this tag affects text visibility"
 msgstr ""
 
+#: gtk/gtktextutil.c:46
+msgid "LRM _Left-to-right mark"
+msgstr ""
+
+#: gtk/gtktextutil.c:47
+msgid "RLM _Right-to-left mark"
+msgstr ""
+
+#: gtk/gtktextutil.c:48
+msgid "LRE Left-to-right _embedding"
+msgstr ""
+
+#: gtk/gtktextutil.c:49
+msgid "RLE Right-to-left e_mbedding"
+msgstr ""
+
+#: gtk/gtktextutil.c:50
+msgid "LRO Left-to-right _override"
+msgstr ""
+
+#: gtk/gtktextutil.c:51
+msgid "RLO Right-to-left o_verride"
+msgstr ""
+
+#: gtk/gtktextutil.c:52
+msgid "PDF _Pop directional formatting"
+msgstr ""
+
+#: gtk/gtktextutil.c:53
+msgid "ZWS _Zero width space"
+msgstr ""
+
+#: gtk/gtktextutil.c:54
+msgid "ZWN Zero width _joiner"
+msgstr ""
+
+#: gtk/gtktextutil.c:55
+msgid "ZWNJ Zero width _non-joiner"
+msgstr ""
+
 #: gtk/gtktextview.c:535
 msgid "Pixels Above Lines"
 msgstr ""
@@ -3372,6 +3683,14 @@ msgstr "Розмір піктограми на панелі"
 
 #: gtk/gtktoolbar.c:292
 msgid "Size of icons in default toolbars"
+msgstr ""
+
+#: gtk/gtktreemodelsort.c:298
+msgid "TreeModelSort Model"
+msgstr ""
+
+#: gtk/gtktreemodelsort.c:299
+msgid "The model for the TreeModelSort to sort"
 msgstr ""
 
 #: gtk/gtktreeview.c:499

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.11\n"
-"POT-Creation-Date: 2002-01-29 22:58-0500\n"
+"POT-Creation-Date: 2002-01-31 09:59-0500\n"
 "PO-Revision-Date: 2002-01-11 23:49+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <no@li.org>\n"
@@ -128,6 +128,40 @@ msgstr "BMP-bilde har ugyldige data i header"
 #: gdk-pixbuf/io-bmp.c:341
 msgid "Not enough memory to load bitmap image"
 msgstr "Ikke nok minne til å laste bitkart-bilde"
+
+#: gdk-pixbuf/io-ico.c:204
+#, fuzzy, c-format
+msgid "Failure reading ICO: %s"
+msgstr "Feil under lesing av GIF: %s"
+
+#: gdk-pixbuf/io-ico.c:221
+#, fuzzy
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr "GIF-fil mangler data (kanskje den har blitt avkuttet på en måte?)"
+
+#: gdk-pixbuf/io-ico.c:259 gdk-pixbuf/io-ico.c:307 gdk-pixbuf/io-ico.c:370
+#: gdk-pixbuf/io-ico.c:423
+#, fuzzy
+msgid "Not enough memory to load icon"
+msgstr "Ikke nok minne til å laste GIF-bilde"
+
+#: gdk-pixbuf/io-ico.c:329
+msgid "Icon has zero width"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:339
+msgid "Icon has zero height"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:384
+#, fuzzy
+msgid "Compressed icons are not supported"
+msgstr "Bildetype «%s» er ikke støttet"
+
+#: gdk-pixbuf/io-ico.c:472
+#, fuzzy
+msgid "Not enough memory to load ICO file"
+msgstr "Ikke nok minne til å laste GIF-bilde"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -336,6 +370,117 @@ msgstr "Uventet slutt på PNM-bildedata"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "Ikke nok minne til å laste PNM-fil"
+
+#: gdk-pixbuf/io-tga.c:157
+#, fuzzy
+msgid "Can't allocate memory for IOBuffer struct"
+msgstr "Kan ikke allokere minne for lasting av PNM-bilde"
+
+#: gdk-pixbuf/io-tga.c:176
+#, fuzzy
+msgid "Can't allocate memory for IOBuffer data"
+msgstr "Kan ikke allokere minne for lasting av PNM-bilde"
+
+#: gdk-pixbuf/io-tga.c:187
+msgid "Can't realloc IOBuffer data"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:216
+#, fuzzy
+msgid "Can't allocate temporary IOBuffer data"
+msgstr "Kan ikke allokere minne for lasting av XPM-bilde"
+
+#: gdk-pixbuf/io-tga.c:249
+#, fuzzy
+msgid "fread() failed -- premature end-of-file probably encountered"
+msgstr "Prematur slutt-på-fil funnet"
+
+#: gdk-pixbuf/io-tga.c:259
+#, fuzzy
+msgid "fseek() failed -- premature end-of-file probably encountered"
+msgstr "Prematur slutt-på-fil funnet"
+
+#: gdk-pixbuf/io-tga.c:288
+msgid "Can't allocate new pixbuf"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:557
+msgid "Can't allocate colormap structure"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:564
+msgid "Can't allocate colormap entries"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:587
+msgid "Unexpected bitdepth for colormap entries"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:607
+msgid "Can't allocate TGA header memory"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:619
+msgid "TGA image comment length is too long"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:628
+#, fuzzy
+msgid "TGA image type not supported"
+msgstr "Bildetype «%s» er ikke støttet"
+
+#: gdk-pixbuf/io-tga.c:671
+#, fuzzy
+msgid "Can't allocate memory for TGA context struct"
+msgstr "Kan ikke allokere minne for lasting av XPM-bilde"
+
+#: gdk-pixbuf/io-tga.c:735
+msgid "Excess data in file"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:776
+#, fuzzy
+msgid "Can't allocate memory for TGA header"
+msgstr "Kan ikke allokere minne for lasting av PNM-bilde"
+
+#: gdk-pixbuf/io-tga.c:786
+msgid "Too big value in the infolen field of TGA header."
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:810
+#, fuzzy
+msgid "Can't allocate memory for TGA cmap temporary buffer"
+msgstr "Kan ikke allokere minne for lasting av XPM-bilde"
+
+#: gdk-pixbuf/io-tga.c:822
+#, fuzzy
+msgid "Can't allocate memory for TGA colormap struct"
+msgstr "Kan ikke allokere minne for lasting av XPM-bilde"
+
+#: gdk-pixbuf/io-tga.c:831
+#, fuzzy
+msgid "Can't allocate memory for TGA colormap entries"
+msgstr "Kan ikke allokere minne for lasting av XPM-bilde"
+
+#: gdk-pixbuf/io-tga.c:841
+msgid "Unexpected bitdepth for TGA colormap"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:881
+msgid "Pseudo-Color image without colormap"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:888
+msgid "Can't seek to image offset -- end-of-file probably encountered"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:897 gdk-pixbuf/io-tga.c:993 gdk-pixbuf/io-tga.c:1059
+msgid "Can't allocate pixbuf"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:1125 gdk-pixbuf/io-tga.c:1154
+msgid "Unsupported TGA image type"
+msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:152
 msgid "Could not get image width (bad TIFF file)"
@@ -1373,35 +1518,35 @@ msgstr "Maksimum Y"
 msgid "Maximum possible value for Y"
 msgstr "Største mulige verdi for Y"
 
-#: gtk/gtkdialog.c:126
+#: gtk/gtkdialog.c:128
 msgid "Has separator"
 msgstr "Har separator"
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:129
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Dialogen har en skillelinje over knappene"
 
-#: gtk/gtkdialog.c:150
+#: gtk/gtkdialog.c:152
 msgid "Content area border"
 msgstr "Kant for innholdsområde"
 
-#: gtk/gtkdialog.c:151
+#: gtk/gtkdialog.c:153
 msgid "Width of border around the main dialog area"
 msgstr "Bredde på kanten rundt hoveddialogområdet"
 
-#: gtk/gtkdialog.c:158
+#: gtk/gtkdialog.c:160
 msgid "Button spacing"
 msgstr "Knappeavstand"
 
-#: gtk/gtkdialog.c:159
+#: gtk/gtkdialog.c:161
 msgid "Spacing between buttons"
 msgstr "Avstand mellom knapper"
 
-#: gtk/gtkdialog.c:167
+#: gtk/gtkdialog.c:169
 msgid "Action area border"
 msgstr "Kant for handlingsområde"
 
-#: gtk/gtkdialog.c:168
+#: gtk/gtkdialog.c:170
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Bredde på kanten rundt knappeområdet nederst i dialogen"
 
@@ -1514,7 +1659,7 @@ msgstr "Inndatametode"
 msgid "_Insert Unicode control character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
-#: gtk/gtkfilesel.c:518
+#: gtk/gtkfilesel.c:518 gtk/gtkimage.c:161
 msgid "Filename"
 msgstr "Filnavn"
 
@@ -1709,6 +1854,22 @@ msgstr "Navnet er for langt"
 msgid "Couldn't convert filename"
 msgstr "Kunne ikke konvertere filnavnet"
 
+#: gtk/gtkfixed.c:120 gtk/gtklayout.c:597
+msgid "X position"
+msgstr "X-posisjon"
+
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:598
+msgid "X position of child widget"
+msgstr "X-posisjon for underwidgetet"
+
+#: gtk/gtkfixed.c:130 gtk/gtklayout.c:607
+msgid "Y position"
+msgstr "Y-posisjon"
+
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
+msgid "Y position of child widget"
+msgstr "Y-posisjon for underwidgetet"
+
 #: gtk/gtkfontsel.c:195
 msgid "Font name"
 msgstr "Skriftnavn"
@@ -1838,6 +1999,90 @@ msgstr ""
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
+
+#: gtk/gtkimage.c:129
+#, fuzzy
+msgid "Pixbuf"
+msgstr "Pixbuf-objekt"
+
+#: gtk/gtkimage.c:130
+msgid "A GdkPixbuf to display."
+msgstr ""
+
+#: gtk/gtkimage.c:137
+msgid "Pixmap"
+msgstr ""
+
+#: gtk/gtkimage.c:138
+msgid "A GdkPixmap to display."
+msgstr ""
+
+#: gtk/gtkimage.c:145
+#, fuzzy
+msgid "Image"
+msgstr "Side"
+
+#: gtk/gtkimage.c:146
+msgid "A GdkImage to display."
+msgstr ""
+
+#: gtk/gtkimage.c:153
+#, fuzzy
+msgid "Mask"
+msgstr "Tagging"
+
+#: gtk/gtkimage.c:154
+msgid "Mask bitmap to use with GdkImage or GdkPixmap"
+msgstr ""
+
+#: gtk/gtkimage.c:162
+#, fuzzy
+msgid "Filename to load and siplay."
+msgstr "Feil under åpning av TIFF-bilde"
+
+#: gtk/gtkimage.c:170
+msgid "Stock ID"
+msgstr ""
+
+#: gtk/gtkimage.c:171
+msgid "Stock ID for a stock image to display."
+msgstr ""
+
+#: gtk/gtkimage.c:178
+#, fuzzy
+msgid "Icon set"
+msgstr "Inkonsistent"
+
+#: gtk/gtkimage.c:179
+msgid "Icon set to display."
+msgstr ""
+
+#: gtk/gtkimage.c:186
+#, fuzzy
+msgid "Icon size"
+msgstr "Skriftstørrelse"
+
+#: gtk/gtkimage.c:187
+msgid "Size to use for stock icon or icon set."
+msgstr ""
+
+#: gtk/gtkimage.c:195
+#, fuzzy
+msgid "Animation"
+msgstr "Informasjon"
+
+#: gtk/gtkimage.c:196
+msgid "GdkPixbufAnimation to display."
+msgstr ""
+
+#: gtk/gtkimage.c:203
+#, fuzzy
+msgid "Storage type"
+msgstr "Kurvetype"
+
+#: gtk/gtkimage.c:204
+msgid "The representation being used for image data."
+msgstr ""
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
@@ -2009,27 +2254,11 @@ msgstr ""
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr ""
 
-#: gtk/gtklayout.c:597
-msgid "X position"
-msgstr "X-posisjon"
-
-#: gtk/gtklayout.c:598
-msgid "X position of child widget"
-msgstr "X-posisjon for underwidgetet"
-
-#: gtk/gtklayout.c:607
-msgid "Y position"
-msgstr "Y-posisjon"
-
-#: gtk/gtklayout.c:608
-msgid "Y position of child widget"
-msgstr "Y-posisjon for underwidgetet"
-
 #: gtk/gtklayout.c:617 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
 msgstr "Horisontal justering"
 
-#: gtk/gtklayout.c:618
+#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:178
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "GtkAdjustment for horisontal posisjon."
 
@@ -2037,7 +2266,7 @@ msgstr "GtkAdjustment for horisontal posisjon."
 msgid "Vertical adjustment"
 msgstr "Vertikal justering"
 
-#: gtk/gtklayout.c:626
+#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:185
 msgid "The GtkAdjustment for the vertical position."
 msgstr "GtkAdjustment for vertikal posisjon."
 
@@ -2065,6 +2294,16 @@ msgstr "Høyde på plasseringen."
 #: gtk/gtkmain.c:614
 msgid "default:LTR"
 msgstr "standard:LTR"
+
+#: gtk/gtkmenu.c:189
+msgid "Tearoff Title"
+msgstr ""
+
+#: gtk/gtkmenu.c:190
+msgid ""
+"A title that may be displayed by the window manager when this menu is torn-"
+"off."
+msgstr ""
 
 #: gtk/gtkmenubar.c:151
 msgid "Style of bevel around the menubar"
@@ -2568,6 +2807,51 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
+#: gtk/gtkscrolledwindow.c:177 gtk/gtktext.c:604 gtk/gtktreeview.c:507
+msgid "Horizontal Adjustment"
+msgstr "Horisontal justering"
+
+#: gtk/gtkscrolledwindow.c:184 gtk/gtktext.c:612 gtk/gtktreeview.c:515
+msgid "Vertical Adjustment"
+msgstr "Vertikal justering"
+
+#: gtk/gtkscrolledwindow.c:191
+#, fuzzy
+msgid "Horizontal Scrollbar Policy"
+msgstr "Horisontal skalering"
+
+#: gtk/gtkscrolledwindow.c:192
+msgid "When the horizontal scrollbar is displayed"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:199
+#, fuzzy
+msgid "Vertical Scrollbar Policy"
+msgstr "Vertikal skalering"
+
+#: gtk/gtkscrolledwindow.c:200
+msgid "When the vertical scrollbar is displayed"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:208
+#, fuzzy
+msgid "Window Placement"
+msgstr "Vindustittel"
+
+#: gtk/gtkscrolledwindow.c:209
+msgid "Where the contents are located with respect to the scrollbars"
+msgstr ""
+
+#: gtk/gtkscrolledwindow.c:216
+#, fuzzy
+msgid "Shadow Type"
+msgstr "Skyggetype"
+
+#: gtk/gtkscrolledwindow.c:217
+#, fuzzy
+msgid "Style of bevel around the contents"
+msgstr "Stil på kanten rundt menylinjen"
+
 #: gtk/gtksettings.c:147
 msgid "Double Click Time"
 msgstr "Tid for dobbelklikk"
@@ -3014,17 +3298,9 @@ msgstr "Homogen"
 msgid "If TRUE this means the table cells are all the same width/height"
 msgstr ""
 
-#: gtk/gtktext.c:604 gtk/gtktreeview.c:507
-msgid "Horizontal Adjustment"
-msgstr "Horisontal justering"
-
 #: gtk/gtktext.c:605
 msgid "Horizontal adjustment for the text widget"
 msgstr "Horisontal justering for tekstwidget"
-
-#: gtk/gtktext.c:612 gtk/gtktreeview.c:515
-msgid "Vertical Adjustment"
-msgstr "Vertikal justering"
 
 #: gtk/gtktext.c:613
 msgid "Vertical adjustment for the text widget"
@@ -3281,6 +3557,46 @@ msgstr "Usynlig satt"
 msgid "Whether this tag affects text visibility"
 msgstr ""
 
+#: gtk/gtktextutil.c:46
+msgid "LRM _Left-to-right mark"
+msgstr ""
+
+#: gtk/gtktextutil.c:47
+msgid "RLM _Right-to-left mark"
+msgstr ""
+
+#: gtk/gtktextutil.c:48
+msgid "LRE Left-to-right _embedding"
+msgstr ""
+
+#: gtk/gtktextutil.c:49
+msgid "RLE Right-to-left e_mbedding"
+msgstr ""
+
+#: gtk/gtktextutil.c:50
+msgid "LRO Left-to-right _override"
+msgstr ""
+
+#: gtk/gtktextutil.c:51
+msgid "RLO Right-to-left o_verride"
+msgstr ""
+
+#: gtk/gtktextutil.c:52
+msgid "PDF _Pop directional formatting"
+msgstr ""
+
+#: gtk/gtktextutil.c:53
+msgid "ZWS _Zero width space"
+msgstr ""
+
+#: gtk/gtktextutil.c:54
+msgid "ZWN Zero width _joiner"
+msgstr ""
+
+#: gtk/gtktextutil.c:55
+msgid "ZWNJ Zero width _non-joiner"
+msgstr ""
+
 #: gtk/gtktextview.c:535
 msgid "Pixels Above Lines"
 msgstr "Piksler over linjer"
@@ -3402,6 +3718,16 @@ msgstr "Størrelse på verktøylinjeikon"
 #: gtk/gtktoolbar.c:292
 msgid "Size of icons in default toolbars"
 msgstr "Størrelse på ikiner i standard verktøylinjer"
+
+#: gtk/gtktreemodelsort.c:298
+#, fuzzy
+msgid "TreeModelSort Model"
+msgstr "TreeView modell"
+
+#: gtk/gtktreemodelsort.c:299
+#, fuzzy
+msgid "The model for the TreeModelSort to sort"
+msgstr "Modell for treevisning"
 
 #: gtk/gtktreeview.c:499
 msgid "TreeView Model"

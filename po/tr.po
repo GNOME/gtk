@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.7\n"
-"POT-Creation-Date: 2002-01-29 22:58-0500\n"
+"POT-Creation-Date: 2002-01-31 09:59-0500\n"
 "PO-Revision-Date: 2001-11-15 07:42+0200\n"
 "Last-Translator: Nilgün Belma Bugüner <nilgun@fide.org>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -146,6 +146,47 @@ msgstr "BMP resminin başlığı hatalı veri içeriyor"
 #: gdk-pixbuf/io-bmp.c:341
 msgid "Not enough memory to load bitmap image"
 msgstr "Biteşlem resmi yüklemek için bellek yetersiz."
+
+# gdk-pixbuf/io-gif.c:218
+#: gdk-pixbuf/io-ico.c:204
+#, fuzzy, c-format
+msgid "Failure reading ICO: %s"
+msgstr "GIF okunurken hata: %s"
+
+# gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1352 gdk-pixbuf/io-gif.c:1511
+#: gdk-pixbuf/io-ico.c:221
+#, fuzzy
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr "GIF dosyasında veri eksik (Dosya kırpılmış olabilir mi?)"
+
+# gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1340 gdk-pixbuf/io-gif.c:1385
+# gdk-pixbuf/io-gif.c:1499
+#: gdk-pixbuf/io-ico.c:259 gdk-pixbuf/io-ico.c:307 gdk-pixbuf/io-ico.c:370
+#: gdk-pixbuf/io-ico.c:423
+#, fuzzy
+msgid "Not enough memory to load icon"
+msgstr "GIF dosyasını yüklemek için bellek yetersiz"
+
+#: gdk-pixbuf/io-ico.c:329
+msgid "Icon has zero width"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:339
+msgid "Icon has zero height"
+msgstr ""
+
+# gdk-pixbuf/gdk-pixbuf-io.c:425 gdk-pixbuf/gdk-pixbuf-io.c:451
+#: gdk-pixbuf/io-ico.c:384
+#, fuzzy
+msgid "Compressed icons are not supported"
+msgstr "Resim türü '%s' desteklenmiyor"
+
+# gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1340 gdk-pixbuf/io-gif.c:1385
+# gdk-pixbuf/io-gif.c:1499
+#: gdk-pixbuf/io-ico.c:472
+#, fuzzy
+msgid "Not enough memory to load ICO file"
+msgstr "GIF dosyasını yüklemek için bellek yetersiz"
 
 # gdk-pixbuf/io-gif.c:218
 #: gdk-pixbuf/io-gif.c:218
@@ -392,6 +433,126 @@ msgstr "Beklenmeyen PNM resim verisi sonu"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "PNM dosyasını yüklemek için bellek yetersiz"
+
+# gdk-pixbuf/io-xpm.c:1321
+#: gdk-pixbuf/io-tga.c:157
+#, fuzzy
+msgid "Can't allocate memory for IOBuffer struct"
+msgstr "PNM resminin yüklenebilmesi için bellek ayrılamadı"
+
+# gdk-pixbuf/io-xpm.c:1321
+#: gdk-pixbuf/io-tga.c:176
+#, fuzzy
+msgid "Can't allocate memory for IOBuffer data"
+msgstr "PNM resminin yüklenebilmesi için bellek ayrılamadı"
+
+#: gdk-pixbuf/io-tga.c:187
+msgid "Can't realloc IOBuffer data"
+msgstr ""
+
+# gdk-pixbuf/io-xpm.c:1321
+#: gdk-pixbuf/io-tga.c:216
+#, fuzzy
+msgid "Can't allocate temporary IOBuffer data"
+msgstr "XPM resminin yüklenebilmesi için bellek ayrılamadı"
+
+#: gdk-pixbuf/io-tga.c:249
+#, fuzzy
+msgid "fread() failed -- premature end-of-file probably encountered"
+msgstr "Dosya içinde dosya sonu karakteri saptandı"
+
+#: gdk-pixbuf/io-tga.c:259
+#, fuzzy
+msgid "fseek() failed -- premature end-of-file probably encountered"
+msgstr "Dosya içinde dosya sonu karakteri saptandı"
+
+#: gdk-pixbuf/io-tga.c:288
+msgid "Can't allocate new pixbuf"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:557
+msgid "Can't allocate colormap structure"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:564
+msgid "Can't allocate colormap entries"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:587
+msgid "Unexpected bitdepth for colormap entries"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:607
+msgid "Can't allocate TGA header memory"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:619
+msgid "TGA image comment length is too long"
+msgstr ""
+
+# gdk-pixbuf/gdk-pixbuf-io.c:425 gdk-pixbuf/gdk-pixbuf-io.c:451
+#: gdk-pixbuf/io-tga.c:628
+#, fuzzy
+msgid "TGA image type not supported"
+msgstr "Resim türü '%s' desteklenmiyor"
+
+# gdk-pixbuf/io-xpm.c:1321
+#: gdk-pixbuf/io-tga.c:671
+#, fuzzy
+msgid "Can't allocate memory for TGA context struct"
+msgstr "XPM resminin yüklenebilmesi için bellek ayrılamadı"
+
+#: gdk-pixbuf/io-tga.c:735
+msgid "Excess data in file"
+msgstr ""
+
+# gdk-pixbuf/io-xpm.c:1321
+#: gdk-pixbuf/io-tga.c:776
+#, fuzzy
+msgid "Can't allocate memory for TGA header"
+msgstr "PNM resminin yüklenebilmesi için bellek ayrılamadı"
+
+#: gdk-pixbuf/io-tga.c:786
+msgid "Too big value in the infolen field of TGA header."
+msgstr ""
+
+# gdk-pixbuf/io-xpm.c:1321
+#: gdk-pixbuf/io-tga.c:810
+#, fuzzy
+msgid "Can't allocate memory for TGA cmap temporary buffer"
+msgstr "XPM resminin yüklenebilmesi için bellek ayrılamadı"
+
+# gdk-pixbuf/io-xpm.c:1321
+#: gdk-pixbuf/io-tga.c:822
+#, fuzzy
+msgid "Can't allocate memory for TGA colormap struct"
+msgstr "XPM resminin yüklenebilmesi için bellek ayrılamadı"
+
+# gdk-pixbuf/io-xpm.c:1321
+#: gdk-pixbuf/io-tga.c:831
+#, fuzzy
+msgid "Can't allocate memory for TGA colormap entries"
+msgstr "XPM resminin yüklenebilmesi için bellek ayrılamadı"
+
+#: gdk-pixbuf/io-tga.c:841
+msgid "Unexpected bitdepth for TGA colormap"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:881
+msgid "Pseudo-Color image without colormap"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:888
+msgid "Can't seek to image offset -- end-of-file probably encountered"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:897 gdk-pixbuf/io-tga.c:993 gdk-pixbuf/io-tga.c:1059
+msgid "Can't allocate pixbuf"
+msgstr ""
+
+#: gdk-pixbuf/io-tga.c:1125 gdk-pixbuf/io-tga.c:1154
+msgid "Unsupported TGA image type"
+msgstr ""
 
 # gdk-pixbuf/io-tiff.c:152
 #: gdk-pixbuf/io-tiff.c:152
@@ -1657,42 +1818,42 @@ msgid "Maximum possible value for Y"
 msgstr "Y için en büyük mümkün değer."
 
 # gtk/gtkdialog.c:125
-#: gtk/gtkdialog.c:126
+#: gtk/gtkdialog.c:128
 msgid "Has separator"
 msgstr "Ayırıcılı"
 
 # gtk/gtkdialog.c:126
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:129
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Diyaloğun düğmeleri arasında bir ayırıcı çubuk olabilirliği"
 
 # gtk/gtkdialog.c:149
-#: gtk/gtkdialog.c:150
+#: gtk/gtkdialog.c:152
 msgid "Content area border"
 msgstr "İçerik alanı kenarlığı"
 
 # gtk/gtkdialog.c:150
-#: gtk/gtkdialog.c:151
+#: gtk/gtkdialog.c:153
 msgid "Width of border around the main dialog area"
 msgstr "Ana diyalog alanını çevreleyen kenarlığın genişliği"
 
 # gtk/gtkdialog.c:157
-#: gtk/gtkdialog.c:158
+#: gtk/gtkdialog.c:160
 msgid "Button spacing"
 msgstr "Düğme boşluğu"
 
 # gtk/gtkdialog.c:158
-#: gtk/gtkdialog.c:159
+#: gtk/gtkdialog.c:161
 msgid "Spacing between buttons"
 msgstr "Düğmeler arası boşluk"
 
 # gtk/gtkdialog.c:166
-#: gtk/gtkdialog.c:167
+#: gtk/gtkdialog.c:169
 msgid "Action area border"
 msgstr "Eylem alanı kenarlığı"
 
 # gtk/gtkdialog.c:167
-#: gtk/gtkdialog.c:168
+#: gtk/gtkdialog.c:170
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Diyaloğun altındaki düğme alanınını çevreleyen kenarlığın genişliği"
 
@@ -1826,7 +1987,7 @@ msgid "_Insert Unicode control character"
 msgstr ""
 
 # gtk/gtkfilesel.c:502
-#: gtk/gtkfilesel.c:518
+#: gtk/gtkfilesel.c:518 gtk/gtkimage.c:161
 msgid "Filename"
 msgstr "Dosyaismi"
 
@@ -2061,6 +2222,24 @@ msgstr "İsim çok uzun"
 msgid "Couldn't convert filename"
 msgstr "Dosya ismi dönüştürülemedi"
 
+# gtk/gtkpaned.c:116 gtk/gtkruler.c:138
+#: gtk/gtkfixed.c:120 gtk/gtklayout.c:597
+msgid "X position"
+msgstr "X konumu"
+
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:598
+msgid "X position of child widget"
+msgstr "Ast parçanın X konumu"
+
+# gtk/gtkpaned.c:116 gtk/gtkruler.c:138
+#: gtk/gtkfixed.c:130 gtk/gtklayout.c:607
+msgid "Y position"
+msgstr "Y konumu"
+
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
+msgid "Y position of child widget"
+msgstr "Ast parçanın Y konumu"
+
 # gtk/gtkfontsel.c:185
 #: gtk/gtkfontsel.c:195
 msgid "Font name"
@@ -2219,6 +2398,99 @@ msgstr ""
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Simge yüklenirken hata: %s"
+
+# gtk/gtkcellrendererpixbuf.c:102 gtk/gtkcellrenderertextpixbuf.c:125
+#: gtk/gtkimage.c:129
+#, fuzzy
+msgid "Pixbuf"
+msgstr "Pixbuf Nesnesi"
+
+#: gtk/gtkimage.c:130
+msgid "A GdkPixbuf to display."
+msgstr ""
+
+#: gtk/gtkimage.c:137
+msgid "Pixmap"
+msgstr ""
+
+#: gtk/gtkimage.c:138
+msgid "A GdkPixmap to display."
+msgstr ""
+
+# gtk/gtknotebook.c:324
+#: gtk/gtkimage.c:145
+#, fuzzy
+msgid "Image"
+msgstr "Sayfa"
+
+#: gtk/gtkimage.c:146
+msgid "A GdkImage to display."
+msgstr ""
+
+# gtk/gtkcellrenderertext.c:162
+#: gtk/gtkimage.c:153
+#, fuzzy
+msgid "Mask"
+msgstr "Biçimleme"
+
+#: gtk/gtkimage.c:154
+msgid "Mask bitmap to use with GdkImage or GdkPixmap"
+msgstr ""
+
+# gdk-pixbuf/io-tiff.c:411
+#: gtk/gtkimage.c:162
+#, fuzzy
+msgid "Filename to load and siplay."
+msgstr "TIFF resmi yüklenemedi"
+
+#: gtk/gtkimage.c:170
+msgid "Stock ID"
+msgstr ""
+
+#: gtk/gtkimage.c:171
+msgid "Stock ID for a stock image to display."
+msgstr ""
+
+# gtk/gtkcheckmenuitem.c:122 gtk/gtktogglebutton.c:152
+#: gtk/gtkimage.c:178
+#, fuzzy
+msgid "Icon set"
+msgstr "Tutarsız"
+
+#: gtk/gtkimage.c:179
+msgid "Icon set to display."
+msgstr ""
+
+# gtk/gtkcellrenderertext.c:282 gtk/gtkcellrenderertext.c:283
+# gtk/gtktexttag.c:347 gtk/gtktexttag.c:348
+#: gtk/gtkimage.c:186
+#, fuzzy
+msgid "Icon size"
+msgstr "Yazı tipi boyu"
+
+#: gtk/gtkimage.c:187
+msgid "Size to use for stock icon or icon set."
+msgstr ""
+
+# gtk/gtkstock.c:267
+#: gtk/gtkimage.c:195
+#, fuzzy
+msgid "Animation"
+msgstr "Bilgi"
+
+#: gtk/gtkimage.c:196
+msgid "GdkPixbufAnimation to display."
+msgstr ""
+
+# gtk/gtkcurve.c:120
+#: gtk/gtkimage.c:203
+#, fuzzy
+msgid "Storage type"
+msgstr "Eğri türü"
+
+#: gtk/gtkimage.c:204
+msgid "The representation being used for image data."
+msgstr ""
 
 # gtk/gtkimagemenuitem.c:124
 #: gtk/gtkimagemenuitem.c:124
@@ -2430,31 +2702,13 @@ msgstr "Seçme parçası"
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr "Etiketin seçme tuşuna basıldığında etkinleştirilecek parça."
 
-# gtk/gtkpaned.c:116 gtk/gtkruler.c:138
-#: gtk/gtklayout.c:597
-msgid "X position"
-msgstr "X konumu"
-
-#: gtk/gtklayout.c:598
-msgid "X position of child widget"
-msgstr "Ast parçanın X konumu"
-
-# gtk/gtkpaned.c:116 gtk/gtkruler.c:138
-#: gtk/gtklayout.c:607
-msgid "Y position"
-msgstr "Y konumu"
-
-#: gtk/gtklayout.c:608
-msgid "Y position of child widget"
-msgstr "Ast parçanın Y konumu"
-
 # gtk/gtklayout.c:419 gtk/gtkviewport.c:131
 #: gtk/gtklayout.c:617 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
 msgstr "Yatay hizalama"
 
 # gtk/gtklayout.c:420
-#: gtk/gtklayout.c:618
+#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:178
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "Yatay konum için GtkAdjustment"
 
@@ -2464,7 +2718,7 @@ msgid "Vertical adjustment"
 msgstr "Düşey hizalama"
 
 # gtk/gtklayout.c:428
-#: gtk/gtklayout.c:626
+#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:185
 msgid "The GtkAdjustment for the vertical position."
 msgstr "Düşey konum için GtkAdjustment"
 
@@ -2497,6 +2751,16 @@ msgstr "Yerleşim yüksekliği"
 #: gtk/gtkmain.c:614
 msgid "default:LTR"
 msgstr "öntanımlı:LTR"
+
+#: gtk/gtkmenu.c:189
+msgid "Tearoff Title"
+msgstr ""
+
+#: gtk/gtkmenu.c:190
+msgid ""
+"A title that may be displayed by the window manager when this menu is torn-"
+"off."
+msgstr ""
 
 # gtk/gtkmenubar.c:155
 #: gtk/gtkmenubar.c:151
@@ -3120,6 +3384,59 @@ msgstr ""
 "Kaydırma çubuğunun ucundaki geri düğmesinin yanında ileri düğmesi "
 "gösterilecek mi"
 
+# gtk/gtktext.c:594 gtk/gtktreeview.c:465
+#: gtk/gtkscrolledwindow.c:177 gtk/gtktext.c:604 gtk/gtktreeview.c:507
+msgid "Horizontal Adjustment"
+msgstr "Yatay Hizalama"
+
+# gtk/gtktext.c:602 gtk/gtktreeview.c:473
+#: gtk/gtkscrolledwindow.c:184 gtk/gtktext.c:612 gtk/gtktreeview.c:515
+msgid "Vertical Adjustment"
+msgstr "Düşey Hizalama"
+
+# gtk/gtkalignment.c:121
+#: gtk/gtkscrolledwindow.c:191
+#, fuzzy
+msgid "Horizontal Scrollbar Policy"
+msgstr "Yatay çarpan"
+
+#: gtk/gtkscrolledwindow.c:192
+msgid "When the horizontal scrollbar is displayed"
+msgstr ""
+
+# gtk/gtkalignment.c:130
+#: gtk/gtkscrolledwindow.c:199
+#, fuzzy
+msgid "Vertical Scrollbar Policy"
+msgstr "Düşey çarpan"
+
+#: gtk/gtkscrolledwindow.c:200
+msgid "When the vertical scrollbar is displayed"
+msgstr ""
+
+# gtk/gtkwindow.c:332
+#: gtk/gtkscrolledwindow.c:208
+#, fuzzy
+msgid "Window Placement"
+msgstr "Pencere Başlığı"
+
+#: gtk/gtkscrolledwindow.c:209
+msgid "Where the contents are located with respect to the scrollbars"
+msgstr ""
+
+# gtk/gtkhandlebox.c:183 gtk/gtkmenubar.c:154 gtk/gtkstatusbar.c:157
+# gtk/gtktoolbar.c:276 gtk/gtkviewport.c:147
+#: gtk/gtkscrolledwindow.c:216
+#, fuzzy
+msgid "Shadow Type"
+msgstr "Gölge tipi"
+
+# gtk/gtkmenubar.c:155
+#: gtk/gtkscrolledwindow.c:217
+#, fuzzy
+msgid "Style of bevel around the contents"
+msgstr "Menü çubuğunun etrafındaki kenar tarzı"
+
 # gtk/gtksettings.c:143
 #: gtk/gtksettings.c:147
 msgid "Double Click Time"
@@ -3665,20 +3982,10 @@ msgstr "Eşalanlı"
 msgid "If TRUE this means the table cells are all the same width/height"
 msgstr "DOĞRU ise tablo gözeleri eşit genişlik ve yüksekliktedir"
 
-# gtk/gtktext.c:594 gtk/gtktreeview.c:465
-#: gtk/gtktext.c:604 gtk/gtktreeview.c:507
-msgid "Horizontal Adjustment"
-msgstr "Yatay Hizalama"
-
 # gtk/gtktext.c:595
 #: gtk/gtktext.c:605
 msgid "Horizontal adjustment for the text widget"
 msgstr "Metin parçası için yatay hizalama"
-
-# gtk/gtktext.c:602 gtk/gtktreeview.c:473
-#: gtk/gtktext.c:612 gtk/gtktreeview.c:515
-msgid "Vertical Adjustment"
-msgstr "Düşey Hizalama"
 
 # gtk/gtktext.c:603
 #: gtk/gtktext.c:613
@@ -4001,6 +4308,46 @@ msgstr "Görünmez ayarı"
 msgid "Whether this tag affects text visibility"
 msgstr "Metnin görünürlüğünü etkiler"
 
+#: gtk/gtktextutil.c:46
+msgid "LRM _Left-to-right mark"
+msgstr ""
+
+#: gtk/gtktextutil.c:47
+msgid "RLM _Right-to-left mark"
+msgstr ""
+
+#: gtk/gtktextutil.c:48
+msgid "LRE Left-to-right _embedding"
+msgstr ""
+
+#: gtk/gtktextutil.c:49
+msgid "RLE Right-to-left e_mbedding"
+msgstr ""
+
+#: gtk/gtktextutil.c:50
+msgid "LRO Left-to-right _override"
+msgstr ""
+
+#: gtk/gtktextutil.c:51
+msgid "RLO Right-to-left o_verride"
+msgstr ""
+
+#: gtk/gtktextutil.c:52
+msgid "PDF _Pop directional formatting"
+msgstr ""
+
+#: gtk/gtktextutil.c:53
+msgid "ZWS _Zero width space"
+msgstr ""
+
+#: gtk/gtktextutil.c:54
+msgid "ZWN Zero width _joiner"
+msgstr ""
+
+#: gtk/gtktextutil.c:55
+msgid "ZWNJ Zero width _non-joiner"
+msgstr ""
+
 # gtk/gtktextview.c:522
 #: gtk/gtktextview.c:535
 msgid "Pixels Above Lines"
@@ -4155,6 +4502,18 @@ msgstr "Araç çubuğu simge boyutu"
 #: gtk/gtktoolbar.c:292
 msgid "Size of icons in default toolbars"
 msgstr "Araç çubuklarında öntanımlı simge boyutu"
+
+# gtk/gtktreeview.c:457
+#: gtk/gtktreemodelsort.c:298
+#, fuzzy
+msgid "TreeModelSort Model"
+msgstr "Ağaç Görünümü Modeli"
+
+# gtk/gtktreeview.c:458
+#: gtk/gtktreemodelsort.c:299
+#, fuzzy
+msgid "The model for the TreeModelSort to sort"
+msgstr "Ağaç görünümü için model"
 
 # gtk/gtktreeview.c:457
 #: gtk/gtktreeview.c:499
