@@ -2,6 +2,9 @@
 
 	* src/wimp_style.c: Toolbar steppers get drawn ETCHED_IN when pressed now. More 
 	consistent with Win32 behavior.
+	* src/Theme/gtk-2.0/gtkrc: Make menubars have shadow=NONE. More
+	consisten with Win32 behavior, though Win32 apps tend to differ in this
+	area.
 	
 2003-11-04  Dom Lachowicz <cinamod@hotmail.com>
 
