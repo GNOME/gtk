@@ -867,9 +867,9 @@ gtk_drag_dest_set   (GtkWidget            *widget,
     site->target_list = gtk_target_list_new (targets, n_targets);
   else
     site->target_list = NULL;
-
   site->actions = actions;
   site->do_proxy = FALSE;
+  site->proxy_window = NULL;
 
   gtk_drag_dest_set_internal (widget, site);
 }

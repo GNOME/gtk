@@ -25,12 +25,27 @@
 #include "gtk/gtkwindow.h"
 #include "gtkimcontextxim.h"
 
+typedef struct _StatusWindow StatusWindow;
+
 struct _GtkXIMInfo
 {
   GdkDisplay *display;
   XIM im;
   char *locale;
   XIMStyle style;
+};
+
+/* A context status window; these are kept in the status_windows list. */
+struct _StatusWindow
+{
+  GtkWidget *window;
+  
+  /* Toplevel window to which the status window corresponds */
+  GtkWidget *toplevel;
+  
+  /* Signal connection ids; we connect to the toplevel */
+  guint destroy_handler_id;
+  guint configure_handler_id;
 };
 
 static void     gtk_im_context_xim_class_init         (GtkIMContextXIMClass  *class);
@@ -63,6 +78,9 @@ static GObjectClass *parent_class;
 GType gtk_type_im_context_xim = 0;
 
 GSList *open_ims = NULL;
+
+/* List of status windows for different toplevels */
+static GSList *status_windows = NULL;
 
 void
 gtk_im_context_xim_register_type (GTypeModule *type_module)
@@ -948,34 +966,39 @@ status_window_style_set (GtkWidget *toplevel,
     gtk_widget_modify_fg (label, i, &toplevel->style->text[i]);
 }
 
+/* Frees a status window and removes its link from the status_windows list */
 static void
-status_window_destroy (GtkWidget *toplevel,
-		       GtkWidget *status_window)
+status_window_free (StatusWindow *status_window)
 {
-  gtk_widget_destroy (status_window);
-  g_object_set_data (G_OBJECT (toplevel), "gtk-im-xim-status-window", NULL);
+  status_windows = g_slist_remove (status_windows, status_window);
+ 
+  g_signal_handler_disconnect (status_window->toplevel, status_window->destroy_handler_id);
+  g_signal_handler_disconnect (status_window->toplevel, status_window->configure_handler_id);
+  gtk_widget_destroy (status_window->window);
+  g_object_set_data (G_OBJECT (status_window->toplevel), "gtk-im-xim-status-window", NULL);
+ 
+  g_free (status_window);
 }
 
 static gboolean
 status_window_configure (GtkWidget         *toplevel,
 			 GdkEventConfigure *event,
-			 GtkWidget         *status_window)
+  			 StatusWindow      *status_window)
 {
   GdkRectangle rect;
   GtkRequisition requisition;
   gint y;
   gint height = gdk_screen_get_height (gtk_widget_get_screen (toplevel));
   
-
   gdk_window_get_frame_extents (toplevel->window, &rect);
-  gtk_widget_size_request (status_window, &requisition);
+  gtk_widget_size_request (status_window->window, &requisition);
 
   if (rect.y + rect.height + requisition.height < height)
     y = rect.y + rect.height;
   else
     y = height - requisition.height;
   
-  gtk_window_move (GTK_WINDOW (status_window), rect.x, y);
+  gtk_window_move (GTK_WINDOW (status_window->window), rect.x, y);
 
   return FALSE;
 }
@@ -986,7 +1009,8 @@ status_window_get (GtkIMContextXIM *context_xim,
 {
   GdkWindow *toplevel_gdk;
   GtkWidget *toplevel;
-  GtkWidget *status_window;
+  GtkWidget *window;
+  StatusWindow *status_window;
   GtkWidget *status_label;
   
   if (!context_xim->client_window)
@@ -1007,35 +1031,45 @@ status_window_get (GtkIMContextXIM *context_xim,
     return NULL;
 
   status_window = g_object_get_data (G_OBJECT (toplevel), "gtk-im-xim-status-window");
-  if (status_window || !create)
-    return status_window;
+  if (status_window)
+    return status_window->window;
+  else if (!create)
+    return NULL;
 
-  status_window = gtk_window_new (GTK_WINDOW_POPUP);
+  status_window = g_new (StatusWindow, 1);
+  status_window->window = gtk_window_new (GTK_WINDOW_POPUP);
+  status_window->toplevel = toplevel;
 
-  gtk_window_set_policy (GTK_WINDOW (status_window), FALSE, FALSE, FALSE);
-  gtk_widget_set_app_paintable (status_window, TRUE);
+  status_windows = g_slist_prepend (status_windows, status_window);
+
+  window = status_window->window;
+
+  gtk_window_set_policy (GTK_WINDOW (window), FALSE, FALSE, FALSE);
+  gtk_widget_set_app_paintable (window, TRUE);
 
   status_label = gtk_label_new ("");
   gtk_misc_set_padding (GTK_MISC (status_label), 1, 1);
   gtk_widget_show (status_label);
   
-  gtk_container_add (GTK_CONTAINER (status_window), status_label);
+  gtk_container_add (GTK_CONTAINER (window), status_label);
 
-  g_signal_connect (toplevel, "destroy",
-		    G_CALLBACK (status_window_destroy), status_window);
-  g_signal_connect (toplevel, "configure_event",
-		    G_CALLBACK (status_window_configure), status_window);
+  status_window->destroy_handler_id = g_signal_connect_swapped (toplevel, "destroy",
+								G_CALLBACK (status_window_free),
+								status_window);
+  status_window->configure_handler_id = g_signal_connect (toplevel, "configure_event",
+							  G_CALLBACK (status_window_configure),
+							  status_window);
 
   status_window_configure (toplevel, NULL, status_window);
-  
-  g_signal_connect (status_window, "style_set",
+
+  g_signal_connect (window, "style_set",
 		    G_CALLBACK (status_window_style_set), status_label);
-  g_signal_connect (status_window, "expose_event",
+  g_signal_connect (window, "expose_event",
 		    G_CALLBACK (status_window_expose_event), NULL);
-  
+
   g_object_set_data (G_OBJECT (toplevel), "gtk-im-xim-status-window", status_window);
 
-  return status_window;
+  return window;
 }
 
 static gboolean
@@ -1085,4 +1119,17 @@ status_window_set_text (GtkIMContextXIM *context_xim,
       else
 	gtk_widget_hide (status_window);
     }
+}
+
+/**
+ * gtk_im_context_xim_shutdown:
+ * 
+ * Destroys all the status windows that are kept by the XIM contexts.  This
+ * function should only be called by the XIM module exit routine.
+ **/
+void
+gtk_im_context_xim_shutdown (void)
+{
+  while (status_windows)
+    status_window_free (status_windows->data);
 }

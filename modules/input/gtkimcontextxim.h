@@ -84,6 +84,8 @@ struct _GtkIMContextXIMClass
 void gtk_im_context_xim_register_type (GTypeModule *type_module);
 GtkIMContext *gtk_im_context_xim_new (void);
 
+void gtk_im_context_xim_shutdown (void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

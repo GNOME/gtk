@@ -157,6 +157,8 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
 			       GtkIMContext      *slave,
 			       gboolean           finalizing)
 {
+  gboolean need_preedit_changed = FALSE;
+  
   if (multicontext->slave)
     {
       if (!finalizing)
@@ -179,7 +181,7 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
       multicontext->slave = NULL;
 
       if (!finalizing)
-	g_signal_emit_by_name (multicontext, "preedit_changed");
+	need_preedit_changed = TRUE;
     }
   
   multicontext->slave = slave;
@@ -210,6 +212,9 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
       if (multicontext->client_window)
 	gtk_im_context_set_client_window (slave, multicontext->client_window);
     }
+
+  if (need_preedit_changed)
+    g_signal_emit_by_name (multicontext, "preedit_changed");
 }
 
 static GtkIMContext *

@@ -43,6 +43,7 @@ im_module_init (GTypeModule *type_module)
 void 
 im_module_exit (void)
 {
+  gtk_im_context_xim_shutdown ();
 }
 
 void 

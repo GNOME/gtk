@@ -1,3 +1,18 @@
+Fri May 17 14:40:24 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_set_slave): 
+	Protect against reentrancy problems by emitting 
+	::preedit_changed at the end, fixing input context
+	leak. (Yao Zhang)
+
+	* modules/input/gtkimcontextxim.c (status_window_free): 
+	Patch from Federico Mena Quintero to fix problem where
+	references to IMContextXIM were kept around after
+	module was unloaded.
+
+	* gtk/gtkdnd.c (gtk_drag_dest_set): NULL initialize
+	proxy window.
+
 Fri May 17 13:56:23 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkplug.c (gtk_plug_filter_func): Fix a missing
