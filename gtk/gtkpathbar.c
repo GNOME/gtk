@@ -150,7 +150,7 @@ gtk_path_bar_finalize (GObject *object)
   if (path_bar->home_icon)
     g_object_unref (path_bar->home_icon);
   if (path_bar->root_icon)
-    g_object_unref (path_bar->home_icon);
+    g_object_unref (path_bar->root_icon);
   if (path_bar->file_system)
     g_object_unref (path_bar->file_system);
 

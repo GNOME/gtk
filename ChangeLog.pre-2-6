@@ -1,3 +1,7 @@
+Tue Mar  9 11:01:45 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkpathbar.c (gtk_path_bar_finalize): unref the correct icon.
+
 2004-03-09  Morten Welinder  <terra@gnome.org>
 
 	* tests/testfilechooser.c (main): Destroy widgets to reveal leaks.
