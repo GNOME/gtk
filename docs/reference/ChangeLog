@@ -1,3 +1,8 @@
+Thu Aug 12 00:06:20 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkuimanager.sgml: Add some information about
+	allowed values for the name and action attributes.
+
 2004-08-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkrc.sgml: Fix a typo.  (#149470, Mariano

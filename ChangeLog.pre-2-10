@@ -1,3 +1,8 @@
+Thu Aug 12 00:07:15 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaction.c (gtk_action_new):  Link to information about
+	allowed action names.  (#149620, David Malcolm)
+
 2004-08-11  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from HEAD:
