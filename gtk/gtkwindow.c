@@ -69,6 +69,7 @@ enum {
   PROP_AUTO_SHRINK,
   PROP_ALLOW_SHRINK,
   PROP_ALLOW_GROW,
+  PROP_RESIZABLE,
   PROP_MODAL,
   PROP_WIN_POS,
   PROP_DEFAULT_WIDTH,
@@ -358,6 +359,14 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
+                                   PROP_RESIZABLE,
+                                   g_param_spec_boolean ("resizable",
+							 _("Resizable"),
+							 _("If TRUE, users can resize the window."),
+							 TRUE,
+							 G_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
                                    PROP_MODAL,
                                    g_param_spec_boolean ("modal",
 							 _("Modal"),
@@ -596,6 +605,12 @@ gtk_window_set_property (GObject      *object,
     case PROP_ALLOW_GROW:
       window->allow_grow = g_value_get_boolean (value);
       gtk_widget_queue_resize (GTK_WIDGET (window));
+      g_object_notify (G_OBJECT (window), "resizable");
+      break;
+    case PROP_RESIZABLE:
+      window->allow_grow = g_value_get_boolean (value);
+      gtk_widget_queue_resize (GTK_WIDGET (window));
+      g_object_notify (G_OBJECT (window), "allow_grow");
       break;
     case PROP_MODAL:
       gtk_window_set_modal (window, g_value_get_boolean (value));
@@ -643,6 +658,9 @@ gtk_window_get_property (GObject      *object,
       g_value_set_boolean (value, window->allow_shrink);
       break;
     case PROP_ALLOW_GROW:
+      g_value_set_boolean (value, window->allow_grow);
+      break;
+    case PROP_RESIZABLE:
       g_value_set_boolean (value, window->allow_grow);
       break;
     case PROP_MODAL:
