@@ -152,7 +152,7 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 							 G_PARAM_READWRITE));
 
   /**
-   * GtkGroupAction::connect-proxy:
+   * GtkActionGroup::connect-proxy:
    * @action_group: the group
    * @action: the action
    * @proxy: the proxy
@@ -180,7 +180,7 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 		  GTK_TYPE_ACTION, GTK_TYPE_WIDGET);
 
   /**
-   * GtkAction::disconnect-proxy:
+   * GtkActionGroup::disconnect-proxy:
    * @action_group: the group
    * @action: the action
    * @proxy: the proxy
