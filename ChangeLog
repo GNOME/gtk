@@ -5,6 +5,14 @@ Mon Jun 22 18:43:11 1998  Lars Hamann  <lars@gtk.org>
 	* gtk/gtkctree.c/h (gtk_ctree_find_glist_ptr): new function to
 	search the glist pointer of an GtkCTreeRow
 
+1998-06-21  Raja R Harinath  <harinath@cs.umn.edu>
+ 
+	* gtk/Makefile.am (gtk.defs,gtktypebuiltins*): Remove $(srcdir)
+	from, and clean up, the dependencies.  Generate to intermediate
+	files to prevent problems with Ctrl-C.
+
+	* gtk/genmarshal.pl: Generate `gtkmarshal.[ch]' in $srcdir.
+
 Fri Jun 19 14:46:56 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/gtkspinbutton.h gtk/gtkspinbutton.c gtk/testgtk.c:
