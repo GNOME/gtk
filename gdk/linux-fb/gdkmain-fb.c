@@ -72,6 +72,7 @@ gdk_fb_display_new(const char *filename)
 
   retval = g_new0(GdkFBDisplay, 1);
   retval->fd = fd;
+  ioctl(retval->fd, FBIOBLANK, 0);
   n = ioctl(fd, FBIOGET_FSCREENINFO, &retval->sinfo);
   n |= ioctl(fd, FBIOGET_VSCREENINFO, &retval->modeinfo);
   g_assert(!n);

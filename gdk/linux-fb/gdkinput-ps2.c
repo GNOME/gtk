@@ -35,6 +35,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <linux/fb.h>
+
+/* Two minutes */
+#define BLANKING_TIMEOUT 120*1000
 
 /*
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
@@ -64,6 +68,8 @@ typedef struct {
   gboolean caps_lock : 1;
 } Keyboard;
 
+static guint blanking_timer = 0;
+
 static Keyboard * tty_keyboard_open(void);
 static guint keyboard_get_state(Keyboard *k);
 
@@ -72,6 +78,37 @@ static Keyboard *keyboard = NULL;
 
 static guint multiclick_tag;
 static GdkEvent *multiclick_event = NULL;
+
+#ifndef VESA_NO_BLANKING
+#define VESA_NO_BLANKING        0
+#define VESA_VSYNC_SUSPEND      1
+#define VESA_HSYNC_SUSPEND      2
+#define VESA_POWERDOWN          3
+#endif
+
+#if 0
+static gboolean
+input_activity_timeout(gpointer p)
+{
+  blanking_timer = 0;
+  ioctl(gdk_display->fd, FBIOBLANK, VESA_POWERDOWN);
+  return FALSE;
+}
+#endif
+
+/* This is all very broken :( */
+static void
+input_activity(void)
+{
+#if 0
+  if(blanking_timer)
+    g_source_remove(blanking_timer);
+  else
+    gdk_fb_redraw_all();
+
+  blanking_timer = g_timeout_add(BLANKING_TIMEOUT, input_activity_timeout, NULL);
+#endif
+}
 
 static gboolean
 click_event_timeout(gpointer x)
@@ -569,6 +606,8 @@ handle_mouse_input(MouseDevice *mouse, gboolean got_motion)
 	gdk_window_unref(mouse->prev_window);
       mouse->prev_window = gdk_window_ref(win);
     }
+
+  input_activity();
 }
 
 static gboolean
@@ -1380,6 +1419,8 @@ handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 	  event->key.string = event->key.length?g_strdup(dummy):NULL;
 	}
     }
+
+  input_activity();
 
   return TRUE;
 }
