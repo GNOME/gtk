@@ -1,3 +1,8 @@
+2005-03-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-tga.c (parse_rle_data): Fix the update areas for incremental
+	loading of compressed tgas.  (#171883, David Costanzo)
+
 2005-03-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-bmp.c (DoCompressed): Use the correct update regions for
