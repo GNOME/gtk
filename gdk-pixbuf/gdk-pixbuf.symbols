@@ -82,12 +82,18 @@ gdk_pixbuf_ref
 gdk_pixbuf_rotate_simple
 gdk_pixbuf_rotation_get_type G_GNUC_CONST
 gdk_pixbuf_saturate_and_pixelate
-gdk_pixbuf_save
+gdk_pixbuf_save PRIVATE
+#ifdef G_OS_WIN32
+gdk_pixbuf_save_utf8
+#endif
 gdk_pixbuf_save_to_buffer
 gdk_pixbuf_save_to_bufferv
 gdk_pixbuf_save_to_callback
 gdk_pixbuf_save_to_callbackv
-gdk_pixbuf_savev
+gdk_pixbuf_savev PRIVATE
+#ifdef G_OS_WIN32
+gdk_pixbuf_savev_utf8
+#endif
 gdk_pixbuf_scale
 gdk_pixbuf_scale_simple
 gdk_pixbuf_set_option

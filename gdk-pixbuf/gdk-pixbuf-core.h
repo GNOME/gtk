@@ -156,6 +156,12 @@ void       gdk_pixbuf_fill              (GdkPixbuf    *pixbuf,
 
 /* Saving */
 
+#ifdef G_OS_WIN32
+/* DLL ABI stability hack. */
+#define gdk_pixbuf_save gdk_pixbuf_save_utf8
+#define gdk_pixbuf_savev gdk_pixbuf_savev_utf8
+#endif
+
 gboolean gdk_pixbuf_save           (GdkPixbuf  *pixbuf, 
                                     const char *filename, 
                                     const char *type, 

@@ -1,3 +1,14 @@
+2005-03-10  Tor Lillqvist  <tml@novell.com>
+
+	* Makefile.am: Use grep | head -n 1 instead of grep -m 1 which
+	doesn't work with slightly older versions of GNU grep in
+	install-libtool-import-lib rule.
+	
+	* gdk-pixbuf-core.h
+	* gdk-pixbuf-io.c
+	* gdk-pixbuf.symbols: Implement DLL ABI stablility for
+	gdk_pixbuf_save() and gdk_pixbuf_savev(). (#167973)
+
 2005-03-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-gif-animation.c (gdk_pixbuf_gif_anim_frame_composite): Fix 
