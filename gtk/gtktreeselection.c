@@ -368,6 +368,13 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
       selection->tree_view->priv->tree->root == NULL)
     return;
 
+  if (selection->type == GTK_TREE_SELECTION_SINGLE)
+    {
+      if (gtk_tree_selection_get_selected (selection, NULL, &iter))
+	(* func) (selection->tree_view->priv->model, &iter, data);
+      return;
+    }
+
   tree = selection->tree_view->priv->tree;
   node = selection->tree_view->priv->tree->root;
 

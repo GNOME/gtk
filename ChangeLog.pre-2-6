@@ -1,3 +1,11 @@
+Tue Apr  3 15:04:45 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodelsort.h:  removed set_sort_column, as it was
+	moved to the GtkTreeSortable interface.
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach):
+	Make more efficient (fixes #50262).
+
 Tue Apr  3 13:55:37 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* NEWS: Updated.
