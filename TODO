@@ -69,6 +69,17 @@ DND
   gtk_widget layer that makes it easier... Also, adding support for drop
   zones might be nice.
     -- Elliot
+  This one is reproducabel for me:
+  testgtk --sync
+  popup colorselection
+  drag/drop works
+  start up preview color
+  drag works but not dropping
+  end preview color
+  drag/drop works
+  start up prewiev color
+  segfault in malloc
+  -timj
 
 OTHER
 -----

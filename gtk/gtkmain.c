@@ -328,8 +328,8 @@ gtk_main_iteration_do (gboolean blocking)
 	  }
 
       /* Push the event onto a stack of current events for
-       * gdk_current_event_get */
-
+       * gtk_current_event_get().
+       */
       current_events = g_list_prepend (current_events, event);
       
       /* Find the widget which got the event. We store the widget
@@ -876,7 +876,7 @@ GdkEvent *
 gtk_get_current_event ()
 {
   if (current_events)
-    return gdk_event_copy ((GdkEvent *)current_events->data);
+    return gdk_event_copy ((GdkEvent *) current_events->data);
   else
     return NULL;
 }
