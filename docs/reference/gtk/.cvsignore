@@ -4,8 +4,12 @@ sgml
 html
 .libs
 gtk.args
+gtk.hierarchy
 gtk.signals
 gtk-decl.txt
 gtk-decl-list.txt
 gtk-unused.txt
 gtk-scan.lo
+*.stamp
+*.lo
+.libs

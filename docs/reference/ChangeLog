@@ -1,3 +1,13 @@
+Fri Apr 13 10:41:10 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* */Makefile.am: Add $(top_builddir) to includes as necessary,
+	Run gtkdoc-scangobj from builddir, not srcdir, don't distribute
+	foo-doc.{top,bottom}, recomment in code to distribute HTML
+	images, with shell fixes.
+
+	* gtk/gtk.hierarchy gdk-pixbuf/gdk-pixbuf.{args,signals,hierarchy}:
+	Remove generated files.
+	
 Wed Apr  4 01:26:04 2001  Tim Janik  <timj@gtk.org>
 
         * gdk-pixbuf/Makefile.am: disabled "for i in $(HTML_IMAGES) ;"

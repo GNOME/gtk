@@ -2,6 +2,12 @@ Makefile
 Makefile.in
 sgml
 html
+gdk.args
+gdk.signals
+gdk.hierarchy
 gdk-decl.txt
 gdk-decl-list.txt
 gdk-unused.txt
+*.stamp
+*.lo
+.libs

@@ -66,6 +66,7 @@ extra_files =
 GTKDOC_CFLAGS = @STRIP_BEGIN@ 				\
 	@CFLAGS@					\
 	-I$(top_srcdir) 				\
+	-I$(top_builddir) 				\
 	-I$(top_builddir)/gdk				\
 	-DGTK_DISABLE_COMPAT_H				\
 	@GTK_DEBUG_FLAGS@				\
@@ -123,14 +124,14 @@ all-local: html-build.stamp
 
 scan-build.stamp: $(HFILE_GLOB)
 	@echo '*** Scanning header files ***'
-	cd $(srcdir) && ( \
-	if grep -l '^..*$$' $(DOC_MODULE).types > /dev/null ; then \
-	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" gtkdoc-scangobj --module=$(DOC_MODULE) ; \
+	if grep -l '^..*$$' $(srcdir)/$(DOC_MODULE).types > /dev/null ; then \
+	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" gtkdoc-scangobj --module=$(DOC_MODULE) --output-dir=$(srcdir) ; \
 	else \
+	    cd $(srcdir) ; \
 	    for i in $(SCANOBJ_FILES) ; do \
                test -f $$i || touch $$i ; \
 	    done \
-	fi )
+	fi
 	cd $(srcdir) && \
 	  gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(SCAN_OPTIONS) $(EXTRA_HFILES)
 	touch scan-build.stamp
@@ -150,7 +151,7 @@ tmpl.stamp: tmpl-build.stamp
 
 #### sgml ####
 
-sgml-build.stamp: tmpl.stamp $(CFILE_GLOB) tmpl/*.sgml
+sgml-build.stamp: tmpl.stamp $(CFILE_GLOB) $(srcdir)/tmpl/*.sgml
 	@echo '*** Building SGML ***'
 	cd $(srcdir) && \
 	gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) $(MKDB_OPTIONS)
@@ -210,12 +211,12 @@ dist-hook: dist-check-gtkdoc dist-hook-local
 	mkdir $(distdir)/html
 	-cp $(srcdir)/tmpl/*.sgml $(distdir)/tmpl
 	-cp $(srcdir)/sgml/*.sgml $(distdir)/sgml
-	-cp $(srcdir)/sgml/*.bottom $(srcdir)/sgml/*.top $(distdir)/sgml
 	-cp $(srcdir)/html/index.sgml $(distdir)/html
 	-cp $(srcdir)/html/*.html $(srcdir)/html/*.css $(distdir)/html
 
-#	for i in $(HTML_IMAGES) ; do          \
-#	  cp $(srcdir)/$$i $(distdir)/html ;  \
-#	done
+	images=$(HTML_IMAGES) ;    	      \
+	for i in $$images ; do		      \
+	  cp $(srcdir)/$$i $(distdir)/html ;  \
+	done
 
 .PHONY : dist-hook-local

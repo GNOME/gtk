@@ -2,6 +2,12 @@ Makefile
 Makefile.in
 html
 sgml
+gdk-pixbuf.args
+gdk-pixbuf.hierarchy
+gdk-pixbuf.signals
 gdk-pixbuf-decl.txt
 gdk-pixbuf-decl-list.txt
 gdk-pixbuf-unused.txt
+*.stamp
+*.lo
+.libs
