@@ -236,7 +236,8 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer *cell,
 
   if (height)
     *height = calc_height;
-
+  if (width && height)
+    g_print ("Checking width/height %d %d\n", *width, *height);
   if (cell_area)
     {
       if (x_offset)
@@ -267,12 +268,11 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
   GtkShadowType shadow;
   GtkStateType state;
   
-  width = MIN (TOGGLE_WIDTH, cell_area->width - cell->xpad * 2);
-  height = MIN (TOGGLE_WIDTH, cell_area->height - cell->ypad * 2);
-
   gtk_cell_renderer_toggle_get_size (cell, widget, cell_area,
 				     &x_offset, &y_offset,
 				     &width, &height);
+  width -= cell->xpad*2;
+  height -= cell->ypad*2;
 
   if (width <= 0 || height <= 0)
     return;

@@ -1,3 +1,8 @@
+Tue Mar 20 15:00:43 2001  Jonathan Blandford  <jrb@webwynk.net>
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render):
+	Fix buglet in meeting.
+
 2001-03-19  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkiconfactory.c: Make GtkIconSource an opaque datatype, and
