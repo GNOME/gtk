@@ -136,17 +136,17 @@ pixbuf_check_ppm (guchar *buffer, int size)
 #endif
 
 ModuleType file_formats [] = {
-	{ "png",  pixbuf_check_png,  NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "gif",  pixbuf_check_gif,  NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "png",  NULL, pixbuf_check_png,  NULL, NULL, NULL, NULL, NULL },
+	{ "jpeg", NULL, pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL },
+	{ "tiff", NULL, pixbuf_check_tiff, NULL, NULL, NULL, NULL, NULL },
+	{ "gif",  NULL, pixbuf_check_gif,  NULL, NULL, NULL, NULL, NULL },
 #define XPM_FILE_FORMAT_INDEX 4
-	{ "xpm",  pixbuf_check_xpm,  NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "xpm",  NULL, pixbuf_check_xpm,  NULL, NULL, NULL, NULL, NULL },
 #if 0
-	{ "bmp",  pixbuf_check_bmp,  NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "ppm",  pixbuf_check_ppm,  NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "bmp",  NULL, pixbuf_check_bmp,  NULL, NULL, NULL, NULL, NULL },
+	{ "ppm",  NULL, pixbuf_check_ppm,  NULL, NULL, NULL, NULL, NULL },
 #endif
-	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
+	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 
 static void
@@ -161,14 +161,29 @@ image_handler_load (ModuleType *image_module)
 
 	module_name = g_strconcat ("pixbuf-", image_module->module_name, NULL);
 	path = g_module_build_path (PIXBUF_LIBDIR, module_name);
-	g_free (module_name);
-
+        
 	module = g_module_open (path, G_MODULE_BIND_LAZY);
-	g_free (path);
 	if (!module) {
-		g_warning ("Unable to load module: %s", path);
-		return;
-	}
+                /* Debug feature, check in present working directory */
+                g_free(path);
+                path = g_module_build_path("", module_name);
+                module = g_module_open(path, G_MODULE_BIND_LAZY);
+
+                if (!module) {
+                        g_warning ("Unable to load module: %s: %s", path, g_module_error());
+                        g_free (module_name);
+                        g_free(path);
+                        return;
+                } else {
+                  printf("loaded module `%s'\n", module_name);
+                }
+                g_free(path);
+	} else {
+                printf("loaded module `%s'\n", path);
+                g_free (path);
+        }
+
+        g_free (module_name);
 
 	image_module->module = module;
 
@@ -224,10 +239,10 @@ gdk_pixbuf_new_from_file (const char *filename)
 
 	image_module = gdk_pixbuf_get_module (buffer, size);
 	if (image_module){
-		if (!image_module->load)
+		if (image_module->module == NULL)
 			image_handler_load (image_module);
 
-		if (!image_module->load) {
+		if (image_module->load == NULL) {
 			fclose (f);
 			return NULL;
 		}
@@ -254,12 +269,15 @@ gdk_pixbuf_new_from_xpm_data (const gchar **data)
         GdkPixbuf *(* load_xpm_data) (const gchar **data);
         GdkPixbuf *pixbuf;
 
-        if (file_formats[XPM_FILE_FORMAT_INDEX].load_xpm_data == NULL) {
+        if (file_formats[XPM_FILE_FORMAT_INDEX].module == NULL) {
                 image_handler_load(&file_formats[XPM_FILE_FORMAT_INDEX]);
         }
 
-        if (file_formats[XPM_FILE_FORMAT_INDEX].load_xpm_data == NULL) {
+        if (file_formats[XPM_FILE_FORMAT_INDEX].module == NULL) {
                 g_warning("Can't find gdk-pixbuf module for parsing inline XPM data");
+                return NULL;
+        } else if (file_formats[XPM_FILE_FORMAT_INDEX].load_xpm_data == NULL) {
+                g_warning("gdk-pixbuf XPM module lacks XPM data capability");
                 return NULL;
         } else {
                 load_xpm_data = file_formats[XPM_FILE_FORMAT_INDEX].load_xpm_data;

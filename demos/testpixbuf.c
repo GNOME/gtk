@@ -409,7 +409,7 @@ main (int argc, char **argv)
 	int found_valid = FALSE; 
 
 	GdkPixbuf *pixbuf;
-	GtkObject *pixbuf_loader;
+	GdkPixbufLoader *pixbuf_loader;
 	FILE *file;
 	gint val;
 	guchar buf;
