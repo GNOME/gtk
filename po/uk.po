@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2003-01-24 00:29+0200\n"
-"PO-Revision-Date: 2003-01-23 13:46--500\n"
+"PO-Revision-Date: 2003-01-23 14:11--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -98,9 +98,8 @@ msgid "Image header corrupt"
 msgstr "Зображення має нульову ширину"
 
 #: gdk-pixbuf/gdk-pixdata.c:150
-#, fuzzy
 msgid "Image format unknown"
-msgstr "RAS-зображення має невідомий тип"
+msgstr "Формат зображення невідомий"
 
 #: gdk-pixbuf/gdk-pixdata.c:155
 #: gdk-pixbuf/gdk-pixdata.c:456
@@ -117,9 +116,8 @@ msgid "Unexpected icon chunk in animation"
 msgstr ""
 
 #: gdk-pixbuf/io-ani.c:337
-#, fuzzy
 msgid "Unsupported animation type"
-msgstr "Непідтримуваний тип піктограми"
+msgstr "Непідтримуваний тип анімації"
 
 #: gdk-pixbuf/io-ani.c:348
 #: gdk-pixbuf/io-ani.c:538
@@ -144,9 +142,8 @@ msgid "Malformed chunk in animation"
 msgstr "Неправильний фрагмент у анімації"
 
 #: gdk-pixbuf/io-ani.c:676
-#, fuzzy
 msgid "The ANI image format"
-msgstr "RAS-зображення має невідомий тип"
+msgstr "Формат зображення ANI"
 
 #: gdk-pixbuf/io-bmp.c:223
 #: gdk-pixbuf/io-bmp.c:339
@@ -240,9 +237,8 @@ msgid "GIF image was truncated or incomplete."
 msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1636
-#, fuzzy
 msgid "The GIF image format"
-msgstr "RAS-зображення має невідомий тип"
+msgstr "Формат зображення GIF"
 
 #: gdk-pixbuf/io-ico.c:218
 #: gdk-pixbuf/io-ico.c:277
@@ -277,9 +273,8 @@ msgid "Not enough memory to load ICO file"
 msgstr "Недостатньо пам'яті для завантаження файлу ICO"
 
 #: gdk-pixbuf/io-ico.c:871
-#, fuzzy
 msgid "The ICO image format"
-msgstr "RAS-зображення має невідомий тип"
+msgstr "Формат зображення ICO"
 
 #: gdk-pixbuf/io-jpeg.c:114
 #, c-format
@@ -373,9 +368,8 @@ msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:919
-#, fuzzy
 msgid "The PNG image format"
-msgstr "Формат зображення PNM не вірний"
+msgstr "Формат зображення PNG"
 
 #: gdk-pixbuf/io-pnm.c:248
 msgid "PNM loader expected to find an integer, but didn't"
@@ -1093,18 +1087,16 @@ msgid "width"
 msgstr "ширина"
 
 #: gtk/gtkcellrenderer.c:180
-#, fuzzy
 msgid "The fixed width"
-msgstr "Фіксована ширина."
+msgstr "Фіксована ширина"
 
 #: gtk/gtkcellrenderer.c:190
 msgid "height"
 msgstr "висота"
 
 #: gtk/gtkcellrenderer.c:191
-#, fuzzy
 msgid "The fixed height"
-msgstr "Фіксована висота."
+msgstr "Фіксована висота"
 
 #: gtk/gtkcellrenderer.c:201
 msgid "Is Expander"
