@@ -3128,12 +3128,22 @@ void
 gdk_window_get_frame_extents (GdkWindow    *window,
                               GdkRectangle *rect)
 {
+  GdkDisplay *display;
   GdkWindowObject *private;
   Window xwindow;
   Window xparent;
   Window root;
   Window *children;
+  Window *vroots;
+  Atom type_return;
   unsigned int nchildren;
+  unsigned int nvroots;
+  unsigned long nitems_return;
+  unsigned long bytes_after_return;
+  int format_return;
+  int i;
+  unsigned int ww, wh, wb, wd;
+  int wx, wy;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (rect != NULL);
@@ -3161,35 +3171,61 @@ gdk_window_get_frame_extents (GdkWindow    *window,
 
   gdk_error_trap_push();
   
+  /* use NETWM_VIRTUAL_ROOTS if available */
+  display = gdk_drawable_get_display (window);
+  root = GDK_WINDOW_XID (gdk_screen_get_root_window (GDK_WINDOW_SCREEN (window)));
+  nvroots = 0;
+  vroots = NULL;
+  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
+			  root,
+			  gdk_x11_get_xatom_by_name_for_display (display, 
+								 "_NET_VIRTUAL_ROOTS"),
+			  0, 0x7fffffff, False, XA_WINDOW, &type_return,
+			  &format_return, &nitems_return, &bytes_after_return,
+			  (unsigned char **)(&vroots))
+      == Success)
+    {
+      if ((type_return == XA_WINDOW) && (format_return == 32) && (vroots))
+	nvroots = nitems_return;
+    }
+
   xparent = GDK_WINDOW_XID (window);
   do
     {
       xwindow = xparent;
-      if (!XQueryTree (GDK_WINDOW_XDISPLAY (window), xwindow,
+      if (!XQueryTree (GDK_DISPLAY_XDISPLAY (window), xwindow,
 		       &root, &xparent,
 		       &children, &nchildren))
 	goto fail;
       
       if (children)
 	XFree (children);
+
+      /* check virtual roots */
+      for (i = 0; i < nvroots; i++)
+	{
+	  if (xparent == vroots[i])
+	    {
+	      root = xparent;
+	      break;
+           }
+	}
     }
   while (xparent != root);
   
-  if (xparent == root)
+  if (XGetGeometry (GDK_DISPLAY_XDISPLAY (window), xwindow, 
+		    &root, &wx, &wy, &ww, &wh, &wb, &wd))
     {
-      unsigned int ww, wh, wb, wd;
-      int wx, wy;
-      
-      if (XGetGeometry (GDK_WINDOW_XDISPLAY (window), xwindow, &root, &wx, &wy, &ww, &wh, &wb, &wd))
-	{
-          rect->x = wx;
-          rect->y = wy;
-          rect->width = ww;
-          rect->height = wh;
-	}
+      rect->x = wx;
+      rect->y = wy;
+      rect->width = ww;
+      rect->height = wh;
     }
 
  fail:
+  if (vroots)
+    XFree (vroots);
+
   gdk_error_trap_pop ();
 }
 

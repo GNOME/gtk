@@ -90,6 +90,7 @@ static const char *const precache_atoms[] = {
   "_NET_WM_WINDOW_TYPE",
   "_NET_WM_WINDOW_TYPE_NORMAL",
   "_NET_WM_USER_TIME",
+  "_NET_VIRTUAL_ROOTS"
 };
 
 GType
