@@ -261,7 +261,7 @@ gtk_aspect_frame_paint (GtkWidget    *widget,
       frame = GTK_FRAME (widget);
       allocation = &GTK_ASPECT_FRAME(widget)->center_allocation;
 
-      height_extra = frame->label_height - widget->style->klass->xthickness;
+      height_extra = frame->label_height - widget->style->xthickness;
       height_extra = MAX (height_extra, 0);
 
       x = GTK_CONTAINER (frame)->border_width;
@@ -271,10 +271,10 @@ gtk_aspect_frame_paint (GtkWidget    *widget,
 	{
 	  label_area_width = (allocation->width +
 			      GTK_CONTAINER (frame)->border_width * 2 -
-			      widget->style->klass->xthickness * 2);
+			      widget->style->xthickness * 2);
 
 	  x2 = ((label_area_width - frame->label_width) * frame->label_xalign +
-		GTK_CONTAINER (frame)->border_width + widget->style->klass->xthickness);
+		GTK_CONTAINER (frame)->border_width + widget->style->xthickness);
 	  y2 = (GTK_CONTAINER (frame)->border_width + widget->style->font->ascent);
 	  
 	  gtk_paint_shadow_gap (widget->style, widget->window,
@@ -415,14 +415,14 @@ gtk_aspect_frame_size_allocate (GtkWidget     *widget,
 	ratio = aspect_frame->ratio;
       
       x = (GTK_CONTAINER (frame)->border_width +
-	   GTK_WIDGET (frame)->style->klass->xthickness);
+	   GTK_WIDGET (frame)->style->xthickness);
       width = allocation->width - x * 2;
       
       y = (GTK_CONTAINER (frame)->border_width +
-	   MAX (frame->label_height, GTK_WIDGET (frame)->style->klass->ythickness));
+	   MAX (frame->label_height, GTK_WIDGET (frame)->style->ythickness));
       height = (allocation->height - y -
 		GTK_CONTAINER (frame)->border_width -
-		GTK_WIDGET (frame)->style->klass->ythickness);
+		GTK_WIDGET (frame)->style->ythickness);
       
       /* make sure we don't allocate a negative width or height,
        * since that will be cast to a (very big) guint16 */
@@ -447,7 +447,7 @@ gtk_aspect_frame_size_allocate (GtkWidget     *widget,
       aspect_frame->center_allocation.x = child_allocation.x - x;
       aspect_frame->center_allocation.height = child_allocation.height + y +
 				 GTK_CONTAINER (frame)->border_width +
-				 GTK_WIDGET (frame)->style->klass->ythickness;
+				 GTK_WIDGET (frame)->style->ythickness;
       aspect_frame->center_allocation.y = child_allocation.y - y;
 
       gtk_widget_size_allocate (bin->child, &child_allocation);

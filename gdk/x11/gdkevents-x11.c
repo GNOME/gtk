@@ -206,7 +206,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   if (xevent.xany.type == GraphicsExpose)
     {
       event = gdk_event_new ();
-      
+
       if (gdk_event_translate (event, &xevent))
 	return event;
       else
@@ -306,7 +306,9 @@ gdk_event_translate (GdkEvent *event,
   if (window_private && GDK_WINDOW_DESTROYED (window))
     {
       if (xevent->type != DestroyNotify)
-	return FALSE;
+        {
+          return FALSE;
+        }
     }
   else
     {

@@ -325,17 +325,17 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
     list_requisition.height += EMPTY_LIST_HEIGHT;
   
   alloc_width = (widget->allocation.width -
-		 2 * popwin->child->style->klass->xthickness -
+		 2 * popwin->child->style->xthickness -
 		 2 * GTK_CONTAINER (popwin->child)->border_width -
 		 2 * GTK_CONTAINER (combo->popup)->border_width -
 		 2 * GTK_CONTAINER (GTK_BIN (popup)->child)->border_width - 
-		 2 * GTK_BIN (popup)->child->style->klass->xthickness);
+		 2 * GTK_BIN (popup)->child->style->xthickness);
   
-  work_height = (2 * popwin->child->style->klass->ythickness +
+  work_height = (2 * popwin->child->style->ythickness +
 		 2 * GTK_CONTAINER (popwin->child)->border_width +
 		 2 * GTK_CONTAINER (combo->popup)->border_width +
 		 2 * GTK_CONTAINER (GTK_BIN (popup)->child)->border_width +
-		 2 * GTK_BIN (popup)->child->style->klass->xthickness);
+		 2 * GTK_BIN (popup)->child->style->xthickness);
   
   do 
     {

@@ -296,13 +296,13 @@ gtk_option_menu_size_request (GtkWidget      *widget,
   option_menu = GTK_OPTION_MENU (widget);
 
   requisition->width = ((GTK_CONTAINER (widget)->border_width +
-			 GTK_WIDGET (widget)->style->klass->xthickness) * 2 +
+			 GTK_WIDGET (widget)->style->xthickness) * 2 +
 			option_menu->width +
 			OPTION_INDICATOR_WIDTH +
 			OPTION_INDICATOR_SPACING * 5 +
 			CHILD_LEFT_SPACING + CHILD_RIGHT_SPACING + 2);
   requisition->height = ((GTK_CONTAINER (widget)->border_width +
-			  GTK_WIDGET (widget)->style->klass->ythickness) * 2 +
+			  GTK_WIDGET (widget)->style->ythickness) * 2 +
 			 option_menu->height +
 			 CHILD_TOP_SPACING + CHILD_BOTTOM_SPACING + 2);
 
@@ -332,9 +332,9 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
   if (child && GTK_WIDGET_VISIBLE (child))
     {
       child_allocation.x = (GTK_CONTAINER (widget)->border_width +
-			    GTK_WIDGET (widget)->style->klass->xthickness) + 1;
+			    GTK_WIDGET (widget)->style->xthickness) + 1;
       child_allocation.y = (GTK_CONTAINER (widget)->border_width +
-			    GTK_WIDGET (widget)->style->klass->ythickness) + 1;
+			    GTK_WIDGET (widget)->style->ythickness) + 1;
       child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2 -
 				    OPTION_INDICATOR_WIDTH - OPTION_INDICATOR_SPACING * 5 -
 				    CHILD_LEFT_SPACING - CHILD_RIGHT_SPACING - 2);

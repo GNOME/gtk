@@ -5878,7 +5878,7 @@ drag_dest_cell (GtkCList         *clist,
   dest_info->insert_pos = GTK_CLIST_DRAG_NONE;
   
   y -= (GTK_CONTAINER (widget)->border_width +
-	widget->style->klass->ythickness + clist->column_title_area.height);
+	widget->style->ythickness + clist->column_title_area.height);
   dest_info->cell.row = ROW_FROM_YPIXEL (clist, y);
   
   if (dest_info->cell.row >= clist->rows)
@@ -5889,7 +5889,7 @@ drag_dest_cell (GtkCList         *clist,
   if (dest_info->cell.row < -1)
     dest_info->cell.row = -1;
   
-  x -= GTK_CONTAINER (widget)->border_width + widget->style->klass->xthickness;
+  x -= GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
   dest_info->cell.column = COLUMN_FROM_XPIXEL (clist, x);
   
   if (dest_info->cell.row >= 0)

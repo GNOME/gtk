@@ -403,7 +403,7 @@ gtk_list_item_size_request (GtkWidget      *widget,
   bin = GTK_BIN (widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->klass->xthickness) * 2;
+			widget->style->xthickness) * 2;
   requisition->height = GTK_CONTAINER (widget)->border_width * 2;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
@@ -437,7 +437,7 @@ gtk_list_item_size_allocate (GtkWidget     *widget,
   if (bin->child)
     {
       child_allocation.x = (GTK_CONTAINER (widget)->border_width +
-			    widget->style->klass->xthickness);
+			    widget->style->xthickness);
       child_allocation.y = GTK_CONTAINER (widget)->border_width;
       child_allocation.width = allocation->width - child_allocation.x * 2;
       child_allocation.height = allocation->height - child_allocation.y * 2;

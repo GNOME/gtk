@@ -165,9 +165,9 @@ gtk_hscrollbar_init (GtkHScrollbar *hscrollbar)
   requisition->width = (RANGE_CLASS (widget)->min_slider_size +
                         RANGE_CLASS (widget)->stepper_size +
                         RANGE_CLASS (widget)->stepper_slider_spacing +
-                        widget->style->klass->xthickness) * 2;
+                        widget->style->xthickness) * 2;
   requisition->height = (RANGE_CLASS (widget)->slider_width +
-                         widget->style->klass->ythickness * 2);
+                         widget->style->ythickness * 2);
 }
 
 GtkWidget*
@@ -217,21 +217,21 @@ gtk_hscrollbar_realize (GtkWidget *widget)
   range->trough = widget->window;
   gdk_window_ref (range->trough);
   
-  attributes.x = widget->style->klass->xthickness;
-  attributes.y = widget->style->klass->ythickness;
+  attributes.x = widget->style->xthickness;
+  attributes.y = widget->style->ythickness;
   attributes.width = RANGE_CLASS (widget)->stepper_size;
   attributes.height = RANGE_CLASS (widget)->stepper_size;
   
   range->step_back = gdk_window_new (range->trough, &attributes, attributes_mask);
   
   attributes.x = (widget->allocation.width -
-                  widget->style->klass->xthickness -
+                  widget->style->xthickness -
                   RANGE_CLASS (widget)->stepper_size);
   
   range->step_forw = gdk_window_new (range->trough, &attributes, attributes_mask);
   
   attributes.x = 0;
-  attributes.y = widget->style->klass->ythickness;
+  attributes.y = widget->style->ythickness;
   attributes.width = RANGE_CLASS (widget)->min_slider_size;
   attributes.height = RANGE_CLASS (widget)->slider_width;
   attributes.event_mask |= (GDK_BUTTON_MOTION_MASK |
@@ -279,16 +279,16 @@ gtk_hscrollbar_size_allocate (GtkWidget     *widget,
                               allocation->y + (allocation->height - widget->requisition.height) / 2,
                               allocation->width, widget->requisition.height);
       gdk_window_move_resize (range->step_back,
-                              widget->style->klass->xthickness,
-                              widget->style->klass->ythickness,
+                              widget->style->xthickness,
+                              widget->style->ythickness,
                               RANGE_CLASS (widget)->stepper_size,
-                              widget->requisition.height - widget->style->klass->ythickness * 2);
+                              widget->requisition.height - widget->style->ythickness * 2);
       gdk_window_move_resize (range->step_forw,
-                              allocation->width - widget->style->klass->xthickness -
+                              allocation->width - widget->style->xthickness -
                               RANGE_CLASS (widget)->stepper_size,
-                              widget->style->klass->ythickness,
+                              widget->style->ythickness,
                               RANGE_CLASS (widget)->stepper_size,
-                              widget->requisition.height - widget->style->klass->ythickness * 2);
+                              widget->requisition.height - widget->style->ythickness * 2);
       
       gtk_range_slider_update (GTK_RANGE (widget));
     }

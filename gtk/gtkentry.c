@@ -586,8 +586,8 @@ gtk_entry_realize (GtkWidget *widget)
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, entry);
 
-  attributes.x = widget->style->klass->xthickness;
-  attributes.y = widget->style->klass->ythickness;
+  attributes.x = widget->style->xthickness;
+  attributes.y = widget->style->ythickness;
   attributes.width = widget->allocation.width - attributes.x * 2;
   attributes.height = requisition.height - attributes.y * 2;
   attributes.cursor = entry->cursor = gdk_cursor_new (GDK_XTERM);
@@ -764,10 +764,10 @@ gtk_entry_size_request (GtkWidget      *widget,
   g_return_if_fail (GTK_IS_ENTRY (widget));
   g_return_if_fail (requisition != NULL);
 
-  requisition->width = MIN_ENTRY_WIDTH + (widget->style->klass->xthickness + INNER_BORDER) * 2;
+  requisition->width = MIN_ENTRY_WIDTH + (widget->style->xthickness + INNER_BORDER) * 2;
   requisition->height = (widget->style->font->ascent +
 			 widget->style->font->descent +
-			 (widget->style->klass->ythickness + INNER_BORDER) * 2);
+			 (widget->style->ythickness + INNER_BORDER) * 2);
 }
 
 static void
@@ -799,10 +799,10 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 			      allocation->y + (allocation->height - requisition.height) / 2,
 			      allocation->width, requisition.height);
       gdk_window_move_resize (entry->text_area,
-			      widget->style->klass->xthickness,
-			      widget->style->klass->ythickness,
-			      allocation->width - widget->style->klass->xthickness * 2,
-			      requisition.height - widget->style->klass->ythickness * 2);
+			      widget->style->xthickness,
+			      widget->style->ythickness,
+			      allocation->width - widget->style->xthickness * 2,
+			      requisition.height - widget->style->ythickness * 2);
 
       /* And make sure the cursor is on screen */
       entry_adjust_scroll (entry);
@@ -839,8 +839,8 @@ gtk_entry_draw (GtkWidget    *widget,
     {
       GdkRectangle tmp_area = *area;
 
-      tmp_area.x -= widget->style->klass->xthickness;
-      tmp_area.y -= widget->style->klass->xthickness;
+      tmp_area.x -= widget->style->xthickness;
+      tmp_area.y -= widget->style->xthickness;
       
       gdk_window_begin_paint_rect (entry->text_area, &tmp_area);
       gtk_widget_draw_focus (widget);

@@ -240,6 +240,8 @@ gdk_windowing_window_init (void)
   unsigned int border_width;
   unsigned int depth;
   int x, y;
+
+  g_assert (gdk_parent_root == NULL);
   
   XGetGeometry (gdk_display, gdk_root_window, &gdk_root_window,
 		&x, &y, &width, &height, &border_width, &depth);

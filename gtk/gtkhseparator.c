@@ -72,7 +72,7 @@ static void
 gtk_hseparator_init (GtkHSeparator *hseparator)
 {
   GTK_WIDGET (hseparator)->requisition.width = 1;
-  GTK_WIDGET (hseparator)->requisition.height = GTK_WIDGET (hseparator)->style->klass->ythickness;
+  GTK_WIDGET (hseparator)->requisition.height = GTK_WIDGET (hseparator)->style->ythickness;
 }
 
 GtkWidget*
@@ -96,7 +96,7 @@ gtk_hseparator_expose (GtkWidget      *widget,
 		     widget->allocation.x,
 		     widget->allocation.x + widget->allocation.width,
 		     widget->allocation.y + (widget->allocation.height -
-					     widget->style->klass->ythickness) / 2);
+					     widget->style->ythickness) / 2);
 
   return FALSE;
 }

@@ -284,7 +284,7 @@ gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
       width = 8;
       height = 8;
       x = (GTK_CONTAINER (check_menu_item)->border_width +
-	   widget->style->klass->xthickness + 2);
+	   widget->style->xthickness + 2);
       y = (widget->allocation.height - height) / 2;
 
       if (check_menu_item->active ||

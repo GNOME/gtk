@@ -344,8 +344,8 @@ gtk_toggle_button_paint (GtkWidget    *widget,
 
       if (GTK_WIDGET_CAN_DEFAULT (widget))
         {
-          x += widget->style->klass->xthickness;
-          y += widget->style->klass->ythickness;
+          x += widget->style->xthickness;
+          y += widget->style->ythickness;
           width -= 2 * x + DEFAULT_SPACING;
           height -= 2 * y + DEFAULT_SPACING;
           x += DEFAULT_LEFT_POS;

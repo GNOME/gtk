@@ -347,7 +347,7 @@ gtk_frame_paint (GtkWidget    *widget,
     {
       frame = GTK_FRAME (widget);
 
-      height_extra = frame->label_height - widget->style->klass->xthickness;
+      height_extra = frame->label_height - widget->style->xthickness;
       height_extra = MAX (height_extra, 0);
 
       x = GTK_CONTAINER (frame)->border_width;
@@ -357,10 +357,10 @@ gtk_frame_paint (GtkWidget    *widget,
 	{
 	   label_area_width = (widget->allocation.width -
 			       GTK_CONTAINER (frame)->border_width * 2 -
-			       widget->style->klass->xthickness * 2);
+			       widget->style->xthickness * 2);
 	   
 	   x2 = ((label_area_width - frame->label_width) * frame->label_xalign +
-		GTK_CONTAINER (frame)->border_width + widget->style->klass->xthickness);
+		GTK_CONTAINER (frame)->border_width + widget->style->xthickness);
 	   y2 = (GTK_CONTAINER (frame)->border_width + widget->style->font->ascent);
 
 	   gtk_paint_shadow_gap (widget->style, widget->window,
@@ -455,13 +455,13 @@ gtk_frame_size_request (GtkWidget      *widget,
   bin = GTK_BIN (widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width +
-			GTK_WIDGET (widget)->style->klass->xthickness) * 2;
+			GTK_WIDGET (widget)->style->xthickness) * 2;
 
-  tmp_height = frame->label_height - GTK_WIDGET (widget)->style->klass->ythickness;
+  tmp_height = frame->label_height - GTK_WIDGET (widget)->style->ythickness;
   tmp_height = MAX (tmp_height, 0);
 
   requisition->height = tmp_height + (GTK_CONTAINER (widget)->border_width +
-				      GTK_WIDGET (widget)->style->klass->ythickness) * 2;
+				      GTK_WIDGET (widget)->style->ythickness) * 2;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
@@ -507,14 +507,14 @@ gtk_frame_size_allocate (GtkWidget     *widget,
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
       child_allocation.x = (GTK_CONTAINER (frame)->border_width +
-			    GTK_WIDGET (frame)->style->klass->xthickness);
+			    GTK_WIDGET (frame)->style->xthickness);
       child_allocation.width = MAX(1, (gint)allocation->width - child_allocation.x * 2);
 
       child_allocation.y = (GTK_CONTAINER (frame)->border_width +
-			    MAX (frame->label_height, GTK_WIDGET (frame)->style->klass->ythickness));
+			    MAX (frame->label_height, GTK_WIDGET (frame)->style->ythickness));
       child_allocation.height = MAX (1, ((gint)allocation->height - child_allocation.y -
 					 (gint)GTK_CONTAINER (frame)->border_width -
-					 (gint)GTK_WIDGET (frame)->style->klass->ythickness));
+					 (gint)GTK_WIDGET (frame)->style->ythickness));
 
       child_allocation.x += allocation->x;
       child_allocation.y += allocation->y;

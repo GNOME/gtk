@@ -862,9 +862,9 @@ gtk_menu_size_request (GtkWidget      *widget,
   
   requisition->width += max_toggle_size + max_accel_width;
   requisition->width += (GTK_CONTAINER (menu)->border_width +
-			 widget->style->klass->xthickness) * 2;
+			 widget->style->xthickness) * 2;
   requisition->height += (GTK_CONTAINER (menu)->border_width +
-			  widget->style->klass->ythickness) * 2;
+			  widget->style->ythickness) * 2;
   
   children = menu_shell->children;
   while (children)
@@ -903,9 +903,9 @@ gtk_menu_size_allocate (GtkWidget     *widget,
   if (menu_shell->children)
     {
       child_allocation.x = (GTK_CONTAINER (menu)->border_width +
-			    widget->style->klass->xthickness);
+			    widget->style->xthickness);
       child_allocation.y = (GTK_CONTAINER (menu)->border_width +
-			    widget->style->klass->ythickness);
+			    widget->style->ythickness);
       child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2);
       
       children = menu_shell->children;

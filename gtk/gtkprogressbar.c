@@ -279,19 +279,19 @@ gtk_progress_bar_real_update (GtkProgress *progress)
 		  pbar->activity_pos += pbar->activity_step;
 		  if (pbar->activity_pos + size >=
 		      widget->allocation.width -
-		      widget->style->klass->xthickness)
+		      widget->style->xthickness)
 		    {
 		      pbar->activity_pos = widget->allocation.width -
-			widget->style->klass->xthickness - size;
+			widget->style->xthickness - size;
 		      pbar->activity_dir = 1;
 		    }
 		}
 	      else
 		{
 		  pbar->activity_pos -= pbar->activity_step;
-		  if (pbar->activity_pos <= widget->style->klass->xthickness)
+		  if (pbar->activity_pos <= widget->style->xthickness)
 		    {
-		      pbar->activity_pos = widget->style->klass->xthickness;
+		      pbar->activity_pos = widget->style->xthickness;
 		      pbar->activity_dir = 0;
 		    }
 		}
@@ -305,19 +305,19 @@ gtk_progress_bar_real_update (GtkProgress *progress)
 		  pbar->activity_pos += pbar->activity_step;
 		  if (pbar->activity_pos + size >=
 		      widget->allocation.height -
-		      widget->style->klass->ythickness)
+		      widget->style->ythickness)
 		    {
 		      pbar->activity_pos = widget->allocation.height -
-			widget->style->klass->ythickness - size;
+			widget->style->ythickness - size;
 		      pbar->activity_dir = 1;
 		    }
 		}
 	      else
 		{
 		  pbar->activity_pos -= pbar->activity_step;
-		  if (pbar->activity_pos <= widget->style->klass->ythickness)
+		  if (pbar->activity_pos <= widget->style->ythickness)
 		    {
-		      pbar->activity_pos = widget->style->klass->ythickness;
+		      pbar->activity_pos = widget->style->ythickness;
 		      pbar->activity_dir = 0;
 		    }
 		}
@@ -366,13 +366,13 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 						  progress->adjustment->upper);
 
 	  requisition->width = MAX (MIN_HORIZONTAL_BAR_WIDTH,
-				    2 * widget->style->klass->xthickness + 3 +
+				    2 * widget->style->xthickness + 3 +
 				    gdk_text_width (widget->style->font, 
 						    buf, strlen (buf)) +
 				    2 * TEXT_SPACING);
 
 	  requisition->height = MAX (MIN_HORIZONTAL_BAR_HEIGHT,
-				     2 * widget->style->klass->ythickness + 3 +
+				     2 * widget->style->ythickness + 3 +
 				     gdk_text_height (widget->style->font, 
 						      buf, strlen (buf)) +
 				     2 * TEXT_SPACING);
@@ -392,13 +392,13 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 						  progress->adjustment->upper);
 
 	  requisition->width = MAX (MIN_VERTICAL_BAR_WIDTH,
-				    2 * widget->style->klass->xthickness + 3 +
+				    2 * widget->style->xthickness + 3 +
 				    gdk_text_width (widget->style->font, 
 						    buf, strlen (buf)) +
 				    2 * TEXT_SPACING);
 
 	  requisition->height = MAX (MIN_VERTICAL_BAR_HEIGHT,
-				     2 * widget->style->klass->ythickness + 3 +
+				     2 * widget->style->ythickness + 3 +
 				     gdk_text_height (widget->style->font, 
 						      buf, strlen (buf)) +
 				     2 * TEXT_SPACING);
@@ -431,14 +431,14 @@ gtk_progress_bar_act_mode_enter (GtkProgress *progress)
 
       if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT)
 	{
-	  pbar->activity_pos = widget->style->klass->xthickness;
+	  pbar->activity_pos = widget->style->xthickness;
 	  pbar->activity_dir = 0;
 	}
       else
 	{
 	  pbar->activity_pos = widget->allocation.width - 
-	    widget->style->klass->xthickness - (widget->allocation.height - 
-		widget->style->klass->ythickness * 2);
+	    widget->style->xthickness - (widget->allocation.height - 
+		widget->style->ythickness * 2);
 	  pbar->activity_dir = 1;
 	}
     }
@@ -448,14 +448,14 @@ gtk_progress_bar_act_mode_enter (GtkProgress *progress)
 
       if (pbar->orientation == GTK_PROGRESS_TOP_TO_BOTTOM)
 	{
-	  pbar->activity_pos = widget->style->klass->ythickness;
+	  pbar->activity_pos = widget->style->ythickness;
 	  pbar->activity_dir = 0;
 	}
       else
 	{
 	  pbar->activity_pos = widget->allocation.height -
-	    widget->style->klass->ythickness - (widget->allocation.width - 
-		widget->style->klass->xthickness * 2);
+	    widget->style->ythickness - (widget->allocation.width - 
+		widget->style->xthickness * 2);
 	  pbar->activity_dir = 1;
 	}
     }
@@ -484,10 +484,10 @@ gtk_progress_bar_paint (GtkProgress *progress)
   if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
       pbar->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
     space = widget->allocation.width -
-      2 * widget->style->klass->xthickness;
+      2 * widget->style->xthickness;
   else
     space = widget->allocation.height -
-      2 * widget->style->klass->ythickness;
+      2 * widget->style->ythickness;
 
   percentage = gtk_progress_get_current_percentage (progress);
 
@@ -513,9 +513,9 @@ gtk_progress_bar_paint (GtkProgress *progress)
 			     GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
 			     NULL, widget, "bar",
 			     pbar->activity_pos,
-			     widget->style->klass->ythickness,
+			     widget->style->ythickness,
 			     size,
-			     widget->allocation.height - widget->style->klass->ythickness * 2);
+			     widget->allocation.height - widget->style->ythickness * 2);
 	      return;
 	    }
 	  else
@@ -526,9 +526,9 @@ gtk_progress_bar_paint (GtkProgress *progress)
 			     progress->offscreen_pixmap,
 			     GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
 			     NULL, widget, "bar",
-			     widget->style->klass->xthickness,
+			     widget->style->xthickness,
 			     pbar->activity_pos,
-			     widget->allocation.width - widget->style->klass->xthickness * 2,
+			     widget->allocation.width - widget->style->xthickness * 2,
 			     size);
 	      return;
 	    }
@@ -549,14 +549,14 @@ gtk_progress_bar_paint (GtkProgress *progress)
 				 progress->offscreen_pixmap,
 				 GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
 				 NULL, widget, "bar",
-				 widget->style->klass->xthickness,
-				 widget->style->klass->ythickness,
+				 widget->style->xthickness,
+				 widget->style->ythickness,
 				 amount,
-				 widget->allocation.height - widget->style->klass->ythickness * 2);
+				 widget->allocation.height - widget->style->ythickness * 2);
 		}
 	      else
 		{
-		  x = widget->style->klass->xthickness;
+		  x = widget->style->xthickness;
 		  
 		  for (i = 0; i <= pbar->in_block; i++)
 		    {
@@ -568,9 +568,9 @@ gtk_progress_bar_paint (GtkProgress *progress)
 				     GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
 				     NULL, widget, "bar",
 				     x,
-				     widget->style->klass->ythickness,
+				     widget->style->ythickness,
 				     block_delta,
-				     widget->allocation.height - widget->style->klass->ythickness * 2);
+				     widget->allocation.height - widget->style->ythickness * 2);
 		      
 		      x +=  block_delta;
 		    }
@@ -586,16 +586,16 @@ gtk_progress_bar_paint (GtkProgress *progress)
 				 GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
 				 NULL, widget, "bar",
 				 widget->allocation.width - 
-				 widget->style->klass->xthickness - amount,
-				 widget->style->klass->ythickness,
+				 widget->style->xthickness - amount,
+				 widget->style->ythickness,
 				 amount,
 				 widget->allocation.height -
-				 widget->style->klass->ythickness * 2);
+				 widget->style->ythickness * 2);
 		}
 	      else
 		{
 		  x = widget->allocation.width - 
-		    widget->style->klass->xthickness;
+		    widget->style->xthickness;
 		  
 		  for (i = 0; i <= pbar->in_block; i++)
 		    {
@@ -609,10 +609,10 @@ gtk_progress_bar_paint (GtkProgress *progress)
 				     GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
 				     NULL, widget, "bar",
 				     x,
-				     widget->style->klass->ythickness,
+				     widget->style->ythickness,
 				     block_delta,
 				     widget->allocation.height -
-				     widget->style->klass->ythickness * 2);
+				     widget->style->ythickness * 2);
 		    }
 		}
 	      break;
@@ -625,17 +625,17 @@ gtk_progress_bar_paint (GtkProgress *progress)
 				 progress->offscreen_pixmap,
 				 GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
 				 NULL, widget, "bar",
-				 widget->style->klass->xthickness,
+				 widget->style->xthickness,
 				 widget->allocation.height - 
-				 widget->style->klass->ythickness - amount,
+				 widget->style->ythickness - amount,
 				 widget->allocation.width -
-				 widget->style->klass->xthickness * 2,
+				 widget->style->xthickness * 2,
 				 amount);
 		}
 	      else
 		{
 		  y = widget->allocation.height - 
-		    widget->style->klass->ythickness;
+		    widget->style->ythickness;
 		  
 		  for (i = 0; i <= pbar->in_block; i++)
 		    {
@@ -648,10 +648,10 @@ gtk_progress_bar_paint (GtkProgress *progress)
 				     progress->offscreen_pixmap,
 				     GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
 				     NULL, widget, "bar",
-				     widget->style->klass->xthickness,
+				     widget->style->xthickness,
 				     y,
 				     widget->allocation.width - 
-				     widget->style->klass->xthickness * 2,
+				     widget->style->xthickness * 2,
 				     block_delta);
 		    }
 		}
@@ -665,15 +665,15 @@ gtk_progress_bar_paint (GtkProgress *progress)
 				 progress->offscreen_pixmap,
 				 GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
 				 NULL, widget, "bar",
-				 widget->style->klass->xthickness,
-				 widget->style->klass->ythickness,
+				 widget->style->xthickness,
+				 widget->style->ythickness,
 				 widget->allocation.width -
-				 widget->style->klass->xthickness * 2,
+				 widget->style->xthickness * 2,
 				 amount);
 		}
 	      else
 		{
-		  y = widget->style->klass->ythickness;
+		  y = widget->style->ythickness;
 		  
 		  for (i = 0; i <= pbar->in_block; i++)
 		    {
@@ -685,10 +685,10 @@ gtk_progress_bar_paint (GtkProgress *progress)
 				     progress->offscreen_pixmap,
 				     GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
 				     NULL, widget, "bar",
-				     widget->style->klass->xthickness,
+				     widget->style->xthickness,
 				     y,
 				     widget->allocation.width -
-				     widget->style->klass->xthickness * 2,
+				     widget->style->xthickness * 2,
 				     block_delta);
 		      
 		      y += block_delta;
@@ -710,22 +710,22 @@ gtk_progress_bar_paint (GtkProgress *progress)
 
 	  buf = gtk_progress_get_current_text (progress);
 
-	  x = widget->style->klass->xthickness + 1 + 
-	    (widget->allocation.width - 2 * widget->style->klass->xthickness -
+	  x = widget->style->xthickness + 1 + 
+	    (widget->allocation.width - 2 * widget->style->xthickness -
 	     3 - gdk_text_width (widget->style->font, buf, strlen (buf)))
 	    * progress->x_align; 
 
 	  y = widget->style->font->ascent + 1 +
-	    (widget->allocation.height - 2 * widget->style->klass->ythickness -
+	    (widget->allocation.height - 2 * widget->style->ythickness -
 	     3 - gdk_text_height (widget->style->font, buf, strlen (buf)))
 	    * progress->y_align;
 
-	  rect.x = widget->style->klass->xthickness + 1;
-	  rect.y = widget->style->klass->ythickness + 1;
+	  rect.x = widget->style->xthickness + 1;
+	  rect.y = widget->style->ythickness + 1;
 	  rect.width = widget->allocation.width -
-	    2 * widget->style->klass->xthickness - 3;
+	    2 * widget->style->xthickness - 3;
 	  rect.height = widget->allocation.height -
-	    2 * widget->style->klass->ythickness - 3;
+	    2 * widget->style->ythickness - 3;
 
 	  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state],
 				     &rect);

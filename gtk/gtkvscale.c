@@ -326,9 +326,9 @@ gtk_vscale_size_request (GtkWidget      *widget,
   scale = GTK_SCALE (widget);
   
   requisition->width = (RANGE_CLASS (scale)->slider_width +
-                        widget->style->klass->ythickness * 2);
+                        widget->style->ythickness * 2);
   requisition->height = (SCALE_CLASS (scale)->slider_length +
-                         widget->style->klass->xthickness) * 2;
+                         widget->style->xthickness) * 2;
   
   if (scale->draw_value)
     {
@@ -395,7 +395,7 @@ gtk_vscale_pos_trough (GtkVScale *vscale,
   scale = GTK_SCALE (vscale);
   
   *w = (RANGE_CLASS (scale)->slider_width +
-        widget->style->klass->xthickness * 2);
+        widget->style->xthickness * 2);
   *h = widget->allocation.height;
   
   if (scale->draw_value)

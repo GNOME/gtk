@@ -45,6 +45,8 @@ typedef struct _GdkDragContextClass GdkDragContextClass;
 
 struct _GdkDragContext {
   GObject parent_instance;
+
+  /*< public >*/
   
   GdkDragProtocol protocol;
   
@@ -60,6 +62,8 @@ struct _GdkDragContext {
 
   guint32 start_time;
 
+  /*< private >*/
+  
   gpointer windowing_data;
 };
 

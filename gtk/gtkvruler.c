@@ -92,8 +92,8 @@ gtk_vruler_init (GtkVRuler *vruler)
   GtkWidget *widget;
 
   widget = GTK_WIDGET (vruler);
-  widget->requisition.width = widget->style->klass->xthickness * 2 + RULER_WIDTH;
-  widget->requisition.height = widget->style->klass->ythickness * 2 + 1;
+  widget->requisition.width = widget->style->xthickness * 2 + RULER_WIDTH;
+  widget->requisition.height = widget->style->ythickness * 2 + 1;
 }
 
 GtkWidget*
@@ -163,8 +163,8 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
   gc = widget->style->fg_gc[GTK_STATE_NORMAL];
   bg_gc = widget->style->bg_gc[GTK_STATE_NORMAL];
   font = widget->style->font;
-  xthickness = widget->style->klass->xthickness;
-  ythickness = widget->style->klass->ythickness;
+  xthickness = widget->style->xthickness;
+  ythickness = widget->style->ythickness;
   digit_height = font->ascent; /* assume descent == 0 ? */
 
   width = widget->allocation.height;
@@ -280,8 +280,8 @@ gtk_vruler_draw_pos (GtkRuler *ruler)
       widget = GTK_WIDGET (ruler);
 
       gc = widget->style->fg_gc[GTK_STATE_NORMAL];
-      xthickness = widget->style->klass->xthickness;
-      ythickness = widget->style->klass->ythickness;
+      xthickness = widget->style->xthickness;
+      ythickness = widget->style->ythickness;
       width = widget->allocation.width - xthickness * 2;
       height = widget->allocation.height;
 

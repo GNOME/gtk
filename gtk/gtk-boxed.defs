@@ -16,10 +16,6 @@
 (define-boxed GtkSelectionData
 )
 
-(define-boxed GtkStyle
-  gtk_style_ref
-  gtk_style_unref)
-
 (define-boxed GtkCTreeNode
 )
 
