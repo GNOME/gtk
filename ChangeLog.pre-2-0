@@ -1,3 +1,9 @@
+Mon Apr  6 23:48:29 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwindow.c (gtk_window_realize): Set the
+	window hints on every map so that GTK_WIN_POS_MOUSE
+	works correctly.
+
 1998-04-06  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtktable.h: 

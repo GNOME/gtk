@@ -568,6 +568,7 @@ gtk_window_map (GtkWidget *widget)
       !GTK_WIDGET_MAPPED (window->bin.child))
     gtk_widget_map (window->bin.child);
 
+  gtk_window_set_hints (widget, &widget->requisition);
   gdk_window_show (widget->window);
 }
 
@@ -637,8 +638,6 @@ gtk_window_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-
-  gtk_window_set_hints (widget, &widget->requisition);
 }
 
 static void
