@@ -1,3 +1,19 @@
+Mon Apr 19 12:05:31 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_style_init): Fixed leak of
+	rc_style list when lookup succeeeds.
+
+Mon Apr 19 10:11:12 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkcolor.c (gdk_colormap_new): Fix memory leak
+	for pseudocolor where colormap->colors was double
+	allocated.
+
+	* gdk/gdkcolor.c (gdk_colormap_alloc1): Store the
+	color value in the hash table with the pixel filled
+	in so when we do later hash table lookups, the color
+	value is correct.
+	
 1999-04-18  Tomas Ogren  <stric@ing.umu.se>
 
 	* gtk/gtkrc.c: Add a / before the directory name to keep directory

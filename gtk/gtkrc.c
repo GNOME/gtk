@@ -1144,6 +1144,8 @@ gtk_rc_style_init (GSList *rc_styles)
 
       g_hash_table_insert (realized_style_ht, rc_styles, style);
     }
+  else
+    g_slist_free (rc_styles);
 
   return style;
 }
