@@ -602,7 +602,7 @@ else
     AC_MSG_RESULT(yes)
     AC_MSG_CHECKING(whether dynamic modules work)
     ## for loop is to strip newline 
-    tmp=`pkg-config --variable=gmodule_supported gmodule-2.0`
+    tmp=`$PKG_CONFIG --variable=gmodule_supported gmodule-2.0`
     for I in $tmp; do
         dynworks=$I
     done

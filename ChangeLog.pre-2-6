@@ -1,3 +1,8 @@
+Wed Mar 20 11:00:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+        * configure.in: Use $PKG_CONFIG, not pkg-config.
+        (LEE Sau Dan, #75572)
+
 Wed Mar 20 10:55:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Fix assignment
