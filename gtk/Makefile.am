@@ -136,7 +136,6 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkhscale.h		\
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
-	gtkhsv.h		\
 	gtkiconfactory.h	\
 	gtkimage.h		\
 	gtkimagemenuitem.h	\
@@ -296,6 +295,7 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkhscrollbar.c		\
 	gtkhseparator.c		\
 	gtkhsv.c		\
+	gtkhsv.h		\
 	gtkiconfactory.c	\
 	gtkimage.c		\
 	gtkimagemenuitem.c	\

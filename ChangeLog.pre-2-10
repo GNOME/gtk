@@ -1,3 +1,11 @@
+Tue Jan 29 16:35:04 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_motion): Small
+	fix to size of torn off window (#60271, Detlef Reichl)
+
+	* gtk/Makefile.am: Don't install gtkhsv.h. (Pointed out
+	by Ross Burton)
+
 Tue Jan 29 18:50:46 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): free

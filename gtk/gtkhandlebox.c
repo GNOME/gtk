@@ -1207,6 +1207,12 @@ gtk_handle_box_motion (GtkWidget      *widget,
 
 	  width = child_requisition.width + 2 * GTK_CONTAINER (hb)->border_width;
 	  height = child_requisition.height + 2 * GTK_CONTAINER (hb)->border_width;
+
+	  if (hb->handle_position == GTK_POS_LEFT || hb->handle_position == GTK_POS_RIGHT)
+	    width += DRAG_HANDLE_SIZE;
+	  else
+	    height += DRAG_HANDLE_SIZE;
+	  
 	  gdk_window_move_resize (hb->float_window, new_x, new_y, width, height);
 	  gdk_window_reparent (hb->bin_window, hb->float_window, 0, 0);
 	  gdk_window_set_hints (hb->float_window, new_x, new_y, 0, 0, 0, 0, GDK_HINT_POS);
