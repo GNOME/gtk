@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkFileSystemModel      GtkFileSystemModel;
 
-GType _gtk_file_system_model_get_type (void);
+GType _gtk_file_system_model_get_type (void) G_GNUC_CONST;
 
 typedef enum {
   GTK_FILE_SYSTEM_MODEL_INFO,

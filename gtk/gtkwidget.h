@@ -766,7 +766,7 @@ void   gtk_widget_add_mnemonic_label    (GtkWidget *widget,
 void   gtk_widget_remove_mnemonic_label (GtkWidget *widget,
 					 GtkWidget *label);
 
-GType           gtk_requisition_get_type (void);
+GType           gtk_requisition_get_type (void) G_GNUC_CONST;
 GtkRequisition *gtk_requisition_copy     (const GtkRequisition *requisition);
 void            gtk_requisition_free     (GtkRequisition       *requisition);
 

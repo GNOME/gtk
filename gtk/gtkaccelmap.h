@@ -70,7 +70,7 @@ void	gtk_accel_map_foreach_unfiltered (gpointer		 data,
 					  GtkAccelMapForeach	 foreach_func);
 
 /* --- notification --- */
-GType        gtk_accel_map_get_type (void);
+GType        gtk_accel_map_get_type (void) G_GNUC_CONST;
 GtkAccelMap *gtk_accel_map_get      (void);
 
 

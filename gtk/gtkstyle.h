@@ -852,7 +852,7 @@ void gtk_paint_resize_grip (GtkStyle		*style,
                             gint           	 height);
 
 
-GType      gtk_border_get_type (void);
+GType      gtk_border_get_type (void) G_GNUC_CONST;
 GtkBorder *gtk_border_copy     (const GtkBorder *border_);
 void       gtk_border_free (   GtkBorder       *border_);
 

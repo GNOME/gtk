@@ -228,7 +228,7 @@ void               gtk_text_attributes_copy_values (GtkTextAttributes *src,
 void               gtk_text_attributes_unref       (GtkTextAttributes *values);
 void               gtk_text_attributes_ref         (GtkTextAttributes *values);
 
-GType              gtk_text_attributes_get_type    (void);
+GType              gtk_text_attributes_get_type    (void) G_GNUC_CONST;
 
 
 #ifdef __cplusplus

@@ -107,7 +107,7 @@ G_BEGIN_DECLS
 
 /* urg */
 #define GTK_TYPE_IDENTIFIER (gtk_identifier_get_type ())
-GType gtk_identifier_get_type (void);
+GType gtk_identifier_get_type (void) G_GNUC_CONST;
 
 /* --- typedefs --- */
 /* here we come with some necessary forward declarations for structures and
