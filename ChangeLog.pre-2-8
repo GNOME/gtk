@@ -1,3 +1,8 @@
+Tue Mar  1 14:04:08 2005  Manish Singh  <yosh@gimp.org>
+
+	* gdk/x11/gdkproperty-x11.c (virtual_atom_check_init): Cast to avoid
+	const warnings on data structure seeding.
+
 Tue Mar  1 13:53:56 2005  Manish Singh  <yosh@gimp.org>
 
 	* gtk/xdgmime/xdgmime.[ch]: revert previous change, maintain ABI.
