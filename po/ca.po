@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.3\n"
-"POT-Creation-Date: 2002-06-03 03:24+0200\n"
-"PO-Revision-Date: 2002-06-03 03:21+0200\n"
+"POT-Creation-Date: 2002-06-13 19:31+0200\n"
+"PO-Revision-Date: 2002-06-13 19:32+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <gnome@softcatala.net>\n"
 "MIME-Version: 1.0\n"
@@ -137,15 +137,15 @@ msgstr "Les dades en punts de la imatge estan corrompudes"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "És impossible d'obtenir %u bytes a la memòria intermitja"
 
-#: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
+#: gdk-pixbuf/io-bmp.c:266 gdk-pixbuf/io-bmp.c:366
 msgid "Not enough memory to load bitmap image"
 msgstr "No existeix prou memòria per carregar la imatge en mapa de bits"
 
-#: gdk-pixbuf/io-bmp.c:275
+#: gdk-pixbuf/io-bmp.c:292
 msgid "BMP image has unsupported header size"
 msgstr "La imatge BMP té una mida de capçalera no implementat"
 
-#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
+#: gdk-pixbuf/io-bmp.c:317 gdk-pixbuf/io-bmp.c:340 gdk-pixbuf/io-bmp.c:399
 msgid "BMP image has bogus header data"
 msgstr "La imatge BMP conté dades de capçalera errònies"
 
@@ -1768,7 +1768,7 @@ msgstr "Seleccioneu tot"
 msgid "Input Methods"
 msgstr "Mètodes d'entrada"
 
-#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6382
+#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6384
 msgid "_Insert Unicode control character"
 msgstr "_Inserta caràcters de control Unicode"
 
@@ -1813,12 +1813,12 @@ msgstr "Fitxers"
 msgid "_Files"
 msgstr "_Fitxers"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
+#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Directori il·legible: %s"
 
-#: gtk/gtkfilesel.c:946
+#: gtk/gtkfilesel.c:953
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1829,19 +1829,19 @@ msgstr ""
 "disponible per aquest programa.\n"
 "Esteu segur que voleu seleccionar-lo?"
 
-#: gtk/gtkfilesel.c:1076
+#: gtk/gtkfilesel.c:1086
 msgid "_New Folder"
 msgstr "_Nova Carpeta"
 
-#: gtk/gtkfilesel.c:1087
+#: gtk/gtkfilesel.c:1097
 msgid "De_lete File"
 msgstr "Es_borra fitxer"
 
-#: gtk/gtkfilesel.c:1098
+#: gtk/gtkfilesel.c:1108
 msgid "_Rename File"
 msgstr "_Reanomena fitxer"
 
-#: gtk/gtkfilesel.c:1358
+#: gtk/gtkfilesel.c:1386
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
@@ -1849,7 +1849,7 @@ msgstr ""
 "La carpeta anomenada «%s» conté símbols que no es permeten per a noms de "
 "fitxer"
 
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilesel.c:1388
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1858,35 +1858,35 @@ msgstr ""
 "Error creant la carpeta «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Probablement heu utilitzat símbols no permesos per a noms de fitxer."
 
-#: gtk/gtkfilesel.c:1369
+#: gtk/gtkfilesel.c:1397
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Error creant carpeta «%s»: %s\n"
 
-#: gtk/gtkfilesel.c:1403
+#: gtk/gtkfilesel.c:1431
 msgid "New Folder"
 msgstr "Nova Carpeta"
 
-#: gtk/gtkfilesel.c:1418
+#: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
 msgstr "Nom de la _carpeta"
 
-#: gtk/gtkfilesel.c:1444
+#: gtk/gtkfilesel.c:1472
 msgid "Create"
 msgstr "Crear"
 
-#: gtk/gtkfilesel.c:1485
+#: gtk/gtkfilesel.c:1513
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "El nom del fitxer «%s» conté símbols que no estan permesos per a noms de "
 "fitxer"
 
-#: gtk/gtkfilesel.c:1488
+#: gtk/gtkfilesel.c:1516
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1895,32 +1895,32 @@ msgstr ""
 "Error esborrant el fitxer «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
+#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Probablement conté símbols no permesos per a noms de fitxer"
 
-#: gtk/gtkfilesel.c:1499
+#: gtk/gtkfilesel.c:1527
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Error esborrant el fitxer «%s»: %s"
 
-#: gtk/gtkfilesel.c:1542
+#: gtk/gtkfilesel.c:1570
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Voleu realment esborrar el fitxer «%s»?"
 
-#: gtk/gtkfilesel.c:1547
+#: gtk/gtkfilesel.c:1575
 msgid "Delete File"
 msgstr "Esborrar fitxer"
 
-#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "El nom de fitxer «%s» conté símbols que no són permesos per un a un nom de "
 "fitxer"
 
-#: gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1623
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1929,7 +1929,7 @@ msgstr ""
 "Error reanomenant el fitxer com a «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1609
+#: gtk/gtkfilesel.c:1637
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1938,29 +1938,29 @@ msgstr ""
 "Error reanomenant el fitxer «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1619
+#: gtk/gtkfilesel.c:1647
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Error reanomenant el fitxer «%s» com a «%s»: %s"
 
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1694
 msgid "Rename File"
 msgstr "Reanomena el fitxer"
 
-#: gtk/gtkfilesel.c:1681
+#: gtk/gtkfilesel.c:1709
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Reanomena el fitxer «%s» com a:"
 
-#: gtk/gtkfilesel.c:1712
+#: gtk/gtkfilesel.c:1740
 msgid "Rename"
 msgstr "Reanomena"
 
-#: gtk/gtkfilesel.c:2103
+#: gtk/gtkfilesel.c:2131
 msgid "Selection: "
 msgstr "Selecció:"
 
-#: gtk/gtkfilesel.c:2983
+#: gtk/gtkfilesel.c:3011
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -1969,15 +1969,15 @@ msgstr ""
 "El nom del fitxer «%s» no ha pogut ser convertit com a UTF-8 (intenteu "
 "introduir la variable d'entorn G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:2986
+#: gtk/gtkfilesel.c:3014
 msgid "Invalid Utf-8"
 msgstr "Utf-8 no vàlid"
 
-#: gtk/gtkfilesel.c:3852
+#: gtk/gtkfilesel.c:3880
 msgid "Name too long"
 msgstr "El nom és massa llarg"
 
-#: gtk/gtkfilesel.c:3854
+#: gtk/gtkfilesel.c:3882
 msgid "Couldn't convert filename"
 msgstr "No s'ha pogut convertir el nom del fitxer"
 
@@ -2383,7 +2383,7 @@ msgstr "Ajustament vertical"
 msgid "The GtkAdjustment for the vertical position."
 msgstr "El GtkAdjustment per a la posició vertical."
 
-#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:191
+#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:192
 msgid "Width"
 msgstr "Amplada"
 
@@ -2846,17 +2846,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Com de lluny es mou la fletxa en la direcció y quan el botò és premut"
 
-#: gtk/gtkrc.c:2280
+#: gtk/gtkrc.c:2282
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Impossible de trobar el fitxer inclòs: «%s»"
 
-#: gtk/gtkrc.c:2922 gtk/gtkrc.c:2925
+#: gtk/gtkrc.c:2924 gtk/gtkrc.c:2927
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "No s'ha trobat un fitxer d'imatge al pixmap_path: «%s»"
 
-#: gtk/gtkrc.c:3360
+#: gtk/gtkrc.c:3362
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -3794,8 +3794,8 @@ msgid "ZWS _Zero width space"
 msgstr "ZWS Espai d'amplada _zero"
 
 #: gtk/gtktextutil.c:54
-msgid "ZWN Zero width _joiner"
-msgstr "ZWN Ensamblador d'amplada zero"
+msgid "ZWJ Zero width _joiner"
+msgstr "ZWJ En_samblador d'amplada zero"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
@@ -3834,7 +3834,7 @@ msgstr "Cursor visible"
 msgid "If the insertion cursor is shown"
 msgstr "Si es mostra el cursor d'inserció"
 
-#: gtk/gtktextview.c:6373
+#: gtk/gtktextview.c:6375
 msgid "Input _Methods"
 msgstr "_Mètodes d'entrada"
 
@@ -3954,7 +3954,7 @@ msgid "Vertical Adjustment for the widget"
 msgstr "Ajustament vertical pel símbol"
 
 #
-#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:175 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:176 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Visible"
 
@@ -3978,7 +3978,7 @@ msgstr "Columna expansora"
 msgid "Set the column for the expander column"
 msgstr "Introdueix la columna per a la columna expansora"
 
-#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:274
+#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:275
 msgid "Reorderable"
 msgstr "Reordenable"
 
@@ -4053,108 +4053,108 @@ msgstr "Ampliadors de sangnat"
 msgid "Make the expanders indented."
 msgstr "Des els ampliadors sangnats"
 
-#: gtk/gtktreeviewcolumn.c:176
+#: gtk/gtktreeviewcolumn.c:177
 msgid "Whether to display the column"
 msgstr "Quan es mostra la columna"
 
 #
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
+#: gtk/gtktreeviewcolumn.c:184 gtk/gtkwindow.c:446
 msgid "Resizable"
 msgstr "Reajustable"
 
-#: gtk/gtktreeviewcolumn.c:184
+#: gtk/gtktreeviewcolumn.c:185
 msgid "Column is user-resizable"
 msgstr "La columna és usuari-reajustable"
 
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Current width of the column"
 msgstr "Amplada actual de la columna"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Sizing"
 msgstr "Dimensionar"
 
-#: gtk/gtktreeviewcolumn.c:201
+#: gtk/gtktreeviewcolumn.c:202
 msgid "Resize mode of the column"
 msgstr "Modalitat de redimensió de la columna"
 
 #
-#: gtk/gtktreeviewcolumn.c:209
+#: gtk/gtktreeviewcolumn.c:210
 msgid "Fixed Width"
 msgstr "Amplada fixada"
 
-#: gtk/gtktreeviewcolumn.c:210
+#: gtk/gtktreeviewcolumn.c:211
 msgid "Current fixed width of the column"
 msgstr "Amplada fixada actual de la columna"
 
-#: gtk/gtktreeviewcolumn.c:219
+#: gtk/gtktreeviewcolumn.c:220
 msgid "Minimum Width"
 msgstr "Amplada mínima"
 
-#: gtk/gtktreeviewcolumn.c:220
+#: gtk/gtktreeviewcolumn.c:221
 msgid "Minimum allowed width of the column"
 msgstr "Amplada mínima permesa de la columna"
 
-#: gtk/gtktreeviewcolumn.c:229
+#: gtk/gtktreeviewcolumn.c:230
 msgid "Maximum Width"
 msgstr "Amplada màxima"
 
-#: gtk/gtktreeviewcolumn.c:230
+#: gtk/gtktreeviewcolumn.c:231
 msgid "Maximum allowed width of the column"
 msgstr "Amplada màxima permesa de la columna"
 
 #
-#: gtk/gtktreeviewcolumn.c:239
+#: gtk/gtktreeviewcolumn.c:240
 msgid "Title"
 msgstr "Títol"
 
-#: gtk/gtktreeviewcolumn.c:240
+#: gtk/gtktreeviewcolumn.c:241
 msgid "Title to appear in column header"
 msgstr "Títol que apareix a la capçalera de la columna"
 
-#: gtk/gtktreeviewcolumn.c:247
+#: gtk/gtktreeviewcolumn.c:248
 msgid "Clickable"
 msgstr "Cliquejable"
 
-#: gtk/gtktreeviewcolumn.c:248
+#: gtk/gtktreeviewcolumn.c:249
 msgid "Whether the header can be clicked"
 msgstr "Quan la capçalera pot ésser clicada"
 
 #
-#: gtk/gtktreeviewcolumn.c:256
+#: gtk/gtktreeviewcolumn.c:257
 msgid "Widget"
 msgstr "Símbol"
 
-#: gtk/gtktreeviewcolumn.c:257
+#: gtk/gtktreeviewcolumn.c:258
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
 "Símbol a posar a la capçalera de columna en comptes del tìtol de columna"
 
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Alignment"
 msgstr "Alineació"
 
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "X Alignment of the column header text or widget"
 msgstr "Alineació X del text de la capçalera de columna o símbol"
 
-#: gtk/gtktreeviewcolumn.c:275
+#: gtk/gtktreeviewcolumn.c:276
 msgid "Whether the column can be reordered around the headers"
 msgstr "Si la columna pot ser reordenada al voltant la capçalera"
 
-#: gtk/gtktreeviewcolumn.c:282
+#: gtk/gtktreeviewcolumn.c:283
 msgid "Sort indicator"
 msgstr "Indicador d'ordenació"
 
-#: gtk/gtktreeviewcolumn.c:283
+#: gtk/gtktreeviewcolumn.c:284
 msgid "Whether to show a sort indicator"
 msgstr "Si es mostrarà un indicador d'ordenació"
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Sort order"
 msgstr "Ordre d'ordenació"
 
-#: gtk/gtktreeviewcolumn.c:291
+#: gtk/gtktreeviewcolumn.c:292
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Direcció d'ordre que l'indicador haurà d'indicar"
 
