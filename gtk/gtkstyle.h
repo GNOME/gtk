@@ -758,7 +758,18 @@ void gtk_paint_handle  (GtkStyle      *style,
 			gint           width,
 			gint           height,
 			GtkOrientation orientation);
-      
+
+/* Deprecated
+ */
+void gtk_style_apply_default_pixmap (GtkStyle     *style,
+				     GdkWindow    *window,
+				     GtkStateType  state_type, 
+				     GdkRectangle *area, 
+				     gint          x, 
+				     gint          y, 
+				     gint          width, 
+				     gint          height);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
