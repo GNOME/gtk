@@ -1,15 +1,19 @@
 2002-01-24  Tor Lillqvist  <tml@iki.fi>
 
-	Committing now to get all huge amount of changes checked in. There
-	might be some silly debugging printouts left, or stuff like
-	that. But everything does seem to work as well as before. Much
-	cleanup and refactoring still do to.
-
+	Small preparations for the OLE2 DND code:
+	
 	* acconfig.h: Add USE_OLE2_DND.
 
 	* configure.in: Add option --disable-ole2-dnd.
 
 	* autogen.sh: Check for glib-2.0.m4 and glib-gettext.m4.
+
+2002-01-24  Tor Lillqvist  <tml@iki.fi>
+
+	Committing now to get a huge amount of changes checked in. There
+	might be some silly debugging printouts left, or stuff like
+	that. But everything does seem to work as well as before. Much
+	cleanup and refactoring still do to.
 
 	* gdk/gdkprivate.h: There is no gdk_debug_level variable.
 
@@ -59,14 +63,19 @@
 	such common snippets.
 
 	Probably it would be a good idea to keep the pointer to the DIB
-	section's bits also for GdkPixmaps, and not just GdkImages (where
-	it of course is visible to the application, even). Maybe even have
-	a GdkImage struct as such as a part of the private data for Win32
-	GdkPixmaps? Having the pixel data accessible would simplify
-	gdk_win32_bitmap_to_region() a lot. Perhaps gdk_image_get() and
-	_put() between pixmaps and images, too, and maybe even
-	gdk_win32_draw_drawable(). We could skip all the HDC and palette
-	setup and the BitBlt, and just copy the bits ourselves. Hmm.
+	section's pixels also for GdkPixmaps, and not just GdkImages
+	(where it of course is visible to the application, even). Maybe
+	even have a GdkImage struct as such as a part of the private data
+	for Win32 GdkPixmaps? Having the pixel data accessible would
+	simplify gdk_win32_bitmap_to_region() a lot. Perhaps
+	gdk_image_get() and _put() between pixmaps and images, too, and
+	maybe even gdk_win32_draw_drawable(). We could skip all the HDC
+	and palette setup and the BitBlt, and just copy the bits
+	ourselves. Hmm. It might seem silly to roll your own BitBlt, but
+	if we did that, we wouldn't have to bother about HDCs and palettes
+	at all when blitting between bitmaps (pixmaps and/or images).
+	OTOH, when blitting to/from a window, we still would need the
+	palette setup. Maybe just some nice refactoring.
 
 	* gdk/win32/gdkprivate-win32.h: Remove definitions of the X11
 	structs ColormapStruct, Visual and XStandardColormap.
