@@ -151,6 +151,8 @@ choose_better_style (XIMStyle style1, XIMStyle style2)
       return (s1 == XIMPreeditArea) ? style1 : style2;
     else if (u & XIMPreeditNothing)
       return (s1 == XIMPreeditNothing) ? style1 : style2;
+    else if (u & XIMPreeditNone)
+      return (s1 == XIMPreeditNone) ? style1 : style2;
   } else {
     s1 = style1 & STATUS_MASK;
     s2 = style2 & STATUS_MASK;
@@ -223,6 +225,7 @@ setup_styles (GtkXIMInfo *info)
   XIMStyles *xim_styles = info->xim_styles;
 
   settings_preference = info->status_style_setting|info->preedit_style_setting;
+  info->style = 0;
   if (xim_styles)
     {
       for (i = 0; i < xim_styles->count_styles; i++)
@@ -237,6 +240,8 @@ setup_styles (GtkXIMInfo *info)
 					       xim_styles->supported_styles[i]);
 	  }
     }
+  if (info->style == 0)
+    info->style = XIMPreeditNothing | XIMStatusNothing;
 }
 
 static void
@@ -1084,6 +1089,8 @@ get_ic_real (GtkIMContextXIM *context_xim)
       name1 = XNPreeditAttributes;
       list1 = set_preedit_callback (context_xim);
     }
+  else if ((context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditNone)
+    im_style |= XIMPreeditNone;
   else
     im_style |= XIMPreeditNothing;
 
@@ -1101,6 +1108,8 @@ get_ic_real (GtkIMContextXIM *context_xim)
 	  list2 = set_status_callback (context_xim);
 	}
     }
+  else if ((context_xim->im_info->style & STATUS_MASK) == XIMStatusNone)
+    im_style |= XIMStatusNone;
   else
     im_style |= XIMStatusNothing;
 
