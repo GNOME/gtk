@@ -1,3 +1,31 @@
+Sat Jan 17 16:53:08 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c: 
+
+	Phase 1 of fixing #128678: Only access ToolbarContent through a
+	set of new functions:
+
+	toolbar_content_expose, toolbar_content_visible,
+	toolbar_content_size_request, toolbar_content_is_homogeneous,
+	toolbar_content_get_child_requisition,
+	toolbar_content_is_placeholder, toolbar_content_disappearing,
+	toolbar_content_get_state, toolbar_content_child_visible,
+	toolbar_content_get_goal_allocation,
+	toolbar_content_get_allocation,
+	toolbar_content_set_start_allocation,
+	toolbar_content_get_start_allocation, toolbar_content_get_expand,
+	toolbar_content_set_goal_allocation,
+	toolbar_content_set_child_visible, toolbar_content_size_allocate,
+	toolbar_content_set_state, toolbar_content_get_widget,
+	toolbar_content_set_disappearing,
+	toolbar_content_set_size_request,
+	toolbar_content_toolbar_reconfigured,
+	toolbar_content_retrieve_menu_item, 
+	toolbar_content_new_tool_item, toolbar_content_destroy,
+	toolbar_content_is_separator
+
+	Also fix #127092.
+	
 Sat Jan 17 12:55:13 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolitem.c (gtk_tool_item_finalize): don't leak the menu
