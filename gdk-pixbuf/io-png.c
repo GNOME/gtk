@@ -174,7 +174,7 @@ int image_save(GdkPixBuf *pixbuf, FILE *file)
      png_color_8 sig_bit;
      gint type;
      
-     g_return_val_if_fail(f != NULL, NULL);
+     g_return_val_if_fail(file != NULL, NULL);
      g_return_val_if_fail(pixbuf != NULL, NULL);
 
      h = pixbuf->art_pixbuf->height;

@@ -121,7 +121,7 @@ static struct {
 	gboolean   (*format_check)(unsigned char *buffer, int size);
 	GModule   *module;
 	GdkPixBuf *(*load)(FILE *f);
-	int        (*save)(GdkPixBuf, *p, FILE *f, ...);
+	int        (*save)(GdkPixBuf *p, FILE *f, ...);
 } file_formats [] = {
 	{ "png",  pixbuf_check_png,  NULL, NULL, NULL },
 	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL },
