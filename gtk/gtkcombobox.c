@@ -33,11 +33,12 @@
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtklabel.h"
-#include "gtkbin.h"
 
 #define ARROW_SIZE_X 20
 #define ARROW_SIZE_Y 20
 #define ARROW_PADDING 4
+/* Copied from gtkentry.c for size_allocate */
+#define INNER_BORDER 2
 
 static void gtk_combo_box_class_init   (GtkComboBoxClass *class);
 static void gtk_combo_box_init         (GtkComboBox *combobox);
@@ -47,16 +48,16 @@ static void gtk_combo_box_size_allocate(GtkWidget     *widget,
 					GtkAllocation *allocation);
 static void gtk_combo_box_draw         (GtkWidget    *widget,
 					GdkRectangle *area);
-static void gtk_combo_box_draw_arrow   (GtkWidget *widget);
+static void gtk_combo_box_draw_arrow   (GtkWidget *widget, gboolean detent);
 static gint gtk_combo_box_expose       (GtkWidget *object,
 					GdkEventExpose *event);
 static void gtk_combo_box_destroy      (GtkObject *object);
-#if 0
 static gint gtk_combo_box_key_press    (GtkWidget   *widget,
 					GdkEventKey *event);
-#endif
 static gint gtk_combo_box_button_press (GtkWidget      *widget,
 					GdkEventButton *event);
+static gint gtk_combo_box_motion_notify(GtkWidget      *widget,
+					GdkEventMotion *event);
 static void gtk_combo_box_realize      (GtkWidget      *widget);
 static void gtk_combo_box_item_activate(GtkWidget      *widget,
 					GtkComboBox    *cb);
@@ -104,9 +105,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *class)
   object_class->destroy = gtk_combo_box_destroy;
 
   widget_class->button_press_event = gtk_combo_box_button_press;
-#if 0
   widget_class->key_press_event = gtk_combo_box_key_press;
-#endif
+  widget_class->motion_notify_event = gtk_combo_box_motion_notify;
   widget_class->size_request = gtk_combo_box_size_request;
   widget_class->size_allocate = gtk_combo_box_size_allocate;
   widget_class->draw = gtk_combo_box_draw;
@@ -122,6 +122,9 @@ gtk_combo_box_init (GtkComboBox *combobox)
 
   combobox->popdown = NULL;
   combobox->menu_is_down = FALSE;
+
+  gtk_widget_set_events(GTK_WIDGET(combobox),
+	gtk_widget_get_events(GTK_WIDGET(combobox)) | GDK_POINTER_MOTION_MASK);
 }
 
 GtkWidget*
@@ -177,9 +180,8 @@ gtk_combo_box_set_popdown_strings(GtkComboBox *combobox,
 			 combobox);
     }
 
-  if(GTK_WIDGET_REALIZED(combobox))
     gtk_widget_set_usize(combobox->popdown,
-			 GTK_WIDGET(combobox)->requisition.width,
+			 GTK_WIDGET(combobox)->allocation.width,
 			 -1);
 }
 
@@ -196,12 +198,6 @@ gtk_combo_box_realize(GtkWidget *widget)
   gdk_window_set_background (GTK_WIDGET(widget)->window,
 			     &widget->style->bg[GTK_WIDGET_STATE(widget)]);
 
-  if(cb->popdown)
-    {
-      gtk_widget_set_usize(cb->popdown,
-			   widget->requisition.width,
-			   -1);
-    }
 }
 
 static void
@@ -233,14 +229,20 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
 
   GTK_WIDGET_CLASS(parent_class)->size_allocate(widget, allocation);
-#define INNER_BORDER 2
+
   gdk_window_resize(GTK_ENTRY(widget)->text_area,
 		    allocation->width - (widget->style->klass->xthickness + INNER_BORDER) * 2 - ARROW_SIZE_X,
 		    widget->requisition.height - (widget->style->klass->ythickness + INNER_BORDER) * 2);
+  if(cb->popdown)
+    {
+      gtk_widget_set_usize(cb->popdown,
+			   widget->allocation.width,
+			   -1);
+    }
 }
 
 static void
-gtk_combo_box_draw_arrow   (GtkWidget *widget)
+gtk_combo_box_draw_arrow   (GtkWidget *widget, gboolean detent)
 {
   gint sx, sy;
 
@@ -249,7 +251,7 @@ gtk_combo_box_draw_arrow   (GtkWidget *widget)
   widget->style->klass->draw_arrow(widget->style,
 				   widget->window,
 				   GTK_WIDGET_STATE(widget),
-				   GTK_SHADOW_OUT,
+				   detent?GTK_SHADOW_IN:GTK_SHADOW_OUT,
 				   GTK_ARROW_DOWN, TRUE,
 				   sx, sy,
 				   ARROW_SIZE_X - ARROW_PADDING,
@@ -266,7 +268,7 @@ gtk_combo_box_draw (GtkWidget    *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      gtk_combo_box_draw_arrow(widget);
+      gtk_combo_box_draw_arrow(widget, FALSE);
       GTK_WIDGET_CLASS(parent_class)->draw(widget, area);
     }
 }
@@ -280,7 +282,7 @@ gtk_combo_box_expose (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_ENTRY (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  gtk_combo_box_draw_arrow(widget);
+  gtk_combo_box_draw_arrow(widget, FALSE);
   retval = GTK_WIDGET_CLASS(parent_class)->expose_event(widget, event);
   return retval;
 }
@@ -302,7 +304,7 @@ gtk_combo_box_position_menu(GtkMenu  *menu,
   widget = GTK_WIDGET(user_data);
 
   gdk_window_get_origin(widget->window, x, &wy);
-  *y = wy + widget->allocation.height;
+  *y = wy + widget->requisition.height;
 
   gdk_window_get_size(GDK_ROOT_PARENT(), &rootw, &rooth);
 
@@ -355,22 +357,30 @@ gtk_combo_box_button_press (GtkWidget      *widget,
       return TRUE;
     }
   else
+    return FALSE;
+/*
     return GTK_WIDGET_CLASS(parent_class)->button_press_event(widget, event);
+*/
 }
 
-#if 0
 static gint
 gtk_combo_box_key_press (GtkWidget   *widget,
 			 GdkEventKey *event)
 {
-
+  GtkComboBox *cb;
   g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_ENTRY (widget), FALSE);
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  return GTK_WIDGET_CLASS(parent_class)->key_press_event(widget, event);
+  cb = GTK_COMBO_BOX(widget);
+  if(cb->menu_is_down)
+    return GTK_WIDGET_CLASS(cb->popdown)->key_press_event(cb->popdown, event);
+  else
+    return FALSE;
+/*
+    return GTK_WIDGET_CLASS(parent_class)->key_press_event(widget, event);
+*/
 }
-#endif
 
 static void
 gtk_combo_box_destroy(GtkObject *object)
@@ -391,4 +401,20 @@ static void gtk_combo_box_item_activate(GtkWidget *widget,
   char *newtext = GTK_LABEL(GTK_BIN(widget)->child)->label;
 
   gtk_entry_set_text(GTK_ENTRY(cb), newtext);
+}
+
+static gint gtk_combo_box_motion_notify(GtkWidget      *widget,
+					GdkEventMotion *event)
+{
+  if(event->window == widget->window
+     && event->x > (widget->allocation.width - ARROW_SIZE_X)
+     && event->x < widget->allocation.width)
+    {
+      gtk_combo_box_draw_arrow(widget, TRUE);
+    }
+  else
+    {
+      gtk_combo_box_draw_arrow(widget, FALSE);
+    }
+  return FALSE;
 }

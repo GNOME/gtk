@@ -16,7 +16,7 @@
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#ifndef __GTK_COMBO_H__
+#ifndef __GTK_COMBO_BOX_H__
 #define __GTK_COMBO_H__
 
 
@@ -64,4 +64,4 @@ void gtk_combo_box_set_popdown_strings(GtkComboBox *combobox,
 #endif /* __cplusplus */
 
 
-#endif /* __GTK_ENTRY_H__ */
+#endif /* __GTK_COMBO_BOX_H__ */
