@@ -1,3 +1,8 @@
+Thu May 23 15:44:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c (changed_handler): Don't redraw
+	when the area is completely above the visible area.
+
 Fri May 17 17:27:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c gtk/gtkwidget.c: Add a "is_focus"

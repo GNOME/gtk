@@ -3165,9 +3165,11 @@ changed_handler (GtkTextLayout     *layout,
 
       if (old_height == new_height)
         redraw_rect.height = old_height;
-      else
+      else if (start_y + old_height > visible_rect.y)
         redraw_rect.height = MAX (0, visible_rect.y + visible_rect.height - start_y);
-
+      else
+        redraw_rect.height = 0;
+	
       if (gdk_rectangle_intersect (&redraw_rect, &visible_rect, &redraw_rect))
         {
           /* text_window_invalidate_rect() takes buffer coordinates */
