@@ -1,3 +1,8 @@
+2005-02-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenushell.c (gtk_real_menu_shell_move_current): Fix RTL
+	keynav for going from menubar to menu.
+
 2005-02-08  Christian Rose  <menthos@menthos.com>
 
 	* configure.in: Added "xh" to ALL_LINGUAS.
