@@ -45,6 +45,8 @@ static void gtk_image_size_request (GtkWidget      *widget,
 static void gtk_image_destroy      (GtkObject      *object);
 static void gtk_image_clear        (GtkImage       *image);
 static void gtk_image_reset        (GtkImage       *image);
+static void gtk_image_calc_size    (GtkImage       *image);
+
 static void gtk_image_update_size  (GtkImage       *image,
                                     gint            image_width,
                                     gint            image_height);
@@ -1227,6 +1229,14 @@ gtk_image_expose (GtkWidget      *widget,
       misc = GTK_MISC (widget);
 
       area = event->area;
+
+      /* For stock items and icon sets, we lazily calculate
+       * the size; we might get here between a queue_resize()
+       * and size_request() if something explicitely forces
+       * a redraw.
+       */
+      if (widget->requisition.width == 0 && widget->requisition.height == 0)
+	gtk_image_calc_size (image);
       
       if (!gdk_rectangle_intersect (&area, &widget->allocation, &area))
 	return FALSE;
@@ -1591,29 +1601,25 @@ gtk_image_reset (GtkImage *image)
 }
 
 static void
-gtk_image_size_request (GtkWidget      *widget,
-                        GtkRequisition *requisition)
+gtk_image_calc_size (GtkImage *image)
 {
-  GtkImage *image;
+  GtkWidget *widget = GTK_WIDGET (image);
   GdkPixbuf *pixbuf = NULL;
   
-  image = GTK_IMAGE (widget);
-
   /* We update stock/icon set on every size request, because
    * the theme could have affected the size; for other kinds of
    * image, we just update the requisition when the image data
    * is set.
    */
-  
   switch (image->storage_type)
     {
     case GTK_IMAGE_STOCK:
-      pixbuf = gtk_widget_render_icon (GTK_WIDGET (image),
+      pixbuf = gtk_widget_render_icon (widget,
                                        image->data.stock.stock_id,
                                        image->icon_size,
                                        NULL);
       break;
-
+      
     case GTK_IMAGE_ICON_SET:
       pixbuf = gtk_icon_set_render_icon (image->data.icon_set.icon_set,
                                          widget->style,
@@ -1630,11 +1636,22 @@ gtk_image_size_request (GtkWidget      *widget,
 
   if (pixbuf)
     {
-      GTK_WIDGET (image)->requisition.width = gdk_pixbuf_get_width (pixbuf) + GTK_MISC (image)->xpad * 2;
-      GTK_WIDGET (image)->requisition.height = gdk_pixbuf_get_height (pixbuf) + GTK_MISC (image)->ypad * 2;
+      widget->requisition.width = gdk_pixbuf_get_width (pixbuf) + GTK_MISC (image)->xpad * 2;
+      widget->requisition.height = gdk_pixbuf_get_height (pixbuf) + GTK_MISC (image)->ypad * 2;
 
       g_object_unref (pixbuf);
     }
+}
+
+static void
+gtk_image_size_request (GtkWidget      *widget,
+                        GtkRequisition *requisition)
+{
+  GtkImage *image;
+  
+  image = GTK_IMAGE (widget);
+
+  gtk_image_calc_size (image);
 
   /* Chain up to default that simply reads current requisition */
   GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
@@ -1651,5 +1668,3 @@ gtk_image_update_size (GtkImage *image,
   if (GTK_WIDGET_VISIBLE (image))
     gtk_widget_queue_resize (GTK_WIDGET (image));
 }
-
-

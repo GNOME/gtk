@@ -1,3 +1,15 @@
+Thu Nov  7 17:18:06 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_draw_pixbuf): 
+	Don't try to use render if we can't get a picture for 
+	the drawable. (Fixes #97220, reported by
+	Jamie Zawinski)
+
+	* gtk/gtkimage.c: Force requisition calculation
+	when we get a expose prior to size_request().
+	(#91711, reported by Sven Neumann, debugging
+	help from Matthias Clasen, Soeren Sandmann)
+
 Thu Nov  7 16:45:54 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkx.h: Fix misplaced display_grab()/display_ungrab();

@@ -1441,7 +1441,8 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
 
   if (format_type == FORMAT_NONE ||
       !gdk_pixbuf_get_has_alpha (pixbuf) ||
-      (dither == GDK_RGB_DITHER_MAX && gdk_drawable_get_depth (drawable) != 24))
+      (dither == GDK_RGB_DITHER_MAX && gdk_drawable_get_depth (drawable) != 24) ||
+      gdk_x11_drawable_get_picture (drawable) == None)
     {
       GdkDrawable *wrapper = GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper;
       GDK_DRAWABLE_CLASS (parent_class)->draw_pixbuf (wrapper, gc, pixbuf,
