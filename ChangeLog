@@ -1,3 +1,35 @@
+Fri May  5 11:18:47 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c gdk/x11/gdkwindow-x11.c (gdk_window_clear): Move
+	gdk_window_clear() into common code, implement in terms of
+	gdk_window_clear_area(). (Fixes bug where gdk_window_clear() was
+	not redirected to the backing rectangle.
+
+Wed Apr 26 01:53:23 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (EXTRA_DIST): Add OLD_STAMP into 
+	EXTRA_DIST. It does not work well when the file that
+	everything depends on is not in the tarball.
+
+Tue Apr 25 22:20:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_process_updates_internal): Fix error
+	with recursion where process_updates() is called from
+	an expose handler. (GtkTextView is highly broken in
+	doing this, but it should work, so it is a nice test
+	case.)
+
+Sun Apr 23 23:39:18 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_process_updates_internal): Gracefully
+	handle the case where updates are queued during processing of
+	updates.
+
+Tue Apr 18 14:16:50 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_foreign_new): We already assume
+	window is on gdk_display - use that instead of segfaulting.
+
 Thu May  4 02:04:46 2000  Tim Janik  <timj@gtk.org>
 
         * configure.in (STRIP_DUMMY): some Make 3.79 $(strip ) versions are

@@ -481,6 +481,7 @@ test-debug: testgtk
 	$(SHELL) $$top_builddir/libtool --mode=execute gdb $$builddir/testgtk
 
 EXTRA_DIST += @STRIP_BEGIN@ 	\
+	OLD_STAMP		\
 	testgtk.1 		\
 	testgtkrc 		\
 	testgtkrc2 		\

@@ -946,6 +946,18 @@ gdk_window_clear_backing_rect (GdkWindow *window,
 }
 
 void
+gdk_window_clear (GdkWindow *window)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  gdk_window_clear_area (window, 0, 0,
+			 private->drawable.width, private->drawable.height);
+}
+
+void
 gdk_window_clear_area (GdkWindow *window,
 		       gint       x,
 		       gint       y,
@@ -1026,33 +1038,42 @@ gdk_window_process_updates_internal (GdkWindow *window)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
   gboolean save_region = FALSE;
-  
-  if (gdk_event_func)
+
+  /* If an update got queued during update processing, we can get a
+   * window in the update queue that has an empty update_area.
+   * just ignore it.
+   */
+  if (private->update_area)
     {
-      GdkEvent event;
-      GdkRectangle window_rect;
-
-      window_rect.x = 0;
-      window_rect.y = 0;
-      window_rect.width = private->drawable.width;
-      window_rect.height = private->drawable.height;
-
-      save_region = _gdk_windowing_window_queue_antiexpose (window, private->update_area);
+      GdkRegion *update_area = private->update_area;
+      private->update_area = NULL;
       
-      event.expose.type = GDK_EXPOSE;
-      event.expose.window = gdk_window_ref ((GdkWindow *)private);
-      event.expose.count = 0;
-      
-      gdk_region_get_clipbox (private->update_area, &event.expose.area);
-      if (gdk_rectangle_intersect (&event.expose.area, &window_rect, &event.expose.area))
+      if (gdk_event_func)
 	{
-	  (*gdk_event_func) (&event, gdk_event_data);
+	  GdkEvent event;
+	  GdkRectangle window_rect;
+	  
+	  window_rect.x = 0;
+	  window_rect.y = 0;
+	  window_rect.width = private->drawable.width;
+	  window_rect.height = private->drawable.height;
+
+	  save_region = _gdk_windowing_window_queue_antiexpose (window, update_area);
+      
+	  event.expose.type = GDK_EXPOSE;
+	  event.expose.window = gdk_window_ref ((GdkWindow *)private);
+	  event.expose.count = 0;
+      
+	  gdk_region_get_clipbox (update_area, &event.expose.area);
+	  if (gdk_rectangle_intersect (&event.expose.area, &window_rect, &event.expose.area))
+	    {
+	      (*gdk_event_func) (&event, gdk_event_data);
+	    }
 	}
+      
+      if (!save_region)
+	gdk_region_destroy (update_area);
     }
-  
-  if (!save_region)
-    gdk_region_destroy (private->update_area);
-  private->update_area = NULL;
 }
 
 void
