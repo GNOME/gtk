@@ -2,7 +2,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>November 22nd 2000</date>
+    <date>March 1st 2001</date>
     <title>GTK+ 1.2 Tutorial</title>
     <authorgroup>
       <author>
@@ -3354,6 +3354,8 @@ styles. You can ignore this for now as the <link linkend="sec-Frames">Frame</lin
 <programlisting role="C">
 /* example-start label label.c */
 
+#include &lt;gtk/gtk.h&gt;
+
 int main( int   argc,
           char *argv[] )
 {
@@ -6111,11 +6113,11 @@ void calendar_set_flags( CalendarData *calendar )
   gint i;
   gint options=0;
   for (i=0;i<5;i++) 
-    if (calendar-&lt;settings[i])
+    if (calendar-&gt;settings[i])
       {
 	options=options + (1&lt;&lt;i);
       }
-  if (calendar-&lt;window)
+  if (calendar-&gt;window)
     gtk_calendar_display_options (GTK_CALENDAR (calendar->window), options);
 }
 
