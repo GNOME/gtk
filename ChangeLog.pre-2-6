@@ -1,3 +1,8 @@
+Sun Mar  3 11:05:13 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/Makefile.am (moduledir): Fix
+	install location.
+
 Sun Mar  3 10:28:32 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am: add missing dependency of objects on
