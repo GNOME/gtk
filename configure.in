@@ -1033,4 +1033,5 @@ gtk/makefile.mingw
 gtk/gtkcompat.h
 modules/Makefile
 modules/linux-fb/Makefile
+modules/input/Makefile
 ], [chmod +x gtk-config-2.0])
