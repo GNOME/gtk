@@ -1388,8 +1388,9 @@ gtk_file_selection_create_dir (GtkWidget *widget,
 }
 
 static void
-gtk_file_selection_delete_file_confirmed (GtkWidget *widget,
-					  gpointer   data)
+gtk_file_selection_delete_file_response (GtkDialog *dialog, 
+                                         gint       response_id,
+                                         gpointer   data)
 {
   GtkFileSelection *fs = data;
   CompletionState *cmpl_state;
@@ -1400,6 +1401,12 @@ gtk_file_selection_delete_file_confirmed (GtkWidget *widget,
   gchar *buf;
   
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
+
+  if (response_id != GTK_RESPONSE_OK)
+    {
+      gtk_widget_destroy (GTK_WIDGET (dialog));
+      return;
+    }
 
   cmpl_state = (CompletionState*) fs->cmpl_state;
   path = cmpl_reference_position (cmpl_state);
@@ -1441,17 +1448,13 @@ gtk_file_selection_delete_file (GtkWidget *widget,
 				gpointer   data)
 {
   GtkFileSelection *fs = data;
-  GtkWidget *label;
-  GtkWidget *vbox;
-  GtkWidget *button;
   GtkWidget *dialog;
   const gchar *filename;
-  gchar *buf;
   
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
   if (fs->fileop_dialog)
-	  return;
+    return;
 
 #ifdef G_WITH_CYGWIN
   translate_win32_path (fs);
@@ -1465,54 +1468,32 @@ gtk_file_selection_delete_file (GtkWidget *widget,
   fs->fileop_file = g_strdup (filename);
   
   /* main dialog */
-  fs->fileop_dialog = dialog = gtk_dialog_new ();
+  fs->fileop_dialog = dialog = 
+    gtk_message_dialog_new (GTK_WINDOW (fs),
+                            GTK_WINDOW (fs)->modal ? GTK_DIALOG_MODAL : 0,
+                            GTK_MESSAGE_QUESTION,
+                            GTK_BUTTONS_NONE,
+                            _("Really delete file \"%s\" ?"), filename);
+
   gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
 		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
 		      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), _("Delete File"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
-  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (fs));
-
-  /* If file dialog is grabbed, grab option dialog */
-  /* When option dialog is closed, file dialog will be grabbed again */
-  if (GTK_WINDOW (fs)->modal)
-      gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  
-  vbox = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
-		     FALSE, FALSE, 0);
-  gtk_widget_show (vbox);
-
-  buf = g_strconcat ("Really delete file \"", filename, "\" ?", NULL);
-  label = gtk_label_new (buf);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
-  gtk_widget_show (label);
-  g_free (buf);
   
   /* buttons */
-  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			     (GtkSignalFunc) gtk_widget_destroy, 
-			     (gpointer) dialog);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
-		      button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default (button);
-  gtk_widget_show (button);
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                          GTK_STOCK_DELETE, GTK_RESPONSE_OK,
+                          NULL);
 
-  button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) gtk_file_selection_delete_file_confirmed, 
-		      (gpointer) fs);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
-		      button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_show (button);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+
+  g_signal_connect (G_OBJECT (dialog), "response",
+                    G_CALLBACK (gtk_file_selection_delete_file_response),
+                    fs);
   
   gtk_widget_show (dialog);
-
 }
 
 static void
@@ -1631,8 +1612,8 @@ gtk_file_selection_rename_file (GtkWidget *widget,
 		      FALSE, FALSE, 0);
   gtk_widget_show(vbox);
   
-  buf = g_strconcat ("Rename file \"", fs->fileop_file, "\" to:", NULL);
-  label = gtk_label_new(buf);
+  buf = g_strdup_printf (_("Rename file \"%s\" to:"), fs->fileop_file);
+  label = gtk_label_new (buf);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
   gtk_widget_show (label);

@@ -1,7 +1,12 @@
+2002-02-11  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkfilesel.c: converted the "Delete File" dialog to
+	GtkMessageDialog. Marked missing strings for translation.
+
 Mon Feb 11 22:03:15 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkpaned.[ch]: Opaque resizing + prelighting for paned widget.
-	* gtk/gtkvpaned.c, gtk/gtkvpaned.h: move reszing logic to gtkpaned.c
+	* gtk/gtkvpaned.c, gtk/gtkvpaned.h: move resizing logic to gtkpaned.c
 
 Mon Feb 11 21:42:17 2002  Kristian Rietveld  <kris@gtk.org>
 
@@ -34,7 +39,6 @@ Mon Feb 11 16:40:44 2002  Kristian Rietveld  <kris@gtk.org>
 	* gtk/gtktreeview.c (gtk_tree_view_set_model): install presize
 	handler, so the validate_rows_handler will always be run (#70997)
 
->>>>>>> 1.2993
 Sun Feb 10 22:20:46 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkliststore.c (gtk_list_store_sort_iter_changed): increase
@@ -51,8 +55,9 @@ Sun Feb 10 12:32:44 2002  Owen Taylor  <otaylor@redhat.com>
 2002-02-10  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkcalendar.c (gtk_calendar_class_init): Set finalize handler;
-	(gtk_calendar_finalize): Rename gtk_calendar_destroy to gtk_calendar_finalize
-	since ::destroy can be called multiple times, resulting in double-freeing memory.
+	(gtk_calendar_finalize): Rename gtk_calendar_destroy to 
+	gtk_calendar_finalize since ::destroy can be called multiple times, 
+	resulting in double-freeing memory.
 
 2002-02-10  Hans Breuer  <hans@breuer.org>
 
