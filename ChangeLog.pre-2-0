@@ -1,3 +1,17 @@
+Wed Feb 25 13:18:53 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkbbox.[ch] gtk/gtkhbox.[ch] gtk/gtkvbox.[ch] :
+
+	Move layout constants into an enumeration, split
+	GTK_BUTTONBOX_DEFAULT into GTK_BUTTONBOX_DEFAULT
+	and GTK_BUTTONBOX_DEFAULT_STYLE (enumeration member).
+	
+	* gtk/gtkclist.c:
+
+	Renamed gtk_clist_row_isvisable to .._is_visible
+
+	From: Maciej Stachowiak <mstachow@mit.edu>
+	
 Wed Feb 25 13:50:05 GMT 1998  Tony Gale <gale@gimp.org>
 
 	* docs/gtkfaq.sgml: added questions on:
