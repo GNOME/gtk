@@ -99,6 +99,11 @@ extern "C" {
  */
 #define GTK_HAVE_FEATURES_1_1_12			1-1-12
 
+/* Gtk+ 1.1.13 version tag
+ * gtk_toggle_button_set_state name changes
+ */
+#define GTK_HAVE_FEATURES_1_1_13			1-1-13
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
