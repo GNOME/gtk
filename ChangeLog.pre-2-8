@@ -1,3 +1,19 @@
+Mon Mar 15 12:51:17 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (location_popup_handler): Only show
+	the title string in OPEN/SELECT_FOLDER mode as it's open-specific.
+	Put a blank title for SAVE/CREATE_FOLDER; we are in string freeze,
+	so we'll fix it for 2.4.1 as #137272.
+
+	* gtk/gtkpathbar.c (gtk_path_bar_scroll_down): calculate
+	space_available correctly for RTL mode.  w/o this, you can't
+	scroll down again.  Fixes #137021.
+
+2004-03-15  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkpathbar.c (gtk_path_bar_scroll_up): Queue a resize.
+	(gtk_path_bar_scroll_down): Likewise.
+
 Mon Mar 15 11:40:43 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilechooserentry.c: Store the position of the 

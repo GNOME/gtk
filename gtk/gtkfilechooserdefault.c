@@ -4998,6 +4998,7 @@ location_popup_handler (GtkFileChooserDefault *impl)
   GtkWidget *label;
   GtkWidget *entry;
   gboolean refocus;
+  char *title;
 
   /* Create dialog */
 
@@ -5005,7 +5006,19 @@ location_popup_handler (GtkFileChooserDefault *impl)
   if (!GTK_WIDGET_TOPLEVEL (toplevel))
     toplevel = NULL;
 
-  dialog = gtk_dialog_new_with_buttons (_("Open Location"),
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+      || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+    {
+      title = _("Open Location");
+    }
+  else 
+    {
+      g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+		|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
+      title = ""; /* FIXME: #137272, fix for 2.4.1 */
+    }
+
+  dialog = gtk_dialog_new_with_buttons (title,
 					GTK_WINDOW (toplevel),
 					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -5044,8 +5057,8 @@ location_popup_handler (GtkFileChooserDefault *impl)
 	    }
 	  else 
 	    {
-	      g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-			|| impl->action == GTK_FILE_CHOOSER_ACTION_SAVE);
+	      g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+			|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
 	      gtk_widget_grab_focus (impl->save_file_name_entry);
 	    }
 	  refocus = FALSE;

@@ -565,6 +565,8 @@ gtk_path_bar_scroll_down (GtkWidget *button, GtkPathBar *path_bar)
   gint border_width;
   GtkTextDirection direction;
   
+  gtk_widget_queue_resize (GTK_WIDGET (path_bar));
+
   border_width = GTK_CONTAINER (path_bar)->border_width;
   direction = gtk_widget_get_direction (GTK_WIDGET (path_bar));
   
@@ -592,7 +594,7 @@ gtk_path_bar_scroll_down (GtkWidget *button, GtkPathBar *path_bar)
 
   space_needed = BUTTON_DATA (down_button->data)->button->allocation.width + path_bar->spacing;
   if (direction == GTK_TEXT_DIR_RTL)
-    space_available = GTK_WIDGET (path_bar)->allocation.x + GTK_WIDGET (path_bar)->allocation.width;
+    space_available = path_bar->down_slider_button->allocation.x - GTK_WIDGET (path_bar)->allocation.x;
   else
     space_available = (GTK_WIDGET (path_bar)->allocation.x + GTK_WIDGET (path_bar)->allocation.width - border_width) -
       (path_bar->down_slider_button->allocation.x + path_bar->down_slider_button->allocation.width);
@@ -613,6 +615,8 @@ static void
 gtk_path_bar_scroll_up (GtkWidget *button, GtkPathBar *path_bar)
 {
   GList *list;
+
+  gtk_widget_queue_resize (GTK_WIDGET (path_bar));
 
   for (list = g_list_last (path_bar->button_list); list; list = list->prev)
     {
