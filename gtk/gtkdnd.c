@@ -1024,6 +1024,24 @@ gtk_drag_dest_set_target_list (GtkWidget      *widget,
   site->target_list = target_list;
 }
 
+/**
+ * gtk_drag_dest_add_text_targets:
+ * @widget: a #GtkWidget that's a drag destination
+ *
+ * Add the text targets supported by #GtkSelection to
+ * the target list of the drag destination.  
+ * 
+ * Since: 2.6
+ **/
+void
+gtk_drag_dest_add_text_targets (GtkWidget *widget)
+{
+  GtkTargetList *target_list;
+
+  target_list = gtk_drag_dest_get_target_list (widget);
+  gtk_target_list_add_text_targets (target_list);
+  gtk_drag_dest_set_target_list (widget, target_list);
+}
 
 /*************************************************************
  * _gtk_drag_dest_handle_event:
@@ -2170,6 +2188,25 @@ gtk_drag_source_set_target_list (GtkWidget     *widget,
     gtk_target_list_unref (site->target_list);
 
   site->target_list = target_list;
+}
+
+/**
+ * gtk_drag_source_add_text_targets:
+ * @widget: a #GtkWidget that's is a drag source
+ *
+ * Add the text targets supported by #GtkSelection to
+ * the target list of the drag source.  
+ * 
+ * Since: 2.6
+ **/
+void
+gtk_drag_source_add_text_targets (GtkWidget *widget)
+{
+  GtkTargetList *target_list;
+
+  target_list = gtk_drag_source_get_target_list (widget);
+  gtk_target_list_add_text_targets (target_list);
+  gtk_drag_source_set_target_list (widget, target_list);
 }
 
 static void

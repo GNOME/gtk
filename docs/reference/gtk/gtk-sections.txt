@@ -4890,6 +4890,7 @@ gtk_target_list_ref
 gtk_target_list_unref
 gtk_target_list_add
 gtk_target_list_add_table
+gtk_target_list_add_text_targets
 gtk_target_list_remove
 gtk_target_list_find
 gtk_selection_owner_set
@@ -4958,6 +4959,7 @@ gtk_drag_dest_unset
 gtk_drag_dest_find_target
 gtk_drag_dest_get_target_list
 gtk_drag_dest_set_target_list
+gtk_drag_dest_add_text_targets
 gtk_drag_finish
 gtk_drag_get_data
 gtk_drag_get_source_widget
@@ -4979,6 +4981,7 @@ gtk_drag_source_set_icon_stock
 gtk_drag_source_unset
 gtk_drag_source_set_target_list
 gtk_drag_source_get_target_list
+gtk_drag_source_add_text_targets
 </SECTION>
 
 

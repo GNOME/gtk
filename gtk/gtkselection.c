@@ -222,9 +222,9 @@ gtk_target_list_unref (GtkTargetList *list)
 
 void 
 gtk_target_list_add (GtkTargetList *list,
-		     GdkAtom            target,
-		     guint              flags,
-		     guint              info)
+		     GdkAtom        target,
+		     guint          flags,
+		     guint          info)
 {
   GtkTargetPair *pair;
 
@@ -236,6 +236,61 @@ gtk_target_list_add (GtkTargetList *list,
   pair->info = info;
 
   list->list = g_list_append (list->list, pair);
+}
+
+static GdkAtom utf8_atom;
+static GdkAtom text_atom;
+static GdkAtom ctext_atom;
+static GdkAtom text_plain_atom;
+static GdkAtom text_plain_utf8_atom;
+static GdkAtom text_plain_locale_atom;
+
+static void 
+init_atoms (void)
+{
+  gchar *tmp;
+  const gchar *charset;
+
+  if (!utf8_atom)
+    {
+      utf8_atom = gdk_atom_intern ("UTF8_STRING", FALSE);
+      text_atom = gdk_atom_intern ("TEXT", FALSE);
+      ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
+      text_plain_atom = gdk_atom_intern ("text/plain", FALSE);
+      text_plain_utf8_atom = gdk_atom_intern ("text/plain;charset=utf-8", FALSE);
+      g_get_charset (&charset);
+      tmp = g_strdup_printf ("text/plain;charset=%s", charset);
+      text_plain_locale_atom = gdk_atom_intern (tmp, FALSE);
+      g_free (tmp);
+    }
+}
+
+/**
+ * gtk_target_list_add_text_targets:
+ * @list: a #GtkTargetList
+ * 
+ * Adds the text targets supported by #GtkSelection to
+ * the target list. The targets are added with both flags
+ * and info being zero.
+ * 
+ * Since: 2.6
+ **/
+void 
+gtk_target_list_add_text_targets (GtkTargetList *list)
+{
+  g_return_if_fail (list != NULL);
+  
+  init_atoms ();
+
+  /* Keep in sync with gtk_selection_data_targets_include_text()
+   */
+  gtk_target_list_add (list, utf8_atom, 0, 0);  
+  gtk_target_list_add (list, ctext_atom, 0, 0);  
+  gtk_target_list_add (list, text_atom, 0, 0);  
+  gtk_target_list_add (list, GDK_TARGET_STRING, 0, 0);  
+  gtk_target_list_add (list, text_plain_utf8_atom, 0, 0);  
+  gtk_target_list_add (list, text_plain_locale_atom, 0, 0);  
+  gtk_target_list_add (list, text_plain_atom, 0, 0);  
 }
 
 void               
@@ -803,21 +858,6 @@ gtk_selection_data_set (GtkSelectionData *selection_data,
   selection_data->length = length;
 }
 
-static GdkAtom utf8_atom;
-static GdkAtom text_atom;
-static GdkAtom ctext_atom;
-
-static void 
-init_atoms (void)
-{
-  if (!utf8_atom)
-    {
-      utf8_atom = gdk_atom_intern ("UTF8_STRING", FALSE);
-      text_atom = gdk_atom_intern ("TEXT", FALSE);
-      ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
-    }
-}
-
 static gboolean
 selection_set_string (GtkSelectionData *selection_data,
 		      const gchar      *str,
@@ -867,6 +907,149 @@ selection_set_compound_text (GtkSelectionData *selection_data,
   return result;
 }
 
+/* Normalize \r and \n into \r\n
+ */
+static gchar *
+normalize_to_crlf (const gchar *str, 
+		   gint         len)
+{
+  GString *result = g_string_sized_new (len);
+  const gchar *p = str;
+
+  while (1)
+    {
+      if (*p == '\n')
+	g_string_append_c (result, '\r');
+
+      if (*p == '\r')
+	{
+	  g_string_append_c (result, *p);
+	  p++;
+	  if (*p != '\n')
+	    g_string_append_c (result, '\n');
+	}
+
+      if (*p == '\0')
+	break;
+
+      g_string_append_c (result, *p);
+      p++;
+    }
+
+  return g_string_free (result, FALSE);  
+}
+
+/* Normalize \r and \r\n into \n
+ */
+static gchar *
+normalize_to_lf (gchar *str, 
+		 gint   len)
+{
+  GString *result = g_string_sized_new (len);
+  const gchar *p = str;
+
+  while (1)
+    {
+      if (*p == '\r')
+	{
+	  p++;
+	  if (*p != '\n')
+	    g_string_append_c (result, '\n');
+	}
+
+      if (*p == '\0')
+	break;
+
+      g_string_append_c (result, *p);
+      p++;
+    }
+
+  return g_string_free (result, FALSE);  
+}
+
+static gboolean
+selection_set_text_plain (GtkSelectionData *selection_data,
+			  const gchar      *str,
+			  gint              len)
+{
+  const gchar *charset = NULL;
+  gchar *result;
+  GError *error = NULL;
+
+  result = normalize_to_crlf (str, len);
+  if (selection_data->target == text_plain_atom)
+    charset = "ASCII";
+  else if (selection_data->target == text_plain_locale_atom)
+    g_get_charset (&charset);
+
+  if (charset)
+    {
+      gchar *tmp = result;
+      result = g_convert_with_fallback (tmp, -1, 
+					charset, "UTF-8", 
+					NULL, NULL, NULL, &error);
+      g_free (tmp);
+    }
+
+  if (!result)
+    {
+      g_warning ("Error converting from UTF-8 to %s: %s",
+		 charset, error->message);
+      g_error_free (error);
+      
+      return FALSE;
+    }
+  
+  gtk_selection_data_set (selection_data,
+			  selection_data->target, 
+			  8, result, strlen (result));
+  g_free (result);
+  
+  return TRUE;
+}
+
+static gchar *
+selection_get_text_plain (GtkSelectionData *selection_data)
+{
+  const gchar *charset = NULL;
+  gchar *str, *result;
+  gint len;
+  GError *error = NULL;
+
+  str = g_strdup (selection_data->data);
+  len = selection_data->length;
+  
+  if (selection_data->type == text_plain_atom)
+    charset = "ISO-8859-1";
+  else if (selection_data->type == text_plain_locale_atom)
+    g_get_charset (&charset);
+
+  if (charset)
+    {
+      gchar *tmp = str;
+      str = g_convert_with_fallback (tmp, len, 
+				     charset, "UTF-8", 
+				     NULL, NULL, &len, &error);
+      g_free (tmp);
+    }
+
+  if (!str)
+    {
+      g_warning ("Error converting from %s to UTF-8: %s",
+		 charset, error->message);
+      g_error_free (error);
+      
+      return NULL;
+    }
+
+
+  result = normalize_to_lf (str, len);
+
+  g_free (str);
+
+  return result;
+}
+
 /**
  * gtk_selection_data_set_text:
  * @selection_data: a #GtkSelectionData
@@ -909,6 +1092,12 @@ gtk_selection_data_set_text (GtkSelectionData     *selection_data,
       else if (selection_data->target == text_atom)
 	return selection_set_string (selection_data, str, len);
     }
+  else if (selection_data->target == text_plain_atom ||
+	   selection_data->target == text_plain_utf8_atom ||
+	   selection_data->target == text_plain_locale_atom)
+    {
+      return selection_set_text_plain (selection_data, str, len);
+    }
 
   return FALSE;
 }
@@ -950,6 +1139,13 @@ gtk_selection_data_get_text (GtkSelectionData *selection_data)
       for (i = 1; i < count; i++)
 	g_free (list[i]);
       g_free (list);
+    }
+  else if (selection_data->length >= 0 &&
+	   (selection_data->type == text_plain_atom ||
+	    selection_data->type == text_plain_utf8_atom ||
+	    selection_data->type == text_plain_locale_atom))
+    {
+      result = selection_get_text_plain (selection_data);
     }
 
   return result;
@@ -1016,14 +1212,19 @@ gtk_selection_data_targets_include_text (GtkSelectionData *selection_data)
   gint i;
   gboolean result = FALSE;
 
+  init_atoms ();
+
   if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
     {
       for (i=0; i < n_targets; i++)
 	{
-	  if (targets[i] == gdk_atom_intern ("STRING", FALSE) ||
-	      targets[i] == gdk_atom_intern ("TEXT", FALSE) ||
-	      targets[i] == gdk_atom_intern ("COMPOUND_TEXT", FALSE) ||
-	      targets[i] == gdk_atom_intern ("UTF8_STRING", FALSE))
+	  if (targets[i] == utf8_atom ||
+	      targets[i] == text_atom ||
+	      targets[i] == GDK_TARGET_STRING ||
+	      targets[i] == ctext_atom ||
+	      targets[i] == text_plain_atom ||
+	      targets[i] == text_plain_utf8_atom ||
+	      targets[i] == text_plain_locale_atom)
 	    result = TRUE;
 	}
 

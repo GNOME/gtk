@@ -410,22 +410,8 @@ static gint           text_window_get_width       (GtkTextWindow     *win);
 static gint           text_window_get_height      (GtkTextWindow     *win);
 
 
-enum
-{
-  TARGET_STRING,
-  TARGET_TEXT,
-  TARGET_COMPOUND_TEXT,
-  TARGET_UTF8_STRING,
-  TARGET_TEXT_BUFFER_CONTENTS
-};
-
-static const GtkTargetEntry target_table[] = {
-  { "GTK_TEXT_BUFFER_CONTENTS", GTK_TARGET_SAME_APP,
-    TARGET_TEXT_BUFFER_CONTENTS },
-  { "UTF8_STRING", 0, TARGET_UTF8_STRING },
-  { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
-  { "TEXT", 0, TARGET_TEXT },
-  { "STRING",     0, TARGET_STRING }
+static GtkTargetEntry target_table[] = {
+  { "GTK_TEXT_BUFFER_CONTENTS", GTK_TARGET_SAME_APP, 0 },
 };
 
 static GtkContainerClass *parent_class = NULL;
@@ -1066,6 +1052,7 @@ gtk_text_view_init (GtkTextView *text_view)
 		     0,
                      target_table, G_N_ELEMENTS (target_table),
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_drag_dest_add_text_targets (widget);
 
   text_view->virtual_cursor_x = -1;
   text_view->virtual_cursor_y = -1;
@@ -5872,6 +5859,7 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
   
   target_list = gtk_target_list_new (target_table,
                                      G_N_ELEMENTS (target_table));
+  gtk_target_list_add_text_targets (target_list);
 
   context = gtk_drag_begin (GTK_WIDGET (text_view), target_list,
                             GDK_ACTION_COPY | GDK_ACTION_MOVE,

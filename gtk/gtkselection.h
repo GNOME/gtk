@@ -95,6 +95,7 @@ void           gtk_target_list_add       (GtkTargetList  *list,
 				  	  GdkAtom         target,
 					  guint           flags,
 					  guint           info);
+void           gtk_target_list_add_text_targets (GtkTargetList  *list);
 void           gtk_target_list_add_table (GtkTargetList        *list,
 					  const GtkTargetEntry *targets,
 					  guint                 ntargets);

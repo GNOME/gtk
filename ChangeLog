@@ -1,3 +1,29 @@
+Sat Jul 17 00:48:27 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Support text/plain selection target  (#55117, Owen Taylor)
+	
+	* gtk/gtkselection.h: 
+	* gtk/gtkdnd.h: 
+	* gtk/gtkselection.c (gtk_target_list_add_text_targets): 
+	* gtk/gtkdnd.c (gtk_drag_dest_add_text_targets): 
+	* gtk/gtkdnd.c (gtk_drag_source_add_text_targets): New
+	functions to facilitate handling of text targets.
+
+	* gtk/gtkentry.c: 
+	* gtk/gtktextview.c: Use the new text target handling 
+	functions instead of hardwiring the list of supported
+	text targets everywhere.
+
+	* gtk/gtkselection.c (gtk_selection_data_get_text): 
+	(gtk_selection_data_set_text): 
+	Support the targets text/plain, text/plain?charset=utf-8
+	and text/plain?charset=<LOCALE-CHARSET> as outlined in
+	#55117: 
+	For text/plain send only ASCII, but accept 8-bit text 
+	and treat it as ISO-8859-1 as specified by the Xdnd spec.
+	Always send CRLF terminators. Accept either and convert
+	into the native terminator for the platform.
+	
 Fri Jul 16 23:20:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Support themed window icons.  (#92346, Calum Benson)

@@ -112,13 +112,6 @@ typedef enum {
   CURSOR_DND
 } CursorType;
 
-static const GtkTargetEntry target_table[] = {
-  { "UTF8_STRING",   0, 0 },
-  { "COMPOUND_TEXT", 0, 0 },
-  { "TEXT",          0, 0 },
-  { "STRING",        0, 0 }
-};
-
 /* GObject, GtkObject methods
  */
 static void   gtk_entry_class_init           (GtkEntryClass        *klass);
@@ -959,8 +952,9 @@ gtk_entry_init (GtkEntry *entry)
 
   gtk_drag_dest_set (GTK_WIDGET (entry),
                      GTK_DEST_DEFAULT_HIGHLIGHT,
-                     target_table, G_N_ELEMENTS (target_table),
+                     NULL, 0,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_drag_dest_add_text_targets (GTK_WIDGET (entry));
 
   /* This object is completely private. No external entity can gain a reference
    * to it; so we create it here and destroy it in finalize().
@@ -1573,7 +1567,8 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 				    event->x + entry->scroll_offset, event->y))
 	{
 	  GdkDragContext *context;
-	  GtkTargetList *target_list = gtk_target_list_new (target_table, G_N_ELEMENTS (target_table));
+	  GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
+	  gtk_target_list_add_text_targets (target_list);
 	  guint actions = entry->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
 	  
 	  context = gtk_drag_begin (widget, target_list, actions,
@@ -3557,15 +3552,26 @@ primary_clear_cb (GtkClipboard *clipboard,
 static void
 gtk_entry_update_primary_selection (GtkEntry *entry)
 {
-  static const GtkTargetEntry targets[] = {
+  static GtkTargetEntry targets[] = {
     { "UTF8_STRING", 0, 0 },
     { "STRING", 0, 0 },
     { "TEXT",   0, 0 }, 
-    { "COMPOUND_TEXT", 0, 0 }
+    { "COMPOUND_TEXT", 0, 0 },
+    { "text/plain;charset=utf-8",   0, 0 }, 
+    { NULL,   0, 0 },
+    { "text/plain", 0, 0 }
   };
   
   GtkClipboard *clipboard;
   gint start, end;
+
+  if (targets[5].target == NULL)
+    {
+      const gchar *charset;
+
+      g_get_charset (&charset);
+      targets[5].target = g_strdup_printf ("text/plain;charset=%s", charset);
+    }
 
   if (!GTK_WIDGET_REALIZED (entry))
     return;

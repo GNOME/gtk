@@ -1,3 +1,8 @@
+Sat Jul 17 00:55:54 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add new text target list handling
+	functions.
+
 Fri Jul 16 23:54:18 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add new GtkWindow and GtkIconTheme 
