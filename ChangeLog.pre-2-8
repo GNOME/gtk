@@ -1,3 +1,8 @@
+Tue Feb 13 00:58:49 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c: Properly handle passive buttons at
+	button creation time (#50686).
+	
 Mon Feb 12 20:37:32 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkrgb.c (gdk_rgb_try_colormap): Call gdk_colormap_sync() - 

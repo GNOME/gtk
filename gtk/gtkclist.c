@@ -32,6 +32,7 @@
 #include "gtkclist.h"
 #include "gtkbindings.h"
 #include "gtkdnd.h"
+#include "gtkwindow.h"
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -354,10 +355,13 @@ static void cell_size_request         (GtkCList       *clist,
 				       GtkRequisition *requisition);
 
 /* Buttons */
-static void column_button_create      (GtkCList       *clist,
-				       gint            column);
-static void column_button_clicked     (GtkWidget      *widget,
-				       gpointer        data);
+static void set_column_title_active (GtkCList  *clist,
+				     gint       column,
+				     gboolean   active);
+static void column_button_create    (GtkCList  *clist,
+				     gint       column);
+static void column_button_clicked   (GtkWidget *widget,
+				     gpointer   data);
 
 /* Adjustments */
 static void adjust_adjustments        (GtkCList       *clist,
@@ -1320,21 +1324,13 @@ gtk_clist_column_title_active (GtkCList *clist,
 
   clist->column[column].button_passive = FALSE;
 
-  gtk_signal_disconnect_by_func (GTK_OBJECT (clist->column[column].button),
-				 (GtkSignalFunc) column_title_passive_func,
-				 NULL);
-
-  GTK_WIDGET_SET_FLAGS (clist->column[column].button, GTK_CAN_FOCUS);
-  if (GTK_WIDGET_VISIBLE (clist))
-    gtk_widget_queue_draw (clist->column[column].button);
+  set_column_title_active (clist, column, TRUE);
 }
 
 void
 gtk_clist_column_title_passive (GtkCList *clist,
 				gint      column)
 {
-  GtkButton *button;
-
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
 
@@ -1343,21 +1339,9 @@ gtk_clist_column_title_passive (GtkCList *clist,
   if (!clist->column[column].button || clist->column[column].button_passive)
     return;
 
-  button = GTK_BUTTON (clist->column[column].button);
-
   clist->column[column].button_passive = TRUE;
 
-  if (button->button_down)
-    gtk_button_released (button);
-  if (button->in_button)
-    gtk_button_leave (button);
-
-  gtk_signal_connect (GTK_OBJECT (clist->column[column].button), "event",
-		      (GtkSignalFunc) column_title_passive_func, NULL);
-
-  GTK_WIDGET_UNSET_FLAGS (clist->column[column].button, GTK_CAN_FOCUS);
-  if (GTK_WIDGET_VISIBLE (clist))
-    gtk_widget_queue_draw (clist->column[column].button);
+  set_column_title_active (clist, column, FALSE);
 }
 
 void
@@ -1791,6 +1775,7 @@ gtk_clist_set_column_max_width (GtkCList *clist,
  *   size_allocate_columns
  *   list_requisition_width
  *   new_column_width
+ *   set_column_title_active
  *   column_button_create
  *   column_button_clicked
  *   column_title_passive_func
@@ -2092,6 +2077,48 @@ new_column_width (GtkCList *clist,
 }
 
 static void
+set_column_title_active (GtkCList *clist,
+			 gint      column,
+			 gboolean  active)
+{
+  if (active)
+    {
+      gtk_signal_disconnect_by_func (GTK_OBJECT (clist->column[column].button),
+				     (GtkSignalFunc) column_title_passive_func,
+				     NULL);
+      
+      GTK_WIDGET_SET_FLAGS (clist->column[column].button, GTK_CAN_FOCUS);
+    }
+  else
+    {
+      GtkButton *button = GTK_BUTTON (clist->column[column].button);
+      
+      if (button->button_down)
+	gtk_button_released (button);
+      if (button->in_button)
+	gtk_button_leave (button);
+      
+      gtk_signal_connect (GTK_OBJECT (clist->column[column].button), "event",
+			  (GtkSignalFunc) column_title_passive_func, NULL);
+      
+      if (GTK_WIDGET_HAS_FOCUS (clist->column[column].button))
+	{
+	  GtkWidget *window;
+
+	  window = gtk_widget_get_ancestor (clist->column[column].button,
+					    GTK_TYPE_WINDOW);
+	  if (window)
+	    gtk_window_set_focus (GTK_WINDOW (window), NULL);
+	}
+
+      GTK_WIDGET_UNSET_FLAGS (clist->column[column].button, GTK_CAN_FOCUS);
+    }
+  
+  if (GTK_WIDGET_VISIBLE (clist))
+    gtk_widget_queue_draw (clist->column[column].button);
+}
+
+static void
 column_button_create (GtkCList *clist,
 		      gint      column)
 {
@@ -2109,6 +2136,10 @@ column_button_create (GtkCList *clist,
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc) column_button_clicked,
 		      (gpointer) clist);
+
+  if (clist->column[column].button_passive)
+    set_column_title_active (clist, column, FALSE);
+  
   gtk_widget_show (button);
 }
 
