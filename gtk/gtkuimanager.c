@@ -736,6 +736,11 @@ gtk_ui_manager_get_accel_group (GtkUIManager *self)
  *
  * Note that the widget found by following a path that ends in a &lt;menu&gt;
  * element is the menuitem to which the menu is attached, not the menu itself.
+ *
+ * Also note that the widgets constructed by a ui manager are not tied to 
+ * the lifecycle of the ui manager. If you add the widgets returned by this 
+ * function to some container or explicitly ref them, they will survive the
+ * destruction of the ui manager.
  * 
  * Return value: the widget found by following the path, or %NULL if no widget
  *   was found.

@@ -1,5 +1,8 @@
 2005-01-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (gtk_ui_manager_get_widget): Add hints about 
+	the lifecycle of widgets.  (#159503, Christian Persch)
+
 	* demos/gtk-demo/main.c (create_text): Use monospace for the 
 	source code view.  (#163526, Theerud Lawtrakul)
 
