@@ -9,8 +9,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 1999-04-05 07:08+0200\n"
+"Project-Id-Version: gtk+ 1.1.16\n"
+"POT-Creation-Date: 1999-02-26 05:34+0100\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
@@ -47,14 +47,14 @@ msgid "Opacity:"
 msgstr ""
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:564 gtk/gtkfontsel.c:3707
+#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3472
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "I Va"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:571 gtk/gtkfilesel.c:949
-#: gtk/gtkfilesel.c:1053 gtk/gtkfilesel.c:1168 gtk/gtkfontsel.c:3720
+#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
+#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3485
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Renoncî"
@@ -64,29 +64,29 @@ msgid "Help"
 msgstr "Aide"
 
 #. The directories clist
-#: gtk/gtkfilesel.c:513
+#: gtk/gtkfilesel.c:418
 msgid "Directories"
 msgstr "Ridants"
 
 #. The files clist
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:437
 msgid "Files"
 msgstr "Fitchîs"
 
-#: gtk/gtkfilesel.c:602 gtk/gtkfilesel.c:1632
+#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1461
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Dji n' sai lere li ridant: %s"
 
-#: gtk/gtkfilesel.c:634
+#: gtk/gtkfilesel.c:539
 msgid "Create Dir"
 msgstr "Fé on Ridant"
 
-#: gtk/gtkfilesel.c:645 gtk/gtkfilesel.c:1022
+#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:920
 msgid "Delete File"
 msgstr "Rafacer li fitchî"
 
-#: gtk/gtkfilesel.c:656 gtk/gtkfilesel.c:1126
+#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1024
 msgid "Rename File"
 msgstr "Rlomer li fitchî"
 
@@ -95,260 +95,285 @@ msgstr "Rlomer li fitchî"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:820
+#: gtk/gtkfilesel.c:722
 msgid "Error"
 msgstr "Aroke"
 
 #. close button
-#: gtk/gtkfilesel.c:838 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:740 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Cloyu"
 
-#: gtk/gtkfilesel.c:913
+#: gtk/gtkfilesel.c:815
 msgid "Create Directory"
 msgstr "Fé on Ridant"
 
-#: gtk/gtkfilesel.c:927
+#: gtk/gtkfilesel.c:829
 msgid "Directory name:"
 msgstr "No do ridant:"
 
 #. buttons
-#: gtk/gtkfilesel.c:940
+#: gtk/gtkfilesel.c:842
 msgid "Create"
 msgstr "Fé"
 
 #. buttons
-#: gtk/gtkfilesel.c:1044
+#: gtk/gtkfilesel.c:942
 msgid "Delete"
 msgstr "Rafacer"
 
 #. buttons
-#: gtk/gtkfilesel.c:1159
+#: gtk/gtkfilesel.c:1057
 msgid "Rename"
 msgstr "Rlomer"
 
-#: gtk/gtkfilesel.c:1611
+#: gtk/gtkfilesel.c:1440
 msgid "Selection: "
 msgstr "Tchûze: "
 
-#: gtk/gtkfontsel.c:209
+#: gtk/gtkfontsel.c:210
 msgid "Foundry:"
 msgstr ""
 
-#: gtk/gtkfontsel.c:210
+#: gtk/gtkfontsel.c:211
 msgid "Family:"
 msgstr "Famile"
 
-#: gtk/gtkfontsel.c:211
+#: gtk/gtkfontsel.c:212
 msgid "Weight:"
 msgstr "Pwed:"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:213
 msgid "Slant:"
 msgstr ""
 
-#: gtk/gtkfontsel.c:213
+#: gtk/gtkfontsel.c:214
 msgid "Set Width:"
 msgstr "Lårdjeu:"
 
-#: gtk/gtkfontsel.c:214
+#: gtk/gtkfontsel.c:215
 msgid "Add Style:"
 msgstr "Stîle di Rawete:"
 
-#: gtk/gtkfontsel.c:215
+#: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
 msgstr ""
 
-#: gtk/gtkfontsel.c:216
+#: gtk/gtkfontsel.c:217
 msgid "Point Size:"
 msgstr ""
 
-#: gtk/gtkfontsel.c:217
+#: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
 msgstr ""
 
-#: gtk/gtkfontsel.c:218
+#: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
 msgstr ""
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:220
 msgid "Spacing:"
 msgstr ""
 
-#: gtk/gtkfontsel.c:220
+#: gtk/gtkfontsel.c:221
 msgid "Average Width:"
 msgstr ""
 
-#: gtk/gtkfontsel.c:221
+#: gtk/gtkfontsel.c:222
 msgid "Charset:"
 msgstr "Ecôdaeje:"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
-#: gtk/gtkfontsel.c:465
+#: gtk/gtkfontsel.c:459
 msgid "Font Property"
 msgstr "Prôpietés del Fonte"
 
-#: gtk/gtkfontsel.c:466
+#: gtk/gtkfontsel.c:460
 msgid "Requested Value"
 msgstr "Valixhance Dimandeye"
 
-#: gtk/gtkfontsel.c:467
+#: gtk/gtkfontsel.c:461
 msgid "Actual Value"
 msgstr ""
 
-#: gtk/gtkfontsel.c:500
+#: gtk/gtkfontsel.c:494
 msgid "Font"
 msgstr "Fonte"
 
-#: gtk/gtkfontsel.c:510 gtk/gtkfontsel.c:2195 gtk/gtkfontsel.c:2425
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2153 gtk/gtkfontsel.c:2383
 msgid "Font:"
 msgstr "Fonte:"
 
-#: gtk/gtkfontsel.c:515
+#: gtk/gtkfontsel.c:509
 msgid "Font Style:"
 msgstr "Stîle del Fonte:"
 
-#: gtk/gtkfontsel.c:520
+#: gtk/gtkfontsel.c:514
 msgid "Size:"
 msgstr "Grandeu:"
 
-#: gtk/gtkfontsel.c:652 gtk/gtkfontsel.c:874
+#: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
 msgid "Reset Filter"
 msgstr ""
 
-#: gtk/gtkfontsel.c:666
+#: gtk/gtkfontsel.c:660
 msgid "Metric:"
 msgstr "Metrike:"
 
-#: gtk/gtkfontsel.c:670
+#: gtk/gtkfontsel.c:664
 msgid "Points"
 msgstr "Ponts"
 
-#: gtk/gtkfontsel.c:677
+#: gtk/gtkfontsel.c:671
 msgid "Pixels"
 msgstr "Pixels"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:693
+#: gtk/gtkfontsel.c:687
 msgid "Preview:"
 msgstr "Vey divant:"
 
-#: gtk/gtkfontsel.c:722
+#: gtk/gtkfontsel.c:716
 msgid "Font Information"
 msgstr "Informåcion sol Fonte"
 
-#: gtk/gtkfontsel.c:755
+#: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
 msgstr "No del Fonte Dimandeye:"
 
-#: gtk/gtkfontsel.c:766
+#: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
 msgstr ""
 
-#: gtk/gtkfontsel.c:777
+#: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
 msgstr ""
 
-#: gtk/gtkfontsel.c:792
+#: gtk/gtkfontsel.c:786
 msgid "Filter"
 msgstr "Passete"
 
-#: gtk/gtkfontsel.c:805
+#: gtk/gtkfontsel.c:799
 msgid "Font Types:"
 msgstr "Sôrtes di Fontes:"
 
-#: gtk/gtkfontsel.c:813
+#: gtk/gtkfontsel.c:807
 msgid "Bitmap"
 msgstr "Bitmap"
 
-#: gtk/gtkfontsel.c:819
+#: gtk/gtkfontsel.c:813
 msgid "Scalable"
 msgstr "Vectoriå"
 
-#: gtk/gtkfontsel.c:825
+#: gtk/gtkfontsel.c:819
 msgid "Scaled Bitmap"
 msgstr "Bitmap al schåle"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
-#: gtk/gtkfontsel.c:1221
+#: gtk/gtkfontsel.c:1215
 msgid "regular"
 msgstr "normå"
 
-#: gtk/gtkfontsel.c:1226 gtk/gtkfontsel.c:1987
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1945
 msgid "italic"
 msgstr "clintcheye"
 
-#: gtk/gtkfontsel.c:1227 gtk/gtkfontsel.c:1988
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1946
 msgid "oblique"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:1989
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1947
 msgid "reverse italic"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1229 gtk/gtkfontsel.c:1990
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1948
 msgid "reverse oblique"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1230 gtk/gtkfontsel.c:1991
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1949
 msgid "other"
 msgstr "ôte"
 
-#: gtk/gtkfontsel.c:1237
+#: gtk/gtkfontsel.c:1231
 msgid "[M]"
 msgstr "[M]"
 
-#: gtk/gtkfontsel.c:1238
+#: gtk/gtkfontsel.c:1232
 msgid "[C]"
 msgstr "[C]"
 
-#: gtk/gtkfontsel.c:1786
+msgid "*"
+msgstr "*"
+msgid "(nil)"
+msgstr "(nole)"
+msgid "heavy"
+msgstr ""
+msgid "extrabold"
+msgstr ""
+msgid "bold"
+msgstr "cråsses"
+msgid "demibold"
+msgstr ""
+msgid "medium"
+msgstr ""
+msgid "normal"
+msgstr "normå"
+msgid "light"
+msgstr ""
+msgid "extralight"
+msgstr ""
+msgid "thin"
+msgstr ""
+msgid "regular"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1777
 msgid "The selected font is not available."
 msgstr ""
 
-#: gtk/gtkfontsel.c:1792
+#: gtk/gtkfontsel.c:1783
 msgid "The selected font is not a valid font."
 msgstr ""
 
-#: gtk/gtkfontsel.c:1853
+#: gtk/gtkfontsel.c:1841
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr ""
 
-#: gtk/gtkfontsel.c:1975 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1933 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(nén cnoxhu)"
 
-#: gtk/gtkfontsel.c:1986
+#: gtk/gtkfontsel.c:1944
 msgid "roman"
 msgstr "romane"
 
-#: gtk/gtkfontsel.c:1998
+#: gtk/gtkfontsel.c:1956
 msgid "proportional"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1999
+#: gtk/gtkfontsel.c:1957
 msgid "monospaced"
 msgstr ""
 
-#: gtk/gtkfontsel.c:2000
+#: gtk/gtkfontsel.c:1958
 msgid "char cell"
 msgstr ""
 
-#: gtk/gtkfontsel.c:2200
+#: gtk/gtkfontsel.c:2158
 msgid "Font: (Filter Applied)"
 msgstr ""
 
-#: gtk/gtkfontsel.c:2860
+#: gtk/gtkfontsel.c:2634
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr ""
 
-#: gtk/gtkfontsel.c:3714
+#: gtk/gtkfontsel.c:3479
 msgid "Apply"
 msgstr "Mete èn oûve"
 
-#: gtk/gtkfontsel.c:3736
+#: gtk/gtkfontsel.c:3501
 msgid "Font Selection"
 msgstr ""
 
@@ -443,17 +468,17 @@ msgstr "netyî"
 msgid "Page %u"
 msgstr "Pådje %u"
 
-#: gtk/gtkrc.c:1609
+#: gtk/gtkrc.c:1529
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 
-#: gtk/gtkrc.c:1612
+#: gtk/gtkrc.c:1532
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
 
-#: gtk/gtkthemes.c:103
+#: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr ""
