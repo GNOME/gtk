@@ -1,0 +1,92 @@
+How ref counting works within Gdk and Gtk
+=========================================
+
+Each data structure that provides ref counting offers a bunch of
+functions that follow these conventions:
+
+  *_new:      Create a new structure with a reference count of 1.
+  *_ref:      Increase ref count by one.
+  *_unref:    Decrease ref count by one.  If the count drops to zero,
+              free the memory.  No user visible actions should take place,
+              like destryoing windows, etc.
+
+Some structures also provide a *_destroy function.
+
+GdkWindow
+---------
+
+A GdkWindow has to be explicitely destroyed with gdk_window_destroy.
+This will send out a request to destroy this window and all its
+children, and will decrement the ref_count of the GdkWindow by one.
+Thus, it releases the inital reference created by gdk_window_new.
+
+All GdkWindows are kept in a hash table to translate from their XId to
+the actual structure and the pointer in the hash table is reflected in
+the reference count.  When a DestroyNotify event is received for a
+particular GdkWindow, it is removed from the hash table and the
+ref_count is updated accordingly.
+
+You can call gdk_window_destroy more than once on a particular
+GdkWindow, it will only be destroyed when it hasn't been yet.  The
+ref_count is *always* decremented, tho.
+ 
+GdkPixmap
+---------
+
+There is no gdk_pixmap_destroy function.  The Pixmap is destroyed when
+the last reference to it vanishes.
+
+GdkPixmaps are kept in the same hash table as GdkWindows but the
+pointer in the hash table is *not* reflected in the ref_count.
+
+This works only when Pixmaps never get XEvents.  I'm not sure if this
+is the case.
+
+GdkBitmap
+---------
+
+A GdkBitmap is only another name for a special use of GdkPixmap.
+
+GdkVisual
+---------
+
+There are no *_new or *_destroy functions and the *_ref and *_unref
+functions are noops.  GdkVisuals are static structures and thus do not
+need reference counting.  The ref counting functions are only there
+for extra defensive programming.
+
+GdkColormap
+-----------
+
+Nothing special.  There is no gdk_colormap_destroy function.
+
+GdkFont / GdkFontSet
+--------------------
+
+GdkFont and GdkFontSet are equivalent as far as ref counting is
+concerned.  Use gdk_font_ref and gdk_font_unref for both.
+
+There is no gdk_font_free or gdk_fontset_free function.
+
+GtkAcceleratorTable
+-------------------
+
+There is no gtk_accelerator_table_destroy function.
+
+GtkTooltips
+-----------
+
+There is no gtk_tooltips_destroy function.
+
+GtkStyle
+--------
+
+There is no gtk_style_destroy function.
+
+GtkObject
+---------
+
+This one is the most tricky and I'm still meditating over it.
+
+
+- Marius Vollmer <mvo@zagadka.ping.de>

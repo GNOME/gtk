@@ -1,3 +1,195 @@
+Wed Dec 17 20:59:52 1997  Owen Taylor  <owt1@cornell.edu>
+	* gdk/gdkinput.c gdk/gdkinput.h gdk/gdkinputcommon.h
+	  gdk/gdkinputxfree.h gdk/gdkinputgxi.h gdk/gdkinputnone.h.
+	  gtk/gtkinputdialog.h gtk/testinput.c
+	Added support for device keys mapping to key events.
+	Fixed various bugs.
+
+Wed Dec 17 20:53:00 1997  Owen Taylor  <owt1@cornell.edu>
+	* gdk/gdk.c gdk/gdk.h: Changed gdk_get_event to remove
+	predicate filtering, and to allocate the events.
+	Added gdk_event_get_graphics_expose for scroll handling.
+	* gtk/gtkmain.c gtk/gtktext.c:
+	Use above changes. Interface change for gtk_get_current_event.
+	* testgtk.c
+	Added another test to test new scrolling mechanism.s
+	* gdk/gdk.c gdk/gdk.h gdk/gdkwindow.c gdk/gdkprivate.h: 
+	Added beginnings of event filtering. Removed obsolte
+	OtherEvent mechanism.
+	* gdk/gdk.c: Combined FocusIn/FocusOut events. Now ignore
+	focus events which aren't for window itself. (Only pay
+	attention to NotifyAncestor/Inferior/Nonlinear)
+	* gtk/gtkwindow.c gtk/gtkwindow.h: Virtualize set_focus 
+	function so it can be overridden.
+	* gtk/gtkwidget.c: Reparenting should now work for
+	containers. (Guillaume Laurent <glaurent@worldnet.fr>)
+	* gdk/gdkgc.c: By default, GraphicsExpose events are now
+	_not_ generated.
+	* gtk/testselection.c: Suppress a warning, fix a bug?
+
+Wed Dec 17 20:47:42 1997  Owen Taylor  <owt1@cornell.edu>
+	* configure.in, glib/configure.in: 
+	Remember if user set CFLAGS, so we can set it for --enable-debug
+	  only if they didn't. 
+	Added missing quotes. )Raphael.Quinet@eed.ericsson.se)
+	Only use -DX_LOCALE if setlocale doesn't work.
+	* gdk/gdki18n.h: Simplified system for trying to get iswalnum() -
+	include <wctype.h> if present, otherwise <wchar.h> if present.
+	
+Wed Dec 17 21:09:12 1997  Owen Taylor  <owt1@cornell.edu>
+  1997-10-13  Marius Vollmer  <mvo@zagadka.ping.de>
+
+    Bug fixes:
+	
+	* gtksignal.c (gtk_params_get): Initialize the GtkArg even when
+	the return type is GTK_TYPE_NONE.
+
+    Revamped reference counting, see the file REFCOUNTING.
+
+	* Makefile.am (EXTRA_DIST): Added REFCOUNTING.
+	* REFCOUNTING: New file.
+
+	* gdk/gdk.c (received_destroy_notify, window_to_destroy): Removed.
+	(gdk_event_get): Code that deals with the above removed.
+	(gdk_event_translate): Abort when the GdkWindow for the XEvent
+	cannot be found.  For DestroyNotify: Do not use
+	receive_destroy_notify and window_to_destroy but call
+	gdk_window_destroy_notify.
+
+	* gdk/gdk.h: (gdk_pixmap_destroy, gdk_colormap_destroy,
+	gdk_fontset_free): Removed.
+	(gdk_pixmap_ref, gdk_pixmap_unref, gdk_bitmap_ref,
+	gdk_bitmap_unref): New prototypes.
+	(gdk_font_free, gdk_font_unref): Renamed gdk_font_free to
+	gdk_font_unref.
+
+	* gdk/gdkcolor.c (gdk_colormap_real_destroy): Made static.
+	(gdk_colormap_destroy): Removed.
+
+	* gdk/gdkfont.c (gdk_font_free): Renamed to gdk_font_unref.
+	Handle fontsets as well.
+	(gdk_fontset_free): Removed.
+
+	* gdk/gdkpixmap.c (gdk_pixmap_destroy): Removed.
+	(gdk_pixmap_ref, gdk_pixmap_unref, gdk_bitmap_ref,
+	gdk_bitmap_ref): New functions.
+
+	* gdk/gdkwindow.c: (gdk_window_new, gdk_window_foreign_new): Call
+	gdk_window_ref for the pointer in the xid table.
+	(gdk_window_internal_destroy): Renamed from gdk_window_destroy.
+	New parameter XDESTROY that takes the role of `destroyed==2';
+	removed special casing of `destroyed==2'.  Free dnd_data only when
+	really destroying.  Do not touch the ref_count.  Calling
+	gdk_window_destroy on a Pixmap is now a real error, not just a
+	warning.
+	(gdk_window_destroy): Just call gdk_window_internal_destroy and
+	gdk_window_unref, as advertised in REFCOUNTING.
+	(gdk_window_destroy_notify): New function.
+	(gdk_window_unref): Print a warning when the ref_count is zero and
+	the window has not been destroyed.  Should never happen.  Do not
+	destroy the window, just free the memory.
+	
+	* gdk/gdkprivate.h (gdk_window_real_destroy): Removed.
+
+	* gtk/gtkaccelerator.c (gtk_accelerator_table_destroy): Removed.
+	(gtk_accelerator_table_unref): Do the job of
+	gtk_accelerator_table_destroy directly.
+	(gtk_accelerator_table_init): Init ref_count with 1.
+
+	* gtk/gtkaccelerator.h (gtk_accelerator_table_destroy): Removed.
+
+	* gtk/gtkcurve.c, gtk/gtkgamma.c: Replaced gdk_pixmap_destroy with
+	gdk_pixmap_unref.
+
+	* gtk/gtkhscrollbar.c (gtk_hscrollbar_realize): Reflect the fact
+	that the widget->window is used as the range->trough in the
+	ref_count.
+	* gtk/gtkvscrollbar.c (gtk_vscrollbar_realize): Likewise.
+
+	* gtk/gtkmain.c (gtk_main_iteration): Protect event_widget with
+	ref/unref while handling the GDK_DELETE and GDK_DESTROY events.
+
+	* gtk/gtkmenu.c (gtk_menu_set_accelerator_table): Don't do
+	anything when the new accel_table is the old one.
+
+	* gtk/gtkmenufactory.c (gtk_menu_factory_destroy): Unref
+	factory->table if there is one.
+	(gtk_menu_factory_create, gtk_menu_factory_create_widget): Don't
+	ref newly created accel_table, it is now created with a ref_count
+	of 1.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_set_submenu):  Don't do
+	anything when the new submenu is the old one.
+
+	* gtk/gtkpixmap.c (gtk_pixmap_destroy): New static function.
+	(parent_class): New global variable.
+	(gtk_pixmap_init): Set object_class->destroy.
+	(gtk_pixmap_set): Don't do anything about the pixmap when the new
+	pixmap is the old one.  Likewise for the mask.
+
+	* gtk/gtkprogressbar.c, gtk/gtkruler.c: Replaced
+	gdk_pixmap_destroy with gdk_pixmap_unref.
+
+	* gtk/gtkrange.c (gtk_range_set_adjustment):  Don't do
+	anything when the new adjustment is the old one.
+
+	* gtk/gtkrc.c: Replaced gdk_fontset_free/gdk_font_free with
+	gdk_font_unref.
+
+	* gtk/gtkstyle.c (gtk_style_new): Initialize ref_count with 1.
+	(gtk_styles_init): Replace gtk_style_destroy with gtk_style_unref
+	for the cache.
+	(gtk_style_new_from_key): Ref style before returning it when it
+	has not been newly created.
+	(gtk_style_destroy): Don't look at the ref_count, destroy always.
+	Free style-font with gdk_font_unref, regardless of font->type.
+
+	* gtk/gtktooltips.c (gtk_tooltips_real_destroy): Renamed from
+	gtk_tooltips_destroy and made static.  Don't look at ref_count,
+	destroy always.
+	(gtk_tooltips_new): Initialize ref_count with 1.
+	(gtk_tooltips_unref): Don't look at pending_destroy, destroy
+	always when ref_count is 0.
+	(gtk_tooltios_widget_remove): Use gtk_tooltips_destroy_data
+	instead of hand-coded destruction.
+
+	* gtk/gtktooltips.h (GtkTooltips::pending_destroy): Removed.
+	(gtk_tooltips_destroy): Removed.
+
+	* gtk/gtkviewport.c (gtk_viewport_set_hadjustment,
+	gtk_viewport_set_vadjustment): Don't do anything when the new
+	adjustment is the old one.
+
+	* gtk/gtkwidget.c (gtk_widget_reparent): Protect the reparented
+	widget with ref/unref while moving it.
+	(gtk_widget_set_default_colormap): Replace gdk_colormap_destroy
+	with the proper ref/unref spell.
+	(gtk_widget_set_default_style): Don't do anything when the new
+	style is the old one.
+
+	* gtk/testinput.c (configure_event): Replaced gdk_pixmap_destroy
+	with gdk_pixmap_unref.
+	
+    More Interpreter support:
+
+	* gdk/gdktypes.h (GdkDestroyNotify): New type.
+	
+	* gdk/gdk.c (struct _GdkInput::destroy): New field.
+	(gdk_input_add_interp): New version of gdk_input_add that follows
+	the interp conventions for callbacks.
+	(gdk_input_add): Implement in terms of gdk_input_add_interp.
+	(gdk_input_remove): Call destroy notify when appropriate.
+
+	* gdk/gdk.h (gdk_input_add_interp): New prototype.
+
+	* gtk.defs: Updated from guile-gtk.
+	* gtk/gtktypebuiltins.c, gtk/gtktypebuiltins.h: Regenerated.
+	
+	* gtk/gtkmain.c (GtkInputFunction, struct _GtkInputFunction): New
+	types.
+	(gtk_invoke_input_function, gtk_destroy_input_function,
+	gtk_input_add_interp, gtk_input_remove): New functions.
+
 Wed Dec 17 12:00:48 1997  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
 
 	* gdk/gdkcc.c: New GdkColorContext functionality!  This should
@@ -32,7 +224,7 @@ Fri Dec 12 Owen Taylor <owt1@cornell.edu>
 	  rectangle = NULL, remove clip mask, instead of segfaulting.
 	* gtk/gtknotebook.c: Set clip mask before redrawing, so that
 	  we don't overwrite things outside of exposed areas when
-	  drawing the shadows. (Based on a patch from 
+	  drawing them shadows. (Based on a patch from 
 	  Lars Hamann <hamann@braunschweig.netsurf.de>, and Stefan Jeske)
 	
 Thu Dec 11 10:57:29 CST 1997 Shawn T. Amundson <amundson@gimp.org>
