@@ -1,3 +1,16 @@
+Tue Feb  2 12:39:42 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c: Make sure we set the icon window position 
+	 before it is shown to prevent annoying flicking to 0,0.
+	 Make it consistent that info->cur_x/y do not include
+	 info->hot_x/y displacement.
+
+Tue Feb  2 11:06:02 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_style_set): Fixes
+	 to account for the changed structure of the windows
+	 of range widgets.
+
 Tue Feb  2 08:59:16 GMT 1999 Tony Gale  <gale@gtk.org>
 
 	* docs/gtk_tut.sgml: new sections on Layout and

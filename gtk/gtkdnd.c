@@ -1556,6 +1556,23 @@ gtk_drag_begin (GtkWidget         *widget,
   if (event)
     info->cursor = gtk_drag_get_cursor (suggested_action);
 
+  /* Set cur_x, cur_y here so if the "drag_begin" signal shows
+   * the drag icon, it will be in the right place
+   */
+  if (event->type == GDK_MOTION_NOTIFY)
+    {
+      info->cur_x = event->motion.x_root;
+      info->cur_y = event->motion.y_root;
+    }
+  else 
+    {
+      gint x, y;
+      gdk_window_get_pointer (GDK_ROOT_PARENT(), &x, &y, NULL);
+
+      info->cur_x = x;
+      info->cur_y = y;
+    }
+
   gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_begin",
 			   info->context);
   
@@ -1571,20 +1588,6 @@ gtk_drag_begin (GtkWidget         *widget,
 
   if (event->type == GDK_MOTION_NOTIFY)
     gtk_drag_motion_cb (info->ipc_widget, (GdkEventMotion *)event, info);
-  else 
-    {
-      gint x, y;
-      gdk_window_get_pointer (GDK_ROOT_PARENT(), &x, &y, NULL);
-
-      info->cur_x = x;
-      info->cur_y = y;
-
-      if (info->icon_window)
-	{
-	  gdk_window_raise (info->icon_window->window);
-	  gtk_widget_set_uposition (info->icon_window, x - info->hot_x, y - info->hot_y);
-	}
-    }
 
   info->start_x = info->cur_x;
   info->start_y = info->cur_y;
@@ -1754,16 +1757,18 @@ gtk_drag_set_icon_widget  (GdkDragContext    *context,
   gtk_drag_remove_icon (info);
   
   info->icon_window = widget;
+  info->hot_x = hot_x;
+  info->hot_y = hot_y;
+
   if (widget)
     {
-      gtk_widget_set_uposition (widget, info->cur_x, info->cur_y);      
+      gtk_widget_set_uposition (widget, 
+				info->cur_x - info->hot_x, 
+				info->cur_y - info->hot_y);
       gtk_widget_ref (widget);
       gdk_window_raise (widget->window);
       gtk_widget_show (widget);
     }
-
-  info->hot_x = hot_x;
-  info->hot_y = hot_y;
 }
 
 /*************************************************************
@@ -2338,7 +2343,9 @@ gtk_drag_anim_timeout (gpointer data)
       y = (anim->info->start_y * (anim->step + 1) +
 	   anim->info->cur_y * (anim->n_steps - anim->step - 1)) / anim->n_steps;
       if (anim->info->icon_window)
-	gtk_widget_set_uposition (anim->info->icon_window, x, y);
+	gtk_widget_set_uposition (anim->info->icon_window, 
+				  x - anim->info->hot_x, 
+				  y - anim->info->hot_y);
   
       anim->step++;
 
@@ -2427,13 +2434,15 @@ gtk_drag_motion_cb (GtkWidget      *widget,
 			      info->possible_actions,
 			      &action, &possible_actions);
   
-  info->cur_x = event->x_root - info->hot_x;
-  info->cur_y = event->y_root - info->hot_y;
+  info->cur_x = event->x_root;
+  info->cur_y = event->y_root;
 
   if (info->icon_window)
     {
       gdk_window_raise (info->icon_window->window);
-      gtk_widget_set_uposition (info->icon_window, info->cur_x, info->cur_y);
+      gtk_widget_set_uposition (info->icon_window, 
+				info->cur_x - info->hot_x, 
+				info->cur_y - info->hot_y);
       window = info->icon_window->window;
     }
   
