@@ -980,9 +980,9 @@ menu_change_screen (GtkMenu   *menu,
 {
   GtkMenuPrivate *private = gtk_menu_get_private (menu);
 
-  if (gtk_widget_has_screen (menu))
+  if (gtk_widget_has_screen (GTK_WIDGET (menu)))
     {
-      if (new_screen == gtk_widget_get_screen (menu))
+      if (new_screen == gtk_widget_get_screen (GTK_WIDGET (menu)))
 	return;
     }
 

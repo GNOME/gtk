@@ -1,5 +1,7 @@
 2004-11-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenu.c (menu_change_screen): Remove some warnings.
+
 	Show files in folder modes. (#157013, Nickolay V. Shmyrev)
 	
 	* gtk/gtkfilechooserdefault.c (create_file_list): Use a selection
