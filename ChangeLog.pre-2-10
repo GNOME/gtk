@@ -1,4 +1,8 @@
-Tue Oct 19 12:15:13 KST 1999  Changwoo Ryu  <cwryu@adam.kaist.ac.kr>
+Tue Oct 19 20:36:42 1999  Changwoo Ryu  <cwryu@adam.kaist.ac.kr>
+
+	* gtk/gtkrc.ko: Fixed the wrong number of "*"'s.
+
+Tue Oct 19 12:15:13 1999  Changwoo Ryu  <cwryu@adam.kaist.ac.kr>
 
 	* gtk/gtkrc.ko: Changed the Korean default fontset.
 
