@@ -148,7 +148,7 @@ gboolean gtk_selection_data_targets_include_text (GtkSelectionData  *selection_d
 void gtk_selection_remove_all      (GtkWidget *widget);
 
 /* Event handlers */
-#ifndef GTK_DISABLE_DEPRECATED
+#if !defined(GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 gboolean gtk_selection_clear		  (GtkWidget 	     *widget,
 					   GdkEventSelection *event);
 #endif
