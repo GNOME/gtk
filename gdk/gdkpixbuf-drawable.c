@@ -1218,6 +1218,14 @@ convert_real_slow (GdkImage    *image,
   bpl = image->bpl;
   v = gdk_colormap_get_visual(cmap);
 
+  if (image->depth != v->depth)
+    {
+      g_warning ("%s: The depth of the source image (%d) doesn't "
+                 "match the depth of the colormap passed in (%d).",
+                 G_STRLOC, image->depth, v->depth);
+      return;
+    } 
+ 
   d(printf("rgb  mask/shift/prec = %x:%x:%x %d:%d:%d  %d:%d:%d\n",
 	   v->red_mask, v->green_mask, v->blue_mask,
 	   v->red_shift, v->green_shift, v->blue_shift,
@@ -1329,6 +1337,15 @@ rgbconvert (GdkImage    *image,
     }
   
   v = gdk_colormap_get_visual (cmap);
+
+  if (image->depth != v->depth)
+    {
+      g_warning ("%s: The depth of the source image (%d) doesn't "
+                 "match the depth of the colormap passed in (%d).",
+                 G_STRLOC, image->depth, v->depth);
+      return;
+    } 
+ 
   bank = 5; /* default fallback converter */
   index = (image->byte_order == GDK_MSB_FIRST) | (alpha != 0) << 1;
   
@@ -1515,6 +1532,14 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
       return NULL;
     }
   
+  if (cmap != NULL && depth != cmap->visual->depth)
+    {
+      g_warning ("%s: Depth of the source drawable is %d where as "
+                 "the visual depth of the colormap passed is %d",
+                 G_STRLOC, depth, cmap->visual->depth);
+      return NULL;
+    } 
+ 
   /* Coordinate sanity checks */
   
   if (GDK_IS_PIXMAP (src))
@@ -1623,6 +1648,14 @@ gdk_pixbuf_get_from_image (GdkPixbuf   *dest,
       return NULL;
     }
   
+  if (cmap != NULL && src->depth != cmap->visual->depth)
+    {
+      g_warning ("%s: Depth of the Source image is %d where as "
+                 "the visual depth of the colormap passed is %d",
+                 G_STRLOC, src->depth, cmap->visual->depth);
+      return NULL;
+    } 
+ 
   /* Coordinate sanity checks */
 
   g_return_val_if_fail (src_x >= 0 && src_y >= 0, NULL);

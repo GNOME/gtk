@@ -1,3 +1,10 @@
+Fri Jul 26 16:34:34 2002  Shivram U  <shivaram.upadhyayula@wipro.com>
+
+	* gdk/gdkpixbuf-drawable.c (gdk_pixbuf_get_from_drawable),
+	(gdk_pixbuf_get_from_image), (rgbconvert), (convert_real_slow):
+	Check if depth of the source is not equal to the depth of the colormap
+	passed. (#75597)
+
 2002-07-25  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkrgb.c (gdk_rgb_select_conv): Use gdk_rgb_convert_4,
