@@ -1,8 +1,84 @@
+Tue Dec 15 21:36:14 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testgtk.c (create_layout): Create buttons,
+	not combos again.
+
 1998-12-15  Joel Becker  <jlbec@ocala.cs.miami.edu>
 
 	* autogen.sh: reordered gettextize and aclocal, because
 	gettextize was messing up aclocal.m4.
 
+Tue Dec 15 22:30:44 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.h : 
+	removed clist flag : GTK_CLIST_DRAG_SELECTION
+	added flags : GTK_CLIST_REORDERABLE, GTK_CLIST_USE_DRAG_ICONS,
+	GTK_CLIST_DRAW_DRAG_LINE, GTK_CLIST_DRAW_DRAG_RECT
+	(GtkCListDragPos) : new enum for DND
+ 	(GtkButtonAction) : new enum of possible mouse button actions
+	(struct _GtkCList): added button_actions array.
+ 	Added drag_button and click_cell struct, to store cell and
+ 	mouse button of last button_press_event
+	
+	(struct _GtkCListClass): new class method draw_drag_highlight.
+	(gtk_clist_set_reorderable) (gtk_clist_set_use_drag_icons) :
+	new functions. Moved from gtkctree.h. Now clist is reorderable
+	as well.
+	(gtk_clist_set_button_actions) new function to customize mouse
+	button actions.
+
+	* gtk/gtkclist.c:
+	(gtk_clist_drag_begin)
+	(gtk_clist_drag_motion)
+	(gtk_clist_drag_leave)
+	(gtk_clist_drag_end)
+	(gtk_clist_drag_drop)
+	(gtk_clist_drag_data_get)
+	(gtk_clist_drag_data_received) : new dnd widget methods to
+	implement clists reorderability via DND
+
+	(remove_grab) : new function. remove mouse grab if necessary.
+	(draw_drag_highlight) : new method. Draw dnd highlight depending
+	on clist flags GTK_CLIST_DRAW_DRAG_LINE and GTK_CLIST_DRAW_DRAG_RECT
+
+	(gtk_clist_class_init): added object args "reorderable" and
+ 	"use_drag_icons"
+
+	(gtk_clist_button_press) (gtk_clist_button_release) :
+	use button_actions array to decide which action to perform.
+	(gtk_clist_motion) : start reorder operation if necessary.
+
+	* gtk/gtkctree.h :
+	(struct _GtkCTree): removed drag_icon, icon_widht, icon_height,
+	drag_row, drag_source, drag_target, reorderable, use_icons,
+	in_drag, drag_rect
+	(gtk_ctree_set_reorderable) :  deprecated function.
+ 	use gtk_clist_set_reorderable instead.
+	(gtk_ctree_set_use_drag_icons) : deprecated function.
+ 	use gtk_clist_set_use_drag_icons instead.
+
+	* gtk/gtkctree.c :
+	(gtk_ctree_class_init): removed object args "reorderable" and
+	and "use_drag_icons"
+
+	(draw_xor_line) (draw_xor_rect) (create_drag_icon) (check_cursor)
+	(tree_toggle_selection) (set_mouse_cursor) : removed
+	
+	(draw_drag_highlight) : new clist method. replacement for
+	draw_xor_line and draw_xor_rect functions
+	(check_drag) renamed check_cursor function
+
+	(gtk_ctree_drag_begin)
+	(gtk_ctree_drag_motion)
+	(gtk_ctree_drag_data_received) : new dnd methods to implement ctrees
+	reorderability via DND
+
+	(gtk_ctree_button_release)
+	(gtk_ctree_button_motion) : removed.
+
+	* gtk/testgtk.c:
+	(create_clist) : added new reorderable toggle button
+ 	
 Tue Dec 15 19:50:41 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkctree.c gtk/gtkclist.c gtk/testgtk.c: Use 
