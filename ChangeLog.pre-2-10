@@ -1,3 +1,10 @@
+2004-11-11  J. Ali Harlow  <ali@juiblex.co.uk>
+
+	* gdk/Makefile.am:
+	* gdk-pixbuf/Makefile.am:
+	* gtk/Makefile.am (gtk.def): Use embedded tab rather than '\t'
+	escape sequence. (#157949)
+
 2004-11-10  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (_gdk_win32_get_next_tick): 
