@@ -46,7 +46,7 @@ struct _GtkTreeModelSort
   gpointer root;
   gint stamp;
   guint flags;
-  GtkTreeModel *model;
+  GtkTreeModel *child_model;
   gint sort_col;
   GValueCompareFunc func;
 };
@@ -73,7 +73,7 @@ struct _GtkTreeModelSortClass
 
 GtkType       gtk_tree_model_sort_get_type       (void);
 GtkTreeModel *gtk_tree_model_sort_new            (void);
-GtkTreeModel *gtk_tree_model_sort_new_with_model (GtkTreeModel      *model,
+GtkTreeModel *gtk_tree_model_sort_new_with_model (GtkTreeModel      *child_model,
 						  GValueCompareFunc  func,
 						  gint               sort_col);
 void          gtk_tree_model_sort_set_model      (GtkTreeModelSort  *tree_model_sort,
@@ -84,7 +84,10 @@ void          gtk_tree_model_sort_set_compare    (GtkTreeModelSort  *tree_model_
 						  GValueCompareFunc *func);
 void          gtk_tree_model_sort_resort         (GtkTreeModelSort  *tree_model_sort);
 GtkTreePath  *gtk_tree_model_sort_convert_path   (GtkTreeModelSort  *tree_model_sort,
-						  GtkTreePath       *path);
+						  GtkTreePath       *child_path);
+void          gtk_tree_model_sort_convert_iter   (GtkTreeModelSort  *tree_model_sort,
+						  GtkTreeIter       *sort_iter,
+						  GtkTreeIter       *child_iter);
 
 #ifdef __cplusplus
 }

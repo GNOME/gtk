@@ -1,3 +1,11 @@
+2000-11-20  Jonathan Blandford <jrb@redhat.com>
+	* gtk/gtktreemodelsort.h: Add convertion functions to let you
+	  convert to and from relative path's and iters.
+
+	* gtk/treestoretest.c: move to having a sorted/unsorted view.  Start
+	  testing sorting functions a bit better.  Currently broken -- will
+	  fix in morning.
+
 2000-11-20  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkwidget.c: Documented a bunch of functions in here
