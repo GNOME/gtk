@@ -1,11 +1,17 @@
+1999-12-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkfont-win32.c: Fix string measurement code. For now,
+	the rbearing is set to the same as the width, but this should be
+	fixed.
+
 1999-12-06  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkfont-win32.c (check_unicode_subranges): New
-	function. Guesstimate what Unicode subranges a font covers based
-	on the codepages. Windows tells us it covers. This will hopefully
-	help those Windows versions or fonts that don't give us any useful
-	Unicode subrange information with GetTextCharsetInfo. Call this
-	function in gdk_font_load_internal.
+	function. If Windows doesn't tell us what Unicode subranges a font
+	covers, guesstimate based on the codepages it covers. This will
+	hopefully help those Windows versions or fonts that don't give us
+	any useful Unicode subrange information with GetTextCharsetInfo.
+	Call this function in gdk_font_load_internal.
 
 	* gdk/win32/{gdkdnd,gdkimage,gdkpixmap,gdkprivate}-win32.c: Misc
 	minor changes.

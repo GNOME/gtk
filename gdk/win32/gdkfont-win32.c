@@ -1734,7 +1734,6 @@ gdk_wchar_text_handle (GdkFont       *font,
 typedef struct
 {
   SIZE total;
-  SIZE max;
 } gdk_text_size_arg;
 
 static void
@@ -1759,9 +1758,7 @@ gdk_text_size_handler (GdkWin32SingleFont *singlefont,
   SelectObject (gdk_DC, oldfont);
 
   arg->total.cx += this_size.cx;
-  arg->total.cy += this_size.cy;
-  arg->max.cx = MAX (this_size.cx, arg->max.cx);
-  arg->max.cy = MAX (this_size.cy, arg->max.cy);
+  arg->total.cy = MAX (arg->total.cy, this_size.cy);
 }
 
 static gboolean
@@ -1800,7 +1797,6 @@ gdk_text_width (GdkFont      *font,
   gdk_text_size_arg arg;
 
   arg.total.cx = arg.total.cy = 0;
-  arg.max.cx = arg.max.cy = 0;
 
   if (!gdk_text_size (font, text, text_length, &arg))
     return -1;
@@ -1835,7 +1831,6 @@ gdk_text_width_wc (GdkFont	  *font,
     wcstr = (wchar_t *) text;
 
   arg.total.cx = arg.total.cy = 0;
-  arg.max.cx = arg.max.cy = 0;
 
   gdk_wchar_text_handle (font, wcstr, text_length,
 			 gdk_text_size_handler, &arg);
@@ -1881,7 +1876,6 @@ gdk_text_extents (GdkFont     *font,
   g_assert (font->type == GDK_FONT_FONT || font->type == GDK_FONT_FONTSET);
 
   arg.total.cx = arg.total.cy = 0;
-  arg.max.cx = arg.max.cy = 0;
 
   wcstr = g_new (wchar_t, text_length);
   if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
@@ -1895,11 +1889,12 @@ gdk_text_extents (GdkFont     *font,
   if (lbearing)
     *lbearing = 0;
   if (rbearing)
-    *rbearing = 0;
+    *rbearing = arg.total.cx;
+  /* What should be the difference between width and rbearing? */
   if (width)
     *width = arg.total.cx;
   if (ascent)
-    *ascent = arg.max.cy + 1;
+    *ascent = arg.total.cy + 1;
   if (descent)
     *descent = font->descent + 1;
 }
@@ -1948,7 +1943,6 @@ gdk_text_extents_wc (GdkFont        *font,
     wcstr = (wchar_t *) text;
 
   arg.total.cx = arg.total.cy = 0;
-  arg.max.cx = arg.max.cy = 0;
 
   gdk_wchar_text_handle (font, wcstr, text_length,
 			 gdk_text_size_handler, &arg);
@@ -1960,11 +1954,11 @@ gdk_text_extents_wc (GdkFont        *font,
   if (lbearing)
     *lbearing = 0;
   if (rbearing)
-    *rbearing = 0;
+    *rbearing = arg.total.cx;
   if (width)
     *width = arg.total.cx;
   if (ascent)
-    *ascent = arg.max.cy + 1;
+    *ascent = arg.total.cy + 1;
   if (descent)
     *descent = font->descent + 1;
 }
