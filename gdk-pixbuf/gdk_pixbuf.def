@@ -49,22 +49,24 @@ EXPORTS
 	gdk_pixbuf_loader_get_pixbuf
 	gdk_pixbuf_loader_get_type
 	gdk_pixbuf_loader_new
+	gdk_pixbuf_loader_new_with_mime_type
 	gdk_pixbuf_loader_new_with_type
 	gdk_pixbuf_loader_set_size
 	gdk_pixbuf_loader_write
 	gdk_pixbuf_new
 	gdk_pixbuf_new_from_data
 	gdk_pixbuf_new_from_file
+	gdk_pixbuf_new_from_file_at_size
 	gdk_pixbuf_new_from_inline
 	gdk_pixbuf_new_from_xpm_data
 	gdk_pixbuf_new_subpixbuf
 	gdk_pixbuf_ref
 	gdk_pixbuf_saturate_and_pixelate
 	gdk_pixbuf_save
-	gdk_pixbuf_save_to_callback
-	gdk_pixbuf_save_to_callbackv
 	gdk_pixbuf_save_to_buffer
 	gdk_pixbuf_save_to_bufferv
+	gdk_pixbuf_save_to_callback
+	gdk_pixbuf_save_to_callbackv
 	gdk_pixbuf_savev
 	gdk_pixbuf_scale
 	gdk_pixbuf_scale_simple

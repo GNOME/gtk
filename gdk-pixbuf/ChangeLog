@@ -1,3 +1,7 @@
+2004-01-28  Hans Breuer  <hans@breuer.org>
+
+	* gdk_pixbuf.def : updated externals
+
 Sat Jan 17 23:02:55 2004  Matthias Clasen  <maclas@gmx.de>
 
 	The second part of the fix for #114351 (see also 
