@@ -644,3 +644,13 @@ gdk_gc_set_line_attributes (GdkGC       *gc,
   XSetLineAttributes (private->xdisplay, private->xgc, line_width,
 		      xline_style, xcap_style, xjoin_style);
 }
+
+void
+gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
+{
+  GdkGCPrivate *dst_private, *src_private;
+
+  src_private = (GdkGCPrivate *) src_gc;
+  dst_private = (GdkGCPrivate *) dst_gc;
+  XcopyGC (src_private->xdisplay, src_private->xgc, 0xffff, dst_private->xgc);
+}

@@ -333,6 +333,8 @@ void   gdk_gc_set_line_attributes (GdkGC            *gc,
 				   GdkLineStyle      line_style,
 				   GdkCapStyle       cap_style,
 				   GdkJoinStyle      join_style);
+void   gdk_gc_copy                (GdkGC             *dst_gc,
+				   GdkGC             *src_gc);
 
 
 /* Pixmaps
