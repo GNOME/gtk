@@ -40,10 +40,10 @@ uninstall-ms-lib:
 endif
 
 gdk_pixbuf.def: gdk-pixbuf.symbols
-	(echo -e EXPORTS; cpp -P -DINCLUDE_VARIABLES gdk-pixbuf.symbols | sed -e '/^$$/d' -e 's/^/\t/') > gdk_pixbuf.def
+	(echo -e EXPORTS; cpp -P -DINCLUDE_VARIABLES $(srcdir)/gdk-pixbuf.symbols | sed -e '/^$$/d' -e 's/^/\t/') > gdk_pixbuf.def
 
 gdk-pixbuf-alias.h: gdk-pixbuf.symbols
-	 ./makegdkpixbufalias.pl < gdk-pixbuf.symbols > gdk-pixbuf-alias.h
+	 ./makegdkpixbufalias.pl < $(srcdir)/gdk-pixbuf.symbols > gdk-pixbuf-alias.h
 
 if OS_UNIX
 TESTS = abicheck.sh
@@ -404,7 +404,7 @@ MAINTAINERCLEANFILES += stamp-gdk-pixbuf-marshal.h
 # gdk-pixbuf-marshal.c
 #
 $(srcdir)/gdk-pixbuf-marshal.c: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
-	(echo -e "#include \"gdk-pixbuf-alias.h\"" | $(GLIB_GENMARSHAL) --prefix=gdk_pixbuf_marshal $(srcdir)/gdk-pixbuf-marshal.list --body ) >> xgen-gmc \
+	(echo -e "#include \"gdk-pixbuf-alias.h\"" | $(GLIB_GENMARSHAL) --prefix=_gdk_pixbuf_marshal $(srcdir)/gdk-pixbuf-marshal.list --body ) >> xgen-gmc \
 	&& cp xgen-gmc gdk-pixbuf-marshal.c \
 	&& rm -f xgen-gmc xgen-gmc~
 

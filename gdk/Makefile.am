@@ -177,10 +177,10 @@ uninstall-ms-lib:
 endif
 
 gdk.def: gdk.symbols
-	(echo -e EXPORTS; cpp -P -DGDK_WINDOWING_WIN32 -DINCLUDE_VARIABLES gdk.symbols | sed -e '/^$$/d' -e 's/^/\t/') > gdk.def
+	(echo -e EXPORTS; cpp -P -DGDK_WINDOWING_WIN32 -DINCLUDE_VARIABLES $(srcdir)/gdk.symbols | sed -e '/^$$/d' -e 's/^/\t/') > gdk.def
 
 gdkalias.h: gdk.symbols
-	 ./makegdkalias.pl <gdk.symbols > gdkalias.h
+	 ./makegdkalias.pl < $(srcdir)/gdk.symbols > gdkalias.h
 
 if OS_UNIX
 TESTS = abicheck.sh

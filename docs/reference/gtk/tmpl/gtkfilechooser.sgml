@@ -550,6 +550,24 @@ class "GtkFileChooserDefault" binding "my-own-gtkfilechooser-bindings"
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_file_chooser_set_show_hidden ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@show_hidden: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_show_hidden ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_file_chooser_set_current_name ##### -->
 <para>
 

@@ -5073,7 +5073,7 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
   return;
 }
 
-gint
+static gint
 gtk_icon_view_accessible_item_compare (GtkIconViewItemAccessibleInfo *i1,
                                        GtkIconViewItemAccessibleInfo *i2)
 {
@@ -5618,7 +5618,7 @@ gtk_icon_view_accessible_get_type (void)
   return type;
 }
 
-AtkObject *
+static AtkObject *
 gtk_icon_view_accessible_new (GObject *obj)
 {
   AtkObject *accessible;

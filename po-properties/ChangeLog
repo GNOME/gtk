@@ -1,17 +1,21 @@
+2004-08-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.5.2 ===
+
 2004-08-16  Christian Rose  <menthos@menthos.com>
 
 	* bs.po: Added Bosnian translation by
 	Kenan Hadžiavdić <kenanh@frisurf.no>.
 
 2004-08-01  Matthias Clasen  <mclasen@redhat.com>
-                                                                                
-        * === Released 2.5.1 ===
-                                                                                
+
+	* === Released 2.5.1 ===
+
 2004-07-26  Christian Rose  <menthos@menthos.com>
 
 	* sv.po: Fix for #148437. Thanks to Robert Ögren for
 	discovering the problem.
-                                                                                
+
 2004-07-21  Christian Rose  <menthos@menthos.com>
 
 	* uz.po: Updated Uzbek translation by

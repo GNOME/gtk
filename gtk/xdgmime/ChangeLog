@@ -1,3 +1,7 @@
+2004-08-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.5.2 ===
+
 Wed Aug 11 20:44:35 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* xdgmime.h (xdg_mime_shutdown): Add the XDG_PREFIX to
@@ -5,7 +9,7 @@ Wed Aug 11 20:44:35 2004  Matthias Clasen  <maclas@gmx.de>
 
 2004-08-01  Matthias Clasen  <mclasen@redhat.com>
 
-        * === Released 2.5.1 ===
+	* === Released 2.5.1 ===
 
 Tue Jul 20 22:24:35 2004  Matthias Clasen  <maclas@gmx.de>
 

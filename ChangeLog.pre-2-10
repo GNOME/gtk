@@ -1,3 +1,17 @@
+2004-08-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.5.2 ===
+
+	* gdk/abicheck.sh:
+	* gtk/abicheck.sh: Make work during make distcheck.
+	
+	* docs/RELEASE-HOWTO: Add hint about doing make check 
+	before make distcheck.
+	
+	* gtk/gtk.symbols: Add some missing symbols.
+
+	* gtk/gtkiconview.c: Add some missing statics.
+
 2004-08-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates for 2.5.2

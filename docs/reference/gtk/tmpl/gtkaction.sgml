@@ -117,6 +117,11 @@ and should not be accessed directly.
 
 </para>
 
+<!-- ##### ARG GtkAction:visible-overflown ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkAction:visible-vertical ##### -->
 <para>
 
@@ -161,6 +166,15 @@ and should not be accessed directly.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_action_set_sensitive ##### -->
+<para>
+
+</para>
+
+@action: 
+@sensitive: 
+
+
 <!-- ##### FUNCTION gtk_action_is_visible ##### -->
 <para>
 
@@ -177,6 +191,15 @@ and should not be accessed directly.
 
 @action: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_set_visible ##### -->
+<para>
+
+</para>
+
+@action: 
+@visible: 
 
 
 <!-- ##### FUNCTION gtk_action_activate ##### -->

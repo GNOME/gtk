@@ -38,6 +38,13 @@ The #GtkEntry-struct struct contains only private data.
 
 @entry: the object which received the signal.
 
+<!-- ##### SIGNAL GtkEntry::backspace ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
 <!-- ##### SIGNAL GtkEntry::copy-clipboard ##### -->
 <para>
 
@@ -393,6 +400,26 @@ use gtk_editable_set_editable() instead.
 @entry: 
 @x: 
 @y: 
+
+
+<!-- ##### FUNCTION gtk_entry_layout_index_to_text_index ##### -->
+<para>
+
+</para>
+
+@entry: 
+@layout_index: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_text_index_to_layout_index ##### -->
+<para>
+
+</para>
+
+@entry: 
+@text_index: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_entry_get_max_length ##### -->

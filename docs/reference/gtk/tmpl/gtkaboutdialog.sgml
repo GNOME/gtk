@@ -265,6 +265,7 @@ link is activated.
 
 @about: the #GtkAboutDialog in which the link was activated
 @link: the URL or email address to whiche the activated link points
+@data: 
 
 
 <!-- ##### FUNCTION gtk_about_dialog_set_email_hook ##### -->
@@ -273,6 +274,8 @@ link is activated.
 </para>
 
 @func: 
+@data: 
+@destroy: 
 @Returns: 
 
 
@@ -282,6 +285,8 @@ link is activated.
 </para>
 
 @func: 
+@data: 
+@destroy: 
 @Returns: 
 
 

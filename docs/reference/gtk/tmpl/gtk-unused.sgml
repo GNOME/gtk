@@ -1639,6 +1639,15 @@ If the window shrinks automatically when widgets within it shrink.
 @notify_data: 
 @notify_func: 
 
+<!-- ##### FUNCTION gtk_action_group_translate_string ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@string: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_arg_copy ##### -->
 <para>
 It will either copy data into an existing argument or allocate a new argument

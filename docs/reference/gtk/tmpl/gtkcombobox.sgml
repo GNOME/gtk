@@ -42,6 +42,11 @@ a widget used to choose from a list of items.
 
 </para>
 
+<!-- ##### ARG GtkComboBox:focus-on-click ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkComboBox:has-frame ##### -->
 <para>
 
@@ -311,6 +316,24 @@ a widget used to choose from a list of items.
 </para>
 
 @combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_focus_on_click ##### -->
+<para>
+
+</para>
+
+@combo: 
+@focus_on_click: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_focus_on_click ##### -->
+<para>
+
+</para>
+
+@combo: 
 @Returns: 
 
 

@@ -26,6 +26,13 @@ types related to the text widget and how they work together.
 </para>
 
 
+<!-- ##### SIGNAL GtkTextView::backspace ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
 <!-- ##### SIGNAL GtkTextView::copy-clipboard ##### -->
 <para>
 

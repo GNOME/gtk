@@ -1,3 +1,17 @@
+2004-08-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.5.2 ===
+
+	* abicheck.sh: Make work in make distcheck.
+
+2004-08-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* Makefile.am: Use the same prefix when creating 
+	gdk-pixbuf-marshal.c and gdk-pixbuf-marshal.h
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_class_init): _-prefix
+	the marshalers.
+
 2004-08-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_new_with_mime_type): Use

@@ -118,6 +118,8 @@ gtk_action_is_visible
 gtk_action_new
 gtk_action_set_accel_group
 gtk_action_set_accel_path
+gtk_action_set_sensitive
+gtk_action_set_visible
 gtk_action_unblock_activate_from
 gtk_adjustment_changed
 gtk_adjustment_clamp_page
@@ -429,6 +431,7 @@ gtk_combo_box_get_active_iter
 gtk_combo_box_get_active_text
 gtk_combo_box_get_add_tearoffs
 gtk_combo_box_get_column_span_column
+gtk_combo_box_get_focus_on_click
 gtk_combo_box_get_model
 gtk_combo_box_get_popup_accessible
 gtk_combo_box_get_row_separator_func
@@ -447,6 +450,7 @@ gtk_combo_box_set_active
 gtk_combo_box_set_active_iter
 gtk_combo_box_set_add_tearoffs
 gtk_combo_box_set_column_span_column
+gtk_combo_box_set_focus_on_click
 gtk_combo_box_set_model
 gtk_combo_box_set_row_separator_func
 gtk_combo_box_set_row_span_column

@@ -135,7 +135,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (GdkPixbufLoaderClass, size_prepared),
                               NULL, NULL,
-                              gdk_pixbuf_marshal_VOID__INT_INT,
+                              _gdk_pixbuf_marshal_VOID__INT_INT,
                               G_TYPE_NONE, 2, 
                               G_TYPE_INT,
                               G_TYPE_INT);
@@ -155,7 +155,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (GdkPixbufLoaderClass, area_prepared),
                               NULL, NULL,
-                              gdk_pixbuf_marshal_VOID__VOID,
+                              _gdk_pixbuf_marshal_VOID__VOID,
                               G_TYPE_NONE, 0);
 
         /**
@@ -178,7 +178,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (GdkPixbufLoaderClass, area_updated),
                               NULL, NULL,
-                              gdk_pixbuf_marshal_VOID__INT_INT_INT_INT,
+                              _gdk_pixbuf_marshal_VOID__INT_INT_INT_INT,
                               G_TYPE_NONE, 4,
                               G_TYPE_INT,
                               G_TYPE_INT,
@@ -200,7 +200,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (GdkPixbufLoaderClass, closed),
                               NULL, NULL,
-                              gdk_pixbuf_marshal_VOID__VOID,
+                              _gdk_pixbuf_marshal_VOID__VOID,
                               G_TYPE_NONE, 0);
 }
 

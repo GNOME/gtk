@@ -71,10 +71,10 @@ uninstall-ms-lib:
 endif
 
 gtk.def: gtk.symbols
-	(echo -e EXPORTS; cpp -P -DINCLUDE_VARIABLES -DG_OS_WIN32 gtk.symbols | sed -e '/^$$/d' -e 's/^/\t/') > gtk.def
+	(echo -e EXPORTS; cpp -P -DINCLUDE_VARIABLES -DG_OS_WIN32 $(srcdir)/gtk.symbols | sed -e '/^$$/d' -e 's/^/\t/') > gtk.def
 
 gtkalias.h: gtk.symbols
-	  ./makegtkalias.pl < gtk.symbols > gtkalias.h
+	  ./makegtkalias.pl < $(srcdir)/gtk.symbols > gtkalias.h
 
 if OS_UNIX
 TESTS = abicheck.sh
