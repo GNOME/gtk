@@ -1,3 +1,7 @@
+Mon Mar 15 02:36:32 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkentrycompletion.sgml: Add some docs.
+
 Tue Mar  9 09:34:10 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.3.6 ===

@@ -12,6 +12,22 @@ completion functionality for GtkEntry
 #GtkTreeView with completion matches. 
 </para>
 <para>
+"Completion functionality" means that when the user modifies the text 
+in the entry, #GtkEntryCompletion checks which rows in the model match 
+the current content of the entry, and displays a list of matches.
+By default, the matching is done by comparing the entry text 
+case-insensitively against the text column of the model (see 
+gtk_entry_completion_set_text_column()), but this can be overridden with 
+a custom match function (see gtk_entry_completion_set_match_func()).
+</para>
+<para>
+When the user selects a completion, the content of the entry is updated. 
+By default, the content of the entry is replaced by the text column of the 
+model, but this can be overridden by connecting to the ::match-selected signal
+and updating the entry in the signal handler. Note that you should return 
+%TRUE from the signal handler to suppress the default behaviour.
+</para>
+<para>
 To add completion functionality to an entry, use gtk_entry_set_completion().
 </para>
 <para>

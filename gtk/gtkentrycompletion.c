@@ -174,6 +174,19 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   object_class->get_property = gtk_entry_completion_get_property;
   object_class->finalize = gtk_entry_completion_finalize;
 
+  /**
+   * GtkEntryCompletion::match-selected:
+   * @widget: the object which received the signal
+   * @model: the #GtkTreeModel containing the matches
+   * @iter: a #GtkTreeIter positioned at the selected match
+   * 
+   * The ::match-selected signal is emitted when a match from the list
+   * is selected. The default behaviour is to replace the contents of the
+   * entry with the contents of the text column in the row pointed to by
+   * @iter.
+   *
+   * Return value: %TRUE if the signal has been handled
+   */ 
   entry_completion_signals[MATCH_SELECTED] =
     g_signal_new ("match_selected",
                   G_TYPE_FROM_CLASS (klass),
@@ -184,6 +197,15 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                   G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_TREE_MODEL,
                   GTK_TYPE_TREE_ITER);
+		  
+  /**
+   * GtkEntryCompletion::action-activated:
+   * @widget: the object which received the signal
+   * @index: the index of the activated action
+   *
+   * The ::action-activated signal is emitted when an action
+   * is activated.
+   */
   entry_completion_signals[ACTION_ACTIVATED] =
     g_signal_new ("action_activated",
                   G_TYPE_FROM_CLASS (klass),
