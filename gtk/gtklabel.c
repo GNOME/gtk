@@ -293,8 +293,6 @@ gtk_label_expose (GtkWidget      *widget,
       misc = GTK_MISC (widget);
 
       state = widget->state;
-      if (!GTK_WIDGET_IS_SENSITIVE (widget))
-	state = GTK_STATE_INSENSITIVE;
 
       maxl = widget->requisition.width - misc->xpad * 2;
 

@@ -148,7 +148,6 @@ gtk_aspect_frame_paint (GtkWidget    *widget,
 			GdkRectangle *area)
 {
   GtkFrame *frame;
-  GtkStateType state;
   gint height_extra;
   gint label_area_width;
   gint x, y;
@@ -162,10 +161,6 @@ gtk_aspect_frame_paint (GtkWidget    *widget,
     {
       frame = GTK_FRAME (widget);
       allocation = &GTK_ASPECT_FRAME(widget)->center_allocation;
-
-      state = widget->state;
-      if (!GTK_WIDGET_IS_SENSITIVE (widget))
-        state = GTK_STATE_INSENSITIVE;
 
       height_extra = frame->label_height - widget->style->klass->xthickness;
       height_extra = MAX (height_extra, 0);
@@ -194,7 +189,7 @@ gtk_aspect_frame_paint (GtkWidget    *widget,
 				 allocation->x + x + 2,
 				 allocation->y + GTK_CONTAINER (frame)->border_width,
 				 frame->label_width - 4, frame->label_height);
-	  gtk_draw_string (widget->style, widget->window, state,
+	  gtk_draw_string (widget->style, widget->window, GTK_WIDGET_STATE (widget),
 			   allocation->x + x + 3,
 			   allocation->y + y,
 			   frame->label);

@@ -1,3 +1,14 @@
+Wed Jan 21 01:32:21 1998  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c: changed the state_changed signal to take an
+ 	  extra argument `old_state'.
+	  removed `gtk_widget_restore_state'.
+	  changed `gtk_widget_set_state' and `gtk_widget_set_sensitive' to use
+	  only one function `gtk_widget_propagate_state' to iterate down the
+	  tree. this causes GtkWidget::state_changed to be invoked on state
+	  changes and on sensitivity changes. some comment cleanups.
+
 Tue Jan 20 16:38:52 1998  Owen Taylor  <owt1@cornell.edu>
 	* gtk/gtkcombobox.{c,h}: removed
 	  gtk/gtkcombo.{c,h}: added [Paolo Molaro's version]
