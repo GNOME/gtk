@@ -1,3 +1,8 @@
+2000-01-29  Mark Crichton  <crichton@gimp.org>
+
+	* gdk-pixbuf-config: Oh dear, we weren't Telsa/Alan proof...
+	put `libart-config --libs` in instead of -lart_lgpl.
+
 2000-01-22  Federico Mena Quintero  <federico@helixcode.com>
 
 	* gdk-pixbuf/io-pnm.c (pnm_read_raw_scanline): Return an error on
