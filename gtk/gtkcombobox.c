@@ -74,7 +74,6 @@ struct _GtkComboBoxPrivate
 
   gint col_column;
   gint row_column;
-  gint separator_column;
 
   gint wrap_width;
 
@@ -113,6 +112,10 @@ struct _GtkComboBoxPrivate
   guint is_cell_renderer : 1;
   guint editing_canceled : 1;
   guint auto_scroll : 1;
+
+  GtkTreeViewRowSeparatorFunc row_separator_func;
+  gpointer                    row_separator_data;
+  GtkDestroyNotify            row_separator_destroy;
 };
 
 /* While debugging this evil code, I have learned that
@@ -184,7 +187,6 @@ enum {
   PROP_WRAP_WIDTH,
   PROP_ROW_SPAN_COLUMN,
   PROP_COLUMN_SPAN_COLUMN,
-  PROP_ROW_SEPARATOR_COLUMN,
   PROP_ACTIVE,
   PROP_ADD_TEAROFFS,
   PROP_HAS_FRAME
@@ -541,15 +543,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                      -1,
                                                      G_PARAM_READWRITE));
 
-  g_object_class_install_property (object_class,
-                                   PROP_ROW_SEPARATOR_COLUMN,
-                                   g_param_spec_int ("row_separator_column",
-                                                     P_("Row separator column"),
-                                                     P_("Boolean TreeModel column specifying which rows are separators"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
                                    PROP_ACTIVE,
@@ -639,7 +632,6 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   combo_box->priv->active_item = -1;
   combo_box->priv->col_column = -1;
   combo_box->priv->row_column = -1;
-  combo_box->priv->separator_column = -1;
 
   combo_box->priv->add_tearoffs = FALSE;
   combo_box->priv->has_frame = TRUE;
@@ -671,10 +663,6 @@ gtk_combo_box_set_property (GObject      *object,
 
       case PROP_COLUMN_SPAN_COLUMN:
         gtk_combo_box_set_column_span_column (combo_box, g_value_get_int (value));
-        break;
-
-      case PROP_ROW_SEPARATOR_COLUMN:
-        gtk_combo_box_set_row_separator_column (combo_box, g_value_get_int (value));
         break;
 
       case PROP_ACTIVE:
@@ -718,10 +706,6 @@ gtk_combo_box_get_property (GObject    *object,
 
       case PROP_COLUMN_SPAN_COLUMN:
         g_value_set_int (value, combo_box->priv->col_column);
-        break;
-
-      case PROP_ROW_SEPARATOR_COLUMN:
-        g_value_set_int (value, combo_box->priv->separator_column);
         break;
 
       case PROP_ACTIVE:
@@ -1334,16 +1318,10 @@ tree_column_row_is_sensitive (GtkComboBox *combo_box,
   if (!combo_box->priv->column)
     return TRUE;
 
-  if (combo_box->priv->separator_column != -1)
+  if (combo_box->priv->row_separator_func)
     {
-      gboolean is_separator;
-
-      gtk_tree_model_get (combo_box->priv->model,
-			  iter,
-			  combo_box->priv->separator_column, &is_separator,
-			  -1);
-
-      if (is_separator)
+      if ((*combo_box->priv->row_separator_func) (combo_box->priv->model, iter,
+						  combo_box->priv->row_separator_data))
 	return FALSE;
     }
 
@@ -2093,12 +2071,12 @@ gtk_combo_box_menu_fill (GtkComboBox *combo_box)
       gboolean is_separator;
 
       path = gtk_tree_path_new_from_indices (i, -1);
-
-      if (combo_box->priv->separator_column != -1)
+      
+      if (combo_box->priv->row_separator_func)
 	{
 	  gtk_tree_model_get_iter (combo_box->priv->model, &iter, path);
-	  gtk_tree_model_get (combo_box->priv->model, &iter, 
-			      combo_box->priv->separator_column, &is_separator, -1);
+	  is_separator = (*combo_box->priv->row_separator_func) (combo_box->priv->model, &iter,
+								 combo_box->priv->row_separator_data);
 	}
       else
 	is_separator = FALSE;
@@ -2563,21 +2541,6 @@ gtk_combo_box_menu_row_changed (GtkTreeModel *model,
  * list style
  */
 
-static gboolean
-row_is_separator (GtkTreeModel      *model,
-		  GtkTreeIter       *iter,
-		  gpointer           data)
-{
-  GtkComboBox *combo_box = GTK_COMBO_BOX (data);
-  gboolean is_separator = FALSE;
-
-  if (combo_box->priv->separator_column != -1)
-    gtk_tree_model_get (combo_box->priv->model, iter, 
-			combo_box->priv->separator_column, &is_separator, -1);
-
-  return is_separator;
-}
-
 static void
 gtk_combo_box_list_setup (GtkComboBox *combo_box)
 {
@@ -2640,8 +2603,11 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
                                      FALSE);
   gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (combo_box->priv->tree_view),
 				     TRUE);
-  gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (combo_box->priv->tree_view),
-					row_is_separator, combo_box, NULL);
+  if (combo_box->priv->row_separator_func)
+    gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (combo_box->priv->tree_view), 
+					  combo_box->priv->row_separator_func, 
+					  combo_box->priv->row_separator_data, 
+					  NULL);
   if (combo_box->priv->model)
     gtk_tree_view_set_model (GTK_TREE_VIEW (combo_box->priv->tree_view),
 			     combo_box->priv->model);
@@ -4351,57 +4317,6 @@ gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
     }
 }
 
-/**
- * gtk_combo_box_set_row_separator_column:
- * @combo_box: a #GtkComboBox
- * @column: the index of a boolean model column, or -1 to 
- *   turn off separators
- * 
- * Sets the row separator column index. 
- * This model column contains boolean values which indicate 
- * whether a row is to be drawn as a separator or now. 
- * Setting the index to -1 turns off separators.
- *
- * Since: 2.6
- **/
-void
-gtk_combo_box_set_row_separator_column (GtkComboBox *combo_box,
-					gint         column)
-{
-  gint col;
-
-  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-  col = gtk_tree_model_get_n_columns (combo_box->priv->model);
-  g_return_if_fail (column >= -1 && column < col);
-
-  if (combo_box->priv->separator_column != column)
-    {
-      combo_box->priv->separator_column = column;
-
-      gtk_widget_queue_draw (GTK_WIDGET (combo_box));
-
-      g_object_notify (G_OBJECT (combo_box), "row_separator_column");
-    }
-}
-
-/**
- * gtk_combo_box_get_row_separator_column:
- * @combo_box: a #GtkComboBox
- * 
- * Returns the current row separator column index.
- * 
- * Return value: the row separator column index
- *
- * Since: 2.6
- **/
-gint
-gtk_combo_box_get_row_separator_column (GtkComboBox *combo_box)
-{
-  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), -1);
-
-  return combo_box->priv->separator_column;
-}
-
 gboolean
 _gtk_combo_box_editing_canceled (GtkComboBox *combo_box)
 {
@@ -4435,4 +4350,57 @@ gtk_combo_box_get_popup_accessible (GtkComboBox *combo_box)
     }
 
   return NULL;
+}
+
+/**
+ * gtk_combo_box_get_row_separator_func:
+ * @combo_box: a #GtkComboBox
+ * 
+ * Returns the current row separator function.
+ * 
+ * Return value: the current row separator function.
+ *
+ * Since: 2.6
+ **/
+GtkTreeViewRowSeparatorFunc 
+gtk_combo_box_get_row_separator_func (GtkComboBox *combo_box)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
+
+  return combo_box->priv->row_separator_func;
+}
+
+/**
+ * gtk_combo_box_set_row_separator_func:
+ * @combo_box: a #GtkComboBox
+ * @func: a #GtkTreeViewRowSeparatorFunc
+ * @data: user data to pass to @func, or %NULL
+ * @destroy: destroy notifier for @data, or %NULL
+ * 
+ * Sets the row separator function, which is used to determine
+ * whether a row should be drawn as a separator. If the row separator
+ * function is %NULL, no separators are drawn. This is the default value.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_combo_box_set_row_separator_func (GtkComboBox                 *combo_box,
+				      GtkTreeViewRowSeparatorFunc  func,
+				      gpointer                     data,
+				      GtkDestroyNotify             destroy)
+{
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+
+  if (combo_box->priv->row_separator_destroy)
+    (* combo_box->priv->row_separator_destroy) (combo_box->priv->row_separator_data);
+
+  combo_box->priv->row_separator_func = func;
+  combo_box->priv->row_separator_data = data;
+  combo_box->priv->row_separator_destroy = destroy;
+
+  if (combo_box->priv->tree_view)
+    gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (combo_box->priv->tree_view), 
+					  func, data, NULL);
+
+  gtk_widget_queue_draw (GTK_WIDGET (combo_box));
 }

@@ -94,9 +94,11 @@ void          gtk_combo_box_set_model        (GtkComboBox     *combo_box,
                                               GtkTreeModel    *model);
 GtkTreeModel *gtk_combo_box_get_model        (GtkComboBox     *combo_box);
 
-void          gtk_combo_box_set_row_separator_column (GtkComboBox *combo_box,
-						      gint         column);
-gint          gtk_combo_box_get_row_separator_column (GtkComboBox *combo_box);
+GtkTreeViewRowSeparatorFunc gtk_combo_box_get_row_separator_func (GtkComboBox                *combo_box);
+void                        gtk_combo_box_set_row_separator_func (GtkComboBox                *combo_box,
+								  GtkTreeViewRowSeparatorFunc func,
+								  gpointer                    data,
+								  GtkDestroyNotify            destroy);
 
 /* convenience -- text */
 GtkWidget    *gtk_combo_box_new_text         (void);

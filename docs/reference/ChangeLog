@@ -1,3 +1,7 @@
+2004-07-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Update to combo box api changes.
+
 2004-07-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_combo_box_get_popup_accessible.
