@@ -470,6 +470,7 @@ void	   gtk_widget_queue_clear_area	  (GtkWidget	       *widget,
 
 
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
+void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
 #ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_widget_draw		  (GtkWidget	       *widget,
 					   GdkRectangle	       *area);

@@ -2249,7 +2249,6 @@ gtk_widget_queue_clear (GtkWidget *widget)
  * be called when a widget for some reason has a new size request.
  * For example, when you change the text in a #GtkLabel, #GtkLabel
  * queues a resize to ensure there's enough space for the new text.
- * 
  **/
 void
 gtk_widget_queue_resize (GtkWidget *widget)
@@ -2265,6 +2264,23 @@ gtk_widget_queue_resize (GtkWidget *widget)
       gdk_region_destroy (region);
     }
       
+  _gtk_size_group_queue_resize (widget);
+}
+
+/**
+ * gtk_widget_queue_resize_no_redraw:
+ * @widget: a #GtkWidget
+ *
+ * This function works like gtk_widget_queue_resize(), except that the
+ * widget is not invalidated.
+ *
+ * Since: 2.4
+ **/
+void
+gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
   _gtk_size_group_queue_resize (widget);
 }
 
@@ -3855,7 +3871,7 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
  * Sets whether a when a widgets size allocation changes, the entire
  * widget is queued for drawing. By default, this setting is %TRUE and
  * the entire widget is redrawn on every size change. If your widget
- * leaves the upper left are unchanged when made bigger, turning this
+ * leaves the upper left unchanged when made bigger, turning this
  * setting on will improve performance.
 
  * Note that for %NO_WINDOW widgets setting this flag to %FALSE turns

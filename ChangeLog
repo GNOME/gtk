@@ -1,3 +1,8 @@
+Fri Jul 18 19:55:50 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkwidget.c (gtk_widget_queue_resize_no_redraw): Add this
+	API. 
+
 Fri Jul 18 18:43:01 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	By popular request give toolbuttons a border.
