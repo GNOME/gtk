@@ -1,3 +1,7 @@
+2002-10-04  jacob berkman  <jacob@ximian.com>
+
+	* queryloaders.c (query_module): make legal C
+
 2002-10-04  Matthias Clasen  <maclas@gmx.de>
 
 	* Makefile.am gdk-pixbuf-animation.c gdk-pixbuf-data.c 

@@ -77,8 +77,9 @@ query_module (const char *dir, const char *file)
 	if (module &&
 	    g_module_symbol (module, "fill_info", (gpointer *) &fill_info) &&
 	    g_module_symbol (module, "fill_vtable", (gpointer *) &fill_vtable)) {
+		GdkPixbufFormat *info;
 		printf("\"%s\"\n", path);
-		GdkPixbufFormat *info = g_new0 (GdkPixbufFormat, 1);
+		info = g_new0 (GdkPixbufFormat, 1);
 		(*fill_info) (info);
 		printf("\"%s\" %d \"%s\" \"%s\"\n", 
 		       info->name, info->flags, 
