@@ -2,7 +2,8 @@
 
 	* gtk-zip.sh.in: Use correct DLL and import library names, with
 	GTK_API_VERSION in name, not GTK_MAJOR_VERSION.GTK_MINOR_VERSION.
-	(DEVZIP): Add gdk-pixbuf-query-loaders.exe.
+	(DEVZIP): Add bin/{gdk-pixbuf-query-loaders,gtk-query-immodules-2.0,
+	gtk-demo}.exe and share/gtk-2.0.
 
 	* configure.in: Improve check for dimm.h.
 

@@ -26,6 +26,8 @@ zip -r $DEVZIP -@ <<EOF
 include/gtk-2.0
 bin/gdk-pixbuf-csource.exe
 bin/gdk-pixbuf-query-loaders.exe
+bin/gtk-query-immodules-2.0.exe
+bin/gtk-demo.exe
 man/man1/gdk-pixbuf-csource.1
 lib/libgdk_pixbuf-@GTK_API_VERSION@.dll.a
 lib/gdk_pixbuf-@GTK_API_VERSION@.lib
@@ -40,5 +42,6 @@ lib/pkgconfig/gdk-win32-2.0.pc
 lib/pkgconfig/gtk+-2.0.pc
 lib/pkgconfig/gtk+-win32-2.0.pc
 share/aclocal/gtk-2.0.m4
+share/gtk-2.0
 EOF
 
