@@ -105,7 +105,8 @@
     <glossterm>event</glossterm>
     <glossdef>
       <para>
-	FIXME
+        Events are the way in which GDK informs GTK+ about external events
+        like pointer motion, button clicks, key presses, etc. 
       </para>
     </glossdef>
   </glossentry>
@@ -284,7 +285,9 @@
     <glossterm>style</glossterm>
     <glossdef>
       <para>
-	FIXME
+        A style encapsulates what GTK+ needs to know in order to draw
+        a widget. Styles can be modified with <link linkend="gtk-Resource-Files">resource 
+        files</link>.
       </para>
     </glossdef>
   </glossentry>
