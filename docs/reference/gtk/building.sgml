@@ -142,7 +142,7 @@ How to compile GTK+ itself
 	  library along with version number information.)  The version
 	  of <command>pkg-config</command> needed to build GTK+ is
 	  mirrored in the <filename>dependencies</filename> directory
-	  on the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.0/">GTK+ FTP
+	  on the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">GTK+ FTP
 	  site.</ulink>
 	</para>
       </listitem>
@@ -169,15 +169,17 @@ How to compile GTK+ itself
 	  The GLib library provides core non-graphical functionality
 	  such as high level data types, Unicode manipulation, and
 	  a object and type system to C programs. It is available
-	  from the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.0/">GTK+
+	  from the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">GTK+
 	  FTP site.</ulink>
 	</para>
       </listitem>
       <listitem>
 	<para>
-	  Pango is a library for internationalized text handling. It
-	  is available from the <ulink
-	  url="ftp://ftp.gtk.org/pub/gtk/v2.0/">GTK+ FTP site.</ulink>
+	  <ulink url="http://www.pango.org">Pango</ulink> is a library
+	  for internationalized text handling. Itis available from
+	  the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">GTK+ FTP
+	  site.</ulink>. Either Pango-1.0 or Pango-1.2 can be used
+	  with GTK+-2.2, though Pango-1.2 is recommended.
 	</para>
       </listitem>
       <listitem>
@@ -186,7 +188,7 @@ How to compile GTK+ itself
 	  interfaces allowing accessibility technologies such as
 	  screen readers to interact with a graphical user interface.
 	  It is available from the <ulink
-	  url="ftp://ftp.gtk.org/pub/gtk/v2.0/">GTK+ FTP site.</ulink>
+	  url="ftp://ftp.gtk.org/pub/gtk/v2.2/">GTK+ FTP site.</ulink>
 	</para>
       </listitem>
       <listitem>
@@ -217,7 +219,7 @@ How to compile GTK+ itself
 	  compile GTK+. You probably already have these libraries
 	  installed, but if not, the versions you need are available in
 	  the <filename>dependencies</filename> directory on the the
-	  <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.0/dependencies/">GTK+
+	  <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/dependencies/">GTK+
 	    FTP site.</ulink>. (Before installing these libraries
 	  from source, you should check if your operating system
 	  vendor has prebuilt packages of these libraries that you
@@ -226,26 +228,26 @@ How to compile GTK+ itself
       </listitem>
       <listitem>
 	<para>
-	  While not required for running GTK+ on X, you may want install the
-	  <ulink url="http://www.freetype.org">FreeType
-	  library</ulink> so that the PangoFT2 backend for Pango will
-	  be built. This backend is used by the linux-fb backend for
-	  GTK+ and applications that want to render independently
-	  of the X display. You'll need at least version 2.0.1.
-	</para>
-      </listitem>
-      <listitem>
-	<para>
 	  The libraries from the X window system are needed to build
 	  Pango and GTK+. You should already have these installed on
 	  your system, but it's possible that you'll need to install
 	  the development environment for these libraries that your
-	  operating system vendor provides. If you have a recent
-	  version of the XFree86 system, such as 4.2.0, then Pango
-	  and GTK+ will take advantage of the Xft and Xrender
-	  libraries to provide anti-aliased and scaleable fonts in
-	  a much more sophisticated fashion then the support for
-	  core X fonts.
+	  operating system vendor provides.
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  The <ulink url="http://www.fontconfig.org">fontconfig</ulink>
+	  library provides Pango with a standard way of locating
+	  fonts and matching them against font names. The Xft2
+	  library, distributed with fontconfig, provide support for
+	  scaleable and antialiased fonts on X. Pango includes two
+	  backends that work on top of fontconfig: an Xft2 backend
+	  and a backend that uses fontconfig and the underlying
+	  <ulink url="http://www.freetype.org">FreeType
+	  library</ulink> directly. Neither backend is mandatory, but the
+	  Xft2 backend is the preferred backend for X and the FreeType
+	  backend is needed by many applications.
 	</para>
       </listitem>
     </itemizedlist>
@@ -271,13 +273,8 @@ How to compile GTK+ itself
       <link linkend="gtk-compiling">start compiling your own GTK+
 	applications</link>. You can test your GTK+ installation
       by running the <command>gtk-demo</command> program that
-      GTK+ installs. If you have the Xft library, you can turn on
-      anti-aliased fonts by setting the <envar>GDK_USE_XFT</envar>
-      environment variable. 
+      GTK+ installs.
     </para>
-    <programlisting>
-      GDK_USE_XFT=1 gtk-demo
-    </programlisting>
     <para>
       If one of the <filename>configure</filename> scripts fails or running
       <command>make</command> fails, look closely at the error
