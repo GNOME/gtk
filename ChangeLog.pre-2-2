@@ -1,3 +1,8 @@
+2002-07-24  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextview.c: Apply patch from Gustavo
+	Giraldez for bug #78513
+
 Wed Jul 24 16:43:49 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkrc.c docs/references/tmpl/gtkrc.sgml: Don't use

@@ -1513,6 +1513,16 @@ free_pending_scroll (GtkTextPendingScroll *scroll)
 }
 
 static void
+cancel_pending_scroll (GtkTextView *text_view)
+{
+  if (text_view->pending_scroll)
+    {
+      free_pending_scroll (text_view->pending_scroll);
+      text_view->pending_scroll = NULL;
+    }
+}
+    
+static void
 gtk_text_view_queue_scroll (GtkTextView   *text_view,
                             GtkTextMark   *mark,
                             gdouble        within_margin,
@@ -1541,8 +1551,7 @@ gtk_text_view_queue_scroll (GtkTextView   *text_view,
 
   g_object_ref (G_OBJECT (scroll->mark));
   
-  if (text_view->pending_scroll)
-    free_pending_scroll (text_view->pending_scroll);
+  cancel_pending_scroll (text_view);
 
   text_view->pending_scroll = scroll;
 }
@@ -2428,11 +2437,7 @@ gtk_text_view_finalize (GObject *object)
   gtk_text_view_destroy_layout (text_view);
   gtk_text_view_set_buffer (text_view, NULL);
   
-  if (text_view->pending_scroll)
-    {
-      free_pending_scroll (text_view->pending_scroll);
-      text_view->pending_scroll = NULL;
-    }
+  cancel_pending_scroll (text_view);
 
   if (text_view->tabs)
     pango_tab_array_free (text_view->tabs);
@@ -3052,11 +3057,14 @@ gtk_text_view_flush_first_validate (GtkTextView *text_view)
     }
   else
     {
-      /* scroll to any marks, if that's pending. This can
-       * jump us to the validation codepath used for scrolling
-       * onscreen, if so we bail out.
+      /* scroll to any marks, if that's pending. This can jump us to
+       * the validation codepath used for scrolling onscreen, if so we
+       * bail out.  It won't jump if already in that codepath since
+       * value_changed is not recursive, so also validate if
+       * necessary.
        */
-      if (!gtk_text_view_flush_scroll (text_view))
+      if (!gtk_text_view_flush_scroll (text_view) ||
+          !text_view->onscreen_validated)
 	gtk_text_view_validate_onscreen (text_view);
       
       DV(g_print(">Leaving first validate idle ("G_STRLOC")\n"));
@@ -4628,6 +4636,8 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
 
   g_return_if_fail (text_view->vadjustment != NULL);
 
+  cancel_pending_scroll (text_view);
+  
   adj = text_view->vadjustment;
 
   /* Validate the region that will be brought into view by the cursor motion
@@ -4702,6 +4712,8 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
   
   g_return_if_fail (text_view->hadjustment != NULL);
 
+  cancel_pending_scroll (text_view);
+  
   adj = text_view->hadjustment;
 
   /* Validate the line that we're moving within.
