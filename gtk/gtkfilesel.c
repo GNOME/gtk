@@ -1029,13 +1029,23 @@ gtk_file_selection_key_press (GtkWidget   *widget,
 
   if (event->keyval == GDK_Tab)
     {
-      gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+      gboolean intercept;
 
       fs = GTK_FILE_SELECTION (user_data);
       text = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
+
+      intercept = text && *text;
+
+      text = g_strdup (text);
+
       gtk_file_selection_populate (fs, text, TRUE);
 
-      return TRUE;
+      g_free (text);
+
+      if (intercept)
+	gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+
+      return intercept;
     }
 
   return FALSE;

@@ -1,3 +1,9 @@
+Sat May 16 09:04:32 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_key_press): g_strdup() the
+	text retrived from GtkEntry. only intercept the Tab key if there
+	was some text to complete.
+
 Fri May 15 21:16:54 1998  Owen Taylor  <otaylor@gtk.org>
 
 	Basic thread-awareness:
