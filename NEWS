@@ -1,3 +1,14 @@
+What is new in GTK+ 1.1.7:
+
+* Fixed memory mis-allocation in default files code
+* Various event handling fixes
+* Wide character support for entry and text
+* Destroy widgets _after_ propagating unrealize signals through 
+  widget heirarchy
+* Only build XIM-support if available
+* Tutorial and examples updates
+* Added gtk_drag_source_unset()
+
 What is new in GTK+ 1.1.6:
 
 * The signal system now features emission hooks whith special semantics,

@@ -1,3 +1,15 @@
+Thu Dec 10 22:02:49 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.7
+
+	* INSTALL:
+	  NEWS:
+	  README:
+	  configure.in:
+	  gtk+.spec:
+	  gtk/gtkfeatures.h.in: 
+	  docs/gtk-config.1: Version to 1.1.7
+
 Thu Dec 10 20:48:19 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkclist.c: avoid void pointer math
