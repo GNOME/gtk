@@ -140,17 +140,11 @@ gtk_viewport_set_arg (GtkObject        *object,
       GtkAdjustment *adjustment;
 
     case ARG_HADJUSTMENT:
-      g_return_if_fail (viewport->hadjustment == NULL);
       adjustment = GTK_VALUE_POINTER (*arg);
-      if (!adjustment)
-	adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
       gtk_viewport_set_hadjustment (viewport, adjustment);
       break;
     case ARG_VADJUSTMENT:
-      g_return_if_fail (viewport->vadjustment == NULL);
       adjustment = GTK_VALUE_POINTER (*arg);
-      if (!adjustment)
-	adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
       gtk_viewport_set_vadjustment (viewport, adjustment);
       break;
     case ARG_SHADOW_TYPE:
@@ -210,12 +204,6 @@ gtk_viewport_new (GtkAdjustment *hadjustment,
 
   viewport = gtk_type_new (gtk_viewport_get_type ());
 
-  if (!hadjustment)
-    hadjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-
-  if (!vadjustment)
-    vadjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-
   gtk_viewport_set_hadjustment (viewport, hadjustment);
   gtk_viewport_set_vadjustment (viewport, vadjustment);
 
@@ -257,17 +245,22 @@ gtk_viewport_set_hadjustment (GtkViewport   *viewport,
 {
   g_return_if_fail (viewport != NULL);
   g_return_if_fail (GTK_IS_VIEWPORT (viewport));
-  g_return_if_fail (adjustment != NULL);
+  if (adjustment)
+    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+
+  if (viewport->hadjustment && viewport->hadjustment != adjustment)
+    {
+      gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->hadjustment),
+				     (gpointer) viewport);
+      gtk_object_unref (GTK_OBJECT (viewport->hadjustment));
+    }
+
+  if (!adjustment)
+    adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0,
+						     0.0, 0.0, 0.0));
 
   if (viewport->hadjustment != adjustment)
     {
-      if (viewport->hadjustment)
-	{
-	  gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->hadjustment),
-					 (gpointer) viewport);
-	  gtk_object_unref (GTK_OBJECT (viewport->hadjustment));
-	}
-
       viewport->hadjustment = adjustment;
       gtk_object_ref (GTK_OBJECT (viewport->hadjustment));
       gtk_object_sink (GTK_OBJECT (viewport->hadjustment));
@@ -289,17 +282,22 @@ gtk_viewport_set_vadjustment (GtkViewport   *viewport,
 {
   g_return_if_fail (viewport != NULL);
   g_return_if_fail (GTK_IS_VIEWPORT (viewport));
-  g_return_if_fail (adjustment != NULL);
+  if (adjustment)
+    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+
+  if (viewport->vadjustment && viewport->vadjustment != adjustment)
+    {
+      gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->vadjustment),
+				     (gpointer) viewport);
+      gtk_object_unref (GTK_OBJECT (viewport->vadjustment));
+    }
+
+  if (!adjustment)
+    adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0,
+						     0.0, 0.0, 0.0));
 
   if (viewport->vadjustment != adjustment)
     {
-      if (viewport->vadjustment)
-	{
-	  gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->vadjustment),
-					 (gpointer) viewport);
-	  gtk_object_unref (GTK_OBJECT (viewport->vadjustment));
-	}
-
       viewport->vadjustment = adjustment;
       gtk_object_ref (GTK_OBJECT (viewport->vadjustment));
       gtk_object_sink (GTK_OBJECT (viewport->vadjustment));

@@ -156,10 +156,8 @@ struct _GtkCList
   gint undo_anchor;
   
   /* scrollbars */
-  GtkWidget *vscrollbar;
-  GtkWidget *hscrollbar;
-  guint8 vscrollbar_policy;
-  guint8 hscrollbar_policy;
+  GtkAdjustment *hadjustment;
+  GtkAdjustment *vadjustment;
   
   /* xor GC for the vertical drag line */
   GdkGC *xor_gc;
@@ -384,13 +382,19 @@ void gtk_clist_construct (GtkCList *clist,
 			  gchar    *titles[]);
 
 /* create a new GtkCList */
-GtkWidget *gtk_clist_new             (gint   columns);
-GtkWidget *gtk_clist_new_with_titles (gint   columns,
+GtkWidget* gtk_clist_new             (gint   columns);
+GtkWidget* gtk_clist_new_with_titles (gint   columns,
 				      gchar *titles[]);
 
-/* deprecated function, use gtk_clist_set_shadow_type instead. */
-void gtk_clist_set_border (GtkCList      *clist,
-			   GtkShadowType  border);
+/* set adjustments of clist */
+void gtk_clist_set_hadjustment (GtkCList      *clist,
+				GtkAdjustment *adjustment);
+void gtk_clist_set_vadjustment (GtkCList      *clist,
+				GtkAdjustment *adjustment);
+
+/* get adjustments of clist */
+GtkAdjustment* gtk_clist_get_hadjustment (GtkCList *clist);
+GtkAdjustment* gtk_clist_get_vadjustment (GtkCList *clist);
 
 /* set the border style of the clist */
 void gtk_clist_set_shadow_type (GtkCList      *clist,
@@ -399,14 +403,6 @@ void gtk_clist_set_shadow_type (GtkCList      *clist,
 /* set the clist's selection mode */
 void gtk_clist_set_selection_mode (GtkCList         *clist,
 				   GtkSelectionMode  mode);
-
-/* set policy on the scrollbar, to either show them all the time
- * or show them only when they are needed, ie., when there is more
- * than one page of information
- */
-void gtk_clist_set_policy (GtkCList      *clist,
-			   GtkPolicyType  vscrollbar_policy,
-			   GtkPolicyType  hscrollbar_policy);
 
 /* freeze all visual updates of the list, and then thaw the list after
  * you have made a number of changes and the updates wil occure in a
@@ -696,6 +692,17 @@ void gtk_clist_sort (GtkCList *clist);
 void gtk_clist_set_auto_sort (GtkCList *clist,
 			      gboolean  auto_sort);
 
+
+/* Deprecated methods */
+
+/* Use gtk_clist_set_shadow_type instead. */
+void gtk_clist_set_border (GtkCList      *clist,
+			   GtkShadowType  border);
+
+/* Completely non-functional */
+void gtk_clist_set_policy (GtkCList      *clist,
+			   GtkPolicyType  vscrollbar_policy,
+			   GtkPolicyType  hscrollbar_policy);
 #ifdef __cplusplus
 }
 #endif				/* __cplusplus */
