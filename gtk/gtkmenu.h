@@ -37,10 +37,12 @@ extern "C" {
 typedef struct _GtkMenu       GtkMenu;
 typedef struct _GtkMenuClass  GtkMenuClass;
 
-typedef void (*GtkMenuPositionFunc) (GtkMenu  *menu,
-				     gint     *x,
-				     gint     *y,
-				     gpointer  user_data);
+typedef void (*GtkMenuPositionFunc) (GtkMenu   *menu,
+				     gint      *x,
+				     gint      *y,
+				     gpointer   user_data);
+typedef void (*GtkMenuDetachFunc)   (GtkWidget *attach_widget,
+				     GtkMenu   *menu);
 
 struct _GtkMenu
 {
@@ -84,6 +86,10 @@ void       gtk_menu_set_active            (GtkMenu             *menu,
 					   gint                 index);
 void       gtk_menu_set_accelerator_table (GtkMenu             *menu,
 					   GtkAcceleratorTable *table);
+void	   gtk_menu_attach_to_widget	  (GtkMenu	       *menu,
+					   GtkWidget	       *attach_widget,
+					   GtkMenuDetachFunc	detacher);
+void	   gtk_menu_detach		  (GtkMenu	       *menu);
 
 
 #ifdef __cplusplus

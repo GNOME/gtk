@@ -26,9 +26,6 @@ BUGS
  
  * GtkOptionMenu needs to reference its curent GtkMenuItem.
  
- * Right after creation of an option menu, the first selected menu item is
-   placed too low (is this still true?).
-   
  * GtkMenu needs to properly unref() accelerator tables upon destroy.
  
  * Display of GtkToggleButton is messed up if GtkContainer::container_width

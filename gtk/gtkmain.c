@@ -1150,9 +1150,7 @@ gtk_propagate_event (GtkWidget *widget,
   while (!handled_event && tmp)
     {
       gtk_widget_ref (tmp);
-      handled_event = (GTK_OBJECT_DESTROYED (tmp) ||
-		       !GTK_WIDGET_IS_SENSITIVE (tmp) ||
-		       gtk_widget_event (tmp, event));
+      handled_event = !GTK_WIDGET_IS_SENSITIVE (tmp) || gtk_widget_event (tmp, event);
       parent = tmp->parent;
       gtk_widget_unref (tmp);
       tmp = parent;

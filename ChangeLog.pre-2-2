@@ -1,3 +1,15 @@
+Tue Feb  3 15:09:55 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkoptionmenu.h: 
+	* gtk/gtkoptionmenu.c: attach/detach to menu widget via
+
+	* gtk/gtkmenu.h: 
+	* gtk/gtkmenu.c: new functions gtk_menu_attach_to_widget
+ 	  and gtk_menu_detach that correspond to the action of
+	  gtk_widget_set_parent and gtk_widget_unparent.
+
+	* gtk/widget.c: few fixups.
+
 Tue Feb  3 00:12:00 1998  Owen Taylor  <owt1@cornell.edu>
 	* gtk/gtktable.c 
 	  Fixed problem with division by zero in row/column-spanned

@@ -1045,7 +1045,7 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
   
   fs->history_menu = gtk_menu_new();
 
-  current_dir = g_strdup(current_directory);
+  current_dir = g_strdup (current_directory);
 
   dir_len = strlen (current_dir);
 

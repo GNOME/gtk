@@ -802,6 +802,7 @@ gtk_button_remove (GtkContainer *container,
 
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_BUTTON (container));
+  g_return_if_fail (widget != NULL);
 
   button = GTK_BUTTON (container);
 

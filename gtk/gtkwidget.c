@@ -1054,9 +1054,7 @@ gtk_widget_setv (GtkWidget *widget,
 /*****************************************
  * gtk_widget_unparent:
  *   do any cleanup necessary necessary
- *   before setting parent = NULL.
- *   In particular, remove the focus
- *   properly.
+ *   for setting parent = NULL.
  *
  *   arguments:
  *
@@ -1073,6 +1071,9 @@ gtk_widget_unparent (GtkWidget *widget)
   if (widget->parent == NULL)
     return;
   
+  /* keep this function in sync with gtk_menu_detach()
+   */
+
   toplevel = gtk_widget_get_toplevel (widget);
   if (GTK_IS_WINDOW (toplevel))
     {
@@ -1680,7 +1681,7 @@ gtk_widget_event (GtkWidget *widget,
   return_val = FALSE;
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT], event,
 		   &return_val);
-  if (return_val)
+  if (return_val || GTK_OBJECT_DESTROYED (widget))
     {
       gtk_widget_unref (widget);
       return TRUE;
@@ -1783,13 +1784,16 @@ gtk_widget_event (GtkWidget *widget,
     default:
       g_warning ("could not determine signal number for event: %d", event->type);
       gtk_widget_unref (widget);
-      return return_val;
+      return TRUE;
     }
   
   if (signal_num != -1)
     gtk_signal_emit (GTK_OBJECT (widget), widget_signals[signal_num], event, &return_val);
 
+  return_val |= GTK_OBJECT_DESTROYED (widget);
+
   gtk_widget_unref (widget);
+
   return return_val;
 }
 
@@ -1858,8 +1862,10 @@ gtk_widget_reparent (GtkWidget *widget,
 		     GtkWidget *new_parent)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (new_parent != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (new_parent));
+  g_return_if_fail (widget->parent != NULL);
   
   if (widget->parent != new_parent)
     {
@@ -2224,8 +2230,11 @@ gtk_widget_set_parent (GtkWidget *widget,
   g_assert (widget->parent == NULL);
   g_return_if_fail (parent != NULL);
 
+  /* keep this function in sync with gtk_menu_attach_to_widget()
+   */
+
   gtk_widget_ref (widget);
-  gtk_object_sink (GTK_OBJECT(widget));
+  gtk_object_sink (GTK_OBJECT (widget));
   widget->parent = parent;
 
   if (GTK_WIDGET_STATE (parent) != GTK_STATE_NORMAL)

@@ -26,6 +26,15 @@
 #define MENU_ITEM_CLASS(w)  GTK_MENU_ITEM_CLASS (GTK_OBJECT (w)->klass)
 
 
+typedef struct _GtkMenuAttachData	GtkMenuAttachData;
+
+struct _GtkMenuAttachData
+{
+  GtkWidget *attach_widget;
+  GtkMenuDetachFunc detacher;
+};
+
+
 static void gtk_menu_class_init     (GtkMenuClass      *klass);
 static void gtk_menu_init           (GtkMenu           *menu);
 static void gtk_menu_destroy        (GtkObject         *object);
@@ -52,6 +61,8 @@ static void gtk_menu_show_all       (GtkWidget         *widget);
 static void gtk_menu_hide_all       (GtkWidget         *widget);
 
 static GtkMenuShellClass *parent_class = NULL;
+static const gchar	*attach_data_key = "gtk-menu-attach-data";
+
 
 guint
 gtk_menu_get_type ()
@@ -125,19 +136,103 @@ gtk_menu_init (GtkMenu *menu)
   
   GTK_MENU_SHELL (menu)->menu_flag = TRUE;
   
-  gtk_container_register_toplevel (GTK_CONTAINER (menu));
+  /* we don't need to register as toplevel anymore,
+   * since there is the attach/detach functionality in place.
+   * gtk_container_register_toplevel (GTK_CONTAINER (menu));
+   */
 }
 
 static void
 gtk_menu_destroy (GtkObject         *object)
 {
+  GtkMenuAttachData *data;
+
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_MENU (object));
 
-  gtk_container_unregister_toplevel (GTK_CONTAINER (object));
+  gtk_widget_ref (GTK_WIDGET (object));
+
+  data = gtk_object_get_data (object, attach_data_key);
+  if (data)
+    gtk_menu_detach (GTK_MENU (object));
+
+  /* we don't need this:
+   * gtk_container_unregister_toplevel (GTK_CONTAINER (object));
+   */
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+
+  gtk_widget_unref (GTK_WIDGET (object));
+}
+
+
+void
+gtk_menu_attach_to_widget (GtkMenu             *menu,
+			   GtkWidget           *attach_widget,
+			   GtkMenuDetachFunc    detacher)
+{
+  GtkMenuAttachData *data;
+
+  g_return_if_fail (menu != NULL);
+  g_return_if_fail (GTK_IS_MENU (menu));
+  g_return_if_fail (attach_widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (attach_widget));
+  g_return_if_fail (detacher != NULL);
+
+  /* keep this function in sync with gtk_widget_set_parent()
+   */
+
+  data = gtk_object_get_data (GTK_OBJECT (menu), attach_data_key);
+  if (data)
+    {
+      g_warning ("gtk_menu_attach_to_widget(): menu already attached to %s",
+		 gtk_type_name (GTK_OBJECT_TYPE (data->attach_widget)));
+      return;
+    }
+
+  gtk_widget_ref (menu);
+  gtk_object_sink (GTK_OBJECT (menu));
+
+  data = g_new (GtkMenuAttachData, 1);
+  data->attach_widget = attach_widget;
+  data->detacher = detacher;
+  gtk_object_set_data (GTK_OBJECT (menu), attach_data_key, data);
+
+  if (GTK_WIDGET_STATE (menu) != GTK_STATE_NORMAL)
+    gtk_widget_set_state (GTK_WIDGET (menu), GTK_STATE_NORMAL);
+
+  /* we don't need to set the style here, since
+   * we are a toplevel widget.
+   */
+}
+
+void
+gtk_menu_detach (GtkMenu             *menu)
+{
+  GtkMenuAttachData *data;
+
+  g_return_if_fail (menu != NULL);
+  g_return_if_fail (GTK_IS_MENU (menu));
+
+  /* keep this function in sync with gtk_widget_unparent()
+   */
+  data = gtk_object_get_data (GTK_OBJECT (menu), attach_data_key);
+  if (!data)
+    {
+      g_warning ("gtk_menu_detach(): menu is not attached");
+      return;
+    }
+  gtk_object_remove_data (GTK_OBJECT (menu), attach_data_key);
+
+  data->detacher (data->attach_widget, menu);
+
+  if (GTK_WIDGET_REALIZED (menu))
+    gtk_widget_unrealize (GTK_WIDGET (menu));
+
+  g_free (data);
+
+  gtk_widget_unref (GTK_WIDGET (menu));
 }
 
 GtkWidget*
