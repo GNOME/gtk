@@ -29,6 +29,11 @@
 #else
 #include <locale.h>
 #endif
+
+#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
+#include <libintl.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -395,7 +400,7 @@ gtk_init_check (int	 *argc,
 #ifdef ENABLE_NLS
 #  ifndef G_OS_WIN32
   bindtextdomain(GETTEXT_PACKAGE, GTK_LOCALEDIR);
-#    ifdef HAVE_BIND_TEXTDOMAIN_CODSET
+#    ifdef HAVE_BIND_TEXTDOMAIN_CODESET
   bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 #    endif
 #  else /* !G_OS_WIN32 */
@@ -412,7 +417,9 @@ gtk_init_check (int	 *argc,
 
   {
   /* Translate to default:RTL if you want your widgets
-   * to be RTL, otherwise translate to default:LTR 
+   * to be RTL, otherwise translate to default:LTR.
+   * Do *not* translate it to "predefinito:LTR", if it
+   * it isn't default:LTR or default:RTL it will not work 
    */
     char *e = _("default:LTR");
     if (strcmp (e, "default:RTL")==0) {

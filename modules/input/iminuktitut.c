@@ -87,11 +87,11 @@ static guint16 inuktitut_compose_seqs[] = {
   SYL('l', 0x14d5, 0x14ea, 2)
   SYL('m', 0x14a5, 0x14bb, 2)
   SYL('n', 0x14c2, 0x14d0, 2)
-  SYL('p', 0x1431, 0x1449, 0)
 
   'o', 0,   0,   0 ,  0,   0x1405, /* as u */
   'o', 'o', 0,   0,   0,   0x1406,
 
+  SYL('p', 0x1431, 0x1449, 0)
   SYL('q', 0x157f, 0x1585, 3)
   SYL('r', 0x1546, 0x1550, 2)
   SYL('s', 0x14ef, 0x1505, 2) /* As h */
