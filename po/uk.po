@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-01-16 13:19+0200\n"
-"PO-Revision-Date: 2002-01-16 12:18+0200\n"
+"POT-Creation-Date: 2002-01-16 14:03+0200\n"
+"PO-Revision-Date: 2002-01-16 13:02+0200\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1804,11 +1804,11 @@ msgstr "Гаразд"
 #: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:148 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 msgid "Shadow type"
-msgstr ""
+msgstr "Тип тіні"
 
 #: gtk/gtkhandlebox.c:193
 msgid "Appearance of the shadow that surrounds the container."
-msgstr ""
+msgstr "Вигляд тіні, що оточує контейнер."
 
 #: gtk/gtkhandlebox.c:201
 #, fuzzy
@@ -1953,7 +1953,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:311 gtk/gtktexttag.c:378 gtk/gtktextview.c:575
 msgid "Justification"
-msgstr ""
+msgstr "Вирівнювання"
 
 #: gtk/gtklabel.c:312
 msgid ""
@@ -2070,7 +2070,7 @@ msgstr ""
 
 #: gtk/gtkmenubar.c:149
 msgid "Style of bevel around the menubar"
-msgstr ""
+msgstr "Стиль скосу навколо панелі меню"
 
 #: gtk/gtkmenubar.c:156 gtk/gtktoolbar.c:251
 msgid "Internal padding"
@@ -3151,11 +3151,11 @@ msgstr "Ширина правого відступу в точках"
 
 #: gtk/gtktexttag.c:416 gtk/gtktextview.c:604
 msgid "Indent"
-msgstr ""
+msgstr "Відступ"
 
 #: gtk/gtktexttag.c:417 gtk/gtktextview.c:605
 msgid "Amount to indent the paragraph, in pixels"
-msgstr ""
+msgstr "Величина відступу абзацу в точках"
 
 #: gtk/gtktexttag.c:437
 msgid "Pixels above lines"
