@@ -74,7 +74,7 @@ typedef enum
   GTK_DESTROYED		= 1 << 0,
   GTK_FLOATING		= 1 << 1,
   GTK_CONNECTED		= 1 << 2,
-  GTK_CONSTRUCTED	= 1 << 3,
+  GTK_CONSTRUCTED	= 1 << 3
 } GtkObjectFlags;
 
 /* Macros for extracting the object_flags from GtkObject.
