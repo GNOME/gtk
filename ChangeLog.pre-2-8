@@ -1,3 +1,9 @@
+2002-02-23  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtk.def: Add missing gtk_file_selection_get_select_multiple.
+	Remove gtk_tree_view_column_cell_* entry points that were made
+	private.
+
 Sat Feb 23 15:43:46 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktogglebutton.c: Make button draw depressed whenever
