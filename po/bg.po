@@ -3,19 +3,20 @@
 # Borislav Aleksandrov <B.Aleksandrov@CNsys.bg>, 2002.
 # additions for completeness, Yanko Kaneti <yaneti@declera.com>, 2002.
 # additions for completeness, Vladimir Petkov <vpetkov@i-space.org>, 2004
+# Rostislav Raykov <zbrox@i-space.org>, 2004, updatesVladimir Petkov <vpetkov@i-space.org>, 2004.
 # 
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
-"PO-Revision-Date: 2004-06-01 14:57+0300\n"
-"Last-Translator: Vladimir Petkov <vpetkov@i-space.org>\n"
+"POT-Creation-Date: 2004-07-27 04:02+0200\n"
+"PO-Revision-Date: 2004-07-27 14:42+0300\n"
+"Last-Translator: Rostislav Raykov <zbrox@i-space.org>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:779
 #: gdk-pixbuf/gdk-pixbuf-io.c:926 tests/testfilechooser.c:192
@@ -49,7 +50,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:415
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Не мога да заредя модул за зареждане на изображения: %s: %s"
+msgstr "Не може да се зареди модул за зареждане на изображения: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:430
 #, c-format
@@ -68,7 +69,7 @@ msgstr "Типът Изображение '%s' не се поддържа"
 #: gdk-pixbuf/gdk-pixbuf-io.c:663
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Не мога да разпозная формата на графичният файл '%s'"
+msgstr "Не може да се разпознае формата на графичният файл '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:671
 msgid "Unrecognized image file format"
@@ -87,8 +88,7 @@ msgstr "Грешка при записването на изображениет
 #: gdk-pixbuf/gdk-pixbuf-io.c:1202 gdk-pixbuf/gdk-pixbuf-io.c:1318
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Вграденото в 'gdk-pixbuf' не поддържа запазването на графичен формат: %s"
+msgstr "Вграденото в 'gdk-pixbuf' не поддържа запазването на графичен формат: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1231
 msgid "Insufficient memory to save image to callback"
@@ -147,11 +147,9 @@ msgid "Image pixel data corrupt"
 msgstr "Повредени данни за 'pixel' изображението"
 
 #: gdk-pixbuf/gdk-pixdata.c:403
-#, fuzzy, c-format
+#, c-format
 msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "неуспех при заделяне на буфер за изображението от %u байта"
-msgstr[1] "неуспех при заделяне на буфер за изображението от %u байта"
+msgstr "неуспех при заделяне на буфер за изображението от %u байт"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -325,7 +323,7 @@ msgstr "Неподдържано JPEG цветово пространство (%
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
 #: gdk-pixbuf/io-jpeg.c:950
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Не мога да разпределя памет за зареждане на JPEG файл"
+msgstr "Не може да се разпредели памет за зареждане на JPEG файл"
 
 #: gdk-pixbuf/io-jpeg.c:893
 #, c-format
@@ -349,7 +347,7 @@ msgstr "Форматът за изображения JPEG"
 
 #: gdk-pixbuf/io-pcx.c:191
 msgid "Couldn't allocate memory for header"
-msgstr "Не мога да разпределя памет за заглавна част"
+msgstr "Не може да се разпредели памет за заглавна част"
 
 #: gdk-pixbuf/io-pcx.c:206 gdk-pixbuf/io-pcx.c:566
 msgid "Couldn't allocate memory for context buffer"
@@ -491,7 +489,7 @@ msgstr "Максимална стойност на цвят в PNM файла е
 
 #: gdk-pixbuf/io-pnm.c:396
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr "Не мога да поддържам PNM файлове със стойност за цвят по-голяма от 255"
+msgstr "Не може да се поддържат PNM файлове със стойност за цвят по-голяма от 255"
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
@@ -503,8 +501,7 @@ msgstr "Формата на PNM изображението е грешен"
 
 #: gdk-pixbuf/io-pnm.c:656
 msgid "PNM image loader does not support this PNM subformat"
-msgstr ""
-"Програмата за зареждане на PNM изображението не подържа този PNM подформат"
+msgstr "Програмата за зареждане на PNM изображението не подържа този PNM подформат"
 
 #: gdk-pixbuf/io-pnm.c:711
 msgid "Premature end-of-file encountered"
@@ -556,19 +553,19 @@ msgstr "Форматът за изображения Sun raster"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
-msgstr "Не мога да разпределя паметта за структура на IOBuffer "
+msgstr "Не може да се разпредели паметта за структура на IOBuffer "
 
 #: gdk-pixbuf/io-tga.c:178
 msgid "Can't allocate memory for IOBuffer data"
-msgstr "Не мога да разпределя паметта за данни на IOBuffer "
+msgstr "Не може да се разпредели паметта за данни на IOBuffer "
 
 #: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
-msgstr "Не мога да преразпределя IOBuffer данни"
+msgstr "Не може да се преразпредели IOBuffer данни"
 
 #: gdk-pixbuf/io-tga.c:219
 msgid "Can't allocate temporary IOBuffer data"
-msgstr "Не мога да разпределя временни IOBuffer данни"
+msgstr "Не може да се разпределят временни IOBuffer данни"
 
 #: gdk-pixbuf/io-tga.c:353
 msgid "Can't allocate new pixbuf"
@@ -576,11 +573,11 @@ msgstr "Невъзможно е да разпределя нов 'pixbuf'"
 
 #: gdk-pixbuf/io-tga.c:692
 msgid "Can't allocate colormap structure"
-msgstr "Не мога да разпределя структура на цветната карта"
+msgstr "Не може да се разпредели структура на цветната карта"
 
 #: gdk-pixbuf/io-tga.c:699
 msgid "Can't allocate colormap entries"
-msgstr "Не мога да разпределя елементи на цветната карта"
+msgstr "Не може да се разпределят елементи на цветната карта"
 
 #: gdk-pixbuf/io-tga.c:721
 msgid "Unexpected bitdepth for colormap entries"
@@ -601,7 +598,7 @@ msgstr "Типът изображение TGA не се поддържа"
 
 #: gdk-pixbuf/io-tga.c:861
 msgid "Can't allocate memory for TGA context struct"
-msgstr "Не мога да разпределя памет за контекстна структура на TGA "
+msgstr "Не може да се разпредели памет за контекстна структура на TGA "
 
 #: gdk-pixbuf/io-tga.c:926
 msgid "Excess data in file"
@@ -613,11 +610,11 @@ msgstr "Форматът за изображения Targa"
 
 #: gdk-pixbuf/io-tiff.c:175
 msgid "Could not get image width (bad TIFF file)"
-msgstr "Неможах да получа ширина на изображението (лош TIFF файл)"
+msgstr "Не може да се получи ширина на изображението (лош TIFF файл)"
 
 #: gdk-pixbuf/io-tiff.c:182
 msgid "Could not get image height (bad TIFF file)"
-msgstr "Неможах да получа височина на изображението (лош TIFF файл)"
+msgstr "Не може да се получи височина на изображението (лош TIFF файл)"
 
 #: gdk-pixbuf/io-tiff.c:190
 msgid "Width or height of TIFF image is zero"
@@ -710,11 +707,11 @@ msgstr "XPM има грешен брой символи за пиксел"
 
 #: gdk-pixbuf/io-xpm.c:1279
 msgid "Can't read XPM colormap"
-msgstr "Не мога да чета цветната карта за XPM "
+msgstr "Не може да се чете цветната карта за XPM "
 
 #: gdk-pixbuf/io-xpm.c:1317
 msgid "Can't allocate memory for loading XPM image"
-msgstr "Не мога да разпределя памет за зареждане на XPM изображение"
+msgstr "Не може да се разпредели памет за зареждане на XPM изображение"
 
 #: gdk-pixbuf/io-xpm.c:1508
 msgid "Failed to write to temporary file when loading XPM image"
@@ -762,7 +759,7 @@ msgstr "Alt"
 #.
 #: gtk/gtkcalendar.c:709
 msgid "calendar:MY"
-msgstr ""
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -770,7 +767,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
-msgstr ""
+msgstr "calendar:week_start:1"
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
@@ -907,17 +904,17 @@ msgstr "Цветна Палитра"
 msgid "Color Selection"
 msgstr "Избор на Цвят"
 
-#: gtk/gtkentry.c:4300 gtk/gtktextview.c:6933
+#: gtk/gtkentry.c:4312 gtk/gtktextview.c:6933
 msgid "Select _All"
-msgstr "Избира _Всичко"
+msgstr "Избор на _Всичко"
 
-#: gtk/gtkentry.c:4310 gtk/gtktextview.c:6943
+#: gtk/gtkentry.c:4322 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "Вх_Методи за Вход"
 
-#: gtk/gtkentry.c:4320 gtk/gtktextview.c:6954
+#: gtk/gtkentry.c:4332 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
-msgstr "_Вмъква Уникод Контролен Символ"
+msgstr "_Вмъкване на Уникод Контролен Символ"
 
 #: gtk/gtkfilechooser.c:1583 gtk/gtkfilechooser.c:1627
 #: gtk/gtkfilechooser.c:1702 gtk/gtkfilechooser.c:1746
@@ -941,7 +938,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5332
+#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5351
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -993,115 +990,121 @@ msgstr ""
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2578
+#: gtk/gtkfilechooserdefault.c:2525
+msgid "Shortcuts"
+msgstr "Препратки"
+
+#: gtk/gtkfilechooserdefault.c:2579
 msgid "Folder"
 msgstr "Папка"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2625 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2626 gtk/gtkstock.c:293
 msgid "_Add"
-msgstr "_Добавя"
+msgstr "_Добавяне"
 
-#: gtk/gtkfilechooserdefault.c:2635 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2636 gtk/gtkstock.c:341
 msgid "_Remove"
-msgstr "_Премахва"
+msgstr "_Премахване"
 
-#: gtk/gtkfilechooserdefault.c:2714
+#: gtk/gtkfilechooserdefault.c:2715
 msgid "Show _Hidden Files"
-msgstr "Показва _Скритите Файлове"
+msgstr "Показване на _Скритите Файлове"
 
-#: gtk/gtkfilechooserdefault.c:2855
+#: gtk/gtkfilechooserdefault.c:2830 gtk/gtkfilesel.c:766
+msgid "Files"
+msgstr "Файлове"
+
+#: gtk/gtkfilechooserdefault.c:2857
 msgid "Name"
 msgstr "Име"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2879
 msgid "Size"
 msgstr "Размер"
 
-#: gtk/gtkfilechooserdefault.c:2889
+#: gtk/gtkfilechooserdefault.c:2891
 msgid "Modified"
 msgstr "Променян на"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2934
+#: gtk/gtkfilechooserdefault.c:2936
 msgid "Create Fo_lder"
-msgstr "Създава _Папка"
+msgstr "Създаване на _Папка"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3044
+#: gtk/gtkfilechooserdefault.c:3046
 msgid "_Name:"
 msgstr "_Име"
 
-#: gtk/gtkfilechooserdefault.c:3086
+#: gtk/gtkfilechooserdefault.c:3088
 msgid "_Browse for other folders"
-msgstr "_Отваря други папки"
-
-#: gtk/gtkfilechooserdefault.c:3323
-msgid "Save in _folder:"
-msgstr "Запазва в п_апка"
+msgstr "_Отваряне на други папки"
 
 #: gtk/gtkfilechooserdefault.c:3325
-msgid "Create in _folder:"
-msgstr "Създава в _папка:"
+msgid "Save in _folder:"
+msgstr "Запазване в п_апка"
 
-#: gtk/gtkfilechooserdefault.c:3969
+#: gtk/gtkfilechooserdefault.c:3327
+msgid "Create in _folder:"
+msgstr "Създаване в _папка:"
+
+#: gtk/gtkfilechooserdefault.c:3971
 msgid "Can't change to folder because it isn't local"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4107
+#: gtk/gtkfilechooserdefault.c:4109
 msgid "Could not find the path"
 msgstr "Пътеката не може да бъде намерена"
 
-#: gtk/gtkfilechooserdefault.c:4458
+#: gtk/gtkfilechooserdefault.c:4460
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "бързият клавиш %s не съществува"
 
-#: gtk/gtkfilechooserdefault.c:5105
+#: gtk/gtkfilechooserdefault.c:5124
 msgid "Type name of new folder"
 msgstr "Напишете името на новата папка"
 
-#: gtk/gtkfilechooserdefault.c:5134
-#, fuzzy, c-format
+#: gtk/gtkfilechooserdefault.c:5153
+#, c-format
 msgid "%d byte"
-msgid_plural "%d bytes"
-msgstr[0] "%d байт"
-msgstr[1] "%d байт"
+msgstr "%d байт"
 
-#: gtk/gtkfilechooserdefault.c:5136
+#: gtk/gtkfilechooserdefault.c:5155
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f·К"
 
-#: gtk/gtkfilechooserdefault.c:5138
+#: gtk/gtkfilechooserdefault.c:5157
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f·М"
 
-#: gtk/gtkfilechooserdefault.c:5140
+#: gtk/gtkfilechooserdefault.c:5159
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f·Г"
 
-#: gtk/gtkfilechooserdefault.c:5185
+#: gtk/gtkfilechooserdefault.c:5204
 msgid "Today"
 msgstr "Днес"
 
-#: gtk/gtkfilechooserdefault.c:5187
+#: gtk/gtkfilechooserdefault.c:5206
 msgid "Yesterday"
 msgstr "Вчера"
 
-#: gtk/gtkfilechooserdefault.c:5198
+#: gtk/gtkfilechooserdefault.c:5217
 msgid "Unknown"
 msgstr "Неизвестен"
 
-#: gtk/gtkfilechooserdefault.c:5293
+#: gtk/gtkfilechooserdefault.c:5312
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5370
+#: gtk/gtkfilechooserdefault.c:5389
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1110,15 +1113,15 @@ msgstr ""
 "%s не може да бъде избран:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5409
+#: gtk/gtkfilechooserdefault.c:5428
 msgid "Open Location"
-msgstr "Отваря Местоположение"
-
-#: gtk/gtkfilechooserdefault.c:5416
-msgid "Save in Location"
-msgstr "Запазва в"
+msgstr "Отваряне на Местоположение"
 
 #: gtk/gtkfilechooserdefault.c:5435
+msgid "Save in Location"
+msgstr "Запазване в"
+
+#: gtk/gtkfilechooserdefault.c:5454
 msgid "_Location:"
 msgstr "_Местоположение"
 
@@ -1129,10 +1132,6 @@ msgstr "Папки"
 #: gtk/gtkfilesel.c:734
 msgid "Fol_ders"
 msgstr "Па_пки"
-
-#: gtk/gtkfilesel.c:766
-msgid "Files"
-msgstr "Файлове"
 
 #: gtk/gtkfilesel.c:770
 msgid "_Files"
@@ -1160,11 +1159,11 @@ msgstr "_Нова Папка"
 
 #: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
-msgstr "Из_трива Файл"
+msgstr "Из_триване на Файл"
 
 #: gtk/gtkfilesel.c:1137
 msgid "_Rename File"
-msgstr "_Преименува Файл"
+msgstr "_Преименуване на Файл"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
@@ -1208,8 +1207,7 @@ msgstr "_Създаване"
 #: gtk/gtkfilesel.c:1566
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"В името на файла \"%s\" има символи, които не са позволени за име на файл"
+msgstr "В името на файла \"%s\" има символи, които не са позволени за име на файл"
 
 #: gtk/gtkfilesel.c:1569
 #, c-format
@@ -1241,8 +1239,7 @@ msgstr "Изтриване на Файл"
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Името на файл \"%s\" съдържа символи, които не са позволени за име на файл"
+msgstr "Името на файл \"%s\" съдържа символи, които не са позволени за име на файл"
 
 #: gtk/gtkfilesel.c:1676
 #, c-format
@@ -1269,12 +1266,12 @@ msgstr "Грешка при преименуване на файл \"%s\" в \"%
 
 #: gtk/gtkfilesel.c:1747
 msgid "Rename File"
-msgstr "Преименува Файл"
+msgstr "Преименуване на Файл"
 
 #: gtk/gtkfilesel.c:1762
 #, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Преименува файл \"%s\" в:"
+msgstr "Преименуване на файл \"%s\" в:"
 
 #: gtk/gtkfilesel.c:1791
 msgid "_Rename"
@@ -1303,7 +1300,7 @@ msgstr "Името е твърде дълго"
 
 #: gtk/gtkfilesel.c:4021
 msgid "Couldn't convert filename"
-msgstr "Не мога да конвертирам името на файла"
+msgstr "Не може да се конвертира името на файла"
 
 #: gtk/gtkfilesystemmodel.c:1266
 msgid "(Empty)"
@@ -1334,9 +1331,9 @@ msgid "Filesystem"
 msgstr "Файлова система"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Не може да бъде взета информация за файлът '%s': %s"
+msgstr ""
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
@@ -1374,28 +1371,28 @@ msgstr "Шрифт"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:69
+#: gtk/gtkfontsel.c:72
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "абвгде АБВГДЕ abcde ABCDE"
 
-#: gtk/gtkfontsel.c:355
+#: gtk/gtkfontsel.c:359
 msgid "_Family:"
 msgstr "_Фамилия:"
 
-#: gtk/gtkfontsel.c:361
+#: gtk/gtkfontsel.c:365
 msgid "_Style:"
 msgstr "_Стил:"
 
-#: gtk/gtkfontsel.c:367
+#: gtk/gtkfontsel.c:371
 msgid "Si_ze:"
 msgstr "Раз_мер:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:499
+#: gtk/gtkfontsel.c:547
 msgid "_Preview:"
 msgstr "_Преглед:"
 
-#: gtk/gtkfontsel.c:1327
+#: gtk/gtkfontsel.c:1375
 msgid "Font Selection"
 msgstr "Избор на Шрифт"
 
@@ -1518,7 +1515,7 @@ msgstr "чист"
 
 #: gtk/gtklabel.c:3297
 msgid "Select All"
-msgstr "Избира Всичко"
+msgstr "Избор на Всичко"
 
 #: gtk/gtklabel.c:3307
 msgid "Input Methods"
@@ -1546,17 +1543,17 @@ msgstr "Група"
 msgid "The radio tool button whose group this button belongs to."
 msgstr ""
 
-#: gtk/gtkrc.c:2390
+#: gtk/gtkrc.c:2391
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr "Не мога да намеря файла за включване: \"%s\""
+msgstr "Не може да се намери файла за включване: \"%s\""
 
-#: gtk/gtkrc.c:3029 gtk/gtkrc.c:3032
+#: gtk/gtkrc.c:3030 gtk/gtkrc.c:3033
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Не мога да намеря графичен файл в pixmap_path: \"%s\""
+msgstr "Не може да се намери графичен файл в pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3467
+#: gtk/gtkrc.c:3468
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Път на 'Pixmap' елемент: \"%s\" трябва да е абсолютно, %s, ред %d"
@@ -1580,7 +1577,7 @@ msgstr "Въпрос"
 
 #: gtk/gtkstock.c:294
 msgid "_Apply"
-msgstr "_Използва"
+msgstr "Прилагане"
 
 #: gtk/gtkstock.c:295
 msgid "_Bold"
@@ -1588,7 +1585,7 @@ msgstr "_Удебелен"
 
 #: gtk/gtkstock.c:296
 msgid "_Cancel"
-msgstr "_Прекъсва"
+msgstr "Отказ"
 
 #: gtk/gtkstock.c:297
 msgid "_CD-Rom"
@@ -1596,35 +1593,35 @@ msgstr "_CD-Rom"
 
 #: gtk/gtkstock.c:298
 msgid "_Clear"
-msgstr "_Изчиства"
+msgstr "_Изчистване"
 
 #: gtk/gtkstock.c:299
 msgid "_Close"
-msgstr "_Затваря"
+msgstr "_Затваряне"
 
 #: gtk/gtkstock.c:300
 msgid "_Convert"
-msgstr "Кон_вертира"
+msgstr "Кон_вертиране"
 
 #: gtk/gtkstock.c:301
 msgid "_Copy"
-msgstr "_Копира"
+msgstr "_Копиране"
 
 #: gtk/gtkstock.c:302
 msgid "Cu_t"
-msgstr "От_рязва"
+msgstr "От_рязване"
 
 #: gtk/gtkstock.c:303
 msgid "_Delete"
-msgstr "_Изтрива"
+msgstr "_Изтриване"
 
 #: gtk/gtkstock.c:304
 msgid "_Execute"
-msgstr "_Изпълнява"
+msgstr "_Изпълнение"
 
 #: gtk/gtkstock.c:305
 msgid "_Find"
-msgstr "_Търси"
+msgstr "_Търсене"
 
 #: gtk/gtkstock.c:306
 msgid "Find and _Replace"
@@ -1680,11 +1677,11 @@ msgstr "_У Дома"
 
 #: gtk/gtkstock.c:319
 msgid "Increase Indent"
-msgstr "Увеличава Изместването"
+msgstr "Увеличаване на Изместването"
 
 #: gtk/gtkstock.c:320
 msgid "Decrease Indent"
-msgstr "Нямалява Изместването"
+msgstr "Нямаляване на Изместването"
 
 #: gtk/gtkstock.c:321
 msgid "_Index"
@@ -1704,7 +1701,7 @@ msgstr "_Център"
 
 #: gtk/gtkstock.c:325
 msgid "_Fill"
-msgstr "_Запълва"
+msgstr "_Запълване"
 
 #: gtk/gtkstock.c:326
 msgid "_Left"
@@ -1732,11 +1729,11 @@ msgstr "_Да"
 
 #: gtk/gtkstock.c:332
 msgid "_Open"
-msgstr "_Отваря"
+msgstr "_Отваряне"
 
 #: gtk/gtkstock.c:333
 msgid "_Paste"
-msgstr "_Поставя"
+msgstr "_Поставяне"
 
 #: gtk/gtkstock.c:334
 msgid "_Preferences"
@@ -1756,7 +1753,7 @@ msgstr "_Настройки"
 
 #: gtk/gtkstock.c:338
 msgid "_Quit"
-msgstr "_Напуска"
+msgstr "_Спиране на програмата"
 
 #: gtk/gtkstock.c:339
 msgid "_Redo"
@@ -1764,19 +1761,19 @@ msgstr "_Напред"
 
 #: gtk/gtkstock.c:340
 msgid "_Refresh"
-msgstr "_Обновява"
+msgstr "_Обновяване"
 
 #: gtk/gtkstock.c:342
 msgid "_Revert"
-msgstr "_Обръща"
+msgstr "_Обръщане"
 
 #: gtk/gtkstock.c:343
 msgid "_Save"
-msgstr "_Запазва"
+msgstr "_Запазване"
 
 #: gtk/gtkstock.c:344
 msgid "Save _As"
-msgstr "Запазва _Като"
+msgstr "Запазване _Като"
 
 #: gtk/gtkstock.c:345
 msgid "_Color"
@@ -1808,7 +1805,7 @@ msgstr "_Зачертан"
 
 #: gtk/gtkstock.c:352
 msgid "_Undelete"
-msgstr "Възстановява _изтрито"
+msgstr "Възстановяване на _изтрито"
 
 #: gtk/gtkstock.c:353
 msgid "_Underline"
@@ -1828,15 +1825,15 @@ msgstr "_Нормален Размер"
 
 #: gtk/gtkstock.c:357
 msgid "Best _Fit"
-msgstr ""
+msgstr "Запълване"
 
 #: gtk/gtkstock.c:358
 msgid "Zoom _In"
-msgstr "Увеличава"
+msgstr "Увеличаване"
 
 #: gtk/gtkstock.c:359
 msgid "Zoom _Out"
-msgstr "Намалява"
+msgstr "Намаляване"
 
 #: gtk/gtktextutil.c:47
 msgid "LRM _Left-to-right mark"
@@ -1881,28 +1878,28 @@ msgstr "ZWNJ _Развръзка с нулева ширина"
 #: gtk/gtkthemes.c:70
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Не мога да намеря тема в пътя с модули: \"%s\","
+msgstr "Не може да се намери тема в пътя с модули: \"%s\","
 
 #: gtk/gtktipsquery.c:185
 msgid "--- No Tip ---"
 msgstr "--- Няма Подсещане ---"
 
-#: gtk/gtkuimanager.c:1095
+#: gtk/gtkuimanager.c:1099
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1313
+#: gtk/gtkuimanager.c:1317
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1398
+#: gtk/gtkuimanager.c:1402
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:2175
+#: gtk/gtkuimanager.c:2188
 msgid "Empty"
 msgstr "Празно"
 
