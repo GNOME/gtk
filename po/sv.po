@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2004-07-20 02:54+0200\n"
-"PO-Revision-Date: 2004-04-16 10:31+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-07-26 07:55+0200\n"
+"PO-Revision-Date: 2004-07-26 08:00+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:787
@@ -792,7 +792,7 @@ msgstr ""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:712
+#: gtk/gtkcalendar.c:699
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -802,7 +802,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:722
+#: gtk/gtkcalendar.c:709
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -977,7 +977,7 @@ msgstr ""
 "Kunde inte lägga till ett bokmärke för %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5353
+#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5358
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1057,97 +1057,97 @@ msgstr "Visa _dolda filer"
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilechooserdefault.c:2857
+#: gtk/gtkfilechooserdefault.c:2858
 msgid "Name"
 msgstr "Namn"
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2883
 msgid "Size"
 msgstr "Storlek"
 
-#: gtk/gtkfilechooserdefault.c:2891
+#: gtk/gtkfilechooserdefault.c:2896
 msgid "Modified"
 msgstr "Ändrad"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2936
+#: gtk/gtkfilechooserdefault.c:2941
 msgid "Create Fo_lder"
 msgstr "Skapa mapp"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3048
+#: gtk/gtkfilechooserdefault.c:3053
 msgid "_Name:"
 msgstr "_Namn:"
 
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3095
 msgid "_Browse for other folders"
 msgstr "_Bläddra efter andra mappar"
 
-#: gtk/gtkfilechooserdefault.c:3327
+#: gtk/gtkfilechooserdefault.c:3332
 msgid "Save in _folder:"
 msgstr "Spara i _mappen:"
 
-#: gtk/gtkfilechooserdefault.c:3329
+#: gtk/gtkfilechooserdefault.c:3334
 msgid "Create in _folder:"
 msgstr "Skapa i _mappen:"
 
-#: gtk/gtkfilechooserdefault.c:3973
+#: gtk/gtkfilechooserdefault.c:3978
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan inte byta till mappen eftersom den inte är lokal"
 
-#: gtk/gtkfilechooserdefault.c:4111
+#: gtk/gtkfilechooserdefault.c:4116
 msgid "Could not find the path"
 msgstr "Kunde inte hitta sökvägen"
 
-#: gtk/gtkfilechooserdefault.c:4462
+#: gtk/gtkfilechooserdefault.c:4467
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "genvägen %s finns inte"
 
-#: gtk/gtkfilechooserdefault.c:5126
+#: gtk/gtkfilechooserdefault.c:5131
 msgid "Type name of new folder"
 msgstr "Ange namnet på den nya mappen"
 
-#: gtk/gtkfilechooserdefault.c:5155
+#: gtk/gtkfilechooserdefault.c:5160
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:5157
+#: gtk/gtkfilechooserdefault.c:5162
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f kB"
 
-#: gtk/gtkfilechooserdefault.c:5159
+#: gtk/gtkfilechooserdefault.c:5164
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:5161
+#: gtk/gtkfilechooserdefault.c:5166
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:5206
+#: gtk/gtkfilechooserdefault.c:5211
 msgid "Today"
 msgstr "Idag"
 
-#: gtk/gtkfilechooserdefault.c:5208
+#: gtk/gtkfilechooserdefault.c:5213
 msgid "Yesterday"
 msgstr "Igår"
 
-#: gtk/gtkfilechooserdefault.c:5219
+#: gtk/gtkfilechooserdefault.c:5224
 msgid "Unknown"
 msgstr "Okänd"
 
-#: gtk/gtkfilechooserdefault.c:5314
+#: gtk/gtkfilechooserdefault.c:5319
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Kan inte byta till mappen du angav eftersom den är en ogiltig sökväg."
 
-#: gtk/gtkfilechooserdefault.c:5391
+#: gtk/gtkfilechooserdefault.c:5396
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1156,15 +1156,15 @@ msgstr ""
 "Kunde inte välja %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5430
+#: gtk/gtkfilechooserdefault.c:5435
 msgid "Open Location"
 msgstr "Öppna plats"
 
-#: gtk/gtkfilechooserdefault.c:5437
+#: gtk/gtkfilechooserdefault.c:5442
 msgid "Save in Location"
 msgstr "Spara på plats"
 
-#: gtk/gtkfilechooserdefault.c:5456
+#: gtk/gtkfilechooserdefault.c:5461
 msgid "_Location:"
 msgstr "_Plats:"
 
@@ -1413,28 +1413,28 @@ msgstr "Typsnitt"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:69
+#: gtk/gtkfontsel.c:72
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: gtk/gtkfontsel.c:355
+#: gtk/gtkfontsel.c:359
 msgid "_Family:"
 msgstr "_Familj:"
 
-#: gtk/gtkfontsel.c:361
+#: gtk/gtkfontsel.c:365
 msgid "_Style:"
 msgstr "_Stil:"
 
-#: gtk/gtkfontsel.c:367
+#: gtk/gtkfontsel.c:371
 msgid "Si_ze:"
 msgstr "S_torlek:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:499
+#: gtk/gtkfontsel.c:547
 msgid "_Preview:"
 msgstr "_Förhandsvisning:"
 
-#: gtk/gtkfontsel.c:1327
+#: gtk/gtkfontsel.c:1374
 msgid "Font Selection"
 msgstr "Typsnittsval"
 
@@ -1492,9 +1492,11 @@ msgstr "_Enhet:"
 msgid "Disabled"
 msgstr "Avstängd"
 
+# Se http://bugzilla.gnome.org/show_bug.cgi?id=148437 -- detta ska vara
+# "skärm"
 #: gtk/gtkinputdialog.c:279
 msgid "Screen"
-msgstr "Mask"
+msgstr "Skärm"
 
 #: gtk/gtkinputdialog.c:286
 msgid "Window"
@@ -1555,11 +1557,11 @@ msgstr "(okänd)"
 msgid "clear"
 msgstr "töm"
 
-#: gtk/gtklabel.c:3297
+#: gtk/gtklabel.c:3395
 msgid "Select All"
 msgstr "Markera allt"
 
-#: gtk/gtklabel.c:3307
+#: gtk/gtklabel.c:3405
 msgid "Input Methods"
 msgstr "Inmatningsmetoder"
 
@@ -1572,7 +1574,7 @@ msgstr "Inmatningsmetoder"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtknotebook.c:2698 gtk/gtknotebook.c:5046
+#: gtk/gtknotebook.c:2711 gtk/gtknotebook.c:5059
 #, c-format
 msgid "Page %u"
 msgstr "Sida %u"
@@ -1966,22 +1968,22 @@ msgstr "Kan inte hitta temamotorn i \"module_path\": \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Inget tips ---"
 
-#: gtk/gtkuimanager.c:1095
+#: gtk/gtkuimanager.c:1099
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Okänt attribut \"%s\" på rad %d tecken %d"
 
-#: gtk/gtkuimanager.c:1313
+#: gtk/gtkuimanager.c:1317
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Oväntad starttagg \"%s\" på rad %d tecken %d"
 
-#: gtk/gtkuimanager.c:1398
+#: gtk/gtkuimanager.c:1402
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Oväntade teckendata på rad %d tecken %d"
 
-#: gtk/gtkuimanager.c:2175
+#: gtk/gtkuimanager.c:2188
 msgid "Empty"
 msgstr "Tom"
 

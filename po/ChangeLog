@@ -1,3 +1,8 @@
+2004-07-26  Christian Rose  <menthos@menthos.com>
+
+	* sv.po: Fix for #148437. Thanks to Robert Ögren for
+	discovering the problem.
+
 2004-07-22  Gustavo Maciel Dias Vieira  <gustavo@sagui.org>
 
 	* pt_BR.po: Updated Brazilian Portuguese translation done by

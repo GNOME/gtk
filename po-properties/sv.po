@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "POT-Creation-Date: 2004-07-20 02:56+0200\n"
-"PO-Revision-Date: 2004-03-03 00:05+0100\n"
+"PO-Revision-Date: 2004-07-26 08:00+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2090,9 +2090,11 @@ msgstr "Visa menybilder"
 msgid "Whether images should be shown in menus"
 msgstr "Huruvida bilder ska visas i menyer"
 
+# Se http://bugzilla.gnome.org/show_bug.cgi?id=148437 -- detta ska vara
+# "skärm"
 #: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:570
 msgid "Screen"
-msgstr "Mask"
+msgstr "Skärm"
 
 #: gtk/gtkinvisible.c:116 gtk/gtkwindow.c:571
 msgid "The screen where this window will be displayed"
