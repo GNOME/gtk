@@ -197,7 +197,7 @@ typedef enum
   GDK_WA_COLORMAP = 1 << 5,
   GDK_WA_VISUAL   = 1 << 6,
   GDK_WA_WMCLASS  = 1 << 7,
-  GDK_WA_NOREDIR  = 1 << 8,
+  GDK_WA_NOREDIR  = 1 << 8
 } GdkWindowAttributesType;
 
 /* Size restriction enumeration.

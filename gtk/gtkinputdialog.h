@@ -68,7 +68,7 @@ struct _GtkInputDialogClass
 
 
 guint      gtk_input_dialog_get_type     (void);
-GtkWidget* gtk_input_dialog_new          ();
+GtkWidget* gtk_input_dialog_new          (void);
 
 
 #ifdef __cplusplus

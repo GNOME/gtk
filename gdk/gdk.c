@@ -2233,6 +2233,7 @@ gdk_event_translate (GdkEvent *event,
 	  return_val = window_private && !window_private->destroyed;
 	  break;
 	default:
+          ;
 	}
       break;
 

@@ -1,3 +1,9 @@
+Fri Jan  2 23:55:24 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* Several portability fixes from Michael Callahan 
+          <callahan@xmission.com> including adding in missing
+ 	  #includes and adding void in function prototypes.
+
 Fri Jan  2 19:28:52 1988 Jay Painter <jpaint@serv.net>
 	* gtk/gtkclist.h:
 	* gtk/gtkclist.c:

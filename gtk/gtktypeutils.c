@@ -45,7 +45,7 @@ static gint  gtk_type_compare      (GtkType     *a,
 static guint gtk_type_name_hash    (const char  *key);
 static gint  gtk_type_name_compare (const char  *a,
 				    const char  *b);
-static void  gtk_type_init_builtin_types ();
+static void  gtk_type_init_builtin_types (void);
 
 
 static int initialize = TRUE;
@@ -395,7 +395,7 @@ gtk_type_register_builtin (char   *name,
   return gtk_type_unique (parent, &info);
 }
 
-extern void gtk_object_init_type ();
+extern void gtk_object_init_type (void);
 
 GtkType gtk_type_builtins[GTK_TYPE_NUM_BUILTINS];
 

@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <stdlib.h>
 #include "gtksignal.h"
 #include "gtkhandlebox.h"
 #include <gdk/gdkx.h>

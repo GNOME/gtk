@@ -48,7 +48,7 @@ struct _GtkHPanedClass
 
 
 guint      gtk_hpaned_get_type (void);
-GtkWidget* gtk_hpaned_new      ();
+GtkWidget* gtk_hpaned_new      (void);
 
 
 #ifdef __cplusplus

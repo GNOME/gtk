@@ -16,6 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <string.h>
 #include "gtk.h"
 
 typedef enum {
@@ -35,7 +36,7 @@ typedef enum {
   STRING,
   TEXT,
   WINDOW,
-  LAST_SEL_TYPE,
+  LAST_SEL_TYPE
 } SelType;
 
 GdkAtom seltypes[LAST_SEL_TYPE];
