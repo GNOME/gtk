@@ -1288,7 +1288,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 		   entry->path);
       
       if (type_id == quark_type_last_branch)
-	gtk_menu_item_right_justify (GTK_MENU_ITEM (widget));
+	gtk_menu_item_set_right_justified (GTK_MENU_ITEM (widget), TRUE);
       
       parent = widget;
       widget = gtk_widget_new (GTK_TYPE_MENU,

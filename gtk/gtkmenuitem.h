@@ -103,9 +103,13 @@ void       gtk_menu_item_toggle_size_request  (GtkMenuItem         *menu_item,
 					       gint                *requisition);
 void       gtk_menu_item_toggle_size_allocate (GtkMenuItem         *menu_item,
 					       gint                 allocation);
-void       gtk_menu_item_right_justify        (GtkMenuItem         *menu_item);
+void       gtk_menu_item_set_right_justified  (GtkMenuItem         *menu_item,
+					       gboolean             right_justified);
+gboolean   gtk_menu_item_get_right_justified  (GtkMenuItem         *menu_item);
 
-
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_menu_item_right_justify(menu_item) gtk_menu_item_set_right_justified ((menu_item), TRUE)
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

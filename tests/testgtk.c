@@ -2864,7 +2864,7 @@ create_menus (void)
       menuitem = gtk_image_menu_item_new_with_label ("Help");
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, 5, TRUE));
-      gtk_menu_item_right_justify (GTK_MENU_ITEM (menuitem));
+      gtk_menu_item_set_right_justified (GTK_MENU_ITEM (menuitem), TRUE);
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
       

@@ -817,12 +817,49 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   *y = ty;
 }
 
+/**
+ * gtk_menu_item_set_right_justified:
+ * @menu_item: a #GtkMenuItem.
+ * @right_justified: if %TRUE the menu item will appear at the 
+ *   far right if added to a menu bar.
+ * 
+ * Sets whether the menu item appears justified at the right
+ * side of a menu bar. This was traditionally done for "Help" menu
+ * items, but is now considered a bad idea. (If the widget
+ * layout is reversed for a right-to-left language like Hebrew
+ * or Arabic, right-justified-menu-items appear at the left.)
+ **/
 void
-gtk_menu_item_right_justify (GtkMenuItem *menuitem)
+gtk_menu_item_set_right_justified (GtkMenuItem *menu_item,
+				   gboolean     right_justified)
 {
-  g_return_if_fail (GTK_IS_MENU_ITEM (menuitem));
+  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
-  menuitem->right_justify = 1;
+  right_justified = right_justified != FALSE;
+
+  if (right_justified != menu_item->right_justify)
+    {
+      menu_item->right_justify = right_justified;
+      gtk_widget_queue_resize (GTK_MENU_ITEM (menu_item));
+    }
+}
+
+/**
+ * gtk_menu_item_get_right_justified:
+ * @menu_item: a #GtkMenuItem
+ * 
+ * Gets whether the menu item appears justified at the right
+ * side of the menu bar.
+ * 
+ * Return value: %TRUE if the menu item will appear at the
+ *   far right if added to a menu bar.
+ **/
+gboolean
+gtk_menu_item_get_right_justified (GtkMenuItem *menu_item)
+{
+  g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), FALSE);
+  
+  return menu_item->right_justify;
 }
 
 

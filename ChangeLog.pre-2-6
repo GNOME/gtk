@@ -1,3 +1,20 @@
+Sun Aug 26 20:00:00 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in acinclude.m4: Use autoconf 2.13/2.50 compat
+	macro.
+
+	 (patch from ERDI Gergo  <cactus@cactus.rulez.org>, #58920)
+ 
+ 	* gtk/gtkmenuitem.c (gtk_menu_item_set_right_justified): Change
+	interface to be a standard setter from gtk_menu_item_right_justify.
+ 	(gtk_menu_item_get_right_justified): a getter to go with the setter
+
+	* gtk/gtkmenuitem.h: Add a deprecated compat macro for
+	gtk_menu_item_right_justify.
+
+	* demos/gtk-demo/menus.c tests/testgtk.c: Switch to 
+	gtk_menu_item_set_right_justified.
+ 
 2001-08-27  Jens Finke <jens@gnome.org>
 
 	* gtk+.spec.in: Updated to match gpp requirements, reworked the
