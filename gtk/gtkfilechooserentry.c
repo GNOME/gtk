@@ -42,6 +42,8 @@ struct _GtkFileChooserEntry
 {
   GtkEntry parent_instance;
 
+  GtkFileChooserAction action;
+
   GtkFileSystem *file_system;
   GtkFilePath *base_folder;
   GtkFilePath *current_folder_path;
@@ -173,6 +175,7 @@ gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   GtkCellRenderer *cell;
 
   comp = gtk_entry_completion_new ();
+
   gtk_entry_completion_set_match_func (comp,
 				       completion_match_func,
 				       chooser_entry,
@@ -447,6 +450,19 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
 						      unique_path,
 						      common_prefix);
       gtk_file_path_free (unique_path);
+    }
+
+  switch (chooser_entry->action)
+    {
+    case GTK_FILE_CHOOSER_ACTION_SAVE:
+    case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+      if (common_prefix && !g_str_has_suffix (common_prefix, "/"))
+	{
+	  g_free (common_prefix);
+	  common_prefix = NULL;
+	}
+      break;
+    default: ;
     }
 
   if (common_prefix)
@@ -863,6 +879,11 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
 const GtkFilePath *
 _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
 {
+  if (chooser_entry->has_completion)
+    {
+      gtk_editable_set_position (GTK_EDITABLE (chooser_entry),
+				 GTK_ENTRY (chooser_entry)->text_length);
+    }
   return chooser_entry->current_folder_path;
 }
 
@@ -881,6 +902,11 @@ _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
 const gchar *
 _gtk_file_chooser_entry_get_file_part (GtkFileChooserEntry *chooser_entry)
 {
+  if (chooser_entry->has_completion)
+    {
+      gtk_editable_set_position (GTK_EDITABLE (chooser_entry),
+				 GTK_ENTRY (chooser_entry)->text_length);
+    }
   return chooser_entry->file_part;
 }
 
@@ -898,4 +924,44 @@ _gtk_file_chooser_entry_set_file_part (GtkFileChooserEntry *chooser_entry,
   g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry));
 
   gtk_entry_set_text (GTK_ENTRY (chooser_entry), file_part);
+}
+
+
+/**
+ * _gtk_file_chooser_entry_set_action:
+ * @chooser_entry: a #GtkFileChooserEntry
+ * @action: the action which is performed by the file selector using this entry
+ *
+ * Sets action which is performed by the file selector using this entry. 
+ * The #GtkFileChooserEntry will use different completion strategies for 
+ * different actions.
+ **/
+void
+_gtk_file_chooser_entry_set_action (GtkFileChooserEntry *chooser_entry,
+				    GtkFileChooserAction action)
+{
+  g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry));
+  
+  if (  chooser_entry->action != action)
+    {
+      chooser_entry->action = action;
+    }
+}
+
+
+/**
+ * _gtk_file_chooser_entry_get_action:
+ * @chooser_entry: a #GtkFileChooserEntry
+ *
+ * Gets the action for this entry. 
+ *
+ * Returns: the action
+ **/
+GtkFileChooserAction
+_gtk_file_chooser_entry_get_action (GtkFileChooserEntry *chooser_entry)
+{
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry),
+			GTK_FILE_CHOOSER_ACTION_OPEN);
+  
+  return chooser_entry->action;
 }

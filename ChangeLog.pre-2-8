@@ -1,3 +1,28 @@
+2004-09-17  Matthias Clasen  <mclasen@redhat.com>
+
+	Improve the behaviour of the file chooser in save mode. Fixes bugs
+	#151031, #151608, #151994 reported by Owen Taylor and Alexander 
+	Larsson.
+	
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_set_property): 
+	(location_entry_create): Propagate the action to the file 
+	chooser entries.
+	(gtk_file_chooser_default_should_respond): Switch folders if 
+	the user enters a directory name in the entry and clear the entry
+	after switching folders.
+	(gtk_file_chooser_default_should_respond, shortcuts_row_activated_cb): 
+	Move focus to the file list when activating a shortcut.
+	(gtk_file_chooser_default_should_respond): Handle the case where the
+	user clicks on "Save" after selecting a folder in the file list.
+
+	* gtk/gtkfilechooserentry.h: 
+	* gtk/gtkfilechooserentry.c (_gtk_file_chooser_entry_set_action): 
+	(_gtk_file_chooser_entry_get_action): New functions to propagate
+	the GtkFileChooserAction of the file chooser to the file chooser 
+	entry.
+	(check_completion_callback): If we are in save mode, only do 
+	inline completion for directories. 
+
 Thu Sep 16 23:10:37 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkselection-x11.c (make_list): Warn if a UTF8_STRING
