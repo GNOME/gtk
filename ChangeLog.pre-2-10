@@ -1,3 +1,13 @@
+Wed May 22 16:12:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Require autoconf-2.52 explicitely,
+	since otherwise Debian will process it with 2.13 (ugh!).
+
+Wed May 22 12:29:20 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_init): remove
+	GTK_RESIZE_QUEUE setting.
+
 Tue May 21 16:46:15 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gdk/x11/gdkdisplay-x11.c (gdk_internal_connection_watch): 
