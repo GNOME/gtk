@@ -75,11 +75,9 @@ static void     gtk_im_context_xim_get_preedit_string (GtkIMContext          *co
 						       PangoAttrList        **attrs,
 						       gint                  *cursor_pos);
 
-static void reinitialize_ic      (GtkIMContextXIM *context_xim,
-				  gboolean         send_signal);
+static void reinitialize_ic      (GtkIMContextXIM *context_xim);
 static void set_ic_client_window (GtkIMContextXIM *context_xim,
-				  GdkWindow       *client_window,
-				  gboolean         send_signal);
+				  GdkWindow       *client_window);
 
 static void setup_styles (GtkXIMInfo *info);
 
@@ -175,7 +173,7 @@ reinitialize_all_ics (GtkXIMInfo *info)
   GSList *tmp_list;
 
   for (tmp_list = info->ics; tmp_list; tmp_list = tmp_list->next)
-    reinitialize_ic (tmp_list->data, TRUE);
+    reinitialize_ic (tmp_list->data);
 }
 
 static void
@@ -320,7 +318,7 @@ xim_info_display_closed (GdkDisplay *display,
   info->ics = NULL;
 
   for (tmp_list = ics; tmp_list; tmp_list = tmp_list->next)
-    set_ic_client_window (tmp_list->data, NULL, TRUE);
+    set_ic_client_window (tmp_list->data, NULL);
 
   g_slist_free (ics);
   
@@ -418,6 +416,7 @@ gtk_im_context_xim_init (GtkIMContextXIM *im_context_xim)
   im_context_xim->use_preedit = TRUE;
   im_context_xim->filter_key_release = FALSE;
   im_context_xim->status_visible = FALSE;
+  im_context_xim->finalizing = FALSE;
 }
 
 static void
@@ -425,15 +424,16 @@ gtk_im_context_xim_finalize (GObject *obj)
 {
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (obj);
 
-  set_ic_client_window (context_xim, NULL, FALSE);
+  context_xim->finalizing = TRUE;
+
+  set_ic_client_window (context_xim, NULL);
 
   g_free (context_xim->locale);
   g_free (context_xim->mb_charset);
 }
 
 static void
-reinitialize_ic (GtkIMContextXIM *context_xim,
-		 gboolean         send_signal)
+reinitialize_ic (GtkIMContextXIM *context_xim)
 {
   if (context_xim->ic)
     {
@@ -444,7 +444,7 @@ reinitialize_ic (GtkIMContextXIM *context_xim,
       if (context_xim->preedit_length)
 	{
 	  context_xim->preedit_length = 0;
-	  if (send_signal)
+	  if (!context_xim->finalizing)
 	    g_signal_emit_by_name (context_xim, "preedit_changed");
 	}
     }
@@ -452,10 +452,9 @@ reinitialize_ic (GtkIMContextXIM *context_xim,
 
 static void
 set_ic_client_window (GtkIMContextXIM *context_xim,
-		      GdkWindow       *client_window,
-		      gboolean         send_signal)
+		      GdkWindow       *client_window)
 {
-  reinitialize_ic (context_xim, send_signal);
+  reinitialize_ic (context_xim);
   if (context_xim->client_window)
     {
       context_xim->im_info->ics = g_slist_remove (context_xim->im_info->ics, context_xim);
@@ -477,7 +476,7 @@ gtk_im_context_xim_set_client_window (GtkIMContext          *context,
 {
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
 
-  set_ic_client_window (context_xim, client_window, TRUE);
+  set_ic_client_window (context_xim, client_window);
 }
 
 GtkIMContext *
@@ -677,7 +676,7 @@ gtk_im_context_xim_set_use_preedit (GtkIMContext *context,
   if (context_xim->use_preedit != use_preedit)
     {
       context_xim->use_preedit = use_preedit;
-      reinitialize_ic (context_xim, TRUE);
+      reinitialize_ic (context_xim);
     }
 
   return;
@@ -836,8 +835,10 @@ preedit_start_callback (XIC      xic,
 			XPointer call_data)
 {
   GtkIMContext *context = GTK_IM_CONTEXT (client_data);
+  GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
   
-  g_signal_emit_by_name (context, "preedit_start");
+  if (!context_xim->finalizing)
+    g_signal_emit_by_name (context, "preedit_start");
 }		     
 
 static void
@@ -846,8 +847,10 @@ preedit_done_callback (XIC      xic,
 		     XPointer call_data)
 {
   GtkIMContext *context = GTK_IM_CONTEXT (client_data);
-  
-  g_signal_emit_by_name (context, "preedit_end");  
+  GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
+
+  if (!context_xim->finalizing)
+    g_signal_emit_by_name (context, "preedit_end");  
 }		     
 
 static gint
@@ -972,7 +975,8 @@ preedit_draw_callback (XIC                           xic,
   if (new_text)
     g_free (new_text);
 
-  g_signal_emit_by_name (context, "preedit_changed");
+  if (!context->finalizing)
+    g_signal_emit_by_name (context, "preedit_changed");
 }
     
 
@@ -986,7 +990,8 @@ preedit_caret_callback (XIC                            xic,
   if (call_data->direction == XIMAbsolutePosition)
     {
       context->preedit_cursor = call_data->position;
-      g_signal_emit_by_name (context, "preedit_changed");
+      if (!context->finalizing)
+	g_signal_emit_by_name (context, "preedit_changed");
     }
   else
     {
@@ -1018,7 +1023,7 @@ status_draw_callback (XIC      xic,
 {
   GtkIMContextXIM *context = GTK_IM_CONTEXT_XIM (client_data);
 
-  if (context->status_visible == FALSE)
+  if (!context->status_visible)
     return;
 
   if (call_data->type == XIMTextType)
