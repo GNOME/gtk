@@ -1,6 +1,12 @@
 2004-03-24  J. Ali Harlow  <ali@juiblex.co.uk>
 
 	* gtk/gtkfilesystemwin32.c
+	(filename_is_root): Bare drive designators (eg., "c:") are
+	no longer considered as root filenames.  Fixed #137942
+
+2004-03-24  J. Ali Harlow  <ali@juiblex.co.uk>
+
+	* gtk/gtkfilesystemwin32.c
 	(gtk_file_system_win32_create_folder): Invert test for error in
 	mkdir.  Fixes #137945
 

@@ -1383,7 +1383,6 @@ filename_is_root (const char *filename)
 
   /* accept both forms */
 
-  return (   (len == 2 && filename[1] == ':')
-          || (len == 3 && filename[1] == ':' && (filename[2] == '\\' || filename[2] == '/')));
+  return (len == 3 && filename[1] == ':' && (filename[2] == '\\' || filename[2] == '/'));
 }
 
