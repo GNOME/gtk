@@ -1141,13 +1141,6 @@ convert_to_format (guchar        *src_buf,
 {
   gint i;
 
-  if (dest_format == FORMAT_EXACT_MASK &&
-      src_rowstride == dest_rowstride)
-    {
-      memcpy (dest_buf, src_buf, height * src_rowstride);
-      return;
-    }
-  
   for (i=0; i < height; i++)
     {
       switch (dest_format)

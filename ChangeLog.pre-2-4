@@ -1,3 +1,11 @@
+Tue Jun  3 15:05:47 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.c (convert_to_format): Remove
+	bad optimization for src_rowstride == dest_stride.
+	(Didn't consider the case where we were copying only
+	partial widths of a wider source buffer)
+	(#113034, reported by Hans Petter Jansson)
+
 2003-06-03  Michael Natterer  <mitch@gimp.org>
 
 	* gdk/x11/gdkinput-x11.c (_gdk_input_common_find_events):
