@@ -467,19 +467,14 @@ GtkWidget *
 gtk_clist_new_with_titles (gint columns,
 			   gchar * titles[])
 {
-  GtkCList *clist;
   GtkWidget *widget;
 
- if (titles == NULL)
-    return NULL;
+  g_return_val_if_fail (titles != NULL, NULL);
+  
+  widget = gtk_type_new (gtk_clist_get_type ());
+  
+  gtk_clist_construct (GTK_CLIST (widget), columns, titles);
 
-  widget = gtk_clist_new (columns);
-  if (!widget)
-    return NULL;
-  else
-    clist = GTK_CLIST (widget);
-
-  gtk_clist_construct (clist, columns, titles);
   return widget;
 }
 

@@ -1,5 +1,14 @@
+Sat Feb 28 19:29:09 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkclist.c (gtk_clist_new_with_titles): retrive the clist widget
+	from gtk_type_new (gtk_clist_get_type ()), not gtk_clist_new(),
+ 	otherwise gtk_clist_construct() gets called twice.
+
+	* gtk/gtkhandlebox.h:
+	* gtk/gtkhandlebox.c: emit signals when the child is attached/detached.
+
 Sat Feb 28 15:18:36 1998  Tim Janik  <timj@gimp.org>
-	
+
 	* gtk/gtkpreview.c: fix behavior of gtk_preview_put() with
 	srcx/srcy != 0, gtk-shige-980127-0.patch.gz by
 	AOSASA Shigeru <aozasa@sakuranet.or.jp>.

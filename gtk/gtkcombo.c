@@ -255,8 +255,8 @@ gtk_combo_popup_list (GtkButton * button, GtkCombo * combo)
   gtk_widget_set_uposition (combo->popwin, x, y);
   gtk_widget_set_usize (combo->popwin, width, height);
   gtk_widget_realize (combo->popwin);
-  gdk_window_set_cursor (combo->popwin->window,
-			 gdk_cursor_new (GDK_TOP_LEFT_ARROW));
+  /*  gdk_window_set_cursor (combo->popwin->window, gdk_cursor_new (GDK_TOP_LEFT_ARROW));
+   */
   gdk_window_resize (combo->popwin->window, width, height);
   gtk_widget_show (combo->popwin);
   gtk_widget_grab_focus (combo->popwin);

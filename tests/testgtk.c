@@ -939,6 +939,17 @@ create_statusbar ()
 }
 
 static void
+handle_box_child_signal (GtkHandleBox *hb,
+			 GtkWidget    *child,
+			 const gchar  *action)
+{
+  printf ("%s: child <%s> %sed\n",
+	  gtk_type_name (GTK_OBJECT_TYPE (hb)),
+	  gtk_type_name (GTK_OBJECT_TYPE (child)),
+	  action);
+}
+
+static void
 create_handle_box ()
 {
   static GtkWidget* window = NULL;
@@ -960,6 +971,14 @@ create_handle_box ()
     
     hbox = gtk_handle_box_new ();
     gtk_container_add (GTK_CONTAINER (window), hbox);
+    gtk_signal_connect (GTK_OBJECT (hbox),
+			"child_attached",
+			GTK_SIGNAL_FUNC (handle_box_child_signal),
+			"attached");
+    gtk_signal_connect (GTK_OBJECT (hbox),
+			"child_detached",
+			GTK_SIGNAL_FUNC (handle_box_child_signal),
+			"detached");
     gtk_widget_show (hbox);
 
     toolbar = make_toolbar (window);
@@ -1056,7 +1075,7 @@ create_reparent ()
 
       gtk_box_pack_start (GTK_BOX (box3), label, FALSE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT (label),
-			  "set_parent",
+			  "parent_set",
 			  GTK_SIGNAL_FUNC (set_parent_signal),
 			  (GtkObject*) 42);
       gtk_widget_show (label);

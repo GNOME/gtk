@@ -235,7 +235,7 @@ static const gchar *event_key = "gtk-event-mask";
 static const gchar *extension_event_key = "gtk-extension-event-mode";
 static const gchar *parent_window_key = "gtk-parent-window";
 static const gchar *shape_info_key = "gtk-shape-info";
-static const gchar *saved_default_style = "gtk-saved-default-style";
+static const gchar *saved_default_style_key = "gtk-saved-default-style";
 
 
 
@@ -2349,11 +2349,11 @@ gtk_widget_set_style (GtkWidget *widget,
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_RC_STYLE);
   GTK_PRIVATE_SET_FLAG (widget, GTK_USER_STYLE);
 
-  default_style = gtk_object_get_data (GTK_OBJECT (widget), saved_default_style);
+  default_style = gtk_object_get_data (GTK_OBJECT (widget), saved_default_style_key);
   if (!default_style)
     {
       gtk_style_ref (widget->style);
-      gtk_object_set_data (GTK_OBJECT (widget), saved_default_style, widget->style);
+      gtk_object_set_data (GTK_OBJECT (widget), saved_default_style_key, widget->style);
     }
 
   gtk_widget_set_style_internal (widget, style, initial_emission);
@@ -2381,14 +2381,14 @@ gtk_widget_set_rc_style (GtkWidget *widget)
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
   GTK_WIDGET_SET_FLAGS (widget, GTK_RC_STYLE);
 
-  saved_style = gtk_object_get_data (GTK_OBJECT (widget), saved_default_style);
+  saved_style = gtk_object_get_data (GTK_OBJECT (widget), saved_default_style_key);
   new_style = gtk_rc_get_style (widget);
   if (new_style)
     {
       if (!saved_style)
 	{
 	  gtk_style_ref (widget->style);
-	  gtk_object_set_data (GTK_OBJECT (widget), saved_default_style, widget->style);
+	  gtk_object_set_data (GTK_OBJECT (widget), saved_default_style_key, widget->style);
 	}
       gtk_widget_set_style_internal (widget, new_style, initial_emission);
     }
@@ -2398,7 +2398,7 @@ gtk_widget_set_rc_style (GtkWidget *widget)
 	{
 	  g_assert (initial_emission == FALSE); /* FIXME: remove this line */
 
-	  gtk_object_remove_data (GTK_OBJECT (widget), saved_default_style);
+	  gtk_object_remove_data (GTK_OBJECT (widget), saved_default_style_key);
 	  gtk_widget_set_style_internal (widget, saved_style, initial_emission);
 	  gtk_style_unref (saved_style);
 	}
@@ -3297,6 +3297,7 @@ static void
 gtk_widget_real_destroy (GtkObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
+  GtkStyle *saved_style;
 
   gtk_widget_ref (widget);
 
@@ -3320,6 +3321,13 @@ gtk_widget_real_destroy (GtkObject *object)
 
   if (widget->parent)
     gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
+
+  saved_style = gtk_object_get_data (GTK_OBJECT (widget), saved_default_style_key);
+  if (saved_style)
+    {
+      gtk_style_unref (saved_style);
+      gtk_object_remove_data (GTK_OBJECT (widget), saved_default_style_key);
+    }
 
   gtk_style_unref (widget->style);
   widget->style = NULL;

@@ -22,6 +22,7 @@ Forthcoming Changes for GTK+ 0.99.4:
   g_string_hash() -> g_str_hash()
   g_string_equal() -> g_str_equal()
   gtk_tooltips_set_tips() -> gtk_tooltips_set_tip()
+* Motif window mangaer hints support.
 * Clean ups and many many bug fixes by a lot of people all over the place.
 * New, long and descriptive ChangeLog entries for bored readers ;)
 

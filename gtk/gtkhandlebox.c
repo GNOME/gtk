@@ -71,6 +71,7 @@ static gint gtk_handle_box_delete_float   (GtkWidget         *widget,
 
 
 static GtkBinClass *parent_class;
+static gint         handle_box_signals[SIGNAL_LAST] = { 0 };
 
 
 guint
@@ -98,6 +99,19 @@ gtk_handle_box_get_type (void)
 }
 
 static void
+gtk_handle_box_marshal_child_attached (GtkObject      *object,
+				       GtkSignalFunc  func,
+				       gpointer       func_data,
+				       GtkArg         *args)
+{
+  SignalChildAttached sfunc = (SignalChildAttached) func;
+
+  (* sfunc) (object,
+	     (GtkWidget*) GTK_VALUE_OBJECT (args[0]),
+	     func_data);
+}
+
+static void
 gtk_handle_box_class_init (GtkHandleBoxClass *class)
 {
   GtkWidgetClass *widget_class;
@@ -108,6 +122,24 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 
   parent_class = gtk_type_class (gtk_bin_get_type ());
 
+  handle_box_signals[SIGNAL_CHILD_ATTACHED] =
+    gtk_signal_new ("child_attached",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_attached),
+		    gtk_handle_box_marshal_child_attached,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
+  handle_box_signals[SIGNAL_CHILD_DETACHED] =
+    gtk_signal_new ("child_detached",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_detached),
+		    gtk_handle_box_marshal_child_attached,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
+  gtk_object_class_add_signals (object_class, handle_box_signals, SIGNAL_LAST);
+  
   object_class->destroy = gtk_handle_box_destroy;
 
   widget_class->map = gtk_handle_box_map;
@@ -602,6 +634,10 @@ gtk_handle_box_motion (GtkWidget      *widget,
 
 	      gtk_widget_hide (hb->float_window);
 
+	      gtk_signal_emit (GTK_OBJECT (hb),
+			       handle_box_signals[SIGNAL_CHILD_ATTACHED],
+			       GTK_BIN (hb)->child);
+	      
 	      while (gdk_pointer_grab (widget->window,
 				       FALSE,
 				       (GDK_BUTTON1_MOTION_MASK
@@ -610,7 +646,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
 				       NULL,
 				       hb->fleur_cursor,
 				       GDK_CURRENT_TIME) != 0); /* wait for success */
-
+	      
 	      gtk_widget_queue_resize (widget);
 	    }
 	}
@@ -633,6 +669,10 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	      gtk_widget_set_uposition (hb->float_window, newx, newy);
 	      gdk_window_reparent (widget->window, hb->float_window->window, 0, 0);
 	      gtk_widget_show (hb->float_window);
+
+              gtk_signal_emit (GTK_OBJECT (hb),
+			       handle_box_signals[SIGNAL_CHILD_DETACHED],
+			       GTK_BIN (hb)->child);
 
 	      while (gdk_pointer_grab (widget->window,
 				       FALSE,
@@ -669,6 +709,11 @@ gtk_handle_box_delete_float (GtkWidget *widget,
 
   gdk_window_reparent (GTK_WIDGET (hb)->window, hb->steady_window, 0, 0);
   gtk_widget_hide (hb->float_window);
+
+  gtk_signal_emit (GTK_OBJECT (hb),
+		   handle_box_signals[SIGNAL_CHILD_ATTACHED],
+		   GTK_BIN (hb)->child);
+  
   gtk_widget_queue_resize (GTK_WIDGET (hb));
 
   return FALSE;
