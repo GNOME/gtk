@@ -278,7 +278,10 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
  * @Varargs: all #GType types for the columns, from first to last
  *
  * Creates a new tree store as with @n_columns columns each of the types passed
- * in.  As an example, <literal>gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
+ * in.  Note that only types derived from standard GObject fundamental types 
+ * are supported. 
+ *
+ * As an example, <literal>gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
  * GDK_TYPE_PIXBUF);</literal> will create a new #GtkTreeStore with three columns, of type
  * <type>int</type>, <type>string</type> and #GdkPixbuf respectively.
  *

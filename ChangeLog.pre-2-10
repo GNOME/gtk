@@ -1,3 +1,9 @@
+2003-06-05  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreestore.c (gtk_tree_store_new): 
+	* gtk/gtkliststore.c (gtk_list_store_new): Document restriction on 
+	types.
+
 Wed Jun  4 19:42:17 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpango.c (gdk_draw_layout_line_with_colors):
