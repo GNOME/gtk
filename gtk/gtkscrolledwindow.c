@@ -26,7 +26,8 @@ enum {
   ARG_0,
   ARG_VIEWPORT,
   ARG_HSCROLLBAR_POLICY,
-  ARG_VSCROLLBAR_POLICY
+  ARG_VSCROLLBAR_POLICY,
+  ARG_WINDOW_PLACEMENT
 };
 
 
@@ -114,6 +115,10 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 			   GTK_TYPE_POLICY_TYPE,
 			   GTK_ARG_READWRITE,
 			   ARG_VSCROLLBAR_POLICY);
+  gtk_object_add_arg_type ("GtkScrolledWindow::window_placement",
+			   GTK_TYPE_CORNER_TYPE,
+			   GTK_ARG_READWRITE,
+			   ARG_WINDOW_PLACEMENT);
 
   object_class->set_arg = gtk_scrolled_window_set_arg;
   object_class->get_arg = gtk_scrolled_window_get_arg;
@@ -159,6 +164,10 @@ gtk_scrolled_window_set_arg (GtkObject        *object,
 				      scrolled_window->hscrollbar_policy,
 				      GTK_VALUE_ENUM (*arg));
       break;
+    case ARG_WINDOW_PLACEMENT:
+      gtk_scrolled_window_set_placement (scrolled_window,
+					 GTK_VALUE_ENUM (*arg));
+      break;
     default:
       break;
     }
@@ -183,6 +192,9 @@ gtk_scrolled_window_get_arg (GtkObject        *object,
       break;
     case ARG_VSCROLLBAR_POLICY:
       GTK_VALUE_ENUM (*arg) = scrolled_window->vscrollbar_policy;
+      break;
+    case ARG_WINDOW_PLACEMENT:
+      GTK_VALUE_ENUM (*arg) = scrolled_window->window_placement;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;

@@ -1,3 +1,21 @@
+Wed Nov 11 19:54:58 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_class_init)
+	(gtk_scrolled_window_set_arg) (gtk_scrolled_window_get_arg):
+ 	added ARG_WINDOW_PLACEMENT
+
+	* gtk/gtkclist.c (size_allocate_columns): resize column if column
+ 	button > column width and auto_resize is set
+	(real_clear) (column_auto_resize) (gtk_clist_optimal_column_width):
+ 	consider column button width of auto resized columns
+	(gtk_clist_parent_set): removed 
+
+	* gtk/gtkctree.c (gtk_ctree_insert_node): call column_auto_resize.
+	(auto_resize_columns): auto_resize all columns
+	(real_tree_collapse) (gtk_ctree_remove_node): call auto_resize_columns
+	(column_auto_resize): respect column button width of auto resized
+ 	columns
+
 1998-11-10  Martin Baulig  <baulig@merkur.uni-trier.de>
 
 	* gtk/gtkfeatures.h.in (GTK_HAVE_FEATURES_1_1_4): Define this so

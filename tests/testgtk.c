@@ -3725,10 +3725,10 @@ insert_row_clist (GtkWidget *widget, gpointer data)
 {
   static char *text[] =
   {
-    "This", "is", "a", "inserted", "row.",
-    "This", "is", "a", "inserted", "row.",
-    "This", "is", "a", "inserted", "row.",
-    "This", "is", "a", "inserted", "row."
+    "This", "is", "an", "inserted", "row.",
+    "This", "is", "an", "inserted", "row.",
+    "This", "is", "an", "inserted", "row.",
+    "This", "is", "an", "inserted", "row."
   };
 
   static GtkStyle *style1 = NULL;
@@ -3908,7 +3908,6 @@ create_clist (void)
 				      GTK_POLICY_AUTOMATIC, 
 				      GTK_POLICY_AUTOMATIC);
       gtk_container_add (GTK_CONTAINER (scrolled_win), clist);
-      /*clist = gtk_clist_new (TESTGTK_CLIST_COLUMNS);*/
 
       gtk_signal_connect (GTK_OBJECT (clist), "click_column",
 			  (GtkSignalFunc) clist_click_column, NULL);
@@ -4005,8 +4004,6 @@ create_clist (void)
 
       gtk_clist_set_row_height (GTK_CLIST (clist), 18);
       gtk_widget_set_usize (clist, -1, 300);
-
-      gtk_clist_set_column_width (GTK_CLIST (clist), 0, 100);
 
       for (i = 1; i < TESTGTK_CLIST_COLUMNS; i++)
 	gtk_clist_set_column_width (GTK_CLIST (clist), i, 80);
@@ -4296,7 +4293,6 @@ void change_style (GtkWidget *widget, GtkCTree *ctree)
   if (GTK_CTREE_ROW (node)->children)
     gtk_ctree_node_set_row_style (ctree, GTK_CTREE_ROW (node)->children,
 				  style2);
-  
 }
 
 void unselect_all (GtkWidget *widget, GtkCTree *ctree)
@@ -4307,50 +4303,37 @@ void unselect_all (GtkWidget *widget, GtkCTree *ctree)
 
 void remove_selection (GtkWidget *widget, GtkCTree *ctree)
 {
-  GtkCTreeNode *work;
-  GtkCTreeNode *new_sel;
+  GtkCList *clist;
+  GtkCTreeNode *node;
   GList *selection;
+  GList *list = NULL;
 
-  selection = GTK_CLIST (ctree)->selection;
-  new_sel = NULL;
+  clist = GTK_CLIST (ctree);
 
-  gtk_clist_freeze (GTK_CLIST (ctree));
+  gtk_clist_freeze (clist);
 
+  for (selection = clist->selection; selection; selection = selection->next)
+    list = g_list_prepend (list, selection->data);
+
+  selection = clist->selection;
   while (selection)
     {
-      work = selection->data;
-      selection = selection->next;
+      node = selection->data;
 
-      if (GTK_CTREE_ROW (work)->is_leaf)
+      if (!g_list_find (list, node))
+	break;
+
+      if (GTK_CTREE_ROW (node)->is_leaf)
 	pages--;
       else
-	gtk_ctree_post_recursive (ctree, work, 
+	gtk_ctree_post_recursive (ctree, node, 
 				  (GtkCTreeFunc) count_items, NULL);
 
-      if (GTK_CLIST (ctree)->selection_mode == GTK_SELECTION_BROWSE)
-	{
-	  if (GTK_CTREE_ROW (work)->children)
-	    {
-	      new_sel = GTK_CTREE_ROW (work)->sibling;
-	      if (!new_sel)
-		new_sel = GTK_CTREE_NODE_NEXT (work);
-	    }
-	  else
-	    {
-	      if (GTK_CTREE_NODE_NEXT (work))
-		new_sel = GTK_CTREE_NODE_NEXT (work);
-	      else
-		new_sel = GTK_CTREE_NODE_PREV (work);
-	    }
-	}
-
-      gtk_ctree_remove_node (ctree, work);
+      gtk_ctree_remove_node (ctree, node);
+      selection = clist->selection;
     }
-
-  if (new_sel)
-    gtk_ctree_select (ctree, new_sel);
-
-  gtk_clist_thaw (GTK_CLIST (ctree));
+  g_list_free (list);
+  gtk_clist_thaw (clist);
   after_press (ctree, NULL);
 }
 
@@ -4880,7 +4863,6 @@ void create_ctree (void)
       gtk_container_border_width (GTK_CONTAINER (scrolled_win), 5);
       gtk_box_pack_start (GTK_BOX (vbox), scrolled_win, TRUE, TRUE, 0);
       gtk_clist_set_selection_mode (GTK_CLIST (ctree), GTK_SELECTION_EXTENDED);
-      gtk_clist_set_column_min_width (GTK_CLIST (ctree), 0, 50);
       gtk_clist_set_column_auto_resize (GTK_CLIST (ctree), 0, TRUE);
       gtk_clist_set_column_width (GTK_CLIST (ctree), 1, 200);
 

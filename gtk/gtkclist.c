@@ -188,8 +188,6 @@ static gint gtk_clist_focus           (GtkContainer     *container,
 				       GtkDirectionType  direction);
 static void gtk_clist_style_set       (GtkWidget        *widget,
 				       GtkStyle         *previous_style);
-static void gtk_clist_parent_set      (GtkWidget        *widget,
-				       GtkWidget        *previous_parent);
 
 /* GtkContainer Methods */
 static void gtk_clist_set_focus_child (GtkContainer  *container,
@@ -324,7 +322,8 @@ static void draw_rows        (GtkCList      *clist,
 
 /* Size Allocation / Requisition */
 static void size_allocate_title_buttons (GtkCList *clist);
-static void size_allocate_columns       (GtkCList *clist);
+static void size_allocate_columns       (GtkCList *clist,
+					 gboolean  block_resize);
 static gint list_requisition_width      (GtkCList *clist);
 
 /* Memory Allocation/Distruction Routines */
@@ -559,7 +558,6 @@ gtk_clist_class_init (GtkCListClass *klass)
   widget_class->focus_out_event = gtk_clist_focus_out;
   widget_class->draw_focus = gtk_clist_draw_focus;
   widget_class->style_set = gtk_clist_style_set;
-  widget_class->parent_set = gtk_clist_parent_set;
 
   /* container_class->add = NULL; use the default GtkContainerClass warning */
   /* container_class->remove=NULL; use the default GtkContainerClass warning */
@@ -1530,13 +1528,19 @@ gtk_clist_optimal_column_width (GtkCList *clist,
 {
   GtkRequisition requisition;
   GList *list;
-  gint width = 0;
+  gint width;
 
   g_return_val_if_fail (clist != NULL, 0);
   g_return_val_if_fail (GTK_CLIST (clist), 0);
 
   if (column < 0 || column > clist->columns)
     return 0;
+
+  if (GTK_CLIST_SHOW_TITLES (clist) && clist->column[column].button)
+    width = (clist->column[column].button->requisition.width -
+	     (CELL_SPACING + (2 * COLUMN_INSET)));
+  else
+    width = 0;
 
   for (list = clist->row_list; list; list = list->next)
     {
@@ -1633,19 +1637,14 @@ column_auto_resize (GtkCList    *clist,
       GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
     return;
 
-  GTK_CLIST_CLASS_FW (clist)->cell_size_request (clist, clist_row,
-						 column, &requisition);
+  if (clist_row)
+    GTK_CLIST_CLASS_FW (clist)->cell_size_request (clist, clist_row,
+						   column, &requisition);
+  else
+    requisition.width = 0;
 
   if (requisition.width > clist->column[column].width)
-    {
-      if (clist->column[column].max_width < 0)
-	gtk_clist_set_column_width (clist, column, requisition.width);
-      else if (clist->column[column].max_width >
-	       clist->column[column].width)
-	gtk_clist_set_column_width (clist, column,
-				    MIN (requisition.width,
-					 clist->column[column].max_width));
-    }
+    gtk_clist_set_column_width (clist, column, requisition.width);
   else if (requisition.width < old_width &&
 	   old_width == clist->column[column].width)
     {
@@ -1654,7 +1653,12 @@ column_auto_resize (GtkCList    *clist,
 
       /* run a "gtk_clist_optimal_column_width" but break, if
        * the column doesn't shrink */
-      new_width = 0;
+      if (GTK_CLIST_SHOW_TITLES (clist) && clist->column[column].button)
+	new_width = (clist->column[column].button->requisition.width -
+		     (CELL_SPACING + (2 * COLUMN_INSET)));
+      else
+	new_width = 0;
+
       for (list = clist->row_list; list; list = list->next)
 	{
 	  GTK_CLIST_CLASS_FW (clist)->cell_size_request
@@ -1685,7 +1689,7 @@ real_resize_column (GtkCList *clist,
   if (clist->column[column].max_width >= 0 &&
       width > clist->column[column].max_width)
     width = clist->column[column].max_width;
-  
+
   clist->column[column].width = width;
   clist->column[column].width_set = TRUE;
 
@@ -1693,7 +1697,7 @@ real_resize_column (GtkCList *clist,
    *        been size_allocated yet, and pointless. Should
    *        a flag be kept
    */
-  size_allocate_columns (clist);
+  size_allocate_columns (clist, TRUE);
   size_allocate_title_buttons (clist);
 
   if (!GTK_CLIST_FROZEN (clist))
@@ -1804,7 +1808,8 @@ size_allocate_title_buttons (GtkCList *clist)
 }
 
 static void
-size_allocate_columns (GtkCList *clist)
+size_allocate_columns (GtkCList *clist,
+		       gboolean  block_resize)
 {
   gint xoffset = CELL_SPACING + COLUMN_INSET;
   gint last_column;
@@ -1824,6 +1829,18 @@ size_allocate_columns (GtkCList *clist)
       clist->column[i].area.x = xoffset;
       if (clist->column[i].width_set)
 	{
+	  if (!block_resize && GTK_CLIST_SHOW_TITLES (clist) &&
+	      clist->column[i].auto_resize && clist->column[i].button)
+	    {
+	      gint width;
+
+	      width = (clist->column[i].button->requisition.width -
+		       (CELL_SPACING + (2 * COLUMN_INSET)));
+
+	      if (width > clist->column[i].width)
+		gtk_clist_set_column_width (clist, i, width);
+	    }
+
 	  clist->column[i].area.width = clist->column[i].width;
 	  xoffset += clist->column[i].width + CELL_SPACING + (2* COLUMN_INSET);
 	}
@@ -2670,9 +2687,15 @@ real_clear (GtkCList *clist)
   g_list_free (free_list);
   GTK_CLIST_UNSET_FLAG (clist, CLIST_AUTO_RESIZE_BLOCKED);
   for (i = 0; i < clist->columns; i++)
-    if (clist->column[i].auto_resize && clist->column[i].width > 0)
-      gtk_clist_set_column_width (clist, i, 0);
-
+    if (clist->column[i].auto_resize)
+      {
+	if (GTK_CLIST_SHOW_TITLES (clist) && clist->column[i].button)
+	  gtk_clist_set_column_width
+	    (clist, i, (clist->column[i].button->requisition.width -
+			(CELL_SPACING + (2 * COLUMN_INSET))));
+	else
+	  gtk_clist_set_column_width (clist, i, 0);
+      }
   /* zero-out the scrollbars */
   if (clist->vadjustment)
     {
@@ -3034,11 +3057,8 @@ gtk_clist_set_row_style (GtkCList *clist,
     }
 
   if (GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
-    {
-      for (i = 0; i < clist->columns; i++)
-	if (clist->column[i].auto_resize)
-	  column_auto_resize (clist, clist_row, i, old_width[i]);
-    }
+    for (i = 0; i < clist->columns; i++)
+      column_auto_resize (clist, clist_row, i, old_width[i]);
 
   g_free (old_width);
 
@@ -4086,7 +4106,6 @@ gtk_clist_finalize (GtkObject *object)
  *   gtk_clist_draw
  *   gtk_clist_expose
  *   gtk_clist_style_set
- *   gtk_clist_parent_set
  *   gtk_clist_key_press
  *   gtk_clist_button_press
  *   gtk_clist_button_release
@@ -4511,24 +4530,6 @@ gtk_clist_style_set (GtkWidget *widget,
 	      gtk_clist_set_column_width (clist, i, width);
 	  }
     }
-}
-
-static void
-gtk_clist_parent_set (GtkWidget *widget,
-		      GtkWidget *previous_parent)
-{
-  GtkCList *clist;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  clist = GTK_CLIST (widget);
-
- /* create adjustments */
-  /*  if (!clist->hadjustment)
-    gtk_clist_set_hadjustment (clist, NULL);
-  if (!clist->vadjustment)
-  gtk_clist_set_vadjustment (clist, NULL);*/
 }
 
 static gint
@@ -5177,7 +5178,7 @@ gtk_clist_size_allocate (GtkWidget     *widget,
     }
   
   /* column button allocation */
-  size_allocate_columns (clist);
+  size_allocate_columns (clist, FALSE);
   size_allocate_title_buttons (clist);
 
   adjust_adjustments (clist, TRUE);

@@ -228,6 +228,7 @@ static void column_auto_resize          (GtkCList       *clist,
 					 GtkCListRow    *clist_row,
 					 gint            column,
 					 gint            old_width);
+static void auto_resize_columns         (GtkCList       *clist);
 
 enum
 {
@@ -2860,31 +2861,7 @@ real_tree_collapse (GtkCTree     *ctree,
       if (visible)
 	{
 	  /* resize auto_resize columns if needed */
-	  if (!GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
-	    {
-	      GList *list;
-	      gint new_width;
-	      gint i;
-
-	      for (i = 0; i < clist->columns; i++)
-		if (clist->column[i].auto_resize)
-		  {
-		    /* run a "gtk_clist_optimal_column_width" but break, if
-		     * the column doesn't shrink */
-		    new_width = 0;
-		    for (list = clist->row_list; list; list = list->next)
-		      {
-			GTK_CLIST_CLASS_FW (clist)->cell_size_request
-			  (clist, GTK_CLIST_ROW (list), i, &requisition);
-			new_width = MAX (new_width, requisition.width);
-			if (new_width == clist->column[i].width)
-			  break;
-		      }
-
-		    if (new_width < clist->column[i].width)
-		      gtk_clist_set_column_width (clist, i, new_width);
-		  }
-	    }
+	  auto_resize_columns (clist);
 
 	  row = g_list_position (clist->row_list, (GList *)node);
 	  if (row < clist->focus_row)
@@ -2915,26 +2892,28 @@ column_auto_resize (GtkCList    *clist,
       GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
     return;
 
-  GTK_CLIST_CLASS_FW (clist)->cell_size_request (clist, clist_row,
-						 column, &requisition);
+  if (clist_row)
+    GTK_CLIST_CLASS_FW (clist)->cell_size_request (clist, clist_row,
+						   column, &requisition);
+  else
+    requisition.width = 0;
 
   if (requisition.width > clist->column[column].width)
-    {
-      if (clist->column[column].max_width < 0)
-	gtk_clist_set_column_width (clist, column, requisition.width);
-      else if (clist->column[column].max_width > clist->column[column].width)
-	gtk_clist_set_column_width (clist, column,
-				    MIN (requisition.width,
-					 clist->column[column].max_width));
-    }
+    gtk_clist_set_column_width (clist, column, requisition.width);
   else if (requisition.width < old_width &&
 	   old_width == clist->column[column].width)
     {
       GList *list;
-      gint new_width = 0;
+      gint new_width;
 
       /* run a "gtk_clist_optimal_column_width" but break, if
        * the column doesn't shrink */
+      if (GTK_CLIST_SHOW_TITLES (clist) && clist->column[column].button)
+	new_width = (clist->column[column].button->requisition.width -
+		     (CELL_SPACING + (2 * COLUMN_INSET)));
+      else
+	new_width = 0;
+
       for (list = clist->row_list; list; list = list->next)
 	{
 	  GTK_CLIST_CLASS_FW (clist)->cell_size_request
@@ -2944,9 +2923,20 @@ column_auto_resize (GtkCList    *clist,
 	    break;
 	}
       if (new_width < clist->column[column].width)
-	gtk_clist_set_column_width
-	  (clist, column, MAX (new_width, clist->column[column].min_width));
+	gtk_clist_set_column_width (clist, column, new_width);
     }
+}
+
+static void
+auto_resize_columns (GtkCList *clist)
+{
+  gint i;
+
+  if (GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
+    return;
+
+  for (i = 0; i < clist->columns; i++)
+    column_auto_resize (clist, NULL, i, clist->column[i].width);
 }
 
 static void
@@ -3875,17 +3865,9 @@ gtk_ctree_insert_node (GtkCTree     *ctree,
   if (text && !GTK_CLIST_AUTO_RESIZE_BLOCKED (clist) &&
       gtk_ctree_is_viewable (ctree, node))
     {
-      GtkRequisition requisition;
-
       for (i = 0; i < clist->columns; i++)
 	if (clist->column[i].auto_resize)
-	  {
-	    GTK_CLIST_CLASS_FW (clist)->cell_size_request (clist,
-							   &(new_row->row),
-							   i, &requisition);
-	    if (requisition.width > clist->column[i].width)
-	      gtk_clist_set_column_width (clist, i, requisition.width);
-	  }
+	  column_auto_resize (clist, &(new_row->row), i, 0);
     }
 
   if (!GTK_CLIST_FROZEN (clist))
@@ -4061,33 +4043,7 @@ gtk_ctree_remove_node (GtkCTree     *ctree,
 	  !clist->selection && clist->focus_row >= 0)
 	gtk_clist_select_row (clist, clist->focus_row, -1);
 
-      if (!GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
-	{
-	  GtkRequisition requisition;
-	  GList *list;
-	  gint new_width;
-	  gint i;
-
-	  for (i = 0; i < clist->columns; i++)
-	    if (clist->column[i].auto_resize)
-	      {
-		/* run a "gtk_clist_optimal_column_width" but break, if
-		 * the column doesn't shrink */
-		new_width = 0;
-		for (list = clist->row_list; list; list = list->next)
-		  {
-		    GTK_CLIST_CLASS_FW (clist)->cell_size_request
-		      (clist, GTK_CLIST_ROW (list), i, &requisition);
-		    new_width = MAX (new_width, requisition.width);
-		    if (new_width == clist->column[i].width)
-		      break;
-		  }
-
-		if (new_width < clist->column[i].width)
-		  gtk_clist_set_column_width (clist, i, new_width);
-	      }
-	}
-
+      auto_resize_columns (clist);
     }
   else
     gtk_clist_clear (clist);
