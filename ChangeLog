@@ -1,3 +1,8 @@
+Mon May 25 19:54:20 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* configure.in: x_libs=, not $x_libs=. Enough said.
+          (Case only hit for --disable-xshm)
+	
 Mon May 25 12:08:14 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* configure.in (LDFLAGS): Add to $CFLAGS and $LDFLAGS
