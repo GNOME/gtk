@@ -1,37 +1,35 @@
-# translation of gtk20.po to Uzbek
-# Copyright (C) 1998-2003 Free Software Foundation, Inc.
-# Mashrab Kuvatov <kmashrab@uni-bremen.de>
-# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003.
+# translation of gtk+.gtk-2-4.po to Uzbek
+# Copyright (C) 1998-2003, 2004 Free Software Foundation, Inc.
+# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003, 2004.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk20\n"
-"POT-Creation-Date: 2004-07-20 02:54+0200\n"
-"PO-Revision-Date: 2003-09-06 00:29+0200\n"
+"Project-Id-Version: gtk+.gtk-2-4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-07-19 13:56+0200\n"
+"PO-Revision-Date: 2004-07-19 18:54+0200\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
-"Language-Team: Uzbek <uz-li@yahoogroups.com>\n"
+"Language-Team: Uzbek <kmashrab@uni-bremen.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "X-Generator: KBabel 1.0.2\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:787
-#: gdk-pixbuf/gdk-pixbuf-io.c:934 tests/testfilechooser.c:192
+#: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:779
+#: gdk-pixbuf/gdk-pixbuf-io.c:926 tests/testfilechooser.c:192
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:165 gdk-pixbuf/gdk-pixbuf-io.c:801
+#: gdk-pixbuf/gdk-pixbuf-animation.c:165 gdk-pixbuf/gdk-pixbuf-io.c:793
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:839
-#: gdk-pixbuf/gdk-pixbuf-io.c:977 tests/testfilechooser.c:237
+#: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
+#: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:239
@@ -53,60 +51,60 @@ msgid ""
 "from a different GTK version?"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:629
+#: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:625
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:671
+#: gdk-pixbuf/gdk-pixbuf-io.c:663
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:679
+#: gdk-pixbuf/gdk-pixbuf-io.c:671
 msgid "Unrecognized image file format"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:852
+#: gdk-pixbuf/gdk-pixbuf-io.c:844
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1166
+#: gdk-pixbuf/gdk-pixbuf-io.c:1158
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1210 gdk-pixbuf/gdk-pixbuf-io.c:1326
+#: gdk-pixbuf/gdk-pixbuf-io.c:1202 gdk-pixbuf/gdk-pixbuf-io.c:1318
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1239
+#: gdk-pixbuf/gdk-pixbuf-io.c:1231
 msgid "Insufficient memory to save image to callback"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1251
+#: gdk-pixbuf/gdk-pixbuf-io.c:1243
 msgid "Failed to open temporary file"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1270
+#: gdk-pixbuf/gdk-pixbuf-io.c:1262
 msgid "Failed to read from temporary file"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1452
+#: gdk-pixbuf/gdk-pixbuf-io.c:1444
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1477
+#: gdk-pixbuf/gdk-pixbuf-io.c:1469
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1665 gdk-pixbuf/gdk-pixbuf-io.c:1715
+#: gdk-pixbuf/gdk-pixbuf-io.c:1657 gdk-pixbuf/gdk-pixbuf-io.c:1707
 msgid "Insufficient memory to save image into a buffer"
 msgstr ""
 
@@ -202,7 +200,7 @@ msgid "Stack overflow"
 msgstr ""
 
 #: gdk-pixbuf/io-gif.c:635
-msgid "GIF image loader cannot understand this image."
+msgid "GIF image loader can't understand this image."
 msgstr ""
 
 #: gdk-pixbuf/io-gif.c:664
@@ -321,8 +319,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1069
@@ -420,8 +417,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:821
@@ -430,7 +426,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:994
@@ -466,7 +462,7 @@ msgid "Maximum color value in PNM file is too large"
 msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:396
-msgid "Cannot handle PNM files with maximum color values greater than 255"
+msgid "Can't handle PNM files with maximum color values greater than 255"
 msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
@@ -490,7 +486,7 @@ msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:770
-msgid "Cannot allocate memory for loading PNM image"
+msgid "Can't allocate memory for loading PNM image"
 msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:820
@@ -530,31 +526,31 @@ msgid "The Sun raster image format"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:159
-msgid "Cannot allocate memory for IOBuffer struct"
+msgid "Can't allocate memory for IOBuffer struct"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:178
-msgid "Cannot allocate memory for IOBuffer data"
+msgid "Can't allocate memory for IOBuffer data"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:189
-msgid "Cannot realloc IOBuffer data"
+msgid "Can't realloc IOBuffer data"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:219
-msgid "Cannot allocate temporary IOBuffer data"
+msgid "Can't allocate temporary IOBuffer data"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:353
-msgid "Cannot allocate new pixbuf"
+msgid "Can't allocate new pixbuf"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:692
-msgid "Cannot allocate colormap structure"
+msgid "Can't allocate colormap structure"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:699
-msgid "Cannot allocate colormap entries"
+msgid "Can't allocate colormap entries"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:721
@@ -562,7 +558,7 @@ msgid "Unexpected bitdepth for colormap entries"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:739
-msgid "Cannot allocate TGA header memory"
+msgid "Can't allocate TGA header memory"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:772
@@ -575,7 +571,7 @@ msgid "TGA image type not supported"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:861
-msgid "Cannot allocate memory for TGA context struct"
+msgid "Can't allocate memory for TGA context struct"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:926
@@ -586,44 +582,44 @@ msgstr ""
 msgid "The Targa image format"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:177
+#: gdk-pixbuf/io-tiff.c:175
 msgid "Could not get image width (bad TIFF file)"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:184
+#: gdk-pixbuf/io-tiff.c:182
 msgid "Could not get image height (bad TIFF file)"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:192
+#: gdk-pixbuf/io-tiff.c:190
 msgid "Width or height of TIFF image is zero"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:201 gdk-pixbuf/io-tiff.c:210
+#: gdk-pixbuf/io-tiff.c:199 gdk-pixbuf/io-tiff.c:208
 msgid "Dimensions of TIFF image too large"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:241 gdk-pixbuf/io-tiff.c:292
-#: gdk-pixbuf/io-tiff.c:589
+#: gdk-pixbuf/io-tiff.c:227 gdk-pixbuf/io-tiff.c:239 gdk-pixbuf/io-tiff.c:290
+#: gdk-pixbuf/io-tiff.c:587
 msgid "Insufficient memory to open TIFF file"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:257 gdk-pixbuf/io-tiff.c:300
+#: gdk-pixbuf/io-tiff.c:255 gdk-pixbuf/io-tiff.c:298
 msgid "Failed to load RGB data from TIFF file"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:371
+#: gdk-pixbuf/io-tiff.c:369
 msgid "Failed to open TIFF image"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:384
+#: gdk-pixbuf/io-tiff.c:382
 msgid "TIFFClose operation failed"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:519 gdk-pixbuf/io-tiff.c:532
+#: gdk-pixbuf/io-tiff.c:517 gdk-pixbuf/io-tiff.c:530
 msgid "Failed to load TIFF image"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:627
+#: gdk-pixbuf/io-tiff.c:625
 msgid "The TIFF image format"
 msgstr ""
 
@@ -684,11 +680,11 @@ msgid "XPM has invalid number of chars per pixel"
 msgstr ""
 
 #: gdk-pixbuf/io-xpm.c:1279
-msgid "Cannot read XPM colormap"
+msgid "Can't read XPM colormap"
 msgstr ""
 
 #: gdk-pixbuf/io-xpm.c:1317
-msgid "Cannot allocate memory for loading XPM image"
+msgid "Can't allocate memory for loading XPM image"
 msgstr ""
 
 #: gdk-pixbuf/io-xpm.c:1508
@@ -699,47 +695,31 @@ msgstr ""
 msgid "The XPM image format"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:209 gtk/gtkaboutdialog.c:1707
-msgid "License"
+#. This is the text that should appear next to menu accelerators
+#. * that use the shift key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:118
+msgid "Shift"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:210
-msgid "The license of the program"
+#. This is the text that should appear next to menu accelerators
+#. * that use the control key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:124
+msgid "Ctrl"
 msgstr ""
 
-#. Add the credits button
-#: gtk/gtkaboutdialog.c:349
-msgid "_Credits"
-msgstr ""
-
-#. Add the license button
-#: gtk/gtkaboutdialog.c:358
-msgid "_License"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:532
-#, c-format
-msgid "About %s"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:1647
-msgid "Credits"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:1670
-msgid "Written by"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:1673
-msgid "Documented by"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:1684
-msgid "Translated by"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:1688
-msgid "Artwork by"
+#. This is the text that should appear next to menu accelerators
+#. * that use the alt key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:130
+msgid "Alt"
 msgstr ""
 
 #. Translate to calendar:YM if you want years to be displayed
@@ -751,7 +731,7 @@ msgstr ""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:712
+#: gtk/gtkcalendar.c:709
 msgid "calendar:MY"
 msgstr ""
 
@@ -759,7 +739,7 @@ msgstr ""
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:722
+#: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
 msgstr ""
 
@@ -807,9 +787,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1880
-#, fuzzy
 msgid "_Hue:"
-msgstr "_Yordam"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:1881
 msgid "Position on the color wheel."
@@ -874,9 +853,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1955
-#, fuzzy
 msgid "_Palette"
-msgstr "_O'chirish"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:1987
 msgid "Color Wheel"
@@ -886,15 +864,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr ""
 
-#: gtk/gtkentry.c:4343 gtk/gtktextview.c:6936
+#: gtk/gtkentry.c:4312 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr ""
 
-#: gtk/gtkentry.c:4353 gtk/gtktextview.c:6946
+#: gtk/gtkentry.c:4322 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:4363 gtk/gtktextview.c:6957
+#: gtk/gtkentry.c:4332 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -918,7 +896,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5353
+#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5351
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -933,9 +911,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:1072 gtk/gtkpathbar.c:842
-#, fuzzy
 msgid "Home"
-msgstr "_Uy"
+msgstr "Уй"
 
 #: gtk/gtkfilechooserdefault.c:1090 gtk/gtkpathbar.c:844
 msgid "Desktop"
@@ -970,17 +947,19 @@ msgid "Shortcuts"
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:2579
-#, fuzzy
 msgid "Folder"
-msgstr "Fayllar"
+msgstr "Жилд"
 
-#: gtk/gtkfilechooserdefault.c:2626 gtk/gtkstock.c:294
+#. FIXME these need accelerators when appropriate, and
+#. * need the mnemonics to be rationalized
+#.
+#: gtk/gtkfilechooserdefault.c:2626 gtk/gtkstock.c:293
 msgid "_Add"
-msgstr "_Qo'shish"
+msgstr "Қў_шиш"
 
-#: gtk/gtkfilechooserdefault.c:2636 gtk/gtkstock.c:351
+#: gtk/gtkfilechooserdefault.c:2636 gtk/gtkstock.c:341
 msgid "_Remove"
-msgstr "Olib _tashlash"
+msgstr "Олиб _ташлаш"
 
 #: gtk/gtkfilechooserdefault.c:2715
 msgid "Show _Hidden Files"
@@ -988,12 +967,11 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:2830 gtk/gtkfilesel.c:766
 msgid "Files"
-msgstr "Fayllar"
+msgstr "Файллар"
 
 #: gtk/gtkfilechooserdefault.c:2857
-#, fuzzy
 msgid "Name"
-msgstr "Fayl nomi"
+msgstr "Номи"
 
 #: gtk/gtkfilechooserdefault.c:2879
 msgid "Size"
@@ -1005,117 +983,111 @@ msgstr ""
 
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:2936
-#, fuzzy
 msgid "Create Fo_lder"
-msgstr "Fayllar"
+msgstr "_Жилд яратиш"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3048
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:3046
 msgid "_Name:"
-msgstr "Fayl nomi"
+msgstr "_Номи:"
 
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3088
 msgid "_Browse for other folders"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3327
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:3325
 msgid "Save in _folder:"
-msgstr "Fayllar"
+msgstr "Ж_илдга сақлаш:"
 
-#: gtk/gtkfilechooserdefault.c:3329
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:3327
 msgid "Create in _folder:"
-msgstr "Fayllar"
+msgstr "Ж_илдда яратиш:"
 
-#: gtk/gtkfilechooserdefault.c:3973
-msgid "Cannot change to folder because it is not local"
+#: gtk/gtkfilechooserdefault.c:3971
+msgid "Can't change to folder because it isn't local"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4111
+#: gtk/gtkfilechooserdefault.c:4109
 msgid "Could not find the path"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4462
+#: gtk/gtkfilechooserdefault.c:4460
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5126
+#: gtk/gtkfilechooserdefault.c:5124
 msgid "Type name of new folder"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5155
+#: gtk/gtkfilechooserdefault.c:5153
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkfilechooserdefault.c:5157
+#: gtk/gtkfilechooserdefault.c:5155
 #, c-format
 msgid "%.1f K"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5159
+#: gtk/gtkfilechooserdefault.c:5157
 #, c-format
 msgid "%.1f M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5161
+#: gtk/gtkfilechooserdefault.c:5159
 #, c-format
 msgid "%.1f G"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5206
+#: gtk/gtkfilechooserdefault.c:5204
 msgid "Today"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5208
+#: gtk/gtkfilechooserdefault.c:5206
 msgid "Yesterday"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5219
+#: gtk/gtkfilechooserdefault.c:5217
 msgid "Unknown"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5314
+#: gtk/gtkfilechooserdefault.c:5312
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5391
+#: gtk/gtkfilechooserdefault.c:5389
 #, c-format
 msgid ""
 "Could not select %s:\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5430
+#: gtk/gtkfilechooserdefault.c:5428
 msgid "Open Location"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5437
+#: gtk/gtkfilechooserdefault.c:5435
 msgid "Save in Location"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5456
+#: gtk/gtkfilechooserdefault.c:5454
 msgid "_Location:"
 msgstr ""
 
 #: gtk/gtkfilesel.c:730
-#, fuzzy
 msgid "Folders"
-msgstr "Fayllar"
+msgstr "Жилдлар"
 
 #: gtk/gtkfilesel.c:734
-#, fuzzy
 msgid "Fol_ders"
-msgstr "Fayllar"
+msgstr "Жи_лдлар"
 
 #: gtk/gtkfilesel.c:770
 msgid "_Files"
-msgstr "_Fayllar"
+msgstr "_Файллар"
 
 #: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
 #, c-format
@@ -1136,16 +1108,15 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
-msgstr "Fayllni _o'chirish"
+msgstr "Файллни _ўчириш"
 
 #: gtk/gtkfilesel.c:1137
 msgid "_Rename File"
-msgstr "Faylning no_mini o'zgartirish"
+msgstr "Файлнинг но_мини ўзгартириш"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1441
@@ -1169,9 +1140,8 @@ msgid "New Folder"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1499
-#, fuzzy
 msgid "_Folder name:"
-msgstr "_Nomini o'zgartirish"
+msgstr "_Жилднинг номи:"
 
 #: gtk/gtkfilesel.c:1523
 msgid "C_reate"
@@ -1205,7 +1175,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1628
 msgid "Delete File"
-msgstr "Fayllni o'chirish"
+msgstr "Файллни ўчириш"
 
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
@@ -1233,7 +1203,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1747
 msgid "Rename File"
-msgstr "Faylning nomini o'zgartirish"
+msgstr "Файлнинг номини ўзгартириш"
 
 #: gtk/gtkfilesel.c:1762
 #, c-format
@@ -1242,7 +1212,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1791
 msgid "_Rename"
-msgstr "_Nomini o'zgartirish"
+msgstr "_Номини ўзгартириш"
 
 #: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
@@ -1292,9 +1262,8 @@ msgid "This file system does not support mounting"
 msgstr ""
 
 #: gtk/gtkfilesystemunix.c:578
-#, fuzzy
 msgid "Filesystem"
-msgstr "Fayllar"
+msgstr "Файл тизими"
 
 #: gtk/gtkfilesystemunix.c:731
 #, c-format
@@ -1373,7 +1342,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1620
+#: gtk/gtkiconfactory.c:1572
 #, c-format
 msgid "Error loading icon: %s"
 msgstr ""
@@ -1426,15 +1395,13 @@ msgstr ""
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:324
-#, fuzzy
 msgid "_Axes"
-msgstr "H_a"
+msgstr ""
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:341
-#, fuzzy
 msgid "_Keys"
-msgstr "H_a"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:561
 msgid "X"
@@ -1474,9 +1441,8 @@ msgstr ""
 
 #. and clear button
 #: gtk/gtkinputdialog.c:758
-#, fuzzy
 msgid "clear"
-msgstr "_Tozalash"
+msgstr "тозалаш"
 
 #: gtk/gtklabel.c:3297
 msgid "Select All"
@@ -1495,7 +1461,7 @@ msgstr ""
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtknotebook.c:2698 gtk/gtknotebook.c:5046
+#: gtk/gtknotebook.c:2680 gtk/gtknotebook.c:5073
 #, c-format
 msgid "Page %u"
 msgstr ""
@@ -1526,324 +1492,279 @@ msgstr ""
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:285
 msgid "Information"
-msgstr "Ma'lumot"
+msgstr "Маълумот"
 
 #: gtk/gtkstock.c:286
 msgid "Warning"
-msgstr "Diqqat"
+msgstr "Диққат"
 
 #: gtk/gtkstock.c:287
 msgid "Error"
-msgstr "Xato"
+msgstr "Хато"
 
 #: gtk/gtkstock.c:288
 msgid "Question"
-msgstr "So'roq"
+msgstr "Сўроқ"
 
-#. FIXME these need accelerators when appropriate, and
-#. * need the mnemonics to be rationalized
-#.
-#: gtk/gtkstock.c:293
-msgid "_About"
-msgstr ""
+#: gtk/gtkstock.c:294
+msgid "_Apply"
+msgstr "Қў_ллаш"
 
 #: gtk/gtkstock.c:295
-msgid "_Apply"
-msgstr "Qo'_llash"
+msgid "_Bold"
+msgstr "Қал_ин"
 
 #: gtk/gtkstock.c:296
-msgid "_Bold"
-msgstr "Qal_in"
+msgid "_Cancel"
+msgstr "_Бекор қилиш"
 
 #: gtk/gtkstock.c:297
-msgid "_Cancel"
-msgstr "_Bekor qilish"
+msgid "_CD-Rom"
+msgstr "К_омпакт-диск"
 
 #: gtk/gtkstock.c:298
-msgid "_CD-Rom"
-msgstr "K_ompakt-disk"
+msgid "_Clear"
+msgstr "_Тозалаш"
 
 #: gtk/gtkstock.c:299
-msgid "_Clear"
-msgstr "_Tozalash"
+msgid "_Close"
+msgstr "_Ёпиш"
 
 #: gtk/gtkstock.c:300
-msgid "_Close"
-msgstr "_Yopish"
+msgid "_Convert"
+msgstr "Ай_лантириш"
 
 #: gtk/gtkstock.c:301
-msgid "_Convert"
-msgstr "Ay_lantirish"
+msgid "_Copy"
+msgstr "_Нусха кўчириш"
 
 #: gtk/gtkstock.c:302
-msgid "_Copy"
-msgstr "_Nusxa ko'chirish"
+msgid "Cu_t"
+msgstr "_Кесиш"
 
 #: gtk/gtkstock.c:303
-msgid "Cu_t"
-msgstr "_Kesish"
+msgid "_Delete"
+msgstr "Ў_чириш"
 
 #: gtk/gtkstock.c:304
-msgid "_Delete"
-msgstr "_O'chirish"
+msgid "_Execute"
+msgstr "Ба_жариш"
 
 #: gtk/gtkstock.c:305
-msgid "_Execute"
-msgstr "Ba_jarish"
+msgid "_Find"
+msgstr "Қ_идириш"
 
 #: gtk/gtkstock.c:306
-msgid "_Edit"
-msgstr ""
+msgid "Find and _Replace"
+msgstr "Қидириш ва а_лмаштириш"
 
 #: gtk/gtkstock.c:307
-msgid "_Find"
-msgstr "Q_idirish"
+msgid "_Floppy"
+msgstr "_Дискет"
 
 #: gtk/gtkstock.c:308
-msgid "Find and _Replace"
-msgstr "Qidirish va a_lmashtirish"
-
-#: gtk/gtkstock.c:309
-msgid "_Floppy"
-msgstr "_Disket"
-
-#: gtk/gtkstock.c:310
 msgid "_Bottom"
 msgstr ""
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:309
 msgid "_First"
-msgstr "_Birinchi"
+msgstr "_Биринчи"
+
+#: gtk/gtkstock.c:310
+msgid "_Last"
+msgstr "_Охирги"
+
+#: gtk/gtkstock.c:311
+msgid "_Top"
+msgstr "_Юқорига"
 
 #: gtk/gtkstock.c:312
-msgid "_Last"
-msgstr "_Oxirgi"
+msgid "_Back"
+msgstr "_Орқага"
 
 #: gtk/gtkstock.c:313
-msgid "_Top"
-msgstr "_Yuqoriga"
+msgid "_Down"
+msgstr "_Пастга"
 
 #: gtk/gtkstock.c:314
-msgid "_Back"
-msgstr "_Orqaga"
+msgid "_Forward"
+msgstr "_Олдинга"
 
 #: gtk/gtkstock.c:315
-msgid "_Down"
-msgstr "_Pastga"
-
-#: gtk/gtkstock.c:316 gtk/gtkstock.c:330
-msgid "_Forward"
-msgstr "_Oldinga"
-
-#: gtk/gtkstock.c:317
 msgid "_Up"
-msgstr "_Yuqoriga"
+msgstr "_Юқорига"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:316
 msgid "_Harddisk"
 msgstr ""
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:317
 msgid "_Help"
-msgstr "_Yordam"
+msgstr "_Ёрдам"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:318
 msgid "_Home"
-msgstr "_Uy"
+msgstr "_Уй"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:319
 msgid "Increase Indent"
 msgstr ""
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:320
 msgid "Decrease Indent"
 msgstr ""
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:321
 msgid "_Index"
-msgstr "_Indeks"
+msgstr "_Индекс"
+
+#: gtk/gtkstock.c:322
+msgid "_Italic"
+msgstr "Қ_ия"
+
+#: gtk/gtkstock.c:323
+msgid "_Jump to"
+msgstr "Ў_тиш"
 
 #: gtk/gtkstock.c:324
-msgid "_Italic"
-msgstr "Q_iya"
+msgid "_Center"
+msgstr "_Марказ"
 
 #: gtk/gtkstock.c:325
-msgid "_Jump to"
-msgstr "O'_tish"
-
-#: gtk/gtkstock.c:326
-msgid "_Center"
-msgstr "_Markaz"
-
-#: gtk/gtkstock.c:327
 msgid "_Fill"
 msgstr ""
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:326
 msgid "_Left"
-msgstr "_Chap"
+msgstr "_Чап"
+
+#: gtk/gtkstock.c:327
+msgid "_Right"
+msgstr "Ў_нг"
+
+#: gtk/gtkstock.c:328
+msgid "_Network"
+msgstr "_Тармоқ"
 
 #: gtk/gtkstock.c:329
-msgid "_Right"
-msgstr "O'_ng"
+msgid "_New"
+msgstr "_Янги"
+
+#: gtk/gtkstock.c:330
+msgid "_No"
+msgstr "_Йўқ"
 
 #: gtk/gtkstock.c:331
-#, fuzzy
-msgid "_Next"
-msgstr "_Yangi"
+msgid "_OK"
+msgstr "_Ок"
 
 #: gtk/gtkstock.c:332
-#, fuzzy
-msgid "P_ause"
-msgstr "Qo'y_ish"
+msgid "_Open"
+msgstr "_Очиш"
 
 #: gtk/gtkstock.c:333
-msgid "_Play"
-msgstr ""
+msgid "_Paste"
+msgstr "Қўй_иш"
 
 #: gtk/gtkstock.c:334
-msgid "Pre_vious"
-msgstr ""
+msgid "_Preferences"
+msgstr "_Мослаш"
 
 #: gtk/gtkstock.c:335
-#, fuzzy
-msgid "_Record"
-msgstr "Olib _tashlash"
+msgid "_Print"
+msgstr "_Босиб чиқариш"
 
 #: gtk/gtkstock.c:336
-#, fuzzy
-msgid "R_ewind"
-msgstr "Q_idirish"
-
-#: gtk/gtkstock.c:337 gtk/gtkstock.c:360
-msgid "_Stop"
-msgstr "_To'xtatish"
-
-#: gtk/gtkstock.c:338
-#, fuzzy
-msgid "_Network"
-msgstr "_Yangi"
-
-#: gtk/gtkstock.c:339
-msgid "_New"
-msgstr "_Yangi"
-
-#: gtk/gtkstock.c:340
-msgid "_No"
-msgstr "_Yo'q"
-
-#: gtk/gtkstock.c:341
-msgid "_OK"
-msgstr "_Ok"
-
-#: gtk/gtkstock.c:342
-msgid "_Open"
-msgstr "_Ochish"
-
-#: gtk/gtkstock.c:343
-msgid "_Paste"
-msgstr "Qo'y_ish"
-
-#: gtk/gtkstock.c:344
-#, fuzzy
-msgid "_Preferences"
-msgstr "_Yangilash"
-
-#: gtk/gtkstock.c:345
-msgid "_Print"
-msgstr "_Bosib chiqarish"
-
-#: gtk/gtkstock.c:346
 msgid "Print Pre_view"
 msgstr ""
 
-#: gtk/gtkstock.c:347
+#: gtk/gtkstock.c:337
 msgid "_Properties"
-msgstr "Ho_ssalari"
+msgstr "Хо_ссалари"
 
-#: gtk/gtkstock.c:348
+#: gtk/gtkstock.c:338
 msgid "_Quit"
-msgstr "_Chiqish"
+msgstr "_Чиқиш"
 
-#: gtk/gtkstock.c:349
-#, fuzzy
+#: gtk/gtkstock.c:339
 msgid "_Redo"
-msgstr "Olib _tashlash"
+msgstr "Қ_айтариш"
 
-#: gtk/gtkstock.c:350
+#: gtk/gtkstock.c:340
 msgid "_Refresh"
-msgstr "_Yangilash"
+msgstr "_Янгилаш"
 
-#: gtk/gtkstock.c:352
-#, fuzzy
+#: gtk/gtkstock.c:342
 msgid "_Revert"
-msgstr "Olib _tashlash"
+msgstr ""
 
-#: gtk/gtkstock.c:353
+#: gtk/gtkstock.c:343
 msgid "_Save"
-msgstr "_Saqlash"
+msgstr "_Сақлаш"
 
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:344
 msgid "Save _As"
-msgstr "...sif_atida saqlash"
+msgstr "...сиф_атида сақлаш"
 
-#: gtk/gtkstock.c:355
+#: gtk/gtkstock.c:345
 msgid "_Color"
-msgstr "_Rang"
+msgstr "_Ранг"
 
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:346
 msgid "_Font"
-msgstr "_Shrift"
+msgstr "_Шрифт"
 
-#: gtk/gtkstock.c:357
+#: gtk/gtkstock.c:347
 msgid "_Ascending"
 msgstr ""
 
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:348
 msgid "_Descending"
 msgstr ""
 
-#: gtk/gtkstock.c:359
+#: gtk/gtkstock.c:349
 msgid "_Spell Check"
-msgstr "Imloni _tekshirish"
+msgstr "Имлони _текшириш"
 
-#: gtk/gtkstock.c:361
+#: gtk/gtkstock.c:350
+msgid "_Stop"
+msgstr "_Тўхтатиш"
+
+#: gtk/gtkstock.c:351
 msgid "_Strikethrough"
 msgstr ""
 
-#: gtk/gtkstock.c:362
-#, fuzzy
+#: gtk/gtkstock.c:352
 msgid "_Undelete"
-msgstr "_O'chirish"
+msgstr ""
 
-#: gtk/gtkstock.c:363
+#: gtk/gtkstock.c:353
 msgid "_Underline"
 msgstr ""
 
-#: gtk/gtkstock.c:364
-#, fuzzy
+#: gtk/gtkstock.c:354
 msgid "_Undo"
-msgstr "Q_idirish"
+msgstr "_Бекор қилиш"
 
-#: gtk/gtkstock.c:365
+#: gtk/gtkstock.c:355
 msgid "_Yes"
-msgstr "H_a"
+msgstr "Ҳ_а"
 
-#: gtk/gtkstock.c:366
+#: gtk/gtkstock.c:356
 msgid "_Normal Size"
 msgstr ""
 
-#: gtk/gtkstock.c:367
+#: gtk/gtkstock.c:357
 msgid "Best _Fit"
 msgstr ""
 
-#: gtk/gtkstock.c:368
+#: gtk/gtkstock.c:358
 msgid "Zoom _In"
-msgstr "K_attalashtirish"
+msgstr "К_атталаштириш"
 
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:359
 msgid "Zoom _Out"
-msgstr "K_ichiklashtirish"
+msgstr "К_ичиклаштириш"
 
 #: gtk/gtktextutil.c:47
 msgid "LRM _Left-to-right mark"
@@ -1983,3 +1904,4 @@ msgstr ""
 #, fuzzy
 #~ msgid "Up"
 #~ msgstr "_Yuqoriga"
+
