@@ -952,18 +952,21 @@ correct_total (int    *weights,
                double overall_alpha)
 {
   int correction = (int)(0.5 + 65536 * overall_alpha) - total;
-
+  int remaining, c, d, i;
+  
   if (correction != 0)
     {
-      int i;
-      for (i = n_x * n_y - 1; i >= 0; i--) 
-        {
-          if (*(weights + i) + correction >= 0) 
-            {
-              *(weights + i) += correction;
-              break;
-            }
-        }
+      remaining = correction;
+      for (d = 1, c = correction; c != 0 && remaining != 0; d++, c = correction / d) 
+	for (i = n_x * n_y - 1; i >= 0 && c != 0 && remaining != 0; i--) 
+	  if (*(weights + i) + c >= 0) 
+	    {
+	      *(weights + i) += c;
+	      remaining -= c;
+	      if ((0 < remaining && remaining < c) ||
+		  (0 > remaining && remaining > c))
+		c = remaining;
+	    }
     }
 }
 

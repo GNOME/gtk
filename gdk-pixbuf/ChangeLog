@@ -1,3 +1,8 @@
+2003-07-18  Matthias Clasen  <maclas@gmx.de>
+
+	* pixops/pixops.c (correct_total): Split correction into multiple pieces if no single weight is large
+	enough to apply the unsplit correction.  (#117431, problem reported by Tomas Ögren)
+
 2003-07-13  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf.h: 
