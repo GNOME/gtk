@@ -393,7 +393,7 @@ Thu Aug 26 22:44:12 2004  Matthias Clasen  <maclas@gmx.de>
 	* modules/input/gtkimcontextime.c: 
 	* modules/input/imime.c: 
 	* modules/input/imm-extra.h: Add the IME input method for Win32
-	written by Takuro Ashie and Kazuko IWAMOTO. The code was previously
+	written by Takuro Ashie and Kazuki IWAMOTO. The code was previously
 	hosted at http://sourceforge.jp/projects/imime.  (#135195)
 
 2004-08-26  Bill Haneman <billh@gnome.org>
