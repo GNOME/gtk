@@ -59,6 +59,7 @@
 #include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkselection.h"
+#include "gdk-pixbuf/gdk-pixbuf.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -292,6 +293,49 @@ gtk_target_list_add_text_targets (GtkTargetList *list)
   gtk_target_list_add (list, text_plain_utf8_atom, 0, 0);  
   gtk_target_list_add (list, text_plain_locale_atom, 0, 0);  
   gtk_target_list_add (list, text_plain_atom, 0, 0);  
+}
+
+/**
+ * gtk_target_list_add_image_targets:
+ * @list: a #GtkTargetList
+ * @writable: whether to add only targets for which GTK+ knows
+ *   how to convert a pixbuf into the format
+ * 
+ * Adds the image targets supported by #GtkSelection to
+ * the target list. The targets are added with both flags
+ * and info being zero.
+ * 
+ * Since: 2.6
+ **/
+void 
+gtk_target_list_add_image_targets (GtkTargetList *list,
+				   gboolean       writable)
+{
+  GSList *formats, *f;
+  gchar **mimes, **m;
+  GdkAtom atom;
+
+  g_return_if_fail (list != NULL);
+
+  formats = gdk_pixbuf_get_formats ();
+
+  for (f = formats; f; f = f->next)
+    {
+      GdkPixbufFormat *fmt = f->data;
+
+      if (writable && !gdk_pixbuf_format_is_writable (fmt))
+	continue;
+      
+      mimes = gdk_pixbuf_format_get_mime_types (fmt);
+      for (m = mimes; *m; m++)
+	{
+	  atom = gdk_atom_intern (*m, FALSE);
+	  gtk_target_list_add (list, atom, 0, 0);  
+	}
+      g_strfreev (mimes);
+    }
+
+  g_slist_free (formats);
 }
 
 void               
@@ -1156,6 +1200,107 @@ gtk_selection_data_get_text (GtkSelectionData *selection_data)
 
   return result;
 }
+
+/**
+ * gtk_selection_data_set_pixbuf:
+ * @selection_data: a #GtkSelectionData
+ * @pixbuf: a #GdkPixbuf
+ * 
+ * Sets the contents of the selection from a #GdkPixbuf
+ * The pixbuf is converted to the form determined by
+ * @selection_data->target.
+ * 
+ * Return value: %TRUE if the selection was successfully set,
+ *   otherwise %FALSE.
+ *
+ * Since: 2.6
+ **/
+gboolean
+gtk_selection_data_set_pixbuf (GtkSelectionData *selection_data,
+			       GdkPixbuf        *pixbuf)
+{
+  GSList *formats, *f;
+  gchar **mimes, **m;
+  GdkAtom atom;
+  gboolean result;
+  gchar *str, *type;
+  gsize len;
+
+  formats = gdk_pixbuf_get_formats ();
+
+  for (f = formats; f; f = f->next)
+    {
+      GdkPixbufFormat *fmt = f->data;
+
+      mimes = gdk_pixbuf_format_get_mime_types (fmt);
+      for (m = mimes; *m; m++)
+	{
+	  atom = gdk_atom_intern (*m, FALSE);
+	  if (selection_data->target == atom)
+	    {
+	      str = NULL;
+	      type = gdk_pixbuf_format_get_name (fmt),
+	      result = gdk_pixbuf_save_to_buffer (pixbuf,
+						  &str,
+						  &len,
+						  type,
+						  NULL);
+	      if (result) 
+		gtk_selection_data_set (selection_data,
+					atom, 8, (guchar *)str, len);
+	      g_free (type);
+	      g_free (str);
+	      g_strfreev (mimes);
+	      g_slist_free (formats);
+	      
+	      return result;
+	    }
+	}
+
+      g_strfreev (mimes);
+    }
+
+  g_slist_free (formats);
+ 
+  return FALSE;
+}
+
+/**
+ * gtk_selection_data_get_pixbuf:
+ * @selection_data: a #GtkSelectionData
+ * 
+ * Gets the contents of the selection data as a #GdkPixbuf.
+ * 
+ * Return value: if the selection data contained a recognized
+ *   image type and it could be converted to a #GdkPixbuf, a 
+ *   newly allocated pixbuf is returned, otherwise %NULL.
+ *   If the result is non-%NULL it must be freed with g_object_unref().
+ *
+ * Since: 2.6
+ **/
+GdkPixbuf *
+gtk_selection_data_get_pixbuf (GtkSelectionData *selection_data)
+{
+  GdkPixbufLoader *loader;
+  GdkPixbuf *result = NULL;
+
+  loader = gdk_pixbuf_loader_new ();
+  
+  if (gdk_pixbuf_loader_write (loader, 
+			       selection_data->data,
+			       selection_data->length,
+			       NULL))
+    result = gdk_pixbuf_loader_get_pixbuf (loader);
+  
+  if (result)
+    g_object_ref (result);
+
+  gdk_pixbuf_loader_close (loader, NULL);
+  g_object_unref (loader);
+  
+  return result;
+}
+
 
 /**
  * gtk_selection_data_get_targets:

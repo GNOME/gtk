@@ -1,3 +1,18 @@
+2004-10-21  Matthias Clasen  <mclasen@redhat.com>
+
+	Add convenience api for image dnd (#150165):
+	
+	* gtk/gtkselection.h: 
+	* gtk/gtkselection.c (gtk_target_list_add_image_targets) 
+	(gtk_selection_data_set_pixbuf, gtk_selection_data_get_pixbuf): 
+	New functions to handle the image formats readable/writable 
+	by gdk-pixbuf. 
+	
+	* gtk/gtkdnd.h: 
+	* gtk/gtkdnd.c (gtk_drag_dest_add_image_targets) 
+	(gtk_drag_source_add_text_targets): New functions to handle
+	the image formats readable/writable by gdk-pixbuf. 
+
 2004-10-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_new): Make
