@@ -1,3 +1,8 @@
+Mon Jan 21 23:39:42 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/tmpl/gtkfixed.sgml: change guint16 to gint to reflect
+	changes in the code, found by Jody Goldberg <jody@gnome.org>
+
 2002-01-19  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/x11.sgml: add a mostly-empty X11 section

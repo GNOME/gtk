@@ -100,13 +100,13 @@ an application.)
 </row>
 
 <row>
-<entry>#gint16 x;</entry>
+<entry>#gint x;</entry>
 <entry>the horizontal position of the widget within the #GtkFixed
 container.</entry>
 </row>
 
 <row>
-<entry>#gint16 y;</entry>
+<entry>#gint y;</entry>
 <entry>the vertical position of the widget within the #GtkFixed
 container.</entry>
 </row>
