@@ -19,23 +19,27 @@
 #include "gtkhandlebox.h"
 
 
-static void gtk_handle_box_class_init               (GtkHandleBoxClass *klass);
-static void gtk_handle_box_init                     (GtkHandleBox      *event_box);
-static void gtk_handle_box_realize                  (GtkWidget        *widget);
-static void gtk_handle_box_size_request             (GtkWidget        *widget,
-						   GtkRequisition   *requisition);
-static void gtk_handle_box_size_allocate            (GtkWidget        *widget,
-						   GtkAllocation    *allocation);
-static void gtk_handle_box_draw                     (GtkWidget    *widget,
-						   GdkRectangle *area);
-static gint gtk_handle_box_expose                   (GtkWidget      *widget,
-						   GdkEventExpose *event);
+static void gtk_handle_box_class_init    (GtkHandleBoxClass *klass);
+static void gtk_handle_box_init          (GtkHandleBox      *handle_box);
+static void gtk_handle_box_realize       (GtkWidget        *widget);
+static void gtk_handle_box_size_request  (GtkWidget *widget,
+					  GtkRequisition   *requisition);
+static void gtk_handle_box_size_allocate (GtkWidget *widget,
+					  GtkAllocation *allocation);
+static void gtk_handle_box_draw          (GtkWidget *widget,
+					  GdkRectangle *area);
+static gint gtk_handle_box_expose        (GtkWidget *widget,
+					  GdkEventExpose *event);
+static gint gtk_handle_box_button_changed(GtkWidget *widget,
+					  GdkEventButton *event);
+static gint gtk_handle_box_motion        (GtkWidget *widget,
+					  GdkEventMotion *event);
 
 
 guint
 gtk_handle_box_get_type ()
 {
-  static guint event_box_type = 0;
+  static guint handle_box_type = 0;
 
   if (!event_box_type)
     {
@@ -49,10 +53,10 @@ gtk_handle_box_get_type ()
 	(GtkArgFunc) NULL,
       };
 
-      event_box_type = gtk_type_unique (gtk_event_box_get_type (), &handle_box_info);
+      handle_box_type = gtk_type_unique (gtk_event_box_get_type (), &handle_box_info);
     }
 
-  return event_box_type;
+  return handle_box_type;
 }
 
 static void
@@ -67,15 +71,18 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class->size_allocate = gtk_handle_box_size_allocate;
   widget_class->draw = gtk_handle_box_draw;
   widget_class->expose_event = gtk_handle_box_expose;
+  widget_class->button_press_event = gtk_handle_box_button_change;
+  widget_class->button_release_event = gtk_handle_box_button_change;
+  widget_class->motion_notify_event = gtk_handle_box_motion;
 }
 
 static void
-gtk_handle_box_init (GtkHandleBox *event_box)
+gtk_handle_box_init (GtkHandleBox *handle_box)
 {
-  GTK_WIDGET_UNSET_FLAGS (event_box, GTK_NO_WINDOW);
-  GTK_WIDGET_SET_FLAGS (event_box, GTK_BASIC);
-  event_box->show_handle = TRUE;
-  event_box->real_parent = NULL;
+  GTK_WIDGET_UNSET_FLAGS (handle_box, GTK_NO_WINDOW);
+  GTK_WIDGET_SET_FLAGS (handle_box, GTK_BASIC);
+  handle_box->is_being_dragged = FALSE;
+  handle_box->real_parent = NULL;
 }
 
 GtkWidget*
@@ -226,3 +233,43 @@ gtk_handle_box_expose (GtkWidget      *widget,
   return FALSE;
 }
 
+static gint gtk_handle_box_button_changed(GtkWidget *widget,
+					  GdkEventButton *event)
+{
+  GtkHandleBox *hb;
+  g_return_val_if_fail(widget != NULL, FALSE);
+  g_return_val_if_fail(GTK_IS_HANDLE_BOX(widget), FALSE);
+  g_return_val_if_fail(event != NULL, FALSE);
+
+  hb = GTK_HANDLE_BOX(widget);
+  
+  if(event->button == 0)
+    {
+      if(event->type == GDK_BUTTON_PRESS)
+	{
+	  hb->is_being_dragged = TRUE;
+	  real_parent = widget->parent;
+	  gdk_window_set_override_redirect(hb->window, TRUE);
+	  gdk_window_reparent(hb->window, GDK_ROOT_PARENT(),
+			      event->x, event->y);
+	}
+      else if(event->type == GDK_BUTTON_RELEASE)
+	{
+	  hb->is_being_dragged = FALSE;
+	}
+    }
+}
+
+static gint gtk_handle_box_motion        (GtkWidget *widget,
+					  GdkEventMotion *event)
+{
+  GtkHandleBox *hb;
+  g_return_val_if_fail(widget != NULL, FALSE);
+  g_return_val_if_fail(GTK_IS_HANDLE_BOX(widget), FALSE);
+  g_return_val_if_fail(event != NULL, FALSE);
+
+  hb = GTK_HANDLE_BOX(widget);
+  if(hb->is_being_dragged) {
+    
+  }
+}

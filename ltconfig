@@ -776,7 +776,8 @@ else
     hardcode_libdir_flag_spec='-L$libdir'
     hardcode_minus_L=yes
     allow_undefined_flag=unsupported
-    archive_cmds='echo "LIBRARY $libname INITINSTANCE" > $objdir/$libname.def;echo "DESCRIPTION \"$libname\"" >> $objdir/$libname.def;echo DATA >> $objdir/$libname.def;echo " SINGLE NONSHARED" >> $objdir/$libname.def;echo EXPORTS >> $objdir/$libname.def;emxexp$libobjs >> $objdir/$libname.def;$CC -Zdll -Zcrtdll -o $lib$libobjs $objdir/$libname.def'
+    archive_cmds='echo "LIBRARY $libname INITINSTANCE" > $objdir/$libname.def;echo "DESCRIPTION \"$libname\"" >> $objdir/$libname.def;echo DATA >> $objdir/$libname.def;echo " SINGLE NONSHARED" >> $objdir/$libname.def;echo EXPORTS >> $objdir/$libname.def;e
+mxexp$libobjs >> $objdir/$libname.def;$CC -Zdll -Zcrtdll -o $lib$libobjs $objdir/$libname.def'
     old_archive_from_new_cmds='emximp -o $objdir/$libname.a $objdir/$libname.def'
     ;;
 
@@ -1351,7 +1352,7 @@ hardcode_action=$hardcode_action
 
 # Flag to hardcode \$libdir into a binary during linking.
 # This must work even if \$libdir does not exist.
-hardcode_libdir_flag_spec="$hardcode_libdir_flag_spec"
+#hardcode_libdir_flag_spec="$hardcode_libdir_flag_spec"
 
 # Whether we need a single -rpath flag with a separated argument.
 hardcode_libdir_separator="$hardcode_libdir_separator"

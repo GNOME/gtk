@@ -807,6 +807,7 @@ struct _GdkEventMotion
   gint16 is_hint;
   GdkInputSource source;
   guint32 deviceid;
+  gdouble x_root, y_root;
 };
 
 struct _GdkEventButton
@@ -823,6 +824,7 @@ struct _GdkEventButton
   guint button;
   GdkInputSource source;
   guint32 deviceid;
+  gdouble x_root, y_root;
 };
 
 struct _GdkEventKey

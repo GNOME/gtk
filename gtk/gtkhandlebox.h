@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+/* The GtkHandleBox is to allow
 #ifndef __GTK_HANDLE_BOX_H__
 #define __GTK_HANDLE_BOX_H__
 
@@ -38,8 +39,9 @@ typedef struct _GtkHandleBoxClass  GtkHandleBoxClass;
 
 struct _GtkHandleBox
 {
-  GtkEventBox bin;
+  GtkEventBox event_box;
   GtkWidget *real_parent;
+  gboolean is_being_dragged;
 };
 
 struct _GtkHandleBoxClass
