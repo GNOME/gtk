@@ -20,11 +20,13 @@
 #include <config.h>
 #include "gtkdebug.h"
 #include "gtkiconcache.h"
+#include <glib/gstdio.h>
 
 #ifdef HAVE_MMAP
 #include <sys/mman.h>
 #endif
 #ifdef G_OS_WIN32
+#include <windows.h>
 #include <io.h>
 #endif
 #include <sys/types.h>
@@ -34,6 +36,10 @@
 #endif
 #include <fcntl.h>
 #include <string.h>
+
+#ifndef _O_BINARY
+#define _O_BINARY 0
+#endif
 
 #define MAJOR_VERSION 1
 #define MINOR_VERSION 0
@@ -46,6 +52,9 @@ struct _GtkIconCache {
 
   gsize size;
   gchar *buffer;
+#ifdef G_OS_WIN32
+  HANDLE handle;
+#endif
 };
 
 GtkIconCache *
@@ -67,6 +76,10 @@ _gtk_icon_cache_unref (GtkIconCache *cache)
 #ifdef HAVE_MMAP
       munmap (cache->buffer, cache->size);
 #endif
+#ifdef G_OS_WIN32
+      UnmapViewOfFile (cache->buffer);
+      CloseHandle (cache->handle);
+#endif
       g_free (cache);
     }
 }
@@ -75,12 +88,16 @@ GtkIconCache *
 _gtk_icon_cache_new_for_path (const gchar *path)
 {
   GtkIconCache *cache = NULL;
-#ifdef HAVE_MMAP
+
+#if defined(HAVE_MMAP) || defined(G_OS_WIN32)
   gchar *cache_filename;
-  gint fd;
+  gint fd = -1;
   struct stat st;
   struct stat path_st;
-  gchar *buffer;
+  gchar *buffer = NULL;
+#ifdef G_OS_WIN32
+  HANDLE handle = NULL;
+#endif
 
   if (g_getenv ("GTK_NO_ICON_CACHE"))
     return NULL;
@@ -91,8 +108,14 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   GTK_NOTE (ICONTHEME, 
 	    g_print ("look for cache in %s\n", path));
 
-  /* Open the file and mmap it */
-  fd = open (cache_filename, O_RDONLY);
+  if (!g_file_test (cache_filename, G_FILE_TEST_IS_REGULAR))
+    goto done;
+
+  if (g_stat (path, &path_st) < 0)
+    goto done;
+
+  /* Open the file and map it into memory */
+  fd = g_open (cache_filename, O_RDONLY|_O_BINARY, 0);
 
   if (fd < 0)
     {
@@ -100,13 +123,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
       return NULL;
     }
   
-  if (!g_file_test (cache_filename, G_FILE_TEST_IS_REGULAR))
-    goto done;
-
   if (fstat (fd, &st) < 0 || st.st_size < 4)
-    goto done;
-
-  if (stat (path, &path_st) < 0)
     goto done;
 
   /* Verify cache is uptodate */
@@ -117,16 +134,36 @@ _gtk_icon_cache_new_for_path (const gchar *path)
       goto done; 
     }
 
+#ifndef G_OS_WIN32
   buffer = (gchar *) mmap (NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
 
   if (buffer == MAP_FAILED)
     goto done;
+#else
+  handle = CreateFileMapping (_get_osfhandle (fd), NULL, PAGE_READONLY,
+			      0, 0, NULL);
+  if (handle == NULL)
+    goto done;
+
+  buffer = MapViewOfFile (handle, FILE_MAP_READ, 0, 0, 0);
+
+  if (buffer == NULL)
+    {
+      CloseHandle (handle);
+      goto done;
+    }
+#endif
 
   /* Verify version */
   if (GET_UINT16 (buffer, 0) != MAJOR_VERSION ||
       GET_UINT16 (buffer, 2) != MINOR_VERSION)
     {
+#ifndef G_OS_WIN32
       munmap (buffer, st.st_size);
+#else
+      UnmapViewOfFile (buffer);
+      CloseHandle (handle);
+#endif
       GTK_NOTE (ICONTHEME, 
 		g_print ("wrong cache version\n"));
       goto done;
@@ -138,12 +175,16 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   cache = g_new0 (GtkIconCache, 1);
   cache->ref_count = 1;
   cache->buffer = buffer;
+#ifdef G_OS_WIN32
+  cache->handle = handle;
+#endif
   cache->size = st.st_size;
  done:
   g_free (cache_filename);  
-  close (fd);
+  if (fd != -1)
+    close (fd);
 
-#endif  /* HAVE_MMAP */
+#endif  /* HAVE_MMAP || G_OS_WIN32 */
 
   return cache;
 }

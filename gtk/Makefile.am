@@ -46,6 +46,10 @@ gtk-win32res.lo : gtk-win32.rc
 	$(top_srcdir)/build/win32/lt-compile-resource gtk-win32.rc gtk-win32res.lo
 
 install-libtool-import-lib:
+	for entry in `grep PRIVATE gtk.def | sed -e 's/PRIVATE//'`; do \
+	  file=`nm -A .libs/libgtk-win32-$(GTK_API_VERSION).dll.a | tr -d '\r' | grep -m 1 -E $$entry'$$' | cut -d: -f2`; \
+	  ar d .libs/libgtk-win32-$(GTK_API_VERSION).dll.a $$file; \
+	done
 	$(INSTALL) .libs/libgtk-win32-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
 uninstall-libtool-import-lib:
 	-rm $(DESTDIR)$(libdir)/libtk-win32-$(GTK_API_VERSION).dll.a

@@ -27,6 +27,8 @@
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
 
+#include <glib/gstdio.h>
+
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
@@ -39,7 +41,6 @@
 #include <shellapi.h> /* ExtractAssociatedIcon */
 #include <direct.h>
 #include <io.h>
-#define mkdir(p,m) _mkdir(p)
 #include <gdk/win32/gdkwin32.h> /* gdk_win32_hdc_get */
 #else
 #error "The implementation is win32 only."
@@ -371,10 +372,10 @@ gtk_file_system_win32_get_volume_for_path (GtkFileSystem     *file_system,
 }
 
 static GtkFileFolder *
-gtk_file_system_win32_get_folder (GtkFileSystem    *file_system,
-				 const GtkFilePath *path,
-				 GtkFileInfoType    types,
-				 GError           **error)
+gtk_file_system_win32_get_folder (GtkFileSystem     *file_system,
+				  const GtkFilePath *path,
+				  GtkFileInfoType    types,
+				  GError           **error)
 {
   GtkFileSystemWin32 *system_win32;
   GtkFileFolderWin32 *folder_win32;
@@ -393,7 +394,7 @@ gtk_file_system_win32_get_folder (GtkFileSystem    *file_system,
   if (!g_file_test (filename, G_FILE_TEST_IS_DIR))
     {
       int save_errno = errno;
-      gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+      gchar *display_filename = g_filename_display_name (filename);
 
       /* If g_file_test() returned FALSE but not due to an error, it means
        * that the filename is not a directory.
@@ -404,17 +405,17 @@ gtk_file_system_win32_get_folder (GtkFileSystem    *file_system,
 		     GTK_FILE_SYSTEM_ERROR,
 		     GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
 		     _("%s: %s"),
-		     filename_utf8 ? filename_utf8 : "???",
+		     display_filename,
 		     g_strerror (ENOTDIR));
       else
 	g_set_error (error,
 		     GTK_FILE_SYSTEM_ERROR,
 		     GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		     _("error getting information for '%s': %s"),
-		     filename_utf8 ? filename_utf8 : "???",
+		     display_filename,
 		     g_strerror (save_errno));
 
-      g_free (filename_utf8);
+      g_free (display_filename);
       return NULL;
     }
 
@@ -443,18 +444,18 @@ gtk_file_system_win32_create_folder (GtkFileSystem     *file_system,
   filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, FALSE);
 
-  result = mkdir (filename, 0777) == 0;
+  result = g_mkdir (filename, 0777) == 0;
 
   if (!result)
     {
-      gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+      gchar *display_filename = g_filename_display_name (filename);
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		   _("error creating directory '%s': %s"),
-		   filename_utf8 ? filename_utf8 : "???",
+		   display_filename,
 		   g_strerror (errno));
-      g_free (filename_utf8);
+      g_free (display_filename);
     }
   else if (!filename_is_drive_root (filename))
     {
@@ -517,7 +518,7 @@ gtk_file_system_win32_volume_mount (GtkFileSystem        *file_system,
 
 static gchar *
 gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
-					      GtkFileSystemVolume *volume)
+					       GtkFileSystemVolume *volume)
 {
   gchar *real_display_name;
   gunichar2 *wdrive = g_utf8_to_utf16 (volume->drive, -1, NULL, NULL, NULL);
@@ -526,12 +527,12 @@ gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
   g_return_val_if_fail (wdrive != NULL, NULL);
 
   if (GetVolumeInformationW (wdrive,
-			    wname, G_N_ELEMENTS(wname), 
-                            NULL, /* serial number */
-                            NULL, /* max. component length */
-                            NULL, /* fs flags */
-                            NULL, 0) /* fs type like FAT, NTFS */
-			    && wname[0])
+			     wname, G_N_ELEMENTS(wname), 
+			     NULL, /* serial number */
+			     NULL, /* max. component length */
+			     NULL, /* fs flags */
+			     NULL, 0) /* fs type like FAT, NTFS */
+      && wname[0])
     {
       gchar *name = g_utf16_to_utf8 (wname, -1, NULL, NULL, NULL);
       real_display_name = g_strconcat (name, " (", volume->drive, ")", NULL);
@@ -547,10 +548,10 @@ gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
 
 static GdkPixbuf *
 gtk_file_system_win32_volume_render_icon (GtkFileSystem        *file_system,
-					 GtkFileSystemVolume  *volume,
-					 GtkWidget            *widget,
-					 gint                  pixel_size,
-					 GError              **error)
+					  GtkFileSystemVolume  *volume,
+					  GtkWidget            *widget,
+					  gint                  pixel_size,
+					  GError              **error)
 {
   GtkIconSet *icon_set = NULL;
   DWORD dt = GetDriveType (volume->drive);
@@ -618,32 +619,15 @@ gtk_file_system_win32_make_path (GtkFileSystem     *file_system,
 			         GError           **error)
 {
   const char *base_filename;
-  gchar *filename;
   gchar *full_filename;
-  GError *tmp_error = NULL;
   GtkFilePath *result;
   
   base_filename = gtk_file_path_get_string (base_path);
   g_return_val_if_fail (base_filename != NULL, NULL);
   g_return_val_if_fail (g_path_is_absolute (base_filename), NULL);
 
-  filename = g_filename_from_utf8 (display_name, -1, NULL, NULL, &tmp_error);
-  if (!filename)
-    {
-      g_set_error (error,
-		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_BAD_FILENAME,
-		   "%s",
-		   tmp_error->message);
-      
-      g_error_free (tmp_error);
-
-      return NULL;
-    }
-    
-  full_filename = g_build_filename (base_filename, filename, NULL);
+  full_filename = g_build_filename (base_filename, display_name, NULL);
   result = filename_to_path (full_filename);
-  g_free (filename);
   g_free (full_filename);
   
   return result;
@@ -780,19 +764,16 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
 	{
 	  if (g_ascii_isalpha (base_filename[0]) &&
 	      base_filename[1] == ':')
-	    folder_part = g_strdup_printf ("%c:%c", base_filename[0],
-					   G_DIR_SEPARATOR);
+	    folder_part = g_strdup_printf ("%c:" G_DIR_SEPARATOR_S, base_filename[0]);
 	  else
 	    folder_part = g_strdup (G_DIR_SEPARATOR_S);
 	}
       else if (g_ascii_isalpha (str[0]) &&
 	       str[1] == ':' &&
 	       G_IS_DIR_SEPARATOR (str[2]))
-	folder_part = g_filename_from_utf8 (str, last_slash - str + 1,
-					    NULL, NULL, &tmp_error);
+	folder_part = g_strdup_printf ("%c:" G_DIR_SEPARATOR_S, str[0]);
       else
-	folder_part = g_filename_from_utf8 (str, last_slash - str,
-					    NULL, NULL, &tmp_error);
+	folder_part = g_strndup (str, last_slash - str);
 
       if (!folder_part)
 	{
@@ -904,7 +885,7 @@ bookmarks_serialize (GSList  **bookmarks,
 	  else
 	    ok = FALSE;
 	}
-      if (ok && (f = fopen (filename, "wb")) != NULL)
+      if (ok && (f = g_fopen (filename, "wb")) != NULL)
         {
 	  entry = g_slist_find_custom (list, uri, (GCompareFunc) strcmp);
 	  if (add)
@@ -1294,7 +1275,6 @@ gtk_file_folder_win32_get_info (GtkFileFolder     *folder,
 {
   GtkFileFolderWin32 *folder_win32 = GTK_FILE_FOLDER_WIN32 (folder);
   GtkFileInfo *info;
-  gchar *dirname;
   gchar *filename;
   
   if (!path)
@@ -1309,12 +1289,6 @@ gtk_file_folder_win32_get_info (GtkFileFolder     *folder,
 
   filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, NULL);
-
-#if 0
-  dirname = g_path_get_dirname (filename);
-  g_return_val_if_fail (strcmp (dirname, folder_win32->filename) == 0, NULL);
-  g_free (dirname);
-#endif
 
   info = filename_get_info (filename, folder_win32->types, error);
 
@@ -1378,17 +1352,39 @@ filename_get_info (const gchar     *filename,
   GtkFileIconType icon_type = GTK_FILE_ICON_REGULAR;
 #endif
   WIN32_FILE_ATTRIBUTE_DATA wfad;
+  int rc = 0;
 
-  if (!GetFileAttributesEx (filename, GetFileExInfoStandard, &wfad))
+  if (G_WIN32_HAVE_WIDECHAR_API ())
     {
-      gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+      wchar_t *wfilename = g_utf8_to_utf16 (filename, -1, NULL, NULL, error);
+
+      if (!wfilename)
+	return NULL;
+
+      rc = GetFileAttributesExW (wfilename, GetFileExInfoStandard, &wfad);
+      g_free (wfilename);
+    }
+  else
+    {
+      char *cpfilename = g_locale_from_utf8 (filename, -1, NULL, NULL, error);
+
+      if (!cpfilename)
+	return NULL;
+
+      rc = GetFileAttributesExA (cpfilename, GetFileExInfoStandard, &wfad);
+      g_free (cpfilename);
+    }
+
+  if (!rc)
+    {
+      gchar *display_filename = g_filename_display_name (filename);
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		   _("error getting information for '%s': %s"),
-		   filename_utf8 ? filename_utf8 : "???",
+		   display_filename,
 		   g_win32_error_message (GetLastError ()));
-      g_free (filename_utf8);
+      g_free (display_filename);
       
       return NULL;
     }
@@ -1409,21 +1405,17 @@ filename_get_info (const gchar     *filename,
   
       if (types & GTK_FILE_INFO_DISPLAY_NAME)
 	{
-	  gchar *display_name = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
-	  if (!display_name)
-	    display_name = g_strescape (basename, NULL);
+	  gchar *display_basename = g_filename_display_name (basename);
 	  
-	  gtk_file_info_set_display_name (info, display_name);
-	  
-	  g_free (display_name);
+	  gtk_file_info_set_display_name (info, display_basename);
+	  g_free (display_basename);
 	}
       
       if (types & GTK_FILE_INFO_IS_HIDDEN)
 	{
-            /* win32 convention ... */
-            gboolean is_hidden = basename[0] == '.';
-            /* ... _and_ windoze attribute */
-            is_hidden = is_hidden || !!(wfad.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN);
+	  /* Unix dot convention or the Windows hidden attribute */
+	  gboolean is_hidden = basename[0] == '.' ||
+	    !!(wfad.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN);
 	  gtk_file_info_set_is_hidden (info, is_hidden);
 	}
 

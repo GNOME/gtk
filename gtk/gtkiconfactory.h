@@ -63,6 +63,12 @@ struct _GtkIconFactoryClass
   void (*_gtk_reserved4) (void);
 };
 
+#ifdef G_OS_WIN32
+/* Reserve old names for DLL ABI backward compatibility */
+#define gtk_icon_source_set_filename gtk_icon_source_set_filename_utf8
+#define gtk_icon_source_get_filename gtk_icon_source_get_filename_utf8
+#endif
+
 GType           gtk_icon_factory_get_type (void) G_GNUC_CONST;
 GtkIconFactory* gtk_icon_factory_new      (void);
 void            gtk_icon_factory_add      (GtkIconFactory *factory,

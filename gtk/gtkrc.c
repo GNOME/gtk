@@ -41,11 +41,8 @@
 
 #include "gtkalias.h"
 
-#ifndef HAVE_LSTAT
-#define lstat stat
-#endif
-
 #include <glib.h>
+#include <glib/gstdio.h>
 #include "gdkconfig.h"
 
 #include "gtkversion.h"
@@ -313,10 +310,20 @@ gtk_rc_make_default_dir (const gchar *type)
   gchar *path;
 
   var = g_getenv ("GTK_EXE_PREFIX");
+
+#ifdef G_OS_WIN32
+  if (var)
+    var = g_locale_to_utf8 (var, -1, NULL, NULL, NULL);
+#endif
+
   if (var)
     path = g_build_filename (var, "lib", "gtk-2.0", GTK_BINARY_VERSION, type, NULL);
   else
     path = g_build_filename (GTK_LIBDIR, "gtk-2.0", GTK_BINARY_VERSION, type, NULL);
+
+#ifdef G_OS_WIN32
+  g_free ((void *) var);
+#endif
 
   return path;
 }
@@ -354,7 +361,16 @@ gtk_rc_get_im_module_path (void)
 gchar *
 gtk_rc_get_im_module_file (void)
 {
-  gchar *result = g_strdup (g_getenv ("GTK_IM_MODULE_FILE"));
+  const gchar *var = g_getenv ("GTK_IM_MODULE_FILE");
+  gchar *result = NULL;
+
+#ifdef G_OS_WIN32
+  if (var)
+    var = g_locale_to_utf8 (var, -1, NULL, NULL, NULL);
+#endif
+
+  if (var)
+    result = g_strdup (var);
 
   if (!result)
     {
@@ -363,6 +379,11 @@ gtk_rc_get_im_module_file (void)
       else
 	result = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtk.immodules", NULL);
     }
+
+#ifdef G_OS_WIN32
+  if (var)
+    g_free ((void *) var);
+#endif
 
   return result;
 }
@@ -374,10 +395,21 @@ gtk_rc_get_theme_dir (void)
   gchar *path;
 
   var = g_getenv ("GTK_DATA_PREFIX");
+
+#ifdef G_OS_WIN32
+  if (var)
+    var = g_locale_to_utf8 (var, -1, NULL, NULL, NULL);
+#endif
+
   if (var)
     path = g_build_filename (var, "share", "themes", NULL);
   else
     path = g_build_filename (GTK_DATA_PREFIX, "share", "themes", NULL);
+
+#ifdef G_OS_WIN32
+  if (var)
+    g_free ((void *) var);
+#endif
 
   return path;
 }
@@ -414,6 +446,12 @@ gtk_rc_add_initial_default_files (void)
   init = TRUE;
 
   var = g_getenv ("GTK2_RC_FILES");
+
+#ifdef G_OS_WIN32
+  if (var)
+    var = g_locale_to_utf8 (var, -1, NULL, NULL, NULL);
+#endif
+
   if (var)
     {
       files = g_strsplit (var, G_SEARCHPATH_SEPARATOR_S, 128);
@@ -427,19 +465,25 @@ gtk_rc_add_initial_default_files (void)
     }
   else
     {
+      const gchar *home;
       str = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtkrc", NULL);
 
       gtk_rc_add_default_file (str);
       g_free (str);
 
-      var = g_get_home_dir ();
-      if (var)
+      home = g_get_home_dir ();
+      if (home)
 	{
-	  str = g_build_filename (var, ".gtkrc-2.0", NULL);
+	  str = g_build_filename (home, ".gtkrc-2.0", NULL);
 	  gtk_rc_add_default_file (str);
 	  g_free (str);
 	}
     }
+
+#ifdef G_OS_WIN32
+  if (var)
+    g_free ((void *) var);
+#endif
 }
 
 /**
@@ -805,13 +849,13 @@ gtk_rc_context_parse_one_file (GtkRcContext *context,
   if (g_slist_find (current_files_stack, rc_file))
     return;
 
-  if (!lstat (rc_file->canonical_name, &statbuf))
+  if (!g_lstat (rc_file->canonical_name, &statbuf))
     {
       gint fd;
       
       rc_file->mtime = statbuf.st_mtime;
 
-      fd = open (rc_file->canonical_name, O_RDONLY);
+      fd = g_open (rc_file->canonical_name, O_RDONLY, 0);
       if (fd < 0)
 	goto out;
 
@@ -1457,7 +1501,7 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
 
 	  if (!rc_file->is_string)
 	    {
-	      if (!lstat (rc_file->name, &statbuf) && 
+	      if (!g_lstat (rc_file->name, &statbuf) && 
 		  (statbuf.st_mtime > rc_file->mtime))
 		{
 		  mtime_modified = TRUE;
@@ -3907,3 +3951,56 @@ gtk_rc_parse_stock (GtkRcContext   *context,
 
   return G_TOKEN_NONE;
 }
+
+#ifdef G_OS_WIN32
+
+/* DLL ABI stability backward compatibility versions */
+
+#undef gtk_rc_add_default_file
+
+void
+gtk_rc_add_default_file (const gchar *filename)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+
+  gtk_rc_add_default_file_utf8 (utf8_filename);
+
+  g_free (utf8_filename);
+}
+
+#undef gtk_rc_set_default_files
+
+void
+gtk_rc_set_default_files (gchar **filenames)
+{
+  gchar **utf8_filenames;
+  int n = 0, i;
+
+  while (filenames[n++] != NULL)
+    ;
+
+  utf8_filenames = g_new (gchar *, n + 1);
+
+  for (i = 0; i < n; i++)
+    utf8_filenames[i] = g_locale_to_utf8 (filenames[i], -1, NULL, NULL, NULL);
+
+  utf8_filenames[n] = NULL;
+
+  gtk_rc_set_default_files_utf8 (utf8_filenames);
+
+  g_strfreev (utf8_filenames);
+}
+
+#undef gtk_rc_parse
+
+void
+gtk_rc_parse (const gchar *filename)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+
+  gtk_rc_parse_utf8 (utf8_filename);
+
+  g_free (utf8_filename);
+}
+
+#endif

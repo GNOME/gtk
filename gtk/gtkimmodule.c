@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <glib/gstdio.h>
 #include <gmodule.h>
 #include <pango/pango-utils.h>
 #include "gtkalias.h"
@@ -44,6 +45,10 @@
  * correct_libdir_prefix() function below will have to move somewhere
  * else.
  */
+
+#ifdef __GTK_PRIVATE_H__
+#error gtkprivate.h should not be included in this file
+#endif
 
 #define SIMPLE_ID "gtk-im-context-simple"
 
@@ -279,7 +284,7 @@ gtk_im_module_init (void)
 
   contexts_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
-  file = fopen (filename, "r");
+  file = g_fopen (filename, "r");
   if (!file)
     {
       /* In case someone wants only the default input method,
@@ -353,7 +358,7 @@ gtk_im_module_init (void)
 	    goto context_error;
 	  info->domain_dirname = g_strdup (tmp_buf->str);
 #ifdef DO_CORRECT_LIBDIR_PREFIX
-	  correct_libdir_prefix (&info->domain_dirname);
+	  correct_libdir_prefix ((char **) &info->domain_dirname);
 #endif
 
 	  if (!pango_scan_string (&p, tmp_buf))

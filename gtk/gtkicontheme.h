@@ -92,6 +92,15 @@ typedef enum {
 
 GQuark gtk_icon_theme_error_quark (void);
 
+#ifdef G_OS_WIN32
+/* Reserve old name for DLL ABI backward compatibility */
+#define gtk_icon_theme_set_search_path gtk_icon_theme_set_search_path_utf8
+#define gtk_icon_theme_get_search_path gtk_icon_theme_get_search_path_utf8
+#define gtk_icon_theme_append_search_path gtk_icon_theme_append_search_path_utf8
+#define gtk_icon_theme_prepend_search_path gtk_icon_theme_prepend_search_path_utf8
+#define gtk_icon_info_get_filename gtk_icon_info_get_filename_utf8
+#endif
+
 GType         gtk_icon_theme_get_type              (void) G_GNUC_CONST;
 
 GtkIconTheme *gtk_icon_theme_new                   (void);

@@ -27,6 +27,7 @@
 #include <utime.h>
 
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #define CACHE_NAME "icon-theme.cache"
 
@@ -49,7 +50,7 @@ is_cache_up_to_date (const gchar *path)
   gchar *cache_path;
   int retval;
   
-  retval = stat (path, &path_stat);
+  retval = g_stat (path, &path_stat);
 
   if (retval < 0)
     {
@@ -59,7 +60,7 @@ is_cache_up_to_date (const gchar *path)
     }
 
   cache_path = g_build_filename (path, CACHE_NAME, NULL);
-  retval = stat (cache_path, &cache_stat);
+  retval = g_stat (cache_path, &cache_stat);
   g_free (cache_path);
   
   if (retval < 0 && errno == ENOENT)
@@ -554,7 +555,7 @@ build_cache (const gchar *path)
   GList *directories = NULL;
   
   tmp_cache_path = g_build_filename (path, "."CACHE_NAME, NULL);
-  cache = fopen (tmp_cache_path, "w");
+  cache = g_fopen (tmp_cache_path, "wb");
   
   if (!cache)
     {
@@ -571,7 +572,7 @@ build_cache (const gchar *path)
       /* Empty table, just close and remove the file */
 
       fclose (cache);
-      unlink (tmp_cache_path);
+      g_unlink (tmp_cache_path);
       exit (0);
     }
     
@@ -584,22 +585,22 @@ build_cache (const gchar *path)
   
   if (!retval)
     {
-      unlink (tmp_cache_path);
+      g_unlink (tmp_cache_path);
       exit (1);
     }
 
   cache_path = g_build_filename (path, CACHE_NAME, NULL);
 
-  if (rename (tmp_cache_path, cache_path) == -1)
+  if (g_rename (tmp_cache_path, cache_path) == -1)
     {
-      unlink (tmp_cache_path);
+      g_unlink (tmp_cache_path);
       exit (1);
     }
 
   /* Update time */
   /* FIXME: What do do if an error occurs here? */
-  stat (path, &path_stat);
-  stat (cache_path, &cache_stat);
+  g_stat (path, &path_stat);
+  g_stat (cache_path, &cache_stat);
 
   utime_buf.actime = path_stat.st_atime;
   utime_buf.modtime = cache_stat.st_mtime;
@@ -621,12 +622,18 @@ main (int argc, char **argv)
   gchar *path;
   GOptionContext *context;
 
+  if (argc < 2)
+    return 0;
+
   context = g_option_context_new ("ICONPATH");
   g_option_context_add_main_entries (context, args, NULL);
 
   g_option_context_parse (context, &argc, &argv, NULL);
   
   path = argv[1];
+#ifdef G_OS_WIN32
+  path = g_locale_to_utf8 (path, -1, NULL, NULL, NULL);
+#endif
   
   if (!force_update && is_cache_up_to_date (path))
     return 0;

@@ -1,3 +1,38 @@
+2004-12-11  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkaccelmap.[ch]
+	* gtk/gtkfilechooser.[ch]
+	* gtk/gtkfilesel.c
+	* gtk/gtkfilesystemwin32.c
+	* gtk/gtkiconfactory.[ch]
+	* gtk/gtkicontheme.[ch]
+	* gtk/gtkimage.[ch]
+	* gtk/gtkimmodule.c
+	* gtk/gtkmodules.c
+	* gtk/gtkrc.[ch]
+	* gtk/gtkuimanager.[ch]
+	* gtk/gtkwindow.[ch]	
+	* gtk/updateiconcache.c
+	* gtk/gtk.symbols: Use gstdio wrappers. On Windows, convert
+	environment variables referring to pathnames from locale encoding
+	to UTF-8. As in GLib, in order to preserve Windows DLL ABI
+	stability, add binary compatibility versions of functions that
+	take file names as arguments, or return file names. Add a _utf8
+	suffix to the "real" such functions on Windows. The ABI
+	compatibility versions keep the old name.
+
+	* gtk/Makefile.am: Strip PRIVATE symbols from the GNU import
+	library.
+
+	* gtk/gtkiconcache.c (_gtk_icon_cache_new_for_path): Implement
+	file mapping on Win32.
+
+	* gtk/updateiconcache.c: Don't crash if invoked without
+	argument. Use binary mode when opening file.
+
+	* modules/engines/ms-windows/Theme/gtk-2.0/Makefile.am: Install
+	gtkrc in correct place, in <datadir>/themes/MS-Windows/gtk-2.0.
+
 2004-12-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_setup_mnemonic): Fix a 

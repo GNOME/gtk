@@ -121,6 +121,13 @@ struct _GtkRcStyleClass
   void (*_gtk_reserved4) (void);
 };
 
+#ifdef G_OS_WIN32
+/* Reserve old names for DLL ABI backward compatibility */
+#define gtk_rc_add_default_file gtk_rc_add_default_file_utf8
+#define gtk_rc_set_default_files gtk_rc_set_default_files_utf8
+#define gtk_rc_parse gtk_rc_parse_utf8
+#endif
+
 void	  _gtk_rc_init			(void);
 void      gtk_rc_add_default_file	(const gchar *filename);
 void      gtk_rc_set_default_files      (gchar **filenames);

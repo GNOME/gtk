@@ -94,16 +94,17 @@ struct _GtkFileSelectionClass
 };
 
 
+#ifdef G_OS_WIN32
+/* Reserve old names for DLL ABI backward compatibility */
+#define gtk_file_selection_get_filename gtk_file_selection_get_filename_utf8
+#define gtk_file_selection_set_filename gtk_file_selection_set_filename_utf8
+#define gtk_file_selection_get_selections gtk_file_selection_get_selections_utf8
+#endif
+
 GType      gtk_file_selection_get_type            (void) G_GNUC_CONST;
 GtkWidget* gtk_file_selection_new                 (const gchar      *title);
 void       gtk_file_selection_set_filename        (GtkFileSelection *filesel,
 						   const gchar      *filename);
-/* This function returns the selected filename in the C runtime's
- * multibyte string encoding, which may or may not be the same as that
- * used by GDK (UTF-8). To convert to UTF-8, call g_filename_to_utf8().
- * The returned string points to a statically allocated buffer and
- * should be copied away.
- */
 G_CONST_RETURN gchar* gtk_file_selection_get_filename        (GtkFileSelection *filesel);
 
 void	   gtk_file_selection_complete		  (GtkFileSelection *filesel,

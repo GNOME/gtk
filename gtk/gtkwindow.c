@@ -7451,3 +7451,46 @@ gtk_window_set_auto_startup_notification (gboolean setting)
 {
   disable_startup_notification = !setting;
 }
+
+#ifdef G_OS_WIN32
+
+#undef gtk_window_set_icon_from_file
+
+gboolean
+gtk_window_set_icon_from_file (GtkWindow   *window,
+			       const gchar *filename,
+			       GError     **err)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, err);
+  gboolean retval;
+
+  if (utf8_filename == NULL)
+    return FALSE;
+
+  retval = gtk_window_set_icon_from_file_utf8 (window, utf8_filename, err);
+
+  g_free (utf8_filename);
+
+  return retval;
+}
+
+#undef gtk_window_set_default_icon_from_file
+
+gboolean
+gtk_window_set_default_icon_from_file (const gchar *filename,
+				       GError     **err)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, err);
+  gboolean retval;
+
+  if (utf8_filename == NULL)
+    return FALSE;
+
+  retval = gtk_window_set_default_icon_from_file_utf8 (utf8_filename, err);
+
+  g_free (utf8_filename);
+
+  return retval;
+}
+
+#endif

@@ -43,6 +43,7 @@
 #endif
 
 #include <glib.h>		/* Include early to get G_OS_WIN32 etc */
+#include <glib/gstdio.h>
 
 #if defined(G_PLATFORM_WIN32)
 #include <ctype.h>
@@ -89,7 +90,6 @@
 #ifdef G_OS_WIN32
 #include <direct.h>
 #include <io.h>
-#define mkdir(p,m) _mkdir(p)
 #ifndef S_ISDIR
 #define S_ISDIR(mode) ((mode)&_S_IFDIR)
 #endif
@@ -1194,7 +1194,7 @@ gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel)
  * working directory and an empty filename, @filename must have a trailing
  * directory separator.
  *
- * The encoding of @filename is the on-disk encoding, which
+ * The encoding of @filename is preferred GLib file name encoding, which
  * may not be UTF-8. See g_filename_from_utf8().
  **/
 void
@@ -1239,11 +1239,10 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
  * gtk_file_selection_get_filename:
  * @filesel: a #GtkFileSelection
  * 
- * This function returns the selected filename in the on-disk encoding
- * (see g_filename_from_utf8()), which may or may not be the same as that
- * used by GTK+ (UTF-8). To convert to UTF-8, call g_filename_to_utf8().
- * The returned string points to a statically allocated buffer and
- * should be copied if you plan to keep it around.
+ * This function returns the selected filename in the GLib file name
+ * encoding. To convert to UTF-8, call g_filename_to_utf8(). The
+ * returned string points to a statically allocated buffer and should
+ * be copied if you plan to keep it around.
  *
  * If no file is selected then the selected directory path is returned.
  * 
@@ -1253,7 +1252,7 @@ G_CONST_RETURN gchar*
 gtk_file_selection_get_filename (GtkFileSelection *filesel)
 {
   static const gchar nothing[2] = "";
-  static gchar something[MAXPATHLEN*2];
+  static gchar something[MAXPATHLEN*2+1];
   char *sys_filename;
   const char *text;
 
@@ -1270,7 +1269,8 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
       g_free (fullname);
       if (!sys_filename)
 	return nothing;
-      strncpy (something, sys_filename, sizeof (something));
+      strncpy (something, sys_filename, sizeof (something) - 1);
+      something[sizeof (something) - 1] = '\0';
       g_free (sys_filename);
       return something;
     }
@@ -1451,7 +1451,7 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
       goto out;
     }
 
-  if (mkdir (sys_full_path, 0777) < 0)
+  if (g_mkdir (sys_full_path, 0777) < 0)
     {
       buf = g_strdup_printf (_("Error creating folder \"%s\": %s\n"), dirname,
 			     g_strerror (errno));
@@ -1581,7 +1581,7 @@ gtk_file_selection_delete_file_response (GtkDialog *dialog,
       goto out;
     }
 
-  if (unlink (sys_full_path) < 0) 
+  if (g_unlink (sys_full_path) < 0) 
     {
       buf = g_strdup_printf (_("Error deleting file \"%s\": %s"),
 			     fs->fileop_file, g_strerror (errno));
@@ -1701,7 +1701,7 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget,
       goto out2;
     }
   
-  if (rename (sys_old_filename, sys_new_filename) < 0) 
+  if (g_rename (sys_old_filename, sys_new_filename) < 0) 
     {
       buf = g_strdup_printf (_("Error renaming file \"%s\" to \"%s\": %s"),
 			     sys_old_filename, sys_new_filename,
@@ -2458,9 +2458,8 @@ maybe_clear_entry:
  * This function is intended for use when the user can select multiple files
  * in the file list. 
  *
- * The filenames are in the encoding of g_filename_from_utf8(), which may or 
- * may not be the same as that used by GTK+ (UTF-8). To convert to UTF-8, call
- * g_filename_to_utf8() on each string.
+ * The filenames are in the GLib file name encoding. To convert to
+ * UTF-8, call g_filename_to_utf8() on each string.
  *
  * Return value: a newly-allocated %NULL-terminated array of strings. Use
  * g_strfreev() to free it.
@@ -3172,7 +3171,7 @@ open_new_dir (gchar       *dir_name,
       if (stat_subdirs)
 	{
 	  /* Here we know path->str is a "system charset" string */
-	  if (stat (path->str, &ent_sbuf) >= 0 && S_ISDIR (ent_sbuf.st_mode))
+	  if (g_stat (path->str, &ent_sbuf) >= 0 && S_ISDIR (ent_sbuf.st_mode))
 	    sent->entries[n_entries].is_dir = TRUE;
 	  else
 	    /* stat may fail, and we don't mind, since it could be a
@@ -3226,7 +3225,7 @@ check_dir (gchar       *dir_name,
       initialized = TRUE;
       for (i = 0; i < n_no_stat_dirs; i++)
 	{
-	  if (stat (no_stat_dirs[i].name, &no_stat_dirs[i].statbuf) == 0)
+	  if (g_stat (no_stat_dirs[i].name, &no_stat_dirs[i].statbuf) == 0)
 	    no_stat_dirs[i].present = TRUE;
 	}
     }
@@ -3238,7 +3237,7 @@ check_dir (gchar       *dir_name,
       return FALSE;
     }
   
-  if (stat (sys_dir_name, result) < 0)
+  if (g_stat (sys_dir_name, result) < 0)
     {
       g_free (sys_dir_name);
       cmpl_errno = errno;
@@ -3380,7 +3379,7 @@ correct_dir_fullname (CompletionDir* cmpl_dir)
 	  return FALSE;
 	}
       
-      if (stat (sys_filename, &sbuf) < 0)
+      if (g_stat (sys_filename, &sbuf) < 0)
 	{
 	  g_free (sys_filename);
 	  cmpl_errno = errno;
@@ -3414,7 +3413,7 @@ correct_dir_fullname (CompletionDir* cmpl_dir)
 	  return FALSE;
 	}
       
-      if (stat (sys_filename, &sbuf) < 0)
+      if (g_stat (sys_filename, &sbuf) < 0)
 	{
 	  g_free (sys_filename);
 	  cmpl_errno = errno;
@@ -3472,7 +3471,7 @@ correct_parent (CompletionDir *cmpl_dir,
       return FALSE;
     }
   
-  if (stat (sys_filename, &parbuf) < 0)
+  if (g_stat (sys_filename, &parbuf) < 0)
     {
       g_free (sys_filename);
       cmpl_errno = errno;
@@ -4036,3 +4035,59 @@ cmpl_strerror (gint err)
   else
     return g_strerror (err);
 }
+
+#ifdef G_OS_WIN32
+
+/* DLL ABI stability backward compatibility versions */
+
+#undef gtk_file_selection_get_filename
+
+G_CONST_RETURN gchar*
+gtk_file_selection_get_filename (GtkFileSelection *filesel)
+{
+  static gchar retval[MAXPATHLEN*2+1];
+  gchar *tem;
+
+  tem = g_locale_from_utf8 (gtk_file_selection_get_filename_utf8 (filesel),
+			    -1, NULL, NULL, NULL);
+
+  strncpy (retval, tem, sizeof (retval) - 1);
+  retval[sizeof (retval) - 1] = '\0';
+  g_free (tem);
+
+  return retval;
+}
+
+#undef gtk_file_selection_set_filename
+
+void
+gtk_file_selection_set_filename (GtkFileSelection *filesel,
+				 const gchar      *filename)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+  gtk_file_selection_set_filename_utf8 (filesel, utf8_filename);
+  g_free (utf8_filename);
+}
+
+#undef gtk_file_selection_get_selections
+
+gchar **
+gtk_file_selection_get_selections (GtkFileSelection *filesel)
+{
+  int i = 0;
+  gchar **selections = gtk_file_selection_get_selections_utf8 (filesel);
+
+  if (selections != NULL)
+    while (selections[i] != NULL)
+      {
+	gchar *tem = selections[i];
+	selections[i] = g_locale_from_utf8 (selections[i],
+					    -1, NULL, NULL, NULL);
+	g_free (tem);
+	i++;
+      }
+
+  return selections;
+}
+
+#endif /* G_OS_WIN32 */

@@ -164,6 +164,12 @@ struct _GtkWindowGroupClass
   void (*_gtk_reserved4) (void);
 };
 
+#ifdef G_OS_WIN32
+/* Reserve old names for DLL ABI backward compatibility */
+#define gtk_window_set_icon_from_file gtk_window_set_icon_from_file_utf8
+#define gtk_window_set_default_icon_from_file gtk_window_set_default_icon_from_file_utf8
+#endif
+
 GType      gtk_window_get_type                 (void) G_GNUC_CONST;
 GtkWidget* gtk_window_new                      (GtkWindowType        type);
 void       gtk_window_set_title                (GtkWindow           *window,

@@ -44,6 +44,13 @@ typedef void (*GtkAccelMapForeach)		(gpointer	 data,
 
 
 /* --- public API --- */
+
+#ifdef G_OS_WIN32
+/* Reserve old names for DLL ABI backward compatibility */
+#define gtk_accel_map_load gtk_accel_map_load_utf8
+#define gtk_accel_map_save gtk_accel_map_save_utf8
+#endif
+
 void	   gtk_accel_map_add_entry	(const gchar		*accel_path,
 					 guint			 accel_key,
 					 GdkModifierType         accel_mods);

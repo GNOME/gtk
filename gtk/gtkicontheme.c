@@ -27,6 +27,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #include "gtkalias.h"
 
 #ifdef G_OS_WIN32
@@ -103,6 +104,12 @@ struct _GtkIconInfo
   /* Information about the source
    */
   gchar *filename;
+#ifdef G_OS_WIN32
+  /* System codepage version of filename, for DLL ABI backward
+   * compatibility functions.
+   */
+  gchar *cp_filename;
+#endif
   GdkPixbuf *builtin_pixbuf;
 
   GtkIconData *data;
@@ -885,7 +892,7 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
 			       NULL);
       dir_mtime = g_new (IconThemeDirMtime, 1);
       dir_mtime->dir = path;
-      if (stat (path, &stat_buf) == 0 && S_ISDIR (stat_buf.st_mode))
+      if (g_stat (path, &stat_buf) == 0 && S_ISDIR (stat_buf.st_mode))
 	dir_mtime->mtime = stat_buf.st_mtime;
       else
 	dir_mtime->mtime = 0;
@@ -1214,6 +1221,10 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
 	icon_info->filename = g_strdup (unthemed_icon->svg_filename);
       else if (unthemed_icon->no_svg_filename)
 	icon_info->filename = g_strdup (unthemed_icon->no_svg_filename);
+#ifdef G_OS_WIN32
+      icon_info->cp_filename = g_locale_from_utf8 (icon_info->filename,
+						   -1, NULL, NULL, NULL);
+#endif
 
       icon_info->dir_type = ICON_THEME_DIR_UNTHEMED;
     }
@@ -1629,7 +1640,7 @@ gtk_icon_theme_rescan_if_needed (GtkIconTheme *icon_theme)
     {
       dir_mtime = d->data;
 
-      stat_res = stat (dir_mtime->dir, &stat_buf);
+      stat_res = g_stat (dir_mtime->dir, &stat_buf);
 
       /* dir mtime didn't change */
       if (stat_res == 0 && 
@@ -1880,7 +1891,10 @@ theme_lookup_icon (IconTheme          *theme,
       file = g_strconcat (icon_name, string_from_suffix (suffix), NULL);
       icon_info->filename = g_build_filename (min_dir->dir, file, NULL);
       g_free (file);
-
+#ifdef G_OS_WIN32
+      icon_info->cp_filename = g_locale_from_utf8 (icon_info->filename,
+						   -1, NULL, NULL, NULL);
+#endif
       if (min_dir->cache && has_icon_file)
 	{
 	  gchar *icon_file_name, *icon_file_path;
@@ -2282,6 +2296,10 @@ gtk_icon_info_copy (GtkIconInfo *icon_info)
     copy->load_error = g_error_copy (copy->load_error);
   if (copy->filename)
     copy->filename = g_strdup (copy->filename);
+#ifdef G_OS_WIN32
+  if (copy->cp_filename)
+    copy->cp_filename = g_strdup (copy->cp_filename);
+#endif
 
   return copy;
 }
@@ -2301,6 +2319,10 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
 
   if (icon_info->filename)
     g_free (icon_info->filename);
+#ifdef G_OS_WIN32
+  if (icon_info->cp_filename)
+    g_free (icon_info->cp_filename);
+#endif
   if (icon_info->builtin_pixbuf)
     g_object_unref (icon_info->builtin_pixbuf);
   if (icon_info->pixbuf)
@@ -2900,3 +2922,94 @@ find_builtin_icon (const gchar *icon_name,
 
   return min_icon;
 }
+
+#ifdef G_OS_WIN32
+
+/* DLL ABI stability backward compatibility versions */
+
+#undef gtk_icon_theme_set_search_path
+
+void
+gtk_icon_theme_set_search_path (GtkIconTheme *icon_theme,
+				const gchar  *path[],
+				gint          n_elements)
+{
+  const gchar **utf8_path;
+  gint i;
+
+  utf8_path = g_new (const gchar *, n_elements);
+
+  for (i = 0; i < n_elements; i++)
+    utf8_path[i] = g_locale_to_utf8 (path[i], -1, NULL, NULL, NULL);
+
+  gtk_icon_theme_set_search_path_utf8 (icon_theme, utf8_path, n_elements);
+
+  for (i = 0; i < n_elements; i++)
+    g_free ((gchar *) utf8_path[i]);
+
+  g_free (utf8_path);
+}
+
+#undef gtk_icon_theme_get_search_path
+
+void
+gtk_icon_theme_get_search_path (GtkIconTheme      *icon_theme,
+				gchar            **path[],
+				gint              *n_elements)
+{
+  gint i, n;
+
+  gtk_icon_theme_get_search_path_utf8 (icon_theme, path, &n);
+
+  if (n_elements)
+    *n_elements = n;
+
+  if (path)
+    {
+      for (i = 0; i < n; i++)
+	{
+	  gchar *tem = (*path)[i];
+
+	  (*path)[i] = g_locale_from_utf8 ((*path)[i], -1, NULL, NULL, NULL);
+	  g_free (tem);
+	}
+    }
+}
+
+#undef gtk_icon_theme_append_search_path
+
+void
+gtk_icon_theme_append_search_path (GtkIconTheme *icon_theme,
+				   const gchar  *path)
+{
+  gchar *utf8_path = g_locale_from_utf8 (path, -1, NULL, NULL, NULL);
+
+  gtk_icon_theme_append_search_path_utf8 (icon_theme, utf8_path);
+
+  g_free (utf8_path);
+}
+
+#undef gtk_icon_theme_prepend_search_path
+
+void
+gtk_icon_theme_prepend_search_path (GtkIconTheme *icon_theme,
+				    const gchar  *path)
+{
+  gchar *utf8_path = g_locale_from_utf8 (path, -1, NULL, NULL, NULL);
+
+  gtk_icon_theme_prepend_search_path_utf8 (icon_theme, utf8_path);
+
+  g_free (utf8_path);
+}
+
+#undef gtk_icon_info_get_filename
+
+G_CONST_RETURN gchar *
+gtk_icon_info_get_filename (GtkIconInfo *icon_info)
+{
+  g_return_val_if_fail (icon_info != NULL, NULL);
+
+  return icon_info->cp_filename;
+}
+
+#endif

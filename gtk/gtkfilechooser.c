@@ -1827,3 +1827,172 @@ gtk_file_chooser_get_show_hidden (GtkFileChooser *chooser)
 
   return show_hidden;
 }
+
+#ifdef G_OS_WIN32
+
+/* DLL ABI stability backward compatibility versions */
+
+#undef gtk_file_chooser_get_filename
+
+gchar *
+gtk_file_chooser_get_filename (GtkFileChooser *chooser)
+{
+  gchar *utf8_filename = gtk_file_chooser_get_filename_utf8 (chooser);
+  gchar *retval = g_locale_from_utf8 (utf8_filename, -1, NULL, NULL, NULL);
+
+  g_free (utf8_filename);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_set_filename
+
+gboolean
+gtk_file_chooser_set_filename (GtkFileChooser *chooser,
+			       const gchar    *filename)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+  gboolean retval = gtk_file_chooser_set_filename_utf8 (chooser, utf8_filename);
+
+  g_free (utf8_filename);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_select_filename
+
+gboolean
+gtk_file_chooser_select_filename (GtkFileChooser *chooser,
+				  const gchar    *filename)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+  gboolean retval = gtk_file_chooser_select_filename_utf8 (chooser, utf8_filename);
+
+  g_free (utf8_filename);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_unselect_filename
+
+void
+gtk_file_chooser_unselect_filename (GtkFileChooser *chooser,
+				    const char     *filename)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+
+  gtk_file_chooser_unselect_filename_utf8 (chooser, utf8_filename);
+  g_free (utf8_filename);
+}
+
+#undef gtk_file_chooser_get_filenames
+
+GSList *
+gtk_file_chooser_get_filenames (GtkFileChooser *chooser)
+{
+  GSList *list = gtk_file_chooser_get_filenames_utf8 (chooser);
+  GSList *rover = list;
+  
+  while (rover)
+    {
+      gchar *tem = (gchar *) rover->data;
+      rover->data = g_locale_from_utf8 ((gchar *) rover->data, -1, NULL, NULL, NULL);
+      g_free (tem);
+      rover = rover->next;
+    }
+
+  return list;
+}
+
+#undef gtk_file_chooser_set_current_folder
+
+gboolean
+gtk_file_chooser_set_current_folder (GtkFileChooser *chooser,
+				     const gchar    *filename)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+  gboolean retval = gtk_file_chooser_set_current_folder_utf8 (chooser, utf8_filename);
+
+  g_free (utf8_filename);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_get_current_folder
+
+gchar *
+gtk_file_chooser_get_current_folder (GtkFileChooser *chooser)
+{
+  gchar *utf8_folder = gtk_file_chooser_get_current_folder_utf8 (chooser);
+  gchar *retval = g_locale_from_utf8 (utf8_folder, -1, NULL, NULL, NULL);
+
+  g_free (utf8_folder);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_get_preview_filename
+
+char *
+gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser)
+{
+  char *utf8_filename = gtk_file_chooser_get_preview_filename_utf8 (chooser);
+  char *retval = g_locale_from_utf8 (utf8_filename, -1, NULL, NULL, NULL);
+
+  g_free (utf8_filename);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_add_shortcut_folder
+
+gboolean
+gtk_file_chooser_add_shortcut_folder (GtkFileChooser    *chooser,
+				      const char        *folder,
+				      GError           **error)
+{
+  char *utf8_folder = g_locale_to_utf8 (folder, -1, NULL, NULL, NULL);
+  gboolean retval =
+    gtk_file_chooser_add_shortcut_folder_utf8 (chooser, utf8_folder, error);
+
+  g_free (utf8_folder);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_remove_shortcut_folder
+
+gboolean
+gtk_file_chooser_remove_shortcut_folder (GtkFileChooser    *chooser,
+					 const char        *folder,
+					 GError           **error)
+{
+  char *utf8_folder = g_locale_to_utf8 (folder, -1, NULL, NULL, NULL);
+  gboolean retval =
+    gtk_file_chooser_remove_shortcut_folder_utf8 (chooser, utf8_folder, error);
+
+  g_free (utf8_folder);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_list_shortcut_folders
+
+GSList *
+gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
+{
+  GSList *list = gtk_file_chooser_list_shortcut_folders_utf8 (chooser);
+  GSList *rover = list;
+  
+  while (rover)
+    {
+      gchar *tem = (gchar *) rover->data;
+      rover->data = g_locale_from_utf8 ((gchar *) rover->data, -1, NULL, NULL, NULL);
+      g_free (tem);
+      rover = rover->next;
+    }
+
+  return list;
+}
+
+#endif

@@ -75,6 +75,21 @@ void     gtk_file_chooser_set_current_name   (GtkFileChooser *chooser,
 
 /* Filename manipulation
  */
+#ifdef G_OS_WIN32
+/* Reserve old names for DLL ABI backward compatibility */
+#define gtk_file_chooser_get_filename gtk_file_chooser_get_filename_utf8
+#define gtk_file_chooser_set_filename gtk_file_chooser_set_filename_utf8
+#define gtk_file_chooser_select_filename gtk_file_chooser_select_filename_utf8
+#define gtk_file_chooser_unselect_filename gtk_file_chooser_unselect_filename_utf8
+#define gtk_file_chooser_get_filenames gtk_file_chooser_get_filenames_utf8
+#define gtk_file_chooser_set_current_folder gtk_file_chooser_set_current_folder_utf8
+#define gtk_file_chooser_get_current_folder gtk_file_chooser_get_current_folder_utf8
+#define gtk_file_chooser_get_preview_filename gtk_file_chooser_get_preview_filename_utf8
+#define gtk_file_chooser_add_shortcut_folder gtk_file_chooser_add_shortcut_folder_utf8
+#define gtk_file_chooser_remove_shortcut_folder gtk_file_chooser_remove_shortcut_folder_utf8
+#define gtk_file_chooser_list_shortcut_folders gtk_file_chooser_list_shortcut_folders_utf8
+#endif
+
 gchar *  gtk_file_chooser_get_filename       (GtkFileChooser *chooser);
 gboolean gtk_file_chooser_set_filename       (GtkFileChooser *chooser,
 					      const char     *filename);

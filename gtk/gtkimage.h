@@ -141,6 +141,12 @@ struct _GtkImageClass
   void (*_gtk_reserved4) (void);
 };
 
+#ifdef G_OS_WIN32
+/* Reserve old names for DLL ABI backward compatibility */
+#define gtk_image_new_from_file gtk_image_new_from_file_utf8
+#define gtk_image_set_from_file gtk_image_set_from_file_utf8
+#endif
+
 GType      gtk_image_get_type (void) G_GNUC_CONST;
 
 GtkWidget* gtk_image_new                (void);

@@ -70,6 +70,13 @@ get_module_path (void)
   module_path_env = g_getenv ("GTK_PATH");
   exe_prefix = g_getenv ("GTK_EXE_PREFIX");
 
+#ifdef G_OS_WIN32
+  if (module_path_env)
+    module_path_env = g_locale_to_utf8 (module_path_env, -1, NULL, NULL, NULL);
+  if (exe_prefix)
+    exe_prefix =  g_locale_to_utf8 (exe_prefix, -1, NULL, NULL, NULL);
+#endif
+
   if (exe_prefix)
     default_dir = g_build_filename (exe_prefix, "lib", "gtk-2.0", NULL);
   else
@@ -87,6 +94,13 @@ get_module_path (void)
   else
     module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
 				default_dir, NULL);
+
+#ifdef G_OS_WIN32
+  if (module_path_env)
+    g_free ((void *) module_path_env);
+  if (exe_prefix)
+    g_free ((void *) exe_prefix);
+#endif
 
   g_free (home_gtk_dir);
   g_free (default_dir);

@@ -25,6 +25,8 @@
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"  /* in lack of GtkAcceleratable */
 
+#include <glib/gstdio.h>
+
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -603,7 +605,8 @@ gtk_accel_map_load_fd (gint fd)
 
 /**
  * gtk_accel_map_load:
- * @file_name: a file containing accelerator specifications
+ * @file_name: a file containing accelerator specifications,
+ *   in the GLib file name encoding
  *
  * Parses a file previously saved with gtk_accel_map_save() for
  * accelerator specifications, and propagates them accordingly.
@@ -618,7 +621,7 @@ gtk_accel_map_load (const gchar *file_name)
   if (!g_file_test (file_name, G_FILE_TEST_IS_REGULAR))
     return;
 
-  fd = open (file_name, O_RDONLY);
+  fd = g_open (file_name, O_RDONLY, 0);
   if (fd < 0)
     return;
 
@@ -713,7 +716,8 @@ gtk_accel_map_save_fd (gint fd)
 
 /**
  * gtk_accel_map_save:
- * @file_name: the file to contain accelerator specifications
+ * @file_name: the name of the file to contain accelerator specifications,
+ *   in the GLib file name encoding
  *
  * Saves current accelerator specifications (accelerator path, key
  * and modifiers) to @file_name.
@@ -727,7 +731,7 @@ gtk_accel_map_save (const gchar *file_name)
 
   g_return_if_fail (file_name != NULL);
 
-  fd = open (file_name, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+  fd = g_open (file_name, O_CREAT | O_TRUNC | O_WRONLY, 0644);
   if (fd < 0)
     return;
 
@@ -996,3 +1000,31 @@ do_accel_map_changed (AccelEntry *entry)
 		   entry->accel_key,
 		   entry->accel_mods);
 }
+
+#ifdef G_OS_WIN32
+
+#undef gtk_accel_map_load
+
+void
+gtk_accel_map_load (const gchar *file_name)
+{
+  gchar *utf8_file_name = g_locale_to_utf8 (file_name, -1, NULL, NULL, NULL);
+
+  gtk_accel_map_load_utf8 (utf8_file_name);
+
+  g_free (utf8_file_name);
+}
+
+#undef gtk_accel_map_save
+
+void
+gtk_accel_map_save (const gchar *file_name)
+{
+  gchar *utf8_file_name = g_locale_to_utf8 (file_name, -1, NULL, NULL, NULL);
+
+  gtk_accel_map_save_utf8 (utf8_file_name);
+
+  g_free (utf8_file_name);
+}
+
+#endif
