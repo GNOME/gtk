@@ -1,3 +1,8 @@
+2002-02-28  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextview.c (gtk_text_view_finalize): free the tab array
+	for custom tabs, reported by Paolo Maggi #72980
+	
 Thu Feb 28 19:55:01 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkkeys.c: include gdkkeysysms.h if

@@ -2407,6 +2407,9 @@ gtk_text_view_finalize (GObject *object)
       free_pending_scroll (text_view->pending_scroll);
       text_view->pending_scroll = NULL;
     }
+
+  if (text_view->tabs)
+    pango_tab_array_free (text_view->tabs);
   
   if (text_view->hadjustment)
     g_object_unref (G_OBJECT (text_view->hadjustment));
