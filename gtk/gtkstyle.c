@@ -940,7 +940,7 @@ gtk_style_lookup_icon_set (GtkStyle   *style,
  * Draws a horizontal line from (@x1, @y) to (@x2, @y) in @window
  * using the given style and state.
  * 
- * This function is deprecated, use gtk_paint_hline() instead.
+ * Deprecated: Use gtk_paint_hline() instead.
  **/
 void
 gtk_draw_hline (GtkStyle     *style,
@@ -969,20 +969,20 @@ gtk_draw_hline (GtkStyle     *style,
  * Draws a vertical line from (@x, @y1_) to (@x, @y2_) in @window
  * using the given style and state.
  * 
- * This function is deprecated, use gtk_paint_vline() instead.
+ * Deprecated: Use gtk_paint_vline() instead.
  **/
 void
 gtk_draw_vline (GtkStyle     *style,
                 GdkWindow    *window,
                 GtkStateType  state_type,
-                gint          y1,
-                gint          y2,
+                gint          y1_,
+                gint          y2_,
                 gint          x)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_vline != NULL);
   
-  GTK_STYLE_GET_CLASS (style)->draw_vline (style, window, state_type, NULL, NULL, NULL, y1, y2, x);
+  GTK_STYLE_GET_CLASS (style)->draw_vline (style, window, state_type, NULL, NULL, NULL, y1_, y2_, x);
 }
 
 /**
@@ -999,7 +999,7 @@ gtk_draw_vline (GtkStyle     *style,
  * Draws a shadow around the given rectangle in @window 
  * using the given style and state and shadow type.
  * 
- * This function is deprecated, use gtk_paint_shadow() instead.
+ * Deprecated: Use gtk_paint_shadow() instead.
  */
 void
 gtk_draw_shadow (GtkStyle      *style,
@@ -1029,7 +1029,7 @@ gtk_draw_shadow (GtkStyle      *style,
  * 
  * Draws a polygon on @window with the given parameters.
  *
- * This function is deprecated, use gtk_paint_polygon() instead.
+ * Deprecated: Use gtk_paint_polygon() instead.
  */ 
 void
 gtk_draw_polygon (GtkStyle      *style,
@@ -1062,7 +1062,7 @@ gtk_draw_polygon (GtkStyle      *style,
  * Draws an arrow in the given rectangle on @window using the given 
  * parameters. @arrow_type determines the direction of the arrow.
  *
- * This function is deprecated, use gtk_paint_arrow() instead.
+ * Deprecated: Use gtk_paint_arrow() instead.
  */
 void
 gtk_draw_arrow (GtkStyle      *style,
@@ -1093,9 +1093,10 @@ gtk_draw_arrow (GtkStyle      *style,
  * @width: width of the rectangle to draw the diamond in
  * @height: height of the rectangle to draw the diamond in
  *
- * Draws a diamond in the given rectangle on @window using the given parameters.
+ * Draws a diamond in the given rectangle on @window using the given
+ * parameters.
  *
- * This function is deprecated, use gtk_paint_diamond() instead.
+ * Deprecated: Use gtk_paint_diamond() instead.
  */
 void
 gtk_draw_diamond (GtkStyle      *style,
@@ -1124,7 +1125,7 @@ gtk_draw_diamond (GtkStyle      *style,
  * 
  * Draws a text string on @window with the given parameters.
  *
- * This function is deprecated, use gtk_paint_layout() instead.
+ * Deprecated: Use gtk_paint_layout() instead.
  */
 void
 gtk_draw_string (GtkStyle      *style,
@@ -1153,7 +1154,7 @@ gtk_draw_string (GtkStyle      *style,
  * 
  * Draws a box on @window with the given parameters.
  *
- * This function is deprecated, use gtk_paint_box() instead.
+ * Deprecated: Use gtk_paint_box() instead.
  */
 void
 gtk_draw_box (GtkStyle      *style,
@@ -1184,7 +1185,7 @@ gtk_draw_box (GtkStyle      *style,
  * 
  * Draws a flat box on @window with the given parameters.
  *
- * This function is deprecated, use gtk_paint_flat_box() instead.
+ * Deprecated: Use gtk_paint_flat_box() instead.
  */
 void
 gtk_draw_flat_box (GtkStyle      *style,
@@ -1216,7 +1217,7 @@ gtk_draw_flat_box (GtkStyle      *style,
  * Draws a check button indicator in the given rectangle on @window with 
  * the given parameters.
  *
- * This function is deprecated, use gtk_paint_check() instead.
+ * Deprecated: Use gtk_paint_check() instead.
  */
 void
 gtk_draw_check (GtkStyle      *style,
@@ -1248,7 +1249,7 @@ gtk_draw_check (GtkStyle      *style,
  * Draws a radio button indicator in the given rectangle on @window with 
  * the given parameters.
  *
- * This function is deprecated, use gtk_paint_option() instead.
+ * Deprecated: Use gtk_paint_option() instead.
  */
 void
 gtk_draw_option (GtkStyle      *style,
@@ -1280,7 +1281,7 @@ gtk_draw_option (GtkStyle      *style,
  * Draws an option menu tab (i.e. the up and down pointing arrows)
  * in the given rectangle on @window using the given parameters.
  * 
- * This function is deprecated, use gtk_paint_tab() instead.
+ * Deprecated: Use gtk_paint_tab() instead.
  */ 
 void
 gtk_draw_tab (GtkStyle      *style,
@@ -1298,6 +1299,26 @@ gtk_draw_tab (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_tab (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height);
 }
 
+/**
+ * gtk_draw_shadow_gap:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @x: x origin of the rectangle
+ * @y: y origin of the rectangle
+ * @width: width of the rectangle 
+ * @height: width of the rectangle 
+ * @gap_side: side in which to leave the gap
+ * @gap_x: starting position of the gap
+ * @gap_width: width of the gap
+ *
+ * Draws a shadow around the given rectangle in @window 
+ * using the given style and state and shadow type, leaving a 
+ * gap in one side.
+ * 
+ * Deprecated: Use gtk_paint_shadow_gap() instead.
+*/
 void
 gtk_draw_shadow_gap (GtkStyle       *style,
                      GdkWindow      *window,
@@ -1317,6 +1338,25 @@ gtk_draw_shadow_gap (GtkStyle       *style,
   GTK_STYLE_GET_CLASS (style)->draw_shadow_gap (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height, gap_side, gap_x, gap_width);
 }
 
+/**
+ * gtk_draw_box_gap:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @x: x origin of the rectangle
+ * @y: y origin of the rectangle
+ * @width: width of the rectangle 
+ * @height: width of the rectangle 
+ * @gap_side: side in which to leave the gap
+ * @gap_x: starting position of the gap
+ * @gap_width: width of the gap
+ *
+ * Draws a box in @window using the given style and state and shadow type, 
+ * leaving a gap in one side.
+ * 
+ * Deprecated: Use gtk_paint_box_gap() instead.
+ */
 void
 gtk_draw_box_gap (GtkStyle       *style,
                   GdkWindow      *window,
@@ -1336,6 +1376,22 @@ gtk_draw_box_gap (GtkStyle       *style,
   GTK_STYLE_GET_CLASS (style)->draw_box_gap (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height, gap_side, gap_x, gap_width);
 }
 
+/**
+ * gtk_draw_extension: 
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @x: x origin of the extension
+ * @y: y origin of the extension
+ * @width: width of the extension 
+ * @height: width of the extension 
+ * @gap_side: the side on to which the extension is attached
+ * 
+ * Draws an extension, i.e. a notebook tab.
+ *
+ * Deprecated: Use gtk_paint_extension() instead.
+ **/
 void
 gtk_draw_extension (GtkStyle       *style,
                     GdkWindow      *window,
@@ -1365,7 +1421,7 @@ gtk_draw_extension (GtkStyle       *style,
  * Draws a focus indicator around the given rectangle on @window using the
  * given style.
  * 
- * This function is deprecated, use gtk_paint_focus() instead.
+ * Deprecated: Use gtk_paint_focus() instead.
  */
 void
 gtk_draw_focus (GtkStyle      *style,
@@ -1398,6 +1454,22 @@ gtk_draw_slider (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_slider (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height, orientation);
 }
 
+/**
+ * gtk_draw_handle:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @x: x origin of the handle
+ * @y: y origin of the handle
+ * @width: with of the handle
+ * @height: height of the handle
+ * @orientation: the orientation of the handle
+ * 
+ * Draws a handle as used in #GtkHandleBox and #GtkPaned.
+ * 
+ * Deprecated: Use gtk_paint_handle() instead.
+ **/
 void 
 gtk_draw_handle (GtkStyle      *style,
 		 GdkWindow     *window,
@@ -1415,6 +1487,19 @@ gtk_draw_handle (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_handle (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height, orientation);
 }
 
+/**
+ * gtk_draw_expander:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @x: the x position to draw the expander at
+ * @y: the y position to draw the expander at
+ * @expander_style: the style to draw the expander in
+ * 
+ * Draws an expander as used in #GtkTreeView.
+ * 
+ * Deprecated: Use gtk_paint_expander() instead.
+ **/
 void
 gtk_draw_expander (GtkStyle        *style,
                    GdkWindow       *window,
@@ -1462,7 +1547,7 @@ gtk_draw_layout (GtkStyle        *style,
  * Draws a resize grip in the given rectangle on @window using the given
  * parameters. 
  * 
- * This function is deprecated, use gtk_paint_resize_grip() instead.
+ * Deprecated: Use gtk_paint_resize_grip() instead.
  */
 void
 gtk_draw_resize_grip (GtkStyle     *style,
@@ -5492,8 +5577,8 @@ hls_to_rgb (gdouble *h,
  * @window: a #GdkWindow
  * @state_type: a state
  * @area: rectangle to which the output is clipped
- * @widget:
- * @detail: 
+ * @widget: the widget
+ * @detail: a style detail
  * @x1: the starting x coordinate
  * @x2: the ending x coordinate
  * @y: the y coordinate
@@ -5524,8 +5609,8 @@ gtk_paint_hline (GtkStyle      *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @area: rectangle to which the output is clipped
- * @widget:
- * @detail: 
+ * @widget: the widget
+ * @detail: a style detail
  * @y1_: the starting y coordinate
  * @y2_: the ending y coordinate
  * @x: the x coordinate
@@ -5540,16 +5625,33 @@ gtk_paint_vline (GtkStyle      *style,
                  GdkRectangle  *area,
                  GtkWidget     *widget,
                  const gchar   *detail,
-                 gint          y1,
-                 gint          y2,
+                 gint          y1_,
+                 gint          y2_,
                  gint          x)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_vline != NULL);
   
-  GTK_STYLE_GET_CLASS (style)->draw_vline (style, window, state_type, area, widget, detail, y1, y2, x);
+  GTK_STYLE_GET_CLASS (style)->draw_vline (style, window, state_type, area, widget, detail, y1_, y2_, x);
 }
 
+/**
+ * gtk_paint_shadow:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: x origin of the rectangle
+ * @y: y origin of the rectangle
+ * @width: width of the rectangle 
+ * @height: width of the rectangle 
+ *
+ * Draws a shadow around the given rectangle in @window 
+ * using the given style and state and shadow type.
+ */
 void
 gtk_paint_shadow (GtkStyle     *style,
                   GdkWindow    *window,
@@ -5569,6 +5671,21 @@ gtk_paint_shadow (GtkStyle     *style,
   GTK_STYLE_GET_CLASS (style)->draw_shadow (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
+/**
+ * gtk_paint_polygon:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @points: an array of #GdkPoint<!-- -->s
+ * @npoints: length of @points
+ * @fill: %TRUE if the polygon should be filled
+ * 
+ * Draws a polygon on @window with the given parameters.
+ */ 
 void
 gtk_paint_polygon (GtkStyle      *style,
                    GdkWindow     *window,
@@ -5587,6 +5704,25 @@ gtk_paint_polygon (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_polygon (style, window, state_type, shadow_type, area, widget, detail, points, npoints, fill);
 }
 
+/**
+ * gtk_paint_arrow:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @arrow_type: the type of arrow to draw
+ * @fill: %TRUE if the arrow tip should be filled
+ * @x: x origin of the rectangle to draw the arrow in
+ * @y: y origin of the rectangle to draw the arrow in
+ * @width: width of the rectangle to draw the arrow in
+ * @height: height of the rectangle to draw the arrow in
+ * 
+ * Draws an arrow in the given rectangle on @window using the given 
+ * parameters. @arrow_type determines the direction of the arrow.
+ */
 void
 gtk_paint_arrow (GtkStyle      *style,
                  GdkWindow     *window,
@@ -5608,6 +5744,23 @@ gtk_paint_arrow (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_arrow (style, window, state_type, shadow_type, area, widget, detail, arrow_type, fill, x, y, width, height);
 }
 
+/**
+ * gtk_paint_diamond:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: x origin of the rectangle to draw the diamond in
+ * @y: y origin of the rectangle to draw the diamond in
+ * @width: width of the rectangle to draw the diamond in
+ * @height: height of the rectangle to draw the diamond in
+ *
+ * Draws a diamond in the given rectangle on @window using the given
+ * parameters.
+ */
 void
 gtk_paint_diamond (GtkStyle      *style,
                    GdkWindow     *window,
@@ -5641,7 +5794,7 @@ gtk_paint_diamond (GtkStyle      *style,
  * 
  * Draws a text string on @window with the given parameters.
  *
- * This function is deprecated, use gtk_paint_layout() instead.
+ * Deprecated: Use gtk_paint_layout() instead.
  */
 void
 gtk_paint_string (GtkStyle      *style,
@@ -5660,6 +5813,22 @@ gtk_paint_string (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_string (style, window, state_type, area, widget, detail, x, y, string);
 }
 
+/**
+ * gtk_paint_box:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: x origin of the box
+ * @y: y origin of the box
+ * @width: the width of the box
+ * @height: the height of the box
+ * 
+ * Draws a box on @window with the given parameters.
+ */
 void
 gtk_paint_box (GtkStyle      *style,
                GdkWindow     *window,
@@ -5679,6 +5848,22 @@ gtk_paint_box (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_box (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
+/**
+ * gtk_paint_flat_box:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: x origin of the box
+ * @y: y origin of the box
+ * @width: the width of the box
+ * @height: the height of the box
+ * 
+ * Draws a flat box on @window with the given parameters.
+ */
 void
 gtk_paint_flat_box (GtkStyle      *style,
                     GdkWindow     *window,
@@ -5698,6 +5883,23 @@ gtk_paint_flat_box (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_flat_box (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
+/**
+ * gtk_paint_check:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: x origin of the rectangle to draw the check in
+ * @y: y origin of the rectangle to draw the check in
+ * @width: the width of the rectangle to draw the check in
+ * @height: the height of the rectangle to draw the check in
+ * 
+ * Draws a check button indicator in the given rectangle on @window with 
+ * the given parameters.
+ */
 void
 gtk_paint_check (GtkStyle      *style,
                  GdkWindow     *window,
@@ -5717,6 +5919,23 @@ gtk_paint_check (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_check (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
+/**
+ * gtk_paint_option:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: x origin of the rectangle to draw the option in
+ * @y: y origin of the rectangle to draw the option in
+ * @width: the width of the rectangle to draw the option in
+ * @height: the height of the rectangle to draw the option in
+ *
+ * Draws a radio button indicator in the given rectangle on @window with 
+ * the given parameters.
+ */
 void
 gtk_paint_option (GtkStyle      *style,
                   GdkWindow     *window,
@@ -5736,6 +5955,23 @@ gtk_paint_option (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_option (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
+/**
+ * gtk_paint_tab:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: x origin of the rectangle to draw the tab in
+ * @y: y origin of the rectangle to draw the tab in
+ * @width: the width of the rectangle to draw the tab in
+ * @height: the height of the rectangle to draw the tab in
+ *
+ * Draws an option menu tab (i.e. the up and down pointing arrows)
+ * in the given rectangle on @window using the given parameters.
+ */ 
 void
 gtk_paint_tab (GtkStyle      *style,
                GdkWindow     *window,
@@ -5755,6 +5991,27 @@ gtk_paint_tab (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_tab (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
+/**
+ * gtk_paint_shadow_gap:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: x origin of the rectangle
+ * @y: y origin of the rectangle
+ * @width: width of the rectangle 
+ * @height: width of the rectangle 
+ * @gap_side: side in which to leave the gap
+ * @gap_x: starting position of the gap
+ * @gap_width: width of the gap
+ *
+ * Draws a shadow around the given rectangle in @window 
+ * using the given style and state and shadow type, leaving a 
+ * gap in one side.
+*/
 void
 gtk_paint_shadow_gap (GtkStyle       *style,
                       GdkWindow      *window,
@@ -5778,6 +6035,26 @@ gtk_paint_shadow_gap (GtkStyle       *style,
 }
 
 
+/**
+ * gtk_paint_box_gap:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: x origin of the rectangle
+ * @y: y origin of the rectangle
+ * @width: width of the rectangle 
+ * @height: width of the rectangle 
+ * @gap_side: side in which to leave the gap
+ * @gap_x: starting position of the gap
+ * @gap_width: width of the gap
+ *
+ * Draws a box in @window using the given style and state and shadow type, 
+ * leaving a gap in one side.
+ */
 void
 gtk_paint_box_gap (GtkStyle       *style,
                    GdkWindow      *window,
@@ -5800,6 +6077,23 @@ gtk_paint_box_gap (GtkStyle       *style,
   GTK_STYLE_GET_CLASS (style)->draw_box_gap (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side, gap_x, gap_width);
 }
 
+/**
+ * gtk_paint_extension: 
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: x origin of the extension
+ * @y: y origin of the extension
+ * @width: width of the extension 
+ * @height: width of the extension 
+ * @gap_side: the side on to which the extension is attached
+ * 
+ * Draws an extension, i.e. a notebook tab.
+ **/
 void
 gtk_paint_extension (GtkStyle       *style,
                      GdkWindow      *window,
@@ -5820,6 +6114,22 @@ gtk_paint_extension (GtkStyle       *style,
   GTK_STYLE_GET_CLASS (style)->draw_extension (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side);
 }
 
+/**
+ * gtk_paint_focus:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: the x origin of the rectangle around which to draw a focus indicator
+ * @y: the y origin of the rectangle around which to draw a focus indicator
+ * @width: the width of the rectangle around which to draw a focus indicator
+ * @height: the height of the rectangle around which to draw a focus indicator
+ *
+ * Draws a focus indicator around the given rectangle on @window using the
+ * given style.
+ */
 void
 gtk_paint_focus (GtkStyle      *style,
                  GdkWindow     *window,
@@ -5858,6 +6168,23 @@ gtk_paint_slider (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_slider (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
 }
 
+/**
+ * gtk_paint_handle:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: x origin of the handle
+ * @y: y origin of the handle
+ * @width: with of the handle
+ * @height: height of the handle
+ * @orientation: the orientation of the handle
+ * 
+ * Draws a handle as used in #GtkHandleBox and #GtkPaned.
+ **/
 void
 gtk_paint_handle (GtkStyle      *style,
                   GdkWindow     *window,
@@ -5878,6 +6205,20 @@ gtk_paint_handle (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_handle (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
 }
 
+/**
+ * gtk_paint_expander:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: the x position to draw the expander at
+ * @y: the y position to draw the expander at
+ * @expander_style: the style to draw the expander in
+ * 
+ * Draws an expander as used in #GtkTreeView.
+ **/
 void
 gtk_paint_expander (GtkStyle        *style,
                     GdkWindow       *window,
@@ -5915,6 +6256,23 @@ gtk_paint_layout (GtkStyle        *style,
                                             widget, detail, x, y, layout);
 }
 
+/**
+ * gtk_paint_resize_grip:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @edge: the edge in which to draw the resize grip
+ * @x: the x origin of the rectangle in which to draw the resize grip
+ * @y: the y origin of the rectangle in which to draw the resize grip
+ * @width: the width of the rectangle in which to draw the resize grip
+ * @height: the height of the rectangle in which to draw the resize grip
+ *
+ * Draws a resize grip in the given rectangle on @window using the given
+ * parameters. 
+ */
 void
 gtk_paint_resize_grip (GtkStyle      *style,
                        GdkWindow     *window,

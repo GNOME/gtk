@@ -3397,7 +3397,7 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
 /**
  * gtk_tree_view_column_cell_get_position:
  * @tree_column: a #GtkTreeViewColumn
- * @cell: a #GtkCellRenderer
+ * @cell_renderer: a #GtkCellRenderer
  * @start_pos: return location for the horizontal position of @cell within
  *            @tree_column, may be %NULL
  * @width: return location for the width of @cell, may be %NULL

@@ -132,7 +132,7 @@ Returns whether the style is attached to a window.
 
 <!-- ##### MACRO gtk_style_apply_default_pixmap ##### -->
 <para>
-
+Deprecated alias for gtk_style_apply_default_background().
 </para>
 
 @s: 
