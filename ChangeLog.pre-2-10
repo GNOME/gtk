@@ -1,3 +1,9 @@
+Fri Sep  6 15:35:01 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkgc.c (gdk_gc_new_with_values): Only set
+	gc->colormap if it isn't already set. (Alex Larsson,
+	#90632)
+
 Fri Sep  6 12:41:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/gtkimcontextxim.c: Pass the actual input
