@@ -105,7 +105,6 @@ Tue Mar  2 17:55:31 2004  Matthias Clasen  <maclas@gmx.de>
 	(gtk_file_chooser_default_get_resizable_hints): Test the
 	resize_horizontally pointer, not the deferenced pointer.
 
->>>>>>> 1.5102
 2004-03-01  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault): New
