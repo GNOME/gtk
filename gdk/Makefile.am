@@ -26,16 +26,16 @@ gtarget=@gdktarget@
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
-LDFLAGS = @STRIP_BEGIN@ \
-	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
-	-release $(LT_RELEASE) \
-	-export-dynamic \
-	-rpath @prefix@/lib \
-	@PANGO_LIBS@	\
-	@GLIB_DEPLIBS@	\
-	@more_ldflags@	\
-	@more_libs@	\
-	-lm		\
+LDFLAGS = @STRIP_BEGIN@ 					\
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) 	\
+	-release $(LT_RELEASE) 					\
+	-export-dynamic 					\
+	-rpath @prefix@/lib 					\
+	@PANGO_LIBS@						\
+	@GLIB_DEPLIBS@						\
+	@more_ldflags@						\
+	@more_libs@						\
+	-lm							\
 @STRIP_END@
 
 #
@@ -74,26 +74,26 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdkvisual.h	\
 	gdkwindow.h	\
 @STRIP_END@
-gdk_c_sources = @STRIP_BEGIN@ \
-	gdk.c		\
-	gdkcolor.c	\
-	gdkcursor.c	\
-	gdkdraw.c	\
-	gdkevents.c     \
-	gdkfont.c	\
-	gdkgc.c		\
-	gdkglobals.c	\
-	gdkkeyuni.c	\
-	gdkimage.c	\
-	gdkinternals.h  \
-	gdkpango.c	\
+gdk_c_sources = @STRIP_BEGIN@ 	\
+	gdk.c			\
+	gdkcolor.c		\
+	gdkcursor.c		\
+	gdkdraw.c		\
+	gdkevents.c     	\
+	gdkfont.c		\
+	gdkgc.c			\
+	gdkglobals.c		\
+	gdkkeyuni.c		\
+	gdkimage.c		\
+	gdkinternals.h  	\
+	gdkpango.c		\
 	gdkpoly-generic.h	\
 	gdkpolyreg-generic.c	\
-	gdkrgb.c	\
-	gdkrectangle.c	\
+	gdkrgb.c		\
+	gdkrectangle.c		\
 	gdkregion-generic.c	\
 	gdkregion-generic.h	\
-	gdkwindow.c	\
+	gdkwindow.c		\
 @STRIP_END@
 
 #

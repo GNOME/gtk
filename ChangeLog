@@ -1,3 +1,10 @@
+Wed Jun  7 15:44:42 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (LDFLAGS): Add missing backslash that was keeping
+	GTK+ from even building at all
+
+	* gdk/Makefile.am (gdk_c_sources): Fix up some indentation issues.
+
 Mon Jun  5 19:32:53 CEST 2000 Paolo Molaro <lupus@linuxcare.com>
 
 	* configure.in, gtk-config.in, gdk/Makefile.am, gdk/*/Makefile.am,

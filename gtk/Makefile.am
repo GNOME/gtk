@@ -28,7 +28,7 @@ LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)	\
 	-release $(LT_RELEASE) 					\
 	-export-dynamic						\
-	-rpath @prefix@/lib
+	-rpath @prefix@/lib					\
 	@PANGO_LIBS@						\
 	@GLIB_DEPLIBS@ 						\
 	@more_ldflags@						\
