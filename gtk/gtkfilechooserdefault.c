@@ -4760,9 +4760,10 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
   g_assert (GTK_IS_WINDOW (toplevel));
 
   current_focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
-  g_assert (current_focus != NULL);
 
-  if (current_focus == impl->browse_files_tree_view)
+  if (current_focus == NULL)
+    return NULL;
+  else if (current_focus == impl->browse_files_tree_view)
     {
       int num_selected;
       gboolean all_files, all_folders;
