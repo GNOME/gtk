@@ -1643,3 +1643,15 @@ gdk_shadow_fb_draw_lines (GdkDrawable      *drawable,
 }
 
 #endif
+
+gboolean
+gdk_draw_rectangle_alpha_libgtk_only (GdkDrawable *drawable,
+				      gint         x,
+				      gint         y,
+				      gint         width,
+				      gint         height,
+				      GdkColor    *color,
+				      guint16      alpha)
+{
+  return FALSE;
+}

@@ -320,6 +320,8 @@ do_iconview (GtkWidget *do_widget)
 	  fill_store (store);
 
 	  icon_view = gtk_icon_view_new_with_model (GTK_TREE_MODEL (store));
+	  gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (icon_view),
+					    GTK_SELECTION_MULTIPLE);
 	  g_object_unref (store);
 	  
 	  /* Connect to the "clicked" signal of the "Up" tool button */

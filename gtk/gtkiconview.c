@@ -109,7 +109,7 @@ struct _GtkIconViewPrivate
   gint press_start_x;
   gint press_start_y;
 #endif
-  
+
   /* Layout used to draw icon text */
   PangoLayout *layout;
   
@@ -173,7 +173,6 @@ static gboolean gtk_icon_view_button_press   (GtkWidget      *widget,
 					      GdkEventButton *event);
 static gboolean gtk_icon_view_button_release (GtkWidget      *widget,
 					      GdkEventButton *event);
-
 /* GtkIconView signals */
 static void     gtk_icon_view_set_adjustments           (GtkIconView   *icon_view,
 							 GtkAdjustment *hadj,
@@ -293,7 +292,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->motion_notify_event = gtk_icon_view_motion;
   widget_class->button_press_event = gtk_icon_view_button_press;
   widget_class->button_release_event = gtk_icon_view_button_release;
-  
+
   klass->set_scroll_adjustments = gtk_icon_view_set_adjustments;
   klass->select_all = gtk_icon_view_real_select_all;
   klass->unselect_all = gtk_icon_view_real_unselect_all;
@@ -736,8 +735,6 @@ gtk_icon_view_realize (GtkWidget *widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
   gdk_window_set_background (icon_view->priv->bin_window, &widget->style->base[widget->state]);
   gdk_window_set_background (widget->window, &widget->style->base[widget->state]);
-
-  
 }
 
 static void
@@ -1066,7 +1063,6 @@ gtk_icon_view_button_release (GtkWidget      *widget,
 
   return TRUE;
 }
-
 
 static void
 gtk_icon_view_update_rubberband (gpointer data)
@@ -1888,16 +1884,23 @@ gtk_icon_view_paint_rubberband (GtkIconView     *icon_view,
 
   fill_color = gtk_gdk_color_to_rgb (fill_color_gdk) << 8 | fill_color_alpha;
 
-  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, rect.width, rect.height);
-  gdk_pixbuf_fill (pixbuf, fill_color);
+  if (!gdk_draw_rectangle_alpha_libgtk_only (icon_view->priv->bin_window,
+					     rect.x, rect.y, rect.width, rect.height,
+					     fill_color_gdk,
+					     fill_color_alpha << 8 | fill_color_alpha))
+    {
+      pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, rect.width, rect.height);
+      gdk_pixbuf_fill (pixbuf, fill_color);
+      
+      gdk_draw_pixbuf (icon_view->priv->bin_window, NULL, pixbuf,
+		       0, 0, 
+		       rect.x,rect.y,
+		       rect.width, rect.height,
+		       GDK_RGB_DITHER_NONE,
+		       0, 0);
+      g_object_unref (pixbuf);
+    }
 
-  gdk_draw_pixbuf (icon_view->priv->bin_window, NULL, pixbuf,
-		   0, 0, 
-		   rect.x,rect.y,
-		   rect.width, rect.height,
-		   GDK_RGB_DITHER_NONE,
-		   0, 0);
-  g_object_unref (pixbuf);
   gc = gdk_gc_new (icon_view->priv->bin_window);
   gdk_gc_set_rgb_fg_color (gc, fill_color_gdk);
   gdk_gc_set_clip_rectangle (gc, &rect);

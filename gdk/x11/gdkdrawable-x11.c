@@ -817,7 +817,7 @@ gdk_x11_draw_image     (GdkDrawable     *drawable,
                         gint             height)
 {
   GdkDrawableImplX11 *impl;
-  
+
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
 #ifdef USE_SHM  
@@ -846,7 +846,7 @@ static GdkDrawable * get_impl_drawable (GdkDrawable *drawable)
   GdkDrawable *impl;
   
   if (GDK_IS_WINDOW (drawable))
-    impl = ((GdkPixmapObject *)drawable)->impl;
+    impl = ((GdkWindowObject *)drawable)->impl;
   else if (GDK_IS_PIXMAP (drawable))
     impl = ((GdkPixmapObject *)drawable)->impl;
   else
@@ -1455,4 +1455,69 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
 		      gdk_pixbuf_get_pixels (pixbuf) + src_y * rowstride + src_x * 4,
 		      rowstride,
 		      dest_x, dest_y, width, height);
+}
+
+/**
+ * gdk_draw_rectangle_alpha_libgtk_only:
+ * @drawable: The #GdkDrawable to draw on
+ * @x: the x coordinate of the left edge of the rectangle.
+ * @y: the y coordinate of the top edge of the rectangle.
+ * @width: the width of the rectangle.
+ * @height: the height of the rectangle.
+ * @color: The color
+ * @alpha: The alpha value.
+ * 
+ * Tries to draw a filled alpha blended rectangle using the window
+ * system's native routines. This is not public API and must not be
+ * used by applications.
+ * 
+ * Return value: TRUE if the rectangle could be drawn, FALSE
+ * otherwise.
+ **/
+gboolean
+gdk_draw_rectangle_alpha_libgtk_only (GdkDrawable  *drawable,
+				      gint          x,
+				      gint          y,
+				      gint          width,
+				      gint          height,
+				      GdkColor     *color,
+				      guint16       alpha)
+{
+  Display *xdisplay;
+  XRenderColor render_color;
+  Picture pict;
+  int x_offset, y_offset;
+  GdkDrawable *real_drawable, *impl;
+
+  g_return_val_if_fail (color != NULL, FALSE);
+  
+  if (!GDK_IS_WINDOW (drawable))
+    return FALSE;
+  
+  if (!_gdk_x11_have_render (gdk_drawable_get_display (drawable)))
+    return FALSE;
+
+  gdk_window_get_internal_paint_info (GDK_WINDOW (drawable),
+				      &real_drawable,
+				      &x_offset, &y_offset);
+
+  impl = ((GdkWindowObject *)real_drawable)->impl;  
+      
+  pict = gdk_x11_drawable_get_picture (impl);
+
+  if (pict == None)
+    return FALSE;
+  
+  xdisplay = GDK_DISPLAY_XDISPLAY (gdk_drawable_get_display (drawable));
+
+  render_color.alpha = alpha;
+  render_color.red = color->red * render_color.alpha / 0xffff;
+  render_color.green = color->green * render_color.alpha / 0xffff;
+  render_color.blue = color->blue * render_color.alpha / 0xffff;
+
+  XRenderFillRectangle (xdisplay,
+			PictOpOver, pict, &render_color,
+			x - x_offset, y - y_offset,
+			width, height);
+  return TRUE;
 }

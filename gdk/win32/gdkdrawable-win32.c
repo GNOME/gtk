@@ -1822,3 +1822,15 @@ gdk_win32_drawable_get_handle (GdkDrawable *drawable)
 {
   return GDK_DRAWABLE_HANDLE (drawable);
 }
+
+gboolean
+gdk_draw_rectangle_alpha_libgtk_only (GdkDrawable *drawable,
+				      gint         x,
+				      gint         y,
+				      gint         width,
+				      gint         height,
+				      GdkColor    *color,
+				      guint16      alpha)
+{
+  return FALSE;
+}

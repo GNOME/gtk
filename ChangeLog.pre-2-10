@@ -1,5 +1,24 @@
 2004-07-27  Anders Carlsson  <andersca@gnome.org>
 
+	* demos/gtk-demo/iconview.c: (do_iconview):
+	* gdk/gdkdrawable.h:
+	* gdk/linux-fb/gdkdrawable-fb2.c:
+	(gdk_draw_rectangle_alpha_libgtk_only):
+	* gdk/win32/gdkdrawable-win32.c:
+	(gdk_draw_rectangle_alpha_libgtk_only):
+	* gdk/x11/gdkdrawable-x11.c: (gdk_x11_draw_image),
+	(get_impl_drawable), (gdk_x11_draw_pixbuf),
+	(gdk_draw_rectangle_alpha_libgtk_only):
+	Add gdk_draw_rectangle_alpha_libgtk_only which uses 
+	XRenderFillRectangle on X11. It's stubbed out on the 
+	Win32 and fb backends.
+	
+	* gtk/gtkiconview.c: 
+	(gtk_icon_view_paint_rubberband):
+	Use gdk_draw_rectangle_alpha_libgtk_only here.
+
+2004-07-27  Anders Carlsson  <andersca@gnome.org>
+
 	* gtk/gtkaboutdialog.c: (gtk_about_dialog_init),
 	(text_view_style_set), (add_credits_page),
 	(display_credits_dialog), (display_license_dialog):

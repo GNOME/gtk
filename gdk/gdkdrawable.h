@@ -360,6 +360,15 @@ GdkImage *gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 GdkRegion *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 GdkRegion *gdk_drawable_get_visible_region (GdkDrawable *drawable);
 
+
+gboolean gdk_draw_rectangle_alpha_libgtk_only (GdkDrawable *drawable,
+					       gint         x,
+					       gint         y,
+					       gint         width,
+					       gint         height,
+					       GdkColor    *color,
+					       guint16      alpha);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
