@@ -1,11 +1,26 @@
+#include "config.h"
+
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <time.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-
+#endif
 #include <gtk/gtk.h>
+
+#ifdef G_OS_WIN32
+#  define WIN32_MEAN_AND_LEAN
+#  include <windows.h> /* ExtractAssociatedIcon */
+#  include <io.h>
+#  define localtime_r(t,b) localtime(t)
+#  ifndef S_ISREG
+#    define S_ISREG(m) ((m) & _S_IFREG)
+#  endif
+#  include <gdk/win32/gdkwin32.h> /* gdk_win32_hdc_get */
+#endif
+
 #include "prop-editor.h"
 
 static GtkWidget *preview_label;

@@ -1,7 +1,15 @@
+#include "config.h"
+
 #include <stdio.h>
 #include <string.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <gtk/gtk.h>
+
+#ifndef STDOUT_FILENO
+#define STDOUT_FILENO 1 
+#endif
 
 struct { const gchar *filename; guint merge_id; } merge_ids[] = {
   { "merge-1.ui", 0 },

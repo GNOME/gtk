@@ -38,11 +38,22 @@ all :	\
 #
 # Test programs:
 #
-TESTAPPS = testcalendar testdnd testgtk testinput testrgb testselection \
-		testtext testtextbuffer testsocket testsocket_child \
-		testtreeedit testtreeflow \
-		testtreecolumns testtreefocus testtreesort testtreeview treestoretest \
-		testthreads simple
+TESTAPPS = \
+	testabi testactions \
+	testcalendar testcombo \
+	testdnd \
+	testfilechooser \
+	testgtk \
+	testicontheme testinput \
+	testmenus testmerge testmultidisplay testmultiscreen \
+	testrgb \
+	testselection \
+	testtext testtextbuffer testtoolbar \
+	testtreecolumns testtreeedit testtreeflow testtreefocus \
+	testtreesort testtreeview treestoretest \
+	testsocket testsocket_child \
+	testthreads \
+	simple 
 
 
 all-test-apps: 
@@ -65,8 +76,17 @@ EXTRA_OBJETCS = prop-editor.obj
 EXTRA_OBJETCS = prop-editor.obj
 !ENDIF
 
+!IFDEF EXTRA_testtoolbar
+EXTRA_OBJETCS = prop-editor.obj
+!ENDIF
+
+!IFDEF EXTRA_testfilechooser
+EXTRA_OBJETCS = prop-editor.obj
+EXTRA_LIBS = gdi32.lib user32.lib shell32.lib
+!ENDIF
+
 $(TESTAPP).exe : ../gtk/gtk-win32-$(GTK_VER).lib $(TESTAPP).obj
-	$(CC) $(CFLAGS) $(TESTAPP).obj $(EXTRA_OBJETCS) $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(GLIB_LIBS) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(TESTAPP).obj $(EXTRA_OBJETCS) $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(GLIB_LIBS) $(EXTRA_LIBS) $(LDFLAGS)
 
 $(TESTAPP).obj : $(TESTAPP).c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"$(TESTAPP)\" $(TESTAPP).c

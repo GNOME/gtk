@@ -34,7 +34,8 @@ LDFLAGS = $(ATK_LIBS) /link /machine:ix86 $(LINKDEBUG)
 DEFINES = $(G_DEBUGGING) -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear \
 	-DPANGO_ENABLE_BACKEND \
 	-DGTK_VERSION=\"$(GTK_VER)\" -DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\" \
-	-DGTK_HOST=\"win32\"
+	-DGTK_HOST=\"win32\" \
+	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED
 
 TOUCH = copy makefile.msc+nul
 
@@ -58,6 +59,8 @@ gtk_OBJECTS = 					\
 	gtkaccellabel.obj			\
 	gtkaccelmap.obj	\
 	gtkaccessible.obj \
+	gtkaction.obj	\
+	gtkactiongroup.obj	\
 	gtkadjustment.obj			\
 	gtkalignment.obj			\
 	gtkarrow.obj				\
@@ -74,6 +77,9 @@ gtk_OBJECTS = 					\
 	gtkcellrenderertext.obj			\
 	gtkcellrenderertoggle.obj		\
 	gtkcellrendererpixbuf.obj		\
+	gtkcellrendererseptext.obj		\
+	gtkcellview.obj		\
+	gtkcellviewmenuitem.obj	\
 	gtkcheckbutton.obj			\
 	gtkcheckmenuitem.obj			\
 	gtkclipboard.obj			\
@@ -82,6 +88,8 @@ gtk_OBJECTS = 					\
 	gtkcolorsel.obj				\
 	gtkcolorseldialog.obj			\
 	gtkcombo.obj				\
+	gtkcombobox.obj			\
+	gtkcomboboxentry.obj		\
 	gtkcontainer.obj			\
 	gtkctree.obj				\
 	gtkcurve.obj				\
@@ -93,7 +101,17 @@ gtk_OBJECTS = 					\
 	gtkentrycompletion.obj		\
 	gtkeventbox.obj				\
 	gtkexpander.obj			\
+	gtkfilechooser.obj			\
+	gtkfilechooserdefault.obj			\
+	gtkfilechooserdialog.obj			\
+	gtkfilechooserentry.obj			\
+	gtkfilechooserutils.obj			\
+	gtkfilechooserwidget.obj			\
+	gtkfilefilter.obj			\
 	gtkfilesel.obj				\
+	gtkfilesystem.obj				\
+	gtkfilesystemmodel.obj				\
+	gtkfilesystemwin32.obj				\
 	gtkfixed.obj				\
 	gtkfontsel.obj				\
 	gtkfontbutton.obj				\
@@ -147,6 +165,7 @@ gtk_OBJECTS = 					\
 	gtkpreview.obj				\
 	gtkprogress.obj				\
 	gtkprogressbar.obj			\
+	gtkradioaction.obj			\
 	gtkradiobutton.obj			\
 	gtkradiotoolbutton.obj			\
 	gtkradiomenuitem.obj			\
@@ -187,6 +206,7 @@ gtk_OBJECTS = 					\
 	gtktextview.obj				\
 	gtkthemes.obj				\
 	gtktipsquery.obj			\
+	gtktoggleaction.obj			\
 	gtktogglebutton.obj			\
 	gtktoggletoolbutton.obj			\
 	gtktoolbar.obj				\
@@ -207,6 +227,7 @@ gtk_OBJECTS = 					\
 	gtktreeviewcolumn.obj			\
 	gtktypeutils.obj			\
 	gtktypebuiltins.obj \
+	gtkuimanager.obj	\
 	gtkvbbox.obj				\
 	gtkvbox.obj				\
 	gtkviewport.obj				\
@@ -264,6 +285,10 @@ gtk_public_h_sources =		\
 	gtkenums.h		\
 	gtkeventbox.h		\
 	gtkexpander.h		\
+	gtkfilechooser.h        \
+	gtkfilechooserdialog.h  \
+	gtkfilechooserwidget.h  \
+	gtkfilefilter.h		\
 	gtkfilesel.h		\
 	gtkfixed.h		\
 	gtkfontbutton.h		\
@@ -450,11 +475,14 @@ gtkmarshal.c : gtkmarshal.list
 gtksignal.obj : gtksignal.c gtkmarshal.c gtkmarshal.h
 	$(CC) $(CFLAGS) -GD -c -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" gtksignal.c
 
+gtk.res : gtk.rc
+	rc -DBUILDNUMBER=0 -r -fo gtk.res gtk.rc
+
 #
 # Linking:
 #
-libgtk-win32-$(GTK_VER)-0.dll : $(gtk_OBJECTS) gtk.def
-	$(CC) $(CFLAGS) -LD -Fm -Fe$@ $(gtk_OBJECTS) \
+libgtk-win32-$(GTK_VER)-0.dll : $(gtk_OBJECTS) gtk.def gtk.res
+	$(CC) $(CFLAGS) -LD -Fm -Fe$@ $(gtk_OBJECTS) gtk.res \
 	$(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) \
 	gdi32.lib user32.lib advapi32.lib wsock32.lib \
 	$(LDFLAGS) /implib:gtk-win32-$(GTK_VER).lib /def:gtk.def

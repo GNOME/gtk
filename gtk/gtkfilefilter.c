@@ -133,7 +133,7 @@ filter_rule_free (FilterRule *rule)
 static void
 gtk_file_filter_finalize (GObject  *object)
 {
-  GtkFileFilter *filter = GTK_FILE_FILTER (filter);
+  GtkFileFilter *filter = GTK_FILE_FILTER (object);
 
   g_slist_foreach (filter->rules, (GFunc)filter_rule_free, NULL);
 

@@ -1,3 +1,29 @@
+2003-11-15  Hans Breuer  <hans@breuer.org>
+
+	* gdk/makefile.msc gdk/gdk.def 
+            gtk/gtk.def gtk/makefile.msc.in : updated
+	* tests/makefile.msc : added all the new tests
+
+	* gtk/gtkfilefilter.c(finalize) : initialize filter
+	from object not from itself
+
+	* gtk/gtkfilesystemwin32.[hc] : copied from gtkfilesystemunix.[hc]
+	modified as less as posible to have aworking implementation
+	on win32. There maybe the desire to merge the unchanged pats into
+	a common base class.
+	Also implemented a simple glib based bookmark handling, which
+	is currently missing in gtkfilesystemunix.[hc] but can be copied
+	over there.
+	* gtk/gtkfilechooserwidget.c : conditional include gtkfilesystemwin32.h
+
+	* gdk/win32/gdkwindow-win32.c : implement 
+	gdk_window_set_keep_above() and gdk_window_set_keep_below()
+
+	* tests/testmerge.c : don't include unistd.h unconditionally,
+	#define STDOUT_FILENO if it isn't defined
+
+	* tests/testfilechooser.c : make it compile on win32
+
 2003-11-15  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_focus): If the window is

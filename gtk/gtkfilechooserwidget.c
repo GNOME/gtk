@@ -24,6 +24,9 @@
 #ifdef G_OS_UNIX
 #include "gtkfilesystemunix.h"
 #endif
+#ifdef G_OS_WIN32
+#include "gtkfilesystemwin32.h"
+#endif
 #include "gtktypebuiltins.h"
 
 struct _GtkFileChooserWidgetPrivate

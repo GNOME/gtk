@@ -732,6 +732,12 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
     private->state &= (~GDK_WINDOW_STATE_WITHDRAWN);
   else
     private->state |= GDK_WINDOW_STATE_WITHDRAWN;
+  if (GetWindowLong ((HWND)anid, GWL_EXSTYLE) & WS_EX_TOPMOST)
+    private->state |= GDK_WINDOW_STATE_ABOVE;
+  else
+    private->state &= (~GDK_WINDOW_STATE_ABOVE);
+  private->state &= (~GDK_WINDOW_STATE_BELOW);
+
   private->depth = gdk_visual_get_system ()->depth;
 
   _gdk_window_init_position (GDK_WINDOW (private));
@@ -953,6 +959,19 @@ show_window_internal (GdkWindow *window,
 				 0);
 
   old_active_window = GetActiveWindow ();
+
+  if (private->state & (GDK_WINDOW_STATE_BELOW | GDK_WINDOW_STATE_ABOVE))
+    {
+      DWORD exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
+
+      if (private->state & GDK_WINDOW_STATE_BELOW)
+        exstyle &= (~WS_EX_TOPMOST);
+      if (private->state & GDK_WINDOW_STATE_ABOVE)
+        exstyle |= WS_EX_TOPMOST;
+
+      if (!SetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE, exstyle))
+        WIN32_API_FAILED ("SetWindowLong");
+    }
 
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
     gdk_window_fullscreen (window);
@@ -2700,6 +2719,46 @@ gdk_window_unfullscreen (GdkWindow *window)
 
       gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
     }
+}
+
+void
+gdk_window_set_keep_above (GdkWindow *window, gboolean setting)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      if (!SetWindowPos(GDK_WINDOW_HWND (window), setting ? HWND_TOPMOST : HWND_NOTOPMOST,
+                        0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE))
+         WIN32_API_FAILED ("SetWindowPos");
+    }
+  else
+    gdk_synthesize_window_state (window,
+    				 setting ? GDK_WINDOW_STATE_BELOW : GDK_WINDOW_STATE_ABOVE,
+				 setting ? GDK_WINDOW_STATE_ABOVE : 0);
+}
+
+void
+gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      if (!SetWindowPos(GDK_WINDOW_HWND (window), setting ? HWND_BOTTOM : HWND_NOTOPMOST,
+                        0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE))
+         WIN32_API_FAILED ("SetWindowPos");
+    }
+  else
+    gdk_synthesize_window_state (window,
+				 setting ? GDK_WINDOW_STATE_ABOVE : GDK_WINDOW_STATE_BELOW,
+				 setting ? GDK_WINDOW_STATE_BELOW : 0);
 }
 
 void
