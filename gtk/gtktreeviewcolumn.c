@@ -22,6 +22,7 @@
 #include "gtksignal.h"
 #include "gtkbutton.h"
 #include "gtkalignment.h"
+#include "gtklabel.h"
 
 enum {
   CLICKED,
@@ -640,7 +641,8 @@ gtk_tree_view_column_set_title (GtkTreeViewColumn *tree_column,
 	  if (GTK_BIN (GTK_BIN (tree_column->button)->child)->child &&
 	      GTK_IS_LABEL (GTK_BIN (GTK_BIN (tree_column->button)->child)->child))
 	    {
-	      gtk_label_set_text (GTK_LABEL (GTK_BIN (GTK_BIN (tree_column->button)->child)->child));
+	      gtk_label_set_text (GTK_LABEL (GTK_BIN (GTK_BIN (tree_column->button)->child)->child),
+                                  tree_column->title);
 	    }
 	}
     }
