@@ -7034,6 +7034,7 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
   GdkRectangle cell_rect;
   GdkRectangle vis_rect;
   gint dest_x, dest_y;
+  gfloat within_margin = 0;
 
   /* FIXME work on unmapped/unrealized trees? maybe implement when
    * we do incremental reflow for trees
@@ -7074,10 +7075,10 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
 	}
       else
 	{
-	  if (dest_x < vis_rect.x)
-	    dest_x = vis_rect.x;
-	  else if (dest_x + cell_rect.width > vis_rect.x + vis_rect.width)
-	    dest_x = vis_rect.x + vis_rect.width - cell_rect.width;
+	  if (cell_rect.x < vis_rect.x)
+	    dest_x = cell_rect.x - vis_rect.width * within_margin;
+	  else if (cell_rect.x + cell_rect.width > vis_rect.x + vis_rect.width)
+	    dest_x = cell_rect.x + cell_rect.width - vis_rect.width * (1 - within_margin);
 	}
     }
 
@@ -7089,10 +7090,10 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
 	}
       else
 	{
-	  if (dest_y < vis_rect.y)
-	    dest_y = vis_rect.y;
-	  else if (dest_y + cell_rect.height > vis_rect.y +  vis_rect.height)
-	    dest_y = vis_rect.y + vis_rect.height - cell_rect.height;
+	  if (cell_rect.y < vis_rect.y)
+	    dest_y = cell_rect.y - vis_rect.height * within_margin;
+	  else if (cell_rect.y + cell_rect.height > vis_rect.y + vis_rect.height)
+	    dest_y = cell_rect.y + cell_rect.height - vis_rect.height * (1 - within_margin);
 	}
     }
 
@@ -7929,7 +7930,7 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (column == NULL || GTK_IS_TREE_VIEW_COLUMN (column));
   g_return_if_fail (rect != NULL);
-  g_return_if_fail (column->tree_view == (GtkWidget *) tree_view);
+  g_return_if_fail (!column || column->tree_view == (GtkWidget *) tree_view);
   g_return_if_fail (GTK_WIDGET_REALIZED (tree_view));
 
   gtk_widget_style_get (GTK_WIDGET (tree_view), "vertical_separator", &vertical_separator, NULL);
