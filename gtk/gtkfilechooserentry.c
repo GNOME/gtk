@@ -50,7 +50,6 @@ struct _GtkFileChooserEntry
 
   GtkListStore *completion_store;
 
-  guint in_change : 1;
   guint has_completion : 1;
 };
 
@@ -243,6 +242,7 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
   GSList *tmp_list;
   gchar *common_prefix = NULL;
   GtkFilePath *unique_path = NULL;
+  GtkListStore *new_store;
 
   chooser_entry->completion_idle = NULL;
 
@@ -261,8 +261,7 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 				   &child_paths,
 				   NULL); /* NULL-GError */
 
-  chooser_entry->in_change = TRUE;
-  gtk_list_store_clear (chooser_entry->completion_store);
+  new_store = gtk_list_store_new (1, G_TYPE_STRING);
 
   for (tmp_list = child_paths; tmp_list; tmp_list = tmp_list->next)
     {
@@ -279,8 +278,8 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 	  const gchar *display_name = gtk_file_info_get_display_name (info);
 	  GtkTreeIter iter;
 
-	  gtk_list_store_append (chooser_entry->completion_store, &iter);
-	  gtk_list_store_set (chooser_entry->completion_store, &iter,
+	  gtk_list_store_append (new_store, &iter);
+	  gtk_list_store_set (new_store, &iter,
 			      0, display_name,
 			      -1);
 
@@ -312,7 +311,11 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 	  gtk_file_info_free (info);
 	}
     }
-  chooser_entry->in_change = FALSE;
+
+  g_object_unref (chooser_entry->completion_store);
+  chooser_entry->completion_store = new_store;
+  gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
+				  GTK_TREE_MODEL (new_store));
 
   if (unique_path)
     {
@@ -352,8 +355,6 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 
       if (common_prefix_len > file_part_len)
 	{
-	  chooser_entry->in_change = TRUE;
-	  
 	  pos = total_len - file_part_len;
 	  gtk_editable_delete_text (editable,
 				    pos, -1);
@@ -363,8 +364,7 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 	  gtk_editable_select_region (editable,
 				      total_len,
 				      total_len - file_part_len + common_prefix_len);
-	  
-	  chooser_entry->in_change = FALSE;
+
 	  chooser_entry->has_completion = TRUE;
 	}
 	  
@@ -381,12 +381,10 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
 				       gint        *position)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
-  char *tmp;
 
   parent_editable_iface->do_insert_text (editable, new_text, new_text_length, position);
 
-  if (!chooser_entry->in_change &&
-      *position == GTK_ENTRY (editable)->text_length &&
+  if (*position == GTK_ENTRY (editable)->text_length &&
       !chooser_entry->completion_idle)
     {
       chooser_entry->completion_idle = g_idle_source_new ();
@@ -574,7 +572,5 @@ _gtk_file_chooser_entry_set_file_part (GtkFileChooserEntry *chooser_entry,
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry));
 
-  chooser_entry->in_change = TRUE;
   gtk_entry_set_text (GTK_ENTRY (chooser_entry), file_part);
-  chooser_entry->in_change = FALSE;
 }

@@ -1,3 +1,12 @@
+2003-12-03  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserentry.c (struct _GtkFileChooserEntry): Removed
+	the in_change flag.
+	(completion_idle_callback): Use a temporary list store and re-set
+	it on the completion rather than modifying the old one.  We are
+	re-reading the folder anyway, and this gets rid of non-atomicity
+	problems.
+
 2003-12-01  Federico Mena Quintero  <federico@ximian.com>
 
 	Decouple impl->current_folder from the selection in the folder
