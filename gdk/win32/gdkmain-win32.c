@@ -115,8 +115,8 @@ _gdk_windowing_init (gint    *argc,
   _cf_utf8_string = RegisterClipboardFormat ("UTF8_STRING");
 
   _utf8_string = gdk_atom_intern ("UTF8_STRING", FALSE);
-  _compound_text = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
   _text_uri_list = gdk_atom_intern ("text/uri-list", FALSE);
+  _targets = gdk_atom_intern ("TARGETS", FALSE);
 
   _local_dnd = gdk_atom_intern ("LocalDndSelection", FALSE);
   _gdk_win32_dropfiles = gdk_atom_intern ("DROPFILES_DND", FALSE);

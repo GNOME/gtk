@@ -1,3 +1,59 @@
+2004-07-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_text)
+	* gdk/win32/gdkfont-win32.c (gdk_text_extents)
+	* gdk/win32/gdkproperty-win32.c (find_common_locale,
+	gdk_property_change)
+	* gdk/win32/gdkselection-win32.c (gdk_selection_convert): Use
+	g_utf8_to_utf16() instead of the removed _gdk_utf8_to_ucs2() (see
+	below).
+
+	* gdk/win32/gdkglobals-win32.c
+	* gdk/win32/gdkmain-win32.c (_gdk_windowing_init)
+	* gdk/win3/gdkprivate-win32.h: Add a variable for the TARGETS
+	atom. Initialize it. Declare it. Drop the variable for the
+	COMPOUND_TEXT atom.
+
+	* gdk/win32/gdkim-win32.c (gdk_wcstombs): Don't return UTF-8. This
+	function is supposed to return the string in the locale's charset
+	and encoding. Use g_convert().
+
+	(gdk_mbstowcs): Similarily, don't take an UTF-8 string, but a
+	string in the locale's charset. Use g_convert().
+
+	(_gdk_ucs2_to_utf8, _gdk_utf8_to_wcs, _gdk_utf8_to_ucs2):
+	Delete. The UCS-2 functions didn't handle surrogates anyway. Use
+	GLib's UTF-16 functions instead. Windows uses UTF-16.
+
+	* gdk/win32/gdkprivate-win32.h: Remove declarations of the deleted
+	functions mentioned above.
+
+	* gdk/win32/gdkproperty-win32.c (gdk_property_change): Use CF_TEXT
+	also if the string is of type STRING, i.e. ISO-8859-1, and the
+	current codepage is 1252, and contains no C1 chars. Accept
+	also UTF8_STRING.
+
+	* gdk/win32/gdkselection-win32.c (_gdk_selection_property_store):
+	Mark as static. When storing STRING data, convert to
+	Latin-1. (#140537)
+	(gdk_selection_owner_set_for_display): Now that STRING is always
+	ISO-8859-1, use UTF8_STRING when sending the selection request
+	to ourselves.
+
+	(gdk_selection_convert): Handle also UTF8_STRING. (#140537, John
+	Ehresman)
+
+	(gdk_text_property_to_text_list_for_display): Make work more like
+	X11 version. Do obey the encoding parameter.
+
+	(gdk_string_to_compound_text_for_display,
+	gdk_utf8_to_compound_text_for_display): Don't even pretend
+	supporting COMPOUND_TEXT.
+
+	(gdk_utf8_to_string_target): Convert to ISO-8859-1, like on X11.
+
+	(sanitize_utf8): Zero-terminate string.
+
 2004-07-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/stock-icons/Makefile.am: Add stock_file_16.png, 

@@ -1592,8 +1592,8 @@ gdk_text_extents (GdkFont     *font,
 		  gint        *descent)
 {
   gdk_text_size_arg arg;
-  gint wlen;
-  wchar_t *wcstr;
+  glong wlen;
+  wchar_t *wcstr, wc;
 
   g_return_if_fail (font != NULL);
   g_return_if_fail (text != NULL);
@@ -1617,21 +1617,17 @@ gdk_text_extents (GdkFont     *font,
 
   arg.total.cx = arg.total.cy = 0;
 
-  wcstr = g_new (wchar_t, text_length);
   if (text_length == 1)
     {
-      wcstr[0] = (guchar) text[0];
-      _gdk_wchar_text_handle (font, wcstr, 1, gdk_text_size_handler, &arg);
+      wc = (guchar) text[0];
+      _gdk_wchar_text_handle (font, &wc, 1, gdk_text_size_handler, &arg);
     }
   else
     {
-      if ((wlen = _gdk_utf8_to_ucs2 (wcstr, text, text_length, text_length)) == -1)
-	g_warning ("gdk_text_extents: _gdk_utf8_to_ucs2 failed");
-      else
-	_gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, &arg);
+      wcstr = g_utf8_to_utf16 (text, text_length, NULL, &wlen, NULL);
+      _gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, &arg);
+      g_free (wcstr);
     }
-
-  g_free (wcstr);
 
   /* XXX This is quite bogus */
   if (lbearing)

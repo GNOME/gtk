@@ -51,8 +51,8 @@ WORD  		  _cf_rtf;
 WORD		  _cf_utf8_string;
 
 GdkAtom           _utf8_string;
-GdkAtom		  _compound_text;
 GdkAtom		  _text_uri_list;
+GdkAtom		  _targets;
 
 GdkAtom		  _local_dnd;
 GdkAtom		  _gdk_win32_dropfiles;

@@ -198,12 +198,10 @@ find_common_locale (const guchar  *data,
    * bytes for each Unicode char should be enough, Windows code pages
    * are either single- or double-byte.
    */
-  *bufp = g_malloc ((nchars+1) * 2);
-  wcs = g_new (wchar_t, nchars+1);
+  *bufp = g_malloc ((nchars+1)*2);
 
   /* Convert to Windows wide chars into temp buf */
-  _gdk_utf8_to_ucs2 (wcs, data, nelements, nchars);
-  wcs[nchars] = 0;
+  wcs = g_utf8_to_utf16 (data, nelements, NULL, NULL, NULL);
 
   /* For each code page that is the default for an installed locale: */
   for (i = 0; i < G_N_ELEMENTS (locales); i++)
@@ -254,7 +252,8 @@ gdk_property_change (GdkWindow    *window,
   gchar *prop_name, *type_name;
   guchar *ucptr, *buf = NULL;
   wchar_t *wcptr;
-  enum { PLAIN_ASCII, UNICODE_TEXT, SINGLE_LOCALE, RICH_TEXT } method;
+  glong wclen;
+  enum { SYSTEM_CODEPAGE, UNICODE_TEXT, SINGLE_LOCALE, RICH_TEXT } method;
   gboolean ok = TRUE;
 
   g_return_if_fail (window != NULL);
@@ -279,7 +278,8 @@ gdk_property_change (GdkWindow    *window,
 	     g_free (type_name)));
 
   if (property == _gdk_selection_property
-      && type == GDK_TARGET_STRING
+      && ((type == GDK_TARGET_STRING && GetACP () == 1252) ||
+	  type == _utf8_string)
       && format == 8
       && mode == GDK_PROP_MODE_REPLACE)
     {
@@ -289,22 +289,31 @@ gdk_property_change (GdkWindow    *window,
 	  return;
 	}
 
-      /* Check if only ASCII */
-      for (i = 0; i < nelements; i++)
-	if (data[i] >= 0200)
-	  break;
+      if (type == _utf8_string)
+	{
+	  /* Check if only ASCII */
+	  for (i = 0; i < nelements; i++)
+	    if (data[i] >= 0200)
+	      break;
+	}
+      else /* if (type == GDK_TARGET_STRING) */
+	{
+	  /* Check that no 0200..0240 chars present, as they
+	   * differ between ISO-8859-1 and CP1252.
+	   */
+	  for (i = 0; i < nelements; i++)
+	    if (data[i] >= 0200 && data[i] < 0240)
+	      break;
+	}
+      nchars = g_utf8_strlen (data, nelements);
 
-      if (i == nelements)
-	nchars = nelements;
-      else
-	nchars = g_utf8_strlen (data, nelements);
-
-      GDK_NOTE (DND, g_print ("...nchars:%d\n", nchars));
-      
       if (i == nelements)
 	{
-	  /* If only ASCII, use CF_TEXT and the data as such. */
-	  method = PLAIN_ASCII;
+	  /* If UTF-8 and only ASCII, or if STRING (ISO-8859-1) and
+	   * system codepage is CP1252, use CF_TEXT and the data as
+	   * such.
+	   */
+	  method = SYSTEM_CODEPAGE;
 	  size = nelements;
 	  for (i = 0; i < nelements; i++)
 	    if (data[i] == '\n')
@@ -314,9 +323,15 @@ gdk_property_change (GdkWindow    *window,
 	}
       else if (IS_WIN_NT ())
 	{
-	  /* On NT, use CF_UNICODETEXT if any non-ASCII char present */
+	  /* On NT, use CF_UNICODETEXT if any non-system codepage char
+	   * present.
+	   */
 	  method = UNICODE_TEXT;
-	  size = (nchars + 1) * 2;
+
+	  wcptr = g_utf8_to_utf16 (data, nelements, NULL, &wclen, NULL);
+
+	  wclen++;		/* Terminating 0 */
+	  size = wclen * 2;
 	  GDK_NOTE (DND, g_print ("...as Unicode\n"));
 	}
       else if (find_common_locale (data, nelements, nchars, &lcid, &buf, &size))
@@ -347,7 +362,7 @@ gdk_property_change (GdkWindow    *window,
 		  rtf = g_string_append_c (rtf, *p);
 		  p++;
 		}
-	      else if (*p < 0200)
+	      else if (*p < 0200 && *p >= ' ')
 		{
 		  rtf = g_string_append_c (rtf, *p);
 		  p++;
@@ -388,7 +403,7 @@ gdk_property_change (GdkWindow    *window,
 
       switch (method)
 	{
-	case PLAIN_ASCII:
+	case SYSTEM_CODEPAGE:
 	  cf = CF_TEXT;
 	  for (i = 0; i < nelements; i++)
 	    {
@@ -401,10 +416,8 @@ gdk_property_change (GdkWindow    *window,
 
 	case UNICODE_TEXT:
 	  cf = CF_UNICODETEXT;
-	  wcptr = (wchar_t *) ucptr;
-	  if (_gdk_utf8_to_ucs2 (wcptr, data, nelements, nchars) == -1)
-	    g_warning ("_gdk_utf8_to_ucs2() failed");
-	  wcptr[nchars] = 0;
+	  memmove (ucptr, wcptr, size);
+	  g_free (wcptr);
 	  break;
 
 	case SINGLE_LOCALE:
