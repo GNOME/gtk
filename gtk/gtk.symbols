@@ -1582,6 +1582,7 @@ gtk_progress_bar_get_fraction
 gtk_progress_bar_get_orientation
 gtk_progress_bar_get_pulse_step
 gtk_progress_bar_get_text
+gtk_progress_bar_get_ellipsize
 gtk_progress_bar_get_type
 gtk_progress_bar_new
 gtk_progress_bar_new_with_adjustment
@@ -1595,6 +1596,7 @@ gtk_progress_bar_set_fraction
 gtk_progress_bar_set_orientation
 gtk_progress_bar_set_pulse_step
 gtk_progress_bar_set_text
+gtk_progress_bar_set_ellipsize
 gtk_progress_bar_style_get_type
 gtk_progress_bar_update
 gtk_progress_configure

@@ -1,5 +1,7 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: Add new symbols.
+
 	* gtk/gtkiconview.c (gtk_icon_view_scroll_to_item): Make
 	it work with *big* icon views.  (#154466)
 
