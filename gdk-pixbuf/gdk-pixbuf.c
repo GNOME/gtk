@@ -6,6 +6,9 @@
  */
 #include <config.h>
 #include <glib.h>
+#include <libart_lgpl/art_misc.h>
+#include <libart_lgpl/art_rgb_affine.h>
+#include <libart_lgpl/art_alphagamma.h>
 #include "gdk-pixbuf.h"
 
 
@@ -19,35 +22,70 @@ gdk_pixbuf_destroy (GdkPixBuf *pixbuf)
 void
 gdk_pixbuf_ref (GdkPixBuf *pixbuf)
 {
-	g_return_if_fail (pixbuf != NULL);
-
-	pixbuf->ref_count++;
+    g_return_if_fail (pixbuf != NULL);
+    
+    pixbuf->ref_count++;
 }
 
 void
 gdk_pixbuf_unref (GdkPixBuf *pixbuf)
 {
-	g_return_if_fail (pixbuf != NULL);
-	g_return_if_fail (pixbuf->ref_count == 0);
+    g_return_if_fail (pixbuf != NULL);
+    g_return_if_fail (pixbuf->ref_count == 0);
+    
+    pixbuf->ref_count--;
+    if (pixbuf->ref_count)
+	gdk_pixbuf_destroy (pixbuf);
+}
 
-	pixbuf->ref_count--;
-	if (pixbuf->ref_count)
-		gdk_pixbuf_destroy (pixbuf);
+void
+gdk_pixbuf_free (GdkPixBuf *pixbuf)
+{
+     art_free(pixbuf->art_pixbuf->pixels);
+     art_pixbuf_free_shallow(pixbuf->art_pixbuf);
+     g_free(pixbuf);
 }
 
 GdkPixBuf *
 gdk_pixbuf_scale (GdkPixBuf *pixbuf, gint w, gint h)
 {
     GdkPixBuf *spb;
+    art_u8 *pixels;
     double affine[6];
+    ArtAlphaGamma *alphagamma;
+
+    alphagamma = NULL;
+
+    affine[0] = affine[3] = 1;
+    affine[4] = affine[5] = 0;
     
+    affine[1] = w / (pixbuf->art_pixbuf->width);
+    affine[2] = h / (pixbuf->art_pixbuf->height);
+
+    spb = g_new (GdkPixBuf, 1);
+
+    if (pixbuf->art_pixbuf->has_alpha) {
+	 /* Following code is WRONG....of course, the code for this
+	  * transform isn't in libart yet.
+	  */
+#if 0
+	 pixels = art_alloc (h * w * 4);
+	 art_rgb_affine( pixels, 0, 0, w, h, (w * 4),
+			 pixbuf->art_pixbuf->pixels,
+			 pixbuf->art_pixbuf->width,
+			 pixbuf->art_pixbuf->height,
+			 pixbuf->art_pixbuf->rowstride,
+			 affine, ART_FILTER_NEAREST, alphagamma);
+	 spb->art_pixbuf = art_pixbuf_new_rgba(pixels, w, h, (w * 4));
+#endif
+    } else {
+	 art_alloc (h * w * 3);
+	 art_rgb_affine( pixels, 0, 0, w, h, (w * 3),
+			 pixbuf->art_pixbuf->pixels,
+			 pixbuf->art_pixbuf->width,
+			 pixbuf->art_pixbuf->height,
+			 pixbuf->art_pixbuf->rowstride,
+			 affine, ART_FILTER_NEAREST, alphagamma);
+	 spb->art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3)); 
+    }
 }
-
-
-/*
- * Local variables:
- *  c-basic-offset: 4
- *  c-file-offsets: ((substatement-open . 0))
- * End:
- */
-

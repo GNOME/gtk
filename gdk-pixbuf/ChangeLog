@@ -1,3 +1,13 @@
+1999-07-16  Mark Crichton  <crichton@gimp.org>
+
+	* src/testpixbuf.c (config_func): ConfigureEvent handler.  This
+	calls gdk_pixbuf_scale.  However, something is not working.
+	N.B.: current pixmap is now stored in user_data with a key of
+	"pixmap"
+
+	* src/gdk-pixbuf.c (gdk_pixbuf_scale): Implemented scaling function.
+	Something is still borked, however.
+
 1999-07-15  Larry Ewing  <lewing@gimp.org>
 
 	* src/io-jpeg.c (image_load): add raph@gimp.org's fix to the jpeg
@@ -11,11 +21,11 @@
 	* src/testpixbuf.c (expose_func): added an almost proper expose 
 	handler for testpixbuf
 
-1999-07-13    <crichton@gimp.org>
+1999-07-13  Mark Crichton  <crichton@gimp.org>
 
 	* configure.in: Fixed GIF check.  Replaced " with '
 	* src/gdk-pixbuf.c: More (minor) work on gdk_pixbuf_scale
 
-1999-07-13    <crichton@gimp.org>
+1999-07-13  Mark Crichton  <crichton@gimp.org>
 
 	* configure.in: I am a bonehead.  Added gif-lib check.
