@@ -36,19 +36,22 @@
 
 static const LPCWSTR class_descriptors[] =
 {
-  L"Scrollbar",
-  L"Button",
-  L"Header",
-  L"ComboBox",
-  L"Tab",
-  L"Edit",
-  L"TreeView",
-  L"Spin",
-  L"Progress",
-  L"Tooltip",
-  L"Rebar",
-  L"Toolbar",
-  L"Globals"
+  L"Scrollbar", /* XP_THEME_CLASS_SCROLLBAR */
+  L"Button",    /* XP_THEME_CLASS_BUTTON */
+  L"Header",    /* XP_THEME_CLASS_HEADER */
+  L"ComboBox",  /* XP_THEME_CLASS_COMBOBOX */
+  L"Tab",       /* XP_THEME_CLASS_TAB */
+  L"Edit",      /* XP_THEME_CLASS_EDIT */
+  L"TreeView",  /* XP_THEME_CLASS_TREEVIEW */
+  L"Spin",      /* XP_THEME_CLASS_SPIN */
+  L"Progress",  /* XP_THEME_CLASS_PROGRESS */
+  L"Tooltip",   /* XP_THEME_CLASS_TOOLTIP */
+  L"Rebar",     /* XP_THEME_CLASS_REBAR */
+  L"Toolbar",   /* XP_THEME_CLASS_TOOLBAR */
+  L"Globals",   /* XP_THEME_CLASS_GLOBALS */
+  L"Menu",      /* XP_THEME_CLASS_MENU */
+  L"Window",    /* XP_THEME_CLASS_WINDOW */
+  L"Status"     /* XP_THEME_CLASS_STATUS */
 };
 
 static const short element_part_map[]=
@@ -89,7 +92,11 @@ static const short element_part_map[]=
   RP_GRIPPER,
   RP_GRIPPERVERT,
   RP_CHEVRON,
-  TP_BUTTON
+  TP_BUTTON,
+  MP_MENUITEM,
+  MP_SEPARATOR,
+  SP_GRIPPER,
+  SP_PANE
 
 #if UXTHEME_HAS_LINES
   ,
@@ -102,7 +109,10 @@ static HINSTANCE uxtheme_dll = NULL;
 static HTHEME open_themes[XP_THEME_CLASS__SIZEOF];
 
 typedef HRESULT (FAR PASCAL *GetThemeSysFontFunc)
-     (HTHEME hTheme, int iFontID, FAR LOGFONT *plf);
+     (HTHEME hTheme, int iFontID, OUT LOGFONT *plf);
+typedef int (FAR PASCAL *GetThemeSysSizeFunc)
+	(HTHEME hTheme, int iSizeId);
+typedef COLORREF (FAR PASCAL *GetThemeSysColorFunc)(HTHEME hTheme, int iColorID);
 typedef HTHEME (FAR PASCAL *OpenThemeDataFunc)
      (HWND hwnd, LPCWSTR pszClassList);
 typedef HRESULT (FAR PASCAL *CloseThemeDataFunc)(HTHEME theme);
@@ -113,6 +123,8 @@ typedef HRESULT (FAR PASCAL *EnableThemeDialogTextureFunc)(HWND hwnd, DWORD dwFl
 typedef BOOL (FAR PASCAL *IsThemeActiveFunc)(VOID);
 
 static GetThemeSysFontFunc get_theme_sys_font_func = NULL;
+static GetThemeSysColorFunc get_theme_sys_color_func = NULL;
+static GetThemeSysSizeFunc get_theme_sys_metric_func = NULL;
 static OpenThemeDataFunc open_theme_data_func = NULL;
 static CloseThemeDataFunc close_theme_data_func = NULL;
 static DrawThemeBackgroundFunc draw_theme_background_func = NULL;
@@ -125,7 +137,7 @@ static void
 xp_theme_close_open_handles (void)
 {
   int i;
-  
+
   for (i=0; i < XP_THEME_CLASS__SIZEOF; i++)
     {
       if (open_themes[i])
@@ -142,8 +154,13 @@ xp_theme_init (void)
   if (uxtheme_dll)
     return;
 
-  uxtheme_dll = LoadLibrary("uxtheme.dll");
   memset(open_themes, 0, sizeof(open_themes));
+
+  uxtheme_dll = LoadLibrary("uxtheme.dll");
+  if (!uxtheme_dll) {
+	  was_theming_active = FALSE;
+	  return;
+  }
 
   is_theme_active_func = (IsThemeActiveFunc) GetProcAddress(uxtheme_dll, "IsThemeActive");
   open_theme_data_func = (OpenThemeDataFunc) GetProcAddress(uxtheme_dll, "OpenThemeData");
@@ -151,6 +168,8 @@ xp_theme_init (void)
   draw_theme_background_func = (DrawThemeBackgroundFunc) GetProcAddress(uxtheme_dll, "DrawThemeBackground");
   enable_theme_dialog_texture_func = (EnableThemeDialogTextureFunc) GetProcAddress(uxtheme_dll, "EnableThemeDialogTexture");
   get_theme_sys_font_func = (GetThemeSysFontFunc) GetProcAddress(uxtheme_dll, "GetThemeSysFont");
+  get_theme_sys_color_func = (GetThemeSysColorFunc) GetProcAddress(uxtheme_dll, "GetThemeSysColor");
+  get_theme_sys_metric_func = (GetThemeSysSizeFunc) GetProcAddress(uxtheme_dll, "GetThemeSysSize");
 
   if (is_theme_active_func)
     {
@@ -183,6 +202,8 @@ xp_theme_exit (void)
   draw_theme_background_func = NULL;
   enable_theme_dialog_texture_func = NULL;
   get_theme_sys_font_func = NULL;
+  get_theme_sys_color_func = NULL;
+  get_theme_sys_metric_func = NULL;
 }
 
 static HTHEME
@@ -214,6 +235,11 @@ xp_theme_get_handle_by_element (XpThemeElement element)
       klazz = XP_THEME_CLASS_REBAR;
       break;
 
+	case XP_THEME_ELEMENT_STATUS_GRIPPER:
+	case XP_THEME_ELEMENT_STATUS_PANE:
+		klazz = XP_THEME_CLASS_STATUS;
+		break;
+
     case XP_THEME_ELEMENT_TOOLBAR:
       klazz = XP_THEME_CLASS_TOOLBAR;
       break;
@@ -221,6 +247,11 @@ xp_theme_get_handle_by_element (XpThemeElement element)
     case XP_THEME_ELEMENT_HLINE:
     case XP_THEME_ELEMENT_VLINE:
       klazz = XP_THEME_CLASS_GLOBALS;
+      break;
+
+    case XP_THEME_ELEMENT_MENUITEM:
+    case XP_THEME_ELEMENT_MENU_SEPARATOR:
+      klazz = XP_THEME_CLASS_MENU;
       break;
 
     case XP_THEME_ELEMENT_PRESSED_CHECKBOX:
@@ -305,6 +336,11 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
     case XP_THEME_ELEMENT_GRIPPER_V:
       ret = CHEVS_NORMAL;
       break;
+
+	case XP_THEME_ELEMENT_STATUS_GRIPPER:
+	case XP_THEME_ELEMENT_STATUS_PANE:
+		ret = 1;
+		break;
 
     case XP_THEME_ELEMENT_CHEVRON:
       switch (state)
@@ -585,6 +621,20 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 
 #endif
 
+	case XP_THEME_ELEMENT_MENUITEM:
+	case XP_THEME_ELEMENT_MENU_SEPARATOR:
+		switch(state) {
+			case GTK_STATE_SELECTED:
+				ret = MS_SELECTED;
+				break;
+			case GTK_STATE_INSENSITIVE:
+				ret = MS_DEMOTED;
+				break;
+			default:
+				ret = MS_NORMAL;
+		}
+		break;
+
     default:
       switch(state)
         {
@@ -676,7 +726,7 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
       FillRect (dc, &rect, (HBRUSH) (COLOR_3DFACE+1));
     }
 #endif
-  
+
   draw_theme_background_func(theme, dc, element_part_map[element], part_state, &rect, pClip);
   gdk_win32_hdc_release(drawable, style->dark_gc[state_type], 0);
 
@@ -697,7 +747,7 @@ xp_theme_is_drawable (XpThemeElement element)
         {
           xp_theme_reset ();
         }
-      
+
       if (active)
         {
           return (xp_theme_get_handle_by_element (element) != NULL);
@@ -708,11 +758,55 @@ xp_theme_is_drawable (XpThemeElement element)
 }
 
 gboolean
-xp_theme_get_system_font (int fontId, LOGFONT *lf)
+xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId, LOGFONT *lf)
 {
+  int themeFont;
+
   if (get_theme_sys_font_func != NULL)
     {
-      return ((*get_theme_sys_font_func)(NULL, fontId, lf) == S_OK);
+	  HTHEME theme = xp_theme_get_handle_by_class(klazz);
+	  if (!theme)
+	  	return FALSE;
+
+	switch (fontId){
+		case XP_THEME_FONT_CAPTION:
+			themeFont = TMT_CAPTIONFONT; break;
+		case XP_THEME_FONT_MENU:
+			themeFont = TMT_MENUFONT; break;
+		case XP_THEME_FONT_STATUS:
+			themeFont = TMT_STATUSFONT; break;
+		case XP_THEME_FONT_MESSAGE:
+		default:
+			themeFont = TMT_MSGBOXFONT; break;
+	}
+	  /* if theme is NULL, it will just return the GetSystemFont() value */
+      return ((*get_theme_sys_font_func)(theme, themeFont, lf) == S_OK);
+    }
+  return FALSE;
+}
+
+gboolean xp_theme_get_system_color (XpThemeClass klazz, int colorId, DWORD * pColor)
+{
+  if (get_theme_sys_color_func != NULL)
+    {
+	   HTHEME theme = xp_theme_get_handle_by_class(klazz);
+
+	   /* if theme is NULL, it will just return the GetSystemColor() value */
+	   *pColor = (*get_theme_sys_color_func)(theme, colorId);
+	   return TRUE;
+    }
+  return FALSE;
+}
+
+gboolean xp_theme_get_system_metric (XpThemeClass klazz, int metricId, int * pVal)
+{
+  if (get_theme_sys_metric_func != NULL)
+    {
+	   HTHEME theme = xp_theme_get_handle_by_class(klazz);
+
+	   /* if theme is NULL, it will just return the GetSystemMetrics() value */
+	   *pVal = (*get_theme_sys_metric_func)(theme, metricId);
+	   return TRUE;
     }
   return FALSE;
 }

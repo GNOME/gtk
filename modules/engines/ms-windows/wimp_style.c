@@ -116,40 +116,39 @@ static struct {
   { radio_text_bits, NULL }
 };
 
-typedef enum
-{
-	CAPTION_FONT,
-	MENU_FONT,
-	STATUS_FONT,
-	MESSAGE_FONT
-} SystemFontType;
-
 static gboolean
-get_system_font(SystemFontType type, LOGFONT *out_lf)
+get_system_font(XpThemeClass klazz, XpThemeFont type, LOGFONT *out_lf)
 {
-  NONCLIENTMETRICS ncm;
-  ncm.cbSize = sizeof(NONCLIENTMETRICS);
+#if 0
+  /* TODO: this crashes. need to figure out why and how to fix it */
+  if (xp_theme_get_system_font(klazz, type, out_lf)) {
+	  return TRUE;
+  } else
+#endif
+  {
+	  NONCLIENTMETRICS ncm;
+	  ncm.cbSize = sizeof(NONCLIENTMETRICS);
 
-  if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS,
-			   sizeof(NONCLIENTMETRICS), &ncm, 0))
-    {
-      if (type == CAPTION_FONT)
-	*out_lf = ncm.lfCaptionFont;
-      else if (type == MENU_FONT)
-	*out_lf = ncm.lfMenuFont;
-      else if (type == STATUS_FONT)
-	*out_lf = ncm.lfStatusFont;
-      else
-	*out_lf = ncm.lfMessageFont;
+	  if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS,
+				   sizeof(NONCLIENTMETRICS), &ncm, 0))
+	    {
+	      if (type == XP_THEME_FONT_CAPTION)
+		*out_lf = ncm.lfCaptionFont;
+	      else if (type == XP_THEME_FONT_MENU)
+		*out_lf = ncm.lfMenuFont;
+	      else if (type == XP_THEME_FONT_STATUS)
+		*out_lf = ncm.lfStatusFont;
+	      else
+		*out_lf = ncm.lfMessageFont;
 
-      return TRUE;
-    }
-
+	      return TRUE;
+	    }
+  }
   return FALSE;
 }
 
 static char *
-sys_font_to_pango_font (SystemFontType type, char * buf)
+sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char * buf)
 {
   HDC hDC;
   HWND hwnd;
@@ -158,7 +157,7 @@ sys_font_to_pango_font (SystemFontType type, char * buf)
   const char * weight;
   const char * style;
 
-  if (get_system_font(type, &lf))
+  if (get_system_font(klazz, type, &lf))
     {
       switch (lf.lfWeight) {
       case FW_THIN:
@@ -218,33 +217,35 @@ sys_font_to_pango_font (SystemFontType type, char * buf)
 #define SPI_GETMENUSHOWDELAY 106
 #endif
 
+#define XP_THEME_CLASS_UNKNOWN XP_THEME_CLASS_BUTTON
+
 static void
 setup_menu_settings (void)
 {
   int menu_delay;
   gboolean win95 = FALSE;
-  
+
   GtkSettings * settings;
   OSVERSIONINFOEX osvi;
-  
+
   settings = gtk_settings_get_default ();
   if (!settings)
     return;
-  
+
   ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
   osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-  
+
   if (!GetVersionEx ( (OSVERSIONINFO *) &osvi))
     win95 = TRUE; /* assume the worst */
-  
+
   if (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
     if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
       win95 = TRUE;
-  
+
   if (!win95) {
     if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0)) {
       GObjectClass * klazz = G_OBJECT_GET_CLASS(G_OBJECT(settings));
-      
+
       if (klazz) {
 	if (g_object_class_find_property (klazz, "gtk-menu-bar-popup-delay")) {
 	  g_object_set (G_OBJECT (settings), "gtk-menu-bar-popup-delay",
@@ -286,8 +287,7 @@ wimp_style_setup_system_settings (void)
   g_object_set (G_OBJECT (settings), "gtk-double-click-time",
 		GetDoubleClickTime(), NULL);
   g_object_set (G_OBJECT (settings), "gtk-dnd-drag-threshold",
-		GetSystemMetrics (SM_CXDRAG), NULL);
-
+		GetSystemMetrics(SM_CXDRAG), NULL);
 
   setup_menu_settings ();
 
@@ -298,7 +298,6 @@ wimp_style_setup_system_settings (void)
 
   g_object_set (G_OBJECT (settings), "gtk-icon-sizes",
 		"gtk-menu=10,10 : gtk-button=16,16 : gtk-small-toolbar=16,16 : gtk-large-toolbar=16,16 : gtk-dialog=32,32 : gtk-dnd=32,32", NULL);
-
 #endif
 
   /*
@@ -313,18 +312,33 @@ setup_system_font(GtkStyle *style)
 {
   char buf[256], * font; /* It's okay, lfFaceName is smaller than 32 chars */
 
-  if ((font = sys_font_to_pango_font(MESSAGE_FONT, buf)) != NULL)
+  if ((font = sys_font_to_pango_font(XP_THEME_CLASS_UNKNOWN, XP_THEME_FONT_MESSAGE, buf)) != NULL)
     style->font_desc = pango_font_description_from_string(font);
 }
 
 static void
-sys_color_to_gtk_color(int id, GdkColor *pcolor)
+sys_color_to_gtk_color(XpThemeClass klazz, int id, GdkColor *pcolor)
 {
-  DWORD color   = GetSysColor(id);
+  DWORD color;
+
+  if (!xp_theme_get_system_color (klazz, id, &color))
+  	color = GetSysColor(id);
+
   pcolor->pixel = color;
   pcolor->red   = (GetRValue(color) << 8) | GetRValue(color);
   pcolor->green = (GetGValue(color) << 8) | GetGValue(color);
   pcolor->blue  = (GetBValue(color) << 8) | GetBValue(color);
+}
+
+static int
+get_system_metric(XpThemeClass klazz, int id)
+{
+	int rval;
+
+	if (!xp_theme_get_system_metric(klazz, id, &rval))
+		rval = GetSystemMetrics (id);
+
+	return rval;
 }
 
 static void
@@ -351,26 +365,26 @@ setup_wimp_rc_style(void)
   gint paned_size = 15;
 
   /* Prelight */
-  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &fg_prelight);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &bg_prelight);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &base_prelight);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &text_prelight);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &fg_prelight);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHT, &bg_prelight);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHT, &base_prelight);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &text_prelight);
 
-  sys_color_to_gtk_color(COLOR_MENUTEXT, &menu_text_color);
-  sys_color_to_gtk_color(COLOR_MENU, &menu_color);
+  sys_color_to_gtk_color(XP_THEME_CLASS_MENU, COLOR_MENUTEXT, &menu_text_color);
+  sys_color_to_gtk_color(XP_THEME_CLASS_MENU, COLOR_MENU, &menu_color);
 
   /* tooltips */
-  sys_color_to_gtk_color(COLOR_INFOTEXT, &tooltip_fore);
-  sys_color_to_gtk_color(COLOR_INFOBK, &tooltip_back);
+  sys_color_to_gtk_color(XP_THEME_CLASS_TOOLTIP, COLOR_INFOTEXT, &tooltip_fore);
+  sys_color_to_gtk_color(XP_THEME_CLASS_TOOLTIP, COLOR_INFOBK, &tooltip_back);
 
   /* text on push buttons. TODO: button shadows, backgrounds, and highlights */
-  sys_color_to_gtk_color(COLOR_BTNTEXT, &btn_fore);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_BTNTEXT, &btn_fore);
 
   /* progress bar background color */
-  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &progress_back);
+  sys_color_to_gtk_color(XP_THEME_CLASS_PROGRESS, COLOR_HIGHLIGHT, &progress_back);
 
   /* Enable coloring for menus. */
-  font_ptr = sys_font_to_pango_font (MENU_FONT,font_buf);
+  font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_MENU, XP_THEME_FONT_MENU,font_buf);
   sprintf(buf, "style \"wimp-menu\" = \"wimp-default\"\n"
           "{fg[PRELIGHT] = { %d, %d, %d }\n"
           "bg[PRELIGHT] = { %d, %d, %d }\n"
@@ -403,7 +417,7 @@ setup_wimp_rc_style(void)
   gtk_rc_parse_string(buf);
 
   /* enable tooltip fonts */
-  font_ptr = sys_font_to_pango_font (STATUS_FONT,font_buf);
+  font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_STATUS, XP_THEME_FONT_STATUS,font_buf);
   sprintf(buf, "style \"wimp-tooltips-caption\" = \"wimp-default\"\n"
 	  "{fg[NORMAL] = { %d, %d, %d }\n"
 	  "%s = \"%s\"\n"
@@ -424,7 +438,7 @@ setup_wimp_rc_style(void)
   gtk_rc_parse_string(buf);
 
   /* enable font theming for status bars */
-  font_ptr = sys_font_to_pango_font (STATUS_FONT,font_buf);
+  font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_STATUS, XP_THEME_FONT_STATUS,font_buf);
   sprintf(buf, "style \"wimp-statusbar\" = \"wimp-default\"\n"
 	  "{%s = \"%s\"\n"
 	  "}widget_class \"*GtkStatusbar*\" style \"wimp-statusbar\"\n",
@@ -463,7 +477,7 @@ setup_wimp_rc_style(void)
 	  "GtkRange::trough_border = 0\n"
 	  "}widget_class \"*GtkVScrollbar*\" style \"wimp-vscrollbar\"\n",
 	  GetSystemMetrics(SM_CYVTHUMB),
-	  GetSystemMetrics(SM_CXVSCROLL));
+	  get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CXVSCROLL));
   gtk_rc_parse_string(buf);
 
   sprintf(buf, "style \"wimp-hscrollbar\" = \"wimp-default\"\n"
@@ -473,7 +487,7 @@ setup_wimp_rc_style(void)
 	  "GtkRange::trough_border = 0\n"
 	  "}widget_class \"*GtkHScrollbar*\" style \"wimp-hscrollbar\"\n",
 	  GetSystemMetrics(SM_CXHTHUMB),
-	  GetSystemMetrics(SM_CYHSCROLL));
+	  get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CYHSCROLL));
   gtk_rc_parse_string(buf);
 
   /* radio/check button sizes */
@@ -498,37 +512,37 @@ setup_system_styles(GtkStyle *style)
   int i;
 
   /* Default forgeground */
-  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->fg[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->fg[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->fg[GTK_STATE_PRELIGHT]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->fg[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(COLOR_GRAYTEXT, &style->fg[GTK_STATE_INSENSITIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOWTEXT, &style->fg[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOWTEXT, &style->fg[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOWTEXT, &style->fg[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &style->fg[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_GRAYTEXT, &style->fg[GTK_STATE_INSENSITIVE]);
 
   /* Default background */
-  sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(COLOR_SCROLLBAR, &style->bg[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_PRELIGHT]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &style->bg[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_INSENSITIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_3DFACE, &style->bg[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_SCROLLBAR, COLOR_SCROLLBAR, &style->bg[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_3DFACE, &style->bg[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHT, &style->bg[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_3DFACE, &style->bg[GTK_STATE_INSENSITIVE]);
 
   /* Default base */
-  sys_color_to_gtk_color(COLOR_WINDOW, &style->base[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &style->base[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(COLOR_WINDOW, &style->base[GTK_STATE_PRELIGHT]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &style->base[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(COLOR_3DFACE, &style->base[GTK_STATE_INSENSITIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOW, &style->base[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHT, &style->base[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOW, &style->base[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHT, &style->base[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_3DFACE, &style->base[GTK_STATE_INSENSITIVE]);
 
   /* Default text */
-  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->text[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->text[GTK_STATE_PRELIGHT]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(COLOR_GRAYTEXT, &style->text[GTK_STATE_INSENSITIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOWTEXT, &style->text[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOWTEXT, &style->text[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_GRAYTEXT, &style->text[GTK_STATE_INSENSITIVE]);
 
   for (i = 0; i < 5; i++)
     {
-      sys_color_to_gtk_color(COLOR_3DSHADOW, &style->dark[i]);
-      sys_color_to_gtk_color(COLOR_3DHILIGHT, &style->light[i]);
+      sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_3DSHADOW, &style->dark[i]);
+      sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_3DHILIGHT, &style->light[i]);
 
       style->mid[i].red = (style->light[i].red + style->dark[i].red) / 2;
       style->mid[i].green = (style->light[i].green + style->dark[i].green) / 2;
@@ -1097,10 +1111,6 @@ draw_box (GtkStyle      *style,
 	  gint           width,
 	  gint           height)
 {
-  const gchar * name;
-
-  name = gtk_widget_get_name (widget);
-
   if (detail &&
       (!strcmp (detail, "button") ||
        !strcmp (detail, "buttondefault")))
@@ -1180,17 +1190,14 @@ draw_box (GtkStyle      *style,
 		return;
   	  }
   }
-  else if (name && !strcmp (name, "gtk-tooltips")) {
-      if (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width, height, state_type, area))
+  else if (detail && strcmp (detail, "menuitem") == 0) {
+    shadow_type = GTK_SHADOW_NONE;
+      if (xp_theme_draw (window, XP_THEME_ELEMENT_MENUITEM, style, x, y, width, height, state_type, area))
         {
   		return;
         }
   }
-
-  if (detail && strcmp (detail, "menuitem") == 0)
-    shadow_type = GTK_SHADOW_NONE;
-
-  if (detail && !strcmp (detail, "trough"))
+  else if (detail && !strcmp (detail, "trough"))
     {
       if (widget && GTK_IS_PROGRESS_BAR (widget))
         {
@@ -1262,6 +1269,17 @@ draw_box (GtkStyle      *style,
           return;
         }
     }
+  else
+  {
+	 const gchar * name = gtk_widget_get_name (widget);
+
+	  if (name && !strcmp (name, "gtk-tooltips")) {
+     	 if (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width, height, state_type, area))
+     	   {
+  			return;
+    	    }
+   		}
+  }
 
   parent_class->draw_box (style, window, state_type, shadow_type, area,
 			  widget, detail, x, y, width, height);
@@ -1463,6 +1481,13 @@ draw_hline (GtkStyle		*style,
 	    gint		 x2,
 	    gint		 y)
 {
+
+  if (detail && !strcmp(detail, "menuitem")) {
+	  if (xp_theme_draw(window, XP_THEME_ELEMENT_MENU_SEPARATOR, style,
+	  		x1, y, x2, style->ythickness, state_type, area)) {
+			return;
+	  }
+  }
 #if UXTHEME_HAS_LINES
   if (xp_theme_draw(window, XP_THEME_ELEMENT_HLINE, style, x1, y, x2,
 		    style->ythickness, state_type, area))
@@ -1501,6 +1526,29 @@ draw_vline (GtkStyle		*style,
 }
 
 static void
+draw_resize_grip (GtkStyle      *style,
+                       GdkWindow     *window,
+                       GtkStateType   state_type,
+                       GdkRectangle  *area,
+                       GtkWidget     *widget,
+                       const gchar   *detail,
+                       GdkWindowEdge  edge,
+                       gint           x,
+                       gint           y,
+                       gint           width,
+                       gint           height)
+{
+	if (detail && !strcmp(detail, "statusbar")) {
+		if (!xp_theme_draw(window, XP_THEME_ELEMENT_STATUS_GRIPPER, style, x, y, width, height,
+                           state_type, area))
+			return;
+	}
+
+	parent_class->draw_resize_grip (style, window, state_type, area,
+									widget, detail, edge, x, y, width, height);
+}
+
+static void
 draw_handle (GtkStyle        *style,
 	     GdkWindow       *window,
 	     GtkStateType     state_type,
@@ -1519,7 +1567,7 @@ draw_handle (GtkStyle        *style,
       XpThemeElement hndl;
 
       sanitize_size (window, &width, &height);
-  
+
       if (orientation == GTK_ORIENTATION_VERTICAL)
         hndl = XP_THEME_ELEMENT_GRIPPER_V;
       else
@@ -1573,6 +1621,7 @@ wimp_style_class_init (WimpStyleClass *klass)
   style_class->draw_hline = draw_hline;
   style_class->draw_vline = draw_vline;
   style_class->draw_handle = draw_handle;
+  style_class->draw_resize_grip = draw_resize_grip;
 }
 
 GType wimp_type_style = 0;

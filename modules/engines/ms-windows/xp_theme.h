@@ -39,6 +39,9 @@ typedef enum
   XP_THEME_CLASS_REBAR,
   XP_THEME_CLASS_TOOLBAR,
   XP_THEME_CLASS_GLOBALS,
+  XP_THEME_CLASS_MENU,
+  XP_THEME_CLASS_WINDOW,
+  XP_THEME_CLASS_STATUS,
   XP_THEME_CLASS__SIZEOF
 } XpThemeClass;
 
@@ -81,10 +84,22 @@ typedef enum
   XP_THEME_ELEMENT_GRIPPER_V,
   XP_THEME_ELEMENT_CHEVRON,
   XP_THEME_ELEMENT_TOOLBAR,
+  XP_THEME_ELEMENT_MENUITEM,
+  XP_THEME_ELEMENT_MENU_SEPARATOR,
+  XP_THEME_ELEMENT_STATUS_GRIPPER,
+  XP_THEME_ELEMENT_STATUS_PANE,
   XP_THEME_ELEMENT_HLINE,
   XP_THEME_ELEMENT_VLINE,
   XP_THEME_ELEMENT__SIZEOF
 } XpThemeElement;
+
+typedef enum
+{
+	XP_THEME_FONT_CAPTION,
+	XP_THEME_FONT_MENU,
+	XP_THEME_FONT_STATUS,
+	XP_THEME_FONT_MESSAGE
+} XpThemeFont;
 
 void xp_theme_init (void);
 void xp_theme_reset (void);
@@ -94,6 +109,8 @@ gboolean xp_theme_draw (GdkWindow *win, XpThemeElement element,
                         int height, GtkStateType state_type,
                         GdkRectangle *area);
 gboolean xp_theme_is_drawable (XpThemeElement element);
-gboolean xp_theme_get_system_font (int fontId, LOGFONT *lf);
+gboolean xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId, LOGFONT *lf);
+gboolean xp_theme_get_system_color (XpThemeClass klazz, int colorId, DWORD * pColor);
+gboolean xp_theme_get_system_metric (XpThemeClass klazz, int metricId, int * pVal);
 
 #endif /* XP_THEME_H */
