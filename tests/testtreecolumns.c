@@ -198,7 +198,7 @@ main (int argc, char *argv[])
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (left_tree_view), -1,
 					       "Unattached Columns", cell, "text", 0, NULL);
   cell = gtk_cell_renderer_toggle_new ();
-  g_signal_connect (G_OBJECT (cell), "toggled", set_visible, left_tree_view);
+  g_signal_connect_data (G_OBJECT (cell), "toggled", set_visible, left_tree_view, NULL, FALSE, FALSE);
   column = gtk_tree_view_column_new_with_attributes ("Visible", cell, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (left_tree_view), column);
   g_object_unref (G_OBJECT (column));
@@ -259,7 +259,7 @@ main (int argc, char *argv[])
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (top_right_tree_view), -1,
 					       NULL, cell, "text", 0, NULL);
   cell = gtk_cell_renderer_toggle_new ();
-  g_signal_connect (G_OBJECT (cell), "toggled", set_visible, top_right_tree_view);
+  g_signal_connect_data (G_OBJECT (cell), "toggled", set_visible, top_right_tree_view, NULL, FALSE, FALSE);
   column = gtk_tree_view_column_new_with_attributes (NULL, cell, NULL);
   gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (top_right_tree_view), column);
@@ -274,7 +274,7 @@ main (int argc, char *argv[])
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (bottom_right_tree_view), -1,
 					       NULL, cell, "text", 0, NULL);
   cell = gtk_cell_renderer_toggle_new ();
-  g_signal_connect (G_OBJECT (cell), "toggled", set_visible, bottom_right_tree_view);
+  g_signal_connect_data (G_OBJECT (cell), "toggled", set_visible, bottom_right_tree_view, NULL, FALSE, FALSE);
   column = gtk_tree_view_column_new_with_attributes (NULL, cell, NULL);
   gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (bottom_right_tree_view), column);

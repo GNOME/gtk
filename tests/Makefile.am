@@ -34,20 +34,18 @@ noinst_PROGRAMS = 		\
 	testsocket		\
 	testsocket_child	\
 	testtreeview		\
+	testtreefocus		\
 	testtreecolumns
 
 testsocket_DEPENDENCIES = $(DEPS)
 testsocket_child_DEPENDENCIES = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
+testtreefocus_DEPENDENCIES = $(DEPS)
+testtreecolumns_DEPENDENCIES = $(DEPS)
 
 testsocket_LDADD = $(LDADDS)
 testsocket_child_LDADD = $(LDADDS)
 testtreeview_LDADD = $(LDADDS)
-
-testtreeview_SOURCES = testtreeview.c
-
-testtreecolumns_DEPENDENCIES = $(DEPS)
-
+testtreefocus_LDADD = $(LDADDS)
 testtreecolumns_LDADD = $(LDADDS)
 
-testtreecolumns_SOURCES = testtreecolumns.c

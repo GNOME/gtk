@@ -1,3 +1,14 @@
+Thu Mar  8 16:36:00 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_model_get_type): add prerequesite
+	on gobjects.
+
+	* tests/testtreefocus.c (main): New test file.
+
+	* tests/testtreeview.c: update to latest glib changes.
+
+	* tests/testtreecolumns.c: update to latest glib changes.
+
 Thu Mar  8 18:13:20 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/testgtk.c: re-enabled event watcher emission hooks.
