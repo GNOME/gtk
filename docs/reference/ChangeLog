@@ -1,3 +1,8 @@
+2005-01-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/threads.sgml: Improve the threads 
+	examples.  (#161618, Stefan Kost)
+
 2004-12-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkexpander.sgml: Typo fix. (#162219, Masao Mutoh)

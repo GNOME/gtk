@@ -65,12 +65,13 @@ main (int argc, char *argv[])
 
   g_thread_init (NULL);
   gdk_threads_init (<!-- -->);
+  gdk_threads_enter (<!-- -->);
+
   gtk_init (&amp;argc, &amp;argv);
 
   window = create_window (<!-- -->);
   gtk_widget_show (window);
 
-  gdk_threads_enter (<!-- -->);
   gtk_main (<!-- -->);
   gdk_threads_leave (<!-- -->);
 
@@ -193,6 +194,7 @@ int main (int argc, char *argv[])
   /* init threads */
   g_thread_init (NULL);
   gdk_threads_init (<!-- -->);
+  gdk_threads_enter (<!-- -->);
 
   /* init gtk */
   gtk_init(&amp;argc, &amp;argv);
@@ -226,7 +228,6 @@ int main (int argc, char *argv[])
   pthread_create (&amp;no_tid, NULL, argument_thread, &amp;no_args);
 
   /* enter the GTK main loop */
-  gdk_threads_enter (<!-- -->);
   gtk_main (<!-- -->);
   gdk_threads_leave (<!-- -->);
 
