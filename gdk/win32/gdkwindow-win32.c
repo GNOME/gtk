@@ -310,14 +310,14 @@ RegisterGdkClass (GdkWindowType wtype)
   /* initialize once! */
   if (0 == hAppIcon)
     {
-      gchar sLoc [_MAX_PATH+1];
+      gchar sLoc [MAX_PATH+1];
 
-      if (0 != GetModuleFileName (gdk_app_hmodule, sLoc, _MAX_PATH))
+      if (0 != GetModuleFileName (gdk_app_hmodule, sLoc, MAX_PATH))
 	{
 	  hAppIcon = ExtractIcon (gdk_app_hmodule, sLoc, 0);
 	  if (0 == hAppIcon)
 	    {
-	      if (0 != GetModuleFileName (gdk_dll_hinstance, sLoc, _MAX_PATH))
+	      if (0 != GetModuleFileName (gdk_dll_hinstance, sLoc, MAX_PATH))
 		hAppIcon = ExtractIcon (gdk_dll_hinstance, sLoc, 0);
 	    }
 	}
