@@ -46,14 +46,24 @@ typedef struct _GdkPixbuf GdkPixbuf;
 typedef struct _GdkPixbufFrame GdkPixbufFrame;
 typedef struct _GdkPixbufAnimation GdkPixbufAnimation;
 
+/* Handler that must free the pixel array */
 typedef void (* GdkPixbufDestroyNotify) (guchar *pixels, gpointer data);
+
+/* Handler for the last unref operation */
+typedef void (* GdkPixbufLastUnref) (GdkPixbuf *pixbuf, gpointer data);
 
 
 
 /* Reference counting */
 
-GdkPixbuf *gdk_pixbuf_ref   (GdkPixbuf *pixbuf);
-void       gdk_pixbuf_unref (GdkPixbuf *pixbuf);
+GdkPixbuf *gdk_pixbuf_ref      (GdkPixbuf *pixbuf);
+void       gdk_pixbuf_unref    (GdkPixbuf *pixbuf);
+
+void       gdk_pixbuf_set_last_unref_handler (GdkPixbuf          *pixbuf,
+					      GdkPixbufLastUnref  last_unref_fn,
+					      gpointer            last_unref_fn_data);
+
+void       gdk_pixbuf_finalize (GdkPixbuf *pixbuf);
 
 /* GdkPixbuf accessors */
 

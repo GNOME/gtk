@@ -55,8 +55,11 @@ gdk_pixbuf_ref (GdkPixbuf *pixbuf)
  * gdk_pixbuf_unref:
  * @pixbuf: A pixbuf.
  *
- * Removes a reference from a pixbuf, which will be destroyed when the reference
- * count drops to zero.
+ * Removes a reference from a pixbuf.  If this is the last reference for the
+ * @pixbuf, then its last unref handler function will be called; if no handler
+ * has been defined, then the pixbuf will be finalized.
+ *
+ * See also: gdk_pixbuf_set_last_unref_handler().
  **/
 void
 gdk_pixbuf_unref (GdkPixbuf *pixbuf)
@@ -64,14 +67,58 @@ gdk_pixbuf_unref (GdkPixbuf *pixbuf)
 	g_return_if_fail (pixbuf != NULL);
 	g_return_if_fail (pixbuf->ref_count > 0);
 
-	pixbuf->ref_count--;
+	if (pixbuf->ref_count > 1)
+		pixbuf->ref_count--;
+	else if (pixbuf->last_unref_fn)
+		(* pixbuf->last_unref_fn) (pixbuf, pixbuf->last_unref_fn_data);
+	else
+		gdk_pixbuf_finalize (pixbuf);
+}
 
-	if (pixbuf->ref_count == 0) {
-		if (pixbuf->destroy_fn)
-			(* pixbuf->destroy_fn) (pixbuf->pixels, pixbuf->destroy_fn_data);
+/**
+ * gdk_pixbuf_set_last_unref_handler:
+ * @pixbuf: A pixbuf.
+ * @last_unref_fn: Handler function for the last unref.
+ * @last_unref_fn_data: Closure data to pass to the last unref handler function.
+ * 
+ * Sets the handler function for the @pixbuf's last unref handler.  When
+ * gdk_pixbuf_unref() is called on this pixbuf and it has a reference count of
+ * 1, i.e. its last reference, then the last unref handler will be called.  This
+ * function should determine whether to finalize the pixbuf or just continue.
+ * If it wishes to finalize the pixbuf, it should do so by calling
+ * gdk_pixbuf_finalize().
+ *
+ * See also: gdk_pixbuf_finalize().
+ **/
+void
+gdk_pixbuf_set_last_unref_handler (GdkPixbuf *pixbuf, GdkPixbufLastUnref last_unref_fn,
+				   gpointer last_unref_fn_data)
+{
+	g_return_if_fail (pixbuf != NULL);
 
-		g_free (pixbuf);
-	}
+	pixbuf->last_unref_fn = last_unref_fn;
+	pixbuf->last_unref_fn_data = last_unref_fn_data;
+}
+
+/**
+ * gdk_pixbuf_finalize:
+ * @pixbuf: A pixbuf with a reference count of 1.
+ * 
+ * Finalizes a pixbuf by calling its destroy notification function to free the
+ * pixel data and freeing the pixbuf itself.  This function is meant to be
+ * called only from within a #GdkPixbufLastUnref handler function, and the
+ * specified @pixbuf must have a reference count of 1, i.e. its last reference.
+ **/
+void
+gdk_pixbuf_finalize (GdkPixbuf *pixbuf)
+{
+	g_return_if_fail (pixbuf != NULL);
+	g_return_if_fail (pixbuf->ref_count == 1);
+
+	if (pixbuf->destroy_fn)
+		(* pixbuf->destroy_fn) (pixbuf->pixels, pixbuf->destroy_fn_data);
+
+	g_free (pixbuf);
 }
 
 

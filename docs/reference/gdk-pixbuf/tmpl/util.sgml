@@ -27,13 +27,7 @@ Utility and miscellaneous convenience functions.
 @r: 
 @g: 
 @b: 
-@Returns: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
-
+@Returns: 
 
 <!-- ##### FUNCTION gdk_pixbuf_copy_area ##### -->
 <para>
@@ -50,3 +44,9 @@ End:
 @dest_y: 
 
 
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->

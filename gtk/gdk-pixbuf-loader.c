@@ -156,8 +156,9 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
 				GTK_RUN_LAST,
 				parent_class->type,
 				GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, frame_done),
-				gtk_marshal_NONE__NONE,
-				GTK_TYPE_NONE, 0);
+				gtk_marshal_NONE__POINTER,
+				GTK_TYPE_NONE, 1,
+				GTK_TYPE_POINTER);
 
 	pixbuf_loader_signals[ANIMATION_DONE] =
 		gtk_signal_new ("animation_done",

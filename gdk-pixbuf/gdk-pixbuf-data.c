@@ -60,7 +60,7 @@ gdk_pixbuf_new_from_data (const guchar *data, GdkColorspace colorspace, gboolean
 	g_return_val_if_fail (width > 0, NULL);
 	g_return_val_if_fail (height > 0, NULL);
 
-	pixbuf = g_new (GdkPixbuf, 1);
+	pixbuf = g_new0 (GdkPixbuf, 1);
 	pixbuf->ref_count = 1;
 	pixbuf->colorspace = colorspace;
 	pixbuf->n_channels = has_alpha ? 4 : 3;

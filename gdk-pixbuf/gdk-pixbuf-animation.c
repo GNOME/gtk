@@ -167,14 +167,15 @@ gdk_pixbuf_animation_unref (GdkPixbufAnimation *animation)
 /**
  * gdk_pixbuf_animation_get_width:
  * @animation: An animation.
+ *
+ * Queries the width of the bounding box of a pixbuf animation.
  * 
- * Return the width of @animation.
+ * Return value: Width of the bounding box of the animation.
  **/
 int
 gdk_pixbuf_animation_get_width (GdkPixbufAnimation *animation)
 {
-	g_return_val_if_fail (animation != NULL, 0);
-	g_return_val_if_fail (animation->ref_count > 0, 0);
+	g_return_val_if_fail (animation != NULL, -1);
 
 	return animation->width;
 }
@@ -182,14 +183,15 @@ gdk_pixbuf_animation_get_width (GdkPixbufAnimation *animation)
 /**
  * gdk_pixbuf_animation_get_height:
  * @animation: An animation.
+ *
+ * Queries the height of the bounding box of a pixbuf animation.
  * 
- * Return the height of @animation.
+ * Return value: Height of the bounding box of the animation.
  **/
 int
 gdk_pixbuf_animation_get_height (GdkPixbufAnimation *animation)
 {
-	g_return_val_if_fail (animation != NULL, 0);
-	g_return_val_if_fail (animation->ref_count > 0, 0);
+	g_return_val_if_fail (animation != NULL, -1);
 
 	return animation->height;
 }
@@ -197,14 +199,15 @@ gdk_pixbuf_animation_get_height (GdkPixbufAnimation *animation)
 /**
  * gdk_pixbuf_animation_get_num_frames:
  * @animation: An animation.
+ *
+ * Queries the number of frames in a pixbuf animation.
  * 
- * Return the number of frames in @animation.
+ * Return value: Number of frames in the animation.
  **/
 int
 gdk_pixbuf_animation_get_num_frames (GdkPixbufAnimation *animation)
 {
-	g_return_val_if_fail (animation != NULL, 0);
-	g_return_val_if_fail (animation->ref_count > 0, 0);
+	g_return_val_if_fail (animation != NULL, -1);
 
 	return animation->n_frames;
 }
@@ -212,15 +215,16 @@ gdk_pixbuf_animation_get_num_frames (GdkPixbufAnimation *animation)
 /**
  * gdk_pixbuf_animation_get_frames:
  * @animation: An animation.
+ *
+ * Queries the list of frames of an animation.
  * 
- * Return the frames of @animation as a list of
- * GdkPixbufAnimationFrame objects.
+ * Return value: List of frames in the animation; this is a #GList of
+ * #GdkPixbufFrame structures.
  **/
 GList *
 gdk_pixbuf_animation_get_frames (GdkPixbufAnimation *animation)
 {
-	g_return_val_if_fail (animation != NULL, 0);
-	g_return_val_if_fail (animation->ref_count > 0, 0);
+	g_return_val_if_fail (animation != NULL, NULL);
 
 	return animation->frames;
 }

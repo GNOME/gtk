@@ -210,7 +210,7 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 
 	name = image_module->module_name;
 	
-	module_name = g_strconcat ("pixbuf-", name, NULL);
+	module_name = g_strconcat ("pixbufloader-", name, NULL);
 	path = g_module_build_path (PIXBUF_LIBDIR, module_name);
 
 	module = g_module_open (path, G_MODULE_BIND_LAZY);

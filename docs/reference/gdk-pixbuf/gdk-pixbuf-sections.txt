@@ -2,8 +2,9 @@
 
 <SECTION>
 <FILE>gdk-pixbuf</FILE>
+GdkColorspace
 GdkPixbuf
-gdk_pixbuf_get_format
+gdk_pixbuf_get_colorspace
 gdk_pixbuf_get_n_channels
 gdk_pixbuf_get_has_alpha
 gdk_pixbuf_get_bits_per_sample
@@ -15,8 +16,12 @@ gdk_pixbuf_get_rowstride
 
 <SECTION>
 <FILE>refcounting</FILE>
+GdkPixbufDestroyNotify
+GdkPixbufLastUnref
 gdk_pixbuf_ref
 gdk_pixbuf_unref
+gdk_pixbuf_set_last_unref_handler
+gdk_pixbuf_finalize
 </SECTION>
 
 <SECTION>
@@ -26,10 +31,10 @@ gdk_pixbuf_new_from_file
 
 <SECTION>
 <FILE>creating</FILE>
-gdk_pixbuf_new_from_art_pixbuf
 gdk_pixbuf_new
 gdk_pixbuf_new_from_data
 gdk_pixbuf_new_from_xpm_data
+gdk_pixbuf_copy
 </SECTION>
 
 <SECTION>
@@ -60,10 +65,20 @@ GdkPixbufAnimation
 gdk_pixbuf_animation_new_from_file
 gdk_pixbuf_animation_ref
 gdk_pixbuf_animation_unref
+gdk_pixbuf_animation_get_frames
+gdk_pixbuf_animation_get_width
+gdk_pixbuf_animation_get_num_frames
+gdk_pixbuf_animation_get_height
+gdk_pixbuf_frame_get_pixbuf
+gdk_pixbuf_frame_get_action
+gdk_pixbuf_frame_get_y_offset
+gdk_pixbuf_frame_get_delay_time
+gdk_pixbuf_frame_get_x_offset
 </SECTION>
 
 <SECTION>
 <FILE>scaling</FILE>
+GdkInterpType
 gdk_pixbuf_scale
 gdk_pixbuf_composite
 gdk_pixbuf_composite_color

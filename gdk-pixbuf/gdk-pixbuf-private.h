@@ -59,6 +59,12 @@ struct _GdkPixbuf {
 	/* User data for the destroy notification function */
 	gpointer destroy_fn_data;
 
+	/* Last unref handler, determines whether the pixbuf should be finalized */
+	GdkPixbufLastUnref last_unref_fn;
+
+	/* User data for the last unref handler */
+	gpointer last_unref_fn_data;
+
 	/* Do we have an alpha channel? */
 	guint has_alpha : 1;
 };

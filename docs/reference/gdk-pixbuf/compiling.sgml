@@ -1,22 +1,25 @@
   <appendix id="compiling">
-    <title>Compiling the gdk-pixbuf library</title>
+    <title>Compiling the <application>gdk-pixbuf</application>
+    library</title>
 
     <para>
       This appendix describes the special options you can use while
-      compiling the gdk-pixbuf library.
+      compiling the <application>gdk-pixbuf</application> library.
     </para>
 
     <sect1 id="building">
       <title>Building the Library</title>
       <para>
-	The gdk-pixbuf library uses the standard GNU build system,
-	using <productname>autoconf</productname> for package
-	configuration and resolving portability issues,
-	<productname>automake</productname> for building makefiles
+	The <application>gdk-pixbuf</application> library uses the
+	standard GNU build system, using
+	<application>autoconf</application> for package configuration
+	and resolving portability issues,
+	<application>automake</application> for building makefiles
 	that comply with the GNU Coding Standards, and
-	<productname>libtool</productname> for building shared
+	<application>libtool</application> for building shared
 	libraries on multiple platforms.  The normal sequence for
-	compiling and installing the gdk-pixbuf library is thus:
+	compiling and installing the
+	<application>gdk-pixbuf</application> library is thus:
 
 	<literallayout>
 	  <userinput>./configure</userinput>
@@ -26,10 +29,10 @@
       </para>
 
       <para>
-	The standard options provided by <productname>GNU
-	autoconf</productname> may be passed to the
+	The standard options provided by <application>GNU
+	autoconf</application> may be passed to the
 	<command>configure</command> script.  Please see the
-	<productname>autoconf</productname> documentation or run
+	<application>autoconf</application> documentation or run
 	<command>./configure --help</command> for information about
 	the standard options.
       </para>
@@ -40,8 +43,9 @@
 
       <para>
 	In addition to the normal options, the
-	<command>configure</command> script in the gdk-pixbuf library
-	supports these additional arguments:
+	<command>configure</command> script in the
+	<application>gdk-pixbuf</application> library supports these
+	additional arguments:
 
 	<cmdsynopsis>
 	  <command>configure</command>
@@ -63,13 +67,15 @@
 	  <systemitem>--enable-modules</systemitem></title>
 
 	<para>
-	  Normally gdk-pixbuf will try to build the image file format
-	  loaders as little shared libraries that are loaded on
-	  demand.  The <systemitem>--disable-modules</systemitem>
-	  argument indicates that they should all be built statically
-	  into the gdk-pixbuf library instead.  This is useful for
-	  people who need to produce statically-linked binaries.  If
-	  neither <systemitem>--disable-modules</systemitem> nor
+	  Normally <application>gdk-pixbuf</application> will try to
+	  build the image file format loaders as little shared
+	  libraries that are loaded on demand.  The
+	  <systemitem>--disable-modules</systemitem> argument
+	  indicates that they should all be built statically into the
+	  <application>gdk-pixbuf</application> library instead.  This
+	  is useful for people who need to produce statically-linked
+	  binaries.  If neither
+	  <systemitem>--disable-modules</systemitem> nor
 	  <systemitem>--enable-modules</systemitem> is specified, then
 	  the <command>configure</command> script will try to
 	  auto-detect whether shared modules work on your system.
@@ -83,13 +89,13 @@
 	<para>
 	  By default the <command>configure</command> script will try
 	  to auto-detect whether the
-	  <productname>gtk-doc</productname> package is installed.  If
+	  <application>gtk-doc</application> package is installed.  If
 	  it is, then it will use it to extract and build the
-	  documentation for the gdk-pixbuf library.  These options can
-	  be used to explicitly control whether gtk-doc should be used
-	  or not.  If it is not used, the distributed, pre-generated
-	  HTML files will be installed instead of building them on
-	  your machine.
+	  documentation for the <application>gdk-pixbuf</application>
+	  library.  These options can be used to explicitly control
+	  whether gtk-doc should be used or not.  If it is not used,
+	  the distributed, pre-generated HTML files will be installed
+	  instead of building them on your machine.
 	</para>
       </formalpara>
     </sect1>

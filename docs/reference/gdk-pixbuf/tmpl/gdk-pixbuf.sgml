@@ -8,28 +8,32 @@ Information that describes an image.
 
   <para>
     The <structname>GdkPixbuf</structname> structure contains
-    information that describes an image in memory.  It is actually a
-    simple wrapper that adds reference counting capabilities to an
-    #ArtPixBuf structure.
+    information that describes an image in memory.
   </para>
 
 <!-- ##### SECTION See_Also ##### -->
   <para>
-    #ArtPixBuf
   </para>
+
+<!-- ##### ENUM GdkColorspace ##### -->
+  <para>
+    This enumeration defines the color spaces that are supported by
+    the <application>gdk-pixbuf</application> library.  Currently only
+    RGB is supported.
+  </para>
+
+@GDK_COLORSPACE_RGB: Indicates a red/green/blue additive color space.
 
 <!-- ##### STRUCT GdkPixbuf ##### -->
   <para>
-    This is the main structure in the GdkPixbuf library.  This
-    structure adds reference counting capabilities to an #ArtPixBuf
-    structure.
+    This is the main structure in the
+    <application>gdk-pixbuf</application> library.  It is used to
+    represent images.  It contains information about the image's pixel
+    data, its color space, bits per sample, width and height, and the
+    rowstride or number of bytes between rows.
   </para>
 
-@ref_count: Reference count.
-@art_pixbuf: An #ArtPixBuf that actually contains the description of
-the image data.
-
-<!-- ##### FUNCTION gdk_pixbuf_get_format ##### -->
+<!-- ##### FUNCTION gdk_pixbuf_get_colorspace ##### -->
 <para>
 
 </para>
@@ -98,11 +102,11 @@ the image data.
 </para>
 
 @pixbuf: 
-@Returns: <!--
+@Returns: 
+
+<!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
-
-

@@ -125,103 +125,31 @@ GdkPixbufLoader *loader
 <RETURNS>void  </RETURNS>
 GdkPixbufLoader *loader
 </FUNCTION>
-<STRUCT>
-<NAME>GdkPixbuf</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkPixbufFrame</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkPixbufAnimation</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkPixbuf</NAME>
-struct GdkPixbuf {
-	/* Reference count */
-	int ref_count;
-
-	/* Libart pixbuf */
-	ArtPixBuf *art_pixbuf;
-};
-</STRUCT>
 <ENUM>
-<NAME>GdkPixbufFrameAction</NAME>
+<NAME>GdkColorspace</NAME>
 typedef enum {
-	GDK_PIXBUF_FRAME_RETAIN,
-	GDK_PIXBUF_FRAME_DISPOSE,
-	GDK_PIXBUF_FRAME_REVERT
-} GdkPixbufFrameAction;
+	GDK_COLORSPACE_RGB
+} GdkColorspace;
 </ENUM>
 <STRUCT>
+<NAME>GdkPixbuf</NAME>
+</STRUCT>
+<STRUCT>
 <NAME>GdkPixbufFrame</NAME>
-struct GdkPixbufFrame {
-	/* The pixbuf with this frame's image data */
-	GdkPixbuf *pixbuf;
-
-	/* Offsets for overlaying onto the animation's area */
-	int x_offset;
-	int y_offset;
-
-	/* Frame duration in ms */
-	int delay_time;
-
-	/* Overlay mode */
-	GdkPixbufFrameAction action;
-};
 </STRUCT>
 <STRUCT>
 <NAME>GdkPixbufAnimation</NAME>
-struct GdkPixbufAnimation {
-	/* Reference count */
-	int ref_count;
-
-	/* Number of frames */
-        int n_frames;
-
-	/* List of GdkPixbufFrame structures */
-        GList *frames;
-};
 </STRUCT>
-<FUNCTION>
-<NAME>gdk_pixbuf_get_format</NAME>
-<RETURNS>ArtPixFormat  </RETURNS>
-GdkPixbuf *pixbuf
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_get_n_channels</NAME>
-<RETURNS>int  </RETURNS>
-GdkPixbuf *pixbuf
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_get_has_alpha</NAME>
-<RETURNS>int  </RETURNS>
-GdkPixbuf *pixbuf
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_get_bits_per_sample</NAME>
-<RETURNS>int  </RETURNS>
-GdkPixbuf *pixbuf
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_get_pixels</NAME>
-<RETURNS>guchar       *</RETURNS>
-GdkPixbuf *pixbuf
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_get_width</NAME>
-<RETURNS>int  </RETURNS>
-GdkPixbuf *pixbuf
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_get_height</NAME>
-<RETURNS>int  </RETURNS>
-GdkPixbuf *pixbuf
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_get_rowstride</NAME>
-<RETURNS>int  </RETURNS>
-GdkPixbuf *pixbuf
-</FUNCTION>
+<USER_FUNCTION>
+<NAME>GdkPixbufDestroyNotify</NAME>
+<RETURNS>void </RETURNS>
+guchar *pixels, gpointer data
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>GdkPixbufLastUnref</NAME>
+<RETURNS>void </RETURNS>
+GdkPixbuf *pixbuf, gpointer data
+</USER_FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_ref</NAME>
 <RETURNS>GdkPixbuf  *</RETURNS>
@@ -233,14 +161,64 @@ GdkPixbuf *pixbuf
 GdkPixbuf *pixbuf
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_pixbuf_new_from_art_pixbuf</NAME>
-<RETURNS>GdkPixbuf  *</RETURNS>
-ArtPixBuf *art_pixbuf
+<NAME>gdk_pixbuf_set_last_unref_handler</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf          *pixbuf,GdkPixbufLastUnref  last_unref_fn,gpointer            last_unref_fn_data
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_finalize</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_colorspace</NAME>
+<RETURNS>GdkColorspace  </RETURNS>
+const GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_n_channels</NAME>
+<RETURNS>int  </RETURNS>
+const GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_has_alpha</NAME>
+<RETURNS>gboolean  </RETURNS>
+const GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_bits_per_sample</NAME>
+<RETURNS>int  </RETURNS>
+const GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_pixels</NAME>
+<RETURNS>guchar        *</RETURNS>
+const GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_width</NAME>
+<RETURNS>int  </RETURNS>
+const GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_height</NAME>
+<RETURNS>int  </RETURNS>
+const GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_rowstride</NAME>
+<RETURNS>int  </RETURNS>
+const GdkPixbuf *pixbuf
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_new</NAME>
 <RETURNS>GdkPixbuf  *</RETURNS>
-ArtPixFormat format, gboolean has_alpha, int bits_per_sample,int width, int height
+GdkColorspace colorspace, gboolean has_alpha, int bits_per_sample,int width, int height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_copy</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+const GdkPixbuf *pixbuf
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_new_from_file</NAME>
@@ -250,7 +228,7 @@ const char *filename
 <FUNCTION>
 <NAME>gdk_pixbuf_new_from_data</NAME>
 <RETURNS>GdkPixbuf  *</RETURNS>
-guchar *data,ArtPixFormat format,gboolean has_alpha,int width, int height,int rowstride,ArtDestroyNotify dfunc,gpointer dfunc_data
+const guchar *data,GdkColorspace colorspace,gboolean has_alpha,int bits_per_sample,int width, int height,int rowstride,GdkPixbufDestroyNotify destroy_fn,gpointer destroy_fn_data
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_new_from_xpm_data</NAME>
@@ -260,7 +238,12 @@ const char **data
 <FUNCTION>
 <NAME>gdk_pixbuf_add_alpha</NAME>
 <RETURNS>GdkPixbuf  *</RETURNS>
-GdkPixbuf *pixbuf, gboolean substitute_color,guchar r, guchar g, guchar b
+const GdkPixbuf *pixbuf, gboolean substitute_color,guchar r, guchar g, guchar b
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_copy_area</NAME>
+<RETURNS>void  </RETURNS>
+const GdkPixbuf *src_pixbuf,int src_x, int src_y,int width, int height,GdkPixbuf *dest_pixbuf,int dest_x, int dest_y
 </FUNCTION>
 <ENUM>
 <NAME>GdkPixbufAlphaMode</NAME>
@@ -294,40 +277,52 @@ GdkPixbuf *pixbuf,GdkPixmap **pixmap_return, GdkBitmap **mask_return,int alpha_t
 <RETURNS>GdkPixbuf  *</RETURNS>
 GdkPixbuf *dest,GdkDrawable *src, GdkColormap *cmap,int src_x, int src_y,int dest_x, int dest_y,int width, int height
 </FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_copy_area</NAME>
-<RETURNS>void  </RETURNS>
-GdkPixbuf *src_pixbuf,int src_x, int src_y,int width, int height,GdkPixbuf *dest_pixbuf,int dest_x, int dest_y
-</FUNCTION>
+<ENUM>
+<NAME>GdkInterpType</NAME>
+typedef enum {
+	GDK_INTERP_NEAREST,
+	GDK_INTERP_TILES,
+	GDK_INTERP_BILINEAR,
+	GDK_INTERP_HYPER
+} GdkInterpType;
+</ENUM>
 <FUNCTION>
 <NAME>gdk_pixbuf_scale</NAME>
 <RETURNS>void  </RETURNS>
-GdkPixbuf      *src,GdkPixbuf      *dest,int             dest_x,int             dest_y,int             dest_width,int             dest_height,double          offset_x,double          offset_y,double          scale_x,double          scale_y,ArtFilterLevel  filter_level
+const GdkPixbuf *src,GdkPixbuf       *dest,int              dest_x,int              dest_y,int              dest_width,int              dest_height,double           offset_x,double           offset_y,double           scale_x,double           scale_y,GdkInterpType    interp_type
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_composite</NAME>
 <RETURNS>void  </RETURNS>
-GdkPixbuf      *src,GdkPixbuf      *dest,int             dest_x,int             dest_y,int             dest_width,int             dest_height,double          offset_x,double          offset_y,double          scale_x,double          scale_y,ArtFilterLevel  filter_level,int             overall_alpha
+const GdkPixbuf *src,GdkPixbuf       *dest,int              dest_x,int              dest_y,int              dest_width,int              dest_height,double           offset_x,double           offset_y,double           scale_x,double           scale_y,GdkInterpType    interp_type,int              overall_alpha
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_composite_color</NAME>
 <RETURNS>void  </RETURNS>
-GdkPixbuf      *src,GdkPixbuf      *dest,int             dest_x,int             dest_y,int             dest_width,int             dest_height,double          offset_x,double          offset_y,double          scale_x,double          scale_y,ArtFilterLevel  filter_level,int             overall_alpha,int             check_x,int             check_y,int             check_size,art_u32         color1,art_u32         color2
+const GdkPixbuf *src,GdkPixbuf       *dest,int              dest_x,int              dest_y,int              dest_width,int              dest_height,double           offset_x,double           offset_y,double           scale_x,double           scale_y,GdkInterpType    interp_type,int              overall_alpha,int              check_x,int              check_y,int              check_size,guint32          color1,guint32          color2
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_scale_simple</NAME>
 <RETURNS>GdkPixbuf  *</RETURNS>
-GdkPixbuf      *src,int             dest_width,int             dest_height,ArtFilterLevel  filter_level
+const GdkPixbuf *src,int              dest_width,int              dest_height,GdkInterpType    interp_type
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_composite_color_simple</NAME>
 <RETURNS>GdkPixbuf  *</RETURNS>
-GdkPixbuf      *src,int             dest_width,int             dest_height,ArtFilterLevel  filter_level,int             overall_alpha,int             check_size,art_u32         color1,art_u32         color2
+const GdkPixbuf *src,int              dest_width,int              dest_height,GdkInterpType    interp_type,int              overall_alpha,int              check_size,guint32          color1,guint32          color2
 </FUNCTION>
+<ENUM>
+<NAME>GdkPixbufFrameAction</NAME>
+typedef enum {
+	GDK_PIXBUF_FRAME_RETAIN,
+	GDK_PIXBUF_FRAME_DISPOSE,
+	GDK_PIXBUF_FRAME_REVERT
+} GdkPixbufFrameAction;
+</ENUM>
 <FUNCTION>
 <NAME>gdk_pixbuf_animation_new_from_file</NAME>
 <RETURNS>GdkPixbufAnimation  *</RETURNS>
-const char *filename
+const char         *filename
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_animation_ref</NAME>
@@ -338,6 +333,51 @@ GdkPixbufAnimation *animation
 <NAME>gdk_pixbuf_animation_unref</NAME>
 <RETURNS>void  </RETURNS>
 GdkPixbufAnimation *animation
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_animation_get_width</NAME>
+<RETURNS>int  </RETURNS>
+GdkPixbufAnimation *animation
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_animation_get_height</NAME>
+<RETURNS>int  </RETURNS>
+GdkPixbufAnimation *animation
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_animation_get_frames</NAME>
+<RETURNS>GList               *</RETURNS>
+GdkPixbufAnimation *animation
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_animation_get_num_frames</NAME>
+<RETURNS>int  </RETURNS>
+GdkPixbufAnimation *animation
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_frame_get_pixbuf</NAME>
+<RETURNS>GdkPixbuf            *</RETURNS>
+GdkPixbufFrame *frame
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_frame_get_x_offset</NAME>
+<RETURNS>int  </RETURNS>
+GdkPixbufFrame *frame
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_frame_get_y_offset</NAME>
+<RETURNS>int  </RETURNS>
+GdkPixbufFrame *frame
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_frame_get_delay_time</NAME>
+<RETURNS>int  </RETURNS>
+GdkPixbufFrame *frame
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_frame_get_action</NAME>
+<RETURNS>GdkPixbufFrameAction  </RETURNS>
+GdkPixbufFrame *frame
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_preinit</NAME>
@@ -398,7 +438,7 @@ void
 </MACRO>
 <MACRO>
 <NAME>GDK_PIXBUF_MINOR</NAME>
-#define GDK_PIXBUF_MINOR (4)
+#define GDK_PIXBUF_MINOR (7)
 </MACRO>
 <MACRO>
 <NAME>GDK_PIXBUF_MICRO</NAME>
@@ -406,9 +446,82 @@ void
 </MACRO>
 <MACRO>
 <NAME>GDK_PIXBUF_VERSION</NAME>
-#define GDK_PIXBUF_VERSION "0.4.0"
+#define GDK_PIXBUF_VERSION "0.7.0"
 </MACRO>
 <VARIABLE>
 <NAME>gdk_pixbuf_version</NAME>
 extern const char *gdk_pixbuf_version;
 </VARIABLE>
+<STRUCT>
+<NAME>GdkPixbuf</NAME>
+struct GdkPixbuf {
+	/* Reference count */
+	int ref_count;
+
+	/* Color space */
+	GdkColorspace colorspace;
+
+	/* Number of channels, alpha included */
+	int n_channels;
+
+	/* Bits per channel */
+	int bits_per_sample;
+
+	/* Size */
+	int width, height;
+
+	/* Offset between rows */
+	int rowstride;
+
+	/* The pixel array */
+	guchar *pixels;
+
+	/* Destroy notification function; it is supposed to free the pixel array */
+	GdkPixbufDestroyNotify destroy_fn;
+
+	/* User data for the destroy notification function */
+	gpointer destroy_fn_data;
+
+	/* Last unref handler, determines whether the pixbuf should be finalized */
+	GdkPixbufLastUnref last_unref_fn;
+
+	/* User data for the last unref handler */
+	gpointer last_unref_fn_data;
+
+	/* Do we have an alpha channel? */
+	guint has_alpha : 1;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkPixbufFrame</NAME>
+struct GdkPixbufFrame {
+	/* The pixbuf with this frame's image data */
+	GdkPixbuf *pixbuf;
+
+	/* Offsets for overlaying onto the animation's area */
+	int x_offset;
+	int y_offset;
+
+	/* Frame duration in ms */
+	int delay_time;
+
+	/* Overlay mode */
+	GdkPixbufFrameAction action;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkPixbufAnimation</NAME>
+struct GdkPixbufAnimation {
+	/* Reference count */
+	int ref_count;
+
+	/* Number of frames */
+        int n_frames;
+
+	/* List of GdkPixbufFrame structures */
+        GList *frames;
+
+	/* bounding box size */
+	int width, height;
+};
+</STRUCT>

@@ -8,51 +8,65 @@ Application-driven progressive image loading.
   <para>
     #GdkPixbufLoader provides a way for applications to drive the
     process of loading an image, by letting them send the image data
-    directly.  Applications can use this functionality instead of
+    directly to the loader instead of having the loader read the data
+    from a file.  Applications can use this functionality instead of
     gdk_pixbuf_new_from_file() when they need to parse image data in
-    small chunks.  For example, it should be used when reading an image
-    from a (potentially) slow network connection, or when loading an
-    extremely large file.
+    small chunks.  For example, it should be used when reading an
+    image from a (potentially) slow network connection, or when
+    loading an extremely large file.
   </para>
+
   <para>
-    To use #GdkPixbufLoader to load an image, just create a new one, and
-    call gdk_pixbuf_loader_write() to send the data to it.  When done,
-    gdk_pixbuf_loader_close() should be called to end the stream and
-    finalize everything.  The loader will emit two important signals
-    throughout the process.  The first, #"area_prepared", will be called
-    as soon as the image has enough information to determine the size of
-    the image to be used.  It will pass a @GdkPixbuf in.  If you want to
-    use it, you can simply ref it.  In addition, no actual information
-    will be passed in yet, so the pixbuf can be safely filled with any
-    temporary graphics (or an initial color) as needed.  You can also
-    call the gdk_pixbuf_loader_get_pixbuf() once this signal has been
-    emitted and get the same pixbuf.
+    To use #GdkPixbufLoader to load an image, just create a new one,
+    and call gdk_pixbuf_loader_write() to send the data to it.  When
+    done, gdk_pixbuf_loader_close() should be called to end the stream
+    and finalize everything.  The loader will emit two important
+    signals throughout the process.  The first, "<link
+    linkend="GdkPixbufLoader-area-prepared">area_prepared</link>",
+    will be called as soon as the image has enough information to
+    determine the size of the image to be used.  It will pass a
+    @GdkPixbuf in.  If you want to use it, you can simply ref it.  In
+    addition, no actual information will be passed in yet, so the
+    pixbuf can be safely filled with any temporary graphics (or an
+    initial color) as needed.  You can also call the
+    gdk_pixbuf_loader_get_pixbuf() once this signal has been emitted
+    and get the same pixbuf.
   </para>
+
   <para>
-    The other signal, #"area_updated" gets called every
-    time a region is updated.  This way you can update a partially
-    completed image.  Note that you do not know anything about the
-    completeness of an image from the area updated.  For example, in an
-    interlaced image, you need to make several passes before the image
-    is done loading.
+    The other signal, "<link
+    linkend="GdkPixbufLoader-area-updated">area_updated</link>" gets
+    called every time a region is updated.  This way you can update a
+    partially completed image.  Note that you do not know anything
+    about the completeness of an image from the area updated.  For
+    example, in an interlaced image, you need to make several passes
+    before the image is done loading.
   </para>
+
   <refsect2>
-  <title>Loading an animation</title>
+    <title>Loading an animation</title>
+
     <para>
       Loading an animation is a little more complex then loading an
-      image.  In addition to the above signals, there is also a
-      #"frame_done" signal, as well as an #"animation_done" signal.  The
-      first lets the application know that it is dealing with an
-      animation, instead of a static image.  It also passes a
-      #GdkPixbufFrame in the signal.  As before, if you want to keep the
-      frame, you need to ref it.  Once the first #"frame_done" signal
+      image.  In addition to the above signals, there is also a "<link
+      linkend="GdkPixbufLoader-frame-done">frame_done</link>" signal,
+      as well as an "<link
+      linkend="GdkPixbufLoader-animation-done">animation_done</link>"
+      signal.  The first lets the application know that it is dealing
+      with an animation, instead of a static image.  It also passes a
+      #GdkPixbufFrame in the signal.  As before, if you want to keep
+      the frame, you need to ref it.  Once the first "<link
+      linkend="GdkPixbufLoader-frame-done">frame_done</link>" signal
       has been emitted, you can call gdk_pixbuf_loader_get_animation()
-      to get the #GdkPixbufAnimation struct.  Each subsequent frame goes
-      through a similar lifecycle.  For example #"area_prepared" is
-      re-emitted.  Then #"area_updated" is emitted as many times as
-      necessary.  Finally, #"animation_done" is emitted as soon as all
-      frames are done.
-    </para>  
+      to get the #GdkPixbufAnimation struct.  Each subsequent frame
+      goes through a similar lifecycle.  For example "<link
+      linkend="GdkPixbufLoader-area-prepared">area_prepared</link>" is
+      re-emitted.  Then "<link
+      linkend="GdkPixbufLoader-area-updated">area_updated</link>" is
+      emitted as many times as necessary.  Finally, "<link
+      linkend="GdkPixbufLoader-animation-done">animation_done</link>"
+      is emitted as soon as all frames are done.
+    </para>
   </refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -122,12 +136,6 @@ Application-driven progressive image loading.
     areas of an image that is being loaded.
   </para>
 
-@gdkpixbufloader: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-@arg4: 
-<!-- # Unused Parameters # -->
 @loader: Loader which emitted the signal.
 @x: X offset of upper-left corner of the updated area.
 @y: Y offset of upper-left corner of the updated area.
@@ -143,23 +151,23 @@ Application-driven progressive image loading.
     fetch the partially-loaded pixbuf.
   </para>
 
-@gdkpixbufloader: the object which received the signal.
-<!-- # Unused Parameters # -->
 @loader: Loader which emitted the signal.
 
 <!-- ##### SIGNAL GdkPixbufLoader::frame-done ##### -->
-<para>
+  <para>
+    This signal is emitted when a frame is done loading.  It will be
+    emitted for each frame in an animation data stream.
+  </para>
 
-</para>
-
-@gdkpixbufloader: the object which received the signal.
+@loader: Loader which emitted the signal.
+@frame: Frame which just completed loading.
 
 <!-- ##### SIGNAL GdkPixbufLoader::animation-done ##### -->
-<para>
+  <para>
+    This signal is emitted when an animation is done loading.
+  </para>
 
-</para>
-
-@gdkpixbufloader: the object which received the signal.
+@loader: Loader which emitted the signal.
 
 <!-- ##### SIGNAL GdkPixbufLoader::closed ##### -->
   <para>
@@ -169,8 +177,6 @@ Application-driven progressive image loading.
     drives it.
   </para>
 
-@gdkpixbufloader: the object which received the signal.
-<!-- # Unused Parameters # -->
 @loader: Loader which emitted the signal.
 
 <!--

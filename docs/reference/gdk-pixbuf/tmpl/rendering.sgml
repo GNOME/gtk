@@ -6,18 +6,19 @@ Rendering a pixbuf to a GDK drawable.
 
 <!-- ##### SECTION Long_Description ##### -->
   <para>
-    The GdkPixbuf library provides several convenience functions to
-    render pixbufs to GDK drawables.  It uses the GdkRGB to render the
-    image data.
+    The <application>gdk-pixbuf</application> library provides several
+    convenience functions to render pixbufs to GDK drawables.  It uses
+    the GdkRGB to render the image data.
   </para>
 
   <para>
     At this point there is not a standard alpha channel extension for
     the X Window System, so it is not possible to use full opacity
     information when painting images to arbitrary drawables.  The
-    GdkPixbuf convenience functions will threshold the opacity
-    information to create a bi-level clipping mask (black and white),
-    and use that to draw the image onto a drawable.
+    <application>gdk-pixbuf</application> convenience functions will
+    threshold the opacity information to create a bi-level clipping
+    mask (black and white), and use that to draw the image onto a
+    drawable.
   </para>
 
   <important>
@@ -104,13 +105,7 @@ In the future it will do full alpha compositing.
 @dest_y: 
 @width: 
 @height: 
-@alpha_threshold: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
-
+@alpha_threshold: 
 
 <!-- ##### FUNCTION gdk_pixbuf_render_pixmap_and_mask ##### -->
 <para>
@@ -123,3 +118,9 @@ End:
 @alpha_threshold: 
 
 
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->

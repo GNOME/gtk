@@ -15,7 +15,7 @@
 
 <book>
   <bookinfo>
-    <title>The GdkPixbuf Library</title>
+    <title>The <application>gdk-pixbuf</application> Library</title>
 
     <authorgroup>
       <author>
@@ -41,8 +41,9 @@
     <partintro>
       <para>
 	This part presents the class and function reference for the
-	GdkPixbuf library.  Classes are described together with their
-	methods; individual functions are grouped by functional group.
+	<application>gdk-pixbuf</application> library.  Classes are
+	described together with their methods; individual functions
+	are grouped by functional group.
       </para>
     </partintro>
 

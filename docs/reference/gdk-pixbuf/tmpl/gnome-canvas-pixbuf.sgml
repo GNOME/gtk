@@ -217,8 +217,8 @@ Canvas item to display #GdkPixbuf images.
     Determines whether the <link
     linkend="GnomeCanvasPixbuf--width">width</link> argument is taken
     into account when scaling the pixbuf item.  If this argument is
-    %FALSE, then the width value of the pixbuf's #ArtPixBuf will be
-    used instead.  This argument is %FALSE by default.
+    %FALSE, then the width value of the pixbuf will be used instead.
+    This argument is %FALSE by default.
   </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:width_in_pixels ##### -->
@@ -299,4 +299,3 @@ mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
-

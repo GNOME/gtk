@@ -1,9 +1,3 @@
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### FUNCTION gdk_pixbuf_load_module ##### -->
 <para>
 
@@ -13,12 +7,6 @@
 
 <!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Short_Description ##### -->
 
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:height_pixels ##### -->
-<para>
-
-</para>
 
 
 <!-- ##### STRUCT GdkPixbufModule ##### -->
@@ -34,6 +22,52 @@
 @begin_load: 
 @stop_load: 
 @load_increment: 
+
+<!-- ##### ARG GnomeCanvasPixbuf:x_set ##### -->
+  <para>
+    Determines whether the <link
+    linkend="GnomeCanvasPixbuf--x">x</link> argument is used to
+    translate the pixbuf from its logical origin in item-relative
+    coordinates.
+  </para>
+
+
+<!-- ##### USER_FUNCTION ModulePreparedNotifyFunc ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@user_data: 
+
+<!-- ##### FUNCTION gdk_pixbuf_get_module ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@size: 
+@Returns: 
+
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_art_pixbuf ##### -->
+<para>
+
+</para>
+
+@art_pixbuf: 
+@Returns: 
+
+<!-- ##### ARG GnomeCanvasPixbuf:height_pixels ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### ARG GnomeCanvasPixbuf:y_pixels ##### -->
 <para>
@@ -63,15 +97,6 @@
 gdk-pixbuf-io
 
 
-<!-- ##### ARG GnomeCanvasPixbuf:x_set ##### -->
-  <para>
-    Determines whether the <link
-    linkend="GnomeCanvasPixbuf--x">x</link> argument is used to
-    translate the pixbuf from its logical origin in item-relative
-    coordinates.
-  </para>
-
-
 <!-- ##### ARG GnomeCanvasPixbuf:y_set ##### -->
   <para>
     Determines whether the <link
@@ -83,27 +108,18 @@ gdk-pixbuf-io
   </para>
 
 
-<!-- ##### USER_FUNCTION ModulePreparedNotifyFunc ##### -->
-<para>
-
-</para>
-
-@pixbuf: 
-@user_data: 
-
 <!-- ##### ARG GnomeCanvasPixbuf:x_pixels ##### -->
 <para>
 
 </para>
 
 
-<!-- ##### FUNCTION gdk_pixbuf_get_module ##### -->
+<!-- ##### FUNCTION gdk_pixbuf_get_format ##### -->
 <para>
 
 </para>
 
-@buffer: 
-@size: 
+@pixbuf: 
 @Returns: 
 
 <!-- ##### ARG GnomeCanvasPixbuf:width_pixels ##### -->

@@ -6,11 +6,12 @@ Loading a pixbuf from a file.
 
 <!-- ##### SECTION Long_Description ##### -->
   <para>
-    The GdkPixbuf library provides a simple mechanism for loading an
-    image from a file in synchronous fashion.  This means that the
-    library takes control of the application while the file is being
-    loaded; from the user's point of view, the application will block
-    until the image is done loading.
+    The <application>gdk-pixbuf</application> library provides a
+    simple mechanism for loading an image from a file in synchronous
+    fashion.  This means that the library takes control of the
+    application while the file is being loaded; from the user's point
+    of view, the application will block until the image is done
+    loading.
   </para>
 
   <para>
@@ -22,7 +23,7 @@ Loading a pixbuf from a file.
 
 <!-- ##### SECTION See_Also ##### -->
   <para>
-    #GdkPixbufLoader
+    #GdkPixbufLoader.
   </para>
 
 <!-- ##### FUNCTION gdk_pixbuf_new_from_file ##### -->
@@ -31,7 +32,8 @@ Loading a pixbuf from a file.
 </para>
 
 @filename: 
-@Returns: <!--
+@Returns: 
+<!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")

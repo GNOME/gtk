@@ -15,96 +15,96 @@ lib_LTLIBRARIES = 		\
 	libgdk_pixbuf.la	\
 	$(CANVAS_PIXBUF_LIB)
 
-libgnomecanvaspixbuf_la_LDFLAGS = $(EXTRA_GNOME_LIBS)
+libgnomecanvaspixbuf_la_LDFLAGS = -version-info 1:0:0 $(EXTRA_GNOME_LIBS)
 
 libexecdir = $(libdir)/gdk-pixbuf/loaders
 
 #
 # The PNG plugin.
 #
-libpixbuf_png_la_SOURCES = io-png.c
-libpixbuf_png_la_LDFLAGS = -avoid-version -module
-libpixbuf_png_la_LIBADD = $(LIBPNG)
+libpixbufloader_png_la_SOURCES = io-png.c
+libpixbufloader_png_la_LDFLAGS = -version-info 1:0:0 -module
+libpixbufloader_png_la_LIBADD = $(LIBPNG)
 
 #
 # The JPEG loader
 #
-libpixbuf_jpeg_la_SOURCES = io-jpeg.c
-libpixbuf_jpeg_la_LDFLAGS = -avoid-version -module
-libpixbuf_jpeg_la_LIBADD = $(LIBJPEG)
+libpixbufloader_jpeg_la_SOURCES = io-jpeg.c
+libpixbufloader_jpeg_la_LDFLAGS = -version-info 1:0:0 -module
+libpixbufloader_jpeg_la_LIBADD = $(LIBJPEG)
 
 #
 # The XPM loader
 #
-libpixbuf_xpm_la_SOURCES = io-xpm.c
-libpixbuf_xpm_la_LDFLAGS = -avoid-version -module
-libpixbuf_xpm_la_LIBADD =
+libpixbufloader_xpm_la_SOURCES = io-xpm.c
+libpixbufloader_xpm_la_LDFLAGS = -version-info 1:0:0 -module
+libpixbufloader_xpm_la_LIBADD =
 
 #
 # The GIF loader
 #
-libpixbuf_gif_la_SOURCES = io-gif.c
-libpixbuf_gif_la_LDFLAGS = -avoid-version -module
-libpixbuf_gif_la_LIBADD =
+libpixbufloader_gif_la_SOURCES = io-gif.c
+libpixbufloader_gif_la_LDFLAGS = -version-info 1:0:0 -module
+libpixbufloader_gif_la_LIBADD =
 
 #
 # The ICO loader
 #
-libpixbuf_ico_la_SOURCES = io-ico.c
-libpixbuf_ico_la_LDFLAGS = -avoid-version -module
-libpixbuf_ico_la_LIBADD =
+libpixbufloader_ico_la_SOURCES = io-ico.c
+libpixbufloader_ico_la_LDFLAGS = -version-info 1:0:0 -module
+libpixbufloader_ico_la_LIBADD =
 
 #
 # The RAS loader
 #
-libpixbuf_ras_la_SOURCES = io-ras.c
-libpixbuf_ras_la_LDFLAGS = -avoid-version -module
-libpixbuf_ras_la_LIBADD =
+libpixbufloader_ras_la_SOURCES = io-ras.c
+libpixbufloader_ras_la_LDFLAGS = -version-info 1:0:0 -module
+libpixbufloader_ras_la_LIBADD =
 
 #
 # The TIFF loader
 #
-libpixbuf_tiff_la_SOURCES = io-tiff.c
-libpixbuf_tiff_la_LDFLAGS = -avoid-version -module
-libpixbuf_tiff_la_LIBADD = $(LIBTIFF)
+libpixbufloader_tiff_la_SOURCES = io-tiff.c
+libpixbufloader_tiff_la_LDFLAGS = -version-info 1:0:0 -module
+libpixbufloader_tiff_la_LIBADD = $(LIBTIFF)
 
 #
 # The PNM loader
 #
-libpixbuf_pnm_la_SOURCES = io-pnm.c
-libpixbuf_pnm_la_LDFLAGS = -avoid-version -module
-libpixbuf_pnm_la_LIBADD =
+libpixbufloader_pnm_la_SOURCES = io-pnm.c
+libpixbufloader_pnm_la_LDFLAGS = -version-info 1:0:0 -module
+libpixbufloader_pnm_la_LIBADD =
 
 #
 # The BMP loader
 #
-libpixbuf_bmp_la_SOURCES = io-bmp.c
-libpixbuf_bmp_la_LDFLAGS = -avoid-version -module
-libpixbuf_bmp_la_LIBADD =
+libpixbufloader_bmp_la_SOURCES = io-bmp.c
+libpixbufloader_bmp_la_LDFLAGS = -version-info 1:0:0 -module
+libpixbufloader_bmp_la_LIBADD =
 
 if HAVE_PNG
-PNG_LIB =	libpixbuf-png.la
+PNG_LIB = libpixbufloader-png.la
 endif
 
 if HAVE_JPEG
-JPEG_LIB =	libpixbuf-jpeg.la
+JPEG_LIB = libpixbufloader-jpeg.la
 endif
 
-GIF_LIB = libpixbuf-gif.la
+GIF_LIB = libpixbufloader-gif.la
 
-ICO_LIB = libpixbuf-ico.la
+ICO_LIB = libpixbufloader-ico.la
 
-RAS_LIB = libpixbuf-ras.la
+RAS_LIB = libpixbufloader-ras.la
 
 if HAVE_TIFF
-TIFF_LIB =	libpixbuf-tiff.la
+TIFF_LIB = libpixbufloader-tiff.la
 endif
 
-XPM_LIB =	libpixbuf-xpm.la
+XPM_LIB = libpixbufloader-xpm.la
 
-PNM_LIB =	libpixbuf-pnm.la
+PNM_LIB = libpixbufloader-pnm.la
 
-BMP_LIB =   	libpixbuf-bmp.la
+BMP_LIB = libpixbufloader-bmp.la
 
 if BUILD_DYNAMIC_MODULES
 
@@ -125,15 +125,15 @@ extra_sources =
 else
 libexec_LTLIBRARIES = 
 
-extra_sources = $(libpixbuf_png_la_SOURCES) 	\
-		$(libpixbuf_jpeg_la_SOURCES) 	\
-		$(libpixbuf_xpm_la_SOURCES) 	\
-		$(libpixbuf_gif_la_SOURCES) 	\
-		$(libpixbuf_ico_la_SOURCES) 	\
-		$(libpixbuf_ras_la_SOURCES) 	\
-		$(libpixbuf_tiff_la_SOURCES) 	\
-		$(libpixbuf_pnm_la_SOURCES) 	\
-		$(libpixbuf_bmp_la_SOURCES)
+extra_sources = $(libpixbufloader_png_la_SOURCES) 	\
+		$(libpixbufloader_jpeg_la_SOURCES) 	\
+		$(libpixbufloader_xpm_la_SOURCES) 	\
+		$(libpixbufloader_gif_la_SOURCES) 	\
+		$(libpixbufloader_ico_la_SOURCES) 	\
+		$(libpixbufloader_ras_la_SOURCES) 	\
+		$(libpixbufloader_tiff_la_SOURCES) 	\
+		$(libpixbufloader_pnm_la_SOURCES) 	\
+		$(libpixbufloader_bmp_la_SOURCES)
 
 builtin_libraries = 
 endif

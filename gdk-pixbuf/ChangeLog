@@ -1,3 +1,58 @@
+2000-04-12  Federico Mena Quintero  <federico@helixcode.com>
+
+	This comes from an excellent idea by Tim Janik (timj@gtk.org) to
+	hook to the last unref operation.
+
+	* gdk-pixbuf/gdk-pixbuf.c (gdk_pixbuf_set_last_unref_handler): New
+	function to set the last unref handler for a pixbuf.
+	(gdk_pixbuf_finalize): New function to actually finalize a pixbuf.
+	It calls the pixbuf's destroy notification function and frees the
+	GdkPixbuf structure itself.
+	(gdk_pixbuf_unref): Use the last unref function of the pixbuf if
+	available.
+
+	* gdk-pixbuf/gdk-pixbuf-private.h (struct _GdkPixbuf): New fields
+	for the last unref handler and its user data.
+
+	* gdk-pixbuf/gdk-pixbuf-data.c (gdk_pixbuf_new_from_data): Use
+	g_new0() to allocate the pixbuf.
+
+	* gdk-pixbuf/gdk-pixbuf-loader.c (gdk_pixbuf_loader_class_init):
+	Fixed the call to gtk_signal_new() for the "frame_done" signal; it
+	was not specifying the `frame' argument.
+
+	* gdk-pixbuf/gdk-pixbuf-animation.c
+	(gdk_pixbuf_animation_get_width): Fixed docstring.
+	(gdk_pixbuf_animation_get_height): Likewise.
+	(gdk_pixbuf_animation_get_num_frames): Likewise.
+	(gdk_pixbuf_animation_get_frames): Likewise.
+
+	* doc/gdk-pixbuf-sections.txt: Updated with the new functions and
+	types.
+
+	* doc/tmpl/gdk-pixbuf.sgml: Added the description for GdkColorspace.
+
+	* doc/tmpl/scaling.sgml: Added the description for GdkInterpType.
+
+	* doc/tmpl/refcounting.sgml: Updated with the information about
+	the last unref handler.
+
+	* doc/tmpl/*.sgml: Markup tweaks.
+
+	* gdk-pixbuf/Makefile.am (libgnomecanvaspixbuf_la_LDFLAGS): Sigh,
+	update the libtool version number for libgnomecanvaspixbuf as
+	well.
+	(libpixbufloader_*_la_LDFLAGS): The loaders need to be versioned
+	as well, or the old ones won't work with the new stuff.  Also,
+	renamed the modules as follows.
+
+	* gdk-pixbuf/gdk-pixbuf-io.c (gdk_pixbuf_load_module): Now the
+	modules are called "libpixbufloader-<format>.so" instead of
+	"libpixbuf-<format>.so".  They needed renaming so that the new
+	loaders won't overwrite the old ones; even with the versioning
+	stuff, the new .so symlink to the .so.1.0.0 would overwrite the
+	old real .so file.
+
 2000-04-12  Paolo Molaro <lupus@debian.org>
 
 	* .cvsignore, src/.cvsignore: shut up cvs.

@@ -18,6 +18,7 @@ GdkPixbufLoader *gdkpixbufloader
 <NAME>GdkPixbufLoader::frame-done</NAME>
 <RETURNS>void</RETURNS>
 GdkPixbufLoader *gdkpixbufloader
+gpointer  arg1
 </SIGNAL>
 
 <SIGNAL>

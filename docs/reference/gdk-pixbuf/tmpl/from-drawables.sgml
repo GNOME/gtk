@@ -15,7 +15,7 @@ Getting parts of a drawable's image data into a pixbuf.
 
 <!-- ##### SECTION See_Also ##### -->
   <para>
-    #GdkPixbuf, gdk_image_get()
+    gdk_image_get().
   </para>
 
 <!-- ##### FUNCTION gdk_pixbuf_get_from_drawable ##### -->
@@ -32,7 +32,8 @@ Getting parts of a drawable's image data into a pixbuf.
 @dest_y: 
 @width: 
 @height: 
-@Returns: <!--
+@Returns: 
+<!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
