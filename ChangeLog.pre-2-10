@@ -1,3 +1,16 @@
+Wed Jan 26 18:06:07 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_queue_clear_area): Ignore
+	queue_clear on NO_WINDOW widgets during a reparent,
+	since at that point the window and widget heirarchies
+	are out of sync. This stops crashing in some cases
+	(the scrolled window reparent test, for instance), and
+	_probably_ won't cause drawing errors.
+
+	* gtk/testgtk.c: Make the reparenting-a-scrolled-window
+	test do what it was supposed to do and be robust against
+	window closings, etc. (Bug #2443)
+
 Wed Jan 26 16:56:54 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c: Fix return values on mouse events.
