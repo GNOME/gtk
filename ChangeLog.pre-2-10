@@ -1,3 +1,8 @@
+Fri May 28 15:00:01 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c (gtk_widget_set_parent): Add informative
+	messages for common problems.  (#137974, Owen Taylor)
+
 Fri May 28 14:20:17 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkevents-x11.c: Fix off-by-one allocation 
