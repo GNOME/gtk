@@ -5179,7 +5179,7 @@ create_list (GtkWidget *widget)
 				      GTK_POLICY_AUTOMATIC);
 
       list = gtk_list_new ();
-      gtk_list_set_selection_mode (GTK_LIST (list), GTK_SELECTION_EXTENDED);
+      gtk_list_set_selection_mode (GTK_LIST (list), GTK_SELECTION_SINGLE);
       gtk_scrolled_window_add_with_viewport
 	(GTK_SCROLLED_WINDOW (scrolled_win), list);
       gtk_container_set_focus_vadjustment

@@ -1,3 +1,16 @@
+Tue Oct 22 20:02:22 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombo.c: When popping up the list without
+	any selected items, hack the focus on the list to
+	avoid triggering a bug in GtkList when clicking
+	on focused-but-not-selected items (#86700,
+	Zimler Attila, Matthias Clasen) and to keep
+	GtkWindow from selecting the first item.
+
+	* tests/testgtk.c (create_list): Make the initial
+	setting of the selection mode correspond to the option
+	menu.
+
 Wed Oct 23 01:03:43 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Another feature to create truly ugly TreeViews!: style properties

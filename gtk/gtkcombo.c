@@ -503,6 +503,7 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
 static void
 gtk_combo_popup_list (GtkCombo * combo)
 {
+  GtkList *list;
   gint height, width, x, y;
   gint old_width, old_height;
 
@@ -518,6 +519,26 @@ gtk_combo_popup_list (GtkCombo * combo)
       gtk_widget_hide (GTK_SCROLLED_WINDOW (combo->popup)->vscrollbar);
     }
 
+  gtk_combo_update_list (GTK_ENTRY (combo->entry), combo);
+
+  /* We need to make sure some child of combo->popwin
+   * is focused to disable GtkWindow's automatic
+   * "focus-the-first-item" code. If there is no selected
+   * child, we focus the list itself with some hackery.
+   */
+  list = GTK_LIST (combo->list);
+  
+  if (list->selection)
+    {
+      gtk_widget_grab_focus (list->selection->data);
+    }
+  else
+    {
+      GTK_WIDGET_SET_FLAGS (list, GTK_CAN_FOCUS);
+      gtk_widget_grab_focus (list);
+      GTK_WIDGET_UNSET_FLAGS (list, GTK_CAN_FOCUS);
+    }
+  
   gtk_window_move (GTK_WINDOW (combo->popwin), x, y);
   gtk_widget_set_size_request (combo->popwin, width, height);
   gtk_widget_show (combo->popwin);
