@@ -89,6 +89,32 @@ terms specified in this license.
 #include "gtkpacker.h"
 
 
+enum {
+  ARG_0,
+  ARG_SPACING,
+  ARG_D_BORDER_WIDTH,
+  ARG_D_PAD_X,
+  ARG_D_PAD_Y,
+  ARG_D_IPAD_X,
+  ARG_D_IPAD_Y
+};
+
+enum {
+  CHILD_ARG_0,
+  CHILD_ARG_SIDE,
+  CHILD_ARG_ANCHOR,
+  CHILD_ARG_EXPAND,
+  CHILD_ARG_FILL_X,
+  CHILD_ARG_FILL_Y,
+  CHILD_ARG_USE_DEFAULT,
+  CHILD_ARG_BORDER_WIDTH,
+  CHILD_ARG_PAD_X,
+  CHILD_ARG_PAD_Y,
+  CHILD_ARG_I_PAD_X,
+  CHILD_ARG_I_PAD_Y,
+  CHILD_ARG_POSITION
+};
+
 static void gtk_packer_class_init    (GtkPackerClass   *klass);
 static void gtk_packer_init          (GtkPacker        *packer);
 static void gtk_packer_map           (GtkWidget        *widget);
@@ -108,8 +134,22 @@ static void gtk_packer_remove        (GtkContainer   *container,
 static void gtk_packer_foreach       (GtkContainer   *container,
                                       GtkCallback     callback,
                                       gpointer        callback_data);
+static void gtk_packer_set_arg	     (GtkObject      *object,
+				      GtkArg         *arg,
+				      guint           arg_id);
+static void gtk_packer_get_arg	     (GtkObject      *object,
+				      GtkArg         *arg,
+				      guint           arg_id);
+static void gtk_packer_get_child_arg (GtkContainer   *container,
+				      GtkWidget      *child,
+				      GtkArg         *arg,
+				      guint           arg_id);
+static void gtk_packer_set_child_arg (GtkContainer   *container,
+				      GtkWidget      *child,
+				      GtkArg         *arg,
+				      guint           arg_id);
 static GtkType gtk_packer_child_type (GtkContainer   *container);
-
+     
 
 static GtkPackerClass *parent_class;
 
@@ -127,11 +167,11 @@ gtk_packer_get_type (void)
         sizeof (GtkPackerClass),
         (GtkClassInitFunc) gtk_packer_class_init,
         (GtkObjectInitFunc) gtk_packer_init,
-        (GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL
+        (GtkArgSetFunc) gtk_packer_set_arg,
+        (GtkArgGetFunc) gtk_packer_get_arg
       };
 
-      packer_type = gtk_type_unique (gtk_container_get_type (), &packer_info);
+      packer_type = gtk_type_unique (GTK_TYPE_CONTAINER, &packer_info);
     }
   
   return packer_type;
@@ -145,8 +185,28 @@ gtk_packer_class_init (GtkPackerClass *klass)
   
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
-  parent_class = gtk_type_class (gtk_container_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
   
+  gtk_object_add_arg_type ("GtkPacker::spacing", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_SPACING);
+  gtk_object_add_arg_type ("GtkPacker::default_border_width", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_D_BORDER_WIDTH);
+  gtk_object_add_arg_type ("GtkPacker::default_pad_x", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_D_PAD_X);
+  gtk_object_add_arg_type ("GtkPacker::default_pad_y", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_D_PAD_Y);
+  gtk_object_add_arg_type ("GtkPacker::default_ipad_x", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_D_IPAD_X);
+  gtk_object_add_arg_type ("GtkPacker::default_ipad_y", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_D_IPAD_Y);
+
+  gtk_container_add_child_arg_type ("GtkPacker::side", GTK_TYPE_SIDE_TYPE, GTK_ARG_READWRITE, CHILD_ARG_SIDE);
+  gtk_container_add_child_arg_type ("GtkPacker::anchor", GTK_TYPE_ANCHOR_TYPE, GTK_ARG_READWRITE, CHILD_ARG_ANCHOR);
+  gtk_container_add_child_arg_type ("GtkPacker::expand", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_EXPAND);
+  gtk_container_add_child_arg_type ("GtkPacker::fill_x", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_FILL_X);
+  gtk_container_add_child_arg_type ("GtkPacker::fill_y", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_FILL_Y);
+  gtk_container_add_child_arg_type ("GtkPacker::use_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_USE_DEFAULT);
+  gtk_container_add_child_arg_type ("GtkPacker::border_width", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_BORDER_WIDTH);
+  gtk_container_add_child_arg_type ("GtkPacker::pad_x", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_PAD_X);
+  gtk_container_add_child_arg_type ("GtkPacker::pad_y", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_PAD_Y);
+  gtk_container_add_child_arg_type ("GtkPacker::ipad_x", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_I_PAD_X);
+  gtk_container_add_child_arg_type ("GtkPacker::ipad_y", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_I_PAD_Y);
+  gtk_container_add_child_arg_type ("GtkPacker::position", GTK_TYPE_LONG, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
+
   widget_class->map = gtk_packer_map;
   widget_class->unmap = gtk_packer_unmap;
   widget_class->draw = gtk_packer_draw;
@@ -159,12 +219,266 @@ gtk_packer_class_init (GtkPackerClass *klass)
   container_class->remove = gtk_packer_remove;
   container_class->foreach = gtk_packer_foreach;
   container_class->child_type = gtk_packer_child_type;
+  container_class->get_child_arg = gtk_packer_get_child_arg;
+  container_class->set_child_arg = gtk_packer_set_child_arg;
+}
+
+static void
+gtk_packer_set_arg (GtkObject	 *object,
+		    GtkArg       *arg,
+		    guint         arg_id)
+{
+  GtkPacker *packer;
+
+  packer = GTK_PACKER (object);
+
+  switch (arg_id)
+    {
+    case ARG_SPACING:
+      gtk_packer_set_spacing (packer, GTK_VALUE_UINT (*arg));
+      break;
+    case ARG_D_BORDER_WIDTH:
+      gtk_packer_set_default_border_width (packer, GTK_VALUE_UINT (*arg));
+      break;
+    case ARG_D_PAD_X:
+      gtk_packer_set_default_pad (packer,
+				  GTK_VALUE_UINT (*arg),
+				  packer->default_pad_y);
+      break;
+    case ARG_D_PAD_Y:
+      gtk_packer_set_default_pad (packer,
+				  packer->default_pad_x,
+				  GTK_VALUE_UINT (*arg));
+      break;
+    case ARG_D_IPAD_X:
+      gtk_packer_set_default_ipad (packer,
+				   GTK_VALUE_UINT (*arg),
+				   packer->default_i_pad_y);
+      break;
+    case ARG_D_IPAD_Y:
+      gtk_packer_set_default_ipad (packer,
+				   packer->default_i_pad_x,
+				   GTK_VALUE_UINT (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_packer_get_arg (GtkObject	 *object,
+		    GtkArg       *arg,
+		    guint         arg_id)
+{
+  GtkPacker *packer;
+
+  packer = GTK_PACKER (object);
+
+  switch (arg_id)
+    {
+    case ARG_SPACING:
+      GTK_VALUE_UINT (*arg) = packer->spacing;
+      break;
+    case ARG_D_BORDER_WIDTH:
+      GTK_VALUE_UINT (*arg) = packer->default_border_width;
+      break;
+    case ARG_D_PAD_X:
+      GTK_VALUE_UINT (*arg) = packer->default_pad_x;
+      break;
+    case ARG_D_PAD_Y:
+      GTK_VALUE_UINT (*arg) = packer->default_pad_y;
+      break;
+    case ARG_D_IPAD_X:
+      GTK_VALUE_UINT (*arg) = packer->default_i_pad_x;
+      break;
+    case ARG_D_IPAD_Y:
+      GTK_VALUE_UINT (*arg) = packer->default_i_pad_y;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 static GtkType
 gtk_packer_child_type (GtkContainer   *container)
 {
   return GTK_TYPE_WIDGET;
+}
+
+static void
+gtk_packer_set_child_arg (GtkContainer   *container,
+			  GtkWidget      *child,
+			  GtkArg         *arg,
+			  guint           arg_id)
+{
+  GtkPacker *packer;
+  GtkPackerChild *child_info = NULL;
+  
+  packer = GTK_PACKER (container);
+
+  if (arg_id != CHILD_ARG_POSITION)
+    {
+      GList *list;
+      
+      list = packer->children;
+      while (list)
+	{
+	  child_info = list->data;
+	  if (child_info->widget == child)
+	    break;
+	  
+	  list = list->next;
+	}
+      if (!list)
+	return;
+    }
+
+  switch (arg_id)
+    {
+    case CHILD_ARG_SIDE:
+      child_info->side = GTK_VALUE_ENUM (*arg);
+      break;
+    case CHILD_ARG_ANCHOR:
+      child_info->anchor = GTK_VALUE_ENUM (*arg);
+      break;
+    case CHILD_ARG_EXPAND:
+      if (GTK_VALUE_BOOL (*arg))
+	child_info->options |= GTK_PACK_EXPAND;
+      else
+	child_info->options &= ~GTK_PACK_EXPAND;
+      break;
+    case CHILD_ARG_FILL_X:
+      if (GTK_VALUE_BOOL (*arg))
+	child_info->options |= GTK_FILL_X;
+      else
+	child_info->options &= ~GTK_FILL_X;
+      break;
+    case CHILD_ARG_FILL_Y:
+      if (GTK_VALUE_BOOL (*arg))
+	child_info->options |= GTK_FILL_Y;
+      else
+	child_info->options &= ~GTK_FILL_Y;
+      break;
+    case CHILD_ARG_USE_DEFAULT:
+      child_info->use_default = (GTK_VALUE_BOOL (*arg) != 0);
+      break;
+    case CHILD_ARG_BORDER_WIDTH:
+      if (!child_info->use_default)
+	child_info->border_width = GTK_VALUE_UINT (*arg);
+      break;
+    case CHILD_ARG_PAD_X:
+      if (!child_info->use_default)
+	child_info->pad_x = GTK_VALUE_UINT (*arg);
+      break;
+    case CHILD_ARG_PAD_Y:
+      if (!child_info->use_default)
+	child_info->pad_y = GTK_VALUE_UINT (*arg);
+      break;
+    case CHILD_ARG_I_PAD_X:
+      if (!child_info->use_default)
+	child_info->i_pad_x = GTK_VALUE_UINT (*arg);
+      break;
+    case CHILD_ARG_I_PAD_Y:
+      if (!child_info->use_default)
+	child_info->i_pad_y = GTK_VALUE_UINT (*arg);
+      break;
+    case CHILD_ARG_POSITION:
+      gtk_packer_reorder_child (packer,
+				child,
+				GTK_VALUE_LONG (*arg));
+      break;
+    default:
+      break;
+    }
+
+  if (arg_id != CHILD_ARG_POSITION &&
+      GTK_WIDGET_VISIBLE (packer) &&
+      GTK_WIDGET_VISIBLE (child))
+    gtk_widget_queue_resize (child);
+}
+
+static void
+gtk_packer_get_child_arg (GtkContainer   *container,
+			  GtkWidget      *child,
+			  GtkArg         *arg,
+			  guint           arg_id)
+{
+  GtkPacker *packer;
+  GtkPackerChild *child_info = NULL;
+  GList * list;
+  
+  packer = GTK_PACKER (container);
+
+  if (arg_id != CHILD_ARG_POSITION)
+    {
+      list = packer->children;
+      while (list)
+	{
+	  child_info = list->data;
+	  if (child_info->widget == child)
+	    break;
+	  
+	  list = list->next;
+	}
+      if (!list)
+	{
+	  arg->type = GTK_TYPE_INVALID;
+	  return;
+	}
+    }
+
+  switch (arg_id)
+    {
+    case CHILD_ARG_SIDE:
+      GTK_VALUE_ENUM (*arg) = child_info->side;
+      break;
+    case CHILD_ARG_ANCHOR:
+      GTK_VALUE_ENUM (*arg) = child_info->anchor;
+      break;
+    case CHILD_ARG_EXPAND:
+      GTK_VALUE_BOOL (*arg) = (child_info->options & GTK_PACK_EXPAND) != 0;
+      break;
+    case CHILD_ARG_FILL_X:
+      GTK_VALUE_BOOL (*arg) = (child_info->options & GTK_FILL_X) != 0;
+      break;
+    case CHILD_ARG_FILL_Y:
+      GTK_VALUE_BOOL (*arg) = (child_info->options & GTK_FILL_Y) != 0;
+      break;
+    case CHILD_ARG_USE_DEFAULT:
+      GTK_VALUE_BOOL (*arg) = child_info->use_default;
+      break;
+    case CHILD_ARG_BORDER_WIDTH:
+      GTK_VALUE_UINT (*arg) = child_info->border_width;
+      break;
+    case CHILD_ARG_PAD_X:
+      GTK_VALUE_UINT (*arg) = child_info->pad_x;
+      break;
+    case CHILD_ARG_PAD_Y:
+      GTK_VALUE_UINT (*arg) = child_info->pad_y;
+      break;
+    case CHILD_ARG_I_PAD_X:
+      GTK_VALUE_UINT (*arg) = child_info->i_pad_x;
+      break;
+    case CHILD_ARG_I_PAD_Y:
+      GTK_VALUE_UINT (*arg) = child_info->i_pad_y;
+      break;
+    case CHILD_ARG_POSITION:
+      GTK_VALUE_LONG (*arg) = 0;
+      for (list = packer->children; list; list = list->next)
+	{
+	  child_info = list->data;
+	  if (child_info->widget == child)
+	    break;
+	  GTK_VALUE_LONG (*arg)++;
+	}
+      if (!list)
+	GTK_VALUE_LONG (*arg) = -1;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 static void
@@ -186,14 +500,14 @@ gtk_packer_set_spacing (GtkPacker *packer,
   if (spacing != packer->spacing) 
     {
       packer->spacing = spacing;
-      gtk_widget_queue_resize(GTK_WIDGET(packer));
+      gtk_widget_queue_resize (GTK_WIDGET (packer));
     }
 };
 
 GtkWidget*
 gtk_packer_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_packer_get_type ()));
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_PACKER));
 }
 
 static void
@@ -214,7 +528,7 @@ redo_defaults_children (GtkPacker *packer)
 	  child->pad_y = packer->default_pad_y;
 	  child->i_pad_x = packer->default_i_pad_x;
 	  child->i_pad_y = packer->default_i_pad_y;
-	  gtk_widget_queue_resize(GTK_WIDGET(packer));
+	  gtk_widget_queue_resize (GTK_WIDGET (child->widget));
 	}
       list = g_list_next(list);
     }
@@ -234,9 +548,9 @@ gtk_packer_set_default_border_width (GtkPacker *packer,
     }
 }
 void
-gtk_packer_set_default_pad(GtkPacker *packer,
-			   guint      pad_x,
-			   guint      pad_y)
+gtk_packer_set_default_pad (GtkPacker *packer,
+			    guint      pad_x,
+			    guint      pad_y)
 {
   g_return_if_fail (packer != NULL);
   g_return_if_fail (GTK_IS_PACKER (packer));
@@ -251,9 +565,9 @@ gtk_packer_set_default_pad(GtkPacker *packer,
 }
 
 void
-gtk_packer_set_default_ipad(GtkPacker *packer,
-			    guint      i_pad_x,
-			    guint      i_pad_y)
+gtk_packer_set_default_ipad (GtkPacker *packer,
+			     guint      i_pad_x,
+			     guint      i_pad_y)
 {
   g_return_if_fail (packer != NULL);
   g_return_if_fail (GTK_IS_PACKER (packer));
@@ -425,8 +739,72 @@ gtk_packer_configure (GtkPacker       *packer,
 
 }
 
+void
+gtk_packer_reorder_child (GtkPacker *packer,
+			  GtkWidget *child,
+			  gint       position)
+{
+  GList *list;
+
+  g_return_if_fail (packer != NULL);
+  g_return_if_fail (GTK_IS_PACKER (packer));
+  g_return_if_fail (child != NULL);
+
+  list = packer->children;
+  while (list)
+    {
+      GtkPackerChild *child_info;
+
+      child_info = list->data;
+      if (child_info->widget == child)
+	break;
+
+      list = list->next;
+    }
+
+  if (list && packer->children->next)
+    {
+      GList *tmp_list;
+
+      if (list->next)
+	list->next->prev = list->prev;
+      if (list->prev)
+	list->prev->next = list->next;
+      else
+	packer->children = list->next;
+
+      tmp_list = packer->children;
+      while (position && tmp_list->next)
+	{
+	  position--;
+	  tmp_list = tmp_list->next;
+	}
+
+      if (position)
+	{
+	  tmp_list->next = list;
+	  list->prev = tmp_list;
+	  list->next = NULL;
+	}
+      else
+	{
+	  if (tmp_list->prev)
+	    tmp_list->prev->next = list;
+	  else
+	    packer->children = list;
+	  list->prev = tmp_list->prev;
+	  tmp_list->prev = list;
+	  list->next = tmp_list;
+	}
+
+      if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (packer))
+	gtk_widget_queue_resize (child);
+    }
+}
+
 static void 
-gtk_packer_remove (GtkContainer *container, GtkWidget *widget) 
+gtk_packer_remove (GtkContainer *container,
+		   GtkWidget    *widget) 
 {
   GtkPacker *packer;
   GtkPackerChild *child;
@@ -577,6 +955,7 @@ static void
 gtk_packer_size_request (GtkWidget *widget, GtkRequisition *requisition)
 {
   GtkPacker *packer;
+  GtkContainer *container;
   GtkPackerChild *child;
   GList *children;
   gint nvis_vert_children;
@@ -589,6 +968,8 @@ gtk_packer_size_request (GtkWidget *widget, GtkRequisition *requisition)
   g_return_if_fail (requisition != NULL);
   
   packer = GTK_PACKER (widget);
+  container = GTK_CONTAINER (widget);
+
   requisition->width = 0;
   requisition->height = 0;
   nvis_vert_children = 0;
@@ -631,8 +1012,9 @@ gtk_packer_size_request (GtkWidget *widget, GtkRequisition *requisition)
 
       children = g_list_next(children);
     }
-  requisition->width = MAX (maxWidth, width);
-  requisition->height = MAX (maxHeight, height);
+
+  requisition->width = MAX (maxWidth, width) + 2 * container->border_width;
+  requisition->height = MAX (maxHeight, height) + 2 * container->border_width;
 }
 
 static gint
@@ -720,6 +1102,7 @@ static void
 gtk_packer_size_allocate (GtkWidget *widget, GtkAllocation  *allocation)
 {
   GtkPacker *packer;
+  GtkContainer *container;
   GtkAllocation child_allocation;
   GList *list;
   GtkPackerChild *child;
@@ -733,16 +1116,19 @@ gtk_packer_size_allocate (GtkWidget *widget, GtkAllocation  *allocation)
   g_return_if_fail (GTK_IS_PACKER (widget));
   g_return_if_fail (allocation != NULL);
 
+  packer = GTK_PACKER (widget);
+  container = GTK_CONTAINER (widget);
+
   x = y = 0;
 
   widget->allocation = *allocation;
-  packer = GTK_PACKER(widget);
   
-  cavityX = widget->allocation.x;
-  cavityY = widget->allocation.y;
-  cavityWidth = widget->allocation.width;
-  cavityHeight = widget->allocation.height;
-  list = g_list_first(packer->children);
+  cavityX = widget->allocation.x + container->border_width;
+  cavityY = widget->allocation.y + container->border_width;
+  cavityWidth = widget->allocation.width - 2 * container->border_width;
+  cavityHeight = widget->allocation.height - 2 * container->border_width;
+
+  list = g_list_first (packer->children);
   while (list != NULL)
     {
       child = list->data;

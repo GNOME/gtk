@@ -138,10 +138,11 @@ void    gtk_container_add_child_arg_type   (const gchar      *arg_name,
 					    GtkType           arg_type,
 					    guint             arg_flags,
 					    guint             arg_id);
-
+GtkType gtk_container_get_child_arg_type   (const gchar      *arg_name);
+     
 /* Allocate a GtkArg array of size nargs that hold the
  * names and types of the args that can be used with
- * gtk_container_child_arg_get/gtk_container_child_arg_set.
+ * gtk_container_child_arg_getv/gtk_container_child_arg_setv.
  * if (arg_flags!=NULL),
  * (*arg_flags) will be set to point to a newly allocated
  * guint array that holds the flags of the args.
@@ -178,7 +179,10 @@ void    gtk_container_add_with_argv	   (GtkContainer      *container,
 					    GtkWidget	      *widget,
 					    guint	       n_args,
 					    GtkArg	      *args);
-
+void	gtk_container_child_arg_set	   (GtkContainer      *container,
+					    GtkWidget         *child,
+					    ...);
+     
 
 /* Non-public methods */
 void	gtk_container_queue_resize	   (GtkContainer *container);

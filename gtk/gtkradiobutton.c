@@ -35,10 +35,10 @@ static void gtk_radio_button_destroy        (GtkObject            *object);
 static void gtk_radio_button_clicked        (GtkButton            *button);
 static void gtk_radio_button_draw_indicator (GtkCheckButton       *check_button,
 					     GdkRectangle         *area);
-static void gtk_radio_button_set_arg	    (GtkRadioButton	  *radio_button,
+static void gtk_radio_button_set_arg	    (GtkObject		  *object,
 					     GtkArg        	  *arg,
 					     guint         	   arg_id);
-static void gtk_radio_button_get_arg	    (GtkRadioButton	  *radio_button,
+static void gtk_radio_button_get_arg	    (GtkObject		  *object,
 					     GtkArg        	  *arg,
 					     guint         	   arg_id);
 
@@ -99,10 +99,14 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
 }
 
 static void
-gtk_radio_button_set_arg (GtkRadioButton *radio_button,
+gtk_radio_button_set_arg (GtkObject	 *object,
 			  GtkArg         *arg,
 			  guint           arg_id)
 {
+  GtkRadioButton *radio_button;
+
+  radio_button = GTK_RADIO_BUTTON (object);
+
   switch (arg_id)
     {
       GSList *slist;
@@ -120,10 +124,14 @@ gtk_radio_button_set_arg (GtkRadioButton *radio_button,
 }
 
 static void
-gtk_radio_button_get_arg (GtkRadioButton *radio_button,
+gtk_radio_button_get_arg (GtkObject      *object,
 			  GtkArg         *arg,
 			  guint           arg_id)
 {
+  GtkRadioButton *radio_button;
+
+  radio_button = GTK_RADIO_BUTTON (object);
+
   switch (arg_id)
     {
     default:

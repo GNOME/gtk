@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -26,15 +26,18 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_EVENT_BOX(obj)          GTK_CHECK_CAST (obj, gtk_event_box_get_type (), GtkEventBox)
-#define GTK_EVENT_BOX_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_event_box_get_type (), GtkEventBoxClass)
-#define GTK_IS_EVENT_BOX(obj)       GTK_CHECK_TYPE (obj, gtk_event_box_get_type ())
+#define GTK_TYPE_EVENT_BOX		(gtk_event_box_get_type ())
+#define GTK_EVENT_BOX(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_EVENT_BOX, GtkEventBox))
+#define GTK_EVENT_BOX_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_EVENT_BOX, GtkEventBoxClass))
+#define GTK_IS_EVENT_BOX(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_EVENT_BOX))
+#define GTK_IS_EVENT_BOX_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_EVENT_BOX))
 
 
-typedef struct _GtkEventBox       GtkEventBox;
+typedef struct _GtkEventBox	  GtkEventBox;
 typedef struct _GtkEventBoxClass  GtkEventBoxClass;
 
 struct _GtkEventBox
@@ -47,8 +50,8 @@ struct _GtkEventBoxClass
   GtkBinClass parent_class;
 };
 
-guint          gtk_event_box_get_type        (void);
-GtkWidget*     gtk_event_box_new             (void);
+GtkType	       gtk_event_box_get_type	     (void);
+GtkWidget*     gtk_event_box_new	     (void);
 
 #ifdef __cplusplus
 }

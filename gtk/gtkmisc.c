@@ -103,10 +103,10 @@ gtk_misc_set_arg (GtkMisc        *misc,
       gtk_misc_set_alignment (misc, misc->xalign, GTK_VALUE_DOUBLE (*arg));
       break;
     case ARG_XPAD:
-      gtk_misc_set_alignment (misc, GTK_VALUE_INT (*arg), misc->ypad);
+      gtk_misc_set_padding (misc, GTK_VALUE_INT (*arg), misc->ypad);
       break;
     case ARG_YPAD:
-      gtk_misc_set_alignment (misc, misc->xpad, GTK_VALUE_INT (*arg));
+      gtk_misc_set_padding (misc, misc->xpad, GTK_VALUE_INT (*arg));
       break;
     default:
       break;

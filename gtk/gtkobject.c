@@ -76,6 +76,7 @@ static void           gtk_object_finalize      (GtkObject      *object);
 static void           gtk_object_notify_weaks  (GtkObject      *object);
 
 GtkArg*               gtk_object_collect_args  (guint   *nargs,
+						GtkType (*) (const gchar*),
 						va_list  args1,
 						va_list  args2);
 
@@ -619,7 +620,7 @@ gtk_object_new (GtkType type,
   va_start (args1, type);
   va_start (args2, type);
 
-  args = gtk_object_collect_args (&nargs, args1, args2);
+  args = gtk_object_collect_args (&nargs, gtk_object_get_arg_type, args1, args2);
   gtk_object_setv (obj, nargs, args);
   g_free (args);
 
@@ -846,7 +847,7 @@ gtk_object_set (GtkObject *object,
   va_start (args1, object);
   va_start (args2, object);
 
-  args = gtk_object_collect_args (&nargs, args1, args2);
+  args = gtk_object_collect_args (&nargs, gtk_object_get_arg_type, args1, args2);
   gtk_object_setv (object, nargs, args);
   g_free (args);
 
@@ -1001,7 +1002,7 @@ GtkType
 gtk_object_get_arg_type (const gchar *arg_name)
 {
   GtkArgInfo *info;
-  gchar buffer[1024];
+  gchar buffer[128];
   gchar *t;
 
   g_return_val_if_fail (arg_name != NULL, 0);
@@ -1009,18 +1010,18 @@ gtk_object_get_arg_type (const gchar *arg_name)
   if (!arg_info_ht)
     return GTK_TYPE_INVALID;
 
-  if (!arg_name || strlen (arg_name) > 1000)
+  if (!arg_name || strlen (arg_name) > 120)
     {
       /* security audit
        */
       g_warning ("gtk_object_get_arg_type(): argument `arg_name' exceeds maximum size.");
-      return 0;
+      return GTK_TYPE_INVALID;
     }
 
   t = strchr (arg_name, ':');
   if (!t || (t[0] != ':') || (t[1] != ':'))
     {
-      g_warning ("invalid arg name: \"%s\"\n", arg_name);
+      g_warning ("gtk_object_get_arg_type(): invalid arg name: \"%s\"\n", arg_name);
       return GTK_TYPE_INVALID;
     }
 
@@ -1032,7 +1033,7 @@ gtk_object_get_arg_type (const gchar *arg_name)
       arg_name = buffer;
     }
 
-  info = g_hash_table_lookup (arg_info_ht, (gpointer) arg_name);
+  info = g_hash_table_lookup (arg_info_ht, arg_name);
   if (info)
     return info->type;
 
@@ -1360,6 +1361,7 @@ gtk_object_check_class_cast (GtkObjectClass *klass,
 
 GtkArg*
 gtk_object_collect_args (guint   *nargs,
+			 GtkType (*get_arg_type) (const gchar*),
 			 va_list  args1,
 			 va_list  args2)
 {
@@ -1381,7 +1383,7 @@ gtk_object_collect_args (guint   *nargs,
 	  continue;
 	}
 
-      type = gtk_object_get_arg_type (name);
+      type = get_arg_type (name);
 
       switch (GTK_FUNDAMENTAL_TYPE (type))
 	{
@@ -1458,7 +1460,7 @@ gtk_object_collect_args (guint   *nargs,
       for (i = 0; i < n; i++)
 	{
 	  args[i].name = va_arg (args2, char *);
-	  args[i].type = gtk_object_get_arg_type (args[i].name);
+	  args[i].type = get_arg_type (args[i].name);
 
 	  switch (GTK_FUNDAMENTAL_TYPE (args[i].type))
 	    {

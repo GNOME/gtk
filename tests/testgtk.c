@@ -2307,6 +2307,13 @@ entry_toggle_editable (GtkWidget *checkbutton,
 }
 
 static void
+entry_toggle_sensitive (GtkWidget *checkbutton,
+			GtkWidget *entry)
+{
+   gtk_widget_set_sensitive (entry, GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
+static void
 entry_toggle_visibility (GtkWidget *checkbutton,
 			GtkWidget *entry)
 {
@@ -2321,6 +2328,7 @@ create_entry (void)
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *editable_check;
+  GtkWidget *sensitive_check;
   GtkWidget *entry, *cb;
   GtkWidget *button;
   GtkWidget *separator;
@@ -2361,7 +2369,7 @@ create_entry (void)
 
       entry = gtk_entry_new ();
       gtk_entry_set_text (GTK_ENTRY (entry), "hello world");
-      gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
+      gtk_editable_select_region (GTK_EDITABLE (entry), 0, 5);
       gtk_box_pack_start (GTK_BOX (box2), entry, TRUE, TRUE, 0);
       gtk_widget_show (entry);
 
@@ -2386,6 +2394,13 @@ create_entry (void)
 			  GTK_SIGNAL_FUNC(entry_toggle_visibility), entry);
       gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(editable_check), TRUE);
       gtk_widget_show (editable_check);
+
+      sensitive_check = gtk_check_button_new_with_label("Sensitive");
+      gtk_box_pack_start (GTK_BOX (box2), sensitive_check, FALSE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT(sensitive_check), "toggled",
+			  GTK_SIGNAL_FUNC(entry_toggle_sensitive), entry);
+      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(sensitive_check), TRUE);
+      gtk_widget_show (sensitive_check);
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);

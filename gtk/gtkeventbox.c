@@ -33,10 +33,10 @@ static gint gtk_event_box_expose                   (GtkWidget      *widget,
 						   GdkEventExpose *event);
 
 
-guint
+GtkType
 gtk_event_box_get_type (void)
 {
-  static guint event_box_type = 0;
+  static GtkType event_box_type = 0;
 
   if (!event_box_type)
     {

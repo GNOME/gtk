@@ -68,6 +68,8 @@ static void gtk_entry_draw_cursor_on_drawable
 					   GdkDrawable       *drawable);
 static void gtk_entry_style_set	          (GtkWidget         *widget,
 					   GtkStyle          *previous_style);
+static void gtk_entry_state_changed	  (GtkWidget         *widget,
+					   GtkStateType       previous_state);
 static void gtk_entry_queue_draw          (GtkEntry          *entry);
 static gint gtk_entry_timer               (gpointer           data);
 static gint gtk_entry_position            (GtkEntry          *entry,
@@ -250,7 +252,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->key_press_event = gtk_entry_key_press;
   widget_class->focus_in_event = gtk_entry_focus_in;
   widget_class->focus_out_event = gtk_entry_focus_out;
-  widget_class->style_set    = gtk_entry_style_set;
+  widget_class->style_set = gtk_entry_style_set;
+  widget_class->state_changed = gtk_entry_state_changed;
 
   editable_class->insert_text = gtk_entry_insert_text;
   editable_class->delete_text = gtk_entry_delete_text;
@@ -508,8 +511,8 @@ gtk_entry_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 
-  gdk_window_set_background (widget->window, &widget->style->base[GTK_STATE_NORMAL]);
-  gdk_window_set_background (entry->text_area, &widget->style->base[GTK_STATE_NORMAL]);
+  gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+  gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
 
 #ifdef USE_XIM
   if (gdk_im_ready ())
@@ -635,7 +638,7 @@ gtk_entry_draw_focus (GtkWidget *widget)
       else
 	{
 	  gdk_draw_rectangle (widget->window, 
-			      widget->style->base_gc[GTK_WIDGET_STATE(widget)],
+			      widget->style->base_gc[GTK_WIDGET_STATE (widget)],
 			      FALSE, x + 2, y + 2, width - 5, height - 5);
 	}
 
@@ -1284,7 +1287,7 @@ gtk_entry_draw_text (GtkEntry *entry)
       
       if (selection_start_pos > start_pos)
 	gdk_draw_text (drawable, widget->style->font,
-		       widget->style->fg_gc[GTK_STATE_NORMAL],
+		       widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 		       start_xoffset, y,
 		       toprint,
 		       selection_start_pos - start_pos);
@@ -1310,7 +1313,7 @@ gtk_entry_draw_text (GtkEntry *entry)
       
       if (selection_end_pos < end_pos)
 	gdk_draw_text (drawable, widget->style->font,
-		       widget->style->fg_gc[GTK_STATE_NORMAL],
+		       widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 		       selection_end_xoffset, y,
 		       toprint + selection_end_pos - start_pos,
 		       end_pos - selection_end_pos);
@@ -2242,8 +2245,25 @@ gtk_entry_style_set	(GtkWidget      *widget,
       entry->scroll_offset = entry->char_offset[scroll_char];
       gtk_entry_adjust_scroll (entry);
 
-      gdk_window_set_background (widget->window, &widget->style->base[GTK_STATE_NORMAL]);
-      gdk_window_set_background (entry->text_area, &widget->style->base[GTK_STATE_NORMAL]);
+      gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+      gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+    }
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    gdk_window_clear (widget->window);
+}
+
+static void
+gtk_entry_state_changed (GtkWidget      *widget,
+			 GtkStateType    previous_state)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (widget));
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+      gdk_window_set_background (GTK_ENTRY (widget)->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
     }
 
   if (GTK_WIDGET_DRAWABLE (widget))

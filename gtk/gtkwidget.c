@@ -206,6 +206,7 @@ static void gtk_widget_set_style_recurse	 (GtkWidget	*widget,
 						  gpointer	 client_data);
 
 extern GtkArg* gtk_object_collect_args (guint	*nargs,
+					GtkType (*) (const gchar*),
 					va_list	 args1,
 					va_list	 args2);
 
@@ -1006,7 +1007,7 @@ gtk_widget_new (guint type,
   va_start (args1, type);
   va_start (args2, type);
   
-  args = gtk_object_collect_args (&nargs, args1, args2);
+  args = gtk_object_collect_args (&nargs, gtk_object_get_arg_type, args1, args2);
   gtk_object_setv (obj, nargs, args);
   g_free (args);
   
@@ -1090,7 +1091,7 @@ gtk_widget_set (GtkWidget *widget,
   va_start (args1, widget);
   va_start (args2, widget);
   
-  args = gtk_object_collect_args (&nargs, args1, args2);
+  args = gtk_object_collect_args (&nargs, gtk_object_get_arg_type, args1, args2);
   gtk_object_setv (GTK_OBJECT (widget), nargs, args);
   g_free (args);
   

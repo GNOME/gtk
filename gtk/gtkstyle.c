@@ -229,11 +229,14 @@ gtk_style_new (void)
   style->bg[GTK_STATE_SELECTED] = gtk_default_selected_bg;
   style->bg[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_bg;
 
-  for (i = 0; i < 5; i++)
+  for (i = 0; i < 4; i++)
     {
       style->text[i] = style->fg[i];
       style->base[i] = style->white;
     }
+
+  style->base[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_bg;
+  style->text[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_bg;
 
   for (i = 0; i < 5; i++)
     style->bg_pixmap[i] = NULL;

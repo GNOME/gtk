@@ -31,6 +31,12 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  ARG_0,
+  ARG_ACTIVE,
+  ARG_DRAW_INDICATOR
+};
+
 
 static void gtk_toggle_button_class_init (GtkToggleButtonClass *klass);
 static void gtk_toggle_button_init       (GtkToggleButton      *toggle_button);
@@ -40,7 +46,13 @@ static void gtk_toggle_button_released   (GtkButton            *button);
 static void gtk_toggle_button_clicked    (GtkButton            *button);
 static void gtk_toggle_button_enter      (GtkButton            *button);
 static void gtk_toggle_button_leave      (GtkButton            *button);
-
+static void gtk_toggle_button_set_arg	 (GtkObject	       *object,
+					  GtkArg    	       *arg,
+					  guint      		arg_id);
+static void gtk_toggle_button_get_arg	 (GtkObject	       *object,
+					  GtkArg    	       *arg,
+					  guint      		arg_id);
+     
 
 static guint toggle_button_signals[LAST_SIGNAL] = { 0 };
 
@@ -59,8 +71,8 @@ gtk_toggle_button_get_type (void)
 	sizeof (GtkToggleButtonClass),
 	(GtkClassInitFunc) gtk_toggle_button_class_init,
 	(GtkObjectInitFunc) gtk_toggle_button_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	(GtkArgSetFunc) gtk_toggle_button_set_arg,
+        (GtkArgGetFunc) gtk_toggle_button_get_arg,
       };
 
       toggle_button_type = gtk_type_unique (gtk_button_get_type (), &toggle_button_info);
@@ -81,6 +93,9 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
   button_class = (GtkButtonClass*) class;
+
+  gtk_object_add_arg_type ("GtkToggleButton::active", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ACTIVE);
+  gtk_object_add_arg_type ("GtkToggleButton::draw_indicator", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_DRAW_INDICATOR);
 
   toggle_button_signals[TOGGLED] =
     gtk_signal_new ("toggled",
@@ -131,6 +146,51 @@ gtk_toggle_button_new_with_label (const gchar *label)
   gtk_widget_show (label_widget);
 
   return toggle_button;
+}
+
+static void
+gtk_toggle_button_set_arg (GtkObject *object,
+			   GtkArg    *arg,
+			   guint      arg_id)
+{
+  GtkToggleButton *tb;
+
+  tb = GTK_TOGGLE_BUTTON (object);
+
+  switch (arg_id)
+    {
+    case ARG_ACTIVE:
+      gtk_toggle_button_set_state (tb, GTK_VALUE_BOOL (*arg));
+      break;
+    case ARG_DRAW_INDICATOR:
+      gtk_toggle_button_set_mode (tb, GTK_VALUE_BOOL (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_toggle_button_get_arg (GtkObject *object,
+			   GtkArg    *arg,
+			   guint      arg_id)
+{
+  GtkToggleButton *tb;
+
+  tb = GTK_TOGGLE_BUTTON (object);
+
+  switch (arg_id)
+    {
+    case ARG_ACTIVE:
+      GTK_VALUE_BOOL (*arg) = tb->active;
+      break;
+    case ARG_DRAW_INDICATOR:
+      GTK_VALUE_BOOL (*arg) = tb->draw_indicator;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 void

@@ -144,6 +144,9 @@ void       gtk_packer_configure		       (GtkPacker	*packer,
 						guint		 pad_y,
 						guint		 i_pad_x,
 						guint		 i_pad_y);
+void	   gtk_packer_reorder_child	       (GtkPacker	*packer,
+						GtkWidget	*child,
+						gint             position);
 void       gtk_packer_set_spacing	       (GtkPacker	*packer,
 						guint		 spacing);
 void       gtk_packer_set_default_border_width (GtkPacker	*packer,
