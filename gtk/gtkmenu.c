@@ -62,6 +62,7 @@
 #define MENU_SCROLL_TIMEOUT2 50
 
 #define ATTACH_INFO_KEY "gtk-menu-child-attach-info-key"
+#define ATTACHED_MENUS "gtk-attached-menus"
 
 typedef struct _GtkMenuAttachData	GtkMenuAttachData;
 typedef struct _GtkMenuPrivate  	GtkMenuPrivate;
@@ -984,6 +985,7 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
 			   GtkMenuDetachFunc	detacher)
 {
   GtkMenuAttachData *data;
+  GList *list;
   
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (GTK_IS_WIDGET (attach_widget));
@@ -1012,6 +1014,12 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   
   data->detacher = detacher;
   g_object_set_data (G_OBJECT (menu), attach_data_key, data);
+  list = g_object_get_data (G_OBJECT (attach_widget), ATTACHED_MENUS);
+  if (!g_list_find (list, menu))
+    {
+      list = g_list_prepend (list, menu);
+    }
+  g_object_set_data_full (G_OBJECT (attach_widget), ATTACHED_MENUS, list, (GtkDestroyNotify) g_list_free);
   
   if (GTK_WIDGET_STATE (menu) != GTK_STATE_NORMAL)
     gtk_widget_set_state (GTK_WIDGET (menu), GTK_STATE_NORMAL);
@@ -1041,6 +1049,7 @@ void
 gtk_menu_detach (GtkMenu *menu)
 {
   GtkMenuAttachData *data;
+  GList *list;
   
   g_return_if_fail (GTK_IS_MENU (menu));
   
@@ -1059,6 +1068,12 @@ gtk_menu_detach (GtkMenu *menu)
 					menu);
 
   data->detacher (data->attach_widget, menu);
+  list = g_object_steal_data (G_OBJECT (data->attach_widget), ATTACHED_MENUS);
+  list = g_list_remove (list, menu);
+  if (list)
+    g_object_set_data_full (G_OBJECT (data->attach_widget), ATTACHED_MENUS, list, (GtkDestroyNotify) g_list_free);
+  else
+    g_object_set_data (G_OBJECT (data->attach_widget), ATTACHED_MENUS, NULL);
   
   if (GTK_WIDGET_REALIZED (menu))
     gtk_widget_unrealize (GTK_WIDGET (menu));
@@ -4173,3 +4188,26 @@ gtk_menu_set_monitor (GtkMenu *menu,
   
   priv->monitor_num = monitor_num;
 }
+
+/**
+ * gtk_menu_get_for_attach_widget:
+ * @widget: a #GtkWidget
+ *
+ * Returns a list of the menus which are attached to this widget.
+ * This list is owned by GTK+ and must not be modified.
+ *
+ * Return value: the list of menus attached to his widget.
+ *
+ * Since: 2.6
+ **/
+GList*
+gtk_menu_get_for_attach_widget (GtkWidget *widget)
+{
+  GList *list;
+  
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  
+  list = g_object_get_data (G_OBJECT (widget), ATTACHED_MENUS);
+  return list;
+}
+

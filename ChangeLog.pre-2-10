@@ -1,3 +1,9 @@
+2004-05-06  Padraig O'Briain  <padraig.obriain@sun.com>
+
+	* gtk/gtkmenu.h:
+	* gtk/gtkmenu.c: Add new function gtk_menu_get_for_attach_widget.
+	(bug #113112).
+
 Thu May  6 00:24:11 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkactiongroup.h: 
