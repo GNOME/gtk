@@ -672,13 +672,6 @@ gtk_list_button_press (GtkWidget      *widget,
 
       if (event->type == GDK_BUTTON_PRESS)
 	{
-	  if (gdk_pointer_grab (widget->window, TRUE,
-				GDK_POINTER_MOTION_HINT_MASK |
-				GDK_BUTTON1_MOTION_MASK |
-				GDK_BUTTON_RELEASE_MASK,
-				NULL, NULL, event->time))
-	    return FALSE;
-	  
 	  gtk_grab_add (widget);
 	  list->drag_selection = TRUE;
 	}
@@ -1651,11 +1644,8 @@ gtk_list_end_drag_selection (GtkList *list)
 
   list->drag_selection = FALSE;
   if (GTK_WIDGET_HAS_GRAB (list))
-    {
-      gtk_grab_remove (GTK_WIDGET (list));
-      if (gdk_pointer_is_grabbed())
-	gdk_pointer_ungrab (GDK_CURRENT_TIME);
-    }
+    gtk_grab_remove (GTK_WIDGET (list));
+
   if (list->htimer)
     {
       gtk_timeout_remove (list->htimer);

@@ -111,18 +111,23 @@ build_option_menu (OptionMenuItem items[],
   GtkWidget *omenu;
   GtkWidget *menu;
   GtkWidget *menu_item;
+  GSList *group;
   gint i;
 
   omenu = gtk_option_menu_new ();
       
   menu = gtk_menu_new ();
+  group = NULL;
   
   for (i = 0; i < num_items; i++)
     {
-      menu_item = gtk_menu_item_new_with_label (items[i].name);
+      menu_item = gtk_radio_menu_item_new_with_label (group, items[i].name);
       gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
 			  (GtkSignalFunc) items[i].func, data);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+      if (i == history)
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
       gtk_widget_show (menu_item);
     }
 

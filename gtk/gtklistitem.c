@@ -361,6 +361,8 @@ gtk_list_item_realize (GtkWidget *widget)
 			   GDK_EXPOSURE_MASK |
 			   GDK_BUTTON_PRESS_MASK |
 			   GDK_BUTTON_RELEASE_MASK |
+			   GDK_BUTTON1_MOTION_MASK |
+			   GDK_POINTER_MOTION_HINT_MASK |
 			   GDK_KEY_PRESS_MASK |
 			   GDK_KEY_RELEASE_MASK |
 			   GDK_ENTER_NOTIFY_MASK |
@@ -446,17 +448,8 @@ static gint
 gtk_list_item_button_press (GtkWidget      *widget,
 			    GdkEventButton *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_LIST_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  if (event->type == GDK_BUTTON_PRESS)
-    {
-      if (!GTK_WIDGET_HAS_FOCUS (widget))
-	gtk_widget_grab_focus (widget);
-
-      return TRUE;
-    }
+  if (event->type == GDK_BUTTON_PRESS && !GTK_WIDGET_HAS_FOCUS (widget))
+    gtk_widget_grab_focus (widget);
 
   return FALSE;
 }
