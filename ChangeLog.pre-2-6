@@ -1,3 +1,12 @@
+2000-12-05  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkpango-fb.c:
+	Use italic instead of oblique in font aliases.
+	
+	* gdk/linux-fb/gdkrender-fb.c (gdk_fb_fill_span_generic,
+	_gdk_fb_gc_calc_state): Support GDK_XOR, add g_warning for
+	other unsupported functions.
+
 2000-12-04  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkpaned.c (gtk_paned_expose): fix this to be sane

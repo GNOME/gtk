@@ -443,6 +443,15 @@ gdk_fb_fill_span_generic (GdkDrawable *drawable,
 	  spot.green = ~spot.green;
 	  spot.blue = ~spot.blue;
 	}
+      else if (func == GDK_XOR)
+	{
+	  (gc_private->get_color) (drawable, gc, curx, y, &spot);
+	  spot.pixel ^= gc_private->values.foreground.pixel;
+	}
+      else if (func != GDK_COPY)
+	{
+	  g_warning ("Unsupported GdkFunction %d\n", func);
+	}
       else if (ts)
 	{
 	  int wid, hih;
@@ -1165,7 +1174,7 @@ _gdk_fb_gc_calc_state (GdkGC           *gc,
   if (!gc_private->values.clip_mask &&
       !gc_private->values.tile &&
       !gc_private->values.stipple &&
-       gc_private->values.function != GDK_INVERT)
+       gc_private->values.function == GDK_COPY)
     {
       switch (gc_private->depth)
 	{
