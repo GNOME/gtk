@@ -1,3 +1,10 @@
+Fri Apr 16 20:41:43 PDT 1999 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdk.c: #include "gdkkeysyms.h" for gdk_XConvertCase #defines
+
+	* gtk/gtkfontsel.c (gtk_font_selection_create_xlfd): use
+	g_strdup_printf instead of calcing the length separately
+
 Thu Apr 15 01:11:24 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (resync_selection): 

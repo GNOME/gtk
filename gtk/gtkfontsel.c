@@ -3375,7 +3375,6 @@ gtk_font_selection_create_xlfd (gint		  size,
 {
   gchar buffer[16];
   gchar *pixel_size = "*", *point_size = "*", *fontname;
-  gint length;
   
   if (size <= 0)
     return NULL;
@@ -3386,18 +3385,9 @@ gtk_font_selection_create_xlfd (gint		  size,
   else
     point_size = buffer;
   
-  /* Note: be careful here - don't overrun the allocated memory. */
-  length = strlen(foundry) + strlen(family) + strlen(weight) + strlen(slant)
-    + strlen(set_width) + strlen(pixel_size) + strlen(point_size)
-    + strlen(spacing) + strlen(charset)
-    + 1 + 1 + 1 + 1 + 1 + 3 + 1 + 5 + 3
-    + 1 /* for the terminating '\0'. */;
-  
-  fontname = g_new(gchar, length);
-  /* **NOTE**: If you change this string please change length above! */
-  sprintf(fontname, "-%s-%s-%s-%s-%s-*-%s-%s-*-*-%s-*-%s",
-	  foundry, family, weight, slant, set_width, pixel_size,
-	  point_size, spacing, charset);
+  fontname = g_strdup_printf("-%s-%s-%s-%s-%s-*-%s-%s-*-*-%s-*-%s",
+			     foundry, family, weight, slant, set_width,
+			     pixel_size, point_size, spacing, charset);
   return fontname;
 }
 

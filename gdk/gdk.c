@@ -48,6 +48,7 @@
 #include "gdkinput.h"
 #include "gdkx.h"
 #include "gdki18n.h"
+#include "gdkkeysyms.h"
 
 #ifndef X_GETTIMEOFDAY
 #define X_GETTIMEOFDAY(tv)  gettimeofday (tv, NULL)
