@@ -2,7 +2,7 @@
 <book>
 
   <bookinfo>
-    <date>June 21st 2000</date>
+    <date>June 26th 2000</date>
     <title>GTK+ FAQ</title>
     <authorgroup>
       <author>
@@ -726,6 +726,1370 @@ and reinstall gtk+.</para>
 	  bindings for languages such as Eiffel, TOM, Pascal, Pike, etc.</simpara>
 	  </listitem>
 	</itemizedlist>
+      </sect2>
+
+    </sect1>
+  </chapter>
+
+  <!-- ***************************************************************** -->
+  <chapter>
+    <title>Development with GTK+: the begining</title>
+    <sect1>
+      <title></title>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I get started?</title>
+	<para>So, after you have installed GTK+ there are a couple of
+	things that can ease you into developing applications with
+	it. There is the GTK+ Tutorial <ulink
+	url="http://www.gtk.org/tutorial/">
+	http://www.gtk.org/tutorial/</ulink>, which is undergoing
+	development. This will introduce you to writing applications
+	using C.</para>
+
+	<para>The Tutorial doesn't (yet) contain information on all of
+	the widgets that are in GTK+. For example code on how to use
+	the basics of all the GTK+ widgets you should look at the file
+	gtk/testgtk.c (and associated source files) within the GTK+
+	distribution. Looking at these examples will give you a good
+	grounding on what the widgets can do.</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>I tried to compile a small <command>Hello World</command> of mine,
+	but it failed. Any clue?</title>
+	<para>Since you are good at coding, we will not deal with
+	compile time error here :)</para>
+
+	<para>The classic command line to compile a GTK+ based program is</para>
+	<para><literallayout><literal>gcc -o myprog [c files list] `gtk-config --cflags --libs`</literal></literallayout></para>
+
+	<para>You should notice the backquote character which is used
+        in this command line. A common mistake when you start a GTK+
+        based development is to use quote instead of backquotes. If
+        you do so, the compiler will complain about an unknown file
+        called <filename>gtk-config --cflags --libs</filename>. The
+        text in backquotes is an instruction to your shell to
+        substitute the output of executing this text into the
+        commandline.</para>
+
+	<para>The command line above ensure that:</para>
+	<itemizedlist>
+
+	  <listitem><simpara>the correct C compiler flags will be used
+           to compile the program (including the complete C header
+           directory list)</simpara>
+	  </listitem>
+
+	  <listitem><simpara>your program will be linked with the
+	  needed libraries.</simpara>
+	  </listitem>
+	</itemizedlist>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>What about using the <command>make</command>
+	utility?</title>
+
+	<para>This is a sample makefile which compile a GTK+ based
+	program:</para>
+<programlisting role="C">
+# basic GTK+ app makefile
+SOURCES = myprg.c foo.c bar.c
+OBJS    = ${SOURCES:.c=.o}
+CFLAGS  = `gtk-config --cflags`
+LDADD   = `gtk-config --libs`
+CC      = gcc
+PACKAGE = myprg
+
+all : ${OBJS}
+        ${CC} -o ${PACKAGE} ${OBJS} ${LDADD}
+
+.c.o:
+        ${CC} ${CFLAGS} -c $<
+
+# end of file
+</programlisting>
+
+	<para>For more information about the <command>make</command> utility, you
+	should read either the related man page or the relevant info file.</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>I use the backquote stuff in my makefiles, but my make
+	process failed.</title>
+
+	<para>The backquote construction seems to not be accepted by
+        some old <command>make</command> utilities. If you use one of these, the
+        make process will probably fail. In order to have the
+        backquote syntax working again, you should use the GNU make
+        utility (get it on the GNU ftp server at <ulink
+        url="ftp://ftp.gnu.org/">ftp://ftp.gnu.org/"</ulink>).</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>I want to add some configure stuff, how could I do
+	this?</title>
+
+	<para>To use autoconf/automake, you must first install the
+	relevant packages. These are:</para>
+
+	<itemizedlist spacing=Compact>
+	  <listitem><simpara>the m4 preprocessor v1.4 or better</simpara>
+	  </listitem>
+	  <listitem><simpara>autoconf v2.13 or better</simpara>
+	  </listitem>
+	  <listitem><simpara>automake v1.4 or better</simpara>
+	  </listitem>
+	</itemizedlist>
+
+	<para>You'll find these packages on the GNU main ftp server
+	(<ulink url="ftp://ftp.gnu.org/">ftp://ftp.gnu.org/</ulink>)
+	or on any GNU mirror.</para>
+
+	<para>In order to use the powerful autoconf/automake scheme,
+	you must create a configure.in which may look like:</para>
+
+<programlisting role="C">
+dnl Process this file with autoconf to produce a configure script.
+dnl configure.in for a GTK+ based program
+
+AC_INIT(myprg.c)dnl
+AM_INIT_AUTOMAKE(mypkgname,0.0.1)dnl
+AM_CONFIG_HEADER(config.h)dnl
+
+dnl Checks for programs.
+AC_PROG_CC dnl check for the c compiler
+dnl you should add CFLAGS="" here, 'cos it is set to -g by PROG_CC
+
+dnl Checks for libraries.
+AM_PATH_GTK(1.2.0,,AC_MSG_ERROR(mypkgname 0.1 needs GTK))dnl
+
+AC_OUTPUT(
+	Makefile
+)dnl
+</programlisting>
+
+	<para>You must add a Makefile.am file:</para>
+
+<programlisting role="C">
+bin_PROGRAMS    = myprg
+myprg_SOURCES   = myprg.c foo.c bar.c
+INCLUDES        = @GTK_CFLAGS@
+LDADD           = @GTK_LIBS@
+CLEANFILES      = *~
+DISTCLEANFILES  = .deps/*.P
+</programlisting>
+
+	<para>If your project contains more than one subdirectory,
+        you'll have to create one Makefile.am in each directory plus a
+        master Makefile.am which will look like:</para>
+
+<programlisting role="C">
+SUBDIRS         = mydir1 mydir2 mydir3
+</programlisting>
+
+	<para>then, to use these, simply type the following
+	commands:</para>
+
+<programlisting role="C">
+aclocal
+autoheader
+autoconf
+automake --add-missing --include-deps --foreign 
+</programlisting>
+
+	<para>For further information, you should look at the autoconf
+        and the automake documentation (the shipped info files are
+        really easy to understand, and there are plenty of web
+        resources that deal with autoconf and automake).</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>I try to debug my GTK+ application with gdb, but it
+	hangs my X server when I hit some breakpoint. Any
+	Idea?</title>
+
+	<para>From Federico Mena Quintero:
+        <quote>X is not locked up.  It is likely that you are hitting a breakpoint
+        inside a callback that is called from a place in Gtk that has a mouse grab.
+
+	Run your program with the <literal>--sync</literal>
+        option; it will make it easier to debug. Also, you may want to
+        use the console for running the debugger, and just let the
+        program run in another console with the X server.</quote></para>
+
+	<para>Eric Mouw had another solution:
+        <quote>An old terminal connected to an otherwise unused serial
+        port is also great for debugging X programs. Old vt100/vt220
+        terminals are dirt cheap but a bit hard to get (here in The
+        Netherlands, YMMV).</quote></para>
+      </sect2>
+    </sect1>
+  </chapter>
+
+  <!-- ***************************************************************** -->
+  <chapter>
+    <title>Development with GTK+: general questions</title>
+    <sect1>
+      <title></title>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>What widgets are in GTK?</title>
+
+	<para>The GTK+ Tutorial lists the following widgets:</para>
+<programlisting role="C">
+  GtkObject
+   +GtkData
+   | +GtkAdjustment
+   | `GtkTooltips
+   `GtkWidget
+     +GtkContainer
+     | +GtkBin
+     | | +GtkAlignment
+     | | +GtkEventBox
+     | | +GtkFrame
+     | | | `GtkAspectFrame
+     | | +GtkHandleBox
+     | | +GtkItem
+     | | | +GtkListItem
+     | | | +GtkMenuItem
+     | | | | `GtkCheckMenuItem
+     | | | |   `GtkRadioMenuItem
+     | | | `GtkTreeItem
+     | | +GtkViewport
+     | | `GtkWindow
+     | |   +GtkColorSelectionDialog
+     | |   +GtkDialog
+     | |   | `GtkInputDialog
+     | |   `GtkFileSelection
+     | +GtkBox
+     | | +GtkButtonBox
+     | | | +GtkHButtonBox
+     | | | `GtkVButtonBox
+     | | +GtkHBox
+     | | | +GtkCombo
+     | | | `GtkStatusbar
+     | | `GtkVBox
+     | |   +GtkColorSelection
+     | |   `GtkGammaCurve
+     | +GtkButton
+     | | +GtkOptionMenu
+     | | `GtkToggleButton
+     | |   `GtkCheckButton
+     | |     `GtkRadioButton
+     | +GtkCList
+     |   `GtkCTree
+     | +GtkFixed
+     | +GtkList
+     | +GtkMenuShell
+     | | +GtkMenuBar
+     | | `GtkMenu
+     | +GtkNotebook
+     | +GtkPaned
+     | | +GtkHPaned
+     | | `GtkVPaned
+     | +GtkScrolledWindow
+     | +GtkTable
+     | +GtkToolbar
+     | `GtkTree
+     +GtkDrawingArea
+     | `GtkCurve
+     +GtkEditable
+     | +GtkEntry
+     | | `GtkSpinButton
+     | `GtkText
+     +GtkMisc
+     | +GtkArrow
+     | +GtkImage
+     | +GtkLabel
+     | | `GtkTipsQuery
+     | `GtkPixmap
+     +GtkPreview
+     +GtkProgressBar
+     +GtkRange
+     | +GtkScale
+     | | +GtkHScale
+     | | `GtkVScale
+     | `GtkScrollbar
+     |   +GtkHScrollbar
+     |   `GtkVScrollbar
+     +GtkRuler
+     | +GtkHRuler
+     | `GtkVRuler
+     `GtkSeparator
+       +GtkHSeparator
+       `GtkVSeparator
+</programlisting>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>Is GTK+ thread safe? How do I write multi-threaded GTK+
+	applications?</title>
+
+	<para>The GLib library can be used in a thread-safe mode by
+         calling g_thread_init() before making any other GLib
+         calls. In this mode GLib automatically locks all internal
+         data structures as needed.  This does not mean that two
+         threads can simultaneously access, for example, a single hash
+         table, but they can access two different hash tables
+         simultaneously. If two different threads need to access the
+         same hash table, the application is responsible for locking
+         itself.</para>
+
+	<para>When GLib is intialized to be thread-safe, GTK+ is
+         <emphasis>thread aware</emphasis>. There is a single global
+         lock that you must acquire with gdk_threads_enter() before
+         making any GDK calls, and release with gdk_threads_leave()
+         afterwards.</para>
+
+	<para>A minimal main program for a threaded GTK+ application
+         looks like:</para>
+
+<programlisting role="C">
+int
+main (int argc, char *argv[])
+{
+  GtkWidget *window;
+
+  g_thread_init(NULL);
+  gtk_init(&amp;argc, &amp;argv);
+
+  window = create_window();
+  gtk_widget_show(window);
+
+  gdk_threads_enter();
+  gtk_main();
+  gdk_threads_leave();
+
+  return(0);
+}
+</programlisting>
+
+	<para>Callbacks require a bit of attention. Callbacks from
+         GTK+ (signals) are made within the GTK+ lock. However
+         callbacks from GLib (timeouts, IO callbacks, and idle
+         functions) are made outside of the GTK+ lock. So, within a
+         signal handler you do not need to call gdk_threads_enter(),
+         but within the other types of callbacks, you do.</para>
+
+	<para>Erik Mouw contributed the following code example to
+	 illustrate how to use threads within GTK+ programs.</para>
+
+<programlisting role="C">
+/*-------------------------------------------------------------------------
+ * Filename:      gtk-thread.c
+ * Version:       0.99.1
+ * Copyright:     Copyright (C) 1999, Erik Mouw
+ * Author:        Erik Mouw &lt;J.A.K.Mouw@its.tudelft.nl&gt;
+ * Description:   GTK threads example. 
+ * Created at:    Sun Oct 17 21:27:09 1999
+ * Modified by:   Erik Mouw &lt;J.A.K.Mouw@its.tudelft.nl&gt;
+ * Modified at:   Sun Oct 24 17:21:41 1999
+ *-----------------------------------------------------------------------*/
+/*
+ * Compile with:
+ *
+ * cc -o gtk-thread gtk-thread.c `gtk-config --cflags --libs gthread`
+ *
+ * Thanks to Sebastian Wilhelmi and Owen Taylor for pointing out some
+ * bugs.
+ *
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;time.h&gt;
+#include &lt;gtk/gtk.h&gt;
+#include &lt;glib.h&gt;
+#include &lt;pthread.h&gt;
+
+#define YES_IT_IS    (1)
+#define NO_IT_IS_NOT (0)
+
+typedef struct 
+{
+  GtkWidget *label;
+  int what;
+} yes_or_no_args;
+
+G_LOCK_DEFINE_STATIC (yes_or_no);
+static volatile int yes_or_no = YES_IT_IS;
+
+void destroy(GtkWidget *widget, gpointer data)
+{
+  gtk_main_quit();
+}
+
+void *argument_thread(void *args)
+{
+  yes_or_no_args *data = (yes_or_no_args *)args;
+  gboolean say_something;
+
+  for(;;)
+    {
+      /* sleep a while */
+      sleep(rand() / (RAND_MAX / 3) + 1);
+
+      /* lock the yes_or_no_variable */
+      G_LOCK(yes_or_no);
+
+      /* do we have to say something? */
+      say_something = (yes_or_no != data->what);
+
+      if(say_something)
+	{
+	  /* set the variable */
+	  yes_or_no = data->what;
+	}
+
+      /* Unlock the yes_or_no variable */
+      G_UNLOCK(yes_or_no);
+
+      if(say_something)
+	{
+	  /* get GTK thread lock */
+	  gdk_threads_enter();
+
+	  /* set label text */
+	  if(data->what == YES_IT_IS)
+	    gtk_label_set_text(GTK_LABEL(data->label), "O yes, it is!");
+	  else
+	    gtk_label_set_text(GTK_LABEL(data->label), "O no, it isn't!");
+
+	  /* release GTK thread lock */
+	  gdk_threads_leave();
+	}
+    }
+
+  return(NULL);
+}
+
+int main(int argc, char *argv[])
+{
+  GtkWidget *window;
+  GtkWidget *label;
+  yes_or_no_args yes_args, no_args;
+  pthread_t no_tid, yes_tid;
+
+  /* init threads */
+  g_thread_init(NULL);
+
+  /* init gtk */
+  gtk_init(&amp;argc, &amp;argv);
+
+  /* init random number generator */
+  srand((unsigned int)time(NULL));
+
+  /* create a window */
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+  gtk_signal_connect(GTK_OBJECT (window), "destroy",
+		     GTK_SIGNAL_FUNC(destroy), NULL);
+
+  gtk_container_set_border_width(GTK_CONTAINER (window), 10);
+
+  /* create a label */
+  label = gtk_label_new("And now for something completely different ...");
+  gtk_container_add(GTK_CONTAINER(window), label);
+  
+  /* show everything */
+  gtk_widget_show(label);
+  gtk_widget_show (window);
+
+  /* create the threads */
+  yes_args.label = label;
+  yes_args.what = YES_IT_IS;
+  pthread_create(&amp;yes_tid, NULL, argument_thread, &amp;yes_args);
+
+  no_args.label = label;
+  no_args.what = NO_IT_IS_NOT;
+  pthread_create(&amp;no_tid, NULL, argument_thread, &amp;no_args);
+
+  /* enter the GTK main loop */
+  gdk_threads_enter();
+  gtk_main();
+  gdk_threads_leave();
+
+  return(0);
+}
+</programlisting>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>Why does this strange 'x io error' occur when I
+	<literal>fork()</literal> in my GTK+ app?</title>
+
+	<para>This is not really a GTK+ problem, and the problem is
+         not related to <literal>fork()</literal> either. If the 'x io
+         error' occurs then you probably use the <literal>exit()</literal> function
+         in order to exit from the child process.</para>
+
+	<para>When GDK opens an X display, it creates a socket file
+         descriptor. When you use the <literal>exit()</literal>
+         function, you implicitly close all the open file descriptors,
+         and the underlying X library really doesn't like this.</para>
+
+	<para>The right function to use here is
+	<literal>_exit()</literal>.</para> 
+
+	<para>Erik Mouw contributed the following code example to
+	 illustrate handling fork() and exit().</para>
+
+<programlisting role="C">
+/*-------------------------------------------------------------------------
+ * Filename:      gtk-fork.c
+ * Version:       0.99.1
+ * Copyright:     Copyright (C) 1999, Erik Mouw
+ * Author:        Erik Mouw &lt;J.A.K.Mouw@its.tudelft.nl&gt;
+ * Description:   GTK+ fork example
+ * Created at:    Thu Sep 23 21:37:55 1999
+ * Modified by:   Erik Mouw &lt;J.A.K.Mouw@its.tudelft.nl&gt;
+ * Modified at:   Thu Sep 23 22:39:39 1999
+ *-----------------------------------------------------------------------*/
+/*
+ * Compile with:
+ *
+ * cc -o gtk-fork gtk-fork.c `gtk-config --cflags --libs`
+ *
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;signal.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;sys/wait.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;gtk/gtk.h&gt;
+
+void sigchld_handler(int num)
+{
+  sigset_t set, oldset;
+  pid_t pid;
+  int status, exitstatus;
+
+  /* block other incoming SIGCHLD signals */
+  sigemptyset(&amp;set);
+  sigaddset(&amp;set, SIGCHLD);
+  sigprocmask(SIG_BLOCK, &amp;set, &amp;oldset);
+
+  /* wait for child */
+  while((pid = waitpid((pid_t)-1, &amp;status, WNOHANG)) > 0)
+    {
+      if(WIFEXITED(status))
+	{
+	  exitstatus = WEXITSTATUS(status);
+
+	  fprintf(stderr, 
+		  "Parent: child exited, pid = %d, exit status = %d\n", 
+		  (int)pid, exitstatus);
+	}
+      else if(WIFSIGNALED(status))
+	{
+	  exitstatus = WTERMSIG(status);
+
+	  fprintf(stderr,
+		  "Parent: child terminated by signal %d, pid = %d\n",
+		  exitstatus, (int)pid);
+	}
+      else if(WIFSTOPPED(status))
+	{
+	  exitstatus = WSTOPSIG(status);
+
+	  fprintf(stderr,
+		  "Parent: child stopped by signal %d, pid = %d\n",
+		  exitstatus, (int)pid);
+	}
+      else
+	{
+	  fprintf(stderr,
+		  "Parent: child exited magically, pid = %d\n",
+		  (int)pid);
+	}
+    }
+
+  /* re-install the signal handler (some systems need this) */
+  signal(SIGCHLD, sigchld_handler);
+  
+  /* and unblock it */
+  sigemptyset(&amp;set);
+  sigaddset(&amp;set, SIGCHLD);
+  sigprocmask(SIG_UNBLOCK, &amp;set, &amp;oldset);
+}
+
+gint delete_event(GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+  return(FALSE);
+}
+
+void destroy(GtkWidget *widget, gpointer data)
+{
+  gtk_main_quit();
+}
+
+void fork_me(GtkWidget *widget, gpointer data)
+{
+  pid_t pid;
+
+  pid = fork();
+
+  if(pid == -1)
+    {
+      /* ouch, fork() failed */
+      perror("fork");
+      exit(-1);
+    }
+  else if(pid == 0)
+    {
+      /* child */
+      fprintf(stderr, "Child: pid = %d\n", (int)getpid());
+
+      execlp("ls", "ls", "-CF", "/", NULL);
+      
+      /* if exec() returns, there is something wrong */
+      perror("execlp");
+
+      /* exit child. note the use of _exit() instead of exit() */
+      _exit(-1);
+    }
+  else
+    {
+      /* parent */
+      fprintf(stderr, "Parent: forked a child with pid = %d\n", (int)pid);
+    }
+}
+
+int main(int argc, char *argv[])
+{
+  GtkWidget *window;
+  GtkWidget *button;
+
+  gtk_init(&amp;argc, &amp;argv);
+
+  /* the basic stuff: make a window and set callbacks for destroy and
+   * delete events 
+   */
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+  gtk_signal_connect(GTK_OBJECT (window), "delete_event",
+		     GTK_SIGNAL_FUNC(delete_event), NULL);
+          
+  gtk_signal_connect(GTK_OBJECT (window), "destroy",
+		     GTK_SIGNAL_FUNC(destroy), NULL);
+
+#if (GTK_MAJOR_VERSION == 1) && (GTK_MINOR_VERSION == 0)
+  gtk_container_border_width(GTK_CONTAINER (window), 10);
+#else  
+  gtk_container_set_border_width(GTK_CONTAINER (window), 10);
+#endif
+
+  /* add a button to do something usefull */
+  button = gtk_button_new_with_label("Fork me!");
+          
+  gtk_signal_connect(GTK_OBJECT (button), "clicked",
+		     GTK_SIGNAL_FUNC(fork_me), NULL);
+
+  gtk_container_add(GTK_CONTAINER(window), button);
+          
+  /* show everything */
+  gtk_widget_show (button);
+  gtk_widget_show (window);
+
+
+  /* install a signal handler for SIGCHLD signals */
+  signal(SIGCHLD, sigchld_handler);
+
+  
+  /* main loop */
+  gtk_main ();
+
+  exit(0);         
+}
+</programlisting>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>Why don't the contents of a button move when the button
+	is pressed? Here's a patch to make it work that way...</title>
+
+	<para>From: Peter Mattis
+         <quote>The reason buttons don't move their child down and to
+          the right when they are depressed is because I don't think
+          that's what is happening visually. My view of buttons is
+          that you are looking at them straight on. That is, the user
+          interface lies in a plane and you're above it looking
+          straight at it. When a button gets pressed it moves directly
+          away from you. To be absolutely correct I guess the child
+          should actually shrink a tiny amount. But I don't see why
+          the child should shift down and to the left. Remember, the
+          child is supposed to be attached to the buttons surface. Its
+          not good for it to appear like the child is slipping on the
+          surface of the button.
+
+          On a more practical note, I did implement this at one point
+          and determined it didn't look good and removed
+          it.</quote></para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How to I identifiy a widgets top level window or other
+	ancestor?</title>
+
+	<para>There are a couple of ways to find the top level parent
+         of a widget. The easier way is to call the
+         <literal>gtk_widget_top_level()</literal> function that
+         returns pointer to a GtkWidget that is the top level
+         window.</para>
+
+	<para>A more complicated way to do this (but less limited, as
+         it allows the user to get the closest ancestor of a known type) is to use
+         <literal>gtk_widget_get_ancestor()</literal> as in:</para>
+
+<programlisting role="C">
+      GtkWidget       *widget;
+      widget = gtk_widget_get_ancestor(w, GTK_TYPE_WINDOW);
+</programlisting>
+
+	<para>Since virtually all the GTK_TYPEs can be used as the
+         second parameter of this function, you can get any parent
+         widget of a particular widget. Suppose you have an hbox which
+         contains a vbox, which in turn contains some other atomic
+         widget (entry, label, etc. To find the master hbox using the
+         <literal>entry</literal> widget simply use:</para>
+
+<programlisting role="C">
+      GtkWidget       *hbox;
+      hbox = gtk_widget_get_ancestor(w, GTK_TYPE_HBOX);
+</programlisting>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I get the Window ID of a GtkWindow?</title>
+
+	<para>The actual Gdk/X window will be created when the widget
+	 gets realized. You can get the Window ID with:</para>
+
+<programlisting role="C">
+#include &lt;gdk/gdkx.h&gt;
+
+Window xwin = GDK_WINDOW_XWINDOW (GTK_WIDGET (my_window)->window);
+</programlisting>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I catch a double click event (in a list widget,
+	for example)?</title>
+
+	<para>Tim Janik wrote to gtk-list (slightly modified):</para>
+
+	<para>Define a signal handler:</para>
+
+<programlisting role="C">
+gint
+signal_handler_event(GtkWiget *widget, GdkEvenButton *event, gpointer func_data)
+{
+  if (GTK_IS_LIST_ITEM(widget) &&
+       (event->type==GDK_2BUTTON_PRESS ||
+        event->type==GDK_3BUTTON_PRESS) ) {
+    printf("I feel %s clicked on button %d\",
+           event->type==GDK_2BUTTON_PRESS ? "double" : "triple",
+           event->button);
+  }
+
+  return FALSE;
+}</programlisting>
+
+	<para>And connect the handler to your object:</para>
+
+<programlisting role="C">
+{
+  /* list, list item init stuff */     
+
+  gtk_signal_connect(GTK_OBJECT(list_item),
+                     "button_press_event",
+                     GTK_SIGNAL_FUNC(signal_handler_event),
+                     NULL);
+
+  /* and/or */
+
+  gtk_signal_connect(GTK_OBJECT(list_item),
+                     "button_release_event",
+                     GTK_SIGNAL_FUNC(signal_handler_event),
+                     NULL);
+
+  /* something else */
+}
+</programlisting>
+
+	<para>and, Owen Taylor wrote:
+         <quote>Note that a single button press will be received
+         beforehand, and if you are doing this for a button, you will
+         therefore also get a "clicked" signal for the button. (This
+         is going to be true for any toolkit, since computers aren't
+         good at reading one's mind.)</quote></para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>By the way, what are the differences between signals
+	and events?</title>
+
+	<para>First of all, Havoc Pennington gives a rather complete
+         description of the differences between events and signals in
+         his free book (two chapters can be found at <ulink
+         url="http://www106.pair.com/rhp/sample_chapters.html">
+         http://www106.pair.com/rhp/sample_chapters.html</ulink>).</para>
+
+	<para>Moreover, Havoc posted this to the <literal>gtk-list</literal>
+         <quote>Events are a stream of messages received from the X
+         server. They drive the Gtk main loop; which more or less
+         amounts to "wait for events, process them" (not exactly, it
+         is really more general than that and can wait on many
+         different input streams at once). Events are a Gdk/Xlib
+         concept.</quote></para>
+
+  <para><quote>Signals are a feature of GtkObject and its subclasses. They have
+  nothing to do with any input stream; really a signal is just a way
+  to keep a list of callbacks around and invoke them ("emit" the
+  signal). There are lots of details and extra features of
+  course. Signals are emitted by object instances, and are entirely
+  unrelated to the Gtk main loop.  Conventionally, signals are emitted
+  "when something changes" about the object emitting the signal.</quote></para>
+
+  <para><quote>Signals and events only come together because GtkWidget happens to
+  emit signals when it gets events. This is purely a convenience, so
+  you can connect callbacks to be invoked when a particular widget
+  receives a particular event. There is nothing about this that makes
+  signals and events inherently related concepts, any more than
+  emitting a signal when you click a button makes button clicking and
+  signals related concepts.</quote></para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>Data I pass to the <literal>delete_event</literal> (or other event)
+	handler gets corrupted.</title>
+
+	<para>All event handlers take an additional argument which
+         contains information about the event that triggered the
+         handler. So, a <literal>delete_event</literal> handler must
+         be declared as:</para>
+
+
+<programlisting role="C">
+gint delete_event_handler (GtkWidget   *widget,
+                           GdkEventAny *event,
+                           gpointer     data);
+</programlisting>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>I have my signal connected to the the (whatever) event,
+	but it seems I don't catch it. What's wrong?</title>
+
+	<para>There is some special initialisation to do in order to
+         catch some particular events. In fact, you must set the
+         correct event mask bit of your widget before getting some
+         particular events.</para>
+
+	<para>For example,</para>
+
+<programlisting role="C">
+  gtk_widget_add_events(window, GDK_KEY_RELEASE_MASK);
+</programlisting>
+
+	<para>lets you catch the key release events. If you want to
+	catch every events, simply us the GDK_ALL_EVENTS_MASK event
+	mask.</para>
+
+	<para>All the event masks are defined in the
+	<filename>gdktypes.h</filename> file.</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>I need to add a new signal to a GTK+ widget. Any
+	idea?</title>
+
+	<para>If the signal you want to add may be beneficial for
+         other GTK+ users, you may want to submit a patch that
+         presents your changes. Check the tutorial for more
+         information about adding signals to a widget class.</para>
+
+	<para>If you don't think it is the case or if your patch is
+         not applied you'll have to use the
+         <literal>gtk_object_class_user_signal_new</literal>
+         function. <literal>gtk_object_class_user_signal_new</literal> allows you to
+         add a new signal to a predefined GTK+ widget without any
+         modification of the GTK+ source code. The new signal can be
+         emited with <literal>gtk_signal_emit</literal> and can be
+         handled in the same way as other signals.</para>
+
+	<para>Tim Janik posted this code snippet:</para>
+
+<programlisting role="C">
+static guint signal_user_action = 0;
+
+signal_user_action =
+  gtk_object_class_user_signal_new (gtk_type_class (GTK_TYPE_WIDGET),
+                    "user_action",
+                    GTK_RUN_LAST | GTK_RUN_ACTION,
+                    gtk_marshal_NONE__POINTER,
+                    GTK_TYPE_NONE, 1,
+                    GTK_TYPE_POINTER);
+
+void
+gtk_widget_user_action (GtkWidget *widget,
+                        gpointer   act_data)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_signal_emit (GTK_OBJECT (widget), signal_user_action, act_data);
+}
+</programlisting>
+
+	<para>If you want your new signal to have more than the
+	classical gpointer parameter, you'll have to play with GTK+
+	marshallers.</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>Is it possible to get some text displayed which is
+	truncated to fit inside its allocation?</title>
+
+	<para>GTK's behavior (no clipping) is a consequence of its
+         attempts to conserve X resources. Label widgets (among
+         others) don't get their own X window - they just draw their
+         contents on their parent's window. While it might be possible
+         to have clipping occur by setting the clip mask before
+         drawing the text, this would probably cause a substantial
+         performance penalty.</para>
+
+	<para>Its possible that, in the long term, the best solution
+         to such problems might be just to change gtk to give labels X
+         windows. A short term workaround is to put the label widget
+         inside another widget that does get its own window - one
+         possible candidate would be the viewport widget.</para>
+
+<programlisting role="C">
+viewport = gtk_viewport (NULL, NULL);
+gtk_widget_set_usize (viewport, 50, 25);
+gtk_viewport_set_shadow_type (GTK_VIEWPORT(viewport), GTK_SHADOW_NONE);
+gtk_widget_show(viewport);
+
+label = gtk_label ("a really long label that won't fit");
+gtk_container_add (GTK_CONTAINER(viewport), label);
+gtk_widget_show (label);
+</programlisting>
+
+	<para>If you were doing this for a bunch of widgets, you might
+         want to copy gtkviewport.c and strip out the adjustment and
+         shadow functionality (perhaps you could call it
+         GtkClipper).</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I make my window modal? / How do I make a single
+	window active?</title>
+
+	<para>After you create your window, do
+	<literal>gtk_grab_add(my_window)</literal>. And after  closing
+	the window do
+	<literal>gtk_grab_remove(my_window)</literal>.</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>Why doesn't my widget (e.g. progressbar)
+	update?</title>
+
+	<para>You are probably doing all the changes within a function without
+         returning control to <literal>gtk_main()</literal>. This may
+         be the case if you do some lengthy calculation in your
+         code. Most drawing updates are only placed on a queue, which
+         is processed within <literal>gtk_main()</literal>. You can force the
+         drawing queue to be processed using something like:</para>
+
+
+<programlisting role="C">
+while (gtk_main_iteration());
+</programlisting>
+
+	<para>inside you're function that changes the widget.</para>
+
+	<para>What the above snippet does is run all pending events
+         and high priority idle functions, then return immediately
+         (the drawing is done in a high priority idle function).</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I attach data to some GTK+ object/widget?</title>
+
+	<para>First of all, the attached data is stored in the
+        object_data field of a GtkObject. The type of this field is
+        GData, which is defined in glib.h.  So you should read the
+        gdataset.c file in your glib source directory very
+        carefully.</para>
+
+	<para>There are two (easy) ways to attach some data to a gtk
+        object.  Using <literal>gtk_object_set_data()</literal> and
+        <literal>gtk_object_get_data()</literal> seems to be the most
+        common way to do this, as it provides a powerful interface to
+        connect objects and data.</para>
+
+<programlisting role="C">
+void gtk_object_set_data(GtkObject *object, const gchar *key, gpointer data);
+
+gpointer gtk_object_get_data(GtkObject *object, const gchar *key);
+</programlisting>
+
+	<para>Since a short example is better than any lengthy speech:</para>
+
+<programlisting role="C">
+struct my_struct	p1,p2,*result;
+GtkWidget		*w;
+
+gtk_object_set_data(GTK_OBJECT(w),"p1 data",(gpointer)&amp;p1);
+gtk_object_set_data(GTK_OBJECT(w),"p2 data",(gpointer)&amp;p2);
+
+result = gtk_object_get_data(GTK_OBJECT(w),"p1 data");
+</programlisting>
+
+	<para>The <literal>gtk_object_set_user_data()</literal> and
+	<literal>gtk_object_get_user_data()</literal> functions does
+	exactly the same thing as the functions above, but does not
+	let you specify the "key" parameter.Instead, it uses a
+	standard "user_data" key. Note that the use of these functions
+	is deprecated in 1.2. They only provide a compatibility mode
+	with some old gtk packages.</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I remove the data I have attached to an
+	object?</title>
+
+	<para>When attaching the data to the object, you can use the
+        <literal>gtk_object_set_data_full()</literal> function. The three
+        first arguments of the function are the same as in
+        <literal>gtk_object_set_data()</literal>. The fourth one is a
+        pointer to a callback function which is called when the data
+        is destroyed. The data is destroyed when you:</para>
+
+	<itemizedlist>
+	  <listitem><simpara> destroy the object</simpara>
+	  </listitem>
+	  <listitem><simpara> replace the data with a new one (with
+	  the same key)</simpara>
+	  </listitem>
+	  <listitem><simpara> replace the data with NULL (with the
+	  same key)</simpara>
+	  </listitem>
+	</itemizedlist>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I reparent a widget?</title>
+
+	<para>The normal way to reparent (ie change the owner) of a
+	widget should be to use the function:</para>
+
+<programlisting role="C">
+void gtk_widget_reparent (GtkWidget *widget, 
+                          GtkWidget *new_parent)
+</programlisting>
+
+	<para>But this is only a "should be" since this function does
+        not correctly do its job on some specific widgets. The main
+        goal of gtk_widget_reparent() is to avoid unrealizing widget
+        if both widget and new_parent are realized (in this case,
+        widget->window is successfully reparented). The problem here
+        is that some widgets in the GTK+ hierarchy have multiple
+        attached X subwindows and this is notably the case for the
+        GtkSpinButton widget. For those, gtk_widget_reparent() will
+        fail by leaving an unrealized child window where it should
+        not.</para>
+
+	<para>To avoid this problem, simply use the following code
+	snippet:</para>
+
+<programlisting role="C">
+     gtk_widget_ref(widget);
+     gtk_container_remove(GTK_CONTAINER(old_parent), widget);
+     gtk_container_add(GTK_CONTAINER(new_parent), widget);
+     gtk_widget_unref(widget);
+</programlisting>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How could I get any widgets position?</title>
+
+	<para>As Tim Janik pointed out, there are different cases, and
+	each case requires a different solution.</para>
+
+	<itemizedlist>
+	  <listitem><simpara> If you want the position of a widget
+        relative to its parent, you should use
+        <literal>widget->allocation.x</literal> and
+        <literal>widget->allocation.y</literal>.</simpara>
+	  </listitem>
+	  <listitem><simpara> If you want the position of a window
+        relative to the X root window, you should use <literal>gdk_window_get_geometry()</literal>
+        <literal>gdk_window_get_position()</literal> or
+        <literal>gdk_window_get_origin()</literal>.</simpara>
+	  </listitem>
+	  <listitem><simpara> If you want to get the position of the
+        window (including the WM decorations), you should use
+        <literal>gdk_window_get_root_origin()</literal>.</simpara>
+	  </listitem>
+	  <listitem><simpara> Last but not least, if you want to get a Window Manager frame
+        position, you should use
+        <literal>gdk_window_get_deskrelative_origin()</literal>.</simpara>
+	  </listitem>
+</itemizedlist>
+
+	<para>Your choice of Window Manager will have an effect of the
+        results of the above functions. You should keep this in mind
+        when writing your application. This is dependant upon how the
+        Window Managers manage the decorations that they add around
+        windows.</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I set the size of a widget/window? How do I
+	prevent the user resizing my window?</title>
+
+	<para>The <literal>gtk_widget_set_uposition()</literal>
+	function is used to set the position of any widget.</para>
+
+	<para>The <literal>gtk_widget_set_usize()</literal> function
+        is used to set the size of a widget. In order to use all the
+        features that are provided by this function when it acts on a
+        window, you may want to use the
+        <literal>gtk_window_set_policy</literal> function. The
+        definition of these functions are:</para>
+
+<programlisting role="C">
+void gtk_widget_set_usize (GtkWidget *widget,
+                           gint width,
+                           gint height);
+
+void gtk_window_set_policy (GtkWindow *window,
+                            gint allow_shrink,
+                            gint allow_grow,
+                            gint auto_shrink);
+</programlisting>
+
+	<para><literal>Auto_shrink</literal> will automatically shrink
+        the window when the requested size of the child widgets goes
+        below the current size of the
+        window. <literal>Allow_shrink</literal> will give the user the
+        authorisation to make the window smaller that it should
+        normally be. <literal>Allow_grow</literal> will give the user
+        will have the ability to make the window bigger. The default
+        values for these parameters are:</para>
+
+<programlisting role="C">
+allow_shrink = FALSE
+allow_grow   = TRUE
+auto_shrink  = FALSE
+</programlisting>
+
+	<para>The <literal>gtk_widget_set_usize()</literal> functions
+        is not the easiest way to set a window size since you cannot
+        decrease this window size with another call to this function
+        unless you call it twice, as in:</para>
+
+<programlisting role="C">
+     gtk_widget_set_usize(your_widget, -1, -1);
+     gtk_widget_set_usize(your_widget, new_x_size, new_y_size);
+</programlisting>
+
+	<para>Another way to set the size of and/or move a window is to use
+        the <literal>gdk_window_move_resize()</literal> function which
+        uses to work fine both to grow or to shrink the window:</para>
+
+<programlisting role="C">
+     gdk_window_move_resize(window->window, 
+                            x_pos, y_pos, 
+                            x_size, y_size);
+</programlisting>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I add a popup menu to my GTK+
+	application?</title>
+
+	<para>The <literal>menu</literal> example in the examples/menu
+	directory of the GTK+ distribution implements a popup menu
+	with this technique:</para>
+
+
+<programlisting role="C">
+static gint button_press (GtkWidget *widget, GdkEvent *event)
+{
+
+    if (event->type == GDK_BUTTON_PRESS) {
+        GdkEventButton *bevent = (GdkEventButton *) event; 
+        gtk_menu_popup (GTK_MENU(widget), NULL, NULL, NULL, NULL,
+                        bevent->button, bevent->time);
+        /* Tell calling code that we have handled this event; the buck
+         * stops here. */
+        return TRUE;
+    }
+
+    /* Tell calling code that we have not handled this event; pass it on. */
+    return FALSE;
+}
+</programlisting>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I disable or enable a widget, such as a
+	button?</title>
+
+	<para>To disable (or to enable) a widget, use the
+        <literal>gtk_widget_set_sensitive()</literal> function. The
+        first parameter is you widget pointer. The second parameter is
+        a boolean value: when this value is TRUE, the widget is
+        enabled.</para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>Shouldn't the text argument in the gtk_clist_*
+	functions be declared const?</title>
+
+	<para>For example:</para>
+
+<programlisting role="C">
+gint gtk_clist_prepend (GtkCList *clist,
+                        gchar    *text[]);
+</programlisting>
+
+	<para>Answer: No, while a type "gchar*" (pointer to char) can
+        automatically be cast into "const gchar*" (pointer to const
+        char), this does not apply for "gchar *[]" (array of an
+        unspecified number of pointers to char) into "const gchar *[]"
+        (array of an unspecified number of pointers to const char).</para>
+
+	<para>The type qualifier "const" may be subject to automatic
+        casting, but in the array case, it is not the array itself
+        that needs the (const) qualified cast, but its members, thus
+        changing the whole type.</para>
+      </sect2>
+
+     <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I render pixels (image data) to the
+	screen?</title>
+
+	<para>There are several ways to approach this. The simplest
+        way is to use GdkRGB, see gdk/gdkrgb.h. You create an RGB
+        buffer, render to your RGB buffer, then use GdkRGB routines to
+        copy your RGB buffer to a drawing area or custom widget. The
+        book "GTK+/Gnome Application Development" gives some details;
+        GdkRGB is also documented in the GTK+ reference
+        documentation.</para>
+
+	<para>If you're writing a game or other graphics-intensive
+        application, you might consider a more elaborate
+        solution. OpenGL is the graphics standard that will let you
+        access hardware accelaration in future versions of XFree86; so
+        for maximum speed, you probably want to use OpenGL. A
+        GtkGLArea widget is available for using OpenGL with GTK+ (but
+        GtkGLArea does not come with GTK+ itself). There are also
+        several open source game libraries, such as ClanLib and Loki's
+        Simple DirectMedia Layer library (SDL).</para>
+
+	<para>You do NOT want to use
+	<literal>gdk_draw_point()</literal>, that will be extremely
+	slow.</para>
+      </sect2>
+
+     <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I create a pixmap without having my window being
+	realized/shown?</title>
+
+	<para>Functions such as
+        <literal>gdk_pixmap_create_from_xpm()</literal> require a
+        valid window as a parameter. During the initialisation phase
+        of an application, a valid window may not be available without
+        showing a window, which may be inappropriate. In order to
+        avoid this, a function such as
+        <literal>gdk_pixmap_colormap_create_from_xpm</literal> can be
+        used, as in:</para>
+
+<programlisting role="C">
+  char *pixfile = "foo.xpm";
+  GtkWidget *top, *box, *pixw;
+  GdkPixmap *pixmap, *pixmap_mask;
+
+  top = gtk_window_new (GKT_WINDOW_TOPLEVEL);
+  box = gtk_hbox_new (FALSE, 4);
+  gtk_conainer_add (GTK_CONTAINER(top), box);
+ 
+  pixmap = gdk_pixmap_colormap_create_from_xpm (
+               NULL, gtk_widget_get_colormap(top),
+               &amp;pixmap_mask, NULL, pixfile);
+  pixw = gtk_pixmap_new (pixmap, pixmap_mask);
+  gdk_pixmap_unref (pixmap);
+  gdk_pixmap_unref (pixmap_mask);
+</programlisting>
       </sect2>
 
     </sect1>
