@@ -223,9 +223,6 @@ static GList* xim_ic_list;
 
 #endif
 
-#define OTHER_XEVENT_BUFSIZE 4
-static XEvent other_xevent[OTHER_XEVENT_BUFSIZE];   /* XEvents passed along to user  */
-static int other_xevent_i = 0;
 static GList *putback_events = NULL;
 
 static gulong base_id;
@@ -2546,10 +2543,30 @@ gdk_event_translate (GdkEvent *event,
       while ((XPending (gdk_display) > 0) &&
 	     XCheckTypedWindowEvent(gdk_display, xevent->xany.window,
 				    ConfigureNotify, xevent))
-        GDK_NOTE (EVENTS, 
-	  g_print ("configure notify discarded:\twindow: %ld\n",
-		  xevent->xconfigure.window - base_id));
-	/*XSync (gdk_display, 0);*/
+        {
+	  GdkFilterReturn result;
+
+	  GDK_NOTE (EVENTS, 
+		    g_print ("configure notify discarded:\twindow: %ld\n",
+			     xevent->xconfigure.window - base_id));
+
+	  result = gdk_event_apply_filters (xevent, event,
+					    window_private
+					    ?window_private->filters
+					    :gdk_default_filters);
+
+	  /* If the result is GDK_FILTER_REMOVE, there will be
+	   * trouble, but anybody who filtering the Configure events
+	   * better know what they are doing
+	   */
+	  if (result != GDK_FILTER_CONTINUE)
+	    {
+	      return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+	    }
+
+	    /*XSync (gdk_display, 0);*/
+	}
+
       
       GDK_NOTE (EVENTS,
 	g_print ("configure notify:\twindow: %ld  x,y: %d %d  w,h: %d %d  b-w: %d  above: %ld  ovr: %d\n",
@@ -2931,19 +2948,9 @@ gdk_event_translate (GdkEvent *event,
 	  gdk_input_vtable.other_event)
 	return_val = gdk_input_vtable.other_event(event, xevent, window);
       else
-	return_val = -1;
+	return_val = FALSE;
 
-      if (return_val < 0)	/* not an XInput event, convert */
-	{
-	  event->other.type = GDK_OTHER_EVENT;
-	  event->other.window = window;
-	  event->other.xevent = (GdkXEvent *)&other_xevent[other_xevent_i];
-	  memcpy (&other_xevent[other_xevent_i], xevent, sizeof (XEvent));
-	  other_xevent_i = (other_xevent_i+1) % OTHER_XEVENT_BUFSIZE;
-	  return_val = TRUE;
-	}
-      else
-	return_val = return_val && !window_private->destroyed;
+      return_val = return_val && !window_private->destroyed;
 
       break;
     }

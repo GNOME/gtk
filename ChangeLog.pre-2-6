@@ -1,3 +1,17 @@
+Mon Apr 13 21:40:14 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c (find_char_width): Don't read the
+	character past the end of the text.
+
+	* gtk/gtkrange.c (gtk_real_range_timer): If the mouse
+	button has been released before the timer is activated,
+	don't keep on scrolling.
+
+	* gdk/gdk.c (gdk_event_translate): Filter subsequent configure
+	events after we discard the first. Removed obsolete and
+	sometimes very slow GdkOtherEvent. (Left in gdktypes.h
+	with signal in GTK)
+
 Mon Apr 13 18:03:54 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* README: update address info to gtk.org for ftp and web sites.

@@ -2972,8 +2972,14 @@ pixel_height_of (GtkText* text, GList* cache_line)
 static gint
 find_char_width (GtkText* text, const GtkPropertyMark *mark, const TabStopMark *tab_mark)
 {
-  gchar ch = GTK_TEXT_INDEX (text, mark->index);
-  gint16* char_widths = MARK_CURRENT_TEXT_FONT (mark)->char_widths;
+  gchar ch;
+  gint16* char_widths;
+
+  if (LAST_INDEX (text, *mark))
+    return 0;
+  
+  ch = GTK_TEXT_INDEX (text, mark->index);
+  char_widths = MARK_CURRENT_TEXT_FONT (mark)->char_widths;
 
   if (ch == '\t')
     {

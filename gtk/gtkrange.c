@@ -1165,6 +1165,8 @@ gtk_real_range_timer (GtkRange *range)
     }
   else
     {
+      GdkModifierType mods, mask;
+
       if (!range->timer)
 	{
 	  return_val = FALSE;
@@ -1177,8 +1179,26 @@ gtk_real_range_timer (GtkRange *range)
 	  range->need_timer = FALSE;
 	}
 
-      if (gtk_range_scroll (range, -1))
-	return return_val;
+      switch (range->button)
+	{
+	case 1:
+	  mask = GDK_BUTTON1_MASK;
+	  break;
+	case 2:
+	  mask = GDK_BUTTON2_MASK;
+	  break;
+	case 3:
+	  mask = GDK_BUTTON3_MASK;
+	  break;
+	default:
+	  mask = 0;
+	  break;
+	}
+
+      gdk_window_get_pointer (range->slider, NULL, NULL, &mods);
+
+      if (mods & mask)
+	return_val = gtk_range_scroll (range, -1);
     }
 
   return return_val;
