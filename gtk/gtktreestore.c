@@ -447,6 +447,7 @@ gtk_tree_store_finalize (GObject *object)
 
   g_node_traverse (tree_store->root, G_POST_ORDER, G_TRAVERSE_ALL, -1,
 		   node_free, tree_store->column_headers);
+  g_node_destroy (tree_store->root);
   _gtk_tree_data_list_header_free (tree_store->sort_list);
   g_free (tree_store->column_headers);
 
@@ -459,6 +460,7 @@ gtk_tree_store_finalize (GObject *object)
       tree_store->default_sort_data = NULL;
     }
 
+  /* must chain up */
   (* parent_class->finalize) (object);
 }
 

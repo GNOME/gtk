@@ -1,3 +1,11 @@
+Tue Sep 10 15:39:42 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkliststore.c (gtk_list_store_finalize): free the root
+	list.
+
+	* gtk/gtktreestore.c (gtk_tree_store_finalize): free the root
+	nodes.
+
 Tue Sep 10 11:06:51 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_get_ic): 

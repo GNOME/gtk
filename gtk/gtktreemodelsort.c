@@ -371,7 +371,7 @@ gtk_tree_model_sort_finalize (GObject *object)
   if (tree_model_sort->sort_list)
     {
       _gtk_tree_data_list_header_free (tree_model_sort->sort_list);
-      tree_model_sort->sort_list = NULL;
+      g_free (tree_model_sort->sort_list);
     }
 
   /* must chain up */
