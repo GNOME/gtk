@@ -98,6 +98,9 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    * <emphasis>not</emphasis> the model backing the tree view to which this cell 
    * renderer is attached.
    * 
+   * #GtkCellRendererCombo automatically adds a text cell renderer for this column
+   * to its combo box.
+   *
    * Since: 2.6
    */
   g_object_class_install_property (object_class,
@@ -140,7 +143,7 @@ gtk_cell_renderer_combo_init (GtkCellRendererCombo *self)
 /**
  * gtk_cell_renderer_combo_new: 
  * 
- * Creates a new #GtkCellRendererCombo 
+ * Creates a new #GtkCellRendererCombo. 
  * Adjust how text is drawn using object properties. 
  * Object properties can be set globally (with g_object_set()). 
  * Also, with #GtkTreeViewColumn, you can bind a property to a value 

@@ -1,5 +1,8 @@
 2004-11-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellrenderercombo.c (gtk_cell_renderer_combo_class_init): 
+	Doc additions.
+
 	* gtk/gtkfilechooserbutton.h: Fix trigraphs in private markers.
 
 	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_class_init): 

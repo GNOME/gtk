@@ -6,7 +6,10 @@ Renders a toggle button in a cell
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+#GtkCellRendererToggle renders a toggle button in a cell. The 
+button is drawn as a radio- or checkbutton, depending on the 
+<link linkend="GtkCellRendererToggle--radio">radio</link> 
+property. When activated, it emits the toggled signal.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

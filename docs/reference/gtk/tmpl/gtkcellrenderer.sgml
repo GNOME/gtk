@@ -19,8 +19,8 @@ elements on a #GdkDrawable.  Typically, one cell renderer is used to
 draw many cells on the screen.  To this extent, it isn't expected that a
 CellRenderer keep any permanent state around.  Instead, any state is set
 just prior to use using #GObject<!-- -->s property system.  Then, the
-cell is measured using @gtk_cell_renderer_get_size.  Finally, the cell
-is rendered in the correct location using @gtk_cell_renderer_render.
+cell is measured using gtk_cell_renderer_get_size().  Finally, the cell
+is rendered in the correct location using gtk_cell_renderer_render().
 </para>
 
 <para>
@@ -31,6 +31,17 @@ barring a #GtkStyle change.  The #GtkCellRenderer also has a number of
 generic properties that are expected to be honored by all children.
 </para>
 
+<para>
+Beyond merely rendering a cell, cell renderers can optionally 
+provide active user interface elements. A cell renderer can be 
+<firstterm>activatable</firstterm> like #GtkCellRendererToggle, 
+which toggles when it gets activated by a mouse click, or it can be 
+<firstterm>editable</firstterm> like #GtkCellRendererText, which 
+allows the user to edit the text using a #GtkEntry.
+To make a cell renderer activatable or editable, you have to 
+implement the @activate or @start_editing virtual functions, 
+respectively.
+</para>
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkCellRendererText,#GtkCellRendererPixbuf,#GtkCellRendererToggle

@@ -1,5 +1,11 @@
 2004-11-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkcellrenderercombo.sgml: 
+	* gtk/tmpl/gtkcellrenderertoggle.sgml: 
+	* gtk/tmpl/gtkcellrenderertext.sgml: Add introductions.
+	
+	* gtk/tmpl/gtkcellrenderer.sgml: Additions.
+
 	* gtk/gtk-sections.txt: Remove GtkFileChooserEmbed, since
 	it is not in the headers we parse.
 
