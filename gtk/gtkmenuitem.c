@@ -1043,9 +1043,15 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
+  g_return_if_fail (!accel_group || GTK_IS_ACCEL_GROUP (accel_group));
 
   widget = GTK_WIDGET (menu_item);
+
+  if (!accel_group)
+    {
+      _gtk_widget_set_accel_path (widget, NULL, NULL);
+      return;
+    }
 
   path = _gtk_widget_get_accel_path (widget);
   if (!path)					/* no active accel_path yet */

@@ -1,3 +1,13 @@
+Wed Jan  9 11:13:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenuitem.c (_gtk_menu_item_refresh_accel_path): 
+	Fix problem with menus without accel groups, such as the
+	menus for option menus.
+
+	* gtk/gtkpaned.c (gtk_paned_expose): Only conditionalize
+	drawing of handle on whether both children are visible,
+	not the drawing of the other child!. (#68325, Diego Gonzalez)
+
 Wed Jan  9 10:20:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c gdk/x11/gdkgc-c11.c: Check for

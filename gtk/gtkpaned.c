@@ -338,10 +338,10 @@ gtk_paned_expose (GtkWidget      *widget,
 	}
 
       gdk_region_destroy (region);
-      
-      /* Chain up to draw children */
-      GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
     }
+  
+  /* Chain up to draw children */
+  GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
 
   return FALSE;
 }
