@@ -309,10 +309,9 @@ _gdk_windowing_window_init (GdkScreen * screen)
 }
 
 GdkWindow *
-gdk_window_new_for_screen (GdkScreen     *screen,
-			   GdkWindow     *parent,
-			   GdkWindowAttr *attributes,
-			   gint           attributes_mask)
+gdk_window_new (GdkWindow     *parent,
+		GdkWindowAttr *attributes,
+		gint           attributes_mask)
 {
   GdkWindow *window;
   GdkWindowObject *private;
@@ -320,6 +319,7 @@ gdk_window_new_for_screen (GdkScreen     *screen,
   GdkWindowImplX11 *impl;
   GdkDrawableImplX11 *draw_impl;
   GdkScreenImplX11 *screen_impl;
+  GdkScreen *screen;
   
   GdkVisual *visual;
   Window xparent;
@@ -340,10 +340,18 @@ gdk_window_new_for_screen (GdkScreen     *screen,
   
   g_return_val_if_fail (attributes != NULL, NULL);
 
-  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
   
   if (!parent)
-    parent = screen_impl->root_window;
+    {
+      g_warning ("gdk_window_new(): no parent specified. "
+		 "reverting to parent = default root window");
+      screen = gdk_get_default_screen ();
+    }
+  else
+    screen = gdk_drawable_get_screen (parent);
+
+
+  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
 
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
   
@@ -618,24 +626,6 @@ gdk_window_new_for_screen (GdkScreen     *screen,
     }
   
   return window;
-}
-
-GdkWindow *
-gdk_window_new (GdkWindow     *parent,
-		GdkWindowAttr *attributes,
-		gint           attributes_mask)
-{
-  GdkScreen *screen;
-  if (parent)
-    screen = GDK_WINDOW_SCREEN (parent);
-  else
-    {
-      GDK_NOTE (MULTIHEAD,
-		g_message ("Use gdk_window_new_for_screen instead instead\n"));
-      screen = gdk_get_default_screen ();
-    }
-  return gdk_window_new_for_screen (screen, parent,
-				    attributes, attributes_mask);
 }
 
 GdkWindow *
@@ -3894,8 +3884,7 @@ create_moveresize_window_for_screen (GdkScreen *screen,
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkGrabStatus status;
-  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (gdk_screen_get_display (screen)),
-						  "moveresize");
+  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (gdk_screen_get_display (screen)), "moveresize");
   g_assert (mv_resize != NULL);
   g_assert (mv_resize->moveresize_emulation_window == NULL);
 
@@ -3910,8 +3899,10 @@ create_moveresize_window_for_screen (GdkScreen *screen,
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
 
-  mv_resize->moveresize_emulation_window =
-    gdk_window_new_for_screen (screen, NULL, &attributes, attributes_mask);
+  mv_resize->moveresize_emulation_window = 
+	        gdk_window_new (gdk_screen_get_root_window (screen),
+				&attributes,
+				attributes_mask);
 
   gdk_window_show (mv_resize->moveresize_emulation_window);
 

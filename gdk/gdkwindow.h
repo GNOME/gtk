@@ -266,10 +266,6 @@ struct _GdkWindowObjectClass
 /* Windows
  */
 GType         gdk_window_object_get_type       (void) G_GNUC_CONST;
-GdkWindow*    gdk_window_new_for_screen	       (GdkScreen     *screen,
-						GdkWindow     *parent,
-						GdkWindowAttr *attributes,
-						gint           attributes_mask);
 GdkWindow*    gdk_window_new                   (GdkWindow     *parent,
                                                 GdkWindowAttr *attributes,
                                                 gint           attributes_mask);

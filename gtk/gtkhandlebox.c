@@ -433,10 +433,8 @@ gtk_handle_box_realize (GtkWidget *widget)
 			   GDK_FOCUS_CHANGE_MASK |
 			   GDK_STRUCTURE_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  hb->float_window = gdk_window_new_for_screen (gtk_widget_get_screen (widget),
-  					 	NULL,
-						&attributes,
-						attributes_mask);
+  hb->float_window = gdk_window_new (gtk_widget_get_root_window (widget),
+				     &attributes, attributes_mask);
   gdk_window_set_user_data (hb->float_window, widget);
   gdk_window_set_decorations (hb->float_window, 0);
   gdk_window_set_type_hint (hb->float_window, GDK_WINDOW_TYPE_HINT_TOOLBAR);

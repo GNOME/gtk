@@ -433,10 +433,8 @@ gtk_plug_realize (GtkWidget *widget)
 	  gdk_window_destroy (widget->window);
 	  gdk_flush ();
 	  gdk_error_trap_pop ();
-	  widget->window = gdk_window_new_for_screen (gtk_widget_get_screen (widget),
-						      NULL,
-						      &attributes, 
-						      attributes_mask);
+	  widget->window = gdk_window_new (gtk_widget_get_root_window (widget),
+					   &attributes, attributes_mask);
 	}
       
       gdk_window_add_filter (widget->window, gtk_plug_filter_func, widget);

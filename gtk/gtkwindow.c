@@ -3122,10 +3122,8 @@ gtk_window_realize (GtkWidget *widget)
       
       attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
       
-      window->frame = gdk_window_new_for_screen (gtk_widget_get_screen (widget), 
-      						 NULL,
-						 &attributes,
-						 attributes_mask);
+      window->frame = gdk_window_new (gtk_widget_get_root_window (widget),
+				      &attributes, attributes_mask);
 						 
       gdk_window_set_user_data (window->frame, widget);
       
@@ -3156,10 +3154,13 @@ gtk_window_realize (GtkWidget *widget)
   attributes_mask |= GDK_WA_VISUAL | GDK_WA_COLORMAP;
   attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
-  widget->window = gdk_window_new_for_screen (gtk_widget_get_screen (widget),
-					      parent_window,
-					      &attributes,
-					      attributes_mask);
+  
+  if (parent_window)
+    widget->window = gdk_window_new (parent_window, &attributes, attributes_mask);
+  else
+    widget->window = gdk_window_new (gtk_widget_get_root_window (widget),
+				     &attributes, attributes_mask);
+    
   gdk_window_set_user_data (widget->window, window);
       
   widget->style = gtk_style_attach (widget->style, widget->window);

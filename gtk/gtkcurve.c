@@ -197,7 +197,6 @@ gtk_curve_init (GtkCurve *curve)
   gtk_widget_set_events (GTK_WIDGET (curve), old_mask | GRAPH_MASK);
   gtk_signal_connect (GTK_OBJECT (curve), "event",
 		      (GtkSignalFunc) gtk_curve_graph_events, curve);
-  gtk_curve_size_graph (curve);
 }
 
 static void
