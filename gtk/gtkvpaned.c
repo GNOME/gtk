@@ -170,9 +170,10 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
       paned->handle_pos.width = MAX (1, (gint) widget->allocation.width - 2 * border_width);
       paned->handle_pos.height = handle_size;
       
-      if (GTK_WIDGET_REALIZED(widget))
+      if (GTK_WIDGET_REALIZED (widget))
 	{
-	  gdk_window_show (paned->handle);
+	  if (GTK_WIDGET_MAPPED (widget))
+	    gdk_window_show (paned->handle);
 	  gdk_window_move_resize (paned->handle,
 				  paned->handle_pos.x,
 				  paned->handle_pos.y,

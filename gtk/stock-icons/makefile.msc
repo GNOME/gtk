@@ -1,4 +1,5 @@
 VARIABLES = \
+	stock_add_16		stock_add_16.png	\
 	stock_add_24		stock_add_24.png	\
 	stock_align_center_16		stock_align_center_16.png	\
 	stock_align_center_24		stock_align_center_24.png	\
@@ -77,6 +78,7 @@ VARIABLES = \
 	stock_redo_24		stock_redo_24.png	\
 	stock_refresh_16		stock_refresh_16.png	\
 	stock_refresh_24		stock_refresh_24.png	\
+	stock_remove_16		stock_remove_16.png	\
 	stock_remove_24		stock_remove_24.png	\
 	stock_revert_16		stock_revert_16.png	\
 	stock_revert_24		stock_revert_24.png	\

@@ -105,7 +105,7 @@ gboolean gtk_init_check_abi_check (int	  *argc,
 				   size_t  sizeof_GtkWindow);
 
 #define gtk_init(argc, argv) gtk_init_abi_check (argc, argv, 1, sizeof (GtkWindow))
-#define gtk_init_check(args, argv) gtk_init_check_abi_check (argc, argv, 1, sizeof (GtkWindow))
+#define gtk_init_check(argc, argv) gtk_init_check_abi_check (argc, argv, 1, sizeof (GtkWindow))
 
 #endif
 

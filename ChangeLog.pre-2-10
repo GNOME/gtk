@@ -1,3 +1,90 @@
+Fri Mar 29 18:09:18 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_query): Call 
+	gdk_keyval_to_lower() on the key passed in, since we
+	lowercase all other key vals passed in, so querying
+	keyvals will otherwise fail if the caller used
+	an uppercase accelerators (#76899, Vitaly Tishkov)
+
+Fri Mar 29 17:41:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (load_modules): Fix screwup in handling
+	of module path that was resulting in freed memory being
+	accessed when both GTK_MODULES and a theme were set.
+	(#76902, Johan Dahlin)
+
+Fri Mar 29 17:57:36 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkiconfactory.c (get_default_icons): Fix wrong
+	stock id's for ADD/REMOVE. (#76915, Vitaly Tishkov)
+
+2002-03-29  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkmain.h : fix typo in gtk_init_check macro, which
+	caused crashes if argc != 0
+
+	* gtk/stock-icons/makefile.msc : added new icons
+
+Fri Mar 29 20:17:35 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_rows_reordered):
+	remove call to gtk_tree_model_sort_increment_stamp
+	(gtk_tree_model_sort_sort_level): always increment the stamp
+
+Fri Mar 29 00:19:41 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* NEWS: Updates
+
+	* configure.in: Version 2.0.1, binary, interface age 1.
+
+	* configure.in (GDK_PIXBUF_VERSION): Up required versions
+	of dependencies.
+
+	* gtk/gtkiconfactory.c gtk/stock-icons/Makefile.am:
+	Add stock_add/remove_16.
+
+Thu Mar 28 18:38:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk[hv]paned.c (gtk_[hv]paned_size_allocate): 
+	Don't show the window unless the widget is mapped.
+	(#76742, Dennis Björklund, Soeren Sandmann)
+
+2002-03-29  Hans Breuer  <hans@breuer.org>
+
+	Fixed dashed line issues (#74441) to an IMO reasonable extend. 
+	That is: use PS_USERSTYLE on WinNT (the next GDI limit appears
+	to be with lines width > 50); Render horizontal and vertical
+	dashed lines on Win9x 'by hand'. Dotted selection rectangles 
+	and Dia look nice ...
+
+	* gdk/win32/gdkprivate-win32.h : add pen_dashes pointer and
+	num_pen_dashes to _GdkGCWin32
+	* gdk/win32/gdkgc-win32.c : initialize pen_dashes and remove
+	the guesses from dashes to windoze line styles.
+	(predraw_set_forground) : always ExtCreatePen (PS_SOLID) on
+	Win9x, which does not support PS_USERSTYLE.
+	* gdk/win32/gdkdrawable-win32.c : new functions render_line_
+	<horizontal|vertical>. Use them if not running on NT in
+	gdk_win32_draw_<rectangle|segments|lines> ()
+
+	* gdk/win32/gdkkeys-win32.c (gdk_keyval_name) : return NULL
+	for keyval == 0 to avoid to have zeros in all menu entries 
+	without accelerator.
+
+2002-03-29  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/stock_add_24.png:
+	* gtk/stock-icons/stock_add_16.png:
+	* gtk/stock-icons/stock_remove_24.png:
+	* gtk/stock-icons/stock_remove_16.png: use a simple '+' and '-',
+	  works better. the old box was too clumsy
+
+Thu Mar 28 21:11:04 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkfilesel.c (open_new_dir): when encountering non-UTF-8 file
+	names, alert the user with g_message() instead of g_warning() and
+	put out the actual conversion error.
+
 2002-03-28  Dave Camp  <dave@ximian.com>
 
 	* gtk/gtktreeview.c (install_scroll_sync_handler): Don't install

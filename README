@@ -96,7 +96,7 @@ GTK+-2.0.0 Specific Notes
 * There are known problems with some of the image loaders in the
   gdk-pixbuf library included in GTK+ where corrupted images can cause
   crashes and conceivably worse problems. Until these problems are fixed
-  (we hope to have this done for 2.0.1), gdk-pixbuf should not be used
+  (we hope to have this done for 2.0.x), gdk-pixbuf should not be used
   to load untrusted data.
 
 * The assumption of GLib and GTK+ by default is that filenames on the

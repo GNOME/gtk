@@ -172,7 +172,8 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
       
       if (GTK_WIDGET_REALIZED (widget))
 	{
-	  gdk_window_show (paned->handle);
+	  if (GTK_WIDGET_MAPPED (widget))
+	    gdk_window_show (paned->handle);
 	  gdk_window_move_resize (paned->handle,
 				  paned->handle_pos.x,
 				  paned->handle_pos.y,

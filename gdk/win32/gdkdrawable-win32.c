@@ -250,6 +250,69 @@ gdk_win32_set_colormap (GdkDrawable *drawable,
 /* Drawing
  */
 
+/*
+ * Render a dashed line 'by hand' cause the Win9x GDI is 
+ * too limited to do so
+ */
+static inline gboolean
+render_line_horizontal (HDC hdc,
+                        int x1, 
+                        int x2,
+                        int y,
+                        int pen_width,
+                        int *dashes,
+                        int num_dashes)
+{
+  int n;
+  for (n = 0; x1 < x2; n++)
+    {
+      int len = dashes[n % num_dashes];
+      if (x1 + len > x2)
+        len = x2 - x1;
+
+      if (n % 2 == 0)
+        if (!PatBlt (hdc,
+                     x1, y - pen_width / 2, 
+                     len, pen_width, 
+                     PATCOPY))
+          {
+            WIN32_GDI_FAILED ("PatBlt");
+            return FALSE;
+          }
+
+      x1 += dashes[n % num_dashes];
+    }
+}
+
+
+static inline gboolean
+render_line_vertical (HDC hdc,
+                        int x, 
+                        int y1,
+                        int y2,
+                        int pen_width,
+                        int *dashes,
+                        int num_dashes)
+{
+  int n;
+  for (n = 0; y1 < y2; n++)
+    {
+      int len = dashes[n % num_dashes];
+      if (y1 + len > y2)
+        len = y2 - y1;
+      if (n % 2 == 0)
+        if (!PatBlt (hdc, 
+                     x - pen_width / 2, y1, 
+                     pen_width, len, 
+                     PATCOPY))
+          {
+            WIN32_GDI_FAILED ("PatBlt");
+            return FALSE;
+          }
+      y1 += dashes[n % num_dashes];
+    }
+}
+
 static void
 gdk_win32_draw_rectangle (GdkDrawable *drawable,
 			  GdkGC       *gc,
@@ -341,16 +404,38 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
     }
   else
     {
-      if (filled)
-	old_pen_or_brush = SelectObject (hdc, GetStockObject (NULL_PEN));
+      if (!filled && gc_private->pen_dashes && !IS_WIN_NT ())
+        {
+          ok = ok && render_line_vertical (hdc, x, y, y+height+1,
+                                           gc_private->pen_width,
+                                           gc_private->pen_dashes,
+                                           gc_private->pen_num_dashes);
+          ok = ok && render_line_horizontal (hdc, x, x+width+1, y,
+                                             gc_private->pen_width,
+                                             gc_private->pen_dashes,
+                                             gc_private->pen_num_dashes);
+          ok = ok && render_line_vertical (hdc, x+width+1, y, y+height+1,
+                                           gc_private->pen_width,
+                                           gc_private->pen_dashes,
+                                           gc_private->pen_num_dashes);
+          ok = ok && render_line_horizontal (hdc, x, x+width+1, y+height+1,
+                                             gc_private->pen_width,
+                                             gc_private->pen_dashes,
+                                             gc_private->pen_num_dashes);
+        }
       else
-	old_pen_or_brush = SelectObject (hdc, GetStockObject (HOLLOW_BRUSH));
-      if (old_pen_or_brush == NULL)
-	WIN32_GDI_FAILED ("SelectObject");
-      else if (!Rectangle (hdc, x, y, x+width+1, y+height+1))
-	WIN32_GDI_FAILED ("Rectangle");
-      else
-	SelectObject (hdc, old_pen_or_brush);
+        {
+          if (filled)
+            old_pen_or_brush = SelectObject (hdc, GetStockObject (NULL_PEN));
+          else
+            old_pen_or_brush = SelectObject (hdc, GetStockObject (HOLLOW_BRUSH));
+          if (old_pen_or_brush == NULL)
+            WIN32_GDI_FAILED ("SelectObject");
+          if (!Rectangle (hdc, x, y, x+width+1, y+height+1))
+            WIN32_GDI_FAILED ("Rectangle");
+          if (old_pen_or_brush)
+            SelectObject (hdc, old_pen_or_brush);
+        }
     }
 
   gdk_win32_hdc_release (drawable, gc, mask);
@@ -771,57 +856,112 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
     }
   else
     {
-      const gboolean maybe_patblt =
-	gc_private->rop2 == R2_COPYPEN &&
-	gc_private->pen_width <= 1 &&
-	(gc_private->pen_style & PS_STYLE_MASK) == PS_SOLID;
-
-      for (i = 0; ok && i < nsegs; i++)
-	{
-	  /* PatBlt() is much faster than LineTo(), says
-           * jpe@archaeopteryx.com. Hmm. Use it if we have a solid
-           * colour pen, then we know that the brush is also solid and
-           * of the same colour.
-	   */
-	  if (maybe_patblt && segs[i].x1 == segs[i].x2)
+      if (gc_private->pen_dashes && !IS_WIN_NT ())
+        {
+          /* code very similar to the IMHO questionable optimization 
+           * below. This one draws dashed vertical/horizontal lines 
+           * with the limited Win9x GDI.                        --hb
+           */
+          for (i = 0; ok && i < nsegs; i++)
             {
-	      int y1, y2;
+    	        if (segs[i].x1 == segs[i].x2)
+                {
+                  int y1, y2;
 
-	      if (segs[i].y1 <= segs[i].y2)
-		y1 = segs[i].y1, y2 = segs[i].y2;
-	      else
-		y1 = segs[i].y2, y2 = segs[i].y1;
+                  if (segs[i].y1 <= segs[i].y2)
+                    y1 = segs[i].y1, y2 = segs[i].y2;
+                  else
+                    y1 = segs[i].y2, y2 = segs[i].y1;
 
-              if (!PatBlt (hdc, segs[i].x1, y1,
-			   1, y2 - y1 + 1, PATCOPY))
-                WIN32_GDI_FAILED ("PatBlt"), ok = FALSE;
+                  ok = render_line_vertical (hdc,
+                                             segs[i].x1, y1, y2,
+                                             gc_private->pen_width,
+                                             gc_private->pen_dashes,
+                                             gc_private->pen_num_dashes);
+                }
+              else if (segs[i].y1 == segs[i].y2)
+                {
+                  int x1, x2;
+
+                  if (segs[i].x1 <= segs[i].x2)
+                    x1 = segs[i].x1, x2 = segs[i].x2;
+                  else
+                    x1 = segs[i].x2, x2 = segs[i].x1;
+
+                  ok = render_line_horizontal (hdc,
+                                               x1, x2, segs[i].y1,
+                                               gc_private->pen_width,
+                                               gc_private->pen_dashes,
+                                               gc_private->pen_num_dashes);
+                }
+              else
+                {
+                  if (!MoveToEx (hdc, segs[i].x1, segs[i].y1, NULL))
+                    WIN32_GDI_FAILED ("MoveToEx"), ok = FALSE;
+                  if (ok && !LineTo (hdc, segs[i].x2, segs[i].y2))
+                    WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
+    	  
+                  /* Draw end pixel */
+                  if (ok && gc_private->pen_width <= 1)
+                    if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
+                      WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
+                }
             }
-	  else if (maybe_patblt && segs[i].y1 == segs[i].y2)
+        }
+      else
+        {
+          const gboolean maybe_patblt =
+            gc_private->rop2 == R2_COPYPEN &&
+            gc_private->pen_width <= 1 &&
+            (gc_private->pen_style & PS_STYLE_MASK) == PS_SOLID;
+
+          for (i = 0; ok && i < nsegs; i++)
             {
-	      int x1, x2;
+              /* PatBlt() is much faster than LineTo(), says
+               * jpe@archaeopteryx.com. Hmm. Use it if we have a solid
+               * colour pen, then we know that the brush is also solid and
+               * of the same colour.
+    	         */
+    	        if (maybe_patblt && segs[i].x1 == segs[i].x2)
+                {
+                  int y1, y2;
 
-	      if (segs[i].x1 <= segs[i].x2)
-		x1 = segs[i].x1, x2 = segs[i].x2;
-	      else
-		x1 = segs[i].x2, x2 = segs[i].x1;
+                  if (segs[i].y1 <= segs[i].y2)
+                    y1 = segs[i].y1, y2 = segs[i].y2;
+                  else
+                    y1 = segs[i].y2, y2 = segs[i].y1;
 
-              if (!PatBlt (hdc, x1, segs[i].y1,
-			   x2 - x1 + 1, 1, PATCOPY))
-                WIN32_GDI_FAILED ("PatBlt"), ok = FALSE;
+                  if (!PatBlt (hdc, segs[i].x1, y1,
+                               1, y2 - y1 + 1, PATCOPY))
+                    WIN32_GDI_FAILED ("PatBlt"), ok = FALSE;
+                }
+              else if (maybe_patblt && segs[i].y1 == segs[i].y2)
+                {
+                  int x1, x2;
+
+                  if (segs[i].x1 <= segs[i].x2)
+                    x1 = segs[i].x1, x2 = segs[i].x2;
+                  else
+                    x1 = segs[i].x2, x2 = segs[i].x1;
+
+                  if (!PatBlt (hdc, x1, segs[i].y1,
+                               x2 - x1 + 1, 1, PATCOPY))
+                    WIN32_GDI_FAILED ("PatBlt"), ok = FALSE;
+                }
+              else
+                {
+                  if (!MoveToEx (hdc, segs[i].x1, segs[i].y1, NULL))
+                    WIN32_GDI_FAILED ("MoveToEx"), ok = FALSE;
+                  if (ok && !LineTo (hdc, segs[i].x2, segs[i].y2))
+                    WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
+    	  
+                  /* Draw end pixel */
+                  if (ok && gc_private->pen_width <= 1)
+                    if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
+                      WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
+                }
             }
-          else
-            {
-	      if (!MoveToEx (hdc, segs[i].x1, segs[i].y1, NULL))
-	        WIN32_GDI_FAILED ("MoveToEx"), ok = FALSE;
-	      if (ok && !LineTo (hdc, segs[i].x2, segs[i].y2))
-	        WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
-	  
-	      /* Draw end pixel */
-	      if (ok && gc_private->pen_width <= 1)
-	        if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
-	          WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
-            }
-	}
+    	  }
     }
   gdk_win32_hdc_release (drawable, gc, mask);
 }
@@ -844,26 +984,69 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
 
   hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
-  pts = g_new (POINT, npoints);
+  if (gc_private->pen_dashes && !IS_WIN_NT ())
+    {
+      for (i = 0; i < npoints - 1; i++)
+        {
+	  if (points[i].x == points[i+1].x)
+	    {
+	      int y1, y2;
+	      if (points[i].y > points[i+1].y)
+	        y1 = points[i+1].y, y2 = points[i].y;
+	      else
+	        y1 = points[i].y, y2 = points[i+1].y;
 
-  for (i = 0; i < npoints; i++)
-    {
-      pts[i].x = points[i].x;
-      pts[i].y = points[i].y;
+	      render_line_vertical (hdc, points[i].x, y1, y2,
+	                            gc_private->pen_width,
+	                            gc_private->pen_dashes,
+	                            gc_private->pen_num_dashes);
+	    }
+	  else if (points[i].y == points[i+1].y)
+	    {
+	      int x1, x2;
+	      if (points[i].x > points[i+1].x)
+	        x1 = points[i+1].x, x2 = points[i].x;
+	      else
+	        x1 = points[i].x, x2 = points[i+1].x;
+
+	      render_line_horizontal (hdc, x1, x2, points[i].y,
+	                              gc_private->pen_width,
+	                              gc_private->pen_dashes,
+	                              gc_private->pen_num_dashes);
+	    }
+	  else
+	    {
+	      if (!MoveToEx (hdc, points[i].x, points[i].y, NULL))
+		WIN32_GDI_FAILED ("MoveToEx"), ok = FALSE;
+	      if (ok && !LineTo (hdc, points[i+1].x, points[i+1].y))
+		WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
+	    }
+	}
     }
-  
-  if (!Polyline (hdc, pts, npoints))
-    WIN32_GDI_FAILED ("Polyline"), ok = FALSE;
-  
-  g_free (pts);
-  
-  /* Draw end pixel */
-  if (ok && gc_private->pen_width <= 1)
+  else
     {
-      MoveToEx (hdc, points[npoints-1].x, points[npoints-1].y, NULL);
-      if (!LineTo (hdc, points[npoints-1].x + 1, points[npoints-1].y))
-	WIN32_GDI_FAILED ("LineTo");
+      pts = g_new (POINT, npoints);
+
+      for (i = 0; i < npoints; i++)
+	{
+	  pts[i].x = points[i].x;
+	  pts[i].y = points[i].y;
+	}
+  
+      if (!Polyline (hdc, pts, npoints))
+	WIN32_GDI_FAILED ("Polyline"), ok = FALSE;
+  
+      g_free (pts);
+  
+      /* Draw end pixel */
+      if (ok && gc_private->pen_width <= 1)
+	{
+	  MoveToEx (hdc, points[npoints-1].x, points[npoints-1].y, NULL);
+	  if (!LineTo (hdc, points[npoints-1].x + 1, points[npoints-1].y))
+	    WIN32_GDI_FAILED ("LineTo");
+	}
     }
+
   gdk_win32_hdc_release (drawable, gc, mask);
 }
 
