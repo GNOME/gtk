@@ -100,7 +100,7 @@ EXTRA_DIST =	\
 	examples/spinbutton/Makefile  \
 	examples/find-examples.sh
 
-dist-hook:
+dist-hook: gtk+.spec
 	if test -e $(srcdir)/INSTALL.in && test -e $(srcdir)/README.in ; then \
 	     CONFIG_FILES="INSTALL:$(srcdir)/INSTALL.in README:$(srcdir)/README.in" \
 	     CONFIG_HEADERS= \
