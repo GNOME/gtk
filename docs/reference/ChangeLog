@@ -1,3 +1,7 @@
+Mon Mar  8 08:26:52 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/building.sgml: Fix link to gettext. (Henning Nielsen Lund)
+
 Sat Mar  6 23:50:37 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkrc.sgml: Document that [xy]thickness can
