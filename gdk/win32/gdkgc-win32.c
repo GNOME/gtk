@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "gdkgc.h"
+#include "gdkpixmap.h"
 #include "gdkprivate.h"
 
 GdkGC*

@@ -113,5 +113,7 @@ extern gint		gdk_input_ignore_wintab;
 /* Function declarations */
 
 void gdk_input_window_destroy (GdkWindow *window);
+void gdk_input_init           (void);
+void gdk_input_exit           (void);
 
 #endif /* __GDK_INPUTPRIVATE_H__ */

@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <math.h>
 
+#include "gdk.h"
 #include "gdkinput.h"
 #include "gdkprivate.h"
 

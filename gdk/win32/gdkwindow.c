@@ -31,6 +31,7 @@
 #include <stdio.h>
 
 #include "gdkevents.h"
+#include "gdkpixmap.h"
 #include "gdkwindow.h"
 #include "gdkprivate.h"
 #include "gdkinputprivate.h"
