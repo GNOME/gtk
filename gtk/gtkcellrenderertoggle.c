@@ -300,8 +300,25 @@ gtk_cell_renderer_toggle_event (GtkCellRenderer *cell,
 				GdkRectangle    *cell_area,
 				guint            flags)
 {
-  gtk_signal_emit (GTK_OBJECT (cell), toggle_cell_signals[TOGGLED], path);
-  return TRUE;
+  GtkCellRendererToggle *celltoggle;
+  gint retval = FALSE;
+  
+  celltoggle = GTK_CELL_RENDERER_TOGGLE (cell);
+  
+  switch (event->type)
+    {
+    case GDK_BUTTON_PRESS:
+      {
+        gtk_signal_emit (GTK_OBJECT (cell), toggle_cell_signals[TOGGLED], path);
+        retval = TRUE;
+      }
+      break;
+
+    default:
+      break;
+    }
+      
+  return retval;
 }
 
 void

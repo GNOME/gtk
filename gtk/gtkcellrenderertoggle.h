@@ -40,7 +40,7 @@ struct _GtkCellRendererToggle
 {
   GtkCellRenderer parent;
 
- /*< private >*/
+  /*< private >*/
   guint active : 1;
   guint radio : 1;
 };

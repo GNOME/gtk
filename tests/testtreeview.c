@@ -116,6 +116,12 @@ typedef enum
   COLUMNS_LAST
 } ColumnsType;
 
+static gchar *column_type_names[] = {
+  "No columns",
+  "One column",
+  "Many columns"
+};
+
 #define N_COLUMNS 9
 
 static GType*
@@ -132,7 +138,8 @@ get_model_types (void)
       column_types[4] = G_TYPE_UINT;
       column_types[5] = G_TYPE_UCHAR;
       column_types[6] = G_TYPE_CHAR;
-      column_types[7] = G_TYPE_BOOLEAN;
+#define BOOL_COLUMN 7
+      column_types[BOOL_COLUMN] = G_TYPE_BOOLEAN;
       column_types[8] = G_TYPE_INT;
     }
 
@@ -162,11 +169,88 @@ setup_column (GtkTreeViewColumn *col)
 }
 
 static void
+toggled_callback (GtkCellRendererToggle *celltoggle,
+                  gchar                 *path_string,
+                  GtkTreeView           *tree_view)
+{
+  GtkTreeModel *model = NULL;
+  GtkTreeModelSort *sort_model = NULL;
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  gboolean active = FALSE;
+  
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  model = gtk_tree_view_get_model (tree_view);
+  
+  if (GTK_IS_TREE_MODEL_SORT (model))
+    {
+      sort_model = GTK_TREE_MODEL_SORT (model);
+      model = gtk_tree_model_sort_get_model (sort_model);
+    }
+
+  if (model == NULL)
+    return;
+
+  if (sort_model)
+    {
+      g_warning ("FIXME implement conversion from TreeModelSort iter to child model iter");
+      return;
+    }
+      
+  path = gtk_tree_path_new_from_string (path_string);
+  if (!gtk_tree_model_get_iter (model,
+                                &iter, path))
+    {
+      g_warning ("%s: bad path?", G_STRLOC);
+      return;
+    }
+  gtk_tree_path_free (path);
+  
+  if (GTK_IS_LIST_STORE (model))
+    {
+      gtk_list_store_get (GTK_LIST_STORE (model),
+                          &iter,
+                          BOOL_COLUMN,
+                          &active,
+                          -1);
+      
+      gtk_list_store_set (GTK_LIST_STORE (model),
+                          &iter,
+                          BOOL_COLUMN,
+                          !active,
+                          -1);
+    }
+  else if (GTK_IS_TREE_STORE (model))
+    {
+      gtk_tree_store_get (GTK_TREE_STORE (model),
+                          &iter,
+                          BOOL_COLUMN,
+                          &active,
+                          -1);
+            
+      gtk_tree_store_set (GTK_TREE_STORE (model),
+                          &iter,
+                          BOOL_COLUMN,
+                          !active,
+                          -1);
+    }
+  else
+    g_warning ("don't know how to actually toggle value for model type %s",
+               g_type_name (G_TYPE_FROM_INSTANCE (model)));
+}
+
+
+static ColumnsType current_column_type = COLUMNS_LOTS;
+
+static void
 set_columns_type (GtkTreeView *tree_view, ColumnsType type)
 {
   GtkTreeViewColumn *col;
   GtkCellRenderer *rend;
 
+  current_column_type = type;
+  
   col = gtk_tree_view_get_column (tree_view, 0);
   while (col)
     {
@@ -208,6 +292,47 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       
       g_object_unref (G_OBJECT (rend));
       g_object_unref (G_OBJECT (col));
+
+      rend = gtk_cell_renderer_toggle_new ();
+
+      g_signal_connect_data (G_OBJECT (rend), "toggled",
+                             toggled_callback, tree_view,
+                             NULL, FALSE, FALSE);
+      
+      col = gtk_tree_view_column_new_with_attributes ("Column 3",
+                                                      rend,
+                                                      "active", BOOL_COLUMN,
+                                                      NULL);
+
+      setup_column (col);
+      
+      gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
+      
+      g_object_unref (G_OBJECT (rend));
+      g_object_unref (G_OBJECT (col));
+
+      rend = gtk_cell_renderer_toggle_new ();
+
+      /* you could also set this per-row by tying it to a column
+       * in the model of course.
+       */
+      g_object_set (G_OBJECT (rend), "radio", TRUE, NULL);
+      
+      g_signal_connect_data (G_OBJECT (rend), "toggled",
+                             toggled_callback, tree_view,
+                             NULL, FALSE, FALSE);
+      
+      col = gtk_tree_view_column_new_with_attributes ("Column 4",
+                                                      rend,
+                                                      "active", BOOL_COLUMN,
+                                                      NULL);
+
+      setup_column (col);
+      
+      gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
+      
+      g_object_unref (G_OBJECT (rend));
+      g_object_unref (G_OBJECT (col));
       
       /* FALL THRU */
       
@@ -229,6 +354,12 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
     default:
       break;
     }
+}
+
+static ColumnsType
+get_columns_type (void)
+{
+  return current_column_type;
 }
 
 static GdkPixbuf *our_pixbuf;
@@ -382,6 +513,20 @@ model_selected (GtkOptionMenu *om, gpointer data)
     }
 }
 
+static void
+columns_selected (GtkOptionMenu *om, gpointer data)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (data);
+  gint hist;
+
+  hist = gtk_option_menu_get_history (om);
+
+  if (hist != get_columns_type ())
+    {
+      set_columns_type (tree_view, hist);
+    }
+}
+
 int
 main (int    argc,
       char **argv)
@@ -420,6 +565,18 @@ main (int    argc,
 
   run_automated_tests ();
   
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
+
+  table = gtk_table_new (3, 1, FALSE);
+
+  gtk_container_add (GTK_CONTAINER (window), table);
+
+  tv = gtk_tree_view_new_with_model (models[0]);
+  
+  /* Model menu */
+
   menu = gtk_menu_new ();
   
   i = 0;
@@ -444,14 +601,7 @@ main (int    argc,
       ++i;
     }
   gtk_widget_show_all (menu);
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-  gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
-
-  table = gtk_table_new (2, 1, FALSE);
-
-  gtk_container_add (GTK_CONTAINER (window), table);
-
+  
   om = gtk_option_menu_new ();
   gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
   
@@ -459,29 +609,60 @@ main (int    argc,
                     0, 1, 0, 1,
                     0, 0, 
                     0, 0);
-  
-  sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                  GTK_POLICY_AUTOMATIC,
-                                  GTK_POLICY_AUTOMATIC);
-
-  
-  gtk_table_attach (GTK_TABLE (table), sw,
-                    0, 1, 1, 2,
-                    GTK_EXPAND | GTK_FILL,
-                    GTK_EXPAND | GTK_FILL,
-                    0, 0);
-  
-  tv = gtk_tree_view_new_with_model (models[0]);
 
   gtk_signal_connect (GTK_OBJECT (om),
                       "changed",
                       GTK_SIGNAL_FUNC (model_selected),
                       tv);
   
-  gtk_container_add (GTK_CONTAINER (sw), tv);
+  /* Columns menu */
+
+  menu = gtk_menu_new ();
+  
+  i = 0;
+  while (i < COLUMNS_LAST)
+    {
+      GtkWidget *mi;
+      const char *name;
+
+      name = column_type_names[i];
+      
+      mi = gtk_menu_item_new_with_label (name);
+
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
+
+      ++i;
+    }
+  gtk_widget_show_all (menu);
+  
+  om = gtk_option_menu_new ();
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
+  
+  gtk_table_attach (GTK_TABLE (table), om,
+                    0, 1, 1, 2,
+                    0, 0, 
+                    0, 0);
 
   set_columns_type (GTK_TREE_VIEW (tv), COLUMNS_LOTS);
+  gtk_option_menu_set_history (GTK_OPTION_MENU (om), COLUMNS_LOTS);
+  
+  gtk_signal_connect (GTK_OBJECT (om),
+                      "changed",
+                      GTK_SIGNAL_FUNC (columns_selected),
+                      tv);
+  
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+  
+  gtk_table_attach (GTK_TABLE (table), sw,
+                    0, 1, 2, 3,
+                    GTK_EXPAND | GTK_FILL,
+                    GTK_EXPAND | GTK_FILL,
+                    0, 0);
+  
+  gtk_container_add (GTK_CONTAINER (sw), tv);
   
   gtk_widget_show_all (window);
   

@@ -322,6 +322,22 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
 }
 
 /**
+ * gtk_tree_model_sort_get_model:
+ * @tree_model: a #GtkTreeModelSort
+ * 
+ * Returns the model the #GtkTreeModelSort is sorting.
+ * 
+ * Return value: the "child model" being sorted
+ **/
+GtkTreeModel*
+gtk_tree_model_sort_get_model (GtkTreeModelSort  *tree_model)
+{
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT (tree_model), NULL);
+
+  return tree_model->child_model;
+}
+
+/**
  * gtk_tree_model_sort_convert_path:
  * @tree_model_sort: The #GtkTreeModelSort.
  * @child_path: A #GtkTreePath, relative to the child model.

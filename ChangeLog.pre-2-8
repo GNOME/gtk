@@ -1,3 +1,14 @@
+2001-01-15  Havoc Pennington  <hp@pobox.com>
+
+	* tests/testtreeview.c: add test stuff for CellRendererToggle
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_get_model): add this
+	accessor
+
+	* gtk/gtkcellrenderertoggle.c: distinguish different event types,
+	only toggle on button press (would do release like GtkButton, but
+	we'd need implicit grab code for treeview cells)
+
 2001-01-16  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkvisual-win32.c: Include <stdlib.h> for getenv().

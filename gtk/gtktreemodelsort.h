@@ -78,6 +78,7 @@ GtkTreeModel *gtk_tree_model_sort_new_with_model (GtkTreeModel      *child_model
 						  gint               sort_col);
 void          gtk_tree_model_sort_set_model      (GtkTreeModelSort  *tree_model_sort,
 						  GtkTreeModel      *child_model);
+GtkTreeModel *gtk_tree_model_sort_get_model      (GtkTreeModelSort  *tree_model);
 GtkTreePath  *gtk_tree_model_sort_convert_path   (GtkTreeModelSort  *tree_model_sort,
 						  GtkTreePath       *child_path);
 
