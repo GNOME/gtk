@@ -271,17 +271,17 @@ gdk_pixbuf_loader_frame_done (GdkPixbufFrame *frame, gpointer loader)
 		priv->animation = g_new0 (GdkPixbufAnimation, 1);
 		priv->animation->n_frames = 0;
 		priv->animation->ref_count = 1;
-		priv->animation->width  = gdk_pixbuf_get_width  (frame->pixbuf);
-		priv->animation->height = gdk_pixbuf_get_height (frame->pixbuf);
+		priv->animation->width  = gdk_pixbuf_get_width  (frame->pixbuf) + frame->x_offset;
+		priv->animation->height = gdk_pixbuf_get_height (frame->pixbuf) + frame->y_offset;
 	} else {
 		int w, h;
 
 		/* update bbox size */
-		w = gdk_pixbuf_get_width (frame->pixbuf);
-		h = gdk_pixbuf_get_height (frame->pixbuf);
+		w = gdk_pixbuf_get_width (frame->pixbuf) + frame->x_offset;
+		h = gdk_pixbuf_get_height (frame->pixbuf) + frame->y_offset;
 
 		if (w > priv->animation->width) {
-			priv->animation->width = h;
+			priv->animation->width = w;
 		}
 		if (h > priv->animation->height) {
 			priv->animation->height = h;
@@ -298,6 +298,32 @@ gdk_pixbuf_loader_frame_done (GdkPixbufFrame *frame, gpointer loader)
 static void
 gdk_pixbuf_loader_animation_done (GdkPixbuf *pixbuf, gpointer loader)
 {
+	GdkPixbufLoaderPrivate *priv = NULL;
+	GdkPixbufFrame    *frame;
+	GList *current = NULL;
+	gint h, w;
+
+	priv = GDK_PIXBUF_LOADER (loader)->private;
+	priv->pixbuf = NULL;
+
+	current = gdk_pixbuf_animation_get_frames (priv->animation);
+
+	while (current) {
+		frame = (GdkPixbufFrame *) current->data;
+
+		/* update bbox size */
+		w = gdk_pixbuf_get_width (frame->pixbuf) + frame->x_offset;
+		h = gdk_pixbuf_get_height (frame->pixbuf) + frame->y_offset;
+
+		if (w > priv->animation->width) {
+			priv->animation->width = w;
+		}
+		if (h > priv->animation->height) {
+			priv->animation->height = h;
+		}
+		current = current->next;
+	}
+
 	gtk_signal_emit (GTK_OBJECT (loader),
 			 pixbuf_loader_signals[ANIMATION_DONE]);
 }
