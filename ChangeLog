@@ -1,3 +1,9 @@
+Mon Dec  7 03:52:01 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c (gtk_handlers_run): when marshalling connect_object
+	signals, don't pass the data pointer twice, but swap it with the
+	object pointer (proposed on Nov 30 1998 on gtk-devel-list).
+
 Mon Dec  7 03:08:39 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.h: 

@@ -1874,7 +1874,7 @@ gtk_handlers_run (GtkHandler	 *handlers,
 		/* don't cast with GTK_OBJECT () */
 		(* signal->marshaller) ((GtkObject*) handlers->func_data,
 					handlers->func,
-					handlers->func_data,
+					object,
 					params);
 	      else
 		(* signal->marshaller) (object,
