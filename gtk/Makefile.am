@@ -218,7 +218,7 @@ EXTRA_DIST = \
 	tree_minus.xbm          \
         circles.xbm
 
-INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/glib @x_cflags@ 
+INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/glib -I../glib @x_cflags@ 
 
 noinst_PROGRAMS = testgtk testinput testselection simple 
 testgtk_LDADD = \

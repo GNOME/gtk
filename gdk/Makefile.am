@@ -49,7 +49,7 @@ gdkinclude_HEADERS = \
 libgdk_la_LDFLAGS = -version-info 1:0:0 \
 	@x_ldflags@ @x_libs@
 
-INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/glib @x_cflags@ 
+INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/glib -I../glib @x_cflags@ 
 
 EXTRA_PROGRAMS = gxid
 
