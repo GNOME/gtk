@@ -1501,14 +1501,6 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
       g_return_val_if_fail (dest->bits_per_sample == 8, NULL);
     }
 
-  /* Create the pixbuf if needed */
-  if (!dest)
-    {
-      dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, width, height);
-      if (dest == NULL)
-        return NULL;
-    }
-
   if (cmap == NULL)
     cmap = gdk_drawable_get_colormap (src);
 
@@ -1536,6 +1528,14 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
       g_return_val_if_fail (src_x + width <= src_width && src_y + height <= src_height, NULL);
     }
 
+  /* Create the pixbuf if needed */
+  if (!dest)
+    {
+      dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, width, height);
+      if (dest == NULL)
+        return NULL;
+    }
+  
   if (dest)
     {
       g_return_val_if_fail (dest_x >= 0 && dest_y >= 0, NULL);

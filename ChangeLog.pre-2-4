@@ -1,3 +1,9 @@
+2002-04-13  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/gdkpixbuf-drawable.c (gdk_pixbuf_get_from_drawable): create
+	the target pixbuf AFTER filling in width/height, so that 
+	passing in -1 for width/height will work.
+	
 Sat Apr 13 22:49:45 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes #75510
