@@ -208,7 +208,7 @@ static void     gtk_drag_proxy_begin            (GtkWidget        *widget,
 						 guint32           time);
 static void     gtk_drag_dest_realized          (GtkWidget        *widget);
 static void     gtk_drag_dest_hierarchy_changed (GtkWidget        *widget,
-						 GtkWidget        *old_toplevel);
+						 GtkWidget        *previous_toplevel);
 static void     gtk_drag_dest_site_destroy      (gpointer          data);
 static void     gtk_drag_dest_leave             (GtkWidget        *widget,
 						 GdkDragContext   *context,
@@ -1438,7 +1438,8 @@ gtk_drag_dest_realized (GtkWidget *widget)
 }
 
 static void
-gtk_drag_dest_hierarchy_changed (GtkWidget *widget)
+gtk_drag_dest_hierarchy_changed (GtkWidget *widget,
+				 GtkWidget *previous_toplevel)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
 

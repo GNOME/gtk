@@ -1,3 +1,12 @@
+Wed Jul  4 23:17:04 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_dest_hierarchy_changed):
+	Make compile.
+
+	* gtk/gtkwidget.c (gtk_widget_reset_rc_style): Fix problem
+	with calling gtk_widget_set_style_internal() with
+	the old style, not the new style. (#56989)
+
 Wed Jul  4 22:35:40 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c gtk/gtkmenubar.c gtk/gtktreeviewcolumn.c
