@@ -1,3 +1,7 @@
+1999-11-22  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* configure.in (GDK_PIXBUF_DIR): Fix for srcdir != builddir.
+
 1999-11-22  Havoc Pennington  <hp@pobox.com>
 
 	* src/Makefile.am (GDK_PIXBUF_LIBS): Patch from Paul Fisher
