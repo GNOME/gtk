@@ -1636,6 +1636,7 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 
   priv->entry = g_object_new (GTK_TYPE_ENTRY,
 			      "has_frame", FALSE,
+			      "xalign", cell->xalign,
 			      NULL);
 
   if (celltext->text)
