@@ -1114,12 +1114,12 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
  * </para>
  * <informalexample><programlisting>
  * &sol;* We want to ignore irrelevant modifiers like ScrollLock *&sol;
- * #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
+ * &num;define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
  * gdk_keymap_translate_keyboard_state (keymap, event->hardware_keycode,
  *                                      event->state, event->group,
- *                                      &keyval, NULL, NULL, &consumed);
+ *                                      &amp;keyval, NULL, NULL, &amp;consumed);
  * if (keyval == GDK_PLUS &&
- *     (event->state & ~consumed & ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
+ *     (event->state &amp; ~consumed &amp; ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
  *   &sol;* Control was pressed *&sol;
  * </programlisting></informalexample>
  * <para>
@@ -1130,7 +1130,7 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
  * <informalexample><programlisting>
  * &sol;* XXX Don't do this XXX *&sol;
  * if (keyval == accel_keyval &&
- *     (event->state & ~consumed & ALL_ACCELS_MASK) == (accel_mods & ~consumed))
+ *     (event->state &amp; ~consumed &amp; ALL_ACCELS_MASK) == (accel_mods &amp; ~consumed))
  *   &sol;* Accelerator was pressed *&sol;
  * </programlisting></informalexample>
  * <para>

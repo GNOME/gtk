@@ -1,5 +1,8 @@
 2003-08-28  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state): Markup
+	fix in the docs.
+
 	* gtk/gtkuimanager.c: Change the XML format:
 	<Root> element is replaced by <ui>,
 	<menu> element is replaced by <menubar>,

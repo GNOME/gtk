@@ -1,3 +1,9 @@
+2003-08-28  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/events.sgml: Improve PointerHint docs.
+	* gdk/tmpl/event_structs.sgml: Explain is_hint field in GdkEventMotion.
+	(#120542)
+
 2003-08-26  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Rename GtkMenuMerge to GtkUIManager

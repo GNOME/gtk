@@ -97,8 +97,9 @@ number of %GDK_MOTION_NOTIFY events received. Normally a %GDK_MOTION_NOTIFY
 event is received each time the mouse moves. However, if the application
 spends a lot of time processing the event (updating the display, for example),
 it can easily lag behind the position of the mouse. When using the
-%GDK_POINTER_MOTION_HINT_MASK the server will only send %GDK_MOTION_NOTIFY
-events when the application asks for them, by calling gdk_window_get_pointer().
+%GDK_POINTER_MOTION_HINT_MASK the server will only send a single %GDK_MOTION_NOTIFY
+event (which is marked as a hint) until the application asks for more, by calling 
+gdk_window_get_pointer().
 </para>
 
 @GDK_EXPOSURE_MASK: 

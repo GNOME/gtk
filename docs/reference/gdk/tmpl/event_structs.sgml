@@ -203,7 +203,8 @@ Generated when the pointer moves.
   the mouse.
 @state: a bit-mask representing the state of the modifier keys (e.g. Control,
   Shift and Alt) and the pointer buttons. See #GdkModifierType.
-@is_hint: 
+@is_hint: set to 1 if this event is just a hint, see the %GDK_POINTER_MOTION_HINT_MASK
+  value of #GdkEventMask.
 @device: the device where the event originated.
 @x_root: the x coordinate of the pointer relative to the root of the screen.
 @y_root: the y coordinate of the pointer relative to the root of the screen.
@@ -471,7 +472,7 @@ Specifies the state of a toplevel window.
 @GDK_WINDOW_STATE_ICONIFIED: the window is minimized.
 @GDK_WINDOW_STATE_MAXIMIZED: the window is maximized.
 @GDK_WINDOW_STATE_STICKY: the window is sticky.
-@GDK_WINDOW_STATE_FULLSCREEN: the window is maximized without decorations. 
+@GDK_WINDOW_STATE_FULLSCREEN: the window is maximized without decorations.
 @GDK_WINDOW_STATE_ABOVE: the window is kept above other windows.
 @GDK_WINDOW_STATE_BELOW: the window is kept below other windows.
 
