@@ -1,3 +1,25 @@
+1999-12-08  Federico Mena Quintero  <federico@redhat.com>
+
+	* gdk-pixbuf/gdk-pixbuf-drawable.c: Fix includes.
+	(gdk_pixbuf_get_from_drawable): Implemented the zillion sanity
+	checks and API definition.  The body needs filling in and it needs
+	to do the Right Thing(tm) for pixmaps plus the given colormap and
+	windows and their own colormaps.
+
+	* gdk-pixbuf/gdk-pixbuf.h: Added prototype for
+	gdk_pixbuf_get_from_drawable().  Killed gdk-pixbuf-drawable.h.
+
+	* gdk-pixbuf/Makefile.am: Re-added the gdk-pixbuf-drawable sources.
+
+	* doc/tmpl/from-drawables.sgml: Populated.
+
+	* doc/gdk-pixbuf.sgml: Added the from-drawables section.
+
+	* doc/Makefile.am (tmpl_sources): Added tmpl/from-drawables.sgml.
+
+	* doc/gdk-pixbuf-sections.txt: Added a section for getting pixbufs
+	from drawables.
+
 1999-12-07  Federico Mena Quintero  <federico@redhat.com>
 
 	* doc/tmpl/gnome-canvas-pixbuf.sgml: Added clarification about
@@ -31,24 +53,24 @@
 1999-12-05  Jaka Mocnik  <jaka.mocnik@kiss.uni-lj.si>
 
 	* gdk-pixbuf/Makefile.am: removed GNOME_LIBS from testpixbuf_LDADD.
-	
+
 1999-12-05  Arjan van de Ven <arjan@fenrus.demon.nl>
-	
-	* gdk-pixbuf/io-ico.c: Bug in palet-size 
+
+	* gdk-pixbuf/io-ico.c: Bug in palet-size
 	calculation fixed
 
 1999-12-04  Arjan van de Ven <arjan@fenrus.demon.nl>
 
 	* gdk-pixbuf/io-bmp.c: Major cleanup, added support for
 	32 bpp and 4 bpp (uncompressed) images, fixed 1bpp.
-	
+
 	* gdk-pixbuf/io-ras.c: Minor cleanup, ran through lclint
 
 	* gdk-pixbuf/io-ico.c: Minor cleanup, fixed 1bpp icons,
  	ran through lclint.
 
 	* gdk-pixbuf/gdk-pixbuf-io.c: Added detection of .CUR files
-	(Windows Cursor files). These are identical to .ICO files, 
+	(Windows Cursor files). These are identical to .ICO files,
 	except for the signature and 2 extra fields for the hotspot.
 
 1999-12-03  Federico Mena Quintero  <federico@redhat.com>
@@ -151,7 +173,7 @@
 	* configure.in: Add AM_CONDITIONAL for inside gnome-libs
 
 	* src/Makefile.am: conditionalize GnomeCanvasPixbuf
-	
+
 1999-11-29  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/Makefile.am: Uncomment the GnomeCanvasPixbuf sources.  This
@@ -236,7 +258,7 @@
 
 	* src/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_bounds):
 	implement the bounds method correctly.
-	(compute_viewport_affine): compute the affine need to fit the 
+	(compute_viewport_affine): compute the affine need to fit the
 	image within the viewport given by the args.
 	(compute_render_affine): call compute_viewport_affine.
 
@@ -283,7 +305,7 @@ Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
 	files.
 
 	* src/testpixbuf.c: Added final queued draw when done loading image.
-	
+
 1999-11-10  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/gdk-pixbuf-io.c (gdk_pixbuf_load_module): removed spurious
@@ -305,12 +327,12 @@ Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
         * src/testpixbuf.c: Fixed it to use timeout to read from file
 	for progressive loading. Set TBF_KBPS=n, where n is the number of
 	kilobytes/second to simulate in downloading. n has to be an integer.
-	
+
 	* src/io-jpeg.c: Slight cosmetic cleanup.
 
 	* src/io-pnm.c: Fixed raw PNM loading bug. Also discovered that ASCII
         PBM loading has a similar problem and will address tomorrow.
-	
+
 1999-11-09  Havoc Pennington  <hp@pobox.com>
 
 	* src/Makefile.am (libgdk_pixbuf_la_SOURCES): build the
@@ -332,7 +354,7 @@ Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
 	implement later.
 
 	With these changes all JPEG formats appear to load properly for me.
-	
+
 1999-11-08  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/io-ras.c (image_load_increment): Final patch from Arjan.
@@ -343,7 +365,7 @@ Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
 	* src/io-pnm.c image_load (): Fixed so we do not create a separate
 	pixel buffer when reading in image - we reuse the pixel data in
 	the GdkPixbuf structure instead.
-	
+
 1999-11-08  Michael Fulbright  <drmike@redhat.com>
 
 	* src/io-pnm.c pnm_read_ascii_scanline (): Added support for
@@ -357,7 +379,7 @@ Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
 	of the width, height, x, and y setting and pixels arguments.
 
 1999-11-05  Jonathan Blandford  <jrb@redhat.com>
-	
+
 	* src/io-ras.c (image_load): third patch.  Now it seems to load.
 
 	* src/gdk-pixbuf-io.c: second patch Arjan van de Ven
@@ -402,7 +424,7 @@ Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
 
 	* src/gdk-pixbuf-render.c (gdk_pixbuf_render_to_drawable): In
 	docs, explain what a dither offset is for.
-	(gdk_pixbuf_render_to_drawable_alpha): Explain why you would use 
+	(gdk_pixbuf_render_to_drawable_alpha): Explain why you would use
 	this function vs. gdk_pixbuf_render_to_drawable().
 
 1999-11-04  Havoc Pennington  <hp@pobox.com>
@@ -415,8 +437,8 @@ Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
 	library list.
 
 	Patch untested in the inside-gnome-libs case, I need to commit
-	then check out to the gnome-libs I'm using.	
-	
+	then check out to the gnome-libs I'm using.
+
 1999-11-04  Michael Fulbright  <drmike@redhat.com>
 
 	* src/io-jpeg.c (image_begin_load): Add update_func callback.

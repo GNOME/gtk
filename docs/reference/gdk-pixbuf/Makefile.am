@@ -19,6 +19,7 @@ TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 tmpl_sources =					\
 	tmpl/creating.sgml			\
 	tmpl/file-loading.sgml			\
+	tmpl/from-drawables.sgml		\
 	tmpl/gdk-pixbuf-loader.sgml		\
 	tmpl/gdk-pixbuf-unused.sgml		\
 	tmpl/gdk-pixbuf.sgml			\

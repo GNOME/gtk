@@ -2,7 +2,7 @@
 Rendering
 
 <!-- ##### SECTION Short_Description ##### -->
-Rendering a Pixbuf to a GDK Drawable.
+Rendering a pixbuf to a GDK drawable.
 
 <!-- ##### SECTION Long_Description ##### -->
   <para>
@@ -96,8 +96,7 @@ In the future it will do full alpha compositing.
 @dest_y: 
 @width: 
 @height: 
-@alpha_threshold:
-
+@alpha_threshold: 
 <!--
 Local variables:
 mode: sgml
