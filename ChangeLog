@@ -1,3 +1,10 @@
+Sat Sep  4 16:51:00 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_prepare): Revert accidental
+	change from Aug 02 that removed a flush of the X connection from
+	gdk_event_prepare() causing applications to get stuck. (#151732,
+	Richard Hoelscher).
+
 Fri Sep  3 22:45:03 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c (print_node): Don't print out attributes

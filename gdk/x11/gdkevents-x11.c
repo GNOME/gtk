@@ -2151,13 +2151,6 @@ _gdk_events_queue (GdkDisplay *display)
     }
 }
 
-static gboolean
-has_events_already (GdkDisplay *display)
-{
-    gboolean r = XEventsQueued (GDK_DISPLAY_XDISPLAY (display), QueuedAlready);
-    return r;
-}
-
 static gboolean  
 gdk_event_prepare (GSource  *source,
 		   gint     *timeout)
@@ -2169,7 +2162,7 @@ gdk_event_prepare (GSource  *source,
 
   *timeout = -1;
   retval = (_gdk_event_queue_find_first (display) != NULL || 
-	    has_events_already (display));
+	    gdk_check_xpending (display));
   
   GDK_THREADS_LEAVE ();
 
@@ -2206,15 +2199,15 @@ gdk_event_dispatch (GSource    *source,
   GDK_THREADS_ENTER ();
 
   _gdk_events_queue (display);
-
   event = _gdk_event_unqueue (display);
 
   if (event)
     {
       if (_gdk_event_func)
 	(*_gdk_event_func) (event, _gdk_event_data);
+      
       gdk_event_free (event);
-    }  
+    }
   
   GDK_THREADS_LEAVE ();
 
