@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 1999-07-29 16:44-0400\n"
+"POT-Creation-Date: 1999-08-23 14:10+0200\n"
 "PO-Revision-Date: 1998-12-18 12:15+0100\n"
 "Last-Translator: Sven Neumann <sven@gimp.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -48,8 +48,8 @@ msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
-#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3480
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
+#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3480
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -68,7 +68,7 @@ msgstr "Verzeichnisse"
 msgid "Files"
 msgstr "Dateien"
 
-#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1461
+#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1466
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Verzeichnis unlesbar: %s"
@@ -77,11 +77,11 @@ msgstr "Verzeichnis unlesbar: %s"
 msgid "Create Dir"
 msgstr "Verzeichnis erstellen"
 
-#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:920
+#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:925
 msgid "Delete File"
 msgstr "Datei löschen"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1024
+#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
 msgid "Rename File"
 msgstr "Datei umbenennen"
 
@@ -95,34 +95,34 @@ msgid "Error"
 msgstr "Fehler"
 
 #. close button
-#: gtk/gtkfilesel.c:740 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:745 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Schließen"
 
-#: gtk/gtkfilesel.c:815
+#: gtk/gtkfilesel.c:820
 msgid "Create Directory"
 msgstr "Verzeichnis erstellen"
 
-#: gtk/gtkfilesel.c:829
+#: gtk/gtkfilesel.c:834
 msgid "Directory name:"
 msgstr "Verzeichnis:"
 
 #. buttons
-#: gtk/gtkfilesel.c:842
+#: gtk/gtkfilesel.c:847
 msgid "Create"
 msgstr "Erstellen"
 
 #. buttons
-#: gtk/gtkfilesel.c:942
+#: gtk/gtkfilesel.c:947
 msgid "Delete"
 msgstr "Löschen"
 
 #. buttons
-#: gtk/gtkfilesel.c:1057
+#: gtk/gtkfilesel.c:1062
 msgid "Rename"
 msgstr "Umbenennen"
 
-#: gtk/gtkfilesel.c:1440
+#: gtk/gtkfilesel.c:1445
 #, fuzzy
 msgid "Selection: "
 msgstr "Schriftauswahl"
@@ -434,7 +434,7 @@ msgstr "(ausgeschaltet)"
 msgid "clear"
 msgstr "gelöscht"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4124
+#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
 #, c-format
 msgid "Page %u"
 msgstr "Seite %u"

@@ -1,90 +1,90 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <pauls@euronet.nl>, 1998.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 1999-07-29 16:44-0400\n"
-"PO-Revision-Date: 1999-01-31 23:04+0100\n"
-"Last-Translator: Paul Siegmann <pauls@euronet.nl>\n"
-"Language-Team: LANGUAGE <nl@li.org>\n"
+"POT-Creation-Date: 1999-08-23 14:10+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: ENCODING\n"
 
 #: gtk/gtkcolorsel.c:221
 msgid "Hue:"
-msgstr "Kleur:"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:222
 msgid "Saturation:"
-msgstr "Verzadiging:"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:223
 msgid "Value:"
-msgstr "Waarde:"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:224
 msgid "Red:"
-msgstr "Rood:"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:225
 msgid "Green:"
-msgstr "Groen:"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:226
 msgid "Blue:"
-msgstr "Blauw:"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:227
 msgid "Opacity:"
-msgstr "Doorschijnendheid:"
+msgstr ""
 
 #. The OK button
 #: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
 #: gtk/gtkgamma.c:416
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
-#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3480
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
+#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3480
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
-msgstr "Annuleren"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:1738
 msgid "Help"
-msgstr "Help"
+msgstr ""
 
 #. The directories clist
 #: gtk/gtkfilesel.c:418
 msgid "Directories"
-msgstr "Directories"
+msgstr ""
 
 #. The files clist
 #: gtk/gtkfilesel.c:437
 msgid "Files"
-msgstr "Bestanden"
+msgstr ""
 
-#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1461
+#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1466
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Directory onleesbaar: %s"
+msgstr ""
 
 #: gtk/gtkfilesel.c:539
 msgid "Create Dir"
-msgstr "Maak Dir"
+msgstr ""
 
-#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:920
+#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:925
 msgid "Delete File"
-msgstr "Verwijder Bestand"
+msgstr ""
 
-#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1024
+#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
 msgid "Rename File"
-msgstr "Wijzig Bestandsnaam"
+msgstr ""
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -93,138 +93,137 @@ msgstr "Wijzig Bestandsnaam"
 #.
 #: gtk/gtkfilesel.c:722
 msgid "Error"
-msgstr "Fout"
+msgstr ""
 
 #. close button
-#: gtk/gtkfilesel.c:740 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:745 gtk/gtkinputdialog.c:354
 msgid "Close"
-msgstr "Sluiten"
+msgstr ""
 
-#: gtk/gtkfilesel.c:815
+#: gtk/gtkfilesel.c:820
 msgid "Create Directory"
-msgstr "Maak Directory"
+msgstr ""
 
-#: gtk/gtkfilesel.c:829
+#: gtk/gtkfilesel.c:834
 msgid "Directory name:"
-msgstr "Directory naam:"
+msgstr ""
 
 #. buttons
-#: gtk/gtkfilesel.c:842
+#: gtk/gtkfilesel.c:847
 msgid "Create"
-msgstr "Maak"
+msgstr ""
 
 #. buttons
-#: gtk/gtkfilesel.c:942
+#: gtk/gtkfilesel.c:947
 msgid "Delete"
-msgstr "Verwijder"
+msgstr ""
 
 #. buttons
-#: gtk/gtkfilesel.c:1057
+#: gtk/gtkfilesel.c:1062
 msgid "Rename"
-msgstr "Hernoem"
+msgstr ""
 
-#: gtk/gtkfilesel.c:1440
+#: gtk/gtkfilesel.c:1445
 msgid "Selection: "
-msgstr "Selectie: "
+msgstr ""
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
-msgstr "Oorsprong:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
-msgstr "Familie:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:212
 msgid "Weight:"
-msgstr "Gewicht:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:213
 msgid "Slant:"
-msgstr "Helling:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr "Zet Breedte:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
-msgstr "Voeg Stijl toe:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr "Pixel Grootte:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
-msgstr "Punt Grootte:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr "Resolutie X:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr "Resolutie Y:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
-msgstr "Spatiering:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr "Gemiddelde Breedte:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
-msgstr "Karakterset:"
+msgstr ""
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:459
 msgid "Font Property"
-msgstr "Eigenschap Lettertype"
+msgstr ""
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
-msgstr "Gevraagde Waarde"
+msgstr ""
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
-msgstr "Werkelijke Waarde"
+msgstr ""
 
 #: gtk/gtkfontsel.c:494
 msgid "Font"
-msgstr "Lettertype"
+msgstr ""
 
 #: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2158 gtk/gtkfontsel.c:2388
 msgid "Font:"
-msgstr "Lettertype:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:509
 msgid "Font Style:"
-msgstr "Lettertype Stijl:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:514
 msgid "Size:"
-msgstr "Grootte:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
-#, fuzzy
 msgid "Reset Filter"
-msgstr "Verwijder Filter"
+msgstr ""
 
 #: gtk/gtkfontsel.c:660
 msgid "Metric:"
-msgstr "Metriek:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:664
 msgid "Points"
-msgstr "Punten"
+msgstr ""
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr "Pixels"
+msgstr ""
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
@@ -233,66 +232,65 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:716
 msgid "Font Information"
-msgstr "Lettertype Informatie"
+msgstr ""
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr "Naam Gewenste Lettertype:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr "Naam Werkelijke Lettertype:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr "%i lettertypen beschikbaar met in totaal %i stijlen."
+msgstr ""
 
 #: gtk/gtkfontsel.c:786
-#, fuzzy
 msgid "Filter"
-msgstr "Filter"
+msgstr ""
 
 #: gtk/gtkfontsel.c:799
 msgid "Font Types:"
-msgstr "Lettertypen Types:"
+msgstr ""
 
 #: gtk/gtkfontsel.c:807
 msgid "Bitmap"
-msgstr "Bitmap"
+msgstr ""
 
 #: gtk/gtkfontsel.c:813
 msgid "Scalable"
-msgstr "Schaalbaar"
+msgstr ""
 
 #: gtk/gtkfontsel.c:819
 msgid "Scaled Bitmap"
-msgstr "Geschaalde Bitmap"
+msgstr ""
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
-msgstr "gewoon"
+msgstr ""
 
 #: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1950
 msgid "italic"
-msgstr "schuingedrukt"
+msgstr ""
 
 #: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1951
 msgid "oblique"
-msgstr "scheef"
+msgstr ""
 
 #: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1952
 msgid "reverse italic"
-msgstr "omgekeerd schuingedrukt"
+msgstr ""
 
 #: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1953
 msgid "reverse oblique"
-msgstr "omgekeerd scheef"
+msgstr ""
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
 msgid "other"
-msgstr "anders"
+msgstr ""
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
@@ -304,27 +302,27 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1782
 msgid "The selected font is not available."
-msgstr "Het gekozen lettertype is niet beschikbaar."
+msgstr ""
 
 #: gtk/gtkfontsel.c:1788
 msgid "The selected font is not a valid font."
-msgstr "Het gekozen lettertype is niet een geldig lettertype."
+msgstr ""
 
 #: gtk/gtkfontsel.c:1846
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Dit is een 2-byte lettertype en wordt mischien niet goed weergegeven."
+msgstr ""
 
 #: gtk/gtkfontsel.c:1938 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
-msgstr "(onbekend)"
+msgstr ""
 
 #: gtk/gtkfontsel.c:1949
 msgid "roman"
-msgstr "romaans"
+msgstr ""
 
 #: gtk/gtkfontsel.c:1961
 msgid "proportional"
-msgstr "proportioneel"
+msgstr ""
 
 #: gtk/gtkfontsel.c:1962
 msgid "monospaced"
@@ -332,56 +330,56 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1963
 msgid "char cell"
-msgstr "karakter cel"
+msgstr ""
 
 #: gtk/gtkfontsel.c:2163
 msgid "Font: (Filter Applied)"
-msgstr "Lettertype: (Filter toegepast)"
+msgstr ""
 
 #: gtk/gtkfontsel.c:2639
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS overtreden. Sommige fonts kunnen ontbreken."
+msgstr ""
 
 #: gtk/gtkfontsel.c:3474
 msgid "Apply"
-msgstr "Toepassen"
+msgstr ""
 
 #: gtk/gtkfontsel.c:3496
 msgid "Font Selection"
-msgstr "Lettertype Selectie"
+msgstr ""
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
-msgstr "Gamma"
+msgstr ""
 
 #: gtk/gtkgamma.c:403
 msgid "Gamma value"
-msgstr "Gamma waarde"
+msgstr ""
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:200
 msgid "Input"
-msgstr "Invoer"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
-msgstr "Geen invoer apparaten"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:237
 msgid "Device:"
-msgstr "Apparaat:"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
-msgstr "Uitgeschakeld"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:261
 msgid "Screen"
-msgstr "Scherm"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:269
 msgid "Window"
-msgstr "Venster"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:277
 msgid "Mode: "
@@ -390,72 +388,72 @@ msgstr ""
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
 msgid "Axes"
-msgstr "Assen"
+msgstr ""
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:323
 msgid "Keys"
-msgstr "Sleutels"
+msgstr ""
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
 #: gtk/gtkinputdialog.c:345
 msgid "Save"
-msgstr "Opslaan"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:500
 msgid "X"
-msgstr "X"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:501
 msgid "Y"
-msgstr "Y"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:502
 msgid "Pressure"
-msgstr "Druk"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
-msgstr "X Helling"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:504
 msgid "Y Tilt"
-msgstr "Y Helling"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
-msgstr "niets"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
 msgid "(disabled)"
-msgstr "(uitgeschakeld)"
+msgstr ""
 
 #. and clear button
 #: gtk/gtkinputdialog.c:692
 msgid "clear"
-msgstr "wissen"
+msgstr ""
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4124
+#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
 #, c-format
 msgid "Page %u"
-msgstr "Pagina %u"
+msgstr ""
 
 #: gtk/gtkrc.c:1531
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" regel %d niet vinden"
+msgstr ""
 
 #: gtk/gtkrc.c:1534
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kan plaatjes bestand in pixmap_path: \"s\" niet vinden"
+msgstr ""
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Kan module in module_path: \"%s\" niet vinden,"
+msgstr ""
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- Geen Tip ---"
+msgstr ""

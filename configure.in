@@ -29,9 +29,9 @@ AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 #
 GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=2
-GTK_MICRO_VERSION=3
-GTK_INTERFACE_AGE=1
-GTK_BINARY_AGE=3
+GTK_MICRO_VERSION=4
+GTK_INTERFACE_AGE=2
+GTK_BINARY_AGE=4
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
 dnl
 AC_DIVERT_POP()dnl
@@ -163,6 +163,19 @@ if test -n "$PERL" && perl -v | grep 'version 5.' > /dev/null ; then
 fi
 AC_SUBST(REBUILD)
 
+AC_MSG_CHECKING(whether make is GNU Make)
+STRIP_BEGIN=
+STRIP_END=
+if make --version 2>/dev/null | grep '^GNU Make version ' >/dev/null ; then
+	STRIP_BEGIN='$(strip'
+	STRIP_END=')'
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+AC_SUBST(STRIP_BEGIN)
+AC_SUBST(STRIP_END)
+
 # i18n stuff
 ALL_LINGUAS="ca cs de es fi fr hr hu it ja ko nl no pl pt ru sl sk sv wa zh_TW.Big5"
 AM_GTK_GNU_GETTEXT
@@ -217,9 +230,9 @@ fi
 if test x$with_glib = x ; then 
   # Look for separately installed glib
 
-  AM_PATH_GLIB(1.2.3,,
+  AM_PATH_GLIB(1.2.4,,
     AC_MSG_ERROR([
-*** GLIB 1.2.3 or better is required. The latest version of GLIB
+*** GLIB 1.2.4 or better is required. The latest version of GLIB
 *** is always available from ftp://ftp.gtk.org/.]),
     gmodule gthread)
 

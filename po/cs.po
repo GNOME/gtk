@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 1999-07-29 16:44-0400\n"
+"POT-Creation-Date: 1999-08-23 14:10+0200\n"
 "PO-Revision-Date: 1999-05-25 00:02+02:00\n"
 "Last-Translator: Stanislav Brabec <utx@k332.feld.cvut.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -49,8 +49,8 @@ msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
-#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3480
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
+#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3480
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Zru¹it"
@@ -69,7 +69,7 @@ msgstr "Adresáøe"
 msgid "Files"
 msgstr "Soubory"
 
-#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1461
+#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1466
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Adresáø %s je neèitelný."
@@ -78,11 +78,11 @@ msgstr "Adresáø %s je neèitelný."
 msgid "Create Dir"
 msgstr "Vytvoøit adresáø"
 
-#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:920
+#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:925
 msgid "Delete File"
 msgstr "Smazat soubor"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1024
+#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
 msgid "Rename File"
 msgstr "Pøejmenovat soubor"
 
@@ -96,34 +96,34 @@ msgid "Error"
 msgstr "Chyba"
 
 #. close button
-#: gtk/gtkfilesel.c:740 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:745 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Zavøít"
 
-#: gtk/gtkfilesel.c:815
+#: gtk/gtkfilesel.c:820
 msgid "Create Directory"
 msgstr "Vytvoøit adresáø"
 
-#: gtk/gtkfilesel.c:829
+#: gtk/gtkfilesel.c:834
 msgid "Directory name:"
 msgstr "Jméno adresáøe:"
 
 #. buttons
-#: gtk/gtkfilesel.c:842
+#: gtk/gtkfilesel.c:847
 msgid "Create"
 msgstr "Vytvoøit"
 
 #. buttons
-#: gtk/gtkfilesel.c:942
+#: gtk/gtkfilesel.c:947
 msgid "Delete"
 msgstr "Smazat"
 
 #. buttons
-#: gtk/gtkfilesel.c:1057
+#: gtk/gtkfilesel.c:1062
 msgid "Rename"
 msgstr "Pøejmenovat"
 
-#: gtk/gtkfilesel.c:1440
+#: gtk/gtkfilesel.c:1445
 msgid "Selection: "
 msgstr "Výbìr: "
 
@@ -434,7 +434,7 @@ msgstr "(vypnuto)"
 msgid "clear"
 msgstr "smazat"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4124
+#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
 #, c-format
 msgid "Page %u"
 msgstr "Strana %u"

@@ -1,3 +1,36 @@
+Mon Aug 23 19:11:17 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/Makefile.am:
+	invoke indent on gtkmarshal.*. 
+	rewrote source generation rules, use COPYING as oldest source tag for
+	a piggyback rule to generate all sources from (don't touch it ;).
+	major cleanups, strip spaces on build rules for GNU Make.
+
+	* gtk/genmarshal.pl: don't operate on hardcoded filenames but take
+	source and target files from commandline arguments. don't invoke indent.
+
+	* gdk/Makefile.am: minor cleanups, strip spaces on build rules for
+	GNU Make.
+
+	* docs/Makefile.am: added generation.txt.
+
+	* Makefile.am: require automake 1.4, build README from README.in and
+	INSTALL from INSTALL.in in dist-hook.
+	
+	* README.in:
+	* INSTALL.in: new files to autogenerate README and INSTALL from.
+
+	* gtk/COPYING:
+	* gdk/COPYING: new files containing the GNU LESSER GENERAL PUBLIC
+	LICENSE.
+
+	* configure.in: figure wether we have GNU Make, version update to
+	Gtk+ 1.2.4, interface age 2, binary age 4.
+	
+	* NEWS: updates.
+
+	* docs/generation.txt: minor additions/corrections.
+
 Sat Aug 21 14:07:36 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_real_switch_page): queue_resize

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.16\n"
-"POT-Creation-Date: 1999-07-29 16:44-0400\n"
+"POT-Creation-Date: 1999-08-23 14:10+0200\n"
 "PO-Revision-Date: 1998-03-27 00:09+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@online.no>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -48,8 +48,8 @@ msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
-#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3480
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
+#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3480
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Avbryt"
@@ -68,7 +68,7 @@ msgstr "Kataloger"
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1461
+#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1466
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Uleselig katalog: %s"
@@ -77,11 +77,11 @@ msgstr "Uleselig katalog: %s"
 msgid "Create Dir"
 msgstr "Lag katalog"
 
-#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:920
+#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:925
 msgid "Delete File"
 msgstr "Slett fil"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1024
+#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
 msgid "Rename File"
 msgstr "Gi filen nytt navn"
 
@@ -95,34 +95,34 @@ msgid "Error"
 msgstr "Feil"
 
 #. close button
-#: gtk/gtkfilesel.c:740 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:745 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Lukk"
 
-#: gtk/gtkfilesel.c:815
+#: gtk/gtkfilesel.c:820
 msgid "Create Directory"
 msgstr "Lag katalog"
 
-#: gtk/gtkfilesel.c:829
+#: gtk/gtkfilesel.c:834
 msgid "Directory name:"
 msgstr "Katalognavn:"
 
 #. buttons
-#: gtk/gtkfilesel.c:842
+#: gtk/gtkfilesel.c:847
 msgid "Create"
 msgstr "Lag"
 
 #. buttons
-#: gtk/gtkfilesel.c:942
+#: gtk/gtkfilesel.c:947
 msgid "Delete"
 msgstr "Slett"
 
 #. buttons
-#: gtk/gtkfilesel.c:1057
+#: gtk/gtkfilesel.c:1062
 msgid "Rename"
 msgstr "Gi nytt navn"
 
-#: gtk/gtkfilesel.c:1440
+#: gtk/gtkfilesel.c:1445
 msgid "Selection: "
 msgstr "Valg:"
 
@@ -433,7 +433,7 @@ msgstr "(slått av)"
 msgid "clear"
 msgstr "tøm"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4124
+#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"

@@ -20,25 +20,17 @@
 		"CALLBACK"=>"CALLBACK"
 		);
 
-$srcdir = $ENV{'srcdir'} || '.';
-$indent = $ENV{'INDENT'};
-
-sub indent {
-    my $filename = shift;
-    if (defined($indent) && $indent ne "") {
-	system($indent, $filename);
-	# we try the most likely names for backup files
-	system("rm", "-f", "$filename.bak", "$filename~");
-    }
+if ($#ARGV != 2) {
+	die ("Wrong number of arguments given, need <source> <target.h> <target.c>");
 }
 
-open(IL, "<$srcdir/gtkmarshal.list") || die("Open failed: $!");
-open(OH, ">s-gmh") || die("Open failed: $!");
-open(OS, ">s-gmc") || die("Open failed: $!");
+open(IL, "<" . $ARGV[0]) || die ("Open failed: $!");
+open(OH, ">" . $ARGV[1]) || die ("Open failed: $!");
+open(OS, ">" . $ARGV[2]) || die ("Open failed: $!");
 
 print OH <<EOT;
-#ifndef __GTKMARSHAL_H__
-#define __GTKMARSHAL_H__ 1
+#ifndef __GTK_MARSHAL_H__
+#define __GTK_MARSHAL_H__
 
 #include <gtk/gtktypeutils.h>
 #include <gtk/gtkobject.h>
@@ -196,10 +188,7 @@ print OH <<EOT;
 }
 #endif /* __cplusplus */
 
-#endif /* __GTKMARSHAL_H__ */
+#endif /* __GTK_MARSHAL_H__ */
 EOT
 
 close(IL); close(OH); close(OS);
-
-indent("s-gmh");
-indent("s-gmc");
