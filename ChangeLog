@@ -1,5 +1,8 @@
 2004-09-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpathbar.c (gtk_path_bar_size_request): Give the path
+	bar arrow buttons some more room.
+
 	* gtk/gtkactiongroup.c: Fix typos in signal docs.  (#153224,
 	John Finlay)
 
