@@ -2527,7 +2527,7 @@ real_tree_expand (GtkCTree     *ctree,
   work = GTK_CTREE_ROW (node)->children;
   if (work)
     {
-      GList *list;
+      GList *list = (GList *)work;
       gint *cell_width = NULL;
       gint tmp = 0;
       gint row;
@@ -2538,11 +2538,8 @@ real_tree_expand (GtkCTree     *ctree,
 	  cell_width = g_new0 (gint, clist->columns);
 	  if (clist->column[ctree->tree_column].auto_resize)
 	      cell_width[ctree->tree_column] = requisition.width;
-	}
 
-      while (GTK_CTREE_NODE_NEXT (work))
-	{
-	  if (visible && !GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
+	  while (work)
 	    {
 	      /* search maximum cell widths of auto_resize columns */
 	      for (i = 0; i < clist->columns; i++)
@@ -2552,26 +2549,35 @@ real_tree_expand (GtkCTree     *ctree,
 		      (clist, &GTK_CTREE_ROW (work)->row, i, &requisition);
 		    cell_width[i] = MAX (requisition.width, cell_width[i]);
 		  }
+
+	      list = (GList *)work;
+	      work = GTK_CTREE_NODE_NEXT (work);
+	      tmp++;
 	    }
-
-	  work = GTK_CTREE_NODE_NEXT (work);
-	  tmp++;
 	}
+      else
+	while (work)
+	  {
+	    list = (GList *)work;
+	    work = GTK_CTREE_NODE_NEXT (work);
+	    tmp++;
+	  }
 
-      list = (GList *)work;
       list->next = (GList *)GTK_CTREE_NODE_NEXT (node);
 
       if (GTK_CTREE_NODE_NEXT (node))
 	{
-	  list = (GList *)GTK_CTREE_NODE_NEXT (node);
-	  list->prev = (GList *)work;
+	  GList *tmp_list;
+
+	  tmp_list = (GList *)GTK_CTREE_NODE_NEXT (node);
+	  tmp_list->prev = list;
 	}
       else
-	clist->row_list_end = (GList *)work;
+	clist->row_list_end = list;
 
       list = (GList *)node;
       list->next = (GList *)(GTK_CTREE_ROW (node)->children);
-      
+
       if (visible)
 	{
 	  /* resize auto_resize columns if needed */
@@ -2584,9 +2590,9 @@ real_tree_expand (GtkCTree     *ctree,
 	  /* update focus_row position */
 	  row = g_list_position (clist->row_list, (GList *)node);
 	  if (row < clist->focus_row)
-	    clist->focus_row += tmp + 1;
+	    clist->focus_row += tmp;
 
-	  clist->rows += tmp + 1;
+	  clist->rows += tmp;
 	  CLIST_REFRESH (clist);
 	}
     }
