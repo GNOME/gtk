@@ -1,16 +1,16 @@
 # Përkthimi i mesazheve të gtk+-properties në shqip
-# Copyright (C) 2003, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2003, 2004, 2005 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 # Besnik Bleta <besnikbleta@hotmail.com>, 2003.
-# Laurent Dhima <laurenti@alblinux.net>, 2003, 2004.
+# Laurent Dhima <laurenti@alblinux.net>, 2003, 2004, 2005.
 #
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-17 04:30+0100\n"
-"PO-Revision-Date: 2004-12-17 17:16+0100\n"
+"POT-Creation-Date: 2005-01-04 04:27+0100\n"
+"PO-Revision-Date: 2005-01-04 10:44+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -376,52 +376,52 @@ msgstr "Tregon nëse grupi i veprimit është aktiv."
 msgid "Whether the action group is visible."
 msgstr "Tregon nëse grupi i veprimit është i dukshëm."
 
-#: gtk/gtkadjustment.c:108 gtk/gtkcellrendererprogress.c:115
+#: gtk/gtkadjustment.c:115 gtk/gtkcellrendererprogress.c:115
 #: gtk/gtkspinbutton.c:303
 msgid "Value"
 msgstr "Vlera"
 
-#: gtk/gtkadjustment.c:109
+#: gtk/gtkadjustment.c:116
 msgid "The value of the adjustment"
 msgstr "Vlera e rregullimit"
 
-#: gtk/gtkadjustment.c:118
+#: gtk/gtkadjustment.c:132
 msgid "Minimum Value"
 msgstr "Vlera më e vogël"
 
-#: gtk/gtkadjustment.c:119
+#: gtk/gtkadjustment.c:133
 msgid "The minimum value of the adjustment"
 msgstr "Vlera më e vogël e rregullimit"
 
-#: gtk/gtkadjustment.c:128
+#: gtk/gtkadjustment.c:152
 msgid "Maximum Value"
 msgstr "Vlera më e madhe"
 
-#: gtk/gtkadjustment.c:129
+#: gtk/gtkadjustment.c:153
 msgid "The maximum value of the adjustment"
 msgstr "Vlera më e madhe e rregullimit"
 
-#: gtk/gtkadjustment.c:138
+#: gtk/gtkadjustment.c:169
 msgid "Step Increment"
 msgstr "Hapi rritës"
 
-#: gtk/gtkadjustment.c:139
+#: gtk/gtkadjustment.c:170
 msgid "The step increment of the adjustment"
 msgstr "Hapi rritës i rregullimit"
 
-#: gtk/gtkadjustment.c:148
+#: gtk/gtkadjustment.c:186
 msgid "Page Increment"
 msgstr "Zmadhimi i faqes"
 
-#: gtk/gtkadjustment.c:149
+#: gtk/gtkadjustment.c:187
 msgid "The page increment of the adjustment"
 msgstr "Zmadhimi i faqes së rregullimit"
 
-#: gtk/gtkadjustment.c:158
+#: gtk/gtkadjustment.c:206
 msgid "Page Size"
 msgstr "Madhësia e faqes"
 
-#: gtk/gtkadjustment.c:159
+#: gtk/gtkadjustment.c:207
 msgid "The page size of the adjustment"
 msgstr "Madhësia e faqes së rregullimit"
 
@@ -711,7 +711,7 @@ msgstr ""
 "Nëse vihet, etiketa përdoret për të marrë  një element rezervë në vend që të "
 "shfaqet"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:675
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
 msgid "Focus on click"
 msgstr "Fokus në klikim"
 
@@ -1233,7 +1233,7 @@ msgstr ""
 "Zona e preferuar për të sfazuar tekstin, nëse kutia e krijuar nuk ka "
 "hapësirë të mjaftueshme për të shfaqur të gjithë tekstin"
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:364
 #: gtk/gtklabel.c:453
 msgid "Width In Characters"
 msgstr "Gjerësia llogaritur në gërma"
@@ -1442,7 +1442,7 @@ msgstr "Përdor alfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Nëse i duhet dhënë apo jo ngjyrës një vlerë alfa"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:347
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:350
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Titulli"
@@ -1545,71 +1545,71 @@ msgstr "Vlerë në listë"
 msgid "Whether entered values must already be present in the list"
 msgstr "Nëse vlerat e dhëna duhet tashmë të jenë të pranishme në listë"
 
-#: gtk/gtkcombobox.c:548
+#: gtk/gtkcombobox.c:551
 msgid "ComboBox model"
 msgstr "Modeli i ComboBox"
 
-#: gtk/gtkcombobox.c:549
+#: gtk/gtkcombobox.c:552
 msgid "The model for the combo box"
 msgstr "Modeli për combo box"
 
-#: gtk/gtkcombobox.c:565
+#: gtk/gtkcombobox.c:568
 msgid "Wrap width"
 msgstr "Gjerësia e hapit"
 
-#: gtk/gtkcombobox.c:566
+#: gtk/gtkcombobox.c:569
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Gjerësia e hapit për pasqyrimin e elementëve në një rrjetë"
 
-#: gtk/gtkcombobox.c:588
+#: gtk/gtkcombobox.c:591
 msgid "Row span column"
 msgstr "Hapësira e kollonave"
 
-#: gtk/gtkcombobox.c:589
+#: gtk/gtkcombobox.c:592
 msgid "TreeModel column containing the row span values"
 msgstr "Kollona e modelit të degëzimit që përmban vlerat e hapësirave të rreshtave"
 
-#: gtk/gtkcombobox.c:610
+#: gtk/gtkcombobox.c:613
 msgid "Column span column"
 msgstr "Kollona e hapësirës së kollonës"
 
-#: gtk/gtkcombobox.c:611
+#: gtk/gtkcombobox.c:614
 msgid "TreeModel column containing the column span values"
 msgstr "Kollona e modelit të degëzimit që përmban vlerat e hapësirave të kollonave"
 
-#: gtk/gtkcombobox.c:631
+#: gtk/gtkcombobox.c:634
 msgid "Active item"
 msgstr "Elementi aktiv"
 
-#: gtk/gtkcombobox.c:632
+#: gtk/gtkcombobox.c:635
 msgid "The item which is currently active"
 msgstr "Elementi aktualisht aktiv"
 
-#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "Shto shkëputës në menutë"
 
-#: gtk/gtkcombobox.c:652
+#: gtk/gtkcombobox.c:655
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Nëse tendat duhen të kenë një element menuje \"mbyll sirtarin\""
 
-#: gtk/gtkcombobox.c:667 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Ka Frame"
 
-#: gtk/gtkcombobox.c:668
+#: gtk/gtkcombobox.c:671
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Nëse kutia e kombinuar duhet të vizatojë një kornizë rreth birit"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:679
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Nëse kutia e kombinuar merr fokusin kur klikohet me miun"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:685
 msgid "Appears as list"
 msgstr "Shfaqet si listë"
 
-#: gtk/gtkcombobox.c:683
+#: gtk/gtkcombobox.c:686
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Nëse tenda duhet të paraqitet si listë në vend të paraqitjes si menu"
 
@@ -2009,19 +2009,19 @@ msgstr "Shfaq të padukshmit"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Nëse files dhe kartelat e padukshme duhen shfaqur"
 
-#: gtk/gtkfilechooserbutton.c:332
+#: gtk/gtkfilechooserbutton.c:335
 msgid "Dialog"
 msgstr "Dritarja e dialogut"
 
-#: gtk/gtkfilechooserbutton.c:333
+#: gtk/gtkfilechooserbutton.c:336
 msgid "The file chooser dialog to use."
 msgstr "Dritarja e dialogut që duhet përdorur për zgjedhjen e file."
 
-#: gtk/gtkfilechooserbutton.c:348
+#: gtk/gtkfilechooserbutton.c:351
 msgid "The title of the file chooser dialog."
 msgstr "Titulli i dritares së dialogut për zgjedhjen e file."
 
-#: gtk/gtkfilechooserbutton.c:362
+#: gtk/gtkfilechooserbutton.c:365
 msgid "The desired width of the button widget, in characters."
 msgstr "Gjerësia e dëshiruar e pulsantit, në gërma."
 
@@ -2542,11 +2542,11 @@ msgstr "Gjerësia e skemës"
 msgid "The height of the layout"
 msgstr "Lartësia e skemës"
 
-#: gtk/gtkmenu.c:524
+#: gtk/gtkmenu.c:526
 msgid "Tearoff Title"
 msgstr "Emri i menu të shkëputur"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2554,37 +2554,37 @@ msgstr ""
 "Titulli që mund të shfaqet nga organizuesi i dritareve nëqoftëse menu do të "
 "shkëputet"
 
-#: gtk/gtkmenu.c:539
+#: gtk/gtkmenu.c:541
 msgid "Tearoff State"
 msgstr "Gjendja e mbyllësit"
 
-#: gtk/gtkmenu.c:540
+#: gtk/gtkmenu.c:542
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Një boolean që tregon se kur menuja është e mbyllur"
 
-#: gtk/gtkmenu.c:546
+#: gtk/gtkmenu.c:548
 msgid "Vertical Padding"
 msgstr "Zbutja Vertikale"
 
-#: gtk/gtkmenu.c:547
+#: gtk/gtkmenu.c:549
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Hapësirë ekstra në krye dhe në fund të menusë"
 
-#: gtk/gtkmenu.c:555
+#: gtk/gtkmenu.c:557
 msgid "Vertical Offset"
 msgstr "Degëzimi Vertikal"
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:558
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Kur menuja është një nënmenu, zhvendose vertikalisht me këtë numër pikselësh"
 
-#: gtk/gtkmenu.c:564
+#: gtk/gtkmenu.c:566
 msgid "Horizontal Offset"
 msgstr "Degëzimi Horizontal"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:567
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2592,63 +2592,63 @@ msgstr ""
 "Kur menuja është një nënmenu, zhvendose horizontalisht me këtë numër "
 "pikselësh"
 
-#: gtk/gtkmenu.c:575
+#: gtk/gtkmenu.c:577
 msgid "Left Attach"
 msgstr "Bashkangjitje Majtas"
 
-#: gtk/gtkmenu.c:576 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "Numri i kollonës ku duhet vendosur pjesa e majtë e widget bir"
 
-#: gtk/gtkmenu.c:583
+#: gtk/gtkmenu.c:585
 msgid "Right Attach"
 msgstr "Bashkangjitje Djathtas"
 
-#: gtk/gtkmenu.c:584
+#: gtk/gtkmenu.c:586
 msgid "The column number to attach the right side of the child to"
 msgstr "Numri i kollonës ku duhet vendosur pjesa e djathtë e widget bir"
 
-#: gtk/gtkmenu.c:591
+#: gtk/gtkmenu.c:593
 msgid "Top Attach"
 msgstr "Bashkangjitje sipër"
 
-#: gtk/gtkmenu.c:592
+#: gtk/gtkmenu.c:594
 msgid "The row number to attach the top of the child to"
 msgstr "Numri i rreshtit ku duhet vendosur pjesa e sipërme e widget bir"
 
-#: gtk/gtkmenu.c:599
+#: gtk/gtkmenu.c:601
 msgid "Bottom Attach"
 msgstr "Bashkangjitje e poshtme"
 
-#: gtk/gtkmenu.c:600 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "Numri i rreshtit ku duhet vendosur pjesa e poshtme e widget bir"
 
-#: gtk/gtkmenu.c:687
+#: gtk/gtkmenu.c:689
 msgid "Can change accelerators"
 msgstr "Mund të ndryshojë përshpejtuesit"
 
-#: gtk/gtkmenu.c:688
+#: gtk/gtkmenu.c:690
 msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Nëse përshpejtuesit e menuve mund të ndryshohen me anë të shtypjes së një "
 "butoni tek elementi i menusë"
 
-#: gtk/gtkmenu.c:693
+#: gtk/gtkmenu.c:695
 msgid "Delay before submenus appear"
 msgstr "Vonesa para se nënmenutë të shfaqen"
 
-#: gtk/gtkmenu.c:694
+#: gtk/gtkmenu.c:696
 msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Koha më e vogël që treguesi duhet të qëndrojë mbi një element menuje para se "
 "nënmenuja të shfaqet"
 
-#: gtk/gtkmenu.c:701
+#: gtk/gtkmenu.c:703
 msgid "Delay before hiding a submenu"
 msgstr "Vonesë para se një nënmenu të fshihet"
 
-#: gtk/gtkmenu.c:702
+#: gtk/gtkmenu.c:704
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4333,8 +4333,8 @@ msgid "Hover Expand"
 msgstr "Shpalosja e lirë"
 
 #: gtk/gtktreeview.c:693
-msgid "Whether rows should be expanded/collaped when the pointer moves over them"
-msgstr "Nëse rreshtat duhet të shpalosen/përmblidhen kur kursori kalon mbi ta"
+msgid "Whether rows should be expanded/collapsed when the pointer moves over them"
+msgstr "Nëse rreshtat duhet të shpalosen/përmblidhen kur kursori lëviz sipër tyre"
 
 #: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"
