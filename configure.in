@@ -596,7 +596,7 @@ dnl out so that people don't accidentally build without them.
 
 AC_ARG_WITH(libpng,  [  --without-libpng	  Disable PNG loader for gdk-pixbuf])
 AC_ARG_WITH(libjpeg, [  --without-libjpeg	  Disable JPEG loader for gdk-pixbuf])
-AC_ARG_WITH(libtiff, [  --without-libjpeg	  Disable TIFF loader for gdk-pixbuf])
+AC_ARG_WITH(libtiff, [  --without-libtiff	  Disable TIFF loader for gdk-pixbuf])
 
 dnl Test for libtiff
   if test x$with_libtiff != xno && test -z "$LIBTIFF"; then
