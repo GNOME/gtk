@@ -1452,7 +1452,8 @@ egg_icon_list_layout_single_row (EggIconList *icon_list, GList *first_item, gint
   gint icon_padding;
   gint left_margin, right_margin;
   gint maximum_layout_width;
-  
+  gboolean rtl = gtk_widget_get_direction (GTK_WIDGET (icon_list)) == GTK_TEXT_DIR_RTL;
+
   x = 0;
   max_height = 0;
   max_pixbuf_height = 0;
@@ -1486,10 +1487,13 @@ egg_icon_list_layout_single_row (EggIconList *icon_list, GList *first_item, gint
       maximum_layout_width = MAX (item->pixbuf_width, MINIMUM_ICON_ITEM_WIDTH);
 
       item->y = *y;
-      item->x = x;
+      item->x = rtl ? GTK_WIDGET (icon_list)->allocation.width - item->width - x : x;
       
       if (item->width < MINIMUM_ICON_ITEM_WIDTH) {
-	item->x += (MINIMUM_ICON_ITEM_WIDTH - item->width) / 2;
+	if (rtl)
+	  item->x -= (MINIMUM_ICON_ITEM_WIDTH - item->width) / 2;
+	else
+	  item->x += (MINIMUM_ICON_ITEM_WIDTH - item->width) / 2;
 	x += (MINIMUM_ICON_ITEM_WIDTH - item->width);
       }
 
@@ -1570,7 +1574,7 @@ egg_icon_list_layout (EggIconList *icon_list)
 			"bottom_margin", &bottom_margin,
 			NULL);
   y += top_margin;
-  
+
   do
     {
       icons = egg_icon_list_layout_single_row (icon_list, icons, &y, &maximum_width);
@@ -2278,7 +2282,7 @@ egg_icon_list_get_item_at_pos (EggIconList *icon_list,
       if (x > item->x && x < item->x + item->width &&
 	  y > item->y && y < item->y + item->height)
 	{
-	  gint layout_x = item->x +  (item->width - item->layout_width) / 2;
+	  gint layout_x = item->x + (item->width - item->layout_width) / 2;
 	  /* Check if the mouse is inside the icon or the label */
 	  if ((x > item->pixbuf_x && x < item->pixbuf_x + item->pixbuf_width &&
 	       y > item->pixbuf_y && y < item->pixbuf_y + item->pixbuf_height) ||
