@@ -1886,29 +1886,26 @@ gtk_combo_box_scroll_event (GtkWidget          *widget,
     
   index = gtk_combo_box_get_active (combo_box);
 
-  if (index != -1)
+  items = gtk_tree_model_iter_n_children (combo_box->priv->model, NULL);
+  
+  if (event->direction == GDK_SCROLL_UP)
     {
-      items = gtk_tree_model_iter_n_children (combo_box->priv->model, NULL);
-      
-      if (event->direction == GDK_SCROLL_UP)
-	{
-	  new_index = index - 1;
-	  while (new_index >= 0 && !row_is_sensitive (combo_box, new_index))
-	    new_index--;
-	  if (new_index < 0)
-	    new_index = index;
-	}
-      else
-	{
-	  new_index = index + 1;
-	  while (new_index < items && !row_is_sensitive (combo_box, new_index))
-	    new_index++;
-	  if (new_index == items)
-	    new_index = index;
-	}
-
-      gtk_combo_box_set_active (combo_box, CLAMP (new_index, 0, items - 1));
+      new_index = index - 1;
+      while (new_index >= 0 && !row_is_sensitive (combo_box, new_index))
+	new_index--;
+      if (new_index < 0)
+	new_index = index;
     }
+  else
+    {
+      new_index = index + 1;
+      while (new_index < items && !row_is_sensitive (combo_box, new_index))
+	new_index++;
+      if (new_index == items)
+	new_index = index;
+    }
+
+  gtk_combo_box_set_active (combo_box, new_index);
 
   return TRUE;
 }
@@ -4062,11 +4059,6 @@ gtk_cell_editable_key_press (GtkWidget   *widget,
       if (GTK_IS_CELL_EDITABLE (combo_box))
 	gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (combo_box));
       
-      return TRUE;
-    }
-  else if (event->keyval == GDK_space)
-    {
-      /* ignore */
       return TRUE;
     }
 
