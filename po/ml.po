@@ -1486,7 +1486,7 @@ msgstr "നിവേശക രീതി"
 #.
 #: gtk/gtkmain.c:854
 msgid "default:LTR"
-msgstr "സ്വതേയുള്ള:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtknotebook.c:2680 gtk/gtknotebook.c:5073
 #, c-format

@@ -1783,7 +1783,7 @@ msgstr "माहिती पुरवण्याची पद्धत "
 #.
 #: gtk/gtkmain.c:854
 msgid "default:LTR"
-msgstr "सर्वसाधारण :LTR"
+msgstr "default:LTR"
 
 # gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
 #: gtk/gtknotebook.c:2680 gtk/gtknotebook.c:5073

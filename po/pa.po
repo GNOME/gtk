@@ -1496,7 +1496,7 @@ msgstr "ੲਿੰਪੁੱਟ ਤਰੀਕਾ"
 #.
 #: gtk/gtkmain.c:854
 msgid "default:LTR"
-msgstr "ਮੂਲ:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtknotebook.c:2680 gtk/gtknotebook.c:5073
 #, c-format

@@ -1434,7 +1434,7 @@ msgstr "Ulazne metode"
 #.  * it isn't default:LTR or default:RTL it will not work
 #: gtk/gtkmain.c:854
 msgid "default:LTR"
-msgstr "uobičajeno:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtknotebook.c:2680 gtk/gtknotebook.c:5073
 #, c-format
