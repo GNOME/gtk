@@ -1849,9 +1849,6 @@ expander_changed_cb (GtkExpander           *expander,
 		     GParamSpec            *pspec,
 		     GtkFileChooserDefault *impl)
 {
-  gboolean active;
-
-  active = gtk_expander_get_expanded (expander);
   update_appearance (impl);
 }
 
@@ -2193,6 +2190,7 @@ update_appearance (GtkFileChooserDefault *impl)
     }
 
   g_signal_emit_by_name (impl, "default-size-changed");
+  g_signal_emit_by_name (impl, "resizable-hints-changed");
 }
 
 static void

@@ -1,3 +1,9 @@
+Mon Mar  1 12:05:54 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkfilechooserdialog.c
+	(file_chooser_widget_resizable_hints_changed): Handle
+	shrinking/growing.
+
 2004-03-01  Michael Natterer  <mitch@gimp.org>
 
 	* gtk/gtktextbtree.c: removed underscores from calls to

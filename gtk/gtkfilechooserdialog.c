@@ -150,6 +150,32 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
 }
 
 static void
+file_chooser_widget_resizable_hints_changed (GtkWidget            *widget,
+					     GtkFileChooserDialog *dialog)
+{
+  GtkFileChooserDialogPrivate *priv;
+  gboolean resize_horizontally;
+  gboolean resize_vertically;
+  GdkGeometry geometry;
+
+  priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
+
+  _gtk_file_chooser_embed_get_resizable_hints (GTK_FILE_CHOOSER_EMBED (priv->widget),
+					       &resize_horizontally,
+					       &resize_vertically);
+
+
+  geometry.min_width = -1;
+  geometry.min_height = -1;
+  geometry.max_width = (resize_horizontally?G_MAXSHORT:-1);
+  geometry.max_height = (resize_vertically?G_MAXSHORT:-1);
+
+  gtk_window_set_geometry_hints (GTK_WINDOW (dialog), NULL,
+				 &geometry,
+ 				 GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE);
+}
+
+static void
 file_chooser_widget_default_size_changed (GtkWidget            *widget,
 					  GtkFileChooserDialog *dialog)
 {
@@ -226,6 +252,8 @@ gtk_file_chooser_dialog_constructor (GType                  type,
 		    G_CALLBACK (file_chooser_widget_file_activated), object);
   g_signal_connect (priv->widget, "default-size-changed",
 		    G_CALLBACK (file_chooser_widget_default_size_changed), object);
+  g_signal_connect (priv->widget, "resizable-hints-changed",
+		    G_CALLBACK (file_chooser_widget_resizable_hints_changed), object);
 
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (object)->vbox), priv->widget, TRUE, TRUE, 0);
   gtk_widget_show (priv->widget);
