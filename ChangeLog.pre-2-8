@@ -1,3 +1,10 @@
+2001-01-03  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/gdkwindow.c:
+	Set the colormap of input only windows to the system colormap.
+	The previous GtkInvisible patch generated a lot of colormap ==
+	NULL warnings without this.
+
 2000-12-20  Alexander Larsson  <alexl@redhat.com>
 
         * gtk/gtkinvisible.c (gtk_invisible_realize):

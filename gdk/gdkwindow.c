@@ -401,7 +401,7 @@ gdk_window_new (GdkWindow     *parent,
     {
       depth = 0;
       class = InputOnly;
-      private->colormap = NULL;
+      private->colormap = gdk_colormap_get_system ();
     }
   
   private->xwindow = XCreateWindow (private->xdisplay, xparent,
