@@ -1,3 +1,13 @@
+2004-01-23  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/migrating-checklist.sgml: Note that a widget must be
+	focusable for the menu keybindings to work.
+
+2004-01-22  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/migrating-checklist.sgml: Mention when it is useful to use
+	GdkEventExpose.region rather than GdkEventExpose.area.
+
 2004-01-22  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/migrating-checklist.sgml: Point to GtkEntry as an example of

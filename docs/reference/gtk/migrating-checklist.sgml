@@ -131,6 +131,84 @@ my_widget_popup_menu_handler (GtkWidget *widget)
 	top edge of its popup menu with the bottom edge of the entry.
       </para>
     </note>
+
+    <note>
+      <para>
+	For the standard key bindings to work, your widget must be
+	able to take the keyboard focus.  In general, widgets should
+	be fully usable through the keyboard and not just the mouse.
+	The very first step of this is to ensure that your widget
+	turns on the <link
+	linkend="gtkwidgetflags"><constant>GTK_CAN_FOCUS</constant></link>
+	FLAG.
+      </para>
+    </note>
+  </section>
+
+  <section id="checklist-gdkeventexpose-region">
+    <title>Use GdkEventExpose.region</title>
+
+    <formalpara>
+      <title>Why</title>
+      <para>
+	The <structfield>region</structfield> field of
+	<structname>GdkEventExpose</structname> allows you to redraw
+	less than the traditional
+	<structfield>GdkEventRegion.area</structfield>.
+      </para>
+    </formalpara>
+
+    <para>
+      In GTK+ 1.x, the <structname>GdkEventExpose</structname>
+      structure only had an <structfield>area</structfield> field to
+      let you determine the region that you needed to redraw.  In GTK+
+      2.x, this field exists for compatibility and as a simple
+      interface.  However, there is also a
+      <structfield>region</structfield> field which contains a
+      fine-grained region.  The <structfield>area</structfield> field
+      is simply the bounding rectangle of the
+      <structfield>region</structfield>.
+    </para>
+
+    <para>
+      Widgets that are very expensive to re-render, such as an image
+      editor, may prefer to use the
+      <structfield>GdkEventExpose.region</structfield> field to paint
+      as little as possible.  Widgets that just use a few drawing
+      primitives, such as labels and buttons, may prefer to use the
+      traditional <structfield>GdkEventExpose.area</structfield> field
+      for simplicity.
+    </para>
+
+    <para>
+      Regions have an internal representation that is accessible as a
+      list of rectangles.  To turn the
+      <structfield>GdkEventExpose.region</structfield> field into such
+      a list, use gdk_region_get_rectangles():
+    </para>
+
+    <programlisting id="gdkregion-get-rectangles">
+static gboolean
+my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
+{
+  GdkRectangle *rects;
+  int n_rects;
+  int i;
+
+  gdk_region_get_rectangles (event-&gt;region, &amp;rects, &amp;n_rects);
+
+  for (i = 0; i &lt; n_rects; i++)
+    {
+      /* Repaint rectangle: (rects[i].x, rects[i].y), 
+       *                    (rects[i].width, rects[i].height)
+       */
+    }
+
+  g_free (rects);
+
+  return FALSE;
+}
+    </programlisting>
   </section>
 </chapter>
 
