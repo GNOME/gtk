@@ -156,11 +156,11 @@ static gint   gdk_im_open		(XrmDatabase db,
 static void   gdk_im_close		(void);
 static void   gdk_ic_cleanup		(void);
 
+#endif /* USE_XIM */
+
 GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
 					 GdkEvent  *event,
 					 gpointer   data);
-
-#endif /* USE_XIM */
 
 /* Private variable declarations
  */

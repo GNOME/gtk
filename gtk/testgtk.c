@@ -3542,7 +3542,7 @@ add1000_clist (GtkWidget *widget, gpointer data)
   gtk_clist_freeze (GTK_CLIST (data));
   for (i = 0; i < 1000; i++)
     {
-      sprintf (text[0], "Row %d", rand() % 10000);
+      sprintf (text[0], "CListRow %d", rand() % 10000);
       row = gtk_clist_append (clist, texts);
       gtk_clist_set_pixtext (clist, row, 3, "gtk+", 5, pixmap, mask);
     }
@@ -3572,7 +3572,7 @@ add10000_clist (GtkWidget *widget, gpointer data)
   gtk_clist_freeze (GTK_CLIST (data));
   for (i = 0; i < 10000; i++)
     {
-      sprintf (text[0], "Row %d", rand() % 10000 /*clist_rows++*/);
+      sprintf (text[0], "CListRow %d", rand() % 10000);
       gtk_clist_append (GTK_CLIST (data), texts);
     }
   gtk_clist_thaw (GTK_CLIST (data));
@@ -3830,7 +3830,7 @@ clist_toggle_sel_mode (GtkWidget *widget, GtkCList *clist)
 static void 
 clist_click_column (GtkCList *clist, gint column, gpointer data)
 {
-  if (column == 5)
+  if (column == 4)
     gtk_clist_set_column_visibility (clist, column, FALSE);
   else if (column == clist->sort_column)
     {
@@ -3853,8 +3853,8 @@ create_clist (void)
 
   static char *titles[] =
   {
-    "Title 0",  "Title 1",  "not resizeable", "max width 120",
-    "min width 40", "hide column", "Title 6", "Title 7",
+    "auto resize", "not resizeable", "max width 100", "min width 50",
+    "hide column", "Title 5", "Title 6", "Title 7",
     "Title 8",  "Title 9",  "Title 10", "Title 11", "Title 12",
     "Title 13", "Title 14", "Title 15", "Title 16", "Title 17",
     "Title 18", "Title 19"
@@ -4008,9 +4008,10 @@ create_clist (void)
       for (i = 1; i < TESTGTK_CLIST_COLUMNS; i++)
 	gtk_clist_set_column_width (GTK_CLIST (clist), i, 80);
 
-      gtk_clist_set_column_resizeable (GTK_CLIST (clist), 2, FALSE);
-      gtk_clist_set_column_max_width (GTK_CLIST (clist), 3, 120);
-      gtk_clist_set_column_min_width (GTK_CLIST (clist), 4, 40);
+      gtk_clist_set_column_auto_resize (GTK_CLIST (clist), 0, TRUE);
+      gtk_clist_set_column_resizeable (GTK_CLIST (clist), 1, FALSE);
+      gtk_clist_set_column_max_width (GTK_CLIST (clist), 2, 100);
+      gtk_clist_set_column_min_width (GTK_CLIST (clist), 3, 50);
 
       gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_EXTENDED);
       gtk_clist_set_policy (GTK_CLIST (clist), GTK_POLICY_AUTOMATIC,
@@ -4047,7 +4048,7 @@ create_clist (void)
 
       for (i = 0; i < 10; i++)
 	{
-	  sprintf (text[0], "Row %d", clist_rows++);
+	  sprintf (text[0], "CListRow %d", clist_rows++);
 	  gtk_clist_append (GTK_CLIST (clist), texts);
 
 	  switch (i % 4)
@@ -4832,8 +4833,11 @@ void create_ctree (void)
 
       button = gtk_button_new_with_label ("Rebuild tree");
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-      
+
       ctree = GTK_CTREE (gtk_ctree_new_with_titles (2, 0, title));
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (rebuild_tree), ctree);
+      
       gtk_ctree_set_line_style (ctree, GTK_CTREE_LINES_DOTTED);
       line_style = GTK_CTREE_LINES_DOTTED;
 
@@ -4866,12 +4870,10 @@ void create_ctree (void)
       gtk_clist_set_selection_mode (GTK_CLIST (ctree), GTK_SELECTION_EXTENDED);
       gtk_clist_set_policy (GTK_CLIST (ctree), GTK_POLICY_ALWAYS, 
 			    GTK_POLICY_AUTOMATIC);
-      gtk_clist_set_column_width (GTK_CLIST (ctree), 0, 200);
+      gtk_clist_set_column_min_width (GTK_CLIST (ctree), 0, 50);
+      gtk_clist_set_column_auto_resize (GTK_CLIST (ctree), 0, TRUE);
       gtk_clist_set_column_width (GTK_CLIST (ctree), 1, 200);
 
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC (rebuild_tree), ctree);
-      
       bbox = gtk_hbox_new (FALSE, 5);
       gtk_container_border_width (GTK_CONTAINER (bbox), 5);
       gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, TRUE, 0);
@@ -6264,7 +6266,7 @@ create_dnd (void)
   else
     gtk_widget_destroy (window);
 }
-#endif 
+#endif
 
 /*
  * Shaped Windows

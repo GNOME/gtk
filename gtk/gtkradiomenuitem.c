@@ -227,7 +227,6 @@ gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
   GtkWidget *widget;
   GtkStateType state_type;
   GtkShadowType shadow_type;
-  GdkPoint pts[4];
   gint width, height;
   gint x, y;
 

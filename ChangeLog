@@ -1,3 +1,25 @@
+Sat Oct 31 14:44:01 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdk.c: move prototype of gdk_wm_protocols_filter outside
+	of the USE_XIM #ifdef
+
+	* gtk/Makefile.am: cause the built sources to be rebuild when possible,
+        even with --include-deps. Slightly different from timj's fix, to avoid
+	circular dependency with gtkmarshal.c
+
+	* autogen.sh
+	* gtk/gtkclist.[ch]
+	* gtk/gtkctree.c
+	* gtk/gtkfontsel.[ch]
+	* gtk/gtklist.c
+	* gtk/gtklistitem.c
+	* gtk/gtkobject.[ch]
+	* gtk/testgtk.c: merges from HEAD
+
+	* gtk/gtkmenubar.c
+	* gtk/gtkradiomenuitem.c
+	* gtk/gtktreeitem.c: cleanups
+
 Wed Oct 28 23:32:19 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gdk/gdkrgb.c: Oops. s/BIGENDIAN/BIG_ENDIAN/

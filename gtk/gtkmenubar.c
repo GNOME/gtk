@@ -309,11 +309,6 @@ static gint
 gtk_menu_bar_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  GtkMenuShell *menu_shell;
-  GtkWidget *child;
-  GdkEventExpose child_event;
-  GList *children;
-
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_BAR (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);

@@ -986,7 +986,7 @@ gtk_object_remove_no_notify_by_id (GtkObject      *object,
 }
 
 void
-gtk_object_set_data_destroy (GtkObject       *object,
+gtk_object_remove_no_notify (GtkObject       *object,
 			     const gchar     *key)
 {
   g_return_if_fail (object != NULL);

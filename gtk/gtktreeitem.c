@@ -723,13 +723,10 @@ gtk_tree_item_draw (GtkWidget    *widget,
 static void
 gtk_tree_item_draw_focus (GtkWidget *widget)
 {
-  GdkGC *gc;
-  int dx;
-
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (widget));
 
-   gtk_widget_draw(widget, NULL);
+  gtk_widget_draw(widget, NULL);
 }
 
 static gint

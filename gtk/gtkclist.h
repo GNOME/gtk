@@ -36,15 +36,16 @@ extern "C" {
 /* clist flags */
 enum                    
 {
-  GTK_CLIST_FROZEN          = 1 << 0,                                     
-  GTK_CLIST_IN_DRAG         = 1 << 1,                                        
-  GTK_CLIST_DRAG_SELECTION  = 1 << 2,
-  GTK_CLIST_ROW_HEIGHT_SET  = 1 << 3,
-  GTK_CLIST_SHOW_TITLES     = 1 << 4,
-  GTK_CLIST_CONSTRUCTED	    = 1 << 5,
-  GTK_CLIST_CHILD_HAS_FOCUS = 1 << 6,
-  GTK_CLIST_ADD_MODE        = 1 << 7,
-  GTK_CLIST_AUTO_SORT       = 1 << 8
+  GTK_CLIST_FROZEN              = 1 << 0,
+  GTK_CLIST_IN_DRAG             = 1 << 1,
+  GTK_CLIST_DRAG_SELECTION      = 1 << 2,
+  GTK_CLIST_ROW_HEIGHT_SET      = 1 << 3,
+  GTK_CLIST_SHOW_TITLES         = 1 << 4,
+  GTK_CLIST_CONSTRUCTED	        = 1 << 5,
+  GTK_CLIST_CHILD_HAS_FOCUS     = 1 << 6,
+  GTK_CLIST_ADD_MODE            = 1 << 7,
+  GTK_CLIST_AUTO_SORT           = 1 << 8,
+  GTK_CLIST_AUTO_RESIZE_BLOCKED = 1 << 9
 }; 
 
 /* cell types */
@@ -76,6 +77,7 @@ typedef enum
 #define GTK_CLIST_DRAG_SELECTION(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_DRAG_SELECTION)
 #define GTK_CLIST_ADD_MODE(clist)          (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ADD_MODE)
 #define GTK_CLIST_AUTO_SORT(clist)         (GTK_CLIST_FLAGS (clist) & GTK_CLIST_AUTO_SORT)
+#define GTK_CLIST_AUTO_RESIZE_BLOCKED(clist) (GTK_CLIST_FLAGS (clist) & GTK_CLIST_AUTO_RESIZE_BLOCKED)
 
 #define GTK_CLIST_ROW(_glist_) ((GtkCListRow *)((_glist_)->data))
 
@@ -250,7 +252,11 @@ struct _GtkCListClass
 				 guint8         spacing,
 				 GdkPixmap     *pixmap,
 				 GdkBitmap     *mask);
-  
+  void   (*cell_size_request)   (GtkCList       *clist,
+				 GtkCListRow    *clist_row,
+				 gint            column,
+				 GtkRequisition *requisition);
+ 
   gint scrollbar_spacing;
 };
 
@@ -267,9 +273,10 @@ struct _GtkCListColumn
   gint max_width;
   GtkJustification justification;
   
-  gint visible    : 1;  
-  gint width_set  : 1;
-  gint resizeable : 1;
+  guint visible     : 1;  
+  guint width_set   : 1;
+  guint resizeable  : 1;
+  guint auto_resize : 1;
 };
 
 struct _GtkCListRow
@@ -285,9 +292,9 @@ struct _GtkCListRow
   gpointer data;
   GtkDestroyNotify destroy;
   
-  gint fg_set     : 1;
-  gint bg_set     : 1;
-  gint selectable : 1;
+  guint fg_set     : 1;
+  guint bg_set     : 1;
+  guint selectable : 1;
 };
 
 /* Cell Structures */
@@ -383,9 +390,13 @@ GtkWidget *gtk_clist_new             (gint   columns);
 GtkWidget *gtk_clist_new_with_titles (gint   columns,
 				      gchar *titles[]);
 
-/* set the border style of the clist */
+/* deprecated function, use gtk_clist_set_shadow_type instead. */
 void gtk_clist_set_border (GtkCList      *clist,
 			   GtkShadowType  border);
+
+/* set the border style of the clist */
+void gtk_clist_set_shadow_type (GtkCList      *clist,
+				GtkShadowType  type);
 
 /* set the clist's selection mode */
 void gtk_clist_set_selection_mode (GtkCList         *clist,
@@ -445,6 +456,15 @@ void gtk_clist_set_column_visibility (GtkCList *clist,
 void gtk_clist_set_column_resizeable (GtkCList *clist,
 				      gint      column,
 				      gboolean  resizeable);
+
+/* resize column automatically to its optimal width */
+void gtk_clist_set_column_auto_resize (GtkCList *clist,
+				       gint      column,
+				       gboolean  auto_resize);
+
+/* return the optimal column width, i.e. maximum of all cell widths */
+gint gtk_clist_optimal_column_width (GtkCList *clist,
+				     gint      column);
 
 /* set the pixel width of a column; this is a necessary step in
  * creating a CList because otherwise the column width is chozen from
@@ -548,20 +568,20 @@ void gtk_clist_set_background (GtkCList *clist,
 
 /* set / get cell styles */
 void gtk_clist_set_cell_style (GtkCList *clist,
-			       gint row,
-			       gint column,
+			       gint     row,
+			       gint     column,
 			       GtkStyle *style);
 
 GtkStyle *gtk_clist_get_cell_style (GtkCList *clist,
-				    gint row,
-				    gint column);
+				    gint     row,
+				    gint     column);
 
 void gtk_clist_set_row_style (GtkCList *clist,
-			      gint row,
+			      gint     row,
 			      GtkStyle *style);
 
 GtkStyle *gtk_clist_get_row_style (GtkCList *clist,
-				   gint row);
+				   gint     row);
 
 /* this sets a horizontal and vertical shift for drawing
  * the contents of a cell; it can be positive or negitive;
