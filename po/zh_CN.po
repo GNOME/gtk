@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-02 23:57-0500\n"
-"PO-Revision-Date: 2004-11-22 08:41+0800\n"
+"POT-Creation-Date: 2004-12-04 06:02+0100\n"
+"PO-Revision-Date: 2004-12-04 16:17+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -764,37 +764,37 @@ msgstr "要取消的 Gdk 调试标志"
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:60
 msgid "Don't batch GDI requests"
-msgstr ""
+msgstr "不对 GDI 请求批处理"
 
 #. Description of --no-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:62
 msgid "Don't use the Wintab API for tablet support"
-msgstr ""
+msgstr "不使用 Wintab API 来支持 tablet"
 
 #. Description of --ignore-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:64
 msgid "Same as --no-wintab"
-msgstr ""
+msgstr "与 --no-wintab 相同"
 
 #. Description of --use-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:66
 msgid "Do use the Wintab API [default]"
-msgstr ""
+msgstr "使用 Wintab API [默认]"
 
 #. Description of --max-colors=COLORS in --help output
 #: gdk/win32/gdkmain-win32.c:68
 msgid "Size of the palette in 8 bit mode"
-msgstr ""
+msgstr "8 位模式调色板大小"
 
 #. Placeholder in --max-colors=COLORS in --help output
 #: gdk/win32/gdkmain-win32.c:69
 msgid "COLORS"
-msgstr ""
+msgstr "颜色"
 
 #. Description of --sync in --help output
 #: gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
-msgstr ""
+msgstr "同步调用 X"
 
 #: gtk/gtkaboutdialog.c:260 gtk/gtkaboutdialog.c:1938
 msgid "License"
@@ -886,11 +886,6 @@ msgstr "calendar:YM"
 #: gtk/gtkcalendar.c:710
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
-
-#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
-#, c-format
-msgid "progress bar label|%d %%"
-msgstr ""
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -1825,11 +1820,11 @@ msgstr "底部(_B)"
 
 #: gtk/gtkstock.c:312
 msgid "_First"
-msgstr "最先(_F)"
+msgstr "第一个(_F)"
 
 #: gtk/gtkstock.c:313
 msgid "_Last"
-msgstr "最后(_L)"
+msgstr "最后一个(_L)"
 
 #: gtk/gtkstock.c:314
 msgid "_Top"
