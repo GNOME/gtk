@@ -4,7 +4,7 @@ Thu May  6 00:24:11 2004  Matthias Clasen  <maclas@gmx.de>
 	* gtk/gtkactiongroup.c (gtk_action_group_translate_string): 
 	New function to translate a string with translate_func.
 	(#135740)
-	
+
 Thu May  6 00:02:21 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_get_wrap_width): 
