@@ -1,15 +1,15 @@
 # Copyright (C) 1999-2002 Free Software Foundation, Inc.
 # Sergey Panov <sipan@mit.edu>, 1999.
 # Valek Filippov <frob@df.ru>, 2000- 2002
-# Dmitry Mastrukov <dmitry@taurussoft.org>, 2002
+# Dmitry Mastrukov <dmitry@taurussoft.org>, 2002-2003
 # Sun G11n <gnome_int_l10n@ireland.sun.com>, 2002
 # Andrew W. Nosenko <awn@bcs.zp.ua>, 2003
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
-"POT-Creation-Date: 2003-06-11 13:24+0400\n"
-"PO-Revision-Date: 2003-06-11 13:25+0400\n"
+"POT-Creation-Date: 2003-06-17 12:44+0400\n"
+"PO-Revision-Date: 2003-06-17 12:53+0400\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -60,7 +60,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:564 gdk-pixbuf/gdk-pixbuf-io.c:612
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "Данный тип формата \"%s\" для изображений не поддерживается"
+msgstr "Тип изображения \"%s\" не поддерживается"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:644
 #, c-format
@@ -69,7 +69,7 @@ msgstr "Не удалось распознать формат изображен
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:650
 msgid "Unrecognized image file format"
-msgstr "Формат изображения не распознан"
+msgstr "Формат файла изображения не распознан"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:792
 #, c-format
@@ -457,7 +457,7 @@ msgstr "Преждевременный конец файла обнаружен"
 
 #: gdk-pixbuf/io-pnm.c:742 gdk-pixbuf/io-pnm.c:962
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "Формат PNM требует в точности одного пробела перед данными сэмпла"
+msgstr "Формат PNM требует в точности одного пробела перед данными семпла"
 
 #: gdk-pixbuf/io-pnm.c:769
 msgid "Can't allocate memory for loading PNM image"
@@ -519,7 +519,7 @@ msgstr "Невозможно распределить память для вре
 #: gdk-pixbuf/io-tga.c:281
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr ""
-"Произошёл сбой в функции freed() - возможно, преждевременный конец файла "
+"Произошёл сбой в функции fread() - возможно, преждевременный конец файла "
 "обнаружен"
 
 #: gdk-pixbuf/io-tga.c:291
@@ -571,11 +571,11 @@ msgstr "Данные в файле избыточны"
 
 #: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
-msgstr "Невозможно распределить память для заголовка формата данных TGA"
+msgstr "Невозможно распределить память для заголовка формата TGA"
 
 #: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
-msgstr "Значение в поле infolen заголовка формата TGA слишком велико."
+msgstr "Слишком большое значение поля infolen в заголовке формата TGA"
 
 #: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
@@ -583,7 +583,7 @@ msgstr "Невозможно распределить память для вре
 
 #: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr "Невозможно распределить память для структуры карты цветов формата TGA"
+msgstr "Невозможно распределить память для структуры цвета формата TGA"
 
 #: gdk-pixbuf/io-tga.c:979
 msgid "Can't allocate memory for TGA colormap entries"
@@ -591,20 +591,19 @@ msgstr "Невозможно распределить память для эле
 
 #: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
-msgstr "Непредвиденная битовая глубина обнаружена для карты цветов формата TGA"
+msgstr "Непредвиденная глубина цвета обнаружена карты цветов формата TGA"
 
 #: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
-msgstr "Псевдоцветное изображение без карты цветов"
+msgstr "Псевдо-цветное изображение без карты цветов"
 
 #: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
-msgstr ""
-"Невозможно перейти по смещению изображения - возможно, обнаружен конец файла"
+msgstr "Невозможно перейти по смещению - возможно, конец файла обнаружен"
 
 #: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
-msgstr "Невозможно распределить память для стуктуры pixbuf"
+msgstr "Невозможно распределить новую структуру pixbuf"
 
 #: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
 msgid "Unsupported TGA image type"
@@ -642,7 +641,7 @@ msgstr "Произошёл сбой при загрузке данных RGB и�
 
 #: gdk-pixbuf/io-tiff.c:266
 msgid "Unsupported TIFF variant"
-msgstr "Данный тип изображения формата TIFF не поддерживается"
+msgstr "Данный вариант формата TIFF не поддерживается"
 
 #: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
@@ -876,8 +875,8 @@ msgstr "Отношение"
 #: gtk/gtkaspectframe.c:123
 msgid "Aspect ratio if obey_child is FALSE"
 msgstr ""
-"Коэффициент пропорциональности, если для параметра obey_child выбрано "
-"значение ЛОЖНО"
+"Коэффициент пропорциональности, если для параметра \"Подчинённый элемент"
+"\" (obey_child) выбрано значение \"ЛОЖНО\""
 
 #: gtk/gtkaspectframe.c:129
 msgid "Obey child"
@@ -886,8 +885,8 @@ msgstr "Подчинённый элемент"
 #: gtk/gtkaspectframe.c:130
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr ""
-"Привести коэффициент пропорциональности в соответствие с дочерним элементом "
-"рамки"
+"Привести коэффициент пропорциональности в соответствие с таковым у дочернего "
+"элемента рамки"
 
 #: gtk/gtkbbox.c:119
 msgid "Minimum child width"
@@ -943,7 +942,7 @@ msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 msgstr ""
-"Если \"Истина\", то вложенный элемент появляется во вторичной группе "
+"Если \"ИСТИНА\", то вложенный элемент появляется во вторичной группе "
 "вложенных элементов; может использоваться, например, для кнопок вызова "
 "справки"
 
@@ -957,7 +956,7 @@ msgstr "Расстояние между вложенными элементам�
 
 #: gtk/gtkbox.c:138 gtk/gtknotebook.c:450
 msgid "Homogeneous"
-msgstr "Гомогенный"
+msgstr "Гомогенность"
 
 #: gtk/gtkbox.c:139
 msgid "Whether the children should all be the same size"
@@ -965,7 +964,7 @@ msgstr "Должны ли все вложенные элементы иметь 
 
 #: gtk/gtkbox.c:146 gtk/gtkpreview.c:132
 msgid "Expand"
-msgstr "Расширять"
+msgstr "Расширяемость"
 
 #: gtk/gtkbox.c:147
 msgid "Whether the child should receive extra space when the parent grows"
@@ -975,7 +974,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:153
 msgid "Fill"
-msgstr "Заполнять"
+msgstr "Заполнение"
 
 #: gtk/gtkbox.c:154
 msgid ""
@@ -988,7 +987,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:160
 msgid "Padding"
-msgstr "Дополнять"
+msgstr "Дополнение"
 
 #: gtk/gtkbox.c:161
 msgid "Extra space to put between the child and its neighbors, in pixels"
@@ -1120,7 +1119,7 @@ msgstr "x-выравнивание"
 
 #: gtk/gtkcellrenderer.c:136
 msgid "The x-align"
-msgstr "Выравнивание по X"
+msgstr "Выравнивание по оси X"
 
 #: gtk/gtkcellrenderer.c:146
 msgid "yalign"
@@ -1128,7 +1127,7 @@ msgstr "y-выравнивание"
 
 #: gtk/gtkcellrenderer.c:147
 msgid "The y-align"
-msgstr "Выравнивание по Y"
+msgstr "Выравнивание по оси Y"
 
 #: gtk/gtkcellrenderer.c:157
 msgid "xpad"
@@ -1984,7 +1983,7 @@ msgstr "Методы ввода"
 
 #: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
 msgid "_Insert Unicode control character"
-msgstr "Вс_тавить управляющий символ Unicode"
+msgstr "Вст_авить управляющий символ набора Юникод"
 
 #: gtk/gtkfilesel.c:551 gtk/gtkimage.c:167
 msgid "Filename"
@@ -2024,7 +2023,7 @@ msgstr "Файлы"
 
 #: gtk/gtkfilesel.c:762
 msgid "_Files"
-msgstr "Фай_лы"
+msgstr "_Файлы"
 
 #: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2237
 #, c-format
@@ -2088,7 +2087,7 @@ msgstr "И_мя каталога:"
 
 #: gtk/gtkfilesel.c:1513
 msgid "C_reate"
-msgstr "_Создать"
+msgstr "Со_здать"
 
 #: gtk/gtkfilesel.c:1556
 #, c-format
@@ -2178,7 +2177,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:3114
 msgid "Invalid Utf-8"
-msgstr "Недопустимая последовательность Utf-8"
+msgstr "Данная последовательность UTF-8 недопустима"
 
 #: gtk/gtkfilesel.c:3991
 msgid "Name too long"
@@ -2860,23 +2859,20 @@ msgid "The string displayed in the childs menu entry"
 msgstr "Строка, отображаемая в пункте меню вкладки"
 
 #: gtk/gtknotebook.c:479
-#, fuzzy
 msgid "Tab expand"
-msgstr "Заполнение по горизонтали."
+msgstr "Расширение вкладок"
 
 #: gtk/gtknotebook.c:480
-#, fuzzy
 msgid "Whether to expand the childs tab or not"
-msgstr "Будет ли отображаться граница элемента"
+msgstr "Должны ли расширяться вкладки"
 
 #: gtk/gtknotebook.c:486
 msgid "Tab fill"
-msgstr ""
+msgstr "Заполнение вкладок"
 
 #: gtk/gtknotebook.c:487
-#, fuzzy
 msgid "Wheather the childs tab should fill the allocated area or not"
-msgstr "Должны ли все вложенные элементы иметь одинаковый размер."
+msgstr "Должны ли вкладки заполнять всю область"
 
 #: gtk/gtknotebook.c:493
 msgid "Tab pack type"
@@ -3067,7 +3063,7 @@ msgstr "Группа"
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
-msgstr ""
+msgstr "Радио-кнопка, которой принадлежит этот виджет."
 
 #: gtk/gtkrange.c:281
 msgid "Update policy"
@@ -3814,57 +3810,55 @@ msgstr "Гомогенно"
 
 #: gtk/gtktable.c:195
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "Если истинно, то ячейки таблицы имеют одинаковую высоту и ширину"
+msgstr "Если \"ИСТИНА\", то ячейки таблицы имеют одинаковую высоту и ширину"
 
 #: gtk/gtktable.c:202
 msgid "Left attachment"
-msgstr ""
+msgstr "Прибавление слева"
 
 #: gtk/gtktable.c:203
 msgid "The column number to attach the left side of the child to"
-msgstr ""
+msgstr "Число столбцов, прибавляемых к левой стороне вложенного элемента"
 
 #: gtk/gtktable.c:209
 msgid "Right attachment"
-msgstr ""
+msgstr "Прибавление справа"
 
 #: gtk/gtktable.c:210
 msgid "the column number to attach the right side of a child widget to"
-msgstr ""
+msgstr "Число столбцов, прибавляемых к правой стороне вложенного элемента"
 
 #: gtk/gtktable.c:216
 msgid "Top attachment"
-msgstr ""
+msgstr "Прибавление сверху"
 
 #: gtk/gtktable.c:217
 msgid "The row number to attach the top of a child widget to"
-msgstr ""
+msgstr "Число строк, прибавляемых к верхней стороне вложенного элемента"
 
 #: gtk/gtktable.c:223
 msgid "Bottom attachment"
-msgstr ""
+msgstr "Прибавление снизу"
 
 #: gtk/gtktable.c:224
 msgid "The row number to attach the bottom of the child to"
-msgstr ""
+msgstr "Число строк, прибавляемых к нижней стороне вложенного элемента"
 
 #: gtk/gtktable.c:230
-#, fuzzy
 msgid "Horizontal options"
-msgstr "Горизонтальное масштабирование"
+msgstr "Горизонтальные параметры"
 
 #: gtk/gtktable.c:231
 msgid "Options specifying the horizontal behaviour of the child"
-msgstr ""
+msgstr "Параметры, определяющие горизонтальное поведение вложенного элемента"
 
 #: gtk/gtktable.c:237
-#, fuzzy
 msgid "Vertical options"
-msgstr "Вертикальное масштабирование"
+msgstr "Вертикальные параметры"
 
 #: gtk/gtktable.c:238
 msgid "Options specifying the vertical behaviour of the child"
-msgstr ""
+msgstr "Параметры, определяющие вертикальное поведение вложенного элемента"
 
 #: gtk/gtktable.c:244
 msgid "Horizontal padding"
@@ -3915,28 +3909,25 @@ msgid "Whether words are wrapped at widget edges"
 msgstr "Будет ли делаться перенос слов на границах элемента управления"
 
 #: gtk/gtktextbuffer.c:180
-#, fuzzy
 msgid "Tag Table"
-msgstr "Название ярлыка"
+msgstr "Таблица ярлыков"
 
 #: gtk/gtktextbuffer.c:181
-#, fuzzy
 msgid "Text Tag Table"
-msgstr "Выравнивание текста по Y"
+msgstr "Таблица ярлыков текста"
 
 #: gtk/gtktexttag.c:195
 msgid "Tag name"
-msgstr "Название ярлыка"
+msgstr "Имя ярлыка"
 
 #: gtk/gtktexttag.c:196
-#, fuzzy
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr "Название используемое для ссылки на текстовый ярлык"
+msgstr ""
+"Имя, используемое для ссылки на текстовый ярлык. NULL для безымянных ярлыков"
 
 #: gtk/gtktexttag.c:214
-#, fuzzy
 msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr "Цвет фона как GdkColor"
+msgstr "Цвет фона как (возможно нераспределённая) структура GdkColor"
 
 #: gtk/gtktexttag.c:221
 msgid "Background full height"
@@ -3961,9 +3952,8 @@ msgstr ""
 "прорисовке фона текста"
 
 #: gtk/gtktexttag.c:248
-#, fuzzy
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr "Цвет текста как GdkColor"
+msgstr "Цвет текста как (возможно нераспределённая) структура GdkColor"
 
 #: gtk/gtktexttag.c:256
 msgid "Foreground stipple mask"
@@ -4000,14 +3990,18 @@ msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
 msgstr ""
+"Вес шрифта как целое число, смотрите предопределённые значения в наборе "
+"PangoWeight; к примеру, PANGO_WEIGHT_BOLD"
 
 #: gtk/gtktexttag.c:336
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr ""
+"Разрядка шрифта как значение в наборе PangoStretch; к примеру, "
+"PANGO_STRETCH_CONDENCED"
 
 #: gtk/gtktexttag.c:345
 msgid "Font size in Pango units"
-msgstr "Размер шрифта в единицах Pango"
+msgstr "Размер шрифта в единицах системы Pango"
 
 #: gtk/gtktexttag.c:355
 msgid ""
@@ -4052,7 +4046,7 @@ msgstr "Отступ справа"
 
 #: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
 msgid "Width of the right margin in pixels"
-msgstr "Ширина отступа справа в точках растра"
+msgstr "Ширина отступа справа в пикселях"
 
 #: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
 msgid "Indent"
@@ -4060,40 +4054,39 @@ msgstr "Абзац"
 
 #: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
 msgid "Amount to indent the paragraph, in pixels"
-msgstr "Абзацный отступ, в точках растра"
+msgstr "Абзацный отступ, в пикселях"
 
 #: gtk/gtktexttag.c:424
-#, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in pixels"
 msgstr ""
-"Сдвинуть текст над линией шрифта (под линию шрифта, для отрицательных "
+"Смещение текста над базовой линией (под линию шрифта, для отрицательных "
 "значений)"
 
 #: gtk/gtktexttag.c:433
 msgid "Pixels above lines"
-msgstr "Точек растра над строками"
+msgstr "Пикселей над строками"
 
 #: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
 msgid "Pixels of blank space above paragraphs"
-msgstr "Точек растра в пространстве над абзацами"
+msgstr "Пикселей в пространстве над абзацами"
 
 #: gtk/gtktexttag.c:443
 msgid "Pixels below lines"
-msgstr "Точек растра под строками"
+msgstr "Пикселей под строками"
 
 #: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
 msgid "Pixels of blank space below paragraphs"
-msgstr "Точек растра в пространстве под абзацами"
+msgstr "Пикселей в пространстве под абзацами"
 
 #: gtk/gtktexttag.c:453
 msgid "Pixels inside wrap"
-msgstr "Точек растра в абзаце"
+msgstr "Пикселей в абзаце"
 
 #: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
 msgid "Pixels of blank space between wrapped lines in a paragraph"
-msgstr "Точек растра в пространстве между перенесёнными строками в абзаце"
+msgstr "Пикселей в пространстве между перенесёнными строками в абзаце"
 
 #: gtk/gtktexttag.c:480
 msgid "Wrap mode"
@@ -4118,9 +4111,8 @@ msgid "Invisible"
 msgstr "Невидимый"
 
 #: gtk/gtktexttag.c:499
-#, fuzzy
 msgid "Whether this text is hidden. Not implemented in GTK 2.0"
-msgstr "Будет ли текст скрытым"
+msgstr "Должен ли текст быть скрытым. Не реализовано в библиотере GTK 2.0"
 
 #: gtk/gtktexttag.c:512
 msgid "Background full height set"
@@ -4304,7 +4296,7 @@ msgstr "Показывается ли точка вставки"
 
 #: gtk/gtktextview.c:6631
 msgid "Input _Methods"
-msgstr "_Методы ввода"
+msgstr "Использовать _методы ввода"
 
 #: gtk/gtkthemes.c:69
 #, c-format
@@ -4320,13 +4312,12 @@ msgid "If the toggle button should be pressed in or not"
 msgstr "Должна ли кнопка-переключатель быть нажата или нет"
 
 #: gtk/gtktogglebutton.c:141
-#, fuzzy
 msgid "If the toggle button is in an \"in between\" state"
 msgstr "Если кнопка-переключатель в \"промежуточном\" состоянии."
 
 #: gtk/gtktogglebutton.c:148
 msgid "Draw Indicator"
-msgstr "Нарисовать индикатор"
+msgstr "Рисовать индикатор"
 
 #: gtk/gtktogglebutton.c:149
 msgid "If the toggle part of the button is displayed"
@@ -4419,7 +4410,7 @@ msgstr "Горизонтальное выравнивание элемента �
 msgid "Vertical Adjustment for the widget"
 msgstr "Вертикальное выравнивание элемента управления"
 
-#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
+#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:505
 msgid "Visible"
 msgstr "Видимый"
 
@@ -4483,61 +4474,56 @@ msgid "Expander Size"
 msgstr "Размер расширяемого объекта"
 
 #: gtk/gtktreeview.c:607
-#, fuzzy
 msgid "Size of the expander arrow"
-msgstr "Размер расширяющей стрелки."
+msgstr "Размер расширяющей стрелки"
 
 #: gtk/gtktreeview.c:615
 msgid "Vertical Separator Width"
 msgstr "Ширина вертикального разделителя"
 
 #: gtk/gtktreeview.c:616
-#, fuzzy
 msgid "Vertical space between cells.  Must be an even number"
-msgstr "Вертикальный пробел между ячейками.  Должен быть четным числом."
+msgstr "Вертикальный пробел между ячейками.  Должен быть четным числом"
 
 #: gtk/gtktreeview.c:624
 msgid "Horizontal Separator Width"
 msgstr "Ширина горизонтального разделителя"
 
 #: gtk/gtktreeview.c:625
-#, fuzzy
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr "Горизонтальный пробел между ячейками.  Должен быть четным числом."
+msgstr "Горизонтальный пробел между ячейками.  Должен быть четным числом"
 
 #: gtk/gtktreeview.c:633
 msgid "Allow Rules"
 msgstr "Разрешающие правила"
 
 #: gtk/gtktreeview.c:634
-#, fuzzy
 msgid "Allow drawing of alternating color rows"
-msgstr "Разрешить окраску строк в разный цвет."
+msgstr "Разрешить окраску строк в разный цвет"
 
 #: gtk/gtktreeview.c:640
 msgid "Indent Expanders"
 msgstr "Отступ расширителя"
 
 #: gtk/gtktreeview.c:641
-#, fuzzy
 msgid "Make the expanders indented"
-msgstr "Создает отступы в расширяемых объектах."
+msgstr "Создает отступы в расширяемых объектах"
 
 #: gtk/gtktreeview.c:647
 msgid "Even Row Color"
-msgstr ""
+msgstr "Цвет чётных рядов"
 
 #: gtk/gtktreeview.c:648
 msgid "Color to use for even rows"
-msgstr ""
+msgstr "Цвет для чётных рядов"
 
 #: gtk/gtktreeview.c:654
 msgid "Odd Row Color"
-msgstr ""
+msgstr "Цвет нечётных рядов"
 
 #: gtk/gtktreeview.c:655
 msgid "Color to use for odd rows"
-msgstr ""
+msgstr "Цвет для нечётных рядов"
 
 #: gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
@@ -4650,220 +4636,213 @@ msgstr ""
 "горизонтали"
 
 #: gtk/gtkviewport.c:143
-#, fuzzy
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
 msgstr ""
 "GtkAdjustment, который определяет координаты этого окна просмотра по "
-"горизонтали."
+"горизонтали"
 
 #: gtk/gtkviewport.c:151
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Определяет способ прорисовки тени вокруг окна просмотра"
 
-#: gtk/gtkwidget.c:400
+#: gtk/gtkwidget.c:472
 msgid "Widget name"
 msgstr "Название виджета"
 
-#: gtk/gtkwidget.c:401
+#: gtk/gtkwidget.c:473
 msgid "The name of the widget"
 msgstr "Название виджета"
 
-#: gtk/gtkwidget.c:407
+#: gtk/gtkwidget.c:479
 msgid "Parent widget"
 msgstr "Родительский виджет"
 
-#: gtk/gtkwidget.c:408
-#, fuzzy
+#: gtk/gtkwidget.c:480
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr ""
-"Родительский виджет для этого виджета. Должен быть виджетом-контейнером."
+"Родительский виджет для этого виджета. Должен быть виджетом-контейнером"
 
-#: gtk/gtkwidget.c:415
+#: gtk/gtkwidget.c:487
 msgid "Width request"
 msgstr "Запрос на установку ширины"
 
-#: gtk/gtkwidget.c:416
-#, fuzzy
+#: gtk/gtkwidget.c:488
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr ""
 "Изменение использования запроса на установку ширины этого элемента "
-"управления или -1, если нужно использовать исходный запрос."
+"управления или -1, если нужно использовать исходный запрос"
 
-#: gtk/gtkwidget.c:424
+#: gtk/gtkwidget.c:496
 msgid "Height request"
 msgstr "Запрос на установку высоты"
 
-#: gtk/gtkwidget.c:425
-#, fuzzy
+#: gtk/gtkwidget.c:497
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr ""
 "Изменение запроса на установку высоты этого элемента управления или -1, если "
-"нужно использовать исходный запрос."
+"нужно использовать исходный запрос"
 
-#: gtk/gtkwidget.c:434
+#: gtk/gtkwidget.c:506
 msgid "Whether the widget is visible"
 msgstr "Будет ли виджет видимым"
 
-#: gtk/gtkwidget.c:440
+#: gtk/gtkwidget.c:512
 msgid "Sensitive"
 msgstr "Чувствительный"
 
-#: gtk/gtkwidget.c:441
+#: gtk/gtkwidget.c:513
 msgid "Whether the widget responds to input"
 msgstr "Будет ли виждет использовать ввод"
 
-#: gtk/gtkwidget.c:447
+#: gtk/gtkwidget.c:519
 msgid "Application paintable"
 msgstr "Отрисовываемый приложением"
 
-#: gtk/gtkwidget.c:448
+#: gtk/gtkwidget.c:520
 msgid "Whether the application will paint directly on the widget"
 msgstr "Будет ли приложение рисовать напрямую в виджете"
 
-#: gtk/gtkwidget.c:454
+#: gtk/gtkwidget.c:526
 msgid "Can focus"
 msgstr "Может иметь фокус"
 
-#: gtk/gtkwidget.c:455
+#: gtk/gtkwidget.c:527
 msgid "Whether the widget can accept the input focus"
 msgstr "Будет ли виджет принимать фокус ввода"
 
-#: gtk/gtkwidget.c:461
+#: gtk/gtkwidget.c:533
 msgid "Has focus"
 msgstr "Имеет фокус"
 
-#: gtk/gtkwidget.c:462
+#: gtk/gtkwidget.c:534
 msgid "Whether the widget has the input focus"
 msgstr "Имеет ли виджет фокус ввода"
 
-#: gtk/gtkwidget.c:468
-#, fuzzy
+#: gtk/gtkwidget.c:540
 msgid "Is focus"
 msgstr "Имеет фокус"
 
-#: gtk/gtkwidget.c:469
-#, fuzzy
+#: gtk/gtkwidget.c:541
 msgid "Whether the widget is the focus widget within the toplevel"
-msgstr "Является ли элемент управления выбираемым по умолчанию"
+msgstr "Является ли элемент управления получающим фокус"
 
-#: gtk/gtkwidget.c:475
+#: gtk/gtkwidget.c:547
 msgid "Can default"
 msgstr "Выбирается по умолчанию"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:548
 msgid "Whether the widget can be the default widget"
 msgstr "Может ли элемент управления быть \"элементом по умолчанию\""
 
-#: gtk/gtkwidget.c:482
+#: gtk/gtkwidget.c:554
 msgid "Has default"
 msgstr "Выбран по умолчанию"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:555
 msgid "Whether the widget is the default widget"
 msgstr "Является ли элемент управления \"элементом по умолчанию\""
 
-#: gtk/gtkwidget.c:489
+#: gtk/gtkwidget.c:561
 msgid "Receives default"
 msgstr "Действие по умолчанию"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:562
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Если значение \"ИСТИНА\", то элемент управления получает действие по "
 "умолчанию при получении фокуса ввода"
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:568
 msgid "Composite child"
 msgstr "Составной дочерний объект"
 
-#: gtk/gtkwidget.c:497
+#: gtk/gtkwidget.c:569
 msgid "Whether the widget is part of a composite widget"
 msgstr "Является ли элемент управления частью составного элемента управления"
 
-#: gtk/gtkwidget.c:503
+#: gtk/gtkwidget.c:575
 msgid "Style"
 msgstr "Стиль"
 
-#: gtk/gtkwidget.c:504
+#: gtk/gtkwidget.c:576
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "Стиль элемента управления, описывающий его внешний вид (цвета и т.п.)"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:582
 msgid "Events"
 msgstr "События"
 
-#: gtk/gtkwidget.c:511
+#: gtk/gtkwidget.c:583
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Маска события, определяющая, какие события GdkEvents может получать этот "
 "элемент управления"
 
-#: gtk/gtkwidget.c:518
+#: gtk/gtkwidget.c:590
 msgid "Extension events"
 msgstr "События изменения размеров"
 
-#: gtk/gtkwidget.c:519
+#: gtk/gtkwidget.c:591
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "Маска, определяющая, какие типы событий изменения размеров может получать "
 "этот элемент управления"
 
-#: gtk/gtkwidget.c:1098
+#: gtk/gtkwidget.c:1170
 msgid "Interior Focus"
 msgstr "Внутренний фокус ввода"
 
-#: gtk/gtkwidget.c:1099
+#: gtk/gtkwidget.c:1171
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Рисовать ли индикатор фокуса ввода внутри элементов управления"
 
-#: gtk/gtkwidget.c:1105
+#: gtk/gtkwidget.c:1177
 msgid "Focus linewidth"
 msgstr "Ширина линии фокуса ввода"
 
-#: gtk/gtkwidget.c:1106
+#: gtk/gtkwidget.c:1178
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Ширина линии-индикатора фокуса вода, в точках растра"
 
-#: gtk/gtkwidget.c:1112
+#: gtk/gtkwidget.c:1184
 msgid "Focus line dash pattern"
 msgstr "Штрих линии фокуса ввода"
 
-#: gtk/gtkwidget.c:1113
-#, fuzzy
+#: gtk/gtkwidget.c:1185
 msgid "Dash pattern used to draw the focus indicator"
-msgstr "Образец штрихов для отображения линии-индикатора фокуса ввода."
+msgstr "Образец штрихов для отображения линии-индикатора фокуса ввода"
 
-#: gtk/gtkwidget.c:1118
+#: gtk/gtkwidget.c:1190
 msgid "Focus padding"
 msgstr "Отступ фокуса ввода"
 
-#: gtk/gtkwidget.c:1119
+#: gtk/gtkwidget.c:1191
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Расстояние между индикатором фокуса ввода и 'рамкой' элемента управления, в "
 "точках растра"
 
-#: gtk/gtkwidget.c:1124
+#: gtk/gtkwidget.c:1196
 msgid "Cursor color"
 msgstr "Цвет курсора"
 
-#: gtk/gtkwidget.c:1125
+#: gtk/gtkwidget.c:1197
 msgid "Color with which to draw insertion cursor"
 msgstr "Цвет, используемый для курсора"
 
-#: gtk/gtkwidget.c:1130
+#: gtk/gtkwidget.c:1202
 msgid "Secondary cursor color"
 msgstr "Цвет второго курсора"
 
-#: gtk/gtkwidget.c:1131
+#: gtk/gtkwidget.c:1203
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4871,11 +4850,11 @@ msgstr ""
 "Цвет для отображения второго курсора при использовании смешанного (справа "
 "налево и слева направо) ввода текста"
 
-#: gtk/gtkwidget.c:1136
+#: gtk/gtkwidget.c:1208
 msgid "Cursor line aspect ratio"
 msgstr "Пропорции курсора"
 
-#: gtk/gtkwidget.c:1137
+#: gtk/gtkwidget.c:1209
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Пропорции курсора"
 
@@ -4913,13 +4892,12 @@ msgid "Allow Grow"
 msgstr "Позволить увеличение"
 
 #: gtk/gtkwindow.c:484
-#, fuzzy
 msgid "If TRUE, users can expand the window beyond its minimum size"
-msgstr "Если истинно, то можно задать окну размер больше минимального."
+msgstr "Если \"ИСТИНА\", то можно задать окну размер больше минимального."
 
 #: gtk/gtkwindow.c:492
 msgid "If TRUE, users can resize the window"
-msgstr "Если \"Истина\", то пользователь может изменять размер окна"
+msgstr "Если \"ИСТИНА\", то пользователь может изменять размер окна"
 
 #: gtk/gtkwindow.c:499
 msgid "Modal"
@@ -4930,7 +4908,7 @@ msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
-"Если \"Истина\", то окно является модальным (нельзя обратиться к другим "
+"Если \"ИСТИНА\", то окно является модальным (нельзя обратиться к другим "
 "окнам, пока оно не будет закрыто)"
 
 #: gtk/gtkwindow.c:507
@@ -4981,13 +4959,12 @@ msgid "Is Active"
 msgstr "Активный"
 
 #: gtk/gtkwindow.c:561
-#, fuzzy
 msgid "Whether the toplevel is the current active window"
-msgstr "Является ли элемент управления выбираемым по умолчанию"
+msgstr "Является ли окно активным"
 
 #: gtk/gtkwindow.c:568
 msgid "Focus in Toplevel"
-msgstr ""
+msgstr "/Фокус находится в окне"
 
 #: gtk/gtkwindow.c:569
 msgid "Whether the input focus is within this GtkWindow"
@@ -4995,7 +4972,7 @@ msgstr "Находится ли фокус ввода в данном GtkWindow"
 
 #: gtk/gtkwindow.c:576
 msgid "Type hint"
-msgstr ""
+msgstr "Тип подсказки"
 
 #: gtk/gtkwindow.c:577
 msgid ""
@@ -5007,20 +4984,20 @@ msgstr ""
 
 #: gtk/gtkwindow.c:585
 msgid "Skip taskbar"
-msgstr ""
+msgstr "Скрыть из переключателя задач"
 
 #: gtk/gtkwindow.c:586
 msgid "TRUE if the window should not be in the task bar."
-msgstr "\"Истина\" если окно не должно быть видимо в переключателе задач."
+msgstr "\"Истина\", если окно не должно быть видимо в переключателе задач."
 
 #: gtk/gtkwindow.c:593
 msgid "Skip pager"
-msgstr ""
+msgstr "Скрыть из переключателя рабочих мест"
 
 #: gtk/gtkwindow.c:594
 msgid "TRUE if the window should not be in the pager."
 msgstr ""
-"\"Истина\" если окно не должно быть видимо в переключателе рабочих мест."
+"\"Истина\", если окно не должно быть видимо в переключателе рабочих мест."
 
 #. ID
 #: modules/input/imam-et.c:453
@@ -5069,11 +5046,11 @@ msgstr "Метод XInput"
 
 #: modules/input/gtkimcontextxim.c:276
 msgid "IM Preedit style"
-msgstr ""
+msgstr "Стиль IM Preedit"
 
 #: modules/input/gtkimcontextxim.c:277
 msgid "How to draw the input method preedit string"
-msgstr ""
+msgstr "Как рисовать строку IM Preedit"
 
 #: modules/input/gtkimcontextxim.c:285
 msgid "IM Status style"
@@ -5082,3 +5059,170 @@ msgstr "Стиль строки состояния метода ввода"
 #: modules/input/gtkimcontextxim.c:286
 msgid "How to draw the input method statusbar"
 msgstr "Как рисовать строку состояния метода ввода"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Изображение имеет нулевую ширину и/или высоту"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "Изображение имеет неподдерживаемое число бит на пиксель"
+
+#~ msgid "Image has unsupported number of 1-bit planes"
+#~ msgstr "Изображение имеет неподдерживаемое число однобитовых плоскостей"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr ""
+#~ "Изображение имеет неподдерживаемое число многобитовых (%d) плоскостей"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Невозможно распределить память для новой структуры pixbuf"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Невозможно распределить память для данных строки"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Невозможно распределить память для данных палитры"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Не получены все строки изображения формата PCX"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Палитра не найдена в конце данных формата PCX"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Формат PCX для изображений"
+
+#~ msgid "Top Padding"
+#~ msgstr "Дополнение сверху"
+
+#~ msgid "The padding to insert at the top of the widget."
+#~ msgstr "Пространство, добавляемое к элементу управления сверху."
+
+#~ msgid "Bottom Padding"
+#~ msgstr "Дополнение снизу"
+
+#~ msgid "The padding to insert at the bottom of the widget."
+#~ msgstr "Пространство, добавляемое к элементу управления снизу."
+
+#~ msgid "Left Padding"
+#~ msgstr "Дополнение слева"
+
+#~ msgid "The padding to insert at the left of the widget."
+#~ msgstr "Пространство, добавляемое к элементу управления слева."
+
+#~ msgid "Right Padding"
+#~ msgstr "Дополнение справа"
+
+#~ msgid "The padding to insert at the right of the widget."
+#~ msgstr "Пространство, добавляемое к элементу управления справа."
+
+#~ msgid "Focus on click"
+#~ msgstr "Фокус по щелчку"
+
+#~ msgid "Whether the button grabs focus when it is clicked with the mouse"
+#~ msgstr "Должна ли кнопка захватывать фокус ввода при щелчке мышью по ней"
+
+#~ msgid "Year"
+#~ msgstr "Год"
+
+#~ msgid "The selected year"
+#~ msgstr "Выбранный год"
+
+#~ msgid "Month"
+#~ msgstr "Месяц"
+
+#~ msgid "The selected month (as a number between 0 and 11)"
+#~ msgstr "Выбранный месяц (как номер между 0 и 11)"
+
+#~ msgid "Day"
+#~ msgstr "День"
+
+#~ msgid ""
+#~ "The selected day (as a number between 1 and 31, or 0 to unselect the "
+#~ "currently selected day)"
+#~ msgstr "Выбранный день (как номер между 1 и 31 или 0 для отмены выбора)"
+
+#~ msgid "Show Heading"
+#~ msgstr "Показывать заголовок"
+
+#~ msgid "If TRUE, a heading is displayed"
+#~ msgstr "Если \"ИСТИНА\", то заголовок отображается"
+
+#~ msgid "Show Day Names"
+#~ msgstr "Показывать имена дней"
+
+#~ msgid "If TRUE, day names are displayed"
+#~ msgstr "Если \"ИСТИНА\", то имена дней отображаются"
+
+#~ msgid "No Month Change"
+#~ msgstr "Месяц не изменяется"
+
+#~ msgid "If TRUE, the selected month can not be changed"
+#~ msgstr "Если \"ИСТИНА\", то изменить месяц невозможно"
+
+#~ msgid "Show Week Numbers"
+#~ msgstr "Показывать номера недель"
+
+#~ msgid "If TRUE, week numbers are displayed"
+#~ msgstr "Если \"ИСТИНА\", то номера недель отображаются"
+
+#~ msgid "Week Start Monday"
+#~ msgstr "Неделя начинается в понедельник"
+
+#~ msgid "If TRUE, Monday is displayed as the first day of the week"
+#~ msgstr "Если \"ИСТИНА\", то понедельник отображается как первый день недели"
+
+#~ msgid "Color Selection"
+#~ msgstr "Выбор цвета"
+
+#~ msgid "Select _All"
+#~ msgstr "Выделить вс_ё"
+
+#~ msgid ""
+#~ "Display a second backward arrow button on the opposite end of the tab area"
+#~ msgstr ""
+#~ "Отображать вторую кнопку со стрелкой назад на противоположной стороне "
+#~ "полосы вкладок"
+
+#~ msgid ""
+#~ "Display a second forward arrow button on the opposite end of the tab area"
+#~ msgstr ""
+#~ "Отображать вторую кнопку со стрелкой вперед на противоположной стороне "
+#~ "полосы вкладок"
+
+#~ msgid "Resize"
+#~ msgstr "Изменяемый"
+
+#~ msgid "If TRUE, the child expands and shrinks along with the paned widget"
+#~ msgstr ""
+#~ "Если \"ИСТИНА\", то вложенный элемент изменяет размеры вместе с "
+#~ "родительским"
+
+#~ msgid "Shrink"
+#~ msgstr "Сжимаемый"
+
+#~ msgid "If TRUE, the child can be made smaller than its requisition"
+#~ msgstr ""
+#~ "Если \"ИСТИНА\", то вложенный элемент может быть сжат относительно "
+#~ "запрошенных размеров"
+
+#~ msgid "Buffer"
+#~ msgstr "Буфер"
+
+#~ msgid "The buffer which is displayed"
+#~ msgstr "Отображаемый буфер"
+
+#~ msgid "Overwrite mode"
+#~ msgstr "Режим перезаписи"
+
+#~ msgid "Whether entered text overwrites existing contents"
+#~ msgstr "Должен ли вводимый текст перезаписывать существующий"
+
+#~ msgid "Column gets share of extra width allocated to the widget"
+#~ msgstr "Столбцы расширяются до размеров выделенной виджету области"
+
+#~ msgid "Window Role"
+#~ msgstr "Роль окна"
+
+#~ msgid "Unique identifier for the window to be used when restoring a session"
+#~ msgstr ""
+#~ "Уникальный идентификатор окна, используемый при восттановлении сессии"
