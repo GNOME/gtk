@@ -19,7 +19,7 @@ they work together.
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-#GtkTreeView, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeMode, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
+#GtkTreeView, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeModel, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
 
 </para>
 

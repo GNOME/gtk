@@ -18,7 +18,7 @@ they work together.
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-#GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeMode, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
+#GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeModel, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
 </para>
 
 <!-- ##### STRUCT GtkTreeView ##### -->

@@ -37,7 +37,7 @@ selected row).
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-#GtkTreeView, #GtkTreeViewColumn, #GtkTreeDnd, #GtkTreeMode, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
+#GtkTreeView, #GtkTreeViewColumn, #GtkTreeDnd, #GtkTreeModel, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
 </para>
 
 <!-- ##### STRUCT GtkTreeSelection ##### -->
