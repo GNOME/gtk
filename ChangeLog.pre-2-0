@@ -1,5 +1,8 @@
 Thu May 14 03:04:43 1998  Tim Janik  <timj@gtk.org>
 
+	* gtk/gtk.defs: added GtkButtonBoxStyle and GtkOrientation definitions
+	from Olli Helenius <ollhel@batman.jytol.fi>.
+
 	* gtk/gtktypeutils.c (gtk_type_free): new function to take care about
 	freeing types.
 	(gtk_type_set_chunk_alloc): new function to allow allocation of new
@@ -123,10 +126,10 @@ Mon May 11 23:53:38 1998  Tim Janik  <timj@gtk.org>
 	redrawn if that is still neccessary. don't allow queueing of already
 	destructed objects.
 	(gtk_widget_idle_sizer): proccess the resize queue in a save manner, so
-	widgets which are in the queue can be destroyed savely, handle
+	widgets which are in the queue can be destroyed safely, handle
 	requeueing properly.
 	(gtk_widget_idle_draw): proccess the redraw queue in a save manner, so
-	widgets which are in the queue can be destroyed/unrealized savely.
+	widgets which are in the queue can be destroyed/unrealized safely.
 
 Mon May 11 17:54:44 BST 1998 Tony Gale	<gale@gtk.org>
 
