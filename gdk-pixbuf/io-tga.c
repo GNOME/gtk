@@ -42,6 +42,8 @@
 #include "gdk-pixbuf-io.h"
 #include "gdk-pixbuf-private.h"
 
+#undef DEBUG_TGA
+
 #define TGA_INTERLEAVE_MASK     0xc0
 #define TGA_INTERLEAVE_NONE     0x00
 #define TGA_INTERLEAVE_2WAY     0x40
@@ -265,6 +267,8 @@ static gboolean fseek_check(FILE *f, glong offset, gint whence, GError **err)
 static gboolean fill_in_context(TGAContext *ctx, GError **err)
 {
 	gboolean alpha;
+	guint w, h;
+	guchar *pixels;
 
 	g_return_val_if_fail(ctx != NULL, FALSE);
 
@@ -277,12 +281,25 @@ static gboolean fill_in_context(TGAContext *ctx, GError **err)
 		ctx->cmap_size = ((ctx->hdr->cmap_bpp + 7) >> 3) *
 			LE16(ctx->hdr->cmap_n_colors);
 
-	alpha = ((ctx->hdr->bpp == 32) ||
+	alpha = ((ctx->hdr->bpp == 16) || 
+		 (ctx->hdr->bpp == 32) ||
 		 (ctx->hdr->has_cmap && (ctx->hdr->cmap_bpp == 32)));
 
-	ctx->pbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, alpha, 8,
-				   LE16(ctx->hdr->width),
-				   LE16(ctx->hdr->height));
+	w = LE16(ctx->hdr->width);
+	h = LE16(ctx->hdr->height);
+
+	pixels = g_try_malloc (w * h * (alpha ? 4 : 3));
+
+	if (!pixels) {
+		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+			    _("Insufficient memory to load TGA image"));
+		return FALSE;
+	}	
+	
+	ctx->pbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, alpha, 8,
+					      w, h, w * (alpha ? 4 : 3),
+					      free_buffer, NULL);
+
 	if (!ctx->pbuf) {
 		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
 			    _("Can't allocate new pixbuf"));
@@ -291,9 +308,10 @@ static gboolean fill_in_context(TGAContext *ctx, GError **err)
 	ctx->pbuf_bytes = ctx->pbuf->rowstride * ctx->pbuf->height;
 	ctx->pptr = ctx->pbuf->pixels;
 
-	if ((ctx->hdr->type == TGA_TYPE_PSEUDOCOLOR) ||
-	    (ctx->hdr->type == TGA_TYPE_GRAYSCALE))
-		ctx->rowstride = ctx->pbuf->width;
+	if (ctx->hdr->type == TGA_TYPE_PSEUDOCOLOR)
+	  ctx->rowstride = ctx->pbuf->width;
+	else if (ctx->hdr->type == TGA_TYPE_GRAYSCALE)
+	  ctx->rowstride = (alpha ? ctx->pbuf->width * 2 : ctx->pbuf->width);
 	else if (ctx->hdr->type == TGA_TYPE_TRUECOLOR)
 		ctx->rowstride = ctx->pbuf->rowstride;
 
@@ -305,28 +323,31 @@ static void parse_data_for_row_pseudocolor(TGAContext *ctx)
 {
 	guchar *s = ctx->in->data;
 	guint upper_bound = ctx->pbuf->width;
+	guchar *p = ctx->pptr;
 
 	for (; upper_bound; upper_bound--, s++) {
-		*ctx->pptr++ = ctx->cmap->cols[*s].r;
-		*ctx->pptr++ = ctx->cmap->cols[*s].g;
-		*ctx->pptr++ = ctx->cmap->cols[*s].b;
+		*p++ = ctx->cmap->cols[*s].r;
+		*p++ = ctx->cmap->cols[*s].g;
+		*p++ = ctx->cmap->cols[*s].b;
 		if (ctx->hdr->cmap_bpp == 32)
-			*ctx->pptr++ = ctx->cmap->cols[*s].a;
+			*p++ = ctx->cmap->cols[*s].a;
 	}
-	ctx->pbuf_bytes_done += ctx->pbuf->n_channels * ctx->pbuf->width;
+	ctx->pptr += ctx->pbuf->rowstride;
+	ctx->pbuf_bytes_done += ctx->pbuf->rowstride;
 	if (ctx->pbuf_bytes_done == ctx->pbuf_bytes)
 		ctx->done = TRUE;
 }
 
 static void swap_channels(TGAContext *ctx)
 {
-	register guchar swap;
-	register guint count;
+	guchar swap;
+	guint count;
+	guchar *p = ctx->pptr;
 	for (count = ctx->pbuf->width; count; count--) {
-		swap = ctx->pptr[0];
-		ctx->pptr[0] = ctx->pptr[2];
-		ctx->pptr[2] = swap;
-		ctx->pptr += ctx->pbuf->n_channels;
+	  swap = p[0];
+	  p[0] = p[2];
+	  p[2] = swap;
+	  p += ctx->pbuf->n_channels;
 	}
 }
 
@@ -334,6 +355,7 @@ static void parse_data_for_row_truecolor(TGAContext *ctx)
 {
 	g_memmove(ctx->pptr, ctx->in->data, ctx->pbuf->rowstride);
 	swap_channels(ctx);
+	ctx->pptr += ctx->pbuf->rowstride;
 	ctx->pbuf_bytes_done += ctx->pbuf->rowstride;
 	if (ctx->pbuf_bytes_done == ctx->pbuf_bytes)
 		ctx->done = TRUE;
@@ -344,11 +366,15 @@ static void parse_data_for_row_grayscale(TGAContext *ctx)
 	guchar *s = ctx->in->data;
 	guint upper_bound = ctx->pbuf->width;
 
+	guchar *p = ctx->pptr;
 	for (; upper_bound; upper_bound--) {
-		ctx->pptr[0] = ctx->pptr[1] = ctx->pptr[2] = *s++;
-		ctx->pptr += 3;
+		p[0] = p[1] = p[2] = *s++;
+		if (ctx->pbuf->n_channels == 4)
+		  p[3] = *s++;
+		p += ctx->pbuf->n_channels;
 	}
-	ctx->pbuf_bytes_done = ctx->pbuf->width * 3;
+	ctx->pptr += ctx->pbuf->rowstride;
+	ctx->pbuf_bytes_done += ctx->pbuf->rowstride;
 	if (ctx->pbuf_bytes_done == ctx->pbuf_bytes)
 		ctx->done = TRUE;
 }
@@ -372,10 +398,12 @@ static gboolean parse_data_for_row(TGAContext *ctx, GError **err)
 
 static void write_rle_data(TGAContext *ctx, TGAColor *color, guint *rle_count)
 {
-	ctx->pbuf_bytes_done += ctx->pbuf->n_channels * (*rle_count);
 	for (; *rle_count; (*rle_count)--) {
 		g_memmove(ctx->pptr, (guchar *) color, ctx->pbuf->n_channels);
 		ctx->pptr += ctx->pbuf->n_channels;
+		ctx->pbuf_bytes_done += ctx->pbuf->n_channels;
+		if (ctx->pbuf_bytes_done == ctx->pbuf_bytes)
+			return;
 	}
 }
 
@@ -398,6 +426,10 @@ static guint parse_rle_data_pseudocolor(TGAContext *ctx)
 				rle_num = (tag & 0x7f) + 1;
 				write_rle_data(ctx, &ctx->cmap->cols[*s], &rle_num);
 				s++, n++;
+				if (ctx->pbuf_bytes_done == ctx->pbuf_bytes) {
+					ctx->done = TRUE;
+					return n;
+				}
 			}
 		} else {
 			raw_num = tag + 1;
@@ -415,24 +447,18 @@ static guint parse_rle_data_pseudocolor(TGAContext *ctx)
 						*ctx->pptr++ = ctx->cmap->cols[*s].a;
 					s++, n++;
 					ctx->pbuf_bytes_done += ctx->pbuf->n_channels;
+					if (ctx->pbuf_bytes_done == ctx->pbuf_bytes) {
+						ctx->done = TRUE;
+						return n;
+					}
 				}
 			}
 		}
 	}
+
 	if (ctx->pbuf_bytes_done == ctx->pbuf_bytes)
 		ctx->done = TRUE;
 	return n;
-}
-
-static void swap_channels_rle(TGAContext *ctx, guint count)
-{
-	register guchar swap;
-	for (; count; count--) {
-		swap = ctx->pptr[0];
-		ctx->pptr[0] = ctx->pptr[2];
-		ctx->pptr[2] = swap;
-		ctx->pptr += ctx->pbuf->n_channels;
-	}
 }
 
 static guint parse_rle_data_truecolor(TGAContext *ctx)
@@ -458,19 +484,37 @@ static guint parse_rle_data_truecolor(TGAContext *ctx)
 				col.r = *s++;
 				if (ctx->hdr->bpp == 32)
 					col.a = *s++;
-				write_rle_data(ctx, &col, &rle_num);
 				n += ctx->pbuf->n_channels;
+				write_rle_data(ctx, &col, &rle_num);
+				if (ctx->pbuf_bytes_done == ctx->pbuf_bytes) {
+					ctx->done = TRUE;
+					return n;
+				}
 			}
 		} else {
 			raw_num = tag + 1;
 			if (n + (raw_num * ctx->pbuf->n_channels) >= ctx->in->size) {
 				return --n;
 			} else {
-				g_memmove(ctx->pptr, s, raw_num * ctx->pbuf->n_channels);
-				swap_channels_rle(ctx, raw_num);
-				s += raw_num * ctx->pbuf->n_channels;
-				n += raw_num * ctx->pbuf->n_channels;
-				ctx->pbuf_bytes_done += raw_num * ctx->pbuf->n_channels;
+				for (; raw_num; raw_num--) {
+					ctx->pptr[2] = *s++;
+					ctx->pptr[1] = *s++;
+					ctx->pptr[0] = *s++;
+					if (ctx->hdr->bpp == 32)
+						ctx->pptr[3] = *s++;
+					n += ctx->pbuf->n_channels;
+					ctx->pptr += ctx->pbuf->n_channels;
+					ctx->pbuf_bytes_done += ctx->pbuf->n_channels;
+					if (ctx->pbuf_bytes_done == ctx->pbuf_bytes) {
+						ctx->done = TRUE;
+						return n;
+					}
+				}
+				
+				if (ctx->pbuf_bytes_done == ctx->pbuf_bytes) {
+					ctx->done = TRUE;
+					return n;
+				}
 			}
 		}
 	}
@@ -493,24 +537,40 @@ static guint parse_rle_data_grayscale(TGAContext *ctx)
 		tag = *s;
 		s++, n++;
 		if (tag & 0x80) {
-			if (n == ctx->in->size) {
+			if (n + (ctx->pbuf->n_channels == 4 ? 2 : 1) >= ctx->in->size) {
 				return --n;
 			} else {
 				rle_num = (tag & 0x7f) + 1;
 				tone.r = tone.g = tone.b = *s;
 				s++, n++;
+				if (ctx->pbuf->n_channels == 4) {
+					tone.a = *s++;
+					n++;
+				}
 				write_rle_data(ctx, &tone, &rle_num);
+				if (ctx->pbuf_bytes_done == ctx->pbuf_bytes) {
+					ctx->done = TRUE;
+					return n;
+				}
 			}
 		} else {
 			raw_num = tag + 1;
-			if (n + raw_num >= ctx->in->size) {
+			if (n + raw_num * (ctx->pbuf->n_channels == 4 ? 2 : 1) >= ctx->in->size) {
 				return --n;
 			} else {
 				for (; raw_num; raw_num--) {
 					ctx->pptr[0] = ctx->pptr[1] = ctx->pptr[2] = *s;
 					s++, n++;
-					ctx->pptr += 3;
-					ctx->pbuf_bytes_done += 3;
+					if (ctx->pbuf->n_channels == 4) {
+						ctx->pptr[3] = *s++;
+						n++;
+					}
+					ctx->pptr += ctx->pbuf->n_channels;
+					ctx->pbuf_bytes_done += ctx->pbuf->n_channels;
+					if (ctx->pbuf_bytes_done == ctx->pbuf_bytes) {
+						ctx->done = TRUE;
+						return n;
+					}
 				}
 			}
 		}
@@ -526,13 +586,13 @@ static gboolean parse_rle_data(TGAContext *ctx, GError **err)
 	guint pbuf_count = 0;
 	if (ctx->hdr->type == TGA_TYPE_RLE_PSEUDOCOLOR) {
 		count = parse_rle_data_pseudocolor(ctx);
-		pbuf_count = count *ctx->pbuf->n_channels;
+		pbuf_count = count * ctx->pbuf->n_channels;
 	} else if (ctx->hdr->type == TGA_TYPE_RLE_TRUECOLOR) {
 		count = parse_rle_data_truecolor(ctx);
 		pbuf_count = count;
 	} else if (ctx->hdr->type == TGA_TYPE_RLE_GRAYSCALE) {
 		count = parse_rle_data_grayscale(ctx);
-		pbuf_count = count * 3;
+		pbuf_count = count * (ctx->pbuf->n_channels == 4 ? 2 : 3);
 	}
 	ctx->in = io_buffer_free_segment(ctx->in, count, err);
 	if (!ctx->in)
@@ -609,6 +669,28 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 			}
 			g_memmove(ctx->hdr, ctx->in->data, sizeof(TGAHeader));
 			ctx->in = io_buffer_free_segment(ctx->in, sizeof(TGAHeader), err);
+#ifdef DEBUG_TGA
+			g_print ("infolen %d "
+				 "has_cmap %d "
+				 "type %d "
+				 "cmap_start %d "
+				 "cmap_n_colors %d "
+				 "cmap_bpp %d "
+				 "x %d y %d width %d height %d bpp %d "
+				 "flags %#x",
+				 ctx->hdr->infolen,
+				 ctx->hdr->has_cmap,
+				 ctx->hdr->type,
+				 LE16(ctx->hdr->cmap_start),
+				 LE16(ctx->hdr->cmap_n_colors),
+				 ctx->hdr->cmap_bpp,
+				 LE16(ctx->hdr->x_origin),
+				 LE16(ctx->hdr->y_origin),
+				 LE16(ctx->hdr->width),
+				 LE16(ctx->hdr->height),
+				 ctx->hdr->bpp,
+				 ctx->hdr->flags);
+#endif
 			if (!ctx->in)
 				return FALSE;
 			if (LE16(ctx->hdr->width) == 0 || 
@@ -635,17 +717,39 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 			}
 			switch (ctx->hdr->type) {
 			    case TGA_TYPE_PSEUDOCOLOR:
-			    case TGA_TYPE_TRUECOLOR:
-			    case TGA_TYPE_GRAYSCALE:
 			    case TGA_TYPE_RLE_PSEUDOCOLOR:
+				    if (ctx->hdr->bpp != 8) {
+					    g_set_error(err, GDK_PIXBUF_ERROR, 
+							GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+							_("TGA image type not supported"));
+					    return FALSE;
+				    }
+				    break;
+			    case TGA_TYPE_TRUECOLOR:
 			    case TGA_TYPE_RLE_TRUECOLOR:
+				    if (ctx->hdr->bpp != 24 &&
+					ctx->hdr->bpp != 32) {
+					    g_set_error(err, GDK_PIXBUF_ERROR, 
+							GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+							_("TGA image type not supported"));
+					    return FALSE;
+				    }			      
+				    break;
+			    case TGA_TYPE_GRAYSCALE:
 			    case TGA_TYPE_RLE_GRAYSCALE:
-			      break;
+				    if (ctx->hdr->bpp != 8 &&
+					ctx->hdr->bpp != 16) {
+					    g_set_error(err, GDK_PIXBUF_ERROR, 
+							GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+							_("TGA image type not supported"));
+					    return FALSE;
+				    }
+				    break;
 			    default:
-			      g_set_error(err, GDK_PIXBUF_ERROR, 
-					  GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-					  _("TGA image type not supported"));
-			      return FALSE;    
+				    g_set_error(err, GDK_PIXBUF_ERROR, 
+						GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+						_("TGA image type not supported"));
+				    return FALSE;    
 			}
 			if (!fill_in_context(ctx, err))
 				return FALSE;
@@ -894,7 +998,9 @@ static GdkPixbuf *get_image_pseudocolor(FILE *f, TGAHeader *hdr,
 	GdkPixbuf *pbuf;
 	guchar *p, color, tag;
 	glong n, image_offset;
-	guint count;
+	guint count, w, h;
+	guchar *pixels;
+	gboolean alpha;
 
 	image_offset = sizeof(TGAHeader) + hdr->infolen;
 	if (!hdr->has_cmap) {
@@ -911,8 +1017,22 @@ static GdkPixbuf *get_image_pseudocolor(FILE *f, TGAHeader *hdr,
 		return NULL;
 	}
 
-	pbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, (hdr->cmap_bpp == 32), 8,
-			      LE16(hdr->width), LE16(hdr->height));
+	w = LE16(hdr->width);
+	h = LE16(hdr->height);
+
+	alpha = (hdr->cmap_bpp == 32);
+
+	pixels = g_try_malloc (w * h * (alpha ? 4 : 3));
+
+	if (!pixels) {
+		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+			    _("Insufficient memory to load TGA image"));
+		return FALSE;
+	}	
+	
+	pbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, alpha, 8,
+					 w, h, w * (alpha ? 4 : 3),
+					 free_buffer, NULL);
 	if (!pbuf) {
 		g_set_error(err, GDK_PIXBUF_ERROR, 
 			    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
@@ -998,7 +1118,9 @@ static GdkPixbuf *get_image_truecolor(FILE *f, TGAHeader *hdr,
 	guchar *p, tag;
 	glong n, image_offset;
 	guint32 pixel;
-	guint count;
+	guint count, w, h;
+	guchar *pixels;
+	gboolean alpha;
 
 	image_offset = sizeof(TGAHeader) + hdr->infolen;
 	/* A truecolor image shouldn't actually have a colormap. */
@@ -1007,8 +1129,23 @@ static GdkPixbuf *get_image_truecolor(FILE *f, TGAHeader *hdr,
 	if (!fseek_check(f, image_offset, SEEK_SET, err))
 		return NULL;
 
-	pbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, (hdr->bpp == 32), 8,
-			      LE16(hdr->width), LE16(hdr->height));
+	w = LE16(hdr->width);
+	h = LE16(hdr->height);
+	
+	alpha = (hdr->bpp == 32);
+
+	pixels = g_try_malloc (w * h * (alpha ? 4 : 3));
+
+	if (!pixels) {
+		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+			    _("Insufficient memory to load TGA image"));
+		return FALSE;
+	}	
+	
+	pbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, alpha, 8,
+					 w, h, w * (alpha ? 4 : 3),
+					 free_buffer, NULL);
+
 	if (!pbuf) {
 		g_set_error(err, GDK_PIXBUF_ERROR, 
 			    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
@@ -1063,8 +1200,10 @@ static GdkPixbuf *get_image_grayscale(FILE *f, TGAHeader *hdr,
 {
 	GdkPixbuf *pbuf;
 	glong n, image_offset;
-	guchar *p, color, tag;
-	guint count;
+	guchar *p, color[2], tag;
+	guint count, w, h;
+	guchar *pixels;
+	gboolean alpha;
 
 	image_offset = sizeof(TGAHeader) + hdr->infolen;
 	/* A grayscale image shouldn't actually have a colormap. */
@@ -1073,8 +1212,23 @@ static GdkPixbuf *get_image_grayscale(FILE *f, TGAHeader *hdr,
 	if (!fseek_check(f, image_offset, SEEK_SET, err))
 		return NULL;
 
-	pbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
-			      LE16(hdr->width), LE16(hdr->height));
+	w = LE16(hdr->width);
+	h = LE16(hdr->height);
+
+	alpha = (hdr->bpp == 16);
+
+	pixels = g_try_malloc (w * h * (alpha ? 4 : 3));
+
+	if (!pixels) {
+		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+			    _("Insufficient memory to load TGA image"));
+		return FALSE;
+	}	
+	
+	pbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, alpha, 8,
+					 w, h, w * (alpha ? 4 : 3),
+					 free_buffer, NULL);
+
 	if (!pbuf) {
 		g_set_error(err, GDK_PIXBUF_ERROR, 
 			    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
@@ -1095,35 +1249,41 @@ static GdkPixbuf *get_image_grayscale(FILE *f, TGAHeader *hdr,
 			if (tag & 0x80) {
 				count = (tag & 0x7f) + 1;
 				n += count;
-				if (!fread_check(&color, 1, 1, f, err)) {
+				if (!fread_check(color, (alpha ? 2 : 1), 1, f, err)) {
 					g_object_unref(pbuf);
 					return NULL;
 				}
 				for (; count; count--) {
-					p[0] = p[1] = p[2] = color;
-					p += 3;
+					p[0] = p[1] = p[2] = color[0];
+					if (alpha)
+						p[3] = color[1];
+					p += pbuf->n_channels;
 				}
 			} else {
 				count = tag + 1;
 				n += count;
 				for (; count; count--) {
-					if (!fread_check(&color, 1, 1, f, err)) {
+					if (!fread_check(color, (alpha ? 2 : 1), 1, f, err)) {
 						g_object_unref(pbuf);
 						return NULL;
 					}
-					p[0] = p[1] = p[2] = color;
-					p += 3;
+					p[0] = p[1] = p[2] = color[0];
+					if (alpha)
+						p[3] = color[1];
+					p += pbuf->n_channels;
 				}
 			}
 		}
 	} else {
 		for (n = 0; n < pbuf->width * pbuf->height; n++) {
-			if (!fread_check(&color, 1, 1, f, err)) {
+			if (!fread_check(color, (alpha ? 2 : 1), 1, f, err)) {
 				g_object_unref(pbuf);
 				return NULL;
 			}
-			p[0] = p[1] = p[2] = color;
-			p += 3;
+			p[0] = p[1] = p[2] = color[0];
+			if (alpha)
+				p[3] = color[1];
+			p += pbuf->n_channels;
 		}
 	}
 

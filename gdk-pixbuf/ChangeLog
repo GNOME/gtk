@@ -1,3 +1,10 @@
+2002-03-18  Matthias Clasen  <maclas@gmx.de>
+
+	* io-tga.c: Fix assumptions on rowstride by manually allocating a
+	contiguous pixel buffer. Catch buffer overruns in RLE-modi. 
+	Support grayscale + alpha (which can be written, but not read (!)
+	by the Gimp). 
+
 2002-03-15  Matthias Clasen  <maclas@gmx.de>
 
 	* io-gif.c (gif_get_frame_info): Catch invalid frame dimensions.
