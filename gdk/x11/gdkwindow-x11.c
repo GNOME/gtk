@@ -742,7 +742,7 @@ gdk_window_show (GdkWindow *window)
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowPrivate*) window;
-  if (!private->destroyed && !private->mapped)
+  if (!private->destroyed)
     {
       private->mapped = TRUE;
       XRaiseWindow (private->xdisplay, private->xwindow);
@@ -758,7 +758,7 @@ gdk_window_hide (GdkWindow *window)
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowPrivate*) window;
-  if (!private->destroyed && private->mapped)
+  if (!private->destroyed)
     {
       private->mapped = FALSE;
       XUnmapWindow (private->xdisplay, private->xwindow);

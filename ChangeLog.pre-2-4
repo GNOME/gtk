@@ -1,3 +1,10 @@
+Tue Jan 26 14:02:50 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_show/hide): Remove TimJ's
+	checks for already being mapped or hidden. See
+	the ICCCM's section on state changes for why this
+	is a bad idea.
+
 Wed Jan 27 17:05:40 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* Separate out GLIB_LIBS and GLIB_DEPLIBS. This
