@@ -170,6 +170,8 @@ EXPORTS
 	gtk_check_version
 	gtk_clipboard_clear
 	gtk_clipboard_get
+	gtk_clipboard_get_display
+	gtk_clipboard_get_for_display
 	gtk_clipboard_get_owner
 	gtk_clipboard_get_type
 	gtk_clipboard_request_contents
@@ -270,6 +272,7 @@ EXPORTS
 	gtk_color_selection_palette_from_string
 	gtk_color_selection_palette_to_string
 	gtk_color_selection_set_change_palette_hook
+	gtk_color_selection_set_change_palette_with_screen_hook
 	gtk_color_selection_set_color
 	gtk_color_selection_set_current_alpha
 	gtk_color_selection_set_current_color
@@ -627,6 +630,7 @@ EXPORTS
 	gtk_icon_size_get_name
 	gtk_icon_size_get_type
 	gtk_icon_size_lookup
+	gtk_icon_size_lookup_for_settings
 	gtk_icon_size_register
 	gtk_icon_size_register_alias
 	gtk_icon_source_copy
@@ -717,8 +721,11 @@ EXPORTS
 	gtk_input_dialog_new
 	gtk_input_remove
 	gtk_interface_age
+	gtk_invisible_get_screen
 	gtk_invisible_get_type
 	gtk_invisible_new
+	gtk_invisible_new_for_screen
+	gtk_invisible_set_screen
 	gtk_item_deselect
 	gtk_item_factories_path_delete
 	gtk_item_factory_add_foreign
@@ -824,14 +831,19 @@ EXPORTS
 	gtk_list_store_insert
 	gtk_list_store_insert_after
 	gtk_list_store_insert_before
+	gtk_list_store_iter_is_valid
+	gtk_list_store_move_after
+	gtk_list_store_move_before
 	gtk_list_store_new
 	gtk_list_store_newv
 	gtk_list_store_prepend
 	gtk_list_store_remove
+	gtk_list_store_reorder
 	gtk_list_store_set
 	gtk_list_store_set_column_types
 	gtk_list_store_set_valist
 	gtk_list_store_set_value
+	gtk_list_store_swap
 	gtk_list_toggle_add_mode
 	gtk_list_toggle_focus_row
 	gtk_list_toggle_row
@@ -917,6 +929,7 @@ EXPORTS
 	gtk_menu_shell_get_type
 	gtk_menu_shell_insert
 	gtk_menu_shell_prepend
+	gtk_menu_shell_select_first
 	gtk_menu_shell_select_item
 	gtk_message_dialog_get_type
 	gtk_message_dialog_new
@@ -935,6 +948,7 @@ EXPORTS
 	gtk_notebook_get_current_page
 	gtk_notebook_get_menu_label
 	gtk_notebook_get_menu_label_text
+	gtk_notebook_get_n_pages
 	gtk_notebook_get_nth_page
 	gtk_notebook_get_scrollable
 	gtk_notebook_get_show_border
@@ -1043,10 +1057,6 @@ EXPORTS
 	gtk_pixmap_new
 	gtk_pixmap_set
 	gtk_pixmap_set_build_insensitive
-;	gtk_plug_construct
-;	gtk_plug_get_id
-;	gtk_plug_get_type
-;	gtk_plug_new
 	gtk_policy_type_get_type
 	gtk_position_type_get_type
 	gtk_preview_draw_row
@@ -1217,12 +1227,14 @@ EXPORTS
 	gtk_selection_data_targets_include_text
 	gtk_selection_mode_get_type
 	gtk_selection_owner_set
+	gtk_selection_owner_set_for_display
 	gtk_selection_remove_all
 	gtk_separator_get_type
 	gtk_separator_menu_item_get_type
 	gtk_separator_menu_item_new
 	gtk_set_locale
 	gtk_settings_get_default
+	gtk_settings_get_for_screen
 	gtk_settings_get_type
 	gtk_settings_install_property
 	gtk_settings_install_property_parser
@@ -1251,11 +1263,6 @@ EXPORTS
 	gtk_size_group_new
 	gtk_size_group_remove_widget
 	gtk_size_group_set_mode
-;	gtk_socket_add_id
-;	gtk_socket_get_id
-;	gtk_socket_get_type
-;	gtk_socket_new
-;	gtk_socket_steal
 	gtk_sort_type_get_type
 	gtk_spin_button_configure
 	gtk_spin_button_get_adjustment
@@ -1716,6 +1723,7 @@ EXPORTS
 	gtk_tree_model_get_iter_from_string
 	gtk_tree_model_get_n_columns
 	gtk_tree_model_get_path
+	gtk_tree_model_get_string_from_iter
 	gtk_tree_model_get_type
 	gtk_tree_model_get_valist
 	gtk_tree_model_get_value
@@ -1738,6 +1746,7 @@ EXPORTS
 	gtk_tree_model_sort_convert_path_to_child_path
 	gtk_tree_model_sort_get_model
 	gtk_tree_model_sort_get_type
+	gtk_tree_model_sort_iter_is_valid
 	gtk_tree_model_sort_new_with_model
 	gtk_tree_model_sort_reset_default_sort_func
 	gtk_tree_model_unref_node
@@ -1754,6 +1763,7 @@ EXPORTS
 	gtk_tree_path_is_descendant
 	gtk_tree_path_new
 	gtk_tree_path_new_first
+	gtk_tree_path_new_from_indices
 	gtk_tree_path_new_from_string
 	gtk_tree_path_next
 	gtk_tree_path_prepend_index
@@ -1763,6 +1773,7 @@ EXPORTS
 	gtk_tree_prepend
 	gtk_tree_remove_item
 	gtk_tree_remove_items
+	gtk_tree_row_reference_copy
 	gtk_tree_row_reference_deleted
 	gtk_tree_row_reference_free
 	gtk_tree_row_reference_get_path
@@ -1774,8 +1785,10 @@ EXPORTS
 	gtk_tree_row_reference_valid
 	gtk_tree_select_child
 	gtk_tree_select_item
+	gtk_tree_selection_count_selected_rows
 	gtk_tree_selection_get_mode
 	gtk_tree_selection_get_selected
+	gtk_tree_selection_get_selected_rows
 	gtk_tree_selection_get_tree_view
 	gtk_tree_selection_get_type
 	gtk_tree_selection_get_user_data
@@ -1791,6 +1804,7 @@ EXPORTS
 	gtk_tree_selection_unselect_all
 	gtk_tree_selection_unselect_iter
 	gtk_tree_selection_unselect_path
+	gtk_tree_selection_unselect_range
 	gtk_tree_set_row_drag_data
 	gtk_tree_set_selection_mode
 	gtk_tree_set_view_lines
@@ -1810,14 +1824,19 @@ EXPORTS
 	gtk_tree_store_insert_before
 	gtk_tree_store_is_ancestor
 	gtk_tree_store_iter_depth
+	gtk_tree_store_iter_is_valid
+	gtk_tree_store_move_after
+	gtk_tree_store_move_before
 	gtk_tree_store_new
 	gtk_tree_store_newv
 	gtk_tree_store_prepend
 	gtk_tree_store_remove
+	gtk_tree_store_reorder
 	gtk_tree_store_set
 	gtk_tree_store_set_column_types
 	gtk_tree_store_set_valist
 	gtk_tree_store_set_value
+	gtk_tree_store_swap
 	gtk_tree_unselect_child
 	gtk_tree_unselect_item
 	gtk_tree_view_append_column
@@ -1830,6 +1849,7 @@ EXPORTS
 	gtk_tree_view_column_clear
 	gtk_tree_view_column_clear_attributes
 	gtk_tree_view_column_clicked
+	gtk_tree_view_column_focus_cell
 	gtk_tree_view_column_get_alignment
 	gtk_tree_view_column_get_cell_renderers
 	gtk_tree_view_column_get_clickable
@@ -1877,6 +1897,7 @@ EXPORTS
 	gtk_tree_view_enable_model_drag_source
 	gtk_tree_view_expand_all
 	gtk_tree_view_expand_row
+	gtk_tree_view_expand_to_path
 	gtk_tree_view_get_background_area
 	gtk_tree_view_get_bin_window
 	gtk_tree_view_get_cell_area
@@ -1914,6 +1935,7 @@ EXPORTS
 	gtk_tree_view_scroll_to_point
 	gtk_tree_view_set_column_drag_function
 	gtk_tree_view_set_cursor
+	gtk_tree_view_set_cursor_on_cell
 	gtk_tree_view_set_destroy_count_func
 	gtk_tree_view_set_drag_dest_row
 	gtk_tree_view_set_enable_search
@@ -1974,8 +1996,10 @@ EXPORTS
 	gtk_widget_add_events
 	gtk_widget_child_focus
 	gtk_widget_child_notify
+	gtk_widget_class_find_style_property
 	gtk_widget_class_install_style_property
 	gtk_widget_class_install_style_property_parser
+	gtk_widget_class_list_style_properties
 	gtk_widget_class_path
 	gtk_widget_create_pango_context
 	gtk_widget_create_pango_layout
@@ -1990,14 +2014,15 @@ EXPORTS
 	gtk_widget_get_ancestor
 	gtk_widget_get_child_requisition
 	gtk_widget_get_child_visible
+	gtk_widget_get_clipboard
 	gtk_widget_get_colormap
 	gtk_widget_get_composite_name
 	gtk_widget_get_default_colormap
 	gtk_widget_get_default_direction
 	gtk_widget_get_default_style
 	gtk_widget_get_default_visual
-	gtk_widget_get_display
 	gtk_widget_get_direction
+	gtk_widget_get_display
 	gtk_widget_get_events
 	gtk_widget_get_extension_events
 	gtk_widget_get_modifier_style
@@ -2006,6 +2031,8 @@ EXPORTS
 	gtk_widget_get_parent
 	gtk_widget_get_parent_window
 	gtk_widget_get_pointer
+	gtk_widget_get_root_window
+	gtk_widget_get_screen
 	gtk_widget_get_settings
 	gtk_widget_get_size_request
 	gtk_widget_get_style
@@ -2014,6 +2041,7 @@ EXPORTS
 	gtk_widget_get_visual
 	gtk_widget_grab_default
 	gtk_widget_grab_focus
+	gtk_widget_has_screen
 	gtk_widget_help_type_get_type
 	gtk_widget_hide
 	gtk_widget_hide_all
@@ -2066,7 +2094,6 @@ EXPORTS
 	gtk_widget_set_parent
 	gtk_widget_set_parent_window
 	gtk_widget_set_redraw_on_allocate
-	gtk_widget_get_screen
 	gtk_widget_set_scroll_adjustments
 	gtk_widget_set_sensitive
 	gtk_widget_set_size_request
@@ -2115,6 +2142,7 @@ EXPORTS
 	gtk_window_get_role
 	gtk_window_get_screen
 	gtk_window_get_size
+	gtk_window_get_skip_pager_hint
 	gtk_window_get_skip_taskbar_hint
 	gtk_window_get_title
 	gtk_window_get_transient_for
@@ -2138,8 +2166,10 @@ EXPORTS
 	gtk_window_remove_mnemonic
 	gtk_window_reshow_with_initial_size
 	gtk_window_resize
+	gtk_window_set_auto_startup_notification
 	gtk_window_set_decorated
 	gtk_window_set_default
+	gtk_window_set_default_icon_from_file
 	gtk_window_set_default_icon_list
 	gtk_window_set_default_size
 	gtk_window_set_destroy_with_parent
@@ -2149,6 +2179,7 @@ EXPORTS
 	gtk_window_set_gravity
 	gtk_window_set_has_frame
 	gtk_window_set_icon
+	gtk_window_set_icon_from_file
 	gtk_window_set_icon_list
 	gtk_window_set_mnemonic_modifier
 	gtk_window_set_modal
@@ -2157,6 +2188,8 @@ EXPORTS
 	gtk_window_set_resizable
 	gtk_window_set_role
 	gtk_window_set_screen
+	gtk_window_set_skip_pager_hint
+	gtk_window_set_skip_taskbar_hint
 	gtk_window_set_title
 	gtk_window_set_transient_for
 	gtk_window_set_type_hint
@@ -2167,3 +2200,14 @@ EXPORTS
 	gtk_window_unmaximize
 	gtk_window_unstick
 	gtk_wrap_mode_get_type
+;	gtk_plug_construct
+;	gtk_plug_construct_for_display
+;	gtk_plug_get_id
+;	gtk_plug_get_type
+;	gtk_plug_new
+;	gtk_plug_new_for_display
+;	gtk_socket_add_id
+;	gtk_socket_get_id
+;	gtk_socket_get_type
+;	gtk_socket_new
+;	gtk_socket_steal
