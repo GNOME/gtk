@@ -1,7 +1,7 @@
 Thu May 31 12:43:57 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkoptionmenu.c: Account for the fact that the border
-	width is _outside_ the allocation. (Fixes #54585)
+	width is _outside_ the window. (Fixes #54585)
 
 2001-04-19  Federico Mena Quintero  <federico@ximian.com>
 
