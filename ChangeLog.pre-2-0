@@ -1,3 +1,22 @@
+2002-01-31  Mark McLoughlin  <mark@skynet.ie>
+
+	* gdk/gdkimage.c: (scratch_image_info_for_depth): make static.
+
+	* gdk/x11/gdkimage-x11.c: (get_full_image): ditto.
+
+	* gdk/x11/gxid_lib.[ch]: (_gxid_claim_device), (_gxid_release_device):
+	renamed from gxid_(claim|release)_device.
+
+	* gdk/x11/gdkinput-gxi.c: (_gdk_input_enable_window),
+	(_gdk_input_disable_window): upd for gxid change.
+
+	* gtk/gtkimage.c: (animation_timeout): make static.
+
+	* gtk/gtkstyle.c: (draw_thin_shadow), (draw_spin_entry_shadow): make
+	static.
+
+	* gtk/gtktextutil.c: (bidi_menu_entries): make static.
+
 Thu Jan 31 10:21:05 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkplug.c (gtk_plug_focus): Handle the case where

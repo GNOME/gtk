@@ -42,7 +42,7 @@ struct _GtkTextUtilCallbackInfo
   gpointer data;
 };
 
-GtkUnicodeMenuEntry bidi_menu_entries[] = {
+static GtkUnicodeMenuEntry bidi_menu_entries[] = {
   { N_("LRM _Left-to-right mark"), 0x200E },
   { N_("RLM _Right-to-left mark"), 0x200F },
   { N_("LRE Left-to-right _embedding"), 0x202A },

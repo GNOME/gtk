@@ -220,7 +220,7 @@ allocate_scratch_images (GdkScratchImageInfo *info,
   return TRUE;
 }
 
-GdkScratchImageInfo *
+static GdkScratchImageInfo *
 scratch_image_info_for_depth (gint depth)
 {
   GSList *tmp_list;

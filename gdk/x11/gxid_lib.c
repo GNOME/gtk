@@ -85,7 +85,7 @@ gxid_send_message(char *host, int port, GxidMessage *msg)
 
 /* claim a device. If exclusive, device is claimed exclusively */
 int 
-gxid_claim_device(char *host, int port, GxidU32 device, GxidU32 window,
+_gxid_claim_device(char *host, int port, GxidU32 device, GxidU32 window,
 		  int exclusive)
 {
   GxidClaimDevice msg;
@@ -100,7 +100,7 @@ gxid_claim_device(char *host, int port, GxidU32 device, GxidU32 window,
 
 /* release a device/window pair */
 int 
-gxid_release_device(char *host, int port, GxidU32 device, GxidU32 window)
+_gxid_release_device(char *host, int port, GxidU32 device, GxidU32 window)
 {
   GxidReleaseDevice msg;
   msg.type = htonl(GXID_RELEASE_DEVICE);
@@ -115,8 +115,8 @@ gxid_release_device(char *host, int port, GxidU32 device, GxidU32 window)
 
 /* Some compilers don't like empty source files */
 int 
-gxid_claim_device(char *host, int port, GxidU32 device, GxidU32 window,
-		  int exclusive)
+_gxid_claim_device(char *host, int port, GxidU32 device, GxidU32 window,
+		   int exclusive)
 {
   return 0;
 }

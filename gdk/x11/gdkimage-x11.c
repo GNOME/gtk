@@ -420,7 +420,7 @@ gdk_image_new (GdkImageType  type,
   return _gdk_image_new_for_depth (type, visual, width, height, -1);
 }
 
-GdkImage*
+static GdkImage*
 get_full_image (GdkDrawable    *drawable,
 		gint            src_x,
 		gint            src_y,

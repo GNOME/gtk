@@ -2090,7 +2090,7 @@ gtk_default_draw_vline (GtkStyle     *style,
 }
 
 
-void
+static void
 draw_thin_shadow (GtkStyle      *style,
 		  GdkWindow     *window,
 		  GtkStateType   state,
@@ -2130,7 +2130,7 @@ draw_thin_shadow (GtkStyle      *style,
     }
 }
 
-void
+static void
 draw_spin_entry_shadow (GtkStyle      *style,
 			GdkWindow     *window,
 			GtkStateType   state,

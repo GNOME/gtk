@@ -1164,7 +1164,7 @@ gtk_image_unmap (GtkWidget *widget)
     GTK_WIDGET_CLASS (parent_class)->unmap (widget);
 }
 
-gint
+static gint
 animation_timeout (gpointer data)
 {
   GtkImage *image;
