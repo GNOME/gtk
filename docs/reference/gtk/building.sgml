@@ -312,6 +312,10 @@ How to compile GTK+ itself
 	    <arg>--enable-debug=[no|minimum|yes]</arg>
 	  </group>
           <group>
+	    <arg>--disable-visibility</arg>
+	    <arg>--enable-visibility</arg>
+	  </group>
+          <group>
 	    <arg>--disable-shm</arg>
 	    <arg>--enable-shm</arg>
 	  </group>
@@ -387,6 +391,19 @@ How to compile GTK+ itself
          from simple warnings into fatal crashes. Thus 
          <option>--enable-debug=no</option> should <emphasis>not</emphasis> 
          be used for stable releases of GTK+.
+        </para>
+      </formalpara>
+
+      <formalpara>
+        <title><systemitem>--disable-visibility</systemitem> and
+          <systemitem>--enable-visibility</systemitem></title>
+        <para>
+          The option <systemitem>--disable-visibility</systemitem>
+          turns off the use of ELF visibility attributes for linking
+          optimizations. This makes sense while changing GTK+ itself,
+          since the way in which GTK+ uses visibility attributes 
+          forces a full rebuild of all source files for any header
+          modification.
         </para>
       </formalpara>
 
