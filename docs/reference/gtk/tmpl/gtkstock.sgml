@@ -80,7 +80,7 @@ Stock Items
 
 <!-- ##### MACRO GTK_STOCK_ADD ##### -->
 <para>
-The "Add" icon.
+The "Add" item.
 <inlinegraphic fileref="stock_add.png" format="png">
 </para>
 
@@ -88,7 +88,7 @@ The "Add" icon.
 
 <!-- ##### MACRO GTK_STOCK_APPLY ##### -->
 <para>
-The "Apply" icon and text.
+The "Apply" item.
 <inlinegraphic fileref="stock_button_apply.png" format="png">
 </para>
 
@@ -96,7 +96,7 @@ The "Apply" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_BOLD ##### -->
 <para>
-The "Bold" icon and text.
+The "Bold" item.
 <inlinegraphic fileref="stock_text_bold.png" format="png">
 </para>
 
@@ -104,7 +104,7 @@ The "Bold" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_CANCEL ##### -->
 <para>
-The "Cancel" icon and text.
+The "Cancel" item.
 <inlinegraphic fileref="stock_button_cancel.png" format="png">
 </para>
 
@@ -112,7 +112,7 @@ The "Cancel" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_CDROM ##### -->
 <para>
-The "CD" icon.
+The "CD-Rom" item.
 <inlinegraphic fileref="stock_cdrom.png" format="png">
 </para>
 
@@ -120,7 +120,7 @@ The "CD" icon.
 
 <!-- ##### MACRO GTK_STOCK_CLEAR ##### -->
 <para>
-The "Clear" icon and text.
+The "Clear" item.
 <inlinegraphic fileref="stock_clear.png" format="png">
 </para>
 
@@ -128,7 +128,7 @@ The "Clear" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_CLOSE ##### -->
 <para>
-The "Close" icon and text.
+The "Close" item.
 <inlinegraphic fileref="stock_close.png" format="png">
 </para>
 
@@ -136,7 +136,7 @@ The "Close" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_CONVERT ##### -->
 <para>
-The "Convert" icon.
+The "Convert" item.
 <inlinegraphic fileref="stock_convert.png" format="png">
 </para>
 
@@ -144,7 +144,7 @@ The "Convert" icon.
 
 <!-- ##### MACRO GTK_STOCK_COPY ##### -->
 <para>
-The "Copy" icon and text.
+The "Copy" item.
 <inlinegraphic fileref="stock_menu_copy.png" format="png">
 </para>
 
@@ -152,7 +152,7 @@ The "Copy" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_CUT ##### -->
 <para>
-The "Cut" icon and text.
+The "Cut" item.
 <inlinegraphic fileref="stock_menu_cut.png" format="png">
 </para>
 
@@ -160,7 +160,7 @@ The "Cut" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_DELETE ##### -->
 <para>
-The "Delete" icon and text.
+The "Delete" item.
 <inlinegraphic fileref="stock_menu_trash.png" format="png">
 </para>
 
@@ -168,7 +168,7 @@ The "Delete" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_DIALOG_ERROR ##### -->
 <para>
-The "Error" icon and text.
+The "Error" item.
 <inlinegraphic fileref="dialog_error.png" format="png">
 </para>
 
@@ -176,7 +176,7 @@ The "Error" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_DIALOG_INFO ##### -->
 <para>
-The "Information" icon and text.
+The "Information" item.
 <inlinegraphic fileref="dialog_info.png" format="png">
 </para>
 
@@ -184,7 +184,7 @@ The "Information" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_DIALOG_QUESTION ##### -->
 <para>
-The "Question" icon and text.
+The "Question" item.
 <inlinegraphic fileref="dialog_question.png" format="png">
 </para>
 
@@ -192,7 +192,7 @@ The "Question" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_DIALOG_WARNING ##### -->
 <para>
-The "Warning" icon and text.
+The "Warning" item.
 <inlinegraphic fileref="dialog_warning.png" format="png">
 </para>
 
@@ -216,7 +216,7 @@ The "Drag-And-Drop multiple" icon.
 
 <!-- ##### MACRO GTK_STOCK_EXECUTE ##### -->
 <para>
-The "Execute" icon.
+The "Execute" item.
 <inlinegraphic fileref="stock_exec.png" format="png">
 </para>
 
@@ -224,7 +224,7 @@ The "Execute" icon.
 
 <!-- ##### MACRO GTK_STOCK_FIND ##### -->
 <para>
-The "Find" icon and text.
+The "Find" item.
 <inlinegraphic fileref="stock_search.png" format="png">
 </para>
 
@@ -232,7 +232,7 @@ The "Find" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_FIND_AND_REPLACE ##### -->
 <para>
-The "Find and Replace" icon and text.
+The "Find and Replace" item.
 <inlinegraphic fileref="stock_search_replace.png" format="png">
 </para>
 
@@ -240,7 +240,7 @@ The "Find and Replace" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_FLOPPY ##### -->
 <para>
-The "Floppy" icon.
+The "Floppy" item.
 <inlinegraphic fileref="stock_save.png" format="png">
 </para>
 
@@ -248,7 +248,7 @@ The "Floppy" icon.
 
 <!-- ##### MACRO GTK_STOCK_GOTO_BOTTOM ##### -->
 <para>
-The "Goto Bottom" icon.
+The "Bottom" item.
 <inlinegraphic fileref="stock_bottom.png" format="png">
 </para>
 
@@ -256,7 +256,7 @@ The "Goto Bottom" icon.
 
 <!-- ##### MACRO GTK_STOCK_GOTO_FIRST ##### -->
 <para>
-The "First" icon.
+The "First" item.
 <inlinegraphic fileref="stock_first.png" format="png">
 </para>
 
@@ -264,7 +264,7 @@ The "First" icon.
 
 <!-- ##### MACRO GTK_STOCK_GOTO_LAST ##### -->
 <para>
-The "Last" icon.
+The "Last" item.
 <inlinegraphic fileref="stock_last.png" format="png">
 </para>
 
@@ -272,7 +272,7 @@ The "Last" icon.
 
 <!-- ##### MACRO GTK_STOCK_GOTO_TOP ##### -->
 <para>
-The "Top" icon.
+The "Top" item.
 <inlinegraphic fileref="stock_top.png" format="png">
 </para>
 
@@ -280,7 +280,7 @@ The "Top" icon.
 
 <!-- ##### MACRO GTK_STOCK_GO_BACK ##### -->
 <para>
-The "Back" icon and text.
+The "Back" item.
 <inlinegraphic fileref="stock_left_arrow.png" format="png">
 </para>
 
@@ -288,7 +288,7 @@ The "Back" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_GO_DOWN ##### -->
 <para>
-The "Down" icon.
+The "Down" item.
 <inlinegraphic fileref="stock_down_arrow.png" format="png">
 </para>
 
@@ -296,7 +296,7 @@ The "Down" icon.
 
 <!-- ##### MACRO GTK_STOCK_GO_FORWARD ##### -->
 <para>
-The "Forward" icon and text.
+The "Forward" item.
 <inlinegraphic fileref="stock_right_arrow.png" format="png">
 </para>
 
@@ -304,7 +304,7 @@ The "Forward" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_GO_UP ##### -->
 <para>
-The "Up" icon.
+The "Up" item.
 <inlinegraphic fileref="stock_up_arrow.png" format="png">
 </para>
 
@@ -312,7 +312,7 @@ The "Up" icon.
 
 <!-- ##### MACRO GTK_STOCK_HELP ##### -->
 <para>
-The "Help" icon and text.
+The "Help" item.
 <inlinegraphic fileref="stock_help.png" format="png">
 </para>
 
@@ -320,7 +320,7 @@ The "Help" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_HOME ##### -->
 <para>
-The "Home" icon and text.
+The "Home" item.
 <inlinegraphic fileref="stock_home.png" format="png">
 </para>
 
@@ -328,7 +328,7 @@ The "Home" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_INDEX ##### -->
 <para>
-The "Index" icon.
+The "Index" item.
 <inlinegraphic fileref="stock_index.png" format="png">
 </para>
 
@@ -336,7 +336,7 @@ The "Index" icon.
 
 <!-- ##### MACRO GTK_STOCK_ITALIC ##### -->
 <para>
-The "Italic" icon.
+The "Italic" item.
 <inlinegraphic fileref="stock_text_italic.png" format="png">
 </para>
 
@@ -344,7 +344,7 @@ The "Italic" icon.
 
 <!-- ##### MACRO GTK_STOCK_JUMP_TO ##### -->
 <para>
-The "Jump" icon.
+The "Jump to" item.
 <inlinegraphic fileref="stock_jump_to.png" format="png">
 </para>
 
@@ -352,7 +352,7 @@ The "Jump" icon.
 
 <!-- ##### MACRO GTK_STOCK_JUSTIFY_CENTER ##### -->
 <para>
-The "Center" icon and text.
+The "Center" item.
 <inlinegraphic fileref="stock_align_center.png" format="png">
 </para>
 
@@ -360,7 +360,7 @@ The "Center" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_JUSTIFY_FILL ##### -->
 <para>
-The "Fill" icon and text.
+The "Fill" item.
 <inlinegraphic fileref="stock_align_justify.png" format="png">
 </para>
 
@@ -368,7 +368,7 @@ The "Fill" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_JUSTIFY_LEFT ##### -->
 <para>
-The "Left" icon and text.
+The "Left" item.
 <inlinegraphic fileref="stock_align_left.png" format="png">
 </para>
 
@@ -376,7 +376,7 @@ The "Left" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_JUSTIFY_RIGHT ##### -->
 <para>
-The "Right" icon and text.
+The "Right" item.
 <inlinegraphic fileref="stock_align_right.png" format="png">
 </para>
 
@@ -384,7 +384,7 @@ The "Right" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_MISSING_IMAGE ##### -->
 <para>
-The "Missing" icon.
+The "Missing image" icon.
 <inlinegraphic fileref="dialog_error.png" format="png">
 </para>
 
@@ -392,7 +392,7 @@ The "Missing" icon.
 
 <!-- ##### MACRO GTK_STOCK_NEW ##### -->
 <para>
-The "New" icon and text.
+The "New" item.
 <inlinegraphic fileref="stock_new.png" format="png">
 </para>
 
@@ -400,7 +400,7 @@ The "New" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_NO ##### -->
 <para>
-The "No" icon and text.
+The "No" item.
 <inlinegraphic fileref="stock_button_no.png" format="png">
 </para>
 
@@ -408,7 +408,7 @@ The "No" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_OK ##### -->
 <para>
-The "OK" icon and text.
+The "OK" item.
 <inlinegraphic fileref="stock_button_ok.png" format="png">
 </para>
 
@@ -416,7 +416,7 @@ The "OK" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_OPEN ##### -->
 <para>
-The "Open" icon and text.
+The "Open" item.
 <inlinegraphic fileref="stock_open.png" format="png">
 </para>
 
@@ -424,7 +424,7 @@ The "Open" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_PASTE ##### -->
 <para>
-The "Past" icon and text.
+The "Paste" item.
 <inlinegraphic fileref="stock_paste.png" format="png">
 </para>
 
@@ -432,7 +432,7 @@ The "Past" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_PREFERENCES ##### -->
 <para>
-The "Preferences" icon and text.
+The "Preferences" item.
 <inlinegraphic fileref="stock_preferences.png" format="png">
 </para>
 
@@ -440,7 +440,7 @@ The "Preferences" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_PRINT ##### -->
 <para>
-The "Print" icon and text.
+The "Print" item.
 <inlinegraphic fileref="stock_print.png" format="png">
 </para>
 
@@ -448,7 +448,7 @@ The "Print" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_PRINT_PREVIEW ##### -->
 <para>
-The "Print Preview" icon and text.
+The "Print Preview" item.
 <inlinegraphic fileref="stock_print_preview.png" format="png">
 </para>
 
@@ -456,7 +456,7 @@ The "Print Preview" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_PROPERTIES ##### -->
 <para>
-The "Properties" icon and text.
+The "Properties" item.
 <inlinegraphic fileref="stock_properties.png" format="png">
 </para>
 
@@ -464,7 +464,7 @@ The "Properties" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_QUIT ##### -->
 <para>
-The "Quit" icon and text.
+The "Quit" item.
 <inlinegraphic fileref="stock_exit.png" format="png">
 </para>
 
@@ -472,7 +472,7 @@ The "Quit" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_REDO ##### -->
 <para>
-The "Redo" icon and text.
+The "Redo" item.
 <inlinegraphic fileref="stock_redo.png" format="png">
 </para>
 
@@ -480,7 +480,7 @@ The "Redo" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_REFRESH ##### -->
 <para>
-The "Refresh" icon.
+The "Refresh" item.
 <inlinegraphic fileref="stock_refresh.png" format="png">
 </para>
 
@@ -488,7 +488,7 @@ The "Refresh" icon.
 
 <!-- ##### MACRO GTK_STOCK_REMOVE ##### -->
 <para>
-The "Remove" icon.
+The "Remove" item.
 <inlinegraphic fileref="stock_remove.png" format="png">
 </para>
 
@@ -496,7 +496,7 @@ The "Remove" icon.
 
 <!-- ##### MACRO GTK_STOCK_REVERT_TO_SAVED ##### -->
 <para>
-The "Revert" icon and text.
+The "Revert" item.
 <inlinegraphic fileref="stock_revert.png" format="png">
 </para>
 
@@ -504,7 +504,7 @@ The "Revert" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_SAVE ##### -->
 <para>
-The "Save" icon and text.
+The "Save" item.
 <inlinegraphic fileref="stock_save.png" format="png">
 </para>
 
@@ -512,7 +512,7 @@ The "Save" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_SAVE_AS ##### -->
 <para>
-The "Save As" icon and text.
+The "Save As" item.
 <inlinegraphic fileref="stock_save_as.png" format="png">
 </para>
 
@@ -520,7 +520,7 @@ The "Save As" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_SELECT_COLOR ##### -->
 <para>
-The "Select Color" icon.
+The "Color" item.
 <inlinegraphic fileref="stock_colorselector.png" format="png">
 </para>
 
@@ -528,7 +528,7 @@ The "Select Color" icon.
 
 <!-- ##### MACRO GTK_STOCK_SELECT_FONT ##### -->
 <para>
-The "Select Font" icon.
+The "Font" item.
 <inlinegraphic fileref="stock_font.png" format="png">
 </para>
 
@@ -536,7 +536,7 @@ The "Select Font" icon.
 
 <!-- ##### MACRO GTK_STOCK_SORT_ASCENDING ##### -->
 <para>
-The "Sort Ascending" icon.
+The "Ascending" item.
 <inlinegraphic fileref="stock_sort_ascending.png" format="png">
 </para>
 
@@ -544,7 +544,7 @@ The "Sort Ascending" icon.
 
 <!-- ##### MACRO GTK_STOCK_SORT_DESCENDING ##### -->
 <para>
-The "Sort Descending" icon.
+The "Descending" item.
 <inlinegraphic fileref="stock_sort_descending.png" format="png">
 </para>
 
@@ -552,7 +552,7 @@ The "Sort Descending" icon.
 
 <!-- ##### MACRO GTK_STOCK_SPELL_CHECK ##### -->
 <para>
-The "Spell Check" icon and text.
+The "Spell Check" item.
 <inlinegraphic fileref="stock_spellcheck.png" format="png">
 </para>
 
@@ -560,7 +560,7 @@ The "Spell Check" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_STOP ##### -->
 <para>
-The "Stop" icon and text.
+The "Stop" item.
 <inlinegraphic fileref="stock_stop.png" format="png">
 </para>
 
@@ -568,7 +568,7 @@ The "Stop" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_STRIKETHROUGH ##### -->
 <para>
-The "Strikethrough" icon and text.
+The "Strikethrough" item.
 <inlinegraphic fileref="stock_text_strikeout.png" format="png">
 </para>
 
@@ -576,7 +576,7 @@ The "Strikethrough" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_UNDELETE ##### -->
 <para>
-The "Undelete" icon.
+The "Undelete" item.
 <inlinegraphic fileref="stock_undelete.png" format="png">
 </para>
 
@@ -584,7 +584,7 @@ The "Undelete" icon.
 
 <!-- ##### MACRO GTK_STOCK_UNDERLINE ##### -->
 <para>
-The "Underline" icon and text.
+The "Underline" item.
 <inlinegraphic fileref="stock_text_underline.png" format="png">
 </para>
 
@@ -592,7 +592,7 @@ The "Underline" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_UNDO ##### -->
 <para>
-The "Undo" icon and text.
+The "Undo" item.
 <inlinegraphic fileref="stock_undo.png" format="png">
 </para>
 
@@ -600,7 +600,7 @@ The "Undo" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_YES ##### -->
 <para>
-The "Yes" icon and text.
+The "Yes" item.
 <inlinegraphic fileref="stock_button_yes.png" format="png">
 </para>
 
@@ -608,7 +608,7 @@ The "Yes" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_ZOOM_100 ##### -->
 <para>
-The "Zoom 100%" icon and text.
+The "Zoom 100%" item.
 <inlinegraphic fileref="stock_zoom_1.png" format="png">
 </para>
 
@@ -616,7 +616,7 @@ The "Zoom 100%" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_ZOOM_FIT ##### -->
 <para>
-The "Zoom to Fit" icon and text.
+The "Zoom to Fit" item.
 <inlinegraphic fileref="stock_zoom_fit.png" format="png">
 </para>
 
@@ -624,7 +624,7 @@ The "Zoom to Fit" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_ZOOM_IN ##### -->
 <para>
-The "Zoom In" icon and text.
+The "Zoom In" item.
 <inlinegraphic fileref="stock_zoom_in.png" format="png">
 </para>
 
@@ -632,7 +632,7 @@ The "Zoom In" icon and text.
 
 <!-- ##### MACRO GTK_STOCK_ZOOM_OUT ##### -->
 <para>
-The "Zoom Out" icon and text.
+The "Zoom Out" item.
 <inlinegraphic fileref="stock_zoom_out.png" format="png">
 </para>
 

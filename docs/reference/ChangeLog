@@ -1,3 +1,12 @@
+2001-11-10  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkstock.sgml: Document all stock items
+	with their stock text. 
+
+	* gtk/tmpl/gtkhseparator.sgml: Small corrections.
+
+	* gdk-pixbuf/tmpl/gdk-pixbuf-loader.sgml: Updates.
+
 2001-11-03  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
 
 	* gdk-pixbuf/tmpl/refcounting.sgml,
