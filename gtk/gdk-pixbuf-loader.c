@@ -24,14 +24,15 @@
  */
 
 #include "gdk-pixbuf-loader.h"
+#include "gdk-pixbuf-io.h"
 
 
-static GtkObjectClass *parent_class; 
+static GtkObjectClass *parent_class;
 
 static void gdk_pixbuf_loader_class_init    (GdkPixbufLoaderClass   *klass);
 static void gdk_pixbuf_loader_init          (GdkPixbufLoader        *loader);
-static void gdk_pixbuf_loader_destroy       (GdkPixbufLoader        *loader);
-static void gdk_pixbuf_loader_finalize      (GdkPixbufLoader        *loader);
+static void gdk_pixbuf_loader_destroy       (GtkObject              *loader);
+static void gdk_pixbuf_loader_finalize      (GtkObject              *loader);
 
 /* Internal data */
 typedef struct _GdkPixbufLoaderPrivate GdkPixbufLoaderPrivate;
@@ -39,6 +40,9 @@ struct _GdkPixbufLoaderPrivate
 {
 	GdkPixbuf *pixbuf;
 	gboolean closed;
+	gchar buf[128];
+	gint buf_offset;
+	ModuleType *image_module;
 };
 
 GtkType
@@ -76,28 +80,33 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *klass)
 static void
 gdk_pixbuf_loader_init (GdkPixbufLoader *loader)
 {
-	GdkPixbuf *pixbuf;
-	loader->private = g_new (GdkPixbufLoaderPrivate, 1);
+	GdkPixbufLoaderPrivate *priv;
 
-	loader->pixbuf = NULL;
-	loader->closed = FALSE;
+	priv = g_new (GdkPixbufLoaderPrivate, 1);
+	loader->private = priv;
+
+	priv->pixbuf = NULL;
+	priv->closed = FALSE;
+	priv->buf_offset = 0;
 }
 
 static void
-gdk_pixbuf_loader_destroy (GdkPixbufLoader *loader)
+gdk_pixbuf_loader_destroy (GtkObject *loader)
 {
-	GdkPixbufLoaderPrivate *priv;
+	GdkPixbufLoaderPrivate *priv = NULL;
 
-	priv = loader->private;
+	priv = GDK_PIXBUF_LOADER (loader)->private;
 	gdk_pixbuf_unref (priv->pixbuf);
 }
 
 static void
-gdk_pixbuf_loader_finalize (GdkPixbufLoader *loader)
+gdk_pixbuf_loader_finalize (GtkObject *loader)
 {
-	GdkPixbufLoaderPrivate *priv;
+	GdkPixbufLoader *load;
+	GdkPixbufLoaderPrivate *priv = NULL;
 
-	priv = loader->private;
+	load = GTK_CHECK_CAST (loader, GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoader);
+	priv = GDK_PIXBUF_LOADER (loader)->private;
 	g_free (priv);
 }
 
@@ -117,41 +126,60 @@ gdk_pixbuf_loader_new (void)
  * @loader: A loader.
  * @buf: The image data.
  * @count: The length of @buf in bytes.
- * 
+ *
  * This will load the next @size bytes of the image.  It will return TRUE if the
  * data was loaded successfully, and FALSE if an error occurred. In this case,
  * the loader will be closed, and will not accept further writes.
- * 
+ *
  * Return value: Returns TRUE if the write was successful -- FALSE if the loader
  * cannot parse the buf.
  **/
 gboolean
-gdk_pixbuf_loader_write (GdkPixbufLoader *loader, gchar *buf, size_t count)
+gdk_pixbuf_loader_write (GdkPixbufLoader *loader, gchar *buf, gint count)
 {
 	GdkPixbufLoaderPrivate *priv;
 
 	g_return_val_if_fail (loader != NULL, FALSE);
 	g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), FALSE);
+	g_return_val_if_fail (buf != NULL, FALSE);
+	g_return_val_if_fail (count >= 0, FALSE);
 
 	priv = loader->private;
 
 	/* we expect it's not to be closed */
 	g_return_val_if_fail (priv->closed == FALSE, FALSE);
 
+	if (priv->image_module == NULL) {
+		g_print ("buf_offset:%d:\n", priv->buf_offset);
+		memcpy (priv->buf + priv->buf_offset,
+			buf,
+			(priv->buf_offset + count) > 128 ? 128 - priv->buf_offset : count);
+		if ((priv->buf_offset + count) >= 128) {
+			priv->image_module = gdk_pixbuf_get_module (priv->buf, 128);
+			if (priv->image_module == NULL) {
+				g_print ("no module loaded.  bummer\n");
+				return FALSE;
+			} else {
+				g_print ("module loaded: name is %s\n", priv->image_module->module_name);
+			}
+		} else {
+			priv->buf_offset += count;
+		}
+	}
 	return TRUE;
 }
 
 /**
  * gdk_pixbuf_loader_get_pixbuf:
  * @loader: A loader.
- * 
+ *
  * Gets the GdkPixbuf that the loader is currently loading.  If the loader
  * hasn't been enough data via gdk_pixbuf_loader_write, then NULL is returned.
  * Any application using this function should check for this value when it is
  * used.  The pixbuf returned will be the same in all future calls to the
  * loader, so simply calling a gdk_pixbuf_ref() should be sufficient to continue
  * using it.
- * 
+ *
  * Return value: The GdkPixbuf that the loader is loading.
  **/
 GdkPixbuf *
@@ -169,7 +197,7 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
 /**
  * gdk_pixbuf_loader_close:
  * @loader: A loader.
- * 
+ *
  * Tells the loader to stop accepting writes
  *
  **/

@@ -43,7 +43,8 @@ GdkPixbuf *
 image_load (FILE *f)
 {
 	TIFF *tiff;
-	guchar *pixels, *tmppix;
+	guchar *pixels = NULL;
+	guchar *tmppix;
 	gint w, h, x, y, num_pixs, fd;
 	uint32 *rast, *tmp_rast;
 

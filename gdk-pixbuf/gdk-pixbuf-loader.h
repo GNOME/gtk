@@ -32,16 +32,15 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif
 
 
 
-#define GDK_TYPE_PIXBUF_LOADER		   (gtk_pixbuf_get_type ())
-#define GDK_PIXBUF_LOADER (obj)		   (GTK_CHECK_CAST ((obj), GTK_TYPE_HBOX, GtkHBox))
-#define GDK_PIXBUF_LOADER_CLASS (klass)	   (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HBOX, GtkHBoxClass))
-#define GDK_IS_PIXBUF_LOADER (obj)	   (GTK_CHECK_TYPE ((obj), GTK_TYPE_HBOX))
-#define GDK_IS_PIXBUF_LOADER_CLASS (klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HBOX))
+#define GDK_TYPE_PIXBUF_LOADER		   (gdk_pixbuf_loader_get_type ())
+#define GDK_PIXBUF_LOADER(obj)		   (GTK_CHECK_CAST ((obj), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoader))
+#define GDK_PIXBUF_LOADER_CLASS(klass)	   (GTK_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoaderClass))
+#define GDK_IS_PIXBUF_LOADER(obj)	   (GTK_CHECK_TYPE ((obj), GDK_TYPE_PIXBUF_LOADER))
+#define GDK_IS_PIXBUF_LOADER_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXBUF_LOADER))
 
 
 typedef struct _GdkPixbufLoader GdkPixbufLoader;
@@ -50,7 +49,7 @@ struct _GdkPixbufLoader
 	GtkObject object;
 
 	/* < Private > */
-	gpointer data;
+	gpointer private;
 };
 
 typedef struct _GdkPixbufLoaderClass GdkPixbufLoaderClass;
@@ -66,8 +65,9 @@ struct _GdkPixbufLoaderClass {
 
 
 
+GtkType	   gdk_pixbuf_loader_get_type (void);
 GtkObject *gdk_pixbuf_loader_new (void);
-gboolean   gdk_pixbuf_loader_write (GdkPixbufLoader *loader, gchar *buf, size_t count);
+gboolean   gdk_pixbuf_loader_write (GdkPixbufLoader *loader, gchar *buf, gint count);
 GdkPixbuf *gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader);
 void       gdk_pixbuf_loader_close (GdkPixbufLoader *loader);
 

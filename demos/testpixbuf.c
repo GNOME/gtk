@@ -24,6 +24,8 @@
 
 #include <gtk/gtk.h>
 #include "gdk-pixbuf.h"
+#include "gdk-pixbuf-io.h"
+#include "gdk-pixbuf-loader.h"
 
 #define DEFAULT_WIDTH  24
 #define DEFAULT_HEIGHT 24
@@ -407,6 +409,10 @@ main (int argc, char **argv)
 	int found_valid = FALSE; 
 
 	GdkPixbuf *pixbuf;
+	GtkObject *pixbuf_loader;
+	FILE *file;
+	gint val;
+	guchar buf;
 
 	gtk_init (&argc, &argv);
 
@@ -447,6 +453,20 @@ main (int argc, char **argv)
 			}
 		}
 	}
+
+	pixbuf_loader = gdk_pixbuf_loader_new ();
+	file = fopen ("/usr/share/pixmaps/up2date.png", "r");
+	g_assert (file != NULL);
+
+	while (TRUE) {
+		val = fgetc (file);
+		if (val == EOF)
+			break;
+		buf = (guint) val;
+		if (gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (pixbuf_loader), &buf, 1) == FALSE)
+			break;
+	}
+	fclose (file);
 
 	if (found_valid)
 		gtk_main ();

@@ -29,6 +29,8 @@ libexec_LTLIBRARIES =		\
 	$(TIFF_LIB)
 
 noinst_PROGRAMS = testpixbuf
+
+
 DEPS = libgdk_pixbuf.la
 INCLUDES = $(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK_CFLAGS)
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
@@ -53,6 +55,9 @@ libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0
 libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h		\
 	gdk-pixbuf-loader.h
+
+noinst_HEADERS = \
+	gdk-pixbuf-io.h
 
 #
 # The PNG plugin.

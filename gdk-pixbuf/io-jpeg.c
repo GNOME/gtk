@@ -62,7 +62,8 @@ GdkPixbuf *
 image_load (FILE *f)
 {
 	int w, h, i, j;
-	guchar *pixels = NULL, *dptr;
+	guchar *pixels = NULL;
+	guchar *dptr;
 	guchar *lines[4]; /* Used to expand rows, via rec_outbuf_height, from the header file:
 			   * "* Usually rec_outbuf_height will be 1 or 2, at most 4."
 			   */

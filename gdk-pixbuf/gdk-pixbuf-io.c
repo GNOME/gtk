@@ -22,10 +22,8 @@
  */
 
 #include <config.h>
-#include <stdio.h>
 #include <string.h>
-#include <gmodule.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-io.h"
 
 
 
@@ -105,6 +103,7 @@ pixbuf_check_xpm (guchar *buffer, int size)
 	return FALSE;
 }
 
+#if 0
 static gboolean
 pixbuf_check_bmp (guchar *buffer, int size)
 {
@@ -134,14 +133,9 @@ pixbuf_check_ppm (guchar *buffer, int size)
 	}
 	return FALSE;
 }
+#endif
 
-static struct {
-	char *module_name;
-	gboolean (* format_check) (guchar *buffer, int size);
-	GModule *module;
-	GdkPixbuf *(* load) (FILE *f);
-        GdkPixbuf *(* load_xpm_data) (const gchar **data);
-} file_formats [] = {
+ModuleType file_formats [] = {
 	{ "png",  pixbuf_check_png,  NULL, NULL, NULL },
 	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL },
 	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL },
@@ -156,16 +150,16 @@ static struct {
 };
 
 static void
-image_handler_load (int idx)
+image_handler_load (ModuleType *image_module)
 {
 	char *module_name;
 	char *path;
 	GModule *module;
 	void *load_sym;
 
-        g_return_if_fail(file_formats[idx].module == NULL);
-        
-	module_name = g_strconcat ("pixbuf-", file_formats [idx].module_name, NULL);
+        g_return_if_fail(image_module->module == NULL);
+
+	module_name = g_strconcat ("pixbuf-", image_module->module_name, NULL);
 	path = g_module_build_path (PIXBUF_LIBDIR, module_name);
 	g_free (module_name);
 
@@ -176,59 +170,72 @@ image_handler_load (int idx)
 		return;
 	}
 
-	file_formats [idx].module = module;
+	image_module->module = module;
 
 	if (g_module_symbol (module, "image_load", &load_sym))
-		file_formats [idx].load = load_sym;
+		image_module->load = load_sym;
 
         if (g_module_symbol (module, "image_load_xpm_data", &load_sym))
-		file_formats [idx].load_xpm_data = load_sym;
+		image_module->load_xpm_data = load_sym;
 }
 
 
+
+ModuleType *
+gdk_pixbuf_get_module (gchar *buffer, gint size)
+{
+	gint i;
+
+	for (i = 0; file_formats [i].module_name; i++) {
+		if ((* file_formats [i].format_check) (buffer, size))
+			return &(file_formats[i]);
+	}
+	return NULL;
+}
 
 GdkPixbuf *
 gdk_pixbuf_new_from_file (const char *filename)
 {
 	GdkPixbuf *pixbuf;
-	gint n, i;
+	gint size;
 	FILE *f;
 	char buffer [128];
+	ModuleType *image_module;
 
 	f = fopen (filename, "r");
 	if (!f)
 		return NULL;
 
-	n = fread (&buffer, 1, sizeof (buffer), f);
+	size = fread (&buffer, 1, sizeof (buffer), f);
 
-	if (n == 0) {
+	if (size == 0) {
 		fclose (f);
 		return NULL;
 	}
 
-	for (i = 0; file_formats [i].module_name; i++) {
-		if ((* file_formats [i].format_check) (buffer, n)) {
-			if (!file_formats [i].load)
-				image_handler_load (i);
+	image_module = gdk_pixbuf_get_module (buffer, size);
+	if (image_module){
+		if (!image_module->load)
+			image_handler_load (image_module);
 
-			if (!file_formats [i].load) {
-				fclose (f);
-				return NULL;
-			}
-
-			fseek (f, 0, SEEK_SET);
-			pixbuf = (* file_formats [i].load) (f);
+		if (!image_module->load) {
 			fclose (f);
-
-			if (pixbuf)
-				g_assert (pixbuf->ref_count != 0);
-
-			return pixbuf;
+			return NULL;
 		}
+
+		fseek (f, 0, SEEK_SET);
+		pixbuf = (* image_module->load) (f);
+		fclose (f);
+
+		if (pixbuf)
+			g_assert (pixbuf->ref_count != 0);
+
+		return pixbuf;
+	} else {
+		g_warning ("Unable to find handler for file: %s", filename);
 	}
 
 	fclose (f);
-	g_warning ("Unable to find handler for file: %s", filename);
 	return NULL;
 }
 
@@ -237,9 +244,9 @@ gdk_pixbuf_new_from_xpm_data (const gchar **data)
 {
         GdkPixbuf *(* load_xpm_data) (const gchar **data);
         GdkPixbuf *pixbuf;
-        
+
         if (file_formats[XPM_FILE_FORMAT_INDEX].load_xpm_data == NULL) {
-                image_handler_load(XPM_FILE_FORMAT_INDEX);
+                image_handler_load(&file_formats[XPM_FILE_FORMAT_INDEX]);
         }
 
         if (file_formats[XPM_FILE_FORMAT_INDEX].load_xpm_data == NULL) {
@@ -253,4 +260,4 @@ gdk_pixbuf_new_from_xpm_data (const gchar **data)
 
         return pixbuf;
 }
-                              
+
