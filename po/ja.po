@@ -84,7 +84,7 @@ msgstr "ディレクトリ削除"
 
 #: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1024
 msgid "Rename File"
-msgstr "ファイル削除"
+msgstr "ファイル名変更"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
