@@ -1089,9 +1089,13 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_ENTER_NOTIFY:
       if (GTK_WIDGET_IS_SENSITIVE (grab_widget))
 	{
+	  g_object_ref (event_widget);
+	  
 	  gtk_widget_event (grab_widget, event);
 	  if (event_widget == grab_widget)
 	    GTK_PRIVATE_SET_FLAG (event_widget, GTK_LEAVE_PENDING);
+	  
+	  g_object_unref (event_widget);
 	}
       break;
       
