@@ -1,3 +1,13 @@
+Wed Oct  9 17:06:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkiconfactory.c (add_size_and_dir_with_fallback):
+	Add GO_FORWARD and GO_BACK with both left and right
+	arrows depending on the direction. (#92211,
+	Kenneth Christiansen)
+
+	* tests/testgtk.c (create_flipping): Add forward/back button
+	pairs in default, RTL, LTR configurations.
+
 2002-10-09  Stanislav Brabec  <sbrabec@suse.cz>
 
 	* gtk/gtkimcontextsimple.c: Added support for hungarian characters

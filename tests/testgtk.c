@@ -6957,6 +6957,39 @@ flipping_toggled_cb (GtkWidget *widget, gpointer data)
   gtk_widget_set_default_direction (new_direction);
 }
 
+static void
+set_direction_recurse (GtkWidget *widget,
+		       gpointer   data)
+{
+  GtkTextDirection *dir = data;
+  
+  gtk_widget_set_direction (widget, *dir);
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_foreach (GTK_CONTAINER (widget),
+			   set_direction_recurse,
+			   data);
+}
+
+static GtkWidget *
+create_forward_back (const char       *title,
+		     GtkTextDirection  text_dir)
+{
+  GtkWidget *frame = gtk_frame_new (title);
+  GtkWidget *bbox = gtk_hbutton_box_new ();
+  GtkWidget *back_button = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
+  GtkWidget *forward_button = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
+
+  gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
+  
+  gtk_container_add (GTK_CONTAINER (frame), bbox);
+  gtk_container_add (GTK_CONTAINER (bbox), back_button);
+  gtk_container_add (GTK_CONTAINER (bbox), forward_button);
+
+  set_direction_recurse (frame, &text_dir);
+
+  return frame;
+}
+
 void
 create_flipping (GtkWidget *widget)
 {
@@ -6979,6 +7012,18 @@ create_flipping (GtkWidget *widget)
       check_button = gtk_check_button_new_with_label ("Right-to-left global direction");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
 			  check_button, TRUE, TRUE, 0);
+
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
+			  create_forward_back ("Default", GTK_TEXT_DIR_NONE),
+			  TRUE, TRUE, 0);
+
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
+			  create_forward_back ("Left-to-Right", GTK_TEXT_DIR_LTR),
+			  TRUE, TRUE, 0);
+
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
+			  create_forward_back ("Right-to-Left", GTK_TEXT_DIR_RTL),
+			  TRUE, TRUE, 0);
 
       if (gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
