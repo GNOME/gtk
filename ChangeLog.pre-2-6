@@ -1,3 +1,9 @@
+Sun Nov 12 13:33:01 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c: Add some missing casts. Support 
+	2 and 3 button clicks on the arrows to mean 
+	"move by pages" and "jump to end". (Like gtkspinbutton)
+
 2000-11-12 Hans Breuer <Hans@Breuer.Org>
 
 	* gdk/win32/makefile.msc : reflect build module changes

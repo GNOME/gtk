@@ -458,7 +458,7 @@ gtk_range_default_hslider_update (GtkRange *range)
       else if (x > right)
 	x = right;
 
-      if (range->flippable && gtk_widget_get_direction (range) == GTK_TEXT_DIR_RTL)
+      if (range->flippable && gtk_widget_get_direction (GTK_WIDGET (range)) == GTK_TEXT_DIR_RTL)
 	x = right - (x - left);
       
       move_and_update_window (range->slider, x, GTK_WIDGET (range)->style->ythickness);
@@ -526,7 +526,7 @@ gtk_range_default_htrough_click (GtkRange *range,
   gdk_window_get_size (range->slider, &slider_length, NULL);
   right += slider_length;
 
-  if (range->flippable && gtk_widget_get_direction (range) == GTK_TEXT_DIR_RTL)
+  if (range->flippable && gtk_widget_get_direction (GTK_WIDGET (range)) == GTK_TEXT_DIR_RTL)
     x = (right - x) + left;
 
   if ((x > left) && (y > ythickness))
@@ -613,8 +613,6 @@ gtk_range_default_hmotion (GtkRange *range,
   g_return_if_fail (GTK_IS_RANGE (range));
   g_return_if_fail (GTK_WIDGET_REALIZED (range));
 
-  range = GTK_RANGE (range);
-
   gdk_window_get_position (range->slider, &slider_x, &slider_y);
   gtk_range_trough_hdims (range, &left, &right);
 
@@ -623,7 +621,7 @@ gtk_range_default_hmotion (GtkRange *range,
 
   new_pos = slider_x + xdelta;
 
-  if (range->flippable && gtk_widget_get_direction (range) == GTK_TEXT_DIR_RTL)
+  if (range->flippable && gtk_widget_get_direction (GTK_WIDGET (range)) == GTK_TEXT_DIR_RTL)
     new_pos = (right - new_pos) + left;
 
   if (new_pos < left)
@@ -919,23 +917,37 @@ gtk_range_button_press (GtkWidget      *widget,
 	  range->click_child = RANGE_CLASS (range)->slider;
 	  range->scroll_type = GTK_SCROLL_NONE;
 	}
-      else if (event->window == range->step_forw)
+      else if (event->window == range->step_forw ||
+	       event->window == range->step_back)
 	{
-	  range->click_child = RANGE_CLASS (range)->step_forw;
-	  range->scroll_type = GTK_SCROLL_STEP_FORWARD;
+	  gboolean back = (event->window == range->step_back);
+	  
+	  if (range->button == 3)
+	    {
+	      range->scroll_type = GTK_SCROLL_JUMP;
+	      gtk_range_scroll (range, back ? 0.0 : 1.0);
+	    }
+	  else
+	    {
+	      range->click_child =
+		back ? RANGE_CLASS (range)->step_back
+	             : RANGE_CLASS (range)->step_forw;
 
-	  gtk_range_scroll (range, -1);
-	  gtk_range_add_timer (range);
-	  gtk_range_draw_step_forw (range);
-	}
-      else if (event->window == range->step_back)
-	{
-	  range->click_child = RANGE_CLASS (range)->step_back;
-	  range->scroll_type = GTK_SCROLL_STEP_BACKWARD;
+	      if (range->button == 2)
+		range->scroll_type =
+		  back ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_PAGE_FORWARD;
+	      else
+		range->scroll_type =
+		  back ? GTK_SCROLL_STEP_BACKWARD : GTK_SCROLL_STEP_FORWARD;
 
-	  gtk_range_scroll (range, -1);
-	  gtk_range_add_timer (range);
-	  gtk_range_draw_step_back (range);
+	      gtk_range_scroll (range, -1);
+	      gtk_range_add_timer (range);
+	      
+	      if (back)
+		gtk_range_draw_step_back (range);
+	      else
+		gtk_range_draw_step_forw (range);
+	    }
 	}
     }
 
