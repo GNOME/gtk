@@ -578,7 +578,7 @@ save_rle_decoder (GString     *gstring,
  * into programs. 
  *
  * GTK+ ships with a program called <command>gdk-pixbuf-csource</command> 
- * which offers a cmdline interface to this functions.
+ * which offers a command line interface to this function.
  *
  * Returns: a newly-allocated string containing the C source form
  *   of @pixdata.
