@@ -1,3 +1,29 @@
+2003-02-18  Matthias Clasen  <maclas@gmx.de>
+
+	* io-tga.c (pixbuf_flip_row): 
+	(pixbuf_flip_vertically): Auxiliary functions used to implement
+	support for arbitrary origins.
+	(parse_data_for_row_pseudocolor): 
+	(parse_data_for_row_truecolor): 
+	(parse_data_for_row_grayscale): 
+	(parse_data_for_row): 
+	(fill_in_context): Remove the check for upper-left origin.
+	(parse_rle_data): Support arbitrary origins. (#105912)
+
+	* io-tga.c (fread_check): 
+	(fseek_check): 
+	(get_header_from_file): 
+	(get_colormap_from_file): 
+	(get_image_pseudocolor): 
+	(swap_channels_pixbuf): 
+	(get_image_truecolor): 
+	(get_image_grayscale): 
+	(gdk_pixbuf__tga_load): Remove the non-incremental load
+	implementation, since we have generic_image_load () now.
+
+	(gdk_pixbuf__tga_stop_load): Fix a potential crash discovered by
+	pixbuf-lowmem.
+
 2003-02-14  Matthias Clasen  <maclas@gmx.de>
 
 	* io-tga.c (try_preload): 
