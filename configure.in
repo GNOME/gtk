@@ -1109,7 +1109,6 @@ _______EOF
 	fi ;;
 esac
 ],[
-# Currently we always use X11 on those systems where we run configure...
 if test "x$gdktarget" = "xx11" ; then
   gdk_windowing='
 #define GDK_WINDOWING_X11'

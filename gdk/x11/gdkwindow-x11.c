@@ -1988,6 +1988,8 @@ gdk_window_set_functions (GdkWindow    *window,
   gdk_window_set_mwm_hints (window, &hints);
 }
 
+#ifdef HAVE_SHAPE_EXT
+
 /* 
  * propagate the shapes from all child windows of a GDK window to the parent 
  * window. Shamelessly ripped from Enlightenment's code
@@ -2299,6 +2301,8 @@ gdk_propagate_shapes (Display *disp,
     }
   g_free (spans);
 }
+
+#endif /* HAVE_SHAPE_EXT */
 
 void
 gdk_window_set_child_shapes (GdkWindow *window)

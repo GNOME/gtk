@@ -1,3 +1,20 @@
+Sat Feb  3 11:28:03 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Remove confusing comment about X11.
+
+Fri Feb  2 19:21:23 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_propagate_shapes): Surround additional
+	regions with HAVE_SHAPE_EXT. (#50511, Eric Ding)
+	
+Fri Feb  2 18:31:54 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkimage-x11.c: Remove definition of _XOPEN_SOURCE, since
+	it breaks things on BSD. If you want to compile GTK+ with
+	-ansi -pedantic, you should supply CPP_FLAGS=_XOPEN_SOURCE 
+	when configuring, since GTK+ simply can't be "pure ANSI" 
+	in the header files it uses. (#8170, Greg Hudson)
+
 2001-02-02  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkwindow.c: docs

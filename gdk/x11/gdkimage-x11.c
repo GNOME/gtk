@@ -26,14 +26,6 @@
 
 #include <config.h>
 
-/* gcc -ansi -pedantic on GNU/Linux causes warnings and errors
- * unless this is defined:
- * warning: #warning "Files using this header must be compiled with _SVID_SOURCE or _XOPEN_SOURCE"
- */
-#ifndef _XOPEN_SOURCE
-#  define _XOPEN_SOURCE 1
-#endif
-
 #include <stdlib.h>
 #include <sys/types.h>
 
