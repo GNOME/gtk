@@ -1,3 +1,12 @@
+2005-02-10  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c: Add a draw-border style property to allow
+	themes to draw outside the widget's allocation.
+
+	* gdk/x11/gdkevents-x11.c: Hack out Net/ThemeName to 
+	allow easier testing of theme stuff without having
+	to change global GNOME configuration.
+
 2005-02-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmenushell.c (gtk_real_menu_shell_move_current): Fix RTL

@@ -2708,7 +2708,8 @@ static struct
   { "Net/DndDragThreshold", "gtk-dnd-drag-threshold" },
   { "Net/CursorBlink", "gtk-cursor-blink" },
   { "Net/CursorBlinkTime", "gtk-cursor-blink-time" },
-  { "Net/ThemeName", "gtk-theme-name" },
+  /* Temporarily disabled for demo purposes */
+  /* { "Net/ThemeName", "gtk-theme-name" }, */
   { "Net/IconThemeName", "gtk-icon-theme-name" },
   { "Gtk/CanChangeAccels", "gtk-can-change-accels" },
   { "Gtk/ColorPalette", "gtk-color-palette" },

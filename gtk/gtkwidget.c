@@ -1456,6 +1456,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							       P_("Aspect ratio with which to draw insertion cursor"),
 							       0.0, 1.0, 0.04,
 							       G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (klass,
+					   g_param_spec_boxed ("draw-border",
+							       P_("Draw Border"),
+							       P_("Size of areas outside the widget's allocation to draw"),
+							       GTK_TYPE_BORDER,
+							       G_PARAM_READABLE));
 }
 
 static void
@@ -2425,6 +2431,36 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
   gdk_window_invalidate_rect (widget->window, &invalid_rect, TRUE);
 }
 
+static void
+widget_get_draw_rectangle (GtkWidget    *widget,
+			   GdkRectangle *rect)
+{
+  if (GTK_WIDGET_NO_WINDOW (widget))
+    {
+      GtkBorder *draw_border = NULL;
+
+      *rect = widget->allocation;
+
+      gtk_widget_style_get (widget, 
+			    "draw-border", &draw_border,
+			    NULL);
+      if (draw_border)
+	{
+	  rect->x -= draw_border->top;
+	  rect->y -= draw_border->left;
+	  rect->width += draw_border->left + draw_border->right;
+	  rect->height += draw_border->top + draw_border->bottom;
+	}
+    }
+  else
+    {
+      rect->x = 0;
+      rect->y = 0;
+      rect->width = widget->allocation.width;
+      rect->height = widget->allocation.height;
+    }
+}
+
 /**
  * gtk_widget_queue_draw:
  * @widget: a #GtkWidget
@@ -2436,20 +2472,15 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
 void	   
 gtk_widget_queue_draw (GtkWidget *widget)
 {
+  GdkRectangle rect;
+  
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (widget->allocation.width || widget->allocation.height)
-    {
-      if (GTK_WIDGET_NO_WINDOW (widget))
-	gtk_widget_queue_draw_area (widget, widget->allocation.x,
-				    widget->allocation.y,
-				    widget->allocation.width, 
-				    widget->allocation.height);
-      else
-	gtk_widget_queue_draw_area (widget, 0, 0, 
-				    widget->allocation.width, 
-				    widget->allocation.height);
-    }
+  widget_get_draw_rectangle (widget, &rect);
+
+  gtk_widget_queue_draw_area (widget,
+			      rect.x, rect.y,
+			      rect.width, rect.height);
 }
 
 /* Invalidates the given area (allocation-relative-coordinates)
@@ -3854,12 +3885,15 @@ GdkRegion *
 gtk_widget_region_intersect (GtkWidget *widget,
 			     GdkRegion *region)
 {
+  GdkRectangle rect;
   GdkRegion *dest;
   
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (region != NULL, NULL);
+
+  widget_get_draw_rectangle (widget, &rect);
   
-  dest = gdk_region_rectangle (&widget->allocation);
+  dest = gdk_region_rectangle (&rect);
  
   gdk_region_intersect (dest, region);
 
