@@ -1,3 +1,15 @@
+Sat Sep 22 16:50:34 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtktexttag.c (gtk_text_tag_set_property): (case PROP_WEIGHT):
+	weight value should be an int
+
+Sat Sep 22 15:17:41 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtkmenu.c (gtk_menu_select_item): move most code
+	to gtk_menu_scroll_item_visible(). Only call
+	gtk_menu_scroll_item_visible() if the menu widget has been
+	realized. Fixes bug #55310.
+
 2001-09-21  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_key_press_event): don't pass

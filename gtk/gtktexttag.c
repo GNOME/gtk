@@ -986,7 +986,7 @@ gtk_text_tag_set_property (GObject      *object,
 	    break;
 	  case PROP_WEIGHT:
 	    pango_font_description_set_weight (text_tag->values->font,
-					       g_value_get_enum (value));
+					       g_value_get_int (value));
 	    break;
 	  case PROP_STRETCH:
 	    pango_font_description_set_stretch (text_tag->values->font,
