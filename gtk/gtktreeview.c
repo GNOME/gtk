@@ -1670,6 +1670,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   GList *tmp_list;
   GtkTreeView *tree_view;
   gboolean width_changed = FALSE;
+  gboolean dy_changed = FALSE;
 
   g_return_if_fail (GTK_IS_TREE_VIEW (widget));
 
@@ -1715,8 +1716,12 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->page_size, tree_view->priv->height);
 
   if (tree_view->priv->vadjustment->value + allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view) > tree_view->priv->height)
-    gtk_adjustment_set_value (tree_view->priv->vadjustment,
-			      MAX (tree_view->priv->height - tree_view->priv->vadjustment->page_size, 0));
+    {
+      dy_changed = TRUE;
+      gtk_adjustment_set_value (tree_view->priv->vadjustment,
+			        MAX (tree_view->priv->height - tree_view->priv->vadjustment->page_size, 0));
+    }
+
   gtk_adjustment_changed (tree_view->priv->vadjustment);
   
   if (GTK_WIDGET_REALIZED (widget))
@@ -1738,8 +1743,13 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 
   gtk_tree_view_size_allocate_columns (widget);
 
-  if (GTK_WIDGET_REALIZED (widget) && width_changed)
-    invalidate_last_column (tree_view);
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      if (width_changed)
+        invalidate_last_column (tree_view);
+      if (dy_changed)
+	gtk_widget_queue_draw (widget);
+    }
 }
 
 static gboolean
@@ -6175,6 +6185,12 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
       _gtk_rbtree_remove_node (tree, node);
     }
 
+  if (! gtk_tree_row_reference_valid (tree_view->priv->top_row))
+    {
+      gtk_tree_row_reference_free (tree_view->priv->top_row);
+      tree_view->priv->top_row = NULL;
+    }
+
   install_scroll_sync_handler (tree_view);
 
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
@@ -8209,10 +8225,18 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), -1);
   g_return_val_if_fail (column->tree_view == GTK_WIDGET (tree_view), -1);
 
-  _gtk_tree_view_column_unset_tree_view (column);
-
   if (tree_view->priv->focus_column == column)
     tree_view->priv->focus_column = NULL;
+
+  if (tree_view->priv->edited_column == column)
+    {
+      gtk_tree_view_stop_editing (tree_view, TRUE);
+
+      /* no need to, but just to be sure ... */
+      tree_view->priv->edited_column = NULL;
+    }
+
+  _gtk_tree_view_column_unset_tree_view (column);
 
   tree_view->priv->columns = g_list_remove (tree_view->priv->columns, column);
   tree_view->priv->n_columns--;

@@ -444,7 +444,10 @@ gtk_tree_store_set_column_type (GtkTreeStore *tree_store,
 static gboolean
 node_free (GNode *node, gpointer data)
 {
-  _gtk_tree_data_list_free (node->data, (GType*)data);
+  if (node->data)
+    _gtk_tree_data_list_free (node->data, (GType*)data);
+  node->data = NULL;
+
   return FALSE;
 }
 
@@ -1065,8 +1068,8 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
   next_node = G_NODE (iter->user_data)->next;
 
   if (G_NODE (iter->user_data)->data)
-    _gtk_tree_data_list_free ((GtkTreeDataList *) G_NODE (iter->user_data)->data,
-			      tree_store->column_headers);
+    g_node_traverse (G_NODE (iter->user_data), G_POST_ORDER, G_TRAVERSE_ALL,
+		     -1, node_free, tree_store->column_headers);
 
   path = gtk_tree_store_get_path (GTK_TREE_MODEL (tree_store), iter);
   g_node_destroy (G_NODE (iter->user_data));
