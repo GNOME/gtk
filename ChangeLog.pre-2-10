@@ -1,3 +1,10 @@
+2004-01-30  Not Zed  <NotZed@Ximian.com>
+
+	Fixes #132929.
+
+	* gtk/gtktreeview.c (cancel_arrow_animation): remove the timeout
+	handler when we clear the timeout id.
+
 2004-01-30  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #129872, based on a patch by Jan Arne Petersen

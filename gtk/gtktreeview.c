@@ -6891,8 +6891,12 @@ static void
 cancel_arrow_animation (GtkTreeView *tree_view)
 {
   if (tree_view->priv->expand_collapse_timeout)
-    while (do_expand_collapse (tree_view));
-  tree_view->priv->expand_collapse_timeout = 0;
+    {
+      while (do_expand_collapse (tree_view));
+
+      g_source_remove (tree_view->priv->expand_collapse_timeout);
+      tree_view->priv->expand_collapse_timeout = 0;
+    }
 }
 
 static void
