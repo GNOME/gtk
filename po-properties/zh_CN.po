@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-12 11:31-0500\n"
-"PO-Revision-Date: 2004-03-12 23:09+0800\n"
+"POT-Creation-Date: 2004-11-21 20:43+0100\n"
+"PO-Revision-Date: 2004-11-22 08:53+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -93,122 +93,120 @@ msgid "The default display for GDK"
 msgstr "GDK 的默认显示"
 
 #: gtk/gtkaboutdialog.c:195
-#, fuzzy
 msgid "Program name"
-msgstr "标记名称"
+msgstr "程序名称"
 
 #: gtk/gtkaboutdialog.c:196
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
+"程序的名称。如果未设置，则默认为 "
+"g_get_application_name()"
 
 #: gtk/gtkaboutdialog.c:210
 msgid "Program version"
-msgstr ""
+msgstr "程序版本"
 
 #: gtk/gtkaboutdialog.c:211
-#, fuzzy
 msgid "The version of the program"
-msgstr "工具栏方向"
+msgstr "程序版本"
 
 #: gtk/gtkaboutdialog.c:225
 msgid "Copyright string"
-msgstr ""
+msgstr "版权字符串"
 
 #: gtk/gtkaboutdialog.c:226
 msgid "Copyright information for the program"
-msgstr ""
+msgstr "程序的版权信息"
 
 #: gtk/gtkaboutdialog.c:243
-#, fuzzy
 msgid "Comments string"
-msgstr "列距"
+msgstr "评论字符串"
 
 #: gtk/gtkaboutdialog.c:244
 msgid "Comments about the program"
-msgstr ""
+msgstr "关于程序的评论"
 
 #: gtk/gtkaboutdialog.c:276
 msgid "Website URL"
-msgstr ""
+msgstr "网站 URL"
 
 #: gtk/gtkaboutdialog.c:277
 msgid "The URL for the link to the website of the program"
-msgstr ""
+msgstr "程序网站的 URL 链接"
 
 #: gtk/gtkaboutdialog.c:293
-#, fuzzy
 msgid "Website label"
-msgstr "在标签中使用大小"
+msgstr "网站标签"
 
 #: gtk/gtkaboutdialog.c:294
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
+"程序网站链接的标签。如果未设置，则默认为 URL"
 
 #: gtk/gtkaboutdialog.c:310
 msgid "Authors"
-msgstr ""
+msgstr "作者"
 
 #: gtk/gtkaboutdialog.c:311
-#, fuzzy
 msgid "List of authors of the program"
-msgstr "工具栏方向"
+msgstr "程序的作者列表"
 
 #: gtk/gtkaboutdialog.c:327
 msgid "Documenters"
-msgstr ""
+msgstr "文档撰写者"
 
 #: gtk/gtkaboutdialog.c:328
 msgid "List of people documenting the program"
-msgstr ""
+msgstr "列出为程序撰写文档的人员"
 
 #: gtk/gtkaboutdialog.c:344
 msgid "Artists"
-msgstr ""
+msgstr "美工"
 
 #: gtk/gtkaboutdialog.c:345
 msgid "List of people who have contributed artwork to the program"
-msgstr ""
+msgstr "列出为程序付出美工劳动的人员"
 
 #: gtk/gtkaboutdialog.c:362
 msgid "Translator credits"
-msgstr ""
+msgstr "翻译者致谢"
 
 #: gtk/gtkaboutdialog.c:363
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr ""
+msgstr "翻译者致谢。此字符串应该标为可翻译"
 
 #: gtk/gtkaboutdialog.c:378
 msgid "Logo"
-msgstr ""
+msgstr "标志"
 
 #: gtk/gtkaboutdialog.c:379
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
+"关于对话框标志。如果未设置，则默认为 "
+"gtk_window_get_default_icon_list()"
 
 #: gtk/gtkaboutdialog.c:394
-#, fuzzy
 msgid "Logo Icon Name"
-msgstr "字体名称"
+msgstr "标志图标名称"
 
 #: gtk/gtkaboutdialog.c:395
 msgid "A named icon to use as the logo for the about box."
-msgstr ""
+msgstr "关于对话框中用作标志的命名图标。"
 
 #: gtk/gtkaboutdialog.c:402
-#, fuzzy
 msgid "Link Color"
-msgstr "当前颜色"
+msgstr "链接颜色"
 
 #: gtk/gtkaboutdialog.c:403
 msgid "Color of hyperlinks"
-msgstr ""
+msgstr "超级链接颜色"
 
 #: gtk/gtkaccellabel.c:139
 msgid "Accelerator Closure"
@@ -235,7 +233,7 @@ msgid "A unique name for the action."
 msgstr "动作的唯一名称。"
 
 #: gtk/gtkaction.c:204 gtk/gtkbutton.c:220 gtk/gtkexpander.c:206
-#: gtk/gtkframe.c:127 gtk/gtklabel.c:302 gtk/gtktoolbutton.c:181
+#: gtk/gtkframe.c:127 gtk/gtklabel.c:318 gtk/gtktoolbutton.c:181
 msgid "Label"
 msgstr "标签"
 
@@ -652,12 +650,12 @@ msgid ""
 "widget"
 msgstr "按钮中的文字标签，如果该按钮包含一个标签的话"
 
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:323
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:339
 #: gtk/gtktoolbutton.c:188
 msgid "Use underline"
 msgstr "使用下划线"
 
-#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:324
+#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:340
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -672,7 +670,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "如果设置的话，标签将用于拾取后备项目，而不是显示的项目"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:612
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:675
 msgid "Focus on click"
 msgstr "点击获得焦点"
 
@@ -696,58 +694,65 @@ msgstr "子项水平排列"
 msgid "Vertical alignment for child"
 msgstr "子项垂直排列"
 
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:306 gtk/gtkimagemenuitem.c:131
+msgid "Image widget"
+msgstr "图像部件"
+
+#: gtk/gtkbutton.c:307
+msgid "Child widget to appear next to the button text"
+msgstr "按钮文字旁出现的子部件"
+
+#: gtk/gtkbutton.c:373
 msgid "Default Spacing"
 msgstr "默认间距"
 
-#: gtk/gtkbutton.c:359
+#: gtk/gtkbutton.c:374
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "为“可默认”按钮添加的额外间距"
 
-#: gtk/gtkbutton.c:365
+#: gtk/gtkbutton.c:380
 msgid "Default Outside Spacing"
 msgstr "默认按钮外围间距"
 
-#: gtk/gtkbutton.c:366
+#: gtk/gtkbutton.c:381
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr "在“可默认”按钮边框外侧总是绘制的额外间距"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:386
 msgid "Child X Displacement"
 msgstr "子部件水平位移"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:387
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "当按钮被按下时，它的子部件在水平方向的移动距离"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:394
 msgid "Child Y Displacement"
 msgstr "子部件垂直位移"
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:395
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "当按钮被按下时，它的子部件在垂直方向的移动距离"
 
-#: gtk/gtkbutton.c:396
-#, fuzzy
+#: gtk/gtkbutton.c:411
 msgid "Displace focus"
-msgstr "为焦点"
+msgstr "显示焦点"
 
-#: gtk/gtkbutton.c:397
+#: gtk/gtkbutton.c:412
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
 
-#: gtk/gtkbutton.c:402
+#: gtk/gtkbutton.c:417
 msgid "Show button images"
 msgstr "显示按钮图像"
 
-#: gtk/gtkbutton.c:403
+#: gtk/gtkbutton.c:418
 msgid "Whether stock icons should be shown in buttons"
 msgstr "是否要在按钮中显示备选图标"
 
@@ -798,7 +803,6 @@ msgid "No Month Change"
 msgstr "不能更改月"
 
 #: gtk/gtkcalendar.c:527
-#, fuzzy
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "若为 TRUE，则无法更改选中月"
 
@@ -920,14 +924,12 @@ msgid "Whether this tag affects the cell background color"
 msgstr "此标记是否会影响单元格背景色"
 
 #: gtk/gtkcellrenderercombo.c:88
-#, fuzzy
 msgid "Model"
-msgstr "模式"
+msgstr "模型"
 
 #: gtk/gtkcellrenderercombo.c:89
-#, fuzzy
 msgid "The model containing the possible values for the combo box"
-msgstr "组合框的模型"
+msgstr "包含组合框可选值的模型"
 
 #: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:114
 msgid "Text Column"
@@ -994,9 +996,8 @@ msgid "Render detail to pass to the theme engine"
 msgstr "传递给主题引擎的渲染细节"
 
 #: gtk/gtkcellrendererprogress.c:116
-#, fuzzy
 msgid "Value of the progress bar"
-msgstr "进度条中显示的文字"
+msgstr "进度栏的值"
 
 #: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:204
 #: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:220
@@ -1004,9 +1005,8 @@ msgid "Text"
 msgstr "文字"
 
 #: gtk/gtkcellrendererprogress.c:134
-#, fuzzy
 msgid "Text on the progress bar"
-msgstr "进度条中显示的文字"
+msgstr "进度栏中的文字"
 
 #: gtk/gtkcellrenderertext.c:205
 msgid "Text to render"
@@ -1020,7 +1020,7 @@ msgstr "标记语言"
 msgid "Marked up text to render"
 msgstr "要显示的标记语言文本"
 
-#: gtk/gtkcellrenderertext.c:220 gtk/gtklabel.c:309
+#: gtk/gtkcellrenderertext.c:220 gtk/gtklabel.c:325
 msgid "Attributes"
 msgstr "属性"
 
@@ -1177,7 +1177,7 @@ msgstr ""
 "此文字所用的语言，用 ISO 编码表示。Pango 可以使用此设置作为渲染文字时的提示。"
 "如果您不理解这一参数也没什么关系"
 
-#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:415 gtk/gtkprogressbar.c:242
+#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:431 gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
 msgstr ""
 
@@ -1487,77 +1487,76 @@ msgstr "限于列表中存在值"
 msgid "Whether entered values must already be present in the list"
 msgstr "输入的内容是否必须已存在于列表中"
 
-#: gtk/gtkcombobox.c:529
+#: gtk/gtkcombobox.c:548
 msgid "ComboBox model"
 msgstr "组合框模型"
 
-#: gtk/gtkcombobox.c:530
+#: gtk/gtkcombobox.c:549
 msgid "The model for the combo box"
 msgstr "组合框的模型"
 
-#: gtk/gtkcombobox.c:537
+#: gtk/gtkcombobox.c:565
 msgid "Wrap width"
 msgstr "环绕宽度"
 
-#: gtk/gtkcombobox.c:538
+#: gtk/gtkcombobox.c:566
 msgid "Wrap width for layouting the items in a grid"
 msgstr "在网格中排列项目时的环绕宽度"
 
-#: gtk/gtkcombobox.c:547
+#: gtk/gtkcombobox.c:588
 msgid "Row span column"
 msgstr "行跨列"
 
-#: gtk/gtkcombobox.c:548
+#: gtk/gtkcombobox.c:589
 msgid "TreeModel column containing the row span values"
 msgstr "包含跨行值时的树型列"
 
-#: gtk/gtkcombobox.c:557
+#: gtk/gtkcombobox.c:610
 msgid "Column span column"
 msgstr "列跨列"
 
-#: gtk/gtkcombobox.c:558
+#: gtk/gtkcombobox.c:611
 msgid "TreeModel column containing the column span values"
 msgstr "包含跨列值时的树型列"
 
-#: gtk/gtkcombobox.c:568
+#: gtk/gtkcombobox.c:631
 msgid "Active item"
 msgstr "激活项"
 
-#: gtk/gtkcombobox.c:569
+#: gtk/gtkcombobox.c:632
 msgid "The item which is currently active"
 msgstr "当前激活的项目"
 
-#: gtk/gtkcombobox.c:588 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:222
 msgid "Add tearoffs to menus"
 msgstr "在菜单上添加撕下标志"
 
-#: gtk/gtkcombobox.c:589
+#: gtk/gtkcombobox.c:652
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "标签是否应统一大小"
 
-#: gtk/gtkcombobox.c:604 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:667 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "有边框"
 
-#: gtk/gtkcombobox.c:605
+#: gtk/gtkcombobox.c:668
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "列是否可根据列首重新排序"
 
-#: gtk/gtkcombobox.c:613
+#: gtk/gtkcombobox.c:676
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "用鼠标点击该按钮时是否要获得焦点"
 
-#: gtk/gtkcombobox.c:619
+#: gtk/gtkcombobox.c:682
 msgid "Appears as list"
 msgstr "表现为列表"
 
-#: gtk/gtkcombobox.c:620
-#, fuzzy
+#: gtk/gtkcombobox.c:683
 msgid "Whether dropdowns should look like lists rather than menus"
-msgstr "组合下拉框是否要显示为列表而不是菜单"
+msgstr "下拉框是否要显示为列表而不是菜单"
 
 #: gtk/gtkcontainer.c:205
 msgid "Resize mode"
@@ -1655,19 +1654,19 @@ msgstr "动作区边界"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "对话框底部按钮区域周围的边界宽度"
 
-#: gtk/gtkentry.c:485 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:485 gtk/gtklabel.c:396
 msgid "Cursor Position"
 msgstr "光标位置"
 
-#: gtk/gtkentry.c:486 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:486 gtk/gtklabel.c:397
 msgid "The current position of the insertion cursor in chars"
 msgstr "插入光标的当前位置，以字符个数计。"
 
-#: gtk/gtkentry.c:495 gtk/gtklabel.c:390
+#: gtk/gtkentry.c:495 gtk/gtklabel.c:406
 msgid "Selection Bound"
 msgstr "选中内容的边界"
 
-#: gtk/gtkentry.c:496 gtk/gtklabel.c:391
+#: gtk/gtkentry.c:496 gtk/gtklabel.c:407
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "选中内容的另一端与光标位置的距离，以字符个数计。"
@@ -1741,11 +1740,10 @@ msgid "X align"
 msgstr "水平排列"
 
 #: gtk/gtkentry.c:590 gtk/gtkmisc.c:101
-#, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
-msgstr "水平方向的排列方式，从0(左对齐)到1(右对齐)。被 RTL 布局保留"
+msgstr "水平方向的排列方式，从0(左对齐)到1(右对齐)。被 RTL 布局保留。"
 
 #: gtk/gtkentry.c:828
 msgid "Select on focus"
@@ -1772,7 +1770,6 @@ msgid "Minimum length of the search key in order to look up matches"
 msgstr "查阅匹配项时搜索关键字的最小长度"
 
 #: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:361
-#, fuzzy
 msgid "Text column"
 msgstr "文字列"
 
@@ -1792,12 +1789,11 @@ msgstr "是否应显示边框"
 
 #: gtk/gtkentrycompletion.c:328
 msgid "Popup completion"
-msgstr ""
+msgstr "弹出补全"
 
 #: gtk/gtkentrycompletion.c:329
-#, fuzzy
 msgid "Whether the completions should be shown in a popup window"
-msgstr "是否应显示边框"
+msgstr "补全是否应该显示在弹出窗口中"
 
 #: gtk/gtkeventbox.c:121
 msgid "Visible Window"
@@ -1831,11 +1827,11 @@ msgstr "扩展器是否是否已展开以显示其子部件"
 msgid "Text of the expander's label"
 msgstr "扩展器标签的文字"
 
-#: gtk/gtkexpander.c:222 gtk/gtklabel.c:316
+#: gtk/gtkexpander.c:222 gtk/gtklabel.c:332
 msgid "Use markup"
 msgstr "使用标记语言"
 
-#: gtk/gtkexpander.c:223 gtk/gtklabel.c:317
+#: gtk/gtkexpander.c:223 gtk/gtklabel.c:333
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "标签文字包含 XML 标记语言。参见 pango_parse_markup()"
 
@@ -1946,24 +1942,21 @@ msgstr "是否显示隐藏的文件或文件夹。"
 
 #: gtk/gtkfilechooserbutton.c:251
 msgid "Dialog"
-msgstr ""
+msgstr "对话框"
 
 #: gtk/gtkfilechooserbutton.c:252
 msgid "The file chooser dialog to use."
-msgstr ""
+msgstr "要使用的文件选择对话框。"
 
 #: gtk/gtkfilechooserbutton.c:267
-#, fuzzy
 msgid "The title of the file chooser dialog."
-msgstr "字体选择对话框的标题"
+msgstr "文件选择器对话框的标题。"
 
 #: gtk/gtkfilechooserbutton.c:283
-#, fuzzy
 msgid "Whether the browse dialog is visible or not."
-msgstr "部件是否可见"
+msgstr "浏览对话框是否可见。"
 
 #: gtk/gtkfilechooserbutton.c:295
-#, fuzzy
 msgid "Width In Characters"
 msgstr "以字符数计宽度"
 
@@ -1971,11 +1964,11 @@ msgstr "以字符数计宽度"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:595
+#: gtk/gtkfilechooserdefault.c:609
 msgid "Default file chooser backend"
 msgstr "默认文件选择器后端"
 
-#: gtk/gtkfilechooserdefault.c:596
+#: gtk/gtkfilechooserdefault.c:610
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "默认要使用的 GtkFileChooser 后端名称"
 
@@ -2153,14 +2146,12 @@ msgid ""
 msgstr "是使用咬合边属性的值还是使用句柄位置派生的值"
 
 #: gtk/gtkiconview.c:324
-#, fuzzy
 msgid "Selection mode"
-msgstr "选中内容的边界"
+msgstr "选中模式"
 
 #: gtk/gtkiconview.c:325
-#, fuzzy
 msgid "The selection mode"
-msgstr "选中的年"
+msgstr "选中模式"
 
 #: gtk/gtkiconview.c:343
 #, fuzzy
@@ -2185,14 +2176,12 @@ msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 
 #: gtk/gtkiconview.c:389
-#, fuzzy
 msgid "Icon View Model"
-msgstr "树形视图模型"
+msgstr "图标视图模型"
 
 #: gtk/gtkiconview.c:390
-#, fuzzy
 msgid "The model for the icon view"
-msgstr "树形视图的模型"
+msgstr "图标视图的模型"
 
 #: gtk/gtkiconview.c:397 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
@@ -2281,9 +2270,8 @@ msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr "后备图标或图标集使用的大小"
 
 #: gtk/gtkimage.c:232
-#, fuzzy
 msgid "Pixel size"
-msgstr "像素"
+msgstr "像素大小"
 
 #: gtk/gtkimage.c:233
 #, fuzzy
@@ -2299,9 +2287,8 @@ msgid "GdkPixbufAnimation to display"
 msgstr "要显示的 GdkPixbufAnimation"
 
 #: gtk/gtkimage.c:257 gtk/gtkwindow.c:566
-#, fuzzy
 msgid "Icon Name"
-msgstr "字体名称"
+msgstr "图标名称"
 
 #: gtk/gtkimage.c:258
 #, fuzzy
@@ -2316,19 +2303,15 @@ msgstr "存储类型"
 msgid "The representation being used for image data"
 msgstr "用于图像数据的表示法"
 
-#: gtk/gtkimagemenuitem.c:139
-msgid "Image widget"
-msgstr "图像部件"
-
-#: gtk/gtkimagemenuitem.c:140
+#: gtk/gtkimagemenuitem.c:132
 msgid "Child widget to appear next to the menu text"
 msgstr "菜单文字旁出现的子部件"
 
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 msgid "Show menu images"
 msgstr "显示菜单图像"
 
-#: gtk/gtkimagemenuitem.c:146
+#: gtk/gtkimagemenuitem.c:138
 msgid "Whether images should be shown in menus"
 msgstr "是否要在菜单中显示图像"
 
@@ -2340,19 +2323,19 @@ msgstr "屏幕"
 msgid "The screen where this window will be displayed"
 msgstr "此窗口要显示的屏幕"
 
-#: gtk/gtklabel.c:303
+#: gtk/gtklabel.c:319
 msgid "The text of the label"
 msgstr "标签的文字"
 
-#: gtk/gtklabel.c:310
+#: gtk/gtklabel.c:326
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "用于标签文字的样式属性的列表"
 
-#: gtk/gtklabel.c:331 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
+#: gtk/gtklabel.c:347 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
 msgid "Justification"
 msgstr "对齐"
 
-#: gtk/gtklabel.c:332
+#: gtk/gtklabel.c:348
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2361,72 +2344,78 @@ msgstr ""
 "标签文字中不同行的排列方式。这不影响标签在其分配内的排列。参看 GtkMisc::"
 "xalign 的有关内容"
 
-#: gtk/gtklabel.c:340
+#: gtk/gtklabel.c:356
 msgid "Pattern"
 msgstr "样式"
 
-#: gtk/gtklabel.c:341
+#: gtk/gtklabel.c:357
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr "字符串中出现的“_”字符代表文字中的下一字符要加下划线。"
 
-#: gtk/gtklabel.c:348
+#: gtk/gtklabel.c:364
 msgid "Line wrap"
 msgstr "自动换行"
 
-#: gtk/gtklabel.c:349
+#: gtk/gtklabel.c:365
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "如设置此选项，当字句过宽时会自动换行"
 
-#: gtk/gtklabel.c:355
+#: gtk/gtklabel.c:371
 msgid "Selectable"
 msgstr "可选中"
 
-#: gtk/gtklabel.c:356
+#: gtk/gtklabel.c:372
 msgid "Whether the label text can be selected with the mouse"
 msgstr "标签中的文字是否可以使用鼠标来选中"
 
-#: gtk/gtklabel.c:362
+#: gtk/gtklabel.c:378
 msgid "Mnemonic key"
 msgstr "记忆键"
 
-#: gtk/gtklabel.c:363
+#: gtk/gtklabel.c:379
 msgid "The mnemonic accelerator key for this label"
 msgstr "此标签的可记忆加速键"
 
-#: gtk/gtklabel.c:371
+#: gtk/gtklabel.c:387
 msgid "Mnemonic widget"
 msgstr "可记忆部件"
 
-#: gtk/gtklabel.c:372
+#: gtk/gtklabel.c:388
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "按下标签可记忆键时要激活的部件"
 
-#: gtk/gtklabel.c:416
+#: gtk/gtklabel.c:432
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtklabel.c:433
-#, fuzzy
+#: gtk/gtklabel.c:449
 msgid "Width In Chararacters"
 msgstr "以字符数计宽度"
 
-#: gtk/gtklabel.c:434
+#: gtk/gtklabel.c:450
 msgid "The desired width of the label, in characters"
 msgstr ""
 
-#: gtk/gtklabel.c:454
-#, fuzzy
+#: gtk/gtklabel.c:470
 msgid "Single Line Mode"
-msgstr "单段模式"
+msgstr "单行模式"
 
-#: gtk/gtklabel.c:455
+#: gtk/gtklabel.c:471
 #, fuzzy
 msgid "Whether the label is in single line mode"
 msgstr "标签是否以选中字体绘制"
+
+#: gtk/gtklabel.c:488
+msgid "Angle"
+msgstr "角度"
+
+#: gtk/gtklabel.c:489
+msgid "Angle at which the label is rotated"
+msgstr ""
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -4169,23 +4158,20 @@ msgstr "加速 GtkTreeView，假定全部行的高度都相同"
 
 #: gtk/gtktreeview.c:672
 msgid "Hover Selection"
-msgstr ""
+msgstr "悬停选择"
 
 #: gtk/gtktreeview.c:673
-#, fuzzy
 msgid "Whether the selection should follow the pointer"
-msgstr "颜色选择器是否允许设置透明度"
+msgstr "所选项是否要跟随指针"
 
 #: gtk/gtktreeview.c:692
-#, fuzzy
 msgid "Hover Expand"
-msgstr "展开"
+msgstr "悬停展开"
 
 #: gtk/gtktreeview.c:693
-#, fuzzy
 msgid ""
 "Whether rows should be expanded/collaped when the pointer moves over them"
-msgstr "窗口是否要由窗口管理器装饰"
+msgstr "当鼠标指向行时是否要展开/折叠行"
 
 #: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"
@@ -4253,7 +4239,7 @@ msgstr "当前的列宽"
 
 #: gtk/gtktreeviewcolumn.c:251
 msgid "Space which is inserted between cells"
-msgstr ""
+msgstr "单元格之间插入的间隔"
 
 #: gtk/gtktreeviewcolumn.c:259
 msgid "Sizing"
@@ -4666,9 +4652,8 @@ msgid "Icon for this window"
 msgstr "窗口的图标"
 
 #: gtk/gtkwindow.c:567
-#, fuzzy
 msgid "Name of the themed icon for this window"
-msgstr "窗口的图标"
+msgstr "此窗口的主题图标名称"
 
 #: gtk/gtkwindow.c:582
 msgid "Is Active"
@@ -4762,10 +4747,3 @@ msgstr "输入法状态样式"
 msgid "How to draw the input method statusbar"
 msgstr "如何绘制输入法状态栏"
 
-#, fuzzy
-#~ msgid "Row separator column"
-#~ msgstr "行跨列"
-
-#, fuzzy
-#~ msgid "Boolean TreeModel column specifying which rows are separators"
-#~ msgstr "包含跨行值时的树型列"
