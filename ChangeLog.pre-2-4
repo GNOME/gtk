@@ -1,3 +1,14 @@
+Mon Dec 22 00:40:39 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcalendar.c (gtk_calendar_paint_arrow): Use 
+	gtk_paint_arrow instead of draw_arrow_left/draw_arrow_right.
+	* gtk/gtkcalendar.c (draw_arrow_left):
+	(draw_arrow_right): Removed. 
+	* gtk/gtkcalendar.c (gtk_calendar_realize_arrows): 
+	* gtk/gtkcalendar.c (gtk_calendar_state_changed): Set the
+	arrow_state to GTK_STATE_INSENSITIVE if the calendar is 
+	insensitive.  (#97376)
+
 Sun Dec 21 23:17:01 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c (update_node): 

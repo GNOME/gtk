@@ -826,48 +826,6 @@ top_y_for_row (GtkCalendar *calendar,
 	     * row_height (calendar)));
 }
 
-/* This function should be done by the toolkit, but we don't like the
- * GTK arrows because they don't look good on this widget */
-static void
-draw_arrow_right (GdkWindow *window,
-		  GdkGC	    *gc,
-		  gint	     x,
-		  gint	     y,
-		  gint	     size)
-{
-  gint i;
-  
-  for (i = 0; i <= size / 2; i++)
-    {
-      gdk_draw_line (window, gc,
-		     x + i,
-		     y + i,
-		     x + i,
-		     y + size - i);
-    }
-}
-
-/* This function should be done by the toolkit, but we don't like the
- * GTK arrows because they don't look good on this widget */
-static void
-draw_arrow_left (GdkWindow *window,
-		 GdkGC	   *gc,
-		 gint	    x,
-		 gint	    y,
-		 gint	    size)
-{
-  gint i;
-  
-  for (i = 0; i <= size / 2; i++)
-    {
-      gdk_draw_line (window, gc,
-		     x + size/2 - i,
-		     y + i,
-		     x + size/2 - i,
-		     y + size - i);
-    }
-}
-
 static void
 gtk_calendar_set_month_prev (GtkCalendar *calendar)
 {
@@ -1150,7 +1108,10 @@ gtk_calendar_realize_arrows (GtkWidget *widget)
 	  private_data->arrow_win[i] = gdk_window_new (private_data->header_win,
 						       &attributes, 
 						       attributes_mask);
-	  private_data->arrow_state[i] = GTK_STATE_NORMAL;
+	  if (GTK_WIDGET_IS_SENSITIVE (widget))
+	    private_data->arrow_state[i] = GTK_STATE_NORMAL;
+	  else 
+	    private_data->arrow_state[i] = GTK_STATE_INSENSITIVE;
 	  gdk_window_set_background (private_data->arrow_win[i],
 				     HEADER_BG_COLOR (GTK_WIDGET (calendar)));
 	  gdk_window_show (private_data->arrow_win[i]);
@@ -3002,14 +2963,16 @@ gtk_calendar_paint_arrow (GtkWidget *widget,
       gdk_window_clear_area (window,
 			     0,0,
 			     width,height);
-      
-      gdk_gc_set_foreground (gc, & (widget)->style->fg[state]);
-      
       if (arrow == ARROW_MONTH_LEFT || arrow == ARROW_YEAR_LEFT)
-	draw_arrow_left (window, gc, width/2 - 3, height/2 - 4, 8);
+	gtk_paint_arrow (widget->style, window, state, 
+			 GTK_SHADOW_OUT, NULL, widget, "calendar",
+			 GTK_ARROW_LEFT, TRUE, 
+			 width/2 - 3, height/2 - 4, 8, 8);
       else 
-	draw_arrow_right (window, gc, width/2 - 2, height/2 - 4, 8);
-      return;
+	gtk_paint_arrow (widget->style, window, state, 
+			 GTK_SHADOW_OUT, NULL, widget, "calendar",
+			 GTK_ARROW_RIGHT, TRUE, 
+			 width/2 - 2, height/2 - 4, 8, 8);
     }
 }
 
@@ -3099,9 +3062,20 @@ static void
 gtk_calendar_state_changed (GtkWidget	   *widget,
 			    GtkStateType    previous_state)
 {
+  GtkCalendarPrivateData *private_data;
+  int i;
+  
+  private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
+  
   if (!GTK_WIDGET_IS_SENSITIVE (widget))
     stop_spinning (widget);    
 
+  for (i = 0; i < 4; i++)
+    if (GTK_WIDGET_IS_SENSITIVE (widget))
+      private_data->arrow_state[i] = GTK_STATE_NORMAL;
+    else 
+      private_data->arrow_state[i] = GTK_STATE_INSENSITIVE;
+  
   gtk_calendar_set_background (widget);
 }
 
