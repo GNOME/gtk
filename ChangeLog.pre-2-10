@@ -1,5 +1,8 @@
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenuitem.c (gtk_real_menu_item_select): Revert a change
+	which prevented torn-off menus from being shown normally.
+
 	* gtk/gtkmenu.c (gtk_menu_scroll): Implement scroll wheel scrolling
 	for menus. (#88532)
 
