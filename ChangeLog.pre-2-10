@@ -1,5 +1,11 @@
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (update_node): Also update smart separators 
+	if the visibility of a  menuitem with a submenu changes.  (#153791,
+	Christian Persch)
+
+2004-10-08  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.h:
 	* gtk/gtkentry.c: 
 	* gtk/gtkentrycompletion.c: 

@@ -2196,6 +2196,8 @@ update_node (GtkUIManager *self,
 		    gtk_menu_shell_append (GTK_MENU_SHELL (menu), filler);
 		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
 		    gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
+		    g_signal_connect (info->proxy, "notify::visible",
+				      G_CALLBACK (update_smart_separators), 0);
 		  }
 	      }
 	    else
@@ -2517,7 +2519,7 @@ update_node (GtkUIManager *self,
     {
       if (info->type == NODE_TYPE_MENU) 
 	update_smart_separators (gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy)));
-      else if (info->type == NODE_TYPE_TOOLBAR)
+      else if (info->type == NODE_TYPE_TOOLBAR || info->type == NODE_TYPE_POPUP) 
 	update_smart_separators (info->proxy);
     }
 
