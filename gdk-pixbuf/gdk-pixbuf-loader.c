@@ -318,13 +318,13 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader,
  * @error: return location for errors
  *
  * This will cause a pixbuf loader to parse the next @count bytes of
- * an image.  It will return TRUE if the data was loaded successfully,
- * and FALSE if an error occurred.  In the latter case, the loader
- * will be closed, and will not accept further writes. If FALSE is
+ * an image.  It will return %TRUE if the data was loaded successfully,
+ * and %FALSE if an error occurred.  In the latter case, the loader
+ * will be closed, and will not accept further writes. If %FALSE is
  * returned, @error will be set to an error from the #GDK_PIXBUF_ERROR
  * or #G_FILE_ERROR domains.
  *
- * Return value: #TRUE if the write was successful, or #FALSE if the loader
+ * Return value: %TRUE if the write was successful, or %FALSE if the loader
  * cannot parse the buffer.
  **/
 gboolean
@@ -435,7 +435,7 @@ gdk_pixbuf_loader_new_with_type (const char *image_type,
  * gdk_pixbuf_loader_get_pixbuf:
  * @loader: A pixbuf loader.
  *
- * Queries the GdkPixbuf that a pixbuf loader is currently creating.
+ * Queries the #GdkPixbuf that a pixbuf loader is currently creating.
  * In general it only makes sense to call this function after the
  * "area_prepared" signal has been emitted by the loader; this means
  * that enough data has been read to know the size of the image that
@@ -470,13 +470,13 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
  * gdk_pixbuf_loader_get_animation:
  * @loader: A pixbuf loader
  *
- * Queries the GdkPixbufAnimation that a pixbuf loader is currently creating.
+ * Queries the #GdkPixbufAnimation that a pixbuf loader is currently creating.
  * In general it only makes sense to call this function afer the "area_prepared"
  * signal has been emitted by the loader. If the loader doesn't have enough
- * bytes yet (hasn't emitted the area_prepared signal) this function will return
- * %NULL.
+ * bytes yet (hasn't emitted the "area_prepared" signal) this function will 
+ * return %NULL.
  *
- * Return value: The GdkPixbufAnimation that the loader is loading, or NULL if
+ * Return value: The #GdkPixbufAnimation that the loader is loading, or %NULL if
  not enough data has been read to determine the information.
 **/
 GdkPixbufAnimation *
@@ -501,7 +501,7 @@ gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader)
  * gdk_pixbuf_loader_write() will occur, so that it can free its
  * internal loading structures. Also, tries to parse any data that
  * hasn't yet been parsed; if the remaining data is partial or
- * corrupt, an error will be returned.  If FALSE is returned, @error
+ * corrupt, an error will be returned.  If %FALSE is returned, @error
  * will be set to an error from the #GDK_PIXBUF_ERROR or #G_FILE_ERROR
  * domains. If you're just cancelling a load rather than expecting it
  * to be finished, passing %NULL for @error to ignore it is

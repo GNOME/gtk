@@ -1,3 +1,7 @@
+2001-12-12  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk-pixbuf-loader.c, gdk-pixbuf-util.c: Markup fixes.
+
 2001-12-11  Michael Natterer  <mitch@gimp.org>
 
 	* io-png.c: gdk_pixbuf__png_image_save: removed wrong endian

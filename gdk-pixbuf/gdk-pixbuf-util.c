@@ -31,7 +31,7 @@
  * gdk_pixbuf_add_alpha:
  * @pixbuf: A pixbuf.
  * @substitute_color: Whether to set a color to zero opacity.  If this
- * is #FALSE, then the (@r, @g, @b) arguments will be ignored.
+ * is %FALSE, then the (@r, @g, @b) arguments will be ignored.
  * @r: Red value to substitute.
  * @g: Green value to substitute.
  * @b: Blue value to substitute.
@@ -41,7 +41,7 @@
  * values are copied from the original; otherwise, the alpha channel
  * is initialized to 255 (full opacity).
  * 
- * If @substitute_color is #TRUE, then the color specified by (@r, @g, @b) will be
+ * If @substitute_color is %TRUE, then the color specified by (@r, @g, @b) will be
  * assigned zero opacity. That is, if you pass (255, 255, 255) for the
  * substitute color, all white pixels will become fully transparent.
  *
@@ -165,7 +165,7 @@ gdk_pixbuf_copy_area (const GdkPixbuf *src_pixbuf,
  * effects.  If @saturation is 1.0 then saturation is not changed. If
  * it's less than 1.0, saturation is reduced (the image is darkened);
  * if greater than 1.0, saturation is increased (the image is
- * brightened). If @pixelate is TRUE, then pixels are faded in a
+ * brightened). If @pixelate is %TRUE, then pixels are faded in a
  * checkerboard pattern to create a pixelated image. @src and @dest
  * must have the same image format, size, and rowstride.
  * 
