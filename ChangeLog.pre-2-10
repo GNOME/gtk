@@ -1,3 +1,20 @@
+Sun Jun 11 12:46:19 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_set_default_icon): Fix
+	cut and paste typo where wrong pixmap was being
+	unref'ed. (Pointed out by a friend of KUSANO Takayuki.)
+
+Sun Jun 11 10:22:36 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkselection.c (gtk_selection_bytes_per_item):
+	Add helper function to compute format / bytes 
+	relationship. Use in a couple places to fix up
+	errors which assume 8 * format.
+
+	* gtk/gtkselection.c (gtk_selection_request): Use 32
+	rather than 8 * sizeof (GdkAtom), to work correctly
+	on Alpha.
+
 Thu May 25 03:54:30 2000  Tim Janik  <timj@gtk.org>
 
 	* released Gtk+-1.2.8.
