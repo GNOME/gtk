@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>October 29th 2003</date>
+  <date>November 4th 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -36,17 +36,19 @@
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Note: This FAQ mainly covers GTK+ 1.2</title>
-<para>This FAQ mainly covers GTK+ 1.2.
+<title>Note: This FAQ is undergoing conversion to GTK+ 2.x</title>
+<para>This FAQ is undergoing conversion to GTK+ 2.x.
 Where the text covers GTK+ 2.x this will be indicated by prefixing the
-text with: <emphasis>[GTK+ 2.x]</emphasis>
+text with: <emphasis>[GTK+ 2.x]</emphasis>. Where this is not
+indicated, the text has not yet been updated from GTK+ 1.2 and may
+not be totally correct.
 </para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Before anything else: the greetings</title>
+<title>Before anything else: the greetings <emphasis>[GTK 2.x]</emphasis></title>
 <para>The FAQ authors want to thank:</para>
 <itemizedlist spacing=Compact>
 <listitem>
@@ -86,7 +88,7 @@ it's really short :) </para>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Authors</title>
+<title>Authors <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>The original authors of GTK+ were:</para>
 
@@ -103,29 +105,66 @@ it's really short :) </para>
 </itemizedlist>
 
 <para>Since then, much has been added by others. Please see the
-AUTHORS file in the distribution for the GTK+ Team.</para>
+AUTHORS file in the distribution for the GTK+ Team. The people currently
+contributing the most code to GTK+ are (in no particular order):</para>
+
+
+<itemizedlist spacing=Compact>
+<listitem>
+<simpara>Owen Taylor</simpara>
+</listitem>
+<listitem>
+<simpara>Matthias Clasen</simpara>
+</listitem>
+<listitem>
+<simpara>Federico Mena Quintero</simpara>
+</listitem>
+<listitem>
+<simpara>Soeren Sandmann</simpara>
+</listitem>
+<listitem>
+<simpara>Padraig O'Briain</simpara>
+</listitem>
+<listitem>
+<simpara>Manish Singh</simpara>
+</listitem>
+<listitem>
+<simpara>Kristian Rietveld</simpara>
+</listitem>
+<listitem>
+<simpara>Tor Lillqvist</simpara>
+</listitem>
+</itemizedlist>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>What is GTK+?</title>
+<title>What is GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>GTK+ is a small and efficient widget set designed with
+<para>GTK+ is a multi-platform toolkit for creating graphical user
+interfaces, originally designed with
 the general look and feel of Motif.  In reality, it looks much
-better than Motif.  It contains common widgets and some more
-complex widgets such as a file selection, and color selection
-widgets.</para>
+better than Motif.  It contains common and complex widgets, such as
+file selection, and color selection widgets.</para>
 
-<para>GTK+ provides some unique features. (At least, I know of
-no other widget library which provides them). For example, a
-button does not contain a label, it contains a child widget,
-which in most instances will be a label.  However, the child
-widget can also be a pixmap, image or any combination possible
-the programmer desires. This flexibility is adhered to
-throughout the library.</para>
+<para>GTK+ was initially developed as a widget set for the GIMP (GNU Image
+Manipulation Program). It has grown extensively since then, and is today
+used by a large number of applications, and is the toolkit used by the
+<ulink url="http://www.gnome.org/">GNOME</ulink> desktop project.</para>
 
+<para>GTK+ is free software and part of the GNU Project. However, the
+licensing terms for GTK+, the GNU LGPL, allow it to be used by all developers,
+including those developing proprietary software, without any license fees
+or royalties.</para>
+
+<para>GTK+ has been designed from the ground up to support a range of
+<ulink url="http://www.gtk.org/bindings.html">
+language bindings</ulink>, not only C/C++. Using GTK+ from languages
+such as Perl and Python (especially in combination with the Glade GUI
+builder) provides an effective method of rapid application
+development..</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
@@ -594,7 +633,7 @@ component of GTK) isn't in your path, or there is an old
 version on your system. Type:</simpara>
 
 <para><literallayout>
-<literal>pkg-config gtk+-2.0 --version</literal>
+<literal>pkg-config gtk+-2.0 --modversion</literal>
 </literallayout></para>
 
 <para>to check for both of these. If it returns a value
@@ -3658,22 +3697,15 @@ and become more useful!</para>
 Tony Gale
 <ulink url="mailto:gale@gtk.org">&lt;gale@gtk.org&gt;</ulink>
 
-Nathan Froyd
-<ulink url="mailto:maestrox@geocities.com">
-&lt;maestrox@geocities.com&gt;</ulink>,
-and 
-Emmanuel Deloget
-<ulink url="mailto:logout@free.fr">&lt;logout@free.fr&gt;</ulink>.
-
 This FAQ was created by Shawn T. Amundson 
 <ulink url="mailto:amundson@gimp.org">
-&lt;amundson@gimp.org&gt;</ulink> who continues to provide support.
+&lt;amundson@gimp.org&gt;</ulink>.
 
 Contributions should be sent to Tony Gale <ulink
 url="mailto:gale@gtk.org">&lt;gale@gtk.org&gt;</ulink></para>
 
-<para>The GTK+ FAQ is Copyright (C) 1997-2000 by Shawn T. Amundson, 
-Tony Gale, Emmanuel Deloget and Nathan Froyd.</para>
+<para>The GTK+ FAQ is Copyright (C) 1997-2003 by Shawn T. Amundson, 
+Tony Gale.</para>
 
 <para>Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are

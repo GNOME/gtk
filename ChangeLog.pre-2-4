@@ -1,3 +1,8 @@
+Tue Nov  4 15:00:33 GMT 2003  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: More 2.x updates, fix
+	pkg-config command error, update copyright.
+
 2003-11-03  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (error_dialog): Take in a path as
