@@ -483,6 +483,12 @@ get_default_icons (GtkIconFactory *factory)
 
   /* Generic + menu sizes */  
   add_sized_with_fallback (factory,
+			   stock_add_24,
+			   stock_add_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_JUSTIFY_CENTER);
+
+  add_sized_with_fallback (factory,
 			   stock_align_center_24,
 			   stock_align_center_16,
 			   GTK_ICON_SIZE_MENU,
@@ -651,6 +657,12 @@ get_default_icons (GtkIconFactory *factory)
                            GTK_STOCK_REDO);
 
   add_sized_with_fallback (factory,
+			   stock_remove_24,
+			   stock_remove_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_JUSTIFY_CENTER);
+
+  add_sized_with_fallback (factory,
 			   stock_refresh_24,
 			   stock_refresh_16,
 			   GTK_ICON_SIZE_MENU,
@@ -778,11 +790,9 @@ get_default_icons (GtkIconFactory *factory)
 
 /* Generic size only */
 
-  add_unsized (factory, stock_add_24, GTK_STOCK_ADD);
   add_unsized (factory, stock_clear_24, GTK_STOCK_CLEAR);
   add_unsized (factory, stock_colorselector_24, GTK_STOCK_SELECT_COLOR);
   add_unsized (factory, stock_index_24, GTK_STOCK_INDEX);
-  add_unsized (factory, stock_remove_24, GTK_STOCK_REMOVE);
   add_unsized (factory, stock_zoom_1_24, GTK_STOCK_ZOOM_100);
   add_unsized (factory, stock_zoom_fit_24, GTK_STOCK_ZOOM_FIT);
   add_unsized (factory, stock_zoom_in_24, GTK_STOCK_ZOOM_IN);

@@ -750,6 +750,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 @treeview: the object which received the signal.
 @arg1: 
 @arg2: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkTreeView::row-activated ##### -->
 <para>

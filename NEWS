@@ -1,3 +1,33 @@
+Overview of Changes in GTK+ 2.0.1
+=================================
+
+* GtkTreeView fixes and performance improvements 
+  [Kristian Rietveld, Jonathan Blandford, Mike Piepe, Dave Camp]
+* GtkTextView fixes [Havoc Pennington]
+* Fix problems with accelerators on Solaris [Padraig O'Briain]
+* Some fixes for key bindings on keypad keys [Owen Taylor]
+* Fix problem with RENDER use on big endian machines 
+  [Owen Taylor, with help from Tuomas Kuosmanen]
+* Win32 fixes, especially dashed line drawing 
+  [Tor Lillqvist, Hans Breuer]
+* Compile with -D_REENTRANT when appropriate [Sven Numann]
+* Compiler warning cleanups [Erwann Chenede]
+* Fix handling of font-name XSETTING [Richard Hestilow]
+* Make linux-fb backend compile again [Carlo E. Prelz, Alex Larsson]
+* Fix problems with inappropriate menu scroll arrows [Owen]
+* Stock icon improvements [Jakub Steiner, Tuomas]
+* Much work on pixbuf loader robustness [Matthias Clasen]
+* Documentation improvements [Matthias, Vitaly Tiskkov]
+* Fix some crashes in GtkWindow accelerator handling code 
+  [Dave Camp, Matt Wilson]
+* Misc bug fixes
+
+Other contributors: Jacob Berkman, Dennis Björklund, Seth Burgess,
+  Murray Cumming, John Elliis, Kang Jeong-He, James Henstridge, 
+  Richard Hult, Thomas Leonard, LEE Sau Dan, Alexey A. Malyshev, 
+  Mark McLoughlin, Michael Meeks,Sven Neumann, Andras Salamon, 
+  Soeren Sandmann, Dan Winship, Yao Zhang
+
 Overview of Changes in GTK+ 2.0.0
 =================================
 
@@ -308,7 +338,7 @@ Other Contributors:
   Joshua N Pritikin, Hidetoshi Tajima, Manish Singh, ERDI Gergo, Jens Finke,
   Chema Celorio, Lee Mallabone, Vitaly Tishkov, Sebastian Wilhelmi,
   Nicola Girardi, Sven Neumann, Padraig O'Briain, Michael Natterer,
-  Suresh Chandrasekharan, Jonas Borgstr�m, Jay Cox, Michael Meeks,
+  Suresh Chandrasekharan, Jonas Borgström, Jay Cox, Michael Meeks,
   Mathias Hasselmann, Peter Williams, Thomas Broyer, Kjartan Maraas,
   Joel Becker, Jeff Franks, Brian Cameron, Skip Montanaro
 

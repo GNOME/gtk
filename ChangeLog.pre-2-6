@@ -1,3 +1,15 @@
+Fri Mar 29 00:19:41 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* NEWS: Updates
+
+	* configure.in: Version 2.0.1, binary, interface age 1.
+
+	* configure.in (GDK_PIXBUF_VERSION): Up required versions
+	of dependencies.
+
+	* gtk/gtkiconfactory.c gtk/stock-icons/Makefile.am:
+	Add stock_add/remove_16.
+
 Thu Mar 28 18:38:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk[hv]paned.c (gtk_[hv]paned_size_allocate): 

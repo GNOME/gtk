@@ -1,5 +1,6 @@
 
 IMAGES = @STRIP_BEGIN@ 			\
+	stock_add_16.png		\
 	stock_add_24.png		\
 	stock_align_center_16.png	\
 	stock_align_center_24.png 	\
@@ -73,6 +74,7 @@ IMAGES = @STRIP_BEGIN@ 			\
 	stock_redo_24.png 		\
 	stock_refresh_16.png		\
 	stock_refresh_24.png 		\
+	stock_remove_16.png 		\
 	stock_remove_24.png 		\
 	stock_revert_16.png		\
 	stock_revert_24.png 		\
@@ -120,6 +122,7 @@ IMAGES = @STRIP_BEGIN@ 			\
 @STRIP_END@
 
 VARIABLES1 = @STRIP_BEGIN@ 									\
+		stock_add_16          		$(srcdir)/stock_add_16.png 			\
 		stock_add_24          		$(srcdir)/stock_add_24.png 			\
 	       	stock_align_center_16		$(srcdir)/stock_align_center_16.png             \
 	       	stock_align_center_24		$(srcdir)/stock_align_center_24.png             \
@@ -200,6 +203,7 @@ VARIABLES4 = @STRIP_BEGIN@ 									\
                 stock_redo_24			$(srcdir)/stock_redo_24.png             	\
 		stock_refresh_16		$(srcdir)/stock_refresh_16.png			\
                 stock_refresh_24		$(srcdir)/stock_refresh_24.png             	\
+		stock_remove_16			$(srcdir)/stock_remove_16.png			\
                 stock_remove_24			$(srcdir)/stock_remove_24.png             	\
 		stock_revert_16			$(srcdir)/stock_revert_16.png			\
                 stock_revert_24			$(srcdir)/stock_revert_24.png             	\
