@@ -1,3 +1,11 @@
+Wed Aug 20 22:04:47 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gdk/gdkwindow.c: Make the layers in the paint stack have their
+	own pixmap instead of sharing one.
+
+	* tests/testgtk.c (create_get_image): Fixes to make the window fit
+	on an 800x600 screen
+
 Wed Aug 20 22:03:25 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.

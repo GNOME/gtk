@@ -2346,8 +2346,8 @@ create_get_image (GtkWidget *widget)
       GtkWidget *sw;
       GtkWidget *src;
       GtkWidget *snap;
-      GtkWidget *vbox;
       GtkWidget *hbox;
+      GtkWidget *vbox;
       GtkWidget *button;
       struct GetImageData *gid;
 
@@ -2368,9 +2368,9 @@ create_get_image (GtkWidget *widget)
                               gid,
                               g_free);
       
-      vbox = gtk_vbox_new (FALSE, 0);
+      hbox = gtk_hbox_new (FALSE, 0);
       
-      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_container_add (GTK_CONTAINER (window), hbox);
       
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
@@ -2394,11 +2394,11 @@ create_get_image (GtkWidget *widget)
       gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw),
                                              src);
       
-      gtk_box_pack_start (GTK_BOX (vbox),
+      gtk_box_pack_start (GTK_BOX (hbox),
                           sw, TRUE, TRUE, 0);                          
 
 
-      hbox = gtk_hbox_new (FALSE, 3);
+      vbox = gtk_vbox_new (FALSE, 3);
 
       snap = gtk_widget_new (GTK_TYPE_IMAGE, NULL);
 
@@ -2412,7 +2412,7 @@ create_get_image (GtkWidget *widget)
       
       gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), snap);
 
-      gtk_box_pack_end (GTK_BOX (hbox), sw, FALSE, FALSE, 5);
+      gtk_box_pack_end (GTK_BOX (vbox), sw, FALSE, FALSE, 5);
 
       button = gtk_button_new_with_label ("Get image from drawable");
 
@@ -2421,9 +2421,9 @@ create_get_image (GtkWidget *widget)
                         G_CALLBACK (take_snapshot),
                         gid);
       
-      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-      gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
       
       gtk_widget_show_all (window);
     }
