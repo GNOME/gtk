@@ -999,6 +999,21 @@ show_window_internal (GdkWindow *window,
 				 GDK_WINDOW_STATE_WITHDRAWN,
 				 0);
 
+  /* Use SetWindowPos to show transparent windows so automatic redraws
+   * in other windows can be suppressed.
+   */
+  if (GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
+    {
+      UINT flags = SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE;
+      if (!raise)
+	flags |= SWP_NOZORDER;
+      if (!raise || GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
+	flags |= SWP_NOACTIVATE;
+
+      SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOP, 0, 0, 0, 0, flags);
+      return;
+    }
+
   old_active_window = GetActiveWindow ();
 
   if (private->state & (GDK_WINDOW_STATE_BELOW | GDK_WINDOW_STATE_ABOVE))
@@ -1078,8 +1093,8 @@ gdk_window_hide (GdkWindow *window)
   
   if (GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
     {
-      SetWindowPos(GDK_WINDOW_HWND (window), HWND_BOTTOM, 0, 0, 0, 0,
-		   SWP_HIDEWINDOW | SWP_NOREDRAW | SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE);
+      SetWindowPos (GDK_WINDOW_HWND (window), HWND_BOTTOM, 0, 0, 0, 0,
+		    SWP_HIDEWINDOW | SWP_NOREDRAW | SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE);
     }
   else
     {
@@ -3114,6 +3129,12 @@ gdk_window_set_type_hint (GdkWindow        *window,
     case GDK_WINDOW_TYPE_HINT_UTILITY:
       break;
     case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+      gdk_window_set_decorations (window,
+				  GDK_DECOR_ALL |
+				  GDK_DECOR_RESIZEH |
+				  GDK_DECOR_MENU |
+				  GDK_DECOR_MINIMIZE |
+				  GDK_DECOR_MAXIMIZE);
       break;
     case GDK_WINDOW_TYPE_HINT_DOCK:
       break;

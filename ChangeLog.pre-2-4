@@ -1,3 +1,15 @@
+2004-03-10  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (build_key_event_state): Set also
+	the pointer button bits. (#136636, Dave Neary)
+
+	* gdk/win32/gdkwindow-win32.c (show_window_internal): Show
+	transparent (input only) windows using SetWindowPos(). (#132331,
+	John Ehresman)
+
+	(gdk_window_set_type_hint): For splash screens, remove the resize
+	handles, menu, and minimize/maximize/close buttons. (#132896)
+
 Wed Mar 10 22:30:23 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcellview.c (gtk_cell_view_cell_layout_clear): Keep the

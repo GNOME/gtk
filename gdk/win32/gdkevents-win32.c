@@ -79,6 +79,11 @@
 #define XBUTTON2 2
 #endif
 
+#ifndef VK_XBUTTON1
+#define VK_XBUTTON1 5
+#define VK_XBUTTON2 6
+#endif
+
 #ifndef MK_XBUTTON1
 #define MK_XBUTTON1 32
 #define MK_XBUTTON2 64
@@ -826,6 +831,17 @@ build_key_event_state (GdkEvent *event,
 
   if (key_state[VK_CAPITAL] & 0x01)
     event->key.state |= GDK_LOCK_MASK;
+
+  if (key_state[VK_LBUTTON] & 0x80)
+    event->key.state |= GDK_BUTTON1_MASK;
+  if (key_state[VK_MBUTTON] & 0x80)
+    event->key.state |= GDK_BUTTON2_MASK;
+  if (key_state[VK_RBUTTON] & 0x80)
+    event->key.state |= GDK_BUTTON3_MASK;
+  if (key_state[VK_XBUTTON1] & 0x80)
+    event->key.state |= GDK_BUTTON4_MASK;
+  if (key_state[VK_XBUTTON2] & 0x80)
+    event->key.state |= GDK_BUTTON5_MASK;
 
   /* Win9x doesn't distinguish between left and right Control and Alt
    * in the keyboard state as returned by GetKeyboardState(), so we
