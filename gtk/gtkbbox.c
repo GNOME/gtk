@@ -395,7 +395,6 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
   gint ipad_x;
   gint ipad_y;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
 
   bbox = GTK_BUTTON_BOX (widget);

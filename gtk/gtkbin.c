@@ -115,7 +115,6 @@ gtk_bin_map (GtkWidget *widget)
 {
   GtkBin *bin;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_BIN (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
@@ -135,7 +134,6 @@ gtk_bin_unmap (GtkWidget *widget)
 {
   GtkBin *bin;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_BIN (widget));
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
@@ -154,9 +152,7 @@ gtk_bin_add (GtkContainer *container,
 {
   GtkBin *bin;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_BIN (container));
-  g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_WIDGET (child));
 
   bin = GTK_BIN (container);
@@ -195,9 +191,7 @@ gtk_bin_remove (GtkContainer *container,
   GtkBin *bin;
   gboolean widget_was_visible;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_BIN (container));
-  g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_WIDGET (child));
 
   bin = GTK_BIN (container);
@@ -223,7 +217,6 @@ gtk_bin_forall (GtkContainer *container,
 {
   GtkBin *bin;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_BIN (container));
   g_return_if_fail (callback != NULL);
 

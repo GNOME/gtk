@@ -397,7 +397,6 @@ gtk_range_init (GtkRange *range)
 GtkAdjustment*
 gtk_range_get_adjustment (GtkRange *range)
 {
-  g_return_val_if_fail (range != NULL, NULL);
   g_return_val_if_fail (GTK_IS_RANGE (range), NULL);
 
   if (!range->adjustment)
@@ -425,7 +424,6 @@ void
 gtk_range_set_update_policy (GtkRange      *range,
 			     GtkUpdateType  policy)
 {
-  g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
 
   if (range->update_policy != policy)
@@ -469,7 +467,6 @@ void
 gtk_range_set_adjustment (GtkRange      *range,
 			  GtkAdjustment *adjustment)
 {
-  g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
   
   if (!adjustment)
@@ -772,7 +769,6 @@ gtk_range_unrealize (GtkWidget *widget)
 {
   GtkRange *range;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_RANGE (widget));
 
   range = GTK_RANGE (widget);
@@ -832,7 +828,6 @@ gtk_range_expose (GtkWidget      *widget,
   GtkStateType state;
   GdkRectangle area;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -1409,7 +1404,6 @@ gtk_range_style_set (GtkWidget *widget,
 {
   GtkRange *range;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_RANGE (widget));
 
   range = GTK_RANGE (widget);

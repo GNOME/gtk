@@ -198,7 +198,6 @@ void
 gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
 				gboolean          is_active)
 {
-  g_return_if_fail (check_menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
 
   is_active = is_active != 0;
@@ -231,7 +230,6 @@ static void
 gtk_check_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 					 gint        *requisition)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
 
   *requisition = CHECK_TOGGLE_SIZE;
@@ -241,7 +239,6 @@ void
 gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,
 				     gboolean          always)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
 
 #if 0
@@ -330,7 +327,6 @@ gtk_check_menu_item_activate (GtkMenuItem *menu_item)
 {
   GtkCheckMenuItem *check_menu_item;
 
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
 
   check_menu_item = GTK_CHECK_MENU_ITEM (menu_item);
@@ -344,7 +340,6 @@ static void
 gtk_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 				    GdkRectangle     *area)
 {
-  g_return_if_fail (check_menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
   g_return_if_fail (GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item) != NULL);
 
@@ -362,7 +357,6 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
   gint width, height;
   gint x, y;
 
-  g_return_if_fail (check_menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
 
   if (GTK_WIDGET_DRAWABLE (check_menu_item))

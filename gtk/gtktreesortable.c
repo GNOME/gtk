@@ -83,7 +83,6 @@ gtk_tree_sortable_get_sort_column_id (GtkTreeSortable  *sortable,
 {
   GtkTreeSortableIface *iface;
 
-  g_return_val_if_fail (sortable != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_SORTABLE (sortable), FALSE);
 
   iface = GTK_TREE_SORTABLE_GET_IFACE (sortable);
@@ -101,7 +100,6 @@ gtk_tree_sortable_set_sort_column_id (GtkTreeSortable  *sortable,
 {
   GtkTreeSortableIface *iface;
 
-  g_return_if_fail (sortable != NULL);
   g_return_if_fail (GTK_IS_TREE_SORTABLE (sortable));
 
   iface = GTK_TREE_SORTABLE_GET_IFACE (sortable);
@@ -122,7 +120,6 @@ gtk_tree_sortable_set_sort_func (GtkTreeSortable        *sortable,
 {
   GtkTreeSortableIface *iface;
 
-  g_return_if_fail (sortable != NULL);
   g_return_if_fail (GTK_IS_TREE_SORTABLE (sortable));
 
   iface = GTK_TREE_SORTABLE_GET_IFACE (sortable);

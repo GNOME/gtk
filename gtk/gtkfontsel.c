@@ -427,7 +427,6 @@ gtk_font_selection_finalize (GObject *object)
 {
   GtkFontSelection *fontsel;
   
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_FONT_SELECTION (object));
   
   fontsel = GTK_FONT_SELECTION (object);
@@ -862,7 +861,6 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   int n_descs, i;
   gboolean found = FALSE;
 
-  g_return_val_if_fail (fontsel != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), FALSE);
   
   new_desc = pango_font_description_from_string (fontname);

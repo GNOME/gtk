@@ -102,7 +102,6 @@ gtk_vbox_size_request (GtkWidget      *widget,
   gint nvis_children;
   gint height;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_VBOX (widget));
   g_return_if_fail (requisition != NULL);
 
@@ -163,7 +162,6 @@ gtk_vbox_size_allocate (GtkWidget     *widget,
   gint extra;
   gint y;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_VBOX (widget));
   g_return_if_fail (allocation != NULL);
 

@@ -584,7 +584,6 @@ gtk_tree_iter_free (GtkTreeIter *iter)
 GtkTreeModelFlags
 gtk_tree_model_get_flags (GtkTreeModel *tree_model)
 {
-  g_return_val_if_fail (tree_model != NULL, 0);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), 0);
 
   if (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_flags)
@@ -765,7 +764,6 @@ gtk_tree_model_iter_children (GtkTreeModel *tree_model,
 			      GtkTreeIter  *iter,
 			      GtkTreeIter  *parent)
 {
-  g_return_val_if_fail (tree_model != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_children != NULL, FALSE);
@@ -807,7 +805,6 @@ gint
 gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
-  g_return_val_if_fail (tree_model != NULL, 0);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), 0);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_n_children != NULL, 0);
 
@@ -891,7 +888,6 @@ void
 gtk_tree_model_ref_node (GtkTreeModel *tree_model,
 			 GtkTreeIter  *iter)
 {
-  g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
 
   if (GTK_TREE_MODEL_GET_IFACE (tree_model)->ref_node)
@@ -1383,7 +1379,6 @@ GtkTreeRowReference *
 gtk_tree_row_reference_new (GtkTreeModel *model,
                             GtkTreePath  *path)
 {
-  g_return_val_if_fail (model != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (model), NULL);
   g_return_val_if_fail (path != NULL, NULL);
 

@@ -762,7 +762,6 @@ gtk_text_layout_real_free_line_data (GtkTextLayout     *layout,
 gboolean
 gtk_text_layout_is_valid (GtkTextLayout *layout)
 {
-  g_return_val_if_fail (layout != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), FALSE);
 
   return _gtk_text_btree_is_valid (_gtk_text_buffer_get_btree (layout->buffer),
@@ -806,7 +805,6 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
   gint first_line_y = 0;        /* Quiet GCC */
   gint last_line_y = 0;         /* Quiet GCC */
 
-  g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
 
   if (y0 > 0)
@@ -907,7 +905,6 @@ gtk_text_layout_validate (GtkTextLayout *layout,
 {
   gint y, old_height, new_height;
 
-  g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
 
   while (max_pixels > 0 &&
@@ -2521,7 +2518,6 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
   GtkTextIter orig;
   gboolean update_byte = FALSE;
   
-  g_return_val_if_fail (layout != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
 
@@ -2640,7 +2636,6 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
   gboolean found_after = FALSE;
   gboolean first = TRUE;
 
-  g_return_val_if_fail (layout != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
 
@@ -2713,7 +2708,6 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
   GSList *tmp_list;
   GtkTextIter orig;
   
-  g_return_val_if_fail (layout != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
 
@@ -2771,7 +2765,6 @@ gtk_text_layout_iter_starts_line (GtkTextLayout       *layout,
   gint line_byte;
   GSList *tmp_list;
   
-  g_return_val_if_fail (layout != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
 
@@ -2836,7 +2829,6 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
   gint line_byte;
   PangoLayoutIter *layout_iter;
   
-  g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (iter != NULL);
 

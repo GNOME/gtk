@@ -207,7 +207,6 @@ gtk_statusbar_update (GtkStatusbar *statusbar,
 		      guint	    context_id,
 		      const gchar  *text)
 {
-  g_return_if_fail (statusbar != NULL);
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
 
   if (!text)
@@ -223,7 +222,6 @@ gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
   gchar *string;
   guint *id;
   
-  g_return_val_if_fail (statusbar != NULL, 0);
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), 0);
   g_return_val_if_fail (context_description != NULL, 0);
 
@@ -252,7 +250,6 @@ gtk_statusbar_push (GtkStatusbar *statusbar,
   GtkStatusbarMsg *msg;
   GtkStatusbarClass *class;
 
-  g_return_val_if_fail (statusbar != NULL, 0);
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), 0);
   g_return_val_if_fail (text != NULL, 0);
 
@@ -278,7 +275,6 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
 {
   GtkStatusbarMsg *msg;
 
-  g_return_if_fail (statusbar != NULL);
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
 
   if (statusbar->messages)
@@ -320,7 +316,6 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
 {
   GtkStatusbarMsg *msg;
 
-  g_return_if_fail (statusbar != NULL);
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
   g_return_if_fail (message_id > 0);
 
@@ -396,7 +391,6 @@ gtk_statusbar_destroy (GtkObject *object)
   GtkStatusbarClass *class;
   GSList *list;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_STATUSBAR (object));
 
   statusbar = GTK_STATUSBAR (object);

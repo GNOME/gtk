@@ -111,7 +111,6 @@ gtk_layout_new (GtkAdjustment *hadjustment,
 GtkAdjustment* 
 gtk_layout_get_hadjustment (GtkLayout     *layout)
 {
-  g_return_val_if_fail (layout != NULL, NULL);
   g_return_val_if_fail (GTK_IS_LAYOUT (layout), NULL);
 
   return layout->hadjustment;
@@ -119,7 +118,6 @@ gtk_layout_get_hadjustment (GtkLayout     *layout)
 GtkAdjustment* 
 gtk_layout_get_vadjustment (GtkLayout     *layout)
 {
-  g_return_val_if_fail (layout != NULL, NULL);
   g_return_val_if_fail (GTK_IS_LAYOUT (layout), NULL);
 
   return layout->vadjustment;
@@ -132,7 +130,6 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
 {
   gboolean need_adjust = FALSE;
 
-  g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
 
   if (hadj)
@@ -199,7 +196,6 @@ void
 gtk_layout_set_hadjustment (GtkLayout     *layout,
 			    GtkAdjustment *adjustment)
 {
-  g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
 
   gtk_layout_set_adjustments (layout, adjustment, layout->vadjustment);
@@ -211,7 +207,6 @@ void
 gtk_layout_set_vadjustment (GtkLayout     *layout,
 			    GtkAdjustment *adjustment)
 {
-  g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
   
   gtk_layout_set_adjustments (layout, layout->hadjustment, adjustment);
@@ -227,9 +222,7 @@ gtk_layout_put (GtkLayout     *layout,
 {
   GtkLayoutChild *child;
 
-  g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
-  g_return_if_fail (child_widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (child_widget));
   
   child = g_new (GtkLayoutChild, 1);
@@ -265,7 +258,6 @@ gtk_layout_move (GtkLayout     *layout,
   GList *tmp_list;
   GtkLayoutChild *child;
   
-  g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
 
   tmp_list = layout->children;
@@ -317,7 +309,6 @@ gtk_layout_set_size (GtkLayout     *layout,
 {
   GtkWidget *widget;
   
-  g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
 
   widget = GTK_WIDGET (layout);
@@ -370,7 +361,6 @@ gtk_layout_get_size (GtkLayout *layout,
 void
 gtk_layout_freeze (GtkLayout *layout)
 {
-  g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
 
   layout->freeze_count++;
@@ -379,7 +369,6 @@ gtk_layout_freeze (GtkLayout *layout)
 void
 gtk_layout_thaw (GtkLayout *layout)
 {
-  g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
 
   if (layout->freeze_count)
@@ -581,7 +570,6 @@ gtk_layout_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (widget));
 
   layout = GTK_LAYOUT (widget);
@@ -634,7 +622,6 @@ gtk_layout_map (GtkWidget *widget)
   GList *tmp_list;
   GtkLayout *layout;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (widget));
 
   layout = GTK_LAYOUT (widget);
@@ -663,7 +650,6 @@ gtk_layout_unrealize (GtkWidget *widget)
 {
   GtkLayout *layout;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (widget));
 
   layout = GTK_LAYOUT (widget);
@@ -683,7 +669,6 @@ gtk_layout_size_request (GtkWidget     *widget,
   GList *tmp_list;
   GtkLayout *layout;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (widget));
 
   layout = GTK_LAYOUT (widget);
@@ -711,7 +696,6 @@ gtk_layout_size_allocate (GtkWidget     *widget,
   GList *tmp_list;
   GtkLayout *layout;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (widget));
 
   widget->allocation = *allocation;
@@ -757,7 +741,6 @@ gtk_layout_expose (GtkWidget *widget, GdkEventExpose *event)
 {
   GtkLayout *layout;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_LAYOUT (widget), FALSE);
 
   layout = GTK_LAYOUT (widget);
@@ -780,7 +763,6 @@ gtk_layout_remove (GtkContainer *container,
   GtkLayout *layout;
   GtkLayoutChild *child = NULL;
   
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (container));
   
   layout = GTK_LAYOUT (container);
@@ -814,7 +796,6 @@ gtk_layout_forall (GtkContainer *container,
   GtkLayoutChild *child;
   GList *tmp_list;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (container));
   g_return_if_fail (callback != NULL);
 

@@ -431,7 +431,6 @@ gtk_button_new_with_mnemonic (const gchar *label)
 void
 gtk_button_pressed (GtkButton *button)
 {
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   gtk_signal_emit (GTK_OBJECT (button), button_signals[PRESSED]);
@@ -440,7 +439,6 @@ gtk_button_pressed (GtkButton *button)
 void
 gtk_button_released (GtkButton *button)
 {
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   gtk_signal_emit (GTK_OBJECT (button), button_signals[RELEASED]);
@@ -449,7 +447,6 @@ gtk_button_released (GtkButton *button)
 void
 gtk_button_clicked (GtkButton *button)
 {
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   gtk_signal_emit (GTK_OBJECT (button), button_signals[CLICKED]);
@@ -458,7 +455,6 @@ gtk_button_clicked (GtkButton *button)
 void
 gtk_button_enter (GtkButton *button)
 {
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   gtk_signal_emit (GTK_OBJECT (button), button_signals[ENTER]);
@@ -467,7 +463,6 @@ gtk_button_enter (GtkButton *button)
 void
 gtk_button_leave (GtkButton *button)
 {
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   gtk_signal_emit (GTK_OBJECT (button), button_signals[LEAVE]);
@@ -477,7 +472,6 @@ void
 gtk_button_set_relief (GtkButton *button,
 		       GtkReliefStyle newrelief)
 {
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   button->relief = newrelief;
@@ -502,7 +496,6 @@ gtk_button_realize (GtkWidget *widget)
   gint attributes_mask;
   gint border_width;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_BUTTON (widget));
 
   button = GTK_BUTTON (widget);
@@ -946,7 +939,6 @@ gtk_real_button_pressed (GtkButton *button)
 {
   GtkStateType new_state;
 
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   if (button->activate_timeout)
@@ -968,7 +960,6 @@ gtk_real_button_released (GtkButton *button)
 {
   GtkStateType new_state;
 
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   if (button->button_down)
@@ -999,7 +990,6 @@ gtk_real_button_enter (GtkButton *button)
 {
   GtkStateType new_state;
 
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   new_state = (button->button_down ? GTK_STATE_ACTIVE : GTK_STATE_PRELIGHT);
@@ -1017,7 +1007,6 @@ gtk_real_button_enter (GtkButton *button)
 static void
 gtk_real_button_leave (GtkButton *button)
 {
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
   
   if (button->activate_timeout)
@@ -1047,7 +1036,6 @@ gtk_real_button_activate (GtkButton *button)
 {
   GtkWidget *widget = GTK_WIDGET (button);
   
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   if (GTK_WIDGET_REALIZED (button) && !button->activate_timeout)

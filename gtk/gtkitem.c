@@ -149,7 +149,6 @@ gtk_item_map (GtkWidget *widget)
 {
   GtkBin *bin;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ITEM (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
@@ -167,7 +166,6 @@ gtk_item_map (GtkWidget *widget)
 static void
 gtk_item_unmap (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ITEM (widget));
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
@@ -181,7 +179,6 @@ gtk_item_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ITEM (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
@@ -215,7 +212,6 @@ static gint
 gtk_item_enter (GtkWidget        *widget,
 		GdkEventCrossing *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ITEM (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -226,7 +222,6 @@ static gint
 gtk_item_leave (GtkWidget        *widget,
 		GdkEventCrossing *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ITEM (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 

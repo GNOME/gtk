@@ -872,7 +872,6 @@ gtk_combo_new (void)
 void
 gtk_combo_set_value_in_list (GtkCombo * combo, gboolean val, gboolean ok_if_empty)
 {
-  g_return_if_fail (combo != NULL);
   g_return_if_fail (GTK_IS_COMBO (combo));
 
   combo->value_in_list = val;
@@ -882,7 +881,6 @@ gtk_combo_set_value_in_list (GtkCombo * combo, gboolean val, gboolean ok_if_empt
 void
 gtk_combo_set_case_sensitive (GtkCombo * combo, gboolean val)
 {
-  g_return_if_fail (combo != NULL);
   g_return_if_fail (GTK_IS_COMBO (combo));
 
   combo->case_sensitive = val;
@@ -892,7 +890,6 @@ gtk_combo_set_case_sensitive (GtkCombo * combo, gboolean val)
 void
 gtk_combo_set_use_arrows (GtkCombo * combo, gboolean val)
 {
-  g_return_if_fail (combo != NULL);
   g_return_if_fail (GTK_IS_COMBO (combo));
 
   combo->use_arrows = val;
@@ -902,7 +899,6 @@ gtk_combo_set_use_arrows (GtkCombo * combo, gboolean val)
 void
 gtk_combo_set_use_arrows_always (GtkCombo * combo, gboolean val)
 {
-  g_return_if_fail (combo != NULL);
   g_return_if_fail (GTK_IS_COMBO (combo));
 
   combo->use_arrows_always = val;
@@ -917,7 +913,6 @@ gtk_combo_set_popdown_strings (GtkCombo * combo, GList * strings)
   GList *list;
   GtkWidget *li;
 
-  g_return_if_fail (combo != NULL);
   g_return_if_fail (GTK_IS_COMBO (combo));
   g_return_if_fail (strings != NULL);
 
@@ -951,7 +946,6 @@ gtk_combo_set_item_string (GtkCombo * combo, GtkItem * item, const gchar * item_
   gchar *val;
   gint connected = 0;
 
-  g_return_if_fail (combo != NULL);
   g_return_if_fail (GTK_IS_COMBO (combo));
   g_return_if_fail (item != NULL);
 
@@ -983,7 +977,6 @@ gtk_combo_size_allocate (GtkWidget     *widget,
 {
   GtkCombo *combo;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_COMBO (widget));
   g_return_if_fail (allocation != NULL);
 
@@ -1007,7 +1000,6 @@ gtk_combo_size_allocate (GtkWidget     *widget,
 void
 gtk_combo_disable_activate (GtkCombo* combo)
 {
-  g_return_if_fail (combo != NULL);
   g_return_if_fail (GTK_IS_COMBO (combo));
 
   if ( combo->activate_id ) {

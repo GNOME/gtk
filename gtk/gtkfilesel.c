@@ -743,7 +743,6 @@ gtk_file_selection_new (const gchar *title)
 void
 gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
 {
-  g_return_if_fail (filesel != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
     
   /* delete, create directory, and rename */
@@ -786,7 +785,6 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
 void       
 gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel)
 {
-  g_return_if_fail (filesel != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
     
   if (filesel->fileop_ren_file)
@@ -818,7 +816,6 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
   gchar *buf;
   const char *name, *last_slash;
 
-  g_return_if_fail (filesel != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
   g_return_if_fail (filename != NULL);
 
@@ -864,7 +861,6 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
   char *sys_filename;
   char *text;
 
-  g_return_val_if_fail (filesel != NULL, nothing);
   g_return_val_if_fail (GTK_IS_FILE_SELECTION (filesel), nothing);
 
 #ifdef G_WITH_CYGWIN
@@ -888,7 +884,6 @@ void
 gtk_file_selection_complete (GtkFileSelection *filesel,
 			     const gchar      *pattern)
 {
-  g_return_if_fail (filesel != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
   g_return_if_fail (pattern != NULL);
 
@@ -972,7 +967,6 @@ gtk_file_selection_fileop_destroy (GtkWidget *widget,
 {
   GtkFileSelection *fs = data;
 
-  g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
   
   fs->fileop_dialog = NULL;
@@ -992,7 +986,6 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
   GError *error = NULL;
   CompletionState *cmpl_state;
   
-  g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
   dirname = gtk_entry_get_text (GTK_ENTRY (fs->fileop_entry));
@@ -1038,7 +1031,6 @@ gtk_file_selection_create_dir (GtkWidget *widget,
   GtkWidget *vbox;
   GtkWidget *button;
 
-  g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
   if (fs->fileop_dialog)
@@ -1112,7 +1104,6 @@ gtk_file_selection_delete_file_confirmed (GtkWidget *widget,
   GError *error = NULL;
   gchar *buf;
   
-  g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
   cmpl_state = (CompletionState*) fs->cmpl_state;
@@ -1162,7 +1153,6 @@ gtk_file_selection_delete_file (GtkWidget *widget,
   gchar *filename;
   gchar *buf;
   
-  g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
   if (fs->fileop_dialog)
@@ -1243,7 +1233,6 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget,
   CompletionState *cmpl_state;
   GError *error = NULL;
   
-  g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
   file = gtk_entry_get_text (GTK_ENTRY (fs->fileop_entry));
@@ -1312,7 +1301,6 @@ gtk_file_selection_rename_file (GtkWidget *widget,
   GtkWidget *button;
   gchar *buf;
   
-  g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
   if (fs->fileop_dialog)
@@ -1447,7 +1435,6 @@ gtk_file_selection_history_callback (GtkWidget *widget,
   HistoryCallbackArg *callback_arg;
   GList *list;
 
-  g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
   list = fs->history_list;
@@ -1476,7 +1463,6 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
   gint dir_len;
   gint i;
   
-  g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
   g_return_if_fail (current_directory != NULL);
   
@@ -1560,7 +1546,6 @@ gtk_file_selection_file_button (GtkWidget      *widget,
   g_return_if_fail (GTK_IS_CLIST (widget));
 
   fs = user_data;
-  g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
   
   gtk_clist_get_text (GTK_CLIST (fs->file_list), row, 0, &temp);
@@ -1610,7 +1595,6 @@ gtk_file_selection_dir_button (GtkWidget      *widget,
   g_return_if_fail (GTK_IS_CLIST (widget));
 
   fs = GTK_FILE_SELECTION (user_data);
-  g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
   gtk_clist_get_text (GTK_CLIST (fs->dir_list), row, 0, &temp);
@@ -1695,7 +1679,6 @@ gtk_file_selection_populate (GtkFileSelection *fs,
   gint possible_count = 0;
   gint selection_index = -1;
   
-  g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
   
   cmpl_state = (CompletionState*) fs->cmpl_state;

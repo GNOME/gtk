@@ -209,7 +209,6 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   GtkRequisition child_requisition;
   gint ipadding;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
   g_return_if_fail (requisition != NULL);
 
@@ -282,7 +281,6 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   guint offset;
   gint ipadding;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
   g_return_if_fail (allocation != NULL);
 
@@ -349,7 +347,6 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 static void
 gtk_menu_bar_paint (GtkWidget *widget, GdkRectangle *area)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
 
   if (GTK_WIDGET_DRAWABLE (widget))
@@ -373,7 +370,6 @@ static gint
 gtk_menu_bar_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_BAR (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 

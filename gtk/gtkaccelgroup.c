@@ -183,7 +183,6 @@ gtk_accel_group_attach (GtkAccelGroup	*accel_group,
   GSList *slist;
   
   g_return_if_fail (accel_group != NULL);
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (g_slist_find (accel_group->attach_objects, object) == NULL);
   
@@ -206,7 +205,6 @@ gtk_accel_group_detach (GtkAccelGroup	*accel_group,
   GSList *slist;
   
   g_return_if_fail (accel_group != NULL);
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (g_slist_find (accel_group->attach_objects, object) != NULL);
   
@@ -276,7 +274,6 @@ gtk_accel_groups_activate (GtkObject	    *object,
 			   guint	     accel_key,
 			   GdkModifierType   accel_mods)
 {
-  g_return_val_if_fail (object != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OBJECT (object), FALSE);
   
   if (gtk_accelerator_valid (accel_key, accel_mods))
@@ -349,7 +346,6 @@ gtk_accel_group_add (GtkAccelGroup	*accel_group,
   GtkAccelEntry *entry;
   
   g_return_if_fail (accel_group != NULL);
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (accel_signal != NULL);
   
@@ -511,7 +507,6 @@ gtk_accel_group_handle_add (GtkObject	      *object,
 {
   GtkAccelEntry *entry;
   
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (accel_group != NULL);
   g_return_if_fail (accel_signal_id > 0);
@@ -557,7 +552,6 @@ gtk_accel_group_remove (GtkAccelGroup	  *accel_group,
   guint remove_accelerator_signal_id = 0;
   
   g_return_if_fail (accel_group != NULL);
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   
   /* check for required signals in the objects branch
@@ -612,7 +606,6 @@ gtk_accel_group_handle_remove (GtkObject	 *object,
 {
   GtkAccelEntry *entry;
   
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (accel_group != NULL);
   
@@ -688,7 +681,6 @@ gtk_accel_group_create_remove (GtkType          class_type,
 GSList*
 gtk_accel_groups_from_object (GtkObject	     *object)
 {
-  g_return_val_if_fail (object != NULL, NULL);
   g_return_val_if_fail (GTK_IS_OBJECT (object), NULL);
   
   return gtk_object_get_data_by_id (object, accel_groups_key_id);
@@ -697,7 +689,6 @@ gtk_accel_groups_from_object (GtkObject	     *object)
 GSList*
 gtk_accel_group_entries_from_object (GtkObject	     *object)
 {
-  g_return_val_if_fail (object != NULL, NULL);
   g_return_val_if_fail (GTK_IS_OBJECT (object), NULL);
   
   return gtk_object_get_data_by_id (object, accel_entries_key_id);

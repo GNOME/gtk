@@ -230,7 +230,6 @@ gtk_check_button_size_request (GtkWidget      *widget,
 {
   GtkToggleButton *toggle_button;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CHECK_BUTTON (widget));
   g_return_if_fail (requisition != NULL);
   
@@ -279,7 +278,6 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
   GtkButton *button;
   GtkAllocation child_allocation;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CHECK_BUTTON (widget));
   g_return_if_fail (allocation != NULL);
   
@@ -365,7 +363,6 @@ gtk_check_button_draw_indicator (GtkCheckButton *check_button,
 {
   GtkCheckButtonClass *class;
   
-  g_return_if_fail (check_button != NULL);
   g_return_if_fail (GTK_IS_CHECK_BUTTON (check_button));
   
   class = GTK_CHECK_BUTTON_GET_CLASS (check_button);
@@ -390,7 +387,6 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   gint indicator_spacing;
   GdkWindow *window;
   
-  g_return_if_fail (check_button != NULL);
   g_return_if_fail (GTK_IS_CHECK_BUTTON (check_button));
   
   widget = GTK_WIDGET (check_button);

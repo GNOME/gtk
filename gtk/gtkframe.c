@@ -300,7 +300,6 @@ void
 gtk_frame_set_label (GtkFrame *frame,
 		     const gchar *label)
 {
-  g_return_if_fail (frame != NULL);
   g_return_if_fail (GTK_IS_FRAME (frame));
 
   if (!label)
@@ -334,7 +333,6 @@ gtk_frame_set_label (GtkFrame *frame,
 G_CONST_RETURN gchar *
 gtk_frame_get_label (GtkFrame *frame)
 {
-  g_return_val_if_fail (frame != NULL, NULL);
   g_return_val_if_fail (GTK_IS_FRAME (frame), NULL);
 
   if (frame->label_widget && GTK_IS_LABEL (frame->label_widget))
@@ -358,7 +356,6 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
 {
   gboolean need_resize = FALSE;
   
-  g_return_if_fail (frame != NULL);
   g_return_if_fail (GTK_IS_FRAME (frame));
   g_return_if_fail (label_widget == NULL || GTK_IS_WIDGET (label_widget));
   g_return_if_fail (label_widget == NULL || label_widget->parent == NULL);
@@ -409,7 +406,6 @@ gtk_frame_set_label_align (GtkFrame *frame,
 			   gfloat    xalign,
 			   gfloat    yalign)
 {
-  g_return_if_fail (frame != NULL);
   g_return_if_fail (GTK_IS_FRAME (frame));
 
   xalign = CLAMP (xalign, 0.0, 1.0);
@@ -456,7 +452,6 @@ void
 gtk_frame_set_shadow_type (GtkFrame      *frame,
 			   GtkShadowType  type)
 {
-  g_return_if_fail (frame != NULL);
   g_return_if_fail (GTK_IS_FRAME (frame));
 
   if ((GtkShadowType) frame->shadow_type != type)
@@ -673,7 +668,6 @@ static void
 gtk_frame_compute_child_allocation (GtkFrame      *frame,
 				    GtkAllocation *child_allocation)
 {
-  g_return_if_fail (frame != NULL);
   g_return_if_fail (GTK_IS_FRAME (frame));
   g_return_if_fail (child_allocation != NULL);
 

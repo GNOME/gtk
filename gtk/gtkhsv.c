@@ -1476,7 +1476,6 @@ gtk_hsv_get_color (GtkHSV *hsv, double *h, double *s, double *v)
 {
   HSVPrivate *priv;
   
-  g_return_if_fail (hsv != NULL);
   g_return_if_fail (GTK_IS_HSV (hsv));
   
   priv = hsv->priv;
@@ -1507,7 +1506,6 @@ gtk_hsv_set_metrics (GtkHSV *hsv,
   HSVPrivate *priv;
   int same_size;
   
-  g_return_if_fail (hsv != NULL);
   g_return_if_fail (GTK_IS_HSV (hsv));
   g_return_if_fail (size > 0);
   g_return_if_fail (ring_width > 0);
@@ -1541,7 +1539,6 @@ gtk_hsv_get_metrics (GtkHSV *hsv,
 {
   HSVPrivate *priv;
   
-  g_return_if_fail (hsv != NULL);
   g_return_if_fail (GTK_IS_HSV (hsv));
   
   priv = hsv->priv;
@@ -1571,7 +1568,6 @@ gtk_hsv_is_adjusting (GtkHSV *hsv)
 {
   HSVPrivate *priv;
   
-  g_return_val_if_fail (hsv != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_HSV (hsv), FALSE);
   
   priv = hsv->priv;

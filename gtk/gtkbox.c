@@ -360,7 +360,6 @@ gtk_box_pack_start (GtkBox    *box,
 {
   GtkBoxChild *child_info;
 
-  g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (child != NULL);
   g_return_if_fail (child->parent == NULL);
@@ -406,7 +405,6 @@ gtk_box_pack_end (GtkBox    *box,
 {
   GtkBoxChild *child_info;
 
-  g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (child != NULL);
   g_return_if_fail (child->parent == NULL);
@@ -447,7 +445,6 @@ void
 gtk_box_pack_start_defaults (GtkBox    *box,
 			     GtkWidget *child)
 {
-  g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (child != NULL);
 
@@ -458,7 +455,6 @@ void
 gtk_box_pack_end_defaults (GtkBox    *box,
 			   GtkWidget *child)
 {
-  g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (child != NULL);
 
@@ -469,7 +465,6 @@ void
 gtk_box_set_homogeneous (GtkBox  *box,
 			 gboolean homogeneous)
 {
-  g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
 
   if ((homogeneous ? TRUE : FALSE) != box->homogeneous)
@@ -501,7 +496,6 @@ void
 gtk_box_set_spacing (GtkBox *box,
 		     gint    spacing)
 {
-  g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
 
   if (spacing != box->spacing)
@@ -535,7 +529,6 @@ gtk_box_reorder_child (GtkBox    *box,
 {
   GList *list;
 
-  g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (child != NULL);
 
@@ -603,7 +596,6 @@ gtk_box_query_child_packing (GtkBox             *box,
   GList *list;
   GtkBoxChild *child_info = NULL;
 
-  g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (child != NULL);
 
@@ -641,7 +633,6 @@ gtk_box_set_child_packing (GtkBox               *box,
   GList *list;
   GtkBoxChild *child_info = NULL;
 
-  g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (child != NULL);
 
@@ -683,7 +674,6 @@ gtk_box_map (GtkWidget *widget)
   GtkBoxChild *child;
   GList *children;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_BOX (widget));
 
   box = GTK_BOX (widget);
@@ -708,7 +698,6 @@ gtk_box_unmap (GtkWidget *widget)
   GtkBoxChild *child;
   GList *children;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_BOX (widget));
 
   box = GTK_BOX (widget);
@@ -730,7 +719,6 @@ static void
 gtk_box_add (GtkContainer *container,
 	     GtkWidget    *widget)
 {
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_BOX (container));
   g_return_if_fail (widget != NULL);
 
@@ -745,7 +733,6 @@ gtk_box_remove (GtkContainer *container,
   GtkBoxChild *child;
   GList *children;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_BOX (container));
   g_return_if_fail (widget != NULL);
 
@@ -790,7 +777,6 @@ gtk_box_forall (GtkContainer *container,
   GtkBoxChild *child;
   GList *children;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_BOX (container));
   g_return_if_fail (callback != NULL);
 

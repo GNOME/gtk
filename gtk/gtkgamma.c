@@ -466,7 +466,6 @@ gtk_gamma_curve_destroy (GtkObject *object)
 {
   GtkGammaCurve *c;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_GAMMA_CURVE (object));
 
   c = GTK_GAMMA_CURVE (object);

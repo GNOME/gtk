@@ -236,7 +236,6 @@ gtk_progress_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (widget));
 
   progress = GTK_PROGRESS (widget);
@@ -270,7 +269,6 @@ gtk_progress_destroy (GtkObject *object)
 {
   GtkProgress *progress;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (object));
 
   progress = GTK_PROGRESS (object);
@@ -308,7 +306,6 @@ static gint
 gtk_progress_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_PROGRESS (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -328,7 +325,6 @@ static void
 gtk_progress_size_allocate (GtkWidget     *widget,
 			    GtkAllocation *allocation)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (widget));
   g_return_if_fail (allocation != NULL);
 
@@ -349,7 +345,6 @@ gtk_progress_create_pixmap (GtkProgress *progress)
 {
   GtkWidget *widget;
 
-  g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
   if (GTK_WIDGET_REALIZED (progress))
@@ -492,7 +487,6 @@ void
 gtk_progress_set_adjustment (GtkProgress   *progress,
 			     GtkAdjustment *adjustment)
 {
-  g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
   if (adjustment)
     g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
@@ -528,7 +522,6 @@ gtk_progress_configure (GtkProgress *progress,
   GtkAdjustment *adj;
   gboolean changed = FALSE;
 
-  g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
   g_return_if_fail (min <= max);
   g_return_if_fail (value >= min && value <= max);
@@ -553,7 +546,6 @@ void
 gtk_progress_set_percentage (GtkProgress *progress,
 			     gdouble      percentage)
 {
-  g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
   g_return_if_fail (percentage >= 0 && percentage <= 1.0);
 
@@ -566,7 +558,6 @@ gtk_progress_set_percentage (GtkProgress *progress,
 gdouble
 gtk_progress_get_current_percentage (GtkProgress *progress)
 {
-  g_return_val_if_fail (progress != NULL, 0);
   g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
 
   if (!progress->adjustment)
@@ -580,7 +571,6 @@ gdouble
 gtk_progress_get_percentage_from_value (GtkProgress *progress,
 					gdouble      value)
 {
-  g_return_val_if_fail (progress != NULL, 0);
   g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
 
   if (!progress->adjustment)
@@ -598,7 +588,6 @@ void
 gtk_progress_set_value (GtkProgress *progress,
 			gdouble      value)
 {
-  g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
   if (!progress->adjustment)
@@ -611,7 +600,6 @@ gtk_progress_set_value (GtkProgress *progress,
 gdouble
 gtk_progress_get_value (GtkProgress *progress)
 {
-  g_return_val_if_fail (progress != NULL, 0);
   g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
 
   return progress->adjustment ? progress->adjustment->value : 0;
@@ -621,7 +609,6 @@ void
 gtk_progress_set_show_text (GtkProgress *progress,
 			    gboolean     show_text)
 {
-  g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
   if (progress->show_text != show_text)
@@ -640,7 +627,6 @@ gtk_progress_set_text_alignment (GtkProgress *progress,
 				 gfloat       x_align,
 				 gfloat       y_align)
 {
-  g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
   g_return_if_fail (x_align >= 0.0 && x_align <= 1.0);
   g_return_if_fail (y_align >= 0.0 && y_align <= 1.0);
@@ -668,7 +654,6 @@ void
 gtk_progress_set_format_string (GtkProgress *progress,
 				const gchar *format)
 {
-  g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
   /* Turn on format, in case someone called
@@ -690,7 +675,6 @@ gtk_progress_set_format_string (GtkProgress *progress,
 gchar *
 gtk_progress_get_current_text (GtkProgress *progress)
 {
-  g_return_val_if_fail (progress != NULL, 0);
   g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
 
   if (!progress->adjustment)
@@ -704,7 +688,6 @@ gchar *
 gtk_progress_get_text_from_value (GtkProgress *progress,
 				  gdouble      value)
 {
-  g_return_val_if_fail (progress != NULL, 0);
   g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
 
   if (!progress->adjustment)
@@ -718,7 +701,6 @@ void
 gtk_progress_set_activity_mode (GtkProgress *progress,
 				gboolean     activity_mode)
 {
-  g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
   if (progress->activity_mode != (activity_mode != FALSE))

@@ -1,3 +1,10 @@
+Wed Jul 18 19:28:46 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/*.c: Patch from Matthias Clasen to remove remove
+	all instances of g_return_if_fail (foo != NULL); that are
+	immediately before a g_return_if_fail (GTK_IS_FOO (foo));
+	since the second check catches the NULL anyways.
+
 Wed Jul 18 18:23:05 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbutton.c gtk/gtkentry.c gtk/gtkmenu.c gtk/gtktextview.c

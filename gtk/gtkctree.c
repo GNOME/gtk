@@ -732,7 +732,6 @@ gtk_ctree_realize (GtkWidget *widget)
   GtkCTreeNode *child;
   gint i;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CTREE (widget));
 
   GTK_WIDGET_CLASS (parent_class)->realize (widget);
@@ -775,7 +774,6 @@ gtk_ctree_unrealize (GtkWidget *widget)
   GtkCTree *ctree;
   GtkCList *clist;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CTREE (widget));
 
   GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
@@ -812,7 +810,6 @@ gtk_ctree_button_press (GtkWidget      *widget,
   GtkCList *clist;
   gint button_actions;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CTREE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -869,7 +866,6 @@ draw_drag_highlight (GtkCList        *clist,
   gint i;
   gint y = 0;
 
-  g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
 
   ctree = GTK_CTREE (clist);
@@ -2246,7 +2242,6 @@ gtk_ctree_unlink (GtkCTree     *ctree,
   GtkCTreeNode *parent;
   GList *list;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
@@ -2365,7 +2360,6 @@ real_row_move (GtkCList *clist,
   GtkCTree *ctree;
   GtkCTreeNode *node;
 
-  g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
 
   if (GTK_CLIST_AUTO_SORT (clist))
@@ -2497,7 +2491,6 @@ change_focus_row_expansion (GtkCTree          *ctree,
   GtkCList *clist;
   GtkCTreeNode *node;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   clist = GTK_CLIST (ctree);
@@ -2543,7 +2536,6 @@ real_tree_expand (GtkCTree     *ctree,
   gboolean visible;
   gint level;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   if (!node || GTK_CTREE_ROW (node)->expanded || GTK_CTREE_ROW (node)->is_leaf)
@@ -2687,7 +2679,6 @@ real_tree_collapse (GtkCTree     *ctree,
   gboolean visible;
   gint level;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   if (!node || !GTK_CTREE_ROW (node)->expanded ||
@@ -2864,7 +2855,6 @@ cell_size_request (GtkCList       *clist,
   PangoLayout *layout;
   PangoRectangle logical_rect;
 
-  g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
   g_return_if_fail (requisition != NULL);
 
@@ -2955,7 +2945,6 @@ set_cell_contents (GtkCList    *clist,
   GdkPixmap *old_pixmap = NULL;
   GdkBitmap *old_mask = NULL;
 
-  g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
   g_return_if_fail (clist_row != NULL);
 
@@ -3326,7 +3315,6 @@ real_select_row (GtkCList *clist,
 {
   GList *node;
 
-  g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
   
   if ((node = g_list_nth (clist->row_list, row)) &&
@@ -3343,7 +3331,6 @@ real_unselect_row (GtkCList *clist,
 {
   GList *node;
 
-  g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
 
   if ((node = g_list_nth (clist->row_list, row)))
@@ -3361,7 +3348,6 @@ real_tree_select (GtkCTree     *ctree,
   GtkCTreeNode *sel_row;
   gboolean node_selected;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   if (!node || GTK_CTREE_ROW (node)->row.state == GTK_STATE_SELECTED ||
@@ -3417,7 +3403,6 @@ real_tree_unselect (GtkCTree     *ctree,
 {
   GtkCList *clist;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   if (!node || GTK_CTREE_ROW (node)->row.state != GTK_STATE_SELECTED)
@@ -3455,7 +3440,6 @@ real_select_all (GtkCList *clist)
   GtkCTree *ctree;
   GtkCTreeNode *node;
   
-  g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
 
   ctree = GTK_CTREE (clist);
@@ -3504,7 +3488,6 @@ real_unselect_all (GtkCList *clist)
   GtkCTreeNode *node;
   GList *list;
  
-  g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
   
   ctree = GTK_CTREE (clist);
@@ -3559,7 +3542,6 @@ ctree_is_hot_spot (GtkCTree     *ctree,
   gint xl;
   gint yu;
   
-  g_return_val_if_fail (ctree != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
   g_return_val_if_fail (node != NULL, FALSE);
 
@@ -3655,7 +3637,6 @@ real_insert_row (GtkCList *clist,
   GtkCTreeNode *sibling;
   GtkCTreeNode *node;
 
-  g_return_val_if_fail (clist != NULL, -1);
   g_return_val_if_fail (GTK_IS_CTREE (clist), -1);
 
   sibling = GTK_CTREE_NODE (g_list_nth (clist->row_list, row));
@@ -3690,7 +3671,6 @@ gtk_ctree_insert_node (GtkCTree     *ctree,
   GList *list;
   gint i;
 
-  g_return_val_if_fail (ctree != NULL, NULL);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
   if (sibling)
     g_return_val_if_fail (GTK_CTREE_ROW (sibling)->parent == parent, NULL);
@@ -3768,7 +3748,6 @@ gtk_ctree_insert_gnode (GtkCTree          *ctree,
   GNode *work;
   guint depth = 1;
 
-  g_return_val_if_fail (ctree != NULL, NULL);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
   g_return_val_if_fail (gnode != NULL, NULL);
   g_return_val_if_fail (func != NULL, NULL);
@@ -3834,7 +3813,6 @@ gtk_ctree_export_to_gnode (GtkCTree          *ctree,
   GNode *gnode;
   gint depth;
 
-  g_return_val_if_fail (ctree != NULL, NULL);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
   g_return_val_if_fail (node != NULL, NULL);
   g_return_val_if_fail (func != NULL, NULL);
@@ -3877,7 +3855,6 @@ real_remove_row (GtkCList *clist,
 {
   GtkCTreeNode *node;
 
-  g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
 
   node = GTK_CTREE_NODE (g_list_nth (clist->row_list, row));
@@ -3892,7 +3869,6 @@ gtk_ctree_remove_node (GtkCTree     *ctree,
 {
   GtkCList *clist;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   clist = GTK_CLIST (ctree);
@@ -3926,7 +3902,6 @@ real_clear (GtkCList *clist)
   GtkCTreeNode *work;
   GtkCTreeNode *ptr;
 
-  g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
 
   ctree = GTK_CTREE (clist);
@@ -3965,7 +3940,6 @@ gtk_ctree_post_recursive (GtkCTree     *ctree,
   GtkCTreeNode *work;
   GtkCTreeNode *tmp;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (func != NULL);
 
@@ -3995,7 +3969,6 @@ gtk_ctree_post_recursive_to_depth (GtkCTree     *ctree,
   GtkCTreeNode *work;
   GtkCTreeNode *tmp;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (func != NULL);
 
@@ -4033,7 +4006,6 @@ gtk_ctree_pre_recursive (GtkCTree     *ctree,
   GtkCTreeNode *work;
   GtkCTreeNode *tmp;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (func != NULL);
 
@@ -4063,7 +4035,6 @@ gtk_ctree_pre_recursive_to_depth (GtkCTree     *ctree,
   GtkCTreeNode *work;
   GtkCTreeNode *tmp;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (func != NULL);
 
@@ -4099,7 +4070,6 @@ gtk_ctree_is_viewable (GtkCTree     *ctree,
 { 
   GtkCTreeRow *work;
 
-  g_return_val_if_fail (ctree != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
   g_return_val_if_fail (node != NULL, FALSE);
 
@@ -4118,7 +4088,6 @@ GtkCTreeNode *
 gtk_ctree_last (GtkCTree     *ctree,
 		GtkCTreeNode *node)
 {
-  g_return_val_if_fail (ctree != NULL, NULL);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
 
   if (!node) 
@@ -4139,7 +4108,6 @@ gtk_ctree_find_node_ptr (GtkCTree    *ctree,
 {
   GtkCTreeNode *node;
   
-  g_return_val_if_fail (ctree != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
   g_return_val_if_fail (ctree_row != NULL, FALSE);
   
@@ -4158,7 +4126,6 @@ GtkCTreeNode *
 gtk_ctree_node_nth (GtkCTree *ctree,
 		    guint     row)
 {
-  g_return_val_if_fail (ctree != NULL, NULL);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
 
   if ((row < 0) || (row >= GTK_CLIST(ctree)->rows))
@@ -4236,7 +4203,6 @@ gtk_ctree_find_all_by_row_data (GtkCTree     *ctree,
 {
   GList *list = NULL;
 
-  g_return_val_if_fail (ctree != NULL, NULL);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
 
   /* if node == NULL then look in the whole tree */
@@ -4297,7 +4263,6 @@ gtk_ctree_find_all_by_row_data_custom (GtkCTree     *ctree,
 {
   GList *list = NULL;
 
-  g_return_val_if_fail (ctree != NULL, NULL);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
   g_return_val_if_fail (func != NULL, NULL);
 
@@ -4335,7 +4300,6 @@ gtk_ctree_is_hot_spot (GtkCTree *ctree,
   gint column;
   gint row;
   
-  g_return_val_if_fail (ctree != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
 
   if (gtk_clist_get_selection_info (GTK_CLIST (ctree), x, y, &row, &column))
@@ -4357,7 +4321,6 @@ gtk_ctree_move (GtkCTree     *ctree,
 		GtkCTreeNode *new_parent, 
 		GtkCTreeNode *new_sibling)
 {
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
   
@@ -4369,7 +4332,6 @@ void
 gtk_ctree_expand (GtkCTree     *ctree,
 		  GtkCTreeNode *node)
 {
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
   
@@ -4386,7 +4348,6 @@ gtk_ctree_expand_recursive (GtkCTree     *ctree,
   GtkCList *clist;
   gboolean thaw = FALSE;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   clist = GTK_CLIST (ctree);
@@ -4414,7 +4375,6 @@ gtk_ctree_expand_to_depth (GtkCTree     *ctree,
   GtkCList *clist;
   gboolean thaw = FALSE;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   clist = GTK_CLIST (ctree);
@@ -4439,7 +4399,6 @@ void
 gtk_ctree_collapse (GtkCTree     *ctree,
 		    GtkCTreeNode *node)
 {
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
   
@@ -4457,7 +4416,6 @@ gtk_ctree_collapse_recursive (GtkCTree     *ctree,
   gboolean thaw = FALSE;
   gint i;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   if (node && GTK_CTREE_ROW (node)->is_leaf)
@@ -4492,7 +4450,6 @@ gtk_ctree_collapse_to_depth (GtkCTree     *ctree,
   gboolean thaw = FALSE;
   gint i;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   if (node && GTK_CTREE_ROW (node)->is_leaf)
@@ -4524,7 +4481,6 @@ void
 gtk_ctree_toggle_expansion (GtkCTree     *ctree,
 			    GtkCTreeNode *node)
 {
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
   
@@ -4541,7 +4497,6 @@ gtk_ctree_toggle_expansion_recursive (GtkCTree     *ctree,
   GtkCList *clist;
   gboolean thaw = FALSE;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   
   if (node && GTK_CTREE_ROW (node)->is_leaf)
@@ -4566,7 +4521,6 @@ void
 gtk_ctree_select (GtkCTree     *ctree, 
 		  GtkCTreeNode *node)
 {
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
@@ -4579,7 +4533,6 @@ void
 gtk_ctree_unselect (GtkCTree     *ctree, 
 		    GtkCTreeNode *node)
 {
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
@@ -4609,7 +4562,6 @@ gtk_ctree_real_select_recursive (GtkCTree     *ctree,
   GtkCList *clist;
   gboolean thaw = FALSE;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   clist = GTK_CLIST (ctree);
@@ -4661,7 +4613,6 @@ gtk_ctree_node_set_text (GtkCTree     *ctree,
 {
   GtkCList *clist;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
@@ -4686,7 +4637,6 @@ gtk_ctree_node_set_pixmap (GtkCTree     *ctree,
 {
   GtkCList *clist;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
   g_return_if_fail (pixmap != NULL);
@@ -4718,7 +4668,6 @@ gtk_ctree_node_set_pixtext (GtkCTree     *ctree,
 {
   GtkCList *clist;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
   if (column != ctree->tree_column)
@@ -4757,7 +4706,6 @@ gtk_ctree_set_node_info (GtkCTree     *ctree,
   gboolean old_leaf;
   gboolean old_expanded;
  
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
@@ -4806,7 +4754,6 @@ gtk_ctree_node_set_shift (GtkCTree     *ctree,
   GtkRequisition requisition;
   gboolean visible = FALSE;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
@@ -4861,7 +4808,6 @@ gtk_ctree_node_set_selectable (GtkCTree     *ctree,
 			       GtkCTreeNode *node,
 			       gboolean      selectable)
 {
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
@@ -4902,7 +4848,6 @@ gtk_ctree_node_get_cell_type (GtkCTree     *ctree,
 			      GtkCTreeNode *node,
 			      gint          column)
 {
-  g_return_val_if_fail (ctree != NULL, -1);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), -1);
   g_return_val_if_fail (node != NULL, -1);
 
@@ -4918,7 +4863,6 @@ gtk_ctree_node_get_text (GtkCTree      *ctree,
 			 gint           column,
 			 gchar        **text)
 {
-  g_return_val_if_fail (ctree != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
   g_return_val_if_fail (node != NULL, FALSE);
 
@@ -4941,7 +4885,6 @@ gtk_ctree_node_get_pixmap (GtkCTree     *ctree,
 			   GdkPixmap   **pixmap,
 			   GdkBitmap   **mask)
 {
-  g_return_val_if_fail (ctree != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
   g_return_val_if_fail (node != NULL, FALSE);
 
@@ -4968,7 +4911,6 @@ gtk_ctree_node_get_pixtext (GtkCTree      *ctree,
 			    GdkPixmap    **pixmap,
 			    GdkBitmap    **mask)
 {
-  g_return_val_if_fail (ctree != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
   g_return_val_if_fail (node != NULL, FALSE);
   
@@ -5004,7 +4946,6 @@ gtk_ctree_get_node_info (GtkCTree      *ctree,
 			 gboolean      *is_leaf,
 			 gboolean      *expanded)
 {
-  g_return_val_if_fail (ctree != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
   g_return_val_if_fail (node != NULL, FALSE);
   
@@ -5040,7 +4981,6 @@ gtk_ctree_node_set_cell_style (GtkCTree     *ctree,
   GtkRequisition requisition;
   gboolean visible = FALSE;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
@@ -5092,7 +5032,6 @@ gtk_ctree_node_get_cell_style (GtkCTree     *ctree,
 			       GtkCTreeNode *node,
 			       gint          column)
 {
-  g_return_val_if_fail (ctree != NULL, NULL);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
   g_return_val_if_fail (node != NULL, NULL);
 
@@ -5113,7 +5052,6 @@ gtk_ctree_node_set_row_style (GtkCTree     *ctree,
   gint *old_width = NULL;
   gint i;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
@@ -5169,7 +5107,6 @@ GtkStyle *
 gtk_ctree_node_get_row_style (GtkCTree     *ctree,
 			      GtkCTreeNode *node)
 {
-  g_return_val_if_fail (ctree != NULL, NULL);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
   g_return_val_if_fail (node != NULL, NULL);
 
@@ -5181,7 +5118,6 @@ gtk_ctree_node_set_foreground (GtkCTree     *ctree,
 			       GtkCTreeNode *node,
 			       GdkColor     *color)
 {
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
@@ -5204,7 +5140,6 @@ gtk_ctree_node_set_background (GtkCTree     *ctree,
 			       GtkCTreeNode *node,
 			       GdkColor     *color)
 {
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
@@ -5239,7 +5174,6 @@ gtk_ctree_node_set_row_data_full (GtkCTree         *ctree,
   GtkDestroyNotify dnotify;
   gpointer ddata;
   
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
@@ -5257,7 +5191,6 @@ gpointer
 gtk_ctree_node_get_row_data (GtkCTree     *ctree,
 			     GtkCTreeNode *node)
 {
-  g_return_val_if_fail (ctree != NULL, NULL);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
 
   return node ? GTK_CTREE_ROW (node)->row.data : NULL;
@@ -5273,7 +5206,6 @@ gtk_ctree_node_moveto (GtkCTree     *ctree,
   gint row = -1;
   GtkCList *clist;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   clist = GTK_CLIST (ctree);
@@ -5310,7 +5242,6 @@ gtk_ctree_set_indent (GtkCTree *ctree,
 {
   GtkCList *clist;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (indent >= 0);
 
@@ -5336,7 +5267,6 @@ gtk_ctree_set_spacing (GtkCTree *ctree,
   GtkCList *clist;
   gint old_spacing;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (spacing >= 0);
 
@@ -5361,7 +5291,6 @@ void
 gtk_ctree_set_show_stub (GtkCTree *ctree, 
 			 gboolean  show_stub)
 {
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   show_stub = show_stub != FALSE;
@@ -5387,7 +5316,6 @@ gtk_ctree_set_line_style (GtkCTree          *ctree,
   GtkCList *clist;
   GtkCTreeLineStyle old_style;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   if (line_style == ctree->line_style)
@@ -5447,7 +5375,6 @@ gtk_ctree_set_expander_style (GtkCTree              *ctree,
   GtkCList *clist;
   GtkCTreeExpanderStyle old_style;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   if (expander_style == ctree->expander_style)
@@ -5557,7 +5484,6 @@ gtk_ctree_sort_recursive (GtkCTree     *ctree,
   GtkCList *clist;
   GtkCTreeNode *focus_node = NULL;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   clist = GTK_CLIST (ctree);
@@ -5605,7 +5531,6 @@ gtk_ctree_sort_node (GtkCTree     *ctree,
   GtkCList *clist;
   GtkCTreeNode *focus_node = NULL;
 
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   clist = GTK_CLIST (ctree);
@@ -5693,7 +5618,6 @@ resync_selection (GtkCList *clist, GdkEvent *event)
   gint row;
   gboolean unselect;
 
-  g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
 
   if (clist->selection_mode != GTK_SELECTION_EXTENDED)
@@ -5806,7 +5730,6 @@ real_undo_selection (GtkCList *clist)
   GtkCTree *ctree;
   GList *work;
 
-  g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
 
   if (clist->selection_mode != GTK_SELECTION_EXTENDED)
@@ -5855,7 +5778,6 @@ void
 gtk_ctree_set_drag_compare_func (GtkCTree                *ctree,
 				 GtkCTreeCompareDragFunc  cmp_func)
 {
-  g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
   ctree->drag_compare = cmp_func;
@@ -5867,7 +5789,6 @@ check_drag (GtkCTree        *ctree,
 	    GtkCTreeNode    *drag_target,
 	    GtkCListDragPos  insert_pos)
 {
-  g_return_val_if_fail (ctree != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
 
   if (drag_source && drag_source != drag_target &&
@@ -5985,7 +5906,6 @@ gtk_ctree_drag_begin (GtkWidget	     *widget,
   GtkCTree *ctree;
   gboolean use_icons;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CTREE (widget));
   g_return_if_fail (context != NULL);
 
@@ -6035,7 +5955,6 @@ gtk_ctree_drag_motion (GtkWidget      *widget,
   GtkCListDestInfo new_info;
   GtkCListDestInfo *dest_info;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CTREE (widget), FALSE);
 
   clist = GTK_CLIST (widget);
@@ -6138,7 +6057,6 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
   GtkCTree *ctree;
   GtkCList *clist;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CTREE (widget));
   g_return_if_fail (context != NULL);
   g_return_if_fail (selection_data != NULL);

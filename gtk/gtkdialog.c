@@ -740,7 +740,6 @@ void
 gtk_dialog_response (GtkDialog *dialog,
                      gint       response_id)
 {
-  g_return_if_fail (dialog != NULL);
   g_return_if_fail (GTK_IS_DIALOG (dialog));
 
   gtk_signal_emit (GTK_OBJECT (dialog),

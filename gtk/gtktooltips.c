@@ -167,7 +167,6 @@ gtk_tooltips_destroy (GtkObject *object)
 void
 gtk_tooltips_force_window (GtkTooltips *tooltips)
 {
-  g_return_if_fail (tooltips != NULL);
   g_return_if_fail (GTK_IS_TOOLTIPS (tooltips));
 
   if (!tooltips->tip_window)
@@ -240,7 +239,6 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
 {
   GtkTooltipsData *tooltipsdata;
 
-  g_return_if_fail (tooltips != NULL);
   g_return_if_fail (GTK_IS_TOOLTIPS (tooltips));
   g_return_if_fail (widget != NULL);
 

@@ -898,7 +898,6 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
 G_CONST_RETURN gchar *
 gtk_label_get_text (GtkLabel *label)
 {
-  g_return_val_if_fail (label != NULL, NULL);
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
 
   return label->text;
@@ -1058,7 +1057,6 @@ void
 gtk_label_get (GtkLabel *label,
 	       gchar   **str)
 {
-  g_return_if_fail (label != NULL);
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
   

@@ -1698,7 +1698,6 @@ gtk_text_view_get_visible_rect (GtkTextView  *text_view,
 {
   GtkWidget *widget;
 
-  g_return_if_fail (text_view != NULL);
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
   widget = GTK_WIDGET (text_view);
@@ -1729,7 +1728,6 @@ void
 gtk_text_view_set_wrap_mode (GtkTextView *text_view,
                              GtkWrapMode  wrap_mode)
 {
-  g_return_if_fail (text_view != NULL);
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
   if (text_view->wrap_mode != wrap_mode)
@@ -1757,7 +1755,6 @@ gtk_text_view_set_wrap_mode (GtkTextView *text_view,
 GtkWrapMode
 gtk_text_view_get_wrap_mode (GtkTextView *text_view)
 {
-  g_return_val_if_fail (text_view != NULL, GTK_WRAP_NONE);
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), GTK_WRAP_NONE);
 
   return text_view->wrap_mode;
@@ -4920,7 +4917,6 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
 {
   gboolean need_adjust = FALSE;
 
-  g_return_if_fail (text_view != NULL);
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
   if (hadj)

@@ -147,7 +147,6 @@ void
 gtk_adjustment_set_value (GtkAdjustment        *adjustment,
 			  gdouble               value)
 {
-  g_return_if_fail (adjustment != NULL);
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   value = CLAMP (value, adjustment->lower, adjustment->upper);
@@ -163,7 +162,6 @@ gtk_adjustment_set_value (GtkAdjustment        *adjustment,
 void
 gtk_adjustment_changed (GtkAdjustment        *adjustment)
 {
-  g_return_if_fail (adjustment != NULL);
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   gtk_signal_emit (GTK_OBJECT (adjustment), adjustment_signals[CHANGED]);
@@ -172,7 +170,6 @@ gtk_adjustment_changed (GtkAdjustment        *adjustment)
 void
 gtk_adjustment_value_changed (GtkAdjustment        *adjustment)
 {
-  g_return_if_fail (adjustment != NULL);
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   gtk_signal_emit (GTK_OBJECT (adjustment), adjustment_signals[VALUE_CHANGED]);
@@ -185,7 +182,6 @@ gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
 {
   gboolean need_emission;
 
-  g_return_if_fail (adjustment != NULL);
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   lower = CLAMP (lower, adjustment->lower, adjustment->upper);

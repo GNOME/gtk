@@ -448,7 +448,6 @@ gtk_object_get_property (GObject     *object,
 void
 gtk_object_sink (GtkObject *object)
 {
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
   if (GTK_OBJECT_FLOATING (object))
@@ -493,7 +492,6 @@ gtk_object_weakref (GtkObject        *object,
 {
   GtkWeakRef *weak;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (notify != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
@@ -514,7 +512,6 @@ gtk_object_weakunref (GtkObject        *object,
 {
   GtkWeakRef *weaks, *w, **wp;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
   if (!quark_weakrefs)

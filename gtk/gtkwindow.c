@@ -749,7 +749,6 @@ void
 gtk_window_set_title (GtkWindow   *window,
 		      const gchar *title)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   if (window->title)
@@ -805,7 +804,6 @@ gtk_window_set_wmclass (GtkWindow *window,
 			const gchar *wmclass_name,
 			const gchar *wmclass_class)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   g_free (window->wmclass_name);
@@ -885,7 +883,6 @@ void
 gtk_window_set_focus (GtkWindow *window,
 		      GtkWidget *focus)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
   if (focus)
     {
@@ -916,7 +913,6 @@ void
 gtk_window_set_default (GtkWindow *window,
 			GtkWidget *default_widget)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   if (default_widget)
@@ -950,7 +946,6 @@ gtk_window_set_policy (GtkWindow *window,
 		       gboolean   allow_grow,
 		       gboolean   auto_shrink)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   window->allow_shrink = (allow_shrink != FALSE);
@@ -969,7 +964,6 @@ void
 gtk_window_add_accel_group (GtkWindow        *window,
 			    GtkAccelGroup    *accel_group)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (accel_group != NULL);
 
@@ -980,7 +974,6 @@ void
 gtk_window_remove_accel_group (GtkWindow       *window,
 			       GtkAccelGroup   *accel_group)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (accel_group != NULL);
 
@@ -1140,7 +1133,6 @@ gtk_window_set_position (GtkWindow         *window,
 gboolean 
 gtk_window_activate_focus (GtkWindow *window)
 {
-  g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
   if (window->focus_widget)
@@ -1156,7 +1148,6 @@ gtk_window_activate_focus (GtkWindow *window)
 gboolean
 gtk_window_activate_default (GtkWindow *window)
 {
-  g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
   if (window->default_widget && GTK_WIDGET_IS_SENSITIVE (window->default_widget) &&
@@ -1193,7 +1184,6 @@ void
 gtk_window_set_modal (GtkWindow *window,
 		      gboolean   modal)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   window->modal = modal != FALSE;
@@ -1253,7 +1243,6 @@ gtk_window_add_embedded_xid (GtkWindow *window, guint xid)
 {
   GList *embedded_windows;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   embedded_windows = gtk_object_get_data (GTK_OBJECT (window), "gtk-embedded");
@@ -1275,7 +1264,6 @@ gtk_window_remove_embedded_xid (GtkWindow *window, guint xid)
   GList *embedded_windows;
   GList *node;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
   
   embedded_windows = gtk_object_get_data (GTK_OBJECT (window), "gtk-embedded");
@@ -1303,7 +1291,6 @@ _gtk_window_reposition (GtkWindow *window,
 {
   GtkWindowGeometryInfo *info;
   
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   /* keep this in sync with gtk_window_compute_reposition()
@@ -1927,7 +1914,6 @@ gtk_window_hide (GtkWidget *widget)
 {
   GtkWindow *window;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
 
   window = GTK_WINDOW (widget);
@@ -1945,7 +1931,6 @@ gtk_window_map (GtkWidget *widget)
   GtkWindow *window;
   GdkWindow *toplevel;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
@@ -1988,7 +1973,6 @@ gtk_window_unmap (GtkWidget *widget)
 {
   GtkWindow *window;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
 
   window = GTK_WINDOW (widget);
@@ -2145,7 +2129,6 @@ gtk_window_unrealize (GtkWidget *widget)
 {
   GtkWindow *window;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
 
   window = GTK_WINDOW (widget);
@@ -2167,7 +2150,6 @@ gtk_window_size_request (GtkWidget      *widget,
   GtkWindow *window;
   GtkBin *bin;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
   g_return_if_fail (requisition != NULL);
 
@@ -2195,7 +2177,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkWindow *window;
   GtkAllocation child_allocation;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
   g_return_if_fail (allocation != NULL);
 
@@ -2229,7 +2210,6 @@ gtk_window_event (GtkWidget *widget, GdkEvent *event)
   gboolean return_val;
 
   
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -2293,7 +2273,6 @@ gtk_window_configure_event (GtkWidget         *widget,
 {
   GtkWindow *window;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -2345,7 +2324,6 @@ gtk_window_key_press_event (GtkWidget   *widget,
   GtkWindow *window;
   gboolean handled;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -2402,7 +2380,6 @@ gtk_window_key_release_event (GtkWidget   *widget,
   GtkWindow *window;
   gint handled;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -2425,7 +2402,6 @@ static gint
 gtk_window_enter_notify_event (GtkWidget        *widget,
 			       GdkEventCrossing *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -2436,7 +2412,6 @@ static gint
 gtk_window_leave_notify_event (GtkWidget        *widget,
 			       GdkEventCrossing *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -2531,7 +2506,6 @@ static gint
 gtk_window_client_event (GtkWidget	*widget,
 			 GdkEventClient	*event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -2549,7 +2523,6 @@ gtk_window_check_resize (GtkContainer *container)
 {
   GtkWindow *window;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_WINDOW (container));
 
   window = GTK_WINDOW (container);
@@ -2614,7 +2587,6 @@ gtk_window_real_set_focus (GtkWindow *window,
   GdkEventFocus event;
   gboolean def_flags = 0;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
   
   if (window->default_widget)
@@ -3254,7 +3226,6 @@ static gint
 gtk_window_expose (GtkWidget      *widget,
 		   GdkEventExpose *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -3285,7 +3256,6 @@ void
 gtk_window_set_has_frame (GtkWindow *window, 
 			  gboolean   setting)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (!GTK_WIDGET_REALIZED (window));
 
@@ -3330,7 +3300,6 @@ gtk_window_set_frame_dimensions (GtkWindow *window,
 {
   GtkWidget *widget = GTK_WIDGET (window);
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   if (window->frame_left == left &&

@@ -223,7 +223,6 @@ gtk_paned_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PANED (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
@@ -277,7 +276,6 @@ gtk_paned_map (GtkWidget *widget)
 {
   GtkPaned *paned;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PANED (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
@@ -298,7 +296,6 @@ gtk_paned_map (GtkWidget *widget)
 static void
 gtk_paned_unmap (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PANED (widget));
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
@@ -311,7 +308,6 @@ gtk_paned_unrealize (GtkWidget *widget)
 {
   GtkPaned *paned;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PANED (widget));
 
   paned = GTK_PANED (widget);
@@ -341,7 +337,6 @@ gtk_paned_expose (GtkWidget      *widget,
 {
   GtkPaned *paned;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_PANED (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -376,7 +371,6 @@ gtk_paned_pack1 (GtkPaned  *paned,
 		 gboolean   resize,
 		 gboolean   shrink)
 {
-  g_return_if_fail (paned != NULL);
   g_return_if_fail (GTK_IS_PANED (paned));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
@@ -407,7 +401,6 @@ gtk_paned_pack2 (GtkPaned  *paned,
 		 gboolean   resize,
 		 gboolean   shrink)
 {
-  g_return_if_fail (paned != NULL);
   g_return_if_fail (GTK_IS_PANED (paned));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
@@ -439,7 +432,6 @@ gtk_paned_add (GtkContainer *container,
 {
   GtkPaned *paned;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_PANED (container));
   g_return_if_fail (widget != NULL);
 
@@ -458,7 +450,6 @@ gtk_paned_remove (GtkContainer *container,
   GtkPaned *paned;
   gboolean was_visible;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_PANED (container));
   g_return_if_fail (widget != NULL);
 
@@ -493,7 +484,6 @@ gtk_paned_forall (GtkContainer *container,
 {
   GtkPaned *paned;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_PANED (container));
   g_return_if_fail (callback != NULL);
 
@@ -516,7 +506,6 @@ gtk_paned_forall (GtkContainer *container,
 gint
 gtk_paned_get_position (GtkPaned  *paned)
 {
-  g_return_val_if_fail (paned != NULL, 0);
   g_return_val_if_fail (GTK_IS_PANED (paned), 0);
 
   return paned->child1_size;
@@ -536,7 +525,6 @@ gtk_paned_set_position (GtkPaned *paned,
 {
   GObject *object;
   
-  g_return_if_fail (paned != NULL);
   g_return_if_fail (GTK_IS_PANED (paned));
 
   object = G_OBJECT (paned);
@@ -574,7 +562,6 @@ gtk_paned_compute_position(GtkPaned *paned,
 {
   gint old_position;
   
-  g_return_if_fail (paned != NULL);
   g_return_if_fail (GTK_IS_PANED (paned));
 
   old_position = paned->child1_size;

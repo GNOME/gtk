@@ -416,7 +416,6 @@ void
 gtk_scale_set_draw_value (GtkScale *scale,
 			  gboolean  draw_value)
 {
-  g_return_if_fail (scale != NULL);
   g_return_if_fail (GTK_IS_SCALE (scale));
 
   draw_value = draw_value != FALSE;
@@ -513,7 +512,6 @@ _gtk_scale_get_value_size (GtkScale *scale,
 {
   GtkRange *range;
 
-  g_return_if_fail (scale != NULL);
   g_return_if_fail (GTK_IS_SCALE (scale));
 
   if (scale->draw_value)

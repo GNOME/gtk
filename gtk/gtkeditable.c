@@ -145,7 +145,6 @@ gtk_editable_select_region (GtkEditable *editable,
 void
 gtk_editable_cut_clipboard (GtkEditable *editable)
 {
-  g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
   gtk_signal_emit_by_name (GTK_OBJECT (editable), "cut_clipboard");
@@ -154,7 +153,6 @@ gtk_editable_cut_clipboard (GtkEditable *editable)
 void
 gtk_editable_copy_clipboard (GtkEditable *editable)
 {
-  g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
   gtk_signal_emit_by_name (GTK_OBJECT (editable), "copy_clipboard");
@@ -163,7 +161,6 @@ gtk_editable_copy_clipboard (GtkEditable *editable)
 void
 gtk_editable_paste_clipboard (GtkEditable *editable)
 {
-  g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
   gtk_signal_emit_by_name (GTK_OBJECT (editable), "paste_clipboard");

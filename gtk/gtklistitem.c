@@ -418,7 +418,6 @@ gtk_list_item_realize (GtkWidget *widget)
   /*if (GTK_WIDGET_CLASS (parent_class)->realize)
     (* GTK_WIDGET_CLASS (parent_class)->realize) (widget);*/
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_LIST_ITEM (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
@@ -458,7 +457,6 @@ gtk_list_item_size_request (GtkWidget      *widget,
   GtkBin *bin;
   GtkRequisition child_requisition;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_LIST_ITEM (widget));
   g_return_if_fail (requisition != NULL);
 
@@ -484,7 +482,6 @@ gtk_list_item_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkAllocation child_allocation;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_LIST_ITEM (widget));
   g_return_if_fail (allocation != NULL);
 
@@ -579,7 +576,6 @@ gtk_list_item_expose (GtkWidget      *widget,
 static void
 gtk_real_list_item_select (GtkItem *item)
 {
-  g_return_if_fail (item != NULL);
   g_return_if_fail (GTK_IS_LIST_ITEM (item));
 
   switch (GTK_WIDGET (item)->state)
@@ -596,7 +592,6 @@ gtk_real_list_item_select (GtkItem *item)
 static void
 gtk_real_list_item_deselect (GtkItem *item)
 {
-  g_return_if_fail (item != NULL);
   g_return_if_fail (GTK_IS_LIST_ITEM (item));
 
   if (GTK_WIDGET (item)->state == GTK_STATE_SELECTED)
@@ -606,7 +601,6 @@ gtk_real_list_item_deselect (GtkItem *item)
 static void
 gtk_real_list_item_toggle (GtkItem *item)
 {
-  g_return_if_fail (item != NULL);
   g_return_if_fail (GTK_IS_LIST_ITEM (item));
   
   switch (GTK_WIDGET (item)->state)

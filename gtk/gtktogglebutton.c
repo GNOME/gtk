@@ -287,7 +287,6 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
 {
   GtkWidget *widget;
 
-  g_return_if_fail (toggle_button != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
 
   widget = GTK_WIDGET (toggle_button);
@@ -355,7 +354,6 @@ void
 gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
 			      gboolean         is_active)
 {
-  g_return_if_fail (toggle_button != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
 
   is_active = is_active != FALSE;
@@ -368,7 +366,6 @@ gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
 gboolean
 gtk_toggle_button_get_active (GtkToggleButton *toggle_button)
 {
-  g_return_val_if_fail (toggle_button != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button), FALSE);
 
   return (toggle_button->active) ? TRUE : FALSE;
@@ -378,7 +375,6 @@ gtk_toggle_button_get_active (GtkToggleButton *toggle_button)
 void
 gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
 {
-  g_return_if_fail (toggle_button != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
 
   gtk_signal_emit (GTK_OBJECT (toggle_button), toggle_button_signals[TOGGLED]);
@@ -564,7 +560,6 @@ gtk_toggle_button_pressed (GtkButton *button)
   GtkToggleButton *toggle_button;
   GtkStateType new_state;
 
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
 
   toggle_button = GTK_TOGGLE_BUTTON (button);
@@ -586,7 +581,6 @@ gtk_toggle_button_released (GtkButton *button)
   GtkToggleButton *toggle_button;
   GtkStateType new_state;
 
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
 
   if (button->button_down)
@@ -618,7 +612,6 @@ gtk_toggle_button_clicked (GtkButton *button)
   GtkToggleButton *toggle_button;
   GtkStateType new_state;
 
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
 
   toggle_button = GTK_TOGGLE_BUTTON (button);
@@ -645,7 +638,6 @@ gtk_toggle_button_enter (GtkButton *button)
   GtkToggleButton *toggle_button;
   GtkStateType new_state;
 
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
 
   toggle_button = GTK_TOGGLE_BUTTON (button);
@@ -665,7 +657,6 @@ gtk_toggle_button_leave (GtkButton *button)
   GtkToggleButton *toggle_button;
   GtkStateType new_state;
 
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
 
   toggle_button = GTK_TOGGLE_BUTTON (button);
@@ -684,7 +675,6 @@ gtk_toggle_button_realize (GtkWidget *widget)
   gint attributes_mask;
   gint border_width;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
   
   toggle_button = GTK_TOGGLE_BUTTON (widget);
@@ -738,7 +728,6 @@ gtk_toggle_button_unrealize (GtkWidget *widget)
 {
   GtkToggleButton *toggle_button;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
 
   toggle_button = GTK_TOGGLE_BUTTON (widget);
@@ -757,7 +746,6 @@ gtk_toggle_button_unrealize (GtkWidget *widget)
 static void
 gtk_toggle_button_map (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
 
   if (GTK_WIDGET_NO_WINDOW (widget))
@@ -769,7 +757,6 @@ gtk_toggle_button_map (GtkWidget *widget)
 static void
 gtk_toggle_button_unmap (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
 
   if (GTK_WIDGET_NO_WINDOW (widget))

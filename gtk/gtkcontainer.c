@@ -259,7 +259,6 @@ gtk_container_child_type (GtkContainer *container)
   GtkType slot;
   GtkContainerClass *class;
 
-  g_return_val_if_fail (container != NULL, 0);
   g_return_val_if_fail (GTK_IS_CONTAINER (container), 0);
 
   class = GTK_CONTAINER_GET_CLASS (container);
@@ -558,9 +557,7 @@ gtk_container_add_with_properties (GtkContainer *container,
 				   const gchar  *first_prop_name,
 				   ...)
 {
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->parent == NULL);
 
@@ -591,9 +588,7 @@ gtk_container_child_set (GtkContainer      *container,
 {
   va_list var_args;
   
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (child->parent == GTK_WIDGET (container));
 

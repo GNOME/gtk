@@ -263,7 +263,6 @@ gtk_menu_item_destroy (GtkObject *object)
 {
   GtkMenuItem *menu_item;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (object));
 
   menu_item = GTK_MENU_ITEM (object);
@@ -281,7 +280,6 @@ gtk_menu_item_detacher (GtkWidget     *widget,
 {
   GtkMenuItem *menu_item;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
 
   menu_item = GTK_MENU_ITEM (widget);
@@ -294,7 +292,6 @@ void
 gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
 			   GtkWidget   *submenu)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
   
   if (menu_item->submenu != submenu)
@@ -331,7 +328,6 @@ gtk_menu_item_get_submenu (GtkMenuItem *menu_item)
 void
 gtk_menu_item_remove_submenu (GtkMenuItem         *menu_item)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
       
   if (menu_item->submenu)
@@ -342,7 +338,6 @@ void
 gtk_menu_item_set_placement (GtkMenuItem         *menu_item,
 			     GtkSubmenuPlacement  placement)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   menu_item->submenu_placement = placement;
@@ -353,7 +348,6 @@ gtk_menu_item_configure (GtkMenuItem *menu_item,
 			 gboolean     show_toggle_indicator,
 			 gboolean     show_submenu_indicator)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   menu_item->show_toggle_indicator = show_toggle_indicator;
@@ -363,7 +357,6 @@ gtk_menu_item_configure (GtkMenuItem *menu_item,
 void
 gtk_menu_item_select (GtkMenuItem *menu_item)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
   
   gtk_item_select (GTK_ITEM (menu_item));
@@ -372,7 +365,6 @@ gtk_menu_item_select (GtkMenuItem *menu_item)
 void
 gtk_menu_item_deselect (GtkMenuItem *menu_item)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
   
   gtk_item_deselect (GTK_ITEM (menu_item));
@@ -381,7 +373,6 @@ gtk_menu_item_deselect (GtkMenuItem *menu_item)
 void
 gtk_menu_item_activate (GtkMenuItem *menu_item)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
   
   gtk_signal_emit (GTK_OBJECT (menu_item), menu_item_signals[ACTIVATE]);
@@ -391,7 +382,6 @@ void
 gtk_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 				   gint        *requisition)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   gtk_signal_emit (GTK_OBJECT (menu_item), menu_item_signals[TOGGLE_SIZE_REQUEST], requisition);
@@ -401,7 +391,6 @@ void
 gtk_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
 				    gint         allocation)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   gtk_signal_emit (GTK_OBJECT (menu_item), menu_item_signals[TOGGLE_SIZE_ALLOCATE], allocation);
@@ -434,7 +423,6 @@ gtk_menu_item_size_request (GtkWidget      *widget,
   GtkBin *bin;
   guint accel_width;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
   g_return_if_fail (requisition != NULL);
 
@@ -475,7 +463,6 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkAllocation child_allocation;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
   g_return_if_fail (allocation != NULL);
 
@@ -520,7 +507,6 @@ gtk_menu_item_paint (GtkWidget    *widget,
   gint width, height;
   gint x, y;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
 
   if (GTK_WIDGET_DRAWABLE (widget))
@@ -573,7 +559,6 @@ static gint
 gtk_menu_item_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_ITEM (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -592,7 +577,6 @@ gtk_real_menu_item_select (GtkItem *item)
 {
   GtkMenuItem *menu_item;
 
-  g_return_if_fail (item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (item));
 
   menu_item = GTK_MENU_ITEM (item);
@@ -624,7 +608,6 @@ gtk_real_menu_item_deselect (GtkItem *item)
 {
   GtkMenuItem *menu_item;
 
-  g_return_if_fail (item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (item));
 
   menu_item = GTK_MENU_ITEM (item);
@@ -678,7 +661,6 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
   GtkWidget *widget;
   GtkMenuShell *submenu; 
 
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   widget = GTK_WIDGET (menu_item);
@@ -713,7 +695,6 @@ static void
 gtk_real_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 					gint        *requisition)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   *requisition = 0;
@@ -723,7 +704,6 @@ static void
 gtk_real_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
 					 gint         allocation)
 {
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   menu_item->toggle_size = allocation;
@@ -852,7 +832,6 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 void
 gtk_menu_item_right_justify (GtkMenuItem *menuitem)
 {
-  g_return_if_fail (menuitem != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menuitem));
 
   menuitem->right_justify = 1;
@@ -864,7 +843,6 @@ gtk_menu_item_show_all (GtkWidget *widget)
 {
   GtkMenuItem *menu_item;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
 
   menu_item = GTK_MENU_ITEM (widget);
@@ -882,7 +860,6 @@ gtk_menu_item_hide_all (GtkWidget *widget)
 {
   GtkMenuItem *menu_item;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
 
   gtk_widget_hide (widget);
@@ -904,7 +881,6 @@ gtk_menu_item_forall (GtkContainer *container,
   GtkBin *bin;
   GtkMenuItem *menu_item;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (container));
   g_return_if_fail (callback != NULL);
 

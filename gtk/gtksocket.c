@@ -292,7 +292,6 @@ gtk_socket_realize (GtkWidget *widget)
   gint attributes_mask;
   XWindowAttributes xattrs;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_SOCKET (widget));
 
   socket = GTK_SOCKET (widget);
@@ -435,7 +434,6 @@ gtk_socket_size_allocate (GtkWidget     *widget,
 {
   GtkSocket *socket;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_SOCKET (widget));
   g_return_if_fail (allocation != NULL);
 

@@ -936,7 +936,6 @@ gtk_entry_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
@@ -1008,7 +1007,6 @@ gtk_entry_unrealize (GtkWidget *widget)
 {
   GtkEntry *entry;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
 
   entry = GTK_ENTRY (widget);
@@ -1047,7 +1045,6 @@ gtk_entry_size_request (GtkWidget      *widget,
   gint xborder, yborder;
   PangoContext *context;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
   g_return_if_fail (requisition != NULL);
 
@@ -1180,7 +1177,6 @@ gtk_entry_size_allocate (GtkWidget     *widget,
   GtkEntry *entry;
   GtkEditable *editable;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
   g_return_if_fail (allocation != NULL);
 
@@ -1217,7 +1213,6 @@ gtk_entry_draw_focus (GtkWidget *widget)
   GtkEntry *entry;
   gboolean interior_focus;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
 
   gtk_widget_style_get (widget, "interior_focus", &interior_focus, NULL);
@@ -1264,7 +1259,6 @@ gtk_entry_expose (GtkWidget      *widget,
 {
   GtkEntry *entry;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ENTRY (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -1578,7 +1572,6 @@ static void
 gtk_entry_state_changed (GtkWidget      *widget,
 			 GtkStateType    previous_state)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
 
   if (GTK_WIDGET_REALIZED (widget))
@@ -1654,7 +1647,6 @@ gtk_entry_get_chars      (GtkEditable   *editable,
   GtkEntry *entry;
   gint start_index, end_index;
   
-  g_return_val_if_fail (editable != NULL, NULL);
   g_return_val_if_fail (GTK_IS_ENTRY (editable), NULL);
 
   entry = GTK_ENTRY (editable);
@@ -2378,7 +2370,6 @@ gtk_entry_draw_text (GtkEntry *entry)
   GtkWidget *widget;
   PangoLayoutLine *line;
   
-  g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   if (!entry->visible && entry->invisible_char == 0)
@@ -2457,7 +2448,6 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
     GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
   GtkTextDirection widget_direction = gtk_widget_get_direction (GTK_WIDGET (entry));
   
-  g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   if (GTK_WIDGET_DRAWABLE (entry))
@@ -2516,7 +2506,6 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 static void
 gtk_entry_queue_draw (GtkEntry *entry)
 {
-  g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   if (GTK_WIDGET_REALIZED (entry))
@@ -2610,7 +2599,6 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   PangoLayoutLine *line;
   PangoRectangle logical_rect;
 
-  g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   widget = GTK_WIDGET (entry);
@@ -3025,7 +3013,6 @@ gtk_entry_set_text (GtkEntry *entry,
 
   GtkEditable *editable;
 
-  g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (text != NULL);
 
@@ -3043,7 +3030,6 @@ gtk_entry_append_text (GtkEntry *entry,
 {
   gint tmp_pos;
 
-  g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (text != NULL);
 
@@ -3057,7 +3043,6 @@ gtk_entry_prepend_text (GtkEntry *entry,
 {
   gint tmp_pos;
 
-  g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (text != NULL);
 
@@ -3069,7 +3054,6 @@ void
 gtk_entry_set_position (GtkEntry *entry,
 			gint       position)
 {
-  g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   gtk_editable_set_position (GTK_EDITABLE (entry), position);
@@ -3079,7 +3063,6 @@ void
 gtk_entry_set_visibility (GtkEntry *entry,
 			  gboolean visible)
 {
-  g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   entry->visible = visible ? TRUE : FALSE;
@@ -3154,7 +3137,6 @@ void
 gtk_entry_set_editable (GtkEntry *entry,
 			gboolean  editable)
 {
-  g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   gtk_editable_set_editable (GTK_EDITABLE (entry), editable);
@@ -3163,7 +3145,6 @@ gtk_entry_set_editable (GtkEntry *entry,
 G_CONST_RETURN gchar*
 gtk_entry_get_text (GtkEntry *entry)
 {
-  g_return_val_if_fail (entry != NULL, NULL);
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
   return entry->text;
@@ -3181,7 +3162,6 @@ void
 gtk_entry_set_max_length (GtkEntry     *entry,
                           gint          max)
 {
-  g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   if (max > 0 && entry->text_length > max)

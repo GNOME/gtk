@@ -129,7 +129,6 @@ gtk_fixed_put (GtkFixed       *fixed,
 {
   GtkFixedChild *child_info;
 
-  g_return_if_fail (fixed != NULL);
   g_return_if_fail (GTK_IS_FIXED (fixed));
   g_return_if_fail (widget != NULL);
 
@@ -163,7 +162,6 @@ gtk_fixed_move (GtkFixed       *fixed,
   GtkFixedChild *child;
   GList *children;
 
-  g_return_if_fail (fixed != NULL);
   g_return_if_fail (GTK_IS_FIXED (fixed));
   g_return_if_fail (widget != NULL);
 
@@ -193,7 +191,6 @@ gtk_fixed_map (GtkWidget *widget)
   GtkFixedChild *child;
   GList *children;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_FIXED (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
@@ -219,7 +216,6 @@ gtk_fixed_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_FIXED (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
@@ -254,7 +250,6 @@ gtk_fixed_size_request (GtkWidget      *widget,
   GList *children;
   GtkRequisition child_requisition;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_FIXED (widget));
   g_return_if_fail (requisition != NULL);
 
@@ -296,7 +291,6 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
   GList *children;
   guint16 border_width;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_FIXED(widget));
   g_return_if_fail (allocation != NULL);
 
@@ -334,7 +328,6 @@ static void
 gtk_fixed_add (GtkContainer *container,
 	       GtkWidget    *widget)
 {
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_FIXED (container));
   g_return_if_fail (widget != NULL);
 
@@ -349,7 +342,6 @@ gtk_fixed_remove (GtkContainer *container,
   GtkFixedChild *child;
   GList *children;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_FIXED (container));
   g_return_if_fail (widget != NULL);
 
@@ -390,7 +382,6 @@ gtk_fixed_forall (GtkContainer *container,
   GtkFixedChild *child;
   GList *children;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_FIXED (container));
   g_return_if_fail (callback != NULL);
 

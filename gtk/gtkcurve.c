@@ -1013,7 +1013,6 @@ gtk_curve_finalize (GObject *object)
 {
   GtkCurve *curve;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_CURVE (object));
 
   curve = GTK_CURVE (object);

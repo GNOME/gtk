@@ -320,9 +320,7 @@ gtk_menu_shell_insert (GtkMenuShell *menu_shell,
 {
   GtkMenuShellClass *class;
 
-  g_return_if_fail (menu_shell != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
-  g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (child));
 
   class = GTK_MENU_SHELL_GET_CLASS (menu_shell);
@@ -355,7 +353,6 @@ gtk_menu_shell_real_insert (GtkMenuShell *menu_shell,
 void
 gtk_menu_shell_deactivate (GtkMenuShell *menu_shell)
 {
-  g_return_if_fail (menu_shell != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
 
   gtk_signal_emit (GTK_OBJECT (menu_shell), menu_shell_signals[DEACTIVATE]);
@@ -368,7 +365,6 @@ gtk_menu_shell_map (GtkWidget *widget)
   GtkWidget *child;
   GList *children;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (widget));
 
   menu_shell = GTK_MENU_SHELL (widget);
@@ -393,7 +389,6 @@ gtk_menu_shell_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
@@ -429,7 +424,6 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
   GtkMenuShell *menu_shell;
   GtkWidget *menu_item;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -483,7 +477,6 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
   GtkWidget *menu_item;
   gint deactivate;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -562,7 +555,6 @@ gtk_menu_shell_key_press (GtkWidget	*widget,
   GtkMenuShell *menu_shell;
   GtkWidget *toplevel;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
       
@@ -596,7 +588,6 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
   GtkMenuShell *menu_shell;
   GtkWidget *menu_item;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -639,7 +630,6 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
   GtkMenuItem *menu_item;
   GtkWidget *event_widget;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -694,9 +684,7 @@ gtk_menu_shell_remove (GtkContainer *container,
   GtkMenuShell *menu_shell;
   gint was_visible;
   
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (container));
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
   
   was_visible = GTK_WIDGET_VISIBLE (widget);
@@ -728,7 +716,6 @@ gtk_menu_shell_forall (GtkContainer *container,
   GtkWidget *child;
   GList *children;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (container));
   g_return_if_fail (callback != NULL);
 
@@ -779,7 +766,6 @@ gtk_menu_shell_is_item (GtkMenuShell *menu_shell,
 {
   GtkWidget *parent;
 
-  g_return_val_if_fail (menu_shell != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_SHELL (menu_shell), FALSE);
   g_return_val_if_fail (child != NULL, FALSE);
 
@@ -819,9 +805,7 @@ gtk_menu_shell_select_item (GtkMenuShell *menu_shell,
 {
   GtkMenuShellClass *class;
 
-  g_return_if_fail (menu_shell != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   class = GTK_MENU_SHELL_GET_CLASS (menu_shell);
@@ -869,9 +853,7 @@ gtk_menu_shell_activate_item (GtkMenuShell      *menu_shell,
   GSList *slist, *shells = NULL;
   gboolean deactivate = force_deactivate;
 
-  g_return_if_fail (menu_shell != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   if (!deactivate)

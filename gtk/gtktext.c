@@ -769,7 +769,6 @@ void
 gtk_text_set_word_wrap (GtkText *text,
 			gboolean word_wrap)
 {
-  g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
   
   text->word_wrap = (word_wrap != FALSE);
@@ -787,7 +786,6 @@ void
 gtk_text_set_line_wrap (GtkText *text,
 			gboolean line_wrap)
 {
-  g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
   
   text->line_wrap = (line_wrap != FALSE);
@@ -805,7 +803,6 @@ void
 gtk_text_set_editable (GtkText *text,
 		       gboolean is_editable)
 {
-  g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
   
   gtk_editable_set_editable (GTK_EDITABLE (text), is_editable);
@@ -817,7 +814,6 @@ gtk_text_real_set_editable (GtkOldEditable *old_editable,
 {
   GtkText *text;
   
-  g_return_if_fail (old_editable != NULL);
   g_return_if_fail (GTK_IS_TEXT (old_editable));
   
   text = GTK_TEXT (old_editable);
@@ -835,7 +831,6 @@ gtk_text_set_adjustments (GtkText       *text,
 			  GtkAdjustment *hadj,
 			  GtkAdjustment *vadj)
 {
-  g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
   if (hadj)
     g_return_if_fail (GTK_IS_ADJUSTMENT (hadj));
@@ -903,7 +898,6 @@ void
 gtk_text_set_point (GtkText *text,
 		    guint    index)
 {
-  g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
   g_return_if_fail (index <= TEXT_LENGTH (text));
   
@@ -913,7 +907,6 @@ gtk_text_set_point (GtkText *text,
 guint
 gtk_text_get_point (GtkText *text)
 {
-  g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (GTK_IS_TEXT (text), 0);
   
   return text->point.index;
@@ -922,7 +915,6 @@ gtk_text_get_point (GtkText *text)
 guint
 gtk_text_get_length (GtkText *text)
 {
-  g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (GTK_IS_TEXT (text), 0);
   
   return TEXT_LENGTH (text);
@@ -931,7 +923,6 @@ gtk_text_get_length (GtkText *text)
 void
 gtk_text_freeze (GtkText *text)
 {
-  g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
   
   text->freeze_count++;
@@ -940,7 +931,6 @@ gtk_text_freeze (GtkText *text)
 void
 gtk_text_thaw (GtkText *text)
 {
-  g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
   
   if (text->freeze_count)
@@ -968,7 +958,6 @@ gtk_text_insert (GtkText    *text,
   guint i;
   gint numwcs;
   
-  g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
 
   if (nchars < 0)
@@ -1081,7 +1070,6 @@ gboolean
 gtk_text_backward_delete (GtkText *text,
 			  guint    nchars)
 {
-  g_return_val_if_fail (text != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT (text), FALSE);
   
   if (nchars > text->point.index || nchars <= 0)
@@ -1100,7 +1088,6 @@ gtk_text_forward_delete (GtkText *text,
   GtkOldEditable *old_editable = GTK_OLD_EDITABLE (text);
   gboolean frozen = FALSE;
   
-  g_return_val_if_fail (text != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT (text), FALSE);
   
   if (text->point.index + nchars > TEXT_LENGTH (text) || nchars <= 0)
@@ -1189,7 +1176,6 @@ gtk_text_get_chars (GtkOldEditable *old_editable,
 
   gchar *retval;
   
-  g_return_val_if_fail (old_editable != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TEXT (old_editable), NULL);
   text = GTK_TEXT (old_editable);
   
@@ -1308,7 +1294,6 @@ gtk_text_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TEXT (widget));
   
   text = GTK_TEXT (widget);
@@ -1428,7 +1413,6 @@ gtk_text_unrealize (GtkWidget *widget)
 {
   GtkText *text;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TEXT (widget));
   
   text = GTK_TEXT (widget);
@@ -1495,7 +1479,6 @@ gtk_text_draw_focus (GtkWidget *widget)
   gint width, height;
   gint x, y;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TEXT (widget));
   
   text = GTK_TEXT (widget);
@@ -1566,7 +1549,6 @@ gtk_text_size_request (GtkWidget      *widget,
   gint char_height;
   gint char_width;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TEXT (widget));
   g_return_if_fail (requisition != NULL);
   
@@ -1592,7 +1574,6 @@ gtk_text_size_allocate (GtkWidget     *widget,
   GtkText *text;
   GtkOldEditable *old_editable;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TEXT (widget));
   g_return_if_fail (allocation != NULL);
   
@@ -1622,7 +1603,6 @@ static gint
 gtk_text_expose (GtkWidget      *widget,
 		 GdkEventExpose *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -1677,7 +1657,6 @@ gtk_text_button_press (GtkWidget      *widget,
   GtkText *text;
   GtkOldEditable *old_editable;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -1768,7 +1747,6 @@ gtk_text_button_release (GtkWidget      *widget,
 {
   GtkText *text;
   GtkOldEditable *old_editable;
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -1832,7 +1810,6 @@ gtk_text_motion_notify (GtkWidget      *widget,
   gint height;
   GdkModifierType mask;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -1933,7 +1910,6 @@ gtk_text_key_press (GtkWidget   *widget,
   gint return_val;
   gint position;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -2180,7 +2156,6 @@ static gint
 gtk_text_focus_in (GtkWidget     *widget,
 		   GdkEventFocus *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -2193,7 +2168,6 @@ static gint
 gtk_text_focus_out (GtkWidget     *widget,
 		    GdkEventFocus *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -2206,9 +2180,7 @@ static void
 gtk_text_adjustment (GtkAdjustment *adjustment,
 		     GtkText       *text)
 {
-  g_return_if_fail (adjustment != NULL);
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-  g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
   
   /* Just ignore it if we haven't been size-allocated and realized yet */
@@ -2243,9 +2215,7 @@ static void
 gtk_text_adjustment_destroyed (GtkAdjustment *adjustment,
                                GtkText       *text)
 {
-  g_return_if_fail (adjustment != NULL);
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-  g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
 
   if (adjustment == text->hadj)

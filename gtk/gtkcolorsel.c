@@ -1927,7 +1927,6 @@ void
 gtk_color_selection_set_update_policy (GtkColorSelection *colorsel,
 				       GtkUpdateType      policy)
 {
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   /* */
   g_warning (G_STRLOC ": This function is deprecated.");
@@ -1946,7 +1945,6 @@ gtk_color_selection_get_has_opacity_control (GtkColorSelection *colorsel)
 {
   ColorSelectionPrivate *priv;
   
-  g_return_val_if_fail (colorsel != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_COLOR_SELECTION (colorsel), FALSE);
   
   priv = colorsel->private_data;
@@ -1968,7 +1966,6 @@ gtk_color_selection_set_has_opacity_control (GtkColorSelection *colorsel,
 {
   ColorSelectionPrivate *priv;
   
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   
   priv = colorsel->private_data;
@@ -2026,7 +2023,6 @@ gtk_color_selection_set_has_palette (GtkColorSelection *colorsel,
 				     gboolean           has_palette)
 {
   ColorSelectionPrivate *priv;
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   
   priv = colorsel->private_data;
@@ -2058,7 +2054,6 @@ gtk_color_selection_set_current_color (GtkColorSelection *colorsel,
   ColorSelectionPrivate *priv;
   gint i;
   
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   
   priv = colorsel->private_data;
@@ -2097,7 +2092,6 @@ gtk_color_selection_set_current_alpha (GtkColorSelection *colorsel,
   ColorSelectionPrivate *priv;
   gint i;
   
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   
   priv = colorsel->private_data;
@@ -2130,7 +2124,6 @@ gtk_color_selection_set_color (GtkColorSelection    *colorsel,
   ColorSelectionPrivate *priv;
   gint i;
   
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   
   priv = colorsel->private_data;
@@ -2170,7 +2163,6 @@ gtk_color_selection_get_current_color (GtkColorSelection *colorsel,
 {
   ColorSelectionPrivate *priv;
   
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   
   priv = colorsel->private_data;
@@ -2192,7 +2184,6 @@ gtk_color_selection_get_current_alpha (GtkColorSelection *colorsel)
 {
   ColorSelectionPrivate *priv;
   
-  g_return_val_if_fail (colorsel != NULL, 0);
   g_return_val_if_fail (GTK_IS_COLOR_SELECTION (colorsel), 0);
   
   priv = colorsel->private_data;
@@ -2213,7 +2204,6 @@ gtk_color_selection_get_color (GtkColorSelection *colorsel,
 {
   ColorSelectionPrivate *priv;
   
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   
   priv = colorsel->private_data;
@@ -2240,7 +2230,6 @@ gtk_color_selection_set_previous_color (GtkColorSelection *colorsel,
 {
   ColorSelectionPrivate *priv;
   
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   
   priv = colorsel->private_data;
@@ -2273,7 +2262,6 @@ gtk_color_selection_set_previous_alpha (GtkColorSelection *colorsel,
 {
   ColorSelectionPrivate *priv;
   
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   
   priv = colorsel->private_data;
@@ -2298,7 +2286,6 @@ gtk_color_selection_get_previous_color (GtkColorSelection *colorsel,
 {
   ColorSelectionPrivate *priv;
   
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   
   priv = colorsel->private_data;
@@ -2320,7 +2307,6 @@ gtk_color_selection_get_previous_alpha (GtkColorSelection *colorsel)
 {
   ColorSelectionPrivate *priv;
   
-  g_return_val_if_fail (colorsel != NULL, 0);
   g_return_val_if_fail (GTK_IS_COLOR_SELECTION (colorsel), 0);
   
   priv = colorsel->private_data;
@@ -2345,7 +2331,6 @@ gtk_color_selection_set_palette_color (GtkColorSelection   *colorsel,
   gint x, y;
   gdouble col[3];
   
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   g_return_if_fail (index >= 0  && index < GTK_CUSTOM_PALETTE_WIDTH*GTK_CUSTOM_PALETTE_HEIGHT);
 
@@ -2381,7 +2366,6 @@ gtk_color_selection_get_palette_color (GtkColorSelection   *colorsel,
   gint x, y;
   gdouble col[4];
   
-  g_return_val_if_fail (colorsel != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_COLOR_SELECTION (colorsel), FALSE);
   g_return_val_if_fail (index >= 0  && index < GTK_CUSTOM_PALETTE_WIDTH*GTK_CUSTOM_PALETTE_HEIGHT, FALSE);
   
@@ -2417,7 +2401,6 @@ gtk_color_selection_unset_palette_color (GtkColorSelection   *colorsel,
   ColorSelectionPrivate *priv;
   gint x, y;
   
-  g_return_if_fail (colorsel != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   g_return_if_fail (index >= 0  && index < GTK_CUSTOM_PALETTE_WIDTH*GTK_CUSTOM_PALETTE_HEIGHT);
   
@@ -2457,7 +2440,6 @@ gtk_color_selection_is_adjusting (GtkColorSelection *colorsel)
 {
   ColorSelectionPrivate *priv;
   
-  g_return_val_if_fail (colorsel != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_COLOR_SELECTION (colorsel), FALSE);
   
   priv = colorsel->private_data;

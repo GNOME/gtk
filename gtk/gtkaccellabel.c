@@ -202,7 +202,6 @@ gtk_accel_label_destroy (GtkObject *object)
 {
   GtkAccelLabel *accel_label;
   
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (object));
   
   accel_label = GTK_ACCEL_LABEL (object);
@@ -247,7 +246,6 @@ gtk_accel_label_get_accel_widget (GtkAccelLabel *accel_label)
 guint
 gtk_accel_label_get_accel_width (GtkAccelLabel *accel_label)
 {
-  g_return_val_if_fail (accel_label != NULL, 0);
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), 0);
   
   return (accel_label->accel_string_width +
@@ -262,7 +260,6 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
   PangoLayout *layout;
   gint width;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (widget));
   g_return_if_fail (requisition != NULL);
   
@@ -286,7 +283,6 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
   GtkAccelLabel *accel_label;
   PangoLayout *layout;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -343,7 +339,6 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 static void
 gtk_accel_label_queue_refetch (GtkAccelLabel *accel_label)
 {
-  g_return_if_fail (accel_label != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
 
   if (accel_label->queue_id == 0)
@@ -356,7 +351,6 @@ void
 gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
 				  GtkWidget	*accel_widget)
 {
-  g_return_if_fail (accel_label != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
   if (accel_widget != NULL)
     g_return_if_fail (GTK_IS_WIDGET (accel_widget));
@@ -409,7 +403,6 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 {
   GtkAccelLabelClass *class;
 
-  g_return_val_if_fail (accel_label != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), FALSE);
 
   class = GTK_ACCEL_LABEL_GET_CLASS (accel_label);

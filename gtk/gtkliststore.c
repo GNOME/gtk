@@ -1649,7 +1649,6 @@ gtk_list_store_get_sort_column_id (GtkTreeSortable  *sortable,
 {
   GtkListStore *list_store = (GtkListStore *) sortable;
 
-  g_return_val_if_fail (sortable != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_LIST_STORE (sortable), FALSE);
 
   if (list_store->sort_column_id == -1)
@@ -1670,7 +1669,6 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
   GtkListStore *list_store = (GtkListStore *) sortable;
   GList *list;
 
-  g_return_if_fail (sortable != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (sortable));
 
   for (list = list_store->sort_list; list; list = list->next)
@@ -1705,7 +1703,6 @@ gtk_list_store_set_sort_func (GtkTreeSortable        *sortable,
   GtkTreeDataSortHeader *header = NULL;
   GList *list;
 
-  g_return_if_fail (sortable != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (sortable));
   g_return_if_fail (func != NULL);
 

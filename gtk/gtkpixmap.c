@@ -124,7 +124,6 @@ gtk_pixmap_set (GtkPixmap *pixmap,
   gint oldwidth;
   gint oldheight;
 
-  g_return_if_fail (pixmap != NULL);
   g_return_if_fail (GTK_IS_PIXMAP (pixmap));
 
   if (pixmap->pixmap != val)
@@ -176,7 +175,6 @@ gtk_pixmap_get (GtkPixmap  *pixmap,
 		GdkPixmap **val,
 		GdkBitmap **mask)
 {
-  g_return_if_fail (pixmap != NULL);
   g_return_if_fail (GTK_IS_PIXMAP (pixmap));
 
   if (val)
@@ -193,7 +191,6 @@ gtk_pixmap_expose (GtkWidget      *widget,
   GtkMisc *misc;
   gint x, y;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_PIXMAP (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -247,7 +244,6 @@ gtk_pixmap_expose (GtkWidget      *widget,
 void
 gtk_pixmap_set_build_insensitive (GtkPixmap *pixmap, gboolean build)
 {
-  g_return_if_fail (pixmap != NULL);
   g_return_if_fail (GTK_IS_PIXMAP (pixmap));
 
   pixmap->build_insensitive = build;

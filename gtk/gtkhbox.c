@@ -101,7 +101,6 @@ gtk_hbox_size_request (GtkWidget      *widget,
   gint nvis_children;
   gint width;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HBOX (widget));
   g_return_if_fail (requisition != NULL);
 
@@ -165,7 +164,6 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
   gint x;
   GtkTextDirection direction;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HBOX (widget));
   g_return_if_fail (allocation != NULL);
 

@@ -580,7 +580,6 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
 {
   guint len;
 
-  g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (ifactory->accel_group == NULL);
   g_return_if_fail (path != NULL);
@@ -659,7 +658,6 @@ gtk_item_factory_destroy (GtkObject *object)
   GtkItemFactory *ifactory;
   GSList *slist;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (object));
 
   ifactory = (GtkItemFactory*) object;
@@ -698,7 +696,6 @@ gtk_item_factory_finalize (GObject *object)
 {
   GtkItemFactory *ifactory;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (object));
 
   ifactory = GTK_ITEM_FACTORY (object);
@@ -716,7 +713,6 @@ gtk_item_factory_finalize (GObject *object)
 GtkItemFactory*
 gtk_item_factory_from_widget (GtkWidget	       *widget)
 {
-  g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   return gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_factory);
@@ -725,7 +721,6 @@ gtk_item_factory_from_widget (GtkWidget	       *widget)
 gchar*
 gtk_item_factory_path_from_widget (GtkWidget	    *widget)
 {
-  g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   return gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_path);
@@ -879,7 +874,6 @@ gtk_item_factory_create_items_ac (GtkItemFactory      *ifactory,
 {
   guint i;
 
-  g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (callback_type >= 1 && callback_type <= 2);
 
@@ -1114,7 +1108,6 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   gchar *item_type_path;
   GtkStockItem stock_item;
       
-  g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (entry != NULL);
   g_return_if_fail (entry->path != NULL);
@@ -1449,7 +1442,6 @@ gtk_item_factory_delete_item (GtkItemFactory         *ifactory,
   GtkItemFactoryClass *class;
   GtkWidget *widget;
 
-  g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (path != NULL);
 
@@ -1470,7 +1462,6 @@ void
 gtk_item_factory_delete_entry (GtkItemFactory         *ifactory,
 			       GtkItemFactoryEntry    *entry)
 {
-  g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (entry != NULL);
 
@@ -1484,7 +1475,6 @@ gtk_item_factory_delete_entries (GtkItemFactory         *ifactory,
 {
   guint i;
 
-  g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   if (n_entries > 0)
     g_return_if_fail (entries != NULL);
@@ -1517,7 +1507,6 @@ gtk_item_factory_popup_data_from_widget (GtkWidget     *widget)
 {
   GtkItemFactory *ifactory;
   
-  g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   ifactory = gtk_item_factory_from_widget (widget);
@@ -1530,7 +1519,6 @@ gtk_item_factory_popup_data_from_widget (GtkWidget     *widget)
 gpointer
 gtk_item_factory_popup_data (GtkItemFactory *ifactory)
 {
-  g_return_val_if_fail (ifactory != NULL, NULL);
   g_return_val_if_fail (GTK_IS_ITEM_FACTORY (ifactory), NULL);
 
   return gtk_object_get_data_by_id (GTK_OBJECT (ifactory), quark_popup_data);
@@ -1567,7 +1555,6 @@ gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
 {
   MenuPos *mpos;
 
-  g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (GTK_IS_MENU (ifactory->widget));
   

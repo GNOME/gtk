@@ -1231,7 +1231,6 @@ gtk_quit_add_destroy (guint              main_level,
   GtkObject **object_p;
 
   g_return_if_fail (main_level > 0);
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
   object_p = g_new (GtkObject*, 1);
@@ -1610,7 +1609,6 @@ gtk_propagate_event (GtkWidget *widget,
 {
   gint handled_event;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (event != NULL);
   

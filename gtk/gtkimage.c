@@ -869,7 +869,6 @@ static gint
 gtk_image_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_IMAGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   

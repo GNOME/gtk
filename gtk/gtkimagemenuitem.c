@@ -188,7 +188,6 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 {
   GtkImageMenuItem *image_menu_item;
   
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (menu_item));
 
   image_menu_item = GTK_IMAGE_MENU_ITEM (menu_item);

@@ -334,7 +334,6 @@ gtk_tree_store_set_n_columns (GtkTreeStore *tree_store,
 {
   GType *new_columns;
 
-  g_return_if_fail (tree_store != NULL);
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
 
   if (tree_store->n_columns == n_columns)
@@ -378,7 +377,6 @@ gtk_tree_store_set_column_type (GtkTreeStore *tree_store,
 				gint          column,
 				GType         type)
 {
-  g_return_if_fail (tree_store != NULL);
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
   g_return_if_fail (column >=0 && column < tree_store->n_columns);
   if (!_gtk_tree_data_list_check_type (type))
@@ -464,7 +462,6 @@ gtk_tree_store_get_path (GtkTreeModel *tree_model,
   GNode *tmp_node;
   gint i = 0;
 
-  g_return_val_if_fail (tree_model != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), NULL);
   g_return_val_if_fail (iter != NULL, NULL);
   g_return_val_if_fail (iter->user_data != NULL, NULL);
@@ -532,7 +529,6 @@ gtk_tree_store_get_value (GtkTreeModel *tree_model,
   GtkTreeDataList *list;
   gint tmp_column = column;
 
-  g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_STORE (tree_model));
   g_return_if_fail (iter != NULL);
   g_return_if_fail (column < GTK_TREE_STORE (tree_model)->n_columns);
@@ -598,7 +594,6 @@ static gboolean
 gtk_tree_store_iter_has_child (GtkTreeModel *tree_model,
 			       GtkTreeIter  *iter)
 {
-  g_return_val_if_fail (tree_model != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (iter->user_data != NULL, FALSE);
@@ -613,7 +608,6 @@ gtk_tree_store_iter_n_children (GtkTreeModel *tree_model,
   GNode *node;
   gint i = 0;
 
-  g_return_val_if_fail (tree_model != NULL, 0);
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), 0);
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (iter->user_data != NULL, FALSE);
@@ -641,7 +635,6 @@ gtk_tree_store_iter_nth_child (GtkTreeModel *tree_model,
   GNode *parent_node;
   GNode *child;
 
-  g_return_val_if_fail (tree_model != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), FALSE);
   g_return_val_if_fail (parent == NULL || parent->user_data != NULL, FALSE);
 
@@ -1785,7 +1778,6 @@ gtk_tree_store_get_sort_column_id (GtkTreeSortable  *sortable,
 {
   GtkTreeStore *tree_store = (GtkTreeStore *) sortable;
 
-  g_return_val_if_fail (sortable != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_STORE (sortable), FALSE);
 
   if (tree_store->sort_column_id == -1)
@@ -1807,7 +1799,6 @@ gtk_tree_store_set_sort_column_id (GtkTreeSortable  *sortable,
   GtkTreeStore *tree_store = (GtkTreeStore *) sortable;
   GList *list;
 
-  g_return_if_fail (sortable != NULL);
   g_return_if_fail (GTK_IS_TREE_STORE (sortable));
 
   for (list = tree_store->sort_list; list; list = list->next)
@@ -1842,7 +1833,6 @@ gtk_tree_store_set_sort_func (GtkTreeSortable        *sortable,
   GtkTreeDataSortHeader *header = NULL;
   GList *list;
 
-  g_return_if_fail (sortable != NULL);
   g_return_if_fail (GTK_IS_TREE_STORE (sortable));
   g_return_if_fail (func != NULL);
 
