@@ -35,8 +35,7 @@
 #define RANGE_CLASS(w)  GTK_RANGE_GET_CLASS (w)
 
 enum {
-  PROP_0,
-  PROP_ADJUSTMENT
+  PROP_0
 };
 
 static void     gtk_hscrollbar_class_init       (GtkHScrollbarClass *klass);
@@ -109,15 +108,6 @@ gtk_hscrollbar_class_init (GtkHScrollbarClass *class)
   range_class->slider_update = gtk_hscrollbar_slider_update;
   range_class->trough_click = _gtk_range_default_htrough_click;
   range_class->motion = _gtk_range_default_hmotion;
-
-  g_object_class_install_property (gobject_class,
-				   PROP_ADJUSTMENT,
-				   g_param_spec_object ("adjustment",
-							_("Adjustment"),
-							_("The GtkAdjustment that determines the values to use for this scrollbar."),
-							GTK_TYPE_ADJUSTMENT,
-							G_PARAM_READWRITE));
-
 }
 
 static void 
@@ -132,10 +122,6 @@ gtk_hscrollbar_set_property (GObject                    *object,
   
   switch (prop_id)
     {
-    case PROP_ADJUSTMENT:
-      gtk_range_set_adjustment (GTK_RANGE (hscrollbar), 
-				g_value_get_object (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -154,9 +140,6 @@ gtk_hscrollbar_get_property (GObject                    *object,
   
   switch (prop_id)
     {
-    case PROP_ADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (hscrollbar));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;

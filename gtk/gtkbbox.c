@@ -27,9 +27,22 @@
 #include "gtkbbox.h"
 #include "gtkintl.h"
 
+enum {
+  PROP_0,
+  PROP_LAYOUT_STYLE,
+  PROP_LAST
+};
 
 static void gtk_button_box_class_init    (GtkButtonBoxClass   *klass);
 static void gtk_button_box_init          (GtkButtonBox        *box);
+static void gtk_button_box_set_property  (GObject         *object,
+					  guint            prop_id,
+					  const GValue    *value,
+					  GParamSpec      *pspec);
+static void gtk_button_box_get_property  (GObject         *object,
+					  guint            prop_id,
+					  GValue          *value,
+					  GParamSpec      *pspec);
 
 #define DEFAULT_CHILD_MIN_WIDTH 85
 #define DEFAULT_CHILD_MIN_HEIGHT 27
@@ -65,9 +78,14 @@ static void
 gtk_button_box_class_init (GtkButtonBoxClass *class)
 {
   GtkWidgetClass *widget_class;
+  GObjectClass *gobject_class;
 
+  gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
 
+  gobject_class->set_property = gtk_button_box_set_property;
+  gobject_class->get_property = gtk_button_box_get_property;
+  
   /* FIXME we need to override the "spacing" property on GtkBox once
    * libgobject allows that.
    */
@@ -107,6 +125,14 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 							     G_MAXINT,
                                                              DEFAULT_CHILD_IPAD_Y,
 							     G_PARAM_READABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_LAYOUT_STYLE,
+                                   g_param_spec_enum ("layout_style",
+                                                      _("Layout style"),
+                                                      _("How to layout the buttons in the box. Possible values are default, spread, edge, start and end"),
+						      GTK_TYPE_BUTTON_BOX_STYLE,
+						      GTK_BUTTONBOX_DEFAULT_STYLE,
+                                                      G_PARAM_READWRITE));
 }
 
 static void
@@ -119,6 +145,43 @@ gtk_button_box_init (GtkButtonBox *button_box)
   button_box->child_ipad_y = GTK_BUTTONBOX_DEFAULT;
   button_box->layout_style = GTK_BUTTONBOX_DEFAULT_STYLE;
 }
+
+static void
+gtk_button_box_set_property (GObject         *object,
+			     guint            prop_id,
+			     const GValue    *value,
+			     GParamSpec      *pspec)
+{
+  switch (prop_id) 
+    {
+    case PROP_LAYOUT_STYLE:
+      gtk_button_box_set_layout (GTK_BUTTON_BOX (object),
+				 g_value_get_enum (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_button_box_get_property (GObject         *object,
+			     guint            prop_id,
+			     GValue          *value,
+			     GParamSpec      *pspec)
+{
+  switch (prop_id)
+    {
+    case PROP_LAYOUT_STYLE:
+      g_value_set_enum (value, GTK_BUTTON_BOX (object)->layout_style);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+
 
 /* set per widget values for spacing, child size and child internal padding */
 
@@ -141,7 +204,12 @@ void gtk_button_box_set_layout (GtkButtonBox *widget,
   g_return_if_fail (layout_style >= GTK_BUTTONBOX_DEFAULT_STYLE &&
 		    layout_style <= GTK_BUTTONBOX_END);
 
-  widget->layout_style = layout_style;
+  if (widget->layout_style != layout_style)
+    {
+      widget->layout_style = layout_style;
+      g_object_notify (G_OBJECT (widget), "layout_style");
+      gtk_widget_queue_resize (GTK_WIDGET (widget));
+    }
 }
 
 

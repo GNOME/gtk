@@ -33,7 +33,7 @@ get_param_specs (GType         type,
   /* We count on the fact we have an instance, or else we'd have
    * to use g_type_class_ref ();
    */
-  
+
   /* Use private interface for now, fix later */
   *specs = class->property_specs;
   *n_specs = class->n_property_specs;
@@ -133,7 +133,8 @@ block_controller (GObject *controller)
 {
   ObjectProperty *p = g_object_get_data (controller, "object-property");
 
-  g_signal_handler_block (controller, p->modified_id);
+  if (p)
+    g_signal_handler_block (controller, p->modified_id);
 }
 
 static void
@@ -141,7 +142,8 @@ unblock_controller (GObject *controller)
 {
   ObjectProperty *p = g_object_get_data (controller, "object-property");
 
-  g_signal_handler_unblock (controller, p->modified_id);
+  if (p)
+    g_signal_handler_unblock (controller, p->modified_id);
 }
 
 static void
@@ -172,6 +174,33 @@ int_changed (GObject *object, GParamSpec *pspec, gpointer data)
 }
 
 static void
+uint_modified (GtkAdjustment *adj, gpointer data)
+{
+  ObjectProperty *p = data;
+
+  g_object_set (p->obj, p->prop, (guint) adj->value, NULL);
+}
+
+static void
+uint_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkAdjustment *adj = GTK_ADJUSTMENT (data);
+  GValue val = { 0, };  
+
+  g_value_init (&val, G_TYPE_UINT);
+  g_object_get_property (object, pspec->name, &val);
+
+  if (g_value_get_uint (&val) != (guint)adj->value)
+    {
+      block_controller (G_OBJECT (adj));
+      gtk_adjustment_set_value (adj, g_value_get_uint (&val));
+      unblock_controller (G_OBJECT (adj));
+    }
+
+  g_value_unset (&val);
+}
+
+static void
 float_modified (GtkAdjustment *adj, gpointer data)
 {
   ObjectProperty *p = data;
@@ -192,6 +221,33 @@ float_changed (GObject *object, GParamSpec *pspec, gpointer data)
     {
       block_controller (G_OBJECT (adj));
       gtk_adjustment_set_value (adj, g_value_get_float (&val));
+      unblock_controller (G_OBJECT (adj));
+    }
+
+  g_value_unset (&val);
+}
+
+static void
+double_modified (GtkAdjustment *adj, gpointer data)
+{
+  ObjectProperty *p = data;
+
+  g_object_set (p->obj, p->prop, (double) adj->value, NULL);
+}
+
+static void
+double_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkAdjustment *adj = GTK_ADJUSTMENT (data);
+  GValue val = { 0, };  
+
+  g_value_init (&val, G_TYPE_DOUBLE);
+  g_object_get_property (object, pspec->name, &val);
+
+  if (g_value_get_double (&val) != adj->value)
+    {
+      block_controller (G_OBJECT (adj));
+      gtk_adjustment_set_value (adj, g_value_get_double (&val));
       unblock_controller (G_OBJECT (adj));
     }
 
@@ -362,6 +418,40 @@ unichar_changed (GObject *object, GParamSpec *pspec, gpointer data)
     }
 }
 
+static void
+pointer_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkLabel *label = GTK_LABEL (data);
+  gchar *str;
+  gpointer ptr;
+  
+  g_object_get (object, pspec->name, &ptr, NULL);
+
+  str = g_strdup_printf ("Pointer: %p", ptr);
+  gtk_label_set_text (label, str);
+  g_free (str);
+}
+
+static void
+object_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkLabel *label = GTK_LABEL (data);
+  gchar *str;
+  GObject *obj;
+  const gchar *name;
+  
+  g_object_get (object, pspec->name, &obj, NULL);
+
+  if (obj)
+    name = g_type_name (G_TYPE_FROM_INSTANCE (obj));
+  else
+    name = "unknown";
+  str = g_strdup_printf ("Objetct: %p (%s)", obj, name);
+  
+  gtk_label_set_text (label, str);
+  g_free (str);
+}
+
 void
 model_destroy (gpointer data)
 {
@@ -375,43 +465,224 @@ window_destroy (gpointer data)
   g_object_steal_data (data, "prop-editor-win");
 }
 
-GtkWidget*
-create_prop_editor (GObject *object,
-		    GType    type)
+static GtkWidget *
+property_widget (GObject *object, GParamSpec *spec, gboolean can_modify)
 {
-  GtkWidget *win;
-  GtkWidget *vbox;
-  GtkWidget *hbox;
-  GtkWidget *label;
   GtkWidget *prop_edit;
+  GtkAdjustment *adj;
+  gchar *msg;
+  
+  switch (G_PARAM_SPEC_TYPE (spec))
+    {
+    case G_TYPE_PARAM_INT:
+      adj = GTK_ADJUSTMENT (gtk_adjustment_new (G_PARAM_SPEC_INT (spec)->default_value,
+						G_PARAM_SPEC_INT (spec)->minimum,
+						G_PARAM_SPEC_INT (spec)->maximum,
+						1,
+						MAX ((G_PARAM_SPEC_INT (spec)->maximum -
+						      G_PARAM_SPEC_INT (spec)->minimum) / 10, 1),
+						0.0));
+      
+      prop_edit = gtk_spin_button_new (adj, 1.0, 0);
+      
+      g_object_connect_property (object, spec->name,
+				 GTK_SIGNAL_FUNC (int_changed),
+				 adj, G_OBJECT (adj));
+      
+      if (can_modify)
+	connect_controller (G_OBJECT (adj), "value_changed",
+			    object, spec->name, (GtkSignalFunc) int_modified);
+      break;
+      
+    case G_TYPE_PARAM_UINT:
+      adj = GTK_ADJUSTMENT (
+	     gtk_adjustment_new (G_PARAM_SPEC_UINT (spec)->default_value,
+				 G_PARAM_SPEC_UINT (spec)->minimum,
+				 G_PARAM_SPEC_UINT (spec)->maximum,
+				 1,
+				 MAX ((G_PARAM_SPEC_UINT (spec)->maximum -
+				       G_PARAM_SPEC_UINT (spec)->minimum) / 10, 1),
+				 0.0));
+      
+      prop_edit = gtk_spin_button_new (adj, 1.0, 0);
+      
+      g_object_connect_property (object, spec->name,
+				 GTK_SIGNAL_FUNC (uint_changed),
+				 adj, G_OBJECT (adj));
+      
+      if (can_modify)
+	connect_controller (G_OBJECT (adj), "value_changed",
+			    object, spec->name, (GtkSignalFunc) uint_modified);
+      break;
+      
+    case G_TYPE_PARAM_FLOAT:
+      adj = GTK_ADJUSTMENT (gtk_adjustment_new (G_PARAM_SPEC_FLOAT (spec)->default_value,
+						G_PARAM_SPEC_FLOAT (spec)->minimum,
+						G_PARAM_SPEC_FLOAT (spec)->maximum,
+						0.1,
+						MAX ((G_PARAM_SPEC_FLOAT (spec)->maximum -
+						      G_PARAM_SPEC_FLOAT (spec)->minimum) / 10, 0.1),
+						0.0));
+      
+      prop_edit = gtk_spin_button_new (adj, 0.1, 2);
+      
+      g_object_connect_property (object, spec->name,
+				 GTK_SIGNAL_FUNC (float_changed),
+				 adj, G_OBJECT (adj));
+      
+      if (can_modify)
+	connect_controller (G_OBJECT (adj), "value_changed",
+			    object, spec->name, (GtkSignalFunc) float_modified);
+      break;
+      
+    case G_TYPE_PARAM_DOUBLE:
+      adj = GTK_ADJUSTMENT (gtk_adjustment_new (G_PARAM_SPEC_DOUBLE (spec)->default_value,
+						G_PARAM_SPEC_DOUBLE (spec)->minimum,
+						G_PARAM_SPEC_DOUBLE (spec)->maximum,
+						0.1,
+						MAX ((G_PARAM_SPEC_DOUBLE (spec)->maximum -
+						      G_PARAM_SPEC_DOUBLE (spec)->minimum) / 10, 0.1),
+						0.0));
+      
+      prop_edit = gtk_spin_button_new (adj, 0.1, 2);
+      
+      g_object_connect_property (object, spec->name,
+				 GTK_SIGNAL_FUNC (double_changed),
+				 adj, G_OBJECT (adj));
+      
+      if (can_modify)
+	connect_controller (G_OBJECT (adj), "value_changed",
+			    object, spec->name, (GtkSignalFunc) double_modified);
+      break;
+      
+    case G_TYPE_PARAM_STRING:
+      prop_edit = gtk_entry_new ();
+      
+      g_object_connect_property (object, spec->name,
+				 GTK_SIGNAL_FUNC (string_changed),
+				 prop_edit, G_OBJECT (prop_edit));
+      
+      if (can_modify)
+	connect_controller (G_OBJECT (prop_edit), "changed",
+			    object, spec->name, (GtkSignalFunc) string_modified);
+      break;
+      
+    case G_TYPE_PARAM_BOOLEAN:
+      prop_edit = gtk_toggle_button_new_with_label ("");
+      
+      g_object_connect_property (object, spec->name,
+				 GTK_SIGNAL_FUNC (bool_changed),
+				 prop_edit, G_OBJECT (prop_edit));
+      
+      if (can_modify)
+	connect_controller (G_OBJECT (prop_edit), "toggled",
+			    object, spec->name, (GtkSignalFunc) bool_modified);
+      break;
+      
+    case G_TYPE_PARAM_ENUM:
+      {
+	GtkWidget *menu;
+	GEnumClass *eclass;
+	gint j;
+	
+	prop_edit = gtk_option_menu_new ();
+	
+	menu = gtk_menu_new ();
+	
+	eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
+	
+	j = 0;
+	while (j < eclass->n_values)
+	  {
+	    GtkWidget *mi;
+	    
+	    mi = gtk_menu_item_new_with_label (eclass->values[j].value_name);
+	    
+	    gtk_widget_show (mi);
+	    
+	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
+	    
+	    ++j;
+	  }
+	
+	g_type_class_unref (eclass);
+	
+	gtk_option_menu_set_menu (GTK_OPTION_MENU (prop_edit), menu);
+	
+	g_object_connect_property (object, spec->name,
+				   GTK_SIGNAL_FUNC (enum_changed),
+				   prop_edit, G_OBJECT (prop_edit));
+	
+	if (can_modify)
+	  connect_controller (G_OBJECT (prop_edit), "changed",
+			      object, spec->name, (GtkSignalFunc) enum_modified);
+      }
+      break;
+      
+    case G_TYPE_PARAM_UNICHAR:
+      prop_edit = gtk_entry_new ();
+      gtk_entry_set_max_length (GTK_ENTRY (prop_edit), 1);
+      
+      g_object_connect_property (object, spec->name,
+				 GTK_SIGNAL_FUNC (unichar_changed),
+				 prop_edit, G_OBJECT (prop_edit));
+      
+      if (can_modify)
+	connect_controller (G_OBJECT (prop_edit), "changed",
+			    object, spec->name, (GtkSignalFunc) unichar_modified);
+      break;
+      
+    case G_TYPE_PARAM_POINTER:
+      prop_edit = gtk_label_new ("");
+      
+      g_object_connect_property (object, spec->name,
+				 GTK_SIGNAL_FUNC (pointer_changed),
+				 prop_edit, G_OBJECT (prop_edit));
+      break;
+      
+    case G_TYPE_PARAM_OBJECT:
+      prop_edit = gtk_label_new ("");
+      
+      g_object_connect_property (object, spec->name,
+				 GTK_SIGNAL_FUNC (object_changed),
+				 prop_edit, G_OBJECT (prop_edit));
+      break;
+      
+      
+    default:
+      msg = g_strdup_printf ("uneditable property type: %s",
+			     g_type_name (G_PARAM_SPEC_TYPE (spec)));
+      prop_edit = gtk_label_new (msg);            
+      g_free (msg);
+      gtk_misc_set_alignment (GTK_MISC (prop_edit), 0.0, 0.5);
+    }
+  
+  return prop_edit;
+}
+
+static GtkWidget *
+properties_from_type (GObject     *object,
+		      GType        type,
+		      GtkTooltips *tips)
+{
+  GtkWidget *prop_edit;
+  GtkWidget *label;
   GtkWidget *sw;
+  GtkWidget *vbox;
+  GtkWidget *table;
+  int i;
   gint n_specs = 0;
   GParamSpec **specs = NULL;
-  gint i;
-  GtkAdjustment *adj;
-  GtkTooltips *tips;
 
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-  tips = gtk_tooltips_new ();
-  gtk_signal_connect_object (GTK_OBJECT (win), "destroy",
-			     GTK_SIGNAL_FUNC (gtk_object_destroy), GTK_OBJECT (tips));
-
-  /* hold a weak ref to the object we're editing */
-  g_object_set_data_full (G_OBJECT (object), "prop-editor-win", win, model_destroy);
-  g_object_set_data_full (G_OBJECT (win), "model-object", object, window_destroy);
-  
-  vbox = gtk_vbox_new (TRUE, 2);
-
-  sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), vbox);
-  gtk_container_add (GTK_CONTAINER (win), sw);
-  
   get_param_specs (type, &specs, &n_specs);
+
+  if (n_specs == 0)
+    return NULL;
   
+  table = gtk_table_new (n_specs, 2, FALSE);
+  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 3);
+
   i = 0;
   while (i < n_specs)
     {
@@ -430,184 +701,12 @@ create_prop_editor (GObject *object,
           continue;
         }
       
-      switch (G_PARAM_SPEC_TYPE (spec))
-        {
-        case G_TYPE_PARAM_INT:
-          hbox = gtk_hbox_new (FALSE, 10);
-          label = gtk_label_new (spec->nick);
-          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-          gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-          adj = GTK_ADJUSTMENT (gtk_adjustment_new (G_PARAM_SPEC_INT (spec)->default_value,
-                                                    G_PARAM_SPEC_INT (spec)->minimum,
-                                                    G_PARAM_SPEC_INT (spec)->maximum,
-                                                    1,
-                                                    MAX ((G_PARAM_SPEC_INT (spec)->maximum -
-                                                          G_PARAM_SPEC_INT (spec)->minimum) / 10, 1),
-                                                    0.0));
-
-          prop_edit = gtk_spin_button_new (adj, 1.0, 0);
-          gtk_box_pack_end (GTK_BOX (hbox), prop_edit, FALSE, FALSE, 0);
-          
-          gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0); 
-
-          g_object_connect_property (object, spec->name,
-                                     GTK_SIGNAL_FUNC (int_changed),
-                                     adj, G_OBJECT (adj));
-
-          if (can_modify)
-            connect_controller (G_OBJECT (adj), "value_changed",
-                                object, spec->name, (GtkSignalFunc) int_modified);
-          break;
-
-        case G_TYPE_PARAM_FLOAT:
-          hbox = gtk_hbox_new (FALSE, 10);
-          label = gtk_label_new (spec->nick);
-          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-          gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-          adj = GTK_ADJUSTMENT (gtk_adjustment_new (G_PARAM_SPEC_FLOAT (spec)->default_value,
-                                                    G_PARAM_SPEC_FLOAT (spec)->minimum,
-                                                    G_PARAM_SPEC_FLOAT (spec)->maximum,
-                                                    0.1,
-                                                    MAX ((G_PARAM_SPEC_FLOAT (spec)->maximum -
-                                                          G_PARAM_SPEC_FLOAT (spec)->minimum) / 10, 0.1),
-                                                    0.0));
-
-          prop_edit = gtk_spin_button_new (adj, 0.1, 2);
-          
-          gtk_box_pack_end (GTK_BOX (hbox), prop_edit, FALSE, FALSE, 0);
-          
-          gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0); 
-
-          g_object_connect_property (object, spec->name,
-                                     GTK_SIGNAL_FUNC (float_changed),
-                                     adj, G_OBJECT (adj));
-
-          if (can_modify)
-            connect_controller (G_OBJECT (adj), "value_changed",
-                                object, spec->name, (GtkSignalFunc) float_modified);
-          break;
-          
-        case G_TYPE_PARAM_STRING:
-          hbox = gtk_hbox_new (FALSE, 10);
-          label = gtk_label_new (spec->nick);
-          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-          gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-
-          prop_edit = gtk_entry_new ();
-          gtk_box_pack_end (GTK_BOX (hbox), prop_edit, FALSE, FALSE, 0);
-          
-          gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0); 
-
-          g_object_connect_property (object, spec->name,
-                                     GTK_SIGNAL_FUNC (string_changed),
-                                     prop_edit, G_OBJECT (prop_edit));
-
-          if (can_modify)
-            connect_controller (G_OBJECT (prop_edit), "changed",
-                                object, spec->name, (GtkSignalFunc) string_modified);
-          break;
-
-        case G_TYPE_PARAM_BOOLEAN:
-          hbox = gtk_hbox_new (FALSE, 10);
-          label = gtk_label_new (spec->nick);
-          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-          gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-
-          prop_edit = gtk_toggle_button_new_with_label ("");
-          gtk_box_pack_end (GTK_BOX (hbox), prop_edit, FALSE, FALSE, 0);
-          
-          gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0); 
-
-          g_object_connect_property (object, spec->name,
-                                     GTK_SIGNAL_FUNC (bool_changed),
-                                     prop_edit, G_OBJECT (prop_edit));
-
-          if (can_modify)
-            connect_controller (G_OBJECT (prop_edit), "toggled",
-                                object, spec->name, (GtkSignalFunc) bool_modified);
-          break;
-          
-        case G_TYPE_PARAM_ENUM:
-	  {
-	    GtkWidget *menu;
-	    GEnumClass *eclass;
-	    gint i;
-            
-	    hbox = gtk_hbox_new (FALSE, 10);
-	    label = gtk_label_new (spec->nick);
-	    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	    gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-            
-	    prop_edit = gtk_option_menu_new ();
-	    
-	    menu = gtk_menu_new ();
-
-	    eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
-	    
-	    i = 0;
-	    while (i < eclass->n_values)
-	      {
-		GtkWidget *mi;
-                
-		mi = gtk_menu_item_new_with_label (eclass->values[i].value_name);
-		
-		gtk_widget_show (mi);
-                
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
-                
-                  ++i;
-	      }
-	    
-	    g_type_class_unref (eclass);
-	    
-	    gtk_option_menu_set_menu (GTK_OPTION_MENU (prop_edit), menu);
-	    
-	    gtk_box_pack_end (GTK_BOX (hbox), prop_edit, FALSE, FALSE, 0);
-            
-	    gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0); 
-            
-	    g_object_connect_property (object, spec->name,
-				       GTK_SIGNAL_FUNC (enum_changed),
-				       prop_edit, G_OBJECT (prop_edit));
-            
-	    if (can_modify)
-	      connect_controller (G_OBJECT (prop_edit), "changed",
-				  object, spec->name, (GtkSignalFunc) enum_modified);
-	  }
-	  
-        case G_TYPE_PARAM_UNICHAR:
-          hbox = gtk_hbox_new (FALSE, 10);
-          label = gtk_label_new (spec->nick);
-          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-          gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-
-	  prop_edit = gtk_entry_new ();
-	  gtk_entry_set_max_length (GTK_ENTRY (prop_edit), 1);
-          gtk_box_pack_end (GTK_BOX (hbox), prop_edit, FALSE, FALSE, 0);
-          
-          gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0); 
-
-          g_object_connect_property (object, spec->name,
-                                     GTK_SIGNAL_FUNC (unichar_changed),
-                                     prop_edit, G_OBJECT (prop_edit));
-
-          if (can_modify)
-            connect_controller (G_OBJECT (prop_edit), "changed",
-                                object, spec->name, (GtkSignalFunc) unichar_modified);
-          break;
-
-	default:
-	  {
-	    gchar *msg = g_strdup_printf ("%s: don't know how to edit property type %s",
-					  spec->nick, g_type_name (G_PARAM_SPEC_TYPE (spec)));
-	    hbox = gtk_hbox_new (FALSE, 10);
-	    label = gtk_label_new (msg);            
-	    g_free (msg);
-	    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	    gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-	    gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-	  }
-        }
+      label = gtk_label_new (spec->nick);
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
+      
+      prop_edit = property_widget (object, spec, can_modify);
+      gtk_table_attach_defaults (GTK_TABLE (table), prop_edit, 1, 2, i, i + 1);
 
       if (prop_edit)
         {
@@ -624,7 +723,81 @@ create_prop_editor (GObject *object,
       ++i;
     }
 
-  gtk_window_set_default_size (GTK_WINDOW (win), 300, 500);
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
+
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+                                  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), vbox);
+  return sw;
+}
+
+
+/* Pass zero for type if you want all properties */
+GtkWidget*
+create_prop_editor (GObject *object, GType type)
+{
+  GtkWidget *win;
+  GtkWidget *notebook;
+  GtkTooltips *tips;
+  GtkWidget *properties;
+  GtkWidget *label;
+  gchar *title;
+
+  if ((win = g_object_get_data (G_OBJECT (object), "prop-editor-win")))
+    {
+      gtk_window_present (GTK_WINDOW (win));
+      return win;
+    }
+
+  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  tips = gtk_tooltips_new ();
+  gtk_signal_connect_object (GTK_OBJECT (win), "destroy",
+			     GTK_SIGNAL_FUNC (gtk_object_destroy), GTK_OBJECT (tips));
+
+  /* hold a weak ref to the object we're editing */
+  g_object_set_data_full (G_OBJECT (object), "prop-editor-win", win, model_destroy);
+  g_object_set_data_full (G_OBJECT (win), "model-object", object, window_destroy);
+
+  if (type == 0)
+    {
+      notebook = gtk_notebook_new ();
+      gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_LEFT);
+      
+      gtk_container_add (GTK_CONTAINER (win), notebook);
+      
+      type = G_TYPE_FROM_INSTANCE (object);
+      
+      title = g_strdup_printf ("Properties of %s widget", g_type_name (type));
+      gtk_window_set_title (GTK_WINDOW (win), title);
+      g_free (title);
+      
+      while (type)
+	{
+	  properties = properties_from_type (object, type, tips);
+	  if (properties)
+	    {
+	      label = gtk_label_new (g_type_name (type));
+	      gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
+					properties, label);
+	    }
+	  
+	  type = g_type_parent (type);
+	}
+    }
+  else
+    {
+      properties = properties_from_type (object, type, tips);
+      gtk_container_add (GTK_CONTAINER (win), properties);
+      title = g_strdup_printf ("Properties of %s", g_type_name (type));
+      gtk_window_set_title (GTK_WINDOW (win), title);
+    }
+  
+  gtk_window_set_default_size (GTK_WINDOW (win), -1, 400);
   
   gtk_widget_show_all (win);
 

@@ -58,17 +58,17 @@ enum {
 };
 
 enum {
-  ARG_0,
-  ARG_TAB_POS,
-  ARG_SHOW_TABS,
-  ARG_SHOW_BORDER,
-  ARG_SCROLLABLE,
-  ARG_TAB_BORDER,
-  ARG_TAB_HBORDER,
-  ARG_TAB_VBORDER,
-  ARG_PAGE,
-  ARG_ENABLE_POPUP,
-  ARG_HOMOGENEOUS
+  PROP_0,
+  PROP_TAB_POS,
+  PROP_SHOW_TABS,
+  PROP_SHOW_BORDER,
+  PROP_SCROLLABLE,
+  PROP_TAB_BORDER,
+  PROP_TAB_HBORDER,
+  PROP_TAB_VBORDER,
+  PROP_PAGE,
+  PROP_ENABLE_POPUP,
+  PROP_HOMOGENEOUS
 };
 
 enum {
@@ -121,12 +121,14 @@ static void gtk_notebook_focus_tab           (GtkNotebook       *notebook,
 
 /*** GtkObject Methods ***/
 static void gtk_notebook_destroy             (GtkObject        *object);
-static void gtk_notebook_set_arg             (GtkObject        *object,
-				              GtkArg           *arg,
-				              guint             arg_id);
-static void gtk_notebook_get_arg	     (GtkObject        *object,
-					      GtkArg           *arg,
-					      guint             arg_id);
+static void gtk_notebook_set_property	     (GObject         *object,
+					      guint            prop_id,
+					      const GValue    *value,
+					      GParamSpec      *pspec);
+static void gtk_notebook_get_property	     (GObject         *object,
+					      guint            prop_id,
+					      GValue          *value,
+					      GParamSpec      *pspec);
 
 /*** GtkWidget Methods ***/
 static void gtk_notebook_map                 (GtkWidget        *widget);
@@ -277,19 +279,21 @@ gtk_notebook_get_type (void)
 static void
 gtk_notebook_class_init (GtkNotebookClass *class)
 {
+  GObjectClass   *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   GtkBindingSet *binding_set;
   
+  gobject_class = G_OBJECT_CLASS (class);
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
   parent_class = gtk_type_class (gtk_container_get_type ());
 
 
-  object_class->set_arg = gtk_notebook_set_arg;
-  object_class->get_arg = gtk_notebook_get_arg;
+  gobject_class->set_property = gtk_notebook_set_property;
+  gobject_class->get_property = gtk_notebook_get_property;
   object_class->destroy = gtk_notebook_destroy;
 
   widget_class->map = gtk_notebook_map;
@@ -321,16 +325,94 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   class->focus_tab = gtk_notebook_focus_tab;
   class->select_page = gtk_notebook_select_page;
   
-  gtk_object_add_arg_type ("GtkNotebook::page", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_PAGE);
-  gtk_object_add_arg_type ("GtkNotebook::tab_pos", GTK_TYPE_POSITION_TYPE, GTK_ARG_READWRITE, ARG_TAB_POS);
-  gtk_object_add_arg_type ("GtkNotebook::tab_border", GTK_TYPE_UINT, GTK_ARG_WRITABLE, ARG_TAB_BORDER);
-  gtk_object_add_arg_type ("GtkNotebook::tab_hborder", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_TAB_HBORDER);
-  gtk_object_add_arg_type ("GtkNotebook::tab_vborder", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_TAB_VBORDER);
-  gtk_object_add_arg_type ("GtkNotebook::show_tabs", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SHOW_TABS);
-  gtk_object_add_arg_type ("GtkNotebook::show_border", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SHOW_BORDER);
-  gtk_object_add_arg_type ("GtkNotebook::scrollable", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SCROLLABLE);
-  gtk_object_add_arg_type ("GtkNotebook::enable_popup", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ENABLE_POPUP);
-  gtk_object_add_arg_type ("GtkNotebook::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);
+  g_object_class_install_property (gobject_class,
+				   PROP_PAGE,
+				   g_param_spec_int ("page",
+ 						     _("Page"),
+ 						     _("The index of the current page"),
+ 						     0,
+ 						     G_MAXINT,
+ 						     0,
+ 						     G_PARAM_READWRITE));
+ 
+   g_object_class_install_property (gobject_class,
+                                    PROP_TAB_POS,
+                                    g_param_spec_enum ("tab_pos",
+ 						      _("Tab Position"),
+ 						      _("Which side of the notebook holds the tabs"),
+ 						      GTK_TYPE_POSITION_TYPE,
+ 						      GTK_POS_TOP,
+ 						      G_PARAM_READWRITE));
+ 
+   g_object_class_install_property (gobject_class,
+                                    PROP_TAB_BORDER,
+                                    g_param_spec_uint ("tab_border",
+ 						      _("Tab Border"),
+ 						      _("Width of the border around the tab labels"),
+ 						      0,
+ 						      G_MAXUINT,
+ 						      2,
+ 						      G_PARAM_WRITABLE));
+ 
+   g_object_class_install_property (gobject_class,
+                                    PROP_TAB_HBORDER,
+                                    g_param_spec_uint ("tab_hborder",
+ 						      _("Horizontal Tab Border"),
+ 						      _("Width of the horizontal border of tab labels"),
+ 						      0,
+ 						      G_MAXUINT,
+ 						      2,
+ 						      G_PARAM_READWRITE));
+ 
+   g_object_class_install_property (gobject_class,
+                                    PROP_TAB_VBORDER,
+                                    g_param_spec_uint ("tab_vborder",
+ 						      _("Vertical Tab Border"),
+ 						      _("Width of the vertical border of tab labels"),
+ 						      0,
+ 						      G_MAXUINT,
+ 						      2,
+ 						      G_PARAM_READWRITE));
+ 
+   g_object_class_install_property (gobject_class,
+                                    PROP_SHOW_TABS,
+                                    g_param_spec_boolean ("show_tabs",
+ 							 _("Show Tabs"),
+ 							 _("Whether tabs should be shown or not"),
+ 							 TRUE,
+ 							 G_PARAM_READWRITE));
+ 
+   g_object_class_install_property (gobject_class,
+                                    PROP_SHOW_BORDER,
+                                    g_param_spec_boolean ("show_border",
+ 							 _("Show Border"),
+ 							 _("Whether the border should be shown or not"),
+ 							 TRUE,
+ 							 G_PARAM_READWRITE));
+ 
+   g_object_class_install_property (gobject_class,
+                                    PROP_SCROLLABLE,
+                                    g_param_spec_boolean ("scrollable",
+ 							 _("Scrollable"),
+ 							 _("If TRUE, scroll arrows are added if there are to many tabs to fit"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+ 
+   g_object_class_install_property (gobject_class,
+                                    PROP_ENABLE_POPUP,
+                                    g_param_spec_boolean ("enable_popup",
+ 							 _("Enable Popup"),
+ 							 _("If TRUE, pressing the right mouse button on the notebook pops up a menu that you can use to go to a page"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+ 
+   g_object_class_install_property (gobject_class,
+                                    PROP_HOMOGENEOUS,
+                                    g_param_spec_boolean ("homogeneous",
+ 							 _("Homogeneous"),
+ 							 _("Whether tabs should have homogeneous sizes"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
 
   gtk_container_add_child_arg_type ("GtkNotebook::tab_label", GTK_TYPE_STRING, GTK_ARG_READWRITE, CHILD_ARG_TAB_LABEL);
   gtk_container_add_child_arg_type ("GtkNotebook::menu_label", GTK_TYPE_STRING, GTK_ARG_READWRITE, CHILD_ARG_MENU_LABEL);
@@ -495,48 +577,49 @@ gtk_notebook_destroy (GtkObject *object)
 }
 
 static void
-gtk_notebook_set_arg (GtkObject *object,
-		      GtkArg    *arg,
-		      guint      arg_id)
+gtk_notebook_set_property (GObject         *object,
+			   guint            prop_id,
+			   const GValue    *value,
+			   GParamSpec      *pspec)
 {
   GtkNotebook *notebook;
 
   notebook = GTK_NOTEBOOK (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_SHOW_TABS:
-      gtk_notebook_set_show_tabs (notebook, GTK_VALUE_BOOL (*arg));
+    case PROP_SHOW_TABS:
+      gtk_notebook_set_show_tabs (notebook, g_value_get_boolean (value));
       break;
-    case ARG_SHOW_BORDER:
-      gtk_notebook_set_show_border (notebook, GTK_VALUE_BOOL (*arg));
+    case PROP_SHOW_BORDER:
+      gtk_notebook_set_show_border (notebook, g_value_get_boolean (value));
       break;
-    case ARG_SCROLLABLE:
-      gtk_notebook_set_scrollable (notebook, GTK_VALUE_BOOL (*arg));
+    case PROP_SCROLLABLE:
+      gtk_notebook_set_scrollable (notebook, g_value_get_boolean (value));
       break;
-    case ARG_ENABLE_POPUP:
-      if (GTK_VALUE_BOOL (*arg))
+    case PROP_ENABLE_POPUP:
+      if (g_value_get_boolean (value))
 	gtk_notebook_popup_enable (notebook);
       else
 	gtk_notebook_popup_disable (notebook);
       break;
-    case ARG_HOMOGENEOUS:
-      gtk_notebook_set_homogeneous_tabs (notebook, GTK_VALUE_BOOL (*arg));
+    case PROP_HOMOGENEOUS:
+      gtk_notebook_set_homogeneous_tabs (notebook, g_value_get_boolean (value));
       break;  
-    case ARG_PAGE:
-      gtk_notebook_set_page (notebook, GTK_VALUE_INT (*arg));
+    case PROP_PAGE:
+      gtk_notebook_set_page (notebook, g_value_get_int (value));
       break;
-    case ARG_TAB_POS:
-      gtk_notebook_set_tab_pos (notebook, GTK_VALUE_ENUM (*arg));
+    case PROP_TAB_POS:
+      gtk_notebook_set_tab_pos (notebook, g_value_get_enum (value));
       break;
-    case ARG_TAB_BORDER:
-      gtk_notebook_set_tab_border (notebook, GTK_VALUE_UINT (*arg));
+    case PROP_TAB_BORDER:
+      gtk_notebook_set_tab_border (notebook, g_value_get_uint (value));
       break;
-    case ARG_TAB_HBORDER:
-      gtk_notebook_set_tab_hborder (notebook, GTK_VALUE_UINT (*arg));
+    case PROP_TAB_HBORDER:
+      gtk_notebook_set_tab_hborder (notebook, g_value_get_uint (value));
       break;
-    case ARG_TAB_VBORDER:
-      gtk_notebook_set_tab_vborder (notebook, GTK_VALUE_UINT (*arg));
+    case PROP_TAB_VBORDER:
+      gtk_notebook_set_tab_vborder (notebook, g_value_get_uint (value));
       break;
     default:
       break;
@@ -544,45 +627,46 @@ gtk_notebook_set_arg (GtkObject *object,
 }
 
 static void
-gtk_notebook_get_arg (GtkObject *object,
-		      GtkArg    *arg,
-		      guint      arg_id)
+gtk_notebook_get_property (GObject         *object,
+			   guint            prop_id,
+			   GValue          *value,
+			   GParamSpec      *pspec)
 {
   GtkNotebook *notebook;
 
   notebook = GTK_NOTEBOOK (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_SHOW_TABS:
-      GTK_VALUE_BOOL (*arg) = notebook->show_tabs;
+    case PROP_SHOW_TABS:
+      g_value_set_boolean (value, notebook->show_tabs);
       break;
-    case ARG_SHOW_BORDER:
-      GTK_VALUE_BOOL (*arg) = notebook->show_border;
+    case PROP_SHOW_BORDER:
+      g_value_set_boolean (value, notebook->show_border);
       break;
-    case ARG_SCROLLABLE:
-      GTK_VALUE_BOOL (*arg) = notebook->scrollable;
+    case PROP_SCROLLABLE:
+      g_value_set_boolean (value, notebook->scrollable);
       break;
-    case ARG_ENABLE_POPUP:
-      GTK_VALUE_BOOL (*arg) = notebook->menu != NULL;
+    case PROP_ENABLE_POPUP:
+      g_value_set_boolean (value, notebook->menu != NULL);
       break;
-    case ARG_HOMOGENEOUS:
-      GTK_VALUE_BOOL (*arg) = notebook->homogeneous;
+    case PROP_HOMOGENEOUS:
+      g_value_set_boolean (value, notebook->homogeneous);
       break;
-    case ARG_PAGE:
-      GTK_VALUE_INT (*arg) = gtk_notebook_get_current_page (notebook);
+    case PROP_PAGE:
+      g_value_set_int (value, gtk_notebook_get_current_page (notebook));
       break;
-    case ARG_TAB_POS:
-      GTK_VALUE_ENUM (*arg) = notebook->tab_pos;
+    case PROP_TAB_POS:
+      g_value_set_enum (value, notebook->tab_pos);
       break;
-    case ARG_TAB_HBORDER:
-      GTK_VALUE_UINT (*arg) = notebook->tab_hborder;
+    case PROP_TAB_HBORDER:
+      g_value_set_uint (value, notebook->tab_hborder);
       break;
-    case ARG_TAB_VBORDER:
-      GTK_VALUE_UINT (*arg) = notebook->tab_vborder;
+    case PROP_TAB_VBORDER:
+      g_value_set_uint (value, notebook->tab_vborder);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -3343,6 +3427,7 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
     gtk_widget_map (notebook->cur_page->child);
 
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
+  g_object_notify (G_OBJECT (notebook), "page");
 }
 
 /* Private GtkNotebook Page Switch Functions:
@@ -4080,6 +4165,8 @@ gtk_notebook_set_show_border (GtkNotebook *notebook,
 
       if (GTK_WIDGET_VISIBLE (notebook))
 	gtk_widget_queue_resize (GTK_WIDGET (notebook));
+      
+      g_object_notify (G_OBJECT (notebook), "show_border");
     }
 }
 
@@ -4134,6 +4221,8 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
       gtk_notebook_update_labels (notebook);
     }
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
+
+  g_object_notify (G_OBJECT (notebook), "show_tabs");
 }
 
 /**
@@ -4156,6 +4245,8 @@ gtk_notebook_set_tab_pos (GtkNotebook     *notebook,
       if (GTK_WIDGET_VISIBLE (notebook))
 	gtk_widget_queue_resize (GTK_WIDGET (notebook));
     }
+
+  g_object_notify (G_OBJECT (notebook), "tab_pos");
 }
 
 /**
@@ -4176,6 +4267,8 @@ gtk_notebook_set_homogeneous_tabs (GtkNotebook *notebook,
 
   notebook->homogeneous = homogeneous;
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
+
+  g_object_notify (G_OBJECT (notebook), "homogeneous");
 }
 
 /**
@@ -4199,6 +4292,8 @@ gtk_notebook_set_tab_border (GtkNotebook *notebook,
 
   if (GTK_WIDGET_VISIBLE (notebook) && notebook->show_tabs)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
+
+  g_object_notify (G_OBJECT (notebook), "tab_hborder");
 }
 
 /**
@@ -4221,6 +4316,8 @@ gtk_notebook_set_tab_hborder (GtkNotebook *notebook,
 
   if (GTK_WIDGET_VISIBLE (notebook) && notebook->show_tabs)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
+
+  g_object_notify (G_OBJECT (notebook), "tab_vborder");
 }
 
 /**
@@ -4282,6 +4379,8 @@ gtk_notebook_set_scrollable (GtkNotebook *notebook,
 
       if (GTK_WIDGET_VISIBLE (notebook))
 	gtk_widget_queue_resize (GTK_WIDGET (notebook));
+
+      g_object_notify (G_OBJECT (notebook), "scrollable");
     }
 }
 
@@ -4319,6 +4418,8 @@ gtk_notebook_popup_enable (GtkNotebook *notebook)
   gtk_menu_attach_to_widget (GTK_MENU (notebook->menu),
 			     GTK_WIDGET (notebook),
 			     gtk_notebook_menu_detacher);
+
+  g_object_notify (G_OBJECT (notebook), "enable_popup");
 }
 
 /**
@@ -4338,6 +4439,8 @@ gtk_notebook_popup_disable  (GtkNotebook *notebook)
   gtk_container_foreach (GTK_CONTAINER (notebook->menu),
 			 (GtkCallback) gtk_notebook_menu_label_unparent, NULL);
   gtk_widget_destroy (notebook->menu);
+
+  g_object_notify (G_OBJECT (notebook), "enable_popup");
 }
 
 /* Public GtkNotebook Page Properties Functions:

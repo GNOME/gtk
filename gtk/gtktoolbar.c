@@ -48,12 +48,9 @@
 #define SPACE_LINE_END      7
 
 enum {
-  ARG_0,
-  ARG_ORIENTATION,
-  ARG_TOOLBAR_STYLE,
-  ARG_SPACE_SIZE,
-  ARG_SPACE_STYLE,
-  ARG_RELIEF
+  PROP_0,
+  PROP_ORIENTATION,
+  PROP_TOOLBAR_STYLE,
 };
 
 enum {
@@ -72,12 +69,14 @@ struct _GtkToolbarChildSpace
 
 static void gtk_toolbar_class_init               (GtkToolbarClass *class);
 static void gtk_toolbar_init                     (GtkToolbar      *toolbar);
-static void gtk_toolbar_set_arg                  (GtkObject       *object,
-						  GtkArg          *arg,
-						  guint            arg_id);
-static void gtk_toolbar_get_arg                  (GtkObject       *object,
-						  GtkArg          *arg,
-						  guint            arg_id);
+static void gtk_toolbar_set_property             (GObject         *object,
+						  guint            prop_id,
+						  const GValue    *value,
+						  GParamSpec      *pspec);
+static void gtk_toolbar_get_property             (GObject         *object,
+						  guint            prop_id,
+						  GValue          *value,
+						  GParamSpec      *pspec);
 static void gtk_toolbar_destroy                  (GtkObject       *object);
 static void gtk_toolbar_map                      (GtkWidget       *widget);
 static void gtk_toolbar_unmap                    (GtkWidget       *widget);
@@ -164,10 +163,12 @@ gtk_toolbar_get_type (void)
 static void
 gtk_toolbar_class_init (GtkToolbarClass *class)
 {
+  GObjectClass   *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
+  gobject_class = G_OBJECT_CLASS (class);
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
@@ -175,8 +176,8 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   parent_class = gtk_type_class (gtk_container_get_type ());
   
   object_class->destroy = gtk_toolbar_destroy;
-  object_class->set_arg = gtk_toolbar_set_arg;
-  object_class->get_arg = gtk_toolbar_get_arg;
+  gobject_class->set_property = gtk_toolbar_set_property;
+  gobject_class->get_property = gtk_toolbar_get_property;
 
   widget_class->map = gtk_toolbar_map;
   widget_class->unmap = gtk_toolbar_unmap;
@@ -210,10 +211,24 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_INT);
   
-  gtk_object_add_arg_type ("GtkToolbar::orientation", GTK_TYPE_ORIENTATION,
-			   GTK_ARG_READWRITE, ARG_ORIENTATION);
-  gtk_object_add_arg_type ("GtkToolbar::toolbar_style", GTK_TYPE_TOOLBAR_STYLE,
-			   GTK_ARG_READWRITE, ARG_TOOLBAR_STYLE);
+  g_object_class_install_property (gobject_class,
+				   PROP_ORIENTATION,
+				   g_param_spec_enum ("orientation",
+ 						      _("Orientation"),
+ 						      _("The orientation of the toolbar"),
+ 						      GTK_TYPE_ORIENTATION,
+ 						      GTK_ORIENTATION_HORIZONTAL,
+ 						      G_PARAM_READWRITE));
+ 
+   g_object_class_install_property (gobject_class,
+                                    PROP_TOOLBAR_STYLE,
+                                    g_param_spec_enum ("toolbar_style",
+ 						      _("Toolbar Style"),
+ 						      _("How to draw the toolbar"),
+ 						      GTK_TYPE_TOOLBAR_STYLE,
+ 						      GTK_TOOLBAR_ICONS,
+ 						      G_PARAM_READWRITE));
+
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("space_size",
@@ -258,40 +273,42 @@ gtk_toolbar_init (GtkToolbar *toolbar)
 }
 
 static void
-gtk_toolbar_set_arg (GtkObject *object,
-		     GtkArg    *arg,
-		     guint      arg_id)
+gtk_toolbar_set_property (GObject      *object,
+			  guint         prop_id,
+			  const GValue *value,
+			  GParamSpec   *pspec)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ORIENTATION:
-      gtk_toolbar_set_orientation (toolbar, GTK_VALUE_ENUM (*arg));
+    case PROP_ORIENTATION:
+      gtk_toolbar_set_orientation (toolbar, g_value_get_enum (value));
       break;
-    case ARG_TOOLBAR_STYLE:
-      gtk_toolbar_set_style (toolbar, GTK_VALUE_ENUM (*arg));
+    case PROP_TOOLBAR_STYLE:
+      gtk_toolbar_set_style (toolbar, g_value_get_enum (value));
       break;
     }
 }
 
 static void
-gtk_toolbar_get_arg (GtkObject *object,
-		     GtkArg    *arg,
-		     guint      arg_id)
+gtk_toolbar_get_property (GObject      *object,
+			  guint         prop_id,
+			  GValue       *value,
+			  GParamSpec   *pspec)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ORIENTATION:
-      GTK_VALUE_ENUM (*arg) = toolbar->orientation;
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, toolbar->orientation);
       break;
-    case ARG_TOOLBAR_STYLE:
-      GTK_VALUE_ENUM (*arg) = toolbar->style;
+    case PROP_TOOLBAR_STYLE:
+      g_value_set_enum (value, toolbar->style);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -1262,6 +1279,7 @@ gtk_real_toolbar_orientation_changed (GtkToolbar     *toolbar,
     {
       toolbar->orientation = orientation;
       gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+      g_object_notify (G_OBJECT (toolbar), "orientation");
     }
 }
 
@@ -1400,8 +1418,9 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 		g_assert_not_reached ();
 	      }
 	}
-		
+
       gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+      g_object_notify (G_OBJECT (toolbar), "toolbar_style");
     }
 }
 

@@ -1231,9 +1231,9 @@ gtk_widget_get_property (GObject         *object,
     case PROP_EXTENSION_EVENTS:
       modep = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode);
       if (!modep)
- 	g_value_set_flags (value, 0);
+ 	g_value_set_enum (value, 0);
       else
- 	g_value_set_flags (value, (GdkExtensionMode) *modep);
+ 	g_value_set_enum (value, (GdkExtensionMode) *modep);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

@@ -125,6 +125,8 @@ static void gtk_label_select_region_index (GtkLabel *label,
 
 static gboolean gtk_label_mnemonic_activate (GtkWidget *widget,
 					     gboolean   group_cycling);
+static void     gtk_label_setup_mnemonic    (GtkLabel  *label,
+					     guint      last_key);
 
 
 static GtkMiscClass *parent_class = NULL;
@@ -272,8 +274,10 @@ gtk_label_set_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkLabel *label;
-  
+  guint last_keyval;
+
   label = GTK_LABEL (object);
+  last_keyval = label->mnemonic_keyval;
   
   switch (prop_id)
     {
@@ -281,6 +285,8 @@ gtk_label_set_property (GObject      *object,
       gtk_label_set_label_internal (label,
 				    g_strdup (g_value_get_string (value)));
       gtk_label_recalculate (label);
+      if (last_keyval != label->mnemonic_keyval)
+	gtk_label_setup_mnemonic (label, last_keyval);
       break;
     case PROP_ATTRIBUTES:
       gtk_label_set_attributes (label, g_value_get_boxed (value));
@@ -292,6 +298,8 @@ gtk_label_set_property (GObject      *object,
     case PROP_USE_UNDERLINE:
       gtk_label_set_use_underline_internal (label, g_value_get_boolean (value));
       gtk_label_recalculate (label);
+      if (label->use_underline)
+	gtk_label_setup_mnemonic (label, last_keyval);
       break;
     case PROP_JUSTIFY:
       gtk_label_set_justify (label, g_value_get_enum (value));

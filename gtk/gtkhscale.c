@@ -35,8 +35,7 @@
 #define RANGE_CLASS(w)  GTK_RANGE_GET_CLASS (w)
 
 enum {
-  PROP_0,
-  PROP_ADJUSTMENT
+  PROP_0
 };
 
 static void     gtk_hscale_class_init       (GtkHScaleClass *klass);
@@ -132,13 +131,6 @@ gtk_hscale_class_init (GtkHScaleClass *class)
   
   scale_class->draw_value = gtk_hscale_draw_value;
 
-  g_object_class_install_property (gobject_class,
-				   PROP_ADJUSTMENT,
-				   g_param_spec_object ("adjustment",
-							_("Adjustment"),
-							_("The GtkAdjustment that determines the values to use for this HScale."),
-							GTK_TYPE_ADJUSTMENT,
-							G_PARAM_READWRITE));
   binding_set = gtk_binding_set_by_class (object_class);
 
   add_slider_binding (binding_set, GDK_Left, 0,
@@ -192,9 +184,6 @@ gtk_hscale_set_property (GObject        *object,
   
   switch (prop_id)
     {
-    case PROP_ADJUSTMENT:
-      gtk_range_set_adjustment (GTK_RANGE (hscale), g_value_get_object (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -213,10 +202,6 @@ gtk_hscale_get_property (GObject                    *object,
   
   switch (prop_id)
     {
-    case PROP_ADJUSTMENT:
-      g_value_set_object (value,
-			  G_OBJECT (gtk_range_get_adjustment (GTK_RANGE (hscale))));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;

@@ -1,3 +1,33 @@
+2001-05-17  Alexander Larsson  <alla@lysator.liu.se>
+	
+	* gtk/gtkbbox.c:
+	Add properties, based on patch by Lee Mallabone.
+
+	* gtk/gtknotebook.c:
+	* gtk/gtktoolbar.c:
+	Convert from GtkArg to GParam, based on patch by John Margaglione.
+	
+	* gtk/gtkhscale.c:
+	* gtk/gtkvscale.c:
+	* gtk/gtkhscrollbar.c:
+	* gtk/gtkvscrollbar.c:
+	* gtk/gtkrange.c:
+	Move adjustment property to GtkRange.
+
+	* gtk/gtklabel.c:
+	Setup mnemonics on property changes
+
+	* gtk/gtkwidget.c (gtk_widget_get_property):
+	GdkExtensionMode is an enum, not a flag. Set it with
+	g_value_set_enum ().
+
+	* tests/prop-editor.c:
+	Better propery editor.
+
+	* tests/testgtk.c:
+	Add new property test. Pass zero to the property editor to
+	get properties from all derived types.
+	
 Sun May 13 12:01:12 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* autogen.sh (have_automake): Require libtool-1.4,
