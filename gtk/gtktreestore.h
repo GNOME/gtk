@@ -123,9 +123,12 @@ void          gtk_tree_store_reorder          (GtkTreeStore *tree_store,
 void          gtk_tree_store_swap             (GtkTreeStore *tree_store,
                                                GtkTreeIter  *a,
                                                GtkTreeIter  *b);
-void          gtk_tree_store_move             (GtkTreeStore *tree_store,
+void          gtk_tree_store_move_before      (GtkTreeStore *tree_store,
                                                GtkTreeIter  *iter,
-                                               GtkTreePath  *position);
+                                               GtkTreeIter  *position);
+void          gtk_tree_store_move_after       (GtkTreeStore *tree_store,
+                                               GtkTreeIter  *iter,
+                                               GtkTreeIter  *position);
 
 
 #ifdef __cplusplus

@@ -8946,11 +8946,11 @@ gtk_tree_view_expand_to_path (GtkTreeView *tree_view,
 
   for (i = 0; i < depth; i++)
     {
-      gtk_tree_path_append_index (path, indices[i]);
-      gtk_tree_view_expand_row (tree_view, path, FALSE);
+      gtk_tree_path_append_index (tmp, indices[i]);
+      gtk_tree_view_expand_row (tree_view, tmp, FALSE);
     }
 
-  gtk_tree_path_free (path);
+  gtk_tree_path_free (tmp);
 }
 
 /* FIXME the bool return values for expand_row and collapse_row are

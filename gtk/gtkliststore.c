@@ -109,6 +109,11 @@ static void     gtk_list_store_set_default_sort_func (GtkTreeSortable        *so
 						      GtkDestroyNotify        destroy);
 static gboolean gtk_list_store_has_default_sort_func (GtkTreeSortable        *sortable);
 
+static void     gtk_list_store_move                  (GtkListStore           *store,
+                                                      GtkTreeIter            *iter,
+						      GtkTreeIter            *path,
+						      gboolean                before);
+
 
 static GObjectClass *parent_class = NULL;
 
@@ -1717,7 +1722,7 @@ gtk_list_store_swap (GtkListStore *store,
       a_count++;
     }
 
-  if (a->user_data == store->root)
+  if (b->user_data == store->root)
     prev_b = NULL;
   else
     {
@@ -1765,32 +1770,77 @@ gtk_list_store_swap (GtkListStore *store,
   g_free (order);
 }
 
-/**
- * gtk_list_store_move:
- * @store: A #GtkTreeStore.
- * @iter: A #GtkTreeIter.
- * @position: A #GtkTreePath.
- *
- * Moves @iter in @store to the position before @position. Note that this
- * function only works with unsorted stores.
- **/
-void
+static void
 gtk_list_store_move (GtkListStore *store,
 		     GtkTreeIter  *iter,
-		     GtkTreePath  *position)
+		     GtkTreeIter  *position,
+		     gboolean      before)
 {
-  GSList *i, *prev = NULL, *new_prev = NULL;
-  gint old_pos = 0, j = 0, *order;
-  GtkTreePath *path;
+  GtkTreeIter dst_a;
+  GSList *i, *a, *prev = NULL, *tmp;
+  gint new_pos = 0, old_pos = 0, j = 0, *order;
+  GtkTreePath *path, *pos_path = NULL;
 
   g_return_if_fail (GTK_IS_LIST_STORE (store));
   g_return_if_fail (!GTK_LIST_STORE_IS_SORTED (store));
   g_return_if_fail (VALID_ITER (iter, store));
-  g_return_if_fail (position != NULL);
+  if (position)
+    g_return_if_fail (VALID_ITER (position, store));
 
-  if (gtk_tree_path_get_depth (position) != 1)
-    return;
+  /* lots of sanity checks */
+  if (position)
+    {
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), iter);
+      pos_path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), position);
 
+      if (gtk_tree_path_get_depth (pos_path) != 1)
+        goto free_paths_and_out;
+
+      /* if before:
+       *   moving the iter before path or "path + 1" doesn't make sense
+       * else
+       *   moving the iter before path or "path - 1" doesn't make sense
+       */
+      if (!gtk_tree_path_compare (path, pos_path))
+        goto free_paths_and_out;
+
+      if (before)
+        gtk_tree_path_next (path);
+      else
+        gtk_tree_path_prev (path);
+
+      if (!gtk_tree_path_compare (path, pos_path))
+        goto free_paths_and_out;
+
+      gtk_tree_path_free (path);
+    }
+
+  /* getting destination iters */
+  if (before && position)
+    {
+      if (gtk_tree_path_get_indices (pos_path)[0] > 0)
+        {
+	  gtk_tree_path_prev (pos_path);
+	  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &dst_a, pos_path))
+	    a = G_SLIST (dst_a.user_data);
+	  else
+	    a = NULL;
+	  gtk_tree_path_next (pos_path);
+	}
+      else
+	a = NULL;
+    }
+  else if (before && !position)
+    a = NULL;
+  else /* !before */
+    {
+      if (position)
+	a = G_SLIST (position->user_data);
+      else
+	a = NULL;
+    }
+
+  /* getting the old prev node */
   if (iter->user_data == store->root)
     prev = NULL;
   else
@@ -1805,54 +1855,126 @@ gtk_list_store_move (GtkListStore *store,
       old_pos++;
     }
 
-  if (old_pos == gtk_tree_path_get_indices (position)[0])
-    return;
-
-  if (gtk_tree_path_get_indices (position)[0] == 0)
-    new_prev = NULL;
-  else
-    {
-      for (i = store->root; i; i = i->next, j++)
-	if (j == gtk_tree_path_get_indices (position)[0] - 1)
-	  {
-	    new_prev = i;
-	    break;
-	  }
-    }
-
+  /* remove node */
   if (!prev)
     store->root = G_SLIST (iter->user_data)->next;
   else
     prev->next = G_SLIST (iter->user_data)->next;
 
-  if (!new_prev)
+  /* and reinsert it */
+  if (a)
     {
-      G_SLIST (iter->user_data)->next = store->root;
-      store->root = G_SLIST (iter->user_data);
+      tmp = a->next;
+
+      a->next = G_SLIST (iter->user_data);
+      a->next->next = tmp;
     }
-  else
+  else if (!a && !before)
     {
-      G_SLIST (iter->user_data)->next = new_prev->next;
-      new_prev->next = G_SLIST (iter->user_data);
+      tmp = G_SLIST (store->root);
+
+      store->root = G_SLIST (iter->user_data);
+      G_SLIST (store->root)->next = tmp;
+    }
+  else if (!a && before)
+    {
+      G_SLIST (store->tail)->next = G_SLIST (iter->user_data);
+      G_SLIST (iter->user_data)->next = NULL;
+      store->tail = iter->user_data;
     }
 
   /* emit signal */
+  if (position)
+    new_pos = gtk_tree_path_get_indices (pos_path)[0];
+  else if (before)
+    new_pos = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL) - 1;
+  else
+    new_pos = 0;
+
+  if (new_pos > old_pos)
+    {
+      if (before)
+	new_pos--;
+    }
+  else
+    {
+      if (!before)
+	new_pos++;
+    }
+
   order = g_new (gint, store->length);
-  for (j = 0; j < store->length; j++)
-    if (j < old_pos)
-      order[j] = j;
-    else if (j >= old_pos && j < gtk_tree_path_get_indices (position)[0])
-      order[j] = j + 1;
-    else if (j == gtk_tree_path_get_indices (position)[0])
-      order[j] = old_pos;
-    else
-      order[j] = j;
+  if (new_pos > old_pos)
+    {
+      for (j = 0; j < store->length; j++)
+        if (j < old_pos)
+          order[j] = j;
+        else if (j >= old_pos && j < new_pos)
+          order[j] = j + 1;
+        else if (j == new_pos)
+          order[j] = old_pos;
+        else
+          order[j] = j;
+    }
+  else
+    {
+      for (j = 0; j < store->length; j++)
+	if (j == new_pos)
+	  order[j] = old_pos;
+	else if (j > new_pos && j <= old_pos)
+	  order[j] = j - 1;
+	else
+	  order[j] = j;
+    }
 
   path = gtk_tree_path_new ();
   gtk_tree_model_rows_reordered (GTK_TREE_MODEL (store),
 				 path, NULL, order);
   gtk_tree_path_free (path);
+  if (position)
+    gtk_tree_path_free (pos_path);
   g_free (order);
+
+  return;
+
+free_paths_and_out:
+  gtk_tree_path_free (path);
+  gtk_tree_path_free (pos_path);
+}
+
+/**
+ * gtk_list_store_move_before:
+ * @store: A #GtkListStore.
+ * @iter: A #GtkTreeIter.
+ * @position: A #GtkTreeIter, or %NULL.
+ *
+ * Moves @iter in @store to the position before @position. Note that this
+ * function only works with unsorted stores. If @position is %NULL, @iter
+ * will be moved to the end of the list.
+ **/
+void
+gtk_list_store_move_before (GtkListStore *store,
+                            GtkTreeIter  *iter,
+			    GtkTreeIter  *position)
+{
+  gtk_list_store_move (store, iter, position, TRUE);
+}
+
+/**
+ * gtk_list_store_move_after:
+ * @store: A #GtkListStore.
+ * @iter: A #GtkTreeIter.
+ * @position: A #GtkTreeIter, or %NULL.
+ *
+ * Moves @iter in @store to the position after @position. Note that this
+ * function only works with unsorted stores. If @position is %NULL, @iter
+ * will be moved to the start of the list.
+ **/
+void
+gtk_list_store_move_after (GtkListStore *store,
+                           GtkTreeIter  *iter,
+			   GtkTreeIter  *position)
+{
+  gtk_list_store_move (store, iter, position, FALSE);
 }
 
 /* Sorting */

@@ -1147,6 +1147,7 @@ gtk_tree_selection_real_modify_range (GtkTreeSelection *selection,
 {
   GtkRBNode *start_node, *end_node;
   GtkRBTree *start_tree, *end_tree;
+  GtkTreePath *anchor_path;
   gboolean dirty = FALSE;
 
   switch (gtk_tree_path_compare (start_path, end_path))
@@ -1160,6 +1161,7 @@ gtk_tree_selection_real_modify_range (GtkTreeSelection *selection,
 				start_path,
 				&end_tree,
 				&end_node);
+      anchor_path = end_path;
       break;
     case 0:
       _gtk_tree_view_find_node (selection->tree_view,
@@ -1168,6 +1170,7 @@ gtk_tree_selection_real_modify_range (GtkTreeSelection *selection,
 				&start_node);
       end_tree = start_tree;
       end_node = start_node;
+      anchor_path = start_path;
       break;
     case -1:
       _gtk_tree_view_find_node (selection->tree_view,
@@ -1178,11 +1181,23 @@ gtk_tree_selection_real_modify_range (GtkTreeSelection *selection,
 				end_path,
 				&end_tree,
 				&end_node);
+      anchor_path = start_path;
       break;
     }
 
   g_return_val_if_fail (start_node != NULL, FALSE);
   g_return_val_if_fail (end_node != NULL, FALSE);
+
+  if (anchor_path)
+    {
+      if (selection->tree_view->priv->anchor)
+	gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
+
+      selection->tree_view->priv->anchor =
+	gtk_tree_row_reference_new_proxy (G_OBJECT (selection->tree_view),
+	                                  selection->tree_view->priv->model,
+					  anchor_path);
+    }
 
   do
     {

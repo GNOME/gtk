@@ -1,3 +1,33 @@
+Mon Nov 18 20:42:27 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_expand_to_path): modify and
+	free tmp instead of path ... (patch from #97927).
+
+Mon Nov 18 20:31:20 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_start_editing):
+	only _set_text if celltext->text is not NULL. (#97815, reported
+	and testcase provided by Vitaly Tishkov).
+
+Mon Nov 18 20:28:28 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_real_modify_range):
+	also update the anchor_path, makes behaviour consistent with the
+	other selection modification functions. (#96801, reported and
+	testcase provided by Vitaly Tishkov).
+
+Mon Nov 18 20:17:56 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Hrm, this fixes up lots of mistakes in my swap/move code ... Some
+	of these mistakes where pointed out by Vitaly Tishkov in bugs
+	#97403, #97404, #97412, #97618.
+
+	* gtktreestore.[ch]: gtk_tree_store_move is now private, use
+	gtk_tree_store_move_{before,after} instead now. Lots of fixes
+	(more like a rewrite :) in the _move and _swap functions.
+
+	* gtkliststore.[ch]: likewise.
+	
 2002-11-18  Abigail Brady  <morwen@evilmagic.org>
 
 	* gtk/gtkimmodule.c: (_gtk_im_module_list): Sort the list of Input 

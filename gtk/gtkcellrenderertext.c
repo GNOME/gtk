@@ -1371,7 +1371,8 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 			"has_frame", FALSE,
 			NULL);
 
-  gtk_entry_set_text (GTK_ENTRY (entry), celltext->text);
+  if (celltext->text)
+    gtk_entry_set_text (GTK_ENTRY (entry), celltext->text);
   g_object_set_data_full (G_OBJECT (entry), GTK_CELL_RENDERER_TEXT_PATH, g_strdup (path), g_free);
   
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
