@@ -51,7 +51,7 @@ dump_toplevels (GtkWidget    *button,
 					    GTK_UI_MANAGER_TOOLBAR |
 					    GTK_UI_MANAGER_POPUP);
 
-  g_slist_foreach (toplevels, (GFunc)print_toplevel, NULL);
+  g_slist_foreach (toplevels, (GFunc) print_toplevel, NULL);
   g_slist_free (toplevels);
 }
 
@@ -245,7 +245,7 @@ toggle_merge (GtkWidget    *button,
 					   "could not merge %s: %s", merge_ids[mergenum].filename,
 					   err->message);
 
-	  g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gtk_object_destroy), NULL);
+	  g_signal_connect (dialog, "response", G_CALLBACK (gtk_object_destroy), NULL);
 	  gtk_widget_show (dialog);
 
 	  g_clear_error (&err);
@@ -270,8 +270,8 @@ set_name_func (GtkTreeViewColumn *tree_column,
   char *name;
   
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
-  g_object_get (G_OBJECT (action), "name", &name, NULL);
-  g_object_set (G_OBJECT (cell), "text", name, NULL);
+  g_object_get (action, "name", &name, NULL);
+  g_object_set (cell, "text", name, NULL);
   g_free (name);
   g_object_unref (action);
 }
@@ -287,8 +287,8 @@ set_sensitive_func (GtkTreeViewColumn *tree_column,
   gboolean sensitive;
   
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
-  g_object_get (G_OBJECT (action), "sensitive", &sensitive, NULL);
-  g_object_set (G_OBJECT (cell), "active", sensitive, NULL);
+  g_object_get (action, "sensitive", &sensitive, NULL);
+  g_object_set (cell, "active", sensitive, NULL);
   g_object_unref (action);
 }
 
@@ -304,8 +304,8 @@ set_visible_func (GtkTreeViewColumn *tree_column,
   gboolean visible;
   
   gtk_tree_model_get (tree_model, iter, 0, &action, -1);
-  g_object_get (G_OBJECT (action), "visible", &visible, NULL);
-  g_object_set (G_OBJECT (cell), "active", visible, NULL);
+  g_object_get (action, "visible", &visible, NULL);
+  g_object_set (cell, "active", visible, NULL);
   g_object_unref (action);
 }
 
@@ -323,8 +323,8 @@ sensitivity_toggled (GtkCellRendererToggle *cell,
   gtk_tree_model_get_iter (model, &iter, path);
 
   gtk_tree_model_get (model, &iter, 0, &action, -1);
-  g_object_get (G_OBJECT (action), "sensitive", &sensitive, NULL);
-  g_object_set (G_OBJECT (action), "sensitive", !sensitive, NULL);
+  g_object_get (action, "sensitive", &sensitive, NULL);
+  g_object_set (action, "sensitive", !sensitive, NULL);
   gtk_tree_model_row_changed (model, path, &iter);
   gtk_tree_path_free (path);
 }
@@ -343,8 +343,8 @@ visibility_toggled (GtkCellRendererToggle *cell,
   gtk_tree_model_get_iter (model, &iter, path);
 
   gtk_tree_model_get (model, &iter, 0, &action, -1);
-  g_object_get (G_OBJECT (action), "visible", &visible, NULL);
-  g_object_set (G_OBJECT (action), "visible", !visible, NULL);
+  g_object_get (action, "visible", &visible, NULL);
+  g_object_set (action, "visible", !visible, NULL);
   gtk_tree_model_row_changed (model, path, &iter);
   gtk_tree_path_free (path);
 }
@@ -508,7 +508,7 @@ set_tip (GtkWidget *widget)
   
   if (data) 
     {
-      g_object_get (G_OBJECT (data->action), "tooltip", &tooltip, NULL);
+      g_object_get (data->action, "tooltip", &tooltip, NULL);
       
       gtk_statusbar_push (GTK_STATUSBAR (data->statusbar), 0, 
 			  tooltip ? tooltip : "");
@@ -580,9 +580,9 @@ main (int argc, char **argv)
 				entries, n_entries, 
 				NULL);
   action = gtk_action_group_get_action (action_group, "EmptyMenu1Action");
-  g_object_set (G_OBJECT (action), "hide_if_empty", FALSE, NULL);
+  g_object_set (action, "hide_if_empty", FALSE, NULL);
   action = gtk_action_group_get_action (action_group, "EmptyMenu2Action");
-  g_object_set (G_OBJECT (action), "hide_if_empty", TRUE, NULL);
+  g_object_set (action, "hide_if_empty", TRUE, NULL);
   gtk_action_group_add_toggle_actions (action_group, 
 				       toggle_entries, n_toggle_entries, 
 				       NULL);

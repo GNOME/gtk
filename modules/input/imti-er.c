@@ -483,7 +483,7 @@ GtkIMContext *
 im_module_create (const gchar *context_id)
 {
   if (strcmp (context_id, "ti_er") == 0)
-    return GTK_IM_CONTEXT (g_object_new (type_ti_er_translit, NULL));
+    return g_object_new (type_ti_er_translit, NULL);
   else
     return NULL;
 }

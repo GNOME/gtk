@@ -121,7 +121,7 @@ GtkIMContext *
 im_module_create (const gchar *context_id)
 {
   if (strcmp (context_id, "cedilla") == 0)
-    return GTK_IM_CONTEXT (g_object_new (type_cedilla, NULL));
+    return g_object_new (type_cedilla, NULL);
   else
     return NULL;
 }

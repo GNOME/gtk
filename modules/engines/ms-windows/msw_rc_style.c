@@ -73,6 +73,6 @@ msw_rc_style_class_init (MswRcStyleClass *klass)
 static GtkStyle *
 msw_rc_style_create_style (GtkRcStyle *rc_style)
 {
-  return GTK_STYLE (g_object_new (MSW_TYPE_STYLE, NULL));
+  return g_object_new (MSW_TYPE_STYLE, NULL);
 }
 

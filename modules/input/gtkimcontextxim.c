@@ -633,7 +633,7 @@ gtk_im_context_xim_new (void)
   GtkIMContextXIM *result;
   const gchar *charset;
 
-  result = GTK_IM_CONTEXT_XIM (g_object_new (GTK_TYPE_IM_CONTEXT_XIM, NULL));
+  result = g_object_new (GTK_TYPE_IM_CONTEXT_XIM, NULL);
 
   result->locale = g_strdup (setlocale (LC_CTYPE, NULL));
   

@@ -337,7 +337,7 @@ main (int argc, char *argv[])
 				  "text", 1, NULL); 
   
   gtk_entry_completion_set_match_func (completion, match_func, NULL, NULL);
-  g_signal_connect (G_OBJECT (completion), "match-selected", 
+  g_signal_connect (completion, "match-selected", 
 		    G_CALLBACK (match_selected_cb), NULL);
 
   gtk_entry_completion_insert_action_text (completion, 100, "action!");

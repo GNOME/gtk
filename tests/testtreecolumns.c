@@ -512,7 +512,7 @@ view_column_model_new (GtkTreeView *view)
 {
   GtkTreeModel *retval;
 
-  retval = GTK_TREE_MODEL (g_object_new (view_column_model_get_type (), NULL));
+  retval = g_object_new (view_column_model_get_type (), NULL);
   ((ViewColumnModel *)retval)->view = view;
   ((ViewColumnModel *)retval)->columns = gtk_tree_view_get_columns (view);
 

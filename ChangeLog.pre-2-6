@@ -1,3 +1,34 @@
+Fri Nov 19 15:18:51 2004  Manish Singh  <yosh@gimp.org>
+
+	* modules/engines/ms-windows/msw_rc_style.c
+	* modules/engines/ms-windows/msw_style.c
+	* modules/engines/ms-windows/msw_theme_main.c
+	* modules/engines/pixbuf/pixbuf-main.c
+	* modules/engines/pixbuf/pixbuf-rc-style.c
+	* modules/input/gtkimcontextime.c
+	* modules/input/gtkimcontextxim.c
+	* modules/input/imam-et.c
+	* modules/input/imcedilla.c
+	* modules/input/imcyrillic-translit.c
+	* modules/input/iminuktitut.c
+	* modules/input/imipa.c
+	* modules/input/imthai-broken.c
+	* modules/input/imti-er.c
+	* modules/input/imti-et.c
+	* modules/input/imviqr.c
+	* tests/prop-editor.c
+	* tests/testentrycompletion.c
+	* tests/testfilechooser.c
+	* tests/testmerge.c
+	* tests/testtoolbar.c
+	* tests/testtreecolumns.c
+	* tests/testtreeview.c: get rid of unnecessary casts.
+
+	* tests/testgtk.c (create_labels): add GTK_LABEL() casts for
+	gtk_label_set_ellipsize() calls.
+
+	* tests/testicontheme.c (main): remove unused pixbuf variable.
+
 Fri Nov 19 14:54:09 2004  Manish Singh  <yosh@gimp.org>
 
 	* gdk/linux-fb/gdkgc-fb.c

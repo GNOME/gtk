@@ -216,7 +216,7 @@ my_new_from_file_at_size (const char *filename,
 			if (!gdk_pixbuf_loader_write (loader, buffer, length, error)) {
 			        gdk_pixbuf_loader_close (loader, NULL);
 				fclose (f);
-				g_object_unref (G_OBJECT (loader));
+				g_object_unref (loader);
 				return NULL;
 			}
 	}
@@ -225,14 +225,14 @@ my_new_from_file_at_size (const char *filename,
 
 	g_assert (*error == NULL);
 	if (!gdk_pixbuf_loader_close (loader, error)) {
-		g_object_unref (G_OBJECT (loader));
+		g_object_unref (loader);
 		return NULL;
 	}
 
 	pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
 
 	if (!pixbuf) {
-		g_object_unref (G_OBJECT (loader));
+		g_object_unref (loader);
 
 		/* did the loader set an error? */
 		if (*error != NULL)
@@ -248,7 +248,7 @@ my_new_from_file_at_size (const char *filename,
 
 	g_object_ref (pixbuf);
 
-	g_object_unref (G_OBJECT (loader));
+	g_object_unref (loader);
 
 	return pixbuf;
 }
@@ -572,7 +572,7 @@ main (int argc, char **argv)
   gtk_widget_show_all (control_window);
 
   g_object_ref (control_window);
-  g_signal_connect (G_OBJECT (dialog), "destroy",
+  g_signal_connect (dialog, "destroy",
 		    G_CALLBACK (kill_dependent), control_window);
 
   /* We need to hold a ref until we have destroyed the widgets, just in case

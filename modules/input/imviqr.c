@@ -274,7 +274,7 @@ GtkIMContext *
 im_module_create (const gchar *context_id)
 {
   if (strcmp (context_id, "viqr") == 0)
-    return GTK_IM_CONTEXT (g_object_new (type_viqr_translit, NULL));
+    return g_object_new (type_viqr_translit, NULL);
   else
     return NULL;
 }

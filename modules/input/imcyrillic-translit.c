@@ -247,7 +247,7 @@ GtkIMContext *
 im_module_create (const gchar *context_id)
 {
   if (strcmp (context_id, "cyrillic_translit") == 0)
-    return GTK_IM_CONTEXT (g_object_new (type_cyrillic_translit, NULL));
+    return g_object_new (type_cyrillic_translit, NULL);
   else
     return NULL;
 }

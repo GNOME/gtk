@@ -117,8 +117,8 @@ set_visible_func(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
 
   gtk_tree_model_get (model, iter, 0, &tool_item, -1);
 
-  g_object_get (G_OBJECT (tool_item), "visible", &visible, NULL);
-  g_object_set (G_OBJECT (cell), "active", visible, NULL);
+  g_object_get (tool_item, "visible", &visible, NULL);
+  g_object_set (cell, "active", visible, NULL);
   g_object_unref (tool_item);
 }
 
@@ -135,8 +135,8 @@ visibile_toggled(GtkCellRendererToggle *cell, const gchar *path_str,
   gtk_tree_model_get_iter (model, &iter, path);
 
   gtk_tree_model_get (model, &iter, 0, &tool_item, -1);
-  g_object_get (G_OBJECT (tool_item), "visible", &visible, NULL);
-  g_object_set (G_OBJECT (tool_item), "visible", !visible, NULL);
+  g_object_get (tool_item, "visible", &visible, NULL);
+  g_object_set (tool_item, "visible", !visible, NULL);
   g_object_unref (tool_item);
 
   gtk_tree_model_row_changed (model, path, &iter);
@@ -151,7 +151,7 @@ set_expand_func(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
 
   gtk_tree_model_get (model, iter, 0, &tool_item, -1);
 
-  g_object_set (G_OBJECT (cell), "active", gtk_tool_item_get_expand (tool_item), NULL);
+  g_object_set (cell, "active", gtk_tool_item_get_expand (tool_item), NULL);
   g_object_unref (tool_item);
 }
 
@@ -182,7 +182,7 @@ set_homogeneous_func(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
 
   gtk_tree_model_get (model, iter, 0, &tool_item, -1);
 
-  g_object_set (G_OBJECT (cell), "active", gtk_tool_item_get_homogeneous (tool_item), NULL);
+  g_object_set (cell, "active", gtk_tool_item_get_homogeneous (tool_item), NULL);
   g_object_unref (tool_item);
 }
 
@@ -214,7 +214,7 @@ set_important_func(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
 
   gtk_tree_model_get (model, iter, 0, &tool_item, -1);
 
-  g_object_set (G_OBJECT (cell), "active", gtk_tool_item_get_is_important (tool_item), NULL);
+  g_object_set (cell, "active", gtk_tool_item_get_is_important (tool_item), NULL);
   g_object_unref (tool_item);
 }
 
@@ -469,7 +469,7 @@ toolbar_drag_leave (GtkToolbar     *toolbar,
 {
   if (drag_item)
     {
-      g_object_unref (G_OBJECT (drag_item));
+      g_object_unref (drag_item);
       drag_item = NULL;
     }
   

@@ -808,6 +808,6 @@ pixbuf_rc_style_merge (GtkRcStyle *dest,
 static GtkStyle *
 pixbuf_rc_style_create_style (GtkRcStyle *rc_style)
 {
-  return GTK_STYLE (g_object_new (PIXBUF_TYPE_STYLE, NULL));
+  return g_object_new (PIXBUF_TYPE_STYLE, NULL);
 }
 

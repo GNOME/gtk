@@ -327,7 +327,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
       int len = g_unichar_to_utf8 (c, utf8);
       utf8[len] = 0;
 
-      g_signal_emit_by_name (G_OBJECT (context_ime), "commit", utf8);
+      g_signal_emit_by_name (context_ime, "commit", utf8);
       retval = TRUE;
     }
 
@@ -590,7 +590,7 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
   gdk_window_get_user_data (context_ime->client_window, (gpointer) & widget);
   if (GTK_IS_WIDGET (widget))
     {
-      g_signal_connect (G_OBJECT (widget), "hierarchy-changed",
+      g_signal_connect (widget, "hierarchy-changed",
                         G_CALLBACK (cb_client_widget_hierarchy_changed),
                         context_ime);
     }
@@ -969,7 +969,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
 
             if (utf8str)
               {
-                g_signal_emit_by_name (G_OBJECT (context), "commit", utf8str);
+                g_signal_emit_by_name (context, "commit", utf8str);
                 g_free (utf8str);
               }
           }

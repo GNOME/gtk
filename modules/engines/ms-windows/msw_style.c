@@ -458,16 +458,13 @@ setup_menu_settings (GtkSettings * settings)
     if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0)) {
       if (klazz) {
 	if (g_object_class_find_property (klazz, "gtk-menu-bar-popup-delay")) {
-	  g_object_set (G_OBJECT (settings), "gtk-menu-bar-popup-delay",
-			0, NULL);
+	  g_object_set (settings, "gtk-menu-bar-popup-delay", 0, NULL);
 	}
 	if (g_object_class_find_property (klazz, "gtk-menu-popup-delay")) {
-	  g_object_set (G_OBJECT (settings), "gtk-menu-popup-delay",
-			menu_delay, NULL);
+	  g_object_set (settings, "gtk-menu-popup-delay", menu_delay, NULL);
 	}
 	if (g_object_class_find_property (klazz, "gtk-menu-popdown-delay")) {
-	  g_object_set (G_OBJECT (settings), "gtk-menu-popdown-delay",
-			menu_delay, NULL);
+	  g_object_set (settings, "gtk-menu-popdown-delay", menu_delay, NULL);
 	}
       }
     }
@@ -485,19 +482,17 @@ msw_style_setup_system_settings (void)
     return;
 
   cursor_blink_time = GetCaretBlinkTime ();
-  g_object_set (G_OBJECT (settings), "gtk-cursor-blink",
-		        cursor_blink_time > 0, NULL);
+  g_object_set (settings, "gtk-cursor-blink", cursor_blink_time > 0, NULL);
 
   if (cursor_blink_time > 0)
   {
-  	g_object_set (G_OBJECT (settings), "gtk-cursor-blink-time",
-					2*cursor_blink_time, NULL);
+  	g_object_set (settings, "gtk-cursor-blink-time", 2*cursor_blink_time,
+		      NULL);
   }
 
-  g_object_set (G_OBJECT (settings), "gtk-double-click-time",
-		GetDoubleClickTime(), NULL);
-  g_object_set (G_OBJECT (settings), "gtk-dnd-drag-threshold",
-		GetSystemMetrics(SM_CXDRAG), NULL);
+  g_object_set (settings, "gtk-double-click-time", GetDoubleClickTime(), NULL);
+  g_object_set (settings, "gtk-dnd-drag-threshold", GetSystemMetrics(SM_CXDRAG),
+		NULL);
 
   setup_menu_settings (settings);
 

@@ -812,7 +812,7 @@ create_prop_editor (GObject   *object,
   gtk_object_sink (GTK_OBJECT (tips));
 
   /* Kill the tips when the widget goes away.  */
-  g_signal_connect (G_OBJECT (win), "destroy", G_CALLBACK (kill_tips), tips);
+  g_signal_connect (win, "destroy", G_CALLBACK (kill_tips), tips);
 
   /* hold a weak ref to the object we're editing */
   g_object_set_data_full (G_OBJECT (object), "prop-editor-win", win, model_destroy);

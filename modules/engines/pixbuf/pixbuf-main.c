@@ -40,7 +40,7 @@ theme_exit (void)
 G_MODULE_EXPORT GtkRcStyle *
 theme_create_rc_style (void)
 {
-  return GTK_RC_STYLE (g_object_new (PIXBUF_TYPE_RC_STYLE, NULL));  
+  return g_object_new (PIXBUF_TYPE_RC_STYLE, NULL);
 }
 
 /* The following function will be called by GTK+ when the module

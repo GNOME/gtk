@@ -841,7 +841,7 @@ gtk_tree_model_types_new (void)
 {
   GtkTreeModelTypes *retval;
 
-  retval = GTK_TREE_MODEL_TYPES (g_object_new (GTK_TYPE_MODEL_TYPES, NULL));
+  retval = g_object_new (GTK_TYPE_MODEL_TYPES, NULL);
 
   return retval;
 }

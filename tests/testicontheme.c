@@ -48,7 +48,6 @@ main (int argc, char *argv[])
     {
       GtkWidget *window, *image;
       GtkIconSize size;
-      GdkPixbuf *pixbuf;
 
       if (argc < 4)
 	{
