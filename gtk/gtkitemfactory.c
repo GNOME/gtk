@@ -1234,7 +1234,11 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 	image = gtk_image_new_from_pixbuf (pixbuf);
 
       if (image)
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (widget), image);
+	{
+	  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (widget), image);
+
+	  gtk_widget_show (image);
+	}
 
       if (pixbuf)
 	g_object_unref (G_OBJECT (pixbuf));
@@ -1244,7 +1248,9 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
       image = gtk_image_new_from_stock (entry->extra_data, GTK_ICON_SIZE_MENU);
 
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (widget), image);
-      
+
+      gtk_widget_show (image);
+
       if (gtk_stock_lookup (entry->extra_data, &stock_item))
 	{
 	  if (!accelerator)

@@ -1,3 +1,11 @@
+2001-08-04  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_create_item):
+	Need to show the image after adding it to the GtkImageMenuItem.
+	This used to work without in testgtk because of the
+	gtk_widget_show_all() at the end of the function.
+	(Closes #54978).
+
 Tue Jul 31 22:59:33 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_get_child_property): 
