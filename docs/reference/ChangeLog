@@ -1,3 +1,9 @@
+Sat Oct 20 18:35:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkentry.sgml (Note): Remove note about
+	deprecation. (We've standard on G_CONST_RETURN 
+	rather than the reverse.) #58768, Vitaly Tishkov.
+
 2001-10-20  jacob berkman  <jacob@ximian.com>
 
 	* gtk/Makefile.am (HTML_IMAGES): get them from
