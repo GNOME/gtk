@@ -452,21 +452,24 @@ main (int argc, char **argv)
 				found_valid = TRUE;
 			}
 		}
-	}
 
-	pixbuf_loader = gdk_pixbuf_loader_new ();
-	file = fopen ("/usr/share/pixmaps/up2date.png", "r");
-	g_assert (file != NULL);
-
-	while (TRUE) {
-		val = fgetc (file);
-		if (val == EOF)
-			break;
-		buf = (guint) val;
-		if (gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (pixbuf_loader), &buf, 1) == FALSE)
-			break;
+		pixbuf_loader = gdk_pixbuf_loader_new ();
+		file = fopen (argv[1], "r");
+		g_assert (file != NULL);
+		
+		while (TRUE) {
+			val = fgetc (file);
+			if (val == EOF)
+				break;
+			buf = (guint) val;
+			if (gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (pixbuf_loader), &buf, 1) == FALSE)
+				break;
+		}
+		gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (pixbuf_loader));
+		gtk_object_destroy (pixbuf_loader);
+		fclose (file);
+		
 	}
-	fclose (file);
 
 	if (found_valid)
 		gtk_main ();

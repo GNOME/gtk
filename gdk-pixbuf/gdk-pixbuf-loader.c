@@ -145,6 +145,7 @@ gdk_pixbuf_loader_init (GdkPixbufLoader *loader)
 	priv = g_new (GdkPixbufLoaderPrivate, 1);
 	loader->private = priv;
 
+	priv->image_module=NULL;
 	priv->pixbuf = NULL;
 	priv->closed = FALSE;
 	priv->buf_offset = 0;
