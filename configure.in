@@ -775,18 +775,27 @@ if test "x$gdktarget" = "xx11"; then
     AC_CHECK_HEADER(sys/shm.h, AC_DEFINE(HAVE_SHM_H), no_sys_shm=yes)
 
     # Check for the X shared memory extension header file
+    have_xshm=no 
     AC_MSG_CHECKING(X11/extensions/XShm.h)
     if test "x$no_xext_lib" = "xyes"; then
-      AC_MSG_RESULT(no)
-      no_xshm=yes
+      :
     else
-      if test -f "$x_includes/X11/extensions/XShm.h"; then
-        AC_MSG_RESULT(yes)
-        AC_DEFINE(HAVE_XSHM_H)
-      else
-        AC_MSG_RESULT(no)
-        no_xshm=yes
-      fi
+      gtk_save_CFLAGS="$CFLAGS"
+      CFLAGS="$CFLAGS $x_cflags"
+      AC_TRY_COMPILE([
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/XShm.h>
+], [XShmSegmentInfo *x_shm_info;], have_xshm=yes)
+      CFLAGS="$gtk_save_CFLAGS"
+    fi
+    AC_MSG_RESULT($have_xshm)
+    if test $have_xshm = yes ; then
+      AC_DEFINE(HAVE_XSHM_H)
     fi
   fi
 

@@ -1,3 +1,10 @@
+Sat Jun 23 18:02:46 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Fix tests for XShm.h.
+
+	* gdk/x11/gdkimage-x11.c: Cleanup error handling in
+	gdk_image_new() by use of goto, properly use g_object_unref().
+
 Sat Jun 23 22:03:20 2001  Tim Janik  <timj@gtk.org>
 
 	* gdk/x11/gdkimage-x11.c (gdk_image_init): disabled g_free (image)

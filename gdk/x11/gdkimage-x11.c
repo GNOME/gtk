@@ -62,8 +62,6 @@ static void gdk_image_finalize    (GObject       *object);
 
 #define PRIVATE_DATA(image) ((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)
 
-#define	LEAK_IMAGE(image)		/* FIXME!! this should be g_object_unref */
-
 GType
 gdk_image_get_type (void)
 {
@@ -243,16 +241,17 @@ gdk_image_new (GdkImageType  type,
 	    {
 	      private->x_shm_info = g_new (XShmSegmentInfo, 1);
 	      x_shm_info = private->x_shm_info;
+	      x_shm_info->shmid = -1;
+	      x_shm_info->shmaddr = (char*) -1;
 
 	      private->ximage = XShmCreateImage (private->xdisplay, xvisual, visual->depth,
 						 ZPixmap, NULL, x_shm_info, width, height);
 	      if (private->ximage == NULL)
 		{
 		  g_warning ("XShmCreateImage failed");
-		  
-		  LEAK_IMAGE (image);
-		  gdk_use_xshm = False;
-		  return NULL;
+		  gdk_use_xshm = FALSE;
+
+		  goto error;
 		}
 
 	      x_shm_info->shmid = shmget (IPC_PRIVATE,
@@ -269,14 +268,10 @@ gdk_image_new (GdkImageType  type,
 		  if (errno != EINVAL)
 		    {
 		      g_warning ("shmget failed: error %d (%s)", errno, g_strerror (errno));
-		      gdk_use_xshm = False;
+		      gdk_use_xshm = FALSE;
 		    }
 
-		  XDestroyImage (private->ximage);
-		  g_free (private->x_shm_info);
-		  LEAK_IMAGE (image);
-
-		  return NULL;
+		  goto error;
 		}
 
 	      x_shm_info->readOnly = False;
@@ -286,20 +281,12 @@ gdk_image_new (GdkImageType  type,
 	      if (x_shm_info->shmaddr == (char*) -1)
 		{
 		  g_warning ("shmat failed: error %d (%s)", errno, g_strerror (errno));
-
-		  XDestroyImage (private->ximage);
-		  shmctl (x_shm_info->shmid, IPC_RMID, 0);
-		  
-		  g_free (private->x_shm_info);
-		  LEAK_IMAGE (image);
-
 		  /* Failure in shmat is almost certainly permanent. Most likely error is
 		   * EMFILE, which would mean that we've exceeded the per-process
 		   * Shm segment limit.
 		   */
-		  gdk_use_xshm = False;
-		  
-		  return NULL;
+		  gdk_use_xshm = FALSE;
+		  goto error;
 		}
 
 	      gdk_error_trap_push ();
@@ -310,16 +297,8 @@ gdk_image_new (GdkImageType  type,
 	      if (gdk_error_trap_pop ())
 		{
 		  /* this is the common failure case so omit warning */
-		  XDestroyImage (private->ximage);
-		  shmdt (x_shm_info->shmaddr);
-		  shmctl (x_shm_info->shmid, IPC_RMID, 0);
-                  
-		  g_free (private->x_shm_info);
-		  LEAK_IMAGE (image);
-
-		  gdk_use_xshm = False;
-
-		  return NULL;
+		  gdk_use_xshm = FALSE;
+		  goto error;
 		}
 	      
 	      /* We mark the segment as destroyed so that when
@@ -334,15 +313,10 @@ gdk_image_new (GdkImageType  type,
 		image_list = g_list_prepend (image_list, image);
 	    }
 	  else
-	    {
-	      LEAK_IMAGE (image);
-	      return NULL;
-	    }
-	  break;
-#else /* USE_SHM */
-	  LEAK_IMAGE (image);
-	  return NULL;
+#else /* !USE_SHM */
+	    goto error;
 #endif /* USE_SHM */
+	  break;
 	case GDK_IMAGE_NORMAL:
 	  private->ximage = XCreateImage (private->xdisplay, xvisual, visual->depth,
 					  ZPixmap, 0, 0, width, height, 32, 0);
@@ -352,6 +326,8 @@ gdk_image_new (GdkImageType  type,
 	   */
 	  private->ximage->data = malloc (private->ximage->bytes_per_line *
 					  private->ximage->height);
+	  if (!private->ximage->data)
+	    goto error;
 	  break;
 
 	case GDK_IMAGE_FASTEST:
@@ -369,6 +345,30 @@ gdk_image_new (GdkImageType  type,
     }
 
   return image;
+
+ error:
+  if (private->ximage)
+    {
+      XDestroyImage (private->ximage);
+      private->ximage = NULL;
+    }
+#ifdef USE_SHM
+  if (private->x_shm_info)
+    {
+      x_shm_info = private->x_shm_info;
+      
+      if (x_shm_info->shmaddr != (char *)-1)
+	shmdt (x_shm_info->shmaddr);
+      if (x_shm_info->shmid != -1) 
+	shmctl (x_shm_info->shmid, IPC_RMID, 0);
+      
+      g_free (x_shm_info);
+      private->x_shm_info = NULL;
+    }
+#endif /* USE_SHM */
+  g_object_unref (image);
+  
+  return NULL;
 }
 
 GdkImage*
@@ -478,34 +478,37 @@ gdk_x11_image_destroy (GdkImage *image)
                         * time from _finalize()
                         */
     return;
-  
-  switch (image->type)
+
+  if (private->ximage)		/* Deal with failure of creation */
     {
-    case GDK_IMAGE_NORMAL:
-      XDestroyImage (private->ximage);
-      break;
-
-    case GDK_IMAGE_SHARED:
+      switch (image->type)
+	{
+	case GDK_IMAGE_NORMAL:
+	  XDestroyImage (private->ximage);
+	  break;
+	  
+	case GDK_IMAGE_SHARED:
 #ifdef USE_SHM
-      gdk_flush();
-
-      XShmDetach (private->xdisplay, private->x_shm_info);
-      XDestroyImage (private->ximage);
-
-      x_shm_info = private->x_shm_info;
-      shmdt (x_shm_info->shmaddr);
-      
-      g_free (private->x_shm_info);
-      private->x_shm_info = NULL;
-      
-      image_list = g_list_remove (image_list, image);
+	  gdk_flush();
+	  
+	  XShmDetach (private->xdisplay, private->x_shm_info);
+	  XDestroyImage (private->ximage);
+	  
+	  x_shm_info = private->x_shm_info;
+	  shmdt (x_shm_info->shmaddr);
+	  
+	  g_free (private->x_shm_info);
+	  private->x_shm_info = NULL;
+	  
+	  image_list = g_list_remove (image_list, image);
 #else /* USE_SHM */
-      g_error ("trying to destroy shared memory image when gdk was compiled without shared memory support");
+	  g_error ("trying to destroy shared memory image when gdk was compiled without shared memory support");
 #endif /* USE_SHM */
-      break;
-
-    case GDK_IMAGE_FASTEST:
-      g_assert_not_reached ();
+	  break;
+	  
+	case GDK_IMAGE_FASTEST:
+	  g_assert_not_reached ();
+	}
     }
 
   g_free (private);
