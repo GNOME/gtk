@@ -4335,6 +4335,8 @@ gtk_window_set_transient_for
 gtk_window_set_destroy_with_parent
 gtk_window_set_screen
 gtk_window_get_screen
+gtk_window_is_active
+gtk_window_has_toplevel_focus
 gtk_window_list_toplevels
 gtk_window_add_mnemonic
 gtk_window_remove_mnemonic

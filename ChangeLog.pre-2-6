@@ -1,3 +1,14 @@
+Tue Oct 28 10:34:24 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.[ch] (gtk_window_is_active, 
+	gtk_has_toplevel_focus): Add getters corresponding to
+	the is_active and has_toplevel_focus properties.
+	(#122531)
+
+Tue Oct 28 10:18:55 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_is_active): 
+
 2003-10-28  Mark McLoughlin  <mark@skynet.ie>
 
 	* gtk/gtkexpander.c:

@@ -225,6 +225,11 @@ void	   gtk_window_set_screen	       (GtkWindow	    *window,
 						GdkScreen	    *screen);
 GdkScreen* gtk_window_get_screen	       (GtkWindow	    *window);
 
+gboolean   gtk_window_is_active                (GtkWindow           *window);
+gboolean   gtk_window_has_toplevel_focus       (GtkWindow           *window);
+
+
+
 /* gtk_window_set_has_frame () must be called before realizing the window_*/
 void       gtk_window_set_has_frame            (GtkWindow *window, 
 						gboolean   setting);
