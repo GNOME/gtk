@@ -78,6 +78,7 @@ struct _GtkRcFile
   time_t mtime;
   gchar *name;
   gchar *canonical_name;
+  gchar *directory;
   guint reload;
 };
 
@@ -286,10 +287,11 @@ static gchar *im_module_file = NULL;
 #define GTK_RC_MAX_DEFAULT_FILES 128
 static gchar *gtk_rc_default_files[GTK_RC_MAX_DEFAULT_FILES];
 
-/* A stack of directories for RC files we are parsing currently.
- * these are implicitely added to the end of PIXMAP_PATHS
+/* A stack of information of RC files we are parsing currently.
+ * The directories for these files are implicitely added to the end of
+ * PIXMAP_PATHS.
  */
-static GSList *rc_dir_stack = NULL;
+static GSList *current_files_stack = NULL;
 
 /* RC files and strings that are parsed for every context
  */
@@ -764,7 +766,7 @@ gtk_rc_context_parse_one_file (GtkRcContext *context,
   context->default_priority = priority;
 
   rc_file = add_to_rc_file_list (&context->rc_files, filename, reload);
-  
+
   if (!rc_file->canonical_name)
     {
       /* Get the absolute pathname */
@@ -777,34 +779,33 @@ gtk_rc_context_parse_one_file (GtkRcContext *context,
 
 	  cwd = g_get_current_dir ();
 	  rc_file->canonical_name = g_build_filename (cwd, rc_file->name, NULL);
+	  rc_file->directory = g_path_get_dirname (rc_file->canonical_name);
 	  g_free (cwd);
 	}
     }
 
+  /* If the file is already being parsed (recursion), do nothing
+   */
+  if (g_slist_find (current_files_stack, rc_file))
+    return;
+
   if (!lstat (rc_file->canonical_name, &statbuf))
     {
       gint fd;
-      GSList *tmp_list;
-
+      
       rc_file->mtime = statbuf.st_mtime;
 
       fd = open (rc_file->canonical_name, O_RDONLY);
       if (fd < 0)
 	goto out;
 
-      /* Temporarily push directory name for this file on
-       * a stack of directory names while parsing it
+      /* Temporarily push information for this file on
+       * a stack of current files while parsing it.
        */
-      rc_dir_stack = 
-	g_slist_prepend (rc_dir_stack,
-			 g_path_get_dirname (rc_file->canonical_name));
+      current_files_stack = g_slist_prepend (current_files_stack, rc_file);
       gtk_rc_parse_any (context, filename, fd, NULL);
- 
-      tmp_list = rc_dir_stack;
-      rc_dir_stack = rc_dir_stack->next;
- 
-      g_free (tmp_list->data);
-      g_slist_free_1 (tmp_list);
+      current_files_stack = g_slist_delete_link (current_files_stack,
+						 current_files_stack);
 
       close (fd);
     }
@@ -844,7 +845,7 @@ gtk_rc_context_parse_file (GtkRcContext *context,
   locale = g_win32_getlocale ();
 #else      
   locale = setlocale (LC_CTYPE, NULL);
-#endif      
+#endif
 
   if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
     {
@@ -1467,6 +1468,7 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
 
 	  if (rc_file->canonical_name != rc_file->name)
 	    g_free (rc_file->canonical_name);
+	  g_free (rc_file->directory);
 	  g_free (rc_file->name);
 	  g_free (rc_file);
 
@@ -2348,10 +2350,11 @@ parse_include_file (GtkRcContext *context,
        * so we can give meaningful error messages, and because on reparsing
        * non-absolute paths don't make sense.
        */
-      GSList *tmp_list = rc_dir_stack;
+      GSList *tmp_list = current_files_stack;
       while (tmp_list)
 	{
-	  gchar *tmpname = g_build_filename (tmp_list->data, filename, NULL);
+	  GtkRcFile *curfile = tmp_list->data;
+	  gchar *tmpname = g_build_filename (curfile->directory, filename, NULL);
 
 	  if (g_file_test (tmpname, G_FILE_TEST_EXISTS))
 	    {
@@ -3003,10 +3006,11 @@ gtk_rc_find_pixmap_in_path (GtkSettings  *settings,
  	return filename;
     }
  
-  tmp_list = rc_dir_stack;
+  tmp_list = current_files_stack;
   while (tmp_list)
     {
-      filename = gtk_rc_check_pixmap_dir (tmp_list->data, pixmap_file);
+      GtkRcFile *curfile = tmp_list->data;
+      filename = gtk_rc_check_pixmap_dir (curfile->directory, pixmap_file);
       if (filename)
  	return filename;
        
