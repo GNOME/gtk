@@ -1,3 +1,7 @@
+Tue Nov 12 16:51:04 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkinputdialog.c: Make multihead aware (#80283)
+
 Tue Nov 12 15:13:58 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c gtk/gtkwindow.[ch]: Add
