@@ -1,3 +1,8 @@
+Mon Jul 29 22:36:06 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkfilesel.sgml: Fix up the example program
+	a bit. (#88814, Johnson Wong)
+
 2002-07-16  Sven Neumann  <sven@gimp.org>
 
 	* gdk/tmpl/rgb.sgml: fixed the example code (return TRUE from the

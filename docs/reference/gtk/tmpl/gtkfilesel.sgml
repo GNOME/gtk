@@ -34,14 +34,16 @@ Simple file operations; create directory, delete file, and rename file, are avai
 
 /* The file selection widget and the string to store the chosen filename */
 
-GtkWidget *file_selector;
-gchar *selected_filename;
+void store_filename (GtkFileSelection *file_selector, gpointer user_data) {
+   const gchar *selected_filename;
 
-void store_filename (GtkFileSelection *selector, gpointer user_data) {
    selected_filename = gtk_file_selection_get_filename (GTK_FILE_SELECTION (file_selector));
+   g_print ("Selected filename: %s\n", selected_filename);
 }
 
 void create_file_selection (void) {
+
+   GtkWidget *file_selector;
 
    /* Create the selector */
    
