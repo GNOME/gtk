@@ -1,3 +1,7 @@
+2000-01-31  Yuan-Chung Cheng <platin@linux.org.tw>
+
+        * configure.in: Added "zh_CN.GB2312" to ALL_LINGUAS.
+
 2000-01-30  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/testgtk.c (set_cursor): use gdk_cursor_unref instead of

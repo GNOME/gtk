@@ -181,7 +181,7 @@ AC_SUBST(STRIP_BEGIN)
 AC_SUBST(STRIP_END)
 
 # i18n stuff
-ALL_LINGUAS="ca cs da de el es et eu fi fr ga gl hr hu it ja ko lt nl no pl pt pt_BR ru sk sl sv tr uk wa zh_TW.Big5"
+ALL_LINGUAS="ca cs da de el es et eu fi fr ga gl hr hu it ja ko lt nl no pl pt pt_BR ru sk sl sv tr uk wa zh_TW.Big5 zh_CN.GB2312"
 AM_GTK_GNU_GETTEXT
 LIBS="$LIBS $INTLLIBS"
 
