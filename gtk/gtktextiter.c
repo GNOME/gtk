@@ -2003,6 +2003,8 @@ _gtk_text_iter_forward_indexable_segment (GtkTextIter *iter)
         {
           /* End of buffer */
 
+          g_assert (!_gtk_text_line_is_last (real->line, real->tree));
+          g_assert (_gtk_text_line_contains_end_iter (real->line, real->tree));
           g_assert (gtk_text_iter_is_end (iter));
           
           check_invariants (iter);

@@ -980,6 +980,8 @@ gtk_text_view_init (GtkTextView *text_view)
 
   text_view->drag_start_x = -1;
   text_view->drag_start_y = -1;
+
+  text_view->pending_place_cursor_button = 0;
 }
 
 /**
@@ -3346,6 +3348,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
             {
               text_view->drag_start_x = event->x;
               text_view->drag_start_y = event->y;
+              text_view->pending_place_cursor_button = event->button;
             }
           else
             {
@@ -3465,12 +3468,13 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
           text_view->just_selected_element = FALSE;
           return FALSE;
         }
-      else
+      else if (text_view->pending_place_cursor_button == event->button)
         {
 	  GtkTextIter iter;
 
-          /* Unselect everything; probably we were dragging, or clicked
-           * without dragging to remove selection.
+          /* Unselect everything; we clicked inside selection, but
+           * didn't move by the drag threshold, so just clear selection
+           * and place cursor.
            */
 	  gtk_text_layout_get_iter_at_pixel (text_view->layout,
 					     &iter,
@@ -3478,7 +3482,9 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
 					     event->y + text_view->yoffset);
 
 	  gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
-  
+
+          text_view->pending_place_cursor_button = 0;
+          
           return FALSE;
         }
     }
@@ -4680,7 +4686,8 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
 
   text_view->drag_start_x = -1;
   text_view->drag_start_y = -1;
-
+  text_view->pending_place_cursor_button = 0;
+  
   target_list = gtk_target_list_new (target_table,
                                      G_N_ELEMENTS (target_table));
 

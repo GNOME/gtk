@@ -1,8 +1,12 @@
 2001-09-25  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c: fix for #50317
+	
+2001-09-25  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_key_press_event): use 
 	gtk_text_iter_can_insert
-
+	
 	* gtk/gtktextbuffer.c: use gtk_text_iter_can_insert
 
 	* gtk/gtktextiter.c (find_line_log_attrs): fixes, #57611, #57613

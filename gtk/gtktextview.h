@@ -143,6 +143,8 @@ struct _GtkTextView
 
   GtkTextPendingScroll *pending_scroll;
   GdkGC *cursor_gc;
+
+  gint pending_place_cursor_button;
 };
 
 struct _GtkTextViewClass
