@@ -1,3 +1,25 @@
+Sat Oct 11 15:23:27 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes based on comments from Marco Pesenti Gritti.
+
+	* gtk/gtkentry.c (gtk_entry_set_text): block the completion changed
+	signal handler, avoids the completion popup to popup when text is
+	set programmatically in most cases (we actually have to handle this
+	in the _editable functions as well, but that will break popping up
+	when the user actually typed something :),
+	(gtk_entry_completion_key_press): when handling enter, bail out
+	when nothing has been selected,
+	(gtk_entry_completion_changed): don't popdown when the entry content
+	changed.
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_init),
+	(gtk_entry_completion_selected_changed): unselect_all on the
+	first selected changed signal. Avoids having a default row selected,
+	(_gtk_entry_completion_popup): don't select the first row by default.
+
+	* gtk/gtkentryprivate.h (struct _GtkEntryCompletionPrivate): add a
+	first_sel_changed field.
+
 Fri Oct 10 23:02:58 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* demos/gtk-demo/menus.c: Replace GtkItemFactory by GtkUIManager 

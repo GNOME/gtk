@@ -100,6 +100,8 @@ static gboolean gtk_entry_completion_list_button_press   (GtkWidget             
 static gboolean gtk_entry_completion_action_button_press (GtkWidget               *widget,
                                                           GdkEventButton          *event,
                                                           gpointer                 user_data);
+static void     gtk_entry_completion_selection_changed   (GtkTreeSelection        *selection,
+                                                          gpointer                 data);
 
 static void     gtk_entry_completion_insert_action       (GtkEntryCompletion      *completion,
                                                           gint                     index,
@@ -241,6 +243,10 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->tree_view));
   gtk_tree_selection_set_mode (sel, GTK_SELECTION_SINGLE);
   gtk_tree_selection_unselect_all (sel);
+  g_signal_connect (sel, "changed",
+                    G_CALLBACK (gtk_entry_completion_selection_changed),
+                    completion);
+  priv->first_sel_changed = TRUE;
 
   priv->column = gtk_tree_view_column_new ();
   gtk_tree_view_append_column (GTK_TREE_VIEW (priv->tree_view), priv->column);
@@ -663,6 +669,19 @@ gtk_entry_completion_action_data_func (GtkTreeViewColumn *tree_column,
                   NULL);
 }
 
+static void
+gtk_entry_completion_selection_changed (GtkTreeSelection *selection,
+                                        gpointer          data)
+{
+  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (data);
+
+  if (completion->priv->first_sel_changed)
+    {
+      completion->priv->first_sel_changed = FALSE;
+      gtk_tree_selection_unselect_all (selection);
+    }
+}
+
 /* public API */
 
 /**
@@ -1017,10 +1036,11 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   gint x, y, x_border, y_border;
   gint items;
   gint height;
-  GtkTreePath *path;
 
   if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
     return;
+
+  completion->priv->first_sel_changed = TRUE;
 
   gtk_widget_show_all (completion->priv->vbox);
 
@@ -1041,12 +1061,8 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   if (items <= 0)
     gtk_widget_hide (completion->priv->scrolled_window);
 
-  /* default on the first match */
-  path = gtk_tree_path_new_from_indices (0, -1);
-  gtk_tree_view_set_cursor (GTK_TREE_VIEW (completion->priv->tree_view), path,
-                            NULL, FALSE);
-  completion->priv->current_selected = 0;
-  gtk_tree_path_free (path);
+  /* default on no match */
+  completion->priv->current_selected = -1;
 
   items = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
 

@@ -35,6 +35,7 @@ struct _GtkEntryCompletionPrivate
   GtkTreeViewColumn *column;
   GtkTreeModelFilter *filter_model;
   GtkListStore *actions;
+  gboolean first_sel_changed;
 
   GtkEntryCompletionMatchFunc match_func;
   gpointer match_data;

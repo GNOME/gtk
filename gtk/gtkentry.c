@@ -3447,9 +3447,13 @@ gtk_entry_set_text (GtkEntry    *entry,
 		    const gchar *text)
 {
   gint tmp_pos;
+  GtkEntryCompletion *completion;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (text != NULL);
+
+  completion = gtk_entry_get_completion (entry);
+  g_signal_handler_block (entry, completion->priv->changed_id);
 
   /* Actually setting the text will affect the cursor and selection;
    * if the contents don't actually change, this will look odd to the user.
@@ -3461,6 +3465,8 @@ gtk_entry_set_text (GtkEntry    *entry,
 
   tmp_pos = 0;
   gtk_editable_insert_text (GTK_EDITABLE (entry), text, strlen (text), &tmp_pos);
+
+  g_signal_handler_unblock (entry, completion->priv->changed_id);
 }
 
 void
@@ -4476,7 +4482,8 @@ gtk_entry_completion_timeout (gpointer data)
 
   completion->priv->completion_timeout = 0;
 
-  if (strlen (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry))) >= completion->priv->minimum_key_length)
+  if (strlen (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)))
+      >= completion->priv->minimum_key_length)
     {
       gint matches;
       gint actions;
@@ -4573,7 +4580,8 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
           gboolean entry_set;
 
           sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view));
-          gtk_tree_selection_get_selected (sel, &model, &iter);
+          if (!gtk_tree_selection_get_selected (sel, &model, &iter))
+            return FALSE;
 
           g_signal_emit_by_name (completion, "match_selected",
                                  model, &iter, &entry_set);
@@ -4618,9 +4626,6 @@ gtk_entry_completion_changed (GtkWidget *entry,
                               gpointer   user_data)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
-
-  if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
-    _gtk_entry_completion_popdown (completion);
 
   /* (re)install completion timeout */
   if (completion->priv->completion_timeout)
