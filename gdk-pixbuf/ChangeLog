@@ -1,3 +1,8 @@
+2000-02-14  Darin Adler  <darin@eazel.com>
+
+	* gdk-pixbuf/testpixbuf.c: Remove now-unnecessary cast.
+	* .cvsignore: gdk-pixbuf/.cvsignore: More to ignore.
+
 2000-02-14  Elliot Lee  <sopwith@redhat.com>
 	* gdk-pixbuf/gdk-pixbuf.h, gdk-pixbuf/gdk-pixbuf-data.c: Make passed-in argument 'const'.
 

@@ -9,3 +9,4 @@ testpixbuf
 testpixbuf-drawable
 testpixbuf-scale
 testanimation
+gdk-pixbuf-features.h

@@ -529,7 +529,7 @@ main (int argc, char **argv)
 	if (argc == 1) {
                 const gchar*** xpmp;
                 
-		pixbuf = gdk_pixbuf_new_from_data ((guchar *) default_image, ART_PIX_RGB, FALSE,
+		pixbuf = gdk_pixbuf_new_from_data (default_image, ART_PIX_RGB, FALSE,
 						   DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_WIDTH * 3,
 						   NULL, NULL);
 		new_testrgb_window (pixbuf, NULL);
