@@ -1,3 +1,14 @@
+Thu Apr  1 16:58:10 PST 1999 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdkevents.c: made "->" into a "." of previous change so
+	it compiles
+
+	* gtk/gtkfontsel.c: added braces enclosing an if-else construct
+
+	* autogen.sh: add --enable-maintainer-mode
+
+	* configure.in: set ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
+
 Thu Apr  1 18:41:25 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkevents.c (gdk_compress_exposures): Set the

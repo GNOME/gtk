@@ -450,7 +450,7 @@ gdk_compress_exposures (XEvent    *xevent,
 		  expose_predicate, 
 		  (XPointer)&info);
 
-      event->any.window = window;
+      event.any.window = window;
       
       /* We apply filters here, and if it was filtered, completely
        * ignore the return
