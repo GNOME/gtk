@@ -1,3 +1,10 @@
+Tue Mar  2 20:59:23 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/Makefile.am: Add testentrycompletion.
+
+	* tests/testentrycompletion.c: New file to test some of the
+	more exotic GtkEntryCompletion features.
+
 Tue Mar  2 14:38:10 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* tests/testfilechooser.c (main): improve tests a little.
