@@ -169,8 +169,8 @@ gdk_pixmap_new (GdkWindow *window,
   if (depth == -1)
     depth = window_depth;
 
-  GDK_NOTE (PIXMAP, g_print ("_gdk_win32_pixmap_new: %dx%dx%d window=%p\n",
-			     width, height, depth, window));
+  GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_new: %dx%dx%d window=%p\n",
+			     width, height, depth, GDK_DRAWABLE_HANDLE (window)));
 
   pixmap = g_object_new (gdk_pixmap_get_type (), NULL);
   drawable_impl = GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
@@ -270,7 +270,7 @@ gdk_pixmap_new (GdkWindow *window,
 	  else if ((k = RealizePalette (hdc)) == GDI_ERROR)
 	    WIN32_GDI_FAILED ("RealizePalette");
 	  else if (k > 0)
-	    GDK_NOTE (PIXMAP_OR_COLORMAP, g_print ("_gdk_win32_pixmap_new: realized %p: %d colors\n",
+	    GDK_NOTE (PIXMAP_OR_COLORMAP, g_print ("gdk_pixmap_new: realized %p: %d colors\n",
 						   cmapp->hpal, k));
 
 	  iUsage = DIB_PAL_COLORS;

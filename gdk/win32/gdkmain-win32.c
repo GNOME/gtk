@@ -94,7 +94,8 @@ _gdk_windowing_init_check (int    argc,
   if (getenv ("PRETEND_WIN9X"))
     windows_version = 0x80000004;
 
-  GDK_NOTE (MISC, g_print ("Windows version: %08x\n", windows_version));
+  GDK_NOTE (MISC, g_print ("root window: %p Windows version: %08x\n",
+			   gdk_root_window, windows_version));
 
   _gdk_input_locale = GetKeyboardLayout (0);
   GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),

@@ -1,3 +1,23 @@
+2002-11-22  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdrawable-win32.c (draw_arc, gdk_win32_draw_arc):
+	Use generic_draw() also for arcs, thus adding support for tiled
+	and stippled arcs.
+
+	* gdk/win32/gdkevents-win32.c (synthesize_expose_events): Don't
+	synthesize expose events for GDK_INPUT_ONLY windows.
+	(gdk_event_translate): On WM_SIZE, call
+	gdk_synthesize_window_state() if window was iconified, restored or
+	maximized. (#98983, Arnaud Charlet)
+
+	* gdk/win32/gdkmain-win32.c
+	* gdk/win32/gdkpixmap-win32.c: Minor debugging output changes.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new): Revert change from
+	2002-11-19: Don't need to set depth of GDK_INPUT_ONLY windows to
+	nonzero. It was synthesize_expose_events() (see above) that was
+	causing the trouble with them in 256-colour mode.
+
 2002-11-21 15:48:13 2002 Dan Mills  <thunder@ximian.com>
 
 	* configure.in: replace gtk-doc version check with an all-sh

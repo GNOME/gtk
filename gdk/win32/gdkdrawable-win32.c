@@ -399,6 +399,8 @@ rop2_to_rop3 (int rop2)
     }
 }
 
+#ifdef USE_GENERIC_DRAW
+
 static void
 generic_draw (GdkDrawable    *drawable,
 	      GdkGC          *gc,
@@ -618,6 +620,10 @@ generic_draw (GdkDrawable    *drawable,
   gdk_win32_hdc_release (drawable, gc, mask);
 }
 
+#endif /* USE_GENERIC_DRAW */
+
+#ifdef USE_GENERIC_DRAW
+
 static void
 draw_rectangle (GdkGCWin32 *gcwin32,
 		HDC         hdc,
@@ -675,6 +681,8 @@ draw_rectangle (GdkGCWin32 *gcwin32,
 	GDI_CALL (SelectObject, (hdc, old_pen_or_brush));
     }
 }
+
+#endif /* USE_GENERIC_DRAW */
 
 static void
 gdk_win32_draw_rectangle (GdkDrawable *drawable,
@@ -822,6 +830,80 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 #endif /* !USE_GENERIC_DRAW */
 }
 
+#ifdef USE_GENERIC_DRAW
+
+static void
+draw_arc (GdkGCWin32 *gcwin32,
+	  HDC         hdc,
+	  gint        x_offset,
+	  gint        y_offset,
+	  va_list     args)
+{
+  HGDIOBJ old_pen;
+  gint filled;
+  gint x;
+  gint y;
+  gint width;
+  gint height;
+  gint angle1;
+  gint angle2;
+  int nXStartArc, nYStartArc, nXEndArc, nYEndArc;
+
+  filled = va_arg (args, gint);
+  x = va_arg (args, gint);
+  y = va_arg (args, gint);
+  width = va_arg (args, gint);
+  height = va_arg (args, gint);
+  angle1 = va_arg (args, gint);
+  angle2 = va_arg (args, gint);
+
+  x -= x_offset;
+  y -= y_offset;
+  
+  if (angle2 >= 360*64)
+    {
+      nXStartArc = nYStartArc = nXEndArc = nYEndArc = 0;
+    }
+  else if (angle2 > 0)
+    {
+      /* The 100. is just an arbitrary value */
+      nXStartArc = x + width/2 + 100. * cos(angle1/64.*2.*G_PI/360.);
+      nYStartArc = y + height/2 + -100. * sin(angle1/64.*2.*G_PI/360.);
+      nXEndArc = x + width/2 + 100. * cos((angle1+angle2)/64.*2.*G_PI/360.);
+      nYEndArc = y + height/2 + -100. * sin((angle1+angle2)/64.*2.*G_PI/360.);
+    }
+  else
+    {
+      nXEndArc = x + width/2 + 100. * cos(angle1/64.*2.*G_PI/360.);
+      nYEndArc = y + height/2 + -100. * sin(angle1/64.*2.*G_PI/360.);
+      nXStartArc = x + width/2 + 100. * cos((angle1+angle2)/64.*2.*G_PI/360.);
+      nYStartArc = y + height/2 + -100. * sin((angle1+angle2)/64.*2.*G_PI/360.);
+    }
+  
+  if (filled)
+    {
+      old_pen = SelectObject (hdc, GetStockObject (NULL_PEN));
+      GDK_NOTE (MISC, g_print ("...Pie(hdc,%d,%d,%d,%d,%d,%d,%d,%d)\n",
+			       x, y, x+width, y+height,
+			       nXStartArc, nYStartArc,
+			       nXEndArc, nYEndArc));
+      GDI_CALL (Pie, (hdc, x, y, x+width, y+height,
+		      nXStartArc, nYStartArc, nXEndArc, nYEndArc));
+      GDI_CALL (SelectObject, (hdc, old_pen));
+    }
+  else
+    {
+      GDK_NOTE (MISC, g_print ("...Arc(hdc,%d,%d,%d,%d,%d,%d,%d,%d)\n",
+			       x, y, x+width, y+height,
+			       nXStartArc, nYStartArc,
+			       nXEndArc, nYEndArc));
+      GDI_CALL (Arc, (hdc, x, y, x+width, y+height,
+		      nXStartArc, nYStartArc, nXEndArc, nYEndArc));
+    }
+}
+
+#endif /* USE_GENERIC_DRAW */
+
 static void
 gdk_win32_draw_arc (GdkDrawable *drawable,
 		    GdkGC       *gc,
@@ -833,7 +915,34 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 		    gint         angle1,
 		    gint         angle2)
 {
+#ifdef USE_GENERIC_DRAW
+
+  GdkRectangle bounds;
+  GdkRegion *region;
+  gint pen_width;
+
+  if (width <= 2 || height <= 2 || angle2 == 0)
+    return;
+
+  pen_width = GDK_GC_WIN32 (gc)->pen_width;
+  if (pen_width == 0)
+    pen_width = 1;
+
+  bounds.x = x - pen_width;
+  bounds.y = y - pen_width;
+  bounds.width = width + 2 * pen_width;
+  bounds.height = height + 2 * pen_width;
+  region = gdk_region_rectangle (&bounds);
+
+  generic_draw (drawable, gc, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND,
+		draw_arc, region, filled, x, y, width, height, angle1, angle2);
+
+  gdk_region_destroy (region);
+
+#else  /* !USE_GENERIC_DRAW */
+
   const GdkGCValuesMask mask = GDK_GC_FOREGROUND|GDK_GC_BACKGROUND;
+  HGDIOBJ old_pen;
   HDC hdc;
   int nXStartArc, nYStartArc, nXEndArc, nYEndArc;
 
@@ -873,13 +982,14 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
   
   if (filled)
     {
+      old_pen = SelectObject (hdc, GetStockObject (NULL_PEN));
       GDK_NOTE (MISC, g_print ("...Pie(hdc,%d,%d,%d,%d,%d,%d,%d,%d)\n",
 			       x, y, x+width, y+height,
 			       nXStartArc, nYStartArc,
 			       nXEndArc, nYEndArc));
-      if (!Pie (hdc, x, y, x+width, y+height,
-		nXStartArc, nYStartArc, nXEndArc, nYEndArc))
-	WIN32_GDI_FAILED ("Pie");
+      GDI_CALL (Pie, (hdc, x, y, x+width, y+height,
+		      nXStartArc, nYStartArc, nXEndArc, nYEndArc));
+      GDI_CALL (SelectObject, (hdc, old_pen));
     }
   else
     {
@@ -887,11 +997,12 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 			       x, y, x+width, y+height,
 			       nXStartArc, nYStartArc,
 			       nXEndArc, nYEndArc));
-      if (!Arc (hdc, x, y, x+width, y+height,
-		nXStartArc, nYStartArc, nXEndArc, nYEndArc))
-	WIN32_GDI_FAILED ("Arc");
+      GDI_CALL (Arc, (hdc, x, y, x+width, y+height,
+		      nXStartArc, nYStartArc, nXEndArc, nYEndArc));
     }
   gdk_win32_hdc_release (drawable, gc, mask);
+
+#endif /* !USE_GENERIC_DRAW */
 }
 
 static void

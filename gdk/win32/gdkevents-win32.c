@@ -1439,7 +1439,9 @@ synthesize_expose_events (GdkWindow *window)
 
   g_list_free (head);
 
-  if (!(hdc = GetDC (impl->handle)))
+  if (((GdkWindowObject *) window)->input_only)
+    ;
+  else if (!(hdc = GetDC (impl->handle)))
     WIN32_GDI_FAILED ("GetDC");
   else
     {
@@ -3052,6 +3054,11 @@ gdk_event_translate (GdkEvent *event,
 	  if (k_grab_window == window)
 	    gdk_keyboard_ungrab (msg->time);
 
+	  if (window && GDK_WINDOW_IS_MAPPED (window))
+	    gdk_synthesize_window_state (window,
+					 GDK_WINDOW_STATE_MAXIMIZED,
+					 GDK_WINDOW_STATE_ICONIFIED);
+
 	  return_val = !GDK_WINDOW_DESTROYED (window);
 	}
       else if ((msg->wParam == SIZE_RESTORED
@@ -3061,9 +3068,6 @@ gdk_event_translate (GdkEvent *event,
 #endif
 								 )
 	{
-	  if (LOWORD (msg->lParam) == 0)
-	    break;
-
 	  event->configure.type = GDK_CONFIGURE;
 	  event->configure.window = window;
 	  pt.x = 0;
@@ -3077,6 +3081,16 @@ gdk_event_translate (GdkEvent *event,
 	  private->y = event->configure.y;
 	  GDK_WINDOW_IMPL_WIN32 (private->impl)->width = event->configure.width;
 	  GDK_WINDOW_IMPL_WIN32 (private->impl)->height = event->configure.height;
+
+	  if (msg->wParam == SIZE_RESTORED)
+	    gdk_synthesize_window_state (window,
+					 GDK_WINDOW_STATE_ICONIFIED |
+					 GDK_WINDOW_STATE_MAXIMIZED,
+					 0);
+	  else if (msg->wParam == SIZE_MAXIMIZED)
+	    gdk_synthesize_window_state (window,
+					 GDK_WINDOW_STATE_ICONIFIED,
+					 GDK_WINDOW_STATE_MAXIMIZED);
 
 	  if (private->resize_count > 1)
 	    private->resize_count -= 1;
