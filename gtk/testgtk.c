@@ -2018,16 +2018,17 @@ label_toggle (GtkWidget  *widget,
   if (!(*label))
     {
       *label = gtk_label_new ("Dialog Test");
+      gtk_signal_connect (GTK_OBJECT (*label),
+			  "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  label);
       gtk_misc_set_padding (GTK_MISC (*label), 10, 10);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->vbox), 
 			  *label, TRUE, TRUE, 0);
       gtk_widget_show (*label);
     }
   else
-    {
-      gtk_widget_destroy (*label);
-      *label = NULL;
-    }
+    gtk_widget_destroy (*label);
 }
 
 void
@@ -2059,7 +2060,7 @@ create_dialog ()
 
       button = gtk_button_new_with_label ("Toggle");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC(label_toggle),
+			  GTK_SIGNAL_FUNC (label_toggle),
 			  &label);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->action_area),

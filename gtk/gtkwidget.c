@@ -3303,6 +3303,9 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  if (GTK_WIDGET_NO_WINDOW (widget) && GTK_WIDGET_MAPPED (widget))
+    gtk_widget_real_unmap (widget);
+
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
 
   /* printf ("unrealizing %s\n", gtk_type_name (GTK_OBJECT(widget)->klass->type));
@@ -3320,7 +3323,9 @@ gtk_widget_real_unrealize (GtkWidget *widget)
       gdk_window_destroy (widget->window);
     }
   else
-    gdk_window_unref (widget->window);
+    {
+      gdk_window_unref (widget->window);
+    }
   widget->window = NULL;
 }
 
