@@ -1030,7 +1030,10 @@ gtk_drag_dest_set_target_list (GtkWidget      *widget,
  * @widget: a #GtkWidget that's a drag destination
  *
  * Add the text targets supported by #GtkSelection to
- * the target list of the drag destination.  
+ * the target list of the drag destination. The targets
+ * are added with @info = 0. If you need another value, 
+ * use gtk_target_list_add_text_targets() and
+ * gtk_drag_dest_set_target_list().
  * 
  * Since: 2.6
  **/
@@ -1044,7 +1047,7 @@ gtk_drag_dest_add_text_targets (GtkWidget *widget)
     gtk_target_list_ref (target_list);
   else
     target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (target_list);
+  gtk_target_list_add_text_targets (target_list, 0);
   gtk_drag_dest_set_target_list (widget, target_list);
   gtk_target_list_unref (target_list);
 }
@@ -1054,7 +1057,10 @@ gtk_drag_dest_add_text_targets (GtkWidget *widget)
  * @widget: a #GtkWidget that's a drag destination
  *
  * Add the image targets supported by #GtkSelection to
- * the target list of the drag destination.  
+ * the target list of the drag destination. The targets
+ * are added with @info = 0. If you need another value, 
+ * use gtk_target_list_add_image_targets() and
+ * gtk_drag_dest_set_target_list().
  * 
  * Since: 2.6
  **/
@@ -1068,7 +1074,7 @@ gtk_drag_dest_add_image_targets (GtkWidget *widget)
     gtk_target_list_ref (target_list);
   else
     target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_image_targets (target_list, FALSE);
+  gtk_target_list_add_image_targets (target_list, 0, FALSE);
   gtk_drag_dest_set_target_list (widget, target_list);
   gtk_target_list_unref (target_list);
 }
@@ -2221,7 +2227,10 @@ gtk_drag_source_set_target_list (GtkWidget     *widget,
  * @widget: a #GtkWidget that's is a drag source
  *
  * Add the text targets supported by #GtkSelection to
- * the target list of the drag source.  
+ * the target list of the drag source.  The targets
+ * are added with @info = 0. If you need another value, 
+ * use gtk_target_list_add_text_targets() and
+ * gtk_drag_dest_set_target_list().
  * 
  * Since: 2.6
  **/
@@ -2235,7 +2244,7 @@ gtk_drag_source_add_text_targets (GtkWidget *widget)
     gtk_target_list_ref (target_list);
   else
     target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_text_targets (target_list);
+  gtk_target_list_add_text_targets (target_list, 0);
   gtk_drag_source_set_target_list (widget, target_list);
   gtk_target_list_unref (target_list);
 }
@@ -2245,7 +2254,10 @@ gtk_drag_source_add_text_targets (GtkWidget *widget)
  * @widget: a #GtkWidget that's is a drag source
  *
  * Add the writable image targets supported by #GtkSelection to
- * the target list of the drag source.  
+ * the target list of the drag source. The targets
+ * are added with @info = 0. If you need another value, 
+ * use gtk_target_list_add_text_targets() and
+ * gtk_drag_dest_set_target_list().
  * 
  * Since: 2.6
  **/
@@ -2259,7 +2271,7 @@ gtk_drag_source_add_image_targets (GtkWidget *widget)
     gtk_target_list_ref (target_list);
   else
     target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_image_targets (target_list, TRUE);
+  gtk_target_list_add_image_targets (target_list, 0, TRUE);
   gtk_drag_source_set_target_list (widget, target_list);
   gtk_target_list_unref (target_list);
 }

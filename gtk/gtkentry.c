@@ -1684,7 +1684,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 	  GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
 	  guint actions = entry->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
 
-	  gtk_target_list_add_text_targets (target_list);
+	  gtk_target_list_add_text_targets (target_list, 0);
 
 	  context = gtk_drag_begin (widget, target_list, actions,
 			  entry->button, (GdkEvent *)event);

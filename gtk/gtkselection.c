@@ -270,15 +270,16 @@ init_atoms (void)
 /**
  * gtk_target_list_add_text_targets:
  * @list: a #GtkTargetList
+ * @info: an ID that will be passed back to the application
  * 
  * Adds the text targets supported by #GtkSelection to
- * the target list. The targets are added with both flags
- * and info being zero.
+ * the target list. All targets are added with the same @info.
  * 
  * Since: 2.6
  **/
 void 
-gtk_target_list_add_text_targets (GtkTargetList *list)
+gtk_target_list_add_text_targets (GtkTargetList *list,
+				  guint          info)
 {
   g_return_if_fail (list != NULL);
   
@@ -286,29 +287,30 @@ gtk_target_list_add_text_targets (GtkTargetList *list)
 
   /* Keep in sync with gtk_selection_data_targets_include_text()
    */
-  gtk_target_list_add (list, utf8_atom, 0, 0);  
-  gtk_target_list_add (list, ctext_atom, 0, 0);  
-  gtk_target_list_add (list, text_atom, 0, 0);  
-  gtk_target_list_add (list, GDK_TARGET_STRING, 0, 0);  
-  gtk_target_list_add (list, text_plain_utf8_atom, 0, 0);  
-  gtk_target_list_add (list, text_plain_locale_atom, 0, 0);  
-  gtk_target_list_add (list, text_plain_atom, 0, 0);  
+  gtk_target_list_add (list, utf8_atom, 0, info);  
+  gtk_target_list_add (list, ctext_atom, 0, info);  
+  gtk_target_list_add (list, text_atom, 0, info);  
+  gtk_target_list_add (list, GDK_TARGET_STRING, 0, info);  
+  gtk_target_list_add (list, text_plain_utf8_atom, 0, info);  
+  gtk_target_list_add (list, text_plain_locale_atom, 0, info);  
+  gtk_target_list_add (list, text_plain_atom, 0, info);  
 }
 
 /**
  * gtk_target_list_add_image_targets:
  * @list: a #GtkTargetList
+ * @info: an ID that will be passed back to the application
  * @writable: whether to add only targets for which GTK+ knows
  *   how to convert a pixbuf into the format
  * 
  * Adds the image targets supported by #GtkSelection to
- * the target list. The targets are added with both flags
- * and info being zero.
+ * the target list. All targets are added with the same @info.
  * 
  * Since: 2.6
  **/
 void 
 gtk_target_list_add_image_targets (GtkTargetList *list,
+				   guint          info,
 				   gboolean       writable)
 {
   GSList *formats, *f;
@@ -330,7 +332,7 @@ gtk_target_list_add_image_targets (GtkTargetList *list,
       for (m = mimes; *m; m++)
 	{
 	  atom = gdk_atom_intern (*m, FALSE);
-	  gtk_target_list_add (list, atom, 0, 0);  
+	  gtk_target_list_add (list, atom, 0, info);  
 	}
       g_strfreev (mimes);
     }

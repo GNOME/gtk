@@ -2816,7 +2816,7 @@ gtk_calendar_motion_notify (GtkWidget	   *widget,
 	    {
 	      GdkDragContext *context;
 	      GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
-	      gtk_target_list_add_text_targets (target_list);
+	      gtk_target_list_add_text_targets (target_list, 0);
 	      context = gtk_drag_begin (widget, target_list, GDK_ACTION_COPY,
 					1, (GdkEvent *)event);
 

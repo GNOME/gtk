@@ -1,3 +1,16 @@
+2004-10-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdnd.c: Document how to use info with text/image 
+	targets.
+
+	* gtk/gtkselection.h: 
+	* gtk/gtkselection.c (gtk_target_list_add_text_targets): 
+	(gtk_target_list_add_image_targets): Add info argument.
+	
+	* gtk/gtkcalendar.c (gtk_calendar_motion_notify): 
+	* gtk/gtkentry.c (gtk_entry_init): 
+	* gtk/gtktextview.c (gtk_text_view_init): Adjust all callers.
+
 2004-10-22  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtktexttag.c: (gtk_text_tag_get_property):
