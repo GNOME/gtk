@@ -154,9 +154,13 @@ Retrieves any #GtkTooltipsData previously associated with the given widget.
 
 <!-- ##### FUNCTION gtk_tooltips_force_window ##### -->
 <para>
-Soon as I play with this, I'll report what it does.
+Ensures that the window used for displaying the given @tooltips is created.
+</para>
+<para>
+Applications should never have to call this function, since GTK+ takes
+care of this.
 </para>
 
-@tooltips: 
+@tooltips: a #GtkToolTips
 
 

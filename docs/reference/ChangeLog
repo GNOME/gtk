@@ -1,4 +1,6 @@
 2002-01-14  Matthias Clasen  <matthiasc@poet.de>
+	
+	* gtk/tmpl/gtktooltips.sgml: Minor fixes.
 
 	* gtk/tmpl/gtkrc.sgml: Minor fixes.
 
