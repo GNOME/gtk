@@ -1,3 +1,11 @@
+2001-08-20  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+
+	* test-images.h, test-loaders.c: Add ico and wbmp tests.
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_save): Fail with a suitable
+	error if buffer allocation fails.
+	* io-ico.c: Make .ICO loader more robust.
+	All of these are due to sandmann@daimi.au.dk (#50187)
+
 2001-08-19  Sven Neumann  <sven@gimp.org>
 
 	* pixops/pixops.c: applied some simple but effective optimizations 
