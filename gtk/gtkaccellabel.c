@@ -123,8 +123,8 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
 
   class->signal_quote1 = g_strdup ("<:");
   class->signal_quote2 = g_strdup (":>");
-  class->mod_name_shift = g_strdup ("Shft");
-  class->mod_name_control = g_strdup ("Ctl");
+  class->mod_name_shift = g_strdup ("Shift");
+  class->mod_name_control = g_strdup ("Ctrl");
   class->mod_name_alt = g_strdup ("Alt");
   class->mod_separator = g_strdup ("+");
   class->accel_seperator = g_strdup (" / ");

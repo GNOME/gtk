@@ -1,3 +1,17 @@
+Thu Jul 19 14:56:33 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_class_init) 
+	* gtk/gtkinputdialog.c (gtk_input_dialog_set_key):
+	Use Shift/Ctrl instead of Shft/Ctl. (#53807)
+
+Thu Jul 19 11:41:00 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c: Add propery support (roughly
+	based on patch from Lee Mallabone, #51014)
+
+	* gtk/gtkcolorsel.h: Mark gtk_color_selection_set_update_policy as
+	deprecated, since we already g_warning() on it.
+
 Thu Jul 19 14:24:34 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_set_positions): Fix

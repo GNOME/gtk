@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2001.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -73,6 +73,14 @@
 enum {
   COLOR_CHANGED,
   LAST_SIGNAL
+};
+
+enum {
+  PROP_0,
+  PROP_HAS_PALETTE,
+  PROP_HAS_OPACITY_CONTROL,
+  PROP_CURRENT_COLOR,
+  PROP_CURRENT_ALPHA,
 };
 
 enum {
@@ -137,6 +145,14 @@ static void gtk_color_selection_class_init	(GtkColorSelectionClass	 *klass);
 static void gtk_color_selection_destroy		(GtkObject		 *object);
 static void gtk_color_selection_finalize        (GObject		 *object);
 static void update_color			(GtkColorSelection	 *colorsel);
+static void gtk_color_selection_set_property    (GObject                 *object,
+					         guint                    prop_id,
+					         const GValue            *value,
+					         GParamSpec              *pspec);
+static void gtk_color_selection_get_property    (GObject                 *object,
+					         guint                    prop_id,
+					         GValue                  *value,
+					         GParamSpec              *pspec);
 
 static gint     gtk_color_selection_get_palette_size    (GtkColorSelection *colorsel);
 static gboolean gtk_color_selection_get_palette_color   (GtkColorSelection *colorsel,
@@ -544,12 +560,12 @@ color_sample_new (GtkColorSelection *colorsel)
   gtk_box_pack_start (GTK_BOX (priv->sample_area), priv->cur_sample,
 		      TRUE, TRUE, 0);
   
-  gtk_signal_connect(GTK_OBJECT (priv->old_sample), "expose_event",
-		     GTK_SIGNAL_FUNC (color_old_sample_expose),
-		     colorsel);
-  gtk_signal_connect(GTK_OBJECT (priv->cur_sample), "expose_event",
-		     GTK_SIGNAL_FUNC (color_cur_sample_expose),
-		     colorsel);
+  gtk_signal_connect (GTK_OBJECT (priv->old_sample), "expose_event",
+		      GTK_SIGNAL_FUNC (color_old_sample_expose),
+		      colorsel);
+  gtk_signal_connect (GTK_OBJECT (priv->cur_sample), "expose_event",
+		      GTK_SIGNAL_FUNC (color_cur_sample_expose),
+		      colorsel);
   
   color_sample_setup_dnd (colorsel, priv->old_sample);
   color_sample_setup_dnd (colorsel, priv->cur_sample);
@@ -1518,6 +1534,11 @@ update_color (GtkColorSelection *colorsel)
       *ptr = '0';
   gtk_entry_set_text (GTK_ENTRY (priv->hex_entry), entryval);
   priv->changing = FALSE;
+
+  g_object_freeze_notify (G_OBJECT (colorsel));
+  g_object_notify (G_OBJECT (colorsel), "current_color");
+  g_object_notify (G_OBJECT (colorsel), "current_alpha");
+  g_object_thaw_notify (G_OBJECT (colorsel));
 }
 
 
@@ -1637,6 +1658,38 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
   
   object_class->destroy = gtk_color_selection_destroy;
   gobject_class->finalize = gtk_color_selection_finalize;
+
+  gobject_class->set_property = gtk_color_selection_set_property;
+  gobject_class->get_property = gtk_color_selection_get_property;
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_HAS_OPACITY_CONTROL,
+                                   g_param_spec_boolean ("has_opacity_control",
+							 _("Has Opacity Control"),
+							 _("Whether the color selector should allow setting opacity"),
+							 FALSE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_HAS_PALETTE,
+                                   g_param_spec_boolean ("has_palette",
+							 _("Has palette"),
+							 _("Whether a palette should be used"),
+							 FALSE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_CURRENT_COLOR,
+                                   g_param_spec_boxed ("current_color",
+                                                       _("Current Color"),
+                                                       _("The current color"),
+                                                       GDK_TYPE_COLOR,
+                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_CURRENT_ALPHA,
+                                   g_param_spec_uint ("current_alpha",
+						      _("Current Alpha"),
+						      _("The current opacity value (0 fully transparent, 65535 fully opaque)"),
+						      0, 65535, 65535,
+						      G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   color_selection_signals[COLOR_CHANGED] =
     gtk_signal_new ("color_changed",
@@ -1766,7 +1819,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_label_set_mnemonic_widget (GTK_LABEL (priv->opacity_label),
                                  priv->opacity_slider);
   gtk_scale_set_draw_value (GTK_SCALE (priv->opacity_slider), FALSE);
-  gtk_signal_connect (GTK_OBJECT(adjust), "value_changed",
+  gtk_signal_connect (GTK_OBJECT (adjust), "value_changed",
                       GTK_SIGNAL_FUNC (adjustment_changed),
                       GINT_TO_POINTER (COLORSEL_OPACITY));
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_slider, 1, 7, 4, 5); 
@@ -1987,6 +2040,8 @@ gtk_color_selection_set_has_opacity_control (GtkColorSelection *colorsel,
 	  gtk_widget_hide (priv->opacity_entry);
 	}
       color_sample_draw_samples (colorsel);
+      
+      g_object_notify (G_OBJECT (colorsel), "has_opacity_control");
     }
 }
 
@@ -2035,6 +2090,8 @@ gtk_color_selection_set_has_palette (GtkColorSelection *colorsel,
 	gtk_widget_show (priv->palette_frame);
       else
 	gtk_widget_hide (priv->palette_frame);
+      
+      g_object_notify (G_OBJECT (colorsel), "has_palette");
     }
 }
 
@@ -2053,9 +2110,10 @@ gtk_color_selection_set_current_color (GtkColorSelection *colorsel,
 {
   ColorSelectionPrivate *priv;
   gint i;
+  gboolean previous_changed;
   
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
-  
+
   priv = colorsel->private_data;
   priv->changing = TRUE;
   priv->color[COLORSEL_RED] = color->red / 65535.0;
@@ -2069,6 +2127,7 @@ gtk_color_selection_set_current_color (GtkColorSelection *colorsel,
 		  &priv->color[COLORSEL_VALUE]);
   if (priv->default_set == FALSE)
     {
+      previous_changed = TRUE;
       for (i = 0; i < COLORSEL_NUM_CHANNELS; i++)
 	priv->old_color[i] = priv->color[i];
     }
@@ -2445,6 +2504,67 @@ gtk_color_selection_is_adjusting (GtkColorSelection *colorsel)
   priv = colorsel->private_data;
   
   return (gtk_hsv_is_adjusting (GTK_HSV (priv->triangle_colorsel)));
+}
+
+static void
+gtk_color_selection_set_property (GObject         *object,
+				  guint            prop_id,
+				  const GValue    *value,
+				  GParamSpec      *pspec)
+{
+  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (object);
+  
+  switch (prop_id)
+    {
+    case PROP_HAS_OPACITY_CONTROL:
+      gtk_color_selection_set_has_opacity_control (colorsel, 
+						   g_value_get_boolean (value));
+      break;
+    case PROP_HAS_PALETTE:
+      gtk_color_selection_set_has_palette (colorsel, 
+					   g_value_get_boolean (value));
+      break;
+    case PROP_CURRENT_COLOR:
+      gtk_color_selection_set_current_color (colorsel, g_value_get_boxed (value));
+      break;
+    case PROP_CURRENT_ALPHA:
+      gtk_color_selection_set_current_alpha (colorsel, g_value_get_uint (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+  
+}
+
+static void
+gtk_color_selection_get_property (GObject     *object,
+				  guint        prop_id,
+				  GValue      *value,
+				  GParamSpec  *pspec)
+{
+  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (object);
+  GdkColor color;
+  
+  switch (prop_id)
+    {
+    case PROP_HAS_OPACITY_CONTROL:
+      g_value_set_boolean (value, gtk_color_selection_get_has_opacity_control (colorsel));
+      break;
+    case PROP_HAS_PALETTE:
+      g_value_set_boolean (value, gtk_color_selection_get_has_palette (colorsel));
+      break;
+    case PROP_CURRENT_COLOR:
+      gtk_color_selection_get_current_color (colorsel, &color);
+      g_value_set_boxed (value, &color);
+      break;
+    case PROP_CURRENT_ALPHA:
+      g_value_set_uint (value, gtk_color_selection_get_current_alpha (colorsel));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 
