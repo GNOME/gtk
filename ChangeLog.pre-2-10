@@ -1,6 +1,6 @@
 Mon Oct 13 20:21:38 2003  Kristian Rietveld  <kris@gtk.org>
 
-	* gtk/gtkentry.c (gtk_entry_set_text): I overlooked an if when
+	* gtk/gtkentry.c (gtk_entry_set_text): I overlooked a return when
 	I was adding the signal block/unblock code. Oops. (Noticed by
 	Marco Pesenti Gritti).
 
