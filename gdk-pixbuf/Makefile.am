@@ -241,6 +241,6 @@ gdk-pixbuf-marshal.h: gdk-pixbuf-marshal.list
 
 gdk-pixbuf-marshal.c: gdk-pixbuf-marshal.list
 	cd $(srcdir) \
-	&& glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >> xgen-gmh \
-	&& (cmp -s xgen-gmh gdk-pixbuf-marshal.c || cp xgen-gmh gdk-pixbuf-marshal.c) \
-	&& rm -f xgen-gmh xgen-gmh~
+	&& glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >> xgen-gmc \
+	&& (cmp -s xgen-gmc gdk-pixbuf-marshal.c || cp xgen-gmc gdk-pixbuf-marshal.c) \
+	&& rm -f xgen-gmc xgen-gmc~

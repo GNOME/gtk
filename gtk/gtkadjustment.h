@@ -29,7 +29,7 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkdata.h>
+#include <gtk/gtkobject.h>
 
 
 #ifdef __cplusplus
@@ -50,7 +50,7 @@ typedef struct _GtkAdjustmentClass  GtkAdjustmentClass;
 
 struct _GtkAdjustment
 {
-  GtkData data;
+  GtkObject parent_instance;
   
   gfloat lower;
   gfloat upper;
@@ -62,7 +62,7 @@ struct _GtkAdjustment
 
 struct _GtkAdjustmentClass
 {
-  GtkDataClass parent_class;
+  GtkObjectClass parent_class;
   
   void (* changed)	 (GtkAdjustment *adjustment);
   void (* value_changed) (GtkAdjustment *adjustment);

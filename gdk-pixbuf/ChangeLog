@@ -1,3 +1,8 @@
+2001-03-14  Havoc Pennington  <hp@redhat.com>
+
+	* Makefile.am (gdk-pixbuf-marshal.c): Use different temporary file
+	from gdk-pixbuf-marshal.h, fixes parallel makes.
+
 Thu Mar  1 04:01:57 2001  Tim Janik  <timj@gtk.org>
 
 	* test-gdk-pixbuf.c: fixed includes.

@@ -79,7 +79,6 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkcellrenderertextpixbuf.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellrendererpixbuf.h	\
-	gtkdata.h		\
 	gtkdebug.h              \
 	gtkdialog.h		\
 	gtkdnd.h		\
@@ -238,7 +237,6 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkcontainer.c		\
 	gtkctree.c		\
 	gtkcurve.c		\
-	gtkdata.c		\
 	gtkdialog.c		\
 	gtkdnd.c		\
 	gtkdrawingarea.c	\

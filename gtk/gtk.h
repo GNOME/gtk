@@ -58,7 +58,6 @@
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkctree.h>
 #include <gtk/gtkcurve.h>
-#include <gtk/gtkdata.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkdnd.h>
 #include <gtk/gtkdrawingarea.h>

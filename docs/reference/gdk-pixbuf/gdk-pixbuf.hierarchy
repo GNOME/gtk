@@ -1,2 +1,7 @@
 GObject
+  GdkDrawable
+    GdkWindow
+    GdkDrawableImplX11
+      GdkWindowImplX11
+  GdkColormap
   GdkPixbufLoader

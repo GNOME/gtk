@@ -1,3 +1,23 @@
+2001-03-14  Havoc Pennington  <hp@redhat.com>
+
+        * gtk/gtkdata.h, gtk/gtkdata.c: Delete.
+	
+	* gtk/gtk.h: remove gtkdata.h
+
+	* gtk/Makefile.am: remove gtkdata
+	
+	* gtk/gtktext.c (gtk_text_set_adjustments): connect to "destroy"
+	not "disconnect" on the adjustments.
+	
+	* gtk/gtktooltips.h, gtk/gtktooltips.c: derive from GtkObject not
+	GtkData
+
+	* gtk/gtkadjustment.h, gtk/gtkadjustment.c: derive from GtkObject
+	not GtkData
+
+	* configure.in: handle case where X render exists, but Pango lacks
+	Xft support.
+	
 2001-03-15 Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtktoolbar.[ch]:

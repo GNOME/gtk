@@ -440,6 +440,12 @@ if test "x$gdktarget" = "xx11"; then
       AC_CHECK_LIB(Xft, XftFontOpen, have_xft=true, :, -lXrender -lXext $X_LIBS $FREETYPE_LIBS)
     ,:,-lXext $X_LIBS)
 
+    ## be sure we also have Pango built with xft support
+    if ! $PKG_CONFIG --exists pangoxft ; then
+        have_xft=false
+        AC_MSG_WARN([X render extension found, but Pango lacks Xft support])        
+    fi
+
     if $have_xft = 'true' ; then
       X_LIBS="-lXft -lXrender -lXext $FREETYPE_LIBS $X_LIBS"
       AC_DEFINE(HAVE_XFT)
@@ -447,7 +453,7 @@ if test "x$gdktarget" = "xx11"; then
   fi
 
   AC_SUBST(XFT_LIBS)
-  AM_CONDITIONAL(HAVE_XFT, $have_xft) 
+  AM_CONDITIONAL(HAVE_XFT, $have_xft)
 
   # Check for XIM support.
 

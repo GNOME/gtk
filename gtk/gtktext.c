@@ -217,9 +217,6 @@ static void  gtk_text_size_allocate  (GtkWidget      *widget,
 				      GtkAllocation  *allocation);
 static void  gtk_text_adjustment     (GtkAdjustment  *adjustment,
 				      GtkText        *text);
-static void  gtk_text_disconnect     (GtkAdjustment  *adjustment,
-				      GtkText        *text);
-
 static void   gtk_text_insert_text       (GtkOldEditable *old_editable,
 					  const gchar    *new_text,
 					  gint            new_text_length,
@@ -238,6 +235,9 @@ static void   gtk_text_set_selection     (GtkOldEditable *old_editable,
 					  gint            end);
 static void   gtk_text_real_set_editable (GtkOldEditable *old_editable,
 					  gboolean        is_editable);
+
+static void  gtk_text_adjustment_destroyed (GtkAdjustment  *adjustment,
+                                            GtkText        *text);
 
 /* Event handlers */
 static gint  gtk_text_expose            (GtkWidget         *widget,
@@ -844,8 +844,8 @@ gtk_text_set_adjustments (GtkText       *text,
       gtk_signal_connect (GTK_OBJECT (text->hadj), "value_changed",
 			  (GtkSignalFunc) gtk_text_adjustment,
 			  text);
-      gtk_signal_connect (GTK_OBJECT (text->hadj), "disconnect",
-			  (GtkSignalFunc) gtk_text_disconnect,
+      gtk_signal_connect (GTK_OBJECT (text->hadj), "destroy",
+			  (GtkSignalFunc) gtk_text_adjustment_destroyed,
 			  text);
       gtk_text_adjustment (hadj, text);
     }
@@ -862,8 +862,8 @@ gtk_text_set_adjustments (GtkText       *text,
       gtk_signal_connect (GTK_OBJECT (text->vadj), "value_changed",
 			  (GtkSignalFunc) gtk_text_adjustment,
 			  text);
-      gtk_signal_connect (GTK_OBJECT (text->vadj), "disconnect",
-			  (GtkSignalFunc) gtk_text_disconnect,
+      gtk_signal_connect (GTK_OBJECT (text->vadj), "destroy",
+			  (GtkSignalFunc) gtk_text_adjustment_destroyed,
 			  text);
       gtk_text_adjustment (vadj, text);
     }
@@ -2194,8 +2194,8 @@ gtk_text_adjustment (GtkAdjustment *adjustment,
 }
 
 static void
-gtk_text_disconnect (GtkAdjustment *adjustment,
-		     GtkText       *text)
+gtk_text_adjustment_destroyed (GtkAdjustment *adjustment,
+                               GtkText       *text)
 {
   g_return_if_fail (adjustment != NULL);
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));

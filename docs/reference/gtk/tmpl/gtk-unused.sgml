@@ -247,6 +247,20 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 
 @a: 
 
+<!-- ##### STRUCT GtkData ##### -->
+<para>
+The #GtkData-struct struct contains no public fields.
+</para>
+
+
+<!-- ##### SIGNAL GtkData::disconnect ##### -->
+<para>
+Emitted to notify any views on the #GtkData object to disconnect from it,
+possibly because the #GtkData object is about to be destroyed.
+</para>
+
+@data: the object which received the signal.
+
 <!-- ##### SIGNAL GtkEditable::activate ##### -->
 <para>
 Indicates that the user has activated the widget

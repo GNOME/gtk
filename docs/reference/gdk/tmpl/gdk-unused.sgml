@@ -96,6 +96,187 @@ device. It has the following fields:
        which describe what key press events are generated
        for each macro button.
 
+<!-- ##### STRUCT GdkIC ##### -->
+<para>
+The #GdkIC struct is an opaque structure representing an input context
+for use with the global <link linkend="gdk-Input-Methods">Input Method</link>.
+</para>
+
+
+<!-- ##### STRUCT GdkICAttr ##### -->
+<para>
+The #GdkICAttr struct is used when getting and setting attributes of the
+input context. It is used together with a #GdkICAttributesType mask which
+specifies which of the fields are being set or returned.
+</para>
+
+@style: the pre-edit and status style. This attribute is required when
+creating the #GdkIC, and cannot be changed.
+@client_window: the #GdkWindow in which the input method will display its
+pre-edit and status areas or create subwindows.
+The preedit_area and status_area attributes are specified relative to this
+window. This attribute is required when creating the #GdkIC, and cannot be
+changed.
+@focus_window: the #GdkWindow which is to be used when editing text.
+gdk_im_begin() sets this attribute before starting the text input process,
+so it is normally not necessary to set it elsewhere.
+@filter_events: the mask of events that the input method requires.
+See the gdk_ic_get_events() function. This attribute is read-only and is
+never changed.
+@spot_location: the position of the insertion cursor, for use with the
+%GDK_IM_PREEDIT_POSITION style. The y coordinate specifies the baseline of
+the text.
+@line_spacing: the line spacing to be used in the pre-edit and status areas
+when displaying multi-line text.
+@cursor: the cursor to use in the input method's windows.
+If this attribute isn't set it is determined by the input method.
+@preedit_fontset: the font to use for the pre-edit area.
+If this attribute isn't set it is determined by the input method.
+@preedit_area: the area in which the input method will display pre-editing
+data, used for the %GDK_IM_PREEDIT_POSITION and %GDK_IM_PREEDIT_AREA styles.
+@preedit_area_needed: the area that the input method requests for displaying
+pre-editing data, used for the %GDK_IM_PREEDIT_POSITION and
+%GDK_IM_PREEDIT_AREA styles.
+@preedit_foreground: the foreground color to use for the pre-edit area.
+This color must already be allocated in the preedit_colormap.
+If this attribute isn't set it is determined by the input method.
+@preedit_background: the background color to use for the pre-edit area.
+This color must already be allocated in the preedit_colormap.
+If this attribute isn't set it is determined by the input method.
+@preedit_pixmap: the background pixmap to use for the pre-edit area.
+If this attribute isn't set it is determined by the input method.
+@preedit_colormap: the colormap the input method should use to allocate colors.
+The default value is the colormap of client_window.
+@status_fontset: the font to use for the status area.
+If this attribute isn't set it is determined by the input method.
+@status_area: the are that the input method will display status information in.
+This is used for the %GDK_IM_STATUS_AREA style.
+@status_area_needed: the size that the input method requests for displaying
+status information, for the %GDK_IM_STATUS_AREA style.
+@status_foreground: the foreground color to use for the status area.
+This color must already be allocated in the status_colormap.
+If this attribute isn't set it is determined by the input method.
+@status_background: the background color to use for the status area.
+This color must already be allocated in the status_colormap.
+If this attribute isn't set it is determined by the input method.
+@status_pixmap: the background pixmap to use for the status area.
+If this attribute isn't set it is determined by the input method.
+@status_colormap: the colormap the input method should use to allocate colors.
+The default value is the colormap of client_window.
+
+<!-- ##### ENUM GdkICAttributesType ##### -->
+<para>
+The #GdkICAttributesType contains a set of bit-flags which are used to
+specify which of the attributes in a #GdkICAttr are being set or returned.
+</para>
+<para>
+It also contains several combinations of the flags which specify required
+attributes for the various styles:
+<variablelist>
+<varlistentry>
+<term>%GDK_IC_ALL_REQ:</term>
+<listitem><para>
+the set of attributes required for all styles.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>%GDK_IC_PREEDIT_AREA_REQ:</term>
+<listitem><para>
+the set of additional attributes required for the
+%GDK_IM_PREEDIT_AREA pre-edit style.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>%GDK_IC_PREEDIT_POSITION_REQ:</term>
+<listitem><para>
+the set of additional attributes required for the
+%GDK_IM_PREEDIT_POSITION pre-edit style.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>%GDK_IC_STATUS_AREA_REQ:</term>
+<listitem><para>
+the set of additional attributes required for the
+%GDK_IM_STATUS_AREA status style.
+</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+@GDK_IC_STYLE: 
+@GDK_IC_CLIENT_WINDOW: 
+@GDK_IC_FOCUS_WINDOW: 
+@GDK_IC_FILTER_EVENTS: 
+@GDK_IC_SPOT_LOCATION: 
+@GDK_IC_LINE_SPACING: 
+@GDK_IC_CURSOR: 
+@GDK_IC_PREEDIT_FONTSET: 
+@GDK_IC_PREEDIT_AREA: 
+@GDK_IC_PREEDIT_AREA_NEEDED: 
+@GDK_IC_PREEDIT_FOREGROUND: 
+@GDK_IC_PREEDIT_BACKGROUND: 
+@GDK_IC_PREEDIT_PIXMAP: 
+@GDK_IC_PREEDIT_COLORMAP: 
+@GDK_IC_STATUS_FONTSET: 
+@GDK_IC_STATUS_AREA: 
+@GDK_IC_STATUS_AREA_NEEDED: 
+@GDK_IC_STATUS_FOREGROUND: 
+@GDK_IC_STATUS_BACKGROUND: 
+@GDK_IC_STATUS_PIXMAP: 
+@GDK_IC_STATUS_COLORMAP: 
+@GDK_IC_ALL_REQ: 
+@GDK_IC_PREEDIT_AREA_REQ: 
+@GDK_IC_PREEDIT_POSITION_REQ: 
+@GDK_IC_STATUS_AREA_REQ: 
+
+<!-- ##### ENUM GdkIMStyle ##### -->
+<para>
+A set of bit-flags used to specify the input method styles which are supported
+or which are currently in use. The flags can be divided into 2 groups, the
+pre-edit flags and the status flags.
+</para>
+<para>
+The pre-edit flags specify how pre-editing data is displayed.
+For example, this could display the text being typed in the phonetic
+alphabet before it is composed and inserted as an ideograph.
+</para>
+<para>
+The status flags specify how status information is displayed.
+The status information can be thought of as an extension of the
+standard keyboard mode indicators, such as the Caps Lock indicator.
+</para>
+<note>
+<para>
+The %GDK_IM_PREEDIT_CALLBACKS and %GDK_IM_STATUS_CALLBACKS styles are not 
+currently supported in GTK+.
+</para>
+</note>
+
+@GDK_IM_PREEDIT_AREA: The application provides the input method with an area
+in which to perform <emphasis>off-the-spot</emphasis> pre-editing.
+@GDK_IM_PREEDIT_CALLBACKS: The application registers a number of callback
+functions which are used to display pre-editing data.
+@GDK_IM_PREEDIT_POSITION: The application provides the input method with the
+position of the insertion cursor, for <emphasis>over-the-spot</emphasis>
+pre-editing. The input method creates its own window over the widget to
+display the pre-editing data.
+@GDK_IM_PREEDIT_NOTHING: The input method uses the root X window to perform
+pre-editing, so the application does not need to do anything.
+@GDK_IM_PREEDIT_NONE: No pre-editing is done by the input method, or no
+pre-editing data needs to be displayed.
+@GDK_IM_PREEDIT_MASK: A bit-mask containing all the pre-edit flags.
+@GDK_IM_STATUS_AREA: The application provides the input method with an area
+in which to display status information.
+@GDK_IM_STATUS_CALLBACKS: The applications registers a number of callback
+functions which are used to display status information.
+@GDK_IM_STATUS_NOTHING: The input method uses the root X window to display
+status information, so the application does not need to do anything.
+@GDK_IM_STATUS_NONE: The input method does not display status information.
+@GDK_IM_STATUS_MASK: A bit-mask containing all the status flags.
+
 <!-- ##### ENUM GdkPixbufAlphaMode ##### -->
 <para>
 
@@ -234,6 +415,161 @@ device. It has the following fields:
 @colors: 
 @num_colors: 
 @Returns: 
+
+<!-- ##### FUNCTION gdk_ic_attr_destroy ##### -->
+<para>
+Destroys the given #GdkICAttr struct, freeing the allocated memory.
+</para>
+
+@attr: a #GdkICAttr struct.
+
+<!-- ##### FUNCTION gdk_ic_attr_new ##### -->
+<para>
+Creates a new #GdkICAttr struct, with all fields set to 0.
+The #GdkICAttr struct should be freed with gdk_ic_attr_destroy() when no
+longer needed.
+</para>
+
+@Returns: a new #GdkICAttr struct.
+
+<!-- ##### FUNCTION gdk_ic_destroy ##### -->
+<para>
+Destroys the input context.
+</para>
+
+@ic: a #GdkIC.
+
+<!-- ##### FUNCTION gdk_ic_get_attr ##### -->
+<para>
+Gets attributes of a #GdkIC.
+</para>
+
+@ic: a #GdkIC.
+@attr: a #GdkICAttr struct to contain the returned attributes.
+@mask: a #GdkICAttributesType mask specifying which attributes to get.
+@Returns: a #GdkICAttributesType mask specifying which of the attributes
+were not retrieved succesfully.
+
+<!-- ##### FUNCTION gdk_ic_get_events ##### -->
+<para>
+Returns the mask of events that the input method needs to function properly.
+This is typically called in a widget's realize method after creating the
+#GdkIC. The returned event mask is then combined with the widget's
+own event mask and applied using gdk_window_set_events().
+</para>
+
+@ic: a #GdkIC.
+@Returns: the mask of events that the input method needs to function
+properly.
+
+<!-- ##### FUNCTION gdk_ic_get_style ##### -->
+<para>
+Returns the pre-edit and status style of the #GdkIC.
+</para>
+
+@ic: a #GdkIC.
+@Returns: the pre-edit and status style of the #GdkIC.
+
+<!-- ##### FUNCTION gdk_ic_new ##### -->
+<para>
+Creates a new #GdkIC using the given attributes.
+</para>
+
+@attr: a #GdkICAttr struct containing attributes to use for the input context.
+@mask: a #GdkICAttributesType mask specifying which of the attributes in @attr
+are set.
+@Returns: a new #GdkIC.
+
+<!-- ##### FUNCTION gdk_ic_set_attr ##### -->
+<para>
+Sets attributes of the #GdkIC.
+</para>
+<para>
+Note that the GDK_IC_STYLE and GDK_IC_CLIENT_WINDOW attributes can only be set
+when creating the #GdkIC, and the GDK_IC_FILTER_EVENTS attribute is read-only.
+</para>
+
+@ic: a #GdkIC.
+@attr: a #GdkICAttr struct containing attributes to use for the input context.
+@mask: a #GdkICAttributesType mask specifying which of the attributes in @attr
+are set.
+@Returns: a #GdkICAttributesType mask indicating which of the attributes
+were not set successfully.
+
+<!-- ##### FUNCTION gdk_im_begin ##### -->
+<para>
+Starts editing, using the given input context and #GdkWindow.
+This should be called when the widget receives the input focus, typically in
+the widget's focus_in_event method.
+</para>
+
+@ic: a #GdkIC.
+@window: the #GdkWindow which will be receiving the key press events.
+
+<!-- ##### FUNCTION gdk_im_decide_style ##### -->
+<para>
+Decides which input method style should be used, by comparing the styles given
+in @supported_style with those of the available input method.
+</para>
+
+@supported_style: styles which are supported by the widget.
+@Returns: the best style in @supported_style that is also supported by the
+available input method.
+
+<!-- ##### FUNCTION gdk_im_end ##### -->
+<para>
+Stops editing using the input method.
+This should be called when the widget loses the input focus, typically in
+the widget's focus_out_event method.
+</para>
+
+
+<!-- ##### FUNCTION gdk_im_ready ##### -->
+<para>
+Checks if an input method is to be used for the current locale.
+If GTK+ has been compiled without support for input methods, or the current
+locale doesn't need an input method, then this will return FALSE.
+</para>
+
+@Returns: TRUE if an input method is available and should be used.
+
+<!-- ##### FUNCTION gdk_im_set_best_style ##### -->
+<para>
+Sets the best pre-edit and/or status style which should be used.
+This will affect the style chosen in gdk_im_decide_style().
+</para>
+<para>
+The order of the pre-edit styles is (from worst to best):
+%GDK_IM_PREEDIT_NONE, %GDK_IM_PREEDIT_NOTHING, %GDK_IM_PREEDIT_AREA,
+%GDK_IM_PREEDIT_POSITION, %GDK_IM_PREEDIT_CALLBACKS.
+The order of the status styles is:
+%GDK_IM_STATUS_NONE, %GDK_IM_STATUS_NOTHING, %GDK_IM_STATUS_AREA,
+%GDK_IM_STATUS_CALLBACKS.
+</para>
+<para>
+So, for example, to set the best allowed pre-edit style to %GDK_IM_PREEDIT_AREA
+you would do this:
+
+<informalexample>
+<programlisting>
+  gdk_im_set_best_style (GDK_IM_PREEDIT_AREA);
+</programlisting>
+</informalexample>
+
+Or to set the best allowed pre-edit style to %GDK_IM_PREEDIT_POSITION and the
+best allowed status style to %GDK_IM_STATUS_NOTHING you can do this:
+
+<informalexample>
+<programlisting>
+  gdk_im_set_best_style (GDK_IM_PREEDIT_POSITION | GDK_IM_STATUS_NOTHING);
+</programlisting>
+</informalexample>
+</para>
+
+@best_allowed_style: a bit-mask with the best pre-edit style and/or the best
+status style to use. If 0 is used, then the current bit-mask of all allowed
+styles is returned.
+@Returns: a bit-mask of all the styles allowed.
 
 <!-- ##### FUNCTION gdk_input_list_devices ##### -->
 <para>

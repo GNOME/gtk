@@ -22,17 +22,3 @@ before the #GtkData is destroyed.
 
 </para>
 
-<!-- ##### STRUCT GtkData ##### -->
-<para>
-The #GtkData-struct struct contains no public fields.
-</para>
-
-
-<!-- ##### SIGNAL GtkData::disconnect ##### -->
-<para>
-Emitted to notify any views on the #GtkData object to disconnect from it,
-possibly because the #GtkData object is about to be destroyed.
-</para>
-
-@data: the object which received the signal.
-

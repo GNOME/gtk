@@ -28,7 +28,7 @@
 #define __GTK_TOOLTIPS_H__
 
 #include <gdk/gdk.h>
-#include <gtk/gtkdata.h>
+#include <gtk/gtkobject.h>
 
 
 #ifdef __cplusplus
@@ -58,7 +58,7 @@ struct _GtkTooltipsData
 
 struct _GtkTooltips
 {
-  GtkData data;
+  GtkObject parent_instance;
 
   GtkWidget *tip_window;
   GtkWidget *tip_label;
@@ -74,7 +74,7 @@ struct _GtkTooltips
 
 struct _GtkTooltipsClass
 {
-  GtkDataClass parent_class;
+  GtkObjectClass parent_class;
 };
 
 GtkType		 gtk_tooltips_get_type	   (void) G_GNUC_CONST;

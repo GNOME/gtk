@@ -1,3 +1,9 @@
+2001-03-14  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtk-docs.sgml: remove gtkdata, gtktreemodelsimple
+
+	* gtk/gtk.types: remove gtk_data_get_type
+
 Wed Mar  7 23:58:53 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkwidget.sgml: Document ::hierarchy-changed.

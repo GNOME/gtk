@@ -96,12 +96,11 @@ GObject
       GtkPreview
       GtkProgress
         GtkProgressBar
-    GtkData
-      GtkAdjustment
-      GtkTooltips
+    GtkAdjustment
     GtkIMContext
       GtkIMMulticontext
     GtkItemFactory
+    GtkTooltips
   GtkTextBuffer
   GtkTextTag
   GtkTextTagTable

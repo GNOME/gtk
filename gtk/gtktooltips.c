@@ -62,7 +62,7 @@ static gint gtk_tooltips_timeout           (gpointer     data);
 static gint gtk_tooltips_paint_window      (GtkTooltips *tooltips);
 static void gtk_tooltips_draw_tips         (GtkTooltips *tooltips);
 
-static GtkDataClass *parent_class;
+static GtkObjectClass *parent_class;
 static const gchar  *tooltips_data_key = "_GtkTooltipsData";
 
 GtkType
@@ -84,7 +84,7 @@ gtk_tooltips_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      tooltips_type = gtk_type_unique (GTK_TYPE_DATA, &tooltips_info);
+      tooltips_type = gtk_type_unique (GTK_TYPE_OBJECT, &tooltips_info);
     }
 
   return tooltips_type;
@@ -96,7 +96,7 @@ gtk_tooltips_class_init (GtkTooltipsClass *class)
   GtkObjectClass *object_class;
 
   object_class = (GtkObjectClass*) class;
-  parent_class = gtk_type_class (GTK_TYPE_DATA);
+  parent_class = gtk_type_class (GTK_TYPE_OBJECT);
 
   object_class->destroy = gtk_tooltips_destroy;
 }
