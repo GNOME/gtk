@@ -1,3 +1,10 @@
+Thu Jul 17 19:12:02 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_remove_widget): the treeview
+	should only grab focus back if the "cell_editable" widget still
+	has focus. (Fixes #110104, testcase provided by Marco Pesenti
+	Gritti).
+
 Thu Jul 17 19:06:34 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_realize_button):
