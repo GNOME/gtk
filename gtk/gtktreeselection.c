@@ -92,6 +92,15 @@ gtk_tree_selection_init (GtkTreeSelection *selection)
   selection->type = GTK_TREE_SELECTION_SINGLE;
 }
 
+/**
+ * gtk_tree_selection_new:
+ * @void: 
+ * 
+ * Creates a new #GtkTreeSelection object.  This function should not be invoked,
+ * as each #GtkTreeView will create it's own #GtkTreeSelection.
+ * 
+ * Return value: A newly created #GtkTreeSelection object.
+ **/
 GtkObject *
 gtk_tree_selection_new (void)
 {
@@ -102,6 +111,15 @@ gtk_tree_selection_new (void)
   return selection;
 }
 
+/**
+ * gtk_tree_selection_new_with_tree_view:
+ * @tree_view: The #GtkTreeView.
+ * 
+ * Creates a new #GtkTreeSelection object.  This function should not be invoked,
+ * as each #GtkTreeView will create it's own #GtkTreeSelection.
+ * 
+ * Return value: A newly created #GtkTreeSelection object.
+ **/
 GtkObject *
 gtk_tree_selection_new_with_tree_view (GtkTreeView *tree_view)
 {
@@ -116,6 +134,14 @@ gtk_tree_selection_new_with_tree_view (GtkTreeView *tree_view)
   return selection;
 }
 
+/**
+ * gtk_tree_selection_set_tree_view:
+ * @selection: A #GtkTreeSelection.
+ * @tree_view: The #GtkTreeView.
+ * 
+ * Sets the #GtkTreeView of @selection.  This function should not be invoked, as
+ * it is used internally by #GtkTreeView.
+ **/
 void
 gtk_tree_selection_set_tree_view (GtkTreeSelection *selection,
 				  GtkTreeView      *tree_view)
@@ -129,6 +155,15 @@ gtk_tree_selection_set_tree_view (GtkTreeSelection *selection,
   tree_view->priv->selection = selection;
 }
 
+/**
+ * gtk_tree_selection_set_type:
+ * @selection: A #GtkTreeSelection.
+ * @type: The selection type.
+ * 
+ * Sets the selection type of the @selection.  If the previous type was
+ * #GTK_TREE_SELECTION_MULTI and @type is #GTK_TREE_SELECTION_SINGLE, then
+ * the anchor is kept selected, if it was previously selected.
+ **/
 void
 gtk_tree_selection_set_type (GtkTreeSelection     *selection,
 			     GtkTreeSelectionType  type)
@@ -155,6 +190,9 @@ gtk_tree_selection_set_type (GtkTreeSelection     *selection,
 	  if (node && GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
 	    selected = TRUE;
 	}
+      /* FIXME: if user_func is set, then it needs to unconditionally unselect
+       * all.
+       */
       gtk_tree_selection_unselect_all (selection);
       if (node && selected)
 	GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SELECTED);
@@ -162,10 +200,19 @@ gtk_tree_selection_set_type (GtkTreeSelection     *selection,
   selection->type = type;
 }
 
+/**
+ * gtk_tree_selection_set_select_function:
+ * @selection: A #GtkTreeSelection.
+ * @func: The selection function.
+ * @data: The selection function's data.
+ * 
+ * Sets the selection function.  If set, this function is called before any node
+ * is selected or unselected, giving some control over which nodes are selected.
+ **/
 void
 gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
 					GtkTreeSelectionFunc  func,
-					gpointer            data)
+					gpointer              data)
 {
   g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
@@ -175,6 +222,14 @@ gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
   selection->user_data = data;
 }
 
+/**
+ * gtk_tree_selection_get_user_data:
+ * @selection: A #GtkTreeSelection.
+ * 
+ * Returns the user data for the selection function.
+ * 
+ * Return value: The user data.
+ **/
 gpointer
 gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
 {
@@ -184,6 +239,15 @@ gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
   return selection->user_data;
 }
 
+/**
+ * gtk_tree_selection_get_selected:
+ * @selection: A #GtkTreeSelection.
+ * 
+ * Returns the currently selected node if @selection is set to
+ * #GTK_TREE_SELECTION_SINGLE.  Otherwise, it returns the anchor.
+ * 
+ * Return value: The selected #GtkTreeNode.
+ **/
 GtkTreeNode
 gtk_tree_selection_get_selected (GtkTreeSelection *selection)
 {
@@ -215,6 +279,14 @@ gtk_tree_selection_get_selected (GtkTreeSelection *selection)
   return retval;
 }
 
+/**
+ * gtk_tree_selection_selected_foreach:
+ * @selection: A #GtkTreeSelection.
+ * @func: The function to call for each selected node.
+ * @data: user data to pass to the function.
+ * 
+ * Calls a function for each selected node.
+ **/
 void
 gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
 				     GtkTreeSelectionForeachFunc  func,
@@ -295,6 +367,13 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
   while (TRUE);
 }
 
+/**
+ * gtk_tree_selection_select_path:
+ * @selection: A #GtkTreeSelection.
+ * @path: The #GtkTreePath to be selected.
+ * 
+ * Select the row at @path.
+ **/
 void
 gtk_tree_selection_select_path (GtkTreeSelection *selection,
 				GtkTreePath      *path)
@@ -326,6 +405,13 @@ gtk_tree_selection_select_path (GtkTreeSelection *selection,
 					    state);
 }
 
+/**
+ * gtk_tree_selection_unselect_path:
+ * @selection: A #GtkTreeSelection.
+ * @path: The #GtkTreePath to be unselected.
+ * 
+ * Unselects the row at @path.
+ **/
 void
 gtk_tree_selection_unselect_path (GtkTreeSelection *selection,
 				  GtkTreePath      *path)
@@ -353,6 +439,13 @@ gtk_tree_selection_unselect_path (GtkTreeSelection *selection,
 					    GDK_CONTROL_MASK);
 }
 
+/**
+ * gtk_tree_selection_select_node:
+ * @selection: A #GtkTreeSelection.
+ * @tree_node: The #GtkTreeNode to be selected.
+ * 
+ * Selects the specified node.
+ **/
 void
 gtk_tree_selection_select_node (GtkTreeSelection *selection,
 				GtkTreeNode       tree_node)
@@ -375,6 +468,13 @@ gtk_tree_selection_select_node (GtkTreeSelection *selection,
 }
 
 
+/**
+ * gtk_tree_selection_unselect_node:
+ * @selection: A #GtkTreeSelection.
+ * @tree_node: The #GtkTreeNode to be unselected.
+ * 
+ * Unselects the specified node.
+ **/
 void
 gtk_tree_selection_unselect_node (GtkTreeSelection *selection,
 				  GtkTreeNode       tree_node)
@@ -478,6 +578,13 @@ gtk_tree_selection_real_select_all (GtkTreeSelection *selection)
   return FALSE;
 }
 
+/**
+ * gtk_tree_selection_select_all:
+ * @selection: A #GtkTreeSelection.
+ * 
+ * Selects all the nodes.  If the type of @selection is
+ * #GTK_TREE_SELECTION_SINGLE, then the last row is selected.
+ **/
 void
 gtk_tree_selection_select_all (GtkTreeSelection *selection)
 {
@@ -552,6 +659,12 @@ gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
   return FALSE;
 }
 
+/**
+ * gtk_tree_selection_unselect_all:
+ * @selection: A #GtkTreeSelection.
+ * 
+ * Unselects all the nodes.
+ **/
 void
 gtk_tree_selection_unselect_all (GtkTreeSelection *selection)
 {
@@ -655,6 +768,14 @@ gtk_tree_selection_real_select_range (GtkTreeSelection *selection,
   return dirty;
 }
 
+/**
+ * gtk_tree_selection_select_range:
+ * @selection: A #GtkTreeSelection.
+ * @start_path: The initial node of the range.
+ * @end_path: The final node of the range.
+ * 
+ * Selects a range of nodes, determined by @start_path and @end_path inclusive.
+ **/
 void
 gtk_tree_selection_select_range (GtkTreeSelection *selection,
 				 GtkTreePath      *start_path,
@@ -727,6 +848,10 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 }
 
 /* NOTE: Any {un,}selection ever done _MUST_ be done through this function!
+ */
+
+/* FIXME: user_func can screw up GTK_TREE_SELECTION_SINGLE.  If it prevents
+ * unselection of a node, it can keep more then one node selected.
  */
 static gint
 gtk_tree_selection_real_select_node (GtkTreeSelection *selection,

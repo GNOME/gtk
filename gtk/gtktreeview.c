@@ -2636,7 +2636,7 @@ _gtk_tree_view_find_path (GtkTreeView *tree_view,
   return path;
 }
 
-/* Returns wether or not it's a parent, or not */
+/* Returns whether or not it's a parent, or not */
 gboolean
 _gtk_tree_view_find_node (GtkTreeView  *tree_view,
 			  GtkTreePath  *path,
@@ -3188,7 +3188,7 @@ gtk_tree_view_set_adjustments (GtkTreeView   *tree_view,
  * 
  * Returns TRUE if the headers on the @tree_view are visible.
  * 
- * Return value: whether the headers are visible or not.
+ * Return value: Whether the headers are visible or not.
  **/
 gboolean
 gtk_tree_view_get_headers_visible (GtkTreeView *tree_view)

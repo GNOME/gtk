@@ -1,5 +1,8 @@
 2000-10-16  Jonathan Blandford  <jrb@redhat.com>
 
+	* gtk/gtktreeselection.c: Add API documentation to all public
+	functions.
+
 	* gtk/gtktreeviewcolumn.c: Added API documentation to all public
 	functions.
 
