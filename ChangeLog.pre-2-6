@@ -75,7 +75,7 @@ Mon Jan 27 16:38:13 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Remove SOEXT stuff; it doesn't work portably.
 
-Mon Jan 27 22:45:15 2002  Kristian Rietveld  <kris@gtk.org>
+Mon Jan 27 22:45:15 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -83,7 +83,7 @@ Mon Jan 27 22:45:15 2002  Kristian Rietveld  <kris@gtk.org>
 	we appended/prepended, send the rows_reordered signal to the 
 	correct level ... (Reported by Matthew Tuck).
 
-Mon Jan 27 22:43:11 2002  Kristian Rietveld  <kris@gtk.org>
+Mon Jan 27 22:43:11 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -91,7 +91,7 @@ Mon Jan 27 22:43:11 2002  Kristian Rietveld  <kris@gtk.org>
 	out if the level only has one item, recurse over the child if there
 	is one. (Fixes #100458, reported by Gaël Le Mignot).
 
-Mon Jan 27 22:41:26 2002  Kristian Rietveld  <kris@gtk.org>
+Mon Jan 27 22:41:26 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -100,7 +100,7 @@ Mon Jan 27 22:41:26 2002  Kristian Rietveld  <kris@gtk.org>
 	all types which are transformable by GValue. (Fixes #99803, reported
 	by Muktha Narayan).
 
-Mon Jan 27 22:39:25 2002  Kristian Rietveld  <kris@gtk.org>
+Mon Jan 27 22:39:25 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -108,7 +108,7 @@ Mon Jan 27 22:39:25 2002  Kristian Rietveld  <kris@gtk.org>
 	*really* handle unsetting the ID. Slightly modified patch from
 	Soeren Sandmann. Fixes #87556, reported by Jarek Dukat.
 
-Mon Jan 27 22:33:43 2002  Kristian Rietveld  <kris@gtk.org>
+Mon Jan 27 22:33:43 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -130,14 +130,14 @@ Mon Jan 27 22:33:43 2002  Kristian Rietveld  <kris@gtk.org>
 	(gtk_tree_model_sort_set_default_sort_func): make functions work
 	as advertised by the documentation.
 
-Mon Jan 27 22:31:56 2002  Kristian Rietveld  <kris@gtk.org>
+Mon Jan 27 22:31:56 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): update focus_column
 	before we decide if we edit. (fixes #100973, reported by Dave Cook).
 
-Mon Jan 27 22:29:30 2002  Kristian Rietveld  <kris@gtk.org>
+Mon Jan 27 22:29:30 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -283,13 +283,13 @@ Wed Jan 15 14:56:09 2003  Owen Taylor  <otaylor@redhat.com>
 	hard-code the TRUE return value into gtkmm's wrappers, but that's 
 	part of GTK+'s implementation, not it's API.
 
-Tue Jan 14 23:54:02 2002  Kristian Rietveld  <kris@gtk.org>
+Tue Jan 14 23:54:02 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
 	* gtk/gtktreeview.c: fix compiler warning.
 
-Tue Jan 14 23:29:00 2002  Kristian Rietveld  <kris@gtk.org>
+Tue Jan 14 23:29:00 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -298,7 +298,7 @@ Tue Jan 14 23:29:00 2002  Kristian Rietveld  <kris@gtk.org>
 	drawing, which is a slight speedup. (#102379, patch from Soeren
 	Sandmann).
 
-Tue Jan 14 23:26:41 2002  Kristian Rietveld  <kris@gtk.org>
+Tue Jan 14 23:26:41 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -306,7 +306,7 @@ Tue Jan 14 23:26:41 2002  Kristian Rietveld  <kris@gtk.org>
 	only free scroll_to_path when the complete tree has been validated.
 	This makes sure that we scrolled to the correct path.
 
-Tue Jan 14 23:25:32 2002  Kristian Rietveld  <kris@gtk.org>
+Tue Jan 14 23:25:32 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -314,7 +314,7 @@ Tue Jan 14 23:25:32 2002  Kristian Rietveld  <kris@gtk.org>
 	background of widget->window and bin->window. (Fixes #96650, reported
 	by Dave Camp).
 
-Tue Jan 14 23:24:02 2002  Kristian Rietveld  <kris@gtk.org>
+Tue Jan 14 23:24:02 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -322,7 +322,7 @@ Tue Jan 14 23:24:02 2002  Kristian Rietveld  <kris@gtk.org>
 	updates before scrolling, avoiding a "selection streak". (Fixes
 	#101235, patch from Soeren Sandmann).
 
-Tue Jan 14 23:22:13 2002  Kristian Rietveld  <kris@gtk.org>
+Tue Jan 14 23:22:13 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -330,7 +330,7 @@ Tue Jan 14 23:22:13 2002  Kristian Rietveld  <kris@gtk.org>
 	in the requisition using gtk_widget_size_request. (Fixes #100172,
 	reported by Kjartan Maraas).
 
-Tue Jan 14 23:19:45 2002  Kristian Rietveld  <kris@gtk.org>
+Tue Jan 14 23:19:45 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -340,7 +340,7 @@ Tue Jan 14 23:19:45 2002  Kristian Rietveld  <kris@gtk.org>
 	(cancel_arrow_animation): new function. (Fixes #93629, part 2,
 	reported and testcase provided by Hans Petter Jansson).
 
-Tue Jan 14 23:18:21 2002  Kristian Rietveld  <kris@gtk.org>
+Tue Jan 14 23:18:21 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -348,14 +348,14 @@ Tue Jan 14 23:18:21 2002  Kristian Rietveld  <kris@gtk.org>
 	anchor_path should be start_path, not end_path. (Fixes #102618,
 	patch from Carlos Garnacho Parro).
 
-Tue Jan 14 23:16:15 2002  Kristian Rietveld  <kris@gtk.org>
+Tue Jan 14 23:16:15 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
 	* gtk/gtkliststore.c (gtk_list_store_move): also update the tail,
 	only correct new_pos if we don't move to the head/tail.
 
-Tue Jan 14 23:11:55 2002  Kristian Rietveld  <kris@gtk.org>
+Tue Jan 14 23:11:55 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
@@ -365,7 +365,7 @@ Tue Jan 14 23:11:55 2002  Kristian Rietveld  <kris@gtk.org>
 	earlier (2.2.0 shipped with this, oops). (Fixes #103198, Reported and
 	testcase provided by Matthew Tuck).
 
-Tue Jan 14 20:58:44 2002  Kristian Rietveld  <kris@gtk.org>
+Tue Jan 14 20:58:44 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from HEAD.
 
