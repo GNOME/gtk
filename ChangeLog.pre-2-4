@@ -1,3 +1,11 @@
+2004-05-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkselection.c: Make the chunk size for 
+	incremental transfers depend on the maximal request 
+	size, capped at 256k. This should allow most selections
+	to be transferred nonincrementally, avoiding many
+	roundtrips and protocol overhead.
+
 2004-05-03  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkuimanager.c (gtk_ui_manager_class_init): Call

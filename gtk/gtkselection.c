@@ -63,15 +63,19 @@
 #include "x11/gdkx.h"
 #endif
 
-/* #define DEBUG_SELECTION */
+#define DEBUG_SELECTION
 
 /* Maximum size of a sent chunk, in bytes. Also the default size of
    our buffers */
 #ifdef GDK_WINDOWING_WIN32
 /* No chunks on Win32 */
-#define GTK_SELECTION_MAX_SIZE G_MAXINT
+#define GTK_SELECTION_MAX_SIZE(display) G_MAXINT
 #else
-#define GTK_SELECTION_MAX_SIZE 4000
+#define GTK_SELECTION_MAX_SIZE(display)                                 \
+  MIN(262144,                                                           \
+      XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) == 0     \
+       ? XMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100         \
+       : XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100)
 #endif
 
 #define IDLE_ABORT_TIME 300
@@ -1115,10 +1119,16 @@ _gtk_selection_request (GtkWidget *widget,
   GtkIncrInfo *info;
   GList *tmp_list;
   int i;
-  
+  gulong selection_max_size;
+
   if (initialize)
     gtk_selection_init ();
   
+  g_message ("max request sizes %ld %ld\n", 
+	     XMaxRequestSize(GDK_DISPLAY_XDISPLAY(display)),
+	     XExtendedMaxRequestSize(GDK_DISPLAY_XDISPLAY(display)));
+  selection_max_size = GTK_SELECTION_MAX_SIZE (display);
+
   /* Check if we own selection */
   
   tmp_list = current_selections;
@@ -1164,7 +1174,7 @@ _gtk_selection_request (GtkWidget *widget,
       
       gdk_error_trap_push ();
       if (!gdk_property_get (info->requestor, event->property, GDK_NONE, /* AnyPropertyType */
-			     0, GTK_SELECTION_MAX_SIZE, FALSE,
+			     0, selection_max_size, FALSE,
 			     &type, &format, &length, &mult_atoms))
 	{
 	  gdk_selection_send_notify_for_display (display,
@@ -1234,7 +1244,8 @@ _gtk_selection_request (GtkWidget *widget,
       
 #ifdef DEBUG_SELECTION
       g_message ("Selection %ld, target %ld (%s) requested by 0x%x (property = %ld)",
-		 event->selection, info->conversions[i].target,
+		 event->selection, 
+		 info->conversions[i].target,
 		 gdk_atom_name (info->conversions[i].target),
 		 event->requestor, info->conversions[i].property);
 #endif
@@ -1251,9 +1262,13 @@ _gtk_selection_request (GtkWidget *widget,
       
       items = data.length / gtk_selection_bytes_per_item (data.format);
       
-      if (data.length > GTK_SELECTION_MAX_SIZE)
+      if (data.length > selection_max_size)
 	{
 	  /* Sending via INCR */
+#ifdef DEBUG_SELECTION
+	  g_message ("Target larger (%d) than max. request size (%ld), sending incrementally\n",
+		     data.length, selection_max_size);
+#endif
 	  
 	  info->conversions[i].offset = 0;
 	  info->conversions[i].data = data;
@@ -1373,6 +1388,7 @@ _gtk_selection_incr_event (GdkWindow	   *window,
   GtkIncrInfo *info = NULL;
   gint num_bytes;
   guchar *buffer;
+  gulong selection_max_size;
   
   int i;
   
@@ -1382,7 +1398,9 @@ _gtk_selection_incr_event (GdkWindow	   *window,
 #ifdef DEBUG_SELECTION
   g_message ("PropertyDelete, property %ld", event->atom);
 #endif
-  
+
+  selection_max_size = GTK_SELECTION_MAX_SIZE (gdk_drawable_get_display (window));  
+
   /* Now find the appropriate ongoing INCR */
   tmp_list = current_incrs;
   while (tmp_list)
@@ -1420,10 +1438,10 @@ _gtk_selection_incr_event (GdkWindow	   *window,
 	      buffer = info->conversions[i].data.data + 
 		info->conversions[i].offset;
 	      
-	      if (num_bytes > GTK_SELECTION_MAX_SIZE)
+	      if (num_bytes > selection_max_size)
 		{
-		  num_bytes = GTK_SELECTION_MAX_SIZE;
-		  info->conversions[i].offset += GTK_SELECTION_MAX_SIZE;
+		  num_bytes = selection_max_size;
+		  info->conversions[i].offset += selection_max_size;
 		}
 	      else
 		info->conversions[i].offset = -2;
