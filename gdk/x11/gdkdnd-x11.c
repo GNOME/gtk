@@ -131,10 +131,11 @@ void
 gdk_drag_context_unref (GdkDragContext *context)
 {
   GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
-  private->ref_count--;
-  
+
   g_return_if_fail (context != NULL);
 
+  private->ref_count--;
+  
   if (private->ref_count == 0)
     {
       g_dataset_destroy (private);

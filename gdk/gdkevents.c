@@ -153,9 +153,11 @@ gdk_event_queue_find_first (void)
 
   while (tmp_list)
     {
-      GdkEventPrivate *event = queued_events->data;
+      GdkEventPrivate *event = tmp_list->data;
       if (!(event->flags & GDK_EVENT_PENDING))
 	return tmp_list;
+
+      tmp_list = g_list_next (tmp_list);
     }
 
   return NULL;

@@ -1,3 +1,12 @@
+Thu Jan 21 01:15:28 1999  Jeff Garzik  <jgarzik@pobox.com>
+
+	* gdk/gdkdnd.c (gdk_drag_context_unref):
+	Move not-null assertion before pointer de-ref.
+
+	* gdk/gdkevents.c (gdk_event_queue_find_first):
+	Fix infinite loop bug.  Someone should look at this further to
+	make sure the events_pending tests are correct.
+
 Thu Jan 21 00:44:47 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_dest_drop): Default handling
