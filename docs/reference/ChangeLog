@@ -1,3 +1,8 @@
+2001-10-01  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtk-sections.txt: Move standard gobject stuff to
+	the 'Standard' sections. (#61483)
+
 Wed Sep 26 15:05:28 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtk.types: Add missing types.

@@ -2712,7 +2712,6 @@ GTK_TREE_STORE_GET_CLASS
 
 <SECTION>
 <FILE>gtktreeviewcolumn</FILE>
-GTK_TYPE_TREE_VIEW_COLUMN
 GtkTreeViewColumn
 GtkTreeViewColumnSizing
 <TITLE>GtkTreeViewColumn</TITLE>
@@ -2738,6 +2737,7 @@ gtk_tree_view_column_set_alignment
 gtk_tree_view_column_get_alignment
 gtk_tree_view_column_clicked
 <SUBSECTION Standard>
+GTK_TYPE_TREE_VIEW_COLUMN
 GTK_TREE_VIEW_COLUMN
 GTK_IS_TREE_VIEW_COLUMN
 gtk_tree_view_column_get_type
@@ -2750,7 +2750,6 @@ GTK_IS_TREE_VIEW_COLUMN_CLASS
 GtkTreeViewDropPosition
 GtkTreeViewPrivate
 GtkTreeSelection
-GtkTreeSelectionClass
 <TITLE>GtkTreeView</TITLE>
 GtkTreeViewColumnDropFunc
 GtkTreeViewDraggableFunc
@@ -2818,6 +2817,7 @@ gtk_tree_view_set_search_equal_func
 GtkTreeDestroyCountFunc
 gtk_tree_view_set_destroy_count_func
 <SUBSECTION Standard>
+GtkTreeSelectionClass
 GTK_TREE_VIEW
 GTK_IS_TREE_VIEW
 GTK_TYPE_TREE_VIEW
