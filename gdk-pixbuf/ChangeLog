@@ -1,3 +1,14 @@
+2000-08-02  Tor Lillqvist  <tml@iki.fi>
+
+	* io-bmp.c
+	* io-ico.c
+	* io-ras.c
+	* io-tiff.c
+	* io-wbmp.c: Conditionalise inclusion of <unistd.h>.
+
+	* makefile.mingw.in: List loaders alphabetically. Add the wbmp
+	one. Fix names of DLLs to have '-' instead of '_'.
+
 2000-07-31  Elliot Lee  <sopwith@redhat.com>
 	* io-wbmp.c: Some bug fixes - now tested to work.
 

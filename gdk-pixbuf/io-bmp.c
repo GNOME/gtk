@@ -33,7 +33,9 @@ Known bugs:
 
 #include <config.h>
 #include <stdio.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <string.h>
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"

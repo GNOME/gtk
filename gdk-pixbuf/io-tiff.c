@@ -28,7 +28,9 @@
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <tiffio.h>
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
