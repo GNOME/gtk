@@ -1,5 +1,10 @@
 2003-09-27  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkwindow.c (gtk_window_new):
+	* gtk/gtkitemfactory.c (gtk_item_factory_new): Document 
+	the fact that the newly created object does not come with 
+	a floating reference.  (#103068, patch by Frederic Lespez)
+	
 	* gtk/gtkitemfactory.h: Deprecate GtkItemFactory in favor 
 	of GtkUIManager. Just leave GtkTranslateFunc undeprecated, 
 	since GtkActionGroup uses it.

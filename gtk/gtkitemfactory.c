@@ -200,6 +200,8 @@ gtk_item_factory_init (GtkItemFactory	    *ifactory)
  * @returns: a new #GtkItemFactory
  * 
  * Creates a new #GtkItemFactory.
+ *
+ * Beware that the returned object does not have a floating reference.
  */
 GtkItemFactory*
 gtk_item_factory_new (GType	     container_type,
