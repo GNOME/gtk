@@ -1,3 +1,22 @@
+Thu Nov 26 19:11:46 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtk-boxed.defs (GtkCTreeNode): define GtkCTreeNode as boxed type
+	* gtk/gtkctree.c (gtk_ctree_class_init): use GTK_CTREE_NODE_TYPE
+	instead of GTK_TYPE_POINTER in signal definitions.
+	(patch from James Henstridge <james@daa.com.au>)
+
+Thu Nov 26 18:48:44 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (set_cell_contents)
+	* gtk/gtkctree.c (set_cell_contents): call column_auto_resize only
+ 	if auto.resize == TRUE
+
+	* gtk/gtknotebook.c (gtk_notebook_set_shape) (gtk_notebook_expose):
+ 	don't draw tab, if show_tabs == FALSE
+ 	(bug reports from Alexis Mikhailov / Dave Cole)
+ 	(gtk_notebook_focus_changed) (gtk_notebook_draw_focus): draw only
+ 	the focus rectangle, not the hole tab.
+
 Thu Nov 26 03:18:08 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkclist.h: 

@@ -20,6 +20,9 @@
   gtk_style_ref
   gtk_style_unref)
 
+(define-boxed GtkCTreeNode
+)
+
 ;;; Gdk boxed types
 
                                         ;(define-boxed GdkPoint

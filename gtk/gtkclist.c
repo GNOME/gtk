@@ -2459,7 +2459,9 @@ set_cell_contents (GtkCList    *clist,
       break;
     }
 
-  column_auto_resize (clist, clist_row, column, requisition.width);
+  if (clist->column[column].auto_resize &&
+      !GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
+    column_auto_resize (clist, clist_row, column, requisition.width);
 }
 
 static void
