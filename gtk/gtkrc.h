@@ -82,6 +82,8 @@ struct _GtkRcStyle
   GSList *rc_style_lists;
 
   GSList *icon_factories;
+
+  guint engine_specified : 1;	/* The RC file specified the engine */
 };
 
 struct _GtkRcStyleClass

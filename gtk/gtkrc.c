@@ -1940,9 +1940,10 @@ gtk_rc_init_style (GSList *rc_styles)
       GSList *tmp_styles;
       GType rc_style_type = GTK_TYPE_RC_STYLE;
 
-      /* Find the first derived style in the list, and use that to
-       * create the merged style. If we only have raw GtkRcStyles, use
-       * the first style to create the merged style.
+      /* Find the the first style where the RC file specified engine "" {}
+       * or the first derived style and use that to create the
+       * merged style. If we only have raw GtkRcStyles, use the first
+       * style to create the merged style.
        */
       base_style = rc_styles->data;
       tmp_styles = rc_styles;
@@ -1950,7 +1951,8 @@ gtk_rc_init_style (GSList *rc_styles)
 	{
 	  GtkRcStyle *rc_style = tmp_styles->data;
           
-	  if (G_OBJECT_TYPE (rc_style) != rc_style_type)
+	  if (rc_style->engine_specified ||
+	      G_OBJECT_TYPE (rc_style) != rc_style_type)
 	    {
 	      base_style = rc_style;
 	      break;
@@ -3013,34 +3015,62 @@ gtk_rc_parse_engine (GtkRcContext *context,
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
 
-  engine = gtk_theme_engine_get (scanner->value.v_string);
-  
-  token = g_scanner_get_next_token (scanner);
-  if (token != G_TOKEN_LEFT_CURLY)
-    return G_TOKEN_LEFT_CURLY;
-
-  if (engine)
+  if (!scanner->value.v_string[0])
     {
-      GtkRcStyleClass *new_class;
+      /* Support engine "" {} to mean override to the default engine
+       */
+      token = g_scanner_get_next_token (scanner);
+      if (token != G_TOKEN_LEFT_CURLY)
+	return G_TOKEN_LEFT_CURLY;
       
-      new_style = gtk_theme_engine_create_rc_style (engine);
-      g_type_module_unuse (G_TYPE_MODULE (engine));
+      token = g_scanner_get_next_token (scanner);
+      if (token != G_TOKEN_RIGHT_CURLY)
+	return G_TOKEN_RIGHT_CURLY;
 
-      new_class = GTK_RC_STYLE_GET_CLASS (new_style);
+      parsed_curlies = TRUE;
 
-      new_class->merge (new_style, *rc_style);
-      if ((*rc_style)->name)
-	new_style->name = g_strdup ((*rc_style)->name);
-      
-      if (new_class->parse)
+      if (G_OBJECT_TYPE (*rc_style) != GTK_TYPE_RC_STYLE)
 	{
-	  parsed_curlies = TRUE;
-	  result = new_class->parse (new_style, context->settings, scanner);
-
-	  if (result != G_TOKEN_NONE)
+	  new_style = gtk_rc_style_new ();
+	  gtk_rc_style_real_merge (new_style, *rc_style);
+	  
+	  if ((*rc_style)->name)
+	    new_style->name = g_strdup ((*rc_style)->name);
+	}
+      else
+	(*rc_style)->engine_specified = TRUE;
+    }
+  else
+    {
+      engine = gtk_theme_engine_get (scanner->value.v_string);
+      
+      token = g_scanner_get_next_token (scanner);
+      if (token != G_TOKEN_LEFT_CURLY)
+	return G_TOKEN_LEFT_CURLY;
+      
+      if (engine)
+	{
+	  GtkRcStyleClass *new_class;
+	  
+	  new_style = gtk_theme_engine_create_rc_style (engine);
+	  g_type_module_unuse (G_TYPE_MODULE (engine));
+	  
+	  new_class = GTK_RC_STYLE_GET_CLASS (new_style);
+	  
+	  new_class->merge (new_style, *rc_style);
+	  if ((*rc_style)->name)
+	    new_style->name = g_strdup ((*rc_style)->name);
+	  
+	  if (new_class->parse)
 	    {
-	      g_object_unref (G_OBJECT (new_style));
-	      new_style = NULL;
+	      parsed_curlies = TRUE;
+	      result = new_class->parse (new_style, context->settings, scanner);
+	      
+	      if (result != G_TOKEN_NONE)
+		{
+		  g_object_unref (G_OBJECT (new_style));
+		  new_style = NULL;
+		}
 	    }
 	}
     }
@@ -3069,6 +3099,8 @@ gtk_rc_parse_engine (GtkRcContext *context,
 
   if (new_style)
     {
+      new_style->engine_specified = TRUE;
+      
       g_object_unref (G_OBJECT (*rc_style));
       *rc_style = new_style;
     }
