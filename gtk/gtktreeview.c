@@ -73,6 +73,8 @@ struct _GtkTreeViewChild
   GtkWidget *widget;
   gint x;
   gint y;
+  gint width;
+  gint height;
 };
 
 
@@ -374,7 +376,13 @@ static void     gtk_tree_view_search_init               (GtkWidget        *entry
 							 GtkTreeView      *tree_view);
 static void     gtk_tree_view_interactive_search        (GtkTreeView      *tree_view,
 							 GdkEventKey      *key);
-
+static void     gtk_tree_view_put                       (GtkTreeView      *tree_view,
+							 GtkWidget        *child_widget,
+							 gint              x,
+							 gint              y,
+							 gint              width,
+							 gint              height);
+							 
 
 static GtkContainerClass *parent_class = NULL;
 static guint tree_view_signals[LAST_SIGNAL] = { 0 };
@@ -1410,16 +1418,15 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   while (tmp_list)
     {
       GtkAllocation allocation;
-      GtkRequisition requisition;
 
       GtkTreeViewChild *child = tmp_list->data;
       tmp_list = tmp_list->next;
 
+      /* totally ignore our childs allocation <-: */
       allocation.x = child->x;
       allocation.y = child->y;
-      gtk_widget_get_child_requisition (child->widget, &requisition);
-      allocation.width = requisition.width;
-      allocation.height = requisition.height;
+      allocation.width = child->width;
+      allocation.height = child->height;
 
       gtk_widget_size_allocate (child->widget, &allocation);
     }
@@ -1539,6 +1546,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       for (list = tree_view->priv->columns; list; list = list->next)
 	{
 	  GtkTreeIter iter;
+	  GtkCellEditable *cell_editable = NULL;
 
 	  column = list->data;
 
@@ -1576,12 +1584,21 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
 	  path_string = gtk_tree_path_to_string (path);
 
-	  if (gtk_tree_view_column_cell_event (column,
-					       (GdkEvent *)event,
-					       path_string,
-					       &background_area,
-					       &cell_area, 0))
+	  if (_gtk_tree_view_column_cell_event (column,
+						&cell_editable,
+						(GdkEvent *)event,
+						path_string,
+						&background_area,
+						&cell_area, 0))
 	    {
+	      if (cell_editable != NULL)
+		{
+		  gtk_tree_view_put (tree_view,
+				     GTK_WIDGET (cell_editable),
+				     cell_area.x, cell_area.y, cell_area.width, cell_area.height);
+		  gtk_cell_editable_start_editing (cell_editable,
+						   (GdkEvent *)event);
+		}
 	      g_free (path_string);
 	      gtk_tree_path_free (path);
 	      return TRUE;
@@ -4196,6 +4213,36 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
       g_assert_not_reached ();
     }
 }
+
+static void           
+gtk_tree_view_put (GtkTreeView *tree_view, 
+		   GtkWidget   *child_widget, 
+		   gint         x, 
+		   gint         y,
+		   gint         width,
+		   gint         height)
+{
+  GtkTreeViewChild *child;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (GTK_IS_WIDGET (child_widget));
+  
+  child = g_new (GtkTreeViewChild, 1);
+
+  child->widget = child_widget;
+  child->x = x;
+  child->y = y;
+  child->width = width;
+  child->height = height;
+
+  tree_view->priv->children = g_list_append (tree_view->priv->children, child);
+  
+  if (GTK_WIDGET_REALIZED (tree_view))
+    gtk_widget_set_parent_window (child->widget, tree_view->priv->bin_window);
+
+  gtk_widget_set_parent (child_widget, GTK_WIDGET (tree_view));
+}
+
 
 /* TreeModel Callbacks
  */
@@ -9054,3 +9101,4 @@ gtk_tree_view_search_init (GtkWidget   *entry,
                            selected_iter);
     }
 }
+

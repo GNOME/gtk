@@ -1011,7 +1011,6 @@ gtk_tree_model_row_changed (GtkTreeModel *tree_model,
 			    GtkTreePath  *path,
 			    GtkTreeIter  *iter)
 {
-  gint i;
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (path != NULL);
   g_return_if_fail (iter != NULL);

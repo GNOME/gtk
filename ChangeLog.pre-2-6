@@ -1,3 +1,9 @@
+Tue Sep 18 12:12:43 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_put): Add put for use with
+	editable widgets.  This function is private, and should only be
+	used by GtkTreeView.
+
 2001-09-18  Matt Wilson  <msw@redhat.com>
 
 	* docs/Makefile.am (EXTRA_DIST): don't use += before =

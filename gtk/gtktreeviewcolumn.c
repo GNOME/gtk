@@ -2229,34 +2229,23 @@ gtk_tree_view_column_cell_render (GtkTreeViewColumn *tree_column,
     }
 }
 
-/**
- * gtk_tree_view_column_cell_event:
- * @tree_column: A #GtkTreeViewColumn.
- * @event: a #GdkEvent
- * @path_string: widget-dependent string representation of the event location; e.g. for #GtkTreeView, a string representation of #GtkTreePath
- * @background_area: background area as passed to gtk_cell_renderer_render()
- * @cell_area: cell area as passed to gtk_cell_renderer_render()
- * @flags: render flags
- * 
- * Handles an event.  This is used primarily by the GtkTreeView.
- * 
- * Return value: %TRUE if the event was consumed/handled
- **/
 gboolean
-gtk_tree_view_column_cell_event (GtkTreeViewColumn *tree_column,
-				 GdkEvent          *event,
-				 gchar             *path_string,
-				 GdkRectangle      *background_area,
-				 GdkRectangle      *cell_area,
-				 guint              flags)
+_gtk_tree_view_column_cell_event (GtkTreeViewColumn  *tree_column,
+				  GtkCellEditable   **editable_widget,
+				  GdkEvent           *event,
+				  gchar              *path_string,
+				  GdkRectangle       *background_area,
+				  GdkRectangle       *cell_area,
+				  guint               flags)
 {
-  gboolean visible, can_activate;
+  gboolean visible, can_activate, can_edit;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), FALSE);
 
   g_object_get (G_OBJECT (((GtkTreeViewColumnCellInfo *) tree_column->cell_list->data)->cell),
 		"visible", &visible,
 		"can_activate", &can_activate,
+		"can_edit", &can_edit,
 		NULL);
   if (visible && can_activate)
     {
@@ -2268,7 +2257,17 @@ gtk_tree_view_column_cell_event (GtkTreeViewColumn *tree_column,
 				      cell_area,
 				      flags))
 	return TRUE;
-
+    }
+  else if (visible && can_edit)
+    {
+      *editable_widget = gtk_cell_renderer_start_editing (((GtkTreeViewColumnCellInfo *) tree_column->cell_list->data)->cell,
+							  event,
+							  tree_column->tree_view,
+							  path_string,
+							  background_area,
+							  cell_area,
+							  flags);
+      return (*editable_widget != NULL);
     }
   return FALSE;
 }

@@ -279,6 +279,13 @@ void _gtk_tree_view_column_set_width        (GtkTreeViewColumn *column,
 					     gint               width);
 void _gtk_tree_view_column_start_drag       (GtkTreeView       *tree_view,
 					     GtkTreeViewColumn *column);
+gboolean _gtk_tree_view_column_cell_event   (GtkTreeViewColumn  *tree_column,
+					     GtkCellEditable   **editable_widget,
+					     GdkEvent           *event,
+					     gchar              *path_string,
+					     GdkRectangle       *background_area,
+					     GdkRectangle       *cell_area,
+					     guint               flags);
 
 GtkTreeSelection* _gtk_tree_selection_new                (void);
 GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);
