@@ -1,3 +1,21 @@
+2000-11-13  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextdisplay.c (gtk_text_render_state_update): fix bug 
+	where GC didn't always get updated properly
+
+	* demos/gtk-demo/textview.c (create_tags): Use subattributes
+	of fonts instead of setting the entire font
+
+	* gtk/testtext.c (fill_example_buffer): Use "size" instead of
+	setting entire font
+
+	* gtk/gtkdialog.c (gtk_dialog_add_button): Fix some warnings
+
+	* gtk/gtktexttag.h, gtk/gtktexttag.c: Explode font_desc into 
+	a bunch of individually-settable font attributes. You can still 
+	use the "font" and "font_desc" args, they just set all the font
+	attributes at once.
+
 2000-11-13 Elliot Lee <sopwith@redhat.com>
 	* gdk/gdk.h: Add a couple of missing G_GNUC_CONST's.
 

@@ -1,3 +1,8 @@
+2000-11-13  Havoc Pennington  <hp@redhat.com>
+
+	* io-png.c (png_simple_error_callback): fix error message to not
+	say "save" since it's used for loading
+
 2000-11-11  Hans Breuer <Hans@Breuer.Org>
 
 	* gdk-pixbuf-io.c : Fix all function prototype macros for self 

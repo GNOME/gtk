@@ -76,6 +76,13 @@ enum {
   ARG_FOREGROUND_STIPPLE,
   ARG_FONT,
   ARG_FONT_DESC,
+  ARG_FAMILY,
+  ARG_STYLE,
+  ARG_VARIANT,
+  ARG_WEIGHT,
+  ARG_STRETCH,
+  ARG_SIZE,
+  ARG_SIZE_POINTS,
   ARG_PIXELS_ABOVE_LINES,
   ARG_PIXELS_BELOW_LINES,
   ARG_PIXELS_INSIDE_WRAP,
@@ -101,7 +108,12 @@ enum {
   ARG_FOREGROUND_GDK_SET,
   ARG_BACKGROUND_STIPPLE_SET,
   ARG_FOREGROUND_STIPPLE_SET,
-  ARG_FONT_SET,
+  ARG_FAMILY_SET,
+  ARG_STYLE_SET,
+  ARG_VARIANT_SET,
+  ARG_WEIGHT_SET,
+  ARG_STRETCH_SET,
+  ARG_SIZE_SET,
   ARG_PIXELS_ABOVE_LINES_SET,
   ARG_PIXELS_BELOW_LINES_SET,
   ARG_PIXELS_INSIDE_WRAP_SET,
@@ -191,7 +203,21 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   gtk_object_add_arg_type ("GtkTextTag::font", GTK_TYPE_STRING,
                            GTK_ARG_READWRITE, ARG_FONT);
   gtk_object_add_arg_type ("GtkTextTag::font_desc", GTK_TYPE_BOXED,
-                           GTK_ARG_READWRITE, ARG_FONT_DESC);
+                           GTK_ARG_READWRITE, ARG_FONT_DESC);      
+  gtk_object_add_arg_type ("GtkTextTag::family", GTK_TYPE_STRING,
+                           GTK_ARG_READWRITE, ARG_FAMILY);
+  gtk_object_add_arg_type ("GtkTextTag::style", GTK_TYPE_ENUM,
+                           GTK_ARG_READWRITE, ARG_STYLE);
+  gtk_object_add_arg_type ("GtkTextTag::variant", GTK_TYPE_ENUM,
+                           GTK_ARG_READWRITE, ARG_VARIANT);
+  gtk_object_add_arg_type ("GtkTextTag::weight", GTK_TYPE_ENUM,
+                           GTK_ARG_READWRITE, ARG_WEIGHT);
+  gtk_object_add_arg_type ("GtkTextTag::stretch", GTK_TYPE_ENUM,
+                           GTK_ARG_READWRITE, ARG_STRETCH);
+  gtk_object_add_arg_type ("GtkTextTag::size", GTK_TYPE_INT,
+                           GTK_ARG_READWRITE, ARG_SIZE);
+  gtk_object_add_arg_type ("GtkTextTag::size_points", GTK_TYPE_DOUBLE,
+                           GTK_ARG_READWRITE, ARG_SIZE_POINTS);
   gtk_object_add_arg_type ("GtkTextTag::foreground", GTK_TYPE_STRING,
                            GTK_ARG_WRITABLE, ARG_FOREGROUND);
   gtk_object_add_arg_type ("GtkTextTag::foreground_gdk", GTK_TYPE_GDK_COLOR,
@@ -238,9 +264,19 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   gtk_object_add_arg_type ("GtkTextTag::background_stipple_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_BACKGROUND_STIPPLE_SET);
   gtk_object_add_arg_type ("GtkTextTag::editable_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_EDITABLE_SET);
-  gtk_object_add_arg_type ("GtkTextTag::font_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_FONT_SET);
+                           GTK_ARG_READWRITE, ARG_EDITABLE_SET);  
+  gtk_object_add_arg_type ("GtkTextTag::family_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_FAMILY_SET);
+  gtk_object_add_arg_type ("GtkTextTag::style_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_STYLE_SET);
+  gtk_object_add_arg_type ("GtkTextTag::variant_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_VARIANT_SET);
+  gtk_object_add_arg_type ("GtkTextTag::weight_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_WEIGHT_SET);
+  gtk_object_add_arg_type ("GtkTextTag::stretch_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_STRETCH_SET);
+  gtk_object_add_arg_type ("GtkTextTag::size_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_SIZE_SET);
   gtk_object_add_arg_type ("GtkTextTag::foreground_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_FOREGROUND_SET);
   gtk_object_add_arg_type ("GtkTextTag::foreground_gdk_set", GTK_TYPE_BOOL,
@@ -391,6 +427,44 @@ set_fg_color (GtkTextTag *tag, GdkColor *color)
 }
 
 static void
+set_font_description (GtkTextTag           *text_tag,
+                      PangoFontDescription *font_desc)
+{
+  if (font_desc != NULL)
+    {
+      /* pango_font_description_from_string() will sometimes return
+       * a NULL family or -1 size, so handle those cases.
+       */
+      
+      if (font_desc->family_name)
+        gtk_object_set (GTK_OBJECT (text_tag),
+                        "family", font_desc->family_name,
+                        NULL);
+      
+      if (font_desc->size >= 0)
+        gtk_object_set (GTK_OBJECT (text_tag),
+                        "size", font_desc->size,
+                        NULL);
+        
+      gtk_object_set (GTK_OBJECT (text_tag),
+                      "style", font_desc->style,
+                      "variant", font_desc->variant,
+                      "weight", font_desc->weight,
+                      "stretch", font_desc->stretch,
+                      NULL);
+    }
+  else
+    {      
+      text_tag->family_set = FALSE;
+      text_tag->style_set = FALSE;
+      text_tag->variant_set = FALSE;
+      text_tag->weight_set = FALSE;
+      text_tag->stretch_set = FALSE;
+      text_tag->size_set = FALSE;
+    }
+}
+
+static void
 gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 {
   GtkTextTag *text_tag;
@@ -491,11 +565,10 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
         if (name)
           font_desc = pango_font_description_from_string (name);
 
-        if (text_tag->values->font_desc)
-          pango_font_description_free (text_tag->values->font_desc);
-
-        text_tag->font_set = (font_desc != NULL);
-        text_tag->values->font_desc = font_desc;
+        set_font_description (text_tag, font_desc);
+        
+        if (font_desc)
+          pango_font_description_free (font_desc); 
 
         size_changed = TRUE;
       }
@@ -507,20 +580,56 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
         font_desc = GTK_VALUE_BOXED (*arg);
 
-        if (text_tag->values->font_desc)
-          pango_font_description_free (text_tag->values->font_desc);
-
-        if (font_desc)
-          text_tag->values->font_desc = pango_font_description_copy (font_desc);
-        else
-          text_tag->values->font_desc = NULL;
-
-        text_tag->font_set = (font_desc != NULL);
+        set_font_description (text_tag, font_desc);
 
         size_changed = TRUE;
       }
       break;
 
+    case ARG_FAMILY:
+      if (text_tag->values->font.family_name)
+        g_free (text_tag->values->font.family_name);
+      text_tag->values->font.family_name = g_strdup (GTK_VALUE_STRING (*arg));
+      text_tag->family_set = TRUE;
+      size_changed = TRUE;
+      break;
+
+    case ARG_STYLE:
+      text_tag->values->font.style = GTK_VALUE_ENUM (*arg);
+      text_tag->style_set = TRUE;
+      size_changed = TRUE;
+      break;
+
+    case ARG_VARIANT:
+      text_tag->values->font.variant = GTK_VALUE_ENUM (*arg);
+      text_tag->variant_set = TRUE;
+      size_changed = TRUE;
+      break;
+
+    case ARG_WEIGHT:
+      text_tag->values->font.weight = GTK_VALUE_ENUM (*arg);
+      text_tag->weight_set = TRUE;
+      size_changed = TRUE;
+      break;
+
+    case ARG_STRETCH:
+      text_tag->values->font.stretch = GTK_VALUE_ENUM (*arg);
+      text_tag->stretch_set = TRUE;
+      size_changed = TRUE;
+      break;
+
+    case ARG_SIZE:
+      text_tag->values->font.size = GTK_VALUE_INT (*arg);
+      text_tag->size_set = TRUE;
+      size_changed = TRUE;
+      break;
+
+    case ARG_SIZE_POINTS:
+      text_tag->values->font.size = GTK_VALUE_DOUBLE (*arg) * PANGO_SCALE;
+      text_tag->size_set = TRUE;
+      size_changed = TRUE;
+      break;
+      
     case ARG_PIXELS_ABOVE_LINES:
       text_tag->pixels_above_lines_set = TRUE;
       text_tag->values->pixels_above_lines = GTK_VALUE_INT (*arg);
@@ -636,17 +745,54 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
     case ARG_BACKGROUND_STIPPLE_SET:
       text_tag->bg_stipple_set = GTK_VALUE_BOOL (*arg);
+      if (!text_tag->bg_stipple_set &&
+          text_tag->values->appearance.bg_stipple)
+        {
+          g_object_unref (G_OBJECT (text_tag->values->appearance.bg_stipple));
+          text_tag->values->appearance.bg_stipple = NULL;
+        }
       break;
 
     case ARG_FOREGROUND_STIPPLE_SET:
       text_tag->fg_stipple_set = GTK_VALUE_BOOL (*arg);
+      if (!text_tag->fg_stipple_set &&
+          text_tag->values->appearance.fg_stipple)
+        {
+          g_object_unref (G_OBJECT (text_tag->values->appearance.fg_stipple));
+          text_tag->values->appearance.fg_stipple = NULL;
+        }
       break;
 
-    case ARG_FONT_SET:
-      text_tag->font_set = GTK_VALUE_BOOL (*arg);
+    case ARG_FAMILY_SET:
+      text_tag->family_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
+    case ARG_STYLE_SET:
+      text_tag->style_set = GTK_VALUE_BOOL (*arg);
+      size_changed = TRUE;
+      break;
+
+    case ARG_VARIANT_SET:
+      text_tag->variant_set = GTK_VALUE_BOOL (*arg);
+      size_changed = TRUE;
+      break;
+
+    case ARG_WEIGHT_SET:
+      text_tag->weight_set = GTK_VALUE_BOOL (*arg);
+      size_changed = TRUE;
+      break;
+
+    case ARG_STRETCH_SET:
+      text_tag->stretch_set = GTK_VALUE_BOOL (*arg);
+      size_changed = TRUE;
+      break;
+
+    case ARG_SIZE_SET:
+      text_tag->size_set = GTK_VALUE_BOOL (*arg);
+      size_changed = TRUE;
+      break;
+      
     case ARG_PIXELS_ABOVE_LINES_SET:
       text_tag->pixels_above_lines_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
@@ -775,27 +921,72 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       break;
 
     case ARG_BACKGROUND_STIPPLE:
-      GTK_VALUE_BOXED (*arg) = tag->values->appearance.bg_stipple;
+      if (tag->bg_stipple_set)
+        GTK_VALUE_BOXED (*arg) = tag->values->appearance.bg_stipple;
+      else
+        GTK_VALUE_BOXED (*arg) = NULL;
       break;
 
     case ARG_FOREGROUND_STIPPLE:
-      GTK_VALUE_BOXED (*arg) = tag->values->appearance.fg_stipple;
+      if (tag->fg_stipple_set)
+        GTK_VALUE_BOXED (*arg) = tag->values->appearance.fg_stipple;
+      else
+        GTK_VALUE_BOXED (*arg) = NULL;
       break;
 
     case ARG_FONT:
-      if (tag->values->font_desc)
-        GTK_VALUE_STRING (*arg) = pango_font_description_to_string (tag->values->font_desc);
+      if (tag->family_set &&
+          tag->style_set &&
+          tag->variant_set &&
+          tag->size_set &&
+          tag->stretch_set &&
+          tag->weight_set)
+        GTK_VALUE_STRING (*arg) =
+          pango_font_description_to_string (&tag->values->font);
       else
         GTK_VALUE_STRING (*arg) = NULL;
       break;
 
     case ARG_FONT_DESC:
-      if (tag->values->font_desc)
-        GTK_VALUE_BOXED (*arg) = pango_font_description_copy (tag->values->font_desc);
+      if (tag->family_set &&
+          tag->style_set &&
+          tag->variant_set &&
+          tag->size_set &&
+          tag->stretch_set &&
+          tag->weight_set)
+        GTK_VALUE_BOXED (*arg) = pango_font_description_copy (&tag->values->font);
       else
         GTK_VALUE_BOXED (*arg) = NULL;
       break;
 
+    case ARG_FAMILY:
+      GTK_VALUE_STRING (*arg) = g_strdup (tag->values->font.family_name);
+      break;
+
+    case ARG_STYLE:
+      GTK_VALUE_ENUM (*arg) = tag->values->font.style;
+      break;
+
+    case ARG_VARIANT:
+      GTK_VALUE_ENUM (*arg) = tag->values->font.variant;
+      break;
+
+    case ARG_WEIGHT:
+      GTK_VALUE_ENUM (*arg) = tag->values->font.weight;
+      break;
+
+    case ARG_STRETCH:
+      GTK_VALUE_ENUM (*arg) = tag->values->font.stretch;
+      break;
+
+    case ARG_SIZE:
+      GTK_VALUE_INT (*arg) = tag->values->font.size;
+      break;
+
+    case ARG_SIZE_POINTS:
+      GTK_VALUE_DOUBLE (*arg) = ((double)tag->values->font.size) / (double)PANGO_SCALE;
+      break;
+      
     case ARG_PIXELS_ABOVE_LINES:
       GTK_VALUE_INT (*arg) = tag->values->pixels_above_lines;
       break;
@@ -875,10 +1066,30 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       GTK_VALUE_BOOL (*arg) = tag->fg_stipple_set;
       break;
 
-    case ARG_FONT_SET:
-      GTK_VALUE_BOOL (*arg) = tag->font_set;
+    case ARG_FAMILY_SET:
+      GTK_VALUE_BOOL (*arg) = tag->family_set;
       break;
 
+    case ARG_STYLE_SET:
+      GTK_VALUE_BOOL (*arg) = tag->style_set;
+      break;
+
+    case ARG_VARIANT_SET:
+      GTK_VALUE_BOOL (*arg) = tag->variant_set;
+      break;
+
+    case ARG_WEIGHT_SET:
+      GTK_VALUE_BOOL (*arg) = tag->weight_set;
+      break;
+
+    case ARG_STRETCH_SET:
+      GTK_VALUE_BOOL (*arg) = tag->stretch_set;
+      break;
+
+    case ARG_SIZE_SET:
+      GTK_VALUE_BOOL (*arg) = tag->size_set;
+      break;
+      
     case ARG_PIXELS_ABOVE_LINES_SET:
       GTK_VALUE_BOOL (*arg) = tag->pixels_above_lines_set;
       break;
@@ -1145,7 +1356,7 @@ gtk_text_attributes_new (void)
 {
   GtkTextAttributes *values;
 
-  values = g_new0(GtkTextAttributes, 1);
+  values = g_new0 (GtkTextAttributes, 1);
 
   /* 0 is a valid value for most of the struct */
 
@@ -1186,19 +1397,22 @@ gtk_text_attributes_copy (GtkTextAttributes *src,
 
   if (dest->language)
     g_free (dest->language);
+
+  if (dest->font.family_name)
+    g_free (dest->font.family_name);
   
   /* Copy */
   orig_refcount = dest->refcount;
 
   *dest = *src;
 
-  dest->font_desc = pango_font_description_copy (src->font_desc);
-
   if (src->tabs)
     dest->tabs = pango_tab_array_copy (src->tabs);
 
   dest->language = g_strdup (src->language);
 
+  dest->font.family_name = g_strdup (src->font.family_name);
+  
   dest->refcount = orig_refcount;
   dest->realized = FALSE;
 }
@@ -1226,9 +1440,6 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
       if (values->appearance.bg_stipple)
         gdk_bitmap_unref (values->appearance.bg_stipple);
 
-      if (values->font_desc)
-        pango_font_description_free (values->font_desc);
-
       if (values->appearance.fg_stipple)
         gdk_bitmap_unref (values->appearance.fg_stipple);
 
@@ -1238,6 +1449,9 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
       if (values->language)
         g_free (values->language);
 
+      if (values->font.family_name)
+        g_free (values->font.family_name);
+      
       g_free (values);
     }
 }
@@ -1287,8 +1501,8 @@ gtk_text_attributes_unrealize (GtkTextAttributes *values,
 
 void
 gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
-                                    GtkTextTag**        tags,
-                                    guint               n_tags)
+                                    GtkTextTag**       tags,
+                                    guint              n_tags)
 {
   guint n = 0;
 
@@ -1308,7 +1522,9 @@ gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 
           dest->appearance.draw_bg = TRUE;
         }
-
+      if (tag->fg_color_set)
+        dest->appearance.fg_color = vals->appearance.fg_color;
+      
       if (tag->bg_stipple_set)
         {
           gdk_bitmap_ref (vals->appearance.bg_stipple);
@@ -1319,16 +1535,6 @@ gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
           dest->appearance.draw_bg = TRUE;
         }
 
-      if (tag->fg_color_set)
-        dest->appearance.fg_color = vals->appearance.fg_color;
-
-      if (tag->font_set)
-        {
-          if (dest->font_desc)
-            pango_font_description_free (dest->font_desc);
-          dest->font_desc = pango_font_description_copy (vals->font_desc);
-        }
-
       if (tag->fg_stipple_set)
         {
           gdk_bitmap_ref (vals->appearance.fg_stipple);
@@ -1336,6 +1542,29 @@ gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
             gdk_bitmap_unref (dest->appearance.fg_stipple);
           dest->appearance.fg_stipple = vals->appearance.fg_stipple;
         }
+
+      if (tag->family_set)
+        {
+          if (dest->font.family_name)
+            g_free (dest->font.family_name);
+
+          dest->font.family_name = g_strdup (vals->font.family_name);
+        }
+
+      if (tag->style_set)
+        dest->font.style = vals->font.style;
+
+      if (tag->variant_set)
+        dest->font.variant = vals->font.variant;
+
+      if (tag->weight_set)
+        dest->font.weight = vals->font.weight;
+
+      if (tag->stretch_set)
+        dest->font.stretch = vals->font.stretch;
+
+      if (tag->size_set)
+        dest->font.size = vals->font.size;
 
       if (tag->justify_set)
         dest->justify = vals->justify;
@@ -1405,7 +1634,12 @@ gtk_text_tag_affects_size (GtkTextTag *tag)
   g_return_val_if_fail (GTK_IS_TEXT_TAG (tag), FALSE);
 
   return
-    tag->font_set ||
+    tag->family_set ||
+    tag->style_set ||
+    tag->variant_set ||
+    tag->weight_set ||
+    tag->size_set ||
+    tag->stretch_set ||
     tag->justify_set ||
     tag->left_margin_set ||
     tag->indent_set ||

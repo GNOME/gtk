@@ -387,8 +387,8 @@ gtk_dialog_add_button (GtkDialog   *dialog,
 {
   GtkWidget *button;
   
-  g_return_if_fail (GTK_IS_DIALOG (dialog));
-  g_return_if_fail (button_text != NULL);
+  g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
+  g_return_val_if_fail (button_text != NULL, NULL);
 
   button = gtk_button_new_stock (button_text,
                                  gtk_window_get_default_accel_group (GTK_WINDOW (dialog)));

@@ -444,7 +444,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
   gtk_object_set (GTK_OBJECT (tag),
 		 "foreground_gdk", &color,
 		 "background_gdk", &color2,
-		 "font", "Sans 24",
+                  "size_points", 24.0,
 		 NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "fg_red");
@@ -465,17 +465,17 @@ fill_example_buffer (GtkTextBuffer *buffer)
   color.blue = color.red = 0;
   color.green = 0xffff;
   gtk_object_set (GTK_OBJECT (tag),
-		 "background_gdk", &color,
-		 "font", "Sans 10",
-		 NULL);
+                  "background_gdk", &color,
+                  "size_points", 10.0,
+                  NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "strikethrough");
 
   setup_tag (tag);
       
   gtk_object_set (GTK_OBJECT (tag),
-		 "strikethrough", TRUE,
-		 NULL);
+                  "strikethrough", TRUE,
+                  NULL);
 
 
   tag = gtk_text_buffer_create_tag (buffer, "underline");
@@ -483,30 +483,30 @@ fill_example_buffer (GtkTextBuffer *buffer)
   setup_tag (tag);
       
   gtk_object_set (GTK_OBJECT (tag),
-		 "underline", PANGO_UNDERLINE_SINGLE,
-		 NULL);
+                  "underline", PANGO_UNDERLINE_SINGLE,
+                  NULL);
 
   setup_tag (tag);
       
   gtk_object_set (GTK_OBJECT (tag),
-		 "underline", PANGO_UNDERLINE_SINGLE,
-		 NULL);
+                  "underline", PANGO_UNDERLINE_SINGLE,
+                  NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "centered");
       
   gtk_object_set (GTK_OBJECT (tag),
-		 "justify", GTK_JUSTIFY_CENTER,
-		 NULL);
+                  "justify", GTK_JUSTIFY_CENTER,
+                  NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "rtl_quote");
       
   gtk_object_set (GTK_OBJECT (tag),
-		 "wrap_mode", GTK_WRAPMODE_WORD,
-		 "direction", GTK_TEXT_DIR_RTL,
-		 "indent", 30,
-		 "left_margin", 20,
-		 "right_margin", 20,
-		 NULL);
+                  "wrap_mode", GTK_WRAPMODE_WORD,
+                  "direction", GTK_TEXT_DIR_RTL,
+                  "indent", 30,
+                  "left_margin", 20,
+                  "right_margin", 20,
+                  NULL);
   
   pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
   

@@ -86,6 +86,7 @@ struct _GtkTextRenderState
   GtkWidget *widget;
 
   GtkTextAppearance *last_appearance;
+  GtkTextAppearance *last_bg_appearance;
   GdkGC *fg_gc;
   GdkGC *bg_gc;
   GdkRectangle clip_rect;
@@ -159,12 +160,12 @@ gtk_text_render_state_update (GtkTextRenderState *state,
 
   if (new_appearance->draw_bg)
     {
-      if (!state->last_appearance ||
-          !gdk_color_equal (&new_appearance->bg_color, &state->last_appearance->bg_color))
+      if (!state->last_bg_appearance ||
+          !gdk_color_equal (&new_appearance->bg_color, &state->last_bg_appearance->bg_color))
         gtk_text_render_state_set_color (state, state->bg_gc, &new_appearance->bg_color);
 
-      if (!state->last_appearance ||
-          new_appearance->bg_stipple != state->last_appearance->bg_stipple)
+      if (!state->last_bg_appearance ||
+          new_appearance->bg_stipple != state->last_bg_appearance->bg_stipple)
         {
           if (new_appearance->bg_stipple)
             {
@@ -176,6 +177,8 @@ gtk_text_render_state_update (GtkTextRenderState *state,
               gdk_gc_set_fill (state->bg_gc, GDK_SOLID);
             }
         }
+
+      state->last_bg_appearance = new_appearance;
     }
 
   state->last_appearance = new_appearance;
@@ -665,7 +668,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
       GtkTextLine *line = tmp_list->data;
 
       line_display = gtk_text_layout_get_line_display (layout, line, FALSE);
-
+      
       if (have_selection)
         {
           GtkTextIter line_start, line_end;

@@ -775,7 +775,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
     y0 = 0;
   if (y1 < 0)
     y1 = 0;
-
+  
   /* Validate backwards from the anchor line to y0
    */
   line = gtk_text_iter_get_text_line (anchor);
@@ -792,7 +792,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
           line_data = gtk_text_line_get_data (line, layout);
 
           delta_height += line_data->height - old_height;
-
+          
           first_line = line;
           first_line_y = -seen;
           if (!last_line)
@@ -821,7 +821,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
           line_data = gtk_text_line_get_data (line, layout);
 
           delta_height += line_data->height - old_height;
-
+          
           if (!first_line)
             {
               first_line = line;
@@ -1229,7 +1229,7 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
 
 static void
 add_text_attrs (GtkTextLayout      *layout,
-                GtkTextAttributes *style,
+                GtkTextAttributes  *style,
                 gint                byte_count,
                 PangoAttrList      *attrs,
                 gint                start,
@@ -1237,7 +1237,7 @@ add_text_attrs (GtkTextLayout      *layout,
 {
   PangoAttribute *attr;
 
-  attr = pango_attr_font_desc_new (style->font_desc);
+  attr = pango_attr_font_desc_new (&style->font);
   attr->start_index = start;
   attr->end_index = start + byte_count;
 
@@ -1452,7 +1452,7 @@ add_preedit_attrs (GtkTextLayout     *layout,
       if (end == G_MAXINT)
 	end = layout->preedit_len;
       
-      pango_attr_iterator_get_font (iter, style->font_desc,
+      pango_attr_iterator_get_font (iter, &style->font,
 				    &font_desc, size_only ? NULL : &extra_attrs);
       
       tmp_list = extra_attrs;

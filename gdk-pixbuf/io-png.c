@@ -155,7 +155,7 @@ png_simple_error_callback(png_structp png_save_ptr,
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_FAILED,
-                             _("Fatal error saving PNG image file: %s"),
+                             _("Fatal error in PNG image file: %s"),
                              error_msg);
         }
 }

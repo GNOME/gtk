@@ -71,13 +71,14 @@ create_tags (GtkTextBuffer *buffer)
    */
 
   tag = gtk_text_buffer_create_tag (buffer, "italic");
-  g_object_set (G_OBJECT (tag), "font", "sans italic", NULL);
+  g_object_set (G_OBJECT (tag), "style", PANGO_STYLE_ITALIC, NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "bold");
-  g_object_set (G_OBJECT (tag), "font", "sans bold", NULL);  
+  g_object_set (G_OBJECT (tag), "weight", PANGO_WEIGHT_BOLD, NULL);  
 
   tag = gtk_text_buffer_create_tag (buffer, "big");
-  g_object_set (G_OBJECT (tag), "font", "sans 120", NULL);
+  /* 70 points times the PANGO_SCALE factor */
+  g_object_set (G_OBJECT (tag), "size", 70 * PANGO_SCALE, NULL);
   
   tag = gtk_text_buffer_create_tag (buffer, "blue_foreground");
   g_object_set (G_OBJECT (tag), "foreground", "blue", NULL);  
@@ -141,13 +142,13 @@ create_tags (GtkTextBuffer *buffer)
   tag = gtk_text_buffer_create_tag (buffer, "superscript");
   g_object_set (G_OBJECT (tag),
                 "offset", 10,
-                "font", "Sans 8",
+                "size", 8 * PANGO_SCALE,
                 NULL);
   
   tag = gtk_text_buffer_create_tag (buffer, "subscript");
   g_object_set (G_OBJECT (tag),
                 "offset", -10,
-                "font", "Sans 8",
+                "size", 8 * PANGO_SCALE,
                 NULL); 
 }
 
