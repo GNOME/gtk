@@ -595,7 +595,6 @@ image_load (FILE *f)
 
 	inbuf = &context.inbuf;
 
-	file_off = 0;
 	while (TRUE) {
 		guint  num_to_read;
 
