@@ -13,6 +13,9 @@ Fri Jan 16 01:55:17 1998  Tim Janik  <timj@psynet.net>
 
 	* gtk/gtkobject.c: bug fixes and changes in the assertion system for
 	  arg handling. changed g_print() warning calls to real g_warning()s.
+	  
+	* changed all *_get_type() functions to initialize GtkTypeInfo
+	  correctly with GtkArgSetFunc and GtkArgGetFunc fields.
 
 Thu Jan 15 00:44:27 PST 1998 Jay Painter <jpaint@serv.net>
 	* gtk/gtkentry.[ch]: Change window cursor to "I"
