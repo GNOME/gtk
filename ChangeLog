@@ -1,3 +1,11 @@
+Thu Sep  4 19:16:14 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* === Released 2.2.4 ===
+
+	* configure.in: Version 2.2.4, interface age 4.
+
+	* NEWS: updated for 2.2.4.
+
 Thu Sep  4 19:11:23 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* docs/RELEASE-HOWTO: updates.

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 2003-08-25 22:08-0400\n"
+"POT-Creation-Date: 2003-09-04 18:34+0200\n"
 "PO-Revision-Date: 2003-08-17 01:06-0300\n"
 "Last-Translator: Evandro Fernandes Giovanini <evandrofg@ig.com.br>\n"
 "Language-Team: GNOME-BR <evandrofg@listas.cipsga.org.br>, Debian-BR <debian-"

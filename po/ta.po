@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tamil Gtk 2.4\n"
-"POT-Creation-Date: 2003-08-25 22:08-0400\n"
+"POT-Creation-Date: 2003-09-04 18:34+0200\n"
 "PO-Revision-Date: 2003-06-20 23:00+0600\n"
 "Last-Translator: Dinesh Nadarajah <n_dinesh@yahoo.com>\n"
 "Language-Team: Tamil <tamilinix@yahoogroups.com>\n"

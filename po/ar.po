@@ -44,7 +44,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-2.ar\n"
-"POT-Creation-Date: 2003-08-25 22:08-0400\n"
+"POT-Creation-Date: 2003-09-04 18:34+0200\n"
 "PO-Revision-Date: 2003-06-27 09:17+0200\n"
 "Last-Translator: Arafat Medini <lumina@silverpen.de>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"

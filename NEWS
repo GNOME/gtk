@@ -1,3 +1,12 @@
+Overview of Changes in GTK+ 2.2.4
+=================================
+* Revert TreeView fix which broke context menus in different applications
+  [Kristian Rietveld]
+* Typo fixes [Kjartan Maraas]
+* Make pressing END not put the menu in scrolling mode [Kris]
+* Misc bug fixes [Tor Lillqvist, Bruce Hochstetler, Kjartan, Tony Gale]
+* New and updated translations (sq, cy, hi, nl, de, es, zh_CN, ja, no, el)
+
 Overview of Changes in GTK+ 2.2.3
 =================================
 * GdkPixbuf [Matthias Clasen]
