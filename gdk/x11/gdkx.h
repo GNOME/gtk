@@ -139,6 +139,7 @@ GdkColormap *gdk_x11_colormap_foreign_new (GdkVisual *visual,
 gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,
 						XID         xid);
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
+guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
 /* returns TRUE if we support the given WM spec feature */
 gboolean gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,

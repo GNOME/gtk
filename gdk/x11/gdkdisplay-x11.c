@@ -1162,3 +1162,22 @@ gdk_display_store_clipboard (GdkDisplay *display,
   gdk_error_trap_pop ();
 
 }
+
+/**
+ * gdk_x11_display_get_user_time:
+ * @display: a #GdkDisplay
+ *
+ * Returns the timestamp of the last user interaction on 
+ * @display. The timestamp is taken from events caused
+ * by user interaction such as key presses or pointer 
+ * movements. See gdk_x11_window_set_user_time().
+ *
+ * Returns: the timestamp of the last user interaction 
+ *
+ * Since: 2.8
+ */
+guint32
+gdk_x11_display_get_user_time (GdkDisplay *display)
+{
+  return GDK_DISPLAY_X11 (display)->user_time;
+}

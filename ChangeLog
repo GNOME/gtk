@@ -1,3 +1,11 @@
+2005-01-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk.symbols: 
+	* gdk/x11/gdkx.h: 
+	* gdk/x11/gdkdisplay-x11.c (gdk_x11_display_get_user_time): 
+	Add a function to obtain the last user interaction 
+	time.  (#163119, Elijah Newren)
+
 Tue Jan 18 13:56:09 2005  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkfilechooserdefault.c (pending_op_queue): Actually assign

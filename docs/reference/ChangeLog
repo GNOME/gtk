@@ -1,3 +1,7 @@
+2005-01-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk-sections.txt: Add gdk_x11_display_get_user_time.
+
 2005-01-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-docs.sgml: Add an index for 2.8 symbols.
