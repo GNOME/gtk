@@ -203,6 +203,8 @@ gboolean               gtk_tree_view_collapse_row                  (GtkTreeView 
 void                   gtk_tree_view_map_expanded_rows             (GtkTreeView               *tree_view,
 								    GtkTreeViewMappingFunc     func,
 								    gpointer                   data);
+gboolean               gtk_tree_view_row_expanded                  (GtkTreeView               *tree_view,
+								    GtkTreePath               *path);
 void                   gtk_tree_view_set_reorderable               (GtkTreeView               *tree_view,
 								    gboolean                   reorderable);
 void                   gtk_tree_view_set_cursor                    (GtkTreeView               *tree_view,

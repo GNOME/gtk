@@ -1,3 +1,8 @@
+Mon Jun 18 20:06:10 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_row_expanded): New function to
+	test if a node is expanded.
+
 Mon Jun 18 19:41:38 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): Fix bug

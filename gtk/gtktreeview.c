@@ -7274,6 +7274,33 @@ gtk_tree_view_map_expanded_rows (GtkTreeView            *tree_view,
   gtk_tree_path_free (path);
 }
 
+/**
+ * gtk_tree_view_row_expanded:
+ * @tree_view: A #GtkTreeView.
+ * @path: A #GtkTreePath to test expansion state.
+ * 
+ * Returns TRUE if the node pointed to by @path is expanded in @tree_view.
+ * 
+ * Return value: TRUE if #path is expanded.
+ **/
+gboolean
+gtk_tree_view_row_expanded (GtkTreeView *tree_view,
+			    GtkTreePath *path)
+{
+  GtkRBTree *tree;
+  GtkRBNode *node;
+
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+
+  _gtk_tree_view_find_node (tree_view, path, &tree, &node);
+
+  if (node == NULL)
+    return NULL;
+
+  return (node->children != NULL);
+}
+
 static GtkTargetEntry row_targets[] = {
   { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 }
 };
