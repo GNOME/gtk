@@ -608,7 +608,7 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
  * gdk_draw_drawable:
  * @drawable: a #GdkDrawable
  * @gc: a #GdkGC sharing the drawable's visual and colormap
- * @src: another #GdkDrawable
+ * @src: the source #GdkDrawable, which may be the same as @drawable
  * @xsrc: X position in @src of rectangle to draw
  * @ysrc: Y position in @src of rectangle to draw
  * @xdest: X position in @drawable where the rectangle should be drawn
