@@ -189,7 +189,8 @@ static void gtk_notebook_forall              (GtkContainer     *container,
 static void gtk_notebook_redraw_tabs         (GtkNotebook      *notebook);
 static void gtk_notebook_redraw_arrows       (GtkNotebook      *notebook);
 static void gtk_notebook_real_remove         (GtkNotebook      *notebook,
-					      GList            *list);
+					      GList            *list,
+					      gboolean		destroying);
 static void gtk_notebook_update_labels       (GtkNotebook      *notebook);
 static gint gtk_notebook_timer               (GtkNotebook      *notebook);
 static gint gtk_notebook_page_compare        (gconstpointer     a,
@@ -747,11 +748,21 @@ gtk_notebook_new (void)
 static void
 gtk_notebook_destroy (GtkObject *object)
 {
+  GList *children;
   GtkNotebook *notebook = GTK_NOTEBOOK (object);
   
   if (notebook->menu)
     gtk_notebook_popup_disable (notebook);
 
+  children = notebook->children;
+  while (children)
+    {
+      GList *child = children;
+      children = child->next;
+      
+      gtk_notebook_real_remove (notebook, child, TRUE);
+    }
+  
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
@@ -1953,7 +1964,7 @@ gtk_notebook_remove (GtkContainer *container,
       page = children->data;
       if (page->child == widget)
 	{
-	  gtk_notebook_real_remove (notebook, children);
+	  gtk_notebook_real_remove (notebook, children, FALSE);
 	  break;
 	}
       page_num++;
@@ -2350,7 +2361,8 @@ gtk_notebook_remove_tab_label (GtkNotebook     *notebook,
 
 static void
 gtk_notebook_real_remove (GtkNotebook *notebook,
-			  GList       *list)
+			  GList       *list,
+			  gboolean     destroying)
 {
   GtkNotebookPage *page;
   GList * next_list;
@@ -2363,13 +2375,13 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   if (notebook->cur_page == list->data)
     { 
       notebook->cur_page = NULL;
-      if (next_list)
+      if (next_list && !destroying)
 	gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (next_list), -1);
     }
 
   if (list == notebook->first_tab)
     notebook->first_tab = next_list;
-  if (list == notebook->focus_tab)
+  if (list == notebook->focus_tab && !destroying)
     gtk_notebook_switch_focus_tab (notebook, next_list);
 
   page = list->data;
@@ -4120,13 +4132,13 @@ gtk_notebook_remove_page (GtkNotebook *notebook,
     {
       list = g_list_nth (notebook->children, page_num);
       if (list)
-	gtk_notebook_real_remove (notebook, list);
+	gtk_notebook_real_remove (notebook, list, FALSE);
     }
   else
     {
       list = g_list_last (notebook->children);
       if (list)
-	gtk_notebook_real_remove (notebook, list);
+	gtk_notebook_real_remove (notebook, list, FALSE);
     }
 }
 

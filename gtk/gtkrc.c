@@ -661,11 +661,33 @@ _gtk_rc_init (void)
   
   /* Default RC string */
   gtk_rc_parse_string ("style \"gtk-default-tooltips-style\" {\n"
-		       "  bg[NORMAL] = \"#ffffc0\"\n"
+		       "  bg[NORMAL] = \"#eee1b3\"\n"
 		       "  fg[NORMAL] = \"#000000\"\n"
 		       "}\n"
 		       "\n"
-		       "widget \"gtk-tooltips*\" style : gtk \"gtk-default-tooltips-style\"\n");
+		       "style \"gtk-default-progress-bar-style\" {\n"
+		       "  bg[PRELIGHT] = \"#4b6983\"\n"
+		       "  fg[PRELIGHT] = \"#ffffff\"\n"
+		       "  bg[NORMAL]   = \"#bab5ab\"\n"
+		       "}\n"
+		       "\n"
+		       "style \"gtk-default-menu-item-style\" {\n"
+		       "  bg[PRELIGHT] = \"#4b6983\"\n"
+		       "  fg[PRELIGHT] = \"#ffffff\"\n"
+		       "  base[PRELIGHT] = \"#4b6983\"\n"
+		       "  text[PRELIGHT] = \"#ffffff\"\n"
+		       "}\n"
+		       "\n"
+		       "class \"GtkProgressBar\" style : gtk \"gtk-default-progress-bar-style\"\n"
+		       "widget \"gtk-tooltips*\" style : gtk \"gtk-default-tooltips-style\"\n"
+		       "class \"GtkMenuItem\" style : gtk \"gtk-default-menu-item-style\"\n"
+		       "widget_class \"*.GtkMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
+		       "widget_class \"*.GtkAccelMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
+		       "widget_class \"*.GtkRadioMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
+		       "widget_class \"*.GtkCheckMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
+		       "widget_class \"*.GtkImageMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
+		       "widget_class \"*.GtkSeparatorMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
+      );
 }
   
 static void

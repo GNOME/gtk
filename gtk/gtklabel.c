@@ -467,10 +467,8 @@ gtk_label_set_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkLabel *label;
-  guint last_keyval;
 
   label = GTK_LABEL (object);
-  last_keyval = label->mnemonic_keyval;
   
   switch (prop_id)
     {

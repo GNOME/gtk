@@ -208,7 +208,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 								     "Selected Shadow Type",
 								     "Shadow type when item is selected",
 								     GTK_TYPE_SHADOW_TYPE,
-								     GTK_SHADOW_OUT,
+								     GTK_SHADOW_NONE,
 								     G_PARAM_READABLE),
 						  gtk_rc_property_parse_enum);
 }

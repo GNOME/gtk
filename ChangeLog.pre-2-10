@@ -1,3 +1,16 @@
+Tue Dec 10 12:40:30 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenuitem.c, gtk/gtkstyle.c, gtk/gtkrc.c: new default
+	color scheme based on the GNOME stock icon palette. (#80691,
+	Tuomas Kuosmanen, Garrett LeSage, Owen Taylor)
+
+	* gtk/gtknotebook.c (gtk_notebook_real_remove): take a new
+	parameter, "destroying", and don't emit the switch-page signals
+	when it is true (fix #64832, reported by Jarred Keuch)
+
+	* gtk/gtklabel.c (gtk_label_set_property): remove unused
+	variable. 
+
 Tue Dec 10 02:14:12 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_get_path_at_pos): x can be in

@@ -452,13 +452,13 @@ static GdkColor gtk_default_prelight_fg =    { 0,      0,      0,      0 };
 static GdkColor gtk_default_selected_fg =    { 0, 0xffff, 0xffff, 0xffff };
 static GdkColor gtk_default_insensitive_fg = { 0, 0x7530, 0x7530, 0x7530 };
 
-static GdkColor gtk_default_normal_bg =      { 0, 0xd6d6, 0xd6d6, 0xd6d6 };
-static GdkColor gtk_default_active_bg =      { 0, 0xc350, 0xc350, 0xc350 };
-static GdkColor gtk_default_prelight_bg =    { 0, 0xea60, 0xea60, 0xea60 };
-static GdkColor gtk_default_selected_bg =    { 0,      0,      0, 0x9c40 };
-static GdkColor gtk_default_insensitive_bg = { 0, 0xd6d6, 0xd6d6, 0xd6d6 };
-static GdkColor gtk_default_selected_base =  { 0, 0xa4a4, 0xdfdf, 0xffff };
-static GdkColor gtk_default_active_base =    { 0, 0xbcbc, 0xd2d2, 0xeeee };
+static GdkColor gtk_default_normal_bg =      { 0, 0xdcdc, 0xdada, 0xd5d5 };
+static GdkColor gtk_default_active_bg =      { 0, 0xbaba, 0xb5b5, 0xabab };
+static GdkColor gtk_default_prelight_bg =    { 0, 0xeeee, 0xebeb, 0xe7e7 };
+static GdkColor gtk_default_selected_bg =    { 0, 0x4b4b, 0x6969, 0x8383 };
+static GdkColor gtk_default_insensitive_bg = { 0, 0xdcdc, 0xdada, 0xd5d5 };
+static GdkColor gtk_default_selected_base =  { 0, 0x4b4b, 0x6969, 0x8383 };
+static GdkColor gtk_default_active_base =    { 0, 0x8080, 0x7d7d, 0x7474 };
 
 static gpointer parent_class = NULL;
 
@@ -573,9 +573,9 @@ gtk_style_init (GtkStyle *style)
     }
 
   style->base[GTK_STATE_SELECTED] = gtk_default_selected_base;
-  style->text[GTK_STATE_SELECTED] = style->black;
+  style->text[GTK_STATE_SELECTED] = style->white;
   style->base[GTK_STATE_ACTIVE] = gtk_default_active_base;
-  style->text[GTK_STATE_ACTIVE] = style->black;
+  style->text[GTK_STATE_ACTIVE] = style->white;
   style->base[GTK_STATE_INSENSITIVE] = gtk_default_prelight_bg;
   style->text[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_fg;
   
