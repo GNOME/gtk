@@ -11,7 +11,7 @@
 	   "BOXED"=>"gpointer", "FOREIGN"=>"gpointer",
 	   "CALLBACK"=>"gpointer", "POINTER"=>"gpointer",
 	   "ARGS"=>"gpointer", "SIGNAL"=>"gpointer",
-	   "C_CALLBACK"=>"gpointer");
+	   "C_CALLBACK"=>"gpointer", "OBJECT"=>"gpointer");
 
 open(IL, "<".$ENV{'srcdir'}."/gtkmarshal.list") || die("Open failed: $!");
 open(OH, "|indent >".$ENV{'srcdir'}."/gtkmarshal.h") || die("Open failed: $!");
