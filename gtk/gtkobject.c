@@ -101,7 +101,7 @@ gtk_object_debug_foreach (gpointer key, gpointer value, gpointer user_data)
   GtkObject *object;
   
   object = (GtkObject*) value;
-  g_print ("%p: %s ref_count=%d%s%s\n",
+  g_print ("GTK-DEBUG: %p: %s ref_count=%d%s%s\n",
 	   object,
 	   gtk_type_name (GTK_OBJECT_TYPE (object)),
 	   object->ref_count,
@@ -113,7 +113,7 @@ gtk_object_debug (void)
 {
   g_hash_table_foreach (living_objs_ht, gtk_object_debug_foreach, NULL);
 
-  g_print ("living objects count = %d\n", obj_count);
+  g_print ("GTK-DEBUG: living objects count = %d\n", obj_count);
 }
 static guint
 gtk_object_pointer_hash (const gpointer v)

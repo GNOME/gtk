@@ -1,3 +1,12 @@
+Sat Mar 14 08:29:56 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_size_allocate): refuse to allocate
+	with a greater height than requested.
+	(gtk_handle_box_remove): clean up if the child is detached.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): don't take invisible
+	children into account.
+
 Sat Mar 14 02:12:44 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkmain.c gdk/gdk.c: Don't leave NULL's in argv.

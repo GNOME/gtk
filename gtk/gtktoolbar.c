@@ -416,11 +416,11 @@ static void
 gtk_toolbar_size_allocate (GtkWidget     *widget,
 			   GtkAllocation *allocation)
 {
-  GtkToolbar     *toolbar;
-  GList          *children;
-  GtkToolbarChild          *child;
-  GtkAllocation   alloc;
-  gint            border_width;
+  GtkToolbar      *toolbar;
+  GList           *children;
+  GtkToolbarChild *child;
+  GtkAllocation    alloc;
+  gint             border_width;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (widget));
@@ -453,6 +453,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	case GTK_TOOLBAR_CHILD_BUTTON:
 	case GTK_TOOLBAR_CHILD_RADIOBUTTON:
 	case GTK_TOOLBAR_CHILD_TOGGLEBUTTON:
+	  if (!GTK_WIDGET_VISIBLE (child->widget))
+	    break;
 	  alloc.width = toolbar->button_maxw;
 	  alloc.height = toolbar->button_maxh;
 
@@ -471,6 +473,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	  break;
 
 	case GTK_TOOLBAR_CHILD_WIDGET:
+	  if (!GTK_WIDGET_VISIBLE (child->widget))
+	    break;
 	  alloc.width = child->widget->requisition.width;
 	  alloc.height = child->widget->requisition.height;
 

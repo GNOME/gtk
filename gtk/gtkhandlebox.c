@@ -29,7 +29,7 @@
 #define DRAG_HANDLE_SIZE 10
 #define BORDER_SIZE 5
 #define GHOST_HEIGHT 3
-#define SNAP_TOLERANCE 10
+#define SNAP_TOLERANCE 16
 
 enum
 {
@@ -52,7 +52,9 @@ static void gtk_handle_box_unrealize      (GtkWidget         *widget);
 static void gtk_handle_box_size_request   (GtkWidget         *widget,
 					   GtkRequisition    *requisition);
 static void gtk_handle_box_size_allocate  (GtkWidget         *widget,
-					   GtkAllocation     *allocation);
+					   GtkAllocation     *real_allocation);
+static void gtk_handle_box_remove         (GtkContainer      *container,
+					   GtkWidget         *widget);
 static void gtk_handle_box_draw_ghost     (GtkWidget         *widget);
 static void gtk_handle_box_paint          (GtkWidget         *widget,
 					   GdkEventExpose    *event,
@@ -114,11 +116,13 @@ gtk_handle_box_marshal_child_attached (GtkObject      *object,
 static void
 gtk_handle_box_class_init (GtkHandleBoxClass *class)
 {
-  GtkWidgetClass *widget_class;
   GtkObjectClass *object_class;
+  GtkWidgetClass *widget_class;
+  GtkContainerClass *container_class;
 
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
+  container_class = (GtkContainerClass *) class;
 
   parent_class = gtk_type_class (gtk_bin_get_type ());
 
@@ -153,6 +157,8 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class->button_press_event = gtk_handle_box_button_changed;
   widget_class->button_release_event = gtk_handle_box_button_changed;
   widget_class->motion_notify_event = gtk_handle_box_motion;
+
+  container_class->remove = gtk_handle_box_remove;
 
   class->child_attached = NULL;
   class->child_detached = NULL;
@@ -349,20 +355,32 @@ gtk_handle_box_size_request (GtkWidget      *widget,
 
 static void
 gtk_handle_box_size_allocate (GtkWidget     *widget,
-			      GtkAllocation *allocation)
+			      GtkAllocation *real_allocation)
 {
   GtkBin *bin;
-  GtkAllocation child_allocation;
+  GtkAllocation *allocation;
   GtkHandleBox *hb;
   gint border_width;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
-  g_return_if_fail (allocation != NULL);
+  g_return_if_fail (real_allocation != NULL);
 
-  widget->allocation = *allocation;
   bin = GTK_BIN (widget);
   hb = GTK_HANDLE_BOX (widget);
+
+  allocation = &widget->allocation;
+
+  allocation->x = real_allocation->x;
+  if (real_allocation->height > widget->requisition.height)
+    allocation->y = real_allocation->y + (real_allocation->height - widget->requisition.height) / 2;
+  else
+    allocation->y = real_allocation->y;
+  allocation->height = MIN (real_allocation->height, widget->requisition.height);
+  allocation->width = real_allocation->width;
+  /* this will refuse to allocate width greater than neccessary:
+   * allocation->width = MIN (real_allocation->width, widget->requisition.width);
+   */
 
   border_width = GTK_CONTAINER (widget)->border_width;
 
@@ -399,6 +417,8 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
+      GtkAllocation child_allocation;
+
       child_allocation.x = DRAG_HANDLE_SIZE;
       child_allocation.y = 0;
 
@@ -415,6 +435,34 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate (bin->child, &child_allocation);
     }
+}
+
+static void
+gtk_handle_box_remove (GtkContainer *container,
+		       GtkWidget    *widget)
+{
+  GtkHandleBox *hb;
+
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_HANDLE_BOX (container));
+  g_return_if_fail (widget != NULL);
+
+  hb = GTK_HANDLE_BOX (container);
+
+  if (widget == GTK_BIN (container)->child &&
+      GTK_WIDGET_REALIZED (hb) &&
+      hb->is_onroot)
+    {
+      hb->is_onroot = FALSE;
+      
+      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      
+      gdk_window_reparent (widget->window, hb->steady_window, 0, 0);
+      
+      gtk_widget_hide (hb->float_window);
+    }
+  
+  GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
 }
 
 static void
