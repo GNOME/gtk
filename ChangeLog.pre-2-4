@@ -1,3 +1,7 @@
+1999-10-05  Kjartan Maraas  <kmaraas@online.no>
+
+	* configure.in: Added "uk" to ALL_LINGUAS.
+	
 Mon Oct  4 11:57:11 PDT 1999 Manish Singh <yosh@gimp.org>
 
 	* configure.in: correct checking for BeOS check
