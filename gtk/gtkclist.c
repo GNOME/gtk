@@ -1572,7 +1572,7 @@ gtk_clist_get_column_widget (GtkCList *clist,
     return NULL;
 
   if (clist->column[column].button)
-    return GTK_BUTTON (clist->column[column].button)->child;
+    return GTK_BIN (clist->column[column].button)->child;
 
   return NULL;
 }

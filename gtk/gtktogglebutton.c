@@ -187,17 +187,7 @@ gtk_toggle_button_new (void)
 GtkWidget*
 gtk_toggle_button_new_with_label (const gchar *label)
 {
-  GtkWidget *toggle_button;
-  GtkWidget *label_widget;
-
-  toggle_button = gtk_toggle_button_new ();
-  label_widget = gtk_label_new (label);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.5, 0.5);
-
-  gtk_container_add (GTK_CONTAINER (toggle_button), label_widget);
-  gtk_widget_show (label_widget);
-
-  return toggle_button;
+  return g_object_new (GTK_TYPE_TOGGLE_BUTTON, "label", label, NULL);
 }
 
 /**
@@ -213,17 +203,7 @@ gtk_toggle_button_new_with_label (const gchar *label)
 GtkWidget*
 gtk_toggle_button_new_with_mnemonic (const gchar *label)
 {
-  GtkWidget *toggle_button;
-  GtkWidget *label_widget;
-
-  toggle_button = gtk_toggle_button_new ();
-  label_widget = gtk_label_new_with_mnemonic (label);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.5, 0.5);
-
-  gtk_container_add (GTK_CONTAINER (toggle_button), label_widget);
-  gtk_widget_show (label_widget);
-
-  return toggle_button;
+  return g_object_new (GTK_TYPE_TOGGLE_BUTTON, "label", label, "use_underline", TRUE, NULL);
 }
 
 static void

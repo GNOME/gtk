@@ -216,14 +216,11 @@ gtk_radio_button_new_with_label (GSList      *group,
 				 const gchar *label)
 {
   GtkWidget *radio_button;
-  GtkWidget *label_widget;
 
-  radio_button = gtk_radio_button_new (group);
-  label_widget = gtk_label_new (label);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
+  radio_button = g_object_new (GTK_TYPE_CHECK_BUTTON, "label", label, NULL) ;
 
-  gtk_container_add (GTK_CONTAINER (radio_button), label_widget);
-  gtk_widget_show (label_widget);
+  if (group)
+    gtk_radio_button_set_group (radio_button, group);
 
   return radio_button;
 }
@@ -245,14 +242,11 @@ gtk_radio_button_new_with_mnemonic (GSList      *group,
 				    const gchar *label)
 {
   GtkWidget *radio_button;
-  GtkWidget *label_widget;
 
-  radio_button = gtk_radio_button_new (group);
-  label_widget = gtk_label_new_with_mnemonic (label);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
+  radio_button = g_object_new (GTK_TYPE_CHECK_BUTTON, "label", label, "use_underline", TRUE, NULL);
 
-  gtk_container_add (GTK_CONTAINER (radio_button), label_widget);
-  gtk_widget_show (label_widget);
+  if (group)
+    gtk_radio_button_set_group (radio_button, group);
 
   return radio_button;
 }

@@ -1,5 +1,27 @@
 2001-08-26  Alexander Larsson  <alla@lysator.liu.se>
 
+	* gtk/gtkbutton.[ch]:
+	Add properties for labels, mnemonics and stock items.
+	Added C accessor functions for the properties.
+	Removed deprecated button->child.
+
+	* gtk/gtkradiobutton.c:
+	* gtk/gtktogglebutton.c:
+	Update to use the functions in GtkButton.
+
+	* gtk/gtkcheckbutton.c:
+	Update to use the functions in GtkButton.
+	Changed size allocation of child. Now only gets as much
+	space as it requests.
+
+	* gtk/gtkclist.c:
+	Don't use GtkButton->child
+
+	* gtk/gtklabel.c:
+	Fixed typo in docs
+	
+2001-08-26  Alexander Larsson  <alla@lysator.liu.se>
+
 	* tests/testgtk.c:
 	* tests/Makefile.am:
 	Ressurect the properties test.

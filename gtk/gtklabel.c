@@ -2309,7 +2309,7 @@ gtk_label_set_use_underline (GtkLabel *label,
  * gtk_label_get_use_underline:
  * @label: a #GtkLabel
  *
- * Returns whether an embedded underline in thef label indicates a
+ * Returns whether an embedded underline in the label indicates a
  * mnemonic. See gtk_label_set_use_underline ().
  *
  * Return value: %TRUE whether an embedded underline in the label indicates
