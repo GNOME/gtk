@@ -17,3 +17,6 @@
 #define XEMBED_FOCUS_FIRST              1
 #define XEMBED_FOCUS_LAST               2
 
+
+/* Flags for _XEMBED_INFO */
+#define XEMBED_MAPPED                   (1 << 0)

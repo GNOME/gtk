@@ -1,3 +1,51 @@
+Mon Jul  2 16:53:25 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/xembed.h gtk/gtkplug.c gtk/gtksocket.c: For
+	XEMBED embedding add a _XEMBED_INFO property to the
+	client with version number and a "mapped" flags.
+	Use the mapped flag instead of the racy MapRequestEvent
+
+        * gtk/gtksocket.c: Clean up the gtk_socket_steal()
+	code to reliably set things (when the child is a passive
+	embedder participating in the XEMBED protocol) intead
+	of just being a hack for embedding non-participating
+	programs. Fix various bugs and race conditions.
+	
+	* gtk/gtksocket.[ch] gtk/gtkplug.[ch]: Make local embedding
+	work by simply making the GtkSocket the gtk parent
+	of the GtkPlug. Set a flag in this case and make
+	the GtkPlug work like a normal container by overriding
+	methods such as check_resize and "chaining past" GtkWindow
+	to GtkBin.
+
+ 	* gtk/gtkentry.c (gtk_entry_real_activate)
+	  gtk/gtkmain.c (gtk_propagate_event): 
+ 	Eliminate use of gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW).
+	
+	* gtk/gtkwidget.c (gtk_widget_get_toplevel,
+	gtk_widget_get_ancestor):
+	Explain	why gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW)
+	might not give the expected result and recommend
+	an alternative.
+
+	* tests/testsocket.c tests/testsocket_child.c
+	tests/testsocket_common.c tests/Makefile.am: Extended
+	to test different type of adding plugs to sockets
+	(local,active,passive),	and to test mapping/unmapping
+	the plug.
+
+ 	* gdk/gdkwindow.c (_gdk_window_destroy_hierarchy): Don't
+ 	mark the window as destroyed until after we
+ 	called _gdk_windowing_window_destroy().
+	(_gdk_windowing_window_destroy() may use GDK functions
+	on the window.)
+
+ 	* gdk/x11/gdkinput.c: Remove the check for finalization - 
+ 	devices can be finalized under some circumnstances.
+ 
+ 	* gdk/x11/gdkinput-x11.c (gdk_input_device_new): Fix 
+ 	small problem with GDK_TYPE_DEVICE.
+ 
 2001-07-02  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_wmspec_change_state): fix to 

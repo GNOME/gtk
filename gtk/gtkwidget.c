@@ -4550,7 +4550,19 @@ gtk_widget_set_extension_events (GtkWidget *widget,
  *
  * Note the difference in behavior vs. gtk_widget_get_ancestor();
  * gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW) would return
- * %NULL if @widget wasn't inside a toplevel window.
+ * %NULL if @widget wasn't inside a toplevel window, and if the
+ * window was inside a GtkWindow-derived widget which was in turn
+ * inside the toplevel GtkWindow. While the second case may
+ * seem unlikely, it actually happens when a GtkPlug is embedded
+ * inside a GtkSocket within the same application
+ * 
+ * To reliably find for the toplevel GtkWindow, use
+ * 
+ *  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+ *  if (GTK_IS_WINDOW (toplevel))
+ *   {
+ *     /* Perform action on toplevel.
+ *   }
  * 
  * Return value: the topmost ancestor of @widget, or @widget itself if there's no ancestor
  **/
@@ -4574,7 +4586,8 @@ gtk_widget_get_toplevel (GtkWidget *widget)
  * Gets the first ancestor of @widget with type @widget_type. For example,
  * gtk_widget_get_ancestor (widget, GTK_TYPE_BOX) gets the first #GtkBox that's
  * an ancestor of @widget. No reference will be added to the returned widget;
- * it should not be unreferenced.
+ * it should not be unreferenced. See note about checking for a toplevel
+ * GtkWindow in the docs for gtk_widget_get_toplevel().
  * 
  * Return value: the ancestor widget, or %NULL if not found
  **/

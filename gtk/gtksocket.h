@@ -54,10 +54,14 @@ struct _GtkSocket
   guint16 current_height;
   
   GdkWindow *plug_window;
+  GtkWidget *plug_widget;
+
+  gshort xembed_version;	/* -1 == not xembed */
   guint same_app : 1;
   guint focus_in : 1;
   guint have_size : 1;
   guint need_map : 1;
+  guint is_mapped : 1;
 
   GHashTable *grabbed_keys;
   GtkWidget *toplevel;

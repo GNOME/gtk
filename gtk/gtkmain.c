@@ -1627,9 +1627,8 @@ gtk_propagate_event (GtkWidget *widget,
        */
       GtkWidget *window;
 
-      window = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
-
-      if (window)
+      window = gtk_widget_get_toplevel (widget);
+      if (window && GTK_IS_WINDOW (window))
 	{
 	  /* If there is a grab within the window, give the grab widget
 	   * a first crack at the key event
@@ -1639,8 +1638,8 @@ gtk_propagate_event (GtkWidget *widget,
 	  
 	  if (!handled_event)
 	    {
-	      window = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
-	      if (window)
+	      window = gtk_widget_get_toplevel (widget);
+	      if (window && GTK_IS_WINDOW (window))
 		{
 		  if (GTK_WIDGET_IS_SENSITIVE (window))
 		    gtk_widget_event (window, event);

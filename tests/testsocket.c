@@ -10,10 +10,16 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
+
+int n_children = 0;
 
 GtkWidget *window;
 GtkWidget *vbox;
 GtkWidget *lastsocket = NULL;
+
+extern guint32 create_child_plug (guint32  xid,
+				  gboolean local);
 
 static void
 quit_cb (gpointer        callback_data,
@@ -64,17 +70,66 @@ steal (GtkWidget *window, GtkEntry *entry)
 void
 remove_child (GtkWidget *window)
 {
-  if(lastsocket)
+  if (lastsocket)
     gtk_widget_destroy (lastsocket);
   lastsocket = NULL;
 }
 
+static gboolean
+child_read_watch (GIOChannel *channel, GIOCondition cond, gpointer data)
+{
+  GIOStatus status;
+  GError *error = NULL;
+  char *line;
+  gsize term;
+  int xid;
+  
+  status = g_io_channel_read_line (channel, &line, NULL, &term, &error);
+  switch (status)
+    {
+    case G_IO_STATUS_NORMAL:
+      line[term] = '\0';
+      xid = strtol (line, NULL, 0);
+      if (xid == 0)
+	{
+	  fprintf (stderr, "Invalid window id '%s'\n", line);
+	}
+      else
+	{
+	  GtkWidget *socket = gtk_socket_new ();
+	  gtk_box_pack_start (GTK_BOX (vbox), socket, TRUE, TRUE, 0);
+	  gtk_widget_show (socket);
+	  
+	  gtk_socket_steal (GTK_SOCKET (socket), xid);
+	}
+      g_free (line);
+      return TRUE;
+    case G_IO_STATUS_AGAIN:
+      return TRUE;
+    case G_IO_STATUS_EOF:
+      n_children--;
+      g_io_channel_close (channel);
+      return FALSE;
+    case G_IO_STATUS_ERROR:
+      fprintf (stderr, "Error reading fd from child: %s\n", error->message);
+      exit (1);
+      return FALSE;
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
+  
+}
+
 void
-add_child (GtkWidget *window)
+add_child (GtkWidget *window,
+	   gboolean   active)
 {
   GtkWidget *socket;
   char *argv[3] = { "./testsocket_child", NULL, NULL };
   char buffer[20];
+  int out_fd;
+  GIOChannel *channel;
   GError *error = NULL;
 
   socket = gtk_socket_new ();
@@ -83,18 +138,59 @@ add_child (GtkWidget *window)
 
   lastsocket = socket;
 
-  sprintf(buffer, "%#lx", GDK_WINDOW_XWINDOW (socket->window));
-  argv[1] = buffer;
+  if (active)
+    {
+      sprintf(buffer, "%#lx", GDK_WINDOW_XWINDOW (socket->window));
+      argv[1] = buffer;
+    }
   
 #if 1
-  if (!g_spawn_async (NULL, argv, NULL, 0, NULL, NULL, NULL, &error))
+  if (!g_spawn_async_with_pipes (NULL, argv, NULL, 0, NULL, NULL, NULL, NULL, &out_fd, NULL, &error))
     {
       fprintf (stderr, "Can't exec testsocket_child: %s\n", error->message);
       exit (1);
     }
+
+  n_children++;
+  channel = g_io_channel_unix_new (out_fd);
+  g_io_channel_set_flags (channel, G_IO_FLAG_NONBLOCK, &error);
+  if (error)
+    {
+      fprintf (stderr, "Error making channel non-blocking: %s\n", error->message);
+      exit (1);
+    }
+  
+  g_io_add_watch (channel, G_IO_IN | G_IO_HUP, child_read_watch, NULL);
+  
 #else
   fprintf(stderr,"%s\n", buffer);
 #endif
+}
+
+void
+add_active_child (GtkWidget *window)
+{
+  add_child (window, TRUE);
+}
+
+void
+add_passive_child (GtkWidget *window)
+{
+  add_child (window, FALSE);
+}
+
+void
+add_local_child (GtkWidget *window)
+{
+  GtkWidget *socket;
+
+  socket = gtk_socket_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), socket, TRUE, TRUE, 0);
+  gtk_widget_show (socket);
+
+  lastsocket = socket;
+
+  create_child_plug (GDK_WINDOW_XWINDOW (socket->window), TRUE);
 }
 
 int
@@ -131,11 +227,25 @@ main (int argc, char *argv[])
 		      gtk_item_factory_get_widget (item_factory, "<main>"),
 		      FALSE, FALSE, 0);
 
-  button = gtk_button_new_with_label ("Add Child");
+  button = gtk_button_new_with_label ("Add Active Child");
   gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
 
   gtk_signal_connect_object (GTK_OBJECT(button), "clicked",
-			     GTK_SIGNAL_FUNC(add_child),
+			     GTK_SIGNAL_FUNC(add_active_child),
+			     GTK_OBJECT(vbox));
+
+  button = gtk_button_new_with_label ("Add Passive Child");
+  gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
+
+  gtk_signal_connect_object (GTK_OBJECT(button), "clicked",
+			     GTK_SIGNAL_FUNC(add_passive_child),
+			     GTK_OBJECT(vbox));
+
+  button = gtk_button_new_with_label ("Add Local Child");
+  gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
+
+  gtk_signal_connect_object (GTK_OBJECT(button), "clicked",
+			     GTK_SIGNAL_FUNC(add_local_child),
 			     GTK_OBJECT(vbox));
 
   button = gtk_button_new_with_label ("Remove Last Child");
@@ -162,7 +272,13 @@ main (int argc, char *argv[])
 
   gtk_main ();
 
+  if (n_children)
+    {
+      g_print ("Waiting for children to exit\n");
+
+      while (n_children)
+	g_main_iteration (TRUE);
+    }
+
   return 0;
 }
-
-

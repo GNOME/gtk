@@ -27,6 +27,7 @@
 
 #include "gtkmain.h"
 #include "gtkplug.h"
+#include "gtkprivate.h"
 
 #include "gdk/gdkkeysyms.h"
 #include "x11/gdkx.h"
@@ -37,6 +38,12 @@ static void            gtk_plug_class_init            (GtkPlugClass     *klass);
 static void            gtk_plug_init                  (GtkPlug          *plug);
 static void            gtk_plug_realize               (GtkWidget        *widget);
 static void            gtk_plug_unrealize             (GtkWidget        *widget);
+static void            gtk_plug_show                  (GtkWidget        *widget);
+static void            gtk_plug_hide                  (GtkWidget        *widget);
+static void            gtk_plug_map                   (GtkWidget        *widget);
+static void            gtk_plug_unmap                 (GtkWidget        *widget);
+static void            gtk_plug_size_allocate         (GtkWidget        *widget,
+						       GtkAllocation    *allocation);
 static gboolean        gtk_plug_key_press_event       (GtkWidget        *widget,
 						       GdkEventKey      *event);
 static void            gtk_plug_forward_key_press     (GtkPlug          *plug,
@@ -45,24 +52,28 @@ static void            gtk_plug_set_focus             (GtkWindow        *window,
 						       GtkWidget        *focus);
 static gboolean        gtk_plug_focus                 (GtkWidget        *widget,
 						       GtkDirectionType  direction);
+static void            gtk_plug_check_resize          (GtkContainer     *container);
 static void            gtk_plug_accel_entries_changed (GtkWindow        *window);
 static GdkFilterReturn gtk_plug_filter_func           (GdkXEvent        *gdk_xevent,
 						       GdkEvent         *event,
 						       gpointer          data);
 
-static void gtk_plug_free_grabbed_keys (GHashTable *key_table);
-static void handle_modality_off        (GtkPlug    *plug);
-static void send_xembed_message        (GtkPlug    *plug,
-					glong       message,
-					glong       detail,
-					glong       data1,
-					glong       data2,
-					guint32     time);
+static void gtk_plug_free_grabbed_keys (GHashTable    *key_table);
+static void handle_modality_off        (GtkPlug       *plug);
+static void send_xembed_message        (GtkPlug       *plug,
+					glong          message,
+					glong          detail,
+					glong          data1,
+					glong          data2,
+					guint32        time);
+static void xembed_set_info            (GdkWindow     *window,
+					unsigned long  flags);
 
 /* From Tk */
 #define EMBEDDED_APP_WANTS_FOCUS NotifyNormal+20
   
 static GtkWindowClass *parent_class = NULL;
+static GtkBinClass *bin_class = NULL;
 
 GtkType
 gtk_plug_get_type ()
@@ -95,14 +106,24 @@ gtk_plug_class_init (GtkPlugClass *class)
 {
   GtkWidgetClass *widget_class = (GtkWidgetClass *)class;
   GtkWindowClass *window_class = (GtkWindowClass *)class;
+  GtkContainerClass *container_class = (GtkContainerClass *)class;
 
   parent_class = gtk_type_class (GTK_TYPE_WINDOW);
+  bin_class = gtk_type_class (GTK_TYPE_BIN);
 
   widget_class->realize = gtk_plug_realize;
   widget_class->unrealize = gtk_plug_unrealize;
   widget_class->key_press_event = gtk_plug_key_press_event;
 
- widget_class->focus = gtk_plug_focus;
+  widget_class->show = gtk_plug_show;
+  widget_class->hide = gtk_plug_hide;
+  widget_class->map = gtk_plug_map;
+  widget_class->unmap = gtk_plug_unmap;
+  widget_class->size_allocate = gtk_plug_size_allocate;
+
+  widget_class->focus = gtk_plug_focus;
+
+  container_class->check_resize = gtk_plug_check_resize;
 
   window_class->set_focus = gtk_plug_set_focus;
 #if 0  
@@ -121,18 +142,79 @@ gtk_plug_init (GtkPlug *plug)
   window->auto_shrink = TRUE;
 }
 
+static void
+gtk_plug_set_is_child (GtkPlug  *plug,
+		       gboolean  is_child)
+{
+  if (is_child)
+    {
+      GTK_WIDGET_UNSET_FLAGS (plug, GTK_TOPLEVEL);
+      GTK_PRIVATE_UNSET_FLAG (plug, GTK_ANCHORED);
+      gtk_container_set_resize_mode (GTK_CONTAINER (plug), GTK_RESIZE_PARENT);
+    }
+}
+
+/**
+ * _gtk_plug_add_to_socket:
+ * @plug: a #GtkPlug
+ * @socket: a #GtkSocket
+ * 
+ * Add a plug to a socket within the same application.
+ **/
 void
-gtk_plug_construct (GtkPlug *plug, GdkNativeWindow socket_id)
+_gtk_plug_add_to_socket (GtkPlug   *plug,
+			 GtkSocket *socket)
+{
+  GtkWidget *widget = GTK_WIDGET (plug);
+  
+  g_return_if_fail (GTK_IS_PLUG (plug));
+  g_return_if_fail (GTK_IS_SOCKET (socket));
+  g_return_if_fail (GTK_WIDGET_REALIZED (socket));
+
+  gtk_plug_set_is_child (plug, TRUE);
+  plug->same_app = TRUE;
+  socket->plug_widget = widget;
+
+  gtk_widget_set_parent (widget, GTK_WIDGET (socket));
+
+  if (GTK_WIDGET_REALIZED (widget))
+    gdk_window_reparent (widget->window, plug->socket_window, 0, 0);
+  else
+    gtk_widget_realize (widget);
+
+  if (GTK_WIDGET_VISIBLE (socket) && GTK_WIDGET_VISIBLE (widget))
+    {
+      if (GTK_WIDGET_MAPPED (socket))
+	gtk_widget_map (widget);
+
+      gtk_widget_queue_resize (widget);
+    }
+}
+
+void
+gtk_plug_construct (GtkPlug         *plug,
+		    GdkNativeWindow  socket_id)
 {
   if (socket_id)
     {
-      plug->socket_window = gdk_window_lookup (socket_id);
-      plug->same_app = TRUE;
+      gpointer user_data = NULL;
 
-      if (plug->socket_window == NULL)
+      plug->socket_window = gdk_window_lookup (socket_id);
+
+      if (plug->socket_window)
+	gdk_window_get_user_data (plug->socket_window, &user_data);
+      else
+	plug->socket_window = gdk_window_foreign_new (socket_id);
+
+      if (user_data)
 	{
-	  plug->socket_window = gdk_window_foreign_new (socket_id);
-	  plug->same_app = FALSE;
+	  if (GTK_IS_SOCKET (user_data))
+	    _gtk_plug_add_to_socket (plug, user_data);
+	  else
+	    {
+	      g_warning (G_STRLOC "Can't create GtkPlug as child of non-GtkSocket");
+	      plug->socket_window = NULL;
+	    }
 	}
     }
 }
@@ -164,11 +246,14 @@ gtk_plug_unrealize (GtkWidget *widget)
       plug->socket_window = NULL;
     }
 
-  if (plug->modality_window)
-    handle_modality_off (plug);
+  if (!plug->same_app)
+    {
+      if (plug->modality_window)
+	handle_modality_off (plug);
 
-  gtk_window_group_remove_window (plug->modality_group, GTK_WINDOW (plug));
-  g_object_unref (plug->modality_group);
+      gtk_window_group_remove_window (plug->modality_group, GTK_WINDOW (plug));
+      g_object_unref (plug->modality_group);
+    }
   
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
@@ -213,29 +298,132 @@ gtk_plug_realize (GtkWidget *widget)
   attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
 
-  gdk_error_trap_push ();
-  widget->window = gdk_window_new (plug->socket_window, 
-				   &attributes, attributes_mask);
-  gdk_flush ();
-  if (gdk_error_trap_pop ()) /* Uh-oh */
+  if (GTK_WIDGET_TOPLEVEL (widget))
     {
       gdk_error_trap_push ();
-      gdk_window_destroy (widget->window);
+      widget->window = gdk_window_new (plug->socket_window, 
+				       &attributes, attributes_mask);
       gdk_flush ();
-      gdk_error_trap_pop ();
-      widget->window = gdk_window_new (NULL, &attributes, attributes_mask);
+      if (gdk_error_trap_pop ()) /* Uh-oh */
+	{
+	  gdk_error_trap_push ();
+	  gdk_window_destroy (widget->window);
+	  gdk_flush ();
+	  gdk_error_trap_pop ();
+	  widget->window = gdk_window_new (NULL, &attributes, attributes_mask);
+	}
+
+      GDK_WINDOW_TYPE (widget->window) = GDK_WINDOW_TOPLEVEL;
+      gdk_window_add_filter (widget->window, gtk_plug_filter_func, widget);
+
+      plug->modality_group = gtk_window_group_new ();
+      gtk_window_group_add_window (plug->modality_group, window);
+      
+      xembed_set_info (widget->window, 0);
     }
+  else
+    widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);      
   
-  GDK_WINDOW_TYPE (widget->window) = GDK_WINDOW_TOPLEVEL;
   gdk_window_set_user_data (widget->window, window);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+}
 
-  gdk_window_add_filter (widget->window, gtk_plug_filter_func, widget);
+static void
+gtk_plug_show (GtkWidget *widget)
+{
+  if (GTK_WIDGET_TOPLEVEL (widget))
+    GTK_WIDGET_CLASS (parent_class)->show (widget);
+  else
+    GTK_WIDGET_CLASS (bin_class)->show (widget);
+}
 
-  plug->modality_group = gtk_window_group_new ();
-  gtk_window_group_add_window (plug->modality_group, window);
+static void
+gtk_plug_hide (GtkWidget *widget)
+{
+  if (GTK_WIDGET_TOPLEVEL (widget))
+    GTK_WIDGET_CLASS (parent_class)->hide (widget);
+  else
+    GTK_WIDGET_CLASS (bin_class)->hide (widget);
+}
+
+/* From gdkinternals.h */
+void gdk_synthesize_window_state (GdkWindow     *window,
+                                  GdkWindowState unset_flags,
+                                  GdkWindowState set_flags);
+
+static void
+gtk_plug_map (GtkWidget *widget)
+{
+  if (GTK_WIDGET_TOPLEVEL (widget))
+    {
+      GtkBin *bin = GTK_BIN (widget);
+      
+      GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+
+      if (bin->child &&
+	  GTK_WIDGET_VISIBLE (bin->child) &&
+	  !GTK_WIDGET_MAPPED (bin->child))
+	gtk_widget_map (bin->child);
+
+      xembed_set_info (widget->window, XEMBED_MAPPED);
+      
+      gdk_synthesize_window_state (widget->window,
+				   GDK_WINDOW_STATE_WITHDRAWN,
+				   0);
+    }
+  else
+    GTK_WIDGET_CLASS (bin_class)->map (widget);
+}
+
+static void
+gtk_plug_unmap (GtkWidget *widget)
+{
+  if (GTK_WIDGET_TOPLEVEL (widget))
+    {
+      GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+
+      gdk_window_hide (widget->window);
+      xembed_set_info (widget->window, 0);
+      
+      gdk_synthesize_window_state (widget->window,
+				   0,
+				   GDK_WINDOW_STATE_WITHDRAWN);
+    }
+  else
+    GTK_WIDGET_CLASS (bin_class)->unmap (widget);
+}
+
+static void
+gtk_plug_size_allocate (GtkWidget     *widget,
+			GtkAllocation *allocation)
+{
+  if (GTK_WIDGET_TOPLEVEL (widget))
+    GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
+  else
+    {
+      GtkBin *bin = GTK_BIN (widget);
+
+      if (GTK_WIDGET_REALIZED (widget))
+	gdk_window_move_resize (widget->window,
+				allocation->x, allocation->y,
+				allocation->width, allocation->height);
+
+      if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+	{
+	  GtkAllocation child_allocation;
+	  
+	  child_allocation.x = child_allocation.y = GTK_CONTAINER (widget)->border_width;
+	  child_allocation.width =
+	    MAX (1, (gint)allocation->width - child_allocation.x * 2);
+	  child_allocation.height =
+	    MAX (1, (gint)allocation->height - child_allocation.y * 2);
+	  
+	  gtk_widget_size_allocate (bin->child, &child_allocation);
+	}
+      
+    }
 }
 
 static gboolean
@@ -519,6 +707,15 @@ gtk_plug_focus (GtkWidget        *widget,
 }
 
 static void
+gtk_plug_check_resize (GtkContainer *container)
+{
+  if (GTK_WIDGET_TOPLEVEL (container))
+    GTK_CONTAINER_CLASS (parent_class)->check_resize (container);
+  else
+    GTK_CONTAINER_CLASS (bin_class)->check_resize (container);
+}
+
+static void
 send_xembed_message (GtkPlug *plug,
 		     glong      message,
 		     glong      detail,
@@ -590,6 +787,25 @@ handle_modality_off (GtkPlug *plug)
       gtk_widget_destroy (plug->modality_window);
       plug->modality_window = NULL;
     }
+}
+
+static void
+xembed_set_info (GdkWindow     *gdk_window,
+		 unsigned long  flags)
+{
+  Display *display = GDK_WINDOW_XDISPLAY (gdk_window);
+  Window window = GDK_WINDOW_XWINDOW (gdk_window);
+  unsigned long buffer[2];
+  
+  Atom xembed_info_atom = gdk_atom_intern ("_XEMBED_INFO", FALSE);
+
+  buffer[1] = 0;		/* Protocol version */
+  buffer[1] = flags;
+
+  XChangeProperty (display, window,
+		   xembed_info_atom, xembed_info_atom, 32,
+		   PropModeReplace,
+		   (unsigned char *)buffer, 2);
 }
 
 static void

@@ -87,6 +87,14 @@ testtext_SOURCES =	\
 	prop-editor.c	\
 	testtext.c 
 
+testsocket_SOURCES =    	\
+	testsocket.c		\
+	testsocket_common.c
+
+testsocket_child_SOURCES =    	\
+	testsocket_child.c	\
+	testsocket_common.c
+
 EXTRA_DIST += @STRIP_BEGIN@ 	\
 	prop-editor.h		\
 	testgtk.1 		\

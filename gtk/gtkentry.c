@@ -2022,17 +2022,21 @@ static void
 gtk_entry_real_activate (GtkEntry *entry)
 {
   GtkWindow *window;
+  GtkWidget *toplevel;
   GtkWidget *widget;
 
   widget = GTK_WIDGET (entry);
 
   if (entry->activates_default)
     {
-      window = (GtkWindow *) gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
+      toplevel = gtk_widget_get_toplevel (widget);
+      if (toplevel && GTK_IS_WINDOW (toplevel))
+	{
+	  window = GTK_WINDOW (toplevel);
       
-      if (window &&
-          window->default_widget != widget)
-        gtk_window_activate_default (window);
+	  if (window && window->default_widget != widget)
+	    gtk_window_activate_default (window);
+	}
     }
 }
 

@@ -66,18 +66,6 @@ _gdk_init_input_core (void)
   gdk_core_pointer->keys = NULL;
 }
 
-static void
-gdk_device_finalize (GObject *object)
-{
-  g_error ("A GdkDevice object was finalized. This should not happen");
-}
-
-static void
-gdk_device_class_init (GObjectClass *class)
-{
-  class->finalize = gdk_device_finalize;
-}
-
 GType
 gdk_device_get_type (void)
 {
@@ -90,7 +78,7 @@ gdk_device_get_type (void)
         sizeof (GdkDeviceClass),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_device_class_init,
+        (GClassInitFunc) NULL,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
         sizeof (GdkDevicePrivate),

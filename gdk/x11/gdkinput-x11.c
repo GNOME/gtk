@@ -96,7 +96,7 @@ gdk_input_device_new (XDeviceInfo *device, gint include_core)
   XAnyClassPtr class;
   gint i,j;
 
-  gdkdev = g_object_new (GDK_TYPE_DEVICE_PRIVATE, 1);
+  gdkdev = g_object_new (GDK_TYPE_DEVICE, NULL);
 
   gdkdev->deviceid = device->id;
   if (device->name[0])
