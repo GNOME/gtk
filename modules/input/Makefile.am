@@ -82,7 +82,7 @@ im_ime_la_SOURCES = \
 	gtkimcontextime.h \
 	imime.c 	  \
 	imm-extra.h
-im_ime_la_LIBADD = $(LDADDS)
+im_ime_la_LIBADD = -limm32 $(LDADDS)
 if PLATFORM_WIN32
 IM_IME_MODULE=im-ime.la 
 endif

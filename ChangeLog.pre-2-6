@@ -1,3 +1,10 @@
+2004-08-30  Tor Lillqvist  <tml@iki.fi>
+
+	* modules/input/Makefile.am (im_ime_la_LIBADD): Link with -limm32.
+
+	* modules/input/gtkimcontextime.c: Use quotes in #includes, to
+	find headers when building inside GTK+ sources.
+
 2004-08-27  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdnd-win32.c (GdkDragContextPrivateWin32): Add

@@ -30,9 +30,9 @@
 
 #include "imm-extra.h"
 
-#include <gdk/gdkwin32.h>
-#include <gdk/gdkkeysyms.h>
-#include <gtk/gtkwidget.h>
+#include "gdk/win32/gdkwin32.h"
+#include "gdk/gdkkeysyms.h"
+#include "gtk/gtkwidget.h"
 
 /* avoid warning */
 #ifdef STRICT
