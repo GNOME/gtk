@@ -621,6 +621,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       x = widget->allocation.x + indicator_spacing + GTK_CONTAINER (widget)->border_width;
       y = widget->allocation.y + (widget->allocation.height - indicator_size) / 2;
       
+      state_type = GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE ? GTK_STATE_NORMAL : GTK_WIDGET_STATE (widget);
       if (GTK_TOGGLE_BUTTON (widget)->active)
 	shadow_type = GTK_SHADOW_IN;
       else
