@@ -1,3 +1,28 @@
+2004-12-02  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-4:
+
+	Fix #159656:
+
+	* gtk/gtkfilechooserdefault.c (PendingOp): New enumeration for the
+	pending operation to perform when finishing loading a folder.
+	(struct _GtkFileChooserDefault): New fields 'pending_op' and
+	'pending_select_path'.
+	(pending_op_queue): New utility function.
+	(pending_op_process): New utility function.
+	(gtk_file_chooser_default_select_path): Don't select the path
+	immediately; delay it until the folder is finished loading.
+	(browse_files_model_finished_loading_cb): Process the pending
+	operation.
+	(browse_files_select_first_row): New utility function.
+	(gtk_file_chooser_default_initial_focus): Use
+	browse_files_select_first_row().
+	(gtk_file_chooser_default_should_respond): Queue an operation to
+	select the first row once we load the child folder.
+	(up_folder_handler): Queue an operation to select the current
+	folder once we load the parent folder.
+	(gtk_file_chooser_default_finalize): Free the pending_select_path.
+
 Thu Dec  2 13:18:34 2004  Manish Singh  <yosh@gimp.org>
 
 	* gdk/x11/gdkgc-x11.c (make_fg_tile_picture): Make sure we always

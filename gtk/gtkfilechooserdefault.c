@@ -96,6 +96,12 @@ struct _GtkFileChooserDefaultClass
   GtkVBoxClass parent_class;
 };
 
+typedef enum {
+  PENDING_OP_NONE,
+  PENDING_OP_SELECT_PATH,
+  PENDING_OP_SELECT_FIRST
+} PendingOp;
+
 struct _GtkFileChooserDefault
 {
   GtkVBox parent_instance;
@@ -141,6 +147,9 @@ struct _GtkFileChooserDefault
 
   LoadState load_state;
   guint load_timeout_id;
+
+  PendingOp pending_op;
+  GtkFilePath *pending_select_path;
 
   GtkFileFilter *current_filter;
   GSList *filters;
@@ -387,6 +396,11 @@ static void list_row_activated         (GtkTreeView           *tree_view,
 					GtkTreePath           *path,
 					GtkTreeViewColumn     *column,
 					GtkFileChooserDefault *impl);
+
+static void select_func (GtkFileSystemModel *model,
+			 GtkTreePath        *path,
+			 GtkTreeIter        *iter,
+			 gpointer            user_data);
 
 static void path_bar_clicked           (GtkPathBar            *path_bar,
 					GtkFilePath           *file_path,
@@ -651,6 +665,8 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->show_hidden = FALSE;
   impl->icon_size = FALLBACK_ICON_SIZE;
   impl->load_state = LOAD_FINISHED;
+  impl->pending_op = PENDING_OP_NONE;
+  impl->pending_select_path = NULL;
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (impl), TRUE);
   gtk_box_set_spacing (GTK_BOX (impl), 12);
@@ -748,6 +764,12 @@ gtk_file_chooser_default_finalize (GObject *object)
 
   if (impl->preview_path)
     gtk_file_path_free (impl->preview_path);
+
+  if (impl->pending_op == PENDING_OP_SELECT_PATH)
+    {
+      g_assert (impl->pending_select_path != NULL);
+      gtk_file_path_free (impl->pending_select_path);
+    }
 
   load_remove_timer (impl);
 
@@ -4209,6 +4231,71 @@ load_remove_timer (GtkFileChooserDefault *impl)
     g_assert (impl->load_state == LOAD_FINISHED);
 }
 
+/* Queues a pending operation relative to selecting a file when the current
+ * folder finishes loading.
+ */
+static void
+pending_op_queue (GtkFileChooserDefault *impl, PendingOp op, const GtkFilePath *path)
+{
+  if (impl->pending_op == PENDING_OP_SELECT_PATH)
+    {
+      g_assert (impl->pending_select_path != NULL);
+      gtk_file_path_free (impl->pending_select_path);
+
+      impl->pending_select_path = NULL;
+    }
+
+  impl->pending_op = op;
+
+  if (impl->pending_op == PENDING_OP_SELECT_PATH)
+    {
+      g_assert (path != NULL);
+      impl->pending_select_path = gtk_file_path_copy (path);
+    }
+}
+
+/* Selects the first row in the file list */
+static void
+browse_files_select_first_row (GtkFileChooserDefault *impl)
+{
+  GtkTreePath *path;
+
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view), path, NULL, FALSE);
+  gtk_tree_path_free (path);
+}
+
+/* Processes the pending operation when a folder is finished loading */
+static void
+pending_op_process (GtkFileChooserDefault *impl)
+{
+  switch (impl->pending_op)
+    {
+    case PENDING_OP_NONE:
+      break;
+
+    case PENDING_OP_SELECT_PATH:
+      g_assert (impl->pending_select_path != NULL);
+
+      _gtk_file_system_model_path_do (impl->browse_files_model, impl->pending_select_path, select_func, impl);
+      gtk_file_path_free (impl->pending_select_path);
+      impl->pending_select_path = NULL;
+      impl->pending_op = PENDING_OP_NONE;
+      break;
+
+    case PENDING_OP_SELECT_FIRST:
+      browse_files_select_first_row (impl);
+      impl->pending_op = PENDING_OP_NONE;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  g_assert (impl->pending_op == PENDING_OP_NONE);
+  g_assert (impl->pending_select_path == NULL);
+}
+
 /* Callback used when the file system model finishes loading */
 static void
 browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
@@ -4222,6 +4309,7 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
   else
     g_assert (impl->load_state == LOAD_FINISHED);
 
+  pending_op_process (impl);
   set_busy_cursor (impl, FALSE);
 }
 
@@ -4449,15 +4537,8 @@ gtk_file_chooser_default_select_path (GtkFileChooser    *chooser,
       if (is_hidden)
 	g_object_set (impl, "show-hidden", TRUE, NULL);
 
-      result = _gtk_file_system_model_path_do (impl->browse_files_model, path,
-					       select_func, impl);
-      if (!result)
-	g_set_error (error,
-		     GTK_FILE_CHOOSER_ERROR,
-		     GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-		     _("Could not find the path"));
-
-      return result;
+      pending_op_queue (impl, PENDING_OP_SELECT_PATH, path);
+      return TRUE;
     }
 
   g_assert_not_reached ();
@@ -5057,6 +5138,7 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
       if (num_selected == 1 && all_folders)
 	{
 	  switch_to_selected_folder (impl);
+	  pending_op_queue (impl, PENDING_OP_SELECT_FIRST, NULL);
 	  return FALSE;
 	}
       else
@@ -5148,13 +5230,7 @@ gtk_file_chooser_default_initial_focus (GtkFileChooserEmbed *chooser_embed)
       || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
       if (impl->load_state == LOAD_FINISHED)
-	{
-	  GtkTreePath *path;
-
-	  path = gtk_tree_path_new_from_indices (0, -1);
-	  gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view), path, NULL, FALSE);
-	  gtk_tree_path_free (path);
-	}
+	browse_files_select_first_row (impl);
 
       widget = impl->browse_files_tree_view;
     }
@@ -5977,6 +6053,7 @@ location_popup_handler (GtkFileChooserDefault *impl,
 static void
 up_folder_handler (GtkFileChooserDefault *impl)
 {
+  pending_op_queue (impl, PENDING_OP_SELECT_PATH, impl->current_folder);
   _gtk_path_bar_up (GTK_PATH_BAR (impl->browse_path_bar));
 }
 
