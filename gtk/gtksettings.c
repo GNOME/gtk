@@ -358,11 +358,8 @@ gtk_settings_get_property (GObject     *object,
       
       g_value_init (&val, G_TYPE_STRING);
 
-      if (settings->property_values[property_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION)
-	{
-	  g_value_copy (&settings->property_values[property_id - 1].value, value);
-	}
-      else if (!gdk_screen_get_setting (settings->screen, pspec->name, &val))
+      if (settings->property_values[property_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION ||
+	  !gdk_screen_get_setting (settings->screen, pspec->name, &val))
         {
           g_value_copy (&settings->property_values[property_id - 1].value, value);
         }
