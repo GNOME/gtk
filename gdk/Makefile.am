@@ -1,6 +1,6 @@
 ## Makefile.am for gtk+/gdk
 
-SUBDIRS = $(gdktarget)
+SUBDIRS = . $(gdktarget)
 DIST_SUBDIRS = linux-fb win32 x11
 
 EXTRA_DIST =			\
@@ -214,6 +214,7 @@ endif
 
 #note: not gdkconfig.h
 BUILT_SOURCES =					\
+	gdkalias.h				\
 	gdkenumtypes.h				\
 	gdkenumtypes.c				\
 	gdkmarshalers.h 			\

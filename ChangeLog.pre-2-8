@@ -1,3 +1,7 @@
+2004-08-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/Makefile.am: Add gdkalias.h to BUILT_SOURCES.
+
 2004-08-09  Hans Breuer  <hans@breuer.org>
 
 	* gtk/makefile.msc.in : autogenerate gtk.def, cleanup
