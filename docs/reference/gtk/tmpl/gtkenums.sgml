@@ -134,13 +134,13 @@ widget.
 
 <!-- ##### ENUM GtkExpanderStyle ##### -->
 <para>
-
+Used to specify the style of the expanders drawn by a #GtkTreeView.
 </para>
 
-@GTK_EXPANDER_COLLAPSED: 
-@GTK_EXPANDER_SEMI_COLLAPSED: 
-@GTK_EXPANDER_SEMI_EXPANDED: 
-@GTK_EXPANDER_EXPANDED: 
+@GTK_EXPANDER_COLLAPSED: The style used for a collapsed subtree.
+@GTK_EXPANDER_SEMI_COLLAPSED: Intermediate style used during animation.
+@GTK_EXPANDER_SEMI_EXPANDED: Intermediate style used during animation.
+@GTK_EXPANDER_EXPANDED: The style used for an expanded subtree.
 
 <!-- ##### ENUM GtkIMPreeditStyle ##### -->
 <para>
@@ -183,12 +183,12 @@ Used for justifying the text inside a #GtkLabel widget. (See also
 
 <!-- ##### ENUM GtkMetricType ##### -->
 <para>
-
+Used to indicate which metric is used by a #GtkRuler.
 </para>
 
-@GTK_PIXELS: 
-@GTK_INCHES: 
-@GTK_CENTIMETERS: 
+@GTK_PIXELS: Pixels.
+@GTK_INCHES: Inches.
+@GTK_CENTIMETERS: Centimeters.
 
 <!-- ##### ENUM GtkMovementStep ##### -->
 <para>
@@ -208,11 +208,12 @@ Used for justifying the text inside a #GtkLabel widget. (See also
 
 <!-- ##### ENUM GtkOrientation ##### -->
 <para>
-
+Represents the orientation of widgets which can be switched between horizontal
+and vertical orientation on the fly, like #GtkToolbar.
 </para>
 
-@GTK_ORIENTATION_HORIZONTAL: 
-@GTK_ORIENTATION_VERTICAL: 
+@GTK_ORIENTATION_HORIZONTAL: The widget is in horizontal orientation.
+@GTK_ORIENTATION_VERTICAL: The widget is in vertical orientation.
 
 <!-- ##### ENUM GtkPackType ##### -->
 <para>
@@ -256,13 +257,15 @@ when all of a #GtkCList can not be seen.
 
 <!-- ##### ENUM GtkPositionType ##### -->
 <para>
-
+Describes which edge of a widget a certain feature is positioned at, e.g. the
+tabs of a #GtkNotebook, the handle of a #GtkHandleBox or the label of a 
+#GtkScale.
 </para>
 
-@GTK_POS_LEFT: 
-@GTK_POS_RIGHT: 
-@GTK_POS_TOP: 
-@GTK_POS_BOTTOM: 
+@GTK_POS_LEFT: The feature is at the left edge.
+@GTK_POS_RIGHT: The feature is at the right edge.
+@GTK_POS_TOP: The feature is at the top edge.
+@GTK_POS_BOTTOM: The feature is at the bottom edge.
 
 <!-- ##### ENUM GtkPreviewType ##### -->
 <para>
@@ -275,12 +278,12 @@ contains grayscale or red-green-blue data.
 
 <!-- ##### ENUM GtkReliefStyle ##### -->
 <para>
-
+Indicated the relief to be drawn around a #GtkButton.
 </para>
 
-@GTK_RELIEF_NORMAL: 
-@GTK_RELIEF_HALF: 
-@GTK_RELIEF_NONE: 
+@GTK_RELIEF_NORMAL: Draw a normal relief.
+@GTK_RELIEF_HALF: A half relief.
+@GTK_RELIEF_NONE: No relief.
 
 <!-- ##### ENUM GtkResizeMode ##### -->
 <para>
@@ -402,12 +405,12 @@ other, rather than vertically stacked
 
 <!-- ##### ENUM GtkVisibility ##### -->
 <para>
-
+Used by #GtkCList and #GtkCTree to indicate whether a row is visible.
 </para>
 
-@GTK_VISIBILITY_NONE: 
-@GTK_VISIBILITY_PARTIAL: 
-@GTK_VISIBILITY_FULL: 
+@GTK_VISIBILITY_NONE: The row is not visible.
+@GTK_VISIBILITY_PARTIAL: The row is partially visible.
+@GTK_VISIBILITY_FULL: The row is fully visible.
 
 <!-- ##### ENUM GtkWindowPosition ##### -->
 <para>

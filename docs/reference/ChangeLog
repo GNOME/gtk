@@ -1,5 +1,13 @@
 2003-04-13  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/tmpl/gtkenums.sgml: Additions.
+
+	* gtk/tmpl/gtkvruler.sgml: 
+	* gtk/tmpl/gtkhruler.sgml: 
+	* gtk/tmpl/gtkgamma.sgml: 
+	* gtk/tmpl/gtkcurve.sgml: 
+	* gtk/tmpl/gtkruler.sgml: Fix some typos and add some markup.
+
 	* gtk/gtk-sections.txt: Add a bunch of new functions.
 
 2003-04-09  Matthias Clasen  <maclas@gmx.de>

@@ -5,8 +5,9 @@ GtkRuler
 Base class for horizontal or vertical rulers
 
 <!-- ##### SECTION Long_Description ##### -->
+<note>
 <para>
- NOTE this widget is considered too specialized/little-used for
+ This widget is considered too specialized/little-used for
  GTK+, and will in the future be moved to some other package.  If
  your application needs this widget, feel free to use it, as the
  widget does work and is useful in some applications; it's just not
@@ -14,11 +15,12 @@ Base class for horizontal or vertical rulers
  the widget, and it will eventually move out of the GTK+
  distribution.
 </para>
+</note>
 <para>
 The GTKRuler widget is a base class for horizontal and vertical rulers. Rulers
 are used to show the mouse pointer's location in a window. The ruler can either
 be horizontal or vertical on the window. Within the ruler a small triangle
-indicates the location of the mouse relative to the horixontal or vertical
+indicates the location of the mouse relative to the horizontal or vertical
 ruler. See #GtkHRuler to learn how to create a new horizontal ruler. See
 #GtkVRuler to learn how to create a new vertical ruler.
 </para>
