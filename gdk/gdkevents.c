@@ -1000,10 +1000,8 @@ gdk_event_get_type (void)
   
   if (our_type == 0)
     our_type = g_boxed_type_register_static ("GdkEvent",
-					     NULL,
 					     (GBoxedCopyFunc)gdk_event_copy,
-					     (GBoxedFreeFunc)gdk_event_free,
-					     FALSE);
+					     (GBoxedFreeFunc)gdk_event_free);
   return our_type;
 }
 

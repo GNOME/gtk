@@ -169,25 +169,10 @@ gtk_type_init (GTypeDebugFlags debug_flags)
 	    type_id = g_flags_register_static (builtin_info[i].type_name, builtin_info[i].pointer1);
 	  else if (builtin_info[i].parent == GTK_TYPE_BOXED)
 	    {
-	      static const gchar *copy_types[] = {
-		"GtkSelectionData", "GtkBorder", "GtkTextIter", "PangoTabArray",
-		"PangoFontDescription", "GtkTreeIter", "GtkTreePath", "GtkRequisition"
-	      };
-	      gboolean ref_counted = TRUE;
-	      guint j;
-
-	      for (j = 0; j < sizeof (copy_types) / sizeof (copy_types[0]); j++)
-		if (strcmp (copy_types[j], builtin_info[i].type_name) == 0)
-		  {
-		    ref_counted = FALSE;
-		    break;
-		  }
 	      if (builtin_info[i].pointer1 && builtin_info[i].pointer2)
 		type_id = g_boxed_type_register_static (builtin_info[i].type_name,
-							NULL,
 							builtin_info[i].pointer1,
-							builtin_info[i].pointer2,
-							ref_counted);
+							builtin_info[i].pointer2);
 	      else
 		type_id = g_type_register_static (GTK_TYPE_BOXED, builtin_info[i].type_name, &tinfo, 0);
 	    }

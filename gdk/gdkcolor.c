@@ -224,9 +224,7 @@ gdk_color_get_type (void)
   
   if (our_type == 0)
     our_type = g_boxed_type_register_static ("GdkColor",
-					     NULL,
 					     (GBoxedCopyFunc)gdk_color_copy,
-					     (GBoxedFreeFunc)gdk_color_free,
-					     FALSE);
+					     (GBoxedFreeFunc)gdk_color_free);
   return our_type;
 }

@@ -1,3 +1,13 @@
+2001-09-10  Alex Larsson  <alexl@redhat.com>
+
+	* demos/gtk-demo/stock_browser.c:
+	* gdk/gdkcolor.c:
+	* gdk/gdkcursor.c:
+	* gdk/gdkevents.c:
+	* gdk/gdkrectangle.c:
+	* gtk/gtktypeutils.c:
+	Update to use the new g_boxed_type_register_static API.
+
 2001-09-10  Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtktreestore.c:

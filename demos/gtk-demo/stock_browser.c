@@ -65,10 +65,8 @@ stock_item_info_get_type (void)
   
   if (our_type == 0)
     our_type = g_boxed_type_register_static ("StockItemInfo",
-					     NULL,
                                              (GBoxedCopyFunc) stock_item_info_copy,
-                                             (GBoxedFreeFunc) stock_item_info_free,
-					     FALSE);
+                                             (GBoxedFreeFunc) stock_item_info_free);
 
   return our_type;
 }
