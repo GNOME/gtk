@@ -714,7 +714,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	pango_attr_list_unref (celltext->extra_attrs);
 
       celltext->extra_attrs = g_value_get_boxed (value);
-      pango_attr_list_ref (celltext->extra_attrs);
+      if (celltext->extra_attrs)
+        pango_attr_list_ref (celltext->extra_attrs);
       break;
     case PROP_MARKUP:
       {
