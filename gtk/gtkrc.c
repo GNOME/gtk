@@ -48,11 +48,6 @@
 #define lstat stat
 #endif
 
-#ifdef G_OS_WIN32
-#include <windows.h>		/* For GetWindowsDirectory */
-#include <io.h>
-#endif
-
 #include <glib.h>
 #include "gdkconfig.h"
 
@@ -61,6 +56,11 @@
 #include "gtkthemes.h"
 #include "gtkintl.h"
 #include "gtkiconfactory.h"
+
+#ifdef G_OS_WIN32
+#include <windows.h>		/* For GetWindowsDirectory */
+#include <io.h>
+#endif
 
 typedef struct _GtkRcSet    GtkRcSet;
 typedef struct _GtkRcNode   GtkRcNode;
@@ -353,12 +353,16 @@ gtk_rc_get_im_module_file (void)
   if (!result)
     {
       if (im_module_file)
-	result = im_module_file;
+	result = g_strdup (im_module_file);
       else
-	result = GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtk.immodules";
+#ifndef G_OS_WIN32
+	result = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtk.immodules");
+#else
+	result = g_strdup_printf ("%s\\gtk.immodules", gtk_win32_get_installation_directory ());
+#endif
     }
 
-  return g_strdup (result);
+  return result;
 }
 
 gchar *

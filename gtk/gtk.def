@@ -474,8 +474,6 @@ EXPORTS
 	gtk_drawing_area_get_type
 	gtk_drawing_area_new
 	gtk_drawing_area_size
-	gtk_editable_changed
-	gtk_editable_claim_selection
 	gtk_editable_copy_clipboard
 	gtk_editable_cut_clipboard
 	gtk_editable_delete_selection
@@ -496,6 +494,7 @@ EXPORTS
 	gtk_entry_prepend_text
 	gtk_entry_select_region
 	gtk_entry_set_editable
+	gtk_entry_set_invisible_char
 	gtk_entry_set_max_length
 	gtk_entry_set_position
 	gtk_entry_set_text
@@ -872,6 +871,9 @@ EXPORTS
 	gtk_object_unref
 	gtk_object_weakref
 	gtk_object_weakunref
+	gtk_old_editable_changed
+	gtk_old_editable_claim_selection
+	gtk_old_editable_get_type
 	gtk_option_menu_get_history
 	gtk_option_menu_get_menu
 	gtk_option_menu_get_type
@@ -1209,15 +1211,32 @@ EXPORTS
 	gtk_text_unknown_char_utf8
 	gtk_text_view_buffer_to_window_coords
 	gtk_text_view_get_buffer
+	gtk_text_view_get_editable
+	gtk_text_view_get_indent
+	gtk_text_view_get_justification
+	gtk_text_view_get_left_margin
 	gtk_text_view_get_line_at_y
 	gtk_text_view_get_line_yrange
+	gtk_text_view_get_right_margin
 	gtk_text_view_get_type
+	gtk_text_view_get_pixels_above_lines
+	gtk_text_view_get_pixels_below_lines
+	gtk_text_view_get_pixels_inside_wrap
+	gtk_text_view_get_tabs
 	gtk_text_view_get_window
 	gtk_text_view_get_wrap_mode
 	gtk_text_view_new_with_buffer
 	gtk_text_view_set_border_window_size
 	gtk_text_view_set_cursor_visible
 	gtk_text_view_set_editable
+	gtk_text_view_set_indent
+	gtk_text_view_set_justification
+	gtk_text_view_set_left_margin
+	gtk_text_view_set_pixels_above_lines
+	gtk_text_view_set_pixels_below_lines
+	gtk_text_view_set_pixels_inside_wrap
+	gtk_text_view_set_right_margin
+	gtk_text_view_set_tabs
 	gtk_text_view_set_wrap_mode
 	gtk_text_view_window_to_buffer_coords
 	gtk_timeout_add

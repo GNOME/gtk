@@ -99,6 +99,7 @@ gtk_OBJECTS = 					\
 	gtkimage.obj				\
 	gtkimcontext.obj			\
 	gtkimcontextsimple.obj			\
+	gtkimmodule.obj				\
 	gtkimmulticontext.obj			\
 	gtkinputdialog.obj			\
 	gtkinvisible.obj			\
@@ -118,6 +119,7 @@ gtk_OBJECTS = 					\
 	gtkmisc.obj				\
 	gtknotebook.obj				\
 	gtkobject.obj				\
+	gtkoldeditable.obj			\
 	gtkoptionmenu.obj			\
 	gtkpacker.obj				\
 	gtkpaned.obj				\

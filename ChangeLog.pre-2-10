@@ -1,5 +1,14 @@
 2000-11-15  Tor Lillqvist  <tml@iki.fi>
 
+	* gtk/makefile.{mingw,msc}.in (gtk_OBJECTS): Add new objects.
+
+	* gtk/gtk.def: Update.
+
+	* gtk/gtkrc.c: Can't check for G_OS_WIN32 until glib.h has been
+	included.
+	(gtk_rc_get_im_module_file): Use run-time installation directory
+	on Win32.
+
 	* gdk/win32/rc/gdk.rc: Remove.
 	* gdk/win32/rc/gdk.rc.in: New file.
 	* gdk/win32/rc/Makefile.am: New file
