@@ -1,5 +1,10 @@
 2004-09-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Check for mallinfo.
+
+	* tests/testtreemodel.c: Only include malloc.h if HAVE_MALLINFO
+	is defined.  (#153168, Darren Creutz)
+
 	* gtk/gtkactiongroup.c: Fix typos in signal docs.  (#153224,
 	John Finlay)
 
