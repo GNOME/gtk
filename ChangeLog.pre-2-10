@@ -1,3 +1,8 @@
+2002-01-23  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_delete_entries): Make
+	it work for paths with underline accelerators. (#69247)
+
 Wed Jan 23 15:12:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_state_changed): 
