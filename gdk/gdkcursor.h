@@ -7,6 +7,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define GDK_TYPE_CURSOR (gdk_cursor_get_type ())
+
 /* Cursor types.
  */
 typedef enum
@@ -24,6 +26,9 @@ struct _GdkCursor
 
 /* Cursors
  */
+
+GType      gdk_cursor_get_type           (void);
+
 GdkCursor* gdk_cursor_new		 (GdkCursorType	   cursor_type);
 GdkCursor* gdk_cursor_new_from_pixmap	 (GdkPixmap	  *source,
 					  GdkPixmap	  *mask,

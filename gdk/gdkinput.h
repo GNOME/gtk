@@ -7,6 +7,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define GDK_TYPE_DEVICE (gdk_device_get_type ())
+
 typedef struct _GdkDeviceKey	    GdkDeviceKey;
 typedef struct _GdkDeviceAxis	    GdkDeviceAxis;
 typedef struct _GdkDevice	    GdkDevice;
@@ -85,6 +87,13 @@ struct _GdkTimeCoord
   guint32 time;
   gdouble axes[GDK_MAX_TIMECOORD_AXES];
 };
+
+GType          gdk_device_get_type      (void);
+/* these two are no ops provided for the boxed type code */
+/* XXXX do they need to be exposed as public APIs at all? */
+GdkDevice     *gdk_device_ref           (GdkDevice *device);
+void           gdk_device_unref         (GdkDevice *device);
+
 
 /* Returns a list of GdkDevice * */	  
 GList *        gdk_devices_list         (void);

@@ -1,3 +1,13 @@
+2001-06-29  James Henstridge  <james@daa.com.au>
+
+	The following changes correspond to bug #56812
+
+	* gdk/gdkinput.h, gdk/gdkevents.c (GDK_TYPE_DEVICE): register type
+	code for GdkDevice.
+
+	* gdk/gdkcursor.[ch] (GDK_TYPE_CURSOR): register type code for
+	GdkCursor.
+
 2001-06-19  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_show_unraised): new function

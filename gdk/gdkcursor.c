@@ -27,6 +27,20 @@
 #include "gdkcursor.h"
 #include "gdkinternals.h"
 
+GType
+gdk_cursor_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GdkCursor",
+					     NULL,
+					     (GBoxedCopyFunc)gdk_cursor_ref,
+					     (GBoxedFreeFunc)gdk_cursor_unref,
+					     TRUE);
+  return our_type;
+}
+
 /**
  * gdk_cursor_ref:
  * @cursor: a #GdkCursor
