@@ -155,8 +155,10 @@ gdk_keymap_get_for_display() instead </para></caution>
 @keyval: 
 @effective_group: 
 @level: 
-@unused_modifiers: 
+@consumed_modifiers: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@unused_modifiers: 
 
 
 <!-- ##### FUNCTION gdk_keymap_get_entries_for_keyval ##### -->

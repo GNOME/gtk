@@ -189,11 +189,11 @@ gtk_dial_set_adjustment (GtkDial      *dial,
   g_object_ref (GTK_OBJECT (dial->adjustment));
 
   g_signal_connect (GTK_OBJECT (adjustment), "changed",
-		      GTK_SIGNAL_FUNC (gtk_dial_adjustment_changed),
-		      (gpointer) dial);
+		    GTK_SIGNAL_FUNC (gtk_dial_adjustment_changed),
+		    (gpointer) dial);
   g_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-		      GTK_SIGNAL_FUNC (gtk_dial_adjustment_value_changed),
-		      (gpointer) dial);
+		    GTK_SIGNAL_FUNC (gtk_dial_adjustment_value_changed),
+		    (gpointer) dial);
 
   dial->old_value = adjustment->value;
   dial->old_lower = adjustment->lower;
@@ -267,7 +267,7 @@ gtk_dial_size_allocate (GtkWidget     *widget,
 			      allocation->width, allocation->height);
 
     }
-  dial->radius = MIN(allocation->width,allocation->height) * 0.45;
+  dial->radius = MIN (allocation->width, allocation->height) * 0.45;
   dial->pointer_width = dial->radius / 5;
 }
 
@@ -299,16 +299,16 @@ gtk_dial_expose (GtkWidget      *widget,
 			 widget->allocation.width,
 			 widget->allocation.height);
 */
-  xc = widget->allocation.width/2;
-  yc = widget->allocation.height/2;
+  xc = widget->allocation.width / 2;
+  yc = widget->allocation.height / 2;
 
   upper = dial->adjustment->upper;
   lower = dial->adjustment->lower;
 
   /* Erase old pointer */
 
-  s = sin(dial->last_angle);
-  c = cos(dial->last_angle);
+  s = sin (dial->last_angle);
+  c = cos (dial->last_angle);
   dial->last_angle = dial->angle;
 
   points[0].x = xc + s*dial->pointer_width/2;
@@ -342,7 +342,7 @@ gtk_dial_expose (GtkWidget      *widget,
                     points, 5,
                     FALSE);
 
-  g_object_unref(blankstyle);
+  g_object_unref (blankstyle);
 
 
   /* Draw ticks */
@@ -350,26 +350,26 @@ gtk_dial_expose (GtkWidget      *widget,
   if ((upper - lower) == 0)
     return FALSE;
 
-  increment = (100*M_PI)/(dial->radius*dial->radius);
+  increment = (100*M_PI) / (dial->radius*dial->radius);
 
   inc = (upper - lower);
 
-  while (inc < 100) inc *=10;
-  while (inc >= 1000) inc /=10;
+  while (inc < 100) inc *= 10;
+  while (inc >= 1000) inc /= 10;
   last = -1;
 
-  for (i=0; i<=inc; i++)
+  for (i = 0; i <= inc; i++)
     {
-      theta = ((gfloat)i*M_PI/(18*inc/24.) - M_PI/6.);
+      theta = ((gfloat)i*M_PI / (18*inc/24.) - M_PI/6.);
 
       if ((theta - last) < (increment))
 	continue;     
       last = theta;
 
-      s = sin(theta);
-      c = cos(theta);
+      s = sin (theta);
+      c = cos (theta);
 
-      tick_length = (i%(inc/10) == 0) ? dial->pointer_width : dial->pointer_width/2;
+      tick_length = (i%(inc/10) == 0) ? dial->pointer_width : dial->pointer_width / 2;
 
       gdk_draw_line (widget->window,
                      widget->style->fg_gc[widget->state],
@@ -381,8 +381,8 @@ gtk_dial_expose (GtkWidget      *widget,
 
   /* Draw pointer */
 
-  s = sin(dial->angle);
-  c = cos(dial->angle);
+  s = sin (dial->angle);
+  c = cos (dial->angle);
   dial->last_angle = dial->angle;
 
   points[0].x = xc + s*dial->pointer_width/2;
@@ -434,11 +434,11 @@ gtk_dial_button_press (GtkWidget      *widget,
   dx = event->x - widget->allocation.width / 2;
   dy = widget->allocation.height / 2 - event->y;
   
-  s = sin(dial->angle);
-  c = cos(dial->angle);
+  s = sin (dial->angle);
+  c = cos (dial->angle);
   
   d_parallel = s*dy + c*dx;
-  d_perpendicular = fabs(s*dx - c*dy);
+  d_perpendicular = fabs (s*dx - c*dy);
   
   if (!dial->button &&
       (d_perpendicular < dial->pointer_width/2) &&

@@ -450,7 +450,7 @@ as parameter to your function:
 <programlisting>
 static void button_clicked_int (GtkButton* button, gpointer func_data)
 {
-	g_print ("button pressed: %d\n", GPOINTER_TO_INT (func_data));
+	g_print ("button pressed: %%d\n", GPOINTER_TO_INT (func_data));
 }
 
 /* By calling this function, you will make the g_print above

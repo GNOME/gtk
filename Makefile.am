@@ -113,9 +113,6 @@ EXTRA_DIST =			\
 	examples/spinbutton/Makefile  \
 	examples/find-examples.sh
 
-#	examples/packer/Makefile  \
-#	examples/packer/pack.c  \
-
 GDKTARGET=@gdktarget@
 
 ## Copy .pc files to target-specific names

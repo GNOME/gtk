@@ -34,7 +34,7 @@ GLIB_AC_DIVERT_BEFORE_HELP([
 #
 GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=3
-GTK_MICRO_VERSION=14
+GTK_MICRO_VERSION=15
 GTK_INTERFACE_AGE=0
 GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
@@ -80,9 +80,9 @@ AC_SUBST(GDK_PIXBUF_MICRO)
 AC_SUBST(GDK_PIXBUF_VERSION)
 
 ## Versions of dependencies
-GLIB_REQUIRED_VERSION=1.3.14
-PANGO_REQUIRED_VERSION=0.25
-ATK_REQUIRED_VERSION=0.12
+GLIB_REQUIRED_VERSION=1.3.15
+PANGO_REQUIRED_VERSION=0.26
+ATK_REQUIRED_VERSION=0.13
 
 # For automake.
 VERSION=$GTK_VERSION
@@ -321,7 +321,7 @@ AC_SUBST(STRIP_BEGIN)
 AC_SUBST(STRIP_END)
 
 # i18n stuff
-ALL_LINGUAS="az ca cs da de el en_GB en@IPA es et eu fa fi fr ga gl he hr hu ia it ja ko lt ms nl nn no pl pt pt_BR ro ru sk sl sp sr sv tr uk vi wa zh_TW zh_CN"
+ALL_LINGUAS="az ca cs cy da de el en_GB en@IPA es et eu fa fi fr ga gl he hr hu ia it ja ko lt ms nl nn no pl pt pt_BR ro ru sk sl sp sr sv tr uk vi wa zh_TW zh_CN"
 AM_GLIB_GNU_GETTEXT
 LIBS="$LIBS $INTLLIBS"
 

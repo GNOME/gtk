@@ -86,6 +86,18 @@ Returns whether the style is attached to a window.
 @draw_expander: 
 @draw_layout: 
 @draw_resize_grip: 
+@_gtk_reserved1: 
+@_gtk_reserved2: 
+@_gtk_reserved3: 
+@_gtk_reserved4: 
+@_gtk_reserved5: 
+@_gtk_reserved6: 
+@_gtk_reserved7: 
+@_gtk_reserved8: 
+@_gtk_reserved9: 
+@_gtk_reserved10: 
+@_gtk_reserved11: 
+@_gtk_reserved12: 
 
 <!-- ##### FUNCTION gtk_style_new ##### -->
 <para>

@@ -453,42 +453,6 @@ GtkTreeViewColumn
 @height: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_column_cell_render ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@window: 
-@background_area: 
-@cell_area: 
-@expose_area: 
-@flags: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_column_cell_focus ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@direction: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_column_cell_draw_focus ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@window: 
-@background_area: 
-@cell_area: 
-@expose_area: 
-@flags: 
-
-
 <!-- ##### FUNCTION gtk_tree_view_column_cell_is_visible ##### -->
 <para>
 
@@ -496,14 +460,6 @@ GtkTreeViewColumn
 
 @tree_column: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_column_cell_set_dirty ##### -->
-<para>
-
-</para>
-
-@tree_column: 
 
 
 <!-- ##### SIGNAL GtkTreeViewColumn::clicked ##### -->

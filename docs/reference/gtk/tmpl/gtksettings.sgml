@@ -217,6 +217,11 @@ gtk_settings_get_default_for_screen() instead </para></caution>
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-font-name ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
 <para>
 

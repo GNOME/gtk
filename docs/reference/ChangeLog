@@ -1,3 +1,54 @@
+2002-02-26  Matthias Clasen  <maclas@gmx.de>
+
+	Fixes for #72478:
+	
+	* gtk/tmpl/gtkprogressbar.sgml: Add note about new GtkProgressBar
+	API to introduction. 
+
+	* gtk/gtk-sections.txt: Reorder GtkProgressBar functions to move 
+	undeprecated API to top.
+
+Sat Feb 23 23:39:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtktreemodel.sgml: Document gtk_tree_path_new_root(),
+	gtk_tree_model_get_iter_root() as compatibility macros.
+
+	* gtk/gtk-sections.txt: Updates.
+
+2002-02-23  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/Makefile.am (HTML_IMAGES): Rename strikeout to 
+	strikethrough.
+
+2002-02-22  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/Makefile.am (HTML_IMAGES): Update for name changes.
+
+2002-02-22  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtksignal.sgml, gtk/tmpl/gtkimage.sgml: s/%d/%%d/ in
+	examples.  (#71479)
+
+	* gtk/tmpl/gtkmenu.sgml: Document gtk_menu_set_active as 
+	quasi-private.  (#69788)
+
+	* gtk/tmpl/gtkcalendar.sgml: Document month as zero-based and 
+	selected_day as one-based.  (#57169)
+
+Thu Feb 21 12:11:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (IGNORE_HFILES): Add gtkkeyhash.h
+
+2002-02-20  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtk-sections.txt
+	* gtk/tmpl/gtktreeviewcolumn.sgml: updated for treeviewcolumn changes.
+
+Mon Feb 18 23:00:52 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/running.sgml: Remove docs for GTK_IM_MODULE_PATH,
+	replace docs for GTK_MODULE_PATH with docs for GTK_PATH.
+
 Sun Feb 17 21:33:33 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk-sections.txt: Updated for filesel changes.

@@ -114,12 +114,22 @@ The tree interface used by #GtkTreeView
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_tree_path_new_root ##### -->
+<!-- ##### FUNCTION gtk_tree_path_new_first ##### -->
 <para>
 
 </para>
 
 @Returns: 
+
+
+<!-- ##### MACRO gtk_tree_path_new_root ##### -->
+<para>
+A alternate name for gtk_tree_path_new_root() provided for
+compatibility reasons; this macro will be deprecated in future
+versions of GTK+.
+</para>
+
+@Returns: A new #GtkTreePath.
 
 
 <!-- ##### FUNCTION gtk_tree_path_append_index ##### -->
@@ -382,7 +392,7 @@ The tree interface used by #GtkTreeView
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_tree_model_get_iter_root ##### -->
+<!-- ##### FUNCTION gtk_tree_model_get_iter_first ##### -->
 <para>
 
 </para>
@@ -390,6 +400,18 @@ The tree interface used by #GtkTreeView
 @tree_model: 
 @iter: 
 @Returns: 
+
+
+<!-- ##### MACRO gtk_tree_model_get_iter_root ##### -->
+<para>
+A alternate name for gtk_tree_model_get_iter_root() provided for
+compatibility reasons; this macro will be deprecated in future
+versions of GTK+.
+</para>
+
+@tree_model:  A #GtkTreeModel.
+@iter: uninitialized #GtkTreeIter.
+@Returns:  %TRUE, if @iter was set.
 
 
 <!-- ##### FUNCTION gtk_tree_model_get_path ##### -->

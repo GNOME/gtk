@@ -45,7 +45,7 @@ on the image, such as button clicks, place the image inside a
                          GdkEventButton *event,
                          gpointer        data)
   {
-    g_print ("Event box clicked at coordinates %d,%d\n", 
+    g_print ("Event box clicked at coordinates %%d,%%d\n", 
              event->x, event->y);
 
     /* Returning TRUE means we handled the event, so the signal 
