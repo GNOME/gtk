@@ -155,7 +155,10 @@ libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf-util.c	\
 	$(extra_sources)
 
-libgdk_pixbuf_la_LDFLAGS = -version-info 2:0:0 $(GLIB_LIBS)
+libgdk_pixbuf_la_LDFLAGS = 				        \
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)    \
+	-release $(LT_RELEASE)					\
+	$(GLIB_LIBS) 
 libgdk_pixbuf_la_LIBADD = pixops/libpixops.la
 
 libgdk_pixbufinclude_HEADERS =	\

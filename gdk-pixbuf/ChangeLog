@@ -1,3 +1,8 @@
+Thu Jul  6 11:49:47 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (libgdk_pixbuf_la_LDFLAGS): Use GTK+ version
+	soname scheme for gdk-pixbuf.
+
 2000-06-21  Havoc Pennington  <hp@pobox.com>
 
 	* gdk-pixbuf.c: Convert GdkPixbuf to GObject, leaving it opaque
