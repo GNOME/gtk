@@ -465,17 +465,21 @@ gdk_window_foreign_new (guint32 anid)
   GdkWindowPrivate *parent_private;
   XWindowAttributes attrs;
   Window root, parent;
-  Window *children;
+  Window *children = NULL;
   guint nchildren;
+
+  if(!XGetWindowAttributes (gdk_display, anid, &attrs)) {
+    g_warning("XGetWindowAttributes failed on window ID %d\n", anid);
+    return NULL;
+  }
 
   private = g_new (GdkWindowPrivate, 1);
   window = (GdkWindow*) private;
 
-  XGetWindowAttributes (gdk_display, anid, &attrs);
-
   /* FIXME: This is pretty expensive. Maybe the caller should supply
    *        the parent */
   XQueryTree (gdk_display, anid, &root, &parent, &children, &nchildren);
+
   if (children)
     XFree (children);
   private->parent = gdk_xid_table_lookup (parent);
