@@ -1,3 +1,9 @@
+2004-02-10  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_finalize):
+	Free the filters.  Fixes #133547, patch by Morten Welinder
+	<mortenw@gnome.org>.
+
 Tue Feb 10 12:02:14 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/xsettings-client.c (read_settings): Avoid

@@ -369,6 +369,7 @@ static void
 gtk_file_chooser_default_finalize (GObject *object)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (object);
+  GSList *l;
 
   g_signal_handler_disconnect (impl->file_system, impl->volumes_changed_id);
   impl->volumes_changed_id = 0;
@@ -376,7 +377,17 @@ gtk_file_chooser_default_finalize (GObject *object)
   impl->bookmarks_changed_id = 0;
   g_object_unref (impl->file_system);
 
-  /* FIXME: Free impl->filters -- what's the memory management there? */
+  for (l = impl->filters; l; l = l->next)
+    {
+      GtkFileFilter *filter;
+
+      filter = GTK_FILE_FILTER (l->data);
+      g_object_unref (filter);
+    }
+  g_slist_free (impl->filters);
+
+  if (impl->current_filter)
+    g_object_unref (impl->current_filter);
 
   if (impl->current_volume_path)
     gtk_file_path_free (impl->current_volume_path);
