@@ -2039,6 +2039,7 @@ static gboolean
 lines_match (const GtkTextIter *start,
              const gchar **lines,
              gboolean visible_only,
+             gboolean slice,
              GtkTextIter *match_start)
 {
   GtkTextIter next;
@@ -2052,18 +2053,31 @@ lines_match (const GtkTextIter *start,
   next = *start;
   gtk_text_iter_forward_line (&next);
 
+  gtk_text_iter_spew (start, "start");
+  gtk_text_iter_spew (&next, "next");
+  
   /* No more text in buffer, but *lines is nonempty */
   if (gtk_text_iter_equal (start, &next))
     {
       return FALSE;
     }
-      
-  if (visible_only)
-    line_text = gtk_text_iter_get_visible_text (start, &next);
-  else
-    line_text = gtk_text_iter_get_text (start, &next);
 
-  printf ("Finding `%s' in `%s'\n", *lines, line_text);
+  if (slice)
+    {
+      if (visible_only)
+        line_text = gtk_text_iter_get_visible_slice (start, &next);
+      else
+        line_text = gtk_text_iter_get_slice (start, &next);
+    }
+  else
+    {
+      /* FIXME */
+      g_warning ("Searching for non-slice text is currently broken (you must include 'unknown char' for pixmaps in order to match them)");
+      if (visible_only)
+        line_text = gtk_text_iter_get_visible_text (start, &next);
+      else
+        line_text = gtk_text_iter_get_text (start, &next);
+    }
   
   if (match_start) /* if this is the first line we're matching */
     found = strstr (line_text, *lines);
@@ -2080,18 +2094,15 @@ lines_match (const GtkTextIter *start,
 
   if (found == NULL)
     {
-      printf ("found == NULL\n");
       g_free (line_text);
       return FALSE;
     }
-
-  printf ("found at index %d\n", found - line_text);
   
   /* Get offset to start of search string */
   offset = g_utf8_strlen (line_text, found - line_text);
-
+  
   next = *start;
-
+  
   /* If match start needs to be returned, set it to the
    * start of the search string.
    */
@@ -2103,6 +2114,7 @@ lines_match (const GtkTextIter *start,
 
   /* Go to end of search string */
   offset += g_utf8_strlen (*lines, -1);
+
   gtk_text_iter_forward_chars (&next, offset);
   
   g_free (line_text);
@@ -2112,18 +2124,72 @@ lines_match (const GtkTextIter *start,
   /* pass NULL for match_start, since we don't need to find the
    * start again.
    */
-  return lines_match (&next, lines, visible_only, NULL);
+  return lines_match (&next, lines, visible_only, slice, NULL);
+}
+
+/* strsplit() that retains the delimiter as part of the string. */
+static gchar **
+strbreakup (const char *string,
+            const char *delimiter,
+            gint        max_tokens)
+{
+  GSList *string_list = NULL, *slist;
+  gchar **str_array, *s;
+  guint i, n = 1;
+
+  g_return_val_if_fail (string != NULL, NULL);
+  g_return_val_if_fail (delimiter != NULL, NULL);
+
+  if (max_tokens < 1)
+    max_tokens = G_MAXINT;
+
+  s = strstr (string, delimiter);
+  if (s)
+    {
+      guint delimiter_len = strlen (delimiter);
+
+      do
+	{
+	  guint len;
+	  gchar *new_string;
+
+	  len = s - string + delimiter_len;
+	  new_string = g_new (gchar, len + 1);
+	  strncpy (new_string, string, len);
+	  new_string[len] = 0;
+	  string_list = g_slist_prepend (string_list, new_string);
+	  n++;
+	  string = s + delimiter_len;
+	  s = strstr (string, delimiter);
+	}
+      while (--max_tokens && s);
+    }
+  if (*string)
+    {
+      n++;
+      string_list = g_slist_prepend (string_list, g_strdup (string));
+    }
+
+  str_array = g_new (gchar*, n);
+
+  i = n - 1;
+
+  str_array[i--] = NULL;
+  for (slist = string_list; slist; slist = slist->next)
+    str_array[i--] = slist->data;
+
+  g_slist_free (string_list);
+
+  return str_array;
 }
 
 gboolean
 gtk_text_iter_forward_search (GtkTextIter *iter,
                               const char  *str,
-                              gboolean visible_only)
+                              gboolean visible_only,
+                              gboolean slice)
 {
-  const gchar **lines = NULL;
-  const gchar *newline;
-  int line_num = 0;
-  int allocated = 2;
+  gchar **lines = NULL;
   GtkTextIter match;
   gboolean retval = FALSE;
   GtkTextIter search;
@@ -2136,60 +2202,17 @@ gtk_text_iter_forward_search (GtkTextIter *iter,
   
   /* locate all lines */
 
-  lines = g_new (const gchar*, allocated);
-  lines[line_num] = str;
-  
-  newline = str;
-  while (*newline)
-    {
-      /* Note that we can have empty lines */
-      
-      if (*newline == '\n')
-        {
-          ++newline;
-
-          ++line_num;
-          
-          if (line_num == allocated)
-            {
-              allocated *= 2;
-              lines = g_realloc (lines, allocated + 1); /* alloc 1 for nul */
-            }
-
-          g_assert (line_num < allocated);
-
-          lines[line_num] = newline;
-        }
-      else
-        ++newline;
-    }
-
-  ++line_num;
-  lines[line_num] = NULL;
-
-  {
-    int q = 0;
-    printf ("Lines:\n");
-    while (q < line_num)
-      {
-        printf ("  `%s'\n", lines[q]);
-
-        ++q;
-      }
-  }
+  lines = strbreakup (str, "\n", -1);
   
   search = *iter;
 
   do
-    {
-      printf ("Checking for match on line %d\n",
-              gtk_text_iter_get_line (&search));
-      
+    {      
       /* This loop has an inefficient worst-case, where
        * gtk_text_iter_get_text() is called repeatedly on
        * a single line.
        */
-      if (lines_match (&search, lines, visible_only, &match))
+      if (lines_match (&search, (const gchar**)lines, visible_only, slice, &match))
         {
           retval = TRUE;
           
@@ -2200,7 +2223,7 @@ gtk_text_iter_forward_search (GtkTextIter *iter,
     }
   while (gtk_text_iter_forward_line (&search));
   
-  g_free (lines);
+  g_strfreev ((gchar**)lines);
 
   return retval;
 }
@@ -2208,7 +2231,8 @@ gtk_text_iter_forward_search (GtkTextIter *iter,
 gboolean
 gtk_text_iter_backward_search (GtkTextIter *iter,
                                const char  *str,
-                               gboolean visible_only)
+                               gboolean visible_only,
+                               gboolean slice)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (str != NULL, FALSE);

@@ -2012,7 +2012,7 @@ copy_segment(GString *string,
           copy_bytes = end_byte - copy_start;
         }
       else
-        copy_bytes = seg->byte_count;
+        copy_bytes = seg->byte_count - copy_start;
 
       g_assert(copy_bytes != 0); /* Due to iter equality check at
                                     front of this function. */
@@ -2605,7 +2605,8 @@ gtk_text_btree_first_could_contain_tag (GtkTextBTree *tree,
 
       /* We know the tag root has instances of the given
          tag below it */
-      
+
+    continue_outer_loop:
       g_assert(node != NULL);
       while (node->level > 0)
         {
@@ -2614,7 +2615,8 @@ gtk_text_btree_first_could_contain_tag (GtkTextBTree *tree,
           while (node != NULL)
             {
               if (gtk_text_btree_node_has_tag(node, tag))
-                goto done;
+                goto continue_outer_loop;
+              
               node = node->next;
             }
           g_assert(node != NULL);
@@ -3822,6 +3824,7 @@ gtk_text_line_next_could_contain_tag(GtkTextLine *line,
   /* We have to find the first sub-node of this node that contains
      the target tag. */
 
+ continue_outer_loop:
   while (node->level > 0)
     {
       g_assert(node != NULL); /* If this fails, it likely means an
@@ -3832,7 +3835,7 @@ gtk_text_line_next_could_contain_tag(GtkTextLine *line,
       while (node != NULL)
         {
           if (gtk_text_btree_node_has_tag(node, tag))
-            goto done;
+            goto continue_outer_loop;
           node = node->next;
         }
       g_assert(node != NULL);

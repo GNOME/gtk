@@ -1274,7 +1274,7 @@ buffer_search_forward (Buffer *buffer, const char *str,
 
   if (char_len > 0)
     {
-      while (gtk_text_iter_forward_search (&iter, str, TRUE))
+      while (gtk_text_iter_forward_search (&iter, str, TRUE, FALSE))
         {
           GtkTextIter end = iter;
           

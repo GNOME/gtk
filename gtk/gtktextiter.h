@@ -164,11 +164,13 @@ gboolean gtk_text_iter_backward_find_char     (GtkTextIter *iter,
 
 gboolean gtk_text_iter_forward_search         (GtkTextIter *iter,
                                                const char  *str,
-                                               gboolean visible_only);
+                                               gboolean visible_only,
+                                               gboolean slice);
 
 gboolean gtk_text_iter_backward_search        (GtkTextIter *iter,
                                                const char  *str,
-                                               gboolean visible_only);
+                                               gboolean visible_only,
+                                               gboolean slice);
 
 /*
  * Comparisons
