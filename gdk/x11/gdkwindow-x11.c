@@ -107,6 +107,14 @@ static gpointer parent_class = NULL;
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 
+/* Return whether time1 is considered later than time2 as far as xserver
+ * time is concerned.  Accounts for wraparound.
+ */
+#define XSERVER_TIME_IS_LATER(time1, time2)                        \
+  ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
+    (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
+  )
+
 GType
 gdk_window_impl_x11_get_type (void)
 {
@@ -1376,6 +1384,9 @@ show_window_internal (GdkWindow *window,
                       gboolean   raise)
 {
   GdkWindowObject *private;
+  GdkDisplay *display;
+  GdkDisplayX11 *display_x11;
+  GdkToplevelX11 *toplevel;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -1399,6 +1410,18 @@ show_window_internal (GdkWindow *window,
         }
       
       g_assert (GDK_WINDOW_IS_MAPPED (window));
+
+      if (GDK_WINDOW_IS_TOPLEVEL (window))
+	{
+	  display = gdk_drawable_get_display (window);
+	  display_x11 = GDK_DISPLAY_X11 (display);
+	  toplevel = _gdk_x11_window_get_toplevel (window);
+
+          if (toplevel->user_time != 0 &&
+	      display_x11->user_time != 0 &&
+	      XSERVER_TIME_IS_LATER (display_x11->user_time, toplevel->user_time))
+	    gdk_x11_window_set_user_time (window, display_x11->user_time);
+	}
 
       if (impl->position_info.mapped)
 	{
@@ -3685,6 +3708,7 @@ gdk_x11_window_set_user_time (GdkWindow *window,
 {
   GdkDisplay *display;
   GdkDisplayX11 *display_x11;
+  GdkToplevelX11 *toplevel;
   glong timestamp_long = (glong)timestamp;
 
   g_return_if_fail (window != NULL);
@@ -3695,6 +3719,7 @@ gdk_x11_window_set_user_time (GdkWindow *window,
 
   display = gdk_drawable_get_display (window);
   display_x11 = GDK_DISPLAY_X11 (display);
+  toplevel = _gdk_x11_window_get_toplevel (window);
 
   XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
                    gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_USER_TIME"),
@@ -3703,6 +3728,8 @@ gdk_x11_window_set_user_time (GdkWindow *window,
 
   if (timestamp_long != GDK_CURRENT_TIME)
     display_x11->user_time = timestamp_long;
+
+  toplevel->user_time = timestamp_long;
 }
 
 /**

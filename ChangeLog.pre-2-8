@@ -1,5 +1,15 @@
 2004-08-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkwindow-x11.h (struct _GdkToplevelX11): Add a 
+	user_time field.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_x11_window_set_user_time): Update
+	toplevel->user_time.
+	(show_window_internal): Update the user time when re-mapping a
+	toplevel window.  (#150502, Elijah Newren)
+
+2004-08-23  Matthias Clasen  <mclasen@redhat.com>
+
 	Fix #150822, reported by Christian Persch
 	
 	* gtk/gtklabel.c (gtk_label_ensure_layout): Set the layout width

@@ -120,6 +120,9 @@ struct _GdkToplevelX11
   GdkPixmap *icon_window;
   GdkWindow *group_leader;
 
+  /* Time of most recent user interaction. */
+  gulong user_time;
+
   /* We use an extra X window for toplevel windows that we XSetInputFocus()
    * to in order to avoid getting keyboard events redirected to subwindows
    * that might not even be part of this app
