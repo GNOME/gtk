@@ -1,3 +1,8 @@
+Mon Aug  9 00:28:34 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkicontheme.c (load_svg_at_size): Don't leak the 
+	file contents.
+
 Mon Aug  9 00:13:03 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaboutdialog.c (icon_set_new_from_pixbufs): Don't
