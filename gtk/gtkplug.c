@@ -606,23 +606,6 @@ gtk_plug_set_focus (GtkWindow *window,
 
   if (focus && !window->has_focus)
     {
-#if 0      
-      XEvent xevent;
-
-      xevent.xfocus.type = FocusIn;
-      xevent.xfocus.display = GDK_WINDOW_XDISPLAY (GTK_WIDGET(plug)->window);
-      xevent.xfocus.window = GDK_WINDOW_XWINDOW (plug->socket_window);
-      xevent.xfocus.mode = EMBEDDED_APP_WANTS_FOCUS;
-      xevent.xfocus.detail = FALSE; /* Don't force */
-
-      gdk_error_trap_push ();
-      XSendEvent (GDK_DISPLAY (),
-		  GDK_WINDOW_XWINDOW (plug->socket_window),
-		  False, NoEventMask, &xevent);
-      gdk_flush ();
-      gdk_error_trap_pop ();
-#endif
-
       send_xembed_message (plug, XEMBED_REQUEST_FOCUS, 0, 0, 0,
 			   gtk_get_current_event_time ());
     }
@@ -787,19 +770,6 @@ gtk_plug_focus (GtkWidget        *widget,
 	      
 	      send_xembed_message (plug, message, 0, 0, 0,
 				   gtk_get_current_event_time ());
-	      
-#if 0	      
-	      gtk_window_set_focus (GTK_WINDOW (widget), NULL);
-
-	      gdk_error_trap_push ();
-	      XSetInputFocus (GDK_DISPLAY (),
-			      GDK_WINDOW_XWINDOW (plug->socket_window),
-			      RevertToParent, event->time);
-	      gdk_flush ();
-	      gdk_error_trap_pop ();
-
-	      gtk_plug_forward_key_press (plug, event);
-#endif	      
 	    }
 	}
 
@@ -836,6 +806,9 @@ send_xembed_message (GtkPlug *plug,
   if (plug->socket_window)
     {
       XEvent xevent;
+
+      GTK_NOTE(PLUGSOCKET,
+	       g_message ("GtkPlug: Sending XEMBED message of type %ld", message));
 
       xevent.xclient.window = GDK_WINDOW_XWINDOW (plug->socket_window);
       xevent.xclient.type = ClientMessage;
@@ -928,7 +901,7 @@ handle_xembed_message (GtkPlug   *plug,
 		       guint32    time)
 {
   GTK_NOTE (PLUGSOCKET,
-	    g_message ("Message of type %ld received", message));
+	    g_message ("GtkPlug: Message of type %ld received", message));
   
   switch (message)
     {

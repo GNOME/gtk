@@ -125,6 +125,8 @@ gtk_socket_get_private (GtkSocket *socket)
   if (!private)
     {
       private = g_new0 (GtkSocketPrivate, 1);
+      private->resize_count = 0;
+      
       g_object_set_qdata_full (G_OBJECT (socket), private_quark,
 			       private, (GDestroyNotify) g_free);
     }
@@ -785,19 +787,6 @@ gtk_socket_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 {
   GtkSocket *socket = GTK_SOCKET (widget);
 
-#if 0
-  GtkWidget *toplevel;
-  toplevel = gtk_widget_get_toplevel (widget);
-  
-  if (toplevel && GTK_IS_WINDOW (toplevel))
-    {
-      XSetInputFocus (GDK_DISPLAY (),
-		      GDK_WINDOW_XWINDOW (toplevel->window),
-		      RevertToParent, CurrentTime); /* FIXME? */
-    }
-
-#endif      
-
   if (socket->plug_window)
     {
       send_xembed_message (socket, XEMBED_FOCUS_OUT, 0, 0, 0,
@@ -820,20 +809,6 @@ gtk_socket_claim_focus (GtkSocket *socket)
   GTK_WIDGET_SET_FLAGS (socket, GTK_CAN_FOCUS);
   gtk_widget_grab_focus (GTK_WIDGET (socket));
   GTK_WIDGET_UNSET_FLAGS (socket, GTK_CAN_FOCUS);
-  
-  /* FIXME: we might grab the focus even if we don't have
-   * it as an app... (and see _focus_in ()) */
-  if (socket->plug_window)
-    {
-#if 0      
-      gdk_error_trap_push ();
-      XSetInputFocus (GDK_DISPLAY (),
-		      GDK_WINDOW_XWINDOW (socket->plug_window),
-		      RevertToParent, GDK_CURRENT_TIME);
-      gdk_flush ();
-      gdk_error_trap_pop ();
-#endif
-    }
 }
 
 static gboolean
@@ -875,66 +850,6 @@ gtk_socket_focus (GtkWidget *widget, GtkDirectionType direction)
     }
   else
     return FALSE;
-
-#if 0
-  if (!socket->focus_in && socket->plug_window)
-    {
-      XEvent xevent;
-
-      gtk_socket_claim_focus (socket);
-      
-      xevent.xkey.type = KeyPress;
-      xevent.xkey.display = GDK_DISPLAY ();
-      xevent.xkey.window = GDK_WINDOW_XWINDOW (socket->plug_window);
-      xevent.xkey.root = GDK_ROOT_WINDOW (); /* FIXME */
-      xevent.xkey.time = GDK_CURRENT_TIME; /* FIXME */
-      /* FIXME, the following might cause big problems for
-       * non-GTK apps */
-      xevent.xkey.x = 0;
-      xevent.xkey.y = 0;
-      xevent.xkey.x_root = 0;
-      xevent.xkey.y_root = 0;
-      xevent.xkey.state = 0;
-      xevent.xkey.same_screen = TRUE; /* FIXME ? */
-
-      switch (direction)
-	{
-	case GTK_DIR_UP:
-	  xevent.xkey.keycode =  XKeysymToKeycode(GDK_DISPLAY(), GDK_Up);
-	  break;
-	case GTK_DIR_DOWN:
-	  xevent.xkey.keycode =  XKeysymToKeycode(GDK_DISPLAY(), GDK_Down);
-	  break;
-	case GTK_DIR_LEFT:
-	  xevent.xkey.keycode =  XKeysymToKeycode(GDK_DISPLAY(), GDK_Left);
-	  break;
-	case GTK_DIR_RIGHT:
-	  xevent.xkey.keycode =  XKeysymToKeycode(GDK_DISPLAY(), GDK_Right);
-	  break;
-	case GTK_DIR_TAB_FORWARD:
-	  xevent.xkey.keycode =  XKeysymToKeycode(GDK_DISPLAY(), GDK_Tab);
-	  break;
-	case GTK_DIR_TAB_BACKWARD:
-	  xevent.xkey.keycode =  XKeysymToKeycode(GDK_DISPLAY(), GDK_Tab);
-	  xevent.xkey.state = ShiftMask;
-	  break;
-	}
-
-
-      gdk_error_trap_push ();
-      XSendEvent (GDK_DISPLAY (),
-		  GDK_WINDOW_XWINDOW (socket->plug_window),
-		  False, NoEventMask, &xevent);
-      gdk_flush();
-      gdk_error_trap_pop ();
-      
-      return TRUE;
-    }
-  else
-    {
-      return FALSE;
-    }
-#endif  
 }
 
 static void
@@ -1206,6 +1121,9 @@ handle_xembed_message (GtkSocket *socket,
 		       glong      data2,
 		       guint32    time)
 {
+  GTK_NOTE (PLUGSOCKET,
+	    g_message ("GtkPlug: Message of type %ld received", message));
+  
   switch (message)
     {
     case XEMBED_EMBEDDED_NOTIFY:
@@ -1394,20 +1312,6 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
       if (xevent->xfocus.mode == EMBEDDED_APP_WANTS_FOCUS)
 	{
 	  gtk_socket_claim_focus (socket);
-	}
-      else if (xevent->xfocus.detail == NotifyInferior)
-	{
-#if 0
-	  GtkWidget *toplevel;
-	  toplevel = gtk_widget_get_toplevel (widget);
-	  
-	  if (toplevel && GTK_IS_WINDOW (topelevel))
-	    {
-	      XSetInputFocus (GDK_DISPLAY (),
-			      GDK_WINDOW_XWINDOW (toplevel->window),
-			      RevertToParent, CurrentTime); /* FIXME? */
-	    }
-#endif
 	}
       return_val = GDK_FILTER_REMOVE;
       break;
