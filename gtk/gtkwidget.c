@@ -4188,8 +4188,8 @@ gtk_widget_is_ancestor (GtkWidget *widget,
 static GQuark quark_composite_name = 0;
 
 void
-gtk_widget_set_composite_name (GtkWidget *widget,
-			       gchar     *name)
+gtk_widget_set_composite_name (GtkWidget   *widget,
+			       const gchar *name)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));

@@ -77,7 +77,7 @@ struct _GtkThemeEngine {
 			  GtkStateType  state_type);
 };
 
-GtkThemeEngine *gtk_theme_engine_get   (gchar          *name);
+GtkThemeEngine *gtk_theme_engine_get   (const gchar    *name);
 void            gtk_theme_engine_ref   (GtkThemeEngine *engine);
 void            gtk_theme_engine_unref (GtkThemeEngine *engine);
 

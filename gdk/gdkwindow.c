@@ -2066,8 +2066,8 @@ gdk_window_set_icon (GdkWindow *window,
 }
 
 void          
-gdk_window_set_icon_name (GdkWindow *window, 
-			  gchar *    name)
+gdk_window_set_icon_name (GdkWindow   *window, 
+			  const gchar *name)
 {
   GdkWindowPrivate *window_private;
   XTextProperty property;

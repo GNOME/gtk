@@ -1,4 +1,16 @@
+Fri Jan 21 16:24:08 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkgc.c (gdk_gc_set_dashes): Change from
+	  gdk_gc_set_dashes to take gint8 instead of gchar to
+	  make it clearer that it is _not_ a NULL terminated string.
+
+	* gdk/gdk.h gdk/gdkfont.c gdk/gdkgc.c gdk/gdkselection.c
+	  gdk/gdkwindow.c gtk/gtkprogress.[ch] gtk/gtkthemes.[ch]
+	  gtk/gtktreeitem.[ch] gtk/gtkwidget.[ch]: Constify string
+	  arguments.
+
 2000-01-13 Elliot Lee <sopwith@redhat.com>
+	
 	* gtk/gtktooltips.c: Add note about gtk_tooltips_set_colors().
 
 2000-01-07  Jesus Bravo Alvarez  <jba@pobox.com>

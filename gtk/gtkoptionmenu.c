@@ -244,7 +244,6 @@ gtk_option_menu_set_history (GtkOptionMenu *option_menu,
     }
 }
 
-
 static void
 gtk_option_menu_destroy (GtkObject *object)
 {

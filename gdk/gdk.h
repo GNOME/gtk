@@ -375,7 +375,7 @@ void	      gdk_window_set_icon	 (GdkWindow	  *window,
 					  GdkPixmap	  *pixmap,
 					  GdkBitmap	  *mask);
 void	      gdk_window_set_icon_name	 (GdkWindow	  *window, 
-					  gchar		  *name);
+					  const gchar	  *name);
 void	      gdk_window_set_group	 (GdkWindow	  *window, 
 					  GdkWindow	  *leader);
 void	      gdk_window_set_decorations (GdkWindow	  *window,
@@ -452,7 +452,7 @@ void   gdk_gc_set_line_attributes (GdkGC	    *gc,
 				   GdkJoinStyle	     join_style);
 void   gdk_gc_set_dashes          (GdkGC            *gc,
 				   gint	             dash_offset,
-				   gchar             dash_list[],
+				   gint8             dash_list[],
 				   gint              n);
 void   gdk_gc_copy		  (GdkGC	     *dst_gc,
 				   GdkGC	     *src_gc);
@@ -594,7 +594,7 @@ gboolean gdk_color_change (GdkColormap	*colormap,
 /* Fonts
  */
 GdkFont* gdk_font_load	    (const gchar    *font_name);
-GdkFont* gdk_fontset_load   (gchar          *fontset_name);
+GdkFont* gdk_fontset_load   (const gchar    *fontset_name);
 GdkFont* gdk_font_ref	    (GdkFont        *font);
 void	 gdk_font_unref	    (GdkFont        *font);
 gint	 gdk_font_id	    (const GdkFont  *font);
@@ -772,7 +772,7 @@ gint	   gdk_text_property_to_text_list (GdkAtom encoding, gint format,
 					   guchar *text, gint length,
 					   gchar ***list);
 void	   gdk_free_text_list		  (gchar **list);
-gint	   gdk_string_to_compound_text	  (gchar *str,
+gint	   gdk_string_to_compound_text	  (const gchar *str,
 					   GdkAtom *encoding, gint *format,
 					   guchar **ctext, gint *length);
 void	   gdk_free_compound_text	  (guchar *ctext);

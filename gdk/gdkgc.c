@@ -820,10 +820,10 @@ gdk_gc_set_line_attributes (GdkGC	*gc,
 }
 
 void
-gdk_gc_set_dashes (GdkGC *gc,
-		   gint	  dash_offset,
-		   gchar  dash_list[],
-		   gint   n)
+gdk_gc_set_dashes (GdkGC      *gc,
+		   gint	       dash_offset,
+		   gint8       dash_list[],
+		   gint        n)
 {
   GdkGCPrivate *private;
 

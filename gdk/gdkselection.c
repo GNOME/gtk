@@ -225,7 +225,7 @@ gdk_free_text_list (gchar **list)
 }
 
 gint
-gdk_string_to_compound_text (gchar *str,
+gdk_string_to_compound_text (const gchar *str,
 			     GdkAtom *encoding, gint *format,
 			     guchar **ctext, gint *length)
 {
@@ -233,7 +233,7 @@ gdk_string_to_compound_text (gchar *str,
   XTextProperty property;
 
   res = XmbTextListToTextProperty (GDK_DISPLAY(), 
-				   &str, 1, XCompoundTextStyle,
+				   (char **)&str, 1, XCompoundTextStyle,
                                	   &property);
   if (res != Success)
     {

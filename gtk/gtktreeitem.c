@@ -283,7 +283,7 @@ gtk_tree_item_new (void)
 }
 
 GtkWidget*
-gtk_tree_item_new_with_label (gchar *label)
+gtk_tree_item_new_with_label (const gchar *label)
 {
   GtkWidget *tree_item;
   GtkWidget *label_widget;

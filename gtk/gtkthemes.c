@@ -54,7 +54,7 @@ struct _GtkThemeEnginePrivate {
 static GHashTable *engine_hash = NULL;
 
 GtkThemeEngine*
-gtk_theme_engine_get (gchar *name)
+gtk_theme_engine_get (const gchar *name)
 {
   GtkThemeEnginePrivate *result;
   
