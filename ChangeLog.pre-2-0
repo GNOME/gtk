@@ -1,3 +1,13 @@
+1998-06-09  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkhandlebox.h (struct _GtkHandleBox): Removed the
+	fleur_cursor field.  Now the cursor is created/destroyed on demand
+	by the routines that need it.
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_button_changed): 
+	(gtk_handle_box_motion): The fleur cursor is created and destroyed
+	only when needed.
+
 Tue Jun  9 09:57:09 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.h: 

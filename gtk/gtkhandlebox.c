@@ -183,7 +183,6 @@ gtk_handle_box_init (GtkHandleBox *handle_box)
   handle_box->child_detached = FALSE;
   handle_box->in_drag = FALSE;
   handle_box->shrink_on_detach = TRUE;
-  handle_box->fleur_cursor = gdk_cursor_new (GDK_FLEUR);
   handle_box->dragoff_x = 0;
   handle_box->dragoff_y = 0;
 }
@@ -321,7 +320,6 @@ gtk_handle_box_realize (GtkWidget *widget)
   gdk_window_set_user_data (hb->float_window, widget);
   gdk_window_set_decorations (hb->float_window, 0);
   
-
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_WIDGET_STATE (hb));
   gtk_style_set_background (widget->style, hb->bin_window, GTK_WIDGET_STATE (hb));
@@ -344,9 +342,6 @@ gtk_handle_box_unrealize (GtkWidget *widget)
   gdk_window_set_user_data (hb->float_window, NULL);
   gdk_window_destroy (hb->float_window);
   hb->float_window = NULL;
-
-  gdk_cursor_destroy (hb->fleur_cursor);
-  hb->fleur_cursor = NULL;
 
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
@@ -801,6 +796,7 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 {
   GtkHandleBox *hb;
   gboolean event_handled;
+  GdkCursor *fleur;
   
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_HANDLE_BOX (widget), FALSE);
@@ -849,14 +845,16 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 
 	  gtk_grab_add (widget);
 	  hb->in_drag = TRUE;
+	  fleur = gdk_cursor_new (GDK_FLEUR);
 	  while (gdk_pointer_grab (hb->bin_window,
 				   FALSE,
 				   (GDK_BUTTON1_MOTION_MASK |
 				    GDK_POINTER_MOTION_HINT_MASK |
 				    GDK_BUTTON_RELEASE_MASK),
 				   NULL,
-				   hb->fleur_cursor,
+				   fleur,
 				   GDK_CURRENT_TIME) != 0); /* wait for success */
+	  gdk_cursor_destroy (fleur);
 	  event_handled = TRUE;
 	}
     }
@@ -881,6 +879,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
   gint ox, oy;
   gint snap_x, snap_y;
   gboolean in_handle;
+  GdkCursor *fleur;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_HANDLE_BOX (widget), FALSE);
@@ -941,14 +940,16 @@ gtk_handle_box_motion (GtkWidget      *widget,
 			   handle_box_signals[SIGNAL_CHILD_ATTACHED],
 			   GTK_BIN (hb)->child);
 	  
+	  fleur = gdk_cursor_new (GDK_FLEUR);
 	  while (gdk_pointer_grab (hb->bin_window,
 				   FALSE,
 				   (GDK_BUTTON1_MOTION_MASK |
 				    GDK_POINTER_MOTION_HINT_MASK |
 				    GDK_BUTTON_RELEASE_MASK),
 				   NULL,
-				   hb->fleur_cursor,
+				   fleur,
 				   GDK_CURRENT_TIME) != 0); /* wait for success */
+	  gdk_cursor_destroy (fleur);
 	  
 	  gtk_widget_queue_resize (widget);
 	}
@@ -989,14 +990,16 @@ gtk_handle_box_motion (GtkWidget      *widget,
 			   GTK_BIN (hb)->child);
 	  gtk_handle_box_draw_ghost (hb);
 	  
+	  fleur = gdk_cursor_new (GDK_FLEUR);
 	  while (gdk_pointer_grab (hb->bin_window,
 				   FALSE,
 				   (GDK_BUTTON1_MOTION_MASK |
 				    GDK_POINTER_MOTION_HINT_MASK |
 				    GDK_BUTTON_RELEASE_MASK),
 				   NULL,
-				   hb->fleur_cursor,
+				   fleur,
 				   GDK_CURRENT_TIME) != 0); /* wait for success */
+	  gdk_cursor_destroy (fleur);
 	  
 	  gtk_widget_queue_resize (widget);
 	}
