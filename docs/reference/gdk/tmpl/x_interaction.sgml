@@ -224,11 +224,6 @@ Returns the display of a #GdkCursor.
 <para>
 Returns the X GC of a #GdkGC.
 </para>
-<note><para>
-Note that the clip origin, clip region and tile/stipple origin fields of the
-returned GC may not be in sync with @gc. If you need that, 
-use GDK_GC_GET_XGC().  
-</para></note>
 
 @gc: a #GdkGC.
 @Returns: an Xlib <type>GC</type>.
