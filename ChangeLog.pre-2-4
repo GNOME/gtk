@@ -1,3 +1,21 @@
+2000-11-14  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/gdkpango.c (gdk_draw_layout_line): Draw underlines one pixel
+	higher.
+
+	* gtk/gtktextdisplay.c (render_layout_line): Take rise into
+	account. Also, render rise, underline, background, etc. for
+	pixbufs as well as text. Also, draw underlines one pixel higher.
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_line_display): Add a
+	PangoAttribute for the rise, so it gets drawn properly. Also,
+	add the GtkTextAppearance attribute for pixbuf/widget segments
+	as well; we should go ahead and have rise, underline, background,
+	stipple work for those
+
+	* gtk/gtktexttag.c: Rename "offset" property to "rise" to match
+	Pango
+
 2000-11-15  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/makefile.{mingw,msc}.in (gtk_OBJECTS): Add new objects.

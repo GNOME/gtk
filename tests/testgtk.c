@@ -2111,7 +2111,7 @@ void create_labels (void)
                                          "or even on this one\n"
                                          "la <big>la <big>la <big>la <big>la</big></big></big></big>\n"
                                          "but this _word is <span foreground=\"purple\"><big>purple</big></span>\n"
-                                         "We like <sup>superscript</sup> and <sub>subscript</sub> too");
+                                         "<span underline=\"double\">We like <sup>superscript</sup> and <sub>subscript</sub> too</span>");
 
       g_return_if_fail (keyval == GDK_s);
       

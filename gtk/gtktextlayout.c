@@ -1227,6 +1227,51 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
   return (PangoAttribute *)result;
 }
 
+
+static void
+add_generic_attrs (GtkTextLayout      *layout,
+                   GtkTextAppearance  *appearance,
+                   gint                byte_count,
+                   PangoAttrList      *attrs,
+                   gint                start,
+                   gboolean            size_only,
+                   gboolean            is_text)
+{
+  PangoAttribute *attr;
+
+  if (appearance->underline != PANGO_UNDERLINE_NONE)
+    {
+      attr = pango_attr_underline_new (appearance->underline);
+      
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+      
+      pango_attr_list_insert (attrs, attr);
+    }
+
+  if (appearance->rise != 0)
+    {
+      attr = pango_attr_rise_new (appearance->rise);
+      
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+      
+      pango_attr_list_insert (attrs, attr);
+    }
+  
+  if (!size_only)
+    {
+      attr = gtk_text_attr_appearance_new (appearance);
+      
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      ((GtkTextAttrAppearance *)attr)->appearance.is_text = is_text;
+      
+      pango_attr_list_insert (attrs, attr);
+    }
+}
+
 static void
 add_text_attrs (GtkTextLayout      *layout,
                 GtkTextAttributes  *style,
@@ -1242,16 +1287,6 @@ add_text_attrs (GtkTextLayout      *layout,
   attr->end_index = start + byte_count;
 
   pango_attr_list_insert (attrs, attr);
-
-  if (!size_only)
-    {
-      attr = gtk_text_attr_appearance_new (&style->appearance);
-
-      attr->start_index = start;
-      attr->end_index = start + byte_count;
-
-      pango_attr_list_insert (attrs, attr);
-    }
 }
 
 static void
@@ -1490,16 +1525,10 @@ add_preedit_attrs (GtkTextLayout     *layout,
       insert_attr->end_index = end + offset;
       
       pango_attr_list_insert (attrs, insert_attr);
-      
-      if (!size_only)
-	{
-	  insert_attr = gtk_text_attr_appearance_new (&appearance);
-	  
-	  insert_attr->start_index = start + offset;
-	  insert_attr->end_index = end + offset;
-	  
-	  pango_attr_list_insert (attrs, insert_attr); 
-	}
+
+      add_generic_attrs (layout, &appearance, end - start,
+                         attrs, start + offset,
+                         size_only, TRUE);
     }
   while (pango_attr_iterator_next (iter));
 
@@ -1642,11 +1671,20 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                     }
 
  		  seg = prev_seg; /* Back up one */
+                  add_generic_attrs (layout, &style->appearance,
+                                     byte_count,
+                                     attrs, byte_offset - byte_count,
+                                     size_only, TRUE);
                   add_text_attrs (layout, style, byte_count, attrs,
                                   byte_offset - byte_count, size_only);
                 }
               else if (seg->type == &gtk_text_pixbuf_type)
                 {
+                  add_generic_attrs (layout,
+                                     &style->appearance,
+                                     seg->byte_count,
+                                     attrs, byte_offset,
+                                     size_only, FALSE);
                   add_pixbuf_attrs (layout, display, style,
                                     seg, attrs, byte_offset);
                   memcpy (text + byte_offset, gtk_text_unknown_char_utf8,
@@ -1655,6 +1693,10 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                 }
               else if (seg->type == &gtk_text_child_type)
                 {
+                  add_generic_attrs (layout, &style->appearance,
+                                     seg->byte_count,
+                                     attrs, byte_offset,
+                                     size_only, FALSE);
                   add_child_attrs (layout, display, style,
                                    seg, attrs, byte_offset);
                   memcpy (text + byte_offset, gtk_text_unknown_char_utf8,

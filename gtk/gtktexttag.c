@@ -95,7 +95,7 @@ enum {
   ARG_STRIKETHROUGH,
   ARG_RIGHT_MARGIN,
   ARG_UNDERLINE,
-  ARG_OFFSET,
+  ARG_RISE,
   ARG_BG_FULL_HEIGHT,
   ARG_LANGUAGE,
   ARG_TABS,
@@ -125,7 +125,7 @@ enum {
   ARG_STRIKETHROUGH_SET,
   ARG_RIGHT_MARGIN_SET,
   ARG_UNDERLINE_SET,
-  ARG_OFFSET_SET,
+  ARG_RISE_SET,
   ARG_BG_FULL_HEIGHT_SET,
   ARG_LANGUAGE_SET,
   ARG_TABS_SET,
@@ -233,8 +233,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_LEFT_MARGIN);
   gtk_object_add_arg_type ("GtkTextTag::indent", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_INDENT);
-  gtk_object_add_arg_type ("GtkTextTag::offset", GTK_TYPE_INT,
-                           GTK_ARG_READWRITE, ARG_OFFSET);
+  gtk_object_add_arg_type ("GtkTextTag::rise", GTK_TYPE_INT,
+                           GTK_ARG_READWRITE, ARG_RISE);
   gtk_object_add_arg_type ("GtkTextTag::pixels_above_lines", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_PIXELS_ABOVE_LINES);
   gtk_object_add_arg_type ("GtkTextTag::pixels_below_lines", GTK_TYPE_INT,
@@ -291,8 +291,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_LEFT_MARGIN_SET);
   gtk_object_add_arg_type ("GtkTextTag::indent_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_INDENT_SET);
-  gtk_object_add_arg_type ("GtkTextTag::offset_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_OFFSET_SET);
+  gtk_object_add_arg_type ("GtkTextTag::rise_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_RISE_SET);
   gtk_object_add_arg_type ("GtkTextTag::pixels_above_lines_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_PIXELS_ABOVE_LINES_SET);
   gtk_object_add_arg_type ("GtkTextTag::pixels_below_lines_set", GTK_TYPE_BOOL,
@@ -697,9 +697,9 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       text_tag->values->appearance.underline = GTK_VALUE_ENUM (*arg);
       break;
 
-    case ARG_OFFSET:
-      text_tag->offset_set = TRUE;
-      text_tag->values->offset = GTK_VALUE_INT (*arg);
+    case ARG_RISE:
+      text_tag->rise_set = TRUE;
+      text_tag->values->appearance.rise = GTK_VALUE_INT (*arg);
       size_changed = TRUE;
       break;
 
@@ -845,8 +845,8 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       text_tag->underline_set = GTK_VALUE_BOOL (*arg);
       break;
 
-    case ARG_OFFSET_SET:
-      text_tag->offset_set = GTK_VALUE_BOOL (*arg);
+    case ARG_RISE_SET:
+      text_tag->rise_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
 
@@ -1031,8 +1031,8 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       GTK_VALUE_ENUM (*arg) = tag->values->appearance.underline;
       break;
 
-    case ARG_OFFSET:
-      GTK_VALUE_INT (*arg) = tag->values->offset;
+    case ARG_RISE:
+      GTK_VALUE_INT (*arg) = tag->values->appearance.rise;
       break;
 
     case ARG_BG_FULL_HEIGHT:
@@ -1134,8 +1134,8 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       GTK_VALUE_BOOL (*arg) = tag->underline_set;
       break;
 
-    case ARG_OFFSET_SET:
-      GTK_VALUE_BOOL (*arg) = tag->offset_set;
+    case ARG_RISE_SET:
+      GTK_VALUE_BOOL (*arg) = tag->rise_set;
       break;
 
     case ARG_BG_FULL_HEIGHT_SET:
@@ -1578,8 +1578,8 @@ gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
       if (tag->indent_set)
         dest->indent = vals->indent;
 
-      if (tag->offset_set)
-        dest->offset = vals->offset;
+      if (tag->rise_set)
+        dest->appearance.rise = vals->appearance.rise;
 
       if (tag->right_margin_set)
         dest->right_margin = vals->right_margin;
@@ -1643,7 +1643,7 @@ gtk_text_tag_affects_size (GtkTextTag *tag)
     tag->justify_set ||
     tag->left_margin_set ||
     tag->indent_set ||
-    tag->offset_set ||
+    tag->rise_set ||
     tag->right_margin_set ||
     tag->pixels_above_lines_set ||
     tag->pixels_below_lines_set ||

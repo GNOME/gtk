@@ -71,7 +71,7 @@ struct _GtkTextTag
   guint justify_set : 1;
   guint left_margin_set : 1;
   guint indent_set : 1;
-  guint offset_set : 1;
+  guint rise_set : 1;
   guint strikethrough_set : 1;
   guint right_margin_set : 1;
   guint pixels_above_lines_set : 1;
@@ -121,6 +121,9 @@ struct _GtkTextAppearance
   GdkBitmap *bg_stipple;
   GdkBitmap *fg_stipple;
 
+  /* super/subscript rise, can be negative */
+  gint rise;
+  
   guint underline : 4;          /* PangoUnderline */
   guint strikethrough : 1;
 
@@ -130,12 +133,13 @@ struct _GtkTextAppearance
    * had background stuff set.
    */
   guint draw_bg : 1;
-
-  /* This is only used when we are actually laying out and rendering
+  
+  /* These are only used when we are actually laying out and rendering
    * a paragraph; not when a GtkTextAppearance is part of a
    * GtkTextAttributes.
    */
   guint inside_selection : 1;
+  guint is_text : 1;
 };
 
 struct _GtkTextAttributes
@@ -152,10 +156,7 @@ struct _GtkTextAttributes
 
   gint left_margin;
 
-  gint indent;
-  
-  /* super/subscript offset, can be negative */
-  gint offset;
+  gint indent;  
 
   gint right_margin;
 

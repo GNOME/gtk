@@ -145,13 +145,13 @@ create_tags (GtkTextBuffer *buffer)
 
   tag = gtk_text_buffer_create_tag (buffer, "superscript");
   g_object_set (G_OBJECT (tag),
-                "offset", 10 * PANGO_SCALE, /* 10 pixels */
+                "rise", 10 * PANGO_SCALE,   /* 10 pixels */
                 "size", 8 * PANGO_SCALE,    /* 8 points */
                 NULL);
   
   tag = gtk_text_buffer_create_tag (buffer, "subscript");
   g_object_set (G_OBJECT (tag),
-                "offset", -10 * PANGO_SCALE, /* 10 pixels */
+                "rise", -10 * PANGO_SCALE,   /* 10 pixels */
                 "size", 8 * PANGO_SCALE,     /* 8 points */
                 NULL); 
 }

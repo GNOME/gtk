@@ -185,6 +185,34 @@ gtk_text_render_state_update (GtkTextRenderState *state,
 }
 
 static void
+get_shape_extents (PangoLayoutRun *run,
+                   PangoRectangle *ink_rect,
+                   PangoRectangle *logical_rect)
+{
+  GSList *tmp_list = run->item->extra_attrs;
+    
+  while (tmp_list)
+    {
+      PangoAttribute *attr = tmp_list->data;
+
+      if (attr->klass->type == PANGO_ATTR_SHAPE)
+	{          
+	  if (logical_rect)
+	    *logical_rect = ((PangoAttrShape *)attr)->logical_rect;
+
+	  if (ink_rect)
+	    *ink_rect = ((PangoAttrShape *)attr)->ink_rect;
+
+          return;
+        }
+
+      tmp_list = tmp_list->next;
+    }
+
+  g_assert_not_reached ();
+}
+
+static void
 render_layout_line (GdkDrawable        *drawable,
                     GtkTextRenderState *render_state,
                     PangoLayoutLine    *line,
@@ -197,85 +225,72 @@ render_layout_line (GdkDrawable        *drawable,
   PangoRectangle overall_rect;
   PangoRectangle logical_rect;
   PangoRectangle ink_rect;
-
   gint x_off = 0;
-
+  GdkGC *fg_gc;
+  
   pango_layout_line_get_extents (line, NULL, &overall_rect);
 
   while (tmp_list)
     {
       PangoLayoutRun *run = tmp_list->data;
       GtkTextAppearance *appearance;
-
+      gint risen_y;
+      gint shaped_width_pixels = 0;
+      gboolean need_ink = FALSE;
+      
       tmp_list = tmp_list->next;
 
       get_item_properties (run->item, &appearance);
 
-      if (appearance)           /* A text segment */
+      g_assert (appearance != NULL);
+      
+      risen_y = y - PANGO_PIXELS (appearance->rise);
+      
+      if (selected)
         {
-          GdkGC *fg_gc;
-
-          if (selected)
-            {
-              fg_gc = render_state->widget->style->fg_gc[GTK_STATE_SELECTED];
-            }
-          else
-            {
-              gtk_text_render_state_update (render_state, appearance);
-
-              fg_gc = render_state->fg_gc;
-            }
-
-          if (appearance->underline == PANGO_UNDERLINE_NONE && !appearance->strikethrough)
+          fg_gc = render_state->widget->style->fg_gc[GTK_STATE_SELECTED];
+        }
+      else
+        {
+          gtk_text_render_state_update (render_state, appearance);
+          
+          fg_gc = render_state->fg_gc;
+        }
+      
+      if (appearance->underline != PANGO_UNDERLINE_NONE ||
+          appearance->strikethrough)
+        need_ink = TRUE;
+      
+      if (appearance->is_text)
+        {
+          if (need_ink)
             pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
                                         NULL, &logical_rect);
           else
             pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
                                         &ink_rect, &logical_rect);
-
-          if (appearance->draw_bg && !selected)
-            gdk_draw_rectangle (drawable, render_state->bg_gc, TRUE,
-                                x + PANGO_PIXELS (x_off) + PANGO_PIXELS (logical_rect.x),
-                                y + PANGO_PIXELS (logical_rect.y),
-                                PANGO_PIXELS (logical_rect.width),
-                                PANGO_PIXELS (logical_rect.height));
-
-          gdk_draw_glyphs (drawable, fg_gc,
-                           run->item->analysis.font,
-                           x + PANGO_PIXELS (x_off), y, run->glyphs);
-
-          switch (appearance->underline)
-            {
-            case PANGO_UNDERLINE_NONE:
-              break;
-            case PANGO_UNDERLINE_DOUBLE:
-              gdk_draw_line (drawable, fg_gc,
-                             x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + 4,
-                             x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + 4);
-              /* Fall through */
-            case PANGO_UNDERLINE_SINGLE:
-              gdk_draw_line (drawable, fg_gc,
-                             x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + 2,
-                             x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + 2);
-              break;
-            case PANGO_UNDERLINE_LOW:
-              gdk_draw_line (drawable, fg_gc,
-                             x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2,
-                             x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2);
-              break;
-            }
-
-          if (appearance->strikethrough)
-            {
-              gint strikethrough_y = y + (0.3 * logical_rect.y) / PANGO_SCALE;
-              gdk_draw_line (drawable, fg_gc,
-                             x + (x_off + ink_rect.x) / PANGO_SCALE - 1, strikethrough_y,
-                             x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, strikethrough_y);
-            }
-
-          x_off += logical_rect.width;
         }
-      else                      /* Pixbuf or widget segment */
+      else
+        {
+          if (need_ink)
+            get_shape_extents (run, &ink_rect, &logical_rect);
+          else
+            get_shape_extents (run, NULL, &logical_rect);
+        }
+      
+      if (appearance->draw_bg && !selected)
+        gdk_draw_rectangle (drawable, render_state->bg_gc, TRUE,
+                            x + PANGO_PIXELS (x_off) + PANGO_PIXELS (logical_rect.x),
+                            risen_y + PANGO_PIXELS (logical_rect.y),
+                            PANGO_PIXELS (logical_rect.width),
+                            PANGO_PIXELS (logical_rect.height));
+
+      if (appearance->is_text)
+        gdk_draw_glyphs (drawable, fg_gc,
+                         run->item->analysis.font,
+                         x + PANGO_PIXELS (x_off),
+                         risen_y, run->glyphs);
+      else
         {
           GObject *shaped = (*shaped_pointer)->data;
 
@@ -293,7 +308,7 @@ render_layout_line (GdkDrawable        *drawable,
               height = gdk_pixbuf_get_height (pixbuf);
 
               pixbuf_rect.x = x + x_off / PANGO_SCALE;
-              pixbuf_rect.y = y - height;
+              pixbuf_rect.y = risen_y - height;
               pixbuf_rect.width = width;
               pixbuf_rect.height = height;
 
@@ -343,7 +358,7 @@ render_layout_line (GdkDrawable        *drawable,
                     }
                 }
 
-              x_off += width * PANGO_SCALE;
+              shaped_width_pixels = width;
             }
           else if (GTK_IS_WIDGET (shaped))
             {
@@ -351,6 +366,10 @@ render_layout_line (GdkDrawable        *drawable,
               GdkRectangle draw_rect;
               GtkWidget *widget;
 
+              /* FIXME this doesn't work at all, and remember to use
+               * risen_y
+               */
+              
               widget = GTK_WIDGET (shaped);
               
               width = widget->allocation.width;
@@ -364,11 +383,57 @@ render_layout_line (GdkDrawable        *drawable,
                   gtk_widget_draw (widget, &draw_rect);
                 }
 
-              x_off += width * PANGO_SCALE;
+              shaped_width_pixels = width;
             }
           else
             g_assert_not_reached (); /* not a pixbuf or widget */
         }
+
+      switch (appearance->underline)
+        {
+        case PANGO_UNDERLINE_NONE:
+          break;
+        case PANGO_UNDERLINE_DOUBLE:
+          g_assert (need_ink);
+          gdk_draw_line (drawable, fg_gc,
+                         x + (x_off + ink_rect.x) / PANGO_SCALE - 1,
+                         risen_y + 3,
+                         x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE,
+                         risen_y + 3);
+          /* Fall through */
+        case PANGO_UNDERLINE_SINGLE:
+          g_assert (need_ink);
+          gdk_draw_line (drawable, fg_gc,
+                         x + (x_off + ink_rect.x) / PANGO_SCALE - 1,
+                         risen_y + 1,
+                         x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE,
+                         risen_y + 1);
+          break;
+        case PANGO_UNDERLINE_LOW:
+          g_assert (need_ink);
+          gdk_draw_line (drawable, fg_gc,
+                         x + (x_off + ink_rect.x) / PANGO_SCALE - 1,
+                         risen_y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 1,
+                         x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE,
+                         risen_y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 1);
+          break;
+        }
+
+      if (appearance->strikethrough)
+        {          
+          gint strikethrough_y = risen_y + (0.3 * logical_rect.y) / PANGO_SCALE;
+
+          g_assert (need_ink);
+          
+          gdk_draw_line (drawable, fg_gc,
+                         x + (x_off + ink_rect.x) / PANGO_SCALE - 1, strikethrough_y,
+                         x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, strikethrough_y);
+        }
+
+      if (appearance->is_text)
+        x_off += logical_rect.width;
+      else
+        x_off += shaped_width_pixels * PANGO_SCALE;
     }
 }
 

@@ -454,7 +454,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
   color.blue = color.green = 0;
   color.red = 0xffff;
   gtk_object_set (GTK_OBJECT (tag),
-		 "offset", -4,
+		 "rise", -4 * PANGO_SCALE,
 		 "foreground_gdk", &color,
 		 NULL);
 

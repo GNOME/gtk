@@ -230,21 +230,23 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
 	case PANGO_UNDERLINE_DOUBLE:
 	  gdk_draw_line (drawable, fg_gc,
 			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1,
-                         risen_y + 4,
-			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + 4);
+                         risen_y + 3,
+			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE,
+                         risen_y + 3);
 	  /* Fall through */
 	case PANGO_UNDERLINE_SINGLE:
 	  gdk_draw_line (drawable, fg_gc,
 			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1,
-                         risen_y + 2,
-			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + 2);
+                         risen_y + 1,
+			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE,
+                         risen_y + 1);
 	  break;
 	case PANGO_UNDERLINE_LOW:
 	  gdk_draw_line (drawable, fg_gc,
 			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1,
-                         risen_y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2,
+                         risen_y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 1,
 			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE,
-                         risen_y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2);
+                         risen_y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 1);
 	  break;
 	}
 
