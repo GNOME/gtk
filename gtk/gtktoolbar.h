@@ -131,15 +131,14 @@ struct _GtkToolbarClass
   void (*_gtk_reserved3) (void);
 };
 
-GType           gtk_toolbar_get_type        (void) G_GNUC_CONST;
-GtkWidget*      gtk_toolbar_new             (void);
-
+GType           gtk_toolbar_get_type         (void) G_GNUC_CONST;
+GtkWidget*      gtk_toolbar_new              (void);
 void            gtk_toolbar_insert           (GtkToolbar      *toolbar,
 					      GtkToolItem     *item,
 					      gint             pos);
 gint            gtk_toolbar_get_item_index   (GtkToolbar      *toolbar,
 					      GtkToolItem     *item);
-gint		gtk_toolbar_get_n_items      (GtkToolbar      *toolbar);
+gint            gtk_toolbar_get_n_items      (GtkToolbar      *toolbar);
 GtkToolItem *   gtk_toolbar_get_nth_item     (GtkToolbar      *toolbar,
 					      gint             n);
 gint            gtk_toolbar_get_drop_index   (GtkToolbar      *toolbar,
@@ -157,16 +156,18 @@ GtkToolbarStyle gtk_toolbar_get_style        (GtkToolbar      *toolbar);
 GtkIconSize     gtk_toolbar_get_icon_size    (GtkToolbar      *toolbar);
 gboolean        gtk_toolbar_get_tooltips     (GtkToolbar      *toolbar);
 GtkReliefStyle  gtk_toolbar_get_relief_style (GtkToolbar      *toolbar);
+void            gtk_toolbar_set_style        (GtkToolbar      *toolbar,
+					      GtkToolbarStyle  style);
+void            gtk_toolbar_unset_style      (GtkToolbar      *toolbar);
+
+
 
 /* internal function */
 gchar *	_gtk_toolbar_elide_underscores (const gchar *original);
 
 #ifndef GTK_DISABLE_DEPRECATED
-void       gtk_toolbar_set_style       (GtkToolbar      *toolbar,
-				        GtkToolbarStyle  style);
 void       gtk_toolbar_set_icon_size   (GtkToolbar      *toolbar,
 				        GtkIconSize      icon_size);
-void       gtk_toolbar_unset_style     (GtkToolbar      *toolbar);
 void       gtk_toolbar_unset_icon_size (GtkToolbar      *toolbar);
 
 /* Simple button items */

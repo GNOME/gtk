@@ -1361,6 +1361,12 @@ produce superscript and subscript.
 </para>
 
 
+<!-- ##### ARG GtkToolButton:show-label-horizontally ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### STRUCT GtkTreeSelectionClass ##### -->
 <para>
 

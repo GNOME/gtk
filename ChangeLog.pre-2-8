@@ -1,3 +1,11 @@
+Wed Jul 30 17:03:58 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbutton.[ch]:
+	(gtk_tool_button_new): swap icon_widget and label arguments to
+	match BonoboUIToolbarButton.
+
+	* gtk/gtktoolbar.h: un-deprecate gtk_toolbar_{set|unset}_style().
+
 2003-07-30  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init): Some updates to the DND signal docs.

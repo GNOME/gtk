@@ -143,8 +143,8 @@ to a #GtkToolbar.
 
 </para>
 
-@toolbar:
-@orientation:
+@toolbar: 
+@orientation: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_set_tooltips ##### -->
@@ -152,8 +152,8 @@ to a #GtkToolbar.
 
 </para>
 
-@toolbar:
-@enable:
+@toolbar: 
+@enable: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_unset_icon_size ##### -->
@@ -223,14 +223,14 @@ to a #GtkToolbar.
 
 </para>
 
-@toolbar:
-@text:
-@tooltip_text:
-@tooltip_private_text:
-@icon:
-@callback:
-@user_data:
-@Returns:
+@toolbar: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_prepend_item ##### -->
@@ -238,14 +238,14 @@ to a #GtkToolbar.
 
 </para>
 
-@toolbar:
-@text:
-@tooltip_text:
-@tooltip_private_text:
-@icon:
-@callback:
-@user_data:
-@Returns:
+@toolbar: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_insert_item ##### -->
@@ -253,15 +253,15 @@ to a #GtkToolbar.
 
 </para>
 
-@toolbar:
-@text:
-@tooltip_text:
-@tooltip_private_text:
-@icon:
-@callback:
-@user_data:
-@position:
-@Returns:
+@toolbar: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@position: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_append_space ##### -->
@@ -269,7 +269,7 @@ to a #GtkToolbar.
 
 </para>
 
-@toolbar:
+@toolbar: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_prepend_space ##### -->
@@ -277,7 +277,7 @@ to a #GtkToolbar.
 
 </para>
 
-@toolbar:
+@toolbar: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_insert_space ##### -->
@@ -285,8 +285,8 @@ to a #GtkToolbar.
 
 </para>
 
-@toolbar:
-@position:
+@toolbar: 
+@position: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_append_element ##### -->
@@ -297,16 +297,16 @@ to a #GtkToolbar.
 
 </para>
 
-@toolbar:
-@type:
-@widget:
-@text:
-@tooltip_text:
-@tooltip_private_text:
-@icon:
-@callback:
-@user_data:
-@Returns:
+@toolbar: 
+@type: 
+@widget: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_prepend_element ##### -->
@@ -317,16 +317,16 @@ to a #GtkToolbar.
 I
 </para>
 
-@toolbar:
-@type:
-@widget:
-@text:
-@tooltip_text:
-@tooltip_private_text:
-@icon:
-@callback:
-@user_data:
-@Returns:
+@toolbar: 
+@type: 
+@widget: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_insert_element ##### -->
@@ -386,8 +386,8 @@ I
 
 </para>
 
-@toolbar:
-@style:
+@toolbar: 
+@style: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_insert_stock ##### -->
@@ -464,14 +464,20 @@ I
 
 @toolbar: the object which received the signal.
 @Returns: 
+@: 
+@:
+@Returns: 
+@:
+@Returns: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkToolbar::style-changed ##### -->
 <para>
 
 </para>
 
-@toolbar:
-@style:
+@toolbar: 
+@style: 
 
 <!-- ##### ARG GtkToolbar:orientation ##### -->
 <para>

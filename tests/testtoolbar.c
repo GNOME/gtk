@@ -547,7 +547,7 @@ main (gint argc, gchar **argv)
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   
   item = gtk_tool_button_new_from_stock (GTK_STOCK_REFRESH);
-  add_item_to_list (store, item, "Refresh");  
+  add_item_to_list (store, item, "Refresh");
   g_signal_connect (item, "clicked", G_CALLBACK (reload_clicked), NULL);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
@@ -594,7 +594,7 @@ main (gint argc, gchar **argv)
   add_item_to_list (store, item, "Right");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-  item = gtk_tool_button_new ("_Apple", gtk_image_new_from_file ("apple-red.png"));
+  item = gtk_tool_button_new (gtk_image_new_from_file ("apple-red.png"), "_Apple");
   add_item_to_list (store, item, "Apple");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (item), TRUE);

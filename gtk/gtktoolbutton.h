@@ -58,27 +58,27 @@ struct _GtkToolButtonClass
 };
 
 GType        gtk_tool_button_get_type       (void);
-GtkToolItem *gtk_tool_button_new            (const gchar *label,
-					     GtkWidget   *icon_widget);
+GtkToolItem *gtk_tool_button_new            (GtkWidget   *icon_widget,
+					     const gchar *label);
 GtkToolItem *gtk_tool_button_new_from_stock (const gchar *stock_id);
 
-void                  gtk_tool_button_set_label       (GtkToolButton *button,
-						       const gchar   *label);
-G_CONST_RETURN gchar *gtk_tool_button_get_label       (GtkToolButton *button);
+void                  gtk_tool_button_set_label         (GtkToolButton *button,
+							 const gchar   *label);
+G_CONST_RETURN gchar *gtk_tool_button_get_label         (GtkToolButton *button);
 void                  gtk_tool_button_set_use_underline (GtkToolButton *button,
 							 gboolean       use_underline);
 gboolean              gtk_tool_button_get_use_underline (GtkToolButton *button);
-void		      gtk_tool_button_set_stock_id      (GtkToolButton *button,
+void                  gtk_tool_button_set_stock_id      (GtkToolButton *button,
 							 const gchar   *stock_id);
 G_CONST_RETURN gchar *gtk_tool_button_get_stock_id      (GtkToolButton *button);
-void                  gtk_tool_button_set_icon_widget (GtkToolButton *button,
-						       GtkWidget     *icon);
-GtkWidget *           gtk_tool_button_get_icon_widget (GtkToolButton *button);
+void                  gtk_tool_button_set_icon_widget   (GtkToolButton *button,
+							 GtkWidget     *icon);
+GtkWidget *           gtk_tool_button_get_icon_widget   (GtkToolButton *button);
+void                  gtk_tool_button_set_label_widget  (GtkToolButton *button,
+							 GtkWidget     *label_widget);
+GtkWidget *           gtk_tool_button_get_label_widget  (GtkToolButton *button);
 
-void                  gtk_tool_button_set_label_widget (GtkToolButton *button,
-							GtkWidget     *label_widget);
-GtkWidget *           gtk_tool_button_get_label_widget (GtkToolButton *button);
-
+								   
 /* internal function */
 GtkWidget *_gtk_tool_button_get_button (GtkToolButton *button);
 

@@ -278,10 +278,10 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
   
   if (style != GTK_TOOLBAR_TEXT)
     need_icon = TRUE;
-
+  
   if (style != GTK_TOOLBAR_ICONS)
     need_label = TRUE;
-
+  
   if (need_label)
     {
       if (button->priv->label_widget)
@@ -586,8 +586,8 @@ gtk_tool_button_new_from_stock (const gchar *stock_id)
 }
 
 GtkToolItem *
-gtk_tool_button_new (const gchar *label,
-		     GtkWidget	 *icon_widget)
+gtk_tool_button_new (GtkWidget	 *icon_widget,
+		     const gchar *label)
 {
   GtkToolButton *button;
 
@@ -757,3 +757,4 @@ _gtk_tool_button_get_button (GtkToolButton *button)
 
   return button->priv->button;
 }
+
