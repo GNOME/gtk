@@ -195,6 +195,16 @@ gtk_file_chooser_widget_get_property (GObject         *object,
   g_object_get_property (G_OBJECT (priv->impl), pspec->name, value);
 }
 
+/**
+ * gtk_file_chooser_widget_new:
+ * @action: Open or save mode for the widget
+ * 
+ * Creates a new #GtkFileChooserWidget.  This is a file chooser widget that can
+ * be embedded in custom windows, and it is the same widget that is used by
+ * #GtkFileChooserDialog.
+ * 
+ * Return value: a new #GtkFileChooserWidget
+ **/
 GtkWidget *
 gtk_file_chooser_widget_new (GtkFileChooserAction action)
 {

@@ -199,6 +199,19 @@ gtk_file_chooser_dialog_get_property (GObject         *object,
   g_object_get_property (G_OBJECT (priv->widget), pspec->name, value);
 }
 
+/**
+ * gtk_file_chooser_dialog_new:
+ * @title: Title of the dialog, or %NULL
+ * @parent: Transient parent of the dialog, or %NULL
+ * @action: Open or save mode for the dialog
+ * @first_button_text: stock ID or text to go in the first button, or %NULL
+ * @Varargs: response ID for the first button, then additional (button, id) pairs, ending with %NULL
+ * 
+ * Creates a new #GtkFileChooserDialog.  This function is analogous to
+ * gtk_dialog_new_with_buttons().
+ * 
+ * Return value: a new #GtkFileChooserDialog
+ **/
 GtkWidget *
 gtk_file_chooser_dialog_new (const gchar         *title,
 			     GtkWindow           *parent,

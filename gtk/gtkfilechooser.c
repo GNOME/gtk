@@ -744,6 +744,12 @@ gtk_file_chooser_unselect_uri (GtkFileChooser *chooser,
     }
 }
 
+/**
+ * gtk_file_chooser_select_all:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Selects all the files in the current folder of a file chooser.
+ **/
 void
 gtk_file_chooser_select_all (GtkFileChooser *chooser)
 {
@@ -752,6 +758,12 @@ gtk_file_chooser_select_all (GtkFileChooser *chooser)
   GTK_FILE_CHOOSER_GET_IFACE (chooser)->select_all (chooser);
 }
 
+/**
+ * gtk_file_chooser_unselect_all:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Unselects all the files in the current folder of a file chooser.
+ **/
 void
 gtk_file_chooser_unselect_all (GtkFileChooser *chooser)
 {
@@ -1204,14 +1216,14 @@ gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser)
 }
 
 /**
- * gtk_file_chooser_get_preview_filename:
+ * gtk_file_chooser_get_preview_uri:
  * @chooser: a #GtkFileChooser
  * 
  * Gets the URI that should be previewed in a custom preview
  * widget. See gtk_file_chooser_set_preview_widget().
  * 
- * Return value: the URI for the file to preview, or %NULL if no file
- *  is selected. Free with g_free().
+ * Return value: the URI for the file to preview, or %NULL if no file is
+ * selected. Free with g_free().
  *
  * Since: 2.4
  **/
@@ -1304,7 +1316,7 @@ gtk_file_chooser_add_filter (GtkFileChooser *chooser,
 }
 
 /**
- * gtk_file_chooser_add_filter:
+ * gtk_file_chooser_remove_filter:
  * @chooser: a #GtkFileChooser
  * @filter: a #GtkFileFilter
  * 

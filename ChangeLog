@@ -1,3 +1,14 @@
+2003-10-23  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_get_preview_uri): Fixed docs.
+	(gtk_file_chooser_remove_filter): Likewise.
+	(gtk_file_chooser_select_all): Added docs.
+	(gtk_file_chooser_unselect_all): Likewise.
+
+	* gtk/gtkfilechooserdialog.c (gtk_file_chooser_dialog_new): Added docs.
+
+	* gtk/gtkfilechooserwidget.c (gtk_file_chooser_widget_new): Added docs.
+
 Thu Oct 23 23:22:15 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilefilter.c: 
