@@ -665,15 +665,6 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
   HDC dc;
   GdkDrawable *drawable;
   int part_state;
-
-  /* Do not display grippers on tiny scroll bars, the limit imposed
-     is rather arbitrary, perhaps we can fetch the gripper geometry
-     from somewhere and use that... */
-  if ((element == XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_H && width < 16)
-      || (element == XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_V && height < 16))
-    {
-      return TRUE;
-    }
   
   if (! xp_theme_is_drawable (element))
     return FALSE;

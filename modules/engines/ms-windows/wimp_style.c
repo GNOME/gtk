@@ -354,6 +354,7 @@ setup_wimp_rc_style(void)
   GdkColor tooltip_back;
   GdkColor tooltip_fore;
   GdkColor btn_fore;
+  GdkColor btn_face;
   GdkColor progress_back;
 
   GdkColor fg_prelight;
@@ -379,6 +380,7 @@ setup_wimp_rc_style(void)
 
   /* text on push buttons. TODO: button shadows, backgrounds, and highlights */
   sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_BTNTEXT, &btn_fore);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_BTNFACE, &btn_face);
 
   /* progress bar background color */
   sys_color_to_gtk_color(XP_THEME_CLASS_PROGRESS, COLOR_HIGHLIGHT, &progress_back);
@@ -449,15 +451,21 @@ setup_wimp_rc_style(void)
   /* enable coloring for text on buttons
      TODO: use GetThemeMetric for the border and outside border */
   sprintf(buf, "style \"wimp-button\" = \"wimp-default\"\n"
-	  "{fg[NORMAL] = { %d, %d, %d }\n"
+	  "{\n"
+	  "bg[NORMAL] = { %d, %d, %d }\n"
+	  "bg[PRELIGHT] = { %d, %d, %d }\n"
+	  "bg[INSENSITIVE] = { %d, %d, %d }\n"
+	  "fg[PRELIGHT] = { %d, %d, %d }\n"
 	  "GtkButton::default-border = { 1, 1, 1, 1 }\n"
 	  "GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
 	  "GtkButton::child-displacement-x = 1\n"
   	  "GtkButton::child-displacement-y = 1\n"
-	  "}widget_class \"*GtkButton*\" style \"wimp-button\"\n",
-	  btn_fore.red,
-      btn_fore.green,
-      btn_fore.blue);
+	  "}widget_class \"*Gtk*Button*\" style \"wimp-button\"\n",
+	  btn_face.red, btn_face.green, btn_face.blue,
+	  btn_face.red, btn_face.green, btn_face.blue,
+	  btn_face.red, btn_face.green, btn_face.blue,
+	  btn_fore.red, btn_fore.green, btn_fore.blue
+	  );
   gtk_rc_parse_string(buf);
 
   /* enable coloring for progress bars */
@@ -491,7 +499,7 @@ setup_wimp_rc_style(void)
   gtk_rc_parse_string(buf);
 
   /* radio/check button sizes */
-  sprintf(buf, "style \"wimp-checkbutton\" = \"wimp-default\"\n"
+  sprintf(buf, "style \"wimp-checkbutton\" = \"wimp-button\"\n"
 	  "{GtkCheckButton::indicator-size = 13\n"
 	  "}widget_class \"*GtkCheckButton*\" style \"wimp-checkbutton\"\n");
   gtk_rc_parse_string(buf);
@@ -511,33 +519,33 @@ setup_system_styles(GtkStyle *style)
 {
   int i;
 
-  /* Default forgeground */
-  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOWTEXT, &style->fg[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOWTEXT, &style->fg[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOWTEXT, &style->fg[GTK_STATE_PRELIGHT]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &style->fg[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_GRAYTEXT, &style->fg[GTK_STATE_INSENSITIVE]);
-
   /* Default background */
-  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_3DFACE, &style->bg[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_SCROLLBAR, COLOR_SCROLLBAR, &style->bg[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_3DFACE, &style->bg[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,   &style->bg[GTK_STATE_NORMAL]);
   sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHT, &style->bg[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_3DFACE, &style->bg[GTK_STATE_INSENSITIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,   &style->bg[GTK_STATE_INSENSITIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,   &style->bg[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,   &style->bg[GTK_STATE_PRELIGHT]);
 
   /* Default base */
-  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOW, &style->base[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHT, &style->base[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOW, &style->base[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOW,    &style->base[GTK_STATE_NORMAL]);
   sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHT, &style->base[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON, COLOR_3DFACE, &style->base[GTK_STATE_INSENSITIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,   &style->base[GTK_STATE_INSENSITIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,   &style->base[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOW,    &style->base[GTK_STATE_PRELIGHT]);
 
   /* Default text */
-  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOWTEXT, &style->text[GTK_STATE_NORMAL]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_ACTIVE]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW, COLOR_WINDOWTEXT, &style->text[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOWTEXT,    &style->text[GTK_STATE_NORMAL]);
   sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_GRAYTEXT, &style->text[GTK_STATE_INSENSITIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_GRAYTEXT,      &style->text[GTK_STATE_INSENSITIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNTEXT,       &style->text[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOWTEXT,    &style->text[GTK_STATE_PRELIGHT]);
+
+  /* Default forgeground */
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNTEXT,       &style->fg[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_HIGHLIGHTTEXT, &style->fg[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_GRAYTEXT,      &style->fg[GTK_STATE_INSENSITIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNTEXT,       &style->fg[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(XP_THEME_CLASS_UNKNOWN, COLOR_WINDOWTEXT, &style->fg[GTK_STATE_PRELIGHT]);
 
   for (i = 0; i < 5; i++)
     {
@@ -1162,11 +1170,18 @@ draw_box (GtkStyle      *style,
                             : XP_THEME_ELEMENT_SCROLLBAR_H,
                             style, x, y, width, height, state_type, area))
             {
-              xp_theme_draw(window,
-                            is_v
-                            ? XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_V
-                            : XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_H,
-                            style, x, y, width, height, state_type, area);
+	      XpThemeElement gripper = (is_v ? XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_V : XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_H);
+
+	      /* Do not display grippers on tiny scroll bars, the limit imposed
+		 is rather arbitrary, perhaps we can fetch the gripper geometry
+		 from somewhere and use that... */
+	      if ((gripper == XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_H && width < 16)
+		  || (gripper == XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_V && height < 16))
+		{
+		  return;
+		}
+
+              xp_theme_draw(window, gripper, style, x, y, width, height, state_type, area);
               return;
             }
         }
