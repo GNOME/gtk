@@ -1,3 +1,7 @@
+Wed Apr 17 00:21:36 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreestore.c (gtk_tree_store_insert_before): fix docs
+
 Tue Apr 16 17:28:21 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): check
