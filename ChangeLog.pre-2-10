@@ -1,3 +1,13 @@
+Sun Jan 17 14:52:29 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcompat.h:
+	* gtk/gtkcheckmenuitem.[hc]:
+	deprecated gtk_check_menu_item_set_state, people should use
+	gtk_check_menu_item_set_active instead.
+	
+	* gtk/testgtk.c:
+	 s/gtk_check_menu_item_set_state/gtk_check_menu_item_set_active/.
+
 Sun Jan 17 05:19:14 1999  Tim Janik  <timj@gtk.org>
 
         * configure.in: incremented version number to 1.1.13, bin age 0,

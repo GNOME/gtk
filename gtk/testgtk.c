@@ -99,7 +99,7 @@ build_option_menu (OptionMenuItem items[],
       group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
       gtk_menu_append (GTK_MENU (menu), menu_item);
       if (i == history)
-	gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
       gtk_widget_show (menu_item);
     }
 
@@ -3479,7 +3479,7 @@ create_list (void)
 			  GTK_SIGNAL_FUNC (list_toggle_sel_mode), list);
       group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
       gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
+      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
       gtk_widget_show (menu_item);
       
       gtk_option_menu_set_menu (GTK_OPTION_MENU (list_omenu), menu);

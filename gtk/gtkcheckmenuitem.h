@@ -57,14 +57,14 @@ struct _GtkCheckMenuItemClass
 };
 
 
-GtkType	   gtk_check_menu_item_get_type	      (void);
-GtkWidget* gtk_check_menu_item_new	      (void);
-GtkWidget* gtk_check_menu_item_new_with_label (const gchar	*label);
-void	   gtk_check_menu_item_set_state      (GtkCheckMenuItem *check_menu_item,
-					       gint		 state);
-void	   gtk_check_menu_item_set_show_toggle(GtkCheckMenuItem *menu_item,
-					       gboolean		 always);
-void	   gtk_check_menu_item_toggled	      (GtkCheckMenuItem *check_menu_item);
+GtkType	   gtk_check_menu_item_get_type	       (void);
+GtkWidget* gtk_check_menu_item_new	       (void);
+GtkWidget* gtk_check_menu_item_new_with_label  (const gchar	 *label);
+void	   gtk_check_menu_item_set_active      (GtkCheckMenuItem *check_menu_item,
+						gboolean	  is_active);
+void	   gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,
+						gboolean	  always);
+void	   gtk_check_menu_item_toggled	       (GtkCheckMenuItem *check_menu_item);
 
 
 #ifdef __cplusplus

@@ -40,6 +40,7 @@ extern "C" {
 #define	gtk_scale_value_width                   gtk_scale_get_value_width
 #define	gtk_window_position			gtk_window_set_position
 #define	gtk_toggle_button_set_state		gtk_toggle_button_set_active
+#define	gtk_check_menu_item_set_state		gtk_check_menu_item_set_active
 #define	gtk_style_apply_default_pixmap(s,gw,st,a,x,y,w,h) \
     gtk_style_apply_default_background (s,gw,TRUE,st,a,x,y,w,h)
 

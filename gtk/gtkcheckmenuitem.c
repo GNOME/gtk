@@ -95,14 +95,23 @@ gtk_check_menu_item_new_with_label (const gchar *label)
   return check_menu_item;
 }
 
-void
+void /* FIXME remove gtk_check_menu_item_set_state, this function is deprecated */
 gtk_check_menu_item_set_state (GtkCheckMenuItem *check_menu_item,
 			       gint              state)
+{
+  gtk_check_menu_item_set_active (check_menu_item, state);
+}
+
+void
+gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
+				gboolean          is_active)
 {
   g_return_if_fail (check_menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
 
-  if (check_menu_item->active != (state != 0))
+  is_active = is_active != 0;
+
+  if (check_menu_item->active != is_active)
     gtk_menu_item_activate (GTK_MENU_ITEM (check_menu_item));
 }
 
