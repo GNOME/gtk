@@ -1,6 +1,7 @@
 2004-10-11  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/tmpl/gtkdialog.sgml: Document GtkDialogFlags and GtkResponseType.
+	* gtk/tmpl/gtkdialog.sgml: Document GtkDialogFlags and GtkResponseType,
+	and fix an error in the introduction.  (#155055, Shaun McCance)
 
 	* gtk/tmpl/gtktreesortable.sgml: Document GtkTreeIterCompareFunc
 	(#154943)
