@@ -29,11 +29,11 @@ extern "C" {
 
 
 #define GTK_TYPE_CELL_RENDERER_TEXT		(gtk_cell_renderer_text_get_type ())
-#define GTK_CELL_RENDERER_TEXT(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_CELL_RENDERER_TEXT, GtkCellRendererText))
-#define GTK_CELL_RENDERER_TEXT_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CELL_RENDERER_TEXT, GtkCellRendererTextClass))
-#define GTK_IS_CELL_RENDERER_TEXT(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_CELL_RENDERER_TEXT))
-#define GTK_IS_CELL_RENDERER_TEXT_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CELL_RENDERER_TEXT))
-#define GTK_CELL_RENDERER_TEXT_GET_CLASS(obj)   (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_TEXT, GtkCellRendererTextClass))
+#define GTK_CELL_RENDERER_TEXT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CELL_RENDERER_TEXT, GtkCellRendererText))
+#define GTK_CELL_RENDERER_TEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CELL_RENDERER_TEXT, GtkCellRendererTextClass))
+#define GTK_IS_CELL_RENDERER_TEXT(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CELL_RENDERER_TEXT))
+#define GTK_IS_CELL_RENDERER_TEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CELL_RENDERER_TEXT))
+#define GTK_CELL_RENDERER_TEXT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_TEXT, GtkCellRendererTextClass))
 
 typedef struct _GtkCellRendererText      GtkCellRendererText;
 typedef struct _GtkCellRendererTextClass GtkCellRendererTextClass;
@@ -90,7 +90,7 @@ struct _GtkCellRendererTextClass
   void (*_gtk_reserved4) (void);
 };
 
-GtkType          gtk_cell_renderer_text_get_type (void);
+GType            gtk_cell_renderer_text_get_type (void);
 GtkCellRenderer *gtk_cell_renderer_text_new      (void);
 
 void             gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer,

@@ -1,3 +1,9 @@
+Sun Oct  6 18:32:11 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkcelleditable.c gtk/gtkcellrenderer.[ch]
+	gtk/gtkcellrendererpixbuf.[ch] gtk/gtkcellrenderertext.[ch]
+	gtk/gtkcellrenderertoggle.[ch]: deprecation cleanup
+
 Sat Oct  5 16:11:22 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkmisc.[ch] gtk/gtklabel.[ch] gtk/gtkimage.[ch]

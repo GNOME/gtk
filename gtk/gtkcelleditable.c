@@ -20,14 +20,13 @@
 
 #include "gtkcelleditable.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 
 static void gtk_cell_editable_base_init (gpointer g_class);
 
-GtkType
+GType
 gtk_cell_editable_get_type (void)
 {
-  static GtkType cell_editable_type = 0;
+  static GType cell_editable_type = 0;
 
   if (! cell_editable_type)
     {
@@ -43,7 +42,11 @@ gtk_cell_editable_get_type (void)
 	0,
 	NULL
       };
-      cell_editable_type = g_type_register_static (G_TYPE_INTERFACE, "GtkCellEditable", &cell_editable_info, 0);
+
+      cell_editable_type =
+	g_type_register_static (G_TYPE_INTERFACE, "GtkCellEditable",
+				&cell_editable_info, 0);
+
       g_type_interface_add_prerequisite (cell_editable_type, GTK_TYPE_WIDGET);
     }
 

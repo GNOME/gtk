@@ -22,7 +22,6 @@
 #include "gtkeditable.h"
 #include "gtkentry.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 #include "gtkintl.h"
 
 static void gtk_cell_renderer_text_init       (GtkCellRendererText      *celltext);
@@ -113,10 +112,10 @@ static guint text_cell_renderer_signals [LAST_SIGNAL];
 
 #define GTK_CELL_RENDERER_TEXT_PATH "gtk-cell-renderer-text-path"
 
-GtkType
+GType
 gtk_cell_renderer_text_get_type (void)
 {
-  static GtkType cell_text_type = 0;
+  static GType cell_text_type = 0;
 
   if (!cell_text_type)
     {
@@ -133,7 +132,9 @@ gtk_cell_renderer_text_get_type (void)
         (GInstanceInitFunc) gtk_cell_renderer_text_init,
       };
 
-      cell_text_type = g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererText", &cell_text_info, 0);
+      cell_text_type =
+	g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererText",
+				&cell_text_info, 0);
     }
 
   return cell_text_type;
@@ -409,14 +410,15 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                 _("Whether this tag affects underlining"));
 
   text_cell_renderer_signals [EDITED] =
-    gtk_signal_new ("edited",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCellRendererTextClass, edited),
-		    _gtk_marshal_VOID__STRING_STRING,
-		    GTK_TYPE_NONE, 2,
-		    G_TYPE_STRING,
-		    G_TYPE_STRING);
+    g_signal_new ("edited",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkCellRendererTextClass, edited),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__STRING_STRING,
+		  G_TYPE_NONE, 2,
+		  G_TYPE_STRING,
+		  G_TYPE_STRING);
 
 }
 
@@ -1077,7 +1079,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 GtkCellRenderer *
 gtk_cell_renderer_text_new (void)
 {
-  return GTK_CELL_RENDERER (g_object_new (gtk_cell_renderer_text_get_type (), NULL));
+  return g_object_new (GTK_TYPE_CELL_RENDERER_TEXT, NULL);
 }
 
 static void
@@ -1244,7 +1246,7 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
 	}
     }
 
-  g_object_unref (G_OBJECT (layout));
+  g_object_unref (layout);
 }
 
 static void
@@ -1303,7 +1305,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
                           background_area->width,
                           background_area->height);
 
-      g_object_unref (G_OBJECT (gc));
+      g_object_unref (gc);
     }
 
   gtk_paint_layout (widget->style,
@@ -1317,7 +1319,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
                     cell_area->y + y_offset + cell->ypad,
                     layout);
 
-  g_object_unref (G_OBJECT (layout));
+  g_object_unref (layout);
 }
 static void
 gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
@@ -1332,7 +1334,7 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
   path = g_object_get_data (G_OBJECT (entry), GTK_CELL_RENDERER_TEXT_PATH);
   new_text = gtk_entry_get_text (GTK_ENTRY (entry));
 
-  gtk_signal_emit (GTK_OBJECT (data), text_cell_renderer_signals[EDITED], path, new_text);
+  g_signal_emit (data, text_cell_renderer_signals[EDITED], 0, path, new_text);
 }
 
 static GtkCellEditable *
@@ -1363,10 +1365,10 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
   
   gtk_widget_show (entry);
-  gtk_signal_connect (GTK_OBJECT (entry),
-		      "editing_done",
-		      G_CALLBACK (gtk_cell_renderer_text_editing_done),
-		      celltext);
+  g_signal_connect (entry,
+		    "editing_done",
+		    G_CALLBACK (gtk_cell_renderer_text_editing_done),
+		    celltext);
   return GTK_CELL_EDITABLE (entry);
 
 }

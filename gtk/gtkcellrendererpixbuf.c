@@ -72,110 +72,111 @@ struct _GtkCellRendererPixbufInfo
   gchar *stock_detail;
 };
 
-GtkType
+GType
 gtk_cell_renderer_pixbuf_get_type (void)
 {
-	static GtkType cell_pixbuf_type = 0;
+  static GType cell_pixbuf_type = 0;
 
-	if (!cell_pixbuf_type)
-	{
-		static const GTypeInfo cell_pixbuf_info =
-		{
-			sizeof (GtkCellRendererPixbufClass),
-			NULL,		/* base_init */
-			NULL,		/* base_finalize */
-			(GClassInitFunc) gtk_cell_renderer_pixbuf_class_init,
-			NULL,		/* class_finalize */
-			NULL,		/* class_data */
-			sizeof (GtkCellRendererPixbuf),
-			0,              /* n_preallocs */
-			(GInstanceInitFunc) gtk_cell_renderer_pixbuf_init,
-		};
+  if (!cell_pixbuf_type)
+    {
+      static const GTypeInfo cell_pixbuf_info =
+      {
+	sizeof (GtkCellRendererPixbufClass),
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_cell_renderer_pixbuf_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkCellRendererPixbuf),
+	0,              /* n_preallocs */
+	(GInstanceInitFunc) gtk_cell_renderer_pixbuf_init,
+      };
 
-		cell_pixbuf_type = g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererPixbuf", &cell_pixbuf_info, 0);
-	}
+      cell_pixbuf_type =
+	g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererPixbuf",
+			        &cell_pixbuf_info, 0);
+    }
 
-	return cell_pixbuf_type;
+  return cell_pixbuf_type;
 }
 
 static void
 gtk_cell_renderer_pixbuf_init (GtkCellRendererPixbuf *cellpixbuf)
 {
-	GtkCellRendererPixbufInfo *cellinfo;
+  GtkCellRendererPixbufInfo *cellinfo;
 
-	cellinfo = g_new0 (GtkCellRendererPixbufInfo, 1);
-	cellinfo->stock_size = GTK_ICON_SIZE_MENU;
-	g_object_set_data (G_OBJECT (cellpixbuf), CELLINFO_KEY, cellinfo);
+  cellinfo = g_new0 (GtkCellRendererPixbufInfo, 1);
+  cellinfo->stock_size = GTK_ICON_SIZE_MENU;
+  g_object_set_data (G_OBJECT (cellpixbuf), CELLINFO_KEY, cellinfo);
 }
 
 static void
 gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (class);
-	GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (class);
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (class);
 
-	parent_class = g_type_class_peek_parent (class);
+  parent_class = g_type_class_peek_parent (class);
 
-	object_class->finalize = gtk_cell_renderer_pixbuf_finalize;
+  object_class->finalize = gtk_cell_renderer_pixbuf_finalize;
 
-	object_class->get_property = gtk_cell_renderer_pixbuf_get_property;
-	object_class->set_property = gtk_cell_renderer_pixbuf_set_property;
+  object_class->get_property = gtk_cell_renderer_pixbuf_get_property;
+  object_class->set_property = gtk_cell_renderer_pixbuf_set_property;
 
-	cell_class->get_size = gtk_cell_renderer_pixbuf_get_size;
-	cell_class->render = gtk_cell_renderer_pixbuf_render;
+  cell_class->get_size = gtk_cell_renderer_pixbuf_get_size;
+  cell_class->render = gtk_cell_renderer_pixbuf_render;
 
-	g_object_class_install_property (object_class,
-					 PROP_PIXBUF,
-					 g_param_spec_object ("pixbuf",
-							      _("Pixbuf Object"),
-							      _("The pixbuf to render"),
-							      GDK_TYPE_PIXBUF,
-							      G_PARAM_READABLE |
-							      G_PARAM_WRITABLE));
+  g_object_class_install_property (object_class,
+				   PROP_PIXBUF,
+				   g_param_spec_object ("pixbuf",
+							_("Pixbuf Object"),
+							_("The pixbuf to render"),
+							GDK_TYPE_PIXBUF,
+							G_PARAM_READABLE |
+							G_PARAM_WRITABLE));
 
-	g_object_class_install_property (object_class,
-					 PROP_PIXBUF_EXPANDER_OPEN,
-					 g_param_spec_object ("pixbuf_expander_open",
-							      _("Pixbuf Expander Open"),
-							      _("Pixbuf for open expander"),
-							      GDK_TYPE_PIXBUF,
-							      G_PARAM_READABLE |
-							      G_PARAM_WRITABLE));
+  g_object_class_install_property (object_class,
+				   PROP_PIXBUF_EXPANDER_OPEN,
+				   g_param_spec_object ("pixbuf_expander_open",
+							_("Pixbuf Expander Open"),
+							_("Pixbuf for open expander"),
+							GDK_TYPE_PIXBUF,
+							G_PARAM_READABLE |
+							G_PARAM_WRITABLE));
 
-	g_object_class_install_property (object_class,
-					 PROP_PIXBUF_EXPANDER_CLOSED,
-					 g_param_spec_object ("pixbuf_expander_closed",
-							      _("Pixbuf Expander Closed"),
-							      _("Pixbuf for closed expander"),
-							      GDK_TYPE_PIXBUF,
-							      G_PARAM_READABLE |
-							      G_PARAM_WRITABLE));
+  g_object_class_install_property (object_class,
+				   PROP_PIXBUF_EXPANDER_CLOSED,
+				   g_param_spec_object ("pixbuf_expander_closed",
+							_("Pixbuf Expander Closed"),
+							_("Pixbuf for closed expander"),
+							GDK_TYPE_PIXBUF,
+							G_PARAM_READABLE |
+							G_PARAM_WRITABLE));
 
-	g_object_class_install_property (object_class,
-                                         PROP_STOCK_ID,
-                                         g_param_spec_string ("stock_id",
-                                                              _("Stock ID"),
-                                                              _("The stock ID of the stock icon to render"),
-                                                              NULL,
-                                                              G_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+				   PROP_STOCK_ID,
+				   g_param_spec_string ("stock_id",
+							_("Stock ID"),
+							_("The stock ID of the stock icon to render"),
+							NULL,
+							G_PARAM_READWRITE));
 
-        g_object_class_install_property (object_class,
-                                         PROP_STOCK_SIZE,
-                                         g_param_spec_enum ("stock_size",
-                                                            _("Size"),
-                                                            _("The size of the rendered icon"),
-                                                            GTK_TYPE_ICON_SIZE,
-                                                            GTK_ICON_SIZE_MENU,
-                                                            G_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+				   PROP_STOCK_SIZE,
+				   g_param_spec_enum ("stock_size",
+						      _("Size"),
+						      _("The size of the rendered icon"),
+						      GTK_TYPE_ICON_SIZE,
+						      GTK_ICON_SIZE_MENU,
+						      G_PARAM_READWRITE));
 
-        g_object_class_install_property (object_class,
-                                         PROP_STOCK_DETAIL,
-                                         g_param_spec_string ("stock_detail",
-                                                              _("Detail"),
-                                                              _("Render detail to pass to the theme engine"),
-                                                              NULL,
-                                                              G_PARAM_READWRITE));
-
+  g_object_class_install_property (object_class,
+				   PROP_STOCK_DETAIL,
+				   g_param_spec_string ("stock_detail",
+							_("Detail"),
+							_("Render detail to pass to the theme engine"),
+							NULL,
+							G_PARAM_READWRITE));
 }
 
 static void
@@ -253,25 +254,25 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
     case PROP_PIXBUF:
       pixbuf = (GdkPixbuf*) g_value_get_object (value);
       if (pixbuf)
-        g_object_ref (G_OBJECT (pixbuf));
+        g_object_ref (pixbuf);
       if (cellpixbuf->pixbuf)
-	g_object_unref (G_OBJECT (cellpixbuf->pixbuf));
+	g_object_unref (cellpixbuf->pixbuf);
       cellpixbuf->pixbuf = pixbuf;
       break;
     case PROP_PIXBUF_EXPANDER_OPEN:
       pixbuf = (GdkPixbuf*) g_value_get_object (value);
       if (pixbuf)
-        g_object_ref (G_OBJECT (pixbuf));
+        g_object_ref (pixbuf);
       if (cellpixbuf->pixbuf_expander_open)
-	g_object_unref (G_OBJECT (cellpixbuf->pixbuf_expander_open));
+	g_object_unref (cellpixbuf->pixbuf_expander_open);
       cellpixbuf->pixbuf_expander_open = pixbuf;
       break;
     case PROP_PIXBUF_EXPANDER_CLOSED:
       pixbuf = (GdkPixbuf*) g_value_get_object (value);
       if (pixbuf)
-        g_object_ref (G_OBJECT (pixbuf));
+        g_object_ref (pixbuf);
       if (cellpixbuf->pixbuf_expander_closed)
-	g_object_unref (G_OBJECT (cellpixbuf->pixbuf_expander_closed));
+	g_object_unref (cellpixbuf->pixbuf_expander_closed);
       cellpixbuf->pixbuf_expander_closed = pixbuf;
       break;
     case PROP_STOCK_ID:
@@ -318,7 +319,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
 GtkCellRenderer *
 gtk_cell_renderer_pixbuf_new (void)
 {
-  return GTK_CELL_RENDERER (gtk_type_new (gtk_cell_renderer_pixbuf_get_type ()));
+  return g_object_new (GTK_TYPE_CELL_RENDERER_PIXBUF, NULL);
 }
 
 static void
@@ -328,7 +329,7 @@ gtk_cell_renderer_pixbuf_create_stock_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
   GtkCellRendererPixbufInfo *cellinfo = g_object_get_data (G_OBJECT (cellpixbuf), CELLINFO_KEY);
 
   if (cellpixbuf->pixbuf)
-    g_object_unref (G_OBJECT (cellpixbuf->pixbuf));
+    g_object_unref (cellpixbuf->pixbuf);
 
   cellpixbuf->pixbuf = gtk_widget_render_icon (widget,
 					       cellinfo->stock_id,

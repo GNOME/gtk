@@ -19,7 +19,6 @@
 
 #include <stdlib.h>
 #include <gtk/gtkcellrenderertoggle.h>
-#include <gtk/gtksignal.h>
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 
@@ -74,10 +73,10 @@ enum {
 static guint toggle_cell_signals[LAST_SIGNAL] = { 0 };
 
 
-GtkType
+GType
 gtk_cell_renderer_toggle_get_type (void)
 {
-  static GtkType cell_toggle_type = 0;
+  static GType cell_toggle_type = 0;
 
   if (!cell_toggle_type)
     {
@@ -94,7 +93,9 @@ gtk_cell_renderer_toggle_get_type (void)
 	(GInstanceInitFunc) gtk_cell_renderer_toggle_init,
       };
 
-      cell_toggle_type = g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererToggle", &cell_toggle_info, 0);
+      cell_toggle_type =
+	g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererToggle",
+				&cell_toggle_info, 0);
     }
 
   return cell_toggle_type;
@@ -153,13 +154,14 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 
 
   toggle_cell_signals[TOGGLED] =
-    gtk_signal_new ("toggled",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCellRendererToggleClass, toggled),
-		    _gtk_marshal_VOID__STRING,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_STRING);
+    g_signal_new ("toggled",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkCellRendererToggleClass, toggled),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__STRING,
+		  G_TYPE_NONE, 1,
+		  G_TYPE_STRING);
 }
 
 static void
@@ -232,7 +234,7 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
 GtkCellRenderer *
 gtk_cell_renderer_toggle_new (void)
 {
-  return GTK_CELL_RENDERER (gtk_type_new (gtk_cell_renderer_toggle_get_type ()));
+  return g_object_new (GTK_TYPE_CELL_RENDERER_TOGGLE, NULL);
 }
 
 static void
@@ -348,7 +350,7 @@ gtk_cell_renderer_toggle_activate (GtkCellRenderer *cell,
   celltoggle = GTK_CELL_RENDERER_TOGGLE (cell);
   if (celltoggle->activatable)
     {
-      gtk_signal_emit (GTK_OBJECT (cell), toggle_cell_signals[TOGGLED], path);
+      g_signal_emit (cell, toggle_cell_signals[TOGGLED], 0, path);
       return TRUE;
     }
 

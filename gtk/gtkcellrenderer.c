@@ -59,10 +59,10 @@ struct _GtkCellRendererInfo
   GdkColor cell_background;
 };
 
-GtkType
+GType
 gtk_cell_renderer_get_type (void)
 {
-  static GtkType cell_type = 0;
+  static GType cell_type = 0;
 
   if (!cell_type)
     {
@@ -75,9 +75,9 @@ gtk_cell_renderer_get_type (void)
 	NULL,		/* class_finalize */
 	NULL,		/* class_data */
         sizeof (GtkCellRenderer),
-	0,              /* n_preallocs */
+	0,		/* n_preallocs */
         (GInstanceInitFunc) gtk_cell_renderer_init,
-	NULL,           /* value_table */
+	NULL,		/* value_table */
       };
 
       cell_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkCellRenderer", 
@@ -444,7 +444,13 @@ gtk_cell_renderer_get_size (GtkCellRenderer *cell,
       *height = cell->height;
     }
 
-  GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (cell, widget, cell_area, x_offset, y_offset, real_width, real_height);
+  GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (cell,
+						widget,
+						cell_area,
+						x_offset,
+						y_offset,
+						real_width,
+						real_height);
 }
 
 /**
@@ -497,7 +503,7 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
       gdk_draw_rectangle (window, gc, TRUE,
                           background_area->x, background_area->y,
                           background_area->width, background_area->height);
-      g_object_unref (G_OBJECT (gc));
+      g_object_unref (gc);
     }
 
   GTK_CELL_RENDERER_GET_CLASS (cell)->render (cell,
