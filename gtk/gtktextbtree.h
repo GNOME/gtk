@@ -192,8 +192,8 @@ struct _GtkTextLineData {
   gpointer view_id;
   GtkTextLineData *next;
   gint height;
-  gint width : 24;
-  gint valid : 8;
+  signed int width : 24;
+  guint valid : 8;		/* Actually a boolean */
 };
 
 /*

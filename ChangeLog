@@ -1,3 +1,13 @@
+Mon Sep 23 14:58:04 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkhandlebox.h gtk/gtktextbtree.[ch]:
+	Use 'signed int' not 'gint' for signed bitfields.
+	(#93020, Vitaly Tishkov)
+
+	* gtk/gtktextlayout.h gtk/gtktextbtree.[ch]: 
+	Fix some 'gint' bitfields that should have been
+	unsigned.
+
 Mon Sep 23 12:12:48 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkspinbutton.c: Patch from Joshua N Pritikin to
