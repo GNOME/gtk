@@ -1070,7 +1070,7 @@ gtk_window_move_resize (GtkWindow *window)
       (height < widget->requisition.height))
     {
       window->resize_count += 1;
-      if ((x != -1) && (y != -1))
+      if ((x != -1) && (y != -1) && (window->position != GTK_WIN_POS_NONE))
 	gdk_window_move_resize (widget->window, x, y,
 				widget->requisition.width,
 				widget->requisition.height);

@@ -91,10 +91,10 @@ static guint	   gtk_rc_parse_path_pattern	   (GScanner     *scanner);
 static void        gtk_rc_clear_hash_node          (gpointer   key, 
 						    gpointer   data, 
 						    gpointer   user_data);
-static void        gtk_rc_clear_styles             (void);
+static void        gtk_rc_clear_styles               (void);
 static void        gtk_rc_append_default_pixmap_path (void);
 static void        gtk_rc_append_default_module_path (void);
-
+static void        gtk_rc_append_pixmap_path         (gchar *dir);
 
 
 static	GScannerConfig	gtk_rc_scanner_config =
@@ -214,8 +214,20 @@ gtk_rc_append_default_pixmap_path(void)
   if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
     return;
   pixmap_path[n++] = g_strdup(path);
-  pixmap_path[n] = g_strdup(path);
+  pixmap_path[n] = NULL;
   g_free(path);
+}
+
+static void
+gtk_rc_append_pixmap_path(gchar *dir)
+{
+  gint n;
+
+  for (n = 0; pixmap_path[n]; n++) ;
+  if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
+    return;
+  pixmap_path[n++] = g_strdup(dir);
+  pixmap_path[n] = NULL;
 }
 
 static void
@@ -240,7 +252,7 @@ gtk_rc_append_default_module_path(void)
   if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
     return;
   module_path[n++] = g_strdup(path);
-  module_path[n] = g_strdup(path);
+  module_path[n] = NULL;
   g_free(path);
 }
 
@@ -330,6 +342,16 @@ gtk_rc_parse_file (const gchar *filename, gboolean reload)
       if (fd < 0)
 	return;
 
+	{
+	  gint i;
+	  gchar *dir;
+	  
+	  dir = g_strdup(rc_file->canonical_name);
+	  for (i = strlen(dir) - 1; (i >= 0) && (dir[i] != '/'); i--)
+	    dir[i] = 0;
+	  gtk_rc_append_pixmap_path(dir);
+	  g_free(dir);
+	}
       gtk_rc_parse_any (filename, fd, NULL);
 
       close (fd);
@@ -1305,7 +1327,6 @@ gtk_rc_find_module_in_path (GScanner *scanner,
   
   for (i = 0; (i < GTK_RC_MAX_MODULE_PATHS) && (module_path[i] != NULL); i++)
     {
-      printf("path %s\n",module_path[i]);
       buf = g_malloc (strlen (module_path[i]) + strlen (module_file) + 2);
       sprintf (buf, "%s%c%s", module_path[i], '/', module_file);
       
