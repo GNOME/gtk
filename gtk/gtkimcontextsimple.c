@@ -27,7 +27,7 @@ typedef struct _GtkComposeTable GtkComposeTable;
 
 struct _GtkComposeTable 
 {
-  guint16 *data;
+  const guint16 *data;
   gint max_seq_len;
   gint n_seqs;
 };
@@ -55,7 +55,7 @@ struct _GtkComposeTable
  * that depend on the locale or selected input method. 
  */
 
-static guint16 gtk_compose_seqs[] = {
+static const guint16 gtk_compose_seqs[] = {
   GDK_dead_grave,	GDK_space,	0,	0,	0,	0x0060,	/* GRAVE_ACCENT */
   GDK_dead_grave,	GDK_A,	0,	0,	0,	0x00C0,	/* LATIN_CAPITAL_LETTER_A_WITH_GRAVE */
   GDK_dead_grave,	GDK_E,	0,	0,	0,	0x00C8,	/* LATIN_CAPITAL_LETTER_E_WITH_GRAVE */
@@ -832,7 +832,7 @@ static const GtkComposeTable gtk_compose_table = {
   G_N_ELEMENTS (gtk_compose_seqs) / 6
 };
 
-guint16 gtk_compose_ignore[] = {
+static const guint16 gtk_compose_ignore[] = {
   GDK_Shift_L,
   GDK_Shift_R,
   GDK_Control_L,

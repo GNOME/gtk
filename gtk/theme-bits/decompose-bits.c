@@ -46,7 +46,7 @@ do_part (GdkPixbuf  *pixbuf,
   color3 = pixels + part3_index * n_channels;
   pixels += rowstride;
   
-  printf ("static guchar %s_%s_bits[] = {\n", base_name, part_name);
+  printf ("static const guchar %s_%s_bits[] = {\n", base_name, part_name);
   printf ("  ");
 
   while (height--)

@@ -1,3 +1,12 @@
+2002-11-13  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/theme-bits/decompose-bits.c (do_part): Add a const here.
+
+	* gtk/gtkcolorsel.c: 
+	* gtk/gtkimcontextsimple.c: 
+	* gtk/gtkstyle.c: Mark constant data as const to give the compiler
+	a chance to put it in a readonly section.  (#75754)
+
 Wed Nov 13 10:53:37 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/gtkimcontextxim.c:
