@@ -1,3 +1,9 @@
+2004-02-17  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdialog.c
+	(gtk_file_chooser_dialog_style_set): Use HIG-compliant spacings.
+	This sucks a lot.
+
 Wed Feb 18 02:03:47 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): Document some

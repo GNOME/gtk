@@ -275,11 +275,26 @@ static void
 gtk_file_chooser_dialog_style_set (GtkWidget *widget,
 				   GtkStyle  *previous_style)
 {
+  GtkDialog *dialog;
+
   if (GTK_WIDGET_CLASS (parent_class)->style_set)
     GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
 
   if (GTK_WIDGET_REALIZED (widget))
     set_default_size (GTK_FILE_CHOOSER_DIALOG (widget));
+
+  dialog = GTK_DIALOG (widget);
+
+  /* Override the style properties with HIG-compliant spacings.  Ugh.
+   * http://developer.gnome.org/projects/gup/hig/1.0/layout.html#layout-dialogs
+   * http://developer.gnome.org/projects/gup/hig/1.0/windows.html#alert-spacing
+   */
+
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox), 12);
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 24);
+
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 0);
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
 }
 
 static void
