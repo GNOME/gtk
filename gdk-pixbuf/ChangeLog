@@ -1,3 +1,10 @@
+2000-02-01  Federico Mena Quintero  <federico@helixcode.com>
+
+	* doc/tmpl/rendering.sgml: gnome_init() does not call
+	gdk_rgb_init(), so don't mention that it does in the
+	documentation.  Thanks to Alexander Kruuse <kruuse@home.se> for
+	pointing this out.
+
 2000-01-31  Havoc Pennington  <hp@redhat.com>
 
 	* gdk-pixbuf/Makefile.am (noinst_PROGRAMS): no testpixbuf-foo target
