@@ -110,6 +110,13 @@ struct _GtkItemFactoryEntry
    * "<LastBranch>"	-> create a right justified item to hold sub items
    */
   gchar		 *item_type;
+
+  /* Extra data for some item types:
+   *  ImageItem  -> pointer to inline pixbuf + inline pixbuf length
+   *  StockItem  -> name of stock item
+   */
+  gpointer extra_data;
+  guint    extra_data2;
 };
 
 struct _GtkItemFactoryItem

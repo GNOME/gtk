@@ -1,5 +1,14 @@
 2001-03-21  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkitemfactory.[ch]:
+	Add support for stock and normal imagemenuitems.
+	
+	* gtk/testgtk.c:
+	Add some tests for mnemonics, stock toolbars, stock
+	and image menuitems in itemfactory and gdk_window_scroll.
+
+2001-03-21  Alexander Larsson  <alexl@redhat.com>
+
         * gtk/gtkbutton.[ch]:
 	* gtk/gtkdialog.c:
 	Renamed gtk_button_new_stock() to gtk_button_new_from_stock() and

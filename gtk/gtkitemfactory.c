@@ -37,9 +37,13 @@
 #include	"gtk/gtkmenuitem.h"
 #include	"gtk/gtkradiomenuitem.h"
 #include	"gtk/gtkcheckmenuitem.h"
+#include	"gtk/gtkimagemenuitem.h"
 #include	"gtk/gtktearoffmenuitem.h"
 #include	"gtk/gtkaccellabel.h"
 #include        "gdk/gdkkeysyms.h"
+#include	"gtk/gtkimage.h"
+#include	"gtk/gtkstock.h"
+#include	"gtk/gtkiconfactory.h"
 #include	<string.h>
 #include	<sys/stat.h>
 #include	<fcntl.h>
@@ -105,6 +109,8 @@ static GQuark		 quark_type_title = 0;
 static GQuark		 quark_type_radio_item = 0;
 static GQuark		 quark_type_check_item = 0;
 static GQuark		 quark_type_toggle_item = 0;
+static GQuark		 quark_type_image_item = 0;
+static GQuark		 quark_type_stock_item = 0;
 static GQuark		 quark_type_tearoff_item = 0;
 static GQuark		 quark_type_separator_item = 0;
 static GQuark		 quark_type_branch = 0;
@@ -220,6 +226,8 @@ gtk_item_factory_class_init (GtkItemFactoryClass  *class)
   quark_type_radio_item		= g_quark_from_static_string ("<RadioItem>");
   quark_type_check_item		= g_quark_from_static_string ("<CheckItem>");
   quark_type_toggle_item	= g_quark_from_static_string ("<ToggleItem>");
+  quark_type_image_item         = g_quark_from_static_string ("<ImageItem>");
+  quark_type_stock_item         = g_quark_from_static_string ("<StockItem>");
   quark_type_tearoff_item	= g_quark_from_static_string ("<Tearoff>");
   quark_type_separator_item	= g_quark_from_static_string ("<Separator>");
   quark_type_branch		= g_quark_from_static_string ("<Branch>");
@@ -1095,15 +1103,17 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   GtkOptionMenu *option_menu = NULL;
   GtkWidget *parent;
   GtkWidget *widget;
+  GtkWidget *image;
   GSList *radio_group;
   gchar *name;
   gchar *parent_path;
   gchar *path;
-  guint accel_key;
+  gchar *accelerator;
   guint type_id;
   GtkType type;
   gchar *item_type_path;
-
+  GtkStockItem stock_item;
+      
   g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (entry != NULL);
@@ -1132,6 +1142,10 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     type = GTK_TYPE_RADIO_MENU_ITEM;
   else if (type_id == quark_type_check_item)
     type = GTK_TYPE_CHECK_MENU_ITEM;
+  else if (type_id == quark_type_image_item)
+    type = GTK_TYPE_IMAGE_MENU_ITEM;
+  else if (type_id == quark_type_stock_item)
+    type = GTK_TYPE_IMAGE_MENU_ITEM;
   else if (type_id == quark_type_tearoff_item)
     type = GTK_TYPE_TEAROFF_MENU_ITEM;
   else if (type_id == quark_type_toggle_item)
@@ -1199,6 +1213,8 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 			      
   g_return_if_fail (GTK_IS_CONTAINER (parent));
 
+  accelerator = entry->accelerator;
+  
   widget = gtk_widget_new (type,
 			   "GtkWidget::visible", TRUE,
 			   "GtkWidget::sensitive", (type_id != quark_type_separator_item &&
@@ -1212,6 +1228,39 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     gtk_radio_menu_item_set_group (GTK_RADIO_MENU_ITEM (widget), radio_group);
   if (GTK_IS_CHECK_MENU_ITEM (widget))
     gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (widget), TRUE);
+  if (GTK_IS_IMAGE_MENU_ITEM (widget))
+    {
+      GdkPixbuf *pixbuf = NULL;
+      image = NULL;
+
+      pixbuf = gdk_pixbuf_new_from_inline (entry->extra_data,
+					   FALSE,
+					   entry->extra_data2,
+					   NULL);
+
+      if (pixbuf)
+	image = gtk_image_new_from_pixbuf (pixbuf);
+
+      if (image)
+	gtk_image_menu_item_add_image (GTK_IMAGE_MENU_ITEM (widget), image);
+
+      if (pixbuf)
+	g_object_unref (G_OBJECT (pixbuf));
+    }
+  if (type_id == quark_type_stock_item)
+    {
+      image = gtk_image_new_from_stock (entry->extra_data, GTK_ICON_SIZE_MENU);
+      if (image)
+	gtk_image_menu_item_add_image (GTK_IMAGE_MENU_ITEM (widget), image);
+      
+      if (gtk_stock_lookup (entry->extra_data, &stock_item))
+	{
+	  if (!accelerator)
+	    accelerator = gtk_accelerator_name (stock_item.keyval, stock_item.modifier);
+	}
+    }
+  
+  
 
   /* install underline accelerators for this item
    */
@@ -1251,7 +1300,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     }	   
   
   gtk_item_factory_add_item (ifactory,
-			     path, entry->accelerator,
+			     path, accelerator,
 			     (type_id == quark_type_branch ||
 			      type_id == quark_type_last_branch) ?
 			      (GtkItemFactoryCallback) NULL : entry->callback,
@@ -1260,6 +1309,9 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 			     item_type_path,
 			     widget);
 
+  if (accelerator != entry->accelerator)
+    g_free (accelerator);
+  
   g_free (path);
 }
 
