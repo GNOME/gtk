@@ -4176,6 +4176,8 @@ gtk_combo_box_set_active (GtkComboBox *combo_box,
     path = NULL;
   
   gtk_combo_box_set_active_internal (combo_box, path);
+
+  gtk_tree_path_free (path);
 }
 
 static void
