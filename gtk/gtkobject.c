@@ -22,7 +22,6 @@
 #include "gtkobject.h"
 #include "gtksignal.h"
 
-#define	GTK_OBJECT_DEBUG 1
 
 #define OBJECT_DATA_ID_CHUNK  1024
 
@@ -93,19 +92,18 @@ static GHashTable *arg_info_ht = NULL;
 static const char *user_data_key = "user_data";
 
 
-#ifdef	GTK_OBJECT_DEBUG
-static int obj_count = 0;
+static gint obj_count = 0;
 static GSList *living_objs = NULL;
+
 
 static void
 gtk_object_debug (void)
 {
-
   if (1)
     {
       GSList *node;
       
-      printf ("living objects (%d):\n", obj_count);
+      printf ("living objects (%d):\n", g_slist_length (living_objs));
       for (node = living_objs; node; node = node->next)
 	{
 	  GtkObject *obj;
@@ -117,9 +115,8 @@ gtk_object_debug (void)
 		  GTK_OBJECT_FLOATING (obj)? "floating" : "");
 	}
     }
-  printf ("%d living objects\n", obj_count);
+  printf ("living objects count = %d\n", obj_count);
 }
-#endif	GTK_OBJECT_DEBUG
 
 /*****************************************
  * gtk_object_init_type:
@@ -147,9 +144,9 @@ gtk_object_init_type ()
   object_type = gtk_type_unique (0, &object_info);
   g_assert (object_type == GTK_TYPE_OBJECT);
 
-#ifdef	GTK_OBJECT_DEBUG
+#ifdef	GTK_TRACE_OBJECTS
   ATEXIT (gtk_object_debug);
-#endif	GTK_OBJECT_DEBUG
+#endif	/* GTK_TRACE_OBJECTS */
 }
 
 GtkType
@@ -205,9 +202,7 @@ gtk_object_real_destroy (GtkObject *object)
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
-  /* FIXME: gtk_signal_handlers_destroy (object); */
-
-  /* object->klass = gtk_type_class (gtk_destroyed_get_type ()); */
+  gtk_signal_handlers_destroy (object);
 }
 
 /*****************************************
@@ -226,10 +221,10 @@ gtk_object_init (GtkObject *object)
   object->ref_count = 1;
   object->object_data = NULL;
 
-#ifdef	GTK_OBJECT_DEBUG
+#ifdef	GTK_TRACE_OBJECTS
   obj_count++;
   living_objs = g_slist_prepend (living_objs, object);
-#endif	GTK_OBJECT_DEBUG
+#endif	/* GTK_TRACE_OBJECTS */
 }
 
 /*****************************************
@@ -383,59 +378,6 @@ gtk_object_class_add_user_signal (GtkObjectClass     *class,
     gtk_object_class_add_signals (class, &signal_id, 1);
 
   return signal_id;
-}
-
-/*****************************************
- * gtk_object_ref:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_object_ref (GtkObject *object)
-{
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-
-  object->ref_count += 1;
-}
-
-/*****************************************
- * gtk_object_unref:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_object_unref (GtkObject *object)
-{
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-  
-  if (object->ref_count == 1)
-    gtk_object_destroy (object);
-  
-  if (object->ref_count > 0)
-    object->ref_count -= 1;
-  
-  if (object->ref_count == 0)
-    {
-      obj_count--;
-      
-#ifdef	GTK_OBJECT_DEBUG
-      g_assert (g_slist_find (living_objs, object));
-      living_objs = g_slist_remove (living_objs, object);
-      /*
-	fprintf (stderr, "finalizing %p %s\n", object, gtk_type_name (object->klass->type));
-	*/
-#endif	GTK_OBJECT_DEBUG
-      
-      object->klass->finalize (object);
-    }
 }
 
 /*****************************************
@@ -1494,4 +1436,83 @@ gtk_object_collect_args (guint   *nargs,
     }
 
   return args;
+}
+
+
+
+#undef	gtk_object_ref
+#undef	gtk_object_unref
+
+void
+gtk_object_ref (GtkObject *object)
+{
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+
+  object->ref_count += 1;
+}
+
+void
+gtk_object_unref (GtkObject *object)
+{
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+  
+  if (object->ref_count == 1)
+    gtk_object_destroy (object);
+  
+  if (object->ref_count > 0)
+    object->ref_count -= 1;
+
+  if (object->ref_count == 0)
+    {
+      g_assert (g_slist_find (living_objs, object));
+      living_objs = g_slist_remove (living_objs, object);
+      object->klass->finalize (object);
+      obj_count--;
+    }
+}
+
+static GtkObject *gtk_trace_object = NULL;
+
+void
+gtk_trace_referencing (gpointer    *o,
+		       const gchar *func,
+		       guint	   local_frame,
+		       guint	   line,
+		       gboolean	   do_ref)
+{
+  gboolean exists;
+  GtkObject *object = (GtkObject*) o;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+
+  exists = (g_slist_find (living_objs, object) != NULL);
+
+  if (exists &&
+      (object == gtk_trace_object ||
+       gtk_trace_object == (void*)42))
+    printf ("trace: object_%s: (%s:%p)->ref_count=%d%s (%s_f%02d:%d)\n",
+	    do_ref ? "ref" : "unref",
+	    gtk_type_name (GTK_OBJECT_TYPE (object)),
+	    object,
+	    object->ref_count,
+	    do_ref ? " + 1" : " - 1 ",
+	    func,
+	    local_frame,
+	    line);
+  
+  if (!exists)
+    printf ("trace: object_%s(%p): no such object! (%s_f%02d:%d)\n",
+	    do_ref ? "ref" : "unref",
+	    object,
+	    func,
+	    local_frame,
+	    line);
+  
+  if (do_ref)
+    gtk_object_ref (object);
+  else
+    gtk_object_unref (object);
 }

@@ -18,6 +18,8 @@
 #ifndef __GTK_OBJECT_H__
 #define __GTK_OBJECT_H__
 
+#define GTK_TRACE_OBJECTS	1
+
 
 #include <gtk/gtkenums.h>
 #include <gtk/gtktypeutils.h>
@@ -199,10 +201,9 @@ GtkObject*	gtk_object_new		(guint		type,
 GtkObject*	gtk_object_newv		(guint		type,
 					 guint		nargs,
 					 GtkArg		*args);
-
+void gtk_object_sink      (GtkObject        *object);
 void gtk_object_ref       (GtkObject        *object);
 void gtk_object_unref     (GtkObject        *object);
-void gtk_object_sink      (GtkObject        *object);
 
 void gtk_object_weakref   (GtkObject        *object,
 			   GtkDestroyNotify  notify,
@@ -288,6 +289,18 @@ GtkObject* gtk_object_check_cast (GtkObject *obj,
 
 GtkObjectClass* gtk_object_check_class_cast (GtkObjectClass *klass,
 					     GtkType         cast_type);
+
+void	gtk_trace_referencing	(gpointer    *object,
+				 const gchar *func,
+				 guint        local_frame,
+				 guint        line,
+				 gboolean     do_ref);
+     
+#if	defined (GTK_TRACE_OBJECTS) && defined (__GNUC__)
+#  define gtk_object_ref(o)   G_STMT_START{static guint f=0;gtk_trace_referencing((gpointer)o,__PRETTY_FUNCTION__,++f,__LINE__, 1);f--;}G_STMT_END
+#  define gtk_object_unref(o) G_STMT_START{static guint f=0;gtk_trace_referencing((gpointer)o,__PRETTY_FUNCTION__,++f,__LINE__, 0);f--;}G_STMT_END
+#endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
+
 
 
 #ifdef __cplusplus

@@ -351,9 +351,9 @@ GtkWidget* gtk_widget_new		  (guint		type,
 GtkWidget* gtk_widget_newv		  (guint		type,
 					   guint		nargs,
 					   GtkArg	       *args);
+void       gtk_widget_sink                (GtkWidget           *widget);
 void       gtk_widget_ref                 (GtkWidget           *widget);
 void       gtk_widget_unref               (GtkWidget           *widget);
-void       gtk_widget_sink                (GtkWidget           *widget);
 void       gtk_widget_destroy             (GtkWidget           *widget);
 void       gtk_widget_destroyed           (GtkWidget           *widget,
 					   GtkWidget          **widget_pointer);
@@ -508,6 +508,12 @@ void	     gtk_widget_dnd_data_set (GtkWidget	    *widget,
 				      GdkEvent	    *event,
 				      gpointer	     data,
 				      gulong	     data_numbytes);
+
+#if     defined (GTK_TRACE_OBJECTS) && defined (__GNUC__)
+#  define gtk_widget_ref gtk_object_ref
+#  define gtk_widget_unref gtk_object_unref
+#endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
+
 
 #ifdef __cplusplus
 }

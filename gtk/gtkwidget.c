@@ -953,18 +953,6 @@ gtk_widget_new (guint type,
   return GTK_WIDGET (obj);
 }
 
-void
-gtk_widget_ref (GtkWidget *widget)
-{
-  gtk_object_ref (GTK_OBJECT (widget));
-}
-
-void
-gtk_widget_unref (GtkWidget *widget)
-{
-  gtk_object_unref (GTK_OBJECT (widget));
-}
-
 /*****************************************
  * gtk_widget_newv:
  *
@@ -3830,3 +3818,20 @@ gtk_widget_dnd_data_set (GtkWidget   *widget,
   
   gdk_window_dnd_data_set (widget->window, event, data, data_numbytes);
 }
+
+#undef	gtk_widget_ref
+#undef	gtk_widget_unref
+
+
+void
+gtk_widget_ref (GtkWidget *widget)
+{
+  gtk_object_ref (GTK_OBJECT (widget));
+}
+
+void
+gtk_widget_unref (GtkWidget *widget)
+{
+  gtk_object_unref (GTK_OBJECT (widget));
+}
+

@@ -1,5 +1,22 @@
 Mon Feb  2 04:15:08 1998  Tim Janik  <timj@gimp.org>
 
+	* gtk/gtkmain.c (gtk_propagate_event): fixed a bad, bad referencing
+	  bug that could caused unreferencing of finalized objects.
+
+	* gtk/testgtk.c: destroy fileselection on "OK" (this triggered the
+	  above mentioned bug).
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c:
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c:
+	  implemented and object reference tracer (gtk_trace_referencing) which
+	  is activated if GTK_TRACE_OBJECTS is defined (currently per default).
+	  in gdb: set the static variable `gtk_trace_object' to point to the
+	  object that you want to have reference traced.
+
+	* gtk/gtkfileselection.c: few cleanups.
+
 	* gtk/gtkcolorsel.c:
 	* gtk/gtkcombo.c:
 	* gtk/gtkobject.c:

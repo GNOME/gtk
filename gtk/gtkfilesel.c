@@ -582,17 +582,21 @@ gtk_file_selection_destroy (GtkObject *object)
   if (filesel->fileop_dialog)
 	  gtk_widget_destroy (filesel->fileop_dialog);
   
-  if (filesel->history_list) {
-    list = filesel->history_list;
-    while (list) {
-      callback_arg = list->data;
-      g_free (callback_arg->directory);
-      list = list->next;
+  if (filesel->history_list)
+    {
+      list = filesel->history_list;
+      while (list)
+	{
+	  callback_arg = list->data;
+	  g_free (callback_arg->directory);
+	  list = list->next;
+	}
+      g_list_free (filesel->history_list);
+      filesel->history_list = NULL;
     }
-    g_list_free (filesel->history_list);
-  }
   
   cmpl_free_state (filesel->cmpl_state);
+  filesel->cmpl_state = NULL;
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -1098,28 +1102,28 @@ gtk_file_selection_file_button (GtkWidget *widget,
   
   g_return_if_fail (GTK_IS_CLIST (widget));
 
-  fs = GTK_FILE_SELECTION (user_data);
+  fs = user_data;
   g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
   filename = gtk_clist_get_row_data (GTK_CLIST (fs->file_list), row);
   
-  if (bevent && filename) {
-  
-    switch (bevent->type)
-      {
-      case GDK_BUTTON_PRESS:
-	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-	break;
-      
-      case GDK_2BUTTON_PRESS:
-	gtk_button_clicked (GTK_BUTTON (fs->ok_button));
-	break;
-	
-      default:
-	break;
-      }
-  }
+  if (bevent && filename)
+    {
+      switch (bevent->type)
+	{
+	case GDK_BUTTON_PRESS:
+	  gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+	  break;
+	  
+	case GDK_2BUTTON_PRESS:
+	  gtk_button_clicked (GTK_BUTTON (fs->ok_button));
+	  break;
+	  
+	default:
+	  break;
+	}
+    }
 }
 
 static void
@@ -1487,8 +1491,8 @@ cmpl_free_dir_sent_list(GList* dp0)
 static void
 cmpl_free_state (CompletionState* cmpl_state)
 {
-  cmpl_free_dir_list(cmpl_state->directory_storage);
-  cmpl_free_dir_sent_list(cmpl_state->directory_sent_storage);
+  cmpl_free_dir_list (cmpl_state->directory_storage);
+  cmpl_free_dir_sent_list (cmpl_state->directory_sent_storage);
 
   if (cmpl_state->user_dir_name_buffer)
     g_free (cmpl_state->user_dir_name_buffer);

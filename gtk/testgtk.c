@@ -1972,6 +1972,7 @@ file_selection_ok (GtkWidget        *w,
 		   GtkFileSelection *fs)
 {
   g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+  gtk_widget_destroy (fs);
 }
 
 void
