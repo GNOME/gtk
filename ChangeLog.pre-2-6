@@ -1,5 +1,8 @@
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklayout.c (gtk_layout_add): Implement the GtkContainer::add 
+	vfunc. (#15444, Lorenzo Gil Sanchez)
+
 	* gtk/gtkuimanager.c (update_node): Also update smart separators 
 	if the visibility of a  menuitem with a submenu changes.  (#153791,
 	Christian Persch)
