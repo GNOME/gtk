@@ -1267,3 +1267,53 @@ gtk_tree_model_get_valist (GtkTreeModel *tree_model,
       column = va_arg (var_args, gint);
     }
 }
+
+void
+gtk_tree_model_changed (GtkTreeModel *tree_model,
+			GtkTreePath  *path,
+			GtkTreeIter  *iter)
+{
+  g_return_if_fail (tree_model != NULL);
+  g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (iter != NULL);
+
+  g_signal_emit_by_name (tree_model, "changed", path, iter);
+}
+
+void
+gtk_tree_model_inserted (GtkTreeModel *tree_model,
+			 GtkTreePath  *path,
+			 GtkTreeIter  *iter)
+{
+  g_return_if_fail (tree_model != NULL);
+  g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (iter != NULL);
+
+  g_signal_emit_by_name (tree_model, "inserted", path, iter);
+}
+
+void
+gtk_tree_model_child_toggled (GtkTreeModel *tree_model,
+			      GtkTreePath  *path,
+			      GtkTreeIter  *iter)
+{
+  g_return_if_fail (tree_model != NULL);
+  g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (iter != NULL);
+
+  g_signal_emit_by_name (tree_model, "child_toggled", path, iter);
+}
+
+void
+gtk_tree_model_deleted (GtkTreeModel *tree_model,
+			GtkTreePath  *path)
+{
+  g_return_if_fail (tree_model != NULL);
+  g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+  g_return_if_fail (path != NULL);
+
+  g_signal_emit_by_name (tree_model, "deleted", path);
+}

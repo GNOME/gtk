@@ -524,6 +524,7 @@ gtk_list_store_set_cell (GtkListStore *list_store,
 {
   GtkTreeDataList *list;
   GtkTreeDataList *prev;
+  GtkTreePath *path;
 
   g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
@@ -536,10 +537,10 @@ gtk_list_store_set_cell (GtkListStore *list_store,
     {
       if (column == 0)
 	{
+	  path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
 	  _gtk_tree_data_list_value_to_node (list, value);
-	  g_signal_emit_by_name (G_OBJECT (list_store),
-				 "changed",
-				 NULL, iter);
+	  gtk_tree_model_changed (GTK_TREE_MODEL (list_store), path, iter);
+	  gtk_tree_path_free (path);
 	  return;
 	}
 
@@ -566,10 +567,11 @@ gtk_list_store_set_cell (GtkListStore *list_store,
       list->next = NULL;
       column --;
     }
+
+  path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
   _gtk_tree_data_list_value_to_node (list, value);
-  g_signal_emit_by_name (G_OBJECT (list_store),
-			   "changed",
-			   NULL, iter);
+  gtk_tree_model_changed (GTK_TREE_MODEL (list_store), path, iter);
+  gtk_tree_path_free (path);
 }
 
 /**
@@ -743,10 +745,9 @@ gtk_list_store_remove (GtkListStore *list_store,
   gtk_list_store_remove_silently (list_store, iter, path);
 
   validate_list_store (list_store);  
-  
-  g_signal_emit_by_name (G_OBJECT (list_store),
-			   "deleted",
-			   path);
+
+  gtk_tree_model_deleted (GTK_TREE_MODEL (list_store), path);
+
   gtk_tree_path_free (path);
 }
 
@@ -819,9 +820,7 @@ gtk_list_store_insert (GtkListStore *list_store,
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, position);
-  g_signal_emit_by_name (G_OBJECT (list_store),
-			   "inserted",
-			   path, iter);
+  gtk_tree_model_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }
 
@@ -900,9 +899,7 @@ gtk_list_store_insert_before (GtkListStore *list_store,
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, i);
-  g_signal_emit_by_name (G_OBJECT (list_store),
-			   "inserted",
-			   path, iter);
+  gtk_tree_model_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }
 
@@ -954,9 +951,7 @@ gtk_list_store_insert_after (GtkListStore *list_store,
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, i);
-  g_signal_emit_by_name (G_OBJECT (list_store),
-			   "inserted",
-			   path, iter);
+  gtk_tree_model_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }
 
@@ -995,9 +990,7 @@ gtk_list_store_prepend (GtkListStore *list_store,
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, 0);
-  g_signal_emit_by_name (G_OBJECT (list_store),
-			   "inserted",
-			   path, iter);
+  gtk_tree_model_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }
 
@@ -1038,9 +1031,7 @@ gtk_list_store_append (GtkListStore *list_store,
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, i);
-  g_signal_emit_by_name (G_OBJECT (list_store),
-			   "inserted",
-			   path, iter);
+  gtk_tree_model_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }
 
@@ -1162,6 +1153,7 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
           GtkTreeDataList *copy_head = NULL;
           GtkTreeDataList *copy_prev = NULL;
           GtkTreeDataList *copy_iter = NULL;
+	  GtkTreePath *path;
           gint col;
 
           col = 0;
@@ -1183,11 +1175,11 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
             }
           
           G_SLIST (dest_iter.user_data)->data = copy_head;
-          
-          g_signal_emit_by_name (G_OBJECT (tree_model),
-                                   "changed",
-                                   NULL, &dest_iter);
-        }
+
+	  path = gtk_list_store_get_path (GTK_TREE_MODEL (tree_model), &dest_iter);
+	  gtk_tree_model_changed (GTK_TREE_MODEL (tree_model), path, &dest_iter);
+	  gtk_tree_path_free (path);
+	}
     }
   else
     {

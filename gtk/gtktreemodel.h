@@ -150,7 +150,6 @@ void                 gtk_tree_row_reference_free     (GtkTreeRowReference *refer
 GtkTreeIter *gtk_tree_iter_copy             (GtkTreeIter       *iter);
 void         gtk_tree_iter_free             (GtkTreeIter       *iter);
 
-/* GtkTreeModel stuff */
 GtkType           gtk_tree_model_get_type   (void) G_GNUC_CONST;
 GtkTreeModelFlags gtk_tree_model_get_flags  (GtkTreeModel      *tree_model);
 
@@ -200,6 +199,18 @@ void         gtk_tree_model_get_valist      (GtkTreeModel *tree_model,
 					     GtkTreeIter  *iter,
 					     va_list       var_args);
 
+/* Signals */
+void gtk_tree_model_changed       (GtkTreeModel *tree_model,
+				   GtkTreePath  *path,
+				   GtkTreeIter  *iter);
+void gtk_tree_model_inserted      (GtkTreeModel *tree_model,
+				   GtkTreePath  *path,
+				   GtkTreeIter  *iter);
+void gtk_tree_model_child_toggled (GtkTreeModel *tree_model,
+				   GtkTreePath  *path,
+				   GtkTreeIter  *iter);
+void gtk_tree_model_deleted       (GtkTreeModel *tree_model,
+				   GtkTreePath  *path);
 
 
 #ifdef __cplusplus

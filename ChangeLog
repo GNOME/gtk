@@ -1,3 +1,12 @@
+Wed Feb 21 20:56:50 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.h: add functions for signal emission.
+
+	* gtk/gtktreestore.c: move to use above functions instead of
+	g_signal_emit.
+
+	* gtk/gtkliststore.c: ditto
+
 Wed Feb 21 15:41:34 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c: removed signals.  Moved to inherit from
