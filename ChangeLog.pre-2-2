@@ -1,3 +1,12 @@
+Wed Mar 20 11:32:07 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c: Improve test to prevent infinite
+	loop. (#74952, Thomas Leonard)
+
+	* gtk/gtkmenushell.c (gtk_real_menu_shell_cycle_focus):
+	Fix warning when toplevel menu shell isn't a menu
+	bar. (Thomas Leonard, #75602)
+
 Wed Mar 20 11:00:59 2002  Owen Taylor  <otaylor@redhat.com>
 
         * configure.in: Use $PKG_CONFIG, not pkg-config.

@@ -1128,7 +1128,12 @@ gtk_real_menu_shell_cycle_focus (GtkMenuShell      *menu_shell,
 				 GtkDirectionType   dir)
 {
   while (menu_shell && !GTK_IS_MENU_BAR (menu_shell))
-    menu_shell = GTK_MENU_SHELL (menu_shell->parent_menu_shell);
+    {
+      if (menu_shell->parent_menu_shell)
+	menu_shell = GTK_MENU_SHELL (menu_shell->parent_menu_shell);
+      else
+	menu_shell = NULL;
+    }
 
   if (menu_shell)
     _gtk_menu_bar_cycle_focus (GTK_MENU_BAR (menu_shell), dir);

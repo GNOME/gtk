@@ -2214,7 +2214,8 @@ gtk_entry_real_activate (GtkEntry *entry)
       
 	  if (window &&
 	      widget != window->default_widget &&
-	      !(!window->default_widget && widget == window->focus_widget))
+	      !(widget == window->focus_widget &&
+		(!window->default_widget || !GTK_WIDGET_SENSITIVE (window->default_widget))))
 	    gtk_window_activate_default (window);
 	}
     }
