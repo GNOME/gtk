@@ -112,7 +112,7 @@ gdk_colormap_new (GdkVisual *visual,
 
   g_return_val_if_fail (visual != NULL, NULL);
 
-  private = (GdkColormapPrivateFB *)g_type_create_instance(gdk_colormap_get_type());
+  private = (GdkColormapPrivateFB *)g_object_new(gdk_colormap_get_type(), NULL);
   colormap = (GdkColormap*) private;
 
   private->base.visual = visual;

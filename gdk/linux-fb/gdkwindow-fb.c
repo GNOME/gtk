@@ -168,7 +168,7 @@ gdk_window_new (GdkWindow     *parent,
   
   parent_private = (GdkWindowPrivate*) parent;
   
-  window = (GdkWindow *)g_type_create_instance(GDK_TYPE_WINDOW);
+  window = (GdkWindow *)g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)window;
 
   private->parent = parent_private;
@@ -1308,7 +1308,7 @@ gdk_window_get_pointer (GdkWindow       *window,
     window = gdk_parent_root;
   
   gdk_window_get_root_origin(window, &x_int, &y_int);
-  gdk_input_ps2_get_mouseinfo(&winx, &winy, &my_mask);
+  gdk_input_get_mouseinfo(&winx, &winy, &my_mask);
 
   winx -= x_int;
   winy -= y_int;

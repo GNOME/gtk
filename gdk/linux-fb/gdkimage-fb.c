@@ -110,7 +110,7 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
   GdkImage *image;
   GdkImagePrivateFB *private;
   
-  image = (GdkImage *)private = (GdkImagePrivateFB *)g_type_create_instance(gdk_image_get_type());
+  image = (GdkImage *)private = (GdkImagePrivateFB *)g_object_new (gdk_image_get_type (), NULL);
   image->type = GDK_IMAGE_NORMAL;
   image->visual = visual;
   image->width = w;
@@ -134,7 +134,7 @@ gdk_image_new (GdkImageType  type,
   GdkImage *image;
   GdkImagePrivateFB *private;
 
-  image = (GdkImage *)private = (GdkImagePrivateFB *)g_type_create_instance(gdk_image_get_type());
+  image = (GdkImage *)private = (GdkImagePrivateFB *)g_object_new (gdk_image_get_type(), NULL);
 
   image->type = 0;
   image->visual = visual;
@@ -164,7 +164,7 @@ _gdk_fb_get_image (GdkWindow *window,
 
   g_return_val_if_fail (window != NULL, NULL);
 
-  image = (GdkImage *)private = (GdkImagePrivateFB *)g_type_create_instance(gdk_image_get_type());
+  image = (GdkImage *)private = (GdkImagePrivateFB *)g_object_new (gdk_image_get_type(), NULL);
 
   image->type = GDK_IMAGE_NORMAL;
   image->visual = gdk_window_get_visual (window);

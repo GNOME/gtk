@@ -1,3 +1,24 @@
+2000-11-07  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkcolor-fb.c, gdk/linux-fb/gdkdnd-fb.c,
+	gdk/linux-fb/gdkgc-fb.c, gdk/linux-fb/gdkimage-fb.c,
+	gdk/linux-fb/gdkpango-fb.c, gdk/linux-fb/gdkpixmap-fb.c,
+	gdk/linux-fb/gdkwindow-fb.c:
+	use g_object_new() instead of g_type_create_instance() which
+	is a private function for fundamental type implementations.
+
+	* gdk/linux-fb/gdkinput-ps2.c:
+	Use MEDIUMRAW instead of RAW keycodes. Remove keyboard state-table
+	instead just store the current modifier state. Add a (somewhat broken)
+	keyboard input parser for XLATE mode too, if we couldn't use MEDIUMRAW.
+	Rename exported function gdk_input_ps2_get_mouseinfo to
+	gdk_input_get_mouseinfo.
+
+	* gdk/linux-fb/gdkmain-fb.c, gdk/linux-fb/gdkprivate-fb.h,
+	gdk/linux-fb/gdkwindow-fb.c:
+	gdk_input_ps2_get_mouseinfo was renamed to gdk_input_get_mouseinfo.
+	
+
 2000-11-02  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkfilesel.h, gtk/gtkfilesel.c: Derive from GtkDialog, and

@@ -130,7 +130,7 @@ gdk_pixmap_new (GdkWindow *window,
   if (depth == -1)
     depth = gdk_drawable_get_visual (window)->depth;
 
-  pixmap = (GdkPixmap *)g_type_create_instance(gdk_pixmap_get_type());
+  pixmap = (GdkPixmap *)g_object_new (gdk_pixmap_get_type(), NULL);
   private = GDK_DRAWABLE_IMPL_FBDATA(pixmap);
 
   GDK_DRAWABLE_IMPL_FBDATA(pixmap)->mem = g_malloc(((width * depth + 7) / 8) * height);

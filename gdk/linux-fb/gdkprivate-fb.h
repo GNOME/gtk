@@ -299,7 +299,7 @@ void gdk_fb_cursor_reset(void);
 void gdk_fb_cursor_hide(void);
 void gdk_fb_redraw_all(void);
 
-void gdk_input_ps2_get_mouseinfo(gint *x, gint *y, GdkModifierType *mask);
+void gdk_input_get_mouseinfo(gint *x, gint *y, GdkModifierType *mask);
 void gdk_fb_window_visibility_crossing(GdkWindow *window, gboolean is_show, gboolean is_grab);
 
 #define PANGO_TYPE_FB_FONT              (pango_fb_font_get_type ())

@@ -63,15 +63,13 @@ typedef struct {
   gint fd, fd_tag, consfd;
 
   int vtnum, prev_vtnum;
-  guchar states[256];
-  gboolean is_ext : 1;
+  guint modifier_state;
   gboolean caps_lock : 1;
 } Keyboard;
 
 static guint blanking_timer = 0;
 
 static Keyboard * tty_keyboard_open(void);
-static guint keyboard_get_state(Keyboard *k);
 
 static MouseDevice *gdk_fb_mouse = NULL;
 static Keyboard *keyboard = NULL;
@@ -190,7 +188,7 @@ send_button_event(MouseDevice *mouse, guint button, gboolean press_event, time_t
     | (mouse->button2_pressed?GDK_BUTTON2_MASK:0)
     | (mouse->button3_pressed?GDK_BUTTON3_MASK:0)
     | (1 << (button + 8)) /* badhack */
-    | keyboard_get_state(keyboard);
+    | keyboard->modifier_state;
   event->button.device = gdk_core_pointer;
   event->button.x_root = mouse->x;
   event->button.y_root = mouse->y;
@@ -445,7 +443,7 @@ void gdk_fb_window_visibility_crossing(GdkWindow *window, gboolean is_show, gboo
   gint winx, winy;
   GdkModifierType my_mask;
 
-  gdk_input_ps2_get_mouseinfo(&winx, &winy, &my_mask);
+  gdk_input_get_mouseinfo(&winx, &winy, &my_mask);
 
   if(is_grab
      || (winx >= GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x
@@ -527,6 +525,8 @@ handle_mouse_input(MouseDevice *mouse, gboolean got_motion)
   GdkWindow *win;
   guint state;
 
+  g_print("mous pos: %f, %f\n", mouse->x, mouse->y);
+  
   if(_gdk_fb_pointer_grab_confine)
     mousewin = _gdk_fb_pointer_grab_confine;
   else
@@ -557,7 +557,7 @@ handle_mouse_input(MouseDevice *mouse, gboolean got_motion)
   state = (mouse->button1_pressed?GDK_BUTTON1_MASK:0)
     | (mouse->button2_pressed?GDK_BUTTON2_MASK:0)
     | (mouse->button3_pressed?GDK_BUTTON3_MASK:0)
-    | keyboard_get_state(keyboard);
+    | keyboard->modifier_state;
 
   event = gdk_event_make (win, GDK_MOTION_NOTIFY, TRUE);
   if(event)
@@ -930,7 +930,7 @@ gdk_input_init (void)
 }
 
 void
-gdk_input_ps2_get_mouseinfo(gint *x, gint *y, GdkModifierType *mask)
+gdk_input_get_mouseinfo(gint *x, gint *y, GdkModifierType *mask)
 {
   *x = gdk_fb_mouse->x;
   *y = gdk_fb_mouse->y;
@@ -938,32 +938,7 @@ gdk_input_ps2_get_mouseinfo(gint *x, gint *y, GdkModifierType *mask)
     (gdk_fb_mouse->button1_pressed?GDK_BUTTON1_MASK:0)
     | (gdk_fb_mouse->button2_pressed?GDK_BUTTON2_MASK:0)
     | (gdk_fb_mouse->button3_pressed?GDK_BUTTON3_MASK:0)
-    | keyboard_get_state(keyboard);
-}
-
-/* Returns the modifier mask for the keyboard */
-static guint
-keyboard_get_state(Keyboard *k)
-{
-  guint retval = 0;
-  struct {
-    guchar from;
-    guint to;
-  } statetrans[] = {
-    {0x1D, GDK_CONTROL_MASK},
-    {0x9D, GDK_CONTROL_MASK},
-    {0x38, GDK_MOD1_MASK},
-    {0xB8, GDK_MOD1_MASK},
-    {0x2A, GDK_SHIFT_MASK},
-    {0x36, GDK_SHIFT_MASK}
-  };
-  int i;
-
-  for(i = 0; i < sizeof(statetrans)/sizeof(statetrans[0]); i++)
-    if(k->states[statetrans[i].from])
-      retval |= statetrans[i].to;
-
-  return retval;
+    | keyboard->modifier_state;
 }
 
 GdkWindow *
@@ -1276,8 +1251,11 @@ static const guint trans_table[256][3] = {
   {0, 0, 0},
   {0, 0, 0},
 };
+
+#define TRANS_TABLE_SIZE (sizeof(trans_table)/sizeof(trans_table[0]))
+
 static gboolean
-handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
+handle_mediumraw_keyboard_input (GIOChannel *gioc, GIOCondition cond, gpointer data)
 {
   guchar buf[128];
   int i, n;
@@ -1295,72 +1273,73 @@ handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 
   for(i = 0; i < n; i++)
     {
-      guchar base_char;
+      guchar keycode;
+      gboolean key_up;
       GdkEvent *event;
       GdkWindow *win;
       char dummy[2];
       int mod;
-      guint keyval, state;
+      guint keyval;
 
-      if(buf[i] == 0xE0 || k->is_ext) /* extended char */
+      keycode = buf[i] & 0x7F;
+      key_up = buf[i] & 0x80;
+
+      if (keycode > TRANS_TABLE_SIZE)
 	{
-	  int l;
-
-	  l = k->is_ext?0:1;
-	  k->is_ext = TRUE;
-
-	  if((i+l) >= n)
-	    continue;
-
-	  if(buf[i+l] == 0x2A
-	     || buf[i+l] == 0xAA)
-	    {
-	      i++;
-	      continue;
-	    }
-
-	  base_char = 0x80 + (buf[i+l] & 0x7F);
-	  k->is_ext = FALSE;
-	  i += l;
-	}
-      else
-	base_char = buf[i] & 0x7F;
-
-      if(base_char > sizeof(trans_table)/sizeof(trans_table[0]))
-	continue;
-
-      {
-	gboolean new_state = (buf[i] & 0x80)?FALSE:TRUE;
-
-	k->states[base_char] = new_state;
-      }
-
-      if((base_char == 0x1D) /* left Ctrl */
-	 || (base_char == 0x9D) /* right Ctrl */
-	 || (base_char == 0x38) /* left Alt */
-	 || (base_char == 0xB8) /* right Alt */
-	 || (base_char == 0x2A) /* left Shift */
-	 || (base_char == 0x36) /* right Shift */)
-	{
-	  continue; /* Don't generate events for modifiers */
-	}
-
-      if(base_char == 0x3A /* Caps lock */)
-	{
-	  if(k->states[base_char])
-	    k->caps_lock = !k->caps_lock;
-	  ioctl(k->fd, KDSETLED, k->caps_lock?LED_CAP:0);
-
+	  g_warning("Unknown keycode\n");
 	  continue;
 	}
 
-      if(trans_table[base_char][0] >= GDK_F1
-	 && trans_table[base_char][0] <= GDK_F35
-	 && (keyboard_get_state(k) & GDK_MOD1_MASK))
+      if((keycode == 0x1D) /* left Ctrl */
+	 || (keycode == 0x9D) /* right Ctrl */
+	 || (keycode == 0x38) /* left Alt */
+	 || (keycode == 0xB8) /* right Alt */
+	 || (keycode == 0x2A) /* left Shift */
+	 || (keycode == 0x36) /* right Shift */)
 	{
-	  if(!k->states[base_char]) /* Only switch on release */
+	  switch (keycode)
 	    {
-	      gint vtnum = trans_table[base_char][0] - GDK_F1 + 1;
+	    case 0x1D: /* Left Ctrl */
+	    case 0x9D: /* Right Ctrl */
+	      if (key_up)
+		k->modifier_state &= ~GDK_CONTROL_MASK;
+	      else
+		k->modifier_state |= GDK_CONTROL_MASK;
+	      break;
+	    case 0x38: /* Left Alt */
+	    case 0xB8: /* Right Alt */
+	      if (key_up)
+		k->modifier_state &= ~GDK_MOD1_MASK;
+	      else
+		k->modifier_state |= GDK_MOD1_MASK;
+	      break;
+	    case 0x2A: /* Left Shift */
+	    case 0x36: /* Right Shift */
+	      if (key_up)
+		k->modifier_state &= ~GDK_SHIFT_MASK;
+	      else
+		k->modifier_state |= GDK_SHIFT_MASK;
+	      break;
+	    }
+	  continue; /* Don't generate events for modifiers */
+	}
+
+      if(keycode == 0x3A /* Caps lock */)
+	{
+	  if(!key_up)
+	    k->caps_lock = !k->caps_lock;
+	  
+	  ioctl (k->fd, KDSETLED, k->caps_lock?LED_CAP:0);
+	  continue;
+	}
+
+      if(trans_table[keycode][0] >= GDK_F1
+	 && trans_table[keycode][0] <= GDK_F35
+	 && (k->modifier_state & GDK_MOD1_MASK))
+	{
+	  if(key_up) /* Only switch on release */
+	    {
+	      gint vtnum = trans_table[keycode][0] - GDK_F1 + 1;
 
 	      /* Do the whole funky VT switch thing */
 	      ioctl(k->consfd, VT_ACTIVATE, vtnum);
@@ -1372,46 +1351,44 @@ handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 	}
 
       keyval = 0;
-      state = keyboard_get_state(k);
       mod = 0;
-      if(state & GDK_CONTROL_MASK)
+      if (k->modifier_state & GDK_CONTROL_MASK)
 	mod = 2;
-      else if(state & GDK_SHIFT_MASK)
+      else if (k->modifier_state & GDK_SHIFT_MASK)
 	mod = 1;
       do {
-	keyval = trans_table[base_char][mod--];
-      } while(!keyval && (mod >= 0));
+	keyval = trans_table[keycode][mod--];
+      } while (!keyval && (mod >= 0));
 
-      if(k->caps_lock && (keyval >= 'a')
-	 && (keyval <= 'z'))
-	keyval = toupper(keyval);
+      if (k->caps_lock && (keyval >= 'a')
+	  && (keyval <= 'z'))
+	keyval = toupper (keyval);
 
       /* handle some magic keys */
-      if(state & (GDK_CONTROL_MASK|GDK_MOD1_MASK))
+      if (k->modifier_state & (GDK_CONTROL_MASK|GDK_MOD1_MASK))
 	{
-	  if(!k->states[base_char])
+	  if (key_up)
 	    {
-	      if(keyval == GDK_BackSpace)
+	      if (keyval == GDK_BackSpace)
 		exit(1);
 
-	      if(keyval == GDK_Return)
+	      if (keyval == GDK_Return)
 		gdk_fb_redraw_all();
-
 	    }
 
 	  keyval = 0;
 	}
 
-      if(!keyval)
+      if (!keyval)
 	continue;
 
-      win = gdk_window_find_focus();
-      event = gdk_event_make(win, k->states[base_char]?GDK_KEY_PRESS:GDK_KEY_RELEASE, TRUE);
-      if(event)
+      win = gdk_window_find_focus ();
+      event = gdk_event_make (win, key_up?GDK_KEY_RELEASE:GDK_KEY_PRESS, TRUE);
+      if (event)
 	{
 	  /* Find focused window */
 	  event->key.time = now;
-	  event->key.state = state;
+	  event->key.state = k->modifier_state;
 	  event->key.keyval = keyval;
 	  event->key.length = isprint(event->key.keyval)?1:0;
 	  dummy[0] = event->key.keyval;
@@ -1425,6 +1402,84 @@ handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
   return TRUE;
 }
 
+static gboolean
+handle_xlate_keyboard_input (GIOChannel *gioc, GIOCondition cond, gpointer data)
+{
+  guchar buf[128];
+  int i, n;
+  Keyboard *k = data;
+  time_t now;
+  GTimeVal curtime;
+
+  n = read(k->fd, buf, sizeof(buf));
+  if(n <= 0)
+    g_error("Nothing from keyboard!");
+
+  /* Now turn this into a keyboard event */
+  g_get_current_time(&curtime);
+  now = curtime.tv_sec;
+
+  for(i = 0; i < n; i++)
+    {
+      GdkEvent *event;
+      GdkWindow *win;
+      char dummy[2];
+      guint keyval;
+
+      keyval = buf[i];
+
+      switch (keyval) {
+      case '\n':
+	keyval = GDK_Return;
+	break;
+      case '\t':
+	keyval = GDK_Tab;
+	break;
+      case 127:
+	keyval = GDK_BackSpace;
+	break;
+      case 27:
+	keyval = GDK_Escape;
+	break;
+      }
+
+      win = gdk_window_find_focus ();
+      
+      /* Send key down: */
+      event = gdk_event_make (win, GDK_KEY_PRESS, TRUE);
+      if (event)
+	{
+	  /* Find focused window */
+	  event->key.time = now;
+	  event->key.state = k->modifier_state;
+	  event->key.keyval = keyval;
+	  event->key.length = isprint(event->key.keyval)?1:0;
+	  dummy[0] = event->key.keyval;
+	  dummy[1] = 0;
+	  event->key.string = event->key.length?g_strdup(dummy):NULL;
+	}
+
+      /* Send key up: */
+      event = gdk_event_make (win, GDK_KEY_RELEASE, TRUE);
+      if (event)
+	{
+	  /* Find focused window */
+	  event->key.time = now;
+	  event->key.state = k->modifier_state;
+	  event->key.keyval = keyval;
+	  event->key.length = isprint(event->key.keyval)?1:0;
+	  dummy[0] = event->key.keyval;
+	  dummy[1] = 0;
+	  event->key.string = event->key.length?g_strdup(dummy):NULL;
+	}
+    }
+
+  input_activity();
+
+  return TRUE;
+}
+
+
 static Keyboard *
 tty_keyboard_open(void)
 {
@@ -1435,57 +1490,72 @@ tty_keyboard_open(void)
   struct vt_stat vs;
   char buf[32];
   struct termios ts;
+  gboolean raw_keyboard;
 
+  retval->modifier_state = 0;
+  retval->caps_lock = 0;
+  
   setsid();
-  retval->consfd = open("/dev/console", O_RDWR);
-  ioctl(retval->consfd, VT_GETSTATE, &vs);
+  retval->consfd = open ("/dev/console", O_RDWR);
+  ioctl (retval->consfd, VT_GETSTATE, &vs);
   retval->prev_vtnum = vs.v_active;
-  g_snprintf(buf, sizeof(buf), "/dev/tty%d", retval->prev_vtnum);
-  ioctl(retval->consfd, KDSKBMODE, K_XLATE);
+  g_snprintf (buf, sizeof(buf), "/dev/tty%d", retval->prev_vtnum);
+  ioctl (retval->consfd, KDSKBMODE, K_XLATE);
 
   n = ioctl(retval->consfd, VT_OPENQRY, &retval->vtnum);
   if(n < 0 || retval->vtnum == -1)
     g_error("Cannot allocate VT");
 
-  ioctl(retval->consfd, VT_ACTIVATE, retval->vtnum);
-  ioctl(retval->consfd, VT_WAITACTIVE, retval->vtnum);
+  ioctl (retval->consfd, VT_ACTIVATE, retval->vtnum);
+  ioctl (retval->consfd, VT_WAITACTIVE, retval->vtnum);
 
 #if 0
-  close(0);
-  close(1);
-  close(2);
+  close (0);
+  close (1);
+  close (2);
 #endif
-  g_snprintf(buf, sizeof(buf), "/dev/tty%d", retval->vtnum);
-  retval->fd = open(buf, O_RDWR|O_NONBLOCK);
-  if(retval->fd < 0)
+  g_snprintf (buf, sizeof(buf), "/dev/tty%d", retval->vtnum);
+  retval->fd = open (buf, O_RDWR|O_NONBLOCK);
+  if (retval->fd < 0)
     return NULL;
-  if(ioctl(retval->fd, KDSKBMODE, K_RAW) < 0)
-    g_warning("K_RAW failed");
+  raw_keyboard = TRUE;
+  if (ioctl (retval->fd, KDSKBMODE, K_MEDIUMRAW) < 0)
+    {
+      raw_keyboard = FALSE;
+      g_warning("K_MEDIUMRAW failed, using broken XLATE keyboard driver");
+    }
 
-  ioctl(0, TIOCNOTTY, 0);
-  ioctl(retval->fd, TIOCSCTTY, 0);
-  tcgetattr(retval->fd, &ts);
+  /* Disable normal text on the console */
+  ioctl (retval->fd, KDSETMODE, KD_GRAPHICS);
+
+  /* Set controlling tty */
+  ioctl (0, TIOCNOTTY, 0);
+  ioctl (retval->fd, TIOCSCTTY, 0);
+  tcgetattr (retval->fd, &ts);
   ts.c_cc[VTIME] = 0;
   ts.c_cc[VMIN] = 1;
   ts.c_lflag &= ~(ICANON|ECHO|ISIG);
   ts.c_iflag = 0;
-  tcsetattr(retval->fd, TCSAFLUSH, &ts);
+  tcsetattr (retval->fd, TCSAFLUSH, &ts);
 
-  tcsetpgrp(retval->fd, getpgrp());
+  tcsetpgrp (retval->fd, getpgrp());
 
-  write(retval->fd, cursoroff_str, strlen(cursoroff_str));
+  write (retval->fd, cursoroff_str, strlen(cursoroff_str));
 
 #if 0
-  if(retval->fd != 0)
-    dup2(retval->fd, 0);
-  if(retval->fd != 1)
-    dup2(retval->fd, 1);
-  if(retval->fd != 2)
-    dup2(retval->fd, 2);
+  if (retval->fd != 0)
+    dup2 (retval->fd, 0);
+  if (retval->fd != 1)
+    dup2 (retval->fd, 1);
+  if (retval->fd != 2)
+    dup2 (retval->fd, 2);
 #endif
 
-  gioc = g_io_channel_unix_new(retval->fd);
-  retval->fd_tag = g_io_add_watch(gioc, G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL, handle_keyboard_input, retval);
+  gioc = g_io_channel_unix_new (retval->fd);
+  retval->fd_tag = g_io_add_watch (gioc,
+				   G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
+				   (raw_keyboard)?handle_mediumraw_keyboard_input:handle_xlate_keyboard_input,
+				   retval);
 
   return retval;
 }
@@ -1496,14 +1566,14 @@ gdk_beep (void)
   static int pitch = 600, duration = 100;
   gulong arg;
 
-  if(!keyboard)
+  if (!keyboard)
     return;
 
   /* Thank you XFree86 */
   arg = ((1193190 / pitch) & 0xffff) |
     (((unsigned long)duration) << 16);
 
-  ioctl(keyboard->fd, KDMKTONE, arg);
+  ioctl (keyboard->fd, KDMKTONE, arg);
 }
 
 void
@@ -1517,16 +1587,19 @@ keyboard_shutdown(void)
 {
   int tmpfd;
 
-  ioctl(keyboard->fd, KDSKBMODE, K_XLATE);
-  close(keyboard->fd);
-  g_source_remove(keyboard->fd_tag);
+  ioctl (keyboard->fd, KDSETMODE, KD_TEXT);
+  ioctl (keyboard->fd, KDSKBMODE, K_XLATE);
+  close (keyboard->fd);
+  g_source_remove (keyboard->fd_tag);
 
   tmpfd = keyboard->consfd;
-  ioctl(tmpfd, VT_ACTIVATE, keyboard->prev_vtnum);
-  ioctl(tmpfd, VT_WAITACTIVE, keyboard->prev_vtnum);
-  ioctl(tmpfd, VT_DISALLOCATE, keyboard->vtnum);
-  close(tmpfd);
+  ioctl (tmpfd, VT_ACTIVATE, keyboard->prev_vtnum);
+  ioctl (tmpfd, VT_WAITACTIVE, keyboard->prev_vtnum);
+  ioctl (tmpfd, VT_DISALLOCATE, keyboard->vtnum);
+  close (tmpfd);
 
-  g_free(keyboard);
+  g_free (keyboard);
   keyboard = NULL;
 }
+
+

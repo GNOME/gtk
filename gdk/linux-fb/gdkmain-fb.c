@@ -556,7 +556,7 @@ gdk_event_make(GdkWindow *window, GdkEventType type, gboolean append_to_queue)
       gint x, y;
       GdkModifierType mask;
 
-      gdk_input_ps2_get_mouseinfo(&x, &y, &mask);
+      gdk_input_get_mouseinfo(&x, &y, &mask);
 
       if(((mask & GDK_BUTTON1_MASK) && (evmask & GDK_BUTTON1_MOTION_MASK))
 	 || ((mask & GDK_BUTTON2_MASK) && (evmask & GDK_BUTTON2_MOTION_MASK))

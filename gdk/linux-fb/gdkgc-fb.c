@@ -76,7 +76,7 @@ _gdk_fb_gc_new (GdkDrawable      *drawable,
   GdkGC *private;
   GdkGCFBData *data;
   
-  gc = GDK_GC(g_type_create_instance(gdk_gc_fb_get_type()));
+  gc = GDK_GC(g_object_new (gdk_gc_fb_get_type (), NULL));
   private = (GdkGC *)gc;
 
   data = (GdkGCFBData *)gc;

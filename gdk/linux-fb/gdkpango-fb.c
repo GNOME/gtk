@@ -153,7 +153,7 @@ pango_fb_font_map_load_font(PangoFontMap *fontmap,
   if(i >= fbfm->all_descs->len)
     return NULL;
 
-  retval = (PangoFBFont *)g_type_create_instance(PANGO_TYPE_FB_FONT);
+  retval = (PangoFBFont *)g_object_new (PANGO_TYPE_FB_FONT, NULL);
 
   retval->desc = *desc;
   retval->desc.family_name = g_strdup(desc->family_name);

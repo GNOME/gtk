@@ -127,7 +127,7 @@ gdk_drag_context_get_type (void)
 GdkDragContext *
 gdk_drag_context_new        (void)
 {
-  return (GdkDragContext *)g_type_create_instance(gdk_drag_context_get_type());
+  return (GdkDragContext *)g_object_new(gdk_drag_context_get_type (), NULL);
 }
 
 void            
