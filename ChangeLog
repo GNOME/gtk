@@ -1,5 +1,8 @@
 2004-05-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_set_fixed_height_mode): Add a 
+	note about COLUMN_FIXED restriction.
+
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_list_button_press): 
 	Set the entry in the default handler of the ::match-selected signal.
 	(#137226)

@@ -6170,9 +6170,10 @@ column_sizing_notify (GObject    *object,
  * Enables or disables the fixed height mode of @tree_view. 
  * Fixed height mode speeds up #GtkTreeView by assuming that all 
  * rows have the same height. 
- * Only enable this option if all rows are the same height.  
+ * Only enable this option if all rows are the same height and all
+ * columns are of type %GTK_TREE_VIEW_COLUMN_FIXED.
  *
- * Since: 2.6
+ * Since: 2.6 
  **/
 void
 gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
