@@ -688,6 +688,7 @@ gdk_event_translate (GdkDisplay *display,
   
   GdkWindow *window;
   GdkWindowObject *window_private;
+  GdkWindow *filter_window;
   GdkWindowImplX11 *window_impl = NULL;
   gint return_val;
   gint xoffset, yoffset;
@@ -742,6 +743,14 @@ gdk_event_translate (GdkDisplay *display,
   window = gdk_window_lookup_for_display (display, xwindow);
   window_private = (GdkWindowObject *) window;
 
+  /* We always run the filters for the window where the event
+   * is delivered, not the window that it relates to
+   */
+  if (xevent->xany.window == xwindow)
+    filter_window = window;
+  else
+    filter_window = gdk_window_lookup_for_display (display, xevent->xany.window);
+
   if (window)
     {
       screen = GDK_WINDOW_SCREEN (window);
@@ -791,17 +800,26 @@ gdk_event_translate (GdkDisplay *display,
 	  goto done;
 	}
     }
-  else if (window_private)
+  else if (filter_window)
     {
       /* Apply per-window filters */
+      GdkWindowObject *filter_private = (GdkWindowObject *) filter_window;
       GdkFilterReturn result;
-      result = gdk_event_apply_filters (xevent, event,
-					window_private->filters);
-      
-      if (result != GDK_FILTER_CONTINUE)
+
+      if (filter_private->filters)
 	{
-	  return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
-	  goto done;
+	  g_object_ref (filter_window);
+	  
+	  result = gdk_event_apply_filters (xevent, event,
+					    filter_private->filters);
+	  
+	  g_object_unref (filter_window);
+      
+	  if (result != GDK_FILTER_CONTINUE)
+	    {
+	      return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+	      goto done;
+	    }
 	}
     }
       

@@ -1,3 +1,10 @@
+Thu Dec 19 11:42:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Call
+	the filters on the window where the event is received,
+	not on the window the event is "about". (#101512,
+	Bolian Yin.)
+
 Thu Dec 19 03:58:36 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* tests/testtreeflow.c: the rand variable should be static to
