@@ -1,3 +1,8 @@
+Fri Feb 25 11:12:00 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* TODO.xml: Added some UI items, and an explanatory
+	comment at the top of the file.
+
 Thu Feb 24 09:07:28 2000  Tim Janik  <timj@gtk.org>
 
 	* TODO.xml: some updates, added abunch of new entries.

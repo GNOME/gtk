@@ -1,5 +1,13 @@
+<!-- This is used to generate the online TODO list for GTK+ using
+     the script docs/make-todo. Whenever a change to this file is
+     committed to CVS,the file is run through make-todo and the online
+     version updated. If you modify this file, you should check for
+     parse errors by running:
+
+     $ docs/make-todo > /dev/null
+
+     before committing, or you may screw up the online version --> 
 <todo>
-  
   <section>
     <title>GDK</title>
     
@@ -280,6 +288,58 @@
 	  replacement. The structure of the Tk text widget port seems
 	  suited to this as it works paragraph-by-paragraph, and
 	  Pango works at a sub-paragraph scale.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Improve Radio/Checkbutton Look</title>
+      <description>
+	<p>
+	  The default look for the radio and checkbuttons is both
+	  unattractive and not friendly to the user . Motif did not
+	  get this one right, and we should not keep on following the
+	  Motif look. The right thing here is probably to copy the
+	  Windows appearance for these controls fairly closely. This
+	  will fit in with well with the rest of the GTK+ look.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Improve Submenu Navigation</title>
+      <description>
+	<p>
+	  Navigating through a deep menu tree in GTK+ is currently
+	  quite tricky, because as soon as one leaves a menu item,
+	  the submenu disappears. The way that the Macintosh is
+	  reputed to handle this is that to pop down the current
+	  submenu, you have to leave the triangle defined by the
+	  upper left hand corner of the menu item and right
+	  side of the submenu.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="small" status="0%" target="1.4 ?">
+      <title>Improve Spinbutton Look</title>
+      <description>
+	<p>
+	  Spinbuttons currently appear to have lumpy boundaries,
+	  because sides of the arrows aren't at an angle that
+	  meshes well with the pixel grid. However, fixing this
+	  would require making the spinbuttons narrower and
+	  harder to hit. This points out a general problem with
+	  the spinbutton (and the arrows on the scrollbars) - the
+	  target area for clicks actually the bounding box of the
+	  arrows, but the user thinks that they must click on the
+	  arrows themselves. It would probably be more friendly
+	  to use a square button with an arrow drawn on top instead
+	  of a arrow-shaped button, the approach taken by most other
+	  windowing systems.
 	</p>
       </description>
       <contact>gtk-devel-list@redhat.com</contact>
