@@ -31,7 +31,7 @@
 
 /* MS defines this when it includes its schema definitions */
 #ifndef TMSCHEMA_H
-#include "xp_theme_dfns.h"
+#include "xp_theme_defs.h"
 #endif
 
 static const LPCWSTR class_descriptors[] =
@@ -109,12 +109,14 @@ typedef HRESULT (FAR PASCAL *DrawThemeBackgroundFunc)
      (HTHEME hTheme, HDC hdc, int iPartId, int iStateId,
       const RECT *pRect, const RECT *pClipRect);
 typedef HRESULT (FAR PASCAL *EnableThemeDialogTextureFunc)(HWND hwnd, DWORD dwFlags);
+typedef BOOL (FAR PASCAL *IsThemeActiveFunc)(VOID);
 
 static GetThemeSysFontFunc get_theme_sys_font_func = NULL;
 static OpenThemeDataFunc open_theme_data_func = NULL;
 static CloseThemeDataFunc close_theme_data_func = NULL;
 static DrawThemeBackgroundFunc draw_theme_background_func = NULL;
 static EnableThemeDialogTextureFunc enable_theme_dialog_texture_func = NULL;
+static IsThemeActiveFunc is_theme_active_func = NULL;
 
 void
 xp_theme_init(void)
@@ -125,6 +127,7 @@ xp_theme_init(void)
   uxtheme_dll = LoadLibrary("uxtheme.dll");
   memset(open_themes, 0, sizeof(open_themes));
 
+  is_theme_active_func = (IsThemeActiveFunc) GetProcAddress(uxtheme_dll, "IsThemeActive");
   open_theme_data_func = (OpenThemeDataFunc) GetProcAddress(uxtheme_dll, "OpenThemeData");
   close_theme_data_func = (CloseThemeDataFunc) GetProcAddress(uxtheme_dll, "CloseThemeData");
   draw_theme_background_func = (DrawThemeBackgroundFunc) GetProcAddress(uxtheme_dll, "DrawThemeBackground");
@@ -137,7 +140,7 @@ xp_theme_exit(void)
 {
   int i;
 
-  if(!uxtheme_dll)
+  if (! uxtheme_dll)
     return;
 
   for (i=0; i < XP_THEME_CLASS__SIZEOF; i++)
@@ -152,6 +155,7 @@ xp_theme_exit(void)
   FreeLibrary(uxtheme_dll);
   uxtheme_dll = NULL;
 
+  is_theme_active_func = NULL;
   open_theme_data_func = NULL;
   close_theme_data_func = NULL;
   draw_theme_background_func = NULL;
@@ -642,7 +646,7 @@ xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
 gboolean
 xp_theme_is_drawable(XpThemeElement element)
 {
-  if (uxtheme_dll)
+  if (is_theme_active_func && (*is_theme_active_func)())
     {
       return (xp_theme_get_handle_by_element(element) != NULL);
     }

@@ -1,17 +1,31 @@
+2003-10-07  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/xp_theme.c: We now properly use IsThemeActive().
+	
+	* src/xp_theme_defs.h: Renamed from xp_theme_dfns.h
+
 2003-10-06  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/wimp_style_main.c: Catch system settings changes, disable theme and color changes as they're too experimental
+	* src/wimp_style_main.c: Catch system settings changes, disable
+	theme and color changes as they're too experimental
+	
 	* src/wimp_style.[ch]: Export some things, make them accept 0 args
-	* src/xp_theme_dfns.h: New file. WinXP's UXTHEME constants, for building on platforms without them
-	* src/xp_theme.c: Should be able to build on Win32 != [WinXP,2k3] now
+	
+	* src/xp_theme_dfns.h: New file. WinXP's UXTHEME constants, for
+	building on platforms without them
+	
+	* src/xp_theme.c: Should be able to build on Win32 != [WinXP,2k3]
+	now
 	
 2003-10-03  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/wimp_style.c wimp_style_main.c: Refactor how we're doing styles. Much faster, lower memory consumption
+	* src/wimp_style.c wimp_style_main.c: Refactor how we're doing
+	styles. Much faster, lower memory consumption
 	
 2003-10-03  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/wimp_style_main.c: Catch theme and color changes. Needs more testing and fine-tuning
+	* src/wimp_style_main.c: Catch theme and color changes. Needs more
+	testing and fine-tuning
 	
 2003-10-02  Dom Lachowicz <cinamod@hotmail.com>
 
@@ -19,8 +33,9 @@
 	
 2003-10-01  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/wimp_style.c: Only set the delays if the param is installed. Silly gtk - 
-	installing those 3 params only in the menus...
+	* src/wimp_style.c: Only set the delays if the param is
+	installed. Silly gtk - installing those 3 params only in the
+	menus...
 
 2003-09-25  Dom Lachowicz <cinamod@hotmail.com>
 
