@@ -2,7 +2,9 @@
 
 	* gtk/gtkwindow.c (gtk_window_focus): Test for bin->child being
 	present before doing anything with it.  Patch from Håvard Kvålen
-	<havardk@netcom.no>.
+	<havardk@netcom.no>.  Fixes Ximian bugzilla #2492 (OK, the bug
+	report was not for the development branch of GTK+, but it applies
+	anyways).
 
 2001-05-04  Havoc Pennington  <hp@redhat.com>
 
