@@ -180,7 +180,7 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
     gtk_file_folder_list_children (chooser_entry->current_folder,
 				   &child_paths,
 				   NULL); /* NULL-GError */
-  
+
   for (tmp_list = child_paths; tmp_list; tmp_list = tmp_list->next)
     {
       GtkFileInfo *info;
@@ -245,7 +245,6 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
     }
   
   gtk_file_paths_free (child_paths);
-  g_slist_free (child_paths);
 
   if (common_prefix)
     {
