@@ -1,3 +1,10 @@
+Wed Jan 15 17:02:18 2003  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtktextlayout.c (gtk_text_layout_validate_yrange):
+ 	Fix off-by-one error on the backward iteration loop,
+ 	that was causing the wrong range to be redrawn.
+ 	(at least part of #72734)
+	
 2003-01-21  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (gtk_text_view_size_allocate): Adjust the
