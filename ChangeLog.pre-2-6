@@ -1,5 +1,7 @@
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c: s/maximal/maximum/g  (#161195, David Lodge)
+
 	* gtk/gtkmenuitem.c (gtk_real_menu_item_select): Reintroduce
 	the reverted change, since it is necessary to prevent lost
 	submenus. But make it work for torn-off menus as well.

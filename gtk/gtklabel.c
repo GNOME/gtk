@@ -499,7 +499,7 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel:max-width-chars:
    * 
-   * The desired width maximal of the label, in characters. If this property 
+   * The desired maximum width of the label, in characters. If this property 
    * is set to -1, the width will be calculated automatically, otherwise the 
    * label will request space for no more than the requested number of 
    * characters. If the width-chars property is set to a positive value,
@@ -510,8 +510,8 @@ gtk_label_class_init (GtkLabelClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_MAX_WIDTH_CHARS,
                                    g_param_spec_int ("max_width_chars",
-                                                     P_("Maximal Width In Characters"),
-                                                     P_("The desired maximal width of the label, in characters"),
+                                                     P_("Maximum Width In Characters"),
+                                                     P_("The desired maximum width of the label, in characters"),
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
@@ -1579,9 +1579,9 @@ gtk_label_get_width_chars (GtkLabel *label)
 /**
  * gtk_label_set_max_width_chars:
  * @label: a #GtkLabel
- * @n_chars: the new desired maximal width, in characters.
+ * @n_chars: the new desired maximum width, in characters.
  * 
- * Sets the desired maximal width in characters of @label to @n_chars.
+ * Sets the desired maximum width in characters of @label to @n_chars.
  * 
  * Since: 2.6
  **/
@@ -1608,10 +1608,10 @@ gtk_label_set_max_width_chars (GtkLabel *label,
  * gtk_label_get_max_width_chars:
  * @label: a #GtkLabel
  * 
- * Retrieves the desired maximal width of @label, in characters. See
+ * Retrieves the desired maximum width of @label, in characters. See
  * gtk_label_set_width_chars().
  * 
- * Return value: the maximal width of the label in characters.
+ * Return value: the maximum width of the label in characters.
  * 
  * Since: 2.6
  **/
