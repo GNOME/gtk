@@ -8,7 +8,7 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	-I$(top_srcdir)		\
 	-I$(top_srcdir)/gdk	\
 	-I$(top_builddir)/gdk	\
-	`freetype-config --cflags`\
+	@FREETYPE_CFLAGS@	\
 	@GTK_DEBUG_FLAGS@ 	\
 	@GTK_XIM_FLAGS@		\
 	@GTK_LOCALE_FLAGS@	\
@@ -18,8 +18,8 @@ INCLUDES = @STRIP_BEGIN@ 	\
 
 LDFLAGS = @STRIP_BEGIN@ \
 	@GLIB_LIBS@	\
-	@PANGO_CFLAGS@	\
-	`freetype-config --libs` \
+	@PANGO_LIBS@	\
+	@FREETYPE_LIBS@	\
 	-lm		\
 @STRIP_END@
 
