@@ -633,6 +633,12 @@ Define a function pointer.  Deprecated.
 </para>
 
 
+<!-- ##### ARG GtkComboBox:row-separator-column ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### SIGNAL GtkContainer::focus ##### -->
 <para>
 
@@ -2053,6 +2059,22 @@ is enabled.
 
 @colorsel: 
 @use_palette: 
+
+<!-- ##### FUNCTION gtk_combo_box_get_row_separator_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_combo_box_set_row_separator_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@column: 
 
 <!-- ##### FUNCTION gtk_container_add_child_arg_type ##### -->
 <para>

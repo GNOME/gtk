@@ -52,11 +52,6 @@ a widget used to choose from a list of items.
 
 </para>
 
-<!-- ##### ARG GtkComboBox:row-separator-column ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkComboBox:row-span-column ##### -->
 <para>
 
@@ -272,7 +267,7 @@ a widget used to choose from a list of items.
 @combo_box: 
 
 
-<!-- ##### FUNCTION gtk_combo_box_get_row_separator_column ##### -->
+<!-- ##### FUNCTION gtk_combo_box_get_popup_accessible ##### -->
 <para>
 
 </para>
@@ -281,13 +276,24 @@ a widget used to choose from a list of items.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_combo_box_set_row_separator_column ##### -->
+<!-- ##### FUNCTION gtk_combo_box_get_row_separator_func ##### -->
 <para>
 
 </para>
 
 @combo_box: 
-@column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_row_separator_func ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@func: 
+@data: 
+@destroy: 
 
 
 <!-- ##### FUNCTION gtk_combo_box_set_add_tearoffs ##### -->

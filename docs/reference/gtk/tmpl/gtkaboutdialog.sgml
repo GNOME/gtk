@@ -185,6 +185,24 @@ only private fields and should not be directly accessed.
 @authors: 
 
 
+<!-- ##### FUNCTION gtk_about_dialog_get_artists ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_artists ##### -->
+<para>
+
+</para>
+
+@about: 
+@artists: 
+
+
 <!-- ##### FUNCTION gtk_about_dialog_get_documenters ##### -->
 <para>
 

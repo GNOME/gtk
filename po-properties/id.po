@@ -6,14 +6,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
-"POT-Creation-Date: 2004-07-20 02:56+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-08-01 01:25-0400\n"
 "PO-Revision-Date: 2003-06-28 20:55+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:101
 msgid "Number of Channels"
@@ -123,7 +123,7 @@ msgid "A unique name for the action."
 msgstr ""
 
 #: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
-#: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
+#: gtk/gtkframe.c:126 gtk/gtklabel.c:293 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Label"
 
@@ -195,7 +195,7 @@ msgstr ""
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 
-#: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkcellrenderer.c:173
+#: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkcellrenderer.c:220
 #: gtk/gtkwidget.c:449
 msgid "Sensitive"
 msgstr "Sensitif"
@@ -205,7 +205,7 @@ msgstr "Sensitif"
 msgid "Whether the action is enabled."
 msgstr "Menentukan apakah widget terlihat atau tidak"
 
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:567
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:573
 #: gtk/gtktreeviewcolumn.c:224 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "Terlihat"
@@ -490,7 +490,7 @@ msgstr "Jarak"
 msgid "The amount of space between children"
 msgstr "Jarak antar anak"
 
-#: gtk/gtkbox.c:139 gtk/gtknotebook.c:472 gtk/gtktoolbar.c:533
+#: gtk/gtkbox.c:139 gtk/gtknotebook.c:472 gtk/gtktoolbar.c:537
 msgid "Homogeneous"
 msgstr "Homogen"
 
@@ -498,7 +498,7 @@ msgstr "Homogen"
 msgid "Whether the children should all be the same size"
 msgstr "Menentukan apakah semua anak memiliki ukuran yang sama atau tidak"
 
-#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:525
+#: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:529
 #: gtk/gtktreeviewcolumn.c:305
 msgid "Expand"
 msgstr "Ekspansi"
@@ -556,12 +556,12 @@ msgid ""
 msgstr ""
 "Tulisan pada widget label dalam tombol, (jika tombol berisi widget label"
 
-#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
+#: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:314
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
 msgstr "Gunakan garis bawah"
 
-#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
+#: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:315
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -713,113 +713,113 @@ msgstr "Tampilkan angka minggu"
 msgid "If TRUE, week numbers are displayed"
 msgstr "Bila bernilai TRUE, angka minggu ditampilkan"
 
-#: gtk/gtkcellrenderer.c:156
+#: gtk/gtkcellrenderer.c:203
 msgid "mode"
 msgstr "modus"
 
-#: gtk/gtkcellrenderer.c:157
+#: gtk/gtkcellrenderer.c:204
 msgid "Editable mode of the CellRenderer"
 msgstr "Mode CellRenderer yang bisa diedit"
 
-#: gtk/gtkcellrenderer.c:166
+#: gtk/gtkcellrenderer.c:213
 msgid "visible"
 msgstr "kelihatan"
 
-#: gtk/gtkcellrenderer.c:167
+#: gtk/gtkcellrenderer.c:214
 msgid "Display the cell"
 msgstr "Tampilkan sel"
 
-#: gtk/gtkcellrenderer.c:174
+#: gtk/gtkcellrenderer.c:221
 #, fuzzy
 msgid "Display the cell sensitive"
 msgstr "Tampilkan sel"
 
-#: gtk/gtkcellrenderer.c:181
+#: gtk/gtkcellrenderer.c:228
 msgid "xalign"
 msgstr "xalign"
 
-#: gtk/gtkcellrenderer.c:182
+#: gtk/gtkcellrenderer.c:229
 msgid "The x-align"
 msgstr "x-align"
 
-#: gtk/gtkcellrenderer.c:192
+#: gtk/gtkcellrenderer.c:239
 msgid "yalign"
 msgstr "yalign"
 
-#: gtk/gtkcellrenderer.c:193
+#: gtk/gtkcellrenderer.c:240
 msgid "The y-align"
 msgstr "y-align"
 
-#: gtk/gtkcellrenderer.c:203
+#: gtk/gtkcellrenderer.c:250
 msgid "xpad"
 msgstr "xpad"
 
-#: gtk/gtkcellrenderer.c:204
+#: gtk/gtkcellrenderer.c:251
 msgid "The xpad"
 msgstr "xpad"
 
-#: gtk/gtkcellrenderer.c:214
+#: gtk/gtkcellrenderer.c:261
 msgid "ypad"
 msgstr "ypad"
 
-#: gtk/gtkcellrenderer.c:215
+#: gtk/gtkcellrenderer.c:262
 msgid "The ypad"
 msgstr "ypad"
 
-#: gtk/gtkcellrenderer.c:225
+#: gtk/gtkcellrenderer.c:272
 msgid "width"
 msgstr "lebar"
 
-#: gtk/gtkcellrenderer.c:226
+#: gtk/gtkcellrenderer.c:273
 msgid "The fixed width"
 msgstr "Lebar tetap"
 
-#: gtk/gtkcellrenderer.c:236
+#: gtk/gtkcellrenderer.c:283
 msgid "height"
 msgstr "tinggi"
 
-#: gtk/gtkcellrenderer.c:237
+#: gtk/gtkcellrenderer.c:284
 msgid "The fixed height"
 msgstr "Tinggi tetap"
 
-#: gtk/gtkcellrenderer.c:247
+#: gtk/gtkcellrenderer.c:294
 msgid "Is Expander"
 msgstr "Bisa melakukan ekspansi"
 
-#: gtk/gtkcellrenderer.c:248
+#: gtk/gtkcellrenderer.c:295
 msgid "Row has children"
 msgstr "Baris bisa memiliki anak"
 
-#: gtk/gtkcellrenderer.c:257
+#: gtk/gtkcellrenderer.c:304
 msgid "Is Expanded"
 msgstr "Dalam kondisi ekspansi"
 
-#: gtk/gtkcellrenderer.c:258
+#: gtk/gtkcellrenderer.c:305
 msgid "Row is an expander row, and is expanded"
 msgstr ""
 "Baris adalah baris yang bisa mlakukan ekspansi dan dalam kondisi terekspansi"
 
-#: gtk/gtkcellrenderer.c:266
+#: gtk/gtkcellrenderer.c:313
 msgid "Cell background color name"
 msgstr "Nama warna pada latar sel"
 
-#: gtk/gtkcellrenderer.c:267
+#: gtk/gtkcellrenderer.c:314
 msgid "Cell background color as a string"
 msgstr "Warna latar sel dalam string"
 
-#: gtk/gtkcellrenderer.c:274
+#: gtk/gtkcellrenderer.c:321
 msgid "Cell background color"
 msgstr "warna latar sel"
 
-#: gtk/gtkcellrenderer.c:275
+#: gtk/gtkcellrenderer.c:322
 msgid "Cell background color as a GdkColor"
 msgstr "Warna latar sel dalam GdkColor"
 
-#: gtk/gtkcellrenderer.c:283
+#: gtk/gtkcellrenderer.c:330
 msgid "Cell background set"
 msgstr "Set latar sel"
 
-#: gtk/gtkcellrenderer.c:284
+#: gtk/gtkcellrenderer.c:331
 msgid "Whether this tag affects the cell background color"
 msgstr "Apakah tag ini mempengaruhi warna latar sel atau tidak"
 
@@ -872,173 +872,173 @@ msgstr "Detil"
 msgid "Render detail to pass to the theme engine"
 msgstr "Detil render yang diberikan pada mesin tematik"
 
-#: gtk/gtkcellrenderertext.c:199 gtk/gtkentry.c:569 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:203 gtk/gtkentry.c:569 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Teks"
 
-#: gtk/gtkcellrenderertext.c:200
+#: gtk/gtkcellrenderertext.c:204
 msgid "Text to render"
 msgstr "Teks yang hendak ditulis"
 
-#: gtk/gtkcellrenderertext.c:207
+#: gtk/gtkcellrenderertext.c:211
 msgid "Markup"
 msgstr "Markup"
 
-#: gtk/gtkcellrenderertext.c:208
+#: gtk/gtkcellrenderertext.c:212
 msgid "Marked up text to render"
 msgstr "Teks bermarkup yang hendak ditulis"
 
-#: gtk/gtkcellrenderertext.c:215 gtk/gtklabel.c:299
+#: gtk/gtkcellrenderertext.c:219 gtk/gtklabel.c:300
 msgid "Attributes"
 msgstr "Atribut"
 
-#: gtk/gtkcellrenderertext.c:216
+#: gtk/gtkcellrenderertext.c:220
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "Daftar gaya atribut yang diberikan pada penggambar teks"
 
-#: gtk/gtkcellrenderertext.c:223
+#: gtk/gtkcellrenderertext.c:227
 msgid "Single Paragraph Mode"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:224
+#: gtk/gtkcellrenderertext.c:228
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtkcellview.c:179 gtk/gtktexttag.c:206
+#: gtk/gtkcellrenderertext.c:236 gtk/gtkcellview.c:179 gtk/gtktexttag.c:206
 msgid "Background color name"
 msgstr "Nama warna latar"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:180 gtk/gtktexttag.c:207
+#: gtk/gtkcellrenderertext.c:237 gtk/gtkcellview.c:180 gtk/gtktexttag.c:207
 msgid "Background color as a string"
 msgstr "Nama warna latar dalam string"
 
-#: gtk/gtkcellrenderertext.c:240 gtk/gtkcellview.c:186 gtk/gtktexttag.c:214
+#: gtk/gtkcellrenderertext.c:244 gtk/gtkcellview.c:186 gtk/gtktexttag.c:214
 msgid "Background color"
 msgstr "Warna latar belakang"
 
-#: gtk/gtkcellrenderertext.c:241 gtk/gtkcellview.c:187
+#: gtk/gtkcellrenderertext.c:245 gtk/gtkcellview.c:187
 msgid "Background color as a GdkColor"
 msgstr "Warna latar belakang dalam format GdkColor"
 
-#: gtk/gtkcellrenderertext.c:248 gtk/gtktexttag.c:240
+#: gtk/gtkcellrenderertext.c:252 gtk/gtktexttag.c:240
 msgid "Foreground color name"
 msgstr "Nama warna latar depan"
 
-#: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:241
+#: gtk/gtkcellrenderertext.c:253 gtk/gtktexttag.c:241
 msgid "Foreground color as a string"
 msgstr "Warna latar depan dalam kata-kata"
 
-#: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:248
+#: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:248
 msgid "Foreground color"
 msgstr "Warna latar depan"
 
-#: gtk/gtkcellrenderertext.c:257
+#: gtk/gtkcellrenderertext.c:261
 msgid "Foreground color as a GdkColor"
 msgstr "Warna latar depan dalam GdkColor"
 
-#: gtk/gtkcellrenderertext.c:265 gtk/gtkentry.c:501 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:269 gtk/gtkentry.c:501 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:573
 msgid "Editable"
 msgstr "Bisa diedit"
 
-#: gtk/gtkcellrenderertext.c:266 gtk/gtktexttag.c:275 gtk/gtktextview.c:574
+#: gtk/gtkcellrenderertext.c:270 gtk/gtktexttag.c:275 gtk/gtktextview.c:574
 msgid "Whether the text can be modified by the user"
 msgstr "Menentukan apakah teks bisa diganti-ganti oleh user"
 
-#: gtk/gtkcellrenderertext.c:273 gtk/gtkcellrenderertext.c:281
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkcellrenderertext.c:277 gtk/gtkcellrenderertext.c:285
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "Font"
 
-#: gtk/gtkcellrenderertext.c:274
+#: gtk/gtkcellrenderertext.c:278
 msgid "Font description as a string"
 msgstr "Deskripsi Font"
 
-#: gtk/gtkcellrenderertext.c:282 gtk/gtktexttag.c:291
+#: gtk/gtkcellrenderertext.c:286 gtk/gtktexttag.c:291
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Keterangan font dalam bentuk struct PangoFontDescription"
 
-#: gtk/gtkcellrenderertext.c:290 gtk/gtktexttag.c:299
+#: gtk/gtkcellrenderertext.c:294 gtk/gtktexttag.c:299
 msgid "Font family"
 msgstr "Keluarga Font"
 
-#: gtk/gtkcellrenderertext.c:291 gtk/gtktexttag.c:300
+#: gtk/gtkcellrenderertext.c:295 gtk/gtktexttag.c:300
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "Nama keluarga font, misalnya Sans, Helvetica, Times, Monospace"
 
-#: gtk/gtkcellrenderertext.c:298 gtk/gtkcellrenderertext.c:299
+#: gtk/gtkcellrenderertext.c:302 gtk/gtkcellrenderertext.c:303
 #: gtk/gtktexttag.c:307
 msgid "Font style"
 msgstr "Gaya Font"
 
-#: gtk/gtkcellrenderertext.c:307 gtk/gtkcellrenderertext.c:308
+#: gtk/gtkcellrenderertext.c:311 gtk/gtkcellrenderertext.c:312
 #: gtk/gtktexttag.c:316
 msgid "Font variant"
 msgstr "Jenis Font"
 
-#: gtk/gtkcellrenderertext.c:316 gtk/gtkcellrenderertext.c:317
+#: gtk/gtkcellrenderertext.c:320 gtk/gtkcellrenderertext.c:321
 #: gtk/gtktexttag.c:325
 msgid "Font weight"
 msgstr "Bobot Font"
 
-#: gtk/gtkcellrenderertext.c:326 gtk/gtkcellrenderertext.c:327
+#: gtk/gtkcellrenderertext.c:330 gtk/gtkcellrenderertext.c:331
 #: gtk/gtktexttag.c:336
 msgid "Font stretch"
 msgstr "Stretch Font"
 
-#: gtk/gtkcellrenderertext.c:335 gtk/gtkcellrenderertext.c:336
+#: gtk/gtkcellrenderertext.c:339 gtk/gtkcellrenderertext.c:340
 #: gtk/gtktexttag.c:345
 msgid "Font size"
 msgstr "Ukuran Font"
 
-#: gtk/gtkcellrenderertext.c:345 gtk/gtktexttag.c:365
+#: gtk/gtkcellrenderertext.c:349 gtk/gtktexttag.c:365
 msgid "Font points"
 msgstr "Point Font"
 
-#: gtk/gtkcellrenderertext.c:346 gtk/gtktexttag.c:366
+#: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:366
 msgid "Font size in points"
 msgstr "Ukuran font dalam point"
 
-#: gtk/gtkcellrenderertext.c:355 gtk/gtktexttag.c:355
+#: gtk/gtkcellrenderertext.c:359 gtk/gtktexttag.c:355
 msgid "Font scale"
 msgstr "Skala font"
 
-#: gtk/gtkcellrenderertext.c:356
+#: gtk/gtkcellrenderertext.c:360
 msgid "Font scaling factor"
 msgstr "Faktor skala font"
 
-#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:424
+#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:424
 msgid "Rise"
 msgstr "Angkat"
 
-#: gtk/gtkcellrenderertext.c:366
+#: gtk/gtkcellrenderertext.c:370
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 "Jarak dari garis batas bawah font (bila dibawah garis, maka nilai bernilai "
 "negatif)"
 
-#: gtk/gtkcellrenderertext.c:376 gtk/gtktexttag.c:464
+#: gtk/gtkcellrenderertext.c:380 gtk/gtktexttag.c:464
 msgid "Strikethrough"
 msgstr "Dicoret"
 
-#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:465
+#: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:465
 msgid "Whether to strike through the text"
 msgstr "Menentukan apakah teks disertai coretan"
 
-#: gtk/gtkcellrenderertext.c:384 gtk/gtktexttag.c:472
+#: gtk/gtkcellrenderertext.c:388 gtk/gtktexttag.c:472
 msgid "Underline"
 msgstr "Garis bawah"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:473
+#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:473
 msgid "Style of underline for this text"
 msgstr "Beri garis bawah pada teks"
 
-#: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:384
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:384
 msgid "Language"
 msgstr "Bahasa"
 
-#: gtk/gtkcellrenderertext.c:394
+#: gtk/gtkcellrenderertext.c:398
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
@@ -1048,119 +1048,135 @@ msgstr ""
 "sebagai petunjuk dalam menggambar tulisan itu. Jika Anda tidak mengerti "
 "parameter ini, berarti Anda tidak memerlukannya."
 
-#: gtk/gtkcellrenderertext.c:404 gtk/gtkcellview.c:194 gtk/gtktexttag.c:509
+#: gtk/gtkcellrenderertext.c:406 gtk/gtklabel.c:406
+msgid "Ellipsize"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:407
+msgid ""
+"The preferred place to ellipsize the string, if the cell renderer does not "
+"have enough room to display the entire string, if at all"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:417 gtk/gtkcellview.c:194 gtk/gtktexttag.c:509
 msgid "Background set"
 msgstr "Set latar belakang"
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtkcellview.c:195 gtk/gtktexttag.c:510
+#: gtk/gtkcellrenderertext.c:418 gtk/gtkcellview.c:195 gtk/gtktexttag.c:510
 msgid "Whether this tag affects the background color"
 msgstr "Tentukan apakah tag ini berpengaruh pada warna latar belakang"
 
-#: gtk/gtkcellrenderertext.c:408 gtk/gtktexttag.c:521
+#: gtk/gtkcellrenderertext.c:421 gtk/gtktexttag.c:521
 msgid "Foreground set"
 msgstr "Set Latar depan"
 
-#: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:522
+#: gtk/gtkcellrenderertext.c:422 gtk/gtktexttag.c:522
 msgid "Whether this tag affects the foreground color"
 msgstr "Tentukan apakah tag ini berpengaruh pada warna latar depan"
 
-#: gtk/gtkcellrenderertext.c:412 gtk/gtktexttag.c:529
+#: gtk/gtkcellrenderertext.c:425 gtk/gtktexttag.c:529
 msgid "Editability set"
 msgstr "Set Editability"
 
-#: gtk/gtkcellrenderertext.c:413 gtk/gtktexttag.c:530
+#: gtk/gtkcellrenderertext.c:426 gtk/gtktexttag.c:530
 msgid "Whether this tag affects text editability"
 msgstr ""
 "Tentukan apakah tag ini berpengarun pada bisa diedit atau tidaknya sebuah "
 "teks"
 
-#: gtk/gtkcellrenderertext.c:416 gtk/gtktexttag.c:533
+#: gtk/gtkcellrenderertext.c:429 gtk/gtktexttag.c:533
 msgid "Font family set"
 msgstr "Keluarga Font"
 
-#: gtk/gtkcellrenderertext.c:417 gtk/gtktexttag.c:534
+#: gtk/gtkcellrenderertext.c:430 gtk/gtktexttag.c:534
 msgid "Whether this tag affects the font family"
 msgstr "Menentukan apakah tag ini berpengaruh pada keluarga font"
 
-#: gtk/gtkcellrenderertext.c:420 gtk/gtktexttag.c:537
+#: gtk/gtkcellrenderertext.c:433 gtk/gtktexttag.c:537
 msgid "Font style set"
 msgstr "Gaya font"
 
-#: gtk/gtkcellrenderertext.c:421 gtk/gtktexttag.c:538
+#: gtk/gtkcellrenderertext.c:434 gtk/gtktexttag.c:538
 msgid "Whether this tag affects the font style"
 msgstr "Menentukan apakah tag berpengaruh pada gaya font"
 
-#: gtk/gtkcellrenderertext.c:424 gtk/gtktexttag.c:541
+#: gtk/gtkcellrenderertext.c:437 gtk/gtktexttag.c:541
 msgid "Font variant set"
 msgstr "Jenis font"
 
-#: gtk/gtkcellrenderertext.c:425 gtk/gtktexttag.c:542
+#: gtk/gtkcellrenderertext.c:438 gtk/gtktexttag.c:542
 msgid "Whether this tag affects the font variant"
 msgstr "Menentukan apakah tag berpegaruh pada jenis font"
 
-#: gtk/gtkcellrenderertext.c:428 gtk/gtktexttag.c:545
+#: gtk/gtkcellrenderertext.c:441 gtk/gtktexttag.c:545
 msgid "Font weight set"
 msgstr "Bobot font"
 
-#: gtk/gtkcellrenderertext.c:429 gtk/gtktexttag.c:546
+#: gtk/gtkcellrenderertext.c:442 gtk/gtktexttag.c:546
 msgid "Whether this tag affects the font weight"
 msgstr "Menentukan apakah tag berpengaruh pada bobot font"
 
-#: gtk/gtkcellrenderertext.c:432 gtk/gtktexttag.c:549
+#: gtk/gtkcellrenderertext.c:445 gtk/gtktexttag.c:549
 msgid "Font stretch set"
 msgstr "Strect font"
 
-#: gtk/gtkcellrenderertext.c:433 gtk/gtktexttag.c:550
+#: gtk/gtkcellrenderertext.c:446 gtk/gtktexttag.c:550
 msgid "Whether this tag affects the font stretch"
 msgstr "Menentukan apakah tag berpengaruh pada stretch font"
 
-#: gtk/gtkcellrenderertext.c:436 gtk/gtktexttag.c:553
+#: gtk/gtkcellrenderertext.c:449 gtk/gtktexttag.c:553
 msgid "Font size set"
 msgstr "Ukuran font"
 
-#: gtk/gtkcellrenderertext.c:437 gtk/gtktexttag.c:554
+#: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:554
 msgid "Whether this tag affects the font size"
 msgstr "Menentukan apakah tag berpengaruh pada ukuran font"
 
-#: gtk/gtkcellrenderertext.c:440 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:453 gtk/gtktexttag.c:557
 msgid "Font scale set"
 msgstr "Set skala font"
 
-#: gtk/gtkcellrenderertext.c:441 gtk/gtktexttag.c:558
+#: gtk/gtkcellrenderertext.c:454 gtk/gtktexttag.c:558
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Menentukan apakah tag ini diskalakan dengan faktor"
 
-#: gtk/gtkcellrenderertext.c:444 gtk/gtktexttag.c:577
+#: gtk/gtkcellrenderertext.c:457 gtk/gtktexttag.c:577
 msgid "Rise set"
 msgstr "Nilai Angkat"
 
-#: gtk/gtkcellrenderertext.c:445 gtk/gtktexttag.c:578
+#: gtk/gtkcellrenderertext.c:458 gtk/gtktexttag.c:578
 msgid "Whether this tag affects the rise"
 msgstr "Menentukan apakah tag berpengaruh pada nilai angkatan"
 
-#: gtk/gtkcellrenderertext.c:448 gtk/gtktexttag.c:593
+#: gtk/gtkcellrenderertext.c:461 gtk/gtktexttag.c:593
 msgid "Strikethrough set"
 msgstr "Coretan"
 
-#: gtk/gtkcellrenderertext.c:449 gtk/gtktexttag.c:594
+#: gtk/gtkcellrenderertext.c:462 gtk/gtktexttag.c:594
 msgid "Whether this tag affects strikethrough"
 msgstr "Menentukan apakah tag berpengaruh pada coretan"
 
-#: gtk/gtkcellrenderertext.c:452 gtk/gtktexttag.c:601
+#: gtk/gtkcellrenderertext.c:465 gtk/gtktexttag.c:601
 msgid "Underline set"
 msgstr "Garis bawah"
 
-#: gtk/gtkcellrenderertext.c:453 gtk/gtktexttag.c:602
+#: gtk/gtkcellrenderertext.c:466 gtk/gtktexttag.c:602
 msgid "Whether this tag affects underlining"
 msgstr "Menentukan apakah tag berpengaruh pada garis bawah"
 
-#: gtk/gtkcellrenderertext.c:456 gtk/gtktexttag.c:565
+#: gtk/gtkcellrenderertext.c:469 gtk/gtkcellrenderertext.c:473
+#: gtk/gtktexttag.c:565
 msgid "Language set"
 msgstr "Set Bahasa"
 
-#: gtk/gtkcellrenderertext.c:457 gtk/gtktexttag.c:566
+#: gtk/gtkcellrenderertext.c:470 gtk/gtktexttag.c:566
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Menentukan apakah tag mempengaruhi bahasa teks yang digambar"
+
+#: gtk/gtkcellrenderertext.c:474
+#, fuzzy
+msgid "Whether this tag affects the ellipsize mode"
+msgstr "Menentukan apakah tag berpengaruh pada nilai angkatan"
 
 #: gtk/gtkcellrenderertoggle.c:141
 msgid "Toggle state"
@@ -1346,84 +1362,75 @@ msgstr "Nilai dalam daftar"
 msgid "Whether entered values must already be present in the list"
 msgstr "Menentukan apakah nilai yang dimasukan selalu ada pada daftar"
 
-#: gtk/gtkcombobox.c:494
+#: gtk/gtkcombobox.c:511
 msgid "ComboBox model"
-msgstr ""
-
-#: gtk/gtkcombobox.c:495
-#, fuzzy
-msgid "The model for the combo box"
-msgstr "Model TreeView"
-
-#: gtk/gtkcombobox.c:502
-#, fuzzy
-msgid "Wrap width"
-msgstr "Lebar"
-
-#: gtk/gtkcombobox.c:503
-msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
 #: gtk/gtkcombobox.c:512
 #, fuzzy
+msgid "The model for the combo box"
+msgstr "Model TreeView"
+
+#: gtk/gtkcombobox.c:519
+#, fuzzy
+msgid "Wrap width"
+msgstr "Lebar"
+
+#: gtk/gtkcombobox.c:520
+msgid "Wrap width for layouting the items in a grid"
+msgstr ""
+
+#: gtk/gtkcombobox.c:529
+#, fuzzy
 msgid "Row span column"
 msgstr "Jarak antar baris"
 
-#: gtk/gtkcombobox.c:513
+#: gtk/gtkcombobox.c:530
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:522
+#: gtk/gtkcombobox.c:539
 #, fuzzy
 msgid "Column span column"
 msgstr "Jarak antar kolom"
 
-#: gtk/gtkcombobox.c:523
+#: gtk/gtkcombobox.c:540
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:532
-#, fuzzy
-msgid "Row separator column"
-msgstr "Jarak antar baris"
-
-#: gtk/gtkcombobox.c:533
-msgid "Boolean TreeModel column specifying which rows are separators"
-msgstr ""
-
-#: gtk/gtkcombobox.c:542
+#: gtk/gtkcombobox.c:550
 #, fuzzy
 msgid "Active item"
 msgstr "Aktif"
 
-#: gtk/gtkcombobox.c:543
+#: gtk/gtkcombobox.c:551
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "GdkFont yang sedang dipilih"
 
-#: gtk/gtkcombobox.c:562 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:570 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr ""
 
-#: gtk/gtkcombobox.c:563
+#: gtk/gtkcombobox.c:571
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Menentukan apakah tab memiliki ukuran homogen"
 
-#: gtk/gtkcombobox.c:578 gtk/gtkentry.c:526
+#: gtk/gtkcombobox.c:586 gtk/gtkentry.c:526
 msgid "Has Frame"
 msgstr "Ada bingkai atau tidak"
 
-#: gtk/gtkcombobox.c:579
+#: gtk/gtkcombobox.c:587
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Menentukan apakah kolom dapat diurut kembali pada header"
 
-#: gtk/gtkcombobox.c:585
+#: gtk/gtkcombobox.c:593
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:586
+#: gtk/gtkcombobox.c:594
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Menentukan apakah kemajuan aktivitas ditampilkan dalam bentuk teks"
@@ -1534,19 +1541,19 @@ msgstr "Batas area aksi"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Lebar batas disekeliling area tombol di bawah dialog"
 
-#: gtk/gtkentry.c:481 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:481 gtk/gtklabel.c:371
 msgid "Cursor Position"
 msgstr "Posisi kursor"
 
-#: gtk/gtkentry.c:482 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:482 gtk/gtklabel.c:372
 msgid "The current position of the insertion cursor in chars"
 msgstr "Posisi kursor saat ini untuk memasukkan karakter"
 
-#: gtk/gtkentry.c:491 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:491 gtk/gtklabel.c:381
 msgid "Selection Bound"
 msgstr "Batas seleksi"
 
-#: gtk/gtkentry.c:492 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:492 gtk/gtklabel.c:382
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Posisi lawan pilihan dari kursor dalam satuan karakter"
@@ -1628,7 +1635,7 @@ msgstr "Penyesuaian sisi x"
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
-"layouts"
+"layouts."
 msgstr "Penyesuaian horisontal, bernilai 0 (kiri) hingga 1 (kanan)"
 
 #: gtk/gtkentry.c:811
@@ -1721,11 +1728,11 @@ msgstr "Menentukan apakah widget dapat menjadi widget default"
 msgid "Text of the expander's label"
 msgstr "Teks pada bingkai label"
 
-#: gtk/gtkexpander.c:221 gtk/gtklabel.c:306
+#: gtk/gtkexpander.c:221 gtk/gtklabel.c:307
 msgid "Use markup"
 msgstr "Gunakan markup"
 
-#: gtk/gtkexpander.c:222 gtk/gtklabel.c:307
+#: gtk/gtkexpander.c:222 gtk/gtklabel.c:308
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr ""
 "Label teks termasuk markup XML-nya. Silakan baca pango_parse_markup() untuk "
@@ -1746,11 +1753,11 @@ msgstr "Widget label"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Widget yang digunakan untuk menampilkan letak label bingkai"
 
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:669
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:675
 msgid "Expander Size"
 msgstr "Ukuran ekspander"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:670
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:676
 msgid "Size of the expander arrow"
 msgstr "Ukuran panah ekspander"
 
@@ -1854,11 +1861,11 @@ msgid "Whether the hidden files and folders should be displayed"
 msgstr ""
 "Menentukan apakah tombol untuk membuat/edit file ditampilkan atau tidak"
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:574
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:575
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Font default yang digunakan"
@@ -1905,7 +1912,7 @@ msgstr "Posisi Y widget anak"
 msgid "The title of the font selection dialog"
 msgstr "Judul window"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "Nama font"
 
@@ -1956,19 +1963,19 @@ msgstr "Tampilkan teks"
 msgid "Whether selected font size is shown in the label"
 msgstr "Menentukan apakah kemajuan aktivitas ditampilkan dalam bentuk teks"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "Nama font dalam format X"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr "GdkFont yang sedang dipilih"
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "Contoh teks"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "Teks yang ditulis untuk melihat contoh font yang dipilih"
 
@@ -2009,7 +2016,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Widget yang digunakan untuk menampilkan letak label bingkai"
 
 #: gtk/gtkhandlebox.c:206 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:200
-#: gtk/gtktoolbar.c:574 gtk/gtkviewport.c:151
+#: gtk/gtktoolbar.c:578 gtk/gtkviewport.c:151
 msgid "Shadow type"
 msgstr "Tipe shadow"
 
@@ -2147,19 +2154,19 @@ msgstr "Layar"
 msgid "The screen where this window will be displayed"
 msgstr "Layar tempat window hendak ditampilkan"
 
-#: gtk/gtklabel.c:293
+#: gtk/gtklabel.c:294
 msgid "The text of the label"
 msgstr "Label teks"
 
-#: gtk/gtklabel.c:300
+#: gtk/gtklabel.c:301
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Daftar gaya atribut yang hendak ditempelkan pada label teks"
 
-#: gtk/gtklabel.c:321 gtk/gtktexttag.c:375 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:322 gtk/gtktexttag.c:375 gtk/gtktextview.c:590
 msgid "Justification"
 msgstr "Rata"
 
-#: gtk/gtklabel.c:322
+#: gtk/gtklabel.c:323
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2169,11 +2176,11 @@ msgstr ""
 "lainnya. Hal ini tidak berpengaruh pada penyesuaian letak label dalam "
 "lokasinya.  Silakan baca GtkMis::xalign untuk informasi lengkapnya"
 
-#: gtk/gtklabel.c:330
+#: gtk/gtklabel.c:331
 msgid "Pattern"
 msgstr "Pola"
 
-#: gtk/gtklabel.c:331
+#: gtk/gtklabel.c:332
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2181,37 +2188,43 @@ msgstr ""
 "Kalimat dengan karakter _ (underscore) pada suatu karakter akan membuat "
 "karakter tersebut diberi garis bawah"
 
-#: gtk/gtklabel.c:338
+#: gtk/gtklabel.c:339
 msgid "Line wrap"
 msgstr "potong baris"
 
-#: gtk/gtklabel.c:339
+#: gtk/gtklabel.c:340
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Jika diset, baris akan dipotong bila terlalu lebar"
 
-#: gtk/gtklabel.c:345
+#: gtk/gtklabel.c:346
 msgid "Selectable"
 msgstr "Dapat dipilih"
 
-#: gtk/gtklabel.c:346
+#: gtk/gtklabel.c:347
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Menentukan apakah teks label dapat dipilih dengan mouse atau tidak"
 
-#: gtk/gtklabel.c:352
+#: gtk/gtklabel.c:353
 msgid "Mnemonic key"
 msgstr "Tombol singkat"
 
-#: gtk/gtklabel.c:353
+#: gtk/gtklabel.c:354
 msgid "The mnemonic accelerator key for this label"
 msgstr "Tombol singkat untuk label ini"
 
-#: gtk/gtklabel.c:361
+#: gtk/gtklabel.c:362
 msgid "Mnemonic widget"
 msgstr "Widget mnemonik"
 
-#: gtk/gtklabel.c:362
+#: gtk/gtklabel.c:363
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Widget yang diaktifkan saat tombol singkat ditekan"
+
+#: gtk/gtklabel.c:407
+msgid ""
+"The preferred place to ellipsize the string, if the label does not have "
+"enough room to display the entire string, if at all"
+msgstr ""
 
 #: gtk/gtklayout.c:634 gtk/gtkviewport.c:135
 msgid "Horizontal adjustment"
@@ -2363,7 +2376,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Gaya kotak sekitar kotak menu"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:550
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:554
 msgid "Internal padding"
 msgstr "Isian internal"
 
@@ -2732,7 +2745,7 @@ msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr ""
 "GtkAdjustment yang terhubung ke progress bar (Sebaiknya tidak digunakan)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:499
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:503
 msgid "Orientation"
 msgstr "Orientasi"
 
@@ -2821,11 +2834,12 @@ msgstr "Kelompok"
 
 #: gtk/gtkradioaction.c:156
 #, fuzzy
-msgid "The radio action whose group this action belongs."
+msgid "The radio action whose group this action belongs to."
 msgstr "Tombol radio tempat kelompok widget ini berada."
 
 #: gtk/gtkradiobutton.c:113
-msgid "The radio button whose group this widget belongs."
+#, fuzzy
+msgid "The radio button whose group this widget belongs to."
 msgstr "Tombol radio tempat kelompok widget ini berada."
 
 #: gtk/gtkrange.c:284
@@ -2999,11 +3013,11 @@ msgid ""
 msgstr ""
 "Menambilkan tombol panah kedua dengan arah maju pada sisi lawan scrollbar"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:551
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:557
 msgid "Horizontal Adjustment"
 msgstr "Penyesuaian Horisontal"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:559
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:565
 msgid "Vertical Adjustment"
 msgstr "Penyesuaian Vertikal"
 
@@ -3821,88 +3835,88 @@ msgstr "Indikator gambar"
 msgid "If the toggle part of the button is displayed"
 msgstr "Menentukan apakah bagian togel tombol ditampilkan"
 
-#: gtk/gtktoolbar.c:500
+#: gtk/gtktoolbar.c:504
 msgid "The orientation of the toolbar"
 msgstr "Arah orientasi toolbar"
 
-#: gtk/gtktoolbar.c:508
+#: gtk/gtktoolbar.c:512
 msgid "Toolbar Style"
 msgstr "Gaya toolbar"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:513
 msgid "How to draw the toolbar"
 msgstr "Cara menggambar toolbar"
 
-#: gtk/gtktoolbar.c:516
+#: gtk/gtktoolbar.c:520
 msgid "Show Arrow"
 msgstr "Tampilkan Panah"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:521
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 "Menentukan apakah panah harus ditampilkan pada toolbar bila ruangannya sudah "
 "tidak cukup"
 
-#: gtk/gtktoolbar.c:526
+#: gtk/gtktoolbar.c:530
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Menentukan apakah obyek bisa menambah ruang saat toolbar bertambah besar"
 
-#: gtk/gtktoolbar.c:534
+#: gtk/gtktoolbar.c:538
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Menentukan apakah obyek memiliki ukuran yang sama dengan obyek homogen lain "
 "atau tidak"
 
-#: gtk/gtktoolbar.c:541
+#: gtk/gtktoolbar.c:545
 msgid "Spacer size"
 msgstr "Ukuran pengisi ruang"
 
-#: gtk/gtktoolbar.c:542
+#: gtk/gtktoolbar.c:546
 msgid "Size of spacers"
 msgstr "Ukuran pengisi ruang"
 
-#: gtk/gtktoolbar.c:551
+#: gtk/gtktoolbar.c:555
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Jumlah ruangan dalam batas antara bayangan toolbar dan tombolnya"
 
-#: gtk/gtktoolbar.c:559
+#: gtk/gtktoolbar.c:563
 msgid "Space style"
 msgstr "Gaya pengisi ruangan"
 
-#: gtk/gtktoolbar.c:560
+#: gtk/gtktoolbar.c:564
 msgid "Whether spacers are vertical lines or just blank"
 msgstr ""
 "Menentukan apakah pengisi ruangan digambar secara vertikal atau kosong saja"
 
-#: gtk/gtktoolbar.c:567
+#: gtk/gtktoolbar.c:571
 msgid "Button relief"
 msgstr "Relief tombol"
 
-#: gtk/gtktoolbar.c:568
+#: gtk/gtktoolbar.c:572
 msgid "Type of bevel around toolbar buttons"
 msgstr "Tipe gaya dekorasi di sekeliling tombol toolbar"
 
-#: gtk/gtktoolbar.c:575
+#: gtk/gtktoolbar.c:579
 msgid "Style of bevel around the toolbar"
 msgstr "Gaya dekorasi sekeliling toolbar"
 
-#: gtk/gtktoolbar.c:581
+#: gtk/gtktoolbar.c:585
 msgid "Toolbar style"
 msgstr "Gaya toolbar"
 
-#: gtk/gtktoolbar.c:582
+#: gtk/gtktoolbar.c:586
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Menentukan apakah toolbar default hanya berisi teks, teks dan ikon, ikon "
 "saja, dsb."
 
-#: gtk/gtktoolbar.c:588
+#: gtk/gtktoolbar.c:592
 msgid "Toolbar icon size"
 msgstr "Ukuran ikon toolbar"
 
-#: gtk/gtktoolbar.c:589
+#: gtk/gtktoolbar.c:593
 msgid "Size of icons in default toolbars"
 msgstr "Ukuran ikon pada toolbar default"
 
@@ -3959,139 +3973,139 @@ msgstr "Model TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Model untuk mengurutkan TreeModelSort"
 
-#: gtk/gtktreeview.c:543
+#: gtk/gtktreeview.c:549
 msgid "TreeView Model"
 msgstr "Model TreeView"
 
-#: gtk/gtktreeview.c:544
+#: gtk/gtktreeview.c:550
 msgid "The model for the tree view"
 msgstr "Model TreeView"
 
-#: gtk/gtktreeview.c:552
+#: gtk/gtktreeview.c:558
 msgid "Horizontal Adjustment for the widget"
 msgstr "Penyesuaian widget horisontal"
 
-#: gtk/gtktreeview.c:560
+#: gtk/gtktreeview.c:566
 msgid "Vertical Adjustment for the widget"
 msgstr "Penyesuaian widget vertikal"
 
-#: gtk/gtktreeview.c:568
+#: gtk/gtktreeview.c:574
 msgid "Show the column header buttons"
 msgstr "Tampilkan tombol pada bagian atas kolom"
 
-#: gtk/gtktreeview.c:575
+#: gtk/gtktreeview.c:581
 msgid "Headers Clickable"
 msgstr "Header Dapat Diklik"
 
-#: gtk/gtktreeview.c:576
+#: gtk/gtktreeview.c:582
 msgid "Column headers respond to click events"
 msgstr "Bagian atas kolom merespon kejadian klik"
 
-#: gtk/gtktreeview.c:583
+#: gtk/gtktreeview.c:589
 msgid "Expander Column"
 msgstr "Kolom Ekspander"
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:590
 msgid "Set the column for the expander column"
 msgstr "Set kolom untuk kolom ekspander"
 
-#: gtk/gtktreeview.c:591 gtk/gtktreeviewcolumn.c:340
+#: gtk/gtktreeview.c:597 gtk/gtktreeviewcolumn.c:340
 msgid "Reorderable"
 msgstr "Dapat diurut kembali"
 
-#: gtk/gtktreeview.c:592
+#: gtk/gtktreeview.c:598
 msgid "View is reorderable"
 msgstr "View dapat diurut kembali"
 
-#: gtk/gtktreeview.c:599
+#: gtk/gtktreeview.c:605
 msgid "Rules Hint"
 msgstr "Petunjuk pada aturan"
 
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:606
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Menentukan petunjuk pada mesin tematik untuk menggambar baris-baris dalam "
 "warna yang bergantian"
 
-#: gtk/gtktreeview.c:607
+#: gtk/gtktreeview.c:613
 msgid "Enable Search"
 msgstr "Dapat dicari"
 
-#: gtk/gtktreeview.c:608
+#: gtk/gtktreeview.c:614
 msgid "View allows user to search through columns interactively"
 msgstr "View membolehkan pengguna untuk mencari dalam kolom secara interaktif"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:621
 msgid "Search Column"
 msgstr "Kolom pencarian"
 
-#: gtk/gtktreeview.c:616
+#: gtk/gtktreeview.c:622
 msgid "Model column to search through when searching through code"
 msgstr "Kolom pada model tempat mencari saat mencari dalam kode"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:642
 #, fuzzy
 msgid "Fixed Height Mode"
 msgstr "Tinggi tetap"
 
-#: gtk/gtktreeview.c:637
+#: gtk/gtktreeview.c:643
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 
-#: gtk/gtktreeview.c:657
+#: gtk/gtktreeview.c:663
 msgid "Hover Selection"
 msgstr ""
 
-#: gtk/gtktreeview.c:658
+#: gtk/gtktreeview.c:664
 #, fuzzy
 msgid "Whether the selection should follow the pointer"
 msgstr "Menentukan apakah pemilih warna memiliki seting opasitas atau tidak"
 
-#: gtk/gtktreeview.c:678
+#: gtk/gtktreeview.c:684
 msgid "Vertical Separator Width"
 msgstr "Lebar Separator Vertikal"
 
-#: gtk/gtktreeview.c:679
+#: gtk/gtktreeview.c:685
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Ruangan vertikal antara sel. Harus bernilai genap"
 
-#: gtk/gtktreeview.c:687
+#: gtk/gtktreeview.c:693
 msgid "Horizontal Separator Width"
 msgstr "Lebar Separator Horisontal"
 
-#: gtk/gtktreeview.c:688
+#: gtk/gtktreeview.c:694
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Ruangan horisontal antara sel. Harus bernilai genap"
 
-#: gtk/gtktreeview.c:696
+#: gtk/gtktreeview.c:702
 msgid "Allow Rules"
 msgstr "Membolehkan aturan"
 
-#: gtk/gtktreeview.c:697
+#: gtk/gtktreeview.c:703
 msgid "Allow drawing of alternating color rows"
 msgstr "Membolehkan penggambaran baris-baris dalam warna yang bergantian"
 
-#: gtk/gtktreeview.c:703
+#: gtk/gtktreeview.c:709
 msgid "Indent Expanders"
 msgstr "Indentasi pada ekspander"
 
-#: gtk/gtktreeview.c:704
+#: gtk/gtktreeview.c:710
 msgid "Make the expanders indented"
 msgstr "Buat ekspander memiliki indentasi"
 
-#: gtk/gtktreeview.c:710
+#: gtk/gtktreeview.c:716
 msgid "Even Row Color"
 msgstr "Warna pada baris genap"
 
-#: gtk/gtktreeview.c:711
+#: gtk/gtktreeview.c:717
 msgid "Color to use for even rows"
 msgstr "Warna yang digunakan pada baris-baris pada posisi genap"
 
-#: gtk/gtktreeview.c:717
+#: gtk/gtktreeview.c:723
 msgid "Odd Row Color"
 msgstr "Warna baris ganjil"
 
-#: gtk/gtktreeview.c:718
+#: gtk/gtktreeview.c:724
 msgid "Color to use for odd rows"
 msgstr "Warna yang digunakan pada baris-baris pada posisi ganjil"
 
@@ -4654,6 +4668,10 @@ msgstr "Gaya status IM"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Cara menggambar statusbar metode input"
+
+#, fuzzy
+#~ msgid "Row separator column"
+#~ msgstr "Jarak antar baris"
 
 #, fuzzy
 #~ msgid "Folder Mode"

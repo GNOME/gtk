@@ -59,6 +59,16 @@ Renders text in a cell
 
 </para>
 
+<!-- ##### ARG GtkCellRendererText:ellipsize ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:ellipsize-set ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRendererText:family ##### -->
 <para>
 

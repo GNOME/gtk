@@ -1,3 +1,7 @@
+2004-08-01  Matthias Clasen  <mclasen@redhat.com>
+                                                                                
+        * === Released 2.5.1 ===
+                                                                                
 Tue Jul 20 22:23:26 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-io.h: Remove trailing commas from 

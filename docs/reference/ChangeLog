@@ -1,3 +1,7 @@
+2004-08-01  Matthias Clasen  <mclasen@redhat.com>
+                                                                                
+        * === Released 2.5.1 ===
+                                                                                
 Sat Jul 31 17:20:22 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add some forgotten functions.
