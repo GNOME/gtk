@@ -365,6 +365,8 @@ gtk_action_init (GtkAction *action)
  * Creates a new #GtkAction object. To add the action to a
  * #GtkActionGroup and set the accelerator for the action,
  * call gtk_action_group_add_action_with_accel().
+ * See <xref linkend="XML-UI"> for information on allowed action
+ * names.
  *
  * Return value: a new #GtkAction
  *

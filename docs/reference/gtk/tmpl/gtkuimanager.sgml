@@ -51,9 +51,15 @@ There are some additional restrictions beyond those specified in the
 DTD, e.g. every toolitem must have a toolbar in its anchestry and
 every menuitem must have a menubar or popup in its anchestry. Since
 a #GMarkup parser is used to parse the UI description, it must not only
-be valid XML, but valid #GMarkup. If a name is not specified, it defaults 
-to the action. If an action is not specified either, the element name is 
-used.  
+be valid XML, but valid #GMarkup. 
+</para>
+<para>
+If a name is not specified, it defaults to the action. If an action is 
+not specified either, the element name is used. The name and action 
+attributes must not contain '/' characters after parsing (since that 
+would mess up path lookup) and must be usable as XML attributes when 
+enclosed in doublequotes, thus they must not '"' characters or references 
+to the &amp;quot; entity.
 </para>
 <example>
 <title>A UI definition</title>
