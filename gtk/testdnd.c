@@ -312,6 +312,7 @@ target_drag_motion	   (GtkWidget	       *widget,
       gtk_pixmap_set (GTK_PIXMAP (widget), trashcan_open, trashcan_open_mask);
     }
 
+
   source_widget = gtk_drag_get_source_widget (context);
   g_print("motion, source %s\n", source_widget ?
 	    gtk_type_name (GTK_OBJECT (source_widget)->klass->type) :
@@ -328,10 +329,19 @@ target_drag_drop	   (GtkWidget	       *widget,
 			    gint                y,
 			    guint               time)
 {
+  GList *tmp_list;
+  
   g_print("drop\n");
   have_drag = FALSE;
 
   gtk_pixmap_set (GTK_PIXMAP (widget), trashcan_closed, trashcan_closed_mask);
+
+  tmp_list = context->targets;
+  while (tmp_list)
+    {
+      g_print ("%s\n", gdk_atom_name (GPOINTER_TO_UINT (tmp_list->data)));
+      tmp_list = tmp_list->next;
+    }
 
   if (context->targets)
     {

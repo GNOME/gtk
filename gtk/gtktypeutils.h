@@ -191,6 +191,13 @@ struct _GtkTypeObject
   GtkTypeClass	*klass;
 };
 
+#ifdef __GNUC__
+struct _GtkTypeClassDummyAlign
+{
+  GtkType type;
+  guint *signals;
+};
+#endif /* __GNUC__ */
 
 /* A GtkTypeClass defines the minimum structure requirements for
  * a types class. Classes returned from gtk_type_class () and
@@ -203,7 +210,11 @@ struct _GtkTypeClass
    *  one unique identifier per class.
    */
   GtkType type;
-};
+}
+#ifdef __GNUC__
+__attribute__ ((aligned (__alignof (struct _GtkTypeClassDummyAlign))))
+#endif /* __GNUC__ */
+;
 
 
 struct _GtkArg

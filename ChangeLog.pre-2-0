@@ -1,3 +1,10 @@
+Tue Jul 24 16:41:12 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in po/ta.po (ALL_LINGUAS): Remove dummy ta po - Tamil
+	translation doesn't really make sense for GTK+-1.2 anyways,
+	so lets not worry about the fact that it is missing
+	in this branch.
+
 2001-07-24  Darin Adler  <darin@bentspoon.com>
 
 	* acinclude.m4: Add BUILD_INCLUDED_LIBINTL for
