@@ -1578,7 +1578,7 @@ gdk_window_fb_get_visible_region (GdkDrawable *drawable)
   screen_rect.x = -priv->abs_x;
   screen_rect.y = -priv->abs_y;
   screen_rect.width = gdk_display->fb_width;
-  screen_rect.height = gdk_display->fb_width;
+  screen_rect.height = gdk_display->fb_height;
   
   gdk_rectangle_intersect (&result_rect, &screen_rect, &result_rect);
   

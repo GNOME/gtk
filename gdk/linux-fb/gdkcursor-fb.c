@@ -362,7 +362,6 @@ gdk_fb_cursor_unhide()
   GdkDrawableFBData *pixmap_last;
   
   last_private = GDK_CURSOR_FB (last_cursor);
-  pixmap_last = GDK_DRAWABLE_IMPL_FBDATA (last_private->cursor);
   cursor_visibility_count++;
   g_assert (cursor_visibility_count <= 1);
   if (cursor_visibility_count < 1)
@@ -373,6 +372,8 @@ gdk_fb_cursor_unhide()
 
   if (last_cursor)
     {
+      pixmap_last = GDK_DRAWABLE_IMPL_FBDATA (last_private->cursor);
+      
       if (!last_contents ||
 	  pixmap_last->width > GDK_DRAWABLE_IMPL_FBDATA (last_contents)->width ||
 	  pixmap_last->height > GDK_DRAWABLE_IMPL_FBDATA (last_contents)->height)

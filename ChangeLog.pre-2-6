@@ -1,3 +1,16 @@
+2001-02-13  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkcursor-fb.c (gdk_fb_cursor_unhide):
+	Don't reference last_cursor if it is null. Fixes crash when rotating
+	the screen before having moved the mouse.
+
+	* gdk/linux-fb/gdkcc-fb.c: Zapp!
+
+	* gdk/linux-fb/Makefile.am: Don't compile gdkcc-fb.c
+
+	* gdk/linux-fb/gdkwindow-fb.c: Fix typo. width->height. Fixes redraw when
+	using 90 or 270 degrees rotation.
+
 2001-02-12  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/gdkpango.c (gdk_pango_get_gc): fix bug where 
