@@ -147,12 +147,18 @@ static GdkFBKeyboardDevice keyb_devs[] =
 };
 
 GdkKeymap*
-gdk_keymap_get_default (void)
+gdk_keymap_get_default_for_display (GdkDisplay *display)
 {
   if (default_keymap == NULL)
     default_keymap = g_object_new (gdk_keymap_get_type (), NULL);
 
   return default_keymap;
+}
+
+GdkKeymap*
+gdk_keymap_get_for_display (GdkDisplay *display)
+{
+  return gdk_keymap_get_default_for_display (display);
 }
 
 PangoDirection
@@ -873,8 +879,8 @@ xlate_io (GIOChannel *gioc,
 }
 
 static gboolean
-write_string (gint   fd,
-	      gchar *str)
+write_string (gint         fd,
+	      const gchar *str)
 {
   gsize to_write = strlen (str);
 
@@ -972,8 +978,8 @@ xlate_get_for_keyval (GdkFBKeyboard       *kb,
 		      gint                *n_keys)
 {
   g_warning ("xlate_get_for_keyval() NIY");
-  *keys=NULL;
-  *n_keys=0;
+  if (keys) *keys=NULL;
+  if (n_keys) *n_keys=0;
   return FALSE;
 }
 
@@ -985,8 +991,8 @@ xlate_get_for_keycode (GdkFBKeyboard       *kb,
 		       gint                *n_entries)
 {
   g_warning ("xlate_get_for_keycode() NIY");
-  *keys=NULL;
-  *n_entries=0;
+  if (keys) *keys=NULL;
+  if (n_entries) *n_entries=0;
   return FALSE;
 }
 
@@ -1487,8 +1493,8 @@ raw_get_for_keyval (GdkFBKeyboard       *kb,
 		      gint                *n_keys)
 {
   g_warning ("raw_get_for_keyval() NIY");
-  *keys=NULL;
-  *n_keys=0;
+  if (keys) *keys=NULL;
+  if (n_keys) *n_keys=0;
   return FALSE;
 }
 
@@ -1500,7 +1506,7 @@ raw_get_for_keycode (GdkFBKeyboard       *kb,
 		       gint                *n_entries)
 {
   g_warning ("raw_get_for_keycode() NIY");
-  *keys=NULL;
-  *n_entries=0;
+  if (keys) *keys=NULL;
+  if (n_entries) *n_entries=0;
   return FALSE;
 }

@@ -87,16 +87,17 @@ _gdk_events_init (void)
 gboolean
 gdk_events_pending (void)
 {
-  return _gdk_event_queue_find_first () ? TRUE : FALSE;
+  return fb_events_check (NULL);
 }
 
 GdkEvent*
 gdk_event_get_graphics_expose (GdkWindow *window)
 {
+  GdkDisplay *display = gdk_display_get_default ();
   GList *ltmp;
   g_return_val_if_fail (window != NULL, NULL);
   
-  for (ltmp = _gdk_queued_events; ltmp; ltmp = ltmp->next)
+  for (ltmp = display->queued_events; ltmp; ltmp = ltmp->next)
     {
       GdkEvent *event = ltmp->data;
       if (event->type == GDK_EXPOSE &&
@@ -108,7 +109,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
     {
       GdkEvent *retval = ltmp->data;
 
-      _gdk_event_queue_remove_link (ltmp);
+      _gdk_event_queue_remove_link (display, ltmp);
       g_list_free_1 (ltmp);
 
       return retval;
@@ -118,7 +119,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
 }
 
 void
-_gdk_events_queue (void)
+_gdk_events_queue (GdkDisplay *display)
 {  
 }
 
@@ -138,7 +139,7 @@ fb_events_check (GSource    *source)
 
   GDK_THREADS_ENTER ();
 
-  retval = (_gdk_event_queue_find_first () != NULL);
+  retval = (_gdk_event_queue_find_first (gdk_display_get_default ()) != NULL);
 
   GDK_THREADS_LEAVE ();
 
@@ -154,7 +155,7 @@ fb_events_dispatch (GSource  *source,
 
   GDK_THREADS_ENTER ();
 
-  while ((event = _gdk_event_unqueue ()))
+  while ((event = _gdk_event_unqueue (gdk_display_get_default ())))
     {
       if (event->type == GDK_EXPOSE &&
 	  event->expose.window == _gdk_parent_root)
@@ -199,19 +200,28 @@ gdk_flush (void)
 }
 
 gboolean
-gdk_event_send_client_message (GdkEvent *event, guint32 xid)
+gdk_event_send_client_message_for_display (GdkDisplay *display,
+					   GdkEvent   *event,
+					   guint32     xid)
 {
   return FALSE;
 }
 
 void
-gdk_event_send_clientmessage_toall (GdkEvent *sev)
+gdk_screen_broadcast_client_message (GdkScreen *screen,
+				     GdkEvent  *sev)
 {
 }
 
 gboolean
-gdk_setting_get (const gchar *name,
-		 GValue      *value)
+gdk_screen_get_setting (GdkScreen   *screen,
+			const gchar *name,
+			GValue      *value)
 {
   return FALSE;
+}
+
+void
+gdk_display_sync (GdkDisplay *display)
+{
 }

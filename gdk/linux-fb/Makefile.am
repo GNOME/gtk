@@ -28,6 +28,7 @@ libgdk_linux_fb_la_SOURCES =    \
 	gdkcolor-fb.c	   	\
 	gdkcursor-fb.c	   	\
 	gdkdnd-fb.c	   	\
+	gdkdisplay-fb.c		\
 	gdkdrawable-fb2.c  	\
 	gdkfont-fb.c	   	\
 	gdkgc-fb.c 	   	\
@@ -40,6 +41,7 @@ libgdk_linux_fb_la_SOURCES =    \
 	gdkpixmap-fb.c	   	\
 	gdkproperty-fb.c  	\
 	gdkselection-fb.c 	\
+	gdkscreen-fb.c		\
 	gdkvisual-fb.c	   	\
 	gdkwindow-fb.c    	\
 	gdkprivate-fb.h   	\
@@ -73,6 +75,8 @@ libgdk_linux_fb_la_SOURCES =    \
 	gdkfbmanager.h
 
 gdkfbmanager_sources = gdkfbmanager.c 
+gdkfbmanager_LDFLAGS = $(GLIB_LIBS)
 gdkfbswitch_sources = gdkfbswitch.c
+gdkfbswitch_LDFLAGS = $(GLIB_LIBS)
 
 EXTRA_DIST=x-cursors.xbm

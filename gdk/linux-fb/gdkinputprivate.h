@@ -126,6 +126,7 @@ struct _GdkInputWindow
 /* Global data */
 
 extern const GdkDevice gdk_input_core_info;
+extern GdkDevice *_gdk_core_pointer;
 extern GList *_gdk_input_devices;
 extern GList *_gdk_input_windows;
 

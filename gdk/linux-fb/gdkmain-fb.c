@@ -799,11 +799,11 @@ gdk_fb_display_destroy (GdkFBDisplay *display)
   g_free (display);
 }
 
-gboolean
-_gdk_windowing_init_check (int argc, char **argv)
+void
+_gdk_windowing_init (int *argc, char ***argv)
 {
   if (gdk_initialized)
-    return TRUE;
+    return;
 
   /* Create new session and become session leader */
   setsid();
@@ -811,7 +811,7 @@ _gdk_windowing_init_check (int argc, char **argv)
   gdk_display = gdk_fb_display_new ();
 
   if (!gdk_display)
-    return FALSE;
+    return;
 
   gdk_shadow_fb_init ();
   
@@ -822,7 +822,7 @@ _gdk_windowing_init_check (int argc, char **argv)
       g_warning ("Failed to initialize keyboard");
       gdk_fb_display_destroy (gdk_display);
       gdk_display = NULL;
-      return FALSE;
+      return;
     }
   
   if (!gdk_fb_mouse_init (!gdk_display->manager_blocked))
@@ -831,15 +831,18 @@ _gdk_windowing_init_check (int argc, char **argv)
       gdk_fb_keyboard_close ();
       gdk_fb_display_destroy (gdk_display);
       gdk_display = NULL;
-      return FALSE;
+      return;
     }
 
   gdk_initialized = TRUE;
 
   _gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
 
-  
-  return TRUE;
+}
+
+void
+_gdk_windowing_set_default_display (GdkDisplay *display)
+{
 }
 
 /*
@@ -933,7 +936,7 @@ gdk_fb_pointer_grab (GdkWindow *	  window,
 
 /*
  *--------------------------------------------------------------
- * gdk_pointer_ungrab
+ * gdk_display_pointer_ungrab
  *
  *   Releases any pointer grab
  *
@@ -947,7 +950,8 @@ gdk_fb_pointer_grab (GdkWindow *	  window,
  */
 
 void
-gdk_pointer_ungrab (guint32 time)
+gdk_display_pointer_ungrab (GdkDisplay *display,
+			    guint32     time)
 {
   gdk_fb_pointer_ungrab (time, FALSE);
 }
@@ -993,7 +997,7 @@ gdk_fb_pointer_ungrab (guint32 time, gboolean implicit_grab)
 
 /*
  *--------------------------------------------------------------
- * gdk_pointer_is_grabbed
+ * gdk_display_pointer_is_grabbed
  *
  *   Tell wether there is an active x pointer grab in effect
  *
@@ -1007,7 +1011,7 @@ gdk_fb_pointer_ungrab (guint32 time, gboolean implicit_grab)
  */
 
 gint
-gdk_pointer_is_grabbed (void)
+gdk_display_pointer_is_grabbed (GdkDisplay *display)
 {
   return _gdk_fb_pointer_grab_window != NULL;
 }
@@ -1033,9 +1037,9 @@ gdk_pointer_is_grabbed (void)
  */
 
 GdkGrabStatus
-gdk_keyboard_grab (GdkWindow *	   window,
-		   gint		   owner_events,
-		   guint32	   time)
+gdk_keyboard_grab (GdkWindow  *window,
+		   gint        owner_events,
+		   guint32     time)
 {
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
@@ -1051,7 +1055,7 @@ gdk_keyboard_grab (GdkWindow *	   window,
 
 /*
  *--------------------------------------------------------------
- * gdk_keyboard_ungrab
+ * gdk_display_keyboard_ungrab
  *
  *   Releases any keyboard grab
  *
@@ -1065,7 +1069,8 @@ gdk_keyboard_grab (GdkWindow *	   window,
  */
 
 void
-gdk_keyboard_ungrab (guint32 time)
+gdk_display_keyboard_ungrab (GdkDisplay *display,
+			     guint32     time)
 {
   if (_gdk_fb_keyboard_grab_window)
     gdk_window_unref (_gdk_fb_keyboard_grab_window);
@@ -1073,7 +1078,8 @@ gdk_keyboard_ungrab (guint32 time)
 }
 
 gboolean
-gdk_pointer_grab_info_libgtk_only (GdkWindow **grab_window,
+gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
+				   GdkWindow **grab_window,
 				   gboolean   *owner_events)
 {
   if (_gdk_fb_pointer_grab_window)
@@ -1090,8 +1096,9 @@ gdk_pointer_grab_info_libgtk_only (GdkWindow **grab_window,
 }
 
 gboolean
-gdk_keyboard_grab_info_libgtk_only (GdkWindow **grab_window,
-                                   gboolean   *owner_events)
+gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
+				    GdkWindow **grab_window,
+				    gboolean   *owner_events)
 {
   if (_gdk_fb_keyboard_grab_window)
     {
@@ -1109,7 +1116,7 @@ gdk_keyboard_grab_info_libgtk_only (GdkWindow **grab_window,
 
 /*
  *--------------------------------------------------------------
- * gdk_screen_width
+ * gdk_screen_get_width
  *
  *   Return the width of the screen.
  *
@@ -1123,14 +1130,14 @@ gdk_keyboard_grab_info_libgtk_only (GdkWindow **grab_window,
  */
 
 gint
-gdk_screen_width (void)
+gdk_screen_get_width (GdkScreen *screen)
 {
   return gdk_display->fb_width;
 }
 
 /*
  *--------------------------------------------------------------
- * gdk_screen_height
+ * gdk_screen_get_height
  *
  *   Return the height of the screen.
  *
@@ -1144,14 +1151,14 @@ gdk_screen_width (void)
  */
 
 gint
-gdk_screen_height (void)
+gdk_screen_get_height (GdkScreen *screen)
 {
   return gdk_display->fb_height;
 }
 
 /*
  *--------------------------------------------------------------
- * gdk_screen_width_mm
+ * gdk_screen_get_width_mm
  *
  *   Return the width of the screen in millimeters.
  *
@@ -1165,14 +1172,14 @@ gdk_screen_height (void)
  */
 
 gint
-gdk_screen_width_mm (void)
+gdk_screen_get_width_mm (GdkScreen *screen)
 {
   return 0.5 + gdk_screen_width () * (25.4 / 72.);
 }
 
 /*
  *--------------------------------------------------------------
- * gdk_screen_height
+ * gdk_screen_get_height_mm
  *
  *   Return the height of the screen in millimeters.
  *
@@ -1186,14 +1193,14 @@ gdk_screen_width_mm (void)
  */
 
 gint
-gdk_screen_height_mm (void)
+gdk_screen_get_height_mm (GdkScreen *screen)
 {
   return 0.5 + gdk_screen_height () * (25.4 / 72.);
 }
 
 /*
  *--------------------------------------------------------------
- * gdk_set_sm_client_id
+ * gdk_display_set_sm_client_id
  *
  *   Set the SM_CLIENT_ID property on the WM_CLIENT_LEADER window
  *   so that the window manager can save our state using the
@@ -1214,10 +1221,10 @@ gdk_screen_height_mm (void)
  */
 
 void
-gdk_set_sm_client_id (const gchar* sm_client_id)
+gdk_display_set_sm_client_id (GdkDisplay*  display,
+			      const gchar* sm_client_id)
 {
 }
-
 
 extern void keyboard_shutdown(void);
 
@@ -1260,9 +1267,8 @@ gdk_get_display(void)
   return g_strdup (s);
 }
 
-
 void
-gdk_beep (void)
+gdk_display_beep (GdkDisplay *display)
 {
   static int pitch = 600, duration = 100;
   gulong arg;
@@ -1326,7 +1332,7 @@ gdk_fb_other_event_window (GdkWindow *window,
 	  (g_object_get_data (G_OBJECT (w), "gdk-window-child-handler")))
 	  break;
 	  
-      evmask = GDK_WINDOW_IMPL_FBDATA(window)->event_mask;
+      evmask = GDK_WINDOW_OBJECT(window)->event_mask;
 
       if (evmask & type_masks[type])
 	return w;
@@ -1375,7 +1381,7 @@ gdk_fb_pointer_event_window (GdkWindow *window,
 	  (g_object_get_data (G_OBJECT (w), "gdk-window-child-handler")))
 	  break;
       
-      evmask = GDK_WINDOW_IMPL_FBDATA(window)->event_mask;
+      evmask = GDK_WINDOW_OBJECT(window)->event_mask;
 
       if (evmask & (GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK))
 	{
@@ -1433,7 +1439,7 @@ gdk_fb_keyboard_event_window (GdkWindow *window,
 	  (g_object_get_data (G_OBJECT (w), "gdk-window-child-handler")))
 	  break;
 	  
-      evmask = GDK_WINDOW_IMPL_FBDATA(window)->event_mask;
+      evmask = GDK_WINDOW_OBJECT(window)->event_mask;
 
       if (evmask & type_masks[type])
 	return w;
@@ -1523,7 +1529,7 @@ gdk_event_make (GdkWindow *window,
     }
   
   if (append_to_queue)
-    _gdk_event_queue_append (event);
+    _gdk_event_queue_append (gdk_display_get_default (), event);
   
   return event;
 }

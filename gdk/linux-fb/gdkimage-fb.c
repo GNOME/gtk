@@ -105,7 +105,8 @@ gdk_image_get_type (void)
 
 
 GdkImage*
-_gdk_image_new_for_depth (GdkImageType  type,
+_gdk_image_new_for_depth (GdkScreen    *screen,
+			  GdkImageType  type,
 			  GdkVisual    *visual,
 			  gint          width,
 			  gint          height,
@@ -168,15 +169,6 @@ gdk_image_new_bitmap(GdkVisual *visual,
   free (data); 
   
   return image;
-}
-
-GdkImage*
-gdk_image_new (GdkImageType  type,
-	       GdkVisual    *visual,
-	       gint          width,
-	       gint          height)
-{
-  return _gdk_image_new_for_depth (type, visual, width, height, -1);
 }
 
 GdkImage*
@@ -343,7 +335,8 @@ _gdk_image_exit(void)
 
 /* copy/pasted from gdkimage-win32.c */
 gint
-_gdk_windowing_get_bits_for_depth (gint depth)
+_gdk_windowing_get_bits_for_depth (GdkDisplay *display,
+				   gint        depth)
 {
   if ((1 == depth) || (8 == depth) || (16 == depth) || 
       (24 == depth) || (32 == depth))

@@ -86,6 +86,7 @@ static GdkColormap* gdk_fb_get_colormap       (GdkDrawable      *drawable);
 static void         gdk_fb_set_colormap       (GdkDrawable      *drawable,
 					       GdkColormap      *colormap);
 static gint         gdk_fb_get_depth          (GdkDrawable      *drawable);
+static GdkScreen*   gdk_fb_get_screen         (GdkDrawable      *drawable);
 static GdkVisual*   gdk_fb_get_visual         (GdkDrawable      *drawable);
 static void         gdk_fb_drawable_finalize  (GObject *object);
 
@@ -219,6 +220,7 @@ gdk_drawable_impl_fb_class_init (GdkDrawableFBClass *klass)
   drawable_class->get_size = gdk_fb_get_size;
  
   drawable_class->get_depth = gdk_fb_get_depth;
+  drawable_class->get_screen = gdk_fb_get_screen;
   drawable_class->get_visual = gdk_fb_get_visual;
   
   drawable_class->_copy_to_image = _gdk_fb_copy_to_image;
@@ -1303,6 +1305,12 @@ static gint
 gdk_fb_get_depth (GdkDrawable *drawable)
 {
   return GDK_DRAWABLE_FBDATA (drawable)->depth;
+}
+
+static GdkScreen*
+gdk_fb_get_screen (GdkDrawable *drawable)
+{
+  return gdk_screen_get_default();
 }
 
 static GdkVisual*

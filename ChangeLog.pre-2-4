@@ -1,3 +1,8 @@
+Tue Sep 10 11:11:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/linux-fb/*: Patch from Eric Warmonhoven to
+	get linux-fb compiling with multihead changes.
+
 Tue Sep 10 09:29:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Take

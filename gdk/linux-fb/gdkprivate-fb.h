@@ -119,7 +119,6 @@ struct _GdkWindowFBData
 
   GdkRegion *shape; /* Can also be GDK_FB_USE_CHILD_SHAPE */
   
-  GdkEventMask event_mask;
   gboolean realized : 1;
 };
 
@@ -426,6 +425,8 @@ extern GdkEventMask _gdk_fb_keyboard_grab_events;
 extern gboolean _gdk_fb_keyboard_grab_owner_events;
 
 extern GdkFBDisplay *gdk_display;
+extern GdkDisplay *_gdk_display;
+extern GdkScreen *_gdk_screen;
 extern FILE *debug_out;
 GdkEvent *gdk_event_make(GdkWindow *window,
 			 GdkEventType type,

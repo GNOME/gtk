@@ -87,7 +87,8 @@ gdk_font_hash_lookup (GdkFontType type, const gchar *font_name)
 }
 
 GdkFont*
-gdk_font_from_description (PangoFontDescription *desc)
+gdk_font_from_description_for_display (GdkDisplay           *display,
+				       PangoFontDescription *desc)
 {
   GdkFont *font;
   GdkFontPrivateFB *private;
@@ -154,7 +155,8 @@ gdk_font_from_description (PangoFontDescription *desc)
 
 
 GdkFont*
-gdk_font_load (const gchar *font_name)
+gdk_font_load_for_display (GdkDisplay  *display,
+			   const gchar *font_name)
 {
   GdkFont *font;
   GdkFontPrivateFB *private;

@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -24,24 +24,57 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include <stdio.h>
-
-#include "gdktypes.h"
+#include "gdk.h"
 #include "gdkprivate-fb.h"
-#include "config.h"
 
-GdkWindow *_gdk_fb_pointer_grab_window, *_gdk_fb_keyboard_grab_window, *_gdk_fb_pointer_grab_confine = NULL;
-gboolean _gdk_fb_pointer_grab_owner_events;
-gboolean _gdk_fb_keyboard_grab_owner_events;
-GdkEventMask _gdk_fb_pointer_grab_events, _gdk_fb_keyboard_grab_events;
+static GdkColormap *default_colormap = NULL;
 
-GdkDisplay *_gdk_display = NULL;
-GdkScreen *_gdk_screen = NULL;
-GdkWindow *_gdk_parent_root = NULL;
+GdkDisplay *
+gdk_screen_get_display (GdkScreen *screen)
+{
+  return _gdk_display;
+}
 
-GdkFBWindow *gdk_root_window = NULL;
-GdkFBDisplay *gdk_display = NULL;
-GdkCursor *_gdk_fb_pointer_grab_cursor;
-GdkGC *_gdk_fb_screen_gc = NULL;
-GdkAtom _gdk_selection_property;
-GdkFBAngle _gdk_fb_screen_angle = GDK_FB_0_DEGREES;
+GdkWindow *
+gdk_screen_get_root_window (GdkScreen *screen)
+{
+  return _gdk_parent_root;
+}
+
+GdkColormap*
+gdk_screen_get_default_colormap (GdkScreen *screen)
+{
+  return default_colormap;
+}
+
+void
+gdk_screen_set_default_colormap (GdkScreen   *screen,
+				 GdkColormap *colormap)
+{
+  default_colormap = colormap;
+}
+
+int
+gdk_screen_get_n_monitors (GdkScreen *screen)
+{
+  return 1;
+}
+
+void
+gdk_screen_get_monitor_geometry (GdkScreen    *screen, 
+				 gint          num_monitor,
+				 GdkRectangle *dest)
+{
+  dest->x = 0;
+  dest->y = 0;
+  dest->width = gdk_screen_width ();
+  dest->height = gdk_screen_height ();
+}
+
+gint
+gdk_screen_get_number (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);  
+  
+  return 0;
+}

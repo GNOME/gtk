@@ -192,7 +192,8 @@ static struct {
 };
 
 GdkCursor*
-gdk_cursor_new (GdkCursorType cursor_type)
+gdk_cursor_new_for_display (GdkDisplay    *display,
+			    GdkCursorType  cursor_type)
 {
   GdkCursor *cursor;
   
@@ -527,4 +528,10 @@ gdk_fb_cursor_reset(void)
 
   gdk_fb_mouse_get_info (&x, &y, NULL);
   gdk_fb_cursor_move (x, y, win);
+}
+
+GdkDisplay *
+gdk_cursor_get_display (GdkCursor *cursor)
+{
+  return gdk_display_get_default ();
 }

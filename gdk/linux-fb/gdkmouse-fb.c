@@ -20,6 +20,7 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkinternals.h>
 #include "gdkprivate-fb.h"
+#include "gdkinputprivate.h"
 #include <stdlib.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -183,11 +184,11 @@ send_button_event (GdkFBMouse *mouse,
       event->button.x_root = mouse->x;
       event->button.y_root = mouse->y;
       
-      _gdk_event_queue_append (event);
+      _gdk_event_queue_append (gdk_display_get_default (), event);
       
       /* For double-clicks */
       if (press_event)
-	_gdk_event_button_generate (event);
+	_gdk_event_button_generate (gdk_display_get_default (), event);
     }
 
   nbuttons = 0;

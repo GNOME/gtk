@@ -202,7 +202,7 @@ gdk_colormap_new (GdkVisual *visual,
 }
 
 GdkColormap*
-gdk_colormap_get_system (void)
+gdk_screen_get_system_colormap (GdkScreen *screen)
 {
   static GdkColormap *colormap = NULL;
 
@@ -853,4 +853,12 @@ gdk_colormap_query_color (GdkColormap *colormap,
       g_assert_not_reached ();
       break;
     }
+}
+
+GdkScreen*
+gdk_colormap_get_screen (GdkColormap *cmap)
+{
+  g_return_val_if_fail (cmap != NULL, NULL);
+
+  return gdk_screen_get_default ();
 }

@@ -96,7 +96,6 @@ gdk_window_impl_fb_init (GdkWindowFBData *impl)
 {
   impl->drawable_data.depth = gdk_display->modeinfo.bits_per_pixel;
   impl->drawable_data.colormap = gdk_colormap_get_system ();
-  impl->event_mask = GDK_STRUCTURE_MASK;
   impl->shape = NULL;
 }
 
@@ -1734,7 +1733,7 @@ gdk_window_get_events (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return 0;
   else
-    return GDK_WINDOW_IMPL_FBDATA (window)->event_mask;
+    return GDK_WINDOW_OBJECT (window)->event_mask;
 }
 
 void          
@@ -1750,10 +1749,7 @@ gdk_window_set_events (GdkWindow       *window,
       GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK |
       GDK_BUTTON3_MOTION_MASK;
   
-  if (!GDK_WINDOW_DESTROYED (window))
-    GDK_WINDOW_IMPL_FBDATA (window)->event_mask = event_mask;
-
-  GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
+  GDK_WINDOW_OBJECT (window)->event_mask = GDK_STRUCTURE_MASK | event_mask;
 }
 
 void
@@ -2252,7 +2248,8 @@ gdk_window_get_frame_extents (GdkWindow    *window,
 }
 
 GdkWindow*
-gdk_window_foreign_new (GdkNativeWindow anid)
+gdk_window_foreign_new_for_display (GdkDisplay      *display,
+				    GdkNativeWindow  anid)
 {
   return (GdkWindow*) gdk_drawable_ref (anid);
 }
@@ -2263,3 +2260,10 @@ gdk_window_lookup (GdkNativeWindow anid)
   return (GdkWindow*) (anid);
 }
 
+GdkWindow *
+gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
+{
+  g_return_val_if_fail (display == gdk_display_get_default(), NULL);
+
+  return (GdkWindow*) (anid);
+}

@@ -155,7 +155,7 @@ gdk_visual_get_best_type (void)
 }
 
 GdkVisual*
-gdk_visual_get_system (void)
+gdk_screen_get_system_visual (GdkScreen *screen)
 {
   return system_visual;
 }
@@ -214,7 +214,15 @@ gdk_query_visual_types (GdkVisualType **visual_types,
 }
 
 GList*
-gdk_list_visuals (void)
+gdk_screen_list_visuals (GdkScreen *screen)
 {
   return g_list_append (NULL, gdk_visual_get_system ());
+}
+
+GdkScreen *
+gdk_visual_get_screen (GdkVisual *visual)
+{
+  g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
+
+  return gdk_screen_get_default ();
 }

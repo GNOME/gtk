@@ -65,10 +65,11 @@ _gdk_selection_window_destroyed (GdkWindow *window)
 }
 
 gint
-gdk_selection_owner_set (GdkWindow *owner,
-			 GdkAtom    selection,
-			 guint32    time,
-			 gint       send_event)
+gdk_selection_owner_set_for_display (GdkDisplay *display,
+				     GdkWindow  *owner,
+				     GdkAtom     selection,
+				     guint32     time,
+				     gint        send_event)
 {
   GSList *tmp_list;
   OwnerInfo *info;
@@ -99,7 +100,8 @@ gdk_selection_owner_set (GdkWindow *owner,
 }
 
 GdkWindow*
-gdk_selection_owner_get (GdkAtom selection)
+gdk_selection_owner_get_for_display (GdkDisplay *display,
+				     GdkAtom     selection)
 {
   OwnerInfo *info;
   GSList *tmp_list;
@@ -204,11 +206,12 @@ gdk_selection_property_get (GdkWindow  *requestor,
 
 
 void
-gdk_selection_send_notify (guint32  requestor,
-			   GdkAtom  selection,
-			   GdkAtom  target,
-			   GdkAtom  property,
-			   guint32  time)
+gdk_selection_send_notify_for_display (GdkDisplay *display,
+				       guint32     requestor,
+				       GdkAtom     selection,
+				       GdkAtom     target,
+				       GdkAtom     property,
+				       guint32     time)
 {
   GdkEvent *event;
   GdkWindow *event_window;
@@ -225,9 +228,12 @@ gdk_selection_send_notify (guint32  requestor,
 }
 
 gint
-gdk_text_property_to_text_list (GdkAtom encoding, gint format, 
-				const guchar *text, gint length,
-				gchar ***list)
+gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
+					    GdkAtom       encoding,
+					    gint          format, 
+					    const guchar *text,
+					    gint          length,
+					    gchar      ***list)
 {
   g_warning ("gdk_text_property_to_text_list() not implemented\n");
   return 0;
@@ -241,9 +247,12 @@ gdk_free_text_list (gchar **list)
 }
 
 gint
-gdk_string_to_compound_text (const gchar *str,
-			     GdkAtom *encoding, gint *format,
-			     guchar **ctext, gint *length)
+gdk_string_to_compound_text_for_display (GdkDisplay  *display,
+					 const gchar *str,
+					 GdkAtom     *encoding,
+					 gint        *format,
+					 guchar     **ctext,
+					 gint        *length)
 {
   g_warning ("gdk_string_to_compound_text() not implemented\n");
   return 0;
@@ -275,7 +284,7 @@ gdk_utf8_to_string_target (const gchar *str)
 }
 
 /**
- * gdk_utf8_to_compound_text:
+ * gdk_utf8_to_compound_text_for_display:
  * @str:      a UTF-8 string
  * @encoding: location to store resulting encoding
  * @format:   location to store format of the result
@@ -289,11 +298,12 @@ gdk_utf8_to_string_target (const gchar *str)
  *               false.
  **/
 gboolean
-gdk_utf8_to_compound_text (const gchar *str,
-			   GdkAtom     *encoding,
-			   gint        *format,
-			   guchar     **ctext,
-			   gint        *length)
+gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
+				       const gchar *str,
+				       GdkAtom     *encoding,
+				       gint        *format,
+				       guchar     **ctext,
+				       gint        *length)
 {
   g_warning ("gdk_utf8_to_compound_text() not implemented\n");
   return 0;
@@ -370,7 +380,7 @@ make_list (const gchar  *text,
 
 
 /**
- * gdk_text_property_to_utf8_list:
+ * gdk_text_property_to_utf8_list_for_display:
  * @encoding: an atom representing the encoding of the text
  * @format:   the format of the property
  * @text:     the text to convert
@@ -385,11 +395,12 @@ make_list (const gchar  *text,
  *               list.
  **/
 gint 
-gdk_text_property_to_utf8_list (GdkAtom        encoding,
-				gint           format,
-				const guchar  *text,
-				gint           length,
-				gchar       ***list)
+gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
+					    GdkAtom        encoding,
+					    gint           format,
+					    const guchar  *text,
+					    gint           length,
+					    gchar       ***list)
 {
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);
