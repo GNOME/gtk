@@ -2686,6 +2686,9 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   GtkShadowType shadow;
   GdkPoint points[3];
 
+  if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
+    return;
+
   area.x = 0;
   area.y = offset + TREE_VIEW_VERTICAL_SEPERATOR;
   area.width = tree_view->priv->tab_offset - 2;
@@ -2711,9 +2714,7 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
       shadow = GTK_SHADOW_OUT;
     }
 
-  if (TRUE ||
-      (((node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT) &&
-       node->children))
+  if (node->children == NULL)
     {
       points[0].x = area.x + 2;
       points[0].y = area.y + (area.height - TREE_VIEW_EXPANDER_HEIGHT)/2;
@@ -2721,7 +2722,15 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
       points[1].y = points[0].y + TREE_VIEW_EXPANDER_HEIGHT/2;
       points[2].x = points[0].x;
       points[2].y = points[0].y + TREE_VIEW_EXPANDER_HEIGHT;
-
+    }
+  else
+    {
+      points[0].x = area.x;
+      points[0].y = area.y + (area.height - TREE_VIEW_EXPANDER_WIDTH/2)/2;
+      points[1].x = points[0].x + TREE_VIEW_EXPANDER_WIDTH;
+      points[1].y = points[0].y;
+      points[2].x = points[0].x + (TREE_VIEW_EXPANDER_WIDTH) /2;
+      points[2].y = points[0].y + TREE_VIEW_EXPANDER_HEIGHT/2;
     }
 
   gdk_draw_polygon (tree_view->priv->bin_window,
@@ -3343,6 +3352,7 @@ gtk_tree_view_append_column (GtkTreeView       *tree_view,
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), -1);
   g_return_val_if_fail (column->tree_view == NULL, -1);
 
+  g_object_ref (G_OBJECT (column));
   tree_view->priv->column = g_list_append (tree_view->priv->column,
 					   column);
   column->tree_view = GTK_WIDGET (tree_view);
@@ -3367,12 +3377,12 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
   g_return_val_if_fail (column != NULL, -1);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), -1);
-  g_return_val_if_fail (column->tree_view == tree_view, -1);
+  g_return_val_if_fail (column->tree_view == GTK_WIDGET (tree_view), -1);
 
   tree_view->priv->column = g_list_remove (tree_view->priv->column,
                                            column);
   column->tree_view = NULL;
-  g_object_unref (column);
+  g_object_unref (G_OBJECT (column));
 
   return tree_view->priv->columns--;
 }
@@ -3399,6 +3409,7 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), -1);
   g_return_val_if_fail (column->tree_view == NULL, -1);
 
+  g_object_ref (G_OBJECT (column));
   tree_view->priv->column = g_list_insert (tree_view->priv->column,
                                            column, position);
   column->tree_view = GTK_WIDGET (tree_view);
@@ -3472,9 +3483,6 @@ gtk_tree_view_move_to (GtkTreeView       *tree_view,
 
   if (tree_view->priv->hadjustment && column >= 0)
     {
-      GtkTreeViewColumn *col;
-
-      col = g_list_nth (tree_view->priv->column, column)->data;
       /* FIXME -- write  */
     }
 }

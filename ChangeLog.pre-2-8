@@ -1,5 +1,7 @@
 2000-10-17    <jrb@redhat.com>
 
+	* gtk/gtktreeview.c: Draw the arrows correctly.
+
 	* gtk/gtktreemodel.c: Added user docs.
 
 	* gtk/gtk.h: remove gtktreedatalist.h.

@@ -173,7 +173,7 @@ gtk_tree_path_append_index (GtkTreePath *path,
   g_return_if_fail (path != NULL);
   g_return_if_fail (index >= 0);
 
-  new_indices =  = g_new (gint, ++path->depth);
+  new_indices = g_new (gint, ++path->depth);
   if (path->indices == NULL)
     {
       path->indices = new_indices;
