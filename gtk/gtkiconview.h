@@ -80,7 +80,7 @@ void          gtk_icon_view_set_text_column   (GtkIconView  *icon_view,
 					       gint          column);
 gint          gtk_icon_view_get_text_column   (GtkIconView  *icon_view);
 void          gtk_icon_view_set_markup_column (GtkIconView  *icon_view,
-					       int           column);
+					       gint          column);
 gint          gtk_icon_view_get_markup_column (GtkIconView  *icon_view);
 void          gtk_icon_view_set_pixbuf_column (GtkIconView  *icon_view,
 					       gint          column);
