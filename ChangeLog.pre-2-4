@@ -1,7 +1,7 @@
 Tue Apr 22 15:17:25 2003  Owen Taylor  <otaylor@redhat.com>
  
  	* configure.in: Only check for XFT2 if we found pango-xft
- 	(#105692, John Nall)
+ 	(#105692, Jon Nall)
  
 Tue Apr 22 15:12:19 2003  Owen Taylor  <otaylor@redhat.com>
 
