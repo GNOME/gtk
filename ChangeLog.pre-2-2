@@ -1,3 +1,8 @@
+Wed Dec 17 13:56:17 PST 1997 Manish Singh <yosh@gimp.org>
+
+	* a small patch by Lauri Alanko that allows Gimp to pass
+	on --display to it's plugins.
+
 Sun Dec 14 00:08:00 PST 1997 Raph Levien <raph@acm.org>
 	* a minor patch to make the file selection dialog not always
 	select the first file in a directory

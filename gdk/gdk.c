@@ -3678,3 +3678,9 @@ gdk_event_send_clientmessage_toall(GdkEvent *event)
 
   XFree(ret_children);
 }
+
+gchar *
+gdk_get_display(void)
+{
+  return (gchar *)XDisplayName (gdk_display_name);
+}
