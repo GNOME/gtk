@@ -1,3 +1,15 @@
+Thu Mar 29 16:29:12 2001  Jonathan Blandford  <jrb@webwynk.net>
+
+	* gtk/gtkliststore.c (gtk_list_store_iter_changed): Massive
+	reordering/sorting work.  Now pretty much works.
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_reorder): Lots of work to make
+	reorder mostly work.  Still need to get the parity correct.
+
+	* gtk/gtktreeviewcolumn.c: Listen for "model" property changed
+	signal, so I can listen for the sort_column_changed signal so I
+	can change my "sort_indicator" property.  Cool.
+
 Wed Mar 28 00:03:10 2001  Owen Taylor  <otaylor@redhat.com>
 
 	[ Patch from Havoc Pennington, hp@redhat.com ]

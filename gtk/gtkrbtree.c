@@ -720,6 +720,7 @@ typedef struct _GtkRBReorder
   gint height;
   gint flags;
   gint order;
+  gint invert_order;
 } GtkRBReorder;
 
 static int
@@ -727,6 +728,13 @@ gtk_rbtree_reorder_sort_func (gconstpointer a,
 			      gconstpointer b)
 {
   return ((GtkRBReorder *) a)->order > ((GtkRBReorder *) b)->order;
+}
+
+static int
+gtk_rbtree_reorder_invert_func (gconstpointer a,
+				gconstpointer b)
+{
+  return ((GtkRBReorder *) a)->invert_order > ((GtkRBReorder *) b)->invert_order;
 }
 
 static void
@@ -768,26 +776,35 @@ _gtk_rbtree_reorder (GtkRBTree *tree,
   GtkRBNode *node;
   gint i;
 
-  node = tree->root;
-  while (node && node->left != tree->nil)
-    node = node->left;
 
   /* Sort the trees values in the new tree. */
   array = g_array_sized_new (FALSE, FALSE, sizeof (GtkRBReorder), length);
   for (i = 0; i < length; i++)
     {
-      g_assert (node != tree->nil);
-      reorder.children = node->children;
-      reorder.flags = GTK_RBNODE_NON_COLORS & node->flags;
-      reorder.height = GTK_RBNODE_GET_HEIGHT (node);
       reorder.order = new_order[i];
+      reorder.invert_order = i;
       g_array_append_val (array, reorder);
+    }
+
+  g_array_sort(array, gtk_rbtree_reorder_sort_func);
+
+  /* rewind node*/
+  node = tree->root;
+  while (node && node->left != tree->nil)
+    node = node->left;
+
+  for (i = 0; i < length; i++)
+    {
+      g_assert (node != tree->nil);
+      g_array_index (array, GtkRBReorder, i).children = node->children;
+      g_array_index (array, GtkRBReorder, i).flags = GTK_RBNODE_NON_COLORS & node->flags;
+      g_array_index (array, GtkRBReorder, i).height = GTK_RBNODE_GET_HEIGHT (node);
 
       node = _gtk_rbtree_next (tree, node);
     }
 
-  g_array_sort (array, gtk_rbtree_reorder_sort_func);
-
+  g_array_sort (array, gtk_rbtree_reorder_invert_func);
+ 
   /* rewind node*/
   node = tree->root;
   while (node && node->left != tree->nil)
@@ -797,14 +814,12 @@ _gtk_rbtree_reorder (GtkRBTree *tree,
   for (i = 0; i < length; i++)
     {
       reorder = g_array_index (array, GtkRBReorder, i);
-
       node->children = reorder.children;
       node->flags = GTK_RBNODE_GET_COLOR (node) | reorder.flags;
       /* We temporarily set the height to this. */
       node->offset = reorder.height;
       node = _gtk_rbtree_next (tree, node);
     }
-
   gtk_rbtree_reorder_fixup (tree, tree->root);
 }
 

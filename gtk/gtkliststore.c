@@ -1635,6 +1635,8 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
 
   if (list_store->sort_column_id >= 0)
     gtk_list_store_sort (list_store);
+
+  gtk_tree_sortable_sort_column_changed (sortable);
 }
 
 static void

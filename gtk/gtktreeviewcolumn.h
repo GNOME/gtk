@@ -63,6 +63,7 @@ struct _GtkTreeViewColumn
   GtkWidget *alignment;
   GdkWindow *window;
   gfloat xalign;
+  guint model_changed_signal;
 
   gint width;
   gint min_width;
@@ -78,10 +79,10 @@ struct _GtkTreeViewColumn
   GtkTreeViewColumnSizing column_type;
 
   /* Sorting */
-  guint sort_signal;
+  guint sort_clicked_signal;
+  guint sort_column_changed_signal;
   gint sort_column_id;
   GtkTreeSortOrder sort_order;
-
 
   guint visible       : 1;
   guint button_active : 1;

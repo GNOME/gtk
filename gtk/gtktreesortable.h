@@ -72,6 +72,7 @@ struct _GtkTreeSortableIface
 
 GType    gtk_tree_sortable_get_type                (void) G_GNUC_CONST;
 
+void     gtk_tree_sortable_sort_column_changed     (GtkTreeSortable        *sortable);
 gboolean gtk_tree_sortable_get_sort_column_id      (GtkTreeSortable        *sortable,
 						    gint                   *sort_column_id,
 						    GtkTreeSortOrder       *order);

@@ -67,6 +67,15 @@ gtk_tree_sortable_base_init (gpointer g_class)
     }
 }
 
+void
+gtk_tree_sortable_sort_column_changed (GtkTreeSortable *sortable)
+{
+  g_return_if_fail (GTK_IS_TREE_SORTABLE (sortable));
+
+  g_signal_emit_by_name (G_OBJECT (sortable),
+			 "sort_column_changed");
+}
+
 gboolean
 gtk_tree_sortable_get_sort_column_id (GtkTreeSortable  *sortable,
 				      gint             *sort_column_id,

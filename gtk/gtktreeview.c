@@ -3950,6 +3950,9 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
+  if (model == tree_view->priv->model)
+    return;
+
   if (model != NULL)
     g_object_ref (model);
 
@@ -3994,7 +3997,6 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       tree_view->priv->tree = NULL;
       if (GTK_WIDGET_REALIZED (tree_view))
 	_gtk_tree_view_update_size (tree_view);
-      return;
     }
   else if (GTK_WIDGET_REALIZED (tree_view))
     {

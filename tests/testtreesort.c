@@ -15,7 +15,7 @@ static ListSort data[] =
   { "Apples", "Transmorgrify", "Exculpatory", "Gesundheit"},
   { "Oranges", "Wicker", "Adamantine", "Convivial" },
   { "Bovine Spongiform Encephilopathy", "Sleazebucket", "Mountaineer", "Pander" },
-  { "Foot and Mouth", "Lampshade", "Skim Milk Full Milk", "Viewless" },
+  { "Foot and Mouth", "Lampshade", "Skim Milk\nFull Milk", "Viewless" },
   { "Blood,\nsweat,\ntears", "The Man", "Horses", "Muckety-Muck" },
   { "Rare Steak", "Siam", "Watchdog", "Xantippe" },
   { "SIGINT", "Rabbit Breath", "Alligator", "Bloodstained" },
@@ -30,7 +30,7 @@ static ListSort data[] =
 
 enum
 {
-  WORD_COLUMN = 0,
+  WORD_COLUMN_1 = 0,
   WORD_COLUMN_2,
   WORD_COLUMN_3,
   WORD_COLUMN_4,
@@ -71,7 +71,7 @@ main (int argc, char *argv[])
     {
       gtk_list_store_append (GTK_LIST_STORE (model), &iter);
       gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-			  WORD_COLUMN, data[i].word_1,
+			  WORD_COLUMN_1, data[i].word_1,
 			  WORD_COLUMN_2, data[i].word_2,
 			  WORD_COLUMN_3, data[i].word_3,
 			  WORD_COLUMN_4, data[i].word_4,
@@ -84,10 +84,11 @@ main (int argc, char *argv[])
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("First Word", renderer,
-						     "text", WORD_COLUMN,
+						     "text", WORD_COLUMN_1,
 						     NULL);
-  gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+  gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_1);
+
   g_object_unref (column);
   g_object_unref (renderer);
 
@@ -104,7 +105,7 @@ main (int argc, char *argv[])
   column = gtk_tree_view_column_new_with_attributes ("Third Word", renderer,
 						     "text", WORD_COLUMN_3,
 						     NULL);
-  gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_3);
+  gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_1);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
   g_object_unref (column);
   g_object_unref (renderer);
@@ -120,6 +121,7 @@ main (int argc, char *argv[])
   g_object_unref (renderer);
 
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
+  gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
   gtk_widget_show_all (window);
   gtk_main ();
 
