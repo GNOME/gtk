@@ -13,3 +13,9 @@ simple
 testtree
 gtkfeatures.h
 testthreads
+libgtk.la
+gtkmarshal.h
+gtktypebuiltins.h
+gtkmarshal.c
+gtktypebuiltins_ids.c
+gtktypebuiltins_vars.c

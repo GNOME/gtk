@@ -7,3 +7,4 @@ _libs
 libgdk-1.1.la
 gdkcursors.h
 gdkkeysyms.h
+libgdk.la
