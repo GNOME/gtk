@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-27 16:36-0400\n"
-"PO-Revision-Date: 2004-10-26 22:53-0400\n"
+"POT-Creation-Date: 2004-10-31 15:32-0500\n"
+"PO-Revision-Date: 2004-10-31 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -945,31 +945,29 @@ msgstr "Cell background set"
 msgid "Whether this tag affects the cell background color"
 msgstr "Whether this tag affects the cell background colour"
 
-#: gtk/gtkcellrenderercombo.c:89
+#: gtk/gtkcellrenderercombo.c:88
 msgid "Model"
 msgstr "Model"
 
-#: gtk/gtkcellrenderercombo.c:90
+#: gtk/gtkcellrenderercombo.c:89
 msgid "The model containing the possible values for the combo box"
 msgstr "The model containing the possible values for the combo box"
 
-#: gtk/gtkcellrenderercombo.c:108 gtk/gtkcomboboxentry.c:114
+#: gtk/gtkcellrenderercombo.c:106 gtk/gtkcomboboxentry.c:114
 msgid "Text Column"
 msgstr "Text Column"
 
-#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:115
+#: gtk/gtkcellrenderercombo.c:107 gtk/gtkcomboboxentry.c:115
 msgid "A column in the data source model to get the strings from"
 msgstr "A column in the data source model to get the strings from"
 
-#: gtk/gtkcellrenderercombo.c:127
+#: gtk/gtkcellrenderercombo.c:124
 msgid "Has Entry"
 msgstr "Has Entry"
 
-#: gtk/gtkcellrenderercombo.c:128
-#, c-format
-msgid "If %FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
-"If %FALSE, don't allow strings other than the chosen ones to be entered"
+#: gtk/gtkcellrenderercombo.c:125
+msgid "If FALSE, don't allow to enter strings other than the chosen ones"
+msgstr "If FALSE, don't allow strings other than the chosen ones to be entered"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
@@ -1024,7 +1022,7 @@ msgid "Value of the progress bar"
 msgstr "Value of the progress bar"
 
 #: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:204
-#: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:219
+#: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:220
 msgid "Text"
 msgstr "Text"
 
@@ -1203,7 +1201,7 @@ msgstr ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 
-#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:413
+#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:413 gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
 msgstr "Ellipsize"
 
@@ -1784,43 +1782,43 @@ msgstr "Select on focus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Whether to select the contents of an entry when it is focused"
 
-#: gtk/gtkentrycompletion.c:273
+#: gtk/gtkentrycompletion.c:272
 msgid "Completion Model"
 msgstr "Completion Model"
 
-#: gtk/gtkentrycompletion.c:274
+#: gtk/gtkentrycompletion.c:273
 msgid "The model to find matches in"
 msgstr "The model to find matches in"
 
-#: gtk/gtkentrycompletion.c:280
+#: gtk/gtkentrycompletion.c:279
 msgid "Minimum Key Length"
 msgstr "Minimum Key Length"
 
-#: gtk/gtkentrycompletion.c:281
+#: gtk/gtkentrycompletion.c:280
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimum length of the search key in order to look up matches"
 
-#: gtk/gtkentrycompletion.c:296 gtk/gtkiconview.c:361
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:361
 msgid "Text column"
 msgstr "Text column"
 
-#: gtk/gtkentrycompletion.c:297
+#: gtk/gtkentrycompletion.c:296
 msgid "The column of the model containing the strings."
 msgstr "The column of the model containing the strings."
 
-#: gtk/gtkentrycompletion.c:315
+#: gtk/gtkentrycompletion.c:313
 msgid "Inline completion"
 msgstr "Inline completion"
 
-#: gtk/gtkentrycompletion.c:316
+#: gtk/gtkentrycompletion.c:314
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "Whether the common prefix should be inserted automatically"
 
-#: gtk/gtkentrycompletion.c:330
+#: gtk/gtkentrycompletion.c:328
 msgid "Popup completion"
 msgstr "Popup completion"
 
-#: gtk/gtkentrycompletion.c:331
+#: gtk/gtkentrycompletion.c:329
 msgid "Whether the completions should be shown in a popup window"
 msgstr "Whether the completions should be shown in a popup window"
 
@@ -2219,7 +2217,7 @@ msgstr "Icon View Model"
 msgid "The model for the icon view"
 msgstr "The model for the icon view"
 
-#: gtk/gtkiconview.c:397 gtk/gtkprogressbar.c:151 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:397 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Orientation"
 
@@ -2940,39 +2938,39 @@ msgstr ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
 
-#: gtk/gtkprogressbar.c:143 gtk/gtkrange.c:334 gtk/gtkspinbutton.c:242
+#: gtk/gtkprogressbar.c:144 gtk/gtkrange.c:334 gtk/gtkspinbutton.c:242
 msgid "Adjustment"
 msgstr "Adjustment"
 
-#: gtk/gtkprogressbar.c:144
+#: gtk/gtkprogressbar.c:145
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "The GtkAdjustment connected to the progress bar (Deprecated)"
 
-#: gtk/gtkprogressbar.c:152
+#: gtk/gtkprogressbar.c:153
 msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientation and growth direction of the progress bar"
 
-#: gtk/gtkprogressbar.c:160
+#: gtk/gtkprogressbar.c:161
 msgid "Bar style"
 msgstr "Bar style"
 
-#: gtk/gtkprogressbar.c:161
+#: gtk/gtkprogressbar.c:162
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
 msgstr "Specifies the visual style of the bar in percentage mode (Deprecated)"
 
-#: gtk/gtkprogressbar.c:169
+#: gtk/gtkprogressbar.c:170
 msgid "Activity Step"
 msgstr "Activity Step"
 
-#: gtk/gtkprogressbar.c:170
+#: gtk/gtkprogressbar.c:171
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr "The increment used for each iteration in activity mode (Deprecated)"
 
-#: gtk/gtkprogressbar.c:179
+#: gtk/gtkprogressbar.c:180
 msgid "Activity Blocks"
 msgstr "Activity Blocks"
 
-#: gtk/gtkprogressbar.c:180
+#: gtk/gtkprogressbar.c:181
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
@@ -2980,11 +2978,11 @@ msgstr ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
 
-#: gtk/gtkprogressbar.c:189
+#: gtk/gtkprogressbar.c:190
 msgid "Discrete Blocks"
 msgstr "Discrete Blocks"
 
-#: gtk/gtkprogressbar.c:190
+#: gtk/gtkprogressbar.c:191
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
@@ -2992,25 +2990,33 @@ msgstr ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
 
-#: gtk/gtkprogressbar.c:199
+#: gtk/gtkprogressbar.c:200
 msgid "Fraction"
 msgstr "Fraction"
 
-#: gtk/gtkprogressbar.c:200
+#: gtk/gtkprogressbar.c:201
 msgid "The fraction of total work that has been completed"
 msgstr "The fraction of total work that has been completed"
 
-#: gtk/gtkprogressbar.c:209
+#: gtk/gtkprogressbar.c:210
 msgid "Pulse Step"
 msgstr "Pulse Step"
 
-#: gtk/gtkprogressbar.c:210
+#: gtk/gtkprogressbar.c:211
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr "The fraction of total progress to move the bouncing block when pulsed"
 
-#: gtk/gtkprogressbar.c:220
+#: gtk/gtkprogressbar.c:221
 msgid "Text to be displayed in the progress bar"
 msgstr "Text to be displayed in the progress bar"
+
+#: gtk/gtkprogressbar.c:243
+msgid ""
+"The preferred place to ellipsize the string, if the progressbar does not "
+"have enough room to display the entire string, if at all"
+msgstr ""
+"The preferred place to ellipsize the string (if at all), if the progressbar "
+"does not have enough room to display the entire string"
 
 #: gtk/gtkradioaction.c:139
 msgid "The value"
