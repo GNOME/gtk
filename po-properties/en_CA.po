@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-04 16:32-0400\n"
-"PO-Revision-Date: 2005-04-04 22:53-0400\n"
+"POT-Creation-Date: 2005-04-05 14:11-0400\n"
+"PO-Revision-Date: 2005-04-05 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1050,6 +1050,7 @@ msgstr "Value of the progress bar"
 
 #: ../gtk/gtkcellrendererprogress.c:134 ../gtk/gtkcellrenderertext.c:219
 #: ../gtk/gtkentry.c:574 ../gtk/gtkprogressbar.c:221
+#: ../gtk/gtktextbuffer.c:206
 msgid "Text"
 msgstr "Text"
 
@@ -3792,13 +3793,17 @@ msgstr "Word Wrap"
 msgid "Whether words are wrapped at widget edges"
 msgstr "Whether words are wrapped at widget edges"
 
-#: ../gtk/gtktextbuffer.c:185
+#: ../gtk/gtktextbuffer.c:188
 msgid "Tag Table"
 msgstr "Tag Table"
 
-#: ../gtk/gtktextbuffer.c:186
+#: ../gtk/gtktextbuffer.c:189
 msgid "Text Tag Table"
 msgstr "Text Tag Table"
+
+#: ../gtk/gtktextbuffer.c:207
+msgid "Current text of the buffer"
+msgstr "Current text of the buffer"
 
 #: ../gtk/gtktexttag.c:198
 msgid "Tag name"
