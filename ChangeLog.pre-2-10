@@ -1,3 +1,9 @@
+Thu Jun 13 12:01:36 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_drag_motion): Don't return
+	a positive status unless there is a text target in
+	the drag. (#83386, Thomas Leonard.)
+
 Thu Jun 13 11:36:37 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkdnd.c (_gtk_drag_source_handle_event): Save

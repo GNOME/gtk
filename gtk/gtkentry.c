@@ -4006,7 +4006,8 @@ gtk_entry_drag_motion (GtkWidget        *widget,
   old_position = entry->dnd_position;
   new_position = gtk_entry_find_position (entry, x + entry->scroll_offset);
 
-  if (entry->editable)
+  if (entry->editable &&
+      gtk_drag_dest_find_target (widget, context, NULL) != GDK_NONE)
     {
       source_widget = gtk_drag_get_source_widget (context);
       suggested_action = context->suggested_action;
@@ -4035,7 +4036,7 @@ gtk_entry_drag_motion (GtkWidget        *widget,
     }
   else
     {
-      /* Entry not editable */
+      /* Entry not editable, or no text */
       suggested_action = 0;
       entry->dnd_position = -1;
     }
