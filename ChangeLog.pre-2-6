@@ -5,6 +5,10 @@
 	through the text looking to insert CR in front of each LF. Bug
 	noticed and fix provided by Florent Duguet.
 
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_transient_for): 
+	Use HWND_NOTOPMOST instead of HWND_TOPMOST. Suggested by Florent
+	Duguet.
+
 2002-08-31  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (_gdk_events_init): On Cygwin, open
