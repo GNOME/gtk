@@ -160,14 +160,14 @@ gtk_button_class_init (GtkButtonClass *klass)
     gtk_signal_new ("enter",
                     GTK_RUN_FIRST,
                     object_class->type,
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, enter),
+                    GTK_SIGNAL_OFFSET (GtkButtonClass, enter_button),
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   button_signals[LEAVE] =
     gtk_signal_new ("leave",
                     GTK_RUN_FIRST,
                     object_class->type,
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, leave),
+                    GTK_SIGNAL_OFFSET (GtkButtonClass, leave_button),
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
@@ -198,8 +198,8 @@ gtk_button_class_init (GtkButtonClass *klass)
   klass->pressed = gtk_real_button_pressed;
   klass->released = gtk_real_button_released;
   klass->clicked = NULL;
-  klass->enter = gtk_real_button_enter;
-  klass->leave = gtk_real_button_leave;
+  klass->enter_button = gtk_real_button_enter;
+  klass->leave_button = gtk_real_button_leave;
 }
 
 static void

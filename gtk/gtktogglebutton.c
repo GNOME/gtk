@@ -129,8 +129,8 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   button_class->pressed = gtk_toggle_button_pressed;
   button_class->released = gtk_toggle_button_released;
   button_class->clicked = gtk_toggle_button_clicked;
-  button_class->enter = gtk_toggle_button_enter;
-  button_class->leave = gtk_toggle_button_leave;
+  button_class->enter_button = gtk_toggle_button_enter;
+  button_class->leave_button = gtk_toggle_button_leave;
 
   class->toggled = NULL;
 }

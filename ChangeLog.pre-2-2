@@ -1,3 +1,11 @@
+Wed Dec 16 21:20:00 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* autogen.sh: rm -rf intl breaks --disable-nls, put it back
+
+	* gtkbutton.[ch]
+	* gtktogglebutton.c: s/(enter|leave)/$1_button/g.
+	Digital: 1 GTK+: 0 (for now)
+
 Wed Dec 16 22:38:22 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gdk/gdkevents.c: updated call to g_main_add_poll

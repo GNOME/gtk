@@ -79,9 +79,6 @@ echo "Running gettextize...  Ignore non-fatal messages."
 # while making dist.
 echo "no" | gettextize --copy --force
 
-# We don't need ./intl
-rm -rf intl
-
 aclocal $ACLOCAL_FLAGS
 
 # optionally feature autoheader
