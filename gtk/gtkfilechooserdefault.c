@@ -1224,11 +1224,16 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 	  gtk_file_path_free (base_path);
 
 	  if (!is_local)
-	    continue;
+	    {
+	      gtk_file_system_volume_free (impl->file_system, volume);
+	      continue;
+	    }
 	}
 
-      shortcuts_insert_path (impl, start_row + n, TRUE, volume, NULL, NULL, FALSE, NULL);
-      n++;
+      if (shortcuts_insert_path (impl, start_row + n, TRUE, volume, NULL, NULL, FALSE, NULL))
+	n++;
+      else
+	gtk_file_system_volume_free (impl->file_system, volume);
     }
 
   impl->num_volumes = n;
