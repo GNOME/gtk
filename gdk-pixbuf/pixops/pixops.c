@@ -21,15 +21,15 @@ struct _PixopsFilter
   double y_offset;
 }; 
 
-typedef art_u8 *(*PixopsLineFunc) (int *weights, int n_x, int n_y,
-				   art_u8 *dest, int dest_x, art_u8 *dest_end, int dest_channels, int dest_has_alpha,
-				   art_u8 **src, int src_channels, art_boolean src_has_alpha,
+typedef guchar *(*PixopsLineFunc) (int *weights, int n_x, int n_y,
+				   guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
+				   guchar **src, int src_channels, gboolean src_has_alpha,
 				   int x_init, int x_step, int src_width,
-				   int check_size, art_u32 color1, art_u32 color2);
+				   int check_size, guint32 color1, guint32 color2);
 
-typedef void (*PixopsPixelFunc) (art_u8 *dest, int dest_x, int dest_channels, int dest_has_alpha,
-				 int src_has_alpha, int check_size, art_u32 color1,
-				 art_u32 color2,
+typedef void (*PixopsPixelFunc) (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
+				 int src_has_alpha, int check_size, guint32 color1,
+				 guint32 color2,
 				 int r, int g, int b, int a);
 
 static int
@@ -48,20 +48,20 @@ get_check_shift (int check_size)
 }
 
 static void
-pixops_scale_nearest (art_u8        *dest_buf,
+pixops_scale_nearest (guchar        *dest_buf,
 		      int            render_x0,
 		      int            render_y0,
 		      int            render_x1,
 		      int            render_y1,
 		      int            dest_rowstride,
 		      int            dest_channels,
-		      art_boolean    dest_has_alpha,
-		      const art_u8  *src_buf,
+		      gboolean       dest_has_alpha,
+		      const guchar  *src_buf,
 		      int            src_width,
 		      int            src_height,
 		      int            src_rowstride,
 		      int            src_channels,
-		      art_boolean    src_has_alpha,
+		      gboolean       src_has_alpha,
 		      double         scale_x,
 		      double         scale_y)
 {
@@ -73,7 +73,7 @@ pixops_scale_nearest (art_u8        *dest_buf,
 #define INNER_LOOP(SRC_CHANNELS,DEST_CHANNELS) 			\
       for (j=0; j < (render_x1 - render_x0); j++)		\
 	{							\
-	  const art_u8 *p = src + (x >> SCALE_SHIFT) * SRC_CHANNELS;	\
+	  const guchar *p = src + (x >> SCALE_SHIFT) * SRC_CHANNELS;	\
 								\
 	  dest[0] = p[0];					\
 	  dest[1] = p[1];					\
@@ -93,8 +93,8 @@ pixops_scale_nearest (art_u8        *dest_buf,
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
-      const art_u8 *src  = src_buf + ((i * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
-      art_u8       *dest = dest_buf + i * dest_rowstride;
+      const guchar *src  = src_buf + ((i * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
+      guchar       *dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
 
@@ -119,34 +119,36 @@ pixops_scale_nearest (art_u8        *dest_buf,
 	    {
 	      for (j=0; j < (render_x1 - render_x0); j++)
 		{
-		  const art_u8 *p = src + (x >> SCALE_SHIFT) * 4;
+		  const guchar *p = src + (x >> SCALE_SHIFT) * 4;
+		  guint32 *p32;
 
-		  *(art_u32 *)dest = *(art_u32 *)p;
-		  
+		  p32 = (guint32 *) dest;
+		  *p32 = *((guint32 *) p);
+
 		  dest += 4;
 		  x += x_step;
 		}
 	    }
 	}
     }
-#undef INNER_LOOP  
+#undef INNER_LOOP
 }
 
 static void
-pixops_composite_nearest (art_u8        *dest_buf,
+pixops_composite_nearest (guchar        *dest_buf,
 			  int            render_x0,
 			  int            render_y0,
 			  int            render_x1,
 			  int            render_y1,
 			  int            dest_rowstride,
 			  int            dest_channels,
-			  art_boolean    dest_has_alpha,
-			  const art_u8  *src_buf,
+			  gboolean       dest_has_alpha,
+			  const guchar  *src_buf,
 			  int            src_width,
 			  int            src_height,
 			  int            src_rowstride,
 			  int            src_channels,
-			  art_boolean    src_has_alpha,
+			  gboolean       src_has_alpha,
 			  double         scale_x,
 			  double         scale_y,
 			  int            overall_alpha)
@@ -158,14 +160,14 @@ pixops_composite_nearest (art_u8        *dest_buf,
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
-      const art_u8 *src  = src_buf + (((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
-      art_u8       *dest = dest_buf + i * dest_rowstride + render_x0 * dest_channels;
+      const guchar *src  = src_buf + (((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
+      guchar       *dest = dest_buf + i * dest_rowstride + render_x0 * dest_channels;
 
       x = render_x0 * x_step + x_step / 2;
       
       for (j=0; j < (render_x1 - render_x0); j++)
 	{
-	  const art_u8 *p = src + (x >> SCALE_SHIFT) * src_channels;
+	  const guchar *p = src + (x >> SCALE_SHIFT) * src_channels;
           unsigned int  a0;
 
 	  if (src_has_alpha)
@@ -210,28 +212,28 @@ pixops_composite_nearest (art_u8        *dest_buf,
 }
 
 static void
-pixops_composite_color_nearest (art_u8        *dest_buf,
+pixops_composite_color_nearest (guchar        *dest_buf,
 				int            render_x0,
 				int            render_y0,
 				int            render_x1,
 				int            render_y1,
 				int            dest_rowstride,
 				int            dest_channels,
-				art_boolean    dest_has_alpha,
-				const art_u8  *src_buf,
+				gboolean       dest_has_alpha,
+				const guchar  *src_buf,
 				int            src_width,
 				int            src_height,
 				int            src_rowstride,
 				int            src_channels,
-				art_boolean    src_has_alpha,
+				gboolean       src_has_alpha,
 				double         scale_x,
 				double         scale_y,
 				int            overall_alpha,
 				int            check_x,
 				int            check_y,
 				int            check_size,
-				art_u32        color1,
-				art_u32        color2)
+				guint32        color1,
+				guint32        color2)
 {
   int i, j;
   int x;
@@ -242,8 +244,8 @@ pixops_composite_color_nearest (art_u8        *dest_buf,
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
-      const art_u8 *src  = src_buf + (((i + render_y0) * y_step + y_step/2) >> SCALE_SHIFT) * src_rowstride;
-      art_u8       *dest = dest_buf + i * dest_rowstride;
+      const guchar *src  = src_buf + (((i + render_y0) * y_step + y_step/2) >> SCALE_SHIFT) * src_rowstride;
+      guchar       *dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
       
@@ -270,7 +272,7 @@ pixops_composite_color_nearest (art_u8        *dest_buf,
 
       for (j=0 ; j < (render_x1 - render_x0); j++)
 	{
-	  const art_u8 *p = src + (x >> SCALE_SHIFT) * src_channels;
+	  const guchar *p = src + (x >> SCALE_SHIFT) * src_channels;
           unsigned int  a0;
 
 	  if (src_has_alpha)
@@ -301,8 +303,8 @@ pixops_composite_color_nearest (art_u8        *dest_buf,
 }
 
 static void
-composite_pixel (art_u8 *dest, int dest_x, int dest_channels, int dest_has_alpha,
-		 int src_has_alpha, int check_size, art_u32 color1, art_u32 color2,
+composite_pixel (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
+		 int src_has_alpha, int check_size, guint32 color1, guint32 color2,
 		 int r, int g, int b, int a)
 {
   if (dest_has_alpha)
@@ -333,12 +335,12 @@ composite_pixel (art_u8 *dest, int dest_x, int dest_channels, int dest_has_alpha
     }
 }
 
-static art_u8 *
+static guchar *
 composite_line (int *weights, int n_x, int n_y,
-		art_u8 *dest, int dest_x, art_u8 *dest_end, int dest_channels, int dest_has_alpha,
-		art_u8 **src, int src_channels, art_boolean src_has_alpha,
+		guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
+		guchar **src, int src_channels, gboolean src_has_alpha,
 		int x_init, int x_step, int src_width,
-		int check_size, art_u32 color1, art_u32 color2)
+		int check_size, guint32 color1, guint32 color2)
 {
   int x = x_init;
   int i, j;
@@ -353,7 +355,7 @@ composite_line (int *weights, int n_x, int n_y,
 
       for (i=0; i<n_y; i++)
 	{
-	  art_u8 *q = src[i] + x_scaled * src_channels;
+	  guchar *q = src[i] + x_scaled * src_channels;
 	  int *line_weights = pixel_weights + n_x * i;
 	  
 	  for (j=0; j<n_x; j++)
@@ -408,16 +410,16 @@ composite_line (int *weights, int n_x, int n_y,
   return dest;
 }
 
-static art_u8 *
+static guchar *
 composite_line_22_4a4 (int *weights, int n_x, int n_y,
-		       art_u8 *dest, int dest_x, art_u8 *dest_end, int dest_channels, int dest_has_alpha,
-		       art_u8 **src, int src_channels, art_boolean src_has_alpha,
+		       guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
+		       guchar **src, int src_channels, gboolean src_has_alpha,
 		       int x_init, int x_step, int src_width,
-		       int check_size, art_u32 color1, art_u32 color2)
+		       int check_size, guint32 color1, guint32 color2)
 {
   int x = x_init;
-  art_u8 *src0 = src[0];
-  art_u8 *src1 = src[1];
+  guchar *src0 = src[0];
+  guchar *src1 = src[1];
 
   g_return_val_if_fail (src_channels != 3, dest);
   g_return_val_if_fail (src_has_alpha, dest);
@@ -427,7 +429,7 @@ composite_line_22_4a4 (int *weights, int n_x, int n_y,
       int x_scaled = x >> SCALE_SHIFT;
       unsigned int r, g, b, a, ta;
       int *pixel_weights;
-      art_u8 *q0, *q1;
+      guchar *q0, *q1;
       int w1, w2, w3, w4;
       
       q0 = src0 + x_scaled * 4;
@@ -476,14 +478,14 @@ composite_line_22_4a4 (int *weights, int n_x, int n_y,
 }
 
 #ifdef USE_MMX
-static art_u8 *
+static guchar *
 composite_line_22_4a4_mmx_stub (int *weights, int n_x, int n_y,
-				art_u8 *dest, int dest_x, art_u8 *dest_end, int dest_channels, int dest_has_alpha,
-				art_u8 **src, int src_channels, art_boolean src_has_alpha,
+				guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
+				guchar **src, int src_channels, gboolean src_has_alpha,
 				int x_init, int x_step, int src_width,
-				int check_size, art_u32 color1, art_u32 color2)
+				int check_size, guint32 color1, guint32 color2)
 {
-  art_u32 mmx_weights[16][8];
+  guint32 mmx_weights[16][8];
   int j;
 
   for (j=0; j<16; j++)
@@ -503,8 +505,8 @@ composite_line_22_4a4_mmx_stub (int *weights, int n_x, int n_y,
 #endif /* USE_MMX */
 
 static void
-composite_pixel_color (art_u8 *dest, int dest_x, int dest_channels, int dest_has_alpha,
-		       int src_has_alpha, int check_size, art_u32 color1, art_u32 color2,
+composite_pixel_color (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
+		       int src_has_alpha, int check_size, guint32 color1, guint32 color2,
 		       int r, int g, int b, int a)
 {
   int dest_r, dest_g, dest_b;
@@ -533,12 +535,12 @@ composite_pixel_color (art_u8 *dest, int dest_x, int dest_channels, int dest_has
     dest[3] = a >> 16;
 }
 
-static art_u8 *
+static guchar *
 composite_line_color (int *weights, int n_x, int n_y,
-		      art_u8 *dest, int dest_x, art_u8 *dest_end, int dest_channels, int dest_has_alpha,
-		      art_u8 **src, int src_channels, art_boolean src_has_alpha,
+		      guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
+		      guchar **src, int src_channels, gboolean src_has_alpha,
 		      int x_init, int x_step, int src_width,
-		      int check_size, art_u32 color1, art_u32 color2)
+		      int check_size, guint32 color1, guint32 color2)
 {
   int x = x_init;
   int i, j;
@@ -566,7 +568,7 @@ composite_line_color (int *weights, int n_x, int n_y,
 
       for (i=0; i<n_y; i++)
 	{
-	  art_u8 *q = src[i] + x_scaled * src_channels;
+	  guchar *q = src[i] + x_scaled * src_channels;
 	  int *line_weights = pixel_weights + n_x * i;
 	  
 	  for (j=0; j<n_x; j++)
@@ -614,14 +616,14 @@ composite_line_color (int *weights, int n_x, int n_y,
 }
 
 #ifdef USE_MMX
-static art_u8 *
+static guchar *
 composite_line_color_22_4a4_mmx_stub (int *weights, int n_x, int n_y,
-				      art_u8 *dest, int dest_x, art_u8 *dest_end, int dest_channels, int dest_has_alpha,
-				      art_u8 **src, int src_channels, art_boolean src_has_alpha,
+				      guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
+				      guchar **src, int src_channels, gboolean src_has_alpha,
 				      int x_init, int x_step, int src_width,
-				      int check_size, art_u32 color1, art_u32 color2)
+				      int check_size, guint32 color1, guint32 color2)
 {
-  art_u32 mmx_weights[16][8];
+  guint32 mmx_weights[16][8];
   int check_shift = get_check_shift (check_size);
   int colors[4];
   int j;
@@ -649,8 +651,8 @@ composite_line_color_22_4a4_mmx_stub (int *weights, int n_x, int n_y,
 #endif /* USE_MMX */
 
 static void
-scale_pixel (art_u8 *dest, int dest_x, int dest_channels, int dest_has_alpha,
-	     int src_has_alpha, int check_size, art_u32 color1, art_u32 color2,
+scale_pixel (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
+	     int src_has_alpha, int check_size, guint32 color1, guint32 color2,
 	     int r, int g, int b, int a)
 {
   if (src_has_alpha)
@@ -681,12 +683,12 @@ scale_pixel (art_u8 *dest, int dest_x, int dest_channels, int dest_has_alpha,
     }
 }
 
-static art_u8 *
+static guchar *
 scale_line (int *weights, int n_x, int n_y,
-	    art_u8 *dest, int dest_x, art_u8 *dest_end, int dest_channels, int dest_has_alpha,
-	    art_u8 **src, int src_channels, art_boolean src_has_alpha,
+	    guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
+	    guchar **src, int src_channels, gboolean src_has_alpha,
 	    int x_init, int x_step, int src_width,
-	    int check_size, art_u32 color1, art_u32 color2)
+	    int check_size, guint32 color1, guint32 color2)
 {
   int x = x_init;
   int i, j;
@@ -703,7 +705,7 @@ scale_line (int *weights, int n_x, int n_y,
 	  unsigned int r = 0, g = 0, b = 0, a = 0;
 	  for (i=0; i<n_y; i++)
 	    {
-	      art_u8 *q = src[i] + x_scaled * src_channels;
+	      guchar *q = src[i] + x_scaled * src_channels;
 	      int *line_weights  = pixel_weights + n_x * i;
 	      
 	      for (j=0; j<n_x; j++)
@@ -740,7 +742,7 @@ scale_line (int *weights, int n_x, int n_y,
 	  unsigned int r = 0, g = 0, b = 0;
 	  for (i=0; i<n_y; i++)
 	    {
-	      art_u8 *q = src[i] + x_scaled * src_channels;
+	      guchar *q = src[i] + x_scaled * src_channels;
 	      int *line_weights  = pixel_weights + n_x * i;
 	      
 	      for (j=0; j<n_x; j++)
@@ -772,14 +774,14 @@ scale_line (int *weights, int n_x, int n_y,
 }
 
 #ifdef USE_MMX 
-static art_u8 *
+static guchar *
 scale_line_22_33_mmx_stub (int *weights, int n_x, int n_y,
-			   art_u8 *dest, int dest_x, art_u8 *dest_end, int dest_channels, int dest_has_alpha,
-			   art_u8 **src, int src_channels, art_boolean src_has_alpha,
+			   guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
+			   guchar **src, int src_channels, gboolean src_has_alpha,
 			   int x_init, int x_step, int src_width,
-			   int check_size, art_u32 color1, art_u32 color2)
+			   int check_size, guint32 color1, guint32 color2)
 {
-  art_u32 mmx_weights[16][8];
+  guint32 mmx_weights[16][8];
   int j;
 
   for (j=0; j<16; j++)
@@ -798,23 +800,23 @@ scale_line_22_33_mmx_stub (int *weights, int n_x, int n_y,
 }
 #endif /* USE_MMX */
 
-static art_u8 *
+static guchar *
 scale_line_22_33 (int *weights, int n_x, int n_y,
-		  art_u8 *dest, art_u8 *dest_end, int dest_channels, int dest_has_alpha,
-		  art_u8 **src, int src_channels, art_boolean src_has_alpha,
+		  guchar *dest, guchar *dest_end, int dest_channels, int dest_has_alpha,
+		  guchar **src, int src_channels, gboolean src_has_alpha,
 		  int x_init, int x_step, int src_width,
-		  int check_size, art_u32 color1, art_u32 color2)
+		  int check_size, guint32 color1, guint32 color2)
 {
   int x = x_init;
-  art_u8 *src0 = src[0];
-  art_u8 *src1 = src[1];
+  guchar *src0 = src[0];
+  guchar *src1 = src[1];
   
   while (dest < dest_end)
     {
       unsigned int r, g, b;
       int x_scaled = x >> SCALE_SHIFT;
       int *pixel_weights;
-      art_u8 *q0, *q1;
+      guchar *q0, *q1;
       int w1, w2, w3, w4;
 
       q0 = src0 + x_scaled * 3;
@@ -857,10 +859,10 @@ scale_line_22_33 (int *weights, int n_x, int n_y,
 
 static void
 process_pixel (int *weights, int n_x, int n_y,
-	       art_u8 *dest, int dest_x, int dest_channels, int dest_has_alpha,
-	       art_u8 **src, int src_channels, art_boolean src_has_alpha,
+	       guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
+	       guchar **src, int src_channels, gboolean src_has_alpha,
 	       int x_start, int src_width,
-	       int check_size, art_u32 color1, art_u32 color2,
+	       int check_size, guint32 color1, guint32 color2,
 	       PixopsPixelFunc pixel_func)
 {
   unsigned int r = 0, g = 0, b = 0, a = 0;
@@ -873,7 +875,7 @@ process_pixel (int *weights, int n_x, int n_y,
       for (j=0; j<n_x; j++)
 	{
 	  unsigned int ta;
-	  art_u8 *q;
+	  guchar *q;
 
 	  if (x_start + j < 0)
 	    q = src[i];
@@ -898,34 +900,34 @@ process_pixel (int *weights, int n_x, int n_y,
 }
 
 static void
-pixops_process (art_u8         *dest_buf,
+pixops_process (guchar         *dest_buf,
 		int             render_x0,
 		int             render_y0,
 		int             render_x1,
 		int             render_y1,
 		int             dest_rowstride,
 		int             dest_channels,
-		art_boolean     dest_has_alpha,
-		const art_u8   *src_buf,
+		gboolean        dest_has_alpha,
+		const guchar   *src_buf,
 		int             src_width,
 		int             src_height,
 		int             src_rowstride,
 		int             src_channels,
-		art_boolean     src_has_alpha,
+		gboolean        src_has_alpha,
 		double          scale_x,
 		double          scale_y,
 		int             check_x,
 		int             check_y,
 		int             check_size,
-		art_u32         color1,
-		art_u32         color2,
+		guint32         color1,
+		guint32         color2,
 		PixopsFilter   *filter,
 		PixopsLineFunc  line_func,
 		PixopsPixelFunc pixel_func)
 {
   int i, j;
   int x, y;
-  art_u8 **line_bufs = g_new (art_u8 *, filter->n_y);
+  guchar **line_bufs = g_new (guchar *, filter->n_y);
 
   int x_step = (1 << SCALE_SHIFT) / scale_x;
   int y_step = (1 << SCALE_SHIFT) / scale_y;
@@ -942,11 +944,11 @@ pixops_process (art_u8         *dest_buf,
       int y_start = y >> SCALE_SHIFT;
       int x_start;
       int *run_weights = filter->weights + ((y >> (SCALE_SHIFT - SUBSAMPLE_BITS)) & SUBSAMPLE_MASK) * filter->n_x * filter->n_y * SUBSAMPLE;
-      art_u8 *new_outbuf;
-      art_u32 tcolor1, tcolor2;
+      guchar *new_outbuf;
+      guint32 tcolor1, tcolor2;
       
-      art_u8 *outbuf = dest_buf + dest_rowstride * i;
-      art_u8 *outbuf_end = outbuf + dest_channels * (render_x1 - render_x0);
+      guchar *outbuf = dest_buf + dest_rowstride * i;
+      guchar *outbuf_end = outbuf + dest_channels * (render_x1 - render_x0);
 
       if (((i + check_y) >> check_shift) & 1)
 	{
@@ -962,11 +964,11 @@ pixops_process (art_u8         *dest_buf,
       for (j=0; j<filter->n_y; j++)
 	{
 	  if (y_start <  0)
-	    line_bufs[j] = (art_u8 *)src_buf;
+	    line_bufs[j] = (guchar *)src_buf;
 	  else if (y_start < src_height)
-	    line_bufs[j] = (art_u8 *)src_buf + src_rowstride * y_start;
+	    line_bufs[j] = (guchar *)src_buf + src_rowstride * y_start;
 	  else
-	    line_bufs[j] = (art_u8 *)src_buf + src_rowstride * (src_height - 1);
+	    line_bufs[j] = (guchar *)src_buf + src_rowstride * (src_height - 1);
 
 	  y_start++;
 	}
@@ -1288,35 +1290,35 @@ bilinear_make_weights (PixopsFilter *filter, double x_scale, double y_scale, dou
 }
 
 void
-pixops_composite_color (art_u8         *dest_buf,
+pixops_composite_color (guchar         *dest_buf,
 			int             render_x0,
 			int             render_y0,
 			int             render_x1,
 			int             render_y1,
 			int             dest_rowstride,
 			int             dest_channels,
-			art_boolean     dest_has_alpha,
-			const art_u8   *src_buf,
+			gboolean        dest_has_alpha,
+			const guchar   *src_buf,
 			int             src_width,
 			int             src_height,
 			int             src_rowstride,
 			int             src_channels,
-			art_boolean     src_has_alpha,
+			gboolean        src_has_alpha,
 			double          scale_x,
 			double          scale_y,
-			ArtFilterLevel  filter_level,
+			GdkInterpType   interp_type,
 			int             overall_alpha,
 			int             check_x,
 			int             check_y,
 			int             check_size,
-			art_u32         color1,
-			art_u32         color2)
+			guint32         color1,
+			guint32         color2)
 {
   PixopsFilter filter;
   PixopsLineFunc line_func;
   
 #ifdef USE_MMX
-  art_boolean found_mmx = pixops_have_mmx();
+  gboolean found_mmx = pixops_have_mmx();
 #endif
 
   g_return_if_fail (!(dest_channels == 3 && dest_has_alpha));
@@ -1329,11 +1331,11 @@ pixops_composite_color (art_u8         *dest_buf,
     pixops_scale (dest_buf, render_x0, render_y0, render_x1, render_y1,
 		  dest_rowstride, dest_channels, dest_has_alpha,
 		  src_buf, src_width, src_height, src_rowstride, src_channels,
-		  src_has_alpha, scale_x, scale_y, filter_level);
+		  src_has_alpha, scale_x, scale_y, interp_type);
 
-  switch (filter_level)
+  switch (interp_type)
     {
-    case ART_FILTER_NEAREST:
+    case GDK_INTERP_NEAREST:
       pixops_composite_color_nearest (dest_buf, render_x0, render_y0, render_x1, render_y1,
 				      dest_rowstride, dest_channels, dest_has_alpha,
 				      src_buf, src_width, src_height, src_rowstride, src_channels, src_has_alpha,
@@ -1341,15 +1343,15 @@ pixops_composite_color (art_u8         *dest_buf,
 				      check_x, check_y, check_size, color1, color2);
       return;
 
-    case ART_FILTER_TILES:
+    case GDK_INTERP_TILES:
       tile_make_weights (&filter, scale_x, scale_y, overall_alpha / 255.);
       break;
       
-    case ART_FILTER_BILINEAR:
+    case GDK_INTERP_BILINEAR:
       bilinear_make_fast_weights (&filter, scale_x, scale_y, overall_alpha / 255.);
       break;
       
-    case ART_FILTER_HYPER:
+    case GDK_INTERP_HYPER:
       bilinear_make_weights (&filter, scale_x, scale_y, overall_alpha / 255.);
       break;
     }
@@ -1372,30 +1374,30 @@ pixops_composite_color (art_u8         *dest_buf,
 }
 
 void
-pixops_composite (art_u8        *dest_buf,
+pixops_composite (guchar        *dest_buf,
 		  int            render_x0,
 		  int            render_y0,
 		  int            render_x1,
 		  int            render_y1,
 		  int            dest_rowstride,
 		  int            dest_channels,
-		  art_boolean    dest_has_alpha,
-		  const art_u8  *src_buf,
+		  gboolean       dest_has_alpha,
+		  const guchar  *src_buf,
 		  int            src_width,
 		  int            src_height,
 		  int            src_rowstride,
 		  int            src_channels,
-		  art_boolean    src_has_alpha,
+		  gboolean       src_has_alpha,
 		  double         scale_x,
 		  double         scale_y,
-		  ArtFilterLevel filter_level,
+		  GdkInterpType  interp_type,
 		  int            overall_alpha)
 {
   PixopsFilter filter;
   PixopsLineFunc line_func;
   
 #ifdef USE_MMX
-  art_boolean found_mmx = pixops_have_mmx();
+  gboolean found_mmx = pixops_have_mmx();
 #endif
 
   g_return_if_fail (!(dest_channels == 3 && dest_has_alpha));
@@ -1408,26 +1410,26 @@ pixops_composite (art_u8        *dest_buf,
     pixops_scale (dest_buf, render_x0, render_y0, render_x1, render_y1,
 		  dest_rowstride, dest_channels, dest_has_alpha,
 		  src_buf, src_width, src_height, src_rowstride, src_channels,
-		  src_has_alpha, scale_x, scale_y, filter_level);
+		  src_has_alpha, scale_x, scale_y, interp_type);
 
-  switch (filter_level)
+  switch (interp_type)
     {
-    case ART_FILTER_NEAREST:
+    case GDK_INTERP_NEAREST:
       pixops_composite_nearest (dest_buf, render_x0, render_y0, render_x1, render_y1,
 				dest_rowstride, dest_channels, dest_has_alpha,
 				src_buf, src_width, src_height, src_rowstride, src_channels,
 				src_has_alpha, scale_x, scale_y, overall_alpha);
       return;
 
-    case ART_FILTER_TILES:
+    case GDK_INTERP_TILES:
       tile_make_weights (&filter, scale_x, scale_y, overall_alpha / 255.);
       break;
       
-    case ART_FILTER_BILINEAR:
+    case GDK_INTERP_BILINEAR:
       bilinear_make_fast_weights (&filter, scale_x, scale_y, overall_alpha / 255.);
       break;
       
-    case ART_FILTER_HYPER:
+    case GDK_INTERP_HYPER:
       bilinear_make_weights (&filter, scale_x, scale_y, overall_alpha / 255.);
       break;
     }
@@ -1455,29 +1457,29 @@ pixops_composite (art_u8        *dest_buf,
 }
 
 void
-pixops_scale (art_u8        *dest_buf,
+pixops_scale (guchar        *dest_buf,
 	      int            render_x0,
 	      int            render_y0,
 	      int            render_x1,
 	      int            render_y1,
 	      int            dest_rowstride,
 	      int            dest_channels,
-	      art_boolean    dest_has_alpha,
-	      const art_u8  *src_buf,
+	      gboolean       dest_has_alpha,
+	      const guchar  *src_buf,
 	      int            src_width,
 	      int            src_height,
 	      int            src_rowstride,
 	      int            src_channels,
-	      art_boolean    src_has_alpha,
+	      gboolean       src_has_alpha,
 	      double         scale_x,
 	      double         scale_y,
-	      ArtFilterLevel filter_level)
+	      GdkInterpType  interp_type)
 {
   PixopsFilter filter;
   PixopsLineFunc line_func;
 
 #ifdef USE_MMX
-  art_boolean found_mmx = pixops_have_mmx();
+  gboolean found_mmx = pixops_have_mmx();
 #endif
 
   g_return_if_fail (!(dest_channels == 3 && dest_has_alpha));
@@ -1487,24 +1489,24 @@ pixops_scale (art_u8        *dest_buf,
   if (scale_x == 0 || scale_y == 0)
     return;
 
-  switch (filter_level)
+  switch (interp_type)
     {
-    case ART_FILTER_NEAREST:
+    case GDK_INTERP_NEAREST:
       pixops_scale_nearest (dest_buf, render_x0, render_y0, render_x1, render_y1,
 			    dest_rowstride, dest_channels, dest_has_alpha,
 			    src_buf, src_width, src_height, src_rowstride, src_channels, src_has_alpha,
 			    scale_x, scale_y);
       return;
 
-    case ART_FILTER_TILES:
+    case GDK_INTERP_TILES:
       tile_make_weights (&filter, scale_x, scale_y, 1.0);
       break;
       
-    case ART_FILTER_BILINEAR:
+    case GDK_INTERP_BILINEAR:
       bilinear_make_fast_weights (&filter, scale_x, scale_y, 1.0);
       break;
       
-    case ART_FILTER_HYPER:
+    case GDK_INTERP_HYPER:
       bilinear_make_weights (&filter, scale_x, scale_y, 1.0);
       break;
     }

@@ -22,7 +22,7 @@
  */
 
 #include <config.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 
 
 
@@ -45,42 +45,37 @@
  * Return value: A newly-created pixbuf with a reference count of 1.
  **/
 GdkPixbuf *
-gdk_pixbuf_add_alpha (GdkPixbuf *pixbuf, gboolean substitute_color, guchar r, guchar g, guchar b)
+gdk_pixbuf_add_alpha (const GdkPixbuf *pixbuf,
+		      gboolean substitute_color, guchar r, guchar g, guchar b)
 {
-	ArtPixBuf *apb;
-	ArtPixBuf *new_apb;
 	GdkPixbuf *new_pixbuf;
 	int x, y;
 
 	g_return_val_if_fail (pixbuf != NULL, NULL);
+	g_return_val_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB, NULL);
+	g_return_val_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4, NULL);
+	g_return_val_if_fail (pixbuf->bits_per_sample == 8, NULL);
 
-	apb = pixbuf->art_pixbuf;
-	g_return_val_if_fail (apb->format == ART_PIX_RGB, NULL);
-	g_return_val_if_fail (apb->n_channels == 3 || apb->n_channels == 4, NULL);
-	g_return_val_if_fail (apb->bits_per_sample == 8, NULL);
-
-	if (apb->has_alpha) {
-		new_apb = art_pixbuf_duplicate (apb);
-		if (!new_apb)
+	if (pixbuf->has_alpha) {
+		new_pixbuf = gdk_pixbuf_copy (pixbuf);
+		if (!new_pixbuf)
 			return NULL;
 
-		return gdk_pixbuf_new_from_art_pixbuf (new_apb);
+		return new_pixbuf;
 	}
 
-	new_pixbuf = gdk_pixbuf_new (ART_PIX_RGB, TRUE, 8, apb->width, apb->height);
+	new_pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, pixbuf->width, pixbuf->height);
 	if (!new_pixbuf)
 		return NULL;
 
-	new_apb = new_pixbuf->art_pixbuf;
-
-	for (y = 0; y < apb->height; y++) {
+	for (y = 0; y < pixbuf->height; y++) {
 		guchar *src, *dest;
 		guchar tr, tg, tb;
 
-		src = apb->pixels + y * apb->rowstride;
-		dest = new_apb->pixels + y * new_apb->rowstride;
+		src = pixbuf->pixels + y * pixbuf->rowstride;
+		dest = new_pixbuf->pixels + y * new_pixbuf->rowstride;
 
-		for (x = 0; x < apb->width; x++) {
+		for (x = 0; x < pixbuf->width; x++) {
 			tr = *dest++ = *src++;
 			tg = *dest++ = *src++;
 			tb = *dest++ = *src++;
@@ -116,20 +111,14 @@ gdk_pixbuf_copy_area (const GdkPixbuf *src_pixbuf,
 		      GdkPixbuf *dest_pixbuf,
 		      int dest_x, int dest_y)
 {
-	const ArtPixBuf *src_apb;
-	ArtPixBuf       *dest_apb;
-
 	g_return_if_fail (src_pixbuf != NULL);
 	g_return_if_fail (dest_pixbuf != NULL);
 
-	src_apb = src_pixbuf->art_pixbuf;
-	dest_apb = dest_pixbuf->art_pixbuf;
+	g_return_if_fail (src_x >= 0 && src_x + width <= src_pixbuf->width);
+	g_return_if_fail (src_y >= 0 && src_y + height <= src_pixbuf->height);
 
-	g_return_if_fail (src_x >= 0 && src_x + width <= src_apb->width);
-	g_return_if_fail (src_y >= 0 && src_y + height <= src_apb->height);
-
-	g_return_if_fail (dest_x >= 0 && dest_x + width <= dest_apb->width);
-	g_return_if_fail (dest_y >= 0 && dest_y + height <= dest_apb->height);
+	g_return_if_fail (dest_x >= 0 && dest_x + width <= dest_pixbuf->width);
+	g_return_if_fail (dest_y >= 0 && dest_y + height <= dest_pixbuf->height);
 
 	/* This will perform format conversions automatically */
 
@@ -140,5 +129,5 @@ gdk_pixbuf_copy_area (const GdkPixbuf *src_pixbuf,
 			  (double) (dest_x - src_x),
 			  (double) (dest_y - src_y),
 			  1.0, 1.0,
-			  ART_FILTER_NEAREST);
+			  GDK_INTERP_NEAREST);
 }

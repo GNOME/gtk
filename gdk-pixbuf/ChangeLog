@@ -1,3 +1,97 @@
+2000-04-11  Federico Mena Quintero  <federico@helixcode.com>
+
+	Most of this patch is based on a patch by Havoc Pennington
+	(hp@redhat.com) to make GdkPixbuf's structures opaque and to
+	remove the libart dependency.
+
+	* gdk-pixbuf/gdk-pixbuf.h: Removed the public structures.
+	(GdkColorspace): New enum that for now only contains
+	GDK_COLORSPACE_RGB.
+	(GdkPixbufDestroyNotify): New type for the pixbuf's pixels destroy
+	notification function.
+	(GdkInterpType): New num with interpolation types.
+
+	* *.[ch]: Replace the libart stuff with our own stuff.
+
+	* pixops/*.[ch]: Likewise.
+
+	* gdk-pixbuf/gdk-pixbuf-private.h: New file with the private
+	declarations of the GdkPixbuf structures.
+
+	* gdk-pixbuf/gdk-pixbuf.c (gdk_pixbuf_new_from_art_pixbuf):
+	Removed function.
+	(gdk_pixbuf_get_format): Constify.
+	(gdk_pixbuf_get_n_channels): Constify.
+	(gdk_pixbuf_get_has_alpha): Constify.
+	(gdk_pixbuf_get_bits_per_sample): Constify.
+	(gdk_pixbuf_get_pixels): Constify.
+	(gdk_pixbuf_get_width): Constify.
+	(gdk_pixbuf_get_height): Constify.
+	(gdk_pixbuf_get_rowstride): Constify.
+
+	* gdk-pixbuf/gdk-pixbuf.c (gdk_pixbuf_copy): New function to copy
+	a pixbuf.
+
+	* gdk-pixbuf/gdk-pixbuf-data.c (gdk_pixbuf_new_from_data): Added a
+	bits_per_sample argument; currently only 8 bits per sample are
+	supported.
+
+	* gdk-pixbuf/gdk-pixbuf-animation.c (gdk_pixbuf_frame_get_pixbuf):
+	New accessor.
+	(gdk_pixbuf_frame_get_x_offset): New accessor.
+	(gdk_pixbuf_frame_get_y_offset): New accessor.
+	(gdk_pixbuf_frame_get_delay_time): New accessor.
+	(gdk_pixbuf_frame_get_action): New accessor.
+
+	* gdk-pixbuf/gdk-pixbuf-render.c
+	(gdk_pixbuf_render_pixmap_and_mask): Instead of returning a solid
+	mask rectangle for pixbufs without an alpha channel, set the
+	*mask_return to NULL.
+
+	* gdk-pixbuf/gdk-pixbuf-util.c (gdk_pixbuf_add_alpha): Constify.
+
+	* gdk-pixbuf/gdk-pixbuf-scale.c: Fix includes.
+
+	* gdk-pixbuf/gdk-pixbuf-scale.c (gdk_pixbuf_scale): Added some
+	preconditions.  Maybe we should also check for the colorspace,
+	bits per pixel, and such.
+	(gdk_pixbuf_composite): Likewise.
+	(gdk_pixbuf_composite_color): Likewise.
+	(gdk_pixbuf_scale_simple): Likewise, and fail gracefully if we
+	cannot allocate the new pixbuf.
+	(gdk_pixbuf_composite_color_simple): Likewise.
+
+	* gdk-pixbuf/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_render):
+	Use art_rgb_rgba_affine() or art_rgb_affine() since we no longer
+	have an ArtPixBuf.
+
+	* gdk-pixbuf/io-bmp.c: Fix includes.
+
+	* gdk-pixbuf/pixops/pixops.c (pixops_scale_nearest): Fixed cast in
+	an lvalue.
+
+	* TODO: Populated.
+
+	* configure.in: Removed checks for libart.
+
+	* gdk-pixbuf/Makefile.am: Removed references to libart.
+	(noinst_HEADERS): Added gdk-pixbuf-private.h.
+
+	* gdk-pixbuf/Makefile.am (libgdk_pixbuf_la_LDFLAGS): Incremented
+	the version number of the libtool library to indicate that this
+	definitely is not compatible with the old usage.  I know you love
+	me.  I know you do.
+
+	* configure.in: Bumped version number to 0.7.0.
+
+	* README: Updated.
+
+	* gdk-pixbuf-config.in (--libs): We no longer require libart.
+
+	* DEPENDS.libgdk_pixbuf: We no longer depend on libart.
+
+	* gdk-pixbuf.spec.in: Updated, but I don't guarantee anything.
+
 2000-04-06  Jonathan Blandford  <jrb@redhat.com>
 
 	* gdk-pixbuf/testanimation.c (main): add more info to the

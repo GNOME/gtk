@@ -34,11 +34,10 @@ Known bugs:
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
 
-
 
 /* 
    Header structure for sunras files.
@@ -171,7 +170,7 @@ static void RAS2State(struct rasterfile *RAS,
 
 	if (State->pixbuf == NULL) {
 		if (State->RasType == 32)
-			State->pixbuf = gdk_pixbuf_new(ART_PIX_RGB, TRUE,
+			State->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE,
 						       8,
 						       (gint)
 						       State->Header.width,
@@ -180,7 +179,7 @@ static void RAS2State(struct rasterfile *RAS,
 						       height);
 		else
 			State->pixbuf =
-			    gdk_pixbuf_new(ART_PIX_RGB, FALSE, 8,
+			    gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
 					   (gint) State->Header.width,
 					   (gint) State->Header.height);
 		if (State->prepared_func != NULL)
@@ -278,8 +277,7 @@ static void OneLine32(struct ras_progressive_state *context)
 	guchar *Pixels;
 
 	X = 0;
-	Pixels = context->pixbuf->art_pixbuf->pixels +
-	    context->pixbuf->art_pixbuf->rowstride * context->Lines;
+	Pixels = context->pixbuf->pixels + context->pixbuf->rowstride * context->Lines;
 	while (X < context->Header.width) {
 		/* The joys of having a BGR byteorder */
 		Pixels[X * 4 + 0] = context->LineBuf[X * 4 + 2];
@@ -296,8 +294,7 @@ static void OneLine24(struct ras_progressive_state *context)
 	guchar *Pixels;
 
 	X = 0;
-	Pixels = context->pixbuf->art_pixbuf->pixels +
-	    context->pixbuf->art_pixbuf->rowstride * context->Lines;
+	Pixels = context->pixbuf->pixels + context->pixbuf->rowstride * context->Lines;
 	while (X < context->Header.width) {
 		/* The joys of having a BGR byteorder */
 		Pixels[X * 3 + 0] = context->LineBuf[X * 3 + 2];
@@ -314,8 +311,7 @@ static void OneLine8(struct ras_progressive_state *context)
 	guchar *Pixels;
 
 	X = 0;
-	Pixels = context->pixbuf->art_pixbuf->pixels +
-	    context->pixbuf->art_pixbuf->rowstride * context->Lines;
+	Pixels = context->pixbuf->pixels + context->pixbuf->rowstride * context->Lines;
 	while (X < context->Header.width) {
 		/* The joys of having a BGR byteorder */
 		Pixels[X * 3 + 0] =
@@ -334,8 +330,7 @@ static void OneLine1(struct ras_progressive_state *context)
 	guchar *Pixels;
 
 	X = 0;
-	Pixels = context->pixbuf->art_pixbuf->pixels +
-	    context->pixbuf->art_pixbuf->rowstride * context->Lines;
+	Pixels = context->pixbuf->pixels + context->pixbuf->rowstride * context->Lines;
 	while (X < context->Header.width) {
 		int Bit;
 		

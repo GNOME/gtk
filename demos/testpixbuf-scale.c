@@ -3,15 +3,15 @@
 
 #include <stdio.h>
 
-ArtFilterLevel filter_level = ART_FILTER_BILINEAR;
+GdkInterpType interp_type = GDK_INTERP_BILINEAR;
 int overall_alpha = 255;
 GdkPixbuf *pixbuf;
 GtkWidget *darea;
   
 void
-set_filter_level (GtkWidget *widget, gpointer data)
+set_interp_type (GtkWidget *widget, gpointer data)
 {
-  filter_level = GPOINTER_TO_UINT (data);
+  interp_type = GPOINTER_TO_UINT (data);
   gtk_widget_queue_draw (darea);
 }
 
@@ -32,14 +32,14 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 
   gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
   
-  dest = gdk_pixbuf_new (ART_PIX_RGB, FALSE, 8, event->area.width, event->area.height);
+  dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, event->area.width, event->area.height);
 
   gdk_pixbuf_composite_color (pixbuf, dest,
 			      0, 0, event->area.width, event->area.height,
 			      -event->area.x, -event->area.y,
-			      (double) widget->allocation.width / pixbuf->art_pixbuf->width,
-			      (double) widget->allocation.height / pixbuf->art_pixbuf->height,
-			      filter_level, overall_alpha,
+			      (double) widget->allocation.width / gdk_pixbuf_get_width (pixbuf),
+			      (double) widget->allocation.height / gdk_pixbuf_get_height (pixbuf),
+			      interp_type, overall_alpha,
 			      event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
 
   gdk_pixbuf_render_to_drawable (dest, widget->window, widget->style->fg_gc[GTK_STATE_NORMAL],
@@ -87,28 +87,28 @@ main(int argc, char **argv)
 	
 	menuitem = gtk_menu_item_new_with_label ("NEAREST");
 	gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			    GTK_SIGNAL_FUNC (set_filter_level),
-			    GUINT_TO_POINTER (ART_FILTER_NEAREST));
+			    GTK_SIGNAL_FUNC (set_interp_type),
+			    GUINT_TO_POINTER (GDK_INTERP_NEAREST));
 	gtk_widget_show (menuitem);
 	gtk_container_add (GTK_CONTAINER (menu), menuitem);
 	
 	menuitem = gtk_menu_item_new_with_label ("BILINEAR");
 	gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			    GTK_SIGNAL_FUNC (set_filter_level),
-			    GUINT_TO_POINTER (ART_FILTER_BILINEAR));
+			    GTK_SIGNAL_FUNC (set_interp_type),
+			    GUINT_TO_POINTER (GDK_INTERP_BILINEAR));
 	gtk_widget_show (menuitem);
 	gtk_container_add (GTK_CONTAINER (menu), menuitem);
 	
 	menuitem = gtk_menu_item_new_with_label ("TILES");
 	gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			    GTK_SIGNAL_FUNC (set_filter_level),
-			    GUINT_TO_POINTER (ART_FILTER_TILES));
+			    GTK_SIGNAL_FUNC (set_interp_type),
+			    GUINT_TO_POINTER (GDK_INTERP_TILES));
 	gtk_container_add (GTK_CONTAINER (menu), menuitem);
 
 	menuitem = gtk_menu_item_new_with_label ("HYPER");
 	gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			    GTK_SIGNAL_FUNC (set_filter_level),
-			    GUINT_TO_POINTER (ART_FILTER_HYPER));
+			    GTK_SIGNAL_FUNC (set_interp_type),
+			    GUINT_TO_POINTER (GDK_INTERP_HYPER));
 	gtk_container_add (GTK_CONTAINER (menu), menuitem);
 
 	optionmenu = gtk_option_menu_new ();
@@ -145,8 +145,8 @@ main(int argc, char **argv)
 			    GTK_SIGNAL_FUNC (expose_cb), NULL);
 
 	gtk_window_set_default_size (GTK_WINDOW (window),
-				     pixbuf->art_pixbuf->width,
-				     scratch_requisition.height + pixbuf->art_pixbuf->height);
+				     gdk_pixbuf_get_width (pixbuf),
+				     scratch_requisition.height + gdk_pixbuf_get_height (pixbuf));
 	
 	gtk_widget_show_all (window);
 

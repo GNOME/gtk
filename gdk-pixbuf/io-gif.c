@@ -59,7 +59,7 @@
 #include <config.h>
 #include <stdio.h>
 #include <string.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
 
@@ -666,7 +666,7 @@ gif_get_lzw (GifContext *context)
 	gint v;
 
 	if (context->pixbuf == NULL) {
-		context->pixbuf = gdk_pixbuf_new (ART_PIX_RGB,
+		context->pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
 						  context->gif89.transparent != -1,
 						  8,
 						  context->frame_len,

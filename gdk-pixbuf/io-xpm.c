@@ -24,10 +24,11 @@
 
 #include <config.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <glib.h>
 #include <gdk/gdk.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 
 
 
@@ -309,11 +310,11 @@ mem_buffer (enum buf_op op, gpointer handle)
 	return NULL;
 }
 
-/* Destroy notification function for the libart pixbuf */
+/* Destroy notification function for the pixbuf */
 static void
-free_buffer (gpointer user_data, gpointer data)
+free_buffer (guchar *pixels, gpointer data)
 {
-	free (data);
+	free (pixels);
 }
 
 /* This function does all the work. */
@@ -429,7 +430,7 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 	g_free (colors);
 	g_free (name_buf);
 
-	return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, is_trans,
+	return gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, is_trans, 8,
 					 w, h, is_trans ? (w * 4) : (w * 3),
 					 free_buffer, NULL);
 }

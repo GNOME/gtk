@@ -30,7 +30,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <tiffio.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
 
@@ -68,7 +68,7 @@ gdk_pixbuf__tiff_image_load_real (FILE *f, TiffData *context)
 	TIFFGetField (tiff, TIFFTAG_IMAGEWIDTH, &w);
 	TIFFGetField (tiff, TIFFTAG_IMAGELENGTH, &h);
 	num_pixs = w * h;
-	pixbuf = gdk_pixbuf_new (ART_PIX_RGB, TRUE, 8, w, h);
+	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
 
 	if (context)
 		(* context->prepare_func) (pixbuf, context->user_data);

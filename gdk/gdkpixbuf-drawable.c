@@ -26,7 +26,7 @@
 #include <config.h>
 #include <stdio.h>
 #include <string.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 
 #if (G_BYTE_ORDER == G_LITTLE_ENDIAN)
 #define LITTLE
@@ -54,7 +54,7 @@ static guint32 mask_table[] = {
   no alpha
 */
 static void
-rgb1 (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb1 (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -93,7 +93,7 @@ rgb1 (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
   with alpha
 */
 static void
-rgb1a (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb1a (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -145,7 +145,7 @@ rgb1a (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
   no alpha
 */
 static void
-rgb8 (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb8 (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -183,7 +183,7 @@ rgb8 (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
   with alpha
 */
 static void
-rgb8a (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb8a (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -235,7 +235,7 @@ rgb8a (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
   data in lsb format
 */
 static void
-rgb565lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb565lsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -300,7 +300,7 @@ rgb565lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
   data in msb format
 */
 static void
-rgb565msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb565msb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -365,7 +365,7 @@ rgb565msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
   data in lsb format
 */
 static void
-rgb565alsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb565alsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -418,7 +418,7 @@ rgb565alsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
   data in msb format
 */
 static void
-rgb565amsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb565amsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -467,7 +467,7 @@ rgb565amsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
   data in lsb format
 */
 static void
-rgb555lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb555lsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -532,7 +532,7 @@ rgb555lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
   data in msb format
 */
 static void
-rgb555msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb555msb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -593,7 +593,7 @@ rgb555msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
   data in lsb format
 */
 static void
-rgb555alsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb555alsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -646,7 +646,7 @@ rgb555alsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
   data in msb format
 */
 static void
-rgb555amsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb555amsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -695,7 +695,7 @@ rgb555amsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 
 
 static void
-rgb888alsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb888alsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -728,7 +728,7 @@ rgb888alsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 }
 
 static void
-rgb888lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb888lsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -758,7 +758,7 @@ rgb888lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 }
 
 static void
-rgb888amsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb888amsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -806,7 +806,7 @@ rgb888amsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 }
 
 static void
-rgb888msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
+rgb888msb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap)
 {
 	int xx, yy;
 	int width, height;
@@ -841,7 +841,7 @@ rgb888msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
   run quite slow
 */
 static void
-convert_real_slow (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *cmap, int alpha)
+convert_real_slow (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *cmap, int alpha)
 {
 	int xx, yy;
 	int width, height;
@@ -899,7 +899,7 @@ convert_real_slow (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *
 	}
 }
 
-typedef void (* cfunc) (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *cmap);
+typedef void (* cfunc) (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *cmap);
 
 static cfunc convert_map[] = {
 	rgb1,rgb1,rgb1a,rgb1a,
@@ -917,7 +917,7 @@ static cfunc convert_map[] = {
   conversion function.
 */
 static void
-rgbconvert (GdkImage *image, art_u8 *pixels, int rowstride, int alpha, GdkColormap *cmap)
+rgbconvert (GdkImage *image, guchar *pixels, int rowstride, int alpha, GdkColormap *cmap)
 {
 	int index = (image->byte_order == GDK_MSB_FIRST) | (alpha != 0) << 1;
 	int bank=5;		/* default fallback converter */
@@ -1020,7 +1020,9 @@ rgbconvert (GdkImage *image, art_u8 *pixels, int rowstride, int alpha, GdkColorm
  * be undefined.
  *
  * Return value: The same pixbuf as @dest if it was non-NULL, or a newly-created
- * pixbuf with a reference count of 1 if no destination pixbuf was specified.
+ * pixbuf with a reference count of 1 if no destination pixbuf was specified; in
+ * the latter case, NULL will be returned if not enough memory could be
+ * allocated for the pixbuf to be created.
  **/
 GdkPixbuf *
 gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
@@ -1031,7 +1033,6 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 {
 	GdkWindowType window_type;
 	int src_width, src_height;
-	ArtPixBuf *apb = NULL;
 	GdkImage *image;
 	int rowstride, bpp, alpha;
 
@@ -1054,11 +1055,9 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 	if (!dest)
 		g_return_val_if_fail (dest_x == 0 && dest_y == 0, NULL);
 	else {
-		apb = dest->art_pixbuf;
-
-		g_return_val_if_fail (apb->format == ART_PIX_RGB, NULL);
-		g_return_val_if_fail (apb->n_channels == 3 || apb->n_channels == 4, NULL);
-		g_return_val_if_fail (apb->bits_per_sample == 8, NULL);
+		g_return_val_if_fail (dest->colorspace == GDK_COLORSPACE_RGB, NULL);
+		g_return_val_if_fail (dest->n_channels == 3 || dest->n_channels == 4, NULL);
+		g_return_val_if_fail (dest->bits_per_sample == 8, NULL);
 	}
 
 	/* Coordinate sanity checks */
@@ -1070,8 +1069,8 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 
 	if (dest) {
 		g_return_val_if_fail (dest_x >= 0 && dest_y >= 0, NULL);
-		g_return_val_if_fail (dest_x + width <= apb->width, NULL);
-		g_return_val_if_fail (dest_y + height <= apb->height, NULL);
+		g_return_val_if_fail (dest_x + width <= dest->width, NULL);
+		g_return_val_if_fail (dest_y + height <= dest->height, NULL);
 	}
 
 	if (window_type != GDK_WINDOW_PIXMAP) {
@@ -1096,33 +1095,31 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 
 	/* Get Image in ZPixmap format (packed bits). */
 	image = gdk_image_get (src, src_x, src_y, width, height);
-	g_return_val_if_fail( image != NULL, NULL);
+	g_return_val_if_fail (image != NULL, NULL);
 
 	/* Create the pixbuf if needed */
 	if (!dest) {
-		dest = gdk_pixbuf_new (ART_PIX_RGB, FALSE, 8, width, height);
+		dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, width, height);
 		if (!dest) {
 			gdk_image_destroy(image);
 			return NULL;
 		}
-
-		apb = dest->art_pixbuf;
 	}
 
 	/* Get the colormap if needed */
 	if (window_type != GDK_WINDOW_PIXMAP)
 		cmap = gdk_window_get_colormap (src);
 
-	alpha = gdk_pixbuf_get_has_alpha(dest);
-	rowstride = gdk_pixbuf_get_rowstride(dest);
-	bpp = alpha?4:3;
+	alpha = dest->has_alpha;
+	rowstride = dest->rowstride;
+	bpp = alpha ? 4 : 3;
 
 	/* we offset into the image data based on the position we are retrieving from */
-	rgbconvert(image, gdk_pixbuf_get_pixels(dest) +
-		   (dest_y * rowstride) + (dest_x * bpp),
-		   rowstride,
-		   alpha,
-		   cmap);
+	rgbconvert (image, dest->pixels +
+		    (dest_y * rowstride) + (dest_x * bpp),
+		    rowstride,
+		    alpha,
+		    cmap);
 
 	gdk_image_destroy(image);
 

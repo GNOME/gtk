@@ -24,12 +24,9 @@
 
 #include <config.h>
 #include <math.h>
-#include <libart_lgpl/art_misc.h>
-#include <libart_lgpl/art_affine.h>
-#include <libart_lgpl/art_pixbuf.h>
-#include <libart_lgpl/art_rgb_pixbuf_affine.h>
-#include <libart_lgpl/art_alphagamma.h>
+#include <stdlib.h>
 #include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 
 
 
@@ -58,7 +55,7 @@ gdk_pixbuf_ref (GdkPixbuf *pixbuf)
  * gdk_pixbuf_unref:
  * @pixbuf: A pixbuf.
  *
- * Removes a reference from a pixbuf.  It will be destroyed when the reference
+ * Removes a reference from a pixbuf, which will be destroyed when the reference
  * count drops to zero.
  **/
 void
@@ -70,53 +67,25 @@ gdk_pixbuf_unref (GdkPixbuf *pixbuf)
 	pixbuf->ref_count--;
 
 	if (pixbuf->ref_count == 0) {
-		art_pixbuf_free (pixbuf->art_pixbuf);
-		pixbuf->art_pixbuf = NULL;
+		if (pixbuf->destroy_fn)
+			(* pixbuf->destroy_fn) (pixbuf->pixels, pixbuf->destroy_fn_data);
+
 		g_free (pixbuf);
 	}
 }
 
 
 
-/* Wrap a libart pixbuf */
-
-/**
- * gdk_pixbuf_new_from_art_pixbuf:
- * @art_pixbuf: A libart pixbuf.
- *
- * Creates a #GdkPixbuf by wrapping a libart pixbuf.
- *
- * Return value: A newly-created #GdkPixbuf structure with a reference count of
- * 1.
- **/
-GdkPixbuf *
-gdk_pixbuf_new_from_art_pixbuf (ArtPixBuf *art_pixbuf)
-{
-	GdkPixbuf *pixbuf;
-
-	g_return_val_if_fail (art_pixbuf != NULL, NULL);
-
-	pixbuf = g_new (GdkPixbuf, 1);
-	pixbuf->ref_count = 1;
-	pixbuf->art_pixbuf = art_pixbuf;
-
-	return pixbuf;
-}
-
-/* Destroy notification function for gdk_pixbuf_new() */
+/* Used as the destroy notification function for gdk_pixbuf_new() */
 static void
-free_buffer (gpointer user_data, gpointer data)
+free_buffer (guchar *pixels, gpointer data)
 {
-	free (data);
+	free (pixels);
 }
-
-
-
-/* Create an empty pixbuf */
 
 /**
  * gdk_pixbuf_new:
- * @format: Image format.
+ * @colorspace: Color space for image.
  * @has_alpha: Whether the image should have transparency information.
  * @bits_per_sample: Number of bits per color sample.
  * @width: Width of image in pixels.
@@ -124,20 +93,20 @@ free_buffer (gpointer user_data, gpointer data)
  *
  * Creates a new #GdkPixbuf structure and allocates a buffer for it.  The buffer
  * has an optimal rowstride.  Note that the buffer is not cleared; you will have
- * to fill it completely.
+ * to fill it completely yourself.
  *
  * Return value: A newly-created #GdkPixbuf with a reference count of 1, or NULL
  * if not enough memory could be allocated for the image buffer.
  **/
 GdkPixbuf *
-gdk_pixbuf_new (ArtPixFormat format, gboolean has_alpha, int bits_per_sample,
+gdk_pixbuf_new (GdkColorspace colorspace, gboolean has_alpha, int bits_per_sample,
 		int width, int height)
 {
 	guchar *buf;
 	int channels;
 	int rowstride;
 
-	g_return_val_if_fail (format == ART_PIX_RGB, NULL);
+	g_return_val_if_fail (colorspace == GDK_COLORSPACE_RGB, NULL);
 	g_return_val_if_fail (bits_per_sample == 8, NULL);
 	g_return_val_if_fail (width > 0, NULL);
 	g_return_val_if_fail (height > 0, NULL);
@@ -151,29 +120,70 @@ gdk_pixbuf_new (ArtPixFormat format, gboolean has_alpha, int bits_per_sample,
 	if (!buf)
 		return NULL;
 
-	return gdk_pixbuf_new_from_data (buf, format, has_alpha, width, height, rowstride,
+	return gdk_pixbuf_new_from_data (buf, colorspace, has_alpha, bits_per_sample,
+					 width, height, rowstride,
 					 free_buffer, NULL);
+}
+
+/**
+ * gdk_pixbuf_copy:
+ * @pixbuf: A pixbuf.
+ * 
+ * Creates a new #GdkPixbuf with a copy of the information in the specified
+ * @pixbuf.
+ * 
+ * Return value: A newly-created pixbuf with a reference count of 1, or NULL if
+ * not enough memory could be allocated.
+ **/
+GdkPixbuf *
+gdk_pixbuf_copy (const GdkPixbuf *pixbuf)
+{
+	guchar *buf;
+	int size;
+
+	g_return_val_if_fail (pixbuf != NULL, NULL);
+
+	/* Calculate a semi-exact size.  Here we copy with full rowstrides;
+	 * maybe we should copy each row individually with the minimum
+	 * rowstride?
+	 */
+
+	size = ((pixbuf->height - 1) * pixbuf->rowstride +
+		pixbuf->width * ((pixbuf->n_channels * pixbuf->bits_per_sample + 7) / 8));
+
+	buf = malloc (size * sizeof (guchar));
+	if (!buf)
+		return NULL;
+
+	memcpy (buf, pixbuf->pixels, size);
+
+	return gdk_pixbuf_new_from_data (buf,
+					 pixbuf->colorspace, pixbuf->has_alpha,
+					 pixbuf->bits_per_sample,
+					 pixbuf->width, pixbuf->height,
+					 pixbuf->rowstride,
+					 free_buffer,
+					 NULL);
 }
 
 
 
-/* Convenience functions */
+/* Accessors */
 
 /**
- * gdk_pixbuf_get_format:
+ * gdk_pixbuf_get_colorspace:
  * @pixbuf: A pixbuf.
  *
- * Queries the image format (color model) of a pixbuf.
+ * Queries the color space of a pixbuf.
  *
- * Return value: Image format.
+ * Return value: Color space.
  **/
-ArtPixFormat
-gdk_pixbuf_get_format (GdkPixbuf *pixbuf)
+GdkColorspace
+gdk_pixbuf_get_colorspace (const GdkPixbuf *pixbuf)
 {
-	g_return_val_if_fail (pixbuf != NULL, ART_PIX_RGB);
-	g_assert (pixbuf->art_pixbuf != NULL);
+	g_return_val_if_fail (pixbuf != NULL, GDK_COLORSPACE_RGB);
 
-	return pixbuf->art_pixbuf->format;
+	return pixbuf->colorspace;
 }
 
 /**
@@ -185,12 +195,11 @@ gdk_pixbuf_get_format (GdkPixbuf *pixbuf)
  * Return value: Number of channels.
  **/
 int
-gdk_pixbuf_get_n_channels (GdkPixbuf *pixbuf)
+gdk_pixbuf_get_n_channels (const GdkPixbuf *pixbuf)
 {
 	g_return_val_if_fail (pixbuf != NULL, -1);
-	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return pixbuf->art_pixbuf->n_channels;
+	return pixbuf->n_channels;
 }
 
 /**
@@ -202,12 +211,11 @@ gdk_pixbuf_get_n_channels (GdkPixbuf *pixbuf)
  * Return value: TRUE if it has an alpha channel, FALSE otherwise.
  **/
 gboolean
-gdk_pixbuf_get_has_alpha (GdkPixbuf *pixbuf)
+gdk_pixbuf_get_has_alpha (const GdkPixbuf *pixbuf)
 {
 	g_return_val_if_fail (pixbuf != NULL, -1);
-	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return pixbuf->art_pixbuf->has_alpha;
+	return pixbuf->has_alpha ? TRUE : FALSE;
 }
 
 /**
@@ -219,12 +227,11 @@ gdk_pixbuf_get_has_alpha (GdkPixbuf *pixbuf)
  * Return value: Number of bits per color sample.
  **/
 int
-gdk_pixbuf_get_bits_per_sample (GdkPixbuf *pixbuf)
+gdk_pixbuf_get_bits_per_sample (const GdkPixbuf *pixbuf)
 {
 	g_return_val_if_fail (pixbuf != NULL, -1);
-	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return pixbuf->art_pixbuf->bits_per_sample;
+	return pixbuf->bits_per_sample;
 }
 
 /**
@@ -236,12 +243,11 @@ gdk_pixbuf_get_bits_per_sample (GdkPixbuf *pixbuf)
  * Return value: A pointer to the pixbuf's pixel data.
  **/
 guchar *
-gdk_pixbuf_get_pixels (GdkPixbuf *pixbuf)
+gdk_pixbuf_get_pixels (const GdkPixbuf *pixbuf)
 {
 	g_return_val_if_fail (pixbuf != NULL, NULL);
-	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return pixbuf->art_pixbuf->pixels;
+	return pixbuf->pixels;
 }
 
 /**
@@ -253,12 +259,11 @@ gdk_pixbuf_get_pixels (GdkPixbuf *pixbuf)
  * Return value: Width in pixels.
  **/
 int
-gdk_pixbuf_get_width (GdkPixbuf *pixbuf)
+gdk_pixbuf_get_width (const GdkPixbuf *pixbuf)
 {
 	g_return_val_if_fail (pixbuf != NULL, -1);
-	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return pixbuf->art_pixbuf->width;
+	return pixbuf->width;
 }
 
 /**
@@ -270,46 +275,44 @@ gdk_pixbuf_get_width (GdkPixbuf *pixbuf)
  * Return value: Height in pixels.
  **/
 int
-gdk_pixbuf_get_height (GdkPixbuf *pixbuf)
+gdk_pixbuf_get_height (const GdkPixbuf *pixbuf)
 {
 	g_return_val_if_fail (pixbuf != NULL, -1);
-	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return pixbuf->art_pixbuf->height;
+	return pixbuf->height;
 }
 
 /**
  * gdk_pixbuf_get_rowstride:
  * @pixbuf: A pixbuf.
  *
- * Queries the rowstride of a pixbuf, or the number of bytes between rows.
+ * Queries the rowstride of a pixbuf, which is the number of bytes between rows.
  *
  * Return value: Number of bytes between rows.
  **/
 int
-gdk_pixbuf_get_rowstride (GdkPixbuf *pixbuf)
+gdk_pixbuf_get_rowstride (const GdkPixbuf *pixbuf)
 {
 	g_return_val_if_fail (pixbuf != NULL, -1);
-	g_assert (pixbuf->art_pixbuf != NULL);
 
-	return pixbuf->art_pixbuf->rowstride;
+	return pixbuf->rowstride;
 }
 
 
 
 /* General initialization hooks */
-const guint gdk_pixbuf_major_version=GDK_PIXBUF_MAJOR,
-  gdk_pixbuf_minor_version=GDK_PIXBUF_MINOR,
-  gdk_pixbuf_micro_version=GDK_PIXBUF_MICRO;
+const guint gdk_pixbuf_major_version = GDK_PIXBUF_MAJOR;
+const guint gdk_pixbuf_minor_version = GDK_PIXBUF_MINOR;
+const guint gdk_pixbuf_micro_version = GDK_PIXBUF_MICRO;
 
 const char *gdk_pixbuf_version = GDK_PIXBUF_VERSION;
 
 void
-gdk_pixbuf_preinit(gpointer app, gpointer modinfo)
+gdk_pixbuf_preinit (gpointer app, gpointer modinfo)
 {
 }
 
 void
-gdk_pixbuf_postinit(gpointer app, gpointer modinfo)
+gdk_pixbuf_postinit (gpointer app, gpointer modinfo)
 {
 }

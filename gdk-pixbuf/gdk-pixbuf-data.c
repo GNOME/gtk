@@ -22,48 +22,56 @@
 
 #include <config.h>
 #include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 
 
 
 /**
  * gdk_pixbuf_new_from_data:
  * @data: Image data in 8-bit/sample packed format.
- * @format: Color format used for the data.
+ * @colorspace: Colorspace for the image data.
  * @has_alpha: Whether the data has an opacity channel.
+ * @bits_per_sample: Number of bits per sample.
  * @width: Width of the image in pixels.
  * @height: Height of the image in pixels.
  * @rowstride: Distance in bytes between rows.
- * @dfunc: Function used to free the data when the pixbuf's reference count
+ * @destroy_fn: Function used to free the data when the pixbuf's reference count
  * drops to zero, or NULL if the data should not be freed.
- * @dfunc_data: Closure data to pass to the destroy notification function.
+ * @destroy_fn_data: Closure data to pass to the destroy notification function.
  * 
- * Creates a new #GdkPixbuf out of in-memory RGB data.
+ * Creates a new #GdkPixbuf out of in-memory image data.  Currently only RGB
+ * images with 8 bits per sample are supported.
  * 
  * Return value: A newly-created #GdkPixbuf structure with a reference count of
  * 1.
  **/
 GdkPixbuf *
-gdk_pixbuf_new_from_data (const guchar *data, ArtPixFormat format, gboolean has_alpha,
-			  int width, int height, int rowstride,
-			  ArtDestroyNotify dfunc, gpointer dfunc_data)
+gdk_pixbuf_new_from_data (const guchar *data, GdkColorspace colorspace, gboolean has_alpha,
+			  int bits_per_sample, int width, int height, int rowstride,
+			  GdkPixbufDestroyNotify destroy_fn, gpointer destroy_fn_data)
 {
-	ArtPixBuf *art_pixbuf;
+	GdkPixbuf *pixbuf;
 
 	/* Only 8-bit/sample RGB buffers are supported for now */
 
 	g_return_val_if_fail (data != NULL, NULL);
-	g_return_val_if_fail (format == ART_PIX_RGB, NULL);
+	g_return_val_if_fail (colorspace == GDK_COLORSPACE_RGB, NULL);
+	g_return_val_if_fail (bits_per_sample == 8, NULL);
 	g_return_val_if_fail (width > 0, NULL);
 	g_return_val_if_fail (height > 0, NULL);
 
-	if (has_alpha)
-		art_pixbuf = art_pixbuf_new_rgba_dnotify ((art_u8 *)data, width, height, rowstride,
-							  dfunc_data, dfunc);
-	else
-		art_pixbuf = art_pixbuf_new_rgb_dnotify ((art_u8 *)data, width, height, rowstride,
-							 dfunc_data, dfunc);
+	pixbuf = g_new (GdkPixbuf, 1);
+	pixbuf->ref_count = 1;
+	pixbuf->colorspace = colorspace;
+	pixbuf->n_channels = has_alpha ? 4 : 3;
+	pixbuf->bits_per_sample = bits_per_sample;
+	pixbuf->has_alpha = has_alpha ? TRUE : FALSE;
+	pixbuf->width = width;
+	pixbuf->height = height;
+	pixbuf->rowstride = rowstride;
+	pixbuf->pixels = (guchar *) data;
+	pixbuf->destroy_fn = destroy_fn;
+	pixbuf->destroy_fn_data = destroy_fn_data;
 
-	g_assert (art_pixbuf != NULL);
-
-	return gdk_pixbuf_new_from_art_pixbuf (art_pixbuf);
+	return pixbuf;
 }

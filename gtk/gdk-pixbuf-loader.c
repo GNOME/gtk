@@ -27,6 +27,7 @@
 
 #include <config.h>
 #include <gtk/gtksignal.h>
+#include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-loader.h"
 #include "gdk-pixbuf-io.h"
 

@@ -47,7 +47,7 @@
 #include <string.h>
 #include <setjmp.h>
 #include <jpeglib.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
 
@@ -111,11 +111,11 @@ fatal_error_handler (j_common_ptr cinfo)
 	return;
 }
 
-/* Destroy notification function for the libart pixbuf */
+/* Destroy notification function for the pixbuf */
 static void
-free_buffer (gpointer user_data, gpointer data)
+free_buffer (guchar *pixels, gpointer data)
 {
-	free (data);
+	free (pixels);
 }
 
 
@@ -215,7 +215,7 @@ gdk_pixbuf__jpeg_image_load (FILE *f)
 	jpeg_finish_decompress (&cinfo);
 	jpeg_destroy_decompress (&cinfo);
 
-	return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, FALSE,
+	return gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, FALSE, 8,
 					 w, h, w * 3,
 					 free_buffer, NULL);
 }
@@ -451,8 +451,8 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size)
 				return FALSE;
 			}
 #endif
-			context->pixbuf = gdk_pixbuf_new(ART_PIX_RGB, 
-							 /*have_alpha*/ FALSE,
+			context->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, 
+							 FALSE,
 							 8, 
 							 cinfo->image_width,
 							 cinfo->image_height);
@@ -463,7 +463,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size)
 			}
 
 			/* Use pixbuf buffer to store decompressed data */
-			context->dptr = context->pixbuf->art_pixbuf->pixels;
+			context->dptr = context->pixbuf->pixels;
 
 			/* Notify the client that we are ready to go */
 			(* context->prepared_func) (context->pixbuf,
@@ -497,7 +497,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size)
 				rowptr = context->dptr;
 				for (i=0; i < cinfo->rec_outbuf_height; i++) {
 					*lptr++ = rowptr;
-					rowptr += context->pixbuf->art_pixbuf->rowstride;
+					rowptr += context->pixbuf->rowstride;
 				}
 
 				nlines = jpeg_read_scanlines (cinfo, lines,
@@ -509,7 +509,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size)
 				if (cinfo->output_components == 1)
 					explode_gray_into_buf (cinfo, lines);
 
-				context->dptr += nlines * context->pixbuf->art_pixbuf->rowstride;
+				context->dptr += nlines * context->pixbuf->rowstride;
 
 				/* send updated signal */
 				(* context->updated_func) (context->pixbuf,

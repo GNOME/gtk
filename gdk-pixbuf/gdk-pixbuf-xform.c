@@ -1,7 +1,16 @@
+/* FIXME FIXME FIXME
+ *
+ * This file is not being used.  The gdk_pixbuf_scale() here is not useful
+ * anymore, since we have the new functions in gdk-pixbuf-scale.c.
+ *
+ * The rotation function needs to be implemented without libart if it is
+ * to go inside the GdkPixbuf library.
+ */
+
 GdkPixbuf *
 gdk_pixbuf_scale (const GdkPixbuf *pixbuf, gint w, gint h)
 {
-	art_u8 *pixels;
+	guchar *pixels;
 	gint rowstride;
 	double affine[6];
 	ArtAlphaGamma *alphagamma;
@@ -12,10 +21,10 @@ gdk_pixbuf_scale (const GdkPixbuf *pixbuf, gint w, gint h)
 
 	affine[1] = affine[2] = affine[4] = affine[5] = 0;
 
-	affine[0] = w / (double)(pixbuf->art_pixbuf->width);
-	affine[3] = h / (double)(pixbuf->art_pixbuf->height);
+	affine[0] = w / (double)(pixbuf->width);
+	affine[3] = h / (double)(pixbuf->height);
 
-	/* rowstride = w * pixbuf->art_pixbuf->n_channels; */
+	/* rowstride = w * pixbuf->n_channels; */
 	rowstride = w * 3;
 
 	pixels = art_alloc (h * rowstride);

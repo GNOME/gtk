@@ -35,12 +35,10 @@ Known bugs:
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
-#include <gdk-pixbuf/gdk-pixbuf-io.h>
+#include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf-io.h"
+
 
-
-
-
 
 /* 
 
@@ -287,12 +285,12 @@ static void DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 	if (State->pixbuf == NULL) {
 		if (State->Type == 32)
 			State->pixbuf =
-			    gdk_pixbuf_new(ART_PIX_RGB, TRUE, 8,
+			    gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8,
 					   (gint) State->Header.width,
 					   (gint) State->Header.height);
 		else
 			State->pixbuf =
-			    gdk_pixbuf_new(ART_PIX_RGB, FALSE, 8,
+			    gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
 					   (gint) State->Header.width,
 					   (gint) State->Header.height);
 
@@ -387,14 +385,13 @@ static void OneLine32(struct bmp_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    (context->Header.height - context->Lines - 1);
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  (context->Header.height - context->Lines - 1));
 	else
-		Pixels =
-		    context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    context->Lines;
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  context->Lines);
 	while (X < context->Header.width) {
 		Pixels[X * 4 + 0] = context->LineBuf[X * 4 + 2];
 		Pixels[X * 4 + 1] = context->LineBuf[X * 4 + 1];
@@ -412,14 +409,13 @@ static void OneLine24(struct bmp_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    (context->Header.height - context->Lines - 1);
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  (context->Header.height - context->Lines - 1));
 	else
-		Pixels =
-		    context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    context->Lines;
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  context->Lines);
 	while (X < context->Header.width) {
 		Pixels[X * 3 + 0] = context->LineBuf[X * 3 + 2];
 		Pixels[X * 3 + 1] = context->LineBuf[X * 3 + 1];
@@ -436,14 +432,13 @@ static void OneLine8(struct bmp_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    (context->Header.height - context->Lines - 1);
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  (context->Header.height - context->Lines - 1));
 	else
-		Pixels =
-		    context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    context->Lines;
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  context->Lines);
 	while (X < context->Header.width) {
 		Pixels[X * 3 + 0] =
 		    context->HeaderBuf[4 * context->LineBuf[X] + 56];
@@ -462,14 +457,13 @@ static void OneLine4(struct bmp_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    (context->Header.height - context->Lines - 1);
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  (context->Header.height - context->Lines - 1));
 	else
-		Pixels =
-		    context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    context->Lines;
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  context->Lines);
 
 	while (X < context->Header.width) {
 		guchar Pix;
@@ -504,14 +498,13 @@ static void OneLine1(struct bmp_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    (context->Header.height - context->Lines - 1);
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  (context->Header.height - context->Lines - 1));
 	else
-		Pixels =
-		    context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    context->Lines;
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  context->Lines);
 	while (X < context->Header.width) {
 		gint Bit;
 

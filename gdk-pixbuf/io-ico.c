@@ -37,11 +37,10 @@ Known bugs:
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
+
 
-
-
 
 /* 
 
@@ -345,7 +344,7 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 
 	if (State->pixbuf == NULL) {
 		State->pixbuf =
-		    gdk_pixbuf_new(ART_PIX_RGB, TRUE, 8,
+		    gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8,
 				   (gint) State->Header.width,
 				   (gint) State->Header.height);
 
@@ -433,13 +432,13 @@ static void OneLine24(struct ico_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    (context->Header.height - context->Lines - 1);
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  (context->Header.height - context->Lines - 1));
 	else
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    context->Lines;
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  context->Lines);
 	while (X < context->Header.width) {
 		Pixels[X * 4 + 0] = context->LineBuf[X * 3 + 2];
 		Pixels[X * 4 + 1] = context->LineBuf[X * 3 + 1];
@@ -456,13 +455,13 @@ static void OneLine8(struct ico_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    (context->Header.height - context->Lines - 1);
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  (context->Header.height - context->Lines - 1));
 	else
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    context->Lines;
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  context->Lines);
 	while (X < context->Header.width) {
 		/* The joys of having a BGR byteorder */
 		Pixels[X * 4 + 0] =
@@ -481,13 +480,13 @@ static void OneLine4(struct ico_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    (context->Header.height - context->Lines - 1);
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  (context->Header.height - context->Lines - 1));
 	else
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    context->Lines;
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  context->Lines);
 	
 	while (X < context->Header.width) {
 		guchar Pix;
@@ -522,13 +521,13 @@ static void OneLine1(struct ico_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    (context->Header.height - context->Lines - 1);
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  (context->Header.height - context->Lines - 1));
 	else
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    context->Lines;
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  context->Lines);
 	while (X < context->Header.width) {
 		int Bit;
 
@@ -549,13 +548,13 @@ static void OneLineTransp(struct ico_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    (2*context->Header.height - context->Lines - 1);
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  (2*context->Header.height - context->Lines - 1));
 	else
-		Pixels = context->pixbuf->art_pixbuf->pixels +
-		    gdk_pixbuf_get_rowstride(context->pixbuf) *
-		    (context->Lines-context->Header.height);
+		Pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride *
+			  (context->Lines-context->Header.height));
 	while (X < context->Header.width) {
 		int Bit;
 

@@ -24,8 +24,9 @@
 
 #include <config.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <png.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
 
@@ -139,11 +140,11 @@ setup_png_transformations(png_structp png_read_ptr, png_infop png_info_ptr,
 #endif
 }
 
-/* Destroy notification function for the libart pixbuf */
+/* Destroy notification function for the pixbuf */
 static void
-free_buffer (gpointer user_data, gpointer data)
+free_buffer (guchar *pixels, gpointer data)
 {
-	free (data);
+	free (pixels);
 }
 
 /* Shared library entry point */
@@ -210,11 +211,11 @@ gdk_pixbuf__png_image_load (FILE *f)
 	g_free (rows);
 
 	if (ctype & PNG_COLOR_MASK_ALPHA)
-		return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, TRUE,
+		return gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, TRUE, 8,
 						 w, h, w * 4,
 						 free_buffer, NULL);
 	else
-		return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, FALSE,
+		return gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, FALSE, 8,
 						 w, h, w * 3,
 						 free_buffer, NULL);
 }
@@ -371,7 +372,7 @@ gdk_pixbuf__png_image_load_increment(gpointer context, guchar *buf, guint size)
                                 /* start and end row were in the same pass */
                                 (lc->update_func)(lc->pixbuf, 0,
                                                   lc->first_row_seen_in_chunk,
-                                                  lc->pixbuf->art_pixbuf->width,
+                                                  lc->pixbuf->width,
                                                   (lc->last_row_seen_in_chunk -
                                                    lc->first_row_seen_in_chunk) + 1,
 						  lc->notify_user_data);
@@ -383,14 +384,14 @@ gdk_pixbuf__png_image_load_increment(gpointer context, guchar *buf, guint size)
                                 /* first row to end */
                                 (lc->update_func)(lc->pixbuf, 0,
                                                   lc->first_row_seen_in_chunk,
-                                                  lc->pixbuf->art_pixbuf->width,
+                                                  lc->pixbuf->width,
                                                   (lc->max_row_seen_in_chunk -
                                                    lc->first_row_seen_in_chunk) + 1,
 						  lc->notify_user_data);
                                 /* top to last row */
                                 (lc->update_func)(lc->pixbuf,
                                                   0, 0, 
-                                                  lc->pixbuf->art_pixbuf->width,
+                                                  lc->pixbuf->width,
                                                   lc->last_row_seen_in_chunk + 1,
 						  lc->notify_user_data);
                         } else {
@@ -398,7 +399,7 @@ gdk_pixbuf__png_image_load_increment(gpointer context, guchar *buf, guint size)
                                    whole image */
                                 (lc->update_func)(lc->pixbuf,
                                                   0, 0, 
-                                                  lc->pixbuf->art_pixbuf->width,
+                                                  lc->pixbuf->width,
                                                   lc->max_row_seen_in_chunk + 1,
 						  lc->notify_user_data);
                         }
@@ -439,7 +440,7 @@ png_info_callback   (png_structp png_read_ptr,
         if (color_type & PNG_COLOR_MASK_ALPHA)
                 have_alpha = TRUE;
         
-        lc->pixbuf = gdk_pixbuf_new(ART_PIX_RGB, have_alpha, 8, width, height);
+        lc->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, have_alpha, 8, width, height);
 
         if (lc->pixbuf == NULL) {
                 /* Failed to allocate memory */
@@ -480,7 +481,7 @@ png_row_callback   (png_structp png_read_ptr,
         lc->last_row_seen_in_chunk = row_num;
         lc->last_pass_seen_in_chunk = pass_num;
         
-        old_row = lc->pixbuf->art_pixbuf->pixels + (row_num * lc->pixbuf->art_pixbuf->rowstride);
+        old_row = lc->pixbuf->pixels + (row_num * lc->pixbuf->rowstride);
 
         png_progressive_combine_row(lc->png_read_ptr, old_row, new_row);
 }
@@ -521,4 +522,3 @@ png_warning_callback(png_structp png_read_ptr,
         
         fprintf(stderr, "Warning loading PNG: %s\n", warning_msg);
 }
-

@@ -23,6 +23,7 @@
 
 #include <config.h>
 #include "gdk-pixbuf-io.h"
+#include "gdk-pixbuf-private.h"
 
 
 
@@ -222,4 +223,86 @@ gdk_pixbuf_animation_get_frames (GdkPixbufAnimation *animation)
 	g_return_val_if_fail (animation->ref_count > 0, 0);
 
 	return animation->frames;
+}
+
+
+
+/**
+ * gdk_pixbuf_frame_get_pixbuf:
+ * @frame: A pixbuf animation frame.
+ * 
+ * Queries the pixbuf of an animation frame.
+ * 
+ * Return value: A pixbuf.
+ **/
+GdkPixbuf *
+gdk_pixbuf_frame_get_pixbuf (GdkPixbufFrame *frame)
+{
+	g_return_val_if_fail (frame != NULL, NULL);
+
+	return frame->pixbuf;
+}
+
+/**
+ * gdk_pixbuf_frame_get_x_offset:
+ * @frame: A pixbuf animation frame.
+ * 
+ * Queries the X offset of an animation frame.
+ * 
+ * Return value: X offset from the top left corner of the animation.
+ **/
+int
+gdk_pixbuf_frame_get_x_offset (GdkPixbufFrame *frame)
+{
+	g_return_val_if_fail (frame != NULL, -1);
+
+	return frame->x_offset;
+}
+
+/**
+ * gdk_pixbuf_frame_get_y_offset:
+ * @frame: A pixbuf animation frame.
+ * 
+ * Queries the Y offset of an animation frame.
+ * 
+ * Return value: Y offset from the top left corner of the animation.
+ **/
+int
+gdk_pixbuf_frame_get_y_offset (GdkPixbufFrame *frame)
+{
+	g_return_val_if_fail (frame != NULL, -1);
+
+	return frame->y_offset;
+}
+
+/**
+ * gdk_pixbuf_frame_get_delay_time:
+ * @frame: A pixbuf animation frame.
+ * 
+ * Queries the delay time in milliseconds of an animation frame.
+ * 
+ * Return value: Delay time in milliseconds.
+ **/
+int
+gdk_pixbuf_frame_get_delay_time (GdkPixbufFrame *frame)
+{
+	g_return_val_if_fail (frame != NULL, -1);
+
+	return frame->delay_time;
+}
+
+/**
+ * gdk_pixbuf_frame_get_action:
+ * @frame: A pixbuf animation frame.
+ * 
+ * Queries the overlay action of an animation frame.
+ * 
+ * Return value: Overlay action for this frame.
+ **/
+GdkPixbufFrameAction
+gdk_pixbuf_frame_get_action (GdkPixbufFrame *frame)
+{
+	g_return_val_if_fail (frame != NULL, GDK_PIXBUF_FRAME_RETAIN);
+
+	return frame->action;
 }

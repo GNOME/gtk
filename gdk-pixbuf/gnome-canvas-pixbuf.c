@@ -24,8 +24,9 @@
 #include <math.h>
 #include <libgnomeui/gnome-canvas.h>
 #include <libgnomeui/gnome-canvas-util.h>
-#include "gdk-pixbuf.h"
-#include <libart_lgpl/art_rgb_pixbuf_affine.h>
+#include <libart_lgpl/art_rgb_affine.h>
+#include <libart_lgpl/art_rgb_rgba_affine.h>
+#include "gdk-pixbuf-private.h"
 #include "gnome-canvas-pixbuf.h"
 
 
@@ -242,10 +243,9 @@ gnome_canvas_pixbuf_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 		pixbuf = GTK_VALUE_POINTER (*arg);
 		if (pixbuf != priv->pixbuf) {
 			if (pixbuf) {
-				g_return_if_fail (pixbuf->art_pixbuf->format == ART_PIX_RGB);
-				g_return_if_fail (pixbuf->art_pixbuf->n_channels == 3
-						  || pixbuf->art_pixbuf->n_channels == 4);
-				g_return_if_fail (pixbuf->art_pixbuf->bits_per_sample == 8);
+				g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
+				g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
+				g_return_if_fail (pixbuf->bits_per_sample == 8);
 
 				gdk_pixbuf_ref (pixbuf);
 			}
@@ -451,12 +451,12 @@ compute_viewport_affine (GnomeCanvasPixbuf *gcp, double *viewport_affine, double
 	if (priv->width_set)
 		w = priv->width;
 	else
-		w = priv->pixbuf->art_pixbuf->width;
+		w = priv->pixbuf->width;
 
 	if (priv->height_set)
 		h = priv->height;
 	else
-		h = priv->pixbuf->art_pixbuf->height;
+		h = priv->pixbuf->height;
 
 	/* Convert i_len and j_len into scaling factors */
 
@@ -468,7 +468,7 @@ compute_viewport_affine (GnomeCanvasPixbuf *gcp, double *viewport_affine, double
 	} else
 		si_len = 1.0;
 
-	si_len *= w / priv->pixbuf->art_pixbuf->width;
+	si_len *= w / priv->pixbuf->width;
 
 	if (priv->height_in_pixels) {
 		if (j_len > GNOME_CANVAS_EPSILON)
@@ -478,7 +478,7 @@ compute_viewport_affine (GnomeCanvasPixbuf *gcp, double *viewport_affine, double
 	} else
 		sj_len = 1.0;
 
-	sj_len *= h / priv->pixbuf->art_pixbuf->height;
+	sj_len *= h / priv->pixbuf->height;
 
 	/* Calculate translation offsets */
 
@@ -544,10 +544,10 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 	}
 
 	rect.x0 = 0.0;
-	rect.x1 = priv->pixbuf->art_pixbuf->width;
+	rect.x1 = priv->pixbuf->width;
 
 	rect.y0 = 0.0;
-	rect.y1 = priv->pixbuf->art_pixbuf->height;
+	rect.y1 = priv->pixbuf->height;
 
 	gnome_canvas_item_i2c_affine (item, i2c);
 	compute_render_affine (gcp, render_affine, i2c);
@@ -611,7 +611,6 @@ static void
 transform_pixbuf (guchar *dest, int x, int y, int width, int height, int rowstride,
 		  GdkPixbuf *pixbuf, double *affine)
 {
-	ArtPixBuf *apb;
 	int xx, yy;
 	double inv[6];
 	guchar *src, *d;
@@ -619,8 +618,6 @@ transform_pixbuf (guchar *dest, int x, int y, int width, int height, int rowstri
 	int run_x1, run_x2;
 	int src_x, src_y;
 	int i;
-
-	apb = pixbuf->art_pixbuf;
 
 	art_affine_invert (inv, affine);
 
@@ -630,7 +627,7 @@ transform_pixbuf (guchar *dest, int x, int y, int width, int height, int rowstri
 		run_x1 = x;
 		run_x2 = x + width;
 		art_rgb_affine_run (&run_x1, &run_x2, yy + y,
-				    apb->width, apb->height,
+				    pixbuf->width, pixbuf->height,
 				    inv);
 
 		d = dest + yy * rowstride + (run_x1 - x) * 4;
@@ -641,12 +638,12 @@ transform_pixbuf (guchar *dest, int x, int y, int width, int height, int rowstri
 			src_x = floor (src_p.x);
 			src_y = floor (src_p.y);
 
-			src = apb->pixels + src_y * apb->rowstride + src_x * apb->n_channels;
+			src = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * pixbuf->n_channels;
 
-			for (i = 0; i < apb->n_channels; i++)
+			for (i = 0; i < pixbuf->n_channels; i++)
 				*d++ = *src++;
 
-			if (!apb->has_alpha)
+			if (!pixbuf->has_alpha)
 				*d++ = 255; /* opaque */
 		}
 	}
@@ -702,7 +699,7 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			  w * 4,
 			  priv->pixbuf, render_affine);
 
-	pixbuf = gdk_pixbuf_new_from_data (buf, ART_PIX_RGB, TRUE, w, h, w * 4, NULL, NULL);
+	pixbuf = gdk_pixbuf_new_from_data (buf, GDK_COLORSPACE_RGB, TRUE, 8, w, h, w * 4, NULL, NULL);
 
 	gdk_pixbuf_render_to_drawable_alpha (pixbuf, drawable,
 					     0, 0,
@@ -735,14 +732,28 @@ gnome_canvas_pixbuf_render (GnomeCanvasItem *item, GnomeCanvasBuf *buf)
 	compute_render_affine (gcp, render_affine, i2c);
         gnome_canvas_buf_ensure_buf (buf);
 
-	art_rgb_pixbuf_affine (buf->buf,
-			       buf->rect.x0, buf->rect.y0, buf->rect.x1, buf->rect.y1,
-			       buf->buf_rowstride,
-			       priv->pixbuf->art_pixbuf,
-			       render_affine,
-			       ART_FILTER_NEAREST, NULL);
+	if (priv->pixbuf->has_alpha)
+		art_rgb_rgba_affine (buf->buf,
+				     buf->rect.x0, buf->rect.y0, buf->rect.x1, buf->rect.y1,
+				     buf->buf_rowstride,
+				     priv->pixbuf->pixels,
+				     priv->pixbuf->width, priv->pixbuf->height,
+				     priv->pixbuf->rowstride,
+				     render_affine,
+				     ART_FILTER_NEAREST,
+				     NULL);
+	else
+		art_rgb_affine (buf->buf,
+				buf->rect.x0, buf->rect.y0, buf->rect.x1, buf->rect.y1,
+				buf->buf_rowstride,
+				priv->pixbuf->pixels,
+				priv->pixbuf->width, priv->pixbuf->height,
+				priv->pixbuf->rowstride,
+				render_affine,
+				ART_FILTER_NEAREST,
+				NULL);
 
-	buf->is_bg = 0;
+	buf->is_bg = FALSE;
 }
 
 
@@ -758,7 +769,6 @@ gnome_canvas_pixbuf_point (GnomeCanvasItem *item, double x, double y, int cx, in
 	ArtPoint c, p;
 	int px, py;
 	double no_hit;
-	ArtPixBuf *apb;
 	guchar *src;
 
 	gcp = GNOME_CANVAS_PIXBUF (item);
@@ -771,8 +781,6 @@ gnome_canvas_pixbuf_point (GnomeCanvasItem *item, double x, double y, int cx, in
 	if (!priv->pixbuf)
 		return no_hit;
 
-	apb = priv->pixbuf->art_pixbuf;
-
 	gnome_canvas_item_i2c_affine (item, i2c);
 	compute_render_affine (gcp, render_affine, i2c);
 	art_affine_invert (inv, render_affine);
@@ -783,13 +791,13 @@ gnome_canvas_pixbuf_point (GnomeCanvasItem *item, double x, double y, int cx, in
 	px = p.x;
 	py = p.y;
 
-	if (px < 0 || px >= apb->width || py < 0 || py >= apb->height)
+	if (px < 0 || px >= priv->pixbuf->width || py < 0 || py >= priv->pixbuf->height)
 		return no_hit;
 
-	if (!apb->has_alpha)
+	if (!priv->pixbuf->has_alpha)
 		return 0.0;
 
-	src = apb->pixels + py * apb->rowstride + px * apb->n_channels;
+	src = priv->pixbuf->pixels + py * priv->pixbuf->rowstride + px * priv->pixbuf->n_channels;
 
 	if (src[3] < 128)
 		return no_hit;
@@ -817,10 +825,10 @@ gnome_canvas_pixbuf_bounds (GnomeCanvasItem *item, double *x1, double *y1, doubl
 	}
 
 	rect.x0 = 0.0;
-	rect.x1 = priv->pixbuf->art_pixbuf->width;
+	rect.x1 = priv->pixbuf->width;
 
 	rect.y0 = 0.0;
-	rect.y1 = priv->pixbuf->art_pixbuf->height;
+	rect.y1 = priv->pixbuf->height;
 
 	gnome_canvas_item_i2c_affine (item, i2c);
 	compute_viewport_affine (gcp, viewport_affine, i2c);

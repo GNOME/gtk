@@ -144,25 +144,25 @@ DEPS = libgdk_pixbuf.la
 INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
 	-I$(top_srcdir)/gdk-pixbuf \
 	-I$(top_builddir)/gdk-pixbuf \
-	$(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK_CFLAGS)
+	$(GLIB_CFLAGS) $(GTK_CFLAGS)
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 
-LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS) $(STATIC_LIB_DEPS)
+LDADDS = libgdk_pixbuf.la $(GLIB_LIBS) $(GTK_LIBS) $(STATIC_LIB_DEPS)
 
 if INSIDE_GNOME_LIBS
-testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) -lgmodule
+testpixbuf_LDADD = $(LDADDS) -lgmodule
 testpixbuf_drawable_LDADD = $(LDADDS)
 testpixbuf_scale_LDADD = $(LDADDS)
-testanimation_LDADD = $(LDADDS) $(LIBART_LIBS) -lgmodule
+testanimation_LDADD = $(LDADDS) -lgmodule
 else
-testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) $(GNOME_LIBS) -lgmodule
+testpixbuf_LDADD = $(LDADDS) $(GNOME_LIBS) -lgmodule
 testpixbuf_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)
 testpixbuf_scale_LDADD = $(LDADDS) $(GNOME_LIBS)
-testanimation_LDADD = $(LDADDS) $(LIBART_LIBS) $(GNOME_LIBS) -lgmodule
+testanimation_LDADD = $(LDADDS) $(GNOME_LIBS) -lgmodule
 endif
 
 
-GDK_PIXBUF_LIBS = $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
+GDK_PIXBUF_LIBS = $(GLIB_LIBS) $(GTK_LIBS)
 
 #
 # The GdkPixBuf library
@@ -182,8 +182,8 @@ libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf-util.c	\
 	$(extra_sources)
 
-libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0 $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
-libgdk_pixbuf_la_LIBADD = pixops/libpixops.la 
+libgdk_pixbuf_la_LDFLAGS = -version-info 2:0:0 $(GLIB_LIBS) $(GTK_LIBS)
+libgdk_pixbuf_la_LIBADD = pixops/libpixops.la
 
 libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h		\
@@ -191,6 +191,6 @@ libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf-features.h	\
 	$(CANVAS_PIXBUF_HEADERFILES)
 
-noinst_HEADERS = \
-	gdk-pixbuf-io.h
-
+noinst_HEADERS = 		\
+	gdk-pixbuf-io.h		\
+	gdk-pixbuf-private.h

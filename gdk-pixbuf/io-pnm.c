@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <setjmp.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
 
@@ -87,11 +87,11 @@ gboolean gdk_pixbuf__pnm_image_load_increment(gpointer context, guchar *buf, gui
 static void explode_bitmap_into_buf (PnmLoaderContext *context);
 static void explode_gray_into_buf (PnmLoaderContext *context);
 
-/* Destroy notification function for the libart pixbuf */
+/* Destroy notification function for the pixbuf */
 static void
-free_buffer (gpointer user_data, gpointer data)
+free_buffer (guchar *pixels, gpointer data)
 {
-	free (data);
+	free (pixels);
 }
 
 
@@ -675,7 +675,7 @@ gdk_pixbuf__pnm_image_load (FILE *f)
 			break;
 	}
 
-	return gdk_pixbuf_new_from_data (context.pixels, ART_PIX_RGB, FALSE,
+	return gdk_pixbuf_new_from_data (context.pixels, GDK_COLORSPACE_RGB, FALSE, 8,
 					 context.width, context.height, 
 					 context.width * 3, free_buffer, NULL);
 
@@ -807,8 +807,8 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data, guchar *buf, guint size)
 			context->output_row = 0;
 			context->output_col = 0;
 
-			context->pixbuf = gdk_pixbuf_new(ART_PIX_RGB, 
-							 /*have_alpha*/ FALSE,
+			context->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, 
+							 FALSE,
 							 8, 
 							 context->width,
 							 context->height);
@@ -818,8 +818,8 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data, guchar *buf, guint size)
 				g_error ("Couldn't allocate gdkpixbuf");
 			}
 
-			context->pixels = context->pixbuf->art_pixbuf->pixels;
-			context->rowstride = context->pixbuf->art_pixbuf->rowstride;
+			context->pixels = context->pixbuf->pixels;
+			context->rowstride = context->pixbuf->rowstride;
 
 			/* Notify the client that we are ready to go */
 			(* context->prepared_func) (context->pixbuf,
