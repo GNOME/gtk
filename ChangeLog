@@ -1,3 +1,7 @@
+Mon Feb 19 20:37:35 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* demos/gtk-demo/dialog.c: Add simple new demo.
+
 2001-02-19  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbuffer.h (struct _GtkTextBufferClass): add

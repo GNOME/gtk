@@ -7,6 +7,7 @@ demos = @STRIP_BEGIN@	\
 	item_factory.c	\
 	menus.c		\
 	panes.c		\
+	dialog.c	\
 	textview.c	\
 @STRIP_END@
 
