@@ -201,20 +201,45 @@ animation_timer (GtkEntryCompletion *completion)
   GtkTreeIter iter;
   gint n_completions = G_N_ELEMENTS (dynamic_completions);
   gint n;
-
+  static GtkListStore *old_store = NULL;
   GtkListStore *store = GTK_LIST_STORE (gtk_entry_completion_get_model (completion));
 
-  if ((timer_count / n_completions) % 2 == 0)
+  if (timer_count % 10 == 0)
     {
-      n = timer_count % n_completions;
-      gtk_list_store_append (store, &iter);
-      gtk_list_store_set (store, &iter, 0, dynamic_completions[n], -1);
-      
+      if (!old_store)
+	{
+	  g_print ("removing model!\n");
+
+	  old_store = g_object_ref (gtk_entry_completion_get_model (completion));
+	  gtk_entry_completion_set_model (completion, NULL);
+	}
+      else
+	{
+	  g_print ("readding model!\n");
+	  
+	  gtk_entry_completion_set_model (completion, old_store);
+	  g_object_unref (old_store);
+	  old_store = NULL;
+	}
+
+      timer_count ++;
+      return TRUE;
     }
-  else
+
+  if (!old_store)
     {
-      gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
-      gtk_list_store_remove (store, &iter);
+      if ((timer_count / n_completions) % 2 == 0)
+	{
+	  n = timer_count % n_completions;
+	  gtk_list_store_append (store, &iter);
+	  gtk_list_store_set (store, &iter, 0, dynamic_completions[n], -1);
+	  
+	}
+      else
+	{
+	  gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
+	  gtk_list_store_remove (store, &iter);
+	}
     }
   
   timer_count++;
@@ -342,6 +367,19 @@ main (int argc, char *argv[])
   /* Fill the completion dynamically */
   g_timeout_add (1000, (GSourceFunc) animation_timer, completion);
 
+  /* Fourth entry */
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Model-less entry completion"), FALSE, FALSE, 0);
+
+  entry = gtk_entry_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
+
+  /* Create the completion object */
+  completion = gtk_entry_completion_new ();
+  
+  /* Assign the completion to the entry */
+  gtk_entry_set_completion (GTK_ENTRY (entry), completion);
+  g_object_unref (completion);
+  
   gtk_widget_show_all (window);
 
   gtk_main ();

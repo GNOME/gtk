@@ -724,10 +724,7 @@ gtk_file_chooser_entry_maybe_update_directory (GtkFileChooserEntry *chooser_entr
 	    }
 	  if (chooser_entry->completion_store)
 	    {
-	      gtk_list_store_clear (GTK_LIST_STORE (chooser_entry->completion_store));
-	      /* FIXME: Uncomment this line and get rid of the _clear above
-	       * after #137211 is fixed */
-	      /* gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), NULL);*/
+	      gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), NULL);
 	      g_object_unref (chooser_entry->completion_store);
 	      chooser_entry->completion_store = NULL;
 	    }

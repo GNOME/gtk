@@ -4925,7 +4925,8 @@ gtk_entry_completion_timeout (gpointer data)
 
   completion->priv->completion_timeout = 0;
 
-  if (g_utf8_strlen (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)), -1)
+  if (completion->priv->filter_model &&
+      g_utf8_strlen (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)), -1)
       >= completion->priv->minimum_key_length)
     {
       gint matches;

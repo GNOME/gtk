@@ -1,3 +1,17 @@
+2004-10-25  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtkentry.c: (gtk_entry_completion_timeout):
+	* gtk/gtkentrycompletion.c: (gtk_entry_completion_set_model),
+	(gtk_entry_completion_get_model), (gtk_entry_completion_complete):
+	Really handle a NULL model, fixes #137211 for real.
+
+	* gtk/gtkfilechooserentry.c:
+	(gtk_file_chooser_entry_maybe_update_directory):
+	Remove _clear, #137211 is fixed.
+
+	* tests/testentrycompletion.c: (main):
+	Add completion with an empty model.
+	
 2004-10-25  Carlos Garnacho Parro  <carlosg@gnome.org>
 
 	Fix for #118764, David Bordoley:
@@ -52,7 +66,6 @@
 	* gtk/.cvsignore: Ignore gtk-update-icon-cache.
 	* tests/.cvsignore: Ignore testimage.
 
->>>>>>> 1.5960
 2004-10-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellrenderercombo.c (find_text): Don't leak text. (#156325,

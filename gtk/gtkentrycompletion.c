@@ -935,6 +935,15 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
   g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
 
+  if (!model)
+    {
+      gtk_tree_view_set_model (GTK_TREE_VIEW (completion->priv->tree_view),
+			       NULL);
+      _gtk_entry_completion_popdown (completion);
+      completion->priv->filter_model = NULL;
+      return;
+    }
+     
   /* code will unref the old filter model (if any) */
   completion->priv->filter_model =
     GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (model, NULL));
@@ -967,6 +976,9 @@ gtk_entry_completion_get_model (GtkEntryCompletion *completion)
 {
   g_return_val_if_fail (GTK_IS_ENTRY_COMPLETION (completion), NULL);
 
+  if (!completion->priv->filter_model)
+    return NULL;
+  
   return gtk_tree_model_filter_get_model (completion->priv->filter_model);
 }
 
@@ -1055,8 +1067,10 @@ gtk_entry_completion_complete (GtkEntryCompletion *completion)
   gchar *tmp;
 
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
-  g_return_if_fail (completion->priv->filter_model != NULL);
 
+  if (!completion->priv->filter_model)
+    return;
+  
   if (completion->priv->case_normalized_key)
     g_free (completion->priv->case_normalized_key);
 
