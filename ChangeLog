@@ -1,3 +1,11 @@
+2004-01-20  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #130846, reported by R. McFarland <rwmcfa1@neces.com>.
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): Return TRUE when
+	we handle an event in the colums, and FALSE at the end if the
+	event is not handled at all.
+
 Mon Feb  2 23:41:48 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_row_changed): 

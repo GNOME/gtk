@@ -2327,7 +2327,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	      gtk_tree_view_column_get_sizing (column) != GTK_TREE_VIEW_COLUMN_AUTOSIZE)
 	    {
 	      _gtk_tree_view_column_autosize (tree_view, column);
-	      break;
+	      return TRUE;
 	    }
 
 	  if (gdk_pointer_grab (column->window, FALSE,
@@ -2355,10 +2355,10 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
 	  tree_view->priv->drag_pos = i;
 	  tree_view->priv->x_drag = column->button->allocation.x + (rtl ? 0 : column->button->allocation.width);
-	  break;
+	  return TRUE;
 	}
     }
-  return TRUE;
+  return FALSE;
 }
 
 /* GtkWidget::button_release_event helper */
