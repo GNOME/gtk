@@ -1229,7 +1229,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
   socket = GTK_SOCKET (data);
   widget = GTK_WIDGET (socket);
   xevent = (XEvent *)gdk_xevent;
-  display = gdk_drawable_get_display (event->any.window);
+  display = gtk_widget_get_display (widget);
 
   return_val = GDK_FILTER_CONTINUE;
 

@@ -1,3 +1,9 @@
+Mon Jan 27 16:19:59 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksocket.c (gtk_socket_filter_func): event->any.window
+	might be NULL. Use gtk_widget_get_display (widget) 
+	(#102860, Thomas Leonard)
+
 Mon Jan 27 15:58:31 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Fix --without-modules/--disable-modules
