@@ -63,7 +63,6 @@ Mon Sep 14 21:47:35 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 	  free()s.  X itself uses free() on some of the 
 	  malloced memory.
 
->>>>>>> 1.633
 Sat Sep 12 10:44:06 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkfilesel.c: Maintain a list of directories like
