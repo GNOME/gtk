@@ -3,14 +3,15 @@
 # Lauris Kaplinski <lauris@ariman.ee>, 1999.
 # Tõivo Leedjärv <toivo@linux.ee>, 2002-2004.
 # Priit Laes <amd@tt.ee>, 2004.
+# Ivar Smolin <okul@linux.ee>, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
-"PO-Revision-Date: 2004-03-27 22:32+0300\n"
-"Last-Translator: Priit Laes <amd@tt.ee>\n"
+"POT-Creation-Date: 2005-01-15 12:29+0100\n"
+"PO-Revision-Date: 2005-01-19 18:33+0200\n"
+"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,12 +21,12 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:1069 tests/testfilechooser.c:199
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "Faili '%s' avamine ebaõnnestus: %s"
+msgstr "Tõrge faili '%s' avamisel: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:166 gdk-pixbuf/gdk-pixbuf-io.c:850
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "Pildifaili '%s' on tühi"
+msgstr "Pildifaili '%s' ei sisalda andmeid"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
 #: gdk-pixbuf/gdk-pixbuf-io.c:1110 tests/testfilechooser.c:244
@@ -33,8 +34,8 @@ msgstr "Pildifaili '%s' on tühi"
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"Pildifaili '%s' laadimine ebaõnnestus tundmatul põhjusel, arvatavasti on "
-"fail rikutud"
+"Tõrge pildifaili '%s' laadimisel: põhjus teadmata, arvatavasti on pildifail "
+"rikutud"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:241
 #, c-format
@@ -42,8 +43,8 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"Animatsiooni '%s' laadimine ebaõnnestus tundmatul põhjusel, arvatavasti on "
-"fail rikutud"
+"Tõrge animatsiooni '%s' laadimisel: põhjuse teadmata, arvatavasti on "
+"animatsioonifail rikutud"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:444
 #, c-format
@@ -76,7 +77,7 @@ msgstr "Tundmatu pildifaili vorming"
 #: gdk-pixbuf/gdk-pixbuf-io.c:896
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr "Pildi '%s' laadimine ebaõnnestus> %s"
+msgstr "Tõrge pildi '%s' laadimisel: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1337
 #, c-format
@@ -94,16 +95,16 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1429
 msgid "Failed to open temporary file"
-msgstr "Ajutise faili avamine ebaõnnestus"
+msgstr "Tõrge ajutise faili avamisel"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1454
 msgid "Failed to read from temporary file"
-msgstr "Ajutisest failist lugemine ebaõnnestus"
+msgstr "Tõrge ajutisest failist lugemisel"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1641
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr "'%s' avamine kirjutamiseks ebaõnnestus: %s"
+msgstr "Tõrge faili '%s' avamise kirjutamiseks: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1665
 #, c-format
@@ -212,7 +213,6 @@ msgid "Stack overflow"
 msgstr "Pinu ületäituvus"
 
 #: gdk-pixbuf/io-gif.c:635
-#, fuzzy
 msgid "GIF image loader cannot understand this image."
 msgstr "GIF pildifaili laadija ei saa sellest pildist aru. "
 
@@ -507,9 +507,8 @@ msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:770
-#, fuzzy
 msgid "Cannot allocate memory for loading PNM image"
-msgstr "Ebapiisav mälu pildi laadimiseks"
+msgstr "PNM faili laadimiseks ei saa mälu eraldada"
 
 #: gdk-pixbuf/io-pnm.c:820
 msgid "Insufficient memory to load PNM context struct"
@@ -517,7 +516,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:871
 msgid "Unexpected end of PNM image data"
-msgstr ""
+msgstr "Ootamatu PNM pildi andmete lõpp"
 
 #: gdk-pixbuf/io-pnm.c:1003
 msgid "Insufficient memory to load PNM file"
@@ -549,11 +548,11 @@ msgstr "Sun rastripildivorming"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Cannot allocate memory for IOBuffer struct"
-msgstr ""
+msgstr "IOBuffer struktuuri jaoks ei saa mälu eraldada"
 
 #: gdk-pixbuf/io-tga.c:178
 msgid "Cannot allocate memory for IOBuffer data"
-msgstr ""
+msgstr "IOBuffer andmete jaoks ei saa mälu eraldada"
 
 #: gdk-pixbuf/io-tga.c:189
 msgid "Cannot realloc IOBuffer data"
@@ -594,7 +593,7 @@ msgstr "TGA pilditüüp ei ole toetatud"
 
 #: gdk-pixbuf/io-tga.c:861
 msgid "Cannot allocate memory for TGA context struct"
-msgstr ""
+msgstr "TGA kontekstistruktuuri jaoks ei saa mälu eraldada"
 
 #: gdk-pixbuf/io-tga.c:926
 msgid "Excess data in file"
@@ -631,7 +630,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:361
 msgid "Failed to open TIFF image"
-msgstr "TIFF faili avamine ebaõnnestus"
+msgstr "Tõrge TIFF faili avamisel"
 
 #: gdk-pixbuf/io-tiff.c:373
 msgid "TIFFClose operation failed"
@@ -639,7 +638,7 @@ msgstr "TIFFSulgemisoperatsioon nurjus"
 
 #: gdk-pixbuf/io-tiff.c:504 gdk-pixbuf/io-tiff.c:517
 msgid "Failed to load TIFF image"
-msgstr "TIFF faili laadimine ebaõnnestus"
+msgstr "Tõrge TIFF faili laadimisel"
 
 #: gdk-pixbuf/io-tiff.c:610
 msgid "The TIFF image format"
@@ -702,9 +701,8 @@ msgid "XPM file has invalid number of colors"
 msgstr ""
 
 #: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
-#, fuzzy
 msgid "Cannot allocate memory for loading XPM image"
-msgstr "Ebapiisav mälu pildi laadimiseks"
+msgstr "XPM faili laadimiseks ei saa mälu eraldada"
 
 #: gdk-pixbuf/io-xpm.c:1295
 msgid "Cannot read XPM colormap"
@@ -741,23 +739,22 @@ msgstr ""
 #. Description of --display=DISPLAY in --help output
 #: gdk/gdk.c:121
 msgid "X display to use"
-msgstr ""
+msgstr "Kasutatav X'i kuva"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: gdk/gdk.c:122
-#, fuzzy
 msgid "DISPLAY"
-msgstr "IPA"
+msgstr "KUVA"
 
 #. Description of --screen=SCREEN in --help output
 #: gdk/gdk.c:124
 msgid "X screen to use"
-msgstr ""
+msgstr "Kasutatav X'i ekraan"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: gdk/gdk.c:125
 msgid "SCREEN"
-msgstr ""
+msgstr "EKRAAN"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:128
@@ -770,7 +767,7 @@ msgstr ""
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:405 gtk/gtkmain.c:408
 msgid "FLAGS"
-msgstr ""
+msgstr "LIPUD"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:131
@@ -1026,9 +1023,8 @@ msgid "_Palette"
 msgstr "Pa_lett"
 
 #: gtk/gtkcolorsel.c:2054
-#, fuzzy
 msgid "Color Wheel"
-msgstr "Ratas"
+msgstr "Värviratas"
 
 #: gtk/gtkcolorseldialog.c:123
 msgid "Color Selection"
@@ -1053,9 +1049,8 @@ msgid "Invalid filename: %s"
 msgstr "Vigane failinimi: %s"
 
 #: gtk/gtkfilechooserbutton.c:65
-#, fuzzy
 msgid "Select A File"
-msgstr "Kustuta fail"
+msgstr "Vali fail"
 
 #: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1229
 #: gtk/gtkpathbar.c:982
@@ -1068,9 +1063,8 @@ msgid "Desktop"
 msgstr "Töölaud"
 
 #: gtk/gtkfilechooserbutton.c:68
-#, fuzzy
 msgid "(None)"
-msgstr "ei ole"
+msgstr ""
 
 #: gtk/gtkfilechooserbutton.c:1515
 msgid "Other..."
@@ -1093,18 +1087,17 @@ msgid "The folder could not be created"
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:911
-#, fuzzy
 msgid "Invalid file name"
-msgstr "Vigane failinimi: %s"
+msgstr "Vigane failinimi"
 
 #: gtk/gtkfilechooserdefault.c:921
 msgid "The folder contents could not be displayed"
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:1119
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get information about '%s': %s"
-msgstr "viga informatsiooni saamisel '%s' jaoks: %s"
+msgstr "Viga info saamisel '%s' jaoks: %s"
 
 #: gtk/gtkfilechooserdefault.c:2095
 #, c-format
@@ -1143,7 +1136,7 @@ msgstr "_Lisa"
 
 #: gtk/gtkfilechooserdefault.c:2882
 msgid "Add the selected folder to the bookmarks"
-msgstr ""
+msgstr "Lisab valitud kataloogi järjehoidjate hulka"
 
 #: gtk/gtkfilechooserdefault.c:2887 gtk/gtkstock.c:352
 msgid "_Remove"
@@ -1158,19 +1151,17 @@ msgid "_Add to Shortcuts"
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:3007
-#, fuzzy
 msgid "Open _Location"
-msgstr "_Asukoht: "
+msgstr "_Ava asukoht"
 
 #: gtk/gtkfilechooserdefault.c:3019
 msgid "Show _Hidden Files"
-msgstr ""
+msgstr "Näita _peidetud faile"
 
 #: gtk/gtkfilechooserdefault.c:3143 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "Failid"
 
-#  Name entry
 #: gtk/gtkfilechooserdefault.c:3174
 msgid "Name"
 msgstr "Nimi"
@@ -1187,14 +1178,11 @@ msgstr "Muudetud"
 msgid "Select which types of files are shown"
 msgstr ""
 
-#  Create Folder
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:3280
-#, fuzzy
 msgid "Create Fo_lder"
-msgstr "Uus _kataloog"
+msgstr "Loo _kataloog"
 
-#  Name entry
 #. Name entry
 #: gtk/gtkfilechooserdefault.c:3398
 msgid "_Name:"
@@ -1204,12 +1192,10 @@ msgstr "_Nimi:"
 msgid "_Browse for other folders"
 msgstr "_Sirvi katalooge"
 
-#  Folder combo
 #: gtk/gtkfilechooserdefault.c:3688
 msgid "Save in _folder:"
 msgstr "Salvesta _kataloogi:"
 
-#  Create Folder
 #: gtk/gtkfilechooserdefault.c:3690
 msgid "Create in _folder:"
 msgstr "Loo _kataloogi:"
@@ -1224,11 +1210,9 @@ msgid "Shortcut %s does not exist"
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:5508
-#, fuzzy, c-format
+#, c-format
 msgid "Could not mount %s"
 msgstr ""
-"Ei saa %s valida:\n"
-"%s"
 
 #: gtk/gtkfilechooserdefault.c:5802
 msgid "Type name of new folder"
@@ -1268,11 +1252,9 @@ msgstr "eile"
 msgid "Unknown"
 msgstr "tundmatu"
 
-#  Create Folder
 #: gtk/gtkfilechooserdefault.c:5985
-#, fuzzy
 msgid "Cannot change folder"
-msgstr "Loo _kataloogi:"
+msgstr "Kataloogi ei saa vahetada"
 
 #: gtk/gtkfilechooserdefault.c:5986
 msgid "The folder you specified is an invalid path."
@@ -1284,24 +1266,20 @@ msgid "Could not build file name from '%s' and '%s'"
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:6061
-#, fuzzy
 msgid "Could not select item"
-msgstr ""
-"Ei saa %s valida:\n"
-"%s"
+msgstr "Kirjet ei saa valida"
 
 #: gtk/gtkfilechooserdefault.c:6101
 msgid "Open Location"
-msgstr ""
+msgstr "Asukoha avamine"
 
 #: gtk/gtkfilechooserdefault.c:6108
-#, fuzzy
 msgid "Save in Location"
-msgstr "_Asukoht: "
+msgstr "Salvesta asukohas"
 
 #: gtk/gtkfilechooserdefault.c:6132
 msgid "_Location:"
-msgstr "_Asukoht: "
+msgstr "A_sukoht: "
 
 #: gtk/gtkfilesel.c:731
 msgid "Folders"
@@ -1457,13 +1435,13 @@ msgid "_Selection: "
 msgstr "_Valik: "
 
 #: gtk/gtkfilesel.c:3152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
-"Failinime \"%s\" ei saa UTF-8sse ümber kodeerida (proovi keskkonnamuutuja "
-"G_BROKEN_FILENAMES seadmist): %s"
+"Failinime \"%s\" ei saa UTF-8sse teisendada (proovi keskkonnamuutuja "
+"G_FILENAME_ENCODING seadmist): %s"
 
 #: gtk/gtkfilesel.c:3155
 msgid "Invalid UTF-8"
@@ -1484,14 +1462,14 @@ msgstr "(tühi)"
 #: gtk/gtkfilesystemunix.c:415 gtk/gtkfilesystemunix.c:429
 #: gtk/gtkfilesystemunix.c:626 gtk/gtkfilesystemwin32.c:482
 #: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1530
-#, fuzzy, c-format
+#, c-format
 msgid "Error getting information for '%s': %s"
-msgstr "viga informatsiooni saamisel '%s' jaoks: %s"
+msgstr "Viga info saamisel '%s' jaoks: %s"
 
 #: gtk/gtkfilesystemunix.c:495 gtk/gtkfilesystemwin32.c:537
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating directory '%s': %s"
-msgstr "viga kataloogi '%s' loomisel: %s"
+msgstr "Viga kataloogi '%s' loomisel: %s"
 
 #: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
@@ -1502,11 +1480,9 @@ msgid "Filesystem"
 msgstr "Failisüsteem"
 
 #: gtk/gtkfilesystemunix.c:740
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
 msgstr ""
-"Ei suuda luua kataloogi %s:\n"
-"%s"
 
 #: gtk/gtkfilesystemunix.c:835
 #, c-format
@@ -1516,9 +1492,9 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkfilesystemunix.c:1443 gtk/gtkfilesystemwin32.c:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Bookmark saving failed: %s"
-msgstr "Järjehoidja salvestamine ebaõnnestus (%s)"
+msgstr "Tõrge järjehoidja salvestamisel (%s)"
 
 #: gtk/gtkfilesystemunix.c:1495
 #, c-format
@@ -1531,15 +1507,14 @@ msgid "'%s' does not exist in the bookmarks list"
 msgstr ""
 
 #: gtk/gtkfilesystemunix.c:1739
-#, fuzzy, c-format
+#, c-format
 msgid "Error getting information for '%s'"
-msgstr "viga informatsiooni saamisel '%s' jaoks"
+msgstr "Viga info saamisel '%s' jaoks"
 
 #: gtk/gtkfontbutton.c:178 gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
 msgstr "Vali kirjatüüp"
 
-#  Initialize fields
 #. Initialize fields
 #: gtk/gtkfontbutton.c:289
 msgid "Sans 12"
@@ -1584,8 +1559,6 @@ msgstr "Gamma"
 msgid "_Gamma value"
 msgstr "_Gamma väärtus"
 
-#  Remove this icon source so we don't keep trying to
-#  * load it.
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
@@ -1691,7 +1664,7 @@ msgstr "(tundmatu)"
 msgid "clear"
 msgstr "kustuta"
 
-#: gtk/gtklabel.c:3930
+#: gtk/gtklabel.c:3931
 msgid "Select All"
 msgstr "Vali kõik"
 
@@ -1768,7 +1741,7 @@ msgstr ""
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:286
 msgid "Information"
-msgstr "Informatsioon"
+msgstr "Info"
 
 #: gtk/gtkstock.c:287
 msgid "Warning"
@@ -1930,32 +1903,28 @@ msgid "_Right"
 msgstr "_Paremale"
 
 #: gtk/gtkstock.c:332
-#, fuzzy
 msgid "_Next"
-msgstr "_Uus"
+msgstr "_Järgmine"
 
 #: gtk/gtkstock.c:333
-#, fuzzy
 msgid "P_ause"
-msgstr "_Aseta"
+msgstr "_Pausi"
 
 #: gtk/gtkstock.c:334
 msgid "_Play"
-msgstr ""
+msgstr "_Mängi"
 
 #: gtk/gtkstock.c:335
 msgid "Pre_vious"
-msgstr ""
+msgstr "_Eelmine"
 
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgid "_Record"
-msgstr "_Punane:"
+msgstr "_Salvesta:"
 
 #: gtk/gtkstock.c:337
-#, fuzzy
 msgid "R_ewind"
-msgstr "_Otsi"
+msgstr ""
 
 #: gtk/gtkstock.c:338 gtk/gtkstock.c:361
 msgid "_Stop"
@@ -1987,15 +1956,15 @@ msgstr "_Aseta"
 
 #: gtk/gtkstock.c:345
 msgid "_Preferences"
-msgstr "_Häälestus"
+msgstr "_Eelistused"
 
 #: gtk/gtkstock.c:346
 msgid "_Print"
-msgstr "_Prindi"
+msgstr "_Trüki"
 
 #: gtk/gtkstock.c:347
 msgid "Print Pre_view"
-msgstr "Prindi_vaade"
+msgstr "Trükkimise eel_vaade"
 
 #: gtk/gtkstock.c:348
 msgid "_Properties"
@@ -2149,7 +2118,6 @@ msgstr ""
 msgid "Empty"
 msgstr "Tühi"
 
-#  ID
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
@@ -2167,7 +2135,6 @@ msgstr "Kirillits (translitereeritud)"
 
 #. ID
 #: modules/input/iminuktitut.c:127
-#, fuzzy
 msgid "Inuktitut (Transliterated)"
 msgstr "Inukitut (translitereeritud)"
 
@@ -2196,7 +2163,6 @@ msgstr ""
 msgid "Vietnamese (VIQR)"
 msgstr "Vietnami (VIQR)"
 
-#  ID
 #. ID
 #: modules/input/imxim.c:28
 msgid "X Input Method"
