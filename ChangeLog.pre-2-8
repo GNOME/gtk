@@ -1,3 +1,11 @@
+2002-02-22  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbuffer.c (save_range): change gravity of start/end
+	marks so that text added at either end of the range doesn't end up
+	inside the range.
+	(gtk_text_buffer_real_insert_range): fix to handle pasting a range
+	into itself.
+
 2002-02-28  Sven Neumann  <sven@gimp.org>
 
 	* configure.in: beautified configure --help output.
