@@ -3163,10 +3163,18 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
         }
       else
         {
+	  GtkTextIter iter;
+
           /* Unselect everything; probably we were dragging, or clicked
-           * outside the text.
+           * without dragging to remove selection.
            */
-          gtk_text_view_unselect (text_view);
+	  gtk_text_layout_get_iter_at_pixel (text_view->layout,
+					     &iter,
+					     event->x + text_view->xoffset,
+					     event->y + text_view->yoffset);
+
+	  gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
+  
           return FALSE;
         }
     }
