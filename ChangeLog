@@ -1,3 +1,8 @@
+2004-07-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_class_init): Expand the documentation
+	for GtkLabel::ellipsize.
+
 Mon Jul 26 00:38:27 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Make the GtkComboBox in list mode scroll if the list is too

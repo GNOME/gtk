@@ -385,6 +385,21 @@ gtk_label_class_init (GtkLabelClass *class)
                                                      0,
                                                      G_PARAM_READABLE));
   
+  /**
+   * GtkLabel:ellipsize:
+   *
+   * The preferred place to ellipsize the string, if the label does not have 
+   * enough room to display the entire string, specified as a #PangoEllisizeMode. 
+   *
+   * Note that setting this property to a value other than %PANGO_ELLIPSIZE_NONE 
+   * has the side-effect that the label requests only enough space to display the
+   * ellipsis "...". Ellipsizing labels must be packed in a container which 
+   * ensures that the label gets a reasonable size allocated. In particular, 
+   * this means that ellipsizing labels don't work well in notebook tabs, unless
+   * the tab's ::tab-expand property is set to %TRUE.
+   *
+   * Since: 2.6
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_ELLIPSIZE,
                                    g_param_spec_enum ("ellipsize",
