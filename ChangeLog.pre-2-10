@@ -1,3 +1,9 @@
+2005-01-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter): Update 
+	the user time when receiving a WM_DELETE message.  (#162980, 
+	Elijah Newren)
+	
 Tue Jan  4 16:52:14 2005  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_button_event):

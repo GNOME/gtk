@@ -2069,6 +2069,8 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
       
       event->any.type = GDK_DELETE;
 
+      gdk_x11_window_set_user_time (win, xevent->xclient.data.l[1]);
+
       return GDK_FILTER_TRANSLATE;
     }
   else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS"))
