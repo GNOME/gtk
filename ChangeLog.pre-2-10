@@ -1,5 +1,8 @@
 2004-04-15  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilesel.c (open_new_dir): Tell the user to use
+	G_FILENAME_ENCODING, not G_BROKEN_FILENAMES.  Fixes #114065.
+
 	* gtk/gtkfilechooserdefault.c (split_uris): Use a variant of the
 	code from gtkfilesel.c to parse a "text/uri-list" blob.  Fixes
 	#140126.
