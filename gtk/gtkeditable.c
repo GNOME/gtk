@@ -75,6 +75,9 @@ static void gtk_editable_set_arg	     (GtkObject        *object,
 static void gtk_editable_get_arg	     (GtkObject        *object,
 					      GtkArg           *arg,
 					      guint             arg_id);
+static void *gtk_editable_get_public_chars   (GtkEditable      *editable,
+					      gint              start,
+					      gint              end);
 static gint gtk_editable_selection_clear     (GtkWidget        *widget,
 					     GdkEventSelection *event);
 static void gtk_editable_selection_get      (GtkWidget         *widget,
@@ -382,6 +385,7 @@ gtk_editable_init (GtkEditable *editable)
   editable->selection_end_pos = 0;
   editable->has_selection = FALSE;
   editable->editable = 1;
+  editable->visible = 1;
   editable->clipboard_text = NULL;
 
 #ifdef USE_XIM
@@ -471,6 +475,35 @@ gtk_editable_get_chars      (GtkEditable      *editable,
   klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
 
   return klass->get_chars (editable, start, end);
+}
+
+/*
+ * Like gtk_editable_get_chars, but if the editable is not
+ * visible, return asterisks
+ */
+static void *    
+gtk_editable_get_public_chars (GtkEditable      *editable,
+			       gint              start,
+			       gint              end)
+{
+  if (editable->visible)
+    return gtk_editable_get_chars (editable, start, end);
+  else
+    {
+      gint i;
+      gint nchars = end - start;
+      gchar *str;
+       
+      if (nchars < 0)
+	nchars = -nchars;
+
+      str = g_new (gchar, nchars + 1);
+      for (i = 0; i<nchars; i++)
+	str[i] = '*';
+      str[i] = '\0';
+
+      return str;
+    }
 }
 
 static void
@@ -568,9 +601,9 @@ gtk_editable_selection_get (GtkWidget        *widget,
     {
       selection_start_pos = MIN (editable->selection_start_pos, editable->selection_end_pos);
       selection_end_pos = MAX (editable->selection_start_pos, editable->selection_end_pos);
-      str = gtk_editable_get_chars(editable, 
-				   selection_start_pos, 
-				   selection_end_pos);
+      str = gtk_editable_get_public_chars(editable, 
+					  selection_start_pos, 
+					  selection_end_pos);
       if (!str)
 	 return;		/* Refuse */
       length = strlen (str);
@@ -890,9 +923,9 @@ gtk_editable_real_copy_clipboard (GtkEditable *editable)
       if (gtk_selection_owner_set (GTK_WIDGET (editable),
 				   clipboard_atom,
 				   time))
-	editable->clipboard_text = gtk_editable_get_chars (editable,
-							   selection_start_pos,
-							   selection_end_pos);
+	editable->clipboard_text = gtk_editable_get_public_chars (editable,
+								  selection_start_pos,
+								  selection_end_pos);
     }
 }
 

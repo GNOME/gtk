@@ -52,7 +52,7 @@ struct _GtkEntry
   guint16 text_length;	/* length in use */
   guint16 text_max_length;
   gint    scroll_offset;
-  guint   visible : 1;
+  guint   visible : 1;	/* deprecated - see editable->visible */
   guint32 timer;
   guint   button;
 

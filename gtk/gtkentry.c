@@ -326,7 +326,7 @@ gtk_entry_get_arg (GtkObject      *object,
       GTK_VALUE_UINT (*arg) = entry->text_max_length;
       break;
     case ARG_VISIBILITY:
-      GTK_VALUE_BOOL (*arg) = entry->visible;
+      GTK_VALUE_BOOL (*arg) = GTK_EDITABLE (entry)->visible;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -460,7 +460,8 @@ gtk_entry_set_visibility (GtkEntry *entry,
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  entry->visible = visible;
+  entry->visible = visible ? TRUE : FALSE;
+  GTK_EDITABLE (entry)->visible = visible ? TRUE : FALSE;
   gtk_entry_recompute_offsets (entry);
   gtk_widget_queue_draw (GTK_WIDGET (entry));
 }
@@ -1344,8 +1345,8 @@ gtk_entry_draw_text (GtkEntry *entry)
       selection_end_xoffset = 
 	entry->char_offset[selection_end_pos] -entry->scroll_offset;
 
-      /* if entry->visible, print a bunch of stars.  If not, print the standard text. */
-      if (entry->visible)
+      /* if editable->visible, print a bunch of stars.  If not, print the standard text. */
+      if (editable->visible)
 	{
 	  toprint = entry->text + start_pos;
 	}
@@ -1391,7 +1392,7 @@ gtk_entry_draw_text (GtkEntry *entry)
 			   toprint + selection_end_pos - start_pos,
 			   end_pos - selection_end_pos);
        /* free the space allocated for the stars if it's neccessary. */
-      if (!entry->visible)
+      if (!editable->visible)
 	g_free (toprint);
 
       if (editable->editable)
@@ -1725,7 +1726,7 @@ gtk_entry_insert_text (GtkEditable *editable,
       for (i=start_pos; i<end_pos; i++)
 	{
 	  entry->char_offset[i] = entry->char_offset[start_pos] + offset;
-	  if (entry->visible)
+	  if (editable->visible)
 	    {
 	      offset += gdk_char_width_wc (GTK_WIDGET (entry)->style->font,
 					   entry->text[i]);
@@ -1756,7 +1757,7 @@ gtk_entry_recompute_offsets (GtkEntry *entry)
   for (i=0; i<entry->text_length; i++)
     {
       entry->char_offset[i] = offset;
-      if (entry->visible)
+      if (GTK_EDITABLE (entry)->visible)
 	{
 	  offset += gdk_char_width_wc (GTK_WIDGET (entry)->style->font,
 				       entry->text[i]);

@@ -51,6 +51,7 @@ struct _GtkEditable
   guint      selection_end_pos;
   guint      has_selection : 1;
   guint      editable : 1;
+  guint      visible : 1;
   GdkIC     *ic;
   GdkICAttr *ic_attr;
 
