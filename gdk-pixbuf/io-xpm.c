@@ -330,6 +330,8 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 	_XPMColor *colors, *color, *fallbackcolor;
 	guchar *pixels, *pixtmp;
 
+	fallbackcolor = NULL;
+
 	buffer = (*get_buf) (op_header, handle);
 	if (!buffer) {
 		g_warning ("No XPM header found");

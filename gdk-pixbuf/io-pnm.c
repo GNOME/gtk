@@ -392,7 +392,6 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 	default:
 		g_warning ("io-pnm.c: Illegal raw pnm type!\n");
 		return PNM_FATAL_ERR;
-		break;
 	}
 	
 	numpix = MIN (numpix, context->width - context->output_col);
@@ -418,7 +417,7 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 		break;
 	default:
 		g_warning ("io-pnm.c: Illegal raw pnm type!\n");
-		break;
+		return PNM_FATAL_ERR;
 	}
 	
 	memcpy (context->dptr + offset,	inbuf->next_byte, numbytes);
@@ -457,6 +456,8 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 	PnmIOBuffer *inbuf;
 
 	g_return_val_if_fail (context != NULL, PNM_FATAL_ERR);
+
+	data = mask = 0;
 
 	inbuf = &context->inbuf;
 
