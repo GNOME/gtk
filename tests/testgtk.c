@@ -2635,14 +2635,14 @@ create_tooltips (void)
 			    "ContextHelp/buttons/?");
       
       
-      gtk_widget_set (g_object_connect (tips_query,
-					"signal::widget_entered", tips_query_widget_entered, toggle,
-					"signal::widget_selected", tips_query_widget_selected, NULL,
-					NULL),
-		      "visible", TRUE,
-		      "parent", box3,
-		      "caller", button,
-		      NULL);
+      g_object_set (g_object_connect (tips_query,
+				      "signal::widget_entered", tips_query_widget_entered, toggle,
+				      "signal::widget_selected", tips_query_widget_selected, NULL,
+				      NULL),
+		    "visible", TRUE,
+		    "parent", box3,
+		    "caller", button,
+		    NULL);
       
       frame = gtk_widget_new (gtk_frame_get_type (),
 			      "label", "ToolTips Inspector",

@@ -419,9 +419,11 @@ void	   gtk_widget_unref		  (GtkWidget	       *widget);
 void	   gtk_widget_destroy		  (GtkWidget	       *widget);
 void	   gtk_widget_destroyed		  (GtkWidget	       *widget,
 					   GtkWidget	      **widget_pointer);
+#ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_widget_set		  (GtkWidget	       *widget,
 					   const gchar         *first_property_name,
 					   ...);
+#endif /* GTK_DISABLE_DEPRECATED */
 void	   gtk_widget_unparent		  (GtkWidget	       *widget);
 void	   gtk_widget_show		  (GtkWidget	       *widget);
 void       gtk_widget_show_now            (GtkWidget           *widget);
