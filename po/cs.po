@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-12 15:14+0100\n"
-"PO-Revision-Date: 2003-12-12 18:14+0100\n"
+"POT-Creation-Date: 2003-12-15 04:15+0100\n"
+"PO-Revision-Date: 2003-12-15 12:37+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -760,7 +760,7 @@ msgstr "Název"
 msgid "A unique name for the action."
 msgstr "Jedinečný název akce."
 
-#: gtk/gtkaction.c:193 gtk/gtkbutton.c:190 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:193 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Popis"
@@ -838,7 +838,7 @@ msgstr "Název skupiny akcí."
 msgid "Horizontal alignment"
 msgstr "Vodorovné zarovnání"
 
-#: gtk/gtkalignment.c:117
+#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:254
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -850,7 +850,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Svislé zarovnání"
 
-#: gtk/gtkalignment.c:127
+#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:273
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -1084,18 +1084,18 @@ msgstr "Pozice"
 msgid "The index of the child in the parent"
 msgstr "Index potomka v rodiči"
 
-#: gtk/gtkbutton.c:191
+#: gtk/gtkbutton.c:204
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Text widgetu popisu v tlačítku, pokud tlačítko obsahuje widget popisu"
 
-#: gtk/gtkbutton.c:198 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
+#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
 #: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Používat podtržítko"
 
-#: gtk/gtkbutton.c:199 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
+#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1103,46 +1103,54 @@ msgstr ""
 "Je-li nastaveno, podtržítko v textu znamená, že následující znak se má "
 "použít jako klávesová zkratka"
 
-#: gtk/gtkbutton.c:206
+#: gtk/gtkbutton.c:219
 msgid "Use stock"
 msgstr "Použít standardní"
 
-#: gtk/gtkbutton.c:207
+#: gtk/gtkbutton.c:220
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Je-li nastaveno, popis se použije pro výběr standardní položky místo jeho "
 "zobrazení"
 
-#: gtk/gtkbutton.c:214
+#: gtk/gtkbutton.c:227
 msgid "Focus on click"
 msgstr "Fokus při kliknutí"
 
-#: gtk/gtkbutton.c:215
+#: gtk/gtkbutton.c:228
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Jestli tlačítko dostane fokus, když je na ně kliknuto myší"
 
-#: gtk/gtkbutton.c:222
+#: gtk/gtkbutton.c:235
 msgid "Border relief"
 msgstr "Reliéf okraje"
 
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:236
 msgid "The border relief style"
 msgstr "Styl reliéfu okraje"
 
-#: gtk/gtkbutton.c:280
+#: gtk/gtkbutton.c:253
+msgid "Horizontal alignment for child"
+msgstr "Vodorovné zarovnání potomka"
+
+#: gtk/gtkbutton.c:272
+msgid "Vertical alignment for child"
+msgstr "Svislé zarovnání potomka"
+
+#: gtk/gtkbutton.c:331
 msgid "Default Spacing"
 msgstr "Implicitní rozestup"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:332
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Prostor navíc přidaný pro tlačítka CAN_DEFAULT"
 
-#: gtk/gtkbutton.c:287
+#: gtk/gtkbutton.c:338
 msgid "Default Outside Spacing"
 msgstr "Implicitní prostor okolo"
 
-#: gtk/gtkbutton.c:288
+#: gtk/gtkbutton.c:339
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -1150,20 +1158,20 @@ msgstr ""
 "Prostor navíc přidaný pro tlačítka typu CAN_DEFAULT, který je vždy vykreslen "
 "za okrajem"
 
-#: gtk/gtkbutton.c:293
+#: gtk/gtkbutton.c:344
 msgid "Child X Displacement"
 msgstr "Posun potomka podle X"
 
-#: gtk/gtkbutton.c:294
+#: gtk/gtkbutton.c:345
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "O kolik posunout potomka ve směru osy X při stisku tlačítka"
 
-#: gtk/gtkbutton.c:301
+#: gtk/gtkbutton.c:352
 msgid "Child Y Displacement"
 msgstr "Posun potomka podle Y"
 
-#: gtk/gtkbutton.c:302
+#: gtk/gtkbutton.c:353
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "O kolik posunout potomka ve směru osy Y při stisku tlačítka"
@@ -2743,7 +2751,7 @@ msgstr "Nemohu převést název souboru"
 msgid "(Empty)"
 msgstr "(Prázdný)"
 
-#: gtk/gtkfilesystemunix.c:306 gtk/gtkfilesystemwin32.c:371
+#: gtk/gtkfilesystemunix.c:306 gtk/gtkfilesystemwin32.c:383
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "chyba při vytváření adresáře '%s': %s"
@@ -2756,15 +2764,19 @@ msgstr "Tento systém souborů nepodporuje ikony"
 msgid "This file system does not support bookmarks"
 msgstr "Tento systém souborů nepodporuje záložky"
 
-#: gtk/gtkfilesystemunix.c:765 gtk/gtkfilesystemwin32.c:893
+#: gtk/gtkfilesystemunix.c:765 gtk/gtkfilesystemwin32.c:1069
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "chyba při získávání informací o '%s': %s"
 
-#: gtk/gtkfilesystemwin32.c:680
+#: gtk/gtkfilesystemwin32.c:692
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Ukládání záložek selhalo (%s)"
+
+#: gtk/gtkfilesystemwin32.c:848
+msgid "This file system does not support icons for everything"
+msgstr "Tento systém souborů nepodporuje ikony pro všechno"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
@@ -3250,7 +3262,7 @@ msgstr "Výška rozložení"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:840
+#: gtk/gtkmain.c:851
 msgid "default:LTR"
 msgstr "default:LTR"
 
