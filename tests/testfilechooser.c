@@ -356,7 +356,7 @@ main (int argc, char **argv)
 
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
 			 "action", action,
-			 "file-system-backend", "gnome-vfs",
+			 "file-system-backend", "gtk+",
 			 NULL);
   switch (action)
     {

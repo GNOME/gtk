@@ -10,8 +10,6 @@ static void delegate_get_resizable_hints      (GtkFileChooserEmbed *chooser_embe
 					       gboolean            *resize_vertically);
 static void delegate_default_size_changed     (GtkFileChooserEmbed *chooser_embed,
 					       gpointer             data);
-static void delegate_resizable_hints_changed  (GtkFileChooserEmbed *chooser_embed,
-					       gpointer             data);
 
 static GtkFileChooserEmbed *
 get_delegate (GtkFileChooserEmbed *receiver)
@@ -56,8 +54,6 @@ _gtk_file_chooser_embed_set_delegate (GtkFileChooserEmbed *receiver,
 
   g_signal_connect (delegate, "default_size_changed",
 		    G_CALLBACK (delegate_default_size_changed), receiver);
-  g_signal_connect (delegate, "resizable_hints_changed",
-		    G_CALLBACK (delegate_resizable_hints_changed), receiver);
 }
 
 
@@ -83,13 +79,6 @@ delegate_default_size_changed (GtkFileChooserEmbed *chooser_embed,
 			       gpointer             data)
 {
   g_signal_emit_by_name (data, "default-size-changed");
-}
-
-static void
-delegate_resizable_hints_changed (GtkFileChooserEmbed *chooser_embed,
-				  gpointer             data)
-{
-  g_signal_emit_by_name (data, "resizable-hints-changed");
 }
 
 
@@ -129,13 +118,6 @@ gtk_file_chooser_embed_class_init (gpointer g_iface)
 		iface_type,
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserEmbedIface, default_size_changed),
-		NULL, NULL,
-		_gtk_marshal_VOID__VOID,
-		G_TYPE_NONE, 0);
-  g_signal_new ("resizable-hints-changed",
-		iface_type,
-		G_SIGNAL_RUN_LAST,
-		G_STRUCT_OFFSET (GtkFileChooserEmbedIface, resizable_hints_changed),
 		NULL, NULL,
 		_gtk_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);

@@ -2384,7 +2384,6 @@ update_appearance (GtkFileChooserDefault *impl)
     }
 
   g_signal_emit_by_name (impl, "default-size-changed");
-  g_signal_emit_by_name (impl, "resizable-hints-changed");
 }
 
 static void
