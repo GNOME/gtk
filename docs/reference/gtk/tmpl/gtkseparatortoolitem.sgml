@@ -59,8 +59,10 @@ should only be accessed through the functions described below.
 
 </para>
 
-@tool_item: 
+@item: 
 @draw: 
+<!-- # Unused Parameters # -->
+@tool_item: 
 
 
 <!-- ##### FUNCTION gtk_separator_tool_item_get_draw ##### -->

@@ -14,14 +14,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
-"POT-Creation-Date: 2004-01-17 01:51+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-01-22 18:01-0500\n"
 "PO-Revision-Date: 2004-01-14 18:02+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "serrador@hispalinux.es>\n"
 "X-Generator: KBabel 1.0.2\n"
 
@@ -442,7 +442,7 @@ msgstr "Espaciado"
 msgid "The amount of space between children"
 msgstr "La cantidad de espacio entre hijos"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:475
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:534
 msgid "Homogeneous"
 msgstr "Homogéneo"
 
@@ -450,7 +450,7 @@ msgstr "Homogéneo"
 msgid "Whether the children should all be the same size"
 msgstr "Indica si todos los hijos deben ser del mismo tamaño"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:467
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
 #: gtk/gtktreeviewcolumn.c:294
 msgid "Expand"
 msgstr "Extender"
@@ -1859,7 +1859,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Un widget a mostrar en lugar de la usual etiqueta del marco"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:516 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Tipo de sombra"
 
@@ -2193,7 +2193,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Estilo del bisel alrededor de la barra de menús"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:492
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
 msgid "Internal padding"
 msgstr "Relleno interno"
 
@@ -2563,7 +2563,7 @@ msgstr "Ajuste"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "El GtkAdjustment conectado a la barra de progreso (obsoleto)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:441
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
 msgid "Orientation"
 msgstr "Orientación"
 
@@ -2883,11 +2883,11 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "Número de píxeles entre las barras de desplazamientos y la ventana desplazada"
 
-#: gtk/gtkseparatortoolitem.c:159
+#: gtk/gtkseparatortoolitem.c:134
 msgid "Draw"
 msgstr "Dibujar"
 
-#: gtk/gtkseparatortoolitem.c:160
+#: gtk/gtkseparatortoolitem.c:135
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Indica si el separador se dibuja, o sólo de deja en blanco"
 
@@ -3605,88 +3605,88 @@ msgstr "Indicador de dibujo"
 msgid "If the toggle part of the button is displayed"
 msgstr "Si la parte de activación del botón es mostrada"
 
-#: gtk/gtktoolbar.c:442
+#: gtk/gtktoolbar.c:501
 msgid "The orientation of the toolbar"
 msgstr "La orientación de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:450
+#: gtk/gtktoolbar.c:509
 msgid "Toolbar Style"
 msgstr "Estilo de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:451
+#: gtk/gtktoolbar.c:510
 msgid "How to draw the toolbar"
 msgstr "Cómo dibujar la barra de herramientas"
 
-#: gtk/gtktoolbar.c:458
+#: gtk/gtktoolbar.c:517
 msgid "Show Arrow"
 msgstr "Mostrar flecha"
 
-#: gtk/gtktoolbar.c:459
+#: gtk/gtktoolbar.c:518
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 "Indica si debe mostrarse una flecha si no cabe la barra de herramientas"
 
-#: gtk/gtktoolbar.c:468
+#: gtk/gtktoolbar.c:527
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Indica si el elemento debería recibir espacio extra cuando la barra crezca"
 
-#: gtk/gtktoolbar.c:476
+#: gtk/gtktoolbar.c:535
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Indica si el elemento debería ser del mismo tamaño que otros elementos "
 "homogéneos"
 
-#: gtk/gtktoolbar.c:483
+#: gtk/gtktoolbar.c:542
 msgid "Spacer size"
 msgstr "Tamaño del espaciador"
 
-#: gtk/gtktoolbar.c:484
+#: gtk/gtktoolbar.c:543
 msgid "Size of spacers"
 msgstr "Tamaño de los espaciadores"
 
-#: gtk/gtktoolbar.c:493
+#: gtk/gtktoolbar.c:552
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 "Cantidad de espacio del borde entre la sombra de la barra de herramientas y "
 "los botones"
 
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:560
 msgid "Space style"
 msgstr "Estilo del espacio"
 
-#: gtk/gtktoolbar.c:502
+#: gtk/gtktoolbar.c:561
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Indica si los espaciadores son líneas verticales o sólo blancos"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:568
 msgid "Button relief"
 msgstr "Relieve del botón"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:569
 msgid "Type of bevel around toolbar buttons"
 msgstr "Tipo de bisel alrededor de los botones de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:576
 msgid "Style of bevel around the toolbar"
 msgstr "Estilo del bisel alrededor de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:523
+#: gtk/gtktoolbar.c:582
 msgid "Toolbar style"
 msgstr "Estilo de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:583
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Indica si las barras de herramientas predeterminadas tienen sólo texto, "
 "texto y iconos, sólo iconos, etc."
 
-#: gtk/gtktoolbar.c:530
+#: gtk/gtktoolbar.c:589
 msgid "Toolbar icon size"
 msgstr "Tamaño del icono de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:531
+#: gtk/gtktoolbar.c:590
 msgid "Size of icons in default toolbars"
 msgstr "Tamaño de los iconos el las barras de herramientas predeterminadas"
 
@@ -4163,51 +4163,51 @@ msgstr "No mostrar todo"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Indica que gtk_widget_show_all() no debe afectar a este widget"
 
-#: gtk/gtkwidget.c:1362
+#: gtk/gtkwidget.c:1374
 msgid "Interior Focus"
 msgstr "Foco interior"
 
-#: gtk/gtkwidget.c:1363
+#: gtk/gtkwidget.c:1375
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Indica si dibujar el foco indicador dentro de los widgets"
 
-#: gtk/gtkwidget.c:1369
+#: gtk/gtkwidget.c:1381
 msgid "Focus linewidth"
 msgstr "Dar foco al ancho de línea"
 
-#: gtk/gtkwidget.c:1370
+#: gtk/gtkwidget.c:1382
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Ancho, en píxeles, de la línea indicadora del foco"
 
-#: gtk/gtkwidget.c:1376
+#: gtk/gtkwidget.c:1388
 msgid "Focus line dash pattern"
 msgstr "Dar foco a la línea con patrón punteado"
 
-#: gtk/gtkwidget.c:1377
+#: gtk/gtkwidget.c:1389
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Patrón punteado utilizado para dibujar el indicador de foco"
 
-#: gtk/gtkwidget.c:1382
+#: gtk/gtkwidget.c:1394
 msgid "Focus padding"
 msgstr "Relleno del foco"
 
-#: gtk/gtkwidget.c:1383
+#: gtk/gtkwidget.c:1395
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Ancho, en píxeles, entre el indicador de foco y la «caja» del widget"
 
-#: gtk/gtkwidget.c:1388
+#: gtk/gtkwidget.c:1400
 msgid "Cursor color"
 msgstr "Color del cursor"
 
-#: gtk/gtkwidget.c:1389
+#: gtk/gtkwidget.c:1401
 msgid "Color with which to draw insertion cursor"
 msgstr "Color con el cual dibujar el cursor de inserción"
 
-#: gtk/gtkwidget.c:1394
+#: gtk/gtkwidget.c:1406
 msgid "Secondary cursor color"
 msgstr "Color secundario del cursor"
 
-#: gtk/gtkwidget.c:1395
+#: gtk/gtkwidget.c:1407
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4215,11 +4215,11 @@ msgstr ""
 "Color con el cual dibujar el cursor de inserción secundario cuando se esta "
 "editando una mezcla de texto de derecha-a-izquierda y izquierda-a-derecha"
 
-#: gtk/gtkwidget.c:1400
+#: gtk/gtkwidget.c:1412
 msgid "Cursor line aspect ratio"
 msgstr "Proporción de la línea del cursor"
 
-#: gtk/gtkwidget.c:1401
+#: gtk/gtkwidget.c:1413
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "La proporción con la cual dibujar el cursor de inserción"
 

@@ -10,7 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
-"POT-Creation-Date: 2004-01-17 01:51+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-01-22 18:01-0500\n"
 "PO-Revision-Date: 2004-01-01 11:07+CET\n"
 "Last-Translator: Robert Sedak <robert.sedak@sk.tel.hr>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -443,7 +444,7 @@ msgstr "Prored"
 msgid "The amount of space between children"
 msgstr "Količina razmaka među sadržanim elementima"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:475
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:534
 msgid "Homogeneous"
 msgstr "Homogeno"
 
@@ -451,7 +452,7 @@ msgstr "Homogeno"
 msgid "Whether the children should all be the same size"
 msgstr "Mogu li sve nasljedne komponente biti iste veličine"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:467
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
 #: gtk/gtktreeviewcolumn.c:294
 msgid "Expand"
 msgstr "Proširi"
@@ -1830,7 +1831,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Element koji se prikazuje umjesto uobičajene oznake okvira"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:516 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Vrsta sjene"
 
@@ -2153,7 +2154,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Stil udubljenja oko linije izbornika"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:492
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
 msgid "Internal padding"
 msgstr "Unutrašnja popuna"
 
@@ -2513,7 +2514,7 @@ msgstr "Podešavanje"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "GtkAdjustment vezan za element za prikaz napretka (prevaziđeno)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:441
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
 msgid "Orientation"
 msgstr "Orijentacija"
 
@@ -2824,11 +2825,11 @@ msgstr "Razmak trake za pomicanje"
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Broj točaka između strelica za pomicanje sadržaja i samog sadržaja"
 
-#: gtk/gtkseparatortoolitem.c:159
+#: gtk/gtkseparatortoolitem.c:134
 msgid "Draw"
 msgstr "Crtaj"
 
-#: gtk/gtkseparatortoolitem.c:160
+#: gtk/gtkseparatortoolitem.c:135
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Može li razdjeljnik biti iscrtan ili ne"
 
@@ -3528,82 +3529,82 @@ msgstr "Prikaz pokazatelja"
 msgid "If the toggle part of the button is displayed"
 msgstr "Da li se prikazuje preklopni dio gumba ili ne"
 
-#: gtk/gtktoolbar.c:442
+#: gtk/gtktoolbar.c:501
 msgid "The orientation of the toolbar"
 msgstr "Promijeni format izabranih ćelija"
 
-#: gtk/gtktoolbar.c:450
+#: gtk/gtktoolbar.c:509
 msgid "Toolbar Style"
 msgstr "Stila alatne trake"
 
-#: gtk/gtktoolbar.c:451
+#: gtk/gtktoolbar.c:510
 msgid "How to draw the toolbar"
 msgstr "Kako iscrtati alatnu traku"
 
-#: gtk/gtktoolbar.c:458
+#: gtk/gtktoolbar.c:517
 msgid "Show Arrow"
 msgstr "Strelica"
 
-#: gtk/gtktoolbar.c:459
+#: gtk/gtktoolbar.c:518
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Treba li prikazati strelicu ako alatna traka ne stane"
 
-#: gtk/gtktoolbar.c:468
+#: gtk/gtktoolbar.c:527
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Može li stavka dobiti dodatni prostor kada raste traka s alatima"
 
-#: gtk/gtktoolbar.c:476
+#: gtk/gtktoolbar.c:535
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Može li stavka biti iste veličine kao i ostale istovrsne stavke"
 
-#: gtk/gtktoolbar.c:483
+#: gtk/gtktoolbar.c:542
 msgid "Spacer size"
 msgstr "Veličina _papira:"
 
-#: gtk/gtktoolbar.c:484
+#: gtk/gtktoolbar.c:543
 msgid "Size of spacers"
 msgstr "_Prikaži uzorak"
 
-#: gtk/gtktoolbar.c:493
+#: gtk/gtktoolbar.c:552
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Količina razmaka oko ruba između alatne trake i gumba"
 
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:560
 msgid "Space style"
 msgstr "Ra_zmak"
 
-#: gtk/gtktoolbar.c:502
+#: gtk/gtktoolbar.c:561
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Mogu li razmaci biti okomiti redovi ili samo praznine"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:568
 msgid "Button relief"
 msgstr "Oslobađanje gumba"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:569
 msgid "Type of bevel around toolbar buttons"
 msgstr "Vrsta udubljenja oko gumba na alatnoj traci"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:576
 msgid "Style of bevel around the toolbar"
 msgstr "Stil slikovnog okvira oko trake s alatima"
 
-#: gtk/gtktoolbar.c:523
+#: gtk/gtktoolbar.c:582
 msgid "Toolbar style"
 msgstr "Stil trake s alatima"
 
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:583
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Može li uobičajena trake alata imati samo tekst, tekst i sličice, samo "
 "sličice, itd."
 
-#: gtk/gtktoolbar.c:530
+#: gtk/gtktoolbar.c:589
 msgid "Toolbar icon size"
 msgstr "Veličina sličice za alatnu traku"
 
-#: gtk/gtktoolbar.c:531
+#: gtk/gtktoolbar.c:590
 msgid "Size of icons in default toolbars"
 msgstr "Veličina sličica kod uobičajene alatne trake"
 
@@ -4065,52 +4066,52 @@ msgstr "Bez prikazivanja svega"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Može ligtk_widget_show_all() utjecati na ovu komponentu"
 
-#: gtk/gtkwidget.c:1362
+#: gtk/gtkwidget.c:1374
 msgid "Interior Focus"
 msgstr "Unutrašnji fokus"
 
-#: gtk/gtkwidget.c:1363
+#: gtk/gtkwidget.c:1375
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Može li biti iscrtan pokazatelj fokusa unutar komponente"
 
-#: gtk/gtkwidget.c:1369
+#: gtk/gtkwidget.c:1381
 msgid "Focus linewidth"
 msgstr "Debljina fokusne linije"
 
-#: gtk/gtkwidget.c:1370
+#: gtk/gtkwidget.c:1382
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Širina, u tačkama, linije koju pokazuje element u fokusu"
 
-#: gtk/gtkwidget.c:1376
+#: gtk/gtkwidget.c:1388
 msgid "Focus line dash pattern"
 msgstr "Obrazac crtkanja fokusne linije"
 
-#: gtk/gtkwidget.c:1377
+#: gtk/gtkwidget.c:1389
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Uzorak po kojem se crta pokazatelj elementa u fokusu"
 
-#: gtk/gtkwidget.c:1382
+#: gtk/gtkwidget.c:1394
 msgid "Focus padding"
 msgstr "Fokusna popuna"
 
-#: gtk/gtkwidget.c:1383
+#: gtk/gtkwidget.c:1395
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Širina, u tačkama, između pokazatelja elementa u fokusu i komponente okvira"
 
-#: gtk/gtkwidget.c:1388
+#: gtk/gtkwidget.c:1400
 msgid "Cursor color"
 msgstr "Boja pokazivača"
 
-#: gtk/gtkwidget.c:1389
+#: gtk/gtkwidget.c:1401
 msgid "Color with which to draw insertion cursor"
 msgstr "Boja kojom se iscrtava pokazivač za unos"
 
-#: gtk/gtkwidget.c:1394
+#: gtk/gtkwidget.c:1406
 msgid "Secondary cursor color"
 msgstr "Druga boja kursora"
 
-#: gtk/gtkwidget.c:1395
+#: gtk/gtkwidget.c:1407
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4118,11 +4119,11 @@ msgstr ""
 "Boja kojom se iscrtava drugi kursor za unos pri unosu mješanog teksta sdesna "
 "na lijevo, i teksta s lijeva na desno"
 
-#: gtk/gtkwidget.c:1400
+#: gtk/gtkwidget.c:1412
 msgid "Cursor line aspect ratio"
 msgstr "Omjer prikaza pokazivača"
 
-#: gtk/gtkwidget.c:1401
+#: gtk/gtkwidget.c:1413
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Razmjer u kojem se iscrtava pokazivač za unos"
 

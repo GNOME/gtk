@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-19 19:36+0100\n"
+"POT-Creation-Date: 2004-01-22 18:01-0500\n"
 "PO-Revision-Date: 2004-01-19 20:38+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
@@ -156,7 +156,9 @@ msgstr "Synlig når horisontal"
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
-msgstr "Om verktøylinjeoppføringen er synlig når verktøylinjen har horisontal orientering."
+msgstr ""
+"Om verktøylinjeoppføringen er synlig når verktøylinjen har horisontal "
+"orientering."
 
 #: gtk/gtkaction.c:236 gtk/gtktoolitem.c:161
 msgid "Visible when vertical"
@@ -166,7 +168,9 @@ msgstr "Synlig når vertikal"
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
-msgstr "Om verktøylinjeoppføringen er synlig når verktøylinjen har vertikal orientering."
+msgstr ""
+"Om verktøylinjeoppføringen er synlig når verktøylinjen har vertikal "
+"orientering."
 
 #: gtk/gtkaction.c:243 gtk/gtktoolitem.c:168
 msgid "Is important"
@@ -176,7 +180,9 @@ msgstr "Er viktig"
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr "Om handlingen ses på som viktig. Når denne er satt til TRUE viser proxyer for verktøylinjeoppføringene tekst i GTK_TOOLBAR_BOTH_HORIZ-modus."
+msgstr ""
+"Om handlingen ses på som viktig. Når denne er satt til TRUE viser proxyer "
+"for verktøylinjeoppføringene tekst i GTK_TOOLBAR_BOTH_HORIZ-modus."
 
 #: gtk/gtkaction.c:250
 msgid "Hide if empty"
@@ -1526,7 +1532,9 @@ msgstr "Synlig vindu"
 msgid ""
 "Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
-msgstr "Om handlingsboksen er synlig i motsetning til usynlig. I tillegg kan den kun brukes til å fange opp hendelser."
+msgstr ""
+"Om handlingsboksen er synlig i motsetning til usynlig. I tillegg kan den kun "
+"brukes til å fange opp hendelser."
 
 #: gtk/gtkeventbox.c:126
 msgid "Above child"
@@ -1536,7 +1544,9 @@ msgstr "Over barn"
 msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
-msgstr "Om vinduet som fanger hendelser i hendelsesboksen er over etterkommers vindu eller under det."
+msgstr ""
+"Om vinduet som fanger hendelser i hendelsesboksen er over etterkommers vindu "
+"eller under det."
 
 #: gtk/gtkexpander.c:194
 msgid "Expanded"
@@ -1637,7 +1647,9 @@ msgstr "Forhåndsvisningskomponent aktiv"
 #: gtk/gtkfilechooser.c:130
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
-msgstr "Om komponent for egendefinerte forhåndsvisninger levert av programmet skal vises."
+msgstr ""
+"Om komponent for egendefinerte forhåndsvisninger levert av programmet skal "
+"vises."
 
 #: gtk/gtkfilechooser.c:135
 msgid "Extra widget"
@@ -2411,7 +2423,8 @@ msgstr "Endre størrelse"
 
 #: gtk/gtkpaned.c:308
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
-msgstr "Hvis SANN vil etterkommer utvides og krypmes sammen med paned-komponenten"
+msgstr ""
+"Hvis SANN vil etterkommer utvides og krypmes sammen med paned-komponenten"
 
 #: gtk/gtkpaned.c:323
 msgid "Shrink"
@@ -2556,7 +2569,9 @@ msgstr "Verdien"
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
-msgstr "Verdien som returneres av gtk_radio_action_get_current_value() når denne handlingen er aktiv handling i sin gruppe."
+msgstr ""
+"Verdien som returneres av gtk_radio_action_get_current_value() når denne "
+"handlingen er aktiv handling i sin gruppe."
 
 #: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:109
 msgid "Group"
@@ -4016,51 +4031,51 @@ msgstr "Ikke vis alle"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Om gtk_widget_show_all() skal ha effekt for denne komponenten"
 
-#: gtk/gtkwidget.c:1362
+#: gtk/gtkwidget.c:1374
 msgid "Interior Focus"
 msgstr "Internt fokus"
 
-#: gtk/gtkwidget.c:1363
+#: gtk/gtkwidget.c:1375
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Om fokusindikator skal tegnes inne i et widget"
 
-#: gtk/gtkwidget.c:1369
+#: gtk/gtkwidget.c:1381
 msgid "Focus linewidth"
 msgstr "Fokuslinjebredde"
 
-#: gtk/gtkwidget.c:1370
+#: gtk/gtkwidget.c:1382
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Fokusindikatorlinjens bredde i piksler"
 
-#: gtk/gtkwidget.c:1376
+#: gtk/gtkwidget.c:1388
 msgid "Focus line dash pattern"
 msgstr "Prikkemønster for fokuslinje"
 
-#: gtk/gtkwidget.c:1377
+#: gtk/gtkwidget.c:1389
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Prikkemønster som brukes til å tegne fokusindikator"
 
-#: gtk/gtkwidget.c:1382
+#: gtk/gtkwidget.c:1394
 msgid "Focus padding"
 msgstr "Fyll for fokus"
 
-#: gtk/gtkwidget.c:1383
+#: gtk/gtkwidget.c:1395
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Bredde i piksler mellom fokusindikator og widgetboksen"
 
-#: gtk/gtkwidget.c:1388
+#: gtk/gtkwidget.c:1400
 msgid "Cursor color"
 msgstr "Markørfarge"
 
-#: gtk/gtkwidget.c:1389
+#: gtk/gtkwidget.c:1401
 msgid "Color with which to draw insertion cursor"
 msgstr "Farge som markøren skal tegnes med"
 
-#: gtk/gtkwidget.c:1394
+#: gtk/gtkwidget.c:1406
 msgid "Secondary cursor color"
 msgstr "Sekundær markørfarge"
 
-#: gtk/gtkwidget.c:1395
+#: gtk/gtkwidget.c:1407
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4068,11 +4083,11 @@ msgstr ""
 "Farge for sekundær innsettingsmarkør ved redigering av blandet høyre-til-"
 "venstre og venstre-til-høyre tekst"
 
-#: gtk/gtkwidget.c:1400
+#: gtk/gtkwidget.c:1412
 msgid "Cursor line aspect ratio"
 msgstr "Aspektrate for markørlinje"
 
-#: gtk/gtkwidget.c:1401
+#: gtk/gtkwidget.c:1413
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Aspektrate for tegning av innsettingsmarkør"
 

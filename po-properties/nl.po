@@ -16,14 +16,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2004-01-17 01:51+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-01-22 18:01-0500\n"
 "PO-Revision-Date: 2004-01-14 02:53+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
@@ -443,7 +443,7 @@ msgstr "Spatiëring"
 msgid "The amount of space between children"
 msgstr "De hoeveelheid ruimte tussen dochters"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:475
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:534
 msgid "Homogeneous"
 msgstr "Homogeen"
 
@@ -451,7 +451,7 @@ msgstr "Homogeen"
 msgid "Whether the children should all be the same size"
 msgstr "Of de dochters allemaal dezelfde afmetingen moeten hebben"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:467
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
 #: gtk/gtktreeviewcolumn.c:294
 msgid "Expand"
 msgstr "Uitklappen"
@@ -1859,7 +1859,7 @@ msgstr ""
 "Een widget dat weergegeven wordt in plaats van het gebruikelijk kaderlabel"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:516 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Schaduwtype"
 
@@ -2194,7 +2194,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Stijl van de rand rondom de menubalk"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:492
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
 msgid "Internal padding"
 msgstr "Interne opvulling"
 
@@ -2556,7 +2556,7 @@ msgstr "Aanpassing"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "De GtkAdjustment gekoppeld aan de voortgangsbalk (Verouderd)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:441
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
 msgid "Orientation"
 msgstr "Oriëntatie"
 
@@ -2877,11 +2877,11 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "Het aantal beeldpunten tussen de schuifbalk en het corresponderende venster"
 
-#: gtk/gtkseparatortoolitem.c:159
+#: gtk/gtkseparatortoolitem.c:134
 msgid "Draw"
 msgstr "Tekenen"
 
-#: gtk/gtkseparatortoolitem.c:160
+#: gtk/gtkseparatortoolitem.c:135
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Of de scheiding getoond wordt of onzichtbaar is"
 
@@ -3592,82 +3592,82 @@ msgstr "Teken indicator"
 msgid "If the toggle part of the button is displayed"
 msgstr "Of het schakelgedeelte van een knop weergegeven wordt"
 
-#: gtk/gtktoolbar.c:442
+#: gtk/gtktoolbar.c:501
 msgid "The orientation of the toolbar"
 msgstr "De oriëntatie van de werkbalk"
 
-#: gtk/gtktoolbar.c:450
+#: gtk/gtktoolbar.c:509
 msgid "Toolbar Style"
 msgstr "Werkbalkstijl"
 
-#: gtk/gtktoolbar.c:451
+#: gtk/gtktoolbar.c:510
 msgid "How to draw the toolbar"
 msgstr "Hoe de werkbalk te tekenen"
 
-#: gtk/gtktoolbar.c:458
+#: gtk/gtktoolbar.c:517
 msgid "Show Arrow"
 msgstr "Pijl tonen"
 
-#: gtk/gtktoolbar.c:459
+#: gtk/gtktoolbar.c:518
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Of een pijl wordt getoond als de werkbalk niet past"
 
-#: gtk/gtktoolbar.c:468
+#: gtk/gtktoolbar.c:527
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Of het item meer ruimte moet krijgen als de werkbalk groter wordt"
 
-#: gtk/gtktoolbar.c:476
+#: gtk/gtktoolbar.c:535
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Of het item dezelfde afmeting moet hebben als andere homogene items"
 
-#: gtk/gtktoolbar.c:483
+#: gtk/gtktoolbar.c:542
 msgid "Spacer size"
 msgstr "Afstandhoudergrootte"
 
-#: gtk/gtktoolbar.c:484
+#: gtk/gtktoolbar.c:543
 msgid "Size of spacers"
 msgstr "Grootte van afstandhouders"
 
-#: gtk/gtktoolbar.c:493
+#: gtk/gtktoolbar.c:552
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Hoeveelheid kaderruimte tussen de werkbalkschaduw en de knoppen"
 
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:560
 msgid "Space style"
 msgstr "Afstandhouderstijl"
 
-#: gtk/gtktoolbar.c:502
+#: gtk/gtktoolbar.c:561
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Of afstandhouders verticale lijnen zijn of gewoon leeg"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:568
 msgid "Button relief"
 msgstr "Knopreliëf"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:569
 msgid "Type of bevel around toolbar buttons"
 msgstr "Type rand rondom werkbalkknoppen"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:576
 msgid "Style of bevel around the toolbar"
 msgstr "Stijl van de rand rondom de werkbalk"
 
-#: gtk/gtktoolbar.c:523
+#: gtk/gtktoolbar.c:582
 msgid "Toolbar style"
 msgstr "Werkbalkstijl"
 
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:583
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Of de standaard werkbalk alleen tekst heeft, of tekst en pictogrammen, of "
 "alleen pictogrammen enz. "
 
-#: gtk/gtktoolbar.c:530
+#: gtk/gtktoolbar.c:589
 msgid "Toolbar icon size"
 msgstr "Pictogramgrootte op werkbalk"
 
-#: gtk/gtktoolbar.c:531
+#: gtk/gtktoolbar.c:590
 msgid "Size of icons in default toolbars"
 msgstr "Grootte van pictogrammen in de standaard werkbalk"
 
@@ -3695,7 +3695,6 @@ msgstr "Standaard-ID"
 msgid "The stock icon displayed on the item"
 msgstr "Het standaard pictogram weergegeven op het item"
 
-#. GRUT modified this item
 #: gtk/gtktoolbutton.c:207
 msgid "Icon widget"
 msgstr "Pictogram-widget"
@@ -4138,51 +4137,51 @@ msgstr "Geen 'alles tonen'"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Of gtk_widget_show_all() wel of geen invloed heeft op dit widget"
 
-#: gtk/gtkwidget.c:1362
+#: gtk/gtkwidget.c:1374
 msgid "Interior Focus"
 msgstr "Interne focus"
 
-#: gtk/gtkwidget.c:1363
+#: gtk/gtkwidget.c:1375
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Of de focus-indicator in widgets moet worden getekend"
 
-#: gtk/gtkwidget.c:1369
+#: gtk/gtkwidget.c:1381
 msgid "Focus linewidth"
 msgstr "Focus-lijnbreedte"
 
-#: gtk/gtkwidget.c:1370
+#: gtk/gtkwidget.c:1382
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Breedte, in beeldpunten, van de focus-indicatorlijn"
 
-#: gtk/gtkwidget.c:1376
+#: gtk/gtkwidget.c:1388
 msgid "Focus line dash pattern"
 msgstr "Focuslijn-streeppatroon"
 
-#: gtk/gtkwidget.c:1377
+#: gtk/gtkwidget.c:1389
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Streeppatroon van de focus-indicator"
 
-#: gtk/gtkwidget.c:1382
+#: gtk/gtkwidget.c:1394
 msgid "Focus padding"
 msgstr "Focus-opvulling"
 
-#: gtk/gtkwidget.c:1383
+#: gtk/gtkwidget.c:1395
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Breedte, in beeldpunten, tussen de focus-indicator en de widget-box"
 
-#: gtk/gtkwidget.c:1388
+#: gtk/gtkwidget.c:1400
 msgid "Cursor color"
 msgstr "Cursorkleur"
 
-#: gtk/gtkwidget.c:1389
+#: gtk/gtkwidget.c:1401
 msgid "Color with which to draw insertion cursor"
 msgstr "Kleur van de invoegcursor"
 
-#: gtk/gtkwidget.c:1394
+#: gtk/gtkwidget.c:1406
 msgid "Secondary cursor color"
 msgstr "Secundaire cursorkleur"
 
-#: gtk/gtkwidget.c:1395
+#: gtk/gtkwidget.c:1407
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4190,11 +4189,11 @@ msgstr ""
 "Kleur van de secundaire invoegcursor bij het bewerken van gemengd rechts-"
 "naar-links en links-naar-rechts tekst"
 
-#: gtk/gtkwidget.c:1400
+#: gtk/gtkwidget.c:1412
 msgid "Cursor line aspect ratio"
 msgstr "Cursorlijnverhouding"
 
-#: gtk/gtkwidget.c:1401
+#: gtk/gtkwidget.c:1413
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Verhoudingen van de invoegcursor"
 
@@ -4395,4 +4394,3 @@ msgstr "IM statusstijl"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "Hoe de statusbalk voor invoermethode moet worden getekend"
-

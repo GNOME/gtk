@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
-"POT-Creation-Date: 2004-01-17 01:51+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-01-22 18:01-0500\n"
 "PO-Revision-Date: 2003-11-13 15:21+0100\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "Number of Channels"
@@ -442,7 +442,7 @@ msgstr "Espaiat"
 msgid "The amount of space between children"
 msgstr "La quantitat d'espai entre fills"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:475
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:534
 msgid "Homogeneous"
 msgstr "Homogeni"
 
@@ -450,7 +450,7 @@ msgstr "Homogeni"
 msgid "Whether the children should all be the same size"
 msgstr "Si tots els fills han de tenir la mateixa mida"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:467
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
 #: gtk/gtktreeviewcolumn.c:294
 msgid "Expand"
 msgstr "Expandeix"
@@ -1871,7 +1871,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Un giny a visualitzar en lloc del típic marc d'etiqueta"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:516 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Tipus d'ombra"
 
@@ -2208,7 +2208,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Estil del bisell que envolta la barra de menú"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:492
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
 msgid "Internal padding"
 msgstr "Separació interna"
 
@@ -2582,7 +2582,7 @@ msgstr "Ajust"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "El GtkAdjustment connectat a la barra de progrés (Obsolet)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:441
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
 msgid "Orientation"
 msgstr "Orientació"
 
@@ -2896,11 +2896,11 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "Nombre de píxels entre les barres de desplaçament i la pantalla desplaçada"
 
-#: gtk/gtkseparatortoolitem.c:159
+#: gtk/gtkseparatortoolitem.c:134
 msgid "Draw"
 msgstr ""
 
-#: gtk/gtkseparatortoolitem.c:160
+#: gtk/gtkseparatortoolitem.c:135
 #, fuzzy
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Si els espaiadors són línies verticals o espais en blanc"
@@ -3610,86 +3610,86 @@ msgstr "Indicador de dibuix"
 msgid "If the toggle part of the button is displayed"
 msgstr "Si la part de commutació del botó es visualitza"
 
-#: gtk/gtktoolbar.c:442
+#: gtk/gtktoolbar.c:501
 msgid "The orientation of the toolbar"
 msgstr "L'orientació de la barra d'eines"
 
-#: gtk/gtktoolbar.c:450
+#: gtk/gtktoolbar.c:509
 msgid "Toolbar Style"
 msgstr "Estil de la barra d'eines"
 
-#: gtk/gtktoolbar.c:451
+#: gtk/gtktoolbar.c:510
 msgid "How to draw the toolbar"
 msgstr "Com dibuixar la barra d'eines"
 
-#: gtk/gtktoolbar.c:458
+#: gtk/gtktoolbar.c:517
 #, fuzzy
 msgid "Show Arrow"
 msgstr "Mostra el contorn"
 
-#: gtk/gtktoolbar.c:459
+#: gtk/gtktoolbar.c:518
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 
-#: gtk/gtktoolbar.c:468
+#: gtk/gtktoolbar.c:527
 #, fuzzy
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Si el fill ha de rebre espai extra quan el pare creix"
 
-#: gtk/gtktoolbar.c:476
+#: gtk/gtktoolbar.c:535
 #, fuzzy
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Si tots els fills han de tenir la mateixa mida"
 
-#: gtk/gtktoolbar.c:483
+#: gtk/gtktoolbar.c:542
 msgid "Spacer size"
 msgstr "Mida de l'espaiador"
 
-#: gtk/gtktoolbar.c:484
+#: gtk/gtktoolbar.c:543
 msgid "Size of spacers"
 msgstr "Mida dels espaiadors"
 
-#: gtk/gtktoolbar.c:493
+#: gtk/gtktoolbar.c:552
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 "Quantitat d'espai del contorn entre l'ombra de la barra d'eines i els botons"
 
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:560
 msgid "Space style"
 msgstr "Estil de l'espaidor"
 
-#: gtk/gtktoolbar.c:502
+#: gtk/gtktoolbar.c:561
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Si els espaiadors són línies verticals o espais en blanc"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:568
 msgid "Button relief"
 msgstr "Relleu del botó"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:569
 msgid "Type of bevel around toolbar buttons"
 msgstr "Tipus de bisell que envolta els botons la barra d'eines"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:576
 msgid "Style of bevel around the toolbar"
 msgstr "Estil de bisell que envolta la barra d'eines"
 
 #
-#: gtk/gtktoolbar.c:523
+#: gtk/gtktoolbar.c:582
 msgid "Toolbar style"
 msgstr "Estil de barra d'eines"
 
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:583
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Si les barres d'eines tenen només text, text i icones, només icones, etc."
 
-#: gtk/gtktoolbar.c:530
+#: gtk/gtktoolbar.c:589
 msgid "Toolbar icon size"
 msgstr "Mida de la barra d'eines"
 
-#: gtk/gtktoolbar.c:531
+#: gtk/gtktoolbar.c:590
 msgid "Size of icons in default toolbars"
 msgstr "Mida de les icones a la barra d'eines per defecte"
 
@@ -4169,51 +4169,51 @@ msgstr ""
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:1362
+#: gtk/gtkwidget.c:1374
 msgid "Interior Focus"
 msgstr "Focus interior"
 
-#: gtk/gtkwidget.c:1363
+#: gtk/gtkwidget.c:1375
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Si s'ha de dibuixar l'indicador del focus dins dels ginys"
 
-#: gtk/gtkwidget.c:1369
+#: gtk/gtkwidget.c:1381
 msgid "Focus linewidth"
 msgstr "Amplada de línia del focus"
 
-#: gtk/gtkwidget.c:1370
+#: gtk/gtkwidget.c:1382
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Amplada, en píxels, de la línia indicadora del focus"
 
-#: gtk/gtkwidget.c:1376
+#: gtk/gtkwidget.c:1388
 msgid "Focus line dash pattern"
 msgstr "Patró de traç de la línia de focus"
 
-#: gtk/gtkwidget.c:1377
+#: gtk/gtkwidget.c:1389
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Patró de traç utilitzat per dibuixar l'indicador del focus"
 
-#: gtk/gtkwidget.c:1382
+#: gtk/gtkwidget.c:1394
 msgid "Focus padding"
 msgstr "Separació del focus"
 
-#: gtk/gtkwidget.c:1383
+#: gtk/gtkwidget.c:1395
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Amplada, en píxels, entre l'indicador de focus i el giny 'box'"
 
-#: gtk/gtkwidget.c:1388
+#: gtk/gtkwidget.c:1400
 msgid "Cursor color"
 msgstr "Color del cursor"
 
-#: gtk/gtkwidget.c:1389
+#: gtk/gtkwidget.c:1401
 msgid "Color with which to draw insertion cursor"
 msgstr "Color amb el que es dibuixa el cursor d'inserció"
 
-#: gtk/gtkwidget.c:1394
+#: gtk/gtkwidget.c:1406
 msgid "Secondary cursor color"
 msgstr "Color del cursor secundari"
 
-#: gtk/gtkwidget.c:1395
+#: gtk/gtkwidget.c:1407
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4221,11 +4221,11 @@ msgstr ""
 "Color per dibuixar el cursor d'inserció secundària en editar la barreja del "
 "text de dreta-a-esquerra i d'esquerra-a-dreta."
 
-#: gtk/gtkwidget.c:1400
+#: gtk/gtkwidget.c:1412
 msgid "Cursor line aspect ratio"
 msgstr "Ràtio d'aspecte de la línia del cursor"
 
-#: gtk/gtkwidget.c:1401
+#: gtk/gtkwidget.c:1413
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Ràtio d'aspecte amb el que dibuixar el cursor d'inserció"
 

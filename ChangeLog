@@ -1,3 +1,21 @@
+Thu Jan 22 18:46:05 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.3.2 ===
+
+Thu Jan 22 18:45:26 2004  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkicontheme.c: Patch from Christian Neumair
+	to make warning string more translator friendly.
+
+	* gtk/gtktreemodelfilter.h gtkseparatortoolitem.[ch]
+	gtk/gtktoolbar.c: Parameter name fixes to keep gtk-doc
+	happy.
+
+	* configure.in: Require GLib-2.3.2, version 2.3.2,
+	interface age 0, binary age 302.
+
+	* NEWS: Organized, added some names.
+
 Thu Jan 22 16:59:36 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkliststore.c (gtk_list_store_reorder): Doc fix.

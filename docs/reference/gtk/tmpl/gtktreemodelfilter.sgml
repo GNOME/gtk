@@ -140,9 +140,11 @@ GtkTreeModelFilter
 
 </para>
 
-@path: 
+@filter: 
 @filter_path: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@path: 
 
 
 <!-- ##### FUNCTION gtk_tree_model_filter_refilter ##### -->

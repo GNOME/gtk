@@ -6,14 +6,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-2\n"
-"POT-Creation-Date: 2004-01-17 01:51+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-01-22 18:01-0500\n"
 "PO-Revision-Date: 2003-06-4 16:30+0600\n"
 "Last-Translator: Progga <abulfazl@juniv.edu>\n"
 "Language-Team: Bangla <gnome-translation@bengalinux.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
@@ -431,7 +431,7 @@ msgstr "স্পেস স্থাপন"
 msgid "The amount of space between children"
 msgstr "চিলড্রেনের মাঝে স্পেসের পরিমাণ"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:475
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:534
 msgid "Homogeneous"
 msgstr "সমজাতীয়"
 
@@ -439,7 +439,7 @@ msgstr "সমজাতীয়"
 msgid "Whether the children should all be the same size"
 msgstr "সকল চিলড্রেনের আকৃতি সমান হবে কিনা"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:467
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
 #: gtk/gtktreeviewcolumn.c:294
 msgid "Expand"
 msgstr "প্রসারণ"
@@ -1859,7 +1859,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "সাধারণত প্রদর্শিত ফ্রেম লেবেলের পরিবর্তে যে উইজেটটি দেখানো হবে"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:516 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "ছায়ার ধরন"
 
@@ -2191,7 +2191,7 @@ msgstr "পয়েন্টার সাবমেনুর দিকে সরে
 msgid "Style of bevel around the menubar"
 msgstr "মেনুবারের চারদিকে বেভেলের ধরন"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:492
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
 msgid "Internal padding"
 msgstr "অভ্যন্তরীণ প্যাডিং (Padding)"
 
@@ -2551,7 +2551,7 @@ msgstr "সমন্বয়"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "প্রগ্রেস বারের সাথে যুক্ত GtkAdjustment (অনুমোদিত নয়)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:441
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
 msgid "Orientation"
 msgstr "প্রাথমিক অবস্থান"
 
@@ -2860,11 +2860,11 @@ msgstr "স্ক্রলবারে স্পেসের সংখ্যা"
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "স্ক্রলবার এবং স্ক্রলবারের সাথে সংযুক্ত উইন্ডোর মধ্যবর্তী পিক্সেলের সংখ্যা"
 
-#: gtk/gtkseparatortoolitem.c:159
+#: gtk/gtkseparatortoolitem.c:134
 msgid "Draw"
 msgstr ""
 
-#: gtk/gtkseparatortoolitem.c:160
+#: gtk/gtkseparatortoolitem.c:135
 #, fuzzy
 msgid "Whether the separator is drawn, or just blank"
 msgstr "স্পেসারসমূহ উলম্ব লাইন অথবা শুধুই ফাঁকা স্থান কিনা"
@@ -3564,85 +3564,85 @@ msgstr "নির্দেশক আঁকা হোক"
 msgid "If the toggle part of the button is displayed"
 msgstr "যদি বাটনের টোগল অংশটি প্রদর্শন করা হয়"
 
-#: gtk/gtktoolbar.c:442
+#: gtk/gtktoolbar.c:501
 msgid "The orientation of the toolbar"
 msgstr "টুলবারের প্রথম অবস্থান"
 
 # এইটা নিয়ে Confusion আছে
-#: gtk/gtktoolbar.c:450
+#: gtk/gtktoolbar.c:509
 msgid "Toolbar Style"
 msgstr "টুলবারের ধরন"
 
-#: gtk/gtktoolbar.c:451
+#: gtk/gtktoolbar.c:510
 msgid "How to draw the toolbar"
 msgstr "যেভাবে টুলবার আঁকা হবে"
 
-#: gtk/gtktoolbar.c:458
+#: gtk/gtktoolbar.c:517
 #, fuzzy
 msgid "Show Arrow"
 msgstr "প্রান্ত প্রদর্শন করা হোক"
 
-#: gtk/gtktoolbar.c:459
+#: gtk/gtktoolbar.c:518
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 
-#: gtk/gtktoolbar.c:468
+#: gtk/gtktoolbar.c:527
 #, fuzzy
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "প্যারেন্টের আকৃতি বৃদ্ধি পেলে চাইল্ড অতিরক্ত স্পেস গ্রহণ করবে কিনা"
 
-#: gtk/gtktoolbar.c:476
+#: gtk/gtktoolbar.c:535
 #, fuzzy
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "সকল চিলড্রেনের আকৃতি সমান হবে কিনা"
 
-#: gtk/gtktoolbar.c:483
+#: gtk/gtktoolbar.c:542
 msgid "Spacer size"
 msgstr "স্পেসার (Spacer) এর আকার"
 
-#: gtk/gtktoolbar.c:484
+#: gtk/gtktoolbar.c:543
 msgid "Size of spacers"
 msgstr "স্পেসার (Spacer) এর আকার"
 
-#: gtk/gtktoolbar.c:493
+#: gtk/gtktoolbar.c:552
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "টুলবারের ছায়া ও বাটনসমূহের মাঝে প্রান্তীয় স্থান"
 
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:560
 msgid "Space style"
 msgstr "স্পেসের ধরন"
 
-#: gtk/gtktoolbar.c:502
+#: gtk/gtktoolbar.c:561
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "স্পেসারসমূহ উলম্ব লাইন অথবা শুধুই ফাঁকা স্থান কিনা"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:568
 msgid "Button relief"
 msgstr "বাটন ছেড়ে দেয়া"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:569
 msgid "Type of bevel around toolbar buttons"
 msgstr "টুলবারে অবস্থিত বাটনের চারদিকে বেভেলের ধরন"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:576
 msgid "Style of bevel around the toolbar"
 msgstr "টুলবারের চারদিকে বেভেলের ধরন"
 
-#: gtk/gtktoolbar.c:523
+#: gtk/gtktoolbar.c:582
 msgid "Toolbar style"
 msgstr "টুলবারের ধরন"
 
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:583
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "ডিফল্ট টুলবারে শুধুমাত্র টেক্সট বা টেক্সট ও আইকন বা শুধুমাত্র আইকন, ইত্যাদি থাকবে কিনা"
 
-#: gtk/gtktoolbar.c:530
+#: gtk/gtktoolbar.c:589
 msgid "Toolbar icon size"
 msgstr "টুলবারের আইকনের আয়তন"
 
-#: gtk/gtktoolbar.c:531
+#: gtk/gtktoolbar.c:590
 msgid "Size of icons in default toolbars"
 msgstr "ডিফল্ট টুলবারে আইকনের আয়তন"
 
@@ -4104,51 +4104,51 @@ msgstr ""
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:1362
+#: gtk/gtkwidget.c:1374
 msgid "Interior Focus"
 msgstr "অভ্যন্তরীণ ফোকাস"
 
-#: gtk/gtkwidget.c:1363
+#: gtk/gtkwidget.c:1375
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "ফোকাস নির্দেশকটি উইজেটের ভেতর আঁকা হবে কিনা"
 
-#: gtk/gtkwidget.c:1369
+#: gtk/gtkwidget.c:1381
 msgid "Focus linewidth"
 msgstr "ফোকাসের লাইনব্যাপ্তি"
 
-#: gtk/gtkwidget.c:1370
+#: gtk/gtkwidget.c:1382
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "প্রস্থ"
 
-#: gtk/gtkwidget.c:1376
+#: gtk/gtkwidget.c:1388
 msgid "Focus line dash pattern"
 msgstr ""
 
-#: gtk/gtkwidget.c:1377
+#: gtk/gtkwidget.c:1389
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "ফোকাস নির্দেশক আঁকতে যে ধরনের ড্যাশ প্যাটার্ন আঁকতে হবে"
 
-#: gtk/gtkwidget.c:1382
+#: gtk/gtkwidget.c:1394
 msgid "Focus padding"
 msgstr "ফোকাস প্যাডিং"
 
-#: gtk/gtkwidget.c:1383
+#: gtk/gtkwidget.c:1395
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "প্রস্থ"
 
-#: gtk/gtkwidget.c:1388
+#: gtk/gtkwidget.c:1400
 msgid "Cursor color"
 msgstr "কার্সারের রং "
 
-#: gtk/gtkwidget.c:1389
+#: gtk/gtkwidget.c:1401
 msgid "Color with which to draw insertion cursor"
 msgstr "অক্ষর ঢোকানোর (Insertion) কার্সার আঁকতে যে রং ব্যবহৃত হবে"
 
-#: gtk/gtkwidget.c:1394
+#: gtk/gtkwidget.c:1406
 msgid "Secondary cursor color"
 msgstr "কার্সার আঁকায় ব্যবহৃত দ্বিতীয় রং"
 
-#: gtk/gtkwidget.c:1395
+#: gtk/gtkwidget.c:1407
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4156,12 +4156,12 @@ msgstr ""
 "ডান-থেকে-বাম এবং বাম-থেকে-ডান এ লেখায় হয় এরকম টেক্সটের মিশ্রণ এডিট করার সময় "
 "অক্ষর ঢোকানোর (Insertion) কার্সার আঁকতে যে রং ব্যবহৃত হবে"
 
-#: gtk/gtkwidget.c:1400
+#: gtk/gtkwidget.c:1412
 msgid "Cursor line aspect ratio"
 msgstr "কার্সার লাইনের আবয়ব অনুপাত"
 
 # বোঝা যাচ্ছে না
-#: gtk/gtkwidget.c:1401
+#: gtk/gtkwidget.c:1413
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "যে আবয়ব অনুপাতে অক্ষর ঢোকানোর (Insertion) কার্সার আঁকা হবে"
 
