@@ -1,5 +1,9 @@
 2001-06-04  Havoc Pennington  <hp@redhat.com>
 
+	* configure.in: Make gdk-pixbuf have same version number as GTK
+
+2001-06-04  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkspinbutton.c: Get rid of stupid g_return_if_fail on 
 	digits greater than 6. If there actually are limits (which there
 	likely aren't), should clamp to them not warn.
