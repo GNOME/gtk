@@ -525,7 +525,7 @@ main (int argc, char **argv)
 
 	gtk_init (&argc, &argv);
 
-	//	gdk_rgb_set_verbose (TRUE);
+	/*	gdk_rgb_set_verbose (TRUE);*/
 
 	gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
 

@@ -1,5 +1,8 @@
 2005-02-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/testpixbuf.c (main): Remove a C++ comment.  (#168531, 
+	Paul Cornett)
+
 	* gtk/gtkcombobox.c (gtk_combo_box_menu_fill_level): Don't leak a 
 	path here.  (#168443, Morten Welinder)
 
