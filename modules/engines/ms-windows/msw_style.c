@@ -1842,7 +1842,7 @@ static void
 msw_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
 {
   setup_system_font (style);
-  setup_menu_settings ();
+  setup_menu_settings (gtk_settings_get_default ());
   setup_system_styles (style);
   parent_class->init_from_rc(style, rc_style);
 }
