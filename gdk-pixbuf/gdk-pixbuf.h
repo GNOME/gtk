@@ -50,22 +50,23 @@ struct _GdkPixbuf {
 
 
 
-/* Convenience macros */
+/* Convenience functions */
 
-#define gdk_pixbuf_get_format(pixbuf) ((pixbuf)->art_pixbuf->format)
-#define gdk_pixbuf_get_n_channels(pixbuf) ((pixbuf)->art_pixbuf->n_channels)
-#define gdk_pixbuf_get_has_alpha(pixbuf) ((pixbuf)->art_pixbuf->has_alpha)
-#define gdk_pixbuf_get_bits_per_sample(pixbuf) ((pixbuf)->art_pixbuf->bits_per_sample)
-#define gdk_pixbuf_get_pixels(pixbuf) ((pixbuf)->art_pixbuf->pixels)
-#define gdk_pixbuf_get_width(pixbuf) ((pixbuf)->art_pixbuf->width)
-#define gdk_pixbuf_get_height(pixbuf) ((pixbuf)->art_pixbuf->height)
-#define gdk_pixbuf_get_rowstride(pixbuf) ((pixbuf)->art_pixbuf->rowstride)
+ArtPixFormat gdk_pixbuf_get_format          (GdkPixbuf *pixbuf);
+int          gdk_pixbuf_get_n_channels      (GdkPixbuf *pixbuf);
+int          gdk_pixbuf_get_has_alpha       (GdkPixbuf *pixbuf);
+int          gdk_pixbuf_get_bits_per_sample (GdkPixbuf *pixbuf);
+guchar      *gdk_pixbuf_get_pixels          (GdkPixbuf *pixbuf);
+int          gdk_pixbuf_get_width           (GdkPixbuf *pixbuf);
+int          gdk_pixbuf_get_height          (GdkPixbuf *pixbuf);
+int          gdk_pixbuf_get_rowstride       (GdkPixbuf *pixbuf);
 
 /* Reference counting */
 
 void gdk_pixbuf_ref (GdkPixbuf *pixbuf);
 void gdk_pixbuf_unref (GdkPixbuf *pixbuf);
 
+/* Constructors */
 /* Wrap a libart pixbuf */
 
 GdkPixbuf *gdk_pixbuf_new_from_art_pixbuf (ArtPixBuf *art_pixbuf);

@@ -1,5 +1,8 @@
 1999-10-28  Jonathan Blandford  <jrb@redhat.com>
 
+	* src/gdk-pixbuf.h: turned convenience macros into convenience
+	functions so some error checking could be added. 
+
 	* src/io-tiff.c (image_load_increment): started work on the tiff
 	non-incremental loader.
 	(image_begin_load): Finished the incremental loader. 

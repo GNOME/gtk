@@ -147,3 +147,78 @@ gdk_pixbuf_new (ArtPixFormat format, gboolean has_alpha, int bits_per_sample,
 	return gdk_pixbuf_new_from_data (buf, format, has_alpha, width, height, rowstride,
 					 free_buffer, NULL);
 }
+
+
+/* Convenience functions */
+ArtPixFormat
+gdk_pixbuf_get_format (GdkPixbuf *pixbuf)
+{
+	/* Unfortunately, there's nothing else to return */
+	g_return_val_if_fail (pixbuf != NULL, ART_PIX_RGB);
+	g_assert (pixbuf->art_pixbuf != NULL);
+
+	return (pixbuf->art_pixbuf->format);
+}
+
+int
+gdk_pixbuf_get_n_channels (GdkPixbuf *pixbuf)
+{
+	g_return_val_if_fail (pixbuf != NULL, -1);
+	g_assert (pixbuf->art_pixbuf != NULL);
+
+	return (pixbuf->art_pixbuf->n_channels);
+}
+
+int
+gdk_pixbuf_get_has_alpha (GdkPixbuf *pixbuf)
+{
+	g_return_val_if_fail (pixbuf != NULL, -1);
+	g_assert (pixbuf->art_pixbuf != NULL);
+
+	return (pixbuf->art_pixbuf->has_alpha);
+}
+
+int
+gdk_pixbuf_get_bits_per_sample (GdkPixbuf *pixbuf)
+{
+	g_return_val_if_fail (pixbuf != NULL, -1);
+	g_assert (pixbuf->art_pixbuf != NULL);
+
+	return (pixbuf->art_pixbuf->bits_per_sample);
+}
+
+guchar *
+gdk_pixbuf_get_pixels (GdkPixbuf *pixbuf)
+{
+	g_return_val_if_fail (pixbuf != NULL, NULL);
+	g_assert (pixbuf->art_pixbuf != NULL);
+
+	return (pixbuf->art_pixbuf->pixels);
+}
+
+int
+gdk_pixbuf_get_width (GdkPixbuf *pixbuf)
+{
+	g_return_val_if_fail (pixbuf != NULL, -1);
+	g_assert (pixbuf->art_pixbuf != NULL);
+
+	return (pixbuf->art_pixbuf->width);
+}
+
+int
+gdk_pixbuf_get_height (GdkPixbuf *pixbuf)
+{
+	g_return_val_if_fail (pixbuf != NULL, -1);
+	g_assert (pixbuf->art_pixbuf != NULL);
+
+	return (pixbuf->art_pixbuf->height);
+}
+
+int
+gdk_pixbuf_get_rowstride (GdkPixbuf *pixbuf)
+{
+	g_return_val_if_fail (pixbuf != NULL, -1);
+	g_assert (pixbuf->art_pixbuf != NULL);
+
+	return (pixbuf->art_pixbuf->rowstride);
+}
