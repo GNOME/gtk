@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
-"POT-Creation-Date: 2002-06-14 16:34-0400\n"
+"POT-Creation-Date: 2002-06-15 17:58+0200\n"
 "PO-Revision-Date: 2002-02-26 00:23+0100\n"
 "Last-Translator: Andraž Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: slovenian <sl@li.org>\n"
@@ -3740,9 +3740,8 @@ msgid "ZWS _Zero width space"
 msgstr "ZWS Presledek _nične dolžine"
 
 #: gtk/gtktextutil.c:54
-#, fuzzy
 msgid "ZWJ Zero width _joiner"
-msgstr "ZWN _Združevalec nične širine"
+msgstr "ZWJ _Združevalec nične širine"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
