@@ -206,13 +206,13 @@ void gdk_window_shape_combine_mask (GdkWindow	    *window,
 void gdk_window_set_child_shapes (GdkWindow *window);
 
 /*
- * This routine allows you to combine (ie ADD) child shapes to your
+ * This routine allows you to merge (ie ADD) child shapes to your
  * own window's shape keeping its current shape and ADDING the shild
  * shapes to it.
  * 
  * - Raster
  */
-void gdk_window_combine_child_shapes (GdkWindow *window);
+void gdk_window_merge_child_shapes (GdkWindow *window);
 
 /*
  * The following function adds a global filter for all client
@@ -269,24 +269,6 @@ void            gdk_drag_abort       (GdkDragContext *context,
 GdkAtom       gdk_drag_get_selection (GdkDragContext *context);
 
 /* GdkWindow */
-
-/* 
- * This is used by the GDK_DRAG_BEGIN handler. An example of usage would be a
- * file manager where multiple icons were selected and the drag began.
- * The icon that the drag actually began on would gdk_dnd_drag_addwindow
- * for all the other icons that were being dragged... 
- */
-void gdk_dnd_drag_addwindow  (GdkWindow	 *window);
-void gdk_window_dnd_data_set (GdkWindow	 *window,
-			      GdkEvent	 *event,
-			      gpointer	  data,
-			      gulong	  data_numbytes);
-void gdk_dnd_set_drag_cursors(GdkCursor *default_cursor,
-			      GdkCursor *goahead_cursor);
-void gdk_dnd_set_drag_shape(GdkWindow *default_pixmapwin,
-			    GdkPoint *default_hotspot,
-			    GdkWindow *goahead_pixmapwin,
-			    GdkPoint *goahead_hotspot);
 
 void	      gdk_window_set_hints	 (GdkWindow	  *window,
 					  gint		   x,

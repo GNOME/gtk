@@ -168,9 +168,9 @@ static void gtk_notebook_menu_item_create    (GtkNotebook      *notebook,
 static GtkType gtk_notebook_child_type       (GtkContainer     *container);
 static gint    gtk_notebook_find_page        (gconstpointer     a,
 					      gconstpointer     b);
-static void gtk_notebook_set_shape           (GtkNotebook *notebook);
-static void gtk_notebook_style_set           (GtkWidget *widget,
-					      GtkStyle  *previous_style);
+static void gtk_notebook_set_shape           (GtkNotebook      *notebook);
+static void gtk_notebook_style_set           (GtkWidget        *widget,
+					      GtkStyle         *previous_style);
 
 static GtkContainerClass *parent_class = NULL;
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
@@ -1274,7 +1274,7 @@ gtk_notebook_set_scrollable (GtkNotebook     *notebook,
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
-  scrollable = (scrollable != 0);
+  scrollable = (scrollable != FALSE);
 
   if (scrollable != notebook->scrollable)
     {
@@ -1371,8 +1371,8 @@ gtk_notebook_realize (GtkWidget *widget)
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
   attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK
-    | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK;
+  attributes.event_mask |= GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK |
+                           GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK;
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
@@ -1382,8 +1382,8 @@ gtk_notebook_realize (GtkWidget *widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 
-   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
-   if (notebook->scrollable)
+  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+  if (notebook->scrollable)
     gtk_notebook_panel_realize (notebook);
 }
 
@@ -1428,8 +1428,8 @@ gtk_notebook_panel_realize (GtkNotebook *notebook)
 				    attributes_mask);
   gtk_style_set_background (widget->style, notebook->panel, 
 			    GTK_STATE_NORMAL);
-   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
-   gdk_window_set_user_data (notebook->panel, widget);
+  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+  gdk_window_set_user_data (notebook->panel, widget);
 }
 
 static void
@@ -1655,21 +1655,21 @@ static void
 gtk_notebook_paint (GtkWidget    *widget,
 		    GdkRectangle *area)
 {
-   GtkNotebook *notebook;
-   GtkNotebookPage *page;
-   GList *children;
-   gint width, height;
-   gint x, y;
-   gint showarrow;
-   gint gap_side = 0, gap_x = 0, gap_width = 0;
+  GtkNotebook *notebook;
+  GtkNotebookPage *page;
+  GList *children;
+  gint width, height;
+  gint x, y;
+  gint showarrow;
+  gint gap_x = 0, gap_width = 0;
    
-   g_return_if_fail (widget != NULL);
-   g_return_if_fail (GTK_IS_NOTEBOOK (widget));
-   g_return_if_fail (area != NULL);
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_NOTEBOOK (widget));
+  g_return_if_fail (area != NULL);
 
-   if (GTK_WIDGET_DRAWABLE (widget))
-     {
-	notebook = GTK_NOTEBOOK (widget);
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      notebook = GTK_NOTEBOOK (widget);
 
       if (notebook->show_tabs || notebook->show_border)
 	{
@@ -1702,9 +1702,9 @@ gtk_notebook_paint (GtkWidget    *widget,
 		    case GTK_POS_RIGHT:
 		      width -= page->allocation.width +
 			widget->style->klass->xthickness;
-		    break;
+		      break;
 		    }
-                   gtk_paint_box(widget->style, widget->window,
+		  gtk_paint_box (widget->style, widget->window,
 				 GTK_STATE_NORMAL, GTK_SHADOW_OUT,
 				 area, widget, "notebook",
 				 x, y, width, height);
@@ -1726,37 +1726,33 @@ gtk_notebook_paint (GtkWidget    *widget,
 		    }
 
                   switch (notebook->tab_pos)
-		     {
-		      case GTK_POS_TOP:
-			gap_side = 0;
-			gap_x = notebook->cur_page->allocation.x -
-			  GTK_CONTAINER(notebook)->border_width;
-			gap_width = notebook->cur_page->allocation.width;
-			break;
-		      case GTK_POS_BOTTOM:
-			gap_side = 1;
-			gap_x = notebook->cur_page->allocation.x -
-			  GTK_CONTAINER(notebook)->border_width;
-			gap_width = notebook->cur_page->allocation.width;
-			break;
-		      case GTK_POS_LEFT:
-			gap_side = 2;
-			gap_x = notebook->cur_page->allocation.y -
-			  GTK_CONTAINER(notebook)->border_width;
-			gap_width = notebook->cur_page->allocation.height;
-			break;
-		      case GTK_POS_RIGHT:
-			gap_side = 3;
-			gap_x = notebook->cur_page->allocation.y -
-			  GTK_CONTAINER(notebook)->border_width;
-			gap_width = notebook->cur_page->allocation.height;
-			break;
-		     }
-		   gtk_paint_box_gap(widget->style, widget->window,
-				     GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-				     area, widget, "notebook",
-				     x, y, width, height,
-				     gap_side, gap_x, gap_width);
+		    {
+		    case GTK_POS_TOP:
+		      gap_x = notebook->cur_page->allocation.x -
+			GTK_CONTAINER(notebook)->border_width;
+		      gap_width = notebook->cur_page->allocation.width;
+		      break;
+		    case GTK_POS_BOTTOM:
+		      gap_x = notebook->cur_page->allocation.x -
+			GTK_CONTAINER(notebook)->border_width;
+		      gap_width = notebook->cur_page->allocation.width;
+		      break;
+		    case GTK_POS_LEFT:
+		      gap_x = notebook->cur_page->allocation.y -
+			GTK_CONTAINER(notebook)->border_width;
+		      gap_width = notebook->cur_page->allocation.height;
+		      break;
+		    case GTK_POS_RIGHT:
+		      gap_x = notebook->cur_page->allocation.y -
+			GTK_CONTAINER(notebook)->border_width;
+		      gap_width = notebook->cur_page->allocation.height;
+		      break;
+		    }
+		  gtk_paint_box_gap(widget->style, widget->window,
+				    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+				    area, widget, "notebook",
+				    x, y, width, height,
+				    notebook->tab_pos, gap_x, gap_width);
 		}
 	      children = g_list_last (notebook->children);
 	      showarrow = FALSE;
@@ -1784,10 +1780,10 @@ gtk_notebook_paint (GtkWidget    *widget,
 	    }
 	  else if (notebook->show_border)
 	    {
-	       gtk_paint_box(widget->style, widget->window,
-			     GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-			     area, widget, "notebook",
-			     x, y, width, height);
+	      gtk_paint_box(widget->style, widget->window,
+			    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+			    area, widget, "notebook",
+			    x, y, width, height);
 	    }
 	}
     }
@@ -2189,7 +2185,8 @@ gtk_notebook_draw_arrow (GtkNotebook *notebook, guint arrow)
 	  if (notebook->tab_pos == GTK_POS_LEFT ||
 	      notebook->tab_pos == GTK_POS_RIGHT)
 	    arrow = GTK_ARROW_UP;
-	   gdk_window_clear_area(notebook->panel, 0, 0, ARROW_SIZE, ARROW_SIZE);
+
+	  gdk_window_clear_area (notebook->panel, 0, 0, ARROW_SIZE, ARROW_SIZE);
 	  gtk_paint_arrow (widget->style, notebook->panel, state_type, 
 			   shadow_type, NULL, GTK_WIDGET(notebook), "notebook",
 			   arrow, TRUE, 
@@ -2262,11 +2259,11 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 		       GtkNotebookPage *page,
 		       GdkRectangle    *area)
 {
-   GdkRectangle child_area;
-   GdkRectangle page_area;
-   GtkStateType state_type;
-   gint gap_side;
-   
+  GdkRectangle child_area;
+  GdkRectangle page_area;
+  GtkStateType state_type;
+  GtkPositionType gap_side;
+  
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (page != NULL);
   g_return_if_fail (area != NULL);
@@ -2284,47 +2281,47 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
     {
       GtkWidget *widget;
 
-       widget = GTK_WIDGET(notebook);
-       gap_side = 0;
+      widget = GTK_WIDGET (notebook);
+      gap_side = 0;
       switch (notebook->tab_pos)
 	{
-	 case GTK_POS_TOP:
-	   gap_side = 1;
-	   break;
-	 case GTK_POS_BOTTOM:
-	   gap_side = 0;
-	   break;
-	 case GTK_POS_LEFT:
-	   gap_side = 3;
-	   break;
-	 case GTK_POS_RIGHT:
-	   gap_side = 2;
-	   break;
+	case GTK_POS_TOP:
+	  gap_side = GTK_POS_BOTTOM;
+	  break;
+	case GTK_POS_BOTTOM:
+	  gap_side = GTK_POS_TOP;
+	  break;
+	case GTK_POS_LEFT:
+	  gap_side = GTK_POS_RIGHT;
+	  break;
+	case GTK_POS_RIGHT:
+	  gap_side = GTK_POS_RIGHT;
+	  break;
 	}
-
+      
       if (notebook->cur_page == page)
-	 state_type = GTK_STATE_NORMAL;
+	state_type = GTK_STATE_NORMAL;
       else 
-	 state_type = GTK_STATE_ACTIVE;
-       gtk_paint_extension(widget->style, widget->window,
-			   state_type, GTK_SHADOW_OUT,
+	state_type = GTK_STATE_ACTIVE;
+      gtk_paint_extension(widget->style, widget->window,
+			  state_type, GTK_SHADOW_OUT,
+			  area, widget, "tab",
+			  page_area.x, page_area.y,
+			  page_area.width, page_area.height,
+			  gap_side);
+      if ((GTK_WIDGET_HAS_FOCUS (widget)) &&
+	  notebook->focus_tab && (notebook->focus_tab->data == page) &&
+	  (page))
+	{
+	  gtk_paint_focus (widget->style, widget->window,
 			   area, widget, "tab",
-			   page_area.x, page_area.y,
-			   page_area.width, page_area.height,
-			   gap_side);
-       if ((GTK_WIDGET_HAS_FOCUS (widget)) &&
-	   notebook->focus_tab && (notebook->focus_tab->data == page) &&
-	   (page))
-	 {
-	    gtk_paint_focus (widget->style, widget->window,
-			     area, widget, "tab",
-			     page->tab_label->allocation.x - 1,
-			     page->tab_label->allocation.y - 1,
-			     page->tab_label->allocation.width + 1,
-			     page->tab_label->allocation.height + 1);
-	 }
-       if (gtk_widget_intersect (page->tab_label, area, &child_area))
-	 gtk_widget_draw (page->tab_label, &child_area);
+			   page->tab_label->allocation.x - 1,
+			   page->tab_label->allocation.y - 1,
+			   page->tab_label->allocation.width + 1,
+			   page->tab_label->allocation.height + 1);
+	}
+      if (gtk_widget_intersect (page->tab_label, area, &child_area))
+	gtk_widget_draw (page->tab_label, &child_area);
     }
 }
 
@@ -2738,7 +2735,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 	    gtk_widget_map (page->tab_label);
 	}
     }
-   gtk_notebook_set_shape (notebook);
+  gtk_notebook_set_shape (notebook);
 }
 
 static void

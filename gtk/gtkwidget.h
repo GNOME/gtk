@@ -99,10 +99,6 @@ typedef enum
 typedef struct _GtkRequisition	  GtkRequisition;
 typedef struct _GtkAllocation	  GtkAllocation;
 typedef struct _GtkSelectionData GtkSelectionData;
-#ifndef __TYPEDEFED_GTK_WIDGET__
-typedef struct _GtkWidget         GtkWidget;
-#define __TYPEDEFED_GTK_WIDGET__
-#endif
 typedef struct _GtkWidgetClass	  GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo  GtkWidgetAuxInfo;
 typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;
@@ -536,6 +532,9 @@ void	   gtk_widget_set_rc_style	(GtkWidget	*widget);
 void	   gtk_widget_ensure_style	(GtkWidget	*widget);
 GtkStyle*  gtk_widget_get_style		(GtkWidget	*widget);
 void	   gtk_widget_restore_default_style (GtkWidget	*widget);
+
+void       gtk_widget_modify_style      (GtkWidget      *widget,
+					 GtkRcStyle     *style);
 
 /* Descend recursively and set rc-style on all widgets without user styles */
 void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);

@@ -1,3 +1,49 @@
+Thu Nov  5 12:06:16 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcheckbutton.c (gtk_check_button_draw_focus): Queue
+	a clear/redraw, not just a redraw, so the focus
+	gets undrawn properly.
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_unrealize): 
+	Chain to gtk_widget_unrealize() instead of duplicating
+	code.
+
+Wed Nov  4 14:34:51 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c gdk/gdkprivate.h gdk/gdkwindow.c: Removed
+	last vestiges of old DND.
+
+Tue Nov  3 12:27:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c: Restored inner border to entries,
+	erase cursors to background image.
+
+Fri Oct 30 12:09:21 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c gtk/gtkstyle.[ch]: removed paint_entry() -
+	it was identical to paint_flat_box().
+
+	* gtk/gtkstyle.c: Coding style fixups.
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): removed useless
+	test.
+
+	* gtk/gtkframe.c gtkstyle.[ch] gtknotebook.c: 
+	Change 'side' for paint_[box/shadow]_gap and paint_extension
+	to be GtkPositionType instead of a random int.
+
+	* gtk/gtkaspectframe.c (gtk_aspect_frame_paint): Use 
+	"frame" as detail - an aspectframe should draw identical
+	to a frame.
+
+Tue Oct 27 09:58:11 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_merge_child_shapes): renamed
+	from combine_child_shapes().
+
+	* gdk/gdkwindow.c: Merge propagate_shapes() and
+	propagate_combine_shapes() to remove code duplication.
+
 Thu Nov  5 14:31:57 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gdk/gdk.c: sometimes we get a KeyRelease before a KeyPress in

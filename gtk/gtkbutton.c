@@ -507,83 +507,75 @@ static void
 gtk_button_paint (GtkWidget    *widget,
 		  GdkRectangle *area)
 {
-   GtkButton *button;
-   GtkShadowType shadow_type;
-   gint width, height;
-   gint x, y;
+  GtkButton *button;
+  GtkShadowType shadow_type;
+  gint width, height;
+  gint x, y;
    
-   if (GTK_WIDGET_DRAWABLE (widget))
-     {
-       button = GTK_BUTTON (widget);
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      button = GTK_BUTTON (widget);
 	
-       x = 0;
-       y = 0;
-       width = widget->allocation.width - GTK_CONTAINER (widget)->border_width * 2;
-       height = widget->allocation.height - GTK_CONTAINER (widget)->border_width * 2;
+      x = 0;
+      y = 0;
+      width = widget->allocation.width - GTK_CONTAINER (widget)->border_width * 2;
+      height = widget->allocation.height - GTK_CONTAINER (widget)->border_width * 2;
 
-       if (GTK_WIDGET_HAS_DEFAULT (widget) &&
-	   GTK_BUTTON (widget)->relief == GTK_RELIEF_NORMAL)
-	 {
-	   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
-	   gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
-	   gtk_paint_box (widget->style, widget->window,
-			  GTK_STATE_NORMAL, GTK_SHADOW_IN,
-			  area, widget, "buttondefault",
-			  x, y, width, height);
-	 }
-       else
-	 {
-	   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
-	   gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
-	 }
-       if (GTK_WIDGET_CAN_DEFAULT (widget))
-	 {
-	   x += widget->style->klass->xthickness;
-	   y += widget->style->klass->ythickness;
-	   width -= 2 * x + DEFAULT_SPACING;
-	   height -= 2 * y + DEFAULT_SPACING;
-	   x += DEFAULT_LEFT_POS;
-	   y += DEFAULT_TOP_POS;
-	 }
+      gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+      gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+
+      if (GTK_WIDGET_HAS_DEFAULT (widget) &&
+	  GTK_BUTTON (widget)->relief == GTK_RELIEF_NORMAL)
+	{
+	  gtk_paint_box (widget->style, widget->window,
+			 GTK_STATE_NORMAL, GTK_SHADOW_IN,
+			 area, widget, "buttondefault",
+			 x, y, width, height);
+	}
+
+      if (GTK_WIDGET_CAN_DEFAULT (widget))
+	{
+	  x += widget->style->klass->xthickness;
+	  y += widget->style->klass->ythickness;
+	  width -= 2 * x + DEFAULT_SPACING;
+	  height -= 2 * y + DEFAULT_SPACING;
+	  x += DEFAULT_LEFT_POS;
+	  y += DEFAULT_TOP_POS;
+	}
        
-       if (GTK_WIDGET_HAS_FOCUS (widget))
-	 {
-	   x += 1;
-	   y += 1;
-	   width -= 2;
-	   height -= 2;
-	 }
+      if (GTK_WIDGET_HAS_FOCUS (widget))
+	{
+	  x += 1;
+	  y += 1;
+	  width -= 2;
+	  height -= 2;
+	}
 	
-       if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
-	 shadow_type = GTK_SHADOW_IN;
-       else
-	 shadow_type = GTK_SHADOW_OUT;
+      if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
+	shadow_type = GTK_SHADOW_IN;
+      else
+	shadow_type = GTK_SHADOW_OUT;
 
-       if ((button->relief == GTK_RELIEF_NONE) &&
-	   ((GTK_WIDGET_STATE(widget) == GTK_STATE_NORMAL) ||
-	    (GTK_WIDGET_STATE(widget) == GTK_STATE_INSENSITIVE)))
-	 {
-	   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
-	   gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
-	 }
-       else
-	 gtk_paint_box (widget->style, widget->window,
-			GTK_WIDGET_STATE (widget),
-			shadow_type, area, widget, "button",
-			x, y, width, height);
+      if ((button->relief != GTK_RELIEF_NONE) ||
+	  ((GTK_WIDGET_STATE(widget) != GTK_STATE_NORMAL) &&
+	   (GTK_WIDGET_STATE(widget) != GTK_STATE_INSENSITIVE)))
+	gtk_paint_box (widget->style, widget->window,
+		       GTK_WIDGET_STATE (widget),
+		       shadow_type, area, widget, "button",
+		       x, y, width, height);
        
-       if (GTK_WIDGET_HAS_FOCUS (widget))
-	 {
-	   x -= 1;
-	   y -= 1;
-	   width += 2;
-	   height += 2;
+      if (GTK_WIDGET_HAS_FOCUS (widget))
+	{
+	  x -= 1;
+	  y -= 1;
+	  width += 2;
+	  height += 2;
 	     
-	   gtk_paint_focus (widget->style, widget->window,
-			    area, widget, "button",
-			    x, y, width - 1, height - 1);
-	 }
-     }
+	  gtk_paint_focus (widget->style, widget->window,
+			   area, widget, "button",
+			   x, y, width - 1, height - 1);
+	}
+    }
 }
 
 static void
@@ -616,13 +608,13 @@ gtk_button_draw (GtkWidget    *widget,
 static void
 gtk_button_draw_focus (GtkWidget *widget)
 {
-   gtk_widget_draw (widget, NULL);
+  gtk_widget_draw (widget, NULL);
 }
 
 static void
 gtk_button_draw_default (GtkWidget *widget)
 {
-   gtk_widget_draw (widget, NULL);
+  gtk_widget_draw (widget, NULL);
 }
 
 static gint

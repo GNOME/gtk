@@ -11,6 +11,13 @@
 # widget_class <widget_class_set> style <style_name>
 
 #include "/opt/themes/share/themes/Motif/gtk/gtkrc"
+#include "/home/otaylor/.themes/Ignorant/gtk/gtkrc"
+
+#style "defaultfont" {
+#  fontset = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
+#}
+#
+#class "GtkWidget" style "defaultfont"
 
 binding "test1"
 {

@@ -505,7 +505,7 @@ gtk_spin_button_paint (GtkWidget    *widget,
 		       0, 0, 
 		       ARROW_SIZE + 2 * widget->style->klass->xthickness,
 		       widget->requisition.height); 
-       else
+      else
 	 {
 	    gdk_window_set_back_pixmap (spin->panel, NULL, TRUE);
 	    gdk_window_clear_area (spin->panel, area->x, area->y, area->width, area->height);
@@ -587,12 +587,12 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 	      x = widget->style->klass->xthickness - 1;
 	      y = widget->style->klass->ythickness - 1;
 	    }
-	   gtk_paint_arrow (widget->style, spin_button->panel,
-			    state_type, shadow_type, 
-			    NULL, widget, "spinbutton",
-			    arrow, TRUE, 
-			    x, y, ARROW_SIZE, widget->requisition.height / 2 
-			    - widget->style->klass->ythickness);
+	  gtk_paint_arrow (widget->style, spin_button->panel,
+			   state_type, shadow_type, 
+			   NULL, widget, "spinbutton",
+			   arrow, TRUE, 
+			   x, y, ARROW_SIZE, widget->requisition.height / 2 
+			   - widget->style->klass->ythickness);
 	}
       else
 	{
@@ -606,12 +606,12 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 	      x = widget->style->klass->xthickness - 1;
 	      y = widget->requisition.height / 2 + 1;
 	    }
-	   gtk_paint_arrow (widget->style, spin_button->panel,
-			    state_type, shadow_type, 
-			    NULL, widget, "spinbutton",
-			    arrow, TRUE, 
-			    x, y, ARROW_SIZE, widget->requisition.height / 2 
-			    - widget->style->klass->ythickness);
+	  gtk_paint_arrow (widget->style, spin_button->panel,
+			   state_type, shadow_type, 
+			   NULL, widget, "spinbutton",
+			   arrow, TRUE, 
+			   x, y, ARROW_SIZE, widget->requisition.height / 2 
+			   - widget->style->klass->ythickness);
 	}
     }
 }

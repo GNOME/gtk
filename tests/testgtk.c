@@ -1867,10 +1867,7 @@ create_pixmap (void)
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
 
-      style = gtk_widget_get_style(button);
-
-      pixmap = gdk_pixmap_create_from_xpm (window->window, &mask, 
-					   &style->bg[GTK_STATE_NORMAL],
+      pixmap = gdk_pixmap_create_from_xpm (window->window, &mask, NULL,
 					   "test.xpm");
       pixmapwid = gtk_pixmap_new (pixmap, mask);
       gdk_pixmap_unref (pixmap);

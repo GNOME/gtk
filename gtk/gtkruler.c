@@ -247,23 +247,23 @@ gtk_ruler_expose (GtkWidget      *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-       ruler = GTK_RULER (widget);
+      ruler = GTK_RULER (widget);
 
-       gtk_paint_box (widget->style, widget->window,
-		      GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
-		      NULL, widget, "ruler",
-		      0, 0, -1, -1);
-
-       gtk_ruler_draw_ticks (ruler);
-
-       gdk_draw_pixmap (widget->window,
-			ruler->non_gr_exp_gc,
-			ruler->backing_store,
-			0, 0, 0, 0,
-			widget->allocation.width,
-			widget->allocation.height);
-       
-       gtk_ruler_draw_pos (ruler);
+      gtk_paint_box (widget->style, widget->window,
+		     GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
+		     NULL, widget, "ruler",
+		     0, 0, -1, -1);
+      
+      gtk_ruler_draw_ticks (ruler);
+      
+      gdk_draw_pixmap (widget->window,
+		       ruler->non_gr_exp_gc,
+		       ruler->backing_store,
+		       0, 0, 0, 0,
+		       widget->allocation.width,
+		       widget->allocation.height);
+      
+      gtk_ruler_draw_pos (ruler);
     }
 
   return FALSE;

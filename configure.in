@@ -289,14 +289,6 @@ else
   AC_DEFINE(XINPUT_NONE)
 fi
 
-# Dynamic loading (temporary - will eventually be in -lgmodule)
-
-AC_CHECK_LIB(dl, dlopen,
-  AC_DEFINE(HAVE_LIBDL)
-  DL_LIBS=-ldl)
-
-AC_SUBST(DL_LIBS)
-
 # Threads
 
 CFLAGS="$saved_cflags"

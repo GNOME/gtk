@@ -92,8 +92,8 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 static void
 gtk_check_button_init (GtkCheckButton *check_button)
 {
-   GTK_WIDGET_SET_FLAGS (check_button, GTK_NO_WINDOW);
-   check_button->toggle_button.draw_indicator = TRUE;
+  GTK_WIDGET_SET_FLAGS (check_button, GTK_NO_WINDOW);
+  check_button->toggle_button.draw_indicator = TRUE;
 }
 
 GtkWidget*
@@ -172,11 +172,11 @@ gtk_check_button_draw_focus (GtkWidget *widget)
   g_return_if_fail (GTK_IS_CHECK_BUTTON (widget));
 
   border_width = GTK_CONTAINER (widget)->border_width;
-  gtk_widget_queue_draw_area(widget->parent, 
-                             border_width + widget->allocation.x,
-			     border_width + widget->allocation.y,
-			     widget->allocation.width - 2 * border_width - 1,
-			     widget->allocation.height - 2 * border_width - 1);
+  gtk_widget_queue_clear_area(widget->parent, 
+			      border_width + widget->allocation.x,
+			      border_width + widget->allocation.y,
+			      widget->allocation.width - 2 * border_width,
+			      widget->allocation.height - 2 * border_width);
 }
 
 static void

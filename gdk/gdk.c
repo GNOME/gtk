@@ -116,10 +116,6 @@ static Bool	 gdk_event_get_type	(Display      *display,
 static void	 gdk_synthesize_click	(GdkEvent     *event, 
 					 gint	       nclicks);
 
-#ifdef DEBUG_DND
-static void	 gdk_print_atom		(GdkAtom       anatom);
-#endif
-
 #ifndef HAVE_XCONVERTCASE
 static void	 gdkx_XConvertCase	(KeySym	       symbol,
 					 KeySym	      *lower,
@@ -2226,8 +2222,7 @@ gdk_event_translate (GdkEvent *event,
       /* Print debugging info.
        */
       GDK_NOTE (EVENTS, 
-		g_message ("button press[%d]:\t\twindow: %ld  x,y: %d %d  button: %d",
-			   window_private?window_private->dnd_drag_enabled:0,
+		g_message ("button press:\t\twindow: %ld  x,y: %d %d  button: %d",
 			   xevent->xbutton.window - base_id,
 			   xevent->xbutton.x, xevent->xbutton.y,
 			   xevent->xbutton.button));
@@ -2297,8 +2292,7 @@ gdk_event_translate (GdkEvent *event,
       /* Print debugging info.
        */
       GDK_NOTE (EVENTS, 
-		g_message ("button release[%d]:\twindow: %ld  x,y: %d %d  button: %d",
-			   window_private?window_private->dnd_drag_enabled:0,
+		g_message ("button release:\twindow: %ld  x,y: %d %d  button: %d",
 			   xevent->xbutton.window - base_id,
 			   xevent->xbutton.x, xevent->xbutton.y,
 			   xevent->xbutton.button));
@@ -3836,61 +3830,6 @@ _g_mbtowc (wchar_t *wstr, const char *str, size_t len)
 }
 
 #endif /* X_LOCALE */
-
-/* 
- * used for debugging only 
- */
-#ifdef DEBUG_DND
-static void
-gdk_print_atom (GdkAtom anatom)
-{
-  gchar *tmpstr = NULL;
-  tmpstr = (anatom!=None)?gdk_atom_name(anatom):"(none)";
-  g_message("Atom %lu has name %s", anatom, tmpstr);
-  if(tmpstr)
-    g_free(tmpstr);
-}
-#endif
-
-#ifdef WE_HAVE_MOTIF_DROPS_DONE
-static GdkWindow *
-gdk_drop_get_real_window (GdkWindow   *w, 
-			  guint16     *x, 
-			  guint16     *y)
-{
-  GdkWindow *retval = w;
-  GdkWindowPrivate *awin;
-  GList *children;
-  gint16 myx = *x, myy = *y;
-  
-  g_return_val_if_fail (w != NULL && x != NULL && y != NULL, NULL);
-  
-  myx = *x; 
-  myy = *y;
-  
- descend:
-  for (children = gdk_window_get_children(retval); 
-       children && children->next;
-       children = children->next)
-    {
-      awin = (GdkWindowPrivate *) children->data;
-      if ((myx >= awin->x) && (myy >= awin->y)
-	  && (myx < (awin->x + awin->width))
-	  && (myy < (awin->y + awin->height)))
-	{
-	  retval = (GdkWindow *) awin;
-	  myx -= awin->x;
-	  myy -= awin->y;
-	  goto descend;
-	}
-    }
-  
-  *x = myx; 
-  *y = myy;
-  
-  return retval;
-}
-#endif
 
 /* Sends a ClientMessage to all toplevel client windows */
 gboolean

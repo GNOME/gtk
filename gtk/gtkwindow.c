@@ -624,7 +624,7 @@ gtk_window_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-  gtk_window_draw(widget, NULL);
+  gtk_window_paint (widget, NULL);
 }
 
 static void
@@ -1156,7 +1156,7 @@ gtk_window_move_resize (GtkWindow *window)
 	(height < widget->requisition.height))))
     {
       window->resize_count += 1;
-      if ((x != -1) && (y != -1) && (window->position != GTK_WIN_POS_NONE))
+      if ((x != -1) && (y != -1))
 	gdk_window_move_resize (widget->window, x, y,
 				widget->requisition.width,
 				widget->requisition.height);
@@ -1171,21 +1171,21 @@ gtk_window_move_resize (GtkWindow *window)
        * visible, so reallocate everything, since we didn't
        * keep track of what changed
        */
-       GtkAllocation allocation;
-       
-       allocation.x = 0;
-       allocation.y = 0;
-       allocation.width = widget->requisition.width;
-       allocation.height = widget->requisition.height;
-       
-       gtk_widget_size_allocate (widget, &allocation);
+      GtkAllocation allocation;
+      
+      allocation.x = 0;
+      allocation.y = 0;
+      allocation.width = widget->requisition.width;
+      allocation.height = widget->requisition.height;
+      
+      gtk_widget_size_allocate (widget, &allocation);
     }
   else
     {
-       if ((x != -1) && (y != -1))
-	 gdk_window_move (widget->window, x, y);
-       
-       gtk_container_resize_children (GTK_CONTAINER (window));
+      if ((x != -1) && (y != -1))
+	gdk_window_move (widget->window, x, y);
+      
+      gtk_container_resize_children (GTK_CONTAINER (window));
     }
 }
 

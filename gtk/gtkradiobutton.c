@@ -98,8 +98,8 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 static void
 gtk_radio_button_init (GtkRadioButton *radio_button)
 {
-   GTK_WIDGET_SET_FLAGS (radio_button, GTK_NO_WINDOW);
-   radio_button->group = g_slist_prepend (NULL, radio_button);
+  GTK_WIDGET_SET_FLAGS (radio_button, GTK_NO_WINDOW);
+  radio_button->group = g_slist_prepend (NULL, radio_button);
 }
 
 static void
@@ -395,15 +395,15 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       y = widget->allocation.y + (widget->allocation.height - CHECK_BUTTON_CLASS (widget)->indicator_size) / 2;
       width = CHECK_BUTTON_CLASS (widget)->indicator_size;
       height = CHECK_BUTTON_CLASS (widget)->indicator_size;
-
+      
       if (GTK_TOGGLE_BUTTON (widget)->active)
 	shadow_type = GTK_SHADOW_IN;
       else
 	shadow_type = GTK_SHADOW_OUT;
-
-       gtk_paint_option (widget->style, widget->window,
-			 GTK_WIDGET_STATE (widget), shadow_type,
-			 area, widget, "radiobutton",
-			 x, y, width, height);
+      
+      gtk_paint_option (widget->style, widget->window,
+			GTK_WIDGET_STATE (widget), shadow_type,
+			area, widget, "radiobutton",
+			x, y, width, height);
     }
 }

@@ -919,7 +919,12 @@ motif_read_target_table (void)
 	    goto error;
 
 	  n_targets = card16_to_host (*(gushort *)p, header->byte_order);
-	  targets = (guint32 *)(p + sizeof(guint16));
+
+	  /* We need to make a copy of the targets, since it may
+	   * be unaligned
+	   */
+	  targets = g_new (guint32, n_targets);
+	  memcpy (targets, p + sizeof(guint16), sizeof(guint32) * n_targets);
 
 	  p +=  sizeof(guint16) + n_targets * sizeof(guint32);
 	  if (p - target_bytes > nitems)
@@ -930,7 +935,7 @@ motif_read_target_table (void)
 	      g_list_prepend (motif_target_lists[i],
 			      GUINT_TO_POINTER (card32_to_host (targets[j], 
 								header->byte_order)));
-
+	  g_free (targets);
 	  motif_target_lists[i] = g_list_reverse (motif_target_lists[i]);
 	}
 
@@ -1037,7 +1042,6 @@ motif_add_to_target_table (GList *targets)
 	  guchar *data;
 	  guchar *p;
 	  guint16 *p16;
-	  guint32 *p32;
 	  MotifTargetTableHeader *header;
 	  
 	  if (!motif_target_lists)
@@ -1071,20 +1075,27 @@ motif_add_to_target_table (GList *targets)
 
 	  for (i = 0; i < motif_n_target_lists ; i++)
 	    {
-	      guint16 count = 0;
+	      guint16 n_targets = g_list_length (motif_target_lists[i]);
+	      guint32 *targets = g_new (guint32, n_targets);
+	      guint32 *p32 = targets;
 	      
-	      p16 = (guint16 *)p;
-	      p += sizeof(guint16);
-	      p32 = (guint32 *)p;
 	      tmp_list = motif_target_lists[i];
 	      while (tmp_list)
 		{
-		  *p32++ = GPOINTER_TO_UINT (tmp_list->data);
+		  *p32 = GPOINTER_TO_UINT (tmp_list->data);
+		  
 		  tmp_list = tmp_list->next;
-		  count++;
+		  p32++;
 		}
-	      *p16 = count;
-	      p = (guchar *)p32;
+
+	      p16 = (guint16 *)p;
+	      p += sizeof(guint16);
+
+	      memcpy (p, targets, n_targets * sizeof(guint32));
+
+	      *p16 = n_targets;
+	      p += sizeof(guint32) * n_targets;
+	      g_free (targets);
 	    }
 
 	  XChangeProperty (gdk_display, motif_drag_window,

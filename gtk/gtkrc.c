@@ -597,7 +597,22 @@ gtk_rc_styles_match (GSList       *rc_styles,
 GtkStyle*
 gtk_rc_get_style (GtkWidget *widget)
 {
+  GtkRcStyle *widget_rc_style;
   GSList *rc_styles = NULL;
+
+  static guint rc_style_key_id = 0;
+
+  /* We allow the specification of a single rc style to be bound
+   * tightly to a widget, for application modifications
+   */
+  if (!rc_style_key_id)
+    rc_style_key_id = g_quark_from_static_string ("gtk-rc-style");
+
+  widget_rc_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
+					       rc_style_key_id);
+
+  if (widget_rc_style)
+    rc_styles = g_list_prepend (rc_styles, widget_rc_style);
   
   if (gtk_rc_sets_widget)
     {

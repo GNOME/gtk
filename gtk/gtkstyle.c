@@ -84,7 +84,7 @@ static void gtk_default_draw_polygon (GtkStyle      *style,
 				      gchar         *detail,
 				      GdkPoint      *points,
 				      gint           npoints,
-				      gint           fill);
+				      gboolean       fill);
 static void gtk_default_draw_arrow   (GtkStyle      *style,
 				      GdkWindow     *window,
 				      GtkStateType   state_type,
@@ -93,7 +93,7 @@ static void gtk_default_draw_arrow   (GtkStyle      *style,
 				      GtkWidget     *widget,
 				      gchar         *detail,
 				      GtkArrowType   arrow_type,
-				      gint           fill,
+				      gboolean       fill,
 				      gint           x,
 				      gint           y,
 				      gint           width,
@@ -207,46 +207,46 @@ static void gtk_default_draw_tab     (GtkStyle      *style,
 				      gint           y,
 				      gint           width,
 				      gint           height);
-static void gtk_default_draw_shadow_gap (GtkStyle      *style,
-					 GdkWindow     *window,
-					 GtkStateType   state_type,
-					 GtkShadowType  shadow_type,
-					 GdkRectangle  *area,
-					 GtkWidget     *widget,
-					 gchar         *detail,
-					 gint           x,
-					 gint           y,
-					 gint           width,
-					 gint           height,
-					 gint           gap_side,
-					 gint           gap_x,
-					 gint           gap_width);
-static void gtk_default_draw_box_gap (GtkStyle      *style,
-				      GdkWindow     *window,
-				      GtkStateType   state_type,
-				      GtkShadowType  shadow_type,
-				      GdkRectangle  *area,
-				      GtkWidget     *widget,
-				      gchar         *detail,
-				      gint           x,
-				      gint           y,
-				      gint           width,
-				      gint           height,
-				      gint           gap_side,
-				      gint           gap_x,
-				      gint           gap_width);
-static void gtk_default_draw_extension (GtkStyle      *style,
-					GdkWindow     *window,
-					GtkStateType   state_type,
-					GtkShadowType  shadow_type,
-					GdkRectangle  *area,
-					GtkWidget     *widget,
-					gchar         *detail,
-					gint           x,
-					gint           y,
-					gint           width,
-					gint           height,
-					gint           gap_side);
+static void gtk_default_draw_shadow_gap (GtkStyle       *style,
+					 GdkWindow      *window,
+					 GtkStateType    state_type,
+					 GtkShadowType   shadow_type,
+					 GdkRectangle   *area,
+					 GtkWidget      *widget,
+					 gchar          *detail,
+					 gint            x,
+					 gint            y,
+					 gint            width,
+					 gint            height,
+					 GtkPositionType gap_side,
+					 gint            gap_x,
+					 gint            gap_width);
+static void gtk_default_draw_box_gap (GtkStyle       *style,
+				      GdkWindow      *window,
+				      GtkStateType    state_type,
+				      GtkShadowType   shadow_type,
+				      GdkRectangle   *area,
+				      GtkWidget      *widget,
+				      gchar          *detail,
+				      gint            x,
+				      gint            y,
+				      gint            width,
+				      gint            height,
+				      GtkPositionType gap_side,
+				      gint            gap_x,
+				      gint            gap_width);
+static void gtk_default_draw_extension (GtkStyle       *style,
+					GdkWindow      *window,
+					GtkStateType    state_type,
+					GtkShadowType   shadow_type,
+					GdkRectangle   *area,
+					GtkWidget      *widget,
+					gchar          *detail,
+					gint            x,
+					gint            y,
+					gint            width,
+					gint            height,
+					GtkPositionType gap_side);
 static void gtk_default_draw_focus   (GtkStyle      *style,
 				      GdkWindow     *window,
 				      GdkRectangle  *area,
@@ -268,16 +268,6 @@ static void gtk_default_draw_slider  (GtkStyle      *style,
 				      gint           width,
 				      gint           height,
 				      GtkOrientation orientation);
-static void gtk_default_draw_entry   (GtkStyle      *style,
-				      GdkWindow     *window,
-				      GtkStateType   state_type,
-				      GdkRectangle  *area,
-				      GtkWidget     *widget,
-				      gchar         *detail,
-				      gint           x,
-				      gint           y,
-				      gint           width,
-				      gint           height);
 static void gtk_default_draw_handle  (GtkStyle      *style,
 				      GdkWindow     *window,
 				      GtkStateType   state_type,
@@ -324,7 +314,6 @@ GtkStyleClass default_class =
    gtk_default_draw_extension,
    gtk_default_draw_focus,
    gtk_default_draw_slider,
-   gtk_default_draw_entry,
    gtk_default_draw_handle
 };
 GdkFont *default_font = NULL;
@@ -833,7 +822,7 @@ gtk_draw_polygon (GtkStyle      *style,
 		  GtkShadowType  shadow_type,
 		  GdkPoint      *points,
 		  gint           npoints,
-		  gint           fill)
+		  gboolean       fill)
 {
   g_return_if_fail (style != NULL);
   g_return_if_fail (style->klass != NULL);
@@ -848,7 +837,7 @@ gtk_draw_arrow (GtkStyle      *style,
 		GtkStateType   state_type,
 		GtkShadowType  shadow_type,
 		GtkArrowType   arrow_type,
-		gint           fill,
+		gboolean       fill,
 		gint           x,
 		gint           y,
 		gint           width,
@@ -1033,17 +1022,17 @@ gtk_draw_tab     (GtkStyle      *style,
 }
 
 void
-gtk_draw_shadow_gap (GtkStyle      *style,
-		     GdkWindow     *window,
-		     GtkStateType   state_type,
-		     GtkShadowType  shadow_type,
-		     gint           x,
-		     gint           y,
-		     gint           width,
-		     gint           height,
-		     gint           gap_side,
-		     gint           gap_x,
-		     gint           gap_width)
+gtk_draw_shadow_gap (GtkStyle       *style,
+		     GdkWindow      *window,
+		     GtkStateType    state_type,
+		     GtkShadowType   shadow_type,
+		     gint            x,
+		     gint            y,
+		     gint            width,
+		     gint            height,
+		     GtkPositionType gap_side,
+		     gint            gap_x,
+		     gint            gap_width)
 {
    g_return_if_fail (style != NULL);
    g_return_if_fail (style->klass != NULL);
@@ -1053,17 +1042,17 @@ gtk_draw_shadow_gap (GtkStyle      *style,
 }
 
 void
-gtk_draw_box_gap (GtkStyle      *style,
-		  GdkWindow     *window,
-		  GtkStateType   state_type,
-		  GtkShadowType  shadow_type,
-		  gint           x,
-		  gint           y,
-		  gint           width,
-		  gint           height,
-		  gint           gap_side,
-		  gint           gap_x,
-		  gint           gap_width)
+gtk_draw_box_gap (GtkStyle       *style,
+		  GdkWindow      *window,
+		  GtkStateType    state_type,
+		  GtkShadowType   shadow_type,
+		  gint            x,
+		  gint            y,
+		  gint            width,
+		  gint            height,
+		  GtkPositionType gap_side,
+		  gint            gap_x,
+		  gint            gap_width)
 {
    g_return_if_fail (style != NULL);
    g_return_if_fail (style->klass != NULL);
@@ -1073,15 +1062,15 @@ gtk_draw_box_gap (GtkStyle      *style,
 }
 
 void
-gtk_draw_extension (GtkStyle      *style,
-		    GdkWindow     *window,
-		    GtkStateType   state_type,
-		    GtkShadowType  shadow_type,
-		    gint           x,
-		    gint           y,
-		    gint           width,
-		    gint           height,
-		    gint           gap_side)
+gtk_draw_extension (GtkStyle       *style,
+		    GdkWindow      *window,
+		    GtkStateType    state_type,
+		    GtkShadowType   shadow_type,
+		    gint            x,
+		    gint            y,
+		    gint            width,
+		    gint            height,
+		    GtkPositionType gap_side)
 {
    g_return_if_fail (style != NULL);
    g_return_if_fail (style->klass != NULL);
@@ -1121,22 +1110,6 @@ gtk_draw_slider  (GtkStyle      *style,
    g_return_if_fail (style->klass->draw_slider != NULL);
 
    (*style->klass->draw_slider) (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height, orientation);
-}
-
-void 
-gtk_draw_entry   (GtkStyle      *style,
-		  GdkWindow     *window,
-		  GtkStateType   state_type,
-		  gint           x,
-		  gint           y,
-		  gint           width,
-		  gint           height)
-{
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_entry != NULL);
-
-   (*style->klass->draw_entry) (style, window, state_type, NULL, NULL, NULL, x, y, width, height);
 }
 
 void 
@@ -1498,7 +1471,7 @@ gtk_default_draw_polygon (GtkStyle      *style,
 			  gchar         *detail,
 			  GdkPoint      *points,
 			  gint           npoints,
-			  gint           fill)
+			  gboolean       fill)
 {
 #ifndef M_PI
 #define M_PI    3.14159265358979323846
@@ -1638,7 +1611,7 @@ gtk_default_draw_arrow (GtkStyle      *style,
 			GtkWidget     *widget,
 			gchar         *detail,
 			GtkArrowType   arrow_type,
-			gint           fill,
+			gboolean       fill,
 			gint           x,
 			gint           y,
 			gint           width,
@@ -2212,26 +2185,27 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 			   gint           width,
 			   gint           height)
 {
-   GdkGC *gc1;
+  GdkGC *gc1;
    
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (window != NULL);
    
-   if ((width == -1) && (height == -1))
-     gdk_window_get_size (window, &width, &height);
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
+  if ((width == -1) && (height == -1))
+    gdk_window_get_size (window, &width, &height);
+  else if (width == -1)
+    gdk_window_get_size (window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size (window, NULL, &height);
    
-   gc1 = style->bg_gc[state_type];
-   
-   if ((detail) && (!strcmp("selected",detail)))
-     gc1 = style->bg_gc[GTK_STATE_SELECTED];
-   if ((detail) && (!strcmp("text",detail)) && (state_type == GTK_STATE_SELECTED))
-     gc1 = style->bg_gc[GTK_STATE_SELECTED];
-   else if ((detail) && (!strcmp("viewportbin",detail)))
-     gc1 = style->bg_gc[GTK_STATE_NORMAL];
+  if ((detail) && (!strcmp("text",detail)) && (state_type == GTK_STATE_SELECTED))
+    gc1 = style->bg_gc[GTK_STATE_SELECTED];
+  else if ((detail) && (!strcmp("viewportbin",detail)))
+    gc1 = style->bg_gc[GTK_STATE_NORMAL];
+  else if ((detail) && (!strcmp("entry_bg",detail)))
+    gc1 = style->base_gc[state_type];
+  else
+    gc1 = style->bg_gc[state_type];
+
   if ((!style->bg_pixmap[state_type]) || (gc1 != style->bg_gc[state_type]) ||
       (gdk_window_get_type(window) == GDK_WINDOW_PIXMAP))
     {
@@ -2287,34 +2261,36 @@ gtk_default_draw_option  (GtkStyle      *style,
 		     detail, x, y, width, height);
 }
 
-static void gtk_default_draw_cross   (GtkStyle      *style,
-				      GdkWindow     *window,
-				      GtkStateType   state_type,
-				      GtkShadowType  shadow_type,
-				      GdkRectangle  *area,
-				      GtkWidget     *widget,
-				      gchar         *detail,
-				      gint           x,
-				      gint           y,
-				      gint           width,
-				      gint           height)
+static void 
+gtk_default_draw_cross   (GtkStyle      *style,
+			  GdkWindow     *window,
+			  GtkStateType   state_type,
+			  GtkShadowType  shadow_type,
+			  GdkRectangle  *area,
+			  GtkWidget     *widget,
+			  gchar         *detail,
+			  gint           x,
+			  gint           y,
+			  gint           width,
+			  gint           height)
 {
    g_return_if_fail (style != NULL);
    g_return_if_fail (window != NULL);
 }
 
-static void gtk_default_draw_ramp    (GtkStyle      *style,
-				      GdkWindow     *window,
-				      GtkStateType   state_type,
-				      GtkShadowType  shadow_type,
-				      GdkRectangle  *area,
-				      GtkWidget     *widget,
-				      gchar         *detail,
-				      GtkArrowType   arrow_type,
-				      gint           x,
-				      gint           y,
-				      gint           width,
-				      gint           height)
+static void 
+gtk_default_draw_ramp    (GtkStyle      *style,
+			  GdkWindow     *window,
+			  GtkStateType   state_type,
+			  GtkShadowType  shadow_type,
+			  GdkRectangle  *area,
+			  GtkWidget     *widget,
+			  gchar         *detail,
+			  GtkArrowType   arrow_type,
+			  gint           x,
+			  gint           y,
+			  gint           width,
+			  gint           height)
 {
    g_return_if_fail (style != NULL);
    g_return_if_fail (window != NULL);
@@ -2339,20 +2315,21 @@ static void gtk_default_draw_tab     (GtkStyle      *style,
 	              x, y, width, height);
 }
 
-static void gtk_default_draw_shadow_gap (GtkStyle      *style,
-					 GdkWindow     *window,
-					 GtkStateType   state_type,
-					 GtkShadowType  shadow_type,
-					 GdkRectangle  *area,
-					 GtkWidget     *widget,
-					 gchar         *detail,
-					 gint           x,
-					 gint           y,
-					 gint           width,
-					 gint           height,
-					 gint           gap_side,
-					 gint           gap_x,
-					 gint           gap_width)
+static void 
+gtk_default_draw_shadow_gap (GtkStyle       *style,
+			     GdkWindow      *window,
+			     GtkStateType    state_type,
+			     GtkShadowType   shadow_type,
+			     GdkRectangle   *area,
+			     GtkWidget      *widget,
+			     gchar          *detail,
+			     gint            x,
+			     gint            y,
+			     gint            width,
+			     gint            height,
+			     GtkPositionType gap_side,
+			     gint            gap_x,
+			     gint            gap_width)
 {
   GdkGC *gc1 = NULL;
   GdkGC *gc2 = NULL;
@@ -2413,14 +2390,14 @@ static void gtk_default_draw_shadow_gap (GtkStyle      *style,
     case GTK_SHADOW_OUT:
     case GTK_SHADOW_ETCHED_IN:
     case GTK_SHADOW_ETCHED_OUT:
-      if (gap_side == 0)
-	/* top */
+      switch (gap_side)
 	{
+	case GTK_POS_TOP:
 	  gdk_draw_line (window, gc1,
 			 x, y, x, y + height - 1);
 	  gdk_draw_line (window, gc2,
 			 x + 1, y, x + 1, y + height - 2);
-
+	  
 	  gdk_draw_line (window, gc3,
 			 x + 1, y + height - 2, x + width - 2, y + height - 2);
 	  gdk_draw_line (window, gc3,
@@ -2447,10 +2424,8 @@ static void gtk_default_draw_shadow_gap (GtkStyle      *style,
 	      gdk_draw_line (window, gc2,
 			     x + gap_x + gap_width - 1, y, x + gap_x + gap_width - 1, y);
 	    }
-	}
-      else if (gap_side == 1)
-	/* bottom */
-	{
+	  break;
+	case GTK_POS_BOTTOM:
 	  gdk_draw_line (window, gc1,
 			 x, y, x + width - 1, y);
 	  gdk_draw_line (window, gc1,
@@ -2482,10 +2457,8 @@ static void gtk_default_draw_shadow_gap (GtkStyle      *style,
 	      gdk_draw_line (window, gc3,
 			     x + gap_x + gap_width - 1, y + height - 1, x + gap_x + gap_width - 1, y + height - 1);
 	    }
-	}
-      else if (gap_side == 2)
-	/* left */
-	{
+	  break;
+	case GTK_POS_LEFT:
 	  gdk_draw_line (window, gc1,
 			 x, y, x + width - 1, y);
 	  gdk_draw_line (window, gc2,
@@ -2517,10 +2490,8 @@ static void gtk_default_draw_shadow_gap (GtkStyle      *style,
 	      gdk_draw_line (window, gc2,
 			     x, y + gap_x + gap_width - 1, x, y + gap_x + gap_width - 1);
 	    }
-	}
-      else if (gap_side == 3)
-	/* right */
-	{
+	  break;
+	case GTK_POS_RIGHT:
 	  gdk_draw_line (window, gc1,
 			 x, y, x + width - 1, y);
 	  gdk_draw_line (window, gc1,
@@ -2552,6 +2523,7 @@ static void gtk_default_draw_shadow_gap (GtkStyle      *style,
 	      gdk_draw_line (window, gc3,
 			     x + width - 1, y + gap_x + gap_width - 1, x + width - 1, y + gap_x + gap_width - 1);
 	    }
+	  break;
 	}
     }
   if (area)
@@ -2563,20 +2535,21 @@ static void gtk_default_draw_shadow_gap (GtkStyle      *style,
     }
 }
 
-static void gtk_default_draw_box_gap (GtkStyle      *style,
-				      GdkWindow     *window,
-				      GtkStateType   state_type,
-				      GtkShadowType  shadow_type,
-				      GdkRectangle  *area,
-				      GtkWidget     *widget,
-				      gchar         *detail,
-				      gint           x,
-				      gint           y,
-				      gint           width,
-				      gint           height,
-				      gint           gap_side,
-				      gint           gap_x,
-				      gint           gap_width)
+static void 
+gtk_default_draw_box_gap (GtkStyle       *style,
+			  GdkWindow      *window,
+			  GtkStateType    state_type,
+			  GtkShadowType   shadow_type,
+			  GdkRectangle   *area,
+			  GtkWidget      *widget,
+			  gchar          *detail,
+			  gint            x,
+			  gint            y,
+			  gint            width,
+			  gint            height,
+			  GtkPositionType gap_side,
+			  gint            gap_x,
+			  gint            gap_width)
 {
   GdkGC *gc1 = NULL;
   GdkGC *gc2 = NULL;
@@ -2790,18 +2763,19 @@ static void gtk_default_draw_box_gap (GtkStyle      *style,
     }
 }
 
-static void gtk_default_draw_extension (GtkStyle      *style,
-					GdkWindow     *window,
-					GtkStateType   state_type,
-					GtkShadowType  shadow_type,
-					GdkRectangle  *area,
-					GtkWidget     *widget,
-					gchar         *detail,
-					gint           x,
-					gint           y,
-					gint           width,
-					gint           height,
-					gint           gap_side)
+static void 
+gtk_default_draw_extension (GtkStyle       *style,
+			    GdkWindow      *window,
+			    GtkStateType    state_type,
+			    GtkShadowType   shadow_type,
+			    GdkRectangle   *area,
+			    GtkWidget      *widget,
+			    gchar          *detail,
+			    gint            x,
+			    gint            y,
+			    gint            width,
+			    gint            height,
+			    GtkPositionType gap_side)
 {
   GdkGC *gc1 = NULL;
   GdkGC *gc2 = NULL;
@@ -2864,9 +2838,9 @@ static void gtk_default_draw_extension (GtkStyle      *style,
     case GTK_SHADOW_OUT:
     case GTK_SHADOW_ETCHED_IN:
     case GTK_SHADOW_ETCHED_OUT:
-      if (gap_side == 0)
-	/* top */
+      switch (gap_side)
 	{
+	case GTK_POS_TOP:
 	  gtk_style_apply_default_pixmap(style, window, state_type, area,
 					 x + style->klass->xthickness, 
 					 y, 
@@ -2885,10 +2859,8 @@ static void gtk_default_draw_extension (GtkStyle      *style,
 			 x + 1, y + height - 1, x + width - 2, y + height - 1);
 	  gdk_draw_line (window, gc4,
 			 x + width - 1, y, x + width - 1, y + height - 2);
-	}
-      else if (gap_side == 1)
-	/* bottom */
-	{
+	  break;
+	case GTK_POS_BOTTOM:
 	  gtk_style_apply_default_pixmap(style, window, state_type, area,
 					 x + style->klass->xthickness, 
 					 y + style->klass->ythickness, 
@@ -2907,10 +2879,8 @@ static void gtk_default_draw_extension (GtkStyle      *style,
 			 x + width - 2, y + 2, x + width - 2, y + height - 1);
 	  gdk_draw_line (window, gc4,
 			 x + width - 1, y + 1, x + width - 1, y + height - 1);
-	}
-      else if (gap_side == 2)
-	/* left */
-	{
+	  break;
+	case GTK_POS_LEFT:
 	  gtk_style_apply_default_pixmap(style, window, state_type, area,
 					 x, 
 					 y + style->klass->ythickness, 
@@ -2929,10 +2899,8 @@ static void gtk_default_draw_extension (GtkStyle      *style,
 			 x, y + height - 1, x + width - 2, y + height - 1);
 	  gdk_draw_line (window, gc4,
 			 x + width - 1, y + 1, x + width - 1, y + height - 2);
-	}
-      else if (gap_side == 3)
-	/* right */
-	{
+	  break;
+	case GTK_POS_RIGHT:
 	  gtk_style_apply_default_pixmap(style, window, state_type, area,
 					 x + style->klass->xthickness, 
 					 y + style->klass->ythickness, 
@@ -2951,6 +2919,7 @@ static void gtk_default_draw_extension (GtkStyle      *style,
 			 x + 2, y + height - 2, x + width - 1, y + height - 2);
 	  gdk_draw_line (window, gc4,
 			 x + 1, y + height - 1, x + width - 1, y + height - 1);
+	  break;
 	}
     }
   if (area)
@@ -2962,15 +2931,16 @@ static void gtk_default_draw_extension (GtkStyle      *style,
     }
 }
 
-static void gtk_default_draw_focus   (GtkStyle      *style,
-				      GdkWindow     *window,
-				      GdkRectangle  *area,
-				      GtkWidget     *widget,
-				      gchar         *detail,
-				      gint           x,
-				      gint           y,
-				      gint           width,
-				      gint           height)
+static void 
+gtk_default_draw_focus (GtkStyle      *style,
+			GdkWindow     *window,
+			GdkRectangle  *area,
+			GtkWidget     *widget,
+			gchar         *detail,
+			gint           x,
+			gint           y,
+			gint           width,
+			gint           height)
 {
    g_return_if_fail (style != NULL);
    g_return_if_fail (window != NULL);
@@ -3018,18 +2988,19 @@ static void gtk_default_draw_focus   (GtkStyle      *style,
      }
 }
 
-static void gtk_default_draw_slider  (GtkStyle      *style,
-				      GdkWindow     *window,
-				      GtkStateType   state_type,
-				      GtkShadowType  shadow_type,
-				      GdkRectangle  *area,
-				      GtkWidget     *widget,
-				      gchar         *detail,
-				      gint           x,
-				      gint           y,
-				      gint           width,
-				      gint           height,
-				      GtkOrientation orientation)
+static void 
+gtk_default_draw_slider (GtkStyle      *style,
+			 GdkWindow     *window,
+			 GtkStateType   state_type,
+			 GtkShadowType  shadow_type,
+			 GdkRectangle  *area,
+			 GtkWidget     *widget,
+			 gchar         *detail,
+			 gint           x,
+			 gint           y,
+			 gint           width,
+			 gint           height,
+			 GtkOrientation orientation)
 {
    g_return_if_fail (style != NULL);
    g_return_if_fail (window != NULL);
@@ -3053,63 +3024,19 @@ static void gtk_default_draw_slider  (GtkStyle      *style,
 		      width - style->klass->xthickness - 1, height / 2);
 }
 
-static void gtk_default_draw_entry   (GtkStyle      *style,
-				      GdkWindow     *window,
-				      GtkStateType   state_type,
-				      GdkRectangle  *area,
-				      GtkWidget     *widget,
-				      gchar         *detail,
-				      gint           x,
-				      gint           y,
-				      gint           width,
-				      gint           height)
-{
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-
-   if ((width == -1) && (height == -1))
-     gdk_window_get_size (window, &width, &height);
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
-   
-   if (!strcmp("selected",detail))
-     {
-        gdk_draw_rectangle (window,
-			    style->bg_gc[state_type],
-			    TRUE,
-			    x, y,
-			    width,
-			    height);
-     }
-   else
-     {
-	if (area)
-	  gdk_gc_set_clip_rectangle (style->base_gc[state_type], area);
-	gdk_draw_rectangle (window,
-			    style->base_gc[state_type],
-			    TRUE,
-			    x, y,
-			    width,
-			    height);
-             if (area)
-	  gdk_gc_set_clip_rectangle (style->base_gc[state_type], NULL);
-     }
-}
-
-static void gtk_default_draw_handle  (GtkStyle      *style,
-				      GdkWindow     *window,
-				      GtkStateType   state_type,
-				      GtkShadowType  shadow_type,
-				      GdkRectangle  *area,
-				      GtkWidget     *widget,
-				      gchar         *detail,
-				      gint           x,
-				      gint           y,
-				      gint           width,
-				      gint           height,
-				      GtkOrientation orientation)
+static void 
+gtk_default_draw_handle  (GtkStyle      *style,
+			  GdkWindow     *window,
+			  GtkStateType   state_type,
+			  GtkShadowType  shadow_type,
+			  GdkRectangle  *area,
+			  GtkWidget     *widget,
+			  gchar         *detail,
+			  gint           x,
+			  gint           y,
+			  gint           width,
+			  gint           height,
+			  GtkOrientation orientation)
 {
    gint xx, yy;
    gint xthick, ythick;
@@ -3339,18 +3266,17 @@ hls_to_rgb (gdouble *h,
       *s = b;
     }
 }
-
-   
-   
-void gtk_paint_hline   (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint	       x1,
-			gint	       x2,
-			gint	       y)
+ 
+void 
+gtk_paint_hline (GtkStyle      *style,
+		 GdkWindow     *window,
+		 GtkStateType   state_type,
+		 GdkRectangle  *area,
+		 GtkWidget     *widget,
+		 gchar         *detail,
+		 gint	       x1,
+		 gint	       x2,
+		 gint	       y)
 {
   g_return_if_fail (style != NULL);
   g_return_if_fail (style->klass != NULL);
@@ -3359,52 +3285,55 @@ void gtk_paint_hline   (GtkStyle      *style,
   (*style->klass->draw_hline) (style, window, state_type, area, widget, detail, x1, x2, y);
 }
 
-void gtk_paint_vline   (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint	       y1,
-			gint	       y2,
-			gint	       x)
+void
+gtk_paint_vline (GtkStyle      *style,
+		 GdkWindow     *window,
+		 GtkStateType   state_type,
+		 GdkRectangle  *area,
+		 GtkWidget     *widget,
+		 gchar         *detail,
+		 gint	       y1,
+		 gint	       y2,
+		 gint	       x)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_vline != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_vline != NULL);
    
-   (*style->klass->draw_vline) (style, window, state_type, area, widget, detail, y1, y2, x);
+  (*style->klass->draw_vline) (style, window, state_type, area, widget, detail, y1, y2, x);
 }
 
-void gtk_paint_shadow  (GtkStyle     *style,
-			GdkWindow    *window,
-			GtkStateType  state_type,
-			GtkShadowType shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint	       x,
-			gint	       y,
-			gint	       width,
-			gint	       height)
+void
+gtk_paint_shadow (GtkStyle     *style,
+		  GdkWindow    *window,
+		  GtkStateType  state_type,
+		  GtkShadowType shadow_type,
+		  GdkRectangle  *area,
+		  GtkWidget     *widget,
+		  gchar         *detail,
+		  gint	       x,
+		  gint	       y,
+		  gint	       width,
+		  gint	       height)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_shadow != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_shadow != NULL);
    
-   (*style->klass->draw_shadow) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
+  (*style->klass->draw_shadow) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
-void gtk_paint_polygon (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			GdkPoint      *points,
-			gint	       npoints,
-			gint	       fill)
+void
+gtk_paint_polygon (GtkStyle      *style,
+		   GdkWindow     *window,
+		   GtkStateType   state_type,
+		   GtkShadowType  shadow_type,
+		   GdkRectangle  *area,
+		   GtkWidget     *widget,
+		   gchar         *detail,
+		   GdkPoint      *points,
+		   gint	          npoints,
+		   gboolean       fill)
 {
   g_return_if_fail (style != NULL);
   g_return_if_fail (style->klass != NULL);
@@ -3413,19 +3342,20 @@ void gtk_paint_polygon (GtkStyle      *style,
   (*style->klass->draw_polygon) (style, window, state_type, shadow_type, area, widget, detail, points, npoints, fill);
 }
 
-void gtk_paint_arrow   (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			GtkArrowType   arrow_type,
-			gint	       fill,
-			gint	       x,
-			gint	       y,
-			gint	       width,
-			gint	       height)
+void
+gtk_paint_arrow (GtkStyle      *style,
+		 GdkWindow     *window,
+		 GtkStateType   state_type,
+		 GtkShadowType  shadow_type,
+		 GdkRectangle  *area,
+		 GtkWidget     *widget,
+		 gchar         *detail,
+		 GtkArrowType   arrow_type,
+		 gboolean       fill,
+		 gint	        x,
+		 gint	        y,
+		 gint	        width,
+		 gint	        height)
 {
   g_return_if_fail (style != NULL);
   g_return_if_fail (style->klass != NULL);
@@ -3434,17 +3364,18 @@ void gtk_paint_arrow   (GtkStyle      *style,
   (*style->klass->draw_arrow) (style, window, state_type, shadow_type, area, widget, detail, arrow_type, fill, x, y, width, height);
 }
 
-void gtk_paint_diamond (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint	       x,
-			gint	       y,
-			gint	       width,
-			gint	       height)
+void
+gtk_paint_diamond (GtkStyle      *style,
+		   GdkWindow     *window,
+		   GtkStateType   state_type,
+		   GtkShadowType  shadow_type,
+		   GdkRectangle  *area,
+		   GtkWidget     *widget,
+		   gchar         *detail,
+		   gint	       x,
+		   gint	       y,
+		   gint	       width,
+		   gint	       height)
 {
   g_return_if_fail (style != NULL);
   g_return_if_fail (style->klass != NULL);
@@ -3453,17 +3384,18 @@ void gtk_paint_diamond (GtkStyle      *style,
   (*style->klass->draw_diamond) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
-void gtk_paint_oval    (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint	       x,
-			gint	       y,
-			gint	       width,
-			gint	       height)
+void
+gtk_paint_oval (GtkStyle      *style,
+		GdkWindow     *window,
+		GtkStateType   state_type,
+		GtkShadowType  shadow_type,
+		GdkRectangle  *area,
+		GtkWidget     *widget,
+		gchar         *detail,
+		gint	       x,
+		gint	       y,
+		gint	       width,
+		gint	       height)
 {
   g_return_if_fail (style != NULL);
   g_return_if_fail (style->klass != NULL);
@@ -3472,15 +3404,16 @@ void gtk_paint_oval    (GtkStyle      *style,
   (*style->klass->draw_oval) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
-void gtk_paint_string  (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint	       x,
-			gint	       y,
-			const gchar   *string)
+void
+gtk_paint_string (GtkStyle      *style,
+		  GdkWindow     *window,
+		  GtkStateType   state_type,
+		  GdkRectangle  *area,
+		  GtkWidget     *widget,
+		  gchar         *detail,
+		  gint	       x,
+		  gint	       y,
+		  const gchar   *string)
 {
   g_return_if_fail (style != NULL);
   g_return_if_fail (style->klass != NULL);
@@ -3489,276 +3422,271 @@ void gtk_paint_string  (GtkStyle      *style,
   (*style->klass->draw_string) (style, window, state_type, area, widget, detail, x, y, string);
 }
 
-void gtk_paint_box     (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint	       x,
-			gint	       y,
-			gint	       width,
-			gint	       height)
+void
+gtk_paint_box (GtkStyle      *style,
+	       GdkWindow     *window,
+	       GtkStateType   state_type,
+	       GtkShadowType  shadow_type,
+	       GdkRectangle  *area,
+	       GtkWidget     *widget,
+	       gchar         *detail,
+	       gint	       x,
+	       gint	       y,
+	       gint	       width,
+	       gint	       height)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_box != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_box != NULL);
 
-   (*style->klass->draw_box) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
+  (*style->klass->draw_box) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
-void gtk_paint_flat_box (GtkStyle      *style,
-			 GdkWindow     *window,
-			 GtkStateType   state_type,
-			 GtkShadowType  shadow_type,
-			 GdkRectangle  *area,
-			 GtkWidget     *widget,
-			 gchar         *detail,
-			 gint           x,
-			 gint           y,
-			 gint           width,
-			 gint           height)
+void
+gtk_paint_flat_box (GtkStyle      *style,
+		    GdkWindow     *window,
+		    GtkStateType   state_type,
+		    GtkShadowType  shadow_type,
+		    GdkRectangle  *area,
+		    GtkWidget     *widget,
+		    gchar         *detail,
+		    gint           x,
+		    gint           y,
+		    gint           width,
+		    gint           height)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_flat_box != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_flat_box != NULL);
 
-   (*style->klass->draw_flat_box) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
+  (*style->klass->draw_flat_box) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
-void gtk_paint_check   (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height)
+void
+gtk_paint_check (GtkStyle      *style,
+		 GdkWindow     *window,
+		 GtkStateType   state_type,
+		 GtkShadowType  shadow_type,
+		 GdkRectangle  *area,
+		 GtkWidget     *widget,
+		 gchar         *detail,
+		 gint           x,
+		 gint           y,
+		 gint           width,
+		 gint           height)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_check != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_check != NULL);
 
-   (*style->klass->draw_check) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
+  (*style->klass->draw_check) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
-void gtk_paint_option  (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height)
+void
+gtk_paint_option (GtkStyle      *style,
+		  GdkWindow     *window,
+		  GtkStateType   state_type,
+		  GtkShadowType  shadow_type,
+		  GdkRectangle  *area,
+		  GtkWidget     *widget,
+		  gchar         *detail,
+		  gint           x,
+		  gint           y,
+		  gint           width,
+		  gint           height)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_option != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_option != NULL);
 
-   (*style->klass->draw_option) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
+  (*style->klass->draw_option) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
-void gtk_paint_cross   (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height)
+void
+gtk_paint_cross (GtkStyle      *style,
+		 GdkWindow     *window,
+		 GtkStateType   state_type,
+		 GtkShadowType  shadow_type,
+		 GdkRectangle  *area,
+		 GtkWidget     *widget,
+		 gchar         *detail,
+		 gint           x,
+		 gint           y,
+		 gint           width,
+		 gint           height)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_cross != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_cross != NULL);
 
-   (*style->klass->draw_cross) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
+  (*style->klass->draw_cross) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
-void gtk_paint_ramp    (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			GtkArrowType   arrow_type,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height)
+void
+gtk_paint_ramp (GtkStyle      *style,
+		GdkWindow     *window,
+		GtkStateType   state_type,
+		GtkShadowType  shadow_type,
+		GdkRectangle  *area,
+		GtkWidget     *widget,
+		gchar         *detail,
+		GtkArrowType   arrow_type,
+		gint           x,
+		gint           y,
+		gint           width,
+		gint           height)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_ramp != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_ramp != NULL);
 
-   (*style->klass->draw_ramp) (style, window, state_type, shadow_type, area, widget, detail, arrow_type, x, y, width, height);
+  (*style->klass->draw_ramp) (style, window, state_type, shadow_type, area, widget, detail, arrow_type, x, y, width, height);
 }
 
-void gtk_paint_tab     (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height)
+void
+gtk_paint_tab (GtkStyle      *style,
+	       GdkWindow     *window,
+	       GtkStateType   state_type,
+	       GtkShadowType  shadow_type,
+	       GdkRectangle  *area,
+	       GtkWidget     *widget,
+	       gchar         *detail,
+	       gint           x,
+	       gint           y,
+	       gint           width,
+	       gint           height)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_tab != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_tab != NULL);
 
-   (*style->klass->draw_tab) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
+  (*style->klass->draw_tab) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
-void gtk_paint_shadow_gap (GtkStyle      *style,
-			   GdkWindow     *window,
-			   GtkStateType   state_type,
-			   GtkShadowType  shadow_type,
-			   GdkRectangle  *area,
-			   GtkWidget     *widget,
-			   gchar         *detail,
-			   gint           x,
-			   gint           y,
-			   gint           width,
-			   gint           height,
-			   gint           gap_side,
-			   gint           gap_x,
-			   gint           gap_width)
+void
+gtk_paint_shadow_gap (GtkStyle       *style,
+		      GdkWindow      *window,
+		      GtkStateType    state_type,
+		      GtkShadowType   shadow_type,
+		      GdkRectangle   *area,
+		      GtkWidget      *widget,
+		      gchar          *detail,
+		      gint            x,
+		      gint            y,
+		      gint            width,
+		      gint            height,
+		      GtkPositionType gap_side,
+		      gint            gap_x,
+		      gint            gap_width)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_shadow_gap != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_shadow_gap != NULL);
 
-   (*style->klass->draw_shadow_gap) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side, gap_x, gap_width);
+  (*style->klass->draw_shadow_gap) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side, gap_x, gap_width);
 }
 
 
-void gtk_paint_box_gap (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height,
-			gint           gap_side,
-			gint           gap_x,
-			gint           gap_width)
+void
+gtk_paint_box_gap (GtkStyle       *style,
+		   GdkWindow      *window,
+		   GtkStateType    state_type,
+		   GtkShadowType   shadow_type,
+		   GdkRectangle   *area,
+		   GtkWidget      *widget,
+		   gchar          *detail,
+		   gint            x,
+		   gint            y,
+		   gint            width,
+		   gint            height,
+		   GtkPositionType gap_side,
+		   gint            gap_x,
+		   gint            gap_width)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_box_gap != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_box_gap != NULL);
 
-   (*style->klass->draw_box_gap) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side, gap_x, gap_width);
+  (*style->klass->draw_box_gap) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side, gap_x, gap_width);
 }
 
-void gtk_paint_extension (GtkStyle      *style,
-			  GdkWindow     *window,
-			  GtkStateType   state_type,
-			  GtkShadowType  shadow_type,
-			  GdkRectangle  *area,
-			  GtkWidget     *widget,
-			  gchar         *detail,
-			  gint           x,
-			  gint           y,
-			  gint           width,
-			  gint           height,
-			  gint           gap_side)
+void
+gtk_paint_extension (GtkStyle       *style,
+		     GdkWindow      *window,
+		     GtkStateType    state_type,
+		     GtkShadowType   shadow_type,
+		     GdkRectangle   *area,
+		     GtkWidget      *widget,
+		     gchar          *detail,
+		     gint            x,
+		     gint            y,
+		     gint            width,
+		     gint            height,
+		     GtkPositionType gap_side)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_extension != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_extension != NULL);
 
-   (*style->klass->draw_extension) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side);
+  (*style->klass->draw_extension) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side);
 }
 
-void gtk_paint_focus   (GtkStyle      *style,
-			GdkWindow     *window,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height)
+void
+gtk_paint_focus (GtkStyle      *style,
+		 GdkWindow     *window,
+		 GdkRectangle  *area,
+		 GtkWidget     *widget,
+		 gchar         *detail,
+		 gint           x,
+		 gint           y,
+		 gint           width,
+		 gint           height)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_focus != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_focus != NULL);
 
-   (*style->klass->draw_focus) (style, window, area, widget, detail, x, y, width, height);
+  (*style->klass->draw_focus) (style, window, area, widget, detail, x, y, width, height);
 }
 
-void gtk_paint_slider  (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height,
-			GtkOrientation orientation)
+void
+gtk_paint_slider (GtkStyle      *style,
+		  GdkWindow     *window,
+		  GtkStateType   state_type,
+		  GtkShadowType  shadow_type,
+		  GdkRectangle  *area,
+		  GtkWidget     *widget,
+		  gchar         *detail,
+		  gint           x,
+		  gint           y,
+		  gint           width,
+		  gint           height,
+		  GtkOrientation orientation)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_slider != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_slider != NULL);
 
-   (*style->klass->draw_slider) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
+  (*style->klass->draw_slider) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
 }
 
-void gtk_paint_entry   (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height)
+void
+gtk_paint_handle (GtkStyle      *style,
+		  GdkWindow     *window,
+		  GtkStateType   state_type,
+		  GtkShadowType  shadow_type,
+		  GdkRectangle  *area,
+		  GtkWidget     *widget,
+		  gchar         *detail,
+		  gint           x,
+		  gint           y,
+		  gint           width,
+		  gint           height,
+		  GtkOrientation orientation)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_entry != NULL);
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (style->klass != NULL);
+  g_return_if_fail (style->klass->draw_handle != NULL);
 
-   (*style->klass->draw_entry) (style, window, state_type, area, widget, detail, x, y, width, height);
-}
-
-void gtk_paint_handle  (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			gchar         *detail,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height,
-			GtkOrientation orientation)
-{
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (style->klass != NULL);
-   g_return_if_fail (style->klass->draw_handle != NULL);
-
-   (*style->klass->draw_handle) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
+  (*style->klass->draw_handle) (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
 }

@@ -18,7 +18,6 @@
 #undef GTK_COMPILED_WITH_DEBUGGING
 
 #undef HAVE_IPC_H
-#undef HAVE_LIBDL
 #undef HAVE_SHM_H
 #undef HAVE_XSHM_H
 #undef HAVE_SHAPE_EXT

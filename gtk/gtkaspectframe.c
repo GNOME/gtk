@@ -166,39 +166,40 @@ gtk_aspect_frame_paint (GtkWidget    *widget,
       x = GTK_CONTAINER (frame)->border_width;
       y = GTK_CONTAINER (frame)->border_width;
 
-       
-       if (frame->label)
-	 {
-	    label_area_width = (allocation->width +
-				GTK_CONTAINER (frame)->border_width * 2 -
-				widget->style->klass->xthickness * 2);
-	    x2 = ((label_area_width - frame->label_width) * frame->label_xalign +
-		 GTK_CONTAINER (frame)->border_width + widget->style->klass->xthickness);
-	    y2 = (GTK_CONTAINER (frame)->border_width + widget->style->font->ascent);
-	    
-	    gtk_paint_shadow_gap (widget->style, widget->window,
-				  GTK_STATE_NORMAL, frame->shadow_type,
-				  area, widget, "aspectframe",
-				  allocation->x + x,
-				  allocation->y + y + height_extra / 2,
-				  allocation->width - x * 2,
-				  allocation->height - y * 2 - height_extra / 2,
-				  0, x2 + 2 - x, frame->label_width - 4);
-	    
-	    gtk_paint_string (widget->style, widget->window, GTK_WIDGET_STATE (widget),
-			      area, widget, "aspectframe",
-			      allocation->x + x2 + 3,
-			      allocation->y + y2,
-			      frame->label);
-	 }
-       else
-	 gtk_paint_shadow (widget->style, widget->window,
-			   GTK_STATE_NORMAL, frame->shadow_type,
-			   area, widget, "aspectframe",
-			   allocation->x + x,
-			   allocation->y + y + height_extra / 2,
-			   allocation->width - x * 2,
-			   allocation->height - y * 2 - height_extra / 2);
+      if (frame->label)
+	{
+	  label_area_width = (allocation->width +
+			      GTK_CONTAINER (frame)->border_width * 2 -
+			      widget->style->klass->xthickness * 2);
+
+	  x2 = ((label_area_width - frame->label_width) * frame->label_xalign +
+		GTK_CONTAINER (frame)->border_width + widget->style->klass->xthickness);
+	  y2 = (GTK_CONTAINER (frame)->border_width + widget->style->font->ascent);
+	  
+	  gtk_paint_shadow_gap (widget->style, widget->window,
+				GTK_STATE_NORMAL, frame->shadow_type,
+				area, widget, "frame",
+				allocation->x + x,
+				allocation->y + y + height_extra / 2,
+				allocation->width - x * 2,
+				allocation->height - y * 2 - height_extra / 2,
+				GTK_POS_TOP, 
+				x2 + 2 - x, frame->label_width - 4);
+	  
+	  gtk_paint_string (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+			    area, widget, "frame",
+			    allocation->x + x2 + 3,
+			    allocation->y + y2,
+			    frame->label);
+	}
+      else
+	gtk_paint_shadow (widget->style, widget->window,
+			  GTK_STATE_NORMAL, frame->shadow_type,
+			  area, widget, "frame",
+			  allocation->x + x,
+			  allocation->y + y + height_extra / 2,
+			  allocation->width - x * 2,
+			  allocation->height - y * 2 - height_extra / 2);
     }
 }
 

@@ -52,7 +52,7 @@ gtk_theme_engine_get (gchar          *name)
   
   if (!engine_hash)
     engine_hash = g_hash_table_new (g_str_hash, g_str_equal);
-   
+
   /* get the library name for the theme */
   
   result = g_hash_table_lookup (engine_hash, name);
@@ -100,11 +100,13 @@ gtk_theme_engine_get (gchar          *name)
 	    /* setup anything it needs to set up. */
 	    result->init((GtkThemeEngine *)result);
 	    
-	    g_hash_table_insert (engine_hash, name, result);
+	    g_hash_table_insert (engine_hash, result->name, result);
 	 }
     }
-   
-   return (GtkThemeEngine *)result;
+  else
+    result->refcount++;
+
+  return (GtkThemeEngine *)result;
 }
 
 void
@@ -127,7 +129,7 @@ gtk_theme_engine_unref (GtkThemeEngine *engine)
 
   if (private->refcount == 0)
     {
-      g_hash_table_remove (engine_hash, private);
+      g_hash_table_remove (engine_hash, private->name);
       
       g_module_close (private->library);
       g_free (private->name);

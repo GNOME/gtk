@@ -286,14 +286,6 @@ gdk_window_new (GdkWindow     *parent,
   private->height = (attributes->height > 1) ? (attributes->height) : (1);
   private->window_type = attributes->window_type;
   private->extension_events = FALSE;
-  private->dnd_drag_data_type = None;
-  private->dnd_drag_data_typesavail =
-    private->dnd_drop_data_typesavail = NULL;
-  private->dnd_drop_enabled = private->dnd_drag_enabled =
-    private->dnd_drag_accepted = private->dnd_drag_datashow =
-    private->dnd_drop_data_numtypesavail =
-    private->dnd_drag_data_numtypesavail = 0;
-  private->dnd_drag_eventmask = private->dnd_drag_savedeventmask = 0;
 
   private->filters = NULL;
   private->children = NULL;
@@ -507,15 +499,6 @@ gdk_window_foreign_new (guint32 anid)
 
   private->colormap = NULL;
 
-  private->dnd_drag_data_type = None;
-  private->dnd_drag_data_typesavail =
-    private->dnd_drop_data_typesavail = NULL;
-  private->dnd_drop_enabled = private->dnd_drag_enabled =
-    private->dnd_drag_accepted = private->dnd_drag_datashow =
-    private->dnd_drop_data_numtypesavail =
-    private->dnd_drag_data_numtypesavail = 0;
-  private->dnd_drag_eventmask = private->dnd_drag_savedeventmask = 0;
-
   private->filters = NULL;
   private->children = NULL;
 
@@ -584,17 +567,6 @@ gdk_window_internal_destroy (GdkWindow *window, gboolean xdestroy,
 
 	  if (private->extension_events != 0)
 	    gdk_input_window_destroy (window);
-
-	  if(private->dnd_drag_data_numtypesavail > 0) 
-	    {
-	      g_free (private->dnd_drag_data_typesavail);
-	      private->dnd_drag_data_typesavail = NULL;
-	    }
-	  if(private->dnd_drop_data_numtypesavail > 0) 
-	    {
-	      g_free (private->dnd_drop_data_typesavail);
-	      private->dnd_drop_data_typesavail = NULL;
-	    }
 
 	  if (private->filters)
 	    {
@@ -1631,8 +1603,8 @@ gdk_window_add_colormap_windows (GdkWindow *window)
 }
 
 static gboolean
-gdk_window_have_shape_ext (void){
-
+gdk_window_have_shape_ext (void)
+{
   enum { UNKNOWN, NO, YES };
   static gint have_shape = UNKNOWN;
 
@@ -2107,167 +2079,52 @@ gdk_add_to_span(struct _gdk_span **s, int x, int xx)
 }
 
 static void
-gdk_propagate_shapes(Display *disp, Window win)
+gdk_add_rectangles (Display *disp, Window win, struct _gdk_span **spans,
+		    gint basew, gint baseh, gint x, gint y)
 {
-   Window              rt, par, *list = NULL;
-   gint                a, k, i, j, num = 0, num_rects = 0, rn = 0, ord;
-   gint                x, y, contig, x1, y1, x2, y2;
-   guint               w, h, d;
-   gint                baseh, basew;
-   XRectangle         *rects = NULL, *rl = NULL;
-   struct _gdk_span  **spans = NULL, *ptr1, *ptr2, *ptr3;
-   XWindowAttributes   xatt;
-   
-   XGetGeometry(disp, win, &rt, &x, &y, &w, &h, &d, &d);
-   if (h <= 0)
-     return;
-   basew = w;
-   baseh = h;
-   spans = g_malloc(sizeof(struct _gdk_span *) * h);
-   
-   for (i = 0; i < h; i++)
-     spans[i] = NULL;
-   XQueryTree(disp, win, &rt, &par, &list, (unsigned int *)&num);
-   if (list)
-     {
-	/* go through all child windows and create/insert spans */
-	for (i = 0; i < num; i++)
-	  {
-	     if (XGetWindowAttributes(disp, list[i], &xatt))
-	       {
-		  if (XGetGeometry(disp, list[i], &rt, &x, &y, &w, &h, &d, &d))
-		    {
-		       rl = XShapeGetRectangles(disp, list[i], ShapeBounding, &rn, &ord);
-		       if ((rl) && (xatt.map_state != IsUnmapped))
-			 {
-			    /* go through all clip rects in this window's shape */
-			    for (k = 0; k < rn; k++)
-			      {
-				 /* for each clip rect, add it to each line's spans */
-				 x1 = x + rl[k].x;
-				 x2 = x + rl[k].x + (rl[k].width - 1);
-				 y1 = y + rl[k].y;
-				 y2 = y + rl[k].y + (rl[k].height - 1);
-				 if (x1 < 0)
-				   x1 = 0;
-				 if (y1 < 0)
-				   y1 = 0;
-				 if (x2 >= basew)
-				   x2 = basew - 1;
-				 if (y2 >= baseh)
-				   y2 = baseh - 1;
-				 for (a = y1; a <= y2; a++)
-				   {
-				      if ((x2 - x1) >= 0)
-					gdk_add_to_span(&spans[a], x1, x2);
-				   }
-			      }
-			    XFree(rl);
-			 }
-		    }
-	       }
-	  }
-	/* go through the spans list and build a list of rects */
-	rects = g_malloc(sizeof(XRectangle) * 256);
-	num_rects = 0;
-	for (i = 0; i < baseh; i++)
-	  {
-	     ptr1 = spans[i];
-	     /* go through the line for all spans */
-	     while (ptr1)
-	       {
-		  rects[num_rects].x = ptr1->start;
-		  rects[num_rects].y = i;
-		  rects[num_rects].width = ptr1->end - ptr1->start + 1;
-		  rects[num_rects].height = 1;
-		  j = i + 1;
-		  /* if there are more lines */
-		  contig = 1;
-		  /* while contigous rects (same start/end coords) exist */
-		  while ((contig) && (j < baseh))
-		    {
-		       /* search next line for spans matching this one */
-		       contig = 0;
-		       ptr2 = spans[j];
-		       ptr3 = NULL;
-		       while (ptr2)
-			 {
-			    /* if we have an exact span match set contig */
-			    if ((ptr2->start == ptr1->start) &&
-				(ptr2->end == ptr1->end))
-			      {
-				 contig = 1;
-				 /* remove the span - not needed */
-				 if (ptr3)
-				   {
-				      ptr3->next = ptr2->next;
-				      g_free(ptr2);
-				      ptr2 = NULL;
-				   }
-				 else
-				   {
-				      spans[j] = ptr2->next;
-				      g_free(ptr2);
-				      ptr2 = NULL;
-				   }
-				 break;
-			      }
-			    /* gone past the span point no point looking */
-			    else if (ptr2->start < ptr1->start)
-			      break;
-			    if (ptr2)
-			      {
-				 ptr3 = ptr2;
-				 ptr2 = ptr2->next;
-			      }
-			 }
-		       /* if a contiguous span was found increase the rect h */
-		       if (contig)
-			 {
-			    rects[num_rects].height++;
-			    j++;
-			 }
-		    }
-		  /* up the rect count */
-		  num_rects++;
-		  /* every 256 new rects increase the rect array */
-		  if ((num_rects % 256) == 0)
-		    rects = g_realloc(rects, sizeof(XRectangle) * (num_rects + 256));
-		  ptr1 = ptr1->next;
-	       }
-	  }
-	/* set the rects as the shape mask */
-	if (rects)
-	  {
-	     XShapeCombineRectangles(disp, win, ShapeBounding, 0, 0, rects, num_rects,
-				     ShapeSet, YXSorted);
-	     g_free(rects);
-	  }
-	XFree(list);
-     }
-   /* free up all the spans we made */
-   for (i = 0; i < baseh; i++)
-     {
-	ptr1 = spans[i];
-	while (ptr1)
-	  {
-	     ptr2 = ptr1;
-	     ptr1 = ptr1->next;
-	     g_free(ptr2);
-	  }
-     }
-   g_free(spans);
+  gint a, k;
+  gint x1, y1, x2, y2;
+  gint rn, ord;
+  XRectangle *rl;
+
+  rl = XShapeGetRectangles(disp, win, ShapeBounding, &rn, &ord);
+  if (rl)
+    {
+      /* go through all clip rects in this window's shape */
+      for (k = 0; k < rn; k++)
+	{
+	  /* for each clip rect, add it to each line's spans */
+	  x1 = x + rl[k].x;
+	  x2 = x + rl[k].x + (rl[k].width - 1);
+	  y1 = y + rl[k].y;
+	  y2 = y + rl[k].y + (rl[k].height - 1);
+	  if (x1 < 0)
+	    x1 = 0;
+	  if (y1 < 0)
+	    y1 = 0;
+	  if (x2 >= basew)
+	    x2 = basew - 1;
+	  if (y2 >= baseh)
+	    y2 = baseh - 1;
+	  for (a = y1; a <= y2; a++)
+	    {
+	      if ((x2 - x1) >= 0)
+		gdk_add_to_span(&spans[a], x1, x2);
+	    }
+	}
+      XFree(rl);
+    }
 }
 
 static void
-gdk_propagate_combine_shapes(Display *disp, Window win)
+gdk_propagate_shapes(Display *disp, Window win, gboolean merge)
 {
    Window              rt, par, *list = NULL;
-   gint                a, k, i, j, num = 0, num_rects = 0, rn = 0, ord;
-   gint                x, y, contig, x1, y1, x2, y2;
+   gint                i, j, num = 0, num_rects = 0;
+   gint                x, y, contig;
    guint               w, h, d;
    gint                baseh, basew;
-   XRectangle         *rects = NULL, *rl = NULL;
+   XRectangle         *rects = NULL;
    struct _gdk_span  **spans = NULL, *ptr1, *ptr2, *ptr3;
    XWindowAttributes   xatt;
    
@@ -2283,50 +2140,16 @@ gdk_propagate_combine_shapes(Display *disp, Window win)
    XQueryTree(disp, win, &rt, &par, &list, (unsigned int *)&num);
    if (list)
      {
-	list = realloc(list, ++num * sizeof(Window));
-	list[num - 1] = win;
 	/* go through all child windows and create/insert spans */
 	for (i = 0; i < num; i++)
 	  {
-	     if (XGetWindowAttributes(disp, list[i], &xatt))
-	       {
-		  if (XGetGeometry(disp, list[i], &rt, &x, &y, &w, &h, &d, &d))
-		    {
-		       if (i == (num - 1))
-			 {
-			    x = 0;
-			    y = 0;
-			 }
-		       rl = XShapeGetRectangles(disp, list[i], ShapeBounding, &rn, &ord);
-		       if ((rl) && ((xatt.map_state != IsUnmapped) || (i == (num - 1))))
-			 {
-			    /* go through all clip rects in this window's shape */
-			    for (k = 0; k < rn; k++)
-			      {
-				 /* for each clip rect, add it to each line's spans */
-				 x1 = x + rl[k].x;
-				 x2 = x + rl[k].x + (rl[k].width - 1);
-				 y1 = y + rl[k].y;
-				 y2 = y + rl[k].y + (rl[k].height - 1);
-				 if (x1 < 0)
-				   x1 = 0;
-				 if (y1 < 0)
-				   y1 = 0;
-				 if (x2 >= basew)
-				   x2 = basew - 1;
-				 if (y2 >= baseh)
-				   y2 = baseh - 1;
-				 for (a = y1; a <= y2; a++)
-				   {
-				      if ((x2 - x1) >= 0)
-					gdk_add_to_span(&spans[a], x1, x2);
-				   }
-			      }
-			    XFree(rl);
-			 }
-		    }
-	       }
+	     if (XGetWindowAttributes(disp, list[i], &xatt) && (xatt.map_state != IsUnmapped))
+	       if (XGetGeometry(disp, list[i], &rt, &x, &y, &w, &h, &d, &d))
+		 gdk_add_rectangles (disp, list[i], spans, basew, baseh, x, y);
 	  }
+	if (merge)
+	  gdk_add_rectangles (disp, win, spans, basew, baseh, x, y);
+
 	/* go through the spans list and build a list of rects */
 	rects = g_malloc(sizeof(XRectangle) * 256);
 	num_rects = 0;
@@ -2432,12 +2255,12 @@ gdk_window_set_child_shapes (GdkWindow *window)
     return;
 
   if (gdk_window_have_shape_ext())
-    gdk_propagate_shapes (private->xdisplay, private->xwindow);
+    gdk_propagate_shapes (private->xdisplay, private->xwindow, FALSE);
 #endif   
 }
 
 void
-gdk_window_combine_child_shapes (GdkWindow *window)
+gdk_window_merge_child_shapes (GdkWindow *window)
 {
   GdkWindowPrivate *private;
   
@@ -2449,7 +2272,7 @@ gdk_window_combine_child_shapes (GdkWindow *window)
     return;
 
   if (gdk_window_have_shape_ext())
-    gdk_propagate_combine_shapes (private->xdisplay, private->xwindow);
+    gdk_propagate_shapes (private->xdisplay, private->xwindow, TRUE);
 #endif   
 }
 

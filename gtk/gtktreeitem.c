@@ -648,7 +648,7 @@ gtk_tree_item_draw (GtkWidget    *widget,
 			 GTK_TREE (widget->parent)->current_indent + 2);
       item_area.height = widget->allocation.height;
 
-      if(gdk_rectangle_intersect(&item_area, area, &child_area)) 
+      if (gdk_rectangle_intersect(&item_area, area, &child_area)) 
 	{
 	  if (widget->state == GTK_STATE_NORMAL)
 	    {
@@ -668,18 +668,7 @@ gtk_tree_item_draw (GtkWidget    *widget,
 				   area, widget, "treeitem",
 				   0, 0, -1, -1);
 	    }
-/*	 
-	 else if(GTK_TREE(widget->parent)->view_mode == GTK_TREE_VIEW_LINE &&
-		 widget->state == GTK_STATE_SELECTED)
-	   gtk_style_set_background (widget->style, widget->window, widget->state);
-	 else
-	   gdk_window_set_background (widget->window, 
-				      &widget->style->base[GTK_STATE_NORMAL]);
 
-	gdk_window_clear_area (widget->window, 
-			       child_area.x, child_area.y,
-			       child_area.width, child_area.height);
-*/
 	  gtk_tree_item_draw_lines(widget);
 	  
 	  if (tree_item->pixmaps_box && 
@@ -689,26 +678,13 @@ gtk_tree_item_draw (GtkWidget    *widget,
 	}
       
       /* draw right side */
-      if(gtk_widget_intersect (bin->child, area, &child_area)) 
+      if (gtk_widget_intersect (bin->child, area, &child_area)) 
 	{
-/*
-	if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
-	  gtk_style_set_background (widget->style, widget->window, 
-				    GTK_STATE_INSENSITIVE);
-	else if (widget->state == GTK_STATE_NORMAL)
-	  gdk_window_set_background(widget->window, &widget->style->base[GTK_STATE_NORMAL]);
-	else
-	  gtk_style_set_background (widget->style, widget->window, widget->state);
-
-	gdk_window_clear_area (widget->window, child_area.x, child_area.y,
-			       child_area.width+1, child_area.height);
-*/
-	
 	  if (bin->child && 
 	      GTK_WIDGET_VISIBLE(bin->child) &&
 	      gtk_widget_intersect (bin->child, area, &child_area))
 	    gtk_widget_draw (bin->child, &child_area);
-      }
+	}
 
       if (GTK_WIDGET_HAS_FOCUS (widget))
 	gtk_paint_focus (widget->style, widget->window,
@@ -842,7 +818,7 @@ gtk_real_tree_item_toggle (GtkItem *item)
     {
       /* Should we really bother with this bit? A listitem not in a list?
        * -Johannes Keukelaar
-       * yes, always be on the save side!
+       * yes, always be on the safe side!
        * -timj
        */
       if (GTK_WIDGET (item)->state == GTK_STATE_SELECTED)

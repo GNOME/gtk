@@ -363,7 +363,8 @@ gtk_frame_paint (GtkWidget    *widget,
 				 widget->allocation.y + y + height_extra / 2,
 				 widget->allocation.width - x * 2,
 				 widget->allocation.height - y * 2 - height_extra / 2,
-				 0, x2 + 2 - x, frame->label_width - 4);
+				 GTK_POS_TOP, 
+				 x2 + 2 - x, frame->label_width - 4);
 	   
 	   gtk_paint_string (widget->style, widget->window, GTK_WIDGET_STATE (widget),
 			     area, widget, "frame",

@@ -20,10 +20,9 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "gtkdrawingarea.h"
 #include "gtkmain.h"
 #include "gtkwidget.h"
-#include "gtkwindow.h"
+#include "gtkdrawwindow.h"
 #include "gtksignal.h"
 #include "gtkstyle.h"
 #include "gtktooltips.h"
@@ -170,22 +169,17 @@ gtk_tooltips_destroy (GtkObject *object)
 void
 gtk_tooltips_force_window (GtkTooltips *tooltips)
 {
-  GtkWidget *darea;
-
   g_return_if_fail (tooltips != NULL);
   g_return_if_fail (GTK_IS_TOOLTIPS (tooltips));
 
   if (!tooltips->tip_window)
     {
-      tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
+      tooltips->tip_window = gtk_draw_window_new (GTK_WINDOW_POPUP);
       gtk_widget_ref (tooltips->tip_window);
       gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
 
-      darea = gtk_drawing_area_new ();
-      gtk_container_add (GTK_CONTAINER (tooltips->tip_window), darea);
-      gtk_widget_show (darea);
-      
-      gtk_signal_connect_object (GTK_OBJECT (darea), "expose_event",
+      gtk_signal_connect_object (GTK_OBJECT (tooltips->tip_window), 
+				 "expose_event",
 				 GTK_SIGNAL_FUNC (gtk_tooltips_expose), 
 				 GTK_OBJECT (tooltips));
 
@@ -396,14 +390,12 @@ gtk_tooltips_set_colors (GtkTooltips *tooltips,
 static gint
 gtk_tooltips_expose (GtkTooltips *tooltips, GdkEventExpose *event)
 {
-  GtkWidget *darea;
   GtkStyle *style;
   gint y, baseline_skip, gap;
   GtkTooltipsData *data;
   GList *el;
 
-  darea = GTK_BIN (tooltips->tip_window)->child;
-  style = darea->style;
+  style = tooltips->tip_window->style;
 
   gap = (style->font->ascent + style->font->descent) / 4;
   if (gap < 2)
@@ -414,9 +406,9 @@ gtk_tooltips_expose (GtkTooltips *tooltips, GdkEventExpose *event)
   if (!data)
     return FALSE;
 
-  gtk_paint_flat_box(style, darea->window,
+  gtk_paint_flat_box(style, tooltips->tip_window->window,
 		     GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
-		     NULL, GTK_WIDGET(darea), "tooltip",
+		     NULL, GTK_WIDGET(tooltips->tip_window), "tooltip",
 		     0, 0, -1, -1);
 
   y = style->font->ascent + 4;
@@ -425,11 +417,9 @@ gtk_tooltips_expose (GtkTooltips *tooltips, GdkEventExpose *event)
     {
       if (el->data)
 	{
-	  /*         gdk_draw_string (tooltips->tip_window->window, style->font,
-		     tooltips->gc, 4, y, el->data);*/
-	  gtk_paint_string (style, darea->window, 
+	  gtk_paint_string (style, tooltips->tip_window->window, 
 			    GTK_STATE_NORMAL, 
-			    NULL, GTK_WIDGET(darea), "tooltip",
+			    NULL, GTK_WIDGET(tooltips->tip_window), "tooltip",
 			    4, y, el->data);
 	  y += baseline_skip;
 	}
@@ -443,7 +433,7 @@ gtk_tooltips_expose (GtkTooltips *tooltips, GdkEventExpose *event)
 static void
 gtk_tooltips_draw_tips (GtkTooltips * tooltips)
 {
-  GtkWidget *widget, *darea;
+  GtkWidget *widget;
   GtkStyle *style;
   gint gap, x, y, w, h, scr_w, scr_h, baseline_skip;
   GtkTooltipsData *data;
@@ -454,8 +444,7 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   else if (GTK_WIDGET_VISIBLE (tooltips->tip_window))
     gtk_widget_hide (tooltips->tip_window);
 
-  darea = GTK_BIN (tooltips->tip_window)->child;
-  style = darea->style;
+  style = tooltips->tip_window->style;
   
   widget = tooltips->active_tips_data->widget;
 
@@ -498,40 +487,6 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
 
   gtk_widget_set_usize (tooltips->tip_window, w, h);
   gtk_widget_popup (tooltips->tip_window, x, y);
-
-/*   
-  if (tooltips->gc == NULL)
-    tooltips->gc = gdk_gc_new (tooltips->tip_window->window);
-
-  if (tooltips->background != NULL)
-    {
-      gdk_gc_set_foreground (tooltips->gc, tooltips->background);
-      gdk_gc_set_background (tooltips->gc, tooltips->foreground);
-    }
-  else
-    {
-      gdk_gc_set_foreground (tooltips->gc, &style->bg[GTK_STATE_NORMAL]);
-      gdk_gc_set_background (tooltips->gc, &style->fg[GTK_STATE_NORMAL]);
-    }
-
-  gdk_gc_set_font (tooltips->gc, style->font);
-  gdk_draw_rectangle (tooltips->tip_window->window, tooltips->gc, TRUE, 0, 0, w, h);
-
-  if (tooltips->foreground != NULL)
-    {
-      gdk_gc_set_foreground (tooltips->gc, tooltips->foreground);
-      gdk_gc_set_background (tooltips->gc, tooltips->background);
-    }
-  else
-    {
-      gdk_gc_set_foreground (tooltips->gc, &style->fg[GTK_STATE_NORMAL]);
-      gdk_gc_set_background (tooltips->gc, &style->bg[GTK_STATE_NORMAL]);
-    }
-
-  gdk_draw_rectangle (tooltips->tip_window->window, tooltips->gc, FALSE, 0, 0, w, h);
-*/
-  
-
 }
 
 static gint

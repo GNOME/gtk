@@ -33,7 +33,8 @@ static void gtk_menu_bar_size_request  (GtkWidget       *widget,
 					GtkRequisition  *requisition);
 static void gtk_menu_bar_size_allocate (GtkWidget       *widget,
 					GtkAllocation   *allocation);
-static void gtk_menu_bar_paint         (GtkWidget       *widget);
+static void gtk_menu_bar_paint         (GtkWidget       *widget,
+					GdkRectangle    *area);
 static void gtk_menu_bar_draw          (GtkWidget       *widget,
 					GdkRectangle    *area);
 static gint gtk_menu_bar_expose        (GtkWidget       *widget,
@@ -262,10 +263,21 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_menu_bar_paint (GtkWidget *widget)
+gtk_menu_bar_paint (GtkWidget *widget, GdkRectangle *area)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      gtk_paint_box (widget->style,
+		     widget->window,
+		     GTK_STATE_NORMAL,
+		     GTK_SHADOW_OUT,
+		     area, widget, "menubar",
+		     0, 0,
+		     -1,-1);
+    }
 }
 
 static void
@@ -283,13 +295,7 @@ gtk_menu_bar_draw (GtkWidget    *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-       gtk_paint_box (widget->style,
-		      widget->window,
-		      GTK_STATE_NORMAL,
-		      GTK_SHADOW_OUT,
-		      area, widget, "menubar",
-		      0, 0,
-		      -1,-1);
+      gtk_menu_bar_paint (widget, area);
 
       menu_shell = GTK_MENU_SHELL (widget);
 
@@ -309,13 +315,32 @@ static gint
 gtk_menu_bar_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
+  GtkMenuShell *menu_shell;
+  GdkEventExpose child_event;
+  GList *children;
+  GtkWidget *child;
+
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_BAR (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-       gtk_menu_bar_draw(widget, &event->area);
+      gtk_menu_bar_paint (widget, &event->area);
+
+      menu_shell = GTK_MENU_SHELL (widget);
+      child_event = *event;
+
+      children = menu_shell->children;
+      while (children)
+	{
+	  child = children->data;
+	  children = children->next;
+
+	  if (GTK_WIDGET_NO_WINDOW (child) &&
+	      gtk_widget_intersect (child, &event->area, &child_event.area))
+	    gtk_widget_event (child, (GdkEvent*) &child_event);
+	}
     }
 
   return FALSE;

@@ -201,8 +201,8 @@ static guint        saved_default_style_key_id = 0;
 static const gchar *shape_info_key = "gtk-shape-info";
 static const gchar *colormap_key = "gtk-colormap";
 static const gchar *visual_key = "gtk-visual";
-
-
+static const gchar *rc_style_key = "gtk-rc-style";
+static guint        rc_style_key_id = 0;
 
 /*****************************************
  * gtk_widget_get_type:
@@ -3047,6 +3047,7 @@ gtk_widget_set_parent (GtkWidget *widget,
   GtkStateData data;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->parent == NULL);
   g_return_if_fail (!GTK_WIDGET_TOPLEVEL (widget));
   g_return_if_fail (parent != NULL);
@@ -3109,6 +3110,9 @@ gtk_widget_set_style (GtkWidget *widget,
 void
 gtk_widget_ensure_style (GtkWidget *widget)
 {
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
   if (!GTK_WIDGET_USER_STYLE (widget) &&
       !GTK_WIDGET_RC_STYLE (widget))
     gtk_widget_set_rc_style (widget);
@@ -3186,6 +3190,24 @@ gtk_widget_get_style (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   return widget->style;
+}
+
+void       
+gtk_widget_modify_style (GtkWidget      *widget,
+			 GtkRcStyle     *style)
+{
+  GtkRcStyle *old_style;
+  
+  if (!rc_style_key_id)
+    rc_style_key_id = g_quark_from_static_string (rc_style_key);
+
+  old_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), rc_style_key_id);
+
+  if (style != old_style)
+    gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
+				    rc_style_key_id,
+				    style,
+				    (GtkDestroyNotify)gtk_rc_style_unref);
 }
 
 static void
@@ -3973,7 +3995,6 @@ gtk_widget_get_default_visual (void)
   
   return default_visual;
 }
-
 
 static void
 gtk_widget_shutdown (GtkObject *object)

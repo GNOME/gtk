@@ -308,7 +308,7 @@ gtk_handle_box_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, widget->window, GTK_WIDGET_STATE (hb));
   gtk_style_set_background (widget->style, hb->bin_window, GTK_WIDGET_STATE (hb));
   gtk_style_set_background (widget->style, hb->float_window, GTK_WIDGET_STATE (hb));
-   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
 }
 
 static void
@@ -639,29 +639,25 @@ gtk_handle_box_paint (GtkWidget      *widget,
       width = widget->allocation.width;
       height = widget->allocation.height - DRAG_HANDLE_SIZE;
     }
-/*  
-  if (!event)
-    gdk_window_clear_area (hb->bin_window,
-			   area->x,
-			   area->y,
-			   area->width,
-			   area->height);
-*/
+
   if (!event)
    gtk_paint_box(widget->style,
 		 hb->bin_window,
 		 GTK_WIDGET_STATE (widget),
 		 GTK_SHADOW_OUT,
 		 area, widget, "handlebox_bin",
-		 0,0,-1,-1);
+		 0, 0, -1, -1);
   else
    gtk_paint_box(widget->style,
 		 hb->bin_window,
 		 GTK_WIDGET_STATE (widget),
 		 GTK_SHADOW_OUT,
 		 &event->area, widget, "handlebox_bin",
-		 0,0,-1,-1);
-/*		 
+		 0, 0, -1, -1);
+
+/* We currently draw the handle _above_ the relief of the handlebox.
+ * it could also be drawn on the same level...
+
 		 hb->handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : 0,
 		 hb->handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : 0,
 		 width,

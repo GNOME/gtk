@@ -141,12 +141,12 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
       right_max = x + width;
 
       if (widget->state == GTK_STATE_PRELIGHT)
-	 gtk_paint_box (widget->style,
-			widget->window,
-			GTK_STATE_PRELIGHT,
-			GTK_SHADOW_OUT,
-			area, widget, "menuitem",
-			x, y, width, height);
+	gtk_paint_box (widget->style,
+		       widget->window,
+		       GTK_STATE_PRELIGHT,
+		       GTK_SHADOW_OUT,
+		       area, widget, "menuitem",
+		       x, y, width, height);
        else
 	 gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
 

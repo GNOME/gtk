@@ -343,6 +343,7 @@ target_drag_data_received  (GtkWidget          *widget,
 {
   if ((data->length >= 0) && (data->format == 8))
     {
+      g_print ("Received %s\n", (gchar *)data->data);
       gtk_drag_finish (context, TRUE, FALSE, time);
       return;
     }

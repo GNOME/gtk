@@ -31,10 +31,10 @@ static void gtk_paned_add        (GtkContainer   *container,
 				  GtkWidget      *widget);
 static void gtk_paned_remove     (GtkContainer   *container,
 				  GtkWidget      *widget);
-static void gtk_paned_forall   (GtkContainer   *container,
-				gboolean	include_internals,
-			        GtkCallback     callback,
-			        gpointer        callback_data);
+static void gtk_paned_forall     (GtkContainer   *container,
+			   	  gboolean	  include_internals,
+			          GtkCallback     callback,
+			          gpointer        callback_data);
 static GtkType gtk_paned_child_type (GtkContainer *container);
 
 
