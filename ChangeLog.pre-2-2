@@ -1,3 +1,63 @@
+2002-01-27  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkprivate-win32.h: Unify GdkPixmap and GdkImage
+	implementation: For each GdkPixmap, allocate a GdkImage, and vice
+	versa. GdkDrawableWin32Data has a pointer to the GdkImage.
+	GdkImagePrivateWin32 has a pointer to the GdkPixmap. Declare new
+	and renamed functions (see below).
+	
+	* gdk/win32/gdkcolor-win32.c (gdk_colormap_alloc_colors): Cosmetics.
+
+	* gdk/win32/gdkdrawable-win32.c	(gdk_win32_drawable_type_to_string,
+	gdk_win32_drawable_description): New debugging functions.
+	(gdk_win32_draw_drawable): Revamp the from-pixmap case: Use
+	foreground and background in the GC correctly when drawing
+	bitmaps. (The 0 bits select the background, the 1 bits the
+	foreground.) Still need to handle blitting from 8-bit pixmaps in
+	general correctly: Now we let the BitBlt convert colours (if it
+	thinks that is necessary), we should change the colour table of
+	the source to match that of the destination before blitting, so
+	that just the indexes are copied, like X11 does.
+	
+	* gdk/win32/gdkgc-win32.c (gdk_win32_colormap_color_pack): Rename
+	from gdk_colormap_color.
+	(gdk_win32_colormap_color_unpack): New function, kinda inverse of
+	gdk_win32_colormap_color_pack. Actually not used, though.
+	(gdk_win32_bitmap_to_region): Simplify greatly, now that
+	GdkPixmaps always have the DIB section bits available. Take a
+	GdkPixmap parameter.
+
+	* gdk/win32/gdkimage-win32.c: Change according to the
+	GdkPixmap-GdkImage unification. Many function reduced a lot:
+	(gdk_image_new_bitmap, gdk_image_new, gdk_image_get): Use
+	gdk_win32_pixmap_new().
+	(gdk_image_put): Use gdk_draw_drawable().
+
+	gdk_image_get() should probably be changed to use
+	gdk_draw_drawable(), too.
+
+	* gdk/win32/gdkinput-win32.c: Fix problems if !HAVE_WINTAB_H.
+
+	* gdk/win32/gdkpixmap-win32.c: Change according to the
+	GdkPixmap-GdkImage unification.
+	(setup_pixmap_image): New function, initialises the GdkImage
+	attached to a GdkPixmap.
+	(gdk_win32_pixmap_new): New function, that handles all creations
+	of the unified GdkPixmap-GdkImage DIB section. Yes, only one call
+	to CreateDIBsection() left in the code.
+	(_gdk_pixmap_create_from_xpm): No need to create the resulting
+	pixmap separately and gdk_draw_image() into it. Just use the
+	GdkPixmap view of the GdkImage that we have been storing pixels
+	into.
+	
+	* gdk/win32/gdkvisual-win32.c (gdk_visual_init): Don't error out
+	if on palettized display any longer.
+
+2002-01-24  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkpixmap.h: Remove gdk_pixmap_create_on_shared_image()
+	declaration.
+
 2002-01-24  Tor Lillqvist  <tml@iki.fi>
 
 	Small preparations for the OLE2 DND code:
@@ -28,12 +88,6 @@
 
 	* gdk/win32/gdkcursor-win32.c (gdk_cursor_new_from_pixmap): Add
 	verbose debugging output of the source and mask images.
-
-	* gtk/Makefile.am: Let gtk-win32res.lo depend on gtk.def and the
-	libgtk_la_OBJECTS.
-
-	* gtk/gtk.def: Export the private (but still used by some apps)
-	_gtk_private_signals and _gtk_private_n_signals. Re-sort the file.
 
 	* gtk/gtkfilesel.c: Silence some gcc -Wall warnings.
 

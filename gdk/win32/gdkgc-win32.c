@@ -267,7 +267,7 @@ gc_values_to_win32values (GdkGCValues    *values,
       if (values->clip_mask != NULL)
 	{
 	  data->clip_region = 
-	    gdk_win32_bitmap_to_region ((HBITMAP) GDK_DRAWABLE_XID (values->clip_mask));
+	    gdk_win32_bitmap_to_region (values->clip_mask);
 	  data->values_mask |= GDK_GC_CLIP_MASK;
 	}
       else
@@ -1180,8 +1180,8 @@ set_hdc_pen (HDC          hdc,
 static guint bitmask[9] = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
 
 COLORREF
-gdk_colormap_color (GdkColormapPrivateWin32 *colormap_private,
-		    gulong                   pixel)
+gdk_win32_colormap_color_pack (GdkColormapPrivateWin32 *colormap_private,
+			       gulong                   pixel)
 {
   GdkVisual *visual;
   guchar r, g, b;
@@ -1212,35 +1212,43 @@ gdk_colormap_color (GdkColormapPrivateWin32 *colormap_private,
     }
 }
 
-static HPALETTE
-get_bw_palette (void)
+void
+gdk_win32_colormap_color_unpack (GdkColormapPrivateWin32 *colormap_private,
+				 COLORREF                 color,
+				 GdkColor                *result)
 {
-  struct
-  {
-    WORD palVersion;
-    WORD palNumEntries;
-    PALETTEENTRY palPalEntry[2];
-  } logpal;
-  static HPALETTE bwPalette = NULL;
+  GdkVisual *visual;
+  guchar r, g, b;
 
-  if (bwPalette != NULL)
-    return bwPalette;
-  
-  logpal.palVersion = 0x300;
-  logpal.palNumEntries = 2;
-  logpal.palPalEntry[0].peRed = 
-    logpal.palPalEntry[0].peGreen = 
-    logpal.palPalEntry[0].peBlue = 0;
-  logpal.palPalEntry[0].peFlags = 0;
-  logpal.palPalEntry[1].peRed = 
-    logpal.palPalEntry[1].peGreen = 
-    logpal.palPalEntry[1].peBlue = 0xFF;
-  logpal.palPalEntry[1].peFlags = 0;
+  if (colormap_private == NULL)
+    {
+      result->pixel = (color & 0xFFFF);
+      return;
+    }
 
-  if ((bwPalette = CreatePalette ((LOGPALETTE *) &logpal)) == NULL)
-    WIN32_GDI_FAILED ("CreatePalette");
+  visual = colormap_private->base.visual;
+  switch (visual->type)
+    {
+    case GDK_VISUAL_GRAYSCALE:
+    case GDK_VISUAL_PSEUDO_COLOR:
+    case GDK_VISUAL_STATIC_COLOR:
+      result->pixel = (color & 0xFFFF);
+      return;
 
-  return bwPalette;
+    case GDK_VISUAL_TRUE_COLOR:
+      result->red = (GetRValue (color) * 65535) / 255;
+      result->green = (GetGValue (color) * 65535) / 255;
+      result->blue = (GetBValue (color) * 65535) / 255;
+      result->pixel =
+	(((GetRValue (color) >> (8 - visual->red_prec)) << visual->red_shift) +
+	 ((GetGValue (color) >> (8 - visual->green_prec)) << visual->green_shift) +
+	 ((GetBValue (color) >> (8 - visual->blue_prec)) << visual->blue_shift));
+      return;
+
+    default:
+      g_assert_not_reached ();
+      return 0;
+    }
 }
 
 static void
@@ -1265,7 +1273,7 @@ predraw_set_foreground (GdkGCWin32Data          *data,
 				     colormap_private->hpal, k));
     }
 
-  fg = gdk_colormap_color (colormap_private, data->foreground);
+  fg = gdk_win32_colormap_color_pack (colormap_private, data->foreground);
 
   GDK_NOTE (GC, g_print ("predraw_set_foreground: fg=%06lx\n", fg));
 
@@ -1307,7 +1315,7 @@ predraw_set_background (GdkGCWin32Data          *data,
 {
   COLORREF bg;
   
-  bg = gdk_colormap_color (colormap_private, data->background);
+  bg = gdk_win32_colormap_color_pack (colormap_private, data->background);
 
   GDK_NOTE (GC, g_print ("predraw_set_background: bg=%06lx\n", bg));
 
@@ -1436,152 +1444,23 @@ gdk_win32_hdc_release (GdkDrawable     *drawable,
 
 /*
  *  gdk_win32_bitmap_to_region : Create a region from the
- *  "non-transparent" pixels of a bitmap
- *  Author :      Jean-Edouard Lachand-Robert
- *  (http://www.geocities.com/Paris/LeftBank/1160/resume.htm), June 1998.
+ *  "non-transparent" pixels of a bitmap.
  */
 
 HRGN
-gdk_win32_bitmap_to_region (HBITMAP hBmp)
+gdk_win32_bitmap_to_region (GdkPixmap *pixmap)
 {
   HRGN hRgn = NULL;
-  HDC hMemDC;
-  HPALETTE hOldPal;
-  BITMAP bm;
-
-  struct
-  {
-    BITMAPINFOHEADER bmiHeader;
-#if 1
-    WORD bmiColors[2];
-#else
-    RGBQUAD bmiColors[2];
-#endif
-  } bmi;
-  VOID *pbits8; 
-  HBITMAP hbm8;
-
-  HBITMAP holdBmp;
-  HDC hDC;
-
-  BITMAP bm8;
+  HRGN h;
   DWORD maxRects;
   RGNDATA *pData;
-  BYTE *p8;
-  int x, y;
-  HRGN h;
+  GdkImage *image;
+  guchar *p;
+  gint x, y;
 
-  /* Create a memory DC inside which we will scan the bitmap content */
-  hMemDC = CreateCompatibleDC (NULL);
-  if (!hMemDC)
-    {
-      WIN32_GDI_FAILED ("CreateCompatibleDC");
-      return NULL;
-    }
-
-  hOldPal = SelectPalette (hMemDC, get_bw_palette (), FALSE);
-  RealizePalette (hMemDC);
-
-  /* Get bitmap size */
-  GetObject(hBmp, sizeof(bm), &bm);
-  
-  /* Create a 8 bits depth bitmap and select it into the memory DC */
-  bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = bm.bmWidth;
-  bmi.bmiHeader.biHeight = bm.bmHeight;
-  bmi.bmiHeader.biPlanes = 1;
-  bmi.bmiHeader.biBitCount = 8;
-  bmi.bmiHeader.biCompression = BI_RGB;
-  bmi.bmiHeader.biSizeImage = 0;
-  bmi.bmiHeader.biXPelsPerMeter = 0;
-  bmi.bmiHeader.biYPelsPerMeter = 0;
-  bmi.bmiHeader.biClrUsed = 2;
-  bmi.bmiHeader.biClrImportant = 2;
-#if 1
-  bmi.bmiColors[0] = 0;
-  bmi.bmiColors[1] = 1;
-  hbm8 = CreateDIBSection (hMemDC, (BITMAPINFO *)&bmi,
-			    DIB_PAL_COLORS, &pbits8, NULL, 0);
-#else
-  bmi.bmiColors[0].rgbBlue =
-    bmi.bmiColors[0].rgbGreen =
-    bmi.bmiColors[0].rgbRed = 0x00;
-  bmi.bmiColors[0].rgbReserved = 0x00;
-
-  bmi.bmiColors[1].rgbBlue =
-    bmi.bmiColors[1].rgbGreen =
-    bmi.bmiColors[1].rgbRed = 0xFF;
-  bmi.bmiColors[0].rgbReserved = 0x00;
-
-  hbm8 = CreateDIBSection (hMemDC, (BITMAPINFO *)&bmi,
-			   DIB_RGB_COLORS, &pbits8, NULL, 0);
-#endif
-  if (!hbm8)
-    {
-      WIN32_GDI_FAILED ("CreateDIBSection");
-      SelectPalette (hMemDC, hOldPal, FALSE);
-      DeleteDC (hMemDC);
-      return NULL;
-    }
-
-  holdBmp = (HBITMAP) SelectObject (hMemDC, hbm8);
-
-  /* Obtain hdc with hBmp selected into it */
-  hDC = gdk_win32_obtain_offscreen_hdc ((HWND) hBmp);
-  if (!hDC)
-    {
-      GDK_NOTE (GC, g_print ("BitmapToRegion: gdk_win32_obtain_offscreen_hdc faield\n"));
-      SelectObject (hMemDC, holdBmp);
-      DeleteObject (hbm8);
-      SelectPalette (hMemDC, hOldPal, FALSE);
-      DeleteDC (hMemDC);
-      return NULL;
-    }
-
-  /* Get how many bytes per row we have for the bitmap bits */
-  GetObject (hbm8, sizeof (bm8), &bm8);
-
-  /* Hans Breuer found a fix to the long-standing erroneous behaviour
-   * on NT 4.0: There seems to be a bug in Win NT 4.0 GDI: scanlines
-   * in bitmaps are dword aligned on both Win95 and NT. In the case of
-   * a bitmap with 22 bytes worth of width, GetObject above returns
-   * with bmWidth == 22. On Win95 bmWidthBytes == 24, as it should be,
-   * but on NT is it 22. We need to correct this here.
-   */
-  bm8.bmWidthBytes = (((bm8.bmWidthBytes-1)/4)+1)*4; /* dword aligned!! */
-
-  /* Copy the bitmap into our DIB section */
-  if (!BitBlt (hMemDC, 0, 0, bm.bmWidth, bm.bmHeight, hDC, 0, 0, SRCCOPY))
-    {
-      WIN32_GDI_FAILED ("BitBlt");
-      gdk_win32_release_hdc (NULL, hDC);
-      SelectObject (hMemDC, holdBmp);
-      DeleteObject (hbm8);
-      SelectPalette (hMemDC, hOldPal, FALSE);
-      DeleteDC (hMemDC);
-      return NULL;
-    }
-#if 0
-  /* Debugging... */
-  {
-    HDC screen = GetDC (NULL);
-    RECT r;
-    r.left = 0;
-    r.top = 0;
-    r.right = bm.bmWidth;
-    r.bottom = bm.bmHeight;
-    FillRect (screen, &r, GetStockObject (WHITE_BRUSH));
-    if (!BitBlt (screen, 0, 0, bm.bmWidth, bm.bmHeight, hMemDC, 0, 0, SRCCOPY))
-      WIN32_GDI_FAILED ("BitBlt");
-    r.top = 200;
-    r.bottom = 200 + bm.bmHeight;
-    FillRect (screen, &r, GetStockObject (WHITE_BRUSH));
-    if (!BitBlt (screen, 0, 200, bm.bmWidth, bm.bmHeight, hDC, 0, 0, SRCCOPY))
-      WIN32_GDI_FAILED ("BitBlt");
-  }
-#endif
-
-  gdk_win32_release_hdc (NULL, hDC);
+  g_assert (GDK_DRAWABLE_TYPE (pixmap) == GDK_DRAWABLE_PIXMAP);
+  image = GDK_DRAWABLE_WIN32DATA (pixmap)->image;
+  g_assert (image->depth == 1);
 
   /* For better performances, we will use the ExtCreateRegion()
    * function to create the region. This function take a RGNDATA
@@ -1597,22 +1476,19 @@ gdk_win32_bitmap_to_region (HBITMAP hBmp)
   pData->rdh.nCount = pData->rdh.nRgnSize = 0;
   SetRect (&pData->rdh.rcBound, MAXLONG, MAXLONG, 0, 0);
 
-  /* Scan each bitmap from bottom to top (the bitmap is inverted vertically)*/
-  p8 = (BYTE *) pbits8 + (bm8.bmHeight - 1) * bm8.bmWidthBytes;
-  for (y = 0; y < bm.bmHeight; y++)
+  for (y = 0; y < image->height; y++)
     {
       /* Scan each bitmap row from left to right*/
-      for (x = 0; x < bm.bmWidth; x++)
+      p = image->mem + y * image->bpl;
+      for (x = 0; x < image->width; x++)
 	{
 	  /* Search for a continuous range of "non transparent pixels"*/
-	  int x0 = x;
-	  BYTE *p = p8 + x;
-	  while (x < bm.bmWidth)
+	  gint x0 = x;
+	  while (x < image->width)
 	    {
-	      if (*p == 0)
+	      if ((((p[x/8])>>(7-(x%8)))&1) == 0)
 		/* This pixel is "transparent"*/
 		break;
-	      p++;
 	      x++;
 	    }
 	  
@@ -1660,9 +1536,6 @@ gdk_win32_bitmap_to_region (HBITMAP hBmp)
 		}
 	    }
 	}
-      
-      /* Go to next row (remember, the bitmap is inverted vertically)*/
-      p8 -= bm8.bmWidthBytes;
     }
   
   /* Create or extend the region with the remaining rectangles*/
@@ -1678,10 +1551,6 @@ gdk_win32_bitmap_to_region (HBITMAP hBmp)
 
   /* Clean up*/
   g_free (pData);
-  SelectObject(hMemDC, holdBmp);
-  DeleteObject (hbm8);
-  SelectPalette (hMemDC, hOldPal, FALSE);
-  DeleteDC (hMemDC);
 
   return hRgn;
 }

@@ -264,6 +264,10 @@ struct _GdkGCWin32Data
 struct _GdkDrawableWin32Data
 {
   HANDLE xid;
+
+  GdkImage *image;		/* For GdkPixmaps, a pointer to the GdkImage
+				 * containing the pixels.
+				 */
 };
 
 struct _GdkWindowWin32Data
@@ -349,7 +353,7 @@ struct _GdkColormapPrivateWin32
 struct _GdkImagePrivateWin32
 {
   GdkImagePrivate base;
-  HBITMAP ximage;
+  GdkDrawable *pixmap;
 };
 
 struct _GdkRegionPrivate
@@ -370,8 +374,11 @@ gpointer gdk_xid_table_lookup    (HANDLE xid);
 GdkGC *  _gdk_win32_gc_new       (GdkDrawable        *drawable,
 				  GdkGCValues        *values,
 				  GdkGCValuesMask     values_mask);
-COLORREF gdk_colormap_color      (GdkColormapPrivateWin32 *colormap_private,
-				  gulong                   pixel);
+COLORREF gdk_win32_colormap_color_pack (GdkColormapPrivateWin32 *colormap_private,
+					gulong                   pixel);
+void     gdk_win32_colormap_color_unpack (GdkColormapPrivateWin32 *colormap_private,
+					  COLORREF                 color,
+					  GdkColor                *result);
 HDC	 gdk_gc_predraw          (GdkDrawable        *drawable,
 				  GdkGCPrivate       *gc_private,
 				  GdkGCValuesMask     usage);
@@ -382,7 +389,15 @@ void	 gdk_gc_postdraw         (GdkDrawable        *drawable,
 void    gdk_win32_clear_hdc_cache (void);
 void    gdk_win32_clear_hdc_cache_for_hwnd (HWND hwnd);
 
-HRGN	gdk_win32_bitmap_to_region (HBITMAP hBmp);
+GdkPixmap* gdk_win32_pixmap_new (GdkWindow *window,
+				 GdkVisual *visual,
+				 gint       width,
+				 gint       height,
+				 gint       depth);
+
+GdkImagePrivateWin32 *gdk_win32_image_alloc (void);
+
+HRGN	gdk_win32_bitmap_to_region (GdkPixmap *pixmap);
 
 void    gdk_win32_dropfiles_store(gchar *data);
 
@@ -435,6 +450,7 @@ gchar *gdk_win32_fill_style_to_string (GdkFill      fill);
 gchar *gdk_win32_function_to_string   (GdkFunction  function);
 gchar *gdk_win32_join_style_to_string (GdkJoinStyle join_style);
 gchar *gdk_win32_line_style_to_string (GdkLineStyle line_style);
+gchar *gdk_win32_drawable_type_to_string (GdkDrawableType type);
 gchar *gdk_win32_message_name         (UINT msg);
 void   gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
 				       const int           nentries);

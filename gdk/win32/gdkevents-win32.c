@@ -3255,8 +3255,9 @@ gdk_win32_erase_background (GdkWindow *window,
 
   if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PIXEL)
     {
-      COLORREF bg = gdk_colormap_color (colormap_private,
-					GDK_WINDOW_WIN32DATA (window)->bg_pixel);
+      COLORREF bg =
+	gdk_win32_colormap_color_pack (colormap_private,
+				       GDK_WINDOW_WIN32DATA (window)->bg_pixel);
       
       GetClipBox (hdc, &rect);
       GDK_NOTE (EVENTS, g_print ("...%ldx%ld@+%ld+%ld BG_PIXEL %06lx\n",

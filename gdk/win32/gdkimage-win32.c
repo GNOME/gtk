@@ -62,215 +62,58 @@ gdk_image_exit (void)
     }
 }
 
+GdkImagePrivateWin32 *
+gdk_win32_image_alloc (void)
+{
+  GdkImagePrivateWin32 *private;
+
+  private = g_new (GdkImagePrivateWin32, 1);
+  private->base.ref_count = 1;
+  private->base.klass = &image_class;
+
+  return private;
+}
+
 GdkImage *
 gdk_image_new_bitmap (GdkVisual *visual,
 		      gpointer   data,
-		      gint       w,
-		      gint        h)
+		      gint       width,
+		      gint       height)
 /*
  * Desc: create a new bitmap image
  */
 {
+  GdkPixmap *pixmap;
   GdkImage *image;
   GdkImagePrivateWin32 *private;
-  struct {
-    BITMAPINFOHEADER bmiHeader;
-    union {
-      WORD bmiIndices[2];
-      RGBQUAD bmiColors[2];
-    } u;
-  } bmi;
-  char *bits;
-  int bpl = (w-1)/8 + 1;
-  int bpl32 = ((w-1)/32 + 1)*4;
+  gint data_bpl = (width - 1)/8 + 1;
+  gint i;
 
-  private = g_new (GdkImagePrivateWin32, 1);
-  image = (GdkImage *) private;
-  private->base.ref_count = 1;
-  private->base.klass = &image_class;
+  pixmap = gdk_pixmap_new (NULL, width, height, 1);
 
-  image->type = GDK_IMAGE_SHARED;
-  image->visual = visual;
-  image->width = w;
-  image->height = h;
-  image->depth = 1;
+  if (pixmap == NULL)
+    return NULL;
 
-  GDK_NOTE (IMAGE, g_print ("gdk_image_new_bitmap: %dx%d\n", w, h));
+  image = GDK_DRAWABLE_WIN32DATA (pixmap)->image;
+  private = (GdkImagePrivateWin32 *) image;
+
+  GDK_NOTE (IMAGE, g_print ("gdk_image_new_bitmap: %dx%d\n", width, height));
   
-  bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = w;
-  bmi.bmiHeader.biHeight = -h;
-  bmi.bmiHeader.biPlanes = 1;
-  bmi.bmiHeader.biBitCount = 1;
-  bmi.bmiHeader.biCompression = BI_RGB;
-  bmi.bmiHeader.biSizeImage = 0;
-  bmi.bmiHeader.biXPelsPerMeter =
-    bmi.bmiHeader.biYPelsPerMeter = 0;
-  bmi.bmiHeader.biClrUsed = 0;
-  bmi.bmiHeader.biClrImportant = 0;
-  
-  bmi.u.bmiColors[0].rgbBlue = 
-    bmi.u.bmiColors[0].rgbGreen = 
-    bmi.u.bmiColors[0].rgbRed = 0x00;
-  bmi.u.bmiColors[0].rgbReserved = 0x00;
-
-  bmi.u.bmiColors[1].rgbBlue = 
-    bmi.u.bmiColors[1].rgbGreen = 
-    bmi.u.bmiColors[1].rgbRed = 0xFF;
-  bmi.u.bmiColors[1].rgbReserved = 0x00;
-  
-  private->ximage = CreateDIBSection (gdk_DC, (BITMAPINFO *) &bmi,
-				      DIB_RGB_COLORS, &bits, NULL, 0);
-  if (bpl != bpl32)
+  if (data_bpl != image->bpl)
     {
-      /* Win32 expects scanlines in DIBs to be 32 bit aligned */
-      int i;
-      for (i = 0; i < h; i++)
-	memmove (bits + i*bpl32, ((char *) data) + i*bpl, bpl);
+      for (i = 0; i < height; i++)
+	memmove (image->mem + i*image->bpl, ((guchar *) data) + i*data_bpl,
+		 data_bpl);
     }
   else
-    memmove (bits, data, bpl*h);
-  image->mem = bits;
-  image->bpl = bpl32;
-  image->byte_order = GDK_MSB_FIRST;
+    memmove (image->mem, data, data_bpl*height);
 
-  image->bpp = 1;
-  return (image);
-} /* gdk_image_new_bitmap() */
+  return image;
+}
 
 void
 gdk_image_init (void)
 {
-}
-
-static GdkImage*
-gdk_image_new_with_depth (GdkImageType  type,
-			  GdkVisual    *visual,
-			  gint          width,
-			  gint          height,
-			  gint		depth)
-{
-  GdkImage *image;
-  GdkImagePrivateWin32 *private;
-  struct {
-    BITMAPINFOHEADER bmiHeader;
-    union {
-      WORD bmiIndices[256];
-      DWORD bmiMasks[3];
-      RGBQUAD bmiColors[256];
-    } u;
-  } bmi;
-  UINT iUsage;
-  int i;
-
-  if (type == GDK_IMAGE_FASTEST || type == GDK_IMAGE_NORMAL)
-    type = GDK_IMAGE_SHARED;
-
-  GDK_NOTE (IMAGE, g_print ("gdk_image_new_with_depth: %dx%dx%d\n",
-			    width, height, depth));
-
-  private = g_new (GdkImagePrivateWin32, 1);
-  image = (GdkImage *) private;
-
-  private->base.ref_count = 1;
-  private->base.klass = &image_class;
-
-  image->type = type;
-  image->visual = visual;
-  image->width = width;
-  image->height = height;
-  image->depth = depth;
-  
-  bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = width;
-  bmi.bmiHeader.biHeight = -height;
-  bmi.bmiHeader.biPlanes = 1;
-  if (depth == 15)
-    bmi.bmiHeader.biBitCount = 16;
-  else
-    bmi.bmiHeader.biBitCount = depth;
-  if (depth == 16)
-    bmi.bmiHeader.biCompression = BI_BITFIELDS;
-  else
-    bmi.bmiHeader.biCompression = BI_RGB;
-  bmi.bmiHeader.biSizeImage = 0;
-  bmi.bmiHeader.biXPelsPerMeter =
-    bmi.bmiHeader.biYPelsPerMeter = 0;
-  bmi.bmiHeader.biClrUsed = 0;
-  bmi.bmiHeader.biClrImportant = 0;
-
-  if (image->visual->type == GDK_VISUAL_GRAYSCALE ||
-      image->visual->type == GDK_VISUAL_PSEUDO_COLOR ||
-      image->visual->type == GDK_VISUAL_STATIC_COLOR)
-    {
-      iUsage = DIB_PAL_COLORS;
-      for (i = 0; i < 256; i++)
-	bmi.u.bmiIndices[i] = i;
-    }
-  else
-    {
-      if (depth == 1)
-	{
-	  bmi.u.bmiColors[0].rgbBlue = 
-	    bmi.u.bmiColors[0].rgbGreen =
-	    bmi.u.bmiColors[0].rgbRed = 0x00;
-	  bmi.u.bmiColors[0].rgbReserved = 0x00;
-
-	  bmi.u.bmiColors[1].rgbBlue = 
-	    bmi.u.bmiColors[1].rgbGreen =
-	    bmi.u.bmiColors[1].rgbRed = 0xFF;
-	  bmi.u.bmiColors[1].rgbReserved = 0x00;
-
-	}
-      else if (depth == 16)
-	{
-	  bmi.u.bmiMasks[0] = visual->red_mask;
-	  bmi.u.bmiMasks[1] = visual->green_mask;
-	  bmi.u.bmiMasks[2] = visual->blue_mask;
-	}
-      iUsage = DIB_RGB_COLORS;
-    }
-
-  private->ximage = CreateDIBSection (gdk_DC, (BITMAPINFO *) &bmi, iUsage,
-				      &image->mem, NULL, 0);
-
-  if (private->ximage == NULL)
-    {
-      WIN32_GDI_FAILED ("CreateDIBSection");
-      g_free (image);
-      return NULL;
-    }
-
-  switch (depth)
-    {
-    case 1:
-    case 8:
-      image->bpp = 1;
-      break;
-    case 15:
-    case 16:
-      image->bpp = 2;
-      break;
-    case 24:
-      image->bpp = 3;
-      break;
-    case 32:
-      image->bpp = 4;
-      break;
-    default:
-      g_warning ("gdk_image_new_with_depth: depth = %d", depth);
-      g_assert_not_reached ();
-    }
-  image->byte_order = GDK_LSB_FIRST;
-  if (depth == 1)
-    image->bpl = ((width-1)/32 + 1)*4;
-  else
-    image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
-
-  GDK_NOTE (IMAGE, g_print ("... = %p mem = %p, bpl = %d\n",
-			    private->ximage, image->mem, image->bpl));
-
-  return image;
 }
 
 GdkImage*
@@ -279,7 +122,12 @@ gdk_image_new (GdkImageType  type,
 	       gint          width,
 	       gint          height)
 {
-  return gdk_image_new_with_depth (type, visual, width, height, visual->depth);
+  GdkPixmap *pixmap = gdk_win32_pixmap_new (NULL, visual, width, height, visual->depth);
+
+  if (!pixmap)
+    return NULL;
+
+  return GDK_DRAWABLE_WIN32DATA (pixmap)->image;
 }
 
 GdkImage*
@@ -290,22 +138,14 @@ gdk_image_get (GdkWindow *window,
 	       gint       height)
 {
   HDC hdc, memdc;
-  struct {
-    BITMAPINFOHEADER bmiHeader;
-    union {
-      WORD bmiIndices[256];
-      DWORD bmiMasks[3];
-      RGBQUAD bmiColors[256];
-    } u;
-  } bmi;
   HGDIOBJ oldbitmap2;
-  UINT iUsage;
   BITMAP bm;
   HPALETTE holdpalw = NULL, holdpali = NULL;
+  GdkVisual *visual;
+  GdkPixmap *pixmap;
   GdkImage *image;
   GdkColormapPrivateWin32 *cmapp = NULL;
-  GdkImagePrivateWin32 *private;
-  int i;
+  gint depth;
 
   g_return_val_if_fail (window != NULL, NULL);
 
@@ -314,17 +154,8 @@ gdk_image_get (GdkWindow *window,
 
   GDK_NOTE (IMAGE, g_print ("gdk_image_get: %p %dx%d@+%d+%d\n",
 			    GDK_DRAWABLE_XID (window), width, height, x, y));
-
-  private = g_new (GdkImagePrivateWin32, 1);
-  image = (GdkImage*) private;
-
-  private->base.ref_count = 1;
-  private->base.klass = &image_class;
-
-  image->type = GDK_IMAGE_SHARED;
-  image->visual = gdk_drawable_get_visual (window);
-  image->width = width;
-  image->height = height;
+  
+  visual = gdk_drawable_get_visual (window);
 
   /* This function is called both to blit from a window and from
    * a pixmap.
@@ -337,40 +168,26 @@ gdk_image_get (GdkWindow *window,
 	  g_free (image);
 	  return NULL;
 	}
-      if (image->visual != NULL &&
-	  (image->visual->type == GDK_VISUAL_PSEUDO_COLOR ||
-	   image->visual->type == GDK_VISUAL_STATIC_COLOR))
-	{
-	  cmapp = (GdkColormapPrivateWin32 *) gdk_drawable_get_colormap (window);
-	}
+      if (visual != NULL &&
+	  (visual->type == GDK_VISUAL_PSEUDO_COLOR ||
+	   visual->type == GDK_VISUAL_STATIC_COLOR))
+	cmapp = (GdkColormapPrivateWin32 *) gdk_drawable_get_colormap (window);
 
       GetObject (GDK_DRAWABLE_XID (window), sizeof (BITMAP), &bm);
       GDK_NOTE (IMAGE,
-		g_print ("gdk_image_get: bmWidth=%ld bmHeight=%ld bmWidthBytes=%ld bmBitsPixel=%d\n",
-			 bm.bmWidth, bm.bmHeight, bm.bmWidthBytes, bm.bmBitsPixel));
-      image->depth = bm.bmBitsPixel;
+		g_print ("gdk_image_get: bmWidth=%ld bmHeight=%ld "
+			 "bmWidthBytes=%ld bmBitsPixel=%d\n",
+			 bm.bmWidth, bm.bmHeight,
+			 bm.bmWidthBytes, bm.bmBitsPixel));
+      depth = bm.bmBitsPixel;
     }
   else
     {
       hdc = gdk_win32_obtain_window_hdc (GDK_DRAWABLE_XID (window));
       if (hdc == NULL)
-	{
-	  g_free (image);
-	  return NULL;
-	}
-      image->depth = gdk_visual_get_system ()->depth;
+	return NULL;
+      depth = gdk_visual_get_system ()->depth;
     }
-
-#if 0
-  if (image->depth <= 8)
-    {
-      iUsage = DIB_PAL_COLORS;
-      for (i = 0; i < 256; i++)
-	bmi.u.bmiIndices[i] = i;
-    }
-  else
-#endif
-    iUsage = DIB_RGB_COLORS;
 
   if ((memdc = CreateCompatibleDC (hdc)) == NULL)
     {
@@ -379,97 +196,45 @@ gdk_image_get (GdkWindow *window,
         gdk_win32_release_hdc (NULL, hdc);
       else
         gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
-      g_free (image);
       return NULL;
     }
 
-  bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = width;
-  bmi.bmiHeader.biHeight = -height;
-  bmi.bmiHeader.biPlanes = 1;
-  bmi.bmiHeader.biBitCount = image->depth;
-  if (image->depth == 16)
-    {
-      bmi.bmiHeader.biCompression = BI_BITFIELDS;
-      if (image->visual == NULL)
-	{
-	  /* XXX ??? Is it always this if depth==16 and a pixmap? Guess so. */
-	  bmi.u.bmiMasks[0] = 0xf800;
-	  bmi.u.bmiMasks[1] = 0x07e0;
-	  bmi.u.bmiMasks[2] = 0x001f;
-	}
-      else
-	{
-	  bmi.u.bmiMasks[0] = image->visual->red_mask;
-	  bmi.u.bmiMasks[1] = image->visual->green_mask;
-	  bmi.u.bmiMasks[2] = image->visual->blue_mask;
-	}
-    }
-  else
-    {
-      if (image->depth == 1)
-	{
-	  bmi.u.bmiColors[0].rgbBlue =
-	    bmi.u.bmiColors[0].rgbGreen =
-	    bmi.u.bmiColors[0].rgbRed = 0x00;
-	  bmi.u.bmiColors[0].rgbReserved = 0x00;
-	  
-	  bmi.u.bmiColors[1].rgbBlue =
-	    bmi.u.bmiColors[1].rgbGreen =
-	    bmi.u.bmiColors[1].rgbRed = 0xFF;
-	  bmi.u.bmiColors[1].rgbReserved = 0x00;
-	}
-      bmi.bmiHeader.biCompression = BI_RGB;
-    }
-  bmi.bmiHeader.biSizeImage = 0;
-  bmi.bmiHeader.biXPelsPerMeter =
-    bmi.bmiHeader.biYPelsPerMeter = 0;
-  bmi.bmiHeader.biClrUsed = 0;
-  bmi.bmiHeader.biClrImportant = 0;
+  pixmap = gdk_win32_pixmap_new (NULL, visual, width, height, depth);
+  if (!pixmap)
+    return NULL;
+
+  image = GDK_DRAWABLE_WIN32DATA (pixmap)->image;
 
   if (cmapp != NULL)
-    if (!(holdpalw = SelectPalette (hdc, cmapp->hpal, FALSE)))
-      WIN32_GDI_FAILED ("SelectPalette");
-    else
-      GDK_NOTE (IMAGE, g_print ("gdk_image_get: hpal=%p hdc=%p\n",
-				cmapp->hpal, hdc));
-
-  if ((private->ximage = CreateDIBSection (hdc, (BITMAPINFO *) &bmi, iUsage,
-					   &image->mem, NULL, 0)) == NULL)
     {
-      WIN32_GDI_FAILED ("CreateDIBSection");
-      DeleteDC (memdc);
-      if (holdpalw != NULL)
-	if (!SelectPalette (hdc, holdpalw, FALSE))
-	  WIN32_GDI_FAILED ("SelectPalette");
-      if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
-        gdk_win32_release_hdc (NULL, hdc);
+      if (!(holdpalw = SelectPalette (hdc, cmapp->hpal, FALSE)))
+	WIN32_GDI_FAILED ("SelectPalette");
       else
-        gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
-      g_free (image);
-      return NULL;
+	GDK_NOTE (IMAGE, g_print ("gdk_image_get: hpal=%p hdc=%p\n",
+				  cmapp->hpal, hdc));
     }
-
-  if ((oldbitmap2 = SelectObject (memdc, private->ximage)) == NULL)
+  
+  if ((oldbitmap2 = SelectObject (memdc, GDK_DRAWABLE_XID (pixmap))) == NULL)
     {
       WIN32_GDI_FAILED ("SelectObject");
-      DeleteObject (private->ximage);
+      gdk_pixmap_unref (pixmap);
       DeleteDC (memdc);
       if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
         gdk_win32_release_hdc (NULL, hdc);
       else
         gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
-      g_free (image);
       return NULL;
     }
-
+  
   if (cmapp != NULL)
-    if (!(holdpali = SelectPalette (memdc, cmapp->hpal, FALSE)))
-      WIN32_GDI_FAILED ("SelectPalette");
-    else
-      GDK_NOTE (IMAGE, g_print ("gdk_image_get: hpal=%p memdc=%p\n",
-				cmapp->hpal, memdc));
-
+    {
+      if (!(holdpali = SelectPalette (memdc, cmapp->hpal, FALSE)))
+	WIN32_GDI_FAILED ("SelectPalette");
+      else
+	GDK_NOTE (IMAGE, g_print ("gdk_image_get: hpal=%p memdc=%p\n",
+				  cmapp->hpal, memdc));
+    }
+  
   if (!BitBlt (memdc, 0, 0, width, height, hdc, x, y, SRCCOPY))
     {
       WIN32_GDI_FAILED ("BitBlt");
@@ -480,13 +245,12 @@ gdk_image_get (GdkWindow *window,
 	if (!SelectPalette (memdc, holdpali, FALSE))
 	  WIN32_GDI_FAILED ("SelectPalette");
       SelectObject (memdc, oldbitmap2);
-      DeleteObject (private->ximage);
+      gdk_pixmap_unref (pixmap);
       DeleteDC (memdc);
       if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
         gdk_win32_release_hdc (NULL, hdc);
       else
         gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
-      g_free (image);
       return NULL;
     }
 
@@ -509,49 +273,21 @@ gdk_image_get (GdkWindow *window,
   else
     gdk_win32_release_hdc (GDK_DRAWABLE_XID (window), hdc);
 
-  switch (image->depth)
-    {
-    case 1:
-    case 8:
-      image->bpp = 1;
-      break;
-    case 15:
-    case 16:
-      image->bpp = 2;
-      break;
-    case 24:
-      image->bpp = 3;
-      break;
-    case 32:
-      image->bpp = 4;
-      break;
-    default:
-      g_warning ("gdk_image_get: image->depth = %d", image->depth);
-      g_assert_not_reached ();
-    }
-  image->byte_order = GDK_LSB_FIRST;
-  if (image->depth == 1)
-    image->bpl = ((width - 1)/32 + 1)*4;
-  else
-    image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
-
-  GDK_NOTE (IMAGE, g_print ("... = %p mem=%p, bpl=%d\n",
-			    private->ximage, image->mem, image->bpl));
-
   return image;
 }
 
 guint32
 gdk_image_get_pixel (GdkImage *image,
-		     gint x,
-		     gint y)
+		     gint      x,
+		     gint      y)
 {
   guint32 pixel;
 
   g_return_val_if_fail (image != NULL, 0);
 
-  g_return_val_if_fail (x >= 0 && x < image->width
-			&& y >= 0 && y < image->height, 0);
+  g_return_val_if_fail (x >= 0 && x < image->width &&
+			y >= 0 && y < image->height,
+			0);
 
   if (image->depth == 1)
     pixel = (((char *) image->mem)[y * image->bpl + (x >> 3)] & (1 << (7 - (x & 0x7)))) != 0;
@@ -588,9 +324,9 @@ gdk_image_get_pixel (GdkImage *image,
 
 void
 gdk_image_put_pixel (GdkImage *image,
-		     gint x,
-		     gint y,
-		     guint32 pixel)
+		     gint      x,
+		     gint      y,
+		     guint32   pixel)
 {
   g_return_if_fail (image != NULL);
 
@@ -623,27 +359,9 @@ gdk_image_put_pixel (GdkImage *image,
 static void
 gdk_win32_image_destroy (GdkImage *image)
 {
-  GdkImagePrivateWin32 *private;
-
   g_return_if_fail (image != NULL);
 
-  private = (GdkImagePrivateWin32 *) image;
-
-  GDK_NOTE (IMAGE, g_print ("gdk_win32_image_destroy: %p\n",
-			    private->ximage));
-  
-  switch (image->type)
-    {
-    case GDK_IMAGE_SHARED:
-      if (!DeleteObject (private->ximage))
-	WIN32_GDI_FAILED ("DeleteObject");
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-
-  g_free (image);
+  gdk_pixmap_unref (((GdkImagePrivateWin32 *) image)->pixmap);
 }
 
 static void
@@ -657,12 +375,6 @@ gdk_image_put (GdkImage    *image,
 	       gint         width,
 	       gint         height)
 {
-  GdkDrawablePrivate *drawable_private;
-  GdkImagePrivateWin32 *image_private;
-  GdkGCPrivate *gc_private;
-  HDC hdc;
-  GdkColormapPrivateWin32 *colormap_private;
-
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (image != NULL);
   g_return_if_fail (gc != NULL);
@@ -670,100 +382,6 @@ gdk_image_put (GdkImage    *image,
   if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
 
-  image_private = (GdkImagePrivateWin32 *) image;
-  drawable_private = (GdkDrawablePrivate *) drawable;
-  gc_private = (GdkGCPrivate *) gc;
-
-  hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND);
-  colormap_private = (GdkColormapPrivateWin32 *) drawable_private->colormap;
-  if (colormap_private &&
-      (colormap_private->base.visual->type == GDK_VISUAL_PSEUDO_COLOR ||
-       colormap_private->base.visual->type == GDK_VISUAL_STATIC_COLOR))
-    {
-      DIBSECTION ds;
-
-      if (GetObject (image_private->ximage, sizeof (DIBSECTION),
-		     &ds) != sizeof (DIBSECTION))
-	WIN32_GDI_FAILED ("GetObject");
-      else
-	{
-	  struct {
-	    BITMAPINFOHEADER bmiHeader;
-	    union {
-	      WORD bmiIndices[256];
-	      DWORD bmiMasks[3];
-	      RGBQUAD bmiColors[256];
-	    } u;
-	  } bmi;
-	  int i;
-	  HDC memdc;
-	  HBITMAP ms_bitmap = NULL;
-
-#if 0
-	  g_print ("xdest = %d, ydest = %d, xsrc = %d, ysrc = %d, width = %d, height = %d\n",
-		  xdest, ydest, xsrc, ysrc, width, height);
-	  g_print ("bmWidth = %d, bmHeight = %d, bmBitsPixel = %d, bmBits = %p\n",
-		   ds.dsBm.bmWidth, ds.dsBm.bmHeight, ds.dsBm.bmBitsPixel, ds.dsBm.bmBits);
-	  g_print ("biWidth = %d, biHeight = %d, biBitCount = %d, biClrUsed = %d\n",
-		   ds.dsBmih.biWidth, ds.dsBmih.biHeight, ds.dsBmih.biBitCount, ds.dsBmih.biClrUsed);
-#endif
-
-	  /* Need to set up color table to match that in the drawable */
-	  for (i = 0; i < 256; i++)
-	    {
-	      if (i < drawable_private->colormap->size)
-		{
-		  bmi.u.bmiColors[i].rgbRed =
-		    drawable_private->colormap->colors[i].red >> 8;
-		  bmi.u.bmiColors[i].rgbGreen =
-		    drawable_private->colormap->colors[i].green >> 8;
-		  bmi.u.bmiColors[i].rgbBlue =
-		    drawable_private->colormap->colors[i].blue >> 8;
-		}
-	      else
-		{
-		  bmi.u.bmiColors[i].rgbRed = 
-		    bmi.u.bmiColors[i].rgbGreen = 
-		    bmi.u.bmiColors[i].rgbBlue = 0xFF;
-		}
-	    }
-       
-	  /* Translate image colors via device independent bitmap and
-	   * offscreen DC.
-	   */
-	  bmi.bmiHeader = ds.dsBmih;
-	  bmi.bmiHeader.biHeight *= -1;
-	  ms_bitmap = CreateDIBitmap (hdc, &bmi.bmiHeader,
-				      CBM_INIT, ds.dsBm.bmBits,
-				      (CONST BITMAPINFO *) &bmi, 
-				      DIB_RGB_COLORS);
-	  memdc = CreateCompatibleDC (hdc);
-	  if (ms_bitmap != NULL && memdc != NULL)
-	    {
-	      HGDIOBJ holdbm = SelectObject (memdc, ms_bitmap);
-	      if (!BitBlt (hdc, xdest, ydest, width, height,
-			   memdc, xsrc, ysrc, SRCCOPY))
-		WIN32_GDI_FAILED ("BitBlt");
-	      
-	      SelectObject (memdc, holdbm);
-	      DeleteDC (memdc);
-	      DeleteObject (ms_bitmap);
-	    }
-	}
-    }
-  else
-    {
-      HDC memdc;
-
-      memdc = gdk_win32_obtain_offscreen_hdc ((HGDIOBJ)image_private->ximage);
-      if (memdc != NULL)
-	{
-          if (!BitBlt (hdc, xdest, ydest, width, height,
-		     memdc, xsrc, ysrc, SRCCOPY))
-	    WIN32_GDI_FAILED ("BitBlt");
-
-	  gdk_win32_release_hdc (NULL, memdc);
-	}
-    }
-  gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND);
+  gdk_draw_drawable (drawable, gc, ((GdkImagePrivateWin32 *) image)->pixmap,
+		     xsrc, ysrc, xdest, ydest, width, height);
 }

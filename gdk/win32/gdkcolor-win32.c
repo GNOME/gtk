@@ -2136,9 +2136,10 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
 
       for (i = 0; i < ncolors; i++)
 	{
-	  colors[i].pixel = (((colors[i].red >> (16 - visual->red_prec)) << visual->red_shift) +
-			     ((colors[i].green >> (16 - visual->green_prec)) << visual->green_shift) +
-			     ((colors[i].blue >> (16 - visual->blue_prec)) << visual->blue_shift));
+	  colors[i].pixel =
+	    (((colors[i].red >> (16 - visual->red_prec)) << visual->red_shift) +
+	     ((colors[i].green >> (16 - visual->green_prec)) << visual->green_shift) +
+	     ((colors[i].blue >> (16 - visual->blue_prec)) << visual->blue_shift));
 	  success[i] = TRUE;
 	}
       break;

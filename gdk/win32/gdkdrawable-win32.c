@@ -28,11 +28,8 @@
 #include "config.h"
 
 #include <math.h>
+#include <stdio.h>
 #include <glib.h>
-
-#ifndef G_PI
-#define G_PI 3.14159265358979323846
-#endif
 
 #include "gdkdrawable.h"
 #include "gdkprivate.h"
@@ -111,6 +108,54 @@ GdkDrawableClass _gdk_win32_drawable_class = {
   gdk_win32_draw_segments,
   gdk_win32_draw_lines
 };
+
+#ifdef G_ENABLE_DEBUG
+
+gchar *
+gdk_win32_drawable_type_to_string (GdkDrawableType type)
+{
+  static gchar buf[20];
+
+  switch (type)
+    {
+    case GDK_WINDOW_ROOT: return "ROOT";
+    case GDK_WINDOW_TOPLEVEL: return "TOPLEVEL";
+    case GDK_WINDOW_CHILD: return "CHILD";
+    case GDK_WINDOW_DIALOG: return "DIALOG";
+    case GDK_WINDOW_TEMP: return "TEMP";
+    case GDK_DRAWABLE_PIXMAP: return "PIXMAP";
+    case GDK_WINDOW_FOREIGN: return "FOREIGN";
+    default:
+      sprintf (buf, "???(%d)", type);
+      return buf;
+    }
+}
+
+static gchar *
+gdk_win32_drawable_description (GdkDrawable *d)
+{
+  GdkDrawablePrivate *dp = (GdkDrawablePrivate *) d;
+  static gchar buf[1000];
+  static gchar *bufp = buf;
+  gint n;
+  gchar *retval;
+
+  retval = bufp;
+  n = sprintf (bufp, "%s:%p:%dx%dx%d",
+	       gdk_win32_drawable_type_to_string (GDK_DRAWABLE_TYPE (d)),
+	       GDK_DRAWABLE_XID (d),
+	       dp->width, dp->height,
+	       (GDK_IS_PIXMAP (d) ? GDK_DRAWABLE_WIN32DATA (d)->image->depth
+		: ((GdkColormapPrivate *) dp->colormap)->visual->depth)) + 1;
+  if (bufp < buf + sizeof (buf) - n)
+    bufp += n;
+  else
+    bufp = buf;
+
+  return retval;
+}
+
+#endif
 
 /*****************************************************
  * Win32 specific implementations of generic functions *
@@ -257,7 +302,6 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 
       FillRect (memdc, &rect, hbr);
       
-      
       if (!BeginPath (hdc))
 	WIN32_GDI_FAILED ("BeginPath"), ok = FALSE;
 
@@ -351,17 +395,17 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
   else if (angle2 > 0)
     {
       /* The 100. is just an arbitrary value */
-      nXStartArc = x + width/2 + 100. * cos(angle1/64.*2.*G_PI/360.);
-      nYStartArc = y + height/2 + -100. * sin(angle1/64.*2.*G_PI/360.);
-      nXEndArc = x + width/2 + 100. * cos((angle1+angle2)/64.*2.*G_PI/360.);
-      nYEndArc = y + height/2 + -100. * sin((angle1+angle2)/64.*2.*G_PI/360.);
+      nXStartArc = x + width/2 + 100. * cos (angle1/64.*2.*G_PI/360.);
+      nYStartArc = y + height/2 + -100. * sin (angle1/64.*2.*G_PI/360.);
+      nXEndArc = x + width/2 + 100. * cos ((angle1+angle2)/64.*2.*G_PI/360.);
+      nYEndArc = y + height/2 + -100. * sin ((angle1+angle2)/64.*2.*G_PI/360.);
     }
   else
     {
-      nXEndArc = x + width/2 + 100. * cos(angle1/64.*2.*G_PI/360.);
-      nYEndArc = y + height/2 + -100. * sin(angle1/64.*2.*G_PI/360.);
-      nXStartArc = x + width/2 + 100. * cos((angle1+angle2)/64.*2.*G_PI/360.);
-      nYStartArc = y + height/2 + -100. * sin((angle1+angle2)/64.*2.*G_PI/360.);
+      nXEndArc = x + width/2 + 100. * cos (angle1/64.*2.*G_PI/360.);
+      nYEndArc = y + height/2 + -100. * sin (angle1/64.*2.*G_PI/360.);
+      nXStartArc = x + width/2 + 100. * cos ((angle1+angle2)/64.*2.*G_PI/360.);
+      nYStartArc = y + height/2 + -100. * sin ((angle1+angle2)/64.*2.*G_PI/360.);
     }
   
   /* GDK_OPAQUE_STIPPLED arcs not implemented. */
@@ -635,36 +679,38 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 			 gint         width,
 			 gint         height)
 {
-  GdkDrawablePrivate *src_private;
-  GdkGCPrivate *gc_private;
   HDC hdc;
   HDC srcdc;
   HRGN src_rgn, draw_rgn, outside_rgn;
   RECT r;
-
-  src_private = (GdkDrawablePrivate*) src;
-  gc_private = (GdkGCPrivate*) gc;
-
-  GDK_NOTE (MISC, g_print ("gdk_win32_draw_drawable: "
-			   "src: %p %dx%d@+%d+%d"
-			   " dest: %p @+%d+%d\n",
-			   GDK_DRAWABLE_XID (src),
+  HGDIOBJ holdbitmap;
+  RGBQUAD oldtable[2], newtable[2];
+  GdkDrawablePrivate *drawable_private = (GdkDrawablePrivate*) drawable;
+  GdkDrawablePrivate *src_private = (GdkDrawablePrivate*) src;
+  GdkGCPrivate *gc_private = (GdkGCPrivate *) gc;
+  GdkGCWin32Data *gcwin32 = GDK_GC_WIN32DATA (gc);
+  
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_drawable: src:%s %dx%d@+%d+%d\n"
+			   "                         dst:%s @+%d+%d\n",
+			   gdk_win32_drawable_description (src),
 			   width, height, xsrc, ysrc,
-			   GDK_DRAWABLE_XID (drawable), xdest, ydest));
+			   gdk_win32_drawable_description (drawable),
+			   xdest, ydest));
 
   hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND);
 
   src_rgn = CreateRectRgn (0, 0, src_private->width + 1, src_private->height + 1);
   draw_rgn = CreateRectRgn (xsrc, ysrc, xsrc + width + 1, ysrc + height + 1);
-  SetRectEmpty (&r);
-  outside_rgn = CreateRectRgnIndirect (&r);
-  
-  if (GDK_DRAWABLE_TYPE (drawable) != GDK_DRAWABLE_PIXMAP)
+
+  if (!GDK_IS_PIXMAP (drawable))
     {
       /* If we are drawing on a window, calculate the region that is
        * outside the source pixmap, and invalidate that, causing it to
        * be cleared. XXX
        */
+      SetRectEmpty (&r);
+      outside_rgn = CreateRectRgnIndirect (&r);
+  
       if (CombineRgn (outside_rgn, draw_rgn, src_rgn, RGN_DIFF) != NULLREGION)
 	{
 	  OffsetRgn (outside_rgn, xdest, ydest);
@@ -674,10 +720,11 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 				    r.right - r.left - 1, r.bottom - r.top - 1,
 				    r.left, r.top)));
 	  InvalidateRgn (GDK_DRAWABLE_XID (drawable), outside_rgn, TRUE);
+	  DeleteObject (outside_rgn);
 	}
     }
 
-#if 1 /* Don't know if this is necessary  */
+#if 1 /* Don't know if this is necessary XXX */
   if (CombineRgn (draw_rgn, draw_rgn, src_rgn, RGN_AND) == COMPLEXREGION)
     g_warning ("gdk_draw_pixmap: CombineRgn returned a COMPLEXREGION");
 
@@ -703,35 +750,86 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 
   DeleteObject (src_rgn);
   DeleteObject (draw_rgn);
-  DeleteObject (outside_rgn);
 
-  /* Strangely enough, this function is called also to bitblt
-   * from a window.
-   */
-  if (src_private->window_type == GDK_DRAWABLE_PIXMAP)
+  if (GDK_IS_PIXMAP (src))
     {
-#if 0
-      srcdc = gdk_win32_obtain_offscreen_hdc (GDK_DRAWABLE_XID (src));
-#else
-      GdkGC *srcgc = gdk_gc_new (src);
-      GdkGCPrivate *srcgc_private = (GdkGCPrivate *) srcgc;
-      srcdc = gdk_gc_predraw (src, srcgc_private, GDK_GC_FOREGROUND);
-#endif
-      GDK_NOTE (MISC, g_print ("gdk_win32_draw_drawable: from pixmap\n"));
-      if (srcdc != NULL)
-        {
-          if (!BitBlt (hdc, xdest, ydest, width, height,
-                       srcdc, xsrc, ysrc, SRCCOPY))
-            WIN32_GDI_FAILED ("BitBlt");
-#if 0
-          gdk_win32_release_hdc (NULL, srcdc);
-#else
-	  gdk_gc_postdraw (src, srcgc_private, GDK_GC_FOREGROUND);
-#endif
-        }
-      gdk_gc_unref (srcgc);
+      if ((gcwin32->values_mask & GDK_GC_FOREGROUND) &&
+	  (gcwin32->values_mask & GDK_GC_BACKGROUND) &&
+	  GDK_DRAWABLE_WIN32DATA (src)->image->depth == 1)
+	{
+	  srcdc = CreateCompatibleDC (gdk_DC);
+	  if (!(holdbitmap = SelectObject (srcdc, GDK_DRAWABLE_XID (src))))
+	    WIN32_GDI_FAILED ("SelectObject");
+	  else if (!GetDIBColorTable (srcdc, 0, 2, oldtable))
+	    WIN32_GDI_FAILED ("GetDIBColorTable");
+	  else
+	    {
+	      gboolean ok = TRUE;
+
+	      if (GDK_IS_PIXMAP (drawable) &&
+		  GDK_DRAWABLE_WIN32DATA (drawable)->image->depth == 8)
+		{
+		  if (!GetDIBColorTable (hdc, gcwin32->background, 1, newtable) ||
+		      !GetDIBColorTable (hdc, gcwin32->foreground, 1, newtable+1))
+		    WIN32_GDI_FAILED ("GetDIBColorTable"), ok = FALSE;
+		}
+	      else
+		{
+		  COLORREF bg, fg;
+		  GdkColormapPrivateWin32 *cmapp =
+		    (GdkColormapPrivateWin32 *) drawable_private->colormap;
+
+		  bg = gdk_win32_colormap_color_pack (cmapp, gcwin32->background);
+		  fg = gdk_win32_colormap_color_pack (cmapp, gcwin32->foreground);
+		  newtable[0].rgbBlue = GetBValue (bg);
+		  newtable[0].rgbGreen = GetGValue (bg);
+		  newtable[0].rgbRed = GetRValue (bg);
+		  newtable[0].rgbReserved = 0;
+		  newtable[1].rgbBlue = GetBValue (fg);
+		  newtable[1].rgbGreen = GetGValue (fg);
+		  newtable[1].rgbRed = GetRValue (fg);
+		  newtable[1].rgbReserved = 0;
+		}
+
+	      if (ok && !SetDIBColorTable (srcdc, 0, 2, newtable))
+		WIN32_GDI_FAILED ("SetDIBColorTable");
+	      else
+		{
+		  if (ok && !BitBlt (hdc, xdest, ydest, width, height,
+				     srcdc, xsrc, ysrc, SRCCOPY))
+		    WIN32_GDI_FAILED ("BitBlt");
+		  if (!SetDIBColorTable (srcdc, 0, 2, oldtable))
+		    WIN32_GDI_FAILED ("SetDIBColorTable");
+		}
+	      if (!SelectObject (srcdc, holdbitmap))
+		WIN32_GDI_FAILED ("SelectObject");
+	      if (!DeleteDC (srcdc))
+		WIN32_GDI_FAILED ("DeleteDC");
+	    }
+	}
+      else
+	{
+	  /* FIXME This is most probably bogus for 8-bit pixmaps. We
+	   * should, just change the DIB color table of the source to
+	   * be that of the destination, similar to above, and then
+	   * restore after the bitblt. (The two branches should be
+	   * combined, with appropriate additional logic added.)
+	   */
+	  GdkGC *srcgc = gdk_gc_new (src);
+	  GdkGCPrivate *srcgc_private = (GdkGCPrivate *) srcgc;
+	  srcdc = gdk_gc_predraw (src, srcgc_private, GDK_GC_FOREGROUND);
+	  if (srcdc != NULL)
+	    {
+	      if (!BitBlt (hdc, xdest, ydest, width, height,
+			   srcdc, xsrc, ysrc, SRCCOPY))
+		WIN32_GDI_FAILED ("BitBlt");
+	      gdk_gc_postdraw (src, srcgc_private, GDK_GC_FOREGROUND);
+	    }
+	  gdk_gc_unref (srcgc);
+	}
     }
-  else if (GDK_DRAWABLE_XID(drawable) == GDK_DRAWABLE_XID (src))
+  else if (GDK_IS_WINDOW (drawable) &&
+	   GDK_DRAWABLE_XID (drawable) == GDK_DRAWABLE_XID (src))
     {
       /* Blitting inside a window, use ScrollDC */
       RECT scrollRect, clipRect, emptyRect;
@@ -824,9 +922,9 @@ gdk_win32_draw_points (GdkDrawable *drawable,
 
   hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND);
   
-  fg = gdk_colormap_color (colormap_private, gc_data->foreground);
+  fg = gdk_win32_colormap_color_pack (colormap_private, gc_data->foreground);
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_points: %p %dx%.06x\n",
+  GDK_NOTE (MISC, g_print ("gdk_draw_points: %p %dx%06x\n",
 			   GDK_DRAWABLE_XID (drawable), npoints, (guint) fg));
 
   for (i = 0; i < npoints; i++)
@@ -1002,12 +1100,12 @@ gdk_win32_print_dc_attributes (HDC hdc)
   GetObject (hbr, sizeof (lbr), &lbr);
   GetObject (hpen, sizeof (lpen), &lpen);
 
-  g_print ("current brush: style = %s, color = 0x%.08x\n",
+  g_print ("current brush: style = %s, color = 0x%08lx\n",
 	   (lbr.lbStyle == BS_SOLID ? "SOLID" : "???"),
-	   (guint) lbr.lbColor);
-  g_print ("current pen: style = %s, width = %d, color = 0x%.08x\n",
+	   lbr.lbColor);
+  g_print ("current pen: style = %s, width = %ld, color = 0x%08lx\n",
 	   (lpen.lopnStyle == PS_SOLID ? "SOLID" : "???"),
 	   lpen.lopnWidth.x,
-	   (guint) lpen.lopnColor);
+	   lpen.lopnColor);
 }
 

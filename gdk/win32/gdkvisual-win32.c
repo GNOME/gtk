@@ -66,17 +66,8 @@ gdk_visual_init (void)
 
   if (rastercaps & RC_PALETTE)
     {
-      /* Remaining palette mode bug is that some images are not drawn
-       * right, perhaps depending on creation order of image
-       * vs. window.
-       */
       const int sizepalette = GetDeviceCaps (gdk_DC, SIZEPALETTE);
       const int numcolors = GetDeviceCaps (gdk_DC, NUMCOLORS);
-      if (!getenv ("GDK_WIN32_ENABLE_BROKEN_PSEUDOCOLOR_VISUAL"))
-	g_error ("Palettized display (%d-colour) mode poorly supported on Windows.\n"
-		 "Define environment variable GDK_WIN32_ENABLE_BROKEN_PSEUDOCOLOR_VISUAL\n"
-		 "to run anyway.",
-		 sizepalette);
       system_visual->visual.type = GDK_VISUAL_PSEUDO_COLOR;
       GDK_NOTE (COLORMAP, g_print ("BITSPIXEL=%d NUMCOLORS=%d SIZEPALETTE=%d\n",
 				   bitspixel, numcolors, sizepalette));

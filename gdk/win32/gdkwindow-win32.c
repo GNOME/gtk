@@ -453,11 +453,7 @@ gdk_window_new (GdkWindow     *parent,
   GDK_NOTE (MISC,
 	    g_print ("gdk_window_new: %s %s %dx%d@+%d+%d %p = %p\n"
 		     "...locale %#x codepage %d\n",
-		     (private->drawable.window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
-		      (private->drawable.window_type == GDK_WINDOW_CHILD ? "CHILD" :
-		       (private->drawable.window_type == GDK_WINDOW_DIALOG ? "DIALOG" :
-			(private->drawable.window_type == GDK_WINDOW_TEMP ? "TEMP" :
-			 "???")))),
+		     gdk_win32_drawable_type_to_string (private->drawable.window_type),
 		     mbtitle,
 		     width, height, (x == CW_USEDEFAULT ? -9999 : x), y, 
 		     xparent,
@@ -1892,7 +1888,7 @@ gdk_window_shape_combine_mask (GdkWindow *window,
       RECT rect;
 
       /* Convert mask bitmap to region */
-      hrgn = gdk_win32_bitmap_to_region (GDK_DRAWABLE_XID (mask));
+      hrgn = gdk_win32_bitmap_to_region (mask);
 
       GDK_NOTE (MISC, g_print ("gdk_window_shape_combine_mask: %p %p\n",
 			       GDK_DRAWABLE_XID (window),

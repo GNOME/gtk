@@ -150,14 +150,15 @@ static GdkDevicePrivate *gdk_input_find_dev_from_ctx (HCTX hctx,
 
 static GList     *gdk_input_devices;
 static GList     *gdk_input_windows;
+
+#ifdef HAVE_WINTAB_H
 static GList     *wintab_contexts;
 
 static gint gdk_input_root_width;
 static gint gdk_input_root_height;
-
 static GdkWindow *wintab_window;
-
 static guint32 last_moved_cursor_id;
+#endif
 
 static GdkAxisUse gdk_input_core_axes[] = { GDK_AXIS_X, GDK_AXIS_Y };
 
@@ -179,6 +180,8 @@ gint              gdk_input_ignore_core;
 gint		  gdk_input_ignore_wintab = FALSE;
 
 #ifdef G_ENABLE_DEBUG
+
+#ifdef HAVE_WINTAB_H
 
 static void
 print_lc(LOGCONTEXT *lc)
@@ -274,6 +277,8 @@ print_lc(LOGCONTEXT *lc)
   g_print ("lcSysSensX = %g, lcSysSensY = %g\n",
 	  lc->lcSysSensX / 65536., lc->lcSysSensY / 65536.);
 }
+
+#endif /* HAVE_WINTAB_H */
 
 #endif /* G_ENABLE_DEBUG */
 
