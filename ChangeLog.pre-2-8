@@ -1,3 +1,9 @@
+Sun Aug 22 13:32:33 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkliststore.c (gtk_list_store_insert): Normalize the
+	position so we don't create paths with off-list
+	indices. (#150320).
+
 Sun Aug 22 12:04:59 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkliststore.c (gtk_list_store_sort_iter_changed): Use the

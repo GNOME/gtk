@@ -970,6 +970,7 @@ gtk_list_store_insert (GtkListStore *list_store,
   GtkTreePath *path;
   GtkSequence *seq;
   GtkSequencePtr ptr;
+  gint length;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
@@ -978,6 +979,10 @@ gtk_list_store_insert (GtkListStore *list_store,
   list_store->columns_dirty = TRUE;
 
   seq = list_store->seq;
+
+  length = _gtk_sequence_get_length (seq);
+  if (position > length)
+    position = length;
 
   ptr = _gtk_sequence_get_ptr_at_pos (seq, position);
   ptr = _gtk_sequence_insert (ptr, NULL);
