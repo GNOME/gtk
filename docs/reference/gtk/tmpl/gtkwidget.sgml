@@ -32,6 +32,13 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
 
 </para>
 
+@style: The style for the widget. The style contains the colors the widget should be 
+ drawn in for each state along with graphics contexts used to draw with and the font 
+ to use for text.
+@requisition: The widgets desired size.
+@allocation: The widgets allocated size.
+@window: The widgets window or its parent window if it does not have a window. (Which 
+ will be indicated by the #GTK_NO_WINDOW flag being set).
 
 <!-- ##### STRUCT GtkWidgetClass ##### -->
 <para>

@@ -1,3 +1,7 @@
+2003-08-10  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.h (struct _GtkWidget): Mark some members as public. 
+
 2003-08-09  Noah Levitt  <nlevitt@columbia.edu>
 
 	* gdk/gdkevents.h:
