@@ -294,9 +294,26 @@ gdk_screen_get_monitor_at_point (GdkScreen *screen,
 				 gint       x,
 				 gint       y)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
+  gint num_monitors, i;
   
-  return GDK_SCREEN_GET_CLASS (screen)->get_monitor_at_point (screen, x,y);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
+
+  num_monitors = gdk_screen_get_n_monitors (screen);
+  
+  for (i=0;i<num_monitors;i++)
+    {
+      GdkRectangle monitor;
+      
+      gdk_screen_get_monitor_geometry (screen, i, &monitor);
+
+      if (x >= monitor.x &&
+          x < monitor.x + monitor.width &&
+          y >= monitor.y &&
+          y < (monitor.y + monitor.height))
+        return i;
+    }
+
+  return -1;
 }
 
 /**

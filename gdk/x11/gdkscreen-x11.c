@@ -49,9 +49,6 @@ static gint          gdk_screen_x11_get_n_monitors        (GdkScreen       *scre
 static void          gdk_screen_x11_get_monitor_geometry  (GdkScreen       *screen,
 							   gint             num_monitor,
 							   GdkRectangle    *dest);
-static gint          gdk_screen_x11_get_monitor_at_point  (GdkScreen       *screen,
-							   gint             x,
-							   gint             y);
 
 GType gdk_screen_x11_get_type ();
 static gpointer parent_class = NULL;
@@ -100,7 +97,6 @@ gdk_screen_x11_class_init (GdkScreenX11Class * klass)
   screen_class->get_window_at_pointer = gdk_screen_x11_get_window_at_pointer;
   screen_class->get_n_monitors = gdk_screen_x11_get_n_monitors;
   screen_class->get_monitor_geometry = gdk_screen_x11_get_monitor_geometry;
-  screen_class->get_monitor_at_point = gdk_screen_x11_get_monitor_at_point;
   
   G_OBJECT_CLASS (klass)->finalize = gdk_screen_x11_finalize;
   parent_class = g_type_class_peek_parent (klass);
@@ -257,31 +253,6 @@ gdk_screen_x11_get_monitor_geometry (GdkScreen    *screen,
   g_return_if_fail (num_monitor < GDK_SCREEN_X11 (screen)->num_monitors);
 
   *dest = screen_x11->monitors[num_monitor];
-}
-
-static gint 
-gdk_screen_x11_get_monitor_at_point (GdkScreen *screen,
-				     gint       x,
-				     gint       y)
-{
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
-  int i;
-  GdkRectangle *monitor;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
-  for (i = 0, monitor = screen_x11->monitors; 
-       i < screen_x11->num_monitors; 
-       i++, monitor++)
-    {
-      if (x >= monitor->x &&
-	  x < monitor->x + monitor->width &&
-	  y >= monitor->y &&
-	  y < (monitor->y + monitor->height))
-	return i;
-    }
-
-  return -1; 
 }
 
 Screen *

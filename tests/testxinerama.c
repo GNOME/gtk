@@ -42,7 +42,7 @@ main (int argc, char *argv[])
 
   num_monitors = gdk_screen_get_n_monitors (screen);
   if (num_monitors == 1)
-    g_warning ("The current display does not support xinerama.");
+    g_warning ("The default screen of the current display only has one monitor.");
   
   for (i=0; i<num_monitors; i++)
     {

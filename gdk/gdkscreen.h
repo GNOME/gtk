@@ -65,9 +65,6 @@ struct _GdkScreenClass
   void          (*get_monitor_geometry)  (GdkScreen    *screen,
 					  gint          monitor_num,
 					  GdkRectangle *dest);
-  gint          (*get_monitor_at_point)  (GdkScreen    *screen,
-					  gint          x,
-					  gint          y);
 };
 
 GType        gdk_screen_get_type              (void);
