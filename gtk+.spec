@@ -37,7 +37,7 @@ and GTK is a widget set for creating user interfaces.
 
 %changelog
 
-* Thu Mar 19 16:40:51 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+* Thu Mar 19 1998 Shawn T. Amundson <amundson@gimp.org>
 
 - Changed version to 0.99.8
 
