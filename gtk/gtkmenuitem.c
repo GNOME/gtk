@@ -841,7 +841,7 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 	  gtk_menu_shell_select_item (GTK_MENU_SHELL (widget->parent), widget); 
 	  gtk_menu_item_popup_submenu (widget); 
 
-	  gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu), FALSE);
+	  gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu), TRUE);
 	  submenu = GTK_MENU_SHELL (menu_item->submenu);
 	}
     }
