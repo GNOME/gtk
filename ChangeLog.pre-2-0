@@ -1,3 +1,10 @@
+Tue Feb 26 21:35:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkkeyuni.c: Shouldn't map KP_Enter to '\n',
+	or KP_Tab to \t' since we don't map the corresponding
+	main keyboard characters in that way. (#61561,
+	Padraig O'Briain)
+
 Tue Feb 26 19:45:29 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcombo.c (gtk_combo_set_popdown_strings):
