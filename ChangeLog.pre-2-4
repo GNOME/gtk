@@ -1,3 +1,8 @@
+Tue Feb 25 21:55:17 2003  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_position): account for RTL
+	code.
+
 2003-02-24  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkmain.c (gtk_get_default_language): fixed documentation.
