@@ -1,3 +1,8 @@
+Sun Feb 21 17:44:52 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testgtkrc: Removed check-y/check-n backgrounds -
+	 the effect looked like a bug.
+
 Sun Feb 21 17:14:44 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_set_geometry_hints): Always

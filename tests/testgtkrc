@@ -52,8 +52,8 @@ style "toggle_button" = "button"
 {
   fg[NORMAL] = { 1.0, 0, 0 }
   fg[ACTIVE] = { 1.0, 0, 0 }
-  bg_pixmap[ACTIVE] = "check-y.xpm"
-  bg_pixmap[NORMAL] = "check-n.xpm"
+#  bg_pixmap[ACTIVE] = "check-y.xpm"
+#  bg_pixmap[NORMAL] = "check-n.xpm"
 }
 
 style "text"
