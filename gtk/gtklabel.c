@@ -2447,7 +2447,6 @@ clear_text_callback (GtkClipboard     *clipboard,
     {
       label->select_info->selection_anchor = label->select_info->selection_end;
       
-      gtk_label_clear_layout (label);
       gtk_widget_queue_draw (GTK_WIDGET (label));
     }
 }
@@ -2470,6 +2469,10 @@ gtk_label_select_region_index (GtkLabel *label,
     {
       GtkClipboard *clipboard;
 
+      if (label->select_info->selection_anchor == anchor_index &&
+	  label->select_info->selection_end == end_index)
+	return;
+
       label->select_info->selection_anchor = anchor_index;
       label->select_info->selection_end = end_index;
 
@@ -2490,7 +2493,6 @@ gtk_label_select_region_index (GtkLabel *label,
             gtk_clipboard_clear (clipboard);
         }
 
-      gtk_label_clear_layout (label);
       gtk_widget_queue_draw (GTK_WIDGET (label));
 
       g_object_freeze_notify (G_OBJECT (label));
