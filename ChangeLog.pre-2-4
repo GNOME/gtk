@@ -1,3 +1,20 @@
+Fri Feb 15 20:09:45 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscrolledwindow.[ch] gtk/gtkmarshallers.list:
+	Add key bindings on GtkScrolledWindow for arrow keys,
+	PageUp/PageDown Home/End to scroll the window. 
+	Bind Control-[Shift]-Tab to focus out of the scrolled
+	window entirely. Allow the scrolled window to be
+	focused if no child can be focused. (#63480)
+
+	* gtk/gtkwidget.c (gtk_widget_hide): Remove the REALIZED()
+	check - if we have visible but not mapped widgets 
+	(inside a unshown notebook tab, for instance), we need
+	to track their size. (#65087, reported by Damon Chaplin.)
+
+	* gtk/gtkcolorsel.c (palette_change_color): Shut up
+	a warning.
+
 2002-02-16  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/rc/Makefile.am (gdk-win32res.lo): Depend on gtk.ico.
@@ -5,10 +22,10 @@
 	* gdk/win32/rc/gtk.ico: Use the real GTK logo. Thanks to Jernej
 	Simoncic for providing the nice multi-resolution .ico file.
 
-2002-02-15            Alexey Malyshev       <maa@sparc.spb.su>
+2002-02-15 Alexey Malyshev <maa@sparc.spb.su>
+	
         * gtk/tmpl/gtkimage.sgml
 	removed wrong sentence from gtk_image_new() docs
-
 
 Fri Feb 15 19:38:00 2002  Kristian Rietveld  <kris@gtk.org>
 

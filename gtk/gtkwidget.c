@@ -1706,7 +1706,7 @@ gtk_widget_hide (GtkWidget *widget)
     {
       gtk_widget_ref (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
-      if (!GTK_WIDGET_TOPLEVEL (widget) && GTK_WIDGET_REALIZED (widget))
+      if (!GTK_WIDGET_TOPLEVEL (widget))
 	gtk_widget_queue_resize (widget);
       g_object_notify (G_OBJECT (widget), "visible");
       gtk_widget_unref (widget);

@@ -764,6 +764,7 @@ palette_change_color (GtkWidget         *drawing_area,
   gdk_color.blue = UNSCALE (color[2]);
 
   x = 0;
+  y = 0;			/* Quiet GCC */
   while (x < GTK_CUSTOM_PALETTE_WIDTH)
     {
       y = 0;

@@ -24,6 +24,9 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <gdk/gdkkeysyms.h>
+#include "gtkbindings.h"
+#include "gtkmarshalers.h"
 #include "gtkscrolledwindow.h"
 #include "gtksignal.h"
 #include "gtkintl.h"
@@ -79,6 +82,14 @@ enum {
   PROP_LAST
 };
 
+/* Signals */
+enum
+{
+  SCROLL_CHILD,
+  MOVE_FOCUS_OUT,
+  LAST_SIGNAL
+};
+
 static void gtk_scrolled_window_class_init         (GtkScrolledWindowClass *klass);
 static void gtk_scrolled_window_init               (GtkScrolledWindow      *scrolled_window);
 static void gtk_scrolled_window_destroy            (GtkObject              *object);
@@ -100,6 +111,8 @@ static void gtk_scrolled_window_size_allocate      (GtkWidget              *widg
 						    GtkAllocation          *allocation);
 static gint gtk_scrolled_window_scroll_event       (GtkWidget              *widget,
 						    GdkEventScroll         *event);
+static gint gtk_scrolled_window_focus              (GtkWidget              *widget,
+						    GtkDirectionType        direction);
 static void gtk_scrolled_window_add                (GtkContainer           *container,
 						    GtkWidget              *widget);
 static void gtk_scrolled_window_remove             (GtkContainer           *container,
@@ -108,6 +121,12 @@ static void gtk_scrolled_window_forall             (GtkContainer           *cont
 						    gboolean		    include_internals,
 						    GtkCallback             callback,
 						    gpointer                callback_data);
+static void gtk_scrolled_window_scroll_child       (GtkScrolledWindow      *scrolled_window,
+						    GtkScrollType           scroll,
+						    gboolean                horizontal);
+static void gtk_scrolled_window_move_focus_out     (GtkScrolledWindow      *scrolled_window,
+						    GtkDirectionType        direction_type);
+
 static void gtk_scrolled_window_relative_allocation(GtkWidget              *widget,
 						    GtkAllocation          *allocation);
 static void gtk_scrolled_window_adjustment_changed (GtkAdjustment          *adjustment,
@@ -115,6 +134,7 @@ static void gtk_scrolled_window_adjustment_changed (GtkAdjustment          *adju
 
 static GtkContainerClass *parent_class = NULL;
 
+static guint signals[LAST_SIGNAL] = {0};
 
 GtkType
 gtk_scrolled_window_get_type (void)
@@ -142,12 +162,48 @@ gtk_scrolled_window_get_type (void)
 }
 
 static void
+add_scroll_binding (GtkBindingSet  *binding_set,
+		    guint           keyval,
+		    GdkModifierType mask,
+		    GtkScrollType   scroll,
+		    gboolean        horizontal)
+{
+  guint keypad_keyval = keyval - GDK_Left + GDK_KP_Left;
+  
+  gtk_binding_entry_add_signal (binding_set, keyval, mask,
+                                "scroll_child", 2,
+                                GTK_TYPE_SCROLL_TYPE, scroll,
+				G_TYPE_BOOLEAN, horizontal);
+  gtk_binding_entry_add_signal (binding_set, keypad_keyval, mask,
+                                "scroll_child", 2,
+                                GTK_TYPE_SCROLL_TYPE, scroll,
+				G_TYPE_BOOLEAN, horizontal);
+}
+
+static void
+add_tab_bindings (GtkBindingSet    *binding_set,
+		  GdkModifierType   modifiers,
+		  GtkDirectionType  direction)
+{
+  gtk_binding_entry_add_signal (binding_set, GDK_Tab, modifiers,
+                                "move_focus_out", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
+                                "move_focus_out", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, modifiers,
+                                "move_focus_out", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+}
+
+static void
 gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
+  GtkBindingSet *binding_set;
 
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
@@ -164,6 +220,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->size_request = gtk_scrolled_window_size_request;
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
   widget_class->scroll_event = gtk_scrolled_window_scroll_event;
+  widget_class->focus = gtk_scrolled_window_focus;
 
   container_class->add = gtk_scrolled_window_add;
   container_class->remove = gtk_scrolled_window_remove;
@@ -171,6 +228,9 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 
   class->scrollbar_spacing = DEFAULT_SCROLLBAR_SPACING;
 
+  class->scroll_child = gtk_scrolled_window_scroll_child;
+  class->move_focus_out = gtk_scrolled_window_move_focus_out;
+  
   g_object_class_install_property (gobject_class,
 				   PROP_HADJUSTMENT,
 				   g_param_spec_object ("hadjustment",
@@ -218,12 +278,57 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_NONE,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+  signals[SCROLL_CHILD] =
+    g_signal_new ("scroll_child",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkScrolledWindowClass, scroll_child),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__ENUM_BOOLEAN,
+                  G_TYPE_NONE, 2,
+                  GTK_TYPE_SCROLL_TYPE,
+		  G_TYPE_BOOLEAN);
+  signals[MOVE_FOCUS_OUT] =
+    g_signal_new ("move_focus_out",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkScrolledWindowClass, move_focus_out),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__ENUM,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_DIRECTION_TYPE);
+  
+  binding_set = gtk_binding_set_by_class (class);
+
+  add_scroll_binding (binding_set, GDK_Left,  GDK_CONTROL_MASK, GTK_SCROLL_STEP_BACKWARD, TRUE);
+  add_scroll_binding (binding_set, GDK_Right, GDK_CONTROL_MASK, GTK_SCROLL_STEP_FORWARD,  TRUE);
+  add_scroll_binding (binding_set, GDK_Up,    GDK_CONTROL_MASK, GTK_SCROLL_STEP_BACKWARD, FALSE);
+  add_scroll_binding (binding_set, GDK_Down,  GDK_CONTROL_MASK, GTK_SCROLL_STEP_FORWARD,  FALSE);
+
+  add_scroll_binding (binding_set, GDK_Page_Up,   GDK_CONTROL_MASK, GTK_SCROLL_PAGE_BACKWARD, TRUE);
+  add_scroll_binding (binding_set, GDK_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_FORWARD,  TRUE);
+  add_scroll_binding (binding_set, GDK_Page_Up,   0,                GTK_SCROLL_PAGE_BACKWARD, FALSE);
+  add_scroll_binding (binding_set, GDK_Page_Down, 0,                GTK_SCROLL_PAGE_FORWARD,  FALSE);
+
+  add_scroll_binding (binding_set, GDK_Page_Up,   GDK_CONTROL_MASK, GTK_SCROLL_PAGE_BACKWARD, TRUE);
+  add_scroll_binding (binding_set, GDK_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_FORWARD,  TRUE);
+  add_scroll_binding (binding_set, GDK_Page_Up,   0,                GTK_SCROLL_PAGE_BACKWARD, FALSE);
+  add_scroll_binding (binding_set, GDK_Page_Down, 0,                GTK_SCROLL_PAGE_FORWARD,  FALSE);
+
+  add_scroll_binding (binding_set, GDK_Home, 0,                GTK_SCROLL_START, TRUE);
+  add_scroll_binding (binding_set, GDK_End,  0,                GTK_SCROLL_END,   TRUE);
+  add_scroll_binding (binding_set, GDK_Home, GDK_CONTROL_MASK, GTK_SCROLL_START, FALSE);
+  add_scroll_binding (binding_set, GDK_End,  GDK_CONTROL_MASK, GTK_SCROLL_END,   FALSE);
+
+  add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 }
 
 static void
 gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 {
-  GTK_WIDGET_SET_FLAGS (scrolled_window, GTK_NO_WINDOW);
+  GTK_WIDGET_SET_FLAGS (scrolled_window, GTK_NO_WINDOW | GTK_CAN_FOCUS);
 
   gtk_container_set_resize_mode (GTK_CONTAINER (scrolled_window), GTK_RESIZE_QUEUE);
 
@@ -233,6 +338,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   scrolled_window->vscrollbar_policy = GTK_POLICY_ALWAYS;
   scrolled_window->hscrollbar_visible = FALSE;
   scrolled_window->vscrollbar_visible = FALSE;
+  scrolled_window->focus_out = FALSE;
   scrolled_window->window_placement = GTK_CORNER_TOP_LEFT;
   
 }
@@ -683,6 +789,127 @@ gtk_scrolled_window_forall (GtkContainer *container,
 }
 
 static void
+gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
+				  GtkScrollType      scroll,
+				  gboolean           horizontal)
+{
+  GtkAdjustment *adjustment = NULL;
+  
+  switch (scroll)
+    {
+    case GTK_SCROLL_STEP_UP:
+      scroll = GTK_SCROLL_STEP_BACKWARD;
+      horizontal = FALSE;
+      break;
+    case GTK_SCROLL_STEP_DOWN:
+      scroll = GTK_SCROLL_STEP_FORWARD;
+      horizontal = FALSE;
+      break;
+    case GTK_SCROLL_STEP_LEFT:
+      scroll = GTK_SCROLL_STEP_BACKWARD;
+      horizontal = TRUE;
+      break;
+    case GTK_SCROLL_STEP_RIGHT:
+      scroll = GTK_SCROLL_STEP_FORWARD;
+      horizontal = TRUE;
+      break;
+    case GTK_SCROLL_PAGE_UP:
+      scroll = GTK_SCROLL_PAGE_BACKWARD;
+      horizontal = FALSE;
+      break;
+    case GTK_SCROLL_PAGE_DOWN:
+      scroll = GTK_SCROLL_PAGE_FORWARD;
+      horizontal = FALSE;
+      break;
+    case GTK_SCROLL_PAGE_LEFT:
+      scroll = GTK_SCROLL_STEP_BACKWARD;
+      horizontal = TRUE;
+      break;
+    case GTK_SCROLL_PAGE_RIGHT:
+      scroll = GTK_SCROLL_STEP_FORWARD;
+      horizontal = TRUE;
+      break;
+    case GTK_SCROLL_STEP_BACKWARD:
+    case GTK_SCROLL_STEP_FORWARD:
+    case GTK_SCROLL_PAGE_BACKWARD:
+    case GTK_SCROLL_PAGE_FORWARD:
+    case GTK_SCROLL_START:
+    case GTK_SCROLL_END:
+      break;
+    default:
+      g_warning ("Invalid scroll type %d for GtkSpinButton::change-value", scroll);
+      return;
+    }
+
+  if (horizontal)
+    {
+      if (scrolled_window->hscrollbar)
+	adjustment = gtk_range_get_adjustment (GTK_RANGE (scrolled_window->hscrollbar));
+    }
+  else
+    {
+      if (scrolled_window->vscrollbar)
+	adjustment = gtk_range_get_adjustment (GTK_RANGE (scrolled_window->vscrollbar));
+    }
+
+  if (adjustment)
+    {
+      gdouble value = adjustment->value;
+      
+      switch (scroll)
+	{
+	case GTK_SCROLL_STEP_FORWARD:
+	  value += adjustment->step_increment;
+	  break;
+	case GTK_SCROLL_STEP_BACKWARD:
+	  value -= adjustment->step_increment;
+	  break;
+	case GTK_SCROLL_PAGE_FORWARD:
+	  value += adjustment->page_increment;
+	  break;
+	case GTK_SCROLL_PAGE_BACKWARD:
+	  value -= adjustment->page_increment;
+	  break;
+	case GTK_SCROLL_START:
+	  value = adjustment->lower;
+	  break;
+	case GTK_SCROLL_END:
+	  value = adjustment->upper;
+	  break;
+	default:
+	  g_assert_not_reached ();
+	  break;
+	}
+
+      value = CLAMP (value, adjustment->lower, adjustment->upper - adjustment->page_size);
+      
+      gtk_adjustment_set_value (adjustment, value);
+    }
+}
+
+static void
+gtk_scrolled_window_move_focus_out (GtkScrolledWindow *scrolled_window,
+				    GtkDirectionType   direction_type)
+{
+  GtkWidget *toplevel;
+  
+  /* Focus out of the scrolled window entirely. We do this by setting
+   * a flag, then propagating the focus motion to the notebook.
+   */
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (scrolled_window));
+  if (!GTK_WIDGET_TOPLEVEL (toplevel))
+    return;
+
+  g_object_ref (scrolled_window);
+  
+  scrolled_window->focus_out = TRUE;
+  g_signal_emit_by_name (G_OBJECT (toplevel), "move_focus", direction_type);
+  scrolled_window->focus_out = FALSE;
+  
+  g_object_unref (scrolled_window);
+}
+
+static void
 gtk_scrolled_window_size_request (GtkWidget      *widget,
 				  GtkRequisition *requisition)
 {
@@ -1000,6 +1227,34 @@ gtk_scrolled_window_scroll_event (GtkWidget *widget,
     }
 
   return FALSE;
+}
+
+static gint
+gtk_scrolled_window_focus (GtkWidget        *widget,
+			   GtkDirectionType  direction)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  
+  if (scrolled_window->focus_out)
+    {
+      scrolled_window->focus_out = FALSE; /* Clear this to catch the wrap-around case */
+      return FALSE;
+    }
+  
+  if (gtk_widget_is_focus (widget))
+    return FALSE;
+
+  /* We only put the scrolled window itself in the focus chain if it
+   * isn't possible to focus any children.
+   */
+  if (GTK_BIN (widget)->child)
+    {
+      if (gtk_widget_child_focus (GTK_BIN (widget)->child, direction))
+	return TRUE;
+    }
+
+  gtk_widget_grab_focus (widget);
+  return TRUE;
 }
 
 static void
