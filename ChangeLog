@@ -1,7 +1,14 @@
-2003-11-17  Noah Levitt  <nlevitt@columbia.edu>
+Mon Nov 17 22:56:09 2003  Kristian Rietveld  <kris@gtk.org>
 
-	* configure.in: Check for freetype headers the way freetype
-	wants us to.
+	* gtk/gtkentryprivate.h: add _gtk_entry_completion_resize_popup.
+
+	* gtk/gtkentry.c (gtk_entry_completion_timeout): popup when not
+	mapped, else resize_popup.
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup),
+	(_gtk_entry_completion_popup): moved all popup resizing code to
+	_gtk_entry_completion_resize_popup, and show the window when there
+	are more than zero items in the completion list again (sigh).
 
 2003-11-17  Mark McLoughlin  <mark@skynet.ie>
 

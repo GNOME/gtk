@@ -4515,7 +4515,12 @@ gtk_entry_completion_timeout (gpointer data)
       actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
 
       if (matches > 0 || actions > 0)
-        _gtk_entry_completion_popup (completion);
+        {
+          if (! GTK_WIDGET_MAPPED (completion->priv->popup_window))
+            _gtk_entry_completion_popup (completion);
+          else
+            _gtk_entry_completion_resize_popup (completion);
+        }
     }
 
   GDK_THREADS_LEAVE ();

@@ -1029,20 +1029,12 @@ get_borders (GtkEntry *entry,
     }
 }
 
-/* this function is a bit nasty */
-void
-_gtk_entry_completion_popup (GtkEntryCompletion *completion)
+/* some nasty size requisition */
+gint
+_gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 {
-  gint x, y, x_border, y_border;
-  gint items;
-  gint height;
+  gint items, height, x_border, y_border;
 
-  if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
-    return;
-
-  gtk_widget_show_all (completion->priv->vbox);
-
-  gdk_window_get_origin (completion->priv->entry->window, &x, &y);
   get_borders (GTK_ENTRY (completion->priv->entry), &x_border, &y_border);
 
   items = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
@@ -1052,12 +1044,14 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   gtk_tree_view_column_cell_get_size (completion->priv->column, NULL,
                                       NULL, NULL, NULL, &height);
 
+  if (items <= 0)
+    gtk_widget_hide (completion->priv->scrolled_window);
+  else
+    gtk_widget_show (completion->priv->scrolled_window);
+
   gtk_widget_set_size_request (completion->priv->tree_view,
                                completion->priv->entry->allocation.width - 2 * x_border,
                                items * height);
-
-  if (items <= 0)
-    gtk_widget_hide (completion->priv->scrolled_window);
 
   /* default on no match */
   completion->priv->current_selected = -1;
@@ -1075,8 +1069,27 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
                                    items * height);
     }
 
+  return height;
+}
+
+void
+_gtk_entry_completion_popup (GtkEntryCompletion *completion)
+{
+  gint x, y, x_border, y_border;
+  gint height;
+
+  if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
+    return;
+
+  gtk_widget_show_all (completion->priv->vbox);
+
+  gdk_window_get_origin (completion->priv->entry->window, &x, &y);
+  get_borders (GTK_ENTRY (completion->priv->entry), &x_border, &y_border);
+
   x += x_border;
   y += 2 * y_border;
+
+  height = _gtk_entry_completion_resize_popup (completion);
 
   gtk_window_move (GTK_WINDOW (completion->priv->popup_window), x, y + height);
 

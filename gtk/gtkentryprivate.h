@@ -58,6 +58,7 @@ struct _GtkEntryCompletionPrivate
   gulong key_press_id;
 };
 
+gint                _gtk_entry_completion_resize_popup           (GtkEntryCompletion          *completion);
 void                _gtk_entry_completion_popup                  (GtkEntryCompletion          *completion);
 void                _gtk_entry_completion_popdown                (GtkEntryCompletion          *completion);
 
