@@ -265,9 +265,9 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
  * @Varargs: all #GType types for the columns, from first to last
  *
  * Creates a new tree store as with @n_columns columns each of the types passed
- * in.  As an example, gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
- * GDK_TYPE_PIXBUF); will create a new GtkTreeStore with three columns, of type
- * int, string and GDkPixbuf respectively.
+ * in.  As an example, <literal>gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
+ * GDK_TYPE_PIXBUF);</literal> will create a new #GtkTreeStore with three columns, of type
+ * <type>int</type>, <type>string</type> and #GdkPixbuf respectively.
  *
  * Return value: a new #GtkTreeStore
  **/
@@ -846,7 +846,7 @@ gtk_tree_store_set_value (GtkTreeStore *tree_store,
  * @iter: A valid #GtkTreeIter for the row being modified
  * @var_args: va_list of column/value pairs
  *
- * See @gtk_tree_store_set; this version takes a va_list for
+ * See gtk_tree_store_set(); this version takes a va_list for
  * use by language bindings.
  *
  **/
@@ -914,10 +914,10 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
  *
  * Sets the value of one or more cells in the row referenced by @iter.
  * The variable argument list should contain integer column numbers,
- * each column number followed by the value to be set. For example,
+ * each column number followed by the value to be set. 
  * The list is terminated by a -1. For example, to set column 0 with type
- * %G_TYPE_STRING to "Foo", you would write gtk_tree_store_set (store, iter,
- * 0, "Foo", -1).
+ * %G_TYPE_STRING to "Foo", you would write <literal>gtk_tree_store_set (store, iter,
+ * 0, "Foo", -1)</literal>.
  **/
 void
 gtk_tree_store_set (GtkTreeStore *tree_store,
@@ -940,7 +940,7 @@ gtk_tree_store_set (GtkTreeStore *tree_store,
  * @iter: A valid #GtkTreeIter
  * 
  * Removes @iter from @tree_store.  After being removed, @iter is set to the
- * next valid row at that level, or invalidated if it previeously pointed to the
+ * next valid row at that level, or invalidated if it previously pointed to the
  * last one.
  **/
 void
@@ -1003,13 +1003,13 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
  * @parent: A valid #GtkTreeIter, or %NULL
  * @position: position to insert the new row
  *
- * Creates a new row at @position.  If parent is non-NULL, then the row will be
+ * Creates a new row at @position.  If parent is non-%NULL, then the row will be
  * made a child of @parent.  Otherwise, the row will be created at the toplevel.
  * If @position is larger than the number of rows at that level, then the new
  * row will be inserted to the end of the list.  @iter will be changed to point
  * to this new row.  The row will be empty before this function is called.  To
- * fill in values, you need to call @gtk_list_store_set or
- * @gtk_list_store_set_value.
+ * fill in values, you need to call gtk_list_store_set() or
+ * gtk_list_store_set_value().
  *
  **/
 void
@@ -1057,7 +1057,7 @@ gtk_tree_store_insert (GtkTreeStore *tree_store,
  *
  * @iter will be changed to point to this new row.  The row will be empty after
  * this function is called.  To fill in values, you need to call
- * @gtk_tree_store_set or @gtk_tree_store_set_value.
+ * gtk_tree_store_set() or gtk_tree_store_set_value().
  *
  **/
 void
@@ -1121,7 +1121,7 @@ gtk_tree_store_insert_before (GtkTreeStore *tree_store,
  *
  * @iter will be changed to point to this new row.  The row will be empty after
  * this function is called.  To fill in values, you need to call
- * @gtk_tree_store_set or @gtk_tree_store_set_value.
+ * gtk_tree_store_set() or gtk_tree_store_set_value().
  *
  **/
 void
@@ -1178,11 +1178,11 @@ gtk_tree_store_insert_after (GtkTreeStore *tree_store,
  * @iter: An unset #GtkTreeIter to set to the prepended row
  * @parent: A valid #GtkTreeIter, or %NULL
  * 
- * Prepends a new row to @tree_store.  If @parent is non-NULL, then it will prepend
+ * Prepends a new row to @tree_store.  If @parent is non-%NULL, then it will prepend
  * the new row before the first child of @parent, otherwise it will prepend a row
  * to the top level.  @iter will be changed to point to this new row.  The row
  * will be empty after this function is called.  To fill in values, you need to
- * call @gtk_tree_store_set or @gtk_tree_store_set_value.
+ * call gtk_tree_store_set() or gtk_tree_store_set_value().
  **/
 void
 gtk_tree_store_prepend (GtkTreeStore *tree_store,
@@ -1234,11 +1234,11 @@ gtk_tree_store_prepend (GtkTreeStore *tree_store,
  * @iter: An unset #GtkTreeIter to set to the appended row
  * @parent: A valid #GtkTreeIter, or %NULL
  * 
- * Appends a new row to @tree_store.  If @parent is non-NULL, then it will append the
+ * Appends a new row to @tree_store.  If @parent is non-%NULL, then it will append the
  * new row after the last child of @parent, otherwise it will append a row to
  * the top level.  @iter will be changed to point to this new row.  The row will
  * be empty after this function is called.  To fill in values, you need to call
- * @gtk_tree_store_set or @gtk_tree_store_set_value.
+ * gtk_tree_store_set() or gtk_tree_store_set_value().
  **/
 void
 gtk_tree_store_append (GtkTreeStore *tree_store,

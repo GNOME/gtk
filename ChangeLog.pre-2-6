@@ -1,3 +1,9 @@
+2001-11-12  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtktreeview.c: Documentation fixes. (#64377)
+	
+	* gtk/gtktreestore.c: Documentation fixes. (#64376)
+
 2001-11-11  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkiconfactory.c, gtk/gtktextbuffer.c, gtk/gtktreemodel.c,
