@@ -5988,7 +5988,8 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 						G_SIGNAL_MATCH_DATA,
 						0, 0, NULL,
 						NULL, tree_view);
-	  _gtk_rbtree_free (tree_view->priv->tree);
+	  if (tree_view->priv->tree)
+	    _gtk_rbtree_free (tree_view->priv->tree);
 	}
 
       if (tree_view->priv->drag_dest_row)
