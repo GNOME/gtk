@@ -1180,6 +1180,7 @@ prune_memory_usage(CompletionState *cmpl_state)
     cdsl->next = NULL;
   }
 
+  cmpl_state->directory_storage = NULL;
   while (cdl) {
     if (cdl->data == cmpl_state->reference_dir)
       cmpl_state->directory_storage = g_list_prepend(NULL, cdl->data);
@@ -1577,7 +1578,7 @@ correct_dir_fullname(CompletionDir* cmpl_dir)
 	  return FALSE;
 	}
 
-      cmpl_dir->fullname[length - 3] = 0;
+      cmpl_dir->fullname[length - 2] = 0;
 
       if(!correct_parent(cmpl_dir, &sbuf))
 	return FALSE;
@@ -1597,7 +1598,7 @@ correct_dir_fullname(CompletionDir* cmpl_dir)
 	  return FALSE;
 	}
 
-      cmpl_dir->fullname[length - 4] = 0;
+      cmpl_dir->fullname[length - 3] = 0;
 
       if(!correct_parent(cmpl_dir, &sbuf))
 	return FALSE;
@@ -1621,7 +1622,7 @@ correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
   g_assert(last_slash);
 
   if(last_slash != cmpl_dir->fullname)
-    last_slash[0] = 0;
+    { /* last_slash[0] = 0; */ }
   else
     {
       c = last_slash[1];
@@ -1640,8 +1641,8 @@ correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
 
   if(c)
     last_slash[1] = c;
-  else
-    last_slash[0] = '/';
+  /* else
+    last_slash[0] = '/'; */
 
   /* it was a link, have to figure it out the hard way */
 

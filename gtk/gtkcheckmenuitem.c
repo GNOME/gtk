@@ -103,11 +103,20 @@ gtk_check_menu_item_set_state (GtkCheckMenuItem *check_menu_item,
 }
 
 void
+gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,
+				     gboolean          always)
+{
+  g_return_if_fail (menu_item != NULL);
+  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
+  
+  menu_item->always_show_toggle = always != FALSE;
+}
+
+void
 gtk_check_menu_item_toggled (GtkCheckMenuItem *check_menu_item)
 {
   gtk_signal_emit (GTK_OBJECT (check_menu_item), check_menu_item_signals[TOGGLED]);
 }
-
 
 static void
 gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
@@ -146,6 +155,7 @@ static void
 gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
 {
   check_menu_item->active = FALSE;
+  check_menu_item->always_show_toggle = FALSE;
 }
 
 static void
@@ -231,14 +241,25 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
       gdk_window_clear_area (widget->window, x, y, width, height);
 
       if (check_menu_item->active ||
+	  check_menu_item->always_show_toggle ||
 	  (GTK_WIDGET_STATE (check_menu_item) == GTK_STATE_PRELIGHT))
 	{
 	  state_type = GTK_WIDGET_STATE (widget);
-
-	  shadow_type = GTK_SHADOW_IN;
-	  if (check_menu_item->active && (state_type == GTK_STATE_PRELIGHT))
-	    shadow_type = GTK_SHADOW_OUT;
-
+	  
+	  if (check_menu_item->always_show_toggle)
+	    {
+	      shadow_type = GTK_SHADOW_OUT;
+	      if (check_menu_item->active)
+		shadow_type = GTK_SHADOW_IN;
+	    }
+	  else
+	    {
+	      shadow_type = GTK_SHADOW_IN;
+	      if (check_menu_item->active &&
+		  (state_type == GTK_STATE_PRELIGHT))
+		shadow_type = GTK_SHADOW_OUT;
+	    }
+	  
 	  gdk_draw_rectangle (widget->window,
 			      widget->style->bg_gc[state_type],
 			      TRUE, x, y, width, height);

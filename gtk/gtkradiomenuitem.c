@@ -215,10 +215,15 @@ gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
       gdk_window_clear_area (widget->window, x, y, width, height);
 
       if (check_menu_item->active ||
+	  check_menu_item->always_show_toggle ||
 	  (GTK_WIDGET_STATE (check_menu_item) == GTK_STATE_PRELIGHT))
 	{
 	  state_type = GTK_WIDGET_STATE (widget);
-	  shadow_type = GTK_SHADOW_IN;
+	  if (check_menu_item->active ||
+	      !check_menu_item->always_show_toggle)
+	    shadow_type = GTK_SHADOW_IN;
+	  else
+	    shadow_type = GTK_SHADOW_OUT;
 
 	  pts[0].x = x + width / 2;
 	  pts[0].y = y;

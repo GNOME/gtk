@@ -41,6 +41,7 @@ struct _GtkCheckMenuItem
   GtkMenuItem menu_item;
 
   guint active : 1;
+  guint always_show_toggle : 1;
 };
 
 struct _GtkCheckMenuItemClass
@@ -58,6 +59,8 @@ GtkWidget* gtk_check_menu_item_new            (void);
 GtkWidget* gtk_check_menu_item_new_with_label (const gchar      *label);
 void       gtk_check_menu_item_set_state      (GtkCheckMenuItem *check_menu_item,
 					       gint              state);
+void	   gtk_check_menu_item_set_show_toggle(GtkCheckMenuItem *menu_item,
+					       gboolean          always);
 void       gtk_check_menu_item_toggled        (GtkCheckMenuItem *check_menu_item);
 
 

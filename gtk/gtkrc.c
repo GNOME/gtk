@@ -1257,41 +1257,41 @@ gtk_rc_parse_pixmap_path ()
   return PARSE_OK;
 }
 
-static void gtk_rc_parse_pixmap_path_string(gchar *pix_path)
+static void
+gtk_rc_parse_pixmap_path_string (gchar *pix_path)
 {
   gchar *buf;
   gint end_offset;
   gint start_offset = 0;
   gint path_len;
   gint path_num;
-
+  
   /* free the old one, or just add to the old one ? */
   for (path_num=0; pixmap_path[path_num]; path_num++)
     {
-      g_free(pixmap_path[path_num]);
+      g_free (pixmap_path[path_num]);
       pixmap_path[path_num] = NULL;
     }
-
+  
   path_num = 0;
+  
+  path_len = strlen (pix_path);
+  
+  buf = g_strdup (pix_path);
 
-  path_len = strlen(pix_path);
-
-  buf = g_strdup(pix_path);
-
-  for(end_offset = 0; end_offset <= path_len; end_offset++)
+  for (end_offset = 0; end_offset <= path_len; end_offset++)
     {
-      if ( (buf[end_offset] == ':') || (end_offset == path_len) )
+      if ((buf[end_offset] == ':') ||
+	  (end_offset == path_len))
 	{
 	  buf[end_offset] = '\0';
-	  pixmap_path[path_num] = g_strdup(buf + start_offset);
+	  pixmap_path[path_num] = g_strdup (buf + start_offset);
 	  path_num++;
 	  pixmap_path[path_num] = NULL;
 	  start_offset = end_offset + 1;
-	  g_free(buf);
-	  buf = g_strdup(pix_path);
 	}
     }
-  g_free(buf);
+  g_free (buf);
 }
 
 static gint

@@ -859,6 +859,8 @@ create_menu (int depth)
       sprintf (buf, "item %2d - %d", depth, j);
       menuitem = gtk_radio_menu_item_new_with_label (group, buf);
       group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menuitem));
+      if (depth % 2)
+	gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
       gtk_menu_append (GTK_MENU (menu), menuitem);
       gtk_widget_show (menuitem);
 
