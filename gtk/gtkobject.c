@@ -800,8 +800,8 @@ gtk_object_arg_set (GtkObject *object,
     }
   
   oclass = gtk_type_class (info->class_type);
-  if (oclass->set_arg)
-    oclass->set_arg (object, arg, info->arg_id);
+  g_assert (oclass->set_arg != NULL);
+  oclass->set_arg (object, arg, info->arg_id);
 }
 
 void
@@ -841,13 +841,9 @@ gtk_object_arg_get (GtkObject           *object,
     }
   
   oclass = gtk_type_class (info->class_type);
-  if (oclass->get_arg)
-    {
-      arg->type = info->type;
-      oclass->get_arg (object, arg, info->arg_id);
-    }
-  else
-    arg->type = GTK_TYPE_INVALID;
+  g_assert (oclass->get_arg != NULL);
+  arg->type = info->type;
+  oclass->get_arg (object, arg, info->arg_id);
 }
 
 void

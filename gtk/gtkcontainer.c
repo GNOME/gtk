@@ -492,8 +492,8 @@ gtk_container_arg_set (GtkContainer *container,
     }
   
   class = gtk_type_class (info->class_type);
-  if (class->set_child_arg)
-    class->set_child_arg (container, child, arg, info->arg_id);
+  g_assert (class->set_child_arg != NULL);
+  class->set_child_arg (container, child, arg, info->arg_id);
 }
 
 void
@@ -537,13 +537,9 @@ gtk_container_arg_get (GtkContainer *container,
     }
   
   class = gtk_type_class (info->class_type);
-  if (class->get_child_arg)
-    {
-      arg->type = info->type;
-      class->get_child_arg (container, child, arg, info->arg_id);
-    }
-  else
-    arg->type = GTK_TYPE_INVALID;
+  g_assert (class->get_child_arg != NULL);
+  arg->type = info->type;
+  class->get_child_arg (container, child, arg, info->arg_id);
 }
 
 void
