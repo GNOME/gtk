@@ -1608,7 +1608,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 
   if (tree_view->priv->vadjustment->value + allocation->height > tree_view->priv->height)
     gtk_adjustment_set_value (tree_view->priv->vadjustment,
-			      MAX (tree_view->priv->height - allocation->height, 0));
+			      MAX (tree_view->priv->height - tree_view->priv->vadjustment->page_size, 0));
   gtk_adjustment_changed (tree_view->priv->vadjustment);
   
   if (GTK_WIDGET_REALIZED (widget))

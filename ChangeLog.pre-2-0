@@ -1,7 +1,7 @@
 Fri Feb  1 22:20:13 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): use
-	height - page_size not height - allocation->height
+	height - page_size not height - allocation->height (fixes #66269)
 
 Fri Feb  1 15:22:23 2002  Owen Taylor  <otaylor@redhat.com>
 
