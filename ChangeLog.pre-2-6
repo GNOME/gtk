@@ -1,3 +1,14 @@
+Thu Mar  9 22:10:56 GMT 2000  Tony Gale <gale@gtk.org>
+
+	* docs/gtkfaq.sgml: FAQ Update:
+	  - Minor cleanups (Emmanuel, me)
+	  - New questions:
+		I need to add a new signal to a GTK+ widget. Any idea? (timj)
+		How can I retrieve the text from a GtkMenuItem? (timj)
+		How do I validate/limit/filter the input to a GtkEntry? (me)
+		Memory does not seem to be released when I free the list
+			nodes I've allocated (timj)
+
 2000-03-07  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkmain-win32.c: Internal GDK error reporting changes:
