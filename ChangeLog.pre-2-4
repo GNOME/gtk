@@ -1,3 +1,11 @@
+Tue Mar  2 15:03:15 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_get_resizable_hints): get the logic
+	correct.  This will fix sizing on save dialogs.
+
+	(save_widgets_create): set_mnemonic_widget.
+
 2004-03-02  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c

@@ -2076,6 +2076,7 @@ save_widgets_create (GtkFileChooserDefault *impl)
 		    1, 2, 1, 2,
 		    GTK_EXPAND | GTK_FILL, GTK_FILL,
 		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (impl->save_folder_label), impl->save_folder_combo);
 
   /* custom widget */
   impl->save_extra_align = gtk_alignment_new (0.0, 0.5, 1.0, 1.0);
@@ -3359,23 +3360,18 @@ gtk_file_chooser_default_get_resizable_hints (GtkFileChooserEmbed *chooser_embed
 {
   GtkFileChooserDefault *impl;
 
+  g_return_if_fail (resize_horizontally != NULL);
+  g_return_if_fail (resize_vertically != NULL);
+
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
 
-  if (resize_horizontally)
-    *resize_horizontally = TRUE;
-
-  if (resize_vertically)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
-      *resize_vertically = TRUE;
-
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
-	  impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+      if (! gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
 	{
-	  if (! gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
-	    {
-	      *resize_vertically = FALSE;
-	      *resize_horizontally = FALSE;
-	    }
+	  *resize_vertically = FALSE;
+	  *resize_horizontally = FALSE;
 	}
     }
 }
