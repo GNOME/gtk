@@ -1,3 +1,12 @@
+Thu May  7 10:29:24 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c (gtk_signal_newv): suport middle dashes ('-') in
+	signal names, e.g. "signal-name" is now an alias for "signal_name".
+	(gtk_signal_handler_new): allocate handlers through a global handler
+	structure list, that's faster than memchunks.
+	(gtk_emission_new): allocate emissions through a global emission
+	structure list, that's faster than memchunks.
+
 Thu May  7 05:14:19 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk-config.in (--libs): postfix -lg* libraries with LT_RELEASE.
