@@ -1,3 +1,9 @@
+Sat Nov  2 13:47:09 2002  Owen Taylor  <otaylor@redhat.com>
+	 
+	* === Released 2.1.2 ===
+
+	* NEWS: Update.
+
 Sat Nov  2 00:22:33 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Add startup notification hooks - mostly based on patch

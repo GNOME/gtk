@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-10-14 18:56-0400\n"
+"POT-Creation-Date: 2002-11-02 00:08-0500\n"
 "PO-Revision-Date: 2002-03-07 17:21+0100\n"
 "Last-Translator: Ronald Hummelink <ronald@hummelink.xs4all.nl>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -142,68 +142,72 @@ msgstr "BMP-afbeelding bevat onzinnige headerdata"
 msgid "The BMP image format"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:218
+#: gdk-pixbuf/io-gif.c:219
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Lezen van GIF mislukt: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1543
+#: gdk-pixbuf/io-gif.c:491 gdk-pixbuf/io-gif.c:1425 gdk-pixbuf/io-gif.c:1586
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF-bestand miste data (misschien was het afgebroken?)"
 
-#: gdk-pixbuf/io-gif.c:469
+#: gdk-pixbuf/io-gif.c:500
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Interne fout in de GIF-lader (%s)"
 
-#: gdk-pixbuf/io-gif.c:592
+#: gdk-pixbuf/io-gif.c:572
+msgid "Stack overflow"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:631
 msgid "GIF image loader can't understand this image."
 msgstr "GIF-lader begrijpt deze afbeelding niet"
 
-#: gdk-pixbuf/io-gif.c:621
+#: gdk-pixbuf/io-gif.c:660
 msgid "Bad code encountered"
 msgstr "Foute code ontdekt"
 
-#: gdk-pixbuf/io-gif.c:630
+#: gdk-pixbuf/io-gif.c:670
 msgid "Circular table entry in GIF file"
 msgstr "Circulaire tabelwaarde in GIF-bestand"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1416
-#: gdk-pixbuf/io-gif.c:1531
+#: gdk-pixbuf/io-gif.c:803 gdk-pixbuf/io-gif.c:1413 gdk-pixbuf/io-gif.c:1459
+#: gdk-pixbuf/io-gif.c:1574
 msgid "Not enough memory to load GIF file"
 msgstr "Onvoldoende geheugen om GIF-bestand te laden"
 
-#: gdk-pixbuf/io-gif.c:1009
+#: gdk-pixbuf/io-gif.c:1050
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF-bestand is beschadigd (incorrecte LZW-compressie)"
 
-#: gdk-pixbuf/io-gif.c:1059
+#: gdk-pixbuf/io-gif.c:1100
 msgid "File does not appear to be a GIF file"
 msgstr "Bestand lijkt geen GIF-bestand te zijn"
 
-#: gdk-pixbuf/io-gif.c:1071
+#: gdk-pixbuf/io-gif.c:1112
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Versie %s van het GIF-formaat wordt niet ondersteund"
 
-#: gdk-pixbuf/io-gif.c:1144
+#: gdk-pixbuf/io-gif.c:1185
 #, fuzzy
 msgid "GIF image contained a frame with height or width 0."
 msgstr ""
 "GIF-bestand bevatte een afbeelding die buiten het kader lijkt te vallen"
 
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1198
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 "GIF-bestand bevatte een afbeelding die buiten het kader lijkt te vallen"
 
-#: gdk-pixbuf/io-gif.c:1173
+#: gdk-pixbuf/io-gif.c:1214
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "De eerste afbeelding in het GIF-bestand heeft 'terug naar vorige' als "
 "afsluiting"
 
-#: gdk-pixbuf/io-gif.c:1208
+#: gdk-pixbuf/io-gif.c:1249
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -211,11 +215,11 @@ msgstr ""
 "GIF-bestand heeft geen globaal kleurenpalet, en een afbeelding erin heeft "
 "geen lokaal kleurenpallet"
 
-#: gdk-pixbuf/io-gif.c:1438
+#: gdk-pixbuf/io-gif.c:1481
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-bestand is afgebroken of onvolledig"
 
-#: gdk-pixbuf/io-gif.c:1590
+#: gdk-pixbuf/io-gif.c:1633
 #, fuzzy
 msgid "The GIF image format"
 msgstr "Afbeeldings formaat onbekend"
@@ -962,7 +966,7 @@ msgid ""
 "start or end of the parent"
 msgstr ""
 
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:457 gtk/gtkpaned.c:211
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:457 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
 msgid "Position"
 msgstr "Positie"
@@ -1226,7 +1230,7 @@ msgstr ""
 msgid "Render detail to pass to the theme engine"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:209
+#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:524 gtk/gtkprogressbar.c:209
 msgid "Text"
 msgstr "Tekst"
 
@@ -1283,7 +1287,7 @@ msgstr "Voorgrond kleur"
 msgid "Foreground color as a GdkColor"
 msgstr "Voorgrond kleur als een GdkColor"
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:273
+#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:456 gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:568
 msgid "Editable"
 msgstr "Bewerkbaar"
@@ -1847,21 +1851,21 @@ msgstr "Actie inhouds kader"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Breedte van het kader om de knoppenbalk onderaan het dialoog venster"
 
-#: gtk/gtkentry.c:435 gtk/gtklabel.c:365
+#: gtk/gtkentry.c:436 gtk/gtklabel.c:365
 msgid "Cursor Position"
 msgstr "Cursor Positie"
 
-#: gtk/gtkentry.c:436 gtk/gtklabel.c:366
+#: gtk/gtkentry.c:437 gtk/gtklabel.c:366
 #, fuzzy
 msgid "The current position of the insertion cursor in chars"
 msgstr "De huidige positie van de invoegcurser in tekens."
 
-#: gtk/gtkentry.c:445 gtk/gtklabel.c:375
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:375
 #, fuzzy
 msgid "Selection Bound"
 msgstr "Selectie: "
 
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:376
+#: gtk/gtkentry.c:447 gtk/gtklabel.c:376
 #, fuzzy
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
@@ -1869,24 +1873,24 @@ msgstr ""
 "De positie van de tegenoverstaande zijde van de selectie vanaf de cursor in "
 "tekens."
 
-#: gtk/gtkentry.c:456
+#: gtk/gtkentry.c:457
 msgid "Whether the entry contents can be edited"
 msgstr "If de inhoud van de entry gewijzigt kan worden"
 
-#: gtk/gtkentry.c:463
+#: gtk/gtkentry.c:464
 msgid "Maximum length"
 msgstr "Maximale lengte"
 
-#: gtk/gtkentry.c:464
+#: gtk/gtkentry.c:465
 #, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Maximaal aantal tekens voor deze entry. Nul als er geen maximum is."
 
-#: gtk/gtkentry.c:472
+#: gtk/gtkentry.c:473
 msgid "Visibility"
 msgstr "Zichtbaarheid"
 
-#: gtk/gtkentry.c:473
+#: gtk/gtkentry.c:474
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1894,30 +1898,30 @@ msgstr ""
 "FALSE geeft het 'onzichtbaar teken\" in plaats van de werkelijke tekst "
 "(wachtwoord modus)"
 
-#: gtk/gtkentry.c:480
+#: gtk/gtkentry.c:481
 msgid "Has Frame"
 msgstr "Heeft kader"
 
-#: gtk/gtkentry.c:481
+#: gtk/gtkentry.c:482
 #, fuzzy
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE haalt de buitenste bevel van de entry"
 
-#: gtk/gtkentry.c:488
+#: gtk/gtkentry.c:489
 msgid "Invisible character"
 msgstr "Onzichtbaar teken"
 
-#: gtk/gtkentry.c:489
+#: gtk/gtkentry.c:490
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Het teken om te gebruiken om de inhoud van een entry te maskeren (in "
 "\"wachtwoord modus\")"
 
-#: gtk/gtkentry.c:496
+#: gtk/gtkentry.c:497
 msgid "Activates default"
 msgstr "Activeer standaard"
 
-#: gtk/gtkentry.c:497
+#: gtk/gtkentry.c:498
 #, fuzzy
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
@@ -1926,98 +1930,98 @@ msgstr ""
 "Of de standaard widget te activeren (als in de standaard knop in een "
 "dialoog) als op Enter wordt gedrukt."
 
-#: gtk/gtkentry.c:503
+#: gtk/gtkentry.c:504
 msgid "Width in chars"
 msgstr "Breedte in tekens"
 
-#: gtk/gtkentry.c:504
+#: gtk/gtkentry.c:505
 #, fuzzy
 msgid "Number of characters to leave space for in the entry"
 msgstr "Aantal tekens ruimte te laten in een entry."
 
-#: gtk/gtkentry.c:513
+#: gtk/gtkentry.c:514
 msgid "Scroll offset"
 msgstr "Scroll offset"
 
-#: gtk/gtkentry.c:514
+#: gtk/gtkentry.c:515
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Aantal pixels van de entry naar links weggescrolled van het scherm."
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid "The contents of the entry"
 msgstr "De inhoud van de entry"
 
-#: gtk/gtkentry.c:755
+#: gtk/gtkentry.c:756
 msgid "Select on focus"
 msgstr "Selectie op activering"
 
-#: gtk/gtkentry.c:756
+#: gtk/gtkentry.c:757
 #, fuzzy
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Of de inhoud van een entry geselecteerd worden als het de focus krijgt"
 
-#: gtk/gtkentry.c:3922 gtk/gtklabel.c:3217
+#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3217
 msgid "Select All"
 msgstr "Selecteer Alles"
 
-#: gtk/gtkentry.c:3932 gtk/gtklabel.c:3227
+#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3227
 msgid "Input Methods"
 msgstr "Invoer methodes"
 
-#: gtk/gtkentry.c:3942 gtk/gtktextview.c:6485
+#: gtk/gtkentry.c:3970 gtk/gtktextview.c:6485
 msgid "_Insert Unicode control character"
 msgstr "Voeg Unicode control teken in"
 
-#: gtk/gtkfilesel.c:515 gtk/gtkimage.c:165
+#: gtk/gtkfilesel.c:516 gtk/gtkimage.c:165
 msgid "Filename"
 msgstr "Bestandsnaam"
 
-#: gtk/gtkfilesel.c:516
+#: gtk/gtkfilesel.c:517
 #, fuzzy
 msgid "The currently selected filename"
 msgstr "De nu geselecteerde bestandsnaam"
 
-#: gtk/gtkfilesel.c:522
+#: gtk/gtkfilesel.c:523
 msgid "Show file operations"
 msgstr "Geef bestands operaties weer"
 
-#: gtk/gtkfilesel.c:523
+#: gtk/gtkfilesel.c:524
 #, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 "Of knoppen voor maken/wijzigen van bestanden weergegeven moeten worden."
 
-#: gtk/gtkfilesel.c:530
+#: gtk/gtkfilesel.c:531
 msgid "Select multiple"
 msgstr "Verwijder meerderen"
 
-#: gtk/gtkfilesel.c:531
+#: gtk/gtkfilesel.c:532
 #, fuzzy
 msgid "Whether to allow multiple files to be selected"
 msgstr "Of het mogelijk moet zijn meerdere bestanden te selecteren."
 
-#: gtk/gtkfilesel.c:686
+#: gtk/gtkfilesel.c:687
 msgid "Folders"
 msgstr "Mappen"
 
-#: gtk/gtkfilesel.c:690
+#: gtk/gtkfilesel.c:691
 msgid "Fol_ders"
 msgstr "Mappen"
 
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:723
 msgid "Files"
 msgstr "Bestanden"
 
-#: gtk/gtkfilesel.c:726
+#: gtk/gtkfilesel.c:727
 msgid "_Files"
 msgstr "Bestanden"
 
-#: gtk/gtkfilesel.c:803 gtk/gtkfilesel.c:2143
+#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2208
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Directory onleesbaar: %s"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:941
 #, fuzzy, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2028,26 +2032,26 @@ msgstr ""
 "niet beschikbaar kunnen zijn voor dit programma.\n"
 "Weet je zeker dat je het wilt selecteren?"
 
-#: gtk/gtkfilesel.c:1065
+#: gtk/gtkfilesel.c:1072
 msgid "_New Folder"
 msgstr "Nieuwe Map"
 
-#: gtk/gtkfilesel.c:1076
+#: gtk/gtkfilesel.c:1083
 msgid "De_lete File"
 msgstr "Verwijder Bestand"
 
-#: gtk/gtkfilesel.c:1087
+#: gtk/gtkfilesel.c:1094
 msgid "_Rename File"
 msgstr "Bestand hernoemen"
 
-#: gtk/gtkfilesel.c:1367
+#: gtk/gtkfilesel.c:1390
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "De map naam \"%s\" bevat symbolen die niet toegestaan zijn in bestandsnamen"
 
-#: gtk/gtkfilesel.c:1369
+#: gtk/gtkfilesel.c:1392
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2056,37 +2060,38 @@ msgstr ""
 "Fout bij maken van map \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1370 gtk/gtkfilesel.c:1606
+#: gtk/gtkfilesel.c:1393 gtk/gtkfilesel.c:1634
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 "Je hebt waarschijnlijk symbolen gebruikt die niet toegestaan zijn in "
 "bestandsnamen."
 
-#: gtk/gtkfilesel.c:1378
+#: gtk/gtkfilesel.c:1401
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Fout bij maken van map \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1412
+#: gtk/gtkfilesel.c:1435
 msgid "New Folder"
 msgstr "Nieuwe Map"
 
-#: gtk/gtkfilesel.c:1427
+#: gtk/gtkfilesel.c:1450
 msgid "_Folder name:"
 msgstr "Map naam:"
 
-#: gtk/gtkfilesel.c:1453
-msgid "Create"
+#: gtk/gtkfilesel.c:1476
+#, fuzzy
+msgid "C_reate"
 msgstr "Maak"
 
-#: gtk/gtkfilesel.c:1494
+#: gtk/gtkfilesel.c:1522
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "De bestandsnaam \"%s\" bevat symbolen die niet toegestaan zijn in "
 "bestandsnamen"
 
-#: gtk/gtkfilesel.c:1497
+#: gtk/gtkfilesel.c:1525
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2095,32 +2100,32 @@ msgstr ""
 "Fout bij verwijderen van bestand \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1499 gtk/gtkfilesel.c:1620
+#: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1648
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Het bevat waarschijnlijk symbolen niet toegestaan in bestandsnamen."
 
-#: gtk/gtkfilesel.c:1508
+#: gtk/gtkfilesel.c:1536
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Fout bij verwijderen van bestand \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1551
+#: gtk/gtkfilesel.c:1579
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Weet je zeker dat je \"%s\" wilt verwijderen?"
 
-#: gtk/gtkfilesel.c:1556
+#: gtk/gtkfilesel.c:1584
 msgid "Delete File"
 msgstr "Verwijder Bestand"
 
-#: gtk/gtkfilesel.c:1602 gtk/gtkfilesel.c:1616
+#: gtk/gtkfilesel.c:1630 gtk/gtkfilesel.c:1644
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "De bestandsnaam \"%s\" bevat symbolen die niet toegestaan zijn in "
 "bestandsnamen"
 
-#: gtk/gtkfilesel.c:1604
+#: gtk/gtkfilesel.c:1632
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2129,7 +2134,7 @@ msgstr ""
 "Fout bij hernoemen van bestand naar \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1646
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2138,29 +2143,31 @@ msgstr ""
 "Fout bij hernoemen van bestand \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1628
+#: gtk/gtkfilesel.c:1656
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Fout bij hernoemen van bestand \"%s\" naar \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1675
+#: gtk/gtkfilesel.c:1703
 msgid "Rename File"
 msgstr "Wijzig Bestandsnaam"
 
-#: gtk/gtkfilesel.c:1690
+#: gtk/gtkfilesel.c:1718
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Wijzig Bestandsnaam \"%s\" naar:"
 
-#: gtk/gtkfilesel.c:1721
-msgid "Rename"
+#: gtk/gtkfilesel.c:1749
+#, fuzzy
+msgid "_Rename"
 msgstr "Hernoem"
 
-#: gtk/gtkfilesel.c:2122
-msgid "Selection: "
+#: gtk/gtkfilesel.c:2188
+#, fuzzy
+msgid "_Selection: "
 msgstr "Selectie: "
 
-#: gtk/gtkfilesel.c:3009
+#: gtk/gtkfilesel.c:3074
 #, fuzzy, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2169,16 +2176,16 @@ msgstr ""
 "De bestandsnaam %s kon niet geconverteerd worden naar UTF-8. Probeer de "
 "omgevings variabele G_BROKEN_FILENAMES te zetten."
 
-#: gtk/gtkfilesel.c:3012
+#: gtk/gtkfilesel.c:3077
 #, fuzzy
 msgid "Invalid Utf-8"
 msgstr "Ongeldig XBM bestand"
 
-#: gtk/gtkfilesel.c:3878
+#: gtk/gtkfilesel.c:3943
 msgid "Name too long"
 msgstr "Naam te lang"
 
-#: gtk/gtkfilesel.c:3880
+#: gtk/gtkfilesel.c:3945
 msgid "Couldn't convert filename"
 msgstr "Kon bestandsnaam niet converteren"
 
@@ -2303,8 +2310,8 @@ msgstr "Gamma"
 msgid "_Gamma value"
 msgstr "Gamma waarde"
 
-#: gtk/gtkhandlebox.c:193 gtk/gtkmenubar.c:152 gtk/gtkstatusbar.c:161
-#: gtk/gtktoolbar.c:281 gtk/gtkviewport.c:150
+#: gtk/gtkhandlebox.c:193 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
+#: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Schaduw type"
 
@@ -2338,7 +2345,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1684
+#: gtk/gtkiconfactory.c:1690
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Fout bij laden van icoon: %s"
@@ -2449,7 +2456,7 @@ msgstr "Apparaat:"
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: gtk/gtkinputdialog.c:250 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:548
+#: gtk/gtkinputdialog.c:250 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:550
 msgid "Screen"
 msgstr "Scherm"
 
@@ -2512,7 +2519,7 @@ msgstr "(onbekend)"
 msgid "clear"
 msgstr "wissen"
 
-#: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:549
+#: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:551
 msgid "The screen where this window will be displayed"
 msgstr ""
 
@@ -2645,11 +2652,11 @@ msgstr "De hoogte van de opmaak."
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:230
+#: gtk/gtkmenu.c:235
 msgid "Tearoff Title"
 msgstr "Afscheur Titel"
 
-#: gtk/gtkmenu.c:231
+#: gtk/gtkmenu.c:236
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
@@ -2658,11 +2665,11 @@ msgstr ""
 "Een titel de weergegeven kan worden door de window manager als dit menu "
 "afgescheurd wordt."
 
-#: gtk/gtkmenu.c:302
+#: gtk/gtkmenu.c:308
 msgid "Can change accelerators"
 msgstr "Kan versnellers veranderen"
 
-#: gtk/gtkmenu.c:303
+#: gtk/gtkmenu.c:309
 #, fuzzy
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
@@ -2670,17 +2677,44 @@ msgstr ""
 "Of menu versnellers veranderd kunnen worden door het drukken van een toets "
 "over de menu item."
 
-#: gtk/gtkmenubar.c:153
+#: gtk/gtkmenu.c:314
+msgid "Delay before submenus appear"
+msgstr ""
+
+#: gtk/gtkmenu.c:315
+msgid ""
+"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgstr ""
+
+#: gtk/gtkmenu.c:322
+msgid "Delay before hiding a submenu"
+msgstr ""
+
+#: gtk/gtkmenu.c:323
+msgid ""
+"The time before hiding a submenu when the pointer is moving towards the "
+"submenu"
+msgstr ""
+
+#: gtk/gtkmenubar.c:157
 msgid "Style of bevel around the menubar"
 msgstr "Stijl van de bevel om de menubalk"
 
-#: gtk/gtkmenubar.c:160 gtk/gtktoolbar.c:255
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:256
 msgid "Internal padding"
 msgstr "Interne opvulling"
 
-#: gtk/gtkmenubar.c:161
+#: gtk/gtkmenubar.c:165
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Hoeveelheid kader ruimte tussen de menubalk schaduw en de menu entries"
+
+#: gtk/gtkmenubar.c:172
+msgid "Delay before drop down menus appear"
+msgstr ""
+
+#: gtk/gtkmenubar.c:173
+msgid "Delay before the submenus of a menu bar appear"
+msgstr ""
 
 #: gtk/gtkmessagedialog.c:106
 msgid "Image/label border"
@@ -2864,7 +2898,7 @@ msgstr "Of de kinderen allemaal dezelfde afmetingen moeten hebben."
 msgid "Tab pack type"
 msgstr ""
 
-#: gtk/gtknotebook.c:2464 gtk/gtknotebook.c:4745
+#: gtk/gtknotebook.c:2467 gtk/gtknotebook.c:4751
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
@@ -2886,26 +2920,26 @@ msgstr "Grootte van de dropdown indicator"
 msgid "Spacing around indicator"
 msgstr "Spatiering rond de indicator"
 
-#: gtk/gtkpaned.c:212
+#: gtk/gtkpaned.c:219
 #, fuzzy
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "Positie van de scheidings balk in pixels (0 betekent helemaal link/boven)"
 
-#: gtk/gtkpaned.c:220
+#: gtk/gtkpaned.c:227
 msgid "Position Set"
 msgstr "Positie set"
 
-#: gtk/gtkpaned.c:221
+#: gtk/gtkpaned.c:228
 msgid "TRUE if the Position property should be used"
 msgstr "TRUE als de positie eigenschap gebruikt moet worden"
 
-#: gtk/gtkpaned.c:227
+#: gtk/gtkpaned.c:234
 msgid "Handle Size"
 msgstr "Handle grootte"
 
-#: gtk/gtkpaned.c:228
+#: gtk/gtkpaned.c:235
 msgid "Width of handle"
 msgstr "Grootte van de handle"
 
@@ -2973,7 +3007,7 @@ msgstr "Aanpassing"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "De GtkAdjustment gekoppeld aan de voortgangs balk (afgeraden)"
 
-#: gtk/gtkprogressbar.c:141 gtk/gtktoolbar.c:228
+#: gtk/gtkprogressbar.c:141 gtk/gtktoolbar.c:229
 msgid "Orientation"
 msgstr "Orientatie"
 
@@ -3315,6 +3349,16 @@ msgstr "Schaduw type"
 #: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
 msgstr "Stijl van de bevel rondom de inhoud"
+
+#: gtk/gtkscrolledwindow.c:282
+#, fuzzy
+msgid "Scrollbar spacing"
+msgstr "Kolum spatiering"
+
+#: gtk/gtkscrolledwindow.c:283
+#, fuzzy
+msgid "Number of pixels between the scrollbars and the scrolled window"
+msgstr "Aantal pixels van de entry naar links weggescrolled van het scherm."
 
 #: gtk/gtksettings.c:160
 msgid "Double Click Time"
@@ -4301,66 +4345,66 @@ msgstr "Teken indicator"
 msgid "If the toggle part of the button is displayed"
 msgstr "Of het schakel gedeelte van een knop weergegeven wordt"
 
-#: gtk/gtktoolbar.c:229
+#: gtk/gtktoolbar.c:230
 msgid "The orientation of the toolbar"
 msgstr "De orientatie van de werkbalk"
 
-#: gtk/gtktoolbar.c:237
+#: gtk/gtktoolbar.c:238
 msgid "Toolbar Style"
 msgstr "Werkbalk stijl"
 
-#: gtk/gtktoolbar.c:238
+#: gtk/gtktoolbar.c:239
 msgid "How to draw the toolbar"
 msgstr "Hoe de werkbalk te tekenen"
 
-#: gtk/gtktoolbar.c:246
+#: gtk/gtktoolbar.c:247
 msgid "Spacer size"
 msgstr "Spacer grootte"
 
-#: gtk/gtktoolbar.c:247
+#: gtk/gtktoolbar.c:248
 msgid "Size of spacers"
 msgstr "Grootte van spacers"
 
-#: gtk/gtktoolbar.c:256
+#: gtk/gtktoolbar.c:257
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Hoeveelheid kaderruimte tussen de werkbalk schaduw en de knoppen"
 
-#: gtk/gtktoolbar.c:264
+#: gtk/gtktoolbar.c:265
 msgid "Space style"
 msgstr "Spacer stijl"
 
-#: gtk/gtktoolbar.c:265
+#: gtk/gtktoolbar.c:266
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "If spacers vertikale lijnen zijn of gewoon leeg"
 
-#: gtk/gtktoolbar.c:273
+#: gtk/gtktoolbar.c:274
 msgid "Button relief"
 msgstr "Knop relief"
 
-#: gtk/gtktoolbar.c:274
+#: gtk/gtktoolbar.c:275
 msgid "Type of bevel around toolbar buttons"
 msgstr "Type bevel om werkbalk knoppen"
 
-#: gtk/gtktoolbar.c:282
+#: gtk/gtktoolbar.c:283
 msgid "Style of bevel around the toolbar"
 msgstr "Stijl van bevel om de werkbalk"
 
-#: gtk/gtktoolbar.c:288
+#: gtk/gtktoolbar.c:289
 msgid "Toolbar style"
 msgstr "Werkbalk Stijl:"
 
-#: gtk/gtktoolbar.c:289
+#: gtk/gtktoolbar.c:290
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Of de standaard werkbalk alleen tekst, tekst en iconen of alleen iconen enz. "
 "heeft"
 
-#: gtk/gtktoolbar.c:295
+#: gtk/gtktoolbar.c:296
 msgid "Toolbar icon size"
 msgstr "Werkbalk icoon grootte"
 
-#: gtk/gtktoolbar.c:296
+#: gtk/gtktoolbar.c:297
 msgid "Size of icons in default toolbars"
 msgstr "Grootte van iconen in de standaard werkbalk"
 
@@ -4491,11 +4535,27 @@ msgstr "Spring uitklappers in"
 msgid "Make the expanders indented"
 msgstr "Maak de uitklappers ingesprongen"
 
+#: gtk/gtktreeview.c:644
+msgid "Even Row Color"
+msgstr ""
+
+#: gtk/gtktreeview.c:645
+msgid "Color to use for even rows"
+msgstr ""
+
+#: gtk/gtktreeview.c:651
+msgid "Odd Row Color"
+msgstr ""
+
+#: gtk/gtktreeview.c:652
+msgid "Color to use for odd rows"
+msgstr ""
+
 #: gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
 msgstr "Of de kolom weer te geven"
 
-#: gtk/gtktreeviewcolumn.c:193 gtk/gtkwindow.c:487
+#: gtk/gtktreeviewcolumn.c:193 gtk/gtkwindow.c:489
 msgid "Resizable"
 msgstr "Herschaalbaar"
 
@@ -4833,27 +4893,27 @@ msgstr "Cursorlijn aspect ratio"
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Aspect ratio waarmee de invoeg cursor wordt getekend"
 
-#: gtk/gtkwindow.c:452
+#: gtk/gtkwindow.c:454
 msgid "Window Type"
 msgstr "Venster type"
 
-#: gtk/gtkwindow.c:453
+#: gtk/gtkwindow.c:455
 msgid "The type of the window"
 msgstr "Het type van het window"
 
-#: gtk/gtkwindow.c:462
+#: gtk/gtkwindow.c:464
 msgid "Window Title"
 msgstr "Venster titel"
 
-#: gtk/gtkwindow.c:463
+#: gtk/gtkwindow.c:465
 msgid "The title of the window"
 msgstr "De titel van het window"
 
-#: gtk/gtkwindow.c:470
+#: gtk/gtkwindow.c:472
 msgid "Allow Shrink"
 msgstr "Laat krimp toe"
 
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:474
 #, fuzzy, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4862,27 +4922,27 @@ msgstr ""
 "Als TRUE dan heeft het window geen minimum grootte. Dit op TRUE setten is "
 "een slecht idee 99% van de tijd."
 
-#: gtk/gtkwindow.c:479
+#: gtk/gtkwindow.c:481
 msgid "Allow Grow"
 msgstr "Laat groei toe"
 
-#: gtk/gtkwindow.c:480
+#: gtk/gtkwindow.c:482
 #, fuzzy
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "Als TRUE, gebruikers kunnen het window vergroten tot buiten de minimum "
 "grootte"
 
-#: gtk/gtkwindow.c:488
+#: gtk/gtkwindow.c:490
 #, fuzzy
 msgid "If TRUE, users can resize the window"
 msgstr "Als TRUE, gebruikers kunnen het window vergroten en verkleinen"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:497
 msgid "Modal"
 msgstr "Modaal"
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:498
 #, fuzzy
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
@@ -4891,31 +4951,31 @@ msgstr ""
 "Als TRUE, het window is modaal (andere windows kunnen niet gebruikt worden "
 "zolang deze voor staat."
 
-#: gtk/gtkwindow.c:503
+#: gtk/gtkwindow.c:505
 msgid "Window Position"
 msgstr "Window positie"
 
-#: gtk/gtkwindow.c:504
+#: gtk/gtkwindow.c:506
 #, fuzzy
 msgid "The initial position of the window"
 msgstr "De begin positie van het window"
 
-#: gtk/gtkwindow.c:512
+#: gtk/gtkwindow.c:514
 msgid "Default Width"
 msgstr "Standaard breedte"
 
-#: gtk/gtkwindow.c:513
+#: gtk/gtkwindow.c:515
 #, fuzzy
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "De standaard breedte van het window, gebruikt als het window voor het eerste "
 "getoond wordt."
 
-#: gtk/gtkwindow.c:522
+#: gtk/gtkwindow.c:524
 msgid "Default Height"
 msgstr "Standaard hoogte"
 
-#: gtk/gtkwindow.c:523
+#: gtk/gtkwindow.c:525
 #, fuzzy
 msgid ""
 "The default height of the window, used when initially showing the window"
@@ -4923,63 +4983,63 @@ msgstr ""
 "De standaard hoogte van het window, gebruikt als het window voor het eerste "
 "getoond wordt."
 
-#: gtk/gtkwindow.c:532
+#: gtk/gtkwindow.c:534
 msgid "Destroy with Parent"
 msgstr "Vernietig met parent"
 
-#: gtk/gtkwindow.c:533
+#: gtk/gtkwindow.c:535
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Als dit window vernietigt wordt, dan wordt de parent ook vernietigt"
 
-#: gtk/gtkwindow.c:540
+#: gtk/gtkwindow.c:542
 msgid "Icon"
 msgstr "Icoon"
 
-#: gtk/gtkwindow.c:541
+#: gtk/gtkwindow.c:543
 msgid "Icon for this window"
 msgstr "Icoon voor dit window"
 
-#: gtk/gtkwindow.c:556
+#: gtk/gtkwindow.c:558
 #, fuzzy
 msgid "Is Active"
 msgstr "Actief"
 
-#: gtk/gtkwindow.c:557
+#: gtk/gtkwindow.c:559
 #, fuzzy
 msgid "Whether the toplevel is the current active window"
 msgstr "Of de widget de standaard widget is"
 
-#: gtk/gtkwindow.c:564
+#: gtk/gtkwindow.c:566
 msgid "Focus in Toplevel"
 msgstr ""
 
-#: gtk/gtkwindow.c:565
+#: gtk/gtkwindow.c:567
 msgid "Whether the input focus is within this GtkWindow"
 msgstr ""
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:574
 msgid "Type hint"
 msgstr ""
 
-#: gtk/gtkwindow.c:573
+#: gtk/gtkwindow.c:575
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:583
 msgid "Skip taskbar"
 msgstr ""
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:584
 msgid "TRUE if the window should not be in the task bar."
 msgstr ""
 
-#: gtk/gtkwindow.c:589
+#: gtk/gtkwindow.c:591
 msgid "Skip pager"
 msgstr ""
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:592
 #, fuzzy
 msgid "TRUE if the window should not be in the pager."
 msgstr "TRUE als de positie eigenschap gebruikt moet worden"

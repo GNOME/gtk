@@ -5,6 +5,7 @@ Overview of Changes in GTK+ 2.1.2
 * Remove usage of XLookupString outside of GtkIMContextXIM [Owen]
 * Handle Shift/Caps/Num_Lock properly for non-Xkb [Owen]
 * Add a --screen option to set default screen [Balamurali Viswanathan, Owen]
+* Add simple support for startup notification [Havoc Pennington]
 * Handle focus indication for check and radio buttons without children
   [Dave Camp, Owen]
 * Much work on improve submenu navigation [Soeren Sandmann]

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-10-28 03:23+0300\n"
+"POT-Creation-Date: 2002-11-02 00:08-0500\n"
 "PO-Revision-Date: 2002-10-24 15:30+0300\n"
 "Last-Translator: Ales Nyakhaychyk <i18n@infonet.by>\n"
 "Language-Team: Belarusian <be@li.org>\n"
@@ -1933,12 +1933,12 @@ msgstr "Файлы"
 msgid "_Files"
 msgstr "_Файлы"
 
-#: gtk/gtkfilesel.c:807 gtk/gtkfilesel.c:2189
+#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2208
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Каталёг нячытаем: %s"
 
-#: gtk/gtkfilesel.c:938
+#: gtk/gtkfilesel.c:941
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1946,25 +1946,25 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1069
+#: gtk/gtkfilesel.c:1072
 msgid "_New Folder"
 msgstr "_Новы каталёг"
 
-#: gtk/gtkfilesel.c:1080
+#: gtk/gtkfilesel.c:1083
 msgid "De_lete File"
 msgstr "Зь_нішчыць файл"
 
-#: gtk/gtkfilesel.c:1091
+#: gtk/gtkfilesel.c:1094
 msgid "_Rename File"
 msgstr "_Перайменаваць файл"
 
-#: gtk/gtkfilesel.c:1387
+#: gtk/gtkfilesel.c:1390
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1389
+#: gtk/gtkfilesel.c:1392
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1973,34 +1973,34 @@ msgstr ""
 "Памылка стварэньня каталёгу \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1390 gtk/gtkfilesel.c:1631
+#: gtk/gtkfilesel.c:1393 gtk/gtkfilesel.c:1634
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1398
+#: gtk/gtkfilesel.c:1401
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Памылка стварэньня каталёгу \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1432
+#: gtk/gtkfilesel.c:1435
 msgid "New Folder"
 msgstr "Новы каталёг"
 
-#: gtk/gtkfilesel.c:1447
+#: gtk/gtkfilesel.c:1450
 msgid "_Folder name:"
 msgstr "_Назва каталёгу:"
 
-#: gtk/gtkfilesel.c:1473
+#: gtk/gtkfilesel.c:1476
 #, fuzzy
 msgid "C_reate"
 msgstr "Стварыць"
 
-#: gtk/gtkfilesel.c:1519
+#: gtk/gtkfilesel.c:1522
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Назва файла \"%s\" зьмяшчае нядапушчальныя сімвалы"
 
-#: gtk/gtkfilesel.c:1522
+#: gtk/gtkfilesel.c:1525
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2009,30 +2009,30 @@ msgstr ""
 "Памылка зьнішчэньня файла \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1524 gtk/gtkfilesel.c:1645
+#: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1648
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Магчыма зьмяшчае сімвалы, недапушчальныя ў назвах файлаў."
 
-#: gtk/gtkfilesel.c:1533
+#: gtk/gtkfilesel.c:1536
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Памылка зьнішчэньня файла \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1576
+#: gtk/gtkfilesel.c:1579
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Сапраўды зьнішчыць файл \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1581
+#: gtk/gtkfilesel.c:1584
 msgid "Delete File"
 msgstr "Зьнішчыць файл"
 
-#: gtk/gtkfilesel.c:1627 gtk/gtkfilesel.c:1641
+#: gtk/gtkfilesel.c:1630 gtk/gtkfilesel.c:1644
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Назва файла \"%s\" зьмяшчае сімвалы, недапушчальныя ў назвах файлаў"
 
-#: gtk/gtkfilesel.c:1629
+#: gtk/gtkfilesel.c:1632
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2041,7 +2041,7 @@ msgstr ""
 "Памылка перайменаваньня \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1643
+#: gtk/gtkfilesel.c:1646
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2050,45 +2050,46 @@ msgstr ""
 "Памылка перайменаваньня \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1653
+#: gtk/gtkfilesel.c:1656
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Памылка перайменаваньня \"%s\" у \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1700
+#: gtk/gtkfilesel.c:1703
 msgid "Rename File"
 msgstr "Перайменаваць файл"
 
-#: gtk/gtkfilesel.c:1715
+#: gtk/gtkfilesel.c:1718
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Перайменаваць файл \"%s\" у:"
 
-#: gtk/gtkfilesel.c:1746
+#: gtk/gtkfilesel.c:1749
 #, fuzzy
 msgid "_Rename"
 msgstr "Перайменаваць"
 
-#: gtk/gtkfilesel.c:2168
-msgid "Selection: "
+#: gtk/gtkfilesel.c:2188
+#, fuzzy
+msgid "_Selection: "
 msgstr "Выбар: "
 
-#: gtk/gtkfilesel.c:3055
+#: gtk/gtkfilesel.c:3074
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3058
+#: gtk/gtkfilesel.c:3077
 msgid "Invalid Utf-8"
 msgstr "Нерэчаісны UTF-8"
 
-#: gtk/gtkfilesel.c:3924
+#: gtk/gtkfilesel.c:3943
 msgid "Name too long"
 msgstr "Назва вельмі доўгая"
 
-#: gtk/gtkfilesel.c:3926
+#: gtk/gtkfilesel.c:3945
 msgid "Couldn't convert filename"
 msgstr "Немагчыма пераўтварыць назву файла"
 
@@ -2237,7 +2238,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1684
+#: gtk/gtkiconfactory.c:1690
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Памылка загрузкі значкі: %s"
@@ -2345,7 +2346,7 @@ msgstr "_Прылада:"
 msgid "Disabled"
 msgstr "Выключана"
 
-#: gtk/gtkinputdialog.c:250 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:548
+#: gtk/gtkinputdialog.c:250 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:550
 msgid "Screen"
 msgstr "Экран"
 
@@ -2408,7 +2409,7 @@ msgstr "(невядомы)"
 msgid "clear"
 msgstr "ачысьціць"
 
-#: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:549
+#: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:551
 msgid "The screen where this window will be displayed"
 msgstr ""
 
@@ -4327,7 +4328,7 @@ msgstr ""
 msgid "Whether to display the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:193 gtk/gtkwindow.c:487
+#: gtk/gtktreeviewcolumn.c:193 gtk/gtkwindow.c:489
 msgid "Resizable"
 msgstr ""
 
@@ -4640,141 +4641,141 @@ msgstr ""
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkwindow.c:452
+#: gtk/gtkwindow.c:454
 msgid "Window Type"
 msgstr "Тып акна"
 
-#: gtk/gtkwindow.c:453
+#: gtk/gtkwindow.c:455
 msgid "The type of the window"
 msgstr "Тып гэтага акна"
 
-#: gtk/gtkwindow.c:462
+#: gtk/gtkwindow.c:464
 msgid "Window Title"
 msgstr "Назоў акна"
 
-#: gtk/gtkwindow.c:463
+#: gtk/gtkwindow.c:465
 msgid "The title of the window"
 msgstr "Назоў гэтага акна"
 
-#: gtk/gtkwindow.c:470
+#: gtk/gtkwindow.c:472
 msgid "Allow Shrink"
 msgstr ""
 
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:474
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
 
-#: gtk/gtkwindow.c:479
+#: gtk/gtkwindow.c:481
 msgid "Allow Grow"
 msgstr "Дазваляць рост"
 
-#: gtk/gtkwindow.c:480
+#: gtk/gtkwindow.c:482
 #, fuzzy
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "Калі ІСЬЦІНА (TRUE), карыстальнікі могуць разьвярнуць акно замест яго "
 "найменьшага памеру."
 
-#: gtk/gtkwindow.c:488
+#: gtk/gtkwindow.c:490
 #, fuzzy
 msgid "If TRUE, users can resize the window"
 msgstr "Калі ІСЬЦІНА (TRUE), карыстальнікі могуць зьмяняць памер акна."
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:497
 msgid "Modal"
 msgstr "Мадальны"
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:498
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
 
-#: gtk/gtkwindow.c:503
+#: gtk/gtkwindow.c:505
 msgid "Window Position"
 msgstr "Пазіцыя акна"
 
-#: gtk/gtkwindow.c:504
+#: gtk/gtkwindow.c:506
 #, fuzzy
 msgid "The initial position of the window"
 msgstr "Пачатковае становішча акна."
 
-#: gtk/gtkwindow.c:512
+#: gtk/gtkwindow.c:514
 msgid "Default Width"
 msgstr "Звычайная шырыня:"
 
-#: gtk/gtkwindow.c:513
+#: gtk/gtkwindow.c:515
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 
-#: gtk/gtkwindow.c:522
+#: gtk/gtkwindow.c:524
 msgid "Default Height"
 msgstr "Звычайная вышыня"
 
-#: gtk/gtkwindow.c:523
+#: gtk/gtkwindow.c:525
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 
-#: gtk/gtkwindow.c:532
+#: gtk/gtkwindow.c:534
 msgid "Destroy with Parent"
 msgstr "Зьнішчыць разам з бацькоўскім"
 
-#: gtk/gtkwindow.c:533
+#: gtk/gtkwindow.c:535
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Ці павінна гэта акно быць зьнішчына разам з бацькоўскім"
 
-#: gtk/gtkwindow.c:540
+#: gtk/gtkwindow.c:542
 msgid "Icon"
 msgstr "Значка"
 
-#: gtk/gtkwindow.c:541
+#: gtk/gtkwindow.c:543
 msgid "Icon for this window"
 msgstr "Значка для гэтага акна"
 
-#: gtk/gtkwindow.c:556
+#: gtk/gtkwindow.c:558
 #, fuzzy
 msgid "Is Active"
 msgstr "Актыўны"
 
-#: gtk/gtkwindow.c:557
+#: gtk/gtkwindow.c:559
 msgid "Whether the toplevel is the current active window"
 msgstr ""
 
-#: gtk/gtkwindow.c:564
+#: gtk/gtkwindow.c:566
 msgid "Focus in Toplevel"
 msgstr ""
 
-#: gtk/gtkwindow.c:565
+#: gtk/gtkwindow.c:567
 msgid "Whether the input focus is within this GtkWindow"
 msgstr ""
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:574
 msgid "Type hint"
 msgstr ""
 
-#: gtk/gtkwindow.c:573
+#: gtk/gtkwindow.c:575
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:583
 msgid "Skip taskbar"
 msgstr ""
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:584
 msgid "TRUE if the window should not be in the task bar."
 msgstr ""
 
-#: gtk/gtkwindow.c:589
+#: gtk/gtkwindow.c:591
 msgid "Skip pager"
 msgstr ""
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:592
 msgid "TRUE if the window should not be in the pager."
 msgstr ""
 

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.2\n"
-"POT-Creation-Date: 2002-10-14 18:56-0400\n"
+"POT-Creation-Date: 2002-11-02 00:08-0500\n"
 "PO-Revision-Date: 2002-04-15 22:10+0400\n"
 "Last-Translator: Dmitry Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -165,80 +165,84 @@ msgid "The BMP image format"
 msgstr ""
 
 # gdk-pixbuf/io-gif.c:218
-#: gdk-pixbuf/io-gif.c:218
+#: gdk-pixbuf/io-gif.c:219
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Сбой при чтении файла формата GIF: %s"
 
 # gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1543
+#: gdk-pixbuf/io-gif.c:491 gdk-pixbuf/io-gif.c:1425 gdk-pixbuf/io-gif.c:1586
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "Файл формата GIF содержал испорченные данные (возможно был обрезан?)"
 
 # gdk-pixbuf/io-gif.c:469
-#: gdk-pixbuf/io-gif.c:469
+#: gdk-pixbuf/io-gif.c:500
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Внутренняя ошибка в загрузчике GIF (%s)"
 
+#: gdk-pixbuf/io-gif.c:572
+msgid "Stack overflow"
+msgstr ""
+
 # gdk-pixbuf/io-gif.c:592
-#: gdk-pixbuf/io-gif.c:592
+#: gdk-pixbuf/io-gif.c:631
 msgid "GIF image loader can't understand this image."
 msgstr "Загрузчик изображений формата GIF не может понять это изображение."
 
 # gdk-pixbuf/io-gif.c:621
-#: gdk-pixbuf/io-gif.c:621
+#: gdk-pixbuf/io-gif.c:660
 msgid "Bad code encountered"
 msgstr "Обнаружен неправильный код"
 
 # gdk-pixbuf/io-gif.c:630
-#: gdk-pixbuf/io-gif.c:630
+#: gdk-pixbuf/io-gif.c:670
 msgid "Circular table entry in GIF file"
 msgstr "Круговая табличная запись в файле формата GIF"
 
 # gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
 # gdk-pixbuf/io-gif.c:1530
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1416
-#: gdk-pixbuf/io-gif.c:1531
+#: gdk-pixbuf/io-gif.c:803 gdk-pixbuf/io-gif.c:1413 gdk-pixbuf/io-gif.c:1459
+#: gdk-pixbuf/io-gif.c:1574
 msgid "Not enough memory to load GIF file"
 msgstr "Недостаточно памяти для загрузки файла формата GIF"
 
 # gdk-pixbuf/io-gif.c:1009
-#: gdk-pixbuf/io-gif.c:1009
+#: gdk-pixbuf/io-gif.c:1050
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Изображение формата GIF повреждено (неправильное сжатие LZW)"
 
 # gdk-pixbuf/io-gif.c:1059
-#: gdk-pixbuf/io-gif.c:1059
+#: gdk-pixbuf/io-gif.c:1100
 msgid "File does not appear to be a GIF file"
 msgstr "Вероятно, файл не является файлом формата GIF"
 
 # gdk-pixbuf/io-gif.c:1071
-#: gdk-pixbuf/io-gif.c:1071
+#: gdk-pixbuf/io-gif.c:1112
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Файлы в формате GIF версии %s не поддерживаются"
 
 # gdk-pixbuf/io-gif.c:1144
-#: gdk-pixbuf/io-gif.c:1144
+#: gdk-pixbuf/io-gif.c:1185
 msgid "GIF image contained a frame with height or width 0."
 msgstr "Изображение формата GIF содержит кадр с нулевой шириной или высотой."
 
 # gdk-pixbuf/io-gif.c:1157
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1198
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 "Изображение формата GIF содержит кадр, выходящий за пределы изображения."
 
 # gdk-pixbuf/io-gif.c:1173
-#: gdk-pixbuf/io-gif.c:1173
+#: gdk-pixbuf/io-gif.c:1214
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "Первый кадр изображения формата GIF имел режим размещения 'возврат к "
 "предыдущему'"
 
 # gdk-pixbuf/io-gif.c:1208
-#: gdk-pixbuf/io-gif.c:1208
+#: gdk-pixbuf/io-gif.c:1249
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -247,12 +251,12 @@ msgstr ""
 "не имеет локальной карты цветов."
 
 # gdk-pixbuf/io-gif.c:1437
-#: gdk-pixbuf/io-gif.c:1438
+#: gdk-pixbuf/io-gif.c:1481
 msgid "GIF image was truncated or incomplete."
 msgstr "Изображение формата GIF было обрезано или незавершено."
 
 # gdk-pixbuf/gdk-pixdata.c:151
-#: gdk-pixbuf/io-gif.c:1590
+#: gdk-pixbuf/io-gif.c:1633
 #, fuzzy
 msgid "The GIF image format"
 msgstr "Неизвестный формат изображения"
@@ -1156,7 +1160,7 @@ msgid ""
 msgstr ""
 
 # gtk/gtkpaned.c:208 gtk/gtkruler.c:138
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:457 gtk/gtkpaned.c:211
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:457 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
 msgid "Position"
 msgstr "Позиция"
@@ -1460,7 +1464,7 @@ msgid "Render detail to pass to the theme engine"
 msgstr ""
 
 # gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
-#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:209
+#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:524 gtk/gtkprogressbar.c:209
 msgid "Text"
 msgstr "Текст"
 
@@ -1532,7 +1536,7 @@ msgstr "Цвет текста как GdkColor"
 
 # gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 # gtk/gtktextview.c:568
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:273
+#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:456 gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:568
 msgid "Editable"
 msgstr "Редактируемое"
@@ -2230,200 +2234,200 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Ширина отступа вокруг кнопки снизу в диалоге"
 
 # gtk/gtkentry.c:435 gtk/gtklabel.c:358
-#: gtk/gtkentry.c:435 gtk/gtklabel.c:365
+#: gtk/gtkentry.c:436 gtk/gtklabel.c:365
 msgid "Cursor Position"
 msgstr "Позиция курсора"
 
 # gtk/gtkentry.c:436 gtk/gtklabel.c:359
-#: gtk/gtkentry.c:436 gtk/gtklabel.c:366
+#: gtk/gtkentry.c:437 gtk/gtklabel.c:366
 #, fuzzy
 msgid "The current position of the insertion cursor in chars"
 msgstr "Текущая позиция точки вставки в символах."
 
 # gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#: gtk/gtkentry.c:445 gtk/gtklabel.c:375
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:375
 msgid "Selection Bound"
 msgstr "Граница выделения"
 
 # gtk/gtkentry.c:446 gtk/gtklabel.c:369
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:376
+#: gtk/gtkentry.c:447 gtk/gtklabel.c:376
 #, fuzzy
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Положение противоположного конца выделения от курсора в символах."
 
 # gtk/gtkentry.c:456
-#: gtk/gtkentry.c:456
+#: gtk/gtkentry.c:457
 msgid "Whether the entry contents can be edited"
 msgstr "Может ли содержимое записи быть изменено"
 
 # gtk/gtkentry.c:463
-#: gtk/gtkentry.c:463
+#: gtk/gtkentry.c:464
 msgid "Maximum length"
 msgstr "Максимальная длина"
 
 # gtk/gtkentry.c:464
-#: gtk/gtkentry.c:464
+#: gtk/gtkentry.c:465
 #, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Максимальное число символов для этой записи. \"0\" - без ограничений."
 
 # gtk/gtkentry.c:472
-#: gtk/gtkentry.c:472
+#: gtk/gtkentry.c:473
 msgid "Visibility"
 msgstr "Видимость"
 
 # gtk/gtkentry.c:473
-#: gtk/gtkentry.c:473
+#: gtk/gtkentry.c:474
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 
 # gtk/gtkentry.c:480
-#: gtk/gtkentry.c:480
+#: gtk/gtkentry.c:481
 msgid "Has Frame"
 msgstr "Имеет рамку"
 
-#: gtk/gtkentry.c:481
+#: gtk/gtkentry.c:482
 msgid "FALSE removes outside bevel from entry"
 msgstr ""
 
 # gtk/gtkentry.c:488
-#: gtk/gtkentry.c:488
+#: gtk/gtkentry.c:489
 msgid "Invisible character"
 msgstr "Невидимый символ"
 
 # gtk/gtkentry.c:489
-#: gtk/gtkentry.c:489
+#: gtk/gtkentry.c:490
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Символ используемый для сокрытия содержимого записи (в \"режиме пароля\")"
 
 # gtk/gtkentry.c:496
-#: gtk/gtkentry.c:496
+#: gtk/gtkentry.c:497
 msgid "Activates default"
 msgstr ""
 
-#: gtk/gtkentry.c:497
+#: gtk/gtkentry.c:498
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
 
 # gtk/gtkentry.c:503
-#: gtk/gtkentry.c:503
+#: gtk/gtkentry.c:504
 msgid "Width in chars"
 msgstr "Ширина в символах"
 
 # gtk/gtkentry.c:504
-#: gtk/gtkentry.c:504
+#: gtk/gtkentry.c:505
 #, fuzzy
 msgid "Number of characters to leave space for in the entry"
 msgstr "Число символов, для которых оставлено место в строке."
 
 # gtk/gtkentry.c:513
-#: gtk/gtkentry.c:513
+#: gtk/gtkentry.c:514
 msgid "Scroll offset"
 msgstr ""
 
 # gtk/gtkentry.c:514
-#: gtk/gtkentry.c:514
+#: gtk/gtkentry.c:515
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 
 # gtk/gtkentry.c:524
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid "The contents of the entry"
 msgstr "Содержимое строки"
 
 # gtk/gtkentry.c:728
-#: gtk/gtkentry.c:755
+#: gtk/gtkentry.c:756
 msgid "Select on focus"
 msgstr "Выделение при фокусировании"
 
 # gtk/gtkentry.c:729
-#: gtk/gtkentry.c:756
+#: gtk/gtkentry.c:757
 #, fuzzy
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Будет ли содержимое записи выделяться при фокусировании."
 
 # gtk/gtkentry.c:3850 gtk/gtklabel.c:3164
-#: gtk/gtkentry.c:3922 gtk/gtklabel.c:3217
+#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3217
 msgid "Select All"
 msgstr "Выделить все"
 
 # gtk/gtkentry.c:3860 gtk/gtklabel.c:3174
-#: gtk/gtkentry.c:3932 gtk/gtklabel.c:3227
+#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3227
 msgid "Input Methods"
 msgstr "Методы ввода"
 
 # gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
-#: gtk/gtkentry.c:3942 gtk/gtktextview.c:6485
+#: gtk/gtkentry.c:3970 gtk/gtktextview.c:6485
 msgid "_Insert Unicode control character"
 msgstr "Вс_тавить управляющий символ Unicode"
 
 # gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
-#: gtk/gtkfilesel.c:515 gtk/gtkimage.c:165
+#: gtk/gtkfilesel.c:516 gtk/gtkimage.c:165
 msgid "Filename"
 msgstr "Имя файла"
 
 # gtk/gtkfilesel.c:537
-#: gtk/gtkfilesel.c:516
+#: gtk/gtkfilesel.c:517
 #, fuzzy
 msgid "The currently selected filename"
 msgstr "Выбранное имя файла."
 
 # gtk/gtkfilesel.c:543
-#: gtk/gtkfilesel.c:522
+#: gtk/gtkfilesel.c:523
 msgid "Show file operations"
 msgstr "Показать файловые операции"
 
 # gtk/gtkfilesel.c:544
-#: gtk/gtkfilesel.c:523
+#: gtk/gtkfilesel.c:524
 #, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Должны ли быть показаны кнопки для создания/обработки файлов."
 
 # gtk/gtkfilesel.c:551
-#: gtk/gtkfilesel.c:530
+#: gtk/gtkfilesel.c:531
 msgid "Select multiple"
 msgstr "Выделять несколько."
 
 # gtk/gtkfilesel.c:552
-#: gtk/gtkfilesel.c:531
+#: gtk/gtkfilesel.c:532
 #, fuzzy
 msgid "Whether to allow multiple files to be selected"
 msgstr "Могут ли быть выделены несколько файлов."
 
 # gtk/gtkfilesel.c:707
-#: gtk/gtkfilesel.c:686
+#: gtk/gtkfilesel.c:687
 msgid "Folders"
 msgstr "Каталоги"
 
 # gtk/gtkfilesel.c:711
-#: gtk/gtkfilesel.c:690
+#: gtk/gtkfilesel.c:691
 msgid "Fol_ders"
 msgstr "_Каталоги"
 
 # gtk/gtkfilesel.c:742
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:723
 msgid "Files"
 msgstr "Файлы"
 
 # gtk/gtkfilesel.c:746
-#: gtk/gtkfilesel.c:726
+#: gtk/gtkfilesel.c:727
 msgid "_Files"
 msgstr "Фай_лы"
 
 # gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
-#: gtk/gtkfilesel.c:803 gtk/gtkfilesel.c:2143
+#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2208
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Каталог нечитаем: %s"
 
 # gtk/gtkfilesel.c:946
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:941
 #, fuzzy, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2435,29 +2439,29 @@ msgstr ""
 "Уверены в том, что хотите выбрать его?"
 
 # gtk/gtkfilesel.c:1076
-#: gtk/gtkfilesel.c:1065
+#: gtk/gtkfilesel.c:1072
 msgid "_New Folder"
 msgstr "_Создать каталог"
 
 # gtk/gtkfilesel.c:1087
-#: gtk/gtkfilesel.c:1076
+#: gtk/gtkfilesel.c:1083
 msgid "De_lete File"
 msgstr "У_далить файл"
 
 # gtk/gtkfilesel.c:1098
-#: gtk/gtkfilesel.c:1087
+#: gtk/gtkfilesel.c:1094
 msgid "_Rename File"
 msgstr "Переи_меновать файл"
 
 # gtk/gtkfilesel.c:1358
-#: gtk/gtkfilesel.c:1367
+#: gtk/gtkfilesel.c:1390
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Имя каталога \"%s\" содержит символы недопустимые в названиях файлов"
 
 # gtk/gtkfilesel.c:1360
-#: gtk/gtkfilesel.c:1369
+#: gtk/gtkfilesel.c:1392
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2467,39 +2471,40 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
-#: gtk/gtkfilesel.c:1370 gtk/gtkfilesel.c:1606
+#: gtk/gtkfilesel.c:1393 gtk/gtkfilesel.c:1634
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Возможно вы используете символы недопустимые в именах файлов."
 
 # gtk/gtkfilesel.c:1369
-#: gtk/gtkfilesel.c:1378
+#: gtk/gtkfilesel.c:1401
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Ошибка  создания каталога \"%s\": %s\n"
 
 # gtk/gtkfilesel.c:1403
-#: gtk/gtkfilesel.c:1412
+#: gtk/gtkfilesel.c:1435
 msgid "New Folder"
 msgstr "Создать каталог"
 
 # gtk/gtkfilesel.c:1418
-#: gtk/gtkfilesel.c:1427
+#: gtk/gtkfilesel.c:1450
 msgid "_Folder name:"
 msgstr "И_мя каталога:"
 
 # gtk/gtkfilesel.c:1444
-#: gtk/gtkfilesel.c:1453
-msgid "Create"
+#: gtk/gtkfilesel.c:1476
+#, fuzzy
+msgid "C_reate"
 msgstr "Создать"
 
 # gtk/gtkfilesel.c:1485
-#: gtk/gtkfilesel.c:1494
+#: gtk/gtkfilesel.c:1522
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Имя файла \"%s\" содержит символы недопустимые в названиях файлов"
 
 # gtk/gtkfilesel.c:1488
-#: gtk/gtkfilesel.c:1497
+#: gtk/gtkfilesel.c:1525
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2509,35 +2514,35 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
-#: gtk/gtkfilesel.c:1499 gtk/gtkfilesel.c:1620
+#: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1648
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Возможно содержит символы, недопустимые в именах файлов."
 
 # gtk/gtkfilesel.c:1499
-#: gtk/gtkfilesel.c:1508
+#: gtk/gtkfilesel.c:1536
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Ошибка удаления файла \"%s\": %s"
 
 # gtk/gtkfilesel.c:1542
-#: gtk/gtkfilesel.c:1551
+#: gtk/gtkfilesel.c:1579
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Действительно удалить файл \"%s\"?"
 
 # gtk/gtkfilesel.c:1547
-#: gtk/gtkfilesel.c:1556
+#: gtk/gtkfilesel.c:1584
 msgid "Delete File"
 msgstr "Удалить файл"
 
 # gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
-#: gtk/gtkfilesel.c:1602 gtk/gtkfilesel.c:1616
+#: gtk/gtkfilesel.c:1630 gtk/gtkfilesel.c:1644
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Имя файла \"%s\" содержит символы, недопустимые в названиях файлов"
 
 # gtk/gtkfilesel.c:1595
-#: gtk/gtkfilesel.c:1604
+#: gtk/gtkfilesel.c:1632
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2547,7 +2552,7 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1609
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1646
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2557,34 +2562,36 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1619
-#: gtk/gtkfilesel.c:1628
+#: gtk/gtkfilesel.c:1656
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Ошибка переименования файла \"%s\" в \"%s\": %s"
 
 # gtk/gtkfilesel.c:1666
-#: gtk/gtkfilesel.c:1675
+#: gtk/gtkfilesel.c:1703
 msgid "Rename File"
 msgstr "Переименовать файл"
 
 # gtk/gtkfilesel.c:1681
-#: gtk/gtkfilesel.c:1690
+#: gtk/gtkfilesel.c:1718
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Переименовать файл \"%s\" в:"
 
 # gtk/gtkfilesel.c:1712
-#: gtk/gtkfilesel.c:1721
-msgid "Rename"
+#: gtk/gtkfilesel.c:1749
+#, fuzzy
+msgid "_Rename"
 msgstr "Переименовать"
 
 # gtk/gtkfilesel.c:2103
-#: gtk/gtkfilesel.c:2122
-msgid "Selection: "
+#: gtk/gtkfilesel.c:2188
+#, fuzzy
+msgid "_Selection: "
 msgstr "Выбор: "
 
 # gtk/gtkfilesel.c:2983
-#: gtk/gtkfilesel.c:3009
+#: gtk/gtkfilesel.c:3074
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2594,17 +2601,17 @@ msgstr ""
 "переменную окружения G_BROKEN_FILENAMES)): %s"
 
 # gtk/gtkfilesel.c:2986
-#: gtk/gtkfilesel.c:3012
+#: gtk/gtkfilesel.c:3077
 msgid "Invalid Utf-8"
 msgstr "Недействительный текст Utf-8"
 
 # gtk/gtkfilesel.c:3852
-#: gtk/gtkfilesel.c:3878
+#: gtk/gtkfilesel.c:3943
 msgid "Name too long"
 msgstr "Имя слишком длинное"
 
 # gtk/gtkfilesel.c:3854
-#: gtk/gtkfilesel.c:3880
+#: gtk/gtkfilesel.c:3945
 msgid "Couldn't convert filename"
 msgstr "Не удалось преобразовать название файла"
 
@@ -2751,8 +2758,8 @@ msgstr "_Гамма-значение"
 
 # gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:151 gtk/gtkstatusbar.c:158
 # gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
-#: gtk/gtkhandlebox.c:193 gtk/gtkmenubar.c:152 gtk/gtkstatusbar.c:161
-#: gtk/gtktoolbar.c:281 gtk/gtkviewport.c:150
+#: gtk/gtkhandlebox.c:193 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
+#: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Тип тени"
 
@@ -2786,7 +2793,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1684
+#: gtk/gtkiconfactory.c:1690
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Ошибка загрузки пиктограммы: %s"
@@ -2916,7 +2923,7 @@ msgid "Disabled"
 msgstr "Выключен"
 
 # gtk/gtkinputdialog.c:246
-#: gtk/gtkinputdialog.c:250 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:548
+#: gtk/gtkinputdialog.c:250 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:550
 msgid "Screen"
 msgstr "Экран"
 
@@ -2993,7 +3000,7 @@ msgstr "(неизвестен)"
 msgid "clear"
 msgstr "очистить"
 
-#: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:549
+#: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:551
 msgid "The screen where this window will be displayed"
 msgstr ""
 
@@ -3134,39 +3141,66 @@ msgid "default:LTR"
 msgstr "default:LTR"
 
 # gtk/gtkmenu.c:191
-#: gtk/gtkmenu.c:230
+#: gtk/gtkmenu.c:235
 msgid "Tearoff Title"
 msgstr ""
 
-#: gtk/gtkmenu.c:231
+#: gtk/gtkmenu.c:236
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 
 # gtk/gtkmenu.c:260
-#: gtk/gtkmenu.c:302
+#: gtk/gtkmenu.c:308
 msgid "Can change accelerators"
 msgstr "Может изменять комбинации клавиш"
 
-#: gtk/gtkmenu.c:303
+#: gtk/gtkmenu.c:309
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 
+#: gtk/gtkmenu.c:314
+msgid "Delay before submenus appear"
+msgstr ""
+
+#: gtk/gtkmenu.c:315
+msgid ""
+"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgstr ""
+
+#: gtk/gtkmenu.c:322
+msgid "Delay before hiding a submenu"
+msgstr ""
+
+#: gtk/gtkmenu.c:323
+msgid ""
+"The time before hiding a submenu when the pointer is moving towards the "
+"submenu"
+msgstr ""
+
 # gtk/gtkmenubar.c:152
-#: gtk/gtkmenubar.c:153
+#: gtk/gtkmenubar.c:157
 msgid "Style of bevel around the menubar"
 msgstr "Стиль скоса вокруг строки меню"
 
 # gtk/gtkmenubar.c:159 gtk/gtktoolbar.c:251
-#: gtk/gtkmenubar.c:160 gtk/gtktoolbar.c:255
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:256
 msgid "Internal padding"
 msgstr ""
 
 # gtk/gtkmenubar.c:160
-#: gtk/gtkmenubar.c:161
+#: gtk/gtkmenubar.c:165
 msgid "Amount of border space between the menubar shadow and the menu items"
+msgstr ""
+
+#: gtk/gtkmenubar.c:172
+msgid "Delay before drop down menus appear"
+msgstr ""
+
+#: gtk/gtkmenubar.c:173
+msgid "Delay before the submenus of a menu bar appear"
 msgstr ""
 
 # gtk/gtkmessagedialog.c:104
@@ -3378,7 +3412,7 @@ msgid "Tab pack type"
 msgstr ""
 
 # gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
-#: gtk/gtknotebook.c:2464 gtk/gtknotebook.c:4745
+#: gtk/gtknotebook.c:2467 gtk/gtknotebook.c:4751
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
@@ -3404,28 +3438,28 @@ msgid "Spacing around indicator"
 msgstr "Интервал вокруг индикатора"
 
 # gtk/gtkpaned.c:209
-#: gtk/gtkpaned.c:212
+#: gtk/gtkpaned.c:219
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
 # gtk/gtkpaned.c:217
-#: gtk/gtkpaned.c:220
+#: gtk/gtkpaned.c:227
 msgid "Position Set"
 msgstr ""
 
 # gtk/gtkpaned.c:218
-#: gtk/gtkpaned.c:221
+#: gtk/gtkpaned.c:228
 msgid "TRUE if the Position property should be used"
 msgstr ""
 
 # gtk/gtkpaned.c:224
-#: gtk/gtkpaned.c:227
+#: gtk/gtkpaned.c:234
 msgid "Handle Size"
 msgstr ""
 
 # gtk/gtkpaned.c:225
-#: gtk/gtkpaned.c:228
+#: gtk/gtkpaned.c:235
 msgid "Width of handle"
 msgstr ""
 
@@ -3497,7 +3531,7 @@ msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr ""
 
 # gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:224
-#: gtk/gtkprogressbar.c:141 gtk/gtktoolbar.c:228
+#: gtk/gtkprogressbar.c:141 gtk/gtktoolbar.c:229
 msgid "Orientation"
 msgstr "Ориентация"
 
@@ -3877,6 +3911,19 @@ msgstr "Тип тени"
 #: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
 msgstr "Стиль скоса вокруг содержимого"
+
+# gtk/gtktable.c:183
+#: gtk/gtkscrolledwindow.c:282
+#, fuzzy
+msgid "Scrollbar spacing"
+msgstr "Интервал столбцов"
+
+# gtk/gtksettings.c:207
+#: gtk/gtkscrolledwindow.c:283
+#, fuzzy
+msgid "Number of pixels between the scrollbars and the scrolled window"
+msgstr ""
+"Число точек растра, на которое может сместиться курсор до перетаскивания"
 
 # gtk/gtksettings.c:148
 #: gtk/gtksettings.c:160
@@ -5055,78 +5102,78 @@ msgid "If the toggle part of the button is displayed"
 msgstr ""
 
 # gtk/gtktoolbar.c:225
-#: gtk/gtktoolbar.c:229
+#: gtk/gtktoolbar.c:230
 msgid "The orientation of the toolbar"
 msgstr "Ориентация панели инструментов"
 
 # gtk/gtktoolbar.c:233
-#: gtk/gtktoolbar.c:237
+#: gtk/gtktoolbar.c:238
 msgid "Toolbar Style"
 msgstr "Стиль панели инструментов"
 
 # gtk/gtktoolbar.c:234
-#: gtk/gtktoolbar.c:238
+#: gtk/gtktoolbar.c:239
 msgid "How to draw the toolbar"
 msgstr "Как рисовать панель инструментов"
 
 # gtk/gtktoolbar.c:242
-#: gtk/gtktoolbar.c:246
+#: gtk/gtktoolbar.c:247
 msgid "Spacer size"
 msgstr ""
 
 # gtk/gtktoolbar.c:243
-#: gtk/gtktoolbar.c:247
+#: gtk/gtktoolbar.c:248
 msgid "Size of spacers"
 msgstr ""
 
 # gtk/gtktoolbar.c:252
-#: gtk/gtktoolbar.c:256
+#: gtk/gtktoolbar.c:257
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 
 # gtk/gtktoolbar.c:260
-#: gtk/gtktoolbar.c:264
+#: gtk/gtktoolbar.c:265
 msgid "Space style"
 msgstr ""
 
 # gtk/gtktoolbar.c:261
-#: gtk/gtktoolbar.c:265
+#: gtk/gtktoolbar.c:266
 msgid "Whether spacers are vertical lines or just blank"
 msgstr ""
 
 # gtk/gtktoolbar.c:269
-#: gtk/gtktoolbar.c:273
+#: gtk/gtktoolbar.c:274
 msgid "Button relief"
 msgstr "Рельеф кнопки"
 
 # gtk/gtktoolbar.c:270
-#: gtk/gtktoolbar.c:274
+#: gtk/gtktoolbar.c:275
 msgid "Type of bevel around toolbar buttons"
 msgstr "Тип скоса вокруг кнопок панели инструментов"
 
 # gtk/gtktoolbar.c:278
-#: gtk/gtktoolbar.c:282
+#: gtk/gtktoolbar.c:283
 msgid "Style of bevel around the toolbar"
 msgstr "Стиль скоса вокруг панели инструментов"
 
 # gtk/gtktoolbar.c:284
-#: gtk/gtktoolbar.c:288
+#: gtk/gtktoolbar.c:289
 msgid "Toolbar style"
 msgstr "Стиль панели инструментов"
 
 # gtk/gtktoolbar.c:285
-#: gtk/gtktoolbar.c:289
+#: gtk/gtktoolbar.c:290
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 
 # gtk/gtktoolbar.c:291
-#: gtk/gtktoolbar.c:295
+#: gtk/gtktoolbar.c:296
 msgid "Toolbar icon size"
 msgstr "Размер пиктограмм панели инструментов"
 
 # gtk/gtktoolbar.c:292
-#: gtk/gtktoolbar.c:296
+#: gtk/gtktoolbar.c:297
 msgid "Size of icons in default toolbars"
 msgstr "Размер пиктограмм в панели инструментов по умолчанию"
 
@@ -5275,13 +5322,29 @@ msgstr ""
 msgid "Make the expanders indented"
 msgstr ""
 
+#: gtk/gtktreeview.c:644
+msgid "Even Row Color"
+msgstr ""
+
+#: gtk/gtktreeview.c:645
+msgid "Color to use for even rows"
+msgstr ""
+
+#: gtk/gtktreeview.c:651
+msgid "Odd Row Color"
+msgstr ""
+
+#: gtk/gtktreeview.c:652
+msgid "Color to use for odd rows"
+msgstr ""
+
 # gtk/gtktreeviewcolumn.c:175
 #: gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
 msgstr ""
 
 # gtk/gtktreeviewcolumn.c:182 gtk/gtkwindow.c:441
-#: gtk/gtktreeviewcolumn.c:193 gtk/gtkwindow.c:487
+#: gtk/gtktreeviewcolumn.c:193 gtk/gtkwindow.c:489
 msgid "Resizable"
 msgstr "С изменяемым размером"
 
@@ -5654,31 +5717,31 @@ msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Пропорции курсора"
 
 # gtk/gtkwindow.c:406
-#: gtk/gtkwindow.c:452
+#: gtk/gtkwindow.c:454
 msgid "Window Type"
 msgstr "Тип окна"
 
 # gtk/gtkwindow.c:407
-#: gtk/gtkwindow.c:453
+#: gtk/gtkwindow.c:455
 msgid "The type of the window"
 msgstr "Тип окна"
 
 # gtk/gtkwindow.c:416
-#: gtk/gtkwindow.c:462
+#: gtk/gtkwindow.c:464
 msgid "Window Title"
 msgstr "Заголовок окна"
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkwindow.c:463
+#: gtk/gtkwindow.c:465
 msgid "The title of the window"
 msgstr "Заголовок окна"
 
 # gtk/gtkwindow.c:424
-#: gtk/gtkwindow.c:470
+#: gtk/gtkwindow.c:472
 msgid "Allow Shrink"
 msgstr ""
 
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:474
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -5686,63 +5749,63 @@ msgid ""
 msgstr ""
 
 # gtk/gtkwindow.c:433
-#: gtk/gtkwindow.c:479
+#: gtk/gtkwindow.c:481
 msgid "Allow Grow"
 msgstr "Позволить увеличение"
 
 # gtk/gtkwindow.c:442
-#: gtk/gtkwindow.c:480
+#: gtk/gtkwindow.c:482
 #, fuzzy
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "Если TRUE, пользователь может изменять размер окна."
 
 # gtk/gtkwindow.c:442
-#: gtk/gtkwindow.c:488
+#: gtk/gtkwindow.c:490
 #, fuzzy
 msgid "If TRUE, users can resize the window"
 msgstr "Если TRUE, пользователь может изменять размер окна."
 
 # gtk/gtkwindow.c:449
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:497
 msgid "Modal"
 msgstr "Модальное"
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:498
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
 
 # gtk/gtkwindow.c:457
-#: gtk/gtkwindow.c:503
+#: gtk/gtkwindow.c:505
 msgid "Window Position"
 msgstr "Позиция окна"
 
 # gtk/gtkwindow.c:458
-#: gtk/gtkwindow.c:504
+#: gtk/gtkwindow.c:506
 #, fuzzy
 msgid "The initial position of the window"
 msgstr "Исходная позиция окна"
 
 # gtk/gtkwindow.c:466
-#: gtk/gtkwindow.c:512
+#: gtk/gtkwindow.c:514
 msgid "Default Width"
 msgstr "Исходная ширина"
 
 # gtk/gtkwindow.c:467
-#: gtk/gtkwindow.c:513
+#: gtk/gtkwindow.c:515
 #, fuzzy
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "Ширина окна по умолчанию, используется при первоначальном отображении окна."
 
 # gtk/gtkwindow.c:476
-#: gtk/gtkwindow.c:522
+#: gtk/gtkwindow.c:524
 msgid "Default Height"
 msgstr "Исходная высота"
 
 # gtk/gtkwindow.c:477
-#: gtk/gtkwindow.c:523
+#: gtk/gtkwindow.c:525
 #, fuzzy
 msgid ""
 "The default height of the window, used when initially showing the window"
@@ -5750,66 +5813,66 @@ msgstr ""
 "Высота окна по умолчанию, используется при первоначальном отображении окна."
 
 # gtk/gtkwindow.c:486
-#: gtk/gtkwindow.c:532
+#: gtk/gtkwindow.c:534
 msgid "Destroy with Parent"
 msgstr "Уничтожать вместе с родителем"
 
 # gtk/gtkwindow.c:487
-#: gtk/gtkwindow.c:533
+#: gtk/gtkwindow.c:535
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Должно ли это окно уничтожаться при уничтожении родительского окна"
 
 # gtk/gtkwindow.c:494
-#: gtk/gtkwindow.c:540
+#: gtk/gtkwindow.c:542
 msgid "Icon"
 msgstr "Пиктограмма"
 
 # gtk/gtkwindow.c:495
-#: gtk/gtkwindow.c:541
+#: gtk/gtkwindow.c:543
 msgid "Icon for this window"
 msgstr "Пиктограмма для этого окна"
 
 # gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
-#: gtk/gtkwindow.c:556
+#: gtk/gtkwindow.c:558
 #, fuzzy
 msgid "Is Active"
 msgstr "Активный"
 
-#: gtk/gtkwindow.c:557
+#: gtk/gtkwindow.c:559
 msgid "Whether the toplevel is the current active window"
 msgstr ""
 
-#: gtk/gtkwindow.c:564
+#: gtk/gtkwindow.c:566
 msgid "Focus in Toplevel"
 msgstr ""
 
-#: gtk/gtkwindow.c:565
+#: gtk/gtkwindow.c:567
 msgid "Whether the input focus is within this GtkWindow"
 msgstr ""
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:574
 msgid "Type hint"
 msgstr ""
 
-#: gtk/gtkwindow.c:573
+#: gtk/gtkwindow.c:575
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:583
 msgid "Skip taskbar"
 msgstr ""
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:584
 msgid "TRUE if the window should not be in the task bar."
 msgstr ""
 
-#: gtk/gtkwindow.c:589
+#: gtk/gtkwindow.c:591
 msgid "Skip pager"
 msgstr ""
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:592
 msgid "TRUE if the window should not be in the pager."
 msgstr ""
 
