@@ -2124,7 +2124,7 @@ load_svg_at_size (const gchar *filename,
 {
   GdkPixbuf *pixbuf = NULL;
   GdkPixbufLoader *loader = NULL;
-  gchar *contents;
+  gchar *contents = NULL;
   gsize length;
   
   if (!g_file_get_contents (filename,
@@ -2148,6 +2148,8 @@ load_svg_at_size (const gchar *filename,
  bail:
   if (loader)
     g_object_unref (loader);
+  if (contents)
+    g_free (contents);
   
   return pixbuf;
 }

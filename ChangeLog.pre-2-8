@@ -1,3 +1,8 @@
+Mon Aug  9 00:28:56 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkicontheme.c (load_svg_at_size): Don't leak the 
+	file contents.
+
 2004-08-07  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkkeys-win32.c (update_keymap): Don't hardcode
