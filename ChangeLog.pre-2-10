@@ -1,3 +1,15 @@
+Sun Sep  5 01:04:01 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Allow sorting of tree models to be turned off 
+	again.  (#151139, Torsten Schoenfeld)
+	
+	* gtk/gtktreesortable.h: 
+	Add GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID.
+
+	* gtk/gtktreestore.c (gtk_tree_store_sort): 
+	* gtk/gtkliststore.c (gtk_list_store_sort): Don't sort if
+	the list store is not sorted.
+
 Sat Sep  4 23:37:56 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* configure.in: Fix the Solaris Xinerama checks.  (#151754)

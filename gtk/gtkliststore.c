@@ -27,7 +27,7 @@
 #include "gtktreednd.h"
 #include "gtksequence.h"
 
-#define GTK_LIST_STORE_IS_SORTED(list) (GTK_LIST_STORE (list)->sort_column_id != -2)
+#define GTK_LIST_STORE_IS_SORTED(list) (GTK_LIST_STORE (list)->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
 #define VALID_ITER(iter, list_store) ((iter)!= NULL && (iter)->user_data != NULL && list_store->stamp == (iter)->stamp && !_gtk_sequence_ptr_is_end ((iter)->user_data) && _gtk_sequence_ptr_get_sequence ((iter)->user_data) == list_store->seq)
 
 static void         gtk_list_store_init            (GtkListStore      *list_store);
@@ -1650,7 +1650,8 @@ gtk_list_store_sort (GtkListStore *list_store)
   GtkTreePath *path;
   GHashTable *old_positions;
 
-  if (_gtk_sequence_get_length (list_store->seq) <= 1)
+  if (!GTK_LIST_STORE_IS_SORTED (list_store) ||
+      _gtk_sequence_get_length (list_store->seq) <= 1)
     return;
 
   old_positions = save_positions (list_store->seq);
@@ -1716,19 +1717,22 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
       (list_store->order == order))
     return;
 
-  if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
+  if (sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
     {
-      GtkTreeDataSortHeader *header = NULL;
+      if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
+	{
+	  GtkTreeDataSortHeader *header = NULL;
 
-      header = _gtk_tree_data_list_get_header (list_store->sort_list, sort_column_id);
+	  header = _gtk_tree_data_list_get_header (list_store->sort_list, sort_column_id);
 
-      /* We want to make sure that we have a function */
-      g_return_if_fail (header != NULL);
-      g_return_if_fail (header->func != NULL);
-    }
-  else
-    {
-      g_return_if_fail (list_store->default_sort_func != NULL);
+	  /* We want to make sure that we have a function */
+	  g_return_if_fail (header != NULL);
+	  g_return_if_fail (header->func != NULL);
+	}
+      else
+	{
+	  g_return_if_fail (list_store->default_sort_func != NULL);
+	}
     }
 
 

@@ -27,7 +27,7 @@
 #include "gtktreednd.h"
 
 #define G_NODE(node) ((GNode *)node)
-#define GTK_TREE_STORE_IS_SORTED(tree) (GTK_TREE_STORE (tree)->sort_column_id != -2)
+#define GTK_TREE_STORE_IS_SORTED(tree) (GTK_TREE_STORE (tree)->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
 #define VALID_ITER(iter, tree_store) (iter!= NULL && iter->user_data != NULL && tree_store->stamp == iter->stamp)
 
 static void         gtk_tree_store_init            (GtkTreeStore      *tree_store);
@@ -2555,8 +2555,6 @@ gtk_tree_store_sort_helper (GtkTreeStore *tree_store,
       return;
     }
 
-  g_assert (GTK_TREE_STORE_IS_SORTED (tree_store));
-
   list_length = 0;
   for (tmp_node = node; tmp_node; tmp_node = tmp_node->next)
     list_length++;
@@ -2615,6 +2613,9 @@ gtk_tree_store_sort_helper (GtkTreeStore *tree_store,
 static void
 gtk_tree_store_sort (GtkTreeStore *tree_store)
 {
+  if (!GTK_TREE_STORE_IS_SORTED (tree_store))
+    return;
+
   if (tree_store->sort_column_id != -1)
     {
       GtkTreeDataSortHeader *header = NULL;
@@ -2857,19 +2858,22 @@ gtk_tree_store_set_sort_column_id (GtkTreeSortable  *sortable,
       (tree_store->order == order))
     return;
 
-  if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
+  if (sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
     {
-      GtkTreeDataSortHeader *header = NULL;
+      if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
+	{
+	  GtkTreeDataSortHeader *header = NULL;
 
-      header = _gtk_tree_data_list_get_header (tree_store->sort_list, sort_column_id);
+	  header = _gtk_tree_data_list_get_header (tree_store->sort_list, sort_column_id);
 
-      /* We want to make sure that we have a function */
-      g_return_if_fail (header != NULL);
-      g_return_if_fail (header->func != NULL);
-    }
-  else
-    {
-      g_return_if_fail (tree_store->default_sort_func != NULL);
+	  /* We want to make sure that we have a function */
+	  g_return_if_fail (header != NULL);
+	  g_return_if_fail (header->func != NULL);
+	}
+      else
+	{
+	  g_return_if_fail (tree_store->default_sort_func != NULL);
+	}
     }
 
   tree_store->sort_column_id = sort_column_id;
