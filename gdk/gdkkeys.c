@@ -85,7 +85,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
     g_signal_new ("keys_changed",
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GdkKeymapClass, direction_changed),
+		  G_STRUCT_OFFSET (GdkKeymapClass, keys_changed),
 		  NULL, NULL,
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE,
