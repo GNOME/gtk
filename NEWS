@@ -1,5 +1,10 @@
 Overview of Changes in GTK+ 2.2.1
 =================================
+* Win32 [Tor Lillqvist]
+ - Improve setting of window position / decorations
+ - Implement gdk_pixmap_foreign_new() [Naofumi Yasufuku]
+ - Fix various file selection bugs
+ - Miscellaneous fixes [Alex Shaduri, Kenichi SUTO]
 * GtkTreeView [Kristian Rietveld]
   - made GtkTreeSortable work as the documentation advertises [Jarek Dukat]
   - fixed gtk_tree_view_set_sort_column_id so you can disable sorting [Soeren
@@ -10,6 +15,19 @@ Overview of Changes in GTK+ 2.2.1
   - a lot of misc bug fixes [Alex Duggan, Carlos Garnacho Parro, Hans Petter
     Jansson, Kjartan Maraas, Soeren, Dave Camp, Murray Cumming, Dave Cook,
     Gaël Le Mignot, Vasco Alexandre da Silva Costa]
+* GtkTextView [Matthias Clasen]
+ - Fix keynav with invisible cursor
+ - Fix misdrawing of cursor [Owen Taylor] and selection
+ - Many miscellaneous fixes [Narayana Pattipati, Daniel Elstner]
+* Fix problem with accidental inclusion of a main() [Matthias]
+* Documentation improvements [Matthias, Havoc Pennington]
+* Fix problem with GtkColorsel and pixmap themes [Daniel]
+* Fix race condition with GdkRGB in PseudoColor [Shivaram Upadhyayula]
+* Warning fixes [Manish Singh]
+* configure fixes [Akira Tagoh]
+* Miscellaneous bug fixes [Daniel, Matthias, Louis Garcia, Tommi Komulainen, 
+  Thomas Leonard, Ian Peters, Arvind Samptur, Soeren Sandmann, 
+  Hidetoshi Tajima, Owen]
 
 Overview of Changes in GTK+ 2.2.0
 =================================
