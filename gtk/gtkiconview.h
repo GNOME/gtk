@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define EGG_TYPE_ICON_LIST_ITEM         (egg_icon_list_item_get_type ())
 #define EGG_ICON_LIST_ITEM(obj)		(GTK_CHECK_CAST ((obj), EGG_TYPE_ICON_LIST_ITEM, EggIconListItem))
-#define GTK_IS_ICON_LIST_ITEM(obj)	(GTK_CHECK_TYPE ((obj), EGG_TYPE_ICON_LIST_ITEM))
+#define EGG_IS_ICON_LIST_ITEM(obj)	(GTK_CHECK_TYPE ((obj), EGG_TYPE_ICON_LIST_ITEM))
 
 typedef struct _EggIconList           EggIconList;
 typedef struct _EggIconListClass      EggIconListClass;

@@ -1919,7 +1919,7 @@ egg_icon_list_item_set_data_full (EggIconListItem  *item,
 				  gpointer          data, 
 				  GDestroyNotify    destroy_notify)
 {
-  g_return_if_fail (GTK_IS_ICON_LIST_ITEM (item));
+  g_return_if_fail (EGG_IS_ICON_LIST_ITEM (item));
 
   g_object_set_data_full (G_OBJECT (item), ICON_LIST_ITEM_DATA, data, destroy_notify);
 }
@@ -1927,7 +1927,7 @@ egg_icon_list_item_set_data_full (EggIconListItem  *item,
 gpointer
 egg_icon_list_item_get_data (EggIconListItem *item)
 {
-  g_return_val_if_fail (GTK_IS_ICON_LIST_ITEM (item), NULL);
+  g_return_val_if_fail (EGG_IS_ICON_LIST_ITEM (item), NULL);
 
   return g_object_get_data (G_OBJECT (item), ICON_LIST_ITEM_DATA);
 }
@@ -1990,7 +1990,7 @@ egg_icon_list_append_item (EggIconList     *icon_list,
 {
   GList *list;
   
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
   g_return_if_fail (item != NULL);
   g_return_if_fail (item->icon_list == NULL);
   
@@ -2032,7 +2032,7 @@ egg_icon_list_prepend_item (EggIconList      *icon_list,
 {
   GList *list;
 
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
   g_return_if_fail (item != NULL);
   g_return_if_fail (item->icon_list == NULL);
   
@@ -2070,7 +2070,7 @@ egg_icon_list_insert_item_before (EggIconList      *icon_list,
 {
   GList *list;
   
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
   g_return_if_fail (item != NULL);
   g_return_if_fail (item->icon_list == NULL);
   
@@ -2114,7 +2114,7 @@ egg_icon_list_insert_item_after  (EggIconList      *icon_list,
 {
   GList *list;
 
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
   g_return_if_fail (item != NULL);
   g_return_if_fail (item->icon_list == NULL);
   
@@ -2157,7 +2157,7 @@ void
 egg_icon_list_remove_item (EggIconList      *icon_list,
 			   EggIconListItem  *item)
 {
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
   g_return_if_fail (item != NULL);
   g_return_if_fail (item->icon_list == icon_list);
   
@@ -2209,7 +2209,7 @@ egg_icon_list_get_item_at_pos (EggIconList *icon_list,
 {
   GList *items;
   
-  g_return_val_if_fail (GTK_IS_ICON_LIST (icon_list), NULL);
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), NULL);
 
   for (items = icon_list->priv->items; items; items = items->next)
     {
@@ -2236,7 +2236,7 @@ egg_icon_list_get_item_at_pos (EggIconList *icon_list,
 gint
 egg_icon_list_get_item_count (EggIconList *icon_list)
 {
-  g_return_val_if_fail (GTK_IS_ICON_LIST (icon_list), 0);
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), 0);
 
   return icon_list->priv->item_count;
 }
@@ -2273,7 +2273,7 @@ egg_icon_list_get_selected (EggIconList  *icon_list)
 {
   GList *list, *selected = NULL;
 
-  g_return_val_if_fail (GTK_IS_ICON_LIST (icon_list), NULL);
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), NULL);
   
   for (list = icon_list->priv->items; list; list = list->next)
     {
@@ -2290,7 +2290,7 @@ void
 egg_icon_list_set_selection_mode (EggIconList      *icon_list,
 				  GtkSelectionMode  mode)
 {
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
 
   if (mode == icon_list->priv->selection_mode)
     return;
@@ -2307,7 +2307,7 @@ egg_icon_list_set_selection_mode (EggIconList      *icon_list,
 GtkSelectionMode
 egg_icon_list_get_selection_mode (EggIconList *icon_list)
 {
-  g_return_val_if_fail (GTK_IS_ICON_LIST (icon_list), GTK_SELECTION_SINGLE);
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), GTK_SELECTION_SINGLE);
 
   return icon_list->priv->selection_mode;
 }
@@ -2316,7 +2316,7 @@ void
 egg_icon_list_select_item (EggIconList      *icon_list,
 			   EggIconListItem  *item)
 {
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
   g_return_if_fail (item != NULL);
 
   if (item->selected)
@@ -2339,7 +2339,7 @@ void
 egg_icon_list_unselect_item (EggIconList      *icon_list,
 			     EggIconListItem  *item)
 {
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
   g_return_if_fail (item != NULL);
 
   if (!item->selected)
@@ -2367,7 +2367,7 @@ egg_icon_list_item_is_selected (EggIconListItem *item)
 void
 egg_icon_list_unselect_all (EggIconList *icon_list)
 {
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
 
   egg_icon_list_unselect_all_internal (icon_list, TRUE);
 }
@@ -2378,7 +2378,7 @@ egg_icon_list_select_all (EggIconList *icon_list)
   GList *items;
   gboolean dirty = FALSE;
   
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
 
   for (items = icon_list->priv->items; items; items = items->next)
     {
@@ -2400,7 +2400,7 @@ void
 egg_icon_list_set_sorted (EggIconList *icon_list,
 			  gboolean     sorted)
 {
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
   g_return_if_fail (icon_list->priv->sort_func != NULL);
 
   if (icon_list->priv->sorted == sorted)
@@ -2416,7 +2416,7 @@ egg_icon_list_set_sorted (EggIconList *icon_list,
 gboolean
 egg_icon_list_get_sorted (EggIconList *icon_list)
 {
-  g_return_val_if_fail (GTK_IS_ICON_LIST (icon_list), FALSE);
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), FALSE);
   
   return icon_list->priv->sorted;
 }
@@ -2427,7 +2427,7 @@ egg_icon_list_set_sort_func (EggIconList                *icon_list,
 			     gpointer                    data,
 			     GDestroyNotify              destroy_notify)
 {
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
   g_return_if_fail (func != NULL);
 
   if (icon_list->priv->sort_destroy_notify &&
@@ -2443,7 +2443,7 @@ void
 egg_icon_list_set_sort_order (EggIconList  *icon_list,
 			      GtkSortType   order)
 {
-  g_return_if_fail (GTK_IS_ICON_LIST (icon_list));
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
 
   if (icon_list->priv->sort_order == order)
     return;
@@ -2459,7 +2459,7 @@ egg_icon_list_set_sort_order (EggIconList  *icon_list,
 GtkSortType
 egg_icon_list_get_sort_order (EggIconList  *icon_list)
 {
-  g_return_val_if_fail (GTK_IS_ICON_LIST (icon_list), GTK_SORT_ASCENDING);
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), GTK_SORT_ASCENDING);
 
   return icon_list->priv->sort_order;
 }
@@ -2474,7 +2474,7 @@ egg_icon_list_item_activated (EggIconList      *icon_list,
 GList *
 egg_icon_list_get_items (EggIconList *icon_list)
 {
-  g_return_val_if_fail (GTK_IS_ICON_LIST (icon_list), NULL);
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), NULL);
 
   return icon_list->priv->items;
 }
@@ -2482,7 +2482,7 @@ egg_icon_list_get_items (EggIconList *icon_list)
 EggIconList *
 egg_icon_list_item_get_icon_list (EggIconListItem *item)
 {
-  g_return_val_if_fail (GTK_IS_ICON_LIST_ITEM (item), NULL);
+  g_return_val_if_fail (EGG_IS_ICON_LIST_ITEM (item), NULL);
 
   return item->icon_list;
 }
