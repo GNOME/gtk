@@ -7050,7 +7050,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 			       gboolean     open_all)
 {
   GtkTreeIter iter;
-  GtkTreeIter child;
+  GtkTreeIter temp;
   gboolean expand;
 
   if (node->children)
@@ -7069,10 +7069,11 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
   node->children->parent_tree = tree;
   node->children->parent_node = node;
 
-  gtk_tree_model_iter_children (tree_view->priv->model, &child, &iter);
+  gtk_tree_model_iter_children (tree_view->priv->model, &temp, &iter);
+  temp = iter;
   gtk_tree_view_build_tree (tree_view,
 			    node->children,
-			    &child,
+			    &temp,
 			    gtk_tree_path_get_depth (path) + 1,
 			    open_all,
 			    GTK_WIDGET_REALIZED (tree_view));
@@ -7127,6 +7128,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 				 GtkRBNode   *node)
 {
   GtkTreeIter iter;
+  GtkTreeIter children;
   gboolean collapse;
 
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
@@ -7136,13 +7138,11 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   if (collapse)
     return FALSE;
 
-  TREE_VIEW_INTERNAL_ASSERT (gtk_tree_model_iter_children (tree_view->priv->model,
-							   &iter,
-							   &iter),
-			     FALSE);
+  TREE_VIEW_INTERNAL_ASSERT (gtk_tree_model_iter_children (tree_view->priv->model, &children, &iter), FALSE);
+  children = iter;
   gtk_tree_view_discover_dirty (tree_view,
 				node->children,
-				&iter,
+				&children,
 				gtk_tree_path_get_depth (path));
 
   /* Ensure we don't have a dangling pointer to a dead node */

@@ -1,3 +1,10 @@
+Fri Jun 22 14:06:08 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): Fix bug
+	noticed by Brian Cameron.
+	(gtk_tree_view_real_expand_row): Fix bug noticed by Brian
+	Cameron.
+
 2001-06-22  Hans Breuer  <hans@breuer.org>
 
 	* gdk/gdk.def : updated externals
