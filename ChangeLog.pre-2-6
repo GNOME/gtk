@@ -1,5 +1,8 @@
 2004-08-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c: Rework the combo box to handle 
+	tree models.  (#139582, Matt Walton)
+	
 	* gtk/gtktreeview.h: 
 	* gtk/gtktreeview.c: 
 	* gtk/gtktreeprivate.h: Add a new boolean property 
