@@ -83,6 +83,7 @@ gdk_pixbuf_finalize (GObject *object)
         
         G_OBJECT_CLASS (parent_class)->finalize (object);
 }
+
 
 /**
  * gdk_pixbuf_ref:
@@ -133,8 +134,8 @@ free_buffer (guchar *pixels, gpointer data)
  * has an optimal rowstride.  Note that the buffer is not cleared; you will have
  * to fill it completely yourself.
  *
- * Return value: A newly-created #GdkPixbuf with a reference count of 1, or NULL
- * if not enough memory could be allocated for the image buffer.
+ * Return value: A newly-created #GdkPixbuf with a reference count of 1, or 
+ * %NULL if not enough memory could be allocated for the image buffer.
  **/
 GdkPixbuf *
 gdk_pixbuf_new (GdkColorspace colorspace, gboolean has_alpha, int bits_per_sample,
@@ -170,7 +171,7 @@ gdk_pixbuf_new (GdkColorspace colorspace, gboolean has_alpha, int bits_per_sampl
  * Creates a new #GdkPixbuf with a copy of the information in the specified
  * @pixbuf.
  * 
- * Return value: A newly-created pixbuf with a reference count of 1, or NULL if
+ * Return value: A newly-created pixbuf with a reference count of 1, or %NULL if
  * not enough memory could be allocated.
  **/
 GdkPixbuf *
@@ -248,7 +249,7 @@ gdk_pixbuf_new_subpixbuf (GdkPixbuf *src_pixbuf,
                                         NULL, NULL);
 
         /* Keep a reference to src_pixbuf */
-        g_object_ref (G_OBJECT (src_pixbuf));
+        g_object_ref (src_pixbuf);
   
         g_object_set_qdata_full (G_OBJECT (sub),
                                  g_quark_from_static_string ("gdk-pixbuf-subpixbuf-src"),
@@ -300,7 +301,7 @@ gdk_pixbuf_get_n_channels (const GdkPixbuf *pixbuf)
  *
  * Queries whether a pixbuf has an alpha channel (opacity information).
  *
- * Return value: TRUE if it has an alpha channel, FALSE otherwise.
+ * Return value: %TRUE if it has an alpha channel, %FALSE otherwise.
  **/
 gboolean
 gdk_pixbuf_get_has_alpha (const GdkPixbuf *pixbuf)

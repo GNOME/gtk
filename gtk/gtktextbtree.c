@@ -184,7 +184,7 @@ struct _GtkTextBTree {
   BTreeView *views;
   GSList *tag_infos;
   guint tag_changed_handler;
-  guint tag_removed_handler;
+
   /* Incremented when a segment with a byte size > 0
    * is added to or removed from the tree (i.e. the
    * length of a line may have changed, and lines may
@@ -315,9 +315,6 @@ static void tag_changed_cb        (GtkTextTagTable  *table,
                                    GtkTextTag       *tag,
                                    gboolean          size_changed,
                                    GtkTextBTree     *tree);
-static void tag_removed_cb        (GtkTextTagTable  *table,
-                                   GtkTextTag       *tag,
-                                   GtkTextBTree     *tree);
 static void cleanup_line          (GtkTextLine      *line);
 static void recompute_node_counts (GtkTextBTree     *tree,
                                    GtkTextBTreeNode *node);
@@ -436,11 +433,6 @@ _gtk_text_btree_new (GtkTextTagTable *table,
 						G_CALLBACK (tag_changed_cb),
 						tree);
 
-  tree->tag_removed_handler = g_signal_connect (G_OBJECT (tree->table),
-						"tag_removed",
-						G_CALLBACK (tag_removed_cb),
-						tree);
-
   tree->mark_table = g_hash_table_new (g_str_hash, g_str_equal);
   tree->child_anchor_table = NULL;
   
@@ -518,9 +510,6 @@ _gtk_text_btree_unref (GtkTextBTree *tree)
 
       g_signal_handler_disconnect (G_OBJECT (tree->table),
                                    tree->tag_changed_handler);
-
-      g_signal_handler_disconnect (G_OBJECT (tree->table),
-                                   tree->tag_removed_handler);
 
       g_object_unref (G_OBJECT (tree->table));
 
@@ -1175,6 +1164,7 @@ _gtk_text_btree_insert_child_anchor (GtkTextIter        *iter,
   seg = _gtk_widget_segment_new (anchor);
 
   tree = seg->body.child.tree = _gtk_text_iter_get_btree (iter);
+  seg->body.child.line = _gtk_text_iter_get_text_line (iter);
   
   insert_pixbuf_or_widget_segment (iter, seg);
 
@@ -5480,10 +5470,9 @@ tag_changed_cb (GtkTextTagTable *table,
     }
 }
 
-static void
-tag_removed_cb (GtkTextTagTable *table,
-                GtkTextTag *tag,
-                GtkTextBTree *tree)
+void
+_gtk_text_btree_notify_will_remove_tag (GtkTextBTree    *tree,
+                                        GtkTextTag      *tag)
 {
   /* Remove the tag from the tree */
 
@@ -5852,9 +5841,6 @@ gtk_text_btree_remove_tag_info (GtkTextBTree *tree,
 
       list = g_slist_next (list);
     }
-
-  g_assert_not_reached ();
-  return;
 }
 
 static void
@@ -6446,9 +6432,20 @@ gtk_text_btree_node_view_check_consistency (GtkTextBTree     *tree,
   
   gtk_text_btree_node_compute_view_aggregates (node, nd->view_id,
                                                &width, &height, &valid);
+
+  /* valid aggregate not checked the same as width/height, because on
+   * btree rebalance we can have invalid nodes where all lines below
+   * them are actually valid, due to moving lines around between
+   * nodes.
+   *
+   * The guarantee is that if there are invalid lines the node is
+   * invalid - we don't guarantee that if the node is invalid there
+   * are invalid lines.
+   */
+  
   if (nd->width != width ||
       nd->height != height ||
-      !nd->valid != !valid)
+      (nd->valid && !valid))
     {
       g_error ("Node aggregates for view %p are invalid:\n"
                "Are (%d,%d,%s), should be (%d,%d,%s)",

@@ -437,14 +437,14 @@ object_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_free (str);
 }
 
-void
+static void
 model_destroy (gpointer data)
 {
   g_object_steal_data (data, "model-object");
   gtk_widget_destroy (data);
 }
 
-void
+static void
 window_destroy (gpointer data)
 {
   g_object_steal_data (data, "prop-editor-win");

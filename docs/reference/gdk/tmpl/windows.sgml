@@ -111,7 +111,7 @@ the "character grid" will be allowed.
 <para>
 Here's an example of how the terminal example would be implemented, assuming 
 a terminal area widget called "terminal" and a toplevel window "toplevel":
-<programlisting>
+<informalexample><programlisting>
 	GdkGeometry hints;
 
 	hints.base_width = terminal->char_width;
@@ -127,7 +127,7 @@ a terminal area widget called "terminal" and a toplevel window "toplevel":
 				       GDK_HINT_RESIZE_INC |
                                        GDK_HINT_MIN_SIZE |
                                        GDK_HINT_BASE_SIZE);
-</programlisting>
+</programlisting></informalexample>
 </para>
 
 <para>
@@ -237,6 +237,13 @@ corresponding flag in #GdkWindowAttributesType.
 @GDK_WA_VISUAL: Honor the visual field
 @GDK_WA_WMCLASS: Honor the wmclass_class and wmclass_name fields
 @GDK_WA_NOREDIR: Honor the override_redirect field
+
+<!-- ##### STRUCT GdkScreen ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
 
 <!-- ##### FUNCTION gdk_window_new ##### -->
 <para>
@@ -625,6 +632,17 @@ Registers a window as a potential drop destination.
 @invalidate_children: 
 
 
+<!-- ##### FUNCTION gdk_window_invalidate_maybe_recurse ##### -->
+<para>
+
+</para>
+
+@window: 
+@region: 
+@child_func: 
+@user_data: 
+
+
 <!-- ##### FUNCTION gdk_window_get_update_area ##### -->
 <para>
 
@@ -845,7 +863,9 @@ backend, <type>MSG</type>s for Win32).
 
 <!-- ##### MACRO GDK_PARENT_RELATIVE ##### -->
 <para>
-
+A special value for <literal>GdkPixmap*</literal> variables, indicating
+that the background pixmap for a window should be inherited from the parent
+window.
 </para>
 
 
@@ -1021,23 +1041,36 @@ Deprecated equivalent of gdk_drawable_get_type().
 
 <!-- ##### ENUM GdkModifierType ##### -->
 <para>
-
+A set of bit-flags to indicate the state of modifier keys and mouse buttons 
+in various event types. Typical modifier keys are Shift, Control, Meta, Super,
+Hyper, Alt, Compose, Apple, CapsLock or ShiftLock. 
+</para>
+<para>
+Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
 </para>
 
-@GDK_SHIFT_MASK: 
-@GDK_LOCK_MASK: 
-@GDK_CONTROL_MASK: 
-@GDK_MOD1_MASK: 
-@GDK_MOD2_MASK: 
-@GDK_MOD3_MASK: 
-@GDK_MOD4_MASK: 
-@GDK_MOD5_MASK: 
-@GDK_BUTTON1_MASK: 
-@GDK_BUTTON2_MASK: 
-@GDK_BUTTON3_MASK: 
-@GDK_BUTTON4_MASK: 
-@GDK_BUTTON5_MASK: 
-@GDK_RELEASE_MASK: 
+@GDK_SHIFT_MASK: the Shift key.
+@GDK_LOCK_MASK: a Lock key (depending on the modifier mapping of the 
+  X server this may either be CapsLock or ShiftLock).
+@GDK_CONTROL_MASK: the Control key.
+@GDK_MOD1_MASK: the fourth modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier, but 
+  normally it is the Alt key).
+@GDK_MOD2_MASK: the fifth modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier).
+@GDK_MOD3_MASK: the sixth modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier).
+@GDK_MOD4_MASK: the seventh modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier).
+@GDK_MOD5_MASK: the eighth modifier key (it depends on the modifier 
+  mapping of the X server which key is interpreted as this modifier).
+@GDK_BUTTON1_MASK: the first mouse button.
+@GDK_BUTTON2_MASK: the second mouse button.
+@GDK_BUTTON3_MASK: the third mouse button.
+@GDK_BUTTON4_MASK: the fourth mouse button.
+@GDK_BUTTON5_MASK: the fifth mouse button.
+@GDK_RELEASE_MASK: not used in GDK itself. GTK+ uses it to differentiate 
+  between (keyval, modifiers) pairs from key press and release events.
 @GDK_MODIFIER_MASK: 
 
 <!-- ##### FUNCTION gdk_window_get_parent ##### -->

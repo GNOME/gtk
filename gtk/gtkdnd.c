@@ -777,9 +777,9 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
 void 
 gtk_drag_highlight (GtkWidget  *widget)
 {
-  gtk_signal_connect (GTK_OBJECT (widget), "expose_event",
-		      GTK_SIGNAL_FUNC (gtk_drag_highlight_expose),
-		      NULL);
+  gtk_signal_connect_after (GTK_OBJECT (widget), "expose_event",
+			    GTK_SIGNAL_FUNC (gtk_drag_highlight_expose),
+			    NULL);
 
   gtk_widget_queue_draw (widget);
 }
@@ -1223,6 +1223,15 @@ gtk_drag_selection_received (GtkWidget        *widget,
   gtk_drag_release_ipc_widget (widget);
 }
 
+static void
+prepend_and_ref_widget (GtkWidget *widget,
+			gpointer   data)
+{
+  GSList **slist_p = data;
+
+  *slist_p = g_slist_prepend (*slist_p, g_object_ref (widget));
+}
+
 /*************************************************************
  * gtk_drag_find_widget:
  *     Recursive callback used to locate widgets for 
@@ -1237,10 +1246,10 @@ gtk_drag_find_widget (GtkWidget       *widget,
 		      GtkDragFindData *data)
 {
   GtkAllocation new_allocation;
+  gint allocation_to_window_x = 0;
+  gint allocation_to_window_y = 0;
   gint x_offset = 0;
   gint y_offset = 0;
-
-  new_allocation = widget->allocation;
 
   if (data->found || !GTK_WIDGET_MAPPED (widget))
     return;
@@ -1250,35 +1259,49 @@ gtk_drag_find_widget (GtkWidget       *widget,
    * widget->window; points that are outside of widget->window
    * but within the allocation are not counted. This is consistent
    * with the way we highlight drag targets.
-   */
-  if (!GTK_WIDGET_NO_WINDOW (widget))
-    {
-      new_allocation.x = 0;
-      new_allocation.y = 0;
-    }
-  
+   *
+   * data->x,y are relative to widget->parent->window (if
+   * widget is not a toplevel, widget->window otherwise).
+   * We compute the allocation of widget in the same coordinates,
+   * clipping to widget->window, and all intermediate
+   * windows. If data->x,y is inside that, then we translate
+   * our coordinates to be relative to widget->window and
+   * recurse.
+   */  
+  new_allocation = widget->allocation;
+
   if (widget->parent)
     {
+      gint tx, ty;
       GdkWindow *window = widget->window;
-      while (window != widget->parent->window)
-	{
-	  gint tx, ty, twidth, theight;
-	  gdk_window_get_size (window, &twidth, &theight);
 
-	  if (new_allocation.x < 0)
-	    {
-	      new_allocation.width += new_allocation.x;
-	      new_allocation.x = 0;
-	    }
-	  if (new_allocation.y < 0)
-	    {
-	      new_allocation.height += new_allocation.y;
-	      new_allocation.y = 0;
-	    }
-	  if (new_allocation.x + new_allocation.width > twidth)
-	    new_allocation.width = twidth - new_allocation.x;
-	  if (new_allocation.y + new_allocation.height > theight)
-	    new_allocation.height = theight - new_allocation.y;
+      /* Compute the offset from allocation-relative to
+       * window-relative coordinates.
+       */
+      allocation_to_window_x = widget->allocation.x;
+      allocation_to_window_y = widget->allocation.y;
+
+      if (!GTK_WIDGET_NO_WINDOW (widget))
+	{
+	  /* The allocation is relative to the parent window for
+	   * window widgets, not to widget->window.
+	   */
+          gdk_window_get_position (window, &tx, &ty);
+	  
+          allocation_to_window_x -= tx;
+          allocation_to_window_y -= ty;
+	}
+
+      new_allocation.x = 0 + allocation_to_window_x;
+      new_allocation.y = 0 + allocation_to_window_y;
+      
+      while (window && window != widget->parent->window)
+	{
+	  GdkRectangle window_rect = { 0, 0, 0, 0 };
+	  
+	  gdk_window_get_size (window, &window_rect.width, &window_rect.height);
+
+	  gdk_rectangle_intersect (&new_allocation, &window_rect, &new_allocation);
 
 	  gdk_window_get_position (window, &tx, &ty);
 	  new_allocation.x += tx;
@@ -1288,6 +1311,9 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	  
 	  window = gdk_window_get_parent (window);
 	}
+
+      if (!window)		/* Window and widget heirarchies didn't match. */
+	return;
     }
 
   if (data->toplevel ||
@@ -1301,15 +1327,25 @@ gtk_drag_find_widget (GtkWidget       *widget,
       if (GTK_IS_CONTAINER (widget))
 	{
 	  GtkDragFindData new_data = *data;
+	  GSList *children = NULL;
+	  GSList *tmp_list;
 	  
 	  new_data.x -= x_offset;
 	  new_data.y -= y_offset;
 	  new_data.found = FALSE;
 	  new_data.toplevel = FALSE;
 	  
-	  gtk_container_forall (GTK_CONTAINER (widget),
-				(GtkCallback)gtk_drag_find_widget,
-				&new_data);
+	  /* need to reference children temporarily in case the
+	   * ::drag_motion/::drag_drop callbacks change the widget heirarchy.
+	   */
+	  gtk_container_forall (GTK_CONTAINER (widget), prepend_and_ref_widget, &children);
+	  for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
+	    {
+	      if (!new_data.found && GTK_WIDGET_DRAWABLE (tmp_list->data))
+		gtk_drag_find_widget (tmp_list->data, &new_data);
+	      gtk_widget_unref (tmp_list->data);
+	    }
+	  g_slist_free (children);
 	  
 	  data->found = new_data.found;
 	}
@@ -1323,8 +1359,8 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	{
 	  data->found = data->callback (widget,
 					data->context,
-					data->x - new_allocation.x,
-					data->y - new_allocation.y,
+					data->x - x_offset - allocation_to_window_x,
+					data->y - y_offset - allocation_to_window_y,
 					data->time);
 	  /* If so, send a "drag_leave" to the last widget */
 	  if (data->found)
@@ -2192,7 +2228,9 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
     gtk_widget_shape_combine_mask (window, mask, 0, 0);
 
   g_object_unref (G_OBJECT (pixmap));
-  g_object_unref (G_OBJECT (mask));
+
+  if (mask)
+    g_object_unref (G_OBJECT (mask));
 
   gtk_drag_set_icon_window (context, window, hot_x, hot_y, TRUE);
 }
@@ -2328,7 +2366,7 @@ gtk_drag_set_icon_default (GdkDragContext    *context)
  * Changes the default drag icon. GTK+ retains references for the
  * arguments, and will release them when they are no longer needed.
  * This function is obsolete. The default icon should now be changed
- * via the stock system by changing the stock pixbuf for %GTK_STOCK_DND.
+ * via the stock system by changing the stock pixbuf for #GTK_STOCK_DND.
  **/
 void 
 gtk_drag_set_default_icon (GdkColormap   *colormap,
@@ -3154,11 +3192,11 @@ gtk_drag_abort_timeout (gpointer data)
  * @current_x: current X coordinate
  * @current_y: current Y coordinate
  * 
- * Checks to see if a mouse drag starting at (start_x, start_y) and ending
- * at (current_x, current_y) has passed the GTK drag threshhold, and thus
+ * Checks to see if a mouse drag starting at (@start_x, @start_y) and ending
+ * at (@current_x, @current_y) has passed the GTK+ drag threshhold, and thus
  * should trigger the beginning of a drag-and-drop operation.
  *
- * Return Value: If the drag threshold has been passed.
+ * Return Value: %TRUE if the drag threshold has been passed.
  **/
 gboolean
 gtk_drag_check_threshold (GtkWidget *widget,
@@ -3167,8 +3205,12 @@ gtk_drag_check_threshold (GtkWidget *widget,
 			  gint       current_x,
 			  gint       current_y)
 {
-#define DRAG_THRESHOLD 8
+  gint drag_threshold;
 
-  return (ABS (current_x - start_x) > DRAG_THRESHOLD ||
-	  ABS (current_y - start_y) > DRAG_THRESHOLD);
+  g_object_get (gtk_widget_get_settings (widget),
+		"gtk-dnd-drag-threshold", &drag_threshold,
+		NULL);
+  
+  return (ABS (current_x - start_x) > drag_threshold ||
+	  ABS (current_y - start_y) > drag_threshold);
 }

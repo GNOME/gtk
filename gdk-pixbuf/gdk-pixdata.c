@@ -157,6 +157,13 @@ gdk_pixdata_serialize (const GdkPixdata *pixdata,
   return FALSE; \
 }
 
+static inline const guint8 *
+get_uint32 (const guint8 *stream, guint *result)
+{
+  *result = (stream[0] << 24) + (stream[1] << 16) + (stream[2] << 8) + stream[3];
+  return stream + 4;
+}
+
 /**
  * gdk_pixdata_deserialize:
  * @pixdata: a #GdkPixdata structure to be filled in.
@@ -181,7 +188,6 @@ gdk_pixdata_deserialize (GdkPixdata   *pixdata,
 			 const guint8 *stream,
 			 GError	     **error)
 {
-  guint32 *istream;
   guint color_type, sample_width, encoding;
 
   g_return_val_if_fail (pixdata != NULL, FALSE);
@@ -191,21 +197,14 @@ gdk_pixdata_deserialize (GdkPixdata   *pixdata,
 
 
   /* deserialize header */
-  istream = (guint32*) stream;
-  /*
-   * the deserialization of GdkPixdata will fail (at least on win32 with msvc 5.0) 
-   * with 'g_ntohl(*istream++)' because the guint32 istream pointer is only 
-   * incremented by 1 byte, if it is done within the g_ntohl() macro.
-   * Probably working around just another compiler bug ... --HB
-   */
-  pixdata->magic = g_ntohl (*istream); istream++;
-  pixdata->length = g_ntohl (*istream); istream++;
+  stream = get_uint32 (stream, &pixdata->magic);
+  stream = get_uint32 (stream, &pixdata->length);
   if (pixdata->magic != GDK_PIXBUF_MAGIC_NUMBER || pixdata->length < GDK_PIXDATA_HEADER_LENGTH)
     return_header_corrupt (error);
-  pixdata->pixdata_type = g_ntohl (*istream); istream++;
-  pixdata->rowstride = g_ntohl (*istream); istream++;
-  pixdata->width = g_ntohl (*istream); istream++;
-  pixdata->height = g_ntohl (*istream);  istream++;
+  stream = get_uint32 (stream, &pixdata->pixdata_type);
+  stream = get_uint32 (stream, &pixdata->rowstride);
+  stream = get_uint32 (stream, &pixdata->width);
+  stream = get_uint32 (stream, &pixdata->height);
   if (pixdata->width < 1 || pixdata->height < 1 ||
       pixdata->rowstride < pixdata->width)
     return_header_corrupt (error);
@@ -222,7 +221,7 @@ gdk_pixdata_deserialize (GdkPixdata   *pixdata,
   /* deserialize pixel data */
   if (stream_length < pixdata->length - GDK_PIXDATA_HEADER_LENGTH)
     return_pixel_corrupt (error);
-  pixdata->pixel_data = (guint8*) istream;
+  pixdata->pixel_data = (guint8 *)stream;
 
   return TRUE;
 }
@@ -579,8 +578,8 @@ save_rle_decoder (GString     *gstring,
  * Generates C source code suitable for compiling images directly 
  * into programs. 
  *
- * Gtk+ ships with a program called gdk-pixbuf-csource which offers 
- * a cmdline interface to this functions.
+ * GTK+ ships with a program called <command>gdk-pixbuf-csource</command> 
+ * which offers a cmdline interface to this functions.
  *
  * Returns: a newly-allocated string containing the C source form
  *   of @pixdata.
@@ -626,8 +625,7 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
   height = pixdata->height;
   rowstride = pixdata->rowstride;
   rle_encoded = (pixdata->pixdata_type & GDK_PIXDATA_ENCODING_RLE) > 0;
-  macro_name = g_strdup (name);
-  g_strup (macro_name);
+  macro_name = g_ascii_strup (name, -1);
 
   cdata.dump_macros = (dump_type & GDK_PIXDATA_DUMP_MACROS) > 0;
   cdata.dump_struct = (dump_type & GDK_PIXDATA_DUMP_PIXDATA_STRUCT) > 0;
@@ -822,28 +820,31 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 /**
  * gdk_pixbuf_new_from_inline:
  * @data_length: Length in bytes of the @data argument
- * @data: Byte data containing a serialized GdkPixdata structure
+ * @data: Byte data containing a serialized #GdkPixdata structure
  * @copy_pixels: Whether to copy the pixel data, or use direct pointers
  *               @data for the resulting pixbuf
- * @error: GError return location, may be %NULL to ignore errors
+ * @error: #GError return location, may be %NULL to ignore errors
  *
  * Create a #GdkPixbuf from a flat representation that is suitable for
  * storing as inline data in a program. This is useful if you want to
  * ship a program with images, but don't want to depend on any
  * external files.
  *
- * Gtk+ ships with a program called gdk-pixbuf-csource which allows
- * for conversion of #GdkPixbufs into such a inline representation.
- * In almost all cases, you should pass the --raw flag to
- * gdk-pixbuf-csource. A sample invocation would be:
+ * GTK+ ships with a program called <command>gdk-pixbuf-csource</command> 
+ * which allows for conversion of #GdkPixbufs into such a inline representation.
+ * In almost all cases, you should pass the <option>--raw</option> flag to
+ * <command>gdk-pixbuf-csource</command>. A sample invocation would be:
  *
+ * <informalexample><programlisting>
  *  gdk-pixbuf-csource --raw --name=myimage_inline myimage.png
+ * </programlisting></informalexample>
  * 
  * For the typical case where the inline pixbuf is read-only static data,
  * you don't need to copy the pixel data unless you intend to write to
- * it, so you can pass %FALSE for @copy_pixels.  (If you pass --rle to
- * gdk-pixbuf-csource, a copy will be made even if @copy_pixels is
- * %FALSE, so using this option is generally a bad idea.)
+ * it, so you can pass %FALSE for @copy_pixels.  (If you pass 
+ * <option>--rle</option> to <command>gdk-pixbuf-csource</command>, a copy 
+ * will be made even if @copy_pixels is %FALSE, so using this option is 
+ * generally a bad idea.)
  *
  * If you create a pixbuf from const inline data compiled into your
  * program, it's probably safe to ignore errors, since things will

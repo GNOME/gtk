@@ -128,7 +128,7 @@ complete.
 </para>
 
 @progress: a #GtkProgress.
-@activity_mode: a boolean, TRUE for activity mode.
+@activity_mode: a boolean, %TRUE for activity mode.
 
 
 <!-- ##### FUNCTION gtk_progress_get_current_text ##### -->

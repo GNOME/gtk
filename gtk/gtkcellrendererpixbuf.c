@@ -288,8 +288,6 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer    *cell,
 {
   GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;
   GdkPixbuf *pixbuf;
-  guchar *pixels;
-  gint rowstride;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
 
@@ -306,9 +304,6 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer    *cell,
 
   if (!pixbuf)
     return;
-
-  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-  pixels = gdk_pixbuf_get_pixels (pixbuf);
 
   gtk_cell_renderer_pixbuf_get_size (cell, widget, cell_area,
 				     &pix_rect.x,

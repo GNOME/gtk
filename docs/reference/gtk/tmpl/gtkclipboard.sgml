@@ -2,7 +2,7 @@
 Clipboards
 
 <!-- ##### SECTION Short_Description ##### -->
-Storing data on Clipboards.
+Storing data on clipboards.
 
 <!-- ##### SECTION Long_Description ##### -->
   <para>
@@ -11,9 +11,9 @@ Storing data on Clipboards.
     the same process. Each clipboard is identified by a name encoded as a
     #GdkAtom. (Conversion to and from strings can be done with
     gdk_atom_intern() and gdk_atom_name().) The default clipboard
-    corresponds to the CLIPBOARD atom; another commonly used clipboard
-    is the PRIMARY clipboard, which, in X, traditionally contains
-    the currently selected text. 
+    corresponds to the "CLIPBOARD" atom; another commonly used clipboard
+    is the "PRIMARY" clipboard, which, in X, traditionally contains
+    the currently selected text.
   </para>
   <para>
     To support having a number of different formats on the clipboard
@@ -34,7 +34,7 @@ Storing data on Clipboards.
     with callbacks to convert it into the various data types that you
     advertise. When the @clear_func you provided is called, you
     simply free the data blob. The latter is more useful when the
-    contents of clipboard reflect the internal state of a @GObject
+    contents of clipboard reflect the internal state of a #GObject
     (As an example, for the PRIMARY clipboard, when an entry widget
     provides the clipboard's contents the contents are simply the
     text within the selected region.) If the contents change, the
@@ -53,7 +53,7 @@ Storing data on Clipboards.
     callback that will be called when the contents are received (or
     when the request fails.) If you don't want to deal with providing
     a separate callback, you can also use gtk_clipboard_wait_for_contents().
-    What this does is run the Glib main loop recursively waiting for
+    What this does is run the GLib main loop recursively waiting for
     the contents. This can simplify the code flow, but you still have
     to be aware that other callbacks in your program can be called
     while this recursive mainloop is running.
@@ -75,7 +75,7 @@ Storing data on Clipboards.
 
 <varlistentry>
 <term>#GtkSelection</term>
-<listitem><para>@GtkClipboard provides a high-level wrapper around the
+<listitem><para>#GtkClipboard provides a high-level wrapper around the
 	    lower level routines that deal with X selections. It is
 	    also possibly to directly manipulate the X selections,
 	    though it is seldom necessary to do so.</para></listitem>
@@ -134,7 +134,7 @@ will be informed that the attempt to get the data failed.
                      target from the #GtkTargetEntry array passed to
                      gtk_clipboard_set_with_data() or gtk_clipboard_set_with_owner().
 @user_data_or_owner: the @user_data argument passed to gtk_clipboard_set_with_data(), or
-                     the @owner argument passed to gtk_clipboard_set_owner()
+                     the @owner argument passed to gtk_clipboard_set_with_owner()
 
 
 <!-- ##### USER_FUNCTION GtkClipboardClearFunc ##### -->
@@ -146,7 +146,7 @@ will not be used again.
 
 @clipboard: the #GtkClipboard
 @user_data_or_owner: the @user_data argument passed to gtk_clipboard_set_with_data(), or
-                     the @owner argument passed to gtk_clipboard_set_owner()
+                     the @owner argument passed to gtk_clipboard_set_with_owner()
 
 
 <!-- ##### FUNCTION gtk_clipboard_get_for_display ##### -->

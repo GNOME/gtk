@@ -752,7 +752,7 @@ static gboolean gdk_pixbuf__tga_stop_load(gpointer data, GError **err)
 	g_free(ctx->hdr);
 	if (ctx->cmap)
 		g_free(ctx->cmap);
-	gdk_pixbuf_unref(ctx->pbuf);
+	g_object_unref(ctx->pbuf);
 	if (ctx->in->size)
 		ctx->in = io_buffer_free_segment(ctx->in, ctx->in->size, err);
 	if (!ctx->in) {
@@ -905,14 +905,14 @@ static GdkPixbuf *get_image_pseudocolor(FILE *f, TGAHeader *hdr,
 		n = count = 0;
 		for (; n < pbuf->width * pbuf->height;) {
 			if (!fread_check(&tag, 1, 1, f, err)) {
-				gdk_pixbuf_unref(pbuf);
+				g_object_unref(pbuf);
 				return NULL;
 			}
 			if (tag & 0x80) {
 				count = (tag & 0x7f) + 1;
 				n += count;
 				if (!fread_check(&color, 1, 1, f, err)) {
-					gdk_pixbuf_unref(pbuf);
+					g_object_unref(pbuf);
 					return NULL;
 				}
 				for (; count; count--) {
@@ -927,7 +927,7 @@ static GdkPixbuf *get_image_pseudocolor(FILE *f, TGAHeader *hdr,
 				n += count;
 				for (; count; count--) {
 					if (!fread_check(&color, 1, 1, f, err)) {
-						gdk_pixbuf_unref(pbuf);
+						g_object_unref(pbuf);
 						return NULL;
 					}
 					*p++ = cmap->cols[color].r;
@@ -941,7 +941,7 @@ static GdkPixbuf *get_image_pseudocolor(FILE *f, TGAHeader *hdr,
 	} else {
 		for (n = 0; n < pbuf->width * pbuf->height; n++) {
 			if (!fread_check(&color, 1, 1, f, err)) {
-				gdk_pixbuf_unref(pbuf);
+				g_object_unref(pbuf);
 				return NULL;
 			}
 			*p++ = cmap->cols[color].r;
@@ -1001,14 +1001,14 @@ static GdkPixbuf *get_image_truecolor(FILE *f, TGAHeader *hdr,
 		n = count = 0;
 		for (; n < pbuf->width * pbuf->height;) {
 			if (!fread_check(&tag, 1, 1, f, err)) {
-				gdk_pixbuf_unref(pbuf);
+				g_object_unref(pbuf);
 				return NULL;
 			}
 			if (tag & 0x80) {
 				count = (tag & 0x7f) + 1;
 				n += count;
 				if (!fread_check(&pixel, pbuf->n_channels, 1, f, err)) {
-					gdk_pixbuf_unref(pbuf);
+					g_object_unref(pbuf);
 					return NULL;
 				}
 				for (; count; count--) {
@@ -1019,7 +1019,7 @@ static GdkPixbuf *get_image_truecolor(FILE *f, TGAHeader *hdr,
 				count = tag + 1;
 				n += count;
 				if (!fread_check(p, pbuf->n_channels * count, 1, f, err)) {
-					gdk_pixbuf_unref(pbuf);
+					g_object_unref(pbuf);
 					return NULL;
 				}
 				p += pbuf->n_channels * count;
@@ -1027,7 +1027,7 @@ static GdkPixbuf *get_image_truecolor(FILE *f, TGAHeader *hdr,
 		}
 	} else {
 		if (!fread_check(p, pbuf->rowstride * pbuf->height, 1, f, err)) {
-			gdk_pixbuf_unref(pbuf);
+			g_object_unref(pbuf);
 			return NULL;
 		}
 	}
@@ -1067,14 +1067,14 @@ static GdkPixbuf *get_image_grayscale(FILE *f, TGAHeader *hdr,
 		n = count = 0;
 		for (; n < pbuf->width * pbuf->height;) {
 			if (!fread_check(&tag, 1, 1, f, err)) {
-				gdk_pixbuf_unref(pbuf);
+				g_object_unref(pbuf);
 				return NULL;
 			}
 			if (tag & 0x80) {
 				count = (tag & 0x7f) + 1;
 				n += count;
 				if (!fread_check(&color, 1, 1, f, err)) {
-					gdk_pixbuf_unref(pbuf);
+					g_object_unref(pbuf);
 					return NULL;
 				}
 				for (; count; count--) {
@@ -1086,7 +1086,7 @@ static GdkPixbuf *get_image_grayscale(FILE *f, TGAHeader *hdr,
 				n += count;
 				for (; count; count--) {
 					if (!fread_check(&color, 1, 1, f, err)) {
-						gdk_pixbuf_unref(pbuf);
+						g_object_unref(pbuf);
 						return NULL;
 					}
 					p[0] = p[1] = p[2] = color;
@@ -1097,7 +1097,7 @@ static GdkPixbuf *get_image_grayscale(FILE *f, TGAHeader *hdr,
 	} else {
 		for (n = 0; n < pbuf->width * pbuf->height; n++) {
 			if (!fread_check(&color, 1, 1, f, err)) {
-				gdk_pixbuf_unref(pbuf);
+				g_object_unref(pbuf);
 				return NULL;
 			}
 			p[0] = p[1] = p[2] = color;

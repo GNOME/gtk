@@ -113,7 +113,8 @@ gint  gdk_send_xevent_for_display      (GdkDisplay	*display,
 GType _gdk_gc_x11_get_type (void);
 
 #ifdef HAVE_XFT
-Picture _gdk_x11_gc_get_fg_picture     (GdkGC            *gc);
+gboolean _gdk_x11_have_render       (GdkDisplay *display);
+Picture  _gdk_x11_gc_get_fg_picture (GdkGC *gc);
 #endif /* HAVE_XFT */
 
 GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
@@ -126,11 +127,15 @@ GdkVisual *gdk_visual_lookup_for_screen (GdkScreen * screen,
 					 Visual * xvisual);
 void gdk_window_add_colormap_windows (GdkWindow *window);
 
-GdkImage* _gdk_x11_get_image (GdkDrawable    *drawable,
-                              gint            x,
-                              gint            y,
-                              gint            width,
-                              gint            height);
+GdkImage *_gdk_x11_copy_to_image       (GdkDrawable *drawable,
+					GdkImage    *image,
+					gint         src_x,
+					gint         src_y,
+					gint         dest_x,
+					gint         dest_y,
+					gint         width,
+					gint         height);
+Pixmap   _gdk_x11_image_get_shm_pixmap (GdkImage    *image);
 
 /* Please see gdkwindow.c for comments on how to use */ 
 Window gdk_window_xid_at        (Display  *xdisplay,

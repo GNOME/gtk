@@ -166,6 +166,8 @@ static void     gtk_color_selection_set_palette_color   (GtkColorSelection *colo
                                                          GdkColor          *color);
 static void     gtk_color_selection_unset_palette_color (GtkColorSelection *colorsel,
                                                          gint               index);
+static GdkGC   *get_focus_gc                            (GtkWidget         *drawing_area,
+							 gint              *focus_width);
 static void     default_change_palette_func             (GdkScreen	   *screen,
 							 const GdkColor    *colors,
 							 gint               n_colors);
@@ -483,21 +485,23 @@ color_sample_draw_samples (GtkColorSelection *colorsel)
   color_sample_draw_sample (colorsel, 1);
 }
 
-static void
+static gboolean
 color_old_sample_expose (GtkWidget         *da,
 			 GdkEventExpose    *event,
 			 GtkColorSelection *colorsel)
 {
   color_sample_draw_sample (colorsel, 0);
+  return FALSE;
 }
 
 
-static void
+static gboolean
 color_cur_sample_expose (GtkWidget         *da,
 			 GdkEventExpose    *event,
 			 GtkColorSelection *colorsel)
 {
   color_sample_draw_sample (colorsel, 1);
+  return FALSE;
 }
 
 static void
@@ -640,23 +644,47 @@ palette_paint (GtkWidget    *drawing_area,
   
   if (GTK_WIDGET_HAS_FOCUS (drawing_area))
     {
-      GdkGC *gc;
-      gdouble color[4];
-      
-      palette_get_color (drawing_area, color);
-      
-      if (INTENSITY (color[0], color[1], color[2]) > 0.5)
-	gc = drawing_area->style->black_gc;
-      else
-	gc = drawing_area->style->white_gc;
-
+      gint focus_width;
+      GdkGC *gc = get_focus_gc (drawing_area, &focus_width);
       gdk_draw_rectangle (drawing_area->window,
-			  gc, FALSE, 0, 0,
-			  drawing_area->allocation.width - 1,
-			  drawing_area->allocation.height - 1);
+			  gc, FALSE, focus_width / 2, focus_width / 2,
+			  drawing_area->allocation.width - focus_width,
+			  drawing_area->allocation.height - focus_width);
+      g_object_unref (gc);
     }
 }
 
+static GdkGC *
+get_focus_gc (GtkWidget *drawing_area,
+	      gint      *focus_width)
+{
+  GdkGC *gc = gdk_gc_new (drawing_area->window);
+  gdouble color[4];
+  gint8 *dash_list;
+  
+  gtk_widget_style_get (drawing_area,
+			"focus-line-width", focus_width,
+			"focus-line-pattern", (gchar *)&dash_list,
+			NULL);
+      
+  palette_get_color (drawing_area, color);
+      
+  if (INTENSITY (color[0], color[1], color[2]) > 0.5)
+    gdk_gc_copy (gc, drawing_area->style->black_gc);
+  else
+    gdk_gc_copy (gc, drawing_area->style->white_gc);
+
+  gdk_gc_set_line_attributes (gc, *focus_width,
+			      dash_list[0] ? GDK_LINE_ON_OFF_DASH : GDK_LINE_SOLID,
+			      GDK_CAP_BUTT, GDK_JOIN_MITER);
+
+  if (dash_list[0])
+    gdk_gc_set_dashes (gc, 0, dash_list, strlen (dash_list));
+
+  g_free (dash_list);
+  
+  return gc;
+}
 
 static void
 palette_drag_begin (GtkWidget      *widget,
@@ -776,7 +804,6 @@ palette_set_color (GtkWidget         *drawing_area,
 		   gdouble           *color)
 {
   gdouble *new_color = g_new (double, 4);
-  gdouble *old_color;
   GdkColor gdk_color;
   
   gdk_color.red = UNSCALE (color[0]);
@@ -806,31 +833,26 @@ palette_set_color (GtkWidget         *drawing_area,
       
       gtk_object_set_data (GTK_OBJECT (drawing_area), "color_set", GINT_TO_POINTER (1));
     }
-  else
-    {
-      old_color = (gdouble *) gtk_object_get_data (GTK_OBJECT (drawing_area), "color_val");
-      if (old_color)
-	{
-	  g_free (old_color);
-	}
-    }
+
   new_color[0] = color[0];
   new_color[1] = color[1];
   new_color[2] = color[2];
   new_color[3] = 1.0;
   
-  gtk_object_set_data (GTK_OBJECT (drawing_area), "color_val", new_color);
+  g_object_set_data_full (G_OBJECT (drawing_area), "color_val", new_color, (GDestroyNotify)g_free);
 }
 
-static void
+static gboolean
 palette_expose (GtkWidget      *drawing_area,
 		GdkEventExpose *event,
 		gpointer        data)
 {
   if (drawing_area->window == NULL)
-    return;
+    return FALSE;
   
   palette_paint (drawing_area, &(event->area), data);
+  
+  return FALSE;
 }
 
 static void
@@ -1738,12 +1760,16 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gint i, j;
   ColorSelectionPrivate *priv;
   
+  gtk_widget_push_composite_child ();
+
   priv = colorsel->private_data = g_new0 (ColorSelectionPrivate, 1);
   priv->changing = FALSE;
   priv->default_set = FALSE;
   priv->default_alpha_set = FALSE;
   
   priv->tooltips = gtk_tooltips_new ();
+  g_object_ref (priv->tooltips);
+  gtk_object_sink (GTK_OBJECT (priv->tooltips));
   
   gtk_box_set_spacing (GTK_BOX (colorsel), 4);
   top_hbox = gtk_hbox_new (FALSE, 8);
@@ -1888,8 +1914,10 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
     {
       gtk_widget_hide (priv->palette_frame);
     }
-}
 
+
+  gtk_widget_pop_composite_child ();
+}
 
 static void
 gtk_color_selection_destroy (GtkObject *object)
@@ -1905,7 +1933,7 @@ gtk_color_selection_destroy (GtkObject *object)
 
   if (priv->tooltips)
     {
-      gtk_object_destroy (GTK_OBJECT (priv->tooltips));
+      g_object_unref (priv->tooltips);
       priv->tooltips = NULL;
     }
   
@@ -2015,8 +2043,6 @@ gtk_color_selection_set_update_policy (GtkColorSelection *colorsel,
 				       GtkUpdateType      policy)
 {
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
-  /* */
-  g_warning (G_STRLOC ": This function is deprecated.");
 }
 
 /**
@@ -2750,6 +2776,3 @@ gtk_color_selection_set_change_palette_hook (GtkColorSelectionChangePaletteFunc 
 
   return old;
 }
-
-
-

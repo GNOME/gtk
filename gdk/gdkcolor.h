@@ -61,8 +61,11 @@ GType        gdk_colormap_get_type (void) G_GNUC_CONST;
 
 GdkColormap* gdk_colormap_new	  (GdkVisual   *visual,
 				   gboolean	allocate);
+
+#ifndef GDK_DISABLE_DEPRECATED
 GdkColormap* gdk_colormap_ref	  (GdkColormap *cmap);
 void	     gdk_colormap_unref	  (GdkColormap *cmap);
+#endif 
 
 #ifndef GDK_MULTIHEAD_SAFE
 GdkColormap* gdk_colormap_get_system	   (void);
@@ -70,11 +73,9 @@ GdkColormap* gdk_colormap_get_system	   (void);
 GdkColormap* gdk_colormap_get_system_for_screen (GdkScreen * screen);
 #ifndef GDK_DISABLE_DEPRECATED
 gint	     gdk_colormap_get_system_size  (void);
-#endif
-
 void gdk_colormap_change (GdkColormap	*colormap,
 			  gint		 ncolors);
-
+#endif 
 
 gint  gdk_colormap_alloc_colors   (GdkColormap *colormap,
 				   GdkColor    *colors,

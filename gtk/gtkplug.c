@@ -214,7 +214,7 @@ gtk_plug_set_is_child (GtkPlug  *plug,
  * @plug: a #GtkPlug
  * @socket: a #GtkSocket
  * 
- * Add a plug to a socket within the same application.
+ * Adds a plug to a socket within the same application.
  **/
 void
 _gtk_plug_add_to_socket (GtkPlug   *plug,
@@ -248,7 +248,7 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
  * @plug: a #GtkPlug
  * @socket: a #GtkSocket
  * 
- * Remove a plug from a socket within the same application.
+ * Removes a plug from a socket within the same application.
  **/
 void
 _gtk_plug_remove_from_socket (GtkPlug   *plug,
@@ -496,6 +496,7 @@ gtk_plug_realize (GtkWidget *widget)
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_EXPOSURE_MASK |
 			    GDK_KEY_PRESS_MASK |
+			    GDK_KEY_RELEASE_MASK |
 			    GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK |
 			    GDK_FOCUS_CHANGE_MASK |
@@ -620,6 +621,8 @@ gtk_plug_size_allocate (GtkWidget     *widget,
     {
       GtkBin *bin = GTK_BIN (widget);
 
+      widget->allocation = *allocation;
+
       if (GTK_WIDGET_REALIZED (widget))
 	gdk_window_move_resize (widget->window,
 				allocation->x, allocation->y,
@@ -646,13 +649,18 @@ static gboolean
 gtk_plug_key_press_event (GtkWidget   *widget,
 			  GdkEventKey *event)
 {
-  if (!GTK_WINDOW (widget)->has_focus)
+  if (GTK_WIDGET_TOPLEVEL (widget))
     {
-      gtk_plug_forward_key_press (GTK_PLUG (widget), event);
-      return TRUE;
+      if (!GTK_WINDOW (widget)->has_focus)
+	{
+	  gtk_plug_forward_key_press (GTK_PLUG (widget), event);
+	  return TRUE;
+	}
+      else
+	return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
     }
   else
-    return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
+    return FALSE;
 }
 
 static void

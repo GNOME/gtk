@@ -112,7 +112,7 @@ gdk_gc_x11_finalize (GObject *object)
   
 #if HAVE_XFT
   if (x11_gc->fg_picture != None)
-    XRenderFreePicture (x11_gc->xdisplay, x11_gc->fg_picture);
+    XRenderFreePicture (GDK_GC_XDISPLAY (x11_gc), x11_gc->fg_picture);
 #endif  
   
   XFreeGC (GDK_GC_XDISPLAY (x11_gc), GDK_GC_XGC (x11_gc));
@@ -831,15 +831,22 @@ _gdk_x11_gc_get_fg_picture (GdkGC *gc)
 
   x11_gc = GDK_GC_X11 (gc);
 
+  if (!_gdk_x11_have_render (GDK_GC_DISPLAY (gc)));
+    return None;
+
   if (x11_gc->fg_picture == None)
     {
       XRenderPictureAttributes pa;
       XRenderPictFormat *pix_format = foreground_format (gc);
+      Pixmap pix;
 
-      Pixmap pix = XCreatePixmap (x11_gc->xdisplay, _gdk_root_window,
-				  1, 1, pix_format->depth);
+      if (!pix_format)
+	return None;
+
+      pix = XCreatePixmap (x11_gc->xdisplay, _gdk_root_window,
+			   1, 1, pix_format->depth);
       pa.repeat = True;
-      x11_gc->fg_picture = XRenderCreatePicture (x11_gc->xdisplay, 
+      x11_gc->fg_picture = XRenderCreatePicture (GDK_GC_XDISPLAY (gc), 
 						 pix,
 						 pix_format,
 						 CPRepeat, &pa);
@@ -860,7 +867,7 @@ _gdk_x11_gc_get_fg_picture (GdkGC *gc)
       x11_gc->fg_picture_color.blue = color.blue;
       x11_gc->fg_picture_color.alpha = 0xffff;
 
-      XRenderFillRectangle (x11_gc->xdisplay, PictOpSrc, 
+      XRenderFillRectangle (GDK_GC_XDISPLAY (gc), PictOpSrc, 
 			    x11_gc->fg_picture, &x11_gc->fg_picture_color,
 			    0, 0, 1, 1); 
     }

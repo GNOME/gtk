@@ -40,7 +40,8 @@ GDK_PIXBUF_VER=$(GTK_VER)
 PERL = perl
 !ENDIF
 
-CFLAGS = -I . -I .. $(GLIB_CFLAGS) $(PANGO_CFLAGS) -I ../gdk-pixbuf \
+CFLAGS = -FImsvc_recommended_pragmas.h -I . -I .. \
+		$(GLIB_CFLAGS) $(PANGO_CFLAGS) -I ../gdk-pixbuf \
 		$(G_DEBUGGING) -DHAVE_CONFIG_H -DGDK_ENABLE_BROKEN -DGDK_VERSION=\"$(GTK_VER)\"
 EXTRALIBS = $(WTKIT)\lib\i386\wntab32x.lib $(GLIB_LIBS) \
 		..\gdk-pixbuf\gdk_pixbuf-$(GDK_PIXBUF_VER).lib $(PANGOWIN32_LIBS)
@@ -88,7 +89,6 @@ gdk_public_h_sources = \
 	gdk.h		\
 	gdkcolor.h	\
 	gdkcursor.h     \
-	gdkcursors.h	\
 	gdkdnd.h	\
 	gdkdrawable.h	\
 	gdkevents.h	\

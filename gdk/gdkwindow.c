@@ -128,12 +128,27 @@ static void   gdk_window_draw_image     (GdkDrawable     *drawable,
                                          gint             width,
                                          gint             height);
 
-static GdkImage*  gdk_window_get_image  (GdkDrawable     *drawable,
-                                         gint             x,
-                                         gint             y,
-                                         gint             width,
-                                         gint             height);
+static void gdk_window_draw_pixbuf (GdkDrawable     *drawable,
+				    GdkGC           *gc,
+				    GdkPixbuf       *pixbuf,
+				    gint             src_x,
+				    gint             src_y,
+				    gint             dest_x,
+				    gint             dest_y,
+				    gint             width,
+				    gint             height,
+				    GdkRgbDither     dither,
+				    gint             x_dither,
+				    gint             y_dither);
 
+static GdkImage* gdk_window_copy_to_image (GdkDrawable *drawable,
+					   GdkImage    *image,
+					   gint         src_x,
+					   gint         src_y,
+					   gint         dest_x,
+					   gint         dest_y,
+					   gint         width,
+					   gint         height);
 
 static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
@@ -226,13 +241,14 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_lines = gdk_window_draw_lines;
   drawable_class->draw_glyphs = gdk_window_draw_glyphs;
   drawable_class->draw_image = gdk_window_draw_image;
+  drawable_class->_draw_pixbuf = gdk_window_draw_pixbuf;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
   drawable_class->get_size = gdk_window_real_get_size;
   drawable_class->set_colormap = gdk_window_real_set_colormap;
   drawable_class->get_colormap = gdk_window_real_get_colormap;
   drawable_class->get_visual = gdk_window_real_get_visual;
-  drawable_class->get_image = gdk_window_get_image;
+  drawable_class->_copy_to_image = gdk_window_copy_to_image;
   drawable_class->get_clip_region = gdk_window_get_clip_region;
   drawable_class->get_visible_region = gdk_window_get_visible_region;
   drawable_class->get_composite_drawable = gdk_window_get_composite_drawable;
@@ -268,17 +284,17 @@ gdk_window_finalize (GObject *object)
  * _gdk_window_destroy_hierarchy:
  * @window: a #GdkWindow
  * @recursing: If TRUE, then this is being called because a parent
- *            was destroyed. This generally means that the call to the windowing system
- *            to destroy the window can be omitted, since it will be destroyed as a result
- *            of the parent being destroyed. Unless @foreign_destroy
- *            
- * foreign_destroy: If TRUE, the window or a parent was destroyed by some external 
- *            agency. The window has already been destroyed and no windowing
- *            system calls should be made. (This may never happen for some
- *            windowing systems.)
+ *            was destroyed. This generally means that the call to the 
+ *            windowing system to destroy the window can be omitted, since
+ *            it will be destroyed as a result of the parent being destroyed.
+ *            Unless @foreign_destroy.           
+ * @foreign_destroy: If TRUE, the window or a parent was destroyed by some 
+ *            external agency. The window has already been destroyed and no 
+ *            windowing system calls should be made. (This may never happen
+ *            for some windowing systems.)
  *
- * Internal function to destroy a window. Like gdk_window_destroy(), but does not
- * drop the reference count created by gdk_window_new().
+ * Internal function to destroy a window. Like gdk_window_destroy(),
+ * but does not drop the reference count created by gdk_window_new().
  **/
 static void
 _gdk_window_destroy_hierarchy (GdkWindow *window,
@@ -338,7 +354,8 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 		  
 		  temp_private = (GdkWindowObject*) temp_window;
 		  if (temp_private)
-		    _gdk_window_destroy_hierarchy (temp_window, TRUE, foreign_destroy);
+		    _gdk_window_destroy_hierarchy (temp_window,
+                                                   TRUE, foreign_destroy);
 		}
 	      
 	      g_list_free (children);
@@ -374,13 +391,13 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 /**
  * _gdk_window_destroy:
  * @window: a #GdkWindow
- * foreign_destroy: If TRUE, the window or a parent was destroyed by some external 
- *            agency. The window has already been destroyed and no windowing
- *            system calls should be made. (This may never happen for some
- *            windowing systems.)
+ * @foreign_destroy: If TRUE, the window or a parent was destroyed by some
+ *            external agency. The window has already been destroyed and no
+ *            windowing system calls should be made. (This may never happen
+ *            for some windowing systems.)
  *
- * Internal function to destroy a window. Like gdk_window_destroy(), but does not
- * drop the reference count created by gdk_window_new().
+ * Internal function to destroy a window. Like gdk_window_destroy(),
+ * but does not drop the reference count created by gdk_window_new().
  **/
 void
 _gdk_window_destroy (GdkWindow *window,
@@ -393,9 +410,10 @@ _gdk_window_destroy (GdkWindow *window,
  * gdk_window_destroy:
  * @window: a #GdkWindow
  *
- * Destroys @window (destroys the server-side resource associated with @window).
- * Memory allocated for @window may not be freed until all references
- * to @window are dropped. All children of @window are also destroyed.
+ * Destroys @window (destroys the server-side resource associated with
+ * @window).  Memory allocated for @window may not be freed until all
+ * references to @window are dropped. All children of @window are also
+ * destroyed.
  *
  * There's normally no need to use this function, window are automatically
  * destroyed when their reference count reaches 0.
@@ -471,10 +489,11 @@ gdk_window_get_window_type (GdkWindow *window)
  * @x: X coordinate of window
  * @y: Y coordinate of window
  *
- * Obtains the position of the window as reported in the most-recently-processed
- * #GdkEventConfigure. Contrast with gdk_window_get_geometry() which
- * queries the X server for the current window position, regardless of which
- * events have been received or processed.
+ * Obtains the position of the window as reported in the
+ * most-recently-processed #GdkEventConfigure. Contrast with
+ * gdk_window_get_geometry() which queries the X server for the
+ * current window position, regardless of which events have been
+ * received or processed.
  *
  * The position coordinates are relative to the window's parent window.
  * 
@@ -591,8 +610,10 @@ gdk_window_peek_children (GdkWindow *window)
  * @data: data to pass to filter callback
  *
  * Adds an event filter to @window, allowing you to intercept events
- * before they reach GDK. This is a low-level operation and makes it easy to break
- * GDK and/or GTK+, so you have to know what you're doing.
+ * before they reach GDK. This is a low-level operation and makes it
+ * easy to break GDK and/or GTK+, so you have to know what you're
+ * doing. Pass %NULL for @window to get all events for all windows,
+ * instead of events for a specific window.
  * 
  **/
 void          
@@ -745,10 +766,8 @@ gdk_window_is_visible (GdkWindow *window)
  * Check if the window and all ancestors of the window are
  * mapped. (This is not necessarily "viewable" in the X sense, since
  * we only check as far as we have GDK window parents, not to the root
- * window)
- * 
- * 
- * 
+ * window.)
+ *
  * Return value: %TRUE if the window is viewable
  **/
 gboolean 
@@ -833,14 +852,17 @@ gdk_window_get_bg_gc (GdkWindow *window, GdkWindowPaint *paint)
       
       return gdk_window_get_bg_gc (GDK_WINDOW (private->parent), &tmp_paint);
     }
-  else if (private->bg_pixmap && private->bg_pixmap != GDK_PARENT_RELATIVE_BG && private->bg_pixmap != GDK_NO_BG)
+  else if (private->bg_pixmap && 
+           private->bg_pixmap != GDK_PARENT_RELATIVE_BG && 
+           private->bg_pixmap != GDK_NO_BG)
     {
       gc_values.fill = GDK_TILED;
       gc_values.tile = private->bg_pixmap;
       gc_values.ts_x_origin = - paint->x_offset;
       gc_values.ts_y_origin = - paint->y_offset;
       
-      gc_mask = GDK_GC_FILL | GDK_GC_TILE | GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN;
+      gc_mask = (GDK_GC_FILL | GDK_GC_TILE | 
+                 GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN);
     }
   else
     {
@@ -1005,7 +1027,8 @@ gdk_window_begin_paint_region (GdkWindow *window,
     {
       paint->x_offset = clip_box.x;
       paint->y_offset = clip_box.y;
-      paint->pixmap = gdk_pixmap_new (window, clip_box.width, clip_box.height, -1);
+      paint->pixmap = gdk_pixmap_new (window, 
+                                      clip_box.width, clip_box.height, -1);
     }
 
   if (!gdk_region_empty (init_region))
@@ -1053,7 +1076,8 @@ gdk_window_end_paint (GdkWindow *window)
     }
 
   paint = private->paint_stack->data;
-  private->paint_stack = g_slist_delete_link (private->paint_stack, private->paint_stack);
+  private->paint_stack = g_slist_delete_link (private->paint_stack, 
+                                              private->paint_stack);
 
   gdk_region_get_clipbox (paint->region, &clip_box);
 
@@ -1137,11 +1161,14 @@ gdk_window_get_offsets (GdkWindow *window,
 /**
  * gdk_window_get_internal_paint_info:
  * @window: a #GdkWindow
- * @real_drawable: location to store the drawable to which drawing should be done.
- * @x_offset: location to store the X offset between coordinates in @window, and
- *            the underlying window system primitive coordinates for *@real_drawable.
- * @y_offset: location to store the Y offset between coordinates in @window, and
- *            the underlying window system primitive coordinates for *@real_drawable.
+ * @real_drawable: location to store the drawable to which drawing should be 
+ *            done.
+ * @x_offset: location to store the X offset between coordinates in @window,
+ *            and the underlying window system primitive coordinates for 
+ *            *@real_drawable.
+ * @y_offset: location to store the Y offset between coordinates in @window,
+ *            and the underlying window system primitive coordinates for
+ *            *@real_drawable.
  * 
  * If you bypass the GDK layer and use windowing system primitives to
  * draw directly onto a #GdkWindow, then you need to deal with two
@@ -1880,6 +1907,65 @@ gdk_window_draw_image (GdkDrawable *drawable,
   RESTORE_GC (gc);
 }
 
+static void
+gdk_window_draw_pixbuf (GdkDrawable     *drawable,
+			GdkGC           *gc,
+			GdkPixbuf       *pixbuf,
+			gint             src_x,
+			gint             src_y,
+			gint             dest_x,
+			gint             dest_y,
+			gint             width,
+			gint             height,
+			GdkRgbDither     dither,
+			gint             x_dither,
+			gint             y_dither)
+{
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
+
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
+  if (gc)
+    {
+      OFFSET_GC (gc);
+  
+      if (private->paint_stack)
+	{
+	  GdkWindowPaint *paint = private->paint_stack->data;
+	  _gdk_draw_pixbuf (paint->pixmap, gc, pixbuf, src_x, src_y,
+			    dest_x - x_offset, dest_y - y_offset,
+			    width, height,
+			    dither, x_dither - x_offset, y_dither - y_offset);
+	}
+      else
+	_gdk_draw_pixbuf (private->impl, gc, pixbuf, src_x, src_y,
+			  dest_x - x_offset, dest_y - y_offset,
+			  width, height,
+			  dither, x_dither, y_dither);
+      
+      RESTORE_GC (gc);
+    }
+  else
+    {
+      gint x_offset, y_offset;
+      gdk_window_get_offsets (drawable, &x_offset, &y_offset);
+      
+      if (private->paint_stack)
+	{
+	  GdkWindowPaint *paint = private->paint_stack->data;
+	  _gdk_draw_pixbuf (paint->pixmap, gc, pixbuf, src_x, src_y,
+			    dest_x - x_offset, dest_y - y_offset,
+			    width, height,
+			    dither, x_dither - x_offset, y_dither - y_offset);
+	}
+      else
+	_gdk_draw_pixbuf (private->impl, gc, pixbuf, src_x, src_y,
+			  dest_x - x_offset, dest_y - y_offset,
+			  width, height,
+			  dither, x_dither, y_dither);
+    }
+}
 
 static void
 gdk_window_real_get_size (GdkDrawable *drawable,
@@ -1951,11 +2037,14 @@ gdk_window_real_get_colormap (GdkDrawable *drawable)
 }
                       
 static GdkImage*
-gdk_window_get_image (GdkDrawable *drawable,
-                      gint         x,
-                      gint         y,
-                      gint         width,
-                      gint         height)
+gdk_window_copy_to_image (GdkDrawable     *drawable,
+			  GdkImage        *image,
+			  gint             src_x,
+			  gint             src_y,
+			  gint             dest_x,
+			  gint             dest_y,
+			  gint             width,
+			  gint             height)
 {
   gint x_offset, y_offset;
   
@@ -1970,10 +2059,12 @@ gdk_window_get_image (GdkDrawable *drawable,
   
   _gdk_windowing_window_get_offsets (drawable, &x_offset, &y_offset);
   
-  return gdk_drawable_get_image (((GdkWindowObject*)drawable)->impl,
-                                 x - x_offset,
-                                 y - y_offset,
-                                 width, height);
+  return _gdk_drawable_copy_to_image (((GdkWindowObject*)drawable)->impl,
+				      image,
+				      src_x - x_offset,
+				      src_y - y_offset,
+				      dest_x, dest_y,
+				      width, height);
 }
 
 /* Code for dirty-region queueing
@@ -2181,7 +2272,7 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
  * @region: a #GdkRegion
  * @child_func: function to use to decide if to recurse to a child,
  *              %NULL means never recurse.
- * @child_func_data: data passed to @child_func
+ * @user_data: data passed to @child_func
  *
  * Adds @region to the update area for @window. The update area is the
  * region that needs to be redrawn, or "dirty region." The call
@@ -2197,7 +2288,7 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
  *
  * The @child_func parameter controls whether the region of
  * each child window that intersects @region will also be invalidated.
- * Only children for whic @child_func returns TRUE will have the area
+ * Only children for which @child_func returns TRUE will have the area
  * invalidated.
  **/
 void
@@ -2631,8 +2722,9 @@ gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)
  * Obtains the current pointer position and modifier state.
  * The position is given in coordinates relative to @window.
  * 
- * Return value: the window containing the pointer (as with gdk_window_at_pointer()), or %NULL
- *               if the window containing the pointer isn't known to GDK
+ * Return value: the window containing the pointer (as with
+ * gdk_window_at_pointer()), or %NULL if the window containing the
+ * pointer isn't known to GDK
  **/
 GdkWindow*
 gdk_window_get_pointer (GdkWindow	  *window,
@@ -2650,10 +2742,10 @@ gdk_window_get_pointer (GdkWindow	  *window,
  * @win_x: return location for origin of the window under the pointer
  * @win_y: return location for origin of the window under the pointer
  * 
- * Obtains the window underneath the mouse pointer, returning the location
- * of that window in @win_x, @win_y. Returns %NULL if the window under
- * the mouse pointer is not known to GDK (for example, belongs to
- * another application).
+ * Obtains the window underneath the mouse pointer, returning the
+ * location of that window in @win_x, @win_y. Returns %NULL if the
+ * window under the mouse pointer is not known to GDK (for example,
+ * belongs to another application).
  *
  * NOTE : for multihead application or widgets use 
  *	  gdk_screen_get_window_at_pointer

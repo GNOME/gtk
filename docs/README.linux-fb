@@ -1,3 +1,15 @@
+
+
+
+
+THIS FILE IS OBSOLETE - use docs/reference/gtk/framebuffer.sgml
+
+
+
+
+
+
+
 About GtkFB:
 ------------
 The linux-fb port of Gtk+, also known as GtkFB is an implementation of

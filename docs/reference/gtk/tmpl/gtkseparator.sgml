@@ -2,7 +2,7 @@
 GtkSeparator
 
 <!-- ##### SECTION Short_Description ##### -->
-a base class for #GtkHSeparator and #GtkVseparator.
+a base class for #GtkHSeparator and #GtkVSeparator.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

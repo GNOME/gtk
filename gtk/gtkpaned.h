@@ -106,7 +106,6 @@ void    gtk_paned_compute_position (GtkPaned  *paned,
 #ifndef GTK_DISABLE_DEPRECATED
 #define	gtk_paned_gutter_size(p,s)		(void) 0
 #define	gtk_paned_set_gutter_size(p,s)		(void) 0
-#define	gtk_paned_handle_size			gtk_paned_set_handle_size
 #endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus

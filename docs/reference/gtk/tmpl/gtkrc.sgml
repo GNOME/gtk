@@ -16,28 +16,33 @@ at runtime.
 An application can cause GTK+ to parse a specific RC
 file by calling gtk_rc_parse(). In addition to this,
 certain files will be read at the end of gtk_init().
-Unless modified, the files looked for will be <filename>.gtkrc</filename>
-in the users home directory, and 
-<filename>$localstatedir/gtk/gtkrc</filename> 
-(<literal>$localstatedir</literal> defaults to 
-<filename>/usr/local/etc</filename>).
+Unless modified, the files looked for will be 
+<filename>&lt;SYSCONFDIR&gt;/gtk-2.0/gtkrc</filename> 
+and <filename>.gtkrc-2.0</filename> in the users home directory.
+(<filename>&lt;SYSCONFDIR&gt;</filename> defaults to 
+<filename>/usr/local/etc</filename>. It can be changed with the
+<option>--prefix</option> or <option>--sysconfdir</option> options when 
+configuring GTK+.)
 </para>
 <para>
 The set of these <firstterm>default</firstterm> files
 can be retrieved with gtk_rc_get_default_files()
 and modified with gtk_rc_add_default_file() and
 gtk_rc_set_default_files().
+Additionally, the <envar>GTK_RC_FILES</envar> environment variable
+can be set to a #G_SEARCHPATH_SEPARATOR_S-separated list of files
+in order to overwrite the set of default files at runtime.
 </para>
 <para>
 For each default file, in addition to the file itself,
 GTK+ will look for a locale-specific file that will
-be parsed in addition to the main file. For instance,
-if <literal>LANG</literal> is set to <literal>ja_JP.ujis</literal>,
+be parsed before the main file. For instance,
+if <envar>LANG</envar> is set to <literal>ja_JP.ujis</literal>,
 when loading the default file <filename>~/.gtkrc</filename>
 then GTK+ looks for <filename>~/.gtkrc.ja_JP.ujis</filename>,
 <filename>~/.gtkrc.ja_JP</filename>, and
-<filename>~/.gtkrc.ja</filename>, and parses the
-first one it finds.
+<filename>~/.gtkrc.ja</filename>, and parses all files that 
+it finds.
 </para>
 </refsect2>
 
@@ -48,9 +53,9 @@ attaches them to particular widgets. The attachment is done
 by the <literal>widget</literal>, <literal>widget_class</literal>,
 and <literal>class</literal> declarations. As an example
 of such a statement:
-<programlisting>
+<informalexample><programlisting>
 widget "mywindow.*.GtkEntry" style "my-entry-class"
-</programlisting>
+</programlisting></informalexample>
 attaches the style <literal>"my-entry-class"</literal>
 to all widgets whose <firstterm>widget class</firstterm>
 matches the <firstterm>pattern</firstterm>
@@ -63,48 +68,42 @@ any character, while <literal>"*"</literal> matches
 zero or more of any character. The three types of
 matching are against the widget path, the
 <firstterm>class path</firstterm> and the class
-heirarchy. Both the widget and the class paths consists of a
+hierarchy. Both the widget and the class paths consists of a
 <literal>"."</literal> separated list of all the
 parents of the widget and the widget itself from
 outermost to innermost. The difference is that in
 the widget path, the name assigned by
-<function>gtk_widget_set_name()</function> is used
+gtk_widget_set_name() is used
 if present, otherwise the class name of the widget, while
 for the widget path, the class name is always used.
 </para>
 <para>
-So, if you have a <classname>GtkEntry</classname> named
+So, if you have a #GtkEntry named
 <literal>"myentry"</literal>, inside of a of a window
 named <literal>"mywindow"</literal>, then the
-widget path is:
-<programlisting>
-"mwindow.GtkHBox.myentry"
-</programlisting>
-while the class path is:
-<programlisting>
-"GtkWindow.GtkHBox.GtkEntry"
-</programlisting>
+widget path is: <literal>"mwindow.GtkHBox.myentry"</literal>
+while the class path is: <literal>"GtkWindow.GtkHBox.GtkEntry"</literal>.
 </para>
 <para>
 Matching against class is a little different. The pattern
 match is done against all class names in the widgets
-class heirarchy (not the layout heirarchy) in sequence, so the
+class hierarchy (not the layout hierarchy) in sequence, so the
 pattern:
-<programlisting>
+<informalexample><programlisting>
 class "GtkButton" style "my-style"
-</programlisting>
-will match not just <classname>GtkButton</classname> widgets,
-but also <classname>GtkToggleButton</classname> and
-<classname>GtkCheckButton</classname> widgets, since
-those classes derive from <classname>GtkButton</classname>.
+</programlisting></informalexample>
+will match not just #GtkButton widgets,
+but also #GtkToggleButton and
+#GtkCheckButton widgets, since
+those classes derive from #GtkButton.
 </para>
 </refsect2>
 
 <refsect2><title>Toplevel declarations</title>
 <para>
 An RC file is a text file which is composed of a sequence
-of declarations. '#' characters delimit comments and
-the portion of a line after a '#' is ignored when parsing
+of declarations. <literal>'#'</literal> characters delimit comments and
+the portion of a line after a <literal>'#'</literal> is ignored when parsing
 an RC file.
 </para>
 
@@ -116,7 +115,7 @@ The possible toplevel declarations are:
     <term><literal>binding <replaceable>name</replaceable>
      { ... }</literal></term>
     <listitem>
-      <para>Declare a binding set</para>
+      <para>Declares a binding set.</para>
     </listitem>
   </varlistentry>
   <varlistentry>
@@ -124,18 +123,18 @@ The possible toplevel declarations are:
           [ style | binding [ : <replaceable>priority</replaceable> ]]
           <replaceable>name</replaceable></literal></term>
     <listitem>
-     <para>Specify a style or binding set for a particular
-     branch of the inheritance heirarchy.</para>
+     <para>Specifies a style or binding set for a particular
+     branch of the inheritance hierarchy.</para>
     </listitem>
   </varlistentry>
   <varlistentry>
     <term><literal>include <replaceable>filename</replaceable></literal></term>
     <listitem>
-      <para>Parse another file at this point</para>
+      <para>Parses another file at this point.</para>
     </listitem>
   </varlistentry>
   <varlistentry>
-    <term><literal>module_path <replaceable>path></replaceable></literal></term>
+    <term><literal>module_path <replaceable>path</replaceable></literal></term>
     <listitem>
       <para>Sets a path (a list of directories separated
       by colons) that will be searched for theme engines referenced in
@@ -143,7 +142,7 @@ The possible toplevel declarations are:
     </listitem>
   </varlistentry>
   <varlistentry>
-    <term><literal>pixmap_path <replaceable>path></replaceable></literal></term>
+    <term><literal>pixmap_path <replaceable>path</replaceable></literal></term>
     <listitem>
       <para>Sets a path (a list of directories separated
       by colons) that will be searched for pixmaps referenced in
@@ -154,7 +153,7 @@ The possible toplevel declarations are:
     <term><literal>style <replaceable>name</replaceable> [ =
     <replaceable>parent</replaceable> ] { ... }</literal></term>
     <listitem>
-      <para>Declare a style</para>
+      <para>Declares a style.</para>
     </listitem>
   </varlistentry>
   <varlistentry>
@@ -162,7 +161,7 @@ The possible toplevel declarations are:
           [ style | binding [ : <replaceable>priority</replaceable> ]]
           <replaceable>name</replaceable></literal></term>
     <listitem>
-     <para>Specify a style or binding set for a particular
+     <para>Specifies a style or binding set for a particular
      group of widgets by matching on the widget pathname.</para>
     </listitem>
   </varlistentry>
@@ -171,7 +170,7 @@ The possible toplevel declarations are:
           [ style | binding [ : <replaceable>priority</replaceable> ]]
           <replaceable>name</replaceable></literal></term>
     <listitem>
-     <para>Specify a style or binding set for a particular
+     <para>Specifies a style or binding set for a particular
      group of widgets by matching on the class pathname.</para>
     </listitem>
   </varlistentry>
@@ -203,7 +202,7 @@ elements are:
       <replaceable>color</replaceable></literal></term>
      <listitem>
        <para>
-         Set color used for the background of most widgets.
+         Sets the color used for the background of most widgets.
        </para>
      </listitem>
   </varlistentry>
@@ -212,7 +211,7 @@ elements are:
       <replaceable>color</replaceable></literal></term>
      <listitem>
        <para>
-         Set color used for the foreground of most widgets.
+         Sets the color used for the foreground of most widgets.
        </para>
      </listitem>
   </varlistentry>
@@ -221,7 +220,7 @@ elements are:
       <replaceable>color</replaceable></literal></term>
      <listitem>
        <para>
-         Set color used for the background of widgets displaying
+         Sets the color used for the background of widgets displaying
          editable text. This color is used for the background
          of, among others, #GtkText, #GtkEntry, #GtkList, and #GtkClist.
        </para>
@@ -232,7 +231,7 @@ elements are:
       <replaceable>color</replaceable></literal></term>
      <listitem>
        <para>
-         Set color used for foreground of widgets using
+         Sets the color used for foreground of widgets using
          <literal>base</literal> for the background color.
        </para>
      </listitem>
@@ -242,12 +241,12 @@ elements are:
       <replaceable>pixmap</replaceable></literal></term>
      <listitem>
        <para>
-         Set a background pixmap to be used in place of
+         Sets a background pixmap to be used in place of
          the <literal>bg</literal> color (or for #GtkText,
          in place of the <literal>base</literal> color. The special
-         value "&lt;parent&gt;" may be used to indicate that the widget should
+         value <literal>"&lt;parent&gt;"</literal> may be used to indicate that the widget should
          use the same background pixmap as its parent. The special value
-         "&lt;none&gt;" may be used to indicate no background pixmap.
+         <literal>"&lt;none&gt;"</literal> may be used to indicate no background pixmap.
        </para>
      </listitem>
   </varlistentry>
@@ -255,7 +254,7 @@ elements are:
     <term><literal>font = <replaceable>font</replaceable></literal></term>
      <listitem>
        <para>
-         Set the font for a widget.
+         Sets the font for a widget.
        </para>
      </listitem>
   </varlistentry>
@@ -263,7 +262,7 @@ elements are:
     <term><literal>fontset = <replaceable>font</replaceable></literal></term>
      <listitem>
        <para>
-         Set the fontset for a widget. Overrides any
+         Sets the fontset for a widget. Overrides any
          <literal>font</literal> declarations.
        </para>
      </listitem>
@@ -287,7 +286,7 @@ state of the widget. The states are:
     <term><literal>NORMAL</literal></term>
     <listitem>
       <para>
-        A color used for a widget in its normal state
+        A color used for a widget in its normal state.
       </para>
     </listitem>
   </varlistentry>
@@ -320,8 +319,8 @@ state of the widget. The states are:
     <listitem>
       <para>
         A color used to highlight data selected by the user.
-        for instance, the selected ListItems in a List widget, and the
-        selection in an Editable widget.
+        for instance, the selected items in a list widget, and the
+        selection in an editable widget.
       </para>
     </listitem>
   </varlistentry>
@@ -330,21 +329,26 @@ state of the widget. The states are:
     <listitem>
       <para>
         A color used for the background of widgets that have
-        been set insensitive with gtk_widget_set_sensitive()
+        been set insensitive with gtk_widget_set_sensitive().
       </para>
     </listitem>
   </varlistentry>
 </variablelist>
 </para>
 
-<para>
-Colors can be specified as a string <literal>"&hash;rrrrggggbbbb"</literal>,
-<literal>"&hash;rrrgggbbb"</literal>, <literal>"&hash;rrggbb"</literal>,
-or <literal>"&hash;rgb"</literal>, where <literal>r</literal>
-<literal>g</literal>, and <literal>b</literal> are
-hex digits, or they can be specified as a triplet of floats
+<para id="color-format">
+Colors can be specified as a string containing a color name (GTK+ knows
+all names from the X color database 
+<filename>/usr/lib/X11/rgb.txt</filename>),  
+in one of the hexadecimal forms <literal>&hash;rrrrggggbbbb</literal>,
+<literal>&hash;rrrgggbbb</literal>, <literal>&hash;rrggbb</literal>,
+or <literal>&hash;rgb</literal>, where <literal>r</literal>,
+<literal>g</literal> and <literal>b</literal> are
+hex digits, or they can be specified as a triplet 
 <literal>{ <replaceable>r</replaceable>, <replaceable>g</replaceable>,
-<replaceable>b</replaceable>}</literal>.
+<replaceable>b</replaceable>}</literal>, where <literal>r</literal>,
+<literal>g</literal> and <literal>b</literal> are either integers in 
+the range 0-65635 or floats in the range 0.0-1.0.
 </para>
 
 <para>
@@ -355,33 +359,33 @@ direction, state, and size. The <literal>*</literal> character can be used as a
 wildcard, and if direction/state/size are omitted they default to
 <literal>*</literal>. So for example, the following specifies different icons to
 use for left-to-right and right-to-left languages:
-<programlisting>
+<informalexample><programlisting>
 stock["my-stock-item"] = 
 {
   { "itemltr.png", LTR, *, * },
   { "itemrtl.png", RTL, *, * }
 }
-</programlisting>
+</programlisting></informalexample>
 This could be abbreviated as follows:
-<programlisting>
+<informalexample><programlisting>
 stock["my-stock-item"] = 
 {
   { "itemltr.png", LTR },
   { "itemrtl.png", RTL }
 }
-</programlisting>
+</programlisting></informalexample>
 </para>
 
 <para>
 You can specify custom icons for specific sizes, as follows:
-<programlisting>
+<informalexample><programlisting>
 stock["my-stock-item"] = 
 {
   { "itemmenusize.png", *, *, "gtk-menu" },
   { "itemtoolbarsize.png", *, *, "gtk-large-toolbar" }
   { "itemgeneric.png" } /* implicit *, *, * as a fallback */
 }
-</programlisting>
+</programlisting></informalexample>
 The sizes that come with GTK+ itself are <literal>"gtk-menu"</literal>,
 <literal>"gtk-small-toolbar"</literal>, <literal>"gtk-large-toolbar"</literal>,
 <literal>"gtk-button"</literal>, <literal>"gtk-dialog"</literal>. Applications
@@ -390,14 +394,14 @@ can define other sizes.
 
 <para>
 It's also possible to use custom icons for a given state, for example:
-<programlisting>
+<informalexample><programlisting>
 stock["my-stock-item"] = 
 {
   { "itemprelight.png", *, PRELIGHT },
   { "iteminsensitive.png", *, INSENSITIVE }, 
   { "itemgeneric.png" } /* implicit *, *, * as a fallback */
 }
-</programlisting>
+</programlisting></informalexample>
 </para>
 
 <para>
@@ -418,7 +422,7 @@ taken on particular key presses. The form of a binding
 set declaration is:
 </para>
 
-<programlisting>
+<informalexample><programlisting>
 binding <replaceable>name</replaceable> {
   bind <replaceable>key</replaceable> { 
     <replaceable>signalname</replaceable> (<replaceable>param</replaceable>, ...)
@@ -426,7 +430,7 @@ binding <replaceable>name</replaceable> {
   }
   ...
 }
-</programlisting>
+</programlisting></informalexample>
 
 <para>
 <replaceable>key</replaceable> is a string consisting of a 
@@ -454,7 +458,7 @@ modifiers can be:
 The action that is bound to the key is a sequence
 of signal names (strings) followed by parameters for 
 each signal. The signals must be action signals.
-(See gtk_signal_new()). Each parameter can be
+(See g_signal_new()). Each parameter can be
 a float, integer, string, or unquoted string
 representing an enumeration value. The types of
 the parameters specified must match the types of the 
@@ -471,16 +475,19 @@ and only then by order of specification. (Later
 overrides earlier). The priorities that can
 be specified are (highest to lowest):
 <simplelist>
-<member><literal>HIGHEST</literal></member>
-<member><literal>RC</literal></member>
-<member><literal>APPLICATION</literal></member>
-<member><literal>GTK</literal></member>
-<member><literal>LOWEST</literal></member>
+<member><literal>highest</literal></member>
+<member><literal>rc</literal></member>
+<member><literal>theme</literal></member>
+<member><literal>application</literal></member>
+<member><literal>gtk</literal></member>
+<member><literal>lowest</literal></member>
 </simplelist>
-<literal>RC</literal> is the default for bindings
-read from an RC file, <literal>APPLICATION</literal>
+<literal>rc</literal> is the default for bindings
+read from an RC file, <literal>theme</literal>
+is the default for bindings read from theme RC files,
+<literal>application</literal> 
 should be used for bindings an application sets
-up, and <literal>GTK</literal> is used for bindings
+up, and <literal>gtk</literal> is used for bindings
 that GTK+ creates internally.
 </para>
 </refsect2>
@@ -521,41 +528,11 @@ The #GtkRcFlags enumeration is used as a bitmask
 to specify which fields of a #GtkRcStyle have been
 set for each state.
 </para>
-<variablelist>
- <varlistentry><term> %GTK_RC_FG </term>
- <listitem>
-   <para>
-   If present, the foreground color has been set for this state.
-   </para>
- </listitem>
- </varlistentry>
- <varlistentry><term> %GTK_RC_BG </term>
- <listitem>
-   <para>
-   If present, the background color has been set for this state.
-   </para>
- </listitem>
- </varlistentry>
- <varlistentry><term> %GTK_RC_TEXT </term>
- <listitem>
-   <para>
-   If present, the text color has been set for this state.
-   </para>
- </listitem>
- </varlistentry>
- <varlistentry><term> %GTK_RC_BASE </term>
- <listitem>
-   <para>
-   If present, the base color has been set for this state.
-   </para>
- </listitem>
- </varlistentry>
-</variablelist>
 
-@GTK_RC_FG: 
-@GTK_RC_BG: 
-@GTK_RC_TEXT: 
-@GTK_RC_BASE: 
+@GTK_RC_FG: If present, the foreground color has been set for this state.
+@GTK_RC_BG: If present, the background color has been set for this state.
+@GTK_RC_TEXT: If present, the text color has been set for this state.
+@GTK_RC_BASE: If present, the base color has been set for this state.
 
 <!-- ##### ENUM GtkRcTokenType ##### -->
 <para>
@@ -634,11 +611,11 @@ specific portions of a RC file.
 
 <!-- ##### FUNCTION gtk_rc_add_widget_name_style ##### -->
 <para>
-Add a RcStyle that will be looked up by a match against
+Adds a #GtkRcStyle that will be looked up by a match against
 the widget's pathname. This is equivalent to a:
-<programlisting>
+<literal>
 widget PATTERN style STYLE
-</programlisting>
+</literal>
 statement in a RC file.
 </para>
 
@@ -648,12 +625,11 @@ statement in a RC file.
 
 <!-- ##### FUNCTION gtk_rc_add_widget_class_style ##### -->
 <para>
-Add a RcStyle that will be looked up by a match against
+Adds a #GtkRcStyle that will be looked up by a match against
 the widget's class pathname. This is equivalent to a:
-
-<programlisting>
+<literal>
 widget_class PATTERN style STYLE
-</programlisting>
+</literal>
 statement in a RC file.
 </para>
 
@@ -663,11 +639,11 @@ statement in a RC file.
 
 <!-- ##### FUNCTION gtk_rc_add_class_style ##### -->
 <para>
-Add a RcStyle that will be looked up by a matching against
-the class heirarchy of the widget. This is equivalent to a:
-<programlisting>
+Adds a #GtkRcStyle that will be looked up by a matching against
+the class hierarchy of the widget. This is equivalent to a:
+<literal>
 class PATTERN style STYLE
-</programlisting>
+</literal>
 statement in a RC file.
 </para>
 
@@ -686,7 +662,7 @@ statement in a RC file.
 
 <!-- ##### FUNCTION gtk_rc_parse ##### -->
 <para>
-Parse a given resource file.
+Parses a given resource file.
 </para>
 
 @filename: the filename of a file to parse.
@@ -703,7 +679,7 @@ Parse a given resource file.
 
 <!-- ##### FUNCTION gtk_rc_parse_string ##### -->
 <para>
-Parse resource information directly from a string.
+Parses resource information directly from a string.
 </para>
 
 @rc_string: a string to parse.
@@ -758,7 +734,7 @@ Parse resource information directly from a string.
 
 <!-- ##### FUNCTION gtk_rc_parse_color ##### -->
 <para>
-Parses a color in the format expected in a RC file.
+Parses a color in the <link linkend="color-format">format</link> expected in a RC file.
 </para>
 
 @scanner: a #GtkScanner
@@ -799,7 +775,7 @@ Looks up a file in the current module path.
 </para>
 
 @module_file: The name of the module to search for.
-@Returns: The filename, if found. (Must be freed with g_free()),
+@Returns: The filename, if found (must be freed with g_free()),
 otherwise %NULL.
 
 
@@ -807,12 +783,14 @@ otherwise %NULL.
 <para>
 </para>
 
-@context: 
+@settings: 
 @scanner: a #GtkScanner. Used for printing out warning messages
 if the file is not found.
 @pixmap_file: The name of the file to search for.
-@Returns: The filename, if found. (Must be freed with g_free()),
+@Returns: The filename, if found (must be freed with g_free()),
 otherwise %NULL.
+<!-- # Unused Parameters # -->
+@context: 
 
 
 <!-- ##### FUNCTION gtk_rc_get_module_dir ##### -->
@@ -847,16 +825,16 @@ be installed. (GTK+ does not actually use this directory
 itself.)
 </para>
 
-@Returns: The directory. (Must be freed with g_free())
+@Returns: The directory (must be freed with g_free()).
 
 
 <!-- ##### FUNCTION gtk_rc_style_new ##### -->
 <para>
-Create a new #GtkRcStyle with no fields set and
+Creates a new #GtkRcStyle with no fields set and
 a reference count of 1.
 </para>
 
-@Returns: the newly create #GtkRcStyle
+@Returns: the newly-created #GtkRcStyle
 
 
 <!-- ##### FUNCTION gtk_rc_style_copy ##### -->
@@ -870,7 +848,7 @@ a reference count of 1.
 
 <!-- ##### FUNCTION gtk_rc_style_ref ##### -->
 <para>
-Increment the reference count of a #GtkRcStyle.
+Increments the reference count of a #GtkRcStyle.
 </para>
 
 @rc_style: a #GtkRcStyle
@@ -878,8 +856,8 @@ Increment the reference count of a #GtkRcStyle.
 
 <!-- ##### FUNCTION gtk_rc_style_unref ##### -->
 <para>
-Decrement the reference count of a #GtkRcStyle and
-free if the result is 0.
+Decrements the reference count of a #GtkRcStyle and
+frees if the result is 0.
 </para>
 
 @rc_style: a #GtkRcStyle

@@ -65,11 +65,12 @@ Gets the current #GdkPixmap and #GdkBitmap mask.
 
 <!-- ##### FUNCTION gtk_pixmap_set_build_insensitive ##### -->
 <para>
-
+Sets wether an extra pixmap should be automatically created and used
+when the pixmap is insensitive. The default value is %TRUE.
 </para>
 
 @pixmap: a #GtkPixmap.
-@build: set to TRUE if an extra pixmap should be automatically created to use
+@build: set to %TRUE if an extra pixmap should be automatically created to use
 when the pixmap is insensitive.
 
 

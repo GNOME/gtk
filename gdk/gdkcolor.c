@@ -33,12 +33,26 @@
 #include "gdkcolor.h"
 #include "gdkinternals.h"
 
+/**
+ * gdk_colormap_ref:
+ * @cmap: a #GdkColormap
+ *
+ * Deprecated function; use g_object_ref() instead.
+ *
+ * Return value: the colormap
+ **/
 GdkColormap*
 gdk_colormap_ref (GdkColormap *cmap)
 {
   return (GdkColormap *) g_object_ref (G_OBJECT (cmap));
 }
 
+/**
+ * gdk_colormap_unref:
+ * @cmap: a #GdkColormap
+ *
+ * Deprecated function; use g_object_ref() instead.
+ **/
 void
 gdk_colormap_unref (GdkColormap *cmap)
 {

@@ -20,7 +20,8 @@ BUILT_IN_FORMATS = -DINCLUDE_png -DINCLUDE_bmp -DINCLUDE_gif \
 
 
 
-PKG_CFLAGS = -I. -I.. $(GLIB_CFLAGS) \
+PKG_CFLAGS = -FImsvc_recommended_pragmas.h \
+	-I. -I.. $(GLIB_CFLAGS) \
 	$(BUILT_IN_FORMATS) \
 	$(JPEG_CFLAGS) $(PNG_CFLAGS) $(TIFF_CFLAGS) $(INTL_CFLAGS) \
 	$(G_DEBUGGING) \

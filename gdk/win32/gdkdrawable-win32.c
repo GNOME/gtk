@@ -176,6 +176,8 @@ gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->get_visual = gdk_win32_get_visual;
 
   drawable_class->get_image = _gdk_win32_get_image;
+
+  drawable_class->_copy_to_image = _gdk_win32_copy_to_image;
 }
 
 static void
@@ -552,8 +554,8 @@ gdk_win32_draw_text (GdkDrawable *drawable,
   else
     {
       wcstr = g_new (wchar_t, text_length);
-      if ((wlen = _gdk_win32_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-	g_warning ("gdk_win32_draw_text: _gdk_win32_nmbstowchar_ts failed");
+      if ((wlen = _gdk_utf8_to_ucs2 (wcstr, text, text_length, text_length)) == -1)
+	g_warning ("gdk_win32_draw_text: _gdk_utf8_to_ucs2 failed");
       else
 	_gdk_wchar_text_handle (font, wcstr, wlen, gdk_draw_text_handler, &arg);
       g_free (wcstr);
@@ -1026,7 +1028,7 @@ gdk_win32_draw_image (GdkDrawable     *drawable,
 
   hdc = gdk_win32_hdc_get (drawable, gc, 0);
 
-  if (image->visual->type == GDK_VISUAL_PSEUDO_COLOR &&
+  if (image->visual && image->visual->type == GDK_VISUAL_PSEUDO_COLOR &&
 	  colormap_private && colormap_private->xcolormap->rc_palette)
     {
       if (!bmi_inited)

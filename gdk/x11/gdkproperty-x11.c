@@ -150,7 +150,7 @@ insert_atom_pair (GdkDisplay *display,
  * @atom: A #GdkAtom 
  * 
  * Convert from a #GdkAtom to the X atom for a #GdkDisplay
- * with the same string value.x
+ * with the same string value.
  * 
  * Return value: the X atom corresponding to @atom.
  **/
@@ -361,7 +361,8 @@ gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
  * 
  * Returns the X atom for GDK's default display corresponding to @atom_name.
  * This function caches the result, so if called repeatedly it is much
- * faster than XInternAtom, which is a round trip to the server each time.
+ * faster than <function>XInternAtom()</function>, which is a round trip to 
+ * the server each time.
  * 
  * Return value: a X atom for GDK's default display.
  **/
@@ -402,9 +403,9 @@ gdk_x11_get_xatom_name_for_display (GdkDisplay *display,
  * 
  * Returns the name of an X atom for GDK's default display. This
  * function is meant mainly for debugging, so for convenience, unlike
- * XAtomName() and gdk_atom_name(), the result doesn't need to
- * be freed. Also, this function will never return %NULL, even
- * if @xatom is invalid.
+ * <function>XAtomName()</function> and gdk_atom_name(), the result 
+ * doesn't need to be freed. Also, this function will never return %NULL, 
+ * even if @xatom is invalid.
  * 
  * Return value: name of the X atom; this string is owned by GTK+,
  *   so it shouldn't be modifed or freed. 
@@ -496,10 +497,10 @@ gdk_property_get (GdkWindow   *window,
 	   * to an array of GDK Atoms
 	   */
 	  gint i;
-	  GdkAtom *ret_atoms = g_new (GdkAtom *, ret_nitems);
+	  GdkAtom *ret_atoms = g_new (GdkAtom, ret_nitems);
 	  Atom *xatoms = (Atom *)ret_data;
 
-	  data = (guchar *)ret_atoms;
+	  *data = (guchar *)ret_atoms;
 
 	  for (i = 0; i < ret_nitems; i++)
 	    ret_atoms[i] = gdk_x11_xatom_to_atom_for_display (display,

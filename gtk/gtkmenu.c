@@ -85,7 +85,8 @@ static void     gtk_menu_size_request      (GtkWidget        *widget,
 					    GtkRequisition   *requisition);
 static void     gtk_menu_size_allocate     (GtkWidget        *widget,
 					    GtkAllocation    *allocation);
-static void     gtk_menu_paint             (GtkWidget        *widget);
+static void     gtk_menu_paint             (GtkWidget        *widget,
+					    GdkEventExpose   *expose);
 static void     gtk_menu_show              (GtkWidget        *widget);
 static gboolean gtk_menu_expose            (GtkWidget        *widget,
 					    GdkEventExpose   *event);
@@ -133,6 +134,8 @@ static void gtk_menu_reparent       (GtkMenu           *menu,
 				     gboolean           unrealize);
 static void gtk_menu_remove         (GtkContainer      *menu,
 				     GtkWidget         *widget);
+
+static void gtk_menu_update_title   (GtkMenu           *menu);
 
 static void _gtk_menu_refresh_accel_paths (GtkMenu *menu,
 					   gboolean group_changed);
@@ -288,8 +291,7 @@ gtk_menu_get_property (GObject     *object,
   switch (prop_id)
     {
     case PROP_TEAROFF_TITLE:
-      g_value_set_string (value, gtk_object_get_data (GTK_OBJECT (menu), 
-						      "gtk-menu-title"));
+      g_value_set_string (value, gtk_menu_get_title (menu));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -464,6 +466,9 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   /* we don't need to set the style here, since
    * we are a toplevel widget.
    */
+
+  /* Fallback title for menu comes from attach widget */
+  gtk_menu_update_title (menu);
 }
 
 GtkWidget*
@@ -503,6 +508,9 @@ gtk_menu_detach (GtkMenu *menu)
   
   g_free (data);
   
+  /* Fallback title for menu comes from attach widget */
+  gtk_menu_update_title (menu);
+
   gtk_widget_unref (GTK_WIDGET (menu));
 }
 
@@ -889,9 +897,10 @@ gtk_menu_get_accel_group (GtkMenu *menu)
  * Instead, by just calling gtk_menu_set_accel_path() on their parent,
  * each menu item of this menu, that contains a label describing its purpose,
  * automatically gets an accel path assigned. For example, a menu containing
- * menu items "New" and "Exit", will, after gtk_menu_set_accel_path (menu,
- * "&lt;Gnumeric-Sheet&gt;/File"); has been called, assign its items the accel paths:
- * "&lt;Gnumeric-Sheet&gt;/File/New" and "&lt;Gnumeric-Sheet&gt;/File/Exit".
+ * menu items "New" and "Exit", will, after 
+ * <literal>gtk_menu_set_accel_path (menu, "&lt;Gnumeric-Sheet&gt;/File");</literal>
+ * has been called, assign its items the accel paths:
+ * <literal>"&lt;Gnumeric-Sheet&gt;/File/New"</literal> and <literal>"&lt;Gnumeric-Sheet&gt;/File/Exit"</literal>.
  * Assigning accel paths to menu items then enables the user to change
  * their accelerators at runtime. More details about accelerator paths
  * and their default setups can be found at gtk_accel_map_add_entry().
@@ -991,6 +1000,30 @@ gtk_menu_set_tearoff_hints (GtkMenu *menu,
 				 GDK_HINT_MAX_SIZE|GDK_HINT_MIN_SIZE);
 }
 
+static void
+gtk_menu_update_title (GtkMenu *menu)
+{
+  if (menu->tearoff_window)
+    {
+      const gchar *title;
+      GtkWidget *attach_widget;
+
+      title = gtk_menu_get_title (menu);
+      if (!title)
+	{
+	  attach_widget = gtk_menu_get_attach_widget (menu);
+	  if (GTK_IS_MENU_ITEM (attach_widget))
+	    {
+	      GtkWidget *child = GTK_BIN (attach_widget)->child;
+	      if (GTK_IS_LABEL (child))
+		title = gtk_label_get_text (GTK_LABEL (child));
+	    }
+	}
+      
+      if (title)
+	gtk_window_set_title (GTK_WINDOW (menu->tearoff_window), title);
+    }
+}
 
 void       
 gtk_menu_set_tearoff_state (GtkMenu  *menu,
@@ -1012,16 +1045,16 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 
 	  if (!menu->tearoff_window)
 	    {
-	      GtkWidget *attach_widget;
-	      gchar *title;
-	      
 	      menu->tearoff_window = g_object_connect 
 		(gtk_widget_new (GTK_TYPE_WINDOW,
 				 "type", GTK_WINDOW_TOPLEVEL,
 				 "screen", 
 				 gtk_widget_get_screen (menu->toplevel),
 				 NULL),
-		 "signal::destroy", gtk_widget_destroyed, &menu->tearoff_window,						       NULL);
+		 "signal::destroy", 
+		 gtk_widget_destroyed, &menu->tearoff_window,
+		 NULL);
+
 	      gtk_window_set_type_hint (GTK_WINDOW (menu->tearoff_window),
 					GDK_WINDOW_TYPE_HINT_MENU);
 	      gtk_window_set_mnemonic_modifier (GTK_WINDOW (menu->tearoff_window), 0);
@@ -1030,30 +1063,17 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 				  "event",
 				  GTK_SIGNAL_FUNC (gtk_menu_window_event), 
 				  GTK_OBJECT (menu));
+
+	      gtk_menu_update_title (menu);
+
 	      gtk_widget_realize (menu->tearoff_window);
 	      
-	      title = gtk_object_get_data (GTK_OBJECT (menu), "gtk-menu-title");
-	      if (!title)
-		{
-		  attach_widget = gtk_menu_get_attach_widget (menu);
-		  if (GTK_IS_MENU_ITEM (attach_widget))
-		    {
-		      GtkWidget *child = GTK_BIN (attach_widget)->child;
-		      if (GTK_IS_LABEL (child))
-			gtk_label_get (GTK_LABEL (child), &title);
-		    }
-		}
-
-	      if (title)
-		gdk_window_set_title (menu->tearoff_window->window, title);
-
 	      gdk_window_set_decorations (menu->tearoff_window->window, 
 					  GDK_DECOR_ALL |
 					  GDK_DECOR_RESIZEH |
 					  GDK_DECOR_MINIMIZE |
 					  GDK_DECOR_MAXIMIZE);
-	      gtk_window_set_policy (GTK_WINDOW (menu->tearoff_window),
-				     FALSE, FALSE, TRUE);
+	      gtk_window_set_resizable (GTK_WINDOW (menu->tearoff_window), FALSE);
 
 	      menu->tearoff_hbox = gtk_hbox_new (FALSE, FALSE);
 	      gtk_container_add (GTK_CONTAINER (menu->tearoff_window), menu->tearoff_hbox);
@@ -1125,14 +1145,27 @@ gtk_menu_get_tearoff_state (GtkMenu *menu)
   return menu->torn_off;
 }
 
+/**
+ * gtk_menu_set_title:
+ * @menu: a #GtkMenu
+ * @title: a string containing the title for the menu.
+ * 
+ * Sets the title string for the menu.  The title is displayed when the menu
+ * is shown as a tearoff menu.
+ **/
 void       
 gtk_menu_set_title (GtkMenu     *menu,
 		    const gchar *title)
 {
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  gtk_object_set_data_full (GTK_OBJECT (menu), "gtk-menu-title",
+  if (title)
+    g_object_set_data_full (G_OBJECT (menu), "gtk-menu-title",
 			    g_strdup (title), (GtkDestroyNotify) g_free);
+  else
+    g_object_set_data (G_OBJECT (menu), "gtk-menu-title", NULL);
+    
+  gtk_menu_update_title (menu);
   g_object_notify (G_OBJECT (menu), "tearoff_title");
 }
 
@@ -1246,8 +1279,6 @@ gtk_menu_realize (GtkWidget *widget)
   gtk_menu_scroll_item_visible (GTK_MENU_SHELL (widget),
 				GTK_MENU_SHELL (widget)->active_menu_item);
 
-  gtk_menu_paint (widget);
-  
   gdk_window_show (menu->bin_window);
   gdk_window_show (menu->view_window);
 }
@@ -1467,20 +1498,22 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_menu_paint (GtkWidget *widget)
+gtk_menu_paint (GtkWidget      *widget,
+		GdkEventExpose *event)
 {
-  gint border_x;
-  gint border_y;
-  gint width, height;
-  gint menu_height;
-  gint top_pos;
   GtkMenu *menu;
+  gint width, height;
+  gint border_x, border_y;
   
   g_return_if_fail (GTK_IS_MENU (widget));
 
   menu = GTK_MENU (widget);
   
-  if (GTK_WIDGET_DRAWABLE (widget))
+  border_x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
+  border_y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness;
+  gdk_window_get_size (widget->window, &width, &height);
+
+  if (event->window == widget->window)
     {
       gtk_paint_box (widget->style,
 		     widget->window,
@@ -1488,11 +1521,6 @@ gtk_menu_paint (GtkWidget *widget)
 		     GTK_SHADOW_OUT,
 		     NULL, widget, "menu",
 		     0, 0, -1, -1);
-
-      border_x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
-      border_y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness;
-      gdk_window_get_size (widget->window, &width, &height);
-
       if (menu->upper_arrow_visible && !menu->tearoff_active)
 	{
 	  gtk_paint_box (widget->style,
@@ -1546,7 +1574,12 @@ gtk_menu_paint (GtkWidget *widget)
 			   MENU_SCROLL_ARROW_HEIGHT - 2 * border_y - 2,
 			   MENU_SCROLL_ARROW_HEIGHT - 2 * border_y - 2);
 	}
-
+    }
+  else if (event->window == menu->view_window)
+    {
+      gint menu_height;
+      gint top_pos;
+      
       if (menu->scroll_offset < 0)
 	gtk_paint_box (widget->style,
 		       menu->view_window,
@@ -1582,7 +1615,7 @@ gtk_menu_expose (GtkWidget	*widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      gtk_menu_paint (widget);
+      gtk_menu_paint (widget, event);
       
       (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
     }
@@ -1682,7 +1715,9 @@ gtk_menu_key_press (GtkWidget	*widget,
       gboolean replace_accels = TRUE;
       const gchar *path;
 
-      path = _gtk_widget_get_accel_path (menu_item);
+      path = GTK_MENU_ITEM (menu_item)->accel_path;
+      if (!path)
+	path = _gtk_widget_get_accel_path (menu_item);
       if (!path)
 	{
 	  /* can't change accelerators on menu_items without paths
@@ -2029,7 +2064,7 @@ gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
   
   if (GTK_WIDGET_REALIZED (menu))
     {
-      child_window = gdk_window_get_pointer (GTK_WIDGET (menu)->window, NULL, NULL, NULL);
+      child_window = gdk_window_get_pointer (menu->bin_window, NULL, NULL, NULL);
 
       if (child_window)
 	{

@@ -90,18 +90,37 @@ static GQuark clipboards_owned_key_id = 0;
  * @display: a #GdkDisplay which identifies on which display
  *	     the clipboard is to be retrieved or created
  * @selection: a #GdkAtom which identifies the clipboard
- *             to use. A value of %GDK_NONE here is the
- *             same as gdk_atom_intern ("CLIPBOARD", FALSE),
- *             and provides the default clipboard. Another
- *             common value is %GDK_SELECTION_PRIMARY, which
- *             identifies the primary X selection. 
+ *             to use.
  * 
  * Returns the clipboard object for the given selection.
+ * Cut/copy/paste menu items and keyboard shortcuts should use
+ * the default clipboard, returned by passing #GDK_NONE for @selection.
+ * The currently-selected object or text should be provided on the clipboard
+ * identified by #GDK_SELECTION_PRIMARY. Cut/copy/paste menu items
+ * conceptually copy the contents of the #GDK_SELECTION_PRIMARY clipboard
+ * to the default clipboard, i.e. they copy the selection to what the
+ * user sees as the clipboard.
+ *
+ * (Passing #GDK_NONE is the same as using <literal>gdk_atom_intern
+ * ("CLIPBOARD", FALSE)</literal>. See
+ * <ulink url="http://www.freedesktop.org/standards/clipboards.txt">
+ * http://www.freedesktop.org/standards/clipboards.txt</ulink>
+ * for a detailed discussion of the "CLIPBOARD" vs. "PRIMARY" selections
+ * under the X window system. On Win32 the #GDK_SELECTION_PRIMARY
+ * clipboard is essentially ignored.)
+ *
+ * It's possible to have arbitrary named clipboards; if you do invent
+ * new clipboards, you should prefix the selection name with an
+ * underscore (because the ICCCM requires that nonstandard atoms are
+ * underscore-prefixed), and namespace it as well. For example,
+ * if your application called "Foo" has a special-purpose
+ * clipboard, you might call it "_FOO_SPECIAL_CLIPBOARD".
  * 
  * Return value: the appropriate clipboard object. If no
  *             clipboard already exists, a new one will
  *             be created. Once a clipboard object has
- *             been created, it is persistent for all time.
+ *             been created, it is persistent for all time and
+ *             cannot be freed.
  **/
 GtkClipboard *
 gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
@@ -447,7 +466,7 @@ gtk_clipboard_set_with_data (GtkClipboard          *clipboard,
  * a list of supported formats for the clipboard data and a function
  * to call to get the actual data when it is requested.
  *
- * The difference between this function and gtk_clipboard_set_with_data
+ * The difference between this function and gtk_clipboard_set_with_data()
  * is that instead of an generic @user_data pointer, a #GObject is passed
  * in. 
  * 
@@ -477,9 +496,10 @@ gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
  * gtk_clipboard_get_owner:
  * @clipboard: a #GtkClipboard
  * 
- * If the clipboard contents callbacks were set with gtk_clipboard_set_owner(),
- * and the gtk_clipboard_set_with_data() or gtk_clipboard_clear() has not
- * subsequently called, returns the @owner set by gtk_clipboard_set_owner().
+ * If the clipboard contents callbacks were set with 
+ * gtk_clipboard_set_with_owner(), and the gtk_clipboard_set_with_data() or 
+ * gtk_clipboard_clear() has not subsequently called, returns the owner set 
+ * by gtk_clipboard_set_with_owner().
  * 
  * Return value: the owner of the clipboard, if any; otherwise %NULL.
  **/
@@ -522,7 +542,8 @@ clipboard_unset (GtkClipboard *clipboard)
  * @clipboard:  a #GtkClipboard
  * 
  * Clears the contents of the clipboard. Generally this should only
- * be called between the time you call gtk_clipboard_set_contents(),
+ * be called between the time you call gtk_clipboard_set_with_owner()
+ * or gtk_clipboard_set_with_data(),
  * and when the @clear_func you supplied is called. Otherwise, the
  * clipboard may be owned by someone else.
  **/
@@ -559,7 +580,7 @@ text_clear_func (GtkClipboard *clipboard,
  * @clipboard: a #GtkClipboard object
  * @text:      a UTF-8 string.
  * @len:       length of @text, in bytes, or -1, in which case
- *             the length will be determined with strlen().
+ *             the length will be determined with <function>strlen()</function>.
  * 
  * Sets the contents of the clipboard to the given UTF-8 string. GTK+ will
  * make a copy of the text and take responsibility for responding
@@ -781,10 +802,10 @@ clipboard_received_func (GtkClipboard     *clipboard,
  * This function waits for the data to be received using the main 
  * loop, so events, timeouts, etc, may be dispatched during the wait.
  * 
- * Return value: a newly allocated #GtkSelectionData object or %NULL
+ * Return value: a newly-allocated #GtkSelectionData object or %NULL
  *               if retrieving the given target failed. If non-%NULL,
- *               this value freed with gtk_selection_data_free() when
- *               you are finished with it.
+ *               this value must be freed with gtk_selection_data_free() 
+ *               when you are finished with it.
  **/
 GtkSelectionData *
 gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,

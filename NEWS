@@ -1,3 +1,33 @@
+Overview of Changes in GTK+ 1.3.12
+==================================
+
+* Fix problems with PNG saving [Michael Natterer]
+* Cleanups of deprecated usages [Sebastian Wilhelmi]
+* Win32 fixes [Tor Lillqvist]
+* Documentation improvements [Matthias Clasen, Havoc Pennington, 
+  Vitaly Tishkov]
+* Frame buffer port fixes [Manish Singh]
+* GtkTextView bug fixes [Havoc Pennington, Chris Phelps]
+* Menu behavior improvements [Kristian Rietveld]
+* Make focus line width configurable, focus color work on 
+  dark themes. [Bill Haneman, Owen Taylor]
+* Add state argument to gtk_paint_focus() [Bill]
+* Added incremental revalidation to tree view, for better apparent speed 
+  [Jonathan Blandford]
+* Remove useless gtk_tree_view_column_cell_event() [Jonathan]
+* Display XIM status in a separate window [HideToshi Tajima]
+* Add GDK_DEBUG=nograbs to disable pointer, keyboard grabs [Jacob Berkman]
+* Add menu of Unicode control characters to GtkEntry, GtkTextView 
+  [Dov Grobgeld, Havoc]
+* Pass key releases along to input methods [Owen]
+* Many bug fixes
+
+Other contributors: Darin Adler, Fabrice Bellet, Chris Blizzard, 
+  Hans Breuer, Anders Carlsson, Damon Chaplin, Murray Cumming, Jeff Franks, 
+  James Henstridge, Tim Janik, Alex Larsson, George Lebl, Kjartan, Maraas, 
+  Sven Neumann, Seth Nickell, Padraig O'Briain, Soeren Sandmann, Manish Singh, 
+  Matt Wilson
+
 Overview of Changes in GTK+ 1.3.11
 ==================================
 

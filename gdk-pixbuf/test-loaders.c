@@ -155,7 +155,7 @@ test_loader (const guchar *bytes, gsize len, gboolean data_is_ok)
       err = NULL;
       did_fail = TRUE;
     }
-  g_object_unref (G_OBJECT (loader));
+  g_object_unref (loader);
   
   if (data_is_ok == did_fail)
     return FALSE;
@@ -192,7 +192,7 @@ mem_test (const guchar *bytes, gsize len)
   } while (!did_fail);
   
   for (i = loaders; i != NULL; i = i->next)
-    g_object_unref (G_OBJECT (i->data));
+    g_object_unref (i->data);
   g_list_free (loaders);
 }
 
@@ -249,7 +249,7 @@ assault (const gchar *header, gsize header_size,
 	  err = NULL;
 	}
       
-      g_object_unref (G_OBJECT (loader));
+      g_object_unref (loader);
     }
 }
 

@@ -144,15 +144,16 @@ get_xkb (GdkKeymapX11 *keymap_x11)
   if (keymap_x11->xkb_desc == NULL)
     {
       keymap_x11->xkb_desc = 
-	XkbGetMap (xdisplay, XkbKeySymsMask, XkbUseCoreKbd);
+	XkbGetMap (xdisplay, XkbKeySymsMask | XkbKeyTypesMask, XkbUseCoreKbd);
       if (keymap_x11->xkb_desc == NULL)
-        g_error ("Failed to get keymap");
+	g_error ("Failed to get keymap");
 
       XkbGetNames (xdisplay, XkbGroupNamesMask, keymap_x11->xkb_desc);
     }
   else if (keymap_x11->current_serial != display_impl->keymap_serial)
     {
-      XkbGetUpdatedMap (xdisplay, XkbKeySymsMask, keymap_x11->xkb_desc);
+      XkbGetUpdatedMap (xdisplay, XkbKeySymsMask | XkbKeyTypesMask,
+			keymap_x11->xkb_desc);
       XkbGetNames (xdisplay, XkbGroupNamesMask, keymap_x11->xkb_desc);
     }
 

@@ -135,7 +135,7 @@ typedef enum
 /* forward declaration to avoid excessive includes (and concurrent includes)
  */
 typedef struct _GtkRequisition	   GtkRequisition;
-typedef struct _GdkRectangle	   GtkAllocation;
+typedef 	GdkRectangle	   GtkAllocation;
 typedef struct _GtkSelectionData   GtkSelectionData;
 typedef struct _GtkWidgetClass	   GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo   GtkWidgetAuxInfo;

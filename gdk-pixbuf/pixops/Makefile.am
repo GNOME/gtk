@@ -4,6 +4,8 @@ INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) -I$(top_builddir) 	\
 	@GTK_DEBUG_FLAGS@			\
 	@GDK_PIXBUF_DEP_CFLAGS@			\
+	-DG_DISABLE_DEPRECATED			\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED		\
 @STRIP_END@
 
 noinst_PROGRAMS = timescale

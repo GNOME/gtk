@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2001-11-23 15:47-0500\n"
-"PO-Revision-Date: 2001-11-05 21:11+0200\n"
+"Project-Id-Version: gtk+ 1.3.11\n"
+"POT-Creation-Date: 2001-12-23 18:02-0500\n"
+"PO-Revision-Date: 2001-12-22 14:10+0200\n"
 "Last-Translator: Marius Andreiana <mandreiana@yahoo.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -92,12 +92,12 @@ msgstr ""
 "Această versiune compilată gdk-pixbuf nu suportă salvarea formatului "
 "imagine: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:830
+#: gdk-pixbuf/gdk-pixbuf-io.c:829
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Eşuare la deschiderea '%s' pentru scriere: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:851
+#: gdk-pixbuf/gdk-pixbuf-io.c:850
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -120,15 +120,15 @@ msgstr ""
 "Eroare internă: Modulul de încărcare imagine '%s' a eşuat la încărcarea unei "
 "imagini, dar nu a dat nici un motiv pentru eşec"
 
-#: gdk-pixbuf/io-bmp.c:255
+#: gdk-pixbuf/io-bmp.c:267
 msgid "BMP image has unsupported header size"
 msgstr "Imaginea BMP are mărimea antet nesuportată"
 
-#: gdk-pixbuf/io-bmp.c:278 gdk-pixbuf/io-bmp.c:300
+#: gdk-pixbuf/io-bmp.c:292 gdk-pixbuf/io-bmp.c:315
 msgid "BMP image has bogus header data"
 msgstr "Imaginea BMP are datele din antet greşite"
 
-#: gdk-pixbuf/io-bmp.c:325
+#: gdk-pixbuf/io-bmp.c:341
 msgid "Not enough memory to load bitmap image"
 msgstr "Memorie insuficientă pentru a încarca imaginea bitmap"
 
@@ -258,25 +258,21 @@ msgstr "Eroare fatală la citirea fişierului imagine PNG"
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Eroare fatală la citirea fişierului imagine PNG: %s"
 
-#: gdk-pixbuf/io-png.c:751
+#: gdk-pixbuf/io-png.c:750
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Cheile pentru bucăţile tEXt PNG trebuie să aibă cel puţin 1 şi cel mult 79 "
 "caractere."
 
-#: gdk-pixbuf/io-png.c:759
+#: gdk-pixbuf/io-png.c:758
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
 msgstr "Cheile pentru bucăţile tEXt PNG trebuie să fie caractere ASCII."
 
-#: gdk-pixbuf/io-png.c:780
+#: gdk-pixbuf/io-png.c:779
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr ""
 "Valoare pentru bucata tEXt PNG nu poate fi convertită la codare ISO-8859-1."
-
-#: gdk-pixbuf/io-png.c:845
-msgid "Insufficient memory to save PNG file"
-msgstr "Memorie insuficientă pentru a salva fişierul PNG"
 
 #: gdk-pixbuf/io-pnm.c:254
 msgid "PNM loader expected to find an integer, but didn't"
@@ -393,35 +389,35 @@ msgstr "Memorie insuficientă pentru a încărca fişierul XBM"
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Eşuare la scrierea fişierului temporar când încărcam imaginea XBM"
 
-#: gdk-pixbuf/io-xpm.c:1234
+#: gdk-pixbuf/io-xpm.c:1235
 msgid "No XPM header found"
 msgstr "Antetul XPM nu a fost găsit"
 
-#: gdk-pixbuf/io-xpm.c:1242
+#: gdk-pixbuf/io-xpm.c:1243
 msgid "XPM file has image width <= 0"
 msgstr "Fişierul XPM are lăţimea imaginii <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1250
+#: gdk-pixbuf/io-xpm.c:1251
 msgid "XPM file has image height <= 0"
 msgstr "Fişierul XPM are înălţimea imaginii <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1258
+#: gdk-pixbuf/io-xpm.c:1259
 msgid "XPM file has invalid number of colors"
 msgstr "Fişierul XPM are numărul de culori invalid"
 
-#: gdk-pixbuf/io-xpm.c:1266
+#: gdk-pixbuf/io-xpm.c:1267
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM are numărul de caractere per pixel invalid"
 
-#: gdk-pixbuf/io-xpm.c:1284
+#: gdk-pixbuf/io-xpm.c:1285
 msgid "Can't read XPM colormap"
 msgstr "Nu pot citi harta de culoare XPM"
 
-#: gdk-pixbuf/io-xpm.c:1322
+#: gdk-pixbuf/io-xpm.c:1326
 msgid "Can't allocate memory for loading XPM image"
 msgstr "Nu pot aloca memorie pentru încărcarea fişierului imagine XPM"
 
-#: gdk-pixbuf/io-xpm.c:1505
+#: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Eşuare la scrierea fişierului temporar când încărcam imaginea XPM"
 
@@ -433,34 +429,30 @@ msgstr "Antet imagine corupt"
 msgid "Image format unknown"
 msgstr "Format imagine necunoscut"
 
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:458
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
 msgid "Image pixel data corrupt"
 msgstr "Datele pixel ale imaginii sunt corupte"
 
-#: gdk-pixbuf/gdk-pixdata.c:404
+#: gdk-pixbuf/gdk-pixdata.c:403
 #, c-format
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "eşuare la alocarea memoriei tampon de %u octeţi"
 
 #: gtk/gtkaccellabel.c:122
-#, fuzzy
 msgid "Accelerator Closure"
-msgstr "Obiect accelerator"
+msgstr ""
 
 #: gtk/gtkaccellabel.c:123
-#, fuzzy
 msgid "The closure to be monitored for accelerator changes"
-msgstr "Obiectul monitorizat de aceasta etichetă a acceleratorului"
+msgstr ""
 
 #: gtk/gtkaccellabel.c:129
-#, fuzzy
 msgid "Accelerator Widget"
-msgstr "Obiect accelerator"
+msgstr "Widget accelerator"
 
 #: gtk/gtkaccellabel.c:130
-#, fuzzy
 msgid "The widget to be monitored for accelerator changes"
-msgstr "Obiectul monitorizat de aceasta etichetă a acceleratorului"
+msgstr "Widget-ul care să fie monitorizat pentru schimbări ale acceleratorului"
 
 #: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
@@ -576,19 +568,20 @@ msgstr "Înălţimea minimă a butoanelor înăuntrul cutiei"
 
 #: gtk/gtkbbox.c:133
 msgid "Child internal width padding"
-msgstr ""
+msgstr "Spaţiere lăţime internă a copilului"
 
 #: gtk/gtkbbox.c:134
 msgid "Amount to increase child's size on either side"
 msgstr ""
+"Cantitatea cu care să fie mărită dimensiunea copilului pe fiecare parte"
 
 #: gtk/gtkbbox.c:142
 msgid "Child internal height padding"
-msgstr ""
+msgstr "Spaţiere înălţime internă a copilului"
 
 #: gtk/gtkbbox.c:143
 msgid "Amount to increase child's size on the top and bottom"
-msgstr ""
+msgstr "Cantitatea cu care să fie mărită dimensiunea copilului la vârf şi bază"
 
 #: gtk/gtkbbox.c:151
 msgid "Layout style"
@@ -622,7 +615,7 @@ msgstr "Spaţiere"
 msgid "The amount of space between children."
 msgstr "Cantitatea de spaţiu între copii."
 
-#: gtk/gtkbox.c:135 gtk/gtknotebook.c:400
+#: gtk/gtkbox.c:135 gtk/gtknotebook.c:399
 msgid "Homogeneous"
 msgstr "Omogen"
 
@@ -630,11 +623,11 @@ msgstr "Omogen"
 msgid "Whether the children should all be the same size."
 msgstr "Daca copii ar trebui să fie toţi de aceaşi mărime."
 
-#: gtk/gtkbutton.c:188 gtk/gtkframe.c:125 gtk/gtklabel.c:282
+#: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:282
 msgid "Label"
 msgstr "Etichetă"
 
-#: gtk/gtkbutton.c:189
+#: gtk/gtkbutton.c:190
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget."
@@ -642,11 +635,11 @@ msgstr ""
 "Textul widgetului etichetă dinăuntrul butonului, daca butonul conţine un "
 "widget etichetă."
 
-#: gtk/gtkbutton.c:196 gtk/gtklabel.c:303
+#: gtk/gtkbutton.c:197 gtk/gtklabel.c:303
 msgid "Use underline"
 msgstr "Foloseşte subliniere"
 
-#: gtk/gtkbutton.c:197 gtk/gtklabel.c:304
+#: gtk/gtkbutton.c:198 gtk/gtklabel.c:304
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -654,60 +647,64 @@ msgstr ""
 "Dacă setat, o linie de subliniere în text indică că următorul caracter ar "
 "trebui să fie folosit pentru tasta de accelerare"
 
-#: gtk/gtkbutton.c:204
+#: gtk/gtkbutton.c:205
 msgid "Use stock"
 msgstr "Foloseşte stoc"
 
-#: gtk/gtkbutton.c:205
+#: gtk/gtkbutton.c:206
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Dacă setat, eticheta este folosită pentru a alege un element din stoc în loc "
 "să fie afişată"
 
-#: gtk/gtkbutton.c:212
-msgid "Border relief"
-msgstr ""
-
 #: gtk/gtkbutton.c:213
-msgid "The border relief style."
-msgstr ""
+msgid "Border relief"
+msgstr "Umbra chenarului"
 
-#: gtk/gtkbutton.c:264
+#: gtk/gtkbutton.c:214
+msgid "The border relief style."
+msgstr "Stilul de umbră a chenarului"
+
+#: gtk/gtkbutton.c:265
 msgid "Default Spacing"
 msgstr "Spaţiere implicită"
 
-#: gtk/gtkbutton.c:265
+#: gtk/gtkbutton.c:266
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr ""
-
-#: gtk/gtkbutton.c:271
-msgid "Default Outside Spacing"
-msgstr ""
+msgstr "Extra-spaţiere de adăugat pentru butoanele CAN_DEFAULT"
 
 #: gtk/gtkbutton.c:272
+msgid "Default Outside Spacing"
+msgstr "Spaţiere externă implicită"
+
+#: gtk/gtkbutton.c:273
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
-
-#: gtk/gtkbutton.c:277
-msgid "Child X Displacement"
-msgstr ""
+"Extra-spaţiere de adăugat pentru butoanele CAN_DEFAULT care este întotdeauna "
+"desenată în afara graniţei"
 
 #: gtk/gtkbutton.c:278
+msgid "Child X Displacement"
+msgstr "Deplasare X copil"
+
+#: gtk/gtkbutton.c:279
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
-
-#: gtk/gtkbutton.c:285
-msgid "Child Y Displacement"
-msgstr ""
+"Cât de mult să fie mutat copilul în direcţia X cand butonul este apăsat"
 
 #: gtk/gtkbutton.c:286
+msgid "Child Y Displacement"
+msgstr "Deplasare Y copil"
+
+#: gtk/gtkbutton.c:287
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
+"Cât de mult să fie mutat copilul în direcţia Y cand butonul este apăsat"
 
 #: gtk/gtkcellrenderer.c:103
 msgid "mode"
@@ -715,7 +712,7 @@ msgstr "mod"
 
 #: gtk/gtkcellrenderer.c:104
 msgid "Editable mode of the CellRenderer"
-msgstr ""
+msgstr "Mod editabil al lui CellRenderer"
 
 #: gtk/gtkcellrenderer.c:113
 msgid "visible"
@@ -723,7 +720,7 @@ msgstr "vizibil"
 
 #: gtk/gtkcellrenderer.c:114
 msgid "Display the cell"
-msgstr ""
+msgstr "Afişează celula"
 
 #: gtk/gtkcellrenderer.c:122
 msgid "xalign"
@@ -731,31 +728,31 @@ msgstr "alinierex"
 
 #: gtk/gtkcellrenderer.c:123
 msgid "The x-align."
-msgstr ""
+msgstr "Alinierea X"
 
 #: gtk/gtkcellrenderer.c:133
 msgid "yalign"
-msgstr ""
+msgstr "alinierey"
 
 #: gtk/gtkcellrenderer.c:134
 msgid "The y-align."
-msgstr ""
+msgstr "Alinierea Y"
 
 #: gtk/gtkcellrenderer.c:144
 msgid "xpad"
-msgstr ""
+msgstr "xpad"
 
 #: gtk/gtkcellrenderer.c:145
 msgid "The xpad."
-msgstr ""
+msgstr "xpad-ul"
 
 #: gtk/gtkcellrenderer.c:155
 msgid "ypad"
-msgstr ""
+msgstr "ypad"
 
 #: gtk/gtkcellrenderer.c:156
 msgid "The ypad."
-msgstr ""
+msgstr "ypad-ul"
 
 #: gtk/gtkcellrenderer.c:166
 msgid "width"
@@ -763,7 +760,7 @@ msgstr "lăţime"
 
 #: gtk/gtkcellrenderer.c:167
 msgid "The fixed width."
-msgstr ""
+msgstr "Lăţimea fixă."
 
 #: gtk/gtkcellrenderer.c:177
 msgid "height"
@@ -771,96 +768,113 @@ msgstr "înălţime"
 
 #: gtk/gtkcellrenderer.c:178
 msgid "The fixed height."
-msgstr ""
+msgstr "Înălţimea fixă."
 
 #: gtk/gtkcellrenderer.c:188
 msgid "Is Expander"
-msgstr ""
+msgstr "Este extensibilă"
 
 #: gtk/gtkcellrenderer.c:189
 msgid "Row has children."
-msgstr ""
+msgstr "Linia are copii."
 
 #: gtk/gtkcellrenderer.c:198
 msgid "Is Expanded"
-msgstr ""
+msgstr "Este extinsă"
 
 #: gtk/gtkcellrenderer.c:199
 msgid "Row is an expander row, and is expanded"
-msgstr ""
+msgstr "Linia este extensibilă şi este extinsă"
 
 #: gtk/gtkcellrendererpixbuf.c:104
 msgid "Pixbuf Object"
-msgstr ""
+msgstr "Obiect pixbuf"
 
 #: gtk/gtkcellrendererpixbuf.c:105
 msgid "The pixbuf to render."
+msgstr "Puxbuf-ul care să fie randat"
+
+#: gtk/gtkcellrendererpixbuf.c:113
+msgid "Pixbuf Expander Open"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:506 gtk/gtkprogressbar.c:207
-msgid "Text"
+#: gtk/gtkcellrendererpixbuf.c:114
+#, fuzzy
+msgid "Pixbuf for open expander."
+msgstr "Puxbuf-ul care să fie randat"
+
+#: gtk/gtkcellrendererpixbuf.c:122
+msgid "Pixbuf Expander Closed"
 msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:123
+msgid "Pixbuf for closed expander."
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:522 gtk/gtkprogressbar.c:207
+msgid "Text"
+msgstr "Text"
 
 #: gtk/gtkcellrenderertext.c:175
 msgid "Text to render"
-msgstr ""
+msgstr "Textul pentru a fi randat"
 
 #: gtk/gtkcellrenderertext.c:182
 msgid "Markup"
-msgstr ""
+msgstr "Marcaj"
 
 #: gtk/gtkcellrenderertext.c:183
 msgid "Marked up text to render"
-msgstr ""
+msgstr "Text marcat pentru a fi randat"
 
 #: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:289
 msgid "Attributes"
-msgstr ""
+msgstr "Atribute"
 
 #: gtk/gtkcellrenderertext.c:191
 msgid "A list of style attributes to apply to the text of the renderer."
-msgstr ""
+msgstr "O listă de atribute de stil pentru a fi aplicată textului randării."
 
 #: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
 msgid "Background color name"
-msgstr ""
+msgstr "Numele culorii de fundal"
 
 #: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:210
 msgid "Background color as a string"
-msgstr ""
+msgstr "Culoare fundal ca şir de caractere"
 
 #: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
 msgid "Background color"
-msgstr ""
+msgstr "Culoare fundal"
 
 #: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:218
 msgid "Background color as a GdkColor"
-msgstr ""
+msgstr "Culoare de fundal ca GdkColor"
 
 #: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:243
 msgid "Foreground color name"
-msgstr ""
+msgstr "Numele culorii prim-planului"
 
 #: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:244
 msgid "Foreground color as a string"
-msgstr ""
+msgstr "Culoare prim-plan ca şir de caractere"
 
 #: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:251
 msgid "Foreground color"
-msgstr ""
+msgstr "Culoare prim-plan"
 
 #: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:252
 msgid "Foreground color as a GdkColor"
-msgstr ""
+msgstr "Culoare de prim-plan ca GdkColor"
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:438 gtk/gtktexttag.c:277
-#: gtk/gtktextview.c:548
+#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:454 gtk/gtktexttag.c:277
+#: gtk/gtktextview.c:549
 msgid "Editable"
 msgstr "Editabil"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:549
+#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:550
 msgid "Whether the text can be modified by the user"
-msgstr ""
+msgstr "Specifică dacă textul poate fi modificat de utilizator"
 
 #: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
 #: gtk/gtkfontsel.c:192 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
@@ -869,11 +883,11 @@ msgstr "Font"
 
 #: gtk/gtkcellrenderertext.c:240 gtk/gtktexttag.c:286
 msgid "Font description as a string"
-msgstr ""
+msgstr "Descrierea fontului ca şir"
 
 #: gtk/gtkcellrenderertext.c:248 gtk/gtktexttag.c:294
 msgid "Font description as a PangoFontDescription struct"
-msgstr ""
+msgstr "Descrierea fontului ca structură PangoFontDescription"
 
 #: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:302
 msgid "Font family"
@@ -881,7 +895,7 @@ msgstr "Familie font"
 
 #: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr ""
+msgstr "Numele familie font, de ex. Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:264 gtk/gtkcellrenderertext.c:265
 #: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
@@ -891,12 +905,12 @@ msgstr "Stil font"
 #: gtk/gtkcellrenderertext.c:273 gtk/gtkcellrenderertext.c:274
 #: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
 msgid "Font variant"
-msgstr ""
+msgstr "Variantă font"
 
 #: gtk/gtkcellrenderertext.c:282 gtk/gtkcellrenderertext.c:283
 #: gtk/gtktexttag.c:328 gtk/gtktexttag.c:329
 msgid "Font weight"
-msgstr ""
+msgstr "Greutate font"
 
 #: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
 #: gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
@@ -932,134 +946,135 @@ msgstr "Ridică"
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
+"Deplasare text deasupra liniei de bază (dedesupt dacă valoarea este negativă)"
 
 #: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:467
 msgid "Strikethrough"
-msgstr ""
+msgstr "Tăiere"
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:468
 msgid "Whether to strike through the text"
-msgstr ""
+msgstr "Specifică dacă textul să fie tăiat"
 
 #: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:475
 msgid "Underline"
-msgstr ""
+msgstr "Subliniere"
 
 #: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:476
 msgid "Style of underline for this text"
-msgstr ""
+msgstr "Stil de subliniere"
 
 #: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
 msgid "Background set"
-msgstr ""
+msgstr "Setare fundal"
 
 #: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:513
 msgid "Whether this tag affects the background color"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează culoarea fundalului"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:524
 msgid "Foreground set"
-msgstr ""
+msgstr "Setare culoare text"
 
 #: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground color"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează culoarea textului"
 
 #: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:532
 msgid "Editability set"
-msgstr ""
+msgstr "Setare editabilitate"
 
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:533
 msgid "Whether this tag affects text editability"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează editabilitatea textului"
 
 #: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:536
 msgid "Font family set"
-msgstr ""
+msgstr "Setare familie font"
 
 #: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font family"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează familia fontului"
 
 #: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:540
 msgid "Font style set"
-msgstr ""
+msgstr "Setare stil font"
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font style"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează stilul fontului"
 
 #: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:544
 msgid "Font variant set"
-msgstr ""
+msgstr "Setare variantă font"
 
 #: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font variant"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează varianta fontului"
 
 #: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:548
 msgid "Font weight set"
-msgstr ""
+msgstr "Setare greutate font"
 
 #: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font weight"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează greutatea fontului"
 
 #: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:552
 msgid "Font stretch set"
-msgstr ""
+msgstr "Setare întindere font"
 
 #: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font stretch"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează întinderea fontului"
 
 #: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:556
 msgid "Font size set"
-msgstr ""
+msgstr "Setare mărime font"
 
 #: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:557
 msgid "Whether this tag affects the font size"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează mărimea fontului"
 
 #: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:560
 msgid "Font scale set"
-msgstr ""
+msgstr "Setare scală font"
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:561
 msgid "Whether this tag scales the font size by a factor"
-msgstr ""
+msgstr "Specifică dacă acest tag scalează mărimea fontului cu un factor"
 
 #: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:580
 msgid "Rise set"
-msgstr ""
+msgstr "Setare ridicare"
 
 #: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:581
 msgid "Whether this tag affects the rise"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează ridicarea"
 
 #: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:596
 msgid "Strikethrough set"
-msgstr ""
+msgstr "Setare tăiere"
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:597
 msgid "Whether this tag affects strikethrough"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează tăierea"
 
 #: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:604
 msgid "Underline set"
-msgstr ""
+msgstr "Setare subliniere"
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:605
 msgid "Whether this tag affects underlining"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează sublinierea"
 
 #: gtk/gtkcellrenderertoggle.c:130
 msgid "Toggle state"
-msgstr ""
+msgstr "Comută starea"
 
 #: gtk/gtkcellrenderertoggle.c:131
 msgid "The toggle state of the button"
-msgstr ""
+msgstr "Comutarea stării butonului"
 
 #: gtk/gtkcellrenderertoggle.c:139
 msgid "Activatable"
@@ -1067,204 +1082,215 @@ msgstr "Activabil"
 
 #: gtk/gtkcellrenderertoggle.c:140
 msgid "The toggle button can be activated"
-msgstr ""
+msgstr "Butonul de comutare poate fi activat"
 
 #: gtk/gtkcellrenderertoggle.c:148
 msgid "Radio state"
-msgstr ""
+msgstr "Stare radio"
 
 #: gtk/gtkcellrenderertoggle.c:149
 msgid "Draw the toggle button as a radio button"
-msgstr ""
+msgstr "Desenează butonul de comutare ca un buton radio"
 
-#: gtk/gtkcheckbutton.c:95 gtk/gtkoptionmenu.c:191
+#: gtk/gtkcheckbutton.c:95 gtk/gtkoptionmenu.c:195
 msgid "Indicator Size"
-msgstr ""
+msgstr "Mărime indicator"
 
 #: gtk/gtkcheckbutton.c:96
 msgid "Size of check or radio indicator"
-msgstr ""
+msgstr "Mărimea indicatorului bifare sau radio"
 
-#: gtk/gtkcheckbutton.c:103 gtk/gtkoptionmenu.c:197
+#: gtk/gtkcheckbutton.c:103 gtk/gtkoptionmenu.c:201
 msgid "Indicator Spacing"
-msgstr ""
+msgstr "Spaţiere indicator"
 
 #: gtk/gtkcheckbutton.c:104
 msgid "Spacing around check or radio indicator"
-msgstr ""
+msgstr "Spaţierea în jurul indicatorului bifare sau radio"
 
-#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:132
+#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
 msgid "Active"
-msgstr ""
+msgstr "Activ"
 
 #: gtk/gtkcheckmenuitem.c:116
 msgid "Whether the menu item is checked."
-msgstr ""
+msgstr "Specifică dacă elementul din meniu este bifat."
 
-#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:140
+#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:138
 msgid "Inconsistent"
-msgstr ""
+msgstr "Inconsistent"
 
 #: gtk/gtkcheckmenuitem.c:124
 msgid "Whether to display an \"inconsistent\" state."
-msgstr ""
+msgstr "Specifică dacă să afişez o stare \"inconsistent\""
 
-#: gtk/gtkcolorsel.c:578
+#: gtk/gtkcolorsel.c:582
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
+"Culoarea selectată anterior, pentru comparaţie cu culoarea selectată acum. "
+"Puteţi trage această culoare la o intrare paletă, sau să o selectaţi ca "
+"fiind curentă trăgând-o peste cealaltă bucată de culoare de alături."
 
-#: gtk/gtkcolorsel.c:583
+#: gtk/gtkcolorsel.c:587
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
+"Culoarea pe care aţi ales-o. Puteţi trage această culoare la o intrare "
+"paletă sau să o salvaţi pentru a o folosi în viitor."
 
-#: gtk/gtkcolorsel.c:887
+#: gtk/gtkcolorsel.c:907
 msgid "_Save color here"
-msgstr ""
+msgstr "_Salvează culoarea aici"
 
-#: gtk/gtkcolorsel.c:1055
+#: gtk/gtkcolorsel.c:1075
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
+"Făceţi click pe această intrare paletă pentru a o face culoarea curentă. "
+"Pentru a schimba această intrare, trageţi o bucată de culoare aici sau "
+"făceţi click dreapta pe ea şi selectaţi \"Salvează culoarea aici.\""
 
-#: gtk/gtkcolorsel.c:1674
+#: gtk/gtkcolorsel.c:1694
 msgid "Has Opacity Control"
-msgstr ""
-
-#: gtk/gtkcolorsel.c:1675
-msgid "Whether the color selector should allow setting opacity"
-msgstr ""
-
-#: gtk/gtkcolorsel.c:1681
-msgid "Has palette"
-msgstr ""
-
-#: gtk/gtkcolorsel.c:1682
-msgid "Whether a palette should be used"
-msgstr ""
-
-#: gtk/gtkcolorsel.c:1688
-msgid "Current Color"
-msgstr ""
-
-#: gtk/gtkcolorsel.c:1689
-msgid "The current color"
-msgstr ""
+msgstr "Are control opacitate"
 
 #: gtk/gtkcolorsel.c:1695
-msgid "Current Alpha"
+msgid "Whether the color selector should allow setting opacity"
 msgstr ""
+"Specifică dacă acest selector de culoare ar trebui să permită setarea "
+"opacităţii"
 
-#: gtk/gtkcolorsel.c:1696
-msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr ""
+#: gtk/gtkcolorsel.c:1701
+msgid "Has palette"
+msgstr "Are paletă"
+
+#: gtk/gtkcolorsel.c:1702
+msgid "Whether a palette should be used"
+msgstr "Specifică dacă o paletă ar trebui folosită"
+
+#: gtk/gtkcolorsel.c:1708
+msgid "Current Color"
+msgstr "Culoare curentă"
 
 #: gtk/gtkcolorsel.c:1709
+msgid "The current color"
+msgstr "Culoarea curentă"
+
+#: gtk/gtkcolorsel.c:1715
+msgid "Current Alpha"
+msgstr "Alfa curent"
+
+#: gtk/gtkcolorsel.c:1716
+msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
+msgstr ""
+"Valoare curentă a opacităţii (0 complet transparent, 65535 complet opac)"
+
+#: gtk/gtkcolorsel.c:1729
 msgid "Custom palette"
-msgstr ""
+msgstr "Paletă personalizată"
 
-#: gtk/gtkcolorsel.c:1710
+#: gtk/gtkcolorsel.c:1730
 msgid "Palette to use in the color selector"
-msgstr ""
+msgstr "Paleta care să fie folosită în selectorul de culoare"
 
-#: gtk/gtkcolorsel.c:1750
+#: gtk/gtkcolorsel.c:1772
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1778
+#: gtk/gtkcolorsel.c:1800
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1787
+#: gtk/gtkcolorsel.c:1809
 msgid "_Hue:"
 msgstr "_Nuanţă:"
 
-#: gtk/gtkcolorsel.c:1788
+#: gtk/gtkcolorsel.c:1810
 msgid "Position on the color wheel."
-msgstr ""
+msgstr "Poziţia în roata culorii."
 
-#: gtk/gtkcolorsel.c:1789
+#: gtk/gtkcolorsel.c:1811
 msgid "_Saturation:"
 msgstr "_Saturaţie:"
 
-#: gtk/gtkcolorsel.c:1790
+#: gtk/gtkcolorsel.c:1812
 msgid "\"Deepness\" of the color."
-msgstr ""
+msgstr "\"Adâncimea\" culorii."
 
-#: gtk/gtkcolorsel.c:1791
+#: gtk/gtkcolorsel.c:1813
 msgid "_Value:"
 msgstr "_Valoare:"
 
-#: gtk/gtkcolorsel.c:1792
+#: gtk/gtkcolorsel.c:1814
 msgid "Brightness of the color."
-msgstr ""
+msgstr "Luminozitatea culorii."
 
-#: gtk/gtkcolorsel.c:1793
+#: gtk/gtkcolorsel.c:1815
 msgid "_Red:"
 msgstr "_Roşu:"
 
-#: gtk/gtkcolorsel.c:1794
+#: gtk/gtkcolorsel.c:1816
 msgid "Amount of red light in the color."
-msgstr ""
+msgstr "Cantitatea de roşu în culoare."
 
-#: gtk/gtkcolorsel.c:1795
+#: gtk/gtkcolorsel.c:1817
 msgid "_Green:"
 msgstr "_Verde:"
 
-#: gtk/gtkcolorsel.c:1796
+#: gtk/gtkcolorsel.c:1818
 msgid "Amount of green light in the color."
-msgstr ""
+msgstr "Cantitatea de verde în culoare."
 
-#: gtk/gtkcolorsel.c:1797
+#: gtk/gtkcolorsel.c:1819
 msgid "_Blue:"
 msgstr "_Albastru:"
 
-#: gtk/gtkcolorsel.c:1798
+#: gtk/gtkcolorsel.c:1820
 msgid "Amount of blue light in the color."
-msgstr ""
+msgstr "Cantitatea de albastru în culoare."
 
-#: gtk/gtkcolorsel.c:1801
+#: gtk/gtkcolorsel.c:1823
 msgid "_Opacity:"
 msgstr "_Opacitate:"
 
-#: gtk/gtkcolorsel.c:1809
+#: gtk/gtkcolorsel.c:1831
 msgid "Transparency of the currently-selected color."
-msgstr ""
+msgstr "Transparenţa culorii selectate curent."
 
-#: gtk/gtkcolorsel.c:1824
+#: gtk/gtkcolorsel.c:1846
 msgid "Color _Name:"
-msgstr ""
+msgstr "_Numele culorii:"
 
-#: gtk/gtkcolorsel.c:1836
+#: gtk/gtkcolorsel.c:1858
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1855
+#: gtk/gtkcolorsel.c:1877
 msgid "_Palette"
-msgstr ""
+msgstr "_Paletă"
 
 #: gtk/gtkcombo.c:135
 msgid "Enable arrow keys"
-msgstr ""
+msgstr "Activează tastele săgeţi"
 
 #: gtk/gtkcombo.c:136
 msgid "Whether the arrow keys move through the list of items"
-msgstr ""
+msgstr "Specifică dacă tastele săgeţi mută prin lista de elemente"
 
 #: gtk/gtkcombo.c:142
 msgid "Always enable arrows"
-msgstr ""
+msgstr "Întotdeauna activează tastele săgeţi"
 
 #: gtk/gtkcombo.c:143
 msgid ""
@@ -1273,39 +1299,41 @@ msgstr ""
 
 #: gtk/gtkcombo.c:149
 msgid "Case sensitive"
-msgstr ""
+msgstr "Diferenţă litere mari/mici"
 
 #: gtk/gtkcombo.c:150
 msgid "Whether list item matching is case sensitive"
 msgstr ""
+"Specifică dacă potrivirea elementelor din listă face diferenţă litere mari/"
+"mici"
 
 #: gtk/gtkcombo.c:157
 msgid "Allow empty"
-msgstr ""
+msgstr "Permite gol"
 
 #: gtk/gtkcombo.c:158
 msgid "Whether an empty value may be entered in this field"
-msgstr ""
+msgstr "Specifică dacă o valoare goală poate fi introdusă în acest câmp"
 
 #: gtk/gtkcombo.c:165
 msgid "Value in list"
-msgstr ""
+msgstr "Valoare în listă"
 
 #: gtk/gtkcombo.c:166
 msgid "Whether entered values must already be present in the list"
-msgstr ""
+msgstr "Specifică dacă valorile introduse trebuie să fie deja în listă"
 
 #: gtk/gtkcontainer.c:203
 msgid "Resize mode"
-msgstr ""
+msgstr "Mod redimensionare"
 
 #: gtk/gtkcontainer.c:204
 msgid "Specify how resize events are handled"
-msgstr ""
+msgstr "Specifică cum sunt tratate evenimentele de redimensionare"
 
 #: gtk/gtkcontainer.c:211
 msgid "Border width"
-msgstr ""
+msgstr "Lăţime chenar"
 
 #: gtk/gtkcontainer.c:212
 msgid "The width of the empty border outside the containers children."
@@ -1313,7 +1341,7 @@ msgstr ""
 
 #: gtk/gtkcontainer.c:220
 msgid "Child"
-msgstr ""
+msgstr "Copil"
 
 #: gtk/gtkcontainer.c:221
 msgid "Can be used to add a new child to the container."
@@ -1329,167 +1357,173 @@ msgstr ""
 
 #: gtk/gtkcurve.c:130
 msgid "Minimum X"
-msgstr ""
+msgstr "X minim"
 
 #: gtk/gtkcurve.c:131
 msgid "Minimum possible value for X"
-msgstr ""
+msgstr "Valoarea minimă posibilă pentru X"
 
 #: gtk/gtkcurve.c:140
 msgid "Maximum X"
-msgstr ""
+msgstr "X maxim"
 
 #: gtk/gtkcurve.c:141
 msgid "Maximum possible X value."
-msgstr ""
+msgstr "Valoarea maximă posibilă pentru X"
 
 #: gtk/gtkcurve.c:150
 msgid "Minimum Y"
-msgstr ""
+msgstr "Y minim"
 
 #: gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
-msgstr ""
+msgstr "Valoarea minimă posibilă pentru Y"
 
 #: gtk/gtkcurve.c:160
 msgid "Maximum Y"
-msgstr ""
+msgstr "Y maxim"
 
 #: gtk/gtkcurve.c:161
 msgid "Maximum possible value for Y"
-msgstr ""
+msgstr "Valoarea maximă posibilă pentru Y"
 
 #: gtk/gtkdialog.c:126
 msgid "Has separator"
-msgstr ""
+msgstr "Are separator"
 
 #: gtk/gtkdialog.c:127
 msgid "The dialog has a separator bar above its buttons"
-msgstr ""
+msgstr "Dialogul are o bară de separare deasupra butoanelor sale"
 
 #: gtk/gtkdialog.c:150
 msgid "Content area border"
-msgstr ""
+msgstr "Chenar zonă conţinut"
 
 #: gtk/gtkdialog.c:151
 msgid "Width of border around the main dialog area"
-msgstr ""
+msgstr "Lăţimea chenarului în jurul principalei zone din dialog"
 
 #: gtk/gtkdialog.c:158
 msgid "Button spacing"
-msgstr ""
+msgstr "Spaţiere butoane"
 
 #: gtk/gtkdialog.c:159
 msgid "Spacing between buttons"
-msgstr ""
+msgstr "Spaţiul dintre butoane"
 
 #: gtk/gtkdialog.c:167
 msgid "Action area border"
-msgstr ""
+msgstr "Chenar zonă acţiune"
 
 #: gtk/gtkdialog.c:168
 msgid "Width of border around the button area at the bottom of the dialog"
-msgstr ""
+msgstr "Lăţimea chenarului în jurul zonei cu butoane de la baza dialogului"
 
-#: gtk/gtkentry.c:418 gtk/gtklabel.c:360
+#: gtk/gtkentry.c:434 gtk/gtklabel.c:360
 msgid "Cursor Position"
 msgstr "Poziţie cursor"
 
-#: gtk/gtkentry.c:419 gtk/gtklabel.c:361
+#: gtk/gtkentry.c:435 gtk/gtklabel.c:361
 msgid "The current position of the insertion cursor in chars."
 msgstr ""
 
-#: gtk/gtkentry.c:428 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:444 gtk/gtklabel.c:370
 msgid "Selection Bound"
 msgstr "Legătură selecţie"
 
-#: gtk/gtkentry.c:429 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:445 gtk/gtklabel.c:371
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars."
 msgstr ""
 
-#: gtk/gtkentry.c:439
-msgid "Whether the entry contents can be edited"
-msgstr ""
-
-#: gtk/gtkentry.c:446
-msgid "Maximum length"
-msgstr ""
-
-#: gtk/gtkentry.c:447
-msgid "Maximum number of characters for this entry"
-msgstr ""
-
 #: gtk/gtkentry.c:455
-msgid "Visibility"
-msgstr ""
+msgid "Whether the entry contents can be edited"
+msgstr "Specifică dacă conţinutul intrării poate fi editat"
 
-#: gtk/gtkentry.c:456
+#: gtk/gtkentry.c:462
+msgid "Maximum length"
+msgstr "Lungime maximă"
+
+#: gtk/gtkentry.c:463
+msgid "Maximum number of characters for this entry"
+msgstr "Numărul maxim de caractere pentru această intrare"
+
+#: gtk/gtkentry.c:471
+msgid "Visibility"
+msgstr "Vizibilitate"
+
+#: gtk/gtkentry.c:472
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 
-#: gtk/gtkentry.c:463
+#: gtk/gtkentry.c:479
 msgid "Has Frame"
-msgstr ""
+msgstr "Are cadru"
 
-#: gtk/gtkentry.c:464
+#: gtk/gtkentry.c:480
 msgid "FALSE removes outside bevel from entry."
 msgstr ""
 
-#: gtk/gtkentry.c:471
+#: gtk/gtkentry.c:487
 msgid "Invisible character"
-msgstr ""
+msgstr "Caracter invizibil"
 
-#: gtk/gtkentry.c:472
+#: gtk/gtkentry.c:488
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 
-#: gtk/gtkentry.c:479
+#: gtk/gtkentry.c:495
 msgid "Activates default"
-msgstr ""
+msgstr "Activează implicit"
 
-#: gtk/gtkentry.c:480
+#: gtk/gtkentry.c:496
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
+"Specifică dacă widgetul implicit să fie activat (de ex. butonul implicit "
+"într-un dialog) când este apăsat Enter"
 
-#: gtk/gtkentry.c:486
+#: gtk/gtkentry.c:502
 msgid "Width in chars"
-msgstr ""
+msgstr "Lăţime în caractere"
 
-#: gtk/gtkentry.c:487
+#: gtk/gtkentry.c:503
 msgid "Number of characters to leave space for in the entry."
 msgstr ""
 
-#: gtk/gtkentry.c:496
+#: gtk/gtkentry.c:512
 msgid "Scroll offset"
-msgstr ""
+msgstr "Setare "
 
-#: gtk/gtkentry.c:497
+#: gtk/gtkentry.c:513
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:523
 msgid "The contents of the entry"
-msgstr ""
+msgstr "Conţinutul intrării"
 
-#: gtk/gtkentry.c:513 gtk/gtklabel.c:379 gtk/gtktextview.c:624
+#: gtk/gtkentry.c:529 gtk/gtklabel.c:379 gtk/gtktextview.c:625
 msgid "Cursor color"
-msgstr ""
+msgstr "Culoare cursor"
 
-#: gtk/gtkentry.c:514 gtk/gtklabel.c:380 gtk/gtktextview.c:625
+#: gtk/gtkentry.c:530 gtk/gtklabel.c:380 gtk/gtktextview.c:626
 msgid "Color with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkentry.c:3832 gtk/gtklabel.c:3151
+#: gtk/gtkentry.c:3847 gtk/gtklabel.c:3161
 msgid "Select All"
 msgstr "Selectează tot"
 
-#: gtk/gtkentry.c:3842 gtk/gtklabel.c:3161 gtk/gtktextview.c:5737
+#: gtk/gtkentry.c:3857 gtk/gtklabel.c:3171
 msgid "Input Methods"
+msgstr "Metode de intrare"
+
+#: gtk/gtkentry.c:3867 gtk/gtktextview.c:5782
+msgid "_Insert Unicode control character"
 msgstr ""
 
 #: gtk/gtkfilesel.c:506
@@ -1502,11 +1536,13 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:513
 msgid "Show file operations"
-msgstr ""
+msgstr "Arată operaţiile fişiere"
 
 #: gtk/gtkfilesel.c:514
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
+"Specifică dacă butoanele pentru creare/manipulare fişiere ar trebui să fie "
+"afişate."
 
 #. The directories clist
 #: gtk/gtkfilesel.c:636
@@ -1548,6 +1584,8 @@ msgstr "Redenumeşte fişier"
 msgid ""
 "The directory name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"Numele directorului \"%s\" conţine simboluri care nu sunt permise în nume de "
+"fişiere"
 
 #: gtk/gtkfilesel.c:1239
 #, c-format
@@ -1555,15 +1593,17 @@ msgid ""
 "Error creating directory \"%s\": %s\n"
 "%s"
 msgstr ""
+"Eroare la crearea directorului \"%s\": %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1240 gtk/gtkfilesel.c:1493
 msgid "You probably used symbols not allowed in filenames."
-msgstr ""
+msgstr "Probabil aţi folosit simboluri nepermise în nume de fişiere."
 
 #: gtk/gtkfilesel.c:1248
 #, c-format
 msgid "Error creating directory \"%s\": %s\n"
-msgstr ""
+msgstr "Eroare la crearea directorului \"%s\": %s\n"
 
 #: gtk/gtkfilesel.c:1282
 msgid "Create Directory"
@@ -1587,6 +1627,8 @@ msgstr "Creează"
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"Numele fişierului \"%s\" conţine simboluri care nu sunt permise în nume de "
+"fişiere"
 
 #: gtk/gtkfilesel.c:1359
 #, c-format
@@ -1594,15 +1636,17 @@ msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
+"Eroare la ştergerea fişierului \"%s\": %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1507
 msgid "It probably contains symbols not allowed in filenames."
-msgstr ""
+msgstr "Probabil conţine simboluri nepermise în nume de fişiere."
 
 #: gtk/gtkfilesel.c:1370
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr ""
+msgstr "Eroare la ştergerea fişierului \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1448
 msgid "Delete"
@@ -1611,7 +1655,7 @@ msgstr "Şterge"
 #: gtk/gtkfilesel.c:1489 gtk/gtkfilesel.c:1503
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
+msgstr "Numele de fişier \"%s\" conţine simboluri nepermise în nume de fişiere"
 
 #: gtk/gtkfilesel.c:1491
 #, c-format
@@ -1619,18 +1663,20 @@ msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
+"Eroare la redenumirea fişierului \"%s\": %s\n"
+"%s"
 
 #: gtk/gtkfilesel.c:1505
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
-msgstr ""
+msgstr "Eroare la redenumirea fişierului \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1515
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
+msgstr "Eroare la redenumirea fişierului \"%s\" la \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1604
 msgid "Rename"
@@ -1649,7 +1695,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:3515
 msgid "Name too long"
-msgstr ""
+msgstr "Nume prea lung"
 
 #: gtk/gtkfilesel.c:3517
 msgid "Couldn't convert filename"
@@ -1710,7 +1756,7 @@ msgstr ""
 
 #: gtk/gtkframe.c:143
 msgid "Label yalign"
-msgstr ""
+msgstr "Aliniere y a etichetei"
 
 #: gtk/gtkframe.c:144
 msgid "The vertical alignment of the label."
@@ -1722,7 +1768,7 @@ msgstr ""
 
 #: gtk/gtkframe.c:160
 msgid "Frame shadow"
-msgstr ""
+msgstr "Umbră cadru"
 
 #: gtk/gtkframe.c:161
 msgid "Appearance of the frame border."
@@ -1730,7 +1776,7 @@ msgstr ""
 
 #: gtk/gtkframe.c:169
 msgid "Label widget"
-msgstr ""
+msgstr "Widget etichetă"
 
 #: gtk/gtkframe.c:170
 msgid "A widget to display in place of the usual frame label."
@@ -1751,7 +1797,7 @@ msgstr "OK"
 #: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:148 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 msgid "Shadow type"
-msgstr ""
+msgstr "Tip umbră"
 
 #: gtk/gtkhandlebox.c:193
 msgid "Appearance of the shadow that surrounds the container."
@@ -1759,7 +1805,7 @@ msgstr ""
 
 #: gtk/gtkhandlebox.c:201
 msgid "Handle position"
-msgstr ""
+msgstr "Tratează poziţia"
 
 #: gtk/gtkhandlebox.c:202
 msgid "Position of the handle relative to the child widget."
@@ -1785,7 +1831,7 @@ msgstr ""
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
-msgstr ""
+msgstr "Widget imagine"
 
 #: gtk/gtkimagemenuitem.c:125
 msgid "Child widget to appear next to the menu text"
@@ -1862,7 +1908,7 @@ msgstr "Înclinare Y"
 
 #: gtk/gtkinputdialog.c:475
 msgid "Wheel"
-msgstr ""
+msgstr "Roată"
 
 #: gtk/gtkinputdialog.c:515
 msgid "none"
@@ -1891,15 +1937,15 @@ msgstr ""
 
 #: gtk/gtklabel.c:296
 msgid "Use markup"
-msgstr ""
+msgstr "Foloseşte marcare"
 
 #: gtk/gtklabel.c:297
 msgid "The text of the label includes XML markup. See pango_parse_markup()."
 msgstr ""
 
-#: gtk/gtklabel.c:311 gtk/gtktexttag.c:378 gtk/gtktextview.c:565
+#: gtk/gtklabel.c:311 gtk/gtktexttag.c:378 gtk/gtktextview.c:566
 msgid "Justification"
-msgstr ""
+msgstr "Aliniere"
 
 #: gtk/gtklabel.c:312
 msgid ""
@@ -1932,7 +1978,7 @@ msgstr "Selectabil"
 
 #: gtk/gtklabel.c:336
 msgid "Whether the label text can be selected with the mouse."
-msgstr ""
+msgstr "Specifică dacă textul etichetei poate fi selectat cu mausul."
 
 #: gtk/gtklabel.c:342
 msgid "Mnemonic key"
@@ -1952,19 +1998,19 @@ msgstr ""
 
 #: gtk/gtklayout.c:576
 msgid "X position"
-msgstr ""
+msgstr "Poziţie X"
 
 #: gtk/gtklayout.c:577
 msgid "X position of child widget"
-msgstr ""
+msgstr "Poziţia X a widget-ului copil"
 
 #: gtk/gtklayout.c:586
 msgid "Y position"
-msgstr ""
+msgstr "Poziţie Y"
 
 #: gtk/gtklayout.c:587
 msgid "Y position of child widget"
-msgstr ""
+msgstr "Poziţia Y a widget-ului copil"
 
 #: gtk/gtklayout.c:596 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
@@ -2029,19 +2075,19 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:113
 msgid "Message Type"
-msgstr ""
+msgstr "Tip mesaj"
 
 #: gtk/gtkmessagedialog.c:114
 msgid "The type of message"
-msgstr ""
+msgstr "Tipul mesajului"
 
 #: gtk/gtkmessagedialog.c:121
 msgid "Message Buttons"
-msgstr ""
+msgstr "Butoane mesaj"
 
 #: gtk/gtkmessagedialog.c:122
 msgid "The buttons shown in the message dialog"
-msgstr ""
+msgstr "Butoanele arătate în dialogul mesajului"
 
 #: gtk/gtkmisc.c:97
 msgid "X align"
@@ -2077,117 +2123,117 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
-#: gtk/gtknotebook.c:328
+#: gtk/gtknotebook.c:327
 msgid "Page"
 msgstr "Pagină"
 
-#: gtk/gtknotebook.c:329
+#: gtk/gtknotebook.c:328
 msgid "The index of the current page"
-msgstr ""
+msgstr "Indexul paginii curente"
+
+#: gtk/gtknotebook.c:336
+msgid "Tab Position"
+msgstr "Poziţie tab"
 
 #: gtk/gtknotebook.c:337
-msgid "Tab Position"
-msgstr ""
-
-#: gtk/gtknotebook.c:338
 msgid "Which side of the notebook holds the tabs"
 msgstr ""
 
-#: gtk/gtknotebook.c:345
+#: gtk/gtknotebook.c:344
 msgid "Tab Border"
-msgstr ""
+msgstr "Chenar tab"
 
-#: gtk/gtknotebook.c:346
+#: gtk/gtknotebook.c:345
 msgid "Width of the border around the tab labels"
 msgstr ""
 
-#: gtk/gtknotebook.c:354
+#: gtk/gtknotebook.c:353
 msgid "Horizontal Tab Border"
 msgstr ""
 
-#: gtk/gtknotebook.c:355
+#: gtk/gtknotebook.c:354
 msgid "Width of the horizontal border of tab labels"
 msgstr ""
 
-#: gtk/gtknotebook.c:363
+#: gtk/gtknotebook.c:362
 msgid "Vertical Tab Border"
 msgstr ""
 
-#: gtk/gtknotebook.c:364
+#: gtk/gtknotebook.c:363
 msgid "Width of the vertical border of tab labels"
 msgstr ""
 
-#: gtk/gtknotebook.c:372
+#: gtk/gtknotebook.c:371
 msgid "Show Tabs"
-msgstr ""
+msgstr "Arată taburi"
 
-#: gtk/gtknotebook.c:373
+#: gtk/gtknotebook.c:372
 msgid "Whether tabs should be shown or not"
-msgstr ""
+msgstr "Specifică dacă ar trebui afişate taburi sau nu"
+
+#: gtk/gtknotebook.c:378
+msgid "Show Border"
+msgstr "Arată chenar"
 
 #: gtk/gtknotebook.c:379
-msgid "Show Border"
-msgstr ""
-
-#: gtk/gtknotebook.c:380
 msgid "Whether the border should be shown or not"
-msgstr ""
+msgstr "Specifică dacă ar trebui arătată graniţa sau nu"
 
-#: gtk/gtknotebook.c:386
+#: gtk/gtknotebook.c:385
 msgid "Scrollable"
 msgstr "Defilabil"
 
-#: gtk/gtknotebook.c:387
+#: gtk/gtknotebook.c:386
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
 msgstr ""
 
-#: gtk/gtknotebook.c:393
+#: gtk/gtknotebook.c:392
 msgid "Enable Popup"
-msgstr ""
+msgstr "Activează popup"
 
-#: gtk/gtknotebook.c:394
+#: gtk/gtknotebook.c:393
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
 
-#: gtk/gtknotebook.c:401
+#: gtk/gtknotebook.c:400
 msgid "Whether tabs should have homogeneous sizes"
-msgstr ""
+msgstr "Specifică dacă taburile ar trebui să aibă mărimi omogene"
 
-#: gtk/gtknotebook.c:2240 gtk/gtknotebook.c:4470
+#: gtk/gtknotebook.c:2283 gtk/gtknotebook.c:4515
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
 
-#: gtk/gtkoptionmenu.c:184
+#: gtk/gtkoptionmenu.c:188
 msgid "Menu"
-msgstr ""
+msgstr "Meniu"
 
-#: gtk/gtkoptionmenu.c:185
+#: gtk/gtkoptionmenu.c:189
 msgid "The menu of options"
 msgstr ""
 
-#: gtk/gtkoptionmenu.c:192
+#: gtk/gtkoptionmenu.c:196
 msgid "Size of dropdown indicator"
 msgstr ""
 
-#: gtk/gtkoptionmenu.c:198
+#: gtk/gtkoptionmenu.c:202
 msgid "Spacing around indicator"
 msgstr ""
 
 #: gtk/gtkpaned.c:120 gtk/gtkruler.c:138
 msgid "Position"
-msgstr ""
+msgstr "Poziţie"
 
 #: gtk/gtkpaned.c:121
 msgid ""
-"Position of paned separator in pixels(0 means all the way to the left/top)"
+"Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
 #: gtk/gtkpaned.c:129
 msgid "Position Set"
-msgstr ""
+msgstr "Setare poziţie"
 
 #: gtk/gtkpaned.c:130
 msgid "TRUE if the Position property should be used"
@@ -2201,33 +2247,35 @@ msgstr ""
 msgid "Width of handle"
 msgstr ""
 
-#: gtk/gtkrc.c:2723
+#: gtk/gtkrc.c:2721
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Nu pot localiza fişierul imagine în pixmap_path: \"%s\" line %d"
 
-#: gtk/gtkrc.c:2726
+#: gtk/gtkrc.c:2724
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nu pot localiza fişierul imagine în pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3135
+#: gtk/gtkrc.c:3133
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
 
 #: gtk/gtkpreview.c:129
 msgid "Expand"
-msgstr ""
+msgstr "Extinde"
 
 #: gtk/gtkpreview.c:130
 msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
+"Specifică dacă widgetul de previzualizare ar trebui să ocupe tot spaţiul "
+"care îi este alocat"
 
 #: gtk/gtkprogress.c:122
 msgid "Activity mode"
-msgstr ""
+msgstr "Mod de activitate"
 
 #: gtk/gtkprogress.c:123
 msgid ""
@@ -2239,35 +2287,39 @@ msgstr ""
 
 #: gtk/gtkprogress.c:130
 msgid "Show text"
-msgstr ""
+msgstr "Arată text"
 
 #: gtk/gtkprogress.c:131
 msgid "Whether the progress is shown as text"
-msgstr ""
+msgstr "Specifică dacă progresul este arătat ca text"
 
 #: gtk/gtkprogress.c:138
 msgid "Text x alignment"
-msgstr ""
+msgstr "Aliniere X a textului"
 
 #: gtk/gtkprogress.c:139
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progresswidget"
 msgstr ""
+"Un număr între 0.0 şi 1.0 specificând alinierea orizontală a textului în "
+"widgetul de progres"
 
 #: gtk/gtkprogress.c:147
 msgid "Text y alignment"
-msgstr ""
+msgstr "Aliniere Y a textului"
 
 #: gtk/gtkprogress.c:148
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
 msgstr ""
+"Un număr între 0.0 şi 1.0 specificând alinierea verticală a textului în "
+"widgetul de progres"
 
 #: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:270 gtk/gtkspinbutton.c:214
 msgid "Adjustment"
-msgstr ""
+msgstr "Ajustare"
 
 #: gtk/gtkprogressbar.c:132
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
@@ -2275,7 +2327,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:224
 msgid "Orientation"
-msgstr ""
+msgstr "Orientare"
 
 #: gtk/gtkprogressbar.c:140
 msgid "Orientation and growth of the progress bar"
@@ -2291,15 +2343,16 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:157
 msgid "Activity Step"
-msgstr ""
+msgstr "Pas activitate"
 
 #: gtk/gtkprogressbar.c:158
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr ""
+"Incrementul folosit pentru fiecare iterare în modul de activitate (învechit)"
 
 #: gtk/gtkprogressbar.c:167
 msgid "Activity Blocks"
-msgstr ""
+msgstr "Blocuri de activitate"
 
 #: gtk/gtkprogressbar.c:168
 msgid ""
@@ -2309,12 +2362,12 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:177
 msgid "Discrete Blocks"
-msgstr ""
+msgstr "Blocuri discrete"
 
 #: gtk/gtkprogressbar.c:178
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
-"style"
+"style)"
 msgstr ""
 
 #: gtk/gtkprogressbar.c:187
@@ -2323,11 +2376,11 @@ msgstr "Fracţiune"
 
 #: gtk/gtkprogressbar.c:188
 msgid "The fraction of total work that has been completed"
-msgstr ""
+msgstr "Fracţiunea din munca totală care a fost completată"
 
 #: gtk/gtkprogressbar.c:197
 msgid "Pulse Step"
-msgstr ""
+msgstr "Pas puls"
 
 #: gtk/gtkprogressbar.c:198
 msgid "The fraction of total progress to move the bouncing block when pulsed"
@@ -2335,11 +2388,11 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:208
 msgid "Text to be displayed in the progress bar"
-msgstr ""
+msgstr "Textul care să fie afişat în bara de progres"
 
 #: gtk/gtkrange.c:261
 msgid "Update policy"
-msgstr ""
+msgstr "Politica de actualizare"
 
 #: gtk/gtkrange.c:262
 msgid "How the range should be updated on the screen"
@@ -2351,7 +2404,7 @@ msgstr ""
 
 #: gtk/gtkrange.c:278
 msgid "Inverted"
-msgstr ""
+msgstr "Inversat"
 
 #: gtk/gtkrange.c:279
 msgid "Invert direction slider moves to increase range value"
@@ -2359,7 +2412,7 @@ msgstr ""
 
 #: gtk/gtkrange.c:285
 msgid "Slider Width"
-msgstr ""
+msgstr "Lăţime derulator"
 
 #: gtk/gtkrange.c:286
 msgid "Width of scrollbar or scale thumb"
@@ -2391,19 +2444,19 @@ msgstr ""
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
-msgstr ""
+msgstr "Inferior"
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
-msgstr ""
+msgstr "Limita inferioară a liniei"
 
 #: gtk/gtkruler.c:128
 msgid "Upper"
-msgstr ""
+msgstr "Superior"
 
 #: gtk/gtkruler.c:129
 msgid "Upper limit of ruler"
-msgstr ""
+msgstr "Limita superioară a liniei"
 
 #: gtk/gtkruler.c:139
 msgid "Position of mark on the ruler"
@@ -2415,11 +2468,11 @@ msgstr "Mărime max"
 
 #: gtk/gtkruler.c:149
 msgid "Maximum size of the ruler"
-msgstr ""
+msgstr "Mărimea maximă a liniei"
 
 #: gtk/gtkscale.c:148 gtk/gtkspinbutton.c:232
 msgid "Digits"
-msgstr ""
+msgstr "Cifre"
 
 #: gtk/gtkscale.c:149
 msgid "The number of decimal places that are displayed in the value"
@@ -2431,7 +2484,7 @@ msgstr ""
 
 #: gtk/gtkscale.c:159
 msgid "Whether the current value is displayed as a string next to the slider"
-msgstr ""
+msgstr "Specifică dacă valoarea curentă este afişată ca şir lângă derulator"
 
 #: gtk/gtkscale.c:166
 msgid "Value Position"
@@ -2507,64 +2560,74 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
-#: gtk/gtksettings.c:146
+#: gtk/gtksettings.c:147
 msgid "Double Click Time"
 msgstr ""
 
-#: gtk/gtksettings.c:147
+#: gtk/gtksettings.c:148
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr ""
 
-#: gtk/gtksettings.c:154
+#: gtk/gtksettings.c:155
 msgid "Cursor Blink"
 msgstr "Cursor clipitor"
 
-#: gtk/gtksettings.c:155
+#: gtk/gtksettings.c:156
 msgid "Whether the cursor should blink"
-msgstr ""
+msgstr "Specifică dacă cursorul ar trebui să clipească"
 
-#: gtk/gtksettings.c:162
+#: gtk/gtksettings.c:163
 msgid "Cursor Blink Time"
 msgstr "Timp clipire cursor"
 
-#: gtk/gtksettings.c:163
+#: gtk/gtksettings.c:164
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr ""
 
-#: gtk/gtksettings.c:170
+#: gtk/gtksettings.c:171
 msgid "Split Cursor"
 msgstr ""
 
-#: gtk/gtksettings.c:171
+#: gtk/gtksettings.c:172
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr ""
-
-#: gtk/gtksettings.c:178
-msgid "Theme Name"
-msgstr ""
+"Specifică dacă două cursoare ar trebui să fie afişate pentru text amestecat "
+"stânga-la-dreapta şi dreapta-la-stânga"
 
 #: gtk/gtksettings.c:179
+msgid "Theme Name"
+msgstr "Nume temă"
+
+#: gtk/gtksettings.c:180
 msgid "Name of theme RC file to load"
 msgstr ""
 
-#: gtk/gtksettings.c:186
+#: gtk/gtksettings.c:187
 msgid "Key Theme Name"
 msgstr ""
 
-#: gtk/gtksettings.c:187
+#: gtk/gtksettings.c:188
 msgid "Name of key theme RC file to load"
 msgstr ""
 
-#: gtk/gtksettings.c:195
+#: gtk/gtksettings.c:196
 msgid "Menu bar accelerator"
 msgstr ""
 
-#: gtk/gtksettings.c:196
+#: gtk/gtksettings.c:197
 msgid "Keybinding to activate the menu bar"
+msgstr ""
+
+#: gtk/gtksettings.c:205
+msgid "Drag threshold"
+msgstr ""
+
+#: gtk/gtksettings.c:206
+msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:215
@@ -2592,31 +2655,37 @@ msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 msgstr ""
+"Specifică dacă valorile eronate sunt automat schimbate către cel mai "
+"apropiat increment cu pasul butonului de derulare"
 
 #: gtk/gtkspinbutton.c:250
 msgid "Numeric"
-msgstr ""
+msgstr "Numeric"
 
 #: gtk/gtkspinbutton.c:251
 msgid "Whether non-numeric characters should be ignored"
-msgstr ""
+msgstr "Specifică dacă caracterele non-numerice ar trebui ignorate"
 
 #: gtk/gtkspinbutton.c:258
 msgid "Wrap"
-msgstr ""
+msgstr "Ciclare"
 
 #: gtk/gtkspinbutton.c:259
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr ""
+"Specifică dacă un buton de derulare ar trebui să cicleze când îşi atinge "
+"limitele"
 
 #: gtk/gtkspinbutton.c:266
 msgid "Update Policy"
-msgstr ""
+msgstr "Politica de actualizare"
 
 #: gtk/gtkspinbutton.c:267
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
+"Specifică dacă butonul de derulare ar trebui să se actualizeze întotdeauna, "
+"sau doar când valoarea este legală"
 
 #: gtk/gtkspinbutton.c:275
 msgid "Value"
@@ -2637,7 +2706,7 @@ msgstr "Informaţie"
 
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr ""
+msgstr "Avertizare"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
@@ -2645,14 +2714,14 @@ msgstr "Eroare"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
-msgstr ""
+msgstr "Întrebare"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr ""
+msgstr "_Adaugă"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
@@ -2668,7 +2737,7 @@ msgstr "_Renunţă"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr ""
+msgstr "_CD-Rom"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
@@ -2679,9 +2748,8 @@ msgid "_Close"
 msgstr "În_chide"
 
 #: gtk/gtkstock.c:282
-#, fuzzy
 msgid "_Convert"
-msgstr "_Revino"
+msgstr "_Converteşte"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
@@ -2692,13 +2760,12 @@ msgid "C_ut"
 msgstr "Dec_upează"
 
 #: gtk/gtkstock.c:285
-#, fuzzy
 msgid "_Delete"
-msgstr "Şterge"
+msgstr "_Şterge"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr ""
+msgstr "_Execută"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
@@ -2709,27 +2776,24 @@ msgid "Find and _Replace"
 msgstr "Caută şi înlocui_eşte"
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgid "_Floppy"
-msgstr "_Copiază"
+msgstr "_Dischetă"
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
-msgstr ""
+msgstr "_Bază"
 
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr ""
+msgstr "_Primul"
 
 #: gtk/gtkstock.c:292
-#, fuzzy
 msgid "_Last"
-msgstr "_Lipeşte"
+msgstr "_Ultimul"
 
 #: gtk/gtkstock.c:293
-#, fuzzy
 msgid "_Top"
-msgstr "_Stop"
+msgstr "_Vârf"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
@@ -2737,7 +2801,7 @@ msgstr "Îna_poi"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr ""
+msgstr "_Jos"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
@@ -2745,7 +2809,7 @@ msgstr "Î_nainte"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr ""
+msgstr "_Sus"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
@@ -2757,7 +2821,7 @@ msgstr "_Acasă"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
-msgstr ""
+msgstr "_Index"
 
 #: gtk/gtkstock.c:301
 msgid "_Italic"
@@ -2765,7 +2829,7 @@ msgstr "_Italic"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr ""
+msgstr "_Sări la"
 
 #: gtk/gtkstock.c:303
 msgid "_Center"
@@ -2828,14 +2892,12 @@ msgid "_Redo"
 msgstr "_Refă"
 
 #: gtk/gtkstock.c:318
-#, fuzzy
 msgid "_Refresh"
-msgstr "_Preferinţe"
+msgstr "_Actualizează"
 
 #: gtk/gtkstock.c:319
-#, fuzzy
 msgid "_Remove"
-msgstr "_Revino"
+msgstr "_Elimină"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
@@ -2850,22 +2912,20 @@ msgid "Save _As"
 msgstr "Salvează c_a"
 
 #: gtk/gtkstock.c:323
-#, fuzzy
 msgid "_Color"
-msgstr "În_chide"
+msgstr "_Culoare"
 
 #: gtk/gtkstock.c:324
-#, fuzzy
 msgid "_Font"
-msgstr "Font"
+msgstr "_Font"
 
 #: gtk/gtkstock.c:325
 msgid "_Ascending"
-msgstr ""
+msgstr "_Ascendent"
 
 #: gtk/gtkstock.c:326
 msgid "_Descending"
-msgstr ""
+msgstr "_Descendent"
 
 #: gtk/gtkstock.c:327
 msgid "_Spell Check"
@@ -2877,12 +2937,11 @@ msgstr "_Stop"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
-msgstr "_Taiat"
+msgstr "_Tăiat"
 
 #: gtk/gtkstock.c:330
-#, fuzzy
 msgid "_Undelete"
-msgstr "S_ubliniat"
+msgstr "_Restaurează"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
@@ -2903,31 +2962,31 @@ msgstr "Zoom _100%"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr ""
+msgstr "Zoom pentru portivire"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr ""
+msgstr "_Măreşte"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr ""
+msgstr "M_icşorează"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
-msgstr ""
+msgstr "Linii"
 
 #: gtk/gtktable.c:157
 msgid "The number of rows in the table"
-msgstr ""
+msgstr "Numărul de linii în tabel"
 
 #: gtk/gtktable.c:165
 msgid "Columns"
-msgstr ""
+msgstr "Coloane"
 
 #: gtk/gtktable.c:166
 msgid "The number of columns in the table"
-msgstr ""
+msgstr "Numărul de coloane în tabel"
 
 #: gtk/gtktable.c:174
 msgid "Row spacing"
@@ -2935,63 +2994,63 @@ msgstr "Spaţiere linii"
 
 #: gtk/gtktable.c:175
 msgid "The amount of space between two consecutive rows"
-msgstr ""
+msgstr "Cantitatea de spaţiu între două linii consecutive"
 
 #: gtk/gtktable.c:183
 msgid "Column spacing"
-msgstr ""
+msgstr "Spaţiere coloane"
 
 #: gtk/gtktable.c:184
 msgid "The amount of space between two consecutive columns"
-msgstr ""
+msgstr "Cantitatea de spaţiu între două coloane consecutive"
 
 #: gtk/gtktable.c:192
 msgid "Homogenous"
-msgstr ""
+msgstr "Omogen"
 
 #: gtk/gtktable.c:193
 msgid "If TRUE this means the table cells are all the same width/height"
 msgstr ""
 
-#: gtk/gtktext.c:604 gtk/gtktreeview.c:505
+#: gtk/gtktext.c:604 gtk/gtktreeview.c:506
 msgid "Horizontal Adjustment"
-msgstr ""
+msgstr "Ajustare orizontală"
 
 #: gtk/gtktext.c:605
 msgid "Horizontal adjustment for the text widget"
-msgstr ""
+msgstr "Ajustare orizontală pentru widgetul text"
 
-#: gtk/gtktext.c:612 gtk/gtktreeview.c:513
+#: gtk/gtktext.c:612 gtk/gtktreeview.c:514
 msgid "Vertical Adjustment"
-msgstr ""
+msgstr "Ajustare verticală"
 
 #: gtk/gtktext.c:613
 msgid "Vertical adjustment for the text widget"
-msgstr ""
+msgstr "Ajustare verticală pentru widgetul text"
 
 #: gtk/gtktext.c:620
 msgid "Line Wrap"
-msgstr ""
+msgstr "Formatare linie"
 
 #: gtk/gtktext.c:621
 msgid "Whether lines are wrapped at widget edges"
-msgstr ""
+msgstr "Specifică dacă liniile sunt formatate la marginile widgeturilor"
 
 #: gtk/gtktext.c:628
 msgid "Word Wrap"
-msgstr ""
+msgstr "Formatare cuvânt"
 
 #: gtk/gtktext.c:629
 msgid "Whether words are wrapped at widget edges"
-msgstr ""
+msgstr "Specifică dacă cuvintele sunt formatate la marginile widgeturilor"
 
 #: gtk/gtktexttag.c:199
 msgid "Tag name"
-msgstr ""
+msgstr "Nume tag"
 
 #: gtk/gtktexttag.c:200
 msgid "Name used to refer to the text tag"
-msgstr ""
+msgstr "Numele folosit pentru a se referi tagul"
 
 #: gtk/gtktexttag.c:225
 msgid "Background full height"
@@ -3002,6 +3061,8 @@ msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
 msgstr ""
+"Specifică dacă culoarea fundalului umple toată înălţimea liniei sau doar cea "
+"a caracterelor marcate"
 
 #: gtk/gtktexttag.c:234
 msgid "Background stipple mask"
@@ -3027,47 +3088,47 @@ msgstr "Direcţie text"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr ""
 
-#: gtk/gtktexttag.c:379 gtk/gtktextview.c:566
+#: gtk/gtktexttag.c:379 gtk/gtktextview.c:567
 msgid "Left, right, or center justification"
 msgstr ""
 
 #: gtk/gtktexttag.c:387
 msgid "Language"
-msgstr ""
+msgstr "Limbă"
 
 #: gtk/gtktexttag.c:388
 msgid "Language engine code to use for rendering the text"
-msgstr ""
+msgstr "Limba a cărei motor să fie folosit pentru randare text"
 
 #: gtk/gtktexttag.c:395
 msgid "Left margin"
-msgstr ""
+msgstr "Marginea stângă"
 
-#: gtk/gtktexttag.c:396 gtk/gtktextview.c:575
+#: gtk/gtktexttag.c:396 gtk/gtktextview.c:576
 msgid "Width of the left margin in pixels"
-msgstr ""
+msgstr "Lăţimea marginii stângi în pixeli"
 
 #: gtk/gtktexttag.c:405
 msgid "Right margin"
-msgstr ""
+msgstr "Marginea dreaptă"
 
-#: gtk/gtktexttag.c:406 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:406 gtk/gtktextview.c:586
 msgid "Width of the right margin in pixels"
-msgstr ""
+msgstr "Lăţimea marginii drepte în pixeli"
 
-#: gtk/gtktexttag.c:416 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:416 gtk/gtktextview.c:595
 msgid "Indent"
-msgstr ""
+msgstr "Indentare"
 
-#: gtk/gtktexttag.c:417 gtk/gtktextview.c:595
+#: gtk/gtktexttag.c:417 gtk/gtktextview.c:596
 msgid "Amount to indent the paragraph, in pixels"
-msgstr ""
+msgstr "Cantitatea cu care să fie indentat paragraful, în pixeli"
 
 #: gtk/gtktexttag.c:437
 msgid "Pixels above lines"
 msgstr ""
 
-#: gtk/gtktexttag.c:438 gtk/gtktextview.c:519
+#: gtk/gtktexttag.c:438 gtk/gtktextview.c:520
 msgid "Pixels of blank space above paragraphs"
 msgstr ""
 
@@ -3075,7 +3136,7 @@ msgstr ""
 msgid "Pixels below lines"
 msgstr ""
 
-#: gtk/gtktexttag.c:448 gtk/gtktextview.c:529
+#: gtk/gtktexttag.c:448 gtk/gtktextview.c:530
 msgid "Pixels of blank space below paragraphs"
 msgstr ""
 
@@ -3083,7 +3144,7 @@ msgstr ""
 msgid "Pixels inside wrap"
 msgstr ""
 
-#: gtk/gtktexttag.c:458 gtk/gtktextview.c:539
+#: gtk/gtktexttag.c:458 gtk/gtktextview.c:540
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 
@@ -3091,34 +3152,36 @@ msgstr ""
 msgid "Wrap mode"
 msgstr ""
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:558
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
+"Specifică dacă liniile să fie formatate niciodată, la margini cuvânt sau "
+"margini caractere"
 
-#: gtk/gtktexttag.c:494 gtk/gtktextview.c:604
+#: gtk/gtktexttag.c:494 gtk/gtktextview.c:605
 msgid "Tabs"
-msgstr ""
+msgstr "Taburi"
 
-#: gtk/gtktexttag.c:495 gtk/gtktextview.c:605
+#: gtk/gtktexttag.c:495 gtk/gtktextview.c:606
 msgid "Custom tabs for this text"
-msgstr ""
+msgstr "Taburi personalizate pentru acest text"
 
 #: gtk/gtktexttag.c:502
 msgid "Invisible"
-msgstr ""
+msgstr "Invizibil"
 
 #: gtk/gtktexttag.c:503
 msgid "Whether this text is hidden"
-msgstr ""
+msgstr "Specifică dacă acest text este ascuns"
 
 #: gtk/gtktexttag.c:516
 msgid "Background full height set"
-msgstr ""
+msgstr "Setare înălţime completă fundal"
 
 #: gtk/gtktexttag.c:517
 msgid "Whether this tag affects background height"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează înălţimea fundalului"
 
 #: gtk/gtktexttag.c:520
 msgid "Background stipple set"
@@ -3126,7 +3189,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:521
 msgid "Whether this tag affects the background stipple"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează background stipple"
 
 #: gtk/gtktexttag.c:528
 msgid "Foreground stipple set"
@@ -3134,123 +3197,129 @@ msgstr ""
 
 #: gtk/gtktexttag.c:529
 msgid "Whether this tag affects the foreground stipple"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează foreground stipple"
 
 #: gtk/gtktexttag.c:564
 msgid "Justification set"
-msgstr ""
+msgstr "Setare aliniere"
 
 #: gtk/gtktexttag.c:565
 msgid "Whether this tag affects paragraph justification"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează alinierea paragrafelor"
 
 #: gtk/gtktexttag.c:568
 msgid "Language set"
-msgstr ""
+msgstr "Setare limbă"
 
 #: gtk/gtktexttag.c:569
 msgid "Whether this tag affects the language the text is rendered as"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează limba în care textul este randat"
 
 #: gtk/gtktexttag.c:572
 msgid "Left margin set"
-msgstr ""
+msgstr "Setare marginea stângă"
 
 #: gtk/gtktexttag.c:573
 msgid "Whether this tag affects the left margin"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează marginea stângă"
 
 #: gtk/gtktexttag.c:576
 msgid "Indent set"
-msgstr ""
+msgstr "Setare indentare"
 
 #: gtk/gtktexttag.c:577
 msgid "Whether this tag affects indentation"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează indentarea textului"
 
 #: gtk/gtktexttag.c:584
 msgid "Pixels above lines set"
-msgstr ""
+msgstr "Setare pixeli deasupra liniilor"
 
 #: gtk/gtktexttag.c:585 gtk/gtktexttag.c:589
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează numărul pixelilor deasupra liniilor"
 
 #: gtk/gtktexttag.c:588
 msgid "Pixels below lines set"
-msgstr ""
+msgstr "Setare pixel dedesuptul liniilor"
 
 #: gtk/gtktexttag.c:592
 msgid "Pixels inside wrap set"
-msgstr ""
+msgstr "Setare pixeli în formatare"
 
 #: gtk/gtktexttag.c:593
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr ""
+"Specifică dacă acest tag afectează numărul pixelilor între linii formatate"
 
 #: gtk/gtktexttag.c:600
 msgid "Right margin set"
-msgstr ""
+msgstr "Setare marginea dreaptă"
 
 #: gtk/gtktexttag.c:601
 msgid "Whether this tag affects the right margin"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează marginea dreaptă"
 
 #: gtk/gtktexttag.c:608
 msgid "Wrap mode set"
-msgstr ""
+msgstr "Setare mod formatare"
 
 #: gtk/gtktexttag.c:609
 msgid "Whether this tag affects line wrap mode"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează modul de formatare a liniei"
 
 #: gtk/gtktexttag.c:612
 msgid "Tabs set"
-msgstr ""
+msgstr "Setare taburi"
 
 #: gtk/gtktexttag.c:613
 msgid "Whether this tag affects tabs"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează taburile"
 
 #: gtk/gtktexttag.c:616
 msgid "Invisible set"
-msgstr ""
+msgstr "Setare invizibil"
 
 #: gtk/gtktexttag.c:617
 msgid "Whether this tag affects text visibility"
-msgstr ""
+msgstr "Specifică dacă acest tag afectează vizibiliatea textului"
 
-#: gtk/gtktextview.c:518
+#: gtk/gtktextview.c:519
 msgid "Pixels Above Lines"
 msgstr ""
 
-#: gtk/gtktextview.c:528
+#: gtk/gtktextview.c:529
 msgid "Pixels Below Lines"
 msgstr ""
 
-#: gtk/gtktextview.c:538
+#: gtk/gtktextview.c:539
 msgid "Pixels Inside Wrap"
 msgstr ""
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:557
 msgid "Wrap Mode"
 msgstr ""
 
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:575
 msgid "Left Margin"
-msgstr ""
+msgstr "Margine stânga"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:585
 msgid "Right Margin"
-msgstr ""
+msgstr "Margine dreapta"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:613
 msgid "Cursor Visible"
 msgstr "Cursor vizibil"
 
-#: gtk/gtktextview.c:613
+#: gtk/gtktextview.c:614
 msgid "If the insertion cursor is shown"
 msgstr ""
+
+#: gtk/gtktextview.c:5773
+#, fuzzy
+msgid "Input _Methods"
+msgstr "Metode de intrare"
 
 #: gtk/gtkthemes.c:71
 #, c-format
@@ -3261,33 +3330,33 @@ msgstr "Nu pot localiza motor temă în module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Nici un tip ---"
 
-#: gtk/gtktogglebutton.c:133
+#: gtk/gtktogglebutton.c:131
 msgid "If the toggle button should be pressed in or not"
 msgstr ""
 
-#: gtk/gtktogglebutton.c:141
+#: gtk/gtktogglebutton.c:139
 msgid "If the toggle button is in an \"in between\" state."
 msgstr ""
 
-#: gtk/gtktogglebutton.c:148
+#: gtk/gtktogglebutton.c:146
 msgid "Draw Indicator"
 msgstr ""
 
-#: gtk/gtktogglebutton.c:149
+#: gtk/gtktogglebutton.c:147
 msgid "If the toggle part of the button is displayed"
 msgstr ""
 
 #: gtk/gtktoolbar.c:225
 msgid "The orientation of the toolbar"
-msgstr ""
+msgstr "Orientarea bării de unelte"
 
 #: gtk/gtktoolbar.c:233
 msgid "Toolbar Style"
-msgstr ""
+msgstr "Stil bară unelte"
 
 #: gtk/gtktoolbar.c:234
 msgid "How to draw the toolbar"
-msgstr ""
+msgstr "Cum să desenez bara de unelte"
 
 #: gtk/gtktoolbar.c:242
 msgid "Spacer size"
@@ -3307,11 +3376,11 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:261
 msgid "Whether spacers are vertical lines or just blank"
-msgstr ""
+msgstr "Specifică dacă spaţiatorii sunt liniile verticale sau doar blank"
 
 #: gtk/gtktoolbar.c:269
 msgid "Button relief"
-msgstr ""
+msgstr "Umbră buton"
 
 #: gtk/gtktoolbar.c:270
 msgid "Type of bevel around toolbar buttons"
@@ -3329,6 +3398,8 @@ msgstr "Stil bară de unelte"
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
+"Specifică dacă barele cu unelte implicte au doar text, text şi iconuri, doar "
+"iconuri etc."
 
 #: gtk/gtktoolbar.c:291
 msgid "Toolbar icon size"
@@ -3338,125 +3409,125 @@ msgstr ""
 msgid "Size of icons in default toolbars"
 msgstr ""
 
-#: gtk/gtktreeview.c:497
+#: gtk/gtktreeview.c:498
 msgid "TreeView Model"
 msgstr ""
 
-#: gtk/gtktreeview.c:498
+#: gtk/gtktreeview.c:499
 msgid "The model for the tree view"
 msgstr ""
 
-#: gtk/gtktreeview.c:506
+#: gtk/gtktreeview.c:507
 msgid "Horizontal Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:514
+#: gtk/gtktreeview.c:515
 msgid "Vertical Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:521 gtk/gtktreeviewcolumn.c:173 gtk/gtkwidget.c:427
+#: gtk/gtktreeview.c:522 gtk/gtktreeviewcolumn.c:173 gtk/gtkwidget.c:427
 msgid "Visible"
 msgstr "Vizibil"
 
-#: gtk/gtktreeview.c:522
+#: gtk/gtktreeview.c:523
 msgid "Show the column header buttons"
 msgstr ""
 
-#: gtk/gtktreeview.c:529
+#: gtk/gtktreeview.c:530
 msgid "Headers Clickable"
 msgstr ""
 
-#: gtk/gtktreeview.c:530
+#: gtk/gtktreeview.c:531
 msgid "Column headers respond to click events"
 msgstr ""
 
-#: gtk/gtktreeview.c:537
+#: gtk/gtktreeview.c:538
 msgid "Expander Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:538
+#: gtk/gtktreeview.c:539
 msgid "Set the column for the expander column"
 msgstr ""
 
-#: gtk/gtktreeview.c:545 gtk/gtktreeviewcolumn.c:272
+#: gtk/gtktreeview.c:546 gtk/gtktreeviewcolumn.c:272
 msgid "Reorderable"
-msgstr ""
+msgstr "Re-ordonabile"
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:547
 msgid "View is reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:553
+#: gtk/gtktreeview.c:554
 msgid "Rules Hint"
 msgstr ""
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:555
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 
-#: gtk/gtktreeview.c:561
-msgid "Enable Search"
-msgstr ""
-
 #: gtk/gtktreeview.c:562
+msgid "Enable Search"
+msgstr "Activează căutarea"
+
+#: gtk/gtktreeview.c:563
 msgid "View allows user to search through columns interactively"
 msgstr ""
 
-#: gtk/gtktreeview.c:569
+#: gtk/gtktreeview.c:570
 msgid "Search Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:571
 msgid "Model column to search through when searching through code"
 msgstr ""
 
-#: gtk/gtktreeview.c:583
+#: gtk/gtktreeview.c:584
 msgid "Expander Size"
 msgstr ""
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:585
 msgid "Size of the expander arrow."
 msgstr ""
 
-#: gtk/gtktreeview.c:592
+#: gtk/gtktreeview.c:593
 msgid "Vertical Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:594
 msgid "Vertical space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:602
 msgid "Horizontal Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:603
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:611
 msgid "Allow Rules"
 msgstr ""
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:612
 msgid "Allow drawing of alternating color rows."
 msgstr ""
 
-#: gtk/gtktreeview.c:617
+#: gtk/gtktreeview.c:618
 msgid "Indent Expanders"
 msgstr ""
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:619
 msgid "Make the expanders indented."
 msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:174
 msgid "Whether to display the column"
-msgstr ""
+msgstr "Specifică dacă coloana să fie afişată"
 
 #: gtk/gtktreeviewcolumn.c:181 gtk/gtkwindow.c:394
 msgid "Resizable"
-msgstr ""
+msgstr "Redimensionabil"
 
 #: gtk/gtktreeviewcolumn.c:182
 msgid "Column is user-resizable"
@@ -3468,11 +3539,11 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:198
 msgid "Sizing"
-msgstr ""
+msgstr "Dimensionare"
 
 #: gtk/gtktreeviewcolumn.c:199
 msgid "Resize mode of the column"
-msgstr ""
+msgstr "Modul de redimensionare a coloanei"
 
 #: gtk/gtktreeviewcolumn.c:207
 msgid "Fixed Width"
@@ -3484,19 +3555,19 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:217
 msgid "Minimum Width"
-msgstr ""
+msgstr "Lăţime minimă"
 
 #: gtk/gtktreeviewcolumn.c:218
 msgid "Minimum allowed width of the column"
-msgstr ""
+msgstr "Lăţimea minimă permisă a coloanei"
 
 #: gtk/gtktreeviewcolumn.c:227
 msgid "Maximum Width"
-msgstr ""
+msgstr "Lăţime maximă"
 
 #: gtk/gtktreeviewcolumn.c:228
 msgid "Maximum allowed width of the column"
-msgstr ""
+msgstr "Lăţimea maximă permisă a coloanei"
 
 #: gtk/gtktreeviewcolumn.c:237
 msgid "Title"
@@ -3504,7 +3575,7 @@ msgstr "Titlu"
 
 #: gtk/gtktreeviewcolumn.c:238
 msgid "Title to appear in column header"
-msgstr ""
+msgstr "Titlul care să apară în capătul coloanei"
 
 #: gtk/gtktreeviewcolumn.c:245
 msgid "Clickable"
@@ -3512,7 +3583,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:246
 msgid "Whether the header can be clicked"
-msgstr ""
+msgstr "Specifică dacă se poate face click pe antet"
 
 #: gtk/gtktreeviewcolumn.c:254
 msgid "Widget"
@@ -3524,7 +3595,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:262
 msgid "Alignment"
-msgstr ""
+msgstr "Aliniere"
 
 #: gtk/gtktreeviewcolumn.c:263
 msgid "X Alignment of the column header text or widget"
@@ -3532,19 +3603,19 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Whether the column can be reordered around the headers"
-msgstr ""
+msgstr "Specifică dacă coloana poate fi reordonată în jurul antetelor"
 
 #: gtk/gtktreeviewcolumn.c:280
 msgid "Sort indicator"
-msgstr ""
+msgstr "Indicator de sortare"
 
 #: gtk/gtktreeviewcolumn.c:281
 msgid "Whether to show a sort indicator"
-msgstr ""
+msgstr "Specifică dacă să fie afişat un indicator de sortare"
 
 #: gtk/gtktreeviewcolumn.c:288
 msgid "Sort order"
-msgstr ""
+msgstr "Ordine sortare"
 
 #: gtk/gtktreeviewcolumn.c:289
 msgid "Sort direction the sort indicator should indicate"
@@ -3572,11 +3643,11 @@ msgstr "Nume widget"
 
 #: gtk/gtkwidget.c:395
 msgid "The name of the widget"
-msgstr ""
+msgstr "Numele widget-ului"
 
 #: gtk/gtkwidget.c:401
 msgid "Parent widget"
-msgstr ""
+msgstr "Widget părinte"
 
 #: gtk/gtkwidget.c:402
 msgid "The parent widget of this widget. Must be a Container widget."
@@ -3584,7 +3655,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:409
 msgid "Width request"
-msgstr ""
+msgstr "Cerere lăţime"
 
 #: gtk/gtkwidget.c:410
 msgid ""
@@ -3594,7 +3665,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:418
 msgid "Height request"
-msgstr ""
+msgstr "Cerere înălţime"
 
 #: gtk/gtkwidget.c:419
 msgid ""
@@ -3604,71 +3675,71 @@ msgstr ""
 
 #: gtk/gtkwidget.c:428
 msgid "Whether the widget is visible"
-msgstr ""
+msgstr "Specifică dacă widgetul este vizibil"
 
 #: gtk/gtkwidget.c:434
 msgid "Sensitive"
-msgstr ""
+msgstr "Senzitiv"
 
 #: gtk/gtkwidget.c:435
 msgid "Whether the widget responds to input"
-msgstr ""
+msgstr "Specifică dacă widgetul răspunde la intrare"
 
 #: gtk/gtkwidget.c:441
 msgid "Application paintable"
-msgstr ""
+msgstr "Desenabil de aplicaţie"
 
 #: gtk/gtkwidget.c:442
 msgid "Whether the application will paint directly on the widget"
-msgstr ""
+msgstr "Specifică dacă aplicaţia va desena direct pe widget"
 
 #: gtk/gtkwidget.c:448
 msgid "Can focus"
-msgstr ""
+msgstr "Poate fi focalizat"
 
 #: gtk/gtkwidget.c:449
 msgid "Whether the widget can accept the input focus"
-msgstr ""
+msgstr "Specifică dacă widgetul poate accepta focalizarea intrării"
 
 #: gtk/gtkwidget.c:455
 msgid "Has focus"
-msgstr ""
+msgstr "Are focalizare"
 
 #: gtk/gtkwidget.c:456
 msgid "Whether the widget has the input focus"
-msgstr ""
+msgstr "Specifică dacă widgetul are focalizarea intrării"
 
 #: gtk/gtkwidget.c:462
 msgid "Can default"
-msgstr ""
+msgstr "Poate fi implicit"
 
 #: gtk/gtkwidget.c:463
 msgid "Whether the widget can be the default widget"
-msgstr ""
+msgstr "Specifică dacă widgetul poate fi widgetul implicit"
 
 #: gtk/gtkwidget.c:469
 msgid "Has default"
-msgstr ""
+msgstr "Are implicit"
 
 #: gtk/gtkwidget.c:470
 msgid "Whether the widget is the default widget"
-msgstr ""
+msgstr "Specifică dacă widgetul este widgetul implicit"
 
 #: gtk/gtkwidget.c:476
 msgid "Receives default"
-msgstr ""
+msgstr "Primeşte implicit"
 
 #: gtk/gtkwidget.c:477
 msgid "If TRUE, the widget will receive the default action when it is focused."
-msgstr ""
+msgstr "Dacă TRUE, widgetul va primi acţiunea implicită când este focalizat."
 
 #: gtk/gtkwidget.c:483
 msgid "Composite child"
-msgstr ""
+msgstr "Compus din copii"
 
 #: gtk/gtkwidget.c:484
 msgid "Whether the widget is composed of other widgets"
-msgstr ""
+msgstr "Specifică dacă widgetul este compus din alte widgeturi"
 
 #: gtk/gtkwidget.c:490
 msgid "Style"
@@ -3682,7 +3753,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:497
 msgid "Events"
-msgstr ""
+msgstr "Evenimente"
 
 #: gtk/gtkwidget.c:498
 msgid "The event mask that decides what kind of GdkEvents this widget gets."
@@ -3698,11 +3769,38 @@ msgstr ""
 
 #: gtk/gtkwidget.c:1053
 msgid "Interior Focus"
-msgstr ""
+msgstr "Focalizare interioară"
 
 #: gtk/gtkwidget.c:1054
 msgid "Whether to draw the focus indicator inside widgets."
+msgstr "Specifică dacă indicatorul de focalizare să fie desenat în widgeturi"
+
+#: gtk/gtkwidget.c:1060
+msgid "Focus linewidth"
 msgstr ""
+
+#: gtk/gtkwidget.c:1061
+#, fuzzy
+msgid "Width, in pixels, of the focus indicator line."
+msgstr "Specifică dacă indicatorul de focalizare să fie desenat în widgeturi"
+
+#: gtk/gtkwidget.c:1067
+msgid "Focus line dash pattern"
+msgstr ""
+
+#: gtk/gtkwidget.c:1068
+#, fuzzy
+msgid "Dash pattern used to draw the focus indicator."
+msgstr "Specifică dacă indicatorul de focalizare să fie desenat în widgeturi"
+
+#: gtk/gtkwidget.c:1073
+msgid "Focus padding"
+msgstr ""
+
+#: gtk/gtkwidget.c:1074
+#, fuzzy
+msgid "Width, in pixels, between focus indicator and the widget 'box'."
+msgstr "Specifică dacă indicatorul de focalizare să fie desenat în widgeturi"
 
 #: gtk/gtkwindow.c:359
 msgid "Window Type"
@@ -3710,7 +3808,7 @@ msgstr "Tip fereastră"
 
 #: gtk/gtkwindow.c:360
 msgid "The type of the window"
-msgstr ""
+msgstr "Tipul ferestrei"
 
 #: gtk/gtkwindow.c:369
 msgid "Window Title"
@@ -3718,11 +3816,11 @@ msgstr "Titlu fereastră"
 
 #: gtk/gtkwindow.c:370
 msgid "The title of the window"
-msgstr ""
+msgstr "Titlul ferestrei"
 
 #: gtk/gtkwindow.c:377
 msgid "Allow Shrink"
-msgstr ""
+msgstr "Permite micşorare"
 
 #: gtk/gtkwindow.c:379
 #, no-c-format
@@ -3733,7 +3831,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:386
 msgid "Allow Grow"
-msgstr ""
+msgstr "Permite mărire"
 
 #: gtk/gtkwindow.c:387
 msgid "If TRUE, users can expand the window beyond its minimum size."
@@ -3745,7 +3843,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:402
 msgid "Modal"
-msgstr ""
+msgstr "Modală"
 
 #: gtk/gtkwindow.c:403
 msgid ""
@@ -3755,45 +3853,49 @@ msgstr ""
 
 #: gtk/gtkwindow.c:410
 msgid "Window Position"
-msgstr ""
+msgstr "Poziţie fereastră"
 
 #: gtk/gtkwindow.c:411
 msgid "The initial position of the window."
-msgstr ""
+msgstr "Poziţia iniţială a ferestrei"
 
 #: gtk/gtkwindow.c:419
 msgid "Default Width"
-msgstr ""
+msgstr "Lăţime implicită"
 
 #: gtk/gtkwindow.c:420
 msgid ""
 "The default width of the window, used when initially showing the window."
 msgstr ""
+"Lăţimea implicită a ferestrei, folosită când fereastra este arătată iniţial."
 
 #: gtk/gtkwindow.c:429
 msgid "Default Height"
-msgstr ""
+msgstr "Înălţime implicită"
 
 #: gtk/gtkwindow.c:430
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr ""
+"Înălţimea implicită a ferestrei, folosită când fereastra este arătată "
+"iniţial."
 
 #: gtk/gtkwindow.c:439
 msgid "Destroy with Parent"
-msgstr ""
+msgstr "Distruge cu părinte"
 
 #: gtk/gtkwindow.c:440
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
+"Dacă această fereastră ar trebui să fie distrusă când părintele este distrus"
 
 #: gtk/gtkwindow.c:447
 msgid "Icon"
-msgstr ""
+msgstr "Icon"
 
 #: gtk/gtkwindow.c:448
 msgid "Icon for this window"
-msgstr ""
+msgstr "Icon pentru această fereastră"
 
 #: gtk/gtksizegroup.c:242
 msgid "Mode"
@@ -3835,9 +3937,8 @@ msgstr ""
 msgid "X Input Method"
 msgstr ""
 
-#, fuzzy
-#~ msgid "He_x Value:"
-#~ msgstr "Valoare:"
+#~ msgid "Insufficient memory to save PNG file"
+#~ msgstr "Memorie insuficientă pentru a salva fişierul PNG"
 
 #~ msgid "Foundry:"
 #~ msgstr "Producător:"

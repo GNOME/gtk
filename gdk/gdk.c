@@ -37,18 +37,11 @@
 #endif
 
 typedef struct _GdkPredicate  GdkPredicate;
-typedef struct _GdkErrorTrap  GdkErrorTrap;
 
 struct _GdkPredicate
 {
   GdkEventFunc func;
   gpointer data;
-};
-
-struct _GdkErrorTrap
-{
-  gint error_warnings;
-  gint error_code;
 };
 
 /* Private variable declarations
@@ -57,9 +50,6 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 						     * 0 otherwise.
 						     */
 
-static GSList *gdk_error_traps = NULL;               /* List of error traps */
-static GSList *gdk_error_trap_free_list = NULL;      /* Free list */
-
 static gchar  *gdk_progclass = NULL;
 
 #ifdef G_ENABLE_DEBUG
@@ -67,8 +57,9 @@ static const GDebugKey gdk_debug_keys[] = {
   {"events",	    GDK_DEBUG_EVENTS},
   {"misc",	    GDK_DEBUG_MISC},
   {"dnd",	    GDK_DEBUG_DND},
+  {"xim",	    GDK_DEBUG_XIM},
+  {"nograbs",       GDK_DEBUG_NOGRABS},
   {"multihead",	    GDK_DEBUG_MULTIHEAD},
-  {"xim",	    GDK_DEBUG_XIM}
 };
 
 static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
@@ -136,7 +127,7 @@ gdk_arg_context_parse (GdkArgContext *context, gint *argc, gchar ***argv)
 			int len = strlen (table[k].name);
 			
 			if (strncmp (arg, table[k].name, len) == 0 &&
-			    (arg[len] == '=' || argc[len] == 0))
+			    (arg[len] == '=' || arg[len] == 0))
 			  {
 			    char *value = NULL;
 
@@ -236,8 +227,8 @@ gdk_arg_name_cb (const char *key, const char *value, gpointer user_data)
 }
 
 static GdkArgDesc gdk_args[] = {
-  { "class" ,       GDK_ARG_STRING,   NULL, gdk_arg_class_cb    },
-  { "name",         GDK_ARG_STRING,   NULL, gdk_arg_name_cb     },
+  { "class" ,       GDK_ARG_CALLBACK, NULL, gdk_arg_class_cb    },
+  { "name",         GDK_ARG_CALLBACK, NULL, gdk_arg_name_cb     },
 #ifdef G_ENABLE_DEBUG
   { "gdk-debug",    GDK_ARG_CALLBACK, NULL, gdk_arg_debug_cb    },
   { "gdk-no-debug", GDK_ARG_CALLBACK, NULL, gdk_arg_no_debug_cb },
@@ -301,7 +292,17 @@ gdk_init_check (int    *argc,
 	    g_set_prgname ((*argv)[0]);
 	}
     }
-
+  else
+    {
+      g_set_prgname ("<unknown>");
+    }
+  
+  /* We set the fallback program class here, rather than lazily in
+   * gdk_get_program_class, since we don't want -name to override it.
+   */
+  gdk_progclass = g_strdup (g_get_prgname ());
+  if (gdk_progclass[0])
+    gdk_progclass[0] = g_ascii_toupper (gdk_progclass[0]);  
   
 #ifdef G_ENABLE_DEBUG
   {
@@ -431,77 +432,6 @@ gdk_exit_func (void)
 
 #endif
 
-/*************************************************************
- * gdk_error_trap_push:
- *     Push an error trap. X errors will be trapped until
- *     the corresponding gdk_error_pop(), which will return
- *     the error code, if any.
- *   arguments:
- *     
- *   results:
- *************************************************************/
-
-void
-gdk_error_trap_push (void)
-{
-  GSList *node;
-  GdkErrorTrap *trap;
-
-  if (gdk_error_trap_free_list)
-    {
-      node = gdk_error_trap_free_list;
-      gdk_error_trap_free_list = gdk_error_trap_free_list->next;
-    }
-  else
-    {
-      node = g_slist_alloc ();
-      node->data = g_new (GdkErrorTrap, 1);
-    }
-
-  node->next = gdk_error_traps;
-  gdk_error_traps = node;
-  
-  trap = node->data;
-  trap->error_code = _gdk_error_code;
-  trap->error_warnings = _gdk_error_warnings;
-
-  _gdk_error_code = 0;
-  _gdk_error_warnings = 0;
-}
-
-/*************************************************************
- * gdk_error_trap_pop:
- *     Pop an error trap added with gdk_error_push()
- *   arguments:
- *     
- *   results:
- *     0, if no error occured, otherwise the error code.
- *************************************************************/
-
-gint
-gdk_error_trap_pop (void)
-{
-  GSList *node;
-  GdkErrorTrap *trap;
-  gint result;
-
-  g_return_val_if_fail (gdk_error_traps != NULL, 0);
-
-  node = gdk_error_traps;
-  gdk_error_traps = gdk_error_traps->next;
-
-  node->next = gdk_error_trap_free_list;
-  gdk_error_trap_free_list = node;
-  
-  result = _gdk_error_code;
-  
-  trap = node->data;
-  _gdk_error_code = trap->error_code;
-  _gdk_error_warnings = trap->error_warnings;
-  
-  return result;
-}
-
 void
 gdk_threads_enter ()
 {
@@ -536,12 +466,6 @@ gdk_threads_init ()
 G_CONST_RETURN char *
 gdk_get_program_class (void)
 {
-  if (gdk_progclass == NULL)
-    {
-      gdk_progclass = g_strdup (g_get_prgname ());
-      gdk_progclass[0] = g_ascii_toupper (gdk_progclass[0]);
-    }
-  
   return gdk_progclass;
 }
 

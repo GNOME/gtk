@@ -151,26 +151,77 @@ gdk_wcstombs (const GdkWChar *src)
   return mbstr;
 }
 
-  
-/*
- * gdk_mbstowcs
- *
- * Converts the specified string into GDK wide characters, and,
- * returns the number of wide characters written. The string 'src'
- * must be null-terminated. If the conversion is failed, it returns
- * -1.
- *
- * On Win32, the string is assumed to be in UTF-8.  Also note that
- * GdkWChar is 32 bits, while wchar_t, and the wide characters the
- * Windows API uses, are 16 bits!
- */
+/* A vesion that converts from wchar_t strings to UTF-8 */
 
-/* First a helper function for not zero-terminated strings */
-static gint
-gdk_nmbstowcs (GdkWChar    *dest,
-	       const gchar *src,
-	       gint         src_len,
-	       gint         dest_max)
+gchar *
+_gdk_ucs2_to_utf8 (const wchar_t *src,
+		   gint           src_len)
+{
+  gint len;
+  const wchar_t *wcp;
+  guchar *mbstr, *bp;
+
+  wcp = src;
+  len = 0;
+  while (wcp < src + src_len)
+    {
+      const wchar_t c = *wcp++;
+
+      if (c < 0x80)
+	len += 1;
+      else if (c < 0x800)
+	len += 2;
+      else
+	len += 3;
+    }
+
+  mbstr = g_malloc (len + 1);
+  
+  wcp = src;
+  bp = mbstr;
+  while (wcp < src + src_len)
+    {
+      int first;
+      wchar_t c = *wcp++;
+
+      if (c < 0x80)
+	{
+	  first = 0;
+	  len = 1;
+	}
+      else if (c < 0x800)
+	{
+	  first = 0xc0;
+	  len = 2;
+	}
+      else
+	{
+	  first = 0xe0;
+	  len = 3;
+	}
+      
+      /* Woo-hoo! */
+      switch (len)
+	{
+	case 3: bp[2] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
+	case 2: bp[1] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
+	case 1: bp[0] = c | first;
+	}
+
+      bp += len;
+    }
+  *bp = 0;
+
+  return mbstr;
+}
+  
+/* Convert from UTF-8 to GdkWChar */
+
+gint
+_gdk_utf8_to_wcs (GdkWChar    *dest,
+		  const gchar *src,
+		  gint         src_len,
+		  gint         dest_max)
 {
   guchar *cp, *end;
   gint n;
@@ -240,22 +291,35 @@ gdk_nmbstowcs (GdkWChar    *dest,
   return n;
 }
 
+/*
+ * gdk_mbstowcs
+ *
+ * Converts the specified string into GDK wide characters, and,
+ * returns the number of wide characters written. The string 'src'
+ * must be null-terminated. If the conversion is failed, it returns
+ * -1.
+ *
+ * On Win32, the string is assumed to be in UTF-8.  Also note that
+ * GdkWChar is 32 bits, while wchar_t, and the wide characters the
+ * Windows API uses, are 16 bits!
+ */
+
 gint
 gdk_mbstowcs (GdkWChar    *dest,
 	      const gchar *src,
 	      gint         dest_max)
 {
-  return gdk_nmbstowcs (dest, src, strlen (src), dest_max);
+  return _gdk_utf8_to_wcs (dest, src, strlen (src), dest_max);
 }
 
 
-/* A version that converts to wchar_t wide chars */
+/* A version that converts to a wchar_t string */
 
 gint
-_gdk_win32_nmbstowchar_ts (wchar_t     *dest,
-                           const gchar *src,
-                           gint         src_len,
-                           gint         dest_max)
+_gdk_utf8_to_ucs2 (wchar_t     *dest,
+		   const gchar *src,
+		   gint         src_len,
+		   gint         dest_max)
 {
   wchar_t *wcp;
   guchar *cp, *end;

@@ -38,6 +38,7 @@
 #include <gmodule.h>
 #ifdef G_OS_UNIX
 #include <unistd.h>
+#include <sys/types.h>		/* For uid_t, gid_t */
 #endif
 #include "gdk/gdk.h"
 #ifdef G_OS_WIN32
@@ -286,7 +287,7 @@ static gchar **
 get_module_path (void)
 {
   const gchar *module_path_env = g_getenv ("GTK_MODULE_PATH");
-  const gchar *exe_prefix = g_getenv("GTK_EXE_PREFIX");
+  const gchar *exe_prefix = g_getenv ("GTK_EXE_PREFIX");
   gchar **result;
   gchar *module_path;
   gchar *default_dir;
@@ -370,7 +371,7 @@ load_module (GSList      *gtk_modules,
     {
       module = find_module (module_path, name);
       if (module &&
-	  g_module_symbol (module, "gtk_module_init", (gpointer*) &modinit_func) &&
+	  g_module_symbol (module, "gtk_module_init", (gpointer *) &modinit_func) &&
 	  modinit_func)
 	{
 	  if (!g_slist_find (gtk_modules, modinit_func))
@@ -422,10 +423,10 @@ static gboolean do_setlocale = TRUE;
  * gtk_disable_setlocale:
  * 
  * Prevents gtk_init() and gtk_init_check() from automatically
- * calling setlocale (LC_ALL, ""). You would want to use this
- * function if you wanted to set the locale for your program
- * to something other than the user's locale, or if you wanted
- * to set different values for different locale categories.
+ * calling <literal>setlocale (LC_ALL, "")</literal>. You would 
+ * want to use this function if you wanted to set the locale for 
+ * your program to something other than the user's locale, or if 
+ * you wanted to set different values for different locale categories.
  *
  * Most programs should not need to call this function.
  **/
@@ -472,7 +473,7 @@ gtk_init_check (int	 *argc,
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
   
 #ifdef G_ENABLE_DEBUG
-  env_string = getenv ("GTK_DEBUG");
+  env_string = g_getenv ("GTK_DEBUG");
   if (env_string != NULL)
     {
       gtk_debug_flags = g_parse_debug_string (env_string,
@@ -482,7 +483,7 @@ gtk_init_check (int	 *argc,
     }
 #endif	/* G_ENABLE_DEBUG */
 
-  env_string = getenv ("GTK_MODULES");
+  env_string = g_getenv ("GTK_MODULES");
   if (env_string)
     gtk_modules_string = g_string_new (env_string);
 
@@ -736,12 +737,12 @@ gtk_exit (gint errorcode)
  * is not really supported.)
  * 
  * In detail - sets the current locale according to the
- * program environment. This is the same as calling the libc function
- * setlocale (LC_ALL, "") but also takes care of the locale specific
- * setup of the windowing system used by GDK.
+ * program environment. This is the same as calling the C library function
+ * <literal>setlocale (LC_ALL, "")</literal> but also takes care of the 
+ * locale specific setup of the windowing system used by GDK.
  * 
  * Return value: a string corresponding to the locale set, as with the
- * C library function setlocale()
+ * C library function <function>setlocale()</function>.
  **/
 gchar*
 gtk_set_locale (void)
@@ -1159,9 +1160,19 @@ gtk_main_get_window_group (GtkWidget   *widget)
 
 typedef struct
 {
-  gboolean was_grabbed;
-  GtkWidget *grab_widget;
+  GtkWidget *old_grab_widget;
+  GtkWidget *new_grab_widget;
 } GrabNotifyInfo;
+
+static gboolean
+check_is_grabbed (GtkWidget *widget,
+		  GtkWidget *grab_widget)
+{
+  if (grab_widget)
+    return !(widget == grab_widget || gtk_widget_is_ancestor (widget, grab_widget));
+  else
+    return TRUE;
+}
 
 static void
 gtk_grab_notify_foreach (GtkWidget *child,
@@ -1169,15 +1180,17 @@ gtk_grab_notify_foreach (GtkWidget *child,
                         
 {
   GrabNotifyInfo *info = data;
+  gboolean was_grabbed = check_is_grabbed (child, info->old_grab_widget);
+  gboolean is_grabbed = check_is_grabbed (child, info->new_grab_widget);
 
-  if (child != info->grab_widget)
+  if (was_grabbed != is_grabbed)
     {
       g_object_ref (G_OBJECT (child));
-
-      gtk_signal_emit_by_name (GTK_OBJECT (child), "grab_notify", info->was_grabbed);
-
+      
+      gtk_signal_emit_by_name (GTK_OBJECT (child), "grab_notify", was_grabbed);
+      
       if (GTK_IS_CONTAINER (child))
-       gtk_container_foreach (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
+	gtk_container_foreach (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
       
       g_object_unref (G_OBJECT (child));
     }
@@ -1191,8 +1204,16 @@ gtk_grab_notify (GtkWindowGroup *group,
   GList *toplevels;
   GrabNotifyInfo info;
 
-  info.grab_widget = grab_widget;
-  info.was_grabbed = was_grabbed;
+  if (was_grabbed)
+    {
+      info.old_grab_widget = grab_widget;
+      info.new_grab_widget = group->grabs ? group->grabs->data : NULL;
+    }
+  else
+    {
+      info.old_grab_widget = (group->grabs && group->grabs->next) ? group->grabs->next->data : NULL;
+      info.new_grab_widget = grab_widget;
+    }
 
   g_object_ref (group);
   g_object_ref (grab_widget);
@@ -1205,7 +1226,7 @@ gtk_grab_notify (GtkWindowGroup *group,
       GtkWindow *toplevel = toplevels->data;
       toplevels = g_list_delete_link (toplevels, toplevels);
 
-      if (group == toplevel->group)
+      if (group == _gtk_window_get_group (toplevel))
 	gtk_container_foreach (GTK_CONTAINER (toplevel), gtk_grab_notify_foreach, &info);
       g_object_unref (toplevel);
     }
@@ -1233,8 +1254,7 @@ gtk_grab_add (GtkWidget *widget)
       gtk_widget_ref (widget);
       group->grabs = g_slist_prepend (group->grabs, widget);
 
-      if (!was_grabbed)
-	gtk_grab_notify (group, widget, FALSE);
+      gtk_grab_notify (group, widget, FALSE);
     }
 }
 
@@ -1266,8 +1286,7 @@ gtk_grab_remove (GtkWidget *widget)
       
       gtk_widget_unref (widget);
 
-      if (!group->grabs)
-	gtk_grab_notify (group, widget, TRUE);
+      gtk_grab_notify (group, widget, TRUE);
     }
 }
 

@@ -59,7 +59,7 @@ Calculates the intersection of two rectangles.
 @src1: a #GdkRectangle.
 @src2: a #GdkRectangle.
 @dest: the intersection of @src1 and @src2.
-@Returns: TRUE if the rectangles intersect.
+@Returns: %TRUE if the rectangles intersect.
 
 
 <!-- ##### FUNCTION gdk_rectangle_union ##### -->
@@ -161,32 +161,32 @@ Returns the smallest rectangle which includes the entire #GdkRegion.
 
 <!-- ##### FUNCTION gdk_region_empty ##### -->
 <para>
-Returns TRUE if the #GdkRegion is empty.
+Returns %TRUE if the #GdkRegion is empty.
 </para>
 
 @region: a #GdkRegion.
-@Returns: TRUE if @region is empty.
+@Returns: %TRUE if @region is empty.
 
 
 <!-- ##### FUNCTION gdk_region_equal ##### -->
 <para>
-Returns TRUE if the two regions are the same.
+Returns %TRUE if the two regions are the same.
 </para>
 
 @region1: a #GdkRegion.
 @region2: a #GdkRegion.
-@Returns: TRUE if @region1 and @region2 are equal.
+@Returns: %TRUE if @region1 and @region2 are equal.
 
 
 <!-- ##### FUNCTION gdk_region_point_in ##### -->
 <para>
-Returns TRUE if a point is in a region.
+Returns %TRUE if a point is in a region.
 </para>
 
 @region: a #GdkRegion.
 @x: the x coordinate of a point.
 @y: the y coordinate of a point.
-@Returns: TRUE if the point is in @region.
+@Returns: %TRUE if the point is in @region.
 
 
 <!-- ##### FUNCTION gdk_region_rect_in ##### -->
@@ -196,8 +196,8 @@ Tests whether a rectangle is within a region.
 
 @region: a #GdkRegion.
 @rect: a #GdkRectangle.
-@Returns: GDK_OVERLAP_RECTANGLE_IN, GDK_OVERLAP_RECTANGLE_OUT, or
-GDK_OVERLAP_RECTANGLE_PART, depending on whether the rectangle is inside,
+@Returns: %GDK_OVERLAP_RECTANGLE_IN, %GDK_OVERLAP_RECTANGLE_OUT, or
+%GDK_OVERLAP_RECTANGLE_PART, depending on whether the rectangle is inside,
 outside, or partly inside the #GdkRegion, respectively.
 
 

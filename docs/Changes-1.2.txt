@@ -1,3 +1,15 @@
+
+
+DON'T EDIT THIS FILE - changes are now maintained in the reference
+manual, see docs/reference/gtk/changes-*.sgml. Also, when adding a
+change to the manual, you should amend the docs for all
+newly-deprecated features to point to the replacement for that
+feature, and be sure the GTK_DISABLE_DEPRECATED guards are in place in
+the header files. Be sure to add a note to the docs for EACH
+deprecated function; don't just do the changes-*.sgml change.
+
+
+
 Incompatible Changes from GTK+-1.0 to GTK+-1.2:
 
 * GtkAcceleratorTable has been replaced with GtkAccelGroup
@@ -272,3 +284,12 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
       which returns the requisition of the given widget, modified
       by calls to gtk_widget_set_usize().
 
+
+
+DON'T EDIT THIS FILE - changes are now maintained in the reference
+manual, see docs/reference/gtk/changes-*.sgml. Also, when adding a
+change to the manual, you should amend the docs for all
+newly-deprecated features to point to the replacement for that
+feature, and be sure the GTK_DISABLE_DEPRECATED guards are in place in
+the header files. Be sure to add a note to the docs for EACH
+deprecated function; don't just do the changes-*.sgml change.

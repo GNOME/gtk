@@ -22,10 +22,9 @@ X reference documentation. A X Logical Font Description (XLFD)
 consists of a sequence of fields separated (and surrounded by) '-'
 characters. For example, Adobe Helvetica Bold 12 pt, has the
 full description: 
-
-<programlisting>
+<informalexample><programlisting>
 "-adobe-helvetica-bold-r-normal--12-120-75-75-p-70-iso8859-1"
-</programlisting>
+</programlisting></informalexample>
 </para>
 
 <para>
@@ -122,10 +121,9 @@ When specifying a font via a X logical Font Description,
 '*' can be used as a wildcard to match any portion of
 the XLFD. For instance, the above example could
 also be specified as
-
-<programlisting>
+<informalexample><programlisting>
 "-*-helvetica-bold-r-normal--*-120-*-*-*-*-iso8859-1"
-</programlisting>
+</programlisting></informalexample>
 
 It is generally a good idea to use wildcards for any
 portion of the XLFD that your program does not care

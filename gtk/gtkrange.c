@@ -357,7 +357,7 @@ gtk_range_get_property (GObject      *object,
       g_value_set_enum (value, range->update_policy);
       break;
     case PROP_ADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (range->adjustment));
+      g_value_set_object (value, range->adjustment);
       break;
     case PROP_INVERTED:
       g_value_set_boolean (value, range->inverted);
@@ -918,8 +918,7 @@ gtk_range_expose (GtkWidget      *widget,
                  
       if (sensitive &&
           GTK_WIDGET_HAS_FOCUS (range))
-        gtk_paint_focus (widget->style,
-                         widget->window,
+        gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
                          &area, widget, "trough",
                          widget->allocation.x + range->range_rect.x,
                          widget->allocation.y + range->range_rect.y,
@@ -1055,12 +1054,12 @@ range_get_scroll_for_grab (GtkRange      *range)
         if (range->trough_click_forward)
           {
             return range->layout->grab_button == 3
-              ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD;
+              ? GTK_SCROLL_STEP_FORWARD : GTK_SCROLL_PAGE_FORWARD;
           }
         else
           {
             return range->layout->grab_button == 3
-              ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD;
+              ? GTK_SCROLL_STEP_BACKWARD : GTK_SCROLL_PAGE_BACKWARD;
           }
       }
       break;
@@ -2020,8 +2019,8 @@ gtk_range_calc_layout (GtkRange *range,
         y = top;
         
 	if (range->adjustment->upper - range->adjustment->lower - range->adjustment->page_size != 0)
-		y += (bottom - top - height) * ((adjustment_value - range->adjustment->lower) /
-						(range->adjustment->upper - range->adjustment->lower - range->adjustment->page_size));
+	  y += (bottom - top - height) * ((adjustment_value - range->adjustment->lower) /
+					  (range->adjustment->upper - range->adjustment->lower - range->adjustment->page_size));
         
         y = CLAMP (y, top, bottom);
         
@@ -2155,8 +2154,9 @@ gtk_range_calc_layout (GtkRange *range,
         
         x = left;
         
-        x += (right - left - width) * ((adjustment_value - range->adjustment->lower) /
-                                       (range->adjustment->upper - range->adjustment->lower - range->adjustment->page_size));
+	if (range->adjustment->upper - range->adjustment->lower - range->adjustment->page_size != 0)
+          x += (right - left - width) * ((adjustment_value - range->adjustment->lower) /
+                                         (range->adjustment->upper - range->adjustment->lower - range->adjustment->page_size));
         
         x = CLAMP (x, left, right);
         

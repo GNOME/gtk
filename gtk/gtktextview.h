@@ -168,6 +168,15 @@ struct _GtkTextViewClass
                         GtkMovementStep step,
                         gint            count,
                         gboolean        extend_selection);
+
+  /* FIXME should be deprecated in favor of adding GTK_MOVEMENT_HORIZONTAL_PAGES
+   * or something in GTK 2.2, was put in to avoid adding enum values during
+   * the freeze.
+   */
+  void (* page_horizontally) (GtkTextView *text_view,
+                              gint         count,
+                              gboolean     extend_selection);
+  
   /* move the "anchor" (what Emacs calls the mark) to the cursor position */
   void (* set_anchor)  (GtkTextView    *text_view);
 
@@ -185,10 +194,20 @@ struct _GtkTextViewClass
   /* overwrite */
   void (* toggle_overwrite) (GtkTextView *text_view);
 
+  /* propagates to GtkWindow move_focus */
+  void (* move_focus)       (GtkTextView     *text_view,
+                             GtkDirectionType direction);  
+  
+  
   GtkFunction pad1;
   GtkFunction pad2;
   GtkFunction pad3;
   GtkFunction pad4;
+  
+  GtkFunction pad5;
+  GtkFunction pad6;
+  GtkFunction pad7;
+  GtkFunction pad8;
 };
 
 GtkType        gtk_text_view_get_type              (void) G_GNUC_CONST;

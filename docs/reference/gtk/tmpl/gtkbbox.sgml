@@ -10,20 +10,9 @@ The primary purpose of this class is to keep track of the various properties
 of #GtkHButtonBox and #GtkVButtonBox widgets.
 </para>
 <para>
-gtk_button_box_get_child_size_default() retrieves the default minimum width and height 
-for widgets in any button box. gtk_button_box_set_child_size_default()
-changes the default minimum child widget size.
-</para>
-<para>
 gtk_button_box_get_child_size() retrieves the minimum width and height 
 for widgets in a given button box. gtk_button_box_set_child_size() 
 allows those properties to be changed.
-</para>
-<para>
-gtk_button_box_get_child_ipadding_default() gets the default number of pixels of 
-horizontal and vertical padding that are applied to each button in every button box.
-gtk_button_box_set_child_ipadding_default() allows these defaults to be
-changed.
 </para>
 <para>
 The internal padding of buttons can be retrieved and changed per button box using

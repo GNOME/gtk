@@ -1,6 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1999 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 1998-1999 Tor Lillqvist
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -87,7 +87,6 @@ static int nformats;
  * this is used on both source and destination sides.
  */
 struct _GdkDragContextPrivateWin32 {
-  GdkAtom local_selection;
   gint    ref_count;
 
   guint16 last_x;		/* Coordinates from last event */
@@ -192,6 +191,8 @@ gdk_drag_context_ref (GdkDragContext *context)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
+  GDK_NOTE (DND, g_print ("gdk_drag_context_ref: %p %d\n", context, G_OBJECT(context)->ref_count));
+
   g_object_ref (G_OBJECT (context));
 }
 
@@ -200,16 +201,16 @@ gdk_drag_context_unref (GdkDragContext *context)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
+  GDK_NOTE (DND, g_print ("gdk_drag_context_unref: %p %d\n", context, G_OBJECT(context)->ref_count));
   g_object_unref (G_OBJECT (context));
 }
 
 static GdkDragContext *
-gdk_drag_context_find (gboolean     is_source,
-		       GdkWindow   *source,
-		       GdkWindow   *dest)
+gdk_drag_context_find (gboolean   is_source,
+		       GdkWindow *source,
+		       GdkWindow *dest)
 {
   GList *tmp_list = contexts;
-  
   GdkDragContext *context;
   GdkDragContextPrivateWin32 *private;
 
@@ -221,7 +222,7 @@ gdk_drag_context_find (gboolean     is_source,
       if ((!context->is_source == !is_source) &&
 	  ((source == NULL) || (context->source_window && (context->source_window == source))) &&
 	  ((dest == NULL) || (context->dest_window && (context->dest_window == dest))))
-	  return context;
+	return context;
       
       tmp_list = tmp_list->next;
     }
@@ -943,7 +944,6 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 {
   GdkDragContext *context;
   GdkDragContextPrivateWin32 *private;
-  static GdkAtom text_uri_list_atom = GDK_NONE;
   GString *result;
   MSG *msg = (MSG *) xev;
   HANDLE hdrop;
@@ -951,9 +951,6 @@ gdk_dropfiles_filter (GdkXEvent *xev,
   gint nfiles, i;
   guchar fileName[MAX_PATH], linkedFile[MAX_PATH];
   
-  if (text_uri_list_atom == GDK_NONE)
-    text_uri_list_atom = gdk_atom_intern ("text/uri-list", FALSE);
-
   if (msg->message == WM_DROPFILES)
     {
       GDK_NOTE (DND, g_print ("WM_DROPFILES: %#x\n", (guint) msg->hwnd));
@@ -968,12 +965,11 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       gdk_drawable_ref (context->dest_window);
       /* WM_DROPFILES drops are always file names */
       context->targets =
-	g_list_append (NULL, GUINT_TO_POINTER (text_uri_list_atom));
+	g_list_append (NULL, GUINT_TO_POINTER (text_uri_list));
       current_dest_drag = context;
 
       event->dnd.type = GDK_DROP_START;
       event->dnd.context = current_dest_drag;
-      gdk_drag_context_ref (current_dest_drag);
       
       hdrop = (HANDLE) msg->wParam;
       DragQueryPoint (hdrop, &pt);
@@ -1005,8 +1001,8 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 	    }
 	  g_string_append (result, "\015\012");
 	}
-      _gdk_selection_property_store (_gdk_parent_root, text_uri_list_atom, 8,
-			  result->str, result->len + 1);
+      _gdk_dropfiles_store (result->str);
+      g_string_free (result, FALSE);
 
       DragFinish (hdrop);
       
@@ -1058,8 +1054,8 @@ _gdk_win32_dnd_exit (void)
 /* Source side */
 
 static void
-local_send_leave (GdkDragContext  *context,
-		  guint32          time)
+local_send_leave (GdkDragContext *context,
+		  guint32         time)
 {
   GdkEvent tmp_event;
   
@@ -1070,20 +1066,19 @@ local_send_leave (GdkDragContext  *context,
       tmp_event.dnd.type = GDK_DRAG_LEAVE;
       tmp_event.dnd.window = context->dest_window;
       /* Pass ownership of context to the event */
-      tmp_event.dnd.context = current_dest_drag;
       tmp_event.dnd.send_event = FALSE;
+      tmp_event.dnd.context = current_dest_drag;
       tmp_event.dnd.time = GDK_CURRENT_TIME; /* FIXME? */
 
       current_dest_drag = NULL;
       
       gdk_event_put (&tmp_event);
     }
-  
 }
 
 static void
-local_send_enter (GdkDragContext  *context,
-		  guint32          time)
+local_send_enter (GdkDragContext *context,
+		  guint32         time)
 {
   GdkEvent tmp_event;
   GdkDragContextPrivateWin32 *private;
@@ -1091,9 +1086,6 @@ local_send_enter (GdkDragContext  *context,
 
   private = GDK_DRAG_CONTEXT_PRIVATE_DATA (context);
   
-  if (!private->local_selection)
-    private->local_selection = gdk_atom_intern ("LocalDndSelection", FALSE);
-
   if (current_dest_drag != NULL)
     {
       gdk_drag_context_unref (current_dest_drag);
@@ -1109,7 +1101,6 @@ local_send_enter (GdkDragContext  *context,
   new_context->dest_window = context->dest_window;
   gdk_window_ref (new_context->dest_window);
 
-
   new_context->targets = g_list_copy (context->targets);
 
   gdk_window_set_events (new_context->source_window,
@@ -1121,24 +1112,19 @@ local_send_enter (GdkDragContext  *context,
   tmp_event.dnd.window = context->dest_window;
   tmp_event.dnd.send_event = FALSE;
   tmp_event.dnd.context = new_context;
-  gdk_drag_context_ref (new_context);
-
   tmp_event.dnd.time = GDK_CURRENT_TIME; /* FIXME? */
   
   current_dest_drag = new_context;
   
-  (GDK_DRAG_CONTEXT_PRIVATE_DATA (new_context))->local_selection = 
-    private->local_selection;
-
   gdk_event_put (&tmp_event);
 }
 
 static void
-local_send_motion (GdkDragContext  *context,
-		    gint            x_root, 
-		    gint            y_root,
-		    GdkDragAction   action,
-		    guint32         time)
+local_send_motion (GdkDragContext *context,
+		   gint            x_root, 
+		   gint            y_root,
+		   GdkDragAction   action,
+		   guint32         time)
 {
   GdkEvent tmp_event;
   
@@ -1150,8 +1136,6 @@ local_send_motion (GdkDragContext  *context,
       tmp_event.dnd.window = current_dest_drag->dest_window;
       tmp_event.dnd.send_event = FALSE;
       tmp_event.dnd.context = current_dest_drag;
-      gdk_drag_context_ref (current_dest_drag);
-
       tmp_event.dnd.time = time;
 
       current_dest_drag->suggested_action = action;
@@ -1170,7 +1154,8 @@ local_send_motion (GdkDragContext  *context,
 }
 
 static void
-local_send_drop (GdkDragContext *context, guint32 time)
+local_send_drop (GdkDragContext *context,
+		 guint32         time)
 {
   GdkEvent tmp_event;
   
@@ -1184,10 +1169,7 @@ local_send_drop (GdkDragContext *context, guint32 time)
       tmp_event.dnd.type = GDK_DROP_START;
       tmp_event.dnd.window = current_dest_drag->dest_window;
       tmp_event.dnd.send_event = FALSE;
-
       tmp_event.dnd.context = current_dest_drag;
-      gdk_drag_context_ref (current_dest_drag);
-
       tmp_event.dnd.time = GDK_CURRENT_TIME;
       
       tmp_event.dnd.x_root = private->last_x;
@@ -1314,7 +1296,6 @@ gdk_drag_get_protocol (guint32          xid,
 
   window = gdk_window_lookup (xid);
 
-
   if (GPOINTER_TO_INT (gdk_drawable_get_data (window, "gdk-dnd-registered")))
     {
       *protocol = GDK_DRAG_PROTO_LOCAL;
@@ -1355,7 +1336,6 @@ gdk_drag_find_window (GdkDragContext  *context,
   GDK_NOTE (DND, g_print ("gdk_drag_find_window: %#x +%d+%d Protocol: %d\n",
 			  (drag_window ? (guint) GDK_WINDOW_HWND (drag_window) : 0),
 			  x_root, y_root, *protocol));
-
 }
 
 gboolean
@@ -1396,7 +1376,6 @@ gdk_drag_motion (GdkDragContext *context,
 	    case GDK_DRAG_PROTO_LOCAL:
 	      local_send_enter (context, time);
 	      break;
-
 
 	    default:
 	      break;
@@ -1448,6 +1427,7 @@ gdk_drag_motion (GdkDragContext *context,
 	    case GDK_DRAG_PROTO_NONE:
 	      g_warning ("GDK_DRAG_PROTO_NONE is not valid in gdk_drag_motion()");
 	      break;
+
 	    default:
 	      break;
 	    }
@@ -1478,6 +1458,7 @@ gdk_drag_drop (GdkDragContext *context,
 	case GDK_DRAG_PROTO_NONE:
 	  g_warning ("GDK_DRAG_PROTO_NONE is not valid in gdk_drag_drop()");
 	  break;
+
 	default:
 	  break;
 	}
@@ -1525,8 +1506,6 @@ gdk_drag_status (GdkDragContext *context,
       tmp_event.dnd.window = context->source_window;
       tmp_event.dnd.send_event = FALSE;
       tmp_event.dnd.context = src_context;
-      gdk_drag_context_ref (src_context);
-
       tmp_event.dnd.time = GDK_CURRENT_TIME; /* FIXME? */
 
       if (action == GDK_ACTION_DEFAULT)
@@ -1546,6 +1525,19 @@ gdk_drop_reply (GdkDragContext *context,
   g_return_if_fail (context != NULL);
 
   GDK_NOTE (DND, g_print ("gdk_drop_reply\n"));
+
+  if (context->dest_window)
+    {
+      switch (context->protocol)
+	{
+	case GDK_DRAG_PROTO_WIN32_DROPFILES:
+	  _gdk_dropfiles_store (NULL);
+	  break;
+
+	default:
+	  break;
+	}
+    }
 }
 
 void
@@ -1572,7 +1564,6 @@ gdk_drop_finish (GdkDragContext *context,
       tmp_event.dnd.window = src_context->source_window;
       tmp_event.dnd.send_event = FALSE;
       tmp_event.dnd.context = src_context;
-      gdk_drag_context_ref (src_context);
 
       gdk_event_put (&tmp_event);
     }
@@ -1614,8 +1605,8 @@ gdk_window_register_dnd (GdkWindow *window)
 
   if (GPOINTER_TO_INT (gdk_drawable_get_data (window, "gdk-dnd-registered")))
     return;
-  else
-    gdk_drawable_set_data (window, "gdk-dnd-registered", GINT_TO_POINTER(TRUE), NULL);
+
+  gdk_drawable_set_data (window, "gdk-dnd-registered", GINT_TO_POINTER(TRUE), NULL);
 
   GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %#x\n",
 			  (guint) GDK_WINDOW_HWND (window)));
@@ -1668,11 +1659,11 @@ GdkAtom
 gdk_drag_get_selection (GdkDragContext *context)
 {
   if (context->protocol == GDK_DRAG_PROTO_LOCAL)
-    return (GDK_DRAG_CONTEXT_PRIVATE_DATA (context))->local_selection;
+    return local_dnd;
   else if (context->protocol == GDK_DRAG_PROTO_WIN32_DROPFILES)
-    return gdk_win32_dropfiles_atom;
+    return gdk_win32_dropfiles;
   else if (context->protocol == GDK_DRAG_PROTO_OLE2)
-    return gdk_ole2_dnd_atom;
+    return gdk_ole2_dnd;
   else
     return GDK_NONE;
 }

@@ -327,7 +327,7 @@ gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context, GError **error)
 
 	if (context) {
 		(* context->update_func) (pixbuf, 0, 0, w, h, context->user_data);
-		gdk_pixbuf_unref (pixbuf);
+		g_object_unref (pixbuf);
 		pixbuf = NULL;
 	}
 

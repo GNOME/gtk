@@ -1,30 +1,19 @@
 The way that the GtkTreeView calculates sizing is pretty confusing.
 This is written down to help keep track of it in my head, and thus help
 anyone who hopes to work with the code in the future.
+-jrb
 
 HOW THE GTKTREEVIEW CALCULATES SIZE:
 ====================================
-When the view is given a new model, the first thing it does is walk
+ When the view is given a new model, the first thing it does is walk
 through the model at the top level, creating an GtkRBNode for each
 element of the model.  Each node has a height of 0.  The RBTree is kept
 updated as the models structure changes.  Additionally, the user can
 expand, collapse, and select rows at this stage.  The RBTree is accurate
--- it just doesn't have a height for any row.  
+-- it just has a height of zero for every row.
 
-When the TreeView is realized, it calculates the actual height of each
-row by walking the tree and measuring them.  While doing so, it gets the
-size of each column.
-
-
-
-Columns are initially marked as 'dirty'.  When sized,
-gtk_tree_view_check_dirty_and_clean () is called on each column.  This
-function walks through all visible columns, and sees if they're dirty or
-not.  If any are dirty, it then walks the tree, calling
-gtk_tree_view_calc_size on each row.  gtk_tree_view_calc_size requests
-the size of every dirty column in the tree.  Finally, it updates the
-size of the widget (including adjustments).
-
+When the widget is realized, it calls install_presize_handler, to setup
+the first-run function.  This is run before the expose event.
 
 HOW THE GTKTREEVIEWCOLUMN STORES SIZE:
 ======================================
@@ -32,23 +21,46 @@ HOW THE GTKTREEVIEWCOLUMN STORES SIZE:
 There are a number of size related fields in the GtkTreeViewColumn
 structure.  These are all valid after realization:
 
-  sizing	    The sizing method to use when calculating the size
-		    of the column.  Can be grow_only, resizable, auto, and fixed.
+  column_type	    The sizing method to use when calculating the size
+		    of the column.  Can be GROW_ONLY, AUTO, and FIXED.
 
-  requested_width   The width of the column as requested by the column
+  button_request    The width as requested by the button.
 
-  width             The actual width.  This is requested width for all
-		    columns but possibly the last one.
+  requested_width   The width of the column as requested by the column.
+		    It is the max requested width of the bcells in the
+		    column.  If the column_type is AUTO, then it is
+		    recalculated when a column changes.  Otherwise, it
+		    only grows.
+
+  resized_width     The width after the user has resized the column.
+
+  width             The actual width of the column as displayed.
 
   fixed_width       The requested fixed width for the column iff it's
 		    sizing type is set to GTK_TREE_VIEW_COLUMN_FIXED.
+		    Used instead of requested_width in that case.
 
-  min_width	    The minimum width the column can be
+  min_width	    The minimum width the column can be.  If set to -1,
+		    this field is considered unset.
 
   max_width	    The maximum width the column can be.  This can be
 		    overridden for the last column, if the tree_view is
 		    actually wider than the sum of all of the columns
-		    requested_widths.
+		    requested_widths.  If set to -1, this field is
+		    considered unset.
+
+
+  use_resized_width Use resized_width to determine the size.
+
+
+--
+tree_view->priv->width  = the width the widget wants to be, including headers.
+tree_view->priv->height = the height the widget requests.  It's the sum
+			  of the width of all visible columns.
+
+Both of these are calculated in _gtk_tree_view_update_size
+
+--
 
 The following invariants are true:
 
@@ -56,12 +68,9 @@ min_width is less than or equal to width
 
 max_width is greater than or equal to width
 
+min_width <= max_width
+
 (sizing == GTK_TREE_VIEW_COLUMN_FIXED) => (requested_width == fixed_width)
 
-(column != last visible column) => width == requested_width 
+(column != last visible column) => width == CLAMP (requested_width, min_width, max_width)
 
-
-/* Functions needed by gtktreeview for gtktreeviewcolumn */
-size_request_button
-set_width (for resizing resizable columns)
-calculate_width

@@ -30,9 +30,7 @@
 #include <gdk-pixbuf/gdk-pixbuf-features.h>
 #include <glib-object.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+G_BEGIN_DECLS
 
 
 
@@ -96,8 +94,10 @@ GType gdk_pixbuf_get_type (void) G_GNUC_CONST;
 
 /* Reference counting */
 
+#ifndef GDK_PIXBUF_DISABLE_DEPRECATED
 GdkPixbuf *gdk_pixbuf_ref      (GdkPixbuf *pixbuf);
 void       gdk_pixbuf_unref    (GdkPixbuf *pixbuf);
+#endif
 
 /* GdkPixbuf accessors */
 
@@ -262,8 +262,10 @@ GType               gdk_pixbuf_animation_get_type        (void) G_GNUC_CONST;
 GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file   (const char         *filename,
                                                           GError            **error);
 
+#ifndef GDK_PIXBUF_DISABLE_DEPRECATED
 GdkPixbufAnimation *gdk_pixbuf_animation_ref             (GdkPixbufAnimation *animation);
 void                gdk_pixbuf_animation_unref           (GdkPixbufAnimation *animation);
+#endif
 
 int                 gdk_pixbuf_animation_get_width       (GdkPixbufAnimation *animation);
 int                 gdk_pixbuf_animation_get_height      (GdkPixbufAnimation *animation);
@@ -287,13 +289,11 @@ G_CONST_RETURN gchar * gdk_pixbuf_get_option (GdkPixbuf   *pixbuf,
 
 
  
+G_END_DECLS
+
 #include <gdk-pixbuf/gdk-pixbuf-loader.h>
 #include <gdk-pixbuf/gdk-pixbuf-enum-types.h>
 
 
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

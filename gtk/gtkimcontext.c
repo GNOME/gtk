@@ -293,7 +293,7 @@ gtk_im_context_get_preedit_string (GtkIMContext   *context,
  * @event: the key event
  * 
  * Allow an input method to internally handle a key press event.
- * if this function returns %TRUE, then no further processing
+ * If this function returns %TRUE, then no further processing
  * should be done for this keystroke.
  * 
  * Return value: %TRUE if the input method handled the keystroke.
@@ -475,7 +475,7 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
  * GtkIMContext::retrieve_context signal on the input method; in
  * response to this signal, a widget should provide as much context as
  * is available, up to an entire paragraph, by calling
- * gtk_im_context_set_surrounding. Note that there is no obligation
+ * gtk_im_context_set_surrounding(). Note that there is no obligation
  * for a widget to respond to the ::retrieve_context signal, so input
  * methods must be prepared to function without context.
  *

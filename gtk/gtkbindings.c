@@ -259,84 +259,109 @@ binding_ht_lookup_entry (GtkBindingSet *set,
 }
 
 static gboolean
-binding_compose_params (GtkBindingArg	*args,
+binding_compose_params (GtkObject       *object,
+			GtkBindingArg	*args,
 			GSignalQuery	*query,
-			GtkArg		**params_p)
+			GValue	       **params_p)
 {
-  GtkArg *params;
-  const GtkType *types;
+  GValue *params;
+  const GType *types;
   guint i;
   gboolean valid;
   
-  params = g_new0 (GtkArg, query->n_params);
+  params = g_new0 (GValue, query->n_params + 1);
   *params_p = params;
+
+  /* The instance we emit on is the first object in the array
+   */
+  g_value_init (params, G_TYPE_OBJECT);
+  g_value_set_object (params, G_OBJECT (object));
+  params++;
   
   types = query->param_types;
   valid = TRUE;
-  for (i = 0; i < query->n_params && valid; i++)
+  for (i = 1; i < query->n_params + 1 && valid; i++)
     {
-      GtkType param_ftype;
+      GValue tmp_value = { 0, };
 
-      params->type = *types;
-      params->name = NULL;
-      param_ftype = GTK_FUNDAMENTAL_TYPE (params->type);
-      switch (GTK_FUNDAMENTAL_TYPE (args->arg_type))
+      g_value_init (params, *types);
+
+      switch (G_TYPE_FUNDAMENTAL (args->arg_type))
 	{
-	case  GTK_TYPE_DOUBLE:
-	  if (param_ftype == GTK_TYPE_FLOAT)
-	    GTK_VALUE_FLOAT (*params) = args->d.double_data;
-	  else if (param_ftype == GTK_TYPE_DOUBLE)
-	    GTK_VALUE_DOUBLE (*params) = args->d.double_data;
-	  else
-	    valid = FALSE;
+	case G_TYPE_DOUBLE:
+	  g_value_init (&tmp_value, G_TYPE_DOUBLE);
+	  g_value_set_double (&tmp_value, args->d.double_data);
 	  break;
-	case  GTK_TYPE_LONG:
-	  if (param_ftype == GTK_TYPE_BOOL &&
-	      (args->d.long_data == 0 ||
-	       args->d.long_data == 1))
-	    GTK_VALUE_BOOL (*params) = args->d.long_data;
-	  else if (param_ftype == GTK_TYPE_INT ||
-		   param_ftype == GTK_TYPE_ENUM)
-	    GTK_VALUE_INT (*params) = args->d.long_data;
-	  else if ((param_ftype == GTK_TYPE_UINT ||
-		    param_ftype == GTK_TYPE_FLAGS) &&
-		   args->d.long_data >= 0)
-	    GTK_VALUE_UINT (*params) = args->d.long_data;
-	  else if (param_ftype == GTK_TYPE_LONG)
-	    GTK_VALUE_LONG (*params) = args->d.long_data;
-	  else if (param_ftype == GTK_TYPE_ULONG &&
-		   args->d.long_data >= 0)
-	    GTK_VALUE_ULONG (*params) = args->d.long_data;
-	  else if (param_ftype == GTK_TYPE_FLOAT)
-	    GTK_VALUE_FLOAT (*params) = args->d.long_data;
-	  else if (param_ftype == GTK_TYPE_DOUBLE)
-	    GTK_VALUE_DOUBLE (*params) = args->d.long_data;
-	  else
-	    valid = FALSE;
+	case  G_TYPE_LONG:
+	  g_value_init (&tmp_value, G_TYPE_LONG);
+	  g_value_set_long (&tmp_value, args->d.long_data);
 	  break;
-	case  GTK_TYPE_STRING:
-	  if (args->arg_type == GTK_TYPE_STRING &&
-	      param_ftype == GTK_TYPE_STRING)
-	    GTK_VALUE_STRING (*params) = args->d.string_data;
-	  else if (args->arg_type == GTK_TYPE_IDENTIFIER &&
-		   (param_ftype == GTK_TYPE_ENUM ||
-		    param_ftype == GTK_TYPE_FLAGS))
+	case  G_TYPE_STRING:
+	  /* gtk_rc_parse_flags/enum() has fancier parsing for this; we can't call
+	   * that since we don't have a GParamSpec, so just do something simple
+	   */
+	  if (G_TYPE_FUNDAMENTAL (*types) == G_TYPE_ENUM)
 	    {
-	      GtkEnumValue *value;
+	      GEnumClass *class = G_ENUM_CLASS (g_type_class_ref (*types));
+	      
+	      valid = FALSE;
+	      
+	      if (args->arg_type == GTK_TYPE_IDENTIFIER)
+		{
+		  GEnumValue *enum_value = NULL;
+		  enum_value = g_enum_get_value_by_name (class, args->d.string_data);
+		  if (!enum_value)
+		    enum_value = g_enum_get_value_by_nick (class, args->d.string_data);
+		  if (enum_value)
+		    {
+		      g_value_set_enum (&tmp_value, enum_value->value);
+		      valid = TRUE;
+		    }
+		}
 
-	      value = gtk_type_enum_find_value (params->type, args->d.string_data);
-	      if (value)
-		GTK_VALUE_ENUM (*params) = value->value;
-	      else
-		valid = FALSE;
+	      g_type_class_unref (class);
+	    }
+	  /* This is just a hack for compatibility with GTK+-1.2 where a string
+	   * could be used for a single flag value / without the support for multiple
+	   * values in gtk_rc_parse_flags(), this isn't very useful.
+	   */
+	  else if (G_TYPE_FUNDAMENTAL (*types) == G_TYPE_FLAGS)
+	    {
+	      GFlagsClass *class = G_FLAGS_CLASS (g_type_class_ref (*types));
+	      
+	      valid = FALSE;
+	      
+	      if (args->arg_type == GTK_TYPE_IDENTIFIER)
+		{
+		  GFlagsValue *flags_value = NULL;
+		  flags_value = g_flags_get_value_by_name (class, args->d.string_data);
+		  if (!flags_value)
+		    flags_value = g_flags_get_value_by_nick (class, args->d.string_data);
+		  if (flags_value)
+		    {
+		      g_value_set_flags (&tmp_value, flags_value->value);
+		      valid = TRUE;
+		    }
+		}
+
+	      g_type_class_unref (class);
 	    }
 	  else
-	    valid = FALSE;
+	    {
+	      g_value_init (&tmp_value, G_TYPE_STRING);
+	      g_value_set_static_string (params, args->d.string_data);
+	    }
 	  break;
 	default:
 	  valid = FALSE;
 	  break;
 	}
+
+      if (valid && !g_value_transform (&tmp_value, params))
+	valid = FALSE;
+
+      g_value_unset (&tmp_value);
+      
       types++;
       params++;
       args++;
@@ -344,6 +369,11 @@ binding_compose_params (GtkBindingArg	*args,
   
   if (!valid)
     {
+      guint j;
+
+      for (j = 0; j < i; j++)
+	g_value_unset (&(*params_p)[j]);
+      
       g_free (*params_p);
       *params_p = NULL;
     }
@@ -351,26 +381,29 @@ binding_compose_params (GtkBindingArg	*args,
   return valid;
 }
 
-static void
-gtk_binding_entry_activate (GtkBindingEntry	*entry,
-			    GtkObject	*object)
+static gboolean
+gtk_binding_entry_activate (GtkBindingEntry *entry,
+			    GtkObject	    *object)
 {
   GtkBindingSignal *sig;
   gboolean old_emission;
+  gboolean handled = FALSE;
+  gint i;
   
   old_emission = entry->in_emission;
   entry->in_emission = TRUE;
   
-  gtk_object_ref (object);
+  g_object_ref (object);
   
   for (sig = entry->signals; sig; sig = sig->next)
     {
       GSignalQuery query;
       guint signal_id;
-      GtkArg *params = NULL;
+      GValue *params = NULL;
+      GValue return_val = { 0, };
       gchar *accelerator = NULL;
       
-      signal_id = gtk_signal_lookup (sig->signal_name, GTK_OBJECT_TYPE (object));
+      signal_id = g_signal_lookup (sig->signal_name, G_OBJECT_TYPE (object));
       if (!signal_id)
 	{
 	  accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
@@ -379,15 +412,15 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
 		     entry->binding_set->set_name,
 		     accelerator,
 		     sig->signal_name,
-		     gtk_type_name (GTK_OBJECT_TYPE (object)));
+		     g_type_name (G_OBJECT_TYPE (object)));
 	  g_free (accelerator);
 	  continue;
 	}
       
       g_signal_query (signal_id, &query);
       if (query.n_params != sig->n_args ||
-	  query.return_type != G_TYPE_NONE ||
-	  !binding_compose_params (sig->args, &query, &params))
+	  (query.return_type != G_TYPE_NONE && query.return_type != G_TYPE_BOOLEAN) || 
+	  !binding_compose_params (object, sig->args, &query, &params))
 	{
 	  accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
 	  g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
@@ -395,7 +428,7 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
 		     entry->binding_set->set_name,
 		     accelerator,
 		     sig->signal_name,
-		     gtk_type_name (GTK_OBJECT_TYPE (object)));
+		     g_type_name (G_OBJECT_TYPE (object)));
 	}
       else if (!(query.signal_flags & GTK_RUN_ACTION))
 	{
@@ -405,24 +438,41 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
 		     entry->binding_set->set_name,
 		     accelerator,
 		     sig->signal_name,
-		     gtk_type_name (GTK_OBJECT_TYPE (object)));
+		     g_type_name (G_OBJECT_TYPE (object)));
 	}
       g_free (accelerator);
       if (accelerator)
 	continue;
 
-      gtk_signal_emitv (object, signal_id, params);
+      if (query.return_type == G_TYPE_BOOLEAN)
+	g_value_init (&return_val, G_TYPE_BOOLEAN);
+      
+      g_signal_emitv (params, signal_id, 0, &return_val);
+
+      if (query.return_type == G_TYPE_BOOLEAN)
+	{
+	  if (g_value_get_boolean (&return_val))
+	    handled = TRUE;
+	  g_value_unset (&return_val);
+	}
+      else
+	handled = TRUE;
+      
+      for (i = 0; i < query.n_params + 1; i++)
+	g_value_unset (&params[i]);
       g_free (params);
       
       if (entry->destroyed)
 	break;
     }
   
-  gtk_object_unref (object);
+  g_object_unref (object);
 
   entry->in_emission = old_emission;
   if (entry->destroyed && !entry->in_emission)
     binding_entry_free (entry);
+
+  return handled;
 }
 
 GtkBindingSet*
@@ -506,11 +556,7 @@ gtk_binding_set_activate (GtkBindingSet	 *binding_set,
   
   entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
   if (entry)
-    {
-      gtk_binding_entry_activate (entry, object);
-      
-      return TRUE;
-    }
+    return gtk_binding_entry_activate (entry, object);
   
   return FALSE;
 }
@@ -806,9 +852,8 @@ binding_match_activate (GSList          *pspec_list,
 
 	  binding_set = pspec->user_data;
 
-	  gtk_binding_entry_activate (binding_set->current, object);
-
-	  return TRUE;
+	  if (gtk_binding_entry_activate (binding_set->current, object))
+	    return TRUE;
 	}
     }
 

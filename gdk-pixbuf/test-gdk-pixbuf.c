@@ -99,8 +99,8 @@ simple_composite_test_one (GdkInterpType type,
 				   + 16 * gdk_pixbuf_get_n_channels (destination_pixbuf),
 				   destination_alpha);
 	  
-	gdk_pixbuf_unref (source_pixbuf);
-	gdk_pixbuf_unref (destination_pixbuf);
+	g_object_unref (source_pixbuf);
+	g_object_unref (destination_pixbuf);
 
 	if (result_pixel != expected_result) {
 		char *interpolation_type, *source_string, *destination_string, *result_string, *expected_string;

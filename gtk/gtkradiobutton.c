@@ -587,6 +587,9 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   GdkRectangle new_area;
   gint x, y;
   gint indicator_size, indicator_spacing;
+  gint focus_width;
+  gint focus_pad;
+  gboolean interior_focus;
 
   g_return_if_fail (GTK_IS_RADIO_BUTTON (check_button));
 
@@ -595,6 +598,12 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       widget = GTK_WIDGET (check_button);
       button = GTK_BUTTON (check_button);
       toggle_button = GTK_TOGGLE_BUTTON (check_button);
+
+      gtk_widget_style_get (widget,
+			    "interior_focus", &interior_focus,
+			    "focus-line-width", &focus_width,
+			    "focus-padding", &focus_pad,
+			    NULL);
 
       state_type = GTK_WIDGET_STATE (widget);
       if ((state_type != GTK_STATE_NORMAL) &&
@@ -620,6 +629,9 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       
       x = widget->allocation.x + indicator_spacing + GTK_CONTAINER (widget)->border_width;
       y = widget->allocation.y + (widget->allocation.height - indicator_size) / 2;
+
+      if (!interior_focus)
+	x += focus_width + focus_pad;      
       
       state_type = GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE ? GTK_STATE_NORMAL : GTK_WIDGET_STATE (widget);
       if (GTK_TOGGLE_BUTTON (widget)->active)

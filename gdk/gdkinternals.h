@@ -68,7 +68,8 @@ typedef enum {
   GDK_DEBUG_EVENTS        = 1 << 1,
   GDK_DEBUG_DND           = 1 << 2,
   GDK_DEBUG_XIM           = 1 << 3,
-  GDK_DEBUG_MULTIHEAD	  = 1 << 4
+  GDK_DEBUG_NOGRABS       = 1 << 4,
+  GDK_DEBUG_MULTIHEAD	  = 1 << 5,
 } GdkDebugFlag;
 
 #ifndef GDK_DISABLE_DEPRECATED
@@ -164,6 +165,45 @@ void gdk_synthesize_window_state (GdkWindow     *window,
 
 void _gdk_event_button_generate (GdkEvent *event);
 
+#define GDK_SCRATCH_IMAGE_WIDTH 256
+#define GDK_SCRATCH_IMAGE_HEIGHT 64
+
+GdkImage* _gdk_image_new_for_depth (GdkScreen    *screen,
+				    GdkImageType  type,
+				    GdkVisual    *visual,
+				    gint          width,
+				    gint          height,
+				    gint          depth);
+GdkImage *_gdk_image_get_scratch (GdkScreen *screen,
+				  gint	     width,
+				  gint	     height,
+				  gint	     depth,
+				  gint	    *x,
+				  gint	    *y);
+
+/* Will most likely be exported in the future
+ */
+void _gdk_draw_pixbuf            (GdkDrawable  *drawable,
+				  GdkGC        *gc,
+				  GdkPixbuf    *pixbuf,
+				  gint          src_x,
+				  gint          src_y,
+				  gint          dest_x,
+				  gint          dest_y,
+				  gint          width,
+				  gint          height,
+				  GdkRgbDither  dither,
+				  gint          x_dither,
+				  gint          y_dither);
+GdkImage *_gdk_drawable_copy_to_image (GdkDrawable  *drawable,
+				       GdkImage     *image,
+				       gint          src_x,
+				       gint          src_y,
+				       gint          dest_x,
+				       gint          dest_y,
+				       gint          width,
+				       gint          height);
+
 /*************************************
  * Interfaces used by windowing code *
  *************************************/
@@ -213,6 +253,9 @@ GdkWindow* _gdk_windowing_window_get_pointer (GdkWindow       *window,
 					      gint            *x,
 					      gint            *y,
 					      GdkModifierType *mask);
+
+/* Return the number of bits-per-pixel for images of the specified depth. */
+gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display, gint depth);
 
 #define GDK_WINDOW_IS_MAPPED(window) ((((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 

@@ -345,12 +345,12 @@ gtk_tree_store_newv (gint   n_columns,
  * gtk_tree_store_set_column_types:
  * @tree_store: A #GtkTreeStore
  * @n_columns: Number of columns for the tree store
- * @types: An array length n of @GTypes
+ * @types: An array of #GType types, one for each column
  * 
- * This function is meant primarily for GObjects that inherit from GtkTreeStore,
- * and should only be used when constructing a new @GtkTreeStore.  It will not
- * function after a row has been added, or a method on the @GtkTreeModel
- * interface is called.
+ * This function is meant primarily for #GObjects that inherit from 
+ * #GtkTreeStore, and should only be used when constructing a new 
+ * #GtkTreeStore.  It will not function after a row has been added, 
+ * or a method on the #GtkTreeModel interface is called.
  **/
 void
 gtk_tree_store_set_column_types (GtkTreeStore *tree_store,
@@ -612,6 +612,7 @@ gtk_tree_store_get_value (GtkTreeModel *tree_model,
 
   g_return_if_fail (GTK_IS_TREE_STORE (tree_model));
   g_return_if_fail (iter != NULL);
+  g_return_if_fail (iter->stamp == GTK_TREE_STORE (tree_model)->stamp);
   g_return_if_fail (column < GTK_TREE_STORE (tree_model)->n_columns);
 
   list = G_NODE (iter->user_data)->data;
@@ -636,7 +637,9 @@ static gboolean
 gtk_tree_store_iter_next (GtkTreeModel  *tree_model,
 			  GtkTreeIter   *iter)
 {
+  g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (iter->user_data != NULL, FALSE);
+  g_return_val_if_fail (iter->stamp == GTK_TREE_STORE (tree_model)->stamp, FALSE);
 
   if (G_NODE (iter->user_data)->next)
     {
@@ -655,6 +658,7 @@ gtk_tree_store_iter_children (GtkTreeModel *tree_model,
   GNode *children;
 
   g_return_val_if_fail (parent == NULL || parent->user_data != NULL, FALSE);
+  g_return_val_if_fail (parent == NULL || parent->stamp == GTK_TREE_STORE (tree_model)->stamp, FALSE);
 
   if (parent)
     children = G_NODE (parent->user_data)->children;
@@ -743,7 +747,9 @@ gtk_tree_store_iter_parent (GtkTreeModel *tree_model,
   GNode *parent;
 
   g_return_val_if_fail (iter != NULL, FALSE);
-  g_return_val_if_fail (iter->user_data != NULL, FALSE);
+  g_return_val_if_fail (child != NULL, FALSE);
+  g_return_val_if_fail (child->user_data != NULL, FALSE);
+  g_return_val_if_fail (child->stamp == GTK_TREE_STORE (tree_model)->stamp, FALSE);
 
   parent = G_NODE (child->user_data)->parent;
 
@@ -893,9 +899,9 @@ gtk_tree_store_set_value (GtkTreeStore *tree_store,
  * gtk_tree_store_set_valist:
  * @tree_store: A #GtkTreeStore
  * @iter: A valid #GtkTreeIter for the row being modified
- * @var_args: va_list of column/value pairs
+ * @var_args: <type>va_list</type> of column/value pairs
  *
- * See gtk_tree_store_set(); this version takes a va_list for
+ * See gtk_tree_store_set(); this version takes a <type>va_list</type> for
  * use by language bindings.
  *
  **/
@@ -965,8 +971,8 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
  * The variable argument list should contain integer column numbers,
  * each column number followed by the value to be set. 
  * The list is terminated by a -1. For example, to set column 0 with type
- * %G_TYPE_STRING to "Foo", you would write <literal>gtk_tree_store_set (store, iter,
- * 0, "Foo", -1)</literal>.
+ * %G_TYPE_STRING to "Foo", you would write 
+ * <literal>gtk_tree_store_set (store, iter, 0, "Foo", -1)</literal>.
  **/
 void
 gtk_tree_store_set (GtkTreeStore *tree_store,
@@ -1047,7 +1053,7 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
 
 /**
  * gtk_tree_store_insert:
- * @tree_store: A #GtkListStore
+ * @tree_store: A #GtkTreeStore
  * @iter: An unset #GtkTreeIter to set to the new row
  * @parent: A valid #GtkTreeIter, or %NULL
  * @position: position to insert the new row
@@ -1057,8 +1063,8 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
  * If @position is larger than the number of rows at that level, then the new
  * row will be inserted to the end of the list.  @iter will be changed to point
  * to this new row.  The row will be empty before this function is called.  To
- * fill in values, you need to call gtk_list_store_set() or
- * gtk_list_store_set_value().
+ * fill in values, you need to call gtk_tree_store_set() or
+ * gtk_tree_store_set_value().
  *
  **/
 void
@@ -1265,7 +1271,7 @@ gtk_tree_store_prepend (GtkTreeStore *tree_store,
       iter->stamp = tree_store->stamp;
       iter->user_data = g_node_new (NULL);
 
-      g_node_prepend (parent_node, iter->user_data);
+      g_node_prepend (parent_node, G_NODE (iter->user_data));
 
       path = gtk_tree_store_get_path (GTK_TREE_MODEL (tree_store), iter);
       gtk_tree_model_row_inserted (GTK_TREE_MODEL (tree_store), path, iter);
@@ -1391,7 +1397,7 @@ gtk_tree_store_iter_depth (GtkTreeStore *tree_store,
 
 /**
  * gtk_tree_store_clear:
- * @tree_store: @ #GtkTreeStore
+ * @tree_store: a #GtkTreeStore
  * 
  * Removes all rows from @tree_store
  **/
@@ -1794,6 +1800,7 @@ gtk_tree_store_sort_helper (GtkTreeStore *tree_store,
       i++;
     }
 
+  /* Sort the array */
   g_array_sort_with_data (sort_array, gtk_tree_store_compare_func, tree_store);
 
   for (i = 0; i < list_length - 1; i++)

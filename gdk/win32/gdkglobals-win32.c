@@ -28,16 +28,24 @@
 #include "gdkprivate-win32.h"
 
 HWND              gdk_root_window = NULL;
-gint              gdk_event_func_from_window_proc = FALSE;
 HDC		  gdk_display_hdc;
 HINSTANCE	  gdk_dll_hinstance;
 HINSTANCE	  gdk_app_hmodule;
-UINT		  gdk_selection_notify_msg;
-UINT		  gdk_selection_request_msg;
-UINT		  gdk_selection_clear_msg;
-GdkAtom		  gdk_clipboard_atom;
-GdkAtom		  gdk_win32_dropfiles_atom;
-GdkAtom		  gdk_ole2_dnd_atom;
+
+WORD  		  cf_rtf;
+WORD		  cf_utf8_string;
+
+GdkAtom           utf8_string;
+GdkAtom		  compound_text;
+GdkAtom		  text_uri_list;
+
+GdkAtom		  local_dnd;
+GdkAtom		  gdk_win32_dropfiles;
+GdkAtom		  gdk_ole2_dnd;
+
 GdkAtom           _gdk_selection_property;
+
 DWORD		  windows_version = 0;
+
 gint		  gdk_input_ignore_wintab = FALSE;
+gint              gdk_event_func_from_window_proc = FALSE;

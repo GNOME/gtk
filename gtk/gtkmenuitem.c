@@ -67,6 +67,8 @@ static void gtk_menu_item_paint          (GtkWidget        *widget,
 					  GdkRectangle     *area);
 static gint gtk_menu_item_expose         (GtkWidget        *widget,
 					  GdkEventExpose   *event);
+static void gtk_menu_item_parent_set     (GtkWidget        *widget,
+					  GtkWidget        *previous_parent);
 
 
 static void gtk_real_menu_item_select               (GtkItem     *item);
@@ -151,6 +153,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->show_all = gtk_menu_item_show_all;
   widget_class->hide_all = gtk_menu_item_hide_all;
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
+  widget_class->parent_set = gtk_menu_item_parent_set;
   
   container_class->forall = gtk_menu_item_forall;
 
@@ -186,7 +189,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuItemClass, toggle_size_request),
-                    _gtk_marshal_NONE__POINTER,
+                    _gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_POINTER);
 
@@ -559,9 +562,9 @@ gtk_menu_item_map (GtkWidget *widget)
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   
-  gdk_window_show (menu_item->event_window);
-
   GTK_WIDGET_CLASS (parent_class)->map (widget);
+
+  gdk_window_show (menu_item->event_window);
 }
 
 static void
@@ -1013,6 +1016,23 @@ gtk_menu_item_accel_name_foreach (GtkWidget *widget,
     }
 }
 
+static void
+gtk_menu_item_parent_set (GtkWidget *widget,
+			  GtkWidget *previous_parent)
+{
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
+  GtkMenu *menu = GTK_IS_MENU (widget->parent) ? GTK_MENU (widget->parent) : NULL;
+
+  if (menu)
+    _gtk_menu_item_refresh_accel_path (menu_item,
+				       menu->accel_path,
+				       menu->accel_group,
+				       TRUE);
+
+  if (GTK_WIDGET_CLASS (parent_class)->parent_set)
+    GTK_WIDGET_CLASS (parent_class)->parent_set (widget, previous_parent);
+}
+
 void
 _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
 				   const gchar   *prefix,
@@ -1023,9 +1043,15 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
+  g_return_if_fail (!accel_group || GTK_IS_ACCEL_GROUP (accel_group));
 
   widget = GTK_WIDGET (menu_item);
+
+  if (!accel_group)
+    {
+      _gtk_widget_set_accel_path (widget, NULL, NULL);
+      return;
+    }
 
   path = _gtk_widget_get_accel_path (widget);
   if (!path)					/* no active accel_path yet */
@@ -1052,7 +1078,7 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
 /**
  * gtk_menu_item_set_accel_path
  * @menu_item:  a valid #GtkMenuItem
- * @accel_path: accelerator path, corresponding to this menu item's funcitonality
+ * @accel_path: accelerator path, corresponding to this menu item's functionality
  *
  * Set the accelerator path on @menu_item, through which runtime changes of the
  * menu item's accelerator caused by the user can be identified and saved to

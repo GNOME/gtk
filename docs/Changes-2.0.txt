@@ -1,3 +1,18 @@
+
+
+
+DON'T EDIT THIS FILE - changes are now maintained in the reference
+manual, see docs/reference/gtk/changes-*.sgml. Also, when adding a
+change to the manual, you should amend the docs for all
+newly-deprecated features to point to the replacement for that
+feature, and be sure the GTK_DISABLE_DEPRECATED guards are in place in
+the header files. Be sure to add a note to the docs for EACH
+deprecated function; don't just do the changes-*.sgml change.
+
+
+
+
+
 Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 
 * gtk_container_get_toplevels() was removed and replaced with
@@ -19,6 +34,9 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 * gtk_paned_set_gutter_size() has been removed, since the small handle tab
   has been changed to include the entire area previously occupied by
   the gutter.
+
+* gtk_paned_set_handle_size() has been removed, in favor of a style property,
+  since this is an option that only makes sense for themes to adjust.
 
 * GDK no longer selects OwnerGrabButtonMask for button presses. This means  
   that the automatic grab that occurs when the user presses a button
@@ -546,3 +564,24 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   to store the difference between world and window coordinates for
   layout->bin_window. These coordinate systems are now always
   the same.
+
+* gtk_paint_focus(), gtk_draw_focus() and GtkStyle::draw_focus()
+  have been changed a bit:
+
+   - A GtkStateType argument has been added to gtk_paint_focus()
+   - The default implementation of GtkStyle::draw_focus virtual
+     function now draws a focus rectangle whose width is 
+     determinted by the GtkWidget::focus-width style property.
+   - The rectangle passed in is the bounding box, instead of
+     the rectangle used in the gdk_draw_rectangle() call, so it is
+     no longer necessary to subtract 1 from the width and height.
+
+
+
+DON'T EDIT THIS FILE - changes are now maintained in the reference
+manual, see docs/reference/gtk/changes-*.sgml. Also, when adding a
+change to the manual, you should amend the docs for all
+newly-deprecated features to point to the replacement for that
+feature, and be sure the GTK_DISABLE_DEPRECATED guards are in place in
+the header files. Be sure to add a note to the docs for EACH
+deprecated function; don't just do the changes-*.sgml change.

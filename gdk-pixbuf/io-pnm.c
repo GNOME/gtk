@@ -709,7 +709,7 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
 		if (nbytes == 0) {
 			/* we ran out of data? */
 			if (context.pixbuf)
-				gdk_pixbuf_unref (context.pixbuf);
+				g_object_unref (context.pixbuf);
 			g_set_error (error,
 				     GDK_PIXBUF_ERROR,
 				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
@@ -785,7 +785,7 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
 				break;
 			} else if (retval == PNM_FATAL_ERR) {
 				if (context.pixbuf)
-					gdk_pixbuf_unref (context.pixbuf);
+					g_object_unref (context.pixbuf);
 
 				return NULL;
 			}
@@ -860,7 +860,7 @@ gdk_pixbuf__pnm_image_stop_load (gpointer data,
 	g_return_val_if_fail (context != NULL, TRUE);
 	
 	if (context->pixbuf)
-		gdk_pixbuf_unref (context->pixbuf);
+		g_object_unref (context->pixbuf);
 
 #if 0
 	/* We should ignore trailing newlines and we can't
@@ -1014,7 +1014,7 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 				break;
 			} else if (retval == PNM_FATAL_ERR) {
 				if (context->pixbuf)
-					gdk_pixbuf_unref (context->pixbuf);
+					g_object_unref (context->pixbuf);
 				return FALSE;
 			} else if (retval == PNM_OK) {	
 				/* send updated signal */

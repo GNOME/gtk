@@ -6,25 +6,30 @@ a widget for custom user interface elements.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-The #GtkDrawingArea widget is used for creating custom
-user interface elements. After creating a drawing
-area, the application may want to connect to:
+
+The #GtkDrawingArea widget is used for creating custom user interface
+elements. It's essentially a blank widget; you can draw on
+<literal>widget-&gt;window</literal>. After creating a drawing area,
+the application may want to connect to:
+
 <itemizedlist>
   <listitem>
     <para>
     Mouse and button press signals to respond to input from
-    the user.
+    the user. (Use gtk_widget_add_events() to enable events 
+    you wish to receive.)
     </para>
   </listitem>
   <listitem>
     <para>
     The "realize" signal to take any necessary actions
-    when the widget
+    when the widget is instantiated on a particular display.
+    (Create GDK resources in response to this signal.)
     </para>
   </listitem>
   <listitem>
     <para>
-    The "size_allocate" signal to take any necessary actions
+    The "configure_event" signal to take any necessary actions
     when the widget changes size.
     </para>
   </listitem>
@@ -35,60 +40,80 @@ area, the application may want to connect to:
     </para>
   </listitem>
 </itemizedlist>
-As a convenience, the #GtkDrawingArea widget synthesizes
-a "configure_event" when the widget is realized
-and any time the size of a widget changes when it
-is realized. It often suffices to connect to this
-signal instead of "realize" and "size_allocate".
 </para>
 <para>
 The following code portion demonstrates using a drawing
-area to implement a widget that draws a circle.
-As this example demonstrates, an expose handler should
-draw only the pixels within the requested area and
-should draw or clear all these pixels.
+area to display a circle in the normal widget foreground 
+color.
+Note that GDK automatically clears the exposed area
+to the background color before sending the expose event, and 
+that drawing is implicitly clipped to the exposed area.
 </para>
+<example>
+<title>Simple <structname>GtkDrawingArea</structname> usage.</title>
 <programlisting>
 gboolean
-expose_event (GdkWidget *widget, GdkEventExpose *event, gpointer data)
+expose_event_callback (GdkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-  gdk_window_clear_area (widget->window,
-                         event->area.x, event->area.y,
-                         event->area.width, event->area.height);
-  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state],
-                             &amp;event->area);
   gdk_draw_arc (widget->window,
-                widget->style->fg_gc[widget->state],
+                widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
                 TRUE,
                 0, 0, widget->allocation.width, widget->allocation.height,
                 0, 64 * 360);
-  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state],
-                             NULL);
-
+ 
   return TRUE;
 }
 [...]
-  GtkWidget *drawing_area = gtk_drawing_area_new ();
-  gtk_drawing_area_size (GTK_DRAWING_AREA (drawing_area),
-                         100, 100);
-  gtk_signal_connect (GTK_OBJECT (drawing_area), 
+  GtkWidget *drawing_area = gtk_drawing_area_new (<!>);
+  gtk_widget_set_size_request (drawing_area, 100, 100);
+  g_signal_connect (G_OBJECT (drawing_area), "expose_event",  
+                    G_CALLBACK (expose_event_callback), NULL);
 </programlisting>
+</example>
+
+<para>
+Expose events are normally delivered when a drawing area first comes
+onscreen, or when it's covered by another window and then uncovered
+(exposed). You can also force an expose event by adding to the "damage
+region" of the drawing area's window; gtk_widget_queue_draw_area() and
+gdk_window_invalidate_rect() are equally good ways to do this. You'll
+then get an expose event for the invalid region.
+</para>
+
+<para>
+The available routines for drawing are documented on the <link
+linkend="gdk-Drawing-Primitives">GDK Drawing Primitives</link> page.
+See also gdk_pixbuf_render_to_drawable() for drawing a #GdkPixbuf.
+</para>
+
+<para>
+To receive mouse events on a drawing area, you will need to enable
+them with gtk_widget_add_events(). To receive keyboard events, you
+will need to set the #GTK_CAN_FOCUS flag on the drawing area, and
+should probably draw some user-visible indication that the drawing
+area is focused. Use the GTK_HAS_FOCUS() macro in your expose event
+handler to decide whether to draw the focus indicator. See
+gtk_paint_focus() for one way to draw focus.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+Sometimes #GtkImage is a useful alternative to a drawing area. 
+You can put a #GdkPixmap in the #GtkImage and draw to the #GdkPixmap, 
+calling gtk_widget_queue_draw() on the #GtkImage when you want to 
+refresh to the screen.
 </para>
 
 <!-- ##### STRUCT GtkDrawingArea ##### -->
 <para>
-The #GtkDrawingArea-struct struct contains private data only, and
+The #GtkDrawingArea struct contains private data only, and
 should be accessed using the functions below.
 </para>
 
 
 <!-- ##### FUNCTION gtk_drawing_area_new ##### -->
 <para>
-Create a new drawing area.
+Creates a new drawing area.
 </para>
 
 @Returns: a new #GtkDrawingArea
@@ -96,7 +121,8 @@ Create a new drawing area.
 
 <!-- ##### FUNCTION gtk_drawing_area_size ##### -->
 <para>
-Set the size that the drawing area will request
+(Use gtk_widget_set_size_request() instead.)
+Sets the size that the drawing area will request
 in response to a "size_request" signal. The 
 drawing area may actually be allocated a size
 larger than this depending on how it is packed

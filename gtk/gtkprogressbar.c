@@ -175,7 +175,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                    PROP_DISCRETE_BLOCKS,
                                    g_param_spec_uint ("discrete_blocks",
 						      _("Discrete Blocks"),
-						      _("The number of discrete blocks in a progress bar (when shown in the discrete style"),
+						      _("The number of discrete blocks in a progress bar (when shown in the discrete style)"),
 						      2,
 						      G_MAXUINT,
 						      10,
@@ -284,7 +284,7 @@ gtk_progress_bar_get_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (GTK_PROGRESS (pbar)->adjustment));
+      g_value_set_object (value, GTK_PROGRESS (pbar)->adjustment);
       break;
     case PROP_ORIENTATION:
       g_value_set_enum (value, pbar->orientation);
@@ -459,6 +459,9 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 
   if (progress->show_text && pbar->bar_style != GTK_PROGRESS_DISCRETE)
     {
+      if (!progress->adjustment)
+	gtk_progress_set_adjustment (progress, NULL);
+
       buf = gtk_progress_get_text_from_value (progress, progress->adjustment->upper);
 
       layout = gtk_widget_create_pango_layout (widget, buf);

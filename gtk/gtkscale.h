@@ -61,7 +61,7 @@ struct _GtkScaleClass
 {
   GtkRangeClass parent_class;
 
-  gchar* (* format_value) (GtkRange *range,
+  gchar* (* format_value) (GtkScale *scale,
                            gdouble   value);  
   
   void (* draw_value) (GtkScale *scale);
@@ -85,10 +85,6 @@ void    _gtk_scale_get_value_size  (GtkScale        *scale,
                                     gint            *height);
 gchar  *_gtk_scale_format_value   (GtkScale        *scale,
                                    gdouble          value);
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define	gtk_scale_value_width                   gtk_scale_get_value_width
-#endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

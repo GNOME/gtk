@@ -420,7 +420,7 @@ gdk_pixbuf__tiff_image_stop_load (gpointer data,
                 
                 pixbuf = tiff_image_parse (tiff, context, error);
                 if (pixbuf)
-                        g_object_unref (G_OBJECT (pixbuf));
+                        g_object_unref (pixbuf);
                 retval = pixbuf != NULL;
                 TIFFClose (tiff);
                 if (global_error)

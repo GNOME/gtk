@@ -31,7 +31,7 @@ noinst_PROGRAMS = 		\
 	testpixbuf-scale 	\
 	pixbuf-demo
 
-test-inline-pixbufs.h: $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource apple-red.png gnome-foot.png
+test-inline-pixbufs.h: $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource$(EXEEXT) apple-red.png gnome-foot.png
 	(topdir=`cd $(top_builddir) && pwd` ; curdir=`pwd` ; \
 	  cd $(srcdir) &&				     \
 	    GDK_PIXBUF_MODULEDIR=$$topdir/gdk-pixbuf/.libs \

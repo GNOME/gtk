@@ -44,12 +44,6 @@ elements.
 @ts_y_origin: 
 @colormap: 
 
-<!-- ##### STRUCT GdkGCClass ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### STRUCT GdkGCValues ##### -->
 <para>
 The #GdkGCValues structure holds a set of values used
@@ -152,21 +146,19 @@ Create a new GC with the given initial values.
 
 <!-- ##### FUNCTION gdk_gc_ref ##### -->
 <para>
-Increase the reference count on a graphics context.
+
 </para>
 
-@gc: a #GdkGC.
-@Returns: @gc.
+@gc: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_gc_unref ##### -->
 <para>
-Decrease the reference count on a graphics context. If
-the resulting reference count is zero, the graphics
-context will be destroyed.
+
 </para>
 
-@gc: a #GdkGC.
+@gc: 
 
 
 <!-- ##### MACRO gdk_gc_destroy ##### -->
@@ -396,7 +388,7 @@ windows of that window.
 Sets whether copying non-visible portions of a drawable
 using this graphics context generate exposure events
 for the corresponding regions of the destination
-drawable. (See gdk_draw_pixmap()).
+drawable. (See gdk_draw_drawable()).
 </para>
 
 @gc: a #GdkGC.

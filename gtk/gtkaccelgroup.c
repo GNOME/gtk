@@ -52,8 +52,8 @@ static guint		 default_accel_mod_mask = (GDK_SHIFT_MASK |
 
 /* --- functions --- */
 /**
- * gtk_accel_group_get_type
- * @returns: the type ID for accelerator groups
+ * gtk_accel_group_get_type:
+ * @returns: the type ID for accelerator groups.
  */
 GType
 gtk_accel_group_get_type (void)
@@ -165,7 +165,7 @@ gtk_accel_group_init (GtkAccelGroup *accel_group)
 }
 
 /**
- * gtk_accel_group_new
+ * gtk_accel_group_new:
  * @returns: a new #GtkAccelGroup object
  * 
  * Creates a new #GtkAccelGroup. 
@@ -241,6 +241,13 @@ _gtk_accel_group_detach (GtkAccelGroup *accel_group,
   g_object_unref (accel_group);
 }
 
+/**
+ * gtk_accel_groups_from_object:
+ * @object:        a #GObject, usually a #GtkWindow 
+ * @returns: a list of all accel groups which are attached to @object
+ *
+ * Gets a list of all accel groups which are attached to @object.
+ */
 GSList*
 gtk_accel_groups_from_object (GObject *object)
 {
@@ -249,6 +256,18 @@ gtk_accel_groups_from_object (GObject *object)
   return g_object_get_qdata (object, quark_acceleratable_groups);
 }
 
+/**
+ * gtk_accel_group_find:
+ * @accel_group: a #GtkAccelGroup
+ * @find_func: a function to filter the entries of @accel_group with
+ * @data: data to pass to @find_func
+ * @returns: the key of the first entry passing @find_func. The key is 
+ * owned by GTK+ and must not be freed.
+ *
+ * Finds the first entry in an accelerator group for which 
+ * @find_func returns %TRUE and returns its #GtkAccelKey.
+ *
+ */
 GtkAccelKey*
 gtk_accel_group_find (GtkAccelGroup  *accel_group,
 		      gboolean (*find_func) (GtkAccelKey *key,
@@ -277,9 +296,11 @@ gtk_accel_group_find (GtkAccelGroup  *accel_group,
 }
 
 /**
- * gtk_accel_group_lock
+ * gtk_accel_group_lock:
  * @accel_group: a #GtkAccelGroup
  * 
+ * Locks the given accelerator group.
+ *
  * Locking an acelerator group prevents the accelerators contained
  * within it to be changed during runtime. Refer to
  * gtk_accel_map_change_entry() about runtime accelerator changes.
@@ -297,11 +318,10 @@ gtk_accel_group_lock (GtkAccelGroup *accel_group)
 }
 
 /**
- * gtk_accel_group_unlock
+ * gtk_accel_group_unlock:
  * @accel_group: a #GtkAccelGroup
  * 
- * This function undoes the last call to gtk_accel_group_lock()
- * on this @accel_group.
+ * Undoes the last call to gtk_accel_group_lock() on this @accel_group.
  */
 void
 gtk_accel_group_unlock (GtkAccelGroup *accel_group)
@@ -463,18 +483,20 @@ quick_accel_find (GtkAccelGroup  *accel_group,
 }
 
 /**
- * gtk_accel_group_connect
- * @accel_group:      the ccelerator group to install an accelerator in
+ * gtk_accel_group_connect:
+ * @accel_group:      the accelerator group to install an accelerator in
  * @accel_key:        key value of the accelerator
  * @accel_mods:       modifier combination of the accelerator
  * @accel_flags:      a flag mask to configure this accelerator
  * @closure:          closure to be executed upon accelerator activation
  *
- * Install an accelerator in this group. When @accel_group is being activated
+ * Installs an accelerator in this group. When @accel_group is being activated
  * in response to a call to gtk_accel_groups_activate(), @closure will be
  * invoked if the @accel_key and @accel_mods from gtk_accel_groups_activate()
  * match those of this connection.
+ *
  * The signature used for the @closure is that of #GtkAccelGroupActivate.
+ * 
  * Note that, due to implementation details, a single closure can only be
  * connected to one accelerator group.
  */
@@ -497,17 +519,18 @@ gtk_accel_group_connect (GtkAccelGroup	*accel_group,
 }
 
 /**
- * gtk_accel_group_connect_by_path
- * @accel_group:      the ccelerator group to install an accelerator in
+ * gtk_accel_group_connect_by_path:
+ * @accel_group:      the accelerator group to install an accelerator in
  * @accel_path:       path used for determining key and modifiers.
  * @closure:          closure to be executed upon accelerator activation
  *
- * Install an accelerator in this group, using a accelerator path to look
- * up the appropriate key and modifiers. (See gtk_accel_map_add_entry())
+ * Installs an accelerator in this group, using an accelerator path to look
+ * up the appropriate key and modifiers (see gtk_accel_map_add_entry()).
  * When @accel_group is being activated in response to a call to
  * gtk_accel_groups_activate(), @closure will be invoked if the @accel_key and
  * @accel_mods from gtk_accel_groups_activate() match the key and modifiers
  * for the path.
+ *
  * The signature used for the @closure is that of #GtkAccelGroupActivate.
  */
 void
@@ -541,12 +564,12 @@ gtk_accel_group_connect_by_path (GtkAccelGroup	*accel_group,
 }
 
 /**
- * gtk_accel_group_disconnect
+ * gtk_accel_group_disconnect:
  * @accel_group: the accelerator group to remove an accelerator from
  * @closure:     the closure to remove from this accelerator group
  * @returns:     %TRUE if the closure was found and got disconnected
  *
- * Remove an accelerator previously installed through
+ * Removes an accelerator previously installed through
  * gtk_accel_group_connect().
  */
 gboolean
@@ -569,13 +592,14 @@ gtk_accel_group_disconnect (GtkAccelGroup *accel_group,
 }
 
 /**
- * gtk_accel_group_disconnect_key
- * @accel_group:      the ccelerator group to install an accelerator in
+ * gtk_accel_group_disconnect_key:
+ * @accel_group:      the accelerator group to install an accelerator in
  * @accel_key:        key value of the accelerator
  * @accel_mods:       modifier combination of the accelerator
- * @returns:          %TRUE if there was an accelerator which could be removed, %FALSE otherwise
+ * @returns:          %TRUE if there was an accelerator which could be 
+ *                    removed, %FALSE otherwise
  *
- * Remove an accelerator previously installed through
+ * Removes an accelerator previously installed through
  * gtk_accel_group_connect().
  */
 gboolean
@@ -646,6 +670,17 @@ _gtk_accel_group_reconnect (GtkAccelGroup *accel_group,
   g_object_unref (accel_group);
 }
 
+/**
+ * gtk_accel_group_query:
+ * @accel_group:      the accelerator group to query
+ * @accel_key:        key value of the accelerator
+ * @accel_mods:       modifier combination of the accelerator
+ * @n_entries:        location to return the number of entries found, or %NULL
+ * @returns:          an array of @n_entries #GtkAccelGroupEntry elements, or %NULL. The array is owned by GTK+ and must not be freed. 
+ *
+ * Queries an accelerator group for all entries matching @accel_key and 
+ * @accel_mods.
+ */
 GtkAccelGroupEntry*
 gtk_accel_group_query (GtkAccelGroup  *accel_group,
 		       guint           accel_key,
@@ -665,6 +700,14 @@ gtk_accel_group_query (GtkAccelGroup  *accel_group,
   return entries;
 }
 
+/**
+ * gtk_accel_group_from_accel_closure:
+ * @closure: a #GClosure
+ * @returns: the #GtkAccelGroup to which @closure is connected, or %NULL.
+ *
+ * Finds the #GtkAccelGroup to which @closure is connected; 
+ * see gtk_accel_group_connect().
+ */
 GtkAccelGroup*
 gtk_accel_group_from_accel_closure (GClosure *closure)
 {
@@ -706,7 +749,7 @@ _gtk_accel_group_activate (GtkAccelGroup  *accel_group,
 
 /**
  * gtk_accel_groups_activate:
- * @object:        the #Gobject, usually a #GtkWindow, on which
+ * @object:        the #GObject, usually a #GtkWindow, on which
  *                 to activate the accelerator.
  * @accel_key:     accelerator keyval from a key event
  * @accel_mods:    keyboard state mask from a key event
@@ -744,14 +787,14 @@ gtk_accel_groups_activate (GObject	  *object,
 }
 
 /**
- * gtk_accelerator_valid
+ * gtk_accelerator_valid:
  * @keyval:    a GDK keyval
  * @modifiers: modifier mask
  * @returns:   %TRUE if the accelerator is valid
  * 
  * Determines whether a given keyval and modifier mask constitute
- * a valid keyboard accelerator. For example, the GDK_a keyval
- * plus GDK_CONTROL_MASK is valid - this is a "Ctrl+a" accelerator.
+ * a valid keyboard accelerator. For example, the #GDK_a keyval
+ * plus #GDK_CONTROL_MASK is valid - this is a "Ctrl+a" accelerator.
  * But by default (see gtk_accelerator_set_default_mod_mask()) you
  * cannot use the NumLock key as an accelerator modifier.
  */
@@ -884,7 +927,7 @@ is_release (const gchar *string)
 }
 
 /**
- * gtk_accelerator_parse
+ * gtk_accelerator_parse:
  * @accelerator:      string representing an accelerator
  * @accelerator_key:  return location for accelerator keyval
  * @accelerator_mods: return location for accelerator modifier mask
@@ -1002,14 +1045,14 @@ gtk_accelerator_parse (const gchar     *accelerator,
 }
 
 /**
- * gtk_accelerator_name
+ * gtk_accelerator_name:
  * @accelerator_key:  accelerator keyval
  * @accelerator_mods: accelerator modifier mask
- * @returns:          a newly allocated accelerator name
+ * @returns:          a newly-allocated accelerator name
  * 
  * Converts an accelerator keyval and modifier mask
  * into a string parseable by gtk_accelerator_parse().
- * For example, if you pass in GDK_q and GDK_CONTROL_MASK,
+ * For example, if you pass in #GDK_q and #GDK_CONTROL_MASK,
  * this function returns "&lt;Control&gt;q". 
  *
  * The caller of this function must free the returned string.
@@ -1105,7 +1148,7 @@ gtk_accelerator_name (guint           accelerator_key,
 }
 
 /**
- * gtk_accelerator_set_default_mod_mask
+ * gtk_accelerator_set_default_mod_mask:
  * @default_mod_mask: accelerator modifier mask
  *
  * Sets the modifiers that will be considered significant for keyboard
@@ -1123,7 +1166,7 @@ gtk_accelerator_set_default_mod_mask (GdkModifierType default_mod_mask)
 }
 
 /**
- * gtk_accelerator_get_default_mod_mask
+ * gtk_accelerator_get_default_mod_mask:
  * @returns: the default accelerator modifier mask
  *
  * Gets the value set by gtk_accelerator_set_default_mod_mask().

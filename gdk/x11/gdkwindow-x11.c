@@ -836,7 +836,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
     GdkDrawableImplX11 *draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
 
     if (draw_impl->picture)
-      XRenderFreePicture (draw_impl->xdisplay, draw_impl->picture);
+      XRenderFreePicture (GDK_WINDOW_XDISPLAY (window), draw_impl->picture);
   }
 #endif /* HAVE_XFT */  
 
@@ -4638,7 +4638,7 @@ create_moveresize_window_for_screen (GdkScreen *screen,
                              FALSE,
                              GDK_BUTTON_RELEASE_MASK |
                              GDK_POINTER_MOTION_MASK,
-                             FALSE,
+                             NULL,
                              NULL,
                              timestamp);
 

@@ -775,7 +775,8 @@ gtk_window_get_property (GObject      *object,
  * you might use #GTK_WINDOW_POPUP. #GTK_WINDOW_POPUP is not for
  * dialogs, though in some other toolkits dialogs are called "popups".
  * In GTK+, #GTK_WINDOW_POPUP means a pop-up menu or pop-up tooltip.
- * Popup windows are not controlled by the window manager.
+ * On X11, popup windows are not controlled by the <link
+ * linkend="gtk-X11-arch">window manager</link>.
  *
  * If you simply want an undecorated window (no window borders), use
  * gtk_window_set_decorated(), don't use #GTK_WINDOW_POPUP.
@@ -801,12 +802,14 @@ gtk_window_new (GtkWindowType type)
  * @window: a #GtkWindow
  * @title: title of the window
  * 
- * Sets the title of the #GtkWindow. The title of a window will be displayed in
- * its title bar; on the X Window System, the title bar is rendered by the
- * window manager, so exactly how the title appears to users may vary according
- * to a user's exact configuration. The title should help a user distinguish
- * this window from other windows they may have open. A good title might
- * include the application name and current document filename, for example.
+ * Sets the title of the #GtkWindow. The title of a window will be
+ * displayed in its title bar; on the X Window System, the title bar
+ * is rendered by the <link linkend="gtk-X11-arch">window
+ * manager</link>, so exactly how the title appears to users may vary
+ * according to a user's exact configuration. The title should help a
+ * user distinguish this window from other windows they may have
+ * open. A good title might include the application name and current
+ * document filename, for example.
  * 
  **/
 void
@@ -856,7 +859,7 @@ gtk_window_get_title (GtkWindow *window)
  * Don't use this function. It sets the X Window System "class" and
  * "name" hints for a window.  According to the ICCCM, you should
  * always set these to the same value for all windows in an
- * application, and GTK sets them to that value by default, so calling
+ * application, and GTK+ sets them to that value by default, so calling
  * this function is sort of pointless. However, you may want to call
  * gtk_window_set_role() on each window in your application, for the
  * benefit of the session manager. Setting the role allows the window
@@ -885,11 +888,14 @@ gtk_window_set_wmclass (GtkWindow *window,
  * @window: a #GtkWindow
  * @role: unique identifier for the window to be used when restoring a session
  *
+ * This function is only useful on X11, not with other GTK+ targets.
+ * 
  * In combination with the window title, the window role allows a
- * window manager to identify "the same" window when an application is
- * restarted. So for example you might set the "toolbox" role on your
- * app's toolbox window, so that when the user restarts their session,
- * the window manager can put the toolbox back in the same place.
+ * <link linkend="gtk-X11-arch">window manager</link> to identify "the
+ * same" window when an application is restarted. So for example you
+ * might set the "toolbox" role on your app's toolbox window, so that
+ * when the user restarts their session, the window manager can put
+ * the toolbox back in the same place.
  *
  * If a window already has a unique title, you don't need to set the
  * role, since the WM can use the title to identify the window when
@@ -1102,9 +1108,9 @@ gtk_window_add_accel_group (GtkWindow     *window,
 }
 
 /**
- * gtk_accel_group_detach:
+ * gtk_window_remove_accel_group:
+ * @window: a #GtkWindow
  * @accel_group: a #GtkAccelGroup
- * @object: a #GObject
  *
  * Reverses the effects of gtk_window_add_accel_group().
  **/
@@ -1271,6 +1277,15 @@ gtk_window_get_mnemonic_modifier (GtkWindow *window)
   return window->mnemonic_modifier;
 }
 
+/**
+ * gtk_window_set_position:
+ * @window: a #GtkWindow.
+ * @position: a position constraint.
+ *
+ * Sets a position constraint for this window. If the old or new
+ * constraint is %GTK_WIN_POS_CENTER_ALWAYS, this will also cause
+ * the window to be repositioned to satisfy the new constraint. 
+ **/
 void
 gtk_window_set_position (GtkWindow         *window,
 			 GtkWindowPosition  position)
@@ -1320,7 +1335,7 @@ gtk_window_activate_focus (GtkWindow *window)
  * Retrieves the current focused widget within the window.
  * Note that this is the widget that would have the focus
  * if the toplevel window focused; if the toplevel window
- * is not focused the  GTK_WIDGET_HAS_FOCUS(widget) will
+ * is not focused then  <literal>GTK_WIDGET_HAS_FOCUS (widget)</literal> will
  * not be %TRUE for the widget. 
  * 
  * Return value: the currently focused widget.
@@ -1363,8 +1378,8 @@ gtk_window_activate_default (GtkWindow *window)
  * with other windows in the same application. To keep modal dialogs
  * on top of main application windows, use
  * gtk_window_set_transient_for() to make the dialog transient for the
- * parent; most window managers will then disallow lowering the dialog
- * below the parent.
+ * parent; most <link linkend="gtk-X11-arch">window managers</link>
+ * will then disallow lowering the dialog below the parent.
  * 
  * 
  **/
@@ -1408,8 +1423,8 @@ gtk_window_get_modal (GtkWindow *window)
  * Returns a list of all existing toplevel windows. The widgets
  * in the list are not individually referenced. If you want
  * to iterate through the list and perform actions involving
- * callbacks that might destroy the widgets, you MUST call
- * g_list_foreach (result, (GFunc)g_object_ref, NULL) first, and
+ * callbacks that might destroy the widgets, you <emphasis>must</emphasis> call
+ * <literal>g_list_foreach (result, (GFunc)g_object_ref, NULL)</literal> first, and
  * then unref all the widgets afterwards.
  * 
  * Return value: list of toplevel widgets
@@ -1571,11 +1586,16 @@ gtk_window_unset_transient_for  (GtkWindow *window)
  * @parent: parent window
  *
  * Dialog windows should be set transient for the main application
- * window they were spawned from. This allows window managers to
- * e.g. keep the dialog on top of the main window, or center the
- * dialog over the main window. gtk_dialog_new_with_buttons() and
- * other convenience functions in GTK+ will sometimes call
+ * window they were spawned from. This allows <link
+ * linkend="gtk-X11-arch">window managers</link> to e.g. keep the
+ * dialog on top of the main window, or center the dialog over the
+ * main window. gtk_dialog_new_with_buttons() and other convenience
+ * functions in GTK+ will sometimes call
  * gtk_window_set_transient_for() on your behalf.
+ *
+ * On Windows, this function will and put the child window
+ * on top of the parent, much as the window manager would have
+ * done on X.
  * 
  **/
 void       
@@ -1687,7 +1707,7 @@ gtk_window_get_type_hint (GtkWindow *window)
  * @window: a #GtkWindow
  * @setting: whether to destroy @window with its transient parent
  * 
- * If @setting is TRUE, then destroying the transient parent of @window
+ * If @setting is %TRUE, then destroying the transient parent of @window
  * will also destroy @window itself. This is useful for dialogs that
  * shouldn't persist beyond the lifetime of the main window they're
  * associated with, for example.
@@ -1819,10 +1839,14 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
  * @setting: %TRUE to decorate the window
  *
  * By default, windows are decorated with a title bar, resize
- * controls, etc.  Some window managers allow GTK+ to disable these
- * decorations, creating a borderless window. If you set the decorated
- * property to %FALSE using this function, GTK+ will do its best to
- * convince the window manager not to decorate the window.
+ * controls, etc.  Some <link linkend="gtk-X11-arch">window
+ * managers</link> allow GTK+ to disable these decorations, creating a
+ * borderless window. If you set the decorated property to %FALSE
+ * using this function, GTK+ will do its best to convince the window
+ * manager not to decorate the window.
+ *
+ * On Windows, this function always works, since there's no window manager
+ * policy involved.
  * 
  **/
 void
@@ -2577,10 +2601,11 @@ gtk_window_resize (GtkWindow *window,
  * @width: return location for width, or %NULL
  * @height: return location for height, or %NULL
  *
- * Obtains the current size of @window. If @window is not onscreen,
- * it returns the size GTK+ will suggest to the window manager for the
- * initial window size (but this is not reliably the same as the size
- * the window manager will actually select). The size obtained by
+ * Obtains the current size of @window. If @window is not onscreen, it
+ * returns the size GTK+ will suggest to the <link
+ * linkend="gtk-X11-arch">window manager</link> for the initial window
+ * size (but this is not reliably the same as the size the window
+ * manager will actually select). The size obtained by
  * gtk_window_get_size() is the last size received in a
  * #GdkEventConfigure, that is, GTK+ uses its locally-stored size,
  * rather than querying the X server for the size. As a result, if you
@@ -2597,7 +2622,7 @@ gtk_window_resize (GtkWindow *window,
  * "configure_event" on the window and adjust your size-dependent
  * state to match the size delivered in the #GdkEventConfigure.
  *
- * Note 2: The returned size does NOT include the size of the window
+ * Note 2: The returned size does <emphasis>not</emphasis> include the size of the window
  * manager decorations (aka the window frame or border). Those
  * are not drawn by GTK+ and GTK+ has no reliable method of
  * determining their size.
@@ -2607,7 +2632,7 @@ gtk_window_resize (GtkWindow *window,
  * way is to simply set the window's semantic type with
  * gtk_window_set_type_hint(), which allows the window manager to
  * e.g. center dialogs. Also, if you set the transient parent of
- * dialogs with gtk_widget_set_transient_for() window managers
+ * dialogs with gtk_window_set_transient_for() window managers
  * will often center the dialog over its parent window. It's
  * much preferred to let the window manager handle these
  * things rather than doing it yourself, because all apps will
@@ -2617,9 +2642,9 @@ gtk_window_resize (GtkWindow *window,
  * application cannot.
  *
  * In any case, if you insist on application-specified window
- * positioning, there's STILL a better way than doing it yourself -
- * gtk_window_set_position() will frequently handle the details
- * for you.
+ * positioning, there's <emphasis>still</emphasis> a better way than
+ * doing it yourself - gtk_window_set_position() will frequently
+ * handle the details for you.
  * 
  **/
 void
@@ -2666,11 +2691,11 @@ gtk_window_get_size (GtkWindow *window,
  * @x: X coordinate to move window to
  * @y: Y coordinate to move window to
  *
- * Asks the window manager to move @window to the given position.
- * Window managers are free to ignore this; most window managers
- * ignore requests for initial window positions (instead using a
- * user-defined placement algorithm) and honor requests after the
- * window has already been shown.
+ * Asks the <link linkend="gtk-X11-arch">window manager</link> to move
+ * @window to the given position.  Window managers are free to ignore
+ * this; most window managers ignore requests for initial window
+ * positions (instead using a user-defined placement algorithm) and
+ * honor requests after the window has already been shown.
  *
  * Note: the position is the position of the gravity-determined
  * reference point for the window. The gravity determines two things:
@@ -2691,8 +2716,8 @@ gtk_window_get_size (GtkWindow *window,
  * the bottom-right corner of the window border will be placed at that
  * reference point. So, to place a window in the bottom right corner
  * you would first set gravity to south east, then write:
- * gtk_window_move (window, gdk_screen_width () - window_width,
- * gdk_screen_height () - window_height).
+ * <literal>gtk_window_move (window, gdk_screen_width () - window_width,
+ * gdk_screen_height () - window_height)</literal>.
  *
  * The extended window manager hints specification at <ulink 
  * url="http://www.freedesktop.org/standards/wm-spec.html"
@@ -2788,10 +2813,11 @@ gtk_window_move (GtkWindow *window,
  * Thus GTK+ is using a "best guess" that works with most
  * window managers.
  *
- * Moreover, nearly all window managers are broken with respect to
- * their handling of window gravity. So moving a window to its current
- * position as returned by gtk_window_get_position() tends to
- * result in moving the window slightly.
+ * Moreover, nearly all window managers are historically broken with
+ * respect to their handling of window gravity. So moving a window to
+ * its current position as returned by gtk_window_get_position() tends
+ * to result in moving the window slightly. Window managers are
+ * slowly getting better over time.
  *
  * If a window has gravity #GDK_GRAVITY_STATIC the window manager
  * frame is not relevant, and thus gtk_window_get_position() will
@@ -3308,6 +3334,7 @@ gtk_window_realize (GtkWidget *widget)
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_EXPOSURE_MASK |
 			    GDK_KEY_PRESS_MASK |
+			    GDK_KEY_RELEASE_MASK |
 			    GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK |
 			    GDK_FOCUS_CHANGE_MASK |
@@ -4198,7 +4225,7 @@ gtk_window_move_resize (GtkWindow *window)
    * or gtk_window_move().
    *
    * If the configure request has changed, we send off a new one.  To
-   * ensure GTK invariants are maintained (resize queue does what it
+   * ensure GTK+ invariants are maintained (resize queue does what it
    * should), we go ahead and size_allocate the requested size in this
    * function.
    *
@@ -4524,6 +4551,7 @@ gtk_window_move_resize (GtkWindow *window)
        */
       info->position_constraints_changed = FALSE;
       window->need_default_position = FALSE;
+      info->initial_pos_set = FALSE;
 
       /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
        * configure event in response to our resizing request.
@@ -4687,8 +4715,24 @@ gtk_window_compute_hints (GtkWindow   *window,
   
   if (geometry_info && geometry_info->widget)
     {
-      extra_width = widget->requisition.width - geometry_info->widget->requisition.width;
-      extra_height = widget->requisition.height - geometry_info->widget->requisition.height;
+      GtkRequisition child_requisition;
+
+      /* FIXME: This really isn't right. It gets the min size wrong and forces
+       * callers to do horrible hacks like set a huge usize on the child requisition
+       * to get the base size right. We really want to find the answers to:
+       *
+       *  - If the geometry widget was infinitely big, how much extra space
+       *    would be needed for the stuff around it.
+       *
+       *  - If the geometry widget was infinitely small, how big would the
+       *    window still have to be.
+       *
+       * Finding these answers would be a bit of a mess here. (Bug #68668)
+       */
+      gtk_widget_get_child_requisition (geometry_info->widget, &child_requisition);
+      
+      extra_width = widget->requisition.width - child_requisition.width;
+      extra_height = widget->requisition.height - child_requisition.height;
     }
 
   /* We don't want to set GDK_HINT_POS in here, we just set it
@@ -4780,7 +4824,7 @@ gtk_window_expose (GtkWidget      *widget,
   if (GTK_WIDGET_CLASS (parent_class)->expose_event)
     return GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
 
-  return TRUE;
+  return FALSE;
 }
 
 /**
@@ -4793,9 +4837,9 @@ gtk_window_expose (GtkWidget      *widget,
  *  you want gtk_window_set_decorated() instead, which tells the window
  *  manager whether to draw the window border.)
  * 
- * If this function is called on a window with setting of TRUE, before
+ * If this function is called on a window with setting of %TRUE, before
  * it is realized or showed, it will have a "frame" window around
- * widget->window, accessible in window->frame. Using the signal 
+ * @window->window, accessible in @window->frame. Using the signal 
  * frame_event you can recieve all events targeted at the frame.
  * 
  * This function is used by the linux-fb port to implement managed
@@ -4818,10 +4862,10 @@ gtk_window_set_has_frame (GtkWindow *window,
  * @window: a #GtkWindow
  * 
  * Accessor for whether the window has a frame window exterior to
- * widget->window. Gets the value set by gtk_window_set_has_frame ().
+ * @window->window. Gets the value set by gtk_window_set_has_frame ().
  *
  * Return value: %TRUE if a frame has been added to the window
- *   via gtk_widow_has_frame
+ *   via gtk_window_set_has_frame().
  **/
 gboolean
 gtk_window_get_has_frame (GtkWindow *window)
@@ -4844,7 +4888,7 @@ gtk_window_get_has_frame (GtkWindow *window)
  *  window border drawn by the window manager, which is the normal
  *  case when using the X Window system.)
  *
- * For windows with frames (see #gtk_window_set_has_frame) this function
+ * For windows with frames (see gtk_window_set_has_frame()) this function
  * can be used to change the size of the frame border.
  **/
 void
@@ -4931,12 +4975,13 @@ gtk_window_present (GtkWindow *window)
  * gtk_window_iconify:
  * @window: a #GtkWindow
  *
- * Asks to iconify (i.e. minimize) the specified @window. Note that you
- * shouldn't assume the window is definitely iconified afterward,
- * because other entities (e.g. the user or window manager) could
- * deiconify it again, or there may not be a window manager in which
- * case iconification isn't possible, etc. But normally the window
- * will end up iconified. Just don't write code that crashes if not.
+ * Asks to iconify (i.e. minimize) the specified @window. Note that
+ * you shouldn't assume the window is definitely iconified afterward,
+ * because other entities (e.g. the user or <link
+ * linkend="gtk-X11-arch">window manager</link>) could deiconify it
+ * again, or there may not be a window manager in which case
+ * iconification isn't possible, etc. But normally the window will end
+ * up iconified. Just don't write code that crashes if not.
  *
  * It's permitted to call this function before showing a window,
  * in which case the window will be iconified before it ever appears
@@ -4973,9 +5018,9 @@ gtk_window_iconify (GtkWindow *window)
  *
  * Asks to deiconify (i.e. unminimize) the specified @window. Note
  * that you shouldn't assume the window is definitely deiconified
- * afterward, because other entities (e.g. the user or window manager)
- * could iconify it again before your code which assumes
- * deiconification gets to run.
+ * afterward, because other entities (e.g. the user or <link
+ * linkend="gtk-X11-arch">window manager</link>) could iconify it
+ * again before your code which assumes deiconification gets to run.
  *
  * You can track iconification via the "window_state_event" signal
  * on #GtkWidget.
@@ -5007,10 +5052,11 @@ gtk_window_deiconify (GtkWindow *window)
  *
  * Asks to stick @window, which means that it will appear on all user
  * desktops. Note that you shouldn't assume the window is definitely
- * stuck afterward, because other entities (e.g. the user or window
- * manager) could unstick it again, and some window managers do not
- * support sticking windows. But normally the window will end up
- * stuck. Just don't write code that crashes if not.
+ * stuck afterward, because other entities (e.g. the user or <link
+ * linkend="gtk-X11-arch">window manager</link>) could unstick it
+ * again, and some window managers do not support sticking
+ * windows. But normally the window will end up stuck. Just don't
+ * write code that crashes if not.
  *
  * It's permitted to call this function before showing a window.
  *
@@ -5046,9 +5092,9 @@ gtk_window_stick (GtkWindow *window)
  * Asks to unstick @window, which means that it will appear on only
  * one of the user's desktops. Note that you shouldn't assume the
  * window is definitely unstuck afterward, because other entities
- * (e.g. the user or window manager) could stick it again. But
- * normally the window will end up stuck. Just don't write code that
- * crashes if not.
+ * (e.g. the user or <link linkend="gtk-X11-arch">window
+ * manager</link>) could stick it again. But normally the window will
+ * end up stuck. Just don't write code that crashes if not.
  *
  * You can track stickiness via the "window_state_event" signal
  * on #GtkWidget.
@@ -5081,10 +5127,11 @@ gtk_window_unstick (GtkWindow *window)
  *
  * Asks to maximize @window, so that it becomes full-screen. Note that
  * you shouldn't assume the window is definitely maximized afterward,
- * because other entities (e.g. the user or window manager) could
- * unmaximize it again, and not all window managers support
- * maximization. But normally the window will end up maximized. Just
- * don't write code that crashes if not.
+ * because other entities (e.g. the user or <link
+ * linkend="gtk-X11-arch">window manager</link>) could unmaximize it
+ * again, and not all window managers support maximization. But
+ * normally the window will end up maximized. Just don't write code
+ * that crashes if not.
  *
  * It's permitted to call this function before showing a window,
  * in which case the window will be maximized when it appears onscreen
@@ -5121,10 +5168,10 @@ gtk_window_maximize (GtkWindow *window)
  *
  * Asks to unmaximize @window. Note that you shouldn't assume the
  * window is definitely unmaximized afterward, because other entities
- * (e.g. the user or window manager) could maximize it again, and not
- * all window managers honor requests to unmaximize. But normally the
- * window will end up unmaximized. Just don't write code that crashes
- * if not.
+ * (e.g. the user or <link linkend="gtk-X11-arch">window
+ * manager</link>) could maximize it again, and not all window
+ * managers honor requests to unmaximize. But normally the window will
+ * end up unmaximized. Just don't write code that crashes if not.
  *
  * You can track maximization via the "window_state_event" signal
  * on #GtkWidget.
@@ -5244,9 +5291,10 @@ gtk_window_get_gravity (GtkWindow *window)
  *
  * Starts resizing a window. This function is used if an application
  * has window resizing controls. When GDK can support it, the resize
- * will be done using the standard mechanism for the window manager or
- * windowing system. Otherwise, GDK will try to emulate window
- * resizing, potentially not all that well, depending on the windowing system.
+ * will be done using the standard mechanism for the <link
+ * linkend="gtk-X11-arch">window manager</link> or windowing
+ * system. Otherwise, GDK will try to emulate window resizing,
+ * potentially not all that well, depending on the windowing system.
  * 
  **/
 void
@@ -5286,10 +5334,11 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
  *
  * (Note: this is a special-purpose function intended for the
  *  framebuffer port; see gtk_window_set_has_frame(). It will not
- *  return the size of the window border drawn by the window manager,
- *  which is the normal case when using a windowing system.
- *  See gdk_window_get_frame_extents() to get the standard
- *  window border extents.)
+ *  return the size of the window border drawn by the <link
+ *  linkend="gtk-X11-arch">window manager</link>, which is the normal
+ *  case when using a windowing system.  See
+ *  gdk_window_get_frame_extents() to get the standard window border
+ *  extents.)
  * 
  * Retrieves the dimensions of the frame window for this toplevel.
  * See gtk_window_set_has_frame(), gtk_window_set_frame_dimensions().
@@ -5321,11 +5370,12 @@ gtk_window_get_frame_dimensions (GtkWindow *window,
  * @root_y: Y position where the user clicked to initiate the drag
  * @timestamp: timestamp from the click event that initiated the drag
  *
- * Starts moving a window. This function is used if an application
- * has window movement grips. When GDK can support it, the window movement
- * will be done using the standard mechanism for the window manager or
- * windowing system. Otherwise, GDK will try to emulate window
- * movement, potentially not all that well, depending on the windowing system.
+ * Starts moving a window. This function is used if an application has
+ * window movement grips. When GDK can support it, the window movement
+ * will be done using the standard mechanism for the <link
+ * linkend="gtk-X11-arch">window manager</link> or windowing
+ * system. Otherwise, GDK will try to emulate window movement,
+ * potentially not all that well, depending on the windowing system.
  * 
  **/
 void

@@ -5,7 +5,6 @@
 <FILE>gtkaccelgroup</FILE>
 <TITLE>Keyboard Accelerators</TITLE>
 GtkAccelGroup
-gtk_accel_group_get_type
 gtk_accel_group_new
 gtk_accel_group_ref
 gtk_accel_group_unref
@@ -27,8 +26,11 @@ gtk_accelerator_parse
 gtk_accelerator_name
 gtk_accelerator_set_default_mod_mask
 gtk_accelerator_get_default_mod_mask
+
 <SUBSECTION Private>
 GtkAccelGroupEntry
+gtk_accel_group_get_type
+
 <SUBSECTION Standard>
 GtkAccelGroupClass
 GTK_TYPE_ACCEL_GROUP
@@ -1690,8 +1692,6 @@ GtkObjectFlags
 GTK_OBJECT_FLAGS
 GTK_OBJECT_FLOATING
 GTK_OBJECT_CONNECTED
-GTK_OBJECT_SET_FLAGS
-GTK_OBJECT_UNSET_FLAGS
 GtkArgFlags
 gtk_object_new
 gtk_object_sink
@@ -1728,6 +1728,8 @@ GTK_OBJECT_GET_CLASS
 <SUBSECTION Private>
 gtk_object_get_type
 GTK_ARG_READWRITE
+GTK_OBJECT_SET_FLAGS
+GTK_OBJECT_UNSET_FLAGS
 </SECTION>
 
 <SECTION>
@@ -2502,7 +2504,6 @@ gtk_text_mark_get_type
 <FILE>gtktexttag</FILE>
 <TITLE>GtkTextTag</TITLE>
 GtkTextTag
-GtkTextBTreeNode
 GtkWrapMode
 GtkTextAttributes
 gtk_text_tag_new
@@ -2581,6 +2582,7 @@ gtk_text_view_starts_display_line
 gtk_text_view_move_visually
 gtk_text_view_add_child_at_anchor
 GtkTextChildAnchor
+GtkTextChildAnchorClass
 gtk_text_child_anchor_new
 gtk_text_child_anchor_get_widgets
 gtk_text_child_anchor_get_deleted
@@ -3061,7 +3063,6 @@ gtk_tree_view_column_get_sort_order
 gtk_tree_view_column_cell_set_cell_data
 gtk_tree_view_column_cell_get_size
 gtk_tree_view_column_cell_render
-gtk_tree_view_column_cell_event
 gtk_tree_view_column_cell_focus
 gtk_tree_view_column_cell_draw_focus
 gtk_tree_view_column_cell_is_visible
@@ -3838,7 +3839,6 @@ gtk_gc_release
 <SECTION>
 <FILE>gtkstyle</FILE>
 <TITLE>GtkStyle</TITLE>
-GTK_STYLE_NUM_STYLECOLORS
 GTK_STYLE_ATTACHED
 GtkStyle
 GtkStyleClass
@@ -4008,7 +4008,7 @@ gtk_selection_data_targets_include_text
 gtk_selection_remove_all
 gtk_selection_data_copy
 gtk_selection_data_free
-<SUBSECTION Internals>
+<SUBSECTION Private>
 gtk_selection_clear
 gtk_selection_incr_event
 gtk_selection_notify

@@ -33,7 +33,7 @@ extern "C" {
 #define GTK_TREE_VIEW_COLUMN(obj)	     (GTK_CHECK_CAST ((obj), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumn))
 #define GTK_TREE_VIEW_COLUMN_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnClass))
 #define GTK_IS_TREE_VIEW_COLUMN(obj)	     (GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE_VIEW_COLUMN))
-#define GTK_IS_TREE_VIEW_COLUMN_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_TREE_VIEW_COLUMN))
+#define GTK_IS_TREE_VIEW_COLUMN_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_VIEW_COLUMN))
 #define GTK_TREE_VIEW_COLUMN_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnClass))
 
 typedef enum
@@ -66,11 +66,16 @@ struct _GtkTreeViewColumn
   GtkCellEditable *editable_widget;
   gfloat xalign;
   guint property_changed_signal;
-
   gint spacing;
-  gint fixed_width;
-  gint width;
+
+  /* Sizing fields */
+  /* see gtk+/doc/tree-column-sizing.txt for more information on them */
+  GtkTreeViewColumnSizing column_type;
   gint requested_width;
+  gint button_request;
+  gint resized_width;
+  gint width;
+  gint fixed_width;
   gint min_width;
   gint max_width;
 
@@ -80,7 +85,6 @@ struct _GtkTreeViewColumn
 
   gchar *title;
   GList *cell_list;
-  GtkTreeViewColumnSizing column_type;
 
   /* Sorting */
   guint sort_clicked_signal;
@@ -96,6 +100,7 @@ struct _GtkTreeViewColumn
   guint show_sort_indicator : 1;
   guint maybe_reordered     : 1;
   guint reorderable         : 1;
+  guint use_resized_width   : 1;
 };
 
 struct _GtkTreeViewColumnClass
@@ -210,12 +215,6 @@ void                    gtk_tree_view_column_cell_render         (GtkTreeViewCol
 								  GdkRectangle            *background_area,
 								  GdkRectangle            *cell_area,
 								  GdkRectangle            *expose_area,
-								  guint                    flags);
-gboolean                gtk_tree_view_column_cell_event          (GtkTreeViewColumn       *tree_column,
-								  GdkEvent                *event,
-								  gchar                   *path_string,
-								  GdkRectangle            *background_area,
-								  GdkRectangle            *cell_area,
 								  guint                    flags);
 gboolean                gtk_tree_view_column_cell_focus          (GtkTreeViewColumn       *tree_column,
 								  gint                     direction);

@@ -3,6 +3,8 @@
 
 #include <gtk/gtktexttag.h>
 
+typedef struct _GtkTextBTreeNode GtkTextBTreeNode;
+
 /* values should already have desired defaults; this function will override
  * the defaults with settings in the given tags, which should be sorted in
  * ascending order of priority

@@ -48,7 +48,7 @@ quit_func (GtkWidget *widget, gpointer dummy)
 
 #define WIDTH 640
 #define HEIGHT 400
-#define NUM_ITERS 100
+#define NUM_ITERS 50
 
 static void
 testrgb_rgb_test (GtkWidget *drawing_area)
@@ -62,11 +62,13 @@ testrgb_rgb_test (GtkWidget *drawing_area)
   gboolean dither;
   int dith_max;
   GTimer *timer;
-
-  buf = g_malloc (WIDTH * HEIGHT * 6);
+  GdkPixbuf *pixbuf;
+  gboolean to_pixmap;
+  
+  buf = g_malloc (WIDTH * HEIGHT * 8);
 
   val = 0;
-  for (j = 0; j < WIDTH * HEIGHT * 6; j++)
+  for (j = 0; j < WIDTH * HEIGHT * 8; j++)
     {
       val = (val + ((val + (rand () & 0xff)) >> 1)) >> 1;
       buf[j] = val;
@@ -103,6 +105,7 @@ testrgb_rgb_test (GtkWidget *drawing_area)
 			      GDK_RGB_DITHER_NONE,
 			      buf + offset, WIDTH * 3);
 	}
+      gdk_flush ();
       total_time = g_timer_elapsed (timer, NULL) - start_time;
       g_print ("Color test%s time elapsed: %.2fs, %.1f fps, %.2f megapixels/s\n",
 	       dither ? " (dithered)" : "",
@@ -124,6 +127,7 @@ testrgb_rgb_test (GtkWidget *drawing_area)
 			       GDK_RGB_DITHER_NONE,
 			       buf + offset, WIDTH);
 	}
+      gdk_flush ();
       total_time = g_timer_elapsed (timer, NULL) - start_time;
       g_print ("Grayscale test%s time elapsed: %.2fs, %.1f fps, %.2f megapixels/s\n",
 	       dither ? " (dithered)" : "",
@@ -132,6 +136,42 @@ testrgb_rgb_test (GtkWidget *drawing_area)
 	       NUM_ITERS * (WIDTH * HEIGHT * 1e-6) / total_time);
     }
 
+  for (to_pixmap = FALSE; to_pixmap <= TRUE; to_pixmap++)
+    {
+      if (to_pixmap)
+	{
+	  GdkRectangle rect = { 0, 0, WIDTH, HEIGHT };
+	  gdk_window_begin_paint_rect (drawing_area->window, &rect);
+	}
+	
+      start_time = g_timer_elapsed (timer, NULL);
+      for (i = 0; i < NUM_ITERS; i++)
+	{
+	  offset = (rand () % (WIDTH * HEIGHT * 4)) & -4;
+	  pixbuf = gdk_pixbuf_new_from_data (buf + offset, GDK_COLORSPACE_RGB, TRUE,
+					     8, WIDTH, HEIGHT, WIDTH * 4,
+					     NULL, NULL);
+	  gdk_pixbuf_render_to_drawable_alpha (pixbuf, drawing_area->window,
+					       0, 0, 0, 0, WIDTH, HEIGHT,
+					       GDK_PIXBUF_ALPHA_FULL, /* ignored */
+					       0x80, /* ignored */
+					       GDK_RGB_DITHER_NORMAL,
+					       0, 0);
+	  gdk_pixbuf_unref (pixbuf);
+	}
+      gdk_flush ();
+      total_time = g_timer_elapsed (timer, NULL) - start_time;
+
+      if (to_pixmap)
+	gdk_window_end_paint (drawing_area->window);
+      
+      g_print ("Alpha test%s time elapsed: %.2fs, %.1f fps, %.2f megapixels/s\n",
+	       to_pixmap ? " (to pixmap)" : "",
+	       total_time,
+	       NUM_ITERS / total_time,
+	       NUM_ITERS * (WIDTH * HEIGHT * 1e-6) / total_time);
+    }
+      
   g_print ("Please submit these results to http://www.levien.com/gdkrgb/survey.html\n");
 
 #if 1

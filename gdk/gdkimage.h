@@ -66,13 +66,13 @@ GdkImage*  gdk_image_new       (GdkImageType  type,
 				gint	      width,
 				gint	      height);
 
+#ifndef GDK_DISABLE_DEPRECATED
 GdkImage*  gdk_image_get       (GdkDrawable  *drawable,
 				gint	      x,
 				gint	      y,
 				gint	      width,
 				gint	      height);
 
-#ifndef GDK_DISABLE_DEPRECATED
 GdkImage * gdk_image_ref       (GdkImage     *image);
 void       gdk_image_unref     (GdkImage     *image);
 #endif

@@ -32,8 +32,8 @@ struct _GdkFont
 GType    gdk_font_get_type  (void);
 
 #ifndef GDK_MULTIHEAD_SAFE
-GdkFont* gdk_font_load	    (const gchar    *font_name);
-GdkFont* gdk_fontset_load   (const gchar    *fontset_name);
+GdkFont* gdk_font_load             (const gchar          *font_name);
+GdkFont* gdk_fontset_load          (const gchar          *fontset_name);
 GdkFont* gdk_font_from_description (PangoFontDescription *font_desc);
 #endif
 

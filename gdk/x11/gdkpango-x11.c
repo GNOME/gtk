@@ -54,7 +54,8 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
     {
       const char *val = g_getenv ("GDK_USE_XFT");
 
-      use_xft = val && (atoi (val) != 0);
+      use_xft = val && (atoi (val) != 0) && 
+	_gdk_x11_have_render (GDK_SCREEN_DISPLAY (screen));
     }
   
   if (use_xft)

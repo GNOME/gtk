@@ -78,7 +78,8 @@ gdk_pango_context_get_info (PangoContext *context, gboolean create)
 }
 
 static GdkGC *
-gdk_pango_get_gc (PangoContext   *context,
+gdk_pango_get_gc (GdkDrawable    *drawable,
+		  PangoContext   *context,
 		  PangoColor     *fg_color,
                   GdkBitmap      *stipple,
 		  GdkGC          *base_gc)
@@ -92,6 +93,8 @@ gdk_pango_get_gc (PangoContext   *context,
 
   screen = g_object_get_data (G_OBJECT (context), "gdk-pango-screen");
 
+  g_return_val_if_fail (gdk_drawable_get_screen (drawable) == screen, NULL);
+
   info = gdk_pango_context_get_info (context, FALSE);
 
   if (info == NULL || info->colormap == NULL)
@@ -100,8 +103,15 @@ gdk_pango_get_gc (PangoContext   *context,
       return NULL;
     }
   
-  root_window = gdk_screen_get_root_window (screen);
-  result = gdk_gc_new (root_window);
+  if (!drawable)
+    {
+      root_window = gdk_screen_get_root_window (screen);
+      result = gdk_gc_new (root_window);
+    }
+  else
+    {
+      result = gdk_gc_new (drawable);
+    }
   gdk_gc_copy (result, base_gc);
   
   if (fg_color)
@@ -258,7 +268,7 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
               tmp.green = background->green;
             }
           
-          bg_gc = gdk_pango_get_gc (context, &tmp, stipple, gc);
+          bg_gc = gdk_pango_get_gc (drawable, context, &tmp, stipple, gc);
           
 	  gdk_draw_rectangle (drawable, bg_gc, TRUE,
 			      x + (x_off + logical_rect.x) / PANGO_SCALE,
@@ -283,7 +293,7 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
               tmp.green = foreground->green;
             }
           
-          fg_gc = gdk_pango_get_gc (context, fg_set ? &tmp : NULL,
+          fg_gc = gdk_pango_get_gc (drawable, context, fg_set ? &tmp : NULL,
                                     stipple, gc);
         }
       else
@@ -299,7 +309,7 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
           if (embossed)
             {
               PangoColor color = { 65535, 65535, 65535 };
-              GdkGC *white_gc = gdk_pango_get_gc (context, &color, stipple, fg_gc);
+              GdkGC *white_gc = gdk_pango_get_gc (drawable, context, &color, stipple, fg_gc);
               gdk_draw_glyphs (drawable, white_gc, run->item->analysis.font,
                                gx + 1,
                                gy + 1,

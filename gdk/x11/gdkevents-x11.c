@@ -1963,27 +1963,21 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   unsigned char *data;
   Window *ret_children, ret_root, ret_parent;
   unsigned int ret_nchildren;
-  gint old_warnings = _gdk_error_warnings;
   gboolean send = FALSE;
   gboolean found = FALSE;
+  gboolean result = FALSE;
   int i;
   GdkDisplay *display= 
     gdk_x11_display_manager_get_display (_gdk_display_manager,
 					 xev->xany.display);
   _gdk_error_warnings = FALSE;
   _gdk_error_code = 0;
-  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xid, 
+  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xid, 
 		      gdk_x11_get_xatom_by_name_for_display (display,
-						     "_NET_WM_STATE"),
+							     "_NET_WM_STATE"),
 		      0, 0, False, AnyPropertyType,
-		      &type, &format, &nitems, &after, &data);
-
-  if (_gdk_error_code)
-    {
-      _gdk_error_warnings = old_warnings;
-
-      return FALSE;
-    }
+		      &type, &format, &nitems, &after, &data) != Success)
+    goto out;
 
   if (type)
     {
@@ -1993,15 +1987,10 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   else
     {
       /* OK, we're all set, now let's find some windows to send this to */
-      if (XQueryTree (GDK_DISPLAY_XDISPLAY (display), xid,
+      if (!XQueryTree (GDK_DISPLAY_XDISPLAY (display), xid,
 		      &ret_root, &ret_parent,
-		      &ret_children, &ret_nchildren) != True ||
-	  _gdk_error_code)
-	{
-	  _gdk_error_warnings = old_warnings;
-
-	  return FALSE;
-	}
+		      &ret_children, &ret_nchildren))	
+	goto out;
 
       for(i = 0; i < ret_nchildren; i++)
 	if (gdk_event_send_client_message_to_all_recurse (xev, ret_children[i], level + 1))
@@ -2016,19 +2005,22 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
       gdk_send_xevent_for_display (display, xid, False, NoEventMask, xev);
     }
 
-  _gdk_error_warnings = old_warnings;
+  result = send || found;
 
-  return (send || found);
+ out:
+  gdk_error_trap_pop ();
+
+  return result;
 }
 
 void
 gdk_event_send_clientmessage_toall (GdkEvent *event)
 {
   XEvent sev;
-  gint old_warnings = _gdk_error_warnings;
   GdkWindow *window;
 
   g_return_if_fail (event != NULL);
+
   if(!GDK_IS_DRAWABLE (event->any.window))
     window = gdk_screen_get_root_window (gdk_get_default_screen ());
   else
@@ -2046,8 +2038,6 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
   gdk_event_send_client_message_to_all_recurse (&sev,
 						GDK_WINDOW_XROOTWIN (window),
 						0);
-
-  _gdk_error_warnings = old_warnings;
 }
 
 /**
@@ -2068,12 +2058,11 @@ gdk_event_send_clientmessage_toall_for_screen (GdkScreen *screen,
 					       GdkEvent  *event)
 {
   XEvent sev;
-  gint old_warnings = _gdk_error_warnings;
   GdkWindow *root_window;
 
   g_return_if_fail (event != NULL);
-  if(!GDK_IS_DRAWABLE (event->any.window))
-    root_window = gdk_screen_get_root_window (screen);
+  
+  root_window = gdk_screen_get_root_window (screen);
   
   /* Set up our event to send, with the exception of its target window */
   sev.xclient.type = ClientMessage;
@@ -2087,8 +2076,6 @@ gdk_event_send_clientmessage_toall_for_screen (GdkScreen *screen,
   gdk_event_send_client_message_to_all_recurse (&sev, 
 						GDK_WINDOW_XID (root_window), 
 						0);
-
-  _gdk_error_warnings = old_warnings;
 }
 
 /*
@@ -2314,7 +2301,7 @@ static struct
   const char *gdk_name;
 } settings_map[] = {
   { "Net/DoubleClickTime", "gtk-double-click-timeout" },
-  { "Net/DragThreshold", "gtk-drag-threshold" },
+  { "Net/DndDragThreshold", "gtk-dnd-drag-threshold" },
   { "Gtk/ColorPalette", "gtk-color-palette" },
   { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
   { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },

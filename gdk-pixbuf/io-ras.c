@@ -130,7 +130,7 @@ static GdkPixbuf *gdk_pixbuf__ras_image_load(FILE * f, GError **error)
 	}
 	g_free(membuf);
 	if (State->pixbuf != NULL)
-		gdk_pixbuf_ref(State->pixbuf);
+		g_object_ref(State->pixbuf);
 
 	pb = State->pixbuf;
 
@@ -271,7 +271,7 @@ gdk_pixbuf__ras_image_stop_load(gpointer data, GError **error)
 		g_free(context->HeaderBuf);
 
 	if (context->pixbuf)
-		gdk_pixbuf_unref(context->pixbuf);
+		g_object_unref(context->pixbuf);
 
 	g_free(context);
 

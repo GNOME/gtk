@@ -36,7 +36,6 @@ IGNORE_HFILES=			\
 	gtkrbtree.h		\
 	gtktreedatalist.h	\
 	gtktextbtree.h		\
-	gtktextchild.h		\
 	gtktextdisplay.h	\
 	gtktextiterprivate.h	\
 	gtktextlayout.h		\
@@ -44,6 +43,7 @@ IGNORE_HFILES=			\
 	gtktextsegment.h	\
 	gtktexttagprivate.h	\
 	gtktexttypes.h		\
+	gtktextutil.h		\
 	gtktypebuiltins.h	\
 	xembed.h
 
@@ -122,10 +122,14 @@ HTML_IMAGES = \
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 content_files = 		\
+	running.sgml		\
 	building.sgml		\
+	changes-1.2.sgml	\
+	changes-2.0.sgml	\
 	compiling.sgml		\
 	framebuffer.sgml	\
 	objects_grouped.sgml	\
+	question_index.sgml	\
 	resources.sgml		\
 	text_widget.sgml	\
 	tree_widget.sgml	\

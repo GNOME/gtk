@@ -20,7 +20,9 @@
 #include "locale.h"
 #include <string.h>
 
+#include "gtk/gtklabel.h"
 #include "gtk/gtksignal.h"
+#include "gtk/gtkwindow.h"
 #include "gtkimcontextxim.h"
 #include <gdk/x11/gdkdisplaymgr-x11.h>
 #include <gdk/x11/gdkdisplay-x11.h>
@@ -51,6 +53,11 @@ static void     gtk_im_context_xim_get_preedit_string (GtkIMContext          *co
 						       gchar                **str,
 						       PangoAttrList        **attrs,
 						       gint                  *cursor_pos);
+
+static void status_window_show     (GtkIMContextXIM *context_xim);
+static void status_window_hide     (GtkIMContextXIM *context_xim);
+static void status_window_set_text (GtkIMContextXIM *context_xim,
+				    const gchar     *text);
 
 static XIC       gtk_im_context_xim_get_ic            (GtkIMContextXIM *context_xim);
 static GObjectClass *parent_class;
@@ -336,7 +343,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   if (!ic)
     return FALSE;
 
-  xevent.type = KeyPress;
+  xevent.type = (event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
   xevent.serial = 0;		/* hope it doesn't matter */
   xevent.send_event = event->send_event;
   xevent.display = GDK_DRAWABLE_XDISPLAY (event->window);
@@ -401,6 +408,9 @@ gtk_im_context_xim_focus_in (GtkIMContext *context)
     return;
 
   XSetICFocus (ic);
+
+  status_window_show (context_xim);
+
   return;
 }
 
@@ -414,6 +424,9 @@ gtk_im_context_xim_focus_out (GtkIMContext *context)
     return;
 
   XUnsetICFocus (ic);
+
+  status_window_hide (context_xim);
+
   return;
 }
 
@@ -476,6 +489,9 @@ gtk_im_context_xim_reset (GtkIMContext *context)
   if (!ic)
     return;
   
+
+  if (context_xim->preedit_length == 0)
+    return;
 
   preedit_attr = XVaCreateNestedList(0,
                                      XNPreeditState, &preedit_state,
@@ -613,7 +629,6 @@ preedit_start_callback (XIC      xic,
   GtkIMContext *context = GTK_IM_CONTEXT (client_data);
   
   g_signal_emit_by_name (context, "preedit_start");
-  g_print ("Starting preedit!\n");
 }		     
 
 static void
@@ -624,7 +639,6 @@ preedit_done_callback (XIC      xic,
   GtkIMContext *context = GTK_IM_CONTEXT (client_data);
   
   g_signal_emit_by_name (context, "preedit_end");  
-  g_print ("Ending preedit!\n");
 }		     
 
 static gint
@@ -777,7 +791,7 @@ status_start_callback (XIC      xic,
 		       XPointer client_data,
 		       XPointer call_data)
 {
-  g_print ("Status start\n");
+  return;
 } 
 
 static void
@@ -785,7 +799,7 @@ status_done_callback (XIC      xic,
 		      XPointer client_data,
 		      XPointer call_data)
 {
-  g_print ("Status done!\n");
+  return;
 }
 
 static void
@@ -795,18 +809,19 @@ status_draw_callback (XIC      xic,
 {
   GtkIMContextXIM *context = GTK_IM_CONTEXT_XIM (client_data);
 
-  g_print ("Status draw\n");
   if (call_data->type == XIMTextType)
     {
       gchar *text;
       xim_text_to_utf8 (context, call_data->data.text, &text);
 
       if (text)
-	g_print ("  %s\n", text);
+	status_window_set_text (context, text);
+      else
+	status_window_set_text (context, "");
     }
   else				/* bitmap */
     {
-      g_print ("   bitmap id = %#lx\n", call_data->data.bitmap);
+      g_print ("Status drawn with bitmap - id = %#lx\n", call_data->data.bitmap);
     }
 }
 
@@ -892,4 +907,178 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
     }
 
   return context_xim->ic;
+}
+
+/**************************
+ *                        *
+ * Status Window handling *
+ *                        *
+ **************************/
+
+static gboolean
+status_window_expose_event (GtkWidget      *widget,
+			    GdkEventExpose *event)
+{
+  gdk_draw_rectangle (widget->window,
+		      widget->style->base_gc [GTK_STATE_NORMAL],
+		      TRUE,
+		      0, 0,
+		      widget->allocation.width, widget->allocation.height);
+  gdk_draw_rectangle (widget->window,
+		      widget->style->text_gc [GTK_STATE_NORMAL],
+		      FALSE,
+		      0, 0,
+		      widget->allocation.width - 1, widget->allocation.height - 1);
+
+  return FALSE;
+}
+
+static void
+status_window_style_set (GtkWidget *toplevel,
+			 GtkStyle  *previous_style,
+			 GtkWidget *label)
+{
+  gint i;
+  
+  for (i = 0; i < 5; i++)
+    gtk_widget_modify_fg (label, i, &toplevel->style->text[i]);
+}
+
+static void
+status_window_destroy (GtkWidget *toplevel,
+		       GtkWidget *status_window)
+{
+  gtk_widget_destroy (status_window);
+  g_object_set_data (G_OBJECT (toplevel), "gtk-im-xim-status-window", NULL);
+}
+
+static gboolean
+status_window_configure (GtkWidget         *toplevel,
+			 GdkEventConfigure *event,
+			 GtkWidget         *status_window)
+{
+  GdkRectangle rect;
+  GtkRequisition requisition;
+  gint y;
+  gint height = gdk_screen_get_height (gtk_widget_get_screen (toplevel));
+  
+
+  gdk_window_get_frame_extents (toplevel->window, &rect);
+  gtk_widget_size_request (status_window, &requisition);
+
+  if (rect.y + rect.height + requisition.height < height)
+    y = rect.y + rect.height;
+  else
+    y = height - requisition.height;
+  
+  gtk_window_move (GTK_WINDOW (status_window), rect.x, y);
+
+  return FALSE;
+}
+
+static GtkWidget *
+status_window_get (GtkIMContextXIM *context_xim,
+		   gboolean         create)
+{
+  GdkWindow *toplevel_gdk;
+  GtkWidget *toplevel;
+  GtkWidget *status_window;
+  GtkWidget *status_label;
+  
+  if (!context_xim->client_window)
+    return NULL;
+
+  toplevel_gdk = context_xim->client_window;
+  while (TRUE)
+    {
+      GdkWindow *parent = gdk_window_get_parent (toplevel_gdk);
+      if (parent == gdk_get_default_root_window ())
+	break;
+      else
+	toplevel_gdk = parent;
+    }
+
+  gdk_window_get_user_data (toplevel_gdk, (gpointer *)&toplevel);
+  if (!toplevel)
+    return NULL;
+
+  status_window = g_object_get_data (G_OBJECT (toplevel), "gtk-im-xim-status-window");
+  if (status_window || !create)
+    return status_window;
+
+  status_window = gtk_window_new (GTK_WINDOW_POPUP);
+
+  gtk_window_set_policy (GTK_WINDOW (status_window), FALSE, FALSE, FALSE);
+  gtk_widget_set_app_paintable (status_window, TRUE);
+
+  status_label = gtk_label_new ("");
+  gtk_misc_set_padding (GTK_MISC (status_label), 1, 1);
+  gtk_widget_show (status_label);
+  
+  gtk_container_add (GTK_CONTAINER (status_window), status_label);
+
+  g_signal_connect (toplevel, "destroy",
+		    G_CALLBACK (status_window_destroy), status_window);
+  g_signal_connect (toplevel, "configure_event",
+		    G_CALLBACK (status_window_configure), status_window);
+
+  status_window_configure (toplevel, NULL, status_window);
+  
+  g_signal_connect (status_window, "style_set",
+		    G_CALLBACK (status_window_style_set), status_label);
+  g_signal_connect (status_window, "expose_event",
+		    G_CALLBACK (status_window_expose_event), NULL);
+  
+  g_object_set_data (G_OBJECT (toplevel), "gtk-im-xim-status-window", status_window);
+
+  return status_window;
+}
+
+static gboolean
+status_window_has_text (GtkWidget *status_window)
+{
+  GtkWidget *label = GTK_BIN (status_window)->child;
+  const gchar *text = gtk_label_get_text (GTK_LABEL (label));
+
+  return text[0] != '\0';
+}
+
+static void
+status_window_show (GtkIMContextXIM *context_xim)
+{
+  GtkWidget *status_window = status_window_get (context_xim, TRUE);
+
+  context_xim->status_visible = TRUE;
+  
+  if (status_window && status_window_has_text (status_window))
+    gtk_widget_show (status_window);
+}
+
+static void
+status_window_hide (GtkIMContextXIM *context_xim)
+{
+  GtkWidget *status_window = status_window_get (context_xim, FALSE);
+
+  context_xim->status_visible = FALSE;
+  
+  if (status_window)
+    gtk_widget_hide (status_window);
+}
+
+static void
+status_window_set_text (GtkIMContextXIM *context_xim,
+			const gchar     *text)
+{
+  GtkWidget *status_window = status_window_get (context_xim, TRUE);
+
+  if (status_window)
+    {
+      GtkWidget *label = GTK_BIN (status_window)->child;
+      gtk_label_set_text (GTK_LABEL (label), text);
+      
+      if (context_xim->status_visible && status_window_has_text (status_window))
+	gtk_widget_show (status_window);
+      else
+	gtk_widget_hide (status_window);
+    }
 }

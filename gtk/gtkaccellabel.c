@@ -345,7 +345,7 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	}
     }
   
-  return TRUE;
+  return FALSE;
 }
 
 static void
@@ -368,6 +368,13 @@ refetch_widget_accel_closure (GtkAccelLabel *accel_label)
   gtk_accel_label_set_accel_closure (accel_label, closure);
 }
 
+/**
+ * gtk_accel_label_set_accel_widget:
+ * @accel_label: a #GtkAccelLabel
+ * @accel_widget: the widget to be monitored.
+ *
+ * Sets the widget to be monitored by this accelerator label. 
+ **/
 void
 gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
 				  GtkWidget     *accel_widget)
@@ -421,6 +428,14 @@ check_accel_changed (GtkAccelGroup  *accel_group,
     gtk_accel_label_queue_refetch (accel_label);
 }
 
+/**
+ * gtk_accel_label_set_accel_closure:
+ * @accel_label: a #GtkAccelLabel
+ * @accel_closure: the closure to monitor for accelerator changes.
+ *
+ * Sets the closure to be monitored by this accelerator label. The closure
+ * must be connected to an accelerator group; see gtk_accel_group_connect().
+ **/
 void
 gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
 				   GClosure      *accel_closure)
@@ -477,7 +492,6 @@ gboolean
 gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 {
   GtkAccelLabelClass *class;
-  gchar *utf8;
 
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), FALSE);
 

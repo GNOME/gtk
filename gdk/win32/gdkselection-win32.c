@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,13 +26,15 @@
  */
 
 #include <string.h>
+#include <stdlib.h>
 
 #include "gdkproperty.h"
 #include "gdkselection.h"
 #include "gdkprivate-win32.h"
 
-/* We emulate the GDK_SELECTION window properties by storing
- * it's data in a per-window hashtable.
+/* We emulate the GDK_SELECTION window properties of windows (as used
+ * in the X11 backend) by using a hash table from GdkWindows to
+ * GdkSelProp structs.
  */
 
 typedef struct {
@@ -43,11 +46,18 @@ typedef struct {
 
 static GHashTable *sel_prop_table = NULL;
 
+static GdkSelProp *dropfiles_prop = NULL;
+
+/* We store the owner of each selection in this table. Obviously, this only
+ * is valid intra-app, and in fact it is necessary for the intra-app DND to work.
+ */
+static GHashTable *sel_owner_table = NULL;
+
 void
 _gdk_win32_selection_init (void)
 {
-  if (sel_prop_table == NULL)
-    sel_prop_table = g_hash_table_new (g_int_hash, g_int_equal);
+  sel_prop_table = g_hash_table_new (NULL, NULL);
+  sel_owner_table = g_hash_table_new (NULL, NULL);
 }
 
 void
@@ -59,18 +69,42 @@ _gdk_selection_property_store (GdkWindow *owner,
 {
   GdkSelProp *prop;
 
-  prop = g_hash_table_lookup (sel_prop_table, &GDK_WINDOW_HWND (owner));
+  prop = g_hash_table_lookup (sel_prop_table, GDK_WINDOW_HWND (owner));
   if (prop != NULL)
     {
       g_free (prop->data);
-      g_hash_table_remove (sel_prop_table, &GDK_WINDOW_HWND (owner));
+      g_hash_table_remove (sel_prop_table, GDK_WINDOW_HWND (owner));
     }
   prop = g_new (GdkSelProp, 1);
   prop->data = data;
   prop->length = length;
   prop->format = format;
   prop->type = type;
-  g_hash_table_insert (sel_prop_table, &GDK_WINDOW_HWND (owner), prop);
+  g_hash_table_insert (sel_prop_table, GDK_WINDOW_HWND (owner), prop);
+}
+
+void
+_gdk_dropfiles_store (gchar *data)
+{
+  if (data != NULL)
+    {
+      g_assert (dropfiles_prop == NULL);
+
+      dropfiles_prop = g_new (GdkSelProp, 1);
+      dropfiles_prop->data = data;
+      dropfiles_prop->length = strlen (data);
+      dropfiles_prop->format = 8;
+      dropfiles_prop->type = text_uri_list;
+    }
+  else
+    {
+      if (dropfiles_prop != NULL)
+	{
+	  g_free (dropfiles_prop->data);
+	  g_free (dropfiles_prop);
+	}
+      dropfiles_prop = NULL;
+    }
 }
 
 gboolean
@@ -79,24 +113,27 @@ gdk_selection_owner_set (GdkWindow *owner,
 			 guint32    time,
 			 gboolean   send_event)
 {
-  gchar *sel_name;
   HWND xwindow;
+  GdkEvent tmp_event;
+  gchar *sel_name;
 
-  GDK_NOTE (MISC,
+  GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
 	     g_print ("gdk_selection_owner_set: %#x %#x (%s)\n",
 		      (owner ? (guint) GDK_WINDOW_HWND (owner) : 0),
 		      (guint) selection, sel_name),
 	     g_free (sel_name)));
 
-  if (selection != gdk_clipboard_atom)
+  if (selection != GDK_SELECTION_CLIPBOARD)
     {
-      if (!owner)
-        return FALSE;
-      _gdk_selection_property_store (owner, selection, 0, 0, 0);
+      if (owner != NULL)
+	g_hash_table_insert (sel_owner_table, selection, GDK_WINDOW_HWND (owner));
+      else
+	g_hash_table_remove (sel_owner_table, selection);
       return TRUE;
     }
 
+  /* Rest of this function handles the CLIPBOARD selection */
   if (owner != NULL)
     {
       if (GDK_WINDOW_DESTROYED (owner))
@@ -107,13 +144,11 @@ gdk_selection_owner_set (GdkWindow *owner,
   else
     xwindow = NULL;
 
-  GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n", (guint) xwindow));
   if (!OpenClipboard (xwindow))
     {
       WIN32_API_FAILED ("OpenClipboard");
       return FALSE;
     }
-  GDK_NOTE (MISC, g_print ("...EmptyClipboard()\n"));
   if (!EmptyClipboard ())
     {
       WIN32_API_FAILED ("EmptyClipboard");
@@ -125,40 +160,32 @@ gdk_selection_owner_set (GdkWindow *owner,
   if (xwindow != NULL)
     SetClipboardData (CF_TEXT, NULL);
 #endif
-  GDK_NOTE (MISC, g_print ("...CloseClipboard()\n"));
   if (!CloseClipboard ())
     {
       WIN32_API_FAILED ("CloseClipboard");
       return FALSE;
     }
+
   if (owner != NULL)
     {
-      /* Send ourselves an ersatz selection request message so that
-       * gdk_property_change will be called to store the clipboard data.
+      /* Send ourselves a selection request message so that
+       * gdk_property_change will be called to store the clipboard
+       * data.
        */
-      SendMessage (xwindow, gdk_selection_request_msg,
-		   GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (selection)), 0);
+      GDK_NOTE (DND, g_print ("...sending GDK_SELECTION_REQUEST to ourselves\n"));
+      tmp_event.selection.type = GDK_SELECTION_REQUEST;
+      tmp_event.selection.window = owner;
+      tmp_event.selection.send_event = FALSE;
+      tmp_event.selection.selection = selection;
+      tmp_event.selection.target = GDK_TARGET_STRING;
+      tmp_event.selection.property = _gdk_selection_property;
+      tmp_event.selection.requestor = (guint32) xwindow;
+      tmp_event.selection.time = time;
+
+      gdk_event_put (&tmp_event);
     }
 
   return TRUE;
-}
-
-/* callback for g_hash_table_for_each */
-typedef struct {
-  GdkAtom         atom;
-  GdkNativeWindow hwnd;
-} SelectionAndHwnd;
-
-static void
-window_from_selection (gpointer key,
-                 gpointer value,
-                 gpointer user_data)
-{
-  GdkSelProp *selprop = (GdkSelProp *)value;  
-  SelectionAndHwnd *sah = (SelectionAndHwnd *) user_data;
-
-  if (selprop->type == sah->atom)
-    sah->hwnd = *(GdkNativeWindow*) key;
 }
 
 GdkWindow*
@@ -167,32 +194,18 @@ gdk_selection_owner_get (GdkAtom selection)
   GdkWindow *window;
   gchar *sel_name;
 
-#if 0
-  /* XXX Hmm, gtk selections seem to work best with this. This causes
-   * gtk to always get the clipboard contents from Windows, and not
-   * from the editable's own stashed-away copy.
+  /* Return NULL for CLIPBOARD, because otherwise cut&paste
+   * inside the same application doesn't work. We must pretend to gtk
+   * that we don't have the selection, so that we always fetch it from
+   * the Windows clipboard. See also comments in
+   * gdk_selection_send_notify().
    */
-  return NULL;
-#else
-  /* HB: The above is no longer true with recent changes to get
-   * inter-app drag&drop working ...
-   */
-  if (selection != gdk_clipboard_atom)
-    {
-      SelectionAndHwnd sah;
-      sah.atom = selection;
-      sah.hwnd = 0;
- 
-      g_hash_table_foreach (sel_prop_table, window_from_selection, &sah);
+  if (selection == GDK_SELECTION_CLIPBOARD)
+    return NULL;
 
-      window = gdk_win32_handle_table_lookup (sah.hwnd);
-    }
-  else
-    window = gdk_win32_handle_table_lookup ((GdkNativeWindow) GetClipboardOwner ());
+  window = gdk_window_lookup (g_hash_table_lookup (sel_owner_table, selection));
 
-#endif
-
-  GDK_NOTE (MISC,
+  GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
 	     g_print ("gdk_selection_owner_get: %#x (%s) = %#x\n",
 		      (guint) selection, sel_name,
@@ -202,6 +215,27 @@ gdk_selection_owner_get (GdkAtom selection)
   return window;
 }
 
+static void
+generate_selection_notify (GdkWindow *requestor,
+			   GdkAtom    selection,
+			   GdkAtom    target,
+			   GdkAtom    property,
+			   guint32    time)
+{
+  GdkEvent tmp_event;
+
+  tmp_event.selection.type = GDK_SELECTION_NOTIFY;
+  tmp_event.selection.window = requestor;
+  tmp_event.selection.send_event = FALSE;
+  tmp_event.selection.selection = selection;
+  tmp_event.selection.target = target;
+  tmp_event.selection.property = property;
+  tmp_event.selection.requestor = 0;
+  tmp_event.selection.time = time;
+
+  gdk_event_put (&tmp_event);
+}
+
 void
 gdk_selection_convert (GdkWindow *requestor,
 		       GdkAtom    selection,
@@ -209,15 +243,14 @@ gdk_selection_convert (GdkWindow *requestor,
 		       guint32    time)
 {
   HGLOBAL hdata;
-  guchar *ptr, *data, *datap, *p;
-  guint i, length, slength;
+  GdkAtom property = _gdk_selection_property;
   gchar *sel_name, *tgt_name;
 
   g_return_if_fail (requestor != NULL);
   if (GDK_WINDOW_DESTROYED (requestor))
     return;
 
-  GDK_NOTE (MISC,
+  GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
 	     tgt_name = gdk_atom_name (target),
 	     g_print ("gdk_selection_convert: %#x %#x (%s) %#x (%s)\n",
@@ -227,96 +260,188 @@ gdk_selection_convert (GdkWindow *requestor,
 	     g_free (sel_name),
 	     g_free (tgt_name)));
 
-  if (selection == gdk_clipboard_atom)
+  if (selection == GDK_SELECTION_CLIPBOARD &&
+      target == gdk_atom_intern ("TARGETS", FALSE))
     {
-      /* Converting the CLIPBOARD selection means he wants the
-       * contents of the clipboard. Get the clipboard data,
-       * and store it for later.
+      /* He wants to know what formats are on the clipboard.  If there
+       * is some kind of text, tell him so.
        */
-      GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n",
-			       (guint) GDK_WINDOW_HWND (requestor)));
       if (!OpenClipboard (GDK_WINDOW_HWND (requestor)))
 	{
 	  WIN32_API_FAILED ("OpenClipboard");
 	  return;
 	}
 
-      GDK_NOTE (MISC, g_print ("...GetClipboardData(CF_TEXT)\n"));
-      if ((hdata = GetClipboardData (CF_TEXT)) != NULL)
+      if (IsClipboardFormatAvailable (CF_UNICODETEXT) ||
+	  IsClipboardFormatAvailable (cf_utf8_string) ||
+	  IsClipboardFormatAvailable (CF_TEXT))
 	{
+	  GdkAtom *data = g_new (GdkAtom, 1);
+	  *data = GDK_TARGET_STRING;
+	  _gdk_selection_property_store (requestor, GDK_SELECTION_TYPE_ATOM,
+					 32, data, 1 * sizeof (GdkAtom));
+	}
+      else
+	property = GDK_NONE;
+    }
+  else if (selection == GDK_SELECTION_CLIPBOARD &&
+	   (target == compound_text ||
+	    target == GDK_TARGET_STRING))
+    {
+      /* Converting the CLIPBOARD selection means he wants the
+       * contents of the clipboard. Get the clipboard data,
+       * and store it for later.
+       */
+      if (!OpenClipboard (GDK_WINDOW_HWND (requestor)))
+	{
+	  WIN32_API_FAILED ("OpenClipboard");
+	  return;
+	}
+
+      /* Try various formats. First the simplest, CF_UNICODETEXT. */
+      if ((hdata = GetClipboardData (CF_UNICODETEXT)) != NULL)
+	{
+	  wchar_t *ptr, *wcs, *p, *q;
+	  guchar *data;
+	  gint length, wclen;
+
 	  if ((ptr = GlobalLock (hdata)) != NULL)
 	    {
 	      length = GlobalSize (hdata);
 	      
-	      GDK_NOTE (MISC, g_print ("...got data: %d bytes: %.10s\n",
-				       length, ptr));
-	      
-	      slength = 0;
+	      GDK_NOTE (DND, g_print ("...CF_UNICODETEXT: %d bytes\n",
+				      length));
+
+	      /* Strip out \r */
+	      wcs = g_new (wchar_t, (length + 1) * 2);
 	      p = ptr;
-	      for (i = 0; i < length; i++)
+	      q = wcs;
+	      wclen = 0;
+	      while (*p)
 		{
-		  if (*p == '\0')
-		    break;
-		  else if (*p != '\r')
-		    slength++;
+		  if (*p != '\r')
+		    {
+		      *q++ = *p;
+		      wclen++;
+		    }
 		  p++;
 		}
+
+	      data = _gdk_ucs2_to_utf8 (wcs, wclen);
+	      g_free (wcs);
 	      
-	      data = datap = g_malloc (slength + 1);
-	      p = ptr;
-	      for (i = 0; i < length; i++)
-		{
-		  if (*p == '\0')
-		    break;
-		  else if (*p != '\r')
-		    *datap++ = *p;
-		  p++;
-		}
-	      *datap++ = '\0';
-	      _gdk_selection_property_store (requestor, GDK_TARGET_STRING, 8,
-				  data, strlen (data) + 1);
-	      
+	      _gdk_selection_property_store (requestor, target, 8,
+					     data, strlen (data) + 1);
 	      GlobalUnlock (hdata);
 	    }
 	}
-      GDK_NOTE (MISC, g_print ("...CloseClipboard()\n"));
+      else if ((hdata = GetClipboardData (cf_utf8_string)) != NULL)
+	{
+	  /* UTF8_STRING is a format we store ourselves when necessary */
+	  guchar *ptr;
+	  gint length;
+
+	  if ((ptr = GlobalLock (hdata)) != NULL)
+	    {
+	      length = GlobalSize (hdata);
+	      
+	      GDK_NOTE (DND, g_print ("...UTF8_STRING: %d bytes: %.10s\n",
+				      length, ptr));
+	      
+	      _gdk_selection_property_store (requestor, target, 8,
+					     g_strdup (ptr), strlen (ptr) + 1);
+	      GlobalUnlock (hdata);
+	    }
+	}
+      else if ((hdata = GetClipboardData (CF_TEXT)) != NULL)
+	{
+	  /* We must always assume the data can contain non-ASCII
+	   * in either the current code page, or if there is CF_LOCALE
+	   * data, in that locale's default code page.
+	   */
+	  HGLOBAL hlcid;
+	  UINT cp = CP_ACP;
+	  wchar_t *wcs, *wcs2, *p, *q;
+	  guchar *ptr, *data;
+	  gint length, wclen;
+
+	  if ((ptr = GlobalLock (hdata)) != NULL)
+	    {
+	      length = GlobalSize (hdata);
+	      
+	      GDK_NOTE (DND, g_print ("...CF_TEXT: %d bytes: %.10s\n",
+				       length, ptr));
+	      
+	      if ((hlcid = GetClipboardData (CF_LOCALE)) != NULL)
+		{
+		  gchar buf[10];
+		  LCID *lcidptr = GlobalLock (hlcid);
+		  if (GetLocaleInfo (*lcidptr, LOCALE_IDEFAULTANSICODEPAGE,
+				     buf, sizeof (buf)))
+		    {
+		      cp = atoi (buf);
+		      GDK_NOTE (DND, g_print ("...CF_LOCALE: %#lx cp:%d\n",
+					      *lcidptr, cp));
+		    }
+		  GlobalUnlock (hlcid);
+		}
+
+	      wcs = g_new (wchar_t, length + 1);
+	      wclen = MultiByteToWideChar (cp, 0, ptr, length,
+					   wcs, length + 1);
+
+	      /* Strip out \r */
+	      wcs2 = g_new (wchar_t, wclen);
+	      p = wcs;
+	      q = wcs2;
+	      wclen = 0;
+	      while (*p)
+		{
+		  if (*p != '\r')
+		    {
+		      *q++ = *p;
+		      wclen++;
+		    }
+		  p++;
+		}
+	      g_free (wcs);
+
+	      data = _gdk_ucs2_to_utf8 (wcs2, wclen);
+	      g_free (wcs2);
+	      
+	      _gdk_selection_property_store (requestor, target, 8,
+					     data, strlen (data) + 1);
+	      GlobalUnlock (hdata);
+	    }
+	}
+      else
+	property = GDK_NONE;
+
       CloseClipboard ();
-
-
-      /* Send ourselves an ersatz selection notify message so that we actually
-       * fetch the data.
-       */
-      SendMessage (GDK_WINDOW_HWND (requestor), gdk_selection_notify_msg, 
-                   GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (selection)), 
-                   GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (target)));
     }
-  else if (selection == gdk_win32_dropfiles_atom)
+  else if (selection == gdk_win32_dropfiles)
     {
       /* This means he wants the names of the dropped files.
        * gdk_dropfiles_filter already has stored the text/uri-list
-       * data, tempoarily on gdk_root_parent's selection "property".
+       * data temporarily in dropfiles_prop.
        */
-      GdkSelProp *prop;
-
-      prop = g_hash_table_lookup (sel_prop_table,
-				  &GDK_WINDOW_HWND (_gdk_parent_root));
-
-      if (prop != NULL)
+      if (dropfiles_prop != NULL)
 	{
-	  g_hash_table_remove (sel_prop_table,
-			       &GDK_WINDOW_HWND (_gdk_parent_root));
-	  _gdk_selection_property_store (requestor, prop->type, prop->format,
-			      prop->data, prop->length);
-	  g_free (prop);
-	  SendMessage (GDK_WINDOW_HWND (requestor), gdk_selection_notify_msg, 
-                     GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (selection)), 
-                     GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (target)));
+	  _gdk_selection_property_store
+	    (requestor, selection, dropfiles_prop->format,
+	     dropfiles_prop->data, dropfiles_prop->length);
+	  g_free (dropfiles_prop);
+	  dropfiles_prop = NULL;
 	}
     }
   else
-    {
-      g_warning ("gdk_selection_convert: General case not implemented");
-    }
+    property = GDK_NONE;
+
+  /* Generate a selection notify message so that we actually fetch
+   * the data (if property == _gdk_selection_property) or indicating failure
+   * (if property == GDK_NONE).
+   */
+  generate_selection_notify (requestor, selection, target, property, time);
 }
 
 gint
@@ -333,21 +458,24 @@ gdk_selection_property_get (GdkWindow  *requestor,
   if (GDK_WINDOW_DESTROYED (requestor))
     return 0;
   
-  GDK_NOTE (MISC, g_print ("gdk_selection_property_get: %#x\n",
+  GDK_NOTE (DND, g_print ("gdk_selection_property_get: %#x\n",
 			   (guint) GDK_WINDOW_HWND (requestor)));
 
-  prop = g_hash_table_lookup (sel_prop_table, &GDK_WINDOW_HWND (requestor));
+  prop = g_hash_table_lookup (sel_prop_table, GDK_WINDOW_HWND (requestor));
 
   if (prop == NULL)
     {
       *data = NULL;
       return 0;
     }
+
   *data = g_malloc (prop->length);
   if (prop->length > 0)
     memmove (*data, prop->data, prop->length);
+
   if (ret_type)
     *ret_type = prop->type;
+
   if (ret_format)
     *ret_format = prop->format;
 
@@ -359,14 +487,15 @@ _gdk_selection_property_delete (GdkWindow *window)
 {
   GdkSelProp *prop;
   
-  prop = g_hash_table_lookup (sel_prop_table, &GDK_WINDOW_HWND (window));
+  GDK_NOTE (DND, g_print ("_gdk_selection_property_delete: %#x\n",
+			   (guint) GDK_WINDOW_HWND (window)));
+
+  prop = g_hash_table_lookup (sel_prop_table, GDK_WINDOW_HWND (window));
   if (prop != NULL)
     {
       g_free (prop->data);
-      g_hash_table_remove (sel_prop_table, &GDK_WINDOW_HWND (window));
+      g_hash_table_remove (sel_prop_table, GDK_WINDOW_HWND (window));
     }
-  else
-    g_warning ("huh?");
 }
 
 void
@@ -376,9 +505,10 @@ gdk_selection_send_notify (guint32  requestor,
 			   GdkAtom  property,
 			   guint32  time)
 {
+  GdkEvent tmp_event;
   gchar *sel_name, *tgt_name, *prop_name;
 
-  GDK_NOTE (MISC,
+  GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
 	     tgt_name = gdk_atom_name (target),
 	     prop_name = gdk_atom_name (property),
@@ -394,22 +524,30 @@ gdk_selection_send_notify (guint32  requestor,
   /* Send ourselves a selection clear message so that gtk thinks we don't
    * have the selection, and will claim it anew when needed, and
    * we thus get a chance to store data in the Windows clipboard.
-   * Otherwise, if a gtkeditable does a copy to clipboard several times
+   * Otherwise, if a gtkeditable does a copy to CLIPBOARD several times
    * only the first one actually gets copied to the Windows clipboard,
-   * as only he first one causes a call to gdk_property_change.
+   * as only the first one causes a call to gdk_property_change().
    *
    * Hmm, there is something fishy with this. Cut and paste inside the
    * same app didn't work, the gtkeditable immediately forgot the
-   * clipboard contents in gtk_editable_selection_clear as a result of
-   * this message. OTOH, when I changed gdk_selection_owner_get to
-   * always return NULL, it works. Sigh.
+   * clipboard contents in gtk_editable_selection_clear() as a result
+   * of this message. OTOH, when I changed gdk_selection_owner_get to
+   * return NULL for CLIPBOARD, it works. Sigh.
    */
 
-  SendMessage ((HWND) requestor, 
-               gdk_selection_clear_msg, 
-               GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (selection)), 
-               GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (target)));
+  tmp_event.selection.type = GDK_SELECTION_CLEAR;
+  tmp_event.selection.window = gdk_window_lookup (requestor);
+  tmp_event.selection.send_event = FALSE;
+  tmp_event.selection.selection = selection;
+  tmp_event.selection.target = 0;
+  tmp_event.selection.property = 0;
+  tmp_event.selection.requestor = 0;
+  tmp_event.selection.time = time;
+
+  gdk_event_put (&tmp_event);
 }
+
+/* Simplistic implementations of text list and compound text functions */
 
 gint
 gdk_text_property_to_text_list (GdkAtom       encoding,
@@ -418,10 +556,20 @@ gdk_text_property_to_text_list (GdkAtom       encoding,
 				gint          length,
 				gchar      ***list)
 {
-  GDK_NOTE (MISC,
-	    g_print ("gdk_text_property_to_text_list not implemented\n"));
+  gchar *enc_name;
+
+  GDK_NOTE (DND, (enc_name = gdk_atom_name (encoding),
+		  g_print ("gdk_text_property_to_text_list: %s %d %.20s %d\n",
+			   enc_name, format, text, length),
+		  g_free (enc_name)));
+
+  if (!list)
+    return 0;
+
+  *list = g_new (gchar **, 1);
+  **list = g_strdup (text);
   
-  return 0;
+  return 1;
 }
 
 void
@@ -429,7 +577,8 @@ gdk_free_text_list (gchar **list)
 {
   g_return_if_fail (list != NULL);
 
-  /* ??? */
+  g_free (*list);
+  g_free (list);
 }
 
 gint
@@ -439,7 +588,19 @@ gdk_string_to_compound_text (const gchar *str,
 			     guchar     **ctext,
 			     gint        *length)
 {
-  g_warning ("gdk_string_to_compound_text: Not implemented");
+  GDK_NOTE (DND, g_print ("gdk_string_to_compound_text: %.20s\n", str));
+
+  if (encoding)
+    *encoding = compound_text;
+
+  if (format)
+    *format = 8;
+
+  if (ctext)
+    *ctext = g_strdup (str);
+
+  if (length)
+    *length = strlen (str);
 
   return 0;
 }
@@ -447,7 +608,7 @@ gdk_string_to_compound_text (const gchar *str,
 void
 gdk_free_compound_text (guchar *ctext)
 {
-  g_warning ("gdk_free_compound_text: Not implemented");
+  g_free (ctext);
 }
 
 /* These are lifted from gdkselection-x11.c, just to get GTK+ to build.
@@ -534,7 +695,7 @@ make_list (const gchar  *text,
  * @list:     location to store the list of strings or %NULL. The
  *            list should be freed with g_strfreev().
  * 
- * Convert a text property in the giving encoding to
+ * Converts a text property in the giving encoding to
  * a list of UTF-8 strings. 
  * 
  * Return value: the number of strings in the resulting
@@ -554,7 +715,7 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
     {
       return make_list ((gchar *)text, length, TRUE, list);
     }
-  else if (encoding == gdk_atom_intern ("UTF8_STRING", FALSE))
+  else if (encoding == utf8_string)
     {
       return make_list ((gchar *)text, length, FALSE, list);
     }
@@ -563,8 +724,8 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
       gchar **local_list;
       gint local_count;
       gint i;
-      gchar *charset = NULL;
-      gboolean need_conversion= g_get_charset (&charset);
+      const gchar *charset = NULL;
+      gboolean need_conversion = g_get_charset (&charset);
       gint count = 0;
       GError *error = NULL;
       
@@ -663,7 +824,7 @@ sanitize_utf8 (const gchar *src)
  * gdk_utf8_to_string_target:
  * @str: a UTF-8 string
  * 
- * Convert an UTF-8 string into the best possible representation
+ * Converts an UTF-8 string into the best possible representation
  * as a STRING. The representation of characters not in STRING
  * is not specified; it may be as pseudo-escape sequences
  * \x{ABCD}, or it may be in some other form of approximation.
@@ -675,21 +836,7 @@ sanitize_utf8 (const gchar *src)
 gchar *
 gdk_utf8_to_string_target (const gchar *str)
 {
-  GError *error = NULL;
-  
-  gchar *tmp_str = sanitize_utf8 (str);
-  gchar *result =  g_convert_with_fallback (tmp_str, -1,
-					    "ISO-8859-1", "UTF-8",
-					    NULL, NULL, NULL, &error);
-  if (!result)
-    {
-      g_warning ("Error converting from UTF-8 to STRING: %s",
-		 error->message);
-      g_error_free (error);
-    }
-  
-  g_free (tmp_str);
-  return result;
+  return sanitize_utf8 (str);
 }
 
 /**
@@ -701,10 +848,10 @@ gdk_utf8_to_string_target (const gchar *str)
  * @length:   location to store the length of the data
  *            stored in @ctext
  * 
- * Convert from UTF-8 to compound text. 
+ * Converts from UTF-8 to compound text. 
  * 
  * Return value: %TRUE if the conversion succeeded, otherwise
- *               false.
+ *               %FALSE.
  **/
 gboolean
 gdk_utf8_to_compound_text (const gchar *str,
@@ -714,14 +861,14 @@ gdk_utf8_to_compound_text (const gchar *str,
 			   gint        *length)
 {
   gboolean need_conversion;
-  gchar *charset;
+  const gchar *charset;
   gchar *locale_str, *tmp_str;
   GError *error = NULL;
   gboolean result;
 
   g_return_val_if_fail (str != NULL, FALSE);
 
-  need_conversion = g_get_charset (&charset);
+  need_conversion = !g_get_charset (&charset);
 
   tmp_str = sanitize_utf8 (str);
 

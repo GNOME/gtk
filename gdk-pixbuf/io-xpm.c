@@ -898,7 +898,8 @@ static XPMColorEntry xColors[] = {
 static int
 compare_xcolor_entries (const void *a, const void *b)
 {
-  return g_strcasecmp ((const char *) a, ((const XPMColorEntry *) b)->name);
+  return g_ascii_strcasecmp ((const char *) a, 
+			     ((const XPMColorEntry *) b)->name);
 }
 
 static gboolean
@@ -1297,9 +1298,12 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 
 		color_name = xpm_extract_color (buffer);
 
-		if ((color_name == NULL) || (g_strcasecmp (color_name, "None") == 0)
+		if ((color_name == NULL) || (g_ascii_strcasecmp (color_name, "None") == 0)
 		    || (parse_color (color_name, color) == FALSE)) {
 			color->transparent = TRUE;
+			color->red = 0;
+			color->green = 0;
+			color->blue = 0;
 			is_trans = TRUE;
 		}
 
@@ -1473,7 +1477,7 @@ gdk_pixbuf__xpm_image_stop_load (gpointer data,
                                                   NULL,
                                                   context->user_data);
                        (* context->update_func) (pixbuf, 0, 0, pixbuf->width, pixbuf->height, context->user_data);
-                       gdk_pixbuf_unref (pixbuf);
+                       g_object_unref (pixbuf);
 
                        retval = TRUE;
                }

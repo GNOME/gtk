@@ -306,12 +306,28 @@ Get the number of signals defined by this object.
 
 @obj: the object to query.
 
+<!-- ##### MACRO GTK_OBJECT_SET_FLAGS ##### -->
+<para>
+Turns on certain object flags.  (Private)
+</para>
+
+@obj: the object to affect.
+@flag: the flags to set.
+
 <!-- ##### MACRO GTK_OBJECT_SIGNALS ##### -->
 <para>
 Get the array of signals defined for this object.
 </para>
 
 @obj: the object to fetch the signals from.
+
+<!-- ##### MACRO GTK_OBJECT_UNSET_FLAGS ##### -->
+<para>
+Turns off certain object flags.  (Private)
+</para>
+
+@obj: the object to affect.
+@flag: the flags to unset.
 
 <!-- ##### MACRO GTK_STOCK_BUTTON_APPLY ##### -->
 <para>
@@ -1072,12 +1088,6 @@ after other user handlers and the default handler.
 </para>
 
 
-<!-- ##### ARG GtkSettings:gtk-dnd-drag-threshold ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### USER_FUNCTION GtkSignalDestroy ##### -->
 <para>
 A function which you can use to clean up when the
@@ -1144,6 +1154,12 @@ Holds the data for a statusbar message. <structfield>text</structfield> holds th
 @context_id: 
 @message_id: 
 
+<!-- ##### STRUCT GtkTextBTreeNode ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ARG GtkTextTag:justify ##### -->
 <para>
 A #GtkJustification for the text. This is only used when the tag is
@@ -1181,6 +1197,7 @@ produce superscript and subscript.
 <para>
 
 </para>
+
 
 <!-- ##### ARG GtkTextView:width-columns ##### -->
 <para>
@@ -1468,6 +1485,13 @@ If the window shrinks automatically when widgets within it shrink.
 @accel_group: 
 @accel_key: 
 @accel_mods: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_accel_group_get_type ##### -->
+<para>
+
+</para>
+
 @Returns: 
 
 <!-- ##### FUNCTION gtk_accel_group_handle_add ##### -->
@@ -2526,6 +2550,12 @@ Internal function used by #GtkHPaned and #GtkVPaned
 @child1_req: 
 @child2_req: 
 
+<!-- ##### MACRO gtk_paned_handle_size ##### -->
+<para>
+Old name for gtk_paned_set_handle_size().
+</para>
+
+
 <!-- ##### FUNCTION gtk_paned_set_handle_size ##### -->
 <para>
 Set the the handle size to @size x @size pixels.
@@ -2615,6 +2645,51 @@ Sets the function that GTK+ will use to load images
 </para>
 
 @ruler: the gtkruler
+
+<!-- ##### FUNCTION gtk_selection_clear ##### -->
+<para>
+Internal function.
+</para>
+
+@widget: 
+@event: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_selection_incr_event ##### -->
+<para>
+Internal function.
+</para>
+
+@window: 
+@event: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_selection_notify ##### -->
+<para>
+Internal function.
+</para>
+
+@widget: 
+@event: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_selection_property_notify ##### -->
+<para>
+Internal function.
+</para>
+
+@widget: 
+@event: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_selection_request ##### -->
+<para>
+Internal function.
+</para>
+
+@widget: 
+@event: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_settings_get_global ##### -->
 <para>
@@ -2920,6 +2995,19 @@ a gtk_object_unref().
 @tree_store: 
 @n_columns: 
 
+<!-- ##### FUNCTION gtk_tree_view_column_cell_event ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@event: 
+@path_string: 
+@background_area: 
+@cell_area: 
+@flags: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_tree_view_column_set_cell_data ##### -->
 <para>
 
@@ -3121,15 +3209,6 @@ fundamental type.
 @widget: 
 @width: 
 @height: 
-
-<!-- ##### FUNCTION gtk_widget_is_ancestor ##### -->
-<para>
-
-</para>
-
-@widget: 
-@ancestor: 
-@Returns: 
 
 <!-- ##### FUNCTION gtk_widget_lock_accelerators ##### -->
 <para>

@@ -327,6 +327,8 @@ gtk_text_buffer_new (GtkTextTagTable *table)
       text_buffer->tag_table = table;
 
       g_object_ref (G_OBJECT (text_buffer->tag_table));
+
+      _gtk_text_tag_table_add_buffer (table, text_buffer);
     }
   
   return text_buffer;
@@ -344,6 +346,7 @@ gtk_text_buffer_finalize (GObject *object)
 
   if (buffer->tag_table)
     {
+      _gtk_text_tag_table_remove_buffer (buffer->tag_table, buffer);
       g_object_unref (G_OBJECT (buffer->tag_table));
       buffer->tag_table = NULL;
     }
@@ -366,7 +369,10 @@ static GtkTextTagTable*
 get_table (GtkTextBuffer *buffer)
 {
   if (buffer->tag_table == NULL)
-    buffer->tag_table = gtk_text_tag_table_new ();
+    {
+      buffer->tag_table = gtk_text_tag_table_new ();
+      _gtk_text_tag_table_add_buffer (buffer->tag_table, buffer);
+    }
 
   return buffer->tag_table;
 }
@@ -376,7 +382,7 @@ get_btree (GtkTextBuffer *buffer)
 {
   if (buffer->btree == NULL)
     buffer->btree = _gtk_text_btree_new (gtk_text_buffer_get_tag_table (buffer),
-                                        buffer);
+                                         buffer);
 
   return buffer->btree;
 }
@@ -1445,7 +1451,7 @@ gtk_text_buffer_real_insert_anchor (GtkTextBuffer      *buffer,
  * when obtaining the buffer contents as a string, will be represented
  * by the Unicode "object replacement character" 0xFFFC. Note that the
  * "slice" variants for obtaining portions of the buffer as a string
- * include this character for pixbufs, but the "text" variants do
+ * include this character for child anchors, but the "text" variants do
  * not. e.g. see gtk_text_buffer_get_slice() and
  * gtk_text_buffer_get_text(). Consider
  * gtk_text_buffer_create_child_anchor() as a more convenient
@@ -1475,7 +1481,9 @@ gtk_text_buffer_insert_child_anchor (GtkTextBuffer      *buffer,
  * 
  * This is a convenience function which simply creates a child anchor
  * with gtk_text_child_anchor_new() and inserts it into the buffer
- * with gtk_text_buffer_insert_child_anchor().
+ * with gtk_text_buffer_insert_child_anchor(). The new anchor is
+ * owned by the buffer; no reference count is returned to
+ * the caller of gtk_text_buffer_create_child_anchor().
  * 
  * Return value: the created child anchor
  **/
@@ -1828,6 +1836,15 @@ gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer)
   return gtk_text_buffer_get_mark (buffer, "selection_bound");
 }
 
+/**
+ * gtk_text_buffer_get_iter_at_child_anchor:
+ * @buffer: a #GtkTextBuffer
+ * @iter: an iterator to be initialized
+ * @anchor: a child anchor that appears in @buffer
+ *
+ * Obtains the location of @anchor within @buffer.
+ * 
+ **/
 void
 gtk_text_buffer_get_iter_at_child_anchor (GtkTextBuffer      *buffer,
                                           GtkTextIter        *iter,
@@ -2881,6 +2898,7 @@ paste_from_buffer (ClipboardRequest    *request_data,
   post_paste_cleanup (request_data);
       
   g_object_unref (G_OBJECT (src_buffer));
+  g_free (request_data);
 }
 
 static void
@@ -3503,6 +3521,19 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
   return cache->entries[0].attrs;
 }
 
+void
+_gtk_text_buffer_notify_will_remove_tag (GtkTextBuffer *buffer,
+                                         GtkTextTag    *tag)
+{
+  /* This removes tag from the buffer, but DOESN'T emit the
+   * remove_tag signal, because we can't afford to have user
+   * code messing things up at this point; the tag MUST be removed
+   * entirely.
+   */
+  if (buffer->btree)
+    _gtk_text_btree_notify_will_remove_tag (buffer->btree, tag);
+}
+
 /*
  * Debug spew
  */
@@ -3512,8 +3543,3 @@ _gtk_text_buffer_spew (GtkTextBuffer *buffer)
 {
   _gtk_text_btree_spew (get_btree (buffer));
 }
-
-
-
-
-

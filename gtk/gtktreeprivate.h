@@ -28,8 +28,6 @@ extern "C" {
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtkrbtree.h>
-
-
   
 #define TREE_VIEW_DRAG_WIDTH 6
 
@@ -53,11 +51,12 @@ enum
   DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT = 3,
   DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT = 4
 };
+  
 #define GTK_TREE_VIEW_SET_FLAG(tree_view, flag)   G_STMT_START{ (tree_view->priv->flags|=flag); }G_STMT_END
 #define GTK_TREE_VIEW_UNSET_FLAG(tree_view, flag) G_STMT_START{ (tree_view->priv->flags&=~(flag)); }G_STMT_END
 #define GTK_TREE_VIEW_FLAG_SET(tree_view, flag)   ((tree_view->priv->flags&flag)==flag)
 #define TREE_VIEW_HEADER_HEIGHT(tree_view)        (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE)?tree_view->priv->header_height:0)
-#define TREE_VIEW_COLUMN_WIDTH(column)             (CLAMP (column->width, (column->min_width!=-1)?column->min_width:column->width, (column->max_width!=-1)?column->max_width:column->width))
+#define TREE_VIEW_COLUMN_REQUESTED_WIDTH(column)  (CLAMP (column->requested_width, (column->min_width!=-1)?column->min_width:column->requested_width, (column->max_width!=-1)?column->max_width:column->requested_width))
 #define TREE_VIEW_DRAW_EXPANDERS(tree_view)       (!GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IS_LIST)&&GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS))
 
  /* This lovely little value is used to determine how far away from the title bar
@@ -103,11 +102,17 @@ struct _GtkTreeViewPrivate
   GtkTreeViewColumn *drag_column;
 
   /* bin_window offset */
+  GtkTreeRowReference *top_row;
+  gint top_row_dy;
+  /* dy == y pos of top_row + top_row_dy */
+  /* we cache it for simplicity of the code */
   gint dy;
   gint drag_column_x;
 
   GtkTreeViewColumn *expander_column;
   GtkTreeViewColumn *edited_column;
+  guint presize_handler_timer;
+  guint validate_rows_timer;
 
   /* Focus code */
   GtkTreeViewColumn *focus_column;
@@ -117,8 +122,6 @@ struct _GtkTreeViewPrivate
   GtkTreeRowReference *cursor;
 
   /* Column Resizing */
-  GdkCursor *cursor_drag;
-  GdkGC *xor_gc;
   gint drag_pos;
   gint x_drag;
 
@@ -174,7 +177,8 @@ struct _GtkTreeViewPrivate
   guint drag_column_window_state : 3;
   /* hint to display rows in alternating colors */
   guint has_rules : 1;
-
+  guint mark_rows_col_dirty : 1;
+  
   /* interactive search */
   guint enable_search : 1;
   gint search_column;
@@ -203,7 +207,7 @@ struct _GtkTreeViewPrivate
          return ret;                                                    \
        };                               }G_STMT_END
 
-#define TREE_VIEW_INTERNAL_ASSERT_VOID(expr)     G_STMT_START{             \
+#define TREE_VIEW_INTERNAL_ASSERT_VOID(expr)     G_STMT_START{          \
      if (!(expr))                                                       \
        {                                                                \
          g_log (G_LOG_DOMAIN,                                           \
@@ -269,14 +273,16 @@ gboolean     _gtk_tree_view_find_node                 (GtkTreeView       *tree_v
 GtkTreePath *_gtk_tree_view_find_path                 (GtkTreeView       *tree_view,
 						       GtkRBTree         *tree,
 						       GtkRBNode         *node);
-void         _gtk_tree_view_update_size               (GtkTreeView       *tree_view);
 void         _gtk_tree_view_child_move_resize         (GtkTreeView       *tree_view,
 						       GtkWidget         *widget,
 						       gint               x,
 						       gint               y,
 						       gint               width,
 						       gint               height);
-
+void         _gtk_tree_view_queue_draw_node           (GtkTreeView       *tree_view,
+						       GtkRBTree         *tree,
+						       GtkRBNode         *node,
+						       GdkRectangle      *clip_rect);
 
 void _gtk_tree_view_column_realize_button   (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column);
@@ -297,7 +303,7 @@ gboolean _gtk_tree_view_column_cell_event   (GtkTreeViewColumn  *tree_column,
 void _gtk_tree_view_column_start_editing (GtkTreeViewColumn *tree_column,
 					  GtkCellEditable   *editable_widget);
 void _gtk_tree_view_column_stop_editing  (GtkTreeViewColumn *tree_column);
-					 
+void _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view);					 
 
 GtkTreeSelection* _gtk_tree_selection_new                (void);
 GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);

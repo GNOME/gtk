@@ -204,11 +204,14 @@ builtin_objs = @INCLUDED_LOADER_OBJ@
 endif
 
 DEPS = libgdk_pixbuf-1.3.la
-INCLUDES = @STRIP_BEGIN@ \
+INCLUDES = @STRIP_BEGIN@ 			\
+	-DG_LOG_DOMAIN=\"GdkPixbuf\"		\
 	-I$(top_srcdir) -I$(top_builddir) 	\
 	-I$(top_srcdir)/gdk-pixbuf 		\
 	-I$(top_builddir)/gdk-pixbuf 		\
 	-DGTK_VERSION=\"@GTK_VERSION@\"		\
+	-DG_DISABLE_DEPRECATED			\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED		\
 	@INCLUDED_LOADER_DEFINE@ 		\
 	@GTK_DEBUG_FLAGS@			\
 	@GDK_PIXBUF_DEP_CFLAGS@			\
@@ -287,10 +290,10 @@ $(srcdir)/gdk-pixbuf-enum-types.h: s-enum-types-h
 
 s-enum-types-h: @REBUILD@ $(gdk_pixbuf_headers) Makefile
 	( cd $(srcdir) && glib-mkenums \
-			--fhead "#ifndef __GDK_PIXBUF_ENUM_TYPES_H__\n#define __GDK_PIXBUF_ENUM_TYPES_H__\n" \
+			--fhead "#ifndef __GDK_PIXBUF_ENUM_TYPES_H__\n#define __GDK_PIXBUF_ENUM_TYPES_H__\n\n#include <glib-object.h>\n\nG_BEGIN_DECLS\n" \
 			--fprod "/* enumerations from \"@filename@\" */\n" \
 			--vhead "GType @enum_name@_get_type (void);\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n"         \
-			--ftail "#endif /* __GDK_PIXBUF_ENUM_TYPES_H__ */" \
+			--ftail "G_END_DECLS\n\n#endif /* __GDK_PIXBUF_ENUM_TYPES_H__ */" \
 		$(gdk_pixbuf_headers) ) > tmp-gdk-pixbuf-enum-types.h \
 	&& (cmp -s tmp-gdk-pixbuf-enum-types.h $(srcdir)/gdk-pixbuf-enum-types.h || cp tmp-gdk-pixbuf-enum-types.h $(srcdir)/gdk-pixbuf-enum-types.h ) \
 	&& rm -f tmp-gdk-pixbuf-enum-types.h \
@@ -350,6 +353,7 @@ EXTRA_DIST =			\
         gdk-pixbuf-csource.1    \
 	makefile.mingw		\
 	makefile.mingw.in	\
+	makefile.msc		\
 	gdk_pixbuf.def		\
 	gdk-pixbuf-marshal.c	\
 	gdk-pixbuf-marshal.list		\

@@ -474,7 +474,7 @@ progressive_prepared_callback (GdkPixbufLoader* loader, gpointer data)
         pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
         g_assert (pixbuf != NULL);
 
-        gdk_pixbuf_ref (pixbuf); /* for the RGB window */
+        g_object_ref (pixbuf); /* for the RGB window */
 
         *retloc = new_testrgb_window (pixbuf, "Progressive");
 

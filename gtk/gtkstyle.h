@@ -59,14 +59,9 @@ typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
 					 GValue           *property_value);
 
 /* We make this forward declaration here, since we pass
- * GtkWidgt's to the draw functions.
+ * GtkWidget's to the draw functions.
  */
 typedef struct _GtkWidget      GtkWidget;
-
-/* This is used for having dynamic style changing stuff
- * fg, bg, light, dark, mid, text, base
- */
-#define GTK_STYLE_NUM_STYLECOLORS()	(7 * 5)
 
 #define GTK_STYLE_ATTACHED(style)	(GTK_STYLE (style)->attach_count > 0)
 
@@ -340,6 +335,7 @@ struct _GtkStyleClass
 				 GtkPositionType	 gap_side);
   void (*draw_focus)		(GtkStyle		*style,
 				 GdkWindow		*window,
+                                 GtkStateType            state_type,
 				 GdkRectangle		*area,
 				 GtkWidget		*widget,
 				 const gchar		*detail,
@@ -779,6 +775,7 @@ void gtk_paint_extension  (GtkStyle        *style,
 			   GtkPositionType  gap_side);
 void gtk_paint_focus      (GtkStyle        *style,
 			   GdkWindow       *window,
+			   GtkStateType     state_type,
 			   GdkRectangle    *area,
 			   GtkWidget       *widget,
 			   const gchar     *detail,
@@ -853,7 +850,7 @@ const GValue* _gtk_style_peek_property_value (GtkStyle           *style,
 					      GtkRcPropertyParser parser);
 
 
-/* depprecated */
+/* deprecated */
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_style_apply_default_pixmap(s,gw,st,a,x,y,w,h) gtk_style_apply_default_background (s,gw,1,st,a,x,y,w,h)
 void gtk_draw_string     (GtkStyle        *style,

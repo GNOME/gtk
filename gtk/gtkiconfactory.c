@@ -134,11 +134,11 @@ gtk_icon_factory_finalize (GObject *object)
  * gtk_icon_factory_new:
  *
  * Creates a new #GtkIconFactory. An icon factory manages a collection
- * of #GtkIconSet; a #GtkIconSet manages a set of variants of a
+ * of #GtkIconSet<!>s; a #GtkIconSet manages a set of variants of a
  * particular icon (i.e. a #GtkIconSet contains variants for different
  * sizes and widget states). Icons in an icon factory are named by a
  * stock ID, which is a simple string identifying the icon. Each
- * #GtkStyle has a list of #GtkIconFactory derived from the current
+ * #GtkStyle has a list of #GtkIconFactory<!>s derived from the current
  * theme; those icon factories are consulted first when searching for
  * an icon. If the theme doesn't set a particular icon, GTK+ looks for
  * the icon in a list of default icon factories, maintained by
@@ -1718,7 +1718,7 @@ gtk_icon_source_set_size (GtkIconSource *source,
  * @source: a #GtkIconSource
  * 
  * Obtains the text direction this icon source applies to. The return
- * value is only useful/meaningful if the text direction is NOT
+ * value is only useful/meaningful if the text direction is <emphasis>not</emphasis> 
  * wildcarded.
  * 
  * Return value: text direction this source matches
@@ -1736,7 +1736,7 @@ gtk_icon_source_get_direction (const GtkIconSource *source)
  * @source: a #GtkIconSource
  * 
  * Obtains the widget state this icon source applies to. The return
- * value is only useful/meaningful if the widget state is NOT
+ * value is only useful/meaningful if the widget state is <emphasis>not</emphasis>
  * wildcarded.
  * 
  * Return value: widget state this source matches
@@ -1754,7 +1754,7 @@ gtk_icon_source_get_state (const GtkIconSource *source)
  * @source: a #GtkIconSource
  * 
  * Obtains the icon size this source applies to. The return value
- * is only useful/meaningful if the icon size is NOT wildcarded.
+ * is only useful/meaningful if the icon size is <emphasis>not</emphasis> wildcarded.
  * 
  * Return value: icon size this source matches.
  **/

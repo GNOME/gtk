@@ -732,9 +732,11 @@ gtk_text_iter_get_visible_line_offset (const GtkTextIter *iter)
   ensure_char_offsets (real);
 
   check_invariants (iter);
-
+  
   vis_offset = real->line_char_offset;
 
+  g_assert (vis_offset >= 0);
+  
   _gtk_text_btree_get_iter_at_line (real->tree,
                                     &pos,
                                     real->line,
@@ -792,12 +794,14 @@ gtk_text_iter_get_visible_line_index (const GtkTextIter *iter)
   if (real == NULL)
     return 0;
 
-  ensure_char_offsets (real);
+  ensure_byte_offsets (real);
 
   check_invariants (iter);
 
   vis_offset = real->line_byte_offset;
 
+  g_assert (vis_offset >= 0);
+  
   _gtk_text_btree_get_iter_at_line (real->tree,
                                     &pos,
                                     real->line,
@@ -2109,7 +2113,7 @@ _gtk_text_iter_backward_indexable_segment (GtkTextIter *iter)
    * segment just before our current segment.
    */
   g_assert (seg != real->segment);
-  while (seg != real->segment)
+  do
     {
       prev_seg = seg;
       prev_any_seg = any_seg;
@@ -2119,6 +2123,7 @@ _gtk_text_iter_backward_indexable_segment (GtkTextIter *iter)
       while (seg->char_count == 0)
         seg = seg->next;
     }
+  while (seg != real->segment);
 
   g_assert (prev_seg != NULL);
   g_assert (prev_any_seg != NULL);
@@ -3055,7 +3060,7 @@ gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
  * @iter: a #GtkTextIter
  * @count: number of times to move
  * 
- * Calls gtk_text_iter_backward_word_starts() up to @count times.
+ * Calls gtk_text_iter_backward_word_start() up to @count times.
  *
  * Return value: %TRUE if @iter moved and is not the end iterator 
  **/
@@ -5129,8 +5134,10 @@ _gtk_text_btree_get_iter_at_child_anchor (GtkTextBTree       *tree,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (tree != NULL);
   g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
+  
+  seg = anchor->segment;  
 
-  seg = anchor->segment;
+  g_assert (seg->body.child.line != NULL);
   
   iter_init_from_segment (iter, tree,
                           seg->body.child.line, seg);

@@ -14,19 +14,12 @@ Styles
 
 </para>
 
-<!-- ##### MACRO GTK_STYLE_NUM_STYLECOLORS ##### -->
-<para>
-
-</para>
-
-
-
 <!-- ##### MACRO GTK_STYLE_ATTACHED ##### -->
 <para>
-
+Returns whether the style is attached to a window.
 </para>
 
-@style: 
+@style: a #GtkStyle.
 
 
 <!-- ##### STRUCT GtkStyle ##### -->
@@ -695,6 +688,7 @@ Styles
 
 @style: 
 @window: 
+@state_type: 
 @area: 
 @widget: 
 @detail: 

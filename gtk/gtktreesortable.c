@@ -168,7 +168,7 @@ gtk_tree_sortable_set_sort_func (GtkTreeSortable        *sortable,
 
   g_return_if_fail (iface != NULL);
   g_return_if_fail (iface->set_sort_func != NULL);
-  g_return_if_fail (sort_column_id > 0);
+  g_return_if_fail (sort_column_id >= 0);
 
   (* iface->set_sort_func) (sortable, sort_column_id, sort_func, user_data, destroy);
 }

@@ -125,6 +125,13 @@ struct _GtkTextBufferClass
   /* Called at the start and end of an atomic user action */
   void (* begin_user_action)  (GtkTextBuffer *buffer);
   void (* end_user_action)    (GtkTextBuffer *buffer);
+
+  GtkFunction pad1;
+  GtkFunction pad2;
+  GtkFunction pad3;
+  GtkFunction pad4;
+  GtkFunction pad5;
+  GtkFunction pad6;
 };
 
 GType        gtk_text_buffer_get_type       (void) G_GNUC_CONST;
@@ -360,6 +367,9 @@ GtkTextBTree*   _gtk_text_buffer_get_btree             (GtkTextBuffer      *buff
 const PangoLogAttr* _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
                                                          const GtkTextIter *anywhere_in_line,
                                                          gint              *char_len);
+
+void _gtk_text_buffer_notify_will_remove_tag (GtkTextBuffer *buffer,
+                                              GtkTextTag    *tag);
 
 #ifdef __cplusplus
 }

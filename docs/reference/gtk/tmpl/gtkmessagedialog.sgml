@@ -15,11 +15,11 @@ from #GtkDialog without too much effort, but #GtkMessageDialog saves typing.
 
 <para>
 The easiest way to do a modal message dialog is to use gtk_dialog_run(), though
-you can also pass in the GTK_DIALOG_MODAL flag, gtk_dialog_run() automatically
+you can also pass in the %GTK_DIALOG_MODAL flag, gtk_dialog_run() automatically
 makes the dialog modal and waits for the user to respond to it. gtk_dialog_run()
 returns when any dialog button is clicked.
 <example>
-<title>Modal #GtkMessageDialog</title>
+<title>A modal dialog.</title>
 <programlisting>
  dialog = gtk_message_dialog_new (main_application_window,
                                   GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -36,7 +36,7 @@ returns when any dialog button is clicked.
 <para>
 You might do a non-modal #GtkMessageDialog as follows:
 <example>
-<title>Non-modal #GtkMessageDialog</title>
+<title>A non-modal dialog.</title>
 <programlisting>
  dialog = gtk_message_dialog_new (main_application_window,
                                   GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -46,9 +46,9 @@ You might do a non-modal #GtkMessageDialog as follows:
                                   filename, g_strerror (errno));
 
  /* Destroy the dialog when the user responds to it (e.g. clicks a button) */
- gtk_signal_connect_object (GTK_OBJECT (dialog), "response",
-                            GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                            GTK_OBJECT (dialog));
+ g_signal_connect_swapped (GTK_OBJECT (dialog), "response",
+                           G_CALLBACK (gtk_widget_destroy),
+                           GTK_OBJECT (dialog));
 </programlisting>
 </example>
 </para>
@@ -77,7 +77,7 @@ The type of message being displayed in the dialog.
 <!-- ##### ENUM GtkButtonsType ##### -->
 <para>
 Prebuilt sets of buttons for the dialog. If 
-none of these choices are appropriate, simply use GTK_BUTTONS_NONE
+none of these choices are appropriate, simply use %GTK_BUTTONS_NONE
 then call gtk_dialog_add_buttons().
 </para>
 

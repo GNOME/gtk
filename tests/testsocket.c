@@ -195,7 +195,7 @@ add_child (GtkWidget *window,
 	   gboolean   active)
 {
   Socket *socket;
-  char *argv[3] = { "./testsocket_child", NULL, NULL };
+  char *argv[4] = { "./testsocket_child", NULL, NULL, NULL };
   char buffer[20];
   char dpy_buf[60];
   char* screen_separator;

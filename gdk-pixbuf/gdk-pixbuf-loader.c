@@ -163,7 +163,7 @@ gdk_pixbuf_loader_finalize (GObject *object)
     g_warning ("GdkPixbufLoader finalized without calling gdk_pixbuf_loader_close() - this is not allowed. You must explicitly end the data stream to the loader before dropping the last reference.");
   
   if (priv->animation)
-    gdk_pixbuf_animation_unref (priv->animation);
+    g_object_unref (priv->animation);
   
   g_free (priv);
   
@@ -180,13 +180,13 @@ gdk_pixbuf_loader_prepare (GdkPixbuf          *pixbuf,
   priv = GDK_PIXBUF_LOADER (loader)->priv;
 
   if (anim)
-    g_object_ref (G_OBJECT (anim));
+    g_object_ref (anim);
   else
     anim = gdk_pixbuf_non_anim_new (pixbuf);
   
   priv->animation = anim;
   
-  g_signal_emit (G_OBJECT (loader), pixbuf_loader_signals[AREA_PREPARED], 0);
+  g_signal_emit (loader, pixbuf_loader_signals[AREA_PREPARED], 0);
 }
 
 static void
@@ -201,7 +201,7 @@ gdk_pixbuf_loader_update (GdkPixbuf *pixbuf,
   
   priv = GDK_PIXBUF_LOADER (loader)->priv;
   
-  g_signal_emit (G_OBJECT (loader),
+  g_signal_emit (loader,
                  pixbuf_loader_signals[AREA_UPDATED],
                  0,
                  x, y,
@@ -318,13 +318,13 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader,
  * @error: return location for errors
  *
  * This will cause a pixbuf loader to parse the next @count bytes of
- * an image.  It will return TRUE if the data was loaded successfully,
- * and FALSE if an error occurred.  In the latter case, the loader
- * will be closed, and will not accept further writes. If FALSE is
+ * an image.  It will return %TRUE if the data was loaded successfully,
+ * and %FALSE if an error occurred.  In the latter case, the loader
+ * will be closed, and will not accept further writes. If %FALSE is
  * returned, @error will be set to an error from the #GDK_PIXBUF_ERROR
  * or #G_FILE_ERROR domains.
  *
- * Return value: #TRUE if the write was successful, or #FALSE if the loader
+ * Return value: %TRUE if the write was successful, or %FALSE if the loader
  * cannot parse the buffer.
  **/
 gboolean
@@ -424,7 +424,7 @@ gdk_pixbuf_loader_new_with_type (const char *image_type,
   if (tmp != NULL)
     {
       g_propagate_error (error, tmp);
-      g_object_unref (G_OBJECT (retval));
+      g_object_unref (retval);
       return NULL;
     }
 
@@ -435,7 +435,7 @@ gdk_pixbuf_loader_new_with_type (const char *image_type,
  * gdk_pixbuf_loader_get_pixbuf:
  * @loader: A pixbuf loader.
  *
- * Queries the GdkPixbuf that a pixbuf loader is currently creating.
+ * Queries the #GdkPixbuf that a pixbuf loader is currently creating.
  * In general it only makes sense to call this function after the
  * "area_prepared" signal has been emitted by the loader; this means
  * that enough data has been read to know the size of the image that
@@ -470,13 +470,13 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
  * gdk_pixbuf_loader_get_animation:
  * @loader: A pixbuf loader
  *
- * Queries the GdkPixbufAnimation that a pixbuf loader is currently creating.
- * In general it only makes sense to call this function afer the "area_prepared"
+ * Queries the #GdkPixbufAnimation that a pixbuf loader is currently creating.
+ * In general it only makes sense to call this function after the "area_prepared"
  * signal has been emitted by the loader. If the loader doesn't have enough
- * bytes yet (hasn't emitted the area_prepared signal) this function will return
- * %NULL.
+ * bytes yet (hasn't emitted the "area_prepared" signal) this function will 
+ * return %NULL.
  *
- * Return value: The GdkPixbufAnimation that the loader is loading, or NULL if
+ * Return value: The #GdkPixbufAnimation that the loader is loading, or %NULL if
  not enough data has been read to determine the information.
 **/
 GdkPixbufAnimation *
@@ -501,7 +501,7 @@ gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader)
  * gdk_pixbuf_loader_write() will occur, so that it can free its
  * internal loading structures. Also, tries to parse any data that
  * hasn't yet been parsed; if the remaining data is partial or
- * corrupt, an error will be returned.  If FALSE is returned, @error
+ * corrupt, an error will be returned.  If %FALSE is returned, @error
  * will be set to an error from the #GDK_PIXBUF_ERROR or #G_FILE_ERROR
  * domains. If you're just cancelling a load rather than expecting it
  * to be finished, passing %NULL for @error to ignore it is
@@ -541,7 +541,7 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
   
   priv->closed = TRUE;
   
-  g_signal_emit (G_OBJECT (loader), pixbuf_loader_signals[CLOSED], 0);
+  g_signal_emit (loader, pixbuf_loader_signals[CLOSED], 0);
 
   return retval;
 }

@@ -927,9 +927,9 @@ predraw_set_foreground (GdkGC       *gc,
   if (*ok && (hpen = ExtCreatePen (win32_gc->pen_style,
 				   (win32_gc->pen_width > 0 ? win32_gc->pen_width : 1),
 				   &logbrush, 0, NULL)) == NULL)
-    WIN32_GDI_FAILED ("ExtCreatePen");
+    WIN32_GDI_FAILED ("ExtCreatePen"), *ok = FALSE;
   
-  if (SelectObject (win32_gc->hdc, hpen) == NULL)
+  if (*ok && SelectObject (win32_gc->hdc, hpen) == NULL)
     WIN32_GDI_FAILED ("SelectObject"), *ok = FALSE;
 
   switch (win32_gc->fill_style)
@@ -948,8 +948,14 @@ predraw_set_foreground (GdkGC       *gc,
 	WIN32_GDI_FAILED ("CreateSolidBrush"), *ok = FALSE;
       break;
   }
-  if (*ok && SelectObject (win32_gc->hdc, hbr) == NULL)
-    WIN32_GDI_FAILED ("SelectObject"), *ok = FALSE;
+  if (*ok)
+    {
+      HBRUSH old_hbr = SelectObject (win32_gc->hdc, hbr);
+      if (old_hbr == NULL)
+	WIN32_GDI_FAILED ("SelectObject"), *ok = FALSE;
+      else if (!DeleteObject (old_hbr))
+	WIN32_GDI_FAILED ("DeleteObject");
+    }
 }  
 
 static void
@@ -979,7 +985,7 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 		   GdkGCValuesMask usage)
 {
   GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
-  GdkDrawableImplWin32 *impl;
+  GdkDrawableImplWin32 *impl = NULL;
   gboolean ok = TRUE;
   int flag;
 
@@ -991,6 +997,8 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
     impl = GDK_DRAWABLE_IMPL_WIN32 ((GDK_WINDOW_OBJECT (drawable))->impl);
   else if (GDK_IS_PIXMAP (drawable))
     impl = GDK_DRAWABLE_IMPL_WIN32 ((GDK_PIXMAP_OBJECT (drawable))->impl);
+  else
+    g_assert_not_reached ();
 
   win32_gc->hwnd = impl->handle;
 
@@ -1199,7 +1207,7 @@ gdk_win32_hdc_release (GdkDrawable    *drawable,
 		       GdkGCValuesMask usage)
 {
   GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
-  GdkDrawableImplWin32 *impl;
+  GdkDrawableImplWin32 *impl = NULL;
   HGDIOBJ hpen = NULL;
   HGDIOBJ hbr = NULL;
 
@@ -1209,6 +1217,8 @@ gdk_win32_hdc_release (GdkDrawable    *drawable,
     impl = GDK_DRAWABLE_IMPL_WIN32 ((GDK_WINDOW_OBJECT (drawable))->impl);
   else if (GDK_IS_PIXMAP (drawable))
     impl = GDK_DRAWABLE_IMPL_WIN32 ((GDK_PIXMAP_OBJECT (drawable))->impl);
+  else
+    g_assert_not_reached ();
 
   if (usage & GDK_GC_FOREGROUND)
     {

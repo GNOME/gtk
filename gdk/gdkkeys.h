@@ -71,7 +71,7 @@ struct _GdkKeymapClass
 {
   GObjectClass parent_class;
 
-  void (*direction_changed) (void);
+  void (*direction_changed) (GdkKeymap *keymap);
 };
 
 GType gdk_keymap_get_type (void) G_GNUC_CONST;

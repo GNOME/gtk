@@ -103,7 +103,6 @@ struct _GtkIncrConversion
 
 struct _GtkIncrInfo
 {
-  GtkWidget *widget;		/* Selection owner */
   GdkWindow *requestor;		/* Requestor window - we create a GdkWindow
 				   so we can receive events */
   GdkAtom    selection;		/* Selection we're sending */
@@ -574,19 +573,6 @@ gtk_selection_remove_all (GtkWidget *widget)
   
   /* Remove pending requests/incrs for this widget */
   
-  tmp_list = current_incrs;
-  while (tmp_list)
-    {
-      next = tmp_list->next;
-      if (((GtkIncrInfo *)tmp_list->data)->widget == widget)
-	{
-	  current_incrs = g_list_remove_link (current_incrs, tmp_list);
-	  /* structure will be freed in timeout */
-	  g_list_free (tmp_list);
-	}
-      tmp_list = next;
-    }
-  
   tmp_list = current_retrievals;
   while (tmp_list)
     {
@@ -918,7 +904,7 @@ gtk_selection_data_get_text (GtkSelectionData *selection_data)
  *           stored here must be freed with g_free().
  * @n_atoms: location to store number of items in @targets.
  * 
- * Get the contents of @selection_data as an array of targets.
+ * Gets the contents of @selection_data as an array of targets.
  * This can be used to interpret the results of getting
  * the standard TARGETS target that is always supplied for
  * any selection.
@@ -958,7 +944,7 @@ gtk_selection_data_get_targets (GtkSelectionData  *selection_data,
  * @selection_data: a #GtkSelectionData object
  * 
  * Given a #GtkSelectionData object holding a list of targets,
- * Determines if any of the targets in @targets can be used to
+ * determines if any of the targets in @targets can be used to
  * provide text.
  * 
  * Return value: %TRUE if @selection_data holds a list of targets,
@@ -1088,8 +1074,9 @@ gtk_selection_request (GtkWidget *widget,
     return FALSE;
   
   info = g_new (GtkIncrInfo, 1);
+
+  g_object_ref (widget);
   
-  info->widget = widget;
   info->selection = event->selection;
   info->num_incrs = 0;
   
@@ -1261,12 +1248,14 @@ gtk_selection_request (GtkWidget *widget,
 					     event->property, 
 					     event->time);
     }
-  
+
   if (info->num_incrs == 0)
     {
       g_free (info->conversions);
       g_free (info);
     }
+
+  g_object_unref (widget);
   
   return TRUE;
 }

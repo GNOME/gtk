@@ -76,7 +76,7 @@ The standard cursors available.
 @GDK_QUESTION_ARROW: <inlinegraphic format="png" fileref="question_arrow.png"></inlinegraphic>
 @GDK_RIGHT_PTR: <inlinegraphic format="png" fileref="right_ptr.png"></inlinegraphic>
 @GDK_RIGHT_SIDE: <inlinegraphic format="png" fileref="right_side.png"></inlinegraphic>
-@GDK_RIGHT_TEE: <inlinegraphic format="png" fileref="right_tee.png"></inlinegraphic></inlinegraphic>
+@GDK_RIGHT_TEE: <inlinegraphic format="png" fileref="right_tee.png"></inlinegraphic>
 @GDK_RIGHTBUTTON: <inlinegraphic format="png" fileref="rightbutton.png"></inlinegraphic>
 @GDK_RTL_LOGO: <inlinegraphic format="png" fileref="rtl_logo.png"></inlinegraphic>
 @GDK_SAILBOAT: <inlinegraphic format="png" fileref="sailboat.png"></inlinegraphic>
@@ -122,7 +122,8 @@ The standard cursors available.
 <para>
 Creates a new cursor from a given pixmap and mask. Both the pixmap and mask
 must have a depth of 1 (i.e. each pixel has only 2 values - on or off).
-The standard cursor size is 16 by 16 pixels.
+The standard cursor size is 16 by 16 pixels. You can create a bitmap 
+from inline data as in the below example.
 </para>
 <example><title>Creating a custom cursor.</title>
 <programlisting>

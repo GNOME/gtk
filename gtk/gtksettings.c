@@ -30,6 +30,7 @@ enum {
   PROP_THEME_NAME,
   PROP_KEY_THEME_NAME,
   PROP_MENU_BAR_ACCEL,
+  PROP_DND_DRAG_THRESHOLD,
   PROP_SCREEN
 };
 
@@ -206,8 +207,17 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   "F10",
                                                                   G_PARAM_READWRITE),
                                              NULL);
-
   g_assert (result == PROP_MENU_BAR_ACCEL);
+
+  result = settings_install_property_parser (class,
+					     g_param_spec_int ("gtk-dnd-drag-threshold",
+							       _("Drag threshold"),
+							       _("Number of pixels the cursor can move before dragging"),
+							       1, G_MAXINT, 8,
+                                                               G_PARAM_READWRITE),
+					     NULL);
+  g_assert (result == PROP_DND_DRAG_THRESHOLD);
+  
 }
 
 static void
@@ -292,6 +302,8 @@ gtk_settings_get_property (GObject     *object,
 			   GParamSpec  *pspec)
 {
   GtkSettings *settings = GTK_SETTINGS (object);
+  GType value_type = G_VALUE_TYPE (value);
+  GType fundamental_type = G_TYPE_FUNDAMENTAL (value_type);
 
   if (G_VALUE_HOLDS(value, GDK_TYPE_SCREEN))
     {
@@ -300,7 +312,12 @@ gtk_settings_get_property (GObject     *object,
       return;
     }
 
-  if (g_value_type_transformable (G_TYPE_INT, G_VALUE_TYPE (value)) ||
+  /* For enums and strings, we need to get the value as a string,
+   * not as an int, since we support using names/nicks as the setting
+   * value.
+   */
+  if ((g_value_type_transformable (G_TYPE_INT, value_type) &&
+       !(fundamental_type == G_TYPE_ENUM || fundamental_type == G_TYPE_FLAGS)) ||
       g_value_type_transformable (G_TYPE_STRING, G_VALUE_TYPE (value)) ||
       g_value_type_transformable (GDK_TYPE_COLOR, G_VALUE_TYPE (value)))
     {
@@ -616,11 +633,8 @@ gtk_settings_set_property_value (GtkSettings            *settings,
   
   name = g_strdup (prop_name);
   g_strcanon (name, G_CSET_A_2_Z G_CSET_a_2_z G_CSET_DIGITS "-", '-');
-  name_quark = g_quark_try_string (name);
-  if (name_quark)
-    g_free (name);
-  else
-    name_quark = g_quark_from_string (name);
+  name_quark = g_quark_from_string (name);
+  g_free (name);
 
   qvalue = g_datalist_id_get_data (&settings->queued_settings, name_quark);
   if (!qvalue)

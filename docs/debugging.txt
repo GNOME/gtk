@@ -19,7 +19,7 @@ G_DISABLE_ASSERT
 G_DISABLE_CHECKS
   If set, disable the g_return_if_fail and g_return_val_if_fail macros
 
-GTK_NO_CHECK_CASTS
+G_DISABLE_CAST_CHECKS
   If set, don't check casts between different object types
 
 
@@ -28,7 +28,7 @@ time by the --enable-debug option.
 
 --enable-debug=minimum [default]
   Enable only inexpensive sanity checking 
-    sets GTK_NO_CHECK_CASTS
+    sets G_DISABLE_CAST_CHECKS
 
 --enable-debug=yes
   Enable all debugging support
@@ -36,7 +36,7 @@ time by the --enable-debug option.
 
 --enable-debug=no (or --disable-debug)
   Disable all debugging support (fastest)
-    sets G_DISABLE_ASSERT, G_DISABLE_CHECKS, and GTK_NO_CHECK_CASTS
+    sets G_DISABLE_ASSERT, G_DISABLE_CHECKS, and G_DISABLE_CAST_CHECKS
 
 Note that !G_DISABLE_CHECKS and --enable-debug=no are to be considered
 not only fast, but dangerous as they tend to destabilize even mostly

@@ -1,4 +1,7 @@
 <!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
+<!notation PNG system "PNG">
+<!entity % local.notation.class "| PNG">
+
 <!entity gdk-General SYSTEM "sgml/general.sgml">
 <!entity gdk-Bitmaps-and-Pixmaps SYSTEM "sgml/pixmaps.sgml">
 <!entity gdk-Images SYSTEM "sgml/images.sgml">

@@ -53,8 +53,8 @@ _pixops_composite_line_22_4a4_mmx:
 
 	movl %edx,-24(%ebp)
 
-	cmpl %esi,28(%ebp)
-	je   .out
+	cmpl 28(%ebp),%esi
+	jnb  .out
 
 /* Load initial values into %mm1, %mm3 */
 	shll $2, %edx

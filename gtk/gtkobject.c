@@ -364,7 +364,7 @@ gtk_object_dispose (GObject *gobject)
   GtkObject *object = GTK_OBJECT (gobject);
 
   /* guard against reinvocations during
-   * destruction with the GTK_DESTROYED flag.
+   * destruction with the GTK_IN_DESTRUCTION flag.
    */
   if (!(GTK_OBJECT_FLAGS (object) & GTK_IN_DESTRUCTION))
     {

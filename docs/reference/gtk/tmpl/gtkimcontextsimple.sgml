@@ -41,7 +41,7 @@ GtkIMContextSimple
 
 <!-- ##### MACRO GTK_MAX_COMPOSE_LEN ##### -->
 <para>
-
+The maximum length of sequences in compose tables.
 </para>
 
 

@@ -1,6 +1,6 @@
 /* Tree View/List Store
  *
- * The GtkListStore is used to store data in list form, to be used 
+ * The GtkListStore is used to store data in list form, to be used
  * later on by a GtkTreeView to display it. This demo builds a
  * simple GtkListStore and displays it. See the Stock Browser
  * demo for a more advanced example.
@@ -91,10 +91,10 @@ fixed_toggled (GtkCellRendererToggle *cell,
 
   /* do something with the value */
   fixed ^= 1;
-  
+
   /* set new value */
   gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_FIXED, fixed, -1);
-  
+
   /* clean up */
   gtk_tree_path_free (path);
 }
@@ -129,8 +129,9 @@ add_columns (GtkTreeView *treeview)
 						     "text",
 						     COLUMN_NUMBER,
 						     NULL);
+  gtk_tree_view_column_set_sort_column_id (column, COLUMN_NUMBER);
   gtk_tree_view_append_column (treeview, column);
-				
+
   /* column for severities */
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("Severity",
@@ -138,8 +139,9 @@ add_columns (GtkTreeView *treeview)
 						     "text",
 						     COLUMN_SEVERITY,
 						     NULL);
+  gtk_tree_view_column_set_sort_column_id (column, COLUMN_SEVERITY);
   gtk_tree_view_append_column (treeview, column);
-						     
+
   /* column for description */
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("Description",
@@ -147,6 +149,7 @@ add_columns (GtkTreeView *treeview)
 						     "text",
 						     COLUMN_DESCRIPTION,
 						     NULL);
+  gtk_tree_view_column_set_sort_column_id (column, COLUMN_DESCRIPTION);
   gtk_tree_view_append_column (treeview, column);
 }
 
@@ -186,7 +189,7 @@ do_list_store (GtkWidget *do_widget)
 				      GTK_POLICY_NEVER,
 				      GTK_POLICY_AUTOMATIC);
       gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
-      
+
       /* create tree model */
       model = create_model ();
 
@@ -197,9 +200,9 @@ do_list_store (GtkWidget *do_widget)
 				       COLUMN_DESCRIPTION);
 
       g_object_unref (G_OBJECT (model));
-      
+
       gtk_container_add (GTK_CONTAINER (sw), treeview);
-      
+
       /* add columns to the tree view */
       add_columns (GTK_TREE_VIEW (treeview));
 

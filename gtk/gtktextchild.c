@@ -334,6 +334,16 @@ gtk_text_child_anchor_class_init (GtkTextChildAnchorClass *klass)
   object_class->finalize = gtk_text_child_anchor_finalize;
 }
 
+/**
+ * gtk_text_child_anchor_new:
+ * 
+ * Creates a new #GtkTextChildAnchor. Usually you would then insert
+ * it into a #GtkTextBuffer with gtk_text_buffer_insert_child_anchor().
+ * To perform the creation and insertion in one step, use the
+ * convenience function gtk_text_buffer_create_child_anchor().
+ * 
+ * Return value: a new #GtkTextChildAnchor
+ **/
 GtkTextChildAnchor*
 gtk_text_child_anchor_new (void)
 {
@@ -375,6 +385,16 @@ gtk_text_child_anchor_finalize (GObject *obj)
   anchor->segment = NULL;
 }
 
+/**
+ * gtk_text_child_anchor_get_widgets:
+ * @anchor: a #GtkTextChildAnchor
+ * 
+ * Gets a list of all widgets anchored at this child anchor.
+ * The returned list should be freed with g_list_free().
+ * 
+ * 
+ * Return value: list of widgets anchored at @anchor
+ **/
 GList*
 gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor)
 {
@@ -398,6 +418,19 @@ gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor)
   return list;
 }
 
+/**
+ * gtk_text_child_anchor_get_deleted:
+ * @anchor: a #GtkTextChildAnchor
+ * 
+ * Determines whether a child anchor has been deleted from
+ * the buffer. Keep in mind that the child anchor will be
+ * unreferenced when removed from the buffer, so you need to
+ * hold your own reference (with g_object_ref()) if you plan
+ * to use this function &mdash; otherwise all deleted child anchors
+ * will also be finalized.
+ * 
+ * Return value: %TRUE if the child anchor has been deleted from its buffer
+ **/
 gboolean
 gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor)
 {

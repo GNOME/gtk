@@ -1119,9 +1119,20 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   int n_compose = 0;
   int i;
 
-  /* FIXME? 14755 says you have to commit the char on release of the shift/control
-   * keys. But instead we wait for the user to type another char, or to lose focus.
-   */
+  if (event->type == GDK_KEY_RELEASE)
+    {
+      if (context_simple->in_hex_sequence &&
+	  (event->keyval == GDK_Control_L || event->keyval == GDK_Control_R ||
+	   event->keyval == GDK_Shift_L || event->keyval == GDK_Shift_R))
+	{
+	  gtk_im_context_simple_commit_char (context, context_simple->tentative_match);
+	  context_simple->compose_buffer[0] = 0;
+
+	  return TRUE;
+	}
+      else
+	return FALSE;
+    }
   
   /* Ignore modifier key presses
    */
@@ -1269,17 +1280,17 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
  * @context_simple: A #GtkIMContextSimple
  * @data: the table 
  * @max_seq_len: Maximum length of a sequence in the table
- *               (cannot be greater than 7)
+ *               (cannot be greater than #GTK_MAX_COMPOSE_LEN)
  * @n_seqs: number of sequences in the table
  * 
- * Add an additional table to search to the input context.
- * Each row of the table consists of max_seq_len key symbols
- * followed by two guint16 interpreted as the high and low
- * words of a gunicode value. Tables are searched starting
+ * Adds an additional table to search to the input context.
+ * Each row of the table consists of @max_seq_len key symbols
+ * followed by two #guint16 interpreted as the high and low
+ * words of a #gunicode value. Tables are searched starting
  * from the last added.
  *
  * The table must be sorted in dictionary order on the
- * by numeric value of the key symbol fields. (Values beyond
+ * numeric value of the key symbol fields. (Values beyond
  * the length of the sequence should be zero.)
  **/
 void

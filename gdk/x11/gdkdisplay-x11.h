@@ -65,7 +65,8 @@ struct _GdkDisplayImplX11
 
   gboolean have_xkb_autorepeat;
   gboolean gdk_use_xshm;
-
+  gboolean have_shm_pixmaps;
+  
   /* Window that currently holds the x pointer grab */
 
   GdkWindowObject *gdk_xgrab_window;

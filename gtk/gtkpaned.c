@@ -118,7 +118,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 				   PROP_POSITION,
 				   g_param_spec_int ("position",
 						     _("Position"),
-						     _("Position of paned separator in pixels(0 means all the way to the left/top)"),
+						     _("Position of paned separator in pixels (0 means all the way to the left/top)"),
 						     0,
 						     G_MAXINT,
 						     0,
@@ -310,16 +310,16 @@ static gint
 gtk_paned_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  GtkPaned *paned;
+  GtkPaned *paned = GTK_PANED (widget);
 
   g_return_val_if_fail (GTK_IS_PANED (widget), FALSE);
 
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
+  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget) &&
+      paned->child1 && GTK_WIDGET_VISIBLE (paned->child1) &&
+      paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
     {
       GdkRegion *region;
 
-      paned = GTK_PANED (widget);
-      
       region = gdk_region_rectangle (&paned->handle_pos);
       gdk_region_intersect (region, event->region);
 
@@ -338,10 +338,10 @@ gtk_paned_expose (GtkWidget      *widget,
 	}
 
       gdk_region_destroy (region);
-      
-      /* Chain up to draw children */
-      GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
     }
+  
+  /* Chain up to draw children */
+  GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
 
   return FALSE;
 }

@@ -1363,9 +1363,9 @@ gdk_pixbuf__gif_image_load (FILE *file, GError **error)
         pixbuf = gdk_pixbuf_animation_get_static_image (GDK_PIXBUF_ANIMATION (context->animation));
 
         if (pixbuf)
-                g_object_ref (G_OBJECT (pixbuf));
+                g_object_ref (pixbuf);
 
-        g_object_unref (G_OBJECT (context->animation));
+        g_object_unref (context->animation);
         
         g_free (context->buf);
 	g_free (context);
@@ -1417,7 +1417,7 @@ gdk_pixbuf__gif_image_stop_load (gpointer data, GError **error)
                 retval = FALSE;
         }
         
-        g_object_unref (G_OBJECT (context->animation));
+        g_object_unref (context->animation);
 
   	g_free (context->buf);
 	g_free (context);
@@ -1518,7 +1518,7 @@ gdk_pixbuf__gif_image_load_animation (FILE *file,
                                      GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
                                      _("GIF file was missing some data (perhaps it was truncated somehow?)"));
 
-                g_object_unref (G_OBJECT (context->animation));
+                g_object_unref (context->animation);
                 context->animation = NULL;
         }
 

@@ -39,7 +39,7 @@
  * @height: Height of the image in pixels.
  * @rowstride: Distance in bytes between rows.
  * @destroy_fn: Function used to free the data when the pixbuf's reference count
- * drops to zero, or NULL if the data should not be freed.
+ * drops to zero, or %NULL if the data should not be freed.
  * @destroy_fn_data: Closure data to pass to the destroy notification function.
  * 
  * Creates a new #GdkPixbuf out of in-memory image data.  Currently only RGB
@@ -51,7 +51,7 @@
 GdkPixbuf *
 gdk_pixbuf_new_from_data (const guchar *data, GdkColorspace colorspace, gboolean has_alpha,
 			  int bits_per_sample, int width, int height, int rowstride,
-			  GdkPixbufDestroyNotify destroy_fn, gpointer destroy_fn_data)
+	  GdkPixbufDestroyNotify destroy_fn, gpointer destroy_fn_data)
 {
 	GdkPixbuf *pixbuf;
 

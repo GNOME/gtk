@@ -60,15 +60,17 @@ represents the micro version of the GTK+ headers you have included.
 
 <!-- ##### VARIABLE gtk_binary_age ##### -->
 <para>
-This is the binary age passed to libtool. If "libtool" means nothing
-to you, don't worry about it. ;-)
+This is the binary age passed to <application>libtool</application>. If 
+<application>libtool</application> means nothing to you, don't worry 
+about it. ;-)
 </para>
 
 
 <!-- ##### VARIABLE gtk_interface_age ##### -->
 <para>
-This is the interface age passed to libtool. If "libtool" means nothing
-to you, don't worry about it. ;-)
+This is the interface age passed to <application>libtool</application>. If 
+<application>libtool</application> means nothing to you, don't worry 
+about it. ;-)
 </para>
 
 
@@ -87,7 +89,7 @@ micro version of GTK+ than the one they were compiled against.
 @required_major: the required major version.
 @required_minor: the required major version.
 @required_micro: the required major version.
-@Returns: NULL if the GTK+ library is compatible with the given version, or
+@Returns: %NULL if the GTK+ library is compatible with the given version, or
 a string describing the version mismatch.
 
 
@@ -142,8 +144,8 @@ Returns %TRUE if the version of the GTK+ header files is the same
 as the passed-in version.
 </para>
 
-@major: major version (first number in 1.2.5)
-@minor: minor version (second number in 1.2.5)
-@micro: micro version (third number in 1.2.5)
+@major: major version (e.g. 1 for version 1.2.5)
+@minor: minor version (e.g. 2 for version 1.2.5)
+@micro: micro version (e.g. 5 for version 1.2.5)
 
 

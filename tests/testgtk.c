@@ -11352,25 +11352,24 @@ create_mainloop (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-gint
+gboolean
 layout_expose_handler (GtkWidget *widget, GdkEventExpose *event)
 {
   GtkLayout *layout;
 
   gint i,j;
   gint imin, imax, jmin, jmax;
-  
+
   layout = GTK_LAYOUT (widget);
 
+  if (event->window != layout->bin_window)
+    return FALSE;
+  
   imin = (event->area.x) / 10;
   imax = (event->area.x + event->area.width + 9) / 10;
 
   jmin = (event->area.y) / 10;
   jmax = (event->area.y + event->area.height + 9) / 10;
-
-  gdk_window_clear_area (widget->window,
-			 event->area.x, event->area.y,
-			 event->area.width, event->area.height);
 
   for (i=imin; i<imax; i++)
     for (j=jmin; j<jmax; j++)
@@ -11381,7 +11380,7 @@ layout_expose_handler (GtkWidget *widget, GdkEventExpose *event)
 			    10*i, 10*j, 
 			    1+i%10, 1+j%10);
   
-  return TRUE;
+  return FALSE;
 }
 
 void create_layout (GtkWidget *widget)

@@ -33,9 +33,7 @@
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-i18n.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+G_BEGIN_DECLS
 
 
 
@@ -94,8 +92,6 @@ gboolean _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 
 
 
-#ifdef __cplusplus
-}
-#endif
+G_END_DECLS
 
 #endif

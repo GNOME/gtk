@@ -105,7 +105,7 @@ void	      gdk_query_visual_types_for_screen		(GdkScreen      *screen,
 							 GdkVisualType **visual_types,
 							 gint           *count);
 GList *	      gdk_list_visuals_for_screen		(GdkScreen	*screen);
-#ifndef GTK_DISABLE_DEPRECATED
+#ifndef GDK_DISABLE_DEPRECATED
 #define gdk_visual_ref(v) g_object_ref(v)
 #define gdk_visual_unref(v) g_object_unref(v)
 #endif

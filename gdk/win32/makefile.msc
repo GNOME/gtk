@@ -13,7 +13,8 @@ TOP = ../../..
 
 GTK_VER=1.3
 
-CFLAGS = -I. -I.. -I..\.. $(GLIB_CFLAGS) $(PANGO_CFLAGS) \
+CFLAGS = -FImsvc_recommended_pragmas.h \
+	-I. -I.. -I..\.. $(GLIB_CFLAGS) $(PANGO_CFLAGS) \
 	-I$(WTKIT)\include -I$(GLIB) \
 	$(G_DEBUGGING) -DHAVE_CONFIG_H -DINSIDE_GDK_WIN32 -DGDK_VERSION=\"$(GTK_VER)\"
 

@@ -1,3 +1,396 @@
+Mon Jan 21 23:39:42 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/tmpl/gtkfixed.sgml: change guint16 to gint to reflect
+	changes in the code, found by Jody Goldberg <jody@gnome.org>
+
+2002-01-19  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/x11.sgml: add a mostly-empty X11 section
+
+	* gtk/framebuffer.sgml: make title consistent with windows section
+
+	* gtk/tmpl/gtkdrawingarea.sgml: couple of fixes
+
+2002-01-17  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/resources.sgml: Tiny markup fix.
+
+2002-01-15  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/changes-2.0.sgml: Details about GtkRange and subclasses
+	rewrite. (#67730)
+
+2002-01-14  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/running.sgml: Add ids to some elements to make them
+	addressable as link targets.
+
+2002-01-14  Matthias Clasen  <matthiasc@poet.de>
+	
+	* gtk/tmpl/gtktooltips.sgml: Minor fixes.
+
+	* gtk/tmpl/gtkrc.sgml: Minor fixes.
+
+2002-01-11  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/running.sgml: sgml fixes
+
+	* gtk/tmpl/gtksignal.sgml: sgml fixes
+
+	* gtk/tmpl/gtklabel.sgml: do the intro section
+
+2002-01-10  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/general.sgml (gdk_set_program_class): Expand.
+
+	* gtk/running.sgml: New file.
+
+	* gtk/building.sgml: Document a few more configure options.
+
+	* gtk/Makefile.am (content_files): Add running.sgml.
+
+	* gtk/gtk-docs.sgml: Include running.sgml, sort H and V 
+	variants of widgets to be next to each other.
+
+2002-01-09  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkaccellabel.sgml: Remove duplicate docs.
+	
+	* gdk-pixbuf/Makefile.am (content_files): Add 
+	gdk-pixbuf-from-drawables.sgml. (#68232)
+	
+	* gtk/tmpl/gtkwidget.sgml: Improve docs for GTK_NO_REPARENT
+	and GTK_APP_PAINTABLE. (#68060)
+
+2002-01-08  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkgc.sgml: Improve wording.
+
+	* gtk/tmpl/gtksocket.sgml, gtk/tmpl/gtkplug.sgml: speak of 
+	window IDs rather than XIDs.
+
+2002-01-07  Matthias Clasen  <matthiasc@poet.de>
+ 	
+	* gtk/tmpl/gtksocket.sgml: Mention gtk_socket_get_id()
+	instead of GTK_WINDOW_XWINDOW().  (#68172)
+
+	* gtk/gtk-sections.txt: Move functions which are documented
+	as "private" or "internal" into Private subsections.
+
+	* gtk/tmpl/gtkdnd.sgml, gtk/tmpl/gtkobject.sgml, 
+	gtk/tmpl/gtkrc.sgml, gtk/tmpl/gtktooltips.sgml,
+	gtk/tmpl/gtkwidget.sgml, gtk/tmpl/gtkclipboard.sgml,
+	gtk/tmpl/gtkstyle.sgml, gtk/tmpl/gtkselection.sgml,
+	gtk/tmpl/gtkfeatures.sgml: Minor markup fixes.
+
+	* gtk/tmpl/gtksignal.sgml: Add link to GLib signal docs.
+
+	* gtk/tmpl/gtkpreview.sgml, gtk/tmpl/gtktext.sgml,
+	gtk/tmpl/gtktree.sgml: Remove "deprecated" from short desc.
+
+	* gtk/tmpl/gtkrc.sgml: Correct names of default RC files. 
+
+2002-01-06  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtktypeutils.sgml: Replace GTK_NO_CHECK_CASTS by 
+	G_DISABLE_CAST_CHECKS, fix some markup and add stuff.
+
+	* gtk/tmpl/gtkaccelgroup.sgml, gtk/tmpl/gtkwidget.sgml: Additions.
+
+	* gtk/gtk-sections.txt: Make gtk_accel_group_get_type private.
+
+2002-01-06  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/question_index.sgml: a few more questions I thought of
+
+2002-01-06  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtk-docs.sgml: remove gtk- prefix from TreeView and a few
+	other entities, more consistent anyway (I thought this would make
+	links to "GtkTreeView" etc. go to the ref page, not the struct,
+	but it wasn't the problem, the issue is the way gtkdoc-mkdb
+	decides what's an object, see CheckIsObject() routine)
+
+	* gtk/changes-1.2.sgml: sgml fixes to get rid of warnings
+
+	* gtk/changes-2.0.sgml: ditto
+	
+	* gtk/question_index.sgml: add some questions
+
+2002-01-04  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkwidget.sgml: Additions.
+
+2002-01-04  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/changes-1.2.sgml, gtk/changes-2.0.sgml: SGML fixes.
+
+	* gtk/tmpl/gtkobject.sgml: Document GTK_IN_DESTRUCTION.
+	
+	* gtk/tmpl/gtkwidget.sgml: Additions.
+
+2002-01-04  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/question_index.sgml: add question to help people find
+	gtk_widget_set_sensitive() if they're used to another term for 
+	that.
+	
+2002-01-03  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/tmpl/gtkdrawingarea.sgml: add mention of
+	gtk_widget_add_events() and GTK_CAN_FOCUS
+
+2002-01-04  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtktextview.sgml: Small additions.
+
+	* gtk/tmpl/gtksignal.sgml: Explain what to use instead.
+
+	* gtk/question_index.sgml, gtk/text_widget.sgml, gtk/tree_widget.sgml,
+	gtk/changes-1.2.sgml, gtk/changes-2.0.sgml,
+	gtk/framebuffer.sgml: SGML fixes and additions.
+
+	* gtk/tmpl/gtksignal.sgml, gtk/tmpl/gtkdialog.sgml,
+	gtk/tmpl/gtkeditable.sgml, gtk/tmpl/gtkfilesel.sgml,
+	gtk/tmpl/gtkmain.sgml, gtk/tmpl/gtkmenu.sgml,
+	gtk/tmpl/gtkmessagedialog.sgml, gtk/tmpl/gtkrc.sgml,
+	gtk/tmpl/gtktogglebutton.sgml, gtk/tmpl/gtkspinbutton.sgml,
+        gtk/tmpl/gtkpaned.sgml, gtk/tmpl/gtkwindow.sgml:
+	Replace references to deprecated functions.
+
+2002-01-03  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/changes-1.2.sgml, gtk/changes-2.0.sgml, 
+	gtk/framebuffer.sgml: Add markup.
+
+2002-01-01  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/framebuffer.sgml: move README.linux-fb in here
+
+	* gtk/tmpl/gtkpreview.sgml: explain what to use instead
+
+	* gtk/tmpl/gtkseparator.sgml: typo fix
+
+	* gtk/tmpl/gtkstock.sgml: add some overview docs
+
+	* gtk/Makefile.am (content_files): add new files
+
+	* gtk/changes-1.2.sgml: move Changes-1.2.txt in here
+
+	* gtk/changes-2.0.sgml: move Changes-2.0.txt in here
+
+	* gdk/tmpl/threads.sgml: mention gdk_threads_init() in the
+	overview docs, copy in the examples from the FAQ
+
+	* gtk/gtk-docs.sgml: change DTD to 3.1, and add
+	question_index.sgml and changes-1.2, changes-2.0
+
+	* gtk/tmpl/gtkdrawingarea.sgml: fixups to reflect 2.0 changes
+
+	* gtk/question_index.sgml: new section with question-based 
+	index of the manual
+
+	* gtk/text_widget.sgml: fix some cross-references
+
+2002-01-01  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/tmpl/gtktexttag.sgml: docs updates, mention that invisible 
+	property isn't implemented
+
+	* gtk/text_widget.sgml: small tweaks
+
+2001-12-30  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkbbox.sgml: Remove references to nonexisting functions.
+	
+	* gtk/tmpl/gtkcolorseldlg.sgml, gtk/tmpl/gtkdrawingarea.sgml,
+	gtk/tmpl/gtkmain.sgml, gtk/tmpl/gtkhseparator.sgml, 
+	gtk/tmpl/gtktree.sgml, gtk/tmpl/gtkradiobutton.sgml,
+	gtk/tmpl/gtkradiomenuitem.sgml: 
+	Replace references to deprecated functions.
+
+	* gtk/tmpl/gtkhbbox.sgml,gtk/tmpl/gtkvbbox.sgml: Minor fixes.
+
+2001-12-30  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkpixmap.sgml, gtk/tmpl/gtkscale.sgml,
+	gtk/tmpl/gtkmain.sgml, gtk/tmpl/gtkimcontextsimple.sgml: Additions.
+
+2001-12-28  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/properties.sgml, gdk/tmpl/selections.sgml: Additions.
+
+2001-12-23  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk-pixbuf/porting-from-imlib.sgml: GDK instead of Gdk.
+
+	* gdk-pixbuf/tmpl/gdk-pixbuf-xlib-init.sgml: Replace references to
+	deprecated functions.
+
+	* gdk/tmpl/event_structs.sgml, gdk/tmpl/gcs.sgml,
+	gdk/tmpl/images.sgml: Replace references to deprecated functions.
+
+2001-12-28	Vitaly Tishkov <tvv@sparc.spb.su>
+
+	* gtkwindow.sgml: additional fix for #59314 ('<programlisting>' is
+	changed to '<literal>' in docs for gtk_window_set_policy ())
+
+Sat Dec 22 18:18:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (IGNORE_HFILES): Add gtktextutil.h
+
+	* gtk/text_widget.sgml (linkend): SGML fixes.
+
+	* gtk/gtk-sections.txt: Update
+
+	* gdk/gdk-sections.txt: Update.
+
+	* gdk/tmpl/cursors.sgml: SGML fix.
+
+	* gdk/gdk-docs.sgml: Add PNG handling magic.
+
+2001-12-21  Matthias Clasen  <matthiasc@poet.de>
+		
+	* gtk/text_widget.sgml: More precise wording. (#63388)
+
+	* gtk/tmpl/gtksignal.sgml (GTK_SIGNAL_OFFSET): Add docs.
+
+	* gtk/resources.sgml: Fix markup of mail URLs.
+	
+	* gtk/tmpl/gtkpaned.sgml, gtk/tmpl/gtkobject.sgml: Markup fixes.
+
+	* gtk/tmpl/gtktoolbar.sgml (gtk_toolbar_{prepend,append}_element):
+	Expand documentation. (#60471)
+
+	* gtk/tmpl/gtkmain.sgml: Remove misleading information about 
+	gtk_set_locale().  (#65758)
+
+2001-12-18  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/tmpl/gtkdrawingarea.sgml: Change GdkWidget to
+	GtkWidget. Fixes #67162.
+
+2001-12-17  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk-pixbuf/tmpl/creating.sgml, 
+	gdk-pixbuf/tmpl/gdk-pixbuf-xlib-from-drawables.sgml,
+	gdk-pixbuf/tmpl/gdk-pixbuf-xlib-init.sgml,
+	gdk-pixbuf/tmpl/gdk-pixbuf-xlib-rendering.sgml,
+	gdk-pixbuf/tmpl/refcounting.sgml: Markup fixes.
+
+	* gtk/building.sgml, gtk/resources.sgml: Markup fixes.
+
+	* gtk/gtk.types: Remove gtk_text_layout_get_type(). (???)
+
+	* gdk/tmpl/general.sgml: Use <envar>, not <envvar>.
+
+2001-12-16  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/windows.sgml: Document GDK_RELEASE_MASK.
+
+2001-12-16  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: put _simple variants at the
+	top of the docs
+
+2001-12-16  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf/tmpl/scaling.sgml: small doc tweaks, specifically
+	some "just do XYZ" advice next to the InterpMode technojargon.
+
+2001-12-16  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/windows.sgml: Add something about GdkModifierType.
+
+2001-12-13  Matthias Clasen  <matthiasc@poet.de>
+	
+	* gdk-pixbuf/tmpl/scaling.sgml,	gdk/tmpl/fonts.sgml, 
+	gdk/tmpl/general.sgml, gdk/tmpl/rgb.sgml, gdk/tmpl/visuals.sgml,
+	gdk/tmpl/windows.sgml, gtk/gtk-docs.sgml, gtk/tmpl/gtkaccellabel.sgml,
+	gtk/tmpl/gtkcombo.sgml, gtk/tmpl/gtkdialog.sgml, 
+	gtk/tmpl/gtkdrawingarea.sgml, gtk/tmpl/gtkeditable.sgml, 
+	gtk/tmpl/gtkfilesel.sgml, gtk/tmpl/gtkfontseldlg.sgml,
+	gtk/tmpl/gtkimage.sgml, gtk/tmpl/gtkmain.sgml, gtk/tmpl/gtkmenu.sgml,
+	gtk/tmpl/gtkmessagedialog.sgml, gtk/tmpl/gtkobject.sgml,
+	gtk/tmpl/gtkpaned.sgml, gtk/tmpl/gtkradiobutton.sgml, 
+	gtk/tmpl/gtkrc.sgml, gtk/tmpl/gtkscale.sgml, gtk/tmpl/gtksignal.sgml, 
+	gtk/tmpl/gtksocket.sgml, gtk/tmpl/gtkspinbutton.sgml,
+	gtk/tmpl/gtktogglebutton.sgml, gtk/tmpl/gtksignal.sgml, 
+	gtk/tmpl/gtktooltips.sgml, gtk/tmpl/gtkwindow.sgml,
+	gdk/tmpl/regions.sgml, gtk/tmpl/gtkfontsel.sgml,
+	gtk/tmpl/gtkpixmap.sgml, gtk/tmpl/gtkprogress.sgml,
+	gtk/tmpl/gtkselection.sgml, gtk/tmpl/gtktable.sgml,
+	gtk/tmpl/gtktipsquery.sgml: Markup fixes (mainly examples).
+
+2001-12-12  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtklist.sgml: Markup fixes.
+
+	* gdk/tmpl/selections.sgml, gtk/tmpl/gtksocket.sgml: s/succesful/successful/g.
+
+	* gtk/gtk-sections.txt, gtk/tmpl/gtkstyle.sgml: Remove
+	GTK_STYLE_NUM_STYLECOLORS. (#66467)
+
+2001-12-12  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/text_widget.sgml: add another example
+
+2001-12-09  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkmain.sgml: Markup fixes.
+
+	* gtk/gtk-docs.sgml: Add an empty entity to suppress 
+	crossreferencing in programlistings.
+
+2001-12-08  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkclipboard.sgml: Fix references to 
+	get_clipboard_set_with_owner(). (#66424)
+
+2001-12-07  Matthias Clasen  <matthiasc@poet.de>
+	
+	* gtk/tmpl/gtktypeutils.sgml, gtk/tmpl/gtkobject.sgml,
+	gtk/tmpl/gtkstyle.sgml: Add docs.
+
+2001-12-06  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtklabel.sgml: Remove redundant docs. (#66383)
+
+	* gtk/tree_widget.sgml: Typo fix. (#66256)
+
+	* gdk-pixbuf/Makefile.am (SCAN_OPTIONS): Add --deprecated-guards.
+	
+	* gtk/tmpl/gtktext.sgml, gtk/tmpl/gtktree.sgml, 
+	gtk/tmpl/gtktreeitem.sgml: Updates.
+
+2001-12-04  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkwidget.sgml: Updates.
+	* gtk/Makefile.am (IGNORE_HFILES): Remove gtktextchild.h.
+
+2001-12-03  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/input_devices.sgml, 
+	gdk/gdk-sections.txt, gdk/tmpl/windows.sgml: Updates.
+
+2001-12-02  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/dnd.sgml: Updates.
+
+2001-11-30  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/keys.sgml: Updates.
+
+2001-12-01  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/tmpl/gtkoptionmenu.sgml: add brief explanation of how to use
+	GtkOptionMenu
+
+2001-11-30  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/colors.sgml, gdk/tmpl/pixmaps.sgml, gdk/tmpl/dnd.sgml,
+	gdk/tmpl/gcs.sgml: Document ref and unref functions as deprecated.
+
 2001-11-29  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtk-sections.sgml: Add GtkTextChildAnchor.

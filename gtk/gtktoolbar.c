@@ -1008,7 +1008,9 @@ gtk_toolbar_set_icon_size (GtkToolbar  *toolbar,
   for (children = toolbar->children; children; children = children->next)
     {
       child = children->data;
-      if (child->type == GTK_TOOLBAR_CHILD_BUTTON &&
+      if ((child->type == GTK_TOOLBAR_CHILD_BUTTON ||
+	   child->type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON ||
+	   child->type == GTK_TOOLBAR_CHILD_RADIOBUTTON) &&
 	  GTK_IS_IMAGE (child->icon))
 	{
 	  image = GTK_IMAGE (child->icon);
@@ -1158,6 +1160,13 @@ gtk_toolbar_insert_space (GtkToolbar *toolbar,
 			      position);
 }
 
+/**
+ * gtk_toolbar_remove_space:
+ * @toolbar: a #GtkToolbar.
+ * @position: the index of the space to remove.
+ * 
+ * Removes a space from the specified position.
+ **/
 void
 gtk_toolbar_remove_space (GtkToolbar *toolbar,
                           gint        position)
@@ -1198,6 +1207,15 @@ gtk_toolbar_remove_space (GtkToolbar *toolbar,
   g_warning ("Toolbar position %d doesn't exist", position);
 }
 
+/**
+ * gtk_toolbar_append_widget:
+ * @toolbar: a #GtkToolbar.
+ * @widget: a #GtkWidget to add to the toolbar. 
+ * @tooltip_text: the element's tooltip.
+ * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * 
+ * Adds a widget to the end of the given toolbar.
+ **/ 
 void
 gtk_toolbar_append_widget (GtkToolbar  *toolbar,
 			   GtkWidget   *widget,
@@ -1211,6 +1229,15 @@ gtk_toolbar_append_widget (GtkToolbar  *toolbar,
 			      toolbar->num_children);
 }
 
+/**
+ * gtk_toolbar_prepend_widget:
+ * @toolbar: a #GtkToolbar.
+ * @widget: a #GtkWidget to add to the toolbar. 
+ * @tooltip_text: the element's tooltip.
+ * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * 
+ * Adds a widget to the beginning of the given toolbar.
+ **/ 
 void
 gtk_toolbar_prepend_widget (GtkToolbar  *toolbar,
 			    GtkWidget   *widget,
@@ -1224,6 +1251,16 @@ gtk_toolbar_prepend_widget (GtkToolbar  *toolbar,
 			      0);
 }
 
+/**
+ * gtk_toolbar_insert_widget:
+ * @toolbar: a #GtkToolbar.
+ * @widget: a #GtkWidget to add to the toolbar. 
+ * @tooltip_text: the element's tooltip.
+ * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * @position: the number of widgets to insert this widget after.
+ * 
+ * Inserts a widget in the toolbar at the given position.
+ **/ 
 void
 gtk_toolbar_insert_widget (GtkToolbar *toolbar,
 			   GtkWidget  *widget,
@@ -1271,6 +1308,29 @@ gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
 				     icon, callback, user_data, 0);
 }
 
+/**
+ * gtk_toolbar_insert_element:
+ * @toolbar: a #GtkToolbar.
+ * @type: a value of type #GtkToolbarChildType that determines what @widget
+ *   will be.
+ * @widget: a #GtkWidget, or %NULL. 
+ * @text: the element's label.
+ * @tooltip_text: the element's tooltip.
+ * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * @icon: a #GtkWidget that provides pictorial representation of the element's function.
+ * @callback: the function to be executed when the button is pressed.
+ * @user_data: any data you wish to pass to the callback.
+ * @position: the number of widgets to insert this element after.
+ *
+ * Inserts a new element in the toolbar at the given position. 
+ *
+ * If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
+ * If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
+ * the radio group for the new element. In all other cases, @widget must
+ * be %NULL.
+ *
+ * Return value: the new toolbar element as a #GtkWidget.
+ **/
 GtkWidget *
 gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 			    GtkToolbarChildType  type,
@@ -1573,6 +1633,16 @@ gtk_real_toolbar_orientation_changed (GtkToolbar     *toolbar,
     }
 }
 
+static GtkWidget *
+get_first_child (GtkContainer *container)
+{
+  GList *children = gtk_container_get_children (container);
+  GtkWidget *result = children ? children->data : NULL;
+  g_list_free (children);
+  
+  return result;
+}
+
 static void
 gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 				GtkToolbarStyle  style)
@@ -1621,7 +1691,7 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 		if (child->label && !GTK_WIDGET_VISIBLE (child->label))
 		  gtk_widget_show (child->label);
 
-		box = (GtkWidget*)gtk_container_get_children (GTK_CONTAINER (child->widget))->data;
+		box = get_first_child (GTK_CONTAINER (child->widget));
 
 		if (GTK_IS_HBOX (box))
 		{
@@ -1664,7 +1734,7 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 		if (child->label && !GTK_WIDGET_VISIBLE (child->label))
 		  gtk_widget_show (child->label);
 
-		box = (GtkWidget*)gtk_container_get_children (GTK_CONTAINER (child->widget))->data;
+		box = get_first_child (GTK_CONTAINER (child->widget));
 		
 		if (GTK_IS_VBOX (box))
 		{

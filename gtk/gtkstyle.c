@@ -241,6 +241,7 @@ static void gtk_default_draw_extension  (GtkStyle        *style,
 					 GtkPositionType  gap_side);
 static void gtk_default_draw_focus      (GtkStyle        *style,
 					 GdkWindow       *window,
+					 GtkStateType     state_type,
 					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
@@ -641,6 +642,12 @@ gtk_style_duplicate (GtkStyle *style)
   return new_style;
 }
 
+/**
+ * gtk_style_new:
+ * @returns: a new #GtkStyle.
+ *
+ * Creates a new #GtkStyle.
+ **/
 GtkStyle*
 gtk_style_new (void)
 {
@@ -651,23 +658,22 @@ gtk_style_new (void)
   return style;
 }
 
-/*************************************************************
+/**
  * gtk_style_attach:
- *     Attach a style to a window; this process allocates the
- *     colors and creates the GC's for the style - it specializes
- *     it to a particular visual and colormap. The process
- *     may involve the creation of a new style if the style
- *     has already been attached to a window with a different
- *     style and colormap.
- *   arguments:
- *     style:
- *     window: 
- *   results:
- *     Either the style parameter, or a newly created style.
- *     If the style is newly created, the style parameter
- *     will be dereferenced, and the new style will have
- *     a reference count belonging to the caller.
+ * @style: a #GtkStyle.
+ * @window: a #GtkWindow.
+ * @returns: Either @style, or a newly-created #GtkStyle.
+ *   If the style is newly created, the style parameter
+ *   will be dereferenced, and the new style will have
+ *   a reference count belonging to the caller.
  *
+ * Attaches a style to a window; this process allocates the
+ * colors and creates the GC's for the style - it specializes
+ * it to a particular visual and colormap. The process may 
+ * involve the creation of a new style if the style has already 
+ * been attached to a window with a different style and colormap.
+ **/
+ /*
  * FIXME: The sequence - 
  *    create a style => s1
  *    attach s1 to v1, c1 => s1
@@ -682,8 +688,7 @@ gtk_style_new (void)
  * passes through the linked list when attaching (one to check for 
  * matching styles, one to look for empty unattached styles - but 
  * it will almost never be longer than 2 elements.
- *************************************************************/
-
+ */
 GtkStyle*
 gtk_style_attach (GtkStyle  *style,
                   GdkWindow *window)
@@ -762,12 +767,25 @@ gtk_style_detach (GtkStyle *style)
     }
 }
 
+/**
+ * gtk_style_ref:
+ * @style: a #GtkStyle.
+ * @returns: @style.
+ *
+ * Deprecated equivalent of g_object_ref().
+ **/
 GtkStyle*
 gtk_style_ref (GtkStyle *style)
 {
   return (GtkStyle *) g_object_ref (G_OBJECT (style));
 }
 
+/**
+ * gtk_style_unref:
+ * @style: a #GtkStyle.
+ *
+ * Deprecated equivalent of g_object_unref().
+ **/
 void
 gtk_style_unref (GtkStyle *style)
 {
@@ -810,6 +828,20 @@ gtk_style_lookup_icon_set (GtkStyle   *style,
   return gtk_icon_factory_lookup_default (stock_id);
 }
 
+/**
+ * gtk_draw_hline:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @x1: the starting x coordinate
+ * @x2: the ending x coordinate
+ * @y: the y coordinate
+ * 
+ * Draws a horizontal line from (@x1, @y) to (@x2, @y) in @window
+ * using the given style and state.
+ * 
+ * This function is deprecated, use gtk_paint_hline() instead.
+ **/
 void
 gtk_draw_hline (GtkStyle     *style,
                 GdkWindow    *window,
@@ -825,6 +857,20 @@ gtk_draw_hline (GtkStyle     *style,
 }
 
 
+/**
+ * gtk_draw_vline:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @y1: the starting y coordinate
+ * @y2: the ending y coordinate
+ * @x: the x coordinate
+ * 
+ * Draws a vertical line from (@x, @y1) to (@x, @y2) in @window
+ * using the given style and state.
+ * 
+ * This function is deprecated, use gtk_paint_vline() instead.
+ **/
 void
 gtk_draw_vline (GtkStyle     *style,
                 GdkWindow    *window,
@@ -839,7 +885,22 @@ gtk_draw_vline (GtkStyle     *style,
   GTK_STYLE_GET_CLASS (style)->draw_vline (style, window, state_type, NULL, NULL, NULL, y1, y2, x);
 }
 
-
+/**
+ * gtk_draw_shadow:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @x: x origin of the rectangle
+ * @y: y origin of the rectangle
+ * @width: width of the rectangle 
+ * @height: width of the rectangle 
+ *
+ * Draws a shadow around the given rectangle in @window 
+ * using the given style and state and shadow type.
+ * 
+ * This function is deprecated, use gtk_paint_shadow() instead.
+ */
 void
 gtk_draw_shadow (GtkStyle      *style,
                  GdkWindow     *window,
@@ -856,6 +917,20 @@ gtk_draw_shadow (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_shadow (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height);
 }
 
+/**
+ * gtk_draw_polygon:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @points: an array of #GdkPoint<!>s
+ * @npoints: length of @points
+ * @fill: %TRUE if the polygon should be filled
+ * 
+ * Draws a polygon on @window with the given parameters.
+ *
+ * This function is deprecated, use gtk_paint_polygon() instead.
+ */ 
 void
 gtk_draw_polygon (GtkStyle      *style,
                   GdkWindow     *window,
@@ -871,6 +946,24 @@ gtk_draw_polygon (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_polygon (style, window, state_type, shadow_type, NULL, NULL, NULL, points, npoints, fill);
 }
 
+/**
+ * gtk_draw_arrow:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @arrow_type: the type of arrow to draw
+ * @fill: %TRUE if the arrow tip should be filled
+ * @x: x origin of the rectangle to draw the arrow in
+ * @y: y origin of the rectangle to draw the arrow in
+ * @width: width of the rectangle to draw the arrow in
+ * @height: height of the rectangle to draw the arrow in
+ * 
+ * Draws an arrow in the given rectangle on @window using the given 
+ * parameters. @arrow_type determines the direction of the arrow.
+ *
+ * This function is deprecated, use gtk_paint_arrow() instead.
+ */
 void
 gtk_draw_arrow (GtkStyle      *style,
                 GdkWindow     *window,
@@ -890,6 +983,21 @@ gtk_draw_arrow (GtkStyle      *style,
 }
 
 
+/**
+ * gtk_draw_diamond:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @x: x origin of the rectangle to draw the diamond in
+ * @y: y origin of the rectangle to draw the diamond in
+ * @width: width of the rectangle to draw the diamond in
+ * @height: height of the rectangle to draw the diamond in
+ *
+ * Draws a diamond in the given rectangle on @window using the given parameters.
+ *
+ * This function is deprecated, use gtk_paint_diamond() instead.
+ */
 void
 gtk_draw_diamond (GtkStyle      *style,
                   GdkWindow     *window,
@@ -906,7 +1014,19 @@ gtk_draw_diamond (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_diamond (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height);
 }
 
-
+/**
+ * gtk_draw_string:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @x: x origin
+ * @y: y origin
+ * @string: the string to draw
+ * 
+ * Draws a text string on @window with the given parameters.
+ *
+ * This function is deprecated, use gtk_paint_layout() instead.
+ */
 void
 gtk_draw_string (GtkStyle      *style,
                  GdkWindow     *window,
@@ -921,6 +1041,21 @@ gtk_draw_string (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_string (style, window, state_type, NULL, NULL, NULL, x, y, string);
 }
 
+/**
+ * gtk_draw_box:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @x: x origin of the box
+ * @y: y origin of the box
+ * @width: the width of the box
+ * @height: the height of the box
+ * 
+ * Draws a box on @window with the given parameters.
+ *
+ * This function is deprecated, use gtk_paint_box() instead.
+ */
 void
 gtk_draw_box (GtkStyle      *style,
               GdkWindow     *window,
@@ -937,6 +1072,21 @@ gtk_draw_box (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_box (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height);
 }
 
+/**
+ * gtk_draw_flat_box:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @x: x origin of the box
+ * @y: y origin of the box
+ * @width: the width of the box
+ * @height: the height of the box
+ * 
+ * Draws a flat box on @window with the given parameters.
+ *
+ * This function is deprecated, use gtk_paint_flat_box() instead.
+ */
 void
 gtk_draw_flat_box (GtkStyle      *style,
                    GdkWindow     *window,
@@ -953,6 +1103,22 @@ gtk_draw_flat_box (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_flat_box (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height);
 }
 
+/**
+ * gtk_draw_check:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @x: x origin of the rectangle to draw the check in
+ * @y: y origin of the rectangle to draw the check in
+ * @width: the width of the rectangle to draw the check in
+ * @height: the height of the rectangle to draw the check in
+ * 
+ * Draws a check button indicator in the given rectangle on @window with 
+ * the given parameters.
+ *
+ * This function is deprecated, use gtk_paint_check() instead.
+ */
 void
 gtk_draw_check (GtkStyle      *style,
                 GdkWindow     *window,
@@ -969,6 +1135,22 @@ gtk_draw_check (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_check (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height);
 }
 
+/**
+ * gtk_draw_option:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @x: x origin of the rectangle to draw the option in
+ * @y: y origin of the rectangle to draw the option in
+ * @width: the width of the rectangle to draw the option in
+ * @height: the height of the rectangle to draw the option in
+ *
+ * Draws a radio button indicator in the given rectangle on @window with 
+ * the given parameters.
+ *
+ * This function is deprecated, use gtk_paint_option() instead.
+ */
 void
 gtk_draw_option (GtkStyle      *style,
 		 GdkWindow     *window,
@@ -985,6 +1167,22 @@ gtk_draw_option (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_option (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height);
 }
 
+/**
+ * gtk_draw_tab:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @x: x origin of the rectangle to draw the tab in
+ * @y: y origin of the rectangle to draw the tab in
+ * @width: the width of the rectangle to draw the tab in
+ * @height: the height of the rectangle to draw the tab in
+ *
+ * Draws an option menu tab (i.e. the up and down pointing arrows)
+ * in the given rectangle on @window using the given parameters.
+ * 
+ * This function is deprecated, use gtk_paint_tab() instead.
+ */ 
 void
 gtk_draw_tab (GtkStyle      *style,
 	      GdkWindow     *window,
@@ -1056,6 +1254,20 @@ gtk_draw_extension (GtkStyle       *style,
   GTK_STYLE_GET_CLASS (style)->draw_extension (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height, gap_side);
 }
 
+/**
+ * gtk_draw_focus:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @x: the x origin of the rectangle around which to draw a focus indicator
+ * @y: the y origin of the rectangle around which to draw a focus indicator
+ * @width: the width of the rectangle around which to draw a focus indicator
+ * @height: the height of the rectangle around which to draw a focus indicator
+ *
+ * Draws a focus indicator around the given rectangle on @window using the
+ * given style.
+ * 
+ * This function is deprecated, use gtk_paint_focus() instead.
+ */
 void
 gtk_draw_focus (GtkStyle      *style,
 		GdkWindow     *window,
@@ -1067,7 +1279,7 @@ gtk_draw_focus (GtkStyle      *style,
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_focus != NULL);
   
-  GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, NULL, NULL, NULL, x, y, width, height);
+  GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, GTK_STATE_NORMAL, NULL, NULL, NULL, x, y, width, height);
 }
 
 void 
@@ -1137,6 +1349,23 @@ gtk_draw_layout (GtkStyle        *style,
                                             x, y, layout);
 }
 
+/**
+ * gtk_draw_resize_grip:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @edge: the edge in which to draw the resize grip, currently only
+ *    %GTK_WINDOW_EDGE_SOUTH_EAST is implemented
+ * @x: the x origin of the rectangle in which to draw the resize grip
+ * @y: the y origin of the rectangle in which to draw the resize grip
+ * @width: the width of the rectangle in which to draw the resize grip
+ * @height: the height of the rectangle in which to draw the resize grip
+ *
+ * Draws a resize grip in the given rectangle on @window using the given
+ * parameters. 
+ * 
+ * This function is deprecated, use gtk_paint_resize_grip() instead.
+ */
 void
 gtk_draw_resize_grip (GtkStyle     *style,
                       GdkWindow    *window,
@@ -1157,6 +1386,15 @@ gtk_draw_resize_grip (GtkStyle     *style,
 }
 
 
+/**
+ * gtk_style_set_background:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * 
+ * Sets the background of @window to the background color or pixmap
+ * specified by @style for the given state.
+ */
 void
 gtk_style_set_background (GtkStyle    *style,
                           GdkWindow   *window,
@@ -1227,10 +1465,7 @@ gtk_style_real_init_from_rc (GtkStyle   *style,
   clear_property_cache (style);
 
   if (rc_style->font_desc)
-    {
-      pango_font_description_free (style->font_desc);
-      style->font_desc = pango_font_description_copy (rc_style->font_desc);
-    }
+    pango_font_description_merge (style->font_desc, rc_style->font_desc, TRUE);
     
   for (i = 0; i < 5; i++)
     {
@@ -1526,6 +1761,21 @@ gtk_style_real_set_background (GtkStyle    *style,
     gdk_window_set_background (window, &style->bg[state_type]);
 }
 
+/**
+ * gtk_style_render_icon:
+ * @style: a #GtkStyle
+ * @source: the #GtkIconSource specifying the icon to render
+ * @direction: a text direction
+ * @state: a state
+ * @size: the size to render the icon at
+ * @widget: the widget 
+ * @detail: a style detail
+ * @returns: a newly-created #GdkPixbuf containing the rendered icon
+ *
+ * Renders the icon specified by @source at the given @size 
+ * according to the given parameters and returns the result in a 
+ * pixbuf.
+ */
 GdkPixbuf *
 gtk_style_render_icon (GtkStyle            *style,
                        const GtkIconSource *source,
@@ -3298,7 +3548,7 @@ gtk_default_draw_shadow_gap (GtkStyle       *style,
               gdk_draw_line (window, gc1,
                              x + gap_x + gap_width, y, x + width - 2, y);
               gdk_draw_line (window, gc2,
-                             x + gap_x + gap_width, y + 1, x + width - 2, y + 1);
+                             x + gap_x + gap_width, y + 1, x + width - 3, y + 1);
               gdk_draw_line (window, gc2,
                              x + gap_x + gap_width - 1, y, x + gap_x + gap_width - 1, y);
             }
@@ -3813,6 +4063,7 @@ gtk_default_draw_extension (GtkStyle       *style,
 static void 
 gtk_default_draw_focus (GtkStyle      *style,
 			GdkWindow     *window,
+			GtkStateType   state_type,
 			GdkRectangle  *area,
 			GtkWidget     *widget,
 			const gchar   *detail,
@@ -3822,34 +4073,127 @@ gtk_default_draw_focus (GtkStyle      *style,
 			gint           height)
 {
   GdkPoint points[5];
-  
+  GdkGC    *gc;
+  gboolean free_dash_list = FALSE;
+  gint line_width = 1;
+  gchar *dash_list = "\1\1";
+  gint dash_len;
+
+  gc = style->fg_gc[state_type];
+
+  if (widget)
+    {
+      gtk_widget_style_get (widget,
+			    "focus-line-width", &line_width,
+			    "focus-line-pattern", (gchar *)&dash_list,
+			    NULL);
+
+      free_dash_list = TRUE;
+  }
+
   sanitize_size (window, &width, &height);
   
   if (area)
-    gdk_gc_set_clip_rectangle (style->black_gc, area);
+    gdk_gc_set_clip_rectangle (gc, area);
 
-  gdk_gc_set_line_attributes (style->black_gc, 1, GDK_LINE_ON_OFF_DASH, 0, 0);
+  gdk_gc_set_line_attributes (gc, line_width,
+			      dash_list[0] ? GDK_LINE_ON_OFF_DASH : GDK_LINE_SOLID,
+			      GDK_CAP_BUTT, GDK_JOIN_MITER);
 
   if (detail && !strcmp (detail, "add-mode"))
-    gdk_gc_set_dashes (style->black_gc, 0, "\4\4", 2);
-  else
-    gdk_gc_set_dashes (style->black_gc, 0, "\1\1", 2);
+    {
+      if (free_dash_list)
+	g_free (dash_list);
+      
+      dash_list = "\4\4";
+      free_dash_list = FALSE;
+    }
 
-  points[0].x = x;
-  points[0].y = y;
-  points[1].x = x + width;
-  points[1].y = y;
-  points[2].x = x + width;
-  points[2].y = y + height;
-  points[3].x = x;
-  points[3].y = y + height;
+  points[0].x = x + line_width / 2;
+  points[0].y = y + line_width / 2;
+  points[1].x = x + width - line_width + line_width / 2;
+  points[1].y = y + line_width / 2;
+  points[2].x = x + width - line_width + line_width / 2;
+  points[2].y = y + height - line_width + line_width / 2;
+  points[3].x = x + line_width / 2;
+  points[3].y = y + height - line_width + line_width / 2;
   points[4] = points[0];
-  
-  gdk_draw_polygon (window, style->black_gc, FALSE, points, 4);
-  gdk_gc_set_line_attributes (style->black_gc, 0, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+
+  if (!dash_list[0])
+    {
+      gdk_draw_lines (window, gc, points, 5);
+    }
+  else
+    {
+      /* We go through all the pain below because the X rasterization
+       * rules don't really work right for dashed lines if you
+       * want continuity in segments that go between top/right
+       * and left/bottom. For instance, a top left corner
+       * with a 1-1 dash is drawn as:
+       *
+       *  X X X 
+       *  X
+       *
+       *  X
+       *
+       * This is because pixels on the top and left boundaries
+       * of polygons are drawn, but not on the bottom and right.
+       * So, if you have a line going up that turns the corner
+       * and goes right, there is a one pixel shift in the pattern.
+       *
+       * So, to fix this, we drawn the top and right in one call,
+       * then the left and bottom in another call, fixing up
+       * the dash offset for the second call ourselves to get
+       * continuity at the upper left.
+       *
+       * It's not perfect since we really should have a join at
+       * the upper left and lower right instead of two intersecting
+       * lines but that's only really apparent for no-dashes,
+       * which (for this reason) are done as one polygon and
+       * don't to through this code path.
+       */
+      
+      dash_len = strlen (dash_list);
+      
+      if (dash_list[0])
+	gdk_gc_set_dashes (gc, 0, dash_list, dash_len);
+      
+      gdk_draw_lines (window, gc, points, 3);
+      
+      /* We draw this line one farther over than it is "supposed" to
+       * because of another rasterization problem ... if two 1 pixel
+       * unjoined lines meet at the lower right, there will be a missing
+       * pixel.
+       */
+      points[2].x += 1;
+      
+      if (dash_list[0])
+	{
+	  gint dash_pixels = 0;
+	  gint i;
+	  
+	  /* Adjust the dash offset for the bottom and left so we
+	   * match up at the upper left.
+	   */
+	  for (i = 0; i < dash_len; i++)
+	    dash_pixels += dash_list[i];
+      
+	  if (dash_len % 2 == 1)
+	    dash_pixels *= 2;
+	  
+	  gdk_gc_set_dashes (gc, dash_pixels - (width + height - 2 * line_width) % dash_pixels, dash_list, dash_len);
+	}
+      
+      gdk_draw_lines (window, gc, points + 2, 3);
+    }
+
+  gdk_gc_set_line_attributes (gc, 0, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 
   if (area)
-    gdk_gc_set_clip_rectangle (style->black_gc, NULL);
+    gdk_gc_set_clip_rectangle (gc, NULL);
+
+  if (free_dash_list)
+    g_free (dash_list);
 }
 
 static void 
@@ -4593,6 +4937,22 @@ hls_to_rgb (gdouble *h,
     }
 }
 
+
+/**
+ * gtk_paint_hline:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @area: rectangle to which the output is clipped
+ * @widget:
+ * @detail: 
+ * @x1: the starting x coordinate
+ * @x2: the ending x coordinate
+ * @y: the y coordinate
+ * 
+ * Draws a horizontal line from (@x1, @y) to (@x2, @y) in @window
+ * using the given style and state.
+ **/ 
 void 
 gtk_paint_hline (GtkStyle      *style,
                  GdkWindow     *window,
@@ -4610,6 +4970,21 @@ gtk_paint_hline (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_hline (style, window, state_type, area, widget, detail, x1, x2, y);
 }
 
+/**
+ * gtk_paint_vline:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @area: rectangle to which the output is clipped
+ * @widget:
+ * @detail: 
+ * @y1: the starting y coordinate
+ * @y2: the ending y coordinate
+ * @x: the x coordinate
+ * 
+ * Draws a vertical line from (@x, @y1) to (@x, @y1) in @window
+ * using the given style and state.
+ */
 void
 gtk_paint_vline (GtkStyle      *style,
                  GdkWindow     *window,
@@ -4704,6 +5079,22 @@ gtk_paint_diamond (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_diamond (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
 
+/**
+ * gtk_paint_string:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @area: clip rectangle
+ * @widget: the widget
+ * @detail: a style detail
+ * @x: x origin
+ * @y: y origin
+ * @string: the string to draw
+ * 
+ * Draws a text string on @window with the given parameters.
+ *
+ * This function is deprecated, use gtk_paint_layout() instead.
+ */
 void
 gtk_paint_string (GtkStyle      *style,
                   GdkWindow     *window,
@@ -4884,6 +5275,7 @@ gtk_paint_extension (GtkStyle       *style,
 void
 gtk_paint_focus (GtkStyle      *style,
                  GdkWindow     *window,
+		 GtkStateType   state_type,
                  GdkRectangle  *area,
                  GtkWidget     *widget,
                  const gchar   *detail,
@@ -4895,7 +5287,7 @@ gtk_paint_focus (GtkStyle      *style,
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_focus != NULL);
   
-  GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, area, widget, detail, x, y, width, height);
+  GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, state_type, area, widget, detail, x, y, width, height);
 }
 
 void
@@ -4997,12 +5389,25 @@ gtk_paint_resize_grip (GtkStyle      *style,
                                                  edge, x, y, width, height);
 }
 
+/**
+ * gtk_border_copy:
+ * @border: a #GtkBorder.
+ * @returns: a copy of @border.
+ *
+ * Copies a #GtkBorder structure.
+ **/
 GtkBorder *
 gtk_border_copy (const GtkBorder *border)
 {
   return (GtkBorder *)g_memdup (border, sizeof (GtkBorder));
 }
 
+/**
+ * gtk_border_free:
+ * @border: a #GtkBorder.
+ * 
+ * Frees a #GtkBorder structure.
+ **/
 void
 gtk_border_free (GtkBorder *border)
 {
@@ -5071,9 +5476,9 @@ gtk_style_get_font_for_display (GdkDisplay *display,
  * @style: a #GtkStyle
  * 
  * Gets the #GdkFont to use for the given style. This is
- * meant only as a replacement for direct access to style->font
+ * meant only as a replacement for direct access to @style->font
  * and should not be used in new code. New code should
- * use style->font_desc instead.
+ * use @style->font_desc instead.
  * 
  * Return value: the #GdkFont for the style. This font is owned
  *   by the style; if you want to keep around a copy, you must
@@ -5214,4 +5619,3 @@ _gtk_draw_insertion_cursor (GdkDrawable      *drawable,
 	}
     }
 }
-

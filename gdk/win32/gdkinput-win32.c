@@ -699,7 +699,7 @@ _gdk_input_other_event (GdkEvent  *event,
   GdkWindowObject *obj;
   GdkWindowImplWin32 *impl;
   GdkInputWindow *input_window;
-  GdkDevicePrivate *gdkdev;
+  GdkDevicePrivate *gdkdev = NULL;
   GdkEventMask masktest;
   POINT pt;
 

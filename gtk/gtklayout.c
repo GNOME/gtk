@@ -101,6 +101,8 @@ static void gtk_layout_allocate_child     (GtkLayout      *layout,
                                            GtkLayoutChild *child);
 static void gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
                                            GtkLayout      *layout);
+static void gtk_layout_style_set          (GtkWidget      *widget,
+					   GtkStyle       *old_style);
 
 
 static GtkWidgetClass *parent_class = NULL;
@@ -374,7 +376,7 @@ gtk_layout_move_internal (GtkLayout       *layout,
   gtk_widget_thaw_child_notify (widget);
   
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (layout))
-    gtk_widget_queue_resize (GTK_WIDGET (layout));
+    gtk_widget_queue_resize (GTK_WIDGET (widget));
 }
 
 /**
@@ -630,6 +632,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->size_request = gtk_layout_size_request;
   widget_class->size_allocate = gtk_layout_size_allocate;
   widget_class->expose_event = gtk_layout_expose;
+  widget_class->style_set = gtk_layout_style_set;
 
   container_class->remove = gtk_layout_remove;
   container_class->forall = gtk_layout_forall;
@@ -656,10 +659,10 @@ gtk_layout_get_property (GObject     *object,
   switch (prop_id)
     {
     case PROP_HADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (layout->hadjustment));
+      g_value_set_object (value, layout->hadjustment);
       break;
     case PROP_VADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (layout->vadjustment));
+      g_value_set_object (value, layout->vadjustment);
       break;
     case PROP_WIDTH:
       g_value_set_uint (value, layout->width);
@@ -809,8 +812,8 @@ gtk_layout_realize (GtkWidget *widget)
 				   &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);
 
-  attributes.x = 0;
-  attributes.y = 0;
+  attributes.x = - layout->hadjustment->value,
+  attributes.y = - layout->vadjustment->value;
   attributes.width = MAX (layout->width, widget->allocation.width);
   attributes.height = MAX (layout->height, widget->allocation.height);
   attributes.event_mask = GDK_EXPOSURE_MASK | GDK_SCROLL_MASK | 
@@ -831,6 +834,18 @@ gtk_layout_realize (GtkWidget *widget)
       tmp_list = tmp_list->next;
 
       gtk_widget_set_parent_window (child->widget, layout->bin_window);
+    }
+}
+
+static void
+gtk_layout_style_set (GtkWidget *widget, GtkStyle *old_style)
+{
+  if (GTK_WIDGET_CLASS (parent_class)->style_set)
+    (* GTK_WIDGET_CLASS (parent_class)->style_set) (widget, old_style);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gtk_style_set_background (widget->style, GTK_LAYOUT (widget)->bin_window, GTK_STATE_NORMAL);
     }
 }
 

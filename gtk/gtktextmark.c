@@ -218,7 +218,7 @@ gtk_text_mark_get_buffer (GtkTextMark *mark)
  * gtk_text_mark_get_left_gravity:
  * @mark: a #GtkTextMark
  * 
- * 
+ * Determines whether the mark has left gravity.
  * 
  * Return value: %TRUE if the mark has left gravity, %FALSE otherwise
  **/

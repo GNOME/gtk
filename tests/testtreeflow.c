@@ -60,11 +60,11 @@ futz_row (void)
     {
     case 0:
       /* insert */
-      gtk_list_store_insert_after (GTK_LIST_STORE (model),
-				   &iter2, &iter);
-      gtk_list_store_set (GTK_LIST_STORE (model), &iter2,
-			  TEXT_COLUMN, words[g_rand_int_range (rand, 0, NUM_WORDS)],
-			  -1);
+            gtk_list_store_insert_after (GTK_LIST_STORE (model),
+            				   &iter2, &iter);
+            gtk_list_store_set (GTK_LIST_STORE (model), &iter2,
+            			  TEXT_COLUMN, words[g_rand_int_range (rand, 0, NUM_WORDS)],
+            			  -1);
       break;
     case 1:
       /* delete */
@@ -77,8 +77,8 @@ futz_row (void)
       if (gtk_tree_model_iter_n_children (model, NULL) == 0)
 	return;
       gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-			  TEXT_COLUMN, words[g_rand_int_range (rand, 0, NUM_WORDS)],
-			  -1);
+      			  TEXT_COLUMN, words[g_rand_int_range (rand, 0, NUM_WORDS)],
+      			  -1);
       break;
     }
 }

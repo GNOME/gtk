@@ -26,9 +26,7 @@
 #ifndef GDK_PIXBUF_LOADER_H
 #define GDK_PIXBUF_LOADER_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+G_BEGIN_DECLS
 
 #define GDK_TYPE_PIXBUF_LOADER		   (gdk_pixbuf_loader_get_type ())
 #define GDK_PIXBUF_LOADER(obj)		   (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoader))
@@ -79,8 +77,6 @@ gboolean             gdk_pixbuf_loader_close         (GdkPixbufLoader *loader,
                                                       GError         **error);
 
 
-#ifdef __cplusplus
-}
-#endif
+G_END_DECLS
 
 #endif

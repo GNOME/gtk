@@ -85,7 +85,7 @@ Sets the currently-selected font.
 
 @fontsel: a #GtkFontSelection.
 @fontname: a fontname.
-@Returns: TRUE if the font was found.
+@Returns: %TRUE if the font was found.
 
 
 <!-- ##### FUNCTION gtk_font_selection_get_preview_text ##### -->
