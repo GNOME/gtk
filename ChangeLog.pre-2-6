@@ -1,3 +1,7 @@
+2003-02-21  Tomas Ogren  <stric@ing.umu.se>
+
+	* docs/reference/gtk/tmpl/gtktreemodel.sgml: Fix typos in an example
+
 2003-02-20  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextbtree.c (_gtk_text_line_previous_could_contain_tag): 

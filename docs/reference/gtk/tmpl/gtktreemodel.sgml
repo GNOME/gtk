@@ -160,7 +160,7 @@ enum
   populate_model (list_store);
 
   /* Get the first iter in the list */
-  valid = gtk_tree_model_get_iter_first (model, &amp;iter);
+  valid = gtk_tree_model_get_iter_first (list_store, &amp;iter);
 
   while (valid)
     {
@@ -181,7 +181,7 @@ enum
       g_free (str_data);
 
       row_count ++;
-      valid = gtk_tree_model_iter_next (model, &amp;iter))
+      valid = gtk_tree_model_iter_next (list_store, &amp;iter);
     }
 }
 </programlisting>
