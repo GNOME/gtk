@@ -1322,9 +1322,11 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
 		       tree_view->priv->drag_column_x,
 		       tree_view->priv->drag_column->button->allocation.y);
   gtk_widget_set_parent_window (tree_view->priv->drag_column->button, tree_view->priv->header_window);
+
   gtk_widget_size_allocate (tree_view->priv->drag_column->button, &allocation);
 
-  if (tree_view->priv->cur_reorder->left_column != tree_view->priv->drag_column)
+  if (tree_view->priv->cur_reorder &&
+      tree_view->priv->cur_reorder->left_column != tree_view->priv->drag_column)
     gtk_tree_view_move_column_after (tree_view, tree_view->priv->drag_column,
 				     tree_view->priv->cur_reorder->left_column);
   tree_view->priv->drag_column = NULL;
@@ -1335,6 +1337,7 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
   tree_view->priv->column_drag_info = NULL;
 
   gdk_window_hide (tree_view->priv->drag_highlight_window);
+  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG);
 
   return TRUE;
 }
@@ -6023,14 +6026,16 @@ gtk_tree_view_move_column_after (GtkTreeView       *tree_view,
     {
       column_list_el->prev = NULL;
       column_list_el->next = tree_view->priv->columns;
-      column_list_el->next->prev = column_list_el;
+      if (column_list_el->next)
+	column_list_el->next->prev = column_list_el;
       tree_view->priv->columns = column_list_el;
     }
   else
     {
       column_list_el->prev = base_el;
       column_list_el->next = base_el->next;
-      column_list_el->next->prev = column_list_el;
+      if (column_list_el->next)
+	column_list_el->next->prev = column_list_el;
       base_el->next = column_list_el;
     }
 

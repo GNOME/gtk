@@ -1,3 +1,9 @@
+Tue May  1 09:21:23 2001  Jonathan Blandford  <jrb@webwynk.net>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_release_drag_column):
+	fix bug in dropping columns.  Moving columns now basically works
+	modula some fine tuning.
+
 Tue May  1 19:09:21 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_horizontal_autoscroll): Add
