@@ -10,19 +10,6 @@ EXPORTS
 	gdk_color_alloc
 	gdk_color_black
 	gdk_color_change
-	gdk_color_context_add_palette
-	gdk_color_context_free
-	gdk_color_context_free_dither
-	gdk_color_context_get_index_from_palette
-	gdk_color_context_get_pixel
-	gdk_color_context_get_pixel_from_palette
-	gdk_color_context_get_pixels
-	gdk_color_context_get_pixels_incremental
-	gdk_color_context_init_dither
-	gdk_color_context_new
-	gdk_color_context_new_mono
-	gdk_color_context_query_color
-	gdk_color_context_query_colors
 	gdk_color_copy
 	gdk_color_equal
 	gdk_color_free
@@ -35,7 +22,9 @@ EXPORTS
 	gdk_colormap_free_colors
 	gdk_colormap_get_system
 	gdk_colormap_get_system_size
+	gdk_colormap_get_type
 	gdk_colormap_get_visual
+	gdk_colormap_query_color
 	gdk_colormap_new
 	gdk_colormap_ref
 	gdk_colormap_unref
@@ -222,9 +211,12 @@ EXPORTS
 	gdk_list_visuals
 	gdk_mbstowcs
 	gdk_null_window_warnings
+	gdk_pango_attr_embossed_new
+	gdk_pango_attr_stipple_new
 	gdk_pango_context_get
 	gdk_pango_context_set_colormap
 	gdk_parent_root
+	gdk_pixbuf_get_from_drawable
 	gdk_pixbuf_render_pixmap_and_mask
 	gdk_pixbuf_render_threshold_alpha
 	gdk_pixbuf_render_to_drawable
@@ -368,6 +360,7 @@ EXPORTS
 	gdk_window_set_background
 	gdk_window_set_child_shapes
 	gdk_window_set_cursor
+	gdk_window_set_debug_updates
 	gdk_window_set_decorations
 	gdk_window_set_events
 	gdk_window_set_functions

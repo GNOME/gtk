@@ -186,7 +186,6 @@ gdk_wcstombs (const GdkWChar *src)
   while (*wcp)
     {
       int first;
-      int i;
       GdkWChar c = *wcp++;
 
       if (c < 0x80)

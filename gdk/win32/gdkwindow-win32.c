@@ -1531,6 +1531,7 @@ gdk_window_set_cursor (GdkWindow *window,
   GdkWindowImplWin32 *impl;
   GdkCursorPrivate *cursor_private;
   HCURSOR hcursor;
+  HCURSOR hprevcursor;
   POINT pt;
   
   g_return_if_fail (window != NULL);
@@ -1549,15 +1550,10 @@ gdk_window_set_cursor (GdkWindow *window,
       GDK_NOTE (MISC, g_print ("gdk_window_set_cursor: %#x %#x\n",
 			       (guint) GDK_WINDOW_HWND (window),
 			       (guint) hcursor));
-      if (impl->hcursor != NULL)
-	{
-	  GDK_NOTE (MISC, g_print ("...DestroyCursor (%#x)\n",
-				   (guint) impl->hcursor));
-	  
-	  DestroyCursor (impl->hcursor);
-	  impl->hcursor = NULL;
-	}
-      if (hcursor != NULL)
+      hprevcursor = impl->hcursor;
+      if (hcursor == NULL)
+	impl->hcursor = NULL;
+      else
 	{
 	  /* We must copy the cursor as it is OK to destroy the GdkCursor
 	   * while still in use for some window. See for instance
@@ -1572,6 +1568,16 @@ gdk_window_set_cursor (GdkWindow *window,
 	  GetCursorPos (&pt);
 	  if (ChildWindowFromPoint (GDK_WINDOW_HWND (window), pt) == GDK_WINDOW_HWND (window))
 	    SetCursor (impl->hcursor);
+
+	  if (hprevcursor != NULL)
+	    {
+	      GDK_NOTE (MISC, g_print ("...DestroyCursor (%#x)\n",
+				       (guint) hprevcursor));
+	  
+	      if (!DestroyCursor (hprevcursor))
+		WIN32_API_FAILED ("DestroyCursor");
+	      impl->hcursor = NULL;
+	    }
 	}
     }
 }

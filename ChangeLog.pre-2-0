@@ -1,3 +1,23 @@
+2001-02-11  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkcolor-win32.c (gdk_colormap_query_color): New
+	function, copied from X11 version.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_cursor): Eliminate
+	DestroyCursor failures. The reason for the problem (despite the
+	inconsistent messages from GetLastError()) was that
+	DestroyCursor() cannot be called while a cursor is set in a
+	window. Set the new cursor first and then destroy the old one.
+	Thanks to jpe@archaeopteryx.com.
+
+	* gdk/win32/gdkcc-win32.c: Removed.
+
+	* gdk/gdk.def
+	* gdk/makefile.mingw.in: Update. Godbye GdkColorContext.
+
+	* gtk/gtk.def
+	* gtk/makefile.mingw.in: Updates.
+
 2001-02-08  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkbin.c (gtk_bin_add): better error message if you try to

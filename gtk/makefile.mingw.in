@@ -54,7 +54,6 @@ all :				\
 
 gtk_OBJECTS =			\
 	fnmatch.o		\
-	gdk-pixbuf-loader.o	\
 	gtkaccelgroup.o		\
 	gtkaccellabel.o		\
 	gtkadjustment.o		\
@@ -178,6 +177,7 @@ gtk_OBJECTS =			\
 	gtktree.o		\
 	gtktreeitem.o		\
 	gtktreedatalist.o	\
+	gtktreednd.o		\
 	gtktreemodel.o		\
 	gtktreemodelsimple.o	\
 	gtktreemodelsort.o	\
@@ -221,7 +221,6 @@ gtk_public_h_sources =		\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
 	gtkcombo.h		\
-	gtkcompat.h		\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
@@ -282,7 +281,6 @@ gtk_public_h_sources =		\
 	gtkoptionmenu.h		\
 	gtkpacker.h		\
 	gtkpaned.h		\
-	gdk-pixbuf-loader.h	\
 	gtkpixmap.h		\
 	gtkplug.h		\
 	gtkpreview.h		\
@@ -322,11 +320,13 @@ gtk_public_h_sources =		\
 	gtktoolbar.h		\
 	gtktooltips.h		\
 	gtktree.h		\
+	gtktreednd.h		\
 	gtktreeitem.h		\
 	gtktreemodel.h		\
 	gtktreemodelsimple.h	\
 	gtktreemodelsort.h	\
 	gtktreeselection.h	\
+	gtktreesortable.h	\
 	gtktreestore.h		\
 	gtktreeview.h		\
 	gtktreeviewcolumn.h	\
@@ -344,7 +344,6 @@ gtk_public_h_sources =		\
 
 # More headers to use when autogenerating.
 gdk_headers =			\
-	../gdk/gdkcc.h		\
 	../gdk/gdkcolor.h	\
 	../gdk/gdkcursor.h	\
 	../gdk/gdkdnd.h		\

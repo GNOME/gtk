@@ -28,7 +28,6 @@ EXPORTS
 	GTK_TYPE_GDK_BYTE_ORDER
 	GTK_TYPE_GDK_CAP_STYLE
 	GTK_TYPE_GDK_COLOR
-	GTK_TYPE_GDK_COLOR_CONTEXT_MODE
 	GTK_TYPE_GDK_CROSSING_MODE
 	GTK_TYPE_GDK_CURSOR_TYPE
 	GTK_TYPE_GDK_DRAG_ACTION
@@ -250,8 +249,6 @@ EXPORTS
 	gtk_cell_renderer_text_new
 	gtk_cell_renderer_text_pixbuf_get_type
 	gtk_cell_renderer_text_pixbuf_new
-	gtk_cell_renderer_toggle_get_active
-	gtk_cell_renderer_toggle_set_active
 	gtk_check_button_get_type
 	gtk_check_button_new
 	gtk_check_button_new_with_label
@@ -522,6 +519,7 @@ EXPORTS
 	gtk_entry_prepend_text
 	gtk_entry_select_region
 	gtk_entry_set_editable
+	gtk_entry_set_has_frame
 	gtk_entry_set_invisible_char
 	gtk_entry_set_max_length
 	gtk_entry_set_position
@@ -1067,7 +1065,9 @@ EXPORTS
 	gtk_selection_convert
 	gtk_selection_data_copy
 	gtk_selection_data_free
+	gtk_selection_data_get_tree_row
 	gtk_selection_data_set
+	gtk_selection_data_set_tree_row
 	gtk_selection_incr_event
 	gtk_selection_notify
 	gtk_selection_owner_set
@@ -1305,6 +1305,11 @@ EXPORTS
 	gtk_tree_append
 	gtk_tree_child_position
 	gtk_tree_clear_items
+	gtk_tree_drag_dest_drag_data_received
+	gtk_tree_drag_dest_get_type
+	gtk_tree_drag_dest_row_drop_possible
+	gtk_tree_drag_source_drag_data_get
+	gtk_tree_drag_source_get_type
 	gtk_tree_get_type
 	gtk_tree_insert
 	gtk_tree_item_collapse
@@ -1388,7 +1393,6 @@ EXPORTS
 	gtk_tree_view_column_set_cell_data
 	gtk_tree_view_column_set_cell_renderer
 	gtk_tree_view_column_set_clickable
-	gtk_tree_view_column_set_justification
 	gtk_tree_view_column_set_max_width
 	gtk_tree_view_column_set_min_width
 	gtk_tree_view_column_set_sizing
@@ -1408,7 +1412,6 @@ EXPORTS
 	gtk_tree_view_get_type
 	gtk_tree_view_get_vadjustment
 	gtk_tree_view_insert_column
-	gtk_tree_view_move_to
 	gtk_tree_view_new
 	gtk_tree_view_new_with_model
 	gtk_tree_view_remove_column
