@@ -146,8 +146,8 @@ _gdk_image_exit (void)
  * gdk_image_new_bitmap:
  * @visual: the #GdkVisual to use for the image.
  * @data: the pixel data. 
- * @w: the width of the image in pixels. 
- * @h: the height of the image in pixels. 
+ * @width: the width of the image in pixels. 
+ * @height: the height of the image in pixels. 
  * 
  * Creates a new #GdkImage with a depth of 1 from the given data.
  * <warning><para>THIS FUNCTION IS INCREDIBLY BROKEN. The passed-in data must 
@@ -157,7 +157,7 @@ _gdk_image_exit (void)
  * Return value: a new #GdkImage.
  **/
 GdkImage *
-gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
+gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint width, gint height)
 {
   Visual *xvisual;
   GdkImage *image;
@@ -171,8 +171,8 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
   
   image->type = GDK_IMAGE_NORMAL;
   image->visual = visual;
-  image->width = w;
-  image->height = h;
+  image->width = width;
+  image->height = height;
   image->depth = 1;
   image->bits_per_pixel = 1;
   if (display->closed)
@@ -182,7 +182,7 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
       xvisual = ((GdkVisualPrivate*) visual)->xvisual;
       private->ximage = XCreateImage (GDK_SCREEN_XDISPLAY (private->screen),
 				      xvisual, 1, XYBitmap,
-				      0, 0, w ,h, 8, 0);
+				      0, 0, width, height, 8, 0);
     }
   
   private->ximage->data = data;

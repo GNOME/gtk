@@ -1026,7 +1026,6 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
 	  success[i] = TRUE;
 	}
       break;
-
     case GDK_VISUAL_STATIC_GRAY:
     case GDK_VISUAL_STATIC_COLOR:
       for (i=0; i<ncolors; i++)
@@ -1318,16 +1317,16 @@ gdk_x11_colormap_get_xcolormap (GdkColormap *colormap)
 
 /**
  * gdk_colormap_get_screen:
- * @colormap: a #GdkColormap
+ * @cmap: a #GdkColormap
  * 
  * Gets the screen for which this colormap was created.
  * 
  * Return value: the screen for which this colormap was created.
  **/
 GdkScreen *
-gdk_colormap_get_screen (GdkColormap *colormap)
+gdk_colormap_get_screen (GdkColormap *cmap)
 {
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), NULL);
+  g_return_val_if_fail (GDK_IS_COLORMAP (cmap), NULL);
 
-  return  GDK_COLORMAP_PRIVATE_DATA (colormap)->screen;
+  return  GDK_COLORMAP_PRIVATE_DATA (cmap)->screen;
 }

@@ -1,3 +1,9 @@
+2002-08-12  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk-sections.txt: Remove gdk_screen_close, add a section
+	for GdkDisplayManager, add gdk_visual_get_screen and
+	gdk_colormap_get_screen. 
+	
 2002-08-07  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Remove gtk_style_get_font_for_display.

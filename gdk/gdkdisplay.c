@@ -218,6 +218,7 @@ gdk_display_put_event (GdkDisplay *display,
  * gdk_pointer_ungrab:
  * @time: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no timestamp is
  *        available.
+ *
  * Ungrabs the pointer, if it is grabbed by this application.
  **/
 void

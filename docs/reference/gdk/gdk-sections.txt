@@ -146,6 +146,26 @@ GDK_DISPLAY_GET_CLASS
 </SECTION>
 
 <SECTION>
+<FILE>gdkdisplaymanager</FILE>
+<TITLE>GdkDisplayManager</TITLE>
+GdkDisplayManager
+gdk_display_manager_get
+gdk_display_manager_get_default_display
+gdk_display_manager_set_default_display
+gdk_display_manager_list_displays
+gdk_display_get_core_pointer
+<SUBSECTION Standard>
+GDK_DISPLAY_MANAGER
+GDK_DISPLAY_MANAGER_CLASS
+GDK_DISPLAY_MANAGER_GET_CLASS
+GDK_IS_DISPLAY_MANAGER_CLASS
+GDK_IS_DISPLAY_MANAGER
+GDK_TYPE_DISPLAY_MANAGER
+GdkDisplayManagerClass
+gdk_display_manager_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gdkscreen</FILE>
 <TITLE>GdkScreen</TITLE>
 GdkScreen
@@ -164,7 +184,6 @@ gdk_screen_get_width
 gdk_screen_get_height
 gdk_screen_get_width_mm
 gdk_screen_get_height_mm
-gdk_screen_close
 gdk_screen_list_visuals
 gdk_screen_get_toplevel_windows
 gdk_screen_get_n_monitors
@@ -313,6 +332,7 @@ gdk_colormap_alloc_color
 gdk_colormap_free_colors
 gdk_colormap_query_color
 gdk_colormap_get_visual
+gdk_colormap_get_screen
 gdk_colors_store
 gdk_color_copy
 gdk_color_free
@@ -534,6 +554,7 @@ gdk_visual_get_best_with_type
 gdk_visual_get_best_with_both
 gdk_visual_ref
 gdk_visual_unref
+gdk_visual_get_screen
 
 <SUBSECTION Standard>
 GDK_TYPE_BYTE_ORDER
