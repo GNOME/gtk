@@ -1156,14 +1156,6 @@ gtk_widget_unparent (GtkWidget *widget)
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
     }
   
-  /* Reset the width and height here, to force reallocation if we
-   * get added back to a new parent. This won't work if our new
-   * allocation is smaller than 1x1 and we actually want a size of 1x1...
-   * (would 0x0 be OK here?)
-   */
-  widget->allocation.width = 1;
-  widget->allocation.height = 1;
-  
   if (widget->window &&
       GTK_WIDGET_NO_WINDOW (widget) &&
       GTK_WIDGET_DRAWABLE (widget))
@@ -1173,6 +1165,14 @@ gtk_widget_unparent (GtkWidget *widget)
 			   widget->allocation.width,
 			   widget->allocation.height);
 
+  /* Reset the width and height here, to force reallocation if we
+   * get added back to a new parent. This won't work if our new
+   * allocation is smaller than 1x1 and we actually want a size of 1x1...
+   * (would 0x0 be OK here?)
+   */
+  widget->allocation.width = 1;
+  widget->allocation.height = 1;
+  
   if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_IN_REPARENT (widget))
     gtk_widget_unrealize (widget);
 

@@ -5366,7 +5366,7 @@ create_scroll_test ()
  */
 static int timer = 0;
 
-void
+gint
 timeout_test (GtkWidget *label)
 {
   static int count = 0;
@@ -5374,6 +5374,8 @@ timeout_test (GtkWidget *label)
 
   sprintf (buffer, "count: %d", ++count);
   gtk_label_set (GTK_LABEL (label), buffer);
+
+  return TRUE;
 }
 
 void
@@ -5573,33 +5575,61 @@ create_idle_test ()
 }
 
 /*
- * Basic Test
+ * Test of recursive mainloop
  */
+
 void
-create_test ()
+mainloop_destroyed (GtkWidget *w, GtkWidget **window)
+{
+  *window = NULL;
+  gtk_main_quit ();
+}
+
+void
+create_mainloop ()
 {
   static GtkWidget *window = NULL;
+  GtkWidget *label;
+  GtkWidget *button;
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_dialog_new ();
+
+      gtk_window_set_title (GTK_WINDOW (window), "Test Main Loop");
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  GTK_SIGNAL_FUNC(mainloop_destroyed),
 			  &window);
 
+      label = gtk_label_new ("In recursive main loop...");
+      gtk_misc_set_padding (GTK_MISC(label), 20, 20);
 
-      gtk_window_set_title (GTK_WINDOW (window), "test");
-      gtk_container_border_width (GTK_CONTAINER (window), 0);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), label,
+			  TRUE, TRUE, 0);
+      gtk_widget_show (label);
+
+      button = gtk_button_new_with_label ("Leave");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), button, 
+			  FALSE, TRUE, 0);
+
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC (gtk_widget_destroy),
+				 GTK_OBJECT (window));
+
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_grab_default (button);
+
+      gtk_widget_show (button);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
     {
       gtk_widget_show (window);
 
-      g_print ("create_test: start\n");
+      g_print ("create_mainloop: start\n");
       gtk_main ();
-      g_print ("create_test: done\n");
+      g_print ("create_mainloop: done\n");
     }
   else
     gtk_widget_destroy (window);
@@ -5654,7 +5684,7 @@ create_main_window ()
       { "spinbutton", create_spins },
       { "statusbar", create_statusbar },
       { "test idle", create_idle_test },
-      { "test mainloop", create_test },
+      { "test mainloop", create_mainloop },
       { "test scrolling", create_scroll_test },
       { "test selection", create_selection_test },
       { "test timeout", create_timeout_test },

@@ -109,7 +109,13 @@ AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", no_x11_lib=yes, $X
 
 if test "x$enable_shm" = "xyes"; then
   # Check for the Xext library (needed for XShm extention)
-  AC_CHECK_LIB(Xext, XShmAttach, x_libs="-lXext $x_libs", no_xext_lib=yes, $x_libs)
+  AC_CHECK_LIB(Xext, XShmAttach, 
+      x_libs="-lXext $x_libs", 
+      # On AIX, it is in XextSam instead, but we still need -lXext
+      AC_CHECK_LIB(XextSam, XShmAttach, 
+          x_libs="-lXextSam -lXext $x_libs", 
+          no_xext_lib=yes, $x_libs),
+      $x_libs)
 fi
 
 x_cflags="$X_CFLAGS"

@@ -152,6 +152,8 @@ static GList *idle_functions = NULL;	   /* A list of idle functions.
 
 static GList *current_idles = NULL;
 static GList *current_timeouts = NULL;
+static GtkIdleFunction    *running_idle = NULL;
+static GtkTimeoutFunction *running_timeout = NULL;
 static GMemChunk *timeout_mem_chunk = NULL;
 static GMemChunk *idle_mem_chunk = NULL;
 static GMemChunk *quit_mem_chunk = NULL;
@@ -403,7 +405,7 @@ gtk_events_pending (void)
   gint result = gdk_events_pending() + ((next_event != NULL) ? 1 : 0);
 
   if (idle_functions &&
-      (((GtkIdleFunction *)idle_functions->data)->priority >=
+      (((GtkIdleFunction *)idle_functions->data)->priority <=
        GTK_PRIORITY_INTERNAL))
     result += 1;
 
@@ -844,6 +846,12 @@ gtk_timeout_remove (guint tag)
    * (Which, basically, involves searching the
    *  list for the tag).
    */
+  if ((running_timeout) && (running_timeout->tag == tag))
+    {
+      gtk_timeout_destroy (running_timeout);
+      running_timeout = NULL;
+    }
+
   tmp_list = timeout_functions;
   while (tmp_list)
     {
@@ -1079,6 +1087,12 @@ gtk_idle_remove (guint tag)
   GtkIdleFunction *idlef;
   GList *tmp_list;
   
+  if ((running_idle) && (running_idle->tag == tag))
+    {
+      gtk_idle_destroy (running_idle);
+      running_idle = NULL;
+    }
+
   tmp_list = idle_functions;
   while (tmp_list)
     {
@@ -1301,27 +1315,29 @@ static void
 gtk_handle_current_timeouts (guint32 the_time)
 {
   GList *tmp_list;
-  GtkTimeoutFunction *timeoutf;
   
   while (current_timeouts)
     {
       tmp_list = current_timeouts;
-      timeoutf = tmp_list->data;
+      running_timeout = tmp_list->data;
       
       current_timeouts = g_list_remove_link (current_timeouts, tmp_list);
       g_list_free (tmp_list);
       
-      if (gtk_invoke_timeout_function (timeoutf) == FALSE)
+      if ((gtk_invoke_timeout_function (running_timeout) == FALSE) ||
+	  (running_timeout == NULL))
 	{
-	  gtk_timeout_destroy (timeoutf);
+	  if (running_timeout)
+	    gtk_timeout_destroy (running_timeout);
 	}
       else
 	{
-	  timeoutf->interval = timeoutf->originterval;
-	  timeoutf->start = the_time;
-	  gtk_timeout_insert (timeoutf);
+	  running_timeout->interval = running_timeout->originterval;
+	  running_timeout->start = the_time;
+	  gtk_timeout_insert (running_timeout);
 	}
     }
+  running_timeout = NULL;
 }
 
 static void
@@ -1411,19 +1427,20 @@ gtk_handle_current_idles ()
 {
   GList *tmp_list;
   GList *tmp_list2;
-  GtkIdleFunction *idlef;
   
   while (current_idles)
     {
       tmp_list = current_idles;
-      idlef = tmp_list->data;
+      running_idle = tmp_list->data;
       
       current_idles = g_list_remove_link (current_idles, tmp_list);
       
-      if (gtk_idle_invoke_function (idlef) == FALSE)
+      if ((gtk_idle_invoke_function (running_idle) == FALSE) ||
+	  (running_idle == NULL))
 	{
 	  g_list_free (tmp_list);
-	  gtk_idle_destroy (idlef);
+	  if (running_idle)
+	    gtk_idle_destroy (running_idle);
 	}
       else
 	{
@@ -1432,7 +1449,7 @@ gtk_handle_current_idles ()
 	   */
 	  tmp_list2 = idle_functions;
 	  while (tmp_list2 &&
-		 (((GtkIdleFunction *)tmp_list2->data)->priority <= idlef->priority))
+		 (((GtkIdleFunction *)tmp_list2->data)->priority <= running_idle->priority))
 	    tmp_list2 = tmp_list2->next;
 
 	  if (!tmp_list2)
@@ -1453,6 +1470,7 @@ gtk_handle_current_idles ()
 	    }
 	}
     }
+  running_idle = NULL;
 }
 
 static void
