@@ -1,3 +1,9 @@
+2005-01-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_check) 
+	(gtk_default_draw_option, gtk_default_draw_handle): Add some
+	more NULL checks, patch by Michael Natterer.
+
 Tue Jan 18 10:55:47 2005  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtkstyle.c (gtk_default_draw_handle): Check for NULL detail
