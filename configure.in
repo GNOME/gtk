@@ -256,7 +256,7 @@ else
   esac
 
   GLIB_CFLAGS="-I$glib_dir -I$glib_dir/gmodule"
-  GLIB_LIBS="$glib_dir/libglib.la $glib_dir/gmodule.la"
+  GLIB_LIBS="$glib_dir/libglib.la $glib_dir/gmodule/libgmodule.la"
   GLIB_DEPLIBS=
 
   AC_SUBST(GLIB_CFLAGS)

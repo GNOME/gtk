@@ -1,3 +1,9 @@
+1999-03-14  Jeff Garzik  <jgarzik@pobox.com>
+
+	* configure.in:
+	Use correct path to libgmodule.la when ref'ing uninstalled copy
+	of glib.  (Already in stable branch, Bug #417)
+
 1999-03-15  Tor Lillqvist  <tml@iki.fi>
 
 	Win32 merge and general portability stuff:
