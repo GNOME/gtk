@@ -86,16 +86,12 @@ static Bool	 gdk_event_get_type	(Display   *display,
 					 XPointer   arg);
 #endif
 
-static gboolean  gdk_event_prepare      (gpointer   source_data, 
-				 	 GTimeVal  *current_time,
-					 gint      *timeout,
-					 gpointer   user_data);
-static gboolean  gdk_event_check        (gpointer   source_data,
-				 	 GTimeVal  *current_time,
-					 gpointer   user_data);
-static gboolean  gdk_event_dispatch     (gpointer   source_data,
-					 GTimeVal  *current_time,
-					 gpointer   user_data);
+static gboolean gdk_event_prepare  (GSource     *source,
+				    gint        *timeout);
+static gboolean gdk_event_check    (GSource     *source);
+static gboolean gdk_event_dispatch (GSource     *source,
+				    GSourceFunc  callback,
+				    gpointer     user_data);
 
 GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
 					 GdkEvent  *event,
@@ -116,7 +112,7 @@ static GSourceFuncs event_funcs = {
   gdk_event_prepare,
   gdk_event_check,
   gdk_event_dispatch,
-  (GDestroyNotify)g_free
+  NULL
 };
 
 GPollFD event_poll_fd;
@@ -128,16 +124,22 @@ GPollFD event_poll_fd;
 void 
 gdk_events_init (void)
 {
+  GSource *source;
+  
   connection_number = ConnectionNumber (gdk_display);
   GDK_NOTE (MISC,
 	    g_message ("connection number: %d", connection_number));
 
-  g_source_add (GDK_PRIORITY_EVENTS, TRUE, &event_funcs, NULL, NULL, NULL);
 
+  source = g_source_new (&event_funcs, sizeof (GSource));
+  g_source_set_priority (source, GDK_PRIORITY_EVENTS);
+  
   event_poll_fd.fd = connection_number;
   event_poll_fd.events = G_IO_IN;
   
-  g_main_add_poll (&event_poll_fd, GDK_PRIORITY_EVENTS);
+  g_source_add_poll (source, &event_poll_fd);
+  g_source_set_can_recurse (source, TRUE);
+  g_source_attach (source, NULL);
 
   gdk_add_client_message_filter (gdk_wm_protocols, 
 				 gdk_wm_protocols_filter, NULL);
@@ -1281,7 +1283,7 @@ gdk_events_queue (void)
  	    w = GDK_WINDOW_XWINDOW (gdk_xim_window);
  	    break;
  	  }
-      
+
       if (XFilterEvent (&xevent, w))
 	continue;
 #else
@@ -1313,10 +1315,8 @@ gdk_events_queue (void)
 }
 
 static gboolean  
-gdk_event_prepare (gpointer  source_data, 
-		   GTimeVal *current_time,
-		   gint     *timeout,
-		   gpointer  user_data)
+gdk_event_prepare (GSource  *source,
+		   gint     *timeout)
 {
   gboolean retval;
   
@@ -1332,9 +1332,7 @@ gdk_event_prepare (gpointer  source_data,
 }
 
 static gboolean  
-gdk_event_check (gpointer  source_data,
-		 GTimeVal *current_time,
-		 gpointer  user_data)
+gdk_event_check (GSource  *source) 
 {
   gboolean retval;
   
@@ -1351,9 +1349,9 @@ gdk_event_check (gpointer  source_data,
 }
 
 static gboolean  
-gdk_event_dispatch (gpointer  source_data,
-		    GTimeVal *current_time,
-		    gpointer  user_data)
+gdk_event_dispatch (GSource    *source,
+		    GSourceFunc callback,
+		    gpointer    user_data)
 {
   GdkEvent *event;
  

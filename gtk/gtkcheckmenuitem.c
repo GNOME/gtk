@@ -162,8 +162,10 @@ gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,
 {
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
-  
+
+#if 0
   menu_item->always_show_toggle = always != FALSE;
+#endif  
 }
 
 void
@@ -176,7 +178,7 @@ static void
 gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
 {
   check_menu_item->active = FALSE;
-  check_menu_item->always_show_toggle = FALSE;
+  check_menu_item->always_show_toggle = TRUE;
 }
 
 static gint

@@ -1,3 +1,26 @@
+Tue Dec  5 15:49:31 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* INSTALL: Fix link to PNG home, remove reference
+	to fribidi.
+
+	* gdk/x11/gdkevents-x11.c: Fix up for new GMain API.
+	
+	* gdk/win32/gdkevents-win32.c: Fix up for new GMain API. (Not
+	tested.)
+
+	* gtk/gtkcheckmenuitem.c: Permanently turn on
+	always_show_toggle.
+
+	* gtk/gtkclist.c (gtk_clist_get_pixtext): Allow mask to 
+	be NULL. (Vladimir Klebanov, #26545)
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_insert_text): Fix 
+	some signed/unsigned comparison problems. (#6510,
+	David Kaelbling)
+
+	* gtk/gtkwidget.[ch] (gtk_widget_is_ancestor): Change
+	return type to boolean (Oskar Liljeblad, #18648)
+
 2000-12-05  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkmain-fb.c (gdk_fb_display_new):

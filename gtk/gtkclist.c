@@ -2364,7 +2364,8 @@ gtk_clist_get_pixtext (GtkCList   *clist,
     *pixmap = GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap;
 
   /* mask can be NULL */
-  *mask = GTK_CELL_PIXTEXT (clist_row->cell[column])->mask;
+  if (mask)
+    *mask = GTK_CELL_PIXTEXT (clist_row->cell[column])->mask;
 
   return 1;
 }

@@ -9,16 +9,12 @@ GTK+ requires the following packages:
 
       http://www.pango.org/download.shtml
 
-   Pango also requires the FriBidi library, available from:
-
-      http://imagic.weizmann.ac.il/~dov/freesw/FriBidi/
-
  - The TIFF, PNG, and JPEG image loading libraries. You most
    likely have these installed on your system already. If not
    these libraries are available from:
 
     http://www.libtiff.org/
-    ftp://swrinde.nde.swri.edu/pub/png/src/
+    http://www.libpng.org/
     ftp://ftp.uu.net/graphics/jpeg/
 
    If these libraries are not available, the corresponding 

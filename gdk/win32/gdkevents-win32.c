@@ -94,16 +94,13 @@ static gboolean  gdk_event_translate	(GdkEvent *event,
 					 MSG      *msg,
 					 gboolean *ret_val_flagp,
 					 gint     *ret_valp);
-static gboolean  gdk_event_prepare      (gpointer  source_data, 
-				 	 GTimeVal *current_time,
-					 gint     *timeout,
-					 gpointer  user_data);
-static gboolean  gdk_event_check        (gpointer  source_data,
-				 	 GTimeVal *current_time,
-					 gpointer  user_data);
-static gboolean  gdk_event_dispatch     (gpointer  source_data,
-					 GTimeVal *current_time,
-					 gpointer  user_data);
+
+static gboolean gdk_event_prepare  (GSource     *source,
+				    gint        *timeout);
+static gboolean gdk_event_check    (GSource     *source);
+static gboolean gdk_event_dispatch (GSource     *source,
+				    GSourceFunc  callback,
+				    gpointer     user_data);
 
 /* Private variable declarations
  */
@@ -290,6 +287,7 @@ gdk_window_procedure (HWND   hwnd,
 void 
 gdk_events_init (void)
 {
+  GSource *source;
   HRESULT hres;
 #ifdef USE_TRACKMOUSEEVENT
   HMODULE user32, imm32;
@@ -307,12 +305,17 @@ gdk_events_init (void)
   msh_mousewheel_msg = RegisterWindowMessage ("MSWHEEL_ROLLMSG");
   GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL = %#x\n", msh_mousewheel_msg));
 
-  g_source_add (GDK_PRIORITY_EVENTS, TRUE, &event_funcs, NULL, NULL, NULL);
+  source = g_source_new (&event_funcs, sizeof (GSource));
+  g_source_set_priority (source, GDK_PRIORITY_EVENTS);
 
   event_poll_fd.fd = G_WIN32_MSG_HANDLE;
   event_poll_fd.events = G_IO_IN;
   
-  g_main_add_poll (&event_poll_fd, GDK_PRIORITY_EVENTS);
+  g_source_add_poll (source, &event_poll_fd);
+  g_source_set_can_recurse (source, TRUE);
+  g_source_attach (source, NULL);
+
+  g_source_add (GDK_PRIORITY_EVENTS, TRUE, &event_funcs, NULL, NULL, NULL);
 
   hres = CoCreateInstance (&CLSID_CActiveIMM,
 			   NULL,
@@ -2836,11 +2839,9 @@ gdk_events_queue (void)
     }
 }
 
-static gboolean  
-gdk_event_prepare (gpointer  source_data, 
-		   GTimeVal *current_time,
-		   gint     *timeout,
-		   gpointer  user_data)
+static gboolean
+gdk_event_prepare (GSource *source,
+		   gint    *timeout)
 {
   MSG msg;
   gboolean retval;
@@ -2857,10 +2858,8 @@ gdk_event_prepare (gpointer  source_data,
   return retval;
 }
 
-static gboolean  
-gdk_event_check (gpointer  source_data,
-		 GTimeVal *current_time,
-		 gpointer  user_data)
+static gboolean
+gdk_event_check (GSource *source)
 {
   MSG msg;
   gboolean retval;
@@ -2878,10 +2877,10 @@ gdk_event_check (gpointer  source_data,
   return retval;
 }
 
-static gboolean  
-gdk_event_dispatch (gpointer  source_data,
-		    GTimeVal *current_time,
-		    gpointer  user_data)
+static gboolean
+gdk_event_dispatch (GSource     *source,
+		    GSourceFunc  callback,
+		    gpointer     user_data)
 {
   GdkEvent *event;
  

@@ -546,7 +546,7 @@ void	     gtk_widget_get_pointer	(GtkWidget	*widget,
 					 gint		*x,
 					 gint		*y);
 
-gint	     gtk_widget_is_ancestor	(GtkWidget	*widget,
+gboolean     gtk_widget_is_ancestor	(GtkWidget	*widget,
 					 GtkWidget	*ancestor);
 
 /* Hide widget and return TRUE.

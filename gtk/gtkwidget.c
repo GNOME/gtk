@@ -4294,7 +4294,7 @@ gtk_widget_get_pointer (GtkWidget *widget,
  *   results:
  *****************************************/
 
-gint
+gboolean
 gtk_widget_is_ancestor (GtkWidget *widget,
 			GtkWidget *ancestor)
 {
