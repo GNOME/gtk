@@ -3419,11 +3419,15 @@ compute_log_attrs (const GtkTextIter *iter,
   if (char_lenp)
     *char_lenp = char_len;
   
-  attrs = g_new (PangoLogAttr, char_len);
-  
+  attrs = g_new (PangoLogAttr, char_len + 1);
+
+  /* FIXME we need to follow PangoLayout and allow different language
+   * tags within the paragraph
+   */
   pango_get_log_attrs (paragraph, byte_len, -1,
 		       gtk_text_iter_get_language (&start),
-                       attrs);
+                       attrs,
+                       char_len + 1);
   
   g_free (paragraph);
 

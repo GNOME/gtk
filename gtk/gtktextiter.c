@@ -2852,10 +2852,13 @@ test_log_attrs (const GtkTextIter *iter,
   offset = gtk_text_iter_get_line_offset (iter);
 
   /* char_len may be 0 and attrs will be NULL if so, if
-   * iter is the end iter and the last line is empty
+   * iter is the end iter and the last line is empty.
+   * 
+   * offset may be equal to char_len, since attrs contains an entry
+   * for one past the end
    */
   
-  if (offset < char_len)
+  if (offset <= char_len)
     result = (* func) (attrs, offset, 0, char_len);
 
   return result;

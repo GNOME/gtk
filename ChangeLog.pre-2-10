@@ -1,3 +1,13 @@
+2001-10-03  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextiter.c (test_log_attrs): allow testing the end 
+	position
+
+	* gtk/gtktextbuffer.c (compute_log_attrs): update for pango
+	changes
+
+	* tests/testtextbuffer.c (logical_motion_tests): updates
+
 2001-10-03  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtkwidget.c (gtk_widget_style_get_property): 

@@ -957,6 +957,9 @@ logical_motion_tests (void)
 
   if (!gtk_text_iter_is_end (&iter))
     g_error ("Expected to stop at the end iterator\n");
+
+  if (!gtk_text_iter_is_cursor_position (&iter))
+    g_error ("Should be a cursor position before the end iterator");
   
   if (i != expected_steps)
     g_error ("Expected %d steps, there were actually %d\n", expected_steps, i);
@@ -1016,6 +1019,11 @@ logical_motion_tests (void)
                    pos, expected[i]);
         }
 
+      if (i != 0 &&
+          !gtk_text_iter_is_end (&iter) &&
+          !gtk_text_iter_ends_sentence (&iter))
+        g_error ("Iterator at %d should end a sentence", pos);
+      
       ++i;
     }
   while (gtk_text_iter_forward_sentence_end (&iter));
@@ -1054,6 +1062,11 @@ logical_motion_tests (void)
                    pos, expected[i]);
         }
 
+      if (pos != 0 &&
+          !gtk_text_iter_is_end (&iter) &&
+          !gtk_text_iter_starts_sentence (&iter))
+        g_error ("Iterator at %d should start a sentence", pos);
+      
       ++i;
     }
   while (gtk_text_iter_backward_sentence_start (&iter));
