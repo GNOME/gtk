@@ -1,7 +1,8 @@
 Sun Mar  2 23:35:57 2003  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_get_size):
-	handle rtl code.
+	handle rtl code.  Thanks to Matthias Clasen for an initial patch
+	to handle the RTL code.
 
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_get_size): ditto
 
@@ -33,7 +34,8 @@ Sun Mar  2 23:35:57 2003  Jonathan Blandford  <jrb@gnome.org>
 	(gtk_tree_view_column_set_expand),
 	(gtk_tree_view_column_get_expand),
 	(gtk_tree_view_column_cell_process_action):
-	Add support for expand flag
+	Add support for expand flag.  Thanks to Kristian Rietveld for an
+	initial patch for this.
 
 Fri Feb 28 02:06:17 2003  Jonathan Blandford  <jrb@gnome.org>
 
