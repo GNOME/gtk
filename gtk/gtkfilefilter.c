@@ -150,11 +150,13 @@ gtk_file_filter_finalize (GObject  *object)
  * that accepts any file, use:
  *
  * <informalexample><programlisting>
- * GtkFileFilter *filter = gtk_file_filter_new ();
+ * GtkFileFilter *filter = gtk_file_filter_new (<!-- -->);
  * gtk_file_filter_add_pattern (filter, "*");
  * </programlisting></informalexample>
  * 
  * Return value: a new #GtkFileFilter
+ * 
+ * Since: 2.4
  **/
 GtkFileFilter *
 gtk_file_filter_new (void)
@@ -171,6 +173,8 @@ gtk_file_filter_new (void)
  * Sets the human-readable name of the filter; this is the string
  * that will be displayed in the file selector user interface if
  * there is a selectable list of filters.
+ * 
+ * Since: 2.4
  **/
 void
 gtk_file_filter_set_name (GtkFileFilter *filter,
@@ -193,6 +197,8 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
  * Return value: The human-readable name of the filter,
  *   or %NULL. This value is owned by GTK+ and must not
  *   be modified or freed.
+ * 
+ * Since: 2.4
  **/
 G_CONST_RETURN gchar *
 gtk_file_filter_get_name (GtkFileFilter *filter)
@@ -216,6 +222,8 @@ file_filter_add_rule (GtkFileFilter *filter,
  * @mime_type: name of a MIME type
  * 
  * Adds a rule allowing a given mime type to @filter.
+ * 
+ * Since: 2.4
  **/
 void
 gtk_file_filter_add_mime_type (GtkFileFilter *filter,
@@ -240,6 +248,8 @@ gtk_file_filter_add_mime_type (GtkFileFilter *filter,
  * @pattern: a shell style glob
  * 
  * Adds a rule allowing a shell style glob to a filter.
+ * 
+ * Since: 2.4
  **/
 void
 gtk_file_filter_add_pattern (GtkFileFilter *filter,
@@ -273,6 +283,8 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
  * about what sorts of information that the filter function needs;
  * this allows GTK+ to avoid retrieving expensive information when
  * it isn't needed by the filter.
+ * 
+ * Since: 2.4
  **/
 void
 gtk_file_filter_add_custom (GtkFileFilter         *filter,
@@ -309,6 +321,8 @@ gtk_file_filter_add_custom (GtkFileFilter         *filter,
  * 
  * Return value: bitfield of flags indicating needed fields when
  *   calling gtk_file_filter_filter()
+ * 
+ * Since: 2.4
  **/
 GtkFileFilterFlags
 gtk_file_filter_get_needed (GtkFileFilter *filter)
@@ -331,6 +345,8 @@ gtk_file_filter_get_needed (GtkFileFilter *filter)
  * #GtkFileChooser.
  * 
  * Return value: %TRUE if the file should be displayed
+ * 
+ * Since: 2.4
  **/
 gboolean
 gtk_file_filter_filter (GtkFileFilter           *filter,

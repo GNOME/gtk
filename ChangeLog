@@ -1,3 +1,8 @@
+Thu Oct 23 23:22:15 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilefilter.c: 
+	* gtk/gtkfilechooser.c: Add "Since: 2.4" to all API doc comments.
+
 Thu Oct 23 22:33:47 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilefilter.c (gtk_file_filter_new): Fix doc markup.
