@@ -88,6 +88,7 @@ gtk_plug_init (GtkPlug *plug)
   window->type = GTK_WINDOW_TOPLEVEL;
   window->auto_shrink = TRUE;
 }
+
 void
 gtk_plug_construct (GtkPlug *plug, guint32 socket_id)
 {
@@ -100,6 +101,7 @@ gtk_plug_construct (GtkPlug *plug, guint32 socket_id)
       plug->same_app = FALSE;
     }
 }
+
 GtkWidget*
 gtk_plug_new (guint32 socket_id)
 {

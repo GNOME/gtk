@@ -1,3 +1,16 @@
+Tue Nov 24 11:31:06 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/Changes-1.2.txt: Edited section on the ScrolledWindow.
+
+	* gtk/gtklayout.c (gtk_layout_set_[hv]adjustment): Remove
+	some code duplication.
+
+	* gtk/gtklayout.[ch] Fixed mapping and unmapping of child windows
+	and child widgets when scrolling greater than 32k pixels.
+
+	* testgtk.c: Modified layout test to test scrolling over 
+	long distances.
+
 Tue Nov 24 11:11:05 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklayout.[ch]: Fixed up copyright message.

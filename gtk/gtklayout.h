@@ -45,6 +45,7 @@ struct _GtkLayoutChild {
   GdkWindow *window;	/* For NO_WINDOW widgets */
   gint x;
   gint y;
+  gboolean mapped : 1;
 };
 
 struct _GtkLayout {

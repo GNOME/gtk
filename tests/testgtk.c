@@ -7994,7 +7994,6 @@ void create_layout (void)
       gtk_widget_set_usize (window, 200, 200);
 
       scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
-      gtk_widget_show (scrolledwindow);
 
       gtk_container_add (GTK_CONTAINER (window), scrolledwindow);
       
@@ -8005,8 +8004,7 @@ void create_layout (void)
       gtk_signal_connect (GTK_OBJECT (layout), "expose_event",
 			  GTK_SIGNAL_FUNC (layout_expose_handler), NULL);
       
-      gtk_layout_set_size (GTK_LAYOUT (layout), 1600, 1600);
-      gtk_widget_show (layout);
+      gtk_layout_set_size (GTK_LAYOUT (layout), 1600, 64000);
       
       for (i=0 ; i < 16 ; i++)
 	for (j=0 ; j < 16 ; j++)
@@ -8016,14 +8014,26 @@ void create_layout (void)
 	      button = gtk_button_new_with_label (buf);
 	    else
 	      button = gtk_label_new (buf);
+
 	    gtk_layout_put (GTK_LAYOUT (layout), button,
 			    j*100, i*100);
-	    gtk_widget_show (button);
 	  }
+
+      for (i=16; i < 640; i++)
+	{
+	  sprintf(buf, "Button %d, %d", i, 0);
+	  if (i % 2)
+	    button = gtk_button_new_with_label (buf);
+	  else
+	    button = gtk_label_new (buf);
+
+	  gtk_layout_put (GTK_LAYOUT (layout), button,
+			  0, i*100);
+	}
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
