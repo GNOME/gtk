@@ -1,3 +1,8 @@
+Wed Apr 11 16:20:00 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_parse_uline): Fix check
+	of wrong variable.
+
 Sun Apr  1 23:01:31 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Released 1.2.10.

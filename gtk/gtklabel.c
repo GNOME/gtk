@@ -1004,7 +1004,7 @@ gtk_label_parse_uline (GtkLabel    *label,
   *r = 0;
 
   result_str = gdk_wcstombs (string_wc);
-  if (string)
+  if (result_str)
     {
       gtk_label_set_text_internal (label, result_str, string_wc);
       gtk_label_set_pattern (label, pattern);
