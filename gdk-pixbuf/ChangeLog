@@ -1,3 +1,7 @@
+2002-04-03  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_get_type): Fix a doc typo.
+
 2002-03-29  Matthias Clasen  <maclas@gmx.de>
 
 	* io-png.c (png_simple_error_callback): libpng error handlers must

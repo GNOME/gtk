@@ -65,7 +65,7 @@ typedef struct
  * gdk_pixbuf_loader_get_type:
  * @void:
  *
- * Registers the #GdkPixubfLoader class if necessary, and returns the type ID
+ * Registers the #GdkPixbufLoader class if necessary, and returns the type ID
  * associated to it.
  *
  * Return value: The type ID of the #GdkPixbufLoader class.
