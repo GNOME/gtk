@@ -716,13 +716,14 @@ gtk_window_configure_event (GtkWidget         *widget,
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
+  window = GTK_WINDOW (widget);
+
   /* If the window was merely moved, do nothing */
   if ((widget->allocation.width == event->width) &&
       (widget->allocation.height == event->height) &&
       (window->resize_count == 0))
     return FALSE;
   
-  window = GTK_WINDOW (widget);
   window->handling_resize = TRUE;
   
   allocation.x = 0;
