@@ -1,3 +1,8 @@
+Mon May 10 00:48:08 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenu.c: Make destruction of a torn off menu work 
+	like un-tearing off.
+
 Sun May  9 21:05:38 2004  Matthias Clasen  <maclas@gmx.de>
 
         Merge from 2.4:

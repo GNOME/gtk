@@ -1759,6 +1759,13 @@ gtk_menu_get_toplevel (GtkWidget *menu)
   return NULL;
 }
 
+static void
+gtk_tearoff_window_destroyed (GtkWidget *widget,
+			      GtkMenu   *menu)
+{
+  gtk_menu_set_tearoff_state (menu, FALSE);
+}
+
 void       
 gtk_menu_set_tearoff_state (GtkMenu  *menu,
 			    gboolean  torn_off)
@@ -1792,7 +1799,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 					GDK_WINDOW_TYPE_HINT_MENU);
 	      gtk_window_set_mnemonic_modifier (GTK_WINDOW (menu->tearoff_window), 0);
 	      g_signal_connect (menu->tearoff_window, "destroy",
-				G_CALLBACK (gtk_widget_destroyed), &menu->tearoff_window);
+				G_CALLBACK (gtk_tearoff_window_destroyed), menu);
 	      g_signal_connect (menu->tearoff_window, "event",
 				G_CALLBACK (gtk_menu_window_event), menu);
 
