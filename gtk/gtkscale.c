@@ -25,7 +25,7 @@
  */
 
 #include <math.h>
-#include "gtkcontainer.h"
+#include "gtkintl.h"
 #include "gtkscale.h"
 
 enum {
@@ -112,7 +112,14 @@ gtk_scale_class_init (GtkScaleClass *class)
   
   range_class->draw_background = gtk_scale_draw_background;
 
-  class->slider_length = 31;
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("slider_length",
+							     _("Slider Length"),
+							     _("Length of scale's slider"),
+							     0,
+							     G_MAXINT,
+							     31,
+							     G_PARAM_READABLE));
   class->value_spacing = 2;
   class->draw_value = NULL;
 }

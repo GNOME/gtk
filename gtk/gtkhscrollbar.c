@@ -50,6 +50,8 @@ static void     gtk_hscrollbar_set_property     (GObject            *object,
 						 const GValue       *value,
 						 GParamSpec         *pspec);
 static void     gtk_hscrollbar_realize          (GtkWidget          *widget);
+static void     gtk_hscrollbar_size_request     (GtkWidget          *widget,
+						 GtkRequisition     *requisition);
 static void     gtk_hscrollbar_size_allocate    (GtkWidget          *widget,
 						 GtkAllocation      *allocation);
 static void     gtk_hscrollbar_draw_step_forw   (GtkRange           *range);
@@ -60,7 +62,6 @@ static gboolean gtk_hscrollbar_trough_keys      (GtkRange           *range,
 						 GdkEventKey        *key,
 						 GtkScrollType      *scroll,
 						 GtkTroughType      *pos);
-
 
 GtkType
 gtk_hscrollbar_get_type (void)
@@ -104,6 +105,7 @@ gtk_hscrollbar_class_init (GtkHScrollbarClass *class)
   gobject_class->get_property = gtk_hscrollbar_get_property;
 
   widget_class->realize = gtk_hscrollbar_realize;
+  widget_class->size_request = gtk_hscrollbar_size_request;
   widget_class->size_allocate = gtk_hscrollbar_size_allocate;
   
   range_class->draw_step_forw = gtk_hscrollbar_draw_step_forw;
@@ -169,18 +171,6 @@ gtk_hscrollbar_get_property (GObject                    *object,
 static void
 gtk_hscrollbar_init (GtkHScrollbar *hscrollbar)
 {
-  GtkWidget *widget;
-  GtkRequisition *requisition;
-  
-  widget = GTK_WIDGET (hscrollbar);
-  requisition = &widget->requisition;
-  
-  requisition->width = (RANGE_CLASS (widget)->min_slider_size +
-                        RANGE_CLASS (widget)->stepper_size +
-                        RANGE_CLASS (widget)->stepper_slider_spacing +
-                        widget->style->xthickness) * 2;
-  requisition->height = (RANGE_CLASS (widget)->slider_width +
-                         widget->style->ythickness * 2);
 }
 
 GtkWidget*
@@ -202,6 +192,9 @@ gtk_hscrollbar_realize (GtkWidget *widget)
   GtkRange *range;
   GdkWindowAttr attributes;
   gint attributes_mask;
+  gint slider_width;
+  gint trough_border;
+  gint stepper_size;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HSCROLLBAR (widget));
@@ -209,6 +202,9 @@ gtk_hscrollbar_realize (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   range = GTK_RANGE (widget);
   
+  _gtk_range_get_props (range, &slider_width, &trough_border,
+			&stepper_size, NULL);
+
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y + (widget->allocation.height - widget->requisition.height) / 2;
   attributes.width = widget->allocation.width;
@@ -230,23 +226,24 @@ gtk_hscrollbar_realize (GtkWidget *widget)
   range->trough = widget->window;
   gdk_window_ref (range->trough);
   
-  attributes.x = widget->style->xthickness;
-  attributes.y = widget->style->ythickness;
-  attributes.width = RANGE_CLASS (widget)->stepper_size;
-  attributes.height = RANGE_CLASS (widget)->stepper_size;
+  attributes.x = trough_border;
+  attributes.y = trough_border;
+  attributes.width = stepper_size;
+  attributes.height = stepper_size;
   
   range->step_back = gdk_window_new (range->trough, &attributes, attributes_mask);
   
   attributes.x = (widget->allocation.width -
-                  widget->style->xthickness -
-                  RANGE_CLASS (widget)->stepper_size);
+                  trough_border -
+                  stepper_size);
   
   range->step_forw = gdk_window_new (range->trough, &attributes, attributes_mask);
   
   attributes.x = 0;
-  attributes.y = widget->style->ythickness;
+  attributes.y = trough_border;
   attributes.width = RANGE_CLASS (widget)->min_slider_size;
-  attributes.height = RANGE_CLASS (widget)->slider_width;
+  attributes.height = slider_width;
+  
   attributes.event_mask |= (GDK_BUTTON_MOTION_MASK |
                             GDK_POINTER_MOTION_HINT_MASK);
   
@@ -273,10 +270,34 @@ gtk_hscrollbar_realize (GtkWidget *widget)
 }
 
 static void
+gtk_hscrollbar_size_request (GtkWidget      *widget,
+			     GtkRequisition *requisition)
+{
+  gint slider_width;
+  gint trough_border;
+  gint stepper_size;
+  gint stepper_spacing;
+  
+  GtkRange *range = GTK_RANGE (widget);
+
+  _gtk_range_get_props (range, &slider_width, &trough_border, 
+			&stepper_size, &stepper_spacing);
+  
+  requisition->width = (RANGE_CLASS (widget)->min_slider_size +
+			stepper_size +
+			stepper_spacing +
+			trough_border) * 2;
+  requisition->height = (slider_width +
+			 trough_border * 2);
+}
+
+static void
 gtk_hscrollbar_size_allocate (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
   GtkRange *range;
+  gint trough_border;
+  gint stepper_size;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HSCROLLBAR (widget));
@@ -287,21 +308,24 @@ gtk_hscrollbar_size_allocate (GtkWidget     *widget,
     {
       range = GTK_RANGE (widget);
       
+      _gtk_range_get_props (range, NULL, &trough_border, 
+			    &stepper_size, NULL);
+  
       gdk_window_move_resize (range->trough,
                               allocation->x,
                               allocation->y + (allocation->height - widget->requisition.height) / 2,
                               allocation->width, widget->requisition.height);
       gdk_window_move_resize (range->step_back,
-                              widget->style->xthickness,
-                              widget->style->ythickness,
-                              RANGE_CLASS (widget)->stepper_size,
-                              widget->requisition.height - widget->style->ythickness * 2);
+                              trough_border,
+                              trough_border,
+                              stepper_size,
+                              widget->requisition.height - trough_border * 2);
       gdk_window_move_resize (range->step_forw,
-                              allocation->width - widget->style->xthickness -
-                              RANGE_CLASS (widget)->stepper_size,
-                              widget->style->ythickness,
-                              RANGE_CLASS (widget)->stepper_size,
-                              widget->requisition.height - widget->style->ythickness * 2);
+                              allocation->width - trough_border -
+                              stepper_size,
+                              trough_border,
+                              stepper_size,
+                              widget->requisition.height - trough_border * 2);
       
       _gtk_range_slider_update (GTK_RANGE (widget));
     }
@@ -394,15 +418,18 @@ gtk_hscrollbar_calc_slider_size (GtkHScrollbar *hscrollbar)
   gint step_forw_x;
   gint slider_width;
   gint slider_height;
+  gint stepper_spacing;
   gint left, right;
   gint width;
   
   g_return_if_fail (hscrollbar != NULL);
   g_return_if_fail (GTK_IS_HSCROLLBAR (hscrollbar));
-  
+
   if (GTK_WIDGET_REALIZED (hscrollbar))
     {
       range = GTK_RANGE (hscrollbar);
+
+      _gtk_range_get_props (range, NULL, NULL, NULL, &stepper_spacing);
       
       gdk_window_get_size (range->step_back, &step_back_width, NULL);
       gdk_window_get_position (range->step_back, &step_back_x, NULL);
@@ -410,8 +437,8 @@ gtk_hscrollbar_calc_slider_size (GtkHScrollbar *hscrollbar)
       
       left = (step_back_x +
               step_back_width +
-              RANGE_CLASS (hscrollbar)->stepper_slider_spacing);
-      right = step_forw_x - RANGE_CLASS (hscrollbar)->stepper_slider_spacing;
+              stepper_spacing);
+      right = step_forw_x - stepper_spacing;
       width = right - left;
       
       if ((range->adjustment->page_size > 0) &&

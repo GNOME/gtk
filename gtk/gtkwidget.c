@@ -29,6 +29,7 @@
 #include <locale.h>
 #include "gtkcontainer.h"
 #include "gtkiconfactory.h"
+#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkrc.h"
 #include "gtkselection.h"
@@ -565,13 +566,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   widget_signals[SIZE_REQUEST] =
-    gtk_signal_new ("size_request",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, size_request),
-		    gtk_marshal_VOID__BOXED,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_REQUISITION | G_VALUE_NOCOPY_CONTENTS);
+    g_signal_newc ("size_request",
+		   G_OBJECT_CLASS_TYPE (object_class),
+		   G_SIGNAL_RUN_FIRST,
+		   G_STRUCT_OFFSET (GtkWidgetClass, size_request),
+		   NULL, NULL,
+		   gtk_marshal_VOID__BOXED,
+		   GTK_TYPE_NONE, 1,
+		   GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SIZE_ALLOCATE] = 
     gtk_signal_new ("size_allocate",
 		    GTK_RUN_FIRST,
@@ -955,6 +957,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                     gtk_marshal_BOOLEAN__BOXED,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
+
   widget_signals[POPUP_MENU] =
     gtk_signal_new ("popup_menu",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
@@ -970,6 +973,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   gtk_binding_entry_add_signal (binding_set, GDK_Menu, 0,
                                 "popup_menu", 0);  
+
+  gtk_widget_class_install_style_property (klass,
+					   g_param_spec_boolean ("interior_focus",
+								 _("Interior Focus"),
+								 _("Whether to draw the focus indicator inside widgets."),
+								 FALSE,
+								 G_PARAM_READABLE));
 }
 
 static void

@@ -209,12 +209,16 @@ gtk_hscale_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint x, y, w, h;
+  gint slider_width, slider_length;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HSCALE (widget));
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   range = GTK_RANGE (widget);
+
+  _gtk_range_get_props (range, &slider_width, NULL, NULL, NULL);
+  gtk_widget_style_get (widget, "slider_length", &slider_length, NULL);
   
   widget->window = gtk_widget_get_parent_window (widget);
   gdk_window_ref (widget->window);
@@ -241,8 +245,8 @@ gtk_hscale_realize (GtkWidget *widget)
   
   range->trough = gdk_window_new (widget->window, &attributes, attributes_mask);
   
-  attributes.width = SCALE_CLASS (range)->slider_length;
-  attributes.height = RANGE_CLASS (range)->slider_width;
+  attributes.width = slider_length;
+  attributes.height = slider_width;
   attributes.event_mask |= (GDK_BUTTON_MOTION_MASK |
                             GDK_POINTER_MOTION_HINT_MASK);
   
@@ -281,18 +285,19 @@ static void
 gtk_hscale_size_request (GtkWidget      *widget,
                          GtkRequisition *requisition)
 {
-  GtkScale *scale;
+  GtkScale *scale = GTK_SCALE (widget);
+  gint slider_width, slider_length, trough_border;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HSCALE (widget));
   g_return_if_fail (requisition != NULL);
   
-  scale = GTK_SCALE (widget);
-  
-  requisition->width = (SCALE_CLASS (scale)->slider_length +
-                        widget->style->xthickness) * 2;
-  requisition->height = (RANGE_CLASS (scale)->slider_width +
-                         widget->style->ythickness * 2);
+  _gtk_range_get_props (GTK_RANGE (scale),
+ 			&slider_width, &trough_border, NULL, NULL);
+  gtk_widget_style_get (widget, "slider_length", &slider_length, NULL);
+
+  requisition->width = (slider_length + trough_border) * 2;
+  requisition->height = (slider_width + trough_border * 2);
   
   if (scale->draw_value)
     {
@@ -350,19 +355,16 @@ gtk_hscale_pos_trough (GtkHScale *hscale,
                        gint      *w,
                        gint      *h)
 {
-  GtkWidget *widget;
-  GtkScale *scale;
+  GtkWidget *widget = GTK_WIDGET (hscale);
+  GtkScale *scale = GTK_SCALE (hscale);
+  gint slider_width;
+  gint trough_border;
   
-  g_return_if_fail (hscale != NULL);
-  g_return_if_fail (GTK_IS_HSCALE (hscale));
-  g_return_if_fail ((x != NULL) && (y != NULL) && (w != NULL) && (h != NULL));
-  
-  widget = GTK_WIDGET (hscale);
-  scale = GTK_SCALE (hscale);
+  _gtk_range_get_props (GTK_RANGE (scale),
+			&slider_width, &trough_border, NULL, NULL);
   
   *w = widget->allocation.width;
-  *h = (RANGE_CLASS (scale)->slider_width +
-        widget->style->ythickness * 2);
+  *h = (slider_width + trough_border * 2);
   
   if (scale->draw_value)
     {

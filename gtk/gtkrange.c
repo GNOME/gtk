@@ -25,6 +25,7 @@
  */
 
 #include <stdio.h>
+#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkrange.h"
 #include "gtksignal.h"
@@ -150,9 +151,6 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->leave_notify_event = gtk_range_leave_notify;
   widget_class->style_set = gtk_range_style_set;
 
-  class->slider_width = 11;
-  class->stepper_size = 11;
-  class->stepper_slider_spacing = 1;
   class->min_slider_size = 7;
   class->trough = 1;
   class->slider = 2;
@@ -176,7 +174,40 @@ gtk_range_class_init (GtkRangeClass *class)
 						      _("How the range should be updated on the screen"),
 						      GTK_TYPE_UPDATE_TYPE,
 						      GTK_UPDATE_CONTINUOUS,
-						      G_PARAM_READWRITE));  
+						      G_PARAM_READWRITE));
+  
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("slider_width",
+							     _("Slider Width"),
+							     _("Width of scrollbar or scale thumb"),
+							     0,
+							     G_MAXINT,
+							     11,
+							     G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("trough_border",
+							     _("Trough Border"),
+							     _("Width of border around range"),
+							     0,
+							     G_MAXINT,
+							     2,
+							     G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("stepper_size",
+							     _("Stepper Size"),
+							     _("Size of step buttons at ends"),
+							     0,
+							     G_MAXINT,
+							     11,
+							     G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("stepper_spacing",
+							     _("Stepper Spacing"),
+							     _("Spacing between step buttons and thumb"),
+							     G_MININT,
+							     G_MAXINT,
+							     1,
+							     G_PARAM_READABLE));
 }
 
 static void
@@ -471,9 +502,12 @@ _gtk_range_default_hslider_update (GtkRange *range)
   gint left;
   gint right;
   gint x;
+  gint trough_border;
 
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
+
+  _gtk_range_get_props (range, NULL, &trough_border, NULL, NULL);
 
   if (GTK_WIDGET_REALIZED (range))
     {
@@ -503,7 +537,7 @@ _gtk_range_default_hslider_update (GtkRange *range)
       if (should_invert (range, TRUE))
 	x = right - (x - left);
       
-      move_and_update_window (range->slider, x, GTK_WIDGET (range)->style->ythickness);
+      move_and_update_window (range->slider, x, trough_border);
     }
 }
 
@@ -513,9 +547,12 @@ _gtk_range_default_vslider_update (GtkRange *range)
   gint top;
   gint bottom;
   gint y;
+  gint trough_border;
 
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
+
+  _gtk_range_get_props (range, NULL, &trough_border, NULL, NULL);
 
   if (GTK_WIDGET_REALIZED (range))
     {
@@ -545,7 +582,7 @@ _gtk_range_default_vslider_update (GtkRange *range)
       if (should_invert (range, FALSE))
 	y = bottom - (y - top);
       
-      move_and_update_window (range->slider, GTK_WIDGET (range)->style->xthickness, y);
+      move_and_update_window (range->slider, trough_border, y);
     }
 }
 
@@ -555,7 +592,7 @@ _gtk_range_default_htrough_click (GtkRange  *range,
                                   gint       y,
                                   gdouble   *jump_perc)
 {
-  gint ythickness;
+  gint trough_border;
   gint trough_width;
   gint trough_height;
   gint slider_x;
@@ -565,7 +602,7 @@ _gtk_range_default_htrough_click (GtkRange  *range,
   g_return_val_if_fail (range != NULL, GTK_TROUGH_NONE);
   g_return_val_if_fail (GTK_IS_RANGE (range), GTK_TROUGH_NONE);
 
-  ythickness = GTK_WIDGET (range)->style->ythickness;
+  _gtk_range_get_props (range, NULL, &trough_border, NULL, NULL);
 
   gtk_range_trough_hdims (range, &left, &right);
   gdk_window_get_size (range->slider, &slider_length, NULL);
@@ -574,11 +611,11 @@ _gtk_range_default_htrough_click (GtkRange  *range,
   if (should_invert (range, TRUE))
     x = (right - x) + left;
 
-  if ((x > left) && (y > ythickness))
+  if ((x > left) && (y > trough_border))
     {
       gdk_window_get_size (range->trough, &trough_width, &trough_height);
-
-      if ((x < right) && (y < (trough_height - ythickness)))
+      
+      if ((x < right) && (y < (trough_height - trough_border)))
 	{
 	  if (jump_perc)
 	    {
@@ -604,7 +641,7 @@ _gtk_range_default_vtrough_click (GtkRange  *range,
                                   gint       y,
                                   gdouble   *jump_perc)
 {
-  gint xthickness;
+  gint trough_border;
   gint trough_width;
   gint trough_height;
   gint slider_y;
@@ -614,8 +651,8 @@ _gtk_range_default_vtrough_click (GtkRange  *range,
   g_return_val_if_fail (range != NULL, GTK_TROUGH_NONE);
   g_return_val_if_fail (GTK_IS_RANGE (range), GTK_TROUGH_NONE);
 
-  xthickness = GTK_WIDGET (range)->style->xthickness;
-
+  _gtk_range_get_props (range, NULL, &trough_border, NULL, NULL);
+  
   gtk_range_trough_vdims (range, &top, &bottom);
   gdk_window_get_size (range->slider, NULL, &slider_length);
   bottom += slider_length;
@@ -623,11 +660,11 @@ _gtk_range_default_vtrough_click (GtkRange  *range,
   if (should_invert (range, FALSE))
     y = (bottom - y) + top;
   
-  if ((x > xthickness) && (y > top))
+  if ((x > trough_border) && (y > top))
     {
       gdk_window_get_size (range->trough, &trough_width, &trough_height);
 
-      if ((x < (trough_width - xthickness) && (y < bottom)))
+      if ((x < (trough_width - trough_border) && (y < bottom)))
 	{
 	  if (jump_perc)
 	    {
@@ -1662,25 +1699,29 @@ gtk_range_trough_hdims (GtkRange *range,
   gint tmp_width;
   gint tleft;
   gint tright;
+  gint stepper_spacing;
+  gint trough_border;
 
   g_return_if_fail (range != NULL);
 
   gdk_window_get_size (range->trough, &trough_width, NULL);
   gdk_window_get_size (range->slider, &slider_length, NULL);
 
-  tleft = GTK_WIDGET (range)->style->xthickness;
-  tright = trough_width - slider_length - GTK_WIDGET (range)->style->xthickness;
+  _gtk_range_get_props (range, NULL, &trough_border, NULL, &stepper_spacing);
+   
+  tleft = trough_border;
+  tright = trough_width - slider_length - trough_border;
 
   if (range->step_back)
     {
       gdk_window_get_size (range->step_back, &tmp_width, NULL);
-      tleft += (tmp_width + RANGE_CLASS (range)->stepper_slider_spacing);
+      tleft += (tmp_width + stepper_spacing);
     }
 
   if (range->step_forw)
     {
       gdk_window_get_size (range->step_forw, &tmp_width, NULL);
-      tright -= (tmp_width + RANGE_CLASS (range)->stepper_slider_spacing);
+      tright -= (tmp_width + stepper_spacing);
     }
 
   if (left)
@@ -1699,25 +1740,29 @@ gtk_range_trough_vdims (GtkRange *range,
   gint tmp_height;
   gint ttop;
   gint tbottom;
+  gint stepper_spacing;
+  gint trough_border;
 
   g_return_if_fail (range != NULL);
 
+  _gtk_range_get_props (range, NULL, &trough_border, NULL, &stepper_spacing);
+   
   gdk_window_get_size (range->trough, NULL, &trough_height);
   gdk_window_get_size (range->slider, NULL, &slider_length);
 
-  ttop = GTK_WIDGET (range)->style->ythickness;
-  tbottom = trough_height - slider_length - GTK_WIDGET (range)->style->ythickness;
+  ttop = trough_border;
+  tbottom = trough_height - slider_length - trough_border;
 
   if (range->step_back)
     {
       gdk_window_get_size (range->step_back, NULL, &tmp_height);
-      ttop += (tmp_height + RANGE_CLASS (range)->stepper_slider_spacing);
+      ttop += (tmp_height + stepper_spacing);
     }
 
   if (range->step_forw)
     {
       gdk_window_get_size (range->step_forw, NULL, &tmp_height);
-      tbottom -= (tmp_height + RANGE_CLASS (range)->stepper_slider_spacing);
+      tbottom -= (tmp_height + stepper_spacing);
     }
 
   if (top)
@@ -1763,3 +1808,27 @@ gtk_range_style_set (GtkWidget *widget,
 	}
     }
 }
+
+void
+_gtk_range_get_props (GtkRange *range,
+		      gint     *slider_width,
+		      gint     *trough_border,
+		      gint     *stepper_size,
+		      gint     *stepper_spacing)
+{
+  GtkWidget *widget =  GTK_WIDGET (range);
+  
+
+  if (slider_width)
+    gtk_widget_style_get (widget, "slider_width", slider_width, NULL);
+  
+  if (trough_border)
+    gtk_widget_style_get (widget, "trough_border", trough_border, NULL);
+
+  if (stepper_size)
+    gtk_widget_style_get (widget, "stepper_size", stepper_size, NULL);
+
+  if (stepper_spacing)
+    gtk_widget_style_get (widget, "stepper_spacing", stepper_spacing, NULL);
+}
+

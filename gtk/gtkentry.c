@@ -1104,9 +1104,12 @@ gtk_entry_draw_focus (GtkWidget *widget)
 {
   gint width, height;
   GtkEntry *entry;
+  gboolean interior_focus;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
+
+  gtk_widget_style_get (widget, "interior_focus", &interior_focus, NULL);
 
   entry = GTK_ENTRY (widget);
   
@@ -1118,14 +1121,13 @@ gtk_entry_draw_focus (GtkWidget *widget)
 
           gdk_window_get_size (widget->window, &width, &height);
 
-          if (GTK_WIDGET_HAS_FOCUS (widget))
+          if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
             {
               x += 1;
               y += 1;
               width -= 2;
               height -= 2;
             }
-
 
           gtk_paint_shadow (widget->style, widget->window,
                             GTK_STATE_NORMAL, GTK_SHADOW_IN,
@@ -1135,7 +1137,7 @@ gtk_entry_draw_focus (GtkWidget *widget)
       else
         gdk_window_clear (widget->window);
         
-      if (GTK_WIDGET_HAS_FOCUS (widget))
+      if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
         {
           gdk_window_get_size (widget->window, &width, &height);
           gtk_paint_focus (widget->style, widget->window, 

@@ -24,11 +24,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "gtkintl.h"
 #include "gtkpaned.h"
 
 enum {
   ARG_0,
-  ARG_HANDLE_SIZE
 };
 
 static void    gtk_paned_class_init (GtkPanedClass  *klass);
@@ -110,8 +110,14 @@ gtk_paned_class_init (GtkPanedClass *class)
   container_class->forall = gtk_paned_forall;
   container_class->child_type = gtk_paned_child_type;
 
-  gtk_object_add_arg_type("GtkPaned::handle_size", GTK_TYPE_UINT,
-			  GTK_ARG_READWRITE, ARG_HANDLE_SIZE);
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("handle_size",
+							     _("Handle Size"),
+							     _("Width of handle"),
+							     0,
+							     G_MAXINT,
+							     5,
+							     G_PARAM_READABLE));
 }
 
 static GtkType
@@ -136,7 +142,6 @@ gtk_paned_init (GtkPaned *paned)
   
   paned->handle_width = 5;
   paned->handle_height = 5;
-  paned->handle_size = 5;
   paned->position_set = FALSE;
   paned->last_allocation = -1;
   paned->in_drag = FALSE;
@@ -150,13 +155,8 @@ gtk_paned_set_arg (GtkObject *object,
 		   GtkArg    *arg,
 		   guint      arg_id)
 {
-  GtkPaned *paned = GTK_PANED (object);
-  
   switch (arg_id)
     {
-    case ARG_HANDLE_SIZE:
-      gtk_paned_set_handle_size (paned, GTK_VALUE_UINT (*arg));
-      break;
     default:
       break;
     }
@@ -167,13 +167,8 @@ gtk_paned_get_arg (GtkObject *object,
 		   GtkArg    *arg,
 		   guint      arg_id)
 {
-  GtkPaned *paned = GTK_PANED (object);
-
   switch (arg_id)
     {
-    case ARG_HANDLE_SIZE:
-      GTK_VALUE_UINT (*arg) = paned->handle_size;
-      break;
     default:
       arg->type = GTK_TYPE_INVALID;
       break;
@@ -515,18 +510,6 @@ gtk_paned_set_position (GtkPaned *paned,
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (paned));
-}
-
-void
-gtk_paned_set_handle_size (GtkPaned *paned,
-			   guint16   size)
-{
-  g_return_if_fail (paned != NULL);
-  g_return_if_fail (GTK_IS_PANED (paned));
-
-  gtk_widget_queue_resize (GTK_WIDGET (paned));
-
-  paned->handle_size = size;
 }
 
 void

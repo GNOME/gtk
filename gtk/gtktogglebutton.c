@@ -360,6 +360,7 @@ gtk_toggle_button_paint (GtkWidget    *widget,
   GtkShadowType shadow_type;
   GtkStateType state_type;
   gint width, height;
+  gboolean interior_focus;
   gint x, y;
 
   button = GTK_BUTTON (widget);
@@ -367,6 +368,8 @@ gtk_toggle_button_paint (GtkWidget    *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
+      gtk_widget_style_get (widget, "interior_focus", &interior_focus, NULL);
+      
       x = 0;
       y = 0;
       width = widget->allocation.width - GTK_CONTAINER (widget)->border_width * 2;
@@ -394,7 +397,7 @@ gtk_toggle_button_paint (GtkWidget    *widget,
           y += DEFAULT_TOP_POS;
         }
 
-      if (GTK_WIDGET_HAS_FOCUS (widget))
+      if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
 	{
 	  x += 1;
 	  y += 1;
@@ -426,10 +429,20 @@ gtk_toggle_button_paint (GtkWidget    *widget,
       
       if (GTK_WIDGET_HAS_FOCUS (widget))
 	{
-	  x -= 1;
-	  y -= 1;
-	  width += 2;
-	  height += 2;
+	  if (interior_focus)
+	    {
+	      x += widget->style->xthickness + 1;
+	      y += widget->style->xthickness + 1;
+	      width -= 2 * (widget->style->xthickness + 1);
+	      height -= 2 * (widget->style->ythickness + 1);
+	    }
+	  else
+	    {
+	      x -= 1;
+	      y -= 1;
+	      width += 2;
+	      height += 2;
+	    }
 
 	  gtk_paint_focus (widget->style, widget->window,
 			   area, widget, "togglebutton",

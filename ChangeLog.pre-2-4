@@ -1,3 +1,40 @@
+Mon Apr  2 10:47:57 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): Fix 
+	G_VALUE_NO_COPY_CONTENTS instead of G_SIGNAL_TYPE_STATIC_SCOPE
+	stupidity.
+
+Mon Apr  2 00:51:11 2001  Owen Taylor  <otaylor@redhat.com>
+
+	[ First pass at adding style properties. Still needs some definite
+	fine-tuning. ]
+
+        * gtk/gtkbutton.c: Add ::default_spacing style property.
+	 
+	* gtk/gtkcheckbutton.[ch] gtkradiobutton.c: Add ::indicator_size,
+	::indicator_spacing style properties.
+
+	* gtk/gtkoptionmenu.c: Add ::indicator_size, ::indicator_spacing
+	style properties.
+
+	* gtk/gtk{,h,v}paned.[ch]: Make handle_size a style property
+	rather than a normal property.
+
+	* gtk/gtkwidget.c: Add an ::interior_focus style property to
+	draw focus inside buttons, in the Windows/Java Metal/etc. style.
+
+	* gtk/gtkbutton.c gtk/gtkcheckbutton.c gtk/gtktogglenbutton.c:
+	Honor ::interior_focus.
+	
+	* gtk/gtkentry.c: Don't draw focus at all when ::interior_focus is 
+	TRUE.
+
+	* gtk/gtkrange.[ch] gtk/gtk{h,v}scrollbar.c gtk/gtk{h,v}scale.c:
+	Add ::slider_width, ::trough_border, ::stepper_size,
+	::stepper_spacing style properties.
+
+	* gtk/gtkscale.[ch] Add ::slider-length style property.
+
 2001-04-02 Alexander Larsson   <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkwindow-fb.c:

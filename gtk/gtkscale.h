@@ -60,7 +60,6 @@ struct _GtkScaleClass
 {
   GtkRangeClass parent_class;
 
-  gint slider_length;
   gint value_spacing;
   
   void (* draw_value) (GtkScale *scale);

@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "gtkintl.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtkoptionmenu.h"
@@ -35,10 +36,19 @@
 #define CHILD_RIGHT_SPACING       1
 #define CHILD_TOP_SPACING         1
 #define CHILD_BOTTOM_SPACING      1
-#define OPTION_INDICATOR_WIDTH    12
-#define OPTION_INDICATOR_HEIGHT   8
-#define OPTION_INDICATOR_SPACING  2
 
+typedef struct _GtkOptionMenuProps GtkOptionMenuProps;
+
+struct _GtkOptionMenuProps
+{
+  GtkRequisition indicator_size;
+  GtkBorder indicator_spacing;
+};
+
+static GtkOptionMenuProps default_props = {
+  { 12, 8 },
+  { 3, 7, 2, 2 }		/* Left, right, top, bottom */
+};
 
 static void gtk_option_menu_class_init      (GtkOptionMenuClass *klass);
 static void gtk_option_menu_init            (GtkOptionMenu      *option_menu);
@@ -139,6 +149,19 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   widget_class->hide_all = gtk_option_menu_hide_all;
 
   container_class->child_type = gtk_option_menu_child_type;
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_boxed ("indicator_size",
+							       _("Indicator Size"),
+							       _("Size of dropdown indicator"),
+							       GTK_TYPE_REQUISITION,
+							       G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_boxed ("indicator_spacing",
+							       _("Indicator Spacing"),
+							       _("Spacing around indicator"),
+							       GTK_TYPE_BORDER,
+							       G_PARAM_READABLE));
 }
 
 static GtkType
@@ -304,20 +327,40 @@ gtk_option_menu_destroy (GtkObject *object)
 }
 
 static void
+gtk_option_menu_get_props (GtkOptionMenu       *option_menu,
+			   GtkOptionMenuProps  *props)
+{
+  GtkRequisition *indicator_size;
+  GtkBorder *indicator_spacing;
+  
+  gtk_widget_style_get (GTK_WIDGET (option_menu),
+			"indicator_size", &indicator_size,
+			"indicator_spacing", &indicator_spacing,
+			NULL);
+
+  if (indicator_size)
+    {
+      props->indicator_size = *indicator_size;
+      gtk_requisition_free (indicator_size);
+    }
+  if (indicator_spacing)
+    {
+      props->indicator_spacing = *indicator_spacing;
+      gtk_border_free (indicator_spacing);
+    }
+}
+
+static void
 gtk_option_menu_size_request (GtkWidget      *widget,
 			      GtkRequisition *requisition)
 {
-  GtkOptionMenu *option_menu;
+  GtkOptionMenu *option_menu = GTK_OPTION_MENU (widget);
+  GtkOptionMenuProps props;
   gint tmp;
   GtkRequisition child_requisition = { 0, 0 };
       
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_OPTION_MENU (widget));
-  g_return_if_fail (requisition != NULL);
-
-  option_menu = GTK_OPTION_MENU (widget);
-
+  gtk_option_menu_get_props (option_menu, &props);
+ 
   if (GTK_BIN (option_menu)->child && GTK_WIDGET_VISIBLE (GTK_BIN (option_menu)->child))
     {
       gtk_widget_size_request (GTK_BIN (option_menu)->child, &child_requisition);
@@ -329,8 +372,8 @@ gtk_option_menu_size_request (GtkWidget      *widget,
   requisition->width = ((GTK_CONTAINER (widget)->border_width +
 			 GTK_WIDGET (widget)->style->xthickness) * 2 +
 			MAX (child_requisition.width, option_menu->width) +
-			OPTION_INDICATOR_WIDTH +
-			OPTION_INDICATOR_SPACING * 5 +
+ 			props.indicator_size.width +
+ 			props.indicator_spacing.left + props.indicator_spacing.right +
 			CHILD_LEFT_SPACING + CHILD_RIGHT_SPACING + 2);
   requisition->height = ((GTK_CONTAINER (widget)->border_width +
 			  GTK_WIDGET (widget)->style->ythickness) * 2 +
@@ -338,7 +381,7 @@ gtk_option_menu_size_request (GtkWidget      *widget,
 			 CHILD_TOP_SPACING + CHILD_BOTTOM_SPACING + 2);
 
   tmp = (requisition->height - option_menu->height +
-	 OPTION_INDICATOR_HEIGHT + OPTION_INDICATOR_SPACING * 2);
+	 props.indicator_size.height + props.indicator_spacing.top + props.indicator_spacing.bottom);
   requisition->height = MAX (requisition->height, tmp);
 }
 
@@ -348,10 +391,13 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
 {
   GtkWidget *child;
   GtkAllocation child_allocation;
-
+  GtkOptionMenuProps props;
+    
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (widget));
   g_return_if_fail (allocation != NULL);
+
+  gtk_option_menu_get_props (GTK_OPTION_MENU (widget), &props);
 
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
@@ -367,12 +413,12 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
       child_allocation.y = (GTK_CONTAINER (widget)->border_width +
 			    GTK_WIDGET (widget)->style->ythickness) + 1;
       child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2 -
-				    OPTION_INDICATOR_WIDTH - OPTION_INDICATOR_SPACING * 5 -
+				    props.indicator_size.width - props.indicator_spacing.left - props.indicator_spacing.right -
 				    CHILD_LEFT_SPACING - CHILD_RIGHT_SPACING - 2);
       child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2 -
 				     CHILD_TOP_SPACING - CHILD_BOTTOM_SPACING - 2);
       child_allocation.x += CHILD_LEFT_SPACING;
-      child_allocation.y += CHILD_RIGHT_SPACING;
+      child_allocation.y += CHILD_TOP_SPACING;
 
       gtk_widget_size_allocate (child, &child_allocation);
     }
@@ -383,6 +429,7 @@ gtk_option_menu_paint (GtkWidget    *widget,
 		       GdkRectangle *area)
 {
   GdkRectangle button_area;
+  GtkOptionMenuProps props;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (widget));
@@ -390,6 +437,8 @@ gtk_option_menu_paint (GtkWidget    *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
+      gtk_option_menu_get_props (GTK_OPTION_MENU (widget), &props);
+
       button_area.x = GTK_CONTAINER (widget)->border_width + 1;
       button_area.y = GTK_CONTAINER (widget)->border_width + 1;
       button_area.width = widget->allocation.width - button_area.x * 2;
@@ -411,10 +460,11 @@ gtk_option_menu_paint (GtkWidget    *widget,
       gtk_paint_tab (widget->style, widget->window,
 		     GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
 		     area, widget, "optionmenutab",
-		     button_area.x + button_area.width - button_area.x -
-		     OPTION_INDICATOR_WIDTH - OPTION_INDICATOR_SPACING * 4,
-		     button_area.y + (button_area.height - OPTION_INDICATOR_HEIGHT) / 2,
-		     OPTION_INDICATOR_WIDTH, OPTION_INDICATOR_HEIGHT);
+		     button_area.x + button_area.width - 
+		     props.indicator_size.width - props.indicator_spacing.right -
+		     widget->style->xthickness,
+		     button_area.y + (button_area.height - props.indicator_size.height) / 2,
+		     props.indicator_size.width, props.indicator_size.height);
       
       if (GTK_WIDGET_HAS_FOCUS (widget))
 	gtk_paint_focus (widget->style, widget->window,

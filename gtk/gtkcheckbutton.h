@@ -57,9 +57,6 @@ struct _GtkCheckButtonClass
 {
   GtkToggleButtonClass parent_class;
 
-  guint16 indicator_size;
-  guint16 indicator_spacing;
-
   void (* draw_indicator) (GtkCheckButton *check_button,
 			   GdkRectangle   *area);
 };
@@ -70,6 +67,9 @@ GtkWidget* gtk_check_button_new               (void);
 GtkWidget* gtk_check_button_new_with_label    (const gchar *label);
 GtkWidget* gtk_check_button_new_with_mnemonic (const gchar *label);
 
+void _gtk_check_button_get_props (GtkCheckButton *check_button,
+				  gint           *indicator_size,
+				  gint           *indicator_spacing);
 
 #ifdef __cplusplus
 }

@@ -57,9 +57,6 @@ struct _GtkPaned
   GdkGC *xor_gc;
   GdkCursorType cursor_type;
   
-  /*< public >*/
-  guint16 handle_size;
-  
   /*< private >*/
   guint16 handle_width;
   guint16 handle_height;
@@ -102,8 +99,6 @@ void    gtk_paned_pack2           (GtkPaned  *paned,
 gint    gtk_paned_get_position    (GtkPaned  *paned);
 void    gtk_paned_set_position    (GtkPaned  *paned,
 				   gint       position);
-void    gtk_paned_set_handle_size (GtkPaned  *paned,
-				   guint16    size);
 
 /* Internal function */
 void    gtk_paned_compute_position (GtkPaned  *paned,
