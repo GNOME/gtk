@@ -1,3 +1,8 @@
+Mon Mar  1 17:58:21 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c (gtk_signal_connect_by_type): count object_signal
+	values > 1 as TRUE also.
+
 Wed Feb 24 05:27:44 CST 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.2.0

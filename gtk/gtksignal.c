@@ -1768,7 +1768,7 @@ gtk_signal_connect_by_type (GtkObject	    *object,
   handler = gtk_signal_handler_new ();
   handler->id = gtk_handler_id++;
   handler->signal_id = signal_id;
-  handler->object_signal = object_signal;
+  handler->object_signal = object_signal != FALSE;
   handler->func = func;
   handler->func_data = func_data;
   handler->destroy_func = destroy_func;
