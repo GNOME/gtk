@@ -32,11 +32,11 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_INVISIBLE		(gtk_invisible_get_type ())
-#define GTK_INVISIBLE(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_INVISIBLE, GtkInvisible))
-#define GTK_INVISIBLE_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_INVISIBLE, GtkInvisibleClass))
-#define GTK_IS_INVISIBLE(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_INVISIBLE))
-#define GTK_IS_INVISIBLE_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_INVISIBLE))
-#define GTK_INVISIBLE_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_INVISIBLE, GtkInvisibleClass))
+#define GTK_INVISIBLE(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_INVISIBLE, GtkInvisible))
+#define GTK_INVISIBLE_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_INVISIBLE, GtkInvisibleClass))
+#define GTK_IS_INVISIBLE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_INVISIBLE))
+#define GTK_IS_INVISIBLE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_INVISIBLE))
+#define GTK_INVISIBLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_INVISIBLE, GtkInvisibleClass))
 
 
 typedef struct _GtkInvisible	   GtkInvisible;
@@ -60,7 +60,7 @@ struct _GtkInvisibleClass
   void (*_gtk_reserved4) (void);
 };
 
-GtkType gtk_invisible_get_type (void) G_GNUC_CONST;
+GType gtk_invisible_get_type (void) G_GNUC_CONST;
 
 GtkWidget* gtk_invisible_new            (void);
 GtkWidget* gtk_invisible_new_for_screen (GdkScreen *screen);

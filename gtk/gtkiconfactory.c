@@ -24,6 +24,9 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
 #include <pango/pango-utils.h>	/* For pango_scan_* */
 #include "gtkiconfactory.h"
 #include "stock-icons/gtkstockpixbufs.h"
@@ -31,9 +34,6 @@
 #include "gtksettings.h"
 #include "gtkstock.h"
 #include "gtkintl.h"
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
 
 static GSList *all_icon_factories = NULL;
 
@@ -73,15 +73,15 @@ static GtkIconSize icon_size_register_intern (const gchar *name,
 GType
 gtk_icon_factory_get_type (void)
 {
-  static GType object_type = 0;
+  static GType icon_factory_type = 0;
 
-  if (!object_type)
+  if (!icon_factory_type)
     {
-      static const GTypeInfo object_info =
+      static const GTypeInfo icon_factory_info =
       {
         sizeof (GtkIconFactoryClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
+        NULL,		/* base_init */
+        NULL,		/* base_finalize */
         (GClassInitFunc) gtk_icon_factory_class_init,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
@@ -90,12 +90,12 @@ gtk_icon_factory_get_type (void)
         (GInstanceInitFunc) gtk_icon_factory_init,
       };
       
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GtkIconFactory",
-                                            &object_info, 0);
+      icon_factory_type =
+	g_type_register_static (G_TYPE_OBJECT, "GtkIconFactory",
+				&icon_factory_info, 0);
     }
   
-  return object_type;
+  return icon_factory_type;
 }
 
 static void
@@ -158,7 +158,7 @@ gtk_icon_factory_finalize (GObject *object)
 GtkIconFactory*
 gtk_icon_factory_new (void)
 {
-  return GTK_ICON_FACTORY (g_object_new (GTK_TYPE_ICON_FACTORY, NULL));
+  return g_object_new (GTK_TYPE_ICON_FACTORY, NULL);
 }
 
 /**
@@ -252,7 +252,7 @@ gtk_icon_factory_add_default (GtkIconFactory *factory)
 {
   g_return_if_fail (GTK_IS_ICON_FACTORY (factory));
 
-  g_object_ref (G_OBJECT (factory));
+  g_object_ref (factory);
   
   default_factories = g_slist_prepend (default_factories, factory);
 }
@@ -273,7 +273,7 @@ gtk_icon_factory_remove_default (GtkIconFactory  *factory)
 
   default_factories = g_slist_remove (default_factories, factory);
 
-  g_object_unref (G_OBJECT (factory));
+  g_object_unref (factory);
 }
 
 static void
@@ -335,7 +335,7 @@ add_source (GtkIconSet    *set,
 
   gtk_icon_set_add_source (set, source);
 
-  g_object_unref (G_OBJECT (source->pixbuf));
+  g_object_unref (source->pixbuf);
 }
 
 #if 0
@@ -1767,7 +1767,7 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
 
   if (icon)
     {
-      g_object_ref (G_OBJECT (icon));
+      g_object_ref (icon);
       return icon;
     }
 
@@ -2030,7 +2030,7 @@ gtk_icon_source_copy (const GtkIconSource *source)
   copy->filename = g_strdup (source->filename);
   copy->size = source->size;
   if (copy->pixbuf)
-    g_object_ref (G_OBJECT (copy->pixbuf));
+    g_object_ref (copy->pixbuf);
 
   return copy;
 }
@@ -2049,7 +2049,7 @@ gtk_icon_source_free (GtkIconSource *source)
 
   g_free ((char*) source->filename);
   if (source->pixbuf)
-    g_object_unref (G_OBJECT (source->pixbuf));
+    g_object_unref (source->pixbuf);
 
   g_free (source);
 }
@@ -2108,10 +2108,10 @@ gtk_icon_source_set_pixbuf (GtkIconSource *source,
   g_return_if_fail (source != NULL);
 
   if (pixbuf)
-    g_object_ref (G_OBJECT (pixbuf));
+    g_object_ref (pixbuf);
 
   if (source->pixbuf)
-    g_object_unref (G_OBJECT (source->pixbuf));
+    g_object_unref (source->pixbuf);
 
   source->pixbuf = pixbuf;
 }
@@ -2433,7 +2433,7 @@ ensure_cache_up_to_date (GtkIconSet *icon_set)
 static void
 cached_icon_free (CachedIcon *icon)
 {
-  g_object_unref (G_OBJECT (icon->pixbuf));
+  g_object_unref (icon->pixbuf);
 
   g_free (icon);
 }
@@ -2491,7 +2491,7 @@ add_to_cache (GtkIconSet      *icon_set,
 
   ensure_cache_up_to_date (icon_set);
   
-  g_object_ref (G_OBJECT (pixbuf));
+  g_object_ref (pixbuf);
 
   /* We have to ref the style, since if the style was finalized
    * its address could be reused by another style, creating a
@@ -2499,7 +2499,7 @@ add_to_cache (GtkIconSet      *icon_set,
    */
   
   if (style)
-    g_object_ref (G_OBJECT (style));
+    g_object_ref (style);
   
 
   icon = g_new (CachedIcon, 1);
@@ -2597,7 +2597,7 @@ copy_cache (GtkIconSet *icon_set,
       if (icon_copy->style)
         attach_to_style (copy_recipient, icon_copy->style);
         
-      g_object_ref (G_OBJECT (icon_copy->pixbuf));
+      g_object_ref (icon_copy->pixbuf);
 
       icon_copy->size = icon->size;
       

@@ -53,26 +53,28 @@ static void gtk_arrow_get_property (GObject         *object,
 				    GValue          *value,
 				    GParamSpec      *pspec);
 
-GtkType
+GType
 gtk_arrow_get_type (void)
 {
-  static GtkType arrow_type = 0;
+  static GType arrow_type = 0;
 
   if (!arrow_type)
     {
-      static const GtkTypeInfo arrow_info =
+      static const GTypeInfo arrow_info =
       {
-	"GtkArrow",
-	sizeof (GtkArrow),
 	sizeof (GtkArrowClass),
-	(GtkClassInitFunc) gtk_arrow_class_init,
-	(GtkObjectInitFunc) gtk_arrow_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_arrow_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkArrow),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_arrow_init,
       };
 
-      arrow_type = gtk_type_unique (GTK_TYPE_MISC, &arrow_info);
+      arrow_type = g_type_register_static (GTK_TYPE_MISC, "GtkArrow",
+					   &arrow_info, 0);
     }
 
   return arrow_type;
@@ -82,11 +84,9 @@ static void
 gtk_arrow_class_init (GtkArrowClass *class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = (GObjectClass*) class;
-  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
   gobject_class->set_property = gtk_arrow_set_property;
@@ -182,7 +182,7 @@ gtk_arrow_new (GtkArrowType  arrow_type,
 {
   GtkArrow *arrow;
 
-  arrow = gtk_type_new (GTK_TYPE_ARROW);
+  arrow = g_object_new (GTK_TYPE_ARROW, NULL);
 
   arrow->arrow_type = arrow_type;
   arrow->shadow_type = shadow_type;
@@ -217,7 +217,7 @@ gtk_arrow_set (GtkArrow      *arrow,
       g_object_thaw_notify (G_OBJECT (arrow));
 
       if (GTK_WIDGET_DRAWABLE (arrow))
-	gtk_widget_queue_clear (GTK_WIDGET (arrow));
+	gtk_widget_queue_draw (GTK_WIDGET (arrow));
     }
 }
 

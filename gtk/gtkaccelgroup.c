@@ -23,14 +23,15 @@
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
-#include "gtkaccelgroup.h"
-#include "gtkaccelmap.h"
-#include "gdk/gdkkeysyms.h"
-#include "gtkmarshalers.h"
-#include "gtksignal.h"
 
 #include <string.h>
 #include <stdlib.h>
+
+#include "gtkaccelgroup.h"
+#include "gtkaccelmap.h"
+#include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
+#include "gdk/gdkkeysyms.h"
+#include "gtkmarshalers.h"
 
 
 /* --- prototypes --- */
@@ -66,40 +67,18 @@ gtk_accel_group_get_type (void)
 	(GBaseInitFunc) NULL,
 	(GBaseFinalizeFunc) NULL,
 	(GClassInitFunc) gtk_accel_group_class_init,
-	NULL,   /* clas_finalize */
+	NULL,   /* class_finalize */
 	NULL,   /* class_data */
 	sizeof (GtkAccelGroup),
 	0,      /* n_preallocs */
 	(GInstanceInitFunc) gtk_accel_group_init,
       };
 
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-					    "GtkAccelGroup",
+      object_type = g_type_register_static (G_TYPE_OBJECT, "GtkAccelGroup",
 					    &object_info, 0);
     }
 
   return object_type;
-}
-
-static gboolean
-accel_activate_accumulator (GSignalInvocationHint *ihint,
-			    GValue                *return_accu,
-			    const GValue          *handler_return,
-			    gpointer               data)
-{
-  gboolean continue_emission;
-  gboolean handler_val;
-
-  /* handler returns whether the accelerator was handled */
-  handler_val = g_value_get_boolean (handler_return);
-
-  /* record that as result for this emission */
-  g_value_set_boolean (return_accu, handler_val);
-
-  /* don't continue if accelerator was handled */
-  continue_emission = !handler_val;
-
-  return continue_emission;
 }
 
 static void
@@ -114,20 +93,28 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
   object_class->finalize = gtk_accel_group_finalize;
 
   class->accel_changed = NULL;
-  signal_accel_activate = g_signal_new ("accel_activate",
-					G_OBJECT_CLASS_TYPE (class),
-					G_SIGNAL_DETAILED,
-					0,
-					accel_activate_accumulator, NULL,
-					_gtk_marshal_BOOLEAN__OBJECT_UINT_FLAGS,
-					G_TYPE_BOOLEAN, 3, G_TYPE_OBJECT, G_TYPE_UINT, GDK_TYPE_MODIFIER_TYPE);
-  signal_accel_changed = g_signal_new ("accel_changed",
-				       G_OBJECT_CLASS_TYPE (class),
-				       G_SIGNAL_RUN_FIRST | G_SIGNAL_DETAILED,
-				       G_STRUCT_OFFSET (GtkAccelGroupClass, accel_changed),
-				       NULL, NULL,
-				       _gtk_marshal_VOID__UINT_FLAGS_BOXED,
-				       G_TYPE_NONE, 3, G_TYPE_UINT, GDK_TYPE_MODIFIER_TYPE, G_TYPE_CLOSURE);
+  signal_accel_activate =
+    g_signal_new ("accel_activate",
+		  G_OBJECT_CLASS_TYPE (class),
+		  G_SIGNAL_DETAILED,
+		  0,
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__OBJECT_UINT_FLAGS,
+		  G_TYPE_BOOLEAN, 3,
+		  G_TYPE_OBJECT,
+		  G_TYPE_UINT,
+		  GDK_TYPE_MODIFIER_TYPE);
+  signal_accel_changed =
+    g_signal_new ("accel_changed",
+		  G_OBJECT_CLASS_TYPE (class),
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_DETAILED,
+		  G_STRUCT_OFFSET (GtkAccelGroupClass, accel_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__UINT_FLAGS_BOXED,
+		  G_TYPE_NONE, 3,
+		  G_TYPE_UINT,
+		  GDK_TYPE_MODIFIER_TYPE,
+		  G_TYPE_CLOSURE);
 }
 
 static void

@@ -25,7 +25,6 @@
  */
 
 #include <gdk/gdk.h>
-#include "gtksignal.h"
 #include "gtkinvisible.h"
 #include "gtkintl.h"
 
@@ -59,26 +58,28 @@ static GObject *gtk_invisible_constructor (GType                  type,
 
 static GObjectClass *parent_class;
 
-GtkType
+GType
 gtk_invisible_get_type (void)
 {
-  static GtkType invisible_type = 0;
+  static GType invisible_type = 0;
 
   if (!invisible_type)
     {
-      static const GtkTypeInfo invisible_info =
+      static const GTypeInfo invisible_info =
       {
-	"GtkInvisible",
-	sizeof (GtkInvisible),
 	sizeof (GtkInvisibleClass),
-	(GtkClassInitFunc) gtk_invisible_class_init,
-	(GtkObjectInitFunc) gtk_invisible_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_invisible_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkInvisible),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_invisible_init,
       };
 
-      invisible_type = gtk_type_unique (GTK_TYPE_WIDGET, &invisible_info);
+      invisible_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkInvisible",
+					       &invisible_info, 0);
     }
 
   return invisible_type;
@@ -124,7 +125,7 @@ gtk_invisible_init (GtkInvisible *invisible)
   GTK_WIDGET_UNSET_FLAGS (invisible, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (invisible, GTK_TOPLEVEL);
 
-  gtk_widget_ref (GTK_WIDGET (invisible));
+  g_object_ref (invisible);
   gtk_object_sink (GTK_OBJECT (invisible));
 
   invisible->has_user_ref_count = TRUE;
@@ -143,7 +144,7 @@ gtk_invisible_destroy (GtkObject *object)
   if (invisible->has_user_ref_count)
     {
       invisible->has_user_ref_count = FALSE;
-      gtk_widget_unref (GTK_WIDGET (invisible));
+      g_object_unref (invisible);
     }
 }
 

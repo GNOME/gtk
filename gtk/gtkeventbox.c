@@ -24,7 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gtksignal.h"
 #include "gtkeventbox.h"
 
 
@@ -43,26 +42,28 @@ static gint gtk_event_box_expose                   (GtkWidget         *widget,
 
 static GtkBinClass *parent_class = NULL;
 
-GtkType
+GType
 gtk_event_box_get_type (void)
 {
-  static GtkType event_box_type = 0;
+  static GType event_box_type = 0;
 
   if (!event_box_type)
     {
-      static const GtkTypeInfo event_box_info =
+      static const GTypeInfo event_box_info =
       {
-	"GtkEventBox",
-	sizeof (GtkEventBox),
 	sizeof (GtkEventBoxClass),
-	(GtkClassInitFunc) gtk_event_box_class_init,
-	(GtkObjectInitFunc) gtk_event_box_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_event_box_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkEventBox),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_event_box_init,
       };
 
-      event_box_type = gtk_type_unique (gtk_bin_get_type (), &event_box_info);
+      event_box_type = g_type_register_static (GTK_TYPE_BIN, "GtkEventBox",
+					       &event_box_info, 0);
     }
 
   return event_box_type;
@@ -92,7 +93,7 @@ gtk_event_box_init (GtkEventBox *event_box)
 GtkWidget*
 gtk_event_box_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_event_box_get_type ()));
+  return g_object_new (GTK_TYPE_EVENT_BOX, NULL);
 }
 
 static void

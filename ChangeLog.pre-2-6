@@ -1,3 +1,9 @@
+Thu Oct 10 14:58:47 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkaccelgroup.c gtk/gtkarrow.[ch] gtk/gtkeventbox.[ch]
+	gtk/gtkiconfactory.c gtk/gtkinvisible.[ch] gtk/gtktextchild.c:
+	Deprecation cleanup
+
 Thu Oct 10 14:41:05 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtktextbtree.c gtk/gtktextbuffer.c gtk/gtktextdisplay.c
