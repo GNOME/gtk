@@ -1,3 +1,7 @@
+2004-05-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tree_widget.sgml: Minor update.
+
 2004-05-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.types: Add gtk_cell_renderer_toggle_get_type.
