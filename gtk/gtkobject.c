@@ -59,6 +59,9 @@ static void           gtk_object_init          (GtkObject      *object);
 static void           gtk_object_set_arg       (GtkObject      *object,
 						GtkArg         *arg,
 						guint		arg_id);
+static void           gtk_object_get_arg       (GtkObject      *object,
+						GtkArg         *arg,
+						guint		arg_id);
 static void           gtk_real_object_destroy  (GtkObject      *object);
 static void           gtk_object_data_init     (void);
 static GtkObjectData* gtk_object_data_new      (void);
@@ -104,7 +107,7 @@ gtk_object_init_type ()
     (GtkClassInitFunc) gtk_object_class_init,
     (GtkObjectInitFunc) gtk_object_init,
     gtk_object_set_arg,
-    NULL,
+    gtk_object_get_arg,
   };
 
   object_type = gtk_type_unique (0, &object_info);
@@ -191,8 +194,23 @@ gtk_object_set_arg (GtkObject *object,
 			  (GtkSignalFunc) GTK_VALUE_SIGNAL (*arg).f,
 			  GTK_VALUE_SIGNAL (*arg).d);
       break;
+    }
+}
+
+static void
+gtk_object_get_arg (GtkObject *object,
+		    GtkArg    *arg,
+		    guint      arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_USER_DATA:
+      GTK_VALUE_POINTER (*arg) = gtk_object_get_user_data (object);
+      break;
+    case ARG_SIGNAL:
     default:
-      g_assert_not_reached ();
+      arg->type = GTK_TYPE_INVALID;
+      break;
     }
 }
 

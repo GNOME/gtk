@@ -17,9 +17,20 @@
  */
 #include "gtkbox.h"
 
+enum {
+  ARG_0,
+  ARG_SPACING,
+  ARG_HOMOGENEOUS
+};
 
 static void gtk_box_class_init (GtkBoxClass    *klass);
 static void gtk_box_init       (GtkBox         *box);
+static void gtk_box_get_arg    (GtkBox         *box,
+				GtkArg         *arg,
+				guint           arg_id);
+static void gtk_box_set_arg    (GtkBox         *box,
+				GtkArg         *arg,
+				guint           arg_id);
 static void gtk_box_destroy    (GtkObject      *object);
 static void gtk_box_map        (GtkWidget      *widget);
 static void gtk_box_unmap      (GtkWidget      *widget);
@@ -53,8 +64,8 @@ gtk_box_get_type ()
 	sizeof (GtkBoxClass),
 	(GtkClassInitFunc) gtk_box_class_init,
 	(GtkObjectInitFunc) gtk_box_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	(GtkArgSetFunc) gtk_box_set_arg,
+        (GtkArgGetFunc) gtk_box_get_arg,
       };
 
       box_type = gtk_type_unique (gtk_container_get_type (), &box_info);
@@ -76,6 +87,9 @@ gtk_box_class_init (GtkBoxClass *class)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
+  gtk_object_add_arg_type ("GtkBox::spacing", GTK_TYPE_INT, ARG_SPACING);
+  gtk_object_add_arg_type ("GtkBox::homogeneous", GTK_TYPE_BOOL, ARG_HOMOGENEOUS);
+
   object_class->destroy = gtk_box_destroy;
 
   widget_class->map = gtk_box_map;
@@ -96,6 +110,41 @@ gtk_box_init (GtkBox *box)
   box->children = NULL;
   box->spacing = 0;
   box->homogeneous = FALSE;
+}
+
+static void
+gtk_box_set_arg (GtkBox       *box,
+		 GtkArg       *arg,
+		 guint         arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_SPACING:
+      gtk_box_set_spacing (box, GTK_VALUE_INT (*arg));
+      break;
+    case ARG_HOMOGENEOUS:
+      gtk_box_set_homogeneous (box, GTK_VALUE_BOOL (*arg));
+      break;
+    }
+}
+
+static void
+gtk_box_get_arg (GtkBox       *box,
+		 GtkArg       *arg,
+		 guint         arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_SPACING:
+      GTK_VALUE_INT (*arg) = box->spacing;
+      break;
+    case ARG_HOMOGENEOUS:
+      GTK_VALUE_BOOL (*arg) = box->homogeneous;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 void

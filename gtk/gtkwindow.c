@@ -60,6 +60,9 @@ static void gtk_window_init               (GtkWindow         *window);
 static void gtk_window_set_arg            (GtkWindow         *window,
 					   GtkArg            *arg,
 					   guint	      arg_id);
+static void gtk_window_get_arg            (GtkWindow         *window,
+					   GtkArg            *arg,
+					   guint	      arg_id);
 static void gtk_window_destroy            (GtkObject         *object);
 static void gtk_window_show               (GtkWidget         *widget);
 static void gtk_window_hide               (GtkWidget         *widget);
@@ -123,7 +126,7 @@ gtk_window_get_type ()
 	(GtkClassInitFunc) gtk_window_class_init,
 	(GtkObjectInitFunc) gtk_window_init,
 	(GtkArgSetFunc) gtk_window_set_arg,
-	(GtkArgGetFunc) NULL,
+	(GtkArgGetFunc) gtk_window_get_arg,
       };
 
       window_type = gtk_type_unique (gtk_bin_get_type (), &window_info);
@@ -228,7 +231,7 @@ gtk_window_set_arg (GtkWindow  *window,
   switch (arg_id)
     {
     case ARG_TYPE:
-      window->type = GTK_VALUE_ENUM(*arg);
+      window->type = GTK_VALUE_ENUM (*arg);
       break;
     case ARG_TITLE:
       gtk_window_set_title (window, GTK_VALUE_STRING(*arg));
@@ -241,6 +244,34 @@ gtk_window_set_arg (GtkWindow  *window,
       break;
     case ARG_ALLOW_GROW:
       window->allow_grow = (GTK_VALUE_BOOL(*arg) != FALSE);
+      break;
+    }
+}
+
+static void
+gtk_window_get_arg (GtkWindow  *window,
+		    GtkArg     *arg,
+		    guint	arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_TYPE:
+      GTK_VALUE_ENUM(*arg) = window->type;
+      break;
+    case ARG_TITLE:
+      GTK_VALUE_STRING(*arg) = g_strdup (window->title);
+      break;
+    case ARG_AUTO_SHRINK:
+      GTK_VALUE_BOOL(*arg) = window->auto_shrink;
+      break;
+    case ARG_ALLOW_SHRINK:
+      GTK_VALUE_BOOL(*arg) = window->allow_shrink;
+      break;
+    case ARG_ALLOW_GROW:
+      GTK_VALUE_BOOL(*arg) = window->allow_grow;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
       break;
     }
 }

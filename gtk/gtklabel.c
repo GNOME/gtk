@@ -19,8 +19,20 @@
 #include "gtklabel.h"
 
 
+enum {
+  ARG_0,
+  ARG_LABEL,
+  ARG_JUSTIFY
+};
+
 static void gtk_label_class_init   (GtkLabelClass  *klass);
 static void gtk_label_init         (GtkLabel       *label);
+static void gtk_label_set_arg	   (GtkLabel       *label,
+				    GtkArg         *arg,
+				    guint           arg_id);
+static void gtk_label_get_arg	   (GtkLabel       *label,
+				    GtkArg         *arg,
+				    guint           arg_id);
 static void gtk_label_destroy      (GtkObject      *object);
 static void gtk_label_size_request (GtkWidget      *widget,
 				    GtkRequisition *requisition);
@@ -45,8 +57,8 @@ gtk_label_get_type ()
 	sizeof (GtkLabelClass),
 	(GtkClassInitFunc) gtk_label_class_init,
 	(GtkObjectInitFunc) gtk_label_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	(GtkArgSetFunc) gtk_label_set_arg,
+        (GtkArgGetFunc) gtk_label_get_arg,
       };
 
       label_type = gtk_type_unique (gtk_misc_get_type (), &label_info);
@@ -66,10 +78,46 @@ gtk_label_class_init (GtkLabelClass *class)
 
   parent_class = gtk_type_class (gtk_misc_get_type ());
 
+  gtk_object_add_arg_type ("GtkLabel::label", GTK_TYPE_STRING, ARG_LABEL);
+  gtk_object_add_arg_type ("GtkLabel::justify", GTK_TYPE_ENUM, ARG_JUSTIFY);
+
   object_class->destroy = gtk_label_destroy;
 
   widget_class->size_request = gtk_label_size_request;
   widget_class->expose_event = gtk_label_expose;
+}
+
+static void gtk_label_set_arg      (GtkLabel       *label,
+				    GtkArg         *arg,
+				    guint           arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_LABEL:
+      gtk_label_set (label, GTK_VALUE_STRING (*arg));
+      break;
+    case ARG_JUSTIFY:
+      gtk_label_set_justify (label, GTK_VALUE_ENUM (*arg));
+      break;
+    }
+}
+
+static void gtk_label_get_arg      (GtkLabel       *label,
+				    GtkArg         *arg,
+				    guint           arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_LABEL:
+      GTK_VALUE_STRING (*arg) = g_strdup (label->label);
+      break;
+    case ARG_JUSTIFY:
+      GTK_VALUE_ENUM (*arg) = label->jtype;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 static void
