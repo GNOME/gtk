@@ -1,3 +1,11 @@
+Wed May  9 15:27:22 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_column_drag_function): New
+	function to let user control where columns are dragged.
+
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): Cancel drags if
+	Escape is pressed.
+
 Wed May  9 09:08:44 2001  Jonathan Blandford  <jrb@webwynk.net>
 
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): New

@@ -138,6 +138,8 @@ static void     gtk_tree_view_size_allocate        (GtkWidget        *widget,
 						    GtkAllocation    *allocation);
 static gboolean gtk_tree_view_expose               (GtkWidget        *widget,
 						    GdkEventExpose   *event);
+static gboolean gtk_tree_view_key_press            (GtkWidget        *widget,
+						    GdkEventKey      *event);
 static gboolean gtk_tree_view_motion               (GtkWidget        *widget,
 						    GdkEventMotion   *event);
 static gboolean gtk_tree_view_enter_notify         (GtkWidget        *widget,
@@ -350,6 +352,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->button_release_event = gtk_tree_view_button_release;
   widget_class->motion_notify_event = gtk_tree_view_motion;
   widget_class->expose_event = gtk_tree_view_expose;
+  widget_class->key_press_event = gtk_tree_view_key_press;
   widget_class->enter_notify_event = gtk_tree_view_enter_notify;
   widget_class->leave_notify_event = gtk_tree_view_leave_notify;
   widget_class->focus_in_event = gtk_tree_view_focus_in;
@@ -696,6 +699,13 @@ gtk_tree_view_destroy (GtkObject *object)
     {
       gtk_tree_row_reference_free (tree_view->priv->cursor);
       tree_view->priv->cursor = NULL;
+    }
+
+  if (tree_view->priv->column_drop_func_data &&
+      tree_view->priv->column_drop_func_data_destroy)
+    {
+      (* tree_view->priv->column_drop_func_data_destroy) (tree_view->priv->column_drop_func_data);
+      tree_view->priv->column_drop_func_data = NULL;
     }
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
@@ -1324,6 +1334,7 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
   allocation = tree_view->priv->drag_column->button->allocation;
   allocation.x = tree_view->priv->drag_column_x;
   gdk_pointer_ungrab (GDK_CURRENT_TIME);
+  gdk_keyboard_ungrab (GDK_CURRENT_TIME);
   gdk_window_reparent (tree_view->priv->drag_column->button->window,
 		       tree_view->priv->header_window,
 		       tree_view->priv->drag_column_x,
@@ -1331,6 +1342,7 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
   gtk_widget_set_parent_window (tree_view->priv->drag_column->button, tree_view->priv->header_window);
 
   gtk_widget_size_allocate (tree_view->priv->drag_column->button, &allocation);
+  gtk_widget_grab_focus (tree_view->priv->drag_column->button);
 
   if (tree_view->priv->cur_reorder &&
       tree_view->priv->cur_reorder->left_column != tree_view->priv->drag_column)
@@ -2513,6 +2525,24 @@ gtk_tree_view_expose (GtkWidget      *widget,
     return gtk_tree_view_bin_expose (widget, event);
 
   return TRUE;
+}
+
+static gboolean
+gtk_tree_view_key_press (GtkWidget   *widget,
+			 GdkEventKey *event)
+{
+  GtkTreeView *tree_view = (GtkTreeView *) widget;
+
+  if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG))
+    {
+      if (event->keyval == GDK_Escape)
+	{
+	  tree_view->priv->cur_reorder = NULL;
+	  gtk_tree_view_button_release_drag_column (widget, NULL);
+	}
+      return TRUE;
+    }
+  return FALSE;
 }
 
 /* FIXME Is this function necessary? Can I get an enter_notify event
@@ -5111,6 +5141,12 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
       if (cur_column->visible == FALSE)
 	continue;
 
+      if (tree_view->priv->column_drop_func &&
+	  (* tree_view->priv->column_drop_func) (tree_view, column, left_column, cur_column, tree_view->priv->column_drop_func_data))
+	{
+	  left_column = cur_column;
+	  continue;
+	}
       reorder = g_new (GtkTreeViewColumnReorder, 1);
       reorder->left_column = left_column;
       left_column = reorder->right_column = cur_column;
@@ -5238,6 +5274,9 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 		    FALSE,
 		    GDK_POINTER_MOTION_MASK|GDK_BUTTON_RELEASE_MASK,
 		    NULL, NULL, GDK_CURRENT_TIME);
+  gdk_keyboard_grab (tree_view->priv->drag_window,
+		     FALSE,
+		     GDK_CURRENT_TIME);
 
 }
 
@@ -5469,13 +5508,6 @@ gtk_tree_view_new_column_width (GtkTreeView *tree_view,
   return width;
 }
 
-
-static void
-gtk_tree_view_ensure_scroll_timeout (GtkTreeView *tree_view, GFunc func)
-{
-  if (tree_view->priv->scroll_timeout == 0)
-    tree_view->priv->scroll_timeout = gtk_timeout_add (50, func, tree_view);
-}
 
 /* Callbacks */
 static void
@@ -6228,6 +6260,40 @@ gtk_tree_view_get_expander_column (GtkTreeView *tree_view)
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
 
   return tree_view->priv->expander_column;
+}
+
+
+/**
+ * gtk_tree_view_set_column_drag_function:
+ * @tree_view: A #GtkTreeView.
+ * @func: A function to determine which columns are reorderable, or NULL.
+ * @user_data: User data to be passed to @func, or NULL
+ * @destroy: Destroy notifier for @user_data, or NULL
+ * 
+ * Sets a user function for determining where a column may be dropped when
+ * dragged.  This function is called on every column pair in turn at the
+ * beginning of a column drag to determine where a drop can take place.  The
+ * arguments passed to @func are: the @tree_view, the #GtkTreeViewColumn being
+ * dragged, the two #GtkTreeViewColumn s determining the drop spot, and
+ * @user_data.  If either of the #GtkTreeViewColumn arguments for the drop spot
+ * are NULL, then they indicate an edge.  If @func is set to be NULL, then
+ * @tree_view reverts to the default behavior of allowing all columns to be
+ * dropped everywhere.
+ **/
+void
+gtk_tree_view_set_column_drag_function (GtkTreeView               *tree_view,
+					GtkTreeViewColumnDropFunc  func,
+					gpointer                   user_data,
+					GtkDestroyNotify           destroy)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  if (tree_view->priv->column_drop_func_data_destroy)
+    (* tree_view->priv->column_drop_func_data_destroy) (tree_view->priv->column_drop_func_data);
+
+  tree_view->priv->column_drop_func = func;
+  tree_view->priv->column_drop_func_data = user_data;
+  tree_view->priv->column_drop_func_data_destroy = destroy;
 }
 
 /**
