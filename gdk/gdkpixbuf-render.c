@@ -83,7 +83,6 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
     return;
 
   gc = gdk_gc_new (bitmap);
-  gc = _gdk_drawable_get_scratch_gc (GDK_DRAWABLE (bitmap), FALSE);
 
   if (!pixbuf->has_alpha)
     {
@@ -132,6 +131,8 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
 		       start + dest_x, y + dest_y,
 		       x - 1 + dest_x, y + dest_y);
     }
+
+  g_object_unref (gc);
 }
 
 

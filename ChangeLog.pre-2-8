@@ -1,3 +1,14 @@
+Wed Feb 18 13:28:57 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	Fix bug reported by Nam SungHyun.
+	
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_threshold_alpha):
+	Don't use a cached GC here since the function needs to modify the
+	foreground color.
+
+	* gdk/gdkwindow.c (gdk_window_end_paint): Reset clip region back
+	to NULL on the cached GC.
+
 2004-02-17  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdialog.c

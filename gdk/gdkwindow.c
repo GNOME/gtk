@@ -1033,6 +1033,8 @@ gdk_window_end_paint (GdkWindow *window)
                      clip_box.x - x_offset, clip_box.y - y_offset,
                      clip_box.width, clip_box.height);
 
+  gdk_gc_set_clip_region (tmp_gc, NULL);
+  
   g_object_unref (paint->pixmap);
   gdk_region_destroy (paint->region);
   g_free (paint);
