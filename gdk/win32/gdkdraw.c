@@ -447,12 +447,12 @@ gdk_draw_text_handler (GdkWin32SingleFont *singlefont,
 		       int                 wclen,
 		       void               *arg)
 {
-  HDC hdc;
   HGDIOBJ oldfont;
   SIZE size;
-  GdkDrawablePrivate *drawable_private;
-  GdkGCPrivate *gc_private;
   gdk_draw_text_arg *argp = (gdk_draw_text_arg *) arg;
+
+  if (!singlefont)
+    return;
 
   if ((oldfont = SelectObject (argp->hdc, singlefont->xfont)) == NULL)
     {
@@ -465,7 +465,7 @@ gdk_draw_text_handler (GdkWin32SingleFont *singlefont,
   GetTextExtentPoint32W (argp->hdc, wcstr, wclen, &size);
   argp->x += size.cx;
 
-  SelectObject (hdc, oldfont);
+  SelectObject (argp->hdc, oldfont);
 }
 
 /* gdk_draw_text
@@ -480,7 +480,6 @@ gdk_draw_text (GdkDrawable *drawable,
 	       const gchar *text,
 	       gint         text_length)
 {
-  HDC hdc;
   GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
   wchar_t *wcstr;
@@ -534,7 +533,6 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
 		  const GdkWChar *text,
 		  gint		  text_length)
 {
-  HDC hdc;
   GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
   gint i, wlen;

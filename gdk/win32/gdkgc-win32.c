@@ -29,6 +29,7 @@
 #include <string.h>
 
 #include "gdkgc.h"
+#include "gdkfont.h"
 #include "gdkpixmap.h"
 #include "gdkprivate.h"
 #include "gdkx.h"
@@ -92,7 +93,7 @@ gdk_gc_new_with_values (GdkWindow	*window,
     {
       private->font = values->font;
       gdk_font_ref (private->font);
-      GDK_NOTE (MISC, g_print (" font=%#x", private->font));
+      GDK_NOTE (MISC, g_print (" font"));
     }
   else
     private->font = NULL;

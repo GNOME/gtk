@@ -789,12 +789,11 @@ gdk_font_load (const gchar *font_name)
   font->ascent = textmetric.tmAscent;
   font->descent = textmetric.tmDescent;
 
-  GDK_NOTE (MISC, g_print ("... = %#x charset %s codepage %d (max %d bytes) "
+  GDK_NOTE (MISC, g_print ("... = %#x charset %s codepage %d "
 			   "asc %d desc %d\n",
 			   singlefont->xfont,
 			   charset_name (singlefont->charset),
 			   singlefont->codepage,
-			   singlefont->cpinfo.MaxCharSize,
 			   font->ascent, font->descent));
 
   gdk_font_hash_insert (GDK_FONT_FONTSET, font, font_name);
@@ -851,10 +850,16 @@ gdk_fontset_load (gchar *fontset_name)
       singlefont = gdk_font_load_internal (s);
       if (singlefont)
 	{
+	  GDK_NOTE
+	    (MISC, g_print ("... = %#x charset %s codepage %d\n",
+			    singlefont->xfont,
+			    charset_name (singlefont->charset),
+			    singlefont->codepage));
 	  private->fonts = g_slist_append (private->fonts, singlefont);
 	  oldfont = SelectObject (gdk_DC, singlefont->xfont);
 	  GetTextMetrics (gdk_DC, &textmetric);
-	  singlefont->charset = GetTextCharsetInfo (gdk_DC, &singlefont->fs, 0);
+	  singlefont->charset =
+	    GetTextCharsetInfo (gdk_DC, &singlefont->fs, 0);
 	  SelectObject (gdk_DC, oldfont);
 	  font->ascent = MAX (font->ascent, textmetric.tmAscent);
 	  font->descent = MAX (font->descent, textmetric.tmDescent);
@@ -932,6 +937,7 @@ gdk_font_unref (GdkFont *font)
 
 	      list = list->next;
 	    }
+	  g_slist_free (private->fonts);
 	  break;
 
 	default:
@@ -1130,6 +1136,8 @@ gdk_wchar_text_handle (GdkFont       *font,
   end = wcp + wclen;
   private = (GdkFontPrivate *) font;
 
+  g_assert (private->ref_count > 0);
+
   while (wcp < end)
     {
       /* Split Unicode string into pieces of the same class */
@@ -1175,6 +1183,9 @@ gdk_text_size_handler (GdkWin32SingleFont *singlefont,
   HGDIOBJ oldfont;
   gdk_text_size_arg *arg = (gdk_text_size_arg *) argp;
 
+  if (!singlefont)
+    return;
+
   if ((oldfont = SelectObject (gdk_DC, singlefont->xfont)) == NULL)
     {
       g_warning ("gdk_text_size_handler: SelectObject failed");
@@ -1208,12 +1219,9 @@ gdk_text_size (GdkFont           *font,
 
   wcstr = g_new (wchar_t, text_length);
   if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-    {
-      g_warning ("gdk_text_size: gdk_nmbstowchar_ts failed");
-      return FALSE;
-    }
-
-  gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, arg);
+    g_warning ("gdk_text_size: gdk_nmbstowchar_ts failed");
+  else
+    gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, arg);
 
   g_free (wcstr);
 
@@ -1346,6 +1354,8 @@ gdk_text_extents (GdkFont     *font,
     g_warning ("gdk_text_extents: gdk_nmbstowchar_ts failed");
   else
     gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, &arg);
+
+  g_free (wcstr);
 
   /* XXX This is quite bogus */
   if (lbearing)
