@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-01 11:34-0500\n"
-"PO-Revision-Date: 2005-01-20 20:00+0100\n"
+"POT-Creation-Date: 2005-03-05 06:06+0100\n"
+"PO-Revision-Date: 2005-03-05 13:32+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -208,7 +208,7 @@ msgstr "Formát obrázku BMP"
 msgid "Failure reading GIF: %s"
 msgstr "Chyba při čtení GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1435 gdk-pixbuf/io-gif.c:1596
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "V souboru GIF chybí některá data (možná byl nějak uříznut?)"
 
@@ -233,25 +233,29 @@ msgstr "Nalezen chybný kód"
 msgid "Circular table entry in GIF file"
 msgstr "Cyklická položka tabulky v souboru GIF"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1423 gdk-pixbuf/io-gif.c:1469
-#: gdk-pixbuf/io-gif.c:1584
+#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
+#: gdk-pixbuf/io-gif.c:1612
 msgid "Not enough memory to load GIF file"
 msgstr "Nedostatek paměti pro načtení obrázku ve formátu GIF"
 
-#: gdk-pixbuf/io-gif.c:1088
+#: gdk-pixbuf/io-gif.c:947
+msgid "Not enough memory to composite a frame in GIF file"
+msgstr "Nedostatek paměti pro složení obrázku v souboru GIF"
+
+#: gdk-pixbuf/io-gif.c:1116
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Obrázek GIF je poškozen (chybná komprese LZW)"
 
-#: gdk-pixbuf/io-gif.c:1138
+#: gdk-pixbuf/io-gif.c:1166
 msgid "File does not appear to be a GIF file"
 msgstr "Soubor nevypadá jako soubor GIF"
 
-#: gdk-pixbuf/io-gif.c:1150
+#: gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Verze %s formátu souborů GIF není podporována"
 
-#: gdk-pixbuf/io-gif.c:1259
+#: gdk-pixbuf/io-gif.c:1287
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -259,11 +263,11 @@ msgstr ""
 "Obrázek GIF neobsahuje globální mapu barev a políčko v něm neobsahuje "
 "lokální mapu."
 
-#: gdk-pixbuf/io-gif.c:1491
+#: gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
 msgstr "Obrázek GIF byl zkrácen nebo není úplný."
 
-#: gdk-pixbuf/io-gif.c:1643
+#: gdk-pixbuf/io-gif.c:1671
 msgid "The GIF image format"
 msgstr "Formát obrázku GIF"
 
@@ -698,35 +702,39 @@ msgstr "Formát obrázku XBM"
 msgid "No XPM header found"
 msgstr "Nebyla nalezena hlavička XPM"
 
-#: gdk-pixbuf/io-xpm.c:1237
+#: gdk-pixbuf/io-xpm.c:1238
+msgid "Invalid XPM header"
+msgstr "Neplatná hlavička XPM"
+
+#: gdk-pixbuf/io-xpm.c:1246
 msgid "XPM file has image width <= 0"
 msgstr "Soubor XPM má šířku obrázku <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1245
+#: gdk-pixbuf/io-xpm.c:1254
 msgid "XPM file has image height <= 0"
 msgstr "Soubor XPM má výšku obrázku <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1253
+#: gdk-pixbuf/io-xpm.c:1262
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM obsahuje neplatný počet znaků na pixel"
 
-#: gdk-pixbuf/io-xpm.c:1260
+#: gdk-pixbuf/io-xpm.c:1269
 msgid "XPM file has invalid number of colors"
 msgstr "Soubor XPM má neplatný počet barev"
 
-#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
+#: gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1290 gdk-pixbuf/io-xpm.c:1342
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Nemohu alokovat paměť pro načtení obrázku XPM"
 
-#: gdk-pixbuf/io-xpm.c:1295
+#: gdk-pixbuf/io-xpm.c:1304
 msgid "Cannot read XPM colormap"
 msgstr "Nemohu načíst mapu barev XPM"
 
-#: gdk-pixbuf/io-xpm.c:1524
+#: gdk-pixbuf/io-xpm.c:1533
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Nemohu psát do dočasného souboru při načítání obrázku XPM"
 
-#: gdk-pixbuf/io-xpm.c:1559
+#: gdk-pixbuf/io-xpm.c:1568
 msgid "The XPM image format"
 msgstr "Formát obrázku XPM"
 
