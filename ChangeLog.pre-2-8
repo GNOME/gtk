@@ -1,3 +1,9 @@
+2001-02-07  Sven Neumann  <sven@convergence.de>
+
+	* gtk/gtkentry.c (gtk_entry_draw_text): convert area_height to 
+	pango dimensions after painting the background. We used to draw
+	gigantic flat boxes here.
+
 Mon Feb  5 22:05:57 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/linux-fb/gdkimage-fb.c (_gdk_fb_get_image): Fix syntax

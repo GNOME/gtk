@@ -1951,7 +1951,6 @@ gtk_entry_draw_text (GtkEntry *entry)
       gint y_pos;
 
       gdk_window_get_size (entry->text_area, &area_width, &area_height);
-      area_height = PANGO_SCALE * (area_height - 2 * INNER_BORDER);
       
       widget = GTK_WIDGET (entry);
 
@@ -1960,6 +1959,8 @@ gtk_entry_draw_text (GtkEntry *entry)
 			  NULL, widget, "entry_bg", 
 			  0, 0, area_width, area_height);
       
+      area_height = PANGO_SCALE * (area_height - 2 * INNER_BORDER);
+
       line = pango_layout_get_lines (layout)->data;
       pango_layout_line_get_extents (line, NULL, &logical_rect);
 
