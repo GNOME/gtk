@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: Alex Sandro Queiroz e Silva <asandro@lcg.dc.ufc.br>\n"
 "Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: gdk-pixbuf/io-gif.c:426
@@ -45,7 +45,7 @@ msgstr "Brilho:"
 
 #: gtk/gtkcolorsel.c:1423
 msgid "Saturation:"
-msgstr "Satura√ß√£o:"
+msgstr "SaturaÁ„o:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Value:"
@@ -83,7 +83,7 @@ msgstr ""
 #. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
-msgstr "Diret√≥rios"
+msgstr "DiretÛrios"
 
 #. The files clist
 #: gtk/gtkfilesel.c:534
@@ -93,11 +93,11 @@ msgstr "Arquivos"
 #: gtk/gtkfilesel.c:600 gtk/gtkfilesel.c:1636
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Diret√≥rio ileg√≠vel: %s"
+msgstr "DiretÛrio ilegÌvel: %s"
 
 #: gtk/gtkfilesel.c:632
 msgid "Create Dir"
-msgstr "Criar Diret√≥rio"
+msgstr "Criar DiretÛrio"
 
 #: gtk/gtkfilesel.c:643 gtk/gtkfilesel.c:1043
 msgid "Delete File"
@@ -123,11 +123,11 @@ msgstr "Fechar"
 
 #: gtk/gtkfilesel.c:929
 msgid "Create Directory"
-msgstr "Criar Diret√≥rio"
+msgstr "Criar DiretÛrio"
 
 #: gtk/gtkfilesel.c:943
 msgid "Directory name:"
-msgstr "Nome do diret√≥rio:"
+msgstr "Nome do diretÛrio:"
 
 #. buttons
 #: gtk/gtkfilesel.c:956
@@ -151,11 +151,11 @@ msgstr "Renomear"
 
 #: gtk/gtkfilesel.c:1615
 msgid "Selection: "
-msgstr "Sele√ß√£o: "
+msgstr "SeleÁ„o: "
 
 #: gtk/gtkfontsel.c:190
 msgid "Family:"
-msgstr "Fam√≠lia:"
+msgstr "FamÌlia:"
 
 #: gtk/gtkfontsel.c:195
 #, fuzzy
@@ -173,7 +173,7 @@ msgstr "Exemplo:"
 
 #: gtk/gtkfontsel.c:966
 msgid "Font Selection"
-msgstr "Sele√ß√£o de Fonte"
+msgstr "SeleÁ„o de Fonte"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
@@ -242,7 +242,7 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:473
 msgid "Pressure"
-msgstr "Press√£o"
+msgstr "Press„o"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
@@ -286,7 +286,7 @@ msgstr ""
 #: gtk/gtkstock.c:169
 #, fuzzy
 msgid "Information"
-msgstr "Informa√ß√£o da Fonte"
+msgstr "InformaÁ„o da Fonte"
 
 #: gtk/gtkstock.c:170
 msgid "Warning"
@@ -333,194 +333,194 @@ msgstr ""
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
-msgstr "P√°gina %u"
+msgstr "P·gina %u"
 
 #: gtk/gtkrc.c:2046
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "N√£o encontrei arquivo de imagem no pixmap_path: \"%s\" linha %d"
+msgstr "N„o encontrei arquivo de imagem no pixmap_path: \"%s\" linha %d"
 
 #: gtk/gtkrc.c:2049
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "N√£o encontrei arquivo de imagem no pixmap_path: \"%s\""
+msgstr "N„o encontrei arquivo de imagem no pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "N√£o encontrei m√≥dulo no module_path: \"%s\","
+msgstr "N„o encontrei mÛdulo no module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Sem Ajuda ---"
 
-#~ msgid "Foundry:"
-#~ msgstr "Estilo:"
+msgid "Foundry:"
+msgstr "Estilo:"
 
-#~ msgid "Weight:"
-#~ msgstr "Peso:"
+msgid "Weight:"
+msgstr "Peso:"
 
-#~ msgid "Slant:"
-#~ msgstr "Inclina√ß√£o:"
+msgid "Slant:"
+msgstr "InclinaÁ„o:"
 
-#~ msgid "Set Width:"
-#~ msgstr "Espa√ßamento:"
+msgid "Set Width:"
+msgstr "EspaÁamento:"
 
-#~ msgid "Pixel Size:"
-#~ msgstr "Tamanho em Pixeis:"
+msgid "Pixel Size:"
+msgstr "Tamanho em Pixeis:"
 
-#~ msgid "Point Size:"
-#~ msgstr "Tamanho em Pontos:"
+msgid "Point Size:"
+msgstr "Tamanho em Pontos:"
 
-#~ msgid "Resolution X:"
-#~ msgstr "Resolu√ß√£o X:"
+msgid "Resolution X:"
+msgstr "ResoluÁ„o X:"
 
-#~ msgid "Resolution Y:"
-#~ msgstr "Resolu√ß√£o Y:"
+msgid "Resolution Y:"
+msgstr "ResoluÁ„o Y:"
 
-#~ msgid "Spacing:"
-#~ msgstr "Espa√ßamento:"
+msgid "Spacing:"
+msgstr "EspaÁamento:"
 
-#~ msgid "Average Width:"
-#~ msgstr "Largura M√©dia:"
+msgid "Average Width:"
+msgstr "Largura MÈdia:"
 
-#~ msgid "Charset:"
-#~ msgstr "Charset:"
+msgid "Charset:"
+msgstr "Charset:"
 
-#~ msgid "Font Property"
-#~ msgstr "Propriedade da Fonte"
+msgid "Font Property"
+msgstr "Propriedade da Fonte"
 
-#~ msgid "Requested Value"
-#~ msgstr "Valor Pedido"
+msgid "Requested Value"
+msgstr "Valor Pedido"
 
-#~ msgid "Actual Value"
-#~ msgstr "Valor Real"
+msgid "Actual Value"
+msgstr "Valor Real"
 
-#~ msgid "Font"
-#~ msgstr "Fonte"
+msgid "Font"
+msgstr "Fonte"
 
-#~ msgid "Font:"
-#~ msgstr "Fonte:"
+msgid "Font:"
+msgstr "Fonte:"
 
-#~ msgid "Font Style:"
-#~ msgstr "Estilo de Fonte:"
+msgid "Font Style:"
+msgstr "Estilo de Fonte:"
 
-#~ msgid "Reset Filter"
-#~ msgstr "Reiniciar Filtro"
+msgid "Reset Filter"
+msgstr "Reiniciar Filtro"
 
-#~ msgid "Metric:"
-#~ msgstr "M√©trica:"
+msgid "Metric:"
+msgstr "MÈtrica:"
 
-#~ msgid "Points"
-#~ msgstr "Pontos"
+msgid "Points"
+msgstr "Pontos"
 
-#~ msgid "Pixels"
-#~ msgstr "Pixels"
+msgid "Pixels"
+msgstr "Pixels"
 
-#~ msgid "Requested Font Name:"
-#~ msgstr "Nome da Fonte Pedida:"
+msgid "Requested Font Name:"
+msgstr "Nome da Fonte Pedida:"
 
-#~ msgid "Actual Font Name:"
-#~ msgstr "Nome Real da Fonte:"
+msgid "Actual Font Name:"
+msgstr "Nome Real da Fonte:"
 
-#~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i fontes dispon√≠veis com um total de %i estilos."
+msgid "%i fonts available with a total of %i styles."
+msgstr "%i fontes disponÌveis com um total de %i estilos."
 
-#~ msgid "Filter"
-#~ msgstr "Filtro"
+msgid "Filter"
+msgstr "Filtro"
 
-#~ msgid "Font Types:"
-#~ msgstr "Tipos de Fonte:"
+msgid "Font Types:"
+msgstr "Tipos de Fonte:"
 
-#~ msgid "Bitmap"
-#~ msgstr "Imagem"
+msgid "Bitmap"
+msgstr "Imagem"
 
-#~ msgid "Scalable"
-#~ msgstr "Escal√°vel"
+msgid "Scalable"
+msgstr "Escal·vel"
 
-#~ msgid "Scaled Bitmap"
-#~ msgstr "Bitmap Escalado"
+msgid "Scaled Bitmap"
+msgstr "Bitmap Escalado"
 
-#~ msgid "*"
-#~ msgstr "*"
+msgid "*"
+msgstr "*"
 
-#~ msgid "(nil)"
-#~ msgstr "(nulo)"
+msgid "(nil)"
+msgstr "(nulo)"
 
-#~ msgid "regular"
-#~ msgstr "regular"
+msgid "regular"
+msgstr "regular"
 
-#~ msgid "italic"
-#~ msgstr "it√°lico"
+msgid "italic"
+msgstr "it·lico"
 
-#~ msgid "oblique"
-#~ msgstr "obl√≠quo"
+msgid "oblique"
+msgstr "oblÌquo"
 
-#~ msgid "reverse italic"
-#~ msgstr "it√°lico invertido"
+msgid "reverse italic"
+msgstr "it·lico invertido"
 
-#~ msgid "reverse oblique"
-#~ msgstr "obl√≠quo invertido"
+msgid "reverse oblique"
+msgstr "oblÌquo invertido"
 
-#~ msgid "other"
-#~ msgstr "outro"
+msgid "other"
+msgstr "outro"
 
-#~ msgid "[M]"
-#~ msgstr "[M]"
+msgid "[M]"
+msgstr "[M]"
 
-#~ msgid "[C]"
-#~ msgstr "[C]"
+msgid "[C]"
+msgstr "[C]"
 
-#~ msgid "The selected font is not available."
-#~ msgstr "A fonte selecionada n√£o est√° dispon√≠vel."
+msgid "The selected font is not available."
+msgstr "A fonte selecionada n„o est· disponÌvel."
 
-#~ msgid "The selected font is not a valid font."
-#~ msgstr "A fonte selecionada n√£o √© uma fonte v√°lida."
+msgid "The selected font is not a valid font."
+msgstr "A fonte selecionada n„o È uma fonte v·lida."
 
-#~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Esta √© uma fonte de 2 bytes e pode n√£o ser mostrada corretamente."
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr "Esta È uma fonte de 2 bytes e pode n„o ser mostrada corretamente."
 
-#~ msgid "roman"
-#~ msgstr "romano"
+msgid "roman"
+msgstr "romano"
 
-#~ msgid "proportional"
-#~ msgstr "proporcional"
+msgid "proportional"
+msgstr "proporcional"
 
-#~ msgid "monospaced"
-#~ msgstr "monoespa√ßada"
+msgid "monospaced"
+msgstr "monoespaÁada"
 
-#~ msgid "char cell"
-#~ msgstr "c√©lula de caracter"
+msgid "char cell"
+msgstr "cÈlula de caracter"
 
-#~ msgid "Font: (Filter Applied)"
-#~ msgstr "Fonte: (Filtro Aplicado)"
+msgid "Font: (Filter Applied)"
+msgstr "Fonte: (Filtro Aplicado)"
 
-#~ msgid "heavy"
-#~ msgstr "forte"
+msgid "heavy"
+msgstr "forte"
 
-#~ msgid "extrabold"
-#~ msgstr "extranegrito"
+msgid "extrabold"
+msgstr "extranegrito"
 
-#~ msgid "bold"
-#~ msgstr "negrito"
+msgid "bold"
+msgstr "negrito"
 
-#~ msgid "demibold"
-#~ msgstr "seminegrito"
+msgid "demibold"
+msgstr "seminegrito"
 
-#~ msgid "medium"
-#~ msgstr "m√©dio"
+msgid "medium"
+msgstr "mÈdio"
 
-#~ msgid "normal"
-#~ msgstr "normal"
+msgid "normal"
+msgstr "normal"
 
-#~ msgid "light"
-#~ msgstr "fraca"
+msgid "light"
+msgstr "fraca"
 
-#~ msgid "extralight"
-#~ msgstr "extrafraca"
+msgid "extralight"
+msgstr "extrafraca"
 
-#~ msgid "thin"
-#~ msgstr "fina"
+msgid "thin"
+msgstr "fina"
 
-#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS foi excedido. Podem faltar algumas fontes."
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "MAX_FONTS foi excedido. Podem faltar algumas fontes."
