@@ -26,7 +26,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-#pragma }
 
 typedef struct _GtkStyle       GtkStyle;
 typedef struct _GtkStyleClass  GtkStyleClass;

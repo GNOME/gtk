@@ -1,3 +1,11 @@
+Thu Oct 22 02:27:30 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdkrgb.c: use glib endian stuff
+
+	* configure.in: don't need to check for endianness anymore
+
+	* gtk/gtkstyle.h: removed #pragma }, causing a silly warning
+
 Wed Oct 21 17:44:27 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_read_rcfiles): Reset
