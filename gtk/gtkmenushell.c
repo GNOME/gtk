@@ -585,7 +585,7 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 
   menu_shell = GTK_MENU_SHELL (widget);
 
-  if (menu_shell->active && !menu_shell->ignore_enter)
+  if (menu_shell->active)
     {
       menu_item = gtk_get_event_widget ((GdkEvent*) event);
 
@@ -596,6 +596,9 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 	  (menu_shell->active_menu_item != menu_item) &&
 	  GTK_IS_MENU_ITEM (menu_item))
 	{
+	  if (menu_shell->ignore_enter)
+	    return TRUE;
+	  
 	  if ((event->detail != GDK_NOTIFY_INFERIOR) &&
 	      (GTK_WIDGET_STATE (menu_item) != GTK_STATE_PRELIGHT))
 	    {

@@ -1,3 +1,36 @@
+Tue Mar  6 10:45:45 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbutton.c: Add animation of activation by, on 
+	activate, pressing the button, and adding a timeout that 
+	releases the button after 250ms	or on key release and
+	emits ::clicked. (#51501)
+
+	* gtk/gtkdialog.c: Bit of a hack - for buttons in the
+	action area, we connect to ::clicked instead of ::activate
+	so the dialog stays up through the animation.
+
+Mon Mar  5 16:38:15 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_enter_notify): Only
+	check the ignore_enter flag for the menu shell that
+	the item is actually a child of, not for attached
+	submenus. (#51536)
+
+Tue Feb 27 02:16:14 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_propagate_event): Only do special
+        special key-press grab handling for widgets within
+        GtkWindows. Otherwise, fall through to normal case.
+
+        This prevents key events being sent twice to GtkInvisible
+        widgets, which can cause all sorts of mischief.
+
+Fri Feb  2 13:20:12 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_propagate_event): When a grab
+	widget is in effect, give the grab widget a first
+	crack at KEY_PRESS/RELEASE events. (#424)
+
 2001-03-06  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init): set the class closure
@@ -55,6 +88,7 @@ Mon Mar  5 14:38:54 2001  Jonathan Blandford  <jrb@redhat.com>
 	parent_class pointer in pixbuf_style_class_init().
 	(Will commit the fix to the pixbuf-engine too).
 
+>>>>>>> 1.1779
 2001-03-05  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/gdkwindow.h:

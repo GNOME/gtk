@@ -39,6 +39,10 @@
 #define DEFAULT_TOP_POS   4
 #define DEFAULT_SPACING   7
 
+/* Time out before giving up on getting a key release when animatng
+ * the close button.
+ */
+#define ACTIVATE_TIMEOUT 250
 
 enum {
   PRESSED,
@@ -46,6 +50,7 @@ enum {
   CLICKED,
   ENTER,
   LEAVE,
+  ACTIVATE,
   LAST_SIGNAL
 };
 
@@ -54,8 +59,6 @@ enum {
   ARG_LABEL,
   ARG_RELIEF
 };
-
-
 
 static void gtk_button_class_init     (GtkButtonClass   *klass);
 static void gtk_button_init           (GtkButton        *button);
@@ -66,6 +69,7 @@ static void gtk_button_get_arg        (GtkObject        *object,
 				       GtkArg           *arg,
 				       guint		 arg_id);
 static void gtk_button_realize        (GtkWidget        *widget);
+static void gtk_button_unrealize      (GtkWidget        *widget);
 static void gtk_button_size_request   (GtkWidget        *widget,
 				       GtkRequisition   *requisition);
 static void gtk_button_size_allocate  (GtkWidget        *widget,
@@ -78,6 +82,8 @@ static gint gtk_button_button_press   (GtkWidget        *widget,
 				       GdkEventButton   *event);
 static gint gtk_button_button_release (GtkWidget        *widget,
 				       GdkEventButton   *event);
+static gint gtk_button_key_release    (GtkWidget        *widget,
+				       GdkEventKey      *event);
 static gint gtk_button_enter_notify   (GtkWidget        *widget,
 				       GdkEventCrossing *event);
 static gint gtk_button_leave_notify   (GtkWidget        *widget,
@@ -90,8 +96,11 @@ static void gtk_real_button_pressed   (GtkButton        *button);
 static void gtk_real_button_released  (GtkButton        *button);
 static void gtk_real_button_enter     (GtkButton        *button);
 static void gtk_real_button_leave     (GtkButton        *button);
+static void gtk_real_button_activate (GtkButton         *button);
 static GtkType gtk_button_child_type  (GtkContainer     *container);
 
+static void gtk_button_finish_activate (GtkButton *button,
+					gboolean   do_it);
 
 static GtkBinClass *parent_class = NULL;
 static guint button_signals[LAST_SIGNAL] = { 0 };
@@ -141,11 +150,13 @@ gtk_button_class_init (GtkButtonClass *klass)
   object_class->get_arg = gtk_button_get_arg;
 
   widget_class->realize = gtk_button_realize;
+  widget_class->unrealize = gtk_button_unrealize;
   widget_class->size_request = gtk_button_size_request;
   widget_class->size_allocate = gtk_button_size_allocate;
   widget_class->expose_event = gtk_button_expose;
   widget_class->button_press_event = gtk_button_button_press;
   widget_class->button_release_event = gtk_button_button_release;
+  widget_class->key_release_event = gtk_button_key_release;
   widget_class->enter_notify_event = gtk_button_enter_notify;
   widget_class->leave_notify_event = gtk_button_leave_notify;
 
@@ -158,6 +169,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   klass->clicked = NULL;
   klass->enter = gtk_real_button_enter;
   klass->leave = gtk_real_button_leave;
+  klass->activate = gtk_real_button_activate;
 
   gtk_object_add_arg_type ("GtkButton::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
   gtk_object_add_arg_type ("GtkButton::relief", GTK_TYPE_RELIEF_STYLE, GTK_ARG_READWRITE, ARG_RELIEF);
@@ -183,7 +195,6 @@ gtk_button_class_init (GtkButtonClass *klass)
                     GTK_SIGNAL_OFFSET (GtkButtonClass, clicked),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-  widget_class->activate_signal = button_signals[CLICKED];
   button_signals[ENTER] =
     gtk_signal_new ("enter",
                     GTK_RUN_FIRST,
@@ -198,6 +209,14 @@ gtk_button_class_init (GtkButtonClass *klass)
                     GTK_SIGNAL_OFFSET (GtkButtonClass, leave),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
+  button_signals[ACTIVATE] =
+    gtk_signal_new ("activate",
+                    GTK_RUN_FIRST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkButtonClass, activate),
+                    gtk_marshal_VOID__VOID,
+		    GTK_TYPE_NONE, 0);
+  widget_class->activate_signal = button_signals[ACTIVATE];
 }
 
 static void
@@ -494,6 +513,17 @@ gtk_button_realize (GtkWidget *widget)
 }
 
 static void
+gtk_button_unrealize (GtkWidget *widget)
+{
+  GtkButton *button = GTK_BUTTON (widget);
+
+  if (button->activate_timeout)
+    gtk_button_finish_activate (button, FALSE);
+    
+  GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+}
+
+static void
 gtk_button_size_request (GtkWidget      *widget,
 			 GtkRequisition *requisition)
 {
@@ -749,6 +779,23 @@ gtk_button_button_release (GtkWidget      *widget,
   return TRUE;
 }
 
+static gboolean
+gtk_button_key_release (GtkWidget   *widget,
+			GdkEventKey *event)
+{
+  GtkButton *button = GTK_BUTTON (widget);
+
+  if (button->activate_timeout)
+    {
+      gtk_button_finish_activate (button, TRUE);
+      return TRUE;
+    }
+  else if (GTK_WIDGET_CLASS (parent_class)->key_release_event)
+    return GTK_WIDGET_CLASS (parent_class)->key_release_event (widget, event);
+  else
+    return FALSE;
+}
+
 static gint
 gtk_button_enter_notify (GtkWidget        *widget,
 			 GdkEventCrossing *event)
@@ -831,6 +878,9 @@ gtk_real_button_pressed (GtkButton *button)
   g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
 
+  if (button->activate_timeout)
+    return;
+  
   button->button_down = TRUE;
 
   new_state = (button->in_button ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL);
@@ -854,6 +904,9 @@ gtk_real_button_released (GtkButton *button)
     {
       button->button_down = FALSE;
 
+      if (button->activate_timeout)
+	return;
+  
       if (button->in_button)
 	gtk_button_clicked (button);
 
@@ -880,6 +933,9 @@ gtk_real_button_enter (GtkButton *button)
 
   new_state = (button->button_down ? GTK_STATE_ACTIVE : GTK_STATE_PRELIGHT);
 
+  if (button->activate_timeout)
+    return;
+  
   if (GTK_WIDGET_STATE (button) != new_state)
     {
       gtk_widget_set_state (GTK_WIDGET (button), new_state);
@@ -892,10 +948,66 @@ gtk_real_button_leave (GtkButton *button)
 {
   g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_BUTTON (button));
-
+  
+  if (button->activate_timeout)
+    return;
+  
   if (GTK_WIDGET_STATE (button) != GTK_STATE_NORMAL)
     {
       gtk_widget_set_state (GTK_WIDGET (button), GTK_STATE_NORMAL);
       gtk_widget_queue_draw (GTK_WIDGET (button));
     }
 }
+
+static gboolean
+button_activate_timeout (gpointer data)
+{
+  gtk_button_finish_activate (data, TRUE);
+
+  return FALSE;
+}
+
+static void
+gtk_real_button_activate (GtkButton *button)
+{
+  GtkWidget *widget = GTK_WIDGET (button);
+  
+  g_return_if_fail (button != NULL);
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
+  if (GTK_WIDGET_REALIZED (button) && !button->activate_timeout)
+    {
+      if (gdk_keyboard_grab (widget->window, TRUE,
+			     gtk_get_current_event_time ()) == 0)
+	{
+	  gtk_grab_add (widget);
+	  
+	  button->activate_timeout = g_timeout_add (ACTIVATE_TIMEOUT,
+						    button_activate_timeout,
+						    button);
+	  button->button_down = TRUE;
+	  gtk_widget_set_state (widget, GTK_STATE_ACTIVE);
+	}
+    }
+}
+
+static void
+gtk_button_finish_activate (GtkButton *button,
+			    gboolean   do_it)
+{
+  GtkWidget *widget = GTK_WIDGET (button);
+  
+  g_source_remove (button->activate_timeout);
+  button->activate_timeout = 0;
+
+  gdk_keyboard_ungrab (gtk_get_current_event_time ());
+  gtk_grab_remove (widget);
+
+  button->button_down = FALSE;
+  gtk_widget_set_state (GTK_WIDGET (button),
+			button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL);
+
+  if (do_it)
+    gtk_button_clicked (button);
+}
+

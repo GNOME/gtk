@@ -56,6 +56,8 @@ struct _GtkButton
 		    * use GTK_BIN (button)->child instead
 		    */;
 
+  guint activate_timeout;
+
   guint in_button : 1;
   guint button_down : 1;
   guint relief : 2;
@@ -70,6 +72,7 @@ struct _GtkButtonClass
   void (* clicked)  (GtkButton *button);
   void (* enter)    (GtkButton *button);
   void (* leave)    (GtkButton *button);
+  void (* activate) (GtkButton *button);
 };
 
 

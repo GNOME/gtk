@@ -340,6 +340,7 @@ gtk_dialog_add_action_widget  (GtkDialog *dialog,
                                gint       response_id)
 {
   ResponseData *ad;
+  gint signal_id = 0;
   
   g_return_if_fail (GTK_IS_DIALOG (dialog));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -348,10 +349,16 @@ gtk_dialog_add_action_widget  (GtkDialog *dialog,
 
   ad->response_id = response_id;
 
-  if (GTK_WIDGET_GET_CLASS (child)->activate_signal != 0)
+  if (GTK_IS_BUTTON (child))
     {
-      const gchar* name =
-        gtk_signal_name (GTK_WIDGET_GET_CLASS (child)->activate_signal);
+      signal_id = g_signal_lookup ("clicked", GTK_TYPE_BUTTON);
+    }
+  else
+    signal_id = GTK_WIDGET_GET_CLASS (child)->activate_signal != 0;
+
+  if (signal_id)
+    {
+      const gchar* name = gtk_signal_name (signal_id);
 
       gtk_signal_connect_while_alive (GTK_OBJECT (child),
                                       name,
