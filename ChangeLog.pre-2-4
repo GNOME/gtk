@@ -1,3 +1,8 @@
+Wed Nov 19 02:23:06 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state): Call 
+	gtk_widget_hide(menu) when reattaching the menu.  (#126057) 
+
 2003-11-17  Noah Levitt  <nlevitt@columbia.edu>
 
 	* configure.in: Check for freetype headers the way freetype

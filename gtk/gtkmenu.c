@@ -1387,6 +1387,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	}
       else
 	{
+	  gtk_widget_hide (menu);
 	  gtk_widget_hide (menu->tearoff_window);
 	  gtk_menu_reparent (menu, menu->toplevel, FALSE);
 	  gtk_widget_destroy (menu->tearoff_window);
