@@ -1,3 +1,8 @@
+2001-07-10  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkrc.c: #include <config.h> as the previous patch requires
+	it
+
 2001-06-26  Fatih Demir <kabalak@gtranslator.org>
 
 	* configure.in: Added ta to the languages list.

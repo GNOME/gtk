@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
 #include <X11/Xlocale.h>	/* so we get the right setlocale */
 #include <ctype.h>
 #include <unistd.h>
