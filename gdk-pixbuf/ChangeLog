@@ -1,5 +1,8 @@
 2002-07-07  Matthias Clasen  <maclas@gmx.de>
 
+	* io-ico.c (DecodeHeader): Correct computation of image height.
+	(OneLine): Correct update notification.
+
 	Load-at-size functionality  (#53726): 
 	
 	* gdk-pixbuf-io.h (ModuleSizeFunc): New. 

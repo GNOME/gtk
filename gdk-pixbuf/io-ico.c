@@ -342,7 +342,7 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 		return;
 	}
 	State->Header.height =
-	    (int)(BIH[11] << 24) + (BIH[10] << 16) + (BIH[9] << 8) + (BIH[8])/2;
+	    (int)((BIH[11] << 24) + (BIH[10] << 16) + (BIH[9] << 8) + (BIH[8]))/2;
 	    /* /2 because the BIH height includes the transparency mask */
 	if (State->Header.height == 0) {
 		g_set_error (error,
@@ -797,9 +797,9 @@ static void OneLine(struct ico_progressive_state *context)
 	if (context->updated_func != NULL) {
 		(*context->updated_func) (context->pixbuf,
 					  0,
-					  context->Lines,
+					  context->Lines % context->Header.height,
 					  context->Header.width,
-					  context->Header.height,
+					  1,
 					  context->user_data);
 
 	}
