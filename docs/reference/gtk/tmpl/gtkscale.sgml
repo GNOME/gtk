@@ -72,16 +72,6 @@ Sets the position in which the current value is displayed.
 @pos: the position in which the current value is displayed.
 
 
-<!-- ##### FUNCTION gtk_scale_get_value_width ##### -->
-<para>
-An internal function used to get the maximum width needed to display the value
-string.
-</para>
-
-@scale: a #GtkScale.
-@Returns: the maximum width needed to display the value string.
-
-
 <!-- ##### SIGNAL GtkScale::format-value ##### -->
 <para>
 

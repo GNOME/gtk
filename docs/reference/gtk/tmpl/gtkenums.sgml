@@ -248,11 +248,11 @@ contains grayscale or red-green-blue data.
 </para>
 
 @GTK_SCROLL_NONE: 
+@GTK_SCROLL_JUMP: 
 @GTK_SCROLL_STEP_BACKWARD: 
 @GTK_SCROLL_STEP_FORWARD: 
 @GTK_SCROLL_PAGE_BACKWARD: 
 @GTK_SCROLL_PAGE_FORWARD: 
-@GTK_SCROLL_JUMP: 
 @GTK_SCROLL_STEP_UP: 
 @GTK_SCROLL_STEP_DOWN: 
 @GTK_SCROLL_PAGE_UP: 
@@ -261,6 +261,8 @@ contains grayscale or red-green-blue data.
 @GTK_SCROLL_STEP_RIGHT: 
 @GTK_SCROLL_PAGE_LEFT: 
 @GTK_SCROLL_PAGE_RIGHT: 
+@GTK_SCROLL_START: 
+@GTK_SCROLL_END: 
 
 <!-- ##### ENUM GtkSelectionMode ##### -->
 <para>
@@ -324,16 +326,6 @@ for the default toolbar style.
 @GTK_TOOLBAR_BOTH: Buttons display text and icons in the toolbar.
 @GTK_TOOLBAR_BOTH_HORIZ: Buttons display icons and text alongside each
 other, rather than vertically stacked
-
-<!-- ##### ENUM GtkTroughType ##### -->
-<para>
-
-</para>
-
-@GTK_TROUGH_NONE: 
-@GTK_TROUGH_START: 
-@GTK_TROUGH_END: 
-@GTK_TROUGH_JUMP: 
 
 <!-- ##### ENUM GtkUpdateType ##### -->
 <para>

@@ -1,3 +1,44 @@
+2001-06-03  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_slider): make this special-case
+	hscale/vscale details, so we can use it for scrollbar as well.
+
+	* tests/testgtk.c (reformat_value): honor digits from GtkScale
+
+	* gtk/gtkenums.h (GtkTroughType): Remove this enum
+	(GtkScrollType): add START and END from GtkTroughType
+
+	* gtk/gtkstyle.c (gtk_default_draw_slider): was not properly using
+	its x/y arguments
+
+	* gtk/gtkrange.h, gtk/gtkrange.c, gtk/gtkscrollbar.h,
+	gtk/gtkscrollbar.c, gtk/gtkscale.h, gtk/gtkscale.c,
+	gtk/gtkhscrollbar.h, gtk/gtkhscrollbar.c, gtk/gtkvscrollbar.h,
+	gtk/gtkvscrollbar.c, gtk/gtkhscale.h, gtk/gtkhscale.c,
+	gtk/gtkvscale.h, gtk/gtkvscale.c: Rewrite GtkRange and subclasses.
+
+	Notable changes in the process:
+	 
+	- stepper_size style property is the height for vertical 
+	  ranges, width for horizontal; the other dimension matches
+	  the trough size
+	- add ability to do NeXT-style steppers (and several other styles
+	  that don't make any sense)
+	- added min_slider_length, fixed_slider_length properties to
+          GtkScrollbar
+        - cleaned some private (or at least useless) functions out of
+          gtkscale.h	
+        - moved bindings to GtkScale from subclasses, even arrow keys,
+	  since blind users don't know scale orientation.
+        - change move_slider action signal to use new GtkScrollType,
+	  remove GtkTroughType argument
+	- digits rounds the values a range will input to the given 
+	  number of decimals, but will not try to force adjustment 
+	  values set by other controllers. That is, we no longer
+	  modify adjustment->value inside a value_changed handler.
+	- added getters for GtkScale setters
+        - middle-click begins a slider drag
+	
 Fri Jun  1 18:54:47 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c: (gtk_tree_view_focus): Initial stab at

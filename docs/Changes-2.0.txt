@@ -322,3 +322,10 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 
 * GdkColorContext is gone; you probably weren't using it anyway.
   Use GdkColormap and the gdk_rgb_* functions instead.
+
+* GtkRange/GtkScrollbar/GtkScale were rewritten; this means that most
+  theme engines won't draw them properly, and any custom subclasses of
+  these widgets will need a rewrite (though if you could figure out
+  how to subclass the old version of GtkRange, you have our
+  respect). Also, GtkTroughType is gone.
+

@@ -72,6 +72,7 @@ GtkRange
 
 @range: the object which received the signal.
 @arg1: 
+<!-- # Unused Parameters # -->
 @arg2: 
 
 <!-- ##### ARG GtkRange:update-policy ##### -->

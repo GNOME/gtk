@@ -3754,14 +3754,19 @@ gtk_default_draw_slider (GtkStyle      *style,
   gtk_paint_box (style, window, state_type, shadow_type,
                  area, widget, detail, x, y, width, height);
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_paint_vline (style, window, state_type, area, widget, detail, 
-                     style->ythickness, 
-                     height - style->ythickness - 1, width / 2);
-  else
-    gtk_paint_hline (style, window, state_type, area, widget, detail, 
-                     style->xthickness, 
-                     width - style->xthickness - 1, height / 2);
+  if (detail &&
+      (strcmp ("hscale", detail) == 0 ||
+       strcmp ("vscale", detail) == 0))
+    {
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        gtk_paint_vline (style, window, state_type, area, widget, detail, 
+                         y + style->ythickness, 
+                         y + height - style->ythickness - 1, x + width / 2);
+      else
+        gtk_paint_hline (style, window, state_type, area, widget, detail, 
+                         x + style->xthickness, 
+                         x + width - style->xthickness - 1, y + height / 2);
+    }
 }
 
 static void

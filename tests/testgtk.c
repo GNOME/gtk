@@ -6680,7 +6680,8 @@ static gchar*
 reformat_value (GtkScale *scale,
                 gdouble   value)
 {
-  return g_strdup_printf ("-->%g<--", value);
+  return g_strdup_printf ("-->%0.*g<--",
+                          gtk_scale_get_digits (scale), value);
 }
 
 static void

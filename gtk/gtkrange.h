@@ -45,6 +45,9 @@ extern "C" {
 #define GTK_IS_RANGE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RANGE))
 #define GTK_RANGE_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_RANGE, GtkRangeClass))
 
+/* These two are private/opaque types, ignore */
+typedef struct _GtkRangeLayout    GtkRangeLayout;
+typedef struct _GtkRangeStepTimer GtkRangeStepTimer;
 
 typedef struct _GtkRange        GtkRange;
 typedef struct _GtkRangeClass   GtkRangeClass;
@@ -53,115 +56,79 @@ struct _GtkRange
 {
   GtkWidget widget;
 
-  GdkWindow *trough;
-  GdkWindow *slider;
-  GdkWindow *step_forw;
-  GdkWindow *step_back;
-
-  gint16 x_click_point;
-  gint16 y_click_point;
-
-  guint8 button;
-  gint8 digits;
-  guint policy : 2;
-  guint scroll_type : 5;
-  guint in_child : 3;
-  guint click_child : 3;
-  guint need_timer : 1;
-  guint flippable : 1;
-  guint inverted : 1;
-  
-  guint32 timer;
-
-  gdouble old_value;
-  gdouble old_lower;
-  gdouble old_upper;
-  gdouble old_page_size;
-
   GtkAdjustment *adjustment;
+  GtkUpdateType update_policy;
+  guint inverted : 1;
+
+  /*< protected >*/
+  
+  guint flippable : 1;
+  
+  /* Steppers are: < > ---- < >
+   *               a b      c d
+   */
+   
+  guint has_stepper_a : 1;
+  guint has_stepper_b : 1;
+  guint has_stepper_c : 1;
+  guint has_stepper_d : 1;
+
+  guint need_recalc : 1;
+
+  guint slider_size_fixed : 1;
+  
+  gint min_slider_size;
+
+  GtkOrientation orientation;
+
+  /* Area of entire stepper + trough assembly in widget->window coords */
+  GdkRectangle range_rect;
+  /* Slider range along the long dimension, in widget->window coords */
+  gint slider_start, slider_end;
+
+  /* Round off value to this many digits, -1 for no rounding */
+  gint round_digits;
+  
+  /*< private >*/
+  guint trough_click_forward : 1;  /* trough click was on the forward side of slider */
+  guint update_pending : 1;        /* need to emit value_changed */
+  GtkRangeLayout *layout;
+  GtkRangeStepTimer *timer;
+  gint slide_initial_slider_position;
+  gint slide_initial_coordinate;
+  guint update_timeout_id;
 };
 
 struct _GtkRangeClass
 {
   GtkWidgetClass parent_class;
 
-  gint min_slider_size;
-
-  guint8 trough;
-  guint8 slider;
-  guint8 step_forw;
-  guint8 step_back;
+  /* what detail to pass to GTK drawing functions */
+  gchar *slider_detail;
+  gchar *stepper_detail;
   
   /* action signals for keybindings */
   void (* move_slider)      (GtkRange     *range,
-                             GtkScrollType scroll,
-                             GtkTroughType trough);
+                             GtkScrollType scroll);
 
-  /* Completely broken virtual functions, please ignore */
-
-  void (* draw_background)  (GtkRange *range);
-  void (* clear_background) (GtkRange *range);
-  void (* draw_trough)      (GtkRange *range);
-  void (* draw_slider)      (GtkRange *range);
-  void (* draw_step_forw)   (GtkRange *range);
-  void (* draw_step_back)   (GtkRange *range);
-  void (* slider_update)    (GtkRange *range);
-  gboolean (* trough_click) (GtkRange *range,
-			     gint      x,
-			     gint      y,
-			     gdouble  *jump_perc);
-  void (* motion)           (GtkRange *range,
-			     gint      xdelta,
-			     gint      ydelta);
-  gboolean (* timer)        (GtkRange *range);
+  /* Virtual functions */
+  void (* get_range_border) (GtkRange     *range,
+                             GtkBorder    *border);
 };
 
 
 GtkType        gtk_range_get_type               (void) G_GNUC_CONST;
-GtkAdjustment* gtk_range_get_adjustment         (GtkRange      *range);
+
 void           gtk_range_set_update_policy      (GtkRange      *range,
 						 GtkUpdateType  policy);
+
 void           gtk_range_set_adjustment         (GtkRange      *range,
 						 GtkAdjustment *adjustment);
+GtkAdjustment* gtk_range_get_adjustment         (GtkRange      *range);
 
 void           gtk_range_set_inverted           (GtkRange      *range,
                                                  gboolean       setting);
 gboolean       gtk_range_get_inverted           (GtkRange      *range);
-
-void           _gtk_range_draw_background        (GtkRange      *range);
-void           _gtk_range_clear_background       (GtkRange      *range);
-void           _gtk_range_draw_trough            (GtkRange      *range);
-void           _gtk_range_draw_slider            (GtkRange      *range);
-void           _gtk_range_draw_step_forw         (GtkRange      *range);
-void           _gtk_range_draw_step_back         (GtkRange      *range);
-void           _gtk_range_slider_update          (GtkRange      *range);
-gboolean       _gtk_range_trough_click           (GtkRange      *range,
-                                                  gint           x,
-                                                  gint           y,
-                                                  gdouble       *jump_perc);
-
-void           _gtk_range_default_hslider_update (GtkRange      *range);
-void           _gtk_range_default_vslider_update (GtkRange      *range);
-gboolean       _gtk_range_default_htrough_click  (GtkRange      *range,
-                                                  gint           x,
-                                                  gint           y,
-                                                  gdouble       *jump_perc);
-gboolean       _gtk_range_default_vtrough_click  (GtkRange      *range,
-                                                  gint           x,
-                                                  gint           y,
-                                                  gdouble       *jump_perc);
-void           _gtk_range_default_hmotion        (GtkRange      *range,
-                                                  gint           xdelta,
-                                                  gint           ydelta);
-void           _gtk_range_default_vmotion        (GtkRange      *range,
-                                                  gint           xdelta,
-                                                  gint           ydelta);
-
-void _gtk_range_get_props (GtkRange *range,
-			   gint     *slider_width,
-			   gint     *trough_border,
-			   gint     *stepper_size,
-			   gint     *stepper_spacing);
 
 #ifdef __cplusplus
 }
