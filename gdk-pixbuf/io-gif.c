@@ -24,6 +24,38 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/* This loader is very hairy code.
+ *
+ * The main loop was not designed for incremental loading, so when it was hacked
+ * in it got a bit messy.  Basicly, every function is written to expect a failed
+ * read_gif, and lets you call it again assuming that the bytes are there.
+ *
+ * A note on Animations:
+ * It actually wouldn't be that hard to add support for Gif Animations.  You'd
+ * need, of course, to get the necessary info from the extension, and read the
+ * private colormap into it's own frame, instead of context->color_map.  You'd
+ * also need to stop it from moving to GIF_DONE at the end of gif_get_lzw, (and
+ * of course generate the necessary frames.
+ *
+ * Return vals.
+ * Unless otherwise specified, these are the return vals for most functions:
+ *
+ *  0 -> success
+ * -1 -> more bytes needed.
+ * -2 -> failure; abort the load
+ * -3 -> control needs to be passed back to the main loop
+ *        \_ (most of the time returning 0 will get this, but not always)
+ * >1 -> for functions that get a guchar, the char will be returned.
+ *
+ * -jrb (11/03/1999)
+ */
+
+/*
+ * If you have any images that crash this code, please, please let me know and
+ * send them to me.
+ *                                            <jrb@redhat.com>
+ */
+
 #include <config.h>
 #include <stdio.h>
 #include <glib.h>
@@ -144,10 +176,10 @@ static int GetDataBlock (GifContext *, unsigned char *);
 static int count = 0;
 #endif
 
-/* Returns TRUE if Read is OK,
+/* Returns TRUE if read is OK,
  * FALSE if more memory is needed. */
 static int
-ReadOK (GifContext *context, guchar *buffer, size_t len)
+gif_read (GifContext *context, guchar *buffer, size_t len)
 {
 	gint retval;
 #ifdef IO_GIFDEBUG
@@ -194,18 +226,6 @@ ReadOK (GifContext *context, guchar *buffer, size_t len)
 }
 
 
-/*
- * Return vals.
- * Unless otherwise specified, these are the return vals for most functions:
- *
- *  0 -> success
- * -1 -> more bytes needed.
- * -2 -> failure; abort the load
- * -3 -> control needs to be passed back to the main loop
- *        \_ (most of the time returning 0 will get this, but not always)
- */
-
-
 
 /* Changes the stage to be GIF_GET_COLORMAP */
 static void
@@ -230,7 +250,7 @@ gif_get_colormap (GifContext *context)
 	unsigned char rgb[3];
 
 	while (context->colormap_index < context->bit_pixel) {
-		if (!ReadOK (context, rgb, sizeof (rgb))) {
+		if (!gif_read (context, rgb, sizeof (rgb))) {
 			/*g_message (_("GIF: bad colormap\n"));*/
 			return -1;
 		}
@@ -264,7 +284,7 @@ get_data_block (GifContext *context,
 {
 
 	if (context->block_count == 0) {
-		if (!ReadOK (context, &context->block_count, 1)) {
+		if (!gif_read (context, &context->block_count, 1)) {
 			return -1;
 		}
 	}
@@ -275,7 +295,7 @@ get_data_block (GifContext *context,
 			return 0;
 		}
 
-	if (!ReadOK (context, buf, context->block_count)) {
+	if (!gif_read (context, buf, context->block_count)) {
 		return -1;
 	}
 
@@ -302,7 +322,7 @@ gif_get_extension (GifContext *context)
 		if (context->extension_label == 0) {
 			/* I guess bad things can happen if we have an extension of 0 )-: */
 			/* I should look into this sometime */
-			if (!ReadOK (context, & context->extension_label , 1)) {
+			if (!gif_read (context, & context->extension_label , 1)) {
 				return -1;
 			}
 		}
@@ -349,14 +369,14 @@ GetDataBlock (GifContext *context,
 {
 //	unsigned char count;
 
-	if (!ReadOK (context, &context->block_count, 1)) {
+	if (!gif_read (context, &context->block_count, 1)) {
 		/*g_message (_("GIF: error in getting DataBlock size\n"));*/
 		return -1;
 	}
 
 	ZeroDataBlock = context->block_count == 0;
 
-	if ((context->block_count != 0) && (!ReadOK (context, buf, context->block_count))) {
+	if ((context->block_count != 0) && (!gif_read (context, buf, context->block_count))) {
 		/*g_message (_("GIF: error in reading DataBlock\n"));*/
 		return -1;
 	}
@@ -715,7 +735,7 @@ gif_prepare_lzw (GifContext *context)
 {
 	gint i;
 
-	if (!ReadOK (context, &(context->lzw_set_code_size), 1)) {
+	if (!gif_read (context, &(context->lzw_set_code_size), 1)) {
 		/*g_message (_("GIF: EOF / read error on image data\n"));*/
 		return -1;
 	}
@@ -751,7 +771,7 @@ gif_init (GifContext *context)
 	unsigned char buf[16];
 	char version[4];
 
-	if (!ReadOK (context, buf, 6)) {
+	if (!gif_read (context, buf, 6)) {
 		/* Unable to read magic number */
 		return -1;
 	}
@@ -770,7 +790,7 @@ gif_init (GifContext *context)
 	}
 
 	/* read the screen descriptor */
-	if (!ReadOK (context, buf, 7)) {
+	if (!gif_read (context, buf, 7)) {
 		/* Failed to read screen descriptor */
 		return -1;
 	}
@@ -801,7 +821,7 @@ static gint
 gif_get_frame_info (GifContext *context)
 {
 	unsigned char buf[9];
-	if (!ReadOK (context, buf, 9)) {
+	if (!gif_read (context, buf, 9)) {
 		return -1;
 	}
 	/* Okay, we got all the info we need.  Lets record it */
@@ -833,7 +853,7 @@ gif_get_next_step (GifContext *context)
 {
 	unsigned char c;
 	while (TRUE) {
-		if (!ReadOK (context, &c, 1)) {
+		if (!gif_read (context, &c, 1)) {
 			return -1;
 		}
 		if (c == ';') {

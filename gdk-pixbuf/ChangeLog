@@ -1,5 +1,8 @@
 1999-11-03  Jonathan Blandford  <jrb@redhat.com>
 
+	* src/io-gif.c (gif_read): renamed ReadOK to gif_read.
+	Added a lot of comments to the file.
+
 	* src/Makefile.am (libpixbuf_gif_la_LIBADD): Remove dependency on
 	lib*gif!!!!
 
