@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2004-03-07 18:05+0200\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge."
@@ -115,7 +115,7 @@ msgstr "Ön Qurğulu Displey"
 msgid "The default display for GDK"
 msgstr "GDK üçün ön qurğulu displey"
 
-#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:533
+#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:537
 msgid "Screen"
 msgstr "Ekran"
 
@@ -124,121 +124,121 @@ msgstr "Ekran"
 msgid "the GdkScreen for the renderer"
 msgstr "Ağac görünüşü modeli"
 
-#: gtk/gtkaboutdialog.c:202
+#: gtk/gtkaboutdialog.c:204
 #, fuzzy
 msgid "Program name"
 msgstr "Təq adi"
 
-#: gtk/gtkaboutdialog.c:203
+#: gtk/gtkaboutdialog.c:205
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:217
+#: gtk/gtkaboutdialog.c:219
 msgid "Program version"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:218
+#: gtk/gtkaboutdialog.c:220
 #, fuzzy
 msgid "The version of the program"
 msgstr "Vasitə çubuğu istiqaməti"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:234
 msgid "Copyright string"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:235
 msgid "Copyright information for the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:250
+#: gtk/gtkaboutdialog.c:252
 #, fuzzy
 msgid "Comments string"
 msgstr "Sütünlar arası boşluq"
 
-#: gtk/gtkaboutdialog.c:251
+#: gtk/gtkaboutdialog.c:253
 msgid "Comments about the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:286
 msgid "Website URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:287
 msgid "The URL for the link to the website of the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:303
 #, fuzzy
 msgid "Website label"
 msgstr "Etiketdə böyüklüyü işlət"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:304
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:320
 msgid "Authors"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:321
 #, fuzzy
 msgid "List of authors of the program"
 msgstr "Vasitə çubuğu istiqaməti"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:337
 msgid "Documenters"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:338
 msgid "List of people documenting the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:354
 msgid "Artists"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:355
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:372
 msgid "Translator credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:371
+#: gtk/gtkaboutdialog.c:373
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:388
 msgid "Logo"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:387
+#: gtk/gtkaboutdialog.c:389
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:404
 #, fuzzy
 msgid "Logo Icon Name"
 msgstr "Yazı növü adı"
 
-#: gtk/gtkaboutdialog.c:403
+#: gtk/gtkaboutdialog.c:405
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:410
+#: gtk/gtkaboutdialog.c:412
 #, fuzzy
 msgid "Link Color"
 msgstr "Hazırkı Rəng"
 
-#: gtk/gtkaboutdialog.c:411
+#: gtk/gtkaboutdialog.c:413
 msgid "Color of hyperlinks"
 msgstr ""
 
@@ -2421,7 +2421,7 @@ msgstr "Animasiya"
 msgid "GdkPixbufAnimation to display"
 msgstr "Göstəriləcək GdkPixbufAnimation"
 
-#: gtk/gtkimage.c:257 gtk/gtkwindow.c:525
+#: gtk/gtkimage.c:257 gtk/gtkwindow.c:529
 #, fuzzy
 msgid "Icon Name"
 msgstr "Yazı növü adı"
@@ -2451,7 +2451,7 @@ msgstr "Menyu rəsmlərini göstər"
 msgid "Whether images should be shown in menus"
 msgstr "Menyularda rəsmlərin göstərilməsi"
 
-#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:534
+#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:538
 msgid "The screen where this window will be displayed"
 msgstr "Bu pəncərənin göstəriləcəyi ekran"
 
@@ -4423,7 +4423,7 @@ msgstr "Tək sətirlər üçün işlədiləcək rəng"
 msgid "Whether to display the column"
 msgstr "Sütunu harda göstərək"
 
-#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:456
+#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:460
 msgid "Resizable"
 msgstr "Böyüklüyü dəyişdirilə bilən"
 
@@ -4762,35 +4762,35 @@ msgstr "Kursor sətiri nisbəti"
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Daxil etmə kursorunun göstəriləcəyi nisbət"
 
-#: gtk/gtkwindow.c:414
+#: gtk/gtkwindow.c:418
 msgid "Window Type"
 msgstr "Pəncərə Növü"
 
-#: gtk/gtkwindow.c:415
+#: gtk/gtkwindow.c:419
 msgid "The type of the window"
 msgstr "Pəncərənin növü"
 
-#: gtk/gtkwindow.c:423
+#: gtk/gtkwindow.c:427
 msgid "Window Title"
 msgstr "Pəncərə Başlığı"
 
-#: gtk/gtkwindow.c:424
+#: gtk/gtkwindow.c:428
 msgid "The title of the window"
 msgstr "Pəncərənin üst yazısı"
 
-#: gtk/gtkwindow.c:431
+#: gtk/gtkwindow.c:435
 msgid "Window Role"
 msgstr "Pəncərə Rolu"
 
-#: gtk/gtkwindow.c:432
+#: gtk/gtkwindow.c:436
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "İclas bərpa ediləndə işlədiləcək xüsusi pəncərə tanıdıcısı"
 
-#: gtk/gtkwindow.c:439
+#: gtk/gtkwindow.c:443
 msgid "Allow Shrink"
 msgstr "Daralmanı Qəbul Et"
 
-#: gtk/gtkwindow.c:441
+#: gtk/gtkwindow.c:445
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4799,25 +4799,25 @@ msgstr ""
 "TRUE isə pəncərənin minimal böyüklüyü olmayacaq. Bunu TRUE olaraq seçmək o "
 "qədər də yaxşı fikir deyil"
 
-#: gtk/gtkwindow.c:448
+#: gtk/gtkwindow.c:452
 msgid "Allow Grow"
 msgstr "Böyüməni Qəbul Et"
 
-#: gtk/gtkwindow.c:449
+#: gtk/gtkwindow.c:453
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "Əgər TRUE isə, istifadəçilər pəncərənin minimim ölçüsü xaicinə də kiçildə "
 "bilərlər"
 
-#: gtk/gtkwindow.c:457
+#: gtk/gtkwindow.c:461
 msgid "If TRUE, users can resize the window"
 msgstr "Əgər TRUE isə, istifadəçilər pəncərə böyüklüyünü dəyişdirə bilərlər"
 
-#: gtk/gtkwindow.c:464
+#: gtk/gtkwindow.c:468
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:465
+#: gtk/gtkwindow.c:469
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -4825,73 +4825,73 @@ msgstr ""
 "TRUE isə pəncərə modal olacaq (bu pəncərə açıq ikən digər pəncərələr "
 "işlədilə bilməyəcək və fəal olmayacaq)"
 
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:476
 msgid "Window Position"
 msgstr "Pəncərə Yeri"
 
-#: gtk/gtkwindow.c:473
+#: gtk/gtkwindow.c:477
 msgid "The initial position of the window"
 msgstr "Pəncərənin başlanğıc yeri"
 
-#: gtk/gtkwindow.c:481
+#: gtk/gtkwindow.c:485
 msgid "Default Width"
 msgstr "Əsas En"
 
-#: gtk/gtkwindow.c:482
+#: gtk/gtkwindow.c:486
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Pəncərənin ilk açılışdakı əsas eni"
 
-#: gtk/gtkwindow.c:491
+#: gtk/gtkwindow.c:495
 msgid "Default Height"
 msgstr "Əsas Hündürlük"
 
-#: gtk/gtkwindow.c:492
+#: gtk/gtkwindow.c:496
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "Pəncərənin ilk açılışdakı əsas hündürlüyü"
 
-#: gtk/gtkwindow.c:501
+#: gtk/gtkwindow.c:505
 msgid "Destroy with Parent"
 msgstr "Törədicisi ilə birlikdə Dağıt"
 
-#: gtk/gtkwindow.c:502
+#: gtk/gtkwindow.c:506
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Əgər bu pəncərə dağıdılsa törədəni də dağıdılacaqdır"
 
-#: gtk/gtkwindow.c:509
+#: gtk/gtkwindow.c:513
 msgid "Icon"
 msgstr "Timsal"
 
-#: gtk/gtkwindow.c:510
+#: gtk/gtkwindow.c:514
 msgid "Icon for this window"
 msgstr "Bu pəncərə timsalı"
 
-#: gtk/gtkwindow.c:526
+#: gtk/gtkwindow.c:530
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "Bu pəncərə timsalı"
 
-#: gtk/gtkwindow.c:541
+#: gtk/gtkwindow.c:545
 msgid "Is Active"
 msgstr "Fəaldır"
 
-#: gtk/gtkwindow.c:542
+#: gtk/gtkwindow.c:546
 msgid "Whether the toplevel is the current active window"
 msgstr "Hazırki pəncərənin ən üst səviyyə pəncərəsi olması"
 
-#: gtk/gtkwindow.c:549
+#: gtk/gtkwindow.c:553
 msgid "Focus in Toplevel"
 msgstr "Üst Səviyyədəki Fokus"
 
-#: gtk/gtkwindow.c:550
+#: gtk/gtkwindow.c:554
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Giriş fokusunun bu GtkPəncərəsi-nin içində olacağı"
 
-#: gtk/gtkwindow.c:557
+#: gtk/gtkwindow.c:561
 msgid "Type hint"
 msgstr "İpucunu yaz"
 
-#: gtk/gtkwindow.c:558
+#: gtk/gtkwindow.c:562
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -4899,53 +4899,53 @@ msgstr ""
 "Masa üstü mühidinə pəncərənin hansı növdə olduğunu və onunla necə rəftar "
 "ediləcəyini başa düşməsinə yardım et."
 
-#: gtk/gtkwindow.c:566
+#: gtk/gtkwindow.c:570
 msgid "Skip taskbar"
 msgstr "Vəzifə çubuğunu keç"
 
-#: gtk/gtkwindow.c:567
+#: gtk/gtkwindow.c:571
 msgid "TRUE if the window should not be in the task bar."
 msgstr "Pəncərə vəzifə çubuğunda olmayacaqsa TRUE"
 
-#: gtk/gtkwindow.c:574
+#: gtk/gtkwindow.c:578
 msgid "Skip pager"
 msgstr "Pager-ı keç"
 
-#: gtk/gtkwindow.c:575
+#: gtk/gtkwindow.c:579
 msgid "TRUE if the window should not be in the pager."
 msgstr "Pəncərə pager-də olmayacaqsa TRUE"
 
-#: gtk/gtkwindow.c:589
+#: gtk/gtkwindow.c:593
 msgid "Accept focus"
 msgstr "Fokusu qəbul et"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:594
 msgid "TRUE if the window should receive the input focus."
 msgstr "Pəncərə giriş fokusunu almalıdırsa TRUE"
 
-#: gtk/gtkwindow.c:604
+#: gtk/gtkwindow.c:608
 #, fuzzy
 msgid "Focus on map"
 msgstr "Tıqlamada fokusa al"
 
-#: gtk/gtkwindow.c:605
+#: gtk/gtkwindow.c:609
 #, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "Pəncərə giriş fokusunu almalıdırsa TRUE"
 
-#: gtk/gtkwindow.c:619
+#: gtk/gtkwindow.c:623
 msgid "Decorated"
 msgstr "Bəzəkli"
 
-#: gtk/gtkwindow.c:620
+#: gtk/gtkwindow.c:624
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Pəncərənin pəncərə idarəçisi tərəfindən bəzənməsi"
 
-#: gtk/gtkwindow.c:635
+#: gtk/gtkwindow.c:639
 msgid "Gravity"
 msgstr "Yer çəkimi"
 
-#: gtk/gtkwindow.c:636
+#: gtk/gtkwindow.c:640
 msgid "The window gravity of the window"
 msgstr "Pəncərənin pəncərə yer çəkimi"
 

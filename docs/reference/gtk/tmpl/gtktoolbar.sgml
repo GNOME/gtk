@@ -38,6 +38,9 @@ the #GtkToolbar::popup-context-menu signal.
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkToolbar ##### -->
 <para>
 The #GtkToolbar struct only contains private data and should only be

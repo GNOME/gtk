@@ -24,6 +24,9 @@ in the #GtkWidget class.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### ENUM GtkDestDefaults ##### -->
 <para>
 The #GtkDestDefaults enumeration specifies the various

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+-properties 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2005-01-08 22:51+0200\n"
 "Last-Translator: Vladimir Petkov <vpetkov@i-space.org>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
@@ -91,7 +91,7 @@ msgstr "Дисплей по подразбиране"
 msgid "The default display for GDK"
 msgstr "Дисплеят по подразбиране за GDK"
 
-#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:533
+#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:537
 msgid "Screen"
 msgstr "Екран"
 
@@ -99,11 +99,11 @@ msgstr "Екран"
 msgid "the GdkScreen for the renderer"
 msgstr "Екранът GdkScreen на изобразяващия модул"
 
-#: gtk/gtkaboutdialog.c:202
+#: gtk/gtkaboutdialog.c:204
 msgid "Program name"
 msgstr "Име на програмата"
 
-#: gtk/gtkaboutdialog.c:203
+#: gtk/gtkaboutdialog.c:205
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -111,43 +111,43 @@ msgstr ""
 "Името на програмата. Ако не е зададено, по подразбиране се взима "
 "g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:217
+#: gtk/gtkaboutdialog.c:219
 msgid "Program version"
 msgstr "Версия на програмата"
 
-#: gtk/gtkaboutdialog.c:218
+#: gtk/gtkaboutdialog.c:220
 msgid "The version of the program"
 msgstr "Версията на програмата"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:234
 msgid "Copyright string"
 msgstr "Авторски права"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:235
 msgid "Copyright information for the program"
 msgstr "Информация за авторските права върху програмата"
 
-#: gtk/gtkaboutdialog.c:250
+#: gtk/gtkaboutdialog.c:252
 msgid "Comments string"
 msgstr "Коментар"
 
-#: gtk/gtkaboutdialog.c:251
+#: gtk/gtkaboutdialog.c:253
 msgid "Comments about the program"
 msgstr "Коментари за програмата"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:286
 msgid "Website URL"
 msgstr "Адрес на уебсайт"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:287
 msgid "The URL for the link to the website of the program"
 msgstr "URL към уебсайта на програмата"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:303
 msgid "Website label"
 msgstr "Етикет на интернет страница"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:304
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -155,46 +155,46 @@ msgstr ""
 "Етикетът за хипервръзката към уебсайта на програмата. Ако не е зададен, по "
 "подразбиране е URL-то"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:320
 msgid "Authors"
 msgstr "Автори"
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:321
 msgid "List of authors of the program"
 msgstr "Списък на авторите на програмата"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:337
 msgid "Documenters"
 msgstr "Документатори"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:338
 msgid "List of people documenting the program"
 msgstr "Списък на хората, които са написали документацията на програмата"
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:354
 msgid "Artists"
 msgstr "Дизайнери"
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:355
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 "Списък на хората, които са допринесли за художественото оформление на "
 "програмата"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:372
 msgid "Translator credits"
 msgstr "Преводачи"
 
-#: gtk/gtkaboutdialog.c:371
+#: gtk/gtkaboutdialog.c:373
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Списък с преводачи. Низът трябва да е отбелязан за превод"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:388
 msgid "Logo"
 msgstr "Лого"
 
-#: gtk/gtkaboutdialog.c:387
+#: gtk/gtkaboutdialog.c:389
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -202,21 +202,21 @@ msgstr ""
 "Лого за диалоговата кутия \"Относно\". Ако не е зададено, по подразбиране се "
 "задава gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:404
 msgid "Logo Icon Name"
 msgstr "Име на иконата за логото"
 
-#: gtk/gtkaboutdialog.c:403
+#: gtk/gtkaboutdialog.c:405
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "Именована икона, която да се използва като лого за диалоговата кутия "
 "\"Относно\"."
 
-#: gtk/gtkaboutdialog.c:410
+#: gtk/gtkaboutdialog.c:412
 msgid "Link Color"
 msgstr "Цвят на връзката"
 
-#: gtk/gtkaboutdialog.c:411
+#: gtk/gtkaboutdialog.c:413
 msgid "Color of hyperlinks"
 msgstr "Цветът на хипервръзките"
 
@@ -2409,7 +2409,7 @@ msgstr "Анимация"
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation за показване."
 
-#: gtk/gtkimage.c:257 gtk/gtkwindow.c:525
+#: gtk/gtkimage.c:257 gtk/gtkwindow.c:529
 msgid "Icon Name"
 msgstr "Име на икона"
 
@@ -2437,7 +2437,7 @@ msgstr "Показване на изображения в менютата"
 msgid "Whether images should be shown in menus"
 msgstr "Дали в менютата ще бъдат показвани изображения"
 
-#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:534
+#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:538
 msgid "The screen where this window will be displayed"
 msgstr "Екранът, където ще бъде изобразен този прозорец"
 
@@ -4423,7 +4423,7 @@ msgstr "Цвета, който да се използва за нечетни р
 msgid "Whether to display the column"
 msgstr "Дали да показва колоната"
 
-#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:456
+#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:460
 msgid "Resizable"
 msgstr "Възможна промяна на размера"
 
@@ -4771,37 +4771,37 @@ msgstr "Пропорция на показалеца"
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Пропорция на показалеца"
 
-#: gtk/gtkwindow.c:414
+#: gtk/gtkwindow.c:418
 msgid "Window Type"
 msgstr "Тип прозорец"
 
-#: gtk/gtkwindow.c:415
+#: gtk/gtkwindow.c:419
 msgid "The type of the window"
 msgstr "Типа на прозореца"
 
-#: gtk/gtkwindow.c:423
+#: gtk/gtkwindow.c:427
 msgid "Window Title"
 msgstr "Заглавие на прозорец"
 
-#: gtk/gtkwindow.c:424
+#: gtk/gtkwindow.c:428
 msgid "The title of the window"
 msgstr "Заглавието на прозореца"
 
-#: gtk/gtkwindow.c:431
+#: gtk/gtkwindow.c:435
 msgid "Window Role"
 msgstr "Роля на прозореца"
 
-#: gtk/gtkwindow.c:432
+#: gtk/gtkwindow.c:436
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 "Уникален идентификатор на прозореца, който да се използва при "
 "възстановяването на сесия"
 
-#: gtk/gtkwindow.c:439
+#: gtk/gtkwindow.c:443
 msgid "Allow Shrink"
 msgstr "Позволяване на свиване"
 
-#: gtk/gtkwindow.c:441
+#: gtk/gtkwindow.c:445
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4810,25 +4810,25 @@ msgstr ""
 "Ако е TRUE, прозорцът няма минимален размер. Задаване на това като TRUE е "
 "лоша идея 99% от случаите"
 
-#: gtk/gtkwindow.c:448
+#: gtk/gtkwindow.c:452
 msgid "Allow Grow"
 msgstr "Позволяване на Нарастване"
 
-#: gtk/gtkwindow.c:449
+#: gtk/gtkwindow.c:453
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "Ако е TRUE потребителите могат да разширяват прозореца извън неговият "
 "минимален размер."
 
-#: gtk/gtkwindow.c:457
+#: gtk/gtkwindow.c:461
 msgid "If TRUE, users can resize the window"
 msgstr "Ако е TRUE, потеребителите могат да променя големината на прозореца."
 
-#: gtk/gtkwindow.c:464
+#: gtk/gtkwindow.c:468
 msgid "Modal"
 msgstr "Модален"
 
-#: gtk/gtkwindow.c:465
+#: gtk/gtkwindow.c:469
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -4836,76 +4836,76 @@ msgstr ""
 "Ако е TRUE, прозореца е модален (другите прозорци не са използваеми докато "
 "този е активен)"
 
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:476
 msgid "Window Position"
 msgstr "Местоположение на прозорец"
 
-#: gtk/gtkwindow.c:473
+#: gtk/gtkwindow.c:477
 msgid "The initial position of the window"
 msgstr "Начално местоположение на прозореца"
 
-#: gtk/gtkwindow.c:481
+#: gtk/gtkwindow.c:485
 msgid "Default Width"
 msgstr "Подразбираща се широчина"
 
-#: gtk/gtkwindow.c:482
+#: gtk/gtkwindow.c:486
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "Ширина по подразбиране на прозореца, използва се при първоначалното му "
 "показване"
 
-#: gtk/gtkwindow.c:491
+#: gtk/gtkwindow.c:495
 msgid "Default Height"
 msgstr "Подразбираща се височина"
 
-#: gtk/gtkwindow.c:492
+#: gtk/gtkwindow.c:496
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "Височина по подразбиране на прозореца, използва се при първоначалното му "
 "показване"
 
-#: gtk/gtkwindow.c:501
+#: gtk/gtkwindow.c:505
 msgid "Destroy with Parent"
 msgstr "Унищожава с родителския"
 
-#: gtk/gtkwindow.c:502
+#: gtk/gtkwindow.c:506
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Трябва ли този прозорец да се унищожава при унищожаване на родителския"
 
-#: gtk/gtkwindow.c:509
+#: gtk/gtkwindow.c:513
 msgid "Icon"
 msgstr "Икона"
 
-#: gtk/gtkwindow.c:510
+#: gtk/gtkwindow.c:514
 msgid "Icon for this window"
 msgstr "Икона за този прозорец"
 
-#: gtk/gtkwindow.c:526
+#: gtk/gtkwindow.c:530
 msgid "Name of the themed icon for this window"
 msgstr "Име на иконата от темата за този прозорецИкона за този прозорец"
 
-#: gtk/gtkwindow.c:541
+#: gtk/gtkwindow.c:545
 msgid "Is Active"
 msgstr "Е активен"
 
-#: gtk/gtkwindow.c:542
+#: gtk/gtkwindow.c:546
 msgid "Whether the toplevel is the current active window"
 msgstr "Дали графичният обект е подразбиращият се"
 
-#: gtk/gtkwindow.c:549
+#: gtk/gtkwindow.c:553
 msgid "Focus in Toplevel"
 msgstr "Фокус на връхния прозорец"
 
-#: gtk/gtkwindow.c:550
+#: gtk/gtkwindow.c:554
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Дали фокуса е в този GtkWindow"
 
-#: gtk/gtkwindow.c:557
+#: gtk/gtkwindow.c:561
 msgid "Type hint"
 msgstr "Указател за тип"
 
-#: gtk/gtkwindow.c:558
+#: gtk/gtkwindow.c:562
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -4913,51 +4913,51 @@ msgstr ""
 "Указател помагащ на десктоп обкръжението да разбере какъв тип прозорец е "
 "това и как да се отнася с него"
 
-#: gtk/gtkwindow.c:566
+#: gtk/gtkwindow.c:570
 msgid "Skip taskbar"
 msgstr "Изключен от лентата със задачи"
 
-#: gtk/gtkwindow.c:567
+#: gtk/gtkwindow.c:571
 msgid "TRUE if the window should not be in the task bar."
 msgstr "TRUE ако прозорецът не трябва да бъде в лената със задачи."
 
-#: gtk/gtkwindow.c:574
+#: gtk/gtkwindow.c:578
 msgid "Skip pager"
 msgstr "Изключен от превключвателя на десктопи"
 
-#: gtk/gtkwindow.c:575
+#: gtk/gtkwindow.c:579
 msgid "TRUE if the window should not be in the pager."
 msgstr "TRUE ако прозорецът не трябва да бъде в превключвателя на десктопи."
 
-#: gtk/gtkwindow.c:589
+#: gtk/gtkwindow.c:593
 msgid "Accept focus"
 msgstr "Приемане на фокус"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:594
 msgid "TRUE if the window should receive the input focus."
 msgstr "TRUE ако прозорецът не трябва да бъде в превключвателя на десктопи."
 
-#: gtk/gtkwindow.c:604
+#: gtk/gtkwindow.c:608
 msgid "Focus on map"
 msgstr "Фокусиране при посочване"
 
-#: gtk/gtkwindow.c:605
+#: gtk/gtkwindow.c:609
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "Истна, ако прозорецът трябва да получи фокуса при посочване."
 
-#: gtk/gtkwindow.c:619
+#: gtk/gtkwindow.c:623
 msgid "Decorated"
 msgstr "Украсено"
 
-#: gtk/gtkwindow.c:620
+#: gtk/gtkwindow.c:624
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Дали прозореца трябва да бъде украсен от прозоречния мениджър"
 
-#: gtk/gtkwindow.c:635
+#: gtk/gtkwindow.c:639
 msgid "Gravity"
 msgstr "Гравитация"
 
-#: gtk/gtkwindow.c:636
+#: gtk/gtkwindow.c:640
 msgid "The window gravity of the window"
 msgstr "Гравитацията на прозореца"
 

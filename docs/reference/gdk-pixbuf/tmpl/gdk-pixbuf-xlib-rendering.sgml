@@ -21,6 +21,9 @@ Rendering a pixbuf to an X drawable.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### FUNCTION gdk_pixbuf_xlib_render_threshold_alpha ##### -->
 <para>
 

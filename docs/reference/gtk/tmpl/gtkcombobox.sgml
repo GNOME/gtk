@@ -39,6 +39,9 @@ gtk_combo_box_get_active_text().
 #GtkComboBoxEntry, #GtkTreeModel, #GtkCellRenderer
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkComboBox ##### -->
 <para>
 

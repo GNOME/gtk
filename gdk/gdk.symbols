@@ -604,6 +604,7 @@ gdk_x11_colormap_get_xcolormap
 gdk_x11_colormap_get_xdisplay
 gdk_x11_cursor_get_xcursor
 gdk_x11_cursor_get_xdisplay
+gdk_x11_display_get_user_time_libgtk_only
 gdk_x11_display_get_xdisplay
 gdk_x11_display_grab
 gdk_x11_display_ungrab

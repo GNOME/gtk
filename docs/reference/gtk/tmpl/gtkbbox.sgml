@@ -46,6 +46,9 @@ used to spread the buttons in a button box across the container, respectively.
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkButtonBox ##### -->
 <para>
 This is a read-only struct; no members should be modified directly.

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2005-01-11 00:25+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -91,7 +91,7 @@ msgstr "Ecrã por Omissão"
 msgid "The default display for GDK"
 msgstr "O ecrã por omissão do GDK"
 
-#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:533
+#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:537
 msgid "Screen"
 msgstr "Ecrã"
 
@@ -99,11 +99,11 @@ msgstr "Ecrã"
 msgid "the GdkScreen for the renderer"
 msgstr "O GdkScreen para o renderizador"
 
-#: gtk/gtkaboutdialog.c:202
+#: gtk/gtkaboutdialog.c:204
 msgid "Program name"
 msgstr "Nome da aplicação"
 
-#: gtk/gtkaboutdialog.c:203
+#: gtk/gtkaboutdialog.c:205
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -111,43 +111,43 @@ msgstr ""
 "O nome da aplicação. Se não estiver definido, por omissão será "
 "g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:217
+#: gtk/gtkaboutdialog.c:219
 msgid "Program version"
 msgstr "Versão da aplicação"
 
-#: gtk/gtkaboutdialog.c:218
+#: gtk/gtkaboutdialog.c:220
 msgid "The version of the program"
 msgstr "A versão da aplicação"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:234
 msgid "Copyright string"
 msgstr "Declaração de copyright"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:235
 msgid "Copyright information for the program"
 msgstr "Informação de copyright da aplicação"
 
-#: gtk/gtkaboutdialog.c:250
+#: gtk/gtkaboutdialog.c:252
 msgid "Comments string"
 msgstr "Texto de comentários"
 
-#: gtk/gtkaboutdialog.c:251
+#: gtk/gtkaboutdialog.c:253
 msgid "Comments about the program"
 msgstr "Comentários sobre a aplicação"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:286
 msgid "Website URL"
 msgstr "URL da Página Web"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:287
 msgid "The URL for the link to the website of the program"
 msgstr "O URL do link para a página web da aplicação"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:303
 msgid "Website label"
 msgstr "Etiqueta da página web"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:304
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -155,46 +155,46 @@ msgstr ""
 "A etiqueta para o link para a página web da aplicação. Se não estiver "
 "definida, por omissão será o URL"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:320
 msgid "Authors"
 msgstr "Autores"
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:321
 msgid "List of authors of the program"
 msgstr "Uma lista com os autores da aplicação"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:337
 msgid "Documenters"
 msgstr "Documentadores"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:338
 msgid "List of people documenting the program"
 msgstr "Lista de pessoas que elaboraram a documentação da aplicação"
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:354
 msgid "Artists"
 msgstr "Artistas"
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:355
 msgid "List of people who have contributed artwork to the program"
 msgstr "Lista de pessoas que contribuíram com arte para a aplicação"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:372
 msgid "Translator credits"
 msgstr "Créditos de tradução"
 
-#: gtk/gtkaboutdialog.c:371
+#: gtk/gtkaboutdialog.c:373
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Créditos para os tradutores. Esta expressão deverá ser marcada como "
 "traduzível"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:388
 msgid "Logo"
 msgstr "Logotipo"
 
-#: gtk/gtkaboutdialog.c:387
+#: gtk/gtkaboutdialog.c:389
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -202,19 +202,19 @@ msgstr ""
 "Um logotipo para a caixa \"sobre\". Se não estiver definido, por omissão "
 "será o resultado de gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:404
 msgid "Logo Icon Name"
 msgstr "Nome do Ícone de Logotipo"
 
-#: gtk/gtkaboutdialog.c:403
+#: gtk/gtkaboutdialog.c:405
 msgid "A named icon to use as the logo for the about box."
 msgstr "Um nome de ícone a utilizar como logotipo para a caixa \"sobre\"."
 
-#: gtk/gtkaboutdialog.c:410
+#: gtk/gtkaboutdialog.c:412
 msgid "Link Color"
 msgstr "Cor do Link"
 
-#: gtk/gtkaboutdialog.c:411
+#: gtk/gtkaboutdialog.c:413
 msgid "Color of hyperlinks"
 msgstr "Cor dos links"
 
@@ -2401,7 +2401,7 @@ msgstr "Animação"
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation a apresentar"
 
-#: gtk/gtkimage.c:257 gtk/gtkwindow.c:525
+#: gtk/gtkimage.c:257 gtk/gtkwindow.c:529
 msgid "Icon Name"
 msgstr "Nome do Ícone"
 
@@ -2429,7 +2429,7 @@ msgstr "Apresentar imagens de menu"
 msgid "Whether images should be shown in menus"
 msgstr "Se as images deverão ou não ser apresentadas nos menus"
 
-#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:534
+#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:538
 msgid "The screen where this window will be displayed"
 msgstr "O ecrã onde esta janela será apresentada"
 
@@ -4434,7 +4434,7 @@ msgstr "Cor a utilizar para linhas ímpares"
 msgid "Whether to display the column"
 msgstr "Mostrar ou não a coluna"
 
-#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:456
+#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:460
 msgid "Resizable"
 msgstr "Redimensionável"
 
@@ -4776,35 +4776,35 @@ msgstr "Rácio de aparência da linha do cursor"
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Rácio de aparência com que desenhar o cursor de inserção"
 
-#: gtk/gtkwindow.c:414
+#: gtk/gtkwindow.c:418
 msgid "Window Type"
 msgstr "Tipo de Janela"
 
-#: gtk/gtkwindow.c:415
+#: gtk/gtkwindow.c:419
 msgid "The type of the window"
 msgstr "O tipo da janela"
 
-#: gtk/gtkwindow.c:423
+#: gtk/gtkwindow.c:427
 msgid "Window Title"
 msgstr "Título da Janela"
 
-#: gtk/gtkwindow.c:424
+#: gtk/gtkwindow.c:428
 msgid "The title of the window"
 msgstr "O título da janela"
 
-#: gtk/gtkwindow.c:431
+#: gtk/gtkwindow.c:435
 msgid "Window Role"
 msgstr "Papel da Janela"
 
-#: gtk/gtkwindow.c:432
+#: gtk/gtkwindow.c:436
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Identificador único para a janela a ser utilizado ao repôr uma sessão"
 
-#: gtk/gtkwindow.c:439
+#: gtk/gtkwindow.c:443
 msgid "Allow Shrink"
 msgstr "Permitir Encolher"
 
-#: gtk/gtkwindow.c:441
+#: gtk/gtkwindow.c:445
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4813,25 +4813,25 @@ msgstr ""
 "Se VERDADEIRO, a janela não tem um tamanho mínimo. Definir isto como "
 "VERDADEIRO é 99% das vezes uma má ideia"
 
-#: gtk/gtkwindow.c:448
+#: gtk/gtkwindow.c:452
 msgid "Allow Grow"
 msgstr "Permitir Crescer"
 
-#: gtk/gtkwindow.c:449
+#: gtk/gtkwindow.c:453
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "Se VERDADEIRO, utilizadores podem expandir janela para além do seu tamanho "
 "mínimo"
 
-#: gtk/gtkwindow.c:457
+#: gtk/gtkwindow.c:461
 msgid "If TRUE, users can resize the window"
 msgstr "Se VERDADEIRO, os utilizadores podem redimensionar a janela"
 
-#: gtk/gtkwindow.c:464
+#: gtk/gtkwindow.c:468
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:465
+#: gtk/gtkwindow.c:469
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -4839,74 +4839,74 @@ msgstr ""
 "Se VERDADEIRO, a janela é modal (outras janelas não são utilizáveis enquanto "
 "esta estiver aberta)"
 
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:476
 msgid "Window Position"
 msgstr "Posição da Janela"
 
-#: gtk/gtkwindow.c:473
+#: gtk/gtkwindow.c:477
 msgid "The initial position of the window"
 msgstr "A posição inicial da janela"
 
-#: gtk/gtkwindow.c:481
+#: gtk/gtkwindow.c:485
 msgid "Default Width"
 msgstr "Largura por Omissão"
 
-#: gtk/gtkwindow.c:482
+#: gtk/gtkwindow.c:486
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "A largura por omissão da janela, utilizada ao apresentá-la pela primeira vez"
 
-#: gtk/gtkwindow.c:491
+#: gtk/gtkwindow.c:495
 msgid "Default Height"
 msgstr "Altura por Omissão"
 
-#: gtk/gtkwindow.c:492
+#: gtk/gtkwindow.c:496
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "A altura por omissão da janela, utilizada ao apresentá-la pela primeira vez"
 
-#: gtk/gtkwindow.c:501
+#: gtk/gtkwindow.c:505
 msgid "Destroy with Parent"
 msgstr "Destruir com Pai"
 
-#: gtk/gtkwindow.c:502
+#: gtk/gtkwindow.c:506
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Se esta janela deverá ser destruida quando a janela pai o for"
 
-#: gtk/gtkwindow.c:509
+#: gtk/gtkwindow.c:513
 msgid "Icon"
 msgstr "Ícone"
 
-#: gtk/gtkwindow.c:510
+#: gtk/gtkwindow.c:514
 msgid "Icon for this window"
 msgstr "Ícone para esta janela"
 
-#: gtk/gtkwindow.c:526
+#: gtk/gtkwindow.c:530
 msgid "Name of the themed icon for this window"
 msgstr "Nome do tema de ícones para esta janela"
 
-#: gtk/gtkwindow.c:541
+#: gtk/gtkwindow.c:545
 msgid "Is Active"
 msgstr "Está Activa"
 
-#: gtk/gtkwindow.c:542
+#: gtk/gtkwindow.c:546
 msgid "Whether the toplevel is the current active window"
 msgstr "Se o nível de topo é ou não a janela actualmente activa"
 
-#: gtk/gtkwindow.c:549
+#: gtk/gtkwindow.c:553
 msgid "Focus in Toplevel"
 msgstr "Foco no Nível de Topo"
 
-#: gtk/gtkwindow.c:550
+#: gtk/gtkwindow.c:554
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Se o foco de introdução está dentro desta GtkWindow"
 
-#: gtk/gtkwindow.c:557
+#: gtk/gtkwindow.c:561
 msgid "Type hint"
 msgstr "Dica de tipo"
 
-#: gtk/gtkwindow.c:558
+#: gtk/gtkwindow.c:562
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -4914,51 +4914,51 @@ msgstr ""
 "Dica para ajudar o ambiente de trabalho a compreender que tipo de janela é "
 "esta e como a tratar."
 
-#: gtk/gtkwindow.c:566
+#: gtk/gtkwindow.c:570
 msgid "Skip taskbar"
 msgstr "Ignorar barra de tarefas"
 
-#: gtk/gtkwindow.c:567
+#: gtk/gtkwindow.c:571
 msgid "TRUE if the window should not be in the task bar."
 msgstr "VERDADEIRO para que a janela não surja na barra de tarefas."
 
-#: gtk/gtkwindow.c:574
+#: gtk/gtkwindow.c:578
 msgid "Skip pager"
 msgstr "Ignorar pager"
 
-#: gtk/gtkwindow.c:575
+#: gtk/gtkwindow.c:579
 msgid "TRUE if the window should not be in the pager."
 msgstr "VERDADEIRO para que a janela não surja no pager."
 
-#: gtk/gtkwindow.c:589
+#: gtk/gtkwindow.c:593
 msgid "Accept focus"
 msgstr "Aceitar foco"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:594
 msgid "TRUE if the window should receive the input focus."
 msgstr "VERDADEIRO se a janela deve receber o foco de entrada."
 
-#: gtk/gtkwindow.c:604
+#: gtk/gtkwindow.c:608
 msgid "Focus on map"
 msgstr "Focar ao mapear"
 
-#: gtk/gtkwindow.c:605
+#: gtk/gtkwindow.c:609
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "VERDADEIRO se a janela deve receber o foco ao ser mapeada."
 
-#: gtk/gtkwindow.c:619
+#: gtk/gtkwindow.c:623
 msgid "Decorated"
 msgstr "Decorada"
 
-#: gtk/gtkwindow.c:620
+#: gtk/gtkwindow.c:624
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Se a janela deverá ou não ser decorada pelo gestor de janelas"
 
-#: gtk/gtkwindow.c:635
+#: gtk/gtkwindow.c:639
 msgid "Gravity"
 msgstr "Gravidade"
 
-#: gtk/gtkwindow.c:636
+#: gtk/gtkwindow.c:640
 msgid "The window gravity of the window"
 msgstr "A gravidade da janela"
 

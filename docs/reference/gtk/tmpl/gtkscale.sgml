@@ -24,6 +24,9 @@ call gtk_hscale_new_with_range() or gtk_vscale_new_with_range().
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkScale ##### -->
 <para>
 The #GtkScale-struct struct contains the following fields.

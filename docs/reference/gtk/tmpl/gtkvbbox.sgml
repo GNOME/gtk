@@ -45,6 +45,9 @@ gtk_button_box_set_layout().
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkVButtonBox ##### -->
 <para>
 GtkVButtonBox does not contain any public fields.

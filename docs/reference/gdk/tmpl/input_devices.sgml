@@ -89,6 +89,9 @@ and <structfield>ytilt</structfield>.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkDevice ##### -->
 <para>
 A <structname>GdkDevice</structname> structure contains

@@ -84,6 +84,9 @@ many.</para></listitem>
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkRadioButton ##### -->
 <para>
 Contains only private data that should be read and manipulated using the

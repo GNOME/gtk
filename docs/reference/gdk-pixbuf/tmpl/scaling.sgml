@@ -71,6 +71,9 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
     <link linkend="gdk-GdkRGB">GdkRGB</link>.
   </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### ENUM GdkInterpType ##### -->
   <para>
     This enumeration describes the different interpolation modes that

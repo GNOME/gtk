@@ -7,13 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-12 07:25+0100\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2005-02-14 00:50+0200\n"
 "Last-Translator: Vital Khilko <vk@altlinux.ru>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
 #: gdk-pixbuf/gdk-pixbuf-io.c:1069 tests/testfilechooser.c:199
@@ -41,8 +41,7 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"Збой загрузкі анімацыі \"%s\": зь невядомае прычыны, магчыма "
-"пашкоджаны файл."
+"Збой загрузкі анімацыі \"%s\": зь невядомае прычыны, магчыма пашкоджаны файл."
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:444
 #, c-format
@@ -85,7 +84,8 @@ msgstr "Памылка запісу ў файл малюнку: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1383 gdk-pixbuf/gdk-pixbuf-io.c:1512
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Гэтая зборка gdk-pixbuf не падтрымлівае захаваньне малюнкаў у фармаце %s"
+msgstr ""
+"Гэтая зборка gdk-pixbuf не падтрымлівае захаваньне малюнкаў у фармаце %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1417
 msgid "Insufficient memory to save image to callback"
@@ -110,8 +110,8 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
-"Збой закрыцьця \"%s\" у часе запісу малюнку; усе "
-"даньні могуць быць не захаваныя: %s"
+"Збой закрыцьця \"%s\" у часе запісу малюнку; усе даньні могуць быць не "
+"захаваныя: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1853 gdk-pixbuf/gdk-pixbuf-io.c:1903
 msgid "Insufficient memory to save image into a buffer"
@@ -128,8 +128,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Унутраная памылка. Збой на пачатку загрузкі ў модулі "
-"загрузкі малюнку '%s', але няма зьвестак аб прычыне збою"
+"Унутраная памылка. Збой на пачатку загрузкі ў модулі загрузкі малюнку '%s', "
+"але няма зьвестак аб прычыне збою"
 
 #: gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
@@ -144,9 +144,11 @@ msgid "Image pixel data corrupt"
 msgstr "Даньні малюнку пашкоджаныя"
 
 #: gdk-pixbuf/gdk-pixdata.c:431
-#, c-format
+#, fuzzy, c-format
 msgid "failed to allocate image buffer of %u byte"
-msgstr "збой разьмеркаваньня малюнку ў буфэры у %u байтаў"
+msgid_plural "failed to allocate image buffer of %u bytes"
+msgstr[0] "збой разьмеркаваньня малюнку ў буфэры у %u байтаў"
+msgstr[1] "збой разьмеркаваньня малюнку ў буфэры у %u байтаў"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -413,8 +415,8 @@ msgstr "Пераўтвораны PNG не зьяўляецца RGB ці RGBA."
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
-"Пераўтвораны PNG мае колькасьці каналаў якая не падтрымліваецца, павінна быць 3 "
-"альбо 4."
+"Пераўтвораны PNG мае колькасьці каналаў якая не падтрымліваецца, павінна "
+"быць 3 альбо 4."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -820,46 +822,46 @@ msgstr "КОЛЕРЫ"
 msgid "Make X calls synchronous"
 msgstr "Рабіць X выклікі сынхронна"
 
-#: gtk/gtkaboutdialog.c:268 gtk/gtkaboutdialog.c:2014
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
 msgid "License"
 msgstr "Ліцэнзія"
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:271
 msgid "The license of the program"
 msgstr "Ліцэнзія праграмы"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:489
+#: gtk/gtkaboutdialog.c:491
 msgid "_Credits"
 msgstr "_Падзякі"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:498
+#: gtk/gtkaboutdialog.c:500
 msgid "_License"
 msgstr "_Ліцэнзія"
 
-#: gtk/gtkaboutdialog.c:720
+#: gtk/gtkaboutdialog.c:729
 #, c-format
 msgid "About %s"
 msgstr "Пра %s"
 
-#: gtk/gtkaboutdialog.c:1942
+#: gtk/gtkaboutdialog.c:1951
 msgid "Credits"
 msgstr "Падзякі"
 
-#: gtk/gtkaboutdialog.c:1968
+#: gtk/gtkaboutdialog.c:1977
 msgid "Written by"
 msgstr "Напісанае"
 
-#: gtk/gtkaboutdialog.c:1971
+#: gtk/gtkaboutdialog.c:1980
 msgid "Documented by"
 msgstr "Задакумэнтаванае"
 
-#: gtk/gtkaboutdialog.c:1983
+#: gtk/gtkaboutdialog.c:1992
 msgid "Translated by"
 msgstr "Перакладзенае"
 
-#: gtk/gtkaboutdialog.c:1987
+#: gtk/gtkaboutdialog.c:1996
 msgid "Artwork by"
 msgstr "Мастацкае аздабленьне"
 
@@ -966,8 +968,8 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Націсьніце на кропельнік, затым націсьніце ў любым месцы экрану каб "
-"абраць патрэбны вам колер."
+"Націсьніце на кропельнік, затым націсьніце ў любым месцы экрану каб абраць "
+"патрэбны вам колер."
 
 #: gtk/gtkcolorsel.c:1947
 msgid "_Hue:"
@@ -1203,98 +1205,100 @@ msgid "Create Fo_lder"
 msgstr "Стварыць _тэчку"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3502
+#: gtk/gtkfilechooserdefault.c:3505
 msgid "_Name:"
 msgstr "_Назва:"
 
-#: gtk/gtkfilechooserdefault.c:3542
+#: gtk/gtkfilechooserdefault.c:3545
 msgid "_Browse for other folders"
 msgstr "_Вандраваць па іншых тэчках"
 
-#: gtk/gtkfilechooserdefault.c:3792
+#: gtk/gtkfilechooserdefault.c:3795
 msgid "Save in _folder:"
 msgstr "_Захаваць у тэчку:"
 
-#: gtk/gtkfilechooserdefault.c:3794
+#: gtk/gtkfilechooserdefault.c:3797
 msgid "Create in _folder:"
 msgstr "С_тварыць у тэчцы:"
 
-#: gtk/gtkfilechooserdefault.c:4734
+#: gtk/gtkfilechooserdefault.c:4737
 msgid "Cannot change to folder because it is not local"
 msgstr "Немагчыма зьмяніць тэчку пакуль яна не мясцовая"
 
-#: gtk/gtkfilechooserdefault.c:5249
+#: gtk/gtkfilechooserdefault.c:5253
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Камбінацыя %s·адсутнічае"
 
-#: gtk/gtkfilechooserdefault.c:5713
+#: gtk/gtkfilechooserdefault.c:5717
 #, c-format
 msgid "Could not mount %s"
 msgstr "Немагчыма замацаваць %s"
 
-#: gtk/gtkfilechooserdefault.c:6006
+#: gtk/gtkfilechooserdefault.c:6010
 msgid "Type name of new folder"
 msgstr "Назва тыпу новай тэчкі"
 
-#: gtk/gtkfilechooserdefault.c:6048
-#, c-format
+#: gtk/gtkfilechooserdefault.c:6052
+#, fuzzy, c-format
 msgid "%d byte"
-msgstr "%d байт"
+msgid_plural "%d bytes"
+msgstr[0] "%d байт"
+msgstr[1] "%d байт"
 
-#: gtk/gtkfilechooserdefault.c:6050
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f Кб"
 
-#: gtk/gtkfilechooserdefault.c:6052
+#: gtk/gtkfilechooserdefault.c:6056
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f Мб"
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6058
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Гб"
 
-#: gtk/gtkfilechooserdefault.c:6106
+#: gtk/gtkfilechooserdefault.c:6110
 msgid "Today"
 msgstr "Сёньня"
 
-#: gtk/gtkfilechooserdefault.c:6108
+#: gtk/gtkfilechooserdefault.c:6112
 msgid "Yesterday"
 msgstr "Учора"
 
-#: gtk/gtkfilechooserdefault.c:6119
+#: gtk/gtkfilechooserdefault.c:6123
 msgid "Unknown"
 msgstr "Невядома"
 
-#: gtk/gtkfilechooserdefault.c:6189
+#: gtk/gtkfilechooserdefault.c:6193
 msgid "Cannot change folder"
 msgstr "Немагчыма зьмяніць тэчку"
 
-#: gtk/gtkfilechooserdefault.c:6190
+#: gtk/gtkfilechooserdefault.c:6194
 msgid "The folder you specified is an invalid path."
 msgstr "Пазначаная тэчка ў нерэчаісным шляху."
 
-#: gtk/gtkfilechooserdefault.c:6229
+#: gtk/gtkfilechooserdefault.c:6233
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Немагчыма пабудаваць назву файлу з '%s' і '%s'"
 
-#: gtk/gtkfilechooserdefault.c:6265
+#: gtk/gtkfilechooserdefault.c:6269
 msgid "Could not select item"
 msgstr "немагчыма выбраць пункт"
 
-#: gtk/gtkfilechooserdefault.c:6305
+#: gtk/gtkfilechooserdefault.c:6309
 msgid "Open Location"
 msgstr "Адкрыць месца"
 
-#: gtk/gtkfilechooserdefault.c:6312
+#: gtk/gtkfilechooserdefault.c:6316
 msgid "Save in Location"
 msgstr "Захаваць у месца"
 
-#: gtk/gtkfilechooserdefault.c:6336
+#: gtk/gtkfilechooserdefault.c:6340
 msgid "_Location:"
 msgstr "_Месца: "
 
@@ -1507,8 +1511,8 @@ msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
-"Назва \"%s\" не зьяўляецца рэчаіснай таму як утрымлівае сымбаль \"%s\". "
-"Калі ласка скарыстайце іншую назву."
+"Назва \"%s\" не зьяўляецца рэчаіснай таму як утрымлівае сымбаль \"%s\". Калі "
+"ласка скарыстайце іншую назву."
 
 #: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1007
 #, c-format

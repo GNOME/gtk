@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2005-01-30 19:35+0100\n"
 "Last-Translator: Alessio Dessì <alessiodessi@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -469,80 +469,80 @@ msgstr ""
 msgid "The PNG image format"
 msgstr "Formato PNG"
 
-#: gdk-pixbuf/io-pnm.c:249
+#: gdk-pixbuf/io-pnm.c:252
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr ""
 "Il numero intero atteso dal modulo di caricamento PNM non è stato trovato"
 
-#: gdk-pixbuf/io-pnm.c:281
+#: gdk-pixbuf/io-pnm.c:284
 msgid "PNM file has an incorrect initial byte"
 msgstr "File PNM con byte iniziale non corretto"
 
-#: gdk-pixbuf/io-pnm.c:311
+#: gdk-pixbuf/io-pnm.c:314
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "Il file PNM non è in un sottoformato PNM riconosciuto"
 
-#: gdk-pixbuf/io-pnm.c:336
+#: gdk-pixbuf/io-pnm.c:339
 msgid "PNM file has an image width of 0"
 msgstr "File PNM con larghezza pari a zero"
 
-#: gdk-pixbuf/io-pnm.c:357
+#: gdk-pixbuf/io-pnm.c:360
 msgid "PNM file has an image height of 0"
 msgstr "File PNM con altezza pari a zero"
 
-#: gdk-pixbuf/io-pnm.c:380
+#: gdk-pixbuf/io-pnm.c:383
 msgid "Maximum color value in PNM file is 0"
 msgstr "Il valore massimo del colore nel file PNM è zero"
 
-#: gdk-pixbuf/io-pnm.c:388
+#: gdk-pixbuf/io-pnm.c:391
 msgid "Maximum color value in PNM file is too large"
 msgstr "Il valore massimo del colore nel file PNM troppo grande"
 
-#: gdk-pixbuf/io-pnm.c:396
+#: gdk-pixbuf/io-pnm.c:399
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "Impossibile gestire file PNM con valori di colore maggiori di 255"
 
-#: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
+#: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
 msgstr "Il tipo di immagine Raw PNM non è valido"
 
-#: gdk-pixbuf/io-pnm.c:555 gdk-pixbuf/io-pnm.c:597
+#: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
 msgid "PNM image format is invalid"
 msgstr "Formato PNM dell'immagine non valido"
 
-#: gdk-pixbuf/io-pnm.c:656
+#: gdk-pixbuf/io-pnm.c:663
 msgid "PNM image loader does not support this PNM subformat"
 msgstr ""
 "Il modulo di caricamento per le immagini PNM non supporta questo "
 "sottoformato PNM"
 
-#: gdk-pixbuf/io-pnm.c:711
+#: gdk-pixbuf/io-pnm.c:718
 msgid "Premature end-of-file encountered"
 msgstr "End-of-file raggiunto prematuramente"
 
-#: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
+#: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 "I formati Raw PNM richiedono esattamente uno spazio bianco prima dei dati "
 "grezzi"
 
-#: gdk-pixbuf/io-pnm.c:770
+#: gdk-pixbuf/io-pnm.c:777
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Impossibile allocare memoria per caricare l'immagine PNM"
 
-#: gdk-pixbuf/io-pnm.c:820
+#: gdk-pixbuf/io-pnm.c:827
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Memoria insufficiente per caricare la struttura context del file PNM"
 
-#: gdk-pixbuf/io-pnm.c:871
+#: gdk-pixbuf/io-pnm.c:878
 msgid "Unexpected end of PNM image data"
 msgstr "Fine dei dati dell'immagine PNM inaspettata"
 
-#: gdk-pixbuf/io-pnm.c:1003
+#: gdk-pixbuf/io-pnm.c:1010
 msgid "Insufficient memory to load PNM file"
 msgstr "Memoria insufficiente per caricare il file PNM"
 
-#: gdk-pixbuf/io-pnm.c:1082
+#: gdk-pixbuf/io-pnm.c:1089
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "Famiglia formati PNM/PBM/PGM/PPM"
 
@@ -833,46 +833,46 @@ msgstr "COLORI"
 msgid "Make X calls synchronous"
 msgstr "Rende le chiamate a X sincrone"
 
-#: gtk/gtkaboutdialog.c:268 gtk/gtkaboutdialog.c:2014
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
 msgid "License"
 msgstr "Licenza"
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:271
 msgid "The license of the program"
 msgstr "La licenza del programma"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:489
+#: gtk/gtkaboutdialog.c:491
 msgid "_Credits"
 msgstr "_Ringraziamenti"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:498
+#: gtk/gtkaboutdialog.c:500
 msgid "_License"
 msgstr "_Licenza"
 
-#: gtk/gtkaboutdialog.c:720
+#: gtk/gtkaboutdialog.c:729
 #, c-format
 msgid "About %s"
 msgstr "Informazioni su %s"
 
-#: gtk/gtkaboutdialog.c:1942
+#: gtk/gtkaboutdialog.c:1951
 msgid "Credits"
 msgstr "Ringraziamenti"
 
-#: gtk/gtkaboutdialog.c:1968
+#: gtk/gtkaboutdialog.c:1977
 msgid "Written by"
 msgstr "Scritto da"
 
-#: gtk/gtkaboutdialog.c:1971
+#: gtk/gtkaboutdialog.c:1980
 msgid "Documented by"
 msgstr "Documentato da"
 
-#: gtk/gtkaboutdialog.c:1983
+#: gtk/gtkaboutdialog.c:1992
 msgid "Translated by"
 msgstr "Tradotto da"
 
-#: gtk/gtkaboutdialog.c:1987
+#: gtk/gtkaboutdialog.c:1996
 msgid "Artwork by"
 msgstr "Grafica di"
 
@@ -1090,12 +1090,12 @@ msgid "Select A File"
 msgstr "Seleziona un file"
 
 #: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1283
-#: gtk/gtkpathbar.c:982
+#: gtk/gtkpathbar.c:986
 msgid "Home"
 msgstr "Home"
 
 #: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1310
-#: gtk/gtkpathbar.c:984
+#: gtk/gtkpathbar.c:988
 msgid "Desktop"
 msgstr "Desktop"
 
@@ -1224,100 +1224,100 @@ msgid "Create Fo_lder"
 msgstr "Nuova _cartella"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3502
+#: gtk/gtkfilechooserdefault.c:3505
 msgid "_Name:"
 msgstr "_Nome: "
 
-#: gtk/gtkfilechooserdefault.c:3542
+#: gtk/gtkfilechooserdefault.c:3545
 msgid "_Browse for other folders"
 msgstr "_Esplora altre cartelle"
 
-#: gtk/gtkfilechooserdefault.c:3792
+#: gtk/gtkfilechooserdefault.c:3795
 msgid "Save in _folder:"
 msgstr "Salva nella ca_rtella:"
 
-#: gtk/gtkfilechooserdefault.c:3794
+#: gtk/gtkfilechooserdefault.c:3797
 msgid "Create in _folder:"
 msgstr "Crea nella _cartella:"
 
-#: gtk/gtkfilechooserdefault.c:4734
+#: gtk/gtkfilechooserdefault.c:4737
 msgid "Cannot change to folder because it is not local"
 msgstr "Impossibile spostarsi in una cartella non locale"
 
-#: gtk/gtkfilechooserdefault.c:5249
+#: gtk/gtkfilechooserdefault.c:5253
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La scorciatoia %s non esiste"
 
-#: gtk/gtkfilechooserdefault.c:5713
+#: gtk/gtkfilechooserdefault.c:5717
 #, c-format
 msgid "Could not mount %s"
 msgstr "Impossibile montare «%s»"
 
-#: gtk/gtkfilechooserdefault.c:6006
+#: gtk/gtkfilechooserdefault.c:6010
 msgid "Type name of new folder"
 msgstr "Digitare il nome della nuova cartella"
 
-#: gtk/gtkfilechooserdefault.c:6048
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:6050
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f kB"
 
-#: gtk/gtkfilechooserdefault.c:6052
+#: gtk/gtkfilechooserdefault.c:6056
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6058
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:6106
+#: gtk/gtkfilechooserdefault.c:6110
 msgid "Today"
 msgstr "Oggi"
 
-#: gtk/gtkfilechooserdefault.c:6108
+#: gtk/gtkfilechooserdefault.c:6112
 msgid "Yesterday"
 msgstr "Ieri"
 
-#: gtk/gtkfilechooserdefault.c:6119
+#: gtk/gtkfilechooserdefault.c:6123
 msgid "Unknown"
 msgstr "Sconosciuto"
 
-#: gtk/gtkfilechooserdefault.c:6189
+#: gtk/gtkfilechooserdefault.c:6193
 msgid "Cannot change folder"
 msgstr "Impossibile cambiare cartella"
 
-#: gtk/gtkfilechooserdefault.c:6190
+#: gtk/gtkfilechooserdefault.c:6194
 msgid "The folder you specified is an invalid path."
 msgstr "Il percorso della cartella specificata non è valido."
 
-#: gtk/gtkfilechooserdefault.c:6229
+#: gtk/gtkfilechooserdefault.c:6233
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Impossibile costruire il nome del file da «%s» e «%s»"
 
-#: gtk/gtkfilechooserdefault.c:6265
+#: gtk/gtkfilechooserdefault.c:6269
 msgid "Could not select item"
 msgstr "Impossibile selezionare la voce"
 
-#: gtk/gtkfilechooserdefault.c:6305
+#: gtk/gtkfilechooserdefault.c:6309
 msgid "Open Location"
 msgstr "Apri posizione"
 
-#: gtk/gtkfilechooserdefault.c:6312
+#: gtk/gtkfilechooserdefault.c:6316
 msgid "Save in Location"
 msgstr "Salva nella posizione"
 
-#: gtk/gtkfilechooserdefault.c:6336
+#: gtk/gtkfilechooserdefault.c:6340
 msgid "_Location:"
 msgstr "_Posizione: "
 

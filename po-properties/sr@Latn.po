@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-12 12:09+0100\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2005-02-12 12:09+0100\n"
 "Last-Translator: Danilo Šegan <danilo@gnome.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -95,7 +95,7 @@ msgstr "Podrazumevani prikaz"
 msgid "The default display for GDK"
 msgstr "Podrazumevani prikaz za GDK"
 
-#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:533
+#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:537
 msgid "Screen"
 msgstr "Ekran"
 
@@ -103,11 +103,11 @@ msgstr "Ekran"
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen za iscrtavač"
 
-#: gtk/gtkaboutdialog.c:202
+#: gtk/gtkaboutdialog.c:204
 msgid "Program name"
 msgstr "Ime programa"
 
-#: gtk/gtkaboutdialog.c:203
+#: gtk/gtkaboutdialog.c:205
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -115,88 +115,88 @@ msgstr ""
 "Ime programa. Ukoliko nije postavljeno, podrazumeva se g_get_application_name"
 "()"
 
-#: gtk/gtkaboutdialog.c:217
+#: gtk/gtkaboutdialog.c:219
 msgid "Program version"
 msgstr "Izdanje programa"
 
-#: gtk/gtkaboutdialog.c:218
+#: gtk/gtkaboutdialog.c:220
 msgid "The version of the program"
 msgstr "Izdanje programa"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:234
 msgid "Copyright string"
 msgstr "Tekst za autorska prava"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:235
 msgid "Copyright information for the program"
 msgstr "Podaci o autorskim pravima za program"
 
-#: gtk/gtkaboutdialog.c:250
+#: gtk/gtkaboutdialog.c:252
 msgid "Comments string"
 msgstr "Tekst sa primedbama"
 
-#: gtk/gtkaboutdialog.c:251
+#: gtk/gtkaboutdialog.c:253
 msgid "Comments about the program"
 msgstr "Primedbe o programu"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:286
 msgid "Website URL"
 msgstr "Adresa veb strana"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:287
 msgid "The URL for the link to the website of the program"
 msgstr "Adresa za vezu ka veb stranama programa"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:303
 msgid "Website label"
 msgstr "Oznaka veb strana"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:304
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
-"Oznaka za vezu ka veb stranama programa. Ukoliko nije postavljeno, koristi se "
-"sama adresa"
+"Oznaka za vezu ka veb stranama programa. Ukoliko nije postavljeno, koristi "
+"se sama adresa"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:320
 msgid "Authors"
 msgstr "Autori"
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:321
 msgid "List of authors of the program"
 msgstr "Spisak autora programa"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:337
 msgid "Documenters"
 msgstr "Dokumentacija"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:338
 msgid "List of people documenting the program"
 msgstr "Spisak osoba koje su dokumentovale program"
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:354
 msgid "Artists"
 msgstr "Grafika"
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:355
 msgid "List of people who have contributed artwork to the program"
 msgstr "Spisak osoba koje su izradile grafiku za program"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:372
 msgid "Translator credits"
 msgstr "Prevod"
 
-#: gtk/gtkaboutdialog.c:371
+#: gtk/gtkaboutdialog.c:373
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Zasluge prevodioca. Ova niska treba da bude naznačena za prevod"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:388
 msgid "Logo"
 msgstr "Logotip"
 
-#: gtk/gtkaboutdialog.c:387
+#: gtk/gtkaboutdialog.c:389
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -204,19 +204,19 @@ msgstr ""
 "Logotip za prozorče o programu. Ukoliko nije postavljeno, podrazumeva se "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:404
 msgid "Logo Icon Name"
 msgstr "Ime logotip slike"
 
-#: gtk/gtkaboutdialog.c:403
+#: gtk/gtkaboutdialog.c:405
 msgid "A named icon to use as the logo for the about box."
 msgstr "Imenovana ikona za logotip u prozorčetu o programu."
 
-#: gtk/gtkaboutdialog.c:410
+#: gtk/gtkaboutdialog.c:412
 msgid "Link Color"
 msgstr "Boja veze"
 
-#: gtk/gtkaboutdialog.c:411
+#: gtk/gtkaboutdialog.c:413
 msgid "Color of hyperlinks"
 msgstr "Boja hiperveza"
 
@@ -277,7 +277,8 @@ msgstr "Isporučena ikona"
 #: gtk/gtkaction.c:227
 msgid "The stock icon displayed in widgets representing this action."
 msgstr ""
-"Isporučena ikona koja se prikazuje u elementima koji predstavljaju ovu akciju."
+"Isporučena ikona koja se prikazuje u elementima koji predstavljaju ovu "
+"akciju."
 
 #: gtk/gtkaction.c:234 gtk/gtktoolitem.c:159
 msgid "Visible when horizontal"
@@ -607,8 +608,8 @@ msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 msgstr ""
-"Ukoliko je postavljeno, sadržani element se pojavljuje među drugim elementima, "
-"što je odgovarajuće za npr. dugmiće za pomoć."
+"Ukoliko je postavljeno, sadržani element se pojavljuje među drugim "
+"elementima, što je odgovarajuće za npr. dugmiće za pomoć."
 
 #: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:449
 #: gtk/gtktreeviewcolumn.c:250
@@ -645,8 +646,8 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
-"Da li se dodatni prostor namenjen sadržanom elementu treba njemu dodeliti ili "
-"koristiti za popunu"
+"Da li se dodatni prostor namenjen sadržanom elementu treba njemu dodeliti "
+"ili koristiti za popunu"
 
 #: gtk/gtkbox.c:162
 msgid "Padding"
@@ -655,8 +656,8 @@ msgstr "Popuna"
 #: gtk/gtkbox.c:163
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr ""
-"Dodatni razmak koji se postavlja između sadržanog elementa i njegovih komšija, "
-"u tačkama"
+"Dodatni razmak koji se postavlja između sadržanog elementa i njegovih "
+"komšija, u tačkama"
 
 #: gtk/gtkbox.c:169
 msgid "Pack type"
@@ -1740,7 +1741,8 @@ msgstr "Najveća dužina"
 
 #: gtk/gtkentry.c:514
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "Najviše dozvoljenih znakova za ovo polje. Nula ukoliko nema ograničenja"
+msgstr ""
+"Najviše dozvoljenih znakova za ovo polje. Nula ukoliko nema ograničenja"
 
 #: gtk/gtkentry.c:522
 msgid "Visibility"
@@ -1751,8 +1753,8 @@ msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
-"Ukoliko nije postavljeno, prikazuje se „nevidljivi znak“ umesto pravog teksta "
-"(unos lozinke)"
+"Ukoliko nije postavljeno, prikazuje se „nevidljivi znak“ umesto pravog "
+"teksta (unos lozinke)"
 
 #: gtk/gtkentry.c:531
 msgid "FALSE removes outside bevel from entry"
@@ -1807,8 +1809,8 @@ msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
-"Vodoravno poravnanje, od 0 (levo) do 1 (desno). Obrnuto za rasporede sa desna "
-"na levo."
+"Vodoravno poravnanje, od 0 (levo) do 1 (desno). Obrnuto za rasporede sa "
+"desna na levo."
 
 #: gtk/gtkentry.c:828
 msgid "Select on focus"
@@ -2386,7 +2388,7 @@ msgstr "Animacija"
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation za prikaz"
 
-#: gtk/gtkimage.c:257 gtk/gtkwindow.c:525
+#: gtk/gtkimage.c:257 gtk/gtkwindow.c:529
 msgid "Icon Name"
 msgstr "Ime ikone"
 
@@ -2414,7 +2416,7 @@ msgstr "Prikaži slike u meniju"
 msgid "Whether images should be shown in menus"
 msgstr "Da li se prikazuju slike u meniju"
 
-#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:534
+#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:538
 msgid "The screen where this window will be displayed"
 msgstr "Ekran na kojem će se prikazati ovaj prozor"
 
@@ -2635,8 +2637,8 @@ msgstr "Vreme pre pojave podmenija"
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
-"Najmanje vreme koje se pokazivač miša mora zadržati preko stavke menija da bi "
-"se pojavio podmeni"
+"Najmanje vreme koje se pokazivač miša mora zadržati preko stavke menija da "
+"bi se pojavio podmeni"
 
 #: gtk/gtkmenu.c:705
 msgid "Delay before hiding a submenu"
@@ -2946,8 +2948,8 @@ msgstr "Promeni veličinu"
 #: gtk/gtkpaned.c:310
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
-"Ukoliko je postavljeno, sadržani element se širi i skuplja zajedno sa okvirnim "
-"elementom"
+"Ukoliko je postavljeno, sadržani element se širi i skuplja zajedno sa "
+"okvirnim elementom"
 
 #: gtk/gtkpaned.c:325
 msgid "Shrink"
@@ -3273,8 +3275,8 @@ msgstr "Utvrđena veličina klizača"
 #: gtk/gtkscrollbar.c:92
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr ""
-"Ne dozvoljava promenu veličine klizača, već je utvrđuje na najmanju dozvoljenu "
-"dužinu"
+"Ne dozvoljava promenu veličine klizača, već je utvrđuje na najmanju "
+"dozvoljenu dužinu"
 
 #: gtk/gtkscrollbar.c:116
 msgid ""
@@ -3516,7 +3518,9 @@ msgstr "Način rada"
 msgid ""
 "The directions in which the size group effects the requested sizes of its "
 "component widgets"
-msgstr "Pravci u kojima veličina grupe utiče na zahtevane veličine sadržanih elemenata"
+msgstr ""
+"Pravci u kojima veličina grupe utiče na zahtevane veličine sadržanih "
+"elemenata"
 
 #: gtk/gtkspinbutton.c:243
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3630,7 +3634,8 @@ msgstr "Jednoobrazno"
 
 #: gtk/gtktable.c:197
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "Ukoliko je postavljeno, onda su sva polja tabele jednake širine i visine"
+msgstr ""
+"Ukoliko je postavljeno, onda su sva polja tabele jednake širine i visine"
 
 #: gtk/gtktable.c:204
 msgid "Left attachment"
@@ -3693,8 +3698,8 @@ msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
 msgstr ""
-"Dodatni razmak između sadržanog elementa i njegovog gornjeg i donjeg suseda, u "
-"tačkama"
+"Dodatni razmak između sadržanog elementa i njegovog gornjeg i donjeg suseda, "
+"u tačkama"
 
 # Urke: da li ovde treba „element teksta“ ?
 #: gtk/gtktext.c:604
@@ -4377,7 +4382,7 @@ msgstr "Boja za neparne redove"
 msgid "Whether to display the column"
 msgstr "Da li prikazati stubac"
 
-#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:456
+#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:460
 msgid "Resizable"
 msgstr "Veličina promenljiva"
 
@@ -4718,62 +4723,62 @@ msgstr "Razmera kursorne linije"
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Razmera u kojoj se crta kursor za unos"
 
-#: gtk/gtkwindow.c:414
+#: gtk/gtkwindow.c:418
 msgid "Window Type"
 msgstr "Vrsta prozora"
 
-#: gtk/gtkwindow.c:415
+#: gtk/gtkwindow.c:419
 msgid "The type of the window"
 msgstr "Vrsta prozora"
 
-#: gtk/gtkwindow.c:423
+#: gtk/gtkwindow.c:427
 msgid "Window Title"
 msgstr "Naslov prozora"
 
-#: gtk/gtkwindow.c:424
+#: gtk/gtkwindow.c:428
 msgid "The title of the window"
 msgstr "Naslov prozora"
 
-#: gtk/gtkwindow.c:431
+#: gtk/gtkwindow.c:435
 msgid "Window Role"
 msgstr "Uloga prozora"
 
-#: gtk/gtkwindow.c:432
+#: gtk/gtkwindow.c:436
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Jedinstveni obeleživač prozora koji se koristi pri obnavljanju sesije"
 
-#: gtk/gtkwindow.c:439
+#: gtk/gtkwindow.c:443
 msgid "Allow Shrink"
 msgstr "Dopusti smanjivanje"
 
-#: gtk/gtkwindow.c:441
+#: gtk/gtkwindow.c:445
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
-"Ukoliko je postavljeno, prozor nema najmanju dopuštenu veličinu. Uključivanje "
-"ovoga je u 99 odsto slučajeva neprikladno"
+"Ukoliko je postavljeno, prozor nema najmanju dopuštenu veličinu. "
+"Uključivanje ovoga je u 99 odsto slučajeva neprikladno"
 
-#: gtk/gtkwindow.c:448
+#: gtk/gtkwindow.c:452
 msgid "Allow Grow"
 msgstr "Dopusti povećanje"
 
-#: gtk/gtkwindow.c:449
+#: gtk/gtkwindow.c:453
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
-"Ukoliko je postavljeno, korisnici mogu povećati prozor preko njegove najmanje "
-"veličine"
+"Ukoliko je postavljeno, korisnici mogu povećati prozor preko njegove "
+"najmanje veličine"
 
-#: gtk/gtkwindow.c:457
+#: gtk/gtkwindow.c:461
 msgid "If TRUE, users can resize the window"
 msgstr "Ukoliko je postavljeno, korisnici mogu promeniti veličinu prozora"
 
-#: gtk/gtkwindow.c:464
+#: gtk/gtkwindow.c:468
 msgid "Modal"
 msgstr "Modalni"
 
-#: gtk/gtkwindow.c:465
+#: gtk/gtkwindow.c:469
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -4781,73 +4786,73 @@ msgstr ""
 "Ukoliko je postavljeno, prozor je modalni (ostali prozori se ne mogu "
 "koristiti dok je ovaj prikazan)"
 
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:476
 msgid "Window Position"
 msgstr "Položaj prozora"
 
-#: gtk/gtkwindow.c:473
+#: gtk/gtkwindow.c:477
 msgid "The initial position of the window"
 msgstr "Početni položaj prozora"
 
-#: gtk/gtkwindow.c:481
+#: gtk/gtkwindow.c:485
 msgid "Default Width"
 msgstr "Uobičajena širina"
 
-#: gtk/gtkwindow.c:482
+#: gtk/gtkwindow.c:486
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Uobičajena širina prozora, koristi se pri prvom prikazivanju prozora"
 
-#: gtk/gtkwindow.c:491
+#: gtk/gtkwindow.c:495
 msgid "Default Height"
 msgstr "Uobičajena visina"
 
-#: gtk/gtkwindow.c:492
+#: gtk/gtkwindow.c:496
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "Uobičajena visina prozora, koristi se pri prvom prikazivanju prozora"
 
-#: gtk/gtkwindow.c:501
+#: gtk/gtkwindow.c:505
 msgid "Destroy with Parent"
 msgstr "Ukloni sa pokretačem"
 
-#: gtk/gtkwindow.c:502
+#: gtk/gtkwindow.c:506
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
 "Da li ovaj prozor treba ukloniti kada se ukloni prozor iz kog je ovaj pozvan"
 
-#: gtk/gtkwindow.c:509
+#: gtk/gtkwindow.c:513
 msgid "Icon"
 msgstr "Ikona"
 
-#: gtk/gtkwindow.c:510
+#: gtk/gtkwindow.c:514
 msgid "Icon for this window"
 msgstr "Ikona za ovaj prozor"
 
-#: gtk/gtkwindow.c:526
+#: gtk/gtkwindow.c:530
 msgid "Name of the themed icon for this window"
 msgstr "Ime ikone iz teme za ovaj prozor"
 
-#: gtk/gtkwindow.c:541
+#: gtk/gtkwindow.c:545
 msgid "Is Active"
 msgstr "Je aktivan"
 
-#: gtk/gtkwindow.c:542
+#: gtk/gtkwindow.c:546
 msgid "Whether the toplevel is the current active window"
 msgstr "Da li je prvi nivo trenutno aktivni prozor"
 
-#: gtk/gtkwindow.c:549
+#: gtk/gtkwindow.c:553
 msgid "Focus in Toplevel"
 msgstr "Žiža na prvi nivo"
 
-#: gtk/gtkwindow.c:550
+#: gtk/gtkwindow.c:554
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Da li je žiža za unos unutar ovog GtkWindow-a"
 
-#: gtk/gtkwindow.c:557
+#: gtk/gtkwindow.c:561
 msgid "Type hint"
 msgstr "Nagoveštaj o vrsti"
 
-#: gtk/gtkwindow.c:558
+#: gtk/gtkwindow.c:562
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -4855,51 +4860,51 @@ msgstr ""
 "Nagoveštaj koji pomaže okruženju radne površine da razume koje vrste je ovaj "
 "prozor i kako ga postaviti."
 
-#: gtk/gtkwindow.c:566
+#: gtk/gtkwindow.c:570
 msgid "Skip taskbar"
 msgstr "Preskoči spisak procesa"
 
-#: gtk/gtkwindow.c:567
+#: gtk/gtkwindow.c:571
 msgid "TRUE if the window should not be in the task bar."
 msgstr "Ukoliko je postavljeno, prozor se neće videti na spisku procesa."
 
-#: gtk/gtkwindow.c:574
+#: gtk/gtkwindow.c:578
 msgid "Skip pager"
 msgstr "Ne prikazuj u spisku prozora"
 
-#: gtk/gtkwindow.c:575
+#: gtk/gtkwindow.c:579
 msgid "TRUE if the window should not be in the pager."
 msgstr "Ukoliko je postavljeno, prozor se neće videti u spisku prozora."
 
-#: gtk/gtkwindow.c:589
+#: gtk/gtkwindow.c:593
 msgid "Accept focus"
 msgstr "Prihvati fokus"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:594
 msgid "TRUE if the window should receive the input focus."
 msgstr "Ukoliko je postavljeno, prozor će primati fokus za unos."
 
-#: gtk/gtkwindow.c:604
+#: gtk/gtkwindow.c:608
 msgid "Focus on map"
 msgstr "Fokusiranje pri mapiranju"
 
-#: gtk/gtkwindow.c:605
+#: gtk/gtkwindow.c:609
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "Ukoliko je postavljeno, prozor će primati fokus pri mapiranju."
 
-#: gtk/gtkwindow.c:619
+#: gtk/gtkwindow.c:623
 msgid "Decorated"
 msgstr "Ukrašen"
 
-#: gtk/gtkwindow.c:620
+#: gtk/gtkwindow.c:624
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Da li upravnik prozorima treba da ukrasi prozor"
 
-#: gtk/gtkwindow.c:635
+#: gtk/gtkwindow.c:639
 msgid "Gravity"
 msgstr "Privlačenje"
 
-#: gtk/gtkwindow.c:636
+#: gtk/gtkwindow.c:640
 msgid "The window gravity of the window"
 msgstr "Privlačenje između prozora"
 

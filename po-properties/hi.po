@@ -44,7 +44,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2004-07-19 21:37+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -138,7 +138,7 @@ msgstr "डिफ़ॉल्ट प्रदर्शक"
 msgid "The default display for GDK"
 msgstr "निर्देशांक प्रदर्शक हेतु इकाईयाँ"
 
-#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:533
+#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:537
 msgid "Screen"
 msgstr "स्क्रीन"
 
@@ -147,121 +147,121 @@ msgstr "स्क्रीन"
 msgid "the GdkScreen for the renderer"
 msgstr "विकल्पों का ट्री व्यू दिखाएँ"
 
-#: gtk/gtkaboutdialog.c:202
+#: gtk/gtkaboutdialog.c:204
 #, fuzzy
 msgid "Program name"
 msgstr "टैग नाम"
 
-#: gtk/gtkaboutdialog.c:203
+#: gtk/gtkaboutdialog.c:205
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:217
+#: gtk/gtkaboutdialog.c:219
 msgid "Program version"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:218
+#: gtk/gtkaboutdialog.c:220
 #, fuzzy
 msgid "The version of the program"
 msgstr "उपकरण-पट्टी की दिशा"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:234
 msgid "Copyright string"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:235
 msgid "Copyright information for the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:250
+#: gtk/gtkaboutdialog.c:252
 #, fuzzy
 msgid "Comments string"
 msgstr "कालम के बीच की दूरी"
 
-#: gtk/gtkaboutdialog.c:251
+#: gtk/gtkaboutdialog.c:253
 msgid "Comments about the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:286
 msgid "Website URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:287
 msgid "The URL for the link to the website of the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:303
 #, fuzzy
 msgid "Website label"
 msgstr "लेबल में फ़ॉन्ट उपयोग करें"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:304
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:320
 msgid "Authors"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:321
 #, fuzzy
 msgid "List of authors of the program"
 msgstr "उपकरण-पट्टी की दिशा"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:337
 msgid "Documenters"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:338
 msgid "List of people documenting the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:354
 msgid "Artists"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:355
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:372
 msgid "Translator credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:371
+#: gtk/gtkaboutdialog.c:373
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:388
 msgid "Logo"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:387
+#: gtk/gtkaboutdialog.c:389
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:404
 #, fuzzy
 msgid "Logo Icon Name"
 msgstr "फ़ॉन्ट नाम"
 
-#: gtk/gtkaboutdialog.c:403
+#: gtk/gtkaboutdialog.c:405
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:410
+#: gtk/gtkaboutdialog.c:412
 #, fuzzy
 msgid "Link Color"
 msgstr "वर्तमान रंग"
 
-#: gtk/gtkaboutdialog.c:411
+#: gtk/gtkaboutdialog.c:413
 msgid "Color of hyperlinks"
 msgstr ""
 
@@ -2558,7 +2558,7 @@ msgstr "एनीमेशन"
 msgid "GdkPixbufAnimation to display"
 msgstr "प्रदर्शित किए जाने वाला Gdk Pixbuf Animation"
 
-#: gtk/gtkimage.c:257 gtk/gtkwindow.c:525
+#: gtk/gtkimage.c:257 gtk/gtkwindow.c:529
 #, fuzzy
 msgid "Icon Name"
 msgstr "फ़ॉन्ट नाम"
@@ -2590,7 +2590,7 @@ msgstr "एनिमेटेड छवि दिखाएँ"
 msgid "Whether images should be shown in menus"
 msgstr "एक अंतहीन लूप में छवियों के अनुक्रम दिखाया जाए या नहीं."
 
-#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:534
+#: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:538
 #, fuzzy
 msgid "The screen where this window will be displayed"
 msgstr "संख्याएं ऐसे प्रदर्शित होंगी."
@@ -4606,7 +4606,7 @@ msgstr "बक्सों के लिए उपयोग में पंक�
 msgid "Whether to display the column"
 msgstr "क्या कालम को प्रदर्शित किया जाना है"
 
-#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:456
+#: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:460
 msgid "Resizable"
 msgstr "आकार बदलने योग्य"
 
@@ -4956,58 +4956,58 @@ msgstr "आकृति अनुपात \"%s\" अज्ञात है"
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkwindow.c:414
+#: gtk/gtkwindow.c:418
 msgid "Window Type"
 msgstr "विंडो प्रकार"
 
-#: gtk/gtkwindow.c:415
+#: gtk/gtkwindow.c:419
 msgid "The type of the window"
 msgstr "विंडो का प्रकार"
 
-#: gtk/gtkwindow.c:423
+#: gtk/gtkwindow.c:427
 msgid "Window Title"
 msgstr "विंडो का शीर्षक"
 
-#: gtk/gtkwindow.c:424
+#: gtk/gtkwindow.c:428
 msgid "The title of the window"
 msgstr "विंडो का शीर्षक"
 
-#: gtk/gtkwindow.c:431
+#: gtk/gtkwindow.c:435
 msgid "Window Role"
 msgstr "विंडो रोल"
 
-#: gtk/gtkwindow.c:432
+#: gtk/gtkwindow.c:436
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 
-#: gtk/gtkwindow.c:439
+#: gtk/gtkwindow.c:443
 msgid "Allow Shrink"
 msgstr "सिकुड़ना स्वीकारें"
 
-#: gtk/gtkwindow.c:441
+#: gtk/gtkwindow.c:445
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
 
-#: gtk/gtkwindow.c:448
+#: gtk/gtkwindow.c:452
 msgid "Allow Grow"
 msgstr "बढ़ना स्वीकारें"
 
-#: gtk/gtkwindow.c:449
+#: gtk/gtkwindow.c:453
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "यदि सत्य है, तो उपयोगकर्ता विंडो का उसके न्यूनतम आकार से बढ़ा कर सकता है"
 
-#: gtk/gtkwindow.c:457
+#: gtk/gtkwindow.c:461
 msgid "If TRUE, users can resize the window"
 msgstr "यदि सत्या है, तो उपयोगकर्ता विंडो के आकार को बदल सकता है"
 
-#: gtk/gtkwindow.c:464
+#: gtk/gtkwindow.c:468
 msgid "Modal"
 msgstr "मोडल"
 
-#: gtk/gtkwindow.c:465
+#: gtk/gtkwindow.c:469
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -5015,138 +5015,138 @@ msgstr ""
 "यदि सत्य है तब विंडो मॉडल होगी (जब यह विंडो ऊपर होगा तब अन्य विंडो का प्रयोग नहीं "
 "किया जा सकेगा)"
 
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:476
 msgid "Window Position"
 msgstr "विंडो की स्थिति"
 
-#: gtk/gtkwindow.c:473
+#: gtk/gtkwindow.c:477
 msgid "The initial position of the window"
 msgstr "विंडो की प्रारंभिक स्थिति"
 
-#: gtk/gtkwindow.c:481
+#: gtk/gtkwindow.c:485
 msgid "Default Width"
 msgstr "डिफ़ॉल्ट चौड़ाई"
 
-#: gtk/gtkwindow.c:482
+#: gtk/gtkwindow.c:486
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "विंडो की डिफाल्ड चौड़ाई, इसका प्रयोग तब किया जाएगा जब विंडो को प्रारंभिक तौर पर "
 "दर्शाया जाएगा"
 
-#: gtk/gtkwindow.c:491
+#: gtk/gtkwindow.c:495
 msgid "Default Height"
 msgstr "डिफ़ॉल्ट ऊँचाई"
 
-#: gtk/gtkwindow.c:492
+#: gtk/gtkwindow.c:496
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "विंडो की डिफ़ॉल्ट ऊंचाई, इसका प्रयोग तब किया जाएगा जब विंडो को प्रारंभिक तौर पर "
 "दर्शाया जाएगा"
 
-#: gtk/gtkwindow.c:501
+#: gtk/gtkwindow.c:505
 #, fuzzy
 msgid "Destroy with Parent"
 msgstr "इस पैरेंट के साथ उप-कार्य सूची कनेक्ट करें (&n)"
 
-#: gtk/gtkwindow.c:502
+#: gtk/gtkwindow.c:506
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
 
-#: gtk/gtkwindow.c:509
+#: gtk/gtkwindow.c:513
 msgid "Icon"
 msgstr "चिह्न"
 
-#: gtk/gtkwindow.c:510
+#: gtk/gtkwindow.c:514
 msgid "Icon for this window"
 msgstr "इस विंडो हेतु चिह्न"
 
-#: gtk/gtkwindow.c:526
+#: gtk/gtkwindow.c:530
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "इस विंडो हेतु चिह्न"
 
-#: gtk/gtkwindow.c:541
+#: gtk/gtkwindow.c:545
 msgid "Is Active"
 msgstr "सक्रिय है"
 
-#: gtk/gtkwindow.c:542
+#: gtk/gtkwindow.c:546
 #, fuzzy
 msgid "Whether the toplevel is the current active window"
 msgstr "क्या एक नया विंडो डिफ़ॉल्ट से अधिकतम हो"
 
-#: gtk/gtkwindow.c:549
+#: gtk/gtkwindow.c:553
 #, fuzzy
 msgid "Focus in Toplevel"
 msgstr "फोकस सूचक तथा विज़ेट के बीच की चौड़ाई, पिक्सल में"
 
-#: gtk/gtkwindow.c:550
+#: gtk/gtkwindow.c:554
 #, fuzzy
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "इस प्रोफ़ाइल का उपयोग करें या नहीं"
 
-#: gtk/gtkwindow.c:557
+#: gtk/gtkwindow.c:561
 #, fuzzy
 msgid "Type hint"
 msgstr "संकेत प्राप्त करें"
 
-#: gtk/gtkwindow.c:558
+#: gtk/gtkwindow.c:562
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
 
-#: gtk/gtkwindow.c:566
+#: gtk/gtkwindow.c:570
 #, fuzzy
 msgid "Skip taskbar"
 msgstr "Name=कार्यपट्टी"
 
-#: gtk/gtkwindow.c:567
+#: gtk/gtkwindow.c:571
 msgid "TRUE if the window should not be in the task bar."
 msgstr ""
 
-#: gtk/gtkwindow.c:574
+#: gtk/gtkwindow.c:578
 #, fuzzy
 msgid "Skip pager"
 msgstr "Name=पेजर"
 
-#: gtk/gtkwindow.c:575
+#: gtk/gtkwindow.c:579
 #, fuzzy
 msgid "TRUE if the window should not be in the pager."
 msgstr "क्या टागल बटन दबाया है या नहीं"
 
-#: gtk/gtkwindow.c:589
+#: gtk/gtkwindow.c:593
 msgid "Accept focus"
 msgstr "फोकस को स्वीकार करें"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:594
 msgid "TRUE if the window should receive the input focus."
 msgstr ""
 
-#: gtk/gtkwindow.c:604
+#: gtk/gtkwindow.c:608
 #, fuzzy
 msgid "Focus on map"
 msgstr "मुझपर क्लिक करें"
 
-#: gtk/gtkwindow.c:605
+#: gtk/gtkwindow.c:609
 #, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "क्या टागल बटन दबाया है या नहीं"
 
-#: gtk/gtkwindow.c:619
+#: gtk/gtkwindow.c:623
 msgid "Decorated"
 msgstr ""
 
-#: gtk/gtkwindow.c:620
+#: gtk/gtkwindow.c:624
 #, fuzzy
 msgid "Whether the window should be decorated by the window manager"
 msgstr "क्या मेनू-पट्टी डिफ़ॉल्ट से दिखाई दे."
 
-#: gtk/gtkwindow.c:635
+#: gtk/gtkwindow.c:639
 msgid "Gravity"
 msgstr "ग्रेविटी"
 
-#: gtk/gtkwindow.c:636
+#: gtk/gtkwindow.c:640
 msgid "The window gravity of the window"
 msgstr ""
 

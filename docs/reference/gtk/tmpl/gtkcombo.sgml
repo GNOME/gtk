@@ -83,6 +83,9 @@ items.</title>
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkCombo ##### -->
 <para>
 The #GtkFixedChild-struct struct contains the following fields.

@@ -42,6 +42,9 @@ data commonly stored in X window properties.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkAtom ##### -->
 <para>
 An opaque type representing a string as an index into a table

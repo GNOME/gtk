@@ -29,6 +29,9 @@ gtk_menu_shell_append().
 </variablelist>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkHSeparator ##### -->
 <para>
 The #GtkHSeparator-struct struct contains private data only, and

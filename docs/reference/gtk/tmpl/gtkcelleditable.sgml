@@ -15,6 +15,9 @@ to be usable when editing the contents of a #GtkTreeView cell.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkCellEditable ##### -->
 <para>
 

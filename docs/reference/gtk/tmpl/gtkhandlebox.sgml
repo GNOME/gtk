@@ -36,6 +36,9 @@ so the snap edge should be set to %GTK_POS_BOTTOM.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkHandleBox ##### -->
 <para>
 The #GtkHandleBox-struct struct contains the following fields.

@@ -68,6 +68,9 @@ gtk_widget_set_size_request (frame2, 50, -1);
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkPaned ##### -->
 <para>
 </para>

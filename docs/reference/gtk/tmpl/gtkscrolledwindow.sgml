@@ -67,6 +67,9 @@ your own scrolling with #GtkScrollbar and for example a #GtkTable.
 #GtkViewport, #GtkAdjustment, #GtkWidgetClass
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkScrolledWindow ##### -->
 <para>
 There are no public fields in the #GtkScrolledWindow struct; it should 

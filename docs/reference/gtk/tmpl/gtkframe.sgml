@@ -18,6 +18,9 @@ label can be controlled with gtk_frame_set_label_align().
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkFrame ##### -->
 <para>
 

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2005-01-14 23:13+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -445,75 +445,75 @@ msgstr "PNG 文本块 %s 的值无法转换为 ISO-8859-1 编码。"
 msgid "The PNG image format"
 msgstr "PNG 图像格式"
 
-#: gdk-pixbuf/io-pnm.c:249
+#: gdk-pixbuf/io-pnm.c:252
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "PNM 载入模块找不到要找的整数"
 
-#: gdk-pixbuf/io-pnm.c:281
+#: gdk-pixbuf/io-pnm.c:284
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM 文件的第一个字节不正确"
 
-#: gdk-pixbuf/io-pnm.c:311
+#: gdk-pixbuf/io-pnm.c:314
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNG 文件不是以可识别的 PNM 副格式存储的"
 
-#: gdk-pixbuf/io-pnm.c:336
+#: gdk-pixbuf/io-pnm.c:339
 msgid "PNM file has an image width of 0"
 msgstr "PNM 文件的图像宽度为 0"
 
-#: gdk-pixbuf/io-pnm.c:357
+#: gdk-pixbuf/io-pnm.c:360
 msgid "PNM file has an image height of 0"
 msgstr "PNM 文件的图像高度为 0"
 
-#: gdk-pixbuf/io-pnm.c:380
+#: gdk-pixbuf/io-pnm.c:383
 msgid "Maximum color value in PNM file is 0"
 msgstr "PNM 文件中最大可用颜色数为 0"
 
-#: gdk-pixbuf/io-pnm.c:388
+#: gdk-pixbuf/io-pnm.c:391
 msgid "Maximum color value in PNM file is too large"
 msgstr "PNM 文件中最大可用颜色数过大"
 
-#: gdk-pixbuf/io-pnm.c:396
+#: gdk-pixbuf/io-pnm.c:399
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "无法处理最大可用颜色数大于 255 的 PNM 文件"
 
-#: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
+#: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
 msgstr "原始 PNM 图像类型无效"
 
-#: gdk-pixbuf/io-pnm.c:555 gdk-pixbuf/io-pnm.c:597
+#: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
 msgid "PNM image format is invalid"
 msgstr "PNM 图像格式无效"
 
-#: gdk-pixbuf/io-pnm.c:656
+#: gdk-pixbuf/io-pnm.c:663
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM 载入程序不支持这种 PNM 副格式"
 
-#: gdk-pixbuf/io-pnm.c:711
+#: gdk-pixbuf/io-pnm.c:718
 msgid "Premature end-of-file encountered"
 msgstr "文件过早结束"
 
-#: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
+#: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "原始 PNM 格式在样本数据前精确需要一个空格"
 
-#: gdk-pixbuf/io-pnm.c:770
+#: gdk-pixbuf/io-pnm.c:777
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "无法分配内存来载入 PNM 图像"
 
-#: gdk-pixbuf/io-pnm.c:820
+#: gdk-pixbuf/io-pnm.c:827
 msgid "Insufficient memory to load PNM context struct"
 msgstr "内存不足以载入 PNM 的上下文结构"
 
-#: gdk-pixbuf/io-pnm.c:871
+#: gdk-pixbuf/io-pnm.c:878
 msgid "Unexpected end of PNM image data"
 msgstr "PNM 图像数据过早结束"
 
-#: gdk-pixbuf/io-pnm.c:1003
+#: gdk-pixbuf/io-pnm.c:1010
 msgid "Insufficient memory to load PNM file"
 msgstr "内存不足以载入 PNM 文件"
 
-#: gdk-pixbuf/io-pnm.c:1082
+#: gdk-pixbuf/io-pnm.c:1089
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "PNM/PBM/PGM/PPM 图像格式族"
 
@@ -800,46 +800,46 @@ msgstr "颜色"
 msgid "Make X calls synchronous"
 msgstr "同步调用 X"
 
-#: gtk/gtkaboutdialog.c:268 gtk/gtkaboutdialog.c:2014
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
 msgid "License"
 msgstr "许可"
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:271
 msgid "The license of the program"
 msgstr "程序的许可协议"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:489
+#: gtk/gtkaboutdialog.c:491
 msgid "_Credits"
 msgstr "致谢(_C)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:498
+#: gtk/gtkaboutdialog.c:500
 msgid "_License"
 msgstr "许可(_L)"
 
-#: gtk/gtkaboutdialog.c:720
+#: gtk/gtkaboutdialog.c:729
 #, c-format
 msgid "About %s"
 msgstr "关于 %s"
 
-#: gtk/gtkaboutdialog.c:1942
+#: gtk/gtkaboutdialog.c:1951
 msgid "Credits"
 msgstr "致谢"
 
-#: gtk/gtkaboutdialog.c:1968
+#: gtk/gtkaboutdialog.c:1977
 msgid "Written by"
 msgstr "编写者"
 
-#: gtk/gtkaboutdialog.c:1971
+#: gtk/gtkaboutdialog.c:1980
 msgid "Documented by"
 msgstr "文档撰写者"
 
-#: gtk/gtkaboutdialog.c:1983
+#: gtk/gtkaboutdialog.c:1992
 msgid "Translated by"
 msgstr "翻译者"
 
-#: gtk/gtkaboutdialog.c:1987
+#: gtk/gtkaboutdialog.c:1996
 msgid "Artwork by"
 msgstr "美工"
 
@@ -1045,12 +1045,12 @@ msgid "Select A File"
 msgstr "选择文件"
 
 #: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1283
-#: gtk/gtkpathbar.c:982
+#: gtk/gtkpathbar.c:986
 msgid "Home"
 msgstr "主文件夹"
 
 #: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1310
-#: gtk/gtkpathbar.c:984
+#: gtk/gtkpathbar.c:988
 msgid "Desktop"
 msgstr "桌面"
 
@@ -1176,99 +1176,99 @@ msgid "Create Fo_lder"
 msgstr "创建文件夹(_L)"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3502
+#: gtk/gtkfilechooserdefault.c:3505
 msgid "_Name:"
 msgstr "名称(_N)："
 
-#: gtk/gtkfilechooserdefault.c:3542
+#: gtk/gtkfilechooserdefault.c:3545
 msgid "_Browse for other folders"
 msgstr "浏览其它文件夹(_B)"
 
-#: gtk/gtkfilechooserdefault.c:3792
+#: gtk/gtkfilechooserdefault.c:3795
 msgid "Save in _folder:"
 msgstr "保存于文件夹(_F)："
 
-#: gtk/gtkfilechooserdefault.c:3794
+#: gtk/gtkfilechooserdefault.c:3797
 msgid "Create in _folder:"
 msgstr "创建于文件夹(_F)："
 
-#: gtk/gtkfilechooserdefault.c:4734
+#: gtk/gtkfilechooserdefault.c:4737
 msgid "Cannot change to folder because it is not local"
 msgstr "无法更改为文件夹，因为该文件夹并非本地"
 
-#: gtk/gtkfilechooserdefault.c:5249
+#: gtk/gtkfilechooserdefault.c:5253
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "快捷方式 %s 不存在"
 
-#: gtk/gtkfilechooserdefault.c:5713
+#: gtk/gtkfilechooserdefault.c:5717
 #, c-format
 msgid "Could not mount %s"
 msgstr "无法挂载 %s"
 
-#: gtk/gtkfilechooserdefault.c:6006
+#: gtk/gtkfilechooserdefault.c:6010
 msgid "Type name of new folder"
 msgstr "输入新建文件夹的类型"
 
-#: gtk/gtkfilechooserdefault.c:6048
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d 字节"
 
-#: gtk/gtkfilechooserdefault.c:6050
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6052
+#: gtk/gtkfilechooserdefault.c:6056
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6058
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6106
+#: gtk/gtkfilechooserdefault.c:6110
 msgid "Today"
 msgstr "今天"
 
-#: gtk/gtkfilechooserdefault.c:6108
+#: gtk/gtkfilechooserdefault.c:6112
 msgid "Yesterday"
 msgstr "昨天"
 
-#: gtk/gtkfilechooserdefault.c:6119
+#: gtk/gtkfilechooserdefault.c:6123
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/gtkfilechooserdefault.c:6189
+#: gtk/gtkfilechooserdefault.c:6193
 msgid "Cannot change folder"
 msgstr "无法更改文件夹"
 
-#: gtk/gtkfilechooserdefault.c:6190
+#: gtk/gtkfilechooserdefault.c:6194
 msgid "The folder you specified is an invalid path."
 msgstr "您所指定的文件夹路径无效。"
 
-#: gtk/gtkfilechooserdefault.c:6229
+#: gtk/gtkfilechooserdefault.c:6233
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "无法根据“%s”和“%s”生成文件名"
 
-#: gtk/gtkfilechooserdefault.c:6265
+#: gtk/gtkfilechooserdefault.c:6269
 msgid "Could not select item"
 msgstr "无法选择项目"
 
-#: gtk/gtkfilechooserdefault.c:6305
+#: gtk/gtkfilechooserdefault.c:6309
 msgid "Open Location"
 msgstr "打开位置"
 
-#: gtk/gtkfilechooserdefault.c:6312
+#: gtk/gtkfilechooserdefault.c:6316
 msgid "Save in Location"
 msgstr "保存于位置"
 
-#: gtk/gtkfilechooserdefault.c:6336
+#: gtk/gtkfilechooserdefault.c:6340
 msgid "_Location:"
 msgstr "位置(_L)："
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-08 05:46+0000\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2005-02-08 06:51+0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -826,46 +826,46 @@ msgstr "LLIWIAU"
 msgid "Make X calls synchronous"
 msgstr "Gwneud galwadau X yn gydamserol"
 
-#: gtk/gtkaboutdialog.c:268 gtk/gtkaboutdialog.c:2014
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
 msgid "License"
 msgstr "Trwydded"
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:271
 msgid "The license of the program"
 msgstr "Trwydded y rhaglen"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:489
+#: gtk/gtkaboutdialog.c:491
 msgid "_Credits"
 msgstr "_Diolchiadau"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:498
+#: gtk/gtkaboutdialog.c:500
 msgid "_License"
 msgstr "_Trwydded"
 
-#: gtk/gtkaboutdialog.c:720
+#: gtk/gtkaboutdialog.c:729
 #, c-format
 msgid "About %s"
 msgstr "Ynglyn â %s"
 
-#: gtk/gtkaboutdialog.c:1942
+#: gtk/gtkaboutdialog.c:1951
 msgid "Credits"
 msgstr "Diolchiadau"
 
-#: gtk/gtkaboutdialog.c:1968
+#: gtk/gtkaboutdialog.c:1977
 msgid "Written by"
 msgstr "Ysgrifennwyd gan"
 
-#: gtk/gtkaboutdialog.c:1971
+#: gtk/gtkaboutdialog.c:1980
 msgid "Documented by"
 msgstr "Dogfennwyd gan"
 
-#: gtk/gtkaboutdialog.c:1983
+#: gtk/gtkaboutdialog.c:1992
 msgid "Translated by"
 msgstr "Cyfieithwyd gan"
 
-#: gtk/gtkaboutdialog.c:1987
+#: gtk/gtkaboutdialog.c:1996
 msgid "Artwork by"
 msgstr "Graffeg gan"
 
@@ -916,6 +916,11 @@ msgstr "calendar:MY"
 #: gtk/gtkcalendar.c:710
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
+
+#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
+#, c-format
+msgid "progress bar label|%d %%"
+msgstr "label bar cynnydd|%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -1075,12 +1080,12 @@ msgid "Select A File"
 msgstr "Dewiswch Ffeil"
 
 #: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1283
-#: gtk/gtkpathbar.c:982
+#: gtk/gtkpathbar.c:986
 msgid "Home"
 msgstr "Cartref"
 
 #: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1310
-#: gtk/gtkpathbar.c:984
+#: gtk/gtkpathbar.c:988
 msgid "Desktop"
 msgstr "Penbwrdd"
 
@@ -1206,41 +1211,41 @@ msgid "Create Fo_lder"
 msgstr "Creu _Plygell"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3502
+#: gtk/gtkfilechooserdefault.c:3505
 msgid "_Name:"
 msgstr "_Enw:"
 
-#: gtk/gtkfilechooserdefault.c:3542
+#: gtk/gtkfilechooserdefault.c:3545
 msgid "_Browse for other folders"
 msgstr "_Pori am blygellau eraill"
 
-#: gtk/gtkfilechooserdefault.c:3792
+#: gtk/gtkfilechooserdefault.c:3795
 msgid "Save in _folder:"
 msgstr "Arbed mewn _plygell:"
 
-#: gtk/gtkfilechooserdefault.c:3794
+#: gtk/gtkfilechooserdefault.c:3797
 msgid "Create in _folder:"
 msgstr "Creu mewn _plygell:"
 
-#: gtk/gtkfilechooserdefault.c:4734
+#: gtk/gtkfilechooserdefault.c:4737
 msgid "Cannot change to folder because it is not local"
 msgstr "Methwyd newid i'r blygell am nad yw'n lleol"
 
-#: gtk/gtkfilechooserdefault.c:5249
+#: gtk/gtkfilechooserdefault.c:5253
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Nid yw'r byrlwybr %s yn bodoli"
 
-#: gtk/gtkfilechooserdefault.c:5713
+#: gtk/gtkfilechooserdefault.c:5717
 #, c-format
 msgid "Could not mount %s"
 msgstr "Methu â gosod %s"
 
-#: gtk/gtkfilechooserdefault.c:6006
+#: gtk/gtkfilechooserdefault.c:6010
 msgid "Type name of new folder"
 msgstr "Teipiwch enw'r plygell newydd"
 
-#: gtk/gtkfilechooserdefault.c:6048
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1249,59 +1254,59 @@ msgstr[1] "%d beit"
 msgstr[2] "%d feit"
 msgstr[3] "%d beit"
 
-#: gtk/gtkfilechooserdefault.c:6050
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f C"
 
-#: gtk/gtkfilechooserdefault.c:6052
+#: gtk/gtkfilechooserdefault.c:6056
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6058
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6106
+#: gtk/gtkfilechooserdefault.c:6110
 msgid "Today"
 msgstr "Heddiw"
 
-#: gtk/gtkfilechooserdefault.c:6108
+#: gtk/gtkfilechooserdefault.c:6112
 msgid "Yesterday"
 msgstr "Ddoe"
 
-#: gtk/gtkfilechooserdefault.c:6119
+#: gtk/gtkfilechooserdefault.c:6123
 msgid "Unknown"
 msgstr "Anhysbys"
 
-#: gtk/gtkfilechooserdefault.c:6189
+#: gtk/gtkfilechooserdefault.c:6193
 msgid "Cannot change folder"
 msgstr "Methu newid plygell"
 
-#: gtk/gtkfilechooserdefault.c:6190
+#: gtk/gtkfilechooserdefault.c:6194
 msgid "The folder you specified is an invalid path."
 msgstr "Mae llwybr y blygell ddewisoch yn un annilys."
 
-#: gtk/gtkfilechooserdefault.c:6229
+#: gtk/gtkfilechooserdefault.c:6233
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Methu adeiladu enw ffeil o '%s' a '%s'"
 
-#: gtk/gtkfilechooserdefault.c:6265
+#: gtk/gtkfilechooserdefault.c:6269
 msgid "Could not select item"
 msgstr "Methwyd dewis eitem"
 
-#: gtk/gtkfilechooserdefault.c:6305
+#: gtk/gtkfilechooserdefault.c:6309
 msgid "Open Location"
 msgstr "Agor Lleoliad"
 
-#: gtk/gtkfilechooserdefault.c:6312
+#: gtk/gtkfilechooserdefault.c:6316
 msgid "Save in Location"
 msgstr "Cadw mewn Lleoliad"
 
-#: gtk/gtkfilechooserdefault.c:6336
+#: gtk/gtkfilechooserdefault.c:6340
 msgid "_Location:"
 msgstr "_Lleoliad: "
 
@@ -2217,9 +2222,6 @@ msgstr "Modd Mewnbwn X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Methwyd cyrchu gwybodaeth ar gyfer y ffeil '%s': %s"
-
-#~ msgid "progress bar label|%d %%"
-#~ msgstr "label bar cynnydd|%d %%"
 
 #~ msgid "Error getting information for '%s'"
 #~ msgstr "Gwall wrth gyrchu gwybodaeth ar gyfer '%s'"
@@ -5676,4 +5678,3 @@ msgstr "Methwyd cyrchu gwybodaeth ar gyfer y ffeil '%s': %s"
 #~ msgstr ""
 #~ "Roedd gan ffrÃ¢m cyntaf y ddelwedd GIF y modd gwaredu 'dychwelyd i'r "
 #~ "blaenorol'"
-

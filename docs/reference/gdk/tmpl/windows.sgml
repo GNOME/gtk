@@ -18,6 +18,9 @@ For example, each #GtkButton has a #GdkWindow associated with it.
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkWindow ##### -->
 <para>
 An opaque structure representing an onscreen drawable.

@@ -56,14 +56,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-6.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-22 07:40+0100\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2005-02-25 12:56+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <gu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"Plural-Forms: Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"\n"
 "X-Generator: KBabel 1.9.1\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
@@ -80,7 +81,8 @@ msgstr "ચિત્ર ફાઈલ '%s'માં કોઇ માહિતી 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
 #: gdk-pixbuf/gdk-pixbuf-io.c:1110 tests/testfilechooser.c:244
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "ચિત્ર %s લાવવામાં નિષ્ફળ, કારણ જાણીતું નથી, સંભવિત રીતે એક બગડેલી ચિત્ર ફાઈલ છે"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:241
@@ -88,7 +90,8 @@ msgstr "ચિત્ર %s લાવવામાં નિષ્ફળ, કા�
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr "એનીમેશન %s લાવવામાં નિષ્ફળ, કારણ જાણીતું નથી, સંભવિત રીતે એક બગડેલી એનીમેશન ફાઈલ છે"
+msgstr ""
+"એનીમેશન %s લાવવામાં નિષ્ફળ, કારણ જાણીતું નથી, સંભવિત રીતે એક બગડેલી એનીમેશન ફાઈલ છે"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:444
 #, c-format
@@ -155,7 +158,8 @@ msgstr "લખવા માટે '%s' ખોલવામાં નિષ્ફ�
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr "ચિત્ર લખતી વખતે %s બંધ કરવામાં નિષ્ફળ, કદાચ બધી માહિતીનો સંગ્રહ નહિ થયો હોય: %s"
+msgstr ""
+"ચિત્ર લખતી વખતે %s બંધ કરવામાં નિષ્ફળ, કદાચ બધી માહિતીનો સંગ્રહ નહિ થયો હોય: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1853 gdk-pixbuf/gdk-pixbuf-io.c:1903
 msgid "Insufficient memory to save image into a buffer"
@@ -172,8 +176,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"આંતરિક ભૂલ: ચિત્ર લાવવા માટેનું '%s' મોડ્યુલ ચિત્ર લાવવા માટેની શરૂઆત કરવામાં નિષ્ફળ "
-"પરંતુ નિષ્ફળતા માટે કોઈ કારણ આપતુ નથી"
+"આંતરિક ભૂલ: ચિત્ર લાવવા માટેનું '%s' મોડ્યુલ ચિત્ર લાવવા માટેની શરૂઆત કરવામાં નિષ્ફળ પરંતુ "
+"નિષ્ફળતા માટે કોઈ કારણ આપતુ નથી"
 
 #: gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
@@ -359,7 +363,8 @@ msgstr "JPEG ફાઈલનાં(%s) અર્થઘટનમાં ભૂલ"
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr "ચિત્રને લાવવા માટે પૂરતી મેમરી નથી, મેમરીને મુક્ત કરવા કોઈક કાર્યક્રમમાંથી બહાર નીકળો"
+msgstr ""
+"ચિત્રને લાવવા માટે પૂરતી મેમરી નથી, મેમરીને મુક્ત કરવા કોઈક કાર્યક્રમમાંથી બહાર નીકળો"
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
@@ -382,8 +387,10 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEGની ગુણવત્તા માટેની કિંમત 0 થી 100 ની વચ્ચે હોવી જરૂરી છે; કિંમત '%d' ચાલશે નહિ."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"JPEGની ગુણવત્તા માટેની કિંમત 0 થી 100 ની વચ્ચે હોવી જરૂરી છે; કિંમત '%d' ચાલશે નહિ."
 
 #: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
@@ -482,8 +489,10 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ચિત્ર ફાઈલને વાંચવામાં ઘાતક ભૂલ: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG લેખનના કટકાઓ માટેની કીમાં ઓછામાં ઓછા ૧ અને વધારેમાં વધારે ૭૯ અક્ષરો હોવા જરૂરી છે."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr ""
+"PNG લેખનના કટકાઓ માટેની કીમાં ઓછામાં ઓછા ૧ અને વધારેમાં વધારે ૭૯ અક્ષરો હોવા જરૂરી છે."
 
 #: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -492,7 +501,8 @@ msgstr "PNG લેખનના કટકાઓ માટેની કી ASCII �
 #: gdk-pixbuf/io-png.c:854
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "PNG લેખનના કટકા %s માટેની કિંમતને ISO-8859-1 સંગ્રહપધ્ધતિમાં રૂપાંતરિત કરી શકાતુ નથી."
+msgstr ""
+"PNG લેખનના કટકા %s માટેની કિંમતને ISO-8859-1 સંગ્રહપધ્ધતિમાં રૂપાંતરિત કરી શકાતુ નથી."
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -853,46 +863,46 @@ msgstr "COLORS"
 msgid "Make X calls synchronous"
 msgstr "X કોલોને સુમેળ બનાવો"
 
-#: gtk/gtkaboutdialog.c:268 gtk/gtkaboutdialog.c:2014
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
 msgid "License"
 msgstr "લાઈસન્સ"
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:271
 msgid "The license of the program"
 msgstr "પ્રવેશના સમાવિષ્ટો"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:489
+#: gtk/gtkaboutdialog.c:491
 msgid "_Credits"
 msgstr "યશ"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:498
+#: gtk/gtkaboutdialog.c:500
 msgid "_License"
 msgstr "લાયસન્સ"
 
-#: gtk/gtkaboutdialog.c:720
+#: gtk/gtkaboutdialog.c:729
 #, c-format
 msgid "About %s"
 msgstr "વિશે %s"
 
-#: gtk/gtkaboutdialog.c:1942
+#: gtk/gtkaboutdialog.c:1951
 msgid "Credits"
 msgstr "યશ"
 
-#: gtk/gtkaboutdialog.c:1968
+#: gtk/gtkaboutdialog.c:1977
 msgid "Written by"
 msgstr "લખાયેલ"
 
-#: gtk/gtkaboutdialog.c:1971
+#: gtk/gtkaboutdialog.c:1980
 msgid "Documented by"
 msgstr "દસ્તાવેજીત"
 
-#: gtk/gtkaboutdialog.c:1983
+#: gtk/gtkaboutdialog.c:1992
 msgid "Translated by"
 msgstr "અનુવાદિત"
 
-#: gtk/gtkaboutdialog.c:1987
+#: gtk/gtkaboutdialog.c:1996
 msgid "Artwork by"
 msgstr "કલાકામ"
 
@@ -1235,102 +1245,102 @@ msgid "Create Fo_lder"
 msgstr "ફોલ્ડર બનાવો (_F)"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3502
+#: gtk/gtkfilechooserdefault.c:3505
 msgid "_Name:"
 msgstr "નામ: (_N)"
 
-#: gtk/gtkfilechooserdefault.c:3542
+#: gtk/gtkfilechooserdefault.c:3545
 msgid "_Browse for other folders"
 msgstr "બીજા ફોલ્ડરો માટે શોધો (_B)"
 
-#: gtk/gtkfilechooserdefault.c:3792
+#: gtk/gtkfilechooserdefault.c:3795
 msgid "Save in _folder:"
 msgstr "ફોલ્ડરમાં સંગ્રહ કરો: (_F)"
 
-#: gtk/gtkfilechooserdefault.c:3794
+#: gtk/gtkfilechooserdefault.c:3797
 msgid "Create in _folder:"
 msgstr "ફોલ્ડર બનાવો (_F)"
 
-#: gtk/gtkfilechooserdefault.c:4734
+#: gtk/gtkfilechooserdefault.c:4737
 msgid "Cannot change to folder because it is not local"
 msgstr "તમે સ્પષ્ટ કરેલ ફોલ્ડરમાં બદલી શકાતુ નથી કારણકે તે અયોગ્ય પથ છે."
 
-#: gtk/gtkfilechooserdefault.c:5249
+#: gtk/gtkfilechooserdefault.c:5253
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "ટુંકાણ %s અસ્તિત્વમાં નથી"
 
-#: gtk/gtkfilechooserdefault.c:5713
+#: gtk/gtkfilechooserdefault.c:5717
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s માઉન્ટ કરી શક્યા નહિં"
 
-#: gtk/gtkfilechooserdefault.c:6006
+#: gtk/gtkfilechooserdefault.c:6010
 msgid "Type name of new folder"
 msgstr "નવા ફોલ્ડરના પ્રકારનુ નામ"
 
-#: gtk/gtkfilechooserdefault.c:6048
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d બાઇટ"
 msgstr[1] "%d બાઇટ"
 
-#: gtk/gtkfilechooserdefault.c:6050
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6052
+#: gtk/gtkfilechooserdefault.c:6056
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6058
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
 # #-#-#-#-#  libgnomeui.HEAD.hi.po (libgnomeui-2.0.hi)  #-#-#-#-#
 # libgnomeui/gnome-file-entry.c:216
-#: gtk/gtkfilechooserdefault.c:6106
+#: gtk/gtkfilechooserdefault.c:6110
 msgid "Today"
 msgstr "આજે"
 
-#: gtk/gtkfilechooserdefault.c:6108
+#: gtk/gtkfilechooserdefault.c:6112
 msgid "Yesterday"
 msgstr "ગઇકાલે"
 
-#: gtk/gtkfilechooserdefault.c:6119
+#: gtk/gtkfilechooserdefault.c:6123
 msgid "Unknown"
 msgstr "અજાણીતુ"
 
-#: gtk/gtkfilechooserdefault.c:6189
+#: gtk/gtkfilechooserdefault.c:6193
 msgid "Cannot change folder"
 msgstr "ફોલ્ડર બદલી શકતા નથી"
 
-#: gtk/gtkfilechooserdefault.c:6190
+#: gtk/gtkfilechooserdefault.c:6194
 msgid "The folder you specified is an invalid path."
 msgstr "તમે સ્પષ્ટ કરેલ ફોલ્ડર અયોગ્ય પથ છે."
 
-#: gtk/gtkfilechooserdefault.c:6229
+#: gtk/gtkfilechooserdefault.c:6233
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "'%s' અને '%s' માંથી ફાઈલ નામ બનાવી શક્યા નહિં"
 
-#: gtk/gtkfilechooserdefault.c:6265
+#: gtk/gtkfilechooserdefault.c:6269
 msgid "Could not select item"
 msgstr "વસ્તુ પસંદ કરી શક્યા નહિં"
 
-#: gtk/gtkfilechooserdefault.c:6305
+#: gtk/gtkfilechooserdefault.c:6309
 msgid "Open Location"
 msgstr "જગ્યા ખોલો"
 
-#: gtk/gtkfilechooserdefault.c:6312
+#: gtk/gtkfilechooserdefault.c:6316
 msgid "Save in Location"
 msgstr "જગ્યા ખોલો"
 
-#: gtk/gtkfilechooserdefault.c:6336
+#: gtk/gtkfilechooserdefault.c:6340
 msgid "_Location:"
 msgstr "જગ્યા: (_L)"
 
@@ -1376,7 +1386,8 @@ msgstr "ફાઈલનું નામ બદલો(_R)"
 
 #: gtk/gtkfilesel.c:1445
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ફોલ્ડરનું નામ \"%s\" સંકેતોનો સમાવેશ કરે છે જેની આ ફાઈલનામમાં પરવાનગી નથી"
 
 #: gtk/gtkfilesel.c:1447
@@ -1541,7 +1552,8 @@ msgstr "ફાઈલ '%s' માટેની જાણકારી મેળવ�
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr "નામ \"%s\" યોગ્ય નથી, કારણ કે તે \"%s\" અક્ષર ધરાવે છે.મહેરબાની કરી બીજું નામ વાપરો."
+msgstr ""
+"નામ \"%s\" યોગ્ય નથી, કારણ કે તે \"%s\" અક્ષર ધરાવે છે.મહેરબાની કરી બીજું નામ વાપરો."
 
 #: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1007
 #, c-format
@@ -2228,4 +2240,3 @@ msgstr "X ઈનપુટ પદ્ધતિ"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ફાઈલ '%s' માટેની જાણકારી મેળવી શકાતી નથી: %s"
-

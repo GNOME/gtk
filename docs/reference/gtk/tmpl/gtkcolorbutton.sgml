@@ -15,6 +15,9 @@ selection dialog to change the color. It is suitable widget for selecting a colo
 #GtkColorSelectionDialog, #GtkFontButton
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkColorButton ##### -->
 <para>
 

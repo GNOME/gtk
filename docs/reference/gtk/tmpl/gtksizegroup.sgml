@@ -50,6 +50,9 @@ reached from the widget by a chain of size groups of type
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkSizeGroup ##### -->
 <para>
 

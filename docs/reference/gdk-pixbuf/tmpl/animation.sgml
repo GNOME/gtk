@@ -20,6 +20,9 @@ Animated images.
     #GdkPixbufLoader
   </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkPixbufAnimation ##### -->
   <para>
     This object describes an animation.

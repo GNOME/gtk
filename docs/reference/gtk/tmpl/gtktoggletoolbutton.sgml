@@ -40,6 +40,9 @@ A GtkToolItem containing a toggle button
   </varlistentry>
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkToggleToolButton ##### -->
 <para>
   The #GtkToggleToolButton struct contains only private data and

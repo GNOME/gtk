@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2004-04-09 17:33+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -530,91 +530,91 @@ msgid "The PNG image format"
 msgstr "PNG resim biçimi"
 
 # gdk-pixbuf/io-pnm.c:254
-#: gdk-pixbuf/io-pnm.c:249
+#: gdk-pixbuf/io-pnm.c:252
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "PNM yükleyici tamsayı bulmayı bekledi, ancak bulamadı"
 
 # gdk-pixbuf/io-pnm.c:285
-#: gdk-pixbuf/io-pnm.c:281
+#: gdk-pixbuf/io-pnm.c:284
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM dosyası geçersiz giriş baytına sahip"
 
 # gdk-pixbuf/io-pnm.c:315
-#: gdk-pixbuf/io-pnm.c:311
+#: gdk-pixbuf/io-pnm.c:314
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNM dosyası bilinen bir PNM alt biçimi olarak tanınmadı"
 
 # gdk-pixbuf/io-pnm.c:340
-#: gdk-pixbuf/io-pnm.c:336
+#: gdk-pixbuf/io-pnm.c:339
 msgid "PNM file has an image width of 0"
 msgstr "PNM dosyasındaki resim genişliği 0"
 
 # gdk-pixbuf/io-pnm.c:361
-#: gdk-pixbuf/io-pnm.c:357
+#: gdk-pixbuf/io-pnm.c:360
 msgid "PNM file has an image height of 0"
 msgstr "PNM dosyasındaki resim yüksekliği 0"
 
 # gdk-pixbuf/io-pnm.c:384
-#: gdk-pixbuf/io-pnm.c:380
+#: gdk-pixbuf/io-pnm.c:383
 msgid "Maximum color value in PNM file is 0"
 msgstr "PNM dosyasındaki en yüksek renk değeri 0"
 
 # gdk-pixbuf/io-pnm.c:384
-#: gdk-pixbuf/io-pnm.c:388
+#: gdk-pixbuf/io-pnm.c:391
 msgid "Maximum color value in PNM file is too large"
 msgstr "PNM dosyasındaki en yüksek renk değeri çok büyük"
 
-#: gdk-pixbuf/io-pnm.c:396
+#: gdk-pixbuf/io-pnm.c:399
 #, fuzzy
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "Renk değeri 255'den büyük olan PNM dosyaları işlenemiyor"
 
 # gdk-pixbuf/io-pnm.c:423 gdk-pixbuf/io-pnm.c:451 gdk-pixbuf/io-pnm.c:483
-#: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
+#: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
 msgstr "Temel PNM resim türü geçersiz"
 
 # gdk-pixbuf/io-pnm.c:543 gdk-pixbuf/io-pnm.c:585
-#: gdk-pixbuf/io-pnm.c:555 gdk-pixbuf/io-pnm.c:597
+#: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
 msgid "PNM image format is invalid"
 msgstr "PNM resim biçimi geçersiz"
 
 # gdk-pixbuf/io-pnm.c:644
-#: gdk-pixbuf/io-pnm.c:656
+#: gdk-pixbuf/io-pnm.c:663
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM resim yükleyicisi bu alt biçimi desteklemiyor"
 
-#: gdk-pixbuf/io-pnm.c:711
+#: gdk-pixbuf/io-pnm.c:718
 msgid "Premature end-of-file encountered"
 msgstr "Erken dosya sonu ile karşılaşıldı"
 
-#: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
+#: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 "Temel PNM biçimleri örnek veri öncesinde tam olarak bir boşluk gerektirir"
 
 # gdk-pixbuf/io-xpm.c:1321
-#: gdk-pixbuf/io-pnm.c:770
+#: gdk-pixbuf/io-pnm.c:777
 #, fuzzy
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "PNM resminin yüklenebilmesi için bellek ayrılamadı"
 
 # gdk-pixbuf/io-pnm.c:920
-#: gdk-pixbuf/io-pnm.c:820
+#: gdk-pixbuf/io-pnm.c:827
 msgid "Insufficient memory to load PNM context struct"
 msgstr "PNM içerik yapısını yüklemek için yetersiz bellek"
 
 # gdk-pixbuf/io-pnm.c:818
-#: gdk-pixbuf/io-pnm.c:871
+#: gdk-pixbuf/io-pnm.c:878
 msgid "Unexpected end of PNM image data"
 msgstr "Beklenmeyen PNM resim verisi sonu"
 
 # gdk-pixbuf/io-pnm.c:920
-#: gdk-pixbuf/io-pnm.c:1003
+#: gdk-pixbuf/io-pnm.c:1010
 msgid "Insufficient memory to load PNM file"
 msgstr "PNM dosyasını yüklemek için yetersiz bellek"
 
-#: gdk-pixbuf/io-pnm.c:1082
+#: gdk-pixbuf/io-pnm.c:1089
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "PNM/PBM/PGM/PPM resim biçimi ailesi"
 
@@ -942,46 +942,46 @@ msgstr ""
 msgid "Make X calls synchronous"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:268 gtk/gtkaboutdialog.c:2014
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
 msgid "License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:271
 msgid "The license of the program"
 msgstr ""
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:489
+#: gtk/gtkaboutdialog.c:491
 msgid "_Credits"
 msgstr ""
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:498
+#: gtk/gtkaboutdialog.c:500
 msgid "_License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:720
+#: gtk/gtkaboutdialog.c:729
 #, c-format
 msgid "About %s"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:1942
+#: gtk/gtkaboutdialog.c:1951
 msgid "Credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:1968
+#: gtk/gtkaboutdialog.c:1977
 msgid "Written by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:1971
+#: gtk/gtkaboutdialog.c:1980
 msgid "Documented by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:1983
+#: gtk/gtkaboutdialog.c:1992
 msgid "Translated by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:1987
+#: gtk/gtkaboutdialog.c:1996
 msgid "Artwork by"
 msgstr ""
 
@@ -1229,12 +1229,12 @@ msgstr "Dosya Sil"
 
 # gtk/gtkstock.c:287
 #: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1283
-#: gtk/gtkpathbar.c:982
+#: gtk/gtkpathbar.c:986
 msgid "Home"
 msgstr "Başlangıç"
 
 #: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1310
-#: gtk/gtkpathbar.c:984
+#: gtk/gtkpathbar.c:988
 msgid "Desktop"
 msgstr "Masaüstü"
 
@@ -1383,113 +1383,113 @@ msgstr "_Klasör Oluştur"
 
 # gtk/gtkcolorsel.c:1833
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3502
+#: gtk/gtkfilechooserdefault.c:3505
 msgid "_Name:"
 msgstr "_İsim:"
 
-#: gtk/gtkfilechooserdefault.c:3542
+#: gtk/gtkfilechooserdefault.c:3545
 msgid "_Browse for other folders"
 msgstr "Diğer klasörler için _gözat:"
 
-#: gtk/gtkfilechooserdefault.c:3792
+#: gtk/gtkfilechooserdefault.c:3795
 msgid "Save in _folder:"
 msgstr "_Klasör içine kaydet:"
 
-#: gtk/gtkfilechooserdefault.c:3794
+#: gtk/gtkfilechooserdefault.c:3797
 msgid "Create in _folder:"
 msgstr "_Klasör içinde oluştur:"
 
-#: gtk/gtkfilechooserdefault.c:4734
+#: gtk/gtkfilechooserdefault.c:4737
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "Belirttiğiniz klasör yerel olmadığı için değiştirilemiyor"
 
-#: gtk/gtkfilechooserdefault.c:5249
+#: gtk/gtkfilechooserdefault.c:5253
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s kısayolu bulunmuyor"
 
-#: gtk/gtkfilechooserdefault.c:5713
+#: gtk/gtkfilechooserdefault.c:5717
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr ""
 "%s seçilemedi:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:6006
+#: gtk/gtkfilechooserdefault.c:6010
 msgid "Type name of new folder"
 msgstr "Yeni klasörün adını girin"
 
-#: gtk/gtkfilechooserdefault.c:6048
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d bayt"
 msgstr[1] "%d bayt"
 
-#: gtk/gtkfilechooserdefault.c:6050
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6052
+#: gtk/gtkfilechooserdefault.c:6056
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6058
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
 # gtk/gtkwindow.c:372
-#: gtk/gtkfilechooserdefault.c:6106
+#: gtk/gtkfilechooserdefault.c:6110
 msgid "Today"
 msgstr "Bugün"
 
-#: gtk/gtkfilechooserdefault.c:6108
+#: gtk/gtkfilechooserdefault.c:6112
 msgid "Yesterday"
 msgstr "Dün"
 
 # gtk/gtkinputdialog.c:577
-#: gtk/gtkfilechooserdefault.c:6119
+#: gtk/gtkfilechooserdefault.c:6123
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
-#: gtk/gtkfilechooserdefault.c:6189
+#: gtk/gtkfilechooserdefault.c:6193
 #, fuzzy
 msgid "Cannot change folder"
 msgstr "_Klasör içinde oluştur:"
 
-#: gtk/gtkfilechooserdefault.c:6190
+#: gtk/gtkfilechooserdefault.c:6194
 #, fuzzy
 msgid "The folder you specified is an invalid path."
 msgstr "Belirttiğiniz klasör geçerli bir yol olmadığı için değiştirilemiyor."
 
-#: gtk/gtkfilechooserdefault.c:6229
+#: gtk/gtkfilechooserdefault.c:6233
 #, fuzzy, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr ""
 "'%s' ile '%s' kullanılarak dosya ismi oluşturulamadı:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:6265
+#: gtk/gtkfilechooserdefault.c:6269
 #, fuzzy
 msgid "Could not select item"
 msgstr ""
 "%s seçilemedi:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:6305
+#: gtk/gtkfilechooserdefault.c:6309
 msgid "Open Location"
 msgstr "Konum Aç"
 
-#: gtk/gtkfilechooserdefault.c:6312
+#: gtk/gtkfilechooserdefault.c:6316
 msgid "Save in Location"
 msgstr "Konum içine Kaydet"
 
 # gtk/gtkfilesel.c:1795
-#: gtk/gtkfilechooserdefault.c:6336
+#: gtk/gtkfilechooserdefault.c:6340
 msgid "_Location:"
 msgstr "_Konum:"
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2005-01-26 14:08+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -454,76 +454,76 @@ msgstr "PNG 텍스트 부분 %s의 값을 ISO-8859-1 인코딩으로 변환할 �
 msgid "The PNG image format"
 msgstr "PNG 그림 형식"
 
-#: gdk-pixbuf/io-pnm.c:249
+#: gdk-pixbuf/io-pnm.c:252
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr ""
 "PNM 읽어들이기에서 정수가 나와야 하는 상황에서, 정수가 나오지 않았습니다"
 
-#: gdk-pixbuf/io-pnm.c:281
+#: gdk-pixbuf/io-pnm.c:284
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM 파일의 최초 바이트가 올바르지 못합니다"
 
-#: gdk-pixbuf/io-pnm.c:311
+#: gdk-pixbuf/io-pnm.c:314
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNM 파일이 인식 가능한 PNM 서브포맷에 맞지 않습니다"
 
-#: gdk-pixbuf/io-pnm.c:336
+#: gdk-pixbuf/io-pnm.c:339
 msgid "PNM file has an image width of 0"
 msgstr "PNM 파일의 그림 너비가 0입니다"
 
-#: gdk-pixbuf/io-pnm.c:357
+#: gdk-pixbuf/io-pnm.c:360
 msgid "PNM file has an image height of 0"
 msgstr "PNM 파일의 그림 높이가 0입니다"
 
-#: gdk-pixbuf/io-pnm.c:380
+#: gdk-pixbuf/io-pnm.c:383
 msgid "Maximum color value in PNM file is 0"
 msgstr "PNM 파일의 최대 색 값이 0입니다"
 
-#: gdk-pixbuf/io-pnm.c:388
+#: gdk-pixbuf/io-pnm.c:391
 msgid "Maximum color value in PNM file is too large"
 msgstr "PNM 파일의 최대 색 값이 너무 큽니다"
 
-#: gdk-pixbuf/io-pnm.c:396
+#: gdk-pixbuf/io-pnm.c:399
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "최대 색 값이 255보다 큰 PNM 파일은 처리할 수 없습니다"
 
-#: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
+#: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
 msgstr "원본 PNM 그림 형식이 잘못되었습니다"
 
-#: gdk-pixbuf/io-pnm.c:555 gdk-pixbuf/io-pnm.c:597
+#: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
 msgid "PNM image format is invalid"
 msgstr "PNM 그림 형식이 잘못되었습니다"
 
-#: gdk-pixbuf/io-pnm.c:656
+#: gdk-pixbuf/io-pnm.c:663
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM 그림 읽어들이기가 이 PNM 서브포맷을 지원하지 않습니다"
 
-#: gdk-pixbuf/io-pnm.c:711
+#: gdk-pixbuf/io-pnm.c:718
 msgid "Premature end-of-file encountered"
 msgstr "파일이 갑작스럽게 끝났습니다"
 
-#: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
+#: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "원본 PNM 형식에서는 견본 데이터 앞에 정확히 한 개의 공백이 와야 합니다"
 
-#: gdk-pixbuf/io-pnm.c:770
+#: gdk-pixbuf/io-pnm.c:777
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "PNM 그림을 읽어들이는 데 필요한 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-pnm.c:820
+#: gdk-pixbuf/io-pnm.c:827
 msgid "Insufficient memory to load PNM context struct"
 msgstr "PNM 컨텍스트 구조를 읽어들이는 데 메모리가 부족합니다"
 
-#: gdk-pixbuf/io-pnm.c:871
+#: gdk-pixbuf/io-pnm.c:878
 msgid "Unexpected end of PNM image data"
 msgstr "PNM 그림 데이타가 갑자기 끝났습니다"
 
-#: gdk-pixbuf/io-pnm.c:1003
+#: gdk-pixbuf/io-pnm.c:1010
 msgid "Insufficient memory to load PNM file"
 msgstr "PNM 파일 읽는데 메모리 부족"
 
-#: gdk-pixbuf/io-pnm.c:1082
+#: gdk-pixbuf/io-pnm.c:1089
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "PNM/PBM/PGM/PPM 그림 형식 패밀리"
 
@@ -812,46 +812,46 @@ msgstr "<색>"
 msgid "Make X calls synchronous"
 msgstr "동기 X 호출을 합니다"
 
-#: gtk/gtkaboutdialog.c:268 gtk/gtkaboutdialog.c:2014
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
 msgid "License"
 msgstr "사용권"
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:271
 msgid "The license of the program"
 msgstr "프로그램의 사용권"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:489
+#: gtk/gtkaboutdialog.c:491
 msgid "_Credits"
 msgstr "만든 사람(_C)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:498
+#: gtk/gtkaboutdialog.c:500
 msgid "_License"
 msgstr "사용권(_L)"
 
-#: gtk/gtkaboutdialog.c:720
+#: gtk/gtkaboutdialog.c:729
 #, c-format
 msgid "About %s"
 msgstr "%s 정보"
 
-#: gtk/gtkaboutdialog.c:1942
+#: gtk/gtkaboutdialog.c:1951
 msgid "Credits"
 msgstr "만든 사람"
 
-#: gtk/gtkaboutdialog.c:1968
+#: gtk/gtkaboutdialog.c:1977
 msgid "Written by"
 msgstr "개발자"
 
-#: gtk/gtkaboutdialog.c:1971
+#: gtk/gtkaboutdialog.c:1980
 msgid "Documented by"
 msgstr "문서화"
 
-#: gtk/gtkaboutdialog.c:1983
+#: gtk/gtkaboutdialog.c:1992
 msgid "Translated by"
 msgstr "번역자"
 
-#: gtk/gtkaboutdialog.c:1987
+#: gtk/gtkaboutdialog.c:1996
 msgid "Artwork by"
 msgstr "아트워크"
 
@@ -1066,12 +1066,12 @@ msgid "Select A File"
 msgstr "파일을 고르십시오"
 
 #: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1283
-#: gtk/gtkpathbar.c:982
+#: gtk/gtkpathbar.c:986
 msgid "Home"
 msgstr "홈"
 
 #: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1310
-#: gtk/gtkpathbar.c:984
+#: gtk/gtkpathbar.c:988
 msgid "Desktop"
 msgstr "바탕 화면"
 
@@ -1201,99 +1201,99 @@ msgid "Create Fo_lder"
 msgstr "폴더 만들기(_L)"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3502
+#: gtk/gtkfilechooserdefault.c:3505
 msgid "_Name:"
 msgstr "이름(_N):"
 
-#: gtk/gtkfilechooserdefault.c:3542
+#: gtk/gtkfilechooserdefault.c:3545
 msgid "_Browse for other folders"
 msgstr "다른 폴더 찾아보기(_B)"
 
-#: gtk/gtkfilechooserdefault.c:3792
+#: gtk/gtkfilechooserdefault.c:3795
 msgid "Save in _folder:"
 msgstr "폴더에 저장(_F):"
 
-#: gtk/gtkfilechooserdefault.c:3794
+#: gtk/gtkfilechooserdefault.c:3797
 msgid "Create in _folder:"
 msgstr "폴더에 만들기(_F):"
 
-#: gtk/gtkfilechooserdefault.c:4734
+#: gtk/gtkfilechooserdefault.c:4737
 msgid "Cannot change to folder because it is not local"
 msgstr "폴더로 옮길 수 없습니다 - 로컬 폴더가 아닙니다"
 
-#: gtk/gtkfilechooserdefault.c:5249
+#: gtk/gtkfilechooserdefault.c:5253
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s 바로 가기가 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:5713
+#: gtk/gtkfilechooserdefault.c:5717
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s을(를) 마운트할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:6006
+#: gtk/gtkfilechooserdefault.c:6010
 msgid "Type name of new folder"
 msgstr "새 폴더의 이름을 넣으십시오"
 
-#: gtk/gtkfilechooserdefault.c:6048
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d바이트"
 
-#: gtk/gtkfilechooserdefault.c:6050
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6052
+#: gtk/gtkfilechooserdefault.c:6056
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6058
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6106
+#: gtk/gtkfilechooserdefault.c:6110
 msgid "Today"
 msgstr "오늘"
 
-#: gtk/gtkfilechooserdefault.c:6108
+#: gtk/gtkfilechooserdefault.c:6112
 msgid "Yesterday"
 msgstr "어제"
 
-#: gtk/gtkfilechooserdefault.c:6119
+#: gtk/gtkfilechooserdefault.c:6123
 msgid "Unknown"
 msgstr "모름"
 
-#: gtk/gtkfilechooserdefault.c:6189
+#: gtk/gtkfilechooserdefault.c:6193
 msgid "Cannot change folder"
 msgstr "폴더를 바꿀 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:6190
+#: gtk/gtkfilechooserdefault.c:6194
 msgid "The folder you specified is an invalid path."
 msgstr "선택한 폴더는 경로 이름이 잘못되었습니다."
 
-#: gtk/gtkfilechooserdefault.c:6229
+#: gtk/gtkfilechooserdefault.c:6233
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "'%s', '%s'에서 파일 이름을 만들 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:6265
+#: gtk/gtkfilechooserdefault.c:6269
 msgid "Could not select item"
 msgstr "항목을 선택할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:6305
+#: gtk/gtkfilechooserdefault.c:6309
 msgid "Open Location"
 msgstr "위치 열기"
 
-#: gtk/gtkfilechooserdefault.c:6312
+#: gtk/gtkfilechooserdefault.c:6316
 msgid "Save in Location"
 msgstr "위치에 저장"
 
-#: gtk/gtkfilechooserdefault.c:6336
+#: gtk/gtkfilechooserdefault.c:6340
 msgid "_Location:"
 msgstr "위치(_L):"
 

@@ -14,6 +14,9 @@ Standard and pixmap cursors
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkCursor ##### -->
 <para>
 A <type>GdkCursor</type> structure represents a cursor.

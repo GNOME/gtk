@@ -14,6 +14,9 @@ Functions for inlined pixbuf handling.
 
   </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GdkPixdata ##### -->
   <para>
 

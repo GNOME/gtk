@@ -76,6 +76,9 @@ my_popup_handler (GtkWidget *widget, GdkEvent *event)
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkMenu ##### -->
 <para>
 The #GtkMenu struct contains private data only, and

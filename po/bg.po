@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.4.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-06 07:08+0100\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2005-02-06 10:54+0200\n"
 "Last-Translator: Vladimir Petkov <vpetkov@i-space.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -466,76 +466,76 @@ msgstr ""
 msgid "The PNG image format"
 msgstr "Форматът за изображения PNG"
 
-#: gdk-pixbuf/io-pnm.c:249
+#: gdk-pixbuf/io-pnm.c:252
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr ""
 "Модулът за зареждането на PNM очакваше целочислена стойност, но получи друга"
 
-#: gdk-pixbuf/io-pnm.c:281
+#: gdk-pixbuf/io-pnm.c:284
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM файлът има некоректен начален байт"
 
-#: gdk-pixbuf/io-pnm.c:311
+#: gdk-pixbuf/io-pnm.c:314
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNM файлът не е от познатите PNM под формати"
 
-#: gdk-pixbuf/io-pnm.c:336
+#: gdk-pixbuf/io-pnm.c:339
 msgid "PNM file has an image width of 0"
 msgstr "PNM файлът има изображение с ширина 0"
 
-#: gdk-pixbuf/io-pnm.c:357
+#: gdk-pixbuf/io-pnm.c:360
 msgid "PNM file has an image height of 0"
 msgstr "PNM файлът има изображение с височина 0"
 
-#: gdk-pixbuf/io-pnm.c:380
+#: gdk-pixbuf/io-pnm.c:383
 msgid "Maximum color value in PNM file is 0"
 msgstr "Максимална стойност на цвят в PNM файла е 0"
 
-#: gdk-pixbuf/io-pnm.c:388
+#: gdk-pixbuf/io-pnm.c:391
 msgid "Maximum color value in PNM file is too large"
 msgstr "Максимална стойност на цвят в PNM файла е твърде голяма"
 
-#: gdk-pixbuf/io-pnm.c:396
+#: gdk-pixbuf/io-pnm.c:399
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "Не се поддържат файлове PNM с повчее от 255 цвята"
 
-#: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
+#: gdk-pixbuf/io-pnm.c:438 gdk-pixbuf/io-pnm.c:466 gdk-pixbuf/io-pnm.c:498
 msgid "Raw PNM image type is invalid"
 msgstr "\"Суров\" PNM тип картинка е невалиден"
 
-#: gdk-pixbuf/io-pnm.c:555 gdk-pixbuf/io-pnm.c:597
+#: gdk-pixbuf/io-pnm.c:562 gdk-pixbuf/io-pnm.c:604
 msgid "PNM image format is invalid"
 msgstr "Форматът на PNM изображението е грешен"
 
-#: gdk-pixbuf/io-pnm.c:656
+#: gdk-pixbuf/io-pnm.c:663
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "Модулът за зареждане на PNM не подържа този PNM подформат"
 
-#: gdk-pixbuf/io-pnm.c:711
+#: gdk-pixbuf/io-pnm.c:718
 msgid "Premature end-of-file encountered"
 msgstr "Намерен е ненавременно \"край на файл\""
 
-#: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
+#: gdk-pixbuf/io-pnm.c:750 gdk-pixbuf/io-pnm.c:981
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Форматът за 'суров' PNM изисква точно един интервал преди самите данни"
 
-#: gdk-pixbuf/io-pnm.c:770
+#: gdk-pixbuf/io-pnm.c:777
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Недосатъчно памет за зареждане на PNM изображение"
 
-#: gdk-pixbuf/io-pnm.c:820
+#: gdk-pixbuf/io-pnm.c:827
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Недостатъчно памет за зареждане структурата на контекста за PNM"
 
-#: gdk-pixbuf/io-pnm.c:871
+#: gdk-pixbuf/io-pnm.c:878
 msgid "Unexpected end of PNM image data"
 msgstr "Неочакван край на данните за PNM изображението"
 
-#: gdk-pixbuf/io-pnm.c:1003
+#: gdk-pixbuf/io-pnm.c:1010
 msgid "Insufficient memory to load PNM file"
 msgstr "Недостатъчно памет за зареждане на PNM файл"
 
-#: gdk-pixbuf/io-pnm.c:1082
+#: gdk-pixbuf/io-pnm.c:1089
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "Фамилията формати за изображения PNM/PBG/PGM/PPM"
 
@@ -822,46 +822,46 @@ msgstr "ЦВЕТОВЕ"
 msgid "Make X calls synchronous"
 msgstr "Заявките към Х да са синхронни"
 
-#: gtk/gtkaboutdialog.c:268 gtk/gtkaboutdialog.c:2014
+#: gtk/gtkaboutdialog.c:270 gtk/gtkaboutdialog.c:2023
 msgid "License"
 msgstr "Лиценз"
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:271
 msgid "The license of the program"
 msgstr "Лицензът на програмата"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:489
+#: gtk/gtkaboutdialog.c:491
 msgid "_Credits"
 msgstr "_Заслуги"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:498
+#: gtk/gtkaboutdialog.c:500
 msgid "_License"
 msgstr "_Лиценз"
 
-#: gtk/gtkaboutdialog.c:720
+#: gtk/gtkaboutdialog.c:729
 #, c-format
 msgid "About %s"
 msgstr "Относно %s"
 
-#: gtk/gtkaboutdialog.c:1942
+#: gtk/gtkaboutdialog.c:1951
 msgid "Credits"
 msgstr "Заслуги"
 
-#: gtk/gtkaboutdialog.c:1968
+#: gtk/gtkaboutdialog.c:1977
 msgid "Written by"
 msgstr "Създадено от"
 
-#: gtk/gtkaboutdialog.c:1971
+#: gtk/gtkaboutdialog.c:1980
 msgid "Documented by"
 msgstr "Документиранo от"
 
-#: gtk/gtkaboutdialog.c:1983
+#: gtk/gtkaboutdialog.c:1992
 msgid "Translated by"
 msgstr "Преведено от"
 
-#: gtk/gtkaboutdialog.c:1987
+#: gtk/gtkaboutdialog.c:1996
 msgid "Artwork by"
 msgstr "Художествена изработка"
 
@@ -1076,12 +1076,12 @@ msgid "Select A File"
 msgstr "Избор на файл"
 
 #: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1283
-#: gtk/gtkpathbar.c:982
+#: gtk/gtkpathbar.c:986
 msgid "Home"
 msgstr "Домашна папка"
 
 #: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1310
-#: gtk/gtkpathbar.c:984
+#: gtk/gtkpathbar.c:988
 msgid "Desktop"
 msgstr "Работно Място"
 
@@ -1208,100 +1208,100 @@ msgid "Create Fo_lder"
 msgstr "Създаване на _папка"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3502
+#: gtk/gtkfilechooserdefault.c:3505
 msgid "_Name:"
 msgstr "_Име:"
 
-#: gtk/gtkfilechooserdefault.c:3542
+#: gtk/gtkfilechooserdefault.c:3545
 msgid "_Browse for other folders"
 msgstr "_Отваряне на други папки"
 
-#: gtk/gtkfilechooserdefault.c:3792
+#: gtk/gtkfilechooserdefault.c:3795
 msgid "Save in _folder:"
 msgstr "Запазване в п_апка"
 
-#: gtk/gtkfilechooserdefault.c:3794
+#: gtk/gtkfilechooserdefault.c:3797
 msgid "Create in _folder:"
 msgstr "Създаване в _папка:"
 
-#: gtk/gtkfilechooserdefault.c:4734
+#: gtk/gtkfilechooserdefault.c:4737
 msgid "Cannot change to folder because it is not local"
 msgstr "Не може да е тази папка, защото тя не е локална"
 
-#: gtk/gtkfilechooserdefault.c:5249
+#: gtk/gtkfilechooserdefault.c:5253
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Бързият клавиш %s не съществува"
 
-#: gtk/gtkfilechooserdefault.c:5713
+#: gtk/gtkfilechooserdefault.c:5717
 #, c-format
 msgid "Could not mount %s"
 msgstr "Не може да се монтира \"%s\""
 
-#: gtk/gtkfilechooserdefault.c:6006
+#: gtk/gtkfilechooserdefault.c:6010
 msgid "Type name of new folder"
 msgstr "Напишете името на новата папка"
 
-#: gtk/gtkfilechooserdefault.c:6048
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d байт"
 msgstr[1] "%d байта"
 
-#: gtk/gtkfilechooserdefault.c:6050
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f К"
 
-#: gtk/gtkfilechooserdefault.c:6052
+#: gtk/gtkfilechooserdefault.c:6056
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f М"
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6058
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Г"
 
-#: gtk/gtkfilechooserdefault.c:6106
+#: gtk/gtkfilechooserdefault.c:6110
 msgid "Today"
 msgstr "Днес"
 
-#: gtk/gtkfilechooserdefault.c:6108
+#: gtk/gtkfilechooserdefault.c:6112
 msgid "Yesterday"
 msgstr "Вчера"
 
-#: gtk/gtkfilechooserdefault.c:6119
+#: gtk/gtkfilechooserdefault.c:6123
 msgid "Unknown"
 msgstr "Неизвестен"
 
-#: gtk/gtkfilechooserdefault.c:6189
+#: gtk/gtkfilechooserdefault.c:6193
 msgid "Cannot change folder"
 msgstr "Не може да се смени текущата папка"
 
-#: gtk/gtkfilechooserdefault.c:6190
+#: gtk/gtkfilechooserdefault.c:6194
 msgid "The folder you specified is an invalid path."
 msgstr "Посочената папка е невалиден път."
 
-#: gtk/gtkfilechooserdefault.c:6229
+#: gtk/gtkfilechooserdefault.c:6233
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Не може да се създаде име на файл от \"%s\" и \"%s\""
 
-#: gtk/gtkfilechooserdefault.c:6265
+#: gtk/gtkfilechooserdefault.c:6269
 msgid "Could not select item"
 msgstr "Не може да бъде избран елемента"
 
-#: gtk/gtkfilechooserdefault.c:6305
+#: gtk/gtkfilechooserdefault.c:6309
 msgid "Open Location"
 msgstr "Отваряне на местоположение"
 
-#: gtk/gtkfilechooserdefault.c:6312
+#: gtk/gtkfilechooserdefault.c:6316
 msgid "Save in Location"
 msgstr "Запазване в"
 
-#: gtk/gtkfilechooserdefault.c:6336
+#: gtk/gtkfilechooserdefault.c:6340
 msgid "_Location:"
 msgstr "_Местоположение"
 

@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-24 15:26+0100\n"
+"POT-Creation-Date: 2005-02-28 09:57-0500\n"
 "PO-Revision-Date: 2005-02-24 20:01+0000\n"
 "Last-Translator: Simos Xenitellis <simos@gnome.org>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -55,7 +55,8 @@ msgstr "Το αρχείο εικόνας '%s' δεν περιέχει δεδομ
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
 #: gdk-pixbuf/gdk-pixbuf-io.c:1110 tests/testfilechooser.c:244
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Αποτυχία φόρτωσης εικόνας '%s': Ο λόγος είναι άγνωστος, πιθανόν πρόκειται "
 "για κατεστραμμένο αρχείο εικόνας"
@@ -369,7 +370,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Η ποιότητα JPEG πρέπει να έχει τιμή μεταξύ 0 και 100; Η τιμή  '%d' δεν "
 "επιτρέπεται."
@@ -473,7 +475,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Μοιραίο σφάλμα στην ανάγνωση αρχείου εικόνας PNG: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Τα κλειδιά για PNG text chunks θα πρέπει να έχουν το ελάχιστο 1 και το "
 "μέγιστο 79 χαρακτήρες."
@@ -1171,7 +1174,8 @@ msgstr "Απομάκρυνση του σελιδοδείκτη '%s'"
 #: gtk/gtkfilechooserdefault.c:2695
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
-msgstr "Αποτυχία πρόθεσης σελιδοδείκτη για %s επειδή δεν έχει έγκυρο όνομα διαδρομής."
+msgstr ""
+"Αποτυχία πρόθεσης σελιδοδείκτη για %s επειδή δεν έχει έγκυρο όνομα διαδρομής."
 
 #: gtk/gtkfilechooserdefault.c:2873
 msgid "Shortcuts"
@@ -1235,100 +1239,100 @@ msgid "Create Fo_lder"
 msgstr "Δημιουργία _Φακέλου"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3502
+#: gtk/gtkfilechooserdefault.c:3505
 msgid "_Name:"
 msgstr "Ό_νομα:"
 
-#: gtk/gtkfilechooserdefault.c:3542
+#: gtk/gtkfilechooserdefault.c:3545
 msgid "_Browse for other folders"
 msgstr "_Περιήγηση για άλλους φακέλους"
 
-#: gtk/gtkfilechooserdefault.c:3792
+#: gtk/gtkfilechooserdefault.c:3795
 msgid "Save in _folder:"
 msgstr "Αποθήκευση σε _φάκελο:"
 
-#: gtk/gtkfilechooserdefault.c:3794
+#: gtk/gtkfilechooserdefault.c:3797
 msgid "Create in _folder:"
 msgstr "Δημιουργία σε _φάκελο:"
 
-#: gtk/gtkfilechooserdefault.c:4734
+#: gtk/gtkfilechooserdefault.c:4737
 msgid "Cannot change to folder because it is not local"
 msgstr "Αποτυχία αλλαγής στο φάκελο γιατί δεν είναι τοπικός"
 
-#: gtk/gtkfilechooserdefault.c:5249
+#: gtk/gtkfilechooserdefault.c:5253
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Η συντόμευση %s δεν υπάρχει"
 
-#: gtk/gtkfilechooserdefault.c:5713
+#: gtk/gtkfilechooserdefault.c:5717
 #, c-format
 msgid "Could not mount %s"
 msgstr "Αδυναμία προσάρτησης %s"
 
-#: gtk/gtkfilechooserdefault.c:6006
+#: gtk/gtkfilechooserdefault.c:6010
 msgid "Type name of new folder"
 msgstr "Πληκτρολογήστε το όνομα του νέου φακέλου"
 
-#: gtk/gtkfilechooserdefault.c:6048
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:6050
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6052
+#: gtk/gtkfilechooserdefault.c:6056
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6054
+#: gtk/gtkfilechooserdefault.c:6058
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6106
+#: gtk/gtkfilechooserdefault.c:6110
 msgid "Today"
 msgstr "Σήμερα"
 
-#: gtk/gtkfilechooserdefault.c:6108
+#: gtk/gtkfilechooserdefault.c:6112
 msgid "Yesterday"
 msgstr "Χθές"
 
-#: gtk/gtkfilechooserdefault.c:6119
+#: gtk/gtkfilechooserdefault.c:6123
 msgid "Unknown"
 msgstr "Άγνωστο"
 
-#: gtk/gtkfilechooserdefault.c:6189
+#: gtk/gtkfilechooserdefault.c:6193
 msgid "Cannot change folder"
 msgstr "Αδυναμία αλλαγής φακέλου"
 
-#: gtk/gtkfilechooserdefault.c:6190
+#: gtk/gtkfilechooserdefault.c:6194
 msgid "The folder you specified is an invalid path."
 msgstr "Ο φάκελος που καθορίσατε δεν έχει έγκυρο όνομα διαδρομής."
 
-#: gtk/gtkfilechooserdefault.c:6229
+#: gtk/gtkfilechooserdefault.c:6233
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Αδυναμία build ονόματος αρχείου από '%s' και '%s'"
 
-#: gtk/gtkfilechooserdefault.c:6265
+#: gtk/gtkfilechooserdefault.c:6269
 msgid "Could not select item"
 msgstr "Αδυναμία επιλογής αντικειμένου"
 
-#: gtk/gtkfilechooserdefault.c:6305
+#: gtk/gtkfilechooserdefault.c:6309
 msgid "Open Location"
 msgstr "Άνοιγμα Τοποθεσίας"
 
-#: gtk/gtkfilechooserdefault.c:6312
+#: gtk/gtkfilechooserdefault.c:6316
 msgid "Save in Location"
 msgstr "Αποθήκευση σε Τοποθεσία"
 
-#: gtk/gtkfilechooserdefault.c:6336
+#: gtk/gtkfilechooserdefault.c:6340
 msgid "_Location:"
 msgstr "Τοπο_θεσία:"
 
@@ -1374,7 +1378,8 @@ msgstr "_Μετονομασία Αρχείου"
 
 #: gtk/gtkfilesel.c:1445
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Το όνομα αρχείου \"%s\" περιέχει σύμβολα που δεν επιτρέπονται σε ονόματα "
 "αρχείου"
@@ -1390,7 +1395,8 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1448 gtk/gtkfilesel.c:1684
 msgid "You probably used symbols not allowed in filenames."
-msgstr "Πιθανόν να χρησιμοποιήσατε σύμβολα που δεν επιτρέπονται σε ονόματα αρχείων."
+msgstr ""
+"Πιθανόν να χρησιμοποιήσατε σύμβολα που δεν επιτρέπονται σε ονόματα αρχείων."
 
 #: gtk/gtkfilesel.c:1456
 #, c-format
@@ -2234,4 +2240,3 @@ msgstr "Μέθοδος Eισαγωγής Χ"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Αδυναμία λήψης πληροφοριών για το αρχείο '%s': %s"
-

@@ -15,6 +15,9 @@ dialog to change the font. It is suitable widget for selecting a font in a prefe
 #GtkFontSelectionDialog, #GtkColorButton.
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkFontButton ##### -->
 <para>
 

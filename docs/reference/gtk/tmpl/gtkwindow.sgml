@@ -14,6 +14,9 @@ Toplevel which can contain other widgets
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### STRUCT GtkWindow ##### -->
 <para>
 

@@ -115,6 +115,9 @@ colors.</para></listitem>
 
 </para>
 
+<!-- ##### SECTION Stability_Level ##### -->
+
+
 <!-- ##### FUNCTION gdk_rgb_init ##### -->
 <para>
 This function no longer does anything at all. It's completely useless
