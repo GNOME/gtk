@@ -642,6 +642,8 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 	state_type = GTK_STATE_ACTIVE;
       else if (button->in_button)
 	state_type = GTK_STATE_PRELIGHT;
+      else if (!GTK_WIDGET_SENSITIVE (widget))
+	state_type = GTK_STATE_INSENSITIVE;
       else
 	state_type = GTK_STATE_NORMAL;
 

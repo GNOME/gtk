@@ -408,7 +408,6 @@ struct _GtkWidgetClass
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
   void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
 };
 
 struct _GtkWidgetAuxInfo
