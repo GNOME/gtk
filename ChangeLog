@@ -1,3 +1,9 @@
+Thu Mar 14 11:17:18 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkkeyhash.c (_gtk_key_hash_remove_entry): When
+	removing keys from the key hash, reinsert the right list
+	back into the hash. (Dave Camp, #74571)
+
 Wed Mar 13 17:17:40 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkobject.h: Remove left-over GTK_OBJECT_CONNECTED

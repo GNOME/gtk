@@ -224,12 +224,12 @@ _gtk_key_hash_remove_entry (GtkKeyHash *key_hash,
 						  GUINT_TO_POINTER (entry->keys[i].keycode));
 
 	  GSList *new_keys = g_slist_remove (old_keys, entry);
-	  if (old_keys != new_keys)
+	  if (new_keys != old_keys)
 	    {
-	      if (old_keys)
+	      if (new_keys)
 		g_hash_table_insert (key_hash->keycode_hash,
 				     GUINT_TO_POINTER (entry->keys[i].keycode),
-				     old_keys);
+				     new_keys);
 	      else
 		g_hash_table_remove (key_hash->keycode_hash,
 				     GUINT_TO_POINTER (entry->keys[i].keycode));
