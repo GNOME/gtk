@@ -351,3 +351,4 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 			x, y, width, height);
     }
 }
+

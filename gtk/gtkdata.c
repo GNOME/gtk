@@ -72,3 +72,4 @@ gtk_data_class_init (GtkDataClass *class)
 
   gtk_object_class_add_signals (object_class, data_signals, LAST_SIGNAL);
 }
+

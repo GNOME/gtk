@@ -1052,3 +1052,4 @@ gtk_handle_box_delete_event (GtkWidget *widget,
 
   return TRUE;
 }
+

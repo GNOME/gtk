@@ -1433,3 +1433,4 @@ gtk_range_trough_vdims (GtkRange *range,
   if (bottom)
     *bottom = tbottom;
 }
+

@@ -419,3 +419,4 @@ gtk_paned_gutter_size (GtkPaned *paned, guint16 size)
   if (GTK_WIDGET_VISIBLE (GTK_WIDGET (paned)))
     gtk_widget_queue_resize (GTK_WIDGET (paned));
 }
+

@@ -398,3 +398,4 @@ gtk_label_style_set	(GtkWidget      *widget,
 			   widget->allocation.width,
 			   widget->allocation.height);
 }
+

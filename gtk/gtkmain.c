@@ -1777,3 +1777,4 @@ gtk_print (gchar *str)
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show (window);
 }
+
