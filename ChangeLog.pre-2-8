@@ -1,3 +1,11 @@
+Fri Oct  4 12:00:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkscreen.c (gdk_screen_class_init): Get the
+	name right.
+
+	* gdk/x11/gdkscreen-x11.c (gdk_screen_x11_class_init): 
+	Fix function that should have been static.
+
 Fri Oct  4 11:43:47 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Add a check for the Xrandr extension.

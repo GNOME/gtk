@@ -64,8 +64,8 @@ gdk_screen_get_type (void)
   return object_type;
 }
 
-void
-gdk_screen_x11_class_init (GdkScreenClass *klass)
+static void
+gdk_screen_class_init (GdkScreenClass *klass)
 {
   signals[SIZE_CHANGED] =
     g_signal_new ("size_changed",

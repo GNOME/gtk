@@ -82,7 +82,7 @@ _gdk_screen_x11_get_type ()
   return object_type;
 }
 
-void
+static void
 gdk_screen_x11_class_init (GdkScreenX11Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
