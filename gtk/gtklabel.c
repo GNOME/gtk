@@ -30,6 +30,7 @@
 #include "gtkclipboard.h"
 #include "gdk/gdki18n.h"
 #include <pango/pango.h>
+#include "gtkintl.h"
 
 struct _GtkLabelSelectionInfo
 {
@@ -39,21 +40,30 @@ struct _GtkLabelSelectionInfo
 };
 
 enum {
-  ARG_0,
-  ARG_LABEL,
-  ARG_PATTERN,
-  ARG_JUSTIFY,
-  ARG_WRAP
+  PROP_0,
+  PROP_LABEL,
+  PROP_ATTRIBUTES,
+  PROP_USE_MARKUP,
+  PROP_USE_UNDERLINE,
+  PROP_JUSTIFY,
+  PROP_PATTERN,
+  PROP_WRAP,
+  PROP_SELECTABLE,
+  PROP_ACCEL_KEYVAL
 };
 
 static void gtk_label_class_init        (GtkLabelClass    *klass);
 static void gtk_label_init              (GtkLabel         *label);
-static void gtk_label_set_arg           (GtkObject        *object,
-					 GtkArg           *arg,
-					 guint             arg_id);
-static void gtk_label_get_arg           (GtkObject        *object,
-					 GtkArg           *arg,
-					 guint             arg_id);
+static void gtk_label_set_property      (GObject          *object,
+					 guint             prop_id,
+					 const GValue     *value,
+					 GParamSpec       *pspec,
+					 const gchar      *trailer);
+static void gtk_label_get_property      (GObject          *object,
+					 guint             prop_id,
+					 GValue           *value,
+					 GParamSpec       *pspec,
+					 const gchar      *trailer);
 static void gtk_label_finalize          (GObject          *object);
 static void gtk_label_size_request      (GtkWidget        *widget,
 					 GtkRequisition   *requisition);
@@ -76,6 +86,26 @@ static gint gtk_label_button_release    (GtkWidget        *widget,
                                          GdkEventButton   *event);
 static gint gtk_label_motion            (GtkWidget        *widget,
                                          GdkEventMotion   *event);
+
+
+static void gtk_label_set_text_internal          (GtkLabel      *label,
+						  gchar         *str);
+static void gtk_label_set_label_internal         (GtkLabel      *label,
+						  gchar         *str);
+static void gtk_label_set_use_markup_internal    (GtkLabel      *label,
+						  gboolean       val);
+static void gtk_label_set_use_underline_internal (GtkLabel      *label,
+						  gboolean       val);
+static void gtk_label_set_attributes_internal    (GtkLabel      *label,
+						  PangoAttrList *attrs);
+static void gtk_label_set_uline_text_internal    (GtkLabel      *label,
+						  const gchar   *str);
+static void gtk_label_set_pattern_internal       (GtkLabel      *label,
+				                  const gchar   *pattern);
+static void set_markup                           (GtkLabel      *label,
+						  const gchar   *str,
+						  gboolean       with_uline);
+static void gtk_label_recalculate                (GtkLabel      *label);
 
 static void gtk_label_create_window       (GtkLabel *label);
 static void gtk_label_destroy_window      (GtkLabel *label);
@@ -128,15 +158,9 @@ gtk_label_class_init (GtkLabelClass *class)
   
   parent_class = gtk_type_class (GTK_TYPE_MISC);
   
-  gtk_object_add_arg_type ("GtkLabel::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
-  gtk_object_add_arg_type ("GtkLabel::pattern", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_PATTERN);
-  gtk_object_add_arg_type ("GtkLabel::justify", GTK_TYPE_JUSTIFICATION, GTK_ARG_READWRITE, ARG_JUSTIFY);
-  gtk_object_add_arg_type ("GtkLabel::wrap", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_WRAP);
-  
+  gobject_class->set_property = gtk_label_set_property;
+  gobject_class->get_property = gtk_label_get_property;
   gobject_class->finalize = gtk_label_finalize;
-
-  object_class->set_arg = gtk_label_set_arg;
-  object_class->get_arg = gtk_label_get_arg;
   
   widget_class->size_request = gtk_label_size_request;
   widget_class->size_allocate = gtk_label_size_allocate;
@@ -150,61 +174,165 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->button_press_event = gtk_label_button_press;
   widget_class->button_release_event = gtk_label_button_release;
   widget_class->motion_notify_event = gtk_label_motion;
+
+  g_object_class_install_property (G_OBJECT_CLASS(object_class),
+                                   PROP_LABEL,
+                                   g_param_spec_string ("label",
+                                                        _("Label"),
+                                                        _("The text of the label."),
+                                                        NULL,
+                                                        G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_ATTRIBUTES,
+				   g_param_spec_boxed ("attributes",
+						       _("Attributes"),
+						       _("A list of style attributes to apply to the text of the label."),
+						       PANGO_TYPE_ATTR_LIST,
+						       G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_USE_MARKUP,
+                                   g_param_spec_boolean ("use_markup",
+							 _("Use markup"),
+							 _("The text of the label includes XML markup. See pango_parse_markup()."),
+                                                        FALSE,
+                                                        G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_USE_UNDERLINE,
+                                   g_param_spec_boolean ("use_underline",
+							 _("Use underline"),
+							 _("If set, an underline in the text indicates the next character should be used for the accelerator key"),
+                                                        FALSE,
+                                                        G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+				   PROP_JUSTIFY,
+                                   g_param_spec_enum ("justify",
+                                                      _("Justification"),
+                                                      _("The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkMisc::xalign for that."),
+						      GTK_TYPE_JUSTIFICATION,
+						      GTK_JUSTIFY_LEFT,
+                                                      G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_PATTERN,
+                                   g_param_spec_string ("pattern",
+                                                        _("Pattern"),
+                                                        _("A string with _ characters in positions correspond to characters in
+  the text to underline."),
+                                                        NULL,
+                                                        G_PARAM_WRITABLE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_WRAP,
+                                   g_param_spec_boolean ("wrap",
+                                                        _("Line wrap"),
+                                                        _("If set, wrap lines if the text becomes too wide."),
+                                                        TRUE,
+                                                        G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_SELECTABLE,
+                                   g_param_spec_boolean ("selectable",
+                                                        _("Selectable"),
+                                                        _("Whether the label text can be selected with the mouse."),
+                                                        FALSE,
+                                                        G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACCEL_KEYVAL,
+                                   g_param_spec_uint ("accel_keyval",
+						      _("Accelerator key value"),
+						      _("The accelerator key for this label."),
+						      0,
+						      G_MAXUINT,
+						      GDK_VoidSymbol,
+						      G_PARAM_READABLE));
 }
 
-static void
-gtk_label_set_arg (GtkObject	  *object,
-		   GtkArg	  *arg,
-		   guint	   arg_id)
+static void 
+gtk_label_set_property (GObject      *object,
+			guint         prop_id,
+			const GValue *value,
+			GParamSpec   *pspec,
+			const gchar  *trailer)
 {
   GtkLabel *label;
   
   label = GTK_LABEL (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_LABEL:
-      gtk_label_set_text (label, GTK_VALUE_STRING (*arg));
+    case PROP_LABEL:
+      gtk_label_set_label_internal (label,
+				    g_strdup (g_value_get_string (value)));
+      gtk_label_recalculate (label);
       break;
-    case ARG_PATTERN:
-      gtk_label_set_pattern (label, GTK_VALUE_STRING (*arg));
+    case PROP_ATTRIBUTES:
+      gtk_label_set_attributes (label, g_value_get_boxed (value));
       break;
-    case ARG_JUSTIFY:
-      gtk_label_set_justify (label, GTK_VALUE_ENUM (*arg));
+    case PROP_USE_MARKUP:
+      gtk_label_set_use_markup_internal (label, g_value_get_boolean (value));
+      gtk_label_recalculate (label);
       break;
-    case ARG_WRAP:
-      gtk_label_set_line_wrap (label, GTK_VALUE_BOOL (*arg));
+    case PROP_USE_UNDERLINE:
+      gtk_label_set_use_underline_internal (label, g_value_get_boolean (value));
+      gtk_label_recalculate (label);
+      break;
+    case PROP_JUSTIFY:
+      gtk_label_set_justify (label, g_value_get_enum (value));
+      break;
+    case PROP_PATTERN:
+      gtk_label_set_pattern (label, g_value_get_string (value));
+      break;
+    case PROP_WRAP:
+      gtk_label_set_line_wrap (label, g_value_get_boolean (value));
+      break;	  
+    case PROP_SELECTABLE:
+      gtk_label_set_selectable (label, g_value_get_boolean (value));
       break;	  
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
-static void
-gtk_label_get_arg (GtkObject	  *object,
-		   GtkArg	  *arg,
-		   guint	   arg_id)
+static void 
+gtk_label_get_property (GObject     *object,
+			guint        prop_id,
+			GValue      *value,
+			GParamSpec  *pspec,
+			const gchar *trailer)
 {
   GtkLabel *label;
   
   label = GTK_LABEL (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_LABEL:
-      GTK_VALUE_STRING (*arg) = g_strdup (label->label);
+    case PROP_LABEL:
+      g_value_set_string (value, g_strdup (label->label));
       break;
-    case ARG_PATTERN:
-      GTK_VALUE_STRING (*arg) = g_strdup (label->pattern);
+    case PROP_ATTRIBUTES:
+      g_value_set_boxed (value, label->attrs);
       break;
-    case ARG_JUSTIFY:
-      GTK_VALUE_ENUM (*arg) = label->jtype;
+    case PROP_USE_MARKUP:
+      g_value_set_boolean (value, label->use_markup);
       break;
-    case ARG_WRAP:
-      GTK_VALUE_BOOL (*arg) = label->wrap;
+    case PROP_USE_UNDERLINE:
+      g_value_set_boolean (value, label->use_underline);
+      break;
+    case PROP_JUSTIFY:
+      g_value_set_enum (value, label->jtype);
+      break;
+    case PROP_WRAP:
+      g_value_set_boolean (value, label->wrap);
+      break;
+    case PROP_SELECTABLE:
+      g_value_set_boolean (value, gtk_label_get_selectable (label));
+      break;
+    case PROP_ACCEL_KEYVAL:
+      g_value_set_uint (value, label->accel_keyval);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -215,12 +343,16 @@ gtk_label_init (GtkLabel *label)
   GTK_WIDGET_SET_FLAGS (label, GTK_NO_WINDOW);
   
   label->label = NULL;
-  label->pattern = NULL;
 
   label->jtype = GTK_JUSTIFY_CENTER;
   label->wrap = FALSE;
+
+  label->use_underline = FALSE;
+  label->use_markup = FALSE;
   
+  label->accel_keyval = GDK_VoidSymbol;
   label->layout = NULL;
+  label->text = NULL;
   label->attrs = NULL;
   
   gtk_label_set_text (label, "");
@@ -239,18 +371,102 @@ gtk_label_new (const gchar *str)
   return GTK_WIDGET (label);
 }
 
-static inline void
+/**
+ * gtk_label_get_accel_keyval:
+ * @label: a #GtkLabel
+ * @Returns: GDK keyval usable for accelerators, or GDK_VoidSymbol
+ *
+ * If the label text was set using gtk_label_set_markup_with_accel,
+ * gtk_label_parse_uline, or using the use_underline property this function
+ * returns the keyval for the first underlined accelerator.
+ **/
+guint
+gtk_label_get_accel_keyval (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), GDK_VoidSymbol);
+
+  return label->accel_keyval;
+}
+
+static void
 gtk_label_set_text_internal (GtkLabel *label,
 			     gchar    *str)
+{
+  g_free (label->text);
+  
+  label->text = str;
+
+  gtk_label_select_region_index (label, 0, 0);
+}
+
+static void
+gtk_label_set_label_internal (GtkLabel *label,
+			      gchar    *str)
 {
   g_free (label->label);
   
   label->label = str;
 
-  gtk_label_clear_layout (label);  
+  g_object_notify (G_OBJECT (label), "label");
+}
 
-  gtk_label_select_region_index (label, 0, 0);
+static void
+gtk_label_set_use_markup_internal (GtkLabel *label,
+				   gboolean val)
+{
+  val = val != FALSE;
+  if (label->use_markup != val)
+    g_object_notify (G_OBJECT (label), "use_markup");
+  label->use_markup = val;
+}
+
+static void
+gtk_label_set_use_underline_internal (GtkLabel *label,
+				      gboolean val)
+{
+  val = val != FALSE;
+  if (label->use_underline != val)
+    g_object_notify (G_OBJECT (label), "use_underline");
+  label->use_underline = val;
+}
+
+static void
+gtk_label_set_attributes_internal (GtkLabel         *label,
+				   PangoAttrList    *attrs)
+{
+  if (attrs)
+    pango_attr_list_ref (attrs);
   
+  if (label->attrs)
+    pango_attr_list_unref (label->attrs);
+
+  label->attrs = attrs;
+  g_object_notify (G_OBJECT (label), "attributes");
+}
+
+
+/* Calculates text, attrs and accel_keyval from
+ * label, use_underline and use_markup */
+static void
+gtk_label_recalculate (GtkLabel *label)
+{
+  if (label->use_markup)
+      set_markup (label, label->label, label->use_underline);
+  else
+    {
+      if (label->use_underline)
+	gtk_label_set_uline_text_internal (label, label->label);
+      else
+	{
+	  gtk_label_set_text_internal (label, g_strdup (label->label));
+	  gtk_label_set_attributes_internal (label, NULL);
+	}
+    }
+
+  if (!label->use_underline)
+    label->accel_keyval = GDK_VoidSymbol;
+
+  gtk_label_clear_layout (label);  
   gtk_widget_queue_resize (GTK_WIDGET (label));
 }
 
@@ -260,7 +476,11 @@ gtk_label_set_text (GtkLabel    *label,
 {
   g_return_if_fail (GTK_IS_LABEL (label));
   
-  gtk_label_set_text_internal (label, g_strdup (str ? str : ""));
+  gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
+  gtk_label_set_use_markup_internal (label, FALSE);
+  gtk_label_set_use_underline_internal (label, FALSE);
+  
+  gtk_label_recalculate (label);
 }
 
 /**
@@ -277,16 +497,13 @@ gtk_label_set_attributes (GtkLabel         *label,
 {
   g_return_if_fail (GTK_IS_LABEL (label));
 
-  if (attrs)
-    pango_attr_list_ref (attrs);
+  gtk_label_set_attributes_internal (label, attrs);
   
-  if (label->attrs)
-    pango_attr_list_unref (label->attrs);
-
-  label->attrs = attrs;
+  gtk_label_clear_layout (label);  
+  gtk_widget_queue_resize (GTK_WIDGET (label));
 }
 
-static guint
+static void
 set_markup (GtkLabel    *label,
             const gchar *str,
             gboolean     with_uline)
@@ -296,9 +513,6 @@ set_markup (GtkLabel    *label,
   PangoAttrList *attrs = NULL;
   gunichar accel_char = 0;
 
-  if (str == NULL)
-    str = "";
-  
   if (!pango_parse_markup (str,
                            -1,
                            with_uline ? '_' : 0,
@@ -318,14 +532,14 @@ set_markup (GtkLabel    *label,
 
   if (attrs)
     {
-      gtk_label_set_attributes (label, attrs);
+      gtk_label_set_attributes_internal (label, attrs);
       pango_attr_list_unref (attrs);
     }
 
   if (accel_char != 0)
-    return gdk_keyval_to_lower (gdk_unicode_to_keyval (accel_char));
+    label->accel_keyval = gdk_keyval_to_lower (gdk_unicode_to_keyval (accel_char));
   else
-    return GDK_VoidSymbol;
+    label->accel_keyval = GDK_VoidSymbol;
 }
 
 /**
@@ -342,7 +556,11 @@ gtk_label_set_markup (GtkLabel    *label,
 {  
   g_return_if_fail (GTK_IS_LABEL (label));
 
-  set_markup (label, str, FALSE);
+  gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
+  gtk_label_set_use_markup_internal (label, TRUE);
+  gtk_label_set_use_underline_internal (label, FALSE);
+  
+  gtk_label_recalculate (label);
 }
 
 /**
@@ -365,7 +583,12 @@ gtk_label_set_markup_with_accel (GtkLabel    *label,
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), GDK_VoidSymbol);
 
-  return set_markup (label, str, TRUE);
+  gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
+  gtk_label_set_use_markup_internal (label, TRUE);
+  gtk_label_set_use_underline_internal (label, TRUE);
+  
+  gtk_label_recalculate (label);
+  return label->accel_keyval;
 }
 
 /**
@@ -374,8 +597,8 @@ gtk_label_set_markup_with_accel (GtkLabel    *label,
  * 
  * Fetches the text from a label widget
  * 
- * Return value: the text in the label widget. This value must
- * be freed with g_free().
+ * Return value: the text in the label widget. This is the internal
+ * string used by the label, and must not be modified.
  **/
 G_CONST_RETURN gchar *
 gtk_label_get_text (GtkLabel *label)
@@ -383,7 +606,59 @@ gtk_label_get_text (GtkLabel *label)
   g_return_val_if_fail (label != NULL, NULL);
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
 
-  return label->label;
+  return label->text;
+}
+
+static PangoAttrList *
+gtk_label_pattern_to_attrs (GtkLabel      *label,
+			    const gchar   *pattern)
+{
+  const char *start;
+  const char *p = label->text;
+  const char *q = pattern;
+  PangoAttrList *attrs;
+
+  attrs = pango_attr_list_new ();
+
+  while (1)
+    {
+      while (*p && *q && *q != '_')
+	{
+	  p = g_utf8_next_char (p);
+	  q++;
+	}
+      start = p;
+      while (*p && *q && *q == '_')
+	{
+	  p = g_utf8_next_char (p);
+	  q++;
+	}
+      
+      if (p > start)
+	{
+	  PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_LOW);
+	  attr->start_index = start - label->text;
+	  attr->end_index = p - label->text;
+	  
+	  pango_attr_list_insert (attrs, attr);
+	}
+      else
+	break;
+    }
+
+  return attrs;
+}
+
+static void
+gtk_label_set_pattern_internal (GtkLabel    *label,
+				const gchar *pattern)
+{
+  PangoAttrList *attrs;
+  g_return_if_fail (GTK_IS_LABEL (label));
+  
+  attrs = gtk_label_pattern_to_attrs (label, pattern);
+
+  gtk_label_set_attributes_internal (label, attrs);
 }
 
 void
@@ -392,11 +667,12 @@ gtk_label_set_pattern (GtkLabel	   *label,
 {
   g_return_if_fail (GTK_IS_LABEL (label));
   
-  g_free (label->pattern);
-  label->pattern = g_strdup (pattern);
+  gtk_label_set_pattern_internal (label, pattern);
 
+  gtk_label_clear_layout (label);  
   gtk_widget_queue_resize (GTK_WIDGET (label));
 }
+
 
 void
 gtk_label_set_justify (GtkLabel        *label,
@@ -409,13 +685,10 @@ gtk_label_set_justify (GtkLabel        *label,
     {
       label->jtype = jtype;
 
-      if (label->layout)
-	{
-	  /* No real need to be this drastic, but easier than duplicating the code */
-          g_object_unref (G_OBJECT (label->layout));
-	  label->layout = NULL;
-	}
+      /* No real need to be this drastic, but easier than duplicating the code */
+      gtk_label_clear_layout (label);
       
+      g_object_notify (G_OBJECT (label), "justify");
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -431,7 +704,8 @@ gtk_label_set_line_wrap (GtkLabel *label,
   if (label->wrap != wrap)
     {
       label->wrap = wrap;
-
+      g_object_notify (G_OBJECT (label), "wrap");
+      
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -444,7 +718,7 @@ gtk_label_get (GtkLabel *label,
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
   
-  *str = label->label;
+  *str = label->text;
 }
 
 static void
@@ -457,7 +731,7 @@ gtk_label_finalize (GObject *object)
   label = GTK_LABEL (object);
   
   g_free (label->label);
-  g_free (label->pattern);
+  g_free (label->text);
 
   if (label->layout)
     g_object_unref (G_OBJECT (label->layout));
@@ -468,44 +742,6 @@ gtk_label_finalize (GObject *object)
   g_free (label->select_info);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-static void
-gtk_label_pattern_to_attrs (GtkLabel      *label,
-                            PangoAttrList *attrs)
-{
-  if (label->pattern)
-    {
-      const char *start;
-      const char *p = label->label;
-      const char *q = label->pattern;
-
-      while (1)
-	{
-	  while (*p && *q && *q != '_')
-	    {
-	      p = g_utf8_next_char (p);
-	      q++;
-	    }
-	  start = p;
-	  while (*p && *q && *q == '_')
-	    {
-	      p = g_utf8_next_char (p);
-	      q++;
-	    }
-
-	  if (p > start)
-	    {
-	      PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_LOW);
-	      attr->start_index = start - label->label;
-	      attr->end_index = p - label->label;
-
-	      pango_attr_list_insert (attrs, attr);
-	    }
-	  else
-	    break;
-	}
-    }
 }
 
 static void
@@ -556,26 +792,11 @@ gtk_label_ensure_layout (GtkLabel *label,
   if (!label->layout)
     {
       PangoAlignment align = PANGO_ALIGN_LEFT; /* Quiet gcc */
-      PangoAttrList *attrs = NULL;
 
-      label->layout = gtk_widget_create_pango_layout (widget, label->label);
+      label->layout = gtk_widget_create_pango_layout (widget, label->text);
 
-      /* FIXME move to a model where the pattern isn't stored
-       * permanently, and just modifies or creates the AttrList
-       */
       if (label->attrs)
-	attrs = pango_attr_list_copy (label->attrs);
-      else if (label->pattern)
-        attrs = pango_attr_list_new ();
-
-      if (label->pattern)
-	gtk_label_pattern_to_attrs (label, attrs);
-      
-      if (attrs)
-	{
-	  pango_layout_set_attributes (label->layout, attrs);
-	  pango_attr_list_unref (attrs);
-	}
+	pango_layout_set_attributes (label->layout, label->attrs);
       
       switch (label->jtype)
 	{
@@ -845,7 +1066,7 @@ gtk_label_expose (GtkWidget      *widget,
   gtk_label_ensure_layout (label, NULL, NULL);
   
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget) &&
-      label->label && (*label->label != '\0'))
+      label->text && (*label->text != '\0'))
     {
       get_layout_location (label, &x, &y);
       
@@ -901,9 +1122,9 @@ gtk_label_expose (GtkWidget      *widget,
   return TRUE;
 }
 
-guint      
-gtk_label_parse_uline (GtkLabel    *label,
-		       const gchar *str)
+void
+gtk_label_set_uline_text_internal (GtkLabel    *label,
+				   const gchar *str)
 {
   guint accel_key = GDK_VoidSymbol;
 
@@ -913,8 +1134,8 @@ gtk_label_parse_uline (GtkLabel    *label,
   gchar *dest, *pattern_dest;
   gboolean underscore;
       
-  g_return_val_if_fail (GTK_IS_LABEL (label), GDK_VoidSymbol);
-  g_return_val_if_fail (str != NULL, GDK_VoidSymbol);
+  g_return_if_fail (GTK_IS_LABEL (label));
+  g_return_if_fail (str != NULL);
 
   /* Convert text to wide characters */
 
@@ -923,6 +1144,9 @@ gtk_label_parse_uline (GtkLabel    *label,
   
   underscore = FALSE;
 
+  if (str == NULL)
+    str = "";
+  
   src = str;
   dest = new_str;
   pattern_dest = pattern;
@@ -938,7 +1162,7 @@ gtk_label_parse_uline (GtkLabel    *label,
 	  g_warning ("Invalid input string");
 	  g_free (new_str);
 	  g_free (pattern);
-	  return GDK_VoidSymbol;
+	  return;
 	}
       next_src = g_utf8_next_char (src);
       
@@ -978,12 +1202,28 @@ gtk_label_parse_uline (GtkLabel    *label,
   *pattern_dest = 0;
   
   gtk_label_set_text_internal (label, new_str);
-  gtk_label_set_pattern (label, pattern);
+  gtk_label_set_pattern_internal (label, pattern);
   
   g_free (pattern);
-  
-  return accel_key;
+
+  label->accel_keyval = accel_key;
 }
+
+guint      
+gtk_label_parse_uline (GtkLabel    *label,
+		       const gchar *str)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), GDK_VoidSymbol);
+  g_return_val_if_fail (str != NULL, GDK_VoidSymbol);
+
+  gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
+  gtk_label_set_use_markup_internal (label, FALSE);
+  gtk_label_set_use_underline_internal (label, TRUE);
+  
+  gtk_label_recalculate (label);
+  return label->accel_keyval;
+}
+
 
 static void
 gtk_label_realize (GtkWidget *widget)
@@ -1113,7 +1353,7 @@ get_layout_index (GtkLabel *label,
                             index, &trailing);
 
   
-  cluster = label->label + *index;
+  cluster = label->text + *index;
   cluster_end = cluster;
   while (trailing)
     {
@@ -1310,7 +1550,10 @@ gtk_label_set_selectable (GtkLabel *label,
         }
     }
   if (setting != old_setting)
-    gtk_widget_queue_draw (GTK_WIDGET (label));
+    {
+       g_object_notify (G_OBJECT (label), "selectable");
+       gtk_widget_queue_draw (GTK_WIDGET (label));
+    }
 }
 
 gboolean
@@ -1334,7 +1577,7 @@ get_text_callback (GtkClipboard     *clipboard,
   
   if ((label->select_info->selection_anchor !=
        label->select_info->selection_end) &&
-      label->label)
+      label->text)
     {
       gint start, end;
       
@@ -1343,7 +1586,7 @@ get_text_callback (GtkClipboard     *clipboard,
       end = MAX (label->select_info->selection_anchor,
                  label->select_info->selection_end);
       
-      str = g_strndup (label->label + start,
+      str = g_strndup (label->text + start,
                        end - start);
       
       gtk_selection_data_set_text (selection_data, 
@@ -1413,7 +1656,7 @@ gtk_label_select_region  (GtkLabel *label,
 {
   g_return_if_fail (GTK_IS_LABEL (label));
   
-  if (label->label && label->select_info)
+  if (label->text && label->select_info)
     {
       GtkClipboard *clipboard;
 
@@ -1421,11 +1664,11 @@ gtk_label_select_region  (GtkLabel *label,
         start_offset = 0;
 
       if (end_offset < 0)
-        end_offset = g_utf8_strlen (label->label, -1);
+        end_offset = g_utf8_strlen (label->text, -1);
       
       gtk_label_select_region_index (label,
-                                     g_utf8_offset_to_pointer (label->label, start_offset) - label->label,
-                                     g_utf8_offset_to_pointer (label->label, end_offset) - label->label);
+                                     g_utf8_offset_to_pointer (label->text, start_offset) - label->text,
+                                     g_utf8_offset_to_pointer (label->text, end_offset) - label->text);
     }
 }
 

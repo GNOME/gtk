@@ -1,3 +1,10 @@
+2001-03-05  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtklabel.[ch]:
+	Convert from GtkArg to GParam (originally based on patch from Lee Mallabone).
+	New function gtk_label_get_accel_keyval () to get the underline accelerator
+	of the label. Setting the label pattern overrides other attributes.
+
 Mon Mar  5 14:51:10 MET 2001  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkrc.c: fixed compiler warnings by inserting some consts.

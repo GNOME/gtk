@@ -54,15 +54,18 @@ struct _GtkLabel
   GtkMisc misc;
 
   /*< private >*/
-  
-  gchar    *label;
-  gchar    *pattern;
-
+  gchar  *label;
   guint   jtype : 2;
   guint   wrap : 1;
+  guint   use_underline : 1;
+  guint   use_markup : 1;
+
+  guint   accel_keyval;
+  
+  gchar  *text; 
+  PangoAttrList *attrs;
   
   PangoLayout *layout;
-  PangoAttrList *attrs;
 
   GtkLabelSelectionInfo *select_info;
 };
@@ -87,6 +90,7 @@ void  gtk_label_set_markup            (GtkLabel    *label,
 guint gtk_label_set_markup_with_accel (GtkLabel    *label,
                                        const gchar *str);
                                             
+guint gtk_label_get_accel_keyval   (GtkLabel    *label);
 void       gtk_label_set_justify   (GtkLabel         *label,
 				    GtkJustification  jtype);
 void       gtk_label_set_pattern   (GtkLabel         *label,
