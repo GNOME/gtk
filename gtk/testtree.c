@@ -193,7 +193,8 @@ void create_tree_page(GtkWidget* parent, GtkSelectionMode mode,
     gtk_object_set_user_data(GTK_OBJECT(root), (gpointer)tree_buttons);
 }
 
-void main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
     GtkWidget* window, *notebook;
     GtkWidget* box1;
     GtkWidget* separator;
@@ -236,4 +237,6 @@ void main(int argc, char** argv) {
     gtk_widget_show(window);
 
     gtk_main();
+    
+    return 0;
 }

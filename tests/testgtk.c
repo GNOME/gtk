@@ -662,26 +662,26 @@ create_toolbar (void)
       toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
 
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Horizontal", "Horizontal toolbar layout",
+			       "Horizontal", "Horizontal toolbar layout", "Toolbar/Horizontal",
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_horizontal, toolbar);
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Vertical", "Vertical toolbar layout",
+			       "Vertical", "Vertical toolbar layout", "Toolbar/Vertical",
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_vertical, toolbar);
 
       gtk_toolbar_append_space (GTK_TOOLBAR(toolbar));
 
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Icons", "Only show toolbar icons",
+			       "Icons", "Only show toolbar icons", "Toolbar/IconsOnly",
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_icons, toolbar);
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Text", "Only show toolbar text",
+			       "Text", "Only show toolbar text", "Toolbar/TextOnly",
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_text, toolbar);
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Both", "Show toolbar icons and text",
+			       "Both", "Show toolbar icons and text", "Toolbar/Both",
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_both, toolbar);
 
@@ -689,27 +689,27 @@ create_toolbar (void)
 
       entry = gtk_entry_new ();
       gtk_widget_show(entry);
-      gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), entry, NULL);
+      gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), entry, "This is an unusable GtkEntry ;)", "Hey don't click me!!!");
 
       gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Small", "Use small spaces",
+			       "Small", "Use small spaces", "Toolbar/Small",
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_small_space, toolbar);
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Big", "Use big spaces",
+			       "Big", "Use big spaces", "Toolbar/Big",
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_big_space, toolbar);
 
       gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Enable", "Enable tooltips",
+			       "Enable", "Enable tooltips", NULL,
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_enable, toolbar);
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Disable", "Disable tooltips",
+			       "Disable", "Disable tooltips", NULL,
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_disable, toolbar);
 
@@ -734,48 +734,48 @@ make_toolbar (GtkWidget *window)
   toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
 
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Horizontal", "Horizontal toolbar layout",
+			   "Horizontal", "Horizontal toolbar layout", NULL,
 			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_horizontal, toolbar);
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Vertical", "Vertical toolbar layout",
+			   "Vertical", "Vertical toolbar layout", NULL,
 			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_vertical, toolbar);
 
   gtk_toolbar_append_space (GTK_TOOLBAR(toolbar));
 
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Icons", "Only show toolbar icons",
+			   "Icons", "Only show toolbar icons", NULL,
 			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_icons, toolbar);
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Text", "Only show toolbar text",
+			   "Text", "Only show toolbar text", NULL,
 			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_text, toolbar);
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Both", "Show toolbar icons and text",
+			   "Both", "Show toolbar icons and text", NULL,
 			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_both, toolbar);
 
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Small", "Use small spaces",
+			   "Small", "Use small spaces", NULL,
 			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_small_space, toolbar);
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Big", "Use big spaces",
+			   "Big", "Use big spaces", "Toolbar/Big",
 			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_big_space, toolbar);
 
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Enable", "Enable tooltips",
+			   "Enable", "Enable tooltips", NULL,
 			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_enable, toolbar);
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Disable", "Disable tooltips",
+			   "Disable", "Disable tooltips", NULL,
 			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_disable, toolbar);
 
@@ -4330,7 +4330,11 @@ main (int argc, char *argv[])
   gtk_set_locale ();
 
   gtk_init (&argc, &argv);
-  /* gle_init (&argc, &argv); */
+
+#ifdef HAVE_LIBGLE
+  gle_init (&argc, &argv);
+#endif /* !HAVE_LIBGLE */
+
   gtk_rc_parse ("testgtkrc");
 
   create_main_window ();

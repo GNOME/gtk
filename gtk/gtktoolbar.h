@@ -92,18 +92,21 @@ GtkWidget *gtk_toolbar_new             (GtkOrientation   orientation,
 GtkWidget *gtk_toolbar_append_item     (GtkToolbar      *toolbar,
 					const char      *text,
 					const char      *tooltip_text,
+					const char      *tooltip_private_text,
 					GtkWidget       *icon,
 					GtkSignalFunc    callback,
 					gpointer         user_data);
 GtkWidget *gtk_toolbar_prepend_item    (GtkToolbar      *toolbar,
 					const char      *text,
 					const char      *tooltip_text,
+					const char      *tooltip_private_text,
 					GtkWidget       *icon,
 					GtkSignalFunc    callback,
 					gpointer         user_data);
 GtkWidget *gtk_toolbar_insert_item     (GtkToolbar      *toolbar,
 					const char      *text,
 					const char      *tooltip_text,
+					const char      *tooltip_private_text,
 					GtkWidget       *icon,
 					GtkSignalFunc    callback,
 					gpointer         user_data,
@@ -114,13 +117,16 @@ void       gtk_toolbar_insert_space    (GtkToolbar      *toolbar,
 					gint             position);
 void       gtk_toolbar_append_widget   (GtkToolbar      *toolbar,
 					GtkWidget       *widget,
-					const char      *tooltip_text);
+					const char      *tooltip_text,
+					const char      *tooltip_private_text);
 void       gtk_toolbar_prepend_widget  (GtkToolbar      *toolbar,
 					GtkWidget       *widget,
-					const char      *tooltip_text);
+					const char      *tooltip_text,
+					const char	*tooltip_private_text);
 void       gtk_toolbar_insert_widget   (GtkToolbar      *toolbar,
 					GtkWidget       *widget,
 					const char      *tooltip_text,
+					const char      *tooltip_private_text,
 					gint             position);
 
 void       gtk_toolbar_set_orientation (GtkToolbar      *toolbar,
