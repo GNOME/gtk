@@ -1,3 +1,9 @@
+2003-06-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: 
+	* gdk-pixbuf/tmpl/animation.sgml: Remove manually inserted
+	anchors, gtk-doc emits anchors for all objects since Dec 2002.
+
 2003-05-27  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkadjustment.sgml: Document allowed values for
