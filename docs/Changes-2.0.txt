@@ -502,3 +502,9 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 
   If you aren't using GDK and GTK+ functions from multiple threads,
   there is no reason to call gdk_threads_init().
+
+* The GtkPreviewInfo struct has had its visual and colormap fields
+  removed.  Also, gtk_preview_get_cmap() and gtk_preview_get_visual()
+  are deprecated, as GdkRgb works on any colormap and visual.  You no
+  longer need to gtk_widget_push_cmap (gtk_preview_get_cmap ()) in
+  your code.

@@ -117,16 +117,11 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   widget_class->size_allocate = gtk_preview_size_allocate;
   widget_class->expose_event = gtk_preview_expose;
 
-  klass->info.visual = NULL;
-  klass->info.cmap = NULL;
-
   klass->info.lookup = NULL;
 
   klass->info.gamma = 1.0;
 
   gdk_rgb_init ();
-  klass->info.cmap = gdk_rgb_get_cmap ();
-  klass->info.visual = gdk_rgb_get_visual ();
 
   g_object_class_install_property (gobject_class,
                                    PROP_EXPAND,
@@ -313,7 +308,6 @@ gtk_preview_draw_row (GtkPreview *preview,
 
   g_return_if_fail (GTK_IS_PREVIEW (preview));
   g_return_if_fail (data != NULL);
-  g_return_if_fail (preview_class->info.visual != NULL);
   
   bpp = (preview->type == GTK_PREVIEW_COLOR ? 3 : 1);
   rowstride = (preview->buffer_width * bpp + 3) & -4;
@@ -422,19 +416,13 @@ gtk_preview_set_dither (GtkPreview      *preview,
 GdkVisual*
 gtk_preview_get_visual (void)
 {
-  if (!preview_class)
-    preview_class = gtk_type_class (gtk_preview_get_type ());
-
-  return preview_class->info.visual;
+  return gdk_rgb_get_visual ();
 }
 
 GdkColormap*
 gtk_preview_get_cmap (void)
 {
-  if (!preview_class)
-    preview_class = gtk_type_class (gtk_preview_get_type ());
-
-  return preview_class->info.cmap;
+  return gdk_rgb_get_colormap ();
 }
 
 GtkPreviewInfo*
@@ -491,10 +479,8 @@ gtk_preview_realize (GtkWidget *widget)
   attributes.y = widget->allocation.y + (widget->allocation.height - attributes.height) / 2;;
 
   attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = preview_class->info.visual;
-  attributes.colormap = preview_class->info.cmap;
   attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);

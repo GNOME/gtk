@@ -1,3 +1,28 @@
+2001-10-28  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_class_init): do not call
+	gtk_settings_get_default() here as that requires an X connection
+	(which breaks doc building with no X connection) and is not
+	multihead safe
+	(gtk_color_selection_init): delay palette loading until realize
+	time
+	(gtk_color_selection_realize): load the palette, and initialize
+	the global palette if it hasn't been already
+
+	* gtk/gtkpreview.c (gtk_preview_class_init): don't initialize the
+	visual/cmap fields of klass->info since they are gone
+	(gtk_preview_get_visual): just return gdk_rgb_get_visual ()
+	(gtk_preview_get_cmap): just return gdk_rgb_get_colormap ()
+	(gtk_preview_realize): don't set VISUAL and COLORMAP attributes
+
+	* gtk/gtkpreview.h (struct _GtkPreviewInfo): remove visual and
+	cmap fields
+	(gtk_preview_get_visual):
+	(gtk_preview_get_cmap): mark as deprecated
+
+	* docs/Changes-2.0.txt: add a little note about the GtkPreviewInfo
+	changes
+
 Sun Oct 28 09:15:39 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontext.h (struct _GtkIMContext): Fixed
