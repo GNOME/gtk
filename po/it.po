@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-02 09:54+0100\n"
-"PO-Revision-Date: 2004-03-02 10:03+0100\n"
+"PO-Revision-Date: 2004-03-02 22:08+0100\n"
 "Last-Translator: Alessio Dessì <alessiodessi@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -542,7 +542,7 @@ msgstr "Memoria insufficiente per caricare il file PNM"
 
 #: gdk-pixbuf/io-pnm.c:1082
 msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "La famiglia dei formati di immagine PNM/PBM/PGM/PPM"
+msgstr "Famiglia formati PNM/PBM/PGM/PPM"
 
 #: gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
@@ -1048,11 +1048,11 @@ msgstr "_Nome: "
 #. Folder combo
 #: gtk/gtkfilechooserdefault.c:2059
 msgid "Save in _Folder:"
-msgstr "Salve nella ca_rtella:"
+msgstr "Salva nella ca_rtella:"
 
 #: gtk/gtkfilechooserdefault.c:2081
 msgid "_Browse for other folders"
-msgstr "_Esplorazione di altre cartelle"
+msgstr "_Esplora altre cartelle"
 
 #: gtk/gtkfilechooserdefault.c:3251
 #, c-format
