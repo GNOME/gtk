@@ -1312,7 +1312,7 @@ bilinear_box_make_weights (PixopsFilterDimension *dim,
   dim->n = n;
   dim->weights = pixel_weights;
 
-  for (offset =0 ; offset < SUBSAMPLE; offset++)
+  for (offset = 0; offset < SUBSAMPLE; offset++)
     {
       double x = (double)offset / SUBSAMPLE;
       double a = x + 1 / scale;
@@ -1320,7 +1320,7 @@ bilinear_box_make_weights (PixopsFilterDimension *dim,
       for (i = 0; i < n; i++)
         {
           w  = linear_box_half (0.5 + i - a, 0.5 + i - x);
-          w += linear_box_half (1.5 + x - i, 1.5 + a - i);
+          w += linear_box_half (0.5 + x - i, 0.5 + a - i);
       
           *(pixel_weights++) = w * scale;
         }

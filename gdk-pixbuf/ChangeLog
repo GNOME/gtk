@@ -1,3 +1,8 @@
+Sat Jul  3 00:41:44 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* pixops/pixops.c (bilinear_box_make_weights): Correct the
+	math to calculate bilinear weights. (#112412, Brian Cameron)
+
 Mon Jun 21 00:44:51 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-transform.h: 
