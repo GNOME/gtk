@@ -20,6 +20,7 @@
 #include <gdk/gdkx.h>
 
 #define DRAG_HANDLE_SIZE 10
+#define BORDER_SIZE 5
 
 static void gtk_handle_box_class_init    (GtkHandleBoxClass *klass);
 static void gtk_handle_box_init          (GtkHandleBox      *handle_box);
@@ -145,21 +146,25 @@ gtk_handle_box_size_request (GtkWidget      *widget,
   bin = GTK_BIN (widget);
   hb = GTK_HANDLE_BOX(widget);
 
-  requisition->width = DRAG_HANDLE_SIZE + GTK_CONTAINER(widget)->border_width * 2;
-  requisition->height = DRAG_HANDLE_SIZE + GTK_CONTAINER(widget)->border_width * 2;
+  requisition->width = DRAG_HANDLE_SIZE + BORDER_SIZE * 2 + GTK_CONTAINER(widget)->border_width * 2;
+  requisition->height = BORDER_SIZE + GTK_CONTAINER(widget)->border_width * 2;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
       gtk_widget_size_request (bin->child, &bin->child->requisition);
 
       requisition->width += bin->child->requisition.width;
-      if(bin->child->requisition.height > requisition->height)
-	requisition->height = bin->child->requisition.height;
+      requisition->height += bin->child->requisition.height;
     }
 
+  g_print("New size request is %d x %d\n",
+	  requisition->width, requisition->height);
+
+#if 0
   hb->real_requisition = *requisition;
   if(hb->is_onroot)
     requisition->height = 3;
+#endif
 }
 
 static void
@@ -168,6 +173,7 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 {
   GtkBin *bin;
   GtkAllocation child_allocation;
+  GtkHandleBox *hb;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
@@ -175,25 +181,42 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 
   widget->allocation = *allocation;
   bin = GTK_BIN (widget);
+  hb = GTK_HANDLE_BOX(widget);
 
-  child_allocation.x = 0;
-  child_allocation.y = 0;
-  child_allocation.width = allocation->width - DRAG_HANDLE_SIZE - GTK_CONTAINER(widget)->border_width * 2;
-  child_allocation.height = allocation->height - GTK_CONTAINER(widget)->border_width * 2;
+  g_print("Our allocation is (%d, %d) - %d x %d\n",
+	  allocation->x, allocation->y,
+	  allocation->width, allocation->height);
+  child_allocation.x = DRAG_HANDLE_SIZE + BORDER_SIZE;
+  child_allocation.y = BORDER_SIZE;
+  child_allocation.width = allocation->width - DRAG_HANDLE_SIZE - GTK_CONTAINER(widget)->border_width * 2 - BORDER_SIZE * 2;
+  child_allocation.height = allocation->height - GTK_CONTAINER(widget)->border_width * 2 - BORDER_SIZE * 2;
 
-  if (GTK_WIDGET_REALIZED (widget))
-    {
-      gdk_window_move_resize (widget->window,
-			      allocation->x + GTK_CONTAINER(widget)->border_width,
-			      allocation->y + GTK_CONTAINER(widget)->border_width,
-			      child_allocation.width,
-			      child_allocation.height);
-    }
-  
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
       gtk_widget_size_allocate (bin->child, &child_allocation);
+    }  
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      if(hb->is_onroot)
+	gdk_window_resize (widget->window,
+			   child_allocation.width
+			   + GTK_CONTAINER(widget)->border_width
+			   + BORDER_SIZE,
+			   child_allocation.height
+			   + GTK_CONTAINER(widget)->border_width
+			   + BORDER_SIZE);
+      else
+	gdk_window_move_resize (widget->window,
+				allocation->x + GTK_CONTAINER(widget)->border_width + BORDER_SIZE,
+				allocation->y + GTK_CONTAINER(widget)->border_width + BORDER_SIZE,
+				child_allocation.width + GTK_CONTAINER(widget)->border_width + BORDER_SIZE,
+				child_allocation.height + GTK_CONTAINER(widget)->border_width + BORDER_SIZE);
     }
+
+  g_print("New child allocation is (%d, %d) - %d x %d\n",
+	  child_allocation.x, child_allocation.y,
+	  child_allocation.width, child_allocation.height);
 }
 
 static void gtk_handle_box_paint(GtkWidget *widget,
@@ -355,7 +378,9 @@ gtk_handle_box_reparent      (GtkWidget *widget,
 			  parentx,
 			  parenty);
       gdk_window_raise(widget->window);
+#if 0
       widget->requisition = hb->real_requisition;
+#endif
       gtk_widget_queue_resize(widget->parent);
       gdk_pointer_ungrab(GDK_CURRENT_TIME);
       gdk_pointer_grab(widget->window,
