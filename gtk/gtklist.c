@@ -2431,7 +2431,9 @@ gtk_list_move_focus_child (GtkList       *list,
 static gint
 gtk_list_horizontal_timeout (GtkWidget *list)
 {
-  GdkEventMotion event = { 0 };
+  GdkEventMotion event;
+
+  memset (&event, 0, sizeof (event));
 
   GDK_THREADS_ENTER ();
 
@@ -2450,7 +2452,9 @@ gtk_list_horizontal_timeout (GtkWidget *list)
 static gint
 gtk_list_vertical_timeout (GtkWidget *list)
 {
-  GdkEventMotion event = { 0 };
+  GdkEventMotion event;
+
+  memset (&event, 0, sizeof (event));
 
   GDK_THREADS_ENTER ();
 

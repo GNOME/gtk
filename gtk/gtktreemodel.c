@@ -1199,7 +1199,7 @@ gtk_tree_model_get_valist (GtkTreeModel *tree_model,
 
       gtk_tree_model_get_value (GTK_TREE_MODEL (tree_model), iter, column, &value);
 
-      G_VALUE_LCOPY (&value, var_args, &error);
+      G_VALUE_LCOPY (&value, var_args, 0, &error);
       if (error)
 	{
 	  g_warning ("%s: %s", G_STRLOC, error);

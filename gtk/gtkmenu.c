@@ -1372,7 +1372,6 @@ gtk_menu_expose (GtkWidget	*widget,
 {
   GtkMenuShell *menu_shell;
   GtkWidget *child;
-  GdkEventExpose child_event;
   GList *children;
   GtkMenu *menu;
   
@@ -1385,9 +1384,9 @@ gtk_menu_expose (GtkWidget	*widget,
   
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      gtk_menu_paint (widget);
+      GdkEventExpose child_event = *event;
       
-      child_event = *event;
+      gtk_menu_paint (widget);
       
       children = menu_shell->children;
       while (children)
@@ -1544,7 +1543,8 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 	  event->y >= 0 && event->y < height)
 	{
 	  GdkEvent send_event;
-	  
+
+	  memset (&send_event, 0, sizeof (send_event));
 	  send_event.crossing.type = GDK_ENTER_NOTIFY;
 	  send_event.crossing.window = event->window;
 	  send_event.crossing.time = event->time;
@@ -1790,8 +1790,6 @@ gtk_menu_stop_navigating_submenu (GtkMenu *menu)
 static gboolean
 gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
 {
-  GdkEventCrossing send_event;
-
   GtkMenu *menu = user_data;
   GdkWindow *child_window;
 
@@ -1803,6 +1801,9 @@ gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
 
       if (child_window)
 	{
+	  GdkEventCrossing send_event;
+
+	  memset (&send_event, 0, sizeof (send_event));
 	  send_event.window = child_window;
 	  send_event.type = GDK_ENTER_NOTIFY;
 	  send_event.time = GDK_CURRENT_TIME; /* Bogus */

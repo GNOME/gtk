@@ -651,7 +651,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
 	}
       g_value_init (&value, list_store->column_headers[column]);
 
-      G_VALUE_COLLECT (&value, var_args, &error);
+      G_VALUE_COLLECT (&value, var_args, 0, &error);
       if (error)
 	{
 	  g_warning ("%s: %s", G_STRLOC, error);

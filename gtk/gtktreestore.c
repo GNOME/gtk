@@ -659,7 +659,7 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
 	}
       g_value_init (&value, tree_store->column_headers[column]);
 
-      G_VALUE_COLLECT (&value, var_args, &error);
+      G_VALUE_COLLECT (&value, var_args, 0, &error);
       if (error)
 	{
 	  g_warning ("%s: %s", G_STRLOC, error);

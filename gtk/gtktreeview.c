@@ -5202,11 +5202,6 @@ remove_scroll_timeout (GtkTreeView *tree_view)
     }
 }
 
-#ifdef __GNUC__
-#warning "implement g_closure_sink"
-#endif
-#define g_closure_sink(c)
-
 void
 gtk_tree_view_set_rows_drag_source (GtkTreeView              *tree_view,
                                     GdkModifierType           start_button_mask,

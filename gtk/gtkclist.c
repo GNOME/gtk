@@ -7119,7 +7119,9 @@ move_vertical (GtkCList *clist,
 static gint
 horizontal_timeout (GtkCList *clist)
 {
-  GdkEventMotion event = { 0 };
+  GdkEventMotion event;
+
+  memset (&event, 0, sizeof (event));
 
   GDK_THREADS_ENTER ();
 
@@ -7138,7 +7140,9 @@ horizontal_timeout (GtkCList *clist)
 static gint
 vertical_timeout (GtkCList *clist)
 {
-  GdkEventMotion event = { 0 };
+  GdkEventMotion event;
+
+  memset (&event, 0, sizeof (event));
 
   GDK_THREADS_ENTER ();
 

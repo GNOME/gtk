@@ -1,3 +1,27 @@
+Sat Feb 17 06:47:27 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenu.c (gtk_menu_motion_notify): default initialize the
+	generated ENTER_NOTIFY event with 0, otherwise not explicitely
+	setup fields contain garbage (e.g. subwindow, breaking
+	gdk_drawable_ref() upon event copy).
+	(gtk_menu_stop_navigating_submenu_cb): same here.
+
+	* gtk/gtklist.c (gtk_list_vertical_timeout): 
+	* gtk/gtklist.c (gtk_list_horizontal_timeout): 
+	* gtk/gtkclist.c (vertical_timeout): 
+	* gtk/gtkclist.c (horizontal_timeout): change direct assignment
+	default-zero-intialization for unions to memset(,0,), as unions are
+	not fully default-zero-initialized by compilers (GdkEvent x = { 0, };
+	has to become GdkEvent x; memset (&x, 0, sizeof (x)); )
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_rows_drag_source): scratch
+	g_closure_sink() warning.
+
+	* gtk/gtktreemodel.c (gtk_tree_model_get_valist): 
+	* gtk/gtktreestore.c (gtk_tree_store_set_valist): 
+	* gtk/gtkliststore.c (gtk_list_store_set_valist): 
+	fix G_VALUE_COLLECT() and G_VALUE_LCOPY() calls.
+	
 Fri Feb 16 17:49:59 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.[hc], gtk/gtkliststore.[ch]: removed

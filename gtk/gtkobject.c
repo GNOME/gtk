@@ -179,10 +179,11 @@ gtk_arg_proxy_set_property (GObject      *object,
 			    const gchar  *trailer)
 {
   GtkObjectClass *class = g_type_class_peek (pspec->owner_type);
-  GtkArg arg = { 0, };
+  GtkArg arg;
 
   g_return_if_fail (class->set_arg != NULL);
 
+  memset (&arg, 0, sizeof (arg));
   arg.type = G_VALUE_TYPE (value);
   gtk_arg_set_from_value (&arg, value, FALSE);
   arg.name = pspec->name;
@@ -197,10 +198,11 @@ gtk_arg_proxy_get_property (GObject     *object,
 			    const gchar *trailer)
 {
   GtkObjectClass *class = g_type_class_peek (pspec->owner_type);
-  GtkArg arg = { 0, };
+  GtkArg arg;
 
   g_return_if_fail (class->get_arg != NULL);
 
+  memset (&arg, 0, sizeof (arg));
   arg.type = G_VALUE_TYPE (value);
   arg.name = pspec->name;
   class->get_arg (GTK_OBJECT (object), &arg, property_id);
