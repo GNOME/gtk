@@ -1,3 +1,17 @@
 Makefile
 Makefile.in
 *.info*
+*.dvi
+*.ps
+*.pg
+*.ky
+*.cp
+*.fn
+*.tp
+*.vr
+*.log
+*.aux
+*.toc
+*.cps
+*.fns
+*.vrs

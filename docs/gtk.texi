@@ -9,8 +9,8 @@
 @c %**end of header
 
 @set edition 1.0
-@set update-date 9 April 1997
-@set update-month April 1997
+@set update-date 16 January 1998
+@set update-month January 1998
 
 @ifinfo
 This file documents GTK, the General Toolkit
@@ -700,11 +700,14 @@ The available widgets (in alphabetical order):
 @menu
 * GtkAlignment::                The alignment widget.
 * GtkArrow::                    The arrow widget.
+* GtkAspectFrame::		The aspect frame widget.
 * GtkBin::                      The bin widget.
 * GtkBox::                      The box widget.
+* GtkButtonBox::		The button box widget.
 * GtkButton::                   The button widget.
 * GtkCheckButton::              The check button widget.
 * GtkCheckMenuItem::            The check menu item widget.
+* GtkColorSelection::		The color selector widget.
 * GtkContainer::                The container widget.
 * GtkDialog::                   The dialog widget.
 * GtkDrawingArea::              The drawing area widget.
@@ -712,6 +715,7 @@ The available widgets (in alphabetical order):
 * GtkFileSelection::            The file selection dialog widget.
 * GtkFrame::                    The frame widget.
 * GtkHBox::                     The horizontal box widget.
+* GtkHButtonBox::		The horizontal button box widget.
 * GtkHRuler::                   The horizontal ruler widget.
 * GtkHScale::                   The horizontal scale widget.
 * GtkHScrollbar::               The horizontal scrollbar widget.
@@ -745,6 +749,7 @@ The available widgets (in alphabetical order):
 * GtkTree::                     The tree widget.
 * GtkTreeItem::                 The tree item widget.
 * GtkVBox::                     The vertical box widget.
+* GtkVButtonBox::		The vertical button box widget.
 * GtkViewport::                 The viewport widget.
 * GtkVRuler::                   The vertical ruler widget.
 * GtkVScale::                   The vertical scale widget.
@@ -823,9 +828,8 @@ derived from @code{GtkObject}).
 
 @gtkstdmacros{Alignment, ALIGNMENT}
 
-
 @page
-@node GtkArrow, GtkBin, GtkAlignment, Widgets
+@node GtkArrow, GtkAspectFrame, GtkAlignment, Widgets
 @comment node-name, next, previous, up
 @section The arrow widget
 
@@ -879,7 +883,31 @@ structure directly (or, for that matter, any type derived from
 
 
 @page
-@node GtkBin, GtkBox, GtkArrow, Widgets
+@node GtkAspectFrame, GtkBin, GtkArrow, Widgets
+@comment node-name, next, previous, upa
+@section The aspect frame widget
+
+@subsection Description
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_aspect_frame_get_type (void)
+Returns the @code{GtkAspectFrame} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_aspect_frame_new (gchar *@var{label}, gfloat @var{xalign}, gfloat @var{yalign}, gfloat @var{ratio}, gint @var{obey_child})
+@end deftypefun
+
+@deftypefun void gtk_aspect_frame_set (GtkAspectFrame *@var{aspect_frame}, gfloat @var{xalign}, gfloat @var{yalign}, gfloat @var{ratio}, gint @var{obey_child})
+@end deftypefun
+
+
+@gtkstdmacros{AspectFrame, ASPECT_FRAME}
+
+@page
+@node GtkBin, GtkBox, GtkAspectFrame, Widgets
 @comment node-name, next, previous, up
 @section The bin widget
 
@@ -906,7 +934,7 @@ Returns the @code{GtkBin} type identifier.
 
 
 @page
-@node GtkBox, GtkButton, GtkBin, Widgets
+@node GtkBox, GtkButtonBox, GtkBin, Widgets
 @comment node-name, next, previous, up
 @section The box widget
 
@@ -1036,7 +1064,92 @@ A convenience function which is equivalent to the following:
 
 
 @page
-@node GtkButton, GtkCheckButton, GtkBox, Widgets
+@node GtkButtonBox, GtkButton, GtkBox, Widgets
+@comment node-name, next, previous, up
+@section The button box widget
+
+@subsection Description
+The button box widget is a container (@pxref{GtkContainer}) derived from the
+(@pxref{GtkBox}) widget. It is an abstract base class used by the horizontal
+button box (@pxref{GtkHButtonBox}) and the vertical button box 
+(@pxref{GtkVButtonBox}) widgets to provide a base of common functionality.
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_button_box_get_type (void)
+Returns the @code{GtkButtonBox} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_button_box_set_child_size_default (gint @var{width}, gint@var{height})
+@end deftypefun
+
+@deftypefun void gtk_button_box_set_child_ipadding_default (gint @var{ipad_x}, gint @var{ipad_y})
+@end deftypefun
+
+@deftypefun void gtk_button_box_get_child_size_default (gint *@var{width}, gint *@var{height})
+@end deftypefun
+
+@deftypefun void gtk_button_box_get_child_ipadding_default (gint *@var{ipad_x}, gint *@var{ipad_y})
+@end deftypefun
+
+@deftypefun void gtk_button_box_set_child_size (GtkButtonBox *@var{widget}, gint @var{width}, gint @var{height})
+@end deftypefun
+
+@deftypefun void gtk_button_box_set_child_ipadding (GtkButtonBox *@var{widget}, gint @var{ipad_x}, gint @var{ipad_y})
+@end deftypefun
+
+@deftypefun void gtk_button_box_set_layout (GtkButtonBox *@var{widget}, gint @var{layout_style})
+This will set the layout style of the buttons within this box. Currently it can
+be set to one of @code{GTK_BUTTONBOX_SPREAD}, @code{GTK_BUTTONBOX_EDGE}, 
+@code{GTK_BUTTONBOX_START} or @code{GTK_BUTTONBOX_END}.
+@itemize @bullet
+@item 
+The layout style @code{GTK_BUTTONBOX_SPREAD} will spread the buttons out 
+evenly within the button box. When the parent window is resized they will 
+re-adjust to the new window dimensions. The @code{gtk_button_box_set_spacing}
+function will set the minimum space that the buttons will leave between 
+themselves.
+
+@item
+@code{GTK_BUTTONBOX_EDGE}
+
+@item
+The layout style @code{GTK_BUTTONBOX_START} will place the buttons at the
+start of the button box, taking into account the spacing as set by the
+@code{gtk_button_box_set_spacing} function. The buttons will not move 
+when the parent window is re-sized.
+
+@item
+The layout style @code{GTK_BUTTONBOX_END} will place the buttons at the 
+end of the button box, taking into account the spacing as set by the
+@code{gtk_button_box_set_spacing} function. Again like the 
+@code{GTK_BUTTONBOX_START} layout style the buttons will not move when 
+the parent window is re-sized.
+@end itemize
+@end deftypefun
+
+@deftypefun gint gtk_button_box_get_spacing (GtkButtonBox *@var{widget})
+Get the per widget value for spacing within the button box. This value is
+the amount of space that will be between the indvidual buttons contained by
+this box.
+@end deftypefun
+
+@deftypefun void gtk_button_box_get_child_size (GtkButtonBox *@var{wiget}, gint *@var{width}, gint *@var{height})
+@end deftypefun
+
+@deftypefun void gtk_button_box_get_child_ipadding (GtkButtonBox *@var{widget}, gint *@var{ipad_x}, gint *@var{ipad_y})
+Get the per widget value for the padding inside the buttons. This value 
+controls how large the buttons will be within the box.
+@end deftypefun
+
+@deftypefun void gtk_button_box_get_layout (GtkButtonBox *@var{widget})
+@end deftypefun
+@gtkstdmacros{ButtonBox, BUTTON_BOX}
+
+@page
+@node GtkButton, GtkCheckButton, GtkButtonBox, Widgets
 @comment node-name, next, previous, up
 @section The button widget
 
@@ -1063,12 +1176,18 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_button_get_type (void)
+Returns the @code{GtkButton} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_button_new (void)
+Create a new @code{GtkButton} object. The new widget is returned as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_button_new_with_label (gchar *@var{label})
+Create a new @code{GtkButton} object and set the text that is 
+on the button to @var{label}. The new widget is returned as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
 @end deftypefun
 
 @deftypefun void gtk_button_pressed (GtkButton *@var{button})
@@ -1102,6 +1221,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_check_button_get_type (void)
+Returns the @code{GtkCheckButton} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_check_button_new (void)
@@ -1123,7 +1243,7 @@ A convenience function which is equivalent to the following:
 
 
 @page
-@node GtkCheckMenuItem, GtkContainer, GtkCheckButton, Widgets,
+@node GtkCheckMenuItem, GtkColorSelection, GtkCheckButton, Widgets,
 @comment node-name, next, previous, up
 @section The check menu item widget
 
@@ -1138,6 +1258,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_check_menu_item_get_type (void)
+Returns the @code{GtkCheckMenuItem} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_check_menu_item_new (void)
@@ -1154,9 +1275,46 @@ A convenience function which is equivalent to the following:
 
 @gtkstdmacros{CheckMenuItem, CHECK_MENU_ITEM}
 
-
 @page
-@node GtkContainer, GtkDialog, GtkCheckMenuItem, Widgets
+@node GtkColorSelection, GtkContainer, GtkCheckMenuItem, Widgets
+@comment node-name, next, previous, up
+@section The color selector widget
+
+@subsection Description
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_color_selection_get_type (void)
+Returns the @code{GtkColorSelection} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_color_selection_new (void)
+@end deftypefun
+
+@deftypefun void gtk_color_selection_set_update_policy (GtkColorSelection *@var{colorsel}, GtkUpdateType @var{policy})
+@end deftypefun
+
+@deftypefun void gtk_color_selection_set_color (GtkColorSelection *@var{colorsel}, gdouble *@var{color})
+@end deftypefun
+
+@deftypefun void gtk_color_selection_get_color (GtkColorSelection *@var{colorsel}, gdouble *@var{color})
+@end deftypefun
+
+@deftypefun void gtk_color_selection_set_opacity (GtkColorSelection *@var{colorsel}, gint @var{use_opacity})
+@end deftypefun
+
+@deftypefun guint gtk_color_selection_dialog_get_type (void)
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_color_selection_dialog_new (gchar *@var{title})
+@end deftypefun
+
+
+@gtkstdmacros{ColorSelection, COLOR_SELECTION}
+@page
+@node GtkContainer, GtkDialog, GtkColorSelection, Widgets
 @comment node-name, next, previous, up
 @section The container widget
 
@@ -1183,6 +1341,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_container_get_type (void)
+Returns the @code{GtkContainer} type identifier.
 @end deftypefun
 
 @deftypefun void gtk_container_border_width (GtkContainer *@var{container}, gint @var{border_width})
@@ -1237,6 +1396,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_dialog_get_type (void)
+Returns the @code{GtkDialog} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_dialog_new (void)
@@ -1258,6 +1418,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_drawing_area_get_type (void)
+Returns the @code{GtkDrawingArea} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_drawing_area_new (void)
@@ -1277,6 +1438,10 @@ A convenience function which is equivalent to the following:
 
 @subsection Description
 
+@subsection Options
+
+There are currently no defined options available for this widget.
+
 @subsection Signals
 
 @deftypefn Signal void GtkEntry::insert (GtkEntry *@var{entry}, gchar *@var{text}, gint @var{length}, gint *@var{position})
@@ -1291,12 +1456,23 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_entry_get_type (void)
+Returns the @code{GtkEntry} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_entry_new (void)
+Create a new @code{GtkEntry} object. The new widget is returned 
+as a pointer to a @code{GtkWidget} object. @code{NULL} is returned on
+failure.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_entry_new_with_max_length (guint16 @var{max})
 @end deftypefun
 
 @deftypefun void gtk_entry_set_text (GtkEntry *@var{entry}, gchar *@var{text})
+Will set the text in the previously created @code{GtkEntry} object to 
+@var{text}. It is important to not set the fields of the @code{GtkEntry}
+structure directly (or, for that matter, any type derived from 
+@code{GtkObject}).
 @end deftypefun
 
 @deftypefun void gtk_entry_append_text (GtkEntry *@var{entry}, gchar *@var{text})
@@ -1308,7 +1484,13 @@ A convenience function which is equivalent to the following:
 @deftypefun void gtk_entry_set_position (GtkEntry *@var{entry}, gint @var{position})
 @end deftypefun
 
+@deftypefun void gtk_entry_set_visibility (GtkEntry *@var{entry}, gint @var{visible})
+Will make the keystrokes entered into the @code{GtkEntry} object invisible
+when @var{visible} is @code{TRUE}. Defaults to @code{FALSE}.
+@end deftypefun
+
 @deftypefun gchar* gtk_entry_get_text (GtkEntry *@var{entry})
+Returns the text that is contained in the @code{GtkEntry}.
 @end deftypefun
 
 @gtkstdmacros{Entry, ENTRY}
@@ -1326,7 +1508,8 @@ A convenience function which is equivalent to the following:
 
 @subsection Functions
 
-@deftypefun guint gtk_file_selection_get_Type (void)
+@deftypefun guint gtk_file_selection_get_type (void)
+Returns the @code{GtkFileSelection} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_file_selection_new (gchar *@var{title})
@@ -1354,6 +1537,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_frame_get_type (void)
+Returns the @code{GtkFrame} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_frame_new (gchar *@var{label})
@@ -1372,7 +1556,7 @@ A convenience function which is equivalent to the following:
 
 
 @page
-@node GtkHBox, GtkHRuler, GtkFrame, Widgets
+@node GtkHBox, GtkHButtonBox, GtkFrame, Widgets
 @comment node-name, next, previous, up
 @section The horizontal box widget
 
@@ -1384,6 +1568,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_hbox_get_type (void)
+Returns the @code{GtkHBox} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_hbox_new (gint @var{homogeneous}, gint @var{spacing})
@@ -1391,9 +1576,41 @@ A convenience function which is equivalent to the following:
 
 @gtkstdmacros{HBox, HBOX}
 
+@page
+@node GtkHButtonBox, GtkHRuler, GtkHBox, Widgets
+@comment node-name, next, previous, up
+@section The horizontal button box widget
+
+@subsection Description
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_hbutton_box_get_type (void)
+Returns the @code{GtkHButtonBox} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_hbutton_box_new (void)
+@end deftypefun
+
+@deftypefun void gtk_hbutton_box_set_spacing_default (gint @var{spacing})
+@end deftypefun
+
+@deftypefun void gtk_hbutton_box_set_layout_default (gint @var{layout})
+@end deftypefun
+
+@deftypefun gint gtk_hbutton_box_get_spacing_default (void)
+@end deftypefun
+
+@deftypefun gint gtk_hbutton_box_get_layout_default (void)
+@end deftypefun
+
+@gtkstdmacros {HButtonBox, HBUTTON_BOX}
+
 
 @page
-@node GtkHRuler, GtkHScale, GtkHBox, Widgets
+@node GtkHRuler, GtkHScale, GtkHButtonBox, Widgets
 @comment node-name, next, previous, up
 @section The horizontal ruler widget
 
@@ -1405,6 +1622,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_hruler_get_type (void)
+Returns the @code{GtkHRuler} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_hruler_new (void)
@@ -1426,6 +1644,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_hscale_get_type (void)
+Returns the @code{GtkHScale} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_hscale_new (GtkAdjustment *@var{adjustment})
@@ -1447,6 +1666,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_hscrollbar_get_type (void)
+Returns the @code{GtkHScrollbar} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_hscrollbar_new (GtkAdjustment *@var{adjustment})
@@ -1468,6 +1688,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_hseparator_get_type (void)
+Returns the @code{GtkHSeparator} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_hseparator_new (void)
@@ -1489,6 +1710,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_image_get_type (void)
+Returns the @code{GtkImage} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_image_new (GdkImage *@var{val})
@@ -1525,6 +1747,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_item_get_type (void)
+Returns the @code{GtkItem} type identifier.
 @end deftypefun
 
 @deftypefun void gtk_item_select (GtkItem *@var{item})
@@ -1552,9 +1775,13 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_label_get_type (void)
+Returns the @code{GtkLabel} type identifer.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_label_new (GtkLabel *@var{label}, gchar *@var{str})
+Create a new @code{GtkLabel} object and initialize it with the 
+text in @var{str}. The new widget is returned as a pointer to a 
+@code{GtkWidget} object. @code{NULL} is returned on faulure.
 @end deftypefun
 
 @deftypefun void gtk_label_set (GtkLabel *@var{label}, gchar *@var{str})
@@ -1588,6 +1815,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_list_get_type (void)
+Returns the @code{GtkList} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_list_new (void)
@@ -1642,6 +1870,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_list_item_get_type (void)
+Returns the @code{GtkListItem} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_list_item_new (void)
@@ -1672,6 +1901,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_menu_get_type (void)
+Returns the @code{GtkMenu} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_menu_new (void)
@@ -1717,6 +1947,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_menu_bar_get_type (void)
+Returns the @code{GtkMenuBar} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_menu_bar_new (void)
@@ -1750,6 +1981,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_menu_item_get_type (void)
+Returns the @code{GtkMenuItem} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_menu_item_new (void)
@@ -1801,6 +2033,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_menu_shell_get_type (void)
+Returns the @code{GtkMenuShell} type identifier.
 @end deftypefun
 
 @deftypefun void gtk_menu_shell_append (GtkMenuShell *@var{menu_shell}, GtkWidget *@var{child})
@@ -1831,6 +2064,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_misc_get_type (void)
+Returns the @code{GtkMisc} type identifier.
 @end deftypefun
 
 @deftypefun void gtk_misc_set_alignment (GtkMisc *@var{misc}, gfloat @var{xalign}, gfloat @var{yalign})
@@ -1855,6 +2089,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_notebook_get_type (void)
+Returns the @code{GtkNotebook} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_notebook_new (void)
@@ -1906,6 +2141,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_option_menu_get_type (void)
+Returns the @code{GtkOptionMenu} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_option_menu_new (void)
@@ -1939,6 +2175,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_pixmap_get_type (void)
+Returns the @code{GtkPixmap} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_pixmap_new (GdkPixmap *@var{normal}, GdkPixmap *@var{active}, GdkPixmap *@var{prelight}, GdkPixmap *@var{selected}, GdkPixmap *@var{insensitive})
@@ -1966,6 +2203,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_preview_get_type (void)
+Returns the @code{GtkPreview} type identifier.
 @end deftypefun
 
 @deftypefun void gtk_preview_uninit (void)
@@ -2026,6 +2264,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_progress_bar_get_type (void)
+Returns the @code{GtkProgressBar} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_progress_bar_new (void)
@@ -2050,6 +2289,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_radio_button_get_type (void)
+Returns the @code{GtkRadioButton} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_radio_button_new (GSList *@var{group})
@@ -2077,6 +2317,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_radio_menu_item_get_type (void)
+Returns the @code{GtkRadioMenuItem} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_radio_menu_item_new (GSList *@var{group})
@@ -2104,6 +2345,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_range_get_type (void)
+Returns the @code{GtkRange} type identifier.
 @end deftypefun
 
 @deftypefun GtkAdjustment* gtk_range_get_adjustment (GtkRange *@var{range})
@@ -2173,6 +2415,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_ruler_get_type (void)
+Returns the @code{GtkRuler} type identifier.
 @end deftypefun
 
 @deftypefun void gtk_ruler_set_metric (GtkRuler *@var{ruler}, GtkMetricType @var{metric})
@@ -2203,6 +2446,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_scale_get_type (void)
+Returns the @code{GtkScale} type identifier.
 @end deftypefun
 
 @deftypefun void gtk_scale_set_digits (GtkScale *@var{scale}, gint @var{digits})
@@ -2235,7 +2479,8 @@ A convenience function which is equivalent to the following:
 
 @subsection Functions
 
-@deftypefun guint gtk_scrollbar_get_type (void)
+@deftypefun guint gtk_scrollbar_get_type (void)a
+Returns the @code{GtkScrollbar} type identifier.
 @end deftypefun
 
 @gtkstdmacros{Scrollbar, SCROLLBAR}
@@ -2254,6 +2499,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_scrolled_window_get_type (void)
+Returns the @code{GtkScrolledWindow} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_scrolled_window_new (GtkAdjustment *@var{hadjustment}, GtkAdjustment *@var{vadjustment})
@@ -2284,6 +2530,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_separator_get_type (void)
+Returns the @code{GtkSeparator} type identifier.
 @end deftypefun
 
 @gtkstdmacros{Separator, SEPARATOR}
@@ -2302,6 +2549,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_table_get_type (void)
+Returns the @code{GtkTable} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_table_new (gint @var{rows}, gint @var{columns}, gint @var{homogeneous})
@@ -2341,7 +2589,42 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_text_get_type (void)
+Returns the @code{GtkText} type identifier.
 @end deftypefun
+
+@deftypefun GtkWidget* gtk_text_new (GtkAdjustment *@var{hadj}, GtkAdjustment *@var{vadj});
+@end deftypefun
+
+@deftypefun void gtk_text_set_editable (GtkText *@var{text}, gint @var{editable})
+@end deftypefun
+
+@deftypefun void gtk_text_set_adjustments (GtkText *@var{text}, GtkAdjustment *@var{hadj}, GtkAdjustment *@var{vadj})
+@end deftypefun
+
+@deftypefun void gtk_text_set_point (GtkText *@var{text}, guint @var{index})
+@end deftypefun
+
+@deftypefun guint gtk_text_get_point (GtkText *@var{text})
+@end deftypefun
+
+@deftypefun guint gtk_text_get_length (GtkText *@var{text})
+@end deftypefun
+
+@deftypefun void gtk_text_freeze (GtkText *@var{text})
+@end deftypefun
+
+@deftypefun void gtk_text_thaw (GtkText *@var{text})
+@end deftypefun
+
+@deftypefun void gtk_text_insert (GtkText *@var{text}, GdkFont *@var{font}, GdkColor *@var{fore}, GdkColor *@var{back}, char *@var{chars}, gint @var{length})
+@end deftypefun
+
+@deftypefun gint gtk_text_forward_delete (GtkText *@var{text}, guint @var{nchars})
+@end deftypefun
+
+@deftypefun gint gtk_text_backward_delete (GtkText *@var{text}, guint @var{nchars})
+@end deftypefun
+
 
 @gtkstdmacros{Text, TEXT}
 
@@ -2362,6 +2645,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_toggle_button_get_type (void)
+Returns the @code{GtkToggleButton} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_toggle_button_new (void)
@@ -2395,7 +2679,51 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_tree_get_type (void)
+Returns the @code{GtkTree} type identifier.
 @end deftypefun
+
+@deftypefun GtkWidget* gtk_tree_new (void)
+@end deftypefun
+
+@deftypefun void gtk_tree_append (GtkTree *@var{tree}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_tree_prepend (GtkTree *@var{tree}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_tree_insert (GtkTree *@var{tree}, GtkWidget *@var{child}, gint @var{position})
+@end deftypefun
+
+@deftypefun gint gtk_tree_child_position (GtkTree *@var{tree}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_tree_clear_items (GtkTree *@var{tree}, gint @var{start}, gint @var{end})
+@end deftypefun
+
+@deftypefun void gtk_tree_remove_items (GtkTree *@var{tree}, GList *@var{items})
+@end deftypefun
+
+@deftypefun void gtk_tree_select_child (GtkTree *@var{tree}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_tree_select_item (GtkTree *@var{tree}, gint @var{item})
+@end deftypefun
+
+@deftypefun void gtk_tree_unselect_child (GtkTree *@var{tree}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_tree_unselect_item (GtkTree *@var{tree}, gint @var{item})
+@end deftypefun
+
+@deftypefun void gtk_tree_set_selection_mode (GtkTree *@var{tree}, GtkSelectionMode @var{mode})
+@end deftypefun
+
+@deftypefun void gtk_tree_set_view_mode (GtkTree *@var{tree}, GtkTreeViewMode @var{mode})
+@end deftypefun
+
+@deftypefun void gtk_tree_set_view_lines (GtkTree *@var{tree}, guint @var{flag})
+@end deftypefun
+
 
 @gtkstdmacros{Tree, TREE}
 
@@ -2413,15 +2741,65 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_tree_item_get_type (void)
+Returns the @code{GtkTreeItem} type identifier.
 @end deftypefun
+
+@deftypefun GtkWidget* gtk_tree_item_new (void)
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_tree_item_new_with_label (gchar *@var{label})
+@end deftypefun
+
+@deftypefun void gtk_tree_item_set_subtree (GtkTreeItem *@var{tree_item}, GtkWidget *@var{subtree})
+@end deftypefun
+
+@deftypefun void gtk_tree_item_select (GtkTreeItem *@var{tree_item})
+@end deftypefun
+
+@deftypefun void gtk_tree_item_deselect (GtkTreeItem *@var{tree_item})
+@end deftypefun
+
+@deftypefun void gtk_tree_item_expand (GtkTreeItem *@var{tree_item})
+@end deftypefun
+
+@deftypefun void gtk_tree_item_collapse (GtkTreeItem *@var{tree_item})
+@end deftypefun
+
+@deftypefun void gtk_tree_item_remove_subtree (GtkTreeItem *@var{item})
+@end deftypefun
+
+
 
 @gtkstdmacros{TreeItem, TREE_ITEM}
 
 
 @page
-@node GtkVBox, GtkViewport, GtkTreeItem, Widgets
+@node GtkVBox, GtkVButtonBox, GtkTreeItem, Widgets
 @comment node-name, next, previous, up
 @section The vertical box widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_vbox_get_type (void)
+Returns the @code{GtkVBox} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_vbox_new (gint @var{homogeneous}, gint @var{spacing})
+@end deftypefun
+
+@gtkstdmacros{VBox, VBOX}
+
+@page
+@node GtkVButtonBox, GtkViewport, GtkVBox, Widgets
+@comment node-name, next, previous, up
+@section The vertical button box widget
 
 
 @subsection Description
@@ -2430,17 +2808,29 @@ A convenience function which is equivalent to the following:
 
 @subsection Functions
 
-@deftypefun guint gtk_vbox_get_type (void)
+@deftypefun guint gtk_vbutton_box_get_type (void)
 @end deftypefun
 
-@deftypefun GtkWidget* gtk_vbox_new (gint @var{homogeneous}, gint @var{spacing})
+@deftypefun GtkWidget* gtk_vbutton_box_new (void)
 @end deftypefun
 
-@gtkstdmacros{VBox, VBOX}
+@deftypefun void gtk_vbutton_box_set_spacing_default (gint @var{spacing})
+@end deftypefun
+
+@deftypefun void gtk_vbutton_box_set_layout_default (gint @var{layout})
+@end deftypefun
+
+@deftypefun gint gtk_vbutton_box_get_spacing_default (void)
+@end deftypefun
+
+@deftypefun gint gtk_vbutton_box_get_layout_default (void)
+@end deftypefun
+
+@gtkstdmacros{VButtonBox, VBUTTON_BOX}
 
 
 @page
-@node GtkViewport, GtkVRuler, GtkVBox, Widgets
+@node GtkViewport, GtkVRuler, GtkVButtonBox, Widgets
 @comment node-name, next, previous, up
 @section The viewport widget
 
@@ -2452,6 +2842,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_viewport_get_type (void)
+Returns the @code{GtkViewport} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_viewport_new (GtkAdjustment *@var{hadjustment}, GtkAdjustment *@var{vadjustment})
@@ -2488,6 +2879,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_vruler_get_type (void)
+Returns the @code{GtkVRuler} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_vruler_new (void)
@@ -2509,6 +2901,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_vscale_get_type (void)
+Returns the @code{GtkVScale} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_vscale_new (GtkAdjustment *@var{adjustment})
@@ -2530,6 +2923,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_vscrollbar_get_type (void)
+Returns the @code{GtkVScrollbar} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_vscrollbar_new (GtkAdjustment *@var{adjustment})
@@ -2554,6 +2948,7 @@ A convenience function which is equivalent to the following:
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_vseparator_new (void)
+Returns the @code{GtkVSeparator} type identifier.
 @end deftypefun
 
 @gtkstdmacros{VSeparator, VSEPARATOR}
@@ -2683,6 +3078,7 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_widget_get_type (void)
+Returns the @code{GtkWidget} type identifier.
 @end deftypefun
 
 @deftypefun void gtk_widget_class_init (GtkWidgetClass *@var{class})
@@ -2809,9 +3205,15 @@ A convenience function which is equivalent to the following:
 @subsection Functions
 
 @deftypefun guint gtk_window_get_type (void)
+Returns the @code{GtkWindow} type identifier.
 @end deftypefun
 
 @deftypefun GtkWidget* gtk_window_new (GtkWindowType @var{type})
+Create a new @code{GtkWindow} object. The new widget is returned as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+The @var{type} can be one of @code{GTK_WINDOW_TOPLEVEL}, 
+@code{GTK_WINDOW_DIALOG} or, @code{GTK_WINDOW_POPUP}. The @var{type} 
+value determines how this widget will interact with the window manager.
 @end deftypefun
 
 @deftypefun void gtk_window_set_title (GtkWindow *@var{window}, gchar *@var{title})

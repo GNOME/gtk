@@ -2736,12 +2736,17 @@ static GtkWidget *rings = NULL;
 typedef struct _cursoroffset {gint x,y;} CursorOffset;
 
 static void
-shape_pressed (GtkWidget *widget)
+shape_pressed (GtkWidget *widget, GdkEventButton *event)
 {
   CursorOffset *p;
 
+  /* ignore double and triple click */
+  if (event->type != GDK_BUTTON_PRESS)
+    return;
+
   p = gtk_object_get_user_data (GTK_OBJECT(widget));
-  gtk_widget_get_pointer (widget, &(p->x), &(p->y));
+  p->x = (int) event->x;
+  p->y = (int) event->y;
 
   gtk_grab_add (widget);
   gdk_pointer_grab (widget->window, TRUE,

@@ -1,3 +1,17 @@
+Sat Jan 17 13:26:15 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* gtk/gtkentry.[ch]:  Applied patch from <lupus@lettere.unipd.it> 
+          which adds gtk_entry_set_max_length function.  This was 
+          part of gtk-lupus-970112-0.
+
+	* gtk/testgtk.c: Applied gtk-wille-980113-0 which fixes 
+          a problem with a shaped widget keeping grab forever
+          when double clicked.
+     
+        * docs/gtk.texi: patch from Gregory McLean <gregm@randomc.com>
+          to add some on aspect_frame, button_box, and color_selection
+          widgets
+
 Sat Jan 17 06:24:05 1998  Tim Janik  <timj@psynet.net>
 
 	* gtk/gtktypeutils.h (gtk_type_get_arg): new function.

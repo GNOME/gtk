@@ -1764,7 +1764,7 @@ gtk_real_entry_insert_text (GtkEntry *entry,
     new_text_length = entry->text_max_length - entry->text_length;
 
   /* Don't insert anything, if there was nothing to insert. */
-  if (new_text_length == 0)
+  if (new_text_length <= 0)
     return;
 
   start_pos = *position;
@@ -2108,4 +2108,13 @@ gtk_entry_paste_clipboard (GtkEntry *entry, GdkEventKey *event)
 {
   gtk_selection_convert (GTK_WIDGET(entry), 
 			 clipboard_atom, ctext_atom, event->time);
+}
+
+void
+gtk_entry_set_max_length (GtkEntry *entry, guint16 max)
+{
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  entry->text_max_length = max;
 }
