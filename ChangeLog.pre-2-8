@@ -1,3 +1,9 @@
+2002-03-05  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_size_allocate): don't assign
+	yoffset here, just let it get updated in response to the
+	value_changed. Fixes #72479
+
 Tue Mar  5 10:29:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktreeview.c (do_presize_handler)

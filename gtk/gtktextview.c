@@ -2917,7 +2917,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   if (y != text_view->yoffset)
     {
-      vadj->value = text_view->yoffset = y;
+      vadj->value = y;
       yoffset_changed = TRUE;
     }
 
