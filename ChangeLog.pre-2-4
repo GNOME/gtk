@@ -1,3 +1,9 @@
+Thu Dec 11 23:50:30 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtknotebook.c (gtk_notebook_pages_allocate): Don't 
+	unnecessarily reserve space for arrows in RTL mode.  (#129075,
+	Semion Chichelnitsky)
+
 Thu Dec 11 00:35:12 2003  Matthias Clasen  <maclas@gmx.de>
 
 	Changes to allow "no input" windows (#64613):

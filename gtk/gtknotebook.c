@@ -3396,7 +3396,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
      {
       child_allocation.x = (allocation->x + allocation->width -
 				container->border_width); 
-      if (notebook->scrollable) 
+      if (showarrow) 
 	{
 	  if (notebook->has_after_previous)
 	    child_allocation.x -= ARROW_SPACING + ARROW_SIZE;
