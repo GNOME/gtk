@@ -709,7 +709,7 @@ _gdk_window_process_expose (GdkWindow    *window,
   GdkRegion *invalidate_region = gdk_region_rectangle (area);
   GdkRegion *clip_region;
   GSList *tmp_list = translate_queue;
-
+  
   impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
   
   while (tmp_list)
@@ -747,7 +747,7 @@ _gdk_window_process_expose (GdkWindow    *window,
 
   if (!gdk_region_empty (invalidate_region))
     gdk_window_invalidate_region (window, invalidate_region, FALSE);
-
+  
   gdk_region_destroy (invalidate_region);
   gdk_region_destroy (clip_region);
 }

@@ -169,6 +169,10 @@ gpointer      gdk_xid_table_lookup     (XID              xid);
 
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 
+/* FIXME should take a GdkDisplay* */
+void          gdk_x11_grab_server      (void);
+void          gdk_x11_ungrab_server    (void);
+
 /* returns TRUE if we support the given WM spec feature */
 gboolean      gdk_net_wm_supports      (GdkAtom property);
 

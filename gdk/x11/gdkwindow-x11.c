@@ -807,8 +807,9 @@ set_initial_hints (GdkWindow *window)
     }
 }
 
-void
-gdk_window_show (GdkWindow *window)
+static void
+show_window_internal (GdkWindow *window,
+                      gboolean   raise)
 {
   GdkWindowObject *private;
   
@@ -817,8 +818,9 @@ gdk_window_show (GdkWindow *window)
   private = (GdkWindowObject*) window;
   if (!private->destroyed)
     {
-      XRaiseWindow (GDK_WINDOW_XDISPLAY (window),
-		    GDK_WINDOW_XID (window));
+      if (raise)
+        XRaiseWindow (GDK_WINDOW_XDISPLAY (window),
+                      GDK_WINDOW_XID (window));
 
       if (!GDK_WINDOW_IS_MAPPED (window))
         {
@@ -835,6 +837,31 @@ gdk_window_show (GdkWindow *window)
         XMapWindow (GDK_WINDOW_XDISPLAY (window),
                     GDK_WINDOW_XID (window));
     }
+}
+
+/**
+ * gdk_window_show_unraised:
+ * @window: a #GdkWindow
+ *
+ * Shows a #GdkWindow onscreen, but does not modify its stacking
+ * order. In contrast, gdk_window_show() will raise the window
+ * to the top of the window stack.
+ * 
+ **/
+void
+gdk_window_show_unraised (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  show_window_internal (window, FALSE);
+}
+
+void
+gdk_window_show (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  show_window_internal (window, TRUE);
 }
 
 void
@@ -1982,8 +2009,8 @@ gdk_window_at_pointer (gint *win_x,
   
   xwindow = GDK_ROOT_WINDOW ();
   xdisplay = GDK_DISPLAY ();
-  
-  XGrabServer (xdisplay);
+
+  gdk_x11_grab_server ();
   while (xwindow)
     {
       xwindow_last = xwindow;
@@ -1993,7 +2020,7 @@ gdk_window_at_pointer (gint *win_x,
 		     &winx, &winy,
 		     &xmask);
     }
-  XUngrabServer (xdisplay);
+  gdk_x11_ungrab_server ();
   
   window = gdk_window_lookup (xwindow_last);
   
@@ -3352,10 +3379,10 @@ gdk_window_xid_at_coords (gint     x,
   root = GDK_WINDOW_XID (window);
   num = g_list_length (excludes);
   
-  XGrabServer (xdisplay);
+  gdk_x11_grab_server ();
   if (!XQueryTree (xdisplay, root, &root_win, &parent_win, &list, &num))
     {
-      XUngrabServer (xdisplay);
+      gdk_x11_ungrab_server ();
       return root;
     }
   if (list)
@@ -3381,20 +3408,20 @@ gdk_window_xid_at_coords (gint     x,
 	      if (!g_list_find (excludes, (gpointer *) child))
 		{
 		  XFree (list);
-		  XUngrabServer (xdisplay);
+                  gdk_x11_ungrab_server ();
 		  return child;
 		}
 	    }
 	  else
 	    {
 	      XFree (list);
-	      XUngrabServer (xdisplay);
+              gdk_x11_ungrab_server ();
 	      return child;
 	    }
 	} while (--i > 0);
       XFree (list);
     }
-  XUngrabServer (xdisplay);
+  gdk_x11_ungrab_server ();
   return root;
 }
 

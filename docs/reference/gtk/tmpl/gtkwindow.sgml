@@ -524,6 +524,11 @@ If the window can be resized to a smaller size by the user.
 If the window can be resized to a larger size by the user.
 </para>
 
+<!-- ##### ARG GtkWindow:resizable ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWindow:modal ##### -->
 <para>
 If the window is modal, i.e. it grabs all GTK+ events.

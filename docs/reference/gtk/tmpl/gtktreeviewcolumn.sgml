@@ -42,12 +42,8 @@ GtkTreeViewColumn
 @displayed_width: 
 @drag_x: 
 @drag_y: 
-@func: 
-@func_data: 
-@destroy: 
 @title: 
-@cell: 
-@attributes: 
+@cell_list: 
 @column_type: 
 @sort_clicked_signal: 
 @sort_column_changed_signal: 
@@ -103,6 +99,7 @@ GtkTreeViewColumn
 </para>
 
 @tree_column: 
+@cell_renderer: 
 @attribute: 
 @column: 
 
@@ -113,6 +110,7 @@ GtkTreeViewColumn
 </para>
 
 @tree_column: 
+@cell_renderer: 
 @Varargs: 
 
 

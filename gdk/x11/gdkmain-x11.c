@@ -751,3 +751,23 @@ _gdk_region_get_xrectangles (GdkRegion   *region,
   *rects = rectangles;
   *n_rects = region->numRects;
 }
+
+/* FIXME put in GdkDisplay */
+static gint grab_count = 0;
+void
+gdk_x11_grab_server (void)
+{ 
+  if (grab_count == 0)
+    XGrabServer (gdk_display);
+  ++grab_count;
+}
+
+void
+gdk_x11_ungrab_server (void)
+{
+  g_return_if_fail (grab_count > 0);
+  
+  --grab_count;
+  if (grab_count == 0)
+    XUngrabServer (gdk_display);
+}

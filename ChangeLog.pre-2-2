@@ -1,3 +1,23 @@
+2001-06-19  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_show_unraised): new function
+	for mapping a window without fooling with stacking order, but
+	updating the "withdrawn" flag
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Do event
+	filtering as soon as possible, moving move resize and wmspec_check
+	handling after the event filter.  Make default filter apply to all
+	events, not just those with no GdkWindow wrapped around the X
+	window. Fix a FIXME about how the window could be a pixmap using 
+	RTTI; this of course assumes GDK_IS_WINDOW() is optimized. 
+
+	Also, be robust against events not on a known GdkWindow.
+
+	* gdk/x11/gdkmain-x11.c (gdk_x11_grab_server,
+	gdk_x11_ungrab_server): export reference-counted server grabs, so
+	other people can grab server over a GDK function that also does
+	so.
+
 Wed Jun 27 19:40:31 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c

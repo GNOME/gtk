@@ -1149,7 +1149,7 @@ motif_add_to_target_table (GList *targets)
        */
       motif_find_drag_window (TRUE);
 
-      XGrabServer(gdk_display);
+      gdk_x11_grab_server ();
       motif_read_target_table();
     
       /* Check again, in case it was added in the meantime */
@@ -1225,7 +1225,7 @@ motif_add_to_target_table (GList *targets)
 			   8, PropModeReplace,
 			   data, total_size);
 	}
-      XUngrabServer(gdk_display);
+      gdk_x11_ungrab_server ();
     }
 
   g_list_free (sorted);

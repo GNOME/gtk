@@ -722,7 +722,7 @@ gdk_window_paint_init_bg (GdkWindow      *window,
  * drawing operations performed on @window will be diverted to the
  * backing store.  When you call gdk_window_end_paint(), the backing
  * store will be copied to @window, making it visible onscreen. Only
- * the part of window contained in @region will be modified; that is,
+ * the part of @window contained in @region will be modified; that is,
  * drawing operations are clipped to @region.
  *
  * The net result of all this is to remove flicker, because the user
