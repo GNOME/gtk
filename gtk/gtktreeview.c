@@ -1650,7 +1650,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   tree_view->priv->vadjustment->lower = 0;
   tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->page_size, tree_view->priv->height);
 
-  if (tree_view->priv->vadjustment->value + allocation->height > tree_view->priv->height)
+  if (tree_view->priv->vadjustment->value + allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view) > tree_view->priv->height)
     gtk_adjustment_set_value (tree_view->priv->vadjustment,
 			      MAX (tree_view->priv->height - tree_view->priv->vadjustment->page_size, 0));
   gtk_adjustment_changed (tree_view->priv->vadjustment);
@@ -10647,9 +10647,15 @@ gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
 				  GdkEvent          *event,
 				  guint              flags)
 {
+  gint pre_val = tree_view->priv->vadjustment->value;
+
   tree_view->priv->edited_column = column;
   _gtk_tree_view_column_start_editing (column, GTK_CELL_EDITABLE (cell_editable));
+
   gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
+
+  cell_area->y += pre_val - tree_view->priv->vadjustment->value;
+
   GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
   gtk_tree_view_put (tree_view,
 		     GTK_WIDGET (cell_editable),

@@ -1,3 +1,11 @@
+Fri Apr 19 21:06:39 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): subtract
+	TREE_VIEW_HEADER_HEIGHT from allocation->height to get the real
+	size for the tree (fixes #72729),
+	(gtk_tree_view_real_start_editing): correct cell_area->y for
+	scrolling due to gtk_tree_view_real_set_cursor (fixes #75687)
+
 Fri Apr 19 16:30:09 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeprivate.h, gtk/gtktreeview.c: rename
