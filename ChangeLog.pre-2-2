@@ -1,3 +1,10 @@
+Tue Feb 12 02:19:49 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktable.c (gtk_table_size_allocate_pass1): always spread out
+	the extra space allocated for the homogeneous case, as we don't
+	properly deal with readjusting table allocation within it. (for  this
+	purpose, a GtkAlignment can be used as table parent).
+
 2002-02-11  Darin Adler  <darin@bentspoon.com>
 
 	* gtk/gtktreemodelsort.c: (gtk_tree_model_sort_row_changed):
