@@ -154,7 +154,7 @@ make_inline_pixbuf_SOURCES=make-inline-pixbuf.c
 
 make_inline_pixbuf_LDADD = $(LDADDS)
 
-GDK_PIXBUF_LIBS = $(GLIB_LIBS)
+GDK_PIXBUF_LIBS = $(GLIB_LIBS) $(INTLLIBS)
 
 #
 # The GdkPixBuf library
@@ -163,6 +163,7 @@ GDK_PIXBUF_LIBS = $(GLIB_LIBS)
 libgdk_pixbufincludedir = $(includedir)/gtk-2.0/gdk-pixbuf
 
 libgdk_pixbuf_1_3_la_SOURCES = 	\
+	gdk-pixbuf-i18n.h	\
 	gdk-pixbuf.c		\
 	gdk-pixbuf-animation.c	\
 	gdk-pixbuf-data.c	\

@@ -361,3 +361,14 @@ gdk_pixbuf_init (void)
         gdk_pixbuf_preinit (NULL, NULL);
         gdk_pixbuf_postinit (NULL, NULL);
 }
+
+/* Error quark */
+GQuark
+gdk_pixbuf_error_quark (void)
+{
+  static GQuark q = 0;
+  if (q == 0)
+    q = g_quark_from_static_string ("gdk-pixbuf-error-quark");
+
+  return q;
+}

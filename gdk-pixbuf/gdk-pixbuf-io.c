@@ -24,6 +24,7 @@
 #include <config.h>
 #include <string.h>
 #include <glib.h>
+#include <errno.h>
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
@@ -185,17 +186,17 @@ pixbuf_check_wbmp (guchar *buffer, int size)
 }
 
 static GdkPixbufModule file_formats [] = {
-	{ "png",  pixbuf_check_png, NULL,  NULL, NULL, NULL, NULL, NULL },
-	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "gif",  pixbuf_check_gif, NULL,  NULL, NULL, NULL, NULL, NULL },
+	{ "png",  pixbuf_check_png, NULL,  NULL, NULL, NULL, NULL, NULL, NULL, },
+	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "gif",  pixbuf_check_gif, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 #define XPM_FILE_FORMAT_INDEX 4
-	{ "xpm",  pixbuf_check_xpm, NULL,  NULL, NULL, NULL, NULL, NULL },
-	{ "pnm",  pixbuf_check_pnm, NULL,  NULL, NULL, NULL, NULL, NULL },
-	{ "ras",  pixbuf_check_sunras, NULL,  NULL, NULL, NULL, NULL, NULL },
-	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL },
-	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL },
-	{ "wbmp", pixbuf_check_wbmp, NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "xpm",  pixbuf_check_xpm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "pnm",  pixbuf_check_pnm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "ras",  pixbuf_check_sunras, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "wbmp", pixbuf_check_wbmp, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 
@@ -281,6 +282,7 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 	char *path;
 	GModule *module;
 	gpointer load_sym;
+        gpointer save_sym;
 	char *name;
 	
         g_return_if_fail (image_module->module == NULL);
@@ -333,6 +335,9 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 
         if (pixbuf_module_symbol (module, name, "image_load_animation", &load_sym))
 		image_module->load_animation = load_sym;
+
+        if (pixbuf_module_symbol (module, name, "image_save", &save_sym))
+          image_module->save = save_sym;        
 }
 #else
 
@@ -354,6 +359,7 @@ m_load (png);
 m_begin_load (png);
 m_load_increment (png);
 m_stop_load (png);
+m_save (png);
 /* BMP */
 m_load (bmp);
 m_begin_load (bmp);
@@ -380,6 +386,7 @@ m_load (jpeg);
 m_begin_load (jpeg);
 m_load_increment (jpeg);
 m_stop_load (jpeg);
+m_save (jpeg);
 /* PNM */
 m_load (pnm);
 m_begin_load (pnm);
@@ -409,6 +416,7 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 		image_module->begin_load     = mname (png,begin_load);
 		image_module->load_increment = mname (png,load_increment);
 		image_module->stop_load      = mname (png,stop_load);
+                image_module->save           = mname (png,save);
 		return;
 	}
 
@@ -450,6 +458,7 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 		image_module->begin_load     = mname (jpeg,begin_load);
 		image_module->load_increment = mname (jpeg,load_increment);
 		image_module->stop_load      = mname (jpeg,stop_load);
+                image_module->save           = mname (jpeg,save);
 		return;
 	}
 	if (strcmp (image_module->module_name, "pnm") == 0){
@@ -595,4 +604,198 @@ gdk_pixbuf_new_from_xpm_data (const char **data)
 
 	pixbuf = (* load_xpm_data) (data);
 	return pixbuf;
+}
+
+static void
+collect_save_options (va_list   opts,
+                      gchar  ***keys,
+                      gchar  ***vals)
+{
+  gchar *key;
+  gchar *val;
+  gchar *next;
+  gint count;
+
+  count = 0;
+  *keys = NULL;
+  *vals = NULL;
+  
+  next = va_arg (opts, gchar*);
+  while (next)
+    {
+      key = next;
+      val = va_arg (opts, gchar*);
+
+      ++count;
+
+      /* woo, slow */
+      *keys = g_realloc (*keys, sizeof(gchar*) * (count + 1));
+      *vals = g_realloc (*vals, sizeof(gchar*) * (count + 1));
+      
+      (*keys)[count-1] = g_strdup (key);
+      (*vals)[count-1] = g_strdup (val);
+
+      (*keys)[count] = NULL;
+      (*vals)[count] = NULL;
+      
+      next = va_arg (opts, gchar*);
+    }
+}
+
+static gboolean
+gdk_pixbuf_real_save (GdkPixbuf     *pixbuf, 
+                      FILE          *filehandle, 
+                      const char    *format, 
+                      gchar        **keys,
+                      gchar        **values,
+                      GError       **error)
+{
+       int i;
+       GdkPixbufModule *image_module = NULL;       
+       
+       for (i = 0; file_formats[i].module_name; i++) {
+               if (!strcmp (file_formats[i].module_name, format)) {
+                       image_module = &(file_formats[i]);
+                       break;
+               }
+       }
+       
+       if (!image_module) {
+               g_warning ("gdk-pixbuf does not support the format: %s", format);
+               return FALSE;
+       }
+       
+       if (image_module->module == NULL)
+               gdk_pixbuf_load_module (image_module);
+       
+       g_return_val_if_fail (image_module->save != NULL, FALSE);
+
+       
+       
+       return (* image_module->save) (filehandle, pixbuf,
+                                      keys, values,
+                                      error);
+}
+
+ 
+/**
+ * gdk_pixbuf_save:
+ * @pixbuf: pointer to GdkPixbuf.
+ * @filename: Name of file to save.
+ * @format: name of file format.
+ * @error: return location for error, or NULL
+ * @Varargs: list of key-value save options
+ *
+ * Saves pixbuf to a file in @format, which is currently "jpeg" or
+ * "png".  If @error is set, FALSE will be returned. Possible errors include those
+ * from #GdkPixbufErrorType and those from #GFileErrorType.
+ *
+ * The variable argument list should be NULL-terminated; if not empty,
+ * it should contain pairs of strings that modify the save
+ * parameters. For example:
+ *
+ * <programlisting>
+ * gdk_pixbuf_save (pixbuf, handle, "jpeg", &error,
+ *                  "quality", "100", NULL);
+ * </programlisting>
+ *
+ * The only save parameter that currently exists is the "quality" field
+ * for JPEG images; its value should be in the range [0,100].
+ *
+ * Return value: whether an error was set
+ **/
+
+gboolean
+gdk_pixbuf_save (GdkPixbuf  *pixbuf, 
+                 const char *filename, 
+                 const char *format, 
+                 GError    **error,
+                 ...)
+{
+        gchar **keys = NULL;
+        gchar **values = NULL;
+        va_list args;
+        gboolean result;
+        
+        va_start (args, error);
+        
+        collect_save_options (args, &keys, &values);
+        
+        va_end (args);
+
+        result = gdk_pixbuf_savev (pixbuf, filename, format,
+                                   keys, values,
+                                   error);
+
+        g_strfreev (keys);
+        g_strfreev (values);
+
+        return result;
+}
+
+/**
+ * gdk_pixbuf_savev:
+ * @pixbuf: pointer to GdkPixbuf.
+ * @filename: Name of file to save.
+ * @format: name of file format.
+ * @option_keys: name of options to set, NULL-terminated
+ * @option_values: values for named options
+ * @error: return location for error, or NULL
+ *
+ * Saves pixbuf to a file in @format, which is currently "jpeg" or "png".
+ * If @error is set, FALSE will be returned. See gdk_pixbuf_save () for more
+ * details. Possible errors include those from #GdkPixbufErrorType and
+ * those from #GFileErrorType.
+ *
+ * Return value: whether an error was set
+ **/
+
+gboolean
+gdk_pixbuf_savev (GdkPixbuf  *pixbuf, 
+                  const char *filename, 
+                  const char *format,
+                  char      **option_keys,
+                  char      **option_values,
+                  GError    **error)
+{
+        FILE *f = NULL;
+        gboolean result;
+        
+       
+        g_return_val_if_fail (filename != NULL, FALSE);
+        g_return_val_if_fail (format != NULL, FALSE);
+       
+        f = fopen (filename, "w");
+        
+        if (f == NULL) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_IO,
+                             _("Failed to open '%s' for writing: %s"),
+                             filename, g_strerror (errno));
+                return FALSE;
+        }
+
+       
+       result = gdk_pixbuf_real_save (pixbuf, f, format,
+                                      option_keys, option_values,
+                                      error);
+       
+       
+       if (!result) {
+               g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+               fclose (f);
+               return FALSE;
+       }
+
+       if (fclose (f) < 0) {
+               g_set_error (error,
+                            GDK_PIXBUF_ERROR,
+                            GDK_PIXBUF_ERROR_IO,
+                            _("Failed to close '%s' while writing image, all data may not have been saved: %s"),
+                            filename, g_strerror (errno));
+               return FALSE;
+       }
+       
+       return TRUE;
 }

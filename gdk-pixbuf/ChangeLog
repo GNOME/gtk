@@ -1,3 +1,27 @@
+2000-10-05  Havoc Pennington  <hp@redhat.com>
+
+        Pixbuf saving, patch from David Welton.
+	
+	* Makefile.am (GDK_PIXBUF_LIBS): add INTLLIBS
+	(libgdk_pixbuf_1_3_la_SOURCES): add gdk-pixbuf-i18n.h
+
+	* gdk-pixbuf-i18n.h: Add _() to gdk-pixbuf
+
+	* io-png.c (gdk_pixbuf__png_image_save): PNG save routine.
+
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_save): JPEG save routine.
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_save): 
+	(gdk_pixbuf_savev): Implement pixbuf saving routines
+
+	* gdk-pixbuf.c (gdk_pixbuf_error_quark): pixbuf error quark
+	function
+
+	* gdk-pixbuf.h: Add public save routines; add pixbuf error 
+	types
+
+	* gdk-pixbuf-io.h: Add save function to GdkPixbufModule
+
 2000-10-05  Dan Winship  <danw@helixcode.com>
 
 	* io-png.c, io-tiff.c, io-xpm.c: Fix comments to not claim that

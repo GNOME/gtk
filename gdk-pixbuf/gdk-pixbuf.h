@@ -61,6 +61,18 @@ typedef struct _GdkPixbufFrame GdkPixbufFrame;
 /* Handler that must free the pixel array */
 typedef void (* GdkPixbufDestroyNotify) (guchar *pixels, gpointer data);
 
+#define GDK_PIXBUF_ERROR gdk_pixbuf_error_quark ()
+
+typedef enum {
+        /* some kind of failure reading or writing files */
+        GDK_PIXBUF_ERROR_IO,
+        /* bad option value passed to save routine */
+        GDK_PIXBUF_ERROR_BAD_OPTION_VALUE,
+        GDK_PIXBUF_ERROR_FAILED
+} GdkPixbufErrorType;
+
+GQuark gdk_pixbuf_error_quark () G_GNUC_CONST;
+
 
 
 GType gdk_pixbuf_get_type (void) G_GNUC_CONST;
@@ -110,6 +122,22 @@ GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const char **data);
 GdkPixbuf *gdk_pixbuf_new_from_inline   (const guchar *inline_pixbuf,
                                          gboolean      copy_pixels,
                                          int           length);
+
+
+/* Saving */
+
+gboolean gdk_pixbuf_save           (GdkPixbuf  *pixbuf, 
+                                    const char *filename, 
+                                    const char *format, 
+                                    GError    **err,
+                                    ...);
+
+gboolean gdk_pixbuf_savev          (GdkPixbuf  *pixbuf, 
+                                    const char *filename, 
+                                    const char *format,
+                                    char      **option_keys,
+                                    char      **option_values,
+                                    GError    **err);
 
 /* Adding an alpha channel */
 GdkPixbuf *gdk_pixbuf_add_alpha (const GdkPixbuf *pixbuf, gboolean substitute_color,

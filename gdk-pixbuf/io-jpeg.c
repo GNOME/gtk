@@ -565,3 +565,126 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size)
 
 	return TRUE;
 }
+
+gboolean
+gdk_pixbuf__jpeg_image_save (FILE          *f, 
+                             GdkPixbuf     *pixbuf, 
+                             gchar        **keys,
+                             gchar        **values,
+                             GError       **error)
+{
+        /* FIXME error handling is broken */
+        
+       struct jpeg_compress_struct cinfo;
+       guchar *buf = NULL;
+       guchar *ptr;
+       guchar *pixels = NULL;
+       JSAMPROW *jbuf;
+       int y = 0;
+       int quality = 75; /* default; must be between 0 and 100 */
+       int i, j;
+       int w, h = 0;
+       int rowstride = 0;
+       struct error_handler_data jerr;
+
+       if (keys && *keys) {
+               gchar **kiter = keys;
+               gchar **viter = values;
+
+               while (*kiter) {
+                       if (strcmp (*kiter, "quality") == 0) {
+                               char *endptr = NULL;
+                               quality = strtol (*viter, &endptr, 10);
+
+                               if (endptr == *viter) {
+                                       g_set_error (error,
+                                                    GDK_PIXBUF_ERROR,
+                                                    GDK_PIXBUF_ERROR_BAD_OPTION_VALUE,
+                                                    _("JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."),
+                                                    *viter);
+
+                                       return FALSE;
+                               }
+                               
+                               if (quality < 0 ||
+                                   quality > 100) {
+                                       /* This is a user-visible error;
+                                        * lets people skip the range-checking
+                                        * in their app.
+                                        */
+                                       g_set_error (error,
+                                                    GDK_PIXBUF_ERROR,
+                                                    GDK_PIXBUF_ERROR_BAD_OPTION_VALUE,
+                                                    _("JPEG quality must be a value between 0 and 100; value '%d' is not allowed."),
+                                                    quality);
+
+                                       return FALSE;
+                               }
+                       } else {
+                               g_warning ("Bad option name '%s' passed to JPEG saver",
+                                          *kiter);
+                               return FALSE;
+                       }
+               
+                       ++kiter;
+                       ++viter;
+               }
+       }
+       
+       rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+
+       w = gdk_pixbuf_get_width (pixbuf);
+       h = gdk_pixbuf_get_height (pixbuf);
+
+       /* no image data? abort */
+       pixels = gdk_pixbuf_get_pixels (pixbuf);
+       g_return_val_if_fail (pixels != NULL, FALSE);
+
+       /* allocate a small buffer to convert image data */
+       buf = malloc (w * 3 * sizeof (guchar));
+       g_return_val_if_fail (buf != NULL, FALSE);
+
+       /* set up error handling */
+       jerr.pub.error_exit = fatal_error_handler;
+
+       cinfo.err = jpeg_std_error (&(jerr.pub));
+       if (sigsetjmp (jerr.setjmp_buffer, 1)) {
+               jpeg_destroy_compress (&cinfo);
+               free (buf);
+               return FALSE;
+       }
+
+       /* setup compress params */
+       jpeg_create_compress (&cinfo);
+       jpeg_stdio_dest (&cinfo, f);
+       cinfo.image_width      = w;
+       cinfo.image_height     = h;
+       cinfo.input_components = 3; 
+       cinfo.in_color_space   = JCS_RGB;
+
+       /* set up jepg compression parameters */
+       jpeg_set_defaults (&cinfo);
+       jpeg_set_quality (&cinfo, quality, TRUE);
+       jpeg_start_compress (&cinfo, TRUE);
+       /* get the start pointer */
+       ptr = pixels;
+       /* go one scanline at a time... and save */
+       i = 0;
+       while (cinfo.next_scanline < cinfo.image_height) {
+               /* convert scanline from ARGB to RGB packed */
+               for (j = 0; j < w; j++)
+                       memcpy (&(buf[j*3]), &(ptr[i*rowstride + j*3]), 3);
+
+               /* write scanline */
+               jbuf = (JSAMPROW *)(&buf);
+               jpeg_write_scanlines (&cinfo, jbuf, 1);
+               i++;
+               y++;
+
+       }
+       
+       /* finish off */
+       jpeg_finish_compress (&cinfo);   
+       free (buf);
+       return TRUE;
+}

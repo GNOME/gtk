@@ -1,3 +1,9 @@
+2000-10-05  Havoc Pennington  <hp@redhat.com>
+
+        * demos/testpixbuf-save.c: add pixbuf save test
+
+	* demos/Makefile.am: add testpixbuf-save.c
+
 2000-10-05  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktree.h (GTK_TREE_SELECTION): Replaced with

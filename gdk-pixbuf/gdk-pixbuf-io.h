@@ -31,6 +31,7 @@
 #include <gmodule.h>
 #include <stdio.h>
 #include "gdk-pixbuf.h"
+#include "gdk-pixbuf-i18n.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,11 +65,19 @@ struct _GdkPixbufModule {
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc anim_done_func,
 				 gpointer user_data);
-        void (* stop_load) (gpointer context);
-        gboolean (* load_increment) (gpointer context, const guchar *buf, guint size);
+        void (* stop_load)          (gpointer context);
+        gboolean (* load_increment) (gpointer      context,
+                                     const guchar *buf,
+                                     guint         size);
 
 	/* Animation loading */
 	GdkPixbufAnimation *(* load_animation) (FILE *f);
+
+        gboolean (* save) (FILE      *f,
+                           GdkPixbuf *pixbuf,
+                           gchar    **param_keys,
+                           gchar    **param_values,
+                           GError   **err);
 };
 
 
