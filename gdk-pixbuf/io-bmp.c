@@ -219,7 +219,19 @@ lsb_16 (guchar *src)
 static gboolean grow_buffer (struct bmp_progressive_state *State,
                              GError **error)
 {
-  guchar *tmp = g_try_realloc (State->buff, State->BufferSize);
+  guchar *tmp;
+
+  if (State->BufferSize == 0) {
+    g_set_error (error,
+		 GDK_PIXBUF_ERROR,
+		 GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+		 _("BMP image has bogus header data"));
+    State->read_state = READ_STATE_ERROR;
+    return FALSE;
+  }
+
+  tmp = g_try_realloc (State->buff, State->BufferSize);
+
   if (!tmp) {
     g_set_error (error,
 		 GDK_PIXBUF_ERROR,
@@ -228,6 +240,7 @@ static gboolean grow_buffer (struct bmp_progressive_state *State,
     State->read_state = READ_STATE_ERROR;
     return FALSE;
   }
+
   State->buff = tmp;
   return TRUE;
 }
