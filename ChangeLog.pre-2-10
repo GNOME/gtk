@@ -1,3 +1,13 @@
+Sun Sep  5 17:14:16 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmain.c: 
+	* gdk/gdk.c: 
+	* gdk/x11/gdkmain-x11.c: 
+	* gdk/win32/gdkmain-win32.c: Add descriptions for the 
+	commandline arguments. The actual descriptions are mostly 
+	taken from libbonoboui, so translators should be able to 
+	copy existing translations from there.
+
 2004-09-05  Anders Carlsson  <andersca@gnome.org>
 
 	* gdk/gdk.symbols:

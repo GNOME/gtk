@@ -399,12 +399,19 @@ gtk_arg_warnings_cb (const char *key, const char *value, gpointer user_data)
 }
 
 static GOptionEntry gtk_args[] = {
-  { "gtk-module",       0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_module_cb,   NULL, NULL },
-  { "g-fatal-warnings", 0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_warnings_cb, NULL, NULL },
+  { "gtk-module",       0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_module_cb,   
+    /* Description of --gtk-module=MODULES in --help output */ N_("Load additional GTK+ modules"), 
+    /* Placeholder in --gtk-module=MODULES in --help output */ N_("MODULES") },
+  { "g-fatal-warnings", 0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_warnings_cb, 
+    /* Description of --g-fatal-warnings in --help output */   N_("Make all warnings fatal"), NULL },
 #ifdef G_ENABLE_DEBUG
-  { "gtk-debug",        0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_debug_cb,    NULL, NULL },
-  { "gtk-no-debug",     0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_no_debug_cb, NULL, NULL },
-#endif /* G_ENABLE_DEBUG */
+  { "gtk-debug",        0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_debug_cb,    
+    /* Description of --gtk-debug=FLAGS in --help output */    N_("GTK+ debugging flags to set"), 
+    /* Placeholder in --gtk-debug=FLAGS in --help output */    N_("FLAGS") },
+  { "gtk-no-debug",     0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_no_debug_cb, 
+    /* Description of --gtk-no-debug=FLAGS in --help output */ N_("GTK+ debugging flags to unset"), 
+    /* Placeholder in --gtk-no-debug=FLAGS in --help output */ N_("FLAGS") },
+#endif 
   { NULL }
 };
 
@@ -543,6 +550,7 @@ gtk_get_option_group (gboolean open_default_display)
 
   gdk_add_option_entries_libgtk_only (group);
   g_option_group_add_entries (group, gtk_args);
+  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   
   return group;
 }
@@ -613,7 +621,7 @@ gtk_parse_args (int    *argc,
   g_option_context_set_ignore_unknown_options (option_context, TRUE);
   g_option_context_set_help_enabled (option_context, FALSE);
   
-  g_option_context_add_main_entries (option_context, gtk_args, NULL);
+  g_option_context_add_main_entries (option_context, gtk_args, GETTEXT_PACKAGE);
 
   g_option_context_parse (option_context, argc, argv, NULL);
   g_option_context_free (option_context);

@@ -47,6 +47,7 @@
 #include "gdkx.h"
 #include "gdkdisplay-x11.h"
 #include "gdkinternals.h"
+#include "gdkintl.h"
 #include "gdkregion-generic.h"
 #include "gdkinputprivate.h"
 
@@ -87,7 +88,8 @@ static GSList *gdk_error_traps = NULL;               /* List of error traps */
 static GSList *gdk_error_trap_free_list = NULL;      /* Free list */
 
 GOptionEntry _gdk_windowing_args[] = {
-  { "sync", 0, 0, G_OPTION_ARG_NONE, &_gdk_synchronize, NULL, NULL },
+  { "sync", 0, 0, G_OPTION_ARG_NONE, &_gdk_synchronize, 
+    /* Description of --sync in --help output */ N_("Make X calls synchronous"), NULL },
   { NULL }
 };
 

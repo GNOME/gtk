@@ -32,6 +32,7 @@
 #include "gdkalias.h"
 #include "gdk.h"
 #include "gdkinternals.h"
+#include "gdkintl.h"
 
 #ifndef HAVE_XCONVERTCASE
 #include "gdkkeysyms.h"
@@ -112,14 +113,26 @@ gdk_arg_name_cb (const char *key, const char *value, gpointer user_data, GError 
 }
 
 static GOptionEntry gdk_args[] = {
-  { "class",        0, 0,                     G_OPTION_ARG_CALLBACK, gdk_arg_class_cb,    NULL, NULL },
-  { "name",         0, 0,                     G_OPTION_ARG_CALLBACK, gdk_arg_name_cb,     NULL, NULL },
-  { "display",      0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,   &_gdk_display_name,  NULL, NULL },
-  { "screen",       0, 0,                     G_OPTION_ARG_INT,      &_gdk_screen_number, NULL, NULL },
+  { "class",        0, 0,                     G_OPTION_ARG_CALLBACK, gdk_arg_class_cb,
+    /* Description of --class=CLASS in --help output */        N_("Program class as used by the window manager"),
+    /* Placeholder in --class=CLASS in --help output */        N_("CLASS") },
+  { "name",         0, 0,                     G_OPTION_ARG_CALLBACK, gdk_arg_name_cb,
+    /* Description of --name=NAME in --help output */          N_("Program name as used by the window manager"),
+    /* Placeholder in --name=NAME in --help output */          N_("NAME") },
+  { "display",      0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,   &_gdk_display_name,
+    /* Description of --display=DISPLAY in --help output */    N_("X display to use"),
+    /* Placeholder in --display=DISPLAY in --help output */    N_("DISPLAY") },
+  { "screen",       0, 0, G_OPTION_ARG_INT,      &_gdk_screen_number,
+    /* Description of --screen=SCREEN in --help output */      N_("X screen to use"),
+    /* Placeholder in --screen=SCREEN in --help output */      N_("SCREEN") },
 #ifdef G_ENABLE_DEBUG
-  { "gdk-debug",    0, 0, 		      G_OPTION_ARG_CALLBACK, gdk_arg_debug_cb,    NULL, NULL },
-  { "gdk-no-debug", 0, 0, 		      G_OPTION_ARG_CALLBACK, gdk_arg_no_debug_cb, NULL, NULL },
-#endif /* G_ENABLE_DEBUG */
+  { "gdk-debug",    0, 0, G_OPTION_ARG_CALLBACK, gdk_arg_debug_cb,  
+    /* Description of --gdk-debug=FLAGS in --help output */    N_("Gdk debugging flags to set"),
+    /* Placeholder in --gdk-debug=FLAGS in --help output */    N_("FLAGS") },
+  { "gdk-no-debug", 0, 0, G_OPTION_ARG_CALLBACK, gdk_arg_no_debug_cb, 
+    /* Description of --gdk-no-debug=FLAGS in --help output */ N_("Gdk debugging flags to unset"), 
+    /* Placeholder in --gdk-no-debug=FLAGS in --help output */ N_("FLAGS") },
+#endif 
   { NULL }
 };
 

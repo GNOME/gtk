@@ -37,6 +37,7 @@
 #include "gdkregion-generic.h"
 #include "gdkkeysyms.h"
 #include "gdkinternals.h"
+#include "gdkintl.h"
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
 
@@ -53,13 +54,18 @@
 static gboolean gdk_synchronize = FALSE;
 
 GOptionEntry _gdk_windowing_args[] = {
-  { "sync", 0, 0, G_OPTION_ARG_NONE, &_gdk_synchronize, NULL, NULL },
-  { "no-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, NULL, NULL },
-  { "ignore-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, NULL, NULL },
+  { "sync", 0, 0, G_OPTION_ARG_NONE, &_gdk_synchronize, 
+    /* Description of --sync in --help output */              N_("Don't batch GDI requests"), NULL },
+  { "no-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, 
+    /* Description of --no-wintab in --help output */         N_("Don't use the Wintab API for tablet support [default]"), NULL },
+  { "ignore-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, 
+    /* Description of --ignore-wintab in --help output */     N_("Same as --no-wintab"), NULL },
 #if 0
   { "use-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, NULL, NULL },
 #endif
-  { "max-colors", 0, 0, G_OPTION_ARG_INT, &_gdk_max_colors, NULL, NULL },
+  { "max-colors", 0, 0, G_OPTION_ARG_INT, &_gdk_max_colors, 
+    /* Description of --max-colors=COLORS in --help output */ N_("Size of the palette in 8 bit mode"), 
+    /* Placeholder in --max-colors=COLORS in --help output */ N_("COLORS") },
   { NULL }
 };
 
