@@ -3669,7 +3669,7 @@ create_size_group_window (GtkSizeGroup *master_size_group)
 					GTK_RESPONSE_NONE,
 					NULL);
 
-  gtk_window_set_resizeable (GTK_WINDOW (window), FALSE);
+  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
   gtk_signal_connect (GTK_OBJECT (window), "response",
 		      GTK_SIGNAL_FUNC (gtk_widget_destroy),

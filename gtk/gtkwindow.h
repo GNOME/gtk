@@ -175,9 +175,9 @@ void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
                                                 gboolean             setting);
 gboolean   gtk_window_get_destroy_with_parent  (GtkWindow           *window);
 
-void       gtk_window_set_resizeable           (GtkWindow           *window,
-                                                gboolean             resizeable);
-gboolean   gtk_window_get_resizeable           (GtkWindow           *window);
+void       gtk_window_set_resizable            (GtkWindow           *window,
+                                                gboolean             resizable);
+gboolean   gtk_window_get_resizable            (GtkWindow           *window);
 
 void       gtk_window_set_gravity              (GtkWindow           *window,
                                                 GdkGravity           gravity);

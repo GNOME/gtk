@@ -419,7 +419,7 @@ add_clicked (GtkWidget *button, gpointer data)
   column = gtk_tree_view_column_new_with_attributes (label, cell, "text", 0, NULL);
   g_object_set_data_full (G_OBJECT (column), column_data, label, g_free);
   gtk_tree_view_column_set_reorderable (column, TRUE);
-  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_RESIZEABLE);
+  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_RESIZABLE);
   gtk_list_store_append (GTK_LIST_STORE (left_tree_model), &iter);
   gtk_list_store_set (GTK_LIST_STORE (left_tree_model), &iter, 0, label, 1, column, -1);
   i++;

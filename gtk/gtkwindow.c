@@ -3621,37 +3621,37 @@ gtk_window_unmaximize (GtkWindow *window)
 }
 
 /**
- * gtk_window_set_resizeable:
+ * gtk_window_set_resizable:
  * @window: a #GtkWindow
- * @resizeable: %TRUE if the user can resize this window
+ * @resizable: %TRUE if the user can resize this window
  *
- * Sets whether the user can resize a window. Windows are user resizeable
+ * Sets whether the user can resize a window. Windows are user resizable
  * by default.
  **/
 void
-gtk_window_set_resizeable (GtkWindow *window,
-			   gboolean   resizeable)
+gtk_window_set_resizable (GtkWindow *window,
+                          gboolean   resizable)
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  gtk_window_set_policy (window, FALSE, resizeable, FALSE);
+  gtk_window_set_policy (window, FALSE, resizable, FALSE);
 }
 
 /**
- * gtk_window_get_resizeable:
+ * gtk_window_get_resizable:
  * @window: a #GtkWindow
  *
- * Gets the value set by gtk_window_set_resizeable().
+ * Gets the value set by gtk_window_set_resizable().
  *
  * Return value: %TRUE if the user can resize the window
  **/
 gboolean
-gtk_window_get_resizeable (GtkWindow *window)
+gtk_window_get_resizable (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
   /* allow_grow is most likely to indicate the semantic concept we
-   * mean by "resizeable" (and will be a reliable indicator if
+   * mean by "resizable" (and will be a reliable indicator if
    * set_policy() hasn't been called)
    */
   return window->allow_grow;

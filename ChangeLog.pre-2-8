@@ -1,3 +1,10 @@
+2001-06-25  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktreeviewcolumn.h, gtk/gtktreeviewcolumn.c:
+	s/RESIZEABLE/RESIZABLE/
+
+	* gtk/gtkwindow.c, gtk/gtkwindow.h: s/resizeable/resizable/
+
 2001-06-25  Alexander Larsson  <alexl@redhat.com>
 
 	* configure.in:

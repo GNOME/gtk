@@ -217,7 +217,7 @@ do_pixbufs (void)
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Pixbufs");
-      gtk_window_set_resizeable (GTK_WINDOW (window), FALSE);
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (gtk_widget_destroyed), &window);
       gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (cleanup_callback), NULL);

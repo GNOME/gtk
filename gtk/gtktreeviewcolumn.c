@@ -654,7 +654,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 	  gtk_widget_show_now (tree_column->button);
 	  if (tree_column->window)
 	    {
-	      if (tree_column->column_type == GTK_TREE_VIEW_COLUMN_RESIZEABLE)
+	      if (tree_column->column_type == GTK_TREE_VIEW_COLUMN_RESIZABLE)
 		{
 		  gdk_window_show (tree_column->window);
 		  gdk_window_raise (tree_column->window);
