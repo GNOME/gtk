@@ -139,27 +139,37 @@ gtk_box_class_init (GtkBoxClass *class)
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_EXPAND,
-					      g_param_spec_boolean ("expand", NULL, NULL,
+					      g_param_spec_boolean ("expand", 
+								    _("Expand"), 
+								    _("Whether the child should receive extra space when the parent grows"),
 								    TRUE,
 								    G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_FILL,
-					      g_param_spec_boolean ("fill", NULL, NULL,
+					      g_param_spec_boolean ("fill", 
+								    _("Fill"), 
+								    _("Whether extra space given to the child should be allocated to the child or used as padding"),
 								    TRUE,
 								    G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_PADDING,
-					      g_param_spec_uint ("padding", NULL, NULL,
+					      g_param_spec_uint ("padding", 
+								 _("Padding"), 
+								 _("Extra space to put between the child and its neighbors, in pixels"),
 								 0, G_MAXINT, 0,
 								 G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_PACK_TYPE,
-					      g_param_spec_enum ("pack_type", NULL, NULL,
+					      g_param_spec_enum ("pack_type", 
+								 _("Pack type"), 
+								 _("A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"),
 								 GTK_TYPE_PACK_TYPE, GTK_PACK_START,
 								 G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_POSITION,
-					      g_param_spec_int ("position", NULL, NULL,
+					      g_param_spec_int ("position", 
+								_("Position"), 
+								_("The index of the child in the parent"),
 								-1, G_MAXINT, 0,
 								G_PARAM_READWRITE));
 }

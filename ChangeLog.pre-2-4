@@ -1,3 +1,10 @@
+2002-05-02  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktable.c (gtk_table_class_init): 
+	* gtk/gtknotebook.c (gtk_notebook_class_init): 
+	* gtk/gtkbox.c (gtk_box_class_init): Add nicks and blurbs for
+	child properties.  (#57143)
+
 2002-05-01 Erwann Chenede - <erwann.chenede@sun.com>
   	
 	* gdk/gdkpixmap.[hc] (gdk_pixmap_get_screen):
