@@ -273,7 +273,8 @@ typedef enum
 typedef enum
 {
 #include <gdk/gdkcursors.h>
-  GDK_LAST_CURSOR
+  GDK_LAST_CURSOR,
+  GDK_CURSOR_IS_PIXMAP = -1
 } GdkCursorType;
 
 /* Event types.

@@ -38,6 +38,37 @@ gdk_cursor_new (GdkCursorType cursor_type)
   return cursor;
 }
 
+GdkCursor*
+gdk_cursor_new_from_pixmap (GdkPixmap *source, GdkPixmap *mask, GdkColor *fg, GdkColor *bg, int x, int y)
+{
+  GdkCursorPrivate *private;
+  GdkCursor *cursor;
+  Pixmap source_pixmap, mask_pixmap;
+  Cursor xcursor;
+  XColor xfg, xbg;
+  
+  source_pixmap = ((GdkPixmapPrivate *) source)->xwindow;
+  mask_pixmap   = ((GdkPixmapPrivate *) mask)->xwindow;
+
+  xfg.pixel = fg->pixel;
+  xfg.red = fg->red;
+  xfg.blue = fg->blue;
+  xfg.green = fg->green;
+  xbg.pixel = bg->pixel;
+  xbg.red = bg->red;
+  xbg.blue = bg->blue;
+  xbg.green = bg->green;
+  
+  xcursor = XCreatePixmapCursor (gdk_display, source_pixmap, mask_pixmap, &xfg, &xbg, x, y);
+  private = g_new (GdkCursorPrivate, 1);
+  private->xdisplay = gdk_display;
+  private->xcursor = xcursor;
+  cursor = (GdkCursor *) private;
+  cursor->type = GDK_CURSOR_IS_PIXMAP;
+
+  return cursor;
+}
+
 void
 gdk_cursor_destroy (GdkCursor *cursor)
 {
