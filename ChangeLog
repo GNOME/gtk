@@ -1,3 +1,9 @@
+Wed Mar 17 01:20:28 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
+	Move the repositioning logic from _gtk_entry_completion() popup
+	over here. Fixes #137355, reported by Niklas Knutsson.
+
 Tue Mar 16 13:29:58 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.4.0 ===

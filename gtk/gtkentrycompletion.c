@@ -1089,9 +1089,18 @@ get_borders (GtkEntry *entry,
 gint
 _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 {
+  gint x, y;
   gint items, height, x_border, y_border;
+  GdkScreen *screen;
+  gint monitor_num;
+  GdkRectangle monitor;
+  GtkRequisition popup_req;
 
+  gdk_window_get_origin (completion->priv->entry->window, &x, &y);
   get_borders (GTK_ENTRY (completion->priv->entry), &x_border, &y_border);
+
+  x += x_border;
+  y += 2 * y_border;
 
   items = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
 
@@ -1129,42 +1138,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   else
     gtk_widget_hide (completion->priv->action_view);
 
-  return height;
-}
-
-void
-_gtk_entry_completion_popup (GtkEntryCompletion *completion)
-{
-  gint x, y, x_border, y_border;
-  gint height;
-  GdkScreen *screen;
-  gint monitor_num;
-  GdkRectangle monitor;
-  GtkRequisition popup_req;
-  GtkTreeViewColumn *column;
-  GList *renderers;
-
-  if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
-    return;
-
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
-  renderers = gtk_tree_view_column_get_cell_renderers (column);
-  gtk_widget_ensure_style (completion->priv->tree_view);
-  g_object_set (GTK_CELL_RENDERER (renderers->data), "cell_background_gdk",
-                &completion->priv->tree_view->style->bg[GTK_STATE_NORMAL],
-                NULL);
-  g_list_free (renderers);
-
-  gtk_widget_show_all (completion->priv->vbox);
-
-  gdk_window_get_origin (completion->priv->entry->window, &x, &y);
-  get_borders (GTK_ENTRY (completion->priv->entry), &x_border, &y_border);
-
-  x += x_border;
-  y += 2 * y_border;
-
-  height = _gtk_entry_completion_resize_popup (completion);
-
   gtk_widget_size_request (completion->priv->popup_window, &popup_req);
 
   screen = gtk_widget_get_screen (GTK_WIDGET (completion->priv->entry));
@@ -1183,6 +1156,30 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
     y -= popup_req.height;
 
   gtk_window_move (GTK_WINDOW (completion->priv->popup_window), x, y);
+
+  return height;
+}
+
+void
+_gtk_entry_completion_popup (GtkEntryCompletion *completion)
+{
+  GtkTreeViewColumn *column;
+  GList *renderers;
+
+  if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
+    return;
+
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
+  renderers = gtk_tree_view_column_get_cell_renderers (column);
+  gtk_widget_ensure_style (completion->priv->tree_view);
+  g_object_set (GTK_CELL_RENDERER (renderers->data), "cell_background_gdk",
+                &completion->priv->tree_view->style->bg[GTK_STATE_NORMAL],
+                NULL);
+  g_list_free (renderers);
+
+  gtk_widget_show_all (completion->priv->vbox);
+
+  _gtk_entry_completion_resize_popup (completion);
 
   gtk_widget_show (completion->priv->popup_window);
 
