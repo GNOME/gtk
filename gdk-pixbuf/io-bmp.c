@@ -34,48 +34,54 @@
 
 
 
-/* 
-
-These structures are actually dummies. These are according to
-the "Windows API reference guide volume II" as written by 
-Borland International, but GCC fiddles with the alignment of 
-the internal members, so these aren't actually usable.
-
-*/
-
+#if 0
+/* If these structures were unpacked, they would define the two headers of the
+ * BMP file.  After them comes the palette, and then the image data.
+ *
+ * We do not use these structures; we just keep them here for reference.
+ */
 struct BitmapFileHeader {
-	gushort bfType;
-	guint bfSize;
-	guint reserverd;
-	guint bfOffbits;
+	guint16 magic;
+	guint32 file_size;
+	guint32 reserved;
+	guint32 data_offset;
 };
 
 struct BitmapInfoHeader {
-	guint biSize;
-	guint biWidth;
-	guint biHeight;
-	gushort biPlanes;
-	gushort biBitCount;
-	guint biCompression;
-	guint biSizeImage;
-	guint biXPelsPerMeter;
-	guint biYPelsPerMeter;
-	guint biClrUsed;
-	guint biClrImportant;
+	guint32 header_size;
+	guint32 width;
+	guint32 height;
+	guint16 planes;
+	guint16 bpp;
+	guint32 compression;
+	guint32 data_size;
+	guint32 x_ppm;
+	guint32 y_ppm;
+	guint32 n_colors;
+	guint32 n_important_colors;
 };
+#endif
 
-/* biCompression values */
+/* Compression values */
 
 #define BI_RGB 0
 #define BI_RLE8 1
 #define BI_RLE4 2
 #define BI_BITFIELDS 3
-#define BI_JPEG 4
-#define BI_PNG 5
 
-/* 
+/* State machine */
+typedef enum {
+	READ_STATE_HEADERS,	/* Reading the bitmap file header and bitmap info header */
+	READ_STATE_PALETTE,	/* Reading the palette */
+	READ_STATE_BITMASKS,	/* Reading the bitmasks for BI_BITFIELDS */
+	READ_STATE_DATA,	/* Reading the actual image data */
+	READ_STATE_ERROR,	/* An error occurred; further data will be ignored */
+	READ_STATE_DONE		/* Done reading the image; further data will be ignored */
+} ReadState;
 
-DumpBIH printf's the values in a BitmapInfoHeader to the screen, for 
+/*
+
+DumpBIH printf's the values in a BitmapInfoHeader to the screen, for
 debugging purposes.
 
 */
@@ -121,13 +127,13 @@ struct headerpair {
 	gint32 width;
 	gint32 height;
 	guint depth;
-	guint Negative;		/* Negative = 1 -> top down BMP,  
+	guint Negative;		/* Negative = 1 -> top down BMP,
 				   Negative = 0 -> bottom up BMP */
 };
 
 /* Data needed for the "state" during decompression */
 struct bmp_compression_state {
-	gint phase; 
+	gint phase;
 	gint RunCount;
 
 	guchar *linebuff;
@@ -142,6 +148,8 @@ struct bmp_progressive_state {
 	ModuleUpdatedNotifyFunc updated_func;
 	gpointer user_data;
 
+	ReadState read_state;
+
 	guint LineWidth;
 	guint Lines;		/* # of finished lines */
 
@@ -151,13 +159,13 @@ struct bmp_progressive_state {
 
 	guchar (*Colormap)[3];
 
-	gint Type;		/*  
+	gint Type;		/*
 				   32 = RGB + alpha
 				   24 = RGB
 				   16 = RGB
 				   4  = 4 bpp colormapped
 				   8  = 8 bpp colormapped
-				   1  = 1 bit bitonal 
+				   1  = 1 bit bitonal
 				 */
 	gint Compressed;
 	struct bmp_compression_state compr;
@@ -165,6 +173,10 @@ struct bmp_progressive_state {
 
 	struct headerpair Header;	/* Decoded (BE->CPU) header */
 
+	/* Bit masks, shift amounts, and significant bits for BI_BITFIELDS coding */
+	int r_mask, r_shift, r_bits;
+	int g_mask, g_shift, g_bits;
+	int b_mask, b_shift, b_bits;
 
 	GdkPixbuf *pixbuf;	/* Our "target" */
 };
@@ -199,9 +211,9 @@ static GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f, GError **error)
 
         if (State == NULL)
           return NULL;
-        
+
 	while (feof(f) == 0) {
-		length = fread(membuf, 1, 4096, f);
+		length = fread(membuf, 1, sizeof (membuf), f);
 		if (length > 0)
                   if (!gdk_pixbuf__bmp_image_load_increment(State,
                                                             membuf,
@@ -226,7 +238,7 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
                              GError **error)
 {
         /* FIXME this is totally unrobust against bogus image data. */
-        
+
 	if (State->BufferSize < GUINT32_FROM_LE (* (guint32 *) &BIH[0]) + 14) {
 		State->BufferSize = GUINT32_FROM_LE (* (guint32 *) &BIH[0]) + 14;
 		State->buff = g_realloc (State->buff, State->BufferSize);
@@ -247,12 +259,13 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 		State->Header.width = GUINT16_FROM_LE (* (guint16 *) &BIH[4]);
 		State->Header.height = GUINT16_FROM_LE (* (guint16 *) &BIH[6]);
 		State->Header.depth = GUINT16_FROM_LE (* (guint16 *) &BIH[10]);
-		State->Compressed = 0;
+		State->Compressed = BI_RGB;
 	} else {
 		g_set_error (error,
 			     GDK_PIXBUF_ERROR,
 			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
 			     _("BMP image has unsupported header size"));
+		State->read_state = READ_STATE_ERROR;
 		return FALSE;
 	}
 
@@ -271,11 +284,13 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 	if (State->Header.width == 0 || State->Header.height == 0 ||
 	    (State->Compressed == BI_RLE4 && State->Type != 4)    ||
 	    (State->Compressed == BI_RLE8 && State->Type != 8)	  ||
-	    State->Compressed > BI_RLE4) {
+	    (State->Compressed == BI_BITFIELDS && !(State->Type == 16 || State->Type == 32)) ||
+	    State->Compressed > BI_BITFIELDS) {
 		g_set_error (error,
 			     GDK_PIXBUF_ERROR,
 			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
 			     _("BMP image has bogus header data"));
+		State->read_state = READ_STATE_ERROR;
 		return FALSE;
 	}
 
@@ -298,13 +313,14 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 			     GDK_PIXBUF_ERROR,
 			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
 			     _("BMP image has bogus header data"));
+		State->read_state = READ_STATE_ERROR;
 		return FALSE;
 	}
 
 	/* Pad to a 32 bit boundary */
-	if (((State->LineWidth % 4) > 0) && (State->Compressed == BI_RGB))
+	if (((State->LineWidth % 4) > 0)
+	    && (State->Compressed == BI_RGB || State->Compressed == BI_BITFIELDS))
 		State->LineWidth = (State->LineWidth / 4) * 4 + 4;
-
 
 	if (State->pixbuf == NULL) {
 		if (State->Type == 32)
@@ -323,16 +339,17 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
                                      GDK_PIXBUF_ERROR,
                                      GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
                                      _("Not enough memory to load bitmap image"));
+			State->read_state = READ_STATE_ERROR;
                         return FALSE;
                 }
-                
+
 		if (State->prepared_func != NULL)
 			/* Notify the client that we are ready to go */
 			(*State->prepared_func) (State->pixbuf, NULL, State->user_data);
 
 	}
 
-	if (State->Compressed != BI_RGB) {
+	if (!(State->Compressed == BI_RGB || State->Compressed == BI_BITFIELDS)) {
 		State->compr.linebuffdone = 0;
 		State->compr.linebuffsize = State->Header.width;
 		if (State->Type == 8)
@@ -341,12 +358,18 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 	}
 
 	State->BufferDone = 0;
-	if (State->Type <= 8)
+	if (State->Type <= 8) {
+		State->read_state = READ_STATE_PALETTE;
 		State->BufferSize = GUINT32_FROM_LE (* (guint32 *) &BFH[10]) - 14 - State->Header.size;
-	else if (State->Compressed != BI_RGB)
-		State->BufferSize = 2;
-	else
+	} else if (State->Compressed == BI_RGB) {
+		State->read_state = READ_STATE_DATA;
 		State->BufferSize = State->LineWidth;
+	} else if (State->Compressed == BI_BITFIELDS) {
+		State->read_state = READ_STATE_BITMASKS;
+		State->BufferSize = 12;
+	} else
+		g_assert_not_reached ();
+
 	State->buff = g_realloc (State->buff, State->BufferSize);
 
         return TRUE;
@@ -358,6 +381,8 @@ static void DecodeColormap (guchar *buff,
 {
 	gint i;
 
+	g_assert (State->read_state == READ_STATE_PALETTE);
+
 	State->Colormap = g_malloc ((1 << State->Header.depth) * sizeof (*State->Colormap));
 
 	for (i = 0; i < (1 << State->Header.depth); i++)
@@ -367,15 +392,66 @@ static void DecodeColormap (guchar *buff,
 		State->Colormap[i][2] = buff[i * (State->Header.size == 12 ? 3 : 4) + 2];
 	}
 
+	State->read_state = READ_STATE_DATA;
+
 	State->BufferDone = 0;
-	if (State->Compressed != BI_RGB)
+	if (!(State->Compressed == BI_RGB || State->Compressed == BI_BITFIELDS))
 		State->BufferSize = 2;
 	else
 		State->BufferSize = State->LineWidth;
+
 	State->buff = g_realloc (State->buff, State->BufferSize);
 }
 
-/* 
+/* Finds the lowest set bit and the number of set bits */
+static void
+find_bits (int n, int *lowest, int *n_set)
+{
+	int i;
+
+	*n_set = 0;
+
+	for (i = 31; i >= 0; i--)
+		if (n & (1 << i)) {
+			*lowest = i;
+			(*n_set)++;
+		}
+}
+
+/* Decodes the 3 shorts that follow for the bitmasks for BI_BITFIELDS coding */
+static void
+decode_bitmasks (struct bmp_progressive_state *State, guchar *buf)
+{
+	State->r_mask = buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24);
+	buf += 4;
+
+	State->g_mask = buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24);
+	buf += 4;
+
+	State->b_mask = buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24);
+
+	find_bits (State->r_mask, &State->r_shift, &State->r_bits);
+	find_bits (State->g_mask, &State->g_shift, &State->g_bits);
+	find_bits (State->b_mask, &State->b_shift, &State->b_bits);
+
+	if (State->r_bits == 0 || State->g_bits == 0 || State->b_bits == 0) {
+		State->r_mask = 0x7c00;
+		State->r_shift = 10;
+		State->g_mask = 0x03e0;
+		State->g_shift = 5;
+		State->b_mask = 0x001f;
+		State->b_shift = 0;
+
+		State->r_bits = State->g_bits = State->b_bits = 5;
+	}
+
+	State->read_state = READ_STATE_DATA;
+	State->BufferDone = 0;
+	State->BufferSize = State->LineWidth;
+	State->buff = g_realloc (State->buff, State->BufferSize);
+}
+
+/*
  * func - called when we have pixmap created (but no image data)
  * user_data - passed as arg 1 to func
  * return context (opaque to user)
@@ -394,10 +470,12 @@ gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 	context->updated_func = updated_func;
 	context->user_data = user_data;
 
+	context->read_state = READ_STATE_HEADERS;
+
 	context->BufferSize = 26;
 	context->buff = g_malloc(26);
 	context->BufferDone = 0;
-	/* 14 for the BitmapFileHeader, 12 for the BitmapImageHeader */ 
+	/* 14 for the BitmapFileHeader, 12 for the BitmapImageHeader */
 
 	context->Colormap = NULL;
 
@@ -427,7 +505,7 @@ static gboolean gdk_pixbuf__bmp_image_stop_load(gpointer data, GError **error)
 
         /* FIXME this thing needs to report errors if
          * we have unused image data
-         */        
+         */
 
 	g_return_val_if_fail(context != NULL, TRUE);
 
@@ -453,26 +531,57 @@ OneLine24 is the 24 bpp-version.
 */
 static void OneLine32(struct bmp_progressive_state *context)
 {
-	gint X;
-	guchar *Pixels;
+	gint X;	int i;
+	guchar *pixels;
+	guchar *src;
 
-	X = 0;
-	if (context->Header.Negative == 0)
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (context->Header.height - context->Lines - 1));
+	if (!context->Header.Negative)
+		pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride * (context->Header.height - context->Lines - 1));
 	else
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  context->Lines);
-	while (X < context->Header.width) {
-		Pixels[X * 4 + 0] = context->buff[X * 4 + 2];
-		Pixels[X * 4 + 1] = context->buff[X * 4 + 1];
-		Pixels[X * 4 + 2] = context->buff[X * 4 + 0];
-		Pixels[X * 4 + 3] = context->buff[X * 4 + 3];
-		X++;
-	}
+		pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride * context->Lines);
 
+	src = context->buff;
+
+	if (context->Compressed == BI_BITFIELDS) {
+		int r_lshift, r_rshift;
+		int g_lshift, g_rshift;
+		int b_lshift, b_rshift;
+
+		r_lshift = 8 - context->r_bits;
+		g_lshift = 8 - context->g_bits;
+		b_lshift = 8 - context->b_bits;
+
+		r_rshift = context->r_bits - r_lshift;
+		g_rshift = context->g_bits - g_lshift;
+		b_rshift = context->b_bits - b_lshift;
+
+		for (i = 0; i < context->Header.width; i++) {
+			int v, r, g, b;
+
+			v = src[0] | (src[1] << 8) | (src[2] << 16);
+
+			r = (v & context->r_mask) >> context->r_shift;
+			g = (v & context->g_mask) >> context->g_shift;
+			b = (v & context->b_mask) >> context->b_shift;
+
+			*pixels++ = (r << r_lshift) | (r >> r_rshift);
+			*pixels++ = (g << g_lshift) | (g >> g_rshift);
+			*pixels++ = (b << b_lshift) | (b >> b_rshift);
+			*pixels++ = src[3]; /* alpha */
+
+			src += 4;
+		}
+	} else
+		for (i = 0; i < context->Header.width; i++) {
+			*pixels++ = src[2];
+			*pixels++ = src[1];
+			*pixels++ = src[0];
+			*pixels++ = src[3];
+
+			src += 4;
+		}
 }
 
 static void OneLine24(struct bmp_progressive_state *context)
@@ -500,24 +609,61 @@ static void OneLine24(struct bmp_progressive_state *context)
 
 static void OneLine16(struct bmp_progressive_state *context)
 {
-	gint X;
-	guchar *Pixels;
+	int i;
+	guchar *pixels;
+	guchar *src;
 
-	X = 0;
-	if (context->Header.Negative == 0)
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (context->Header.height - context->Lines - 1));
+	if (!context->Header.Negative)
+		pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride * (context->Header.height - context->Lines - 1));
 	else
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  context->Lines);
-	while (X < context->Header.width) {
-		Pixels[X * 3 + 0] = (GUINT16_FROM_LE (* (guint16 *) &context->buff[X * 2]) & 0x7C00) >> 7;
-		Pixels[X * 3 + 1] = (GUINT16_FROM_LE (* (guint16 *) &context->buff[X * 2]) & 0x03E0) >> 2;
-		Pixels[X * 3 + 2] = (GUINT16_FROM_LE (* (guint16 *) &context->buff[X * 2]) & 0x001F) << 3;
-		X++;
-	}
+		pixels = (context->pixbuf->pixels +
+			  context->pixbuf->rowstride * context->Lines);
+
+	src = context->buff;
+
+	if (context->Compressed == BI_BITFIELDS) {
+		int r_lshift, r_rshift;
+		int g_lshift, g_rshift;
+		int b_lshift, b_rshift;
+
+		r_lshift = 8 - context->r_bits;
+		g_lshift = 8 - context->g_bits;
+		b_lshift = 8 - context->b_bits;
+
+		r_rshift = context->r_bits - r_lshift;
+		g_rshift = context->g_bits - g_lshift;
+		b_rshift = context->b_bits - b_lshift;
+
+		for (i = 0; i < context->Header.width; i++) {
+			int v, r, g, b;
+
+			v = (int) src[0] | ((int) src[1] << 8);
+
+			r = (v & context->r_mask) >> context->r_shift;
+			g = (v & context->g_mask) >> context->g_shift;
+			b = (v & context->b_mask) >> context->b_shift;
+
+			*pixels++ = (r << r_lshift) | (r >> r_rshift);
+			*pixels++ = (g << g_lshift) | (g >> g_rshift);
+			*pixels++ = (b << b_lshift) | (b >> b_rshift);
+
+			src += 2;
+		}
+	} else
+		for (i = 0; i < context->Header.width; i++) {
+			int v, r, g, b;
+
+			v = src[0] | (src[1] << 8);
+
+			r = (v >> 10) & 0x1f;
+			g = (v >> 5) & 0x1f;
+			b = v & 0x1f;
+
+			*pixels++ = (r << 3) | (r >> 2);
+			*pixels++ = (g << 3) | (g >> 2);
+			*pixels++ = (b << 3) | (b >> 2);
+		}
 }
 
 static void OneLine8(struct bmp_progressive_state *context)
@@ -621,16 +767,18 @@ static void OneLine(struct bmp_progressive_state *context)
 
 	if (context->Type == 32)
 		OneLine32(context);
-	if (context->Type == 24)
+	else if (context->Type == 24)
 		OneLine24(context);
-	if (context->Type == 16)
+	else if (context->Type == 16)
 		OneLine16(context);
-	if (context->Type == 8)
+	else if (context->Type == 8)
 		OneLine8(context);
-	if (context->Type == 4)
+	else if (context->Type == 4)
 		OneLine4(context);
-	if (context->Type == 1)
+	else if (context->Type == 1)
 		OneLine1(context);
+	else
+		g_assert_not_reached ();
 
 	context->Lines++;
 
@@ -792,8 +940,13 @@ gdk_pixbuf__bmp_image_load_increment(gpointer data,
 
 	gint BytesToCopy;
 
+	if (context->read_state == READ_STATE_DONE)
+		return TRUE;
+	else if (context->read_state == READ_STATE_ERROR)
+		return FALSE;
+
 	while (size > 0) {
-		if (context->BufferDone < context->BufferSize) {	/* We still 
+		if (context->BufferDone < context->BufferSize) {	/* We still
 									   have headerbytes to do */
 			BytesToCopy =
 			    context->BufferSize - context->BufferDone;
@@ -811,19 +964,32 @@ gdk_pixbuf__bmp_image_load_increment(gpointer data,
 				break;
 		}
 
-		if (!context->Header.size) {
-			if (!DecodeHeader (context->buff,
-					   context->buff + 14, context,
-					   error))
+		switch (context->read_state) {
+		case READ_STATE_HEADERS:
+			if (!DecodeHeader (context->buff, context->buff + 14, context))
 				return FALSE;
+
+			break;
+
+		case READ_STATE_PALETTE:
+			DecodeColormap (context->buff, context);
+			break;
+
+		case READ_STATE_BITMASKS:
+			decode_bitmasks (context, context->buff);
+			break;
+
+		case READ_STATE_DATA:
+			if (context->Compressed == BI_RGB || context->Compressed == BI_BITFIELDS)
+				OneLine (context);
+			else
+				DoCompressed (context);
+
+			break;
+
+		default:
+			g_assert_not_reached ();
 		}
-		else if (context->Type <= 8 && context->Colormap == NULL)
-			DecodeColormap (context->buff, context, error);
-		else if (context->Compressed != BI_RGB)
-			DoCompressed(context);
-		else
-			/* Uncompressed pixeldata */
-			OneLine(context);
 	}
 
 	return TRUE;

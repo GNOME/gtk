@@ -1,3 +1,16 @@
+2001-11-21  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix Ximian bug #12125; merged from gdk-pixbuf stable.
+
+	* gdk-pixbuf/io-bmp.c (gdk_pixbuf__bmp_image_load_increment): Use
+	a simple state machine instead of a scary if/else chain.
+	(DecodeHeader): Set the reading state.
+	(DecodeColormap): Set the reading state.
+	(decode_bitmasks): New function, decodes the bitmasks for
+	BI_BITFIELDS coding.
+	(OneLine32): Handle BI_BITFIELDS coding.
+	(OneLine16): Likewise.
+
 2001-11-18  Hans Breuer  <hans@breuer.org>
 
 	* io-xpm.c : use g_strcasecmp(), some poor platforms
