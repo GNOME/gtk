@@ -435,11 +435,7 @@ void	  gtk_style_detach		     (GtkStyle	   *style);
 GtkStyle* gtk_style_ref			     (GtkStyle	   *style);
 void	  gtk_style_unref		     (GtkStyle	   *style);
 
-#ifndef GDK_MULTIHEAD_SAFE
 GdkFont * gtk_style_get_font                 (GtkStyle     *style);
-#endif
-GdkFont * gtk_style_get_font_for_display     (GdkDisplay   *display,
-					      GtkStyle     *style);
 void      gtk_style_set_font                 (GtkStyle     *style,
 					      GdkFont      *font);
 #endif /* GTK_DISABLE_DEPRECATED */

@@ -811,7 +811,19 @@ gtk_style_detach (GtkStyle *style)
       
       gdk_colormap_unref (style->colormap);
       style->colormap = NULL;
-      
+
+      if (style->private_font_desc)
+	{
+	  if (style->private_font)
+	    {
+	      gdk_font_unref (style->private_font);
+	      style->private_font = NULL;
+	    }
+	  
+	  pango_font_description_free (style->private_font_desc);
+	  style->private_font_desc = NULL;
+	}
+
       g_object_unref (style);
     }
 }
@@ -3110,11 +3122,11 @@ gtk_default_draw_string (GtkStyle      *style,
 
   if (state_type == GTK_STATE_INSENSITIVE)
     gdk_draw_string (window,
-		     gtk_style_get_font_for_display (display, style),
+		     gtk_style_get_font (style),
 		     style->white_gc, x + 1, y + 1, string);
 
   gdk_draw_string (window,
-		   gtk_style_get_font_for_display (display, style),
+		   gtk_style_get_font (style),
 		   style->fg_gc[state_type], x, y, string);
 
   if (area)
@@ -5599,24 +5611,21 @@ gtk_border_get_type (void)
 }
 
 /**
- * gtk_style_get_font_for_display:
- * @display : a #GdkDisplay
+ * gtk_style_get_font:
  * @style: a #GtkStyle
  * 
  * Gets the #GdkFont to use for the given style. This is
- * meant only as a replacement for direct access to style->font
+ * meant only as a replacement for direct access to @style->font
  * and should not be used in new code. New code should
- * use style->font_desc instead.
+ * use @style->font_desc instead.
  * 
  * Return value: the #GdkFont for the style. This font is owned
  *   by the style; if you want to keep around a copy, you must
  *   call gdk_font_ref().
  **/
 GdkFont *
-gtk_style_get_font_for_display (GdkDisplay *display,
-				GtkStyle   *style)
+gtk_style_get_font (GtkStyle *style)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
 
   if (style->private_font && style->private_font_desc)
@@ -5637,9 +5646,21 @@ gtk_style_get_font_for_display (GdkDisplay *display,
   
   if (!style->private_font)
     {
+      GdkDisplay *display;
+
+      if (style->colormap)
+	{
+	  display = gdk_screen_get_display (gdk_colormap_get_screen (style->colormap));
+	}
+      else
+	{
+	  display = gdk_get_default_display ();
+	  GTK_NOTE (MULTIHEAD,
+		    g_warning ("gtk_style_get_font() should not be called on an unattached style"));
+	}
+      
       if (style->font_desc)
 	{
-	  /* no colormap, no screen */
 	  style->private_font = gdk_font_from_description_for_display (display, style->font_desc);
 	  style->private_font_desc = pango_font_description_copy (style->font_desc);
 	}
@@ -5652,27 +5673,6 @@ gtk_style_get_font_for_display (GdkDisplay *display,
     }
 
   return style->private_font;
-}
-
-/**
- * gtk_style_get_font:
- * @style: a #GtkStyle
- * 
- * Gets the #GdkFont to use for the given style. This is
- * meant only as a replacement for direct access to @style->font
- * and should not be used in new code. New code should
- * use @style->font_desc instead.
- * 
- * Return value: the #GdkFont for the style. This font is owned
- *   by the style; if you want to keep around a copy, you must
- *   call gdk_font_ref().
- **/
-GdkFont *
-gtk_style_get_font (GtkStyle *style)
-{
-  g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
-
-  return gtk_style_get_font_for_display (gdk_get_default_display (), style);
 }
 
 /**

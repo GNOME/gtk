@@ -73,8 +73,7 @@
 #define MARK_CURRENT_FONT(text, mark) \
   ((MARK_CURRENT_PROPERTY(mark)->flags & PROPERTY_FONT) ? \
          MARK_CURRENT_PROPERTY(mark)->font->gdk_font : \
-         gtk_style_get_font_for_display (gtk_widget_get_display (GTK_WIDGET (text)), \
-					 GTK_WIDGET (text)->style))
+         gtk_style_get_font (GTK_WIDGET (text)->style))
 #define MARK_CURRENT_FORE(text, mark) \
   ((MARK_CURRENT_PROPERTY(mark)->flags & PROPERTY_FOREGROUND) ? \
          &MARK_CURRENT_PROPERTY(mark)->fore_color : \
@@ -1000,7 +999,7 @@ gtk_text_insert (GtkText    *text,
       
       gtk_widget_ensure_style (widget);
       if ((widget->style) &&
-	  (gtk_style_get_font_for_display (gtk_widget_get_display (widget), widget->style)->type == GDK_FONT_FONTSET))
+	  (gtk_style_get_font (widget->style)->type == GDK_FONT_FONTSET))
  	{
  	  text->use_wchar = TRUE;
  	  g_free (text->text.ch);
@@ -1410,7 +1409,7 @@ gtk_text_style_set (GtkWidget *widget,
   
   if (text->current_font)
     text_font_unref (text->current_font);
-  text->current_font = get_text_font (gtk_style_get_font_for_display (gtk_widget_get_display (widget), widget->style));
+  text->current_font = get_text_font (gtk_style_get_font (widget->style));
 }
 
 static void
@@ -1574,8 +1573,7 @@ gtk_text_size_request (GtkWidget      *widget,
   xthickness = widget->style->xthickness + TEXT_BORDER_ROOM;
   ythickness = widget->style->ythickness + TEXT_BORDER_ROOM;
 
-  font = gtk_style_get_font_for_display (gtk_widget_get_display (widget),
-					 widget->style);
+  font = gtk_style_get_font (widget->style);
   
   char_height = MIN_TEXT_HEIGHT_LINES * (font->ascent +
 					 font->descent);
