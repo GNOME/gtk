@@ -1,5 +1,8 @@
 2004-04-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c (gtk_entry_completion_timeout): Pop down the 
+	completion window if there are no completions anymore.
+
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
 	Don't call gtk_tree_view_scroll_to_cell() on an empty tree view. 
 	It doesn't like that.  (#140642, Christian Persch)
