@@ -1552,16 +1552,12 @@ GtkBox
 GtkImage
 GtkItem
 GtkLabel
-GtkPaned
 GtkPixmap
 GtkScrolledWindow
 GtkSeparator
 GtkTable
-GtkViewport
 GtkAspectFrame
 GtkFrame
-GtkVPaned
-GtkHPaned
 GtkVBox
 GtkHBox
 GtkVSeparator
@@ -3015,15 +3011,6 @@ GtkWidget* gtk_entry_new_with_max_length (guint16 max);
 The first just creates a new Entry widget, whilst the second creates a new Entry and 
 sets a limit on the length of the text within the Entry..
 
-The maximum length of the text within an entry widget may be changed by a call to the following
-function. If the current text is longer than this maximum, then it is upto us to alter the Entries
-contents appropriately.
-
-<tscreen><verb>
-void gtk_entry_set_max_length (GtkEntry *entry,
-                               guint16  max);
-</verb></tscreen>
-
 There are several functions for altering the text which is currently within the Entry widget.
 <tscreen><verb>
 void gtk_entry_set_text       (GtkEntry    *entry,
@@ -3173,6 +3160,327 @@ int main (int argc, char *argv[])
 
     gtk_main();
     return(0);
+}
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> Color Selection
+<P>
+The color selection widget is, not surprisingly, a widget for interactive
+selection of colors. This composite widget lets the user select a color by manipulating
+RGB (Red, Green, Blue) and HSV (Hue, Saturation, Value) triples. This is done
+either by adjusting single values with sliders or entries, or by picking the desired
+color from a hue-saturation wheel/value bar. Optionally, the opacity of the color can also
+be set.
+
+The color selection widget currently emits only one signal, "color_changed", which is emitted
+whenever the current color in the widget changes, either when the user changes it or if
+it's set explicitly through gtk_color_selection_set_color().
+
+Lets have a look at what the color selection widget has to offer us. The widget comes
+in two flavours; gtk_color_selection and gtk_color_selection_dialog:
+
+<tscreen><verb>
+GtkWidget *gtk_color_selection_new(void);
+</verb></tscreen>
+	
+You'll probably not be using this constructor directly. It creates an orphan
+GtkColorSelection widget which you'll have to parent yourself. The GtkColorSelection widget
+inherits from the GtkVBox widget.
+
+<tscreen><verb> 
+GtkWidget *gtk_color_selection_dialog_new(const gchar *title);
+</verb></tscreen>
+
+This is the most common color selection constructor. It creates a GtkColorSelectionDialog, which
+inherits from a GtkDialog. It consists of a GtkFrame containing a GtkColorSelection widget, a
+GtkHSeparator and a GtkHBox with three buttons, "Ok", "Cancel" and "Help". You can reach these
+buttons by accessing the "ok_button", "cancel_button" and "help_button" widgets in the
+GtkColorSelectionDialog structure, (i.e. GTK_COLOR_SELECTION_DIALOG(colorseldialog)->ok_button).
+
+<tscreen><verb>
+void gtk_color_selection_set_update_policy(GtkColorSelection *colorsel, 
+                                           GtkUpdateType policy);
+</verb></tscreen>
+
+This function sets the update policy. The default policy is GTK_UPDATE_CONTINOUS which means that
+the current color is updated continously when the user drags the sliders or presses the mouse and drags
+in the hue-saturation wheel or value bar. If you experience performance problems, you may
+want to set the policy to GTK_UPDATE_DISCONTINOUS or GTK_UPDATE_DELAYED.
+
+<tscreen><verb>
+void gtk_color_selection_set_opacity(GtkColorSelection *colorsel,
+                                     gint use_opacity);
+</verb></tscreen>
+
+The color selection widget supports adjusting the opacity of a color (also known as the alpha channel).
+This is disabled by default. Calling this function with use_opacity set to TRUE enables opacity.
+Likewise, use_opacity set to FALSE will disable opacity.
+
+<tscreen><verb>
+void gtk_color_selection_set_color(GtkColorSelection *colorsel,
+                                   gdouble *color);
+</verb></tscreen>
+
+You can set the current color explicitly by calling this function with a pointer to an array
+of colors (gdouble). The length of the array depends on whether opacity is enabled or not.
+Position 0 contains the red component, 1 is green, 2 is blue and opacity is at position 3 (only if
+opacity is enabled, see gtk_color_selection_set_opacity()). All values are between 0.0 and 1.0.
+
+<tscreen><verb>
+void gtk_color_selection_get_color(GtkColorSelection *colorsel,
+                                   gdouble *color);
+</verb></tscreen>
+
+When you need to query the current color, typically when you've received a "color_changed" signal,
+you use this function. Color is a pointer to the array of colors to fill in. See the
+gtk_color_selection_set_color() function for the description of this array.
+
+<!-- Need to do a whole section on DnD - TRG
+Drag and drop
+-------------
+
+The color sample areas (right under the hue-saturation wheel) supports drag and drop. The type of
+drag and drop is "application/x-color". The message data consists of an array of 4
+(or 5 if opacity is enabled) gdouble values, where the value at position 0 is 0.0 (opacity
+on) or 1.0 (opacity off) followed by the red, green and blue values at positions 1,2 and 3 respectively.
+If opacity is enabled, the opacity is passed in the value at position 4.
+-->
+
+Here's a simple example demonstrating the use of the GtkColorSelectionDialog. The program displays a window
+containing a drawing area. Clicking on it opens a color selection dialog, and changing the color in the
+color selection dialog changes the background color.
+
+<tscreen><verb>
+#include <glib.h>
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+
+GtkWidget *colorseldlg = NULL;
+GtkWidget *drawingarea = NULL;
+
+/* Color changed handler */
+
+void color_changed_cb (GtkWidget *widget, GtkColorSelection *colorsel)
+{
+  gdouble color[3];
+  GdkColor gdk_color;
+  GdkColormap *colormap;
+
+  /* Get drawingarea colormap */
+
+  colormap = gdk_window_get_colormap (drawingarea->window);
+
+  /* Get current color */
+
+  gtk_color_selection_get_color (colorsel,color);
+
+  /* Fit to a unsigned 16 bit integer (0..65535) and insert into the GdkColor structure */
+
+  gdk_color.red = (guint16)(color[0]*65535.0);
+  gdk_color.green = (guint16)(color[1]*65535.0);
+  gdk_color.blue = (guint16)(color[2]*65535.0);
+
+  /* Allocate color */
+
+  gdk_color_alloc (colormap, &amp;gdk_color);
+
+  /* Set window background color */
+
+  gdk_window_set_background (drawingarea->window, &amp;gdk_color);
+
+  /* Clear window */
+
+  gdk_window_clear (drawingarea->window);
+}
+
+/* Drawingarea event handler */
+
+gint area_event (GtkWidget *widget, GdkEvent *event, gpointer client_data)
+{
+  gint handled = FALSE;
+  GtkWidget *colorsel;
+
+  /* Check if we've received a button pressed event */
+
+  if (event->type == GDK_BUTTON_PRESS &amp;&amp; colorseldlg == NULL)
+    {
+      /* Yes, we have an event and there's no colorseldlg yet! */
+
+      handled = TRUE;
+
+      /* Create color selection dialog */
+
+      colorseldlg = gtk_color_selection_dialog_new("Select background color");
+
+      /* Get the GtkColorSelection widget */
+
+      colorsel = GTK_COLOR_SELECTION_DIALOG(colorseldlg)->colorsel;
+
+      /* Connect to the "color_changed" signal, set the client-data to the colorsel widget */
+
+      gtk_signal_connect(GTK_OBJECT(colorsel), "color_changed",
+        (GtkSignalFunc)color_changed_cb, (gpointer)colorsel);
+
+      /* Show the dialog */
+
+      gtk_widget_show(colorseldlg);
+    }
+
+  return handled;
+}
+
+/* Close down and exit handler */
+
+void destroy_window (GtkWidget *widget, gpointer client_data)
+{
+  gtk_main_quit ();
+}
+
+/* Main */
+
+gint main (gint argc, gchar *argv[])
+{
+  GtkWidget *window;
+
+  /* Initialize the toolkit, remove gtk-related commandline stuff */
+
+  gtk_init (&amp;argc,&amp;argv);
+
+  /* Create toplevel window, set title and policies */
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW(window), "Color selection test");
+  gtk_window_set_policy (GTK_WINDOW(window), TRUE, TRUE, TRUE);
+
+  /* Attach to the "delete" and "destroy" events so we can exit */
+
+  gtk_signal_connect (GTK_OBJECT(window), "delete_event",
+    (GtkSignalFunc)destroy_window, (gpointer)window);
+
+  gtk_signal_connect (GTK_OBJECT(window), "destroy",
+    (GtkSignalFunc)destroy_window, (gpointer)window);
+  
+  /* Create drawingarea, set size and catch button events */
+
+  drawingarea = gtk_drawing_area_new ();
+
+  gtk_drawing_area_size (GTK_DRAWING_AREA(drawingarea), 200, 200);
+
+  gtk_widget_set_events (drawingarea, GDK_BUTTON_PRESS_MASK);
+
+  gtk_signal_connect (GTK_OBJECT(drawingarea), "event", 
+    (GtkSignalFunc)area_event, (gpointer)drawingarea);
+  
+  /* Add drawingarea to window, then show them both */
+
+  gtk_container_add (GTK_CONTAINER(window), drawingarea);
+
+  gtk_widget_show (drawingarea);
+  gtk_widget_show (window);
+  
+  /* Enter the gtk main loop (this never returns) */
+
+  gtk_main ();
+
+  /* Satisfy grumpy compilers */
+
+  return 0;
+}
+</verb></tscreen>
+<!-- ----------------------------------------------------------------- -->
+<sect1> File Selections
+<p>
+The file selection widget is a quick and simple way to display a File 
+dialog box.  It comes complete with Ok, Cancel, and Help buttons, a great way
+to cut down on programming time.
+
+To create a new file selection box use:
+
+<tscreen><verb>
+GtkWidget* gtk_file_selection_new (gchar *title);
+</verb></tscreen>
+
+To set the filename, for example to bring up a specific directory, or
+give a default filename, use this function: 
+
+<tscreen><verb>
+void gtk_file_selection_set_filename (GtkFileSelection *filesel, gchar *filename);
+</verb></tscreen>
+
+To grab the text that the user has entered or clicked on, use this 
+function:
+
+<tscreen><verb>
+gchar* gtk_file_selection_get_filename (GtkFileSelection *filesel);
+</verb></tscreen>
+
+There are also pointers to the widgets contained within the file 
+selection widget. These are:
+
+<itemize>
+<item>dir_list
+<item>file_list
+<item>selection_entry
+<item>selection_text
+<item>main_vbox
+<item>ok_button
+<item>cancel_button
+<item>help_button
+</itemize>
+
+Most likely you will want to use the ok_button, cancel_button, and
+help_button pointers in signaling their use.
+
+Included here is an example stolen from testgtk.c, modified to run
+on it's own.  As you will see, there is nothing much to creating a file 
+selection widget.  While, in this example, the Help button appears on the 
+screen, it does nothing as there is not a signal attached to it. 
+
+<tscreen><verb>
+/* filesel.c */
+
+#include <gtk/gtk.h>
+
+/* Get the selected filename and print it to the console */
+void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
+{
+    g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+}
+
+void destroy (GtkWidget *widget, gpointer *data)
+{
+    gtk_main_quit ();
+}
+
+int main (int argc, char *argv[])
+{
+    GtkWidget *filew;
+    
+    gtk_init (&amp;argc, &amp;argv);
+    
+    /* Create a new file selection widget */
+    filew = gtk_file_selection_new ("File selection");
+    
+    gtk_signal_connect (GTK_OBJECT (filew), "destroy",
+			(GtkSignalFunc) destroy, &amp;filew);
+    /* Connect the ok_button to file_ok_sel function */
+    gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filew)->ok_button),
+			"clicked", (GtkSignalFunc) file_ok_sel, filew );
+    
+    /* Connect the cancel_button to destroy the widget */
+    gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (filew)->cancel_button),
+			       "clicked", (GtkSignalFunc) gtk_widget_destroy,
+			       GTK_OBJECT (filew));
+    
+    /* Lets set the filename, as if this were a save dialog, and we are giving
+     a default filename */
+    gtk_file_selection_set_filename (GTK_FILE_SELECTION(filew), 
+				     "penguin.png");
+    
+    gtk_widget_show(filew);
+    gtk_main ();
+    return 0;
 }
 </verb></tscreen>
 
@@ -4219,103 +4527,6 @@ Please see the GtkList example on this, which covers the usage of a
 GtkListItem as well.
 
 <!-- ***************************************************************** -->
-<sect> File Selections
-<!-- ***************************************************************** -->
-<p>
-The file selection widget is a quick and simple way to display a File 
-dialog box.  It comes complete with Ok, Cancel, and Help buttons, a great way
-to cut down on programming time.
-
-To create a new file selection box use:
-
-<tscreen><verb>
-GtkWidget* gtk_file_selection_new (gchar *title);
-</verb></tscreen>
-
-To set the filename, for example to bring up a specific directory, or
-give a default filename, use this function: 
-
-<tscreen><verb>
-void gtk_file_selection_set_filename (GtkFileSelection *filesel, gchar *filename);
-</verb></tscreen>
-
-To grab the text that the user has entered or clicked on, use this 
-function:
-
-<tscreen><verb>
-gchar* gtk_file_selection_get_filename (GtkFileSelection *filesel);
-</verb></tscreen>
-
-There are also pointers to the widgets contained within the file 
-selection widget. These are:
-
-<itemize>
-<item>dir_list
-<item>file_list
-<item>selection_entry
-<item>selection_text
-<item>main_vbox
-<item>ok_button
-<item>cancel_button
-<item>help_button
-</itemize>
-
-Most likely you will want to use the ok_button, cancel_button, and
-help_button pointers in signaling their use.
-
-Included here is an example stolen from testgtk.c, modified to run
-on it's own.  As you will see, there is nothing much to creating a file 
-selection widget.  While, in this example, the Help button appears on the 
-screen, it does nothing as there is not a signal attached to it. 
-
-<tscreen><verb>
-/* filesel.c */
-
-#include <gtk/gtk.h>
-
-/* Get the selected filename and print it to the console */
-void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
-{
-    g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-}
-
-void destroy (GtkWidget *widget, gpointer *data)
-{
-    gtk_main_quit ();
-}
-
-int main (int argc, char *argv[])
-{
-    GtkWidget *filew;
-    
-    gtk_init (&amp;argc, &amp;argv);
-    
-    /* Create a new file selection widget */
-    filew = gtk_file_selection_new ("File selection");
-    
-    gtk_signal_connect (GTK_OBJECT (filew), "destroy",
-			(GtkSignalFunc) destroy, &amp;filew);
-    /* Connect the ok_button to file_ok_sel function */
-    gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filew)->ok_button),
-			"clicked", (GtkSignalFunc) file_ok_sel, filew );
-    
-    /* Connect the cancel_button to destroy the widget */
-    gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (filew)->cancel_button),
-			       "clicked", (GtkSignalFunc) gtk_widget_destroy,
-			       GTK_OBJECT (filew));
-    
-    /* Lets set the filename, as if this were a save dialog, and we are giving
-     a default filename */
-    gtk_file_selection_set_filename (GTK_FILE_SELECTION(filew), 
-				     "penguin.png");
-    
-    gtk_widget_show(filew);
-    gtk_main ();
-    return 0;
-}
-</verb></tscreen>
-
-<!-- ***************************************************************** -->
 <sect>Menu Widgets
 <!-- ***************************************************************** -->
 
@@ -4947,6 +5158,89 @@ For now, there's only this example.  An explanation and lots 'o' comments
 will follow later.
 
 <!-- ***************************************************************** -->
+<sect> Text Widget
+<!-- ***************************************************************** -->
+<p>
+The Text widget allows multiple lines of text to be displayed and edited. It supports both
+multi-colored and multi-font text, allowing them to be mixed in any way we wish. It also has
+a wide set of key based text editing commands, which are compatible with Emacs.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Creating and Configuring a Text box
+<p>
+There is only one function for creating a new Text widget.
+<tscreen><verb>
+GtkWidget* gtk_text_new (GtkAdjustment *hadj,
+                         GtkAdjustment *vadj);
+</verb></tscreen>
+
+The arguments allow us to give the Text widget pointers to Adjustments that can be used 
+to track the viewing position of the widget. Passing NULL values to either or both of
+these arguments will cause the gtk_text_new function to create it's own.
+
+<tscreen><verb>
+void gtk_text_set_adjustments (GtkText       *text,
+                               GtkAdjustment *hadj,
+                               GtkAdjustment *vadj);
+</verb></tscreen>
+
+The above function allows the horizontal and vertical adjustments of a Text widget to be
+changed at any time.
+
+There are two main ways in which a Text widget can be used: to allow the user to edit a
+body of text, or to allow us to display multiple lines of text to the user. In order for
+us to switch between these modes of operation, the text widget has the following function:
+
+<tscreen><verb>
+void gtk_text_set_editable    (GtkText *text,
+                               gint    editable);
+</verb></tscreen>
+
+The <tt/editable/ argument is a TRUE or FALSE value that specifies whether the user is
+permitted to edit the contents of the Text widget. When the text widget is editable, it
+will display a cursor at the current insertion point.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Text Manipulation
+<P>
+The current insertion point of a Text widget can be set using
+<tscreen><verb>
+void gtk_text_set_point (GtkText *text,
+                         guint   index);
+</verb></tscreen>
+where <tt/index/ is the position to set the insertion point.
+
+Analogous to this is the function for getting the current insertion point:
+<tscreen><verb>
+guint gtk_text_get_point (GtkText *text);
+</verb></tscreen>
+
+A function that is useful in combination with the above two functions is
+<tscreen><verb>
+guint gtk_text_get_length (GtkText *text);
+</verb></tscreen>
+which returns the current length of the Text widget. The length is the number of characters
+that are within the text block of the widget, including characters such as carriage-return,
+which marks the end of lines.
+
+In order to insert text at the current insertion point of a Text widget, the function
+gtk_text_insert is used, which also allows us to specify background and foreground colors and a 
+font for the text.
+
+<tscreen><verb>
+void gtk_text_insert (GtkText    *text,
+                      GdkFont    *font,
+                      GdkColor   *fore,
+                      GdkColor   *back,
+                      const char *chars,
+                      gint       length);
+</verb></tscreen>
+
+Passing a value of <tt/NULL/ in as the value for the foreground color,  background colour or
+font will result in the values set within the widget style to be used. Using a value of <tt/-1/ for
+the length parameter will result in the whole of the text string given to be inserted.
+
+<!-- ***************************************************************** -->
 <sect> Undocumented Widgets
 <!-- ***************************************************************** -->
 
@@ -4963,9 +5257,6 @@ from others' code, and it should be no problem.
 When you do come to understand all the functions of a new undocumented
 widget, please consider writing a tutorial on it so others may benifit from
 your time.
-
-<!-- ----------------------------------------------------------------- -->
-<sect1> Color Selections
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Range Controls
