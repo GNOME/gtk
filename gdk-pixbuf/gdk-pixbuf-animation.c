@@ -24,6 +24,7 @@
 
 #include <config.h>
 #include <errno.h>
+#include "gdk-pixbuf-alias.h"
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 #include "gdk-pixbuf-i18n.h"

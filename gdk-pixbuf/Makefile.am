@@ -39,6 +39,16 @@ install-ms-lib:
 uninstall-ms-lib:
 endif
 
+gdk_pixbuf.def: gdk-pixbuf.symbols
+	(echo -e EXPORTS; cpp -P -DINCLUDE_VARIABLES gdk-pixbuf.symbols | sed -e '/^$$/d' -e 's/^/\t/') > gdk_pixbuf.def
+
+gdk-pixbuf-alias.h: gdk-pixbuf.symbols
+	 cpp -P -DINCLUDE_INTERNAL_SYMBOLS gdk-pixbuf.symbols | ./makegdkpixbufalias.pl > gdk-pixbuf-alias.h
+
+if OS_UNIX
+TESTS = abicheck.sh
+endif
+
 lib_LTLIBRARIES = 		\
 	libgdk_pixbuf-2.0.la
 
@@ -325,16 +335,23 @@ libgdk_pixbufinclude_HEADERS =  	\
 	gdk-pixdata.h
 
 noinst_HEADERS = 		\
+	gdk-pixbuf-alias.h	\
 	gdk-pixbuf-private.h
 
-BUILT_SOURCES = gdk-pixbuf-enum-types.h gdk-pixbuf-enum-types.c \
-  gdk-pixbuf-marshal.h gdk-pixbuf-marshal.c
+BUILT_SOURCES = 		\
+	gdk-pixbuf-alias.h	\
+	gdk-pixbuf-enum-types.h \
+	gdk-pixbuf-enum-types.c \
+	gdk-pixbuf-marshal.h 	\
+	gdk-pixbuf-marshal.c
 
 CLEANFILES =
-MAINTAINERCLEANFILES = \
-  gdk-pixbuf-enum-types.h gdk-pixbuf-enum-types.c \
-  gdk-pixbuf-marshal.h gdk-pixbuf-marshal.c \
-  gdk-pixbuf.loaders
+MAINTAINERCLEANFILES = 		\
+	gdk-pixbuf-enum-types.h \
+	gdk-pixbuf-enum-types.c \
+	gdk-pixbuf-marshal.h 	\
+	gdk-pixbuf-marshal.c 	\
+	gdk-pixbuf.loaders
 
 #
 # gdk-pixbuf-enum-types.h
@@ -361,7 +378,7 @@ MAINTAINERCLEANFILES += s-enum-types-h
 #
 gdk-pixbuf-enum-types.c: @REBUILD@ $(gdk_pixbuf_headers) Makefile
 	(cd $(srcdir) && glib-mkenums \
-		--fhead "#include <gdk-pixbuf/gdk-pixbuf.h>" \
+		--fhead "#include \"gdk-pixbuf-alias.h\"\n#include <gdk-pixbuf/gdk-pixbuf.h>" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
 		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {"       \
 		--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
@@ -387,7 +404,7 @@ MAINTAINERCLEANFILES += stamp-gdk-pixbuf-marshal.h
 # gdk-pixbuf-marshal.c
 #
 $(srcdir)/gdk-pixbuf-marshal.c: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
-	$(GLIB_GENMARSHAL) --prefix=gdk_pixbuf_marshal $(srcdir)/gdk-pixbuf-marshal.list --body >> xgen-gmc \
+	(echo -e "#include \"gdk-pixbuf-alias.h\"" | $(GLIB_GENMARSHAL) --prefix=gdk_pixbuf_marshal $(srcdir)/gdk-pixbuf-marshal.list --body ) >> xgen-gmc \
 	&& cp xgen-gmc gdk-pixbuf-marshal.c \
 	&& rm -f xgen-gmc xgen-gmc~
 
@@ -403,6 +420,9 @@ distclean-local:
 EXTRA_DIST =					\
         gdk-pixbuf-csource.1			\
 	makefile.msc				\
+	gdk-pixbuf.symbols			\
+	makegdkpixbufalias.pl			\
+	abicheck.sh				\
 	gdk_pixbuf.def				\
 	gdk_pixbuf.rc				\
 	gdk-pixbuf-marshal.c			\

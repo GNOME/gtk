@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 #define GDK_PIXBUF_COMPILATION
+#include "gdk-pixbuf-alias.h"
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-private.h"
 

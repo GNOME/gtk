@@ -1,3 +1,27 @@
+Tue Aug 10 23:53:59 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Add hidden aliases for exported symbols which are
+	used internally in order to get rid of many PLT 
+	entries.  (#145519, Arjan van de Ven)
+	
+	* gdk/Makefile.am: Add rules to generate gdk_pixbuf.def and 
+	gdk-pixbuf-alias.h from gdk-pixbuf.symbols, and make make 
+	check check the abi with abicheck.sh.
+
+	* gdk/gdk-pixbuf.symbols: New file. Definition of the gdk-pixbuf 
+	ABI. The file can be processed by cpp to filter out certain 
+	subsets of symbols.
+
+	* gdk/abicheck.sh: New file. Script to check the actually 
+	symbols exported from libgdk_pibuf.2.0.so against the symbols
+	found in gdk-pixbuf.symbols.
+
+	* gdk/makegdkpixbufalias.pl: New file. Perl script to generate the 
+	header containing the alias definitions for internally used 
+	exported symbols from a list of symbols.
+
+	* *.c: Include gdk-pixbuf-alias.h
+
 2004-08-06  Hans Breuer  <hans@breuer.org>
 
 	* gdk_pixbuf.def makefile.msc : updated

@@ -27,6 +27,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gdk-pixbuf-alias.h"
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-animation.h"
 #include "gdk-pixbuf-io.h"

@@ -33,6 +33,7 @@
 #include <unistd.h>
 #endif
 
+#include "gdk-pixbuf-alias.h"
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
