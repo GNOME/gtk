@@ -2312,7 +2312,7 @@ gtk_rc_parse_assignment (GScanner      *scanner,
 	    {
 	      g_string_append_c (gstring, ' ');
 	      g_value_init (&prop->value, G_TYPE_GSTRING);
-	      g_value_set_static_boxed (&prop->value, gstring);
+	      g_value_take_boxed (&prop->value, gstring);
 	    }
 	  else
 	    g_string_free (gstring, TRUE);

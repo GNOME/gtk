@@ -572,8 +572,8 @@ gtk_settings_get_property (GObject     *object,
           
           g_value_init (&gstring_value, G_TYPE_GSTRING);
 
-          g_value_set_boxed (&gstring_value,
-                             g_string_new (g_value_get_string (&val)));
+          g_value_take_boxed (&gstring_value,
+                              g_string_new (g_value_get_string (&val)));
 
           g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
 
