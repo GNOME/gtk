@@ -2737,9 +2737,12 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
                            guint             info,
                            gpointer          data)
 {
-  GtkTextBuffer *buffer = GTK_TEXT_BUFFER (data);
-  GtkTextBuffer *contents = get_clipboard_contents_buffer (buffer, clipboard, FALSE);
+  GtkTextBuffer *buffer;
+  GtkTextBuffer *contents;
 
+  buffer = GTK_TEXT_BUFFER (data);
+  contents = get_clipboard_contents_buffer (buffer, clipboard, FALSE);
+  
   g_assert (contents); /* This should never be called unless we own the clipboard */
 
   if (selection_data->target ==
@@ -2952,11 +2955,14 @@ paste_from_buffer (ClipboardRequest    *request_data,
   
   if (!gtk_text_iter_equal (start, end))
     {
-      gtk_text_buffer_real_insert_range (request_data->buffer,
-                                         &insert_point,
-                                         start,
-                                         end,
-                                         request_data->interactive);
+      if (!request_data->interactive ||
+          (gtk_text_iter_can_insert (&insert_point,
+                                     request_data->default_editable)))
+        gtk_text_buffer_real_insert_range (request_data->buffer,
+                                           &insert_point,
+                                           start,
+                                           end,
+                                           request_data->interactive);
     }
 
   post_paste_cleanup (request_data);
@@ -3263,8 +3269,6 @@ cut_or_copy (GtkTextBuffer *buffer,
    */
   GtkTextIter start;
   GtkTextIter end;
-
-  remove_clipboard_contents_buffer (buffer, clipboard);
   
   if (!gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
     {
@@ -3284,7 +3288,8 @@ cut_or_copy (GtkTextBuffer *buffer,
     {
       GtkTextIter ins;
       GtkTextBuffer *contents;
-      
+
+      remove_clipboard_contents_buffer (buffer, clipboard);
       contents = get_clipboard_contents_buffer (buffer, clipboard, TRUE);
 
       gtk_text_buffer_get_iter_at_offset (contents, &ins, 0);

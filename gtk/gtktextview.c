@@ -3587,6 +3587,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextMark *insert;
   GtkTextIter iter;
+  gboolean can_insert;
   
   if (text_view->layout == NULL ||
       get_buffer (text_view) == NULL)
@@ -3594,19 +3595,26 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 
   insert = gtk_text_buffer_get_insert (get_buffer (text_view));
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
-  if (gtk_text_iter_can_insert (&iter, text_view->editable) &&
+  can_insert = gtk_text_iter_can_insert (&iter, text_view->editable);
+  if (can_insert &&
       gtk_im_context_filter_keypress (text_view->im_context, event))
     {
       text_view->need_im_reset = TRUE;
       obscure = TRUE;
       retval = TRUE;
     }
+  /* Binding set */
   else if (GTK_WIDGET_CLASS (parent_class)->key_press_event &&
  	   GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
     retval = TRUE;
-  else if (event->keyval == GDK_Return ||
-           event->keyval == GDK_KP_Enter)
+  /* use overall editability not can_insert, more predictable for users */
+  else if (text_view->editable &&
+           (event->keyval == GDK_Return ||
+            event->keyval == GDK_KP_Enter))
     {
+      /* this won't actually insert the newline if the cursor isn't
+       * editable
+       */
       gtk_text_view_commit_text (text_view, "\n");
 
       obscure = TRUE;
@@ -3617,7 +3625,9 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
             event->keyval == GDK_KP_Tab) &&
            !(event->state & GDK_CONTROL_MASK))
     {
-      /* If the text isn't editable, move the focus instead */
+      /* If the text widget isn't editable overall, move the focus
+       * instead
+       */
       if (text_view->editable)
 	{
 	  gtk_text_view_commit_text (text_view, "\t");
