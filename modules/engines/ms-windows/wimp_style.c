@@ -252,7 +252,7 @@ setup_system_settings (GtkStyle * style)
 
   if (!win95) {
     if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0)) {
-      g_object_set (G_OBJECT (settings), "gtk-menu-bar-popup-delay",
+      g_object_set (G_OBJECT (settings), "gtk-menu-popup-delay",
 		    0, NULL);
       g_object_set (G_OBJECT (settings), "gtk-menu-popdown-delay",
 		    menu_delay, NULL);
