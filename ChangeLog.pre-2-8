@@ -1,3 +1,11 @@
+Sun Jan 11 01:55:07 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaccelmap.c: Remove accidentally committed notification stuff. 
+	(gtk_accel_map_lock_path): 
+	(gtk_accel_map_unlock_path): Path locking can now be nested, a missing
+	entry is silently created during lock_path(), and treated as an error 
+	during unlock_path(). These changes have been requested by Tim Janik.
+
 Fri Jan  9 22:23:45 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c: Introduce a new parser state for 

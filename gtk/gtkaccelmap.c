@@ -43,7 +43,7 @@ typedef struct {
   guint	       std_accel_key;
   guint	       std_accel_mods;
   guint        changed : 1;
-  guint        locked  : 1;
+  guint        lock_count;
   GSList      *groups;
 } AccelEntry;
 
@@ -54,8 +54,6 @@ static GSList     *accel_filters = NULL;
 static GHookList  *change_hooks = NULL;
 
 /* --- functions --- */
-static void invoke_change_hooks (AccelEntry *entry);
-
 static guint
 accel_entry_hash (gconstpointer key)
 {
@@ -163,10 +161,8 @@ gtk_accel_map_add_entry (const gchar    *accel_path,
       entry->accel_key = accel_key;
       entry->accel_mods = accel_mods;
       entry->changed = FALSE;
-      entry->locked = FALSE;
+      entry->lock_count = 0;
       g_hash_table_insert (accel_entry_ht, entry, entry);
-
-      invoke_change_hooks (entry);
     }
 }
 
@@ -246,9 +242,6 @@ internal_change_entry (const gchar    *accel_path,
 	  entry->accel_key = accel_key;
 	  entry->accel_mods = accel_mods;
 	  entry->changed = TRUE;
-	  entry->locked = FALSE;
-
-	  invoke_change_hooks (entry);
 	}
       return TRUE;
     }
@@ -260,8 +253,11 @@ internal_change_entry (const gchar    *accel_path,
 	entry->changed = TRUE;
       return simulate ? TRUE : FALSE;
     }
-  
-  if (entry->locked)
+
+  /* The no-change case has already been handled, so 
+   * simulate doesn't make a difference here.
+   */
+  if (entry->lock_count > 0)
     return FALSE;
 
   /* nobody's interested, easy going */
@@ -272,8 +268,6 @@ internal_change_entry (const gchar    *accel_path,
 	  entry->accel_key = accel_key;
 	  entry->accel_mods = accel_mods;
 	  entry->changed = TRUE;
-
-	  invoke_change_hooks (entry);
 	}
       return TRUE;
     }
@@ -385,8 +379,6 @@ internal_change_entry (const gchar    *accel_path,
       /* unref accel groups */
       for (slist = group_list; slist; slist = slist->next)
 	g_object_unref (slist->data);
-
-      invoke_change_hooks (entry);
     }
   g_slist_free (replace_list);
   g_slist_free (group_list);
@@ -848,12 +840,17 @@ _gtk_accel_map_remove_group (const gchar   *accel_path,
  * gtk_accel_map_lock_path:
  * @accel_path: a valid accelerator path
  * 
- * Locks the given accelerator path.
+ * Locks the given accelerator path. If the accelerator map doesn't yet contain
+ * an entry for @accel_path, a new one is created.
  *
  * Locking an accelerator path prevents its accelerator from being changed 
  * during runtime. A locked accelerator path can be unlocked by 
  * gtk_accel_map_unlock_path(). Refer to gtk_accel_map_change_entry() 
  * for information about runtime accelerator changes.
+ *
+ * If called more than once, @accel_path remains locked until
+ * gtk_accel_map_unlock_path() has been called an equivalent number
+ * of times.
  *
  * Note that locking of individual accelerator paths is independent from 
  * locking the #GtkAccelGroup containing them. For runtime accelerator
@@ -871,16 +868,21 @@ gtk_accel_map_lock_path (const gchar *accel_path)
 
   entry = accel_path_lookup (accel_path);
   
-  if (entry)
-    entry->locked = TRUE;
+  if (!entry)
+    {
+      gtk_accel_map_add_entry (accel_path, 0, 0);
+      entry = accel_path_lookup (accel_path);
+    }
+
+  entry->lock_count += 1;
 }
 
 /**
  * gtk_accel_map_unlock_path:
  * @accel_path: a valid accelerator path
  * 
- * Unlocks the given accelerator path. Refer to gtk_accel_map_lock_path()
- * for information about accelerator path locking.
+ * Undoes the last call to gtk_accel_map_lock_path() on this @accel_path.
+ * Refer to gtk_accel_map_lock_path() for information about accelerator path locking.
  *
  * Since: 2.4
  **/
@@ -892,88 +894,9 @@ gtk_accel_map_unlock_path (const gchar *accel_path)
   g_return_if_fail (_gtk_accel_path_is_valid (accel_path));
 
   entry = accel_path_lookup (accel_path);
-  
-  if (entry)
-    entry->locked = FALSE;  
-}
 
-/**
- * gtk_accel_map_add_change_hook:
- * @hook_func: the function to be called
- * @hook_data: data to pass as the first argument of @hook_func
- * @data_destroy: destroy notify to be called if @hook_data is destroyed
- *
- * Adds a function to be called whenever an accel map entry is changed.
- * The @accel_key and @accel_mods arguments passed to @hook_func are the new
- * values.
- *
- * Returns: A numerical id which can be used to remove the change hook
- *          again with gtk_accel_map_remove_change_hook().
- * Since: 2.4
- */
-gulong
-gtk_accel_map_add_change_hook (GtkAccelMapForeach hook_func,
-			       gpointer           hook_data,
-			       GDestroyNotify     data_destroy)
-{
-  GHook *hook;
+  g_return_if_fail (entry != NULL && entry->lock_count > 0);
 
-  if (!change_hooks) 
-    {
-      change_hooks = g_new (GHookList, 1);
-      g_hook_list_init (change_hooks, sizeof (GHook));
-    }
-
-  hook = g_hook_alloc (change_hooks);
-  hook->func = (gpointer)hook_func;
-  hook->data = hook_data;
-  hook->destroy = data_destroy;
-
-  g_hook_append (change_hooks, hook);
-
-  return hook->hook_id;
-}
-
-/**
- * gtk_accel_map_remove_change_hook:
- * @hook_id: an id returned by gtk_accel_map_add_change_hook()
- *
- * Removes a change hook previously added by gtk_accel_map_add_change_hook().
- *
- * Since: 2.4
- */
-void
-gtk_accel_map_remove_change_hook (gulong hook_id)
-{
-  if (!g_hook_destroy (change_hooks, hook_id))
-    g_warning ("%s: GtkAccelMap had no hook (%lu) to remove", G_STRLOC, hook_id);
-}
-
-static void
-invoke_change_hooks (AccelEntry *entry)
-{
-  GHook *hook;
-
-  if (!change_hooks || !change_hooks->is_setup)
-    return;
-
-  hook = g_hook_first_valid (change_hooks, FALSE);
-  while (hook)
-    {
-      GtkAccelMapForeach func;
-      gboolean was_in_call;
-      
-      func = (GtkAccelMapForeach) hook->func;
-      
-      was_in_call = G_HOOK_IN_CALL (hook);
-      hook->flags |= G_HOOK_FLAG_IN_CALL;
-      func (hook->data, entry->accel_path, entry->accel_key, 
-	    entry->accel_mods, entry->changed);
-      if (!was_in_call)
-	hook->flags &= ~G_HOOK_FLAG_IN_CALL;
-      
-      hook = g_hook_next_valid (change_hooks, hook, FALSE);
-    }
-
+  entry->lock_count -= 1;  
 }
 
