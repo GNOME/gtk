@@ -1,3 +1,10 @@
+2003-02-14  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c (popup_targets_received): Remove bogus
+	GTK_OBJECT cast. Hopefully got it right now...
+	(gtk_text_view_move_cursor_internal): Add a default: to avoid
+	compiler warnings.
+
 2003-02-14  Glynn Foster  <glynn.foster@sun.com>
 
 	* gtk/gtktextview.c: (popup_targets_received): Use g_signal_connect

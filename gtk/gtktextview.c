@@ -4569,6 +4569,9 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
         case GTK_MOVEMENT_PARAGRAPHS:
 	  adj = get_vadjustment (text_view);
 	  break;
+	default:
+	  adj = get_vadjustment (text_view);
+          break;     
 	}
       
       if (count > 0)
@@ -6563,7 +6566,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
 
       menuitem = gtk_menu_item_new_with_label (_("Select All"));
-      g_signal_connect (G_OBJECT (menuitem), "activate",
+      g_signal_connect (menuitem, "activate",
 			G_CALLBACK (select_all_cb), text_view);
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
