@@ -3950,17 +3950,12 @@ gtk_default_draw_handle (GtkStyle      *style,
 
   if (!strcmp (detail, "paned"))
     {
-      gint window_width;
-      gint window_height;
-
-      gdk_window_get_size (window, &window_width, &window_height);
-
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	for (xx = window_width/2 - 15; xx <= window_width/2 + 15; xx += 5)
-	  draw_dot (window, light_gc, dark_gc, xx, window_height/2 - 1, 3);
+	for (xx = x + width/2 - 15; xx <= x + width/2 + 15; xx += 5)
+	  draw_dot (window, light_gc, dark_gc, xx, y + height/2 - 1, 3);
       else
-	for (yy = window_height/2 - 15; yy <= window_height/2 + 15; yy += 5)
-	  draw_dot (window, light_gc, dark_gc, window_width/2 - 1, yy, 3);
+	for (yy = y + height/2 - 15; yy <= y + height/2 + 15; yy += 5)
+	  draw_dot (window, light_gc, dark_gc, x + width/2 - 1, yy, 3);
     }
   else
     {

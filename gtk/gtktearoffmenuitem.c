@@ -138,8 +138,8 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
       menu_item = GTK_MENU_ITEM (widget);
       tearoff_item = GTK_TEAROFF_MENU_ITEM (widget);
 
-      x = GTK_CONTAINER (menu_item)->border_width;
-      y = GTK_CONTAINER (menu_item)->border_width;
+      x = widget->allocation.x + GTK_CONTAINER (menu_item)->border_width;
+      y = widget->allocation.y + GTK_CONTAINER (menu_item)->border_width;
       width = widget->allocation.width - x * 2;
       height = widget->allocation.height - y * 2;
       right_max = x + width;

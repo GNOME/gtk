@@ -58,8 +58,7 @@ struct _GtkPaned
   GdkCursorType cursor_type;
   
   /*< private >*/
-  guint16 handle_width;
-  guint16 handle_height;
+  GdkRectangle handle_pos;
 
   gint child1_size;
   gint last_allocation;
@@ -72,9 +71,7 @@ struct _GtkPaned
   guint child1_resize : 1;
   guint child2_shrink : 1;
   guint child2_resize : 1;
-
-  gint16 handle_xpos;
-  gint16 handle_ypos;
+  guint orientation : 1;
 };
 
 struct _GtkPanedClass

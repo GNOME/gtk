@@ -53,6 +53,7 @@ struct _GtkMenuItem
   GtkItem item;
   
   GtkWidget *submenu;
+  GdkWindow *event_window;
   
   guint16 toggle_size;
   guint16 accelerator_width;

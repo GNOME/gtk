@@ -1,3 +1,15 @@
+Fri Nov 16 00:16:40 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/{gtkmenuitem.[ch],gtkcheckmenuitem.c,gtkimagemenuitem.c,
+	gtkradiomenuitem.c,gtktearoffmenuitem.c}: Make Menu items
+	NO_WINDOW widgets.
+
+	* gtk/gtk{h,v,}paned.[ch]: Make NO_WINDOW widgets, some
+	cleanup.
+
+	* gtk/gtkstyle.c (gtk_default_draw_handle): Don't assume
+	we are drawing in a window when drawing the paned handle.
+
 2001-11-16  Sven Neumann  <sven@gimp.org>
 
 	* demos/gtk-demo/appwindow.c

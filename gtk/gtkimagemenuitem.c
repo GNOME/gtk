@@ -256,8 +256,8 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
 
       child_allocation.width = width;
       child_allocation.height = height;
-      child_allocation.x = MAX (x, 0);
-      child_allocation.y = MAX (y, 0);
+      child_allocation.x = widget->allocation.x + MAX (x, 0);
+      child_allocation.y = widget->allocation.y + MAX (y, 0);
 
       gtk_widget_size_allocate (image_menu_item->image, &child_allocation);
     }
