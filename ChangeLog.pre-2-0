@@ -1,3 +1,8 @@
+Tue Jul 28 00:03:20 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_paint): small fix for border drawing
+	bug
+
 Tue Jul 28 00:15:28 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* docs/gdk.sgml: new format for GDK documentation.  Eventually

@@ -1662,6 +1662,8 @@ gtk_notebook_paint (GtkWidget    *widget,
 		}
 	      else
 		{
+		  gint i = 0;
+
 		  switch (notebook->tab_pos)
 		    {
 		    case GTK_POS_TOP:
@@ -1675,90 +1677,141 @@ gtk_notebook_paint (GtkWidget    *widget,
 		      width -= notebook->cur_page->allocation.width;
 		      break;
 		    }
-
+		  
 		  switch (notebook->tab_pos)
 		    {
 		    case GTK_POS_TOP:
-		      points[0].x = notebook->cur_page->allocation.x;
-		      points[0].y = y;
-		      points[1].x = x;
-		      points[1].y = y;
-		      points[2].x = x;
-		      points[2].y = y + height - 1;
-		      points[3].x = x + width - 1;
-		      points[3].y = y + height - 1;
-		      points[4].x = x + width - 1;
-		      points[4].y = y;
-		      points[5].x = (notebook->cur_page->allocation.x +
-				     notebook->cur_page->allocation.width -
-				     widget->style->klass->xthickness);
-		      points[5].y = y;
+		      if (x != notebook->cur_page->allocation.x)
+			{
+			  points[i].x = notebook->cur_page->allocation.x;
+			  points[i++].y = y;
+			}
 
-		      if (points[5].x == (x + width))
-			points[5].x -= 1;
+		      points[i].x = x;
+		      points[i++].y = y;
+		      points[i].x = x;
+		      points[i++].y = y + height - 1;
+		      points[i].x = x + width - 1;
+		      points[i++].y = y + height - 1;
+		      points[i].x = x + width - 1;
+		      points[i++].y = y;
+
+		      if ((notebook->cur_page->allocation.x +
+			   notebook->cur_page->allocation.width -
+			   widget->style->klass->xthickness) <
+			  x + width - widget->style->klass->xthickness)
+			{
+			  points[i].x = (notebook->cur_page->allocation.x +
+					 notebook->cur_page->allocation.width -
+					 widget->style->klass->xthickness);
+
+			  if (points[i].x == (x + width))
+			    points[i].x -= 1;
+
+			  points[i++].y = y;
+			}
 		      break;
+
 		    case GTK_POS_BOTTOM:
-		      points[0].x = (notebook->cur_page->allocation.x +
-				     notebook->cur_page->allocation.width -
-				     widget->style->klass->xthickness);
-		      points[0].y = y + height - 1;
-		      points[1].x = x + width - 1;
-		      points[1].y = y + height - 1;
-		      points[2].x = x + width - 1;
-		      points[2].y = y;
-		      points[3].x = x;
-		      points[3].y = y;
-		      points[4].x = x;
-		      points[4].y = y + height - 1;
-		      points[5].x = notebook->cur_page->allocation.x;
-		      points[5].y = y + height - 1;
+		      if ((notebook->cur_page->allocation.x +
+			   notebook->cur_page->allocation.width -
+			   widget->style->klass->xthickness) <
+			  x + width - widget->style->klass->xthickness)
+			{
+			  points[i].x = (notebook->cur_page->allocation.x +
+					 notebook->cur_page->allocation.width -
+					 widget->style->klass->xthickness);
 
-		      if (points[0].x == (x + width))
-			points[0].x -= 1;
-		      break;
-		    case GTK_POS_LEFT:
-		      points[0].x = x;
-		      points[0].y = (notebook->cur_page->allocation.y +
-				     notebook->cur_page->allocation.height -
-				     widget->style->klass->ythickness);
-		      points[1].x = x;
-		      points[1].y = y + height - 1;
-		      points[2].x = x + width - 1;
-		      points[2].y = y + height - 1;
-		      points[3].x = x + width - 1;
-		      points[3].y = y;
-		      points[4].x = x;
-		      points[4].y = y;
-		      points[5].x = x;
-		      points[5].y = notebook->cur_page->allocation.y;
+			  if (points[i].x == (x + width))
+			    points[i].x -= 1;
+
+			  points[i++].y = y + height - 1;
+			}
+
+		      points[i].x = x + width - 1;
+		      points[i++].y = y + height - 1;
+		      points[i].x = x + width - 1;
+		      points[i++].y = y;
+		      points[i].x = x;
+		      points[i++].y = y;
+		      points[i].x = x;
+		      points[i++].y = y + height - 1;
 		      
-		      if (points[0].y == (y + height))
-			points[0].y -= 1;
+		      if (notebook->cur_page->allocation.x != x)
+			{
+			  points[i].x = notebook->cur_page->allocation.x;
+			  points[i++].y = y + height - 1;
+			}
 		      break;
-		    case GTK_POS_RIGHT:
-		      points[0].x = x + width - 1;
-		      points[0].y = notebook->cur_page->allocation.y;
-		      points[1].x = x + width - 1;
-		      points[1].y = y;
-		      points[2].x = x;
-		      points[2].y = y;
-		      points[3].x = x;
-		      points[3].y = y + height - 1;
-		      points[4].x = x + width - 1;
-		      points[4].y = y + height - 1;
-		      points[5].x = x + width - 1;
-		      points[5].y = (notebook->cur_page->allocation.y +
-				     notebook->cur_page->allocation.height -
-				     widget->style->klass->ythickness);
 
-		      if (points[5].y == (y + height))
-			points[5].y -= 1;
-		      break;
-		    }
+		    case GTK_POS_LEFT:
+		      if ((notebook->cur_page->allocation.y +
+			   notebook->cur_page->allocation.height -
+			   widget->style->klass->ythickness) <
+			  y + height - widget->style->klass->ythickness)
+			{
+			  points[i].x = x;
+			  points[i++].y = notebook->cur_page->allocation.y +
+			    notebook->cur_page->allocation.height -
+			    widget->style->klass->ythickness;
+
+			  if (points[0].y == (y + height))
+			    points[0].y -= 1;
+			}
 		  
-		  gtk_draw_polygon (widget->style, widget->window,
-				    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-				    points, 6, FALSE);
+		      points[i].x = x;
+		      points[i++].y = y + height - 1;
+		      points[i].x = x + width - 1;
+		      points[i++].y = y + height - 1;
+		      points[i].x = x + width - 1;
+		      points[i++].y = y;
+		      points[i].x = x;
+		      points[i++].y = y;
+
+		      if (notebook->cur_page->allocation.y != y)
+			{
+			  points[i].x = x;
+			  points[i++].y = notebook->cur_page->allocation.y;
+			}
+		      break;
+
+		    case GTK_POS_RIGHT:
+		      if (notebook->cur_page->allocation.y != y)
+			{
+			  points[i].x = x + width - 1;
+			  points[i++].y = notebook->cur_page->allocation.y;
+			}
+
+		      points[i].x = x + width - 1;
+		      points[i++].y = y;
+		      points[i].x = x;
+		      points[i++].y = y;
+		      points[i].x = x;
+		      points[i++].y = y + height - 1;
+		      points[i].x = x + width - 1;
+		      points[i++].y = y + height - 1;
+
+		      if ((notebook->cur_page->allocation.y +
+			   notebook->cur_page->allocation.height -
+			   widget->style->klass->ythickness) <
+			  y + height - widget->style->klass->ythickness)
+			{
+			  points[i].x = x + width - 1;
+			  points[i++].y = notebook->cur_page->allocation.y +
+			    notebook->cur_page->allocation.height -
+			    widget->style->klass->ythickness;
+
+			  if (points[i - 1].y == (y + height))
+			    points[i - 1].y -= 1;
+			}
+		      break;
+
+		    }
+
+		    gtk_draw_polygon (widget->style, widget->window,
+				      GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+				      points, i, FALSE);
+
 		}
 	      children = g_list_last (notebook->children);
 	      showarrow = FALSE;
