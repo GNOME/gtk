@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-03 14:11-0400\n"
-"PO-Revision-Date: 2005-04-03 22:53-0400\n"
+"POT-Creation-Date: 2005-04-04 16:32-0400\n"
+"PO-Revision-Date: 2005-04-04 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -614,7 +614,7 @@ msgstr "Spacing"
 msgid "The amount of space between children"
 msgstr "The amount of space between children"
 
-#: ../gtk/gtkbox.c:141 ../gtk/gtknotebook.c:477 ../gtk/gtktoolbar.c:541
+#: ../gtk/gtkbox.c:141 ../gtk/gtknotebook.c:477 ../gtk/gtktoolbar.c:558
 msgid "Homogeneous"
 msgstr "Homogeneous"
 
@@ -622,7 +622,7 @@ msgstr "Homogeneous"
 msgid "Whether the children should all be the same size"
 msgstr "Whether the children should all be the same size"
 
-#: ../gtk/gtkbox.c:149 ../gtk/gtkpreview.c:134 ../gtk/gtktoolbar.c:533
+#: ../gtk/gtkbox.c:149 ../gtk/gtkpreview.c:134 ../gtk/gtktoolbar.c:550
 #: ../gtk/gtktreeviewcolumn.c:307
 msgid "Expand"
 msgstr "Expand"
@@ -1842,45 +1842,53 @@ msgstr "Select on focus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Whether to select the contents of an entry when it is focused"
 
-#: ../gtk/gtkentrycompletion.c:274
+#: ../gtk/gtkentrycompletion.c:275
 msgid "Completion Model"
 msgstr "Completion Model"
 
-#: ../gtk/gtkentrycompletion.c:275
+#: ../gtk/gtkentrycompletion.c:276
 msgid "The model to find matches in"
 msgstr "The model to find matches in"
 
-#: ../gtk/gtkentrycompletion.c:281
+#: ../gtk/gtkentrycompletion.c:282
 msgid "Minimum Key Length"
 msgstr "Minimum Key Length"
 
-#: ../gtk/gtkentrycompletion.c:282
+#: ../gtk/gtkentrycompletion.c:283
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimum length of the search key in order to look up matches"
 
-#: ../gtk/gtkentrycompletion.c:297 ../gtk/gtkiconview.c:373
+#: ../gtk/gtkentrycompletion.c:298 ../gtk/gtkiconview.c:373
 msgid "Text column"
 msgstr "Text column"
 
-#: ../gtk/gtkentrycompletion.c:298
+#: ../gtk/gtkentrycompletion.c:299
 msgid "The column of the model containing the strings."
 msgstr "The column of the model containing the strings."
 
-#: ../gtk/gtkentrycompletion.c:317
+#: ../gtk/gtkentrycompletion.c:318
 msgid "Inline completion"
 msgstr "Inline completion"
 
-#: ../gtk/gtkentrycompletion.c:318
+#: ../gtk/gtkentrycompletion.c:319
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "Whether the common prefix should be inserted automatically"
 
-#: ../gtk/gtkentrycompletion.c:332
+#: ../gtk/gtkentrycompletion.c:333
 msgid "Popup completion"
 msgstr "Popup completion"
 
-#: ../gtk/gtkentrycompletion.c:333
+#: ../gtk/gtkentrycompletion.c:334
 msgid "Whether the completions should be shown in a popup window"
 msgstr "Whether the completions should be shown in a popup window"
+
+#: ../gtk/gtkentrycompletion.c:349
+msgid "Popup set width"
+msgstr "Popup set width"
+
+#: ../gtk/gtkentrycompletion.c:350
+msgid "If TRUE, the popup window will have the same size as the entry"
+msgstr "If TRUE, the popup window will have the same size as the entry"
 
 #: ../gtk/gtkeventbox.c:122
 msgid "Visible Window"
@@ -2193,7 +2201,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "A widget to display in place of the usual frame label"
 
 #: ../gtk/gtkhandlebox.c:208 ../gtk/gtkmenubar.c:227 ../gtk/gtkstatusbar.c:205
-#: ../gtk/gtktoolbar.c:582 ../gtk/gtkviewport.c:153
+#: ../gtk/gtktoolbar.c:599 ../gtk/gtkviewport.c:153
 msgid "Shadow type"
 msgstr "Shadow type"
 
@@ -2314,7 +2322,7 @@ msgid "Space which is inserted at the edges of the icon view"
 msgstr "Space which is inserted at the edges of the icon view"
 
 #: ../gtk/gtkiconview.c:517 ../gtk/gtkprogressbar.c:153
-#: ../gtk/gtktoolbar.c:507
+#: ../gtk/gtktoolbar.c:508
 msgid "Orientation"
 msgstr "Orientation"
 
@@ -2702,7 +2710,7 @@ msgstr "The child pack direction of the menubar"
 msgid "Style of bevel around the menubar"
 msgstr "Style of bevel around the menubar"
 
-#: ../gtk/gtkmenubar.c:235 ../gtk/gtktoolbar.c:558
+#: ../gtk/gtkmenubar.c:235 ../gtk/gtktoolbar.c:575
 msgid "Internal padding"
 msgstr "Internal padding"
 
@@ -3272,11 +3280,11 @@ msgstr "Max Size"
 msgid "Maximum size of the ruler"
 msgstr "Maximum size of the ruler"
 
-#: ../gtk/gtkruler.c:161
+#: ../gtk/gtkruler.c:168
 msgid "Metric"
 msgstr "Metric"
 
-#: ../gtk/gtkruler.c:162
+#: ../gtk/gtkruler.c:169
 msgid "The metric used for the ruler"
 msgstr "The metric used for the ruler"
 
@@ -4160,81 +4168,89 @@ msgstr "Draw Indicator"
 msgid "If the toggle part of the button is displayed"
 msgstr "If the toggle part of the button is displayed"
 
-#: ../gtk/gtktoolbar.c:508
+#: ../gtk/gtktoolbar.c:509
 msgid "The orientation of the toolbar"
 msgstr "The orientation of the toolbar"
 
-#: ../gtk/gtktoolbar.c:516
+#: ../gtk/gtktoolbar.c:517
 msgid "Toolbar Style"
 msgstr "Toolbar Style"
 
-#: ../gtk/gtktoolbar.c:517
+#: ../gtk/gtktoolbar.c:518
 msgid "How to draw the toolbar"
 msgstr "How to draw the toolbar"
 
-#: ../gtk/gtktoolbar.c:524
+#: ../gtk/gtktoolbar.c:525
 msgid "Show Arrow"
 msgstr "Show Arrow"
 
-#: ../gtk/gtktoolbar.c:525
+#: ../gtk/gtktoolbar.c:526
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "If an arrow should be shown if the toolbar doesn't fit"
 
-#: ../gtk/gtktoolbar.c:534
+#: ../gtk/gtktoolbar.c:541
+msgid "Tooltips"
+msgstr "Tooltips"
+
+#: ../gtk/gtktoolbar.c:542
+msgid "If the tooltips of the toolbar should be active or not"
+msgstr "Whether or not the tooltips of the toolbar should be active"
+
+#: ../gtk/gtktoolbar.c:551
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Whether the item should receive extra space when the toolbar grows"
 
-#: ../gtk/gtktoolbar.c:542
+#: ../gtk/gtktoolbar.c:559
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Whether the item should be the same size as other homogeneous items"
 
-#: ../gtk/gtktoolbar.c:549
+#: ../gtk/gtktoolbar.c:566
 msgid "Spacer size"
 msgstr "Spacer size"
 
-#: ../gtk/gtktoolbar.c:550
+#: ../gtk/gtktoolbar.c:567
 msgid "Size of spacers"
 msgstr "Size of spacers"
 
-#: ../gtk/gtktoolbar.c:559
+#: ../gtk/gtktoolbar.c:576
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Amount of border space between the toolbar shadow and the buttons"
 
-#: ../gtk/gtktoolbar.c:567
+#: ../gtk/gtktoolbar.c:584
 msgid "Space style"
 msgstr "Space style"
 
-#: ../gtk/gtktoolbar.c:568
+#: ../gtk/gtktoolbar.c:585
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Whether spacers are vertical lines or just blank"
 
-#: ../gtk/gtktoolbar.c:575
+#: ../gtk/gtktoolbar.c:592
 msgid "Button relief"
 msgstr "Button relief"
 
-#: ../gtk/gtktoolbar.c:576
+#: ../gtk/gtktoolbar.c:593
 msgid "Type of bevel around toolbar buttons"
 msgstr "Type of bevel around toolbar buttons"
 
-#: ../gtk/gtktoolbar.c:583
+#: ../gtk/gtktoolbar.c:600
 msgid "Style of bevel around the toolbar"
 msgstr "Style of bevel around the toolbar"
 
-#: ../gtk/gtktoolbar.c:589
+#: ../gtk/gtktoolbar.c:606
 msgid "Toolbar style"
 msgstr "Toolbar style"
 
-#: ../gtk/gtktoolbar.c:590
+#: ../gtk/gtktoolbar.c:607
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 
-#: ../gtk/gtktoolbar.c:596
+#: ../gtk/gtktoolbar.c:613
 msgid "Toolbar icon size"
 msgstr "Toolbar icon size"
 
-#: ../gtk/gtktoolbar.c:597
+#: ../gtk/gtktoolbar.c:614
 msgid "Size of icons in default toolbars"
 msgstr "Size of icons in default toolbars"
 
