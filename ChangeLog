@@ -1,3 +1,48 @@
+2004-08-18  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from 2.4:
+
+	Fixes #149251:
+
+	* gtk/gtkfilechooserdefault.c: Renamed SHORTCUTS_COL_PATH to
+	SHORTCUTS_COL_DATA.  Add SHORTCUTS_COL_IS_VOLUME, to determine
+	easily whether the SHORTCUTS_COL_DATA points to a GtkFilePath or a
+	GtkFileSystemVolume.
+	(shortcuts_model_create): Create a boolean column for
+	SHORTCUTS_COL_IS_VOLUME.
+	(shortcuts_reload_icons): Simplify with the use of the
+	SHORTCUTS_COL_IS_VOLUME column.  Don't leak the pixbuf.
+	(shortcuts_insert_path): Add the SHORTCUTS_COL_IS_VOLUME data.
+	(shortcuts_free_row_data): New helper function; frees the data
+	columns for an iter.
+	(shortcuts_remove_rows): Don't take a callback for freeing the
+	data; free everything here instead.  Use
+	shortcuts_free_row_data().
+	(volume_remove_cb): Removed.
+	(remove_bookmark_cb): Removed.
+	(remove_row_cb): Make this a single generic function to delete
+	rows.
+	(shortcuts_add_volumes): Use remove_row_cb().
+	(shortcuts_add_bookmarks): Likewise.
+	(struct _GtkFileChooserDefault): Removed the
+	shortcuts_current_folder_is_volume field.
+	(shortcuts_add_current_folder): Oops, don't free the volume.
+	(remove_current_folder_cb): Removed.
+	(shortcut_find_position): Simplify through the use of the
+	SHORTCUTS_COL_IS_VOLUME column.
+	(remove_selected_bookmarks): Assert that we don't get a volume.
+	(shortcuts_reorder): Likewise; also, plug a leak.
+	(gtk_file_chooser_default_remove_shortcut_folder): Simplify
+	through the use of shortcuts_remove_rows().
+	(gtk_file_chooser_default_list_shortcut_folders): Assert that we
+	don't get a volume.
+	(shortcuts_activate_iter): Simplify.
+	(home_folder_handler): Simplify by using
+	shortcuts_activate_iter().
+	(shortcuts_free): New function; frees all the data columns.
+	(gtk_file_chooser_default_finalize): Unref the
+	shortcuts_filter_model and the shortcuts model data first.
+
 Wed Aug 18 08:31:17 2004  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkiconview.c: Applied patch from Olivier Andrieu to fix
