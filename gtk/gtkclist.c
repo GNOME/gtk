@@ -153,6 +153,11 @@ static void gtk_clist_size_request (GtkWidget * widget,
 				    GtkRequisition * requisition);
 static void gtk_clist_size_allocate (GtkWidget * widget,
 				     GtkAllocation * allocation);
+static gint get_selection_info (GtkCList * clist,
+				gint x,
+				gint y,
+				gint * row,
+				gint * column);
 
 /* GtkContainer Methods */
 static void gtk_clist_foreach (GtkContainer * container,
