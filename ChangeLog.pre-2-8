@@ -1,5 +1,8 @@
 2004-03-01  Morten Welinder  <terra@gnome.org>
 
+	* gtk/gtkfilesystemunix.c (filename_get_info): Only stat when
+	needed.
+
 	* gtk/gtkfilesystemmodel.c (file_model_node_is_visible): Simplify
 	semantics and check for errors.
 

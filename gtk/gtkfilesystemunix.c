@@ -1358,10 +1358,15 @@ filename_get_info (const gchar     *filename,
 {
   GtkFileInfo *info;
   struct stat statbuf;
+  gboolean do_stat = (types & (GTK_FILE_INFO_IS_FOLDER |
+			       GTK_FILE_INFO_IS_HIDDEN |
+			       GTK_FILE_INFO_MODIFICATION_TIME |
+			       GTK_FILE_INFO_SIZE));
 
   /* If stat fails, try to fall back to lstat to catch broken links
    */
-  if (stat (filename, &statbuf) != 0 &&
+  if (do_stat &&
+      stat (filename, &statbuf) != 0 &&
       lstat (filename, &statbuf) != 0)
     {
       gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
