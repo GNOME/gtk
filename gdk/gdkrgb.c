@@ -1888,6 +1888,37 @@ gdk_rgb_convert_0888_br (GdkImage *image,
     }
 }
 
+static void
+gdk_rgb_convert_8880_br (GdkImage *image,
+			 gint x0, gint y0, gint width, gint height,
+			 guchar *buf, int rowstride,
+			 gint x_align, gint y_align, GdkRgbCmap *cmap)
+{
+  int x, y;
+  guchar *obuf;
+  gint bpl;
+  guchar *bptr, *bp2;
+  int r, g, b;
+
+  bptr = buf;
+  bpl = image->bpl;
+  obuf = ((guchar *)image->mem) + y0 * bpl + x0 * 4;
+  for (y = 0; y < height; y++)
+    {
+      bp2 = bptr;
+      for (x = 0; x < width; x++)
+	{
+	  r = bp2[0];
+	  g = bp2[1];
+	  b = bp2[2];
+	  ((unsigned long *)obuf)[x] = (b << 16) | (g << 8) | r;
+	  bp2 += 3;
+	}
+      bptr += rowstride;
+      obuf += bpl;
+    }
+}
+
 /* Generic truecolor/directcolor conversion function. Slow, but these
    are oddball modes. */
 static void
@@ -2199,6 +2230,47 @@ gdk_rgb_convert_gray4 (GdkImage *image,
     }
 }
 
+static void
+gdk_rgb_convert_gray4_pack (GdkImage *image,
+			    gint x0, gint y0, gint width, gint height,
+			    guchar *buf, int rowstride,
+			    gint x_align, gint y_align, GdkRgbCmap *cmap)
+{
+  int x, y;
+  gint bpl;
+  guchar *obuf, *obptr;
+  guchar *bptr, *bp2;
+  gint r, g, b;
+  gint shift;
+  guchar pix0, pix1;
+  /* todo: this is hardcoded to big-endian. Make endian-agile. */
+
+  bptr = buf;
+  bpl = image->bpl;
+  obuf = ((guchar *)image->mem) + y0 * bpl + (x0 >> 1);
+  shift = 9 - image_info->visual->depth;
+  for (y = 0; y < height; y++)
+    {
+      bp2 = bptr;
+      obptr = obuf;
+      for (x = 0; x < width; x += 2)
+	{
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  pix0 = (g + ((b + r) >> 1)) >> shift;
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  pix1 = (g + ((b + r) >> 1)) >> shift;
+	  obptr[0] = (pix0 << 4) | pix1;
+	  obptr++;
+	}
+      bptr += rowstride;
+      obuf += bpl;
+    }
+}
+
 /* This actually works for depths from 3 to 7 */
 static void
 gdk_rgb_convert_gray4_d (GdkImage *image,
@@ -2224,15 +2296,64 @@ gdk_rgb_convert_gray4_d (GdkImage *image,
     {
       bp2 = bptr;
       obptr = obuf;
+      dmp = DM[(y_align + y) & (DM_HEIGHT - 1)];
       for (x = 0; x < width; x++)
 	{
-	  dmp = DM[(y_align + y) & (DM_HEIGHT - 1)];
 	  r = *bp2++;
 	  g = *bp2++;
 	  b = *bp2++;
 	  gray = (g + ((b + r) >> 1)) >> 1;
 	  gray += (dmp[(x_align + x) & (DM_WIDTH - 1)] << 2) >> prec;
 	  obptr[0] = (gray - (gray >> prec)) >> right;
+	  obptr++;
+	}
+      bptr += rowstride;
+      obuf += bpl;
+    }
+}
+
+static void
+gdk_rgb_convert_gray4_d_pack (GdkImage *image,
+			      gint x0, gint y0, gint width, gint height,
+			      guchar *buf, int rowstride,
+			      gint x_align, gint y_align, GdkRgbCmap *cmap)
+{
+  int x, y;
+  gint bpl;
+  guchar *obuf, *obptr;
+  guchar *bptr, *bp2;
+  gint r, g, b;
+  guchar *dmp;
+  gint prec, right;
+  gint gray;
+  guchar pix0, pix1;
+  /* todo: this is hardcoded to big-endian. Make endian-agile. */
+
+  bptr = buf;
+  bpl = image->bpl;
+  obuf = ((guchar *)image->mem) + y0 * bpl + (x0 >> 1);
+  prec = image_info->visual->depth;
+  right = 8 - prec;
+  for (y = 0; y < height; y++)
+    {
+      bp2 = bptr;
+      obptr = obuf;
+      dmp = DM[(y_align + y) & (DM_HEIGHT - 1)];
+      for (x = 0; x < width; x += 2)
+	{
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  gray = (g + ((b + r) >> 1)) >> 1;
+	  gray += (dmp[(x_align + x) & (DM_WIDTH - 1)] << 2) >> prec;
+	  pix0 = (gray - (gray >> prec)) >> right;
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  gray = (g + ((b + r) >> 1)) >> 1;
+	  gray += (dmp[(x_align + x + 1) & (DM_WIDTH - 1)] << 2) >> prec;
+	  pix1 = (gray - (gray >> prec)) >> right;
+	  obptr[0] = (pix0 << 4) | pix1;
 	  obptr++;
 	}
       bptr += rowstride;
@@ -2500,10 +2621,10 @@ gdk_rgb_select_conv (GdkImage *image)
   GdkRgbConvFunc conv_32, conv_32_d;
   GdkRgbConvFunc conv_gray, conv_gray_d;
   GdkRgbConvFunc conv_indexed, conv_indexed_d;
-  gboolean lsb_24, msb_24;
+  gboolean mask_rgb, mask_bgr;
 
   depth = image_info->visual->depth;
-  bpp = image->bpp;
+  bpp = ((GdkImagePrivate *)image)->ximage->bits_per_pixel;
 
   byte_order = image->byte_order;
   if (gdk_rgb_verbose)
@@ -2525,16 +2646,8 @@ gdk_rgb_select_conv (GdkImage *image)
   green_mask = image_info->visual->green_mask;
   blue_mask = image_info->visual->blue_mask;
 
-  lsb_24 =
-    (byte_order == GDK_LSB_FIRST &&
-     red_mask == 0xff0000 && green_mask == 0xff00 && blue_mask == 0xff) ||
-    (byte_order == GDK_MSB_FIRST &&
-     red_mask == 0xff && green_mask == 0xff00 && blue_mask == 0xff0000);
-  msb_24 =
-    (byte_order == GDK_MSB_FIRST &&
-     red_mask == 0xff0000 && green_mask == 0xff00 && blue_mask == 0xff) ||
-    (byte_order == GDK_LSB_FIRST &&
-     red_mask == 0xff && green_mask == 0xff00 && blue_mask == 0xff0000);
+  mask_rgb = red_mask == 0xff0000 && green_mask == 0xff00 && blue_mask == 0xff;
+  mask_bgr = red_mask == 0xff && green_mask == 0xff00 && blue_mask == 0xff0000;
 
   conv = NULL;
   conv_d = NULL;
@@ -2552,7 +2665,7 @@ gdk_rgb_select_conv (GdkImage *image)
 
   if (image_info->bitmap)
     conv = gdk_rgb_convert_1;
-  else if (bpp == 2 && depth == 16 && !byterev &&
+  else if (bpp == 16 && depth == 16 && !byterev &&
       red_mask == 0xf800 && green_mask == 0x7e0 && blue_mask == 0x1f)
     {
       conv = gdk_rgb_convert_565;
@@ -2560,36 +2673,50 @@ gdk_rgb_select_conv (GdkImage *image)
       conv_gray = gdk_rgb_convert_565_gray;
       gdk_rgb_preprocess_dm_565 ();
     }
-  else if (bpp == 2 && depth == 16 &&
+  else if (bpp == 16 && depth == 16 &&
 	   vtype == GDK_VISUAL_TRUE_COLOR && byterev &&
       red_mask == 0xf800 && green_mask == 0x7e0 && blue_mask == 0x1f)
     conv = gdk_rgb_convert_565_br;
 
-  else if (bpp == 2 && depth == 15 &&
+  else if (bpp == 16 && depth == 15 &&
 	   vtype == GDK_VISUAL_TRUE_COLOR && !byterev &&
       red_mask == 0x7c00 && green_mask == 0x3e0 && blue_mask == 0x1f)
     conv = gdk_rgb_convert_555;
 
-  else if (bpp == 2 && depth == 15 &&
+  else if (bpp == 16 && depth == 15 &&
 	   vtype == GDK_VISUAL_TRUE_COLOR && byterev &&
       red_mask == 0x7c00 && green_mask == 0x3e0 && blue_mask == 0x1f)
     conv = gdk_rgb_convert_555_br;
 
   /* I'm not 100% sure about the 24bpp tests - but testing will show*/
-  else if (bpp == 3 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR && lsb_24)
+  else if (bpp == 24 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
+	   ((mask_rgb && byte_order == GDK_LSB_FIRST) ||
+	    (mask_bgr && byte_order == GDK_MSB_FIRST)))
     conv = gdk_rgb_convert_888_lsb;
-  else if (bpp == 3 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR && msb_24)
+  else if (bpp == 24 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
+	   ((mask_rgb && byte_order == GDK_MSB_FIRST) ||
+	    (mask_bgr && byte_order == GDK_LSB_FIRST)))
     conv = gdk_rgb_convert_888_msb;
 #ifdef WORDS_BIGENDIAN
-  else if (bpp == 4 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR && lsb_24)
+  else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
+	   (mask_rgb && byte_order == GDK_LSB_FIRST))
     conv = gdk_rgb_convert_0888_br;
-  else if (bpp == 4 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR && msb_24)
+  else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
+	   (mask_rgb && byte_order == GDK_MSB_FIRST))
     conv = gdk_rgb_convert_0888;
+  else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
+	   (mask_bgr && byte_order == GDK_MSB_FIRST))
+    conv = gdk_rgb_convert_8880_br;
 #else
-  else if (bpp == 4 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR && lsb_24)
-    conv = gdk_rgb_convert_0888;
-  else if (bpp == 4 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR && msb_24)
+  else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
+	   (mask_rgb && byte_order == GDK_MSB_FIRST))
     conv = gdk_rgb_convert_0888_br;
+  else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
+	   (mask_rgb && byte_order == GDK_LSB_FIRST))
+    conv = gdk_rgb_convert_0888;
+  else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
+	   (mask_bgr && byte_order == GDK_LSB_FIRST))
+    conv = gdk_rgb_convert_8880_br;
 #endif
 
   else if (vtype == GDK_VISUAL_TRUE_COLOR && byte_order == GDK_LSB_FIRST)
@@ -2602,7 +2729,7 @@ gdk_rgb_select_conv (GdkImage *image)
       conv = gdk_rgb_convert_truecolor_msb;
       conv_d = gdk_rgb_convert_truecolor_msb_d;
     }
-  else if (bpp == 1 && depth == 8 && (vtype == GDK_VISUAL_PSEUDO_COLOR
+  else if (bpp == 8 && depth == 8 && (vtype == GDK_VISUAL_PSEUDO_COLOR
 #ifdef ENABLE_GRAYSCALE
 				      || vtype == GDK_VISUAL_GRAYSCALE
 #endif
@@ -2622,7 +2749,7 @@ gdk_rgb_select_conv (GdkImage *image)
       conv_indexed = gdk_rgb_convert_8_indexed;
       conv_gray = gdk_rgb_convert_gray_cmap;
     }
-  else if (bpp == 1 && depth == 8 && (vtype == GDK_VISUAL_STATIC_GRAY
+  else if (bpp == 8 && depth == 8 && (vtype == GDK_VISUAL_STATIC_GRAY
 #ifdef not_ENABLE_GRAYSCALE
 				      || vtype == GDK_VISUAL_GRAYSCALE
 #endif
@@ -2631,15 +2758,23 @@ gdk_rgb_select_conv (GdkImage *image)
       conv = gdk_rgb_convert_gray8;
       conv_gray = gdk_rgb_convert_gray8_gray;
     }
-  else if (depth < 8 && depth >= 3 && (vtype == GDK_VISUAL_STATIC_GRAY
-				       || vtype == GDK_VISUAL_GRAYSCALE))
+  else if (bpp == 8 && depth < 8 && depth >= 2 &&
+	   (vtype == GDK_VISUAL_STATIC_GRAY
+	    || vtype == GDK_VISUAL_GRAYSCALE))
     {
       conv = gdk_rgb_convert_gray4;
       conv_d = gdk_rgb_convert_gray4_d;
     }
-  else if (depth < 8 && depth >= 3)
+  else if (bpp == 8 && depth < 8 && depth >= 3)
     {
       conv = gdk_rgb_convert_4;
+    }
+  else if (bpp == 4 && depth <= 4 && depth >= 2 &&
+	   (vtype == GDK_VISUAL_STATIC_GRAY
+	    || vtype == GDK_VISUAL_GRAYSCALE))
+    {
+      conv = gdk_rgb_convert_gray4_pack;
+      conv_d = gdk_rgb_convert_gray4_d_pack;
     }
 
   if (conv_d == NULL)

@@ -1,3 +1,10 @@
+Wed Sep  2 22:41:40 1998  Raph Levien  <raph@gimp.org>
+
+	* gdk/gdkrgb.c (gdk_rgb_select_conv): Fixed 32bpp image depth
+	big-endian cases. Added a 4bpp packed gray mode (somewhat
+	incorrectly hardwired to MSB), which should take care of
+	Stric's hardware.
+
 Thu Sep  3 04:45:57 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkaccelgroup.c (gtk_accel_group_add): plug another small
