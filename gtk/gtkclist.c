@@ -102,6 +102,13 @@ enum
   LAST_SIGNAL
 };
 
+enum
+{
+  SYNC_REMOVE,
+  SYNC_INSERT
+};
+
+
 typedef void (*GtkCListSignal1) (GtkObject * object,
 				 gint arg1,
 				 gint arg2,
@@ -112,6 +119,10 @@ typedef void (*GtkCListSignal2) (GtkObject * object,
 				 gint arg1,
 				 gpointer data);
 
+
+static void sync_selection (GtkCList * clist,
+	                    gint row,
+                            gint mode);
 
 /* GtkCList Methods */
 static void gtk_clist_class_init (GtkCListClass * klass);
@@ -1267,6 +1278,9 @@ gtk_clist_insert (GtkCList * clist,
 	clist->row_list = g_list_insert (clist->row_list, clist_row, row);
 
       clist->rows++;
+
+      /* syncronize the selection list */
+      sync_selection (clist, row, SYNC_INSERT);
     }
 
   /* redraw the list if it isn't frozen */
@@ -1283,7 +1297,7 @@ void
 gtk_clist_remove (GtkCList * clist,
 		  gint row)
 {
-  gint was_visible;
+  gint was_visible, was_selected;
   GList *list;
   GtkCListRow *clist_row;
 
@@ -1294,10 +1308,32 @@ gtk_clist_remove (GtkCList * clist,
     return;
 
   was_visible = gtk_clist_row_is_visible (clist, row);
+  was_selected = 0;
 
   /* get the row we're going to delete */
   list = g_list_nth (clist->row_list, row);
   clist_row = list->data;
+
+  /* if we're removing a selected row, we have to make sure
+   * it's properly unselected, and then sync up the clist->selected
+   * list to reflect the deincrimented indexies of rows after the
+   * removal */
+  if (clist_row->state == GTK_STATE_SELECTED)
+    {
+      was_selected = 1;
+
+      switch (clist->selection_mode)
+	{
+	case GTK_SELECTION_SINGLE:
+	case GTK_SELECTION_BROWSE:
+	case GTK_SELECTION_MULTIPLE:
+	  gtk_clist_unselect_row (clist, row, -1);
+	  break;
+
+	default:
+	  break;
+	}
+    }
 
   /* reset the row end pointer if we're removing at the
    * end of the list */
@@ -1306,6 +1342,27 @@ gtk_clist_remove (GtkCList * clist,
 
   clist->row_list = g_list_remove (clist->row_list, clist_row);
   clist->rows--;
+  sync_selection (clist, row, SYNC_REMOVE);
+
+  /* preform any selections required by the selection mode */
+  if (was_selected)
+    {
+      switch (clist->selection_mode)
+	{
+	case GTK_SELECTION_BROWSE:
+	  if (row == clist->rows)
+	    gtk_clist_select_row (clist, row - 1, -1);
+	  else
+	    gtk_clist_select_row (clist, row, -1);
+	  break;
+
+	default:
+	  break;
+	}
+    }
+
+  /* toast the row */
+  row_delete (clist, clist_row);
 
   /* redraw the row if it isn't frozen */
   if (!GTK_CLIST_FROZEN (clist))
@@ -1315,26 +1372,35 @@ gtk_clist_remove (GtkCList * clist,
       if (was_visible)
 	draw_rows (clist, NULL);
     }
+}
 
-  if (clist_row->state == GTK_STATE_SELECTED)
+static void
+sync_selection (GtkCList * clist,
+		gint row,
+		gint mode)
+{
+  GList *list;
+  
+  list = clist->selection;
+  while (list)
     {
-      switch (clist->selection_mode)
-	{
-	case GTK_SELECTION_BROWSE:
-	  if (row >= clist->rows)
-	    row--;
-	  gtk_clist_select_row (clist, row, -1);
-	  break;
-	  
-	default:
-	  break;
-	}
+      if ((gint) list->data >= row)
+        switch (mode)
+          {
+          case SYNC_INSERT:
+            (gint) list->data = (gint) list->data + 1;
+            break;
 
-      /* remove from selection list */
-      clist->selection = g_list_remove (clist->selection, clist_row);
+          case SYNC_REMOVE:
+            (gint) list->data = (gint) list->data - 1;
+            break;
+
+          default:
+            break;
+          }
+
+      list = list->next;
     }
-
-  row_delete (clist, clist_row);
 }
 
 void
@@ -1402,11 +1468,9 @@ gtk_clist_set_row_data_full (GtkCList * clist,
   clist_row->data = data;
   clist_row->destroy = destroy;
 
-  /*
-   * re-send the selected signal if data is changed/added
+  /* re-send the selected signal if data is changed/added
    * so the application can respond to the new data -- 
-   * this could be questionable behavior
-   */
+   * this could be questionable behavior */
   if (clist_row->state == GTK_STATE_SELECTED)
     gtk_clist_select_row (clist, 0, 0);
 }
@@ -2782,76 +2846,66 @@ toggle_row (GtkCList * clist,
 {
   gint i;
   GList *list;
-  GtkCListRow *clist_row;
+  GtkCListRow *clist_row, *selected_row;
+
+  i = 0;
+  list = clist->row_list;
+  selected_row = NULL;
 
   switch (clist->selection_mode)
     {
     case GTK_SELECTION_SINGLE:
-      i = 0;
-      list = clist->row_list;
       while (list)
 	{
 	  clist_row = list->data;
 	  list = list->next;
 
 	  if (row == i)
-	    {
-	      if (clist_row->state == GTK_STATE_SELECTED)
-		gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
-				 row, column, event);
-	      else
-		 gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW], 
-				  row, column, event); 
-	    }
+	    selected_row = clist_row;
 	  else if (clist_row->state == GTK_STATE_SELECTED)
-	    {
-	      gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
-			       i, column, event);
-	    }
+	    gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
+			     i, column, event);
 
 	  i++;
 	}
+
+      if (selected_row && selected_row->state == GTK_STATE_SELECTED)
+	gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
+			 row, column, event);
+      else
+	gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW], 
+			 row, column, event);
       break;
 
+
     case GTK_SELECTION_BROWSE:
-      i = 0;
-      list = clist->row_list;
       while (list)
 	{
 	  clist_row = list->data;
 	  list = list->next;
 
-	  if (row == i)
-	    gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW], 
-			     row, column, event);
-	  else if (clist_row->state == GTK_STATE_SELECTED)
+	  if (i != row && clist_row->state == GTK_STATE_SELECTED)
 	    gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
 			     i, column, event);
 	  i++;
 	}
+
+      gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW], 
+		       row, column, event);
       break;
+
 
     case GTK_SELECTION_MULTIPLE:
-      i = 0;
-      list = clist->row_list;
-      while (list)
-	{
-	  clist_row = list->data;
-	  list = list->next;
+      clist_row = (g_list_nth (clist->row_list, row))->data;
 
-	  if (row == i)
-	    {
-	      if (clist_row->state == GTK_STATE_SELECTED)
-		gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW], 
-				 row, column, event);
-	      else
-		gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
-				 i, column, event);
-	    }
-
-	  i++;
-	}
+      if (clist_row->state == GTK_STATE_SELECTED)
+	gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
+			 row, column, event);
+      else
+	gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW], 
+			 row, column, event);
       break;
+
 
     case GTK_SELECTION_EXTENDED:
       break;
@@ -2882,15 +2936,15 @@ select_row (GtkCList * clist,
 	  clist_row = list->data;
 	  list = list->next;
 
-	  if (row == i)
-	    gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW], 
-			     row, column, event);
-	  else if (clist_row->state == GTK_STATE_SELECTED)
+	  if (row != i && clist_row->state == GTK_STATE_SELECTED)
 	    gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
 			     i, column, event);
 
 	  i++;
 	}
+
+      gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW], 
+		       row, column, event);
       break;
 
     case GTK_SELECTION_MULTIPLE:
@@ -2916,15 +2970,7 @@ unselect_row (GtkCList * clist,
   switch (clist->selection_mode)
     {
     case GTK_SELECTION_SINGLE:
-      gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
-		       row, column, event);
-      break;
-
     case GTK_SELECTION_BROWSE:
-      /* you can't force unselect a row in browse mode, because a row
-       * must always be selected */
-      break;
-
     case GTK_SELECTION_MULTIPLE:
       gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
 		       row, column, event);
@@ -2956,7 +3002,7 @@ real_select_row (GtkCList * clist,
   if (clist_row->state == GTK_STATE_NORMAL)
     {
       clist_row->state = GTK_STATE_SELECTED;
-      clist->selection = g_list_append (clist->selection, clist_row);
+      clist->selection = g_list_append (clist->selection, (gpointer) row);
 
       if (!GTK_CLIST_FROZEN (clist) && gtk_clist_row_is_visible (clist, row))
 	draw_row (clist, NULL, row, clist_row);
@@ -2981,7 +3027,7 @@ real_unselect_row (GtkCList * clist,
   if (clist_row->state == GTK_STATE_SELECTED)
     {
       clist_row->state = GTK_STATE_NORMAL;
-      clist->selection = g_list_remove (clist->selection, clist_row);
+      clist->selection = g_list_remove (clist->selection, (gpointer) row);
 
       if (!GTK_CLIST_FROZEN (clist) && gtk_clist_row_is_visible (clist, row))
 	draw_row (clist, NULL, row, clist_row);

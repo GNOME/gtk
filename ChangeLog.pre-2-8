@@ -1,3 +1,12 @@
+Sun Mar  8 12:33:38 PST 1998 Jay Painter <jpaint@serv.net>
+	
+	* gtk/gtkclist.c: the GList clist->selection now contains row indexes
+	  in the data portion of the linked list structure instead of pointers,
+	  fixed several bugs with the different selection modes
+
+	* gtk/testgtk.c: displays information for unselect events, and prints the list
+	  of selected rows
+
 Sun Mar  8 13:03:22 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkrange.h: removed gtk_range_calc_value().

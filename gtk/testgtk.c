@@ -2654,6 +2654,7 @@ select_clist (GtkWidget *widget,
   gchar *text;
   GdkPixmap *pixmap;
   GdkBitmap *mask;
+  GList *list;
 
   g_print ("GtkCList Selection: row %d column %d button %d\n", 
 	   row, column, bevent ? bevent->button : 0);
@@ -2689,14 +2690,97 @@ select_clist (GtkWidget *widget,
 	}
     }
 
-  g_print ("\n\n");
+  /* print selections list */
+  g_print ("\nSelected Rows:");
+  list = GTK_CLIST (widget)->selection;
+  while (list)
+    {
+      g_print (" %d ", (gint) list->data);
+      list = list->next;
+    }
+
+  g_print ("\n\n\n");
 
   clist_selected_row = row;
 }
 
 void
-list_selection_clist (GtkWidget *widget, gpointer data)
+unselect_clist (GtkWidget *widget,
+		gint row, 
+		gint column, 
+		GdkEventButton * bevent)
 {
+  gint i;
+  guint8 spacing;
+  gchar *text;
+  GdkPixmap *pixmap;
+  GdkBitmap *mask;
+  GList *list;
+
+  g_print ("GtkCList Unselection: row %d column %d button %d\n", 
+	   row, column, bevent ? bevent->button : 0);
+
+  for (i = 0; i < TESTGTK_CLIST_COLUMNS; i++)
+    {
+      switch (gtk_clist_get_cell_type (GTK_CLIST (widget), row, i))
+	{
+	case GTK_CELL_TEXT:
+	  g_print ("CELL %d GTK_CELL_TEXT\n", i);
+	  gtk_clist_get_text (GTK_CLIST (widget), row, i, &text);
+	  g_print ("TEXT: %s\n", text);
+	  break;
+
+	case GTK_CELL_PIXMAP:
+	  g_print ("CELL %d GTK_CELL_PIXMAP\n", i);
+	  gtk_clist_get_pixmap (GTK_CLIST (widget), row, i, &pixmap, &mask);
+	  g_print ("PIXMAP: %d\n", (int) pixmap);
+	  g_print ("MASK: %d\n", (int) mask);
+	  break;
+
+	case GTK_CELL_PIXTEXT:
+	  g_print ("CELL %d GTK_CELL_PIXTEXT\n", i);
+	  gtk_clist_get_pixtext (GTK_CLIST (widget), row, i, &text, &spacing, &pixmap, &mask);
+	  g_print ("TEXT: %s\n", text);
+	  g_print ("SPACING: %d\n", spacing);
+	  g_print ("PIXMAP: %d\n", (int) pixmap);
+	  g_print ("MASK: %d\n", (int) mask);
+	  break;
+
+	default:
+	  break;
+	}
+    }
+
+  /* print selections list */
+  g_print ("\nSelected Rows:");
+  list = GTK_CLIST (widget)->selection;
+  while (list)
+    {
+      g_print (" %d ", (gint) list->data);
+      list = list->next;
+    }
+
+  g_print ("\n\n\n");
+
+  clist_selected_row = row;
+}
+
+void
+insert_row_clist (GtkWidget *widget, gpointer data)
+{
+  static char *text[] =
+  {
+    "This",
+    "is",
+    "a",
+    "inserted",
+    "row",
+    "la la la la la",
+    "la la la la"
+  };
+
+  gtk_clist_insert (GTK_CLIST (data), clist_selected_row, text);
+  clist_rows++;
 }
 
 void
@@ -2804,6 +2888,16 @@ create_clist ()
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
       gtk_widget_show (box2);
 
+      button = gtk_button_new_with_label ("Insert Row");
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+
+      gtk_signal_connect (GTK_OBJECT (button),
+                          "clicked",
+                          (GtkSignalFunc) insert_row_clist,
+                          (gpointer) clist);
+
+      gtk_widget_show (button);
+
       button = gtk_button_new_with_label ("Show Title Buttons");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
@@ -2840,14 +2934,20 @@ create_clist ()
 			  (GtkSignalFunc) select_clist, 
 			  NULL);
 
+      gtk_signal_connect (GTK_OBJECT (clist), 
+			  "unselect_row",
+			  (GtkSignalFunc) unselect_clist, 
+			  NULL);
+
       gtk_clist_set_column_width (GTK_CLIST (clist), 0, 100);
 
       for (i = 1; i < TESTGTK_CLIST_COLUMNS; i++)
 	gtk_clist_set_column_width (GTK_CLIST (clist), i, 80);
 
       gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_BROWSE);
-
-      gtk_clist_set_policy (GTK_CLIST (clist), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+      gtk_clist_set_policy (GTK_CLIST (clist), 
+			    GTK_POLICY_AUTOMATIC,
+			    GTK_POLICY_AUTOMATIC);
 
       gtk_clist_set_column_justification (GTK_CLIST (clist), 1, GTK_JUSTIFY_RIGHT);
       gtk_clist_set_column_justification (GTK_CLIST (clist), 2, GTK_JUSTIFY_CENTER);
@@ -2896,7 +2996,10 @@ create_clist ()
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    {
+      clist_rows = 0;
+      gtk_widget_destroy (window);
+    }
 
 }
 
