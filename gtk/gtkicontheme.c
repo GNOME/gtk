@@ -1322,6 +1322,27 @@ gtk_icon_theme_load_icon (GtkIconTheme         *icon_theme,
   return pixbuf;
 }
 
+typedef struct 
+{
+  const gchar *icon_name;
+  gboolean found;
+} CacheSearch;
+
+static void
+cache_has_icon (gpointer  key,
+		gpointer  value,
+		gpointer  user_data)
+{
+  GtkIconCache *cache = (GtkIconCache *)value;
+  CacheSearch *search = (CacheSearch *)user_data;
+
+  if (!cache || search->found)
+    return;
+
+  if (_gtk_icon_cache_has_icon (cache, search->icon_name))
+    search->found = TRUE;  
+}
+
 /**
  * gtk_icon_theme_has_icon:
  * @icon_theme: a #GtkIconTheme
@@ -1340,12 +1361,35 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
 			 const char   *icon_name)
 {
   GtkIconThemePrivate *priv;
+  GList *l;
+  CacheSearch search;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), FALSE);
   
   priv = icon_theme->priv;
   
   ensure_valid_themes (icon_theme);
+
+  search.icon_name = icon_name;
+  search.found = FALSE;
+
+  for (l = priv->themes; l; l = l->next)
+    {
+      IconTheme *theme = (IconTheme *)l->data;
+
+      g_hash_table_foreach (theme->icon_caches, cache_has_icon, &search);
+
+      if (search.found)
+	return TRUE;
+    }
+
+  for (l = priv->unthemed_icons_caches; l; l = l->next)
+    {
+      GtkIconCache *cache = (GtkIconCache *)l->data;
+
+      if (_gtk_icon_cache_has_icon (cache, icon_name))
+	return TRUE;
+    }
 
   if (g_hash_table_lookup_extended (priv->all_icons,
 				    icon_name, NULL, NULL))
@@ -1741,9 +1785,9 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
 							   dir->subdir);
 
       if (has_icon_file)
-	{
-	  *has_icon_file = suffix & HAS_ICON_FILE;
-	}
+	*has_icon_file = suffix & HAS_ICON_FILE;
+
+      suffix = suffix & ~HAS_ICON_FILE;
     }
   else
       suffix = GPOINTER_TO_UINT (g_hash_table_lookup (dir->icons, icon_name));

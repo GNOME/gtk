@@ -81,10 +81,19 @@ typedef struct
 static gboolean
 foreach_remove_func (gpointer key, gpointer value, gpointer user_data)
 {
+  Image *image = (Image *)value;
   GHashTable *files = user_data;
   GList *list;
-  gboolean free_key = FALSE;;
-  
+  gboolean free_key = FALSE;  
+
+  if (image->flags == HAS_ICON_FILE)
+    {
+      g_free (key);
+      g_free (image);
+
+      return TRUE;
+    }
+
   list = g_hash_table_lookup (files, key);
   if (list)
     free_key = TRUE;
@@ -171,7 +180,7 @@ scan_directory (const gchar *base_path,
 	  image = g_hash_table_lookup (dir_hash, basename);
 	  if (image)
 	    image->flags |= flags;
-	  else if ((flags & HAS_ICON_FILE) != HAS_ICON_FILE)
+	  else
 	    {
 	      if (!dir_added) 
 		{

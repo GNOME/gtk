@@ -1,5 +1,21 @@
 2004-10-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (gtk_icon_theme_has_icon): Implement for
+	cached themes.
+
+	* gtk/gtkiconcache.h: 
+	* gtk/gtkiconcache.c (_gtk_icon_cache_has_icon): New function.
+
+	* gtk/updateiconcache.c (scan_directory): Don't skip .icon 
+	files which are listed before their images.
+	(foreach_remove_func): Instead filter lonely .icon files out
+	here.
+
+	* gtk/gtkicontheme.c (theme_dir_get_icon_suffix): Filter out
+	the HAS_ICON_FILE flag.
+
+2004-10-21  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkiconcache.c: Make it compile without mmap() and
 	add some more checks.  (#155973, Morten Welinder)
 

@@ -50,7 +50,6 @@ GtkIconCache *
 _gtk_icon_cache_ref (GtkIconCache *cache)
 {
   cache->ref_count ++;
-
   return cache;
 }
 
@@ -141,7 +140,6 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   cache->ref_count = 1;
   cache->buffer = buffer;
   cache->size = st.st_size;
-  
  done:
   g_free (cache_filename);  
   close (fd);
@@ -282,6 +280,36 @@ _gtk_icon_cache_add_icons (GtkIconCache *cache,
 
 	  chain_offset = GET_UINT32 (cache->buffer, chain_offset);
 	}
-    }
-  
+    }  
 }
+
+gboolean
+_gtk_icon_cache_has_icon (GtkIconCache *cache,
+			  const gchar  *icon_name)
+{
+  guint32 hash_offset;
+  guint32 n_buckets;
+  guint32 chain_offset;
+  gint hash;
+  
+  hash_offset = GET_UINT32 (cache->buffer, 4);
+  n_buckets = GET_UINT32 (cache->buffer, hash_offset);
+
+  hash = icon_name_hash (icon_name) % n_buckets;
+
+  chain_offset = GET_UINT32 (cache->buffer, hash_offset + 4 + 4 * hash);
+  while (chain_offset != 0xffffffff)
+    {
+      guint32 name_offset = GET_UINT32 (cache->buffer, chain_offset + 4);
+      gchar *name = cache->buffer + name_offset;
+
+      if (strcmp (name, icon_name) == 0)
+	return TRUE;
+	  
+      chain_offset = GET_UINT32 (cache->buffer, chain_offset);
+    }
+
+  return FALSE;
+}
+			  
+

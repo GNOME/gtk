@@ -26,6 +26,8 @@ typedef struct _GtkIconCache GtkIconCache;
 GtkIconCache *_gtk_icon_cache_new_for_path   (const gchar  *path);
 gboolean      _gtk_icon_cache_has_directory  (GtkIconCache *cache,
 					      const gchar  *directory);
+gboolean      _gtk_icon_cache_has_icon       (GtkIconCache *cache,
+					      const gchar  *icon_name);
 void	      _gtk_icon_cache_add_icons      (GtkIconCache *cache,
 					      const gchar  *directory,
 					      GHashTable   *hash_table);
