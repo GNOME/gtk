@@ -1,3 +1,7 @@
+2003-04-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkfilesel.sgml: Fix the example.  (#109563)
+
 2003-03-22  Michael Natterer  <mitch@gimp.org>
 
 	* gtk/Makefile.am: copy stock_color_picker_25.png, don't copy
