@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-03-05 15:18-0600\n"
+"PO-Revision-Date: 2004-03-06 01:59-0600\n"
 "Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -1663,7 +1663,7 @@ msgstr "_แปะ"
 
 #: gtk/gtkstock.c:316
 msgid "_Preferences"
-msgstr "ปรับแ_ต่ง"
+msgstr "_ปรับแต่ง"
 
 #: gtk/gtkstock.c:317
 msgid "_Print"
