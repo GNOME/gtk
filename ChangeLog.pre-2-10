@@ -1,3 +1,39 @@
+2003-07-29  Tor Lillqvist  <tml@iki.fi>
+
+	Fix for #108007, #112402, #117042: There was confusion in
+	gdk/win32 at various places whether a window position refers to
+	the decoration position or the client area position. Also whether
+	window size includes decorations or not.
+	
+	The correct interpretation apparently is that in GDK (like in
+	X11), a top-level window position means the decoration's position,
+	but size means the window's inner size (client area size). In the
+	Win32 API, the window size usually includes the decorations,
+	though.
+	
+	* gdk/win32/gdkevents-win32.c (decode_key_lparam): Move inside
+	#ifdef G_ENABLE_DEBUG.
+	(handle_configure_event): New function, generates GDK_CONFIGURE
+	events from WM_SIZE and WM_MOVE messages. Even if no event is
+	generated because of the event mask, still set the private
+	position and size fields. Calculate position and size correctly.
+	(gdk_event_translate): Call handle_configure_event().
+
+	* gdk/win32/gdkgeometry-win32.c: Cosmetics.
+
+	* gdk/win32/gdkwindow-win32.c: Use GDI_CALL() and API_CALL()
+	macros. Cosmetic debugging output changes.
+	(SafeAdjustWindowRectEx): Remove. If an application wants to
+	locate a window outside of the screen, it's not GDK's business to
+	prevent it. And anyway, with multiple monitors, negative
+	coordinates are perfectly normal.
+	(gdk_window_new): Adjust the window size for decorations after
+	_gdk_window_init_position() has done its job. (But the big window
+	code currently is presumably broken on Win32 anyway.)
+	(gdk_window_move): The position passed in is supposed to be that
+	of the window border, so don't need to adjust for decorations.
+	(gdk_window_resize, gdk_window_move_resize): Simplify somewhat.
+
 Tue Jul 29 13:55:44 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_set_style,

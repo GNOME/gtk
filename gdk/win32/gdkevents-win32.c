@@ -979,6 +979,25 @@ print_event (GdkEvent *event)
   g_print ("\n");
 }
 
+static char *
+decode_key_lparam (LPARAM lParam)
+{
+  static char buf[100];
+  char *p = buf;
+
+  if (HIWORD (lParam) & KF_UP)
+    p += g_sprintf (p, "KF_UP ");
+  if (HIWORD (lParam) & KF_REPEAT)
+    p += g_sprintf (p, "KF_REPEAT ");
+  if (HIWORD (lParam) & KF_ALTDOWN)
+    p += g_sprintf (p, "KF_ALTDOWN ");
+  if (HIWORD (lParam) & KF_EXTENDED)
+    p += g_sprintf (p, "KF_EXTENDED ");
+  p += g_sprintf (p, "sc:%d rep:%d", LOBYTE (HIWORD (lParam)), LOWORD (lParam));
+
+  return buf;
+}
+
 #endif
 
 static void
@@ -1552,23 +1571,53 @@ doesnt_want_scroll (gint mask,
 #endif
 }
 
-static char *
-decode_key_lparam (LPARAM lParam)
+static void
+handle_configure_event (MSG       *msg,
+			GdkWindow *window)
 {
-  static char buf[100];
-  char *p = buf;
+  RECT client_rect, outer_rect;
+  POINT point;
+  LONG style, exstyle;
 
-  if (HIWORD (lParam) & KF_UP)
-    p += g_sprintf (p, "KF_UP ");
-  if (HIWORD (lParam) & KF_REPEAT)
-    p += g_sprintf (p, "KF_REPEAT ");
-  if (HIWORD (lParam) & KF_ALTDOWN)
-    p += g_sprintf (p, "KF_ALTDOWN ");
-  if (HIWORD (lParam) & KF_EXTENDED)
-    p += g_sprintf (p, "KF_EXTENDED ");
-  p += g_sprintf (p, "sc:%d rep:%d", LOBYTE (HIWORD (lParam)), LOWORD (lParam));
+  GetClientRect (msg->hwnd, &client_rect);
+  
+  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->width = client_rect.right - client_rect.left;
+  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->height = client_rect.bottom - client_rect.top;
+  
+  point.x = client_rect.left;
+  point.y = client_rect.top;
+  ClientToScreen (msg->hwnd, &point);
+  outer_rect.left = point.x;
+  outer_rect.top = point.y;
+  
+  point.x = client_rect.right;
+  point.y = client_rect.bottom;
+  ClientToScreen (msg->hwnd, &point);
+  outer_rect.right = point.x;
+  outer_rect.bottom = point.y;
+  
+  style = GetWindowLong (msg->hwnd, GWL_STYLE);
+  exstyle = GetWindowLong (msg->hwnd, GWL_EXSTYLE);
+  
+  API_CALL (AdjustWindowRectEx, (&outer_rect, style,
+				 FALSE, exstyle));
+  
+  ((GdkWindowObject *) window)->x = outer_rect.left;
+  ((GdkWindowObject *) window)->y = outer_rect.top;
+  
+  if (((GdkWindowObject *) window)->event_mask & GDK_STRUCTURE_MASK)
+    {
+      GdkEvent *event = gdk_event_new (GDK_CONFIGURE);
+      event->configure.window = window;
 
-  return buf;
+      event->configure.width = client_rect.right - client_rect.left;
+      event->configure.height = client_rect.bottom - client_rect.top;
+      
+      event->configure.x = outer_rect.left;
+      event->configure.y = outer_rect.top;
+      
+      append_event (gdk_drawable_get_display (window), event);
+    }
 }
 
 static void
@@ -1777,7 +1826,6 @@ gdk_event_translate (GdkDisplay *display,
   DWORD pidThis;
   PAINTSTRUCT paintstruct;
   HDC hdc;
-  RECT rect;
   POINT pt;
   MINMAXINFO *mmi;
   HWND hwnd;
@@ -2752,26 +2800,9 @@ gdk_event_translate (GdkDisplay *display,
 	  GdkWindowState withdrawn_bit =
 	    IsWindowVisible (msg->hwnd) ? GDK_WINDOW_STATE_WITHDRAWN : 0;
 
-	  if ((((GdkWindowObject *) window)->event_mask & GDK_STRUCTURE_MASK) &&
-	      !GDK_WINDOW_DESTROYED (window))
-	    {
-	      event = gdk_event_new (GDK_CONFIGURE);
-	      event->configure.window = window;
-	      pt.x = 0;
-	      pt.y = 0;
-	      ClientToScreen (msg->hwnd, &pt);
-	      event->configure.x = pt.x;
-	      event->configure.y = pt.y;
-	      event->configure.width = LOWORD (msg->lParam);
-	      event->configure.height = HIWORD (msg->lParam);
-	      append_event (display, event);
-	    }
-
-	  ((GdkWindowObject *) window)->x = event->configure.x;
-	  ((GdkWindowObject *) window)->y = event->configure.y;
-	  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->width = event->configure.width;
-	  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->height = event->configure.height;
-
+	  if (!GDK_WINDOW_DESTROYED (window))
+	    handle_configure_event (msg, window);
+	  
 	  if (msg->wParam == SIZE_RESTORED)
 	    gdk_synthesize_window_state (window,
 					 GDK_WINDOW_STATE_ICONIFIED |
@@ -2835,29 +2866,13 @@ gdk_event_translate (GdkDisplay *display,
 				 msg->hwnd,
 				 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
-      if (!(((GdkWindowObject *) window)->event_mask & GDK_STRUCTURE_MASK))
-	break;
-
       if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
 	  !IsIconic (msg->hwnd) &&
 	  IsWindowVisible (msg->hwnd))
 	{
 	  if (!GDK_WINDOW_DESTROYED (window))
-	    {
-	      event = gdk_event_new (GDK_CONFIGURE);
-	      event->configure.window = window;
-	      event->configure.x = GET_X_LPARAM (msg->lParam);
-	      event->configure.y = GET_Y_LPARAM (msg->lParam);
-	      GetClientRect (msg->hwnd, &rect);
-	      event->configure.width = rect.right;
-	      event->configure.height = rect.bottom;
+	    handle_configure_event (msg, window);
 
-	      append_event (display, event);
-	    }
-	  ((GdkWindowObject *) window)->x = event->configure.x;
-	  ((GdkWindowObject *) window)->y = event->configure.y;
-	  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->width = event->configure.width;
-	  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->height = event->configure.height;
 	  return_val = TRUE;
 	}
       break;
