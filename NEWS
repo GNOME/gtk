@@ -1,11 +1,18 @@
-Overview of Changes in GTK+ 1.1.0:
+What is new in GTK+ 1.1.0:
 
+* New widget GtkFontSelector.
+* New featurefull progress bar.
+* New container widget GtkPacker.
+* New object GtkItemFactory, GtkMenuFactory is deprecated.
+* New key binding system, configurable via rcfiles, similar to styles.
+* New widget GtkCTree with drag selections and keyboard movement and
+  and horizontal scrolling. Features also implemented for GtkCList.
 * Significant speedups to widget creation and destruction through caching
   colormap and visual queries to the XServer.
 * Speedups for type creation and especially gtk_type_is_a() checks.
 * Speedups in signal lookup, creation and emissions and connection handling.
-* Additions to the signal handling API (e.g. *_emitv).
 * Minor speedups with object data allocation and destruction.
+* Additions to the signal handling API (e.g. *_emitv).
 * Support for rc-file reparsing.
 * Resizing logic is now implemented on container widget basis, rather than
   for toplevel GtkWindows only.
@@ -13,16 +20,25 @@ Overview of Changes in GTK+ 1.1.0:
 * Some widgets are now allocated through memchunks to behave more memory wise.
 * Newly included file gtkfeatures.h which defines compatibility macros to
   test for certain API features upon program compilation.
-* New widget GtkCTree
-* New widget GtkFontSelector.
-* GtkTables are now fully resizable.
-* New container widget GtkPacker.
-* New object GtkItemFactory, GtkMenuFactory is deprecated.
-* Far better support for widget arguments.
 * Child arguments support for container widgets.
+* Far better support for object arguments, revamp of the underlying
+  mechanism for speed and reusability. Child/object arguments don't
+  need to be preceeded by the "GtkType::" portion anymore.
 * Removed GtkAcceleratorTable in favour of GtkAccelGroup, accelerator display
   is now performed by a new widget GtkAccelLabel.
+* Overhaul of the resizing code. Resizing behaviour can now be specified
+  on GtkContainer basis, so the underlying algorithm isn't only available
+  for GtkWindows.
+* GtkTables are now fully resizable.
+* The GtkType system now supports an additional base class initialization
+  function.
+* GtkStyles and key bindings can now be looked up depending on the base
+  types of a widget, through a new keyword `class' in rc files.
+* GtkButton derives from GtkBin (finally).  
+* More descriptive error messages on rc parsing.  
 * Runtime information is available to query enum/flag definition values.
 * Upgrade to libtool-1.2
-* Legions of bug fixes, including one that fixed a major memory leak
-  in 1.0.0.
+* Legions of bug fixes, memory leaks, segfaults, of-by-something errors...
+  including those that already went into the 1.0.x branch.
+* A big bunch of features and cosmetic fixups that just got lost in
+  the masses of changes.
