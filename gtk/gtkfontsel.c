@@ -998,7 +998,16 @@ gtk_font_selection_size_focus_out (GtkWidget     *w,
 				   GdkEventFocus *event,
 				   gpointer       data)
 {
-  gtk_font_selection_size_activate (w, data);
+  GtkFontSelection *fontsel;
+  gint new_size;
+  const gchar *text;
+  
+  fontsel = GTK_FONT_SELECTION (data);
+
+  text = gtk_entry_get_text (GTK_ENTRY (fontsel->size_entry));
+  new_size = MAX (0.1, atof (text) * PANGO_SCALE + 0.5);
+
+  gtk_font_selection_set_size (fontsel, new_size);
   
   return TRUE;
 }
