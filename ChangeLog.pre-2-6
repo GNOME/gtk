@@ -1,5 +1,11 @@
 2002-02-13  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_flush_scroll): validate a
+	larger area, proportional to widget size, to fix
+	#71427 reported by Dennis Bjorklund
+
+2002-02-13  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_paint): just go ahead and flush 
 	all the first validate stuff if it hasn't been done, presumably
 	someone called process_updates at a weird time.

@@ -1545,6 +1545,9 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
   GtkTextIter iter;
   GtkTextPendingScroll *scroll;
   gboolean retval;
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (text_view);
   
   DV(g_print(G_STRLOC"\n"));
   
@@ -1561,11 +1564,17 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
   
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, scroll->mark);
 
-  /* Validate arbitrary area around the scroll destination, so the adjustment
-   * can meaningfully point into that area
+  /* Validate area around the scroll destination, so the adjustment
+   * can meaningfully point into that area. We must validate
+   * enough area to be sure that after we scroll, everything onscreen
+   * is valid; otherwise, validation will maintain the first para
+   * in one place, but may push the target iter off the bottom of
+   * the screen.
    */
   DV(g_print (">Validating scroll destination ("G_STRLOC")\n"));
-  gtk_text_layout_validate_yrange (text_view->layout, &iter, -300, 300);
+  gtk_text_layout_validate_yrange (text_view->layout, &iter,
+                                   - (widget->allocation.height * 2),
+                                   widget->allocation.height * 2);
   
   DV(g_print (">Done validating scroll destination ("G_STRLOC")\n"));
 
@@ -5900,7 +5909,7 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
   /* process exposes */
   if (GTK_WIDGET_REALIZED (text_view))
     {
-      DV (g_print ("Processing updates (%s)", G_STRLOC));
+      DV (g_print ("Processing updates (%s)\n", G_STRLOC));
       
       if (text_view->left_window)
         gdk_window_process_updates (text_view->left_window->bin_window, TRUE);
