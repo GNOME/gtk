@@ -68,7 +68,7 @@ struct _GtkInputDialog
 
 struct _GtkInputDialogClass
 {
-  GtkWindowClass parent_class;
+  GtkDialogClass parent_class;
 
   void (* enable_device)               (GtkInputDialog    *inputd,
 					guint32            devid);

@@ -1,3 +1,8 @@
+Sun Mar 12 15:19:24 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkinputdialog.h (struct _GtkInputDialogClass): Fix
+	parent class to correctly be GtkDialogClass.
+
 Thu Feb 24 23:58:21 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkgeometry-x11.c: Don't worry about clipping of
