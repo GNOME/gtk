@@ -1,3 +1,7 @@
+2002-01-24  Mark McLoughlin  <mark@skynet.ie>
+
+	* gtk/gtkaccessible.h: include gtk/gtkwidget.h
+
 Wed Jan 23 20:28:59 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_draw_arrow): 

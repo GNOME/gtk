@@ -21,7 +21,7 @@
 #define __GTK_ACCESSIBLE_H__
 
 #include <atk/atk.h>
-
+#include <gtk/gtkwidget.h>
 
 #ifdef __cplusplus
 extern "C" {
