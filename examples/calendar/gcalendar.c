@@ -140,7 +140,6 @@ calendar_toggle_flag(GtkWidget * toggle, CalendarData *calendar)
   calendar_set_flags(calendar);
   
 }
-#ifdef GTK_HAVE_FEATURES_1_1_0
 void
 calendar_font_selection_ok(GtkWidget * button, CalendarData *calendar)
 {
@@ -193,7 +192,6 @@ calendar_select_font(GtkWidget * button, CalendarData *calendar)
     gtk_widget_destroy (window);
 
 }
-#endif /* GTK_HAVE_FEATURES_1_1_0 */
 
 void 
 create_calendar()
@@ -299,7 +297,6 @@ create_calendar()
       gtk_box_pack_start (GTK_BOX (vbox3), toggle, TRUE, TRUE, 0);
       calendar_data.flag_checkboxes[i]=toggle;
     }
-#ifdef GTK_HAVE_FEATURES_1_1_0
   /* Build the right font-button */ 
   button = gtk_button_new_with_label("Font...");
   gtk_signal_connect (GTK_OBJECT (button),
@@ -307,7 +304,6 @@ create_calendar()
 		      GTK_SIGNAL_FUNC(calendar_select_font),
 		      &calendar_data);
   gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE, 0);
-#endif /* GTK_HAVE_FEATURES_1_1_0 */
 
   /*
    *  Build the Signal-event part.

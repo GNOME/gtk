@@ -1,3 +1,9 @@
+Sun Sep 27 22:02:48 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkcalendar.h:
+	  gtk/gtkcalendar.c:
+	  examples/calendar/gcalendar.c: remove HAVE_FEATURES stuff
+
 Sun Sep 27 02:18:06 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gtk/gtkcalendar.h:

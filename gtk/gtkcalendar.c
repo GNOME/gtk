@@ -1022,13 +1022,11 @@ gtk_calendar_size_request (GtkWidget      *widget,
   gint day_font_lbearing;
   gint day_font_rbearing;
   gint day_font_width;
-#ifdef GTK_HAVE_FEATURES_1_1_0
   gint lbearing;
   gint rbearing;
   gint ascent;
   gint descent;
   gint width;
-#endif /* GTK_HAVE_FEATURES_1_1_0 */
 
   calendar = GTK_CALENDAR (widget);
 
@@ -1084,7 +1082,6 @@ gtk_calendar_size_request (GtkWidget      *widget,
   if (calendar->display_flags & GTK_CALENDAR_SHOW_DAY_NAMES)
     for (i = 0; i < 7; i++)
       {
-#ifdef GTK_HAVE_FEATURES_1_1_0
 	gdk_text_extents (LABEL_FONT (widget),
 			  default_abbreviated_dayname[i],
 			  strlen(default_abbreviated_dayname[i]),
@@ -1098,13 +1095,6 @@ gtk_calendar_size_request (GtkWidget      *widget,
 					       ascent);
 	calendar->max_label_char_descent = MAX (calendar->max_label_char_descent
 						, descent);
-#else /* not GTK_HAVE_FEATURES_1_1_0 */
-	calendar->min_day_width = MAX (calendar->min_day_width,
-				       gdk_string_measure (LABEL_FONT (widget),
-							   default_abbreviated_dayname[i]));
-	calendar->max_label_char_ascent = LABEL_FONT (widget)->ascent;
-	calendar->max_label_char_descent = LABEL_FONT (widget)->descent;
-#endif /* not GTK_HAVE_FEATURES_1_1_0 */
       }
 
   calendar->max_week_char_width = 0;
@@ -1145,7 +1135,6 @@ gtk_calendar_size_request (GtkWidget      *widget,
   else
     calendar->day_name_h = 0;
 
-#ifdef GTK_HAVE_FEATURES_1_1_0
   gdk_text_extents (DAY_FONT (widget),
                     "0123456789",
                     10,
@@ -1154,10 +1143,6 @@ gtk_calendar_size_request (GtkWidget      *widget,
                     &width,
                     &calendar->max_day_char_ascent,
                     &calendar->max_day_char_descent);
-#else /* not GTK_HAVE_FEATURES_1_1_0 */
-  calendar->max_day_char_ascent = DAY_FONT (widget)->ascent;
-  calendar->max_day_char_descent = DAY_FONT (widget)->descent;
-#endif /* not GTK_HAVE_FEATURES_1_1_0 */
 
   calendar->main_h = (CALENDAR_MARGIN + calendar_margin
 		      + 6 * (calendar->max_day_char_ascent
