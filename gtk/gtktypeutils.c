@@ -130,6 +130,10 @@ gtk_type_unique (GtkType      parent_type,
   guint i;
 
   g_return_val_if_fail (type_info != NULL, 0);
+
+  if (n_type_nodes == 0)
+    gtk_type_init ();
+
   if (g_hash_table_lookup (type_name_2_type_ht, type_info->type_name))
     {
       g_warning ("gtk_type_unique(): type `%s' already exists.", type_info->type_name);

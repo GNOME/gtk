@@ -2028,7 +2028,7 @@ create_menus (void)
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
 			  &window);
-      gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+      gtk_signal_connect (GTK_OBJECT (window), "delete-event",
 			  GTK_SIGNAL_FUNC (gtk_true),
 			  NULL);
 
@@ -5144,7 +5144,7 @@ dnd_drop (GtkWidget *button, GdkEvent *event)
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC(dnd_drop_destroy_popup),
 		      &window);
-  gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+  gtk_signal_connect (GTK_OBJECT (window), "delete-event",
 		      GTK_SIGNAL_FUNC(gtk_false),
 		      &window);
 
@@ -6642,7 +6642,7 @@ create_main_window (void)
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC(gtk_main_quit),
 		      NULL);
-  gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+  gtk_signal_connect (GTK_OBJECT (window), "delete-event",
 		      GTK_SIGNAL_FUNC (gtk_false),
 		      NULL);
 
