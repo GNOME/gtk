@@ -1,6 +1,6 @@
 # Note that this is NOT a relocatable package
 %define ver      @VERSION@
-%define rel      SNAP
+%define rel      1
 %define prefix   /usr
 
 Summary: The Gimp Toolkit
@@ -148,10 +148,10 @@ fi
 %defattr(-, root, root)
 
 %doc AUTHORS COPYING ChangeLog NEWS README TODO
-%{prefix}/lib/libgtk-1.1.so.*
-%{prefix}/lib/libgdk-1.1.so.*
-{prefix}/share/themes/Default
-+%{prefix}/share/locale/*/*/*
+%{prefix}/lib/libgtk-1.2.so.*
+%{prefix}/lib/libgdk-1.2.so.*
+%{prefix}/share/themes/Default
+%{prefix}/share/locale/*/*/*
  
 
 %files devel
