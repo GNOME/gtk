@@ -955,16 +955,26 @@ static void
 gtk_spin_button_grab_notify (GtkWidget *widget,
 			     gboolean   was_grabbed)
 {
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
+
   if (!was_grabbed)
-    gtk_spin_button_stop_spinning (GTK_SPIN_BUTTON (widget));
+    {
+      gtk_spin_button_stop_spinning (spin);
+      spin_button_redraw (spin);
+    }
 }
 
 static void
 gtk_spin_button_state_changed (GtkWidget    *widget,
 			       GtkStateType  previous_state)
 {
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
+
   if (!GTK_WIDGET_IS_SENSITIVE (widget))
-    gtk_spin_button_stop_spinning (GTK_SPIN_BUTTON (widget));    
+    {
+      gtk_spin_button_stop_spinning (spin);    
+      spin_button_redraw (spin);
+    }
 }
 
 static gint
@@ -1006,6 +1016,9 @@ gtk_spin_button_stop_spinning (GtkSpinButton *spin)
   spin->timer = 0;
   spin->timer_step = spin->adjustment->step_increment;
   spin->timer_calls = 0;
+
+  spin->click_child = NO_ARROW;
+  spin->button = 0;
 }
 
 static void
@@ -1084,7 +1097,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
 
   if (event->button == spin->button)
     {
-      guint click_child;
+      int click_child = spin->click_child;
 
       gtk_spin_button_stop_spinning (spin);
 
@@ -1094,7 +1107,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
 	      event->y <= widget->requisition.height &&
 	      event->x <= arrow_size + 2 * widget->style->xthickness)
 	    {
-	      if (spin->click_child == GTK_ARROW_UP &&
+	      if (click_child == GTK_ARROW_UP &&
 		  event->y <= widget->requisition.height / 2)
 		{
 		  gdouble diff;
@@ -1103,7 +1116,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
 		  if (diff > EPSILON)
 		    gtk_spin_button_real_spin (spin, diff);
 		}
-	      else if (spin->click_child == GTK_ARROW_DOWN &&
+	      else if (click_child == GTK_ARROW_DOWN &&
 		       event->y > widget->requisition.height / 2)
 		{
 		  gdouble diff;
@@ -1114,9 +1127,6 @@ gtk_spin_button_button_release (GtkWidget      *widget,
 		}
 	    }
 	}		  
-      click_child = spin->click_child;
-      spin->click_child = NO_ARROW;
-      spin->button = 0;
       spin_button_redraw (spin);
 
       return TRUE;

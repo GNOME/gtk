@@ -118,6 +118,10 @@ static gint gtk_range_enter_notify   (GtkWidget        *widget,
                                       GdkEventCrossing *event);
 static gint gtk_range_leave_notify   (GtkWidget        *widget,
                                       GdkEventCrossing *event);
+static void gtk_range_grab_notify    (GtkWidget          *widget,
+				      gboolean            was_grabbed);
+static void gtk_range_state_changed  (GtkWidget          *widget,
+				      GtkStateType        previous_state);
 static gint gtk_range_scroll_event   (GtkWidget        *widget,
                                       GdkEventScroll   *event);
 static void gtk_range_style_set      (GtkWidget        *widget,
@@ -233,6 +237,8 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->scroll_event = gtk_range_scroll_event;
   widget_class->enter_notify_event = gtk_range_enter_notify;
   widget_class->leave_notify_event = gtk_range_leave_notify;
+  widget_class->grab_notify = gtk_range_grab_notify;
+  widget_class->state_changed = gtk_range_state_changed;
   widget_class->style_set = gtk_range_style_set;
 
   class->move_slider = gtk_range_move_slider;
@@ -1311,6 +1317,19 @@ update_slider_position (GtkRange *range,
   gtk_range_internal_set_value (range, new_value);
 }
 
+static void stop_scrolling (GtkRange *range)
+{
+  range_grab_remove (range);
+  gtk_range_remove_step_timer (range);
+  /* Flush any pending discontinuous/delayed updates */
+  gtk_range_update_value (range);
+  
+  /* Just be lazy about this, if we scrolled it will all redraw anyway,
+   * so no point optimizing the button deactivate case
+   */
+  gtk_widget_queue_draw (widget);
+}
+
 static gint
 gtk_range_button_release (GtkWidget      *widget,
 			  GdkEventButton *event)
@@ -1332,23 +1351,10 @@ gtk_range_button_release (GtkWidget      *widget,
   
   if (range->layout->grab_button == event->button)
     {
-      MouseLocation grab_location;
-
-      grab_location = range->layout->grab_location;
-
-      range_grab_remove (range);
-      gtk_range_remove_step_timer (range);
-      
-      if (grab_location == MOUSE_SLIDER)
+      if (range->layout->grab_location == MOUSE_SLIDER)
         update_slider_position (range, range->layout->mouse_x, range->layout->mouse_y);
 
-      /* Flush any pending discontinuous/delayed updates */
-      gtk_range_update_value (range);
-      
-      /* Just be lazy about this, if we scrolled it will all redraw anyway,
-       * so no point optimizing the button deactivate case
-       */
-      gtk_widget_queue_draw (widget);
+      stop_scrolling (range);
       
       return TRUE;
     }
@@ -1438,6 +1444,22 @@ gtk_range_leave_notify (GtkWidget        *widget,
     gtk_widget_queue_draw (widget);
   
   return TRUE;
+}
+
+static void
+gtk_range_grab_notify (GtkWidget *widget,
+		       gboolean   was_grabbed)
+{
+  if (!was_grabbed)
+    stop_scrolling (GTK_RANGE (widget));
+}
+
+static void
+gtk_range_state_changed (GtkWidget    *widget,
+			 GtkStateType  previous_state)
+{
+  if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
+    stop_scrolling (GTK_RANGE (widget));
 }
 
 static void

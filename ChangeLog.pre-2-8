@@ -1,5 +1,29 @@
 2003-03-29  Matthias Clasen  <maclas@gmx.de>
 
+        Fixes for bug #56248:
+	
+	* gtk/gtknotebook.c (stop_scrolling): New function to remove the
+	timer and queue a redraw. 
+	(gtk_notebook_grab_notify): 
+	(gtk_notebook_state_changed): New functions to call stop_scrolling() 
+	if necessary.	
+	(gtk_notebook_button_release): Use stop_scrolling().
+	(gtk_notebook_draw_arrow): Fix drawing of insensitive arrows.
+
+	* gtk/gtkrange.c (stop_scrolling): New function to remove the
+	grab, remove the timer and queue a redraw.
+	(gtk_range_grab_notify): 
+	(gtk_range_state_changed): New functions to call stop_scrolling() 
+	if necessary.	
+	(gtk_range_button_release): Use stop_scrolling().
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_grab_notify): 
+	(gtk_spin_button_state_changed): Redraw after stop_spinning.
+	(gtk_spin_button_stop_spinning): Reset click_child to correct the
+	drawing of the arrows.
+	(gtk_spin_button_button_release): Use a local copy of click_child,
+	since stop_spinning() resets it.
+
 	* gtk/gtknotebook.c (gtk_notebook_class_init): Add C-A-PgUp and
 	C-A-PgDown as alternatives to the A-less variants. (This slipped
 	in accidentally some time ago).  (#97860)

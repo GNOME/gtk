@@ -158,6 +158,10 @@ static gint gtk_notebook_motion_notify       (GtkWidget        *widget,
 					      GdkEventMotion   *event);
 static gint gtk_notebook_focus_in            (GtkWidget        *widget,
 					      GdkEventFocus    *event);
+static void gtk_notebook_grab_notify         (GtkWidget          *widget,
+					      gboolean            was_grabbed);
+static void gtk_notebook_state_changed       (GtkWidget          *widget,
+					      GtkStateType        previous_state);
 static void gtk_notebook_draw_focus          (GtkWidget        *widget);
 static gint gtk_notebook_focus               (GtkWidget        *widget,
 					      GtkDirectionType  direction);
@@ -348,6 +352,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->enter_notify_event = gtk_notebook_enter_notify;
   widget_class->leave_notify_event = gtk_notebook_leave_notify;
   widget_class->motion_notify_event = gtk_notebook_motion_notify;
+  widget_class->grab_notify = gtk_notebook_grab_notify;
+  widget_class->state_changed = gtk_notebook_state_changed;
   widget_class->focus_in_event = gtk_notebook_focus_in;
   widget_class->focus = gtk_notebook_focus;
   
@@ -1664,6 +1670,20 @@ gtk_notebook_button_press (GtkWidget      *widget,
   return TRUE;
 }
 
+static void 
+stop_scrolling (GtkNotebook *notebook)
+{
+  if (notebook->timer)
+    {
+      gtk_timeout_remove (notebook->timer);
+      notebook->timer = 0;
+      notebook->need_timer = FALSE;
+    }
+  notebook->click_child = 0;
+  notebook->button = 0;
+  gtk_notebook_redraw_arrows (notebook);
+}
+
 static gint
 gtk_notebook_button_release (GtkWidget      *widget,
 			     GdkEventButton *event)
@@ -1680,18 +1700,7 @@ gtk_notebook_button_release (GtkWidget      *widget,
 
   if (event->button == notebook->button)
     {
-      guint click_child;
-
-      if (notebook->timer)
-	{
-	  g_source_remove (notebook->timer);
-	  notebook->timer = 0;
-	  notebook->need_timer = FALSE;
-	}
-      click_child = notebook->click_child;
-      notebook->click_child = 0;
-      notebook->button = 0;
-      gtk_notebook_redraw_arrows (notebook);
+      stop_scrolling (notebook);
 
       return TRUE;
     }
@@ -1773,6 +1782,22 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
     }
   
   return TRUE;
+}
+
+static void
+gtk_notebook_grab_notify (GtkWidget *widget,
+			  gboolean   was_grabbed)
+{
+  if (!was_grabbed)
+    stop_scrolling (GTK_NOTEBOOK (widget));
+}
+
+static void
+gtk_notebook_state_changed (GtkWidget    *widget,
+			    GtkStateType  previous_state)
+{
+  if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
+    stop_scrolling (GTK_NOTEBOOK (widget));
 }
 
 static gint
@@ -2808,7 +2833,7 @@ gtk_notebook_draw_arrow (GtkNotebook *notebook,
             state_type = GTK_STATE_PRELIGHT;
         }
       else
-        state_type = GTK_STATE_NORMAL;
+        state_type = GTK_WIDGET_STATE (widget);
 
       if (notebook->click_child == arrow)
         shadow_type = GTK_SHADOW_IN;
@@ -2830,7 +2855,7 @@ gtk_notebook_draw_arrow (GtkNotebook *notebook,
 	    arrow = GTK_ARROW_UP;
 
 	  gtk_paint_arrow (widget->style, widget->window, state_type, 
-			   shadow_type, NULL, GTK_WIDGET(notebook), "notebook",
+			   shadow_type, NULL, widget, "notebook",
 			   arrow, TRUE, 
 			   arrow_rect.x, arrow_rect.y, ARROW_SIZE, ARROW_SIZE);
 	}
@@ -2849,7 +2874,7 @@ gtk_notebook_draw_arrow (GtkNotebook *notebook,
 	    arrow = GTK_ARROW_DOWN;
 
 	   gtk_paint_arrow (widget->style, widget->window, state_type, 
-			    shadow_type, NULL, GTK_WIDGET(notebook), "notebook",
+			    shadow_type, NULL, widget, "notebook",
 			    arrow, TRUE, arrow_rect.x + ARROW_SIZE + ARROW_SPACING,
 			    arrow_rect.y, ARROW_SIZE, ARROW_SIZE);
 	}
