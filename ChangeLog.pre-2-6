@@ -1,5 +1,19 @@
 2001-10-22  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextiter.c (_gtk_text_iter_forward_indexable_segment):
+	add temporary code to dump btree contents on assertion failure
+	described in #62656
+	
+	* gtk/gtktextbtree.c (ensure_end_iter_segment): add some
+	assertions that we're getting the right end iter segment
+
+	* gtk/gtktextiter.c (_gtk_text_iter_forward_indexable_segment):
+	verify that we aren't on the end iterator after moving 
+	forward one segment - fixes return value in an obscure case. 
+	Also, some trivial code cleanup/rearranging.
+	
+2001-10-22  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextlayout.h: add a #error unless you define
 	GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API, so people don't use this accidentally
 

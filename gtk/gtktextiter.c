@@ -1976,7 +1976,7 @@ _gtk_text_iter_forward_indexable_segment (GtkTextIter *iter)
 
       check_invariants (iter);
 
-      return TRUE;
+      return !gtk_text_iter_is_end (iter);
     }
   else
     {
@@ -1995,21 +1995,20 @@ _gtk_text_iter_forward_indexable_segment (GtkTextIter *iter)
 
           check_invariants (iter);
 
-          if (gtk_text_iter_is_end (iter))
-            return FALSE;
-          else
-            return TRUE;
+          return !gtk_text_iter_is_end (iter);
         }
       else
         {
           /* End of buffer */
-
-          g_assert (!_gtk_text_line_is_last (real->line, real->tree));
-          g_assert (_gtk_text_line_contains_end_iter (real->line, real->tree));
-          g_assert (gtk_text_iter_is_end (iter));
           
           check_invariants (iter);
 
+          g_assert (!_gtk_text_line_is_last (real->line, real->tree));
+          g_assert (_gtk_text_line_contains_end_iter (real->line, real->tree));
+          if (!gtk_text_iter_is_end (iter))
+            _gtk_text_btree_spew (_gtk_text_iter_get_btree (iter));              
+          g_assert (gtk_text_iter_is_end (iter));
+          
           return FALSE;
         }
     }

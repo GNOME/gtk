@@ -3234,6 +3234,9 @@ ensure_end_iter_segment (GtkTextBTree *tree)
       tree->end_iter_segment_char_offset = last_with_chars->char_count - 1;
       
       tree->end_iter_segment_stamp = tree->segments_changed_stamp;
+
+      g_assert (tree->end_iter_segment->type == &gtk_text_char_type);
+      g_assert (tree->end_iter_segment->body.chars[tree->end_iter_segment_byte_index] == '\n');
     }
 }
 
