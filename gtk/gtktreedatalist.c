@@ -314,9 +314,9 @@ gtk_tree_data_list_compare_func (GtkTreeModel *model,
   switch (G_TYPE_FUNDAMENTAL (type))
     {
     case G_TYPE_BOOLEAN:
-      if (g_value_get_int (&a_value) < g_value_get_int (&b_value))
+      if (g_value_get_boolean (&a_value) < g_value_get_boolean (&b_value))
 	retval = -1;
-      else if (g_value_get_int (&a_value) == g_value_get_int (&b_value))
+      else if (g_value_get_boolean (&a_value) == g_value_get_boolean (&b_value))
 	retval = 0;
       else
 	retval = 1;
