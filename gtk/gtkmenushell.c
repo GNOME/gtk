@@ -1070,7 +1070,10 @@ gtk_menu_shell_select_submenu_first (GtkMenuShell     *menu_shell)
   menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item); 
   
   if (menu_item->submenu)
-    gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu), TRUE);
+    {
+      _gtk_menu_item_popup_submenu (menu_item);
+      gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu), TRUE);
+    }
 }
 
 static void
@@ -1190,13 +1193,16 @@ gtk_real_menu_shell_activate_current (GtkMenuShell      *menu_shell,
 				      gboolean           force_hide)
 {
   if (menu_shell->active_menu_item &&
-      _gtk_menu_item_is_selectable (menu_shell->active_menu_item) &&
-      GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL)
-    {
+      _gtk_menu_item_is_selectable (menu_shell->active_menu_item))
+  {
+   
+    if (GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL)
       gtk_menu_shell_activate_item (menu_shell,
 				    menu_shell->active_menu_item,
 				    force_hide);
-    }
+    else
+      _gtk_menu_item_popup_submenu (menu_shell->active_menu_item);
+  }
 }
 
 static void

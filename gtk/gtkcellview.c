@@ -76,9 +76,10 @@ static void        gtk_cell_view_size_allocate            (GtkWidget        *wid
                                                            GtkAllocation    *allocation);
 static gboolean    gtk_cell_view_expose                   (GtkWidget        *widget,
                                                            GdkEventExpose   *event);
-static void        gtk_cell_view_set_valuesv              (GtkCellView      *cellview,
-                                                           GtkCellRenderer  *renderer,
-                                                           va_list           args);
+static void        gtk_cell_view_set_value                (GtkCellView     *cell_view,
+                                                           GtkCellRenderer *renderer,
+                                                           gchar           *property,
+                                                           GValue          *value);
 static GtkCellViewCellInfo *gtk_cell_view_get_cell_info   (GtkCellView      *cellview,
                                                            GtkCellRenderer  *renderer);
 static void        gtk_cell_view_set_cell_data            (GtkCellView      *cell_view);
@@ -795,7 +796,7 @@ gtk_cell_view_new_with_text (const gchar *text)
 
   g_value_init (&value, G_TYPE_STRING);
   g_value_set_string (&value, text);
-  gtk_cell_view_set_values (cellview, renderer, "text", &value, NULL);
+  gtk_cell_view_set_value (cellview, renderer, "text", &value);
   g_value_unset (&value);
 
   return GTK_WIDGET (cellview);
@@ -829,7 +830,7 @@ gtk_cell_view_new_with_markup (const gchar *markup)
 
   g_value_init (&value, G_TYPE_STRING);
   g_value_set_string (&value, markup);
-  gtk_cell_view_set_values (cellview, renderer, "markup", &value, NULL);
+  gtk_cell_view_set_value (cellview, renderer, "markup", &value);
   g_value_unset (&value);
 
   return GTK_WIDGET (cellview);
@@ -861,7 +862,7 @@ gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
 
   g_value_init (&value, GDK_TYPE_PIXBUF);
   g_value_set_object (&value, pixbuf);
-  gtk_cell_view_set_values (cellview, renderer, "pixbuf", &value, NULL);
+  gtk_cell_view_set_value (cellview, renderer, "pixbuf", &value);
   g_value_unset (&value);
 
   return GTK_WIDGET (cellview);
@@ -879,7 +880,7 @@ gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
  *
  * Since: 2.6
  */
-void
+static void
 gtk_cell_view_set_value (GtkCellView     *cell_view,
                          GtkCellRenderer *renderer,
                          gchar           *property,
@@ -893,52 +894,6 @@ gtk_cell_view_set_value (GtkCellView     *cell_view,
   /* force resize and redraw */
   gtk_widget_queue_resize (GTK_WIDGET (cell_view));
   gtk_widget_queue_draw (GTK_WIDGET (cell_view));
-}
-
-static void
-gtk_cell_view_set_valuesv (GtkCellView     *cell_view,
-                           GtkCellRenderer *renderer,
-                           va_list          args)
-{
-  gchar *attribute;
-  GValue *value;
-
-  attribute = va_arg (args, gchar *);
-
-  while (attribute)
-    {
-      value = va_arg (args, GValue *);
-      gtk_cell_view_set_value (cell_view, renderer, attribute, value);
-      attribute = va_arg (args, gchar *);
-    }
-}
-
-/**
- * gtk_cell_view_set_values:
- * @cell_view: a #GtkCellView widget
- * @renderer: one of the renderers of @cell_view
- * @Varargs: a list of pairs of property names and #GValue<!-- -->s,
- *   finished by %NULL
- * 
- * Sets multiple properties of a cell renderer of @cell_view, and
- * makes sure the display of @cell_view is updated.
- *
- * Since: 2.6
- */
-void
-gtk_cell_view_set_values (GtkCellView     *cell_view,
-                          GtkCellRenderer *renderer,
-                          ...)
-{
-  va_list args;
-
-  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
-  g_return_if_fail (gtk_cell_view_get_cell_info (cell_view, renderer));
-
-  va_start (args, renderer);
-  gtk_cell_view_set_valuesv (cell_view, renderer, args);
-  va_end (args);
 }
 
 /**

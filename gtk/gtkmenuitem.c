@@ -80,7 +80,6 @@ static gboolean gtk_menu_item_mnemonic_activate     (GtkWidget   *widget,
 						     gboolean     group_cycling);
 
 static gint gtk_menu_item_select_timeout (gpointer          data);
-static void gtk_menu_item_popup_submenu  (gpointer     data);
 static void gtk_menu_item_position_menu  (GtkMenu          *menu,
 					  gint             *x,
 					  gint             *y,
@@ -199,7 +198,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
     g_signal_new ("toggle_size_allocate",
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkMenuItemClass, toggle_size_allocate),
+ 		  G_STRUCT_OFFSET (GtkMenuItemClass, toggle_size_allocate),
 		  NULL, NULL,
 		  _gtk_marshal_NONE__INT,
 		  G_TYPE_NONE, 1,
@@ -718,7 +717,6 @@ gtk_menu_item_paint (GtkWidget    *widget,
   
       if (menu_item->submenu && menu_item->show_submenu_indicator)
 	{
-	  GtkRequisition child_requisition;
 	  gint arrow_x, arrow_y;
 	  gint arrow_size;
 	  gint arrow_extent;
@@ -728,7 +726,6 @@ gtk_menu_item_paint (GtkWidget    *widget,
 	  PangoContext *context;
 	  PangoFontMetrics *metrics;
 	  gint ascent, descent;
-	  PangoLayout *layout;
 
 	  direction = gtk_widget_get_direction (widget);
       
@@ -871,7 +868,7 @@ gtk_real_menu_item_select (GtkItem *item)
 	    gdk_event_free (event);
 	}
       else
-	gtk_menu_item_popup_submenu (menu_item);
+	_gtk_menu_item_popup_submenu (GTK_WIDGET (menu_item));
     }
   
   gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_PRELIGHT);
@@ -944,7 +941,7 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 	  _gtk_menu_shell_activate (menu_shell);
 
 	  gtk_menu_shell_select_item (GTK_MENU_SHELL (widget->parent), widget); 
-	  gtk_menu_item_popup_submenu (widget); 
+	  _gtk_menu_item_popup_submenu (widget); 
 
 	  gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu), TRUE);
 	  submenu = GTK_MENU_SHELL (menu_item->submenu);
@@ -984,7 +981,7 @@ gtk_menu_item_select_timeout (gpointer data)
   if ((GTK_IS_MENU_SHELL (parent) && GTK_MENU_SHELL (parent)->active) || 
       (GTK_IS_MENU (parent) && GTK_MENU (parent)->torn_off))
     {
-      gtk_menu_item_popup_submenu (data);
+      _gtk_menu_item_popup_submenu (GTK_WIDGET (menu_item));
       if (menu_item->timer_from_keypress && menu_item->submenu)
 	GTK_MENU_SHELL (menu_item->submenu)->ignore_enter = TRUE;
     }
@@ -994,13 +991,11 @@ gtk_menu_item_select_timeout (gpointer data)
   return FALSE;  
 }
 
-static void
-gtk_menu_item_popup_submenu (gpointer data)
+void
+_gtk_menu_item_popup_submenu (GtkWidget *widget)
 {
-  GtkWidget *widget;
   GtkMenuItem *menu_item;
 
-  widget = GTK_WIDGET (data);
   menu_item = GTK_MENU_ITEM (widget);
 
   if (menu_item->timer)

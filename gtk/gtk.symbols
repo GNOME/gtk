@@ -288,8 +288,6 @@ gtk_cell_view_new_with_text
 gtk_cell_view_set_background_color
 gtk_cell_view_set_displayed_row
 gtk_cell_view_set_model
-gtk_cell_view_set_value
-gtk_cell_view_set_values
 gtk_check_button_get_type G_GNUC_CONST
 gtk_check_button_new
 gtk_check_button_new_with_label

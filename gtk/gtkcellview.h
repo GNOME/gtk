@@ -56,15 +56,6 @@ GtkWidget        *gtk_cell_view_new_with_text          (const gchar     *text);
 GtkWidget        *gtk_cell_view_new_with_markup        (const gchar     *markup);
 GtkWidget        *gtk_cell_view_new_with_pixbuf        (GdkPixbuf       *pixbuf);
 
-
-void              gtk_cell_view_set_value               (GtkCellView     *cell_view,
-                                                         GtkCellRenderer *renderer,
-                                                         gchar           *property,
-                                                         GValue          *value);
-void              gtk_cell_view_set_values              (GtkCellView     *cell_view,
-                                                         GtkCellRenderer *renderer,
-                                                         ...);
-
 void              gtk_cell_view_set_model               (GtkCellView     *cell_view,
                                                          GtkTreeModel    *model);
 void              gtk_cell_view_set_displayed_row       (GtkCellView     *cell_view,

@@ -1,3 +1,15 @@
+2004-12-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_select_submenu_first) 
+	(gtk_real_menu_shell_activate_current): Use 
+	_gtk_menu_item_popup_submenu() to make keynav into submenus work
+	instantaneously, independent of the popup delay.  (#161140)
+
+	* gtk/gtkmenuitem.[hc]: _-prefix gtk_menu_item_popup_submenu() and
+	make it non-static.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_paint): Remove unused variables.
+
 2004-12-15  James M. Cape  <jcape@ignore-your.tv>
 
 	* gtk/gtkfilechooserbutton.c (struct _GtkFileChooserButtonPrivate)
