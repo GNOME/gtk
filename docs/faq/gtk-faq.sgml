@@ -1920,7 +1920,7 @@ drawing queue to be processed using something like:</para>
 
 
 <programlisting role="C">
-while (gtk_main_iteration());
+while (g_main_iteration(FALSE));
 </programlisting>
 
 <para>inside you're function that changes the widget.</para>
