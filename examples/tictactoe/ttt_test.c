@@ -32,6 +32,7 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), ttt);
   gtk_widget_show (ttt);
 
+  /* And attach to its "tictactoe" signal */
   g_signal_connect (G_OBJECT (ttt), "tictactoe",
 		    G_CALLBACK (win), NULL);
 

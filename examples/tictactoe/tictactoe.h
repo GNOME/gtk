@@ -1,4 +1,3 @@
-
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -21,17 +20,18 @@
 #define __TICTACTOE_H__
 
 
-#include <gdk/gdk.h>
-#include <gtk/gtkvbox.h>
+#include <glib.h>
+#include <glib-object.h>
+#include <gtk/gtktable.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
-#define TICTACTOE(obj)          GTK_CHECK_CAST (obj, tictactoe_get_type (), Tictactoe)
-#define TICTACTOE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, tictactoe_get_type (), TictactoeClass)
-#define IS_TICTACTOE(obj)       GTK_CHECK_TYPE (obj, tictactoe_get_type ())
+#define TICTACTOE_TYPE            (tictactoe_get_type ())
+#define TICTACTOE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), TICTACTOE_TYPE, Tictactoe))
+#define TICTACTOE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), TICTACTOE_TYPE, TictactoeClass))
+#define IS_TICTACTOE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TICTACTOE_TYPE))
+#define IS_TICTACTOE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TICTACTOE_TYPE))
 
 
 typedef struct _Tictactoe       Tictactoe;
@@ -39,25 +39,23 @@ typedef struct _TictactoeClass  TictactoeClass;
 
 struct _Tictactoe
 {
-  GtkVBox vbox;
+  GtkTable table;
   
   GtkWidget *buttons[3][3];
 };
 
 struct _TictactoeClass
 {
-  GtkVBoxClass parent_class;
+  GtkTableClass parent_class;
 
   void (* tictactoe) (Tictactoe *ttt);
 };
 
-GtkType        tictactoe_get_type        (void);
+GType          tictactoe_get_type        (void);
 GtkWidget*     tictactoe_new             (void);
 void	       tictactoe_clear           (Tictactoe *ttt);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __TICTACTOE_H__ */
 

@@ -17,9 +17,9 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include "gtk/gtksignal.h"
-#include "gtk/gtktable.h"
-#include "gtk/gtktogglebutton.h"
+#include <gtk/gtksignal.h>
+#include <gtk/gtktable.h>
+#include <gtk/gtktogglebutton.h>
 #include "tictactoe.h"
 
 enum {
@@ -34,7 +34,7 @@ static void tictactoe_toggle              (GtkWidget *widget, Tictactoe *ttt);
 static gint tictactoe_signals[LAST_SIGNAL] = { 0 };
 
 GType
-tictactoe_get_type ()
+tictactoe_get_type (void)
 {
   static GType ttt_type = 0;
 
@@ -43,57 +43,50 @@ tictactoe_get_type ()
       static const GTypeInfo ttt_info =
       {
 	sizeof (TictactoeClass),
-	NULL,
-        NULL,
+	NULL, /* base_init */
+        NULL, /* base_finalize */
 	(GClassInitFunc) tictactoe_class_init,
-        NULL,
-	NULL,
+        NULL, /* class_finalize */
+	NULL, /* class_data */
         sizeof (Tictactoe),
 	0,
 	(GInstanceInitFunc) tictactoe_init,
       };
 
-      ttt_type = g_type_register_static (GTK_TYPE_VBOX, "Tictactoe", &ttt_info, 0);
+      ttt_type = g_type_register_static (GTK_TYPE_TABLE, "Tictactoe", &ttt_info, 0);
     }
 
   return ttt_type;
 }
 
 static void
-tictactoe_class_init (TictactoeClass *class)
+tictactoe_class_init (TictactoeClass *klass)
 {
-  GtkObjectClass *object_class;
-
-  object_class = (GtkObjectClass*) class;
   
   tictactoe_signals[TICTACTOE_SIGNAL] = g_signal_new ("tictactoe",
-					 G_TYPE_FROM_CLASS (object_class),
-	                                 G_SIGNAL_RUN_FIRST,
-	                                 0,
+					 G_TYPE_FROM_CLASS (klass),
+	                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+	                                 G_STRUCT_OFFSET (TictactoeClass, tictactoe),
                                          NULL, 
                                          NULL,                
 					 g_cclosure_marshal_VOID__VOID,
-                                         G_TYPE_NONE, 0, NULL);
+                                         G_TYPE_NONE, 0);
 
 
-  class->tictactoe = NULL;
 }
 
 static void
 tictactoe_init (Tictactoe *ttt)
 {
-  GtkWidget *table;
   gint i,j;
   
-  table = gtk_table_new (3, 3, TRUE);
-  gtk_container_add (GTK_CONTAINER (ttt), table);
-  gtk_widget_show (table);
+  gtk_table_resize (GTK_TABLE (ttt), 3, 3);
+  gtk_table_set_homogeneous (GTK_TABLE (ttt), TRUE);
 
-  for (i = 0; i < 3; i++)
-    for (j = 0; j < 3; j++)
-      {
+  for (i=0;i<3; i++)
+    for (j=0;j<3; j++)      {
 	ttt->buttons[i][j] = gtk_toggle_button_new ();
-	gtk_table_attach_defaults (GTK_TABLE (table), ttt->buttons[i][j], 
+	gtk_table_attach_defaults (GTK_TABLE (ttt), ttt->buttons[i][j], 
 				   i, i+1, j, j+1);
 	g_signal_connect (G_OBJECT (ttt->buttons[i][j]), "toggled",
 			  G_CALLBACK (tictactoe_toggle), (gpointer) ttt);
@@ -113,15 +106,17 @@ tictactoe_clear (Tictactoe *ttt)
 {
   int i,j;
 
-  for (i = 0; i < 3; i++)
-    for (j = 0; j < 3; j++)
+  for (i = 0; i<3; i++)
+    for (j = 0; j<3; j++)
       {
-	g_signal_handlers_block_by_func (G_OBJECT (ttt->buttons[i][j]), 
-                                         NULL, ttt);
+	g_signal_handlers_block_matched (G_OBJECT (ttt->buttons[i][j]), 
+                                         G_SIGNAL_MATCH_DATA,
+                                         0, 0, NULL, NULL, ttt);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ttt->buttons[i][j]),
 				      FALSE);
-	g_signal_handlers_unblock_by_func (G_OBJECT (ttt->buttons[i][j]), 
-                                           NULL, ttt);
+	g_signal_handlers_unblock_matched (G_OBJECT (ttt->buttons[i][j]),
+                                           G_SIGNAL_MATCH_DATA,
+                                           0, 0, NULL, NULL, ttt);
       }
 }
 
@@ -139,12 +134,12 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
 
   int success, found;
 
-  for (k = 0; k < 8; k++)
+  for (k = 0; k<8; k++)
     {
       success = TRUE;
       found = FALSE;
 
-      for (i = 0; i < 3; i++)
+      for (i = 0; i<3; i++)
 	{
 	  success = success && 
 	    GTK_TOGGLE_BUTTON (ttt->buttons[rwins[k][i]][cwins[k][i]])->active;

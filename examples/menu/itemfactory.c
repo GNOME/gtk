@@ -30,9 +30,9 @@ static void print_selected(gpointer   callback_data,
 /* Our menu, an array of GtkItemFactoryEntry structures that defines each menu item */
 static GtkItemFactoryEntry menu_items[] = {
   { "/_File",         NULL,         NULL,           0, "<Branch>" },
-  { "/File/_New",     "<control>N", print_hello,    0, "<Item>" },
-  { "/File/_Open",    "<control>O", print_hello,    0, "<Item>" },
-  { "/File/_Save",    "<control>S", print_hello,    0, "<Item>" },
+  { "/File/_New",     "<control>N", print_hello,    0, "<StockItem>", GTK_STOCK_NEW },
+  { "/File/_Open",    "<control>O", print_hello,    0, "<StockItem>", GTK_STOCK_OPEN },
+  { "/File/_Save",    "<control>S", print_hello,    0, "<StockItem>", GTK_STOCK_SAVE },
   { "/File/Save _As", NULL,         NULL,           0, "<Item>" },
   { "/File/sep1",     NULL,         NULL,           0, "<Separator>" },
   { "/File/_Quit",    "<CTRL>Q", gtk_main_quit, 0, "<StockItem>", GTK_STOCK_QUIT },
