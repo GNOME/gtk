@@ -1,3 +1,8 @@
+Mon, 11 Jan 1999 08:09:08 +0100 Paolo Molaro <lupus@debian.org>
+
+	* gtk/gtktypeutils.[ch]: add gtk_type_{add,remove}_creation_hook().
+	You can have a notification when a type is created.
+
 1999-01-11  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_propagate_event): added an assertement.

@@ -153,7 +153,8 @@ typedef void (*GtkSignalMarshaller) (GtkObject      *object,
 				     GtkSignalFunc   func,
 				     gpointer        func_data,
 				     GtkArg         *args);
-
+typedef gboolean (*GtkCreationHook) (GtkTypeQuery   *type_info,
+                                     gpointer        data);
 
 /* deprecated */
 typedef void (*GtkArgGetFunc)	   (GtkObject*, GtkArg*, guint);
@@ -362,7 +363,10 @@ GtkType		gtk_type_get_varargs_type	(GtkType	foreign_type);
  */
 GtkTypeQuery*	gtk_type_query			(GtkType	type);
 
-
+guint           gtk_type_add_creation_hook      (GtkCreationHook hook,
+                                                 gpointer        data,
+                                                 GDestroyNotify  destroy);
+void            gtk_type_remove_creation_hook   (guint           hook_id);
 
 
 
