@@ -1,3 +1,29 @@
+Wed Sep 10 22:25:04 2003  Kristian Rietveld  <kris@gtk.org>
+
+	The table menu patch! Turns GtkMenu into a table, so you can attach
+	menu items in numerous new ways! Be creative!
+
+	Contains some bug fixes and RTL adaptions from Matthias Clasen.
+
+	* gtk/gtkmenu.c [toplevel]: introduce ATTACH_INFO_KEY, extend
+	GtkMenuPrivate, introduce AttachInfo, add child properties enum,
+	(gtk_menu_free_private), (gtk_menu_get_private): we have to free
+	the heights array in the private struct,
+	(gtk_menu_class_init): reorder code a bit, install child properties,
+	(get_attach_info), (get_child_attach): new utility functions,
+	(gtk_menu_set_child_property), (gtk_menu_get_child_property): introduce
+	child properties, for the attach info,
+	(gtk_menu_remove): remove AttachInfo from menu item,
+	(gtk_menu_real_insert): implemented algorithm to automagically place
+	inserted menu items at the correct place in the table,
+	(gtk_menu_size_request), (gtk_menu_size_allocate),
+	(compute_child_offset): reworked/rewritten to support table menus,
+	(gtk_menu_attach): new function,
+	(find_child_containing), (gtk_menu_move_current): new functions to
+	get table menu keynav right.
+
+	* gtk/gtkmenu.h: add gtk_menu_attach() prototype.
+
 2003-09-10  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtksocket.c (gtk_socket_filter_func): Only remove 

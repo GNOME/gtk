@@ -188,6 +188,15 @@ void       gtk_menu_reorder_child         (GtkMenu             *menu,
 
 void	   gtk_menu_set_screen		  (GtkMenu	       *menu,
 					   GdkScreen	       *screen);
+
+void       gtk_menu_attach                (GtkMenu             *menu,
+                                           GtkWidget           *child,
+                                           guint                left_attach,
+                                           guint                right_attach,
+                                           guint                top_attach,
+                                           guint                bottom_attach);
+
+
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_menu_append(menu,child)	gtk_menu_shell_append  ((GtkMenuShell *)(menu),(child))
 #define gtk_menu_prepend(menu,child)    gtk_menu_shell_prepend ((GtkMenuShell *)(menu),(child))
