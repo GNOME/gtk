@@ -390,7 +390,22 @@ void	   gtk_widget_map		  (GtkWidget	       *widget);
 void	   gtk_widget_unmap		  (GtkWidget	       *widget);
 void	   gtk_widget_realize		  (GtkWidget	       *widget);
 void	   gtk_widget_unrealize		  (GtkWidget	       *widget);
+
+/* Queuing draws */
 void	   gtk_widget_queue_draw	  (GtkWidget	       *widget);
+void	   gtk_widget_queue_draw_area	  (GtkWidget	       *widget,
+					   gint                 x,
+					   gint                 y,
+					   gint                 width,
+					   gint                 height);
+void	   gtk_widget_queue_clear	  (GtkWidget	       *widget);
+void	   gtk_widget_queue_clear_area	  (GtkWidget	       *widget,
+					   gint                 x,
+					   gint                 y,
+					   gint                 width,
+					   gint                 height);
+
+
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_draw		  (GtkWidget	       *widget,
 					   GdkRectangle	       *area);

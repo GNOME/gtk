@@ -1248,11 +1248,7 @@ gtk_widget_unparent (GtkWidget *widget)
   if (widget->window &&
       GTK_WIDGET_NO_WINDOW (widget) &&
       GTK_WIDGET_DRAWABLE (widget))
-    gdk_window_clear_area (widget->window,
-			   widget->allocation.x,
-			   widget->allocation.y,
-			   widget->allocation.width,
-			   widget->allocation.height);
+    gtk_widget_queue_clear (widget);
 
   /* Reset the width and height here, to force reallocation if we
    * get added back to a new parent. This won't work if our new
@@ -1580,44 +1576,424 @@ gtk_widget_unrealize (GtkWidget *widget)
  *   results:
  *****************************************/
 
-static gint
-gtk_widget_idle_draw (gpointer data)
-{
-  while (gtk_widget_redraw_queue)
-    gtk_widget_draw (gtk_widget_redraw_queue->data, NULL);
+typedef struct _GtkDrawData GtkDrawData;
+struct _GtkDrawData {
+  GdkRectangle rect;
+  GdkWindow *window;
+};
 
-  return FALSE;
-}
+static GMemChunk   *draw_data_mem_chunk = NULL;
+static GSList      *draw_data_free_list = NULL;
+static const gchar *draw_data_key  = "gtk-draw-data";
+static guint        draw_data_key_id = 0;
 
-void
-gtk_widget_queue_draw (GtkWidget *widget)
+static gint gtk_widget_idle_draw (gpointer data);
+
+static void
+gtk_widget_queue_draw_data (GtkWidget *widget,
+			    gint       x,
+			    gint       y,
+			    gint       width,
+			    gint       height,
+			    GdkWindow *window)
 {
-  GtkWidget *parent;
+  GSList      *node;
+  GtkDrawData *data;
   
   g_return_if_fail (widget != NULL);
-  
-  if (GTK_WIDGET_DRAWABLE (widget))
+
+  if ((width != 0) && (height != 0) && GTK_WIDGET_DRAWABLE (widget))
     {
-      /* We queue the redraw if:
-       *  a) the widget is not already queued for redraw and
-       *  b) non of the widgets ancestors are queued for redraw.
-       */
-      parent = widget;
-      while (parent)
-	{
-	  if (GTK_WIDGET_REDRAW_PENDING (parent))
-	    return;
-	  parent = parent->parent;
-	}
+      if (!draw_data_key_id)
+	draw_data_key_id = g_quark_from_static_string (draw_data_key);
       
+      if (draw_data_free_list)
+	{
+	  node = draw_data_free_list;
+	  data = node->data;
+	  draw_data_free_list = draw_data_free_list->next;
+	}
+      else
+	{
+	  if (!draw_data_mem_chunk)
+	    draw_data_mem_chunk = g_mem_chunk_create (GtkDrawData, 64,
+						      G_ALLOC_ONLY);
+	  data = g_chunk_new (GtkDrawData, draw_data_mem_chunk);
+	  node = g_slist_alloc();
+	  node->data = data;
+	}
+
+      data->rect.x = x;
+      data->rect.y = y;
+
+      if ((width < 0) || (height < 0))
+	{
+	  data->rect.width = 0;
+	  data->rect.height = 0;
+	}
+      else
+	{
+	  data->rect.width = width;
+	  data->rect.height = height;
+	}
+      data->window = window;
+      
+      if ((width < 0) || (height < 0))
+	{
+	  GSList *draw_data_list = 
+	    gtk_object_get_data_by_id (GTK_OBJECT (widget),
+				       draw_data_key_id);
+	  if (draw_data_list)
+	    draw_data_free_list = g_slist_concat (draw_data_list,
+						  draw_data_free_list);
+	  node->next = NULL;
+	}
+      else
+	node->next = gtk_object_get_data_by_id (GTK_OBJECT (widget),
+						draw_data_key_id);
+
+      gtk_object_set_data_by_id (GTK_OBJECT (widget), draw_data_key_id, node);
+  
       GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_PENDING);
       if (gtk_widget_redraw_queue == NULL)
 	gtk_idle_add_priority (GTK_PRIORITY_INTERNAL,
 			       gtk_widget_idle_draw,
 			       NULL);
-
+      
       gtk_widget_redraw_queue = g_slist_prepend (gtk_widget_redraw_queue, widget);
     }
+}
+
+void	   
+gtk_widget_queue_draw_area (GtkWidget *widget,
+			    gint       x,
+			    gint       y,
+			    gint       width,
+			    gint       height)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_widget_queue_draw_data (widget, x, y, width, height, NULL);
+}
+
+void	   
+gtk_widget_queue_draw (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_widget_queue_draw_data (widget, 0, 0, -1, -1, NULL);
+}
+
+void	   
+gtk_widget_queue_clear_area (GtkWidget *widget,
+			     gint       x,
+			     gint       y,
+			     gint       width,
+			     gint       height)
+{
+  GtkWidget *parent;
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  /* Find the correct widget */
+
+  if (GTK_WIDGET_NO_WINDOW (widget))
+    {
+      parent = widget;
+      while (parent && GTK_WIDGET_NO_WINDOW (parent))
+	parent = parent->parent;
+      
+      if (parent)
+	gtk_widget_queue_draw_data (parent, x, y, width, height, widget->window);
+    }
+  else
+    {
+      gint wx, wy, wwidth, wheight;
+      /* Translate widget relative to window-relative */
+
+      gdk_window_get_position (widget->window, &wx, &wy);
+      x -= wx - widget->allocation.x;
+      y -= wy - widget->allocation.y;
+
+      gdk_window_get_size (widget->window, &wwidth, &wheight);
+
+      if (x < 0)
+	{
+	  width += x;  x = 0;
+	}
+      if (y < 0)
+	{
+	  height += y; y = 0;
+	}
+      if (x + width > wwidth)
+	width = wwidth - x;
+      if (y + height > wheight)
+	height = wheight - y;
+    }
+}
+
+void	   
+gtk_widget_queue_clear	  (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (GTK_WIDGET_NO_WINDOW (widget))
+    gtk_widget_queue_clear_area (widget, widget->allocation.x,
+				 widget->allocation.y,
+				 widget->allocation.width, 
+				 widget->allocation.height);
+  else
+    gtk_widget_queue_clear_area (widget, 0, 0, 
+				 widget->allocation.width, 
+				 widget->allocation.height);
+}
+
+static gint
+gtk_widget_draw_data_combine (GtkDrawData *parent, GtkDrawData *child)
+{
+  gint parent_x2, parent_y2;
+  gint child_x2, child_y2;
+
+  /* Check for intersection */
+
+  parent_x2 = parent->rect.x + parent->rect.width;
+  child_x2 = child->rect.x + child->rect.width;
+  parent_y2 = parent->rect.y + parent->rect.height;
+  child_y2 = child->rect.y + child->rect.height;
+
+  if ((child->rect.x > parent_x2) || (parent->rect.x > child_x2) ||
+      (child->rect.y > parent_y2) || (parent->rect.y > child_y2))
+    return FALSE;
+  else
+    {
+      parent->rect.x = MIN (parent->rect.x, child->rect.x);
+      parent->rect.y = MIN (parent->rect.y, child->rect.y);
+      parent->rect.width = MAX (parent_x2, child_x2) - parent->rect.x;
+      parent->rect.height = MAX (parent_y2, child_y2) - parent->rect.y;
+    }
+
+  return TRUE;
+}
+
+/* Take a rectangle with respect to window, and translate it
+ * to coordinates relative to widget's allocation, clipping through
+ * intermediate windows.
+ */
+static void
+gtk_widget_clip_rect (GtkWidget *widget,
+		      GdkWindow *window,
+		      GdkRectangle *rect)
+{
+  gint x,y, width, height;
+
+  while (window != widget->window)
+    {
+      gdk_window_get_position (window, &x, &y);
+      rect->x += x;
+      rect->y += y;
+      
+      window = gdk_window_get_parent (window);
+      
+      gdk_window_get_size (window, &width, &height);
+      
+      if (rect->x < 0)
+	{
+	  rect->width += rect->x;
+	  rect->x = 0;
+	}
+      if (rect->y < 0)
+	{
+	  rect->height += rect->y;
+	  rect->y = 0;
+	}
+      if (rect->x + rect->width > width)
+	rect->width = width - rect->x;
+      if (rect->y + rect->height > height)
+	rect->height = height - rect->y;
+    }
+
+  if (!GTK_WIDGET_NO_WINDOW (widget))
+    {
+      if (gdk_window_get_toplevel (window) != window)
+	{
+	  gdk_window_get_position (window, &x, &y);
+	  rect->x += x - widget->allocation.x;
+	  rect->y += y - widget->allocation.y;
+	}
+    }
+}
+
+static gint
+gtk_widget_idle_draw (gpointer data)
+{
+  GSList *widget_list;
+  GSList *draw_data_list;
+  GtkWidget *widget;
+  
+  /* Translate all draw requests to be allocation-relative */
+  widget_list = gtk_widget_redraw_queue;
+  while (widget_list)
+    {
+      widget = widget_list->data;
+      draw_data_list = gtk_object_get_data_by_id (GTK_OBJECT (widget),
+						  draw_data_key_id);
+
+      while (draw_data_list)
+	{
+	  GtkDrawData *data = draw_data_list->data;
+
+	  if (data->window)
+	    {
+	      gtk_widget_clip_rect (widget, data->window, &data->rect);
+	      data->window = NULL;
+	    }
+	  else
+	    {
+	      if ((data->rect.width == 0) && (data->rect.height == 0))
+		{
+		  if (GTK_WIDGET_NO_WINDOW (widget))
+		    {
+		      data->rect.x = widget->allocation.x;
+		      data->rect.y = widget->allocation.y;
+		    }
+		  else
+		    {
+		      data->rect.x = 0;
+		      data->rect.y = 0;
+		    }
+		  data->rect.width = widget->allocation.width;
+		  data->rect.height = widget->allocation.height;
+		}
+	    }
+
+	  draw_data_list = draw_data_list->next;
+	}
+
+      widget_list = widget_list->next;
+    }
+
+  /* Now, coalesce redraws
+   */
+  widget_list = gtk_widget_redraw_queue;
+  while (widget_list)
+    {
+      GSList *prev_node = NULL;
+      widget = widget_list->data;
+      draw_data_list = gtk_object_get_data_by_id (GTK_OBJECT (widget),
+						  draw_data_key_id);
+
+      while (draw_data_list)
+	{
+	  gint tmp_x, tmp_y;
+	  GtkDrawData *data = draw_data_list->data;
+	  GSList *parent_list = draw_data_list->next;
+	  GtkWidget *parent;
+	  GdkWindow *window;
+
+	  tmp_x = data->rect.x;
+	  tmp_y = data->rect.y;
+	  
+	  parent = widget;
+	  while (parent)
+	    {
+	      while (parent_list)
+		{
+		  if (gtk_widget_draw_data_combine (parent_list->data, data))
+		    {
+		      GSList *tmp;
+		      if (prev_node)
+			prev_node->next = draw_data_list->next;
+		      else
+			gtk_object_set_data_by_id (GTK_OBJECT (widget),
+						   draw_data_key_id,
+						   draw_data_list->next);
+
+		      tmp = draw_data_list->next;
+		      draw_data_list->next = draw_data_free_list;
+		      draw_data_free_list = draw_data_list;
+		      draw_data_list = tmp;
+
+		      goto next_rect;
+		    }
+		  
+		  parent_list = parent_list->next;
+		}
+
+	      window = parent->window;
+
+	      if (parent->parent && parent->parent->window != window)
+		{
+		  if (!GTK_WIDGET_NO_WINDOW (parent))
+		    {
+		      gint x, y;
+		      gdk_window_get_position (window, &x, &y);
+		      data->rect.x -= x - widget->allocation.x;
+		      data->rect.y -= y - widget->allocation.y;
+		    }
+		  gtk_widget_clip_rect (parent->parent, window, &data->rect);
+		}
+
+	      parent = parent->parent;
+	      
+	      if (parent && GTK_WIDGET_REDRAW_PENDING (parent))
+		parent_list = gtk_object_get_data_by_id (GTK_OBJECT (parent),
+							 draw_data_key_id);
+	      else
+		parent_list = NULL;
+	    }
+
+	  data->rect.x = tmp_x;
+	  data->rect.y = tmp_y;
+
+	  prev_node = draw_data_list;
+
+	  draw_data_list = draw_data_list->next;
+	next_rect:
+	}
+      widget_list = widget_list->next;
+    }
+
+  /* Now process the draws */
+  
+  widget_list = gtk_widget_redraw_queue;
+
+  while (widget_list)
+    {
+      widget = widget_list->data;
+      draw_data_list = gtk_object_get_data_by_id (GTK_OBJECT (widget),
+						  draw_data_key_id);
+      gtk_object_set_data_by_id (GTK_OBJECT (widget),
+				 draw_data_key_id,
+				 NULL);
+
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
+
+      while (draw_data_list)
+	{
+	  GtkDrawData *data = draw_data_list->data;
+	  gtk_widget_draw (widget, &data->rect);
+	  
+	  if (draw_data_list->next)
+	    draw_data_list = draw_data_list->next;
+	  else
+	    {
+	      draw_data_list->next = draw_data_free_list;
+	      draw_data_free_list = draw_data_list;
+	      break;
+	    }
+	}
+
+      widget_list = widget_list->next;
+    }
+
+  g_slist_free (gtk_widget_redraw_queue);
+  gtk_widget_redraw_queue = NULL;
+
+  return FALSE;
 }
 
 void
@@ -1650,14 +2026,6 @@ gtk_widget_draw (GtkWidget    *widget,
   GdkRectangle temp_area;
 
   g_return_if_fail (widget != NULL);
-
-  if (GTK_WIDGET_REDRAW_PENDING (widget))
-    {
-      gtk_widget_redraw_queue = g_slist_remove (gtk_widget_redraw_queue, widget);
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
-
-      area = NULL;
-    }
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
@@ -2486,7 +2854,9 @@ gtk_widget_set_state (GtkWidget           *widget,
 	data.parent_sensitive = TRUE;
 
       gtk_widget_propagate_state (widget, &data);
-      gtk_widget_queue_draw (widget);
+  
+      if (GTK_WIDGET_DRAWABLE (widget))
+	gtk_widget_queue_clear (widget);
     }
 }
 
@@ -2532,7 +2902,8 @@ gtk_widget_set_sensitive (GtkWidget *widget,
     data.parent_sensitive = TRUE;
 
   gtk_widget_propagate_state (widget, &data);
-  gtk_widget_queue_draw (widget);
+  if (GTK_WIDGET_DRAWABLE (widget))
+    gtk_widget_queue_clear (widget);
 }
 
 /*****************************************
@@ -2737,7 +3108,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
 	      (old_requisition.height != widget->requisition.height))
 	    gtk_widget_queue_resize (widget);
 	  else if (GTK_WIDGET_DRAWABLE (widget))
-	    gtk_widget_queue_draw (widget);
+	    gtk_widget_queue_clear (widget);
 	}
     }
   else if (initial_emission)
@@ -3555,11 +3926,7 @@ gtk_widget_real_unmap (GtkWidget *widget)
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
       
       if (GTK_WIDGET_NO_WINDOW (widget))
-	gdk_window_clear_area (widget->window,
-			       widget->allocation.x,
-			       widget->allocation.y,
-			       widget->allocation.width,
-			       widget->allocation.height);
+	gtk_widget_queue_clear (widget);
       else
 	gdk_window_hide (widget->window);
     }
@@ -3690,11 +4057,7 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
        (widget->allocation.height != allocation->height)) &&
       (widget->allocation.width != 0) &&
       (widget->allocation.height != 0))
-    gdk_window_clear_area (widget->window,
-			   widget->allocation.x,
-			   widget->allocation.y,
-			   widget->allocation.width,
-			   widget->allocation.height);
+    gtk_widget_queue_clear (widget);
   
   widget->allocation = *allocation;
   

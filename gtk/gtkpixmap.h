@@ -46,8 +46,6 @@ struct _GtkPixmap
   
   GdkPixmap *pixmap;
   GdkBitmap *mask;
-
-  guint needs_clear : 1;
 };
 
 struct _GtkPixmapClass

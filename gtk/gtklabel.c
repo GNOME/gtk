@@ -39,12 +39,6 @@ static void gtk_label_size_request (GtkWidget	   *widget,
 				    GtkRequisition *requisition);
 static gint gtk_label_expose	   (GtkWidget	   *widget,
 				    GdkEventExpose *event);
-static void gtk_label_state_changed (GtkWidget	    *widget,
-				     guint	     previous_state);
-static void gtk_label_style_set	    (GtkWidget	    *widget,
-				     GtkStyle	    *previous_style);
-
-
 
 static GtkMiscClass *parent_class = NULL;
 
@@ -95,8 +89,6 @@ gtk_label_class_init (GtkLabelClass *class)
   
   widget_class->size_request = gtk_label_size_request;
   widget_class->expose_event = gtk_label_expose;
-  widget_class->style_set    = gtk_label_style_set;
-  widget_class->state_changed = gtk_label_state_changed;
 }
 
 static void
@@ -197,11 +189,7 @@ gtk_label_set (GtkLabel	   *label,
   if (GTK_WIDGET_VISIBLE (label))
     {
       if (GTK_WIDGET_MAPPED (label))
-	gdk_window_clear_area (GTK_WIDGET (label)->window,
-			       GTK_WIDGET (label)->allocation.x,
-			       GTK_WIDGET (label)->allocation.y,
-			       GTK_WIDGET (label)->allocation.width,
-			       GTK_WIDGET (label)->allocation.height);
+	gtk_widget_queue_clear (GTK_WIDGET (label));
       
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
@@ -221,11 +209,7 @@ gtk_label_set_justify (GtkLabel	       *label,
       if (GTK_WIDGET_VISIBLE (label))
 	{
 	  if (GTK_WIDGET_MAPPED (label))
-	    gdk_window_clear_area (GTK_WIDGET (label)->window,
-				   GTK_WIDGET (label)->allocation.x,
-				   GTK_WIDGET (label)->allocation.y,
-				   GTK_WIDGET (label)->allocation.width,
-				   GTK_WIDGET (label)->allocation.height);
+	    gtk_widget_queue_clear (GTK_WIDGET (label));
 	  
 	  gtk_widget_queue_resize (GTK_WIDGET (label));
 	}
@@ -324,24 +308,7 @@ gtk_label_expose (GtkWidget	 *widget,
        */
       gdk_gc_set_clip_rectangle (widget->style->white_gc, &event->area);
       gdk_gc_set_clip_rectangle (widget->style->fg_gc[state], &event->area);
-      
-      /* We clear the whole allocation here so that if a partial
-       * expose is triggered we don't just clear part and mess up
-       * when the queued redraw comes along. (There will always
-       * be a complete queued redraw when the needs_clear flag
-       * is set.)
-       */
-      if (label->needs_clear)
-	{
-	  gdk_window_clear_area (widget->window,
-				 widget->allocation.x,
-				 widget->allocation.y,
-				 widget->allocation.width,
-				 widget->allocation.height);
-	  
-	  label->needs_clear = FALSE;
-	}
-      
+  
       x = widget->allocation.x + misc->xpad +
 	(widget->allocation.width - (label->max_width + label->misc.xpad * 2))
 	* misc->xalign + 0.5;
@@ -403,20 +370,3 @@ gtk_label_expose (GtkWidget	 *widget,
     }
   return TRUE;
 }
-
-static void 
-gtk_label_state_changed (GtkWidget	*widget,
-			 guint		 previous_state)
-{
-  if (GTK_WIDGET_DRAWABLE (widget))
-    GTK_LABEL (widget)->needs_clear = TRUE;
-}
-
-static void 
-gtk_label_style_set (GtkWidget	*widget,
-		     GtkStyle	*previous_style)
-{
-  if (GTK_WIDGET_DRAWABLE (widget))
-    GTK_LABEL (widget)->needs_clear = TRUE;
-}
-

@@ -1,3 +1,20 @@
+Tue Jul 28 14:41:54 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.[ch]: Added the concept of queued redraws
+	  of partial areas. This can be done either relative
+	  to the existing windows (gtk_widget_queue_clear[_area]())
+	  or relative to the future allocation of the widget
+	  (gtk_widget_queue_draw[_area]). 
+
+	  The initial implementation is pretty braindead, but
+	  can be improved.
+
+	* gtk/gtkwidget.[ch]: Removed calls to gdk_window_clear_area()
+	  in favor of gtk_widget_queue_clear().
+	
+	* gtk/gtklabel.[ch] gtk/gtkpixmap.[ch]: Removed needs_clear
+	  flags in favor of gtk_widget_queue_clear()
+	
 Tue Jul 28 00:15:28 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* docs/gdk.sgml: new format for GDK documentation.  Eventually
