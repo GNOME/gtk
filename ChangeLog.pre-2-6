@@ -1,3 +1,8 @@
+Mon Nov 13 00:09:29 2000  Robert Brady  <robert@suse.co.uk>
+
+	* configure.in: Chinese .pos have been renamed to zh_CN and zh_TW
+	respectively.
+	
 Sun Nov 12 19:11:42 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_to_next_line):
