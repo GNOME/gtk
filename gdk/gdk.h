@@ -262,8 +262,7 @@ GdkAtom          gdk_drag_get_selection (GdkDragContext   *context);
 /* Source side */
 
 GdkDragContext * gdk_drag_begin      (GdkWindow      *window,
-				      GList          *targets,
-				      GdkDragAction   actions);
+				      GList          *targets);
 guint32         gdk_drag_get_protocol (guint32          xid,
 				       GdkDragProtocol *protocol);
 void             gdk_drag_find_window (GdkDragContext   *context,
@@ -277,7 +276,8 @@ gboolean        gdk_drag_motion      (GdkDragContext *context,
 				      GdkDragProtocol protocol,
 				      gint            x_root, 
 				      gint            y_root,
-				      GdkDragAction   action,
+				      GdkDragAction   suggested_action,
+				      GdkDragAction   possible_actions,
 				      guint32         time);
 void            gdk_drag_drop        (GdkDragContext *context,
 				      guint32         time);

@@ -1,3 +1,36 @@
+Wed Jan 27 20:06:06 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklayout.c (gtk_layout_adjustment_changed):
+	Removed some g_print()'s
+
+Wed Jan 27 18:57:57 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.h gdk/gdkdnd.c: Change signatures for 
+	gdk_drag_begin() and gdk_drag_motion() so that the set 
+	of possible actions is passed on each motion, not just at
+	the beginning of the drag. We do this so that
+	we can restrict the set of possible drag events
+	when the user presses a modifier key during a 
+	drag.
+
+	* gdk/gdkdnd.c: Send a motif Operation-changed
+	message when the set of possible actions change,
+	as well as when the suggested action change.
+
+	* gdk/gdkdnd.c: Change the XdndActionList whenever
+	the set of actions change.
+
+	* gdk/gdkdnd.c: Add a filter to catch changes to
+	the XdndActionList property for the source widget.
+
+	* gtk/gtkdnd.c: Change the set of possible actions
+	when the user presses Control, Shift, or Control-Shift,
+	to only include the corresponding action.
+	
+	* gtk/gtkdnd.c (gtk_drag_button_release_cb):
+	Disconnect button signals before we possibly
+	free info structure.
+
 Wed Jan 27 18:40:50 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (gtk_main_do_event): Hack scrollwheel

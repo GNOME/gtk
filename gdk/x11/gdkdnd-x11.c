@@ -56,11 +56,13 @@ struct _GdkDragContextPrivate {
 
   guint16 last_x;		/* Coordinates from last event */
   guint16 last_y;
-  GdkDragAction old_action;	/* The last action we sent to the source */
+  GdkDragAction old_action;	  /* The last action we sent to the source */
+  GdkDragAction old_actions;	  /* The last actions we sent to the source */
+  GdkDragAction xdnd_actions;     /* What is currently set in XdndActionList */
 
   Window  dest_xid;
   guint xdnd_targets_set : 1;   /* Whether we've already set XdndTypeList */
-  guint xdnd_actions_set : 1;   /* Whether we've already set XdndActionsList */
+  guint xdnd_actions_set : 1;   /* Whether we've already set XdndActionList */
   guint xdnd_have_actions : 1; /* Whether an XdndActionList was provided */
   guint motif_targets_set : 1;  /* Whether we've already set motif initiator info */
   guint drag_status : 4;	/* current status of drag */
@@ -102,6 +104,10 @@ static GdkFilterReturn xdnd_finished_filter (GdkXEvent *xev,
 static GdkFilterReturn xdnd_drop_filter (GdkXEvent *xev,
 					 GdkEvent  *event,
 					 gpointer   data);
+
+static void   xdnd_manage_source_filter (GdkDragContext *context,
+					 GdkWindow      *window,
+					 gboolean        add_filter);
 
 /* Drag Contexts */
 
@@ -145,7 +151,13 @@ gdk_drag_context_unref (GdkDragContext *context)
       g_list_free (context->targets);
 
       if (context->source_window)
-	gdk_window_unref (context->source_window);
+	{
+	  if ((context->protocol == GDK_DRAG_PROTO_XDND) &&
+	      !context->is_source)
+	    xdnd_manage_source_filter (context, context->source_window, FALSE);
+
+	  gdk_window_unref (context->source_window);
+	}
 
       if (context->dest_window)
 	gdk_window_unref (context->dest_window);
@@ -1361,11 +1373,12 @@ motif_send_motion (GdkDragContext  *context,
   MOTIF_XCLIENT_SHORT (&xev, 1) = motif_dnd_get_flags (context);
   MOTIF_XCLIENT_LONG (&xev, 1) = time;
 
-  if (context->suggested_action != private->old_action)
+  if ((context->suggested_action != private->old_action) ||
+      (context->actions != private->old_actions))
     {
       MOTIF_XCLIENT_BYTE (&xev, 0) = XmOPERATION_CHANGED;
 
-      private->drag_status = GDK_DRAG_STATUS_ACTION_WAIT;
+      /* private->drag_status = GDK_DRAG_STATUS_ACTION_WAIT; */
       retval = TRUE;
     }
   else
@@ -1724,7 +1737,8 @@ motif_drag_status (GdkEvent *event,
   if (context)
     {
       GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
-      if (private->drag_status == GDK_DRAG_STATUS_MOTION_WAIT)
+      if ((private->drag_status == GDK_DRAG_STATUS_MOTION_WAIT) ||
+	  (private->drag_status == GDK_DRAG_STATUS_ACTION_WAIT))
 	private->drag_status = GDK_DRAG_STATUS_DRAG;
       
       event->dnd.type = GDK_DRAG_STATUS;
@@ -2009,7 +2023,7 @@ xdnd_set_actions (GdkDragContext *context)
 
   if (!xdnd_actions_initialized)
     xdnd_initialize_actions();
-
+  
   actions = context->actions;
   n_atoms = 0;
   for (i=0; i<xdnd_n_actions; i++)
@@ -2042,6 +2056,7 @@ xdnd_set_actions (GdkDragContext *context)
 		   (guchar *)atomlist, n_atoms);
 
   private->xdnd_actions_set = 1;
+  private->xdnd_actions = context->actions;
 }
 
 static void
@@ -2081,9 +2096,6 @@ xdnd_send_enter (GdkDragContext *context)
 	  i++;
 	}
     }
-
-  if (!private->xdnd_actions_set)
-    xdnd_set_actions (context);
 
   if (!gdk_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
 			FALSE, 0, &xev))
@@ -2256,6 +2268,133 @@ xdnd_check_dest (Window win)
 
 /* Target side */
 
+static void
+xdnd_read_actions (GdkDragContext *context)
+{
+  Atom type;
+  int format;
+  gulong nitems, after;
+  Atom *data;
+
+  gint i;
+
+  gint old_warnings = gdk_error_warnings;
+
+  gdk_error_code = 0;
+  gdk_error_warnings = 0;
+
+  /* Get the XdndActionList, if set */
+
+  XGetWindowProperty (GDK_WINDOW_XDISPLAY (context->source_window),
+		      GDK_WINDOW_XWINDOW (context->source_window),
+		      gdk_atom_intern ("XdndActionList", FALSE), 0, 65536,
+		      False, XA_ATOM, &type, &format, &nitems,
+		      &after, (guchar **)&data);
+  
+  if (!gdk_error_code && (format == 32) && (type == XA_ATOM))
+    {
+      context->actions = 0;
+
+      for (i=0; i<nitems; i++)
+	context->actions |= xdnd_action_from_atom (data[i]);
+
+      ((GdkDragContextPrivate *)context)->xdnd_have_actions = TRUE;
+
+#ifdef G_ENABLE_DEBUG
+      if (gdk_debug_flags & GDK_DEBUG_DND)
+	{
+	  GString *action_str = g_string_new (NULL);
+	  if (context->actions & GDK_ACTION_MOVE)
+	    g_string_append(action_str, "MOVE ");
+	  if (context->actions & GDK_ACTION_COPY)
+	    g_string_append(action_str, "COPY ");
+	  if (context->actions & GDK_ACTION_LINK)
+	    g_string_append(action_str, "LINK ");
+	  if (context->actions & GDK_ACTION_ASK)
+	    g_string_append(action_str, "ASK ");
+	  
+	  g_message("Xdnd actions = %s", action_str->str);
+	  g_string_free (action_str, TRUE);
+	}
+#endif /* G_ENABLE_DEBUG */
+
+      XFree(data);
+    }
+
+  gdk_error_warnings = old_warnings;
+  gdk_error_code = 0;
+}
+
+/* We have to make sure that the XdndActionList we keep internally
+ * is up to date with the XdndActionList on the source window
+ * because we get no notification, because Xdnd wasn't meant
+ * to continually send actions. So we select on PropertyChangeMask
+ * and add this filter.
+ */
+static GdkFilterReturn 
+xdnd_source_window_filter (GdkXEvent *xev,
+			   GdkEvent  *event,
+			   gpointer   cb_data)
+{
+  XEvent *xevent = (XEvent *)xev;
+  GdkDragContext *context = cb_data;
+
+  if ((xevent->xany.type == PropertyNotify) &&
+      (xevent->xproperty.atom == gdk_atom_intern ("XdndActionList", FALSE)))
+    {
+      xdnd_read_actions (context);
+
+      return GDK_FILTER_REMOVE;
+    }
+
+  return GDK_FILTER_CONTINUE;
+}
+
+static void
+xdnd_manage_source_filter (GdkDragContext *context,
+			   GdkWindow      *window,
+			   gboolean        add_filter)
+{
+  gint old_warnings = 0;	/* quiet gcc */
+  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+			       
+  gboolean is_foreign = (private->window_type == GDK_WINDOW_FOREIGN);
+
+  if (is_foreign)
+    {
+      old_warnings = gdk_error_warnings;
+      gdk_error_warnings = 0;
+    }
+
+  if (!private->destroyed)
+    {
+      if (add_filter)
+	{
+	  gdk_window_set_events (window,
+				 gdk_window_get_events (window) |
+				 GDK_PROPERTY_CHANGE_MASK);
+	  gdk_window_add_filter (window, xdnd_source_window_filter, context);
+
+	}
+      else
+	{
+	  gdk_window_remove_filter (window,
+				    xdnd_source_window_filter,
+				    context);
+	  /* Should we remove the GDK_PROPERTY_NOTIFY mask?
+	   * but we might want it for other reasons. (Like
+	   * INCR selection transactions).
+	   */
+	}
+    }
+
+  if (is_foreign)
+    {
+      gdk_flush();
+      gdk_error_warnings = old_warnings;
+    }
+}
+
 static GdkFilterReturn 
 xdnd_enter_filter (GdkXEvent *xev,
 		   GdkEvent  *event,
@@ -2339,48 +2478,13 @@ xdnd_enter_filter (GdkXEvent *xev,
 						GUINT_TO_POINTER (xevent->xclient.data.l[2+i]));
     }
 
-  /* Get the XdndActionList, if set */
-
-  XGetWindowProperty (GDK_WINDOW_XDISPLAY (event->any.window), 
-		      source_window, 
-		      gdk_atom_intern ("XdndActionList", FALSE), 0, 65536,
-		      False, XA_ATOM, &type, &format, &nitems,
-		      &after, (guchar **)&data);
-  
-  if ((format == 32) && (type == XA_ATOM))
-    {
-      new_context->actions = 0;
-
-      for (i=0; i<nitems; i++)
-	new_context->actions |= xdnd_action_from_atom (data[i]);
-
-      ((GdkDragContextPrivate *)new_context)->xdnd_have_actions = TRUE;
-
-#ifdef G_ENABLE_DEBUG
-      if (gdk_debug_flags & GDK_DEBUG_DND)
-	{
-	  GString *action_str = g_string_new (NULL);
-	  if (new_context->actions & GDK_ACTION_MOVE)
-	    g_string_append(action_str, "MOVE ");
-	  if (new_context->actions & GDK_ACTION_COPY)
-	    g_string_append(action_str, "COPY ");
-	  if (new_context->actions & GDK_ACTION_LINK)
-	    g_string_append(action_str, "LINK ");
-	  if (new_context->actions & GDK_ACTION_ASK)
-	    g_string_append(action_str, "ASK ");
-	  
-	  g_message("\tactions = %s", action_str->str);
-	  g_string_free (action_str, TRUE);
-	}
-#endif /* G_ENABLE_DEBUG */
-
-      XFree(data);
-    }
-  
 #ifdef G_ENABLE_DEBUG
   if (gdk_debug_flags & GDK_DEBUG_DND)
     print_target_list (new_context->targets);
 #endif /* G_ENABLE_DEBUG */
+
+  xdnd_manage_source_filter (new_context, new_context->source_window, TRUE);
+  xdnd_read_actions (new_context);
 
   event->dnd.type = GDK_DRAG_ENTER;
   event->dnd.context = new_context;
@@ -2558,8 +2662,7 @@ gdk_drag_do_leave (GdkDragContext *context, guint32 time)
 
 GdkDragContext * 
 gdk_drag_begin (GdkWindow     *window,
-		GList         *targets,
-		GdkDragAction  actions)
+		GList         *targets)
 {
   GList *tmp_list;
   GdkDragContext *new_context;
@@ -2580,7 +2683,7 @@ gdk_drag_begin (GdkWindow     *window,
       tmp_list = tmp_list->prev;
     }
 
-  new_context->actions = actions;
+  new_context->actions = 0;
 
   return new_context;
 }
@@ -2717,12 +2820,24 @@ gdk_drag_motion (GdkDragContext *context,
 		 GdkDragProtocol protocol,
 		 gint            x_root, 
 		 gint            y_root,
-		 GdkDragAction   action,
+		 GdkDragAction   suggested_action,
+		 GdkDragAction   possible_actions,
 		 guint32         time)
 {
   GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
 
   g_return_val_if_fail (context != NULL, FALSE);
+
+  /* When we have a Xdnd target, make sure our XdndActionList
+   * matches the current actions;
+   */
+  private->old_actions = context->actions;
+  context->actions = possible_actions;
+  
+  if ((protocol == GDK_DRAG_PROTO_XDND) &&
+      (!private->xdnd_actions_set ||
+       private->xdnd_actions != possible_actions))
+    xdnd_set_actions (context);
 
   if (context->dest_window != dest_window)
     {
@@ -2754,8 +2869,9 @@ gdk_drag_motion (GdkDragContext *context,
 	    case GDK_DRAG_PROTO_NONE:
 	      break;
 	    }
-	  private->old_action = action;
-	  context->suggested_action = action;
+	  private->old_action = suggested_action;
+	  context->suggested_action = suggested_action;
+	  private->old_actions = possible_actions;
 	}
       else
 	{
@@ -2782,7 +2898,7 @@ gdk_drag_motion (GdkDragContext *context,
   else
     {
       private->old_action = context->suggested_action;
-      context->suggested_action = action;
+      context->suggested_action = suggested_action;
     }
 
   /* Send a drag-motion event */
@@ -2797,11 +2913,11 @@ gdk_drag_motion (GdkDragContext *context,
 	  switch (context->protocol)
 	    {
 	    case GDK_DRAG_PROTO_MOTIF:
-	      motif_send_motion (context, x_root, y_root, action, time);
+	      motif_send_motion (context, x_root, y_root, suggested_action, time);
 	      break;
 	      
 	    case GDK_DRAG_PROTO_XDND:
-	      xdnd_send_motion (context, x_root, y_root, action, time);
+	      xdnd_send_motion (context, x_root, y_root, suggested_action, time);
 	      break;
 
 	    case GDK_DRAG_PROTO_ROOTWIN:
