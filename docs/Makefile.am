@@ -15,5 +15,5 @@ EXTRA_DIST = \
 	widget_geometry.txt		\
 	widget_system.txt 		\
 	generation.txt			\
-	gtkdocs_fix
-
+	gtkdocs_fix			\
+	RELEASE-HOWTO

@@ -1,3 +1,9 @@
+Tue Nov 19 00:45:34 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* docs/RELEASE-HOWTO: new file describing the release process.
+
+	* docs/Makefile.am: added RELEASE-HOWTO to EXTRA_DIST.
+	
 Mon Nov 18 18:15:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksettings.c (gtk_settings_get_property): Clean up
