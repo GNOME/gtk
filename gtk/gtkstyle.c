@@ -3079,6 +3079,33 @@ gtk_default_draw_slider (GtkStyle      *style,
                      width - style->klass->xthickness - 1, height / 2);
 }
 
+static void
+draw_dot (GdkWindow    *window,
+	  GdkGC        *light_gc,
+	  GdkGC        *dark_gc,
+	  gint          x,
+	  gint          y,
+	  gushort       size)
+{
+  
+  size = CLAMP (size, 2, 3);
+
+  if (size == 2)
+    {
+      gdk_draw_point (window, light_gc, x, y);
+      gdk_draw_point (window, light_gc, x+1, y+1);
+    }
+  else if (size == 3);
+    {
+      gdk_draw_point (window, light_gc, x, y);
+      gdk_draw_point (window, light_gc, x+1, y);
+      gdk_draw_point (window, light_gc, x, y+1);
+      gdk_draw_point (window, dark_gc, x+1, y+2);
+      gdk_draw_point (window, dark_gc, x+2, y+1);
+      gdk_draw_point (window, dark_gc, x+2, y+2);
+    }
+}
+
 static void 
 gtk_default_draw_handle (GtkStyle      *style,
 			 GdkWindow     *window,
@@ -3113,11 +3140,24 @@ gtk_default_draw_handle (GtkStyle      *style,
   gtk_paint_box (style, window, state_type, shadow_type, area, widget, 
                  detail, x, y, width, height);
   
-  light_gc = style->light_gc[state_type];
-  dark_gc = style->dark_gc[state_type];
-  
-  xthick = style->klass->xthickness;
-  ythick = style->klass->ythickness;
+
+  if (!strcmp (detail, "paned"))
+    {
+      /* we want to ignore the shadow border in paned widgets */
+      xthick = 0;
+      ythick = 0;
+
+      light_gc = style->light_gc[state_type];
+      dark_gc = style->black_gc;
+    }
+  else
+    {
+      xthick = style->klass->xthickness;
+      ythick = style->klass->ythickness;
+
+      light_gc = style->light_gc[state_type];
+      dark_gc = style->dark_gc[state_type];
+    }
   
   rect.x = x + xthick;
   rect.y = y + ythick;
@@ -3125,7 +3165,7 @@ gtk_default_draw_handle (GtkStyle      *style,
   rect.height = height - (ythick * 2);
 
   if (area)
-    intersect = gdk_rectangle_intersect (area, &rect, &dest);
+      intersect = gdk_rectangle_intersect (area, &rect, &dest);
   else
     {
       intersect = TRUE;
@@ -3135,24 +3175,35 @@ gtk_default_draw_handle (GtkStyle      *style,
   if (!intersect)
     return;
 
-#define DRAW_POINT(w, gc, clip, xx, yy)		\
-  {						\
-    if ((xx) >= (clip).x			\
-	&& (yy) >= (clip).y			\
-	&& (xx) < (clip).x + (clip).width	\
-	&& (yy) < (clip).y + (clip).height)	\
-      gdk_draw_point ((w), (gc), (xx), (yy));	\
-  }
+  gdk_gc_set_clip_rectangle (light_gc, &dest);
+  gdk_gc_set_clip_rectangle (dark_gc, &dest);
 
-  for (yy = y + ythick; yy < (y + height - ythick); yy += 3)
-    for (xx = x + xthick; xx < (x + width - xthick); xx += 6)
-      {
-	DRAW_POINT (window, light_gc, dest, xx, yy);
-	DRAW_POINT (window, dark_gc, dest, xx + 1, yy + 1);
+  if (!strcmp (detail, "paned"))
+    {
+      gint window_width;
+      gint window_height;
 
-	DRAW_POINT (window, light_gc, dest, xx + 3, yy + 1);
-	DRAW_POINT (window, dark_gc, dest, xx + 4, yy + 2);
-      }
+      gdk_window_get_size (window, &window_width, &window_height);
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	for (xx = window_width/2 - 15; xx <= window_width/2 + 15; xx += 5)
+	  draw_dot (window, light_gc, dark_gc, xx, window_height/2 - 1, 3);
+      else
+	for (yy = window_height/2 - 15; yy <= window_height/2 + 15; yy += 5)
+	  draw_dot (window, light_gc, dark_gc, window_width/2 - 1, yy, 3);
+    }
+  else
+    {
+      for (yy = y + ythick; yy < (y + height - ythick); yy += 3)
+	for (xx = x + xthick; xx < (x + width - xthick); xx += 6)
+	  {
+	    draw_dot (window, light_gc, dark_gc, xx, yy, 2);
+	    draw_dot (window, light_gc, dark_gc, xx + 3, yy + 1, 2);
+	  }
+    }
+
+  gdk_gc_set_clip_rectangle (light_gc, NULL);
+  gdk_gc_set_clip_rectangle (dark_gc, NULL);
 }
 
 static void

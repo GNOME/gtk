@@ -1,3 +1,21 @@
+2000-02-23  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_handle): add a 'paned' mode to
+	the function to let it draw the seven dots, instead of the old,
+	much maligned, method.
+	(draw_dot): New function to draw a dot.
+
+	* gtk/gtkhpaned.c (gtk_hpaned_size_allocate): changed allocation
+	to draw the handle inside the border width as opposed to outside.
+	Use paint function instead of gdk_draw_point.
+
+	* gtk/gtkvpaned.c (gtk_vpaned_size_allocate): changed allocation
+	to draw the handle inside the border width as opposed to outside.
+	Use paint function instead of gdk_draw_point.
+
+	* gtk/gtkfilesel.c (gtk_file_selection_update_history_menu):
+	Change indenting to be more GTK like.
+
 Wed Feb 23 10:54:14 GMT 2000  Tony Gale <gale@gtk.org>
 
         * docs/gtk_tut.sgml: New section on GtkCalendar

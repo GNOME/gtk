@@ -179,9 +179,9 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
 
   /* Move the handle before the children so we don't get extra expose events */
 
-  paned->handle_xpos = 0;
+  paned->handle_xpos = border_width;
   paned->handle_ypos = paned->child1_size + border_width;
-  paned->handle_width = widget->allocation.width;
+  paned->handle_width = widget->allocation.width - 2 * border_width;
   paned->handle_height = paned->handle_size;
 
   if (GTK_WIDGET_REALIZED(widget))
@@ -247,79 +247,24 @@ gtk_vpaned_draw (GtkWidget    *widget,
 
       handle_area.x = paned->handle_xpos;
       handle_area.y = paned->handle_ypos;
-      handle_area.width = paned->handle_height;
+      handle_area.width = paned->handle_width;
       handle_area.height = paned->handle_size;
 
       if (gdk_rectangle_intersect (&handle_area, area, &child_area))
 	{
-	  if (widget->allocation.height > 2)
-	    {
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_width/2,
-			      paned->handle_size/2);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_width/2 - 1,
-			      paned->handle_size/2 - 1);
-	    }
-	  if (widget->allocation.height > 11)
-	    {
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_width/2 + 5,
-			      paned->handle_size/2);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_width/2 + 4,
-			      paned->handle_size/2 - 1);
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_width/2 - 5,
-			      paned->handle_size/2);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_width/2 - 6,
-			      paned->handle_size/2 - 1);
-	    }
-	  if (widget->allocation.height > 20)
-	    {
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_width/2 - 10,
-			      paned->handle_size/2);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_width/2 - 11,
-			      paned->handle_size/2 - 1);
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_width/2 + 10,
-			      paned->handle_size/2);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_width/2 + 9,
-			      paned->handle_size/2 - 1);
-	    }
-	  if (widget->allocation.height > 30)
-	    {
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_width/2 - 15,
-			      paned->handle_size/2);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_width/2 - 16,
-			      paned->handle_size/2 - 1);
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_width/2 + 15,
-			      paned->handle_size/2);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_width/2 + 14,
-			      paned->handle_size/2 - 1);
-	    }
+	  child_area.x -= paned->handle_xpos;
+	  child_area.y -= paned->handle_ypos;
+
+	  gtk_paint_handle (widget->style,
+			    paned->handle,
+			    GTK_STATE_NORMAL,
+			    GTK_SHADOW_NONE,
+			    &child_area,
+			    widget,
+			    "paned",
+			    0, 0, -1, -1,
+			    GTK_ORIENTATION_HORIZONTAL);
+
 	}
       /* Redraw the children
        */

@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -181,9 +180,9 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
   /* Move the handle before the children so we don't get extra expose events */
 
   paned->handle_xpos = paned->child1_size + border_width;
-  paned->handle_ypos = 0;
+  paned->handle_ypos = border_width;
   paned->handle_width = paned->handle_size;
-  paned->handle_height = widget->allocation.height;
+  paned->handle_height = widget->allocation.height - 2 * border_width;
 
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -253,74 +252,19 @@ gtk_hpaned_draw (GtkWidget    *widget,
 
       if (gdk_rectangle_intersect (&handle_area, area, &child_area))
 	{
-	  if (widget->allocation.height > 2)
-	    { 
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_size/2,
-			      paned->handle_height/2);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_size/2 - 1,
-			      paned->handle_height/2 - 1);
-	    }
-	  if (widget->allocation.height > 11)
-	    {
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_size/2,
-			      paned->handle_height/2 + 5);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_size/2 - 1,
-			      paned->handle_height/2 + 4);
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_size/2,
-			      paned->handle_height/2 - 5);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_size/2 - 1,
-			      paned->handle_height/2 - 6);
-	    }
-	  if (widget->allocation.height > 20)
-	    {
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_size/2,
-			      paned->handle_height/2 - 10);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_size/2 - 1,
-			      paned->handle_height/2 - 11);
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_size/2,
-			      paned->handle_height/2 + 10);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_size/2 - 1,
-			      paned->handle_height/2 + 9);
-	    }
-	  if (widget->allocation.height > 30)
-	    {
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_size/2,
-			      paned->handle_height/2 - 15);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_size/2 - 1,
-			      paned->handle_height/2 - 16);
-	      gdk_draw_point (paned->handle,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      paned->handle_size/2,
-			      paned->handle_height/2 + 15);
-	      gdk_draw_point (paned->handle,
-			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
-			      paned->handle_size/2 - 1,
-			      paned->handle_height/2 + 14);
-	    }
+	  child_area.x -= paned->handle_xpos;
+	  child_area.y -= paned->handle_ypos;
+
+	  gtk_paint_handle (widget->style,
+			    paned->handle,
+			    GTK_STATE_NORMAL,
+			    GTK_SHADOW_NONE,
+			    &child_area,
+			    widget,
+			    "paned",
+			    0, 0, -1, -1,
+			    GTK_ORIENTATION_VERTICAL);
+			    
 	}
       /* Redraw the children
        */
