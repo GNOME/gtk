@@ -1,5 +1,11 @@
 2005-03-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.6.4 ===
+
+	* NEWS: Updates
+
+2005-03-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkmenutoolbutton.c (button_state_changed_cb): 
 	Fix prelighting.  (#157392, Vincent Noel, patch by
 	Christian Persch)
@@ -9,6 +15,7 @@
 
 	* gdk-pixbuf/gdk-pixbuf.c:
 	* gdk-pixbuf/gdk-pixbuf-features.h.in:
+	* gtk/xdgmime/xdgmime.[hc]:
 	Revert the previous change, since it breaks
 	bin compat.
 

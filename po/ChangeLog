@@ -1,5 +1,9 @@
 2005-03-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.6.4 ===
+
+2005-03-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* *.po: Strip the prefix from the 
 	"progress bar label" message in many
 	translations. It is not supposed to be

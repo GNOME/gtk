@@ -1,3 +1,10 @@
+Overview of Changes from GTK+ 2.6.3 to GTK+ 2.6.4
+=================================================
+* Move a lot of const data to the .rodata section [Matthias Clasen]
+* Make caching of .icon files work again [Alexander Larsson]
+* Fix many translations of our single Q_() message 
+  to not include the prefix [Christian Persch]
+
 Overview of Changes from GTK+ 2.6.2 to GTK+ 2.6.3
 =================================================
 * GtkAction
