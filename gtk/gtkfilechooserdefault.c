@@ -92,6 +92,8 @@ struct _GtkFileChooserDefault
   GtkFilePath *current_folder;
   GtkFilePath *preview_path;
 
+  GtkToolItem *up_button;
+
   GtkWidget *preview_frame;
 
   GtkWidget *toolbar;
@@ -393,39 +395,14 @@ set_preview_widget (GtkFileChooserDefault *impl,
   update_preview_widget_visibility (impl);
 }
 
-/* Used from gtk_tree_model_foreach(); selects the item that corresponds to the
- * current path. */
-static gboolean
-set_current_shortcut_foreach_cb (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
+/* Clears the selection in the shortcuts tree */
+static void
+shortcuts_unselect_all (GtkFileChooserDefault *impl)
 {
-  GtkFileChooserDefault *impl;
-  GtkFilePath *model_path;
   GtkTreeSelection *selection;
 
-  impl = GTK_FILE_CHOOSER_DEFAULT (data);
-
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
-
-  gtk_tree_model_get (model, iter, SHORTCUTS_COL_PATH, &model_path, -1);
-
-  if (model_path && impl->current_folder && gtk_file_path_compare (model_path, impl->current_folder) == 0)
-    {
-      gtk_tree_selection_select_path (selection, path);
-      return TRUE;
-    }
-  else
-    gtk_tree_selection_unselect_path (selection, path);
-
-  return FALSE;
-}
-
-/* Selects the appropriate node in the shortcuts tree based on the current folder */
-static void
-shortcuts_select_folder (GtkFileChooserDefault *impl)
-{
-  gtk_tree_model_foreach (GTK_TREE_MODEL (impl->shortcuts_model),
-			  set_current_shortcut_foreach_cb,
-			  impl);
+  gtk_tree_selection_unselect_all (selection);
 }
 
 /* Convenience function to get the display name and icon info for a path */
@@ -670,7 +647,7 @@ toolbar_up_cb (GtkToolButton         *button,
 }
 
 /* Appends an item to the toolbar */
-static void
+static GtkToolItem *
 toolbar_add_item (GtkFileChooserDefault *impl,
 		  const char            *stock_id,
 		  GCallback              callback)
@@ -681,6 +658,8 @@ toolbar_add_item (GtkFileChooserDefault *impl,
   g_signal_connect (item, "clicked", callback, impl);
   gtk_toolbar_insert (GTK_TOOLBAR (impl->toolbar), item, -1);
   gtk_widget_show (GTK_WIDGET (item));
+
+  return item;
 }
 
 /* Creates the toolbar widget */
@@ -688,9 +667,31 @@ static GtkWidget *
 toolbar_create (GtkFileChooserDefault *impl)
 {
   impl->toolbar = gtk_toolbar_new ();
-  toolbar_add_item (impl, GTK_STOCK_GO_UP, G_CALLBACK (toolbar_up_cb));
+  impl->up_button = toolbar_add_item (impl, GTK_STOCK_GO_UP, G_CALLBACK (toolbar_up_cb));
 
   return impl->toolbar;
+}
+
+/* Sets the sensitivity of the toolbar buttons */
+static void
+toolbar_check_sensitivity (GtkFileChooserDefault *impl)
+{
+  GtkFilePath *parent_path;
+  gboolean has_parent;
+
+  has_parent = FALSE;
+
+  /* I don't think we need to check GError here, do we? */
+  if (gtk_file_system_get_parent (impl->file_system, impl->current_folder, &parent_path, NULL))
+    {
+      if (parent_path)
+	{
+	  gtk_file_path_free (parent_path);
+	  has_parent = TRUE;
+	}
+    }
+
+  gtk_widget_set_sensitive (GTK_WIDGET (impl->up_button), has_parent);
 }
 
 /* Creates the widgets for the filter combo box */
@@ -948,8 +949,6 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
   gtk_box_pack_start (GTK_BOX (hbox), impl->remove_bookmark_button, FALSE, FALSE, 0);
   gtk_widget_show (impl->remove_bookmark_button);
 
-  shortcuts_select_folder (impl);
-
   return vbox;
 }
 
@@ -1187,7 +1186,6 @@ bookmarks_changed_cb (GtkFileSystem         *file_system,
 		      GtkFileChooserDefault *impl)
 {
   shortcuts_append_bookmarks (impl);
-  shortcuts_select_folder (impl);
 
   bookmarks_check_add_sensitivity (impl);
   bookmarks_check_remove_sensitivity (impl);
@@ -2098,7 +2096,8 @@ tree_selection_changed (GtkTreeSelection      *selection,
   /* Create the new list model */
   set_list_model (impl);
 
-  shortcuts_select_folder (impl);
+  shortcuts_unselect_all (impl);
+  toolbar_check_sensitivity (impl);
 
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 

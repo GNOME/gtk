@@ -1,3 +1,16 @@
+2003-11-03  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_select_folder): Removed.
+	(create_shortcuts_tree): Don't call the above.
+	(bookmarks_changed_cb): Likewise.
+	(tree_selection_changed): Unselect everything from the shortcuts
+	list.  This is the behavior that Mac OS has.
+	(toolbar_add_item): Return the item.
+	(toolbar_create): Store the up_button in the impl structure.
+	(toolbar_check_sensitivity): New function to set the sensitivity
+	of the "Up" button in the toolbar.
+	(tree_selection_changed): Call toolbar_check_sensitivity().
+
 2003-11-02  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_init): Do
