@@ -1,12 +1,12 @@
 # Bulgarian translation for gtk+-2.x.
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Borislav Aleksandrov <B.Aleksandrov@CNsys.bg>, 2002.
-# small additions for completeness, Yanko Kaneti <yaneti@declera.com>, 2002.
+# additions for completeness, Yanko Kaneti <yaneti@declera.com>, 2002.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+\n"
-"POT-Creation-Date: 2002-12-11 14:39-0500\n"
+"POT-Creation-Date: 2002-12-12 08:27+0200\n"
 "PO-Revision-Date: 2002-06-19 00:40+0200\n"
 "Last-Translator: Borislav Aleksandrov <B.Aleksandrov@cnsys.bg>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
@@ -128,32 +128,28 @@ msgstr "неуспех при заделяне на буфер за картин
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
-msgstr ""
+msgstr "Неочакван откъс в анимация"
 
 #: gdk-pixbuf/io-ani.c:337
-#, fuzzy
 msgid "Unsupported animation type"
-msgstr "Неподдържан тип икона"
+msgstr "Неподдържан тип анимация"
 
 #: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:538
-#, fuzzy
 msgid "Invalid header in animation"
-msgstr "Грешна заглавна част в икона"
+msgstr "Грешна заглавна част в анимация"
 
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
 #: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
-#, fuzzy
 msgid "Not enough memory to load animation"
-msgstr "Няма достатъчно памет за зареждане на икона"
+msgstr "Няма достатъчно памет за зареждане на анимация"
 
 #: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
 msgid "Malformed chunk in animation"
-msgstr ""
+msgstr "Грешно форматиран откъс от анимация"
 
 #: gdk-pixbuf/io-ani.c:676
-#, fuzzy
 msgid "The ANI image format"
-msgstr "Неизвестен формат на картинка"
+msgstr "Форматът за картинки ANI"
 
 #: gdk-pixbuf/io-bmp.c:223 gdk-pixbuf/io-bmp.c:339
 msgid "Not enough memory to load bitmap image"
@@ -169,7 +165,7 @@ msgstr "BMP картинка има 'фалшива' заглавна част"
 
 #: gdk-pixbuf/io-bmp.c:1076
 msgid "The BMP image format"
-msgstr ""
+msgstr "Форматът за картинки BMP"
 
 #: gdk-pixbuf/io-gif.c:219
 #, c-format
@@ -187,7 +183,7 @@ msgstr "Вътрешна грешка в заглавната част на GIF 
 
 #: gdk-pixbuf/io-gif.c:574
 msgid "Stack overflow"
-msgstr ""
+msgstr "Препълване на стека"
 
 #: gdk-pixbuf/io-gif.c:634
 msgid "GIF image loader can't understand this image."
@@ -244,9 +240,8 @@ msgid "GIF image was truncated or incomplete."
 msgstr "GIF картинката е орязана или непълна."
 
 #: gdk-pixbuf/io-gif.c:1636
-#, fuzzy
 msgid "The GIF image format"
-msgstr "Неизвестен формат на картинка"
+msgstr "Форматът за картинки GIF"
 
 #: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
 #: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
@@ -278,9 +273,8 @@ msgid "Not enough memory to load ICO file"
 msgstr "Няма достатъчно памет за да заредя ICO файл"
 
 #: gdk-pixbuf/io-ico.c:871
-#, fuzzy
 msgid "The ICO image format"
-msgstr "Неизвестен формат на картинка"
+msgstr "Форматът за картинки ICO"
 
 #: gdk-pixbuf/io-jpeg.c:114
 #, c-format
@@ -296,9 +290,9 @@ msgstr ""
 "някои приложения за да освободите памет."
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:744
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported JPEG color space (%s)"
-msgstr "Неподдържан тип икона"
+msgstr "Неподдържано JPEG цветово пространство (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:673 gdk-pixbuf/io-jpeg.c:858
 msgid "Couldn't allocate memory for loading JPEG file"
@@ -322,7 +316,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:940
 msgid "The JPEG image format"
-msgstr ""
+msgstr "Форматът за картинки JPEG"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
@@ -390,9 +384,8 @@ msgstr ""
 "кодировка"
 
 #: gdk-pixbuf/io-png.c:919
-#, fuzzy
 msgid "The PNG image format"
-msgstr "Формата на PNM картинката е грешен"
+msgstr "Форматът за картинки PNG"
 
 #: gdk-pixbuf/io-pnm.c:248
 msgid "PNM loader expected to find an integer, but didn't"
@@ -464,7 +457,7 @@ msgstr "Недостатъчно памет за зареждане на PNM ф�
 
 #: gdk-pixbuf/io-pnm.c:1070
 msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr ""
+msgstr "Фамилията формати за картинки PNM/PBG/PGM/PPM"
 
 #: gdk-pixbuf/io-ras.c:125
 msgid "RAS image has bogus header data"
@@ -475,9 +468,8 @@ msgid "RAS image has unknown type"
 msgstr "RAS картинка е неизвестен тип"
 
 #: gdk-pixbuf/io-ras.c:155
-#, fuzzy
 msgid "unsupported RAS image variation"
-msgstr "Неподържан тип TGA картинка"
+msgstr "неподържана разновидност от тип RAS картинка"
 
 #: gdk-pixbuf/io-ras.c:170 gdk-pixbuf/io-ras.c:190
 msgid "Not enough memory to load RAS image"
@@ -485,7 +477,7 @@ msgstr "Няма достатъчно памет за да зареди RAS ка
 
 #: gdk-pixbuf/io-ras.c:532
 msgid "The Sun raster image format"
-msgstr ""
+msgstr "Форматът за картинки Sun raster"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -597,7 +589,7 @@ msgstr "Неподържан тип TGA картинка"
 
 #: gdk-pixbuf/io-tga.c:1370
 msgid "The Targa image format"
-msgstr ""
+msgstr "Форматът за картинки Targa"
 
 #: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
@@ -624,9 +616,8 @@ msgid "Failed to load RGB data from TIFF file"
 msgstr "Неуспех при зареждане на RGB данно от TIFF файл"
 
 #: gdk-pixbuf/io-tiff.c:266
-#, fuzzy
 msgid "Unsupported TIFF variant"
-msgstr "Неподържан тип TGA картинка"
+msgstr "Неподържан вариант TIFF"
 
 #: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
@@ -642,7 +633,7 @@ msgstr "Неуспех при зареждане на TIFF картинка"
 
 #: gdk-pixbuf/io-tiff.c:591
 msgid "The TIFF image format"
-msgstr ""
+msgstr "Форматът за картинки TIFF"
 
 #: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
@@ -662,7 +653,7 @@ msgstr "Не можах да запазя останалото"
 
 #: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
-msgstr ""
+msgstr "Форматът за картинки WBMP"
 
 #: gdk-pixbuf/io-xbm.c:285
 msgid "Invalid XBM file"
@@ -678,7 +669,7 @@ msgstr "Неуспех при запис на временен файл при �
 
 #: gdk-pixbuf/io-xbm.c:474
 msgid "The XBM image format"
-msgstr ""
+msgstr "Форматът за картинки XBM"
 
 #: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
@@ -713,18 +704,16 @@ msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Неуспех при запис на временен файл когато зареждам XPM картинка"
 
 #: gdk-pixbuf/io-xpm.c:1543
-#, fuzzy
 msgid "The XPM image format"
-msgstr "Формата на PNM картинката е грешен"
+msgstr "Форматът за картинки XPM"
 
 #: gdk/gdkdisplaymanager.c:117
-#, fuzzy
 msgid "Default Display"
-msgstr "Интервал по подразбиране"
+msgstr "Дисплей по подразбиране"
 
 #: gdk/gdkdisplaymanager.c:118
 msgid "The default display for GDK"
-msgstr ""
+msgstr "Дисплеят по подразбиране за GDK"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -916,31 +905,28 @@ msgid "Secondary"
 msgstr "Вторичен"
 
 #: gtk/gtkbbox.c:165
-#, fuzzy
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 msgstr ""
 "Ако TRUE, то вложеният елемент се появява във вторична група от вложени "
-"елементи, например бутоните за помощ."
+"елементи, подходящо, например, за бутони за помощ."
 
 #: gtk/gtkbox.c:128
 msgid "Spacing"
 msgstr "Интервал"
 
 #: gtk/gtkbox.c:129
-#, fuzzy
 msgid "The amount of space between children"
-msgstr "Брой интервали между вложени елементи."
+msgstr "Разстоянието между вложени елементи"
 
 #: gtk/gtkbox.c:138 gtk/gtknotebook.c:444
 msgid "Homogeneous"
 msgstr "Хомогенен"
 
 #: gtk/gtkbox.c:139
-#, fuzzy
 msgid "Whether the children should all be the same size"
-msgstr "Дали вложените елементи ще имат еднакъв размер."
+msgstr "Дали вложените елементи да имат еднакъв размер"
 
 #: gtk/gtkbox.c:146 gtk/gtkpreview.c:132
 msgid "Expand"
@@ -998,11 +984,11 @@ msgid "Label"
 msgstr "Етикет"
 
 #: gtk/gtkbutton.c:190
-#, fuzzy
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr "Текст на етикет вътре в бутон, ако той съдържа такъв"
+msgstr ""
+"Текст на елемента етикет вътре в бутона, ако той съдържа елемент етикет"
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:311
 msgid "Use underline"
@@ -1032,9 +1018,8 @@ msgid "Border relief"
 msgstr "Релефни граници"
 
 #: gtk/gtkbutton.c:214
-#, fuzzy
 msgid "The border relief style"
-msgstr "Релефен стил на граници."
+msgstr "Стил олекотяване на границите"
 
 #: gtk/gtkbutton.c:271
 msgid "Default Spacing"
@@ -1099,25 +1084,22 @@ msgid "xalign"
 msgstr "x-подравняване"
 
 #: gtk/gtkcellrenderer.c:136
-#, fuzzy
 msgid "The x-align"
-msgstr "Подравняване по Х"
+msgstr "Подравняването по x"
 
 #: gtk/gtkcellrenderer.c:146
 msgid "yalign"
 msgstr "у-подравняване"
 
 #: gtk/gtkcellrenderer.c:147
-#, fuzzy
 msgid "The y-align"
-msgstr "Подравняване по У"
+msgstr "Подравняванеto по y"
 
 #: gtk/gtkcellrenderer.c:157
 msgid "xpad"
 msgstr "xpad"
 
 #: gtk/gtkcellrenderer.c:158
-#, fuzzy
 msgid "The xpad"
 msgstr "Xpad"
 
@@ -1126,7 +1108,6 @@ msgid "ypad"
 msgstr "ypad"
 
 #: gtk/gtkcellrenderer.c:169
-#, fuzzy
 msgid "The ypad"
 msgstr "Ypad"
 
@@ -1135,16 +1116,14 @@ msgid "width"
 msgstr "ширина"
 
 #: gtk/gtkcellrenderer.c:180
-#, fuzzy
 msgid "The fixed width"
-msgstr "Фиксираната ширина."
+msgstr "Фиксираната ширина"
 
 #: gtk/gtkcellrenderer.c:190
 msgid "height"
 msgstr "височина"
 
 #: gtk/gtkcellrenderer.c:191
-#, fuzzy
 msgid "The fixed height"
 msgstr "Фиксираната височина"
 
@@ -1153,9 +1132,8 @@ msgid "Is Expander"
 msgstr "Е Разширител"
 
 #: gtk/gtkcellrenderer.c:202
-#, fuzzy
 msgid "Row has children"
-msgstr "Редът има подредове"
+msgstr "Редът има вложени елементи"
 
 #: gtk/gtkcellrenderer.c:211
 msgid "Is Expanded"
@@ -1194,27 +1172,24 @@ msgid "Pixbuf Object"
 msgstr "Обект 'Pixbuf'"
 
 #: gtk/gtkcellrendererpixbuf.c:133
-#, fuzzy
 msgid "The pixbuf to render"
-msgstr "'Pixbuf' за рендване"
+msgstr "Pixbuf за рендване"
 
 #: gtk/gtkcellrendererpixbuf.c:141
 msgid "Pixbuf Expander Open"
-msgstr "Pixbuf Expander Open"
+msgstr "Pixbuf разширител отворен"
 
 #: gtk/gtkcellrendererpixbuf.c:142
-#, fuzzy
 msgid "Pixbuf for open expander"
-msgstr "Pixbuf for open expander."
+msgstr "Pixbuf за отворен разширител"
 
 #: gtk/gtkcellrendererpixbuf.c:150
 msgid "Pixbuf Expander Closed"
-msgstr "Pixbuf Expander Closed"
+msgstr "Pixbuf разширител затворен"
 
 #: gtk/gtkcellrendererpixbuf.c:151
-#, fuzzy
 msgid "Pixbuf for closed expander"
-msgstr "Pixbuf for closed expander."
+msgstr "Pixbuf за затворен разширител"
 
 #: gtk/gtkcellrendererpixbuf.c:159 gtk/gtkimage.c:176
 msgid "Stock ID"
@@ -1261,9 +1236,8 @@ msgid "Attributes"
 msgstr "Атрибути"
 
 #: gtk/gtkcellrenderertext.c:192
-#, fuzzy
 msgid "A list of style attributes to apply to the text of the renderer"
-msgstr "Списък от атрибути на стил за използване в текста при ренване."
+msgstr "Списък от атрибути на стил за прилагане към текста на рендера"
 
 #: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:205
 msgid "Background color name"
@@ -1501,21 +1475,19 @@ msgstr "Дали този таг засяга подчертаване"
 
 #: gtk/gtkcellrenderertoggle.c:132
 msgid "Toggle state"
-msgstr "Стил на превключване"
+msgstr "Състояние на превключване"
 
 #: gtk/gtkcellrenderertoggle.c:133
 msgid "The toggle state of the button"
-msgstr "Стил на превключване на бутонте"
+msgstr "Състояние на превключване на бутонте"
 
 #: gtk/gtkcellrenderertoggle.c:141
-#, fuzzy
 msgid "Inconsistent state"
-msgstr "Нечувствителен"
+msgstr "Неопределено състояние"
 
 #: gtk/gtkcellrenderertoggle.c:142
-#, fuzzy
 msgid "The inconsistent state of the button"
-msgstr "Стил на превключване на бутонте"
+msgstr "Неопределеното състояние на бутона"
 
 #: gtk/gtkcellrenderertoggle.c:150
 msgid "Activatable"
@@ -1554,18 +1526,16 @@ msgid "Active"
 msgstr "Активен"
 
 #: gtk/gtkcheckmenuitem.c:118
-#, fuzzy
 msgid "Whether the menu item is checked"
-msgstr "Дали обекта на менюто е маркиран"
+msgstr "Дали меню елемента е маркиран"
 
 #: gtk/gtkcheckmenuitem.c:125 gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
 msgstr "Нечувствителен"
 
 #: gtk/gtkcheckmenuitem.c:126
-#, fuzzy
 msgid "Whether to display an \"inconsistent\" state"
-msgstr "Дали да показва състояние \"нечувствителен\""
+msgstr "Дали да показва \"неопределено\" състояние"
 
 #: gtk/gtkcolorsel.c:559
 msgid ""
@@ -1593,7 +1563,10 @@ msgstr "_Запазва цвета тук"
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr "Кликнете на тази палитра"
+msgstr ""
+"Кликнете на този елемент от палитрата за да го направите текущ цвят. За да "
+"смените цвета изтеглете примерен цвят тук или натиснете десния клавиш и "
+"изберете \"Запазване на цвета тук.\""
 
 #: gtk/gtkcolorsel.c:1743
 msgid "Has Opacity Control"
@@ -1739,7 +1712,7 @@ msgstr "Винаги разрешава стрелките"
 
 #: gtk/gtkcombo.c:151
 msgid "Obsolete property, ignored"
-msgstr ""
+msgstr "Ост., не се взема под внимание"
 
 #: gtk/gtkcombo.c:157
 msgid "Case sensitive"
@@ -1778,18 +1751,17 @@ msgid "Border width"
 msgstr "Ширина на рамка"
 
 #: gtk/gtkcontainer.c:211
-#, fuzzy
 msgid "The width of the empty border outside the containers children"
-msgstr "Ширината на празната рамка извън съдържанието на контейнера."
+msgstr "Ширината на празната рамка извън вложените елементи на контейнера"
 
 #: gtk/gtkcontainer.c:219
 msgid "Child"
-msgstr "Вграден елемент"
+msgstr "Вложен елемент"
 
 #: gtk/gtkcontainer.c:220
-#, fuzzy
 msgid "Can be used to add a new child to the container"
-msgstr "Може да бъде използван за добавяне на нов елемент в съдържанието."
+msgstr ""
+"Може да бъде използван за добавяне на нов вложен елемент към контейнера"
 
 #: gtk/gtkcurve.c:121
 msgid "Curve type"
@@ -1812,7 +1784,6 @@ msgid "Maximum X"
 msgstr "Максимум Х"
 
 #: gtk/gtkcurve.c:141
-#, fuzzy
 msgid "Maximum possible X value"
 msgstr "Максимална възможна стойност за Х"
 
@@ -1869,20 +1840,17 @@ msgid "Cursor Position"
 msgstr "Позиция на Показалеца"
 
 #: gtk/gtkentry.c:437 gtk/gtklabel.c:369
-#, fuzzy
 msgid "The current position of the insertion cursor in chars"
-msgstr "Текущата позиция на мястото за вмъкване в символи."
+msgstr "Текущата позиция на вмъкващия курсор в символи"
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:378
 msgid "Selection Bound"
 msgstr "Избор на Рамки"
 
 #: gtk/gtkentry.c:447 gtk/gtklabel.c:379
-#, fuzzy
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
-msgstr ""
-"Позицията на противоположният край от избраното на показалеца в символи."
+msgstr "Позицията на противоположния край от избраното от показалеца в символи"
 
 #: gtk/gtkentry.c:457
 msgid "Whether the entry contents can be edited"
@@ -1893,10 +1861,9 @@ msgid "Maximum length"
 msgstr "Максимална дължина"
 
 #: gtk/gtkentry.c:465
-#, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
-"Максимален брой символи за този запис. Нула ако няма максимална стойност."
+"Максимален брой символи за този запис. Нула ако няма максимална стойност"
 
 #: gtk/gtkentry.c:473
 msgid "Visibility"
@@ -1913,9 +1880,8 @@ msgid "Has Frame"
 msgstr "Има рамка"
 
 #: gtk/gtkentry.c:482
-#, fuzzy
 msgid "FALSE removes outside bevel from entry"
-msgstr "FLASE премахва външното рамка от полето"
+msgstr "FLASE премахва външната рамка от полето"
 
 #: gtk/gtkentry.c:489
 msgid "Invisible character"
@@ -1932,20 +1898,18 @@ msgid "Activates default"
 msgstr "Активира по подразбиране"
 
 #: gtk/gtkentry.c:498
-#, fuzzy
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
-"Дали да активира подразбиращите се графични обекти (такива като бутони по "
-"подразбиране в диалог) кагато е натиснат 'Enter'"
+"Дали да активира елемента по подразбиране (такъв като бутон по подразбиране "
+"в диалог) кагато е натиснат 'Enter'"
 
 #: gtk/gtkentry.c:504
 msgid "Width in chars"
 msgstr "Ширина в символи"
 
 #: gtk/gtkentry.c:505
-#, fuzzy
 msgid "Number of characters to leave space for in the entry"
 msgstr "Брой символи за които е оставено място в записа"
 
@@ -1966,9 +1930,8 @@ msgid "Select on focus"
 msgstr "Избор на фокус"
 
 #: gtk/gtkentry.c:757
-#, fuzzy
 msgid "Whether to select the contents of an entry when it is focused"
-msgstr "Дали избраното съдържание ще се отдели при фокусиране."
+msgstr "Дали да се избере съдържанието на записа, когато той се фокусира"
 
 #: gtk/gtkentry.c:3950 gtk/gtklabel.c:3222
 msgid "Select All"
@@ -1987,7 +1950,6 @@ msgid "Filename"
 msgstr "Име на файл"
 
 #: gtk/gtkfilesel.c:517
-#, fuzzy
 msgid "The currently selected filename"
 msgstr "Текущото избрано име на файл"
 
@@ -1996,18 +1958,16 @@ msgid "Show file operations"
 msgstr "Показва файловите операции"
 
 #: gtk/gtkfilesel.c:524
-#, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
-msgstr "Дали бутоните за създаване/манипулация на файловете ще бъде показано"
+msgstr "Дали бутоните за създаване/манипулация на файловете да бъдат показани"
 
 #: gtk/gtkfilesel.c:531
 msgid "Select multiple"
 msgstr "Избор на няколко"
 
 #: gtk/gtkfilesel.c:532
-#, fuzzy
 msgid "Whether to allow multiple files to be selected"
-msgstr "Дали позволява избор на няколко файла."
+msgstr "Дали е позволен избор на няколко файла"
 
 #: gtk/gtkfilesel.c:687
 msgid "Folders"
@@ -2089,9 +2049,8 @@ msgid "_Folder name:"
 msgstr "_Име на Папка:"
 
 #: gtk/gtkfilesel.c:1476
-#, fuzzy
 msgid "C_reate"
-msgstr "Създава"
+msgstr "_Създаване"
 
 #: gtk/gtkfilesel.c:1522
 #, c-format
@@ -2165,14 +2124,12 @@ msgid "Rename file \"%s\" to:"
 msgstr "Преименува файл \"%s\" в:"
 
 #: gtk/gtkfilesel.c:1749
-#, fuzzy
 msgid "_Rename"
-msgstr "Преименува"
+msgstr "_Преименуване"
 
 #: gtk/gtkfilesel.c:2188
-#, fuzzy
 msgid "_Selection: "
-msgstr "Избор:"
+msgstr "_Избор: "
 
 #: gtk/gtkfilesel.c:3075
 #, c-format
@@ -2222,12 +2179,10 @@ msgid "Font name"
 msgstr "Име на шрифт"
 
 #: gtk/gtkfontsel.c:211
-#, fuzzy
 msgid "The X string that represents this font"
-msgstr "Х низ който представя този шрифт."
+msgstr "Х низ който представя този шрифт"
 
 #: gtk/gtkfontsel.c:218
-#, fuzzy
 msgid "The GdkFont that is currently selected"
 msgstr "GdkFont който текущо е избран"
 
@@ -2236,9 +2191,8 @@ msgid "Preview text"
 msgstr "Преглед на текст"
 
 #: gtk/gtkfontsel.c:225
-#, fuzzy
 msgid "The text to display in order to demonstrate the selected font"
-msgstr "Текста за покзване за демонстрация на шрифта"
+msgstr "Текстът за показване при демонстрация на шрифта"
 
 #: gtk/gtkfontsel.c:332
 msgid "_Family:"
@@ -2262,51 +2216,44 @@ msgid "Font Selection"
 msgstr "Избор на Шрифт"
 
 #: gtk/gtkframe.c:126
-#, fuzzy
 msgid "Text of the frame's label"
-msgstr "Текст за етикет на рамка."
+msgstr "Текст на етикет на рамката"
 
 #: gtk/gtkframe.c:133
 msgid "Label xalign"
 msgstr "Изравняване на текста по Х"
 
 #: gtk/gtkframe.c:134
-#, fuzzy
 msgid "The horizontal alignment of the label"
-msgstr "Хоризонтално подравняване на етикета."
+msgstr "Хоризонталното подравняване на етикета"
 
 #: gtk/gtkframe.c:143
 msgid "Label yalign"
 msgstr "Изравняване на текста по У"
 
 #: gtk/gtkframe.c:144
-#, fuzzy
 msgid "The vertical alignment of the label"
-msgstr "Вертикално подравняване на етикета."
+msgstr "Вертикалното подравняване на етикета"
 
 #: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:187
-#, fuzzy
 msgid "Deprecated property, use shadow_type instead"
-msgstr "Ост., вместо това използвайте shadow_type."
+msgstr "Ост., вместо това използвайте shadow_type"
 
 #: gtk/gtkframe.c:160
 msgid "Frame shadow"
 msgstr "Сянка на рамка"
 
 #: gtk/gtkframe.c:161
-#, fuzzy
 msgid "Appearance of the frame border"
-msgstr "Появяване граници на рамка."
+msgstr "Вид на границите на рамка"
 
 #: gtk/gtkframe.c:169
 msgid "Label widget"
 msgstr "Графичен обект Етикет"
 
 #: gtk/gtkframe.c:170
-#, fuzzy
 msgid "A widget to display in place of the usual frame label"
-msgstr ""
-"Графичен обект за показване в мястото на обикновеният етикет за рамката."
+msgstr "Елемент показан на мястото на обикновеният етикет за рамка"
 
 #: gtk/gtkgamma.c:399
 msgid "Gamma"
@@ -2322,42 +2269,40 @@ msgid "Shadow type"
 msgstr "Тип на сянка"
 
 #: gtk/gtkhandlebox.c:195
-#, fuzzy
 msgid "Appearance of the shadow that surrounds the container"
-msgstr "Поява на сянка около контейнера."
+msgstr "Вид на сянката около контейнера"
 
 #: gtk/gtkhandlebox.c:203
 msgid "Handle position"
 msgstr "Подържа позиция"
 
 #: gtk/gtkhandlebox.c:204
-#, fuzzy
 msgid "Position of the handle relative to the child widget"
-msgstr "Позиция на манипулатора относно вложения елемент."
+msgstr "Позиция на манипулатора относно вложения елемент"
 
 #: gtk/gtkhandlebox.c:212
 msgid "Snap edge"
 msgstr "Изравняване на края"
 
 #: gtk/gtkhandlebox.c:213
-#, fuzzy
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
 "Страна на манипулаторната кутия, която е подравнена с точката за скачване на "
-"кутията."
+"кутията"
 
 #: gtk/gtkhandlebox.c:221
-#, fuzzy
 msgid "Snap edge set"
-msgstr "Изравняване на края"
+msgstr "Включено Изравняване на края"
 
 #: gtk/gtkhandlebox.c:222
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
+"Дали да използва стойността на характеристиката snap_edge или стойност "
+"извлечена от handle_position"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2372,27 +2317,24 @@ msgid "Pixbuf"
 msgstr "Pixbuf"
 
 #: gtk/gtkimage.c:136
-#, fuzzy
 msgid "A GdkPixbuf to display"
-msgstr "GdkPixbuf за показване."
+msgstr "GdkPixbuf за показване"
 
 #: gtk/gtkimage.c:143
 msgid "Pixmap"
 msgstr "Растерна картинка"
 
 #: gtk/gtkimage.c:144
-#, fuzzy
 msgid "A GdkPixmap to display"
-msgstr "Растерна картинка на Gdk за показване."
+msgstr "GdkPixmap за показване."
 
 #: gtk/gtkimage.c:151
 msgid "Image"
 msgstr "Картинка"
 
 #: gtk/gtkimage.c:152
-#, fuzzy
 msgid "A GdkImage to display"
-msgstr "Gdk картинка за показване."
+msgstr "GdkImage за показване"
 
 #: gtk/gtkimage.c:159
 msgid "Mask"
@@ -2403,51 +2345,44 @@ msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Битова маска използвана с GdkImage или GdkPixmap"
 
 #: gtk/gtkimage.c:168
-#, fuzzy
 msgid "Filename to load and display"
-msgstr "Име на файл за зареждане или показване."
+msgstr "Име на файл за зареждане и показване"
 
 #: gtk/gtkimage.c:177
-#, fuzzy
 msgid "Stock ID for a stock image to display"
-msgstr ""
-"ID от номенклатурата за номенклатурната картинка, която да се изобрази."
+msgstr "ID от номенклатурата за номенклатурната картинка, която да се изобрази"
 
 #: gtk/gtkimage.c:184
 msgid "Icon set"
 msgstr "Набор икони"
 
 #: gtk/gtkimage.c:185
-#, fuzzy
 msgid "Icon set to display"
-msgstr "Набор от икони за показване"
+msgstr "Набор икони за показване"
 
 #: gtk/gtkimage.c:192
 msgid "Icon size"
 msgstr "Размер на икона"
 
 #: gtk/gtkimage.c:193
-#, fuzzy
 msgid "Size to use for stock icon or icon set"
-msgstr "Размер за използване на икони."
+msgstr "Размер за използване от икони от номенклатурата или от набор икони"
 
 #: gtk/gtkimage.c:201
 msgid "Animation"
 msgstr "Анимация"
 
 #: gtk/gtkimage.c:202
-#, fuzzy
 msgid "GdkPixbufAnimation to display"
-msgstr "Gdk Анимация за показване."
+msgstr "GdkPixbufAnimation за показване."
 
 #: gtk/gtkimage.c:209
 msgid "Storage type"
 msgstr "Тип на запазване"
 
 #: gtk/gtkimage.c:210
-#, fuzzy
 msgid "The representation being used for image data"
-msgstr "Презентацията започва с използване на представените данни."
+msgstr "Презентацията използвана за данни от картинки"
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
@@ -2537,126 +2472,115 @@ msgid "clear"
 msgstr "чист"
 
 #: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:553
-#, fuzzy
 msgid "The screen where this window will be displayed"
-msgstr "Екранът, където да бъде изобразен този прозорец."
+msgstr "Екранът, където ще бъде изобразен този прозорец"
 
 #: gtk/gtklabel.c:291
-#, fuzzy
 msgid "The text of the label"
-msgstr "Текста на етикета"
+msgstr "Текстът на етикета"
 
 #: gtk/gtklabel.c:298
-#, fuzzy
 msgid "A list of style attributes to apply to the text of the label"
-msgstr "Списък от атрибути на стил за използване в текста на етикетите"
+msgstr "Списък от стилови трибути за прилагане към текста на етикета"
 
 #: gtk/gtklabel.c:304
 msgid "Use markup"
 msgstr "Използва отметка"
 
 #: gtk/gtklabel.c:305
-#, fuzzy
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr "Текста на отметката включваща XML. Виж pango_parse_markup()."
+msgstr "Текстът на етикета включва XML. Виж pango_parse_markup()"
 
 #: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:583
 msgid "Justification"
 msgstr "Нагласяване"
 
 #: gtk/gtklabel.c:320
-#, fuzzy
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that"
-msgstr "Подредбата на редовете в етикета един спрямо друг. Виж GtkMisc::xalign"
+msgstr ""
+"Подревняването на редовете в текста на етикета един спрямо друг. Това НЕ "
+"влияе на подравняването на етикета в неговото място. За това Виж GtkMisc::"
+"xalign"
 
 #: gtk/gtklabel.c:328
 msgid "Pattern"
 msgstr "Образец"
 
 #: gtk/gtklabel.c:329
-#, fuzzy
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr ""
 "Стринг с _ знаци на позиции отговаряши на знаците от от текста, които да се "
-"подчертаят."
+"подчертаят"
 
 #: gtk/gtklabel.c:336
 msgid "Line wrap"
 msgstr "Прехвърляне на ред"
 
 #: gtk/gtklabel.c:337
-#, fuzzy
 msgid "If set, wrap lines if the text becomes too wide"
-msgstr "Ако е зададен, текта се прехвърля на нов ред ако е твърде дълъг."
+msgstr "Ако е зададено, текста се прехвърля на нов ред ако е твърде широк"
 
 #: gtk/gtklabel.c:343
 msgid "Selectable"
 msgstr "Избираем"
 
 #: gtk/gtklabel.c:344
-#, fuzzy
 msgid "Whether the label text can be selected with the mouse"
-msgstr "Дали текста на етикета може да бъде избран с мишката."
+msgstr "Дали текстът на етикета може да бъде избран с мишката"
 
 #: gtk/gtklabel.c:350
 msgid "Mnemonic key"
 msgstr "Мнемоничен клавиш"
 
 #: gtk/gtklabel.c:351
-#, fuzzy
 msgid "The mnemonic accelerator key for this label"
-msgstr "Мнемоничичен ускорителен клавиш за този етикет."
+msgstr "Мнемоничичен ускорителен клавиш за този етикет"
 
 #: gtk/gtklabel.c:359
 msgid "Mnemonic widget"
 msgstr "Мнемоничен графичен обект"
 
 #: gtk/gtklabel.c:360
-#, fuzzy
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
-"Графичен обект за активиране когато мнемоничният клавиш на етикет е натиснат."
+"Елементът за активиране, когато мнемоничният клавиш на етикет е натиснат"
 
 #: gtk/gtklayout.c:631 gtk/gtkviewport.c:134
 msgid "Horizontal adjustment"
 msgstr "Хоризонтално нагласяване"
 
 #: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:236
-#, fuzzy
 msgid "The GtkAdjustment for the horizontal position"
-msgstr "Нагласяване на Gtk по хоризонталата."
+msgstr "Нагласяване на Gtk за хоризонталната позиция"
 
 #: gtk/gtklayout.c:639 gtk/gtkviewport.c:142
 msgid "Vertical adjustment"
 msgstr "Вертикално нагласяване"
 
 #: gtk/gtklayout.c:640 gtk/gtkscrolledwindow.c:243
-#, fuzzy
 msgid "The GtkAdjustment for the vertical position"
-msgstr "Нагласяване на Gtk по вертикалата."
+msgstr "Нагласяване на Gtk за вертикалната позиция"
 
 #: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:201
 msgid "Width"
 msgstr "Ширина"
 
 #: gtk/gtklayout.c:648
-#, fuzzy
 msgid "The width of the layout"
-msgstr "Ширина на подредбата."
+msgstr "Ширината на подредбата"
 
 #: gtk/gtklayout.c:656
 msgid "Height"
 msgstr "Височина"
 
 #: gtk/gtklayout.c:657
-#, fuzzy
 msgid "The height of the layout"
-msgstr "Височина на подредбата."
+msgstr "Височината на подредбата"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -2672,7 +2596,6 @@ msgid "Tearoff Title"
 msgstr "Откъснато заглавие"
 
 #: gtk/gtkmenu.c:244
-#, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2685,31 +2608,33 @@ msgid "Can change accelerators"
 msgstr "Може да променя ускорителите"
 
 #: gtk/gtkmenu.c:320
-#, fuzzy
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
-"Дали менюто за ускорителите може да бъде променено чрез натискане на клавиш "
-"над обект от менюто."
+"Дали ускорителите за менюта могат да бъдат променяни чрез натискане на "
+"клавиш над обект от менюто."
 
 #: gtk/gtkmenu.c:325
 msgid "Delay before submenus appear"
-msgstr ""
+msgstr "Закъснение преди появяване на подменюта"
 
 #: gtk/gtkmenu.c:326
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
+"Минимално време през което показалеца трябва да остане над обект от меню "
+"преди  да се появи подменюто"
 
 #: gtk/gtkmenu.c:333
 msgid "Delay before hiding a submenu"
-msgstr ""
+msgstr "Закъснение преди скриване на подменю"
 
 #: gtk/gtkmenu.c:334
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
 msgstr ""
+"Време преди скриване на подменю, през което показалеца се движи към подменюто"
 
 #: gtk/gtkmenubar.c:157
 msgid "Style of bevel around the menubar"
@@ -2725,11 +2650,11 @@ msgstr "Брой рамки между лентата със засенчена 
 
 #: gtk/gtkmenubar.c:172
 msgid "Delay before drop down menus appear"
-msgstr ""
+msgstr "Закъснение преди появяване на падащи менюта"
 
 #: gtk/gtkmenubar.c:173
 msgid "Delay before the submenus of a menu bar appear"
-msgstr ""
+msgstr "Закъснениет преди появяване на подменютата"
 
 #: gtk/gtkmessagedialog.c:106
 msgid "Image/label border"
@@ -2961,16 +2886,15 @@ msgid "Activity mode"
 msgstr "Режим на Активиране"
 
 #: gtk/gtkprogress.c:128
-#, fuzzy
 msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
 msgstr ""
-"Ако е TRUE, GtkProgress е във режим активеност, което означава, че "
+"Ако е TRUE, GtkProgress е във режим активност, което означава, че "
 "сигнализира, когато има някакъв прогрес, но не и каква част от дейността е "
 "свършена. Това се използва когато изобразявате дейност с неопределена "
-"продължителност."
+"продължителност"
 
 #: gtk/gtkprogress.c:135
 msgid "Show text"
@@ -3082,11 +3006,11 @@ msgstr "Текст за показване в лентата за прогрес
 
 #: gtk/gtkradiobutton.c:109
 msgid "Group"
-msgstr ""
+msgstr "Група"
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
-msgstr ""
+msgstr "Радио бутонът към чиято група принадлежи този графичен елемент."
 
 #: gtk/gtkrange.c:275
 msgid "Update policy"
@@ -3336,14 +3260,12 @@ msgid "Style of bevel around the contents"
 msgstr "Стила около съдържанието"
 
 #: gtk/gtkscrolledwindow.c:282
-#, fuzzy
 msgid "Scrollbar spacing"
-msgstr "Разсояние между колони"
+msgstr "Разстояние за лента за скролиране"
 
 #: gtk/gtkscrolledwindow.c:283
-#, fuzzy
 msgid "Number of pixels between the scrollbars and the scrolled window"
-msgstr "Брой пиксели от полето скролирани извън екрана в ляво"
+msgstr "Брой пиксели между лентите за скролиране и скролирания прозорец"
 
 #: gtk/gtksettings.c:167
 msgid "Double Click Time"
@@ -3426,26 +3348,24 @@ msgid "Name of default font to use"
 msgstr "Име на подразбиращ се шрифт за използване"
 
 #: gtk/gtksettings.c:243
-#, fuzzy
 msgid "Icon Sizes"
-msgstr "Размер на икона"
+msgstr "Размери на икони"
 
 #: gtk/gtksettings.c:244
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
-msgstr ""
+msgstr "Списък размери на икони (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksizegroup.c:241
 msgid "Mode"
 msgstr "Режим"
 
 #: gtk/gtksizegroup.c:242
-#, fuzzy
 msgid ""
 "The directions in which the size group effects the requested sizes of its "
 "component widgets"
 msgstr ""
-"Посока в която тази GtkSizeGroup-a оказва влияние на своите съставни "
-"елементи."
+"Посоките в които тази GtkSizeGroup-a оказва влияние на заявените размиер на "
+"своите съставни елементи"
 
 #: gtk/gtkspinbutton.c:241
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3563,16 +3483,15 @@ msgstr "_Затваря"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
-msgstr "_Конвертира"
+msgstr "Кон_вертира"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
 msgstr "_Копира"
 
 #: gtk/gtkstock.c:284
-#, fuzzy
 msgid "Cu_t"
-msgstr "О_трязва"
+msgstr "От_рязва"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
@@ -3835,6 +3754,7 @@ msgstr "Ляво прикачване"
 #: gtk/gtktable.c:203
 msgid "The column number to attach the left side of the child to"
 msgstr ""
+"Номер на колоната към който да се прикачи лявата страна на вложения елемент"
 
 #: gtk/gtktable.c:209
 msgid "Right attachment"
@@ -3843,6 +3763,7 @@ msgstr "Дясно прикачване"
 #: gtk/gtktable.c:210
 msgid "the column number to attach the right side of a child widget to"
 msgstr ""
+"Номер на колоната към който да се прикачи дясната страна на вложения елемент"
 
 #: gtk/gtktable.c:216
 msgid "Top attachment"
@@ -3851,6 +3772,7 @@ msgstr "Горно прикачване"
 #: gtk/gtktable.c:217
 msgid "The row number to attach the top of a child widget to"
 msgstr ""
+"Номер на реда към който да се прикачи горната страна на вложения елемент"
 
 #: gtk/gtktable.c:223
 msgid "Bottom attachment"
@@ -3859,15 +3781,15 @@ msgstr "Долно прикачване"
 #: gtk/gtktable.c:224
 msgid "The row number to attach the bottom of the child to"
 msgstr ""
+"Номер на реда към който да се прикачи долната страна на вложения елемент"
 
 #: gtk/gtktable.c:230
 msgid "Horizontal options"
 msgstr "Хоризонтални опции"
 
 #: gtk/gtktable.c:231
-#, fuzzy
 msgid "Options specifying the horizontal behaviour of the child"
-msgstr "Опции указващи хоризонталното поведение на вложения елемент."
+msgstr "Опции указващи хоризонталното поведение на вложения елемент"
 
 #: gtk/gtktable.c:237
 msgid "Vertical options"
@@ -3875,7 +3797,7 @@ msgstr "Вертикални опции"
 
 #: gtk/gtktable.c:238
 msgid "Options specifying the vertical behaviour of the child"
-msgstr "Опции указващи вертикалното поведение на вложения елемент."
+msgstr "Опции указващи вертикалното поведение на вложения елемент"
 
 #: gtk/gtktable.c:244
 msgid "Horizontal padding"
@@ -3926,24 +3848,20 @@ msgid "Whether words are wrapped at widget edges"
 msgstr "Дали думите ще се прехвърлят на края на графичния обект"
 
 #: gtk/gtktextbuffer.c:180
-#, fuzzy
 msgid "Tag Table"
-msgstr "Име на таг"
+msgstr "Таблица тагове"
 
 #: gtk/gtktextbuffer.c:181
-#, fuzzy
 msgid "Text Tag Table"
-msgstr "Подравняване на текст по у"
+msgstr "Таблица текстови тагове"
 
 #: gtk/gtktexttag.c:195
 msgid "Tag name"
 msgstr "Име на таг"
 
 #: gtk/gtktexttag.c:196
-#, fuzzy
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr ""
-"Име използвано за обръщение към текстовия етикет. NULL за анонимни етикети."
+msgstr "Име използвано за обръщение към текстовия таг. NULL за анонимен таг"
 
 #: gtk/gtktexttag.c:214
 msgid "Background color as a (possibly unallocated) GdkColor"
@@ -3992,36 +3910,30 @@ msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "Описание на шрифт като низ. пр. \"Sans Italic 12\""
 
 #: gtk/gtktexttag.c:307
-#, fuzzy
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr "Стил на шрифта като PangoStyle, пр. PANGO_STYLE_ITALIC."
+msgstr "Стил на шрифта като PangoStyle, пр. PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:316
-#, fuzzy
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr "Вариант на шрифта като PangoVariant, пр. PANGO_VARIANT_SMALL_CAPS."
+msgstr "Вариант на шрифта като PangoVariant, пр. PANGO_VARIANT_SMALL_CAPS"
 
 #: gtk/gtktexttag.c:325
-#, fuzzy
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
 msgstr ""
 "Тегло на шрифта като цяло число, виж предефинираните стойности във "
-"PangoWeight. пр. PANGO_WEIGHT_BOLD."
+"PangoWeight. пр. PANGO_WEIGHT_BOLD"
 
 #: gtk/gtktexttag.c:336
-#, fuzzy
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr "Разтегляне на шрифта като PangoStretch, пр. PANGO_STRETCH_CONDENSED."
+msgstr "Разтегляне на шрифта като PangoStretch, пр. PANGO_STRETCH_CONDENSED"
 
 #: gtk/gtktexttag.c:345
-#, fuzzy
 msgid "Font size in Pango units"
 msgstr "Размер на шрифт в Pango единици"
 
 #: gtk/gtktexttag.c:355
-#, fuzzy
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
@@ -4030,7 +3942,7 @@ msgstr ""
 "Размер на шрифта като фактор за промяна на размера относно шрифта по "
 "подразбиране. Това поле се адаптира към промени на темата, затова "
 "използването му се препоръчва. Pango предефинира някои стоиности, пр. "
-"PANGO_SCALE_X_LARGE."
+"PANGO_SCALE_X_LARGE"
 
 #: gtk/gtktexttag.c:375 gtk/gtktextview.c:584
 msgid "Left, right, or center justification"
@@ -4041,15 +3953,14 @@ msgid "Language"
 msgstr "Език"
 
 #: gtk/gtktexttag.c:384
-#, fuzzy
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 msgstr ""
-"Езикът, на който е този текст е ISO код. Pango може да използва това като "
+"Езикът, на който е този текст като ISO код. Pango може да използва това като "
 "подсказка когато изобразява текста. Ако не разбирате този параметър най-"
-"вероятно не се нъждаете от него."
+"вероятно не се нуждаете от него"
 
 #: gtk/gtktexttag.c:391
 msgid "Left margin"
@@ -4330,9 +4241,8 @@ msgid "If the toggle button should be pressed in or not"
 msgstr "Дали бутона за превключване да бъде включен или не"
 
 #: gtk/gtktogglebutton.c:141
-#, fuzzy
 msgid "If the toggle button is in an \"in between\" state"
-msgstr "Ако бутона за превключване е в \"междинно\" състояние."
+msgstr "Ако бутона за превключване е в \"междинно\" състояние"
 
 #: gtk/gtktogglebutton.c:148
 msgid "Draw Indicator"
@@ -4489,61 +4399,56 @@ msgid "Expander Size"
 msgstr "Големина на разширителя"
 
 #: gtk/gtktreeview.c:604
-#, fuzzy
 msgid "Size of the expander arrow"
-msgstr "Големина на стрелката на разширителя."
+msgstr "Големина на стрелката на разширителя"
 
 #: gtk/gtktreeview.c:612
 msgid "Vertical Separator Width"
 msgstr "Ширина на Вертикален Разделител"
 
 #: gtk/gtktreeview.c:613
-#, fuzzy
 msgid "Vertical space between cells.  Must be an even number"
-msgstr "Вертикално разстояние между клетки. Трябва да е четно."
+msgstr "Вертикално разстояние между клетки. Трябва да е четно число"
 
 #: gtk/gtktreeview.c:621
 msgid "Horizontal Separator Width"
 msgstr "Ширина на Хоризонтален Разделител"
 
 #: gtk/gtktreeview.c:622
-#, fuzzy
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr "Хоризонтално разстояние между клетки. Трябва да е четно."
+msgstr "Хоризонтално разстояние между клетки. Трябва да е четно число"
 
 #: gtk/gtktreeview.c:630
 msgid "Allow Rules"
 msgstr "Позволява линия"
 
 #: gtk/gtktreeview.c:631
-#, fuzzy
 msgid "Allow drawing of alternating color rows"
-msgstr "Позволява изчертаване на алтернативни цветни редове"
+msgstr "Позволява изчертаване на цветове с алтернативни цветове"
 
 #: gtk/gtktreeview.c:637
 msgid "Indent Expanders"
 msgstr "Отместване на разширителите"
 
 #: gtk/gtktreeview.c:638
-#, fuzzy
 msgid "Make the expanders indented"
-msgstr "Отемсти разширителите."
+msgstr "Отемсти разширителите"
 
 #: gtk/gtktreeview.c:644
 msgid "Even Row Color"
-msgstr ""
+msgstr "Цвят четен ред"
 
 #: gtk/gtktreeview.c:645
 msgid "Color to use for even rows"
-msgstr ""
+msgstr "Цвета, който да се използва за четни редове"
 
 #: gtk/gtktreeview.c:651
 msgid "Odd Row Color"
-msgstr ""
+msgstr "Цвят нечетен ред"
 
 #: gtk/gtktreeview.c:652
 msgid "Color to use for odd rows"
-msgstr ""
+msgstr "Цвета, който да се използва за нечетни редове"
 
 #: gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
@@ -4646,23 +4551,24 @@ msgid "Sort direction the sort indicator should indicate"
 msgstr "Посока на сортиране, която е изобразена на индикатора на сортиране"
 
 #: gtk/gtkviewport.c:135
-#, fuzzy
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport"
-msgstr "GtkAdjustment който определя стойносттая на хоризонталната позиция"
+msgstr ""
+"GtkAdjustment който определя стойностите на хоризонталната позиция за този "
+"изглед"
 
 #: gtk/gtkviewport.c:143
-#, fuzzy
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
-msgstr "GtkAdjustment който определя стойносттая на вертикалната позиция"
+msgstr ""
+"GtkAdjustment който определя стойностите на вертикалната позиция за този "
+"изглед"
 
 #: gtk/gtkviewport.c:151
-#, fuzzy
 msgid "Determines how the shadowed box around the viewport is drawn"
-msgstr "Определя изчертаването на засенчването"
+msgstr "Определя изчертаването на засенчващата кутия около изгледа"
 
 #: gtk/gtkwidget.c:400
 msgid "Widget name"
@@ -4677,35 +4583,32 @@ msgid "Parent widget"
 msgstr "Бащин графичен обект"
 
 #: gtk/gtkwidget.c:408
-#, fuzzy
 msgid "The parent widget of this widget. Must be a Container widget"
-msgstr "Бащиният графичен обект. Трябва да бъде графичен обект 'контейнер'"
+msgstr "Бащиният елемент на този елемент. Трябва да бъде елемент контейнер"
 
 #: gtk/gtkwidget.c:415
 msgid "Width request"
 msgstr "Заявена широчина"
 
 #: gtk/gtkwidget.c:416
-#, fuzzy
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr ""
-"Игнорирай заявката за ширина на елемента, или -1 ако трябва да бъде "
-"използвана обикновена заявка."
+"Игнорирне на заявката за ширина на елемента, или -1 ако трябва да бъде "
+"използвана обикновена заявка"
 
 #: gtk/gtkwidget.c:424
 msgid "Height request"
 msgstr "Заявена височина"
 
 #: gtk/gtkwidget.c:425
-#, fuzzy
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr ""
-"Игнорирай заявката за височина на елемента, или -1 ако трябва да бъде "
-"използвана обикновена заявка."
+"Игнориране на заявката за височина на елемента, или -1 ако трябва да бъде "
+"използвана обикновена заявка"
 
 #: gtk/gtkwidget.c:434
 msgid "Whether the widget is visible"
@@ -4772,11 +4675,10 @@ msgid "Receives default"
 msgstr "Получава по подразбиране"
 
 #: gtk/gtkwidget.c:490
-#, fuzzy
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Ако е TRUE, графичният обект ще получи подразбиращитете се действия когато е "
-"фокусиран."
+"фокусиран"
 
 #: gtk/gtkwidget.c:496
 msgid "Composite child"
@@ -4791,12 +4693,11 @@ msgid "Style"
 msgstr "Стил"
 
 #: gtk/gtkwidget.c:504
-#, fuzzy
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr ""
-"Стил на графичния обект, който съдържа информация за това как ще изглежда "
+"Стилът на графичния обект, който съдържа информация за това как ще изглежда "
 "(цвят и др)"
 
 #: gtk/gtkwidget.c:510
@@ -4804,58 +4705,52 @@ msgid "Events"
 msgstr "Събития"
 
 #: gtk/gtkwidget.c:511
-#, fuzzy
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
-"Маска на събития които определят GdkEvents които този графичен обект "
-"получава."
+"Маската на събития които определят GdkEvents които този графичен обект "
+"получава"
 
 #: gtk/gtkwidget.c:518
 msgid "Extension events"
 msgstr "Разширени събития"
 
 #: gtk/gtkwidget.c:519
-#, fuzzy
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
-"Маската която определя по какъв начин от разширени събития този обект "
-"получава"
+"Маската която определя по как вид разширени събития този обект получава"
 
 #: gtk/gtkwidget.c:1098
 msgid "Interior Focus"
 msgstr "Вътрешен Фокус"
 
 #: gtk/gtkwidget.c:1099
-#, fuzzy
 msgid "Whether to draw the focus indicator inside widgets"
-msgstr "Дали да изчертава индикатор за фокус вътре в графичния обект"
+msgstr "Дали да изчертава индикатор за фокус вътре в графични обекти"
 
 #: gtk/gtkwidget.c:1105
 msgid "Focus linewidth"
 msgstr "Ширина на линия за фокус"
 
 #: gtk/gtkwidget.c:1106
-#, fuzzy
 msgid "Width, in pixels, of the focus indicator line"
-msgstr "Ширина, в пиксели, за линията на индикатора на фокус."
+msgstr "Ширина, в пиксели, за линията на индикатора на фокус"
 
 #: gtk/gtkwidget.c:1112
 msgid "Focus line dash pattern"
 msgstr "Линия на фокус с шаблон на тирета"
 
 #: gtk/gtkwidget.c:1113
-#, fuzzy
 msgid "Dash pattern used to draw the focus indicator"
-msgstr "Образец с тирета използван за изчертаване на индикатор за фокус."
+msgstr "Образец с тирета използван за изчертаване на индикатор за фокус"
 
 #: gtk/gtkwidget.c:1118
 msgid "Focus padding"
 msgstr "Рамка на фокуса"
 
 #: gtk/gtkwidget.c:1119
-#, fuzzy
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr "Ширина в пиксели между индикатора 'фокус' и графичния обект 'box'."
+msgstr ""
+"Ширина в пиксели между индикатора 'фокус' и 'box'-ът на графичния обект"
 
 #: gtk/gtkwidget.c:1124
 msgid "Cursor color"
@@ -4870,13 +4765,12 @@ msgid "Secondary cursor color"
 msgstr "Цвят на Втори Показалец"
 
 #: gtk/gtkwidget.c:1131
-#, fuzzy
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr ""
-"Цвят с който ще се изчертава втирия показалец при смесено редактиране ляво-"
-"дясно и дясно-ляво"
+"Цвят с който ще се изчертава втирия показалец при редактиране на смесен ляво-"
+"десен и дясно-ляв текст"
 
 #: gtk/gtkwidget.c:1136
 msgid "Cursor line aspect ratio"
@@ -4907,41 +4801,38 @@ msgid "Allow Shrink"
 msgstr "Позволява Свиване"
 
 #: gtk/gtkwindow.c:476
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
-"Ако е истина, прозорците нямат минимален размер. Задаването на това като "
-"TRUE е 99% лоша идея"
+"Ако е TRUE, прозорцът няма минимален размер. Задаване на това като TRUE е "
+"лоша идея 99% от случаите"
 
 #: gtk/gtkwindow.c:483
 msgid "Allow Grow"
 msgstr "Позволява Нарастване"
 
 #: gtk/gtkwindow.c:484
-#, fuzzy
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
-"Ако е TRUE потребителя може да разширява прозореца извън неговият минимален "
-"размер."
+"Ако е TRUE потребителите могат да разширяват прозореца извън неговият "
+"минимален размер."
 
 #: gtk/gtkwindow.c:492
-#, fuzzy
 msgid "If TRUE, users can resize the window"
-msgstr "Ако е TRUE, потеребителя може да променя големината на прозореца."
+msgstr "Ако е TRUE, потеребителите могат да променя големината на прозореца."
 
 #: gtk/gtkwindow.c:499
 msgid "Modal"
 msgstr "Модален"
 
 #: gtk/gtkwindow.c:500
-#, fuzzy
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
-"Ако е TRUE прозореца е модален (другите прозорци не са използваеми докато "
+"Ако е TRUE, прозореца е модален (другите прозорци не са използваеми докато "
 "този е активен)"
 
 #: gtk/gtkwindow.c:507
@@ -4949,7 +4840,6 @@ msgid "Window Position"
 msgstr "Местоположение на Прозорец"
 
 #: gtk/gtkwindow.c:508
-#, fuzzy
 msgid "The initial position of the window"
 msgstr "Начално местоположение на прозореца"
 
@@ -4958,10 +4848,9 @@ msgid "Default Width"
 msgstr "Подразбираща се Широчина"
 
 #: gtk/gtkwindow.c:517
-#, fuzzy
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
-"Подразбираща се широчина на прозорец, използва се при първоначалното му "
+"Ширина по подразбиране на прозореца, използва се при първоначалното му "
 "показване"
 
 #: gtk/gtkwindow.c:526
@@ -4969,11 +4858,10 @@ msgid "Default Height"
 msgstr "Подразбираща се Височина"
 
 #: gtk/gtkwindow.c:527
-#, fuzzy
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
-"Подразбираща се височина на прозорец, използва се при първоначалното му "
+"Височина по подразбиране на прозореца, използва се при първоначалното му "
 "показване"
 
 #: gtk/gtkwindow.c:536
@@ -5010,30 +4898,31 @@ msgstr "Дали фокуса е във този GtkWindow"
 
 #: gtk/gtkwindow.c:576
 msgid "Type hint"
-msgstr ""
+msgstr "Указател за тип"
 
 #: gtk/gtkwindow.c:577
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
+"Указател помагащ на десктоп обкръжението да разбере какъв тип прозорец е "
+"това и как да се отнася с него"
 
 #: gtk/gtkwindow.c:585
 msgid "Skip taskbar"
-msgstr ""
+msgstr "Изключен от лентата със задачи"
 
 #: gtk/gtkwindow.c:586
 msgid "TRUE if the window should not be in the task bar."
-msgstr ""
+msgstr "TRUE ако прозорецът не трябва да бъде в лената със задачи."
 
 #: gtk/gtkwindow.c:593
 msgid "Skip pager"
-msgstr ""
+msgstr "Изключен от превключвателя на десктопи"
 
 #: gtk/gtkwindow.c:594
-#, fuzzy
 msgid "TRUE if the window should not be in the pager."
-msgstr "TRUE ако ще се използва свойството на Позиция"
+msgstr "TRUE ако прозорецът не трябва да бъде в превключвателя ан десктопи."
 
 #. ID
 #: modules/input/imam-et.c:453
@@ -5082,21 +4971,19 @@ msgstr "Метод за Вход в X "
 
 #: modules/input/gtkimcontextxim.c:260
 msgid "IM Preedit style"
-msgstr ""
+msgstr "Стил на прередактиране на метода за вход"
 
 #: modules/input/gtkimcontextxim.c:261
 msgid "How to draw the input method preedit string"
-msgstr ""
+msgstr "Как да се изчертава низа а прередкатиране на метода за вход"
 
 #: modules/input/gtkimcontextxim.c:269
-#, fuzzy
 msgid "IM Status style"
-msgstr "Стил на шпация"
+msgstr "Стил на статуса на метода за вход"
 
 #: modules/input/gtkimcontextxim.c:270
-#, fuzzy
 msgid "How to draw the input method statusbar"
-msgstr "Как да изчертае лентата с инструменти"
+msgstr "Как да се изчертава статус лентата на метода за вход"
 
 #~ msgid ""
 #~ "Whether the arrow keys work, even if the entry contents are not in the "
