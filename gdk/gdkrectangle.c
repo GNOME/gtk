@@ -25,12 +25,14 @@ gdk_rectangle_union (GdkRectangle *src1,
 		     GdkRectangle *src2,
 		     GdkRectangle *dest)
 {
+  g_return_if_fail (src1 != NULL);
+  g_return_if_fail (src2 != NULL);
+  g_return_if_fail (dest != NULL);
+
   dest->x = MIN (src1->x, src2->x);
   dest->y = MIN (src1->y, src2->y);
-  dest->width = 
-    MAX (src1->x + src1->width, src2->x + src2->width) - dest->x;
-  dest->height = 
-    MAX (src1->y + src1->height, src2->y + src2->height) - dest->y;
+  dest->width = MAX (src1->x + src1->width, src2->x + src2->width) - dest->x;
+  dest->height = MAX (src1->y + src1->height, src2->y + src2->height) - dest->y;
 }
 
 gint

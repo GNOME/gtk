@@ -39,21 +39,24 @@ typedef struct _GdkEventPrivate GdkEventPrivate;
 #define DOUBLE_CLICK_DIST      5
 #define TRIPLE_CLICK_DIST      5
 
-typedef enum {
+typedef enum
+{
   /* Following flag is set for events on the event queue during
    * translation and cleared afterwards.
    */
   GDK_EVENT_PENDING = 1 << 0
 } GdkEventFlags;
 
-struct _GdkIOClosure {
+struct _GdkIOClosure
+{
   GdkInputFunction function;
   GdkInputCondition condition;
   GdkDestroyNotify notify;
   gpointer data;
 };
 
-struct _GdkEventPrivate {
+struct _GdkEventPrivate
+{
   GdkEvent event;
   guint    flags;
 };
@@ -63,30 +66,30 @@ struct _GdkEventPrivate {
  */
 
 static GdkEvent *gdk_event_new		(void);
-static gint	 gdk_event_apply_filters (XEvent *xevent,
+static gint	 gdk_event_apply_filters (XEvent   *xevent,
 					  GdkEvent *event,
-					  GList *filters);
+					  GList    *filters);
 static gint	 gdk_event_translate	 (GdkEvent *event, 
 					  XEvent   *xevent);
 #if 0
-static Bool	 gdk_event_get_type	(Display      *display, 
-					 XEvent	      *xevent, 
-					 XPointer      arg);
+static Bool	 gdk_event_get_type	(Display   *display, 
+					 XEvent	   *xevent, 
+					 XPointer   arg);
 #endif
 static void      gdk_events_queue       (void);
-static GdkEvent *gdk_event_unqueue      (void);
+static GdkEvent* gdk_event_unqueue      (void);
 
-static gboolean  gdk_event_prepare      (gpointer  source_data, 
-				 	 GTimeVal *current_time,
-					 gint     *timeout);
-static gboolean  gdk_event_check        (gpointer  source_data,
-				 	 GTimeVal *current_time);
-static gboolean  gdk_event_dispatch     (gpointer  source_data,
-					 GTimeVal *current_time,
-					 gpointer  user_data);
+static gboolean  gdk_event_prepare      (gpointer   source_data, 
+				 	 GTimeVal  *current_time,
+					 gint      *timeout);
+static gboolean  gdk_event_check        (gpointer   source_data,
+				 	 GTimeVal  *current_time);
+static gboolean  gdk_event_dispatch     (gpointer   source_data,
+					 GTimeVal  *current_time,
+					 gpointer   user_data);
 
-static void	 gdk_synthesize_click	(GdkEvent     *event, 
-					 gint	       nclicks);
+static void	 gdk_synthesize_click	(GdkEvent  *event, 
+					 gint	    nclicks);
 
 GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
 					 GdkEvent  *event,
@@ -111,11 +114,11 @@ static GdkWindow *button_window[2];	    /* The last 2 windows to receive button 
 					     */
 static guint button_number[2];		    /* The last 2 buttons to be pressed.
 					     */
-static GdkEventFunc   event_func;	    /* Callback for events */
-static gpointer       event_data;
-static GDestroyNotify event_notify;
+static GdkEventFunc   event_func = NULL;    /* Callback for events */
+static gpointer       event_data = NULL;
+static GDestroyNotify event_notify = NULL;
 
-static GList *client_filters;	                    /* Filters for client messages */
+static GList *client_filters;	            /* Filters for client messages */
 
 /* FIFO's for event queue, and for events put back using
  * gdk_event_put().
@@ -146,7 +149,7 @@ GPollFD event_poll_fd;
  *     Pointer to the list node for that event, or NULL
  *************************************************************/
 
-static GList *
+static GList*
 gdk_event_queue_find_first (void)
 {
   GList *tmp_list = queued_events;
@@ -197,7 +200,7 @@ gdk_event_queue_remove_link (GList *node)
 static void
 gdk_event_queue_append (GdkEvent *event)
 {
-  queued_tail = g_list_append(queued_tail, event);
+  queued_tail = g_list_append (queued_tail, event);
   
   if (!queued_events)
     queued_events = queued_tail;
@@ -269,23 +272,23 @@ gdk_events_pending (void)
  *-------------------------------------------------------------- */
 
 static Bool
-graphics_expose_predicate  (Display  *display,
-			    XEvent   *xevent,
-			    XPointer  arg)
+graphics_expose_predicate (Display  *display,
+			   XEvent   *xevent,
+			   XPointer  arg)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)arg;
+  GdkWindowPrivate *private = (GdkWindowPrivate*) arg;
   
   g_return_val_if_fail (private != NULL, False);
   
-  if ((xevent->xany.window == private->xwindow) &&
-      ((xevent->xany.type == GraphicsExpose) ||
-       (xevent->xany.type == NoExpose)))
+  if (xevent->xany.window == private->xwindow &&
+      (xevent->xany.type == GraphicsExpose ||
+       xevent->xany.type == NoExpose))
     return True;
   else
     return False;
 }
 
-GdkEvent *
+GdkEvent*
 gdk_event_get_graphics_expose (GdkWindow *window)
 {
   XEvent xevent;
@@ -293,7 +296,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   
   g_return_val_if_fail (window != NULL, NULL);
   
-  XIfEvent (gdk_display, &xevent, graphics_expose_predicate, (XPointer)window);
+  XIfEvent (gdk_display, &xevent, graphics_expose_predicate, (XPointer) window);
   
   if (xevent.xany.type == GraphicsExpose)
     {
@@ -368,15 +371,18 @@ gdk_add_rect_to_rects (GdkRectangle *rect1,
 
 typedef struct _GdkExposeInfo GdkExposeInfo;
 
-struct _GdkExposeInfo {
+struct _GdkExposeInfo
+{
   Window window;
   gboolean seen_nonmatching;
 };
 
-Bool
-expose_predicate (Display *display, XEvent *xevent, XPointer arg)
+static Bool
+expose_predicate (Display *display,
+		  XEvent  *xevent,
+		  XPointer arg)
 {
-  GdkExposeInfo *info = (GdkExposeInfo *)arg;
+  GdkExposeInfo *info = (GdkExposeInfo*) arg;
 
   /* Compressing across GravityNotify events is safe, because
    * we completely ignore them, so they can't change what
@@ -385,22 +391,23 @@ expose_predicate (Display *display, XEvent *xevent, XPointer arg)
    * we'll get a whole bunch of them interspersed with
    * expose events.
    */
-  if ((xevent->xany.type != Expose) && 
-      (xevent->xany.type != GravityNotify))
+  if (xevent->xany.type != Expose && 
+      xevent->xany.type != GravityNotify)
     {
       info->seen_nonmatching = TRUE;
     }
 
   if (info->seen_nonmatching ||
-      (xevent->xany.type != Expose) ||
-      (xevent->xany.window != info->window))
+      xevent->xany.type != Expose ||
+      xevent->xany.window != info->window)
     return FALSE;
   else
     return TRUE;
 }
 
 void
-gdk_compress_exposures (XEvent *xevent, GdkWindow *window)
+gdk_compress_exposures (XEvent    *xevent,
+			GdkWindow *window)
 {
   gint nrects = 1;
   gint count = 0;
@@ -522,7 +529,7 @@ gdk_event_handler_set (GdkEventFunc   func,
 		       gpointer       data,
 		       GDestroyNotify notify)
 {
-  if (event_func && event_notify)
+  if (event_notify)
     (*event_notify) (event_data);
 
   event_func = func;
@@ -548,12 +555,12 @@ gdk_event_handler_set (GdkEventFunc   func,
  *--------------------------------------------------------------
  */
 
-GdkEvent *
+GdkEvent*
 gdk_event_get (void)
 {
-  gdk_events_queue();
+  gdk_events_queue ();
 
-  return gdk_event_unqueue();
+  return gdk_event_unqueue ();
 }
 
 /*
@@ -575,7 +582,7 @@ gdk_event_get (void)
  *--------------------------------------------------------------
  */
 
-GdkEvent *
+GdkEvent*
 gdk_event_peek (void)
 {
   GList *tmp_list;
@@ -618,7 +625,7 @@ gdk_event_put (GdkEvent *event)
  *--------------------------------------------------------------
  */
 
-static GMemChunk *event_chunk;
+static GMemChunk *event_chunk = NULL;
 
 static GdkEvent*
 gdk_event_new (void)
@@ -634,7 +641,7 @@ gdk_event_new (void)
   new_event = g_chunk_new (GdkEventPrivate, event_chunk);
   new_event->flags = 0;
   
-  return (GdkEvent *)new_event;
+  return (GdkEvent*) new_event;
 }
 
 GdkEvent*
@@ -670,7 +677,6 @@ gdk_event_copy (GdkEvent *event)
     case GDK_DROP_FINISHED:
       gdk_drag_context_ref (event->dnd.context);
       break;
-
       
     default:
       break;
@@ -700,8 +706,9 @@ gdk_event_copy (GdkEvent *event)
 void
 gdk_event_free (GdkEvent *event)
 {
-  g_assert (event_chunk != NULL);
   g_return_if_fail (event != NULL);
+
+  g_assert (event_chunk != NULL); /* paranoid */
   
   if (event->any.window)
     gdk_window_unref (event->any.window);
@@ -727,7 +734,6 @@ gdk_event_free (GdkEvent *event)
     case GDK_DROP_FINISHED:
       gdk_drag_context_unref (event->dnd.context);
       break;
-
       
     default:
       break;
@@ -811,7 +817,7 @@ gdk_event_get_time (GdkEvent *event)
  */
 
 void
-gdk_set_show_events (int show_events)
+gdk_set_show_events (gint show_events)
 {
   if (show_events)
     gdk_debug_flags |= GDK_DEBUG_EVENTS;
@@ -882,9 +888,9 @@ gdk_input_add_full (gint	      source,
     cond |= G_IO_ERR|G_IO_HUP|G_IO_NVAL;
 
   channel = g_io_channel_unix_new (source);
-  result = g_io_add_watch_full   (channel, G_PRIORITY_DEFAULT, cond, 
-				  gdk_io_invoke,
-				  closure, gdk_io_destroy);
+  result = g_io_add_watch_full (channel, G_PRIORITY_DEFAULT, cond, 
+				gdk_io_invoke,
+				closure, gdk_io_destroy);
   g_io_channel_unref (channel);
 
   return result;
@@ -918,9 +924,9 @@ gdk_event_apply_filters (XEvent *xevent,
   
   while (tmp_list)
     {
-      filter = (GdkEventFilter *)tmp_list->data;
+      filter = (GdkEventFilter*) tmp_list->data;
       
-      result = (*filter->function)(xevent, event, filter->data);
+      result = (*filter->function) (xevent, event, filter->data);
       if (result !=  GDK_FILTER_CONTINUE)
 	return result;
       
@@ -2020,8 +2026,8 @@ gdk_event_prepare (gpointer  source_data,
 }
 
 static gboolean  
-gdk_event_check   (gpointer  source_data,
-		   GTimeVal *current_time)
+gdk_event_check (gpointer  source_data,
+		 GTimeVal *current_time)
 {
   gboolean retval;
   
@@ -2037,7 +2043,7 @@ gdk_event_check   (gpointer  source_data,
   return retval;
 }
 
-static GdkEvent *
+static GdkEvent*
 gdk_event_unqueue (void)
 {
   GdkEvent *event = NULL;
@@ -2215,7 +2221,8 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
  *--------------------------------------------------------------
  */
 
-void gdk_flush (void)
+void
+gdk_flush (void)
 {
   XSync (gdk_display, False);
 }

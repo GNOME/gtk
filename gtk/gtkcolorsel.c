@@ -151,6 +151,9 @@ static void gtk_color_selection_sample_resize     (GtkWidget          *widget,
 static void gtk_color_selection_drag_begin        (GtkWidget          *widget,
 						   GdkDragContext     *context,
 						   gpointer            data);
+static void gtk_color_selection_drag_end          (GtkWidget          *widget,
+						   GdkDragContext     *context,
+						   gpointer            data);
 static void gtk_color_selection_drop_handle       (GtkWidget          *widget, 
 						   GdkDragContext     *context,
 						   gint                x,
@@ -547,6 +550,10 @@ gtk_color_selection_realize (GtkWidget         *widget)
 		      GTK_SIGNAL_FUNC (gtk_color_selection_drag_begin),
 		      colorsel);
   gtk_signal_connect (GTK_OBJECT (colorsel->sample_area),
+		      "drag_end",
+		      GTK_SIGNAL_FUNC (gtk_color_selection_drag_end),
+		      colorsel);
+  gtk_signal_connect (GTK_OBJECT (colorsel->sample_area),
 		      "drag_data_get",
 		      GTK_SIGNAL_FUNC (gtk_color_selection_drag_handle),
 		      colorsel);
@@ -863,10 +870,14 @@ gtk_color_selection_drag_begin (GtkWidget      *widget,
   gdouble colors[4];
   GdkColor bg;
 
-  window = gtk_window_new(GTK_WINDOW_POPUP);
+  window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
   gtk_widget_set_usize (window, 48, 32);
   gtk_widget_realize (window);
+  gtk_object_set_data_full (GTK_OBJECT (widget),
+			    "gtk-color-selection-drag-window",
+			    window,
+			    (GtkDestroyNotify) gtk_widget_destroy);
 
   gtk_color_selection_get_color (colorsel, colors);
   bg.red = 0xffff * colors[0];
@@ -877,6 +888,14 @@ gtk_color_selection_drag_begin (GtkWidget      *widget,
   gdk_window_set_background (window->window, &bg);
 
   gtk_drag_set_icon_widget (context, window, -2, -2);
+}
+
+static void
+gtk_color_selection_drag_end (GtkWidget      *widget,
+			      GdkDragContext *context,
+			      gpointer        data)
+{
+  gtk_object_set_data (GTK_OBJECT (widget), "gtk-color-selection-drag-window", NULL);
 }
 
 static void
@@ -1219,19 +1238,16 @@ static void
 gtk_color_selection_draw_value_bar (GtkColorSelection *colorsel,
                                     gint               resize)
 {
-  gint x, y, i, wid, heig, n;
-  gdouble sv, v, c[3];
-  guchar rc[3];
+  gint x, y, wid, heig, n;
+  gdouble sv, v;
 
   wid = colorsel->value_area->allocation.width;
   heig = colorsel->value_area->allocation.height;
 
-  if (resize)
+  if (resize || !colorsel->value_buf)
     {
-      if (colorsel->value_buf != NULL)
-	g_free (colorsel->value_buf);
-
-      colorsel->value_buf = g_new(guchar, 3 * wid);
+      g_free (colorsel->value_buf);
+      colorsel->value_buf = g_new0 (guchar, 3 * wid);
     }
 
   v = 1.0;
@@ -1239,9 +1255,13 @@ gtk_color_selection_draw_value_bar (GtkColorSelection *colorsel,
 
   for (y = 0; y < heig; y++)
     {
-      i = 0;
+      gdouble c[3];
+      guchar rc[3];
+      gint i = 0;
 
-      gtk_color_selection_hsv_to_rgb (colorsel->values[HUE],colorsel->values[SATURATION],v,
+      gtk_color_selection_hsv_to_rgb (colorsel->values[HUE],
+				      colorsel->values[SATURATION],
+				      v,
                                       &c[0], &c[1], &c[2]);
 
       for (n = 0; n < 3; n++)
@@ -1359,9 +1379,9 @@ gtk_color_selection_draw_wheel (GtkColorSelection *colorsel,
 		      FALSE, 1, 1, w - 1, h - 1, 210 * 64, 180 * 64);
 	gdk_draw_arc (pm, pmgc,
 		      FALSE, 0, 0, w, h, 210 * 64, 180 * 64);
-	gdk_window_shape_combine_mask(colorsel->wheel_area->window, pm, 0, 0);
-	gdk_pixmap_unref(pm);
-	gdk_gc_destroy(pmgc);
+	gdk_window_shape_combine_mask (colorsel->wheel_area->window, pm, 0, 0);
+	gdk_pixmap_unref (pm);
+	gdk_gc_destroy (pmgc);
      }
 }
 

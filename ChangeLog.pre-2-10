@@ -1,3 +1,25 @@
+Wed Feb 10 08:35:36 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_draw_value_bar): asure that
+	->value_buf always points to an allocated area.
+	(gtk_color_selection_drag_end): new function hooked up to drag_end to
+	destroy the drag_window.
+
+	* gtk/gtkdnd.c: some coding style fixups.
+
+Wed Feb 10 06:47:17 1999  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkwindow.c: various indentation fixes.
+
+	* gdk/gdkevents.c: coding style fixups.
+	NULL initialize event_func, event_notify and event_chunk.
+	(expose_predicate): made this function static.
+	(gdk_event_handler_set): perform destroy notification even if no
+	event_func is set.
+
+	* gdk/gdkrectangle.c (gdk_rectangle_union): added g_return_if_fail
+	statements.
+
 Sun Feb  7 19:49:21 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_move_resize): Fixed some
