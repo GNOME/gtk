@@ -2248,7 +2248,7 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
   tree = _gtk_text_iter_get_btree (iter);
   byte_index = gtk_text_iter_get_line_index (iter);
 
-  numTags = gtk_text_tag_table_size (tree->table);
+  numTags = gtk_text_tag_table_get_size (tree->table);
 
   /* almost always avoid malloc, so stay out of system calls */
   if (LOTSA_TAGS < numTags)

@@ -64,8 +64,8 @@ struct _GtkFixedClass
 struct _GtkFixedChild
 {
   GtkWidget *widget;
-  gint16 x;
-  gint16 y;
+  gint x;
+  gint y;
 };
 
 
@@ -73,12 +73,12 @@ GtkType    gtk_fixed_get_type          (void) G_GNUC_CONST;
 GtkWidget* gtk_fixed_new               (void);
 void       gtk_fixed_put               (GtkFixed       *fixed,
                                         GtkWidget      *widget,
-                                        gint16         x,
-                                        gint16         y);
+                                        gint            x,
+                                        gint            y);
 void       gtk_fixed_move              (GtkFixed       *fixed,
                                         GtkWidget      *widget,
-                                        gint16         x,
-                                        gint16         y);
+                                        gint            x,
+                                        gint            y);
 
 #ifdef __cplusplus
 }

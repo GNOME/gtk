@@ -113,8 +113,6 @@ gdk_keymap_get_default (void)
   return keymap;
 }
 
-
-
 /* Other key-handling stuff
  */
 

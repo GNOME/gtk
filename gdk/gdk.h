@@ -51,8 +51,6 @@
 #include <gdk/gdkdisplay.h>
 #include <gdk/gdkscreen.h>
 
-#include <gdk/gdkcompat.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */

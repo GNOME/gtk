@@ -174,29 +174,6 @@ gtk_menu_bar_new (void)
   return GTK_WIDGET (gtk_type_new (gtk_menu_bar_get_type ()));
 }
 
-void
-gtk_menu_bar_append (GtkMenuBar *menu_bar,
-		     GtkWidget  *child)
-{
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu_bar), child);
-}
-
-void
-gtk_menu_bar_prepend (GtkMenuBar *menu_bar,
-		      GtkWidget  *child)
-{
-  gtk_menu_shell_prepend (GTK_MENU_SHELL (menu_bar), child);
-}
-
-void
-gtk_menu_bar_insert (GtkMenuBar *menu_bar,
-		     GtkWidget  *child,
-		     gint        position)
-{
-  gtk_menu_shell_insert (GTK_MENU_SHELL (menu_bar), child, position);
-}
-
-
 static void
 gtk_menu_bar_size_request (GtkWidget      *widget,
 			   GtkRequisition *requisition)

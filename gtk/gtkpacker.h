@@ -123,6 +123,7 @@ void       gtk_packer_set_child_packing	       (GtkPacker	*packer,
 						guint		 pad_y,
 						guint		 i_pad_x,
 						guint		 i_pad_y);
+#define	   gtk_packer_configure                gtk_packer_set_child_packing
 void	   gtk_packer_reorder_child	       (GtkPacker	*packer,
 						GtkWidget	*child,
 						gint             position);

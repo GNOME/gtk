@@ -95,7 +95,12 @@ gdk_selection_owner_set (GdkWindow *owner,
 	     g_free (sel_name)));
 
   if (selection != gdk_clipboard_atom)
-    return FALSE;
+    {
+      if (!owner)
+        return FALSE;
+      gdk_sel_prop_store (owner, selection, 0, 0, 0);
+      return TRUE;
+    }
 
   if (owner != NULL)
     {
@@ -143,23 +148,52 @@ gdk_selection_owner_set (GdkWindow *owner,
   return TRUE;
 }
 
+/* callback for g_hash_table_for_each */
+typedef struct {
+  GdkAtom         atom;
+  GdkNativeWindow hwnd;
+} SelectionAndHwnd;
+
+static void
+window_from_selection (gpointer key,
+                 gpointer value,
+                 gpointer user_data)
+{
+  GdkSelProp *selprop = (GdkSelProp *)value;  
+  SelectionAndHwnd *sah = (SelectionAndHwnd *) user_data;
+
+  if (selprop->type == sah->atom)
+    sah->hwnd = *(GdkNativeWindow*) key;
+}
+
 GdkWindow*
 gdk_selection_owner_get (GdkAtom selection)
 {
   GdkWindow *window;
   gchar *sel_name;
 
-#if 1
+#if 0
   /* XXX Hmm, gtk selections seem to work best with this. This causes
    * gtk to always get the clipboard contents from Windows, and not
    * from the editable's own stashed-away copy.
    */
   return NULL;
 #else
+  /* HB: The above is no longer true with recent changes to get
+   * inter-app drag&drop working ...
+   */
   if (selection != gdk_clipboard_atom)
-    window = NULL;
+    {
+      SelectionAndHwnd sah;
+      sah.atom = selection;
+      sah.hwnd = 0;
+ 
+      g_hash_table_foreach (sel_prop_table, window_from_selection, &sah);
+
+      window = gdk_win32_handle_table_lookup (sah.hwnd);
+    }
   else
-    window = gdk_win32_handle_table_lookup (GetClipboardOwner ());
+    window = gdk_win32_handle_table_lookup ((GdkNativeWindow) GetClipboardOwner ());
 
 #endif
 
@@ -372,7 +406,10 @@ gdk_selection_send_notify (guint32  requestor,
    * always return NULL, it works. Sigh.
    */
 
-  SendMessage ((HWND) requestor, gdk_selection_clear_msg, selection, 0);
+  SendMessage ((HWND) requestor, 
+               gdk_selection_clear_msg, 
+               selection, 
+               target);
 }
 
 gint

@@ -118,7 +118,7 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 
 <!-- ##### MACRO gtk_notebook_current_page ##### -->
 <para>
-Compatibility macro; in gtkcompat.h.
+Deprecated compatibility macro.
 </para>
 
 

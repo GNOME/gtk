@@ -61,13 +61,12 @@ struct _GtkMenuBarClass
 
 GtkType    gtk_menu_bar_get_type        (void) G_GNUC_CONST;
 GtkWidget* gtk_menu_bar_new             (void);
-void       gtk_menu_bar_append          (GtkMenuBar    *menu_bar,
-					 GtkWidget     *child);
-void       gtk_menu_bar_prepend         (GtkMenuBar    *menu_bar,
-					 GtkWidget     *child);
-void       gtk_menu_bar_insert          (GtkMenuBar    *menu_bar,
-					 GtkWidget     *child,
-					 gint           position);
+
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_menu_bar_append(menu,child)	    gtk_menu_shell_append  ((GtkMenuShell *)(menu),(child))
+#define gtk_menu_bar_prepend(menu_child)    gtk_menu_shell_prepend ((GtkMenuShell *)(menu),(child))
+#define gtk_menu_bar_insert(menu,child,pos) gtk_menu_shell_prepend ((GtkMenuShell *)(menu),(child),(pos))
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

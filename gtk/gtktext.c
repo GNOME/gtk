@@ -1175,6 +1175,7 @@ gtk_text_get_chars (GtkOldEditable *old_editable,
   GtkText *text;
   
   gchar *retval;
+  
   g_return_val_if_fail (GTK_IS_TEXT (old_editable), NULL);
   text = GTK_TEXT (old_editable);
   

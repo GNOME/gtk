@@ -627,10 +627,12 @@ gtk_packer_set_default_pad (GtkPacker *packer,
       packer->default_pad_y = pad_y;
       redo_defaults_children (packer);
     
+      g_object_freeze_notify (G_OBJECT (packer));
       if (packer->default_pad_x != pad_x)
 	g_object_notify (G_OBJECT (packer), "default_pad_x");
       if (packer->default_pad_y != pad_y)	    
 	g_object_notify (G_OBJECT (packer), "default_pad_y");
+      g_object_thaw_notify (G_OBJECT (packer));
     }
 }
 
@@ -648,10 +650,12 @@ gtk_packer_set_default_ipad (GtkPacker *packer,
     packer->default_i_pad_y = i_pad_y;
     redo_defaults_children (packer);
     
+    g_object_freeze_notify (G_OBJECT (packer));
     if (packer->default_i_pad_x != i_pad_x)
       g_object_notify (G_OBJECT (packer), "default_ipad_x");
     if (packer->default_i_pad_y != i_pad_y)	    
       g_object_notify (G_OBJECT (packer), "default_ipad_y");
+    g_object_thaw_notify (G_OBJECT (packer));
   }
 }
 

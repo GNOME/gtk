@@ -53,7 +53,7 @@ struct _GtkTreeModelSort
   /* sort information */
   GList *sort_list;
   gint sort_column_id;
-  GtkTreeSortOrder order;
+  GtkSortType order;
 
   /* signal ids */
   guint changed_id;

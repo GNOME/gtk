@@ -49,7 +49,9 @@ static void gtk_cell_renderer_pixbuf_render     (GtkCellRenderer            *cel
 
 enum {
 	PROP_ZERO,
-	PROP_PIXBUF
+	PROP_PIXBUF,
+	PROP_PIXBUF_EXPANDER_OPEN,
+	PROP_PIXBUF_EXPANDER_CLOSED
 };
 
 
@@ -120,6 +122,14 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
       g_value_set_object (value,
                           cellpixbuf->pixbuf ? G_OBJECT (cellpixbuf->pixbuf) : NULL);
       break;
+    case PROP_PIXBUF_EXPANDER_OPEN:
+      g_value_set_object (value,
+                          cellpixbuf->pixbuf_expander_open ? G_OBJECT (cellpixbuf->pixbuf_expander_open) : NULL);
+      break;
+    case PROP_PIXBUF_EXPANDER_CLOSED:
+      g_value_set_object (value,
+                          cellpixbuf->pixbuf_expander_closed ? G_OBJECT (cellpixbuf->pixbuf_expander_closed) : NULL);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -146,6 +156,24 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
 	g_object_unref (G_OBJECT (cellpixbuf->pixbuf));
       cellpixbuf->pixbuf = pixbuf;
       g_object_notify (object, "pixbuf");
+      break;
+    case PROP_PIXBUF_EXPANDER_OPEN:
+      pixbuf = (GdkPixbuf*) g_value_get_object (value);
+      if (pixbuf)
+        g_object_ref (G_OBJECT (pixbuf));
+      if (cellpixbuf->pixbuf_expander_open)
+	g_object_unref (G_OBJECT (cellpixbuf->pixbuf_expander_open));
+      cellpixbuf->pixbuf_expander_open = pixbuf;
+      g_object_notify (object, "pixbuf_expander_open");
+      break;
+    case PROP_PIXBUF_EXPANDER_CLOSED:
+      pixbuf = (GdkPixbuf*) g_value_get_object (value);
+      if (pixbuf)
+        g_object_ref (G_OBJECT (pixbuf));
+      if (cellpixbuf->pixbuf_expander_closed)
+	g_object_unref (G_OBJECT (cellpixbuf->pixbuf_expander_closed));
+      cellpixbuf->pixbuf_expander_closed = pixbuf;
+      g_object_notify (object, "pixbuf_expander_closed");
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -182,22 +210,34 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
 				   gint            *height)
 {
   GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;
-  GdkPixbuf *pixbuf;
+  gint pixbuf_width = 0;
+  gint pixbuf_height = 0;
   gint calc_width;
   gint calc_height;
 
-  pixbuf = cellpixbuf->pixbuf;
-
-  calc_width = (gint) GTK_CELL_RENDERER (cellpixbuf)->xpad * 2 +
-    (cellpixbuf->pixbuf ? gdk_pixbuf_get_width (cellpixbuf->pixbuf) : 0);
+  if (cellpixbuf->pixbuf)
+    {
+      pixbuf_width = gdk_pixbuf_get_width (cellpixbuf->pixbuf);
+      pixbuf_height = gdk_pixbuf_get_height (cellpixbuf->pixbuf);
+    }
+  if (cellpixbuf->pixbuf_expander_open)
+    {
+      pixbuf_width = MAX (pixbuf_width, gdk_pixbuf_get_width (cellpixbuf->pixbuf_expander_open));
+      pixbuf_height = MAX (pixbuf_height, gdk_pixbuf_get_height (cellpixbuf->pixbuf_expander_open));
+    }
+  if (cellpixbuf->pixbuf_expander_closed)
+    {
+      pixbuf_width = MAX (pixbuf_width, gdk_pixbuf_get_width (cellpixbuf->pixbuf_expander_closed));
+      pixbuf_height = MAX (pixbuf_height, gdk_pixbuf_get_height (cellpixbuf->pixbuf_expander_closed));
+    }
   
-  calc_height = (gint) GTK_CELL_RENDERER (cellpixbuf)->ypad * 2 +
-    (cellpixbuf->pixbuf ? gdk_pixbuf_get_height (cellpixbuf->pixbuf) : 0);
+  calc_width = (gint) GTK_CELL_RENDERER (cellpixbuf)->xpad * 2 + pixbuf_width;
+  calc_height = (gint) GTK_CELL_RENDERER (cellpixbuf)->ypad * 2 + pixbuf_height;
   
   if (x_offset) *x_offset = 0;
   if (y_offset) *y_offset = 0;
 
-  if (cell_area && pixbuf)
+  if (cell_area && pixbuf_width > 0 && pixbuf_height > 0)
     {
       if (x_offset)
 	{
@@ -236,6 +276,15 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer    *cell,
   GdkRectangle draw_rect;
 
   pixbuf = cellpixbuf->pixbuf;
+  if (cell->is_expander)
+    {
+      if (cell->is_expanded &&
+	  cellpixbuf->pixbuf_expander_open != NULL)
+	pixbuf = cellpixbuf->pixbuf_expander_open;
+      else if (! cell->is_expanded &&
+	       cellpixbuf->pixbuf_expander_closed != NULL)
+	pixbuf = cellpixbuf->pixbuf_expander_closed;
+    }
 
   if (!pixbuf)
     return;

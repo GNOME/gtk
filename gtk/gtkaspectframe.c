@@ -241,8 +241,6 @@ gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
 		      gfloat          ratio,
 		      gboolean        obey_child)
 {
-  gboolean needs_resize = FALSE;
-   
   g_return_if_fail (GTK_IS_ASPECT_FRAME (aspect_frame));
   
   xalign = CLAMP (xalign, 0.0, 1.0);
@@ -250,33 +248,37 @@ gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
   ratio = CLAMP (ratio, MIN_RATIO, MAX_RATIO);
   obey_child = obey_child != FALSE;
   
-  if (aspect_frame->xalign != xalign)
+  if (   (aspect_frame->xalign != xalign)
+      || (aspect_frame->yalign != yalign)
+      || (aspect_frame->ratio != ratio)
+      || (aspect_frame->obey_child != obey_child))
     {
-      aspect_frame->xalign = xalign;
-      g_object_notify (G_OBJECT (aspect_frame), "xalign");
-      needs_resize = TRUE;
-    }
-   if (aspect_frame->yalign != yalign)
-    {
-      aspect_frame->yalign = yalign;
-      g_object_notify (G_OBJECT (aspect_frame), "yalign");
-      needs_resize = TRUE;
-    }
-   if (aspect_frame->ratio != ratio)
-    {
-      aspect_frame->ratio = ratio;
-      g_object_notify (G_OBJECT (aspect_frame), "ratio");
-      needs_resize = TRUE;
-    }
-   if (aspect_frame->obey_child != obey_child)
-    {
-      aspect_frame->obey_child = obey_child;
-      g_object_notify (G_OBJECT (aspect_frame), "obey_child");
-      needs_resize = TRUE;
-    }
-   
-   if (needs_resize == TRUE)
+      g_object_freeze_notify (G_OBJECT (aspect_frame));
+
+      if (aspect_frame->xalign != xalign)
+        {
+          aspect_frame->xalign = xalign;
+          g_object_notify (G_OBJECT (aspect_frame), "xalign");
+        }
+      if (aspect_frame->yalign != yalign)
+        {
+          aspect_frame->yalign = yalign;
+          g_object_notify (G_OBJECT (aspect_frame), "yalign");
+        }
+      if (aspect_frame->ratio != ratio)
+        {
+          aspect_frame->ratio = ratio;
+          g_object_notify (G_OBJECT (aspect_frame), "ratio");
+        }
+      if (aspect_frame->obey_child != obey_child)
+        {
+          aspect_frame->obey_child = obey_child;
+          g_object_notify (G_OBJECT (aspect_frame), "obey_child");
+        }
+      g_object_thaw_notify (G_OBJECT (aspect_frame));
+
       gtk_widget_queue_resize (GTK_WIDGET(aspect_frame));
+    }
 }
 
 static void

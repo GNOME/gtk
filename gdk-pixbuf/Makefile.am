@@ -95,6 +95,14 @@ libpixbufloader_xbm_la_LDFLAGS = -version-info 1:0:0 -module
 libpixbufloader_xbm_la_LDFLAGS = -avoid-version -module
 libpixbufloader_xbm_la_LIBADD = $(module_libs)
 
+#
+# The TGA loader
+#
+libpixbufloader_tga_la_SOURCES = io-tga.c
+libpixbufloader_tga_la_LDFLAGS = -version-info 1:0:0 -module
+libpixbufloader_tga_la_LDFLAGS = -avoid-version -module
+libpixbufloader_tga_la_LIBADD = $(module_libs)
+
 if HAVE_PNG
 PNG_LIB = libpixbufloader-png.la
 endif
@@ -123,6 +131,8 @@ WBMP_LIB = libpixbufloader-wbmp.la
 
 XBM_LIB = libpixbufloader-xbm.la
 
+TGA_LIB = libpixbufloader-tga.la
+
 if BUILD_DYNAMIC_MODULES
 
 loader_LTLIBRARIES = 	\
@@ -136,7 +146,8 @@ loader_LTLIBRARIES = 	\
 	$(PNM_LIB)	\
 	$(BMP_LIB)	\
 	$(WBMP_LIB)	\
-	$(XBM_LIB)
+	$(XBM_LIB)	\
+	$(TGA_LIB)
 
 
 extra_sources = 

@@ -805,6 +805,7 @@ gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
     
   result = gdk_string_to_compound_text_for_display (display, locale_str,
 					encoding, format, ctext, length);
+  result = (result == Success? TRUE : FALSE);
   
   g_free (locale_str);
 

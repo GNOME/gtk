@@ -1513,6 +1513,6 @@ gdk_pixbuf_get_from_image (GdkPixbuf   *dest,
               src_x + width,
               src_y + height,
 	      cmap);
-
+  
   return dest;
 }

@@ -254,6 +254,7 @@ gtk_socket_add_id (GtkSocket *socket, GdkNativeWindow id)
 {
   g_return_if_fail (GTK_IS_SOCKET (socket));
   g_return_if_fail (GTK_WIDGET_ANCHORED (socket));
+
   if (!GTK_WIDGET_REALIZED (socket))
     gtk_widget_realize (GTK_WIDGET (socket));
 

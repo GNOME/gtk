@@ -4,7 +4,6 @@ SUBDIRS=stock-icons
 
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gtk\"				\
-	-DGTK_DISABLE_COMPAT_H				\
 	-DGTK_LIBDIR=\"$(libdir)\"			\
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
@@ -16,6 +15,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
 	-I$(top_srcdir)/gdk-pixbuf -I../gdk-pixbuf	\
+	@GTK_DEBUG_FLAGS@				\
 	@GTK_DEP_CFLAGS@				\
 @STRIP_END@
 
@@ -387,7 +387,7 @@ gtk_built_sources = @STRIP_BEGIN@ \
 # that don't serve as direct make target sources, i.e. they don't have
 # their own .lo rules and don't get publically installed
 gtk_extra_sources = @STRIP_BEGIN@ \
-	gtkcompat.h.in		\
+	gtkversion.h.in		\
 	maketypes.awk		\
 	makeenums.h		\
 	gtk-boxed.defs		\
@@ -398,7 +398,7 @@ gtk_extra_sources = @STRIP_BEGIN@ \
 #
 # setup GTK+ sources and their dependancies
 #
-gtk_target_headers = $(gtk_public_h_sources) $(gtk_built_public_sources) gtkcompat.h
+gtk_target_headers = $(gtk_public_h_sources) $(gtk_built_public_sources) gtkversion.h
 gtk_target_sources = $(gtk_c_sources) $(gtk_plug_c_sources)
 MAINTAINERCLEANFILES += $(gtk_built_sources)
 EXTRA_HEADERS +=
@@ -456,7 +456,7 @@ $(srcdir)/gtkmarshal.c: @REBUILD@ $(srcdir)/stamp-gtkmarshal.h
 	esac;												\
 	cd $(srcdir) \
 	&& $$glib_genmarshal --prefix=gtk_marshal gtkmarshal.list --body >> xgen-gmc \
-	&& cp xgen-gmc $(srcdir)/gtkmarshal.c \
+	&& cp xgen-gmc gtkmarshal.c \
 	&& rm -f xgen-gmc xgen-gmc~
 $(srcdir)/stamp-gtktypebuiltins.h: @REBUILD@ maketypes.awk $(srcdir)/stamp-gtk.defs gtktypebuiltins.h
 	cd $(srcdir) \

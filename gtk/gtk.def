@@ -1,6 +1,5 @@
 EXPORTS
 	GTK_TYPE_ACCEL_FLAGS
-	GTK_TYPE_ACCEL_GROUP
 	GTK_TYPE_ANCHOR_TYPE
 	GTK_TYPE_ARG_FLAGS
 	GTK_TYPE_ARROW_TYPE
@@ -94,6 +93,7 @@ EXPORTS
 	gtk_accel_group_entries_from_object
 	gtk_accel_group_get_default
 	gtk_accel_group_get_entry
+	gtk_accel_group_get_type
 	gtk_accel_group_handle_add
 	gtk_accel_group_handle_remove
 	gtk_accel_group_lock
@@ -106,12 +106,12 @@ EXPORTS
 	gtk_accel_group_unref
 	gtk_accel_groups_activate
 	gtk_accel_groups_from_object
-	gtk_accel_label_get_accel_widget
+	gtk_accel_label_get_accel_object
 	gtk_accel_label_get_accel_width
 	gtk_accel_label_get_type
 	gtk_accel_label_new
 	gtk_accel_label_refetch
-	gtk_accel_label_set_accel_widget
+	gtk_accel_label_set_accel_object
 	gtk_accelerator_get_default_mod_mask
 	gtk_accelerator_name
 	gtk_accelerator_parse
@@ -618,6 +618,7 @@ EXPORTS
 	gtk_hscrollbar_new
 	gtk_hseparator_get_type
 	gtk_hseparator_new
+	gtk_icon_factory_add
 	gtk_icon_factory_add_default
 	gtk_icon_factory_get_type
 	gtk_icon_factory_lookup
@@ -856,15 +857,12 @@ EXPORTS
 	gtk_marshal_BOOLEAN__VOID
 	gtk_marshal_ENUM__ENUM
 	gtk_marshal_INT__POINTER
-	gtk_marshal_VOID__BOOLEAN
-	gtk_marshal_VOID__BOXED
 	gtk_marshal_VOID__BOXED_BOXED
 	gtk_marshal_VOID__BOXED_OBJECT
 	gtk_marshal_VOID__BOXED_STRING_INT
 	gtk_marshal_VOID__BOXED_UINT
 	gtk_marshal_VOID__BOXED_UINT_FLAGS
 	gtk_marshal_VOID__BOXED_UINT_UINT
-	gtk_marshal_VOID__ENUM
 	gtk_marshal_VOID__ENUM_FLOAT
 	gtk_marshal_VOID__ENUM_FLOAT_BOOLEAN
 	gtk_marshal_VOID__ENUM_INT
@@ -1875,7 +1873,6 @@ EXPORTS
 	gtk_widget_get_style
 	gtk_widget_get_toplevel
 	gtk_widget_get_type
-	gtk_widget_get_usize
 	gtk_widget_get_visual
 	gtk_widget_grab_default
 	gtk_widget_grab_focus
@@ -1935,6 +1932,7 @@ EXPORTS
 	gtk_widget_set_style
 	gtk_widget_set_uposition
 	gtk_widget_set_usize
+	gtk_widget_set_size_request
 	gtk_widget_shape_combine_mask
 	gtk_widget_show
 	gtk_widget_show_all
@@ -1966,8 +1964,10 @@ EXPORTS
 	gtk_window_get_has_frame
 	gtk_window_get_mnemonic_modifier
 	gtk_window_get_modal
+	gtk_window_get_position
 	gtk_window_get_resizable
 	gtk_window_get_role
+	gtk_window_get_size
 	gtk_window_get_title
 	gtk_window_get_transient_for
 	gtk_window_get_type
@@ -1980,11 +1980,15 @@ EXPORTS
 	gtk_window_list_toplevels
 	gtk_window_maximize
 	gtk_window_mnemonic_activate
+	gtk_window_move
 	gtk_window_new
+	gtk_window_parse_geometry
 	gtk_window_present
 	gtk_window_remove_accel_group
 	gtk_window_remove_embedded_xid
 	gtk_window_remove_mnemonic
+	gtk_window_reshow_with_initial_size
+	gtk_window_resize
 	gtk_window_set_decorated
 	gtk_window_set_default
 	gtk_window_set_default_size

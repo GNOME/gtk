@@ -45,7 +45,6 @@
 #include	"gtk/gtkstock.h"
 #include	"gtk/gtkiconfactory.h"
 #include	<string.h>
-#include	<sys/stat.h>
 #include	<fcntl.h>
 #ifdef HAVE_UNISTD_H
 #include	<unistd.h>
@@ -1235,7 +1234,11 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 	image = gtk_image_new_from_pixbuf (pixbuf);
 
       if (image)
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (widget), image);
+	{
+	  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (widget), image);
+
+	  gtk_widget_show (image);
+	}
 
       if (pixbuf)
 	g_object_unref (G_OBJECT (pixbuf));
@@ -1245,7 +1248,9 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
       image = gtk_image_new_from_stock (entry->extra_data, GTK_ICON_SIZE_MENU);
 
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (widget), image);
-      
+
+      gtk_widget_show (image);
+
       if (gtk_stock_lookup (entry->extra_data, &stock_item))
 	{
 	  if (!accelerator)
@@ -1754,7 +1759,7 @@ gtk_item_factory_parse_rc (const gchar	  *file_name)
 
   g_return_if_fail (file_name != NULL);
 
-  if (!S_ISREG (g_scanner_stat_mode (file_name)))
+  if (!g_file_test (file_name, G_FILE_TEST_IS_REGULAR))
     return;
 
   fd = open (file_name, O_RDONLY);

@@ -65,10 +65,12 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
 
-  model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+  model = GTK_TREE_MODEL (gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING));
   //  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model), 0, GTK_TREE_SORT_ASCENDING);
   g_print ("start model\n");
   tree_view = gtk_tree_view_new_with_model (model);
+  gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
+			       GTK_TREE_SELECTION_MULTI);
   for (j = 0; j < 2; j++)
     for (i = 0; data[i].word_1 != NULL; i++)
       {
@@ -92,17 +94,12 @@ main (int argc, char *argv[])
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
   gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_1);
 
-  g_object_unref (column);
-  g_object_unref (renderer);
-
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("Second Word", renderer,
 						     "text", WORD_COLUMN_2,
 						     NULL);
   gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_2);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-  g_object_unref (column);
-  g_object_unref (renderer);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("Third Word", renderer,
@@ -110,8 +107,6 @@ main (int argc, char *argv[])
 						     NULL);
   gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_3);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-  g_object_unref (column);
-  g_object_unref (renderer);
 
   renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("Fourth Word", renderer,
@@ -120,8 +115,6 @@ main (int argc, char *argv[])
   gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_4);
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-  g_object_unref (column);
-  g_object_unref (renderer);
 
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);

@@ -156,7 +156,6 @@ gtk_plug_init (GtkPlug *plug)
   window = GTK_WINDOW (plug);
 
   window->type = GTK_WINDOW_TOPLEVEL;
-  window->auto_shrink = TRUE;
 }
 
 static void
@@ -435,7 +434,10 @@ gtk_plug_realize (GtkWidget *widget)
 	  gdk_window_destroy (widget->window);
 	  gdk_flush ();
 	  gdk_error_trap_pop ();
-	  widget->window = gdk_window_new (NULL, &attributes, attributes_mask);
+	  widget->window = gdk_window_new_for_screen (gtk_widget_get_screen (widget),
+						      NULL,
+						      &attributes, 
+						      attributes_mask);
 	}
       
       gdk_window_add_filter (widget->window, gtk_plug_filter_func, widget);

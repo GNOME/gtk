@@ -167,7 +167,6 @@ get_keymap_for_display (GdkDisplay * display)
   return GDK_DISPLAY_IMPL_X11 (display)->keymap;
 }
 
-
 #if HAVE_XKB
 PangoDirection
 get_direction (GdkDisplay *display)

@@ -82,7 +82,9 @@ typedef enum
   GDK_HINT_BASE_SIZE   = 1 << 3,
   GDK_HINT_ASPECT      = 1 << 4,
   GDK_HINT_RESIZE_INC  = 1 << 5,
-  GDK_HINT_WIN_GRAVITY = 1 << 6
+  GDK_HINT_WIN_GRAVITY = 1 << 6,
+  GDK_HINT_USER_POS    = 1 << 7,
+  GDK_HINT_USER_SIZE   = 1 << 8
 } GdkWindowHints;
 
 
@@ -522,6 +524,20 @@ void gdk_window_get_internal_paint_info (GdkWindow    *window,
 					 gint         *y_offset);
 
 GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);   
+
+
+#ifndef GDK_DISABLE_DEPRECATED
+#define gdk_window_get_size            gdk_drawable_get_size
+#define gdk_window_get_type            gdk_window_get_window_type
+#define gdk_window_get_colormap        gdk_drawable_get_colormap
+#define gdk_window_set_colormap        gdk_drawable_set_colormap
+#define gdk_window_get_visual          gdk_drawable_get_visual
+#define gdk_window_ref                 gdk_drawable_ref
+#define gdk_window_unref               gdk_drawable_unref
+
+#define gdk_window_copy_area(drawable,gc,x,y,source_drawable,source_x,source_y,width,height) \
+   gdk_draw_pixmap(drawable,gc,source_drawable,source_x,source_y,x,y,width,height)
+#endif /* GDK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

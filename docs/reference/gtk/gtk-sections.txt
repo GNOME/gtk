@@ -1531,34 +1531,6 @@ GTK_OPTION_MENU_GET_CLASS
 </SECTION>
 
 <SECTION>
-<FILE>gtkpacker</FILE>
-GtkPacker
-GtkPackerOptions
-GtkSideType
-GtkAnchorType
-GtkPackerChild
-<TITLE>GtkPacker</TITLE>
-gtk_packer_new
-gtk_packer_add_defaults
-gtk_packer_add
-gtk_packer_configure
-gtk_packer_reorder_child
-gtk_packer_set_spacing
-gtk_packer_set_default_border_width
-gtk_packer_set_default_pad
-gtk_packer_set_default_ipad
-gtk_packer_set_child_packing
-<SUBSECTION Standard>
-GTK_PACKER
-GTK_IS_PACKER
-GTK_TYPE_PACKER
-gtk_packer_get_type
-GTK_PACKER_CLASS
-GTK_IS_PACKER_CLASS
-GTK_PACKER_GET_CLASS
-</SECTION>
-
-<SECTION>
 <FILE>gtkpaned</FILE>
 <TITLE>GtkPaned</TITLE>
 GtkPaned
@@ -3272,22 +3244,6 @@ GTK_MICRO_VERSION
 GTK_BINARY_AGE
 GTK_INTERFACE_AGE
 GTK_CHECK_VERSION
-<SUBSECTION Private>
-GTK_HAVE_CONTAINER_FOCUS_ADJUSTMENTS
-GTK_HAVE_SIGNAL_INIT
-GTK_HAVE_FEATURES_1_1_0
-GTK_HAVE_FEATURES_1_1_2
-GTK_HAVE_FEATURES_1_1_4
-GTK_HAVE_FEATURES_1_1_5
-GTK_HAVE_FEATURES_1_1_6
-GTK_HAVE_FEATURES_1_1_7
-GTK_HAVE_FEATURES_1_1_8
-GTK_HAVE_FEATURES_1_1_9
-GTK_HAVE_FEATURES_1_1_10
-GTK_HAVE_FEATURES_1_1_11
-GTK_HAVE_FEATURES_1_1_12
-GTK_HAVE_FEATURES_1_1_13
-GTK_HAVE_FEATURES_1_1_14
 </SECTION>
 
 

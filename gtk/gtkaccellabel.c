@@ -383,6 +383,8 @@ gtk_accel_label_set_accel_object (GtkAccelLabel *accel_label,
 				   accel_label,
 				   G_CONNECT_AFTER | G_CONNECT_SWAPPED);
 	}
+       gtk_accel_label_refetch (accel_label);
+
        g_object_notify (G_OBJECT (accel_label), "accel_object");
     }
 }

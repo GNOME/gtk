@@ -1354,6 +1354,8 @@ propagate (GdkWindow  **window,
 	   gboolean   (*doesnt_want_it) (gint mask,
 					 MSG *msg))
 {
+  gboolean in_propagation = FALSE;
+
   if (grab_window != NULL && !grab_owner_events)
     {
       /* Event source is grabbed with owner_events FALSE */
@@ -1414,9 +1416,11 @@ propagate (GdkWindow  **window,
 	      gdk_drawable_unref (*window);
 	      *window = GDK_WINDOW (GDK_WINDOW_OBJECT (*window)->parent);
 	      gdk_drawable_ref (*window);
-	      GDK_NOTE (EVENTS, g_print ("...propagating to %#lx\n",
+	      GDK_NOTE (EVENTS, g_print ("%s %#lx",
+					 (in_propagation ? "," : " ...propagating to"),
 					 (gulong) GDK_WINDOW_HWND (*window)));
 	      /* The only branch where we actually continue the loop */
+	      in_propagation = TRUE;
 	    }
 	}
       else
@@ -1676,6 +1680,7 @@ gdk_event_translate (GdkEvent *event,
       event->selection.type = GDK_SELECTION_CLEAR;
       event->selection.window = window;
       event->selection.selection = msg->wParam;
+      event->selection.target = msg->lParam;
       event->selection.time = msg->time;
 
       return_val = !GDK_WINDOW_DESTROYED (window);
@@ -2527,6 +2532,9 @@ gdk_event_translate (GdkEvent *event,
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
+      *ret_val_flagp = TRUE; /* always claim as handled */
+      *ret_valp = 1;
+
       if (GDK_WINDOW_OBJECT (window)->input_only)
 	break;
 
@@ -2556,8 +2564,6 @@ gdk_event_translate (GdkEvent *event,
 		   colormap_private->xcolormap->palette, k);
 #endif
 	}
-      *ret_val_flagp = TRUE;
-      *ret_valp = 1;
 
       if (GDK_WINDOW_OBJECT (window)->bg_pixmap == GDK_PARENT_RELATIVE_BG)
 	{
@@ -2571,6 +2577,14 @@ gdk_event_translate (GdkEvent *event,
 	      ASSIGN_WINDOW (GDK_WINDOW (GDK_WINDOW_OBJECT (window)->parent));
 	      gdk_drawable_ref (window);
 	    }
+	}
+
+      if (GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->position_info.no_bg)
+	{
+	  /* improves scolling effect, e.g. main buttons of testgtk */
+	  *ret_val_flagp = TRUE;
+	  *ret_valp = 1;
+	  break;
 	}
 
       if (GDK_WINDOW_OBJECT (window)->bg_pixmap == NULL)
@@ -2674,18 +2688,6 @@ gdk_event_translate (GdkEvent *event,
           break;
         }
 
-      /* HB: don't generate GDK_EXPOSE events for InputOnly
-       * windows -> backing store now works!
-       */
-      if (GDK_WINDOW_OBJECT (window)->input_only)
-	break;
-
-      if (!(window_impl->event_mask & GDK_EXPOSURE_MASK))
-	break;
-
-      if (GDK_WINDOW_OBJECT (window)->bg_pixmap == GDK_NO_BG)
-	break;
-
       hdc = BeginPaint (msg->hwnd, &paintstruct);
 
       GDK_NOTE (EVENTS,
@@ -2698,6 +2700,18 @@ gdk_event_translate (GdkEvent *event,
 			 (gulong) hdc));
 
       EndPaint (msg->hwnd, &paintstruct);
+
+      /* HB: don't generate GDK_EXPOSE events for InputOnly
+       * windows -> backing store now works!
+       */
+      if (GDK_WINDOW_OBJECT (window)->input_only)
+	break;
+
+      if (!(window_impl->event_mask & GDK_EXPOSURE_MASK))
+	break;
+
+      if (GDK_WINDOW_OBJECT (window)->bg_pixmap == GDK_NO_BG)
+	break;
 
       if ((paintstruct.rcPaint.right == paintstruct.rcPaint.left)
           || (paintstruct.rcPaint.bottom == paintstruct.rcPaint.top))
@@ -2738,7 +2752,7 @@ gdk_event_translate (GdkEvent *event,
           expose_rect.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
           expose_rect.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
 
-	    _gdk_window_process_expose (window, GetMessageTime (), &expose_rect);
+	    _gdk_window_process_expose (window, msg->time, &expose_rect);
 
 	    return_val = FALSE;
         }
@@ -2864,9 +2878,11 @@ gdk_event_translate (GdkEvent *event,
 	{
 	  mmi->ptMaxTrackSize.x = window_impl->hint_max_width;
 	  mmi->ptMaxTrackSize.y = window_impl->hint_max_height;
-	    
-	  mmi->ptMaxSize.x = window_impl->hint_max_width;
-	  mmi->ptMaxSize.y = window_impl->hint_max_height;
+
+	  /* kind of WM functionality, limit maximized size to screen */
+	  mmi->ptMaxPosition.x = 0; mmi->ptMaxPosition.y = 0;	    
+	  mmi->ptMaxSize.x = MIN(window_impl->hint_max_width, gdk_screen_width ());
+	  mmi->ptMaxSize.y = MIN(window_impl->hint_max_height, gdk_screen_height ());
 	}
       break;
 
@@ -3093,6 +3109,8 @@ void
 gdk_events_queue (void)
 {
   MSG msg;
+  GdkEvent *event;
+  GList *node;
 
   while (!gdk_event_queue_find_first ()
 	 && PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
@@ -3104,7 +3122,33 @@ gdk_events_queue (void)
 	  || (active_imm_msgpump_owner->lpVtbl->OnTranslateMessage) (active_imm_msgpump_owner, &msg) != S_OK)
 	TranslateMessage (&msg);
 
+#if 1 /* It was like this all the time */
       DispatchMessage (&msg);
+#else /* but this one is more similar to the X implementation. Any effect ? */
+      event = gdk_event_new ();
+      
+      event->any.type = GDK_NOTHING;
+      event->any.window = NULL;
+      event->any.send_event = InSendMessage ();
+
+      ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
+
+      gdk_event_queue_append (event);
+      node = gdk_queued_tail;
+
+      if (gdk_event_translate (event, &msg, NULL, NULL, FALSE))
+	{
+	  ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
+	}
+      else
+	{
+	  gdk_event_queue_remove_link (node);
+	  g_list_free_1 (node);
+	  gdk_event_free (event);
+        DispatchMessage (&msg);
+	}
+
+#endif
     }
 }
 

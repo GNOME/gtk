@@ -495,6 +495,8 @@ Styles
 @state_type: 
 @x: 
 @y: 
+@expander_style: 
+<!-- # Unused Parameters # -->
 @is_open: 
 
 
@@ -866,6 +868,8 @@ Styles
 @detail: 
 @x: 
 @y: 
+@expander_style: 
+<!-- # Unused Parameters # -->
 @is_open: 
 
 

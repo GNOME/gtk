@@ -563,6 +563,14 @@ GdkScreen *gtk_widget_get_screen	  (GtkWidget	       *widget);
 GdkDisplay*gtk_widget_get_display	  (GtkWidget	       *widget);
 gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
                                            GtkDirectionType     direction);
+
+void       gtk_widget_set_size_request    (GtkWidget           *widget,
+                                           gint                 width,
+                                           gint                 height);
+void       gtk_widget_get_size_request    (GtkWidget           *widget,
+                                           gint                *width,
+                                           gint                *height);
+#ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,
 					   gint			x,
 					   gint			y);
@@ -572,6 +580,8 @@ void	   gtk_widget_set_usize		  (GtkWidget	       *widget,
 void       gtk_widget_get_usize           (GtkWidget           *widget,
 					   gint                *width,
 					   gint                *height);
+#endif
+
 void	   gtk_widget_set_events	  (GtkWidget	       *widget,
 					   gint			events);
 void       gtk_widget_add_events          (GtkWidget           *widget,
@@ -588,6 +598,12 @@ GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
 
 GtkSettings* gtk_widget_get_settings    (GtkWidget      *widget);
 
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_widget_set_visual(widget,visual)  ((void) 0)
+#define gtk_widget_push_visual(visual)        ((void) 0)
+#define gtk_widget_pop_visual()               ((void) 0)
+#define gtk_widget_set_default_visual(visual) ((void) 0)
+#endif /* GTK_DISABLE_DEPRECATED */
 
 /* Accessibility support */
 AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);
@@ -692,7 +708,6 @@ void gtk_widget_style_get          (GtkWidget	     *widget,
 
 /* Set certain default values to be used at widget creation time.
  */
-void	     gtk_widget_set_default_style    (GtkStyle	  *style);
 void	     gtk_widget_set_default_colormap (GdkColormap *colormap);
 GtkStyle*    gtk_widget_get_default_style    (void);
 GdkColormap* gtk_widget_get_default_colormap (void);

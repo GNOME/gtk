@@ -42,7 +42,9 @@
  */
 
 #include <windows.h>
+#ifdef HAVE_WINTAB
 #include <wintab.h>
+#endif
 #include "gdkinput-win32.h"
 
 static GdkDeviceAxis gdk_input_core_axes[] = {

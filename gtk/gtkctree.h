@@ -430,6 +430,7 @@ void gtk_ctree_sort_recursive                    (GtkCTree     *ctree,
 						  GtkCTreeNode *node);
 
 
+#define gtk_ctree_set_reorderable(t,r)                    gtk_clist_set_reorderable((GtkCList*) (t),(r))
 
 #ifdef __cplusplus
 }

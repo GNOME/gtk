@@ -7,7 +7,7 @@ makefile.msc
 _libs
 .libs
 libgtk-*.la
-gtkcompat.h
+gtkversion.h
 libgtk.la
 gtkfeatures.h
 gtkmarshal.h

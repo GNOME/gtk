@@ -194,26 +194,27 @@ gtk_arrow_set (GtkArrow      *arrow,
 	       GtkArrowType   arrow_type,
 	       GtkShadowType  shadow_type)
 {
-  gboolean changed = FALSE;
-   
   g_return_if_fail (GTK_IS_ARROW (arrow));
 
-  if ((GtkArrowType) arrow->arrow_type != arrow_type)
+  if (   ((GtkArrowType) arrow->arrow_type != arrow_type)
+      || ((GtkShadowType) arrow->shadow_type != shadow_type))
     {
-      arrow->arrow_type = arrow_type;
-      g_object_notify (G_OBJECT (arrow), "arrow_type");
-      changed = TRUE;
-    }
+      g_object_freeze_notify (G_OBJECT (arrow));
 
-  if ((GtkShadowType) arrow->shadow_type != shadow_type)
-    {
-      arrow->shadow_type = shadow_type;
-      g_object_notify (G_OBJECT (arrow), "shadow_type");
-      changed = TRUE;
-    }
+      if ((GtkArrowType) arrow->arrow_type != arrow_type)
+        {
+          arrow->arrow_type = arrow_type;
+          g_object_notify (G_OBJECT (arrow), "arrow_type");
+        }
 
-  if (changed == TRUE)
-    {
+      if ((GtkShadowType) arrow->shadow_type != shadow_type)
+        {
+          arrow->shadow_type = shadow_type;
+          g_object_notify (G_OBJECT (arrow), "shadow_type");
+        }
+
+      g_object_thaw_notify (G_OBJECT (arrow));
+
       if (GTK_WIDGET_DRAWABLE (arrow))
 	gtk_widget_queue_clear (GTK_WIDGET (arrow));
     }

@@ -127,7 +127,12 @@ void     gtk_container_foreach_full (GtkContainer       *container,
 				     GtkCallbackMarshal  marshal,
 				     gpointer            callback_data,
 				     GtkDestroyNotify    notify);
-GList*   gtk_container_children     (GtkContainer       *container);
+GList*   gtk_container_get_children     (GtkContainer       *container);
+
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_container_children gtk_container_get_children
+#endif
+
 void     gtk_container_propagate_expose (GtkContainer   *container,
 					 GtkWidget      *child,
 					 GdkEventExpose *event);
@@ -205,6 +210,10 @@ void    gtk_container_forall		     (GtkContainer *container,
 gchar*	gtk_container_child_composite_name   (GtkContainer *container,
 					      GtkWidget	   *child);
 void   _gtk_container_dequeue_resize_handler (GtkContainer *container);
+
+#ifndef GTK_DISABLE_DEPRECATED
+#define	gtk_container_border_width		gtk_container_set_border_width
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

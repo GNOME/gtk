@@ -530,8 +530,9 @@ gdk_window_new (GdkWindow     *parent,
       dwExStyle = WS_EX_TRANSPARENT;
       private->depth = 0;
       private->input_only = TRUE;
-      draw_impl->colormap = NULL;
-      GDK_NOTE (MISC, g_print ("...GDK_INPUT_ONLY, NULL colormap\n"));
+      draw_impl->colormap = gdk_colormap_get_system ();
+      gdk_colormap_ref (draw_impl->colormap);
+      GDK_NOTE (MISC, g_print ("...GDK_INPUT_ONLY, system colormap\n"));
     }
 
   if (parent_private)
@@ -557,7 +558,9 @@ gdk_window_new (GdkWindow     *parent,
       break;
 
     case GDK_WINDOW_TEMP:
-      dwStyle = WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+      dwStyle = WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+      /* a temp window is not necessarily a top level window */
+      dwStyle |= (gdk_parent_root == parent ? WS_POPUP : WS_CHILDWINDOW);
       dwExStyle |= WS_EX_TOOLWINDOW;
       break;
 
@@ -770,7 +773,10 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 	}
     }
   else if (!recursing && !foreign_destroy)
-    DestroyWindow (GDK_WINDOW_HWND (window));
+    {
+      private->destroyed = TRUE;
+      DestroyWindow (GDK_WINDOW_HWND (window));
+    }
 }
 
 /* This function is called when the window really gone.
@@ -799,14 +805,14 @@ gdk_window_destroy_notify (GdkWindow *window)
   gdk_drawable_unref (window);
 }
 
-void
-gdk_window_show (GdkWindow *window)
+static void
+show_window_internal (GdkWindow *window,
+                      gboolean   raise)
 {
   GdkWindowObject *private;
   
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  private = (GdkWindowObject*) window;
+  private = GDK_WINDOW_OBJECT (window);
+
   if (!private->destroyed)
     {
       GDK_NOTE (MISC, g_print ("gdk_window_show: %#x\n",
@@ -834,17 +840,42 @@ gdk_window_show (GdkWindow *window)
             {
 	      GdkWindow *parent = GDK_WINDOW (private->parent);
 
-	      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
-	      ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+	      /* Todo: GDK_WINDOW_STATE_STICKY */
+	      if (private->state & GDK_WINDOW_STATE_ICONIFIED)
+	        ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMINIMIZED);
+	      else if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
+	        ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMAXIMIZED);
+	      else
+	        {
+	          ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+	          ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+	        }
               if (parent == gdk_parent_root)
                 SetForegroundWindow (GDK_WINDOW_HWND (window));
-	      BringWindowToTop (GDK_WINDOW_HWND (window));
+	      if (raise)
+	        BringWindowToTop (GDK_WINDOW_HWND (window));
 #if 0
 	      ShowOwnedPopups (GDK_WINDOW_HWND (window), TRUE);
 #endif
 	    }
 	}
     }
+}
+
+void
+gdk_window_show_unraised (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  show_window_internal (window, FALSE);
+}
+
+void
+gdk_window_show (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  show_window_internal (window, TRUE);
 }
 
 void
@@ -906,7 +937,19 @@ gdk_window_move (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   
-  gdk_window_move_resize (window, x, y, impl->width, impl->height);
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
+	_gdk_window_move_resize_child (window, x, y,
+				       impl->width, impl->height);
+      else
+	{
+	  if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
+	                     x, y, impl->width, impl->height,
+	                     SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER))
+	    WIN32_API_FAILED ("SetWindowPos");
+	}
+    }
 }
 
 void
@@ -928,13 +971,12 @@ gdk_window_resize (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   
-  if (!private->destroyed)
+  if (!GDK_WINDOW_DESTROYED (window))
     {
-      GDK_NOTE (MISC, g_print ("gdk_window_resize: %#x %dx%d\n",
-			       (guint) GDK_WINDOW_HWND (window),
-			       width, height));
-      
-      if (GDK_WINDOW_TYPE (private) != GDK_WINDOW_CHILD)
+      if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
+	_gdk_window_move_resize_child (window, private->x, private->y,
+				       width, height);
+      else
 	{
 	  POINT pt;
 	  RECT rect;
@@ -958,22 +1000,12 @@ gdk_window_resize (GdkWindow *window,
 	  y = rect.top;
 	  width = rect.right - rect.left;
 	  height = rect.bottom - rect.top;
+	  if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
+	                     x, y, width, height,
+	                     SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER))
+	    WIN32_API_FAILED ("SetWindowPos");
 	}
-      else
-	{
-	  x = private->x;
-	  y = private->y;
-	  impl->width = width;
-	  impl->height = height;
-	}
-
       private->resize_count += 1;
-
-      GDK_NOTE (MISC, g_print ("...MoveWindow(%#x,%dx%d@+%d+%d)\n",
-			       (guint) GDK_WINDOW_HWND (window),
-			       width, height, x, y));
-      if (!MoveWindow (GDK_WINDOW_HWND (window), x, y, width, height, TRUE))
-	WIN32_API_FAILED ("MoveWindow");
     }
 }
 
@@ -1021,15 +1053,15 @@ gdk_window_move_resize (GdkWindow *window,
 	  if (!AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle))
 	    WIN32_API_FAILED ("AdjustWindowRectEx");
 
-	  GDK_NOTE (MISC, g_print ("...MoveWindow(%#x,%ldx%ld@+%ld+%ld)\n",
+	  GDK_NOTE (MISC, g_print ("...SetWindowPos(%#x,%ldx%ld@+%ld+%ld)\n",
 				   (guint) GDK_WINDOW_HWND (window),
 				   rect.right - rect.left, rect.bottom - rect.top,
 				   rect.left, rect.top));
-	  if (!MoveWindow (GDK_WINDOW_HWND (window),
-			   rect.left, rect.top,
-			   rect.right - rect.left, rect.bottom - rect.top,
-			   TRUE))
-	    WIN32_API_FAILED ("MoveWindow");
+	  if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
+	                     rect.left, rect.top,
+	                     rect.right - rect.left, rect.bottom - rect.top,
+	                     SWP_NOACTIVATE | SWP_NOZORDER))
+	    WIN32_API_FAILED ("SetWindowPos");
 	}
     }
 }
@@ -1327,7 +1359,7 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   impl->hint_flags = geom_mask;
 
   if (geom_mask & GDK_HINT_POS)
-    ; /* XXX */
+    ; /* even the X11 mplementation doesn't care */
 
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
@@ -1466,13 +1498,44 @@ void
 gdk_window_set_transient_for (GdkWindow *window, 
 			      GdkWindow *parent)
 {
+  HWND window_id, parent_id;
+  LONG style;
+
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
   GDK_NOTE (MISC, g_print ("gdk_window_set_transient_for: %#x %#x\n",
 			   (guint) GDK_WINDOW_HWND (window),
 			   (guint) GDK_WINDOW_HWND (parent)));
-  /* XXX */
+
+  if (GDK_WINDOW_DESTROYED (window) || GDK_WINDOW_DESTROYED (parent))
+    return;
+
+  window_id = GDK_WINDOW_HWND (window);
+  parent_id = GDK_WINDOW_HWND (parent);
+
+  if ((style = GetWindowLong (window_id, GWL_STYLE)) == 0)
+    WIN32_API_FAILED ("GetWindowLong");
+
+  style |= WS_POPUP;
+#if 0 /* not sure if we want to do this */
+  style &= ~(WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX);
+#endif
+
+  if (!SetWindowLong (window_id, GWL_STYLE, style))
+    WIN32_API_FAILED ("SetWindowLong");
+#if 0 /* not sure if we want to do this, clipping to parent size! */
+  if (!SetParent (window_id, parent_id))
+	WIN32_API_FAILED ("SetParent");
+#else /* make the modal window topmost instead */
+  if (!SetWindowPos (window_id, HWND_TOPMOST, 0, 0, 0, 0,
+                     SWP_NOMOVE | SWP_NOSIZE))
+    WIN32_API_FAILED ("SetWindowPos");
+#endif
+
+  if (!RedrawWindow (window_id, NULL, NULL, 
+                     RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW))
+    WIN32_API_FAILED ("RedrawWindow");
 }
 
 void
@@ -1713,6 +1776,11 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   HWND hwnd;
   RECT r;
 
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (rect != NULL);
+
+  private = GDK_WINDOW_OBJECT (window);
+
   rect->x = 0;
   rect->y = 0;
   rect->width = 1;
@@ -1720,6 +1788,9 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  while (private->parent && ((GdkWindowObject*) private->parent)->parent)
+    private = (GdkWindowObject*) private->parent;
 
   hwnd = GDK_WINDOW_HWND (window);
   /* find the frame window */
@@ -1729,7 +1800,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
       g_return_if_fail (NULL != hwnd);
     }
 
-  if (GetWindowRect (hwnd, &r))
+  if (!GetWindowRect (hwnd, &r))
     WIN32_API_FAILED ("GetWindowRect");
 
   rect->x = r.left;

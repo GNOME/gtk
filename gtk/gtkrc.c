@@ -47,7 +47,7 @@
 #include <glib.h>
 #include "gdkconfig.h"
 
-#include "gtkcompat.h"
+#include "gtkversion.h"
 #include "gtkrc.h"
 #include "gtkbindings.h"
 #include "gtkthemes.h"
@@ -3611,8 +3611,6 @@ gtk_rc_parse_icon_source (GtkRcContext   *context,
       gtk_icon_source_free (source);
       return G_TOKEN_RIGHT_CURLY;
     }
-
-  gtk_icon_set_add_source (icon_set, source);
 
  done:
   if (gtk_icon_source_get_filename (source))

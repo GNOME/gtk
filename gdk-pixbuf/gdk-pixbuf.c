@@ -429,6 +429,9 @@ gdk_pixbuf_fill (GdkPixbuf *pixbuf,
         
         g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
+        if (pixbuf->width == 0 || pixbuf->height == 0)
+          return;
+
         pixels = pixbuf->pixels;
 
         r = (pixel & 0xff000000) >> 24;
@@ -448,20 +451,30 @@ gdk_pixbuf_fill (GdkPixbuf *pixbuf,
                         pixbuf->rowstride * pixbuf->height);
         } else {
                 guchar *p;
-                guchar *end;
+                guchar  c[4];
+                gint    n;
 
-                /* feel free to optimize this */
+                c[0] = r; c[1] = g; c[2] = b; c[3] = a;
                 
                 p = pixels;
-                end = pixels + pixbuf->rowstride * pixbuf->height;
-                end -= (pixbuf->rowstride - pixbuf->width * pixbuf->n_channels);
-                
-                while (p < end) {
-                        *p++ = r;
-                        *p++ = g;
-                        *p++ = b;
-                        if (pixbuf->has_alpha)
-                                *p++ = a;
+                n = pixbuf->width;
+                if (pixbuf->has_alpha) {
+                        do {
+                                memcpy (p, c, 4);
+                                p += 4;
+                        } while (--n);
+                } else {
+                        do {
+                                memcpy (p, c, 3);
+                                p += 3;
+                        } while (--n);
+                }
+
+                p = pixels;
+                n = pixbuf->height - 1;
+                while (n--) {
+                        p += pixbuf->rowstride;
+                        memcpy (p, pixels, pixbuf->width * pixbuf->n_channels);
                 }
         }
 }

@@ -1236,7 +1236,7 @@ motif_add_to_target_table_for_display (GList *targets, GdkDisplay *dpy)
 			   8, PropModeReplace,
 			   data, total_size);
 	}
-      XUngrabServer (dpy_impl->xdisplay);
+      gdk_x11_ungrab_server (dpy_impl->xdisplay);
     }
 
   g_list_free (sorted);

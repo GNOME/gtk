@@ -112,10 +112,10 @@ static void         gtk_tree_model_sort_unref_node      (GtkTreeModel          *
 /* sortable */
 static gboolean gtk_tree_model_sort_get_sort_column_id (GtkTreeSortable        *sortable,
 							gint                   *sort_column_id,
-							GtkTreeSortOrder       *order);
+							GtkSortType            *order);
 static void     gtk_tree_model_sort_set_sort_column_id (GtkTreeSortable        *sortable,
 							gint                    sort_column_id,
-							GtkTreeSortOrder        order);
+							GtkSortType             order);
 static void     gtk_tree_model_sort_set_sort_func      (GtkTreeSortable        *sortable,
 							gint                    sort_column_id,
 							GtkTreeIterCompareFunc  func,
@@ -913,7 +913,7 @@ gtk_tree_model_sort_unref_node (GtkTreeModel *tree_model,
 static gboolean
 gtk_tree_model_sort_get_sort_column_id (GtkTreeSortable  *sortable,
 					gint             *sort_column_id,
-					GtkTreeSortOrder *order)
+					GtkSortType      *order)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) sortable;
 
@@ -933,7 +933,7 @@ gtk_tree_model_sort_get_sort_column_id (GtkTreeSortable  *sortable,
 static void
 gtk_tree_model_sort_set_sort_column_id (GtkTreeSortable  *sortable,
 					 gint              sort_column_id,
-					 GtkTreeSortOrder  order)
+					 GtkSortType       order)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) sortable;
   GList *list;

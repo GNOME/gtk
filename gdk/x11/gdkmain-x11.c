@@ -98,9 +98,8 @@ static const GDebugKey gdk_debug_keys[] = {
   {"events",	    GDK_DEBUG_EVENTS},
   {"misc",	    GDK_DEBUG_MISC},
   {"dnd",	    GDK_DEBUG_DND},
-  {"color-context", GDK_DEBUG_COLOR_CONTEXT},
-  {"xim",	    GDK_DEBUG_XIM},
-  {"multihead",	    GDK_DEBUG_MULTIHEAD}
+  {"multihead",	    GDK_DEBUG_MULTIHEAD},
+  {"xim",	    GDK_DEBUG_XIM}
 };
 
 static const int gdk_ndebug_keys = sizeof (gdk_debug_keys)/sizeof (GDebugKey);
@@ -199,11 +198,13 @@ _gdk_windowing_init_check_for_display (int argc, char **argv, char *display_name
   {
     gint xkb_major = XkbMajorVersion;
     gint xkb_minor = XkbMinorVersion;
-    if (XkbLibraryVersion (&xkb_major, &xkb_minor)) {
+    if (XkbLibraryVersion (&xkb_major, &xkb_minor)) 
+    {
       xkb_major = XkbMajorVersion;
       xkb_minor = XkbMinorVersion;
       if (XkbQueryExtension (dpy_impl->xdisplay, NULL, dpy_impl->xkb_event_type, NULL,
-			     &xkb_major, &xkb_minor)) {
+			     &xkb_major, &xkb_minor)) 
+      {
 	Bool detectable_autorepeat_supported;
 
 	dpy_impl->use_xkb = TRUE;
@@ -862,7 +863,6 @@ _gdk_region_get_xrectangles (GdkRegion   *region,
   *n_rects = region->numRects;
 }
 
-/* FIXME put in GdkDisplay */
 static gint grab_count = 0;
 void
 gdk_x11_grab_server (GdkDisplay *display)
@@ -883,3 +883,4 @@ gdk_x11_ungrab_server (GdkDisplay *display)
   if (dpy_impl->grab_count == 0)
     XUngrabServer (dpy_impl->xdisplay);
 }
+

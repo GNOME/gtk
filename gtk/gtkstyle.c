@@ -38,7 +38,6 @@
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
 
-
 /* --- typedefs & structures --- */
 typedef struct {
   GType       widget_type;
@@ -1537,6 +1536,7 @@ gtk_style_real_unrealize (GtkStyle *style)
       gtk_gc_release (style->mid_gc[i]);
       gtk_gc_release (style->text_gc[i]);
       gtk_gc_release (style->base_gc[i]);
+      gtk_gc_release (style->text_aa_gc[i]);
 
       if (style->bg_pixmap[i] &&  style->bg_pixmap[i] != (GdkPixmap*) GDK_PARENT_RELATIVE)
 	gdk_pixmap_unref (style->bg_pixmap[i]);
@@ -1549,6 +1549,7 @@ gtk_style_real_unrealize (GtkStyle *style)
   gdk_colormap_free_colors (style->colormap, style->mid, 5);
   gdk_colormap_free_colors (style->colormap, style->text, 5);
   gdk_colormap_free_colors (style->colormap, style->base, 5);
+  gdk_colormap_free_colors (style->colormap, style->text_aa, 5);
 }
 
 static void
@@ -4050,11 +4051,11 @@ create_expander_affine (gdouble affine[6],
   gdouble width;
   gdouble height;
 
-  width = expander_size / 4;
-  height = expander_size / 2;
+  width = expander_size / 4.0;
+  height = expander_size / 2.0;
   
-  s = sin (degrees * M_PI / 180.0);
-  c = cos (degrees * M_PI / 180.0);
+  s = sin (degrees * G_PI / 180.0);
+  c = cos (degrees * G_PI / 180.0);
   
   affine[0] = c;
   affine[1] = s;
@@ -4133,11 +4134,25 @@ gtk_default_draw_expander (GtkStyle        *style,
   for (i = 0; i < 3; i++)
     apply_affine_on_point (affine, &points[i]);
 
-  gdk_draw_polygon (window, style->base_gc[GTK_STATE_NORMAL],
-		    TRUE, points, 3);
-  gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
-                    FALSE, points, 3);
-
+  if (state_type == GTK_STATE_PRELIGHT)
+    {
+      gdk_draw_polygon (window, style->base_gc[GTK_STATE_NORMAL],
+			TRUE, points, 3);
+      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
+			FALSE, points, 3);
+    }
+  else if (state_type == GTK_STATE_ACTIVE)
+    {
+      gdk_draw_polygon (window, style->light_gc[GTK_STATE_ACTIVE],
+			TRUE, points, 3);
+      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
+			FALSE, points, 3);
+    }
+  else
+    {
+      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
+			TRUE, points, 3);
+    }
   if (area)
     {
       gdk_gc_set_clip_rectangle (style->fg_gc[GTK_STATE_NORMAL], NULL);

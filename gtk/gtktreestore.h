@@ -48,7 +48,7 @@ struct _GtkTreeStore
   gint n_columns;
   gint sort_column_id;
   GList *sort_list;
-  GtkTreeSortOrder order;
+  GtkSortType order;
   GType *column_headers;
 };
 

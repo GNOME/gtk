@@ -83,6 +83,7 @@ gboolean   gtk_check_menu_item_get_inconsistent  (GtkCheckMenuItem *check_menu_i
 #ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,
 						gboolean	  always);
+#define	gtk_check_menu_item_set_state		gtk_check_menu_item_set_active
 #endif
 
 #ifdef __cplusplus

@@ -875,14 +875,6 @@ GtkWidget
 
 
 
-<!-- ##### FUNCTION gtk_widget_set_default_style ##### -->
-<para>
-
-</para>
-
-@style: 
-
-
 <!-- ##### FUNCTION gtk_widget_set_default_colormap ##### -->
 <para>
 
@@ -1874,22 +1866,12 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
-<!-- ##### ARG GtkWidget:x ##### -->
+<!-- ##### ARG GtkWidget:width-request ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkWidget:y ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:height ##### -->
+<!-- ##### ARG GtkWidget:height-request ##### -->
 <para>
 
 </para>

@@ -141,26 +141,26 @@ _gdk_visual_init (GdkScreen * scr)
 #else /* __cplusplus */
       switch (visual_list[i].class)
 #endif /* __cplusplus */
-	{
-	case StaticGray:
-	  visuals[nvisuals]->visual.type = GDK_VISUAL_STATIC_GRAY;
-	  break;
-	case GrayScale:
-	  visuals[nvisuals]->visual.type = GDK_VISUAL_GRAYSCALE;
-	  break;
-	case StaticColor:
-	  visuals[nvisuals]->visual.type = GDK_VISUAL_STATIC_COLOR;
-	  break;
-	case PseudoColor:
-	  visuals[nvisuals]->visual.type = GDK_VISUAL_PSEUDO_COLOR;
-	  break;
-	case TrueColor:
-	  visuals[nvisuals]->visual.type = GDK_VISUAL_TRUE_COLOR;
-	  break;
-	case DirectColor:
-	  visuals[nvisuals]->visual.type = GDK_VISUAL_DIRECT_COLOR;
-	  break;
-	}
+	    {
+	    case StaticGray:
+	      visuals[nvisuals]->visual.type = GDK_VISUAL_STATIC_GRAY;
+	      break;
+	    case GrayScale:
+	      visuals[nvisuals]->visual.type = GDK_VISUAL_GRAYSCALE;
+	      break;
+	    case StaticColor:
+	      visuals[nvisuals]->visual.type = GDK_VISUAL_STATIC_COLOR;
+	      break;
+	    case PseudoColor:
+	      visuals[nvisuals]->visual.type = GDK_VISUAL_PSEUDO_COLOR;
+	      break;
+	    case TrueColor:
+	      visuals[nvisuals]->visual.type = GDK_VISUAL_TRUE_COLOR;
+	      break;
+	    case DirectColor:
+	      visuals[nvisuals]->visual.type = GDK_VISUAL_DIRECT_COLOR;
+	      break;
+	    }
 
 	  visuals[nvisuals]->visual.depth = visual_list[i].depth;
 	  visuals[nvisuals]->visual.byte_order =
@@ -265,7 +265,7 @@ _gdk_visual_init (GdkScreen * scr)
 	{
 	  if (visuals[j]->visual.depth == possible_depths[i])
 	    {
-	     scr_impl-> available_depths[scr_impl->navailable_depths++] = 
+	      scr_impl->available_depths[scr_impl->navailable_depths++] = 
 						visuals[j]->visual.depth;
 	      break;
 	    }

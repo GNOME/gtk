@@ -41,6 +41,7 @@ Known bugs:
 #include <string.h>
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
+#include <errno.h>
 
 
 
@@ -115,8 +116,8 @@ static void DumpBIH(unsigned char *BIH)
 
 /* Progressive loading */
 struct headerpair {
-	guint width;
-	guint height;
+	gint width;
+	gint height;
 	guint depth;
 	guint Negative;		/* Negative = 1 -> top down BMP,  
 				   Negative = 0 -> bottom up BMP */
@@ -163,14 +164,27 @@ static gboolean gdk_pixbuf__ico_image_load_increment(gpointer data,
                                                      const guchar * buf, guint size,
                                                      GError **error);
 
+static void 
+context_free (struct ico_progressive_state *context)
+{
+	if (context->LineBuf != NULL)
+		g_free (context->LineBuf);
+	context->LineBuf = NULL;
+	if (context->HeaderBuf != NULL)
+		g_free (context->HeaderBuf);
 
+	if (context->pixbuf)
+		gdk_pixbuf_unref (context->pixbuf);
 
+	g_free (context);
+}
+				
 /* Shared library entry point --> Can go when generic_image_load
    enters gdk-pixbuf-io */
 static GdkPixbuf *
 gdk_pixbuf__ico_image_load(FILE * f, GError **error)
 {
-	guchar *membuf;
+	guchar membuf [4096];
 	size_t length;
 	struct ico_progressive_state *State;
 
@@ -179,24 +193,35 @@ gdk_pixbuf__ico_image_load(FILE * f, GError **error)
 	State = gdk_pixbuf__ico_image_begin_load(NULL, NULL, NULL, error);
 
         if (State == NULL)
-          return NULL;
+		return NULL;
         
-	membuf = g_malloc(4096);
-
-	g_assert(membuf != NULL);
-
-	while (feof(f) == 0) {
+	while (!feof(f)) {
 		length = fread(membuf, 1, 4096, f);
+		if (ferror (f)) {
+			g_set_error (error,
+				     G_FILE_ERROR,
+				     g_file_error_from_errno (errno),
+				     _("Failure reading ICO: %s"), g_strerror (errno));
+			context_free (State);
+			return NULL;
+		}
 		if (length > 0)
                         if (!gdk_pixbuf__ico_image_load_increment(State, membuf, length,
                                                                   error)) {
-                                gdk_pixbuf__ico_image_stop_load (State, NULL);
+				context_free (State);
                                 return NULL;
-                        }
+			}
 	}
-	g_free(membuf);
 	if (State->pixbuf != NULL)
-		gdk_pixbuf_ref(State->pixbuf);
+		gdk_pixbuf_ref (State->pixbuf);
+	else {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("ICO file was missing some data (perhaps it was truncated somehow?)"));
+		context_free (State);
+		return NULL;
+	}
 
 	pb = State->pixbuf;
 
@@ -205,7 +230,8 @@ gdk_pixbuf__ico_image_load(FILE * f, GError **error)
 }
 
 static void DecodeHeader(guchar *Data, gint Bytes,
-			 struct ico_progressive_state *State)
+			 struct ico_progressive_state *State,
+			 GError **error)
 {
 /* For ICO's we have to be very clever. There are multiple images possible
    in an .ICO. For now, we select (in order of priority):
@@ -225,7 +251,14 @@ static void DecodeHeader(guchar *Data, gint Bytes,
  	State->HeaderSize = 6 + IconCount*16;
  	
  	if (State->HeaderSize>State->BytesInHeaderBuf) {
- 		State->HeaderBuf=g_realloc(State->HeaderBuf,State->HeaderSize);
+ 		State->HeaderBuf=g_try_realloc(State->HeaderBuf,State->HeaderSize);
+		if (!State->HeaderBuf) {
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+				     _("Not enough memory to load icon"));
+			return;
+		}
  		State->BytesInHeaderBuf = State->HeaderSize;
  	}
  	if (Bytes < State->HeaderSize)
@@ -266,7 +299,14 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	State->HeaderSize = State->DIBoffset + 40; /* 40 = sizeof(InfoHeader) */
 	
  	if (State->HeaderSize>State->BytesInHeaderBuf) {
- 		State->HeaderBuf=g_realloc(State->HeaderBuf,State->HeaderSize);
+ 		State->HeaderBuf=g_try_realloc(State->HeaderBuf,State->HeaderSize);
+		if (!State->HeaderBuf) {
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+				     _("Not enough memory to load icon"));
+			return;
+		}
  		State->BytesInHeaderBuf = State->HeaderSize;
  	}
 	if (Bytes<State->HeaderSize) 
@@ -282,9 +322,23 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 		
 	State->Header.width =
 	    (int)(BIH[7] << 24) + (BIH[6] << 16) + (BIH[5] << 8) + (BIH[4]);
+	if (State->Header.width == 0) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("Icon has zero width"));
+		return;
+	}
 	State->Header.height =
 	    (int)(BIH[11] << 24) + (BIH[10] << 16) + (BIH[9] << 8) + (BIH[8])/2;
 	    /* /2 because the BIH height includes the transparency mask */
+	if (State->Header.height == 0) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("Icon has zero height"));
+		return;
+	}
 	State->Header.depth = (BIH[15] << 8) + (BIH[14]);;
 
 	State->Type = State->Header.depth;	
@@ -308,7 +362,14 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	State->HeaderSize+=I;
 	
  	if (State->HeaderSize>State->BytesInHeaderBuf) {
- 		State->HeaderBuf=g_realloc(State->HeaderBuf,State->HeaderSize);
+ 		State->HeaderBuf=g_try_realloc(State->HeaderBuf,State->HeaderSize);
+		if (!State->HeaderBuf) {
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+				     _("Not enough memory to load icon"));
+			return;
+		}
  		State->BytesInHeaderBuf = State->HeaderSize;
  	}
  	if (Bytes < State->HeaderSize)
@@ -316,7 +377,12 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 
 	if ((BIH[16] != 0) || (BIH[17] != 0) || (BIH[18] != 0)
 	    || (BIH[19] != 0)) {
-		g_assert(0); /* Compressed icons aren't allowed */
+		/* FIXME: is this the correct message? */
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Compressed icons are not supported"));
+		return;
 	}
 
 	/* Negative heights mean top-down pixel-order */
@@ -327,6 +393,8 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	if (State->Header.width < 0) {
 		State->Header.width = -State->Header.width;
 	}
+	g_assert (State->Header.width > 0);
+	g_assert (State->Header.height > 0);
 
 	if (State->Type == 24)
 		State->LineWidth = State->Header.width * 3;
@@ -346,8 +414,16 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 		State->LineWidth = (State->LineWidth / 4) * 4 + 4;
 
 
-	if (State->LineBuf == NULL)
-		State->LineBuf = g_malloc(State->LineWidth);
+	if (State->LineBuf == NULL) {
+		State->LineBuf = g_try_malloc(State->LineWidth);
+		if (!State->LineBuf) {
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+				     _("Not enough memory to load icon"));
+		}
+		return;
+	}
 
 	g_assert(State->LineBuf != NULL);
 
@@ -355,8 +431,8 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	if (State->pixbuf == NULL) {
 		State->pixbuf =
 		    gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8,
-				   (gint) State->Header.width,
-				   (gint) State->Header.height);
+				   State->Header.width,
+				   State->Header.height);
 
 		if (State->prepared_func != NULL)
 			/* Notify the client that we are ready to go */
@@ -388,7 +464,14 @@ gdk_pixbuf__ico_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 	context->user_data = user_data;
 
 	context->HeaderSize = 54;
-	context->HeaderBuf = g_malloc(14 + 40 + 4*256 + 512);
+	context->HeaderBuf = g_try_malloc(14 + 40 + 4*256 + 512);
+	if (!context->HeaderBuf) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+			     _("Not enough memory to load ICO file"));
+		return NULL;
+	}
 	/* 4*256 for the colormap */
 	context->BytesInHeaderBuf = 14 + 40 + 4*256 + 512 ;
 	context->HeaderDone = 0;
@@ -425,18 +508,8 @@ gboolean gdk_pixbuf__ico_image_stop_load(gpointer data,
          */
 
 	g_return_val_if_fail(context != NULL, TRUE);
-
-	if (context->LineBuf != NULL)
-		g_free(context->LineBuf);
-	context->LineBuf = NULL;
-	if (context->HeaderBuf != NULL)
-		g_free(context->HeaderBuf);
-
-	if (context->pixbuf)
-		gdk_pixbuf_unref(context->pixbuf);
-
-	g_free(context);
-
+	
+	context_free (context);
         return TRUE;
 }
 
@@ -672,9 +745,8 @@ gdk_pixbuf__ico_image_load_increment(gpointer data,
 			size -= BytesToCopy;
 			buf += BytesToCopy;
 			context->HeaderDone += BytesToCopy;
-
-		}  else
-		{  
+		} 
+		else {
 			BytesToCopy =
 			    context->LineWidth - context->LineDone;
 			if (BytesToCopy > size)
@@ -696,11 +768,15 @@ gdk_pixbuf__ico_image_load_increment(gpointer data,
 
 		}
 
-		if (context->HeaderDone >= 6)
+		if (context->HeaderDone >= 6) {
+			GError *decode_err = NULL;
 			DecodeHeader(context->HeaderBuf,
-				     context->HeaderDone, context);
-
-
+				     context->HeaderDone, context, &decode_err);
+			if (decode_err) {
+				g_propagate_error (error, decode_err);
+				return FALSE;
+			}
+		}
 	}
 
 	return TRUE;

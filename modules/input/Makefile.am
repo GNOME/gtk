@@ -4,7 +4,6 @@ INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) 				\
 	-I$(top_srcdir)/gdk				\
 	-I$(top_builddir)/gdk				\
-	-DGTK_DISABLE_COMPAT_H				\
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_XIM_FLAGS@					\

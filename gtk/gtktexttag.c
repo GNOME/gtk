@@ -625,7 +625,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                   G_TYPE_BOOLEAN,
                   3,
                   G_TYPE_OBJECT,
-                  GDK_TYPE_EVENT,
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GTK_TYPE_TEXT_ITER);
 }
 
@@ -756,6 +756,7 @@ set_font_description (GtkTextTag           *text_tag,
     }
   else
     {
+      g_object_freeze_notify (G_OBJECT (text_tag));
       if (text_tag->family_set)
         {
           text_tag->family_set = FALSE;
@@ -786,6 +787,7 @@ set_font_description (GtkTextTag           *text_tag,
           text_tag->size_set = FALSE;
           g_object_notify (G_OBJECT (text_tag), "size_set");
         }
+      g_object_thaw_notify (G_OBJECT (text_tag));
     }
 }
 
@@ -1595,7 +1597,7 @@ gtk_text_tag_get_priority (GtkTextTag *tag)
  * @priority: the new priority
  * 
  * Sets the priority of a #GtkTextTag. Valid priorities are
- * start at 0 and go to one less than gtk_text_tag_table_size().
+ * start at 0 and go to one less than gtk_text_tag_table_get_size().
  * Each tag in a table has a unique priority; setting the priority
  * of one tag shifts the priorities of all the other tags in the
  * table to maintain a unique priority for each tag. Higher priority
@@ -1615,7 +1617,7 @@ gtk_text_tag_set_priority (GtkTextTag *tag,
   g_return_if_fail (GTK_IS_TEXT_TAG (tag));
   g_return_if_fail (tag->table != NULL);
   g_return_if_fail (priority >= 0);
-  g_return_if_fail (priority < gtk_text_tag_table_size (tag->table));
+  g_return_if_fail (priority < gtk_text_tag_table_get_size (tag->table));
 
   if (priority == tag->priority)
     return;

@@ -284,13 +284,12 @@ gdk_image_new (GdkImageType  type,
 	private->ximage->data = x_shm_info->shmaddr;
 
 	if (x_shm_info->shmaddr == (char *) -1) {
-		  g_warning ("shmat failed: error %d (%s)", errno, g_strerror (errno));
+	    g_warning ("shmat failed: error %d (%s)", errno, g_strerror (errno));
 		  /* Failure in shmat is almost certainly permanent. Most likely error is
 		   * EMFILE, which would mean that we've exceeded the per-process
 		   * Shm segment limit.
 		   */
-	  GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = False;
-	  if (!private->ximage->data)
+	    GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = False;
 	    goto error;
 	  break;
 
@@ -300,12 +299,11 @@ gdk_image_new (GdkImageType  type,
 
 	XShmAttach (scr_impl->xdisplay, x_shm_info);
 	XSync (scr_impl->xdisplay, False);
-        XSync (scr_impl->xdisplay, False);
 
         if (gdk_error_trap_pop ())
 	  {
 	   /* this is the common failure case so omit warning */
-	   gdk_use_xshm = FALSE;
+	   GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = False;
 	   goto error;
 	  }
       
@@ -321,6 +319,7 @@ gdk_image_new (GdkImageType  type,
 	  image_list = g_list_prepend (image_list, image);
       }
           else
+
 #endif /* USE_SHM */
 	    goto error;
 	  break;
@@ -328,14 +327,14 @@ gdk_image_new (GdkImageType  type,
 	  private->ximage = XCreateImage (scr_impl->xdisplay, xvisual, visual->depth,
 					  ZPixmap, 0, 0, width, height, 32, 0);
 
-      /* Use malloc, not g_malloc here, because X will call free ()
-       * on this data
-       */
-      private->ximage->data = malloc (private->ximage->bytes_per_line *
-				      private->ximage->height);
-      if (!private->ximage->data)
+	  /* Use malloc, not g_malloc here, because X will call free()
+	   * on this data
+	   */
+	  private->ximage->data = malloc (private->ximage->bytes_per_line *
+					  private->ximage->height);
+	  if (!private->ximage->data)
 	    goto error;
-      break;
+	  break;
 
     case GDK_IMAGE_FASTEST:
       g_assert_not_reached ();
@@ -352,7 +351,7 @@ gdk_image_new (GdkImageType  type,
 
   return image;
 
-error:
+ error:
   if (private->ximage)
     {
       XDestroyImage (private->ximage);
@@ -397,13 +396,12 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
 
   visual = gdk_drawable_get_visual (drawable);
 
-  g_assert (visual || !GDK_IS_WINDOW (drawable));
+  g_assert (visual || !GDK_IS_WINDOW_IMPL_X11 (drawable));
 
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   
   have_grab = FALSE;
-
-  if (GDK_IS_WINDOW (drawable))
+  if (GDK_IS_WINDOW_IMPL_X11 (drawable))
     {
       GdkRectangle screen_rect;
       Window child;
@@ -413,30 +411,37 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
       have_grab = TRUE;
       gdk_x11_grab_server (gdk_screen_get_display(impl->screen));
       
+      /* Translate screen area into window coordinates */
+      
       XTranslateCoordinates (GDK_DRAWABLE_XDISPLAY (drawable),
 			     GDK_SCREEN_XROOTWIN (visual->screen),
-			     GDK_DRAWABLE_XID (drawable),
+			     impl->xid,
 			     0, 0, 
 			     &screen_rect.x, &screen_rect.y, 
 			     &child);
 
-      screen_rect.width = gdk_screen_width ();
-      screen_rect.height = gdk_screen_height ();
+      screen_rect.width = gdk_screen_get_width (visual->screen);
+      screen_rect.height = gdk_screen_get_height (visual->screen);
       
       gdk_error_trap_push ();
+
+      window_rect.x = 0;
+      window_rect.y = 0;
       
-      gdk_window_get_geometry (GDK_WINDOW (drawable),
-                               &window_rect.x,
-                               &window_rect.y,
+      gdk_window_get_geometry (GDK_WINDOW (impl->wrapper),
+			       NULL, NULL,
                                &window_rect.width,
                                &window_rect.height,
                                NULL);
-
+      /* compute intersection of screen and window, in window
+       * coordinates
+       */
       if (gdk_error_trap_pop () ||
           !gdk_rectangle_intersect (&window_rect, &screen_rect, 
                                     &window_rect))
         {
-          gdk_x11_ungrab_server (gdk_screen_get_display(impl->screen));
+          if (have_grab)
+	    gdk_x11_ungrab_server (gdk_screen_get_display(impl->screen));
           return image = gdk_image_new (GDK_IMAGE_FASTEST,
                                         visual,
                                         width, height);
@@ -457,9 +462,10 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
   req.height = height;
   
   /* window_rect specifies the part of drawable which we can get from
-     the server in window coordinates. 
-     For pixmaps this is all of the pixmap, for windows it is just 
-     the onscreen part. */
+   * the server in window coordinates. 
+   * For pixmaps this is all of the pixmap, for windows it is just 
+   * the onscreen part.
+   */
   if (!gdk_rectangle_intersect (&req, &window_rect, &req) && visual) 
     {
       if (have_grab)
@@ -478,7 +484,11 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
                              visual,
                              width, height);
       if (image == NULL)
-        return NULL;
+        {
+          if (have_grab)
+	    gdk_x11_ungrab_server (gdk_screen_get_display(impl->screen));
+          return NULL;
+        }
 
       private = PRIVATE_DATA (image);
 
@@ -504,18 +514,24 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
     }
   else
     {
-
+      /* Here we ignore the req.width, req.height -
+       * XGetImage() will do the right thing without
+       * them.
+       */
       ximage = XGetImage (GDK_SCREEN_XDISPLAY(impl->screen),
                           impl->xid,
                           x, y, width, height,
                           AllPlanes, ZPixmap);
 
-      if (!ximage)
+
+      if (have_grab)
         {
-          if (have_grab)
-            gdk_x11_ungrab_server (gdk_screen_get_display(impl->screen));
-          return NULL;
-        }
+          gdk_x11_ungrab_server (gdk_screen_get_display(impl->screen));
+          have_grab = FALSE;
+        }      
+
+      if (!ximage)
+        return NULL;
 
       image = g_object_new (gdk_image_get_type (), NULL);
 
@@ -537,6 +553,8 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
       image->byte_order = private->ximage->byte_order; 
     }
 
+  g_assert (!have_grab);
+  
   return image;
 }
 

@@ -73,9 +73,8 @@ static const GDebugKey gdk_debug_keys[] = {
   {"events",	    GDK_DEBUG_EVENTS},
   {"misc",	    GDK_DEBUG_MISC},
   {"dnd",	    GDK_DEBUG_DND},
-  {"color-context", GDK_DEBUG_COLOR_CONTEXT},
-  {"xim",	    GDK_DEBUG_XIM},
-  {"multihead",	    GDK_DEBUG_MULTIHEAD}
+  {"multihead",	    GDK_DEBUG_MULTIHEAD},
+  {"xim",	    GDK_DEBUG_XIM}
 };
 
 static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);

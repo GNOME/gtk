@@ -1304,7 +1304,7 @@ gdk_fb_draw_image (GdkDrawable *drawable,
 static gint
 gdk_fb_get_depth (GdkDrawable *drawable)
 {
-  return GDK_DRAWABLE_IMPL_FBDATA (drawable)->depth;
+  return GDK_DRAWABLE_FBDATA (drawable)->depth;
 }
 
 static GdkVisual*

@@ -268,8 +268,8 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                    g_param_spec_enum ("sort_order",
                                                       _("Sort order"),
                                                       _("Sort direction the sort indicator should indicate"),
-                                                      GTK_TYPE_TREE_SORT_ORDER,
-                                                      GTK_TREE_SORT_ASCENDING,
+                                                      GTK_TYPE_SORT_TYPE,
+                                                      GTK_SORT_ASCENDING,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
   
 }
@@ -277,10 +277,6 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 static void
 gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
 {
-  /* FIXME remove on port to GtkObject */
-  gtk_object_ref (GTK_OBJECT (tree_column));
-  gtk_object_sink (GTK_OBJECT (tree_column));
-  
   tree_column->button = NULL;
   tree_column->xalign = 0.0;
   tree_column->width = 1;
@@ -291,7 +287,7 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->visible = TRUE;
   tree_column->clickable = FALSE;
   tree_column->dirty = TRUE;
-  tree_column->sort_order = GTK_TREE_SORT_ASCENDING;
+  tree_column->sort_order = GTK_SORT_ASCENDING;
   tree_column->show_sort_indicator = FALSE;
   tree_column->property_changed_signal = 0;
   tree_column->sort_clicked_signal = 0;
@@ -307,7 +303,6 @@ gtk_tree_view_column_finalize (GObject *object)
   GtkTreeViewColumn *tree_column = (GtkTreeViewColumn *) object;
   GList *list;
 
-
   for (list = tree_column->cell_list; list; list = list->next)
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
@@ -319,6 +314,8 @@ gtk_tree_view_column_finalize (GObject *object)
     }
 
   g_free (tree_column->title);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
@@ -602,13 +599,13 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 
   switch (tree_column->sort_order)
     {
-    case GTK_TREE_SORT_ASCENDING:
+    case GTK_SORT_ASCENDING:
       gtk_arrow_set (GTK_ARROW (arrow),
 		     GTK_ARROW_DOWN,
 		     GTK_SHADOW_IN);
       break;
 
-    case GTK_TREE_SORT_DESCENDING:
+    case GTK_SORT_DESCENDING:
       gtk_arrow_set (GTK_ARROW (arrow),
 		     GTK_ARROW_UP,
 		     GTK_SHADOW_IN);
@@ -767,7 +764,7 @@ gtk_tree_view_model_sort_column_changed (GtkTreeSortable   *sortable,
 					  GtkTreeViewColumn *column)
 {
   gint sort_column_id;
-  GtkTreeSortOrder order;
+  GtkSortType order;
 
   if (gtk_tree_sortable_get_sort_column_id (sortable,
 					    &sort_column_id,
@@ -795,14 +792,14 @@ gtk_tree_view_column_sort (GtkTreeViewColumn *tree_column,
 
   if (tree_column->show_sort_indicator)
     {
-      if (tree_column->sort_order == GTK_TREE_SORT_ASCENDING)
-	gtk_tree_view_column_set_sort_order (tree_column, GTK_TREE_SORT_DESCENDING);
+      if (tree_column->sort_order == GTK_SORT_ASCENDING)
+	gtk_tree_view_column_set_sort_order (tree_column, GTK_SORT_DESCENDING);
       else
-	gtk_tree_view_column_set_sort_order (tree_column, GTK_TREE_SORT_ASCENDING);
+	gtk_tree_view_column_set_sort_order (tree_column, GTK_SORT_ASCENDING);
     }
   else
     {
-      gtk_tree_view_column_set_sort_order (tree_column, GTK_TREE_SORT_ASCENDING);
+      gtk_tree_view_column_set_sort_order (tree_column, GTK_SORT_ASCENDING);
       gtk_tree_view_column_set_sort_indicator (tree_column, TRUE);
     }
 
@@ -836,20 +833,13 @@ gtk_tree_view_column_setup_sort_column_id_callback (GtkTreeViewColumn *tree_colu
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_column->tree_view));
 
   if (model == NULL)
-    {
-      if (tree_column->sort_column_changed_signal)
-	{
-	  g_signal_handler_disconnect (G_OBJECT (tree_column), tree_column->sort_column_changed_signal);
-	  tree_column->sort_column_changed_signal = 0;
-	}
-      return;
-    }
+    return;
 
   if (GTK_IS_TREE_SORTABLE (model) &&
       tree_column->sort_column_id != -1)
     {
       gint real_sort_column_id;
-      GtkTreeSortOrder real_order;
+      GtkSortType real_order;
 
       if (tree_column->sort_column_changed_signal == 0)
 	tree_column->sort_column_changed_signal =
@@ -965,7 +955,8 @@ _gtk_tree_view_column_unset_tree_view (GtkTreeViewColumn *column)
 
   if (column->sort_column_changed_signal)
     {
-      g_signal_handler_disconnect (G_OBJECT (column), column->sort_column_changed_signal);
+      g_signal_handler_disconnect (G_OBJECT (gtk_tree_view_get_model (GTK_TREE_VIEW (column->tree_view))),
+				   column->sort_column_changed_signal);
       column->sort_column_changed_signal = 0;
     }
 
@@ -1100,6 +1091,7 @@ gtk_tree_view_column_pack_start_cell_renderer (GtkTreeViewColumn  *tree_column,
   g_return_if_fail (! gtk_tree_view_column_get_cell_info (tree_column, cell));
 
   g_object_ref (G_OBJECT (cell));
+  gtk_object_sink (GTK_OBJECT (cell));
 
   cell_info = g_new0 (GtkTreeViewColumnCellInfo, 1);
   cell_info->cell = cell;
@@ -1125,6 +1117,7 @@ gtk_tree_view_column_pack_end_cell_renderer (GtkTreeViewColumn  *tree_column,
   g_return_if_fail (! gtk_tree_view_column_get_cell_info (tree_column, cell));
 
   g_object_ref (G_OBJECT (cell));
+  gtk_object_sink (GTK_OBJECT (cell));
 
   cell_info = g_new (GtkTreeViewColumnCellInfo, 1);
   cell_info->cell = cell;
@@ -1860,9 +1853,8 @@ gtk_tree_view_column_get_reorderable (GtkTreeViewColumn *tree_column)
  * @tree_column: a #GtkTreeViewColumn
  * @sort_column_id: The sort_column_id of the model to sort on.
  * 
- * Sets the logical sort_column_id that this column sorts on when this
- * column is selected for sorting.  Doing so makes
- * the column header clickable.
+ * Sets the logical sort_column_id that this column sorts on when this column is
+ * selected for sorting.  Doing so makes the column header clickable.
  **/
 void
 gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
@@ -1891,7 +1883,7 @@ gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
 	  tree_column->sort_column_changed_signal = 0;
 	}
 
-      gtk_tree_view_column_set_sort_order (tree_column, GTK_TREE_SORT_ASCENDING);
+      gtk_tree_view_column_set_sort_order (tree_column, GTK_SORT_ASCENDING);
       gtk_tree_view_column_set_sort_indicator (tree_column, FALSE);
       return;
     }
@@ -1986,7 +1978,7 @@ gtk_tree_view_column_get_sort_indicator  (GtkTreeViewColumn     *tree_column)
  **/
 void
 gtk_tree_view_column_set_sort_order      (GtkTreeViewColumn     *tree_column,
-                                          GtkTreeSortOrder       order)
+                                          GtkSortType            order)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
@@ -2006,7 +1998,7 @@ gtk_tree_view_column_set_sort_order      (GtkTreeViewColumn     *tree_column,
  * 
  * Return value: the sort order the sort indicator is indicating
  **/
-GtkTreeSortOrder
+GtkSortType
 gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn     *tree_column)
 {
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), 0);
@@ -2019,6 +2011,8 @@ gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn     *tree_column)
  * @tree_column: A #GtkTreeViewColumn.
  * @tree_model: The #GtkTreeModel to to get the cell renderers attributes from.
  * @iter: The #GtkTreeIter to to get the cell renderer's attributes from.
+ * @is_expander: TRUE, if the row has children
+ * @is_expanded: TRUE, if the row has visible children
  * 
  * Sets the cell renderer based on the @tree_model and @tree_node.  That is, for
  * every attribute mapping in @tree_column, it will get a value from the set
@@ -2028,7 +2022,9 @@ gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn     *tree_column)
 void
 gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
 					 GtkTreeModel      *tree_model,
-					 GtkTreeIter       *iter)
+					 GtkTreeIter       *iter,
+					 gboolean           is_expander,
+					 gboolean           is_expanded)
 {
   GSList *list;
   GValue value = { 0, };
@@ -2048,6 +2044,7 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
       list = info->attributes;
 
       g_object_freeze_notify (cell);
+      g_object_set (cell, "is_expander", is_expander, "is_expanded", is_expanded, NULL);
 
       while (list && list->next)
 	{

@@ -85,7 +85,7 @@ struct _GtkTreeViewColumn
   guint sort_clicked_signal;
   guint sort_column_changed_signal;
   gint sort_column_id;
-  GtkTreeSortOrder sort_order;
+  GtkSortType sort_order;
 
   /* Flags */
   guint visible             : 1;
@@ -188,15 +188,17 @@ void                    gtk_tree_view_column_set_sort_indicator  (GtkTreeViewCol
 								  gboolean                 setting);
 gboolean                gtk_tree_view_column_get_sort_indicator  (GtkTreeViewColumn       *tree_column);
 void                    gtk_tree_view_column_set_sort_order      (GtkTreeViewColumn       *tree_column,
-								  GtkTreeSortOrder         order);
-GtkTreeSortOrder        gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn       *tree_column);
+								  GtkSortType              order);
+GtkSortType             gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn       *tree_column);
 
 
 /* These functions are meant primarily for interaction between the GtkTreeView and the column.
  */
 void                    gtk_tree_view_column_cell_set_cell_data  (GtkTreeViewColumn       *tree_column,
 								  GtkTreeModel            *tree_model,
-								  GtkTreeIter             *iter);
+								  GtkTreeIter             *iter,
+								  gboolean                 is_expander,
+								  gboolean                 is_expanded);
 void                    gtk_tree_view_column_cell_get_size       (GtkTreeViewColumn       *tree_column,
 								  GdkRectangle            *cell_area,
 								  gint                    *x_offset,

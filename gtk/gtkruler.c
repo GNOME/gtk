@@ -271,6 +271,7 @@ gtk_ruler_set_range (GtkRuler *ruler,
 {
   g_return_if_fail (GTK_IS_RULER (ruler));
 
+  g_object_freeze_notify (G_OBJECT (ruler));
   if (ruler->lower != lower)
     {
       ruler->lower = lower;
@@ -291,6 +292,7 @@ gtk_ruler_set_range (GtkRuler *ruler,
       ruler->max_size = max_size;
       g_object_notify (G_OBJECT (ruler), "max_size");
     }
+  g_object_thaw_notify (G_OBJECT (ruler));
 
   if (GTK_WIDGET_DRAWABLE (ruler))
     gtk_widget_queue_draw (GTK_WIDGET (ruler));

@@ -237,7 +237,7 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
   /* We get the highest tag priority, as the most-recently-added
      tag. Note that we do NOT use gtk_text_tag_set_priority,
      as it assumes the tag is already in the table. */
-  size = gtk_text_tag_table_size (table);
+  size = gtk_text_tag_table_get_size (table);
   g_assert (size > 0);
   tag->priority = size - 1;
 
@@ -283,7 +283,7 @@ gtk_text_tag_table_remove (GtkTextTagTable *table,
   /* Set ourselves to the highest priority; this means
      when we're removed, there won't be any gaps in the
      priorities of the tags in the table. */
-  gtk_text_tag_set_priority (tag, gtk_text_tag_table_size (table) - 1);
+  gtk_text_tag_set_priority (tag, gtk_text_tag_table_get_size (table) - 1);
 
   tag->table = NULL;
 
@@ -353,7 +353,7 @@ gtk_text_tag_table_foreach (GtkTextTagTable       *table,
 }
 
 /**
- * gtk_text_tag_table_size:
+ * gtk_text_tag_table_get_size:
  * @table: a #GtkTextTagTable
  * 
  * Returns the size of the table (number of tags)
@@ -361,7 +361,7 @@ gtk_text_tag_table_foreach (GtkTextTagTable       *table,
  * Return value: number of tags in @table
  **/
 gint
-gtk_text_tag_table_size (GtkTextTagTable *table)
+gtk_text_tag_table_get_size (GtkTextTagTable *table)
 {
   g_return_val_if_fail (GTK_IS_TEXT_TAG_TABLE (table), 0);
 

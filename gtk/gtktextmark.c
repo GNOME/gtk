@@ -125,6 +125,9 @@ gtk_text_mark_finalize (GObject *obj)
 
       mark->segment = NULL;
     }
+
+  /* chain parent_class' handler */
+  G_OBJECT_CLASS (parent_class)->finalize (obj);
 }
 
 /**

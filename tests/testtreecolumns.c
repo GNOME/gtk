@@ -607,7 +607,7 @@ main (int argc, char *argv[])
   g_signal_connect (G_OBJECT (cell), "toggled", (GCallback) set_visible, left_tree_view);
   column = gtk_tree_view_column_new_with_attributes ("Visible", cell, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (left_tree_view), column);
-  g_object_unref (G_OBJECT (column));
+
   gtk_tree_view_column_set_cell_data_func (column, cell, get_visible, NULL, NULL);
   gtk_box_pack_start (GTK_BOX (hbox), swindow, TRUE, TRUE, 0);
 

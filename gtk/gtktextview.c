@@ -808,7 +808,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_Page_Down, 0,
                     GTK_MOVEMENT_PAGES, 1);
 
-
   add_move_binding (binding_set, GDK_KP_Page_Down, 0,
                     GTK_MOVEMENT_PAGES, 1);
   

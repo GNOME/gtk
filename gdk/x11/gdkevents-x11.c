@@ -589,7 +589,8 @@ gdk_event_translate (GdkEvent *event,
 	}
     }
       
-  if (g_object_get_data (G_OBJECT(dpy), "moveresize_window") &&
+  if (window && 
+      g_object_get_data (G_OBJECT(dpy), "moveresize_window") &&
       (xevent->xany.type == MotionNotify ||
        xevent->xany.type == ButtonRelease))
     {
@@ -598,7 +599,7 @@ gdk_event_translate (GdkEvent *event,
       return_val = FALSE;
       goto done;
     }
-  
+
   /* We do a "manual" conversion of the XEvent to a
    *  GdkEvent. The structures are mostly the same so
    *  the conversion is fairly straightforward. We also
@@ -1350,7 +1351,9 @@ gdk_event_translate (GdkEvent *event,
 	  (window_private->extension_events != 0))
 	_gdk_input_configure_event (&xevent->xconfigure, window);
 
-      if (!window || GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
+      if (!window ||
+          GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD ||
+          GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
 	return_val = FALSE;
       else
 	{
@@ -1359,8 +1362,7 @@ gdk_event_translate (GdkEvent *event,
 	  event->configure.width = xevent->xconfigure.width;
 	  event->configure.height = xevent->xconfigure.height;
 	  
-	  if (!xevent->xconfigure.x &&
-	      !xevent->xconfigure.y &&
+	  if (!xevent->xconfigure.send_event && 
 	      !GDK_WINDOW_DESTROYED (window))
 	    {
 	      gint tx = 0;

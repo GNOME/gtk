@@ -49,8 +49,8 @@ typedef enum
 struct _GdkVisual
 {
   GObject parent_instance;
-  
   GdkScreen *screen;
+  
   GdkVisualType type;
   gint depth;
   GdkByteOrder byte_order;

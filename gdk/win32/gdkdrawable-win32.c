@@ -867,17 +867,56 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
     }
   else
     {
+      const gboolean maybe_patblt =
+	gc_private->rop2 == R2_COPYPEN &&
+	gc_private->pen_width <= 1 &&
+	(gc_private->pen_style & PS_STYLE_MASK) == PS_SOLID;
+
       for (i = 0; ok && i < nsegs; i++)
 	{
-	  if (!MoveToEx (hdc, segs[i].x1, segs[i].y1, NULL))
-	    WIN32_GDI_FAILED ("MoveToEx"), ok = FALSE;
-	  if (ok && !LineTo (hdc, segs[i].x2, segs[i].y2))
-	    WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
+	  /* PatBlt() is much faster than LineTo(), says
+           * jpe@archaeopteryx.com. Hmm. Use it if we have a solid
+           * colour pen, then we know that the brush is also solid and
+           * of the same colour.
+	   */
+	  if (maybe_patblt && segs[i].x1 == segs[i].x2)
+            {
+	      int y1, y2;
+
+	      if (segs[i].y1 <= segs[i].y2)
+		y1 = segs[i].y1, y2 = segs[i].y2;
+	      else
+		y1 = segs[i].y2, y2 = segs[i].y1;
+
+              if (!PatBlt (hdc, segs[i].x1, y1,
+			   1, y2 - y1 + 1, PATCOPY))
+                WIN32_GDI_FAILED ("PatBlt"), ok = FALSE;
+            }
+	  else if (maybe_patblt && segs[i].y1 == segs[i].y2)
+            {
+	      int x1, x2;
+
+	      if (segs[i].x1 <= segs[i].x2)
+		x1 = segs[i].x1, x2 = segs[i].x2;
+	      else
+		x1 = segs[i].x2, x2 = segs[i].x1;
+
+              if (!PatBlt (hdc, x1, segs[i].y1,
+			   x2 - x1 + 1, 1, PATCOPY))
+                WIN32_GDI_FAILED ("PatBlt"), ok = FALSE;
+            }
+          else
+            {
+	      if (!MoveToEx (hdc, segs[i].x1, segs[i].y1, NULL))
+	        WIN32_GDI_FAILED ("MoveToEx"), ok = FALSE;
+	      if (ok && !LineTo (hdc, segs[i].x2, segs[i].y2))
+	        WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
 	  
-	  /* Draw end pixel */
-	  if (ok && gc_private->pen_width <= 1)
-	    if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
-	      WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
+	      /* Draw end pixel */
+	      if (ok && gc_private->pen_width <= 1)
+	        if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
+	          WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
+            }
 	}
     }
   gdk_win32_hdc_release (drawable, gc, mask);
