@@ -1,3 +1,12 @@
+Sun Feb 17 00:13:06 2002  Kristian Rietveld  <kris@gtk.org>
+
+	This commit lands the 'dy patch'.
+
+	* gtk/gtktreeview.c (validate_rows_handler): update top_row or dy,
+	(gtk_tree_view_top_row_to_dy): new function,
+	(gtk_tree_view_row_changed): update top_row or dy,
+	(gtk_tree_view_rows_reordered): update top_row
+
 2002-02-16  Matthias Clasen  <matthias@YAST_ASK>
 
 	* examples/extract.awk: rearrange rules to not emit the example 

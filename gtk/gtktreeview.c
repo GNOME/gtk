@@ -264,6 +264,7 @@ static gboolean validate_rows_handler    (GtkTreeView *tree_view);
 static gboolean presize_handler_callback (gpointer     data);
 static void     install_presize_handler  (GtkTreeView *tree_view);
 static void	gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view);
+static void     gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view);
 
 
 /* Internal functions */
@@ -3455,6 +3456,11 @@ validate_rows_handler (GtkTreeView *tree_view)
   while (i < GTK_TREE_VIEW_NUM_ROWS_PER_IDLE);
   
  done:
+  if (gtk_tree_row_reference_valid (tree_view->priv->top_row))
+    gtk_tree_view_top_row_to_dy (tree_view);
+  else
+    gtk_tree_view_dy_to_top_row (tree_view);
+
   if (path) gtk_tree_path_free (path);
   if (validated_area)
     gtk_widget_queue_resize (GTK_WIDGET (tree_view));
@@ -3532,6 +3538,51 @@ gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view)
   path = _gtk_tree_view_find_path (tree_view, tree, node);
   tree_view->priv->top_row = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
   gtk_tree_path_free (path);
+}
+
+static void
+gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
+{
+  GtkTreePath *path;
+  GtkRBTree *tree;
+  GtkRBNode *node;
+
+  if (tree_view->priv->top_row)
+    path = gtk_tree_row_reference_get_path (tree_view->priv->top_row);
+  else
+    path = NULL;
+
+  if (!path)
+    tree = NULL;
+  else
+    _gtk_tree_view_find_node (tree_view, path, &tree, &node);
+
+  if (path)
+    gtk_tree_path_free (path);
+
+  if (tree == NULL)
+    {
+      /* keep dy and set new toprow */
+      gtk_tree_row_reference_free (tree_view->priv->top_row);
+      tree_view->priv->top_row = NULL;
+      tree_view->priv->top_row_dy = 0;
+      gtk_tree_view_dy_to_top_row (tree_view);
+      return;
+    }
+
+  if (MAX (BACKGROUND_HEIGHT (node), tree_view->priv->expander_size)
+      < tree_view->priv->top_row_dy)
+    {
+      /* new top row */
+      gtk_tree_view_dy_to_top_row (tree_view);
+      return;
+    }
+
+  tree_view->priv->dy = _gtk_rbtree_node_find_offset (tree, node);
+  tree_view->priv->dy += tree_view->priv->top_row_dy;
+  gtk_adjustment_set_value (tree_view->priv->vadjustment,
+			    tree_view->priv->dy);
+  gtk_adjustment_changed (tree_view->priv->vadjustment);
 }
 
 void
@@ -5222,6 +5273,11 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
       _gtk_rbtree_remove_node (tree, node);
     }
 
+  if (gtk_tree_row_reference_valid (tree_view->priv->top_row))
+    gtk_tree_view_top_row_to_dy (tree_view);
+  else
+    gtk_tree_view_dy_to_top_row (tree_view);
+
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 
   if (selection_changed)
@@ -5272,6 +5328,8 @@ gtk_tree_view_rows_reordered (GtkTreeModel *model,
   _gtk_rbtree_reorder (tree, new_order, len);
 
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+
+  gtk_tree_view_dy_to_top_row (tree_view);
 }
 
 
