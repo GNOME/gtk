@@ -67,9 +67,11 @@
  *    under A) at least correspond to the space taken up by its scrollbars.
  */
 
-#define SCROLLBAR_SPACING(w) (GTK_SCROLLED_WINDOW_GET_CLASS (w)->scrollbar_spacing)
+#define DEFAULT_SCROLLBAR_SPACING  3
 
-#define DEFAULT_SCROLLBAR_SPACING  0
+#define SCROLLBAR_SPACING(w)								\
+  (GTK_SCROLLED_WINDOW_GET_CLASS (w)->scrollbar_spacing >= 0 ?				\
+   GTK_SCROLLED_WINDOW_GET_CLASS (w)->scrollbar_spacing : DEFAULT_SCROLLBAR_SPACING)
 
 enum {
   PROP_0,
@@ -223,7 +225,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   container_class->remove = gtk_scrolled_window_remove;
   container_class->forall = gtk_scrolled_window_forall;
 
-  class->scrollbar_spacing = DEFAULT_SCROLLBAR_SPACING;
+  class->scrollbar_spacing = -1;
 
   class->scroll_child = gtk_scrolled_window_scroll_child;
   class->move_focus_out = gtk_scrolled_window_move_focus_out;

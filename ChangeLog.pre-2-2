@@ -1,3 +1,11 @@
+Fri Mar  1 16:48:19 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscrolledwindow.c: Initialize the scrollbar spacing
+	variable in the class to -1, and then take that to mean
+	"default" (3) rather than putting 3 in the class directly.
+	This gives us some wiggle room to make it a per-instance
+	rather than a per-class property later.
+
 2002-03-01  jacob berkman  <jacob@ximian.com>
 
 	* Makefile.am (install-data-hook): 
