@@ -1,3 +1,8 @@
+Tue Aug  3 14:29:49 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_fill): Remove 
+	accidentally committed debug code.
+
 Tue Aug  3 01:19:12 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_relayout_item): Optimize 

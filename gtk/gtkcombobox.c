@@ -3965,7 +3965,6 @@ void
 gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
                               gint         width)
 {
-  GTimer *timer;
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   g_return_if_fail (width >= 0);
 
@@ -3973,16 +3972,8 @@ gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
     {
       combo_box->priv->wrap_width = width;
 
-  timer = g_timer_new ();
-  g_timer_start (timer);
-
       gtk_combo_box_check_appearance (combo_box);
-  g_timer_stop (timer);
-  g_print ("check appearance in %lf seconds\n", g_timer_elapsed (timer, NULL));
-  g_timer_reset (timer);
-  g_timer_start (timer);
       gtk_combo_box_relayout (combo_box);
-  g_print ("relayout in %lf seconds\n", g_timer_elapsed (timer, NULL));
       
       g_object_notify (G_OBJECT (combo_box), "wrap_width");
     }
