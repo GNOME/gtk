@@ -284,12 +284,12 @@ gtk_adjustment_new (gdouble value,
 		    gdouble page_size)
 {
   return g_object_new (GTK_TYPE_ADJUSTMENT, 
-		       "value", value,
 		       "lower", lower,
 		       "upper", upper,
 		       "step-increment", step_increment,
 		       "page-increment", page_increment,
 		       "page_size", page_size,
+		       "value", value,
 		       NULL);
 }
 
