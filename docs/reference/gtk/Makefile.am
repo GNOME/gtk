@@ -73,7 +73,6 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_exec_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_search_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_search_replace_24.png	\
-	$(top_srcdir)/gtk/stock-icons/stock_save_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_bottom_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_first_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_last_24.png			\
@@ -109,6 +108,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_save_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_save_as_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_colorselector_24.png	\
+	$(top_srcdir)/gtk/stock-icons/stock_color_picker_25.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_font_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_sort_ascending_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_sort_descending_24.png	\
@@ -296,12 +296,3 @@ dist-hook: dist-check-gtkdoc dist-hook-local
 	-cp $(srcdir)/html/* $(distdir)/html
 
 .PHONY : dist-hook-local
-
-
-
-
-
-
-
-
-

@@ -1,3 +1,11 @@
+2003-03-22  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/Makefile.am: copy stock_color_picker_25.png, don't copy
+	stock_save_24.png twice.
+
+	* gtk/tmpl/gtkstock.sgml: use it for GTK_STOCK_COLOR_PICKER
+	instead of stock_colorselector_24.png.
+
 2003-03-04  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkobject.sgml: Add deprecation notes.

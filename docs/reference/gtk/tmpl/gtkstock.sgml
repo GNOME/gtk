@@ -154,7 +154,7 @@ The "Close" item.
 <!-- ##### MACRO GTK_STOCK_COLOR_PICKER ##### -->
 <para>
 The "Color Picker" item.
-<inlinegraphic fileref="stock_colorselector_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="stock_color_picker_25.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.2
