@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <math.h>
 #include <gdk/gdkkeysyms.h>
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
@@ -1226,14 +1227,12 @@ gtk_scrolled_window_scroll_event (GtkWidget *widget,
   if (range && GTK_WIDGET_VISIBLE (range))
     {
       GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
-      gdouble new_value;
+      gdouble delta, new_value;
 
-      if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_LEFT)
-	new_value = adj->value - adj->page_increment / 2;
-      else
-	new_value = adj->value + adj->page_increment / 2;
+      delta = _gtk_range_get_wheel_delta (GTK_RANGE (range), event->direction);
 
-      new_value = CLAMP (new_value, adj->lower, adj->upper - adj->page_size);
+      new_value = CLAMP (adj->value + delta, adj->lower, adj->upper - adj->page_size);
+      
       gtk_adjustment_set_value (adj, new_value);
 
       return TRUE;

@@ -2880,7 +2880,7 @@ gtk_menu_leave_notify (GtkWidget        *widget,
 	  gtk_menu_set_submenu_navigation_region (menu, menu_item, event);
 	  return TRUE;
 	}
-      else if (menu_item == menu_shell->active_menu_item)
+      else if (menu_item == GTK_MENU_ITEM (menu_shell->active_menu_item))
 	{
 	  /* We are leaving an active menu item with nonactive submenu.
 	   * Deselect it so we don't surprise the user with by popping

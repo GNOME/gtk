@@ -26,11 +26,13 @@
  */
 
 #include <stdio.h>
+#include <math.h>
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkrange.h"
 #include "gtkintl.h"
+#include "gtkscrollbar.h"
 
 #define SCROLL_INITIAL_DELAY 250  /* must hold button this long before ... */
 #define SCROLL_LATER_DELAY   100  /* ... it starts repeating at this rate  */
@@ -1364,6 +1366,39 @@ gtk_range_button_release (GtkWidget      *widget,
   return FALSE;
 }
 
+/**
+ * _gtk_range_get_wheel_delta:
+ * @range: a #GtkRange
+ * @direction: A #GdkScrollDirection
+ * 
+ * Returns a good step value for the mouse wheel.
+ * 
+ * Return value: A good step value for the mouse wheel. 
+ * 
+ * Since: 2.4
+ **/
+gdouble
+_gtk_range_get_wheel_delta (GtkRange           *range,
+			    GdkScrollDirection  direction)
+{
+  GtkAdjustment *adj = range->adjustment;
+  gdouble delta;
+
+  if (GTK_IS_SCROLLBAR (range))
+    delta = pow (adj->page_size, 2.0 / 3.0);
+  else
+    delta = adj->step_increment * 2;
+  
+  if (direction == GDK_SCROLL_UP ||
+      direction == GDK_SCROLL_LEFT)
+    delta = - delta;
+  
+  if (range->inverted)
+    delta = - delta;
+
+  return delta;
+}
+      
 static gint
 gtk_range_scroll_event (GtkWidget      *widget,
 			GdkEventScroll *event)
@@ -1373,16 +1408,11 @@ gtk_range_scroll_event (GtkWidget      *widget,
   if (GTK_WIDGET_REALIZED (range))
     {
       GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
-      gdouble increment = ((event->direction == GDK_SCROLL_UP ||
-			    event->direction == GDK_SCROLL_LEFT) ? 
-			   -adj->page_increment / 2: 
-			   adj->page_increment / 2);
-      
-      if (range->inverted)
-	increment = -increment;
-	  
-      gtk_range_internal_set_value (range, adj->value + increment);
+      gdouble delta;
 
+      delta = _gtk_range_get_wheel_delta (range, event->direction);
+      gtk_range_internal_set_value (range, adj->value + delta);
+      
       /* Policy DELAYED makes sense with scroll events,
        * but DISCONTINUOUS doesn't, so we update immediately
        * for DISCONTINUOUS

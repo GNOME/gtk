@@ -149,6 +149,8 @@ void           gtk_range_set_value         (GtkRange      *range,
                                             gdouble        value);
 gdouble        gtk_range_get_value         (GtkRange      *range);
 
+gdouble	      _gtk_range_get_wheel_delta   (GtkRange           *range,
+					    GdkScrollDirection  direction);
 
 #ifdef __cplusplus
 }

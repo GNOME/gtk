@@ -1,3 +1,17 @@
+Sun Feb 29 19:04:33 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkrange.c (_gtk_range_get_wheel_delta): New internal
+	function returning a good step value for the mouse wheel. For
+	scrollbars, base the step on page_size^(2/3), for other ranges,
+	use 2 * step_increment.
+
+	* gtk/gtkrange.c (gtk_range_scroll_event): Use it here ...
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_scroll_event): 
+	... and here.
+
+	* gtk/gtkmenu.c (gtk_menu_leave_notify): Fix a warning.
+
 Sun Feb 29 01:51:27 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserembed.c
