@@ -74,12 +74,27 @@ im_hangul_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined
 im_hangul_la_SOURCES = imhangul.c imhangul-defs.h
 im_hangul_la_LIBADD = $(LDADDS)
 
-# Running this if DESTDIR is set is going to not work at all, so
-# skip it.
+if CROSS_COMPILING
+RUN_QUERY_IMMODULES_TEST=false
+else
+RUN_QUERY_IMMODULES_TEST=test -z "$(DESTDIR)"
+endif
+
+# Running this if cross compiling or if DESTDIR is set is going to
+# not work at all, so skip it.
 install-data-local:
-	if [ -z "$(DESTDIR)" ] ; then \
+	@if $(RUN_QUERY_IMMODULES_TEST) ; then \
+	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
 	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
+	  echo "$(top_builddir)/gtk/gtk-query-immodules-2.0 > $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules" ; \
 	  $(top_builddir)/gtk/gtk-query-immodules-2.0 > $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules ; \
+	else \
+	  echo "***" ; \
+	  echo "*** Warning: gtk.immodules not built" ; \
+	  echo "***" ; \
+	  echo "*** Generate this file manually on host" ; \
+	  echo "*** system using gtk-query-immodules-2.0" ; \
+	  echo "***" ; \
         fi
 
 module_LTLIBRARIES =				\
@@ -97,4 +112,7 @@ module_LTLIBRARIES =				\
 gtk.immodules: Makefile.am $(module_LTLIBRARIES)
 	$(top_builddir)/gtk/gtk-query-immodules-2.0 *.la > gtk.immodules
 
+if CROSS_COMPILING
+else
 all-local: gtk.immodules
+endif

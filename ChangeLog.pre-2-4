@@ -1,3 +1,9 @@
+Fri Sep 27 17:40:47 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/Makefile.am: Patch from J. Ali Harlow
+	to avoid generating gtk.immodules when cross-compiling.
+        (#87774)
+	
 Fri Sep 27 14:30:34 2002 Eric Warmenhoven <eric@warmenhoven.org>
 
 	* gdk/Makefile.am gdk/gdkkeynames.c gdk/linux-fb/gdkmain-fb.c
