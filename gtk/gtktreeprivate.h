@@ -316,8 +316,10 @@ void             _gtk_tree_view_column_autosize          (GtkTreeView       *tre
 							  GtkTreeViewColumn *column);
 
 gboolean         _gtk_tree_view_column_has_editable_cell (GtkTreeViewColumn *column);
-GtkCellRenderer *_gtk_tree_view_column_get_editable_cell (GtkTreeViewColumn *column);
+GtkCellRenderer *_gtk_tree_view_column_get_edited_cell   (GtkTreeViewColumn *column);
 gint             _gtk_tree_view_column_count_special_cells (GtkTreeViewColumn *column);
+GtkCellRenderer *_gtk_tree_view_column_get_cell_at_pos   (GtkTreeViewColumn *column,
+							  gint               x);
 
 GtkTreeSelection* _gtk_tree_selection_new                (void);
 GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);
@@ -331,7 +333,9 @@ void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn *tree_column,
 							  GdkRectangle      *expose_area,
 							  guint              flags);
 gboolean	  _gtk_tree_view_column_cell_focus       (GtkTreeViewColumn *tree_column,
-							  gint               direction);
+							  gint               direction,
+							  gboolean           left,
+							  gboolean           right);
 void		  _gtk_tree_view_column_cell_draw_focus  (GtkTreeViewColumn *tree_column,
 							  GdkWindow         *window,
 							  GdkRectangle      *background_area,

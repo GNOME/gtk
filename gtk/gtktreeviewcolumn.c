@@ -68,6 +68,7 @@ struct _GtkTreeViewColumnCellInfo
   guint expand : 1;
   guint pack : 1;
   guint has_focus : 1;
+  guint in_editing_mode : 1;
 };
 
 /* Type methods */
@@ -113,6 +114,13 @@ static void gtk_tree_view_column_set_attributesv               (GtkTreeViewColum
 static GtkTreeViewColumnCellInfo *gtk_tree_view_column_get_cell_info (GtkTreeViewColumn *tree_column,
 								      GtkCellRenderer   *cell_renderer);
 
+/* cell list manipulation */
+static GList *gtk_tree_view_column_cell_first                  (GtkTreeViewColumn      *tree_column);
+static GList *gtk_tree_view_column_cell_last                   (GtkTreeViewColumn      *tree_column);
+static GList *gtk_tree_view_column_cell_next                   (GtkTreeViewColumn      *tree_column,
+								GList                  *current);
+static GList *gtk_tree_view_column_cell_prev                   (GtkTreeViewColumn      *tree_column,
+								GList                  *current);
 
 
 static GtkObjectClass *parent_class = NULL;
@@ -1054,14 +1062,14 @@ _gtk_tree_view_column_has_editable_cell (GtkTreeViewColumn *column)
   return FALSE;
 }
 
+/* gets cell being edited */
 GtkCellRenderer *
-_gtk_tree_view_column_get_editable_cell (GtkTreeViewColumn *column)
+_gtk_tree_view_column_get_edited_cell (GtkTreeViewColumn *column)
 {
   GList *list;
 
   for (list = column->cell_list; list; list = list->next)
-    if (((GtkTreeViewColumnCellInfo *)list->data)->cell->mode ==
-	GTK_CELL_RENDERER_MODE_EDITABLE)
+    if (((GtkTreeViewColumnCellInfo *)list->data)->in_editing_mode)
       return ((GtkTreeViewColumnCellInfo *)list->data)->cell;
 
   return NULL;
@@ -1083,6 +1091,25 @@ _gtk_tree_view_column_count_special_cells (GtkTreeViewColumn *column)
     }
 
   return i;
+}
+
+GtkCellRenderer *
+_gtk_tree_view_column_get_cell_at_pos (GtkTreeViewColumn *column,
+				       gint               x)
+{
+  GList *list;
+  gint current_x = 0;
+
+  list = gtk_tree_view_column_cell_first (column);
+  for (; list; list = gtk_tree_view_column_cell_next (column, list))
+   {
+     GtkTreeViewColumnCellInfo *cellinfo = list->data;
+     if (current_x <= x && x <= current_x + cellinfo->real_width)
+       return cellinfo->cell;
+     current_x += cellinfo->real_width;
+   }
+
+  return NULL;
 }
 
 /* Public Functions */
@@ -1222,7 +1249,7 @@ gtk_tree_view_column_pack_end (GtkTreeViewColumn  *tree_column,
   g_object_ref (G_OBJECT (cell));
   gtk_object_sink (GTK_OBJECT (cell));
 
-  cell_info = g_new (GtkTreeViewColumnCellInfo, 1);
+  cell_info = g_new0 (GtkTreeViewColumnCellInfo, 1);
   cell_info->cell = cell;
   cell_info->expand = expand ? TRUE : FALSE;
   cell_info->pack = GTK_PACK_END;
@@ -2351,23 +2378,53 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   gint min_x, min_y, max_x, max_y;
   gint focus_line_width;
   gint dx;
+  gint special_cells;
 
   min_x = G_MAXINT;
   min_y = G_MAXINT;
   max_x = 0;
   max_y = 0;
 
-  real_cell_area = *cell_area;
-  real_background_area = *background_area;
-  dx = real_cell_area.x - real_background_area.x;
+  special_cells = _gtk_tree_view_column_count_special_cells (tree_column);
+
+  if (special_cells > 1 && action == CELL_ACTION_FOCUS)
+    {
+      GtkTreeViewColumnCellInfo *info = NULL;
+      gboolean found_has_focus = FALSE;
+
+      /* one should have focus */
+      for (list = tree_column->cell_list; list; list = list->next)
+        {
+	  info = list->data;
+	  if (info && info->has_focus)
+	    {
+	      found_has_focus = TRUE;
+	      break;
+	    }
+	}
+
+      if (!found_has_focus)
+        {
+	  /* give the first one focus */
+	  info = gtk_tree_view_column_cell_first (tree_column)->data;
+	  info->has_focus = TRUE;
+	}
+    }
 
   gtk_widget_style_get (GTK_WIDGET (tree_column->tree_view),
 			"focus-line-width", &focus_line_width,
 			NULL);
-  /* Find out how my extra space we have to allocate */
+
+  real_cell_area = *cell_area;
+  real_background_area = *background_area;
+  dx = real_cell_area.x - real_background_area.x - focus_line_width;
+
+  real_cell_area.x += focus_line_width;
+
+  /* Find out how many extra space we have to allocate */
   for (list = tree_column->cell_list; list; list = list->next)
     {
-      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *)list->data;
 
       if (! info->cell->visible)
 	continue;
@@ -2377,10 +2434,13 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       full_requested_width += info->requested_width;
     }
 
-  extra_space = cell_area->width - full_requested_width;
+  extra_space = background_area->width - full_requested_width;
   if (extra_space < 0)
     extra_space = 0;
+  else if (extra_space > 0 && expand_cell_count > 0)
+    extra_space /= expand_cell_count;
 
+  /* iterate list for GTK_PACK_START cells */
   for (list = tree_column->cell_list; list; list = list->next)
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
@@ -2391,15 +2451,12 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       if (! info->cell->visible)
 	continue;
 
-      real_cell_area.width = info->requested_width +
+      real_background_area.width = info->requested_width +
 	(info->expand?extra_space:0);
-      info->real_width = real_cell_area.width;
-      real_cell_area.x += focus_line_width;
+      info->real_width = real_background_area.width;
 
-      real_background_area.width = real_cell_area.width;
-      real_background_area.x += focus_line_width;
-      if (!list->prev)
-	real_background_area.width += dx;
+      real_cell_area.width = real_background_area.width;
+      real_cell_area.width -= 2 * focus_line_width;
 
       if (action == CELL_ACTION_RENDER)
 	{
@@ -2421,14 +2478,27 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 				      &x_offset, &y_offset,
 				      &width, &height);
 
-	  if (min_x > (real_cell_area.x + x_offset))
-	    min_x = real_cell_area.x + x_offset;
-	  if (max_x < real_cell_area.x + x_offset + width)
-	    max_x = real_cell_area.x + x_offset + width;
-	  if (min_y > (real_cell_area.y + y_offset))
-	    min_y = real_cell_area.y + y_offset;
-	  if (max_y < real_cell_area.y + y_offset + height)
-	    max_y = real_cell_area.y + y_offset + height;
+	  if (special_cells > 1)
+	    {
+	      if (info->has_focus)
+	        {
+		  min_x = real_cell_area.x + x_offset;
+		  max_x = min_x + width;
+		  min_y = real_cell_area.y + y_offset;
+		  max_y = min_y + height;
+		}
+	    }
+	  else
+	    {
+	      if (min_x > (real_cell_area.x + x_offset))
+		min_x = real_cell_area.x + x_offset;
+	      if (max_x < real_cell_area.x + x_offset + width)
+		max_x = real_cell_area.x + x_offset + width;
+	      if (min_y > (real_cell_area.y + y_offset))
+		min_y = real_cell_area.y + y_offset;
+	      if (max_y < real_cell_area.y + y_offset + height)
+		max_y = real_cell_area.y + y_offset + height;
+	    }
 	}
       else if (action == CELL_ACTION_EVENT)
 	{
@@ -2436,9 +2506,9 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
 	  if (event)
 	    {
-	      if (_gtk_tree_view_column_count_special_cells (tree_column) == 1)
+	      if (special_cells == 1)
 	        {
-		  /* only 1 activatably cell -> whole column can activate */
+		  /* only 1 activatable cell -> whole column can activate */
 		  if (cell_area->x <= ((GdkEventButton *)event)->x &&
 		      cell_area->x + cell_area->width > ((GdkEventButton *)event)->x)
 		    try_event = TRUE;
@@ -2450,11 +2520,11 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 		   */
 		try_event = TRUE;
 	    }
-	  else /* if (info->has_focus)*/
-	    /* FIXME 73676: allow focusing individual cells */
-	    {
-	      try_event = TRUE;
-	    }
+	  else if (special_cells > 1 && info->has_focus)
+	    try_event = TRUE;
+	  else if (special_cells == 1)
+	    try_event = TRUE;
+
 	  if (try_event)
 	    {
 	      gboolean visible, mode;
@@ -2488,15 +2558,20 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 		  if (*editable_widget != NULL)
 		    {
 		      g_return_val_if_fail (GTK_IS_CELL_EDITABLE (*editable_widget), FALSE);
+		      info->in_editing_mode = TRUE;
+		      gtk_tree_view_column_focus_cell (tree_column, info->cell);
 		      
 		      return TRUE;
 		    }
 		}
 	    }
 	}
-      real_cell_area.x += (info->requested_width + tree_column->spacing);
-      real_background_area.x += (info->requested_width + tree_column->spacing);
+
+      real_cell_area.x += (info->real_width + tree_column->spacing);
+      real_background_area.x += (info->real_width + tree_column->spacing);
     }
+
+  /* iterate list for PACK_END cells */
   for (list = g_list_last (tree_column->cell_list); list; list = list->prev)
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
@@ -2507,10 +2582,13 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       if (! info->cell->visible)
 	continue;
 
-      real_cell_area.width = info->requested_width +
+      real_background_area.width = info->requested_width +
 	(info->expand?extra_space:0);
-      info->real_width = real_cell_area.width;
-      real_background_area.width = real_background_area.width;
+      info->real_width = real_background_area.width;
+
+      real_cell_area.width = real_background_area.width;
+      real_cell_area.width -= 2 * focus_line_width;
+
       if (action == CELL_ACTION_RENDER)
 	{
 	  gtk_cell_renderer_render (info->cell,
@@ -2531,19 +2609,100 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 				      &x_offset, &y_offset,
 				      &width, &height);
 
-	  if (min_x > (real_cell_area.x + x_offset))
-	    min_x = real_cell_area.x + x_offset;
-	  if (max_x < real_cell_area.x + x_offset + width)
-	    max_x = real_cell_area.x + x_offset + width;
-	  if (min_y > (real_cell_area.y + y_offset))
-	    min_y = real_cell_area.y + y_offset;
-	  if (max_y < real_cell_area.y + y_offset + height)
-	    max_y = real_cell_area.y + y_offset + height;
+	  if (special_cells > 1)
+	    {
+	      if (info->has_focus)
+	        {
+		  min_x = real_cell_area.x + x_offset;
+		  max_x = min_x + width;
+		  min_y = real_cell_area.y + y_offset;
+		  max_y = min_y + height;
+		}
+	    }
+	  else
+	    {
+	      if (min_x > (real_cell_area.x + x_offset))
+		min_x = real_cell_area.x + x_offset;
+	      if (max_x < real_cell_area.x + x_offset + width)
+		max_x = real_cell_area.x + x_offset + width;
+	      if (min_y > (real_cell_area.y + y_offset))
+		min_y = real_cell_area.y + y_offset;
+	      if (max_y < real_cell_area.y + y_offset + height)
+		max_y = real_cell_area.y + y_offset + height;
+	    }
 	}
-      real_cell_area.x += (info->requested_width + tree_column->spacing);
-      real_background_area.x += (info->requested_width + tree_column->spacing);
+      else if (action == CELL_ACTION_EVENT)
+        {
+	  gboolean try_event = FALSE;
+
+	  if (event)
+	    {
+	      if (special_cells == 1)
+	        {
+		  /* only 1 activatable cell -> whole column can activate */
+		  if (cell_area->x <= ((GdkEventButton *)event)->x &&
+		      cell_area->x + cell_area->width > ((GdkEventButton *)event)->x)
+		    try_event = TRUE;
+		}
+	      else if (real_cell_area.x <= ((GdkEventButton *)event)->x &&
+		  real_cell_area.x + real_cell_area.width > ((GdkEventButton *)event)->x)
+		/* only activate cell if the user clicked on an individual
+		 * cell
+		 */
+		try_event = TRUE;
+	    }
+	  else if (special_cells > 1 && info->has_focus)
+	    try_event = TRUE;
+	  else if (special_cells == 1)
+	    try_event = TRUE;
+
+	  if (try_event)
+	    {
+	      gboolean visible, mode;
+
+	      g_object_get (G_OBJECT (info->cell),
+			    "visible", &visible,
+			    "mode", &mode,
+			    NULL);
+	      if (visible && mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
+	        {
+		  if (gtk_cell_renderer_activate (info->cell,
+						  event,
+						  tree_column->tree_view,
+						  path_string,
+						  background_area,
+						  cell_area,
+						  flags))
+		    return TRUE;
+		}
+	      else if (visible && mode == GTK_CELL_RENDERER_MODE_EDITABLE)
+	        {
+		  *editable_widget =
+		    gtk_cell_renderer_start_editing (info->cell,
+						     event,
+						     tree_column->tree_view,
+						     path_string,
+						     background_area,
+						     cell_area,
+						     flags);
+
+		  if (*editable_widget != NULL)
+		    {
+		      g_return_val_if_fail (GTK_IS_CELL_EDITABLE (*editable_widget), FALSE);
+		      info->in_editing_mode = TRUE;
+		      gtk_tree_view_column_focus_cell (tree_column, info->cell);
+
+		      return TRUE;
+		    }
+		}
+	    }
+	}
+
+      real_cell_area.x += (info->real_width + tree_column->spacing);
+      real_background_area.x += (info->real_width + tree_column->spacing);
     }
 
+  /* fill focus_rectangle when required */
   if (action == CELL_ACTION_FOCUS)
     {
       if (min_x >= max_x || min_y >= max_y)
@@ -2622,14 +2781,218 @@ _gtk_tree_view_column_cell_event (GtkTreeViewColumn  *tree_column,
 						   path_string);
 }
 
+/* cell list manipulation */
+static GList *
+gtk_tree_view_column_cell_first (GtkTreeViewColumn *tree_column)
+{
+  GList *list = tree_column->cell_list;
+
+  /* first GTK_PACK_START cell we find */
+  for ( ; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = list->data;
+      if (info->pack == GTK_PACK_START)
+	return list;
+    }
+
+  /* hmm, else the *last* GTK_PACK_END cell */
+  list = g_list_last (tree_column->cell_list);
+
+  for ( ; list; list = list->prev)
+    {
+      GtkTreeViewColumnCellInfo *info = list->data;
+      if (info->pack == GTK_PACK_END)
+	return list;
+    }
+
+  return NULL;
+}
+
+static GList *
+gtk_tree_view_column_cell_last (GtkTreeViewColumn *tree_column)
+{
+  GList *list = tree_column->cell_list;
+
+  /* *first* GTK_PACK_END cell we find */
+  for ( ; list ; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = list->data;
+      if (info->pack == GTK_PACK_END)
+	return list;
+    }
+
+  /* hmm, else the last GTK_PACK_START cell */
+  list = g_list_last (tree_column->cell_list);
+
+  for ( ; list; list = list->prev)
+    {
+      GtkTreeViewColumnCellInfo *info = list->data;
+      if (info->pack == GTK_PACK_START)
+	return list;
+    }
+
+  return NULL;
+}
+
+static GList *
+gtk_tree_view_column_cell_next (GtkTreeViewColumn *tree_column,
+				GList             *current)
+{
+  GList *list;
+  GtkTreeViewColumnCellInfo *info = current->data;
+
+  if (info->pack == GTK_PACK_START)
+    {
+      for (list = current->next; list; list = list->next)
+        {
+	  GtkTreeViewColumnCellInfo *inf = list->data;
+	  if (inf->pack == GTK_PACK_START)
+	    return list;
+	}
+
+      /* out of GTK_PACK_START cells, get *last* GTK_PACK_END one */
+      list = g_list_last (tree_column->cell_list);
+      for (; list; list = list->prev)
+        {
+	  GtkTreeViewColumnCellInfo *inf = list->data;
+	  if (inf->pack == GTK_PACK_END)
+	    return list;
+	}
+    }
+
+  for (list = current->prev; list; list = list->prev)
+    {
+      GtkTreeViewColumnCellInfo *inf = list->data;
+      if (inf->pack == GTK_PACK_END)
+	return list;
+    }
+
+  return NULL;
+}
+
+static GList *
+gtk_tree_view_column_cell_prev (GtkTreeViewColumn *tree_column,
+				GList             *current)
+{
+  GList *list;
+  GtkTreeViewColumnCellInfo *info = current->data;
+
+  if (info->pack == GTK_PACK_END)
+    {
+      for (list = current->next; list; list = list->next)
+        {
+	  GtkTreeViewColumnCellInfo *inf = list->data;
+	  if (inf->pack == GTK_PACK_END)
+	    return list;
+	}
+
+      /* out of GTK_PACK_END, get last GTK_PACK_START one */
+      list = g_list_last (tree_column->cell_list);
+      for ( ; list; list = list->prev)
+        {
+	  GtkTreeViewColumnCellInfo *inf = list->data;
+	  if (inf->pack == GTK_PACK_START)
+	    return list;
+	}
+    }
+
+  for (list = current->prev; list; list = list->prev)
+    {
+      GtkTreeViewColumnCellInfo *inf = list->data;
+      if (inf->pack == GTK_PACK_START)
+	return list;
+    }
+
+  return NULL;
+}
 
 gboolean
 _gtk_tree_view_column_cell_focus (GtkTreeViewColumn *tree_column,
-				  gint               direction)
+				  gint               direction,
+				  gboolean           left,
+				  gboolean           right)
 {
-  /* FIXME 73676: allow focusing individual cells */
+  gint count;
+
+  count = _gtk_tree_view_column_count_special_cells (tree_column);
+
+  /* if we are the current focus column and have multiple editable cells,
+   * try to select the next one, else move the focus to the next column
+   */
   if (GTK_TREE_VIEW (tree_column->tree_view)->priv->focus_column == tree_column)
-    return FALSE;
+    {
+      if (count > 1)
+        {
+          GList *next, *prev;
+	  GList *list = tree_column->cell_list;
+	  GtkTreeViewColumnCellInfo *info = NULL;
+
+	  /* find current focussed cell */
+	  for ( ; list; list = list->next)
+	    {
+	      info = list->data;
+	      if (info->has_focus)
+		break;
+	    }
+
+	  /* not a focussed cell in the focus column? */
+	  if (!list || !info || !info->has_focus)
+	    return FALSE;
+
+	  next = gtk_tree_view_column_cell_next (tree_column, list);
+	  prev = gtk_tree_view_column_cell_prev (tree_column, list);
+
+	  info->has_focus = FALSE;
+	  if (direction > 0 && next)
+	    {
+	      info = next->data;
+	      info->has_focus = TRUE;
+	      return TRUE;
+	    }
+	  else if (direction > 0 && !next && !right)
+	    {
+	      /* keep focus on latest cell */
+	      info = gtk_tree_view_column_cell_last (tree_column)->data;
+	      info->has_focus = TRUE;
+	      return TRUE;
+	    }
+	  else if (direction < 0 && prev)
+	    {
+	      info = prev->data;
+	      info->has_focus = TRUE;
+	      return TRUE;
+	    }
+	  else if (direction < 0 && !prev && !left)
+	    {
+	      /* keep focus on first cell */
+	      info = gtk_tree_view_column_cell_first (tree_column)->data;
+	      info->has_focus = TRUE;
+	      return TRUE;
+	    }
+	}
+      return FALSE;
+    }
+
+  /* we get focus, if we have multiple editable cells, give the correct one
+   * focus
+   */
+  if (count > 1)
+    {
+      GList *list = tree_column->cell_list;
+
+      /* clear focus first */
+      for ( ; list ; list = list->next)
+        {
+	  GtkTreeViewColumnCellInfo *info = list->data;
+	  if (info->has_focus)
+	    info->has_focus = FALSE;
+	}
+
+      if (direction > 0)
+	((GtkTreeViewColumnCellInfo *)gtk_tree_view_column_cell_first (tree_column)->data)->has_focus = TRUE;
+      else if (direction < 0)
+	((GtkTreeViewColumnCellInfo *)gtk_tree_view_column_cell_last (tree_column)->data)->has_focus = TRUE;
+    }
   return TRUE;
 }
 
@@ -2708,6 +3071,8 @@ gtk_tree_view_column_cell_is_visible (GtkTreeViewColumn *tree_column)
 {
   GList *list;
 
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), FALSE);
+
   for (list = tree_column->cell_list; list; list = list->next)
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
@@ -2717,6 +3082,53 @@ gtk_tree_view_column_cell_is_visible (GtkTreeViewColumn *tree_column)
     }
 
   return FALSE;
+}
+
+/**
+ * gtk_tree_view_column_focus_cell:
+ * @tree_view: A #GtkTreeView
+ * @cell: A #GtkCellRenderer
+ *
+ * Sets the current keyboard focus to be at @cell, if the column contains
+ * 2 or more editable and activatable cells.
+ **/
+void
+gtk_tree_view_column_focus_cell (GtkTreeViewColumn *tree_column,
+				 GtkCellRenderer   *cell)
+{
+  GList *list;
+  gboolean found_cell = FALSE;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  if (_gtk_tree_view_column_count_special_cells (tree_column) < 2)
+    return;
+
+  for (list = tree_column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = list->data;
+
+      if (info->cell == cell)
+        {
+	  info->has_focus = TRUE;
+	  found_cell = TRUE;
+	  break;
+	}
+    }
+
+  if (found_cell)
+    {
+      for (list = tree_column->cell_list; list; list = list->next)
+        {
+	  GtkTreeViewColumnCellInfo *info = list->data;
+
+	  if (info->cell != cell)
+	    info->has_focus = FALSE;
+        }
+
+      /* FIXME: redraw? */
+    }
 }
 
 void
@@ -2759,9 +3171,13 @@ _gtk_tree_view_column_start_editing (GtkTreeViewColumn *tree_column,
 void
 _gtk_tree_view_column_stop_editing (GtkTreeViewColumn *tree_column)
 {
+  GList *list;
+
   g_return_if_fail (tree_column->editable_widget != NULL);
 
   tree_column->editable_widget = NULL;
+  for (list = tree_column->cell_list; list; list = list->next)
+    ((GtkTreeViewColumnCellInfo *)list->data)->in_editing_mode = FALSE;
 }
 
 void
@@ -2775,8 +3191,9 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
   if (left)
     {
       *left = 0;
+      list = gtk_tree_view_column_cell_first (column);
 
-      for (list = column->cell_list; list; list = list->next)
+      for (; list; list = gtk_tree_view_column_cell_next (column, list))
         {
 	  GtkTreeViewColumnCellInfo *info =
 	    (GtkTreeViewColumnCellInfo *)list->data;
@@ -2790,9 +3207,12 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
 
   if (right)
     {
-      *right = 0;
+      GList *next;
 
-      for (list = column->cell_list; list; list = list->next)
+      *right = 0;
+      list = gtk_tree_view_column_cell_first (column);
+
+      for (; list; list = gtk_tree_view_column_cell_next (column, list))
         {
 	  GtkTreeViewColumnCellInfo *info =
 	    (GtkTreeViewColumnCellInfo *)list->data;
@@ -2802,10 +3222,11 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
 	}
 
       /* skip cell */
-      if (list && list->next)
+      next = gtk_tree_view_column_cell_next (column, list);
+      if (list && next)
         {
-	  list = list->next;
-	  for ( ; list; list = list->next)
+	  list = next;
+	  for ( ; list; list = gtk_tree_view_column_cell_next (column, list))
 	    {
 	      GtkTreeViewColumnCellInfo *info =
 	        (GtkTreeViewColumnCellInfo *)list->data;

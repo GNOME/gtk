@@ -218,6 +218,11 @@ void                   gtk_tree_view_set_cursor                    (GtkTreeView 
 								    GtkTreePath               *path,
 								    GtkTreeViewColumn         *focus_column,
 								    gboolean                   start_editing);
+void                   gtk_tree_view_set_cursor_on_cell            (GtkTreeView               *tree_view,
+								    GtkTreePath               *path,
+								    GtkTreeViewColumn         *focus_column,
+								    GtkCellRenderer           *focus_cell,
+								    gboolean                   start_editing);
 void                   gtk_tree_view_get_cursor                    (GtkTreeView               *tree_view,
 								    GtkTreePath              **path,
 								    GtkTreeViewColumn        **focus_column);

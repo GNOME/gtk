@@ -217,6 +217,8 @@ void                    gtk_tree_view_column_cell_get_size       (GtkTreeViewCol
 								  gint                    *width,
 								  gint                    *height);
 gboolean                gtk_tree_view_column_cell_is_visible     (GtkTreeViewColumn       *tree_column);
+void                    gtk_tree_view_column_focus_cell          (GtkTreeViewColumn       *tree_column,
+								  GtkCellRenderer         *cell);
 
 #ifdef __cplusplus
 }

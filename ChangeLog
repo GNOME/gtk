@@ -1,3 +1,52 @@
+Sun May  5 16:42:32 2002  Kristian Rietveld  <kris@gtk.org>
+
+	The "big treeview focus patch". Fixes several issues and adds some
+	goodies. Related bugs: #73676, #73734, #78660.
+
+	* gtk/gtktreeview.h: add gtk_tree_view_set_cursor_on_cell
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): focus on a cell
+	if applicable,
+	(gtk_tree_view_bin_expose): set_cell_data before iterating columns,
+	add support for row-spanning focus rectangles,
+	(gtk_tree_view_has_special_cell): new function,
+	(gtk_tree_view_move_cursor_left_right): add support for multiple
+	focusable cells in one column,
+	(gtk_tree_view_set_cursor): call _set_cursor_on_cell now,
+	(gtk_tree_view_set_cursor_on_cell): copy of _set_cursor, extended
+	with focus_cell parameter,
+	(gtk_tree_view_search_iter): removed unused column variable,
+	(gtk_tree_view_start_editing): add neighbor size code to allow
+	for multiple editable cells in one column.
+
+	* gtk/gtktreeviewcolumn.c (_GtkTreeViewColumnCellInfo): add
+	in_editing_mode field,
+	(gtk_tree_view_column_get_edited_cell): new function, removed
+	_get_editable_cell,
+	(_gtk_tree_view_column_get_cell_at_pos): new function,
+	(gtk_tree_view_column_pack_end): s/g_new/g_new0/ ...,
+	(gtk_tree_view_column_cell_process_action): loads of changes to get
+	it right and to allow for multiple special cells, etc,
+	(gtk_tree_view_column_cell_first): new function,
+	(gtk_tree_view_column_cell_last): ditto,
+	(gtk_tree_view_column_cell_next): ditto,
+	(gtk_tree_view_column_cell_prev): ditto,
+	(gtk_tree_view_column_cell_focus): add left and right parameters,	
+	allow for multiple special cells,
+	(gtk_tree_view_column_cell_is_visible): add assertion,
+	(gtk_tree_view_column_focus_cell): new function,
+	(gtk_tree_view_column_stop_editing): unset in_editing_mode flag,
+	(_gtk_tree_view_column_get_neighbor_sizes): iterate through cells
+	correctly
+
+	* gtk/gtktreeviewcolumn.h: add gtk_tree_view_column_focus_cell
+
+	* gtk/gtktreeprivate.h: s/_get_editable_cell/_get_edited_cell/, add
+	_gtk_tree_view_column_get_cell_at_pos, add new parameters to
+	_gtk_tree_view_column_cell_focus.
+
+	* tests/testtreeedit.c: add some cells in order to test new code.
+
 Sun May  5 02:22:59 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* tests/test-images/*: image files for testing pixbuf loaders
