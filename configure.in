@@ -734,7 +734,7 @@ dnl Test for libtiff
           [AC_CHECK_HEADER(tiffio.h,
             TIFF='tiff'; LIBTIFF='-ltiff34 -ljpeg -lz',
             AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***))],
-        AC_MSG_WARN(*** TIFF plug-in will not be built (TIFF library not found) ***), -ljpeg -lz -lm)], -ljpeg -lz -lm)], -lm)
+        AC_MSG_WARN(*** TIFF loader will not be built (TIFF library not found) ***), -ljpeg -lz -lm)], -ljpeg -lz -lm)], -lm)
   fi
 
   if test x$with_libtiff != xno && test -z "$LIBTIFF"; then

@@ -1,3 +1,7 @@
+2004-11-21  Sven Neumann  <sven@gimp.org>
+
+	* configure.in: talk about TIFF loader, not TIFF plug-in.
+
 2004-11-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols: 
