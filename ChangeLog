@@ -1,3 +1,12 @@
+Tue Jan  8 18:04:01 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_set_icon_size):
+	Handle TOGGLE/RADIOBUTTON as well. (#68201,
+	Damon Chaplin.)
+
+	* gtk/gtktoolbar.c (get_first_child): Fix stupid 
+	bug, just introduced.
+
 Tue Jan  8 15:53:28 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_find_widget): Fix coordinate

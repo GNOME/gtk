@@ -981,7 +981,9 @@ gtk_toolbar_set_icon_size (GtkToolbar  *toolbar,
   for (children = toolbar->children; children; children = children->next)
     {
       child = children->data;
-      if (child->type == GTK_TOOLBAR_CHILD_BUTTON &&
+      if ((child->type == GTK_TOOLBAR_CHILD_BUTTON ||
+	   child->type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON ||
+	   child->type == GTK_TOOLBAR_CHILD_RADIOBUTTON) &&
 	  GTK_IS_IMAGE (child->icon))
 	{
 	  image = GTK_IMAGE (child->icon);
@@ -1605,7 +1607,7 @@ gtk_real_toolbar_orientation_changed (GtkToolbar     *toolbar,
 static GtkWidget *
 get_first_child (GtkContainer *container)
 {
-  GList *children = gtk_container_get_children (children);
+  GList *children = gtk_container_get_children (container);
   GtkWidget *result = children ? children->data : NULL;
   g_list_free (children);
   
