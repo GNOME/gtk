@@ -992,8 +992,12 @@ draw_cell_pixmap (GdkWindow    *window,
 
   if (width > 0 && height > 0)
     gdk_draw_pixmap (window, fg_gc, pixmap, xsrc, ysrc, x, y, width, height);
-    
-  gdk_gc_set_clip_origin (fg_gc, 0, 0);
+
+  if (mask)
+    {
+      gdk_gc_set_clip_rectangle (fg_gc, NULL);
+      gdk_gc_set_clip_origin (fg_gc, 0, 0);
+    }
 
   return x + MAX (width, 0);
 }
