@@ -15,11 +15,11 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:221
 msgid "Hue:"
-msgstr ""
+msgstr "Atspalvis:"
 
 #: gtk/gtkcolorsel.c:222
 msgid "Saturation:"
-msgstr ""
+msgstr "Tirðtumas:"
 
 #: gtk/gtkcolorsel.c:223
 msgid "Value:"
@@ -39,7 +39,7 @@ msgstr "Mëlyna"
 
 #: gtk/gtkcolorsel.c:227
 msgid "Opacity:"
-msgstr ""
+msgstr "Permatomumas:"
 
 #. The OK button
 #: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
@@ -128,7 +128,7 @@ msgstr "Pasirinkimas:"
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
-msgstr ""
+msgstr "Iðlietas:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
@@ -140,7 +140,7 @@ msgstr "Plotis"
 
 #: gtk/gtkfontsel.c:213
 msgid "Slant:"
-msgstr ""
+msgstr "Nuoþulnumas:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
@@ -172,7 +172,7 @@ msgstr "Tarpai:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr ""
+msgstr "Vidurkio plotis:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
@@ -285,7 +285,7 @@ msgstr "italiðkas"
 
 #: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1951
 msgid "oblique"
-msgstr ""
+msgstr "áþambus"
 
 #: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1952
 msgid "reverse italic"
@@ -293,7 +293,7 @@ msgstr "iðkreiptas italiðkas"
 
 #: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1953
 msgid "reverse oblique"
-msgstr ""
+msgstr "iðkreiptas áþambus"
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
 msgid "other"
