@@ -16,6 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+#undef	G_LOG_DOMAIN
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -2121,29 +2122,37 @@ create_menus (void)
     gtk_widget_destroy (window);
 }
 
+static void
+gtk_ifactory_cb (gpointer             callback_data,
+		 guint                callback_action,
+		 GtkWidget           *widget)
+{
+  g_message ("ItemFactory: activated \"%s\"", gtk_item_factory_path_from_widget (widget));
+}
+
 static GtkItemFactoryEntry menu_items[] =
 {
-  { "/_File",            NULL,         NULL,       0, "<Branch>" },
-  { "/File/tearoff1",    NULL,         NULL,       0, "<Tearoff>" },
-  { "/File/_New",        "<control>N", NULL,       0 },
-  { "/File/_Open",       "<control>O", NULL,       0 },
-  { "/File/_Save",       "<control>S", NULL,       0 },
-  { "/File/Save _As...", NULL,         NULL,       0 },
-  { "/File/sep1",        NULL,         NULL,       0, "<Separator>" },
-  { "/File/_Quit",       "<control>Q", NULL,       0 },
+  { "/_File",            NULL,         gtk_ifactory_cb,       0, "<Branch>" },
+  { "/File/tearoff1",    NULL,         gtk_ifactory_cb,       0, "<Tearoff>" },
+  { "/File/_New",        "<control>N", gtk_ifactory_cb,       0 },
+  { "/File/_Open",       "<control>O", gtk_ifactory_cb,       0 },
+  { "/File/_Save",       "<control>S", gtk_ifactory_cb,       0 },
+  { "/File/Save _As...", NULL,         gtk_ifactory_cb,       0 },
+  { "/File/sep1",        NULL,         gtk_ifactory_cb,       0, "<Separator>" },
+  { "/File/_Quit",       "<control>Q", gtk_ifactory_cb,       0 },
 
-  { "/_Preferences",     NULL,         NULL,       0, "<Branch>" },
-  { "/_Preferences/_Color", NULL,         NULL,       0, "<Branch>" },
-  { "/_Preferences/Color/_Red",      NULL,         NULL,          0, "<RadioItem>" },
-  { "/_Preferences/Color/_Green",   NULL,         NULL,           0, "<RadioItem>" },
-  { "/_Preferences/Color/_Blue",        NULL,         NULL,       0, "<RadioItem>" },
-  { "/_Preferences/_Shape", NULL,         NULL,       0, "<Branch>" },
-  { "/_Preferences/Shape/_Square",      NULL,         NULL,       0, "<RadioItem>" },
-  { "/_Preferences/Shape/_Rectangle",   NULL,         NULL,       0, "<RadioItem>" },
-  { "/_Preferences/Shape/_Oval",        NULL,         NULL,       0, "<RadioItem>" },
+  { "/_Preferences",     		NULL, gtk_ifactory_cb, 0, "<Branch>" },
+  { "/_Preferences/_Color", 		NULL, gtk_ifactory_cb, 0, "<Branch>" },
+  { "/_Preferences/Color/_Red",      	NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
+  { "/_Preferences/Color/_Green",   	NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
+  { "/_Preferences/Color/_Blue",        NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
+  { "/_Preferences/_Shape", 		NULL, gtk_ifactory_cb, 0, "<Branch>" },
+  { "/_Preferences/Shape/_Square",      NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
+  { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
+  { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
 
-  { "/_Help",            NULL,         NULL,       0, "<LastBranch>" },
-  { "/Help/_About",      NULL,         NULL,       0 },
+  { "/_Help",            NULL,         gtk_ifactory_cb,       0, "<LastBranch>" },
+  { "/Help/_About",      NULL,         gtk_ifactory_cb,       0 },
 };
 
 static int nmenu_items = sizeof (menu_items) / sizeof (menu_items[0]);

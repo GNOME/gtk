@@ -238,13 +238,12 @@ gtk_init (int	 *argc,
   if (gtk_initialized)
     return;
 
-  if (0)
-    {
-      g_set_error_handler (gtk_error);
-      g_set_warning_handler (gtk_warning);
-      g_set_message_handler (gtk_message);
-      g_set_print_handler (gtk_print);
-    }
+#if	0
+  g_set_error_handler (gtk_error);
+  g_set_warning_handler (gtk_warning);
+  g_set_message_handler (gtk_message);
+  g_set_print_handler (gtk_print);
+#endif
   
   /* Initialize "gdk". We pass along the 'argc' and 'argv'
    *  parameters as they contain information that GDK uses
@@ -310,7 +309,29 @@ gtk_init (int	 *argc,
 	    }
 	  else if (strcmp ("--g-fatal-warnings", (*argv)[i]) == 0)
 	    {
-	      g_set_warning_handler ((GWarningFunc)g_error);
+	      GLogLevelFlags fatal_levels;
+
+	      fatal_levels = g_log_set_fatal_mask (g_log_domain_glib, G_LOG_FATAL_MASK);
+	      fatal_levels |= G_LOG_LEVEL_WARNING;
+              g_log_set_fatal_mask (g_log_domain_glib, fatal_levels);
+	      (*argv)[i] = NULL;
+	    }
+	  else if (strcmp ("--gdk-fatal-warnings", (*argv)[i]) == 0)
+	    {
+	      GLogLevelFlags fatal_levels;
+
+	      fatal_levels = g_log_set_fatal_mask ("Gdk", G_LOG_FATAL_MASK);
+	      fatal_levels |= G_LOG_LEVEL_WARNING;
+              g_log_set_fatal_mask ("Gdk", fatal_levels);
+	      (*argv)[i] = NULL;
+	    }
+	  else if (strcmp ("--gtk-fatal-warnings", (*argv)[i]) == 0)
+	    {
+	      GLogLevelFlags fatal_levels;
+
+	      fatal_levels = g_log_set_fatal_mask (G_LOG_DOMAIN, G_LOG_FATAL_MASK);
+	      fatal_levels |= G_LOG_LEVEL_WARNING;
+              g_log_set_fatal_mask (G_LOG_DOMAIN, fatal_levels);
 	      (*argv)[i] = NULL;
 	    }
 	  i += 1;

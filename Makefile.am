@@ -13,6 +13,7 @@ EXTRA_DIST =	\
 	TODO		\
 	NEWS.pre-1-0	\
 	ChangeLog.pre-1-0	\
+	README.cvs-commits	\
 	examples/README.1ST	\
 	examples/extract.awk	\
 	examples/extract.sh	\

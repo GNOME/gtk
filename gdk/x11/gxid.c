@@ -3,6 +3,7 @@
  *
  * Copyright 1997 Owen Taylor <owt1@cornell.edu>
 */
+#undef	G_LOG_DOMAIN
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,3 +1,20 @@
+Sun Aug 16 20:51:59 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_init): fatal warning option is split up now,
+	"--g-fatal-warnings" causes fatal warnings in GLib,
+ 	"--gdk-fatal-warnings" causes fatal warnings in Gdk,
+ 	"--gtk-fatal-warnings" causes fatal warnings in Gtk.
+
+	* gtk/Makefile.am: define G_LOG_DOMAIN for gtk.
+	* gdk/Makefile.am: define G_LOG_DOMAIN for gdk.
+
+	* gtk/testgtk.c: 
+	* gdk/gxid.c:
+ 	we need ugly #undef G_LOG_DOMAIN at the start of these files currently,
+ 	since automake doesn't support per target _CFLAGS yet.
+
+	* configure.in: require GLib 1.1.3.
+
 Sat Aug 15 03:19:30 1998  John Ellis  <johne@bellatlantic.net>
 
 	* gtk/gtkctree.[ch] (gtk_ctree_set_drag_compare_func): New function

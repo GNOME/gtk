@@ -3,6 +3,7 @@
 gdkincludedir = $(includedir)/gdk
 
 lib_LTLIBRARIES = libgdk-1.1.la
+DEFS += -DG_LOG_DOMAIN=\"Gdk\"
 
 libgdk_1_1_la_SOURCES = \
 	gdk.c		\

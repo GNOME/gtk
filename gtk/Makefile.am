@@ -1,6 +1,7 @@
 ### Process this file with automake to produce Makefile.in
 
 gtkincludedir = $(includedir)/gtk
+DEFS += -DG_LOG_DOMAIN=\"Gtk\"
 
 lib_LTLIBRARIES = libgtk-1.1.la
 
