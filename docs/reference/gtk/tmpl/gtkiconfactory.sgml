@@ -1,0 +1,237 @@
+<!-- ##### SECTION Title ##### -->
+Themeable Stock Images
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkIconSource ##### -->
+<para>
+
+</para>
+
+@filename: 
+@pixbuf: 
+@direction: 
+@state: 
+@size: 
+@any_direction: 
+@any_state: 
+@any_size: 
+
+<!-- ##### STRUCT GtkIconFactory ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
+@icons: 
+
+<!-- ##### STRUCT GtkIconSet ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_icon_source_copy ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_free ##### -->
+<para>
+
+</para>
+
+@source: 
+
+
+<!-- ##### FUNCTION gtk_icon_factory_add ##### -->
+<para>
+
+</para>
+
+@factory: 
+@stock_id: 
+@icon_set: 
+
+
+<!-- ##### FUNCTION gtk_icon_factory_add_default ##### -->
+<para>
+
+</para>
+
+@factory: 
+
+
+<!-- ##### FUNCTION gtk_icon_factory_lookup ##### -->
+<para>
+
+</para>
+
+@factory: 
+@stock_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_factory_lookup_default ##### -->
+<para>
+
+</para>
+
+@stock_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_factory_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_factory_remove_default ##### -->
+<para>
+
+</para>
+
+@factory: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_add_source ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+@source: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_copy ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_ref ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_render_icon ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+@style: 
+@direction: 
+@state: 
+@size: 
+@widget: 
+@detail: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_set_unref ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+
+
+<!-- ##### MACRO GTK_ICON_SIZE_MENU ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_ICON_SIZE_BUTTON ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_ICON_SIZE_SMALL_TOOLBAR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_ICON_SIZE_LARGE_TOOLBAR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_ICON_SIZE_DIALOG ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_icon_size_lookup ##### -->
+<para>
+
+</para>
+
+@alias: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_size_register ##### -->
+<para>
+
+</para>
+
+@alias: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_icon_size_register_alias ##### -->
+<para>
+
+</para>
+
+@alias: 
+@target: 
+
+

@@ -1,0 +1,192 @@
+<!-- ##### SECTION Title ##### -->
+Stock Items
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkStockItem ##### -->
+<para>
+
+</para>
+
+@stock_id: 
+@label: 
+@modifier: 
+@keyval: 
+@translation_domain: 
+
+<!-- ##### FUNCTION gtk_stock_add ##### -->
+<para>
+
+</para>
+
+@item: 
+@n_items: 
+
+
+<!-- ##### FUNCTION gtk_stock_add_static ##### -->
+<para>
+
+</para>
+
+@item: 
+@n_items: 
+
+
+<!-- ##### FUNCTION gtk_stock_item_copy ##### -->
+<para>
+
+</para>
+
+@item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_stock_item_free ##### -->
+<para>
+
+</para>
+
+@item: 
+
+
+<!-- ##### FUNCTION gtk_stock_list_items ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_stock_lookup ##### -->
+<para>
+
+</para>
+
+@stock_id: 
+@item: 
+@Returns: 
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_APPLY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_CANCEL ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_CLOSE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_NO ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_OK ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_YES ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_DIALOG_ERROR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_DIALOG_INFO ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_DIALOG_QUESTION ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_DIALOG_WARNING ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_HELP ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_NEW ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_OPEN ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_QUIT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_SAVE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_CLOSE ##### -->
+<para>
+
+</para>
+
+
+
