@@ -305,7 +305,7 @@ gtk_option_menu_remove_menu (GtkOptionMenu *option_menu)
   if (option_menu->menu)
     {
       if (GTK_MENU_SHELL (option_menu->menu)->active)
-	g_signal_emit_by_name (option_menu->menu, "cancel", 0);
+	gtk_menu_shell_cancel (GTK_MENU_SHELL (option_menu->menu));
       
       gtk_menu_detach (GTK_MENU (option_menu->menu));
     }

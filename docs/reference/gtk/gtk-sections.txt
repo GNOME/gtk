@@ -1983,6 +1983,7 @@ gtk_menu_shell_select_item
 gtk_menu_shell_select_first
 gtk_menu_shell_deselect
 gtk_menu_shell_activate_item
+gtk_menu_shell_cancel
 GtkMenuDirectionType
 <SUBSECTION Standard>
 GTK_MENU_SHELL

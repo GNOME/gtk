@@ -1,3 +1,7 @@
+Sun Dec 21 01:58:33 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_menu_shell_cancel.
+
 Thu Dec 18 01:24:35 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_message_dialog_set_markup

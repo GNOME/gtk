@@ -1182,3 +1182,19 @@ _gtk_menu_shell_get_popup_delay (GtkMenuShell *menu_shell)
       return popup_delay;
     }
 }
+
+/**
+ * gtk_menu_shell_cancel:
+ * @menu_shell: a #GtkMenuShell
+ * 
+ * Cancels the selection within the menu shell.  
+ * 
+ * Since: 2.4
+ */
+void
+gtk_menu_shell_cancel (GtkMenuShell *menu_shell)
+{
+  g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+
+  g_signal_emit (menu_shell, menu_shell_signals[CANCEL], 0);
+}

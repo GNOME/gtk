@@ -582,7 +582,7 @@ _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
       g_list_free (menubars);
     }
 
-  g_signal_emit_by_name (menubar, "cancel", 0);
+  gtk_menu_shell_cancel (GTK_MENU_SHELL (menubar));
 
   if (to_activate)
     g_signal_emit_by_name (to_activate, "activate_item");

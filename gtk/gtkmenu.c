@@ -2461,9 +2461,7 @@ gtk_menu_key_press (GtkWidget	*widget,
        */
       if (event->keyval == keyval &&
           (mods & event->state) == mods)
-        {
-          g_signal_emit_by_name (menu, "cancel", 0);
-        }
+	gtk_menu_shell_cancel (menu_shell);
 
       g_free (accel);
 

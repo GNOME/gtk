@@ -1,9 +1,20 @@
+Sun Dec 21 01:54:40 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenushell.h: 
+	* gtk/gtkmenushell.c (gtk_menu_shell_cancel): New function 
+	to emit the "cancel" signal on a menu shell.
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): 
+	* gtk/gtkoptionmenu.c (gtk_option_menu_remove_menu): 
+	* gtk/gtkmenubar.c (_gtk_menu_bar_cycle_focus): Use the 
+	new function instead of directly emitting the 
+	signal.  (#81803, Owen Taylor)
+
 Sun Dec 21 00:39:50 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init): 
-	Fix the "language_set" blurb.  (#129720, Christian Rose)
+	Fix the "language_set" blurb.  
 	
-
 Sat Dec 20 22:06:03 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): do not invalidate
