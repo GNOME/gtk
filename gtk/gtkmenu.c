@@ -2538,12 +2538,6 @@ gtk_menu_scroll_to (GtkMenu *menu,
   view_height -= (border_width + widget->style->ythickness) * 2;
   menu_height = widget->requisition.height - (border_width + widget->style->ythickness) * 2;
 
-  offset = CLAMP (offset, 0, menu_height - view_height);
-
-  /* Scroll the menu: */
-  if (GTK_WIDGET_REALIZED (menu))
-    gdk_window_move (menu->bin_window, 0, -offset);
-
   x = border_width + widget->style->xthickness;
   y = border_width + widget->style->ythickness;
   
@@ -2584,6 +2578,12 @@ gtk_menu_scroll_to (GtkMenu *menu,
       if (menu->upper_arrow_visible)
 	y += MENU_SCROLL_ARROW_HEIGHT;
     }
+
+  offset = CLAMP (offset, 0, menu_height - view_height);
+
+  /* Scroll the menu: */
+  if (GTK_WIDGET_REALIZED (menu))
+    gdk_window_move (menu->bin_window, 0, -offset);
 
   if (GTK_WIDGET_REALIZED (menu))
     gdk_window_move_resize (menu->view_window,

@@ -1,3 +1,8 @@
+Thu Oct 17 22:09:05 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c (gtk_menu_scroll_to): Take arrows into
+	account when clamping the offset. Fixes #95758.
+
 Wed Oct 16 15:19:44 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c: Fix from Phil Blundell for
