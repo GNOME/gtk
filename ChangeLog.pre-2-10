@@ -1,3 +1,8 @@
+Fri Mar 27 08:51:17 PST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* docs/Makefile.sgml: some stuff for doing plain text and
+	  postscript
+
 Fri Mar 27 00:13:18 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkmain.c (gtk_propagate_event): If the widget is _not_

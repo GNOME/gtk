@@ -8,10 +8,25 @@
 # the automake stuff...
 #
 
-all: html
+all: html ps
 
 html: faq tut italian_tut
 	perl gtkdocs_fix gtkfaq*.html gtk_tut*.html
+
+txt:
+	sgml2txt gtkfaq.sgml
+	sgml2txt gtk_tut.sgml
+	sgml2txt gtk_tut_it.sgml
+
+ps: dvi
+	dvips -o gtkfaq.ps gtkfaq.dvi
+	dvips -o gtk_tut.ps gtk_tut.dvi
+	dvips -o gtk_tut_it.ps gtk_tut_it.dvi
+
+dvi: 
+	sgml2latex gtkfaq.sgml
+	sgml2latex gtk_tut.sgml
+	sgml2latex gtk_tut_it.sgml
 
 faq:
 	sgml2html gtkfaq.sgml
@@ -21,3 +36,5 @@ tut:
 
 italian_tut:
 	sgml2html gtk_tut_it.sgml
+
+
