@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1998-12-19 15:03-0600\n"
+"POT-Creation-Date: 1998-12-29 13:31+0100\n"
 "PO-Revision-Date: 1998-12-18 20:32+0100\n"
 "Last-Translator: Vincent Renardias <vincent@debian.org>\n"
 "Language-Team: Vincent Renardias <vincent@debian.org>\n"
@@ -43,14 +43,14 @@ msgid "Opacity:"
 msgstr "Opacité:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1637 gtk/gtkfilesel.c:462 gtk/gtkfontsel.c:3458
+#: gtk/gtkcolorsel.c:1637 gtk/gtkfilesel.c:462 gtk/gtkfontsel.c:3459
 #: gtk/gtkgamma.c:408
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1643 gtk/gtkfilesel.c:469 gtk/gtkfilesel.c:844
-#: gtk/gtkfilesel.c:944 gtk/gtkfilesel.c:1059 gtk/gtkfontsel.c:3471
+#: gtk/gtkfilesel.c:944 gtk/gtkfilesel.c:1059 gtk/gtkfontsel.c:3472
 #: gtk/gtkgamma.c:416
 msgid "Cancel"
 msgstr "Annuler"
@@ -191,7 +191,7 @@ msgstr "Valeur effective"
 msgid "Font"
 msgstr "Police"
 
-#: gtk/gtkfontsel.c:491 gtk/gtkfontsel.c:2139 gtk/gtkfontsel.c:2369
+#: gtk/gtkfontsel.c:491 gtk/gtkfontsel.c:2140 gtk/gtkfontsel.c:2370
 msgid "Font:"
 msgstr "Police:"
 
@@ -266,23 +266,23 @@ msgstr ""
 msgid "regular"
 msgstr "normal"
 
-#: gtk/gtkfontsel.c:1207 gtk/gtkfontsel.c:1931
+#: gtk/gtkfontsel.c:1207 gtk/gtkfontsel.c:1932
 msgid "italic"
 msgstr "italique"
 
-#: gtk/gtkfontsel.c:1208 gtk/gtkfontsel.c:1932
+#: gtk/gtkfontsel.c:1208 gtk/gtkfontsel.c:1933
 msgid "oblique"
 msgstr "oblique"
 
-#: gtk/gtkfontsel.c:1209 gtk/gtkfontsel.c:1933
+#: gtk/gtkfontsel.c:1209 gtk/gtkfontsel.c:1934
 msgid "reverse italic"
 msgstr "italique inversé"
 
-#: gtk/gtkfontsel.c:1210 gtk/gtkfontsel.c:1934
+#: gtk/gtkfontsel.c:1210 gtk/gtkfontsel.c:1935
 msgid "reverse oblique"
 msgstr "oblique inversé"
 
-#: gtk/gtkfontsel.c:1211 gtk/gtkfontsel.c:1935
+#: gtk/gtkfontsel.c:1211 gtk/gtkfontsel.c:1936
 msgid "other"
 msgstr "autre"
 
@@ -294,51 +294,51 @@ msgstr "[M]"
 msgid "[C]"
 msgstr "[C]"
 
-#: gtk/gtkfontsel.c:1763
+#: gtk/gtkfontsel.c:1764
 msgid "The selected font is not available."
 msgstr "La police sélectionnée n'est pas disponible."
 
-#: gtk/gtkfontsel.c:1769
+#: gtk/gtkfontsel.c:1770
 msgid "The selected font is not a valid font."
 msgstr "La police sélectionnée n'est pas valide."
 
-#: gtk/gtkfontsel.c:1827
+#: gtk/gtkfontsel.c:1828
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr ""
 
-#: gtk/gtkfontsel.c:1919 gtk/gtkinputdialog.c:599
+#: gtk/gtkfontsel.c:1920 gtk/gtkinputdialog.c:599
 msgid "(unknown)"
 msgstr "(inconnu)"
 
-#: gtk/gtkfontsel.c:1930
+#: gtk/gtkfontsel.c:1931
 msgid "roman"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1942
+#: gtk/gtkfontsel.c:1943
 msgid "proportional"
 msgstr "proportionnelle"
 
-#: gtk/gtkfontsel.c:1943
+#: gtk/gtkfontsel.c:1944
 msgid "monospaced"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1944
+#: gtk/gtkfontsel.c:1945
 msgid "char cell"
 msgstr ""
 
-#: gtk/gtkfontsel.c:2144
+#: gtk/gtkfontsel.c:2145
 msgid "Font: (Filter Applied)"
 msgstr "Police: (Filtre appliqué)"
 
-#: gtk/gtkfontsel.c:2620
+#: gtk/gtkfontsel.c:2621
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "Valeur de MAX_FONTS dépassée. Des polices peuvent manquer."
 
-#: gtk/gtkfontsel.c:3465
+#: gtk/gtkfontsel.c:3466
 msgid "Apply"
 msgstr "Appliquer"
 
-#: gtk/gtkfontsel.c:3487
+#: gtk/gtkfontsel.c:3488
 msgid "Font Selection"
 msgstr "Sélection de police"
 
