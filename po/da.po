@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 1999-09-03 05:20+0200\n"
+"POT-Creation-Date: 1999-09-06 11:28+0200\n"
 "PO-Revision-Date: 1999-09-03 22:36+0100\n"
 "Last-Translator: Birger Langkjer <birger.langkjer@image.dk>\n"
 "Language-Team: Danish <dltp@lists.wiktor.dk>\n"
@@ -222,7 +222,7 @@ msgstr "Punkter"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr ""
+msgstr "Pixels"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
@@ -357,7 +357,7 @@ msgstr "Skrifttypevalg"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: gtk/gtkgamma.c:403
 msgid "Gamma value"
@@ -366,7 +366,7 @@ msgstr "Gamma-værdi"
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:200
 msgid "Input"
-msgstr ""
+msgstr "Input"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
@@ -446,12 +446,12 @@ msgstr "ryd"
 msgid "Page %u"
 msgstr "Side %u"
 
-#: gtk/gtkrc.c:1627
+#: gtk/gtkrc.c:1570
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\" linje %d"
 
-#: gtk/gtkrc.c:1630
+#: gtk/gtkrc.c:1573
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
