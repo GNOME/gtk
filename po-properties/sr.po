@@ -1,8 +1,8 @@
 # Serbian translation of gtk
-# Courtesy of Prevod.org team (http://prevod.org/) -- 2003, 2004.
-# 
+# Courtesy of Prevod.org team (http://prevod.org/) -- 2003, 2004, 2005.
+#
 # This file is distributed under the same license as the gtk package.
-# 
+#
 # Maintainer: Данило Шеган <dsegan@gmx.net>
 # Reviewed on 2004-02-11 by Александар Урошевић <urke@users.sourceforge.net>
 #
@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
-"PO-Revision-Date: 2004-10-15 23:03+0200\n"
+"POT-Creation-Date: 2005-02-12 12:09+0100\n"
+"PO-Revision-Date: 2005-02-12 12:09+0100\n"
 "Last-Translator: Данило Шеган <danilo@gnome.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
 "MIME-Version: 1.0\n"
@@ -100,9 +100,8 @@ msgid "Screen"
 msgstr "Екран"
 
 #: gdk/gdkpango.c:575
-#, fuzzy
 msgid "the GdkScreen for the renderer"
-msgstr "Модел за разгранати преглед"
+msgstr "GdkScreen за исцртавач"
 
 #: gtk/gtkaboutdialog.c:202
 msgid "Program name"
@@ -165,7 +164,6 @@ msgid "Authors"
 msgstr "Аутори"
 
 #: gtk/gtkaboutdialog.c:319
-#, fuzzy
 msgid "List of authors of the program"
 msgstr "Списак аутора програма"
 
@@ -207,13 +205,12 @@ msgstr ""
 "gtk_window_get_default_icon_list()"
 
 #: gtk/gtkaboutdialog.c:402
-#, fuzzy
 msgid "Logo Icon Name"
-msgstr "Име иконе"
+msgstr "Име логотип слике"
 
 #: gtk/gtkaboutdialog.c:403
 msgid "A named icon to use as the logo for the about box."
-msgstr ""
+msgstr "Именована икона за логотип у прозорчету о програму."
 
 #: gtk/gtkaboutdialog.c:410
 msgid "Link Color"
@@ -739,9 +736,8 @@ msgid "Image widget"
 msgstr "Елемент за слику"
 
 #: gtk/gtkbutton.c:307
-#, fuzzy
 msgid "Child widget to appear next to the button text"
-msgstr "Садржани елемент који се појављује поред текста за мени"
+msgstr "Садржани елемент који се појављује поред текста дугмета"
 
 #: gtk/gtkbutton.c:373
 msgid "Default Spacing"
@@ -979,21 +975,19 @@ msgstr "Модел који садржи допуштене вредности �
 
 #: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:114
 msgid "Text Column"
-msgstr "Текстуална колона"
+msgstr "Текстуални стубац"
 
 #: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:115
 msgid "A column in the data source model to get the strings from"
-msgstr "Колона у моделу извора података из којег се извлаче ниске"
+msgstr "Стубац у моделу извора података из којег се извлаче ниске"
 
 #: gtk/gtkcellrenderercombo.c:127
 msgid "Has Entry"
 msgstr "Омогућава унос"
 
-# bug: s/%FALSE/FALSE/
 #: gtk/gtkcellrenderercombo.c:128
-#, fuzzy
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr "Уколико није постављено, не дозвољава унос ниски осим изабраних (%F)"
+msgstr "Уколико није постављено, не дозвољава унос ниски осим изабраних"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
@@ -1242,13 +1236,12 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
 #: gtk/gtklabel.c:453
-#, fuzzy
 msgid "Width In Characters"
 msgstr "Ширина у знаковима"
 
 #: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:454
 msgid "The desired width of the label, in characters"
-msgstr ""
+msgstr "Жељена ширина ознаке, као број знакова"
 
 #: gtk/gtkcellrenderertext.c:447 gtk/gtkcellview.c:197 gtk/gtktexttag.c:510
 msgid "Background set"
@@ -1363,15 +1356,15 @@ msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Да ли ова поставка утиче на језик у ком се текст исцртава"
 
 #: gtk/gtkcellrenderertext.c:503
-#, fuzzy
 msgid "Ellipsize set"
-msgstr "Скрати"
+msgstr "Скраћивање (са три тачке)"
 
 #: gtk/gtkcellrenderertext.c:504
 msgid "Whether this tag affects the ellipsize mode"
 msgstr "Да ли ове поставке утичу на режим скраћивања текста"
 
-# Ovaj izraz se kod nas koristi za sve sto se ponasa kao "toggle", koliko mi je bar poznato
+# Ovaj izraz se kod nas koristi za sve sto se ponasa kao "toggle",
+# koliko mi je bar poznato 
 #: gtk/gtkcellrenderertoggle.c:142
 msgid "Toggle state"
 msgstr "Стање жабице"
@@ -1573,19 +1566,19 @@ msgstr "Ширина за прелом при распоређивању ста�
 
 #: gtk/gtkcombobox.c:591
 msgid "Row span column"
-msgstr "Ред обухвата колону"
+msgstr "Ред обухвата стубац"
 
 #: gtk/gtkcombobox.c:592
 msgid "TreeModel column containing the row span values"
-msgstr "Модел колоне стабла који садржи вредности обухватања редова"
+msgstr "TreeModel стубац који садржи вредности обухватања редова"
 
 #: gtk/gtkcombobox.c:613
 msgid "Column span column"
-msgstr "Колона обухвата колону"
+msgstr "Стубац обухвата стубац"
 
 #: gtk/gtkcombobox.c:614
 msgid "TreeModel column containing the column span values"
-msgstr "Модел колоне стабла који садржи вредности обухватања колона"
+msgstr "TreeModel стубац који садржи вредности обухватања стубаца"
 
 #: gtk/gtkcombobox.c:634
 msgid "Active item"
@@ -1843,11 +1836,11 @@ msgstr "Најмања дужина кључа за претрагу ради н
 
 #: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:370
 msgid "Text column"
-msgstr "Текстуална колона"
+msgstr "Текстуални стубац"
 
 #: gtk/gtkentrycompletion.c:296
 msgid "The column of the model containing the strings."
-msgstr "Колона у моделу која садржи ниске."
+msgstr "Стубац у моделу која садржи ниске."
 
 #: gtk/gtkentrycompletion.c:313
 msgid "Inline completion"
@@ -2029,7 +2022,7 @@ msgstr "Наслов прозорчета за избор датотека."
 
 #: gtk/gtkfilechooserbutton.c:366
 msgid "The desired width of the button widget, in characters."
-msgstr ""
+msgstr "Жељена ширина дугмета, као број знакова."
 
 #: gtk/gtkfilechooserdefault.c:622
 msgid "Default file chooser backend"
@@ -2224,24 +2217,24 @@ msgstr "Режим избора"
 
 #: gtk/gtkiconview.c:352
 msgid "Pixbuf column"
-msgstr "Pixbuf колона"
+msgstr "Pixbuf стубац"
 
 #: gtk/gtkiconview.c:353
 msgid "Model column used to retrieve the icon pixbuf from"
-msgstr "Колона у моделу из које се извлачи pixbuf иконе"
+msgstr "Стубац у моделу из којег се извлаче pixbuf иконе"
 
 #: gtk/gtkiconview.c:371
 msgid "Model column used to retrieve the text from"
-msgstr "Колона у моделу из које се извлачи текст"
+msgstr "Стубац у моделу из којег се извлачи текст"
 
 #: gtk/gtkiconview.c:390
 msgid "Markup column"
-msgstr "Колона са означеним текстом"
+msgstr "Стубац са означеним текстом"
 
 #: gtk/gtkiconview.c:391
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
-"Колона у моделу из које се извлачи текст уколико се користе ознаке Пангоа"
+"Стубац у моделу из којег се извлачи текст уколико се користе ознаке Пангоа"
 
 #: gtk/gtkiconview.c:398
 msgid "Icon View Model"
@@ -2252,58 +2245,48 @@ msgid "The model for the icon view"
 msgstr "Модел за преглед помоћу икона"
 
 #: gtk/gtkiconview.c:415
-#, fuzzy
 msgid "Number of columns"
-msgstr "Број канала"
+msgstr "Број стубаца"
 
 #: gtk/gtkiconview.c:416
-#, fuzzy
 msgid "Number of columns to display"
-msgstr "Број децималних места које желите да прикажете"
+msgstr "Број стубаца које желите да прикажете"
 
 #: gtk/gtkiconview.c:433
-#, fuzzy
 msgid "Width for each item"
-msgstr "Елемент који се користи као ознака ставке"
+msgstr "Ширина сваке ставке"
 
 #: gtk/gtkiconview.c:434
 msgid "The width used for each item"
-msgstr ""
+msgstr "Ширина за сваку ставку"
 
 #: gtk/gtkiconview.c:450
-#, fuzzy
 msgid "Space which is inserted between cells of an item"
-msgstr "Размак који се убацује између ћелија"
+msgstr "Размак који се убацује између ћелија ставке"
 
 #: gtk/gtkiconview.c:465
-#, fuzzy
 msgid "Row Spacing"
 msgstr "Размак редова"
 
 #: gtk/gtkiconview.c:466
-#, fuzzy
 msgid "Space which is inserted between grid rows"
-msgstr "Размак који се убацује између ћелија"
+msgstr "Размак који се убацује између редова мреже"
 
 #: gtk/gtkiconview.c:481
-#, fuzzy
 msgid "Column Spacing"
-msgstr "Размак колона"
+msgstr "Размак стубаца"
 
 #: gtk/gtkiconview.c:482
-#, fuzzy
 msgid "Space which is inserted between grid column"
-msgstr "Размак који се убацује између ћелија"
+msgstr "Размак који се убацује између стубаца мреже"
 
 #: gtk/gtkiconview.c:497
-#, fuzzy
 msgid "Margin"
-msgstr "Лева маргина"
+msgstr "Маргина"
 
 #: gtk/gtkiconview.c:498
-#, fuzzy
 msgid "Space which is inserted at the edges of the icon view"
-msgstr "Размак који се убацује између ћелија"
+msgstr "Размак који се убацује на крајевима прегледа икона"
 
 #: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
@@ -2383,19 +2366,17 @@ msgid "Icon size"
 msgstr "Величина икона"
 
 #: gtk/gtkimage.c:216
-#, fuzzy
 msgid "Symbolic size to use for stock icon, icon set or named icon"
-msgstr "Величина за припремљене иконе или скуп икона"
+msgstr ""
+"Симболичка величина за припремљене иконе, скуп икона или именовану икону"
 
 #: gtk/gtkimage.c:232
-#, fuzzy
 msgid "Pixel size"
-msgstr "Тачке"
+msgstr "Величина у тачкама"
 
 #: gtk/gtkimage.c:233
-#, fuzzy
 msgid "Pixel size to use for named icon"
-msgstr "Величина за припремљене иконе или скуп икона"
+msgstr "Величина у тачкама за именоване иконе"
 
 #: gtk/gtkimage.c:241
 msgid "Animation"
@@ -2410,9 +2391,8 @@ msgid "Icon Name"
 msgstr "Име иконе"
 
 #: gtk/gtkimage.c:258
-#, fuzzy
 msgid "The name of the icon from the icon theme"
-msgstr "Име изабраног писма"
+msgstr "Име иконе из теме икона"
 
 #: gtk/gtkimage.c:265
 msgid "Storage type"
@@ -2512,31 +2492,28 @@ msgstr ""
 "простором за приказ целог текста."
 
 #: gtk/gtklabel.c:474
-#, fuzzy
 msgid "Single Line Mode"
-msgstr "У једном пасусу"
+msgstr "У једном реду"
 
 #: gtk/gtklabel.c:475
-#, fuzzy
 msgid "Whether the label is in single line mode"
-msgstr "Да ли се ознака исцртава помоћу изабраног писма"
+msgstr "Да ли је ознака у једном реду"
 
 #: gtk/gtklabel.c:492
 msgid "Angle"
-msgstr ""
+msgstr "Угао"
 
 #: gtk/gtklabel.c:493
 msgid "Angle at which the label is rotated"
-msgstr ""
+msgstr "Угао под којим је ознака"
 
 #: gtk/gtklabel.c:513
-#, fuzzy
 msgid "Maximum Width In Characters"
-msgstr "Ширина у знаковима"
+msgstr "Највећа ширина у знаковима"
 
 #: gtk/gtklabel.c:514
 msgid "The desired maximum width of the label, in characters"
-msgstr ""
+msgstr "Жељена највећа ширина ознаке, као број знакова"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -2614,7 +2591,7 @@ msgstr "Лево припајање"
 
 #: gtk/gtkmenu.c:580 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
-msgstr "Број колоне за коју прикачити леву страну садржаног елемента"
+msgstr "Број ступца за који прикачити леву страну садржаног елемента"
 
 #: gtk/gtkmenu.c:587
 msgid "Right Attach"
@@ -2622,7 +2599,7 @@ msgstr "Десно припајање"
 
 #: gtk/gtkmenu.c:588
 msgid "The column number to attach the right side of the child to"
-msgstr "Број колоне за коју прикачити десну страну садржаног елемента"
+msgstr "Број ступца за који прикачити десну страну садржаног елемента"
 
 #: gtk/gtkmenu.c:595
 msgid "Top Attach"
@@ -3110,13 +3087,12 @@ msgid "Text to be displayed in the progress bar"
 msgstr "Текст који се приказује у елементу напретка"
 
 #: gtk/gtkprogressbar.c:243
-#, fuzzy
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
-"Жељено место за скраћивање текста, уколико ознака не располаже довољним "
-"простором за приказ целог текста."
+"Жељено место за скраћивање текста, уколико елемент напретка не располаже "
+"довољним простором за приказ целог текста."
 
 #: gtk/gtkradioaction.c:139
 msgid "The value"
@@ -3526,12 +3502,11 @@ msgstr "Резолуција за Xft, у 1024 * тачака/инчу. -1 за 
 
 #: gtk/gtksettings.c:432
 msgid "Alternative button order"
-msgstr ""
+msgstr "Обрнути редослед дугмића"
 
 #: gtk/gtksettings.c:433
-#, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr "Да ли се приказују испоручене иконе у дугмадима"
+msgstr "Да ли дугмад у прозорчићима користе обрнути редослед"
 
 #: gtk/gtksizegroup.c:243
 msgid "Mode"
@@ -3541,8 +3516,7 @@ msgstr "Начин рада"
 msgid ""
 "The directions in which the size group effects the requested sizes of its "
 "component widgets"
-msgstr ""
-"Правци у којима „size group“ утиче на захтеване величине садржаних елемената"
+msgstr "Правци у којима величина групе утиче на захтеване величине садржаних елемената"
 
 #: gtk/gtkspinbutton.c:243
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3628,11 +3602,11 @@ msgstr "Број редова у табели"
 
 #: gtk/gtktable.c:169
 msgid "Columns"
-msgstr "Колона"
+msgstr "Ступци"
 
 #: gtk/gtktable.c:170
 msgid "The number of columns in the table"
-msgstr "Број колона у табели"
+msgstr "Број стубаца у табели"
 
 #: gtk/gtktable.c:178
 msgid "Row spacing"
@@ -3644,11 +3618,11 @@ msgstr "Размак између два суседна реда"
 
 #: gtk/gtktable.c:187
 msgid "Column spacing"
-msgstr "Размак колона"
+msgstr "Размак стубаца"
 
 #: gtk/gtktable.c:188
 msgid "The amount of space between two consecutive columns"
-msgstr "Размак између две суседне колоне"
+msgstr "Размак између два суседна ступца"
 
 #: gtk/gtktable.c:196
 msgid "Homogenous"
@@ -3668,7 +3642,7 @@ msgstr "Десно припајање"
 
 #: gtk/gtktable.c:212
 msgid "The column number to attach the right side of a child widget to"
-msgstr "Број колоне за коју прикачити десну страну садржаног елемента"
+msgstr "Број ступца за који прикачити десну страну садржаног елемента"
 
 #: gtk/gtktable.c:218
 msgid "Top attachment"
@@ -4273,7 +4247,7 @@ msgstr "Усправна поправка за елемент"
 
 #: gtk/gtktreeview.c:583
 msgid "Show the column header buttons"
-msgstr "Прикажи дугмиће за заглавље колона"
+msgstr "Прикажи дугмиће за заглавље стубаца"
 
 #: gtk/gtktreeview.c:590
 msgid "Headers Clickable"
@@ -4281,15 +4255,15 @@ msgstr "Заглавља се могу кликнути"
 
 #: gtk/gtktreeview.c:591
 msgid "Column headers respond to click events"
-msgstr "Заглавља колона одговарају на притиске мишем"
+msgstr "Заглавља стубаца одговарају на притиске мишем"
 
 #: gtk/gtktreeview.c:598
 msgid "Expander Column"
-msgstr "Колона гранања"
+msgstr "Стубац гранања"
 
 #: gtk/gtktreeview.c:599
 msgid "Set the column for the expander column"
-msgstr "Поставите колону у којој се врши гранање"
+msgstr "Поставите стубац у којем се врши гранање"
 
 #: gtk/gtktreeview.c:606 gtk/gtktreeviewcolumn.c:341
 msgid "Reorderable"
@@ -4315,15 +4289,15 @@ msgstr "Омогући претрагу"
 
 #: gtk/gtktreeview.c:623
 msgid "View allows user to search through columns interactively"
-msgstr "Преглед дозвољава корисницима да траже интерактивно кроз колоне"
+msgstr "Преглед дозвољава корисницима да траже интерактивно кроз ступце"
 
 #: gtk/gtktreeview.c:630
 msgid "Search Column"
-msgstr "Колона за претрагу"
+msgstr "Стубац за претрагу"
 
 #: gtk/gtktreeview.c:631
 msgid "Model column to search through when searching through code"
-msgstr "Колона кроз коју се претражује када се претражује помоћу кода"
+msgstr "Стубац модела који се користи када се претражује помоћу кода"
 
 #: gtk/gtktreeview.c:651
 msgid "Fixed Height Mode"
@@ -4345,9 +4319,7 @@ msgstr "Да ли избор треба да прати показивач"
 msgid "Hover Expand"
 msgstr "Рашири под мишем"
 
-# bug: s/collaped/collapsed/
 #: gtk/gtktreeview.c:693
-#, fuzzy
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
@@ -4403,7 +4375,7 @@ msgstr "Боја за непарне редове"
 
 #: gtk/gtktreeviewcolumn.c:226
 msgid "Whether to display the column"
-msgstr "Да ли приказати колону"
+msgstr "Да ли приказати стубац"
 
 #: gtk/gtktreeviewcolumn.c:233 gtk/gtkwindow.c:456
 msgid "Resizable"
@@ -4411,11 +4383,11 @@ msgstr "Величина променљива"
 
 #: gtk/gtktreeviewcolumn.c:234
 msgid "Column is user-resizable"
-msgstr "Величину колоне може мењати корисник"
+msgstr "Величину супца може мењати корисник"
 
 #: gtk/gtktreeviewcolumn.c:242
 msgid "Current width of the column"
-msgstr "Тренутна ширина колоне"
+msgstr "Тренутна ширина ступца"
 
 #: gtk/gtktreeviewcolumn.c:251
 msgid "Space which is inserted between cells"
@@ -4427,7 +4399,7 @@ msgstr "Величина"
 
 #: gtk/gtktreeviewcolumn.c:260
 msgid "Resize mode of the column"
-msgstr "Начин измене величине колоне"
+msgstr "Начин измене величине ступца"
 
 #: gtk/gtktreeviewcolumn.c:268
 msgid "Fixed Width"
@@ -4435,7 +4407,7 @@ msgstr "Утврђена ширина"
 
 #: gtk/gtktreeviewcolumn.c:269
 msgid "Current fixed width of the column"
-msgstr "Тренутна утврђена ширина колоне"
+msgstr "Тренутна утврђена ширина ступца"
 
 #: gtk/gtktreeviewcolumn.c:278
 msgid "Minimum Width"
@@ -4443,7 +4415,7 @@ msgstr "Најмања ширина"
 
 #: gtk/gtktreeviewcolumn.c:279
 msgid "Minimum allowed width of the column"
-msgstr "Најмања дозвољена ширина колоне"
+msgstr "Најмања дозвољена ширина ступца"
 
 #: gtk/gtktreeviewcolumn.c:288
 msgid "Maximum Width"
@@ -4451,16 +4423,16 @@ msgstr "Највећа ширина"
 
 #: gtk/gtktreeviewcolumn.c:289
 msgid "Maximum allowed width of the column"
-msgstr "Највећа дозвољена ширина колоне"
+msgstr "Највећа дозвољена ширина ступца"
 
 #: gtk/gtktreeviewcolumn.c:299
 msgid "Title to appear in column header"
-msgstr "Наслов који се појављује у заглављу колоне"
+msgstr "Наслов који се појављује у заглављу ступца"
 
 # bug: a bit confusing, ain't it?
 #: gtk/gtktreeviewcolumn.c:307
 msgid "Column gets share of extra width allocated to the widget"
-msgstr "Колоне деле додатну ширину коју добије елемент"
+msgstr "Ступци деле додатну ширину коју добије елемент"
 
 #: gtk/gtktreeviewcolumn.c:314
 msgid "Clickable"
@@ -4476,7 +4448,7 @@ msgstr "Елемент"
 
 #: gtk/gtktreeviewcolumn.c:324
 msgid "Widget to put in column header button instead of column title"
-msgstr "Елемент који треба ставити у заглавље колоне наместо наслова"
+msgstr "Елемент који треба ставити у заглавље ступца наместо наслова"
 
 #: gtk/gtktreeviewcolumn.c:331
 msgid "Alignment"
@@ -4484,11 +4456,11 @@ msgstr "Поравнање"
 
 #: gtk/gtktreeviewcolumn.c:332
 msgid "X Alignment of the column header text or widget"
-msgstr "Водоравно поравнање текста или елемента у заглављу колоне"
+msgstr "Водоравно поравнање текста или елемента у заглављу ступца"
 
 #: gtk/gtktreeviewcolumn.c:342
 msgid "Whether the column can be reordered around the headers"
-msgstr "Да ли се редослед колона може изменити око заглавља"
+msgstr "Да ли се редослед стубаца може изменити око заглавља"
 
 #: gtk/gtktreeviewcolumn.c:349
 msgid "Sort indicator"
@@ -4947,9 +4919,37 @@ msgstr "Стил стања IM-а"
 msgid "How to draw the input method statusbar"
 msgstr "Како исцртати линију стања начина уноса"
 
-#, fuzzy
-#~ msgid "Width In Chararacters"
-#~ msgstr "Ширина у знаковима"
+#~ msgid "Follow State"
+#~ msgstr "Прати стање"
+
+#~ msgid ""
+#~ "Whether the rendered pixbuf should be colorized according to the state"
+#~ msgstr "Да ли се исцртани pixbuf боји према стању или не"
+
+#~ msgid ""
+#~ "How to break the string into multiple lines, if the cell renderer does "
+#~ "not have enough room to display the entire string"
+#~ msgstr ""
+#~ "Како преломити текст у више редова, уколико цртач ћелије не располаже "
+#~ "довољним простором за приказ целог текста"
+
+#~ msgid "The width at which the text is wrapped"
+#~ msgstr "Положај на којем се прелама текст"
+
+#~ msgid "Pack direction"
+#~ msgstr "Правац паковања"
+
+#~ msgid "The pack direction of the menubar"
+#~ msgstr "Правац паковања менија"
+
+#~ msgid "Child Pack direction"
+#~ msgstr "Правац паковања садржаног"
+
+#~ msgid "The child pack direction of the menubar"
+#~ msgstr "Правац паковања садржаног у менију"
+
+#~ msgid "Headers Visible"
+#~ msgstr "Заглавља видљива"
 
 #~ msgid "Whether the browse dialog is visible or not."
 #~ msgstr "Да ли је прозорче за разгледање видљиво или не."
