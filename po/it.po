@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
-"PO-Revision-Date: 2004-04-16 17:59+0200\n"
+"POT-Creation-Date: 2004-09-15 21:06+0200\n"
+"PO-Revision-Date: 2004-09-15 21:06+0200\n"
 "Last-Translator: Alessio Dessì <alessiodessi@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -259,12 +259,12 @@ msgstr "Immagine GIF troncata o incompleta."
 msgid "The GIF image format"
 msgstr "Formato GIF"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "Memoria insufficiente per caricare l'icona"
 
-#: gdk-pixbuf/io-ico.c:256
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "Header dell'icona non valido"
 
@@ -276,32 +276,32 @@ msgstr "Icona con larghezza pari a zero"
 msgid "Icon has zero height"
 msgstr "Icona con altezza pari a zero"
 
-#: gdk-pixbuf/io-ico.c:347
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr "Icone compresse non supportate"
 
-#: gdk-pixbuf/io-ico.c:380
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "Tipo di icona non supportato"
 
-#: gdk-pixbuf/io-ico.c:474
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "Memoria insufficiente per caricare il file ICO"
 
-#: gdk-pixbuf/io-ico.c:939
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr "Immagine troppo larga per essere salvata come ICO"
 
-#: gdk-pixbuf/io-ico.c:950
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr "Hotspot del cursore esterno all'immagine"
 
-#: gdk-pixbuf/io-ico.c:973
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Profondità non supportata per il file ICO: %d"
 
-#: gdk-pixbuf/io-ico.c:1202
+#: gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
 msgstr "Formato ICO"
 
@@ -323,12 +323,12 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Spazio di colore JPEG (%s) non supportato"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
-#: gdk-pixbuf/io-jpeg.c:950
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Impossibile allocare memoria per caricare il file JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:893
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -337,7 +337,7 @@ msgstr ""
 "La qualità di un'immagine JPEG deve essere compresa tra 0 e 100; il valore «%"
 "s» non può essere analizzato."
 
-#: gdk-pixbuf/io-jpeg.c:908
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -345,7 +345,7 @@ msgstr ""
 "La qualità di un'immagine JPEG deve essere compresa tra 0 e 100; il valore «%"
 "d» non è valido."
 
-#: gdk-pixbuf/io-jpeg.c:1069
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr "Formato JPEG"
 
@@ -713,28 +713,32 @@ msgid "XPM file has image height <= 0"
 msgstr "File XPM con altezza minore o ugale a zero"
 
 #: gdk-pixbuf/io-xpm.c:1253
-msgid "XPM file has invalid number of colors"
-msgstr "File XPM con numero di colori non valido"
-
-#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM con numero di byte per pixel non valido"
 
-#: gdk-pixbuf/io-xpm.c:1279
+#: gdk-pixbuf/io-xpm.c:1260
+msgid "XPM file has invalid number of colors"
+msgstr "File XPM con numero di colori non valido"
+
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281
+msgid "Cannot allocate memory for loading XPM image"
+msgstr "Impossibile allocare memoria per caricare l'immagine XPM"
+
+#: gdk-pixbuf/io-xpm.c:1295
 msgid "Can't read XPM colormap"
 msgstr "Impossibile leggere la colormap XPM"
 
-#: gdk-pixbuf/io-xpm.c:1317
+#: gdk-pixbuf/io-xpm.c:1333
 msgid "Can't allocate memory for loading XPM image"
 msgstr "Impossibile allocare memoria per caricare l'immagine XPM"
 
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr ""
 "Fallita la scrittura nel file temporaneo durante il caricamento "
 "dell'immagine XPM"
 
-#: gdk-pixbuf/io-xpm.c:1543
+#: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
 msgstr "Formato XPM"
 
@@ -1019,7 +1023,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:2572
 msgid "Shortcuts"
-msgstr ""
+msgstr "Scorciatoie"
 
 #: gtk/gtkfilechooserdefault.c:2626
 msgid "Folder"
@@ -1994,6 +1998,3 @@ msgstr "Metodo di inserimento X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Impossibile ottenere informazioni per il file «%s»: %s"
-
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "Variante di immagine TIFF non supportata"
