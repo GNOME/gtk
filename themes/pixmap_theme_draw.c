@@ -1002,7 +1002,6 @@ apply_theme_image_box_gap(GdkWindow *window, struct theme_image *img, gchar setb
   gint                w, h;
   GdkRectangle        r1, r2, r3;
   
-  printf("%i %i %i %i\n", width, height, gap_x, gap_width);
   if (gap_side == 0)
     /* top */
     {
@@ -1075,7 +1074,6 @@ apply_theme_image_box_gap(GdkWindow *window, struct theme_image *img, gchar setb
       im1 = load_image(img->gap_start_file);
       im2 = load_image(img->gap_end_file);
       im3 = load_image(img->gap_file);
-      printf("%s %s %s %s\n",img->file,img->gap_start_file,img->gap_end_file,img->gap_file);
       if ((im) && (im1) && (im2) && (im3))
 	{  
 	  gdk_imlib_set_image_border(im, &(img->border));
@@ -1625,7 +1623,6 @@ draw_box(GtkStyle * style,
   gchar               setbg = 0;
   GtkOrientation      orientation;
 
-  printf("%s\n",detail);
   g_return_if_fail(style != NULL);
   g_return_if_fail(window != NULL);
 
