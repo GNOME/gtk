@@ -1,3 +1,13 @@
+Tue Aug 19 14:37:46 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimmulticontext.[ch] (struct _GtkIMMulticontext): 
+	Replace client_window field with 'priv' pointer,
+	retaining binary compatibility.
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_set_slave): 
+	save use_preedit/cursor_location/focus status and set
+	up the new slave appropriately. (#118651, Botond Botyanszki)
+
 Tue Aug 19 13:58:50 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkgeometry-x11.c (gdk_window_scroll): 
