@@ -367,9 +367,15 @@ gtk_settings_notify (GObject    *object,
   switch (property_id)
     {
     case PROP_DOUBLE_CLICK_TIME:
-      g_object_get (object, pspec->name, &double_click_time, NULL);
-      gdk_set_double_click_time (double_click_time);
-      break;
+      {
+	GdkDisplay *display;
+	
+	g_object_get (object, pspec->name, &double_click_time, NULL);
+	display = gdk_screen_get_display (settings->screen);
+	if (settings->screen == gdk_display_get_screen (display, 0))
+	  gdk_display_set_double_click_time (display, double_click_time);
+	break;
+      }
     }
 }
 

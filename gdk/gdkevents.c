@@ -987,8 +987,8 @@ gdk_synthesize_window_state (GdkWindow     *window,
  * Applications should NOT set this, it is a global user-configured setting.
  **/
 void
-gdk_set_double_click_time_for_display (GdkDisplay *display,
-				       guint       msec)
+gdk_display_set_double_click_time (GdkDisplay *display,
+				   guint       msec)
 {
   display->double_click_time = msec;
 }
@@ -1004,7 +1004,7 @@ gdk_set_double_click_time_for_display (GdkDisplay *display,
 void
 gdk_set_double_click_time (guint msec)
 {
-  gdk_set_double_click_time_for_display (gdk_get_default_display (), msec);
+  gdk_display_set_double_click_time (gdk_get_default_display (), msec);
 }
 
 GType
