@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-09-15 22:18+0900\n"
-"PO-Revision-Date: 2003-09-15 22:21+0900\n"
+"POT-Creation-Date: 2003-09-25 01:43+0900\n"
+"PO-Revision-Date: 2003-09-23 15:14+0900\n"
 "Last-Translator: KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -578,24 +578,20 @@ msgstr "TGA ヘッダのメモリを確保できません"
 msgid "TGA image has invalid dimensions"
 msgstr "TGA 画像の次元がおかしいです"
 
-#: gdk-pixbuf/io-tga.c:766
-msgid "TGA image comment length is too long"
-msgstr "TGA 画像のコメントが長すぎます"
-
-#: gdk-pixbuf/io-tga.c:772 gdk-pixbuf/io-tga.c:781 gdk-pixbuf/io-tga.c:791
-#: gdk-pixbuf/io-tga.c:801 gdk-pixbuf/io-tga.c:808
+#: gdk-pixbuf/io-tga.c:766 gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:785
+#: gdk-pixbuf/io-tga.c:795 gdk-pixbuf/io-tga.c:802
 msgid "TGA image type not supported"
 msgstr "TGA 画像はサポートしていません"
 
-#: gdk-pixbuf/io-tga.c:855
+#: gdk-pixbuf/io-tga.c:849
 msgid "Can't allocate memory for TGA context struct"
 msgstr "TGA コンテキスト構造体用のメモリを確保できません"
 
-#: gdk-pixbuf/io-tga.c:919
+#: gdk-pixbuf/io-tga.c:913
 msgid "Excess data in file"
 msgstr "ファイルのデータが多すぎます"
 
-#: gdk-pixbuf/io-tga.c:988
+#: gdk-pixbuf/io-tga.c:982
 msgid "The Targa image format"
 msgstr "Targa 画像形式"
 
@@ -1394,11 +1390,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "前景色の GdkColor 表現"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:585
 msgid "Editable"
 msgstr "編集可能"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:585
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:586
 msgid "Whether the text can be modified by the user"
 msgstr "ユーザがテキストを変更できるかどうか"
 
@@ -2094,15 +2090,15 @@ msgstr "フォーカス部の選択"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "エントリにフォーカスが当たった際にその内容を選択するかどうか"
 
-#: gtk/gtkentry.c:4059 gtk/gtktextview.c:6811
+#: gtk/gtkentry.c:4059 gtk/gtktextview.c:6873
 msgid "Select _All"
 msgstr "すべて選択(_A)"
 
-#: gtk/gtkentry.c:4069 gtk/gtktextview.c:6821
+#: gtk/gtkentry.c:4069 gtk/gtktextview.c:6883
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: gtk/gtkentry.c:4079 gtk/gtktextview.c:6832
+#: gtk/gtkentry.c:4079 gtk/gtktextview.c:6894
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
@@ -2726,7 +2722,7 @@ msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr ""
 "XML マークアップを含むラベルのテキスト (pango_parse_markup() 参照のこと)"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:601
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:602
 msgid "Justification"
 msgstr "中央揃え"
 
@@ -3421,17 +3417,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "ボタン押下が解放されたらどれくらい矢印が Y 方向に移動するか"
 
-#: gtk/gtkrc.c:2382
+#: gtk/gtkrc.c:2380
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "インクルードファイルが見つかりません: \"%s\""
 
-#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
+#: gtk/gtkrc.c:3023 gtk/gtkrc.c:3026
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path に画像ファイルが見つかりません: \"%s\""
 
-#: gtk/gtkrc.c:3463
+#: gtk/gtkrc.c:3461
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Pixmap パス: \"%s\" は絶対パスにして下さい (%s, %d 行)"
@@ -4255,7 +4251,7 @@ msgstr ""
 "す。これはテーマの変更などに正しく対応します。よって推奨になります。Pango で"
 "は PANGO_SCALE_X_LARGE などのようないくつかの大きさを予め定義されています。"
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:602
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:603
 msgid "Left, right, or center justification"
 msgstr "左、右、または中央揃え"
 
@@ -4277,7 +4273,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "左マージン"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:611
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:612
 msgid "Width of the left margin in pixels"
 msgstr "左マージンの幅 (ピクセル単位)"
 
@@ -4285,15 +4281,15 @@ msgstr "左マージンの幅 (ピクセル単位)"
 msgid "Right margin"
 msgstr "右マージン"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:622
 msgid "Width of the right margin in pixels"
 msgstr "右マージンの幅 (ピクセル単位)"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:631
 msgid "Indent"
 msgstr "インデント"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:632
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "段落のインデント量 (ピクセル単位)"
 
@@ -4309,7 +4305,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "ラインより上のピクセル数"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:555
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:556
 msgid "Pixels of blank space above paragraphs"
 msgstr "段落の上にある空白のピクセル数"
 
@@ -4317,7 +4313,7 @@ msgstr "段落の上にある空白のピクセル数"
 msgid "Pixels below lines"
 msgstr "ラインより下のピクセル数"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:565
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:566
 msgid "Pixels of blank space below paragraphs"
 msgstr "段落の下にある空白のピクセル数"
 
@@ -4325,7 +4321,7 @@ msgstr "段落の下にある空白のピクセル数"
 msgid "Pixels inside wrap"
 msgstr "ラップ内部のピクセル数"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:575
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:576
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "段落でラップした行間との間にある空白のピクセル数"
 
@@ -4333,16 +4329,16 @@ msgstr "段落でラップした行間との間にある空白のピクセル数
 msgid "Wrap mode"
 msgstr "ラップ・モード"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:594
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "単語単位で行ラップしない、または文字単位で行ラップしないかどうか"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:640
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:641
 msgid "Tabs"
 msgstr "タブ"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:641
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:642
 msgid "Custom tabs for this text"
 msgstr "このテキストのカスタム・タブ"
 
@@ -4502,53 +4498,61 @@ msgstr "ZWJ Zero Width Joiner(_J)"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Zero Width Non-Joiner(_N)"
 
-#: gtk/gtktextview.c:554
+#: gtk/gtktextview.c:555
 msgid "Pixels Above Lines"
 msgstr "ラインより上のピクセル数"
 
-#: gtk/gtktextview.c:564
+#: gtk/gtktextview.c:565
 msgid "Pixels Below Lines"
 msgstr "ラインより下のピクセル数"
 
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:575
 msgid "Pixels Inside Wrap"
 msgstr "ラップ内部のピクセル数"
 
-#: gtk/gtktextview.c:592
+#: gtk/gtktextview.c:593
 msgid "Wrap Mode"
 msgstr "ラップ・モード"
 
-#: gtk/gtktextview.c:610
+#: gtk/gtktextview.c:611
 msgid "Left Margin"
 msgstr "左マージン"
 
-#: gtk/gtktextview.c:620
+#: gtk/gtktextview.c:621
 msgid "Right Margin"
 msgstr "右マージン"
 
-#: gtk/gtktextview.c:648
+#: gtk/gtktextview.c:649
 msgid "Cursor Visible"
 msgstr "カーソルの表示"
 
-#: gtk/gtktextview.c:649
+#: gtk/gtktextview.c:650
 msgid "If the insertion cursor is shown"
 msgstr "挿入カーソルを表示するかどうか"
 
-#: gtk/gtktextview.c:656
+#: gtk/gtktextview.c:657
 msgid "Buffer"
 msgstr "バッファ"
 
-#: gtk/gtktextview.c:657
+#: gtk/gtktextview.c:658
 msgid "The buffer which is displayed"
 msgstr "表示されるバッファ"
 
-#: gtk/gtktextview.c:664
+#: gtk/gtktextview.c:665
 msgid "Overwrite mode"
 msgstr "上書きモード"
 
-#: gtk/gtktextview.c:665
+#: gtk/gtktextview.c:666
 msgid "Whether entered text overwrites existing contents"
 msgstr "入力されたテキストが既にある内容を上書きするかどうか"
+
+#: gtk/gtktextview.c:673
+msgid "Tab moves focus"
+msgstr "タブがフォーカスを移動させる"
+
+#: gtk/gtktextview.c:674
+msgid "Whether tab moves focus"
+msgstr "タブがフォーカスを移動させるかどうか"
 
 #: gtk/gtkthemes.c:69
 #, c-format
@@ -4557,7 +4561,7 @@ msgstr "module_path にテーマ・エンジンが見つかりません: \"%s\",
 
 #: gtk/gtktipsquery.c:184
 msgid "--- No Tip ---"
-msgstr "--- Tip 無し ---"
+msgstr "--- Tip なし ---"
 
 #: gtk/gtktogglebutton.c:133
 msgid "If the toggle button should be pressed in or not"
@@ -4687,7 +4691,7 @@ msgstr "ウィジェットの水平方向のアジャストメント"
 msgid "Vertical Adjustment for the widget"
 msgstr "ウィジェットの垂直方向のアジャストメント"
 
-#: gtk/gtktreeview.c:545 gtk/gtktreeviewcolumn.c:219 gtk/gtkwidget.c:434
+#: gtk/gtktreeview.c:545 gtk/gtktreeviewcolumn.c:219 gtk/gtkwidget.c:435
 msgid "Visible"
 msgstr "可視性"
 
@@ -4916,206 +4920,214 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 "ビューポートが表示された周辺に影付きの Box を配置するかどうかを決定する"
 
-#: gtk/gtkwidget.c:401
+#: gtk/gtkwidget.c:402
 msgid "Widget name"
 msgstr "ウィジェット名"
 
-#: gtk/gtkwidget.c:402
+#: gtk/gtkwidget.c:403
 msgid "The name of the widget"
 msgstr "ウィジェットの名前"
 
-#: gtk/gtkwidget.c:408
+#: gtk/gtkwidget.c:409
 msgid "Parent widget"
 msgstr "親ウィジェット"
 
-#: gtk/gtkwidget.c:409
+#: gtk/gtkwidget.c:410
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "このウィジェットの親ウィジェット (コンテナ・ウィジェットであること)"
 
-#: gtk/gtkwidget.c:416
+#: gtk/gtkwidget.c:417
 msgid "Width request"
 msgstr "要求する幅"
 
-#: gtk/gtkwidget.c:417
+#: gtk/gtkwidget.c:418
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr "ウィジェットの要求する幅に上書きするか、通常の要求を使用する場合は -1"
 
-#: gtk/gtkwidget.c:425
+#: gtk/gtkwidget.c:426
 msgid "Height request"
 msgstr "要求する高さ"
 
-#: gtk/gtkwidget.c:426
+#: gtk/gtkwidget.c:427
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr ""
 "ウィジェットの要求する高さに上書きするか、通常の要求を使用する場合は -1"
 
-#: gtk/gtkwidget.c:435
+#: gtk/gtkwidget.c:436
 msgid "Whether the widget is visible"
 msgstr "ウィジェットが表示可能かどうか"
 
-#: gtk/gtkwidget.c:441
+#: gtk/gtkwidget.c:442
 msgid "Sensitive"
 msgstr "感応可否"
 
-#: gtk/gtkwidget.c:442
+#: gtk/gtkwidget.c:443
 msgid "Whether the widget responds to input"
 msgstr "ウィジェットは入力に応答するかどうか"
 
-#: gtk/gtkwidget.c:448
+#: gtk/gtkwidget.c:449
 msgid "Application paintable"
 msgstr "アプリケーション表示可否"
 
-#: gtk/gtkwidget.c:449
+#: gtk/gtkwidget.c:450
 msgid "Whether the application will paint directly on the widget"
 msgstr "アプリケーションはウィジェット状で直接描画するかどうか"
 
-#: gtk/gtkwidget.c:455
+#: gtk/gtkwidget.c:456
 msgid "Can focus"
 msgstr "フォーカス可否"
 
-#: gtk/gtkwidget.c:456
+#: gtk/gtkwidget.c:457
 msgid "Whether the widget can accept the input focus"
 msgstr "ウィジェットは入力フォーカスを受け付けるかどうか"
 
-#: gtk/gtkwidget.c:462
+#: gtk/gtkwidget.c:463
 msgid "Has focus"
 msgstr "フォーカスあり"
 
-#: gtk/gtkwidget.c:463
+#: gtk/gtkwidget.c:464
 msgid "Whether the widget has the input focus"
 msgstr "ウィジェットは入力のフォーカスをもてるかどうか"
 
-#: gtk/gtkwidget.c:469
+#: gtk/gtkwidget.c:470
 msgid "Is focus"
 msgstr "フォーカス化あり"
 
-#: gtk/gtkwidget.c:470
+#: gtk/gtkwidget.c:471
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr ""
 "ウィジェットがトップレベルの内側でフォーカス・ウィジェットであるかどうか"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:477
 msgid "Can default"
 msgstr "デフォルト可否"
 
-#: gtk/gtkwidget.c:477
+#: gtk/gtkwidget.c:478
 msgid "Whether the widget can be the default widget"
 msgstr "ウィジェットがデフォルトのウィジェットになれるかどうか"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:484
 msgid "Has default"
 msgstr "デフォルトあり"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "Whether the widget is the default widget"
 msgstr "ウィジェットはデフォルトのウィジェットかどうか"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:491
 msgid "Receives default"
 msgstr "デフォルトの受信"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "TRUE にすると、ウィジェットにフォーカスが当たるとデフォルトの動作を受信する"
 
-#: gtk/gtkwidget.c:497
+#: gtk/gtkwidget.c:498
 msgid "Composite child"
 msgstr "コンポジットの子ウィジェット"
 
-#: gtk/gtkwidget.c:498
+#: gtk/gtkwidget.c:499
 msgid "Whether the widget is part of a composite widget"
 msgstr "ウィジェットがコンポジット・ウィジェットの一部であるかどうか"
 
-#: gtk/gtkwidget.c:504
+#: gtk/gtkwidget.c:505
 msgid "Style"
 msgstr "スタイル"
 
-#: gtk/gtkwidget.c:505
+#: gtk/gtkwidget.c:506
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "ウィジェットのスタイルで、どのように見えるかという情報 (色など) を含む"
 
-#: gtk/gtkwidget.c:511
+#: gtk/gtkwidget.c:512
 msgid "Events"
 msgstr "イベント"
 
-#: gtk/gtkwidget.c:512
+#: gtk/gtkwidget.c:513
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "このウィジェットがどの種類の GdkEvent を受信するかを決定するイベント・マスク"
 
-#: gtk/gtkwidget.c:519
+#: gtk/gtkwidget.c:520
 msgid "Extension events"
 msgstr "拡張イベント"
 
-#: gtk/gtkwidget.c:520
+#: gtk/gtkwidget.c:521
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "このウィジェットがどの種類の拡張イベントを受信するかを決定するマスク"
 
-#: gtk/gtkwidget.c:1330
+#: gtk/gtkwidget.c:528
+msgid "No show all"
+msgstr "何も表示しない"
+
+#: gtk/gtkwidget.c:529
+msgid "Whether gtk_widget_show_all() should not affect this widget"
+msgstr "gtk_widget_show_all() がこのウィジェットに影響すべきでないかどうか"
+
+#: gtk/gtkwidget.c:1338
 msgid "Interior Focus"
 msgstr "インテリア・フォーカス"
 
-#: gtk/gtkwidget.c:1331
+#: gtk/gtkwidget.c:1339
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr ""
 "フォーカスが当たったことを示す矩形の内側のウィジェットを描画するかどうか"
 
-#: gtk/gtkwidget.c:1337
+#: gtk/gtkwidget.c:1345
 msgid "Focus linewidth"
 msgstr "フォーカス線の幅"
 
-#: gtk/gtkwidget.c:1338
+#: gtk/gtkwidget.c:1346
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "フォーカスが当たったことを示す表示線の幅 (ピクセル単位)"
 
-#: gtk/gtkwidget.c:1344
+#: gtk/gtkwidget.c:1352
 msgid "Focus line dash pattern"
 msgstr "フォーカス線のダッシュ・パターン"
 
-#: gtk/gtkwidget.c:1345
+#: gtk/gtkwidget.c:1353
 msgid "Dash pattern used to draw the focus indicator"
 msgstr ""
 "フォーカスが当たったことを示す矩形の描画に使用するダッシュ (-) のパターン"
 
-#: gtk/gtkwidget.c:1350
+#: gtk/gtkwidget.c:1358
 msgid "Focus padding"
 msgstr "フォーカスのパディング"
 
-#: gtk/gtkwidget.c:1351
+#: gtk/gtkwidget.c:1359
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "フォーカスが当たった表示部と 'box' ウィジェット間の幅 (ピクセル単位)"
 
-#: gtk/gtkwidget.c:1356
+#: gtk/gtkwidget.c:1364
 msgid "Cursor color"
 msgstr "カーソルの色"
 
-#: gtk/gtkwidget.c:1357
+#: gtk/gtkwidget.c:1365
 msgid "Color with which to draw insertion cursor"
 msgstr "挿入カーソルを描画する色"
 
-#: gtk/gtkwidget.c:1362
+#: gtk/gtkwidget.c:1370
 msgid "Secondary cursor color"
 msgstr "セカンダリのカーソルの色"
 
-#: gtk/gtkwidget.c:1363
+#: gtk/gtkwidget.c:1371
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr ""
 "右→左と左→右のテキストが混在している時のセカンダリ挿入カーソルを描画する色"
 
-#: gtk/gtkwidget.c:1368
+#: gtk/gtkwidget.c:1376
 msgid "Cursor line aspect ratio"
 msgstr "カーソル行のアスペクト比"
 
-#: gtk/gtkwidget.c:1369
+#: gtk/gtkwidget.c:1377
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "挿入カーソルを描画するアスペクト比"
 
@@ -5347,6 +5359,9 @@ msgstr "ベトナム語 (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X 入力メソッド"
+
+#~ msgid "TGA image comment length is too long"
+#~ msgstr "TGA 画像のコメントが長すぎます"
 
 #~ msgid "GIF image contained a frame appearing outside the image bounds."
 #~ msgstr "GIF 画像に画像からはみ出るフレームがあります"
