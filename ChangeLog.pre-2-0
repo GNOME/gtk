@@ -1,3 +1,15 @@
+Thu Mar  7 16:46:58 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (validate_visible_area): get rid of really
+	bad focus loop.
+	(gtk_tree_view_clamp_node_visible): only clamp the node when
+	realized.  Need to replace this with scroll_to_cell sometime.
+	(gtk_tree_view_header_focus): clickable or reorderable columns are
+	focusable, #73656
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_get_widget): fix
+	docs to reflect behaviour change, #73682
+
 Fri Mar  8 11:12:32 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* NEWS: Fix version numbers. (Johan Dahlin.)

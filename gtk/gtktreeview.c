@@ -106,7 +106,6 @@ enum
   EXPAND_COLLAPSE_CURSOR_ROW,
   SELECT_CURSOR_PARENT,
   START_INTERACTIVE_SEARCH,
-  FOCUS_COLUMN_HEADER,
   LAST_SIGNAL
 };
 
@@ -400,7 +399,6 @@ static void gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
 static void gtk_tree_view_stop_editing                  (GtkTreeView *tree_view,
 							 gboolean     cancel_editing);
 static void gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view);
-static void gtk_tree_view_real_focus_column_header      (GtkTreeView *tree_view);
 static GtkTreeViewColumn *gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 							 GtkTreeViewColumn *column,
 							 gint               drop_position);
@@ -504,7 +502,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   class->expand_collapse_cursor_row = gtk_tree_view_real_expand_collapse_cursor_row;
   class->select_cursor_parent = gtk_tree_view_real_select_cursor_parent;
   class->start_interactive_search = gtk_tree_view_real_start_interactive_search;
-  class->focus_column_header = gtk_tree_view_real_focus_column_header;
 
   /* Properties */
 
@@ -790,15 +787,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   _gtk_marshal_NONE__NONE,
                   GTK_TYPE_NONE, 0);
 
-  tree_view_signals[FOCUS_COLUMN_HEADER] =
-    g_signal_new ("focus_column_header",
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
-		  G_STRUCT_OFFSET (GtkTreeViewClass, focus_column_header),
-		  NULL, NULL,
-		  _gtk_marshal_NONE__NONE,
-		  GTK_TYPE_NONE, 0);
-
   /* Key bindings */
   gtk_tree_view_add_move_binding (binding_set, GDK_Up, 0,
 				  GTK_MOVEMENT_DISPLAY_LINES, -1);
@@ -915,10 +903,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_f, GDK_CONTROL_MASK, "start_interactive_search", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_F, GDK_CONTROL_MASK, "start_interactive_search", 0);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_Tab, GDK_SHIFT_MASK, "focus_column_header", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, GDK_SHIFT_MASK, "focus_column_header", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, GDK_SHIFT_MASK, "focus_column_header", 0);
 }
 
 static void
@@ -3833,7 +3817,7 @@ validate_visible_area (GtkTreeView *tree_view)
   _gtk_tree_view_find_node (tree_view, above_path, &tree, &node);
 
   /* We walk backwards */
-  do
+  while (area_above > 0)
     {
       _gtk_rbtree_prev_full (tree, node, &tree, &node);
       if (! gtk_tree_path_prev (above_path) && node != NULL)
@@ -3856,20 +3840,20 @@ validate_visible_area (GtkTreeView *tree_view)
       area_above -= MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
       modify_dy = TRUE;
     }
-  while (area_above > 0);
 
   /* if we walk backwards at all, then we need to reset our dy. */
   if (modify_dy)
     {
+      gint dy;
       if (node != NULL)
 	{
-	  tree_view->priv->dy = _gtk_rbtree_node_find_offset (tree, node) - area_above;
+	  dy = _gtk_rbtree_node_find_offset (tree, node) - area_above;
 	}
       else
 	{
-	  tree_view->priv->dy = 0;
+	  dy = 0;
 	}
-      gtk_adjustment_set_value (tree_view->priv->vadjustment, tree_view->priv->dy);
+      gtk_adjustment_set_value (tree_view->priv->vadjustment, dy);
       need_redraw = TRUE;
     }
 
@@ -5101,32 +5085,33 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
   focus_child = GTK_CONTAINER (tree_view)->focus_child;
   container = GTK_CONTAINER (tree_view);
 
-  last_column = g_list_last (tree_view->priv->columns);
-  while (last_column)
-    {
-      if (GTK_WIDGET_CAN_FOCUS (GTK_TREE_VIEW_COLUMN (last_column->data)->button) &&
-	  GTK_TREE_VIEW_COLUMN (last_column->data)->clickable &&
-	  GTK_TREE_VIEW_COLUMN (last_column->data)->reorderable &&
-	  GTK_TREE_VIEW_COLUMN (last_column->data)->visible)
-	break;
-      last_column = last_column->prev;
-    }
-
-  /* No headers are visible, or are focusable.  We can't focus in or out.
-   */
-  if (last_column == NULL)
-    return FALSE;
-
   first_column = tree_view->priv->columns;
   while (first_column)
     {
       if (GTK_WIDGET_CAN_FOCUS (GTK_TREE_VIEW_COLUMN (first_column->data)->button) &&
-	  GTK_TREE_VIEW_COLUMN (first_column->data)->clickable &&
-	  GTK_TREE_VIEW_COLUMN (last_column->data)->reorderable &&
-	  GTK_TREE_VIEW_COLUMN (first_column->data)->visible)
+	  GTK_TREE_VIEW_COLUMN (first_column->data)->visible &&
+	  (GTK_TREE_VIEW_COLUMN (first_column->data)->clickable ||
+	   GTK_TREE_VIEW_COLUMN (first_column->data)->reorderable))
 	break;
       first_column = first_column->next;
     }
+
+  /* No headers are visible, or are focusable.  We can't focus in or out.
+   */
+  if (first_column == NULL)
+    return FALSE;
+
+  last_column = g_list_last (tree_view->priv->columns);
+  while (last_column)
+    {
+      if (GTK_WIDGET_CAN_FOCUS (GTK_TREE_VIEW_COLUMN (last_column->data)->button) &&
+	  GTK_TREE_VIEW_COLUMN (last_column->data)->visible &&
+	  (GTK_TREE_VIEW_COLUMN (last_column->data)->clickable ||
+	   GTK_TREE_VIEW_COLUMN (last_column->data)->reorderable))
+	break;
+      last_column = last_column->prev;
+    }
+
 
   switch (dir)
     {
@@ -6172,8 +6157,10 @@ gtk_tree_view_clamp_node_visible (GtkTreeView *tree_view,
 
   /* We process updates because we want to clear old selected items when we scroll.
    * if this is removed, we get a "selection streak" at the bottom. */
-  if (GTK_WIDGET_REALIZED (tree_view))
-    gdk_window_process_updates (tree_view->priv->bin_window, TRUE);
+  if (!GTK_WIDGET_REALIZED (tree_view))
+    return;
+
+  gdk_window_process_updates (tree_view->priv->bin_window, TRUE);
   cell_rect.y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, BACKGROUND_FIRST_PIXEL (tree_view, tree, node));
   cell_rect.height = BACKGROUND_HEIGHT (node);
   gtk_tree_view_get_visible_rect (tree_view, &vis_rect);
@@ -7249,15 +7236,6 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
 
   /* search first matching iter */
   gtk_tree_view_search_init (entry, tree_view);
-}
-
-static void
-gtk_tree_view_real_focus_column_header (GtkTreeView *tree_view)
-{
-  if (!tree_view->priv->focus_column)
-    return;
-
-  gtk_widget_grab_focus (tree_view->priv->focus_column->button);
 }
 
 /* this function returns the new width of the column being resized given

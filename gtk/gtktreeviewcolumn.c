@@ -1878,11 +1878,10 @@ gtk_tree_view_column_set_widget (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_get_widget:
  * @tree_column: A #GtkTreeViewColumn.
  * 
- * Returns the #GtkWidget in the button in the column header.  If a custom
- * widget has not been set, then this will be a #GtkAlignment with a #GtkLabel
- * in it.
+ * Returns the #GtkWidget in the button on the column header.  If a custom
+ * widget has not been set then %NULL is returned.
  * 
- * Return value: The #GtkWidget in the column header.
+ * Return value: The #GtkWidget in the column header, or %NULL
  **/
 GtkWidget *
 gtk_tree_view_column_get_widget (GtkTreeViewColumn *tree_column)
