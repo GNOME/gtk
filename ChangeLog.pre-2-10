@@ -1,5 +1,11 @@
 2000-11-01  Havoc Pennington  <hp@redhat.com>
 
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_to_drawable_alpha):
+	Clip the rectangle to be rendered to the drawable, since
+	get_from_drawable() requires a region within the drawable	
+
+2000-11-01  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkimage.c (gtk_image_expose): Um, don't randomly subtract 4
 	from coordinates.
 

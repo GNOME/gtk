@@ -266,6 +266,8 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
   GdkBitmap *bitmap = NULL;
   GdkGC *gc;
   GdkPixbuf *composited = NULL;
+  gint dwidth, dheight;
+
   
   g_return_if_fail (pixbuf != NULL);
   g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
@@ -277,9 +279,37 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
   g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
   g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
 
-  if (width == 0 || height == 0)
+  /* Clip to the drawable; this is required for get_from_drawable() so
+   * can't be done implicitly
+   */
+  
+  if (dest_x < 0)
+    {
+      src_x -= dest_x;
+      width += dest_x;
+      dest_x = 0;
+    }
+
+  if (dest_y < 0)
+    {
+      src_y -= dest_y;
+      height += dest_y;
+      dest_y = 0;
+    }
+
+  gdk_drawable_get_size (drawable, &dwidth, &dheight);
+
+  if ((dest_x + width) > dwidth)
+    width = dwidth - dest_x;
+
+  if ((dest_y + height) > dheight)
+    height = dheight - dest_y;
+
+  if (width <= 0 || height <= 0)
     return;
 
+  /* Actually draw */
+  
   gc = gdk_gc_new (drawable);
 
   if (pixbuf->has_alpha)
