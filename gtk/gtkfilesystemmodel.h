@@ -44,7 +44,8 @@ typedef enum {
 GtkFileSystemModel *_gtk_file_system_model_new              (GtkFileSystem      *file_system,
 							     const GtkFilePath  *root_path,
 							     gint                max_depth,
-							     GtkFileInfoType     types);
+							     GtkFileInfoType     types,
+							     GError            **error);
 const GtkFileInfo * _gtk_file_system_model_get_info         (GtkFileSystemModel *model,
 							     GtkTreeIter        *iter);
 const GtkFilePath * _gtk_file_system_model_get_path          (GtkFileSystemModel *model,
