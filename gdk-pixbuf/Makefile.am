@@ -49,7 +49,7 @@ testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) \
 
 testpixbuf_drawable_LDADD = $(LDADDS)
 
-GDK_PIXBUF_LIBS = -lgdk_pixbuf $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
+GDK_PIXBUF_LIBS = $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
 
 #
 # The GdkPixBuf library
@@ -81,53 +81,53 @@ noinst_HEADERS = \
 #
 libpixbuf_png_la_SOURCES = io-png.c
 libpixbuf_png_la_LDFLAGS = -avoid-version -module
-libpixbuf_png_la_LIBADD = $(LIBPNG) $(GDK_PIXBUF_LIBS)
+libpixbuf_png_la_LIBADD = $(LIBPNG)
 
 #
 # The JPEG loader
 #
 libpixbuf_jpeg_la_SOURCES = io-jpeg.c
 libpixbuf_jpeg_la_LDFLAGS = -avoid-version -module
-libpixbuf_jpeg_la_LIBADD = $(LIBJPEG) $(GDK_PIXBUF_LIBS)
+libpixbuf_jpeg_la_LIBADD = $(LIBJPEG)
 
 #
 # The XPM loader
 #
 libpixbuf_xpm_la_SOURCES = io-xpm.c
 libpixbuf_xpm_la_LDFLAGS = -avoid-version -module
-libpixbuf_xpm_la_LIBADD = $(GDK_PIXBUF_LIBS)
+libpixbuf_xpm_la_LIBADD =
 
 #
 # The GIF loader
 #
 libpixbuf_gif_la_SOURCES = io-gif.c
 libpixbuf_gif_la_LDFLAGS = -avoid-version -module
-libpixbuf_gif_la_LIBADD = $(GDK_PIXBUF_LIBS)
+libpixbuf_gif_la_LIBADD =
 
 #
 # The RAS loader
 #
 libpixbuf_ras_la_SOURCES = io-ras.c
 libpixbuf_ras_la_LDFLAGS = -avoid-version -module
-libpixbuf_ras_la_LIBADD = $(GDK_PIXBUF_LIBS)
+libpixbuf_ras_la_LIBADD =
 
 #
 # The TIFF loader
 #
 libpixbuf_tiff_la_SOURCES = io-tiff.c
 libpixbuf_tiff_la_LDFLAGS = -avoid-version -module
-libpixbuf_tiff_la_LIBADD = $(LIBTIFF) $(GDK_PIXBUF_LIBS)
+libpixbuf_tiff_la_LIBADD =
 
 #
 # The PNM loader
 #
 libpixbuf_pnm_la_SOURCES = io-pnm.c
 libpixbuf_pnm_la_LDFLAGS = -avoid-version -module
-libpixbuf_pnm_la_LIBADD = $(GDK_PIXBUF_LIBS)
+libpixbuf_pnm_la_LIBADD =
 
 #
 # The BMP loader
 #
 libpixbuf_bmp_la_SOURCES = io-bmp.c
 libpixbuf_bmp_la_LDFLAGS = -avoid-version -module
-libpixbuf_bmp_la_LIBADD = $(GDK_PIXBUF_LIBS)
+libpixbuf_bmp_la_LIBADD =

@@ -1,3 +1,8 @@
+1999-11-23  Jonathan Blandford  <jrb@redhat.com>
+
+	* Removed #PRAGMA } from headers.  Also, make compile if you don't
+	have it installed, already.
+
 1999-11-22  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* configure.in (GDK_PIXBUF_DIR): Fix for srcdir != builddir.
