@@ -1,3 +1,19 @@
+Overview of Changes in GTK+ 1.3.5
+=================================
+
+* New default theme based on Raleigh theme for 1.2.x.
+* Dependency on the ATK library added as a step to
+  providing accessibility-enabling interfaces
+* XEMBED-based GtkPlug/GtkSocket now basically works.
+* Drag and drop of column headers in GtkTreeView
+* GtkColorSelector work: hooks for saving and propagating palette, UI tweaks,
+  and API sanitization
+* Key binding fixes
+* Configurable padding/spacing in a lot of places
+* Invisible text in GtkTextView fixed
+* SHM segments now created with a mode of 0600
+* Bug fixes
+
 Overview of Changes in GTK+ 1.3.4
 =================================
 

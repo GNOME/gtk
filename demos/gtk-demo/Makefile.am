@@ -44,8 +44,9 @@ bin_PROGRAMS = gtk-demo
 
 BUILT_SOURCES = demos.h
 
-EXTRA_DIST = \
-	geninclude.pl
+EXTRA_DIST = 		\
+	geninclude.pl	\
+	$(IMAGEFILES)
 
 demos.h: $(demos) geninclude.pl
 	(cd $(srcdir) && ./geninclude.pl $(demos) > demos.h)
@@ -70,5 +71,3 @@ IMAGEFILES=	apple-red.png		\
 		gtk-logo-rgb.gif
 
 democode_DATA = $(demos) $(IMAGEFILES)
-
-EXTRA_DIST = $(IMAGEFILES)

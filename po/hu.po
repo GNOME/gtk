@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 2001-04-17 19:08-0400\n"
+"POT-Creation-Date: 2001-05-03 09:56-0400\n"
 "PO-Revision-Date: 2000-11-07 06:28+0100\n"
 "Last-Translator: Szabolcs BAN <shooby@gnome.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -686,54 +686,127 @@ msgstr ""
 msgid "Draw the toggle button as a radio button"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1414
+#: gtk/gtkcolorsel.c:552
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:557
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:862
+msgid "_Save color here"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1029
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1643
+#, fuzzy
+msgid "Custom palette"
+msgstr "Egyéni paletta"
+
+#: gtk/gtkcolorsel.c:1644
+msgid "Palette to use in the color selector"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1693
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1721
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1730
 #, fuzzy
 msgid "_Hue:"
 msgstr "Szín:"
 
-#: gtk/gtkcolorsel.c:1415
+#: gtk/gtkcolorsel.c:1731
+msgid "Position on the color wheel."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1732
 #, fuzzy
 msgid "_Saturation:"
 msgstr "Színesség:"
 
-#: gtk/gtkcolorsel.c:1416
+#: gtk/gtkcolorsel.c:1733
+msgid "\"Deepness\" of the color."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1734
 #, fuzzy
 msgid "_Value:"
 msgstr "Érték:"
 
-#: gtk/gtkcolorsel.c:1417
+#: gtk/gtkcolorsel.c:1735
+msgid "Brightness of the color."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1736
 #, fuzzy
 msgid "_Red:"
 msgstr "Vörös:"
 
-#: gtk/gtkcolorsel.c:1418
+#: gtk/gtkcolorsel.c:1737
+msgid "Amount of red light in the color."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1738
 #, fuzzy
 msgid "_Green:"
 msgstr "Zöld:"
 
-#: gtk/gtkcolorsel.c:1419
+#: gtk/gtkcolorsel.c:1739
+msgid "Amount of green light in the color."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1740
 #, fuzzy
 msgid "_Blue:"
 msgstr "Kék:"
 
-#: gtk/gtkcolorsel.c:1422
+#: gtk/gtkcolorsel.c:1741
+msgid "Amount of blue light in the color."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1744
 #, fuzzy
 msgid "_Opacity:"
 msgstr "Átlátszóság:"
 
-#: gtk/gtkcolorsel.c:1443
-#, fuzzy
-msgid "He_x Value:"
-msgstr "Hexa érték:"
+#: gtk/gtkcolorsel.c:1752
+msgid "Transparency of the currently-selected color."
+msgstr ""
 
-#: gtk/gtkcolorsel.c:1469
-msgid "Custom Palette"
+#: gtk/gtkcolorsel.c:1767
+msgid "Color _Name:"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1779
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1798
+#, fuzzy
+msgid "_Palette"
 msgstr "Egyéni paletta"
-
-#: gtk/gtkcolorsel.c:1475
-#, fuzzy
-msgid "Set _Color"
-msgstr "Szín beállítása"
 
 #: gtk/gtkentry.c:372
 msgid "Text Position"
@@ -799,19 +872,19 @@ msgstr ""
 msgid "Color with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkentry.c:3270 gtk/gtktextview.c:4986
+#: gtk/gtkentry.c:3259 gtk/gtktextview.c:5013
 msgid "Cut"
 msgstr ""
 
-#: gtk/gtkentry.c:3272 gtk/gtktextview.c:4988
+#: gtk/gtkentry.c:3261 gtk/gtktextview.c:5015
 msgid "Copy"
 msgstr ""
 
-#: gtk/gtkentry.c:3274 gtk/gtktextview.c:4990
+#: gtk/gtkentry.c:3263 gtk/gtktextview.c:5018
 msgid "Paste"
 msgstr ""
 
-#: gtk/gtkentry.c:3281 gtk/gtktextview.c:4997
+#: gtk/gtkentry.c:3270 gtk/gtktextview.c:5025
 msgid "Input Methods"
 msgstr ""
 
@@ -833,168 +906,168 @@ msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
 
 #. The directories clist
-#: gtk/gtkfilesel.c:625
+#: gtk/gtkfilesel.c:631
 msgid "Directories"
 msgstr "Könyvtárak"
 
 #. The files clist
-#: gtk/gtkfilesel.c:645
+#: gtk/gtkfilesel.c:651
 msgid "Files"
 msgstr "Fájlok"
 
-#: gtk/gtkfilesel.c:713 gtk/gtkfilesel.c:1826
+#: gtk/gtkfilesel.c:719 gtk/gtkfilesel.c:1830
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Olvashatatlan könyvtár: %s"
 
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:752
 msgid "Create Dir"
 msgstr "Könyvtár létrehozása"
 
-#: gtk/gtkfilesel.c:757 gtk/gtkfilesel.c:1180
+#: gtk/gtkfilesel.c:763 gtk/gtkfilesel.c:1186
 msgid "Delete File"
 msgstr "Fájl törlése"
 
-#: gtk/gtkfilesel.c:768 gtk/gtkfilesel.c:1324
+#: gtk/gtkfilesel.c:774 gtk/gtkfilesel.c:1330
 msgid "Rename File"
 msgstr "Fájl átnevezése"
 
-#: gtk/gtkfilesel.c:1001
+#: gtk/gtkfilesel.c:1007
 #, c-format
 msgid ""
 "The directory name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1003
+#: gtk/gtkfilesel.c:1009
 #, c-format
 msgid ""
 "Error creating directory \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1004 gtk/gtkfilesel.c:1258
+#: gtk/gtkfilesel.c:1010 gtk/gtkfilesel.c:1264
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1012
+#: gtk/gtkfilesel.c:1018
 #, c-format
 msgid "Error creating directory \"%s\": %s\n"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1047
+#: gtk/gtkfilesel.c:1053
 msgid "Create Directory"
 msgstr "Könyvtár létrehozása"
 
-#: gtk/gtkfilesel.c:1061
+#: gtk/gtkfilesel.c:1067
 #, fuzzy
 msgid "_Directory name:"
 msgstr "Könyvtár neve:"
 
 #. buttons
-#: gtk/gtkfilesel.c:1075
+#: gtk/gtkfilesel.c:1081
 msgid "Create"
 msgstr "Létrehozás"
 
-#: gtk/gtkfilesel.c:1084 gtk/gtkfilesel.c:1211 gtk/gtkfilesel.c:1366
+#: gtk/gtkfilesel.c:1090 gtk/gtkfilesel.c:1217 gtk/gtkfilesel.c:1372
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Mégsem"
 
-#: gtk/gtkfilesel.c:1120
+#: gtk/gtkfilesel.c:1126
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1123
+#: gtk/gtkfilesel.c:1129
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1125 gtk/gtkfilesel.c:1272
+#: gtk/gtkfilesel.c:1131 gtk/gtkfilesel.c:1278
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1134
+#: gtk/gtkfilesel.c:1140
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr ""
 
 #. buttons
-#: gtk/gtkfilesel.c:1202
+#: gtk/gtkfilesel.c:1208
 msgid "Delete"
 msgstr "Törlés"
 
-#: gtk/gtkfilesel.c:1254 gtk/gtkfilesel.c:1268
+#: gtk/gtkfilesel.c:1260 gtk/gtkfilesel.c:1274
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1256
+#: gtk/gtkfilesel.c:1262
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1270
+#: gtk/gtkfilesel.c:1276
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1280
+#: gtk/gtkfilesel.c:1286
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr ""
 
 #. buttons
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilesel.c:1363
 msgid "Rename"
 msgstr "Átnevezés"
 
-#: gtk/gtkfilesel.c:1805
+#: gtk/gtkfilesel.c:1809
 msgid "Selection: "
 msgstr "Kiválasztott: "
 
-#: gtk/gtkfilesel.c:2417
+#: gtk/gtkfilesel.c:2421
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
 "variable G_BROKEN_FILENAMES."
 msgstr ""
 
-#: gtk/gtkfilesel.c:3285
+#: gtk/gtkfilesel.c:3289
 msgid "Name too long"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3287
+#: gtk/gtkfilesel.c:3291
 msgid "Couldn't convert filename"
 msgstr ""
 
-#: gtk/gtkfontsel.c:213
+#: gtk/gtkfontsel.c:205
 #, fuzzy
 msgid "_Family:"
 msgstr "Család:"
 
-#: gtk/gtkfontsel.c:220
+#: gtk/gtkfontsel.c:212
 #, fuzzy
 msgid "_Style:"
 msgstr "Stílus:"
 
-#: gtk/gtkfontsel.c:227
+#: gtk/gtkfontsel.c:219
 #, fuzzy
 msgid "Si_ze:"
 msgstr "Méret:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:317
+#: gtk/gtkfontsel.c:300
 msgid "Preview:"
 msgstr "Nézet:"
 
-#: gtk/gtkfontsel.c:979
+#: gtk/gtkfontsel.c:902
 msgid "Font Selection"
 msgstr "Betűkészlet választó"
 
@@ -1118,21 +1191,21 @@ msgstr "törlés"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:476
+#: gtk/gtkmain.c:472
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtknotebook.c:2020 gtk/gtknotebook.c:4374
+#: gtk/gtknotebook.c:2078 gtk/gtknotebook.c:4432
 #, c-format
 msgid "Page %u"
 msgstr "%u. lap"
 
-#: gtk/gtkrc.c:2367
+#: gtk/gtkrc.c:2363
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Nem találom a képet a pixmap_path (%s) útvonalon (%d. sor)"
 
-#: gtk/gtkrc.c:2370
+#: gtk/gtkrc.c:2366
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nem találom a pixmap_path (%s) útvonalon a képet"
@@ -1576,3 +1649,11 @@ msgstr ""
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr ""
+
+#, fuzzy
+#~ msgid "He_x Value:"
+#~ msgstr "Hexa érték:"
+
+#, fuzzy
+#~ msgid "Set _Color"
+#~ msgstr "Szín beállítása"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.2\n"
-"POT-Creation-Date: 2001-05-05 12:21+0200\n"
+"POT-Creation-Date: 2001-05-03 09:56-0400\n"
 "PO-Revision-Date: 2001-04-28 14:02GMT +0200\n"
 "Last-Translator: Vasif İsmayıloğlu MD <azerb_linux@hotmail.com>\n"
 "Language-Team: Azerbaijani Turkish <linuxaz@azerimail.net>\n"
