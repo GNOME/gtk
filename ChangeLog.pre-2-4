@@ -1,3 +1,11 @@
+Sun Nov  3 21:26:20 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Bah, and of course I broke something ...
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach): fix
+	up the mess I caused with my commit of Oct 23 fixing #50263, things
+	should be fine now.
+
 Sun Nov  3 13:03:29 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c configure.in: Remove check for
