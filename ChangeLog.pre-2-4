@@ -1,3 +1,15 @@
+Wed Feb 25 03:52:58 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkpathbar.c: use gtk_widget_push/pop_composite_child around
+	internal buttons.
+
+	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault):
+	rename some widgets to make it clear where they are packed.
+	(update_appearance): New function to handle all the 'logic' of
+	layout in one place.  We aren't trying to keep all our properties
+	in sync.
+	(gtk_file_chooser_default_set_property): use update_appearance()
+
 2004-02-24  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_model_create): Renamed

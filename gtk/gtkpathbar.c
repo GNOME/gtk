@@ -60,11 +60,15 @@ static GtkWidget *
 get_slider_button (GtkPathBar *path_bar)
 {
   GtkWidget *button;
-  
+
+  gtk_widget_push_composite_child ();
+
   button = gtk_button_new ();
   gtk_container_add (GTK_CONTAINER (button), gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_OUT));
   gtk_container_add (GTK_CONTAINER (path_bar), button);
   gtk_widget_show_all (button);
+
+  gtk_widget_pop_composite_child ();
 
   return button;
 }
@@ -641,6 +645,8 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
   gtk_path_bar_clear_buttons (path_bar);
   path = gtk_file_path_copy (file_path);
 
+  gtk_widget_push_composite_child ();
+
   while (path != NULL)
     {
       GtkFilePath *parent_path = NULL;
@@ -685,6 +691,8 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
       path = parent_path;
       first_directory = FALSE;
     }
+
+  gtk_widget_pop_composite_child ();
 
   path_bar->button_list = g_list_reverse (path_bar->button_list);
 }
