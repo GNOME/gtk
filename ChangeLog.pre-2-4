@@ -1,3 +1,8 @@
+Wed May 16 14:06:01 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_path_new_from_string): fix bug
+	#54699 where paths weren't being checked for correctness.
+
 Tue May 15 20:13:24 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c: You can now set all sorts of properties

@@ -145,22 +145,24 @@ gtk_tree_path_new (void)
  * gtk_tree_path_new_from_string:
  * @path: The string representation of a path.
  *
- * Creates a new #GtkTreePath initialized to @path.  @path is expected
- * to be a colon separated list of numbers.  For example, the string
- * "10:4:0" would create a path of depth 3 pointing to the 11th child
- * of the root node, the 5th child of that 11th child, and the 1st
- * child of that 5th child.
+ * Creates a new #GtkTreePath initialized to @path.  @path is expected to be a
+ * colon separated list of numbers.  For example, the string "10:4:0" would
+ * create a path of depth 3 pointing to the 11th child of the root node, the 5th
+ * child of that 11th child, and the 1st child of that 5th child.  If an invalid
+ * path is past in, NULL is returned.
  *
- * Return value: A newly created #GtkTreePath.
+ * Return value: A newly created #GtkTreePath, or NULL
  **/
 GtkTreePath *
 gtk_tree_path_new_from_string (gchar *path)
 {
   GtkTreePath *retval;
+  gchar *orig_path = path;
   gchar *ptr;
   gint i;
 
-  g_return_val_if_fail (path != NULL, gtk_tree_path_new ());
+  g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (*path != '\000', NULL);
 
   retval = gtk_tree_path_new ();
 
@@ -169,9 +171,20 @@ gtk_tree_path_new_from_string (gchar *path)
       i = strtol (path, &ptr, 10);
       gtk_tree_path_append_index (retval, i);
 
+      if (i < 0)
+	{
+	  g_warning (G_STRLOC"Negative numbers in path %s passed to gtk_tree_path_new_from_string", orig_path);
+	  gtk_tree_path_free (retval);
+	  return NULL;
+	}
       if (*ptr == '\000')
 	break;
-      /* FIXME: should we error out if this is not a ':', or should we be tolerant? */
+      if (ptr == path || *ptr != ':')
+	{
+	  g_warning (G_STRLOC"Invalid path %s passed to gtk_tree_path_new_from_string", orig_path);
+	  gtk_tree_path_free (retval);
+	  return NULL;
+	}
       path = ptr + 1;
     }
 
@@ -192,6 +205,8 @@ gtk_tree_path_to_string (GtkTreePath *path)
 {
   gchar *retval, *ptr;
   gint i;
+
+  g_return_val_if_fail (path != NULL, NULL);
 
   if (path->depth == 0)
     return NULL;
