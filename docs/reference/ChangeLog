@@ -1,5 +1,8 @@
 2004-04-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/migrating-GtkAction.sgml: Fix an example.  
+	(#138966, Tim-Philipp Müller)
+
 	* gdk/tmpl/properties.sgml: Document the only_if_exists argument
 	to gdk_atom_intern() as ignored.
 

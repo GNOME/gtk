@@ -382,7 +382,7 @@ if (!gtk_ui_manager_add_ui_from_string (ui_manager, ui_description, -1, &amp;err
     exit (EXIT_FAILURE);
   }
 
-menubar = gtk_ui_manager_get_widget ("/MainMenu");
+menubar = gtk_ui_manager_get_widget (ui_manager, "/MainMenu");
 gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, FALSE, 0);
 
 gtk_widget_show_all (window);
