@@ -1,3 +1,8 @@
+2000-10-28  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/makefile.{mingw,msc}.in: Adjust to Tim's changes. Use
+	glib-genmarshal etc.
+
 Fri Oct 27 20:15:00 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/Makefile.am: added dependancies for testtextbuffer which broke
