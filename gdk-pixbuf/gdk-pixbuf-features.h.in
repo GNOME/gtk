@@ -27,6 +27,8 @@
 #  else /* !G_PLATFORM_WIN32 */
 #    ifndef GDK_PIXBUF_COMPILATION
 #      define GDK_PIXBUF_VAR extern
+#    else
+#      define GDK_PIXBUF_VAR
 #    endif /* !GDK_PIXBUF_COMPILATION */
 #  endif /* !G_PLATFORM_WIN32 */
 #endif /* GDK_PIXBUF_VAR */
