@@ -471,7 +471,7 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
  * @loader: A pixbuf loader
  *
  * Queries the #GdkPixbufAnimation that a pixbuf loader is currently creating.
- * In general it only makes sense to call this function afer the "area_prepared"
+ * In general it only makes sense to call this function after the "area_prepared"
  * signal has been emitted by the loader. If the loader doesn't have enough
  * bytes yet (hasn't emitted the "area_prepared" signal) this function will 
  * return %NULL.

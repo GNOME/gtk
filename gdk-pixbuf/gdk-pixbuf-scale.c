@@ -221,7 +221,7 @@ gdk_pixbuf_composite_color (const GdkPixbuf *src,
  * For more complicated scaling/compositing see gdk_pixbuf_scale()
  * and gdk_pixbuf_composite().
  * 
- * Return value: the new #GdkPixbuf, or NULL if not enough memory could be
+ * Return value: the new #GdkPixbuf, or %NULL if not enough memory could be
  * allocated for it.
  **/
 GdkPixbuf *
@@ -263,7 +263,7 @@ gdk_pixbuf_scale_simple (const GdkPixbuf *src,
  * @dest_height and compositing the result with a checkboard of colors
  * @color1 and @color2.
  * 
- * Return value: the new #GdkPixbuf, or NULL if not enough memory could be
+ * Return value: the new #GdkPixbuf, or %NULL if not enough memory could be
  * allocated for it.
  **/
 GdkPixbuf *

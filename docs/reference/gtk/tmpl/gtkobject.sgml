@@ -386,12 +386,8 @@ For convenience, every object offers a generic user data
 pointer.  This function sets it.
 </para>
 <para>
-This function is equivalent to:
-<informalexample>
-<programlisting>
-	gtk_object_set_data (object, "user_data", data);
-</programlisting>
-</informalexample>
+This function is equivalent to
+<literal>gtk_object_set_data (object, "user_data", data)</literal>.
 </para>
 
 @object: the object whose user data should be set.

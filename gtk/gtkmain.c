@@ -420,10 +420,10 @@ static gboolean do_setlocale = TRUE;
  * gtk_disable_setlocale:
  * 
  * Prevents gtk_init() and gtk_init_check() from automatically
- * calling setlocale (LC_ALL, ""). You would want to use this
- * function if you wanted to set the locale for your program
- * to something other than the user's locale, or if you wanted
- * to set different values for different locale categories.
+ * calling <literal>setlocale (LC_ALL, "")</literal>. You would 
+ * want to use this function if you wanted to set the locale for 
+ * your program to something other than the user's locale, or if 
+ * you wanted to set different values for different locale categories.
  *
  * Most programs should not need to call this function.
  **/
@@ -734,12 +734,12 @@ gtk_exit (gint errorcode)
  * is not really supported.)
  * 
  * In detail - sets the current locale according to the
- * program environment. This is the same as calling the libc function
- * setlocale (LC_ALL, "") but also takes care of the locale specific
- * setup of the windowing system used by GDK.
+ * program environment. This is the same as calling the C library function
+ * <literal>setlocale (LC_ALL, "")</literal> but also takes care of the 
+ * locale specific setup of the windowing system used by GDK.
  * 
  * Return value: a string corresponding to the locale set, as with the
- * C library function setlocale()
+ * C library function <function>setlocale()</function>.
  **/
 gchar*
 gtk_set_locale (void)

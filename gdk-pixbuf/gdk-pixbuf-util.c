@@ -29,7 +29,7 @@
 
 /**
  * gdk_pixbuf_add_alpha:
- * @pixbuf: A pixbuf.
+ * @pixbuf: A #GdkPixbuf.
  * @substitute_color: Whether to set a color to zero opacity.  If this
  * is %FALSE, then the (@r, @g, @b) arguments will be ignored.
  * @r: Red value to substitute.

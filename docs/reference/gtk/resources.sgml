@@ -53,7 +53,7 @@ are authorized to give us the patch under those terms.
 
 <para>
 If you want to discuss your patch before or after developing it, mail 
-<ulink url="mail:gtk-devel-list@gnome.org">gtk-devel-list@gnome.org</ulink>. 
+<ulink url="mailto:gtk-devel-list@gnome.org">gtk-devel-list@gnome.org</ulink>. 
 But be sure to file the Bugzilla report as well; if the patch is only on the 
 list and not in Bugzilla, it's likely to slip through the cracks.
 </para>
@@ -75,7 +75,7 @@ archives of these lists on
 <variablelist>
 
 <varlistentry>
-<term>gtk-list@gnome.org</term>
+<term><ulink url="mailto:gtk-list@gnome.org">gtk-list@gnome.org</ulink></term>
 <listitem><para>
 gtk-list covers general GTK+ topics; questions about using GTK+ in programs,
 GTK+ from a user standpoint, announcements of GTK+-related projects
@@ -85,7 +85,8 @@ traffic consists of GTK+ programming questions.
 </varlistentry>
 
 <varlistentry>
-<term>gtk-app-devel-list@gnome.org</term> <listitem><para>
+<term><ulink url="mailto:gtk-app-devel-list@gnome.org">gtk-app-devel-list@gnome.org</ulink></term> 
+<listitem><para>
 gtk-app-devel-list covers writing applications in GTK+. It's narrower
 in scope than gtk-list, but the two lists overlap quite a
 bit. gtk-app-devel-list is a good place to ask questions about GTK+
@@ -93,7 +94,7 @@ programming.  </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term>gtk-devel-list@gnome.org</term>
+<term><ulink url="mailto:gtk-devel-list@gnome.org">gtk-devel-list@gnome.org</ulink></term>
 <listitem><para>
 gtk-devel-list is for discussion of work on GTK+ itself, it is NOT for
 asking questions about how to use GTK+ in applications. gtk-devel-list 
@@ -103,7 +104,7 @@ and so on.
 </varlistentry>
 
 <varlistentry>
-<term>gtk-i18n-list@gnome.org</term>
+<term><ulink url="mailto:gtk-i18n-list@gnome.org">gtk-i18n-list@gnome.org</ulink></term>
 <listitem><para>
 gtk-i18n-list is for discussion of internationalization in GTK+; 
 Pango is the main focus of the list. Questions about the details of 
@@ -113,7 +114,7 @@ all on topic.
 </varlistentry>
 
 <varlistentry>
-<term>gtk-doc-list@gnome.org</term>
+<term><ulink url="mailto:gtk-doc-list@gnome.org">gtk-doc-list@gnome.org</ulink></term>
 <listitem><para>
 gtk-doc-list is for discussion of the <application>gtk-doc</application> 
 documentation system (used to document GTK+), and for work on the GTK+ 

@@ -16,11 +16,6 @@ initialization - you might start up your application in text mode instead.
 </para>
 
 <para>
-If your application supports internationalization, gtk_set_locale() 
-should be called prior to gtk_init().
-</para>
-
-<para>
 Like all GUI toolkits, GTK+ uses an event-driven programming
 model. When the user is doing nothing, GTK+ sits in the
 <firstterm>main loop</firstterm> and waits for input. If the user

@@ -1,3 +1,18 @@
+2001-12-21  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtklabel.c (gtk_label_new_with_mnemonic),
+	gtk/gtkbutton.c (gtk_button_new_with_mnemonic): More precise
+	documentation about underscores and mnemonics. (#66380)
+
+	* gtk/gtktextiter.c (gtk_text_iter_backward_word_starts): Fix
+	cyclic reference in docs.
+
+	* gtk/gtklabel.c (gtk_label_set_justify): Correct documentation
+	of default value. (#65402)
+
+	* gtk/gtkmain.c (gtk_set_locale, gtk_disable_set_locale): 
+	Markup fixes.
+
 2001-12-20  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_realize): Don't call

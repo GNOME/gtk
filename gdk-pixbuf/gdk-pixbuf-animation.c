@@ -119,7 +119,7 @@ gdk_pixbuf_animation_get_type (void)
  * images, then an animation with a single frame will be created. Possible errors
  * are in the #GDK_PIXBUF_ERROR and #G_FILE_ERROR domains.
  *
- * Return value: A newly created animation with a reference count of 1, or NULL
+ * Return value: A newly-created animation with a reference count of 1, or %NULL
  * if any of several error conditions ocurred:  the file could not be opened,
  * there was no loader for the file's format, there was not enough memory to
  * allocate the image buffer, or the image file contained invalid data.

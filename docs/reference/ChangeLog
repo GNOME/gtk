@@ -1,3 +1,19 @@
+2001-12-21  Matthias Clasen  <matthiasc@poet.de>
+		
+	* gtk/text_widget.sgml: More precise wording. (#63388)
+
+	* gtk/tmpl/gtksignal.sgml (GTK_SIGNAL_OFFSET): Add docs.
+
+	* gtk/resources.sgml: Fix markup of mail URLs.
+	
+	* gtk/tmpl/gtkpaned.sgml, gtk/tmpl/gtkobject.sgml: Markup fixes.
+
+	* gtk/tmpl/gtktoolbar.sgml (gtk_toolbar_{prepend,append}_element):
+	Expand documentation. (#60471)
+
+	* gtk/tmpl/gtkmain.sgml: Remove misleading information about 
+	gtk_set_locale().  (#65758)
+
 2001-12-18  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/tmpl/gtkdrawingarea.sgml: Change GdkWidget to

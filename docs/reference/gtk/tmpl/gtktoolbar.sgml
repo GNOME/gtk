@@ -154,10 +154,16 @@ Inserts a new space in the toolbar at the specified position.
 <para>
 Adds a new element to the end of a toolbar.
 </para>
+<para>
+If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
+If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
+the radio group for the new element. In all other cases, @widget must
+be %NULL.
+</para>
 
 @toolbar: a #GtkToolbar.
 @type: a value of type #GtkToolbarChildType that determines what @widget will be.
-@widget: a #GtkWidget to add to the toolbar. (FIXME: double check this).
+@widget: a #GtkWidget, or %NULL. 
 @text: the element's label.
 @tooltip_text: the element's tooltip.
 @tooltip_private_text: used for context-sensitive help about this toolbar element.
@@ -171,10 +177,16 @@ Adds a new element to the end of a toolbar.
 <para>
 Adds a new element to the beginning of a toolbar.
 </para>
+<para>
+If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
+If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
+the radio group for the new element. In all other cases, @widget must
+be %NULL.
+</para>
 
 @toolbar: a #GtkToolbar.
 @type: a value of type #GtkToolbarChildType that determines what @widget will be.
-@widget: a #GtkWidget to add to the toolbar. (FIXME: double check this).
+@widget: a #GtkWidget, or %NULL 
 @text: the element's label.
 @tooltip_text: the element's tooltip.
 @tooltip_private_text: used for context-sensitive help about this toolbar element.
@@ -189,17 +201,17 @@ Adds a new element to the beginning of a toolbar.
 
 </para>
 
-@toolbar: a #GtkToolbar.
-@type: a value of type #GtkToolbarChildType that determines what @widget will be.
-@widget: a #GtkWidget to add to the toolbar. (FIXME: double check this).
-@text: the element's label.
-@tooltip_text: the element's tooltip.
-@tooltip_private_text: used for context-sensitive help about this toolbar element.
-@icon: a #GtkWidget that provides pictorial representation of the element's function.
-@callback: the function to be executed when the button is pressed.
-@user_data: any data you wish to pass to the callback.
-@position: the number of widgets to insert this element after.
-@Returns: the new toolbar element as a #GtkWidget.
+@toolbar:
+@type:
+@widget:
+@text: 
+@tooltip_text: 
+@tooltip_private_text:
+@icon:
+@callback: 
+@user_data:
+@position:
+@Returns:
 
 
 <!-- ##### FUNCTION gtk_toolbar_append_widget ##### -->

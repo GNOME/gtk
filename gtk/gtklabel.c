@@ -626,9 +626,10 @@ gtk_label_new (const gchar *str)
  * Creates a new #GtkLabel, containing the text in @str.
  *
  * If characters in @str are preceded by an underscore, they are
- * underlined indicating that they represent a keyboard accelerator
- * called a mnemonic.  The mnemonic key can be used to activate
- * another widget, chosen automatically, or explicitly using
+ * underlined. If you need a literal underscore character in a label, use
+ * '__' (two underscores). The first underlined character represents a 
+ * keyboard accelerator called a mnemonic. The mnemonic key can be used 
+ * to activate another widget, chosen automatically, or explicitly using
  * gtk_label_set_mnemonic_widget().
  * 
  * If gtk_label_set_mnemonic_widget()
@@ -1190,7 +1191,7 @@ gtk_label_set_pattern (GtkLabel	   *label,
  * @jtype: a #GtkJustification
  *
  * Sets the alignment of the lines in the text of the label relative to
- * each other.  %GTK_JUSTIFY_CENTER is the default value when the
+ * each other.  %GTK_JUSTIFY_LEFT is the default value when the
  * widget is first created with gtk_label_new().
  **/
 void

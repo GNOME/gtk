@@ -732,10 +732,10 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
  
 /**
  * gdk_pixbuf_save:
- * @pixbuf: pointer to GdkPixbuf.
- * @filename: Name of file to save.
+ * @pixbuf: a #GdkPixbuf.
+ * @filename: name of file to save.
  * @type: name of file format.
- * @error: return location for error, or NULL
+ * @error: return location for error, or %NULL
  * @Varargs: list of key-value save options
  *
  * Saves pixbuf to a file in @type, which is currently "jpeg" or
@@ -746,7 +746,7 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
  * it should contain pairs of strings that modify the save
  * parameters. For example:
  * <informalexample><programlisting>
- * gdk_pixbuf_save (pixbuf, handle, "jpeg", &error,
+ * gdk_pixbuf_save (pixbuf, handle, "jpeg", &amp;error,
  *                  "quality", "100", NULL);
  * </programlisting></informalexample>
  *
@@ -791,8 +791,8 @@ gdk_pixbuf_save (GdkPixbuf  *pixbuf,
 
 /**
  * gdk_pixbuf_savev:
- * @pixbuf: pointer to GdkPixbuf.
- * @filename: Name of file to save.
+ * @pixbuf: a #GdkPixbuf.
+ * @filename: name of file to save.
  * @type: name of file format.
  * @option_keys: name of options to set, %NULL-terminated
  * @option_values: values for named options

@@ -3056,7 +3056,7 @@ gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
  * @iter: a #GtkTextIter
  * @count: number of times to move
  * 
- * Calls gtk_text_iter_backward_word_starts() up to @count times.
+ * Calls gtk_text_iter_backward_word_start() up to @count times.
  *
  * Return value: %TRUE if @iter moved and is not the end iterator 
  **/

@@ -88,7 +88,7 @@ to <literal>gtk_paned_pack1 (paned, child, FALSE, TRUE)</literal>.
 <para>
 Adds a child to the bottom or right pane with default
 parameters. This is equivalent to 
-<literal>gtk_paned_pack2(paned, child, TRUE, TRUE)</literal>.
+<literal>gtk_paned_pack2 (paned, child, TRUE, TRUE)</literal>.
 </para>
 
 @paned: a paned widget
