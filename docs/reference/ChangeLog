@@ -1,3 +1,8 @@
+Fri May  7 01:36:30 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/gdk-pixbuf-csource.xml: Add an "Environment" 
+	section.  (Jens Elkner)
+
 Fri May  7 01:23:03 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkicontheme.sgml: Fix example.  (Steffen Röcker)
