@@ -16,6 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,12 +29,25 @@
 
 #include "circles.xbm"
 
-GtkWidget *shape_create_icon (char     *xpm_file,
-			      gint      x,
-			      gint      y,
-			      gint      px,
-			      gint      py,
-			      gint      window_type);
+typedef struct _OptionMenuItem
+{
+  gchar        *name;
+  GtkSignalFunc func;
+} OptionMenuItem;
+
+GtkWidget *
+shape_create_icon (char     *xpm_file,
+		   gint      x,
+		   gint      y,
+		   gint      px,
+		   gint      py,
+		   gint      window_type);
+
+static GtkWidget *
+build_option_menu (OptionMenuItem items[],
+		   gint           num_items,
+		   gint           history,
+		   gpointer       data);
 
 /* macro, structure and variables used by tree window demos */
 #define DEFAULT_NUMBER_OF_ITEM  3
@@ -59,14 +73,52 @@ typedef struct sTreeButtons {
 } sTreeButtons;
 /* end of tree section */
 
+static GtkWidget *
+build_option_menu (OptionMenuItem items[],
+		   gint           num_items,
+		   gint           history,
+		   gpointer       data)
+{
+  GtkWidget *omenu;
+  GtkWidget *menu;
+  GtkWidget *menu_item;
+  GSList *group;
+  gint i;
+
+  omenu = gtk_option_menu_new ();
+      
+  menu = gtk_menu_new ();
+  group = NULL;
+  
+  for (i = 0; i < num_items; i++)
+    {
+      menu_item = gtk_radio_menu_item_new_with_label (group, items[i].name);
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  (GtkSignalFunc) items[i].func, data);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      if (i == history)
+	gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
+      gtk_widget_show (menu_item);
+    }
+
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
+  gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), history);
+  
+  return omenu;
+}
+
 static void
 destroy_tooltips (GtkWidget *widget, GtkWindow **window)
 {
   GtkTooltips *tt = gtk_object_get_data (GTK_OBJECT (*window), "tooltips");
   gtk_object_unref (GTK_OBJECT (tt));
-  
   *window = NULL;
 }
+
+/*
+ * GtkButton
+ */
 
 static void
 button_window (GtkWidget *widget,
@@ -96,21 +148,17 @@ create_buttons (void)
 			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
 			  &window);
 
-      gtk_window_set_title (GTK_WINDOW (window), "buttons");
+      gtk_window_set_title (GTK_WINDOW (window), "GtkButton");
       gtk_container_border_width (GTK_CONTAINER (window), 0);
 
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_show (box1);
-
 
       table = gtk_table_new (3, 3, FALSE);
       gtk_table_set_row_spacings (GTK_TABLE (table), 5);
       gtk_table_set_col_spacings (GTK_TABLE (table), 5);
       gtk_container_border_width (GTK_CONTAINER (table), 10);
       gtk_box_pack_start (GTK_BOX (box1), table, TRUE, TRUE, 0);
-      gtk_widget_show (table);
-
 
       button[0] = gtk_button_new_with_label ("button1");
       button[1] = gtk_button_new_with_label ("button2");
@@ -128,7 +176,6 @@ create_buttons (void)
 
       gtk_table_attach (GTK_TABLE (table), button[0], 0, 1, 0, 1,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-      gtk_widget_show (button[0]);
 
       gtk_signal_connect (GTK_OBJECT (button[1]), "clicked",
 			  GTK_SIGNAL_FUNC(button_window),
@@ -136,68 +183,55 @@ create_buttons (void)
 
       gtk_table_attach (GTK_TABLE (table), button[1], 1, 2, 1, 2,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-      gtk_widget_show (button[1]);
 
       gtk_signal_connect (GTK_OBJECT (button[2]), "clicked",
 			  GTK_SIGNAL_FUNC(button_window),
 			  button[3]);
       gtk_table_attach (GTK_TABLE (table), button[2], 2, 3, 2, 3,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-      gtk_widget_show (button[2]);
 
       gtk_signal_connect (GTK_OBJECT (button[3]), "clicked",
 			  GTK_SIGNAL_FUNC(button_window),
 			  button[4]);
       gtk_table_attach (GTK_TABLE (table), button[3], 0, 1, 2, 3,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-      gtk_widget_show (button[3]);
 
       gtk_signal_connect (GTK_OBJECT (button[4]), "clicked",
 			  GTK_SIGNAL_FUNC(button_window),
 			  button[5]);
       gtk_table_attach (GTK_TABLE (table), button[4], 2, 3, 0, 1,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-      gtk_widget_show (button[4]);
 
       gtk_signal_connect (GTK_OBJECT (button[5]), "clicked",
 			  GTK_SIGNAL_FUNC(button_window),
 			  button[6]);
       gtk_table_attach (GTK_TABLE (table), button[5], 1, 2, 2, 3,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-      gtk_widget_show (button[5]);
 
       gtk_signal_connect (GTK_OBJECT (button[6]), "clicked",
 			  GTK_SIGNAL_FUNC(button_window),
 			  button[7]);
       gtk_table_attach (GTK_TABLE (table), button[6], 1, 2, 0, 1,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-      gtk_widget_show (button[6]);
 
       gtk_signal_connect (GTK_OBJECT (button[7]), "clicked",
 			  GTK_SIGNAL_FUNC(button_window),
 			  button[8]);
       gtk_table_attach (GTK_TABLE (table), button[7], 2, 3, 1, 2,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-      gtk_widget_show (button[7]);
 
       gtk_signal_connect (GTK_OBJECT (button[8]), "clicked",
 			  GTK_SIGNAL_FUNC(button_window),
 			  button[0]);
       gtk_table_attach (GTK_TABLE (table), button[8], 0, 1, 1, 2,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-      gtk_widget_show (button[8]);
-
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-      gtk_widget_show (separator);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button[9] = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button[9]), "clicked",
@@ -206,14 +240,17 @@ create_buttons (void)
       gtk_box_pack_start (GTK_BOX (box2), button[9], TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button[9], GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button[9]);
-      gtk_widget_show (button[9]);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
+
+/*
+ * GtkToggleButton
+ */
 
 static void
 create_toggle_buttons (void)
@@ -232,44 +269,31 @@ create_toggle_buttons (void)
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
 			  &window);
 
-      gtk_window_set_title (GTK_WINDOW (window), "toggle buttons");
+      gtk_window_set_title (GTK_WINDOW (window), "GtkToggleButton");
       gtk_container_border_width (GTK_CONTAINER (window), 0);
-
 
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_show (box1);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button = gtk_toggle_button_new_with_label ("button1");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
 
       button = gtk_toggle_button_new_with_label ("button2");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
 
       button = gtk_toggle_button_new_with_label ("button3");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
-
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-      gtk_widget_show (separator);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -278,14 +302,17 @@ create_toggle_buttons (void)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button);
-      gtk_widget_show (button);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
+
+/*
+ * GtkCheckButton
+ */
 
 static void
 create_check_buttons (void)
@@ -304,44 +331,31 @@ create_check_buttons (void)
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
 			  &window);
 
-      gtk_window_set_title (GTK_WINDOW (window), "check buttons");
+      gtk_window_set_title (GTK_WINDOW (window), "GtkCheckButton");
       gtk_container_border_width (GTK_CONTAINER (window), 0);
-
 
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_show (box1);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button = gtk_check_button_new_with_label ("button1");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
 
       button = gtk_check_button_new_with_label ("button2");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
 
       button = gtk_check_button_new_with_label ("button3");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
-
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-      gtk_widget_show (separator);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -350,14 +364,17 @@ create_check_buttons (void)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button);
-      gtk_widget_show (button);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
+
+/*
+ * GtkRadioButton
+ */
 
 static void
 create_radio_buttons (void)
@@ -379,46 +396,33 @@ create_radio_buttons (void)
       gtk_window_set_title (GTK_WINDOW (window), "radio buttons");
       gtk_container_border_width (GTK_CONTAINER (window), 0);
 
-
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_show (box1);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button = gtk_radio_button_new_with_label (NULL, "button1");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
 
       button = gtk_radio_button_new_with_label (
 	         gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
 		 "button2");
       gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
 
       button = gtk_radio_button_new_with_label (
                  gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
 		 "button3");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
-
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-      gtk_widget_show (separator);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -427,150 +431,136 @@ create_radio_buttons (void)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button);
-      gtk_widget_show (button);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
 
-static void
-bbox_widget_destroy (GtkWidget* widget, GtkWidget* todestroy)
-{
-}
+/*
+ * GtkButtonBox
+ */
 
-static void
-create_bbox_window (gint  horizontal,
-		    char* title, 
-		    gint  pos, 
-		    gint  spacing,
-		    gint  child_w, 
-		    gint  child_h, 
-		    gint  layout)
+static GtkWidget *
+create_bbox (gint  horizontal,
+	     char* title, 
+	     gint  spacing,
+	     gint  child_w, 
+	     gint  child_h, 
+	     gint  layout)
 {
-  GtkWidget* window;
-  GtkWidget* box1;
-  GtkWidget* bbox;
-  GtkWidget* button;
+  GtkWidget *frame;
+  GtkWidget *bbox;
+  GtkWidget *button;
 	
-  /* create a new window */
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (window), title);
+  frame = gtk_frame_new (title);
 
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC(bbox_widget_destroy), window);
-  
   if (horizontal)
-  {
-    gtk_widget_set_usize (window, 550, 60);
-    gtk_widget_set_uposition (window, 150, pos);
-    box1 = gtk_vbox_new (FALSE, 0);
-  }
+    bbox = gtk_hbutton_box_new ();
   else
-  {
-    gtk_widget_set_usize (window, 150, 400);
-    gtk_widget_set_uposition (window, pos, 200);
-    box1 = gtk_vbox_new (FALSE, 0);
-  }
-  
-  gtk_container_add (GTK_CONTAINER (window), box1);
-  gtk_widget_show (box1);
-  
-  if (horizontal)
-    bbox = gtk_hbutton_box_new();
-  else
-    bbox = gtk_vbutton_box_new();
+    bbox = gtk_vbutton_box_new ();
+
+  gtk_container_border_width (GTK_CONTAINER (bbox), 5);
+  gtk_container_add (GTK_CONTAINER (frame), bbox);
+
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), layout);
   gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), spacing);
   gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), child_w, child_h);
-  gtk_widget_show (bbox);
-  
-  gtk_container_border_width (GTK_CONTAINER(box1), 25);
-  gtk_box_pack_start (GTK_BOX (box1), bbox, TRUE, TRUE, 0);
   
   button = gtk_button_new_with_label ("OK");
-  gtk_container_add (GTK_CONTAINER(bbox), button);
-
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC(bbox_widget_destroy), window);
-
-  gtk_widget_show (button);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
   
   button = gtk_button_new_with_label ("Cancel");
-  gtk_container_add (GTK_CONTAINER(bbox), button);
-  gtk_widget_show (button);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
   
   button = gtk_button_new_with_label ("Help");
-  gtk_container_add (GTK_CONTAINER(bbox), button);
-  gtk_widget_show (button);
-  
-  gtk_widget_show (window);
-}
+  gtk_container_add (GTK_CONTAINER (bbox), button);
 
-static void
-test_hbbox (void)
-{
-  create_bbox_window (TRUE, "Spread", 50, 40, 85, 28, GTK_BUTTONBOX_SPREAD);
-  create_bbox_window (TRUE, "Edge", 200, 40, 85, 25, GTK_BUTTONBOX_EDGE);
-  create_bbox_window (TRUE, "Start", 350, 40, 85, 25, GTK_BUTTONBOX_START);
-  create_bbox_window (TRUE, "End", 500, 15, 30, 25, GTK_BUTTONBOX_END);
+  return frame;
 }
-
-static void
-test_vbbox (void)
-{
-  create_bbox_window (FALSE, "Spread", 50, 40, 85, 25, GTK_BUTTONBOX_SPREAD);
-  create_bbox_window (FALSE, "Edge", 250, 40, 85, 28, GTK_BUTTONBOX_EDGE);
-  create_bbox_window (FALSE, "Start", 450, 40, 85, 25, GTK_BUTTONBOX_START);
-  create_bbox_window (FALSE, "End", 650, 15, 30, 25, GTK_BUTTONBOX_END);
-} 
 
 static void
 create_button_box (void)
 {
   static GtkWidget* window = NULL;
-  GtkWidget* bbox;
-  GtkWidget* button;
+  GtkWidget *main_vbox;
+  GtkWidget *vbox;
+  GtkWidget *hbox;
+  GtkWidget *frame_horz;
+  GtkWidget *frame_vert;
 	
   if (!window)
   {
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title (GTK_WINDOW (window),
-			  "Button Box Test");
+    gtk_window_set_title (GTK_WINDOW (window), "Button Boxes");
     
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC(gtk_widget_destroyed),
 			&window);
     
-    gtk_container_border_width (GTK_CONTAINER (window), 20);
+    gtk_container_border_width (GTK_CONTAINER (window), 10);
+
+    main_vbox = gtk_vbox_new (FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (window), main_vbox);
     
-    /* 
-     *these 15 lines are a nice and easy example for GtkHButtonBox 
-     */
-    bbox = gtk_hbutton_box_new ();
-    gtk_container_add (GTK_CONTAINER (window), bbox);
-    gtk_widget_show (bbox);
+    frame_horz = gtk_frame_new ("Horizontal Button Boxes");
+    gtk_box_pack_start (GTK_BOX (main_vbox), frame_horz, TRUE, TRUE, 10);
     
-    button = gtk_button_new_with_label ("Horizontal");
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			GTK_SIGNAL_FUNC(test_hbbox), 0);
-    gtk_container_add (GTK_CONTAINER (bbox), button);
-    gtk_widget_show (button);
+    vbox = gtk_vbox_new (FALSE, 0);
+    gtk_container_border_width (GTK_CONTAINER (vbox), 10);
+    gtk_container_add (GTK_CONTAINER (frame_horz), vbox);
+
+    gtk_box_pack_start (GTK_BOX (vbox), 
+	   create_bbox (TRUE, "Spread", 40, 85, 20, GTK_BUTTONBOX_SPREAD),
+			TRUE, TRUE, 0);
+
+    gtk_box_pack_start (GTK_BOX (vbox), 
+	   create_bbox (TRUE, "Edge", 40, 85, 20, GTK_BUTTONBOX_EDGE),
+			TRUE, TRUE, 5);
+
+    gtk_box_pack_start (GTK_BOX (vbox), 
+	   create_bbox (TRUE, "Start", 40, 85, 20, GTK_BUTTONBOX_START),
+			TRUE, TRUE, 5);
+
+    gtk_box_pack_start (GTK_BOX (vbox), 
+	   create_bbox (TRUE, "End", 40, 85, 20, GTK_BUTTONBOX_END),
+			TRUE, TRUE, 5);
+
+    frame_vert = gtk_frame_new ("Vertical Button Boxes");
+    gtk_box_pack_start (GTK_BOX (main_vbox), frame_vert, TRUE, TRUE, 10);
     
-    button = gtk_button_new_with_label ("Vertical");
-    gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			GTK_SIGNAL_FUNC(test_vbbox), 0);
-    gtk_container_add (GTK_CONTAINER (bbox), button);
-    gtk_widget_show (button);
+    hbox = gtk_hbox_new (FALSE, 0);
+    gtk_container_border_width (GTK_CONTAINER (hbox), 10);
+    gtk_container_add (GTK_CONTAINER (frame_vert), hbox);
+
+    gtk_box_pack_start (GTK_BOX (hbox), 
+	   create_bbox (FALSE, "Spread", 30, 85, 20, GTK_BUTTONBOX_SPREAD),
+			TRUE, TRUE, 0);
+
+    gtk_box_pack_start (GTK_BOX (hbox), 
+	   create_bbox (FALSE, "Edge", 30, 85, 20, GTK_BUTTONBOX_EDGE),
+			TRUE, TRUE, 5);
+
+    gtk_box_pack_start (GTK_BOX (hbox), 
+	   create_bbox (FALSE, "Start", 30, 85, 20, GTK_BUTTONBOX_START),
+			TRUE, TRUE, 5);
+
+    gtk_box_pack_start (GTK_BOX (hbox), 
+	   create_bbox (FALSE, "End", 30, 85, 20, GTK_BUTTONBOX_END),
+			TRUE, TRUE, 5);
   }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
+
+/*
+ * GtkToolBar
+ */
 
 static GtkWidget*
 new_pixmap (char      *filename,
@@ -716,7 +706,7 @@ create_toolbar (void)
       gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
       entry = gtk_entry_new ();
-      gtk_widget_show(entry);
+
       gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), entry, "This is an unusable GtkEntry ;)", "Hey don't click me!!!");
 
       gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
@@ -753,11 +743,10 @@ create_toolbar (void)
 			       (GtkSignalFunc) set_toolbar_borderless, toolbar);
 
       gtk_container_add (GTK_CONTAINER (window), toolbar);
-      gtk_widget_show (toolbar);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
@@ -832,6 +821,10 @@ make_toolbar (GtkWidget *window)
 
   return toolbar;
 }
+
+/*
+ * GtkStatusBar
+ */
 
 static guint statusbar_counter = 1;
 
@@ -938,20 +931,15 @@ create_statusbar (void)
       gtk_window_set_title (GTK_WINDOW (window), "statusbar");
       gtk_container_border_width (GTK_CONTAINER (window), 0);
 
-
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_show (box1);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-      gtk_widget_show (box2);
 
       statusbar = gtk_statusbar_new ();
       gtk_box_pack_end (GTK_BOX (box1), statusbar, TRUE, TRUE, 0);
-      gtk_widget_show (statusbar);
       gtk_signal_connect (GTK_OBJECT (statusbar),
 			  "text_popped",
 			  GTK_SIGNAL_FUNC (statusbar_popped),
@@ -994,14 +982,10 @@ create_statusbar (void)
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-      gtk_widget_show (separator);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -1010,25 +994,17 @@ create_statusbar (void)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button);
-      gtk_widget_show (button);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
 
-static void
-handle_box_child_signal (GtkHandleBox *hb,
-			 GtkWidget    *child,
-			 const gchar  *action)
-{
-  printf ("%s: child <%s> %sed\n",
-	  gtk_type_name (GTK_OBJECT_TYPE (hb)),
-	  gtk_type_name (GTK_OBJECT_TYPE (child)),
-	  action);
-}
+/*
+ * GtkTree
+ */
 
 static void
 cb_tree_destroy_event(GtkWidget* w)
@@ -1039,6 +1015,7 @@ cb_tree_destroy_event(GtkWidget* w)
   tree_buttons = gtk_object_get_user_data(GTK_OBJECT(w));
   free(tree_buttons);
 }
+
 static void
 cb_add_new_item(GtkWidget* w, GtkTree* tree)
 {
@@ -1375,50 +1352,42 @@ create_tree_mode_window(void)
     {
       /* create toplevel window  */
       window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_title(GTK_WINDOW(window), "Tree Mode Selection Window");
+      gtk_window_set_title(GTK_WINDOW(window), "Set Tree Parameters");
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
 			  &window);
       box1 = gtk_vbox_new(FALSE, 0);
       gtk_container_add(GTK_CONTAINER(window), box1);
-      gtk_widget_show(box1);
 
-  /* create upper box - selection box */
+      /* create upper box - selection box */
       box2 = gtk_vbox_new(FALSE, 5);
       gtk_box_pack_start(GTK_BOX(box1), box2, TRUE, TRUE, 0);
       gtk_container_border_width(GTK_CONTAINER(box2), 5);
-      gtk_widget_show(box2);
 
       box3 = gtk_hbox_new(FALSE, 5);
       gtk_box_pack_start(GTK_BOX(box2), box3, TRUE, TRUE, 0);
-      gtk_widget_show(box3);
 
       /* create selection mode frame */
       frame = gtk_frame_new("Selection Mode");
       gtk_box_pack_start(GTK_BOX(box3), frame, TRUE, TRUE, 0);
-      gtk_widget_show(frame);
 
       box4 = gtk_vbox_new(FALSE, 0);
       gtk_container_add(GTK_CONTAINER(frame), box4);
       gtk_container_border_width(GTK_CONTAINER(box4), 5);
-      gtk_widget_show(box4);
 
       /* create radio button */  
       button = gtk_radio_button_new_with_label(NULL, "SINGLE");
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
-      gtk_widget_show(button);
       sTreeSampleSelection.single_button = button;
 
       button = gtk_radio_button_new_with_label(gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
 					       "BROWSE");
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
-      gtk_widget_show(button);
       sTreeSampleSelection.browse_button = button;
 
       button = gtk_radio_button_new_with_label(gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
 					       "MULTIPLE");
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
-      gtk_widget_show(button);
       sTreeSampleSelection.multiple_button = button;
 
       sTreeSampleSelection.selection_mode_group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
@@ -1426,107 +1395,102 @@ create_tree_mode_window(void)
       /* create option mode frame */
       frame = gtk_frame_new("Options");
       gtk_box_pack_start(GTK_BOX(box3), frame, TRUE, TRUE, 0);
-      gtk_widget_show(frame);
 
       box4 = gtk_vbox_new(FALSE, 0);
       gtk_container_add(GTK_CONTAINER(frame), box4);
       gtk_container_border_width(GTK_CONTAINER(box4), 5);
-      gtk_widget_show(box4);
 
       /* create check button */
       button = gtk_check_button_new_with_label("Draw line");
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
       gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button), TRUE);
-      gtk_widget_show(button);
       sTreeSampleSelection.draw_line_button = button;
   
       button = gtk_check_button_new_with_label("View Line mode");
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
       gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button), TRUE);
-      gtk_widget_show(button);
       sTreeSampleSelection.view_line_button = button;
   
       button = gtk_check_button_new_with_label("Without Root item");
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
-      gtk_widget_show(button);
       sTreeSampleSelection.no_root_item_button = button;
 
       /* create recursion parameter */
       frame = gtk_frame_new("Size Parameters");
       gtk_box_pack_start(GTK_BOX(box2), frame, TRUE, TRUE, 0);
-      gtk_widget_show(frame);
 
       box4 = gtk_hbox_new(FALSE, 5);
       gtk_container_add(GTK_CONTAINER(frame), box4);
       gtk_container_border_width(GTK_CONTAINER(box4), 5);
-      gtk_widget_show(box4);
 
       /* create number of item spin button */
       box5 = gtk_hbox_new(FALSE, 5);
       gtk_box_pack_start(GTK_BOX(box4), box5, FALSE, FALSE, 0);
-      gtk_widget_show(box5);
 
-      label = gtk_label_new("Number of Item");
+      label = gtk_label_new("Number of items : ");
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (box5), label, FALSE, TRUE, 0);
-      gtk_widget_show(label);
 
       adj = (GtkAdjustment *) gtk_adjustment_new ((gfloat)DEFAULT_NUMBER_OF_ITEM, 1.0, 255.0, 1.0,
 						  5.0, 0.0);
       spinner = gtk_spin_button_new (adj, 0, 0);
       gtk_box_pack_start (GTK_BOX (box5), spinner, FALSE, TRUE, 0);
-      gtk_widget_show(spinner);
       sTreeSampleSelection.nb_item_spinner = spinner;
   
       /* create recursion level spin button */
       box5 = gtk_hbox_new(FALSE, 5);
       gtk_box_pack_start(GTK_BOX(box4), box5, FALSE, FALSE, 0);
-      gtk_widget_show(box5);
 
-      label = gtk_label_new("Depth Level");
+      label = gtk_label_new("Depth : ");
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (box5), label, FALSE, TRUE, 0);
-      gtk_widget_show(label);
 
       adj = (GtkAdjustment *) gtk_adjustment_new ((gfloat)DEFAULT_RECURSION_LEVEL, 0.0, 255.0, 1.0,
 						  5.0, 0.0);
       spinner = gtk_spin_button_new (adj, 0, 0);
       gtk_box_pack_start (GTK_BOX (box5), spinner, FALSE, TRUE, 0);
-      gtk_widget_show(spinner);
       sTreeSampleSelection.recursion_spinner = spinner;
   
       /* create horizontal separator */
       separator = gtk_hseparator_new();
       gtk_box_pack_start(GTK_BOX(box1), separator, FALSE, FALSE, 0);
-      gtk_widget_show(separator);
 
       /* create bottom button box */
-      box2 = gtk_hbox_new(FALSE, 0);
+      box2 = gtk_hbox_new(TRUE, 10);
       gtk_box_pack_start(GTK_BOX(box1), box2, FALSE, FALSE, 0);
       gtk_container_border_width(GTK_CONTAINER(box2), 5);
-      gtk_widget_show(box2);
 
-      button = gtk_button_new_with_label("Create Tree Sample");
+      button = gtk_button_new_with_label("Create Tree");
       gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
       gtk_signal_connect(GTK_OBJECT (button), "clicked",
 			 (GtkSignalFunc) cb_create_tree, NULL);
-      gtk_widget_show(button);
 
       button = gtk_button_new_with_label("Close");
       gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
                                  GTK_SIGNAL_FUNC(gtk_widget_destroy),
                                  GTK_OBJECT (window));
-      gtk_widget_show(button);
-  
     }
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
 
-/* end of function used by tree demos */
+/*
+ * GtkHandleBox
+ */
+
+static void
+handle_box_child_signal (GtkHandleBox *hb,
+			 GtkWidget    *child,
+			 const gchar  *action)
+{
+  printf ("%s: child <%s> %sed\n",
+	  gtk_type_name (GTK_OBJECT_TYPE (hb)),
+	  gtk_type_name (GTK_OBJECT_TYPE (child)),
+	  action);
+}
 
 static void
 create_handle_box (void)
@@ -1632,6 +1596,9 @@ create_handle_box (void)
     gtk_widget_destroy (window);
 }
 
+/*
+ * Reparent demo
+ */
 
 static void
 reparent_label (GtkWidget *widget,
@@ -1676,31 +1643,24 @@ create_reparent (void)
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
 			  &window);
 
-      gtk_window_set_title (GTK_WINDOW (window), "buttons");
+      gtk_window_set_title (GTK_WINDOW (window), "reparent");
       gtk_container_border_width (GTK_CONTAINER (window), 0);
-
 
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_show (box1);
-
 
       box2 = gtk_hbox_new (FALSE, 5);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       label = gtk_label_new ("Hello World");
 
       frame = gtk_frame_new ("Frame 1");
       gtk_box_pack_start (GTK_BOX (box2), frame, TRUE, TRUE, 0);
-      gtk_widget_show (frame);
 
       box3 = gtk_vbox_new (FALSE, 5);
       gtk_container_border_width (GTK_CONTAINER (box3), 5);
       gtk_container_add (GTK_CONTAINER (frame), box3);
-      gtk_widget_show (box3);
 
       button = gtk_button_new_with_label ("switch");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
@@ -1708,24 +1668,19 @@ create_reparent (void)
 			  box3);
       gtk_object_set_user_data (GTK_OBJECT (button), label);
       gtk_box_pack_start (GTK_BOX (box3), button, FALSE, TRUE, 0);
-      gtk_widget_show (button);
 
       gtk_box_pack_start (GTK_BOX (box3), label, FALSE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT (label),
 			  "parent_set",
 			  GTK_SIGNAL_FUNC (set_parent_signal),
 			  GINT_TO_POINTER (42));
-      gtk_widget_show (label);
-
 
       frame = gtk_frame_new ("Frame 2");
       gtk_box_pack_start (GTK_BOX (box2), frame, TRUE, TRUE, 0);
-      gtk_widget_show (frame);
 
       box3 = gtk_vbox_new (FALSE, 5);
       gtk_container_border_width (GTK_CONTAINER (box3), 5);
       gtk_container_add (GTK_CONTAINER (frame), box3);
-      gtk_widget_show (box3);
 
       button = gtk_button_new_with_label ("switch");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
@@ -1733,19 +1688,13 @@ create_reparent (void)
 			  box3);
       gtk_object_set_user_data (GTK_OBJECT (button), label);
       gtk_box_pack_start (GTK_BOX (box3), button, FALSE, TRUE, 0);
-      gtk_widget_show (button);
-
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-      gtk_widget_show (separator);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -1754,14 +1703,17 @@ create_reparent (void)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button);
-      gtk_widget_show (button);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
+
+/*
+ * GtkPixmap
+ */
 
 static void
 create_pixmap (void)
@@ -1786,24 +1738,21 @@ create_pixmap (void)
                           GTK_SIGNAL_FUNC(gtk_widget_destroyed),
                           &window);
 
-      gtk_window_set_title (GTK_WINDOW (window), "pixmap");
+      gtk_window_set_title (GTK_WINDOW (window), "GtkPixmap");
       gtk_container_border_width (GTK_CONTAINER (window), 0);
       gtk_widget_realize(window);
 
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_show (box1);
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-      gtk_widget_show (box2);
 
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
-      gtk_widget_show (button);
 
-      style=gtk_widget_get_style(button);
+      style = gtk_widget_get_style(button);
 
       pixmap = gdk_pixmap_create_from_xpm (window->window, &mask, 
 					   &style->bg[GTK_STATE_NORMAL],
@@ -1816,20 +1765,13 @@ create_pixmap (void)
       gtk_container_add (GTK_CONTAINER (box3), pixmapwid);
       gtk_container_add (GTK_CONTAINER (box3), label);
       gtk_container_add (GTK_CONTAINER (button), box3);
-      gtk_widget_show (pixmapwid);
-      gtk_widget_show (label);
-      gtk_widget_show (box3);
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-      gtk_widget_show (separator);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -1838,11 +1780,10 @@ create_pixmap (void)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button);
-      gtk_widget_show (button);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
@@ -1874,7 +1815,6 @@ tips_query_widget_selected (GtkWidget      *tips_query,
     g_print ("Help \"%s\" requested for <%s>\n",
 	     tip_private ? tip_private : "None",
 	     gtk_type_name (GTK_OBJECT_TYPE (widget)));
-
   return TRUE;
 }
 
@@ -1914,24 +1854,18 @@ create_tooltips (void)
       
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_show (box1);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button = gtk_toggle_button_new_with_label ("button1");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
 
       gtk_tooltips_set_tip (tooltips,button,"This is button 1", "ContextHelp/buttons/1");
 
       button = gtk_toggle_button_new_with_label ("button2");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
 
       gtk_tooltips_set_tip (tooltips,
 			    button,
@@ -1940,7 +1874,6 @@ create_tooltips (void)
 
       toggle = gtk_toggle_button_new_with_label ("Override TipsQuery Label");
       gtk_box_pack_start (GTK_BOX (box2), toggle, TRUE, TRUE, 0);
-      gtk_widget_show (toggle);
 
       gtk_tooltips_set_tip (tooltips, toggle, "Toggle TipsQuery view.", "Hi msw! ;)");
 
@@ -1989,14 +1922,10 @@ create_tooltips (void)
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-      gtk_widget_show (separator);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      gtk_widget_show (box2);
-
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -2005,16 +1934,19 @@ create_tooltips (void)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button);
-      gtk_widget_show (button);
 
       gtk_tooltips_set_tip (tooltips, button, "Push this button to close window", "ContextHelp/buttons/Close");
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
+
+/*
+ * Menu demo
+ */
 
 static GtkWidget*
 create_menu (int depth)
@@ -2083,7 +2015,6 @@ create_menus (void)
       gtk_container_add (GTK_CONTAINER (window), box1);
       gtk_widget_show (box1);
       
-      
       menubar = gtk_menu_bar_new ();
       gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE, 0);
       gtk_widget_show (menubar);
@@ -2105,7 +2036,6 @@ create_menus (void)
       gtk_menu_item_right_justify (GTK_MENU_ITEM (menuitem));
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
-      
       
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
@@ -2157,17 +2087,14 @@ create_menus (void)
       gtk_box_pack_start (GTK_BOX (box2), optionmenu, TRUE, TRUE, 0);
       gtk_widget_show (optionmenu);
 
-
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
       gtk_widget_show (separator);
-
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
       gtk_widget_show (box2);
-
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -2188,6 +2115,7 @@ create_menus (void)
 /*
  * GtkScrolledWindow
  */
+
 static void
 scrolled_windows_remove (GtkWidget *widget, GtkWidget *scrollwin)
 {
@@ -2213,6 +2141,7 @@ scrolled_windows_remove (GtkWidget *widget, GtkWidget *scrollwin)
 /*
  * GtkScrolledWindow
  */
+
 static void
 create_scrolled_windows (void)
 {
@@ -2789,7 +2718,7 @@ create_cursors (void)
       gtk_container_border_width (GTK_CONTAINER (hbox), 5);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
       
-      label = gtk_label_new ("Cursor Value:");
+      label = gtk_label_new ("Cursor Value : ");
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
       
@@ -2865,6 +2794,7 @@ create_cursors (void)
 /*
  * GtkList
  */
+
 static void
 list_add (GtkWidget *widget,
 	  GtkWidget *list)
@@ -3033,7 +2963,6 @@ create_list (void)
   else
     gtk_widget_destroy (window);
 }
-
 
 /*
  * GtkCList
@@ -3402,26 +3331,18 @@ create_clist (void)
 
   static char *titles[] =
   {
-    "Title 0",
-    "Title 1",
-    "Title 2",
-    "Title 3",
-    "Title 4",
-    "Title 5",
-    "Title 6",
-    "Title 7",
-    "Title 8",
-    "Title 9",
-    "Title 10",
-    "Title 11",
-    "Title 12",
-    "Title 13",
-    "Title 14",
-    "Title 15",
-    "Title 16",
-    "Title 17",
-    "Title 18",
-    "Title 19"
+    "Title 0",  "Title 1",  "Title 2",  "Title 3",  "Title 4",
+    "Title 5",  "Title 6",  "Title 7",  "Title 8",  "Title 9",
+    "Title 10", "Title 11", "Title 12", "Title 13", "Title 14",
+    "Title 15", "Title 16", "Title 17", "Title 18", "Title 19"
+  };
+
+  static OptionMenuItem items[] =
+  {
+    { "Single",   clist_toggle_sel_mode },
+    { "Browse",   clist_toggle_sel_mode },
+    { "Multiple", clist_toggle_sel_mode },
+    { "Extended", clist_toggle_sel_mode }
   };
 
   char text[TESTGTK_CLIST_COLUMNS][50];
@@ -3435,9 +3356,6 @@ create_clist (void)
 
   GtkWidget *undo_button;
   GtkWidget *label;
-  GtkWidget *menu;
-  GtkWidget *menu_item;
-  GSList *group;
 
   if (!window)
     {
@@ -3547,44 +3465,8 @@ create_clist (void)
       label = gtk_label_new ("Selection Mode :");
       gtk_box_pack_start (GTK_BOX (box2), label, FALSE, TRUE, 0);
 
-      clist_omenu = gtk_option_menu_new ();
-      
-      menu = gtk_menu_new ();
-      group = NULL;
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Single");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (clist_toggle_sel_mode), clist);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Browse");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (clist_toggle_sel_mode), clist);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Multiple");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-                      GTK_SIGNAL_FUNC (clist_toggle_sel_mode), clist);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Extended");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (clist_toggle_sel_mode), clist);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
-      gtk_widget_show (menu_item);
-      
-      gtk_option_menu_set_menu (GTK_OPTION_MENU (clist_omenu), menu);
+      clist_omenu = build_option_menu (items, 4, 3, clist);
       gtk_box_pack_start (GTK_BOX (box2), clist_omenu, FALSE, TRUE, 0);
-      
-      gtk_option_menu_set_history (GTK_OPTION_MENU (clist_omenu), 3);
 
       /* vbox for the list itself */
       box2 = gtk_vbox_new (FALSE, 10);
@@ -3686,7 +3568,7 @@ static GtkWidget *book_label;
 static GtkWidget *page_label;
 static GtkWidget *sel_label;
 static GtkWidget *vis_label;
-static GtkWidget *omenu;
+static GtkWidget *omenu1;
 static GtkWidget *omenu2;
 static GtkWidget *omenu3;
 static GtkWidget *spin1;
@@ -3917,7 +3799,7 @@ void set_background (GtkCTree *ctree, GList *node, gpointer data)
     gtk_ctree_set_background (ctree, node, NULL);
 }
 
-void toggle_line_style (GtkWidget *widget, GtkCTree *ctree)
+void ctree_toggle_line_style (GtkWidget *widget, GtkCTree *ctree)
 {
   gint i;
 
@@ -3925,7 +3807,7 @@ void toggle_line_style (GtkWidget *widget, GtkCTree *ctree)
     return;
 
   RADIOMENUTOGGLED ((GtkRadioMenuItem *)
-		    (((GtkOptionMenu *)omenu2)->menu_item),i);
+		    (((GtkOptionMenu *)omenu1)->menu_item),i);
   
   if ((ctree->line_style == GTK_CTREE_LINES_TABBED && 
        ((GtkCTreeLineStyle) (3-i)) != GTK_CTREE_LINES_TABBED) ||
@@ -3936,7 +3818,7 @@ void toggle_line_style (GtkWidget *widget, GtkCTree *ctree)
   gtk_ctree_set_line_style (ctree, (GtkCTreeLineStyle) (3-i));
 }
 
-void toggle_justify (GtkWidget *widget, GtkCTree *ctree)
+void ctree_toggle_justify (GtkWidget *widget, GtkCTree *ctree)
 {
   gint i;
 
@@ -3944,13 +3826,13 @@ void toggle_justify (GtkWidget *widget, GtkCTree *ctree)
     return;
 
   RADIOMENUTOGGLED ((GtkRadioMenuItem *)
-		    (((GtkOptionMenu *)omenu3)->menu_item),i);
+		    (((GtkOptionMenu *)omenu2)->menu_item),i);
 
   gtk_clist_set_column_justification (GTK_CLIST (ctree), ctree->tree_column, 
 				      (GtkJustification) (1-i));
 }
 
-void toggle_sel_mode (GtkWidget *widget, GtkCTree *ctree)
+void ctree_toggle_sel_mode (GtkWidget *widget, GtkCTree *ctree)
 {
   gint i;
 
@@ -3958,7 +3840,7 @@ void toggle_sel_mode (GtkWidget *widget, GtkCTree *ctree)
     return;
 
   RADIOMENUTOGGLED ((GtkRadioMenuItem *)
-		    (((GtkOptionMenu *)omenu)->menu_item), i);
+		    (((GtkOptionMenu *)omenu3)->menu_item), i);
 
   gtk_clist_set_selection_mode (GTK_CLIST (ctree), (GtkSelectionMode) (3-i));
   after_press (ctree, NULL);
@@ -4089,17 +3971,35 @@ void create_ctree (void)
   GtkWidget *frame;
   GtkWidget *label;
   GtkWidget *button;
-  GtkWidget *menu_item;
-  GtkWidget *menu;
-  GtkWidget *submenu;
   GtkWidget *check;
   GtkAdjustment *adj;
   GtkWidget *spinner;
-  GSList *group;
   GdkColor transparent;
 
   char *title[] = { "Tree" , "Info" };
   char buf[80];
+
+  static OptionMenuItem items1[] =
+  {
+    { "Solid",    ctree_toggle_line_style },
+    { "Dotted",   ctree_toggle_line_style },
+    { "Tabbed",   ctree_toggle_line_style },
+    { "No lines", ctree_toggle_line_style }
+  };
+
+  static OptionMenuItem items2[] =
+  {
+    { "Left",  ctree_toggle_justify },
+    { "Right", ctree_toggle_justify }
+  };
+
+  static OptionMenuItem items3[] =
+  {
+    { "Single",   ctree_toggle_sel_mode },
+    { "Browse",   ctree_toggle_sel_mode },
+    { "Multiple", ctree_toggle_sel_mode },
+    { "Extended", ctree_toggle_sel_mode }
+  };
 
   if (!window)
     {
@@ -4267,116 +4167,19 @@ void create_ctree (void)
       gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, TRUE, 0);
       gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (check), TRUE);
       
-      omenu2 = gtk_option_menu_new ();
-      gtk_tooltips_set_tip (tooltips, omenu2, "The tree's line style.", NULL);
+      omenu1 = build_option_menu (items1, 4, 1, ctree);
+      gtk_tooltips_set_tip (tooltips, omenu1, "The tree's line style.", NULL);
+      gtk_box_pack_start (GTK_BOX (hbox), omenu1, FALSE, TRUE, 0);
       
-      menu = gtk_menu_new ();
-      submenu = NULL;
-      group = NULL;
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Solid");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_line_style), ctree);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Dotted");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_line_style), ctree);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Tabbed");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_line_style), ctree);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-
-      menu_item = gtk_radio_menu_item_new_with_label (group, "No lines");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_line_style), ctree);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-      
-      gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu2), menu);
+      omenu2 = build_option_menu (items2, 2, 0, ctree);
+      gtk_tooltips_set_tip (tooltips, omenu2, "The tree's justification.",
+			    NULL);
       gtk_box_pack_start (GTK_BOX (hbox), omenu2, FALSE, TRUE, 0);
       
-      gtk_option_menu_set_history (GTK_OPTION_MENU (omenu2), 1);
-      
-      omenu3 = gtk_option_menu_new ();
-      gtk_tooltips_set_tip (tooltips, omenu3, "The tree's justification.",
+      omenu3 = build_option_menu (items3, 4, 3, ctree);
+      gtk_tooltips_set_tip (tooltips, omenu3, "The list's selection mode.",
 			    NULL);
-      
-      menu = gtk_menu_new ();
-      submenu = NULL;
-      group = NULL;
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Left");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_justify), ctree);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
-      gtk_widget_show (menu_item);
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Right");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_justify), ctree);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-      
-      gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu3), menu);
       gtk_box_pack_start (GTK_BOX (hbox), omenu3, FALSE, TRUE, 0);
-      
-      gtk_option_menu_set_history (GTK_OPTION_MENU (omenu3), 0);
-      
-      omenu = gtk_option_menu_new ();
-      gtk_tooltips_set_tip (tooltips, omenu, "The list's selection mode.",
-			    NULL);
-      
-      menu = gtk_menu_new ();
-      submenu = NULL;
-      group = NULL;
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Single");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_sel_mode), ctree);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Browse");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_sel_mode), ctree);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Multiple");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-                      GTK_SIGNAL_FUNC (toggle_sel_mode), ctree);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Extended");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_sel_mode), ctree);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
-      gtk_widget_show (menu_item);
-      
-      gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
-      gtk_box_pack_start (GTK_BOX (hbox), omenu, FALSE, TRUE, 0);
-      
-      gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), 3);
       
       gtk_widget_realize (window);
       
@@ -4468,8 +4271,9 @@ void create_ctree (void)
 }
 
 /*
- * GtkColorSelect
+ * GtkColorSelection
  */
+
 void
 color_selection_ok (GtkWidget               *w,
                     GtkColorSelectionDialog *cs)
@@ -4542,6 +4346,10 @@ create_color_selection (void)
     gtk_widget_destroy (window);
 }
 
+/*
+ * GtkFileSelection
+ */
+
 void
 file_selection_hide_fileops (GtkWidget *widget,
 			     GtkFileSelection *fs)
@@ -4597,9 +4405,6 @@ create_file_selection (void)
       gtk_box_pack_start (GTK_BOX (GTK_FILE_SELECTION (window)->action_area), 
 			  button, FALSE, FALSE, 0);
       gtk_widget_show (button);
-
-      
-      
     }
   
   if (!GTK_WIDGET_VISIBLE (window))
@@ -4607,6 +4412,10 @@ create_file_selection (void)
   else
     gtk_widget_destroy (window);
 }
+
+/*
+ * GtkFontSelection
+ */
 
 void
 font_selection_ok (GtkWidget              *w,
@@ -4645,10 +4454,10 @@ create_font_selection (void)
     gtk_widget_destroy (window);
 }
 
-
 /*
  * GtkDialog
  */
+
 static GtkWidget *dialog_window = NULL;
 
 void
@@ -4685,8 +4494,9 @@ create_dialog (void)
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
 			  &dialog_window);
 
-      gtk_window_set_title (GTK_WINDOW (dialog_window), "dialog");
+      gtk_window_set_title (GTK_WINDOW (dialog_window), "GtkDialog");
       gtk_container_border_width (GTK_CONTAINER (dialog_window), 0);
+      gtk_widget_set_usize (dialog_window, 200, 110);
 
       button = gtk_button_new_with_label ("OK");
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -4713,10 +4523,10 @@ create_dialog (void)
     gtk_widget_destroy (dialog_window);
 }
 
-
 /*
  * GtkRange
  */
+
 void
 create_range_controls (void)
 {
@@ -4796,10 +4606,10 @@ create_range_controls (void)
     gtk_widget_destroy (window);
 }
 
-
 /*
  * GtkRulers
  */
+
 void
 create_rulers (void)
 {
@@ -4863,7 +4673,6 @@ create_rulers (void)
     gtk_widget_destroy (window);
 }
 
-
 static void
 text_toggle_editable (GtkWidget *checkbutton,
 		       GtkWidget *text)
@@ -4883,6 +4692,7 @@ text_toggle_word_wrap (GtkWidget *checkbutton,
 /*
  * GtkText
  */
+
 void
 create_text (void)
 {
@@ -5027,7 +4837,6 @@ create_text (void)
     gtk_widget_destroy (window);
 }
 
-
 /*
  * GtkNotebook
  */
@@ -5036,29 +4845,6 @@ GdkPixmap *book_open;
 GdkPixmap *book_closed;
 GdkBitmap *book_open_mask;
 GdkBitmap *book_closed_mask;
-
-
-static void
-notebook_reparent (GtkWidget *widget, GtkWidget *scrollwin)
-{
-  static GtkWidget *parent = NULL;
-  static GtkWidget *float_parent;
-
-  if (parent)
-    {
-      gtk_widget_reparent (scrollwin, parent);
-      gtk_widget_destroy (float_parent);
-      float_parent = NULL;
-      parent = NULL;
-    }
-  else
-    {
-      parent = widget->parent;
-      float_parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_widget_show (float_parent);
-      gtk_widget_reparent (scrollwin, float_parent);
-    }
-}
 
 static void
 page_switch (GtkWidget *widget, GtkNotebookPage *page, gint page_num)
@@ -5105,7 +4891,7 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
     {
       sprintf (buffer, "Page %d", i);
      
-      switch (i%4)
+      switch (i % 4)
 	{
 	case 3:
 	  child = gtk_button_new_with_label (buffer);
@@ -5230,11 +5016,14 @@ create_notebook (void)
   GtkWidget *separator;
   GtkWidget *notebook;
   GtkWidget *omenu;
-  GtkWidget *menu;
-  GtkWidget *submenu;
-  GtkWidget *menuitem;
-  GSList *group;
   GdkColor *transparent = NULL;
+
+  static OptionMenuItem items[] =
+  {
+    { "Standard",   standard_notebook },
+    { "No tabs",    notabs_notebook },
+    { "Scrollable", scrollable_notebook }
+  };
 
   if (!window)
     {
@@ -5275,42 +5064,16 @@ create_notebook (void)
       box2 = gtk_hbox_new (TRUE, 5);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
       
-      omenu = gtk_option_menu_new ();
-      menu = gtk_menu_new ();
-      submenu = NULL;
-      group = NULL;
-      
-      menuitem = gtk_radio_menu_item_new_with_label (group, "Standard");
-      gtk_signal_connect_object (GTK_OBJECT (menuitem), "activate",
-				 GTK_SIGNAL_FUNC (standard_notebook),
-				 GTK_OBJECT (notebook));
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menuitem));
-      gtk_menu_append (GTK_MENU (menu), menuitem);
-      gtk_widget_show (menuitem);
-      menuitem = gtk_radio_menu_item_new_with_label (group, "w/o Tabs");
-      gtk_signal_connect_object (GTK_OBJECT (menuitem), "activate",
-				 GTK_SIGNAL_FUNC (notabs_notebook),
-				 GTK_OBJECT (notebook));
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menuitem));
-      gtk_menu_append (GTK_MENU (menu), menuitem);
-      gtk_widget_show (menuitem);
-      menuitem = gtk_radio_menu_item_new_with_label (group, "Scrollable");
-      gtk_signal_connect_object (GTK_OBJECT (menuitem), "activate",
-				 GTK_SIGNAL_FUNC (scrollable_notebook),
-				 GTK_OBJECT (notebook));
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menuitem));
-      gtk_menu_append (GTK_MENU (menu), menuitem);
-      gtk_widget_show (menuitem);
-      
-      gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
+      omenu = build_option_menu (items, 3, 0, notebook);
       gtk_box_pack_start (GTK_BOX (box2), omenu, FALSE, FALSE, 0);
+
       button = gtk_check_button_new_with_label ("enable popup menu");
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
       gtk_signal_connect (GTK_OBJECT(button), "clicked",
 			  GTK_SIGNAL_FUNC (notebook_popup),
 			  GTK_OBJECT (notebook));
       
-      box2 = gtk_hbox_new (FALSE, 10);
+      box2 = gtk_hbox_new (TRUE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
       
@@ -5342,13 +5105,6 @@ create_notebook (void)
 			  notebook);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-
-      button = gtk_button_new_with_label ("reparent");
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC (notebook_reparent),
-			  notebook);
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
@@ -5357,10 +5113,10 @@ create_notebook (void)
     gtk_widget_destroy (window);
 }
 
-
 /*
  * GtkPanes
  */
+
 void
 create_panes (void)
 {
@@ -5419,7 +5175,6 @@ create_panes (void)
   else
     gtk_widget_destroy (window);
 }
-
 
 /*
  * Drag -N- Drop
@@ -5653,6 +5408,7 @@ create_dnd (void)
 /*
  * Shaped Windows
  */
+
 static GdkWindow *root_win = NULL;
 
 typedef struct _cursoroffset {gint x,y;} CursorOffset;
@@ -5677,7 +5433,6 @@ shape_pressed (GtkWidget *widget, GdkEventButton *event)
 		    GDK_POINTER_MOTION_HINT_MASK,
 		    NULL, NULL, 0);
 }
-
 
 static void
 shape_released (GtkWidget *widget)
@@ -5816,6 +5571,10 @@ create_shapes (void)
     gtk_widget_destroy (rings);
 }
 
+/*
+ * WM Hints demo
+ */
+
 void
 create_wmhints (void)
 {
@@ -5893,7 +5652,7 @@ create_wmhints (void)
 }
 
 /*
- * Progress Bar
+ * GtkProgressBar
  */
 
 typedef struct _ProgressData {
@@ -5906,11 +5665,10 @@ typedef struct _ProgressData {
   GtkWidget *act_blocks_spin;
   GtkWidget *label;
   GtkWidget *omenu1;
-  GtkWidget *omenu3;
+  GtkWidget *omenu2;
   GtkWidget *entry;
   int timer;
 } ProgressData;
-
 
 gint
 progress_timeout (gpointer data)
@@ -5941,7 +5699,7 @@ destroy_progress (GtkWidget     *widget,
 }
 
 static void
-toggle_orientation (GtkWidget *widget, ProgressData *pdata)
+progressbar_toggle_orientation (GtkWidget *widget, ProgressData *pdata)
 {
   gint i;
 
@@ -5968,7 +5726,7 @@ toggle_show_text (GtkWidget *widget, ProgressData *pdata)
 }
 
 static void
-toggle_bar_style (GtkWidget *widget, ProgressData *pdata)
+progressbar_toggle_bar_style (GtkWidget *widget, ProgressData *pdata)
 {
   gint i;
 
@@ -5976,7 +5734,7 @@ toggle_bar_style (GtkWidget *widget, ProgressData *pdata)
     return;
 
   RADIOMENUTOGGLED ((GtkRadioMenuItem *)
-		    (((GtkOptionMenu *)(pdata->omenu3))->menu_item), i);
+		    (((GtkOptionMenu *)(pdata->omenu2))->menu_item), i);
 
   i = 1 - i;
 
@@ -6066,11 +5824,21 @@ create_progress_bar (void)
   GtkWidget *label;
   GtkWidget *align;
   GtkAdjustment *adj;
-  GtkWidget *menu_item;
-  GtkWidget *menu;
-  GtkWidget *submenu;
-  GSList *group;
   static ProgressData *pdata = NULL;
+
+  static OptionMenuItem items1[] =
+  {
+    { "Left-Right", progressbar_toggle_orientation },
+    { "Right-Left", progressbar_toggle_orientation },
+    { "Bottom-Top", progressbar_toggle_orientation },
+    { "Top-Bottom", progressbar_toggle_orientation }
+  };
+
+  static OptionMenuItem items2[] =
+  {
+    { "Continuous", progressbar_toggle_bar_style },
+    { "Discrete",   progressbar_toggle_bar_style }
+  };
 
   if (!pdata)
     pdata = g_new0 (ProgressData, 1);
@@ -6139,47 +5907,7 @@ create_progress_bar (void)
 			5, 5);
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 
-      pdata->omenu1 = gtk_option_menu_new ();
-
-      menu = gtk_menu_new ();
-      submenu = NULL;
-      group = NULL;
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Left-Right");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_orientation), 
-			  pdata);
-      gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Right-Left");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_orientation),
-			  pdata);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Bottom-Top");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_orientation),
-			  pdata);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Top-Bottom");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_orientation),
-			  pdata);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-      
-      gtk_option_menu_set_menu (GTK_OPTION_MENU (pdata->omenu1), menu);
-      gtk_option_menu_set_history (GTK_OPTION_MENU (pdata->omenu1), 0);
+      pdata->omenu1 = build_option_menu (items1, 4, 0, pdata);
       hbox = gtk_hbox_new (FALSE, 0);
       gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 0, 1,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
@@ -6248,36 +5976,12 @@ create_progress_bar (void)
 			5, 5);
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 
-      pdata->omenu3 = gtk_option_menu_new ();
-
-      menu = gtk_menu_new ();
-      submenu = NULL;
-      group = NULL;
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Continuous");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_bar_style),
-			  pdata);
-      gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-      
-      menu_item = gtk_radio_menu_item_new_with_label (group, "Discrete");
-      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
-			  GTK_SIGNAL_FUNC (toggle_bar_style),
-			  pdata);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
-      gtk_widget_show (menu_item);
-
-      gtk_option_menu_set_menu (GTK_OPTION_MENU (pdata->omenu3), menu);
-      gtk_option_menu_set_history (GTK_OPTION_MENU (pdata->omenu3), 0);
+      pdata->omenu2 = build_option_menu (items2, 2, 0, pdata);
       hbox = gtk_hbox_new (FALSE, 0);
       gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 3, 4,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
-      gtk_box_pack_start (GTK_BOX (hbox), pdata->omenu3, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), pdata->omenu2, TRUE, TRUE, 0);
 
       label = gtk_label_new ("Block count :");
       gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 4, 5,
@@ -6350,6 +6054,7 @@ create_progress_bar (void)
 /*
  * Color Preview
  */
+
 static int color_idle = 0;
 
 gint
@@ -6411,7 +6116,6 @@ create_color_preview (void)
       preview = gtk_preview_new (GTK_PREVIEW_COLOR);
       gtk_preview_size (GTK_PREVIEW (preview), 256, 256);
       gtk_container_add (GTK_CONTAINER (window), preview);
-      gtk_widget_show (preview);
 
       for (i = 0; i < 256; i++)
 	{
@@ -6430,15 +6134,15 @@ create_color_preview (void)
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
 
-
 /*
  * Gray Preview
  */
+
 static int gray_idle = 0;
 
 gint
@@ -6495,7 +6199,6 @@ create_gray_preview (void)
       preview = gtk_preview_new (GTK_PREVIEW_GRAYSCALE);
       gtk_preview_size (GTK_PREVIEW (preview), 256, 256);
       gtk_container_add (GTK_CONTAINER (window), preview);
-      gtk_widget_show (preview);
 
       for (i = 0; i < 256; i++)
 	{
@@ -6509,7 +6212,7 @@ create_gray_preview (void)
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
@@ -6518,6 +6221,7 @@ create_gray_preview (void)
 /*
  * Selection Test
  */
+
 void
 selection_test_received (GtkWidget *list, GtkSelectionData *data)
 {
@@ -6607,11 +6311,9 @@ create_selection_test (void)
       gtk_container_border_width (GTK_CONTAINER (vbox), 10);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox,
 			  TRUE, TRUE, 0);
-      gtk_widget_show (vbox);
 
       label = gtk_label_new ("Gets available targets for current selection");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-      gtk_widget_show (label);
 
       scrolled_win = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
@@ -6619,14 +6321,12 @@ create_selection_test (void)
 				      GTK_POLICY_AUTOMATIC);
       gtk_box_pack_start (GTK_BOX (vbox), scrolled_win, TRUE, TRUE, 0);
       gtk_widget_set_usize (scrolled_win, 100, 200);
-      gtk_widget_show (scrolled_win);
 
       list = gtk_list_new ();
       gtk_container_add (GTK_CONTAINER (scrolled_win), list);
 
       gtk_signal_connect (GTK_OBJECT(list), "selection_received",
 			  GTK_SIGNAL_FUNC (selection_test_received), NULL);
-      gtk_widget_show (list);
 
       /* .. And create some buttons */
       button = gtk_button_new_with_label ("Get Targets");
@@ -6635,7 +6335,6 @@ create_selection_test (void)
 
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (selection_test_get_targets), list);
-      gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Quit");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area),
@@ -6644,19 +6343,18 @@ create_selection_test (void)
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 				 GTK_SIGNAL_FUNC (gtk_widget_destroy),
 				 GTK_OBJECT (window));
-      gtk_widget_show (button);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }
 
-
 /*
  * Gamma Curve
  */
+
 void
 create_gamma_curve (void)
 {
@@ -6699,6 +6397,10 @@ create_gamma_curve (void)
 
   ++count;
 }
+
+/*
+ * Test scrolling
+ */
 
 static int scroll_test_pos = 0.0;
 static GdkGC *scroll_test_gc = NULL;
@@ -6812,7 +6514,6 @@ scroll_test_adjustment_changed (GtkAdjustment *adj, GtkWidget *widget)
 	}
     }
 
-
   if (rect.height != 0)
     gtk_widget_draw (widget, &rect);
 }
@@ -6889,6 +6590,7 @@ create_scroll_test (void)
 /*
  * Timeout Test
  */
+
 static int timer = 0;
 
 gint
@@ -6992,10 +6694,10 @@ create_timeout_test (void)
     gtk_widget_destroy (window);
 }
 
-
 /*
  * Idle Test
  */
+
 static int idle = 0;
 
 static gint
@@ -7160,6 +6862,10 @@ create_idle_test (void)
     gtk_widget_destroy (window);
 }
 
+/*
+ * rc file test
+ */
+
 void
 reload_rc_file (void)
 {
@@ -7312,10 +7018,10 @@ create_mainloop (void)
     gtk_widget_destroy (window);
 }
 
-
 /*
  * Main Window and Exit
  */
+
 void
 do_exit (GtkWidget *widget, GtkWidget *window)
 {
@@ -7347,7 +7053,6 @@ create_main_window (void)
       { "handle box", create_handle_box },
       { "list", create_list },
       { "menus", create_menus },
-      { "miscellaneous", NULL },
       { "notebook", create_notebook },
       { "panes", create_panes },
       { "pixmap", create_pixmap },
@@ -7401,7 +7106,6 @@ create_main_window (void)
 
   box1 = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), box1);
-  gtk_widget_show (box1);
 
   if (gtk_micro_version > 0)
     sprintf (buffer,
@@ -7416,7 +7120,6 @@ create_main_window (void)
 	     gtk_minor_version);
 
   label = gtk_label_new (buffer);
-  gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 0);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
@@ -7426,7 +7129,6 @@ create_main_window (void)
                                   GTK_POLICY_AUTOMATIC);
   GTK_WIDGET_UNSET_FLAGS (GTK_SCROLLED_WINDOW (scrolled_window)->vscrollbar, GTK_CAN_FOCUS);
   gtk_box_pack_start (GTK_BOX (box1), scrolled_window, TRUE, TRUE, 0);
-  gtk_widget_show (scrolled_window);
 
   box2 = gtk_vbox_new (FALSE, 0);
   gtk_container_border_width (GTK_CONTAINER (box2), 10);
@@ -7446,17 +7148,14 @@ create_main_window (void)
       else
         gtk_widget_set_sensitive (button, FALSE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
     }
 
   separator = gtk_hseparator_new ();
   gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-  gtk_widget_show (separator);
 
   box2 = gtk_vbox_new (FALSE, 10);
   gtk_container_border_width (GTK_CONTAINER (box2), 10);
   gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-  gtk_widget_show (box2);
 
   button = gtk_button_new_with_label ("close");
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
@@ -7465,9 +7164,8 @@ create_main_window (void)
   gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
   gtk_widget_grab_default (button);
-  gtk_widget_show (button);
 
-  gtk_widget_show (window);
+  gtk_widget_show_all (window);
 }
 
 #ifdef HAVE_LIBGLE
