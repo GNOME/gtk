@@ -1764,17 +1764,17 @@ gtk_font_selection_load_font (GtkFontSelection *fontsel)
       g_message("Loading: %s\n", fontname);
 #endif
       font = gdk_font_load (fontname);
-      xfs = GDK_FONT_XFONT(font);
-      if (xfs->min_byte1 != 0 || xfs->max_byte1 != 0)
+      xfs = font ? GDK_FONT_XFONT (font) : NULL;
+      if (xfs && (xfs->min_byte1 != 0 || xfs->max_byte1 != 0))
 	{
 	  gchar *tmp_name;
 	  
-	  gdk_font_unref(font);
+	  gdk_font_unref (font);
 	  tmp_name = g_strconcat (fontname, ",*", NULL);
 	  font = gdk_fontset_load (tmp_name);
-	  g_free(tmp_name);
+	  g_free (tmp_name);
 	}
-      g_free(fontname);
+      g_free (fontname);
       
       if (font)
 	{
@@ -3118,11 +3118,13 @@ gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
   font = &fontsel_info->font_info[fontsel->font_index];
   family_str = font->family;
   foundry_str = fontsel_info->properties[FOUNDRY][font->foundry];
-  
+  /* some fonts have a (nil) foundry */
+  if (strcmp (foundry_str, "(nil)") == 0)
+    foundry_str = "";
+    
   for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
     {
-      property_str[prop]
-	= fontsel_info->properties[prop][fontsel->property_values[prop]];
+      property_str[prop] = fontsel_info->properties[prop][fontsel->property_values[prop]];
       if (strcmp (property_str[prop], "(nil)") == 0)
 	property_str[prop] = "";
     }
