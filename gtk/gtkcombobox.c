@@ -2608,9 +2608,12 @@ gtk_combo_box_key_press (GtkWidget   *widget,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (data);
   guint state = event->state & gtk_accelerator_get_default_mod_mask ();
-  gint items = gtk_tree_model_iter_n_children (combo_box->priv->model, NULL);
+  gint items = 0;
   gint index = gtk_combo_box_get_active (combo_box);
   gint new_index;
+
+  if (combo_box->priv->model)
+    items = gtk_tree_model_iter_n_children (combo_box->priv->model, NULL);
 
   if ((event->keyval == GDK_Down || event->keyval == GDK_KP_Down) && 
       state == GDK_MOD1_MASK)
@@ -2657,8 +2660,9 @@ gtk_combo_box_key_press (GtkWidget   *widget,
     default:
       return FALSE;
     }
-  
-  gtk_combo_box_set_active (combo_box, CLAMP (new_index, 0, items - 1));
+      
+  if (items > 0)
+    gtk_combo_box_set_active (combo_box, CLAMP (new_index, 0, items - 1));
 
   return TRUE;
 }
@@ -2706,12 +2710,16 @@ gtk_combo_box_list_key_press (GtkWidget   *widget,
   if (event->keyval == GDK_Return || event->keyval == GDK_KP_Enter ||
       event->keyval == GDK_space || event->keyval == GDK_KP_Space) 
   {
-    gboolean ret;
+    gboolean ret = FALSE;
     GtkTreeIter iter;
     GtkTreeModel *model = NULL;
-    GtkTreeSelection *sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (combo_box->priv->tree_view));
     
-    ret = gtk_tree_selection_get_selected (sel, &model, &iter);
+    if (combo_box->priv->model)
+      {
+	GtkTreeSelection *sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (combo_box->priv->tree_view));
+    
+	ret = gtk_tree_selection_get_selected (sel, &model, &iter);
+      }
     if (ret)
       {
 	GtkTreePath *path;
