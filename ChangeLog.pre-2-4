@@ -1,3 +1,7 @@
+Sun May 13 18:40:04 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpixmap.h: Remove creative formatting.
+
 Thu May 10 19:22:28 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktogglebutton.c:  Patch from John Margaglione converting to
