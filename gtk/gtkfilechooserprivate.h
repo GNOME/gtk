@@ -36,33 +36,35 @@ struct _GtkFileChooserIface
 
   /* Methods
    */
-  void           (*set_current_folder) (GtkFileChooser    *chooser,
-		 		        const GtkFilePath *path);
-  GtkFilePath *  (*get_current_folder) (GtkFileChooser    *chooser);
-  void           (*set_current_name)   (GtkFileChooser    *chooser,
-					const gchar       *name);
-  void           (*select_path)        (GtkFileChooser    *chooser,
-		 		        const GtkFilePath *path);
-  void           (*unselect_path)      (GtkFileChooser    *chooser,
-		 		        const GtkFilePath *path);
-  void           (*select_all)         (GtkFileChooser    *chooser);
-  void           (*unselect_all)       (GtkFileChooser    *chooser);
-  GSList *       (*get_paths)          (GtkFileChooser    *chooser);
-  GtkFilePath *  (*get_preview_path)   (GtkFileChooser    *chooser);
-  GtkFileSystem *(*get_file_system)    (GtkFileChooser    *chooser);
-  void           (*add_filter)         (GtkFileChooser    *chooser,
-					GtkFileFilter     *filter);
-  void           (*remove_filter)      (GtkFileChooser    *chooser,
-					GtkFileFilter     *filter);
-  GSList *       (*list_filters)       (GtkFileChooser    *chooser);
-
+  void           (*set_current_folder) 	   (GtkFileChooser    *chooser,
+		 		       	    const GtkFilePath *path);
+  GtkFilePath *  (*get_current_folder) 	   (GtkFileChooser    *chooser);
+  void           (*set_current_name)   	   (GtkFileChooser    *chooser,
+					    const gchar       *name);
+  void           (*select_path)        	   (GtkFileChooser    *chooser,
+		 		       	    const GtkFilePath *path);
+  void           (*unselect_path)      	   (GtkFileChooser    *chooser,
+		 		       	    const GtkFilePath *path);
+  void           (*select_all)         	   (GtkFileChooser    *chooser);
+  void           (*unselect_all)       	   (GtkFileChooser    *chooser);
+  GSList *       (*get_paths)          	   (GtkFileChooser    *chooser);
+  GtkFilePath *  (*get_preview_path)   	   (GtkFileChooser    *chooser);
+  GtkFileSystem *(*get_file_system)    	   (GtkFileChooser    *chooser);
+  void           (*add_filter)         	   (GtkFileChooser    *chooser,
+					    GtkFileFilter     *filter);
+  void           (*remove_filter)      	   (GtkFileChooser    *chooser,
+					    GtkFileFilter     *filter);
+  GSList *       (*list_filters)       	   (GtkFileChooser    *chooser);
+  void           (*set_shortcut_folders)   (GtkFileChooser    *chooser,
+					    GSList            *bookmarks);
+  GSList *       (*list_shortcut_folders)  (GtkFileChooser    *chooser);
   
   /* Signals
    */
   void (*current_folder_changed) (GtkFileChooser *chooser);
   void (*selection_changed)      (GtkFileChooser *chooser);
   void (*update_preview)         (GtkFileChooser *chooser);
-  void (*file_activated)         (GtkFileChooser *chooser); 
+  void (*file_activated)         (GtkFileChooser *chooser);
 };
 
 GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);

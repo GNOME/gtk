@@ -448,6 +448,13 @@ gtk_file_system_base_init (gpointer g_class)
 		    NULL, NULL,
 		    g_cclosure_marshal_VOID__VOID,
 		    G_TYPE_NONE, 0);
+      g_signal_new ("bookmarks-changed",
+		    iface_type,
+		    G_SIGNAL_RUN_LAST,
+		    G_STRUCT_OFFSET (GtkFileSystemIface, bookmarks_changed),
+		    NULL, NULL,
+		    g_cclosure_marshal_VOID__VOID,
+		    G_TYPE_NONE, 0);
 
       initialized = TRUE;
     }
@@ -644,6 +651,68 @@ gtk_file_system_filename_to_path (GtkFileSystem *file_system,
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->filename_to_path (file_system, filename);
 }
 
+/**
+ * gtk_file_system_get_supports_bookmarks:
+ * @chooser: a #GtkFileSystem
+ * 
+ * Queries whether the file system supports the bookmarks feature.  If this
+ * returns FALSE, then gtk_file_system_set_bookmarks() and
+ * gtk_file_system_list_bookmarks() will do nothing.
+ * 
+ * Return value: TRUE if the file system supports bookmarks, FALSE otherwise.
+ **/
+gboolean
+gtk_file_system_get_supports_bookmarks (GtkFileSystem *file_system)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_supports_bookmarks (file_system);
+}
+
+/**
+ * gtk_file_system_set_bookmarks:
+ * @file_system: a #GtkFileSystem
+ * @bookmarks: a list of #GtkFilePath, or NULL if you want to clear the current
+ * list of bookmarks.
+ * @error: location to store error, or %NULL.
+ * 
+ * Sets the list of bookmarks to be stored by a file system.  This will also
+ * cause the bookmarks list to get saved.  The ::bookmarks_changed signal will
+ * be emitted.  Normally you do not need to call this function.
+ *
+ * See also: gtk_file_system_get_supports_bookmarks()
+ **/
+void
+gtk_file_system_set_bookmarks (GtkFileSystem *file_system,
+			       GSList        *bookmarks,
+			       GError       **error)
+{
+  g_return_if_fail (GTK_IS_FILE_SYSTEM (file_system));
+  g_return_if_fail (gtk_file_system_get_supports_bookmarks (file_system));
+
+  GTK_FILE_SYSTEM_GET_IFACE (file_system)->set_bookmarks (file_system, bookmarks, error);
+}
+
+/**
+ * gtk_file_system_list_bookmarks:
+ * @file_system: a #GtkFileSystem
+ * 
+ * Queries the list of bookmarks in the file system.
+ * 
+ * Return value: A list of #GtkFilePath, or NULL if there are no configured
+ * bookmarks.  You should use gtk_file_paths_free() to free this list.
+ *
+ * See also: gtk_file_system_get_supports_bookmarks()
+ **/
+GSList *
+gtk_file_system_list_bookmarks (GtkFileSystem *file_system)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (gtk_file_system_get_supports_bookmarks (file_system), NULL);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->list_bookmarks (file_system);
+}
+
 /*****************************************
  *             GtkFileFolder             *
  *****************************************/
@@ -754,6 +823,42 @@ GSList *
 gtk_file_paths_sort (GSList *paths)
 {
   return g_slist_sort (paths, (GCompareFunc)strcmp);
+}
+
+/**
+ * gtk_file_paths_copy:
+ * @paths: A #GSList of 3GtkFilePath structures.
+ * 
+ * Copies a list of #GtkFilePath structures.
+ * 
+ * Return value: A copy of @paths.  Since the contents of the list are copied as
+ * well, you should use gtk_file_paths_free() to free the result.
+ **/
+GSList *
+gtk_file_paths_copy (GSList *paths)
+{
+  GSList *head, *tail, *l;
+
+  head = tail = NULL;
+
+  for (l = paths; l; l = l->next)
+    {
+      GtkFilePath *path;
+      GSList *node;
+
+      path = l->data;
+      node = g_slist_alloc ();
+
+      if (tail)
+	tail->next = node;
+      else
+	head = node;
+
+      node->data = gtk_file_path_copy (path);
+      tail = node;
+    }
+
+  return head;
 }
 
 void

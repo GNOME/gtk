@@ -112,6 +112,12 @@ static GtkFilePath *gtk_file_system_unix_uri_to_path      (GtkFileSystem     *fi
 static GtkFilePath *gtk_file_system_unix_filename_to_path (GtkFileSystem     *file_system,
 							   const gchar       *filename);
 
+static gboolean       gtk_file_system_unix_get_supports_bookmarks (GtkFileSystem *file_system);
+static void           gtk_file_system_unix_set_bookmarks          (GtkFileSystem *file_system,
+								   GSList        *bookmarks,
+								   GError       **error);
+static GSList *       gtk_file_system_unix_list_bookmarks         (GtkFileSystem *file_system);
+
 static GType gtk_file_folder_unix_get_type   (void);
 static void  gtk_file_folder_unix_class_init (GtkFileFolderUnixClass *class);
 static void  gtk_file_folder_unix_iface_init (GtkFileFolderIface     *iface);
@@ -213,6 +219,9 @@ gtk_file_system_unix_iface_init   (GtkFileSystemIface *iface)
   iface->path_to_filename = gtk_file_system_unix_path_to_filename;
   iface->uri_to_path = gtk_file_system_unix_uri_to_path;
   iface->filename_to_path = gtk_file_system_unix_filename_to_path;
+  iface->get_supports_bookmarks = gtk_file_system_unix_get_supports_bookmarks;
+  iface->set_bookmarks = gtk_file_system_unix_set_bookmarks;
+  iface->list_bookmarks = gtk_file_system_unix_list_bookmarks;
 }
 
 static void
@@ -530,6 +539,29 @@ gtk_file_system_unix_filename_to_path (GtkFileSystem *file_system,
 				       const gchar   *filename)
 {
   return gtk_file_path_new_dup (filename);
+}
+
+static gboolean
+gtk_file_system_unix_get_supports_bookmarks (GtkFileSystem *file_system)
+{
+  return FALSE;
+}
+
+static void
+gtk_file_system_unix_set_bookmarks (GtkFileSystem *file_system,
+				    GSList        *bookmarks,
+				    GError       **error)
+{
+  g_set_error (error,
+	       GTK_FILE_SYSTEM_ERROR,
+	       GTK_FILE_SYSTEM_ERROR_FAILED,
+	       "This file system does not support bookmarks"); 
+}
+
+static GSList *
+gtk_file_system_unix_list_bookmarks (GtkFileSystem *file_system)
+{
+  return NULL;
 }
 
 /*

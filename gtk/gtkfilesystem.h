@@ -176,9 +176,18 @@ struct _GtkFileSystemIface
   GtkFilePath *(*filename_to_path) (GtkFileSystem      *file_system,
 				    const gchar        *path);
 
+  /* Bookmarks */
+
+  gboolean       (*get_supports_bookmarks) (GtkFileSystem *file_system);
+  void           (*set_bookmarks)          (GtkFileSystem *file_system,
+					    GSList        *bookmarks,
+					    GError       **error);
+  GSList *       (*list_bookmarks)         (GtkFileSystem *file_system);
+
   /* Signals
    */
-  void (*roots_changed) (GtkFileSystem *file_system);
+  void (*roots_changed)     (GtkFileSystem *file_system);
+  void (*bookmarks_changed) (GtkFileSystem *file_system);
 };
 
 GType             gtk_file_system_get_type       (void);
@@ -226,6 +235,14 @@ GtkFilePath *gtk_file_system_uri_to_path      (GtkFileSystem     *file_system,
 					       const gchar       *uri);
 GtkFilePath *gtk_file_system_filename_to_path (GtkFileSystem     *file_system,
 					       const gchar       *filename);
+
+gboolean gtk_file_system_get_supports_bookmarks (GtkFileSystem *file_system);
+
+void    gtk_file_system_set_bookmarks  (GtkFileSystem *file_system,
+					GSList        *bookmarks,
+					GError       **error);
+GSList *gtk_file_system_list_bookmarks (GtkFileSystem *file_system);
+
 
 /*
  * Detailed information about a particular folder
@@ -290,6 +307,7 @@ GtkFileInfo *gtk_file_folder_get_info      (GtkFileFolder      *folder,
 						   gtk_file_path_get_string (path2))
 
 GSList *gtk_file_paths_sort (GSList *paths);
+GSList *gtk_file_paths_copy (GSList *paths);
 void    gtk_file_paths_free (GSList *paths);
 
 G_END_DECLS

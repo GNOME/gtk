@@ -1231,3 +1231,40 @@ gtk_file_chooser_get_filter (GtkFileChooser *chooser)
 
   return filter;
 }
+
+/* gtk_file_chooser_set_shortcut_folders:
+ * @chooser: a #GtkFileChooser
+ * @shortcut_folders: a list of #GtkFilePath, or NULL if you want to clear the
+ * current list of shortcut folders.
+ * 
+ * Sets the list of shortcut folders to be shown in a file chooser.  Note that
+ * these do not get saved, as they are provided by the application.  For
+ * example, you can use this to add a "/usr/share/myapp/Clipart" folder to the
+ * volume list.
+ **/
+void
+gtk_file_chooser_set_shortcut_folders (GtkFileChooser *chooser,
+				       GSList         *shortcut_folders)
+{
+  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+
+  GTK_FILE_CHOOSER_GET_IFACE (chooser)->set_shortcut_folders (chooser, shortcut_folders);
+}
+
+/**
+ * gtk_file_chooser_list_shortcut_folders:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Queries the list of shortcut folders in the file chooser, as set by
+ * gtk_file_chooser_set_shortcut_folders().
+ * 
+ * Return value: A list of #GtkFilePath, or NULL if there are no shortcut
+ * folders.  You should use gtk_file_paths_free() to free this list.
+ **/
+GSList *
+gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
+{
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
+
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_shortcut_folders (chooser);
+}

@@ -121,6 +121,12 @@ void           gtk_file_chooser_set_filter (GtkFileChooser *chooser,
 					   GtkFileFilter  *filter);
 GtkFileFilter *gtk_file_chooser_get_filter (GtkFileChooser *chooser);
 
+/* Per-application shortcut folders */
+
+void    gtk_file_chooser_set_shortcut_folders  (GtkFileChooser *chooser,
+					        GSList         *shortcut_directories);
+GSList *gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_H__ */
