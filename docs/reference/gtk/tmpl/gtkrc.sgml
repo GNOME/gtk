@@ -495,7 +495,6 @@ This can later be composited together with other
 #GtkRcStyle structures to form a #GtkStyle.
 </para>
 
-@parent_instance: 
 @name: 
 @bg_pixmap_name: 
 @font_desc: 
@@ -554,20 +553,6 @@ set for each state.
 @GTK_RC_BG: 
 @GTK_RC_TEXT: 
 @GTK_RC_BASE: 
-
-<!-- ##### USER_FUNCTION GtkImageLoader ##### -->
-<para>
-A GtkImageLoader is used to load a filename found in
-a RC file.
-</para>
-
-@window: the window for creating image
-@colormap: the colormap for this image
-@mask: a pointer to the location to store the mask
-@transparent_color: the transparent color for the image
-@filename: filename to load
-@Returns: a #GtkPixmap representing @filename
-
 
 <!-- ##### ENUM GtkRcTokenType ##### -->
 <para>
@@ -833,26 +818,6 @@ itself.)
 </para>
 
 @Returns: The directory. (Must be freed with g_free())
-
-
-<!-- ##### FUNCTION gtk_rc_set_image_loader ##### -->
-<para>
-Sets the function that GTK+ will use to load images 
-</para>
-
-@loader: the #GtkImageLoader to use
-
-
-<!-- ##### FUNCTION gtk_rc_load_image ##### -->
-<para>
-Internal function. Loads an image using the current
-image loader.
-</para>
-
-@colormap: the colormap to use for the image
-@transparent_color: the transparent color for the image
-@filename: the filename of the image file
-@Returns: a #GtkPixmap representing @filename
 
 
 <!-- ##### FUNCTION gtk_rc_style_new ##### -->

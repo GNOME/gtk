@@ -214,14 +214,14 @@ set or retrieve the number of rows in a table.
 set or retrieve the number of columnsin a table.
 </para>
 
-<!-- ##### ARG GtkTable:row-spacing ##### -->
-<para>
-set or retrieve the number of pixels of space between each row.
-</para>
-
 <!-- ##### ARG GtkTable:column-spacing ##### -->
 <para>
 set or retrieve the number of pixels of space between each column.
+</para>
+
+<!-- ##### ARG GtkTable:row-spacing ##### -->
+<para>
+set or retrieve the number of pixels of space between each row.
 </para>
 
 <!-- ##### ARG GtkTable:homogeneous ##### -->

@@ -1378,6 +1378,14 @@ GtkWidget
 @event: 
 @Returns: 
 
+<!-- ##### SIGNAL GtkWidget::child-notify ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkWidget::client-event ##### -->
 <para>
 

@@ -154,72 +154,6 @@ GtkContainer
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_container_add_child_arg_type ##### -->
-<para>
-
-</para>
-
-@arg_name: 
-@arg_type: 
-@arg_flags: 
-@arg_id: 
-
-
-<!-- ##### FUNCTION gtk_container_query_child_args ##### -->
-<para>
-
-</para>
-
-@class_type: 
-@arg_flags: 
-@nargs: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_container_child_getv ##### -->
-<para>
-
-</para>
-
-@container: 
-@child: 
-@n_args: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_container_child_setv ##### -->
-<para>
-
-</para>
-
-@container: 
-@child: 
-@n_args: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_container_add_with_args ##### -->
-<para>
-
-</para>
-
-@container: 
-@widget: 
-@first_arg_name: 
-@Varargs: 
-
-
-<!-- ##### FUNCTION gtk_container_addv ##### -->
-<para>
-
-</para>
-
-@container: 
-@widget: 
-@n_args: 
-@args: 
-
-
 <!-- ##### FUNCTION gtk_container_child_set ##### -->
 <para>
 
@@ -227,8 +161,10 @@ GtkContainer
 
 @container: 
 @child: 
-@first_arg_name: 
+@first_prop_name: 
 @Varargs: 
+<!-- # Unused Parameters # -->
+@first_arg_name: 
 
 
 <!-- ##### FUNCTION gtk_container_queue_resize ##### -->
@@ -245,52 +181,6 @@ GtkContainer
 </para>
 
 @container: 
-
-
-<!-- ##### FUNCTION gtk_container_arg_set ##### -->
-<para>
-
-</para>
-
-@container: 
-@child: 
-@arg: 
-@info: 
-
-
-<!-- ##### FUNCTION gtk_container_arg_get ##### -->
-<para>
-
-</para>
-
-@container: 
-@child: 
-@arg: 
-@info: 
-
-
-<!-- ##### FUNCTION gtk_container_child_args_collect ##### -->
-<para>
-
-</para>
-
-@object_type: 
-@arg_list_p: 
-@info_list_p: 
-@first_arg_name: 
-@args: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_container_child_arg_get_info ##### -->
-<para>
-
-</para>
-
-@object_type: 
-@arg_name: 
-@info_p: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_forall ##### -->
@@ -388,12 +278,12 @@ GtkContainer
 @container: the object which received the signal.
 @widget: 
 
-<!-- ##### ARG GtkContainer:resize-mode ##### -->
+<!-- ##### ARG GtkContainer:border-width ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkContainer:border-width ##### -->
+<!-- ##### ARG GtkContainer:resize-mode ##### -->
 <para>
 
 </para>

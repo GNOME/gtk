@@ -1,3 +1,50 @@
+<!-- ##### SECTION ./tmpl/gtkarg.sgml:Long_Description ##### -->
+<para>
+All the functions in here are marked a Non-public.
+We describe it anyway because it is occasionally useful
+to understand how the work is done.
+</para>
+<para>
+Arguments are a way of describing a named parameter to a function.
+They have two important roles within gtk+:
+<itemizedlist>
+<listitem>
+<para>
+they describe <wordasword>object properties</wordasword>.
+This means that they present an interface to get and set a named-type
+for any type of object in a consistent way.
+(All the relevant functions to do this start with gtk_object_set
+or gtk_object_get).
+</para>
+</listitem>
+<listitem>
+<para>
+they describe <wordasword>signal arguments</wordasword>.
+This is a lot less often needed but still useful.
+Usually if you are just emitting or creating a particular signal
+it is more convenient to just use gtk_signal_emit() or gtk_signal_new().
+However if you are writing a function to emit or create an arbitrary
+signal, you must use gtk_signal_emitv() or gtk_signal_newv().
+</para>
+</listitem>
+</itemizedlist>
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkarg.sgml:See_Also ##### -->
+<para>
+#GtkObject.
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkarg.sgml:Short_Description ##### -->
+Utility function to manipulate lists of named, typed arguments.
+
+
+<!-- ##### SECTION ./tmpl/gtkarg.sgml:Title ##### -->
+Implementation of Object Properties
+
+
 <!-- ##### SECTION ./tmpl/gtkdata.sgml:Long_Description ##### -->
 <para>
 The #GtkData object is a very simple object intended to be used as a base
@@ -352,6 +399,23 @@ Define a function pointer.  Deprecated.
 @arg: 
 @arg_id: 
 
+<!-- ##### STRUCT GtkArgInfo ##### -->
+<para>
+A structure containing information about the argument.
+Returned by gtk_arg_get_info().
+</para>
+
+@class_type: if the argument is an object, this is the object class type.
+@name: the name of the argument.
+@type: the type of the argument; it may be an object's type
+or a fundamental type.
+@arg_flags: flags applicable to the argument (i.e. readable, writable,
+and whether it needs to be constructed).
+@full_name: the object name and argument name separated by ::,
+e.g. "GtkObject::user_data" or "GtkButton::label".
+@arg_id: the unique argument identified.
+@seq_id: ???
+
 <!-- ##### USER_FUNCTION GtkArgSetFunc ##### -->
 <para>
 Define a function pointer.  Deprecated.
@@ -638,6 +702,19 @@ the #GtkAdjustment which sets the range of the scale.
 @tentative_match: 
 @tentative_match_len: 
 
+<!-- ##### USER_FUNCTION GtkImageLoader ##### -->
+<para>
+A GtkImageLoader is used to load a filename found in
+a RC file.
+</para>
+
+@window: the window for creating image
+@colormap: the colormap for this image
+@mask: a pointer to the location to store the mask
+@transparent_color: the transparent color for the image
+@filename: filename to load
+@Returns: a #GtkPixmap representing @filename
+
 <!-- ##### ARG GtkLabel:accel-keyval ##### -->
 <para>
 
@@ -682,6 +759,42 @@ the signal to the object.
 Setting this with a GtkType of GTK_TYPE_SIGNAL connects
 the signal to the object, so that the signal is always run
 after other user handlers and the default handler.
+</para>
+
+
+<!-- ##### ARG GtkPacker:default-border-width ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkPacker:default-ipad-x ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkPacker:default-ipad-y ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkPacker:default-pad-x ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkPacker:default-pad-y ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkPacker:spacing ##### -->
+<para>
+
 </para>
 
 
@@ -867,6 +980,161 @@ the #GtkAdjustment which sets the range of the scale.
 
 @widget: the object which received the signal.
 
+<!-- ##### FUNCTION gtk_arg_copy ##### -->
+<para>
+It will either copy data into an existing argument or allocate a new argument
+and copy the data.  Strings are duplicated.  All other pointers and
+values are copied (shallowly-- that is the pointers themselves are
+copied, not the data they point to.)
+</para>
+<para>
+You should call gtk_arg_reset() on dest_arg before calling this
+if the argument may contain string data that you want freed.
+</para>
+
+@src_arg: the argument to duplicate.
+@dest_arg: the argument to copy over (or NULL to create a new #GtkArg).
+@Returns: the new #GtkArg (or dest_arg, if it was not NULL).
+
+<!-- ##### FUNCTION gtk_arg_free ##### -->
+<para>
+Frees the argument, and optionally its contents.
+</para>
+
+@arg: the argument to free.
+@free_contents: whether to free the string, if it is a string.
+
+<!-- ##### FUNCTION gtk_arg_get_info ##### -->
+<para>
+Private: get information about an argument.
+</para>
+
+@object_type: the type of object.
+@arg_info_hash_table: the hashtable of #GtkArgInfos.
+@arg_name: the name of the argument to lookup.
+@info_p: the argument info.
+@Returns: an error message on failure, or NULL otherwise.
+
+<!-- ##### FUNCTION gtk_arg_info_equal ##### -->
+<para>
+A #GCompareFunc for hashing #GtkArgInfos.
+</para>
+
+@arg_info_1: a #GtkArgInfo.
+@arg_info_2: a #GtkArgInfo.
+@Returns: whether the arguments are the same.
+
+<!-- ##### FUNCTION gtk_arg_info_hash ##### -->
+<para>
+A #GHashFunc for hashing #GtkArgInfos.
+</para>
+
+@arg_info: a #GtkArgInfo.
+@Returns: a hash value for that #GtkArgInfo.
+
+<!-- ##### FUNCTION gtk_arg_name_strip_type ##### -->
+<para>
+Given a fully qualified argument name (e.g. "GtkButton::label")
+it returns just the argument name (e.g. "label") unless
+the argument name was invalid, in which case it returns NULL.
+</para>
+
+@arg_name: the fully-qualified argument name.
+@Returns: the base argument name.
+
+<!-- ##### FUNCTION gtk_arg_new ##### -->
+<para>
+Creates a new argument of a certain type, set to 0 or NULL.
+</para>
+
+@arg_type: the type of the argument.
+@Returns: the newly created #GtkArg.
+
+<!-- ##### FUNCTION gtk_arg_reset ##### -->
+<para>
+
+</para>
+
+@arg: 
+
+<!-- ##### FUNCTION gtk_arg_to_valueloc ##### -->
+<para>
+
+</para>
+
+@arg: 
+@value_pointer: 
+
+<!-- ##### FUNCTION gtk_arg_type_new_static ##### -->
+<para>
+Create a new argument registered with a class.
+</para>
+
+@base_class_type: the basic type having the arguments, almost alway
+GTK_TYPE_OBJECT, except if your defining a different type argument
+that gets a different namespace.  #GtkContainer does this to define
+per-child arguments of the container.
+@arg_name: name of the argument to create.  (must be a static constant string)
+@class_n_args_offset: offset into the base class structure that tells
+the number of arguments.
+@arg_info_hash_table: hashtable of #GtkArgInfos.
+@arg_type: type of the argument.
+@arg_flags: flags of the argument.
+@arg_id: ???
+@Returns: the new #GtkArgInfo.
+
+<!-- ##### FUNCTION gtk_arg_values_equal ##### -->
+<para>
+
+</para>
+
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_args_collect ##### -->
+<para>
+Private:  given a hashtable of argument information it takes a vararg
+list and parses it into arguments (in the form of lists of #GtkArgs
+and lists of #GtkArgInfos.
+</para>
+<para>
+The list of arguments starts with first_arg_name then the first argument's
+value.  Followed by any number of additional name/argument pairs,
+terminated with NULL.
+</para>
+
+@object_type: the type of object we are collecting arguments for.
+@arg_info_hash_table: a hashtable mapping from names of arguments
+to their #GtkArgInfos.
+@arg_list_p: a returned list of arguments obtained from parsing the
+varargs.
+@info_list_p: a returned list of the #GtkArgInfos.
+@first_arg_name: the name of the first argument.
+@var_args: a va_list containing the value of the first argument,
+followed by name/value pairs, followed by NULL.
+@Returns: an error message on failure, or NULL otherwise.
+
+<!-- ##### FUNCTION gtk_args_collect_cleanup ##### -->
+<para>
+Private: erase lists of arguments returned from gtk_args_collect().
+</para>
+
+@arg_list: arg_list_p returned from gtk_args_collect().
+@info_list: info_list_p returned from gtk_args_collect().
+
+<!-- ##### FUNCTION gtk_args_query ##### -->
+<para>
+Private: from a class type and its arginfo hashtable,
+get an array of #GtkArgs that this object accepts.
+</para>
+
+@class_type: the class type.
+@arg_info_hash_table: the hashtable of #GtkArgInfos.
+@arg_flags: returned array of argument flags.
+@n_args_p: the number of arguments this object accepts.
+@Returns: the array of arguments (or NULL on error).
+
 <!-- ##### FUNCTION gtk_button_box_child_requisition ##### -->
 <para>
 This is an internally used function and should never be called from an
@@ -1005,6 +1273,98 @@ is enabled.
 @colorsel: 
 @use_palette: 
 
+<!-- ##### FUNCTION gtk_container_add_child_arg_type ##### -->
+<para>
+
+</para>
+
+@arg_name: 
+@arg_type: 
+@arg_flags: 
+@arg_id: 
+
+<!-- ##### FUNCTION gtk_container_add_with_args ##### -->
+<para>
+
+</para>
+
+@container: 
+@widget: 
+@first_arg_name: 
+@Varargs: 
+
+<!-- ##### FUNCTION gtk_container_addv ##### -->
+<para>
+
+</para>
+
+@container: 
+@widget: 
+@n_args: 
+@args: 
+
+<!-- ##### FUNCTION gtk_container_arg_get ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@arg: 
+@info: 
+
+<!-- ##### FUNCTION gtk_container_arg_set ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@arg: 
+@info: 
+
+<!-- ##### FUNCTION gtk_container_child_arg_get_info ##### -->
+<para>
+
+</para>
+
+@object_type: 
+@arg_name: 
+@info_p: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_container_child_args_collect ##### -->
+<para>
+
+</para>
+
+@object_type: 
+@arg_list_p: 
+@info_list_p: 
+@first_arg_name: 
+@args: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_container_child_getv ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@n_args: 
+@args: 
+
+<!-- ##### FUNCTION gtk_container_child_setv ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@n_args: 
+@args: 
+
 <!-- ##### FUNCTION gtk_container_focus ##### -->
 <para>
 
@@ -1012,6 +1372,16 @@ is enabled.
 
 @container: 
 @direction: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_container_query_child_args ##### -->
+<para>
+
+</para>
+
+@class_type: 
+@arg_flags: 
+@nargs: 
 @Returns: 
 
 <!-- ##### FUNCTION gtk_ctree_construct ##### -->
@@ -1391,6 +1761,24 @@ Set the the handle size to @size x @size pixels.
 Internal function.
 </para>
 
+
+<!-- ##### FUNCTION gtk_rc_load_image ##### -->
+<para>
+Internal function. Loads an image using the current
+image loader.
+</para>
+
+@colormap: the colormap to use for the image
+@transparent_color: the transparent color for the image
+@filename: the filename of the image file
+@Returns: a #GtkPixmap representing @filename
+
+<!-- ##### FUNCTION gtk_rc_set_image_loader ##### -->
+<para>
+Sets the function that GTK+ will use to load images 
+</para>
+
+@loader: the #GtkImageLoader to use
 
 <!-- ##### FUNCTION gtk_ruler_draw_pos ##### -->
 <para>

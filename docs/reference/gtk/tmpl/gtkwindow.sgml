@@ -411,6 +411,7 @@ it's larger
 </para>
 
 @window: 
+@setting: 
 
 
 <!-- ##### FUNCTION gtk_window_set_mnemonic_modifier ##### -->

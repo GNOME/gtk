@@ -58,7 +58,6 @@ gtk_notebook_get_type
 gtk_old_editable_get_type
 gtk_object_get_type
 gtk_option_menu_get_type
-gtk_packer_get_type
 gtk_paned_get_type
 gtk_pixmap_get_type
 gtk_plug_get_type
