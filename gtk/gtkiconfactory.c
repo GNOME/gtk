@@ -1038,20 +1038,10 @@ find_and_prep_icon_source (GtkIconSet       *icon_set,
   if (source->pixbuf == NULL)
     {
       GError *error;
-      gchar *full;
       
       g_assert (source->filename);
+      source->pixbuf = gdk_pixbuf_new_from_file (source->filename, &error);
 
-      if (g_path_is_absolute (source->filename))
-        full = g_strdup (source->filename);
-      else
-        full = gtk_rc_find_pixmap_in_path (NULL, source->filename);
-
-      error = NULL;
-      source->pixbuf = gdk_pixbuf_new_from_file (full, &error);
-
-      g_free (full);
-      
       if (source->pixbuf == NULL)
         {
           /* Remove this icon source so we don't keep trying to
@@ -1435,19 +1425,15 @@ gtk_icon_source_free (GtkIconSource *source)
  * @source: a #GtkIconSource
  * @filename: image file to use
  *
- * Sets the name of an image file to use as a base image when creating icon
- * variants for #GtkIconSet. If the filename is absolute, GTK+ will
- * attempt to open the exact file given. If the filename is relative,
- * GTK+ will search for it in the "pixmap path" which can be configured
- * by users in their gtkrc files or specified as part of a theme's gtkrc
- * file. See #GtkRcStyle for information on gtkrc files.
- * 
+ * Sets the name of an image file to use as a base image when creating
+ * icon variants for #GtkIconSet. The filename must be absolute. 
  **/
 void
-gtk_icon_source_set_filename             (GtkIconSource *source,
-                                          const gchar   *filename)
+gtk_icon_source_set_filename (GtkIconSource *source,
+			      const gchar   *filename)
 {
   g_return_if_fail (source != NULL);
+  g_return_if_fail (filename == NULL || g_path_is_absolute (filename));
 
   if (source->filename == filename)
     return;

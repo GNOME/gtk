@@ -589,6 +589,7 @@ specific portions of a RC file.
 @GTK_RC_TOKEN_LOWEST: 
 @GTK_RC_TOKEN_GTK: 
 @GTK_RC_TOKEN_APPLICATION: 
+@GTK_RC_TOKEN_THEME: 
 @GTK_RC_TOKEN_RC: 
 @GTK_RC_TOKEN_HIGHEST: 
 @GTK_RC_TOKEN_ENGINE: 
@@ -610,19 +611,10 @@ specific portions of a RC file.
 
 <!-- ##### FUNCTION gtk_rc_get_style ##### -->
 <para>
-Finds all matching RC styles for a given widget,
-composites them together, and then creates a 
-#GtkStyle representing the composite appearance.
-(GTK+ actually keeps a cache of previously 
-created styles, so a new style may not be
-created.)
 </para>
 
-@widget: a #GtkWidget
-@Returns: the resulting style. The caller should
-reference the result, since GTK+ will retain the
-initial reference count itself for the cache
-of created styles.
+@widget: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_rc_add_widget_name_style ##### -->
@@ -686,42 +678,30 @@ Parse resource information directly from a string.
 
 <!-- ##### FUNCTION gtk_rc_reparse_all ##### -->
 <para>
-If the modification time on any previously read file
-has changed, discard all style information
-and then reread all previously read RC files.
 </para>
 
-@Returns: %TRUE if the files were reread.
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_rc_add_default_file ##### -->
 <para>
-Adds a file to the list of files to be parsed at the
-end of gtk_init().
 </para>
 
-@filename: the pathname to the file.
+@filename: 
 
 
 <!-- ##### FUNCTION gtk_rc_get_default_files ##### -->
 <para>
-Retrieves the current list of RC files that will be parsed
-at the end of gtk_init()
 </para>
 
-@Returns: A NULL terminated array of filenames. This memory
-is owned by GTK+ and must not be freed by the application.
-If you want to store this information, you should make a 
-copy.
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_rc_set_default_files ##### -->
 <para>
-Sets the list of files that GTK+ will read at the
-end of gtk_init()
 </para>
 
-@filenames: A %NULL terminated list of filenames.
+@filenames: 
 
 
 <!-- ##### FUNCTION gtk_rc_parse_color ##### -->
@@ -773,11 +753,9 @@ otherwise %NULL.
 
 <!-- ##### FUNCTION gtk_rc_find_pixmap_in_path ##### -->
 <para>
-Looks up a file in the current pixmap path. If the file is
-not found, it outputs a warning message using g_warning()
-and returns %NULL.
 </para>
 
+@context: 
 @scanner: a #GtkScanner. Used for printing out warning messages
 if the file is not found.
 @pixmap_file: The name of the file to search for.

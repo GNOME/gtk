@@ -17,14 +17,18 @@
  */
 
 #include "gtksettings.h"
+#include "gtkrc.h"
 #include "gtkintl.h"
+#include "gtkwidget.h"
 
 enum {
   PROP_0,
   PROP_DOUBLE_CLICK_TIME,
   PROP_CURSOR_BLINK,
   PROP_CURSOR_BLINK_TIME,
-  PROP_SPLIT_CURSOR
+  PROP_SPLIT_CURSOR,
+  PROP_THEME_NAME,
+  PROP_KEY_THEME_NAME
 };
 
 
@@ -166,6 +170,22 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								   G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_SPLIT_CURSOR);
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-theme-name",
+								   _("Theme Name"),
+								   _("Name of theme RC file to load"),
+								  NULL,
+								  G_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_THEME_NAME);
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-key-theme-name",
+								  _("Key Theme Name"),
+								  _("Name of key theme RC file to load"),
+								  NULL,
+								  G_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_KEY_THEME_NAME);
 }
 
 static void
@@ -207,7 +227,7 @@ gtk_settings_constructor (GType			 type,
 }
 
 GtkSettings*
-gtk_settings_get_global (void)
+gtk_settings_get_default (void)
 {
   if (!the_singleton)
     g_object_new (GTK_TYPE_SETTINGS, NULL);
@@ -294,6 +314,7 @@ gtk_settings_notify (GObject    *object,
 {
   guint property_id = pspec->param_id;
   gint double_click_time;
+  gchar *str_value;
   
 #if 1
   GValue tmp_value = { 0, };
@@ -484,29 +505,25 @@ _gtk_rc_property_parser_from_type (GType type)
 }
 
 void
-gtk_settings_install_property (GtkSettings *settings,
-			       GParamSpec  *pspec)
+gtk_settings_install_property (GParamSpec  *pspec)
 {
   GtkRcPropertyParser parser = NULL;
 
-  g_return_if_fail (GTK_IS_SETTINGS (settings));
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
   parser = _gtk_rc_property_parser_from_type (G_PARAM_SPEC_VALUE_TYPE (pspec));
 
-  settings_install_property_parser (GTK_SETTINGS_GET_CLASS (settings), pspec, parser);
+  settings_install_property_parser (gtk_type_class (GTK_TYPE_SETTINGS), pspec, parser);
 }
 
 void
-gtk_settings_install_property_parser (GtkSettings        *settings,
-				      GParamSpec         *pspec,
+gtk_settings_install_property_parser (GParamSpec         *pspec,
 				      GtkRcPropertyParser parser)
 {
-  g_return_if_fail (GTK_IS_SETTINGS (settings));
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
   g_return_if_fail (parser != NULL);
   
-  settings_install_property_parser (GTK_SETTINGS_GET_CLASS (settings), pspec, parser);
+  settings_install_property_parser (gtk_type_class (GTK_TYPE_SETTINGS), pspec, parser);
 }
 
 static void
@@ -884,7 +901,7 @@ gtk_rc_property_parse_border (const GParamSpec *pspec,
 void
 _gtk_settings_handle_event (GdkEventSetting *event)
 {
-  GtkSettings *settings = gtk_settings_get_global ();
+  GtkSettings *settings = gtk_settings_get_default ();
   
   if (g_object_class_find_property (G_OBJECT_GET_CLASS (settings), event->name))
     g_object_notify (G_OBJECT (settings), event->name);

@@ -367,6 +367,11 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 * gtk_rc_set_image_loader() and gtk_rc_load_image() has been removed, now 
   that GTK+ includes decent image loading capabilities itself.
 
+* An extra GtkSettings argument has been added to
+  gtk_rc_find_pixmap_in_path(). This function is only actually useful
+  from a theme engine during parsing, at which point the GtkSettings
+  is provided.
+
 * The child argument facility in gtkcontainer.c has been converted
   to a child property facility using GParamSpec and other facilities
   for GObject.   

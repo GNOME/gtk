@@ -26,8 +26,6 @@ double-click_timeout = 42
 bell-duration = 39
 bell_duration = 40
 
-pixmap_path "."
-
 style "global-style-properties"
 {
 #  xthickness = 20

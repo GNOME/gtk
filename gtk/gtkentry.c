@@ -2467,7 +2467,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       
       gtk_entry_get_cursor_locations (entry, type, &strong_x, &weak_x);
 
-      g_object_get (gtk_settings_get_global (),
+      g_object_get (gtk_widget_get_settings (widget),
 		    "gtk-split-cursor", &split_cursor,
 		    NULL);
 
@@ -2694,7 +2694,7 @@ gtk_entry_move_visually (GtkEntry *entry,
       gboolean split_cursor;
       gboolean strong;
 
-      g_object_get (gtk_settings_get_global (),
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (entry)),
 		    "gtk-split-cursor", &split_cursor,
 		    NULL);
 
@@ -3749,7 +3749,7 @@ gtk_entry_drag_data_delete (GtkWidget      *widget,
 static gboolean
 cursor_blinks (GtkEntry *entry)
 {
-  GtkSettings *settings = gtk_settings_get_global ();
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (entry));
   gboolean blink;
 
   if (GTK_WIDGET_HAS_FOCUS (entry) &&
@@ -3765,7 +3765,7 @@ cursor_blinks (GtkEntry *entry)
 static gint
 get_cursor_time (GtkEntry *entry)
 {
-  GtkSettings *settings = gtk_settings_get_global ();
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (entry));
   gint time;
 
   g_object_get (G_OBJECT (settings), "gtk-cursor-blink-time", &time, NULL);

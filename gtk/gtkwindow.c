@@ -2524,29 +2524,7 @@ gtk_window_read_rcfiles (GtkWidget *widget,
 	}
     }
 
-  if (gtk_rc_reparse_all ())
-    {
-      /* If the above returned true, some of our RC files are out
-       * of date, so we need to reset all our widgets. Our other
-       * toplevel windows will also get the message, but by
-       * then, the RC file will up to date, so we have to tell
-       * them now. Also, we have to invalidate cached icons in
-       * icon sets so they get re-rendered.
-       */
-      GList *list, *toplevels;
-
-      _gtk_icon_set_invalidate_caches ();
-      
-      toplevels = gtk_window_list_toplevels ();
-      g_list_foreach (toplevels, (GFunc)g_object_ref, NULL);
-      
-      for (list = toplevels; list; list = list->next)
-	{
-	  gtk_widget_reset_rc_styles (list->data);
-	  gtk_widget_unref (list->data);
-	}
-      g_list_free (toplevels);
-    }
+  gtk_rc_reparse_all ();
 }
 
 static gint

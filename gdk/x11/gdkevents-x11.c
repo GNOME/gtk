@@ -2027,7 +2027,9 @@ static struct
   { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
   { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },
   { "Net/CursorBlink", "gtk-cursor-blink" },
-  { "Net/CursorBlinkTime", "gtk-cursor-blink-time" }
+  { "Net/CursorBlinkTime", "gtk-cursor-blink-time" },
+  { "Net/ThemeName", "gtk-theme-name" },
+  { "Gtk/KeyThemeName", "gtk-key-theme-name" }
 };
 
 static void

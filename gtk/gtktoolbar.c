@@ -283,16 +283,14 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
                                                               GTK_SHADOW_OUT,
                                                               G_PARAM_READABLE));
 
-  gtk_settings_install_property (gtk_settings_get_global (),
-                                 g_param_spec_enum ("gtk-toolbar-style",
+  gtk_settings_install_property (g_param_spec_enum ("gtk-toolbar-style",
                                                     _("Toolbar style"),
                                                     _("Whether default toolbars have text only, text and icons, icons only, etc."),
                                                     GTK_TYPE_TOOLBAR_STYLE,
                                                     GTK_TOOLBAR_BOTH,
                                                     G_PARAM_READWRITE));
 
-  gtk_settings_install_property (gtk_settings_get_global (),
-                                 g_param_spec_enum ("gtk-toolbar-icon-size",
+  gtk_settings_install_property (g_param_spec_enum ("gtk-toolbar-icon-size",
                                                     _("Toolbar icon size"),
                                                     _("Size of icons in default toolbars"),
                                                     GTK_TYPE_ICON_SIZE,
@@ -350,7 +348,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
 
   toolbar->style_set = FALSE;
   toolbar->icon_size_set = FALSE;
-  g_object_get (gtk_settings_get_global (),
+  g_object_get (gtk_settings_get_default (),
                 "gtk-toolbar-icon-size",
                 &toolbar->icon_size,
                 "gtk-toolbar-style",
@@ -358,13 +356,13 @@ gtk_toolbar_init (GtkToolbar *toolbar)
                 NULL);
   
   toolbar->style_set_connection =
-    g_signal_connect (G_OBJECT (gtk_settings_get_global ()),
+    g_signal_connect (G_OBJECT (gtk_settings_get_default ()),
 		      "notify::gtk-toolbar-style",
 		      G_CALLBACK (style_change_notify),
 		      toolbar);
 
   toolbar->icon_size_connection =
-    g_signal_connect (G_OBJECT (gtk_settings_get_global ()),
+    g_signal_connect (G_OBJECT (gtk_settings_get_default ()),
 		      "notify::gtk-toolbar-icon-size",
 		      G_CALLBACK (icon_size_change_notify),
 		      toolbar);
@@ -377,9 +375,9 @@ gtk_toolbar_finalize (GObject *object)
 
   toolbar = GTK_TOOLBAR (object);
 
-  g_signal_handler_disconnect (G_OBJECT (gtk_settings_get_global ()),
+  g_signal_handler_disconnect (G_OBJECT (gtk_settings_get_default ()),
                                toolbar->style_set_connection);
-  g_signal_handler_disconnect (G_OBJECT (gtk_settings_get_global ()),
+  g_signal_handler_disconnect (G_OBJECT (gtk_settings_get_default ()),
                                toolbar->icon_size_connection);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -1087,7 +1085,7 @@ gtk_toolbar_unset_icon_size (GtkToolbar  *toolbar)
 
   if (toolbar->icon_size_set)
     {
-      g_object_get (gtk_settings_get_global (),
+      g_object_get (gtk_settings_get_default (),
                     "gtk-toolbar-icon-size",
                     &size, NULL);
 
@@ -1542,7 +1540,7 @@ gtk_toolbar_unset_style (GtkToolbar *toolbar)
 
   if (toolbar->style_set)
     {
-      g_object_get (gtk_settings_get_global (),
+      g_object_get (gtk_settings_get_default (),
                     "gtk-toolbar-style",
                     &style,
                     NULL);

@@ -32,6 +32,7 @@
 #include <gtk/gtkobject.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkstyle.h>
+#include <gtk/gtksettings.h>
 #include <atk/atkobject.h>
 
 #ifdef __cplusplus
@@ -579,6 +580,8 @@ GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
 GdkColormap* gtk_widget_get_colormap	(GtkWidget	*widget);
 GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
 
+GtkSettings* gtk_widget_get_settings    (GtkWidget      *widget);
+
 
 /* Accessibility support */
 AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);
@@ -608,10 +611,8 @@ gboolean     gtk_widget_hide_on_delete	(GtkWidget	*widget);
  */
 void	   gtk_widget_set_style		(GtkWidget	*widget,
 					 GtkStyle	*style);
-void	   gtk_widget_set_rc_style	(GtkWidget	*widget);
 void	   gtk_widget_ensure_style	(GtkWidget	*widget);
 GtkStyle*  gtk_widget_get_style		(GtkWidget	*widget);
-void	   gtk_widget_restore_default_style (GtkWidget	*widget);
 
 void        gtk_widget_modify_style       (GtkWidget            *widget,
 					   GtkRcStyle           *style);
@@ -630,6 +631,11 @@ void        gtk_widget_modify_base        (GtkWidget            *widget,
 					   GdkColor             *color);
 void        gtk_widget_modify_font        (GtkWidget            *widget,
 					   PangoFontDescription *font_desc);
+
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_widget_set_rc_style(widget)          (gtk_widget_set_style (widget, NULL))
+#define gtk_widget_restore_default_style(widget) (gtk_widget_set_style (widget, NULL))
+#endif
 
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
 PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
@@ -655,11 +661,9 @@ void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
  * This will override the values that got set by the
  * gtk_widget_set_default_* () functions.
  */
-void	     gtk_widget_push_style	     (GtkStyle	 *style);
 void	     gtk_widget_push_colormap	     (GdkColormap *cmap);
 void	     gtk_widget_push_composite_child (void);
 void	     gtk_widget_pop_composite_child  (void);
-void	     gtk_widget_pop_style	     (void);
 void	     gtk_widget_pop_colormap	     (void);
 
 /* widget style properties

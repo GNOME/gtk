@@ -1586,7 +1586,7 @@ default_change_palette_func (const GdkColor *colors,
   
   str = gtk_color_selection_palette_to_string (colors, n_colors);
 
-  gtk_settings_set_string_property (gtk_settings_get_global (),
+  gtk_settings_set_string_property (gtk_settings_get_default (),
                                     "gtk-color-palette",
                                     str,
                                     "gtk_color_selection_palette_to_string");
@@ -1642,14 +1642,13 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                     gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
-  gtk_settings_install_property (gtk_settings_get_global (),
-                                 g_param_spec_string ("gtk-color-palette",
+  gtk_settings_install_property (g_param_spec_string ("gtk-color-palette",
                                                       _("Custom palette"),
                                                       _("Palette to use in the color selector"),
                                                       default_colors,
                                                       G_PARAM_READWRITE));
 
-  g_object_get (G_OBJECT (gtk_settings_get_global ()),
+  g_object_get (G_OBJECT (gtk_settings_get_default ()),
                 "gtk-color-palette",
                 &palette,
                 NULL);
@@ -1659,7 +1658,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 
   change_palette_hook = default_change_palette_func;
   
-  g_signal_connect_data (G_OBJECT (gtk_settings_get_global ()),
+  g_signal_connect_data (G_OBJECT (gtk_settings_get_default ()),
                          "notify::gtk-color-palette",
                          G_CALLBACK (palette_change_notify_class),
                          NULL, NULL, 0);
@@ -1825,7 +1824,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   update_palette (colorsel);
 
   priv->settings_connection = 
-    g_signal_connect_data (G_OBJECT (gtk_settings_get_global ()),
+    g_signal_connect_data (G_OBJECT (gtk_settings_get_default ()),
                            "notify::gtk-color-palette",
                            G_CALLBACK (palette_change_notify_instance),
                            colorsel, NULL, 0);
@@ -1877,7 +1876,7 @@ gtk_color_selection_finalize (GObject *object)
 
       priv = cselection->private_data;
 
-      g_signal_handler_disconnect (gtk_settings_get_global (),
+      g_signal_handler_disconnect (gtk_settings_get_default (),
                                    priv->settings_connection);
       
       g_free (cselection->private_data);

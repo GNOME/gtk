@@ -1,3 +1,88 @@
+Tue Jun 26 19:39:03 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_set_style): Allow %NULL
+	for style to mean "revert to default style"
+
+	* gtk/gtkwidget.[ch] (gtk_widget_set_rc_style,
+	  gtk_widget_restore_default_style): Make this functions
+	deprecated aliases for gtk_widget_set_style (widget, NULL).
+
+	* gtk/gtkwidget.[ch]: Remove:
+	   gtk_widget_set_default_style ()
+	   gtk_widget_push_style ()
+	   gtk_widget_pop_style ()
+	These functions interact are overriden by RC files, and
+	thus virtually useless, and complicated.
+
+Fri Jun 22 18:49:48 2001  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkrc.c: Add a GtkRcContext structure to hold 
+	most of the previous global variables in gtkrc.c. This is
+	in preparation for multi-head, since each screen can
+	have different GtkSettings and RC information.
+
+	* gtk/gtkrc.[ch]: 
+
+	* gtk/gtkrc.h (struct _GtkRcStyleClass): Add a
+	GtkSettings parameter to GtkRcStyle::parse.
+
+	* gdk/x11/gdkevents-x11.c gtk/gtksettings.c gtk/gtkrc.c: 
+	Add two new settings gtk-theme-name, gtk-key-theme-name,
+	for RC files that are loaded by name after reading
+	the default RC files.
+	
+	* gtk/gtkrc.c: Allow priorities for styles, as wll as
+	bindings.
+
+	* gtk/gtkenums.h gtk/gtkrc.c: Add GTK_PATH_PRIO_THEME,
+	and use it by default for RC files loaded via 
+	gtk-theme-name, gtk-key-theme-name.
+
+	* gtk/gtkiconfactory.c (gtk_icon_source_set_filename)
+        gtk/gtkrc.c (gtk_rc_parse_pixmap_path_string) 
+	tests/testgtkrc: Require pathnames to be absolute.
+
+	* gtk/gtkrc.c gtk/gtkiconfactory.c: Look up the full filename for
+	the source when parsing, since the operation of looking up a
+	pixmap from an RC file depends on the parsing context.
+
+	* gtk/gtkrc.c (gtk_rc_context_reparse_all): Automatically
+	reset RC styles on all widgets when files are reparsed.
+
+	* tests/testgtk.c (create_rc_file) 
+	  gtk/gtkwindow.c (gtk_window_read_rcfiles): 
+	Simplify, now that gtk_rc_reparse_all() resets styles on
+	all widgets itself.
+
+	* gtk/gtkmain.c (gtk_get_default_language): Fix broken
+	return value.
+
+	* gtk/gtksettings.[ch] (gtk_settings_install_property[_ch]): Remove
+	GtkSettings argument.
+
+	* gtk/gtksettings.[ch] (gtk_settings_get_default): Rename from
+	gtk_settings_get_global().
+
+	* gtk/gtkwidget.[ch]: Add a function gtk_widget_Get_settings()
+	to get the appropriate GtkSettings for a widget. (For now,
+	just gets the default GtkSetttings.) 
+
+	* gtk/gtkcolorsel.c gtk/gtkentry.c gtk/gtkmenu.c gtk/gtkmenubar.c
+	  gtk/gtktextview.c gtk/gtktoolbar.c: Fixes for GtkSettings
+        changes.
+
+	* gtk/gtkrc.[ch]: Add gtk_rc_get_style_by_paths() to allow
+	getting a style for a path without actually having a widget.
+	(Allows using a style for a subpart of a widget, for
+	example.)
+
+	* gtk/gtkrc.[ch]: Add gtk_rc_reparse_all_for_setting() to allow forcing
+	the RC files to be reloaded for just one GtkSettings
+	(not sure how useful this really is.)
+
+	* gtk/gtkrc.h: Deprecate
+	gtk_rc_add_widget_name/widget_class/class_style
+
 2001-06-30  Alex Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkinput-none.c:

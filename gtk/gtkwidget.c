@@ -197,12 +197,12 @@ static gboolean		gtk_widget_real_focus_out_event   	(GtkWidget        *widget,
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 static GdkColormap*	gtk_widget_peek_colormap		(void);
-static GtkStyle*	gtk_widget_peek_style			(void);
 static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
 static void		gtk_widget_reparent_container_child	(GtkWidget	  *widget,
 								 gpointer          client_data);
 static void		gtk_widget_propagate_state		(GtkWidget	  *widget,
 								 GtkStateData 	  *data);
+static void             gtk_widget_reset_rc_style               (GtkWidget        *widget);
 static void		gtk_widget_set_style_internal		(GtkWidget	  *widget,
 								 GtkStyle	  *style,
 								 gboolean	   initial_emission);
@@ -227,7 +227,6 @@ static GMemChunk       *aux_info_mem_chunk = NULL;
 static GdkColormap     *default_colormap = NULL;
 static GtkStyle        *gtk_default_style = NULL;
 static GSList          *colormap_stack = NULL;
-static GSList          *style_stack = NULL;
 static guint            composite_child_stack = 0;
 static GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 static GParamSpecPool  *style_property_spec_pool = NULL;
@@ -237,7 +236,6 @@ static GQuark		quark_aux_info = 0;
 static GQuark		quark_event_mask = 0;
 static GQuark		quark_extension_event_mode = 0;
 static GQuark		quark_parent_window = 0;
-static GQuark		quark_saved_default_style = 0;
 static GQuark		quark_shape_info = 0;
 static GQuark		quark_colormap = 0;
 static GQuark		quark_pango_context = 0;
@@ -307,7 +305,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_event_mask = g_quark_from_static_string ("gtk-event-mask");
   quark_extension_event_mode = g_quark_from_static_string ("gtk-extension-event-mode");
   quark_parent_window = g_quark_from_static_string ("gtk-parent-window");
-  quark_saved_default_style = g_quark_from_static_string ("gtk-saved-default-style");
   quark_shape_info = g_quark_from_static_string ("gtk-shape-info");
   quark_colormap = g_quark_from_static_string ("gtk-colormap");
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
@@ -1309,7 +1306,7 @@ gtk_widget_init (GtkWidget *widget)
 			(composite_child_stack ? GTK_COMPOSITE_CHILD : 0) |
 			GTK_DOUBLE_BUFFERED);
 
-  widget->style = gtk_widget_peek_style ();
+  widget->style = gtk_widget_get_default_style ();
   gtk_style_ref (widget->style);
   
   colormap = gtk_widget_peek_colormap ();
@@ -3239,7 +3236,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
   widget->name = g_strdup (name);
 
   if (GTK_WIDGET_RC_STYLE (widget))
-    gtk_widget_set_rc_style (widget);
+    gtk_widget_reset_rc_style (widget);
 
   g_object_notify (G_OBJECT (widget), "name");
 }
@@ -3486,7 +3483,8 @@ gtk_widget_get_parent (GtkWidget *widget)
 /**
  * gtk_widget_set_style:
  * @widget: a #GtkWidget
- * @style: a #GtkStyle
+ * @style: a #GtkStyle, or %NULL to remove the effect of a previous
+ *         gtk_widget_set_style and go back to the default style
  *
  * Sets the #GtkStyle for a widget (widget->style). You probably don't
  * want to use this function; it interacts badly with themes, because
@@ -3498,26 +3496,25 @@ void
 gtk_widget_set_style (GtkWidget *widget,
 		      GtkStyle	*style)
 {
-  GtkStyle *default_style;
-  gboolean initial_emission;
-
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (style != NULL);
 
-  initial_emission = !GTK_WIDGET_RC_STYLE (widget) && !GTK_WIDGET_USER_STYLE (widget);
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_RC_STYLE);
-  GTK_PRIVATE_SET_FLAG (widget, GTK_USER_STYLE);
-
-  default_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
-  if (!default_style)
+  if (style)
     {
-      gtk_style_ref (widget->style);
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_saved_default_style, widget->style);
-    }
+      gboolean initial_emission;
 
-  gtk_widget_set_style_internal (widget, style, initial_emission);
+      initial_emission = !GTK_WIDGET_RC_STYLE (widget) && !GTK_WIDGET_USER_STYLE (widget);
+      
+      GTK_WIDGET_UNSET_FLAGS (widget, GTK_RC_STYLE);
+      GTK_PRIVATE_SET_FLAG (widget, GTK_USER_STYLE);
+      
+      gtk_widget_set_style_internal (widget, style, initial_emission);
+    }
+  else
+    {
+      if (GTK_WIDGET_USER_STYLE (widget))
+	gtk_widget_reset_rc_style (widget);
+    }
 }
 
 /**
@@ -3538,19 +3535,15 @@ gtk_widget_ensure_style (GtkWidget *widget)
 
   if (!GTK_WIDGET_USER_STYLE (widget) &&
       !GTK_WIDGET_RC_STYLE (widget))
-    gtk_widget_set_rc_style (widget);
+    gtk_widget_reset_rc_style (widget);
 }
 
-/**
- * gtk_widget_set_rc_style:
- * @widget: a #GtkWidget
- * 
- * 
+/* Look up the RC style for this widget, unsetting any user style that
+ * may be in effect currently
  **/
-void
-gtk_widget_set_rc_style (GtkWidget *widget)
+static void
+gtk_widget_reset_rc_style (GtkWidget *widget)
 {
-  GtkStyle *saved_style;
   GtkStyle *new_style;
   gboolean initial_emission;
   
@@ -3562,52 +3555,12 @@ gtk_widget_set_rc_style (GtkWidget *widget)
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
   GTK_WIDGET_SET_FLAGS (widget, GTK_RC_STYLE);
 
-  saved_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
   new_style = gtk_rc_get_style (widget);
-  if (new_style)
-    {
-      if (!saved_style)
-	{
-	  gtk_style_ref (widget->style);
-	  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_saved_default_style, widget->style);
-	}
-      gtk_widget_set_style_internal (widget, new_style, initial_emission);
-    }
-  else
-    {
-      if (saved_style)
-	{
-	  g_assert (initial_emission == FALSE); /* FIXME: remove this line */
+  if (!new_style)
+    new_style = gtk_widget_get_default_style ();
 
-	  gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
-	  gtk_widget_set_style_internal (widget, saved_style, initial_emission);
-	  gtk_style_unref (saved_style);
-	}
-      else
-	{
-	  if (initial_emission)
-	    gtk_widget_set_style_internal (widget, widget->style, TRUE);
-	}
-    }
-}
-
-void
-gtk_widget_restore_default_style (GtkWidget *widget)
-{
-  GtkStyle *default_style;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
-
-  default_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
-  if (default_style)
-    {
-      gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
-      gtk_widget_set_style_internal (widget, default_style, FALSE);
-      gtk_style_unref (default_style);
-    }
+  if (initial_emission || new_style != widget->style)
+    gtk_widget_set_style_internal (widget, widget->style, TRUE);
 }
 
 /**
@@ -3671,7 +3624,7 @@ gtk_widget_modify_style (GtkWidget      *widget,
    */
   
   if (GTK_WIDGET_RC_STYLE (widget))
-    gtk_widget_set_rc_style (widget);
+    gtk_widget_reset_rc_style (widget);
 }
 
 /**
@@ -3950,7 +3903,7 @@ gtk_widget_set_style_recurse (GtkWidget *widget,
 			      gpointer	 client_data)
 {
   if (GTK_WIDGET_RC_STYLE (widget))
-    gtk_widget_set_rc_style (widget);
+    gtk_widget_reset_rc_style (widget);
   
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget),
@@ -3995,19 +3948,6 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
   gtk_widget_set_style_recurse (widget, NULL);
 }
 
-void
-gtk_widget_set_default_style (GtkStyle *style)
-{
-  if (style != gtk_default_style)
-     {
-       if (gtk_default_style)
-	 gtk_style_unref (gtk_default_style);
-       gtk_default_style = style;
-       if (gtk_default_style)
-	 gtk_style_ref (gtk_default_style);
-     }
-}
-
 GtkStyle*
 gtk_widget_get_default_style (void)
 {
@@ -4018,38 +3958,6 @@ gtk_widget_get_default_style (void)
     }
   
   return gtk_default_style;
-}
-
-void
-gtk_widget_push_style (GtkStyle *style)
-{
-  g_return_if_fail (style != NULL);
-
-  gtk_style_ref (style);
-  style_stack = g_slist_prepend (style_stack, style);
-}
-
-static GtkStyle*
-gtk_widget_peek_style (void)
-{
-  if (style_stack)
-    return (GtkStyle*) style_stack->data;
-  else
-    return gtk_widget_get_default_style ();
-}
-
-void
-gtk_widget_pop_style (void)
-{
-  GSList *tmp;
-  
-  if (style_stack)
-    {
-      tmp = style_stack;
-      style_stack = style_stack->next;
-      gtk_style_unref ((GtkStyle*) tmp->data);
-      g_slist_free_1 (tmp);
-    }
 }
 
 static PangoContext *
@@ -4717,6 +4625,20 @@ gtk_widget_get_visual (GtkWidget *widget)
   return gdk_colormap_get_visual (gtk_widget_get_colormap (widget));
 }
 
+/**
+ * gtk_widget_get_settings:
+ * @widget: a #GtkWidget
+ * 
+ * Get the settings object holding the settings (global property
+ * settings, RC file information, etc) used for this widget.
+ * 
+ * Return value: the relevant #GtkSettings object
+ **/
+GtkSettings*
+gtk_widget_get_settings (GtkWidget *widget)
+{
+  return gtk_settings_get_default ();
+}
 
 /**
  * gtk_widget_set_colormap:
@@ -5161,7 +5083,6 @@ static void
 gtk_widget_real_destroy (GtkObject *object)
 {
   GtkWidget *widget;
-  GtkStyle *saved_style;
 
   /* gtk_object_destroy() will already hold a refcount on object
    */
@@ -5170,15 +5091,8 @@ gtk_widget_real_destroy (GtkObject *object)
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
   
-  saved_style = gtk_object_get_data_by_id (object, quark_saved_default_style);
-  if (saved_style)
-    {
-      gtk_style_unref (saved_style);
-      gtk_object_remove_data_by_id (object, quark_saved_default_style);
-    }
-
   gtk_style_unref (widget->style);
-  widget->style = gtk_widget_peek_style ();
+  widget->style = gtk_widget_get_default_style ();
   gtk_style_ref (widget->style);
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
@@ -5191,18 +5105,10 @@ gtk_widget_finalize (GObject *object)
   GtkWidgetAuxInfo *aux_info;
   gint *events;
   GdkExtensionMode *mode;
-  GtkStyle *saved_style;
   GtkAccessible *accessible;
   
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
-
-  saved_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
-  if (saved_style)
-    {
-      gtk_style_unref (saved_style);
-      gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
-    }
 
   gtk_style_unref (widget->style);
   widget->style = NULL;

@@ -142,8 +142,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_CHILD);
   
-  gtk_settings_install_property (gtk_settings_get_global (),
-                                 g_param_spec_string ("gtk-menu-bar-accel",
+  gtk_settings_install_property (g_param_spec_string ("gtk-menu-bar-accel",
                                                       _("Menu bar accelerator"),
                                                       _("Keybinding to activate the menu bar"),
                                                       "F10",
@@ -395,7 +394,7 @@ window_key_press_handler (GtkWidget   *widget,
   gchar *accel = NULL;
   gboolean retval = FALSE;
   
-  g_object_get (G_OBJECT (gtk_settings_get_global ()),
+  g_object_get (G_OBJECT (gtk_widget_get_settings (widget)),
                 "gtk-menu-bar-accel",
                 &accel,
                 NULL);

@@ -9883,28 +9883,6 @@ create_idle_test (void)
  */
 
 void
-reload_rc_file (void)
-{
-  GList *toplevels;
-
-  if (gtk_rc_reparse_all ())
-    {
-      toplevels = gdk_window_get_toplevels();
-      while (toplevels)
-	{
-	  GtkWidget *widget;
-	  gdk_window_get_user_data (toplevels->data, (gpointer *)&widget);
-	  
-	  if (widget)
-	    gtk_widget_reset_rc_styles (widget);
-	  
-	  toplevels = toplevels->next;
-	}
-      g_list_free (toplevels);
-    }
-}
-
-void
 reload_all_rc_files (void)
 {
   static GdkAtom atom_rcfiles = GDK_NONE;
@@ -9941,7 +9919,7 @@ create_rc_file (void)
 
       button = gtk_button_new_with_label ("Reload");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC(reload_rc_file), NULL);
+			  GTK_SIGNAL_FUNC(gtk_rc_reparse_all), NULL);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
