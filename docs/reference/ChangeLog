@@ -1,3 +1,18 @@
+Wed Nov 21 15:57:29 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk-sections.txt: Updates
+
+	* gtk/tmpl/gtkstock.sgml: Close end tags.
+
+	* gtk/gtk.types: Remove interface types which gtk-doc
+	can't handle currently.
+
+	* gtk/tmpl/gtknotebook.sgml: Fix some garbage in file.
+
+	* gdk/tmpl/x_interaction.sgml: Fix SGML errors.
+
+	* gdk/gdk-overrides.txt gdk/gdk-sections.txt: Updates. 
+
 2001-11-20  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/tmpl/gtkwindow.sgml: fix docs for gtk_window_set_policy() to

@@ -159,8 +159,6 @@ gtk_notebook_set_current_page() instead.
 <para>
 </para>
 
-@notebook
-
 @notebook: 
 @child: 
 @position: 

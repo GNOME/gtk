@@ -243,6 +243,26 @@ Null terminates the stored data.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_selection_data_get_targets ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@targets: 
+@n_atoms: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_targets_include_text ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_selection_remove_all ##### -->
 <para>
 Removes all handlers and unsets ownership of all 

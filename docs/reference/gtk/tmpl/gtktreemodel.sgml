@@ -371,6 +371,17 @@ The tree interface used by #GtkTreeView
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_tree_model_get_iter_from_string ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+@path_string: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_model_get_iter_root ##### -->
 <para>
 
@@ -566,49 +577,4 @@ The tree interface used by #GtkTreeView
 @iter: 
 @new_order: 
 
-
-<!-- ##### SIGNAL GtkTreeModel::row-changed ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTreeModel::row-deleted ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkTreeModel::row-has-child-toggled ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTreeModel::row-inserted ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTreeModel::rows-reordered ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
 

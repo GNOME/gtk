@@ -42,6 +42,13 @@ data commonly stored in X window properties.
 
 </para>
 
+<!-- ##### STRUCT GdkAtom ##### -->
+<para>
+A numeric type representing a string as an index into a table
+of strings on the X server.
+</para>
+
+
 <!-- ##### MACRO GDK_NONE ##### -->
 <para>
 A null value for #GdkAtom, used in a similar way as <literal>None</literal>

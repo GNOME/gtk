@@ -245,9 +245,9 @@ elements are:
          Set a background pixmap to be used in place of
          the <literal>bg</literal> color (or for #GtkText,
          in place of the <literal>base</literal> color. The special
-         value "<parent>" may be used to indicate that the widget should
+         value "&lt;parent&gt;" may be used to indicate that the widget should
          use the same background pixmap as its parent. The special value
-         "<none>" may be used to indicate no background pixmap.
+         "&lt;none&gt;" may be used to indicate no background pixmap.
        </para>
      </listitem>
   </varlistentry>

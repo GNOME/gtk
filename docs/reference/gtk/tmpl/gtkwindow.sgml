@@ -302,6 +302,33 @@ it's larger
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_window_get_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_set_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@focus: 
+
+
+<!-- ##### FUNCTION gtk_window_set_default ##### -->
+<para>
+
+</para>
+
+@window: 
+@default_widget: 
+
+
 <!-- ##### FUNCTION gtk_window_present ##### -->
 <para>
 

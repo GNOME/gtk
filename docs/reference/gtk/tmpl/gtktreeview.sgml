@@ -36,12 +36,6 @@ GtkTreeView
 </para>
 
 
-<!-- ##### STRUCT GtkTreeSelection ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### USER_FUNCTION GtkTreeViewColumnDropFunc ##### -->
 <para>
 
@@ -517,6 +511,15 @@ GtkTreeView
 @visible_rect: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_get_bin_window ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_view_widget_to_tree_coords ##### -->
 <para>
 
@@ -539,6 +542,29 @@ GtkTreeView
 @ty: 
 @wx: 
 @wy: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_enable_model_drag_dest ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@targets: 
+@n_targets: 
+@actions: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_enable_model_drag_source ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@start_button_mask: 
+@targets: 
+@n_targets: 
+@actions: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_unset_rows_drag_source ##### -->

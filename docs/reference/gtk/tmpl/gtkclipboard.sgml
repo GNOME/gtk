@@ -258,3 +258,12 @@ End:
 -->
 
 
+<!-- ##### FUNCTION gtk_clipboard_wait_is_text_available ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@Returns: 
+
+

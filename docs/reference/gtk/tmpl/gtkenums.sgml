@@ -23,6 +23,29 @@ Public enumerated types used throughout GTK+.
 @GTK_ACCEL_LOCKED: 
 @GTK_ACCEL_MASK: 
 
+<!-- ##### ENUM GtkAnchorType ##### -->
+<para>
+
+</para>
+
+@GTK_ANCHOR_CENTER: 
+@GTK_ANCHOR_NORTH: 
+@GTK_ANCHOR_NORTH_WEST: 
+@GTK_ANCHOR_NORTH_EAST: 
+@GTK_ANCHOR_SOUTH: 
+@GTK_ANCHOR_SOUTH_WEST: 
+@GTK_ANCHOR_SOUTH_EAST: 
+@GTK_ANCHOR_WEST: 
+@GTK_ANCHOR_EAST: 
+@GTK_ANCHOR_N: 
+@GTK_ANCHOR_NW: 
+@GTK_ANCHOR_NE: 
+@GTK_ANCHOR_S: 
+@GTK_ANCHOR_SW: 
+@GTK_ANCHOR_SE: 
+@GTK_ANCHOR_W: 
+@GTK_ANCHOR_E: 
+
 <!-- ##### ENUM GtkArrowType ##### -->
 <para>
 Used to indicate the direction in which a #GtkArrow should point.
@@ -295,6 +318,16 @@ Used to change the appearance of an outline typically provided by a #GtkFrame.
 @GTK_SHADOW_ETCHED_IN: The outline itself is an inward bevel, but the frame
 does
 @GTK_SHADOW_ETCHED_OUT: 
+
+<!-- ##### ENUM GtkSideType ##### -->
+<para>
+
+</para>
+
+@GTK_SIDE_TOP: 
+@GTK_SIDE_BOTTOM: 
+@GTK_SIDE_LEFT: 
+@GTK_SIDE_RIGHT: 
 
 <!-- ##### ENUM GtkStateType ##### -->
 <para>

@@ -738,6 +738,10 @@ backend, <type>MSG</type>s for Win32).
 </para>
 
 @window: 
+@mask: 
+@x: 
+@y: 
+<!-- # Unused Parameters # -->
 @shape_mask: 
 @offset_x: 
 @offset_y: 
@@ -875,6 +879,8 @@ Deprecated equivalent to gdk_drawable_set_colormap()
 
 @window: 
 @geometry: 
+@geom_mask: 
+<!-- # Unused Parameters # -->
 @flags: 
 
 
@@ -1102,6 +1108,8 @@ Deprecated equivalent of gdk_drawable_get_type().
 </para>
 
 @window: 
+@parent: 
+<!-- # Unused Parameters # -->
 @leader: 
 
 

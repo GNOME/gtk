@@ -527,29 +527,6 @@ This is a private struct used by GTK+ internally, don't worry about it.
 @old_accel_key: 
 @old_accel_mods: 
 
-<!-- ##### ENUM GtkAnchorType ##### -->
-<para>
-
-</para>
-
-@GTK_ANCHOR_CENTER: 
-@GTK_ANCHOR_NORTH: 
-@GTK_ANCHOR_NORTH_WEST: 
-@GTK_ANCHOR_NORTH_EAST: 
-@GTK_ANCHOR_SOUTH: 
-@GTK_ANCHOR_SOUTH_WEST: 
-@GTK_ANCHOR_SOUTH_EAST: 
-@GTK_ANCHOR_WEST: 
-@GTK_ANCHOR_EAST: 
-@GTK_ANCHOR_N: 
-@GTK_ANCHOR_NW: 
-@GTK_ANCHOR_NE: 
-@GTK_ANCHOR_S: 
-@GTK_ANCHOR_SW: 
-@GTK_ANCHOR_SE: 
-@GTK_ANCHOR_W: 
-@GTK_ANCHOR_E: 
-
 <!-- ##### USER_FUNCTION GtkArgGetFunc ##### -->
 <para>
 Define a function pointer.  Deprecated.
@@ -644,6 +621,14 @@ Control-Return for #GtkText.)
 
 @editable: the object which received the signal.
 
+<!-- ##### SIGNAL GtkEditable::changed ##### -->
+<para>
+Indicates that the user has changed the contents
+of the widget.
+</para>
+
+@editable: the object which received the signal.
+
 <!-- ##### SIGNAL GtkEditable::copy-clipboard ##### -->
 <para>
 An action signal. Causes the characters in the current selection to
@@ -660,6 +645,42 @@ the widget.
 </para>
 
 @editable: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEditable::delete-text ##### -->
+<para>
+This signal is emitted when text is deleted from
+the widget by the user. The default handler for
+this signal will normally be responsible for inserting
+the text, so by connecting to this signal and then
+stopping the signal with gtk_signal_emit_stop(), it
+is possible to modify the inserted text, or prevent
+it from being inserted entirely. The @start_pos
+and @end_pos parameters are interpreted as for
+gtk_editable_delete_text()
+</para>
+
+@editable: the object which received the signal.
+@start_pos: the starting position.
+@end_pos: the end position.
+
+<!-- ##### SIGNAL GtkEditable::insert-text ##### -->
+<para>
+This signal is emitted when text is inserted into
+the widget by the user. The default handler for
+this signal will normally be responsible for inserting
+the text, so by connecting to this signal and then
+stopping the signal with gtk_signal_emit_stop(), it
+is possible to modify the inserted text, or prevent
+it from being inserted entirely.
+</para>
+
+@editable: the object which received the signal.
+@new_text: the new text to insert.
+@new_text_length: the length of the new text.
+@position: the position at which to insert the new text.
+           this is an in-out paramter. After the signal
+           emission is finished, it should point after   
+           the newly inserted text.
 
 <!-- ##### SIGNAL GtkEditable::kill-char ##### -->
 <para>
@@ -1057,16 +1078,6 @@ after other user handlers and the default handler.
 </para>
 
 
-<!-- ##### ENUM GtkSideType ##### -->
-<para>
-
-</para>
-
-@GTK_SIDE_TOP: 
-@GTK_SIDE_BOTTOM: 
-@GTK_SIDE_LEFT: 
-@GTK_SIDE_RIGHT: 
-
 <!-- ##### USER_FUNCTION GtkSignalDestroy ##### -->
 <para>
 A function which you can use to clean up when the
@@ -1177,6 +1188,51 @@ produce superscript and subscript.
 
 </para>
 
+
+<!-- ##### SIGNAL GtkTreeModel::row-changed ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeModel::row-deleted ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTreeModel::row-has-child-toggled ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeModel::row-inserted ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeModel::rows-reordered ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
 
 <!-- ##### STRUCT GtkTreeSelectionClass ##### -->
 <para>
@@ -1446,14 +1502,6 @@ If the window shrinks automatically when widgets within it shrink.
 @accel_key: 
 @accel_mods: 
 
-<!-- ##### MACRO gtk_accel_group_ref ##### -->
-<para>
-
-</para>
-
-@Returns: 
-@accel_group: 
-
 <!-- ##### FUNCTION gtk_accel_group_remove ##### -->
 <para>
 
@@ -1472,21 +1520,6 @@ If the window shrinks automatically when widgets within it shrink.
 @accel_group: 
 @accel_key: 
 @accel_mods: 
-
-<!-- ##### MACRO gtk_accel_group_unref ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-
-<!-- ##### FUNCTION gtk_accel_groups_from_object ##### -->
-<para>
-
-</para>
-
-@object: 
-@Returns: 
 
 <!-- ##### FUNCTION gtk_accel_label_get_accel_object ##### -->
 <para>
@@ -2887,19 +2920,6 @@ a gtk_object_unref().
 
 @tree_store: 
 @n_columns: 
-
-<!-- ##### FUNCTION gtk_tree_view_column_cell_event ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@event: 
-@path_string: 
-@background_area: 
-@cell_area: 
-@flags: 
-@Returns: 
 
 <!-- ##### FUNCTION gtk_tree_view_column_set_cell_data ##### -->
 <para>

@@ -7,8 +7,11 @@
 GtkAccelGroup
 gtk_accel_group_get_type
 gtk_accel_group_new
+gtk_accel_group_ref
+gtk_accel_group_unref
 gtk_accel_group_connect
 gtk_accel_group_connect_by_path
+GtkAccelGroupActivate
 gtk_accel_group_disconnect
 gtk_accel_group_disconnect_key
 gtk_accel_group_query
@@ -16,12 +19,16 @@ gtk_accel_group_lock
 gtk_accel_group_unlock
 gtk_accel_group_from_accel_closure
 gtk_accel_groups_activate
+gtk_accel_groups_from_object
+gtk_accel_group_find
+GtkAccelKey
 gtk_accelerator_valid
 gtk_accelerator_parse
 gtk_accelerator_name
 gtk_accelerator_set_default_mod_mask
 gtk_accelerator_get_default_mod_mask
 <SUBSECTION Private>
+GtkAccelGroupEntry
 <SUBSECTION Standard>
 GtkAccelGroupClass
 GTK_TYPE_ACCEL_GROUP
@@ -45,6 +52,8 @@ gtk_accel_map_foreach
 gtk_accel_map_load_fd
 gtk_accel_map_save_fd
 gtk_accel_map_load_scanner
+gtk_accel_map_add_filter
+gtk_accel_map_foreach_unfiltered
 </SECTION>
 
 <SECTION>
@@ -52,7 +61,6 @@ gtk_accel_map_load_scanner
 <TITLE>GtkAccelLabel</TITLE>
 GtkAccelLabel
 gtk_accel_label_new
-gtk_accel_label_get_accel_closure
 gtk_accel_label_set_accel_closure
 gtk_accel_label_get_accel_widget
 gtk_accel_label_set_accel_widget
@@ -594,6 +602,7 @@ GtkCTreeGNodeFunc
 GtkCTreeCompareDragFunc
 GtkCTreeRow
 GtkCTreeNode
+GTK_TYPE_CTREE_NODE
 gtk_ctree_new_with_titles
 gtk_ctree_new
 gtk_ctree_insert_node
@@ -670,6 +679,7 @@ GTK_IS_CTREE_CLASS
 GTK_CTREE_GET_CLASS
 <SUBSECTION Private>
 gtk_ctree_get_type
+gtk_ctree_node_get_type
 </SECTION>
 
 <SECTION>
@@ -868,6 +878,8 @@ GtkFixedChild
 gtk_fixed_new
 gtk_fixed_put
 gtk_fixed_move
+gtk_fixed_get_has_window
+gtk_fixed_set_has_window
 <SUBSECTION Standard>
 GTK_FIXED
 GTK_IS_FIXED
@@ -1182,6 +1194,9 @@ gtk_im_context_focus_out
 gtk_im_context_reset
 gtk_im_context_set_cursor_location
 gtk_im_context_set_use_preedit
+gtk_im_context_set_surrounding
+gtk_im_context_get_surrounding
+gtk_im_context_delete_surrounding
 <SUBSECTION Standard>
 GTK_IM_CONTEXT
 GTK_IS_IM_CONTEXT
@@ -1199,6 +1214,7 @@ gtk_im_context_get_type
 GtkIMContextSimple
 gtk_im_context_simple_new
 gtk_im_context_simple_add_table
+GTK_MAX_COMPOSE_LEN
 <SUBSECTION Standard>
 GTK_IM_CONTEXT_SIMPLE
 GTK_IS_IM_CONTEXT_SIMPLE
@@ -2396,6 +2412,7 @@ gtk_text_iter_toggles_tag
 gtk_text_iter_has_tag
 gtk_text_iter_get_tags
 gtk_text_iter_editable
+gtk_text_iter_can_insert
 gtk_text_iter_starts_word
 gtk_text_iter_ends_word
 gtk_text_iter_inside_word
@@ -2444,6 +2461,7 @@ gtk_text_iter_backward_to_tag_toggle
 GtkTextCharPredicate
 gtk_text_iter_forward_find_char
 gtk_text_iter_backward_find_char
+GtkTextSearchFlags
 gtk_text_iter_forward_search
 gtk_text_iter_backward_search
 gtk_text_iter_equal
@@ -2478,7 +2496,6 @@ gtk_text_mark_get_type
 <TITLE>GtkTextTag</TITLE>
 GtkTextTag
 GtkTextBTreeNode
-GtkTextTagTable
 GtkWrapMode
 GtkTextAttributes
 gtk_text_tag_new
@@ -2810,6 +2827,7 @@ gtk_tree_model_get_flags
 gtk_tree_model_get_n_columns
 gtk_tree_model_get_column_type
 gtk_tree_model_get_iter
+gtk_tree_model_get_iter_from_string
 gtk_tree_model_get_iter_root
 gtk_tree_model_get_path
 gtk_tree_model_get_value
@@ -2842,12 +2860,14 @@ gtk_tree_model_get_type
 <FILE>gtktreemodelsort</FILE>
 <TITLE>GtkTreeModelSort</TITLE>
 GtkTreeModelSort
-gtk_tree_model_sort_new
 gtk_tree_model_sort_new_with_model
-gtk_tree_model_sort_set_model
 gtk_tree_model_sort_get_model
-gtk_tree_model_sort_convert_path
-gtk_tree_model_sort_convert_iter
+gtk_tree_model_sort_convert_child_path_to_path
+gtk_tree_model_sort_convert_child_iter_to_iter
+gtk_tree_model_sort_convert_path_to_child_path
+gtk_tree_model_sort_convert_iter_to_child_iter
+gtk_tree_model_sort_reset_default_sort_func
+gtk_tree_model_sort_clear_cache
 <SUBSECTION Standard>
 GTK_TREE_MODEL_SORT
 GTK_IS_TREE_MODEL_SORT
@@ -2921,12 +2941,13 @@ GtkTreeDragSource
 GtkTreeDragSourceIface
 gtk_tree_drag_source_drag_data_delete
 gtk_tree_drag_source_drag_data_get
+gtk_tree_drag_source_row_draggable
 GtkTreeDragDest
 GtkTreeDragDestIface
 gtk_tree_drag_dest_drag_data_received
 gtk_tree_drag_dest_row_drop_possible
-gtk_selection_data_set_tree_row
-gtk_selection_data_get_tree_row
+gtk_tree_set_row_drag_data
+gtk_tree_get_row_drag_data
 <SUBSECTION Standard>
 GTK_TYPE_TREE_DRAG_DEST
 GTK_TREE_DRAG_DEST
@@ -2947,6 +2968,7 @@ gtk_tree_drag_dest_get_type
 GtkTreeStore
 gtk_tree_store_new
 gtk_tree_store_newv
+gtk_tree_store_set_column_types
 gtk_tree_store_set_value
 gtk_tree_store_set
 gtk_tree_store_set_valist
@@ -2990,6 +3012,8 @@ gtk_tree_view_column_set_spacing
 gtk_tree_view_column_get_spacing
 gtk_tree_view_column_set_visible
 gtk_tree_view_column_get_visible
+gtk_tree_view_column_set_resizable
+gtk_tree_view_column_get_resizable
 gtk_tree_view_column_set_sizing
 gtk_tree_view_column_get_sizing
 gtk_tree_view_column_get_width
@@ -3019,11 +3043,11 @@ gtk_tree_view_column_get_sort_order
 gtk_tree_view_column_cell_set_cell_data
 gtk_tree_view_column_cell_get_size
 gtk_tree_view_column_cell_render
+gtk_tree_view_column_cell_event
 gtk_tree_view_column_cell_focus
 gtk_tree_view_column_cell_draw_focus
 gtk_tree_view_column_cell_is_visible
 gtk_tree_view_column_cell_set_dirty
-gtk_tree_view_column_cell_can_focus
 <SUBSECTION Standard>
 GTK_TREE_VIEW_COLUMN
 GTK_IS_TREE_VIEW_COLUMN
@@ -3041,11 +3065,8 @@ gtk_tree_view_column_get_type
 GtkTreeView
 GtkTreeViewDropPosition
 GtkTreeViewPrivate
-GtkTreeSelection
 GtkTreeViewColumnDropFunc
-GtkTreeViewDraggableFunc
 GtkTreeViewMappingFunc
-GtkTreeViewDroppableFunc
 GtkTreeViewSearchEqualFunc
 gtk_tree_view_new
 gtk_tree_view_new_with_model
@@ -3090,10 +3111,11 @@ gtk_tree_view_get_path_at_pos
 gtk_tree_view_get_cell_area
 gtk_tree_view_get_background_area
 gtk_tree_view_get_visible_rect
+gtk_tree_view_get_bin_window
 gtk_tree_view_widget_to_tree_coords
 gtk_tree_view_tree_to_widget_coords
-gtk_tree_view_set_rows_drag_source
-gtk_tree_view_set_rows_drag_dest
+gtk_tree_view_enable_model_drag_dest
+gtk_tree_view_enable_model_drag_source
 gtk_tree_view_unset_rows_drag_source
 gtk_tree_view_unset_rows_drag_dest
 gtk_tree_view_set_drag_dest_row
@@ -3239,6 +3261,7 @@ gtk_cell_renderer_toggle_get_type
 GtkListStore
 gtk_list_store_new
 gtk_list_store_newv
+gtk_list_store_set_column_types
 gtk_list_store_set
 gtk_list_store_set_valist
 gtk_list_store_set_value
@@ -3489,6 +3512,7 @@ gtk_widget_get_visual
 gtk_widget_get_events
 gtk_widget_get_pointer
 gtk_widget_is_ancestor
+gtk_widget_translate_coordinates
 gtk_widget_hide_on_delete
 gtk_widget_set_style
 gtk_widget_set_rc_style
@@ -3530,6 +3554,7 @@ gtk_widget_queue_draw_area
 gtk_widget_reset_shapes
 gtk_widget_set_app_paintable
 gtk_widget_set_double_buffered
+gtk_widget_set_redraw_on_allocate
 gtk_widget_set_composite_name
 gtk_widget_set_scroll_adjustments
 gtk_widget_mnemonic_activate
@@ -3597,6 +3622,9 @@ gtk_window_list_toplevels
 gtk_window_add_mnemonic
 gtk_window_remove_mnemonic
 gtk_window_mnemonic_activate
+gtk_window_get_focus
+gtk_window_set_focus
+gtk_window_set_default
 gtk_window_present
 gtk_window_iconify
 gtk_window_deiconify
@@ -3652,8 +3680,6 @@ gtk_decorated_window_move_resize_window
 <SUBSECTION Private>
 gtk_window_get_type
 GtkWindowGeometryInfo
-gtk_window_set_focus
-gtk_window_set_default
 gtk_window_remove_embedded_xid
 gtk_window_add_embedded_xid
 </SECTION>
@@ -3681,6 +3707,7 @@ gtk_window_group_get_type
 <FILE>gtkmain</FILE>
 <TITLE>General</TITLE>
 gtk_set_locale
+gtk_disable_setlocale
 gtk_get_default_language
 gtk_init
 gtk_init_check
@@ -3802,6 +3829,8 @@ gtk_style_apply_default_background
 gtk_style_apply_default_pixmap
 gtk_style_lookup_icon_set
 gtk_style_render_icon
+gtk_style_get_font
+gtk_style_set_font
 gtk_draw_hline
 gtk_draw_vline
 gtk_draw_shadow
@@ -3945,6 +3974,8 @@ gtk_selection_convert
 gtk_selection_data_set
 gtk_selection_data_set_text
 gtk_selection_data_get_text
+gtk_selection_data_get_targets
+gtk_selection_data_targets_include_text
 gtk_selection_remove_all
 gtk_selection_data_copy
 gtk_selection_data_free
@@ -3974,6 +4005,7 @@ gtk_clipboard_request_contents
 gtk_clipboard_request_text
 gtk_clipboard_wait_for_contents
 gtk_clipboard_wait_for_text
+gtk_clipboard_wait_is_text_available
 </SECTION>
 
 <SECTION>
@@ -4152,6 +4184,7 @@ gtk_binding_parse_binding
 <FILE>gtkenums</FILE>
 <TITLE>Standard Enumerations</TITLE>
 GtkAccelFlags
+GtkAnchorType
 GtkArrowType
 GtkAttachOptions
 GtkButtonBoxStyle
@@ -4176,6 +4209,7 @@ GtkResizeMode
 GtkScrollType
 GtkSelectionMode
 GtkShadowType
+GtkSideType
 GtkStateType
 GtkSubmenuDirection
 GtkSubmenuPlacement
@@ -4189,6 +4223,7 @@ GtkSortType
 <SUBSECTION Private>
 GtkMenuCallback
 GtkMenuEntry
+GTK_PATH_PRIO_MASK
 </SECTION>
 
 <SECTION>

@@ -251,6 +251,16 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_text_iter_can_insert ##### -->
+<para>
+
+</para>
+
+@iter: 
+@default_editability: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_iter_starts_word ##### -->
 <para>
 
@@ -701,6 +711,14 @@ types related to the text widget and how they work together.
 @limit: 
 @Returns: 
 
+
+<!-- ##### ENUM GtkTextSearchFlags ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_SEARCH_VISIBLE_ONLY: 
+@GTK_TEXT_SEARCH_TEXT_ONLY: 
 
 <!-- ##### FUNCTION gtk_text_iter_forward_search ##### -->
 <para>

@@ -406,6 +406,13 @@ as the functions below to access it.
 
 @list: 
 
+<!-- ##### MACRO GTK_TYPE_CTREE_NODE ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_ctree_new_with_titles ##### -->
 <para>
 Create a new #GtkCTree widget with the given titles for the columns.

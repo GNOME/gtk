@@ -797,6 +797,20 @@ GtkWidget
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_widget_translate_coordinates ##### -->
+<para>
+
+</para>
+
+@src_widget: 
+@dest_widget: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_widget_hide_on_delete ##### -->
 <para>
 
@@ -1165,6 +1179,15 @@ GtkWidget
 
 @widget: 
 @double_buffered: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_redraw_on_allocate ##### -->
+<para>
+
+</para>
+
+@widget: 
+@redraw_on_allocate: 
 
 
 <!-- ##### FUNCTION gtk_widget_set_composite_name ##### -->

@@ -94,12 +94,9 @@ gdk_property_state_get_type
 gdk_prop_mode_get_type
 gdk_rgb_dither_get_type
 gdk_scroll_direction_get_type
-gdk_selection_get_type
-gdk_selection_type_get_type
 gdk_setting_action_get_type
 gdk_status_get_type
 gdk_subwindow_mode_get_type
-gdk_target_get_type
 gdk_visibility_state_get_type
 gdk_visual_type_get_type
 gdk_window_attributes_type_get_type
@@ -635,12 +632,6 @@ gdk_selection_convert
 gdk_selection_property_get
 gdk_selection_send_notify
 
-<SUBSECTION Standard>
-GDK_TYPE_SELECTION
-GDK_TYPE_SELECTION_TYPE
-GDK_TYPE_TARGET
-</SECTION>
-
 <SECTION>
 <TITLE>Properties and Atoms</TITLE>
 <FILE>properties</FILE>
@@ -784,7 +775,6 @@ GdkDeviceKey
 GdkDeviceAxis
 GdkAxisUse
 gdk_devices_list
-gdk_core_pointer
 gdk_device_set_source
 gdk_device_set_mode
 gdk_device_set_key
@@ -982,8 +972,6 @@ gdk_drag_context_get_type
 <SECTION>
 <TITLE>X Window System Interaction</TITLE>
 <FILE>x_interaction</FILE>
-GDK_GC_X11
-GDK_GC_X11_GET_CLASS
 GDK_ROOT_WINDOW
 GDK_ROOT_PARENT
 GDK_DISPLAY
@@ -1006,14 +994,8 @@ GDK_CURSOR_XDISPLAY
 GDK_GC_XGC
 GDK_GC_GET_XGC
 GDK_WINDOW_XWINDOW
-gdk_screen
-gdk_display_name
-gdk_leader_window
-gdk_selection_property
-gdk_progclass
 gdkx_visual_get
 gdkx_colormap_get
-gdk_get_client_window
 gdk_pixmap_foreign_new
 gdk_window_foreign_new
 gdk_xid_table_lookup
@@ -1043,20 +1025,7 @@ gdk_x11_ungrab_server
 gdk_x11_visual_get_xvisual
 
 <SUBSECTION Private>
-GDK_TYPE_GC_X11
-GDK_IS_GC_X11
-gdk_gc_x11_get_type
-GDK_GC_X11_CLASS
-GDK_IS_GC_X11_CLASS
-GdkGCX11
-GdkGCX11Class
-GdkColormapPrivateX11
-GdkCursorPrivate
-GdkFontPrivateX
-GdkImagePrivateX11
-GdkVisualPrivate
 gdk_display
-gdk_root_window
 GDK_HAVE_WCHAR_H
 GDK_HAVE_WCTYPE_H
 gdk_iswalnum

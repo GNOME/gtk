@@ -40,6 +40,16 @@ GtkListStore
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_list_store_set_column_types ##### -->
+<para>
+
+</para>
+
+@list_store: 
+@n_columns: 
+@types: 
+
+
 <!-- ##### FUNCTION gtk_list_store_set ##### -->
 <para>
 

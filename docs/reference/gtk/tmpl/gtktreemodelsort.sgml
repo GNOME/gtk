@@ -42,6 +42,62 @@ GtkTreeModelSort
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_tree_model_sort_convert_child_path_to_path ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@child_path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_convert_child_iter_to_iter ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@sort_iter: 
+@child_iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_convert_path_to_child_path ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@sorted_path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_convert_iter_to_child_iter ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@child_iter: 
+@sorted_iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_reset_default_sort_func ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_clear_cache ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+
+
 <!-- ##### ARG GtkTreeModelSort:model ##### -->
 <para>
 
