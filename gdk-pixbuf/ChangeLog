@@ -1,3 +1,16 @@
+Wed Sep 19 00:28:24 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (gdk_pixbuf_headers): Don't include
+	gkd-pixbuf-features.h here since is in builddir
+	and confuses autogen rules.
+
+	* Makefile.am: Don't += variables before they have values,
+	automake-1.5 doesn't like it.
+
+	* Makefile.am: Fix srcdir != builddir for gdk-pixbuf-enum-types.c.
+
+	* Makefile.am: The whitespace strikes back.
+	
 2001-09-17  Matt Wilson  <msw@redhat.com>
 
 	* Makefile.am (libpixbufloader_xbm_la_LDFLAGS): removed duplicate

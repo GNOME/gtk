@@ -222,14 +222,14 @@ libgdk_pixbuf_1_3_la_LDFLAGS = @STRIP_BEGIN@ \
 libgdk_pixbuf_1_3_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS)
 libgdk_pixbuf_1_3_la_DEPENDENCIES = $(builtin_objs)
 
-gdk_pixbuf_headers = \
-	gdk-pixbuf.h		\
-	gdk-pixbuf-loader.h	\
-	gdk-pixbuf-features.h
+gdk_pixbuf_headers = 			\
+	gdk-pixbuf.h			\
+	gdk-pixbuf-loader.h
 
-libgdk_pixbufinclude_HEADERS =  \
+libgdk_pixbufinclude_HEADERS =  	\
 	$(gdk_pixbuf_headers)		\
 	$(gdk_pixbuf_built_headers)	\
+	gdk-pixbuf-features.h		\
 	gdk-pixdata.h
 
 noinst_HEADERS = 		\
@@ -237,13 +237,18 @@ noinst_HEADERS = 		\
 	gdk-pixbuf-private.h
 
 gdk_pixbuf_built_headers = gdk-pixbuf-enum-types.h gdk-pixbuf-marshal.h
-gdk_pixbuf_built_cfiles = gdk-pixbuf-enum-types.c
-MAINTAINERCLEANFILES += $(gdk_pixbuf_built_headers) $(gdk_pixbuf_built_cfiles) gdk-pixbuf-marshal.c
+gdk_pixbuf_built_cfiles = gdk-pixbuf-enum-types.c 
 $(OBJECTS): $(gdk_pixbuf_built_headers) $(gdk_pixbuf_built_cfiles) gdk-pixbuf-marshal.c
 
+CLEANFILES =
+MAINTAINERCLEANFILES = $(gdk_pixbuf_built_headers) $(gdk_pixbuf_built_cfiles) gdk-pixbuf-marshal.c
+
+#
+# gdk-pixbuf-enum-types.h
+#
 $(srcdir)/gdk-pixbuf-enum-types.h: s-enum-types-h
 	@true
-MAINTAINERCLEANFILES += s-enum-types-h
+
 s-enum-types-h: @REBUILD@ $(gdk_pixbuf_headers) Makefile
 	( cd $(srcdir) && glib-mkenums \
 			--fhead "#ifndef __GDK_PIXBUF__ENUM_TYPES_H__\n#define __GDK_PIXBUF_ENUM_TYPES_H__\n" \
@@ -254,22 +259,28 @@ s-enum-types-h: @REBUILD@ $(gdk_pixbuf_headers) Makefile
 	&& (cmp -s tmp-gdk-pixbuf-enum-types.h $(srcdir)/gdk-pixbuf-enum-types.h || cp tmp-gdk-pixbuf-enum-types.h $(srcdir)/gdk-pixbuf-enum-types.h ) \
 	&& rm -f tmp-gdk-pixbuf-enum-types.h \
 	&& echo timestamp > $(@F)
+
 CLEANFILES += tmp-gdk-pixbuf-enum-types.h
+MAINTAINERCLEANFILES += s-enum-types-h
+
+#
+# gdk-pixbuf-enum-types.c
+#
 $(srcdir)/gdk-pixbuf-enum-types.c: @REBUILD@ $(gdk_pixbuf_headers) Makefile
-	cd $(srcdir) \
-	&& glib-mkenums \
+	cd $(srcdir) && glib-mkenums \
 		--fhead "#include <gdk-pixbuf/gdk-pixbuf.h>" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
 		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const GEnumValue values[] = {"       \
 		--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
 		--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_enum_register_static (\"@EnumName@\", values);\n  }\n  return etype;\n}\n" \
-		  $(gdk_pixbuf_headers)  > tmp-gdk-pixbuf-enum-types.c \
-	&& cp tmp-gdk-pixbuf-enum-types.c $(srcdir)/gdk-pixbuf-enum-types.c \
-	&& rm -f tmp-gdk-pixbuf-enum-types.c
-CLEANFILES += tmp-gdk-pixbuf-enum-types.c
+		  $(gdk_pixbuf_headers) > gdk-pixbuf-enum-types.c
+
+#
+# gdk-pixbuf-marshal.h
+#
 $(srcdir)/gdk-pixbuf-marshal.h: @REBUILD@ stamp-gdk-pixbuf-marshal.h
 	@true
-MAINTAINERCLEANFILES += stamp-gdk-pixbuf-marshal.h
+
 stamp-gdk-pixbuf-marshal.h: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
 	case @GLIB_GENMARSHAL@ in									\
 	   .*) glib_genmarshal=`pwd`/@GLIB_GENMARSHAL@ ;;				\
@@ -280,7 +291,13 @@ stamp-gdk-pixbuf-marshal.h: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
 	&& (cmp -s xgen-gmh gdk-pixbuf-marshal.h || cp xgen-gmh gdk-pixbuf-marshal.h)			\
 	&& rm -f xgen-gmh xgen-gmh~	\
 	&& echo timestamp > $(@F)
+
 CLEANFILES += xgen-gmh
+MAINTAINERCLEANFILES += stamp-gdk-pixbuf-marshal.h
+
+#
+# gdk-pixbuf-marshal.c
+#
 $(srcdir)/gdk-pixbuf-marshal.c: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
 	case @GLIB_GENMARSHAL@ in									\
 	   .*) glib_genmarshal=`pwd`/@GLIB_GENMARSHAL@ ;;				\
@@ -290,6 +307,7 @@ $(srcdir)/gdk-pixbuf-marshal.c: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
 	&& $$glib_genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >> xgen-gmc	\
 	&& cp xgen-gmc gdk-pixbuf-marshal.c								\
 	&& rm -f xgen-gmc xgen-gmc~
+
 CLEANFILES += xgen-gmc
 
 EXTRA_DIST =			\
