@@ -1145,23 +1145,23 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       size_hints.flags |= PAspect;
       if (geometry->min_aspect <= 1)
 	{
-	  size_hints.min_aspect.x = G_MAXINT * geometry->min_aspect;
-	  size_hints.min_aspect.y = G_MAXINT;
+	  size_hints.min_aspect.x = 65536 * geometry->min_aspect;
+	  size_hints.min_aspect.y = 65536;
 	}
       else
 	{
-	  size_hints.min_aspect.x = G_MAXINT;
-	  size_hints.min_aspect.y = G_MAXINT / geometry->min_aspect;;
+	  size_hints.min_aspect.x = 65536;
+	  size_hints.min_aspect.y = 65536 / geometry->min_aspect;;
 	}
       if (geometry->max_aspect <= 1)
 	{
-	  size_hints.max_aspect.x = G_MAXINT * geometry->max_aspect;
-	  size_hints.max_aspect.y = G_MAXINT;
+	  size_hints.max_aspect.x = 65536 * geometry->max_aspect;
+	  size_hints.max_aspect.y = 65536;
 	}
       else
 	{
-	  size_hints.max_aspect.x = G_MAXINT;
-	  size_hints.max_aspect.y = G_MAXINT / geometry->max_aspect;;
+	  size_hints.max_aspect.x = 65536;
+	  size_hints.max_aspect.y = 65536 / geometry->max_aspect;;
 	}
     }
   
