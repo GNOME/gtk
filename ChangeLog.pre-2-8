@@ -1,3 +1,27 @@
+Fri Jun  6 16:25:44 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkviewport.c: Many fixes, along with extensive cleanups and 
+	refactoring of code to reduce duplication; fixes include:
+
+	- gtk_viewport_realize(): Position the window correct from adjustment 
+	values. (#110737, Michael Natterer)
+
+	- Remove some division-by-zero checks in places where there is no 
+	longer division. (#110737)
+
+	- gtk_viewport_class_init: Make the hadjustment/vadjustment properties 
+	G_PARAM_CONSTRUCT, so that there will always be adjustments, even 
+	if gtk_viewport_new isn't used (#101135, Thomas Leonard).
+
+	- Switch over to encapsulated lazy-creation for hadjustment/
+	vadjustment; even with the CONSTRUCT property, we need this after
+	destroy.
+
+	- When updating the adjustment, immediate set their values to
+	match the the current range of the viewport, and update the 
+	viewport position to match the value of the new adjustments. 
+	(Part of #1165)
+
 2003-06-06  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkprivate-win32.h: Fix typo.
@@ -32,7 +56,7 @@ Fri Jun  6 11:05:45 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 Thu Jun  5 20:35:40 2003  Owen Taylor  <otaylor@redhat.com>
 
-	* demos/Makefile.am: Conditionalize deendencies for
+	* demos/Makefile.am: Conditionalize dependencies for
 	gdk-pixbuf-csource on cross-compilation (#112391, J. Ali Harlowe). 
 	Buildtest-inline-pixbufs.h in srcdir. Don't try to build 
 	test-inline-pixbufs.h if we don't have libpng.
