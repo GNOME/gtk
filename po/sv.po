@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2003-12-13 14:18+0100\n"
-"PO-Revision-Date: 2003-12-13 14:18+0100\n"
+"POT-Creation-Date: 2003-12-16 22:41+0100\n"
+"PO-Revision-Date: 2003-12-16 22:41+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -763,7 +763,7 @@ msgstr "Namn"
 msgid "A unique name for the action."
 msgstr "Ett unikt namn för åtgärden."
 
-#: gtk/gtkaction.c:193 gtk/gtkbutton.c:190 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:193 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Etikett"
@@ -842,7 +842,7 @@ msgstr "Ett namn för åtgärdsgruppen."
 msgid "Horizontal alignment"
 msgstr "Horisontell justering"
 
-#: gtk/gtkalignment.c:117
+#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:254
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -854,7 +854,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Vertikal justering"
 
-#: gtk/gtkalignment.c:127
+#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:273
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -1091,7 +1091,7 @@ msgstr "Position"
 msgid "The index of the child in the parent"
 msgstr "Indexet för barnet i föräldern"
 
-#: gtk/gtkbutton.c:191
+#: gtk/gtkbutton.c:204
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -1099,12 +1099,12 @@ msgstr ""
 "Texten på etikettwidgeten inuti knappen, om knappen innehåller en "
 "etikettwidget"
 
-#: gtk/gtkbutton.c:198 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
+#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
 #: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Använd understrykning"
 
-#: gtk/gtkbutton.c:199 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
+#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1112,46 +1112,54 @@ msgstr ""
 "Om detta är angivet kommer en understrykning i texten att indikera att nästa "
 "tecken ska användas som en genvägstangent"
 
-#: gtk/gtkbutton.c:206
+#: gtk/gtkbutton.c:219
 msgid "Use stock"
 msgstr "Använd standard"
 
-#: gtk/gtkbutton.c:207
+#: gtk/gtkbutton.c:220
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Om detta är angivet kommer etiketten att användas för att plocka ett "
 "standardobjekt istället för att visas"
 
-#: gtk/gtkbutton.c:214
+#: gtk/gtkbutton.c:227
 msgid "Focus on click"
 msgstr "Fokusera vid klick"
 
-#: gtk/gtkbutton.c:215
+#: gtk/gtkbutton.c:228
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Huruvida knappen tar fokus när den klickas på med musen"
 
-#: gtk/gtkbutton.c:222
+#: gtk/gtkbutton.c:235
 msgid "Border relief"
 msgstr "Kantrelief"
 
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:236
 msgid "The border relief style"
 msgstr "Reliefstilen på kanten"
 
-#: gtk/gtkbutton.c:280
+#: gtk/gtkbutton.c:253
+msgid "Horizontal alignment for child"
+msgstr "Horisontell justering för barn"
+
+#: gtk/gtkbutton.c:272
+msgid "Vertical alignment for child"
+msgstr "Vertikal justering för barn"
+
+#: gtk/gtkbutton.c:331
 msgid "Default Spacing"
 msgstr "Standardmellanrum"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:332
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Extra mellanrum att lägga till för alla CAN_DEFAULT-knappar"
 
-#: gtk/gtkbutton.c:287
+#: gtk/gtkbutton.c:338
 msgid "Default Outside Spacing"
 msgstr "Standardmellanrum på utsidan"
 
-#: gtk/gtkbutton.c:288
+#: gtk/gtkbutton.c:339
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -1159,20 +1167,20 @@ msgstr ""
 "Extra mellanrum att lägga till för CAN_DEFAULT-knappar som alltid visas "
 "utanför kanten"
 
-#: gtk/gtkbutton.c:293
+#: gtk/gtkbutton.c:344
 msgid "Child X Displacement"
 msgstr "X-förflyttning av barn"
 
-#: gtk/gtkbutton.c:294
+#: gtk/gtkbutton.c:345
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "Hur långt bort i x-riktingen barnet ska flyttas då knappen trycks ned"
 
-#: gtk/gtkbutton.c:301
+#: gtk/gtkbutton.c:352
 msgid "Child Y Displacement"
 msgstr "Y-förflyttning av barn"
 
-#: gtk/gtkbutton.c:302
+#: gtk/gtkbutton.c:353
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "Hur långt bort i y-riktningen barnet ska flyttas då knappen trycks ned"
@@ -2770,7 +2778,7 @@ msgstr "Kunde inte konvertera filnamn"
 msgid "(Empty)"
 msgstr "(Tom)"
 
-#: gtk/gtkfilesystemunix.c:306 gtk/gtkfilesystemwin32.c:371
+#: gtk/gtkfilesystemunix.c:306 gtk/gtkfilesystemwin32.c:383
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "fel vid skapande av katalogen \"%s\": %s"
@@ -2783,15 +2791,19 @@ msgstr "Detta filsystem stöder inte ikoner"
 msgid "This file system does not support bookmarks"
 msgstr "Detta filsystem stöder inte bokmärken"
 
-#: gtk/gtkfilesystemunix.c:765 gtk/gtkfilesystemwin32.c:893
+#: gtk/gtkfilesystemunix.c:765 gtk/gtkfilesystemwin32.c:1069
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "fel vid hämtning av information för \"%s\": %s"
 
-#: gtk/gtkfilesystemwin32.c:680
+#: gtk/gtkfilesystemwin32.c:692
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Bokmärkessparande misslyckades (%s)"
+
+#: gtk/gtkfilesystemwin32.c:848
+msgid "This file system does not support icons for everything"
+msgstr "Detta filsystem stöder inte ikoner till allt"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
@@ -3281,7 +3293,7 @@ msgstr "Höjden på layouten"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:840
+#: gtk/gtkmain.c:851
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -4090,11 +4102,11 @@ msgstr "Rita"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Huruvida avskiljaren är ritad eller enbart tom"
 
-#: gtk/gtksettings.c:169
+#: gtk/gtksettings.c:170
 msgid "Double Click Time"
 msgstr "Tid för dubbelklick"
 
-#: gtk/gtksettings.c:170
+#: gtk/gtksettings.c:171
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -4102,27 +4114,39 @@ msgstr ""
 "Största tid som tillåts mellan två klick för att de ska betraktas som en "
 "dubbelklickning (i millisekunder)"
 
-#: gtk/gtksettings.c:177
+#: gtk/gtksettings.c:178
+msgid "Double Click Distance"
+msgstr "Avstånd för dubbelklick"
+
+#: gtk/gtksettings.c:179
+msgid ""
+"Maximum distance allowed between two clicks for them to be considered a "
+"double click (in pixels)"
+msgstr ""
+"Största avstånd som tillåts mellan två klick för att de ska betraktas som en "
+"dubbelklickning (i bildpunkter)"
+
+#: gtk/gtksettings.c:186
 msgid "Cursor Blink"
 msgstr "Markörblinkning"
 
-#: gtk/gtksettings.c:178
+#: gtk/gtksettings.c:187
 msgid "Whether the cursor should blink"
 msgstr "Huruvida markören ska blinka"
 
-#: gtk/gtksettings.c:185
+#: gtk/gtksettings.c:194
 msgid "Cursor Blink Time"
 msgstr "Blinktid för markör"
 
-#: gtk/gtksettings.c:186
+#: gtk/gtksettings.c:195
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Längd på markörens blinkcykel, i millisekunder"
 
-#: gtk/gtksettings.c:193
+#: gtk/gtksettings.c:202
 msgid "Split Cursor"
 msgstr "Delad markör"
 
-#: gtk/gtksettings.c:194
+#: gtk/gtksettings.c:203
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -4130,59 +4154,59 @@ msgstr ""
 "Huruvida två markörer ska visas för blandad vänster-till-höger- och höger-"
 "till-vänster-text"
 
-#: gtk/gtksettings.c:201
+#: gtk/gtksettings.c:210
 msgid "Theme Name"
 msgstr "Temanamn"
 
-#: gtk/gtksettings.c:202
+#: gtk/gtksettings.c:211
 msgid "Name of theme RC file to load"
 msgstr "Namn på den tema-RC-fil som ska läsas in"
 
-#: gtk/gtksettings.c:209
+#: gtk/gtksettings.c:218
 msgid "Icon Theme Name"
 msgstr "Namn på ikontema"
 
-#: gtk/gtksettings.c:210
+#: gtk/gtksettings.c:219
 msgid "Name of icon theme to use"
 msgstr "Namn på ikontemat att använda"
 
-#: gtk/gtksettings.c:217
+#: gtk/gtksettings.c:226
 msgid "Key Theme Name"
 msgstr "Nyckeltemanamn"
 
-#: gtk/gtksettings.c:218
+#: gtk/gtksettings.c:227
 msgid "Name of key theme RC file to load"
 msgstr "Namn på den nyckeltema-RC-fil som ska läsas in"
 
-#: gtk/gtksettings.c:226
+#: gtk/gtksettings.c:235
 msgid "Menu bar accelerator"
 msgstr "Snabbtangent för menyrad"
 
-#: gtk/gtksettings.c:227
+#: gtk/gtksettings.c:236
 msgid "Keybinding to activate the menu bar"
 msgstr "Snabbtangent för att aktivera menyraden"
 
-#: gtk/gtksettings.c:235
+#: gtk/gtksettings.c:244
 msgid "Drag threshold"
 msgstr "Dragtröskel"
 
-#: gtk/gtksettings.c:236
+#: gtk/gtksettings.c:245
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Antalet bildpunkter markören kan flyttas innan drag"
 
-#: gtk/gtksettings.c:244
+#: gtk/gtksettings.c:253
 msgid "Font Name"
 msgstr "Typsnittsnamn"
 
-#: gtk/gtksettings.c:245
+#: gtk/gtksettings.c:254
 msgid "Name of default font to use"
 msgstr "Namn på standardtypsnittet att använda"
 
-#: gtk/gtksettings.c:253
+#: gtk/gtksettings.c:262
 msgid "Icon Sizes"
 msgstr "Ikonstorlekar"
 
-#: gtk/gtksettings.c:254
+#: gtk/gtksettings.c:263
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "Lista med ikonstorlekar (gtk-menu=16,16;gtk-button=20,20..."
 
