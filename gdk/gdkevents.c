@@ -410,6 +410,20 @@ gdk_event_copy (GdkEvent *event)
     case GDK_SETTING:
       new_event->setting.name = g_strdup (new_event->setting.name);
       break;
+
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      if (event->button.axes) 
+	new_event->button.axes = g_memdup (event->button.axes, 
+					     sizeof (gdouble) * event->button.device->num_axes);
+      break;
+
+    case GDK_MOTION_NOTIFY:
+      if (event->motion.axes) 
+	new_event->motion.axes = g_memdup (event->motion.axes, 
+					   sizeof (gdouble) * event->motion.device->num_axes);
+      
+      break;
       
     default:
       break;
