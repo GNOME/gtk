@@ -1,0 +1,306 @@
+<!doctype book PUBLIC "-//OASIS//DTD DocBook V3.1//EN" []>
+<book>
+
+  <bookinfo>
+    <date>June 21st 2000</date>
+    <title>GTK+ FAQ</title>
+    <authorgroup>
+      <author>
+	<firstname>Tony</firstname>
+	<surname>Gale</surname>
+      </author>
+      <author>
+	<firstname>Shawn</firstname>
+	<surname>Amundson</surname>
+      </author>
+      <author>
+	<firstname>Emmanuel</firstname>
+	<surname>Deloget</surname>
+      </author>
+    </authorgroup>
+    <abstract>
+      <para> This document is intended to answer questions that are
+      likely to be frequently asked by programmers using GTK+ or
+      people who are just looking at using GTK+. </para>
+    </abstract>
+  </bookinfo>
+
+  <toc></toc>
+
+<!-- ***************************************************************** -->
+  <chapter>
+    <title>General Information</title>
+    <para>Here's a paragraph of text because it is stylistically poor
+    to start a section right after the chapter title.</para>
+    <sect1>
+      <title></title>
+      <sect2>
+	<title>Before anything else: the greetings</title>
+	<para>The FAQ authors want to thank:</para>
+	<itemizedlist spacing=Compact>
+	  <listitem>
+	    <simpara>Havoc Pennington</simpara>
+	  </listitem>
+	  <listitem>
+	    <simpara>Erik Mouw</simpara>
+	  </listitem>
+	  <listitem>
+	    <simpara>Owen Taylor</simpara>
+	  </listitem>
+	  <listitem>
+	    <simpara>Tim Janik</simpara>
+	  </listitem>
+	  <listitem>
+	    <simpara>Thomas Mailund Jensen</simpara>
+	  </listitem>
+	  <listitem>
+	    <simpara>Joe Pfeiffer</simpara>
+	  </listitem>
+	  <listitem>
+	    <simpara>Andy Kahn</simpara>
+	  </listitem>
+	  <listitem>
+	    <simpara>Federico Mena Quntero</simpara>
+	  </listitem>
+	  <listitem>
+	    <simpara>Damon Chaplin</simpara>
+	  </listitem>
+	  <listitem>
+	    <simpara>and all the members of the GTK+ lists</simpara>
+	  </listitem></itemizedlist>
+	<para> If we forgot you, please email us! Thanks again (I know,
+	  it's really short :) </para>
+      </sect2>
+      
+      <!-- ----------------------------------------------------------------- -->
+      
+      <sect2>
+	<title>Authors</title>
+	<para>The original authors of GTK+ were:</para>
+	<itemizedlist spacing=Compact>
+	  <listitem>
+	    <simpara>Peter Mattis</simpara>
+	  </listitem>
+	  <listitem>
+	    <simpara>Spencer Kimball</simpara>
+	  </listitem>
+	  <listitem>
+	    <simpara>Josh MacDonald</simpara>
+	  </listitem>
+	</itemizedlist>
+	<para>Since then, much has been added by others. Please see the
+              AUTHORS file in the distribution for the GTK+ Team.</para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>What is GTK+?</title>
+	<para>GTK+ is a small and efficient widget set designed with
+	the general look and feel of Motif.  In reality, it looks much
+	better than Motif.  It contains common widgets and some more
+	complex widgets such as a file selection, and color selection
+	widgets.</para>
+	<para>GTK+ provides some unique features. (At least, I know of
+	no other widget library which provides them). For example, a
+	button does not contain a label, it contains a child widget,
+	which in most instances will be a label.  However, the child
+	widget can also be a pixmap, image or any combination possible
+	the programmer desires. This flexibility is adhered to
+	throughout the library.</para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>What is the + in GTK+?</title>
+	<para>Peter Mattis informed the gtk mailing list that:</para>
+	<para><quote>I originally wrote gtk which included the three
+	libraries, libglib, libgdk and libgtk. It featured a flat
+	widget hierarchy. That is, you couldn't derive a new widget
+	from an existing one. And it contained a more standard
+	callback mechanism instead of the signal mechanism now present
+	in gtk+. The + was added to distinguish between the original
+	version of gtk and the new version. You can think of it as
+	being an enhancement to the original gtk that adds object
+	oriented features.</quote></para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>Does the G in GTK+, GDK and GLib stand for?</title>
+	<para>GTK+ == Gimp Toolkit</para>
+	<para>GDK == GTK+ Drawing Kit</para>
+	<para>GLib == G Libray</para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>Where is the documentation for GTK+?</title>
+	<para>In the GTK+ distribution's doc/ directory you will find
+	the reference material for both GTK and GDK, this FAQ and the
+	GTK Tutorial.</para>
+	<para>In addition, you can find links to HTML versions of
+	these documents  by going to <ulink url="http://www.gtk.org/">
+	http://www.gtk.org/</ulink>. A
+	packaged version of the GTK Tutorial, with SGML, HTML,
+	Postscript, DVI and text versions can be found in <ulink
+	url="ftp://ftp.gtk.org/pub/gtk/tutorial">ftp://ftp.gtk.org/pub/gtk/tutorial
+	</ulink></para>
+	<para>There are now a couple of books available that deal with
+	programming GTK+, GDK and GNOME:</para>
+	<itemizedlist>
+	  <listitem><simpara>Eric Harlows book entitled "Developing
+	  Linux Applications with GTK+ and GDK". The ISBN is 0-7357-0021-4</simpara>
+	  </listitem>
+	  <listitem><simpara>The example code from Eric's book is
+	  available on-line at <ulink
+	  url="http://www.bcpl.net/~eharlow/book">
+	  http://www.bcpl.net/~eharlow/book</ulink></simpara>
+	  </listitem>
+	  <listitem><simpara>Havoc Pennington has released a book called
+	  "GTK+/GNOME Application Development". The ISBN is 0-7357-0078-8</simpara>
+	    <simpara>The free version of the book lives here: <ulink
+	  url="http://developer.gnome.org/doc/GGAD/">http://developer.gnome.org/doc/GGAD/
+	  </ulink></simpara>
+	    <simpara>And Havoc maintains information about it and
+	  errata here: <ulink
+	  url="http://pobox.com/~hp/gnome-app-devel.html">http://pobox.com/~hp/gnome-app-devel.html
+	  </ulink></simpara>
+	  </listitem>
+	</itemizedlist>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>Is there a mailing list (or mailing list archive) for
+	GTK+?</title>
+	<para>Information on mailing lists relating to GTK+ can be
+	found at: <ulink
+	url="http://www.gtk.org/mailinglists.html">http://www.gtk.org/mailinglists.html
+	</ulink></para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>How to get help with GTK+</title>
+	<para>First, make sure your question isn't answered in the
+	documentation, this FAQ or the tutorial. Done that? You're
+	sure you've done that, right? In that case, the best place to
+	post questions is to the GTK+ mailing list.</para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>How to report bugs in GTK+</title>
+	<para>Bugs should be reported to the GNOME bug tracking system
+	(<ulink
+	url="http://bugs.gnome.org">http://bugs.gnome.org</ulink>). To
+	report a problem about GTK+, send mail to submit@bugs.gnome.org.</para>
+	<para>The subject of the mail should describe your problem. In
+	the body of the mail, you should first include a
+	"pseudo-header" that gives the package and version
+	number. This should be separated by a blank line from the
+	actual headers.</para>
+
+	<para><literallayout><literal>Package: gtk+</literal>
+	<literal>Version: 1.2.0</literal></literallayout></para>
+
+	<para>Substitute 1.2.0 with the version of GTK+ that you have installed.</para>
+	<para>Then describe the bug. Include:</para>
+	
+	<itemizedlist>
+	  <listitem><simpara> Information about your system. For instance:</simpara>
+	    <itemizedlist spacing=compact>
+	      <listitem><simpara> What operating system and version</simpara>
+	      </listitem>
+	      <listitem><simpara> What version of X</simpara>
+	      </listitem>
+	      <listitem><simpara> For Linux, what version of the C library</simpara>
+	      </listitem>
+	    </itemizedlist>
+	    <para>And anything else you think is relevant.</para>
+	  </listitem>
+	  <listitem><simpara> How to reproduce the bug.</simpara>
+	    <simpara>If you can reproduce it with the testgtk program
+	    that is built in the gtk/ subdirectory, that will be most
+	    convenient. Otherwise, please include a short test program
+	    that exhibits the behavior. As a last resort, you can also
+	    provide a pointer to a larger piece of software that can
+	    be downloaded.</simpara>
+	    <simpara>(Bugs that can be reproduced within the GIMP are
+	    almost as good as bugs that can be reproduced in
+	    testgtk. If you are reporting a bug found with the GIMP,
+	    please include the version number of the GIMP you are
+	    using)</simpara>
+	  </listitem>
+	  <listitem><simpara> If the bug was a crash, the exact text that was
+	  printed out when the crash occured.</simpara>
+	  </listitem>
+	  <listitem><simpara> Further information such as stack traces
+  may be useful, but are not necessary. If you do send a stack trace,
+  and the error is an X error, it will be more useful if the stacktrace is produced running
+  the test program with the <literal>--sync</literal> command line option.</simpara>
+	  </listitem>
+	</itemizedlist>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>Is there a Windows version of GTK+?</title>
+	<para>There is an on going port of GTK+ to the Windows
+	platform which is making impressive progress.</para>
+	<para>See <ulink
+	url="http://www.iki.fi/tml/gimp/win32">http://www.iki.fi/tml/gimp/win32</ulink>
+	for more information.</para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>What applications have been written with GTK+?</title>
+	<para></para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>I'm looking for an application to write in GTK+. How
+	about an IRC client?</title>
+	<para>Ask on gtk-list for suggestions. There are at least
+	three IRC clients already under development (probably more in fact. The server at
+        <ulink url="http://www.forcix.cx/irc-clients.html">
+	http://www.forcix.cx/irc-clients.html</ulink> list a bunch of them).</para>
+
+	<itemizedlist spacing=compact>
+	  <listitem><simpara> X-Chat.</simpara>
+	  </listitem>
+	  <listitem><simpara> girc. (Included with GNOME)</simpara>
+	  </listitem>
+	  <listitem><simpara> gsirc. (In the gnome CVS tree)</simpara>
+	  </listitem>
+	</itemizedlist>
+      </sect2>
+
+
+    </sect1>
+  </chapter>
+  <!-- ----------------------------------------------------------------- -->
+
+  <appendix>
+    <title>Remaining details</title>
+    <para>Although this booklet is quite complete, here I will
+mention some details I never got to.</para>
+    <sect1>
+      <title>Use of the word dude</title>
+      <para>Here's an example of how to say
+<emphasis>dude</emphasis>: DUDE.</para>
+    </sect1>
+  </appendix>
+</book>

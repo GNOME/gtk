@@ -1,3 +1,8 @@
+Thu Jun 22 08:43:45 BST 2000  Tony Gale <gale@gtk.org>
+
+	* docs/gtk-faq.sgm: New file. Start of DocBook
+	  version of the FAQ.
+
 Wed Jun 21 23:04:17 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (GDK_PIXBUF_MAJOR): Define version
