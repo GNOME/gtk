@@ -810,7 +810,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
 	    {
 	      page = children->data;
 	      
-	      if (GTK_WIDGET_VISIBLE (page->tab_label))
+	      if (page->tab_label && GTK_WIDGET_VISIBLE (page->tab_label))
 		gtk_widget_hide (page->tab_label);
 	    }
 	}

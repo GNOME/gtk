@@ -1,3 +1,8 @@
+Sat Jan 29 10:11:56 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_size_request): 
+	page->tab_label can be NULL.
+
 2000-01-25  Havoc Pennington  <hp@pobox.com>
 	
 	* gdk/gdkwindow.c (gdk_window_set_back_pixmap): parent_relative
