@@ -1,3 +1,24 @@
+Tue Jan 30 19:49:02 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c: Patch from Kipp Hickman to make the event
+	handlers in gtkrange.c return the proper values (TRUE == handled)
+	(#10316).
+
+	This is just the tip of the iceberg, but gtkrange.c is the
+	most common place where the propagation is problematical,
+	and also a place where it is almost certainly safe to change
+	this in the stable branch.
+
+	(You don't want right click popups on a range control or anything...)
+
+Tue Jan 30 19:12:52 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_unmap): Call gdk_window_withdraw
+	rather than gdk_window_hide; this makes things work
+	correctly if the window is programmatically hidden while
+	iconified. [ Backport from HEAD, hope, hope it doesn't break
+	anything since it fixes a bunch of stuff. ] (#14082)
+
 Tue Jan 30 18:57:59 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c (clear_focus_area): We need to clear the focus
