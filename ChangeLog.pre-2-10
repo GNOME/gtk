@@ -1,3 +1,16 @@
+2001-03-22  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_insert_stock): handle mnemonics in
+	the stock item label
+
+	* gtk/gtklabel.c: s/@gtk_func/gtk_func()/ in docs
+
+	* gtk/gtkstock.c (builtin_items): add mnemonics where missing
+
+	* demos/gtk-demo/*.c: Add mnemonics all over the place
+
+	* gtk/gtklabel.h: mark parse_uline deprecated
+
 2001-03-21  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkitemfactory.[ch]:
@@ -481,7 +494,6 @@ Fri Mar  9 09:31:55 2001  Tim Janik  <timj@gtk.org>
 	* gtk/gtktext.c (process_exposes):
 	Use gtk_widget_send_expose instead of gtk_widget_event.
 
->>>>>>> 1.1811
 Thu Mar  8 19:40:28 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_destroy): Add destroy function.

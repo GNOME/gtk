@@ -72,14 +72,14 @@ create_pane_options (GtkPaned *paned,
   gtk_table_attach_defaults (GTK_TABLE (table), label,
 			     0, 1, 0, 1);
   
-  check_button = gtk_check_button_new_with_label ("Resize");
+  check_button = gtk_check_button_new_with_mnemonic ("_Resize");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     0, 1, 1, 2);
   gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
 		      GTK_SIGNAL_FUNC (toggle_resize),
 		      paned->child1);
   
-  check_button = gtk_check_button_new_with_label ("Shrink");
+  check_button = gtk_check_button_new_with_mnemonic ("_Shrink");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     0, 1, 2, 3);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
@@ -92,7 +92,7 @@ create_pane_options (GtkPaned *paned,
   gtk_table_attach_defaults (GTK_TABLE (table), label,
 			     1, 2, 0, 1);
   
-  check_button = gtk_check_button_new_with_label ("Resize");
+  check_button = gtk_check_button_new_with_mnemonic ("_Resize");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     1, 2, 1, 2);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
@@ -101,7 +101,7 @@ create_pane_options (GtkPaned *paned,
 		      GTK_SIGNAL_FUNC (toggle_resize),
 		      paned->child2);
   
-  check_button = gtk_check_button_new_with_label ("Shrink");
+  check_button = gtk_check_button_new_with_mnemonic ("_Shrink");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     1, 2, 2, 3);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
@@ -149,7 +149,7 @@ do_panes (void)
       gtk_widget_set_usize (frame, 60, 60);
       gtk_paned_add1 (GTK_PANED (hpaned), frame);
       
-      button = gtk_button_new_with_label ("Hi there");
+      button = gtk_button_new_with_mnemonic ("_Hi there");
       gtk_container_add (GTK_CONTAINER(frame), button);
 
       frame = gtk_frame_new (NULL);

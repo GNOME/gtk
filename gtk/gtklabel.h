@@ -102,12 +102,7 @@ void       gtk_label_set_pattern    (GtkLabel         *label,
 				     const gchar      *pattern);
 void       gtk_label_set_line_wrap  (GtkLabel         *label,
 				     gboolean          wrap);
-/* Convenience function to set the name and pattern by parsing
- * a string with embedded underscores, and return the appropriate
- * key symbol for the accelerator.
- */
-guint gtk_label_parse_uline            (GtkLabel    *label,
-					const gchar *string);
+
 void  gtk_label_set_text_with_mnemonic (GtkLabel    *label,
 					const gchar *string);
 void  gtk_label_set_mnemonic_widget    (GtkLabel    *label,
@@ -133,6 +128,14 @@ void     gtk_label_get_layout_offsets (GtkLabel *label,
 /* Deprecated */
 void       gtk_label_get           (GtkLabel          *label,
                                     char             **str);
+
+/* Convenience function to set the name and pattern by parsing
+ * a string with embedded underscores, and return the appropriate
+ * key symbol for the accelerator.
+ */
+guint gtk_label_parse_uline            (GtkLabel    *label,
+					const gchar *string);
+
 #endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus

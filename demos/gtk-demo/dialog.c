@@ -36,6 +36,7 @@ interactive_dialog_clicked (GtkButton *button, gpointer user_data)
   GtkWidget *table;
   GtkWidget *local_entry1;
   GtkWidget *local_entry2;
+  GtkWidget *label;
   gint response;
 
   dialog = gtk_dialog_new_with_buttons ("Interactive Dialog",
@@ -56,18 +57,25 @@ interactive_dialog_clicked (GtkButton *button, gpointer user_data)
   gtk_table_set_row_spacings (GTK_TABLE (table), 4);
   gtk_table_set_col_spacings (GTK_TABLE (table), 4);
   gtk_box_pack_start (GTK_BOX (hbox), table, TRUE, TRUE, 0);
-  gtk_table_attach_defaults (GTK_TABLE (table), gtk_label_new ("Entry 1"),
+  label = gtk_label_new_with_mnemonic ("_Entry 1");
+  gtk_table_attach_defaults (GTK_TABLE (table),
+                             label,
 			     0, 1, 0, 1);
-  gtk_table_attach_defaults (GTK_TABLE (table), gtk_label_new ("Entry 2"),
-			     0, 1, 1, 2);
-
   local_entry1 = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (local_entry1), gtk_entry_get_text (GTK_ENTRY (entry1)));
   gtk_table_attach_defaults (GTK_TABLE (table), local_entry1, 1, 2, 0, 1);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), local_entry1);
+
+  label = gtk_label_new_with_mnemonic ("E_ntry 2");
+  gtk_table_attach_defaults (GTK_TABLE (table),
+                             label,
+			     0, 1, 1, 2);
+
   local_entry2 = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (local_entry2), gtk_entry_get_text (GTK_ENTRY (entry2)));
   gtk_table_attach_defaults (GTK_TABLE (table), local_entry2, 1, 2, 1, 2);
-    
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), local_entry2);
+  
   gtk_widget_show_all (hbox);
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
@@ -89,7 +97,8 @@ do_dialog (void)
   GtkWidget *hbox;
   GtkWidget *button;
   GtkWidget *table;
-
+  GtkWidget *label;
+  
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -108,7 +117,7 @@ do_dialog (void)
       /* Standard message dialog */
       hbox = gtk_hbox_new (FALSE, 8);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-      button = gtk_button_new_with_label ("Message Dialog");
+      button = gtk_button_new_with_mnemonic ("_Message Dialog");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (message_dialog_clicked), NULL);
       gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
@@ -120,7 +129,7 @@ do_dialog (void)
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
       vbox2 = gtk_vbox_new (FALSE, 0);
 
-      button = gtk_button_new_with_label ("Interactive Dialog");
+      button = gtk_button_new_with_mnemonic ("_Interactive Dialog");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (interactive_dialog_clicked), NULL);
       gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 0);
@@ -130,13 +139,25 @@ do_dialog (void)
       gtk_table_set_row_spacings (GTK_TABLE (table), 4);
       gtk_table_set_col_spacings (GTK_TABLE (table), 4);
       gtk_box_pack_start (GTK_BOX (hbox), table, FALSE, FALSE, 0);
-      gtk_table_attach_defaults (GTK_TABLE (table), gtk_label_new ("Entry 1"), 0, 1, 0, 1);
-      gtk_table_attach_defaults (GTK_TABLE (table), gtk_label_new ("Entry 2"), 0, 1, 1, 2);
+
+      label = gtk_label_new_with_mnemonic ("_Entry 1");
+      gtk_table_attach_defaults (GTK_TABLE (table),
+                                 label,
+                                 0, 1, 0, 1);
 
       entry1 = gtk_entry_new ();
       gtk_table_attach_defaults (GTK_TABLE (table), entry1, 1, 2, 0, 1);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry1);
+
+      label = gtk_label_new_with_mnemonic ("E_ntry 2");
+      
+      gtk_table_attach_defaults (GTK_TABLE (table),
+                                 label,
+                                 0, 1, 1, 2);
+
       entry2 = gtk_entry_new ();
       gtk_table_attach_defaults (GTK_TABLE (table), entry2, 1, 2, 1, 2);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry2);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

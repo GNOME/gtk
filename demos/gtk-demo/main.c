@@ -472,12 +472,11 @@ main (int argc, char **argv)
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
 			    create_text (&info_buffer, FALSE),
-			    gtk_label_new ("Info"));
-
+			    gtk_label_new_with_mnemonic ("_Info"));
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
 			    create_text (&source_buffer, TRUE),
-			    gtk_label_new ("Source"));
+			    gtk_label_new_with_mnemonic ("_Source"));
 
   tag = gtk_text_buffer_create_tag (info_buffer, "title",
                                     "font", "Sans 18",

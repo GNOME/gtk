@@ -99,6 +99,27 @@ static void gtk_real_toolbar_orientation_changed (GtkToolbar      *toolbar,
 static void gtk_real_toolbar_style_changed       (GtkToolbar      *toolbar,
 						  GtkToolbarStyle  style);
 
+static GtkWidget * gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
+                                                        GtkToolbarChildType  type,
+                                                        GtkWidget           *widget,
+                                                        const char          *text,
+                                                        const char          *tooltip_text,
+                                                        const char          *tooltip_private_text,
+                                                        GtkWidget           *icon,
+                                                        GtkSignalFunc        callback,
+                                                        gpointer             user_data,
+                                                        gint                 position,
+                                                        gboolean             has_mnemonic);
+
+static GtkWidget * gtk_toolbar_internal_insert_item (GtkToolbar    *toolbar,
+                                                     const char    *text,
+                                                     const char    *tooltip_text,
+                                                     const char    *tooltip_private_text,
+                                                     GtkWidget     *icon,
+                                                     GtkSignalFunc  callback,
+                                                     gpointer       user_data,
+                                                     gint           position,
+                                                     gboolean       has_mnemonic);
 
 static GtkContainerClass *parent_class;
 
@@ -740,6 +761,24 @@ gtk_toolbar_prepend_item (GtkToolbar    *toolbar,
 				     0);
 }
 
+static GtkWidget *
+gtk_toolbar_internal_insert_item (GtkToolbar    *toolbar,
+                                  const char    *text,
+                                  const char    *tooltip_text,
+                                  const char    *tooltip_private_text,
+                                  GtkWidget     *icon,
+                                  GtkSignalFunc  callback,
+                                  gpointer       user_data,
+                                  gint           position,
+                                  gboolean       has_mnemonic)
+{
+  return gtk_toolbar_internal_insert_element (toolbar, GTK_TOOLBAR_CHILD_BUTTON,
+                                              NULL, text,
+                                              tooltip_text, tooltip_private_text,
+                                              icon, callback, user_data,
+                                              position, has_mnemonic);
+}
+     
 GtkWidget *
 gtk_toolbar_insert_item (GtkToolbar    *toolbar,
 			 const char    *text,
@@ -750,11 +789,10 @@ gtk_toolbar_insert_item (GtkToolbar    *toolbar,
 			 gpointer       user_data,
 			 gint           position)
 {
-  return gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_BUTTON,
-				     NULL, text,
-				     tooltip_text, tooltip_private_text,
-				     icon, callback, user_data,
-				     position);
+  return gtk_toolbar_internal_insert_item (toolbar, 
+                                           text, tooltip_text, tooltip_private_text,
+                                           icon, callback, user_data,
+                                           position, FALSE);
 }
 
 /**
@@ -816,7 +854,10 @@ gtk_toolbar_set_icon_size (GtkToolbar  *toolbar,
  * @position: The position the button shall be inserted at.
  *            -1 means at the end.
  *
- * Inserts a stock item at the specified position of the toolbar.
+ * Inserts a stock item at the specified position of the toolbar.  If
+ * @stock_id is not a known stock item ID, it's inserted verbatim,
+ * except that underscores are used to mark mnemonics (see
+ * gtk_label_new_with_mnemonic()).
  */
 GtkWidget*
 gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
@@ -834,24 +875,26 @@ gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
     {
       image = gtk_image_new_from_stock (stock_id, toolbar->icon_size);
 
-      return gtk_toolbar_insert_item (toolbar,
-				      item.label,
-				      tooltip_text,
-				      tooltip_private_text,
-				      image,
-				      callback,
-				      user_data,
-				      position);
+      return gtk_toolbar_internal_insert_item (toolbar,
+                                               item.label,
+                                               tooltip_text,
+                                               tooltip_private_text,
+                                               image,
+                                               callback,
+                                               user_data,
+                                               position,
+                                               TRUE);
     }
   else
-    return gtk_toolbar_insert_item (toolbar,
-				    stock_id,
-				    tooltip_text,
-				    tooltip_private_text,
-				    NULL,
-				    callback,
-				    user_data,
-				    position);
+    return gtk_toolbar_internal_insert_item (toolbar,
+                                             stock_id,
+                                             tooltip_text,
+                                             tooltip_private_text,
+                                             NULL,
+                                             callback,
+                                             user_data,
+                                             position,
+                                             TRUE);
 }
 
 
@@ -972,6 +1015,35 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 			    gpointer             user_data,
 			    gint                 position)
 {
+  g_return_val_if_fail (toolbar != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), NULL);
+  if (type == GTK_TOOLBAR_CHILD_WIDGET)
+    {
+      g_return_val_if_fail (widget != NULL, NULL);
+      g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+    }
+  else if (type != GTK_TOOLBAR_CHILD_RADIOBUTTON)
+    g_return_val_if_fail (widget == NULL, NULL);
+  
+  gtk_toolbar_internal_insert_element (toolbar, type, widget, text,
+                                       tooltip_text, tooltip_private_text,
+                                       icon, callback, user_data,
+                                       position, FALSE);
+}
+
+static GtkWidget *
+gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
+                                     GtkToolbarChildType  type,
+                                     GtkWidget           *widget,
+                                     const char          *text,
+                                     const char          *tooltip_text,
+                                     const char          *tooltip_private_text,
+                                     GtkWidget           *icon,
+                                     GtkSignalFunc        callback,
+                                     gpointer             user_data,
+                                     gint                 position,
+                                     gboolean             has_mnemonic)
+{
   GtkToolbarChild *child;
   GtkWidget *box;
 
@@ -1045,7 +1117,10 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 
       if (text)
 	{
-	  child->label = gtk_label_new (text);
+          if (has_mnemonic)
+            child->label = gtk_label_new_with_mnemonic (text);
+          else
+            child->label = gtk_label_new (text);
 	  gtk_box_pack_end (GTK_BOX (box), child->label, FALSE, FALSE, 0);
 	  if (toolbar->style != GTK_TOOLBAR_ICONS)
 	    gtk_widget_show (child->label);
