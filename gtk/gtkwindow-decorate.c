@@ -36,6 +36,7 @@
 typedef enum
 {
   GTK_WINDOW_REGION_TITLE,
+  GTK_WINDOW_REGION_MAXIMIZE,
   GTK_WINDOW_REGION_CLOSE,
   GTK_WINDOW_REGION_BR_RESIZE
 } GtkWindowRegionType;
@@ -68,6 +69,7 @@ struct _GtkWindowDecoration
   GtkWindowRegion *regions;
 
   gint last_x, last_y;
+  gint last_w, last_h;
   
   PangoLayout *title_layout;
 
@@ -75,6 +77,9 @@ struct _GtkWindowDecoration
   
   gboolean moving : 1;
   gboolean closing : 1;
+  gboolean maximizing : 1;
+  gboolean maximized : 1;
+  gboolean maximizable : 1;
   gboolean decorated : 1;
   gboolean real_inner_move : 1;
   gboolean focused : 1;
@@ -102,6 +107,8 @@ static gint gtk_decorated_window_button_release (GtkWidget      *widget,
 						 GdkEventButton *event);
 static gint gtk_decorated_window_motion_notify  (GtkWidget      *widget,
 						 GdkEventMotion *event);
+static gint gtk_decorated_window_window_state   (GtkWidget           *widget,
+						 GdkEventWindowState *event);
 static void gtk_decorated_window_paint          (GtkWidget      *widget,
 						 GdkRectangle   *area);
 static gint gtk_decorated_window_focus_change   (GtkWidget         *widget,
@@ -133,6 +140,9 @@ gtk_decorated_window_init (GtkWindow   *window)
   deco->moving = FALSE;
   deco->decorated = TRUE;
   deco->closing = FALSE;
+  deco->maximizing = FALSE;
+  deco->maximized = FALSE;
+  deco->maximizable = FALSE;
   deco->real_inner_move = FALSE;
  
   g_object_set_data_full (G_OBJECT (window), "gtk-window-decoration", deco,
@@ -189,12 +199,20 @@ gtk_decorated_window_calculate_frame_size (GtkWindow *window)
     {
       if ((decorations & GDK_DECOR_BORDER) &&
 	  (decorations & GDK_DECOR_TITLE))
-	deco->decorated = TRUE;
+	{
+	  deco->decorated = TRUE;
+	  if ((decorations & GDK_DECOR_MAXIMIZE) &&
+	      (gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL))
+	    deco->maximizable = TRUE;
+	}
       else
 	deco->decorated = FALSE;
     }
   else
-    deco->decorated = (window->type != GTK_WINDOW_POPUP);
+    {
+      deco->decorated = (window->type != GTK_WINDOW_POPUP);
+      deco->maximizable = (gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL);
+    }
 
   if (deco->decorated)
     gtk_window_set_frame_dimensions (window,
@@ -312,6 +330,8 @@ gtk_decorated_window_frame_event (GtkWindow *window, GdkEvent *event)
       break;
     case GDK_BUTTON_RELEASE:
       return gtk_decorated_window_button_release (widget, (GdkEventButton *)event);
+    case GDK_WINDOW_STATE:
+      return gtk_decorated_window_window_state (widget, (GdkEventWindowState *)event);
     default:
       break;
     }
@@ -441,22 +461,32 @@ gtk_decorated_window_button_press (GtkWidget       *widget,
   
   type = gtk_decorated_window_region_type (window, x, y);
 
-  deco->last_x = x;
-  deco->last_y = y;
-
   switch (type)
     {
     case GTK_WINDOW_REGION_TITLE:
+      if (!deco->maximized && event->state & GDK_BUTTON1_MASK)
+	{
+	  deco->last_x = x;
+	  deco->last_y = y;
+	  deco->moving = TRUE;
+	}
+      break;
+    case GTK_WINDOW_REGION_MAXIMIZE:
       if (event->state & GDK_BUTTON1_MASK)
-	deco->moving = TRUE;
+	deco->maximizing = TRUE;
       break;
     case GTK_WINDOW_REGION_CLOSE:
       if (event->state & GDK_BUTTON1_MASK)
 	deco->closing = TRUE;
       break;
     case GTK_WINDOW_REGION_BR_RESIZE:
-      if (event->state & GDK_BUTTON1_MASK)
-	deco->resize = RESIZE_BOTTOM_RIGHT;
+      if (!deco->maximized)
+	{
+	  if (event->state & GDK_BUTTON1_MASK)
+	    deco->resize = RESIZE_BOTTOM_RIGHT;
+	  deco->last_x = x;
+	  deco->last_y = y;
+	}
       break;
     default:
       break;
@@ -491,10 +521,64 @@ gtk_decorated_window_button_release (GtkWidget	    *widget,
 	  gdk_event_free (event);
 	}
     }
+  else if (deco->maximizing)
+    {
+      type = gtk_decorated_window_region_type (window, event->x, event->y);
+      if (type == GTK_WINDOW_REGION_MAXIMIZE)
+        {
+	  if (deco->maximized)
+	    gtk_window_unmaximize (window);
+	  else
+	    gtk_window_maximize (window);
+	}
+    }
   
   deco->closing = FALSE;
+  deco->maximizing = FALSE;
   deco->moving = FALSE;
   deco->resize = RESIZE_NONE;
+  return TRUE;
+}
+
+static gint
+gtk_decorated_window_window_state (GtkWidget	       *widget,
+				   GdkEventWindowState *event)
+{
+  GtkWindow *window;
+  GtkWindowDecoration *deco;
+  GdkWindowObject *priv;
+      
+  window = GTK_WINDOW (widget);
+  deco = get_decoration (window);
+  priv = GDK_WINDOW_OBJECT (window->frame);
+
+  if (event->changed_mask & GDK_WINDOW_STATE_MAXIMIZED)
+    {
+      if (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED)
+	{
+	  int w, h;
+	  gdk_window_get_geometry (widget->window, NULL, NULL,
+				   &deco->last_w, &deco->last_h, NULL);
+	  gdk_window_get_origin (widget->window, &deco->last_x, &deco->last_y);
+	  w = gdk_screen_get_width(gdk_screen_get_default()) - DECORATION_BORDER_TOT_X;
+	  h = gdk_screen_get_height(gdk_screen_get_default()) - DECORATION_BORDER_TOT_Y;
+	  _gtk_window_constrain_size (window, w, h, &w, &h);
+	  if (w != deco->last_w || h != deco->last_h)
+	    {
+	      _gtk_window_reposition (window, DECORATION_BORDER_LEFT, DECORATION_BORDER_TOP);
+	      gdk_window_resize (widget->window, w, h);
+	      deco->maximized = TRUE;
+	    }
+	}
+      else
+	{
+	  _gtk_window_reposition (window, deco->last_x, deco->last_y);
+	  _gtk_window_constrain_size (window, deco->last_w, deco->last_h,
+				      &deco->last_w, &deco->last_h);
+	  gdk_window_resize (widget->window, deco->last_w, deco->last_h);
+	  deco->maximized = FALSE;
+	}
+    }
   return TRUE;
 }
 
@@ -551,6 +635,31 @@ gtk_decorated_window_paint (GtkWidget    *widget,
 		     DECORATION_BORDER_LEFT - 2, DECORATION_BORDER_TOP - 2,
 		     width - (DECORATION_BORDER_LEFT + DECORATION_BORDER_RIGHT) + 3,
 		     height - (DECORATION_BORDER_TOP + DECORATION_BORDER_BOTTOM) + 3);
+
+      if (deco->maximizable)
+	{
+	  /* Maximize button: */
+
+	  x1 = width - (DECORATION_BORDER_LEFT * 2) - (DECORATION_BUTTON_SIZE * 2);
+	  y1 = DECORATION_BUTTON_Y_OFFSET;
+	  x2 = x1 + DECORATION_BUTTON_SIZE;
+	  y2 = y1 + DECORATION_BUTTON_SIZE;
+
+	  if (area)
+	    gdk_gc_set_clip_rectangle (widget->style->bg_gc[widget->state], area);
+
+	  gdk_draw_rectangle (frame, widget->style->bg_gc[widget->state], TRUE,
+			      x1, y1, x2 - x1, y2 - y1);
+
+	  gdk_draw_line (frame, widget->style->black_gc, x1 + 1, y1 + 1, x2 - 2, y1 + 1);
+
+	  gdk_draw_rectangle (frame, widget->style->black_gc, FALSE,
+			      x1 + 1, y1 + 2,
+			      DECORATION_BUTTON_SIZE - 3, DECORATION_BUTTON_SIZE - 4);
+
+	  if (area)
+	    gdk_gc_set_clip_rectangle (widget->style->black_gc, NULL);
+	}
       
       /* Close button: */
       
@@ -584,14 +693,14 @@ gtk_decorated_window_paint (GtkWidget    *widget,
       if (deco->title_layout)
 	{
 	  if (area)
-	    gdk_gc_set_clip_rectangle (widget->style->fg_gc [widget->state], area);
+	    gdk_gc_set_clip_rectangle (widget->style->fg_gc [border_state], area);
 
 	  gdk_draw_layout (frame,
-			   widget->style->fg_gc [widget->state],
+			   widget->style->fg_gc [border_state],
 			   DECORATION_BORDER_LEFT, 1,
 			   deco->title_layout);
 	  if (area)
-	    gdk_gc_set_clip_rectangle (widget->style->fg_gc [widget->state], NULL);
+	    gdk_gc_set_clip_rectangle (widget->style->fg_gc [border_state], NULL);
 	}
       
     }
@@ -612,6 +721,8 @@ gtk_decorated_window_recalculate_regions (GtkWindow *window)
     return;
   
   n_regions += 2; /* close, Title */
+  if (deco->maximizable)
+    n_regions += 1;
   if (window->allow_shrink || window->allow_grow)
     n_regions += 2;
 
@@ -627,9 +738,20 @@ gtk_decorated_window_recalculate_regions (GtkWindow *window)
 
   region = deco->regions;
 
+  /* Maximize button */
+  if (deco->maximizable)
+    {
+      region->rect.x = width - (DECORATION_BORDER_LEFT * 2) - (DECORATION_BUTTON_SIZE * 2);
+      region->rect.y = DECORATION_BUTTON_Y_OFFSET;
+      region->rect.width = DECORATION_BUTTON_SIZE;
+      region->rect.height = DECORATION_BUTTON_SIZE;
+      region->type = GTK_WINDOW_REGION_MAXIMIZE;
+      region++;
+    }
+
   /* Close button */
   region->rect.x = width - DECORATION_BORDER_LEFT - DECORATION_BUTTON_SIZE;
-  region->rect.y = 2;
+  region->rect.y = DECORATION_BUTTON_Y_OFFSET;
   region->rect.width = DECORATION_BUTTON_SIZE;
   region->rect.height = DECORATION_BUTTON_SIZE;
   region->type = GTK_WINDOW_REGION_CLOSE;

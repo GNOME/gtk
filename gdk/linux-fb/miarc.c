@@ -401,8 +401,8 @@ miComputeCircleSpans(int lw, miArc *parc, miArcSpanData *spdata)
     register int x, y, e;
     int xk, yk, xm, ym, dx, dy;
     register int slw, inslw;
-    int inx, iny, ine;
-    int inxk, inyk, inxm, inym;
+    int inx = 0, iny, ine = 0;
+    int inxk = 0, inyk = 0, inxm = 0, inym = 0;
 
     doinner = -lw;
     slw = parc->width - doinner;
@@ -464,7 +464,7 @@ miComputeEllipseSpans(int lw, miArc *parc, miArcSpanData *spdata)
     register miArcSpan *span;
     double w, h, r, xorg;
     double Hs, Hf, WH, K, Vk, Nk, Fk, Vr, N, Nc, Z, rs;
-    double A, T, b, d, x, y, t, inx, outx, hepp, hepm;
+    double A, T, b, d, x, y, t, inx, outx = 0.0, hepp, hepm;
     int flip, solution;
 
     w = (double)parc->width / 2.0;
@@ -986,8 +986,8 @@ miPolyArc(GdkDrawable *pDraw, GdkGC *pGC, int narcs, miArc *parcs)
     register int		i;
     miArc			*parc;
     int				xMin, xMax, yMin, yMax;
-    int				pixmapWidth, pixmapHeight;
-    int				xOrg, yOrg;
+    int				pixmapWidth = 0, pixmapHeight = 0;
+    int				xOrg = 0, yOrg = 0;
     int				width;
     gboolean			fTricky;
     GdkDrawable*		pDrawTo;
@@ -1243,7 +1243,7 @@ miArcJoin (GdkDrawable *pDraw, GdkGC *pGC, miArcFacePtr pLeft, miArcFacePtr pRig
 	int		cpt;
 	SppArcRec	arc;
 	miArcFaceRec	Right, Left;
-	int		polyLen;
+	int		polyLen = 0;
 	int		xOrg, yOrg;
 	double		xFtrans, yFtrans;
 	double		a;
@@ -1746,7 +1746,7 @@ computeDashMap (arcp, map)
 	dashMap	*map;
 {
 	int	di;
-	double	a, x, y, prevx, prevy, dist;
+	double	a, x, y, prevx = 0.0, prevy = 0.0, dist;
 
 	for (di = 0; di < DASH_MAP_SIZE; di++) {
 		a = dashIndexToAngle (di);
@@ -1773,7 +1773,7 @@ miComputeArcs (miArc *parcs, int narcs, GdkGC *pGC)
 	int		isDashed, isDoubleDash;
 	int		dashOffset;
 	miPolyArcPtr	arcs;
-	int		start, i, j, k, nexti, nextk;
+	int		start, i, j, k = 0, nexti, nextk = 0;
 	int		joinSize[2];
 	int		capSize[2];
 	int		arcSize[2];
@@ -1782,13 +1782,13 @@ miComputeArcs (miArc *parcs, int narcs, GdkGC *pGC)
 	struct arcData	*data;
 	miArcDataPtr	arc;
 	miArc		xarc;
-	int		iphase, prevphase, joinphase;
+	int		iphase, prevphase = 0, joinphase;
 	int		arcsJoin;
 	int		selfJoin;
 
-	int		iDash, dashRemaining;
-	int		iDashStart, dashRemainingStart, iphaseStart;
-	int		startAngle, spanAngle, endAngle, backwards;
+	int		iDash = 0, dashRemaining;
+	int		iDashStart = 0, dashRemainingStart = 0, iphaseStart;
+	int		startAngle, spanAngle, endAngle, backwards = 0;
 	int		prevDashAngle, dashAngle;
 	dashMap		map;
 
@@ -2330,7 +2330,7 @@ drawZeroArc (pDraw, pGC, tarc, lw, left, right)
     int		  lw;
     miArcFacePtr	right, left;
 {
-	double	x0, y0, x1, y1, w, h, x, y;
+	double	x0 = 0.0, y0 = 0.0, x1 = 0.0, y1 = 0.0, w, h, x, y;
 	double	xmax, ymax, xmin, ymin;
 	int	a0, a1;
 	double	a, startAngle, endAngle;
@@ -3222,9 +3222,9 @@ drawArc (miArc *tarc, int l, int a0, int a1, miArcFacePtr right, miArcFacePtr le
 	struct arc_def		def;
 	struct accelerators	acc;
 	int			startq, endq, curq;
-	int			rightq, leftq, righta, lefta;
+	int			rightq, leftq = 0, righta = 0, lefta = 0;
 	miArcFacePtr		passRight, passLeft;
-	int			q0, q1, mask;
+	int			q0 = 0, q1 = 0, mask;
 	struct band {
 		int	a0, a1;
 		int	mask;

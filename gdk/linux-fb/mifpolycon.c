@@ -79,9 +79,9 @@ miFillSppPoly(GdkDrawable *dst, GdkGC *pgc, int count, SppPointPtr ptsIn, int xT
 						 */
 #endif
 {
-    double		xl, xr,		/* x vals of left and right edges */
-          		ml,       	/* left edge slope */
-          		mr,             /* right edge slope */
+    double		xl = 0.0, xr = 0.0,	/* x vals of left and right edges */
+          		ml = 0.0,       /* left edge slope */
+          		mr = 0.0,       /* right edge slope */
           		dy,             /* delta y */
     			i;              /* loop counter */
     int			y,              /* current scanline */

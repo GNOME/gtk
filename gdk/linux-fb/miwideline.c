@@ -81,7 +81,7 @@ miFillPolyHelper (pDrawable, pGC, pixel, spanData, y, overall_height,
     int	left_height = 0, right_height = 0;
 
     register GdkSpan* ppt;
-    GdkSpan* pptInit;
+    GdkSpan* pptInit = NULL;
     GdkColor		oldPixel;
     int		xorg;
     Spans	spanRec;

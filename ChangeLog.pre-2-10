@@ -1,3 +1,16 @@
+Thu Oct  3 16:40:18 2002 Eric Warmenhoven <eric@warmenhoven.org>
+
+	* gdk/gdkevents.c, gdk/linux-fb/gdkwindow-fb.c,
+	gtk/gtkwindow-decorate.c: implement maximize for linux-fb
+
+	* gdk/linux-fb/gdkkeyboard-fb.c: implement raw keyboard mode
+
+	* gdk/linux-fb/Makefile.am, gdk/linux-fb/gdkdnd-fb.c,
+	gdk/linux-fb/gdkmain-fb.c, gdk/linux-fb/gdkselection-fb.c,
+	gdk/linux-fb/miarc.c, gdk/linux-fb/mifpolycon.c,
+	gdk/linux-fb/miwideline.c, gdk/linux-fb/mizerclip.c,
+	gdk/linux-fb/mizerline.c: small cleanups
+
 Thu Oct  3 19:00:55 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkselection-x11.c (gdk_selection_property_get): 

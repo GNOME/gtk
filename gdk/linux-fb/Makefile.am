@@ -29,9 +29,11 @@ libgdkinclude_HEADERS= \
 libgdk_linux_fb_la_SOURCES =    \
 	gdkcolor-fb.c	   	\
 	gdkcursor-fb.c	   	\
-	gdkdnd-fb.c	   	\
 	gdkdisplay-fb.c		\
+	gdkdnd-fb.c	   	\
 	gdkdrawable-fb2.c  	\
+	gdkevents-fb.c		\
+	gdkfbmanager.h		\
 	gdkfont-fb.c	   	\
 	gdkgc-fb.c 	   	\
 	gdkgeometry-fb.c  	\
@@ -39,19 +41,19 @@ libgdk_linux_fb_la_SOURCES =    \
 	gdkim-fb.c	   	\
 	gdkimage-fb.c	   	\
 	gdkinput.c	   	\
-	gdkmain-fb.c	   	\
-	gdkpixmap-fb.c	   	\
-	gdkproperty-fb.c  	\
-	gdkselection-fb.c 	\
-	gdkscreen-fb.c		\
-	gdkvisual-fb.c	   	\
-	gdkwindow-fb.c    	\
-	gdkprivate-fb.h   	\
 	gdkinputprivate.h	\
 	gdkkeyboard-fb.c	\
+	gdkmain-fb.c	   	\
 	gdkmouse-fb.c		\
-	gdkevents-fb.c		\
+	gdkpango-fb.c		\
+	gdkpixmap-fb.c	   	\
+	gdkprivate-fb.h   	\
+	gdkproperty-fb.c  	\
 	gdkrender-fb.c		\
+	gdkscreen-fb.c		\
+	gdkselection-fb.c 	\
+	gdkvisual-fb.c	   	\
+	gdkwindow-fb.c    	\
 	mi.h			\
 	miarc.c			\
 	midash.c		\
@@ -65,16 +67,14 @@ libgdk_linux_fb_la_SOURCES =    \
 	mipolygen.c		\
 	mipolyutil.c		\
 	miscanfill.h		\
-	mispans.h		\
 	mispans.c		\
+	mispans.h		\
 	mistruct.h		\
 	mitypes.h		\
 	miwideline.c		\
 	miwideline.h		\
 	mizerclip.c		\
-	mizerline.c		\
-	gdkpango-fb.c		\
-	gdkfbmanager.h
+	mizerline.c
 
 gdkfbmanager_sources = gdkfbmanager.c 
 gdkfbmanager_LDFLAGS = $(GLIB_LIBS)

@@ -409,7 +409,7 @@ gdk_fb_setup_mode_from_name (struct fb_var_screeninfo *modeinfo,
   scanner->input_name = filename;
 
   for (i = 0; i < sizeof(fb_modes_keywords)/sizeof(fb_modes_keywords[0]); i++)
-    g_scanner_add_symbol (scanner, fb_modes_keywords[i], GINT_TO_POINTER (i));
+    g_scanner_scope_add_symbol (scanner, 0, fb_modes_keywords[i], GINT_TO_POINTER (i));
 
   g_scanner_input_file (scanner, fd);
   

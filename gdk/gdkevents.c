@@ -1053,10 +1053,10 @@ gdk_synthesize_window_state (GdkWindow     *window,
   
   old = ((GdkWindowObject*) temp_event.window_state.window)->state;
   
-  temp_event.window_state.changed_mask = (unset_flags | set_flags) ^ old;
   temp_event.window_state.new_window_state = old;
   temp_event.window_state.new_window_state |= set_flags;
   temp_event.window_state.new_window_state &= ~unset_flags;
+  temp_event.window_state.changed_mask = temp_event.window_state.new_window_state ^ old;
 
   if (temp_event.window_state.new_window_state == old)
     return; /* No actual work to do, nothing changed. */

@@ -2154,7 +2154,9 @@ gdk_window_maximize (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  g_warning ("gdk_window_maximize() not implemented.\n");
+  gdk_synthesize_window_state (window,
+			       0,
+			       GDK_WINDOW_STATE_MAXIMIZED);
 }
 
 void
@@ -2162,7 +2164,9 @@ gdk_window_unmaximize (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  /*  g_warning ("gdk_window_unmaximize() not implemented.\n");*/
+  gdk_synthesize_window_state (window,
+			       GDK_WINDOW_STATE_MAXIMIZED,
+			       0);
 }
 
 void

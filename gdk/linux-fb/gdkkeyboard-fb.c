@@ -817,6 +817,10 @@ xlate_io (GIOChannel *gioc,
 			  gdk_fb_set_rotation (deg);
 			}
 
+		      if ((xlate_codes[j].code == GDK_F8) &&
+			  (xlate_codes[j].modifier & GDK_SHIFT_MASK))
+			exit (1);
+
 		      
 		      gdk_fb_handle_key (xlate_codes[j].code,
 					 xlate_codes[j].code,
@@ -1140,16 +1144,16 @@ static const guint trans_table[256][3] = {
   {0, 0, 0},
   {0, 0, 0},
   {0, 0, 0},
-  {0, 0, 0},
-  {0, 0, 0},
-  {0, 0, 0},
-  {0, 0, 0},
-  {0, 0, 0},
-  {0, 0, 0},
-  {0, 0, 0},
-  {0, 0, 0},
-  {0, 0, 0},
-  {0, 0, 0},
+  {GDK_Home, 0, 0},
+  {GDK_Up, 0, 0},
+  {GDK_Page_Up, 0, 0},
+  {GDK_Left, 0, 0},
+  {GDK_Right, 0, 0},
+  {GDK_End, 0, 0},
+  {GDK_Down, 0, 0},
+  {GDK_Page_Down, 0, 0},
+  {GDK_Insert, 0, 0},
+  {GDK_Delete, 0, 0},
 
 	/* 0x70 */
   {0, 0, 0},
@@ -1456,7 +1460,7 @@ raw_open (GdkFBKeyboard *kb)
   
   if (ioctl (gdk_display->tty_fd, KDSKBMODE, K_MEDIUMRAW) < 0)
     {
-      g_warning ("setting tty to K_MEDIUMRAW failed");
+      g_warning ("setting tty to K_MEDIUMRAW failed (are you root?)");
       return FALSE;
     }
 
@@ -1491,47 +1495,185 @@ raw_close (GdkFBKeyboard *kb)
 
 static guint
 raw_lookup (GdkFBKeyboard       *kb,
-	      const GdkKeymapKey  *key)
+	    const GdkKeymapKey  *key)
 {
-  g_warning ("raw_lookup() NIY");
-  return FALSE;
+  if (key->group != 0)
+    return 0;
+  if ((key->keycode < 0) || (key->keycode >= 256))
+    return 0;
+  if ((key->level < 0) || (key->level >= 3))
+    return 0;
+  return trans_table[key->keycode][key->level];
 }
 
 static gboolean
 raw_translate (GdkFBKeyboard       *kb,
-		 guint                hardware_keycode,
-		 GdkModifierType      state,
-		 gint                 group,
-		 guint               *keyval,
-		 gint                *effective_group,
-		 gint                *level,
-		 GdkModifierType     *consumed_modifiers)
+	       guint                hardware_keycode,
+	       GdkModifierType      state,
+	       gint                 group,
+	       guint               *keyval,
+	       gint                *effective_group,
+	       gint                *level,
+	       GdkModifierType     *consumed_modifiers)
 {
-  g_warning ("raw_translate() NIY");
-  return FALSE;
+  guint tmp_keyval;
+  gint tmp_level;
+
+  if (keyval)
+    *keyval = 0;
+  if (effective_group)
+    *effective_group = 0;
+  if (level)
+    *level = 0;
+  if (consumed_modifiers)
+    *consumed_modifiers = 0;
+
+  if ((hardware_keycode < 0) || (hardware_keycode >= 256))
+    return FALSE;
+
+  if (group != 0)
+    return FALSE;
+
+  if (state & GDK_CONTROL_MASK)
+    tmp_level = 2;
+  else if (state & GDK_SHIFT_MASK)
+    tmp_level = 1;
+  else
+    tmp_level = 0;
+
+  do {
+    tmp_keyval = trans_table[hardware_keycode][tmp_level --];
+  } while (!tmp_keyval && (tmp_level >= 0));
+
+  if (keyval)
+    *keyval = tmp_keyval;
+  if (level)
+    *level = tmp_level;
+
+  return TRUE;
 }
 
 static gboolean
 raw_get_for_keyval (GdkFBKeyboard       *kb,
-		      guint                keyval,
-		      GdkKeymapKey       **keys,
-		      gint                *n_keys)
+		    guint                keyval,
+		    GdkKeymapKey       **keys,
+		    gint                *n_keys)
 {
-  g_warning ("raw_get_for_keyval() NIY");
-  if (keys) *keys=NULL;
-  if (n_keys) *n_keys=0;
-  return FALSE;
+  GArray *retval;
+  int i, j;
+
+  retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
+
+  for (i = 0; i < 256; i++)
+    for (j = 0; j < 3; j++)
+      if (trans_table[i][j] == keyval)
+	{
+	  GdkKeymapKey key;
+
+	  key.keycode = i;
+	  key.group = 0;
+	  key.level = j;
+
+	  g_array_append_val (retval, key);
+	}
+
+  if (retval->len > 0)
+    {
+      *keys = (GdkKeymapKey*) retval->data;
+      *n_keys = retval->len;
+    }
+  else
+    {
+      *keys = NULL;
+      *n_keys = 0;
+    }
+
+  g_array_free (retval, retval->len > 0 ? FALSE : TRUE);
+
+  return *n_keys > 0;
 }
 
 static gboolean
 raw_get_for_keycode (GdkFBKeyboard       *kb,
-		       guint                hardware_keycode,
-		       GdkKeymapKey       **keys,
-		       guint              **keyvals,
-		       gint                *n_entries)
+		     guint                hardware_keycode,
+		     GdkKeymapKey       **keys,
+		     guint              **keyvals,
+		     gint                *n_entries)
 {
-  g_warning ("raw_get_for_keycode() NIY");
-  if (keys) *keys=NULL;
-  if (n_entries) *n_entries=0;
-  return FALSE;
+  GArray *key_array;
+  GArray *keyval_array;
+  int i;
+
+  if (hardware_keycode <= 0 ||
+      hardware_keycode >= 256)
+    { 
+      if (keys)
+        *keys = NULL;
+      if (keyvals)
+        *keyvals = NULL;
+
+      *n_entries = 0;
+      return FALSE;
+    }
+
+  if (keys)
+    key_array = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
+  else
+    key_array = NULL;
+
+  if (keyvals)
+    keyval_array = g_array_new (FALSE, FALSE, sizeof (guint));
+  else
+    keyval_array = NULL;
+
+  for (i = 0; i < 3; i++)
+    {
+      if (key_array)
+	{
+	  GdkKeymapKey key;
+
+	  key.keycode = hardware_keycode;
+	  key.group = 0;
+	  key.level = i;
+
+	  g_array_append_val (key_array, key);
+	}
+
+      if (keyval_array)
+	{
+	  g_array_append_val (keyval_array, trans_table[hardware_keycode][i]);
+	}
+    }
+
+  if ((key_array && key_array->len > 0) ||
+      (keyval_array && keyval_array->len > 0))
+    { 
+      if (keys)
+        *keys = (GdkKeymapKey*) key_array->data;
+
+      if (keyvals)
+        *keyvals = (guint*) keyval_array->data;
+
+      if (key_array)
+        *n_entries = key_array->len;
+      else
+        *n_entries = keyval_array->len;
+    }
+  else
+    { 
+      if (keys)
+        *keys = NULL;
+
+      if (keyvals)
+        *keyvals = NULL;
+
+      *n_entries = 0;
+    }
+
+  if (key_array)
+    g_array_free (key_array, key_array->len > 0 ? FALSE : TRUE);
+  if (keyval_array)
+    g_array_free (keyval_array, keyval_array->len > 0 ? FALSE : TRUE);
+
+  return *n_entries > 0;
 }

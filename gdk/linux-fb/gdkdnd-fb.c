@@ -383,7 +383,7 @@ gdk_drag_get_protocol (guint32          xid,
 {
   GdkWindow *window;
 
-  window = gdk_window_lookup (xid);
+  window = gdk_window_lookup ((GdkNativeWindow) xid);
 
   if (GPOINTER_TO_INT (gdk_drawable_get_data (window, "gdk-dnd-registered")))
     {
@@ -392,7 +392,7 @@ gdk_drag_get_protocol (guint32          xid,
     }
   
   *protocol = GDK_DRAG_PROTO_NONE;
-  return GDK_NONE;
+  return 0;
 }
 
 static GdkWindow *
@@ -466,7 +466,7 @@ gdk_drag_find_window (GdkDragContext  *context,
       /* Check if new destination accepts drags, and which protocol */
       if ((recipient = gdk_drag_get_protocol ((guint32)dest, protocol)))
 	{
-	  *dest_window = gdk_window_lookup (recipient);
+	  *dest_window = gdk_window_lookup ((GdkNativeWindow) recipient);
 	  gdk_window_ref (*dest_window);
 	}
       else

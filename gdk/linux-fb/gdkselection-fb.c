@@ -216,7 +216,7 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
   GdkEvent *event;
   GdkWindow *event_window;
   
-  event_window = gdk_fb_other_event_window (gdk_window_lookup (requestor), GDK_SELECTION_NOTIFY);
+  event_window = gdk_fb_other_event_window (gdk_window_lookup ((GdkNativeWindow) requestor), GDK_SELECTION_NOTIFY);
   if (event_window)
     {
       event = gdk_event_make (event_window, GDK_SELECTION_NOTIFY, TRUE);
