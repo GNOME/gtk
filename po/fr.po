@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-08-03 11:04+0200\n"
-"PO-Revision-Date: 2003-08-03 10:42+0200\n"
+"POT-Creation-Date: 2003-08-16 09:43+0200\n"
+"PO-Revision-Date: 2003-08-16 09:36+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -684,7 +684,7 @@ msgstr "Le format d'image XBM"
 
 #: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
-msgstr "En-tête XPM non trouvé"
+msgstr "Aucun en-tête XPM n'a été trouvé"
 
 #: gdk-pixbuf/io-xpm.c:1237
 msgid "XPM file has image width <= 0"
@@ -1971,54 +1971,54 @@ msgstr "Méthodes de saisie"
 msgid "_Insert Unicode control character"
 msgstr "_Insérer un caractère de contrôle Unicode"
 
-#: gtk/gtkfilesel.c:551 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Nom du fichier"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:557
 msgid "The currently selected filename"
 msgstr "Le nom du fichier actuellement sélectionné"
 
-#: gtk/gtkfilesel.c:558
+#: gtk/gtkfilesel.c:563
 msgid "Show file operations"
 msgstr "Afficher les opérations sur les fichiers"
 
-#: gtk/gtkfilesel.c:559
+#: gtk/gtkfilesel.c:564
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 "Indique si les boutons de création/manipulation de fichiers doivent être "
 "affichés"
 
-#: gtk/gtkfilesel.c:566
+#: gtk/gtkfilesel.c:571
 msgid "Select multiple"
 msgstr "Sélection multiple"
 
-#: gtk/gtkfilesel.c:567
+#: gtk/gtkfilesel.c:572
 msgid "Whether to allow multiple files to be selected"
 msgstr "Indique si plusieurs fichiers peuvent être sélectionnés"
 
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:727
 msgid "Folders"
 msgstr "Dossiers"
 
-#: gtk/gtkfilesel.c:726
+#: gtk/gtkfilesel.c:731
 msgid "Fol_ders"
 msgstr "_Dossiers"
 
-#: gtk/gtkfilesel.c:758
+#: gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "Fichiers"
 
-#: gtk/gtkfilesel.c:762
+#: gtk/gtkfilesel.c:767
 msgid "_Files"
 msgstr "_Fichiers"
 
-#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2239
+#: gtk/gtkfilesel.c:850 gtk/gtkfilesel.c:2240
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Dossier non lisible : %s"
 
-#: gtk/gtkfilesel.c:976
+#: gtk/gtkfilesel.c:981
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2029,19 +2029,19 @@ msgstr ""
 "pas être utilisable par ce programme.\n"
 "Êtes-vous sûr de vouloir le sélectionner ?"
 
-#: gtk/gtkfilesel.c:1107
+#: gtk/gtkfilesel.c:1112
 msgid "_New Folder"
 msgstr "_Créer un dossier"
 
-#: gtk/gtkfilesel.c:1118
+#: gtk/gtkfilesel.c:1123
 msgid "De_lete File"
 msgstr "_Supprimer le fichier"
 
-#: gtk/gtkfilesel.c:1129
+#: gtk/gtkfilesel.c:1134
 msgid "_Rename File"
 msgstr "_Renommer le fichier"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1436
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
@@ -2049,7 +2049,7 @@ msgstr ""
 "Le nom du dossier « %s » contient des symboles non autorisés dans des noms "
 "de fichiers."
 
-#: gtk/gtkfilesel.c:1433
+#: gtk/gtkfilesel.c:1438
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2058,37 +2058,37 @@ msgstr ""
 "Erreur lors de la création du dossier « %s » : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1434 gtk/gtkfilesel.c:1670
+#: gtk/gtkfilesel.c:1439 gtk/gtkfilesel.c:1675
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 "Vous avez probablement utilisé des symboles non valides dans un nom de "
 "fichiers."
 
-#: gtk/gtkfilesel.c:1442
+#: gtk/gtkfilesel.c:1447
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Erreur lors de la création du dossier « %s » : %s\n"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1481
 msgid "New Folder"
 msgstr "Nouveau dossier"
 
-#: gtk/gtkfilesel.c:1491
+#: gtk/gtkfilesel.c:1496
 msgid "_Folder name:"
 msgstr "_Nom du dossier :"
 
-#: gtk/gtkfilesel.c:1515
+#: gtk/gtkfilesel.c:1520
 msgid "C_reate"
 msgstr "C_réer"
 
-#: gtk/gtkfilesel.c:1558
+#: gtk/gtkfilesel.c:1563
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Le nom du fichier « %s » contient des symboles non valides dans un nom de "
 "fichiers."
 
-#: gtk/gtkfilesel.c:1561
+#: gtk/gtkfilesel.c:1566
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2097,33 +2097,33 @@ msgstr ""
 "Erreur lors de la suppression du fichier « %s » : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1563 gtk/gtkfilesel.c:1684
+#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1689
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 "Il contient probablement des symboles non valides dans un nom de fichiers."
 
-#: gtk/gtkfilesel.c:1572
+#: gtk/gtkfilesel.c:1577
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Erreur lors de la suppression du fichier « %s » : %s"
 
-#: gtk/gtkfilesel.c:1615
+#: gtk/gtkfilesel.c:1620
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Voulez-vous vraiment supprimer le fichier « %s » ?"
 
-#: gtk/gtkfilesel.c:1620
+#: gtk/gtkfilesel.c:1625
 msgid "Delete File"
 msgstr "Supprimer le fichier"
 
-#: gtk/gtkfilesel.c:1666 gtk/gtkfilesel.c:1680
+#: gtk/gtkfilesel.c:1671 gtk/gtkfilesel.c:1685
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Le nom du fichier « %s » contient des symboles non valides dans un nom de "
 "fichiers."
 
-#: gtk/gtkfilesel.c:1668
+#: gtk/gtkfilesel.c:1673
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2132,7 +2132,7 @@ msgstr ""
 "Erreur lors du renommage en « %s » : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1682
+#: gtk/gtkfilesel.c:1687
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2141,29 +2141,29 @@ msgstr ""
 "Erreur lors du renommage de « %s » : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1692
+#: gtk/gtkfilesel.c:1697
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Erreur lors du renommage de « %s » en « %s » : %s"
 
-#: gtk/gtkfilesel.c:1739
+#: gtk/gtkfilesel.c:1744
 msgid "Rename File"
 msgstr "Renommer le fichier"
 
-#: gtk/gtkfilesel.c:1754
+#: gtk/gtkfilesel.c:1759
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Renommer le fichier « %s » en :"
 
-#: gtk/gtkfilesel.c:1783
+#: gtk/gtkfilesel.c:1788
 msgid "_Rename"
 msgstr "_Renommer"
 
-#: gtk/gtkfilesel.c:2219
+#: gtk/gtkfilesel.c:2220
 msgid "_Selection: "
 msgstr "_Sélection : "
 
-#: gtk/gtkfilesel.c:3097
+#: gtk/gtkfilesel.c:3136
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2172,15 +2172,15 @@ msgstr ""
 "Le nom du fichier « %s » n'a pas pu être converti en UTF-8 (essayez "
 "d'activer la variable d'environnement G_BROKEN_FILENAMES) : %s"
 
-#: gtk/gtkfilesel.c:3100
+#: gtk/gtkfilesel.c:3139
 msgid "Invalid Utf-8"
 msgstr "UTF-8 non valide"
 
-#: gtk/gtkfilesel.c:3977
+#: gtk/gtkfilesel.c:4016
 msgid "Name too long"
 msgstr "Nom trop long"
 
-#: gtk/gtkfilesel.c:3979
+#: gtk/gtkfilesel.c:4018
 msgid "Couldn't convert filename"
 msgstr "Impossible de convertir le nom du fichier"
 
@@ -2434,7 +2434,7 @@ msgstr "Entrée"
 
 #: gtk/gtkinputdialog.c:239
 msgid "No input devices"
-msgstr "Pas de périphérique d'entrée"
+msgstr "Aucun périphérique d'entrée"
 
 #: gtk/gtkinputdialog.c:251
 msgid "_Device:"
@@ -2551,7 +2551,7 @@ msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr ""
-"Une chaîne avec des caractères _ indique que le carctère suivant doit être "
+"Une chaîne avec des caractères _ indique que le caractère suivant doit être "
 "souligné"
 
 #: gtk/gtklabel.c:336
@@ -3444,7 +3444,7 @@ msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 msgstr ""
-"IIIndique si les valeurs erronées sont automatiquement modifiées à la valeur "
+"Indique si les valeurs erronées sont automatiquement modifiées à la valeur "
 "du pas la plus proche"
 
 #: gtk/gtkspinbutton.c:276
@@ -5003,6 +5003,11 @@ msgstr "VRAI si la fenêtre ne doit pas être dans le pager."
 #: modules/input/imam-et.c:453
 msgid "Amharic (EZ+)"
 msgstr "Amharic (EZ+)"
+
+#. ID
+#: modules/input/imcedilla.c:90
+msgid "Cedilla"
+msgstr "Cédille"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
