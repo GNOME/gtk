@@ -1,3 +1,8 @@
+Sun Jul 11 01:38:48 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkpaned.c (gtk_paned_expose): Remove clip-region computing
+	code. Just use &paned->handle_pos.
+
 Sun Jul 11 01:12:50 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	Bug 144271

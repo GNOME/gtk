@@ -741,34 +741,21 @@ gtk_paned_expose (GtkWidget      *widget,
       paned->child1 && GTK_WIDGET_VISIBLE (paned->child1) &&
       paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
     {
-      GdkRegion *region;
-
-      region = gdk_region_rectangle (&paned->handle_pos);
-      gdk_region_intersect (region, event->region);
-
-      if (!gdk_region_empty (region))
-	{
-	  GtkStateType state;
-	  GdkRectangle clip;
-
-	  gdk_region_get_clipbox (region, &clip);
-
-	  if (gtk_widget_is_focus (widget))
-	    state = GTK_STATE_SELECTED;
-	  else if (paned->handle_prelit)
-	    state = GTK_STATE_PRELIGHT;
-	  else
-	    state = GTK_WIDGET_STATE (widget);
-	  
-	  gtk_paint_handle (widget->style, widget->window,
-			    state, GTK_SHADOW_NONE,
-			    &clip, widget, "paned",
-			    paned->handle_pos.x, paned->handle_pos.y,
-			    paned->handle_pos.width, paned->handle_pos.height,
-			    paned->orientation);
-	}
-
-      gdk_region_destroy (region);
+      GtkStateType state;
+      
+      if (gtk_widget_is_focus (widget))
+	state = GTK_STATE_SELECTED;
+      else if (paned->handle_prelit)
+	state = GTK_STATE_PRELIGHT;
+      else
+	state = GTK_WIDGET_STATE (widget);
+      
+      gtk_paint_handle (widget->style, widget->window,
+			state, GTK_SHADOW_NONE,
+			&paned->handle_pos, widget, "paned",
+			paned->handle_pos.x, paned->handle_pos.y,
+			paned->handle_pos.width, paned->handle_pos.height,
+			paned->orientation);
     }
 
   /* Chain up to draw children */
