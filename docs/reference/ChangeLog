@@ -1,3 +1,11 @@
+2002-05-30  Matthias Clasen  <maclas@gmx.de>
+
+	Make stock icons appear again (patch by Gediminas Paulauskas):
+	
+	* gtk/Makefile.am (HTML_IMAGES): Add stock_broken_image_24.png
+
+	* gtk/tmpl/gtkstock.sgml: Fix icon filenames.	
+
 2002-05-29  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/*, gdk/*, gdk-pixbuf/*: Create XML, not SGML.

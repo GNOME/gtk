@@ -91,6 +91,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_align_justify_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_align_left_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_align_right_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_broken_image_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_new_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_no_20.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_ok_20.png			\
