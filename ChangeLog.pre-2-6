@@ -1,3 +1,19 @@
+2002-03-03  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdk.def
+	* gdk/win32/gdkevents-win32.c: Add and (trivially) implement
+	gdk_pointer_grab_info_libgtk_only() and
+	gdk_keyboard_grab_info_libgtk_only().
+
+2002-03-02  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (build_keypress_event): Reorder
+	code, keyval should get a value in all cases now.
+	(build_keyrelease_event): Set GDK_CONTROL_MASK here, too, if it
+	was a control character produced with Alt+keypad digits.
+	(gdk_event_translate): Minor cleanups to keyboard input
+	handling. Still need more major work.
+	
 Sat Mar  2 16:12:03 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkradiobutton.c (gtk_radio_button_focus): Don't

@@ -209,6 +209,7 @@ EXPORTS
 	gdk_input_window_destroy
 	gdk_join_style_get_type
 	gdk_keyboard_grab
+	gdk_keyboard_grab_info_libgtk_only
 	gdk_keyboard_ungrab
 	gdk_keymap_get_default
 	gdk_keymap_get_direction
@@ -253,6 +254,7 @@ EXPORTS
 	gdk_pixmap_get_type
 	gdk_pixmap_new
 	gdk_pointer_grab
+	gdk_pointer_grab_info_libgtk_only
 	gdk_pointer_is_grabbed
 	gdk_pointer_ungrab
 	gdk_prop_mode_get_type

@@ -668,6 +668,35 @@ gdk_pointer_is_grabbed (void)
   return p_grab_window != NULL;
 }
 
+/**
+ * gdk_pointer_grab_info_libgtk_only:
+ * @grab_window: location to store current grab window
+ * @owner_events: location to store boolean indicating whether
+ *   the @owner_events flag to gdk_pointer_grab() was %TRUE.
+ * 
+ * Determines information about the current pointer grab.
+ * This is not public API and must not be used by applications.
+ * 
+ * Return value: %TRUE if this application currently has the
+ *  pointer grabbed.
+ **/
+gboolean
+gdk_pointer_grab_info_libgtk_only (GdkWindow **grab_window,
+				   gboolean   *owner_events)
+{
+  if (p_grab_window != NULL)
+    {
+      if (grab_window)
+        *grab_window = p_grab_window;
+      if (owner_events)
+        *owner_events = p_grab_owner_events;
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
 /*
  *--------------------------------------------------------------
  * gdk_keyboard_grab
@@ -738,6 +767,35 @@ gdk_keyboard_ungrab (guint32 time)
   k_grab_window = NULL;
 }
 
+/**
+ * gdk_keyboard_grab_info_libgtk_only:
+ * @grab_window: location to store current grab window
+ * @owner_events: location to store boolean indicating whether
+ *   the @owner_events flag to gdk_keyboard_grab() was %TRUE.
+ * 
+ * Determines information about the current keyboard grab.
+ * This is not public API and must not be used by applications.
+ * 
+ * Return value: %TRUE if this application currently has the
+ *  keyboard grabbed.
+ **/
+gboolean
+gdk_keyboard_grab_info_libgtk_only (GdkWindow **grab_window,
+				    gboolean   *owner_events)
+{
+  if (k_grab_window)
+    {
+      if (grab_window)
+        *grab_window = k_grab_window;
+      if (owner_events)
+        *owner_events = k_grab_owner_events;
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
 static GdkFilterReturn
 gdk_event_apply_filters (MSG      *msg,
 			 GdkEvent *event,
@@ -776,10 +834,6 @@ gdk_add_client_message_filter (GdkAtom       message_type,
   
   client_filters = g_list_prepend (client_filters, filter);
 }
-
-/* Thanks to Markus G. Kuhn <mkuhn@acm.org> for the ksysym<->Unicode
- * mapping functions, from the xterm sources.
- */
 
 static void
 build_key_event_state (GdkEvent *event)
@@ -850,6 +904,7 @@ build_keypress_event (GdkEvent *event,
   event->key.time = msg->time;
   event->key.state = 0;
   event->key.group = 0;		/* ??? */
+  event->key.keyval = GDK_VoidSymbol;
   
   if (msg->message == WM_IME_COMPOSITION)
     {
@@ -869,10 +924,20 @@ build_keypress_event (GdkEvent *event,
 	  for (i = 0; i < bytecount; i++)
 	    buf[i] = msg->wParam;
 	  event->key.hardware_keycode = vk_from_char (msg->wParam);
+	  if (msg->wParam < ' ')
+	    {
+	      /* For ASCII control chars, the keyval should be the
+	       * corresponding ASCII character.
+	       */
+	      event->key.keyval = msg->wParam + '@';
+	      /* This is needed in case of Alt+nnn or Alt+0nnn (on the numpad)
+	       * where nnn<32
+	       */
+	      event->key.state |= GDK_CONTROL_MASK;
+	    }
 	}
       else /* WM_IME_CHAR */
 	{
-	  event->key.keyval = GDK_VoidSymbol;
 	  event->key.hardware_keycode = 0; /* ??? */
 	  if (msg->wParam & 0xFF00)
 	    {
@@ -891,43 +956,32 @@ build_keypress_event (GdkEvent *event,
 	}
 
       /* Convert from the thread's current code page
-       * to Unicode. Then convert to UTF-8.
-       * We don't handle the surrogate stuff. Should we?
+       * to Unicode. (Followed by conversion to UTF-8 below.)
        */
       ucount = MultiByteToWideChar (_gdk_input_codepage,
 				    0, buf, bytecount,
 				    wbuf, G_N_ELEMENTS (wbuf));
     }
-  if (ucount == 0)
-    event->key.keyval = GDK_VoidSymbol;
-  else if (msg->message == WM_CHAR || msg->message == WM_SYSCHAR)
-    {
-      if (msg->wParam < ' ')
-	{
-	  event->key.keyval = msg->wParam + '@';
-	  /* This is needed in case of Alt+nnn or Alt+0nnn (on the numpad)
-	   * where nnn<32
-	   */
-	  event->key.state |= GDK_CONTROL_MASK;
-	}
-      else
-	event->key.keyval = gdk_unicode_to_keyval (wbuf[0]);
-    }
 
   build_key_event_state (event);
 
   /* Build UTF-8 string */
-  if (ucount == 1 && wbuf[0] < 0200)
+  if (ucount > 0)
     {
-      event->key.string = g_malloc (2);
-      event->key.string[0] = wbuf[0];
-      event->key.string[1] = '\0';
-      event->key.length = 1;
-    }
-  else
-    {
-      event->key.string = _gdk_ucs2_to_utf8 (wbuf, ucount);
-      event->key.length = strlen (event->key.string);
+      if (ucount == 1 && wbuf[0] < 0200)
+	{
+	  event->key.string = g_malloc (2);
+	  event->key.string[0] = wbuf[0];
+	  event->key.string[1] = '\0';
+	  event->key.length = 1;
+	}
+      else
+	{
+	  event->key.string = _gdk_ucs2_to_utf8 (wbuf, ucount);
+	  event->key.length = strlen (event->key.string);
+	}
+      if (event->key.keyval == GDK_VoidSymbol)
+	event->key.keyval = gdk_unicode_to_keyval (wbuf[0]);
     }
 }
 
@@ -946,7 +1000,10 @@ build_keyrelease_event (GdkEvent *event,
   if (msg->message == WM_CHAR || msg->message == WM_SYSCHAR)
     {
       if (msg->wParam < ' ')
-	event->key.keyval = msg->wParam + '@';
+	{
+	  event->key.keyval = msg->wParam + '@';
+	  event->key.state |= GDK_CONTROL_MASK;
+	}
       else
 	{
 	  buf = msg->wParam;
@@ -2044,7 +2101,7 @@ gdk_event_translate (GdkEvent *event,
     case WM_SYSKEYUP:
     case WM_SYSKEYDOWN:
       GDK_NOTE (EVENTS,
-		g_print ("WM_SYSKEY%s: %p  %s %#x %s\n",
+		g_print ("WM_SYSKEY%s: %p  %s vk%.02x %s\n",
 			 (msg->message == WM_SYSKEYUP ? "UP" : "DOWN"),
 			 msg->hwnd,
 			 (GetKeyNameText (msg->lParam, buf,
@@ -2053,26 +2110,26 @@ gdk_event_translate (GdkEvent *event,
 			 msg->wParam,
 			 decode_key_lparam (msg->lParam)));
 
-      /* Let the system handle Alt-Tab and Alt-Enter */
+      /* If posted without us having keyboard focus, ignore */
+      if (!(msg->lParam & 0x20000000))
+	break;
+      /* Let the system handle Alt-Tab, Alt-Enter and Alt-F4 */
       if (msg->wParam == VK_TAB
 	  || msg->wParam == VK_RETURN
 	  || msg->wParam == VK_F4)
 	break;
-      /* If posted without us having keyboard focus, ignore */
-      if (!(msg->lParam & 0x20000000))
+      /* Ignore auto-repeated Shift or Alt keypresses (good idea???) */
+      if ((msg->wParam == VK_SHIFT || msg->wParam == VK_MENU) &&
+	  (HIWORD (msg->lParam) & KF_REPEAT))
 	break;
-#if 0
-      /* don't generate events for just the Alt key */
-      if (msg->wParam == VK_MENU)
-	break;
-#endif
+
       /* Jump to code in common with WM_KEYUP and WM_KEYDOWN */
       goto keyup_or_down;
 
     case WM_KEYUP:
     case WM_KEYDOWN:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_KEY%s: %p  %s %#x %s\n",
+		g_print ("WM_KEY%s: %p  %s vk%.02x %s\n",
 			 (msg->message == WM_KEYUP ? "UP" : "DOWN"),
 			 msg->hwnd,
 			 (GetKeyNameText (msg->lParam, buf,
@@ -2339,7 +2396,7 @@ gdk_event_translate (GdkEvent *event,
 			 GDK_KEY_PRESS : GDK_KEY_RELEASE);
       event->key.time = msg->time;
       event->key.state = 0;
-      if (GetKeyState (VK_SHIFT) < 0)
+      if (event->key.keyval != GDK_ISO_Left_Tab && GetKeyState (VK_SHIFT) < 0)
 	event->key.state |= GDK_SHIFT_MASK;
       if (GetKeyState (VK_CAPITAL) & 0x1)
 	event->key.state |= GDK_LOCK_MASK;
@@ -3306,8 +3363,6 @@ _gdk_events_queue (void)
   while (!_gdk_event_queue_find_first ()
 	 && PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
     {
-      GDK_NOTE (EVENTS, g_print ("PeekMessage: %p %s\n",
-				 msg.hwnd, gdk_win32_message_name (msg.message)));
 #ifndef HAVE_DIMM_H
       TranslateMessage (&msg);
 #else
