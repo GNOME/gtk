@@ -1,3 +1,11 @@
+2003-07-11  Matthias Clasen  <maclas@gmx.de>
+
+	* queryloaders.c (query_module): Handle absolute filenames properly. (#117170, Jens Elkner)
+
+	* gdk-pixbuf-io.c: Mention that NULL-terminated arrays returned by 
+	gdk_pixbuf_format_get_mime_types() and gdk_pixbuf_format_get_extensions() must be 
+	freed with g_strfreev().
+
 2003-07-04  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-io.c: Document ICO save parameters.

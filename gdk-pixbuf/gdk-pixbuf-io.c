@@ -1036,7 +1036,7 @@ gdk_pixbuf_format_get_name (GdkPixbufFormat *format)
  *
  * Returns a description of the format.
  * 
- * Return value: a description of the format. 
+ * Return value: a description of the format.
  *
  * Since: 2.2
  */
@@ -1062,7 +1062,8 @@ gdk_pixbuf_format_get_description (GdkPixbufFormat *format)
  *
  * Returns the mime types supported by the format.
  * 
- * Return value: a %NULL-terminated array of mime types.
+ * Return value: a %NULL-terminated array of mime types which must be freed with 
+ * g_strfreev() when it is no longer needed.
  *
  * Since: 2.2
  */
@@ -1081,7 +1082,8 @@ gdk_pixbuf_format_get_mime_types (GdkPixbufFormat *format)
  * Returns the filename extensions typically used for files in the 
  * given format.
  * 
- * Return value: a %NULL-terminated array of filename extensions.
+ * Return value: a %NULL-terminated array of filename extensions which must be
+ * freed with g_strfreev() when it is no longer needed.
  *
  * Since: 2.2
  */

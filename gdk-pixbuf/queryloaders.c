@@ -64,14 +64,10 @@ query_module (const char *dir, const char *file)
 	char **ext; 
 	const GdkPixbufModulePattern *pattern;
 
-	if (g_path_is_absolute (dir)) 
+	if (g_path_is_absolute (file)) 
+		path = g_strdup (file);
+	else
 		path = g_build_filename (dir, file, NULL);
-	else {
-		char *cwd = g_get_current_dir ();
-		path = g_build_filename (cwd, dir, file, NULL);
-		g_free (cwd);
-	}	       
-	
 
 	module = g_module_open (path, 0);
 	if (module &&

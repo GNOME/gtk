@@ -489,7 +489,7 @@ pixbuf_supports_svg ()
 	    found_svg = TRUE;
 	}
 
-      g_free (mime_types);
+      g_strfreev (mime_types);
     }
 
   g_slist_free (formats);
