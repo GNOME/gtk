@@ -1,3 +1,15 @@
+Fri Aug 24 16:03:45 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_scroll_to_cell): Add
+	"use_align" to give people the option to just make a cell visible.
+
+	* gtk/gtktreeview.c (gtk_tree_view_scroll_to_point): fix bug where
+	we were scrolling past the end of the tree.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_pack_start):
+	rename gtk_tree_view_column_pack_start_cell_renderer to
+	gtk_tree_view_column_pack_start.  Same for pack_end, and clear.
+
 Fri Aug 24 12:02:08 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_new): Remove

@@ -110,18 +110,18 @@ GtkTreeViewColumn      *gtk_tree_view_column_new_with_attributes (const gchar   
 								  ...);
 void                    gtk_tree_view_column_set_cell_renderer   (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell);
-void                    gtk_tree_view_column_pack_start_cell_renderer (GtkTreeViewColumn  *tree_column,
-								       GtkCellRenderer    *cell,
-								       gboolean            expand,
-								       gboolean            fill,
-								       guint               padding);
-void                    gtk_tree_view_column_pack_end_cell_renderer   (GtkTreeViewColumn  *tree_column,
-								       GtkCellRenderer    *cell,
-								       gboolean            expand,
-								       gboolean            fill,
-								       guint               padding);
-void                    gtk_tree_view_column_clear_cell_renderers     (GtkTreeViewColumn  *tree_column);
-GList                  *gtk_tree_view_column_get_cell_renderers       (GtkTreeViewColumn  *tree_column);
+void                    gtk_tree_view_column_pack_start          (GtkTreeViewColumn       *tree_column,
+								  GtkCellRenderer         *cell,
+								  gboolean                 expand,
+								  gboolean                 fill,
+								  guint                    padding);
+void                    gtk_tree_view_column_pack_end            (GtkTreeViewColumn       *tree_column,
+								  GtkCellRenderer         *cell,
+								  gboolean                 expand,
+								  gboolean                 fill,
+								  guint                    padding);
+void                    gtk_tree_view_column_clear               (GtkTreeViewColumn       *tree_column);
+GList                  *gtk_tree_view_column_get_cell_renderers  (GtkTreeViewColumn       *tree_column);
 void                    gtk_tree_view_column_add_attribute       (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell_renderer,
 								  const gchar             *attribute,

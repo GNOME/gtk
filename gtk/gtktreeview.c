@@ -1211,6 +1211,7 @@ gtk_tree_view_realize (GtkWidget *widget)
       gtk_tree_view_scroll_to_cell (tree_view,
 				    tree_view->priv->scroll_to_path,
 				    tree_view->priv->scroll_to_column,
+				    tree_view->priv->scroll_to_use_align,
 				    tree_view->priv->scroll_to_row_align,
 				    tree_view->priv->scroll_to_col_align);
       if (tree_view->priv->scroll_to_path)
@@ -3136,6 +3137,7 @@ drag_scan_timeout (gpointer data)
           gtk_tree_view_scroll_to_cell (tree_view,
                                         path,
                                         column,
+					TRUE,
                                         0.5, 0.5);
 
           gtk_tree_path_free (path);
@@ -6985,8 +6987,8 @@ gtk_tree_view_scroll_to_point (GtkTreeView *tree_view,
   hadj = tree_view->priv->hadjustment;
   vadj = tree_view->priv->vadjustment;
 
-  gtk_adjustment_set_value (hadj, CLAMP (tree_x, hadj->lower, hadj->upper));
-  gtk_adjustment_set_value (vadj, CLAMP (tree_y, vadj->lower, vadj->upper));
+  gtk_adjustment_set_value (hadj, CLAMP (tree_x, hadj->lower, hadj->upper - hadj->page_size));
+  gtk_adjustment_set_value (vadj, CLAMP (tree_y, vadj->lower, vadj->upper - vadj->page_size));
 }
 
 /**
@@ -6994,21 +6996,24 @@ gtk_tree_view_scroll_to_point (GtkTreeView *tree_view,
  * @tree_view: A #GtkTreeView.
  * @path: The path of the row to move to.
  * @column: The #GtkTreeViewColumn to move horizontally to.
+ * @use_align: whether to use alignment arguments, or %FALSE.
  * @row_align: The vertical alignment of the row specified by @path.
  * @col_align: The horizontal alignment of the column specified by @column.
  *
- * Moves the alignments of @tree_view to the position specified by
- * @column and @path.  If @column is NULL, then no horizontal
- * scrolling occurs.  Likewise, if @path is NULL no vertical scrolling
- * occurs.  @row_align determines where the row is placed, and
- * @col_align determines where @column is placed.  Both are expected
- * to be between 0.0 and 1.0. 0.0 means left/top alignment, 1.0 means
- * right/bottom alignment, 0.5 means center.
+ * Moves the alignments of @tree_view to the position specified by @column and
+ * @path.  If @column is NULL, then no horizontal scrolling occurs.  Likewise,
+ * if @path is NULL no vertical scrolling occurs.  @row_align determines where
+ * the row is placed, and @col_align determines where @column is placed.  Both
+ * are expected to be between 0.0 and 1.0. 0.0 means left/top alignment, 1.0
+ * means right/bottom alignment, 0.5 means center.  If @use_align is %TRUE, then
+ * the alignment arguments are ignored, and the tree does the minimum amount of
+ * work to scroll the cell onto the screen.
  **/
 void
 gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
                               GtkTreePath       *path,
                               GtkTreeViewColumn *column,
+			      gboolean           use_align,
                               gfloat             row_align,
                               gfloat             col_align)
 {
@@ -7034,6 +7039,7 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
 	tree_view->priv->scroll_to_path = gtk_tree_path_copy (path);
       if (column)
 	tree_view->priv->scroll_to_column = column;
+      tree_view->priv->scroll_to_use_align = use_align;
       tree_view->priv->scroll_to_row_align = row_align;
       tree_view->priv->scroll_to_col_align = col_align;
 
@@ -7046,18 +7052,34 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
   dest_x = vis_rect.x;
   dest_y = vis_rect.y;
 
-  if (path)
-    {
-      dest_x = cell_rect.x +
-        cell_rect.width * row_align -
-        vis_rect.width * row_align;
-    }
-
   if (column)
     {
-      dest_y = cell_rect.y +
-        cell_rect.height * col_align -
-        vis_rect.height * col_align;
+      if (use_align)
+	{
+	  dest_x = cell_rect.x + cell_rect.width * row_align - vis_rect.width * row_align;
+	}
+      else
+	{
+	  if (dest_x < vis_rect.x)
+	    dest_x = vis_rect.x;
+	  else if (dest_x + cell_rect.width > vis_rect.x + vis_rect.width)
+	    dest_x = vis_rect.x + vis_rect.width - cell_rect.width;
+	}
+    }
+
+  if (path)
+    {
+      if (use_align)
+	{
+	  dest_y = cell_rect.y + cell_rect.height * col_align - vis_rect.height * col_align;
+	}
+      else
+	{
+	  if (dest_y < vis_rect.y)
+	    dest_y = vis_rect.y;
+	  else if (dest_y + cell_rect.height > vis_rect.y +  vis_rect.height)
+	    dest_y = vis_rect.y + vis_rect.height - cell_rect.height;
+	}
     }
 
   gtk_tree_view_scroll_to_point (tree_view, dest_x, dest_y);
@@ -8886,7 +8908,7 @@ gtk_tree_view_search_iter (GtkTreeModel     *model,
           gtk_tree_selection_select_iter (selection, iter);
           
           path = gtk_tree_model_get_path (model, iter);
-	  gtk_tree_view_scroll_to_cell (tree_view, path, column, 0.5, 0.5);
+	  gtk_tree_view_scroll_to_cell (tree_view, path, column, TRUE, 0.5, 0.5);
 	  gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
           gtk_tree_path_free (path);
           
@@ -8920,7 +8942,7 @@ gtk_tree_view_search_iter (GtkTreeModel     *model,
               gtk_tree_selection_select_iter (selection, iter);
               
               path = gtk_tree_model_get_path (model, iter);
-              gtk_tree_view_scroll_to_cell (tree_view, path, column, 0.5, 0.5);
+              gtk_tree_view_scroll_to_cell (tree_view, path, column, TRUE, 0.5, 0.5);
 	      gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
               gtk_tree_path_free (path);
               

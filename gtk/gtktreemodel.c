@@ -510,7 +510,7 @@ gtk_tree_path_up (GtkTreePath *path)
 {
   g_return_val_if_fail (path != NULL, FALSE);
 
-  if (path->depth == 1)
+  if (path->depth == 0)
     return FALSE;
 
   path->depth--;
