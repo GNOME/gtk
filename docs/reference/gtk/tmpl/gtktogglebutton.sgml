@@ -191,12 +191,12 @@ Should be connected if you wish to perform an action whenever the
 
 </para>
 
-<!-- ##### ARG GtkToggleButton:inconsistent ##### -->
+<!-- ##### ARG GtkToggleButton:draw-indicator ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkToggleButton:draw-indicator ##### -->
+<!-- ##### ARG GtkToggleButton:inconsistent ##### -->
 <para>
 
 </para>

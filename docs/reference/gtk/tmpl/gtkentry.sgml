@@ -335,27 +335,17 @@ use gtk_editable_set_editable() instead.
 
 @entry: the object which received the signal.
 
+<!-- ##### ARG GtkEntry:activates-default ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:cursor-position ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkEntry:selection-bound ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkEntry:editable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:max-length ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:visibility ##### -->
 <para>
 
 </para>
@@ -370,12 +360,7 @@ use gtk_editable_set_editable() instead.
 
 </para>
 
-<!-- ##### ARG GtkEntry:activates-default ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:width-chars ##### -->
+<!-- ##### ARG GtkEntry:max-length ##### -->
 <para>
 
 </para>
@@ -385,7 +370,22 @@ use gtk_editable_set_editable() instead.
 
 </para>
 
+<!-- ##### ARG GtkEntry:selection-bound ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:visibility ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:width-chars ##### -->
 <para>
 
 </para>

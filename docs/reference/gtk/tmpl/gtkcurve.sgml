@@ -137,22 +137,22 @@ calling gtk_curve_reset() or gtk_curve_set_gamma().
 
 </para>
 
-<!-- ##### ARG GtkCurve:min-x ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkCurve:max-x ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCurve:min-y ##### -->
+<!-- ##### ARG GtkCurve:max-y ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCurve:max-y ##### -->
+<!-- ##### ARG GtkCurve:min-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCurve:min-y ##### -->
 <para>
 
 </para>

@@ -448,17 +448,12 @@ use gtk_spin_button_get_value() instead.
 
 </para>
 
-<!-- ##### ARG GtkSpinButton:snap-to-ticks ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkSpinButton:numeric ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkSpinButton:wrap ##### -->
+<!-- ##### ARG GtkSpinButton:snap-to-ticks ##### -->
 <para>
 
 </para>
@@ -469,6 +464,11 @@ use gtk_spin_button_get_value() instead.
 </para>
 
 <!-- ##### ARG GtkSpinButton:value ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:wrap ##### -->
 <para>
 
 </para>

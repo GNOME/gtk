@@ -204,12 +204,7 @@ instead.
 @combo: a #GtkCombo.
 
 
-<!-- ##### ARG GtkCombo:enable-arrow-keys ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCombo:enable-arrows-always ##### -->
+<!-- ##### ARG GtkCombo:allow-empty ##### -->
 <para>
 
 </para>
@@ -219,7 +214,12 @@ instead.
 
 </para>
 
-<!-- ##### ARG GtkCombo:allow-empty ##### -->
+<!-- ##### ARG GtkCombo:enable-arrow-keys ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:enable-arrows-always ##### -->
 <para>
 
 </para>

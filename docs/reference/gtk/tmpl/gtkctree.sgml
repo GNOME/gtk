@@ -1216,14 +1216,9 @@ Emitted when a node is unselected.
 @node: The node  corresponding to the selected row.
 @column: 
 
-<!-- ##### ARG GtkCTree:n-columns ##### -->
+<!-- ##### ARG GtkCTree:expander-style ##### -->
 <para>
-The number of columns in the tree.
-</para>
-
-<!-- ##### ARG GtkCTree:tree-column ##### -->
-<para>
-The column in which the actual tree graphic appears.
+The style of the expander buttons.
 </para>
 
 <!-- ##### ARG GtkCTree:indent ##### -->
@@ -1231,9 +1226,14 @@ The column in which the actual tree graphic appears.
 The number of pixels to indent the tree levels.
 </para>
 
-<!-- ##### ARG GtkCTree:spacing ##### -->
+<!-- ##### ARG GtkCTree:line-style ##### -->
 <para>
-The number of pixels between the tree and the columns.
+The style of the lines in the tree graphic.
+</para>
+
+<!-- ##### ARG GtkCTree:n-columns ##### -->
+<para>
+The number of columns in the tree.
 </para>
 
 <!-- ##### ARG GtkCTree:show-stub ##### -->
@@ -1241,13 +1241,13 @@ The number of pixels between the tree and the columns.
 FIXME
 </para>
 
-<!-- ##### ARG GtkCTree:line-style ##### -->
+<!-- ##### ARG GtkCTree:spacing ##### -->
 <para>
-The style of the lines in the tree graphic.
+The number of pixels between the tree and the columns.
 </para>
 
-<!-- ##### ARG GtkCTree:expander-style ##### -->
+<!-- ##### ARG GtkCTree:tree-column ##### -->
 <para>
-The style of the expander buttons.
+The column in which the actual tree graphic appears.
 </para>
 

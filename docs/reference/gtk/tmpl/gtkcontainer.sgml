@@ -417,12 +417,12 @@ Does the same as gtk_container_get_children().
 
 </para>
 
-<!-- ##### ARG GtkContainer:resize-mode ##### -->
+<!-- ##### ARG GtkContainer:child ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkContainer:child ##### -->
+<!-- ##### ARG GtkContainer:resize-mode ##### -->
 <para>
 
 </para>

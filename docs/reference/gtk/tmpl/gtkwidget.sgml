@@ -1852,6 +1852,8 @@ a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 @widget: the object which received the signal.
+@widget2: 
+<!-- # Unused Parameters # -->
 @widget: 
 
 <!-- ##### SIGNAL GtkWidget::key-press-event ##### -->
@@ -2118,52 +2120,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 @event: 
 @Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
-<!-- ##### ARG GtkWidget:name ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:parent ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:width-request ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:height-request ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:visible ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:sensitive ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkWidget:app-paintable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:can-focus ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:is-focus ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:has-focus ##### -->
 <para>
 
 </para>
@@ -2173,22 +2130,12 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
-<!-- ##### ARG GtkWidget:has-default ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:receives-default ##### -->
+<!-- ##### ARG GtkWidget:can-focus ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkWidget:composite-child ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:style ##### -->
 <para>
 
 </para>
@@ -2203,17 +2150,62 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
+<!-- ##### ARG GtkWidget:has-default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:has-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:height-request ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:is-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:parent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:receives-default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:sensitive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:width-request ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWidget:cursor-aspect-ratio ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:focus-line-width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:interior-focus ##### -->
 <para>
 
 </para>
@@ -2228,7 +2220,17 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
+<!-- ##### ARG GtkWidget:focus-line-width ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWidget:focus-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:interior-focus ##### -->
 <para>
 
 </para>

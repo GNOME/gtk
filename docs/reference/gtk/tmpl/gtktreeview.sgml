@@ -872,7 +872,12 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 @treeview: the object which received the signal.
 
-<!-- ##### ARG GtkTreeView:model ##### -->
+<!-- ##### ARG GtkTreeView:enable-search ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:expander-column ##### -->
 <para>
 
 </para>
@@ -882,7 +887,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 </para>
 
-<!-- ##### ARG GtkTreeView:vadjustment ##### -->
+<!-- ##### ARG GtkTreeView:headers-clickable ##### -->
 <para>
 
 </para>
@@ -892,12 +897,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 </para>
 
-<!-- ##### ARG GtkTreeView:headers-clickable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeView:expander-column ##### -->
+<!-- ##### ARG GtkTreeView:model ##### -->
 <para>
 
 </para>
@@ -912,17 +912,12 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 </para>
 
-<!-- ##### ARG GtkTreeView:enable-search ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTreeView:search-column ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTreeView:vertical-separator ##### -->
+<!-- ##### ARG GtkTreeView:vadjustment ##### -->
 <para>
 
 </para>
@@ -932,7 +927,17 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 </para>
 
+<!-- ##### ARG GtkTreeView:even-row-color ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTreeView:expander-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:horizontal-separator ##### -->
 <para>
 
 </para>
@@ -942,7 +947,12 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 </para>
 
-<!-- ##### ARG GtkTreeView:horizontal-separator ##### -->
+<!-- ##### ARG GtkTreeView:odd-row-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:vertical-separator ##### -->
 <para>
 
 </para>

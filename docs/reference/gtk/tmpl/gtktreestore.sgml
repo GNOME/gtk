@@ -4,7 +4,6 @@ GtkTreeStore
 <!-- ##### SECTION Short_Description ##### -->
 A tree-like data structure that can be used with the #GtkTreeView
 
-
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 The #GtkTreeStore object is a list model for use with a #GtkTreeView

@@ -95,7 +95,7 @@ This sets the range of the ruler using gfloat lower, gfloat upper, gfloat positi
 
 </para>
 
-<!-- ##### ARG GtkRuler:upper ##### -->
+<!-- ##### ARG GtkRuler:max-size ##### -->
 <para>
 
 </para>
@@ -105,7 +105,7 @@ This sets the range of the ruler using gfloat lower, gfloat upper, gfloat positi
 
 </para>
 
-<!-- ##### ARG GtkRuler:max-size ##### -->
+<!-- ##### ARG GtkRuler:upper ##### -->
 <para>
 
 </para>

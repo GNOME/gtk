@@ -59,12 +59,12 @@ The #GtkScrollbar struct does not contain any public data.
 
 </para>
 
-<!-- ##### ARG GtkScrollbar:min-slider-length ##### -->
+<!-- ##### ARG GtkScrollbar:has-backward-stepper ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkScrollbar:has-backward-stepper ##### -->
+<!-- ##### ARG GtkScrollbar:has-forward-stepper ##### -->
 <para>
 
 </para>
@@ -79,7 +79,7 @@ The #GtkScrollbar struct does not contain any public data.
 
 </para>
 
-<!-- ##### ARG GtkScrollbar:has-forward-stepper ##### -->
+<!-- ##### ARG GtkScrollbar:min-slider-length ##### -->
 <para>
 
 </para>

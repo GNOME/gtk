@@ -239,12 +239,22 @@ mouse cursor is.
 
 </para>
 
+<!-- ##### ARG GtkButton:use-stock ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkButton:use-underline ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkButton:use-stock ##### -->
+<!-- ##### ARG GtkButton:child-displacement-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:child-displacement-y ##### -->
 <para>
 
 </para>
@@ -255,16 +265,6 @@ mouse cursor is.
 </para>
 
 <!-- ##### ARG GtkButton:default-outside-border ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:child-displacement-y ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:child-displacement-x ##### -->
 <para>
 
 </para>

@@ -162,7 +162,7 @@ box.
 
 </para>
 
-<!-- ##### ARG GtkButtonBox:child-min-height ##### -->
+<!-- ##### ARG GtkButtonBox:child-internal-pad-x ##### -->
 <para>
 
 </para>
@@ -172,7 +172,7 @@ box.
 
 </para>
 
-<!-- ##### ARG GtkButtonBox:child-internal-pad-x ##### -->
+<!-- ##### ARG GtkButtonBox:child-min-height ##### -->
 <para>
 
 </para>

@@ -1065,6 +1065,24 @@ after other user handlers and the default handler.
 </para>
 
 
+<!-- ##### ARG GtkSettings:gtk-menu-bar-popout-delay ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-menu-popout-delay ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-menu-submenu-hysteresis ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### STRUCT GtkSettingsClass ##### -->
 <para>
 
@@ -1121,30 +1139,6 @@ and its unique identifying integer.
 @return_val: 
 @nparams: 
 @params: 
-
-<!-- ##### SIGNAL GtkStatusbar::text-popped ##### -->
-<para>
-Is emitted whenever a new message is popped off a statusbar's stack.
-</para>
-
-@statusbar: the object which received the signal.
-@context_id: the context id of the relevant message/statusbar.
-@text: the message that was just popped.
-
-<!-- ##### SIGNAL GtkStatusbar::text-pushed ##### -->
-<para>
-Is emitted whenever a new message gets pushed onto a statusbar's stack.
-</para>
-
-@statusbar: the object which received the signal.
-@context_id: the context id of the relevant message/statusbar.
-@text: the message that was pushed.
-
-<!-- ##### ARG GtkStatusbar:shadow-type ##### -->
-<para>
-
-</para>
-
 
 <!-- ##### STRUCT GtkStatusbarMsg ##### -->
 <para>

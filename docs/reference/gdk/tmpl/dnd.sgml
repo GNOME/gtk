@@ -29,6 +29,7 @@ the GTK+ documentation for more information.
 @context: 
 @Returns: 
 
+
 <!-- ##### FUNCTION gdk_drag_abort ##### -->
 <para>
 </para>
@@ -115,7 +116,7 @@ the GTK+ documentation for more information.
 @suggested_action: 
 @possible_actions: 
 @time: 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_drop_finish ##### -->

@@ -247,12 +247,17 @@ Sets the #GtkAdjustment for the vertical scrollbar.
 
 </para>
 
-<!-- ##### ARG GtkScrolledWindow:vadjustment ##### -->
+<!-- ##### ARG GtkScrolledWindow:hscrollbar-policy ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkScrolledWindow:hscrollbar-policy ##### -->
+<!-- ##### ARG GtkScrolledWindow:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:vadjustment ##### -->
 <para>
 
 </para>
@@ -267,7 +272,7 @@ Sets the #GtkAdjustment for the vertical scrollbar.
 
 </para>
 
-<!-- ##### ARG GtkScrolledWindow:shadow-type ##### -->
+<!-- ##### ARG GtkScrolledWindow:scrollbar-spacing ##### -->
 <para>
 
 </para>

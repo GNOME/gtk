@@ -125,8 +125,8 @@ The colormap structure contains the following public fields.
 @colormap: 
 @colors: 
 @ncolors: 
-@writeable:
-@best_match:
+@writeable: 
+@best_match: 
 @success: 
 @Returns: 
 
@@ -135,20 +135,20 @@ The colormap structure contains the following public fields.
 <para>
 </para>
 
-@colormap:
-@color:
-@writeable:
-@best_match:
-@Returns:
+@colormap: 
+@color: 
+@writeable: 
+@best_match: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_colormap_free_colors ##### -->
 <para>
 </para>
 
-@colormap:
-@colors:
-@ncolors:
+@colormap: 
+@colors: 
+@ncolors: 
 
 
 <!-- ##### FUNCTION gdk_colormap_query_color ##### -->
@@ -184,7 +184,7 @@ The colormap structure contains the following public fields.
 
 @colormap: 
 @colors: 
-@ncolors:
+@ncolors: 
 
 
 <!-- ##### FUNCTION gdk_color_copy ##### -->
@@ -211,7 +211,7 @@ The colormap structure contains the following public fields.
 @planes: 
 @nplanes: 
 @pixels: 
-@npixels:
+@npixels: 
 @Returns: 
 
 
@@ -221,7 +221,7 @@ The colormap structure contains the following public fields.
 
 @colormap: 
 @pixels: 
-@npixels:
+@npixels: 
 @planes: 
 
 
@@ -229,7 +229,7 @@ The colormap structure contains the following public fields.
 <para>
 </para>
 
-@colormap:
+@colormap: 
 @color: 
 @Returns: 
 
@@ -276,19 +276,14 @@ The colormap structure contains the following public fields.
 
 @colora: 
 @colorb: 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_color_hash ##### -->
 <para>
 </para>
 
-@colora:
+@colora: 
 @Returns: 
-
-
-
-
-
 
 

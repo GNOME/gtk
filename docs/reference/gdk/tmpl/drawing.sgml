@@ -177,7 +177,7 @@ or a #GdkWindow.
 <para>
 </para>
 
-@drawable:
+@drawable: 
 @gc: 
 @x1: 
 @y1: 
@@ -353,7 +353,7 @@ function.
 @gc: 
 @x: 
 @y: 
-@string:
+@string: 
 
 
 <!-- ##### FUNCTION gdk_draw_text ##### -->
@@ -365,7 +365,7 @@ function.
 @gc: 
 @x: 
 @y: 
-@text:
+@text: 
 @text_length: 
 
 
@@ -386,6 +386,8 @@ function.
 <para>
 Draws a pixmap, or a part of a pixmap, onto another drawable.
 </para>
+
+
 
 <!-- ##### FUNCTION gdk_draw_drawable ##### -->
 <para>

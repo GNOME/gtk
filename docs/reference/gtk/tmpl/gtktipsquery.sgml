@@ -133,17 +133,17 @@ Emitted when a widget is selected during a query.
 @event: the button press or button release event.
 @Returns: %TRUE if the query should be stopped.
 
-<!-- ##### ARG GtkTipsQuery:emit-always ##### -->
-<para>
-%TRUE if the widget-entered and widget-selected signals are emitted even when
-the widget has no tooltip set.
-</para>
-
 <!-- ##### ARG GtkTipsQuery:caller ##### -->
 <para>
 The widget that starts the tips query, usually a button.
 If it is selected while the query is in effect the query is automatically
 stopped.
+</para>
+
+<!-- ##### ARG GtkTipsQuery:emit-always ##### -->
+<para>
+%TRUE if the widget-entered and widget-selected signals are emitted even when
+the widget has no tooltip set.
 </para>
 
 <!-- ##### ARG GtkTipsQuery:label-inactive ##### -->

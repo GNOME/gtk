@@ -251,7 +251,12 @@ to %FALSE if this is not your desired behaviour.
 @Returns: 
 
 
-<!-- ##### ARG GtkTable:n-rows ##### -->
+<!-- ##### ARG GtkTable:column-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:homogeneous ##### -->
 <para>
 
 </para>
@@ -261,7 +266,7 @@ to %FALSE if this is not your desired behaviour.
 
 </para>
 
-<!-- ##### ARG GtkTable:column-spacing ##### -->
+<!-- ##### ARG GtkTable:n-rows ##### -->
 <para>
 
 </para>
@@ -271,7 +276,7 @@ to %FALSE if this is not your desired behaviour.
 
 </para>
 
-<!-- ##### ARG GtkTable:homogeneous ##### -->
+<!-- ##### ARG GtkTable:bottom-attach ##### -->
 <para>
 
 </para>
@@ -291,22 +296,17 @@ to %FALSE if this is not your desired behaviour.
 
 </para>
 
-<!-- ##### ARG GtkTable:bottom-attach ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTable:x-options ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTable:y-options ##### -->
+<!-- ##### ARG GtkTable:x-padding ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTable:x-padding ##### -->
+<!-- ##### ARG GtkTable:y-options ##### -->
 <para>
 
 </para>

@@ -1264,9 +1264,15 @@ previously selected row in a "single" or "browse" mode CList.
 An integer value for a column.
 </para>
 
-<!-- ##### ARG GtkCList:shadow-type ##### -->
+<!-- ##### ARG GtkCList:reorderable ##### -->
 <para>
-Sets the shadowing for the CList.
+A boolean value for determining if the user can re-order the CList's
+columns.
+</para>
+
+<!-- ##### ARG GtkCList:row-height ##### -->
+<para>
+An integer value representing the height of a row in pixels.
 </para>
 
 <!-- ##### ARG GtkCList:selection-mode ##### -->
@@ -1274,9 +1280,14 @@ Sets the shadowing for the CList.
 Sets the type of selection mode for the CList.
 </para>
 
-<!-- ##### ARG GtkCList:row-height ##### -->
+<!-- ##### ARG GtkCList:shadow-type ##### -->
 <para>
-An integer value representing the height of a row in pixels.
+Sets the shadowing for the CList.
+</para>
+
+<!-- ##### ARG GtkCList:sort-type ##### -->
+<para>
+
 </para>
 
 <!-- ##### ARG GtkCList:titles-active ##### -->
@@ -1285,20 +1296,9 @@ A boolean value for setting whether the column titles can be
 clicked.
 </para>
 
-<!-- ##### ARG GtkCList:reorderable ##### -->
-<para>
-A boolean value for determining if the user can re-order the CList's
-columns.
-</para>
-
 <!-- ##### ARG GtkCList:use-drag-icons ##### -->
 <para>
 A boolean value for setting whether to use icons during drag
 operations.
-</para>
-
-<!-- ##### ARG GtkCList:sort-type ##### -->
-<para>
-
 </para>
 

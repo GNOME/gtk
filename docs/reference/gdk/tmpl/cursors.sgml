@@ -127,7 +127,7 @@ The standard cursors available.
 @bg: 
 @x: 
 @y: 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_cursor_new_for_display ##### -->

@@ -33,12 +33,17 @@ GtkCellRendererPixbuf
 
 </para>
 
+<!-- ##### ARG GtkCellRendererPixbuf:pixbuf-expander-closed ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRendererPixbuf:pixbuf-expander-open ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCellRendererPixbuf:pixbuf-expander-closed ##### -->
+<!-- ##### ARG GtkCellRendererPixbuf:stock-detail ##### -->
 <para>
 
 </para>
@@ -49,11 +54,6 @@ GtkCellRendererPixbuf
 </para>
 
 <!-- ##### ARG GtkCellRendererPixbuf:stock-size ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererPixbuf:stock-detail ##### -->
 <para>
 
 </para>

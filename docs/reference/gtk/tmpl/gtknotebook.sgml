@@ -454,12 +454,22 @@ Emitted when the user or a function changes the current page.
 @page: the new current page
 @page_num: the index of the page
 
-<!-- ##### ARG GtkNotebook:tab-pos ##### -->
+<!-- ##### ARG GtkNotebook:enable-popup ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkNotebook:show-tabs ##### -->
+<!-- ##### ARG GtkNotebook:homogeneous ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:page ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:scrollable ##### -->
 <para>
 
 </para>
@@ -469,7 +479,7 @@ Emitted when the user or a function changes the current page.
 
 </para>
 
-<!-- ##### ARG GtkNotebook:scrollable ##### -->
+<!-- ##### ARG GtkNotebook:show-tabs ##### -->
 <para>
 
 </para>
@@ -484,27 +494,12 @@ Emitted when the user or a function changes the current page.
 
 </para>
 
+<!-- ##### ARG GtkNotebook:tab-pos ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkNotebook:tab-vborder ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:page ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:enable-popup ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:homogeneous ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:tab-label ##### -->
 <para>
 
 </para>
@@ -525,6 +520,11 @@ Emitted when the user or a function changes the current page.
 </para>
 
 <!-- ##### ARG GtkNotebook:tab-fill ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab-label ##### -->
 <para>
 
 </para>

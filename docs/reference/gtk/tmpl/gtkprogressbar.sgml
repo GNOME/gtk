@@ -272,22 +272,12 @@ gtk_progress_set_percentage() instead.
 @percentage: the new percent complete value.
 
 
-<!-- ##### ARG GtkProgressBar:fraction ##### -->
+<!-- ##### ARG GtkProgressBar:activity-blocks ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkProgressBar:pulse-step ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:orientation ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:text ##### -->
+<!-- ##### ARG GtkProgressBar:activity-step ##### -->
 <para>
 
 </para>
@@ -302,17 +292,27 @@ gtk_progress_set_percentage() instead.
 
 </para>
 
-<!-- ##### ARG GtkProgressBar:activity-step ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgressBar:activity-blocks ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkProgressBar:discrete-blocks ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:fraction ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:orientation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:pulse-step ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:text ##### -->
 <para>
 
 </para>

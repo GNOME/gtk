@@ -426,7 +426,7 @@ are currently:
 <para>
 </para>
 
-@font:
+@font: 
 @string: 
 @Returns: 
 
@@ -521,7 +521,7 @@ are currently:
 </para>
 
 @font: 
-@character:
+@character: 
 @Returns: 
 
 

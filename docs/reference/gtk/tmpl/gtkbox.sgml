@@ -373,12 +373,12 @@ field in #GtkBoxChild-struct.
 in #GtkBoxChild-struct.
 
 
-<!-- ##### ARG GtkBox:spacing ##### -->
+<!-- ##### ARG GtkBox:homogeneous ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkBox:homogeneous ##### -->
+<!-- ##### ARG GtkBox:spacing ##### -->
 <para>
 
 </para>
@@ -393,12 +393,12 @@ in #GtkBoxChild-struct.
 
 </para>
 
-<!-- ##### ARG GtkBox:padding ##### -->
+<!-- ##### ARG GtkBox:pack-type ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkBox:pack-type ##### -->
+<!-- ##### ARG GtkBox:padding ##### -->
 <para>
 
 </para>

@@ -41,17 +41,10 @@ HTML_IMAGES =
 
 # Extra SGML files that are included by DOC_MAIN_SGML_FILE
 content_files =				\
-	version.xml			\
 	gdk-pixbuf-from-drawables.sgml	\
 	gdk-pixbuf-rendering.sgml	\
 	gdk-pixbuf.sgml			\
 	porting-from-imlib.sgml
-
-version.xml: FORCE
-	@date +'<!ENTITY builddate "%Y-%m-%d">' > version.xml
-	@echo "<!ENTITY srcversion \"@GTK_VERSION@\">" >> version.xml
-
-FORCE:
 
 # Other files to distribute
 extra_files =

@@ -1,3 +1,11 @@
+Sat Nov  2 12:46:16 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf/Makefile.am: Remove rules for generation
+	of version.xml, which was causing make to always
+	rebuild the HTML file, and didn't seem to be used.
+
+	* gtk/tmpl/gtkliststore.sgml: SGML fixes.
+
 Sat Nov  2 08:41:47 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/tmpl/gtktreestore.sgml: clean up the wording.

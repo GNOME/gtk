@@ -177,17 +177,17 @@ handlebox are detached from the main window.
          (this argument provides no extra information
           and is here only for backwards-compatibility)
 
+<!-- ##### ARG GtkHandleBox:handle-position ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkHandleBox:shadow ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkHandleBox:shadow-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkHandleBox:handle-position ##### -->
 <para>
 
 </para>
