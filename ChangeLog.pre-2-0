@@ -1,3 +1,13 @@
+Thu Oct 26 00:51:52 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c:
+	(gtk_signal_emitv): use g_value_set_static_{string|boxed} where
+	applicable.
+
+	* gtk/gtk-boxed.defs (GtkSelectionData): specify
+	gtk_selection_data_copy and gtk_selection_data_free
+	do GtkSelectionData work as params in signals.
+
 Wed Oct 25 20:47:41 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gdk-pixbuf-loader.c (gdk_pixbuf_loader_class_init): urg, removed

@@ -206,6 +206,33 @@ gtk_arg_to_value (GtkArg *arg,
 }
 
 static inline gboolean
+gtk_arg_static_to_value (GtkArg *arg,
+			 GValue *value)
+{
+  switch (G_TYPE_FUNDAMENTAL (arg->type))
+    {
+    case G_TYPE_CHAR:		g_value_set_char (value, GTK_VALUE_CHAR (*arg));		break;
+    case G_TYPE_UCHAR:		g_value_set_uchar (value, GTK_VALUE_UCHAR (*arg));		break;
+    case G_TYPE_BOOLEAN:	g_value_set_boolean (value, GTK_VALUE_BOOL (*arg));		break;
+    case G_TYPE_INT:		g_value_set_int (value, GTK_VALUE_INT (*arg));			break;
+    case G_TYPE_UINT:		g_value_set_uint (value, GTK_VALUE_UINT (*arg));		break;
+    case G_TYPE_LONG:		g_value_set_long (value, GTK_VALUE_LONG (*arg));		break;
+    case G_TYPE_ULONG:		g_value_set_ulong (value, GTK_VALUE_ULONG (*arg));		break;
+    case G_TYPE_ENUM:		g_value_set_enum (value, GTK_VALUE_ENUM (*arg));		break;
+    case G_TYPE_FLAGS:		g_value_set_flags (value, GTK_VALUE_FLAGS (*arg));		break;
+    case G_TYPE_FLOAT:		g_value_set_float (value, GTK_VALUE_FLOAT (*arg));		break;
+    case G_TYPE_DOUBLE:		g_value_set_double (value, GTK_VALUE_DOUBLE (*arg));		break;
+    case G_TYPE_STRING:		g_value_set_static_string (value, GTK_VALUE_STRING (*arg));	break;
+    case G_TYPE_BOXED:		g_value_set_static_boxed (value, GTK_VALUE_BOXED (*arg));	break;
+    case G_TYPE_POINTER:	g_value_set_pointer (value, GTK_VALUE_POINTER (*arg));		break;
+    case G_TYPE_OBJECT:		g_value_set_object (value, GTK_VALUE_POINTER (*arg));		break;
+    default:
+      return FALSE;
+    }
+  return TRUE;
+}
+
+static inline gboolean
 gtk_arg_set_from_value (GtkArg  *arg,
 			GValue  *value,
 			gboolean copy_string)
@@ -296,7 +323,7 @@ gtk_signal_emitv (GtkObject *object,
       GtkArg *arg = args + i;
       
       g_value_init (value, arg->type);
-      if (!gtk_arg_to_value (arg, value))
+      if (!gtk_arg_static_to_value (arg, value))
 	{
 	  g_warning ("%s: failed to convert arg type `%s' to value type `%s'",
 		     G_STRLOC, g_type_name (arg->type), g_type_name (G_VALUE_TYPE (value)));
