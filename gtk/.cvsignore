@@ -35,3 +35,4 @@ stamp-gtkmarshal.h
 stamp-gtk.defs
 gtk-query-immodules-2.0
 gtk.immodules
+.saved
