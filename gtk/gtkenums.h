@@ -305,6 +305,13 @@ typedef enum
   GTK_WINDOW_POPUP
 } GtkWindowType;
 
+/* How to sort */
+typedef enum
+{
+  GTK_SORT_ASCENDING,
+  GTK_SORT_DESCENDING
+} GtkSortType;
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

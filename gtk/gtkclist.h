@@ -44,7 +44,8 @@ enum
   GTK_CLIST_SHOW_TITLES     = 1 << 4,
   GTK_CLIST_CONSTRUCTED	    = 1 << 5,
   GTK_CLIST_CHILD_HAS_FOCUS = 1 << 6,
-  GTK_CLIST_ADD_MODE        = 1 << 7
+  GTK_CLIST_ADD_MODE        = 1 << 7,
+  GTK_CLIST_AUTO_SORT       = 1 << 8
 }; 
 
 /* cell types */
@@ -75,6 +76,7 @@ typedef enum
 #define GTK_CLIST_CHILD_HAS_FOCUS(clist)   (GTK_CLIST_FLAGS (clist) & GTK_CLIST_CHILD_HAS_FOCUS)
 #define GTK_CLIST_DRAG_SELECTION(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_DRAG_SELECTION)
 #define GTK_CLIST_ADD_MODE(clist)          (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ADD_MODE)
+#define GTK_CLIST_AUTO_SORT(clist)         (GTK_CLIST_FLAGS (clist) & GTK_CLIST_AUTO_SORT)
 
 #define GTK_CLIST_ROW(_glist_) ((GtkCListRow *)((_glist_)->data))
 
@@ -94,6 +96,10 @@ typedef struct _GtkCellText GtkCellText;
 typedef struct _GtkCellPixmap GtkCellPixmap;
 typedef struct _GtkCellPixText GtkCellPixText;
 typedef struct _GtkCellWidget GtkCellWidget;
+
+typedef gint (*GtkCListCompareFunc) (GtkCList     *clist,
+				     gconstpointer ptr1,
+				     gconstpointer ptr2);
 
 struct _GtkCList
 {
@@ -176,56 +182,56 @@ struct _GtkCList
   gint drag_pos;
   gint htimer;
   gint vtimer;
+
+  GtkSortType sort_type;
+  GtkCListCompareFunc compare;
+  gint sort_column;
 };
 
 struct _GtkCListClass
 {
   GtkContainerClass parent_class;
   
-  void (*select_row) (GtkCList * clist,
-		      gint row,
-		      gint column,
-		      GdkEvent * event);
-  void (*unselect_row) (GtkCList * clist,
-			gint row,
-			gint column,
-			GdkEvent * event);
-  void (*click_column) (GtkCList * clist,
-			gint column);
-
-  void (*toggle_focus_row) (GtkCList * clist);
-  void (*select_all) (GtkCList * clist);
-  void (*unselect_all) (GtkCList * clist);
-  void (*undo_selection) (GtkCList * clist);
-  void (*start_selection) (GtkCList * clist);
-  void (*end_selection) (GtkCList * clist);
-  void (*extend_selection) (GtkCList * clist,
-			    GtkScrollType scroll_type,
-			    gfloat position,
-			    gboolean auto_start_selection);
-  void (*scroll_horizontal) (GtkCList * clist,
-			     GtkScrollType scroll_type,
-			     gfloat position);
-  void (*scroll_vertical) (GtkCList * clist,
-			   GtkScrollType scroll_type,
-			   gfloat position);
-  void (*toggle_add_mode) (GtkCList * clist);
+  void (*select_row)          (GtkCList * clist,
+		               gint row,
+		               gint column,
+		               GdkEvent * event);
+  void (*unselect_row)        (GtkCList * clist,
+			       gint row,
+			       gint column,
+			       GdkEvent * event);
+  void (*click_column)        (GtkCList * clist,
+			       gint column);
+  void (*toggle_focus_row)    (GtkCList * clist);
+  void (*select_all)          (GtkCList * clist);
+  void (*unselect_all)        (GtkCList * clist);
+  void (*undo_selection)      (GtkCList * clist);
+  void (*start_selection)     (GtkCList * clist);
+  void (*end_selection)        (GtkCList * clist);
+  void (*extend_selection)    (GtkCList * clist,
+			       GtkScrollType scroll_type,
+			       gfloat position,
+			       gboolean auto_start_selection);
+  void (*scroll_horizontal)   (GtkCList * clist,
+			       GtkScrollType scroll_type,
+			       gfloat position);
+  void (*scroll_vertical)     (GtkCList * clist,
+			       GtkScrollType scroll_type,
+			       gfloat position);
+  void (*toggle_add_mode)     (GtkCList * clist);
   void (*abort_column_resize) (GtkCList * clist);
-
-  void (*resync_selection) (GtkCList * clist,
-			    GdkEvent * event);
-  GList * (*selection_find) (GtkCList *clist,
-			     gint row_number,
-			     GList *row_list_element);
-  void (*draw_row) (GtkCList * clist,
-		    GdkRectangle * area,
-		    gint row,
-		    GtkCListRow * clist_row);
-  void (*clear) (GtkCList * clist);
-  void (*fake_unselect_all) (GtkCList * clist,
-			     gint row);
-	 
-
+  void (*resync_selection)    (GtkCList * clist,
+			       GdkEvent * event);
+  GList * (*selection_find)   (GtkCList *clist,
+			       gint row_number,
+			       GList *row_list_element);
+  void (*draw_row)            (GtkCList * clist,
+		               GdkRectangle * area,
+		               gint row,
+		               GtkCListRow * clist_row);
+  void (*clear)               (GtkCList * clist);
+  void (*fake_unselect_all)   (GtkCList * clist,
+			       gint row);
 
   gint scrollbar_spacing;
 };
@@ -493,8 +499,9 @@ void gtk_clist_set_shift (GtkCList * clist,
 gint gtk_clist_append (GtkCList * clist,
 		       gchar * text[]);
 
-/* inserts a row at index row */
-void gtk_clist_insert (GtkCList * clist,
+/* inserts a row at index row and returns the row where it was actually
+inserted (may be different from "row" in auto_sort mode) */
+gint gtk_clist_insert (GtkCList * clist,
 		       gint row,
 		       gchar * text[]);
 
@@ -555,9 +562,27 @@ void gtk_clist_unselect_all (GtkCList *clist);
 /* swap the position of two rows */
 void gtk_clist_swap_rows (GtkCList * clist, gint row1, gint row2);
 
+/* sets a compare function different to the default */
+void gtk_clist_set_compare_func (GtkCList            *clist,
+				 GtkCListCompareFunc  cmp_func);
+
+/* the column to sort by */
+void gtk_clist_set_sort_column (GtkCList *clist,
+				gint      column);
+
+/* how to sort : ascending or descending */
+void gtk_clist_set_sort_type (GtkCList   *clist,
+			      GtkSortType sort_type);
+
+/* sort the list with the current compare function */
+void gtk_clist_sort (GtkCList *clist);
+
+/* Automatically sort upon insertion */
+void gtk_clist_set_auto_sort (GtkCList *clist,
+			      gboolean  auto_sort);
+
 #ifdef __cplusplus
 }
 #endif				/* __cplusplus */
-
 
 #endif				/* __GTK_CLIST_H__ */

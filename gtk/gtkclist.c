@@ -350,6 +350,17 @@ static void extend_selection (GtkCList      *clist,
 			      gfloat         position,
 			      gboolean       auto_start_selection);
 
+/* Sorting */
+static gint default_compare (GtkCList     *clist,
+			     gconstpointer row1,
+			     gconstpointer row2);
+static GList * merge (GtkCList *clist,
+		      GList    *a,
+		      GList    *b);
+static GList * mergesort (GtkCList *clist,
+			  GList    *list,
+			  gint      num);
+
 /* Fill in data after widget is realized and has style */
 
 static void add_style_data (GtkCList * clist);
@@ -809,6 +820,10 @@ gtk_clist_init (GtkCList * clist)
   clist->drag_pos = -1;
   clist->htimer = 0;
   clist->vtimer = 0;
+
+  clist->compare = default_compare;
+  clist->sort_type = GTK_SORT_ASCENDING;
+  clist->sort_column = 0;
 }
 
 /* Constructors */
@@ -1613,57 +1628,14 @@ gint
 gtk_clist_append (GtkCList * clist,
 		  gchar * text[])
 {
-  gint i;
-  GtkCListRow *clist_row;
-
   g_return_val_if_fail (clist != NULL, -1);
   g_return_val_if_fail (GTK_IS_CLIST (clist), -1);
+  g_return_val_if_fail (text != NULL, -1);
 
-  clist_row = row_new (clist);
-  clist->rows++;
-
-  /* set the text in the row's columns */
-  if (text)
-    for (i = 0; i < clist->columns; i++)
-      if (text[i])
-        cell_set_text (clist, clist_row, i, text[i]);
-
-  /* keeps track of the end of the list so the list 
-   * doesn't have to be traversed every time a item is added */
-  if (!clist->row_list)
-    {
-      clist->row_list = g_list_append (clist->row_list, clist_row);
-      clist->row_list_end = clist->row_list;
-
-      /* check the selection mode to see if we should select
-       * the first row automaticly */
-      switch (clist->selection_mode)
-	{
-	case GTK_SELECTION_BROWSE:
-	  select_row (clist, 0, -1, NULL);
-	  break;
-
-	default:
-	  break;
-	}
-    }
-  else
-    clist->row_list_end = (g_list_append (clist->row_list_end, clist_row))->next;
-  
-  /* redraw the list if it's not frozen */
-  if (!GTK_CLIST_FROZEN (clist))
-    {
-      adjust_scrollbars (clist);
-
-      if (gtk_clist_row_is_visible (clist, clist->rows - 1) != GTK_VISIBILITY_NONE)
-	draw_rows (clist, NULL);
-    }
-
-  /* return index of the row */
-  return clist->rows - 1;
+  return gtk_clist_insert (clist, clist->rows, text);
 }
 
-void
+gint
 gtk_clist_insert (GtkCList * clist,
 		  gint row,
 		  gchar * text[])
@@ -1671,42 +1643,72 @@ gtk_clist_insert (GtkCList * clist,
   gint i;
   GtkCListRow *clist_row;
 
-  g_return_if_fail (clist != NULL);
-  g_return_if_fail (GTK_IS_CLIST (clist));
-  g_return_if_fail (text != NULL);
+  g_return_val_if_fail (clist != NULL, -1);
+  g_return_val_if_fail (GTK_IS_CLIST (clist), -1);
+  g_return_val_if_fail (text != NULL, -1);
 
   /* return if out of bounds */
   if (row < 0 || row > clist->rows)
-    return;
+    return -1;
 
-  if (clist->rows == 0)
-    gtk_clist_append (clist, text);
+  /* create the row */
+  clist_row = row_new (clist);
+
+  /* set the text in the row's columns */
+  for (i = 0; i < clist->columns; i++)
+    if (text[i])
+      cell_set_text (clist, clist_row, i, text[i]);
+
+  if (!clist->rows)
+    {
+      clist->row_list = g_list_append (clist->row_list, clist_row);
+      clist->row_list_end = clist->row_list;
+    }
   else
     {
-      /* create the row */
-      clist_row = row_new (clist);
-
-      /* set the text in the row's columns */
-      if (text)
-	for (i = 0; i < clist->columns; i++)
-	  if (text[i])
-	    cell_set_text (clist, clist_row, i, text[i]);
+      if (GTK_CLIST_AUTO_SORT (clist))   /* override insertion pos */
+	{
+	  GList *work;
+	  
+	  row = 0;
+	  work = clist->row_list;
+	  
+	  if (clist->sort_type == GTK_SORT_ASCENDING)
+	    {
+	      while (row < clist->rows &&
+		     clist->compare (clist, clist_row,
+				     GTK_CLIST_ROW (work)) > 0)
+		{
+		  row++;
+		  work = work->next;
+		}
+	    }
+	  else
+	    {
+	      while (row < clist->rows &&
+		     clist->compare (clist, clist_row,
+				     GTK_CLIST_ROW (work)) < 0)
+		{
+		  row++;
+		  work = work->next;
+		}
+	    }
+	}
       
-      /* reset the row end pointer if we're inserting at the
-       * end of the list */
+      /* reset the row end pointer if we're inserting at the end of the list */
       if (row == clist->rows)
 	clist->row_list_end = (g_list_append (clist->row_list_end, clist_row))->next;
       else
 	clist->row_list = g_list_insert (clist->row_list, clist_row, row);
-
-      clist->rows++;
-
-      if (row < ROW_FROM_YPIXEL (clist, 0))
-	clist->voffset -= (clist->row_height + CELL_SPACING);
-
-      /* syncronize the selection list */
-      sync_selection (clist, row, SYNC_INSERT);
     }
+  
+  clist->rows++;
+
+  if (row < ROW_FROM_YPIXEL (clist, 0))
+    clist->voffset -= (clist->row_height + CELL_SPACING);
+
+  /* syncronize the selection list */
+  sync_selection (clist, row, SYNC_INSERT);
 
   /* redraw the list if it isn't frozen */
   if (!GTK_CLIST_FROZEN (clist))
@@ -1716,6 +1718,8 @@ gtk_clist_insert (GtkCList * clist,
       if (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE)
 	draw_rows (clist, NULL);
     }
+
+  return row;
 }
 
 void
@@ -1893,6 +1897,9 @@ gtk_clist_swap_rows (GtkCList * clist,
   
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
+
+  if (GTK_CLIST_AUTO_SORT (clist))
+    return;
 
   if (row1 < 0 || row1 > (clist->rows - 1))
     return;
@@ -5988,4 +5995,205 @@ selection_find (GtkCList *clist,
 		GList    *row_list_element)
 {
   return g_list_find (clist->selection, GINT_TO_POINTER (row_number));
+}
+
+static gint
+default_compare (GtkCList     *clist,
+		 gconstpointer ptr1,
+		 gconstpointer ptr2)
+{
+  GtkCListRow *row1 = (GtkCListRow *) ptr1;
+  GtkCListRow *row2 = (GtkCListRow *) ptr2;
+  char *text1;
+  char *text2;
+
+  text1 = GTK_CELL_TEXT (row1->cell[clist->sort_column])->text;
+  text2 = GTK_CELL_TEXT (row2->cell[clist->sort_column])->text;
+
+  return strcmp (text1, text2);
+}
+
+void
+gtk_clist_set_compare_func (GtkCList            *clist,
+			    GtkCListCompareFunc  cmp_func)
+{
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CLIST (clist));
+
+  clist->compare = (cmp_func) ? cmp_func : default_compare;
+}
+
+void       
+gtk_clist_set_auto_sort (GtkCList *clist,
+			 gboolean  auto_sort)
+{
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CLIST (clist));
+  
+  if (GTK_CLIST_AUTO_SORT (clist) && !auto_sort)
+    GTK_CLIST_UNSET_FLAG (clist, CLIST_AUTO_SORT);
+  else if (!GTK_CLIST_AUTO_SORT (clist) && auto_sort)
+    {
+      GTK_CLIST_SET_FLAG (clist, CLIST_AUTO_SORT);
+      gtk_clist_sort (clist);
+    }
+}
+
+void       
+gtk_clist_set_sort_type (GtkCList   *clist,
+			 GtkSortType sort_type)
+{
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CLIST (clist));
+  
+  clist->sort_type = sort_type;
+}
+
+void
+gtk_clist_set_sort_column (GtkCList *clist,
+			   gint      column)
+{
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CLIST (clist));
+
+  if (column < 0 || column >= clist->columns)
+    return;
+
+  clist->sort_column = column;
+}
+
+static GList *
+merge (GtkCList *clist,
+       GList    *a,         /* first list to merge */
+       GList    *b)         /* second list to merge */
+{
+  GList z = { 0 };          /* auxiliary node */
+  GList *c;
+  gint cmp;
+
+  c = &z;
+
+  while (a || b)
+    {
+      if (a && !b)
+	{
+	  c->next = a;
+	  a->prev = c;
+	  c = a;
+	  a = a->next;
+	  break;
+	}
+      else if (!a && b)
+	{
+	  c->next = b;
+	  b->prev = c;
+	  c = b;
+	  b = b->next;
+	  break;
+	}
+      else /* a && b */
+	{
+	  cmp = clist->compare (clist, GTK_CLIST_ROW (a), GTK_CLIST_ROW (b));
+	  if ((cmp >= 0 && clist->sort_type == GTK_SORT_DESCENDING) ||
+	      (cmp <= 0 && clist->sort_type == GTK_SORT_ASCENDING) ||
+	      (a && !b))
+	    {
+	      c->next = a;
+	      a->prev = c;
+	      c = a;
+	      a = a->next;
+	    }
+	  else
+	    {
+	      c->next = b;
+	      b->prev = c;
+	      c = b;
+	      b = b->next;
+	    }
+	}
+    }
+
+  return z.next;
+}
+
+static GList *
+mergesort (GtkCList *clist,
+	   GList    *list,         /* the list to sort */
+	   gint      num)          /* the list's length */
+{
+  GList *half;
+  gint i;
+
+  if (num == 1)
+    {
+      return list;
+    }
+  else
+    {
+      /* move "half" to the middle */
+      half = list;
+      for (i = 0; i < num / 2; i++)
+	half = half->next;
+
+      /* cut the list in two */
+      half->prev->next = NULL;
+      half->prev = NULL;
+
+      /* recursively sort both lists */
+      return merge (clist,
+		    mergesort (clist, list, num / 2),
+		    mergesort (clist, half, num - num / 2));
+    }
+}
+
+void
+gtk_clist_sort (GtkCList *clist)
+{
+  GList *list;
+  GList *work;
+  gint i;
+  gboolean thaw = FALSE;
+
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CLIST (clist));
+
+  if (clist->rows <= 1)
+    return;
+
+  if (GTK_WIDGET_HAS_GRAB (GTK_WIDGET (clist)))
+    return;
+
+  if (clist->anchor != -1 && clist->selection_mode == GTK_SELECTION_EXTENDED)
+    {
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+      g_list_free (clist->undo_selection);
+      g_list_free (clist->undo_unselection);
+      clist->undo_selection = NULL;
+      clist->undo_unselection = NULL;
+    }
+   
+  if (!GTK_CLIST_FROZEN (clist))
+    {
+      gtk_clist_freeze (clist);
+      thaw = TRUE;
+    }
+
+  clist->row_list = mergesort (clist, clist->row_list, clist->rows);
+
+  work = clist->selection;
+
+  for (i = 0, list = clist->row_list; i < clist->rows; i++, list = list->next)
+    {
+      if (GTK_CLIST_ROW (list)->state == GTK_STATE_SELECTED)
+	{
+	  work->data = GINT_TO_POINTER (i);
+	  work = work->next;
+	}
+      
+      if (i == clist->rows - 1)
+	clist->row_list_end = list;
+    }
+
+  if (thaw)
+    gtk_clist_thaw (clist);
 }

@@ -81,16 +81,11 @@ typedef void (*GtkCTreeFunc) (GtkCTree     *ctree,
 			      GtkCTreeNode *node,
 			      gpointer      data);
 
-typedef gint (*GtkCTreeCompareFunc) (GtkCTree    *ctree,
-				     const GtkCTreeNode *node1,
-				     const GtkCTreeNode *node2);
-
 typedef gboolean (*GtkCTreeGNodeFunc) (GtkCTree     *ctree,
                                        guint         depth,
                                        GNode        *gnode,
 				       GtkCTreeNode *cnode,
                                        gpointer      data);
-
 
 struct _GtkCTree
 {
@@ -108,9 +103,7 @@ struct _GtkCTree
   GtkCTreeNode *drag_source;
   GtkCTreeNode *drag_target;
   gint insert_pos;
-  GtkCTreeCompareFunc node_compare;
-  
-  guint auto_sort   : 1;
+
   guint reorderable : 1;
   guint use_icons   : 1;
   guint in_drag     : 1;
@@ -384,10 +377,6 @@ void       gtk_ctree_set_line_style         (GtkCTree     *ctree,
  *             Tree sorting functions                      *
  ***********************************************************/
 
-void       gtk_ctree_set_auto_sort          (GtkCTree     *ctree,
-					     gboolean      auto_sort);
-void       gtk_ctree_set_compare_func       (GtkCTree     *ctree,
-					     GtkCTreeCompareFunc cmp_func);
 void       gtk_ctree_sort                   (GtkCTree     *ctree, 
 					     GtkCTreeNode *node);
 void       gtk_ctree_sort_recursive         (GtkCTree     *ctree, 

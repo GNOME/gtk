@@ -3150,10 +3150,11 @@ add1000_clist (GtkWidget *widget, gpointer data)
   gtk_clist_freeze (GTK_CLIST (data));
   for (i = 0; i < 1000; i++)
     {
-      sprintf (text[0], "Row %d", clist_rows++);
+      sprintf (text[0], "Row %d", rand() % 10000 /*clist_rows++*/);
       row = gtk_clist_append (GTK_CLIST (data), texts);
       gtk_clist_set_pixtext (GTK_CLIST (data), row, 3, "Hello World", 5, pixmap, mask);
     }
+
   gtk_clist_thaw (GTK_CLIST (data));
 
   gdk_pixmap_unref (pixmap);
@@ -3179,7 +3180,7 @@ add10000_clist (GtkWidget *widget, gpointer data)
   gtk_clist_freeze (GTK_CLIST (data));
   for (i = 0; i < 10000; i++)
     {
-      sprintf (text[0], "Row %d", clist_rows++);
+      sprintf (text[0], "Row %d", rand() % 10000 /*clist_rows++*/);
       gtk_clist_append (GTK_CLIST (data), texts);
     }
   gtk_clist_thaw (GTK_CLIST (data));
@@ -3342,7 +3343,10 @@ insert_row_clist (GtkWidget *widget, gpointer data)
     "This", "is", "a", "inserted", "row."
   };
 
-  gtk_clist_insert (GTK_CLIST (data), GTK_CLIST (data)->focus_row, text);
+  if (GTK_CLIST (data)->focus_row >= 0)
+    gtk_clist_insert (GTK_CLIST (data), GTK_CLIST (data)->focus_row, text);
+  else
+    gtk_clist_insert (GTK_CLIST (data), 0, text);
 
   clist_rows++;
 }
@@ -3391,6 +3395,22 @@ clist_toggle_sel_mode (GtkWidget *widget, GtkCList *clist)
 		    (((GtkOptionMenu *)clist_omenu)->menu_item), i);
 
   gtk_clist_set_selection_mode (clist, (GtkSelectionMode) (3-i));
+}
+
+static void 
+clist_click_column (GtkCList *clist, gint column, gpointer data)
+{
+  if (column == clist->sort_column)
+    {
+      if (clist->sort_type == GTK_SORT_ASCENDING)
+	clist->sort_type = GTK_SORT_DESCENDING;
+      else
+	clist->sort_type = GTK_SORT_ASCENDING;
+    }
+  else
+    gtk_clist_set_sort_column (clist, column);
+
+  gtk_clist_sort (clist);
 }
 
 static void
@@ -3450,6 +3470,10 @@ create_clist (void)
        * button callbacks -- more is done with it later */
       clist = gtk_clist_new_with_titles (TESTGTK_CLIST_COLUMNS, titles);
       /*clist = gtk_clist_new (TESTGTK_CLIST_COLUMNS);*/
+
+      gtk_signal_connect (GTK_OBJECT (clist), "click_column",
+			  (GtkSignalFunc) clist_click_column,
+			  NULL);
 
       /* control buttons */
       button = gtk_button_new_with_label ("Add 1,000 Rows With Pixmaps");
@@ -4032,6 +4056,26 @@ void rebuild_tree (GtkWidget *widget, GtkCTree *ctree)
   after_press (ctree, NULL);
 }
 
+static void 
+ctree_click_column (GtkCTree *ctree, gint column, gpointer data)
+{
+  GtkCList *clist;
+
+  clist = GTK_CLIST (ctree);
+
+  if (column == clist->sort_column)
+    {
+      if (clist->sort_type == GTK_SORT_ASCENDING)
+	clist->sort_type = GTK_SORT_DESCENDING;
+      else
+	clist->sort_type = GTK_SORT_ASCENDING;
+    }
+  else
+    gtk_clist_set_sort_column (clist, column);
+
+  gtk_ctree_sort_recursive (ctree, NULL);
+}
+
 void create_ctree (void)
 {
   static GtkWidget *window = NULL;
@@ -4132,6 +4176,9 @@ void create_ctree (void)
       ctree = GTK_CTREE (gtk_ctree_new_with_titles (2, 0, title));
       gtk_ctree_set_line_style (ctree, GTK_CTREE_LINES_DOTTED);
       gtk_ctree_set_reorderable (ctree, TRUE);
+      gtk_signal_connect (GTK_OBJECT (ctree), "click_column",
+			  (GtkSignalFunc) ctree_click_column,
+			  NULL);
       gtk_signal_connect (GTK_OBJECT (ctree), "button_press_event",
 			  GTK_SIGNAL_FUNC (button_press), NULL);
       gtk_signal_connect_after (GTK_OBJECT (ctree), "button_press_event",
@@ -4154,7 +4201,6 @@ void create_ctree (void)
 				GTK_SIGNAL_FUNC (after_press), NULL);
       
       gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (ctree), TRUE, TRUE, 0);
-      gtk_clist_column_titles_passive (GTK_CLIST (ctree));
       gtk_clist_set_selection_mode (GTK_CLIST (ctree), GTK_SELECTION_EXTENDED);
       gtk_clist_set_policy (GTK_CLIST (ctree), GTK_POLICY_ALWAYS, 
 			    GTK_POLICY_AUTOMATIC);

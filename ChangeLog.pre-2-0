@@ -1,3 +1,33 @@
+Wed Aug  5 21:12:37 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkenums.h: new enum GtkSortType.
+ 	
+	* gtk/gtkclist.h:
+	* gtk/gtkclist.c:
+	Added sorting capabilities to GtkCList. New APIs :
+	gtk_clist_set_compare_func, gtk_clist_set_sort_column,
+	gtk_clist_set_sort_type, gtk_clist_sort, gtk_clist_set_auto_sort. 
+	New internal functions : default_compare, merge, mergesort.
+
+	(gtk_clist_append): This is just a wrapper for gtk_clist_insert now.
+	
+	(gtk_clist_insert): Modified to handle gtk_clist_append and the
+	auto sort flag. Changed the return value from void to gint to
+	return the row number where the element was actually inserted.
+
+	(gtk_clist_swap_rows): Return immediately if auto sort flag is set.
+	
+	* gtk/gtkctree.h:
+	* gtk/gtkctree.c:
+	Removed the auto_sort flag, replaced ctree->node_compare with
+	clist->compare all over the place, modified default_compare to
+	match clist's needs. Removed API´s : gtk_ctree_set_auto_sort,
+	gtk_ctree_set_compare_func. Removed GtkCTreeCompareFunc typedef.
+
+	* gtk/testgtk.c: Modified clist/ctree samples to demonstrate
+	sorting. The lists can be sorted by a column by clicking the 
+	corresponding title button.
+	
 Tue Aug  4 22:02:49 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.1.1
