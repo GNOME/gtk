@@ -257,7 +257,7 @@ gdk_pixbuf_loader_prepare (GdkPixbuf          *pixbuf,
   if (anim)
     g_object_ref (anim);
   else
-    anim = gdk_pixbuf_non_anim_new (pixbuf);
+    anim = _gdk_pixbuf_non_anim_new (pixbuf);
   
   priv->animation = anim;
   
@@ -627,7 +627,7 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
     g_object_ref (tmp);
     pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, tmp->has_alpha, 8, priv->width, priv->height);
     g_object_unref (priv->animation);
-    priv->animation = gdk_pixbuf_non_anim_new (pixbuf);
+    priv->animation = _gdk_pixbuf_non_anim_new (pixbuf);
     g_signal_emit (loader, pixbuf_loader_signals[AREA_PREPARED], 0);
     gdk_pixbuf_scale (tmp, pixbuf, 0, 0, priv->width, priv->height, 0, 0,
 		      (double) priv->width / tmp->width,

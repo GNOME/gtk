@@ -1358,9 +1358,9 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 	if (items == 6) {
 		gchar hot[10];
 		g_snprintf (hot, 10, "%d", x_hot);
-		gdk_pixbuf_set_option (pixbuf, "x_hot", hot);
+		_gdk_pixbuf_set_option (pixbuf, "x_hot", hot);
 		g_snprintf (hot, 10, "%d", y_hot);
-		gdk_pixbuf_set_option (pixbuf, "y_hot", hot);
+		_gdk_pixbuf_set_option (pixbuf, "y_hot", hot);
 
 	}
 

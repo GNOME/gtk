@@ -1,3 +1,10 @@
+2002-09-18  Matthias Clasen  <maclas@gmx.de>
+
+	* io-xpm.c, io-xbm.c, io-ico.c, io-ani.c, io-png.c,
+	gdk-pixbuf.c, gdk-pixbuf-animation.c, gdk-pixbuf-loader.c,
+	gdk-pixbuf-private.h: _-prefix gdk_pixbuf_non_anim_new and
+	gdk_pixbuf_set_option. Adjust all callers. 
+
 2002-09-14  Hans Breuer  <hans@breuer.org>
 
 	* pixops/Makefile.am : added makefile.msc to EXTRA_DIST

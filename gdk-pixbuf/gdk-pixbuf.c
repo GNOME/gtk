@@ -525,7 +525,7 @@ gdk_pixbuf_get_option (GdkPixbuf   *pixbuf,
 }
 
 /**
- * gdk_pixbuf_set_option:
+ * _gdk_pixbuf_set_option:
  * @pixbuf: a #GdkPixbuf
  * @key: a nul-terminated string.
  * @value: a nul-terminated string.
@@ -537,7 +537,7 @@ gdk_pixbuf_get_option (GdkPixbuf   *pixbuf,
  * Return value: %TRUE on success.
  **/
 gboolean
-gdk_pixbuf_set_option (GdkPixbuf   *pixbuf,
+_gdk_pixbuf_set_option (GdkPixbuf   *pixbuf,
                        const gchar *key,
                        const gchar *value)
 {
