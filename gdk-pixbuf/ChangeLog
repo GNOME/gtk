@@ -1,3 +1,8 @@
+Wed Dec 22 01:17:44 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* queryloaders.c (main): print out the version and binary name in
+	the header comment.  Problem reported by Seth Nickell.
+
 2004-12-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.6.0 ===

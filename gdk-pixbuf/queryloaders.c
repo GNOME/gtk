@@ -208,6 +208,7 @@ query_module (const char *dir, const char *file)
 int main (int argc, char **argv)
 {
 	gint i;
+	gchar *prgname;
 
 #ifdef G_OS_WIN32
 	gchar *libdir;
@@ -254,10 +255,13 @@ int main (int argc, char **argv)
 #define PIXBUF_LIBDIR libdir
 
 #endif
-
+	prgname = g_get_prgname ();
 	g_printf ("# GdkPixbuf Image Loader Modules file\n"
-		"# Automatically generated file, do not edit\n"
-		"#\n");
+		  "# Automatically generated file, do not edit\n"
+		  "# Created by %s from gtk+-%s\n"
+		  "#\n",
+		  (prgname ? prgname : "gdk-pixbuf-query-loaders"),
+		  GDK_PIXBUF_VERSION);
   
 	if (argc == 1) {
 #ifdef USE_GMODULE
