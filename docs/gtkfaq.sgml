@@ -9,7 +9,7 @@
 <!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
 <author>Tony Gale, Shawn T. Amundson, Emmanuel Deloget, Nathan Froyd
 
-<date>February 9th 2000
+<date>February 22nd 2000
 
 <abstract> This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just looking at 
