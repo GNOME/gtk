@@ -1497,31 +1497,21 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
           /* dest was the first spot in the list; which means we are supposed
            * to prepend.
            */
-          gtk_list_store_prepend (GTK_LIST_STORE (tree_model),
-                                  &dest_iter);
+          gtk_list_store_prepend (list_store, &dest_iter);
 
           retval = TRUE;
         }
       else
         {
-          if (gtk_tree_model_get_iter (GTK_TREE_MODEL (tree_model),
-                                       &dest_iter,
-                                       prev))
+          if (gtk_tree_model_get_iter (tree_model, &dest_iter, prev))
             {
               GtkTreeIter tmp_iter = dest_iter;
 
-	      if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tree_model), "gtk-tree-model-drop-append")))
-		gtk_list_store_append (GTK_LIST_STORE (tree_model), &dest_iter);
-	      else
-		gtk_list_store_insert_after (GTK_LIST_STORE (tree_model),
-					     &dest_iter, &tmp_iter);
+              gtk_list_store_insert_after (list_store, &dest_iter, &tmp_iter);
 
               retval = TRUE;
             }
         }
-
-      g_object_set_data (G_OBJECT (tree_model), "gtk-tree-model-drop-append",
-			 NULL);
 
       gtk_tree_path_free (prev);
 
@@ -1554,11 +1544,11 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
               ++col;
             }
 
-	  dest_iter.stamp = GTK_LIST_STORE (tree_model)->stamp;
+	  dest_iter.stamp = list_store->stamp;
           G_SLIST (dest_iter.user_data)->data = copy_head;
 
-	  path = gtk_list_store_get_path (GTK_TREE_MODEL (tree_model), &dest_iter);
-	  gtk_tree_model_row_changed (GTK_TREE_MODEL (tree_model), path, &dest_iter);
+	  path = gtk_list_store_get_path (tree_model, &dest_iter);
+	  gtk_tree_model_row_changed (tree_model, path, &dest_iter);
 	  gtk_tree_path_free (path);
 	}
     }
@@ -1612,7 +1602,8 @@ gtk_list_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
     retval = TRUE;
 
  out:
-  gtk_tree_path_free (src_path);
+  if (src_path)
+    gtk_tree_path_free (src_path);
   
   return retval;
 }

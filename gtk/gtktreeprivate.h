@@ -192,6 +192,9 @@ struct _GtkTreeViewPrivate
   guint has_rules : 1;
   guint mark_rows_col_dirty : 1;
 
+  /* for DnD */
+  guint empty_view_drop : 1;
+
   guint ctrl_pressed : 1;
   guint shift_pressed : 1;
   

@@ -313,6 +313,9 @@ gtk_tree_get_row_drag_data (GtkSelectionData  *selection_data,
   if (selection_data->target != gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
     return FALSE;
 
+  if (selection_data->length < 0)
+    return FALSE;
+
   trd = (void*) selection_data->data;
 
   if (tree_model)

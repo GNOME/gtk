@@ -1,3 +1,37 @@
+Wed Sep 10 01:06:44 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Big TreeView DnD fixage, makes drops on empty models work, makes
+	TreeStore DnD work and gets rid of gtk-tree-model-drop-append.
+	Related bugs #95362 and #113314. I don't want to touch this code
+	ever again.
+
+	* gtk/gtktreeprivate.h (GtkTreePrivate): add empty_view_drop field.
+
+	* gtk/gtktreednd.c (gtk_tree_get_row_drag_data): add check
+	for selection_data->length.
+
+	* gtk/gtktreeview.c (struct DestRow), (dest_row_free),
+	(set_dest_row), (get_dest_row): we don't store just the row ref
+	anymore, but a struct with the row ref and additional info,
+	(set_destination_row): handle drops on empty space and some
+	style fixes,
+	(get_logical_dest_row): also return path_down_mode/drop_append_mode
+	flags, handle dropping childs on their new parents, rewrite
+	drop append handling into something saner,
+	(gtk_tree_view_drag_motion): show a "drop possible arrow" on empty
+	spaces,
+	(gtk_tree_view_drag_drop): updates for updated backend,
+	(gtk_tree_view_drag_data_received): updates for updated backend,
+	path down mode (treestore DnD) handling,
+	(gtk_tree_view_set_drag_dest_row): set empty_view_drop flag,
+	when we are trying to drop a row on an empty model,
+	(gtk_tree_view_get_drag_dest_row): handle empty_view_drop flag.
+
+	* gtk/gtkliststore.c (gtk_list_store_drag_data_received),
+	(gtk_list_store_row_drop_possible): style and drop-append fixes.
+
+	* gtk/gtktreestore.c (gtk_tree_store_drag_data_received): ditto.
+
 2003-09-08  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkeventbox.[hc]:

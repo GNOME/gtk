@@ -40,6 +40,7 @@
 #include "gtktreemodelsort.h"
 
 #define GTK_TREE_VIEW_SEARCH_DIALOG_KEY "gtk-tree-view-search-dialog"
+
 #define GTK_TREE_VIEW_PRIORITY_VALIDATE (GDK_PRIORITY_REDRAW + 5)
 #define GTK_TREE_VIEW_PRIORITY_SCROLL_SYNC (GTK_TREE_VIEW_PRIORITY_VALIDATE + 2)
 #define GTK_TREE_VIEW_NUM_ROWS_PER_IDLE 500
@@ -4808,26 +4809,79 @@ get_source_row (GdkDragContext *context)
     return NULL;
 }
 
+typedef struct
+{
+  GtkTreeRowReference *dest_row;
+  gboolean             path_down_mode;
+  gboolean             empty_view_drop;
+  gboolean             drop_append_mode;
+}
+DestRow;
+
+static void
+dest_row_free (gpointer data)
+{
+  DestRow *dr = (DestRow *)data;
+
+  gtk_tree_row_reference_free (dr->dest_row);
+  g_free (dr);
+}
+
 
 static void
 set_dest_row (GdkDragContext *context,
               GtkTreeModel   *model,
-              GtkTreePath    *dest_row)
+              GtkTreePath    *dest_row,
+              gboolean        path_down_mode,
+              gboolean        empty_view_drop,
+              gboolean        drop_append_mode)
 {
-  g_object_set_data_full (G_OBJECT (context),
-                          "gtk-tree-view-dest-row",
-                          dest_row ? gtk_tree_row_reference_new (model, dest_row) : NULL,
-                          (GDestroyNotify) (dest_row ? gtk_tree_row_reference_free : NULL));
+  DestRow *dr;
+
+  if (!dest_row)
+    {
+      g_object_set_data_full (G_OBJECT (context), "gtk-tree-view-dest-row",
+                              NULL, NULL);
+      return;
+    }
+
+  dr = g_new0 (DestRow, 1);
+
+  dr->dest_row = gtk_tree_row_reference_new (model, dest_row);
+  dr->path_down_mode = path_down_mode;
+  dr->empty_view_drop = empty_view_drop;
+  dr->drop_append_mode = drop_append_mode;
+
+  g_object_set_data_full (G_OBJECT (context), "gtk-tree-view-dest-row",
+                          dr, (GDestroyNotify) dest_row_free);
 }
 
 static GtkTreePath*
-get_dest_row (GdkDragContext *context)
+get_dest_row (GdkDragContext *context,
+              gboolean       *path_down_mode)
 {
-  GtkTreeRowReference *ref =
+  DestRow *dr =
     g_object_get_data (G_OBJECT (context), "gtk-tree-view-dest-row");
 
-  if (ref)
-    return gtk_tree_row_reference_get_path (ref);
+  if (dr)
+    {
+      GtkTreePath *path = NULL;
+
+      if (path_down_mode)
+        *path_down_mode = dr->path_down_mode;
+
+      if (dr->dest_row)
+        path = gtk_tree_row_reference_get_path (dr->dest_row);
+      else if (dr->empty_view_drop)
+        path = gtk_tree_path_new_from_indices (0, -1);
+      else
+        path = NULL;
+
+      if (path && dr->drop_append_mode)
+        gtk_tree_path_next (path);
+
+      return path;
+    }
   else
     return NULL;
 }
@@ -5071,6 +5125,7 @@ set_destination_row (GtkTreeView    *tree_view,
   TreeViewDragInfo *di;
   GtkWidget *widget;
   GtkTreePath *old_dest_path = NULL;
+  gboolean can_drop = FALSE;
 
   *suggested_action = 0;
   *target = GDK_NONE;
@@ -5106,18 +5161,34 @@ set_destination_row (GtkTreeView    *tree_view,
                                           &path,
                                           &pos))
     {
-      /* can't drop here */
+      gint n_children;
+      GtkTreeModel *model;
+
       remove_open_timeout (tree_view);
 
-      gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (widget),
-                                       NULL,
-                                       GTK_TREE_VIEW_DROP_BEFORE);
+      /* the row got dropped on empty space, let's setup a special case
+       */
 
       if (path)
 	gtk_tree_path_free (path);
 
-      /* don't propagate to parent though */
-      return TRUE;
+      model = gtk_tree_view_get_model (tree_view);
+
+      n_children = gtk_tree_model_iter_n_children (model, NULL);
+      if (n_children)
+        {
+          pos = GTK_TREE_VIEW_DROP_AFTER;
+          path = gtk_tree_path_new_from_indices (n_children - 1, -1);
+        }
+      else
+        {
+          pos = GTK_TREE_VIEW_DROP_BEFORE;
+          path = gtk_tree_path_new_from_indices (0, -1);
+        }
+
+      can_drop = TRUE;
+
+      goto out;
     }
 
   g_assert (path);
@@ -5140,16 +5211,21 @@ set_destination_row (GtkTreeView    *tree_view,
 
   if (TRUE /* FIXME if the location droppable predicate */)
     {
+      can_drop = TRUE;
+    }
+
+out:
+  if (can_drop)
+    {
       GtkWidget *source_widget;
 
       *suggested_action = context->suggested_action;
-
       source_widget = gtk_drag_get_source_widget (context);
 
       if (source_widget == widget)
         {
           /* Default to MOVE, unless the user has
-           * pressed ctrl or alt to affect available actions
+           * pressed ctrl or shift to affect available actions
            */
           if ((context->actions & GDK_ACTION_MOVE) != 0)
             *suggested_action = GDK_ACTION_MOVE;
@@ -5173,13 +5249,21 @@ set_destination_row (GtkTreeView    *tree_view,
 
   return TRUE;
 }
-static GtkTreePath*
-get_logical_dest_row (GtkTreeView *tree_view)
 
+static GtkTreePath*
+get_logical_dest_row (GtkTreeView *tree_view,
+                      gboolean    *path_down_mode,
+                      gboolean    *drop_append_mode)
 {
   /* adjust path to point to the row the drop goes in front of */
   GtkTreePath *path = NULL;
   GtkTreeViewDropPosition pos;
+
+  g_return_val_if_fail (path_down_mode != NULL, NULL);
+  g_return_val_if_fail (drop_append_mode != NULL, NULL);
+
+  *path_down_mode = FALSE;
+  *drop_append_mode = 0;
 
   gtk_tree_view_get_drag_dest_row (tree_view, &path, &pos);
 
@@ -5190,10 +5274,7 @@ get_logical_dest_row (GtkTreeView *tree_view)
     ; /* do nothing */
   else if (pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE ||
            pos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
-    {
-      /* get first child, drop before it */
-      gtk_tree_path_down (path);
-    }
+    *path_down_mode = TRUE;
   else
     {
       GtkTreeIter iter;
@@ -5201,17 +5282,14 @@ get_logical_dest_row (GtkTreeView *tree_view)
 
       g_assert (pos == GTK_TREE_VIEW_DROP_AFTER);
 
-      gtk_tree_model_get_iter (model, &iter, path);
-
-      if (!gtk_tree_model_iter_next (model, &iter))
-	g_object_set_data (G_OBJECT (model), "gtk-tree-model-drop-append",
-			   GINT_TO_POINTER (1));
+      if (!gtk_tree_model_get_iter (model, &iter, path) ||
+          !gtk_tree_model_iter_next (model, &iter))
+        *drop_append_mode = 1;
       else
         {
-	  g_object_set_data (G_OBJECT (model), "gtk-tree-model-drop-append",
-			     NULL);
-	  gtk_tree_path_next (path);
-	}
+          *drop_append_mode = 0;
+          gtk_tree_path_next (path);
+        }
     }
 
   return path;
@@ -5451,7 +5529,9 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
                            gint              y,
                            guint             time)
 {
+  gboolean empty;
   GtkTreePath *path = NULL;
+  GtkTreeModel *model;
   GtkTreeViewDropPosition pos;
   GtkTreeView *tree_view;
   GdkDragAction suggested_action = 0;
@@ -5464,7 +5544,11 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
 
   gtk_tree_view_get_drag_dest_row (tree_view, &path, &pos);
 
-  if (path == NULL)
+  /* we only know this *after* set_desination_row */
+  model = gtk_tree_view_get_model (tree_view);
+  empty = tree_view->priv->empty_view_drop;
+
+  if (path == NULL && !empty)
     {
       /* Can't drop here. */
       gdk_drag_status (context, 0, time);
@@ -5519,6 +5603,8 @@ gtk_tree_view_drag_drop (GtkWidget        *widget,
   GdkAtom target = GDK_NONE;
   TreeViewDragInfo *di;
   GtkTreeModel *model;
+  gboolean path_down_mode;
+  gboolean drop_append_mode;
 
   tree_view = GTK_TREE_VIEW (widget);
 
@@ -5538,7 +5624,7 @@ gtk_tree_view_drag_drop (GtkWidget        *widget,
   if (!set_destination_row (tree_view, context, x, y, &suggested_action, &target))
     return FALSE;
 
-  path = get_logical_dest_row (tree_view);
+  path = get_logical_dest_row (tree_view, &path_down_mode, &drop_append_mode);
 
   if (target != GDK_NONE && path != NULL)
     {
@@ -5546,8 +5632,9 @@ gtk_tree_view_drag_drop (GtkWidget        *widget,
        * treat drag data receives as a drop.
        */
       set_status_pending (context, 0);
-
-      set_dest_row (context, model, path);
+      set_dest_row (context, model, path,
+                    path_down_mode, tree_view->priv->empty_view_drop,
+                    drop_append_mode);
     }
 
   if (path)
@@ -5583,6 +5670,8 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
   GtkTreeView *tree_view;
   GtkTreePath *dest_row;
   GdkDragAction suggested_action;
+  gboolean path_down_mode;
+  gboolean drop_append_mode;
 
   tree_view = GTK_TREE_VIEW (widget);
 
@@ -5605,17 +5694,33 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
        * supposed to call drag_status, not actually paste in the
        * data.
        */
-      path = get_logical_dest_row (tree_view);
+      path = get_logical_dest_row (tree_view, &path_down_mode,
+                                   &drop_append_mode);
 
       if (path == NULL)
         suggested_action = 0;
+      else if (path_down_mode)
+        gtk_tree_path_down (path);
 
       if (suggested_action)
         {
 	  if (!gtk_tree_drag_dest_row_drop_possible (GTK_TREE_DRAG_DEST (model),
 						     path,
 						     selection_data))
-	    suggested_action = 0;
+            {
+              if (path_down_mode)
+                {
+                  path_down_mode = FALSE;
+                  gtk_tree_path_up (path);
+
+                  if (!gtk_tree_drag_dest_row_drop_possible (GTK_TREE_DRAG_DEST (model),
+                                                             path,
+                                                             selection_data))
+                    suggested_action = 0;
+                }
+              else
+	        suggested_action = 0;
+            }
         }
 
       gdk_drag_status (context, suggested_action, time);
@@ -5632,10 +5737,21 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
       return;
     }
 
-  dest_row = get_dest_row (context);
+  dest_row = get_dest_row (context, &path_down_mode);
 
   if (dest_row == NULL)
     return;
+
+  if (selection_data->length >= 0)
+    {
+      if (path_down_mode)
+        {
+          gtk_tree_path_down (dest_row);
+          if (!gtk_tree_drag_dest_row_drop_possible (GTK_TREE_DRAG_DEST (model),
+                                                     dest_row, selection_data))
+            gtk_tree_path_up (dest_row);
+        }
+    }
 
   if (selection_data->length >= 0)
     {
@@ -5661,7 +5777,7 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
   gtk_tree_path_free (dest_row);
 
   /* drop dest_row */
-  set_dest_row (context, NULL, NULL);
+  set_dest_row (context, NULL, NULL, FALSE, FALSE, FALSE);
 }
 
 
@@ -10635,6 +10751,7 @@ gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
                                  GtkTreeViewDropPosition pos)
 {
   GtkTreePath *current_dest;
+
   /* Note; this function is exported to allow a custom DND
    * implementation, so it can't touch TreeViewDragInfo
    */
@@ -10644,10 +10761,26 @@ gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
   current_dest = NULL;
 
   if (tree_view->priv->drag_dest_row)
-    current_dest = gtk_tree_row_reference_get_path (tree_view->priv->drag_dest_row);
+    {
+      current_dest = gtk_tree_row_reference_get_path (tree_view->priv->drag_dest_row);
+      gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
+    }
 
-  if (tree_view->priv->drag_dest_row)
-    gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
+  /* special case a drop on an empty model */
+  tree_view->priv->empty_view_drop = 0;
+
+  if (pos == GTK_TREE_VIEW_DROP_BEFORE && path
+      && gtk_tree_path_get_depth (path) == 1
+      && gtk_tree_path_get_indices (path)[0] == 0)
+    {
+      gint n_children;
+
+      n_children = gtk_tree_model_iter_n_children (tree_view->priv->model,
+                                                   NULL);
+
+      if (!n_children)
+        tree_view->priv->empty_view_drop = 1;
+    }
 
   tree_view->priv->drag_dest_pos = pos;
 
@@ -10694,7 +10827,12 @@ gtk_tree_view_get_drag_dest_row (GtkTreeView              *tree_view,
       if (tree_view->priv->drag_dest_row)
         *path = gtk_tree_row_reference_get_path (tree_view->priv->drag_dest_row);
       else
-        *path = NULL;
+        {
+          if (tree_view->priv->empty_view_drop)
+            *path = gtk_tree_path_new_from_indices (0, -1);
+          else
+            *path = NULL;
+        }
     }
 
   if (pos)
