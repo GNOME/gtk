@@ -1148,7 +1148,7 @@ static gboolean
 my_widget_key_press_handler (GtkWidget *widget, GdkEventKey *event)
 {
   if (event-&gt;keysym == GDK_F10
-      &amp;&amp; (event-&gt;state &amp;&amp; GDK_MODIFIER_MASK) == GDK_CONTROL_MASK)
+      &amp;&amp; (event-&gt;state &amp; GDK_MODIFIER_MASK) == GDK_CONTROL_MASK)
     {
       g_print ("Control-F10 was pressed\n");
       return TRUE;
