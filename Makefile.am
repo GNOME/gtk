@@ -149,6 +149,10 @@ dist-hook: gtk+.spec
 m4datadir = $(datadir)/aclocal
 m4data_DATA = gtk-2.0.m4
 
+bin_SCRIPTS=gtk-config-2.0
+BUILT_SOURCES=gtk-config-2.0
+gtk-config-2.0: gtk-config-2.0.in
+
 .PHONY: files release sanity snapshot
 
 files:

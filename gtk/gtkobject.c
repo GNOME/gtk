@@ -50,13 +50,11 @@ static void       gtk_object_init                (GtkObject      *object,
 static void	  gtk_object_set_property	 (GObject	 *object,
 						  guint           property_id,
 						  const GValue   *value,
-						  GParamSpec     *pspec,
-						  const gchar    *trailer);
+						  GParamSpec     *pspec);
 static void	  gtk_object_get_property	 (GObject	 *object,
 						  guint           property_id,
 						  GValue         *value,
-						  GParamSpec     *pspec,
-						  const gchar    *trailer);
+						  GParamSpec     *pspec);
 static void       gtk_object_shutdown            (GObject        *object);
 static void       gtk_object_real_destroy        (GtkObject      *object);
 static void       gtk_object_finalize            (GObject        *object);
@@ -175,8 +173,7 @@ static void
 gtk_arg_proxy_set_property (GObject      *object,
 			    guint         property_id,
 			    const GValue *value,
-			    GParamSpec   *pspec,
-			    const gchar  *trailer)
+			    GParamSpec   *pspec)
 {
   GtkObjectClass *class = g_type_class_peek (pspec->owner_type);
   GtkArg arg;
@@ -194,8 +191,7 @@ static void
 gtk_arg_proxy_get_property (GObject     *object,
 			    guint        property_id,
 			    GValue      *value,
-			    GParamSpec  *pspec,
-			    const gchar *trailer)
+			    GParamSpec  *pspec)
 {
   GtkObjectClass *class = g_type_class_peek (pspec->owner_type);
   GtkArg arg;
@@ -413,8 +409,7 @@ static void
 gtk_object_set_property (GObject      *object,
 			 guint         property_id,
 			 const GValue *value,
-			 GParamSpec   *pspec,
-			 const gchar  *trailer)
+			 GParamSpec   *pspec)
 {
   switch (property_id)
     {
@@ -431,14 +426,11 @@ static void
 gtk_object_get_property (GObject     *object,
 			 guint        property_id,
 			 GValue      *value,
-			 GParamSpec  *pspec,
-			 const gchar *trailer)
+			 GParamSpec  *pspec)
 {
   switch (property_id)
     {
     case PROP_USER_DATA:
-      g_return_if_fail (trailer != NULL);
-
       g_value_set_pointer (value, gtk_object_get_user_data (GTK_OBJECT (object)));
       break;
     default:

@@ -35,13 +35,11 @@ enum {
 static void gtk_cell_renderer_text_pixbuf_get_property  (GObject                        *object,
 							 guint                           param_id,
 							 GValue                         *value,
-							 GParamSpec                     *pspec,
-							 const gchar                    *trailer);
+							 GParamSpec                     *pspec);
 static void gtk_cell_renderer_text_pixbuf_set_property  (GObject                        *object,
 							 guint                           param_id,
 							 const GValue                   *value,
-							 GParamSpec                     *pspec,
-							 const gchar                    *trailer);
+							 GParamSpec                     *pspec);
 static void gtk_cell_renderer_text_pixbuf_init       (GtkCellRendererTextPixbuf      *celltextpixbuf);
 static void gtk_cell_renderer_text_pixbuf_class_init (GtkCellRendererTextPixbufClass *class);
 static void gtk_cell_renderer_text_pixbuf_get_size   (GtkCellRenderer                *cell,
@@ -176,8 +174,7 @@ static void
 gtk_cell_renderer_text_pixbuf_get_property (GObject     *object,
 					    guint        param_id,
 					    GValue      *value,
-					    GParamSpec  *pspec,
-					    const gchar *trailer)
+					    GParamSpec  *pspec)
 {
   GtkCellRendererTextPixbuf *celltextpixbuf = GTK_CELL_RENDERER_TEXT_PIXBUF (object);
   
@@ -221,8 +218,7 @@ static void
 gtk_cell_renderer_text_pixbuf_set_property (GObject      *object,
 					    guint         param_id,
 					    const GValue *value,
-					    GParamSpec   *pspec,
-					    const gchar  *trailer)
+					    GParamSpec   *pspec)
 {
   GtkCellRendererTextPixbuf *celltextpixbuf = GTK_CELL_RENDERER_TEXT_PIXBUF (object);
   

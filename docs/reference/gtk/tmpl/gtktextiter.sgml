@@ -25,13 +25,6 @@ types related to the text widget and how they work together.
 
 </para>
 
-@parent_instance: 
-@tag_table: 
-@btree: 
-@clipboard_contents: 
-@log_attr_cache: 
-@user_action_count: 
-@modified: 
 
 <!-- ##### STRUCT GtkTextIter ##### -->
 <para>

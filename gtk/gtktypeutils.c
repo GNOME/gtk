@@ -128,12 +128,6 @@ gtk_type_init (GTypeDebugFlags debug_flags)
   
   if (!initialized)
     {
-      static const struct {
-	GtkType type_id;
-	gchar *name;
-      } fundamental_info[] = {
-	{ GTK_TYPE_SIGNAL,	"GtkSignal" },
-      };
       static struct {
 	gchar              *type_name;
 	GtkType            *type_id;
@@ -159,16 +153,6 @@ gtk_type_init (GTypeDebugFlags debug_flags)
        */
       gtk_object_get_type ();
 
-      /* compatibility fundamentals
-       */
-      for (i = 0; i < sizeof (fundamental_info) / sizeof (fundamental_info[0]); i++)
-	{
-	  type_id = g_type_register_fundamental (fundamental_info[i].type_id,
-						 fundamental_info[i].name,
-						 &tinfo, &finfo, 0);
-	  g_assert (type_id == fundamental_info[i].type_id);
-	}
-
       /* GTK_TYPE_IDENTIFIER
        */
       GTK_TYPE_IDENTIFIER = g_type_register_static (G_TYPE_STRING, "GtkIdentifier", &tinfo, 0);
@@ -185,10 +169,25 @@ gtk_type_init (GTypeDebugFlags debug_flags)
 	    type_id = g_flags_register_static (builtin_info[i].type_name, builtin_info[i].pointer1);
 	  else if (builtin_info[i].parent == GTK_TYPE_BOXED)
 	    {
+	      static const gchar *copy_types[] = {
+		"GtkSelectionData", "GdkEvent", "GdkColor", "GtkTextIter", "PangoTabArray",
+		"PangoFontDescription", "GtkTreeIter", "GtkTreePath",
+	      };
+	      gboolean ref_counted = TRUE;
+	      guint j;
+
+	      for (j = 0; j < sizeof (copy_types) / sizeof (copy_types[0]); j++)
+		if (strcmp (copy_types[j], builtin_info[i].type_name) == 0)
+		  {
+		    ref_counted = FALSE;
+		    break;
+		  }
 	      if (builtin_info[i].pointer1 && builtin_info[i].pointer2)
 		type_id = g_boxed_type_register_static (builtin_info[i].type_name,
+							NULL,
 							builtin_info[i].pointer1,
-							builtin_info[i].pointer2);
+							builtin_info[i].pointer2,
+							ref_counted);
 	      else
 		type_id = g_type_register_static (GTK_TYPE_BOXED, builtin_info[i].type_name, &tinfo, 0);
 	    }

@@ -61,13 +61,11 @@ static void gtk_real_tree_column_clicked         (GtkTreeViewColumn      *tree_c
 static void gtk_tree_view_column_set_property    (GObject                *object,
 						  guint                   prop_id,
 						  const GValue           *value,
-						  GParamSpec             *pspec,
-						  const gchar            *trailer);
+						  GParamSpec             *pspec);
 static void gtk_tree_view_column_get_property    (GObject                *object,
 						  guint                   prop_id,
 						  GValue                 *value,
-						  GParamSpec             *pspec,
-						  const gchar            *trailer);
+						  GParamSpec             *pspec);
 static void gtk_tree_view_column_finalize        (GObject                *object);
 
 
@@ -260,8 +258,7 @@ static void
 gtk_tree_view_column_set_property (GObject         *object,
                                    guint            prop_id,
                                    const GValue    *value,
-                                   GParamSpec      *pspec,
-                                   const gchar     *trailer)
+                                   GParamSpec      *pspec)
 {
   GtkTreeViewColumn *tree_column;
 
@@ -340,8 +337,7 @@ static void
 gtk_tree_view_column_get_property (GObject         *object,
                                    guint            prop_id,
                                    GValue          *value,
-                                   GParamSpec      *pspec,
-                                   const gchar     *trailer)
+                                   GParamSpec      *pspec)
 {
   GtkTreeViewColumn *tree_column;
 

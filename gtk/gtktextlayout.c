@@ -173,7 +173,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
 
   signals[INVALIDATED] =
     g_signal_newc ("invalidated",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextLayoutClass, invalidated),
                    NULL,
@@ -183,7 +183,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
 
   signals[CHANGED] =
     g_signal_newc ("changed",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextLayoutClass, changed),
                    NULL,
@@ -196,7 +196,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
 
   signals[ALLOCATE_CHILD] =
     g_signal_newc ("allocate_child",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextLayoutClass, allocate_child),
                    NULL,

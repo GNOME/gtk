@@ -105,13 +105,11 @@ static void         gtk_combo_size_allocate      (GtkWidget        *widget,
 static void         gtk_combo_set_property       (GObject         *object,
 						  guint            prop_id,
 						  const GValue    *value,
-						  GParamSpec      *pspec,
-						  const gchar     *trailer);
+						  GParamSpec      *pspec);
 static void         gtk_combo_get_property       (GObject         *object,
 						  guint            prop_id,
 						  GValue          *value,
-						  GParamSpec      *pspec,
-						  const gchar     *trailer);
+						  GParamSpec      *pspec);
 static GtkHBoxClass *parent_class = NULL;
 
 static void
@@ -997,11 +995,11 @@ gtk_combo_disable_activate (GtkCombo* combo)
   }
 }
 
-static void gtk_combo_set_property (GObject         *object,
-				    guint            prop_id,
-				    const GValue    *value,
-				    GParamSpec      *pspec,
-				    const gchar     *trailer)
+static void
+gtk_combo_set_property (GObject         *object,
+			guint            prop_id,
+			const GValue    *value,
+			GParamSpec      *pspec)
 {
   GtkCombo *combo = GTK_COMBO (object);
   
@@ -1026,11 +1024,11 @@ static void gtk_combo_set_property (GObject         *object,
   
 }
 
-static void gtk_combo_get_property (GObject         *object,
-				    guint            prop_id,
-				    GValue          *value,
-				    GParamSpec      *pspec,
-				    const gchar     *trailer)
+static void
+gtk_combo_get_property (GObject         *object,
+			guint            prop_id,
+			GValue          *value,
+			GParamSpec      *pspec)
 {
   GtkCombo *combo = GTK_COMBO (object);
   

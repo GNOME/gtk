@@ -315,14 +315,17 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   class->set_scroll_adjustments = gtk_tree_view_set_adjustments;
 
+#if 0
+  /* FIXME, tim needs to support interface prerequisits in GType */
   g_object_class_install_property (o_class,
                                    PROP_MODEL,
-                                   g_param_spec_interface ("model",
-							   _("TreeView Model"),
-							   _("The model for the tree view"),
-							   GTK_TYPE_TREE_MODEL,
-							   G_PARAM_READWRITE));
-
+                                   g_param_spec_object ("model",
+							_("TreeView Model"),
+							_("The model for the tree view"),
+							GTK_TYPE_TREE_MODEL,
+							G_PARAM_READWRITE));
+#endif
+  
   g_object_class_install_property (o_class,
                                    PROP_HADJUSTMENT,
                                    g_param_spec_object ("hadjustment",
@@ -378,7 +381,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeViewClass, set_scroll_adjustments),
-		    gtk_marshal_VOID__POINTER_POINTER,
+		    gtk_marshal_VOID__OBJECT_OBJECT,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 }

@@ -26,40 +26,6 @@ types related to the text widget and how they work together.
 
 </para>
 
-@parent_instance: 
-@table: 
-@name: 
-@priority: 
-@values: 
-@bg_color_set: 
-@bg_stipple_set: 
-@fg_color_set: 
-@family_set: 
-@style_set: 
-@variant_set: 
-@weight_set: 
-@stretch_set: 
-@size_set: 
-@fg_stipple_set: 
-@justification_set: 
-@left_margin_set: 
-@indent_set: 
-@rise_set: 
-@strikethrough_set: 
-@right_margin_set: 
-@pixels_above_lines_set: 
-@pixels_below_lines_set: 
-@pixels_inside_wrap_set: 
-@tabs_set: 
-@underline_set: 
-@wrap_mode_set: 
-@bg_full_height_set: 
-@invisible_set: 
-@editable_set: 
-@language_set: 
-@pad1: 
-@pad2: 
-@pad3: 
 
 <!-- ##### STRUCT GtkTextBTreeNode ##### -->
 <para>
@@ -72,10 +38,6 @@ types related to the text widget and how they work together.
 
 </para>
 
-@parent_instance: 
-@hash: 
-@anonymous: 
-@anon_count: 
 
 <!-- ##### ENUM GtkWrapMode ##### -->
 <para>

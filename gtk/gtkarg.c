@@ -549,10 +549,6 @@ gtk_arg_values_equal (const GtkArg *arg1,
     case GTK_TYPE_POINTER:
       equal = GTK_VALUE_POINTER (*arg1) == GTK_VALUE_POINTER (*arg2);
       break;
-    case GTK_TYPE_SIGNAL:
-      equal = (GTK_VALUE_SIGNAL (*arg1).f == GTK_VALUE_SIGNAL (*arg2).f &&
-	       GTK_VALUE_SIGNAL (*arg1).d == GTK_VALUE_SIGNAL (*arg2).d);
-      break;
     default:
       g_warning ("gtk_arg_values_equal() used with unknown type `%s'", gtk_type_name (arg1->type));
       equal = FALSE;
@@ -630,7 +626,6 @@ gtk_arg_to_valueloc (GtkArg  *arg,
       p_pointer = value_pointer;
       *p_pointer = GTK_VALUE_POINTER (*arg);
       break;
-    case GTK_TYPE_SIGNAL:
     case GTK_TYPE_NONE:
     case GTK_TYPE_INVALID:
       /* it doesn't make much sense to retrive these values,

@@ -127,6 +127,13 @@ Returns the current relief style of the given #GtkButton.
 @Returns: The current #GtkReliefStyle
 
 
+<!-- ##### SIGNAL GtkButton::activate ##### -->
+<para>
+
+</para>
+
+@button: the object which received the signal.
+
 <!-- ##### SIGNAL GtkButton::clicked ##### -->
 <para>
 Emitted when a button clicked on by the mouse and the cursor stays on the

@@ -239,12 +239,13 @@ gtk_menu_init (GtkMenu *menu)
   menu->position_func_data = NULL;
   menu->toggle_size = 0;
 
-  menu->toplevel = gtk_widget_new (GTK_TYPE_WINDOW,
-				   "type", GTK_WINDOW_POPUP,
-				   "signal::event", gtk_menu_window_event, menu,
-				   "signal::destroy", gtk_widget_destroyed, &menu->toplevel,
-				   "child", menu,
-				   NULL);
+  menu->toplevel = g_object_connect (gtk_widget_new (GTK_TYPE_WINDOW,
+						     "type", GTK_WINDOW_POPUP,
+						     "child", menu,
+						     NULL),
+				     "signal::event", gtk_menu_window_event, menu,
+				     "signal::destroy", gtk_widget_destroyed, &menu->toplevel,
+				     NULL);
   gtk_window_set_policy (GTK_WINDOW (menu->toplevel),
 			 FALSE, FALSE, TRUE);
 
@@ -836,10 +837,11 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	      GtkWidget *attach_widget;
 	      gchar *title;
 	      
-	      menu->tearoff_window = gtk_widget_new (GTK_TYPE_WINDOW,
-						     "type", GTK_WINDOW_TOPLEVEL,
-						     "signal::destroy", gtk_widget_destroyed, &menu->tearoff_window,
-						     NULL);
+	      menu->tearoff_window = g_object_connect (gtk_widget_new (GTK_TYPE_WINDOW,
+								       "type", GTK_WINDOW_TOPLEVEL,
+								       NULL),
+						       "signal::destroy", gtk_widget_destroyed, &menu->tearoff_window,
+						       NULL);
 	      gtk_window_set_type_hint (GTK_WINDOW (menu->tearoff_window),
 					GDK_WINDOW_TYPE_HINT_MENU);
 	      gtk_widget_set_app_paintable (menu->tearoff_window, TRUE);
@@ -883,9 +885,9 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 						    MENU_SCROLL_STEP,
 						    height/2,
 						    height));
-	      gtk_signal_connect (GTK_OBJECT (menu->tearoff_adjustment), "value_changed",
-				  gtk_menu_scrollbar_changed,
-				  menu);
+	      g_object_connect (GTK_OBJECT (menu->tearoff_adjustment),
+				"signal::value_changed", gtk_menu_scrollbar_changed, menu,
+				NULL);
 	      menu->tearoff_scrollbar = gtk_vscrollbar_new (menu->tearoff_adjustment);
 
 	      gtk_box_pack_end (GTK_BOX (menu->tearoff_hbox),

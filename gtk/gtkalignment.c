@@ -48,13 +48,11 @@ static void gtk_alignment_size_allocate (GtkWidget         *widget,
 static void gtk_alignment_set_property (GObject         *object,
                                         guint            prop_id,
                                         const GValue    *value,
-                                        GParamSpec      *pspec,
-                                        const gchar     *trailer);
+                                        GParamSpec      *pspec);
 static void gtk_alignment_get_property (GObject         *object,
                                         guint            prop_id,
                                         GValue          *value,
-                                        GParamSpec      *pspec,
-                                        const gchar     *trailer);
+                                        GParamSpec      *pspec);
 
 GtkType
 gtk_alignment_get_type (void)
@@ -166,16 +164,16 @@ gtk_alignment_new (gfloat xalign,
   return GTK_WIDGET (alignment);
 }
 
-static void gtk_alignment_set_property (GObject         *object,
-                                        guint            prop_id,
-                                        const GValue    *value,
-                                        GParamSpec      *pspec,
-                                        const gchar     *trailer)
+static void
+gtk_alignment_set_property (GObject         *object,
+			    guint            prop_id,
+			    const GValue    *value,
+			    GParamSpec      *pspec)
 {
   GtkAlignment *alignment;
-
+  
   alignment = GTK_ALIGNMENT (object);
-
+  
   switch (prop_id)
     {
     case PROP_XALIGN:
@@ -212,16 +210,15 @@ static void gtk_alignment_set_property (GObject         *object,
     }
 }
 
-static void gtk_alignment_get_property (GObject         *object,
-                                        guint            prop_id,
-                                        GValue          *value,
-                                        GParamSpec      *pspec,
-                                        const gchar     *trailer)
+static void
+gtk_alignment_get_property (GObject         *object,
+			    guint            prop_id,
+			    GValue          *value,
+			    GParamSpec      *pspec)
 {
   GtkAlignment *alignment;
-
+  
   alignment = GTK_ALIGNMENT (object);
-  g_assert (GTK_IS_ALIGNMENT(object));
    
   switch (prop_id)
     {

@@ -272,7 +272,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkWindowClass, set_focus),
-                    gtk_marshal_VOID__POINTER,
+                    gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
   
@@ -281,7 +281,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWindowClass, frame_event),
-		    gtk_marshal_BOOLEAN__POINTER,
+		    gtk_marshal_BOOLEAN__BOXED,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
 }

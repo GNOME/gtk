@@ -58,8 +58,6 @@ Marks are typically created using the gtk_text_buffer_create_mark() function.
 
 </para>
 
-@parent_instance: 
-@segment: 
 
 <!-- ##### FUNCTION gtk_text_mark_set_visible ##### -->
 <para>

@@ -104,7 +104,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkIMContextClass, commit),
-		    gtk_marshal_VOID__POINTER,
+		    gtk_marshal_VOID__STRING,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_STRING);
 }

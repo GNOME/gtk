@@ -158,7 +158,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 
   signals[INSERT_TEXT] =
     g_signal_newc ("insert_text",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextBufferClass, insert_text),
                    NULL,
@@ -176,7 +176,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 
   signals[INSERT_PIXBUF] =
     g_signal_newc ("insert_pixbuf",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextBufferClass, insert_pixbuf),
                    NULL,
@@ -192,7 +192,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 
   signals[INSERT_CHILD_ANCHOR] =
     g_signal_newc ("insert_child_anchor",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextBufferClass, insert_child_anchor),
                    NULL,
@@ -208,7 +208,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   
   signals[DELETE_RANGE] =
     g_signal_newc ("delete_range",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextBufferClass, delete_range),
                    NULL,
@@ -225,7 +225,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 
   signals[CHANGED] =
     g_signal_newc ("changed",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,                   
                    G_STRUCT_OFFSET (GtkTextBufferClass, changed),
                    NULL,
@@ -235,7 +235,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 
   signals[MODIFIED_CHANGED] =
     g_signal_newc ("modified_changed",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextBufferClass, modified_changed),
                    NULL,
@@ -245,7 +245,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 
   signals[MARK_SET] =
     g_signal_newc ("mark_set",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,                   
                    G_STRUCT_OFFSET (GtkTextBufferClass, mark_set),
                    NULL,
@@ -257,7 +257,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 
   signals[MARK_DELETED] =
     g_signal_newc ("mark_deleted",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,                   
                    G_STRUCT_OFFSET (GtkTextBufferClass, mark_deleted),
                    NULL,
@@ -268,7 +268,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   
   signals[APPLY_TAG] =
     g_signal_newc ("apply_tag",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextBufferClass, apply_tag),
                    NULL,
@@ -281,7 +281,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 
   signals[REMOVE_TAG] =
     g_signal_newc ("remove_tag",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextBufferClass, remove_tag),
                    NULL,
@@ -294,7 +294,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 
   signals[BEGIN_USER_ACTION] =
     g_signal_newc ("begin_user_action",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,                   
                    G_STRUCT_OFFSET (GtkTextBufferClass, begin_user_action),
                    NULL,
@@ -304,7 +304,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 
   signals[END_USER_ACTION] =
     g_signal_newc ("end_user_action",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,                   
                    G_STRUCT_OFFSET (GtkTextBufferClass, end_user_action),
                    NULL,

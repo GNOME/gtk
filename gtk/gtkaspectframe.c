@@ -45,13 +45,11 @@ static void gtk_aspect_frame_init                     (GtkAspectFrame      *aspe
 static void gtk_aspect_frame_set_property (GObject         *object,
 					   guint            prop_id,
 					   const GValue    *value,
-					   GParamSpec      *pspec,
-					   const gchar     *trailer);
+					   GParamSpec      *pspec);
 static void gtk_aspect_frame_get_property (GObject         *object,
 					   guint            prop_id,
 					   GValue          *value,
-					   GParamSpec      *pspec,
-					   const gchar     *trailer);
+					   GParamSpec      *pspec);
 static void gtk_aspect_frame_compute_child_allocation (GtkFrame            *frame,
 						       GtkAllocation       *child_allocation);
 
@@ -142,11 +140,11 @@ gtk_aspect_frame_init (GtkAspectFrame *aspect_frame)
   aspect_frame->obey_child = TRUE;
 }
 
-static void gtk_aspect_frame_set_property (GObject         *object,
-					   guint            prop_id,
-					   const GValue    *value,
-					   GParamSpec      *pspec,
-					   const gchar     *trailer)
+static void
+gtk_aspect_frame_set_property (GObject         *object,
+			       guint            prop_id,
+			       const GValue    *value,
+			       GParamSpec      *pspec)
 {
   GtkAspectFrame *aspect_frame = GTK_ASPECT_FRAME (object);
   
@@ -187,11 +185,11 @@ static void gtk_aspect_frame_set_property (GObject         *object,
     }
 }
 
-static void gtk_aspect_frame_get_property (GObject         *object,
-					   guint            prop_id,
-					   GValue          *value,
-					   GParamSpec      *pspec,
-					   const gchar     *trailer)
+static void
+gtk_aspect_frame_get_property (GObject         *object,
+			       guint            prop_id,
+			       GValue          *value,
+			       GParamSpec      *pspec)
 {
   GtkAspectFrame *aspect_frame = GTK_ASPECT_FRAME (object);
   

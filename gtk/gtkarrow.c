@@ -46,13 +46,11 @@ static gint gtk_arrow_expose     (GtkWidget      *widget,
 static void gtk_arrow_set_property (GObject         *object,
 				    guint            prop_id,
 				    const GValue    *value,
-				    GParamSpec      *pspec,
-				    const gchar     *trailer);
+				    GParamSpec      *pspec);
 static void gtk_arrow_get_property (GObject         *object,
 				    guint            prop_id,
 				    GValue          *value,
-				    GParamSpec      *pspec,
-				    const gchar     *trailer);
+				    GParamSpec      *pspec);
 
 GtkType
 gtk_arrow_get_type (void)
@@ -113,14 +111,14 @@ gtk_arrow_class_init (GtkArrowClass *class)
   widget_class->expose_event = gtk_arrow_expose;
 }
 
-static void gtk_arrow_set_property (GObject         *object,
-				    guint            prop_id,
-				    const GValue    *value,
-				    GParamSpec      *pspec,
-				    const gchar     *trailer)
+static void
+gtk_arrow_set_property (GObject         *object,
+			guint            prop_id,
+			const GValue    *value,
+			GParamSpec      *pspec)
 {
   GtkArrow *arrow;
-
+  
   arrow = GTK_ARROW (object);
 
   switch (prop_id)
@@ -142,14 +140,14 @@ static void gtk_arrow_set_property (GObject         *object,
 }
 
 
-static void gtk_arrow_get_property (GObject         *object,
-				    guint            prop_id,
-				    GValue          *value,
-				    GParamSpec      *pspec,
-				    const gchar     *trailer)
+static void
+gtk_arrow_get_property (GObject         *object,
+			guint            prop_id,
+			GValue          *value,
+			GParamSpec      *pspec)
 {
   GtkArrow *arrow;
-
+  
   arrow = GTK_ARROW (object);
   switch (prop_id)
     {

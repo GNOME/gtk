@@ -112,13 +112,6 @@ G_STMT_START { \
       GTK_VALUE_BOXED (*arg) = va_arg (var_args, gpointer); \
       break; \
  \
-      /* structured types \
-       */ \
-    case GTK_TYPE_SIGNAL: \
-      GTK_VALUE_SIGNAL (*arg).f = va_arg (var_args, GtkSignalFunc); \
-      GTK_VALUE_SIGNAL (*arg).d = va_arg (var_args, gpointer); \
-      break; \
- \
       /* we do some extra sanity checking when collecting objects, \
        * i.e. if the object pointer is not NULL, we check whether we \
        * actually got an object pointer within the desired class branch. \

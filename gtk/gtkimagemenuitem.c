@@ -52,13 +52,11 @@ static void gtk_image_menu_item_forall     (GtkContainer   *container,
 static void gtk_image_menu_item_set_property (GObject         *object,
                                               guint            prop_id,
                                               const GValue    *value,
-                                              GParamSpec      *pspec,
-                                              const gchar     *trailer);
+                                              GParamSpec      *pspec);
 static void gtk_image_menu_item_get_property (GObject         *object,
                                               guint            prop_id,
                                               GValue          *value,
-                                              GParamSpec      *pspec,
-                                              const gchar     *trailer);
+                                              GParamSpec      *pspec);
 
 
 enum {
@@ -143,8 +141,7 @@ static void
 gtk_image_menu_item_set_property (GObject         *object,
                                   guint            prop_id,
                                   const GValue    *value,
-                                  GParamSpec      *pspec,
-                                  const gchar     *trailer)
+                                  GParamSpec      *pspec)
 {
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (object);
   
@@ -179,8 +176,7 @@ static void
 gtk_image_menu_item_get_property (GObject         *object,
                                   guint            prop_id,
                                   GValue          *value,
-                                  GParamSpec      *pspec,
-                                  const gchar     *trailer)
+                                  GParamSpec      *pspec)
 {
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (object);
   

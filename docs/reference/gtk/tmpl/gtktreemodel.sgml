@@ -52,7 +52,7 @@ gtktreemodel
 @g_iface: 
 @changed: 
 @inserted: 
-@child_toggled: 
+@has_child_toggled: 
 @deleted: 
 @reordered: 
 @get_flags: 

@@ -139,13 +139,11 @@ static void gtk_text_tag_finalize     (GObject         *object);
 static void gtk_text_tag_set_property (GObject         *object,
                                        guint            prop_id,
                                        const GValue    *value,
-                                       GParamSpec      *pspec,
-                                       const gchar     *trailer);
+                                       GParamSpec      *pspec);
 static void gtk_text_tag_get_property (GObject         *object,
                                        guint            prop_id,
                                        GValue          *value,
-                                       GParamSpec      *pspec,
-                                       const gchar     *trailer);
+                                       GParamSpec      *pspec);
 
 static GObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -603,7 +601,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
   signals[EVENT] =
     g_signal_newc ("event",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,
                    GTK_SIGNAL_OFFSET (GtkTextTagClass, event),
                    NULL,
@@ -779,8 +777,7 @@ static void
 gtk_text_tag_set_property (GObject      *object,
                            guint         prop_id,
                            const GValue *value,
-                           GParamSpec   *pspec,
-                           const gchar  *trailer)
+                           GParamSpec   *pspec)
 {
   GtkTextTag *text_tag;
   gboolean size_changed = FALSE;
@@ -824,21 +821,23 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_BACKGROUND_GDK:
       {
-        GdkColor *color = g_value_get_as_pointer (value);
+        GdkColor *color = g_value_get_boxed (value);
+
         set_bg_color (text_tag, color);
       }
       break;
 
     case PROP_FOREGROUND_GDK:
       {
-        GdkColor *color = g_value_get_as_pointer (value);
+        GdkColor *color = g_value_get_boxed (value);
+
         set_fg_color (text_tag, color);
       }
       break;
 
     case PROP_BACKGROUND_STIPPLE:
       {
-        GdkBitmap *bitmap = g_value_get_as_pointer (value);
+        GdkBitmap *bitmap = g_value_get_boxed (value);
 
         text_tag->bg_stipple_set = TRUE;
         g_object_notify (G_OBJECT (text_tag), "background_stipple_set");
@@ -858,7 +857,7 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_FOREGROUND_STIPPLE:
       {
-        GdkBitmap *bitmap = g_value_get_as_pointer (value);
+        GdkBitmap *bitmap = g_value_get_boxed (value);
 
         text_tag->fg_stipple_set = TRUE;
         g_object_notify (G_OBJECT (text_tag), "foreground_stipple_set");
@@ -899,7 +898,7 @@ gtk_text_tag_set_property (GObject      *object,
       {
         PangoFontDescription *font_desc;
 
-        font_desc = g_value_get_as_pointer (value);
+        font_desc = g_value_get_boxed (value);
 
         set_font_description (text_tag, font_desc);
 
@@ -1079,7 +1078,7 @@ gtk_text_tag_set_property (GObject      *object,
 
       /* FIXME I'm not sure if this is a memleak or not */
       text_tag->values->tabs =
-        pango_tab_array_copy (g_value_get_as_pointer (value));
+        pango_tab_array_copy (g_value_get_boxed (value));
 
       g_object_notify (G_OBJECT (text_tag), "tabs_set");
       
@@ -1265,8 +1264,7 @@ static void
 gtk_text_tag_get_property (GObject      *object,
                            guint         prop_id,
                            GValue       *value,
-                           GParamSpec   *pspec,
-                           const gchar  *trailer)
+                           GParamSpec   *pspec)
 {
   GtkTextTag *tag;
 

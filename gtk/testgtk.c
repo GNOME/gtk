@@ -1022,37 +1022,34 @@ create_statusbar (void)
 			       "visible", TRUE,
 			       "parent", box2,
 			       NULL);
-      g_object_set (G_OBJECT (button),
-		    "signal::clicked", statusbar_push, statusbar,
-		    NULL);
+      g_object_connect (G_OBJECT (button),
+			"signal::clicked", statusbar_push, statusbar,
+			NULL);
 
-      button = gtk_widget_new (gtk_button_get_type (),
-			       "label", "pop",
-			       "visible", TRUE,
-			       "parent", box2,
-			       NULL);
-      g_object_set (G_OBJECT (button),
-		    "signal_after::clicked", statusbar_pop, statusbar,
-		    NULL);
+      button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
+						 "label", "pop",
+						 "visible", TRUE,
+						 "parent", box2,
+						 NULL),
+				 "signal_after::clicked", statusbar_pop, statusbar,
+				 NULL);
 
-      button = gtk_widget_new (gtk_button_get_type (),
-			       "label", "steal #4",
-			       "visible", TRUE,
-			       "parent", box2,
-			       NULL);
-      g_object_set (G_OBJECT (button),
-		    "signal_after::clicked", statusbar_steal, statusbar,
-		    NULL);
+      button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
+						 "label", "steal #4",
+						 "visible", TRUE,
+						 "parent", box2,
+						 NULL),
+				 "signal_after::clicked", statusbar_steal, statusbar,
+				 NULL);
 
-      button = gtk_widget_new (gtk_button_get_type (),
-			       "label", "test contexts",
-			       "visible", TRUE,
-			       "parent", box2,
-			       NULL);
-      g_object_set (G_OBJECT (button),
-		    "swapped_signal_after::clicked", statusbar_contexts, statusbar,
-		    NULL);
-
+      button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
+						 "label", "test contexts",
+						 "visible", TRUE,
+						 "parent", box2,
+						 NULL),
+				 "swapped_signal_after::clicked", statusbar_contexts, statusbar,
+				 NULL);
+      
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
@@ -2386,13 +2383,14 @@ create_saved_position (void)
       GtkWidget *label;
       GtkWidget *any;
 
-      window = gtk_widget_new (GTK_TYPE_WINDOW,
-			       "type", GTK_WINDOW_TOPLEVEL,
-			       "signal::configure_event", uposition_configure, NULL,
-			       "x", upositionx,
-			       "y", upositiony,
-			       "title", "Saved Position",
-			       NULL);
+      window = g_object_connect (gtk_widget_new (GTK_TYPE_WINDOW,
+						 "type", GTK_WINDOW_TOPLEVEL,
+						 "x", upositionx,
+						 "y", upositiony,
+						 "title", "Saved Position",
+						 NULL),
+				 "signal::configure_event", uposition_configure, NULL,
+				 NULL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
@@ -2409,12 +2407,13 @@ create_saved_position (void)
 			"GtkContainer::border_width", 10,
 			"GtkWidget::parent", main_vbox,
 			"GtkWidget::visible", TRUE,
-			"child", gtk_widget_new (GTK_TYPE_TOGGLE_BUTTON,
-						 "label", "Stop Events",
-						 "active", FALSE,
-						 "signal::clicked", uposition_stop_configure, window,
-						 "visible", TRUE,
-						 NULL),
+			"child", g_object_connect (gtk_widget_new (GTK_TYPE_TOGGLE_BUTTON,
+								   "label", "Stop Events",
+								   "active", FALSE,
+								   "visible", TRUE,
+								   NULL),
+						   "signal::clicked", uposition_stop_configure, window,
+						   NULL),
 			NULL);
 
       hbox = gtk_hbox_new (FALSE, 0);
@@ -2639,23 +2638,23 @@ create_tooltips (void)
 
       box3 =
 	gtk_widget_new (gtk_vbox_get_type (),
-			"GtkBox::homogeneous", FALSE,
-			"GtkBox::spacing", 5,
-			"GtkContainer::border_width", 5,
-			"GtkWidget::visible", TRUE,
+			"homogeneous", FALSE,
+			"spacing", 5,
+			"border_width", 5,
+			"visible", TRUE,
 			NULL);
 
       tips_query = gtk_tips_query_new ();
 
       button =
 	gtk_widget_new (gtk_button_get_type (),
-			"GtkButton::label", "[?]",
-			"GtkWidget::visible", TRUE,
-			"GtkWidget::parent", box3,
+			"label", "[?]",
+			"visible", TRUE,
+			"parent", box3,
 			NULL);
-      g_object_set (G_OBJECT (button),
-		    "swapped_signal::clicked", gtk_tips_query_start_query, tips_query,
-		    NULL);
+      g_object_connect (G_OBJECT (button),
+			"swapped_signal::clicked", gtk_tips_query_start_query, tips_query,
+			NULL);
       gtk_box_set_child_packing (GTK_BOX (box3), button, FALSE, FALSE, 0, GTK_PACK_START);
       gtk_tooltips_set_tip (tooltips,
 			    button,
@@ -2663,23 +2662,23 @@ create_tooltips (void)
 			    "ContextHelp/buttons/?");
       
       
-      gtk_widget_set (tips_query,
-		      "GtkWidget::visible", TRUE,
-		      "GtkWidget::parent", box3,
-		      "GtkTipsQuery::caller", button,
-		      "GtkObject::signal::widget_entered", tips_query_widget_entered, toggle,
-		      "GtkObject::signal::widget_selected", tips_query_widget_selected, NULL,
+      gtk_widget_set (g_object_connect (tips_query,
+					"signal::widget_entered", tips_query_widget_entered, toggle,
+					"signal::widget_selected", tips_query_widget_selected, NULL,
+					NULL),
+		      "visible", TRUE,
+		      "parent", box3,
+		      "caller", button,
 		      NULL);
       
-      frame =
-	gtk_widget_new (gtk_frame_get_type (),
-			"GtkFrame::label", "ToolTips Inspector",
-			"GtkFrame::label_xalign", (double) 0.5,
-			"GtkContainer::border_width", 0,
-			"GtkWidget::visible", TRUE,
-			"GtkWidget::parent", box2,
-			"GtkContainer::child", box3,
-			NULL);
+      frame = gtk_widget_new (gtk_frame_get_type (),
+			      "label", "ToolTips Inspector",
+			      "label_xalign", (double) 0.5,
+			      "border_width", 0,
+			      "visible", TRUE,
+			      "parent", box2,
+			      "child", box3,
+			      NULL);
       gtk_box_set_child_packing (GTK_BOX (box2), frame, TRUE, TRUE, 10, GTK_PACK_START);
 
       separator = gtk_hseparator_new ();
@@ -9075,11 +9074,11 @@ create_idle_test (void)
       
       container =
 	gtk_widget_new (GTK_TYPE_HBOX,
-			"GtkWidget::visible", TRUE,
+			"visible", TRUE,
 			/* "GtkContainer::child", gtk_widget_new (GTK_TYPE_HBOX,
 			 * "GtkWidget::visible", TRUE,
 			 */
-			 "GtkContainer::child", label,
+			 "child", label,
 			/* NULL), */
 			NULL);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
@@ -9087,43 +9086,46 @@ create_idle_test (void)
 
       frame =
 	gtk_widget_new (GTK_TYPE_FRAME,
-			"GtkContainer::border_width", 5,
-			"GtkFrame::label", "Label Container",
-			"GtkWidget::visible", TRUE,
-			"GtkWidget::parent", GTK_DIALOG (window)->vbox,
+			"border_width", 5,
+			"label", "Label Container",
+			"visible", TRUE,
+			"parent", GTK_DIALOG (window)->vbox,
 			NULL);
       box =
 	gtk_widget_new (GTK_TYPE_VBOX,
-			"GtkWidget::visible", TRUE,
-			"GtkWidget::parent", frame,
+			"visible", TRUE,
+			"parent", frame,
 			NULL);
       button =
-	gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
-			"GtkButton::label", "Resize-Parent",
-			"GtkObject::user_data", (void*)GTK_RESIZE_PARENT,
-			"GtkObject::signal::clicked", toggle_idle_container, container,
-			"GtkWidget::visible", TRUE,
-			"GtkWidget::parent", box,
-			NULL);
+	g_object_connect (gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
+					  "label", "Resize-Parent",
+					  "user_data", (void*)GTK_RESIZE_PARENT,
+					  "visible", TRUE,
+					  "parent", box,
+					  NULL),
+			  "signal::clicked", toggle_idle_container, container,
+			  NULL);
       button =
-	gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
-			"GtkButton::label", "Resize-Queue",
-			"GtkObject::user_data", (void*)GTK_RESIZE_QUEUE,
-			"GtkObject::signal::clicked", toggle_idle_container, container,
-			"GtkRadioButton::group", button,
-			"GtkWidget::visible", TRUE,
-			"GtkWidget::parent", box,
-			NULL);
+	g_object_connect (gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
+					  "label", "Resize-Queue",
+					  "user_data", (void*)GTK_RESIZE_QUEUE,
+					  "group", button,
+					  "visible", TRUE,
+					  "parent", box,
+					  NULL),
+			  "signal::clicked", toggle_idle_container, container,
+			  NULL);
       button =
-	gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
-			"GtkButton::label", "Resize-Immediate",
-			"GtkObject::user_data", (void*)GTK_RESIZE_IMMEDIATE,
-			"GtkObject::signal::clicked", toggle_idle_container, container,
-			"GtkRadioButton::group", button,
-			"GtkWidget::visible", TRUE,
-			"GtkWidget::parent", box,
-			NULL);
-      
+	g_object_set (g_object_connect (gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
+							"label", "Resize-Immediate",
+							"user_data", (void*)GTK_RESIZE_IMMEDIATE,
+							NULL),
+					"signal::clicked", toggle_idle_container, container,
+					NULL),
+		      "group", button,
+		      "visible", TRUE,
+		      "parent", box,
+		      NULL);
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",

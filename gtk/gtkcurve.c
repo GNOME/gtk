@@ -66,13 +66,11 @@ static void gtk_curve_init         (GtkCurve      *curve);
 static void gtk_curve_get_property  (GObject              *object,
 				     guint                 param_id,
 				     GValue               *value,
-				     GParamSpec           *pspec,
-				     const gchar          *trailer);
+				     GParamSpec           *pspec);
 static void gtk_curve_set_property  (GObject              *object,
 				     guint                 param_id,
 				     const GValue         *value,
-				     GParamSpec           *pspec,
-				     const gchar          *trailer);
+				     GParamSpec           *pspec);
 static void gtk_curve_finalize     (GObject       *object);
 static gint gtk_curve_graph_events (GtkWidget     *widget, 
 				    GdkEvent      *event, 
@@ -201,11 +199,11 @@ gtk_curve_init (GtkCurve *curve)
   gtk_curve_size_graph (curve);
 }
 
-static void gtk_curve_set_property  (GObject              *object,
-				     guint                 prop_id,
-				     const GValue         *value,
-				     GParamSpec           *pspec,
-				     const gchar          *trailer)
+static void
+gtk_curve_set_property (GObject              *object,
+			guint                 prop_id,
+			const GValue         *value,
+			GParamSpec           *pspec)
 {
   GtkCurve *curve = GTK_CURVE (object);
   
@@ -236,11 +234,11 @@ static void gtk_curve_set_property  (GObject              *object,
     }
 }
 
-static void gtk_curve_get_property  (GObject              *object,
-				     guint                 prop_id,
-				     GValue               *value,
-				     GParamSpec           *pspec,
-				     const gchar          *trailer)
+static void
+gtk_curve_get_property (GObject              *object,
+			guint                 prop_id,
+			GValue               *value,
+			GParamSpec           *pspec)
 {
   GtkCurve *curve = GTK_CURVE (object);
 

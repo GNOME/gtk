@@ -596,10 +596,9 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
     ifactory->accel_group = gtk_accel_group_new ();
 
   ifactory->path = g_strdup (path);
-  ifactory->widget =
-    gtk_widget_new (container_type,
-		    "GtkObject::signal::destroy", gtk_widget_destroyed, &ifactory->widget,
-		    NULL);
+  ifactory->widget = g_object_connect (gtk_widget_new (container_type, NULL),
+				       "signal::destroy", gtk_widget_destroyed, &ifactory->widget,
+				       NULL);
   gtk_object_ref (GTK_OBJECT (ifactory));
   gtk_object_sink (GTK_OBJECT (ifactory));
 

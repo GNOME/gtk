@@ -25,13 +25,11 @@
 static void gtk_cell_renderer_toggle_get_property  (GObject                    *object,
 						    guint                       param_id,
 						    GValue                     *value,
-						    GParamSpec                 *pspec,
-						    const gchar                *trailer);
+						    GParamSpec                 *pspec);
 static void gtk_cell_renderer_toggle_set_property  (GObject                    *object,
 						    guint                       param_id,
 						    const GValue               *value,
-						    GParamSpec                 *pspec,
-						    const gchar                *trailer);
+						    GParamSpec                 *pspec);
 static void gtk_cell_renderer_toggle_init       (GtkCellRendererToggle      *celltext);
 static void gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class);
 static void gtk_cell_renderer_toggle_get_size   (GtkCellRenderer            *cell,
@@ -152,8 +150,7 @@ static void
 gtk_cell_renderer_toggle_get_property (GObject     *object,
 				       guint        param_id,
 				       GValue      *value,
-				       GParamSpec  *pspec,
-				       const gchar *trailer)
+				       GParamSpec  *pspec)
 {
   GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (object);
   
@@ -176,8 +173,7 @@ static void
 gtk_cell_renderer_toggle_set_property (GObject      *object,
 				       guint         param_id,
 				       const GValue *value,
-				       GParamSpec   *pspec,
-				       const gchar  *trailer)
+				       GParamSpec   *pspec)
 {
   GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (object);
   

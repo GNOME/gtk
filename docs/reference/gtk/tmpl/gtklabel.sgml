@@ -147,10 +147,19 @@ Gtk+ 1.0.x.
 The actual label text.  Do not write to this pointer, it is not copied.
 </para>
 
-<!-- ##### ARG GtkLabel:pattern ##### -->
+<!-- ##### ARG GtkLabel:attributes ##### -->
 <para>
-The pattern of underlines under the existing text.  Do not change the
-pointer, it isn't copied.
+
+</para>
+
+<!-- ##### ARG GtkLabel:use-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:use-underline ##### -->
+<para>
+
 </para>
 
 <!-- ##### ARG GtkLabel:justify ##### -->
@@ -158,7 +167,23 @@ pointer, it isn't copied.
 The #GtkJustification setting.  See gtk_label_set_justify() for more info.
 </para>
 
+<!-- ##### ARG GtkLabel:pattern ##### -->
+<para>
+The pattern of underlines under the existing text.  Do not change the
+pointer, it isn't copied.
+</para>
+
 <!-- ##### ARG GtkLabel:wrap ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:selectable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:accel-keyval ##### -->
 <para>
 
 </para>

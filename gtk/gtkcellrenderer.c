@@ -25,13 +25,11 @@ static void gtk_cell_renderer_class_init (GtkCellRendererClass *class);
 static void gtk_cell_renderer_get_property  (GObject              *object,
 					     guint                 param_id,
 					     GValue               *value,
-					     GParamSpec           *pspec,
-					     const gchar          *trailer);
+					     GParamSpec           *pspec);
 static void gtk_cell_renderer_set_property  (GObject              *object,
 					     guint                 param_id,
 					     const GValue         *value,
-					     GParamSpec           *pspec,
-					     const gchar          *trailer);
+					     GParamSpec           *pspec);
 
 
 enum {
@@ -153,8 +151,7 @@ static void
 gtk_cell_renderer_get_property (GObject     *object,
 				guint        param_id,
 				GValue      *value,
-				GParamSpec  *pspec,
-				const gchar *trailer)
+				GParamSpec  *pspec)
 {
   GtkCellRenderer *cell = GTK_CELL_RENDERER (object);
 
@@ -186,8 +183,7 @@ static void
 gtk_cell_renderer_set_property (GObject      *object,
 				guint         param_id,
 				const GValue *value,
-				GParamSpec   *pspec,
-				const gchar  *trailer)
+				GParamSpec   *pspec)
 {
   GtkCellRenderer *cell = GTK_CELL_RENDERER (object);
 

@@ -30,6 +30,7 @@ GtkCellRenderer
 </para>
 
 @parent: 
+@visible: 
 @xalign: 
 @yalign: 
 @xpad: 

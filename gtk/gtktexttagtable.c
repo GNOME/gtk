@@ -21,13 +21,11 @@ static void gtk_text_tag_table_finalize     (GObject              *object);
 static void gtk_text_tag_table_set_property (GObject              *object,
                                              guint                 prop_id,
                                              const GValue         *value,
-                                             GParamSpec           *pspec,
-                                             const gchar          *trailer);
+                                             GParamSpec           *pspec);
 static void gtk_text_tag_table_get_property (GObject              *object,
                                              guint                 prop_id,
                                              GValue               *value,
-                                             GParamSpec           *pspec,
-                                             const gchar          *trailer);
+                                             GParamSpec           *pspec);
 
 static GObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -75,7 +73,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
   
   signals[TAG_CHANGED] =
     g_signal_newc ("tag_changed",
-                   G_TYPE_FROM_CLASS (object_class),
+                   G_OBJECT_CLASS_TYPE (object_class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkTextTagTableClass, tag_changed),
                    NULL,
@@ -161,8 +159,7 @@ static void
 gtk_text_tag_table_set_property (GObject      *object,
                                  guint         prop_id,
                                  const GValue *value,
-                                 GParamSpec   *pspec,
-                                 const gchar  *trailer)
+                                 GParamSpec   *pspec)
 {
   GtkTextTagTable *table;
 
@@ -182,8 +179,7 @@ static void
 gtk_text_tag_table_get_property (GObject      *object,
                                  guint         prop_id,
                                  GValue       *value,
-                                 GParamSpec   *pspec,
-                                 const gchar  *trailer)
+                                 GParamSpec   *pspec)
 {
   GtkTextTagTable *table;
 

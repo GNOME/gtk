@@ -20,7 +20,6 @@
 #ifndef __GTK_TREE_SELECTION_H__
 #define __GTK_TREE_SELECTION_H__
 
-#include <gobject/gobject.h>
 #include <gtk/gtkobject.h>
 #include <gtk/gtktreeview.h>
 

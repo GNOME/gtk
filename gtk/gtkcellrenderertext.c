@@ -28,13 +28,11 @@ static void gtk_cell_renderer_text_finalize   (GObject                  *object)
 static void gtk_cell_renderer_text_get_property  (GObject                  *object,
 						  guint                     param_id,
 						  GValue                   *value,
-						  GParamSpec               *pspec,
-						  const gchar              *trailer);
+						  GParamSpec               *pspec);
 static void gtk_cell_renderer_text_set_property  (GObject                  *object,
 						  guint                     param_id,
 						  const GValue             *value,
-						  GParamSpec               *pspec,
-						  const gchar              *trailer);
+						  GParamSpec               *pspec);
 static void gtk_cell_renderer_text_get_size   (GtkCellRenderer          *cell,
 					       GtkWidget                *widget,
 					       gint                     *width,
@@ -384,8 +382,7 @@ static void
 gtk_cell_renderer_text_get_property (GObject        *object,
 				     guint           param_id,
 				     GValue         *value,
-				     GParamSpec     *pspec,
-				     const gchar    *trailer)
+				     GParamSpec     *pspec)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (object);
 
@@ -655,8 +652,7 @@ static void
 gtk_cell_renderer_text_set_property (GObject      *object,
 				     guint         param_id,
 				     const GValue *value,
-				     GParamSpec   *pspec,
-				     const gchar  *trailer)
+				     GParamSpec   *pspec)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (object);
 

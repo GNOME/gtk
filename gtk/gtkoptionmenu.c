@@ -121,7 +121,7 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
 
   signals[CHANGED] =
     g_signal_newc ("changed",
-                   G_TYPE_FROM_CLASS (class),
+                   G_OBJECT_CLASS_TYPE (class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkOptionMenuClass, changed),
                    NULL,

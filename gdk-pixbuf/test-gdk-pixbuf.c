@@ -25,7 +25,7 @@
 
 #include <stdlib.h>
 #include "gdk-pixbuf.h"
-#include <gobject/gtype.h>
+#include <glib-object.h>
 
 
 

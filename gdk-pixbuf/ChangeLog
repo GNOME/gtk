@@ -1,3 +1,7 @@
+Thu Mar  1 04:01:57 2001  Tim Janik  <timj@gtk.org>
+
+	* test-gdk-pixbuf.c: fixed includes.
+
 2001-02-18  Havoc Pennington  <hp@pobox.com>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_load_module): prepend underscore

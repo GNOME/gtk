@@ -34,7 +34,6 @@ Styles
 
 </para>
 
-@parent_instance: 
 @fg: 
 @bg: 
 @light: 

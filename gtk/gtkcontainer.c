@@ -192,7 +192,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkContainerClass, add),
-                    gtk_marshal_VOID__POINTER,
+                    gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
   container_signals[REMOVE] =
@@ -200,7 +200,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkContainerClass, remove),
-                    gtk_marshal_VOID__POINTER,
+                    gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
   container_signals[CHECK_RESIZE] =
@@ -223,7 +223,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkContainerClass, set_focus_child),
-                    gtk_marshal_VOID__POINTER,
+                    gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
 }
@@ -741,9 +741,9 @@ gtk_container_add (GtkContainer *container,
     {
       g_warning ("Attempting to add a widget with type %s to a container of "
                  "type %s, but the widget is already inside a container of type %s",
-                 g_type_name (G_TYPE_FROM_INSTANCE (widget)),
-                 g_type_name (G_TYPE_FROM_INSTANCE (container)),
-                 g_type_name (G_TYPE_FROM_INSTANCE (widget->parent)));
+                 g_type_name (G_OBJECT_TYPE (widget)),
+                 g_type_name (G_OBJECT_TYPE (container)),
+                 g_type_name (G_OBJECT_TYPE (widget->parent)));
       return;
     }
 

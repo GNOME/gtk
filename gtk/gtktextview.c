@@ -540,7 +540,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, insert_at_cursor),
-                    gtk_marshal_VOID__POINTER,
+                    gtk_marshal_VOID__STRING,
                     GTK_TYPE_NONE, 1, GTK_TYPE_STRING);
 
   signals[DELETE_FROM_CURSOR] =
@@ -588,7 +588,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, set_scroll_adjustments),
-                    gtk_marshal_VOID__POINTER_POINTER,
+                    gtk_marshal_VOID__OBJECT_OBJECT,
                     GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
   widget_class->set_scroll_adjustments_signal = signals[SET_SCROLL_ADJUSTMENTS];
 

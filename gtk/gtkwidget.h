@@ -370,10 +370,6 @@ struct _GtkWidgetClass
 				    guint               info,
 				    guint               time);
   
-  /* action signals */
-  void (* debug_msg)		   (GtkWidget	       *widget,
-				    const gchar	       *string);
-
   /* Padding for future expandsion */
   GtkFunction pad1;
   GtkFunction pad2;

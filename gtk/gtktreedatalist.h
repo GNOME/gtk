@@ -22,7 +22,7 @@
 #define __GTK_TREE_DATA_LIST_H__
 
 #include <glib.h>
-#include <gobject/gobject.h>
+#include <glib-object.h>
 
 typedef struct _GtkTreeDataList GtkTreeDataList;
 struct _GtkTreeDataList

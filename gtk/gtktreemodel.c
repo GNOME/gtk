@@ -21,12 +21,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <glib.h>
-#include <gobject/gobject.h>
 #include <gobject/gvaluecollector.h>
-#include "gtkmarshal.h"
 #include "gtktreemodel.h"
 #include "gtktreeview.h"
 #include "gtktreeprivate.h"
+#include "gtksignal.h"
 
 
 struct _GtkTreePath

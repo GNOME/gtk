@@ -457,8 +457,10 @@ gdk_pixbuf_frame_get_type (void)
 
   if (our_type == 0)
     our_type = g_boxed_type_register_static ("GdkPixbufFrame",
+					     NULL,
 					     gdk_pixbuf_frame_copy,
-					     gdk_pixbuf_frame_free);
+					     gdk_pixbuf_frame_free,
+					     FALSE);
 
   return our_type;
 }

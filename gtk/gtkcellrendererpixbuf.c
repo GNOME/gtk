@@ -24,13 +24,11 @@
 static void gtk_cell_renderer_pixbuf_get_property  (GObject                    *object,
 						    guint                       param_id,
 						    GValue                     *value,
-						    GParamSpec                 *pspec,
-						    const gchar                *trailer);
+						    GParamSpec                 *pspec);
 static void gtk_cell_renderer_pixbuf_set_property  (GObject                    *object,
 						    guint                       param_id,
 						    const GValue               *value,
-						    GParamSpec                 *pspec,
-						    const gchar                *trailer);
+						    GParamSpec                 *pspec);
 static void gtk_cell_renderer_pixbuf_init       (GtkCellRendererPixbuf      *celltext);
 static void gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class);
 static void gtk_cell_renderer_pixbuf_get_size   (GtkCellRenderer            *cell,
@@ -109,8 +107,7 @@ static void
 gtk_cell_renderer_pixbuf_get_property (GObject        *object,
 				       guint           param_id,
 				       GValue         *value,
-				       GParamSpec     *pspec,
-				       const gchar    *trailer)
+				       GParamSpec     *pspec)
 {
   GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
   
@@ -131,8 +128,7 @@ static void
 gtk_cell_renderer_pixbuf_set_property (GObject      *object,
 				       guint         param_id,
 				       const GValue *value,
-				       GParamSpec   *pspec,
-				       const gchar  *trailer)
+				       GParamSpec   *pspec)
 {
   GdkPixbuf *pixbuf;
   GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);

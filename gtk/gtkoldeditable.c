@@ -220,7 +220,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, insert_text),
-		    gtk_marshal_NONE__POINTER_INT_POINTER,
+		    gtk_marshal_NONE__STRING_INT_POINTER,
 		    GTK_TYPE_NONE,
 		    3,
 		    GTK_TYPE_STRING,
