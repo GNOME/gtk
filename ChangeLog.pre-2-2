@@ -1,3 +1,12 @@
+Mon Sep 14 14:28:24 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (adjust_adj): Change the way we
+	set the adjustments on resize so that it tries to
+	keep the beginning of the text in approximately
+	the same place. 
+
+	Removed assertion that the above change made invalid.
+
 Thu Sep 10 22:19:35 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c: - Save first_cut_pixels when switching
