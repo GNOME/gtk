@@ -1,6 +1,7 @@
-Tue Feb  3 02:32:52 2004  Matthias Clasen  <maclas@gmx.de>
+Tue Feb  3 02:35:09 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/Makefile.am: Build filesystemwin32.c if OS_WIN32.
+	* gtk/Makefile.am: Build filesystemwin32.c if OS_WIN32 and
+	also dist gtkfilesystemwin32.[hc].
 
 Tue Feb  3 02:04:44 2004  Matthias Clasen  <maclas@gmx.de>
 
