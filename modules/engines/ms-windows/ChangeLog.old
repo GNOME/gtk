@@ -1,3 +1,7 @@
+2003-09-25  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Set a delay on popdown menus
+	
 2003-09-22  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/xp_theme.c: Make a string array const

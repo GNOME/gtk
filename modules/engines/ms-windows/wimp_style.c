@@ -266,10 +266,9 @@ setup_system_settings (GtkStyle * style)
   g_object_set (G_OBJECT (settings), "gtk-toolbar-icon-size",
 		GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
 
-#endif
-
   g_object_set (G_OBJECT (settings), "gtk-icon-sizes",
 		"gtk-menu=10,10 : gtk-button=16,16 : gtk-small-toolbar=16,16 : gtk-large-toolbar=16,16 : gtk-dialog=32,32 : gtk-dnd=32,32", NULL);
+#endif
 
   /*
      http://developer.gnome.org/doc/API/2.0/gtk/GtkSettings.html
