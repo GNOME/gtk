@@ -64,7 +64,7 @@ static void           gtk_object_data_init     (void);
 static GtkObjectData* gtk_object_data_new      (void);
 static void           gtk_object_data_destroy  (GtkObjectData  *odata);
 static guint*         gtk_object_data_id_alloc (void);
-GtkArg*               gtk_object_collect_args  (gint    *nargs,
+GtkArg*               gtk_object_collect_args  (guint   *nargs,
 						va_list  args1,
 						va_list  args2);
 
@@ -220,6 +220,7 @@ gtk_object_class_add_signals (GtkObjectClass *class,
   for (i = 0; i < nsignals; i++)
     new_signals[class->nsignals + i] = signals[i];
 
+  /*  g_free (class->signals); FIXME freeing here causes a segfault */
   class->signals = new_signals;
   class->nsignals += nsignals;
 }
@@ -273,7 +274,7 @@ gtk_object_new (guint type,
 {
   GtkObject *obj;
   GtkArg *args;
-  gint nargs;
+  guint nargs;
   va_list args1;
   va_list args2;
 
@@ -302,7 +303,7 @@ gtk_object_new (guint type,
 
 GtkObject*
 gtk_object_newv (guint   type,
-		 gint    nargs,
+		 guint    nargs,
 		 GtkArg *args)
 {
   gpointer obj;
@@ -314,6 +315,63 @@ gtk_object_newv (guint   type,
 }
 
 /*****************************************
+ * gtk_object_getv:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+void
+gtk_object_getv (GtkObject           *object,
+		 guint		     nargs,
+		 GtkArg              *args)
+{
+  int i;
+  
+  g_return_if_fail (object != NULL);
+  
+  if (!arg_info_ht)
+    return;
+  
+  for (i = 0; i < nargs; i++)
+    {
+      GtkArgInfo *info;
+      gchar *lookup_name;
+      gchar *d;
+      
+      
+      /* hm, the name cutting shouldn't be needed on gets, but what the heck...
+       */
+      lookup_name = g_strdup (args[i].name);
+      d = strchr (lookup_name, ':');
+      if (d && d[1] == ':')
+	{
+	  d = strchr (d + 2, ':');
+	  if (d)
+	    *d = 0;
+	  
+	  info = g_hash_table_lookup (arg_info_ht, lookup_name);
+	}
+      else
+	info = NULL;
+      
+      if (!info)
+	{
+	  g_warning ("invalid arg name: \"%s\"\n", lookup_name);
+	  args[i].type = GTK_TYPE_INVALID;
+	  g_free (lookup_name);
+	  continue;
+	}
+      else
+	g_free (lookup_name);
+
+      args[i].type = info->type;
+      gtk_type_get_arg (object, info->class_type, &args[i], info->arg_id);
+    }
+}
+
+/*****************************************
  * gtk_object_set:
  *
  *   arguments:
@@ -322,21 +380,21 @@ gtk_object_newv (guint   type,
  *****************************************/
 
 void
-gtk_object_set (GtkObject *obj,
+gtk_object_set (GtkObject *object,
 		...)
 {
   GtkArg *args;
-  gint nargs;
+  guint nargs;
   va_list args1;
   va_list args2;
 
-  g_return_if_fail (obj != NULL);
+  g_return_if_fail (object != NULL);
 
-  va_start (args1, obj);
-  va_start (args2, obj);
+  va_start (args1, object);
+  va_start (args2, object);
 
   args = gtk_object_collect_args (&nargs, args1, args2);
-  gtk_object_setv (obj, nargs, args);
+  gtk_object_setv (object, nargs, args);
   g_free (args);
 
   va_end (args1);
@@ -353,7 +411,7 @@ gtk_object_set (GtkObject *obj,
 
 void
 gtk_object_setv (GtkObject *obj,
-		 gint       nargs,
+		 guint      nargs,
 		 GtkArg    *args)
 {
   int i;
@@ -368,6 +426,7 @@ gtk_object_setv (GtkObject *obj,
       GtkArgInfo *info;
       gchar *lookup_name;
       gchar *d;
+      gboolean arg_ok;
 
       lookup_name = g_strdup (args[i].name);
       d = strchr (lookup_name, ':');
@@ -382,12 +441,23 @@ gtk_object_setv (GtkObject *obj,
       else
 	info = NULL;
 
+      arg_ok = TRUE;
+      
       if (!info)
 	{
 	  g_warning ("invalid arg name: \"%s\"\n", lookup_name);
-	  continue;
+	  arg_ok = FALSE;
 	}
+      else if (info->type != args[i].type)
+	{
+	  g_warning ("invalid arg type for: \"%s\"\n", lookup_name);
+	  arg_ok = FALSE;
+	}
+      
       g_free (lookup_name);
+
+      if (!arg_ok)
+	continue;
 
       gtk_type_set_arg (obj, info->class_type, &args[i], info->arg_id);
     }
@@ -857,15 +927,15 @@ gtk_object_data_id_alloc ()
  *****************************************/
 
 GtkArg*
-gtk_object_collect_args (gint    *nargs,
+gtk_object_collect_args (guint   *nargs,
 			 va_list  args1,
 			 va_list  args2)
 {
   GtkArg *args;
   GtkType type;
-  char *name;
-  int done;
-  int i, n;
+  gchar *name;
+  gint done;
+  gint i, n;
 
   n = 0;
   done = FALSE;

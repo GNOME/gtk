@@ -242,8 +242,6 @@ gtk_window_set_arg (GtkWindow  *window,
     case ARG_ALLOW_GROW:
       window->allow_grow = (GTK_VALUE_BOOL(*arg) != FALSE);
       break;
-    default:
-      g_assert_not_reached ();
     }
 }
 

@@ -159,37 +159,51 @@ struct _GtkObjectClass
 
 /* Get the type identifier for GtkObject's.
  */
-guint gtk_object_get_type (void);
+guint	gtk_object_get_type		(void);
 
 /* Append "signals" to those already defined in "class".
  */
-void gtk_object_class_add_signals (GtkObjectClass *klass,
-				   gint           *signals,
-				   gint            nsignals);
+void	gtk_object_class_add_signals	(GtkObjectClass	*klass,
+					 gint           *signals,
+					 gint            nsignals);
 
-void gtk_object_ref (GtkObject *object);
+GtkObject*	gtk_object_new		(guint		type,
+					 ...);
 
-void gtk_object_unref (GtkObject *object);
+GtkObject*	gtk_object_newv		(guint		type,
+					 guint		nargs,
+					 GtkArg		*args);
 
-GtkObject* gtk_object_new (guint type,
-			   ...);
+void	gtk_object_ref		(GtkObject	*object);
 
-GtkObject* gtk_object_newv (guint   type,
-			    gint    nargs,
-			    GtkArg *args);
+void	gtk_object_unref	(GtkObject	*object);
 
-void gtk_object_set (GtkObject *obj,
-		     ...);
+/* gtk_object_getv() sets an arguments type and value, or just
+ * its type to GTK_TYPE_INVALID.
+ * if arg->type == GTK_TYPE_STRING, it's the callers response to
+ * do a g_free (GTK_VALUE_STRING (arg));
+ */
+void	gtk_object_getv		(GtkObject	*object,
+				 guint		nargs,
+				 GtkArg		*args);
 
-void gtk_object_setv (GtkObject *obj,
-		      gint       nargs,
-		      GtkArg    *args);
+/* gtk_object_set() takes a variable argument list of the form:
+ * (..., gchar *arg_name, ARG_VALUES, [repeatedly name/value pairs,] NULL)
+ * where ARG_VALUES type depend on the argument and can consist of
+ * more than one c-function argument.
+ */
+void	gtk_object_set		(GtkObject	*object,
+				 ...);
 
-void gtk_object_add_arg_type (const char *arg_name,
-			      GtkType     arg_type,
-			      guint	  arg_id);
+void	gtk_object_setv		(GtkObject	*object,
+				 guint		nargs,
+				 GtkArg		*args);
 
-GtkType gtk_object_get_arg_type (const char *arg_name);
+void	gtk_object_add_arg_type	(const gchar	*arg_name,
+				 GtkType	arg_type,
+				 guint		arg_id);
+
+GtkType	gtk_object_get_arg_type	(const gchar	*arg_name);
 
 /* Emit the "destroy" signal for "object". Normally it is
  *  permissible to emit a signal for an object instead of
@@ -200,7 +214,7 @@ GtkType gtk_object_get_arg_type (const char *arg_name);
  *  and sets the GTK_NEED_DESTROY flag which tells the object
  *  to be destroyed when it is done handling the signal emittion.
  */
-void gtk_object_destroy (GtkObject *object);
+void gtk_object_destroy	(GtkObject *object);
 
 /* Set 'data' to the "object_data" field of the object. The
  *  data is indexed by the "key". If there is already data

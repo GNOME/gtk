@@ -185,6 +185,10 @@ void     gtk_type_describe_tree     (GtkType      type,
 				     gint         show_size);
 gint     gtk_type_is_a              (GtkType      type,
 				     GtkType      is_a_type);
+void	 gtk_type_get_arg           (GtkObject   *object,
+				     GtkType      type,
+				     GtkArg      *arg,
+				     guint	  arg_id);
 void     gtk_type_set_arg           (GtkObject   *object,
 				     GtkType      type,
 				     GtkArg      *arg,

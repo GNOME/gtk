@@ -167,7 +167,7 @@ static void gtk_widget_set_style_internal    (GtkWidget *widget,
 static void gtk_widget_set_style_recurse     (GtkWidget *widget,
 					      gpointer	 client_data);
 
-extern GtkArg* gtk_object_collect_args (gint	*nargs,
+extern GtkArg* gtk_object_collect_args (guint	*nargs,
 					va_list	 args1,
 					va_list	 args2);
 
@@ -718,8 +718,6 @@ gtk_widget_set_arg (GtkWidget	*widget,
     case ARG_PARENT:
       gtk_container_add (GTK_CONTAINER (GTK_VALUE_OBJECT(*arg)), widget);
       break;
-    default:
-      g_assert_not_reached ();
     }
 }
 
@@ -785,7 +783,7 @@ gtk_widget_new (guint type,
 {
   GtkObject *obj;
   GtkArg *args;
-  gint nargs;
+  guint nargs;
   va_list args1;
   va_list args2;
   
@@ -816,12 +814,46 @@ gtk_widget_new (guint type,
 
 GtkWidget*
 gtk_widget_newv (guint	 type,
-		 gint	 nargs,
+		 guint	 nargs,
 		 GtkArg *args)
 {
   g_return_val_if_fail (gtk_type_is_a (type, gtk_widget_get_type ()), NULL);
   
   return GTK_WIDGET (gtk_object_newv (type, nargs, args));
+}
+
+/*****************************************
+ * gtk_widget_get:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+void
+gtk_widget_get (GtkWidget	*widget,
+		GtkArg		*arg)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (arg != NULL);
+  
+  gtk_object_getv (GTK_OBJECT (widget), 1, arg);
+}
+
+/*****************************************
+ * gtk_widget_getv:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+void
+gtk_widget_getv (GtkWidget	*widget,
+		 guint           nargs,
+		 GtkArg         *args)
+{
+  gtk_object_getv (GTK_OBJECT (widget), nargs, args);
 }
 
 /*****************************************
@@ -837,7 +869,7 @@ gtk_widget_set (GtkWidget *widget,
 		...)
 {
   GtkArg *args;
-  gint nargs;
+  guint nargs;
   va_list args1;
   va_list args2;
   
@@ -864,7 +896,7 @@ gtk_widget_set (GtkWidget *widget,
 
 void
 gtk_widget_setv (GtkWidget *widget,
-		 gint	    nargs,
+		 guint	    nargs,
 		 GtkArg	   *args)
 {
   gtk_object_setv (GTK_OBJECT (widget), nargs, args);

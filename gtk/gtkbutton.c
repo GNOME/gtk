@@ -231,8 +231,6 @@ gtk_button_set_arg (GtkButton *button,
       gtk_container_add (GTK_CONTAINER (button), label);
       gtk_container_enable_resize (GTK_CONTAINER (button));
       break;
-    default:
-      g_assert_not_reached ();
     }
 }
 

@@ -270,12 +270,37 @@ gtk_type_is_a (GtkType type,
 }
 
 void
+gtk_type_get_arg (GtkObject   *object,
+		  GtkType      type,
+		  GtkArg      *arg,
+		  guint	       arg_id)
+{
+  GtkTypeNode *node;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (arg != NULL);
+
+  if (initialize)
+    gtk_type_init ();
+
+  node = g_hash_table_lookup (type_hash_table, &type);
+
+  if (node && node->type_info.arg_get_func)
+    (* node->type_info.arg_get_func) (object, arg, arg_id);
+  else
+    arg->type = GTK_TYPE_INVALID;
+}
+
+void
 gtk_type_set_arg (GtkObject *object,
 		  GtkType    type,
 		  GtkArg    *arg,
 		  guint	     arg_id)
 {
   GtkTypeNode *node;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (arg != NULL);
 
   if (initialize)
     gtk_type_init ();

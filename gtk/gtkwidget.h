@@ -355,12 +355,17 @@ guint      gtk_widget_get_type            (void);
 GtkWidget* gtk_widget_new                 (guint                type,
 					   ...);
 GtkWidget* gtk_widget_newv                (guint                type,
-					   gint                 nargs,
+					   guint                nargs,
+					   GtkArg              *args);
+void       gtk_widget_get                 (GtkWidget           *widget,
+					   GtkArg	       *arg);
+void       gtk_widget_getv                (GtkWidget           *widget,
+					   guint                nargs,
 					   GtkArg              *args);
 void       gtk_widget_set                 (GtkWidget           *widget,
 					   ...);
 void       gtk_widget_setv                (GtkWidget           *widget,
-					   gint                 nargs,
+					   guint                nargs,
 					   GtkArg              *args);
 void       gtk_widget_destroy             (GtkWidget           *widget);
 void       gtk_widget_unparent            (GtkWidget           *widget);

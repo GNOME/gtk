@@ -71,6 +71,9 @@ static void gtk_container_marshal_signal_4 (GtkObject      *object,
 
 static void gtk_container_class_init        (GtkContainerClass *klass);
 static void gtk_container_init              (GtkContainer      *container);
+static void gtk_container_get_arg           (GtkContainer      *container,
+					     GtkArg            *arg,
+					     guint		arg_id);
 static void gtk_container_set_arg           (GtkContainer      *container,
 					     GtkArg            *arg,
 					     guint		arg_id);
@@ -114,7 +117,7 @@ gtk_container_get_type ()
 	(GtkClassInitFunc) gtk_container_class_init,
 	(GtkObjectInitFunc) gtk_container_init,
 	(GtkArgSetFunc) gtk_container_set_arg,
-	(GtkArgGetFunc) NULL,
+	(GtkArgGetFunc) gtk_container_get_arg,
       };
 
       container_type = gtk_type_unique (gtk_widget_get_type (), &container_info);
@@ -226,8 +229,27 @@ gtk_container_set_arg (GtkContainer *container,
     case ARG_CHILD:
       gtk_container_add (container, GTK_WIDGET (GTK_VALUE_OBJECT (*arg)));
       break;
+    }
+}
+
+static void
+gtk_container_get_arg (GtkContainer *container,
+		       GtkArg       *arg,
+		       guint	     arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_BORDER_WIDTH:
+      GTK_VALUE_LONG (*arg) = container->border_width;
+      break;
+    case ARG_AUTO_RESIZE:
+      GTK_VALUE_BOOL (*arg) = container->auto_resize;
+      break;
+    case ARG_BLOCK_RESIZE:
+      GTK_VALUE_BOOL (*arg) = container->block_resize;
+      break;
     default:
-      g_assert_not_reached ();
+      arg->type = GTK_TYPE_INVALID;
     }
 }
 
