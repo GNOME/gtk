@@ -1,3 +1,10 @@
+2004-03-03  Mark McLoughlin  <mark@skynet.ie>
+
+	* gtk/gtkexpander.c:
+	(gtk_expander_enter_notify), (gtk_expander_leave_notify),
+	(gtk_expander_set_label_widget): Set the label widget's
+	state to prelight if we're prelit. Fixes bug #136078.
+
 2004-03-03  Murray Cumming  <murrayc@murrayc.com>
 
 	* gtk/gtkradiobutton.h, radiomenuitem.h: Corrected the group_changed
