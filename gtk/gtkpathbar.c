@@ -24,6 +24,8 @@
 #include "gtkarrow.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
+#include "gtkicontheme.h"
+#include "gtkiconfactory.h"
 #include "gtklabel.h"
 #include "gtkhbox.h"
 #include "gtkmain.h"
@@ -45,8 +47,8 @@ typedef enum {
 
 static guint path_bar_signals [LAST_SIGNAL] = { 0 };
 
-/* FIXME: this should correspond to gtk_icon_size_lookup_for_settings  */
-#define ICON_SIZE 20
+/* Icon size for if we can't get it from the theme */
+#define FALLBACK_ICON_SIZE 20
 
 typedef struct _ButtonData ButtonData;
 
@@ -65,23 +67,34 @@ G_DEFINE_TYPE (GtkPathBar,
 	       gtk_path_bar,
 	       GTK_TYPE_CONTAINER);
 
-static void gtk_path_bar_finalize (GObject *object);
-static void gtk_path_bar_size_request  (GtkWidget      *widget,
-					GtkRequisition *requisition);
-static void gtk_path_bar_size_allocate (GtkWidget      *widget,
-					GtkAllocation  *allocation);
-static void gtk_path_bar_direction_changed (GtkWidget *widget,
-					    GtkTextDirection direction);
-static void gtk_path_bar_add (GtkContainer *container,
-			      GtkWidget    *widget);
-static void gtk_path_bar_remove (GtkContainer *container,
-				 GtkWidget    *widget);
-static void gtk_path_bar_forall (GtkContainer *container,
-				 gboolean      include_internals,
-				 GtkCallback   callback,
-				 gpointer      callback_data);
-static void gtk_path_bar_scroll_up (GtkWidget *button, GtkPathBar *path_bar);
-static void gtk_path_bar_scroll_down (GtkWidget *button, GtkPathBar *path_bar);
+static void gtk_path_bar_finalize                 (GObject          *object);
+static void gtk_path_bar_dispose                  (GObject          *object);
+static void gtk_path_bar_size_request             (GtkWidget        *widget,
+						   GtkRequisition   *requisition);
+static void gtk_path_bar_size_allocate            (GtkWidget        *widget,
+						   GtkAllocation    *allocation);
+static void gtk_path_bar_direction_changed        (GtkWidget        *widget,
+						   GtkTextDirection  direction);
+static void gtk_path_bar_add                      (GtkContainer     *container,
+						   GtkWidget        *widget);
+static void gtk_path_bar_remove                   (GtkContainer     *container,
+						   GtkWidget        *widget);
+static void gtk_path_bar_forall                   (GtkContainer     *container,
+						   gboolean          include_internals,
+						   GtkCallback       callback,
+						   gpointer          callback_data);
+static void gtk_path_bar_scroll_up                (GtkWidget        *button,
+						   GtkPathBar       *path_bar);
+static void gtk_path_bar_scroll_down              (GtkWidget        *button,
+						   GtkPathBar       *path_bar);
+static void gtk_path_bar_style_set                (GtkWidget        *widget,
+						   GtkStyle         *previous_style);
+static void gtk_path_bar_screen_changed           (GtkWidget        *widget,
+						   GdkScreen        *previous_screen);
+static void gtk_path_bar_check_icon_theme         (GtkPathBar       *path_bar);
+static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
+						   ButtonData       *button_data,
+						   gboolean          current_dir);
 
 static GtkWidget *
 get_slider_button (GtkPathBar *path_bar)
@@ -109,6 +122,7 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   path_bar->spacing = 3;
   path_bar->up_slider_button = get_slider_button (path_bar);
   path_bar->down_slider_button = get_slider_button (path_bar);
+  path_bar->icon_size = FALLBACK_ICON_SIZE;
 
   g_signal_connect (path_bar->up_slider_button, "clicked", G_CALLBACK (gtk_path_bar_scroll_up), path_bar);
   g_signal_connect (path_bar->down_slider_button, "clicked", G_CALLBACK (gtk_path_bar_scroll_down), path_bar);
@@ -128,10 +142,13 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   container_class = (GtkContainerClass *) path_bar_class;
 
   gobject_class->finalize = gtk_path_bar_finalize;
+  gobject_class->dispose = gtk_path_bar_dispose;
 
   widget_class->size_request = gtk_path_bar_size_request;
   widget_class->size_allocate = gtk_path_bar_size_allocate;
   widget_class->direction_changed = gtk_path_bar_direction_changed;
+  widget_class->style_set = gtk_path_bar_style_set;
+  widget_class->screen_changed = gtk_path_bar_screen_changed;
 
   container_class->add = gtk_path_bar_add;
   container_class->forall = gtk_path_bar_forall;
@@ -176,6 +193,31 @@ gtk_path_bar_finalize (GObject *object)
     g_object_unref (path_bar->file_system);
 
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->finalize (object);
+}
+
+/* Removes the settings signal handler.  It's safe to call multiple times */
+static void
+remove_settings_signal (GtkPathBar *path_bar,
+			GdkScreen  *screen)
+{
+  if (path_bar->settings_signal_id)
+    {
+      GtkSettings *settings;
+
+      settings = gtk_settings_get_for_screen (screen);
+      g_signal_handler_disconnect (settings,
+				   path_bar->settings_signal_id);
+      path_bar->settings_signal_id = 0;
+    }
+}
+
+static void
+gtk_path_bar_dispose (GObject *object)
+{
+  remove_settings_signal (GTK_PATH_BAR (object),
+			  gtk_widget_get_screen (GTK_WIDGET (object)));
+
+  G_OBJECT_CLASS (gtk_path_bar_parent_class)->dispose (object);
 }
 
 /* Size requisition:
@@ -459,6 +501,30 @@ static void
 }
 
 static void
+gtk_path_bar_style_set (GtkWidget *widget,
+			GtkStyle  *previous_style)
+{
+  if (GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->style_set)
+    GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->style_set (widget, previous_style);
+
+  gtk_path_bar_check_icon_theme (GTK_PATH_BAR (widget));
+}
+
+static void
+gtk_path_bar_screen_changed (GtkWidget *widget,
+			     GdkScreen *previous_screen)
+{
+  if (GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->screen_changed)
+    GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->screen_changed (widget, previous_screen);
+
+  /* We might nave a new settings, so we remove the old one */
+  if (previous_screen)
+    remove_settings_signal (GTK_PATH_BAR (widget), previous_screen);
+
+  gtk_path_bar_check_icon_theme (GTK_PATH_BAR (widget));
+}
+
+static void
 gtk_path_bar_add (GtkContainer *container,
 		  GtkWidget    *widget)
 {
@@ -579,7 +645,7 @@ gtk_path_bar_scroll_down (GtkWidget *button, GtkPathBar *path_bar)
 }
 
 static void
- gtk_path_bar_scroll_up (GtkWidget *button, GtkPathBar *path_bar)
+gtk_path_bar_scroll_up (GtkWidget *button, GtkPathBar *path_bar)
 {
   GList *list;
 
@@ -593,7 +659,88 @@ static void
     }
 }
 
-/* Public functions. */
+/* Changes the icons wherever it is needed */
+static void
+reload_icons (GtkPathBar *path_bar)
+{
+  GList *list;
+
+  if (path_bar->root_icon)
+    {
+      g_object_unref (path_bar->root_icon);
+      path_bar->root_icon = NULL;
+    }
+  if (path_bar->home_icon)
+    {
+      g_object_unref (path_bar->home_icon);
+      path_bar->home_icon = NULL;
+    }
+  if (path_bar->desktop_icon)
+    {
+      g_object_unref (path_bar->desktop_icon);
+      path_bar->desktop_icon = NULL;
+    }
+
+  for (list = path_bar->button_list; list; list = list->next)
+    {
+      ButtonData *button_data;
+      gboolean current_dir;
+
+      button_data = BUTTON_DATA (list->data);
+      if (button_data->type != NORMAL_BUTTON)
+	{
+	  current_dir = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_data->button));
+	  gtk_path_bar_update_button_appearance (path_bar, button_data, current_dir);
+	}
+    }
+  
+}
+
+static void
+change_icon_theme (GtkPathBar *path_bar)
+{
+  GtkSettings *settings;
+  gint width, height;
+
+  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (path_bar)));
+
+  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_BUTTON, &width, &height))
+    path_bar->icon_size = MAX (width, height);
+  else
+    path_bar->icon_size = FALLBACK_ICON_SIZE;
+
+  reload_icons (path_bar);
+}
+/* Callback used when a GtkSettings value changes */
+static void
+settings_notify_cb (GObject    *object,
+		    GParamSpec *pspec,
+		    GtkPathBar *path_bar)
+{
+  const char *name;
+
+  name = g_param_spec_get_name (pspec);
+
+  if (! strcmp (name, "gtk-icon-theme-name") ||
+      ! strcmp (name, "gtk-icon-sizes"))
+    change_icon_theme (path_bar);
+}
+
+static void
+gtk_path_bar_check_icon_theme (GtkPathBar *path_bar)
+{
+  GtkSettings *settings;
+
+  if (path_bar->settings_signal_id)
+    return;
+
+  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (path_bar)));
+  path_bar->settings_signal_id = g_signal_connect (settings, "notify", G_CALLBACK (settings_notify_cb), path_bar);
+
+  change_icon_theme (path_bar);
+}
+
+/* Public functions and their helpers */
 static void
 gtk_path_bar_clear_buttons (GtkPathBar *path_bar)
 {
@@ -642,7 +789,7 @@ get_button_image (GtkPathBar *path_bar,
       path_bar->root_icon = gtk_file_system_volume_render_icon (path_bar->file_system,
 								volume,
 								GTK_WIDGET (path_bar),
-								ICON_SIZE,
+								path_bar->icon_size,
 								NULL);
       gtk_file_system_volume_free (path_bar->file_system, volume);
 
@@ -654,7 +801,8 @@ get_button_image (GtkPathBar *path_bar,
       path_bar->home_icon = gtk_file_system_render_icon (path_bar->file_system,
 							 path_bar->home_path,
 							 GTK_WIDGET (path_bar),
-							 ICON_SIZE, NULL);
+							 path_bar->icon_size,
+							 NULL);
       return path_bar->home_icon;
     case DESKTOP_BUTTON:
       if (path_bar->desktop_icon != NULL)
@@ -663,7 +811,8 @@ get_button_image (GtkPathBar *path_bar,
       path_bar->desktop_icon = gtk_file_system_render_icon (path_bar->file_system,
 							    path_bar->desktop_path,
 							    GTK_WIDGET (path_bar),
-							    ICON_SIZE, NULL);
+							    path_bar->icon_size,
+							    NULL);
       return path_bar->desktop_icon;
     default:
       return NULL;
@@ -681,9 +830,9 @@ button_data_free (ButtonData *button_data)
 }
 
 static void
-update_button_appearance (GtkPathBar *path_bar,
-			  ButtonData *button_data,
-			  gboolean    current_dir)
+gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
+				       ButtonData *button_data,
+				       gboolean    current_dir)
 {
   const gchar *dir_name;
 
@@ -782,7 +931,7 @@ make_directory_button (GtkPathBar  *path_bar,
   gtk_container_add (GTK_CONTAINER (button_data->button), child);
   gtk_widget_show_all (button_data->button);
 
-  update_button_appearance (path_bar, button_data, current_dir);
+  gtk_path_bar_update_button_appearance (path_bar, button_data, current_dir);
 
   g_signal_connect (button_data->button, "clicked",
 		    G_CALLBACK (button_clicked_cb),
@@ -817,9 +966,9 @@ gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
     {
       for (list = path_bar->button_list; list; list = list->next)
 	{
-	  update_button_appearance (path_bar,
-				    BUTTON_DATA (list->data),
-				    (list == current_path) ? TRUE : FALSE);
+	  gtk_path_bar_update_button_appearance (path_bar,
+						 BUTTON_DATA (list->data),
+						 (list == current_path) ? TRUE : FALSE);
 	}
       return TRUE;
     }

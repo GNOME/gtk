@@ -400,7 +400,7 @@ main (int argc, char **argv)
 
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
 			 "action", action,
-			 "file-system-backend", "gtk+",
+			 "file-system-backend", "gnome-vfs",
 			 NULL);
   switch (action)
     {
@@ -525,10 +525,6 @@ main (int argc, char **argv)
   gtk_widget_show_all (control_window);
   
   gtk_main ();
-
-  gtk_widget_destroy (control_window);
-  gtk_widget_destroy (prop_editor);
-  gtk_widget_destroy (dialog);
 
   return 0;
 }

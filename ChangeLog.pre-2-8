@@ -1,3 +1,19 @@
+Wed Mar 10 02:41:05 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkpathbar.c: (gtk_path_bar_init), (gtk_path_bar_class_init),
+	(remove_settings_signal), (gtk_path_bar_dispose),
+	(gtk_path_bar_style_set), (gtk_path_bar_screen_changed),
+	(gtk_path_bar_scroll_up), (reload_icons), (change_icon_theme),
+	(settings_notify_cb), (gtk_path_bar_check_icon_theme),
+	(get_button_image), (gtk_path_bar_update_button_appearance),
+	(make_directory_button), (gtk_path_bar_check_parent_path): Support
+	changes in icon themes.
+
+	* gtk/gtkpathbar.h: add two elements
+
+	* tests/testfilechooser.c: (main): use gnome-vfs method again to
+	get more testing.
+
 Wed Mar 10 01:17:40 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkpathbar.c: added 'Desktop' to the list of volumes.  We

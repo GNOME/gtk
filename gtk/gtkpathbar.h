@@ -53,6 +53,8 @@ struct _GtkPathBar
   GList *first_scrolled_button;
   GtkWidget *up_slider_button;
   GtkWidget *down_slider_button;
+  guint settings_signal_id;
+  gint icon_size;
   gint16 slider_width;
   gint16 spacing;
   gint16 button_offset;
