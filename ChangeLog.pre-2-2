@@ -1,3 +1,8 @@
+Sun Mar 15 14:38:34 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_pages_allocate): applied a fix from
+	lars against a segfault that i discovered.
+
 Sun Mar 15 13:25:28 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkwidget.h: added new flag GTK_EXCLUSIVE_GRAB.

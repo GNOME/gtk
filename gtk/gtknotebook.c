@@ -2386,7 +2386,10 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 		  children = NULL;
 		  gtk_notebook_calc_tabs (notebook,notebook->first_tab->prev,
 					  &children, &tab_space, STEP_PREV);
-		  notebook->first_tab = children->next;
+		  if (children)
+		    notebook->first_tab = children->next;
+		  else
+		    notebook->first_tab = notebook->children;
 		}
 	    }
 	  
