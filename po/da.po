@@ -28,8 +28,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-05-23 17:08-0400\n"
-"PO-Revision-Date: 2002-05-11 13:02+0200\n"
+"POT-Creation-Date: 2002-05-29 12:58+0200\n"
+"PO-Revision-Date: 2002-05-29 12:59+0200\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -3382,7 +3382,7 @@ msgstr "_Afslut"
 
 #: gtk/gtkstock.c:317
 msgid "_Redo"
-msgstr "_Gentag"
+msgstr "_Omgør"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
@@ -3449,6 +3449,7 @@ msgid "_Yes"
 msgstr "_Ja"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
 msgstr "Zoom _100%"
 
