@@ -29,7 +29,7 @@ struct _GdkFont
   gint descent;
 };
 
-GType    gdk_font_get_type  (void);
+GType    gdk_font_get_type  (void) G_GNUC_CONST;
 
 GdkFont* gdk_font_ref	    (GdkFont        *font);
 void	 gdk_font_unref	    (GdkFont        *font);

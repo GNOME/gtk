@@ -467,7 +467,7 @@ union _GdkEvent
   GdkEventSetting           setting;
 };
 
-GType     gdk_event_get_type            (void);
+GType     gdk_event_get_type            (void) G_GNUC_CONST;
 
 gboolean  gdk_events_pending	 	(void);
 GdkEvent* gdk_event_get			(void);

@@ -109,7 +109,7 @@ guint     gdk_color_hash  (const GdkColor *colora);
 gboolean  gdk_color_equal (const GdkColor *colora,
 			   const GdkColor *colorb);
 
-GType     gdk_color_get_type (void);
+GType     gdk_color_get_type (void) G_GNUC_CONST;
 
 /* The following functions are deprecated */
 #ifndef GDK_DISABLE_DEPRECATED

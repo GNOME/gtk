@@ -189,7 +189,7 @@ struct _GdkTrapezoid
   double y1, x11, x21, y2, x12, x22;
 };
 
-GType           gdk_drawable_get_type     (void);
+GType           gdk_drawable_get_type     (void) G_GNUC_CONST;
 
 /* Manipulation of drawables
  */

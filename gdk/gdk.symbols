@@ -2,11 +2,11 @@ gdk_add_client_message_filter
 gdk_add_option_entries_libgtk_only
 gdk_atom_intern
 gdk_atom_name
-gdk_axis_use_get_type
+gdk_axis_use_get_type G_GNUC_CONST
 gdk_beep
 gdk_bitmap_create_from_data
-gdk_byte_order_get_type
-gdk_cap_style_get_type
+gdk_byte_order_get_type G_GNUC_CONST
+gdk_cap_style_get_type G_GNUC_CONST
 gdk_char_height
 gdk_char_measure
 gdk_char_width
@@ -17,7 +17,7 @@ gdk_color_change
 gdk_color_copy
 gdk_color_equal
 gdk_color_free
-gdk_color_get_type
+gdk_color_get_type G_GNUC_CONST
 gdk_color_hash
 gdk_colormap_alloc_color
 gdk_colormap_alloc_colors
@@ -37,22 +37,22 @@ gdk_colors_alloc
 gdk_colors_free
 gdk_colors_store
 gdk_color_white
-gdk_crossing_mode_get_type
+gdk_crossing_mode_get_type G_GNUC_CONST
 gdk_cursor_get_display
-gdk_cursor_get_type
+gdk_cursor_get_type G_GNUC_CONST
 gdk_cursor_new
 gdk_cursor_new_for_display
 gdk_cursor_new_from_pixbuf
 gdk_cursor_new_from_pixmap
 gdk_cursor_ref
-gdk_cursor_type_get_type
+gdk_cursor_type_get_type G_GNUC_CONST
 gdk_cursor_unref
 gdk_device_free_history
 gdk_device_get_axis
 gdk_device_get_core_pointer
 gdk_device_get_history
 gdk_device_get_state
-gdk_device_get_type
+gdk_device_get_type G_GNUC_CONST
 gdk_device_set_axis_use
 gdk_device_set_key
 gdk_device_set_mode
@@ -73,7 +73,7 @@ gdk_display_get_name
 gdk_display_get_n_screens
 gdk_display_get_pointer
 gdk_display_get_screen
-gdk_display_get_type
+gdk_display_get_type G_GNUC_CONST
 gdk_display_get_window_at_pointer
 gdk_display_keyboard_ungrab
 gdk_display_list_devices
@@ -99,7 +99,7 @@ gdk_display_supports_cursor_color
 gdk_display_supports_selection_notification
 gdk_display_sync
 gdk_drag_abort
-gdk_drag_action_get_type
+gdk_drag_action_get_type G_GNUC_CONST
 gdk_drag_begin
 gdk_drag_context_get_type G_GNUC_CONST
 gdk_drag_context_new
@@ -113,7 +113,7 @@ gdk_drag_get_protocol
 gdk_drag_get_protocol_for_display
 gdk_drag_get_selection
 gdk_drag_motion
-gdk_drag_protocol_get_type
+gdk_drag_protocol_get_type G_GNUC_CONST
 gdk_drag_status
 gdk_drawable_copy_to_image
 gdk_drawable_get_clip_region
@@ -124,7 +124,7 @@ gdk_drawable_get_display
 gdk_drawable_get_image
 gdk_drawable_get_screen
 gdk_drawable_get_size
-gdk_drawable_get_type
+gdk_drawable_get_type G_GNUC_CONST
 gdk_drawable_get_visible_region
 gdk_drawable_get_visual
 gdk_drawable_ref
@@ -173,9 +173,9 @@ gdk_event_get_root_coords
 gdk_event_get_screen
 gdk_event_get_state
 gdk_event_get_time
-gdk_event_get_type
+gdk_event_get_type G_GNUC_CONST
 gdk_event_handler_set
-gdk_event_mask_get_type
+gdk_event_mask_get_type G_GNUC_CONST
 gdk_event_new
 gdk_event_peek
 gdk_event_put
@@ -184,29 +184,29 @@ gdk_event_send_client_message_for_display
 gdk_event_send_clientmessage_toall
 gdk_event_set_screen
 gdk_events_pending
-gdk_event_type_get_type
+gdk_event_type_get_type G_GNUC_CONST
 gdk_exit
-gdk_extension_mode_get_type
-gdk_fill_get_type
-gdk_fill_rule_get_type
-gdk_filter_return_get_type
+gdk_extension_mode_get_type G_GNUC_CONST
+gdk_fill_get_type G_GNUC_CONST
+gdk_fill_rule_get_type G_GNUC_CONST
+gdk_filter_return_get_type G_GNUC_CONST
 gdk_flush
 gdk_font_equal
 gdk_font_from_description
 gdk_font_from_description_for_display
 gdk_font_get_display
-gdk_font_get_type
+gdk_font_get_type G_GNUC_CONST
 gdk_font_id
 gdk_font_load
 gdk_font_load_for_display
 gdk_font_ref
 gdk_fontset_load
 gdk_fontset_load_for_display
-gdk_font_type_get_type
+gdk_font_type_get_type G_GNUC_CONST
 gdk_font_unref
 gdk_free_compound_text
 gdk_free_text_list
-gdk_function_get_type
+gdk_function_get_type G_GNUC_CONST
 gdk_gc_copy
 gdk_gc_get_colormap
 gdk_gc_get_screen
@@ -237,15 +237,15 @@ gdk_gc_set_tile
 gdk_gc_set_ts_origin
 gdk_gc_set_values
 gdk_gc_unref
-gdk_gc_values_mask_get_type
+gdk_gc_values_mask_get_type G_GNUC_CONST
 gdk_get_default_root_window
 gdk_get_display
 gdk_get_display_arg_name
 gdk_get_program_class
 gdk_get_show_events
 gdk_get_use_xshm
-gdk_grab_status_get_type
-gdk_gravity_get_type
+gdk_grab_status_get_type G_GNUC_CONST
+gdk_gravity_get_type G_GNUC_CONST
 gdk_image_get
 gdk_image_get_colormap
 gdk_image_get_pixel
@@ -255,18 +255,18 @@ gdk_image_new_bitmap
 gdk_image_put_pixel
 gdk_image_ref
 gdk_image_set_colormap
-gdk_image_type_get_type
+gdk_image_type_get_type G_GNUC_CONST
 gdk_image_unref
 gdk_init
 gdk_init_check
 gdk_input_add
 gdk_input_add_full
-gdk_input_condition_get_type
-gdk_input_mode_get_type
+gdk_input_condition_get_type G_GNUC_CONST
+gdk_input_mode_get_type G_GNUC_CONST
 gdk_input_remove
 gdk_input_set_extension_events
-gdk_input_source_get_type
-gdk_join_style_get_type
+gdk_input_source_get_type G_GNUC_CONST
+gdk_join_style_get_type G_GNUC_CONST
 gdk_keyboard_grab
 gdk_keyboard_grab_info_libgtk_only
 gdk_keyboard_ungrab
@@ -286,10 +286,10 @@ gdk_keyval_name G_GNUC_CONST
 gdk_keyval_to_lower G_GNUC_CONST
 gdk_keyval_to_unicode G_GNUC_CONST
 gdk_keyval_to_upper G_GNUC_CONST
-gdk_line_style_get_type
+gdk_line_style_get_type G_GNUC_CONST
 gdk_list_visuals
 gdk_mbstowcs
-gdk_modifier_type_get_type
+gdk_modifier_type_get_type G_GNUC_CONST
 #ifdef GDK_WINDOWING_X11
 gdk_net_wm_supports
 #endif
@@ -297,9 +297,9 @@ gdk_net_wm_supports
 gdk_net_wm_supports
 #endif
 gdk_notify_startup_complete
-gdk_notify_type_get_type
-gdk_overlap_type_get_type
-gdk_owner_change_get_type
+gdk_notify_type_get_type G_GNUC_CONST
+gdk_overlap_type_get_type G_GNUC_CONST
+gdk_owner_change_get_type G_GNUC_CONST
 gdk_pango_attr_embossed_new
 gdk_pango_attr_stipple_new
 gdk_pango_context_get
@@ -341,11 +341,11 @@ gdk_pre_parse_libgtk_only
 gdk_property_change
 gdk_property_delete
 gdk_property_get
-gdk_property_state_get_type
-gdk_prop_mode_get_type
+gdk_property_state_get_type G_GNUC_CONST
+gdk_prop_mode_get_type G_GNUC_CONST
 gdk_query_depths
 gdk_query_visual_types
-gdk_rectangle_get_type
+gdk_rectangle_get_type G_GNUC_CONST
 gdk_rectangle_intersect
 gdk_rectangle_union
 gdk_region_copy
@@ -371,7 +371,7 @@ gdk_rgb_cmap_free
 gdk_rgb_cmap_new
 gdk_rgb_colormap_ditherable
 gdk_rgb_ditherable
-gdk_rgb_dither_get_type
+gdk_rgb_dither_get_type G_GNUC_CONST
 gdk_rgb_find_color
 gdk_rgb_gc_set_background
 gdk_rgb_gc_set_foreground
@@ -400,7 +400,7 @@ gdk_screen_get_setting
 gdk_screen_get_system_colormap
 gdk_screen_get_system_visual
 gdk_screen_get_toplevel_windows
-gdk_screen_get_type
+gdk_screen_get_type G_GNUC_CONST
 gdk_screen_get_width
 gdk_screen_get_width_mm
 gdk_screen_height G_GNUC_CONST
@@ -410,7 +410,7 @@ gdk_screen_make_display_name
 gdk_screen_set_default_colormap
 gdk_screen_width G_GNUC_CONST
 gdk_screen_width_mm G_GNUC_CONST
-gdk_scroll_direction_get_type
+gdk_scroll_direction_get_type G_GNUC_CONST
 gdk_selection_convert
 gdk_selection_owner_get
 gdk_selection_owner_get_for_display
@@ -425,20 +425,20 @@ gdk_set_pointer_hooks
 gdk_set_program_class
 gdk_set_show_events
 gdk_set_sm_client_id
-gdk_setting_action_get_type
+gdk_setting_action_get_type G_GNUC_CONST
 gdk_setting_get
 gdk_set_use_xshm
 gdk_spawn_command_line_on_screen
 gdk_spawn_on_screen
 gdk_spawn_on_screen_with_pipes
-gdk_status_get_type
+gdk_status_get_type G_GNUC_CONST
 gdk_string_extents
 gdk_string_height
 gdk_string_measure
 gdk_string_to_compound_text
 gdk_string_to_compound_text_for_display
 gdk_string_width
-gdk_subwindow_mode_get_type
+gdk_subwindow_mode_get_type G_GNUC_CONST
 gdk_synthesize_window_state
 gdk_text_extents
 gdk_text_extents_wc
@@ -463,7 +463,7 @@ gdk_unicode_to_keyval G_GNUC_CONST
 gdk_utf8_to_compound_text
 gdk_utf8_to_compound_text_for_display
 gdk_utf8_to_string_target
-gdk_visibility_state_get_type
+gdk_visibility_state_get_type G_GNUC_CONST
 gdk_visual_get_best
 gdk_visual_get_best_depth
 gdk_visual_get_best_type
@@ -472,8 +472,8 @@ gdk_visual_get_best_with_depth
 gdk_visual_get_best_with_type
 gdk_visual_get_screen
 gdk_visual_get_system
-gdk_visual_get_type
-gdk_visual_type_get_type
+gdk_visual_get_type G_GNUC_CONST
+gdk_visual_type_get_type G_GNUC_CONST
 gdk_wcstombs
 #ifdef GDK_WINDOWING_WIN32
 gdk_win32_drawable_get_handle
@@ -483,12 +483,12 @@ gdk_win32_hdc_release
 #endif
 gdk_window_add_filter
 gdk_window_at_pointer
-gdk_window_attributes_type_get_type
+gdk_window_attributes_type_get_type G_GNUC_CONST
 gdk_window_begin_move_drag
 gdk_window_begin_paint_rect
 gdk_window_begin_paint_region
 gdk_window_begin_resize_drag
-gdk_window_class_get_type
+gdk_window_class_get_type G_GNUC_CONST
 gdk_window_clear
 gdk_window_clear_area
 gdk_window_clear_area_e
@@ -497,7 +497,7 @@ gdk_window_constrain_size
 gdk_window_deiconify
 gdk_window_destroy
 gdk_window_destroy_notify
-gdk_window_edge_get_type
+gdk_window_edge_get_type G_GNUC_CONST
 gdk_window_enable_synchronized_configure
 gdk_window_end_paint
 gdk_window_focus
@@ -525,10 +525,10 @@ gdk_window_get_update_area
 gdk_window_get_user_data
 gdk_window_get_window_type
 gdk_window_hide
-gdk_window_hints_get_type
+gdk_window_hints_get_type G_GNUC_CONST
 gdk_window_iconify
 #ifdef GDK_WINDOWING_X11
-gdk_window_impl_x11_get_type
+gdk_window_impl_x11_get_type G_GNUC_CONST
 #endif
 gdk_window_invalidate_maybe_recurse
 gdk_window_invalidate_rect
@@ -585,17 +585,17 @@ gdk_window_shape_combine_mask
 gdk_window_shape_combine_region
 gdk_window_show
 gdk_window_show_unraised
-gdk_window_state_get_type
+gdk_window_state_get_type G_GNUC_CONST
 gdk_window_stick
 gdk_window_thaw_updates
-gdk_window_type_get_type
-gdk_window_type_hint_get_type
+gdk_window_type_get_type G_GNUC_CONST
+gdk_window_type_hint_get_type G_GNUC_CONST
 gdk_window_unfullscreen
 gdk_window_unmaximize
 gdk_window_unstick
 gdk_window_withdraw
-gdk_wm_decoration_get_type
-gdk_wm_function_get_type
+gdk_wm_decoration_get_type G_GNUC_CONST
+gdk_wm_function_get_type G_GNUC_CONST
 #ifdef GDK_WINDOWING_X11
 gdk_x11_atom_to_xatom
 gdk_x11_atom_to_xatom_for_display

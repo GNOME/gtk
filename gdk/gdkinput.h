@@ -95,7 +95,7 @@ struct _GdkTimeCoord
   gdouble axes[GDK_MAX_TIMECOORD_AXES];
 };
 
-GType          gdk_device_get_type      (void);
+GType          gdk_device_get_type      (void) G_GNUC_CONST;
 
 #ifndef GDK_MULTIHEAD_SAFE
 /* Returns a list of GdkDevice * */	  

@@ -100,7 +100,7 @@ struct _GdkDisplayPointerHooks
 				    gint            *win_y);
 };
 
-GType       gdk_display_get_type (void);
+GType       gdk_display_get_type (void) G_GNUC_CONST;
 GdkDisplay *gdk_display_open                (const gchar *display_name);
 
 G_CONST_RETURN gchar * gdk_display_get_name (GdkDisplay *display);
@@ -131,6 +131,11 @@ void gdk_display_add_client_message_filter (GdkDisplay   *display,
 					    GdkAtom       message_type,
 					    GdkFilterFunc func,
 					    gpointer      data);
+void gdk_display_add_client_message_filter_full (GdkDisplay    *display,
+						 GdkAtom        message_type,
+						 GdkFilterFunc  func,
+						 gpointer       data,
+						 GDestroyNotify destroy);
 
 void gdk_display_set_double_click_time     (GdkDisplay   *display,
 					    guint         msec);

@@ -55,7 +55,7 @@ struct _GdkScreenClass
   void (*size_changed) (GdkScreen *screen);
 };
 
-GType        gdk_screen_get_type              (void);
+GType        gdk_screen_get_type              (void) G_GNUC_CONST;
 GdkColormap *gdk_screen_get_default_colormap  (GdkScreen   *screen);
 void         gdk_screen_set_default_colormap  (GdkScreen   *screen,
 					       GdkColormap *colormap);

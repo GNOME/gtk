@@ -104,7 +104,7 @@ struct _GdkCursor
 /* Cursors
  */
 
-GType      gdk_cursor_get_type           (void);
+GType      gdk_cursor_get_type           (void) G_GNUC_CONST;
 
 GdkCursor* gdk_cursor_new_for_display	 (GdkDisplay      *display,
 					  GdkCursorType    cursor_type);
