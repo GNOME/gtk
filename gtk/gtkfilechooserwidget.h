@@ -57,4 +57,3 @@ GtkWidget *gtk_file_chooser_widget_new_with_backend (GtkFileChooserAction  actio
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_WIDGET_H__ */
-1
