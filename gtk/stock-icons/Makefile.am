@@ -264,17 +264,23 @@ pixbuf_csource=GDK_PIXBUF_MODULEDIR=$(top_builddir)/gdk-pixbuf $(top_builddir)/g
 endif
 
 gtkstockpixbufs.h: $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource $(IMAGES)
-	$(pixbuf_csource) \
-	   --raw --build-list $(VARIABLES1) >$(srcdir)/gtkstockpixbufs.h
-	$(pixbuf_csource) \
-	   --raw --build-list $(VARIABLES2) >>$(srcdir)/gtkstockpixbufs.h
-	$(pixbuf_csource) \
-	   --raw --build-list $(VARIABLES3) >>$(srcdir)/gtkstockpixbufs.h
-	$(pixbuf_csource) \
-	   --raw --build-list $(VARIABLES4) >>$(srcdir)/gtkstockpixbufs.h
-	$(pixbuf_csource) \
-	   --raw --build-list $(VARIABLES5) >>$(srcdir)/gtkstockpixbufs.h
-	$(pixbuf_csource) \
-	   --raw --build-list $(VARIABLES6) >>$(srcdir)/gtkstockpixbufs.h
+	$(pixbuf_csource)							\
+	   --raw --build-list $(VARIABLES1) > $(srcdir)/gtkstockpixbufs.h ||	\
+           ( rm -f $(srcdir)/gtkstockpixbufs.h && false )
+	$(pixbuf_csource)							\
+	   --raw --build-list $(VARIABLES2) >>$(srcdir)/gtkstockpixbufs.h ||	\
+           ( rm -f $(srcdir)/gtkstockpixbufs.h && false )
+	$(pixbuf_csource)							\
+	   --raw --build-list $(VARIABLES3) >>$(srcdir)/gtkstockpixbufs.h ||	\
+           ( rm -f $(srcdir)/gtkstockpixbufs.h && false )
+	$(pixbuf_csource)							\
+	   --raw --build-list $(VARIABLES4) >>$(srcdir)/gtkstockpixbufs.h ||	\
+           ( rm -f $(srcdir)/gtkstockpixbufs.h && false )
+	$(pixbuf_csource)							\
+	   --raw --build-list $(VARIABLES5) >>$(srcdir)/gtkstockpixbufs.h ||	\
+           ( rm -f $(srcdir)/gtkstockpixbufs.h && false )
+	$(pixbuf_csource)							\
+	   --raw --build-list $(VARIABLES6) >>$(srcdir)/gtkstockpixbufs.h ||    \
+           ( rm -f $(srcdir)/gtkstockpixbufs.h && false )
 
 EXTRA_DIST = $(IMAGES) gtkstockpixbufs.h
