@@ -136,6 +136,9 @@ gtk_arrow_init (GtkArrow *arrow)
 {
   GTK_WIDGET_SET_FLAGS (arrow, GTK_NO_WINDOW);
 
+  GTK_WIDGET (arrow)->requisition.width = MIN_ARROW_SIZE + GTK_MISC (arrow)->xpad * 2;
+  GTK_WIDGET (arrow)->requisition.height = MIN_ARROW_SIZE + GTK_MISC (arrow)->ypad * 2;
+
   arrow->arrow_type = GTK_ARROW_RIGHT;
   arrow->shadow_type = GTK_SHADOW_OUT;
 }
@@ -146,10 +149,7 @@ gtk_arrow_new (GtkArrowType  arrow_type,
 {
   GtkArrow *arrow;
 
-  arrow = gtk_type_new (gtk_arrow_get_type ());
-
-  GTK_WIDGET (arrow)->requisition.width = MIN_ARROW_SIZE + GTK_MISC (arrow)->xpad * 2;
-  GTK_WIDGET (arrow)->requisition.height = MIN_ARROW_SIZE + GTK_MISC (arrow)->ypad * 2;
+  arrow = gtk_type_new (GTK_TYPE_ARROW);
 
   arrow->arrow_type = arrow_type;
   arrow->shadow_type = shadow_type;
@@ -174,10 +174,10 @@ gtk_arrow_set (GtkArrow      *arrow,
       if (GTK_WIDGET_DRAWABLE (arrow))
 	{
 	  gdk_window_clear_area (GTK_WIDGET (arrow)->window,
-				 GTK_WIDGET (arrow)->allocation.x + 1,
-				 GTK_WIDGET (arrow)->allocation.y + 1,
-				 GTK_WIDGET (arrow)->allocation.width - 2,
-				 GTK_WIDGET (arrow)->allocation.height - 2);
+				 GTK_WIDGET (arrow)->allocation.x,
+				 GTK_WIDGET (arrow)->allocation.y,
+				 GTK_WIDGET (arrow)->allocation.width,
+				 GTK_WIDGET (arrow)->allocation.height);
 	  gtk_widget_queue_draw (GTK_WIDGET (arrow));
 	}
     }
@@ -209,7 +209,7 @@ gtk_arrow_expose (GtkWidget      *widget,
       extent = MIN (width, height);
 
       x = ((widget->allocation.x + misc->xpad) * (1.0 - misc->xalign) +
-	   (widget->allocation.x + widget->allocation.width - extent - misc->ypad) * misc->xalign);
+	   (widget->allocation.x + widget->allocation.width - extent - misc->xpad) * misc->xalign);
       y = ((widget->allocation.y + misc->ypad) * (1.0 - misc->yalign) +
 	   (widget->allocation.y + widget->allocation.height - extent - misc->ypad) * misc->yalign);
 
@@ -232,5 +232,5 @@ gtk_arrow_expose (GtkWidget      *widget,
 		      x, y, extent, extent);
     }
 
-  return FALSE;
+  return TRUE;
 }

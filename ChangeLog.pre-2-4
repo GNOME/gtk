@@ -1,3 +1,18 @@
+Fri Jul 17 01:21:32 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkarrow.c (gtk_arrow_expose): use misc->xpad for x calculation
+	instead of ypad (typo).
+	(gtk_arrow_set): clear all of the arrow's allocation (left a 1 pixel
+ 	border around the allocation).
+	(gtk_arrow_init): the static requisition needs to be setup in this
+	function rather than gtk_widget_new(), so arrow creation works without
+	the gtk_arrow_new() constructing.
+	(gtk_arrow_expose): return TRUE, since we actually handled the expose.
+
+	* gtk/gtkwidget.c (gtk_widget_real_size_request): provide a default
+ 	implementation for GtkWidget::size_request, so size requisition for
+ 	simple statically sized widgets like GtkArrow works.
+
 Thu Jul 16 14:16:16 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk-config.in: minor changes to gtk-config: --cflags doesn't

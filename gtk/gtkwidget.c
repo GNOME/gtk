@@ -183,6 +183,8 @@ static void gtk_widget_real_realize		 (GtkWidget	    *widget);
 static void gtk_widget_real_unrealize		 (GtkWidget	    *widget);
 static void gtk_widget_real_draw		 (GtkWidget	    *widget,
 						  GdkRectangle	    *area);
+static void gtk_widget_real_size_request	 (GtkWidget	    *widget,
+						  GtkRequisition    *requisition);
 static void gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
 						  GtkAllocation	    *allocation);
 static gint gtk_widget_real_key_press_event      (GtkWidget         *widget,
@@ -718,7 +720,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->unrealize = gtk_widget_real_unrealize;
   klass->draw = gtk_widget_real_draw;
   klass->draw_focus = NULL;
-  klass->size_request = NULL;
+  klass->size_request = gtk_widget_real_size_request;
   klass->size_allocate = gtk_widget_real_size_allocate;
   klass->state_changed = NULL;
   klass->parent_set = NULL;
@@ -3839,13 +3841,16 @@ gtk_widget_real_draw (GtkWidget	   *widget,
     }
 }
 
-/*****************************************
- * gtk_widget_real_size_allocate:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
+static void
+gtk_widget_real_size_request (GtkWidget         *widget,
+			      GtkRequisition    *requisition)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  requisition->width = widget->requisition.width;
+  requisition->height = widget->requisition.height;
+}
 
 static void
 gtk_widget_real_size_allocate (GtkWidget     *widget,
