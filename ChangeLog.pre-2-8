@@ -1,5 +1,8 @@
 2004-11-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c: Actually commit the "stat less" patch
+	which appeared in the ChangeLog a few days ago.
+
 	* gtk/gtkfilechooserbutton.c: Move some docs inline.
 
 	* gtk/gtkaboutdialog.c (gtk_show_about_dialog): Doc update.
@@ -17,7 +20,8 @@
 
 	* gtk/gtkcombobox.c (gtk_combo_box_button_state_changed): Update the
 	state of the cell view when the state of the button changes (to 
-	get prelighted drawing right).  (#138650, Frances Keenan, Christian Persch)
+	get prelighted drawing right).  (#138650, Frances Keenan, 
+	Christian Persch)
 
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
 	Don't force the height of the action area, we don't scroll 

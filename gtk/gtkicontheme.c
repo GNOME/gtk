@@ -890,6 +890,7 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
 
       priv->dir_mtimes = g_list_prepend (priv->dir_mtimes, dir_mtime);
     }
+  priv->dir_mtimes = g_list_reverse (priv->dir_mtimes);
 
   theme_file = NULL;
   for (i = 0; i < priv->search_path_len && !theme_file; i++)
@@ -2082,7 +2083,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
 		   GKeyFile     *theme_file,
 		   char         *subdir)
 {
-  int base;
+  GList *d;
   char *type_string;
   IconThemeDir *dir;
   IconThemeDirType type;
@@ -2094,6 +2095,8 @@ theme_subdir_load (GtkIconTheme *icon_theme,
   int threshold;
   char *full_dir;
   GError *error = NULL;
+  GtkIconCache *cache;
+  IconThemeDirMtime *dir_mtime;
 
   size = g_key_file_get_integer (theme_file, subdir, "Size", &error);
   if (error)
@@ -2152,36 +2155,29 @@ theme_subdir_load (GtkIconTheme *icon_theme,
       g_error_free (error);
       error = NULL;
     }
-  
-  for (base = 0; base < icon_theme->priv->search_path_len; base++)
-    {
-      GtkIconCache *cache;
-      gchar *theme_path;
 
-      full_dir = g_build_filename (icon_theme->priv->search_path[base],
-				   theme->name,
-				   subdir,
-				   NULL);
+  for (d = icon_theme->priv->dir_mtimes; d; d = d->next)
+    {
+      dir_mtime = (IconThemeDirMtime *)d->data;
+
+      if (dir_mtime->mtime == 0)
+	continue; /* directory doesn't exist */
+
+       full_dir = g_build_filename (dir_mtime->dir, subdir, NULL);
 
       /* First, see if we have a cache for the directory */
       if (!theme->icon_caches)
 	theme->icon_caches = g_hash_table_new_full (g_str_hash, g_str_equal,
 						    g_free, (GDestroyNotify)free_cache);
 						   
-      theme_path = g_build_filename (icon_theme->priv->search_path[base],
-				     theme->name,
-				     NULL);
-	  
-      if (!g_hash_table_lookup_extended (theme->icon_caches, theme_path, 
+      if (!g_hash_table_lookup_extended (theme->icon_caches, dir_mtime->dir, 
 					 NULL, (gpointer)&cache))
 	{
 	  /* This will return NULL if the cache doesn't exist or is outdated */
-	  cache = _gtk_icon_cache_new_for_path (theme_path);
+	  cache = _gtk_icon_cache_new_for_path (dir_mtime->dir);
 
-	  g_hash_table_insert (theme->icon_caches, g_strdup (theme_path), cache);
+	  g_hash_table_insert (theme->icon_caches, g_strdup (dir_mtime->dir), cache);
 	}
-
-      g_free (theme_path);
 
       if (cache != NULL || g_file_test (full_dir, G_FILE_TEST_IS_DIR))
 	{
