@@ -92,10 +92,11 @@ COLUMN_FROM_XPIXEL (GtkCList * clist,
 				    (clist)->column[(clist)->columns - 1].area.width + \
 				    COLUMN_INSET + CELL_SPACING)
 
-
 /* Signals */
 enum
 {
+  MOUSE_CLICK,
+  MOUSE_DOUBLE_CLICK,
   SELECT_ROW,
   UNSELECT_ROW,
   CLICK_COLUMN,
@@ -105,7 +106,7 @@ enum
 typedef void (*GtkCListSignal1) (GtkObject * object,
 				 gint arg1,
 				 gint arg2,
-				 GdkEventButton * arg3,
+				 gint arg3,
 				 gpointer data);
 
 typedef void (*GtkCListSignal2) (GtkObject * object,
@@ -164,11 +165,11 @@ static void size_allocate_columns (GtkCList * clist);
 static void real_select_row (GtkCList * clist,
 			     gint row,
 			     gint column,
-			     GdkEventButton * event);
+			     gint button);
 static void real_unselect_row (GtkCList * clist,
 			       gint row,
 			       gint column,
-			       GdkEventButton * event);
+			       gint button);
 static gint get_selection_info (GtkCList * clist,
 				gint x,
 				gint y,
@@ -248,12 +249,10 @@ static void gtk_clist_marshal_signal_2 (GtkObject * object,
 					GtkArg * args);
 
 /* Fill in data after widget is realized and has style */
-
 static void add_style_data (GtkCList * clist);
 
 static GtkContainerClass *parent_class = NULL;
 static gint clist_signals[LAST_SIGNAL] = {0};
-
 
 guint
 gtk_clist_get_type ()
@@ -291,21 +290,34 @@ gtk_clist_class_init (GtkCListClass * klass)
   container_class = (GtkContainerClass *) klass;
 
   parent_class = gtk_type_class (gtk_container_get_type ());
-
+  clist_signals[MOUSE_CLICK] =
+    gtk_signal_new ("mouse_click",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkCListClass, mouse_click),
+		    gtk_clist_marshal_signal_1,
+		    GTK_TYPE_NONE, 3, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_INT);
+  clist_signals[MOUSE_DOUBLE_CLICK] =
+    gtk_signal_new ("mouse_double_click",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkCListClass, mouse_double_click),
+		    gtk_clist_marshal_signal_1,
+		    GTK_TYPE_NONE, 3, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_INT);
   clist_signals[SELECT_ROW] =
     gtk_signal_new ("select_row",
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCListClass, select_row),
 		    gtk_clist_marshal_signal_1,
-	    GTK_TYPE_NONE, 3, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_POINTER);
+		    GTK_TYPE_NONE, 3, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_INT);
   clist_signals[UNSELECT_ROW] =
     gtk_signal_new ("unselect_row",
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCListClass, unselect_row),
 		    gtk_clist_marshal_signal_1,
-	    GTK_TYPE_NONE, 3, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_POINTER);
+		    GTK_TYPE_NONE, 3, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_INT);
   clist_signals[CLICK_COLUMN] =
     gtk_signal_new ("click_column",
 		    GTK_RUN_LAST,
@@ -335,6 +347,8 @@ gtk_clist_class_init (GtkCListClass * klass)
   container_class->remove = NULL;
   container_class->foreach = gtk_clist_foreach;
 
+  klass->mouse_click = NULL;
+  klass->mouse_double_click = NULL;
   klass->select_row = real_select_row;
   klass->unselect_row = real_unselect_row;
   klass->click_column = NULL;
@@ -352,9 +366,10 @@ gtk_clist_marshal_signal_1 (GtkObject * object,
 
   rfunc = (GtkCListSignal1) func;
 
-  (*rfunc) (object, GTK_VALUE_INT (args[0]),
+  (*rfunc) (object, 
+	    GTK_VALUE_INT (args[0]),
 	    GTK_VALUE_INT (args[1]),
-	    GTK_VALUE_POINTER (args[2]),
+	    GTK_VALUE_INT (args[2]),
 	    func_data);
 }
 
@@ -368,7 +383,8 @@ gtk_clist_marshal_signal_2 (GtkObject * object,
 
   rfunc = (GtkCListSignal2) func;
 
-  (*rfunc) (object, GTK_VALUE_INT (args[0]),
+  (*rfunc) (object, 
+	    GTK_VALUE_INT (args[0]),
 	    func_data);
 }
 
@@ -812,7 +828,7 @@ gtk_clist_set_row_height (GtkCList * clist,
   if (GTK_WIDGET_REALIZED (clist))
     {
       text_height = height - (GTK_WIDGET (clist)->style->font->ascent +
-			      GTK_WIDGET (clist) ->style->font->descent + 1);
+			      GTK_WIDGET (clist)->style->font->descent + 1);
       clist->row_center_offset = (text_height / 2) + GTK_WIDGET (clist)->style->font->ascent + 1.5;
     }
       
@@ -1425,7 +1441,7 @@ gtk_clist_select_row (GtkCList * clist,
   if (column < -1 || column >= clist->columns)
     return;
 
-  gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW], row, column, NULL);
+  gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW], row, column, 0);
 }
 
 void
@@ -1441,7 +1457,7 @@ gtk_clist_unselect_row (GtkCList * clist,
   if (column < -1 || column >= clist->columns)
     return;
 
-  gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], row, column, NULL);
+  gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], row, column, 0);
 }
 
 gint
@@ -1904,8 +1920,25 @@ gtk_clist_button_press (GtkWidget * widget,
       y = event->y;
 
       if (get_selection_info (clist, x, y, &row, &column))
-	gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW],
-			 row, column, event);
+	{
+	  switch (event->type)                                                     
+	    {             
+	    case GDK_BUTTON_PRESS:
+	      gtk_signal_emit (GTK_OBJECT (clist), clist_signals[MOUSE_CLICK],
+			       row, column, event->button);
+	      gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW],
+			       row, column, event->button);
+	      break;
+	      
+	    case GDK_2BUTTON_PRESS:
+	      gtk_signal_emit (GTK_OBJECT (clist), clist_signals[MOUSE_DOUBLE_CLICK],
+			       row, column, event->button);
+	      break;
+	      
+	    default:
+	      break;
+	    }
+	}
 
       return FALSE;
     }
@@ -2724,7 +2757,7 @@ static void
 real_select_row (GtkCList * clist,
 		 gint row,
 		 gint column,
-		 GdkEventButton * event)
+		 gint button)
 {
   gint i;
   GList *list;
@@ -2763,7 +2796,7 @@ real_select_row (GtkCList * clist,
 	    }
 	  else if (clist_row->state == GTK_STATE_SELECTED)
 	    {
-	      gtk_clist_unselect_row (clist, i, column);
+	      gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], i, column, button);
 	    }
 
 	  i++;
@@ -2791,7 +2824,7 @@ real_select_row (GtkCList * clist,
 	    }
 	  else if (clist_row->state == GTK_STATE_SELECTED)
 	    {
-	      gtk_clist_unselect_row (clist, i, column);
+	      gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], i, column, button);
 	    }
 
 	  i++;
@@ -2811,7 +2844,7 @@ real_select_row (GtkCList * clist,
 	      if (clist_row->state == GTK_STATE_SELECTED)
 		{
 		  clist_row->state = GTK_STATE_NORMAL;
-		  gtk_clist_unselect_row (clist, i, column);
+		 gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], i, column, button);
 		}
 	      else
 		{
@@ -2839,7 +2872,7 @@ static void
 real_unselect_row (GtkCList * clist,
 		   gint row,
 		   gint column,
-		   GdkEventButton * event)
+		   gint button)
 {
   GtkCListRow *clist_row;
 

@@ -1,3 +1,10 @@
+Wed Feb 18 01:09:56 PST 1998  Jay Painter <jpaint@serv.net>
+	* gdk/gdk.c: fixed ambigous else compiler warning
+	* gtk/gtkgamma.c: fixed ambigous else compiler warning
+	* gtk/gtkclist.h:
+	* gtk/gtkclist.c: new signals which break everything! (yeah!)
+	* gtk/gtkfilesel.c: fixed to use new clist signals
+
 Wed Feb 18 04:38:24 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkwidget.h:

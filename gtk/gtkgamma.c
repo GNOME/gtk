@@ -320,54 +320,58 @@ button_clicked_callback (GtkWidget *w, gpointer data)
 
   active = (long) gtk_object_get_data (GTK_OBJECT (w), "_GtkGammaCurveIndex");
   if (active == 3)
-    /* set gamma */
-    if (c->gamma_dialog)
-      return;
-    else
-      {
-	GtkWidget *vbox, *hbox, *label, *button;
-	gchar buf[64];
-
-	c->gamma_dialog = gtk_dialog_new ();
-	gtk_window_set_title (GTK_WINDOW (c->gamma_dialog), "Gamma");
-	vbox = GTK_DIALOG (c->gamma_dialog)->vbox;
-
-	hbox = gtk_hbox_new (/* homogeneous */ FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 2);
-	gtk_widget_show (hbox);
-
-	label = gtk_label_new ("Gamma value");
-	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 2);
-	gtk_widget_show (label);
-
-	sprintf (buf, "%g", c->gamma);
-	c->gamma_text = gtk_entry_new ();
-	gtk_entry_set_text (GTK_ENTRY (c->gamma_text), buf);
-	gtk_box_pack_start (GTK_BOX (hbox), c->gamma_text, TRUE, TRUE, 2);
-	gtk_widget_show (c->gamma_text);
-
-	/* fill in action area: */
-	hbox = GTK_DIALOG (c->gamma_dialog)->action_area;
-
-	button = gtk_button_new_with_label ("OK");
-	GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-	gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			    (GtkSignalFunc) gamma_ok_callback, c);
-	gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-	gtk_widget_grab_default (button);
-	gtk_widget_show (button);
-
-	button = gtk_button_new_with_label ("Cancel");
-	gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			    (GtkSignalFunc) gamma_cancel_callback, c);
-	gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-	gtk_widget_show (button);
-
-	gtk_widget_show (c->gamma_dialog);
-      }
+    {
+      /* set gamma */
+      if (c->gamma_dialog)
+	return;
+      else
+	{
+	  GtkWidget *vbox, *hbox, *label, *button;
+	  gchar buf[64];
+	  
+	  c->gamma_dialog = gtk_dialog_new ();
+	  gtk_window_set_title (GTK_WINDOW (c->gamma_dialog), "Gamma");
+	  vbox = GTK_DIALOG (c->gamma_dialog)->vbox;
+	  
+	  hbox = gtk_hbox_new (/* homogeneous */ FALSE, 0);
+	  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 2);
+	  gtk_widget_show (hbox);
+	  
+	  label = gtk_label_new ("Gamma value");
+	  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 2);
+	  gtk_widget_show (label);
+	  
+	  sprintf (buf, "%g", c->gamma);
+	  c->gamma_text = gtk_entry_new ();
+	  gtk_entry_set_text (GTK_ENTRY (c->gamma_text), buf);
+	  gtk_box_pack_start (GTK_BOX (hbox), c->gamma_text, TRUE, TRUE, 2);
+	  gtk_widget_show (c->gamma_text);
+	  
+	  /* fill in action area: */
+	  hbox = GTK_DIALOG (c->gamma_dialog)->action_area;
+	  
+	  button = gtk_button_new_with_label ("OK");
+	  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+	  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			      (GtkSignalFunc) gamma_ok_callback, c);
+	  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+	  gtk_widget_grab_default (button);
+	  gtk_widget_show (button);
+	  
+	  button = gtk_button_new_with_label ("Cancel");
+	  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			      (GtkSignalFunc) gamma_cancel_callback, c);
+	  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+	  gtk_widget_show (button);
+	  
+	  gtk_widget_show (c->gamma_dialog);
+	}
+    }
   else
-    /* reset */
-    gtk_curve_reset (GTK_CURVE (c->curve));
+    {
+      /* reset */
+      gtk_curve_reset (GTK_CURVE (c->curve));
+    }
 }
 
 static void
