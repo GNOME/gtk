@@ -1,3 +1,12 @@
+Sun Oct 13 12:29:15 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkcolorsel.[ch] gtk/gtkcombo.[ch] gtk/gtkplug.[ch]
+	gtk/gtksocket.[ch] gtk/gtktreeview.[ch] gtk/gtktreeviewcolumn.[ch]:
+	Deprecation cleanup
+
+	* gtk/gtkcolorseldialog.c: make window not resizable (lost
+	accidently in the previous cleanup)
+
 Sun Oct 13 20:20:51 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktooltips.c (gtk_tooltips_force_window): Make tooltip
@@ -18,7 +27,7 @@ Sun Oct 13 18:50:14 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 	#94616, Ben Martin;
 	#94772, sbaillie@bigpond.net.au;
 
-Oct 13 17:41:53 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+Sun Oct 13 17:41:53 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkwidget.c (gtk_widget_queue_clear_area): Don't invalidate
 	a widget if it or one of its ancestors isn't mapped.

@@ -35,7 +35,6 @@
 #include "gtkselection.h"
 #include "gtkdnd.h"
 #include "gtkdrawingarea.h"
-#include "gtksignal.h"
 #include "gtkhbox.h"
 #include "gtkhbbox.h"
 #include "gtkrc.h"
@@ -43,7 +42,7 @@
 #include "gtktable.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
-#include "gtkpixmap.h"
+#include "gtkimage.h"
 #include "gtkspinbutton.h"
 #include "gtkrange.h"
 #include "gtkhscale.h"
@@ -235,7 +234,7 @@ set_color_icon (GdkDragContext *context,
   gdk_pixbuf_fill (pixbuf, pixel);
   
   gtk_drag_set_icon_pixbuf (context, pixbuf, -2, -2);
-  gdk_pixbuf_unref (pixbuf);
+  g_object_unref (pixbuf);
 }
 
 static void
@@ -262,7 +261,7 @@ color_sample_drag_end (GtkWidget      *widget,
 		       GdkDragContext *context,
 		       gpointer        data)
 {
-  gtk_object_set_data (GTK_OBJECT (widget), "gtk-color-selection-drag-window", NULL);
+  g_object_set_data (G_OBJECT (widget), "gtk-color-selection-drag-window", NULL);
 }
 
 static void
@@ -468,10 +467,10 @@ color_sample_setup_dnd (GtkColorSelection *colorsel, GtkWidget *sample)
 		       targets, 1,
 		       GDK_ACTION_COPY | GDK_ACTION_MOVE);
   
-  gtk_signal_connect (GTK_OBJECT (sample),
-		      "drag_begin",
-		      GTK_SIGNAL_FUNC (color_sample_drag_begin),
-		      colorsel);
+  g_signal_connect (sample,
+		    "drag_begin",
+		    G_CALLBACK (color_sample_drag_begin),
+		    colorsel);
   if (sample == priv->cur_sample)
     {
       
@@ -482,20 +481,20 @@ color_sample_setup_dnd (GtkColorSelection *colorsel, GtkWidget *sample)
 			 targets, 1,
 			 GDK_ACTION_COPY);
       
-      gtk_signal_connect (GTK_OBJECT (sample),
-			  "drag_end",
-			  GTK_SIGNAL_FUNC (color_sample_drag_end),
-			  colorsel);
+      g_signal_connect (sample,
+			"drag_end",
+			G_CALLBACK (color_sample_drag_end),
+			colorsel);
     }
   
-  gtk_signal_connect (GTK_OBJECT (sample),
-		      "drag_data_get",
-		      GTK_SIGNAL_FUNC (color_sample_drag_handle),
-		      colorsel);
-  gtk_signal_connect (GTK_OBJECT (sample),
-		      "drag_data_received",
-		      GTK_SIGNAL_FUNC (color_sample_drop_handle),
-		      colorsel);
+  g_signal_connect (sample,
+		    "drag_data_get",
+		    G_CALLBACK (color_sample_drag_handle),
+		    colorsel);
+  g_signal_connect (sample,
+		    "drag_data_received",
+		    G_CALLBACK (color_sample_drop_handle),
+		    colorsel);
   
 }
 
@@ -522,12 +521,12 @@ color_sample_new (GtkColorSelection *colorsel)
   gtk_box_pack_start (GTK_BOX (priv->sample_area), priv->cur_sample,
 		      TRUE, TRUE, 0);
   
-  gtk_signal_connect (GTK_OBJECT (priv->old_sample), "expose_event",
-		      GTK_SIGNAL_FUNC (color_old_sample_expose),
-		      colorsel);
-  gtk_signal_connect (GTK_OBJECT (priv->cur_sample), "expose_event",
-		      GTK_SIGNAL_FUNC (color_cur_sample_expose),
-		      colorsel);
+  g_signal_connect (priv->old_sample, "expose_event",
+		    G_CALLBACK (color_old_sample_expose),
+		    colorsel);
+  g_signal_connect (priv->cur_sample, "expose_event",
+		    G_CALLBACK (color_cur_sample_expose),
+		    colorsel);
   
   color_sample_setup_dnd (colorsel, priv->old_sample);
   color_sample_setup_dnd (colorsel, priv->cur_sample);
@@ -560,7 +559,7 @@ palette_get_color (GtkWidget *drawing_area, gdouble *color)
   
   g_return_if_fail (color != NULL);
   
-  color_val = gtk_object_get_data (GTK_OBJECT (drawing_area), "color_val");
+  color_val = g_object_get_data (G_OBJECT (drawing_area), "color_val");
   if (color_val == NULL)
     {
       /* Default to white for no good reason */
@@ -675,7 +674,7 @@ palette_drag_end (GtkWidget      *widget,
 		  GdkDragContext *context,
 		  gpointer        data)
 {
-  gtk_object_set_data (GTK_OBJECT (widget), "gtk-color-selection-drag-window", NULL);
+  g_object_set_data (G_OBJECT (widget), "gtk-color-selection-drag-window", NULL);
 }
 
 static GdkColor *
@@ -795,7 +794,7 @@ palette_set_color (GtkWidget         *drawing_area,
 
   gtk_widget_modify_bg (drawing_area, GTK_STATE_NORMAL, &gdk_color);
   
-  if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (drawing_area), "color_set")) == 0)
+  if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (drawing_area), "color_set")) == 0)
     {
       static const GtkTargetEntry targets[] = {
 	{ "application/x-color", 0 }
@@ -805,16 +804,17 @@ palette_set_color (GtkWidget         *drawing_area,
 			   targets, 1,
 			   GDK_ACTION_COPY | GDK_ACTION_MOVE);
       
-      gtk_signal_connect (GTK_OBJECT (drawing_area),
-			  "drag_begin",
-			  GTK_SIGNAL_FUNC (palette_drag_begin),
-			  colorsel);
-      gtk_signal_connect (GTK_OBJECT (drawing_area),
-			  "drag_data_get",
-			  GTK_SIGNAL_FUNC (palette_drag_handle),
-			  colorsel);
+      g_signal_connect (drawing_area,
+			"drag_begin",
+			G_CALLBACK (palette_drag_begin),
+			colorsel);
+      g_signal_connect (drawing_area,
+			"drag_data_get",
+			G_CALLBACK (palette_drag_handle),
+			colorsel);
       
-      gtk_object_set_data (GTK_OBJECT (drawing_area), "color_set", GINT_TO_POINTER (1));
+      g_object_set_data (G_OBJECT (drawing_area), "color_set",
+			 GINT_TO_POINTER (1));
     }
 
   new_color[0] = color[0];
@@ -902,9 +902,9 @@ do_popup (GtkColorSelection *colorsel,
 
   mi = gtk_menu_item_new_with_mnemonic (_("_Save color here"));
 
-  gtk_signal_connect (GTK_OBJECT (mi), "activate",
-                      GTK_SIGNAL_FUNC (save_color_selected),
-                      drawing_area);
+  g_signal_connect (mi, "activate",
+                    G_CALLBACK (save_color_selected),
+                    drawing_area);
   
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
 
@@ -972,7 +972,7 @@ palette_release (GtkWidget      *drawing_area,
       g_object_get_data (G_OBJECT (drawing_area),
 			 "gtk-colorsel-have-pointer") != NULL)
     {
-      if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (drawing_area), "color_set")) != 0)
+      if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (drawing_area), "color_set")) != 0)
         {
           gdouble color[4];
           palette_get_color (drawing_area, color);
@@ -986,11 +986,11 @@ palette_release (GtkWidget      *drawing_area,
 static void
 palette_unset_color (GtkWidget *drawing_area)
 {
-  if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (drawing_area), "color_set")) == 0)
+  if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (drawing_area), "color_set")) == 0)
     return;
   
   gtk_widget_reset_rc_styles (drawing_area);
-  gtk_object_set_data (GTK_OBJECT (drawing_area), "color_set", GINT_TO_POINTER (0));
+  g_object_set_data (G_OBJECT (drawing_area), "color_set", GINT_TO_POINTER (0));
 }
 
 static void
@@ -1037,7 +1037,7 @@ palette_activate (GtkWidget   *widget,
       (event->keyval == GDK_KP_Enter) ||
       (event->keyval == GDK_KP_Space))
     {
-      if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (widget), "color_set")) != 0)
+      if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "color_set")) != 0)
         {
           gdouble color[4];
           palette_get_color (widget, color);
@@ -1076,28 +1076,27 @@ palette_new (GtkColorSelection *colorsel)
 
   GTK_WIDGET_SET_FLAGS (retval, GTK_CAN_FOCUS);
   
-  gtk_object_set_data (GTK_OBJECT (retval), "color_set", GINT_TO_POINTER (0)); 
+  g_object_set_data (G_OBJECT (retval), "color_set", GINT_TO_POINTER (0)); 
   gtk_widget_set_events (retval, GDK_BUTTON_PRESS_MASK
                          | GDK_BUTTON_RELEASE_MASK
                          | GDK_EXPOSURE_MASK
                          | GDK_ENTER_NOTIFY_MASK
                          | GDK_LEAVE_NOTIFY_MASK);
   
-
-  gtk_signal_connect (GTK_OBJECT (retval), "expose_event",
-                      GTK_SIGNAL_FUNC (palette_expose), colorsel);
-  gtk_signal_connect (GTK_OBJECT (retval), "button_press_event",
-                      GTK_SIGNAL_FUNC (palette_press), colorsel);
-  gtk_signal_connect (GTK_OBJECT (retval), "button_release_event",
-                      GTK_SIGNAL_FUNC (palette_release), colorsel);
-  gtk_signal_connect (GTK_OBJECT (retval), "enter_notify_event",
-                      GTK_SIGNAL_FUNC (palette_enter), colorsel);
-  gtk_signal_connect (GTK_OBJECT (retval), "leave_notify_event",
-                      GTK_SIGNAL_FUNC (palette_leave), colorsel);
-  gtk_signal_connect (GTK_OBJECT (retval), "key_press_event",
-                      GTK_SIGNAL_FUNC (palette_activate), colorsel);
-  gtk_signal_connect (GTK_OBJECT (retval), "popup_menu",
-                      GTK_SIGNAL_FUNC (palette_popup), colorsel);
+  g_signal_connect (retval, "expose_event",
+		    G_CALLBACK (palette_expose), colorsel);
+  g_signal_connect (retval, "button_press_event",
+		    G_CALLBACK (palette_press), colorsel);
+  g_signal_connect (retval, "button_release_event",
+		    G_CALLBACK (palette_release), colorsel);
+  g_signal_connect (retval, "enter_notify_event",
+		    G_CALLBACK (palette_enter), colorsel);
+  g_signal_connect (retval, "leave_notify_event",
+		    G_CALLBACK (palette_leave), colorsel);
+  g_signal_connect (retval, "key_press_event",
+		    G_CALLBACK (palette_activate), colorsel);
+  g_signal_connect (retval, "popup_menu",
+		    G_CALLBACK (palette_popup), colorsel);
   
   gtk_drag_dest_set (retval,
 		     GTK_DEST_DEFAULT_HIGHLIGHT |
@@ -1106,10 +1105,10 @@ palette_new (GtkColorSelection *colorsel)
 		     targets, 1,
 		     GDK_ACTION_COPY);
   
-  gtk_signal_connect (GTK_OBJECT (retval), "drag_end",
-                      GTK_SIGNAL_FUNC (palette_drag_end), NULL);
-  gtk_signal_connect (GTK_OBJECT (retval), "drag_data_received",
-                      GTK_SIGNAL_FUNC (palette_drop_handle), colorsel);
+  g_signal_connect (retval, "drag_end",
+                    G_CALLBACK (palette_drag_end), NULL);
+  g_signal_connect (retval, "drag_data_received",
+                    G_CALLBACK (palette_drop_handle), colorsel);
 
   gtk_tooltips_set_tip (priv->tooltips,
                         retval,
@@ -1129,24 +1128,23 @@ static GdkCursor *
 make_picker_cursor (GdkScreen *screen)
 {
   GdkCursor *cursor;
-  GdkColor fg, bg;
+  GdkColor bg = { 0, 0xffff, 0xffff, 0xffff };
+  GdkColor fg = { 0, 0x0000, 0x0000, 0x0000 };
+  GdkWindow *window = gdk_screen_get_root_window (screen);
   
   GdkPixmap *pixmap =
-    gdk_bitmap_create_from_data (gdk_screen_get_root_window (screen),
-				 (gchar *)dropper_bits, DROPPER_WIDTH, DROPPER_HEIGHT);
+    gdk_bitmap_create_from_data (window, (gchar *) dropper_bits,
+				 DROPPER_WIDTH, DROPPER_HEIGHT);
 
   GdkPixmap *mask =
-    gdk_bitmap_create_from_data (gdk_screen_get_root_window (screen),
-				 (gchar *)dropper_mask, DROPPER_WIDTH, DROPPER_HEIGHT);
+    gdk_bitmap_create_from_data (window, (gchar *) dropper_mask,
+				 DROPPER_WIDTH, DROPPER_HEIGHT);
 
+  cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg,
+				       DROPPER_X_HOT, DROPPER_Y_HOT);
   
-  gdk_color_white (gdk_screen_get_system_colormap (screen), &bg);
-  gdk_color_black (gdk_screen_get_system_colormap (screen), &fg);
-  
-  cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg, DROPPER_X_HOT ,DROPPER_Y_HOT);
-  
-  gdk_pixmap_unref (pixmap);
-  gdk_pixmap_unref (mask);
+  g_object_unref (pixmap);
+  g_object_unref (mask);
 
   return cursor;
 }
@@ -1167,9 +1165,9 @@ grab_color_at_mouse (GdkScreen *screen,
   
   priv = colorsel->private_data;
   
-  image = gdk_image_get (root_window, x_root, y_root, 1, 1);
+  image = gdk_drawable_get_image (root_window, x_root, y_root, 1, 1);
   pixel = gdk_image_get_pixel (image, 0, 0);
-  gdk_image_unref (image);
+  g_object_unref (image);
 
   gdk_colormap_query_color (colormap, pixel, &color);
   
@@ -1229,10 +1227,12 @@ mouse_release (GtkWidget      *invisible,
 
   shutdown_eyedropper (GTK_WIDGET (data));
   
-  gtk_signal_disconnect_by_func (GTK_OBJECT (invisible),
-                                 GTK_SIGNAL_FUNC (mouse_motion), data);
-  gtk_signal_disconnect_by_func (GTK_OBJECT (invisible),
-                                 GTK_SIGNAL_FUNC (mouse_release), data);
+  g_signal_handlers_disconnect_by_func (invisible,
+					mouse_motion,
+					data);
+  g_signal_handlers_disconnect_by_func (invisible,
+					mouse_release,
+					data);
 
   return TRUE;
 }
@@ -1252,12 +1252,12 @@ key_press (GtkWidget   *invisible,
     {
       shutdown_eyedropper (data);
 
-      gtk_signal_disconnect_by_func (GTK_OBJECT (invisible),
-                                     GTK_SIGNAL_FUNC (mouse_press),
-                                     data);
-      gtk_signal_disconnect_by_func (GTK_OBJECT (invisible),
-                                     GTK_SIGNAL_FUNC (key_press),
-                                     data);
+      g_signal_handlers_disconnect_by_func (invisible,
+					    mouse_press,
+					    data);
+      g_signal_handlers_disconnect_by_func (invisible,
+					    key_press,
+					    data);
       
       return TRUE;
     }
@@ -1277,18 +1277,18 @@ mouse_press (GtkWidget      *invisible,
   if (event->type == GDK_BUTTON_PRESS &&
       event->button == 1)
     {
-      gtk_signal_connect (GTK_OBJECT (invisible), "motion_notify_event",
-                          GTK_SIGNAL_FUNC (mouse_motion),
-                          data);
-      gtk_signal_connect (GTK_OBJECT (invisible), "button_release_event",
-                          GTK_SIGNAL_FUNC (mouse_release),
-                          data);
-      gtk_signal_disconnect_by_func (GTK_OBJECT (invisible),
-                                     GTK_SIGNAL_FUNC (mouse_press),
-                                     data);
-      gtk_signal_disconnect_by_func (GTK_OBJECT (invisible),
-                                     GTK_SIGNAL_FUNC (key_press),
-                                     data);
+      g_signal_connect (invisible, "motion_notify_event",
+                        G_CALLBACK (mouse_motion),
+                        data);
+      g_signal_connect (invisible, "button_release_event",
+                        G_CALLBACK (mouse_release),
+                        data);
+      g_signal_handlers_disconnect_by_func (invisible,
+					    mouse_press,
+					    data);
+      g_signal_handlers_disconnect_by_func (invisible,
+					    key_press,
+					    data);
       return TRUE;
     }
 
@@ -1299,7 +1299,7 @@ mouse_press (GtkWidget      *invisible,
 static void
 get_screen_color (GtkWidget *button)
 {
-  GtkColorSelection *colorsel = gtk_object_get_data (GTK_OBJECT (button), "COLORSEL");
+  GtkColorSelection *colorsel = g_object_get_data (G_OBJECT (button), "COLORSEL");
   ColorSelectionPrivate *priv = colorsel->private_data;
   GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (button));
   GdkCursor *picker_cursor;
@@ -1337,10 +1337,10 @@ get_screen_color (GtkWidget *button)
 
   gtk_grab_add (priv->dropper_grab_widget);
   
-  gtk_signal_connect (GTK_OBJECT (priv->dropper_grab_widget), "button_press_event",
-                      GTK_SIGNAL_FUNC (mouse_press), colorsel);
-  gtk_signal_connect (GTK_OBJECT (priv->dropper_grab_widget), "key_press_event",
-                      GTK_SIGNAL_FUNC (key_press), colorsel);
+  g_signal_connect (priv->dropper_grab_widget, "button_press_event",
+                    G_CALLBACK (mouse_press), colorsel);
+  g_signal_connect (priv->dropper_grab_widget, "key_press_event",
+                    G_CALLBACK (key_press), colorsel);
 }
 
 static void
@@ -1408,7 +1408,7 @@ adjustment_changed (GtkAdjustment *adjustment,
   GtkColorSelection *colorsel;
   ColorSelectionPrivate *priv;
   
-  colorsel = GTK_COLOR_SELECTION (gtk_object_get_data (GTK_OBJECT (adjustment), "COLORSEL"));
+  colorsel = GTK_COLOR_SELECTION (g_object_get_data (G_OBJECT (adjustment), "COLORSEL"));
   priv = colorsel->private_data;
   
   if (priv->changing)
@@ -1500,21 +1500,20 @@ make_label_spinbutton (GtkColorSelection *colorsel,
     {
       adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 1.0));
     }
-  gtk_object_set_data (GTK_OBJECT (adjust), "COLORSEL", colorsel);
+  g_object_set_data (G_OBJECT (adjust), "COLORSEL", colorsel);
   *spinbutton = gtk_spin_button_new (adjust, 10.0, 0);
 
   gtk_tooltips_set_tip (priv->tooltips, *spinbutton, tooltip, NULL);  
 
-  gtk_signal_connect (GTK_OBJECT (adjust), "value_changed",
-                      GTK_SIGNAL_FUNC (adjustment_changed),
-                      GINT_TO_POINTER (channel_type));
+  g_signal_connect (adjust, "value_changed",
+                    G_CALLBACK (adjustment_changed),
+                    GINT_TO_POINTER (channel_type));
   label = gtk_label_new_with_mnemonic (text);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), *spinbutton);
 
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
   gtk_table_attach_defaults (GTK_TABLE (table), label, i, i+1, j, j+1);
   gtk_table_attach_defaults (GTK_TABLE (table), *spinbutton, i+1, i+2, j, j+1);
-  
 }
 
 static void
@@ -1530,7 +1529,7 @@ make_palette_frame (GtkColorSelection *colorsel,
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
   priv->custom_palette[i][j] = palette_new (colorsel);
-  gtk_widget_set_usize (priv->custom_palette[i][j], CUSTOM_PALETTE_ENTRY_WIDTH, CUSTOM_PALETTE_ENTRY_HEIGHT);
+  gtk_widget_set_size_request (priv->custom_palette[i][j], CUSTOM_PALETTE_ENTRY_WIDTH, CUSTOM_PALETTE_ENTRY_HEIGHT);
   gtk_container_add (GTK_CONTAINER (frame), priv->custom_palette[i][j]);
   gtk_table_attach_defaults (GTK_TABLE (table), frame, i, i+1, j, j+1);
 }
@@ -1673,26 +1672,29 @@ default_change_palette_func (GdkScreen	    *screen,
   g_free (str);
 }
 
-GtkType
+GType
 gtk_color_selection_get_type (void)
 {
-  static GtkType color_selection_type = 0;
+  static GType color_selection_type = 0;
   
   if (!color_selection_type)
     {
-      static const GtkTypeInfo color_selection_info =
+      static const GTypeInfo color_selection_info =
       {
-        "GtkColorSelection",
-        sizeof (GtkColorSelection),
         sizeof (GtkColorSelectionClass),
-        (GtkClassInitFunc) gtk_color_selection_class_init,
-        (GtkObjectInitFunc) gtk_color_selection_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+        (GClassInitFunc) gtk_color_selection_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+        sizeof (GtkColorSelection),
+	0,		/* n_preallocs */
+        (GInstanceInitFunc) gtk_color_selection_init,
       };
       
-      color_selection_type = gtk_type_unique (GTK_TYPE_VBOX, &color_selection_info);
+      color_selection_type =
+	g_type_register_static (GTK_TYPE_VBOX, "GtkColorSelection",
+				&color_selection_info, 0);
     }
   
   return color_selection_type;
@@ -1701,15 +1703,15 @@ gtk_color_selection_get_type (void)
 static void
 gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 {
-  GtkObjectClass *object_class;
   GObjectClass *gobject_class;
+  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   
-  object_class = GTK_OBJECT_CLASS (klass);
   gobject_class = G_OBJECT_CLASS (klass);
+  object_class = GTK_OBJECT_CLASS (klass);
   widget_class = GTK_WIDGET_CLASS (klass);
   
-  parent_class = gtk_type_class (GTK_TYPE_VBOX);
+  parent_class = g_type_class_peek_parent (klass);
   
   object_class->destroy = gtk_color_selection_destroy;
   gobject_class->finalize = gtk_color_selection_finalize;
@@ -1751,12 +1753,13 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 						      G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   color_selection_signals[COLOR_CHANGED] =
-    gtk_signal_new ("color_changed",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkColorSelectionClass, color_changed),
-                    _gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
+    g_signal_new ("color_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkColorSelectionClass, color_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 
   gtk_settings_install_property (g_param_spec_string ("gtk-color-palette",
                                                       _("Custom palette"),
@@ -1795,8 +1798,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   
   vbox = gtk_vbox_new (FALSE, 4);
   priv->triangle_colorsel = gtk_hsv_new ();
-  gtk_signal_connect (GTK_OBJECT (priv->triangle_colorsel), "changed",
-                      GTK_SIGNAL_FUNC (hsv_changed), colorsel);
+  g_signal_connect (priv->triangle_colorsel, "changed",
+                    G_CALLBACK (hsv_changed), colorsel);
   gtk_hsv_set_metrics (GTK_HSV (priv->triangle_colorsel), 174, 15);
   gtk_box_pack_start (GTK_BOX (top_hbox), vbox, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), priv->triangle_colorsel, FALSE, FALSE, 0);
@@ -1807,7 +1810,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   
   frame = gtk_frame_new (NULL);
-  gtk_widget_set_usize (frame, -1, 30);
+  gtk_widget_set_size_request (frame, -1, 30);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
   color_sample_new (colorsel);
   gtk_container_add (GTK_CONTAINER (frame), priv->sample_area);
@@ -1816,9 +1819,9 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   button = gtk_button_new ();
 
   gtk_widget_set_events (button, GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
-  gtk_object_set_data (GTK_OBJECT (button), "COLORSEL", colorsel); 
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (get_screen_color), NULL);
+  g_object_set_data (G_OBJECT (button), "COLORSEL", colorsel); 
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (get_screen_color), NULL);
   picker_image = gtk_image_new_from_stock (GTK_STOCK_COLOR_PICKER, GTK_ICON_SIZE_BUTTON);
   gtk_container_add (GTK_CONTAINER (button), picker_image);
   gtk_widget_show (GTK_WIDGET (picker_image));
@@ -1853,7 +1856,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_misc_set_alignment (GTK_MISC (priv->opacity_label), 1.0, 0.5); 
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_label, 0, 1, 4, 5); 
   adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 0.0)); 
-  gtk_object_set_data (GTK_OBJECT (adjust), "COLORSEL", colorsel); 
+  g_object_set_data (G_OBJECT (adjust), "COLORSEL", colorsel); 
   priv->opacity_slider = gtk_hscale_new (adjust);
   gtk_tooltips_set_tip (priv->tooltips,
                         priv->opacity_slider,
@@ -1861,15 +1864,15 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_label_set_mnemonic_widget (GTK_LABEL (priv->opacity_label),
                                  priv->opacity_slider);
   gtk_scale_set_draw_value (GTK_SCALE (priv->opacity_slider), FALSE);
-  gtk_signal_connect (GTK_OBJECT (adjust), "value_changed",
-                      GTK_SIGNAL_FUNC (adjustment_changed),
-                      GINT_TO_POINTER (COLORSEL_OPACITY));
+  g_signal_connect (adjust, "value_changed",
+                    G_CALLBACK (adjustment_changed),
+                    GINT_TO_POINTER (COLORSEL_OPACITY));
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_slider, 1, 7, 4, 5); 
   priv->opacity_entry = gtk_entry_new (); 
-  gtk_widget_set_usize (priv->opacity_entry, 40, 0); 
+  gtk_widget_set_size_request (priv->opacity_entry, 40, -1); 
 
-  gtk_signal_connect (GTK_OBJECT (priv->opacity_entry), "activate",
-                      GTK_SIGNAL_FUNC (opacity_entry_changed), colorsel);
+  g_signal_connect (priv->opacity_entry, "activate",
+                    G_CALLBACK (opacity_entry_changed), colorsel);
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_entry, 7, 8, 4, 5);
   
   label = gtk_label_new_with_mnemonic (_("Color _Name:"));
@@ -1879,14 +1882,14 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), priv->hex_entry);
 
-  gtk_signal_connect (GTK_OBJECT (priv->hex_entry), "activate",
-                      GTK_SIGNAL_FUNC (hex_changed), colorsel);
+  g_signal_connect (priv->hex_entry, "activate",
+                    G_CALLBACK (hex_changed), colorsel);
 
   gtk_tooltips_set_tip (priv->tooltips,
                         priv->hex_entry,
                         _("You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."), NULL);
   
-  gtk_widget_set_usize (priv->hex_entry, 75, -1);  
+  gtk_widget_set_size_request (priv->hex_entry, 75, -1);  
   gtk_table_set_col_spacing (GTK_TABLE (table), 3, 15);
   gtk_table_attach_defaults (GTK_TABLE (table), priv->hex_entry, 1, 5, 5, 6);
   
@@ -2026,7 +2029,7 @@ gtk_color_selection_new (void)
   color[2] = 1.0;
   color[3] = 1.0;
   
-  colorsel = gtk_type_new (GTK_TYPE_COLOR_SELECTION);
+  colorsel = g_object_new (GTK_TYPE_COLOR_SELECTION, NULL);
   priv = colorsel->private_data;
   gtk_color_selection_set_color (colorsel, color);
   gtk_color_selection_set_has_opacity_control (colorsel, TRUE);
@@ -2489,7 +2492,7 @@ gtk_color_selection_get_palette_color (GtkColorSelection   *colorsel,
   x = index % GTK_CUSTOM_PALETTE_WIDTH;
   y = index / GTK_CUSTOM_PALETTE_WIDTH;
 
-  if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (priv->custom_palette[x][y]), "color_set")) == 0)
+  if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (priv->custom_palette[x][y]), "color_set")) == 0)
     return FALSE;
   
   palette_get_color (priv->custom_palette[x][y], col);

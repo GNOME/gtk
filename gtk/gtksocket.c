@@ -33,7 +33,6 @@
 #include "gtkwindow.h"
 #include "gtkplug.h"
 #include "gtkprivate.h"
-#include "gtksignal.h"
 #include "gtksocket.h"
 #include "gtkdnd.h"
 
@@ -135,10 +134,10 @@ gtk_socket_get_private (GtkSocket *socket)
   return private;
 }
 
-GtkType
+GType
 gtk_socket_get_type (void)
 {
-  static GtkType socket_type = 0;
+  static GType socket_type = 0;
 
   if (!socket_type)
     {
@@ -155,7 +154,8 @@ gtk_socket_get_type (void)
 	(GInstanceInitFunc) gtk_socket_init,
       };
 
-      socket_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkSocket", &socket_info, 0);
+      socket_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkSocket",
+					    &socket_info, 0);
     }
 
   return socket_type;
@@ -183,7 +183,7 @@ gtk_socket_class_init (GtkSocketClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
+  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_socket_finalize;
   gobject_class->notify = gtk_socket_notify;
@@ -207,7 +207,7 @@ gtk_socket_class_init (GtkSocketClass *class)
 		  G_STRUCT_OFFSET (GtkSocketClass, plug_added),
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
-		  GTK_TYPE_NONE, 0);
+		  G_TYPE_NONE, 0);
   socket_signals[PLUG_REMOVED] =
     g_signal_new ("plug_removed",
 		  G_OBJECT_CLASS_TYPE (class),
@@ -656,7 +656,6 @@ remove_grabbed_key (GtkSocket      *socket,
 				      accel_entry->closure);
 	  return;
 	}
-	
     }
 
   g_warning ("GtkSocket: request to remove non-present grabbed key %u,%#x\n",
@@ -735,9 +734,11 @@ gtk_socket_hierarchy_changed (GtkWidget *widget,
 	{
 	  gtk_window_remove_accel_group (GTK_WINDOW (socket->toplevel), socket->accel_group);
 	  g_signal_handlers_disconnect_by_func (socket->toplevel,
-						(gpointer) socket_update_focus_in, socket);
+						socket_update_focus_in,
+						socket);
 	  g_signal_handlers_disconnect_by_func (socket->toplevel,
-						(gpointer) socket_update_active, socket);
+						socket_update_active,
+						socket);
 	}
 
       socket->toplevel = toplevel;
@@ -987,7 +988,7 @@ gtk_socket_add_window (GtkSocket        *socket,
       
       if (gdk_error_trap_pop ())
 	{
-	  gdk_window_unref (socket->plug_window);
+	  g_object_unref (socket->plug_window);
 	  socket->plug_window = NULL;
 	  return;
 	}
@@ -1044,7 +1045,7 @@ gtk_socket_add_window (GtkSocket        *socket,
     }
 
   if (socket->plug_window)
-    g_signal_emit (G_OBJECT (socket), socket_signals[PLUG_ADDED], 0);
+    g_signal_emit (socket, socket_signals[PLUG_ADDED], 0);
 }
 
 
@@ -1322,7 +1323,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	    gtk_socket_end_embedding (socket);
 
 	    g_object_ref (widget);
-	    g_signal_emit (G_OBJECT (widget), socket_signals[PLUG_REMOVED], 0, &result);
+	    g_signal_emit (widget, socket_signals[PLUG_REMOVED], 0, &result);
 	    if (!result)
 	      gtk_widget_destroy (widget);
 	    g_object_unref (widget);

@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_PLUG            (gtk_plug_get_type ())
-#define GTK_PLUG(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_PLUG, GtkPlug))
-#define GTK_PLUG_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PLUG, GtkPlugClass))
-#define GTK_IS_PLUG(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_PLUG))
-#define GTK_IS_PLUG_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PLUG))
-#define GTK_PLUG_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_PLUG, GtkPlugClass))
+#define GTK_PLUG(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PLUG, GtkPlug))
+#define GTK_PLUG_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PLUG, GtkPlugClass))
+#define GTK_IS_PLUG(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PLUG))
+#define GTK_IS_PLUG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PLUG))
+#define GTK_PLUG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PLUG, GtkPlugClass))
 
 
 typedef struct _GtkPlug        GtkPlug;
@@ -75,7 +75,7 @@ struct _GtkPlugClass
 };
 
 
-GtkType    gtk_plug_get_type  (void) G_GNUC_CONST;
+GType      gtk_plug_get_type  (void) G_GNUC_CONST;
 
 #ifndef GDK_MULTIHEAD_SAFE
 void       gtk_plug_construct (GtkPlug         *plug,

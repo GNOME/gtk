@@ -42,11 +42,11 @@ typedef enum
 } GtkTreeViewDropPosition;
 
 #define GTK_TYPE_TREE_VIEW		(gtk_tree_view_get_type ())
-#define GTK_TREE_VIEW(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_TREE_VIEW, GtkTreeView))
-#define GTK_TREE_VIEW_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_VIEW, GtkTreeViewClass))
-#define GTK_IS_TREE_VIEW(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE_VIEW))
-#define GTK_IS_TREE_VIEW_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_VIEW))
-#define GTK_TREE_VIEW_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TREE_VIEW, GtkTreeViewClass))
+#define GTK_TREE_VIEW(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_VIEW, GtkTreeView))
+#define GTK_TREE_VIEW_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_VIEW, GtkTreeViewClass))
+#define GTK_IS_TREE_VIEW(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TREE_VIEW))
+#define GTK_IS_TREE_VIEW_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_VIEW))
+#define GTK_TREE_VIEW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_VIEW, GtkTreeViewClass))
 
 typedef struct _GtkTreeView           GtkTreeView;
 typedef struct _GtkTreeViewClass      GtkTreeViewClass;
@@ -127,7 +127,7 @@ typedef gboolean (*GtkTreeViewSearchEqualFunc) (GtkTreeModel            *model,
 
 
 /* Creators */
-GtkType                gtk_tree_view_get_type                      (void);
+GType                  gtk_tree_view_get_type                      (void);
 GtkWidget             *gtk_tree_view_new                           (void);
 GtkWidget             *gtk_tree_view_new_with_model                (GtkTreeModel              *model);
 

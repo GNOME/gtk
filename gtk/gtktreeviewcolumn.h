@@ -20,21 +20,24 @@
 #ifndef __GTK_TREE_VIEW_COLUMN_H__
 #define __GTK_TREE_VIEW_COLUMN_H__
 
-#include <gtk/gtkobject.h>
+#include <glib-object.h>
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreesortable.h>
+
+/* Not needed, retained for compatibility -Yosh */
+#include <gtk/gtkobject.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
 #define GTK_TYPE_TREE_VIEW_COLUMN	     (gtk_tree_view_column_get_type ())
-#define GTK_TREE_VIEW_COLUMN(obj)	     (GTK_CHECK_CAST ((obj), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumn))
-#define GTK_TREE_VIEW_COLUMN_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnClass))
-#define GTK_IS_TREE_VIEW_COLUMN(obj)	     (GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE_VIEW_COLUMN))
-#define GTK_IS_TREE_VIEW_COLUMN_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_VIEW_COLUMN))
-#define GTK_TREE_VIEW_COLUMN_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnClass))
+#define GTK_TREE_VIEW_COLUMN(obj)	     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumn))
+#define GTK_TREE_VIEW_COLUMN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnClass))
+#define GTK_IS_TREE_VIEW_COLUMN(obj)	     (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TREE_VIEW_COLUMN))
+#define GTK_IS_TREE_VIEW_COLUMN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_VIEW_COLUMN))
+#define GTK_TREE_VIEW_COLUMN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnClass))
 
 typedef enum
 {
@@ -116,7 +119,7 @@ struct _GtkTreeViewColumnClass
   void (*_gtk_reserved4) (void);
 };
 
-GtkType                 gtk_tree_view_column_get_type            (void);
+GType                   gtk_tree_view_column_get_type            (void);
 GtkTreeViewColumn      *gtk_tree_view_column_new                 (void);
 GtkTreeViewColumn      *gtk_tree_view_column_new_with_attributes (const gchar             *title,
 								  GtkCellRenderer         *cell,

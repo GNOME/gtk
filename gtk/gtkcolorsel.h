@@ -36,11 +36,11 @@ extern "C" {
 
 
 #define GTK_TYPE_COLOR_SELECTION			(gtk_color_selection_get_type ())
-#define GTK_COLOR_SELECTION(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelection))
-#define GTK_COLOR_SELECTION_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
-#define GTK_IS_COLOR_SELECTION(obj)			(GTK_CHECK_TYPE ((obj), GTK_TYPE_COLOR_SELECTION))
-#define GTK_IS_COLOR_SELECTION_CLASS(klass)		(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COLOR_SELECTION))
-#define GTK_COLOR_SELECTION_GET_CLASS(obj)              (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
+#define GTK_COLOR_SELECTION(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelection))
+#define GTK_COLOR_SELECTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
+#define GTK_IS_COLOR_SELECTION(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_COLOR_SELECTION))
+#define GTK_IS_COLOR_SELECTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COLOR_SELECTION))
+#define GTK_COLOR_SELECTION_GET_CLASS(obj)              (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
 
 
 typedef struct _GtkColorSelection       GtkColorSelection;
@@ -77,7 +77,7 @@ struct _GtkColorSelectionClass
 
 /* ColorSelection */
 
-GtkType    gtk_color_selection_get_type                (void) G_GNUC_CONST;
+GType      gtk_color_selection_get_type                (void) G_GNUC_CONST;
 GtkWidget *gtk_color_selection_new                     (void);
 gboolean   gtk_color_selection_get_has_opacity_control (GtkColorSelection *colorsel);
 void       gtk_color_selection_set_has_opacity_control (GtkColorSelection *colorsel,

@@ -39,7 +39,6 @@
 #include "gtklistitem.h"
 #include "gtkscrolledwindow.h"
 #include "gtkmain.h"
-#include "gtksignal.h"
 #include "gtkwindow.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkcombo.h"
@@ -107,7 +106,6 @@ static gint         gtk_combo_entry_key_press    (GtkEntry         *widget,
 static gint         gtk_combo_window_key_press   (GtkWidget        *window,
 						  GdkEventKey      *event,
 						  GtkCombo         *combo);
-static void         gtk_combo_item_destroy       (GtkObject        *object);
 static void         gtk_combo_size_allocate      (GtkWidget        *widget,
 						  GtkAllocation   *allocation);
 static void         gtk_combo_set_property       (GObject         *object,
@@ -128,9 +126,10 @@ gtk_combo_class_init (GtkComboClass * klass)
   GtkWidgetClass *widget_class;
 
   gobject_class = (GObjectClass *) klass;
-  parent_class = gtk_type_class (GTK_TYPE_HBOX);
   oclass = (GtkObjectClass *) klass;
   widget_class = (GtkWidgetClass *) klass;
+
+  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->set_property = gtk_combo_set_property; 
   gobject_class->get_property = gtk_combo_get_property; 
@@ -189,7 +188,7 @@ gtk_combo_destroy (GtkObject *object)
   if (combo->popwin)
     {
       gtk_widget_destroy (combo->popwin);
-      gtk_widget_unref (combo->popwin);
+      g_object_unref (combo->popwin);
       combo->popwin = NULL;
     }
 
@@ -207,38 +206,38 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
       (event->state & GDK_MOD1_MASK)) 
     {
       GtkEditable *editable = GTK_EDITABLE (entry);
-    GCompletion * cmpl;
-    gchar* prefix;
-    gchar* nprefix = NULL;
-    gint pos;
+      GCompletion * cmpl;
+      gchar* prefix;
+      gchar* nprefix = NULL;
+      gint pos;
 
-    if ( !GTK_LIST (combo->list)->children )
-      return FALSE;
+      if ( !GTK_LIST (combo->list)->children )
+	return FALSE;
     
-    gtk_signal_emit_stop_by_name (GTK_OBJECT (entry), "key_press_event");
+      g_signal_stop_emission_by_name (entry, "key_press_event");
 
-    cmpl = g_completion_new ((GCompletionFunc)gtk_combo_func);
-    g_completion_add_items (cmpl, GTK_LIST (combo->list)->children);
+      cmpl = g_completion_new ((GCompletionFunc)gtk_combo_func);
+      g_completion_add_items (cmpl, GTK_LIST (combo->list)->children);
 
-    pos = gtk_editable_get_position (editable);
-    prefix = gtk_editable_get_chars (editable, 0, pos);
+      pos = gtk_editable_get_position (editable);
+      prefix = gtk_editable_get_chars (editable, 0, pos);
 
-    g_completion_complete (cmpl, prefix, &nprefix);
+      g_completion_complete (cmpl, prefix, &nprefix);
 
-    if (nprefix && strlen (nprefix) > strlen (prefix)) 
-      {
-    	gtk_editable_insert_text (editable, nprefix + pos, 
-				  strlen (nprefix) - strlen (prefix), &pos);
-	gtk_editable_set_position (editable, pos);
+      if (nprefix && strlen (nprefix) > strlen (prefix)) 
+	{
+	  gtk_editable_insert_text (editable, nprefix + pos, 
+				    strlen (nprefix) - strlen (prefix), &pos);
+	  gtk_editable_set_position (editable, pos);
+	}
+
+      if (nprefix)
+	g_free (nprefix);
+      g_free (prefix);
+      g_completion_free (cmpl);
+
+      return TRUE;
     }
-
-    if (nprefix)
-      g_free (nprefix);
-    g_free (prefix);
-    g_completion_free (cmpl);
-
-    return TRUE;
-  }
 
   if (!combo->use_arrows || !GTK_LIST (combo->list)->children)
     return FALSE;
@@ -258,7 +257,7 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
       if (li)
 	{
 	  gtk_list_select_child (GTK_LIST (combo->list), GTK_WIDGET (li->data));
-	  gtk_signal_emit_stop_by_name (GTK_OBJECT (entry), "key_press_event");
+	  g_signal_stop_emission_by_name (entry, "key_press_event");
 	  return TRUE;
 	}
     }
@@ -275,7 +274,7 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
       if (li)
 	{
 	  gtk_list_select_child (GTK_LIST (combo->list), GTK_WIDGET (li->data));
-	  gtk_signal_emit_stop_by_name (GTK_OBJECT (entry), "key_press_event");
+	  g_signal_stop_emission_by_name (entry, "key_press_event");
 	  return TRUE;
 	}
     }
@@ -301,7 +300,7 @@ gtk_combo_window_key_press (GtkWidget   *window,
 	    }
 	}
 
-      gtk_signal_emit_stop_by_name (GTK_OBJECT (window), "key_press_event");
+      g_signal_stop_emission_by_name (window, "key_press_event");
 
       return TRUE;
     }
@@ -354,13 +353,13 @@ gtk_combo_func (GtkListItem * li)
   GtkWidget *label;
   gchar *ltext = NULL;
 
-  ltext = (gchar *) gtk_object_get_data (GTK_OBJECT (li), gtk_combo_string_key);
+  ltext = g_object_get_data (G_OBJECT (li), gtk_combo_string_key);
   if (!ltext)
     {
       label = GTK_BIN (li)->child;
       if (!label || !GTK_IS_LABEL (label))
 	return NULL;
-      gtk_label_get (GTK_LABEL (label), &ltext);
+      ltext = (gchar *) gtk_label_get_text (GTK_LABEL (label));
     }
   return ltext;
 }
@@ -395,7 +394,7 @@ gtk_combo_entry_focus_out (GtkEntry * entry, GdkEventFocus * event, GtkCombo * c
       /* this is needed because if we call gtk_widget_grab_focus() 
          it isn't guaranteed it's the *last* call before the main-loop,
          so the focus can be lost anyway...
-         the signal_emit_stop doesn't seem to work either...
+         the signal_stop_emission doesn't seem to work either...
        */
       focus_idle = g_idle_source_new ();
       g_source_set_closure (focus_idle,
@@ -403,7 +402,7 @@ gtk_combo_entry_focus_out (GtkEntry * entry, GdkEventFocus * event, GtkCombo * c
 						   G_OBJECT (combo)));
       g_source_attach (focus_idle, NULL);
       
-      /*gtk_signal_emit_stop_by_name (GTK_OBJECT (entry), "focus_out_event"); */
+      /*g_signal_stop_emission_by_name (entry, "focus_out_event"); */
       return TRUE;
     }
   return FALSE;
@@ -520,7 +519,7 @@ gtk_combo_popup_list (GtkCombo * combo)
     }
 
   gtk_window_move (GTK_WINDOW (combo->popwin), x, y);
-  gtk_widget_set_usize (combo->popwin, width, height);
+  gtk_widget_set_size_request (combo->popwin, width, height);
   gtk_widget_show (combo->popwin);
 
   gtk_widget_grab_focus (combo->popwin);
@@ -610,7 +609,7 @@ gtk_combo_update_entry (GtkList * list, GtkCombo * combo)
   char *text;
 
   gtk_grab_remove (GTK_WIDGET (combo));
-  gtk_signal_handler_block (GTK_OBJECT (list), combo->list_change_id);
+  g_signal_handler_block (list, combo->list_change_id);
   if (list->selection)
     {
       text = gtk_combo_func (GTK_LIST_ITEM (list->selection->data));
@@ -618,7 +617,7 @@ gtk_combo_update_entry (GtkList * list, GtkCombo * combo)
 	text = "";
       gtk_entry_set_text (GTK_ENTRY (combo->entry), text);
     }
-  gtk_signal_handler_unblock (GTK_OBJECT (list), combo->list_change_id);
+  g_signal_handler_unblock (list, combo->list_change_id);
 }
 
 static void
@@ -630,13 +629,13 @@ gtk_combo_update_list (GtkEntry * entry, GtkCombo * combo)
 
   gtk_grab_remove (GTK_WIDGET (combo));
 
-  gtk_signal_handler_block (GTK_OBJECT (entry), combo->entry_change_id);
+  g_signal_handler_block (entry, combo->entry_change_id);
   if (slist && slist->data)
     gtk_list_unselect_child (list, GTK_WIDGET (slist->data));
   li = gtk_combo_find (combo);
   if (li)
     gtk_list_select_child (list, GTK_WIDGET (li));
-  gtk_signal_handler_unblock (GTK_OBJECT (entry), combo->entry_change_id);
+  g_signal_handler_unblock (entry, combo->entry_change_id);
 }
 
 static gint
@@ -768,7 +767,7 @@ combo_event_box_realize (GtkWidget *widget)
   GdkCursor *cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
 						  GDK_TOP_LEFT_ARROW);
   gdk_window_set_cursor (widget->window, cursor);
-  gdk_cursor_destroy (cursor);
+  gdk_cursor_unref (cursor);
 }
 
 static void
@@ -794,25 +793,27 @@ gtk_combo_init (GtkCombo * combo)
   GTK_WIDGET_UNSET_FLAGS (combo->button, GTK_CAN_FOCUS);
   gtk_widget_show (combo->entry);
   gtk_widget_show (combo->button);
-  combo->entry_change_id = gtk_signal_connect (GTK_OBJECT (combo->entry), "changed",
-			      (GtkSignalFunc) gtk_combo_update_list, combo);
-  gtk_signal_connect (GTK_OBJECT (combo->entry), "key_press_event",
-		      (GtkSignalFunc) gtk_combo_entry_key_press, combo);
-  gtk_signal_connect_after (GTK_OBJECT (combo->entry), "focus_out_event",
-			    (GtkSignalFunc) gtk_combo_entry_focus_out, combo);
-  combo->activate_id = gtk_signal_connect (GTK_OBJECT (combo->entry), "activate",
-		      (GtkSignalFunc) gtk_combo_activate, combo);
-  gtk_signal_connect (GTK_OBJECT (combo->button), "button_press_event",
-		      (GtkSignalFunc) gtk_combo_popup_button_press, combo);
-  gtk_signal_connect (GTK_OBJECT (combo->button), "leave_notify_event",
-		      (GtkSignalFunc) gtk_combo_popup_button_leave, combo);
+  combo->entry_change_id = g_signal_connect (combo->entry, "changed",
+					     G_CALLBACK (gtk_combo_update_list),
+					     combo);
+  g_signal_connect (combo->entry, "key_press_event",
+		    G_CALLBACK (gtk_combo_entry_key_press), combo);
+  g_signal_connect_after (combo->entry, "focus_out_event",
+			  G_CALLBACK (gtk_combo_entry_focus_out), combo);
+  combo->activate_id = g_signal_connect (combo->entry, "activate",
+					 G_CALLBACK (gtk_combo_activate),
+					 combo);
+  g_signal_connect (combo->button, "button_press_event",
+		    G_CALLBACK (gtk_combo_popup_button_press), combo);
+  g_signal_connect (combo->button, "leave_notify_event",
+		    G_CALLBACK (gtk_combo_popup_button_leave), combo);
 
   combo->popwin = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_widget_ref (combo->popwin);
+  g_object_ref (combo->popwin);
   gtk_window_set_resizable (GTK_WINDOW (combo->popwin), FALSE);
 
-  gtk_signal_connect (GTK_OBJECT (combo->popwin), "key_press_event",
-		      GTK_SIGNAL_FUNC (gtk_combo_window_key_press), combo);
+  g_signal_connect (combo->popwin, "key_press_event",
+		    G_CALLBACK (gtk_combo_window_key_press), combo);
   
   gtk_widget_set_events (combo->popwin, GDK_KEY_PRESS_MASK);
 
@@ -850,21 +851,24 @@ gtk_combo_init (GtkCombo * combo)
 				       gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (combo->popup)));
   gtk_widget_show (combo->list);
 
-  combo->list_change_id = gtk_signal_connect (GTK_OBJECT (combo->list), "selection_changed",
-			     (GtkSignalFunc) gtk_combo_update_entry, combo);
-  gtk_signal_connect (GTK_OBJECT (combo->popwin), "key_press_event",
-		      (GtkSignalFunc) gtk_combo_list_key_press, combo);
-  gtk_signal_connect (GTK_OBJECT (combo->popwin), "button_press_event",
-		      GTK_SIGNAL_FUNC (gtk_combo_button_press), combo);
+  combo->list_change_id = g_signal_connect (combo->list,
+					    "selection_changed",
+					    G_CALLBACK (gtk_combo_update_entry),
+					    combo);
+  g_signal_connect (combo->popwin, "key_press_event",
+		    G_CALLBACK (gtk_combo_list_key_press), combo);
+  g_signal_connect (combo->popwin, "button_press_event",
+		    G_CALLBACK (gtk_combo_button_press), combo);
 
-  gtk_signal_connect (GTK_OBJECT (combo->list), "event_after",
-		      (GtkSignalFunc) gtk_combo_button_event_after, combo);
+  g_signal_connect (combo->list, "event_after",
+		    G_CALLBACK (gtk_combo_button_event_after), combo);
+
   /* We connect here on the button, because we'll have a grab on it
    * when the event occurs. But we are actually interested in enters
    * for the combo->list.
    */
-  gtk_signal_connect (GTK_OBJECT (combo->button), "enter_notify_event",
-		      GTK_SIGNAL_FUNC (gtk_combo_list_enter), combo);
+  g_signal_connect (combo->button, "enter_notify_event",
+		    G_CALLBACK (gtk_combo_list_enter), combo);
 }
 
 static void
@@ -889,33 +893,37 @@ gtk_combo_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
 }
 
-GtkType
+GType
 gtk_combo_get_type (void)
 {
-  static GtkType combo_type = 0;
+  static GType combo_type = 0;
 
   if (!combo_type)
     {
-      static const GtkTypeInfo combo_info =
+      static const GTypeInfo combo_info =
       {
-	"GtkCombo",
-	sizeof (GtkCombo),
 	sizeof (GtkComboClass),
-	(GtkClassInitFunc) gtk_combo_class_init,
-	(GtkObjectInitFunc) gtk_combo_init,
-	/* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_combo_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkCombo),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_combo_init,
       };
-      combo_type = gtk_type_unique (GTK_TYPE_HBOX, &combo_info);
+
+      combo_type = g_type_register_static (GTK_TYPE_HBOX, "GtkCombo",
+					   &combo_info, 0);
     }
+
   return combo_type;
 }
 
 GtkWidget*
 gtk_combo_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (GTK_TYPE_COMBO));
+  return g_object_new (GTK_TYPE_COMBO, NULL);
 }
 
 void
@@ -1008,48 +1016,14 @@ gtk_combo_set_popdown_strings (GtkCombo * combo, GList * strings)
     }
 }
 
-static void
-gtk_combo_item_destroy (GtkObject * object)
-{
-  gchar *key;
-
-  key = gtk_object_get_data (object, gtk_combo_string_key);
-  if (key)
-    {
-      gtk_object_remove_data (object, gtk_combo_string_key);
-      g_free (key);
-    }
-}
-
 void
 gtk_combo_set_item_string (GtkCombo * combo, GtkItem * item, const gchar * item_value)
 {
-  gchar *val;
-  gint connected = 0;
-
   g_return_if_fail (GTK_IS_COMBO (combo));
   g_return_if_fail (item != NULL);
 
-  val = gtk_object_get_data (GTK_OBJECT (item), gtk_combo_string_key);
-  if (val) 
-    {
-      g_free (val);
-      connected = 1;
-    }
-  if (item_value)
-    {
-      val = g_strdup (item_value);
-      gtk_object_set_data (GTK_OBJECT (item), gtk_combo_string_key, val);
-      if (!connected)
-        gtk_signal_connect (GTK_OBJECT (item), "destroy",
-			  (GtkSignalFunc) gtk_combo_item_destroy, val);
-    }
-  else 
-    {
-      gtk_object_set_data (GTK_OBJECT (item), gtk_combo_string_key, NULL);
-      if (connected)
-	gtk_signal_disconnect_by_data(GTK_OBJECT (item), val);
-    }
+  g_object_set_data_full (G_OBJECT (item), gtk_combo_string_key,
+			  g_strdup (item_value), g_free);
 }
 
 static void
@@ -1084,7 +1058,7 @@ gtk_combo_disable_activate (GtkCombo* combo)
   g_return_if_fail (GTK_IS_COMBO (combo));
 
   if ( combo->activate_id ) {
-    gtk_signal_disconnect (GTK_OBJECT(combo->entry), combo->activate_id);
+    g_signal_handler_disconnect (combo->entry, combo->activate_id);
     combo->activate_id = 0;
   }
 }

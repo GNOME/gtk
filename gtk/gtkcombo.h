@@ -35,11 +35,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define GTK_TYPE_COMBO              (gtk_combo_get_type ())
-#define GTK_COMBO(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_COMBO, GtkCombo))
-#define GTK_COMBO_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_COMBO, GtkComboClass))
-#define GTK_IS_COMBO(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_COMBO))
-#define GTK_IS_COMBO_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COMBO))
-#define GTK_COMBO_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_COMBO, GtkComboClass))
+#define GTK_COMBO(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COMBO, GtkCombo))
+#define GTK_COMBO_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_COMBO, GtkComboClass))
+#define GTK_IS_COMBO(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_COMBO))
+#define GTK_IS_COMBO_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COMBO))
+#define GTK_COMBO_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_COMBO, GtkComboClass))
 
 
 typedef struct _GtkCombo	GtkCombo;
@@ -77,7 +77,7 @@ struct _GtkComboClass {
         void (*_gtk_reserved4) (void);
 };
 
-GtkType    gtk_combo_get_type              (void) G_GNUC_CONST;
+GType      gtk_combo_get_type              (void) G_GNUC_CONST;
 
 GtkWidget* gtk_combo_new                   (void);
 /* the text in the entry must be or not be in the list */

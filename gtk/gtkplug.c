@@ -83,10 +83,10 @@ enum {
 
 static guint plug_signals[LAST_SIGNAL] = { 0 };
 
-GtkType
+GType
 gtk_plug_get_type ()
 {
-  static GtkType plug_type = 0;
+  static GType plug_type = 0;
 
   if (!plug_type)
     {
@@ -103,7 +103,8 @@ gtk_plug_get_type ()
 	(GInstanceInitFunc) gtk_plug_init,
       };
 
-      plug_type = g_type_register_static (GTK_TYPE_WINDOW, "GtkPlug", &plug_info, 0);
+      plug_type = g_type_register_static (GTK_TYPE_WINDOW, "GtkPlug",
+					  &plug_info, 0);
     }
 
   return plug_type;
@@ -117,8 +118,8 @@ gtk_plug_class_init (GtkPlugClass *class)
   GtkWindowClass *window_class = (GtkWindowClass *)class;
   GtkContainerClass *container_class = (GtkContainerClass *)class;
 
-  parent_class = gtk_type_class (GTK_TYPE_WINDOW);
-  bin_class = gtk_type_class (GTK_TYPE_BIN);
+  parent_class = g_type_class_peek_parent (class);
+  bin_class = g_type_class_peek (GTK_TYPE_BIN);
 
   gobject_class->finalize = gtk_plug_finalize;
   
@@ -148,7 +149,7 @@ gtk_plug_class_init (GtkPlugClass *class)
 		  G_STRUCT_OFFSET (GtkPlugClass, embedded),
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
-		  GTK_TYPE_NONE, 0);
+		  G_TYPE_NONE, 0);
 }
 
 static void
@@ -244,7 +245,7 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
 
   gtk_widget_set_parent (widget, GTK_WIDGET (socket));
 
-  g_signal_emit_by_name (G_OBJECT (socket), "plug_added", 0);
+  g_signal_emit_by_name (socket, "plug_added", 0);
 }
 
 static void
@@ -311,7 +312,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
 
   gtk_plug_set_is_child (plug, FALSE);
 		    
-  g_signal_emit_by_name (G_OBJECT (socket), "plug_removed", &result);
+  g_signal_emit_by_name (socket, "plug_removed", &result);
   if (!result)
     gtk_widget_destroy (GTK_WIDGET (socket));
 
@@ -379,7 +380,7 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
 	}
 
       if (plug->socket_window)
-	g_signal_emit (G_OBJECT (plug), plug_signals[EMBEDDED], 0);
+	g_signal_emit (plug, plug_signals[EMBEDDED], 0);
     }
 }
 
@@ -414,7 +415,7 @@ gtk_plug_new_for_display (GdkDisplay	  *display,
 {
   GtkPlug *plug;
 
-  plug = GTK_PLUG (gtk_type_new (GTK_TYPE_PLUG));
+  plug = g_object_new (GTK_TYPE_PLUG, NULL);
   gtk_plug_construct_for_display (plug, display, socket_id);
   return GTK_WIDGET (plug);
 }
@@ -466,7 +467,7 @@ gtk_plug_unrealize (GtkWidget *widget)
   if (plug->socket_window != NULL)
     {
       gdk_window_set_user_data (plug->socket_window, NULL);
-      gdk_window_unref (plug->socket_window);
+      g_object_unref (plug->socket_window);
       plug->socket_window = NULL;
     }
 
@@ -1108,7 +1109,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 		GtkWidget *widget = GTK_WIDGET (plug);
 
 		gdk_window_set_user_data (plug->socket_window, NULL);
-		gdk_window_unref (plug->socket_window);
+		g_object_unref (plug->socket_window);
 		plug->socket_window = NULL;
 
 		/* Emit a delete window, as if the user attempted
@@ -1157,7 +1158,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	      g_hash_table_foreach (plug->grabbed_keys, add_grabbed_key_always, plug);
 
 	    if (!was_embedded)
-	      g_signal_emit (G_OBJECT (plug), plug_signals[EMBEDDED], 0);
+	      g_signal_emit (plug, plug_signals[EMBEDDED], 0);
 	  }
 
       done:

@@ -119,6 +119,7 @@ gtk_color_selection_dialog_new (const gchar *title)
   
   colorseldiag = g_object_new (GTK_TYPE_COLOR_SELECTION_DIALOG, NULL);
   gtk_window_set_title (GTK_WINDOW (colorseldiag), title);
+  gtk_window_set_resizable (GTK_WINDOW (colorseldiag), FALSE);
   
   return GTK_WIDGET (colorseldiag);
 }
