@@ -1477,10 +1477,15 @@ gtk_entry_draw_cursor_on_drawable (GtkEntry *entry, GdkDrawable *drawable)
 	   */
 	  if ((editable->current_pos < entry->text_length) &&
 	      (editable->selection_start_pos == editable->selection_end_pos))
-	    gdk_draw_text_wc (drawable, widget->style->font,
-			      widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			      xoffset, yoffset,
-			      entry->text + editable->current_pos, 1);
+	    {
+	      GdkWChar c = editable->visible ?
+		                 *(entry->text + editable->current_pos) :
+		                 '*';
+	      
+	      gdk_draw_text_wc (drawable, widget->style->font,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				xoffset, yoffset, &c, 1);
+	    }
 	}
 
 
