@@ -66,9 +66,8 @@ toggle_tearoffs (GtkWidget    *button,
   gtk_ui_manager_set_add_tearoffs (merge, !add_tearoffs);
 }
 
-static void
-toggle_dynamic (GtkWidget    *button, 
-		GtkUIManager *merge)
+static gint
+delayed_toggle_dynamic (GtkUIManager *merge)
 {
   GtkAction *dyn;
   static GtkActionGroup *dynamic = NULL;
@@ -89,6 +88,7 @@ toggle_dynamic (GtkWidget    *button,
 			  "label", "Dynamic action 2",
 			  "stock_id", GTK_STOCK_EXECUTE,
 			  NULL);
+      g_object_set (dyn, "name", "dyn2", NULL);
       gtk_action_group_add_action (dynamic, dyn);
     }
   
@@ -114,8 +114,16 @@ toggle_dynamic (GtkWidget    *button,
       gtk_ui_manager_remove_ui (merge, merge_id);
       merge_id = 0;
     }
+
+  return FALSE;
 }
 
+static void
+toggle_dynamic (GtkWidget    *button, 
+		GtkUIManager *merge)
+{
+  g_timeout_add (2000, delayed_toggle_dynamic, merge);
+}
 
 static void
 activate_action (GtkAction *action)

@@ -229,12 +229,17 @@ gtk_separator_tool_item_expose (GtkWidget      *widget,
 				GdkEventExpose *event)
 {
   GtkToolbar *toolbar = NULL;
+  GtkSeparatorToolItemPrivate *priv =
+      GTK_SEPARATOR_TOOL_ITEM_GET_PRIVATE (widget);
 
-  if (widget->parent && GTK_IS_TOOLBAR (widget->parent))
-    toolbar = GTK_TOOLBAR (widget->parent);
+  if (priv->draw)
+    {
+      if (widget->parent && GTK_IS_TOOLBAR (widget->parent))
+	toolbar = GTK_TOOLBAR (widget->parent);
 
-  _gtk_toolbar_paint_space_line (widget, toolbar,
-				 &(event->area), &widget->allocation);
+      _gtk_toolbar_paint_space_line (widget, toolbar,
+				     &(event->area), &widget->allocation);
+    }
   
   return FALSE;
 }
