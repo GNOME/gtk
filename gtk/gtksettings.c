@@ -360,19 +360,7 @@ gtk_settings_get_property (GObject     *object,
 
       if (settings->property_values[property_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION)
 	{
-          GValue tmp_value = { 0, };
-          GValue gstring_value = { 0, };
-          
-          g_value_init (&gstring_value, G_TYPE_GSTRING);
-
-          g_value_set_boxed (&gstring_value,
-                             g_string_new (g_value_get_string (&val)));
-
-          g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
 	  g_value_copy (&settings->property_values[property_id - 1].value, value);
-
-          g_value_unset (&gstring_value);
-          g_value_unset (&tmp_value);
 	}
       else if (!gdk_screen_get_setting (settings->screen, pspec->name, &val))
         {
