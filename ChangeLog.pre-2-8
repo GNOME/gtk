@@ -1,3 +1,10 @@
+Fri Aug 13 01:06:56 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeview.c (gtk_tree_view_row_inserted): 
+	Make fixed height mode handle insertions.  (#135955, 
+	Michael Vogt, testcase by Tim-Philipp Müller, fix by
+	Pawel Salek)
+
 Fri Aug 13 00:40:18 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkhandlebox.c: Add missing include.

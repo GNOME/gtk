@@ -7157,7 +7157,10 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
     } 
 
  done:
-  install_presize_handler (tree_view);
+  if (height > 0)
+    gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+  else
+    install_presize_handler (tree_view);
   if (free_path)
     gtk_tree_path_free (path);
 }
