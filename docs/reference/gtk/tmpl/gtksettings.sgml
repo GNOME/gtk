@@ -224,7 +224,22 @@ GtkSettings
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-menu-bar-popout-delay ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-can-change-accels ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-menu-popout-delay ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-menu-submenu-hysteresis ##### -->
 <para>
 
 </para>

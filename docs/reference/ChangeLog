@@ -1,3 +1,7 @@
+Wed Oct 30 16:50:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/running.sgml: Document --screen.
+
 2002-10-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/tmpl/dnd.sgml: 
