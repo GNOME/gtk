@@ -37,7 +37,7 @@ im_xim_la_SOURCES = 		\
 	gtkimcontextxim.h	\
 	imxim.c
 im_xim_la_LIBADD = $(LDADDS)
-if USE_X11
+if HAVE_X11R6
 IM_XIM_MODULE=im-xim.la 
 endif
 
