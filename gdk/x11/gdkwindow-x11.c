@@ -79,7 +79,9 @@ static void     gdk_window_set_static_win_gravity (GdkWindow *window,
 						   gboolean   on);
 static gboolean gdk_window_have_shape_ext (void);
 
-
+static GdkColormap* gdk_window_impl_get_colormap (GdkDrawable *drawable);
+static void         gdk_window_impl_set_colormap (GdkDrawable *drawable,
+                                                  GdkColormap *cmap);
 static void gdk_window_impl_init       (GdkWindowImpl      *window);
 static void gdk_window_impl_class_init (GdkWindowImplClass *klass);
 static void gdk_window_impl_finalize   (GObject            *object);
@@ -125,72 +127,91 @@ static void
 gdk_window_impl_class_init (GdkWindowImplClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
+  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
+  
   parent_class = g_type_class_peek (GDK_TYPE_DRAWABLE_IMPL);
 
   object_class->finalize = gdk_window_impl_finalize;
+
+  drawable_class->set_colormap = gdk_window_impl_set_colormap;
+  drawable_class->get_colormap = gdk_window_impl_get_colormap;
 }
 
 static void
 gdk_window_impl_finalize (GObject *object)
 {
-  GdkWindowImpl *impl = GDK_WINDOW_IMPL (object);
+  GdkWindowObject *wrapper;
+  GdkDrawableImpl *draw_impl;
+  GdkWindowImpl *window_impl;
+  
+  g_return_if_fail (GDK_IS_WINDOW_IMPL (drawable));
 
+  drawable_impl = GDK_DRAWABLE_IMPL (drawable);
+  window_impl = GDK_WINDOW_IMPL (drawable);
+  
+  wrapper = (GdkWindowObject*) GDK_DRAWABLE_IMPL (drawable)->wrapper;
+
+  if (!GDK_WINDOW_DESTROYED (wrapper))
+    {
+      gdk_xid_table_remove (drawable_impl->xid);
+    }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-GdkDrawableClass _gdk_windowing_window_class;
+static GdkColormap*
+gdk_window_impl_get_colormap (GdkDrawable *drawable)
+{
+  GdkDrawableImpl *drawable_impl;
+  GdkWindowImpl *window_impl;
+  
+  g_return_val_if_fail (GDK_IS_WINDOW_IMPL (drawable), NULL);
+
+  drawable_impl = GDK_DRAWABLE_IMPL (drawable);
+  window_impl = GDK_WINDOW_IMPL (drawable);
+
+  if (drawable_impl->colormap == NULL)
+    {
+      XWindowAttributes window_attributes;
+      
+      XGetWindowAttributes (drawable_impl->xdisplay,
+                            drawable_impl->xid,
+                            &window_attributes);
+      drawable_impl->colormap =
+        gdk_colormap_lookup (window_attributes.colormap);
+    }
+  
+  return drawable_impl->colormap;
+}
 
 static void
-gdk_x11_window_destroy (GdkDrawable *drawable)
+gdk_window_impl_set_colormap (GdkDrawable *drawable,
+                              GdkColormap *cmap)
 {
-  if (!GDK_DRAWABLE_DESTROYED (drawable))
-    {
-      if (GDK_DRAWABLE_TYPE (drawable) != GDK_WINDOW_FOREIGN)
-	{
-	  g_warning ("losing last reference to undestroyed window\n");
-	  _gdk_window_destroy (drawable, FALSE);
-	}
-      else
-	/* We use TRUE here, to keep us from actually calling
-	 * XDestroyWindow() on the window
-	 */
-	_gdk_window_destroy (drawable, TRUE);
-      
-      gdk_xid_table_remove (GDK_DRAWABLE_XID (drawable));
-    }
-
-  g_free (GDK_DRAWABLE_XDATA (drawable));
-}
-
-static GdkWindow *
-gdk_x11_window_alloc (void)
-{
-  GdkWindow *window;
-  GdkWindowPrivate *private;
+  GdkWindowImpl *impl;
+  GdkDrawableImpl *draw_impl;
   
-  static gboolean initialized = FALSE;
+  g_return_if_fail (GDK_IS_WINDOW_IMPL (drawable));
+  g_return_if_fail (gdk_colormap_get_visual (cmap) != gdk_drawable_get_visual (drawable));
 
-  if (!initialized)
-    {
-      initialized = TRUE;
+  impl = GDK_WINDOW_IMPL (drawable);
+  draw_impl = GDK_DRAWABLE_IMPL (drawable);
 
-      _gdk_windowing_window_class = _gdk_x11_drawable_class;
-      _gdk_windowing_window_class.destroy = gdk_x11_window_destroy;
-    }
+  GDK_DRAWABLE_IMPL_GET_CLASS (draw_impl)->set_colormap (drawable, cmap);
+  
+  XSetWindowColormap (draw_impl->xdisplay,
+                      draw_impl->xid,
+                      GDK_COLORMAP_XCOLORMAP (cmap));
 
-  window = _gdk_window_alloc ();
-  private = (GdkWindowPrivate *)window;
-
-  private->drawable.klass = &_gdk_window_class;
-  private->drawable.klass_data = g_new (GdkWindowXData, 1);
-
-  return window;
+  if (((GdkWindowObject*)draw_impl->wrapper)->window_type !=
+      GDK_WINDOW_TOPLEVEL)
+    gdk_window_add_colormap_windows (GDK_WINDOW (draw_impl->wrapper));
 }
+
+/********************* Continue here *********************/
 
 void
-gdk_window_init (void)
+gdk_windowing_window_init (void)
 {
   GdkWindowPrivate *private;
   XWindowAttributes xattributes;

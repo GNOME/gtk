@@ -212,11 +212,11 @@ void _gdk_windowing_window_destroy (GdkWindow *window,
  * Initialization and exit routines *
  ************************************/
 
-void gdk_window_init (void);
+void gdk_windowing_window_init (void);
 void gdk_visual_init (void);
 void gdk_dnd_init    (void);
 
-void gdk_image_init  (void);
+void gdk_windowing_image_init  (void);
 void gdk_image_exit  (void);
 
 void gdk_input_init  (void);

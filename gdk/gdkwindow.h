@@ -167,8 +167,7 @@ struct _GdkWindowObject
   
   gint width;
   gint height;
-
-  /*   GdkColormap *colormap; */
+  
   GdkWindowObject *parent;
   gint x;
   gint y;

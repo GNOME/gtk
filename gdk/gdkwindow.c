@@ -193,8 +193,25 @@ static void
 gdk_window_finalize (GObject *object)
 {
   GdkWindow *window = GDK_WINDOW (object);
+  GdkWindowObject *obj = (GdkWindowObject *) object;
+  
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+	{
+	  g_warning ("losing last reference to undestroyed window\n");
+	  _gdk_window_destroy (window, FALSE);
+	}
+      else
+	/* We use TRUE here, to keep us from actually calling
+	 * XDestroyWindow() on the window
+	 */
+	_gdk_window_destroy (window, TRUE);
+    }
 
-
+  g_object_unref (G_OBJECT (obj->impl));
+  obj->impl = NULL;
+  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -1296,6 +1313,9 @@ gdk_window_set_colormap (GdkDrawable *drawable,
 {
   g_return_if_fail (GDK_IS_WINDOW (drawable));  
 
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
   gdk_drawable_set_colormap (GDK_WINDOW (drawable)->impl, cmap);
 }
 
@@ -1304,6 +1324,9 @@ gdk_window_get_colormap (GdkDrawable *drawable)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (drawable), NULL);
 
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return NULL;
+  
   return gdk_drawable_get_colormap (GDK_WINDOW (drawable)->impl);
 }
 

@@ -141,6 +141,23 @@ gdk_drawable_get_depth (GdkDrawable *drawable)
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_depth (drawable);
 }
 
+void
+gdk_drawable_set_colormap (GdkDrawable *drawable,
+                           GdkColormap *cmap)
+{
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+
+  GDK_DRAWABLE_GET_CLASS (drawable)->set_colormap (drawable, cmap);
+}
+
+GdkColormap*
+gdk_drawable_get_colormap (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  return GDK_DRAWABLE_GET_CLASS (drawable)->get_colormap (drawable);
+}
+
 GdkDrawable*
 gdk_drawable_ref (GdkDrawable *drawable)
 {

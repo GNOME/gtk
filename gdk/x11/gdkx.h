@@ -34,8 +34,6 @@
 #include <X11/Xutil.h>
 
 typedef struct _GdkGCXData          GdkGCXData;
-typedef struct _GdkDrawableXData    GdkDrawableXData;
-typedef struct _GdkWindowXData      GdkWindowXData;
 typedef struct _GdkXPositionInfo    GdkXPositionInfo;
 typedef struct _GdkColormapPrivateX GdkColormapPrivateX;
 typedef struct _GdkCursorPrivate    GdkCursorPrivate;
@@ -47,7 +45,6 @@ typedef struct _GdkVisualPrivate    GdkVisualPrivate;
 typedef struct _GdkICPrivate        GdkICPrivate;
 #endif /* USE_XIM */
 
-#define GDK_DRAWABLE_XDATA(win) ((GdkDrawableXData *)(((GdkDrawablePrivate*)(win))->klass_data))
 #define GDK_WINDOW_XDATA(win) ((GdkWindowXData *)(((GdkDrawablePrivate*)(win))->klass_data))
 #define GDK_GC_XDATA(gc) ((GdkGCXData *)(((GdkGCPrivate*)(gc))->klass_data))
 
@@ -57,12 +54,6 @@ struct _GdkGCXData
   Display *xdisplay;
   GdkRegion *clip_region;
   guint dirty_mask;
-};
-
-struct _GdkDrawableXData
-{
-  Window xid;
-  Display *xdisplay;
 };
 
 struct _GdkXPositionInfo
@@ -78,12 +69,6 @@ struct _GdkXPositionInfo
   gboolean no_bg : 1;	        /* Set when the window background is temporarily
 				 * unset during resizing and scaling */
   GdkRectangle clip_rect;	/* visible rectangle of window */
-};
-
-struct _GdkWindowXData
-{
-  GdkDrawableXData drawable_data;
-  GdkXPositionInfo position_info;
 };
 
 struct _GdkCursorPrivate
@@ -147,8 +132,12 @@ struct _GdkICPrivate
 #define GDK_ROOT_WINDOW()             gdk_root_window
 #define GDK_ROOT_PARENT()             ((GdkWindow *)gdk_parent_root)
 #define GDK_DISPLAY()                 gdk_display
-#define GDK_DRAWABLE_XDISPLAY(win)    (GDK_DRAWABLE_XDATA(win)->xdisplay)
-#define GDK_DRAWABLE_XID(win)         (GDK_DRAWABLE_XDATA(win)->xid)
+#define GDK_WINDOW_XDISPLAY(win)      (GDK_DRAWABLE_IMPL(((GdkWindowObject*)win)->impl)->xdisplay)
+#define GDK_WINDOW_XID(win)           (GDK_DRAWABLE_IMPL(((GdkWindowObject*)win)->impl)->xid)
+#define GDK_PIXMAP_XDISPLAY(win)      (GDK_DRAWABLE_IMPL(((GdkPixmapObject*)win)->impl)->xdisplay)
+#define GDK_PIXMAP_XID(win)           (GDK_DRAWABLE_IMPL(((GdkPixmapObject*)win)->impl)->xid)
+#define GDK_DRAWABLE_XDISPLAY(win)    (GDK_IS_WINDOW (win) ? GDK_WINDOW_XDISPLAY (win) : GDK_PIXMAP_XDISPLAY (win))
+#define GDK_DRAWABLE_XID(win)         (GDK_IS_WINDOW (win) ? GDK_WINDOW_XID (win) : GDK_PIXMAP_XID (win))
 #define GDK_IMAGE_XDISPLAY(image)     (((GdkImagePrivate*) image)->xdisplay)
 #define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivate*) image)->ximage)
 #define GDK_GC_XDISPLAY(gc)           (GDK_GC_XDATA(gc)->xdisplay)

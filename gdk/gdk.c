@@ -334,8 +334,8 @@ gdk_init_check (int    *argc,
   
   gdk_events_init ();
   gdk_visual_init ();
-  gdk_window_init ();
-  gdk_image_init ();
+  gdk_windowing_window_init ();
+  gdk_windowing_image_init ();
   gdk_input_init ();
   gdk_dnd_init ();
 

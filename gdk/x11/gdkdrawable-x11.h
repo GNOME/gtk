@@ -50,6 +50,12 @@ struct _GdkDrawableImpl
 {
   GdkDrawable parent_instance;
 
+  GdkDrawable *wrapper;
+  
+  GdkColormap *colormap;
+  
+  Window xid;
+  Display *xdisplay;
 };
  
 struct _GdkDrawableImplClass 
