@@ -1,3 +1,8 @@
+Mon Mar  9 23:24:42 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (gtk_clist_get_selection_info): Export
+	functionality.
+
 Tue Mar 10 05:42:34 1998  Tim Janik  <timj@gimp.org>
 
         * configure.in: Bumped version number to 0.99.5.

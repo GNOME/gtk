@@ -194,12 +194,6 @@ static void real_unselect_row (GtkCList * clist,
 			       gint column,
 			       GdkEventButton * event);
 
-static gint get_selection_info (GtkCList * clist,
-				gint x,
-				gint y,
-				gint * row,
-				gint * column);
-
 /* Resize Columns */
 static void draw_xor_line (GtkCList * clist);
 static gint new_column_width (GtkCList * clist,
@@ -2340,6 +2334,15 @@ gtk_clist_size_allocate (GtkWidget * widget,
   adjust_scrollbars (clist);
 }
 
+gint
+gtk_clist_row_from_ypixel (GtkCList *clist, gint y)
+{
+	g_return_val_if_fail (GTK_IS_CLIST (clist), 0);
+	g_return_val_if_fail (y >= 0, 0);
+
+	return ROW_FROM_YPIXEL (clist, y);
+}
+
 /* 
  * GTKCONTAINER
  *   gtk_clist_foreach
@@ -3073,6 +3076,14 @@ get_selection_info (GtkCList * clist,
     *column = tcol;
 
   return 1;
+}
+
+gint
+gtk_clist_get_selection_info (GtkCList *clist, gint x, gint y, gint *row, gint *column)
+{
+	g_return_val_if_fail (clist != NULL, 0);
+	g_return_val_if_fail (GTK_IS_CLIST (clist), 0);
+	return get_selection_info (clist, x, y, row, column);
 }
 
 /* 
