@@ -293,6 +293,7 @@ gtk_text_layout_default_style_changed (GtkTextLayout *layout)
 {
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
 
+  DV (g_print ("invalidating all due to default style change (%s)\n", G_STRLOC));
   gtk_text_layout_invalidate_all (layout);
 }
 
@@ -335,6 +336,7 @@ gtk_text_layout_set_contexts (GtkTextLayout *layout,
   layout->rtl_context = rtl_context;
   g_object_ref (G_OBJECT (rtl_context));
 
+  DV (g_print ("invalidating all due to new pango contexts (%s)\n", G_STRLOC));
   gtk_text_layout_invalidate_all (layout);
 }
 
@@ -391,6 +393,7 @@ gtk_text_layout_set_screen_width (GtkTextLayout *layout, gint width)
 
   layout->screen_width = width;
 
+  DV (g_print ("invalidating all due to new screen width (%s)\n", G_STRLOC));
   gtk_text_layout_invalidate_all (layout);
 }
 
@@ -919,7 +922,8 @@ gtk_text_layout_real_wrap (GtkTextLayout   *layout,
   GtkTextLineDisplay *display;
 
   g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), NULL);
-
+  g_return_val_if_fail (line != NULL, NULL);
+  
   if (line_data == NULL)
     {
       line_data = _gtk_text_line_data_new (layout, line);

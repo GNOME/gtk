@@ -575,6 +575,7 @@ _gtk_text_btree_delete (GtkTextIter *start,
     _gtk_text_btree_check (tree);
   
   /* Broadcast the need for redisplay before we break the iterators */
+  DV (g_print ("invalidating due to deleting some text (%s)\n", G_STRLOC));
   _gtk_text_btree_invalidate_region (tree, start, end);
 
   /* Save the byte offset so we can reset the iterators */
@@ -826,8 +827,8 @@ _gtk_text_btree_delete (GtkTextIter *start,
                    * we do need to store our temporary sizes. So we
                    * create the line data and assume a line w/h of 0.
                    */
-                  ld = _gtk_text_line_data_new (view->layout, line);
-                  _gtk_text_line_add_data (line, ld);
+                  ld = _gtk_text_line_data_new (view->layout, start_line);
+                  _gtk_text_line_add_data (start_line, ld);
                   ld->width = 0;
                   ld->height = 0;
                   ld->valid = FALSE;
@@ -1033,6 +1034,7 @@ _gtk_text_btree_insert (GtkTextIter *iter,
        above. FIXME */
     gtk_text_iter_forward_chars (&end, char_count_delta);
 
+    DV (g_print ("invalidating due to inserting some text (%s)\n", G_STRLOC));
     _gtk_text_btree_invalidate_region (tree,
                                       &start, &end);
 
@@ -1081,6 +1083,7 @@ insert_pixbuf_or_widget_segment (GtkTextIter        *iter,
   *iter = start;
   gtk_text_iter_forward_char (iter); /* skip forward past the segment */
 
+  DV (g_print ("invalidating due to inserting pixbuf/widget (%s)\n", G_STRLOC));
   _gtk_text_btree_invalidate_region (tree, &start, iter);
 }
      
@@ -1414,9 +1417,9 @@ _gtk_text_btree_remove_view (GtkTextBTree *tree,
 }
 
 void
-_gtk_text_btree_invalidate_region (GtkTextBTree *tree,
-                                  const GtkTextIter *start,
-                                  const GtkTextIter *end)
+_gtk_text_btree_invalidate_region (GtkTextBTree      *tree,
+                                   const GtkTextIter *start,
+                                   const GtkTextIter *end)
 {
   BTreeView *view;
 
@@ -1526,6 +1529,7 @@ queue_tag_redisplay (GtkTextBTree      *tree,
 {
   if (_gtk_text_tag_affects_size (tag))
     {
+      DV (g_print ("invalidating due to size-affecting tag (%s)\n", G_STRLOC));
       _gtk_text_btree_invalidate_region (tree, start, end);
     }
   else if (_gtk_text_tag_affects_nonsize_appearance (tag))
@@ -2448,6 +2452,7 @@ redisplay_mark (GtkTextLineSegment *mark)
   end = iter;
   gtk_text_iter_forward_char (&end);
 
+  DV (g_print ("invalidating due to moving visible mark (%s)\n", G_STRLOC));
   _gtk_text_btree_invalidate_region (mark->body.mark.tree,
                                     &iter, &end);
 }
@@ -5411,6 +5416,7 @@ tag_changed_cb (GtkTextTagTable *table,
         {
           /* Must be a last toggle if there was a first one. */
           _gtk_text_btree_get_iter_at_last_toggle (tree, &end, tag);
+          DV (g_print ("invalidating due to tag change (%s)\n", G_STRLOC));
           _gtk_text_btree_invalidate_region (tree,
                                             &start, &end);
 

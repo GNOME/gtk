@@ -82,9 +82,6 @@
  *
  */
 
-#define SCREEN_WIDTH(widget) text_window_get_width (GTK_TEXT_VIEW (widget)->text_window)
-#define SCREEN_HEIGHT(widget) text_window_get_height (GTK_TEXT_VIEW (widget)->text_window)
-
 #if 0
 #define DEBUG_VALIDATION_AND_SCROLLING
 #endif
@@ -94,6 +91,9 @@
 #else
 #define DV(x)
 #endif
+
+#define SCREEN_WIDTH(widget) text_window_get_width (GTK_TEXT_VIEW (widget)->text_window)
+#define SCREEN_HEIGHT(widget) text_window_get_height (GTK_TEXT_VIEW (widget)->text_window)
 
 struct _GtkTextPendingScroll
 {
@@ -312,9 +312,10 @@ static void gtk_text_view_queue_scroll           (GtkTextView   *text_view,
                                                   gdouble        xalign,
                                                   gdouble        yalign);
 
-static gboolean gtk_text_view_flush_scroll       (GtkTextView *text_view);
-static void     gtk_text_view_update_adjustments (GtkTextView *text_view);
-static void     gtk_text_view_invalidate         (GtkTextView *text_view);
+static gboolean gtk_text_view_flush_scroll         (GtkTextView *text_view);
+static void     gtk_text_view_update_adjustments   (GtkTextView *text_view);
+static void     gtk_text_view_invalidate           (GtkTextView *text_view);
+static void     gtk_text_view_flush_first_validate (GtkTextView *text_view);
 
 static void gtk_text_view_update_im_spot_location (GtkTextView *text_view);
 
@@ -1146,7 +1147,8 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
   
   if (GTK_WIDGET_VISIBLE (text_view))
     gtk_widget_queue_draw (GTK_WIDGET (text_view));
-  
+
+  DV(g_print ("Invalidating due to set_buffer\n"));
   gtk_text_view_invalidate (text_view);
 }
 
@@ -1547,7 +1549,10 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
   DV(g_print(G_STRLOC"\n"));
   
   if (text_view->pending_scroll == NULL)
-    return FALSE;
+    {
+      DV (g_print ("in flush scroll, no pending scroll\n"));
+      return FALSE;
+    }
 
   scroll = text_view->pending_scroll;
 
@@ -2365,6 +2370,7 @@ gtk_text_view_remove_validate_idles (GtkTextView *text_view)
 {
   if (text_view->first_validate_idle != 0)
     {
+      DV (g_print ("Removing first validate idle: %s\n", G_STRLOC));
       g_source_remove (text_view->first_validate_idle);
       text_view->first_validate_idle = 0;
     }
@@ -2938,19 +2944,11 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   if (yoffset_changed)
     gtk_adjustment_value_changed (vadj);
 
-  if (text_view->first_validate_idle != 0)
-    {
-      /* The GTK resize loop processes all the pending exposes right
-       * after doing the resize stuff, so the idle sizer won't have a
-       * chance to run. So we do the work here. 
-       */
-
-      g_source_remove (text_view->first_validate_idle);
-      text_view->first_validate_idle = 0;
-      
-      if (!gtk_text_view_flush_scroll (text_view))
-        gtk_text_view_validate_onscreen (text_view);
-    }
+  /* The GTK resize loop processes all the pending exposes right
+   * after doing the resize stuff, so the idle sizer won't have a
+   * chance to run. So we do the work here. 
+   */
+  gtk_text_view_flush_first_validate (text_view);
 
   /* widget->window doesn't get auto-redrawn as the layout is computed, so has to
    * be invalidated
@@ -3004,23 +3002,18 @@ gtk_text_view_validate_onscreen (GtkTextView *text_view)
   g_assert (text_view->onscreen_validated);
 }
 
-static gboolean
-first_validate_callback (gpointer data)
+static void
+gtk_text_view_flush_first_validate (GtkTextView *text_view)
 {
-  GtkTextView *text_view = data;
-
-  GDK_THREADS_ENTER ();
-  
-  /* Note that some of this code is duplicated at the end of size_allocate,
-   * keep in sync with that.
-   */
-  
-  DV(g_print(G_STRLOC"\n"));
+  if (text_view->first_validate_idle == 0)
+    return;
 
   /* Do this first, which means that if an "invalidate"
    * occurs during any of this process, a new first_validate_callback
    * will be installed, and we'll start again.
    */
+  DV (g_print ("removing first validate in %s\n", G_STRLOC));
+  g_source_remove (text_view->first_validate_idle);
   text_view->first_validate_idle = 0;
   
   /* be sure we have up-to-date screen size set on the
@@ -3047,8 +3040,23 @@ first_validate_callback (gpointer data)
       DV(g_print(">Leaving first validate idle ("G_STRLOC")\n"));
       
       g_assert (text_view->onscreen_validated);
-      
     }
+}
+
+static gboolean
+first_validate_callback (gpointer data)
+{
+  GtkTextView *text_view = data;
+
+  GDK_THREADS_ENTER ();
+  
+  /* Note that some of this code is duplicated at the end of size_allocate,
+   * keep in sync with that.
+   */
+  
+  DV(g_print(G_STRLOC"\n"));
+
+  gtk_text_view_flush_first_validate (text_view);
   
   GDK_THREADS_LEAVE ();
   
@@ -3082,10 +3090,11 @@ incremental_validate_callback (gpointer data)
 
 static void
 gtk_text_view_invalidate (GtkTextView *text_view)
-{
+{  
+  DV (g_print (">Invalidate, onscreen_validated = %d now FALSE ("G_STRLOC")\n",
+               text_view->onscreen_validated));
+
   text_view->onscreen_validated = FALSE;
-  
-  DV(g_print(">Invalidate, onscreen_validated = FALSE ("G_STRLOC")\n"));
   
   if (!text_view->first_validate_idle)
     {
@@ -3110,6 +3119,7 @@ invalidated_handler (GtkTextLayout *layout,
 
   text_view = GTK_TEXT_VIEW (data);
 
+  DV (g_print ("Invalidating due to layout invalidate signal\n"));
   gtk_text_view_invalidate (text_view);
 }
 
@@ -3205,7 +3215,10 @@ changed_handler (GtkTextLayout     *layout,
         }
 
       if (yoffset_changed)
-        gtk_adjustment_value_changed (get_vadjustment (text_view));
+        {
+          DV(g_print ("Changing scroll position (%s)\n", G_STRLOC));
+          gtk_adjustment_value_changed (get_vadjustment (text_view));
+        }
 
       /* FIXME be smarter about which anchored widgets we update */
 
@@ -4007,19 +4020,37 @@ gtk_text_view_paint (GtkWidget      *widget,
   GtkTextView *text_view;
   GList *child_exposes;
   GList *tmp_list;
+  GdkRegion *updates;
   
   text_view = GTK_TEXT_VIEW (widget);
 
   g_return_if_fail (text_view->layout != NULL);
   g_return_if_fail (text_view->xoffset >= 0);
   g_return_if_fail (text_view->yoffset >= 0);
-  
-  DV (g_print (G_STRLOC": first_validate_idle: %d\n",
-               text_view->first_validate_idle));
+
+  while (text_view->first_validate_idle != 0)
+    {
+      DV (g_print (G_STRLOC": first_validate_idle: %d\n",
+                   text_view->first_validate_idle));
+      gtk_text_view_flush_first_validate (text_view);
+    }
+
+  /* More regions could have become invalid in the above loop */
+  updates = gdk_window_get_update_area (text_view->text_window->bin_window);
+  if (updates)
+    {
+      GdkRectangle rect;
+      
+      gdk_region_get_clipbox (updates, &rect);
+
+      gdk_rectangle_union (area, &rect, area);
+      
+      gdk_region_destroy (updates);
+    }
   
   if (!text_view->onscreen_validated)
     {
-      g_warning (G_STRLOC ": somehow some text lines were modified or scrolling occurred since the last validation of lines on the screen - this is a known bug, no need to report.");
+      g_warning (G_STRLOC ": somehow some text lines were modified or scrolling occurred since the last validation of lines on the screen - may be a text widget bug.");
       G_BREAKPOINT ();
     }
   
@@ -4957,6 +4988,7 @@ move_mark_to_pointer_and_scroll (GtkTextView *text_view,
     GtkTextMark *mark =
       gtk_text_buffer_get_mark (get_buffer (text_view), mark_name);
 
+    /* This may invalidate the layout */
     DV(g_print (G_STRLOC": move mark\n"));
     gtk_text_buffer_move_mark (get_buffer (text_view),
                                mark,
@@ -4965,6 +4997,9 @@ move_mark_to_pointer_and_scroll (GtkTextView *text_view,
     DV(g_print (G_STRLOC": scrolling onscreen\n"));
     gtk_text_view_scroll_mark_onscreen (text_view, mark);
   }
+
+  DV (g_print ("first validate idle leaving %s is %d\n",
+               G_STRLOC, text_view->first_validate_idle));
 }
 
 static gint
@@ -5865,6 +5900,8 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
   /* process exposes */
   if (GTK_WIDGET_REALIZED (text_view))
     {
+      DV (g_print ("Processing updates (%s)", G_STRLOC));
+      
       if (text_view->left_window)
         gdk_window_process_updates (text_view->left_window->bin_window, TRUE);
 

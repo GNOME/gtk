@@ -1,3 +1,16 @@
+2002-02-13  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_paint): just go ahead and flush 
+	all the first validate stuff if it hasn't been done, presumably
+	someone called process_updates at a weird time.
+
+	* tests/testtext.c (do_apply_colors): terminate on >= end, not >
+	end, avoids infinite loop when end is at the end of the buffer.
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_delete): when creating a
+	line data, we were adding it to the wrong line ("line" instead of
+	"start_line")
+
 2002-02-13  Joe Shaw  <joe@ximian.com>
 
 	* gtk/gtktreeitem.c (gtk_tree_item_expose): Don't chain up to the
