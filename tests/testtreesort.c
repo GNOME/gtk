@@ -69,6 +69,8 @@ main (int argc, char *argv[])
   //  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model), 0, GTK_TREE_SORT_ASCENDING);
   g_print ("start model\n");
   tree_view = gtk_tree_view_new_with_model (model);
+  gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
+			       GTK_TREE_SELECTION_MULTI);
   for (j = 0; j < 2; j++)
     for (i = 0; data[i].word_1 != NULL; i++)
       {

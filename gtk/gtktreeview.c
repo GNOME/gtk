@@ -1657,7 +1657,20 @@ gtk_tree_view_button_press (GtkWidget      *widget,
           tree_view->priv->press_start_y = event->y;
         }
 
-      gtk_tree_view_real_set_cursor (tree_view, path, TRUE);
+      if (tree_view->priv->in_free_motion)
+	{
+	  gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
+	  gtk_tree_view_real_toggle_cursor_row (tree_view);
+	}
+      else if (tree_view->priv->in_extended_selection)
+	{
+	  gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
+	  gtk_tree_view_real_select_cursor_row (tree_view);
+	}
+      else
+	{
+	  gtk_tree_view_real_set_cursor (tree_view, path, TRUE);
+	}
       
       if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
 	{
@@ -1670,8 +1683,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 		gtk_tree_view_real_collapse_row (GTK_TREE_VIEW (widget), path,
 						 tree, node);
 	    }
-	  gtk_tree_view_row_activated (tree_view, path, column);
 
+	  gtk_tree_view_row_activated (tree_view, path, column);
 	}
       gtk_tree_path_free (path);
       return TRUE;
