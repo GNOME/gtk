@@ -2367,11 +2367,11 @@ update_im_cursor_location (GtkEntry *entry)
   GdkRectangle area;
   gint strong_x;
   gint strong_xoffset;
-  gint x, y, area_width, area_height;
+  gint area_width, area_height;
 
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL)
 ;
-  get_text_area_size (entry, &x, &y, &area_width, &area_height);
+  get_text_area_size (entry, NULL, NULL, &area_width, &area_height);
 
   strong_xoffset = strong_x - entry->scroll_offset;
   if (strong_xoffset < 0)
@@ -2382,9 +2382,9 @@ update_im_cursor_location (GtkEntry *entry)
     {
       strong_xoffset = area_width;
     }
-  area.x = x + strong_xoffset;
-  area.y = y + area_height;
-  area.width = area_width;
+  area.x = strong_xoffset;
+  area.y = 0;
+  area.width = 0;
   area.height = area_height;
 
   gtk_im_context_set_cursor_location (entry->im_context, &area);

@@ -3598,6 +3598,7 @@ create_item_factory (GtkWidget *widget)
       GtkWidget *button;
       GtkAccelGroup *accel_group;
       GtkItemFactory *item_factory;
+      GtkTooltips *tooltips;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       
@@ -3627,6 +3628,23 @@ create_item_factory (GtkWidget *widget)
       gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (gtk_item_factory_get_item (item_factory,
 										      "/Preferences/Shape/Oval")),
 				      TRUE);
+
+      /* Test how tooltips (ugh) work on menu items
+       */
+      tooltips = gtk_tooltips_new ();
+      g_object_ref (tooltips);
+      gtk_object_sink (GTK_OBJECT (tooltips));
+      g_object_set_data_full (G_OBJECT (window), "testgtk-tooltips",
+			      tooltips, (GDestroyNotify)g_object_unref);
+      
+      gtk_tooltips_set_tip (tooltips, gtk_item_factory_get_item (item_factory, "/File/New"),
+			    "Create a new file", NULL);
+      gtk_tooltips_set_tip (tooltips, gtk_item_factory_get_item (item_factory, "/File/Open"),
+			    "Open a file", NULL);
+      gtk_tooltips_set_tip (tooltips, gtk_item_factory_get_item (item_factory, "/File/Save"),
+			    "Safe file", NULL);
+      gtk_tooltips_set_tip (tooltips, gtk_item_factory_get_item (item_factory, "/File/Save As..."),
+			    "Save under a new name", NULL);
 
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);

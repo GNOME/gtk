@@ -30,6 +30,7 @@
 
 #include "gtklabel.h"
 #include "gtkmain.h"
+#include "gtkmenuitem.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtksignal.h"
@@ -519,6 +520,31 @@ stop_keyboard_mode (GtkWidget *widget)
 }
 
 static void
+gtk_tooltips_start_delay (GtkTooltips *tooltips,
+			  GtkWidget   *widget)
+{
+  GtkTooltipsData *old_tips_data;
+  
+  old_tips_data = tooltips->active_tips_data;
+  if (tooltips->enabled &&
+      (!old_tips_data || old_tips_data->widget != widget))
+    {
+      guint delay;
+      
+      gtk_tooltips_set_active_widget (tooltips, widget);
+      
+      if (tooltips->use_sticky_delay &&
+	  gtk_tooltips_recently_shown (tooltips))
+	delay = STICKY_DELAY;
+      else
+	delay = tooltips->delay;
+      tooltips->timer_tag = gtk_timeout_add (delay,
+					     gtk_tooltips_timeout,
+					     (gpointer) tooltips);
+    }
+}
+
+static void
 gtk_tooltips_event_handler (GtkWidget *widget,
                             GdkEvent  *event)
 {
@@ -559,29 +585,11 @@ gtk_tooltips_event_handler (GtkWidget *widget,
   
       switch (event->type)
 	{
-	case GDK_MOTION_NOTIFY:
 	case GDK_EXPOSE:
 	  /* do nothing */
 	  break;
-	  
 	case GDK_ENTER_NOTIFY:
-	  old_tips_data = tooltips->active_tips_data;
-	  if (tooltips->enabled &&
-	      (!old_tips_data || old_tips_data->widget != widget))
-	    {
-	      guint delay;
-	      
-	      gtk_tooltips_set_active_widget (tooltips, widget);
-	      
-	      if (tooltips->use_sticky_delay  &&
-	      gtk_tooltips_recently_shown (tooltips))
-		delay = STICKY_DELAY;
-	      else
-		delay = tooltips->delay;
-	      tooltips->timer_tag = gtk_timeout_add (delay,
-						     gtk_tooltips_timeout,
-						     (gpointer) tooltips);
-	    }
+	  gtk_tooltips_start_delay (tooltips, widget);
 	  break;
 	  
 	case GDK_LEAVE_NOTIFY:
@@ -595,6 +603,17 @@ gtk_tooltips_event_handler (GtkWidget *widget,
 	  }
 	  break;
 
+	case GDK_MOTION_NOTIFY:
+	  /* Handle menu items specially ... pend popup for each motion
+	   * on other widgets, we ignore motion.
+	   */
+	  if (GTK_IS_MENU_ITEM (widget))
+	    {
+	      gtk_tooltips_set_active_widget (tooltips, NULL);
+	      gtk_tooltips_start_delay (tooltips, widget);
+	      break;
+	    }
+	  break;		/* ignore */
 	case GDK_BUTTON_PRESS:
 	case GDK_BUTTON_RELEASE:
 	case GDK_KEY_PRESS:
