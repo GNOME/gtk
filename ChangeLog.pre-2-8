@@ -1,3 +1,8 @@
+Fri Sep 17 11:20:03 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtklabel.c (gtk_label_set_markup): Add an example to the
+	docs.
+
 Thu Sep 16 23:20:05 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkselection.c (selection_get_text_plain): 

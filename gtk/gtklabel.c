@@ -1122,8 +1122,18 @@ set_markup (GtkLabel    *label,
  * @label: a #GtkLabel
  * @str: a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)
  * 
- * Parses @str which is marked up with the <link linkend="PangoMarkupFormat">Pango text markup language</link>,
- * setting the label's text and attribute list based on the parse results.
+ * Parses @str which is marked up with the <link
+ * linkend="PangoMarkupFormat">Pango text markup language</link>, setting the
+ * label's text and attribute list based on the parse results.  If the @str is
+ * external data, you may need to escape it with g_markup_escape_text() or
+ * g_markup_printf_escaped()<!-- -->:
+ * <informalexample><programlisting>
+ * char *markup;
+ * <!-- -->
+ * markup = g_markup_printf_escaped ("&lt;span style=\"italic\"&gt;%s&lt;/span&gt;", str);
+ * gtk_label_set_markup (GTK_LABEL (label), markup);
+ * g_free (markup);
+ * </programlisting></informalexample>
  **/
 void
 gtk_label_set_markup (GtkLabel    *label,

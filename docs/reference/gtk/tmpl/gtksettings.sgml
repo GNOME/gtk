@@ -110,6 +110,11 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-modules ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-split-cursor ##### -->
 <para>
 

@@ -28,6 +28,16 @@ Base class for widgets which visualize an adjustment
 @range: the object which received the signal.
 @arg1: 
 
+<!-- ##### SIGNAL GtkRange::change-value ##### -->
+<para>
+
+</para>
+
+@range: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkRange::move-slider ##### -->
 <para>
 Virtual function that moves the slider. Used for keybindings.
