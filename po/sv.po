@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-02-27 18:10-0500\n"
-"PO-Revision-Date: 2002-02-27 01:28+0100\n"
+"POT-Creation-Date: 2002-02-28 01:21+0100\n"
+"PO-Revision-Date: 2002-02-28 01:21+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -598,7 +598,7 @@ msgstr "misslyckades med att allokera bildbuffert på %u byte"
 #.
 #: gtk/gtkaccellabel.c:116
 msgid "Shift"
-msgstr ""
+msgstr "Skift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -607,7 +607,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:122
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -616,7 +616,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:128
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: gtk/gtkaccellabel.c:136
 msgid "Accelerator Closure"
@@ -1931,7 +1931,7 @@ msgstr "Y-position på barnwidgeten"
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:61
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "abcdefghijk ABCDEFGHIJK"
 
 #: gtk/gtkfontsel.c:194
 msgid "Font name"
