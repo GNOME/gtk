@@ -1,3 +1,9 @@
+2003-05-05  Christian Rose  <menthos@menthos.com>
+
+	* sr.po, sr@Latn.po: Added Serbian translation by
+	Danilo Šegan <dsegan@gmx.net>.
+	* sp.po: Removed. Replaced by sr@Latn.po.
+
 2003-04-29  Hasbullah Bin Pit <sebol@ikhlas.com>
 
 	* ms.po: Updated Malay translation.

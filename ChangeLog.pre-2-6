@@ -1,3 +1,8 @@
+2003-05-05  Christian Rose  <menthos@menthos.com>
+
+	* configure.in: Added sr and sr@Latn to ALL_LINGUAS.
+	Removed sp, it's replaced by sr@Latn.
+
 Wed Apr 30 22:09:11 BST 2003  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: GTK+ 2.x updates, mainly from
