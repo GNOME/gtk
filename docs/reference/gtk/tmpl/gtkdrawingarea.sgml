@@ -64,7 +64,7 @@ expose_event_callback (GdkWidget *widget, GdkEventExpose *event, gpointer data)
   return TRUE;
 }
 [...]
-  GtkWidget *drawing_area = gtk_drawing_area_new (<!>);
+  GtkWidget *drawing_area = gtk_drawing_area_new (<!-- -->);
   gtk_widget_set_size_request (drawing_area, 100, 100);
   g_signal_connect (G_OBJECT (drawing_area), "expose_event",  
                     G_CALLBACK (expose_event_callback), NULL);

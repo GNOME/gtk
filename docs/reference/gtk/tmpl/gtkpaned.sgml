@@ -47,7 +47,7 @@ gtk_paned_set_position().
 <example>
 <title>Creating a paned widget with minimum sizes.</title>
 <programlisting>
-GtkWidget *hpaned = gtk_hpaned_new (<!>);
+GtkWidget *hpaned = gtk_hpaned_new (<!-- -->);
 GtkWidget *frame1 = gtk_frame_new (NULL);
 GtkWidget *frame2 = gtk_frame_new (NULL);
 gtk_frame_set_shadow_type (GTK_FRAME (frame1), GTK_SHADOW_IN);

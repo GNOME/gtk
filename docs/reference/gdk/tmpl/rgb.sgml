@@ -58,7 +58,7 @@ main (int argc, char *argv[])
   gtk_init (&amp;argc, &amp;argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  darea = gtk_drawing_area_new (<!>);
+  darea = gtk_drawing_area_new (<!-- -->);
   gtk_widget_set_size_request (darea, IMAGE_WIDTH, IMAGE_HEIGHT);
   gtk_container_add (GTK_CONTAINER (window), darea);
   gtk_signal_connect (GTK_OBJECT (darea), "expose-event",
@@ -77,7 +77,7 @@ main (int argc, char *argv[])
 	}
     }
 
-  gtk_main (<!>);
+  gtk_main (<!-- -->);
   return 0;
 }
 

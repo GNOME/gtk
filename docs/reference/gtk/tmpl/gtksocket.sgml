@@ -25,7 +25,7 @@ have been added to its parent.
 <example>
 <title>Obtaining the window ID of a socket.</title>
 <programlisting>
-GtkWidget *socket = gtk_socket_new (<!>);
+GtkWidget *socket = gtk_socket_new (<!-- -->);
 gtk_widget_show (socket);
 gtk_container_add (GTK_CONTAINER (parent), socket);
 

@@ -879,9 +879,9 @@ gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
  * index is 0.  If @index is too big, or @parent has no children, @iter is set
  * to an invalid iterator and %FALSE is returned.  @parent will remain a valid
  * node after this function has been called.  As a special case, if @parent is
- * %NULL, then the @n<!>th root node is set.
+ * %NULL, then the @n<!-- -->th root node is set.
  *
- * Return value: %TRUE, if @parent has an @n<!>th child.
+ * Return value: %TRUE, if @parent has an @n<!-- -->th child.
  **/
 gboolean
 gtk_tree_model_iter_nth_child (GtkTreeModel *tree_model,

@@ -39,7 +39,7 @@ it called g_object_ref()), and the child widget has no floating reference.
 The purpose of the floating reference is to keep the child widget alive 
 until you add it to a parent container:
 <informalexample><programlisting>
-   button = gtk_button_new (<!>);
+   button = gtk_button_new (<!-- -->);
    /* button has one floating reference to keep it alive */
    gtk_container_add (GTK_CONTAINER (container), button);
    /* button has one non-floating reference owned by the container */

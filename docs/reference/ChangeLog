@@ -1,3 +1,24 @@
+2002-04-18  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/rgb.sgml:
+	* gdk/tmpl/general.sgml:
+	* gtk/tmpl/gtktogglebutton.sgml:
+	* gtk/tmpl/gtkaccellabel.sgml:
+	* gtk/tmpl/gtkradiobutton.sgml:
+	* gtk/tmpl/gtktreemodel.sgml:
+	* gtk/tmpl/gtkwidget.sgml:
+	* gtk/tmpl/gtkimage.sgml:
+	* gtk/tmpl/gtktooltips.sgml:
+	* gtk/tmpl/gtksignal.sgml:
+	* gtk/tmpl/gtkcombo.sgml:
+	* gtk/tmpl/gtkdnd.sgml:
+	* gtk/tmpl/gtksocket.sgml:
+	* gtk/tmpl/gtkdrawingarea.sgml:
+	* gtk/tmpl/gtkobject.sgml:
+	* gtk/tmpl/gtkpaned.sgml:
+	* gtk/tmpl/gtkmain.sgml: s/<!>/<!-- -->/g throughout the
+	documentation to bring the produced Docbook closer to XML.
+
 Tue Mar 26 15:41:49 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/building.sgml: Add a mention of running ldconfig.

@@ -967,7 +967,7 @@ gtk_draw_shadow (GtkStyle      *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @points: an array of #GdkPoint<!>s
+ * @points: an array of #GdkPoint<!-- -->s
  * @npoints: length of @points
  * @fill: %TRUE if the polygon should be filled
  * 

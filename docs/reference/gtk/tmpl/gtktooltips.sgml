@@ -38,7 +38,7 @@ Information about the tooltip (if any) associated with an arbitrary widget can b
    GtkWidget *load_button, *save_button, *hbox;
    GtkTooltips *button_bar_tips;
    
-   button_bar_tips = gtk_tooltips_new (<!>);
+   button_bar_tips = gtk_tooltips_new (<!-- -->);
    
    /* Create the buttons and pack them into a GtkHBox */
    hbox = gtk_hbox_new (TRUE, 2);

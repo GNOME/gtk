@@ -46,7 +46,7 @@ items.</title>
   items = g_list_append (items, "Fourth Item");
   items = g_list_append (items, "Fifth Item");
 
-  combo = gtk_combo_new (<!>);
+  combo = gtk_combo_new (<!-- -->);
   gtk_combo_set_popdown_strings (GTK_COMBO (combo), items);
 </programlisting>
 </example>
@@ -56,9 +56,9 @@ items.</title>
 <programlisting>
   GtkWidget *combo, *item, *hbox, *arrow, *label;
 
-  combo = gtk_combo_new (<!>);
+  combo = gtk_combo_new (<!-- -->);
 
-  item = gtk_list_item_new (<!>);
+  item = gtk_list_item_new (<!-- -->);
   gtk_widget_show (item);
 
   /* You can put almost anything into the GtkListItem widget. Here we will use

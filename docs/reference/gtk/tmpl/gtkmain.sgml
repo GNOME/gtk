@@ -46,7 +46,7 @@ int
 main (int argc, char **argv)
 {
   /* Initialize i18n support */
-  gtk_set_locale (<!>);
+  gtk_set_locale (<!-- -->);
 
   /* Initialize the widget set */
   gtk_init (&amp;argc, &amp;argv);
@@ -61,7 +61,7 @@ main (int argc, char **argv)
   gtk_widget_show_all (mainwin);
 
   /* Enter the main event loop, and wait for user interaction */
-  gtk_main (<!>);
+  gtk_main (<!-- -->);
 
   /* The user lost interest */
   return 0;
@@ -171,8 +171,8 @@ and invoke timeouts etc. while doing some time intensive computation.
 <programlisting>
 	/* computation going on */
 ...
-        while (gtk_events_pending (<!>))
-	  gtk_main_iteration (<!>);
+        while (gtk_events_pending (<!-- -->))
+	  gtk_main_iteration (<!-- -->);
 ...
 	/* computation continued */
 </programlisting>
@@ -334,7 +334,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (win), but);
 
   gtk_widget_show_all (win);
-  gtk_main (<!>);
+  gtk_main (<!-- -->);
   return 0;
 }
 </programlisting>

@@ -1,3 +1,15 @@
+2002-04-18  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkitemfactory.c:
+	* gtk/gtkiconfactory.c:
+	* gtk/gtkwidget.c:
+	* gtk/gtkstyle.c:
+	* gtk/gtkrc.c:
+	* gtk/gtktreeviewcolumn.c:
+	* gtk/gtkdialog.c:
+	* gtk/gtktreemodel.c: s/<!>/<!-- -->/g throughout the
+	documentation to bring the produced Docbook closer to XML.
+
 2002-04-18  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk-pixbuf/Makefile.am (uninstall-libtool-import-lib)

@@ -168,7 +168,7 @@ enum
       gchar *str_data;
       gint   int_data;
 
-      /* Make sure you terminate calls to gtk_tree_model_get(<!>)
+      /* Make sure you terminate calls to gtk_tree_model_get(<!-- -->)
        * with a '-1' value
        */
       gtk_tree_model_get (list_store, &amp;iter, 

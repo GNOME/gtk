@@ -348,14 +348,14 @@ avoid the X error in any other way.
 <example>
 <title>Trapping an X error.</title>
 <programlisting>
-  gdk_error_trap_push (<!>);
+  gdk_error_trap_push (<!-- -->);
 
   /* ... Call the X function which may cause an error here ... */
 
   /* Flush the X queue to catch errors now. */
-  gdk_flush (<!>);
+  gdk_flush (<!-- -->);
 
-  if (gdk_error_trap_pop (<!>))
+  if (gdk_error_trap_pop (<!-- -->))
     {
       /* ... Handle the error here ... */
     }

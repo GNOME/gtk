@@ -1616,10 +1616,10 @@ gtk_rc_get_style (GtkWidget *widget)
  *
  * The action of gtk_rc_get_style() is similar to:
  * <informalexample><programlisting>
- * <!> gtk_widget_path (widget, NULL, &amp;path, NULL);
- * <!> gtk_widget_class_path (widget, NULL, &amp;class_path, NULL);
- * <!> gtk_rc_get_style_by_paths (gtk_widget_get_settings (widget), path, class_path,
- * <!>                            G_OBJECT_TYPE (widget));
+ *  gtk_widget_path (widget, NULL, &amp;path, NULL);
+ *  gtk_widget_class_path (widget, NULL, &amp;class_path, NULL);
+ *  gtk_rc_get_style_by_paths (gtk_widget_get_settings (widget), path, class_path,
+ *                             G_OBJECT_TYPE (widget));
  * </programlisting></informalexample>
  * 
  * Return value: A style created by matching with the supplied paths,

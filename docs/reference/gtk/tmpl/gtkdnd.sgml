@@ -78,7 +78,7 @@ Sets a widget as a potential drop destination.
  on behalf of a widget for drops onto that widget. The @targets
  and @actions fields only are used if %GTK_DEST_DEFAULT_MOTION
  or %GTK_DEST_DEFAULT_DROP are given.
-@targets: a pointer to an array of #GtkTargetEntry<!>s indicating
+@targets: a pointer to an array of #GtkTargetEntry<!-- -->s indicating
  the drop types that this widget will accept.
 @n_targets: the number of entries in @targets.
 @actions: a bitmask of possible actions for a drop onto this

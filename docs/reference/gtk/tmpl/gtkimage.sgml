@@ -64,7 +64,7 @@ on the image, such as button clicks, place the image inside a
 
     image = gtk_image_new_from_file ("myfile.png");
 
-    event_box = gtk_event_box_new (<!>);
+    event_box = gtk_event_box_new (<!-- -->);
 
     gtk_container_add (GTK_CONTAINER (event_box), image);
 

@@ -621,7 +621,7 @@ gtk_item_factory_path_from_widget (GtkWidget	    *widget)
  * gtk_item_factory_create_items:
  * @ifactory: a #GtkItemFactory
  * @n_entries: the length of @entries
- * @entries: an array of #GtkItemFactoryEntry<!>s whose @callback members
+ * @entries: an array of #GtkItemFactoryEntry<!-- -->s whose @callback members
  *    must by of type #GtkItemFactoryCallback1
  * @callback_data: data passed to the callback functions of all entries
  *
@@ -640,7 +640,7 @@ gtk_item_factory_create_items (GtkItemFactory	   *ifactory,
  * gtk_item_factory_create_items_ac:
  * @ifactory: a #GtkItemFactory
  * @n_entries: the length of @entries
- * @entries: an array of #GtkItemFactoryEntry<!>s 
+ * @entries: an array of #GtkItemFactoryEntry<!-- -->s 
  * @callback_data: data passed to the callback functions of all entries
  * @callback_type: 1 if the callback functions in @entries are of type
  *    #GtkItemFactoryCallback1, 2 if they are of type #GtkItemFactoryCallback2 
@@ -1160,7 +1160,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 /**
  * gtk_item_factory_create_menu_entries:
  * @n_entries: the length of @entries
- * @entries: an array of #GtkMenuEntry<!>s 
+ * @entries: an array of #GtkMenuEntry<!-- -->s 
  *
  * Creates the menu items from the @entries.
  */
@@ -1366,7 +1366,7 @@ gtk_item_factory_delete_entry (GtkItemFactory         *ifactory,
  * gtk_item_factory_delete_entries:
  * @ifactory: a #GtkItemFactory
  * @n_entries: the length of @entries
- * @entries: an array of #GtkItemFactoryEntry<!>s 
+ * @entries: an array of #GtkItemFactoryEntry<!-- -->s 
  *
  * Deletes the menu items which were created from the @entries by the given
  * item factory.
