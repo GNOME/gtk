@@ -1,3 +1,10 @@
+Thu Jan 30 16:54:29 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c: Patch from Soeren Sandmann
+	to update the states of the tab label child
+	widgets to match the state of the tabs. 
+	(#93389, Reported by Tommi Komulainen)
+
 Thu Jan 30 16:30:54 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (EXTRA_DIST): Remove gtk+.spec.in from
