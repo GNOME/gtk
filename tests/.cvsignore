@@ -4,6 +4,10 @@ makefile.mingw
 makefile.msc
 .deps
 .libs
+pixbuf-lowmem
+pixbuf-random
+pixbuf-randomly-modified
+pixbuf-read
 simple
 testcalendar
 testdnd
