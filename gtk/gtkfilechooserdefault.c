@@ -996,22 +996,6 @@ shortcuts_find_current_folder (GtkFileChooserDefault *impl)
   gtk_tree_path_free (path);
 }
 
-/* Returns whether a path is a folder */
-static gboolean
-check_is_folder (GtkFileSystem *file_system, const GtkFilePath *path, GError **error)
-{
-  GtkFileFolder *folder;
-
-  folder = gtk_file_system_get_folder (file_system, path,
-				       GTK_FILE_INFO_DISPLAY_NAME,
-				       error);
-  if (!folder)
-    return FALSE;
-
-  g_object_unref (folder);
-  return TRUE;
-}
-
 /* Convenience function to get the display name and icon info for a path */
 static GtkFileInfo *
 get_file_info (GtkFileSystem *file_system, const GtkFilePath *path, gboolean name_only, GError **error)
@@ -1039,6 +1023,41 @@ get_file_info (GtkFileSystem *file_system, const GtkFilePath *path, gboolean nam
 
   gtk_file_path_free (parent_path);
   return info;
+}
+
+/* Returns whether a path is a folder */
+static gboolean
+check_is_folder (GtkFileSystem *file_system, const GtkFilePath *path, GError **error)
+{
+  GtkFileInfo *info;
+  gboolean is_folder;
+
+  /* Use get_file_info() rather than trying get_folder() and checking
+   * for an error directly because older versions of the gnome-vfs
+   * backend don't return an error immediately. This way is also
+   * more efficient if we already have the parent folder. 
+   */
+  info = get_file_info (file_system, path, FALSE, error);
+  
+  if (!info)
+    return FALSE;
+  
+  is_folder = gtk_file_info_get_is_folder (info);
+  gtk_file_info_free (info);
+
+  if (!is_folder)
+    {
+      g_set_error (error,
+		   GTK_FILE_SYSTEM_ERROR,
+		   GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
+		   "%s: %s", 
+		   gtk_file_info_get_display_name (info),
+		   g_strerror (ENOTDIR));
+
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 /* Inserts a path in the shortcuts tree, making a copy of it; alternatively,
