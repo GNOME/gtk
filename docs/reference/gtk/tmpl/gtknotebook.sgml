@@ -172,7 +172,7 @@ ignored.
 
 <!-- ##### MACRO gtk_notebook_current_page ##### -->
 <para>
-??? I don't see such a macro in gtknotebook.h (v1.2.3).
+Compatibility macro; in gtkcompat.h.
 </para>
 
 

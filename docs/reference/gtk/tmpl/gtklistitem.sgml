@@ -2,55 +2,68 @@
 GtkListItem
 
 <!-- ##### SECTION Short_Description ##### -->
-
+an item in a #GtkList.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+The #GtkListItem widget is used for each item in a #GtkList.
 
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkList</term>
+<listitem><para>the parent list widget.</para></listitem>
+</varlistentry>
+
+</variablelist>
 
 </para>
 
 <!-- ##### STRUCT GtkListItem ##### -->
 <para>
-
+The #GtkListItem struct contains private data only, and should
+only be accessed using the functions below.
 </para>
 
 
 <!-- ##### FUNCTION gtk_list_item_new ##### -->
 <para>
-
+Creates a new #GtkListitem.
 </para>
 
-@Returns: 
+@Returns: a new #GtkListItem.
 
 
 <!-- ##### FUNCTION gtk_list_item_new_with_label ##### -->
 <para>
-
+Creates a new #GtkListItem with a child label containing the given string.
 </para>
 
-@label: 
-@Returns: 
+@label: the string to use for the child label.
+@Returns: a new #GtkListItem with a child #GtkLabel with the text set to
+@label.
 
 
 <!-- ##### FUNCTION gtk_list_item_select ##### -->
 <para>
-
+Selects the item, by emitting the item's "select" signal.
+Depending on the selection mode of the list, this may cause other items to
+be deselected.
 </para>
 
-@list_item: 
+@list_item: a #GtkListItem.
 
 
 <!-- ##### FUNCTION gtk_list_item_deselect ##### -->
 <para>
-
+Deselects the item, by emitting the item's "deselect" signal.
 </para>
 
-@list_item: 
+@list_item: a #GtkListItem.
 
 
 <!-- ##### SIGNAL GtkListItem::toggle-focus-row ##### -->

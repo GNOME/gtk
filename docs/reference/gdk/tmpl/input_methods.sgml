@@ -193,7 +193,7 @@ styles is returned.
 
 <!-- ##### FUNCTION gdk_im_begin ##### -->
 <para>
-Starts editing, using the given #GdkInputContext and #GdkWindow.
+Starts editing, using the given input context and #GdkWindow.
 This should be called when the widget receives the input focus, typically in
 the widget's focus_in_event method.
 </para>

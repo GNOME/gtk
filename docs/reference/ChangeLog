@@ -1,3 +1,20 @@
+2000-02-28  Damon Chaplin  <damon@helixcode.com>
+
+	* gtk/tmpl/gtkradiomenuitem.sgml: 
+	* gtk/tmpl/gtkmenuitem.sgml: 
+	* gtk/tmpl/gtknotebook.sgml: new menu item sections and minor update to
+	notebook section from Nicolas GEORGE <nicolas.george@ens.fr>.
+
+2000-02-18  Damon Chaplin  <damon@helixcode.com>
+
+	* gtk/tmpl/gtktooltips.sgml: patch from
+	David Benson <daveb@idealab.com> to note that gtk_tooltips_set_colors()
+	does not work.
+
+2000-02-09  Damon Chaplin  <damon@helixcode.com>
+
+	* gdk/tmpl/input_methods.sgml: minor fix.
+
 2000-02-03  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gdk/gdk-sections.txt: rearranged a bit.
