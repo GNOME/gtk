@@ -291,7 +291,18 @@ if test "x$enable_rebuilds" = "xyes" && \
 fi
 AC_SUBST(REBUILD)
 
-AC_CHECK_FUNCS(lstat mkstemp sigsetjmp bind_textdomain_codeset)
+AC_CHECK_FUNCS(lstat mkstemp bind_textdomain_codeset)
+
+# sigsetjmp is a macro on some platforms, so AC_CHECK_FUNCS is not reliable
+AC_MSG_CHECKING(for sigsetjmp)
+AC_TRY_LINK([#include <setjmp.h>], [
+sigjmp_buf env;
+sigsetjmp(env, 0);
+], gtk_ok=yes, gtk_ok=no)
+AC_MSG_RESULT($gtk_ok)
+if test "$gtk_ok" = "yes"; then
+  AC_DEFINE(HAVE_SIGSETJMP)
+fi
 
 AC_MSG_CHECKING(whether make is GNU Make)
 STRIP_BEGIN=
@@ -385,7 +396,7 @@ AC_CHECK_HEADERS(unistd.h, AC_DEFINE(HAVE_UNISTD_H))
 AC_CHECK_HEADERS(winsock.h, AC_DEFINE(HAVE_WINSOCK_H))
 AC_CHECK_HEADERS(dimm.h, AC_DEFINE(HAVE_DIMM_H))
 
-if test ${with_wintab+set} = set && test $with_wintab != no; then
+if test "${with_wintab+set}" = set && test $with_wintab != no; then
   AC_MSG_CHECKING([for wintab.h])
   saved_CFLAGS="$CFLAGS"
   CFLAGS="$CFLAGS -I$with_wintab/include"

@@ -37,6 +37,8 @@
 #undef HAVE_XCONVERTCASE
 #undef HAVE_XFT
 
+#undef HAVE_SIGSETJMP
+
 #undef NO_FD_SET
 
 #undef RESOURCE_BASE

@@ -1,3 +1,8 @@
+Sun Nov  4 17:36:08 2001  Manish Singh  <yosh@gimp.org>
+
+	* acconfig.h configure.in: sigsetjmp is macroized in some places,
+	so use AC_TRY_LINK instead of AC_CHECK_FUNCS for the check.
+
 Sun Nov  4 19:16:23 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkcolor.c (gdk_color_parse): Implement gdk_color_parse()
