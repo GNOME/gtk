@@ -1,5 +1,6 @@
 \input texinfo @c -*-texinfo-*-
 @c Copyright (C) 1996 by Peter Mattis. All rights reserved.
+@c Portions Copyright (C) 1998 Marius Vollmer
 @c
 @c %**start of header
 @setfilename gtk.info
@@ -9,8 +10,8 @@
 @c %**end of header
 
 @set edition 1.0
-@set update-date 29 January 1998
-@set update-month January 1998
+@set update-date 23 August 1998
+@set update-month August 1998
 
 @ifinfo
 This file documents GTK, the GIMP Toolkit
@@ -44,7 +45,7 @@ approved by Peter Mattis.
 @title The GIMP Toolkit
 @subtitle Version @value{edition}
 @subtitle @value{update-month}
-@author by Peter Mattis
+@author by Peter Mattis and the GTK+ team
 
 @page
 @vskip 0pt plus 1filll
@@ -83,7 +84,7 @@ This is edition @value{edition} of the GTK documentation,
 @menu
 * Copying::                     Your rights.
 * Overview::                    What is GTK?
-* Objects::                     Object overview.
+* Types and Objects::           
 * Signals::                     Signals overview.
 * Widgets::                     Widget overview.
 * Other Objects::               Utility objects.
@@ -120,17 +121,17 @@ copies of GTK, you must give the recipients all the rights that you
 have. You must make sure that they, too, receive or can get the source
 code. And you must tell them their rights.
 
-Also, for my own protection, we must make certain that everyone finds
+Also, for our own protection, we must make certain that everyone finds
 out that there is no warranty for GTK. If GTK is modified by someone
 else and passed on, we want their recipients to know that what they have
 is not what we distributed, so that any problems introduced by others
 will no reflect on our reputation.
 
 The precise conditions of the licenses for GTK are found in the General
-Public Licenses that accompanies it.
+Public Licenses that accompany it.
 
 
-@node Overview, Objects, Copying, Top
+@node Overview, Types and Objects, Copying, Top
 @comment node-name, next, previous, up
 @chapter What is GTK?
 @cindex Overview
@@ -151,11 +152,32 @@ label. However, the child widget can also be a pixmap, image or any
 combination possible the programmer desires. This flexibility is adhered
 to throughout the library.
 
+@c I think the next paragraph takes unproportionally much space for
+@c the thing it wants to say (compared to the rest of this overview).
+@c So Somebody please extend this overview with more generally interesting
+@c stuff. - mvo
 
-@node Objects, Signals, Overview, Top
+To make life easier for you, GTK presents this flexibility in a uniform
+framework.  Specifically, it implements its own support for object
+oriented programming that is well adapted to the purposes of a user
+interface toolkit and it aims at providing a reasonable sane and
+disciplined programming interface.  This uniformity and discipline is
+intended to make it easy and reliable to access GTK from languages other
+than C.  Especially more dynamic languages like Perl, Python or Scheme
+will find amble support, and in fact, bindings to these languages
+already exist.
+
+@node Types and Objects, Signals, Overview, Top
 @comment node-name, next, previous, up
-@chapter Object Overview
-@cindex Objects
+@chapter Types and Object Overview
+@cindex object, type, type system, class
+
+@flushright
+Other kid's games are all such a bore!
+They've gotta have rules and they gotta keep score!
+
+-- Calvin about CalvinBall(tm)
+@end flushright
 
 GTK implements a semi-simple class mechanism and an associated class
 hierarchy for widgets and several other useful objects. The GtkObject
@@ -163,14 +185,212 @@ type is the root of the class hierarchy. It provides a few items needed
 by all classes, the foundation for the signal (@pxref{Signals})
 mechanism and the ``destroy'' method.
 
-The class hierarchy is defined by a type hierarchy. This hierarchy
-allows queries to be made in regards to a type. The basic query that can
-be performed is asking whether a given type has an ``is a'' relation
-with another type. For instance, it is common to ask whether a general
-widget pointer is a type of specific widget so that runtime sanity
-checks can be made.
+This class hierarchy is part of a slightly more general type system.
+The classes for the individual widgets are by far the most important
+part of this type system, but before we get to them, we describe the
+basics of the type system itself.  This is mostly of interest for widget
+writers, so you might want to skip ahead to the Object section.
 
-@section Type utility functions
+@menu
+* Type introduction::           
+* Basics::                      
+* Simple types::                
+* Enumerations and flags::      
+* Strings::                     
+* Callbacks::                   
+* Composite types::             
+* Objects::                     
+@end menu
+
+@node Type introduction, Basics, Types and Objects, Types and Objects
+@section Introduction to the Type System
+
+Gtk defines its own system of types, much like a computer language
+defines what types it supports.  Of course, the Gtk type system is build
+on top of the types that C provides, so it includes members like
+@samp{int}, @samp{long} and @samp{float}.  But, compared to C, it allows
+only few carefully selected types and specifies a lot of restrictions on
+the way you can use values of these types.  For example, there is no
+general facility for specifying @emph{pointer to X}.  Instead, we take a
+more higher level approach and define such things as @samp{string},
+which is just like a @code{char*} but with additional rules about how to
+manage the memory that it points to.
+
+The type system has two purposes: to define a formal system with which
+to describe the various exported features of Gtk; and to implement this
+system at run-time so that we get sound and flexible @dfn{dynamic} types
+for the dynamic languages that want to interface with Gtk.
+
+Let me restate this with different words, because I think it is
+important to understand this idea.  We will see in a moment that the
+type system is indeed weel defined and all this detail is implemented
+with functions and data structures in Gtk.  For example, every type (and
+there can be any number of them) can be represented with a unique
+integer and Gtk has support for the necessary bookkeeping for this.
+Every type also has a name and there are functions for converting
+between the name of a type and its unique number.  Maybe more useful,
+there is a big discriminated union that can be used to pass around a
+value of any representable type, together with its precise type.
+
+This is the run-time or dynamic side of the type system.  Mostly, you do
+not need to use it when you don't want to.  The compile-time or static
+side of the type system can is used to statically define the programming
+interface of Gtk.  For example, suppose there is function @code{gtk_foo}
+in the Gtk API that has a prototype
+
+@example
+char *gtk_foo (char *);
+@end example
+
+This looks like it does something with strings.  But what does it do
+with the memory of the string that has been passed in, and what are we
+supposed or allowed to do with the string that is returned?  The more
+restricted type @samp{string} from the Gtk type system can be used to be
+more precise.  In fact, the definition of @samp{string} below includes
+the rule that when a @samp{string} is passed to a function, that
+function is not allowed to retain a pointer into the string beyond the
+life time of that function call.  Se we are safe to deallocate it or
+override it when the function has returned.  Likewise, the definition
+specifies that the memory of a @samp{string} that is returned from a
+function becomes the sole property of the calling function.  The calling
+function is responsible for deallocating it eventually and it can be
+sure that nobody else scribbles in it.  When @samp{gtk_foo} really obeys
+these rules, we can say that it takes one argument, which is a
+@samp{string}, and it returns a @samp{string}.
+
+Now we can understand why it makes sense to have a more restrictive type
+system than that of C.  With it, it is possible to be more precise and
+we actually have a framework where we can be sure that as long as we
+stay inside this framework we are not gratitously causing trouble for
+languages that are more disciplined than C.  Of course, you are not
+restricted to making all your interfaces expressible within the
+framework.  There are valid reasons for breaking it, for performance or
+simply for convenience.  But please try to provide all the functionality
+of your module in such a way that it can be described with this type
+system and treat the non-conforming functions as additional goodies that
+are nice to have but not essential.  The reward is an instant
+accessibility of your code from a huge number of scripting and extension
+languages such as Perl, Python, and Guile.
+
+These formal specifications of the Gtk interface are contained in
+special declarations in the header files of Gtk.  They are ignored by
+the C compiler, but can be used by other language processors.  For extra
+convenience, these declarations are also available in a more condensed
+form that is easier to parse.  Tools for generating bindings of Gtk to
+other languages can read these declarations and---because all the
+important details are defined---automatically generate the bulk of the
+needed glue code.  It is also possible to feed these declarations into a
+running application (a interface builder, say) and thus make it aware of
+new widgets and functions without recompiling anything.
+
+The run-time side of the type system is also somewhat introspective.
+This means that you can query Gtk about all the members of an
+enumeration for example.  Gtk provides tools that help you provide this
+introspection for your definitions also.
+
+Types are not enough to completely specify an interface, so GTK also has
+@dfn{modes}.  A mode specifies what happens to a value when it crosses a
+module boundary; it can be @samp{in}, @samp{out}, or @samp{inout}.  Most
+fundamental types (and their derived types) support only mode @samp{in}.
+The modes @samp{out} and @samp{inout} can only be used with the
+composite types: lists and vectors.  When argument of these types are
+marked as @samp{out} or @samp{inout} it means that the called module is
+allowed to change the contents of the composite value and that these
+changes need to be propagated back to the originator of the value.  Mode
+@samp{out} means that the argument has no meaningful value at the
+beginning and should not be read.  Mode @samp{in} specifies that the
+called module is not allowed to change the value in any way.
+
+The type system allows for an unbounded number of types.  Every widget
+is a type for example and you can add new widget types at any time
+without confusing the run-time implementation of the type system.
+Nevertheless, all types are derived from a certain @dfn{fundamental}
+type, and there are only a small and finite number of fundamental types.
+We only specify rules for the fundamental types and all other types
+inherit these rules from their fundamental type.  For example,
+@samp{int} is a fundamental type, as is @samp{GtkObject}.  All widgets
+derive from @samp{GtkObject} and so the rules for @samp{GtkObject} apply
+to all widgets as well.
+
+This derivation defines a type hierachy, but this hierachy is not
+completely general.  You can't derive from @samp{int} for example, and
+you can only have one level of derivation from @samp{enum}.  The
+fundamental type @samp{GtkObject}, however, is the basis for the large
+and deep hierarchy of widget types.
+
+The individual fundamental types are defined and explained in the
+following sections.  Here is a complete list of them:
+
+@table @samp
+@item none
+The not-a-value type, similar to @samp{void}.
+@item char
+A character.  Internationalization issues are still undecided.
+@item bool
+True or false.
+@item byte, ubyte, int, uint, long, ulong, float, double
+The usual assortment of scalar types.
+@item string
+A string.  Internationalization issues are still undecided.
+@item enum, flags
+Enumerations with a fixed set of literals.  Either used to express a
+single choice from this set or to individually turn on and off several
+flags.
+@item boxed
+A pointer to an opaque structure that can be copied and destroyed.
+@item callback
+A pointer to a function with enough extra information so that it can
+also be used for functions written in languages completely different
+from C.
+@item GtkObject
+A pointer to a GtkObject or derived type.  The fun starts here.
+@item args, slist, dlist, cvec, tvec
+An assortment of composite types like linked lists and counted or
+zero-terminated arrays.
+@item pointer, signal, c_callback
+Obsolete types.
+@end table
+
+@node Basics, Simple types, Type introduction, Types and Objects
+@section Basic Concepts
+
+The basis for the type system are the fundamental types.  At run-time,
+they are represented by members of the @code{GtkFundamentalType}
+enumeration.  For the static declarations, they are identified with a
+unique name.
+
+@deftp {Enumeration} GtkFundamentalType
+This enumeration contains a member for each defined fundamental type.
+Most members are listed along with the description if their semantics,
+but two are simple enough to list them here:
+@table @code
+@item GTK_TYPE_INVALID
+No valid type is derived from this.  Use @code{GTK_TYPE_INVALID} to
+express exceptional situations.  This member does not correspond to a
+fundamental type and thus there is no name for it.
+@item GTK_TYPE_NONE
+The type without value.
+@end table
+@end deftp
+
+@deftp {Data type} GtkType
+The type @code{GtkType} holds the run-time representation of a type.  It
+is a integer of a certain size.  The follwing macros are defined to
+access the basic properties of a @code{GtkType}:
+
+@deftypefn {Macro} {unsigned int} GTK_TYPE_SEQNO (GtkType type)
+Returns the sequence number of @var{type}.  The sequence numbers are
+guaranteed to be dense, i.e., you can use them to index a table and the
+table need not be much larger than the number of different GtkTypes that
+you might encounter.
+@end deftypefn
+
+@deftypefn {Macro} GtkFundamentalType GTK_FUNDAMENTAL_TYPE (GtkType type)
+Returns the fundamental type of @var{type}.
+@end deftypefn
+Both macros simply access different bit-fields of a @code{GtkType}, so
+they are very efficient.
+@end deftp
 
 The @code{GtkTypeInfo} structure is used to communicate information to
 @code{gtk_type_unique} as opposed to passing in large numbers of
@@ -296,6 +516,44 @@ is_a @var{is_a_type} is true.
 
 @deftypefun void gtk_type_set_arg (GtkObject *@var{object}, GtkType @var{type}, GtkArg *@var{arg}, guint @var{arg_id})
 @end deftypefun
+
+@node Simple types, Enumerations and flags, Basics, Types and Objects
+@section Simple Types
+
+@node Enumerations and flags, Strings, Simple types, Types and Objects
+@section Enumerations and Flags
+
+@node Strings, Callbacks, Enumerations and flags, Types and Objects
+@section Strings
+
+@node Callbacks, Composite types, Strings, Types and Objects
+@section Callbacks
+
+@node Composite types, Objects, Callbacks, Types and Objects
+@section Composite Types
+
+@node Objects,  , Composite types, Types and Objects
+@section Objects and Classes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @section Object functions
 
@@ -423,7 +681,7 @@ return @code{FALSE}. On success it will return @code{TRUE}.
 @end deftypefun
 
 
-@node Signals, Widgets, Objects, Top
+@node Signals, Widgets, Types and Objects, Top
 @comment node-name, next, previous, up
 @chapter Signals Overview
 @cindex Signals
@@ -751,37 +1009,37 @@ The available widgets (in alphabetical order):
 @menu
 * GtkAlignment::                The alignment widget.
 * GtkArrow::                    The arrow widget.
-* GtkAspectFrame::		The aspect frame widget.
+* GtkAspectFrame::              The aspect frame widget.
 * GtkBin::                      The bin widget.
 * GtkBox::                      The box widget.
-* GtkButtonBox::		The button box widget.
+* GtkButtonBox::                The button box widget.
 * GtkButton::                   The button widget.
 * GtkCheckButton::              The check button widget.
 * GtkCheckMenuItem::            The check menu item widget.
-* GtkCList::			The compound list widget.
-* GtkColorSelection::		The color selector widget.
-* GtkCombo::			The combo box widget.
+* GtkCList::                    The compound list widget.
+* GtkColorSelection::           The color selector widget.
+* GtkCombo::                    The combo box widget.
 * GtkContainer::                The container widget.
 * GtkCTree::                    The multi-column tree widget.
-* GtkCurve::			The curve widget.
-* GtkGammaCurve::		The gamma curve widget.
+* GtkCurve::                    The curve widget.
+* GtkGammaCurve::               The gamma curve widget.
 * GtkDialog::                   The dialog widget.
 * GtkDrawingArea::              The drawing area widget.
 * GtkEntry::                    The entry widget.
-* GtkEventBox::			The event box widget.
+* GtkEventBox::                 The event box widget.
 * GtkFileSelection::            The file selection dialog widget.
-* GtkFixed::			The fixed widget.
+* GtkFixed::                    The fixed widget.
 * GtkFrame::                    The frame widget.
-* GtkGamma::			The gamma widget.
+* GtkGamma::                    The gamma widget.
 * GtkHBox::                     The horizontal box widget.
-* GtkHButtonBox::		The horizontal button box widget.
-* GtkHPaned::			The horizontal paned widget.
+* GtkHButtonBox::               The horizontal button box widget.
+* GtkHPaned::                   The horizontal paned widget.
 * GtkHRuler::                   The horizontal ruler widget.
 * GtkHScale::                   The horizontal scale widget.
 * GtkHScrollbar::               The horizontal scrollbar widget.
 * GtkHSeparator::               The horizontal separator widget.
 * GtkImage::                    The image widget.
-* GtkInputDialog::		The input dialog widget.
+* GtkInputDialog::              The input dialog widget.
 * GtkItem::                     The item widget.
 * GtkLabel::                    The label widget.
 * GtkList::                     The list widget.
@@ -793,7 +1051,7 @@ The available widgets (in alphabetical order):
 * GtkMisc::                     The misc widget.
 * GtkNotebook::                 The notebook widget.
 * GtkOptionMenu::               The option menu widget.
-* GtkPaned::			The paned widget.
+* GtkPaned::                    The paned widget.
 * GtkPixmap::                   The pixmap widget.
 * GtkPreview::                  The preview widget.
 * GtkProgressBar::              The progress bar widget.
@@ -805,18 +1063,18 @@ The available widgets (in alphabetical order):
 * GtkScrollbar::                The scrollbar widget.
 * GtkScrolledWindow::           The scrolled window widget.
 * GtkSeparator::                The separator widget.
-* GtkStatusbar::		The statusbar widget.
+* GtkStatusbar::                The statusbar widget.
 * GtkTable::                    The table widget.
 * GtkText::                     The text widget.
 * GtkToggleButton::             The toggle button widget.
-* GtkToolbar::			The tool bar widget.
-* GtkTooltips::			The tool tips widget.
+* GtkToolbar::                  The tool bar widget.
+* GtkTooltips::                 The tool tips widget.
 * GtkTree::                     The tree widget.
 * GtkTreeItem::                 The tree item widget.
 * GtkVBox::                     The vertical box widget.
-* GtkVButtonBox::		The vertical button box widget.
+* GtkVButtonBox::               The vertical button box widget.
 * GtkViewport::                 The viewport widget.
-* GtkVPaned::			The vertical paned widget.
+* GtkVPaned::                   The vertical paned widget.
 * GtkVRuler::                   The vertical ruler widget.
 * GtkVScale::                   The vertical scale widget.
 * GtkVScrollbar::               The vertical scrollbar widget.
@@ -1434,7 +1692,7 @@ values @var{label}. The new widget is returned as a pointer to a
 @gtkstdmacros{CheckButton, CHECK_BUTTON}
 
 @page
-@node GtkCheckMenuItem, GtkCList, GtkCheckButton, Widgets,
+@node GtkCheckMenuItem, GtkCList, GtkCheckButton, Widgets
 @comment node-name, next, previous, up
 @section The check menu item widget
 
@@ -4528,7 +4786,7 @@ Returns the @code{GtkWidget} type identifier.
 
 
 @page
-@node GtkWindow, , GtkWidget, Widgets
+@node GtkWindow,  , GtkWidget, Widgets
 @comment node-name, next, previous, up
 @section The window widget
 
@@ -4677,11 +4935,11 @@ above.
 
 
 @menu
-* GtkAcceleratorTable::		The accelerator table object.
+* GtkAcceleratorTable::         The accelerator table object.
 * GtkAdjustment::               The adjustment object.
-* GtkGC::			The GC object.
+* GtkGC::                       The GC object.
 * GtkData::                     The data object.
-* GtkStyle::			The style object.
+* GtkStyle::                    The style object.
 @end menu
 
 
@@ -4764,7 +5022,7 @@ Returns the @code{GtkData} type identifier.
 
 @gtkstdmacros{Data, DATA}
 @page
-@node GtkStyle, ,GtkData, Other Objects
+@node GtkStyle,  , GtkData, Other Objects
 @section The style object
 
 @subsection Description
@@ -4779,7 +5037,7 @@ Returns the @code{GtkData} type identifier.
 
 @menu
 * Initialization and exit::     Initializing and exiting GTK.
-* Customization::		Customizing the library.
+* Customization::               Customizing the library.
 * Menu Factories::              Simplified menu creation.
 * Tree Factories::              Simplified tree creation.
 * Tool Tips::                   Pop up help mechanism.
@@ -4889,7 +5147,7 @@ you.
 @section Resource Files
 
 @page
-@node Standard Macros, , Resource Files, Miscellaneous
+@node Standard Macros,  , Resource Files, Miscellaneous
 @comment node-name, next, previous, up
 @section Macros defined by all objects
 
@@ -4919,7 +5177,7 @@ Cast a generic pointer to @code{Gtk<ObjectType>Class*}. Like
 @deftypefun gint GTK_IS_<ObjectType> (gpointer @var{obj})
 Determine if a generic pointer refers to a @code{Gtk<ObjectType>}
 object. This function is, in reality, a macro wrapper around the
-@code{gtk_type_is_a} function (@pxref{Objects}).
+@code{gtk_type_is_a} function (@pxref{Types and Objects}).
 @end deftypefun
 
 
@@ -5075,7 +5333,7 @@ main (int argc, char *argv[])
 @end example
 
 
-@node Hello World III, , Hello World II, Examples
+@node Hello World III,  , Hello World II, Examples
 @comment node-name, next, previous, up
 @section Making Hello World II robust
 
@@ -5263,7 +5521,7 @@ array instead of a linked list. This would shrink the overhead of the
 @printindex fn
 
 
-@node Concept Index, , Function Index, Top
+@node Concept Index,  , Function Index, Top
 @comment node-name, next, previous, up
 @unnumbered Concept Index
 
