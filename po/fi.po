@@ -2,21 +2,20 @@
 # Suomennos: http://gnome-fi.org/
 #
 # Copyright (C) 2003 Free Software Foundation, Inc.
-# Mikko Rauhala <mjr@iki.fi> 1999,
-# Pauli Virtanen <pauli.virtanen@hut.fi> 2000-2004,
-# Sami Pesonen <sampeson@iki.fi> 2004.
+# Mikko Rauhala <mjr@iki.fi>, 1999
+# Pauli Virtanen, 2000-2004
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.4.0\n"
-"POT-Creation-Date: 2004-08-14 20:18+0200\n"
-"PO-Revision-Date: 2004-07-13 22:20+0300\n"
-"Last-Translator: Sami Pesonen <sampeson@iki.fi>\n"
+"Project-Id-Version: gtk+ 2.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-08-18 23:07+0300\n"
+"PO-Revision-Date: 2004-08-07 21:13+0300\n"
+"Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:779
@@ -957,7 +956,7 @@ msgid ""
 "Could not change the current folder to %s:\n"
 "%s"
 msgstr ""
-"Hakemistoon \"%s\" siirtyminen epäonnistui:\n"
+"Kansioon \"%s\" siirtyminen epäonnistui:\n"
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1081 gtk/gtkpathbar.c:842
@@ -974,13 +973,13 @@ msgid ""
 "Could not create folder %s:\n"
 "%s"
 msgstr ""
-"Hakemiston \"%s\" luominen ei onnistunut:\n"
+"Kansion \"%s\" luominen ei onnistunut:\n"
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1731
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr "Kohteelle %s ei voi luoda kirjanmerkkiä, koska se ei ole hakemisto."
+msgstr "Kohteelle %s ei voi luoda kirjanmerkkiä, koska se ei ole kansio."
 
 #: gtk/gtkfilechooserdefault.c:1827
 #, c-format
@@ -1003,7 +1002,7 @@ msgstr "Pikavalinnat"
 
 #: gtk/gtkfilechooserdefault.c:2595
 msgid "Folder"
-msgstr "Hakemisto"
+msgstr "Kansio"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
@@ -1039,7 +1038,7 @@ msgstr "Muokattu"
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:2952
 msgid "Create Fo_lder"
-msgstr "Luo _hakemisto"
+msgstr "Luo _kansio"
 
 #. Name entry
 #: gtk/gtkfilechooserdefault.c:3059
@@ -1048,23 +1047,23 @@ msgstr "_Nimi:"
 
 #: gtk/gtkfilechooserdefault.c:3103
 msgid "_Browse for other folders"
-msgstr "_Selaa muita hakemistoja"
+msgstr "_Selaa muita kansioita"
 
 #: gtk/gtkfilechooserdefault.c:3345
 msgid "Save in _folder:"
-msgstr "Tallenna _hakemistoon:"
+msgstr "Tallenna _kansioon:"
 
 #: gtk/gtkfilechooserdefault.c:3347
 msgid "Create in _folder:"
-msgstr "Luo _hakemistoon:"
+msgstr "Luo _kansioon:"
 
 #: gtk/gtkfilechooserdefault.c:4034
 msgid "Can't change to folder because it isn't local"
-msgstr "Hakemistoon ei voi siirtyä, koska se ei ole paikallinen"
+msgstr "Kansioon ei voi siirtyä, koska se ei ole paikallinen"
 
 #: gtk/gtkfilechooserdefault.c:4177
 msgid "Could not find the path"
-msgstr "Ei voinut löytää polun kohdetta"
+msgstr "Polkua ei löytynyt"
 
 #: gtk/gtkfilechooserdefault.c:4533
 #, c-format
@@ -1073,7 +1072,7 @@ msgstr "pikavalinta %s ei ole olemassa"
 
 #: gtk/gtkfilechooserdefault.c:5207
 msgid "Type name of new folder"
-msgstr "Kirjoita uuden hakemiston nimi"
+msgstr "Kirjoita uuden kansion nimi"
 
 #: gtk/gtkfilechooserdefault.c:5236
 #, c-format
@@ -1112,8 +1111,7 @@ msgstr "Tuntematon"
 #: gtk/gtkfilechooserdefault.c:5395
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
-"Valitsemaasi hakemistoon ei voi siirtyä, sillä antamasi polku on "
-"virheellinen."
+"Valitsemaasi kansioon ei voi siirtyä, sillä antamasi polku on virheellinen."
 
 #: gtk/gtkfilechooserdefault.c:5472
 #, c-format
@@ -1121,7 +1119,7 @@ msgid ""
 "Could not select %s:\n"
 "%s"
 msgstr ""
-"Hakemiston \"%s\" valitseminen ei onnistunut:\n"
+"Kansion \"%s\" valitseminen ei onnistunut:\n"
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:5511
@@ -1130,7 +1128,7 @@ msgstr "Avaa sijainti"
 
 #: gtk/gtkfilechooserdefault.c:5518
 msgid "Save in Location"
-msgstr "Tallenna kohteeseen"
+msgstr "Tallenna sijaintiin"
 
 #: gtk/gtkfilechooserdefault.c:5537
 msgid "_Location:"
@@ -1138,11 +1136,11 @@ msgstr "_Sijainti:"
 
 #: gtk/gtkfilesel.c:730
 msgid "Folders"
-msgstr "Hakemistot"
+msgstr "Kansiot"
 
 #: gtk/gtkfilesel.c:734
 msgid "Fol_ders"
-msgstr "_Hakemistot"
+msgstr "_Kansiot"
 
 #: gtk/gtkfilesel.c:770
 msgid "_Files"
@@ -1152,7 +1150,7 @@ msgstr "_Tiedostot"
 #: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
 #, c-format
 msgid "Folder unreadable: %s"
-msgstr "Hakemistoa ei voi lukea: %s"
+msgstr "Kansiota ei voi lukea: %s"
 
 #: gtk/gtkfilesel.c:984
 #, c-format
@@ -1167,7 +1165,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1115
 msgid "_New Folder"
-msgstr "_Uusi hakemisto"
+msgstr "_Uusi kansio"
 
 #: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
@@ -1181,8 +1179,7 @@ msgstr "_Nimeä uudelleen"
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Hakemistonimi \"%s\" sisältää merkkejä, joita ei voi olla tiedostonimissä"
+msgstr "Kansionimi \"%s\" sisältää merkkejä, joita ei voi olla tiedostonimissä"
 
 #: gtk/gtkfilesel.c:1441
 #, c-format
@@ -1190,7 +1187,7 @@ msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"Virhe luodessa hakemistoa \"%s\": %s\n"
+"Virhe kansion \"%s\" luonnissa: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
@@ -1200,15 +1197,15 @@ msgstr "Käytit luultavasti tiedostonimiin kelpaamattomia merkkejä."
 #: gtk/gtkfilesel.c:1450
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr "Virhe luodessa hakemistoa \"%s\": %s\n"
+msgstr "Virhe kansion \"%s\" luonnissa: %s\n"
 
 #: gtk/gtkfilesel.c:1484
 msgid "New Folder"
-msgstr "Uusi hakemisto"
+msgstr "Uusi kansio"
 
 #: gtk/gtkfilesel.c:1499
 msgid "_Folder name:"
-msgstr "_Hakemiston nimi"
+msgstr "_Kansion nimi"
 
 #: gtk/gtkfilesel.c:1523
 msgid "C_reate"
@@ -1299,7 +1296,7 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
-"Ei voinut muuntaa tiedostonimeä \"%s\" UTF-8:ksi. (Kokeile "
+"Tiedostonimen \"%s\" muuntaminen UTF-8:ksi ei onnistunut. (Kokeile "
 "ympäristömuuttujan G_FILENAME_ENCODING asettamista): %s"
 
 #: gtk/gtkfilesel.c:3142
@@ -1323,8 +1320,8 @@ msgstr "(Tyhjä)"
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:617
-#: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1358
+#: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:621
+#: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1364
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "virhe kohteen \"%s\" tietojen hakemisessa: %s"
@@ -1332,7 +1329,7 @@ msgstr "virhe kohteen \"%s\" tietojen hakemisessa: %s"
 #: gtk/gtkfilesystemunix.c:490 gtk/gtkfilesystemwin32.c:434
 #, c-format
 msgid "error creating directory '%s': %s"
-msgstr "virhe hakemiston \"%s\" luomisessa: %s"
+msgstr "virhe kansion \"%s\" luomisessa: %s"
 
 #: gtk/gtkfilesystemunix.c:570 gtk/gtkfilesystemwin32.c:494
 msgid "This file system does not support mounting"
@@ -1342,30 +1339,30 @@ msgstr "Tämä tiedostojärjestelmä ei tue liittämistä"
 msgid "Filesystem"
 msgstr "Tiedostojärjestelmä"
 
-#: gtk/gtkfilesystemunix.c:731
+#: gtk/gtkfilesystemunix.c:735
 #, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Tiedoston %s vakiokuvaketta ei löytynyt."
+msgstr "Vakiokuvaketta \"%s\" ei löytynyt"
 
-#: gtk/gtkfilesystemunix.c:826
+#: gtk/gtkfilesystemunix.c:830
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
-"Nimi \"%s\" on epäkelpo, koska se sisältää merkin \"%s\". Käytä toista nimeä."
+"Nimi \"%s\" ei kelpaa, koska se sisältää merkin \"%s\". Käytä eri nimeä."
 
-#: gtk/gtkfilesystemunix.c:1434 gtk/gtkfilesystemwin32.c:923
+#: gtk/gtkfilesystemunix.c:1438 gtk/gtkfilesystemwin32.c:923
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Kirjanmerkkien tallentaminen epäonnistui (%s)"
 
-#: gtk/gtkfilesystemunix.c:1730
+#: gtk/gtkfilesystemunix.c:1734
 #, c-format
 msgid "error getting information for '%s'"
 msgstr "virhe kohteen \"%s\" tietojen hakemisessa"
 
-#: gtk/gtkfilesystemwin32.c:1120
+#: gtk/gtkfilesystemwin32.c:1126
 msgid "This file system does not support icons for everything"
 msgstr "Tämä tiedostojärjestelmä ei tue kuvakkeita joka kohteelle"
 
@@ -1973,43 +1970,3 @@ msgstr "X-syöttötapa"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Tiedoston \"%s\" tietojen saaminen epäonnistui: %s"
-
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "Tukematon TIFF-muunnelma"
-
-#~ msgid "%d/%b/%Y"
-#~ msgstr "%e.%m.%Y"
-
-#~ msgid ""
-#~ "Could not go to the parent folder of %s:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Hakemiston \"%s\" ylähakemistoon siirtyminen epäonnistui:\n"
-#~ "%s"
-
-#~ msgid "File name"
-#~ msgstr "Tiedostonimi"
-
-#~ msgid "Preview"
-#~ msgstr "Esikatselu"
-
-#~ msgid "Add"
-#~ msgstr "Lisää"
-
-#~ msgid "Remove"
-#~ msgstr "Poista"
-
-#~ msgid "Up"
-#~ msgstr "Ylös"
-
-#~ msgid "_Filename:"
-#~ msgstr "_Tiedostonimi:"
-
-#~ msgid "Current folder: %s"
-#~ msgstr "Nykyinen hakemisto: %s"
-
-#~ msgid "Zoom _100%"
-#~ msgstr "Suurennos _100%"
-
-#~ msgid "Zoom to _Fit"
-#~ msgstr "Suurenna _sopivaksi"
