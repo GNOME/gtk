@@ -991,8 +991,10 @@ if test "x$gdktarget" = "xx11"; then
 
   AM_CONDITIONAL(HAVE_XFT, $have_xft)
 
-  if $PKG_CONFIG --exists xft ; then
-    AC_DEFINE(HAVE_XFT2, 1, [Define if we have Xft, version 2])
+  if $have_xft; then
+    if $PKG_CONFIG --exists xft ; then
+      AC_DEFINE(HAVE_XFT2, 1, [Define if we have Xft, version 2])
+    fi
   fi
 
   #
