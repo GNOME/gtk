@@ -1,3 +1,8 @@
+Tue Jun 22 21:54:24 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/composite.dia: 
+	* gdk-pixbuf/composite.png: Flip the y axes in the diagrams. 
+
 2004-06-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkmenu.sgml: Document the push_in parameter
