@@ -32,7 +32,7 @@
 #endif
 
 static GModule * this_module = NULL;
-static void (*msw_reset_rc_styles) (GtkSettings * settings) = NULL;
+static void (*msw_rc_reset_styles) (GtkSettings * settings) = NULL;
 
 static GdkFilterReturn
 global_filter_func (void     *xevent,
@@ -47,13 +47,13 @@ global_filter_func (void     *xevent,
     case WM_THEMECHANGED:
     case WM_SYSCOLORCHANGE:
 
-      if(msw_reset_rc_styles != NULL) {
-	xp_theme_reset ();
-	msw_style_init ();
+      if(msw_rc_reset_styles != NULL) {
+	  	xp_theme_reset ();
+	  	msw_style_init ();
 
-	/* force all gtkwidgets to redraw */
-	(*msw_reset_rc_styles) (gtk_settings_get_default());
-      }
+	  	/* force all gtkwidgets to redraw */
+		(*msw_rc_reset_styles) (gtk_settings_get_default());
+	  }
 
       return GDK_FILTER_REMOVE;
 
@@ -81,7 +81,7 @@ theme_init (GTypeModule *module)
 
     if(this_module)
       g_module_symbol (this_module, "gtk_rc_reset_styles",
-		       (gpointer *)(&msw_reset_rc_styles));
+		       (gpointer *)(&msw_rc_reset_styles));
   }
 
   msw_style_init ();
@@ -109,8 +109,7 @@ theme_create_rc_style (void)
  * is loaded and checks to see if we are compatible with the
  * version of GTK+ that loads us.
  */
-G_MODULE_EXPORT const gchar* g_module_check_init (GModule *module);
-const gchar*
+G_MODULE_EXPORT const gchar*
 g_module_check_init (GModule *module)
 {
   return gtk_check_version (2,0,0);

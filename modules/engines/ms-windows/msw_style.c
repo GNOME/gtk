@@ -633,6 +633,7 @@ setup_msw_rc_style(void)
 	     "style \"msw-menu-bar\" = \"msw-menu\"\n"
 	     "{\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
+	     "GtkMenuBar::shadow-type = etched-in\n"
 	     "}widget_class \"*MenuBar*\" style \"msw-menu-bar\"\n",
 	     btn_face.red,
 	     btn_face.green,
