@@ -1,3 +1,22 @@
+2003-03-13  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab): if a grab cursor
+	is used, must copy the HCURSOR with CopyCursor(), as it is OK to
+	destroy the GdkCursor after calling gdk_pointer_grab(). Set the
+	cursor right away with SetCursor(), as we won't get any
+	WM_SETCURSOR messages while the mouse is captured. 
+	(gdk_display_pointer_ungrab): Correspondingly, destroy the copy
+	with DestroyCursor() when no longer used. (#108114, Allin Cottrell)
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On
+	WM_SYSCHAR, return FALSE from the window procedure to prevent the
+	DefWindowProc from being called. Otherwise Windows would beep,
+	thinking you are tring to access a (nonexistent) menu when you
+	press Alt-something. Don't do this for Alt-Space,
+	though. (#107454, Martyn Russell)
+
+	* gdk/win32/gdkcursor-win32.c: Minor spacing and debug print fixes.
+
 Tue Mar 11 12:01:07 2003  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): Ctrl/Shift
