@@ -176,18 +176,8 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 
 		/* Keep this logic in sync with gdk_pixbuf_new_from_file() */
 
-		if (image_module->load == NULL) {
-                        g_set_error (error,
-                                     GDK_PIXBUF_ERROR,
-                                     GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
-                                     _("Don't know how to load the animation in file '%s'"),
-                                     filename);                        
-			fclose (f);
-			return NULL;
-		}
-
 		fseek (f, 0, SEEK_SET);
-		pixbuf = (* image_module->load) (f, error);
+		pixbuf = _gdk_pixbuf_generic_image_load (image_module, f, error);
 		fclose (f);
 
                 if (pixbuf == NULL && error != NULL && *error == NULL) {

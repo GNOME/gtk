@@ -564,10 +564,10 @@ prepared_notify (GdkPixbuf *pixbuf,
 	*((GdkPixbuf **)user_data) = pixbuf;
 }
 
-static GdkPixbuf *
-generic_image_load (GdkPixbufModule *module,
-		    FILE *f,
-		    GError **error)
+GdkPixbuf *
+_gdk_pixbuf_generic_image_load (GdkPixbufModule *module,
+				FILE *f,
+				GError **error)
 {
 	guchar buffer[4096];
 	size_t length;
@@ -663,14 +663,14 @@ gdk_pixbuf_new_from_file (const char *filename,
                 }
 
 	fseek (f, 0, SEEK_SET);
-	pixbuf = generic_image_load (image_module, f, error);
+	pixbuf = _gdk_pixbuf_generic_image_load (image_module, f, error);
 	fclose (f);
 
         if (pixbuf == NULL && error != NULL && *error == NULL) {
                 /* I don't trust these crufty longjmp()'ing image libs
                  * to maintain proper error invariants, and I don't
                  * want user code to segfault as a result. We need to maintain
-                 * the invariant that error gets set if NULL is returned.
+                 * the invariastable/gdk-pixbuf/nt that error gets set if NULL is returned.
                  */
                 
                 g_warning ("Bug! gdk-pixbuf loader '%s' didn't set an error on failure.", image_module->module_name);

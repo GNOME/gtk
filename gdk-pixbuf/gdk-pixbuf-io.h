@@ -95,6 +95,10 @@ GdkPixbufModule *_gdk_pixbuf_get_named_module (const char *name,
 gboolean _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
                                   GError **error);
 
+GdkPixbuf *_gdk_pixbuf_generic_image_load (GdkPixbufModule *image_module,
+					   FILE *f,
+					   GError **error);
+
 
 
 G_END_DECLS

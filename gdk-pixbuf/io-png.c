@@ -877,7 +877,7 @@ gdk_pixbuf__png_image_save (FILE          *f,
        png_write_end (png_ptr, info_ptr);
 
 cleanup:
-       png_destroy_write_struct (&png_ptr, (png_infopp) NULL);
+       png_destroy_write_struct (&png_ptr, &info_ptr);
 
        if (num_keys > 0) {
                for (i = 0; i < num_keys; i++)
