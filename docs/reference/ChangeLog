@@ -1,3 +1,7 @@
+2005-02-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_stock_set_translate_func.
+
 2005-02-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/tmpl/event_structs.sgml: 

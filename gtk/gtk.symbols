@@ -1946,6 +1946,7 @@ gtk_stock_item_copy
 gtk_stock_item_free
 gtk_stock_list_ids
 gtk_stock_lookup
+gtk_stock_set_translate_func
 gtk_style_apply_default_background
 gtk_style_attach
 gtk_style_copy

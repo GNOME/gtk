@@ -29,6 +29,7 @@
 
 
 #include <gdk/gdk.h>
+#include <gtk/gtkitemfactory.h> /* for GtkTranslateFunc */
 
 #ifdef __cplusplus
 extern "C" {
@@ -60,6 +61,10 @@ GSList*  gtk_stock_list_ids  (void);
 GtkStockItem *gtk_stock_item_copy (const GtkStockItem *item);
 void          gtk_stock_item_free (GtkStockItem       *item);
 
+void          gtk_stock_set_translate_func (const gchar      *domain,
+					    GtkTranslateFunc  func,
+					    gpointer          data,
+					    GtkDestroyNotify  notify);
 
 /* Stock IDs (not all are stock items; some are images only) */
 #define GTK_STOCK_DIALOG_AUTHENTICATION \

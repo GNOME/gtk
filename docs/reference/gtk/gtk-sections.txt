@@ -5363,6 +5363,7 @@ gtk_stock_item_copy
 gtk_stock_item_free
 gtk_stock_list_ids
 gtk_stock_lookup
+gtk_stock_set_translate_func
 <SUBSECTION Stock IDs>
 GTK_STOCK_ABOUT
 GTK_STOCK_ADD

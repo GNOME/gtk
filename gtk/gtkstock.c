@@ -33,6 +33,7 @@
 #include "gtkintl.h"
 #include <gdk/gdkkeysyms.h>
 
+static GHashTable *translate_hash = NULL;
 static GHashTable *stock_hash = NULL;
 static void init_stock_hash (void);
 
@@ -40,6 +41,14 @@ static void init_stock_hash (void);
  * must be freed when they are removed from the hash table.
  */
 #define NON_STATIC_MASK (1 << 29)
+
+typedef struct _GtkStockTranslateFunc GtkStockTranslateFunc;
+struct _GtkStockTranslateFunc
+{
+  GtkTranslateFunc func;
+  gpointer data;
+  GtkDestroyNotify notify;
+};
 
 static void
 real_add (const GtkStockItem *items,
@@ -155,7 +164,17 @@ gtk_stock_lookup (const gchar  *stock_id,
       *item = *found;
       item->modifier &= ~NON_STATIC_MASK;
       if (item->label)
-        item->label = dgettext (item->translation_domain, item->label);
+	{
+	  GtkStockTranslateFunc *translate;
+
+	  translate = (GtkStockTranslateFunc *) 
+	    g_hash_table_lookup (translate_hash, item->translation_domain);
+	  
+	  if (translate != NULL && translate->func != NULL)
+	    item->label = (* translate->func) (item->label, translate->data);
+	  else
+	    item->label = dgettext (item->translation_domain, item->label);
+	}
     }
 
   return found != NULL;
@@ -308,14 +327,22 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_FIND, N_("_Find"), GDK_CONTROL_MASK, 'f', GETTEXT_PACKAGE },
   { GTK_STOCK_FIND_AND_REPLACE, N_("Find and _Replace"), GDK_CONTROL_MASK, 'r', GETTEXT_PACKAGE },
   { GTK_STOCK_FLOPPY, N_("_Floppy"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_GOTO_BOTTOM, N_("_Bottom"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_GOTO_FIRST, N_("_First"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_GOTO_LAST, N_("_Last"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_GOTO_TOP, N_("_Top"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_GO_BACK, N_("_Back"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_GO_DOWN, N_("_Down"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_GO_FORWARD, N_("_Forward"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_GO_UP, N_("_Up"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_GOTO_BOTTOM, N_("Navigation|_Bottom"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_GOTO_FIRST, N_("Navigation|_First"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_GOTO_LAST, N_("Navigation|_Last"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_GOTO_TOP, N_("Navigation|_Top"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_GO_BACK, N_("Navigation|_Back"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_GO_DOWN, N_("Navigation|_Down"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_GO_FORWARD, N_("Navigation|_Forward"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_GO_UP, N_("Navigation|_Up"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_HARDDISK, N_("_Harddisk"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_HELP, N_("_Help"), GDK_CONTROL_MASK, 'h', GETTEXT_PACKAGE },
   { GTK_STOCK_HOME, N_("_Home"), 0, 0, GETTEXT_PACKAGE },
@@ -324,18 +351,31 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_INDEX, N_("_Index"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_ITALIC, N_("_Italic"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_JUMP_TO, N_("_Jump to"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_JUSTIFY_CENTER, N_("_Center"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_JUSTIFY_FILL, N_("_Fill"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_JUSTIFY_LEFT, N_("_Left"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_JUSTIFY_RIGHT, N_("_Right"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_MEDIA_FORWARD, N_("_Forward"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_MEDIA_NEXT, N_("_Next"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_MEDIA_PAUSE, N_("P_ause"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_MEDIA_PLAY, N_("_Play"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_MEDIA_PREVIOUS, N_("Pre_vious"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_MEDIA_RECORD, N_("_Record"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_MEDIA_REWIND, N_("R_ewind"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_MEDIA_STOP, N_("_Stop"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_JUSTIFY_CENTER, N_("Justify|_Center"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_JUSTIFY_FILL, N_("Justify|_Fill"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_JUSTIFY_LEFT, N_("Justify|_Left"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_JUSTIFY_RIGHT, N_("Justify|_Right"), 0, 0, GETTEXT_PACKAGE },
+
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_MEDIA_FORWARD, N_("Media|_Forward"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_MEDIA_NEXT, N_("Media|_Next"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_MEDIA_PAUSE, N_("Media|P_ause"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_MEDIA_PLAY, N_("Media|_Play"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_MEDIA_PREVIOUS, N_("Media|Pre_vious"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_MEDIA_RECORD, N_("Media|_Record"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_MEDIA_REWIND, N_("Media|R_ewind"), 0, 0, GETTEXT_PACKAGE },
+  /* translators, strip the prefix up to and including the first | */
+  { GTK_STOCK_MEDIA_STOP, N_("Media|_Stop"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_NETWORK, N_("_Network"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_NEW, N_("_New"), GDK_CONTROL_MASK, 'n', GETTEXT_PACKAGE },
   { GTK_STOCK_NO, N_("_No"), 0, 0, GETTEXT_PACKAGE },
@@ -370,6 +410,56 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_ZOOM_OUT, N_("Zoom _Out"), 0, 0, GETTEXT_PACKAGE }
 };
 
+/**
+ * gtk_stock_set_translate_func: 
+ * @func: a #GtkTranslateFunc 
+ * @data: data to pass to @func
+ * @notify: a #GtkDestroyNotify that is called when @data is 
+ *   no longer needed
+ *
+ * Sets a function to be used for translating the @label of 
+ * a stock item.
+ *
+ * If no function is registered for a translation domain,
+ * dgettext() is used.
+ *
+ * Since: 2.8
+ * 
+ */
+void
+gtk_stock_set_translate_func (const gchar      *domain,
+			      GtkTranslateFunc  func,
+			      gpointer          data,
+			      GtkDestroyNotify  notify)
+{
+  GtkStockTranslateFunc *translate;
+  
+  translate = (GtkStockTranslateFunc *) 
+    g_hash_table_lookup (translate_hash, domain);
+
+  if (translate)
+    {
+      if (translate->notify)
+	(* translate->notify) (translate->data);
+    }
+  else
+    translate = g_new0 (GtkStockTranslateFunc, 1);
+    
+  translate->func = func;
+  translate->data = data;
+  translate->notify = notify;
+      
+  g_hash_table_insert (translate_hash, domain, translate);
+}
+
+static gchar *
+sgettext_swapped (const gchar *msgid, 
+		  const gchar *domainname)
+{
+  return g_strip_context (msgid, dgettext (domainname, msgid));
+}
+
+
 static void
 init_stock_hash (void)
 {
@@ -378,5 +468,15 @@ init_stock_hash (void)
       stock_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
       gtk_stock_add_static (builtin_items, G_N_ELEMENTS (builtin_items));
+    }
+
+  if (translate_hash == NULL)
+    {
+      translate_hash = g_hash_table_new (g_str_hash, g_str_equal);
+
+      gtk_stock_set_translate_func (GETTEXT_PACKAGE, 
+				    sgettext_swapped,
+				    GETTEXT_PACKAGE,
+				    NULL);
     }
 }

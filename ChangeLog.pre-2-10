@@ -1,5 +1,13 @@
 2005-02-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: 
+	* gtk/gtkstock.h: 
+	* gtk/gtkstock.c (gtk_stock_set_translate_func): 
+	New function which allows to change the function used for
+	translation stock labels, on a per-domain basis. Use this
+	functionality to switch the GTK+ stock items to use Q_()
+	prefixed msgids.  (#166179, Funda Wang)
+	
 	* gdk/gdkkeynames.c: Make the gdk_key array const (#166075,
 	Tommi Komulainen)
 
