@@ -6,7 +6,7 @@ Sat May 29 11:17:29 PDT 1999 Manish Singh <yosh@gimp.org>
 	* config.guess
 	* config.sub
 	* ltconfig
-	* ltmain.sh: upgrade to libtool 1.3
+	* ltmain.sh: upgrade to libtool 1.3.2
 	
 Tue May 25 13:13:12 1999  Owen Taylor  <otaylor@redhat.com>
 
