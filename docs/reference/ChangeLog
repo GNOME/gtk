@@ -1,3 +1,8 @@
+Mon Jun 21 00:46:20 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add 
+	gdk_pixbuf_rotate_simple() and gdk_pixbuf_flip();
+
 Sat Jun 19 01:42:20 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/composite.png: Add a figure which tries

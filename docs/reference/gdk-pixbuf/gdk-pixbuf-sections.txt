@@ -143,6 +143,9 @@ gdk_pixbuf_scale
 gdk_pixbuf_composite_color_simple
 gdk_pixbuf_composite
 gdk_pixbuf_composite_color
+GdkPixbufRotation
+gdk_pixbuf_rotate_simple
+gdk_pixbuf_flip
 
 <SUBSECTION Standard>
 GDK_TYPE_INTERP_TYPE
