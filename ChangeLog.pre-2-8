@@ -1,3 +1,12 @@
+2005-01-18  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-6:
+
+	* gtk/gtkfilechooserdefault.c (pending_op_queue): Don't queue an
+	operation to select the first file if we are in SAVE or
+	CREATE_FOLDER modes.  Executing that operation would overwrite the
+	contents of the save-name entry.
+
 2005-01-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkdisplay.h: 

@@ -4392,6 +4392,13 @@ pending_op_queue (GtkFileChooserDefault *impl, PendingOp op, const GtkFilePath *
       impl->pending_select_path = NULL;
     }
 
+  if (op == PENDING_OP_SELECT_FIRST &&
+      (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
+    {
+      impl->pending_op == PENDING_OP_NONE;
+      return;
+    }
+
   impl->pending_op = op;
 
   if (impl->pending_op == PENDING_OP_SELECT_PATH)
