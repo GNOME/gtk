@@ -1,3 +1,8 @@
+2001-09-16  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gtk/gtkoptionmenu.c:
+	Handle scroll wheel events.
+
 Fri Sep 14 22:31:25 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* demos/gtk-demo/main.c (setup_default_icon): Use a shaped

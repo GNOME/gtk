@@ -80,6 +80,8 @@ static void gtk_option_menu_position        (GtkMenu            *menu,
 static void gtk_option_menu_show_all        (GtkWidget          *widget);
 static void gtk_option_menu_hide_all        (GtkWidget          *widget);
 static GtkType gtk_option_menu_child_type   (GtkContainer       *container);
+static gint gtk_option_menu_scroll_event    (GtkWidget          *widget,
+					     GdkEventScroll     *event);
 
 enum
 {
@@ -147,6 +149,7 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   widget_class->expose_event = gtk_option_menu_expose;
   widget_class->button_press_event = gtk_option_menu_button_press;
   widget_class->key_press_event = gtk_option_menu_key_press;
+  widget_class->scroll_event = gtk_option_menu_scroll_event;
   widget_class->show_all = gtk_option_menu_show_all;
   widget_class->hide_all = gtk_option_menu_hide_all;
 
@@ -881,5 +884,51 @@ gtk_option_menu_hide_all (GtkWidget *widget)
 
   gtk_widget_hide (widget);
   gtk_container_foreach (container, (GtkCallback) gtk_widget_hide_all, NULL);
+}
+
+static gint
+gtk_option_menu_scroll_event (GtkWidget          *widget,
+			      GdkEventScroll     *event)
+{
+  GtkOptionMenu *option_menu = GTK_OPTION_MENU (widget);
+  gint index;
+  gint n_children;
+  gint index_dir;
+  GList *l;
+  GtkMenuItem *item;
+    
+  index = gtk_option_menu_get_history (option_menu);
+
+  if (index != -1)
+    {
+      n_children = g_list_length (GTK_MENU_SHELL (option_menu->menu)->children);
+      
+      if (event->direction == GDK_SCROLL_UP)
+	index_dir = -1;
+      else
+	index_dir = 1;
+
+
+      while (TRUE)
+	{
+	  index += index_dir;
+
+	  if (index < 0)
+	    break;
+	  if (index >= n_children)
+	    break;
+
+	  l = g_list_nth (GTK_MENU_SHELL (option_menu->menu)->children, index);
+	  item = GTK_MENU_ITEM (l->data);
+	  if (GTK_WIDGET_VISIBLE (item) && GTK_WIDGET_IS_SENSITIVE (item))
+	    {
+	      gtk_option_menu_set_history (option_menu, index);
+	      break;
+	    }
+	      
+	}
+    }
+
+  return TRUE;
 }
 
