@@ -1,5 +1,8 @@
 2004-11-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c (gtk_label_set_pattern_internal): Allow
+	unsetting a pattern by passing NULL.  (#156720, Tristan Van Berkom)
+
 	* gtk/gtkcombobox.c (gtk_combo_box_get_active): Don't crash 
 	if the active_row reference has become invalid.  (#157156,
 	Christophe Fergeau)

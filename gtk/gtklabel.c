@@ -1281,7 +1281,10 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
   PangoAttrList *attrs;
   g_return_if_fail (GTK_IS_LABEL (label));
   
-  attrs = gtk_label_pattern_to_attrs (label, pattern);
+  if (pattern)
+    attrs = gtk_label_pattern_to_attrs (label, pattern);
+  else
+    attrs = NULL;
 
   if (label->effective_attrs)
     pango_attr_list_unref (label->effective_attrs);
