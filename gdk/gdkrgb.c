@@ -207,7 +207,7 @@ gdk_rgb_make_colorcube_d (GdkRgbInfo *image_info, gulong *pixels,
 
 /* Try installing a color cube of the specified size.
    Make the colorcube and return TRUE on success */
-static gint
+static gboolean
 gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
 		      gint nr, gint ng, gint nb)
 {

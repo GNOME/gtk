@@ -2518,8 +2518,8 @@ gdk_window_get_deskrelative_origin (GdkWindow *window,
   gulong number_return, bytes_after_return;
   guchar *data_return;
   
-  g_return_val_if_fail (window != NULL, 0);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (window != NULL, FALSE);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
   
   if (!GDK_WINDOW_DESTROYED (window))
     {
