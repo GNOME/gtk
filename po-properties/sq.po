@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-19 12:40+0200\n"
-"PO-Revision-Date: 2004-10-19 18:21+0200\n"
+"POT-Creation-Date: 2004-10-22 04:59+0200\n"
+"PO-Revision-Date: 2004-10-22 10:22+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -100,8 +100,8 @@ msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
-"Emri i programit. Nëse nuk është përcaktuar, vendoset automatikisht në"
-"g_get_application_name()"
+"Emri i programit. Nëse nuk është përcaktuar, vendoset automatikisht "
+"nëg_get_application_name()"
 
 #: gtk/gtkaboutdialog.c:194
 msgid "Program version"
@@ -143,7 +143,9 @@ msgstr "Etiketa e sitit web"
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
-msgstr "Etiketa për lidhjen me sitin web të programit. Nëse e pacaktuar, vendoset automatikisht tek URL"
+msgstr ""
+"Etiketa për lidhjen me sitin web të programit. Nëse e pacaktuar, vendoset "
+"automatikisht tek URL"
 
 #: gtk/gtkaboutdialog.c:240
 msgid "Authors"
@@ -185,7 +187,9 @@ msgstr "Stema"
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
-msgstr "Në stemë për kutinë e informacioneve. Nëse e pacaktuar, automatikisht vendoset gtk_window_get_default_icon_list()"
+msgstr ""
+"Në stemë për kutinë e informacioneve. Nëse e pacaktuar, automatikisht "
+"vendoset gtk_window_get_default_icon_list()"
 
 #: gtk/gtkaboutdialog.c:279
 msgid "Link Color"
@@ -276,7 +280,9 @@ msgstr "I dukshëm kur kapërcehet"
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr "Nëse TRUE, menutë e proxies për këtë veprim prezantohen në menunë fluturake të instrumentëve."
+msgstr ""
+"Nëse TRUE, menutë e proxies për këtë veprim prezantohen në menunë fluturake "
+"të instrumentëve."
 
 #: gtk/gtkaction.c:258 gtk/gtktoolitem.c:166
 msgid "Visible when vertical"
@@ -755,8 +761,8 @@ msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
-"Nëse pronësitë e child_displacement_x/_y duhet të ndikojnë gjithashtu "
-"tek katrori i fokusit"
+"Nëse pronësitë e child_displacement_x/_y duhet të ndikojnë gjithashtu tek "
+"katrori i fokusit"
 
 #: gtk/gtkbutton.c:402
 msgid "Show button images"
@@ -1198,8 +1204,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
-"Zona e preferuar për të sfazuar tekstin, nëse kutia e krijuar nuk ka hapësirë "
-"të mjaftueshme për të shfaqur të gjithë tekstin"
+"Zona e preferuar për të sfazuar tekstin, nëse kutia e krijuar nuk ka "
+"hapësirë të mjaftueshme për të shfaqur të gjithë tekstin"
 
 #: gtk/gtkcellrenderertext.c:418 gtk/gtkcellview.c:195 gtk/gtktexttag.c:510
 msgid "Background set"
@@ -1305,14 +1311,17 @@ msgstr "Rregullimi i nënvizimit"
 msgid "Whether this tag affects underlining"
 msgstr "Tregon nëse ky tag ka efekt mbi nënvizimin"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcellrenderertext.c:474
-#: gtk/gtktexttag.c:566
+#: gtk/gtkcellrenderertext.c:470 gtk/gtktexttag.c:566
 msgid "Language set"
 msgstr "Përcaktimi i gjuhës"
 
 #: gtk/gtkcellrenderertext.c:471 gtk/gtktexttag.c:567
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Tregon nëse ky tag ka efekt tek gjuha e përdorur për shfaqjen e tekstit"
+
+#: gtk/gtkcellrenderertext.c:474
+msgid "Ellipsize set"
+msgstr "Rregullimi i sfazimit"
 
 #: gtk/gtkcellrenderertext.c:475
 msgid "Whether this tag affects the ellipsize mode"
@@ -2393,7 +2402,9 @@ msgstr "\"Widget\"-i që duhet aktivuar kur shtypet një kyç \"mnemonic\" etike
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
-msgstr "Vendi i preferuar ku do të sfazohet teksti, nëse etiketa nuk ka hapësirë të mjaftueshme për të shfaqur tekstin e plotë"
+msgstr ""
+"Vendi i preferuar ku do të sfazohet teksti, nëse etiketa nuk ka hapësirë të "
+"mjaftueshme për të shfaqur tekstin e plotë"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -3695,7 +3706,8 @@ msgid ""
 "when rendering the text. If not set, an appropriate default will be used."
 msgstr ""
 "Gjuha në të cilën është ky tekst, si kod ISO. Pango mund ta përdorë këtë si "
-"ndihmëz kur shfaq tekstin. Nëse e papërcaktuar, do të përdoret e prezgjedhura e duhur."
+"ndihmëz kur shfaq tekstin. Nëse e papërcaktuar, do të përdoret e "
+"prezgjedhura e duhur."
 
 #: gtk/gtktexttag.c:393
 msgid "Left margin"
