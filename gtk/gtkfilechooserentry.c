@@ -46,6 +46,7 @@ struct _GtkFileChooserEntry
   GtkFilePath *base_folder;
   GtkFilePath *current_folder_path;
   gchar *file_part;
+  gint file_part_pos;
   GSource *check_completion_idle;
   GSource *load_directory_idle;
 
@@ -233,12 +234,8 @@ match_selected_callback (GtkEntryCompletion  *completion,
 			 GtkFileChooserEntry *chooser_entry)
 {
   char *display_name;
-  gint total_len;
-  gint file_part_len;
-  gint selected_part_len;
   GtkFilePath *path;
   gint pos;
-  const gchar *text;
   
   gtk_tree_model_get (model, iter,
 		      DISPLAY_NAME_COLUMN, &display_name,
@@ -255,29 +252,7 @@ match_selected_callback (GtkEntryCompletion  *completion,
 
   display_name = maybe_append_separator_to_path (chooser_entry, path, display_name);
 
-  /* We have to jump through hoops to figure out where to append this to */
-  text = gtk_entry_get_text (GTK_ENTRY (chooser_entry));
-  total_len = g_utf8_strlen (text, -1);
-  file_part_len = g_utf8_strlen (chooser_entry->file_part, -1);
-
-  selected_part_len = 0;
-
-  if (chooser_entry->has_completion)
-    {
-      gint sel_start, sel_end;
-
-      /* Gosh, there should be a more efficient way of doing this... */
-      if (gtk_editable_get_selection_bounds (GTK_EDITABLE (chooser_entry),
-					     &sel_start, &sel_end))
-	{
-	  gchar *str = gtk_editable_get_chars (GTK_EDITABLE (chooser_entry),
-					       sel_start, sel_end);
-	  selected_part_len = g_utf8_strlen (str, -1);
-	  g_free (str);
-	}
-    }
-
-  pos = total_len - (file_part_len + selected_part_len); 
+  pos = chooser_entry->file_part_pos;
 
   /* We don't set in_change here as we want to update the current_folder
    * variable */
@@ -470,18 +445,16 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
 
   if (common_prefix)
     {
-      gint total_len;
       gint file_part_len;
       gint common_prefix_len;
       gint pos;
 
-      total_len = g_utf8_strlen (gtk_entry_get_text (GTK_ENTRY (chooser_entry)), -1);
       file_part_len = g_utf8_strlen (chooser_entry->file_part, -1);
       common_prefix_len = g_utf8_strlen (common_prefix, -1);
 
       if (common_prefix_len > file_part_len)
 	{
-	  pos = total_len - file_part_len;
+	  pos = chooser_entry->file_part_pos;
 
 	  chooser_entry->in_change = TRUE;
 	  gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
@@ -490,8 +463,8 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
 				    common_prefix, -1, 
 				    &pos);
 	  gtk_editable_select_region (GTK_EDITABLE (chooser_entry),
-				      total_len,
-				      total_len - file_part_len + common_prefix_len);
+				      chooser_entry->file_part_pos + file_part_len,
+				      chooser_entry->file_part_pos + common_prefix_len);
 	  chooser_entry->in_change = FALSE;
 
 	  chooser_entry->has_completion = TRUE;
@@ -755,6 +728,8 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
   const gchar *text;
   GtkFilePath *folder_path;
   gchar *file_part;
+  gsize total_len, file_part_len;
+  gint file_part_pos;
 
   if (chooser_entry->in_change)
     return;
@@ -771,12 +746,20 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
       file_part = g_strdup ("");
     }
 
+  file_part_len = strlen (file_part);
+  total_len = strlen (text);
+  if (total_len > file_part_len)
+    file_part_pos = g_utf8_strlen (text, total_len - file_part_len);
+  else
+    file_part_pos = 0;
+
   gtk_file_chooser_entry_maybe_update_directory (chooser_entry, folder_path);
 
   if (chooser_entry->file_part)
     g_free (chooser_entry->file_part);
 
   chooser_entry->file_part = file_part;
+  chooser_entry->file_part_pos = file_part_pos;
 }
 
 static void

@@ -1,3 +1,11 @@
+Mon Mar 15 11:40:43 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilechooserentry.c: Store the position of the 
+	file part and use that in check_completion_callback()
+	and match_selected_callback() to figure out where
+	to operate on the text, rather than recomputing the
+	information.
+
 Mon Mar 15 10:35:19 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_add_volumes): set
