@@ -1181,7 +1181,7 @@ gtk_tree_model_row_changed (GtkTreeModel *tree_model,
   g_return_if_fail (path != NULL);
   g_return_if_fail (iter != NULL);
 
-  g_signal_emit (tree_model, tree_model_signals[ROW_CHANGED], NULL, path, iter);
+  g_signal_emit (tree_model, tree_model_signals[ROW_CHANGED], 0, path, iter);
 }
 
 /**
@@ -1201,7 +1201,7 @@ gtk_tree_model_row_inserted (GtkTreeModel *tree_model,
   g_return_if_fail (path != NULL);
   g_return_if_fail (iter != NULL);
 
-  g_signal_emit (tree_model, tree_model_signals[ROW_INSERTED], NULL, path, iter);
+  g_signal_emit (tree_model, tree_model_signals[ROW_INSERTED], 0, path, iter);
 }
 
 /**
@@ -1222,7 +1222,7 @@ gtk_tree_model_row_has_child_toggled (GtkTreeModel *tree_model,
   g_return_if_fail (path != NULL);
   g_return_if_fail (iter != NULL);
 
-  g_signal_emit (tree_model, tree_model_signals[ROW_HAS_CHILD_TOGGLED], NULL, path, iter);
+  g_signal_emit (tree_model, tree_model_signals[ROW_HAS_CHILD_TOGGLED], 0, path, iter);
 }
 
 /**
@@ -1242,7 +1242,7 @@ gtk_tree_model_row_deleted (GtkTreeModel *tree_model,
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (path != NULL);
 
-  g_signal_emit (tree_model, tree_model_signals[ROW_DELETED], NULL, path);
+  g_signal_emit (tree_model, tree_model_signals[ROW_DELETED], 0, path);
 }
 
 /**
@@ -1266,7 +1266,7 @@ gtk_tree_model_rows_reordered (GtkTreeModel *tree_model,
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (new_order != NULL);
 
-  g_signal_emit (tree_model, tree_model_signals[ROWS_REORDERED], NULL, path, iter, new_order);
+  g_signal_emit (tree_model, tree_model_signals[ROWS_REORDERED], 0, path, iter, new_order);
 }
 
 
