@@ -1,3 +1,9 @@
+Thu Apr 18 00:23:31 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c
+	(gtk_tree_model_sort_convert_path_to_child_path): so this function
+	was completely broken. Fix it and improve readability.
+
 2002-04-17  Anders Carlsson  <andersca@gnu.org>
 
 	* tests/testtreeedit.c (button_press_event): Add a small
