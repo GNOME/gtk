@@ -2469,6 +2469,7 @@ create_reparent (void)
   GtkWidget *button;
   GtkWidget *label;
   GtkWidget *separator;
+  GtkWidget *event_box;
 
   if (!window)
     {
@@ -2498,17 +2499,22 @@ create_reparent (void)
       gtk_container_add (GTK_CONTAINER (frame), box3);
 
       button = gtk_button_new_with_label ("switch");
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC(reparent_label),
-			  box3);
       gtk_object_set_user_data (GTK_OBJECT (button), label);
       gtk_box_pack_start (GTK_BOX (box3), button, FALSE, TRUE, 0);
 
-      gtk_box_pack_start (GTK_BOX (box3), label, FALSE, TRUE, 0);
+      event_box = gtk_event_box_new ();
+      gtk_box_pack_start (GTK_BOX (box3), event_box, FALSE, TRUE, 0);
+      gtk_container_add (GTK_CONTAINER (event_box), label);
+			 
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC(reparent_label),
+			  event_box);
+      
       gtk_signal_connect (GTK_OBJECT (label),
 			  "parent_set",
 			  GTK_SIGNAL_FUNC (set_parent_signal),
 			  GINT_TO_POINTER (42));
+
 
       frame = gtk_frame_new ("Frame 2");
       gtk_box_pack_start (GTK_BOX (box2), frame, TRUE, TRUE, 0);
@@ -2518,11 +2524,15 @@ create_reparent (void)
       gtk_container_add (GTK_CONTAINER (frame), box3);
 
       button = gtk_button_new_with_label ("switch");
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC(reparent_label),
-			  box3);
       gtk_object_set_user_data (GTK_OBJECT (button), label);
       gtk_box_pack_start (GTK_BOX (box3), button, FALSE, TRUE, 0);
+      
+      event_box = gtk_event_box_new ();
+      gtk_box_pack_start (GTK_BOX (box3), event_box, FALSE, TRUE, 0);
+
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC(reparent_label),
+			  event_box);
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);

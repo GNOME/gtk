@@ -196,8 +196,6 @@ static gboolean		gtk_widget_real_focus_out_event   	(GtkWidget        *widget,
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
-static void		gtk_widget_reparent_container_child	(GtkWidget	  *widget,
-								 gpointer          client_data);
 static void		gtk_widget_propagate_state		(GtkWidget	  *widget,
 								 GtkStateData 	  *data);
 static void             gtk_widget_reset_rc_style               (GtkWidget        *widget);
@@ -3146,37 +3144,53 @@ gtk_widget_set_scroll_adjustments (GtkWidget     *widget,
     return FALSE;
 }
 
-/*****************************************
- * gtk_widget_reparent_container_child:
- *   assistent function to gtk_widget_reparent
- *
- *   arguments:
- *
- *   results:
- *****************************************/
+static void
+gtk_widget_reparent_subwindows (GtkWidget *widget,
+				GdkWindow *new_window)
+{
+  if (GTK_WIDGET_NO_WINDOW (widget))
+    {
+      GList *children = gdk_window_get_children (widget->window);
+      GList *tmp_list;
+
+      for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
+	{
+	  GtkWidget *child;
+	  GdkWindow *window = tmp_list->data;
+
+	  gdk_window_get_user_data (window, (void **)&child);
+	  while (child && child != widget)
+	    child = child->parent;
+
+	  if (child)
+	    gdk_window_reparent (window, new_window, 0, 0);
+	}
+
+      g_list_free (children);
+    }
+  else
+    gdk_window_reparent (widget->window, new_window, 0, 0);
+}
 
 static void
-gtk_widget_reparent_container_child (GtkWidget *widget,
-				     gpointer   client_data)
+gtk_widget_reparent_fixup_child (GtkWidget *widget,
+				 gpointer   client_data)
 {
   g_return_if_fail (client_data != NULL);
   
   if (GTK_WIDGET_NO_WINDOW (widget))
     {
       if (widget->window)
-	gdk_window_unref (widget->window);
+        gdk_window_unref (widget->window);
       widget->window = (GdkWindow*) client_data;
       if (widget->window)
-	gdk_window_ref (widget->window);
+        gdk_window_ref (widget->window);
 
       if (GTK_IS_CONTAINER (widget))
-	gtk_container_forall (GTK_CONTAINER (widget),
-			      gtk_widget_reparent_container_child,
-			      client_data);
+        gtk_container_forall (GTK_CONTAINER (widget),
+                              gtk_widget_reparent_fixup_child,
+                              client_data);
     }
-  else
-    gdk_window_reparent (widget->window, 
-			 (GdkWindow*) client_data, 0, 0);
 }
 
 /**
@@ -3213,9 +3227,10 @@ gtk_widget_reparent (GtkWidget *widget,
       if (GTK_WIDGET_IN_REPARENT (widget))
 	{
 	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_IN_REPARENT);
-	  
-	  gtk_widget_reparent_container_child (widget,
-					       gtk_widget_get_parent_window (widget));
+
+	  gtk_widget_reparent_subwindows (widget, gtk_widget_get_parent_window (widget));
+	  gtk_widget_reparent_fixup_child (widget,
+					   gtk_widget_get_parent_window (widget));
 	}
 
       g_object_notify (G_OBJECT (widget), "parent");

@@ -1,3 +1,9 @@
+Sat Mar  2 20:58:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_reparent): Handle NO_WINDOW
+	widgets with windows that are children of widget->window.
+	(#50279)
+
 Sat Mar  2 20:39:38 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_new_from_stock): 
