@@ -3833,7 +3833,7 @@ gtk_default_draw_check (GtkStyle      *style,
       x -= (1 + INDICATOR_PART_SIZE - width) / 2;
       y -= (1 + INDICATOR_PART_SIZE - height) / 2;
 
-      if (strcmp (detail, "check") == 0)	/* Menu item */
+      if (detail && strcmp (detail, "check") == 0)	/* Menu item */
 	{
 	  text_gc = style->fg_gc[state_type];
 	  base_gc = style->bg_gc[state_type];
@@ -3931,7 +3931,7 @@ gtk_default_draw_option (GtkStyle      *style,
       x -= (1 + INDICATOR_PART_SIZE - width) / 2;
       y -= (1 + INDICATOR_PART_SIZE - height) / 2;
 
-      if (strcmp (detail, "option") == 0)	/* Menu item */
+      if (detail && strcmp (detail, "option") == 0)	/* Menu item */
 	{
 	  text_gc = style->fg_gc[state_type];
 	  base_gc = style->bg_gc[state_type];
@@ -3965,7 +3965,7 @@ gtk_default_draw_option (GtkStyle      *style,
 	}
       else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
 	{
-	  if (strcmp (detail, "option") == 0)  /* Menu item */
+	  if (detail && strcmp (detail, "option") == 0)  /* Menu item */
 	    {
 	      draw_part (window, text_gc, area, x, y, CHECK_INCONSISTENT_TEXT);
 	    }
@@ -4926,7 +4926,7 @@ gtk_default_draw_handle (GtkStyle      *style,
   gdk_gc_set_clip_rectangle (light_gc, &dest);
   gdk_gc_set_clip_rectangle (dark_gc, &dest);
 
-  if (!strcmp (detail, "paned"))
+  if (detail && !strcmp (detail, "paned"))
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	for (xx = x + width/2 - 15; xx <= x + width/2 + 15; xx += 5)
