@@ -1576,30 +1576,15 @@ gtk_window_move_resize (GtkWindow *window)
 				   &new_geometry,
 				   new_flags);
 
-  if (x != -1 && y != -1)
-    {
-      gint geo_x, geo_y;
-
-      gdk_window_get_geometry (widget->window, &geo_x, &geo_y, &width, &height, NULL);
-
-      /* As an optimization, don't reposition the window if we are
-       * already positioned there
-       */
-      if (x == geo_x && y == geo_y)
-	{
-	  x = -1;
-	  y = -1;
-	}
-    }
-  else
-    gdk_window_get_geometry (widget->window, NULL, NULL, &width, &height, NULL);
-  
   /* handle actual resizing:
    * - handle reallocations due to configure events
    * - figure whether we need to request a new window size
    * - handle simple resizes within our widget tree
    * - reposition window if neccessary
    */
+  width = widget->allocation.width;
+  height = widget->allocation.height;
+
   if (window->handling_resize)
     { 
       GtkAllocation allocation;
@@ -1618,6 +1603,7 @@ gtk_window_move_resize (GtkWindow *window)
       gtk_widget_size_allocate (widget, &allocation);
       gtk_widget_queue_draw (widget);
     }
+
   if ((size_changed || hints_changed) &&
       (width != new_width || height != new_height))
     {

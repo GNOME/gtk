@@ -1,3 +1,9 @@
+Wed Sep  1 21:27:42 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): don't require a server
+	roundtrip to figure window's width and height, since we know that
+	anyways from widget->allocation.
+
 Wed Sep  1 14:05:30 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkimage.c (gdk_image_new): Use gdk_error_trap_push()
