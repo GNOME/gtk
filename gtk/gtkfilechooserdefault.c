@@ -402,6 +402,9 @@ static void list_mtime_data_func (GtkTreeViewColumn *tree_column,
 				  GtkTreeIter       *iter,
 				  gpointer           data);
 
+static const GtkFileInfo *get_list_file_info (GtkFileChooserDefault *impl,
+					      GtkTreeIter           *iter);
+
 static GObjectClass *parent_class;
 
 
@@ -1277,6 +1280,7 @@ shortcuts_remove_rows (GtkFileChooserDefault *impl,
 		       int                    n_rows)
 {
   GtkTreePath *path;
+  gchar *text;
 
   path = gtk_tree_path_new_from_indices (start_row, -1);
 
@@ -1287,6 +1291,10 @@ shortcuts_remove_rows (GtkFileChooserDefault *impl,
       if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->shortcuts_model), &iter, path))
 	g_assert_not_reached ();
 
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, 
+			  SHORTCUTS_COL_NAME, &text, -1);
+      g_print ("removing shortcut %s\n", text);
+			  
       shortcuts_free_row_data (impl, &iter);
       gtk_list_store_remove (impl->shortcuts_model, &iter);
     }
@@ -4389,15 +4397,37 @@ gtk_file_chooser_default_unselect_path (GtkFileChooser    *chooser,
 				  unselect_func, impl);
 }
 
+static gboolean
+maybe_select (GtkTreeModel *model, 
+	      GtkTreePath  *path, 
+	      GtkTreeIter  *iter, 
+	      gpointer     data)
+{
+  GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (data);
+  GtkTreeSelection *selection;
+  const GtkFileInfo *info;
+  gboolean is_folder;
+  
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+  
+  info = get_list_file_info (impl, iter);
+  is_folder = gtk_file_info_get_is_folder (info);
+
+  if ((is_folder && impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER) ||
+      (!is_folder && impl->action == GTK_FILE_CHOOSER_ACTION_OPEN))
+    gtk_tree_selection_select_iter (selection, iter);
+  else
+    gtk_tree_selection_unselect_iter (selection, iter);
+    
+  return FALSE;
+}
+
 static void
 gtk_file_chooser_default_select_all (GtkFileChooser *chooser)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   if (impl->select_multiple)
-    {
-      GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-      gtk_tree_selection_select_all (selection);
-    }
+    gtk_tree_model_foreach (impl->sort_model, maybe_select, impl);
 }
 
 static void
@@ -5201,7 +5231,7 @@ shortcuts_activate_iter (GtkFileChooserDefault *impl,
 		      -1);
 
   if (!col_data)
-    return FALSE; /* We are on a separator */
+    return; /* We are on a separator */
 
   if (is_volume)
     {
