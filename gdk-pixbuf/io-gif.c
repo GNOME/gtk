@@ -123,6 +123,8 @@ struct _GifContext
 	int frame_len;
 	int frame_height;
 	int frame_interlace;
+	int x_offset;
+	int y_offset;
 
 	/* Static read only */
 	FILE *file;
@@ -674,8 +676,8 @@ gif_get_lzw (GifContext *context)
 			(* context->prepare_func) (context->pixbuf, context->user_data);
 		if (context->animation || context->frame_done_func) {
 			context->frame = g_new (GdkPixbufFrame, 1);
-			context->frame->x_offset = 0;
-			context->frame->y_offset = 0;
+			context->frame->x_offset = context->x_offset;
+			context->frame->y_offset = context->y_offset;;
 			context->frame->delay_time = context->gif89.delay_time;
 			switch (context->gif89.disposal) {
 			case 0:
@@ -934,10 +936,9 @@ gif_get_frame_info (GifContext *context)
 	/* Okay, we got all the info we need.  Lets record it */
 	context->frame_len = LM_to_uint (buf[4], buf[5]);
 	context->frame_height = LM_to_uint (buf[6], buf[7]);
-	if (context->frame) {
-		context->frame->x_offset = LM_to_uint (buf[0], buf[1]);
-		context->frame->y_offset = LM_to_uint (buf[2], buf[3]);
-	}
+	context->x_offset = LM_to_uint (buf[0], buf[1]);
+	context->y_offset = LM_to_uint (buf[2], buf[3]);
+
 	if (context->frame_height > context->height) {
 		/* we don't want to resize things.  So we exit */
 		context->state = GIF_DONE;
@@ -1063,6 +1064,7 @@ new_context (void)
 	GifContext *context;
 
 	context = g_new0 (GifContext, 1);
+
 	context->pixbuf = NULL;
 	context->file = NULL;
 	context->state = GIF_START;
@@ -1077,6 +1079,7 @@ new_context (void)
 	context->gif89.delay_time = -1;
 	context->gif89.input_flag = -1;
 	context->gif89.disposal = -1;
+
 	return context;
 }
 /* Shared library entry point */

@@ -1,3 +1,23 @@
+2000-02-04  Michael Meeks  <mmeeks@gnu.org>
+
+	* gdk-pixbuf/io-gif.c (struct _GifContext): add x,y_offset.
+	(gif_get_frame_info): put the offsets on the context.
+	(gif_get_lzw): copy them off into the frame.
+	(new_context): no change required; will 0 offsets by default.
+
+2000-01-28  Michael Meeks  <michael@mejm2.dow.cam.ac.uk>
+
+	* gdk-pixbuf/pixops/pixops.c (pixops_process): const + nasty
+	un-consting cast.
+
+	* gdk-pixbuf/pixops/pixops.h: const.
+
+	* gdk-pixbuf/gdk-pixbuf-util.c: const.
+	
+	* gdk-pixbuf/gdk-pixbuf-scale.c: const.
+
+	* gdk-pixbuf/gdk-pixbuf.h: constify lots of things.
+
 2000-02-03  Federico Mena Quintero  <federico@helixcode.com>
 
 	* gdk-pixbuf/gdk-pixbuf-render.c

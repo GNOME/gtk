@@ -110,13 +110,14 @@ gdk_pixbuf_add_alpha (GdkPixbuf *pixbuf, gboolean substitute_color, guchar r, gu
  * pixbuf formats is done automatically.
  **/
 void
-gdk_pixbuf_copy_area (GdkPixbuf *src_pixbuf,
+gdk_pixbuf_copy_area (const GdkPixbuf *src_pixbuf,
 		      int src_x, int src_y,
 		      int width, int height,
 		      GdkPixbuf *dest_pixbuf,
 		      int dest_x, int dest_y)
 {
-	ArtPixBuf *src_apb, *dest_apb;
+	const ArtPixBuf *src_apb;
+	ArtPixBuf       *dest_apb;
 
 	g_return_if_fail (src_pixbuf != NULL);
 	g_return_if_fail (dest_pixbuf != NULL);

@@ -22,20 +22,20 @@
  * destination drawable replacing the previous contents.
  **/
 void
-gdk_pixbuf_scale (GdkPixbuf      *src,
-		  GdkPixbuf      *dest,
-		  int             dest_x,
-		  int             dest_y,
-		  int             dest_width,
-		  int             dest_height,
-		  double          offset_x,
-		  double          offset_y,
-		  double          scale_x,
-		  double          scale_y,
-		  ArtFilterLevel  filter_level)
+gdk_pixbuf_scale (const GdkPixbuf *src,
+		  GdkPixbuf       *dest,
+		  int              dest_x,
+		  int              dest_y,
+		  int              dest_width,
+		  int              dest_height,
+		  double           offset_x,
+		  double           offset_y,
+		  double           scale_x,
+		  double           scale_y,
+		  ArtFilterLevel   filter_level)
 {
-  offset_x = floor(offset_x + 0.5);
-  offset_y = floor(offset_y + 0.5);
+  offset_x = floor (offset_x + 0.5);
+  offset_y = floor (offset_y + 0.5);
   
   pixops_scale (dest->art_pixbuf->pixels + dest_y * dest->art_pixbuf->rowstride + dest_x * dest->art_pixbuf->n_channels,
 		-offset_x, -offset_y, dest_width - offset_x, dest_height - offset_y,
@@ -66,21 +66,21 @@ gdk_pixbuf_scale (GdkPixbuf      *src,
  * destination drawable.
  **/
 void
-gdk_pixbuf_composite (GdkPixbuf      *src,
-		      GdkPixbuf      *dest,
-		      int             dest_x,
-		      int             dest_y,
-		      int             dest_width,
-		      int             dest_height,
-		      double          offset_x,
-		      double          offset_y,
-		      double          scale_x,
-		      double          scale_y,
-		      ArtFilterLevel  filter_level,
-		      int             overall_alpha)
+gdk_pixbuf_composite (const GdkPixbuf *src,
+		      GdkPixbuf       *dest,
+		      int              dest_x,
+		      int              dest_y,
+		      int              dest_width,
+		      int              dest_height,
+		      double           offset_x,
+		      double           offset_y,
+		      double           scale_x,
+		      double           scale_y,
+		      ArtFilterLevel   filter_level,
+		      int              overall_alpha)
 {
-  offset_x = floor(offset_x + 0.5);
-  offset_y = floor(offset_y + 0.5);
+  offset_x = floor (offset_x + 0.5);
+  offset_y = floor (offset_y + 0.5);
   pixops_composite (dest->art_pixbuf->pixels + dest_y * dest->art_pixbuf->rowstride + dest_x * dest->art_pixbuf->n_channels,
 		    -offset_x, -offset_y, dest_width - offset_x, dest_height - offset_y,
 		    dest->art_pixbuf->rowstride, dest->art_pixbuf->n_channels, dest->art_pixbuf->has_alpha,
@@ -116,26 +116,26 @@ gdk_pixbuf_composite (GdkPixbuf      *src,
  * destination drawable.
  **/
 void
-gdk_pixbuf_composite_color (GdkPixbuf      *src,
-			    GdkPixbuf      *dest,
-			    int             dest_x,
-			    int             dest_y,
-			    int             dest_width,
-			    int             dest_height,
-			    double          offset_x,
-			    double          offset_y,
-			    double          scale_x,
-			    double          scale_y,
-			    ArtFilterLevel  filter_level,
-			    int             overall_alpha,
-			    int             check_x,
-			    int             check_y,
-			    int             check_size,
-			    art_u32         color1,
-			    art_u32         color2)
+gdk_pixbuf_composite_color (const GdkPixbuf *src,
+			    GdkPixbuf       *dest,
+			    int              dest_x,
+			    int              dest_y,
+			    int              dest_width,
+			    int              dest_height,
+			    double           offset_x,
+			    double           offset_y,
+			    double           scale_x,
+			    double           scale_y,
+			    ArtFilterLevel   filter_level,
+			    int              overall_alpha,
+			    int              check_x,
+			    int              check_y,
+			    int              check_size,
+			    art_u32          color1,
+			    art_u32          color2)
 {
-  offset_x = floor(offset_x + 0.5);
-  offset_y = floor(offset_y + 0.5);
+  offset_x = floor (offset_x + 0.5);
+  offset_y = floor (offset_y + 0.5);
   
   pixops_composite_color (dest->art_pixbuf->pixels + dest_y * dest->art_pixbuf->rowstride + dest_x * dest->art_pixbuf->n_channels,
 			  -offset_x, -offset_y, dest_width - offset_x, dest_height - offset_y,
@@ -158,10 +158,10 @@ gdk_pixbuf_composite_color (GdkPixbuf      *src,
  * Return value: the new #GdkPixbuf
  **/
 GdkPixbuf *
-gdk_pixbuf_scale_simple (GdkPixbuf      *src,
-			 int             dest_width,
-			 int             dest_height,
-			 ArtFilterLevel  filter_level)
+gdk_pixbuf_scale_simple (const GdkPixbuf *src,
+			 int              dest_width,
+			 int              dest_height,
+			 ArtFilterLevel   filter_level)
 {
   GdkPixbuf *dest = gdk_pixbuf_new (ART_PIX_RGB, src->art_pixbuf->has_alpha, 8, dest_width, dest_height);
 
@@ -191,14 +191,14 @@ gdk_pixbuf_scale_simple (GdkPixbuf      *src,
  * Return value: the new #GdkPixbuf
  **/
 GdkPixbuf *
-gdk_pixbuf_composite_color_simple (GdkPixbuf      *src,
-				   int             dest_width,
-				   int             dest_height,
-				   ArtFilterLevel  filter_level,
-				   int             overall_alpha,
-				   int             check_size,
-				   art_u32         color1,
-				   art_u32         color2)
+gdk_pixbuf_composite_color_simple (const GdkPixbuf *src,
+				   int              dest_width,
+				   int              dest_height,
+				   ArtFilterLevel   filter_level,
+				   int              overall_alpha,
+				   int              check_size,
+				   art_u32          color1,
+				   art_u32          color2)
 {
   GdkPixbuf *dest = gdk_pixbuf_new (ART_PIX_RGB, src->art_pixbuf->has_alpha, 8, dest_width, dest_height);
 

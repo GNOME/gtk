@@ -97,8 +97,8 @@ int          gdk_pixbuf_get_rowstride       (GdkPixbuf *pixbuf);
 
 /* Reference counting */
 
-GdkPixbuf *gdk_pixbuf_ref (GdkPixbuf *pixbuf);
-void gdk_pixbuf_unref (GdkPixbuf *pixbuf);
+GdkPixbuf *gdk_pixbuf_ref   (GdkPixbuf *pixbuf);
+void       gdk_pixbuf_unref (GdkPixbuf *pixbuf);
 
 /* Wrap a libart pixbuf */
 GdkPixbuf *gdk_pixbuf_new_from_art_pixbuf (ArtPixBuf *art_pixbuf);
@@ -156,19 +156,19 @@ void gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawab
 					  GdkRgbDither dither,
 					  int x_dither, int y_dither);
 
-void gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf *pixbuf,
-					GdkPixmap **pixmap_return, GdkBitmap **mask_return,
-					int alpha_threshold);
+void gdk_pixbuf_render_pixmap_and_mask   (GdkPixbuf *pixbuf,
+					  GdkPixmap **pixmap_return, GdkBitmap **mask_return,
+					  int alpha_threshold);
 
 /* Fetching a region from a drawable */
-GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
-					 GdkDrawable *src, GdkColormap *cmap,
-					 int src_x, int src_y,
-					 int dest_x, int dest_y,
-					 int width, int height);
+GdkPixbuf *gdk_pixbuf_get_from_drawable  (GdkPixbuf *dest,
+					  GdkDrawable *src, GdkColormap *cmap,
+					  int src_x, int src_y,
+					  int dest_x, int dest_y,
+					  int width, int height);
 
 /* Copy an area of a pixbuf onto another one */
-void gdk_pixbuf_copy_area (GdkPixbuf *src_pixbuf,
+void gdk_pixbuf_copy_area (const GdkPixbuf *src_pixbuf,
 			   int src_x, int src_y,
 			   int width, int height,
 			   GdkPixbuf *dest_pixbuf,
@@ -176,70 +176,70 @@ void gdk_pixbuf_copy_area (GdkPixbuf *src_pixbuf,
 
 /* Scaling */
 
-void gdk_pixbuf_scale           (GdkPixbuf      *src,
-				 GdkPixbuf      *dest,
-				 int             dest_x,
-				 int             dest_y,
-				 int             dest_width,
-				 int             dest_height,
-				 double          offset_x,
-				 double          offset_y,
-				 double          scale_x,
-				 double          scale_y,
-				 ArtFilterLevel  filter_level);
-void gdk_pixbuf_composite       (GdkPixbuf      *src,
-				 GdkPixbuf      *dest,
-				 int             dest_x,
-				 int             dest_y,
-				 int             dest_width,
-				 int             dest_height,
-				 double          offset_x,
-				 double          offset_y,
-				 double          scale_x,
-				 double          scale_y,
-				 ArtFilterLevel  filter_level,
-				 int             overall_alpha);
-void gdk_pixbuf_composite_color (GdkPixbuf      *src,
-				 GdkPixbuf      *dest,
-				 int             dest_x,
-				 int             dest_y,
-				 int             dest_width,
-				 int             dest_height,
-				 double          offset_x,
-				 double          offset_y,
-				 double          scale_x,
-				 double          scale_y,
-				 ArtFilterLevel  filter_level,
-				 int             overall_alpha,
-				 int             check_x,
-				 int             check_y,
-				 int             check_size,
-				 art_u32         color1,
-				 art_u32         color2);
+void gdk_pixbuf_scale           (const GdkPixbuf *src,
+				 GdkPixbuf       *dest,
+				 int              dest_x,
+				 int              dest_y,
+				 int              dest_width,
+				 int              dest_height,
+				 double           offset_x,
+				 double           offset_y,
+				 double           scale_x,
+				 double           scale_y,
+				 ArtFilterLevel   filter_level);
+void gdk_pixbuf_composite       (const GdkPixbuf *src,
+				 GdkPixbuf       *dest,
+				 int              dest_x,
+				 int              dest_y,
+				 int              dest_width,
+				 int              dest_height,
+				 double           offset_x,
+				 double           offset_y,
+				 double           scale_x,
+				 double           scale_y,
+				 ArtFilterLevel   filter_level,
+				 int              overall_alpha);
+void gdk_pixbuf_composite_color (const GdkPixbuf *src,
+				 GdkPixbuf       *dest,
+				 int              dest_x,
+				 int              dest_y,
+				 int              dest_width,
+				 int              dest_height,
+				 double           offset_x,
+				 double           offset_y,
+				 double           scale_x,
+				 double           scale_y,
+				 ArtFilterLevel   filter_level,
+				 int              overall_alpha,
+				 int              check_x,
+				 int              check_y,
+				 int              check_size,
+				 art_u32          color1,
+				 art_u32          color2);
 
-GdkPixbuf *gdk_pixbuf_scale_simple           (GdkPixbuf      *src,
-					      int             dest_width,
-					      int             dest_height,
-					      ArtFilterLevel  filter_level);
-GdkPixbuf *gdk_pixbuf_composite_color_simple (GdkPixbuf      *src,
-					      int             dest_width,
-					      int             dest_height,
-					      ArtFilterLevel  filter_level,
-					      int             overall_alpha,
-					      int             check_size,
-					      art_u32         color1,
-					      art_u32         color2);
+GdkPixbuf *gdk_pixbuf_scale_simple           (const GdkPixbuf *src,
+					      int              dest_width,
+					      int              dest_height,
+					      ArtFilterLevel   filter_level);
+GdkPixbuf *gdk_pixbuf_composite_color_simple (const GdkPixbuf *src,
+					      int              dest_width,
+					      int              dest_height,
+					      ArtFilterLevel   filter_level,
+					      int              overall_alpha,
+					      int              check_size,
+					      art_u32          color1,
+					      art_u32          color2);
 
 /* Animation support */
 
 GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file (const char *filename);
 
-GdkPixbufAnimation *gdk_pixbuf_animation_ref (GdkPixbufAnimation *animation);
-void gdk_pixbuf_animation_unref (GdkPixbufAnimation *animation);
+GdkPixbufAnimation *gdk_pixbuf_animation_ref   (GdkPixbufAnimation *animation);
+void                gdk_pixbuf_animation_unref (GdkPixbufAnimation *animation);
 
 /* General (presently empty) initialization hooks, primarily for gnome-libs */
-void gdk_pixbuf_preinit(gpointer app, gpointer modinfo);
-void gdk_pixbuf_postinit(gpointer app, gpointer modinfo);
+void gdk_pixbuf_preinit  (gpointer app, gpointer modinfo);
+void gdk_pixbuf_postinit (gpointer app, gpointer modinfo);
 
 
 

@@ -56,7 +56,7 @@ pixops_scale_nearest (art_u8        *dest_buf,
 		      int            dest_rowstride,
 		      int            dest_channels,
 		      art_boolean    dest_has_alpha,
-		      art_u8        *src_buf,
+		      const art_u8  *src_buf,
 		      int            src_width,
 		      int            src_height,
 		      int            src_rowstride,
@@ -73,7 +73,7 @@ pixops_scale_nearest (art_u8        *dest_buf,
 #define INNER_LOOP(SRC_CHANNELS,DEST_CHANNELS) 			\
       for (j=0; j < (render_x1 - render_x0); j++)		\
 	{							\
-	  art_u8 *p = src + (x >> SCALE_SHIFT) * SRC_CHANNELS;	\
+	  const art_u8 *p = src + (x >> SCALE_SHIFT) * SRC_CHANNELS;	\
 								\
 	  dest[0] = p[0];					\
 	  dest[1] = p[1];					\
@@ -93,8 +93,8 @@ pixops_scale_nearest (art_u8        *dest_buf,
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
-      art_u8 *src = src_buf + ((i * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
-      art_u8 *dest = dest_buf + i * dest_rowstride;
+      const art_u8 *src  = src_buf + ((i * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
+      art_u8       *dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
 
@@ -119,7 +119,7 @@ pixops_scale_nearest (art_u8        *dest_buf,
 	    {
 	      for (j=0; j < (render_x1 - render_x0); j++)
 		{
-		  art_u8 *p = src + (x >> SCALE_SHIFT) * 4;
+		  const art_u8 *p = src + (x >> SCALE_SHIFT) * 4;
 
 		  *(art_u32 *)dest = *(art_u32 *)p;
 		  
@@ -141,7 +141,7 @@ pixops_composite_nearest (art_u8        *dest_buf,
 			  int            dest_rowstride,
 			  int            dest_channels,
 			  art_boolean    dest_has_alpha,
-			  art_u8        *src_buf,
+			  const art_u8  *src_buf,
 			  int            src_width,
 			  int            src_height,
 			  int            src_rowstride,
@@ -158,15 +158,15 @@ pixops_composite_nearest (art_u8        *dest_buf,
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
-      art_u8 *src = src_buf + (((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
-      art_u8 *dest = dest_buf + i * dest_rowstride + render_x0 * dest_channels;
+      const art_u8 *src  = src_buf + (((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
+      art_u8       *dest = dest_buf + i * dest_rowstride + render_x0 * dest_channels;
 
       x = render_x0 * x_step + x_step / 2;
       
       for (j=0; j < (render_x1 - render_x0); j++)
 	{
-	  art_u8 *p = src + (x >> SCALE_SHIFT) * src_channels;
-          unsigned int a0;
+	  const art_u8 *p = src + (x >> SCALE_SHIFT) * src_channels;
+          unsigned int  a0;
 
 	  if (src_has_alpha)
 	    a0 = (p[3] * overall_alpha + 0xff) >> 8;
@@ -218,7 +218,7 @@ pixops_composite_color_nearest (art_u8        *dest_buf,
 				int            dest_rowstride,
 				int            dest_channels,
 				art_boolean    dest_has_alpha,
-				art_u8        *src_buf,
+				const art_u8  *src_buf,
 				int            src_width,
 				int            src_height,
 				int            src_rowstride,
@@ -242,8 +242,8 @@ pixops_composite_color_nearest (art_u8        *dest_buf,
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
-      art_u8 *src = src_buf + (((i + render_y0) * y_step + y_step/2) >> SCALE_SHIFT) * src_rowstride;
-      art_u8 *dest = dest_buf + i * dest_rowstride;
+      const art_u8 *src  = src_buf + (((i + render_y0) * y_step + y_step/2) >> SCALE_SHIFT) * src_rowstride;
+      art_u8       *dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
       
@@ -270,8 +270,8 @@ pixops_composite_color_nearest (art_u8        *dest_buf,
 
       for (j=0 ; j < (render_x1 - render_x0); j++)
 	{
-	  art_u8 *p = src + (x >> SCALE_SHIFT) * src_channels;
-          unsigned int a0;
+	  const art_u8 *p = src + (x >> SCALE_SHIFT) * src_channels;
+          unsigned int  a0;
 
 	  if (src_has_alpha)
 	    a0 = (p[3] * overall_alpha + 0xff) >> 8;
@@ -906,7 +906,7 @@ pixops_process (art_u8         *dest_buf,
 		int             dest_rowstride,
 		int             dest_channels,
 		art_boolean     dest_has_alpha,
-		art_u8         *src_buf,
+		const art_u8   *src_buf,
 		int             src_width,
 		int             src_height,
 		int             src_rowstride,
@@ -962,11 +962,11 @@ pixops_process (art_u8         *dest_buf,
       for (j=0; j<filter->n_y; j++)
 	{
 	  if (y_start <  0)
-	    line_bufs[j] = src_buf;
+	    line_bufs[j] = (art_u8 *)src_buf;
 	  else if (y_start < src_height)
-	    line_bufs[j] = src_buf + src_rowstride * y_start;
+	    line_bufs[j] = (art_u8 *)src_buf + src_rowstride * y_start;
 	  else
-	    line_bufs[j] = src_buf + src_rowstride * (src_height - 1);
+	    line_bufs[j] = (art_u8 *)src_buf + src_rowstride * (src_height - 1);
 
 	  y_start++;
 	}
@@ -1296,7 +1296,7 @@ pixops_composite_color (art_u8         *dest_buf,
 			int             dest_rowstride,
 			int             dest_channels,
 			art_boolean     dest_has_alpha,
-			art_u8         *src_buf,
+			const art_u8   *src_buf,
 			int             src_width,
 			int             src_height,
 			int             src_rowstride,
@@ -1380,7 +1380,7 @@ pixops_composite (art_u8        *dest_buf,
 		  int            dest_rowstride,
 		  int            dest_channels,
 		  art_boolean    dest_has_alpha,
-		  art_u8        *src_buf,
+		  const art_u8  *src_buf,
 		  int            src_width,
 		  int            src_height,
 		  int            src_rowstride,
@@ -1463,7 +1463,7 @@ pixops_scale (art_u8        *dest_buf,
 	      int            dest_rowstride,
 	      int            dest_channels,
 	      art_boolean    dest_has_alpha,
-	      art_u8        *src_buf,
+	      const art_u8  *src_buf,
 	      int            src_width,
 	      int            src_height,
 	      int            src_rowstride,
