@@ -1,7 +1,8 @@
 /* GDK - The GIMP Drawing Kit
  * gdkdisplay-x11.c
  * 
- * Copyright 2001 Sun Microsystems Inc. 
+ * Copyright 2001 Sun Microsystems Inc.
+ * Copyright (C) 2004 Nokia Corporation
  *
  * Erwann Chenede <erwann.chenede@sun.com>
  *
@@ -1076,4 +1077,87 @@ gboolean gdk_display_request_selection_notification  (GdkDisplay *display,
   else
 #endif
     return FALSE;
+}
+
+/**
+ * gdk_display_supports_clipboard_persistence
+ * @display: a #GdkDisplay
+ *
+ * Returns whether the speicifed display supports clipboard
+ * persistance; if it's possible to store the clipboard data after an
+ * application has quit. On X11 this checks if a clipboard daemon is
+ * running.
+ *
+ * Returns: %TRUE if the display supports clipboard persistance.
+ *
+ * Since: 2.6
+ */
+gboolean
+gdk_display_supports_clipboard_persistence (GdkDisplay *display)
+{
+  /* It might make sense to cache this */
+  return XGetSelectionOwner (GDK_DISPLAY_X11 (display)->xdisplay,
+			     gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER")) != None;
+}
+
+/**
+ * gdk_display_store_clipboard
+ * @display:          a #GdkDisplay
+ * @clipboard_window: a #GdkWindow belonging to the clipboard owner
+ * @time:             a timestamp
+ * @targets:	      an array of targets that should be saved, or NULL 
+ *                    if all available targets should be saved.
+ * @n_targets:        length of the array
+ *
+ * Issues a request to the the clipboard manager to store the
+ * clipboard data. On X11, this is a special program that works
+ * according to the freedesktop clipboard specification, available at
+ * <ulink url="http://www.freedesktop.org/Standards/clipboard-manager-spec">
+ * http://www.freedesktop.org/Standards/clipboard-manager-spec</ulink>
+ *
+ * Since: 2.6
+ */
+void
+gdk_display_store_clipboard (GdkDisplay *display,
+			     GdkWindow  *clipboard_window,
+			     guint32     time_,
+			     GdkAtom    *targets,
+			     gint        n_targets)
+{
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  Atom clipboard_manager, save_targets;
+  
+  clipboard_manager = gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER");
+  save_targets = gdk_x11_get_xatom_by_name_for_display (display, "SAVE_TARGETS");
+
+  gdk_error_trap_push ();
+
+  if (XGetSelectionOwner (display_x11->xdisplay, clipboard_manager) != None)
+    {
+      Atom property_name = None;
+      Atom *xatoms;
+      int i;
+      
+      if (n_targets > 0)
+	{
+	  property_name = gdk_x11_atom_to_xatom_for_display (display, _gdk_selection_property);
+
+	  xatoms = g_new (Atom, n_targets);
+	  for (i = 0; i < n_targets; i++)
+	    xatoms[i] = gdk_x11_atom_to_xatom_for_display (display, targets[i]);
+
+	  XChangeProperty (display_x11->xdisplay, GDK_WINDOW_XID (clipboard_window),
+			   property_name, XA_ATOM,
+			   32, PropModeReplace, (guchar *)xatoms, n_targets);
+	  g_free (xatoms);
+
+	}
+      
+      XConvertSelection (display_x11->xdisplay,
+			 clipboard_manager, save_targets, property_name,
+			 GDK_WINDOW_XID (clipboard_window), time_);
+      
+    }
+  gdk_error_trap_pop ();
+
 }

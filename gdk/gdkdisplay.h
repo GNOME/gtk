@@ -168,6 +168,13 @@ gboolean gdk_display_supports_selection_notification (GdkDisplay *display);
 gboolean gdk_display_request_selection_notification  (GdkDisplay *display,
 						      GdkAtom     selection);
 
+gboolean gdk_display_supports_clipboard_persistence (GdkDisplay *display);
+void     gdk_display_store_clipboard                (GdkDisplay *display,
+						     GdkWindow  *clipboard_window,
+						     guint32     time_,
+						     GdkAtom    *targets,
+						     gint        n_targets);
+
 G_END_DECLS
 
 #endif	/* __GDK_DISPLAY_H__ */

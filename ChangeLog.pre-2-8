@@ -1,3 +1,29 @@
+2004-10-25  Anders Carlsson  <andersca@imendio.com>
+
+	* gdk/gdk.symbols: 
+	* gdk/gdkdisplay.h:
+	* gdk/x11/gdkdisplay-x11.c:
+	(gdk_display_supports_clipboard_persistence), 
+	(gdk_display_store_clipboard):
+	New API to handle the clipboard manager.
+
+	* gtk/gtk.symbols:
+	* gtk/gtkclipboard.c: (gtk_clipboard_class_init),
+	(gtk_clipboard_finalize), (selection_clear_event_cb),
+	(clipboard_unset), (gtk_clipboard_set_text),
+	(gtk_clipboard_request_targets), (gtk_clipboard_wait_for_targets),
+	(clipboard_peek), (gtk_clipboard_owner_change),
+	(gtk_clipboard_wait_is_target_available),
+	(gtk_clipboard_store_timeout), (gtk_clipboard_set_can_store),
+	(gtk_clipboard_selection_notify), (gtk_clipboard_store),
+	(_gtk_clipboard_store_all):
+	* gtk/gtkclipboard.h:
+	Add API for clipboard persistence and implement it, also add
+	gtk_clipboard_wait_is_target_available.
+	
+	* gtk/gtkmain.c: (gtk_main):
+	Call _gtk_clipboard_store_all before exiting.
+	
 2004-10-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaboutdialog.h: 

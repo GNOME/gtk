@@ -94,19 +94,29 @@ void gtk_clipboard_request_targets  (GtkClipboard                    *clipboard,
 				     GtkClipboardTargetsReceivedFunc  callback,
 				     gpointer                         user_data);
 
-GtkSelectionData *gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
-						   GdkAtom       target);
-gchar *           gtk_clipboard_wait_for_text     (GtkClipboard *clipboard);
+GtkSelectionData *gtk_clipboard_wait_for_contents (GtkClipboard  *clipboard,
+						   GdkAtom        target);
+gchar *           gtk_clipboard_wait_for_text     (GtkClipboard  *clipboard);
+gboolean          gtk_clipboard_wait_for_targets  (GtkClipboard  *clipboard,
+						   GdkAtom      **targets,
+						   gint          *n_targets);
 
-gboolean gtk_clipboard_wait_is_text_available   (GtkClipboard         *clipboard);
+gboolean gtk_clipboard_wait_is_text_available   (GtkClipboard *clipboard);
+gboolean gtk_clipboard_wait_is_target_available (GtkClipboard *clipboard,
+						 GdkAtom       target);
 
-gboolean gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard, 
-					 GdkAtom      **targets,
-					 gint          *n_targets);
 
+void gtk_clipboard_set_can_store (GtkClipboard   *clipboard,
+				  GtkTargetEntry *targets,
+				  gint            n_targets);
+
+void gtk_clipboard_store         (GtkClipboard   *clipboard);
+  
 /* private */
 void     _gtk_clipboard_handle_event    (GdkEventOwnerChange *event);
 
+void     _gtk_clipboard_store_all       (void);
+  
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

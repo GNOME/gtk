@@ -954,12 +954,16 @@ gtk_main (void)
 
       gdk_flush ();
     }
-	      
+    
   main_loops = g_slist_remove (main_loops, loop);
 
   g_main_loop_unref (loop);
 
   gtk_main_loop_level--;
+
+  /* Try storing all clipboard data we have */
+  if (gtk_main_loop_level == 0)
+    _gtk_clipboard_store_all ();
 }
 
 guint

@@ -1,5 +1,6 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 2000 Red Hat, Inc.
+ * Copyright (C) 2004 Nokia Corporation
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -62,6 +63,16 @@ struct _GtkClipboard
 
   gboolean have_selection;
   GdkDisplay *display;
+
+  GdkAtom *cached_targets;
+  gint     n_cached_targets;
+
+  guint      notify_signal_id;
+  gboolean   storing_selection;
+  GMainLoop *store_loop;
+  guint      store_timeout;
+  gint       n_storable_targets;
+  GdkAtom   *storable_targets;
 };
 
 struct _GtkClipboardClass
@@ -90,21 +101,27 @@ struct _RequestTargetsInfo
   gpointer user_data;
 };
 
-static void gtk_clipboard_class_init (GtkClipboardClass *class);
-static void gtk_clipboard_finalize   (GObject           *object);
+static void gtk_clipboard_class_init   (GtkClipboardClass   *class);
+static void gtk_clipboard_finalize     (GObject             *object);
+static void gtk_clipboard_owner_change (GtkClipboard        *clipboard,
+					GdkEventOwnerChange *event);
 
-static void clipboard_unset          (GtkClipboard      *clipboard);
-static void selection_received       (GtkWidget         *widget,
-				      GtkSelectionData  *selection_data,
-				      guint              time);
-static GtkClipboard *clipboard_peek  (GdkDisplay        *display,
-				      GdkAtom            selection,
-				      gboolean           only_if_exists);
+static void          clipboard_unset      (GtkClipboard     *clipboard);
+static void          selection_received   (GtkWidget        *widget,
+					   GtkSelectionData *selection_data,
+					   guint             time);
+static GtkClipboard *clipboard_peek       (GdkDisplay       *display,
+					   GdkAtom           selection,
+					   gboolean          only_if_exists);
+static GtkWidget *   get_clipboard_widget (GdkDisplay       *display);
+
+
 enum {
   TARGET_STRING,
   TARGET_TEXT,
   TARGET_COMPOUND_TEXT,
-  TARGET_UTF8_STRING
+  TARGET_UTF8_STRING,
+  TARGET_SAVE_TARGETS
 };
 
 static const gchar request_contents_key[] = "gtk-request-contents";
@@ -152,7 +169,7 @@ gtk_clipboard_class_init (GtkClipboardClass *class)
   
   gobject_class->finalize = gtk_clipboard_finalize;
 
-  class->owner_change = NULL;
+  class->owner_change = gtk_clipboard_owner_change;
 
   clipboard_signals[OWNER_CHANGE] =
     g_signal_new ("owner_change",
@@ -168,7 +185,28 @@ gtk_clipboard_class_init (GtkClipboardClass *class)
 static void
 gtk_clipboard_finalize (GObject *object)
 {
-  clipboard_unset (GTK_CLIPBOARD (object));
+  GtkClipboard *clipboard;
+  GtkWidget *clipboard_widget;
+
+  clipboard = GTK_CLIPBOARD (object);
+
+  clipboard_widget = get_clipboard_widget (clipboard->display);
+  
+  clipboard_unset (clipboard);
+  
+  if (g_main_loop_is_running (clipboard->store_loop))
+    {
+      g_main_loop_quit (clipboard->store_loop);
+      g_main_loop_unref (clipboard->store_loop);
+    }
+  
+  if (clipboard->store_timeout != 0)
+    g_source_remove (clipboard->store_timeout);
+
+  if (clipboard->notify_signal_id != 0)
+    g_signal_handler_disconnect (clipboard_widget, clipboard->notify_signal_id);
+  
+  g_free (clipboard->storable_targets);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -280,6 +318,7 @@ selection_clear_event_cb (GtkWidget	    *widget,
   if (clipboard)
     {
       clipboard_unset (clipboard);
+
       return TRUE;
     }
 
@@ -592,22 +631,37 @@ clipboard_unset (GtkClipboard *clipboard)
 {
   GtkClipboardClearFunc old_clear_func;
   gpointer old_data;
+  gboolean old_have_owner;
+  gint old_n_storable_targets;
   
   old_clear_func = clipboard->clear_func;
   old_data = clipboard->user_data;
-	  
-  if (clipboard->have_owner)
+  old_have_owner = clipboard->have_owner;
+  old_n_storable_targets = clipboard->n_storable_targets;
+  
+  if (old_have_owner)
     {
       clipboard_remove_owner_notify (clipboard);
       clipboard->have_owner = FALSE;
     }
-  
+
+  clipboard->n_storable_targets = -1;
+  g_free (clipboard->storable_targets);
+  clipboard->storable_targets = NULL;
+      
   clipboard->get_func = NULL;
   clipboard->clear_func = NULL;
   clipboard->user_data = NULL;
   
   if (old_clear_func)
     old_clear_func (clipboard, old_data);
+
+  /* If we've transferred the clipboard data to the manager,
+   * unref the owner
+   */
+  if (old_have_owner &&
+      old_n_storable_targets != -1)
+    g_object_unref (clipboard->user_data);
 }
 
 /**
@@ -682,6 +736,7 @@ gtk_clipboard_set_text (GtkClipboard *clipboard,
 			       targets, G_N_ELEMENTS (targets),
 			       text_get_func, text_clear_func,
 			       g_strndup (text, len));
+  gtk_clipboard_set_can_store (clipboard, NULL, 0);
 }
 
 static void
@@ -882,6 +937,14 @@ gtk_clipboard_request_targets (GtkClipboard                *clipboard,
   
   g_return_if_fail (clipboard != NULL);
   g_return_if_fail (callback != NULL);
+
+  /* If the display supports change notification we cache targets */
+  if (gdk_display_supports_selection_notification (gtk_clipboard_get_display (clipboard)) &&
+      clipboard->n_cached_targets != -1)
+    {
+      (* callback) (clipboard, clipboard->cached_targets, clipboard->n_cached_targets, user_data);
+      return;
+    }
   
   info = g_new (RequestTargetsInfo, 1);
   info->callback = callback;
@@ -1087,8 +1150,20 @@ gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard,
   
   g_return_val_if_fail (clipboard != NULL, FALSE);
 
-  /* TODO: see http://bugzilla.gnome.org/show_bug.cgi?id=101774 with regard to XFIXES */
+  /* If the display supports change notification we cache targets */
+  if (gdk_display_supports_selection_notification (gtk_clipboard_get_display (clipboard)) &&
+      clipboard->n_cached_targets != -1)
+    {
+      if (n_targets)
+ 	*n_targets = clipboard->n_cached_targets;
+ 
+      if (targets)
+ 	*targets = g_memdup (clipboard->cached_targets,
+ 			     clipboard->n_cached_targets * sizeof (GdkAtom));
 
+       return TRUE;
+    }
+  
   if (n_targets)
     *n_targets = 0;
       
@@ -1099,7 +1174,26 @@ gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard,
 
   if (data)
     {
-      result = gtk_selection_data_get_targets (data, targets, n_targets);
+      GdkAtom *tmp_targets;
+      gint tmp_n_targets;
+       
+      result = gtk_selection_data_get_targets (data, &tmp_targets, &tmp_n_targets);
+ 
+      if (gdk_display_supports_selection_notification (gtk_clipboard_get_display (clipboard)))
+ 	{
+ 	  clipboard->n_cached_targets = tmp_n_targets;
+ 	  clipboard->cached_targets = g_memdup (tmp_targets,
+ 						tmp_n_targets * sizeof (GdkAtom));
+ 	}
+ 
+      if (n_targets)
+ 	*n_targets = tmp_n_targets;
+ 
+      if (targets)
+ 	*targets = tmp_targets;
+      else
+ 	g_free (tmp_targets);
+      
       gtk_selection_data_free (data);
     }
 
@@ -1135,6 +1229,8 @@ clipboard_peek (GdkDisplay *display,
       clipboard = g_object_new (GTK_TYPE_CLIPBOARD, NULL);
       clipboard->selection = selection;
       clipboard->display = display;
+      clipboard->n_cached_targets = -1;
+      clipboard->n_storable_targets = -1;
       clipboards = g_slist_prepend (clipboards, clipboard);
       g_object_set_data (G_OBJECT (display), "gtk-clipboard-list", clipboards);
       g_signal_connect (display, "closed",
@@ -1145,6 +1241,57 @@ clipboard_peek (GdkDisplay *display,
   return clipboard;
 }
 
+static void
+gtk_clipboard_owner_change (GtkClipboard        *clipboard,
+			    GdkEventOwnerChange *event)
+{
+  if (clipboard->n_cached_targets != -1)
+    {
+      clipboard->n_cached_targets = -1;
+      g_free (clipboard->cached_targets);
+    }
+}
+
+/**
+ * gtk_clipboard_wait_is_target_available:
+ * @clipboard: a #GtkClipboard
+ * @target:    A #GdkAtom indicating which target to look for.
+ *
+ * Checks if a clipboard supports pasting data of a given type. This
+ * function can be used to determine if a "Paste" menu item should be
+ * insensitive or not.
+ *
+ * If you want to see if there's text available on the clipboard, use
+ * gtk_clipboard_wait_is_text_available () instead.
+ *
+ * Return value: %TRUE if the target is available, %FALSE otherwise.
+ *
+ * Since: 2.6
+ */
+gboolean
+gtk_clipboard_wait_is_target_available (GtkClipboard *clipboard,
+					GdkAtom       target)
+{
+  GdkAtom *targets;
+  gint i, n_targets;
+  gboolean retval = FALSE;
+    
+  if (!gtk_clipboard_wait_for_targets (clipboard, &targets, &n_targets))
+    return FALSE;
+
+  for (i = 0; i < n_targets; i++)
+    {
+      if (targets[i] == target)
+	{
+	  retval = TRUE;
+	  break;
+	}
+    }
+
+  g_free (targets);
+  
+  return retval;
+}
 
 /**
  * _gtk_clipboard_handle_event:
@@ -1168,3 +1315,160 @@ _gtk_clipboard_handle_event (GdkEventOwnerChange *event)
 		   clipboard_signals[OWNER_CHANGE], 0, event, NULL);
 }
 
+static gboolean
+gtk_clipboard_store_timeout (GtkClipboard *clipboard)
+{
+  g_main_loop_quit (clipboard->store_loop);
+  
+  return FALSE;
+}
+
+/**
+ * gtk_clipboard_set_can_store:
+ * @clipboard: a #GtkClipboard
+ * @targets: array containing information about which forms should be stored
+ *           or %NULL to indicate that all forms should be stored.
+ * @n_targets: number of elements in @targets
+ *
+ * Hints that the clipboard data should be stored somewhere when the
+ * application exits or when gtk_clipboard_store () is called.
+ *
+ * This value is reset when the clipboard owner changes.
+ * Where the clipboard data is stored is platform dependent,
+ * see gdk_display_store_clipboard () for more information.
+ * 
+ * Since: 2.6
+ */
+void
+gtk_clipboard_set_can_store (GtkClipboard   *clipboard,
+ 			     GtkTargetEntry *targets,
+ 			     gint            n_targets)
+{
+  GtkWidget *clipboard_widget;
+  int i;
+  static const GtkTargetEntry save_targets[] = {
+    { "SAVE_TARGETS", 0, TARGET_SAVE_TARGETS }
+  };
+  
+  g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));
+  g_return_if_fail (clipboard->selection == GDK_SELECTION_CLIPBOARD);
+  
+  g_free (clipboard->storable_targets);
+  
+  clipboard_widget = get_clipboard_widget (clipboard->display);
+
+  /* n_storable_targets being -1 means that
+   * gtk_clipboard_set_can_store hasn't been called since the
+   * clipboard owner changed. We only want to add SAVE_TARGETS and 
+   * ref the owner once , so we do that here
+   */
+  
+  if (clipboard->n_storable_targets == -1)
+    {
+      gtk_selection_add_targets (clipboard_widget, clipboard->selection,
+				 save_targets, 1);
+
+      /* Ref the owner so it won't go away */
+      if (clipboard->have_owner)
+	g_object_ref (clipboard->user_data);
+    }
+  
+  clipboard->n_storable_targets = n_targets;
+  clipboard->storable_targets = g_new (GdkAtom, n_targets);
+  for (i = 0; i < n_targets; i++)
+    clipboard->storable_targets[i] = gdk_atom_intern (targets[i].target, FALSE);
+}
+
+static gboolean
+gtk_clipboard_selection_notify (GtkWidget         *widget,
+				GdkEventSelection *event,
+				GtkClipboard      *clipboard)
+{
+  if (event->selection == gdk_atom_intern ("CLIPBOARD_MANAGER", FALSE) &&
+      clipboard->storing_selection)
+    g_main_loop_quit (clipboard->store_loop);
+
+  return FALSE;
+}
+
+/**
+ * gtk_clipboard_store:
+ * @clipboard: a #GtkClipboard
+ *
+ * Stores the current clipboard data somewhere so that it will stay
+ * around after the application has quit.
+ *
+ * Since: 2.6
+ */
+void
+gtk_clipboard_store (GtkClipboard *clipboard)
+{
+  GtkWidget *clipboard_widget;
+
+  g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));
+
+  if (clipboard->n_storable_targets < 0)
+    return;
+  
+  if (!gdk_display_supports_clipboard_persistence (clipboard->display))
+    return;
+
+  clipboard_widget = get_clipboard_widget (clipboard->display);
+  clipboard->notify_signal_id = g_signal_connect (clipboard_widget, "selection_notify_event",
+						  G_CALLBACK (gtk_clipboard_selection_notify), clipboard);
+  
+  gdk_display_store_clipboard (clipboard->display,
+			       clipboard_widget->window,
+			       clipboard_get_timestamp (clipboard),
+			       clipboard->storable_targets,
+			       clipboard->n_storable_targets);
+
+  clipboard->storing_selection = TRUE;
+
+  clipboard->store_loop = g_main_loop_new (NULL, TRUE);
+  clipboard->store_timeout = g_timeout_add (10000, (GSourceFunc) gtk_clipboard_store_timeout, clipboard);
+
+  if (g_main_loop_is_running (clipboard->store_loop))
+    {
+      GDK_THREADS_LEAVE ();
+      g_main_loop_run (clipboard->store_loop);
+      GDK_THREADS_ENTER ();
+    }
+  
+  g_main_loop_unref (clipboard->store_loop);
+  clipboard->store_loop = NULL;
+  
+  g_source_remove (clipboard->store_timeout);
+  clipboard->store_timeout = 0;
+  g_signal_handler_disconnect (clipboard_widget, clipboard->notify_signal_id);
+  clipboard->notify_signal_id = 0;
+  
+  clipboard->storing_selection = FALSE;
+}
+
+/* Stores all clipboard selections on all displays, called from
+ * gtk_main_quit ().
+ */
+void
+_gtk_clipboard_store_all (void)
+{
+  GtkClipboard *clipboard;
+  GSList *displays, *list;
+  
+  displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+
+  list = displays;
+  while (list)
+    {
+      GdkDisplay *display = list->data;
+
+      clipboard = clipboard_peek (display, GDK_SELECTION_CLIPBOARD, TRUE);
+
+      if (clipboard)
+	gtk_clipboard_store (clipboard);
+      
+      list = list->next;
+    }
+  g_slist_free (displays);
+  
+}
