@@ -250,7 +250,8 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * The license of the program. This string is displayed in a 
    * text view in a secondary dialog, therefore it is fine to use
-   * a long multi-paragraph text.
+   * a long multi-paragraph text. Note that the text is not wrapped
+   * in the text view, thus it must contain the intended linebreaks.
    *
    * Since: 2.6
    */  
@@ -1959,8 +1960,9 @@ display_license_dialog (GtkWidget *button,
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
 				       GTK_SHADOW_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-				  GTK_POLICY_AUTOMATIC,
+				  GTK_POLICY_NEVER,
 				  GTK_POLICY_AUTOMATIC);
+  g_signal_connect (sw, "map", G_CALLBACK (set_policy), NULL);
   gtk_container_set_border_width (GTK_CONTAINER (sw), 8);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), sw, TRUE, TRUE, 0);
 
