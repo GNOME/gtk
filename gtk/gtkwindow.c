@@ -40,6 +40,7 @@
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkplug.h"
 
 enum {
   SET_FOCUS,
@@ -3137,7 +3138,7 @@ gtk_window_show (GtkWidget *widget)
 
   /* Try to make sure that we have some focused widget
    */
-  if (!window->focus_widget)
+  if (!window->focus_widget && !GTK_IS_PLUG (window))
     gtk_window_move_focus (window, GTK_DIR_TAB_FORWARD);
   
   if (window->modal)

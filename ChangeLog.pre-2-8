@@ -1,3 +1,26 @@
+ Thu May 16 18:47:29 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkwindow.c (gtk_window_show): Disable the
+ 	focus-some-widget code for GtkPlug descendants.
+ 
+ 	* gtk/gtkplug.c (gtk_plug_focus_event): Eat 
+ 	focus-in/out events since they can be generated
+ 	by keyboard grabs, but are spurious for an embeddded
+ 	widget. (#79196, Padraig O'Briain)
+ 
+ 	* gtk/gtksocket.c (gtk_socket_size_request): Only
+ 	pay attention to the minimum size hints, and changes
+ 	to that ... ignore the default size.
+ 
+ 	* gtk/gtksocket.c (gtk_socket_send_configure_event):
+ 	Pass in root-window relative coordinates as per
+ 	the ICCCM.
+ 
+ 	* gtk/gtksocket.c (gtk_socket_size_allocate): Send
+ 	as many synthetic configures as necessary to make
+	up for ConfigureRequest events we got. (#78799,
+	Dave Camp.)
+
 Thu May 16 23:59:56 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from gtk-2-0.
