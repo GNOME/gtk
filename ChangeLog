@@ -1,5 +1,8 @@
 2003-09-18  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkaction.c (gtk_action_finalize): Call g_closure_unref() to
+	unref a closure, not g_object_unref().  (#122637, Marco Pesenti Gritti)
+
 	Install accelerators on actions, not on proxies, support
 	accelerator-only actions:
 	
@@ -13,10 +16,10 @@
 	(gtk_action_[dis]connect_accelerator): New functions.
 
 	* gtk/gtkaction.c (struct _GtkActionPrivate): Add accel_group,
-	accel_closure and accel_count. We must have a reference to the accel_group,
-	since we need it in connect_proxy. The count is necessary to ensure
-	that the accelerator isn't removed before the last proxy requesting 
-	it has been unmerged.
+	accel_closure and accel_count. We must have a reference to the 
+	accel_group, since we need it in connect_proxy. The count is necessary
+	to ensure that the accelerator isn't removed before the last proxy 
+	requesting it has been unmerged.
 	(connect_proxy): Connect the accelerator to the 
 	action now, only set the accel_path on the menuitem.
 	(remove_proxy): Disconnect the accelerator from the action, not from

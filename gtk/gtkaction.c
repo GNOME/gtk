@@ -288,7 +288,6 @@ static void
 gtk_action_finalize (GObject *object)
 {
   GtkAction *action;
-
   action = GTK_ACTION (object);
 
   g_free (action->private_data->name);
@@ -297,7 +296,7 @@ gtk_action_finalize (GObject *object)
   g_free (action->private_data->tooltip);
   g_free (action->private_data->stock_id);
 
-  g_object_unref (action->private_data->accel_closure);
+  g_closure_unref (action->private_data->accel_closure);
   if (action->private_data->accel_group)
     g_object_unref (action->private_data->accel_group);
 }
