@@ -297,63 +297,31 @@ update_preview_cb (GtkFileChooser *chooser)
 }
 
 static void
-set_folder_nonexistent_cb (GtkButton *button,
+set_folder_nonexistent_cb (GtkButton      *button,
 			   GtkFileChooser *chooser)
 {
   gtk_file_chooser_set_current_folder (chooser, "/nonexistent");
 }
 
 static void
-set_folder_existing_nonexistent_cb (GtkButton *button,
+set_folder_existing_nonexistent_cb (GtkButton      *button,
 				    GtkFileChooser *chooser)
 {
   gtk_file_chooser_set_current_folder (chooser, "/usr/nonexistent");
 }
 
 static void
-set_filename_nonexistent_cb (GtkButton *button,
+set_filename_nonexistent_cb (GtkButton      *button,
 			     GtkFileChooser *chooser)
 {
   gtk_file_chooser_set_filename (chooser, "/nonexistent");
 }
 
 static void
-set_filename_existing_nonexistent_cb (GtkButton *button,
+set_filename_existing_nonexistent_cb (GtkButton      *button,
 				      GtkFileChooser *chooser)
 {
   gtk_file_chooser_set_filename (chooser, "/usr/nonexistent");
-}
-
-static GtkWidget *
-extra_widget_create (GtkFileChooser *chooser)
-{
-  GtkWidget *box;
-  GtkWidget *widget;
-
-  box = gtk_vbox_new (FALSE, 6);
-
-  widget = gtk_button_new_with_label ("set_current_folder (\"/nonexistent\")");
-  g_signal_connect (widget, "clicked",
-		    G_CALLBACK (set_folder_nonexistent_cb), chooser);
-  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
-
-  widget = gtk_button_new_with_label ("set_current_folder (\"/usr/nonexistent\"");
-  g_signal_connect (widget, "clicked",
-		    G_CALLBACK (set_folder_existing_nonexistent_cb), chooser);
-  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
-
-  widget = gtk_button_new_with_label ("set_filename (\"/nonexistent\"");
-  g_signal_connect (widget, "clicked",
-		    G_CALLBACK (set_filename_nonexistent_cb), chooser);
-  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
-
-  widget = gtk_button_new_with_label ("set_filename (\"/usr/nonexistent\"");
-  g_signal_connect (widget, "clicked",
-		    G_CALLBACK (set_filename_existing_nonexistent_cb), chooser);
-  gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
-
-  gtk_widget_show_all (box);
-  return box;
 }
 
 int
@@ -364,6 +332,7 @@ main (int argc, char **argv)
   GtkWidget *button;
   GtkWidget *dialog;
   GtkWidget *prop_editor;
+  GtkWidget *extra;
   GtkFileFilter *filter;
   GtkWidget *preview_vbox;
   int i;
@@ -457,7 +426,9 @@ main (int argc, char **argv)
 
   /* Extra widget */
 
-  gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), extra_widget_create (GTK_FILE_CHOOSER (dialog)));
+  extra = gtk_check_button_new_with_mnemonic ("Lar_t whoever asks about this button");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (extra), TRUE);
+  gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), extra);
 
   /* Shortcuts */
 
@@ -486,6 +457,26 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (vbbox), button);
   g_signal_connect_swapped (button, "clicked",
 			    G_CALLBACK (gtk_file_chooser_unselect_all), dialog);
+
+  button = gtk_button_new_with_label ("set_current_folder (\"/nonexistent\")");
+  gtk_container_add (GTK_CONTAINER (vbbox), button);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (set_folder_nonexistent_cb), dialog);
+
+  button = gtk_button_new_with_label ("set_current_folder (\"/usr/nonexistent\"");
+  gtk_container_add (GTK_CONTAINER (vbbox), button);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (set_folder_existing_nonexistent_cb), dialog);
+
+  button = gtk_button_new_with_label ("set_filename (\"/nonexistent\"");
+  gtk_container_add (GTK_CONTAINER (vbbox), button);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (set_filename_nonexistent_cb), dialog);
+
+  button = gtk_button_new_with_label ("set_filename (\"/usr/nonexistent\"");
+  gtk_container_add (GTK_CONTAINER (vbbox), button);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (set_filename_existing_nonexistent_cb), dialog);
 
   gtk_widget_show_all (control_window);
   
