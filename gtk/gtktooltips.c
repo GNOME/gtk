@@ -472,6 +472,8 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
 
   gdk_window_get_pointer (NULL, &x, NULL, NULL);
   gdk_window_get_origin (widget->window, NULL, &y);
+  if (GTK_WIDGET_NO_WINDOW (widget))
+    y += widget->allocation.y;
 
   x -= ((w >> 1) + 4);
 

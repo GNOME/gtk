@@ -1,3 +1,9 @@
+Sat Jan 16 19:42:48 1999  George Lebl  <jirka@5z.com>
+
+	* gtk/gtktooltips.c: for NO_WINDOW widgets, add their allocation.y
+	  to the position of the tooltip. This fixes tooltip positioning
+	  problems with some widgets such as a checkbox.
+
 Sat Jan 16 14:01:53 1999  Stuart Parmenter <pavlov@gtk.org>
 
 	* gtk/gtklayout.c (gtk_layout_put): check for child widget being NULL
