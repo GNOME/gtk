@@ -181,7 +181,7 @@ gdk_internal_connection_watch (Display  *display,
   if (opening)
     *watch_data = (XPointer)gdk_add_connection_handler (display, fd);
   else
-    gdk_remove_connection_handler ((GdkInternalConnection *)watch_data);
+    gdk_remove_connection_handler ((GdkInternalConnection *)*watch_data);
 }
 
 gboolean
