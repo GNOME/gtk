@@ -6000,11 +6000,11 @@ gtk_text_btree_node_check_consistency(GtkTextBTreeNode *node)
 }
 
 static void
-listify_foreach(gpointer key, gpointer value, gpointer user_data)
+listify_foreach(GtkTextTag *tag, gpointer user_data)
 {
   GSList** listp = user_data;
 
-  *listp = g_slist_prepend(*listp, value);
+  *listp = g_slist_prepend(*listp, tag);
 }
 
 static GSList*

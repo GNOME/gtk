@@ -1475,6 +1475,39 @@ get_event_coordinates (GdkEvent *event, gint *x, gint *y)
 }
 
 static gint
+emit_event_on_tags (GtkWidget   *widget,
+                    GdkEvent    *event,
+                    GtkTextIter *iter)
+{
+  GSList *tags;
+  GSList *tmp;
+  gint retval = FALSE;
+  GtkTextView *text_view;
+
+  text_view = GTK_TEXT_VIEW (widget);
+  
+  tags = gtk_text_buffer_get_tags (text_view->buffer, iter);
+          
+  tmp = tags;
+  while (tmp != NULL)
+    {
+      GtkTextTag *tag = tmp->data;
+
+      if (gtk_text_tag_event (tag, GTK_OBJECT (widget), event, iter))
+        {
+          retval = TRUE;
+          break;
+        }
+
+      tmp = g_slist_next (tmp);
+    }
+
+  g_slist_free (tags);
+
+  return retval;
+}
+     
+static gint
 gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
 {
   GtkTextView *text_view;
@@ -1489,7 +1522,6 @@ gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
   if (get_event_coordinates (event, &x, &y))
     {
       GtkTextIter iter;
-      gint retval = FALSE;
 
       x += text_view->xoffset;
       y += text_view->yoffset;
@@ -1501,33 +1533,23 @@ gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
                                          &iter,
                                          x, y);
 
-      {
-        GSList *tags;
-        GSList *tmp;
-          
-        tags = gtk_text_buffer_get_tags (text_view->buffer, &iter);
-          
-        tmp = tags;
-        while (tmp != NULL)
-          {
-            GtkTextTag *tag = tmp->data;
-
-            if (gtk_text_tag_event (tag, GTK_OBJECT (widget), event, &iter))
-              {
-                retval = TRUE;
-                break;
-              }
-
-            tmp = g_slist_next (tmp);
-          }
-
-        g_slist_free (tags);
-      }
-        
-      return retval;
+      return emit_event_on_tags (widget, event, &iter);
     }
+  else if (event->type == GDK_KEY_PRESS ||
+           event->type == GDK_KEY_RELEASE)
+    {
+      GtkTextMark *insert;
+      GtkTextIter iter;
 
-  return FALSE;
+      insert = gtk_text_buffer_get_mark (text_view->buffer,
+                                         "insert");      
+
+      gtk_text_buffer_get_iter_at_mark (text_view->buffer, &iter, insert);
+
+      return emit_event_on_tags (widget, event, &iter);
+    }
+  else
+    return FALSE;
 }
 
 static gint

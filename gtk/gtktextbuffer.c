@@ -806,7 +806,6 @@ gtk_text_buffer_create_tag(GtkTextBuffer *buffer,
   GtkTextTag *tag;
   
   g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
-  g_return_val_if_fail(tag_name != NULL, NULL);
   
   tag = gtk_text_tag_new(tag_name);
 
@@ -836,10 +835,57 @@ gtk_text_buffer_real_remove_tag (GtkTextBuffer *buffer,
 
 static void
 gtk_text_buffer_emit_tag(GtkTextBuffer *buffer,
-                         const gchar *name,
+                         GtkTextTag *tag,
                          gboolean apply,
                          const GtkTextIter *start,
                          const GtkTextIter *end)
+{
+  g_return_if_fail(tag != NULL);
+
+  if (apply)
+    gtk_signal_emit(GTK_OBJECT(buffer), signals[APPLY_TAG],
+                    tag, start, end);
+  else
+    gtk_signal_emit(GTK_OBJECT(buffer), signals[REMOVE_TAG],
+                    tag, start, end);
+}
+
+
+void
+gtk_text_buffer_apply_tag(GtkTextBuffer *buffer,
+                          GtkTextTag    *tag,
+                          const GtkTextIter *start,
+                          const GtkTextIter *end)
+{
+  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
+  g_return_if_fail(GTK_IS_TEXT_TAG (tag));
+  g_return_if_fail(start != NULL);
+  g_return_if_fail(end != NULL);  
+
+  gtk_text_buffer_emit_tag(buffer, tag, TRUE, start, end);
+}
+
+void
+gtk_text_buffer_remove_tag(GtkTextBuffer *buffer,
+                           GtkTextTag    *tag,
+                           const GtkTextIter *start,
+                           const GtkTextIter *end)
+
+{
+  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
+  g_return_if_fail(GTK_IS_TEXT_TAG (tag));
+  g_return_if_fail(start != NULL);
+  g_return_if_fail(end != NULL);
+
+  gtk_text_buffer_emit_tag(buffer, tag, FALSE, start, end);
+}
+
+
+void
+gtk_text_buffer_apply_tag_by_name (GtkTextBuffer *buffer,
+                                   const gchar *name,
+                                   const GtkTextIter *start,
+                                   const GtkTextIter *end)
 {
   GtkTextTag *tag;
   
@@ -857,33 +903,34 @@ gtk_text_buffer_emit_tag(GtkTextBuffer *buffer,
       return;
     }
 
-  if (apply)
-    gtk_signal_emit(GTK_OBJECT(buffer), signals[APPLY_TAG],
-                    tag, start, end);
-  else
-    gtk_signal_emit(GTK_OBJECT(buffer), signals[REMOVE_TAG],
-                    tag, start, end);
-}
-
-
-void
-gtk_text_buffer_apply_tag(GtkTextBuffer *buffer,
-                          const gchar *name,
-                          const GtkTextIter *start,
-                          const GtkTextIter *end)
-{
-  gtk_text_buffer_emit_tag(buffer, name, TRUE, start, end);
+  gtk_text_buffer_emit_tag(buffer, tag, TRUE, start, end);
 }
 
 void
-gtk_text_buffer_remove_tag(GtkTextBuffer *buffer,
-                           const gchar *name,
-                           const GtkTextIter *start,
-                           const GtkTextIter *end)
-
+gtk_text_buffer_remove_tag_by_name (GtkTextBuffer *buffer,
+                                    const gchar *name,
+                                    const GtkTextIter *start,
+                                    const GtkTextIter *end)
 {
-  gtk_text_buffer_emit_tag(buffer, name, FALSE, start, end);
+  GtkTextTag *tag;
+  
+  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
+  g_return_if_fail(name != NULL);
+  g_return_if_fail(start != NULL);
+  g_return_if_fail(end != NULL);
+
+  tag = gtk_text_tag_table_lookup(buffer->tag_table,
+                                  name);
+
+  if (tag == NULL)
+    {
+      g_warning("Unknown tag `%s'", name);
+      return;
+    }
+  
+  gtk_text_buffer_emit_tag(buffer, tag, FALSE, start, end);
 }
+
 
 /*
  * Obtain various iterators

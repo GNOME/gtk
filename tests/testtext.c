@@ -344,6 +344,10 @@ tag_event_handler (GtkTextTag *tag, GtkWidget *widget, GdkEvent *event,
         
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
+      printf ("Key event at char %d tag `%s'\n",
+              char_index, tag->name);
+      break;
+      
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
     case GDK_PROPERTY_NOTIFY:
@@ -530,45 +534,45 @@ fill_example_buffer (GtkTextBuffer *buffer)
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 6);
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 0, 13);
 
-      gtk_text_buffer_apply_tag (buffer, "fg_blue", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "fg_blue", &iter, &iter2);
 
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 1, 10);
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 1, 16);
 
-      gtk_text_buffer_apply_tag (buffer, "underline", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "underline", &iter, &iter2);
 
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 1, 14);
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 1, 24);
 
-      gtk_text_buffer_apply_tag (buffer, "overstrike", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "overstrike", &iter, &iter2);
           
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 9);
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 0, 16);
 
-      gtk_text_buffer_apply_tag (buffer, "bg_green", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "bg_green", &iter, &iter2);
   
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 4, 2);
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 4, 10);
 
-      gtk_text_buffer_apply_tag (buffer, "bg_green", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "bg_green", &iter, &iter2);
 
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 4, 8);
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 4, 15);
 
-      gtk_text_buffer_apply_tag (buffer, "fg_red", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "fg_red", &iter, &iter2);
 #endif
 
       gtk_text_buffer_get_iter_at_mark (buffer, &iter, temp_mark);
       gtk_text_buffer_insert (buffer, &iter, "Centered text!\n", -1);
 	  
       gtk_text_buffer_get_iter_at_mark (buffer, &iter2, temp_mark);
-      gtk_text_buffer_apply_tag (buffer, "centered", &iter2, &iter);
+      gtk_text_buffer_apply_tag_by_name (buffer, "centered", &iter2, &iter);
 
       gtk_text_buffer_move_mark (buffer, temp_mark, &iter);
       gtk_text_buffer_insert (buffer, &iter, "Word wrapped, Right-to-left Quote\n", -1);
       gtk_text_buffer_insert (buffer, &iter, "وقد بدأ ثلاث من أكثر المؤسسات تقدما في شبكة اكسيون برامجها كمنظمات لا تسعى للربح، ثم تحولت في السنوات الخمس الماضية إلى مؤسسات مالية منظمة، وباتت جزءا من النظام المالي في بلدانها، ولكنها تتخصص في خدمة قطاع المشروعات الصغيرة. وأحد أكثر هذه المؤسسات نجاحا هو »بانكوسول« في بوليفيا.\n", -1);
       gtk_text_buffer_get_iter_at_mark (buffer, &iter2, temp_mark);
-      gtk_text_buffer_apply_tag (buffer, "rtl_quote", &iter2, &iter);
+      gtk_text_buffer_apply_tag_by_name (buffer, "rtl_quote", &iter2, &iter);
 	  
       ++i;
     }
@@ -875,13 +879,13 @@ do_apply_editable (gpointer callback_data,
       if (callback_action)
         {
           gtk_text_buffer_remove_tag (view->buffer->buffer,
-                                      "ineditable",
+                                      view->buffer->not_editable_tag,
                                       &start, &end);
         }
       else
         {
           gtk_text_buffer_apply_tag (view->buffer->buffer,
-                                     "ineditable",
+                                     view->buffer->not_editable_tag,
                                      &start, &end);
         }
     }
@@ -1119,8 +1123,7 @@ create_buffer (void)
   buffer->filename = NULL;
   buffer->untitled_serial = -1;
 
-  buffer->not_editable_tag = gtk_text_buffer_create_tag (buffer->buffer,
-                                                         "ineditable");
+  buffer->not_editable_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
   gtk_object_set (GTK_OBJECT (buffer->not_editable_tag),
                   "editable", FALSE,
                   "foreground", "purple", NULL);

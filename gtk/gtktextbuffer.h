@@ -168,18 +168,28 @@ void gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
 
 /* Tag manipulation */
 void gtk_text_buffer_apply_tag             (GtkTextBuffer     *buffer,
-                                            const gchar       *name,
+                                            GtkTextTag        *tag,
                                             const GtkTextIter *start_index,
                                             const GtkTextIter *end_index);
 void gtk_text_buffer_remove_tag            (GtkTextBuffer     *buffer,
+                                            GtkTextTag        *tag,
+                                            const GtkTextIter *start_index,
+                                            const GtkTextIter *end_index);
+void gtk_text_buffer_apply_tag_by_name     (GtkTextBuffer     *buffer,
                                             const gchar       *name,
                                             const GtkTextIter *start_index,
                                             const GtkTextIter *end_index);
+void gtk_text_buffer_remove_tag_by_name    (GtkTextBuffer     *buffer,
+                                            const gchar       *name,
+                                            const GtkTextIter *start_index,
+                                            const GtkTextIter *end_index);
+
 
 
 
 /* You can either ignore the return value, or use it to
-   set the attributes of the tag */
+ * set the attributes of the tag. tag_name can be NULL
+ */
 GtkTextTag    *gtk_text_buffer_create_tag (GtkTextBuffer *buffer,
                                            const gchar   *tag_name);
 

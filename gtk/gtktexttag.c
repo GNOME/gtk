@@ -331,7 +331,7 @@ gtk_text_tag_destroy (GtkObject *object)
   g_assert(!tkxt_tag->values->realized);
   
   if (tkxt_tag->table)
-    gtk_text_tag_table_remove(tkxt_tag->table, tkxt_tag->name);
+    gtk_text_tag_table_remove(tkxt_tag->table, tkxt_tag);
 
   g_assert(tkxt_tag->table == NULL);
   
@@ -915,12 +915,9 @@ typedef struct {
 } DeltaData;
 
 static void
-delta_priority_foreach(gpointer key, gpointer value, gpointer user_data)
+delta_priority_foreach(GtkTextTag *tag, gpointer user_data)
 {
-  GtkTextTag *tag;
   DeltaData *dd = user_data;
-  
-  tag = GTK_TEXT_TAG(value);
 
   if (tag->priority >= dd->low && tag->priority <= dd->high)
     tag->priority += dd->delta;
@@ -951,7 +948,7 @@ gtk_text_tag_set_priority(GtkTextTag *tag,
     }
 
     gtk_text_tag_table_foreach(tag->table, delta_priority_foreach,
-                                &dd);
+                               &dd);
     
     tag->priority = priority;
 }

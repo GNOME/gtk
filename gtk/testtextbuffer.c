@@ -346,41 +346,41 @@ fill_buffer (GtkTextBuffer *buffer)
       iter2 = iter;
       gtk_text_iter_forward_chars (&iter2, 10);
 
-      gtk_text_buffer_apply_tag (buffer, "fg_blue", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "fg_blue", &iter, &iter2);
 
       gtk_text_iter_forward_chars (&iter, 7);
       gtk_text_iter_forward_chars (&iter2, 10);
       
-      gtk_text_buffer_apply_tag (buffer, "bg_green", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "bg_green", &iter, &iter2);
 
       gtk_text_iter_forward_chars (&iter, 12);
       gtk_text_iter_forward_chars (&iter2, 10);
       
-      gtk_text_buffer_apply_tag (buffer, "bg_green", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "bg_green", &iter, &iter2);
 
       gtk_text_iter_forward_chars (&iter, 10);
       gtk_text_iter_forward_chars (&iter2, 15);
       
-      gtk_text_buffer_apply_tag (buffer, "fg_red", &iter, &iter2);
-      gtk_text_buffer_apply_tag (buffer, "fg_blue", &iter, &iter2);      
+      gtk_text_buffer_apply_tag_by_name (buffer, "fg_red", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "fg_blue", &iter, &iter2);      
 
       gtk_text_iter_forward_chars (&iter, 20);
       gtk_text_iter_forward_chars (&iter2, 20);
       
-      gtk_text_buffer_apply_tag (buffer, "fg_red", &iter, &iter2);
-      gtk_text_buffer_apply_tag (buffer, "fg_blue", &iter, &iter2);      
+      gtk_text_buffer_apply_tag_by_name (buffer, "fg_red", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "fg_blue", &iter, &iter2);      
 
       gtk_text_iter_backward_chars (&iter, 25);
       gtk_text_iter_forward_chars (&iter2, 5);
       
-      gtk_text_buffer_apply_tag (buffer, "fg_red", &iter, &iter2);
-      gtk_text_buffer_apply_tag (buffer, "fg_blue", &iter, &iter2);      
+      gtk_text_buffer_apply_tag_by_name (buffer, "fg_red", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "fg_blue", &iter, &iter2);      
 
       gtk_text_iter_forward_chars (&iter, 15);
       gtk_text_iter_backward_chars (&iter2, 10);
 
-      gtk_text_buffer_remove_tag (buffer, "fg_red", &iter, &iter2);
-      gtk_text_buffer_remove_tag (buffer, "fg_blue", &iter, &iter2);      
+      gtk_text_buffer_remove_tag_by_name (buffer, "fg_red", &iter, &iter2);
+      gtk_text_buffer_remove_tag_by_name (buffer, "fg_blue", &iter, &iter2);      
       
       ++i;
     }
