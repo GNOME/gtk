@@ -420,11 +420,14 @@ pointer_changed (GObject *object, GParamSpec *pspec, gpointer data)
 static void
 object_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
-  GtkLabel *label = GTK_LABEL (data);
+  GtkWidget *label, *button;
   gchar *str;
   GObject *obj;
   const gchar *name;
   
+  GList *children = gtk_container_get_children (GTK_CONTAINER (data)); 
+  label = GTK_WIDGET (children->data);
+  button = GTK_WIDGET (children->next->data);
   g_object_get (object, pspec->name, &obj, NULL);
 
   if (obj)
@@ -433,7 +436,9 @@ object_changed (GObject *object, GParamSpec *pspec, gpointer data)
     name = "unknown";
   str = g_strdup_printf ("Object: %p (%s)", obj, name);
   
-  gtk_label_set_text (label, str);
+  gtk_label_set_text (GTK_LABEL (label), str);
+  gtk_widget_set_sensitive (button, G_IS_OBJECT (obj));
+
   g_free (str);
 }
 
@@ -450,6 +455,19 @@ window_destroy (gpointer data)
   g_object_steal_data (data, "prop-editor-win");
 }
 
+static void
+object_properties (GtkWidget *button, 
+		   GObject   *object)
+{
+  gchar *name;
+  GObject *obj;
+
+  name = (gchar *) g_object_get_data (G_OBJECT (button), "property-name");
+  g_object_get (object, name, &obj, NULL);
+  if (G_IS_OBJECT (obj)) 
+    create_prop_editor (obj, 0);
+}
+ 
 static GtkWidget *
 property_widget (GObject *object, GParamSpec *spec, gboolean can_modify)
 {
@@ -627,11 +645,23 @@ property_widget (GObject *object, GParamSpec *spec, gboolean can_modify)
     }
   else if (type == G_TYPE_PARAM_OBJECT)
     {
-      prop_edit = gtk_label_new ("");
+      GtkWidget *label, *button;
+
+      prop_edit = gtk_hbox_new (FALSE, 5);
+
+      label = gtk_label_new ("");
+      button = gtk_button_new_with_label ("Properties");
+      g_object_set_data (G_OBJECT (button), "property-name", spec->name);
+      g_signal_connect (button, "clicked", 
+			G_CALLBACK (object_properties), 
+			object);
+
+      gtk_container_add (GTK_CONTAINER (prop_edit), label);
+      gtk_container_add (GTK_CONTAINER (prop_edit), button);
       
       g_object_connect_property (object, spec->name,
 				 G_CALLBACK (object_changed),
-				 prop_edit, G_OBJECT (prop_edit));
+				 prop_edit, G_OBJECT (label));
     }
   else
     {  

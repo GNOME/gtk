@@ -1,3 +1,9 @@
+2003-05-17  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/prop-editor.c: Add navigation for object properties, so
+	that you can easily edit the properties of the parent of a widget.
+	(#113152)
+
 Wed May 14 17:45:32 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkkeysyms.h gdk/gdkkeynames.c gdk/gdkkeyuni.c:
