@@ -2021,6 +2021,12 @@ gtk_tree_model_sort_build_level (GtkTreeModelSort *tree_model_sort,
 					&iter,
 					&child_parent_iter) == FALSE)
 	return;
+
+      /* stamp may have changed */
+      gtk_tree_model_sort_convert_iter_to_child_iter (tree_model_sort,
+						      &child_parent_iter,
+						      &parent_iter);
+
       length = gtk_tree_model_iter_n_children (tree_model_sort->child_model, &child_parent_iter);
     }
 

@@ -1,3 +1,9 @@
+Sat Feb  9 22:57:43 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_build_level): convert
+	the iter to a child iter again, after doing _iter_children. It's
+	possible that _iter_children added some rows and updated the stamp.
+
 2002-02-09  Daniel Elstner  <daniel.elstner@gmx.net>
 
 	* gtk/gtktextchild.c: Use == rather than = in sanity
