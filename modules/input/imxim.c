@@ -25,8 +25,8 @@
 static const GtkIMContextInfo xim_ja_info = { 
   "xim",		           /* ID */
   N_("X Input Method"),            /* Human readable name */
-  "gtk+",			   /* Translation domain */
-   GTK_LOCALEDIR,		   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
+  GETTEXT_PACKAGE,		   /* Translation domain */
+  GTK_LOCALEDIR,		   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   "ko:ja:zh"		           /* Languages for which this module is the default */
 };
 

@@ -124,8 +124,8 @@ inuktitut_init (GtkIMContextSimple *im_context)
 static const GtkIMContextInfo inuktitut_info = { 
   "inuktitut",		   /* ID */
   N_("Inukitut (Transliterated)"),         /* Human readable name */
-  "gtk+",		   /* Translation domain */
-   GTK_LOCALEDIR,	   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
+  GETTEXT_PACKAGE,	   /* Translation domain */
+  GTK_LOCALEDIR,	   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   "iu"			   /* Languages for which this module is the default */
 };
 

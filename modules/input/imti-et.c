@@ -450,7 +450,7 @@ ti_et_init (GtkIMContextSimple *im_context)
 static const GtkIMContextInfo ti_et_info = { 
   "ti_et",		   /* ID */
   N_("Tigrigna-Ethiopian (EZ+)"),         /* Human readable name */
-  "gtk+",		   /* Translation domain */
+  GETTEXT_PACKAGE,	   /* Translation domain */
    GTK_LOCALEDIR,	   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   "ti"			   /* Languages for which this module is the default */
 };

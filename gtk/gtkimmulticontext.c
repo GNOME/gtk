@@ -25,6 +25,7 @@
 #include "gtkimmulticontext.h"
 #include "gtkimmodule.h"
 #include "gtkradiomenuitem.h"
+#include "gtkintl.h"
 
 static void     gtk_im_multicontext_class_init         (GtkIMMulticontextClass  *class);
 static void     gtk_im_multicontext_init               (GtkIMMulticontext       *im_multicontext);
@@ -480,9 +481,36 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
   for (i=0; i < n_contexts; i++)
     {
       GtkWidget *menuitem;
-
+      const gchar *translated_name;
+#ifdef ENABLE_NLS
+      if (contexts[i]->domain && contexts[i]->domain_dirname &&
+	  contexts[i]->domain[0] && contexts[i]->domain_dirname[0])
+	{
+	  if (strcmp (contexts[i]->domain, GETTEXT_PACKAGE) == 0 &&
+	      strcmp (contexts[i]->domain_dirname, GTK_LOCALEDIR) == 0)
+	    /* Input method may have a name in the GTK+ message catalog */
+	    translated_name = _(contexts[i]->context_name);
+	  else
+	    /* Input method has own message catalog */
+	    {
+	      bindtextdomain (contexts[i]->domain,
+			      contexts[i]->domain_dirname);
+#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
+	      bind_textdomain_codeset (contexts[i]->domain, "UTF-8");
+#endif
+	      translated_name = dgettext (contexts[i]->domain, contexts[i]->context_name);
+	    }
+	}
+      else
+	/* Either domain or domain_dirname is NULL or "". We assume that
+	 * input method does not want a translated name in this case
+	 */
+	translated_name = contexts[i]->context_name;
+#else
+      translated_name = contexts[i]->context_name;
+#endif
       menuitem = gtk_radio_menu_item_new_with_label (group,
-                                                     contexts[i]->context_name);
+						     translated_name);
       
       if ((global_context_id == NULL && group == NULL) ||
           (global_context_id &&

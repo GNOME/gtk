@@ -175,7 +175,7 @@ thai_broken_init (GtkIMContextSimple *im_context)
 static const GtkIMContextInfo thai_broken_info = { 
   "thai_broken",	   /* ID */
   N_("Thai (Broken)"),     /* Human readable name */
-  "gtk+",		   /* Translation domain */
+  GETTEXT_PACKAGE,	   /* Translation domain */
    GTK_LOCALEDIR,	   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   ""			   /* Languages for which this module is the default */
 };
