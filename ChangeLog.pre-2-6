@@ -1,3 +1,17 @@
+Sun Nov 12 14:10:09 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkselection-x11.c (gdk_utf8_to_compound_text): Fix
+	problem with using result of g_get_charset() backwards -
+	pointed out by Mikael Hermansson <mikeh@bahnhof.se>.
+
+	* gtk/gtkwindow.c (gtk_window_compute_hints): Support
+	negative min_width/height and max_width/height to
+	mean "requisition"; this allows setting a window
+	to be user-resizable in only one direction easily.
+
+	* gtk/testgtk.c (create_main_window): Remove hard-coded
+	usize - set a default size in the vertical direction.
+
 Sun Nov 12 13:33:01 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrange.c: Add some missing casts. Support 

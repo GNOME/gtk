@@ -415,7 +415,7 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
       gint local_count;
       gint i;
       gchar *charset = NULL;
-      gboolean need_conversion= g_get_charset (&charset);
+      gboolean need_conversion = !g_get_charset (&charset);
       gint count = 0;
       GError *error = NULL;
       
@@ -605,7 +605,7 @@ gdk_utf8_to_compound_text (const gchar *str,
 
   g_return_val_if_fail (str != NULL, FALSE);
 
-  need_conversion = g_get_charset (&charset);
+  need_conversion = !g_get_charset (&charset);
 
   tmp_str = sanitize_utf8 (str);
 

@@ -2125,8 +2125,15 @@ gtk_window_compute_hints (GtkWindow   *window,
   
   if (*new_flags & GDK_HINT_MIN_SIZE)
     {
-      new_geometry->min_width += extra_width;
-      new_geometry->min_height += extra_height;
+      if (new_geometry->min_width < 0)
+	new_geometry->min_width = requisition.width;
+      else
+	new_geometry->min_width += extra_width;
+
+      if (new_geometry->min_height < 0)
+	new_geometry->min_width = requisition.height;
+      else
+	new_geometry->min_height += extra_height;
     }
   else if (!window->allow_shrink)
     {
@@ -2138,8 +2145,15 @@ gtk_window_compute_hints (GtkWindow   *window,
   
   if (*new_flags & GDK_HINT_MAX_SIZE)
     {
-      new_geometry->max_width += extra_width;
-      new_geometry->max_height += extra_height;
+      if (new_geometry->max_width < 0)
+	new_geometry->max_width = requisition.width;
+      else
+	new_geometry->max_width += extra_width;
+
+      if (new_geometry->max_height < 0)
+	new_geometry->max_width = requisition.height;
+      else
+	new_geometry->max_height += extra_height;
     }
   else if (!window->allow_grow)
     {

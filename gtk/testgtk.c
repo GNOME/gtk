@@ -9151,13 +9151,21 @@ create_main_window (void)
   GtkWidget *label;
   gchar buffer[64];
   GtkWidget *separator;
+  GdkGeometry geometry;
   int i;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_policy (GTK_WINDOW (window), FALSE, FALSE, FALSE);
   gtk_widget_set_name (window, "main window");
-  gtk_widget_set_usize (window, 200, 400);
   gtk_widget_set_uposition (window, 20, 20);
+  gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
+
+  geometry.min_width = -1;
+  geometry.min_height = -1;
+  geometry.max_width = -1;
+  geometry.max_height = G_MAXSHORT;
+  gtk_window_set_geometry_hints (GTK_WINDOW (window), NULL,
+				 &geometry,
+				 GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE);
 
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC(gtk_main_quit),
@@ -9187,7 +9195,7 @@ create_main_window (void)
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-     		                  GTK_POLICY_AUTOMATIC, 
+     		                  GTK_POLICY_NEVER, 
                                   GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (box1), scrolled_window, TRUE, TRUE, 0);
 
