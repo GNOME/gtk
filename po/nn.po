@@ -71,7 +71,7 @@ msgstr "Filer"
 #: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1466
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Uleselig katalog: %s"
+msgstr "Uleseleg katalog: %s"
 
 #: gtk/gtkfilesel.c:539
 msgid "Create Dir"
@@ -83,7 +83,7 @@ msgstr "Slett fil"
 
 #: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
 msgid "Rename File"
-msgstr "Gi filen nytt navn"
+msgstr "Gi fila nytt navn"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -144,7 +144,7 @@ msgstr "Helling:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr "Sett vidde:"
+msgstr "Sett bredde:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
@@ -152,11 +152,11 @@ msgstr "Legg til stil:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr "Pixelstørrelse:"
+msgstr "Pixelstorleik:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
-msgstr "Punktstørrelse:"
+msgstr "Punktstorleik:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
@@ -172,7 +172,7 @@ msgstr "Mellomrom:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr "Gjennomsnittlig bredde:"
+msgstr "Gjennomsnittleg bredde:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
@@ -186,11 +186,11 @@ msgstr "Egenskaper for skrifttype"
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
-msgstr "Etterspurt verdi"
+msgstr "Etterspørd verdi"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
-msgstr "Reell verdi"
+msgstr "Verkeleg verdi"
 
 #: gtk/gtkfontsel.c:494
 msgid "Font"
@@ -206,7 +206,7 @@ msgstr "Skrifttypens stil:"
 
 #: gtk/gtkfontsel.c:514
 msgid "Size:"
-msgstr "Størrelse:"
+msgstr "Storleik:"
 
 #: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
 msgid "Reset Filter"
@@ -235,16 +235,16 @@ msgstr "Informasjon om skrifttype"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr "Etterspurt navn på skrifttype:"
+msgstr "Etterspørd navn på skrifttype:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr "Reelt navn på skrifttype:"
+msgstr "Verkeleg navn på skrifttype:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr "%i skrifttyper tilgjengelig med totalt %i stiler."
+msgstr "%i skrifttyper tilgjengeleg med totalt %i stiler."
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
@@ -277,7 +277,7 @@ msgstr "(nil)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
-msgstr "vanlig"
+msgstr "vanleg"
 
 #: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1973
 msgid "italic"
@@ -297,7 +297,7 @@ msgstr "omvendt hellende"
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1977
 msgid "other"
-msgstr "annet"
+msgstr "anna"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
@@ -309,15 +309,15 @@ msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1793
 msgid "The selected font is not available."
-msgstr "Den valgte skrifttypen er ikke tilgjengelig."
+msgstr "Den velgte skrifttypen er ikkje tilgjengelig."
 
 #: gtk/gtkfontsel.c:1799
 msgid "The selected font is not a valid font."
-msgstr "Den valgte skrifttypen er ikke ein gyldig skrifttype."
+msgstr "Den velgte skrifttypen er ikkje en gyldig skrifttype."
 
 #: gtk/gtkfontsel.c:1857
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Dette er en 2-byte skrifttype og vil kanskje ikke vises riktig."
+msgstr "Dette er ein 2-byte skrifttype og vil kanskje ikkje vises riktig."
 
 #: gtk/gtkfontsel.c:1961 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
@@ -333,7 +333,7 @@ msgstr "proporsjonal"
 
 #: gtk/gtkfontsel.c:1985
 msgid "monospaced"
-msgstr "av lik bredde"
+msgstr "med lik bredde"
 
 #: gtk/gtkfontsel.c:1986
 msgid "char cell"
@@ -345,7 +345,7 @@ msgstr "Skrifttype: (med filter på)"
 
 #: gtk/gtkfontsel.c:2662
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS oversteget. Noen skrifttyper mangler kanskje."
+msgstr "MAX_FONTS oversteget. Nokon skrifttyper mangler kanskje."
 
 #: gtk/gtkfontsel.c:3497
 msgid "Apply"
@@ -449,17 +449,17 @@ msgstr "Side %u"
 #: gtk/gtkrc.c:1702
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Kunne ikke finne bildefilen i pixmap_path: \"%s\" linje %d"
+msgstr "Kunne ikkje finne bildefila i pixmap_patg: \"%s\" linje %d"
 
 #: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kunne ikke finne bildefil i pixmap_path: \"%s\""
+msgstr "Kunne ikkje finne bildefila i pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Kunne ikke finne lastbar modul i module_path: \"%s\","
+msgstr "Kunne ikke finne lesbar modul i module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
