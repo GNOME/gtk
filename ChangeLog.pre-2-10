@@ -46,7 +46,6 @@ Fri Oct 26 20:55:57 2001  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtk.def : added the remaining exported functions
 
 2001-10-27  Anders Carlsson  <andersca@gnu.org>
->>>>>>> 1.2471
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_fixed_width): 
 	Add note about width having to be greater than 0. This fixes
