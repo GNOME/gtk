@@ -452,7 +452,7 @@ gtk_style_new (void)
       style->base[i] = style->white;
     }
   
-  style->base[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_bg;
+  style->base[GTK_STATE_INSENSITIVE] = gtk_default_prelight_bg;
   style->text[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_fg;
   
   for (i = 0; i < 5; i++)

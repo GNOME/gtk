@@ -1,3 +1,15 @@
+Tue Feb  8 03:05:55 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkstyle.c (gtk_style_new): use gtk_default_prelight_bg instead
+	of gtk_default_insensitive_bg as insensitive base color.
+
+	* gtk/gtktext.c (gtk_text_style_set): set the background color according
+	to the widget's state.
+	(gtk_text_realize): same here.
+	(gtk_text_state_changed): same here.
+	(draw_bg_rect): compare background color against base[] from
+	GTK_WIDGET_STATE (text) not GTK_STATE_NORMAL.
+
 Mon Feb  7 04:01:55 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_main_do_event): ignore delete events when
