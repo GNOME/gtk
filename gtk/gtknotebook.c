@@ -1380,7 +1380,8 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 	  gdk_window_move_resize (notebook->event_window,
 				  position.x, position.y,
 				  position.width, position.height);
-	  gdk_window_show_unraised (notebook->event_window);
+	  if (GTK_WIDGET_MAPPED (notebook))
+	    gdk_window_show_unraised (notebook->event_window);
 	}
       else
 	gdk_window_hide (notebook->event_window);
