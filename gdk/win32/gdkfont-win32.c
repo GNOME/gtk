@@ -224,7 +224,7 @@ logfont_to_xlfd (const LOGFONT *lfp,
   /* Convert the facename Windows fives us from the locale-dependent
    * codepage to UTF-8.
    */
-  utf8_facename = g_filename_to_utf8 (lfp->lfFaceName);
+  utf8_facename = g_filename_to_utf8 (lfp->lfFaceName, NULL);
 
   /* Replace characters illegal in an XLFD with hex escapes. */
   p = facename;
@@ -1284,7 +1284,7 @@ gdk_font_load_internal (const gchar *font_name)
       logfont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
       logfont.lfQuality = PROOF_QUALITY;
       logfont.lfPitchAndFamily = DEFAULT_PITCH;
-      fn = g_filename_from_utf8 (font_name);
+      fn = g_filename_from_utf8 (font_name, NULL);
       strcpy (logfont.lfFaceName, fn);
       g_free (fn);
     }
@@ -1473,7 +1473,7 @@ gdk_font_load_internal (const gchar *font_name)
 	logfont.lfPitchAndFamily = VARIABLE_PITCH;
       else 
 	logfont.lfPitchAndFamily = DEFAULT_PITCH;
-      fn = g_filename_from_utf8 (family);
+      fn = g_filename_from_utf8 (family, NULL);
       strcpy (logfont.lfFaceName, fn);
       g_free (fn);
     }

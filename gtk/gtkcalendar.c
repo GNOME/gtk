@@ -440,7 +440,7 @@ gtk_calendar_init (GtkCalendar *calendar)
       {
 	tmp_time= (i+3)*86400;
 	strftime ( buffer, sizeof (buffer), "%a", gmtime (&tmp_time));
-	default_abbreviated_dayname[i] = g_strdup (buffer);
+	default_abbreviated_dayname[i] = g_locale_to_utf8 (buffer, NULL);
       }
   
   if (!default_monthname[0])
@@ -448,7 +448,7 @@ gtk_calendar_init (GtkCalendar *calendar)
       {
 	tmp_time=i*2764800;
 	strftime ( buffer, sizeof (buffer), "%B", gmtime (&tmp_time));
-	default_monthname[i] = g_strdup (buffer);
+	default_monthname[i] = g_locale_to_utf8 (buffer, NULL);
       }
   
   /* Set defaults */
@@ -570,6 +570,9 @@ left_x_for_column (GtkCalendar *calendar,
   gint width;
   gint x_left;
   
+  if (gtk_widget_get_direction (GTK_WIDGET (calendar)) == GTK_TEXT_DIR_RTL)
+    column = 6 - column;
+
   width = GTK_CALENDAR_PRIVATE_DATA (calendar)->day_width;
   if (calendar->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     x_left =  DAY_XSEP + (width + DAY_XSEP) * column;
@@ -1671,7 +1674,10 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
   gdk_gc_set_foreground (gc, &widget->style->fg[GTK_STATE_SELECTED]);
   for (i = 0; i < 7; i++)
     {
-      day=i;
+      if (gtk_widget_get_direction (GTK_WIDGET (calendar)) == GTK_TEXT_DIR_RTL)
+	day = 6 - i;
+      else
+	day = i;
       if (calendar->display_flags & GTK_CALENDAR_WEEK_START_MONDAY)
 	day= (day+1)%7;
       sprintf (buffer, "%s", default_abbreviated_dayname[day]);
@@ -1684,7 +1690,7 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
 			+ day_wid_sep * i
 			+ private_data->week_width
 			+ (day_width - logical_rect.width)/2),
-		       CALENDAR_MARGIN + DAY_YPAD + private_data->max_label_char_ascent + logical_rect.y,
+		       CALENDAR_MARGIN + DAY_YPAD + logical_rect.y,
 		       layout);
     }
   
