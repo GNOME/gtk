@@ -93,15 +93,13 @@ gtk_settings_init (GtkSettings *settings)
   guint i;
   
   g_datalist_init (&settings->queued_settings);
-  settings->property_values = NULL;
   object_list = g_slist_prepend (object_list, settings);
 
   /* build up property array for all yet existing properties and queue
    * notification for them (at least notification for internal properties
    * will instantly be caught)
    */
-  settings->property_values = g_renew (GValue, settings->property_values, class_n_properties);
-  settings->property_values[class_n_properties - 1].g_type = 0;
+  settings->property_values = g_new0 (GValue, class_n_properties);
   for (i = 0; i < class_n_properties; i++)
     {
       GParamSpec *pspec = gobject_class->property_specs[i]; // FIXME: g_object_list_properties(this_class_type)
