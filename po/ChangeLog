@@ -1,5 +1,10 @@
 2004-10-12  Matthias Clasen  <mclasen@redhat.com> 
 
+	* pa.po: Fix a problem with the translation
+	of default:LTR.
+
+2004-10-12  Matthias Clasen  <mclasen@redhat.com> 
+
 	* === Released 2.4.13 ===
 
 2004-10-12  Matthias Clasen  <mclasen@redhat.com> 
