@@ -34,6 +34,7 @@
 #include "gtkradiobutton.h"
 #include "gtksignal.h"
 #include "gtktable.h"
+#include "gtkintl.h"
 
 #define RADIUS		3	/* radius of the control points */
 #define MIN_DISTANCE	8	/* min distance between control points */
@@ -47,12 +48,12 @@
 			 GDK_BUTTON1_MOTION_MASK)
 
 enum {
-  ARG_0,
-  ARG_CURVE_TYPE,
-  ARG_MIN_X,
-  ARG_MAX_X,
-  ARG_MIN_Y,
-  ARG_MAX_Y
+  PROP_0,
+  PROP_CURVE_TYPE,
+  PROP_MIN_X,
+  PROP_MAX_X,
+  PROP_MIN_Y,
+  PROP_MAX_Y
 };
 
 static GtkDrawingAreaClass *parent_class = NULL;
@@ -62,12 +63,16 @@ static guint curve_type_changed_signal = 0;
 /* forward declarations: */
 static void gtk_curve_class_init   (GtkCurveClass *class);
 static void gtk_curve_init         (GtkCurve      *curve);
-static void gtk_curve_set_arg     (GtkObject      *object,
-				   GtkArg         *arg,
-				   guint           arg_id);
-static void gtk_curve_get_arg     (GtkObject      *object,
-				   GtkArg         *arg,
-				   guint           arg_id);
+static void gtk_curve_get_property  (GObject              *object,
+				     guint                 param_id,
+				     GValue               *value,
+				     GParamSpec           *pspec,
+				     const gchar          *trailer);
+static void gtk_curve_set_property  (GObject              *object,
+				     guint                 param_id,
+				     const GValue         *value,
+				     GParamSpec           *pspec,
+				     const gchar          *trailer);
 static void gtk_curve_finalize     (GObject       *object);
 static gint gtk_curve_graph_events (GtkWidget     *widget, 
 				    GdkEvent      *event, 
@@ -108,24 +113,63 @@ gtk_curve_class_init (GtkCurveClass *class)
   
   gobject_class->finalize = gtk_curve_finalize;
 
-  object_class->set_arg = gtk_curve_set_arg;
-  object_class->get_arg = gtk_curve_get_arg;
+  gobject_class->set_property = gtk_curve_set_property;
+  gobject_class->get_property = gtk_curve_get_property;
   
+  g_object_class_install_property (gobject_class,
+				   PROP_CURVE_TYPE,
+				   g_param_spec_enum ("curve_type",
+						      _("Curve type"),
+						      _("Is this curve linear, spline interpolated, or free-form"),
+						      GTK_TYPE_CURVE_TYPE,
+						      GTK_CURVE_TYPE_LINEAR,
+						      G_PARAM_READABLE |
+						      G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+				   PROP_MIN_X,
+				   g_param_spec_float ("min_x",
+						       _("Minimum X"),
+						       _("Minimum possible value for X"),
+						       -G_MAXFLOAT,
+						       G_MAXFLOAT,
+						       0.0,
+						       G_PARAM_READABLE |
+						       G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+				   PROP_MAX_X,
+				   g_param_spec_float ("max_x",
+						       _("Maximum X"),
+						       _("Maximum possible X value."),
+						       -G_MAXFLOAT,
+						       G_MAXFLOAT,
+                                                       1.0,
+						       G_PARAM_READABLE |
+						       G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+				   PROP_MIN_Y,
+				   g_param_spec_float ("min_y",
+						       _("Minimum Y"),
+						       _("Minimum possible value for Y"),
+                                                       -G_MAXFLOAT,
+						       G_MAXFLOAT,
+						       0.0,
+						       G_PARAM_READABLE |
+						       G_PARAM_WRITABLE));  
+  g_object_class_install_property (gobject_class,
+				   PROP_MAX_Y,
+				   g_param_spec_float ("max_y",
+						       _("Maximum Y"),
+						       _("Maximum possible value for Y"),
+						       -G_MAXFLOAT,
+						       G_MAXFLOAT,
+						       1.0,
+						       G_PARAM_READABLE |
+						       G_PARAM_WRITABLE));
+
   curve_type_changed_signal =
     gtk_signal_new ("curve_type_changed", GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCurveClass, curve_type_changed),
 		    gtk_marshal_VOID__VOID, GTK_TYPE_NONE, 0);
-  
-  gtk_object_add_arg_type ("GtkCurve::curve_type", GTK_TYPE_CURVE_TYPE,
-			   GTK_ARG_READWRITE, ARG_CURVE_TYPE);
-  gtk_object_add_arg_type ("GtkCurve::min_x", GTK_TYPE_FLOAT,
-			   GTK_ARG_READWRITE, ARG_MIN_X);
-  gtk_object_add_arg_type ("GtkCurve::max_x", GTK_TYPE_FLOAT,
-			   GTK_ARG_READWRITE, ARG_MAX_X);
-  gtk_object_add_arg_type ("GtkCurve::min_y", GTK_TYPE_FLOAT,
-			   GTK_ARG_READWRITE, ARG_MIN_Y);
-  gtk_object_add_arg_type ("GtkCurve::max_y", GTK_TYPE_FLOAT,
-			   GTK_ARG_READWRITE, ARG_MAX_Y);
 }
 
 static void
@@ -157,63 +201,68 @@ gtk_curve_init (GtkCurve *curve)
   gtk_curve_size_graph (curve);
 }
 
-static void
-gtk_curve_set_arg (GtkObject *object,
-		   GtkArg    *arg,
-		   guint      arg_id)
+static void gtk_curve_set_property  (GObject              *object,
+				     guint                 prop_id,
+				     const GValue         *value,
+				     GParamSpec           *pspec,
+				     const gchar          *trailer)
 {
   GtkCurve *curve = GTK_CURVE (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_CURVE_TYPE:
-      gtk_curve_set_curve_type (curve, GTK_VALUE_ENUM (*arg));
+    case PROP_CURVE_TYPE:
+      gtk_curve_set_curve_type (curve, g_value_get_enum (value));
       break;
-    case ARG_MIN_X:
-      gtk_curve_set_range (curve, GTK_VALUE_FLOAT (*arg), curve->max_x,
+    case PROP_MIN_X:
+      gtk_curve_set_range (curve, g_value_get_float (value), curve->max_x,
 			   curve->min_y, curve->max_y);
       break;
-    case ARG_MAX_X:
-      gtk_curve_set_range (curve, curve->min_x, GTK_VALUE_FLOAT (*arg),
+    case PROP_MAX_X:
+      gtk_curve_set_range (curve, curve->min_x, g_value_get_float (value),
 			   curve->min_y, curve->max_y);
       break;	
-    case ARG_MIN_Y:
+    case PROP_MIN_Y:
       gtk_curve_set_range (curve, curve->min_x, curve->max_x,
-			   GTK_VALUE_FLOAT (*arg), curve->max_y);
+			   g_value_get_float (value), curve->max_y);
       break;
-    case ARG_MAX_Y:
+    case PROP_MAX_Y:
       gtk_curve_set_range (curve, curve->min_x, curve->max_x,
-			   curve->min_y, GTK_VALUE_FLOAT (*arg));
+			   curve->min_y, g_value_get_float (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
-static void
-gtk_curve_get_arg (GtkObject *object,
-		   GtkArg    *arg,
-		   guint      arg_id)
+static void gtk_curve_get_property  (GObject              *object,
+				     guint                 prop_id,
+				     GValue               *value,
+				     GParamSpec           *pspec,
+				     const gchar          *trailer)
 {
   GtkCurve *curve = GTK_CURVE (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_CURVE_TYPE:
-      GTK_VALUE_ENUM (*arg) = curve->curve_type;
+    case PROP_CURVE_TYPE:
+      g_value_set_enum (value, curve->curve_type);
       break;
-    case ARG_MIN_X:
-      GTK_VALUE_FLOAT (*arg) = curve->min_x;
+    case PROP_MIN_X:
+      g_value_set_float (value, curve->min_x);
       break;
-    case ARG_MAX_X:
-      GTK_VALUE_FLOAT (*arg) = curve->max_x;
+    case PROP_MAX_X:
+      g_value_set_float (value, curve->max_x);
       break;
-    case ARG_MIN_Y:
-      GTK_VALUE_FLOAT (*arg) = curve->min_y;
+    case PROP_MIN_Y:
+      g_value_set_float (value, curve->min_y);
       break;
-    case ARG_MAX_Y:
-      GTK_VALUE_FLOAT (*arg) = curve->max_y;
+    case PROP_MAX_Y:
+      g_value_set_float (value, curve->max_y);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -659,6 +708,7 @@ gtk_curve_set_curve_type (GtkCurve *c, GtkCurveType new_type)
 	  gtk_curve_interpolate (c, width, height);
 	}
       gtk_signal_emit (GTK_OBJECT (c), curve_type_changed_signal);
+      g_object_notify (G_OBJECT (c), "curve_type");
       gtk_curve_draw (c, width, height);
     }
 }
@@ -766,12 +816,27 @@ gtk_curve_set_gamma (GtkCurve *c, gfloat gamma)
 
 void
 gtk_curve_set_range (GtkCurve *curve,
-		     gfloat min_x, gfloat max_x, gfloat min_y, gfloat max_y)
+		     gfloat    min_x,
+                     gfloat    max_x,
+                     gfloat    min_y,
+                     gfloat    max_y)
 {
-  curve->min_x = min_x;
-  curve->max_x = max_x;
-  curve->min_y = min_y;
-  curve->max_y = max_y;
+  if (curve->min_x != min_x) {
+     curve->min_x = min_x;
+     g_object_notify (G_OBJECT (curve), "min_x");
+  }
+  if (curve->max_x != max_x) {
+     curve->max_x = max_x;
+     g_object_notify (G_OBJECT (curve), "max_x");
+  }
+  if (curve->min_y != min_y) {
+     curve->min_y = min_y;
+     g_object_notify (G_OBJECT (curve), "min_y");
+  }
+  if (curve->max_y != max_y) {
+     curve->max_y = max_y;
+     g_object_notify (G_OBJECT (curve), "max_y");
+  }
 
   gtk_curve_size_graph (curve);
   gtk_curve_reset_vector (curve);

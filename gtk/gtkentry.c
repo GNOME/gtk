@@ -68,12 +68,12 @@ enum {
 };
 
 enum {
-  ARG_0,
-  ARG_TEXT_POSITION,
-  ARG_EDITABLE,
-  ARG_MAX_LENGTH,
-  ARG_VISIBILITY,
-  ARG_INVISIBLE_CHAR
+  PROP_0,
+  PROP_TEXT_POSITION,
+  PROP_EDITABLE,
+  PROP_MAX_LENGTH,
+  PROP_VISIBILITY,
+  PROP_INVISIBLE_CHAR
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -96,12 +96,16 @@ static GtkTargetEntry target_table[] = {
 static void   gtk_entry_class_init           (GtkEntryClass    *klass);
 static void   gtk_entry_editable_init        (GtkEditableClass *iface);
 static void   gtk_entry_init                 (GtkEntry         *entry);
-static void   gtk_entry_set_arg              (GtkObject        *object,
-					      GtkArg           *arg,
-					      guint             arg_id);
-static void   gtk_entry_get_arg              (GtkObject        *object,
-					      GtkArg           *arg,
-					      guint             arg_id);
+static void   gtk_entry_set_property (GObject         *object,
+				      guint            prop_id,
+				      const GValue    *value,
+				      GParamSpec      *pspec,
+				      const gchar     *trailer);
+static void   gtk_entry_get_property (GObject         *object,
+				      guint            prop_id,
+				      GValue          *value,
+				      GParamSpec      *pspec,
+				      const gchar     *trailer);
 static void   gtk_entry_finalize             (GObject          *object);
 
 /* GtkWidget methods
@@ -318,9 +322,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
 
   gobject_class->finalize = gtk_entry_finalize;
-  
-  object_class->set_arg = gtk_entry_set_arg;
-  object_class->get_arg = gtk_entry_get_arg;
+  gobject_class->set_property = gtk_entry_set_property;
+  gobject_class->get_property = gtk_entry_get_property;
 
   widget_class->realize = gtk_entry_realize;
   widget_class->unrealize = gtk_entry_unrealize;
@@ -354,12 +357,51 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->paste_clipboard = gtk_entry_paste_clipboard;
   class->toggle_overwrite = gtk_entry_toggle_overwrite;
 
-  gtk_object_add_arg_type ("GtkEntry::text_position", GTK_TYPE_INT,  GTK_ARG_READWRITE, ARG_TEXT_POSITION);
-  gtk_object_add_arg_type ("GtkEntry::editable",      GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EDITABLE);
-  gtk_object_add_arg_type ("GtkEntry::max_length",    GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_MAX_LENGTH);
-  gtk_object_add_arg_type ("GtkEntry::visibility",    GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_VISIBILITY);
-  gtk_object_add_arg_type ("GtkEntry::invisible_char", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_INVISIBLE_CHAR);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEXT_POSITION,
+                                   g_param_spec_int ("text_position",
+                                                     _("Text Position"),
+                                                     _("The current position of the insertion point"),
+                                                     0,
+                                                     G_MAXINT,
+                                                     0,
+                                                     G_PARAM_READABLE | G_PARAM_WRITABLE));
   
+  g_object_class_install_property (gobject_class,
+                                   PROP_EDITABLE,
+                                   g_param_spec_boolean ("editable",
+							 _("Editable"),
+							 _("Whether the entry contents can be edited"),
+                                                         TRUE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_MAX_LENGTH,
+                                   g_param_spec_int ("max_length",
+                                                     _("Maximum length"),
+                                                     _("Maximum number of characters for this entry"),
+                                                     -1,
+                                                     G_MAXINT,
+                                                     -1,
+                                                     G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_VISIBILITY,
+                                   g_param_spec_boolean ("visibility",
+							 _("Visibility"),
+							 _("FALSE displays the \"invisible char\" instead of the actual text (password mode)"),
+                                                         TRUE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_INVISIBLE_CHAR,
+                                   g_param_spec_int ("invisible_char",
+                                                     _("Invisible character"),
+                                                     _("The character to use when masking entry contents (in \"password mode\")"),
+                                                     0,
+                                                     G_MAXINT,
+                                                     
+                                                     '*',
+                                                     G_PARAM_READABLE | G_PARAM_WRITABLE));
+
   signals[INSERT_TEXT] =
     gtk_signal_new ("insert_text",
 		    GTK_RUN_LAST,
@@ -595,70 +637,80 @@ gtk_entry_editable_init (GtkEditableClass *iface)
   iface->get_position = gtk_entry_get_position;
 }
 
-static void
-gtk_entry_set_arg (GtkObject      *object,
-		   GtkArg         *arg,
-		   guint           arg_id)
+static void   gtk_entry_set_property (GObject         *object,
+				      guint            prop_id,
+				      const GValue    *value,
+				      GParamSpec      *pspec,
+				      const gchar     *trailer)
 {
   GtkEntry *entry = GTK_ENTRY (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_TEXT_POSITION:
-      gtk_editable_set_position (GTK_EDITABLE (object), GTK_VALUE_INT (*arg));
+    case PROP_TEXT_POSITION:
+      gtk_editable_set_position (GTK_EDITABLE (object), 
+				 g_value_get_int (value));
       break;
-    case ARG_EDITABLE:
+
+    case PROP_EDITABLE:
       {
-	gboolean new_value = GTK_VALUE_BOOL (*arg) != 0;
-	if (new_value != entry->editable)
+        gboolean new_value = g_value_get_boolean (value);
+
+      	if (new_value != entry->editable)
 	  {
 	    entry->editable = new_value;
 	    gtk_entry_queue_draw (entry);
 	  }
       }
       break;
-    case ARG_MAX_LENGTH:
-      gtk_entry_set_max_length (entry, GTK_VALUE_UINT (*arg));
+
+    case PROP_MAX_LENGTH:
+      gtk_entry_set_max_length (entry, g_value_get_int (value));
       break;
-    case ARG_VISIBILITY:
-      gtk_entry_set_visibility (entry, GTK_VALUE_BOOL (*arg));
+      
+    case PROP_VISIBILITY:
+      gtk_entry_set_visibility (entry, g_value_get_boolean (value));
       break;
-    case ARG_INVISIBLE_CHAR:
-      gtk_entry_set_invisible_char (entry, GTK_VALUE_INT (*arg));
+
+    case PROP_INVISIBLE_CHAR:
+      gtk_entry_set_invisible_char (entry, g_value_get_int (value));
       break;
+
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
-static void
-gtk_entry_get_arg (GtkObject      *object,
-		   GtkArg         *arg,
-		   guint           arg_id)
+static void   gtk_entry_get_property (GObject         *object,
+				      guint            prop_id,
+				      GValue          *value,
+				      GParamSpec      *pspec,
+				      const gchar     *trailer)
 {
   GtkEntry *entry;
 
   entry = GTK_ENTRY (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_TEXT_POSITION:
-      GTK_VALUE_INT (*arg) = entry->current_pos;
+    case PROP_TEXT_POSITION:
+      g_value_set_int (value, entry->current_pos);
       break;
-    case ARG_EDITABLE:
-      GTK_VALUE_BOOL (*arg) = entry->editable;
+    case PROP_EDITABLE:
+      g_value_set_boolean (value, entry->editable);
       break;
-    case ARG_MAX_LENGTH:
-      GTK_VALUE_UINT (*arg) = entry->text_max_length;
+    case PROP_MAX_LENGTH:
+      g_value_set_int (value, entry->text_max_length); 
       break;
-    case ARG_VISIBILITY:
-      GTK_VALUE_BOOL (*arg) = entry->visible;
+    case PROP_VISIBILITY:
+      g_value_set_boolean (value, entry->visible);
       break;
-    case ARG_INVISIBLE_CHAR:
-      GTK_VALUE_INT (*arg) = entry->invisible_char;
+    case PROP_INVISIBLE_CHAR:
+      g_value_set_int (value, entry->invisible_char);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -1344,6 +1396,8 @@ gtk_entry_real_set_position (GtkEditable *editable,
 
       entry->current_pos = entry->selection_bound = position;
       gtk_entry_recompute (entry);
+
+      g_object_notify (G_OBJECT (entry), "text_position");
     }
 }
 
@@ -2502,7 +2556,7 @@ gtk_entry_new (void)
 }
 
 GtkWidget*
-gtk_entry_new_with_max_length (guint16 max)
+gtk_entry_new_with_max_length (gint max)
 {
   GtkEntry *entry;
 
@@ -2578,7 +2632,7 @@ gtk_entry_set_visibility (GtkEntry *entry,
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   entry->visible = visible ? TRUE : FALSE;
-
+  g_object_notify (G_OBJECT (entry), "visibility");
   gtk_entry_recompute (entry);
 }
 
@@ -2606,7 +2660,7 @@ gtk_entry_set_invisible_char (GtkEntry *entry,
     return;
 
   entry->invisible_char = ch;
-
+  g_object_notify (G_OBJECT (entry), "invisible_char");
   gtk_entry_recompute (entry);  
 }
 
@@ -2639,15 +2693,16 @@ gtk_entry_select_region  (GtkEntry       *entry,
 
 void
 gtk_entry_set_max_length (GtkEntry     *entry,
-                          guint16       max)
+                          gint          max)
 {
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  if (max && entry->text_length > max)
+  if (max > 0 && entry->text_length > max)
     gtk_editable_delete_text (GTK_EDITABLE(entry), max, -1);
   
   entry->text_max_length = max;
+  g_object_notify (G_OBJECT (entry), "max_length");
 }
 
 /**

@@ -40,11 +40,19 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkcombo.h"
 #include "gtkframe.h"
+#include "gtkintl.h"
 
 const gchar *gtk_combo_string_key = "gtk-combo-string-value";
 
 #define COMBO_LIST_MAX_HEIGHT	(400)
 #define	EMPTY_LIST_HEIGHT	(15)
+
+enum {
+  PROP_0,
+  PROP_ENABLE_ARROW_KEYS,
+  PROP_ENABLE_ARROWS_ALWAYS,
+  PROP_CASE_SENSITIVE
+};
 
 static void         gtk_combo_class_init         (GtkComboClass    *klass);
 static void         gtk_combo_init               (GtkCombo         *combo);
@@ -93,20 +101,57 @@ static gint         gtk_combo_window_key_press   (GtkWidget        *window,
 						  GtkCombo         *combo);
 static void         gtk_combo_item_destroy       (GtkObject        *object);
 static void         gtk_combo_size_allocate      (GtkWidget        *widget,
-						  GtkAllocation    *allocation);
-
+						  GtkAllocation   *allocation);
+static void         gtk_combo_set_property       (GObject         *object,
+						  guint            prop_id,
+						  const GValue    *value,
+						  GParamSpec      *pspec,
+						  const gchar     *trailer);
+static void         gtk_combo_get_property       (GObject         *object,
+						  guint            prop_id,
+						  GValue          *value,
+						  GParamSpec      *pspec,
+						  const gchar     *trailer);
 static GtkHBoxClass *parent_class = NULL;
 
 static void
 gtk_combo_class_init (GtkComboClass * klass)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *oclass;
   GtkWidgetClass *widget_class;
 
+  gobject_class = (GObjectClass *) klass;
   parent_class = gtk_type_class (GTK_TYPE_HBOX);
   oclass = (GtkObjectClass *) klass;
   widget_class = (GtkWidgetClass *) klass;
 
+  gobject_class->set_property = gtk_combo_set_property; 
+  gobject_class->get_property = gtk_combo_get_property; 
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ENABLE_ARROW_KEYS,
+                                   g_param_spec_boolean ("enable_arrow_keys",
+                                                         _("Enable arrow keys"),
+                                                         _("Whether the arrow keys move through the list of items"),
+                                                         TRUE,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_ENABLE_ARROWS_ALWAYS,
+                                   g_param_spec_boolean ("enable_arrows_always",
+                                                         _("Always enable arrows"),
+                                                         _("Whether the arrow keys work, even if the entry contents are not in the list"),
+                                                         TRUE,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_CASE_SENSITIVE,
+                                   g_param_spec_boolean ("case_sensitive",
+                                                         _("Case sensitive"),
+                                                         _("Whether list item matching is case sensitive"),
+                                                         FALSE,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
+   
   oclass->destroy = gtk_combo_destroy;
   
   widget_class->size_allocate = gtk_combo_size_allocate;
@@ -822,6 +867,7 @@ gtk_combo_set_case_sensitive (GtkCombo * combo, gint val)
   g_return_if_fail (GTK_IS_COMBO (combo));
 
   combo->case_sensitive = val;
+  g_object_notify (G_OBJECT (combo), "case_sensitive");
 }
 
 void
@@ -831,6 +877,7 @@ gtk_combo_set_use_arrows (GtkCombo * combo, gint val)
   g_return_if_fail (GTK_IS_COMBO (combo));
 
   combo->use_arrows = val;
+  g_object_notify (G_OBJECT (combo), "enable_arrows");
 }
 
 void
@@ -841,6 +888,8 @@ gtk_combo_set_use_arrows_always (GtkCombo * combo, gint val)
 
   combo->use_arrows_always = val;
   combo->use_arrows = 1;
+  g_object_notify (G_OBJECT (combo), "enable_arrows");
+  g_object_notify (G_OBJECT (combo), "enable_arrows_always");
 }
 
 void
@@ -946,4 +995,59 @@ gtk_combo_disable_activate (GtkCombo* combo)
     gtk_signal_disconnect(GTK_OBJECT(combo->entry), combo->activate_id);
     combo->activate_id = 0;
   }
+}
+
+static void gtk_combo_set_property (GObject         *object,
+				    guint            prop_id,
+				    const GValue    *value,
+				    GParamSpec      *pspec,
+				    const gchar     *trailer)
+{
+  GtkCombo *combo = GTK_COMBO (object);
+  
+  switch (prop_id)
+    {
+    case PROP_ENABLE_ARROW_KEYS:
+      /* This call does the notification */
+      gtk_combo_set_use_arrows (combo, g_value_get_boolean (value));
+      break;
+    case PROP_ENABLE_ARROWS_ALWAYS:
+      /* This call does the notification */
+      gtk_combo_set_use_arrows_always (combo, g_value_get_boolean (value));
+      break;
+    case PROP_CASE_SENSITIVE:
+      /* This call does the notification */
+      gtk_combo_set_case_sensitive (combo, g_value_get_boolean (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+  
+}
+
+static void gtk_combo_get_property (GObject         *object,
+				    guint            prop_id,
+				    GValue          *value,
+				    GParamSpec      *pspec,
+				    const gchar     *trailer)
+{
+  GtkCombo *combo = GTK_COMBO (object);
+  
+  switch (prop_id)
+    {
+    case PROP_ENABLE_ARROW_KEYS:
+      g_value_set_boolean (value, combo->use_arrows);
+      break;
+    case PROP_ENABLE_ARROWS_ALWAYS:
+      g_value_set_boolean (value, combo->use_arrows_always);
+      break;
+    case PROP_CASE_SENSITIVE:
+      g_value_set_boolean (value, combo->case_sensitive);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+   
 }

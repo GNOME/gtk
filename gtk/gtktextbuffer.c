@@ -150,6 +150,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 
   klass->insert_text = gtk_text_buffer_real_insert_text;
   klass->insert_pixbuf = gtk_text_buffer_real_insert_pixbuf;
+  klass->insert_child_anchor = gtk_text_buffer_real_insert_anchor;
   klass->delete_range = gtk_text_buffer_real_delete_range;
   klass->apply_tag = gtk_text_buffer_real_apply_tag;
   klass->remove_tag = gtk_text_buffer_real_remove_tag;
@@ -1482,11 +1483,9 @@ gtk_text_buffer_insert_child_anchor (GtkTextBuffer      *buffer,
                                      GtkTextIter        *iter,
                                      GtkTextChildAnchor *anchor)
 {
-  GtkTextChildAnchor *anchor;
-  
-  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
-  g_return_val_if_fail (iter != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor), NULL);
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
   
   g_signal_emit (G_OBJECT (buffer), signals[INSERT_CHILD_ANCHOR], 0,
                  iter, anchor);

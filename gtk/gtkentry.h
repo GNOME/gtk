@@ -145,7 +145,7 @@ void       gtk_entry_set_has_frame              (GtkEntry      *entry,
 gboolean   gtk_entry_get_has_frame              (GtkEntry      *entry);
 /* text is truncated if needed */
 void       gtk_entry_set_max_length 		(GtkEntry      *entry,
-						 guint16        max);
+						 gint           max);
 
 /* Somewhat more convenient than the GtkEditable generic functions
  */
@@ -156,7 +156,7 @@ G_CONST_RETURN gchar* gtk_entry_get_text        (GtkEntry      *entry);
 
 /* Deprecated compatibility functions
  */
-GtkWidget* gtk_entry_new_with_max_length	(guint16       max);
+GtkWidget* gtk_entry_new_with_max_length	(gint           max);
 void       gtk_entry_append_text    		(GtkEntry      *entry,
 						 const gchar   *text);
 void       gtk_entry_prepend_text   		(GtkEntry      *entry,
