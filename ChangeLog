@@ -1,5 +1,7 @@
 2004-07-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version number.
+
 	* === Released 2.4.4 ===
 
 2004-07-09  Federico Mena Quintero  <federico@ximian.com>
