@@ -548,7 +548,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
 			     "(Hello World!)\nfoo foo Hello this is some text we are using to text word wrap. It has punctuation! gee; blah - hmm, great.\nnew line with a significant quantity of text on it. This line really does contain some text. More text! More text! More text!\n"
 			     /* This is UTF8 stuff, Emacs doesn't
 				really know how to display it */
-			     "German (Deutsch Süd) Grüß Gott Greek (Ελληνικά) Γειά σας Hebrew   שלום Japanese (日本語)\n", -1);
+			     "German (Deutsch Süd) Grüß Gott Greek (Ελληνικά) Γειά σας Hebrew   שלום Japanese (日本語) Thai (สวัสดีครับ!! Oop!! คำต่อไปนื่สะกดผิด พัั้ัั่งโกะ )\n", -1);
 
       temp_mark =
         gtk_text_buffer_create_mark (buffer, "tmp_mark", &iter, TRUE);
