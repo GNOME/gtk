@@ -441,7 +441,7 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class = (GtkWidgetClass*) class;
   editable_class = (GtkEditableClass*) class;
 
-  parent_class = gtk_type_class (gtk_widget_get_type ());
+  parent_class = gtk_type_class (gtk_editable_get_type ());
 
   object_class->finalize = gtk_text_finalize;
 
