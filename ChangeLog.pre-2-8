@@ -1,3 +1,11 @@
+2005-03-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkpathbar.c (gtk_path_bar_unmap): 
+	* gtk/gtkspinbutton.c (gtk_spin_button_unmap): 
+	* gtk/gtknotebook.c (gtk_notebook_unmap): 
+	* gtk/gtkrange.c (gtk_range_unmap): Stop scrolling when
+	the widget is unmapped.  (#168791, Ryan Lortie)
+
 2005-03-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkspinbutton.h: Fix a typo.

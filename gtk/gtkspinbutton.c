@@ -520,6 +520,8 @@ gtk_spin_button_unmap (GtkWidget *widget)
 {
   if (GTK_WIDGET_MAPPED (widget))
     {
+      gtk_spin_button_stop_spinning (GTK_SPIN_BUTTON (widget));
+
       gdk_window_hide (GTK_SPIN_BUTTON (widget)->panel);
       GTK_WIDGET_CLASS (parent_class)->unmap (widget);
     }
