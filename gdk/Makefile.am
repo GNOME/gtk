@@ -2,7 +2,7 @@
 
 gdkincludedir = $(includedir)/gdk
 
-configincludedir = $(pkglibdir)/include
+configexecincludedir = $(pkglibdir)/include
 
 lib_LTLIBRARIES = libgdk.la
 
@@ -74,7 +74,7 @@ libgdk_la_LDFLAGS = \
          @x_libs@	\
          -lm
 
-configinclude_DATA = \
+configexecinclude_DATA = \
 	gdkconfig.h
 
 BUILT_SOURCES = stamp-gc-h #note: not gdkconfig.h

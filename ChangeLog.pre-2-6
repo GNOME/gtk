@@ -1,3 +1,9 @@
+1999-03-26  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gdk/Makefile.am (configexecincludedir): Rename from 
+	configincludedir so that glibconfig.h will be installed 
+	as part of `make install-exec'. 
+
 Fri Mar 19 16:50:33 PST 1999 Manish Singh <yosh@gimp.org>
 
 	* acinclude.m4
