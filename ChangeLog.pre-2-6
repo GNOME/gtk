@@ -1,3 +1,7 @@
+Thu Jun 10 22:15:01 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmain.c (gtk_parse_args): Typo fix.
+
 Thu Jun 10 21:16:23 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_list_destroy): 
