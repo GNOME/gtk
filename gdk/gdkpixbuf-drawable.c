@@ -10,6 +10,7 @@
 #include <glib.h>
 #include <gmodule.h>
 #include "gdk-pixbuf.h"
+#include "gdk-pixbuf-drawable.h"
 
 /* private function */
 

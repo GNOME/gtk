@@ -8,6 +8,9 @@
 	* src/Makefile.am: Added gdk-pixbuf-drawable.[ch] to
 	libgdk_pixbuf_la_SOURCES and libgdk_pixbufinclude_HEADERS.
 
+	* src/gdk-pixbuf-drawable.c: Added #include "gdk-pixbuf-drawable.h"
+	to fix compilation.
+
 1999-09-22  Michael Meeks  <michael@nuclecu.unam.mx>
 
 	* src/gdk-pixbuf.c (gdk_pixbuf_new): created.
