@@ -3701,6 +3701,9 @@ gtk_text_line_next_could_contain_tag(GtkTextLine *line,
   
   g_return_val_if_fail(line != NULL, NULL);
 
+  if (gtk_text_view_debug_btree)
+    gtk_text_btree_check (tree);
+  
   if (tag == NULL)
     {
       /* Right now we can only offer linear-search if the user wants
@@ -3768,20 +3771,45 @@ gtk_text_line_next_could_contain_tag(GtkTextLine *line,
   else
     {
       GtkTextBTreeNode * iter;
+      GtkTextBTreeNode * common_parent;
+      GtkTextBTreeNode * parent_of_tag_root;
+      GtkTextBTreeNode * parent_of_node;
+
+      /* Find common parent between our current line, and the tag
+         root. Save the child nodes of the common parent we used to get
+         to the common parent; we then use these two child nodes to
+         determine whether the ordering of the tag root and the current
+         line in the tree. (Nice code cleanup: write
+         gtk_btree_node_compare() to compute node ordering.)
+      */
+
+      /* Get on the same level */
       node = line->parent;
       while (node->level < info->tag_root->level)
         node = node->parent;
 
-      g_assert (node->parent == info->tag_root->parent);
-      g_assert (node != info->tag_root);
+      common_parent = info->tag_root->parent;
 
-      /* See which is first in the list */
-      iter = node->parent->children.node;
+      /* Find common parent, and children of that parent above
+         tag root and our current node */
+      parent_of_node = node;
+      parent_of_tag_root = info->tag_root;
+
+      while (node->parent != common_parent)
+        {
+          parent_of_node = node;
+          parent_of_tag_root = common_parent;
+          node = node->parent;
+          common_parent = common_parent->parent;
+        }
+
+      /* See which is first in the list of common_parent's children */
+      iter = common_parent->children.node;
       while (iter != NULL)
         {
-          if (iter == info->tag_root)
+          if (iter == parent_of_tag_root)
             return NULL; /* Tag root was before us in the tree */
-          else if (iter == node)
+          else if (iter == parent_of_node)
             {
               /* We want the first inside-tag-root node,
                  since we're before the tag root */

@@ -1,3 +1,11 @@
+2000-05-03  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbtree.c (gtk_text_line_next_could_contain_tag):
+	Properly determine the ordering of the tag root and the current
+	line within the tree. Previous algorithm only worked if the tag
+	root's immediate parent was the common root of both the current
+	line and the tag root.
+
 Wed Apr 26 00:43:00 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextlayout.c (set_para_values): Fix some bugs in
