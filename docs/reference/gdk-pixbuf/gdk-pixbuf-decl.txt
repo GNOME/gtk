@@ -1,0 +1,288 @@
+<TYPEDEF>
+<NAME>GdkPixbufCache</NAME>
+typedef struct {
+	int dummy;
+} GdkPixbufCache;
+</TYPEDEF>
+<FUNCTION>
+<NAME>gdk_pixbuf_cache_new</NAME>
+<RETURNS>GdkPixbufCache   *</RETURNS>
+long image_cache_limit,long pixmap_bitmap_cache_limit
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_cache_destroy</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbufCache *cache
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_cache_load_image</NAME>
+<RETURNS>GdkPixbuf        *</RETURNS>
+GdkPixbufCache *cache,const char *file
+</FUNCTION>
+<USER_FUNCTION>
+<NAME>ModulePreparedNotifyFunc</NAME>
+<RETURNS>void </RETURNS>
+GdkPixbuf *pixbuf, gpointer user_data
+</USER_FUNCTION>
+<STRUCT>
+<NAME>GdkPixbufModule</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkPixbufModule</NAME>
+struct GdkPixbufModule {
+	char *module_name;
+	gboolean (* format_check) (guchar *buffer, int size);
+	GModule *module;
+	GdkPixbuf *(* load) (FILE *f);
+        GdkPixbuf *(* load_xpm_data) (const gchar **data);
+
+        /* Incremental loading */
+        gpointer   (* begin_load)    (ModulePreparedNotifyFunc func, gpointer user_data);
+        void       (* stop_load)     (gpointer context);
+        gboolean   (* load_increment)(gpointer context, const gchar *buf, guint size);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_module</NAME>
+<RETURNS>GdkPixbufModule  *</RETURNS>
+gchar *buffer, gint size
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_load_module</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbufModule *image_module
+</FUNCTION>
+<STRUCT>
+<NAME>GdkPixbuf</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkPixbuf</NAME>
+struct GdkPixbuf {
+	/* Reference count */
+	int ref_count;
+
+	/* Libart pixbuf */
+	ArtPixBuf *art_pixbuf;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_format</NAME>
+<RETURNS>ArtPixFormat  </RETURNS>
+GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_n_channels</NAME>
+<RETURNS>int  </RETURNS>
+GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_has_alpha</NAME>
+<RETURNS>int  </RETURNS>
+GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_bits_per_sample</NAME>
+<RETURNS>int  </RETURNS>
+GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_pixels</NAME>
+<RETURNS>guchar       *</RETURNS>
+GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_width</NAME>
+<RETURNS>int  </RETURNS>
+GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_height</NAME>
+<RETURNS>int  </RETURNS>
+GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_rowstride</NAME>
+<RETURNS>int  </RETURNS>
+GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_ref</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_unref</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf *pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_new_from_art_pixbuf</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+ArtPixBuf *art_pixbuf
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_new</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+ArtPixFormat format, gboolean has_alpha, int bits_per_sample,int width, int height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_new_from_file</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+const char *filename
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_new_from_data</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+guchar *data, ArtPixFormat format, gboolean has_alpha,int width, int height, int rowstride,ArtDestroyNotify dfunc, gpointer dfunc_data
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_new_from_xpm_data</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+const gchar **data
+</FUNCTION>
+<ENUM>
+<NAME>GdkPixbufAlphaMode</NAME>
+typedef enum {
+	GDK_PIXBUF_ALPHA_BILEVEL,
+	GDK_PIXBUF_ALPHA_FULL
+} GdkPixbufAlphaMode;
+</ENUM>
+<FUNCTION>
+<NAME>gdk_pixbuf_render_threshold_alpha</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf *pixbuf, GdkBitmap *bitmap,int src_x, int src_y,int dest_x, int dest_y,int width, int height,int alpha_threshold
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_render_to_drawable</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf *pixbuf,GdkDrawable *drawable, GdkGC *gc,int src_x, int src_y,int dest_x, int dest_y,int width, int height,GdkRgbDither dither,int x_dither, int y_dither
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_render_to_drawable_alpha</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf *pixbuf, GdkDrawable *drawable,int src_x, int src_y,int dest_x, int dest_y,int width, int height,GdkPixbufAlphaMode alpha_mode,int alpha_threshold,GdkRgbDither dither,int x_dither, int y_dither
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_scale</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+const GdkPixbuf *pixbuf, gint w, gint h
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_rotate</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkPixbuf *pixbuf, gdouble angle
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_rgb_from_drawable</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkWindow *window, gint x, gint y, gint width, gint height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_rgba_from_drawable</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkWindow *window, gint x, gint y, gint width, gint height
+</FUNCTION>
+<MACRO>
+<NAME>GNOME_TYPE_CANVAS_PIXBUF</NAME>
+#define GNOME_TYPE_CANVAS_PIXBUF            (gnome_canvas_pixbuf_get_type ())
+</MACRO>
+<MACRO>
+<NAME>GNOME_CANVAS_PIXBUF</NAME>
+#define GNOME_CANVAS_PIXBUF(obj)            (GTK_CHECK_CAST ((obj),		\
+					     GNOME_TYPE_CANVAS_PIXBUF, GnomeCanvasPixbuf))
+</MACRO>
+<MACRO>
+<NAME>GNOME_CANVAS_PIXBUF_CLASS</NAME>
+#define GNOME_CANVAS_PIXBUF_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass),	\
+					     GNOME_TYPE_CANVAS_PIXBUF, GnomeCanvasPixbufClass))
+</MACRO>
+<MACRO>
+<NAME>GNOME_IS_CANVAS_PIXBUF</NAME>
+#define GNOME_IS_CANVAS_PIXBUF(obj)         (GTK_CHECK_TYPE ((obj), GNOME_TYPE_CANVAS_PIXBUF))
+</MACRO>
+<MACRO>
+<NAME>GNOME_IS_CANVAS_PIXBUF_CLASS</NAME>
+#define GNOME_IS_CANVAS_PIXBUF_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass),	\
+					     GNOME_TYPE_CANVAS_PIXBUF))
+</MACRO>
+<STRUCT>
+<NAME>GnomeCanvasPixbuf</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GnomeCanvasPixbufClass</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GnomeCanvasPixbuf</NAME>
+struct GnomeCanvasPixbuf {
+	GnomeCanvasItem item;
+
+	/* Private data */
+	gpointer priv;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>gnome_canvas_pixbuf_get_type</NAME>
+<RETURNS>GtkType  </RETURNS>
+void
+</FUNCTION>
+<MACRO>
+<NAME>GDK_TYPE_PIXBUF_LOADER</NAME>
+#define GDK_TYPE_PIXBUF_LOADER		   (gdk_pixbuf_loader_get_type ())
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXBUF_LOADER</NAME>
+#define GDK_PIXBUF_LOADER(obj)		   (GTK_CHECK_CAST ((obj), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoader))
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXBUF_LOADER_CLASS</NAME>
+#define GDK_PIXBUF_LOADER_CLASS(klass)	   (GTK_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoaderClass))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_PIXBUF_LOADER</NAME>
+#define GDK_IS_PIXBUF_LOADER(obj)	   (GTK_CHECK_TYPE ((obj), GDK_TYPE_PIXBUF_LOADER))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_PIXBUF_LOADER_CLASS</NAME>
+#define GDK_IS_PIXBUF_LOADER_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXBUF_LOADER))
+</MACRO>
+<STRUCT>
+<NAME>GdkPixbufLoader</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkPixbufLoader</NAME>
+struct GdkPixbufLoader
+{
+	GtkObject object;
+
+	/* < Private > */
+	gpointer private;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkPixbufLoaderClass</NAME>
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_pixbuf_loader_get_type</NAME>
+<RETURNS>GtkType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_loader_new</NAME>
+<RETURNS>GdkPixbufLoader  *</RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_loader_write</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkPixbufLoader *loader, const gchar *buf, size_t count
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_loader_get_pixbuf</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkPixbufLoader *loader
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_loader_close</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbufLoader *loader
+</FUNCTION>

@@ -1,0 +1,7 @@
+#include <gnome.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk-pixbuf/gdk-pixbuf-loader.h>
+#include <gdk-pixbuf/gnome-canvas-pixbuf.h>
+
+gdk_pixbuf_loader_get_type
+gnome_canvas_pixbuf_get_type

@@ -1,0 +1,98 @@
+<!-- ##### SECTION Title ##### -->
+gdk-pixbuf
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GdkPixbuf ##### -->
+<para>
+
+</para>
+
+@ref_count: 
+@art_pixbuf: 
+
+<!-- ##### FUNCTION gdk_pixbuf_get_format ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_n_channels ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_has_alpha ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_bits_per_sample ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_pixels ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_width ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_height ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_rowstride ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+

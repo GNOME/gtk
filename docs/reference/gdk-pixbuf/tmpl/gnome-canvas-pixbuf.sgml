@@ -1,0 +1,61 @@
+<!-- ##### SECTION Title ##### -->
+GnomeCanvasPixbuf
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GNOME_CANVAS_PIXBUF ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:pixbuf ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:width_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:width_pixels ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:height_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:height_pixels ##### -->
+<para>
+
+</para>
+

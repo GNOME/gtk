@@ -1,0 +1,65 @@
+<!-- ##### SECTION Title ##### -->
+creating
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_art_pixbuf ##### -->
+<para>
+
+</para>
+
+@art_pixbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new ##### -->
+<para>
+
+</para>
+
+@format: 
+@has_alpha: 
+@bits_per_sample: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_data ##### -->
+<para>
+
+</para>
+
+@data: 
+@format: 
+@has_alpha: 
+@width: 
+@height: 
+@rowstride: 
+@dfunc: 
+@dfunc_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_xpm_data ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+

@@ -1,0 +1,87 @@
+<!-- ##### SECTION Title ##### -->
+GdkPixbufLoader
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GDK_PIXBUF_LOADER ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_loader_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_loader_write ##### -->
+<para>
+
+</para>
+
+@loader: 
+@buf: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_loader_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@loader: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_loader_close ##### -->
+<para>
+
+</para>
+
+@loader: 
+
+
+<!-- ##### SIGNAL GdkPixbufLoader::area-updated ##### -->
+<para>
+
+</para>
+
+@gdkpixbufloader: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+
+<!-- ##### SIGNAL GdkPixbufLoader::area-prepared ##### -->
+<para>
+
+</para>
+
+@gdkpixbufloader: the object which received the signal.
+
+<!-- ##### SIGNAL GdkPixbufLoader::closed ##### -->
+<para>
+
+</para>
+
+@gdkpixbufloader: the object which received the signal.
+

@@ -1,0 +1,4 @@
+GtkObject
+  GdkPixbufLoader
+  GnomeCanvasItem
+    GnomeCanvasPixbuf

@@ -4,7 +4,7 @@
 DOC_MODULE=gdk-pixbuf
 
 # The top-level SGML file.
-DOC_MAIN_SGML_FILE=gdk-pixbuf-docs.sgml
+DOC_MAIN_SGML_FILE=gdk-pixbuf.sgml
 
 # The directory containing the source code (if it contains documentation).
 DOC_SOURCE_DIR=$(GDK_PIXBUF_DIR)/src

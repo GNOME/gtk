@@ -1,0 +1,34 @@
+<!-- ##### SECTION Title ##### -->
+refcounting
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_ref ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_unref ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+
+

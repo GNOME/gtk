@@ -1,0 +1,54 @@
+<!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
+<!entity gdk-pixbuf-gdk-pixbuf SYSTEM "sgml/gdk-pixbuf.sgml">
+<!entity gdk-pixbuf-refcounting SYSTEM "sgml/refcounting.sgml">
+<!entity gdk-pixbuf-file-loading SYSTEM "sgml/file-loading.sgml">
+<!entity gdk-pixbuf-creating SYSTEM "sgml/creating.sgml">
+<!entity gdk-pixbuf-rendering SYSTEM "sgml/rendering.sgml">
+<!entity GnomeCanvasPixbuf SYSTEM "sgml/gnome-canvas-pixbuf.sgml">
+<!entity GdkPixbufLoader SYSTEM "sgml/gdk-pixbuf-loader.sgml">
+<!entity gdk-pixbuf-gdk-pixbuf-io SYSTEM "sgml/gdk-pixbuf-io.sgml">
+]>
+
+<book>
+  <bookinfo>
+    <title>The GdkPixbuf Library</title>
+
+    <authorgroup>
+      <author>
+	<firstname>Federico</firstname>
+	<surname>Mena Quintero</surname>
+	<affiliation>
+	  <address>
+	    <email>federico@gimp.org</email>
+	  </address>
+	</affiliation>
+      </author>
+    </authorgroup>
+
+    <copyright>
+      <year>1999</year>
+      <holder>The Free Software Foundation</holder>
+    </copyright>
+  </bookinfo>
+
+  <reference>
+    <title>API Reference</title>
+
+    <partintro>
+      <para>
+	This part presents the class and function reference for the
+	GdkPixbuf library.  Classes are described together with their
+	methods; individual functions are grouped by functional group.
+      </para>
+    </partintro>
+
+    &gdk-pixbuf-gdk-pixbuf;
+    &gdk-pixbuf-refcounting;
+    &gdk-pixbuf-file-loading;
+    &gdk-pixbuf-creating;
+    &gdk-pixbuf-rendering;
+    &GnomeCanvasPixbuf;
+    &GdkPixbufLoader;
+    &gdk-pixbuf-gdk-pixbuf-io;
+  </reference>
+</book>

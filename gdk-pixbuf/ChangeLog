@@ -1,3 +1,7 @@
+1999-11-04  Federico Mena Quintero  <federico@redhat.com>
+
+	* doc/: Finished integrating the documentation framework.
+
 1999-11-03  Federico Mena Quintero  <federico@redhat.com>
 
 	* configure.in: Removed libgif stuff now that we do not depend on it.

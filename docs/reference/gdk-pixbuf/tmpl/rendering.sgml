@@ -1,0 +1,81 @@
+<!-- ##### SECTION Title ##### -->
+rendering
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GdkPixbufAlphaMode ##### -->
+<para>
+
+</para>
+
+@GDK_PIXBUF_ALPHA_BILEVEL: 
+@GDK_PIXBUF_ALPHA_FULL: 
+
+<!-- ##### FUNCTION gdk_pixbuf_render_to_drawable_alpha ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@drawable: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@alpha_mode: 
+@alpha_threshold: 
+@dither: 
+@x_dither: 
+@y_dither: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_to_drawable ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@drawable: 
+@gc: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@dither: 
+@x_dither: 
+@y_dither: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_threshold_alpha ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@bitmap: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@alpha_threshold: 
+
+
