@@ -1,10 +1,19 @@
+Thu Dec 27 16:37:04 2001  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_deleted),
+	(gtk_tree_model_sort_sort_level),
+	(gtk_tree_model_sort_insert_value): fix a few places where
+	I was confused between modelsort iters and other iters. This was
+	really going to happen someday ;)
+
 Wed Dec 26 23:41:41 2001  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_rows_reordered): ensure
 	we are unprelighted before reordering
 
 	* gtk/gtktreemodel.c (gtk_tree_row_ref_reordered_callback): we
-	need to break out of the for loop, not return
+	need to break out of the for loop, not return (this fixed
+	the 'selection freeze' bug).
 
 	* gtk/gtktreemodelsort.c: more fixage and cleanups. It seems to
 	be pretty stable now, though it still needs some more code

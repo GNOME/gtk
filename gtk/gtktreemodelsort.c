@@ -740,8 +740,6 @@ gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
 	elt->offset--;
       if (elt->children)
 	elt->children->parent_elt = elt;
-      if (GTK_TREE_MODEL_SORT_CACHE_CHILD_ITERS (tree_model_sort))
-	elt->iter.user_data2 = elt;
     }
 
   gtk_tree_path_free (path);
@@ -1499,8 +1497,6 @@ gtk_tree_model_sort_sort_level (GtkTreeModelSort *tree_model_sort,
       elt = &g_array_index (new_array, SortElt, i);
       if (elt->children)
 	elt->children->parent_elt = elt;
-      if (GTK_TREE_MODEL_SORT_CACHE_CHILD_ITERS (tree_model_sort))
-	elt->iter.user_data2 = elt;
     }
 
   g_array_free (level->array, TRUE);
@@ -1674,8 +1670,6 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *tree_model_sort,
 	tmp_elt->offset++;
       if (tmp_elt->children)
 	tmp_elt->children->parent_elt = tmp_elt;
-      if (GTK_TREE_MODEL_SORT_CACHE_CHILD_ITERS (tree_model_sort))
-	tmp_elt->iter.user_data2 = tmp_elt;
     }
 
 
