@@ -1,3 +1,7 @@
+2003-07-15  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkcursor-x11.c (gdk_display_get_maximal_cursor_size): Fight against gtk-doc stupidity.
+
 2003-07-13  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkdnd.c (gtk_drag_begin): Rename parameter target_list back to targets, to pacify gtk-doc.

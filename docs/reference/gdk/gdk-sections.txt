@@ -127,6 +127,7 @@ gdk_display_keyboard_ungrab
 gdk_display_pointer_is_grabbed
 gdk_display_beep
 gdk_display_sync
+gdk_display_flush
 gdk_display_close
 gdk_display_list_devices
 gdk_display_get_event

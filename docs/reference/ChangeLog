@@ -1,3 +1,9 @@
+2003-07-15  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/input_devices.sgml: Remove docs for gdk_device_get_history() which are now inline.
+
+	* gdk/gdk-sections.txt: Add gdk_display_flush.
+
 2003-07-13  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk.types: Add gtk_tool_button_get_type and gtk_tool_item_get_type.
