@@ -99,6 +99,10 @@ void          gtk_combo_box_prepend_text     (GtkComboBox     *combo_box,
 void          gtk_combo_box_remove_text      (GtkComboBox     *combo_box,
                                               gint             position);
 
+/* programmatic control */
+void          gtk_combo_box_popup            (GtkComboBox     *combo_box);
+void          gtk_combo_box_popdown          (GtkComboBox     *combo_box);
+
 G_END_DECLS
 
 #endif /* __GTK_COMBO_BOX_H__ */
