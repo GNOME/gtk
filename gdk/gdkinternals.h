@@ -238,9 +238,7 @@ void _gdk_colormap_real_destroy (GdkColormap *colormap);
 
 void _gdk_cursor_destroy (GdkCursor *cursor);
 
-extern GdkArgDesc _gdk_windowing_args[];
-void     _gdk_windowing_init                    (gint       *argc,
-                                                 gchar    ***argv);
+extern GOptionEntry _gdk_windowing_args[];
 void     _gdk_windowing_set_default_display     (GdkDisplay *display);
 
 gchar *_gdk_windowing_substitute_screen_number (const gchar *display_name,
@@ -326,9 +324,6 @@ GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
 
 void _gdk_image_exit  (void);
 void _gdk_windowing_exit (void);
-
-void _gdk_get_command_line_args (int    *argc,
-				 char ***argv);
 
 #ifdef __cplusplus
 }

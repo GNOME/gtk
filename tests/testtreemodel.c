@@ -234,12 +234,7 @@ main (int argc, char *argv[])
   GtkTreeModel *model;
   GOptionContext *context;
   
-  gtk_init (&argc, &argv);
-
-  context = g_option_context_new ("");
-  g_option_context_add_main_entries (context, entries, "");
-  g_option_context_parse (context, &argc, &argv, NULL);
-  g_option_context_free (context);
+  gtk_init_with_args (&argc, &argv, NULL, entries, NULL, NULL);
 
   model = GTK_TREE_MODEL (gtk_list_store_new (2, G_TYPE_INT, G_TYPE_STRING));
   

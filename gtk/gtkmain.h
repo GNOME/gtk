@@ -94,6 +94,16 @@ void     gtk_init                 (int    *argc,
 
 gboolean gtk_init_check           (int    *argc,
                                    char ***argv);
+  
+gboolean gtk_init_with_args       (int            *argc,
+				   char         ***argv,
+				   char           *parameter_string,
+				   GOptionEntry   *entries,
+				   char           *translation_domain,
+				   GError        **error);
+
+GOptionGroup *gtk_get_option_group (gboolean open_default_display);
+  
 #ifdef G_PLATFORM_WIN32
 
 /* Variants that are used to check for correct struct packing

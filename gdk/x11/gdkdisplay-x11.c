@@ -130,6 +130,7 @@ gdk_display_x11_class_init (GdkDisplayX11Class * class)
   parent_class = g_type_class_peek_parent (class);
 }
 
+
 /**
  * gdk_display_open:
  * @display_name: the name of the display to open
@@ -148,7 +149,7 @@ gdk_display_open (const gchar *display_name)
   GdkDisplayX11 *display_x11;
   GdkWindowAttr attr;
   gint argc;
-  gchar **argv;
+  gchar *argv[1];
   const char *sm_client_id;
   
   XClassHint *class_hint;
@@ -227,7 +228,13 @@ gdk_display_open (const gchar *display_name)
   class_hint->res_name = g_get_prgname ();
   
   class_hint->res_class = (char *)gdk_get_program_class ();
-  _gdk_get_command_line_args (&argc, &argv);
+
+  /* XmbSetWMProperties sets the RESOURCE_NAME environment variable
+   * from argv[0], so we just synthesize an argument array here.
+   */
+  argc = 1;
+  argv[0] = g_get_prgname ();
+  
   XmbSetWMProperties (display_x11->xdisplay,
 		      display_x11->leader_window,
 		      NULL, NULL, argv, argc, NULL, NULL,

@@ -86,14 +86,13 @@ static int	    gdk_x_io_error		 (Display     *display);
 static GSList *gdk_error_traps = NULL;               /* List of error traps */
 static GSList *gdk_error_trap_free_list = NULL;      /* Free list */
 
-GdkArgDesc _gdk_windowing_args[] = {
-  { "sync",        GDK_ARG_BOOL,     &_gdk_synchronize,     (GdkArgFunc)NULL },
+GOptionEntry _gdk_windowing_args[] = {
+  { "sync", 0, 0, G_OPTION_ARG_NONE, &_gdk_synchronize, NULL, NULL },
   { NULL }
 };
 
 void
-_gdk_windowing_init (gint    *argc,
-                     gchar ***argv)
+_gdk_windowing_init (void)
 {
   _gdk_x11_initialize_locale ();
   

@@ -65,7 +65,7 @@ static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
 
 #endif /* G_ENABLE_DEBUG */
 
-GdkArgDesc _gdk_windowing_args[] = {
+GOptionEntry _gdk_windowing_args[] = {
   { NULL }
 };
 
@@ -883,7 +883,7 @@ gdk_fb_display_destroy (GdkFBDisplay *display)
 }
 
 void
-_gdk_windowing_init (int *argc, char ***argv)
+_gdk_windowing_init (void)
 {
   if (gdk_initialized)
     return;

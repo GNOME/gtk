@@ -1,3 +1,26 @@
+2004-09-05  Anders Carlsson  <andersca@gnome.org>
+
+	* gdk/gdk.c: (gdk_arg_class_cb), (gdk_arg_name_cb),
+	(gdk_add_option_entries_libgtk_only), (gdk_pre_parse_libgtk_only),
+	(gdk_parse_args):
+	* gdk/gdk.h:
+	* gdk/gdkinternals.h:
+	* gdk/linux-fb/gdkmain-fb.c: (_gdk_windowing_init):
+	* gdk/win32/gdkmain-win32.c: (_gdk_windowing_init):
+	* gdk/x11/gdkdisplay-x11.c: (gdk_display_open):
+	* gdk/x11/gdkmain-x11.c: (_gdk_windowing_init):
+	* gtk/gtkmain.c: (gtk_arg_debug_cb), (gtk_arg_no_debug_cb),
+	(gtk_arg_module_cb), (gtk_arg_warnings_cb),
+	(do_pre_parse_initialization), (do_post_parse_initialization),
+	(pre_parse_hook), (post_parse_hook), (gtk_get_option_group),
+	(gtk_init_with_args), (gtk_parse_args):
+	* gtk/gtkmain.h:
+	Make gtk argument parsing use goption. Add gtk_get_option_group and
+	gtk_init_with_args. 
+	
+	* tests/testtreemodel.c: (main):
+	Use gtk_init_with_args.
+	
 Sun Sep  5 01:04:01 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Allow sorting of tree models to be turned off 

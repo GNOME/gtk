@@ -77,135 +77,6 @@ static const int gdk_ndebug_keys = G_N_ELEMENTS (gdk_debug_keys);
 
 #endif /* G_ENABLE_DEBUG */
 
-static GdkArgContext *
-gdk_arg_context_new (gpointer cb_data)
-{
-  GdkArgContext *result = g_new (GdkArgContext, 1);
-  result->tables = g_ptr_array_new ();
-  result->cb_data = cb_data;
-
-  return result;
-}
-
-static void
-gdk_arg_context_destroy (GdkArgContext *context)
-{
-  g_ptr_array_free (context->tables, TRUE);
-  g_free (context);
-}
-
-static void
-gdk_arg_context_add_table (GdkArgContext *context, GdkArgDesc *table)
-{
-  g_ptr_array_add (context->tables, table);
-}
-
-static void
-gdk_arg_context_parse (GdkArgContext *context, gint *argc, gchar ***argv)
-{
-  int i, j, k;
-
-  if (argc && argv)
-    {
-      for (i = 1; i < *argc; i++)
-	{
-	  char *arg;
-	  
-	  if (!((*argv)[i][0] == '-' && (*argv)[i][1] == '-'))
-	    continue;
-	  
-	  arg = (*argv)[i] + 2;
-
-	  /* '--' terminates list of arguments */
-	  if (*arg == 0)
-	    {
-	      (*argv)[i] = NULL;
-	      break;
-	    }
-	      
-	  for (j = 0; j < context->tables->len; j++)
-	    {
-	      GdkArgDesc *table = context->tables->pdata[j];
-	      for (k = 0; table[k].name; k++)
-		{
-		  switch (table[k].type)
-		    {
-		    case GDK_ARG_STRING:
-		    case GDK_ARG_CALLBACK:
-		    case GDK_ARG_INT:
-		      {
-			int len = strlen (table[k].name);
-			
-			if (strncmp (arg, table[k].name, len) == 0 &&
-			    (arg[len] == '=' || arg[len] == 0))
-			  {
-			    char *value = NULL;
-
-			    (*argv)[i] = NULL;
-
-			    if (arg[len] == '=')
-			      value = arg + len + 1;
-			    else if (i < *argc - 1)
-			      {
-				value = (*argv)[i + 1];
-				(*argv)[i+1] = NULL;
-				i++;
-			      }
-			    else
-			      value = "";
-
-			    switch (table[k].type)
-			      {
-			      case GDK_ARG_STRING:
-				*(gchar **)table[k].location = g_strdup (value);
-				break;
-			      case GDK_ARG_INT:
-				*(gint *)table[k].location = atoi (value);
-				break;
-			      case GDK_ARG_CALLBACK:
-				(*table[k].callback)(table[k].name, value, context->cb_data);
-				break;
-			      default:
-				;
-			      }
-
-			    goto next_arg;
-			  }
-			break;
-		      }
-		    case GDK_ARG_BOOL:
-		    case GDK_ARG_NOBOOL:
-		      if (strcmp (arg, table[k].name) == 0)
-			{
-			  (*argv)[i] = NULL;
-			  
-			  *(gboolean *)table[k].location = (table[k].type == GDK_ARG_BOOL) ? TRUE : FALSE;
-			  goto next_arg;
-			}
-		    }
-		}
-	    }
-	next_arg:
-	  ;
-	}
-	  
-      for (i = 1; i < *argc; i++)
-	{
-	  for (k = i; k < *argc; k++)
-	    if ((*argv)[k] != NULL)
-	      break;
-	  
-	  if (k > i)
-	    {
-	      k -= i;
-	      for (j = i + k; j < *argc; j++)
-		(*argv)[j-k] = (*argv)[j];
-	      *argc -= k;
-	    }
-	}
-    }
-}
-
 #ifdef G_ENABLE_DEBUG
 static void
 gdk_arg_debug_cb (const char *key, const char *value, gpointer user_data)
@@ -224,49 +95,78 @@ gdk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
 }
 #endif /* G_ENABLE_DEBUG */
 
-static void
-gdk_arg_class_cb (const char *key, const char *value, gpointer user_data)
+static gboolean
+gdk_arg_class_cb (const char *key, const char *value, gpointer user_data, GError **error)
 {
   gdk_set_program_class (value);
+
+  return TRUE;
 }
 
-static void
-gdk_arg_name_cb (const char *key, const char *value, gpointer user_data)
+static gboolean
+gdk_arg_name_cb (const char *key, const char *value, gpointer user_data, GError **error)
 {
   g_set_prgname (value);
+
+  return TRUE;
 }
 
-static GdkArgDesc gdk_args[] = {
-  { "class" ,       GDK_ARG_CALLBACK, NULL, gdk_arg_class_cb                   },
-  { "name",         GDK_ARG_CALLBACK, NULL, gdk_arg_name_cb                    },
-  { "display",      GDK_ARG_STRING,   &_gdk_display_name,     (GdkArgFunc)NULL },
-  { "screen",       GDK_ARG_INT,      &_gdk_screen_number,    (GdkArgFunc)NULL },
-
+static GOptionEntry gdk_args[] = {
+  { "class",        0, 0,                     G_OPTION_ARG_CALLBACK, gdk_arg_class_cb,    NULL, NULL },
+  { "name",         0, 0,                     G_OPTION_ARG_CALLBACK, gdk_arg_name_cb,     NULL, NULL },
+  { "display",      0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,   &_gdk_display_name,  NULL, NULL },
+  { "screen",       0, 0,                     G_OPTION_ARG_INT,      &_gdk_screen_number, NULL, NULL },
 #ifdef G_ENABLE_DEBUG
-  { "gdk-debug",    GDK_ARG_CALLBACK, NULL, gdk_arg_debug_cb    },
-  { "gdk-no-debug", GDK_ARG_CALLBACK, NULL, gdk_arg_no_debug_cb },
+  { "gdk-debug",    0, 0, 		      G_OPTION_ARG_CALLBACK, gdk_arg_debug_cb,    NULL, NULL },
+  { "gdk-no-debug", 0, 0, 		      G_OPTION_ARG_CALLBACK, gdk_arg_no_debug_cb, NULL, NULL },
 #endif /* G_ENABLE_DEBUG */
   { NULL }
 };
 
-
 /**
- * _gdk_get_command_line_args:
- * @argv: location to store argv pointer
- * @argc: location 
+ * gdk_add_option_entries_libgtk_only:
+ * @group: An option group.
  * 
- * Retrieve the command line arguments passed to gdk_init().
- * The returned argv pointer points to static storage ; no
- * copy is made.
+ * Appends gdk option entries to the passed in option group. This is
+ * not public API and must not be used by applications.
  **/
 void
-_gdk_get_command_line_args (int    *argc,
-			    char ***argv)
+gdk_add_option_entries_libgtk_only (GOptionGroup *group)
 {
-  *argc = gdk_argc;
-  *argv = gdk_argv;
+  g_option_group_add_entries (group, gdk_args);
+  g_option_group_add_entries (group, _gdk_windowing_args);
 }
 
+void
+gdk_pre_parse_libgtk_only (void)
+{
+  gdk_initialized = TRUE;
+
+  /* We set the fallback program class here, rather than lazily in
+   * gdk_get_program_class, since we don't want -name to override it.
+   */
+  gdk_progclass = g_strdup (g_get_prgname ());
+  if (gdk_progclass && gdk_progclass[0])
+    gdk_progclass[0] = g_ascii_toupper (gdk_progclass[0]);
+  
+#ifdef G_ENABLE_DEBUG
+  {
+    gchar *debug_string = getenv("GDK_DEBUG");
+    if (debug_string != NULL)
+      _gdk_debug_flags = g_parse_debug_string (debug_string,
+					      (GDebugKey *) gdk_debug_keys,
+					      gdk_ndebug_keys);
+  }
+#endif	/* G_ENABLE_DEBUG */
+
+  g_type_init ();
+
+  /* Do any setup particular to the windowing system
+   */
+  _gdk_windowing_init ();  
+}
+
+  
 /**
  * gdk_parse_args:
  * @argc: the number of command line arguments.
@@ -287,70 +187,27 @@ void
 gdk_parse_args (int    *argc,
 		char ***argv)
 {
-  GdkArgContext *arg_context;
-  gint i;
+  GOptionContext *option_context;
+  GOptionGroup *option_group;
 
   if (gdk_initialized)
     return;
 
-  gdk_initialized = TRUE;
-
-  /* Save a copy of the original argc and argv */
-  if (argc && argv)
-    {
-      gdk_argc = *argc;
-      
-      gdk_argv = g_malloc ((gdk_argc + 1) * sizeof (char*));
-      for (i = 0; i < gdk_argc; i++)
-	gdk_argv[i] = g_strdup ((*argv)[i]);
-      gdk_argv[gdk_argc] = NULL;
-    }
-
-  if (argc && argv && *argc > 0)
-    {
-      gchar *d;
-      
-      d = strrchr((*argv)[0], G_DIR_SEPARATOR);
-      if (d != NULL)
-	g_set_prgname (d + 1);
-      else
-	g_set_prgname ((*argv)[0]);
-    }
-  else
-    {
-      g_set_prgname ("<unknown>");
-    }
-
-  /* We set the fallback program class here, rather than lazily in
-   * gdk_get_program_class, since we don't want -name to override it.
-   */
-  gdk_progclass = g_strdup (g_get_prgname ());
-  if (gdk_progclass[0])
-    gdk_progclass[0] = g_ascii_toupper (gdk_progclass[0]);
+  gdk_pre_parse_libgtk_only ();
   
-#ifdef G_ENABLE_DEBUG
-  {
-    gchar *debug_string = getenv("GDK_DEBUG");
-    if (debug_string != NULL)
-      _gdk_debug_flags = g_parse_debug_string (debug_string,
-					      (GDebugKey *) gdk_debug_keys,
-					      gdk_ndebug_keys);
-  }
-#endif	/* G_ENABLE_DEBUG */
+  option_context = g_option_context_new (NULL);
+  g_option_context_set_ignore_unknown_options (option_context, TRUE);
+  g_option_context_set_help_enabled (option_context, FALSE);
+  option_group = g_option_group_new (NULL, NULL, NULL, NULL, NULL);
+  g_option_context_set_main_group (option_context, option_group);
   
-  arg_context = gdk_arg_context_new (NULL);
-  gdk_arg_context_add_table (arg_context, gdk_args);
-  gdk_arg_context_add_table (arg_context, _gdk_windowing_args);
-  gdk_arg_context_parse (arg_context, argc, argv);
-  gdk_arg_context_destroy (arg_context);
+  g_option_group_add_entries (option_group, gdk_args);
+  g_option_group_add_entries (option_group, _gdk_windowing_args);
+
+  g_option_context_parse (option_context, argc, argv, NULL);
+  g_option_context_free (option_context);
   
   GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
-
-  g_type_init ();
-
-  /* Do any setup particular to the windowing system
-   */
-  _gdk_windowing_init (argc, argv);
 }
 
 /** 

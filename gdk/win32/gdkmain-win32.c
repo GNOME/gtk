@@ -52,15 +52,14 @@
 
 static gboolean gdk_synchronize = FALSE;
 
-GdkArgDesc _gdk_windowing_args[] = {
-  { "sync",          GDK_ARG_BOOL, &gdk_synchronize, (GdkArgFunc) NULL},
-  { "no-wintab",     GDK_ARG_BOOL, &_gdk_input_ignore_wintab,
-						     (GdkArgFunc) NULL},
-  { "ignore-wintab", GDK_ARG_BOOL, &_gdk_input_ignore_wintab,
-						     (GdkArgFunc) NULL},
-  { "use-wintab",    GDK_ARG_NOBOOL, &_gdk_input_ignore_wintab,
-						     (GdkArgFunc) NULL},
-  { "max-colors",    GDK_ARG_INT,  &_gdk_max_colors,  (GdkArgFunc) NULL},
+GOptionEntry _gdk_windowing_args[] = {
+  { "sync", 0, 0, G_OPTION_ARG_NONE, &_gdk_synchronize, NULL, NULL },
+  { "no-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, NULL, NULL },
+  { "ignore-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, NULL, NULL },
+#if 0
+  { "use-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, NULL, NULL },
+#endif
+  { "max-colors", 0, 0, G_OPTION_ARG_INT, &_gdk_max_colors, NULL, NULL },
   { NULL }
 };
 
@@ -75,8 +74,7 @@ DllMain (HINSTANCE hinstDLL,
 }
 
 void
-_gdk_windowing_init (gint    *argc,
-                     gchar ***argv)
+_gdk_windowing_init (void)
 {
   gchar buf[10];
 

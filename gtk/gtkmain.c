@@ -348,35 +348,71 @@ gtk_disable_setlocale (void)
 #undef gtk_init_check
 #endif
 
-/**
- * gtk_parse_args:
- * @argc: a pointer to the number of command line arguments.
- * @argv: a pointer to the array of command line arguments.
- * 
- * Parses command line arguments, and initializes global
- * attributes of GTK+, but does not actually open a connection
- * to a display. (See gdk_display_open(), gdk_get_display_arg_name())
- *
- * Any arguments used by GTK+ or GDK are removed from the array and
- * @argc and @argv are updated accordingly.
- *
- * You shouldn't call this function explicitely if you are using
- * gtk_init(), or gtk_init_check().
- *
- * Return value: %TRUE if initialization succeeded, otherwise %FALSE.
- **/
-gboolean
-gtk_parse_args (int    *argc,
-		char ***argv)
+static GString *gtk_modules_string = NULL;
+
+#ifdef G_ENABLE_DEBUG
+static gboolean
+gtk_arg_debug_cb (const char *key, const char *value, gpointer user_data)
 {
-  GString *gtk_modules_string = NULL;
+  gtk_debug_flags |= g_parse_debug_string (value,
+					   gtk_debug_keys,
+					   gtk_ndebug_keys);
+
+  return TRUE;
+}
+
+static gboolean
+gtk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
+{
+  gtk_debug_flags &= ~g_parse_debug_string (value,
+					    gtk_debug_keys,
+					    gtk_ndebug_keys);
+}
+#endif /* G_ENABLE_DEBUG */
+
+static gboolean
+gtk_arg_module_cb (const char *key, const char *value, gpointer user_data)
+{
+  if (value && *value)
+    {
+      if (gtk_modules_string)
+	g_string_append_c (gtk_modules_string, G_SEARCHPATH_SEPARATOR);
+      else
+	gtk_modules_string = g_string_new (NULL);
+      
+      g_string_append (gtk_modules_string, value);
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gtk_arg_warnings_cb (const char *key, const char *value, gpointer user_data)
+{
+  GLogLevelFlags fatal_mask;
+
+  fatal_mask = g_log_set_always_fatal (G_LOG_FATAL_MASK);
+  fatal_mask |= G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL;
+  g_log_set_always_fatal (fatal_mask);
+
+  return TRUE;
+}
+
+static GOptionEntry gtk_args[] = {
+  { "gtk-module",       0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_module_cb,   NULL, NULL },
+  { "g-fatal-warnings", 0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_warnings_cb, NULL, NULL },
+#ifdef G_ENABLE_DEBUG
+  { "gtk-debug",        0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_debug_cb,    NULL, NULL },
+  { "gtk-no-debug",     0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_no_debug_cb, NULL, NULL },
+#endif /* G_ENABLE_DEBUG */
+  { NULL }
+};
+
+static void
+do_pre_parse_initialization (int    *argc,
+			     char ***argv)
+{
   const gchar *env_string;
-
-  if (gtk_initialized)
-    return TRUE;
-
-  if (!check_setugid ())
-    return FALSE;
   
 #if	0
   g_set_error_handler (gtk_error);
@@ -391,7 +427,7 @@ gtk_parse_args (int    *argc,
 	g_warning ("Locale not supported by C library.\n\tUsing the fallback 'C' locale.");
     }
 
-  gdk_parse_args (argc, argv);
+  gdk_pre_parse_libgtk_only ();
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
   
 #ifdef G_ENABLE_DEBUG
@@ -408,109 +444,13 @@ gtk_parse_args (int    *argc,
   env_string = g_getenv ("GTK_MODULES");
   if (env_string)
     gtk_modules_string = g_string_new (env_string);
+}
 
-  if (argc && argv)
-    {
-      gint i, j, k;
-      
-      for (i = 1; i < *argc;)
-	{
-	  if (strcmp ("--gtk-module", (*argv)[i]) == 0 ||
-	      strncmp ("--gtk-module=", (*argv)[i], 13) == 0)
-	    {
-	      gchar *module_name = (*argv)[i] + 12;
-	      
-	      if (*module_name == '=')
-		module_name++;
-	      else if (i + 1 < *argc)
-		{
-		  (*argv)[i] = NULL;
-		  i += 1;
-		  module_name = (*argv)[i];
-		}
-	      (*argv)[i] = NULL;
-
-	      if (module_name && *module_name)
-		{
-		  if (gtk_modules_string)
-		    g_string_append_c (gtk_modules_string, G_SEARCHPATH_SEPARATOR);
- 		  else
- 		    gtk_modules_string = g_string_new (NULL);
-
-		  g_string_append (gtk_modules_string, module_name);
-		}
-	    }
-	  else if (strcmp ("--g-fatal-warnings", (*argv)[i]) == 0)
-	    {
-	      GLogLevelFlags fatal_mask;
-	      
-	      fatal_mask = g_log_set_always_fatal (G_LOG_FATAL_MASK);
-	      fatal_mask |= G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL;
-              g_log_set_always_fatal (fatal_mask);
-	      (*argv)[i] = NULL;
-	    }
-#ifdef G_ENABLE_DEBUG
-	  else if ((strcmp ("--gtk-debug", (*argv)[i]) == 0) ||
-		   (strncmp ("--gtk-debug=", (*argv)[i], 12) == 0))
-	    {
-	      gchar *equal_pos = strchr ((*argv)[i], '=');
-	      
-	      if (equal_pos != NULL)
-		{
-		  gtk_debug_flags |= g_parse_debug_string (equal_pos+1,
-							   gtk_debug_keys,
-							   gtk_ndebug_keys);
-		}
-	      else if ((i + 1) < *argc && (*argv)[i + 1])
-		{
-		  gtk_debug_flags |= g_parse_debug_string ((*argv)[i+1],
-							   gtk_debug_keys,
-							   gtk_ndebug_keys);
-		  (*argv)[i] = NULL;
-		  i += 1;
-		}
-	      (*argv)[i] = NULL;
-	    }
-	  else if ((strcmp ("--gtk-no-debug", (*argv)[i]) == 0) ||
-		   (strncmp ("--gtk-no-debug=", (*argv)[i], 15) == 0))
-	    {
-	      gchar *equal_pos = strchr ((*argv)[i], '=');
-	      
-	      if (equal_pos != NULL)
-		{
-		  gtk_debug_flags &= ~g_parse_debug_string (equal_pos+1,
-							    gtk_debug_keys,
-							    gtk_ndebug_keys);
-		}
-	      else if ((i + 1) < *argc && (*argv)[i + 1])
-		{
-		  gtk_debug_flags &= ~g_parse_debug_string ((*argv)[i+1],
-							    gtk_debug_keys,
-							    gtk_ndebug_keys);
-		  (*argv)[i] = NULL;
-		  i += 1;
-		}
-	      (*argv)[i] = NULL;
-	    }
-#endif /* G_ENABLE_DEBUG */
-	  i += 1;
-	}
-      
-      for (i = 1; i < *argc; i++)
-	{
-	  for (k = i; k < *argc; k++)
-	    if ((*argv)[k] != NULL)
-	      break;
-	  
-	  if (k > i)
-	    {
-	      k -= i;
-	      for (j = i + k; j < *argc; j++)
-		(*argv)[j-k] = (*argv)[j];
-	      *argc -= k;
-	    }
-	}
-    }
+static void
+do_post_parse_initialization (int    *argc,
+			      char ***argv)
+{
+  GSList *slist;
 
   if (gtk_debug_flags & GTK_DEBUG_UPDATES)
     gdk_window_set_debug_updates (TRUE);
@@ -552,8 +492,133 @@ gtk_parse_args (int    *argc,
       _gtk_modules_init (argc, argv, gtk_modules_string->str);
       g_string_free (gtk_modules_string, TRUE);
     }
+}
+
+
+typedef struct
+{
+  gboolean open_default_display;
+} OptionGroupInfo;
+
+static gboolean
+pre_parse_hook (GOptionContext *context,
+		GOptionGroup   *group,
+		gpointer	data,
+		GError        **error)
+{
+  do_pre_parse_initialization (NULL, NULL);
+  
+  return TRUE;
+}
+
+static gboolean
+post_parse_hook (GOptionContext *context,
+		 GOptionGroup   *group,
+		 gpointer	data,
+		 GError        **error)
+{
+  OptionGroupInfo *info = data;
+
+  
+  do_post_parse_initialization (NULL, NULL);
+  
+  if (info->open_default_display)
+    return gdk_display_open_default_libgtk_only () != NULL;
   else
-    _gtk_modules_init (argc, argv, "");
+    return TRUE;
+}
+
+
+GOptionGroup *
+gtk_get_option_group (gboolean open_default_display)
+{
+  GOptionGroup *group;
+  OptionGroupInfo *info;
+
+  info = g_new0 (OptionGroupInfo, 1);
+  info->open_default_display = open_default_display;
+  
+  group = g_option_group_new ("gtk", _("GTK+ Options"), _("Show GTK+ Options"), info, g_free);
+  g_option_group_set_parse_hooks (group, pre_parse_hook, post_parse_hook);
+
+  gdk_add_option_entries_libgtk_only (group);
+  g_option_group_add_entries (group, gtk_args);
+  
+  return group;
+}
+
+gboolean
+gtk_init_with_args (int            *argc,
+		    char         ***argv,
+		    char           *parameter_string,  
+		    GOptionEntry   *entries,
+		    char           *translation_domain,
+		    GError        **error)
+{
+  GOptionContext *context;
+  GOptionGroup *gtk_group;
+  gboolean retval;
+  
+  if (gtk_initialized)
+    return TRUE;
+
+  gtk_group = gtk_get_option_group (TRUE);
+  
+  context = g_option_context_new (parameter_string);
+  g_option_context_add_group (context, gtk_group);
+  
+  if (entries)
+    g_option_context_add_main_entries (context, entries, translation_domain);
+
+  retval = g_option_context_parse (context, argc, argv, error);
+
+  g_option_context_free (context);
+
+  return retval;
+}
+
+
+/**
+ * gtk_parse_args:
+ * @argc: a pointer to the number of command line arguments.
+ * @argv: a pointer to the array of command line arguments.
+ * 
+ * Parses command line arguments, and initializes global
+ * attributes of GTK+, but does not actually open a connection
+ * to a display. (See gdk_display_open(), gdk_get_display_arg_name())
+ *
+ * Any arguments used by GTK+ or GDK are removed from the array and
+ * @argc and @argv are updated accordingly.
+ *
+ * You shouldn't call this function explicitely if you are using
+ * gtk_init(), or gtk_init_check().
+ *
+ * Return value: %TRUE if initialization succeeded, otherwise %FALSE.
+ **/
+gboolean
+gtk_parse_args (int    *argc,
+		char ***argv)
+{
+  GOptionContext *option_context;
+  
+  if (gtk_initialized)
+    return TRUE;
+
+  if (!check_setugid ())
+    return FALSE;
+
+  do_pre_parse_initialization (argc, argv);
+
+  option_context = g_option_context_new (NULL);
+  g_option_context_set_ignore_unknown_options (option_context, TRUE);
+  g_option_context_set_help_enabled (option_context, FALSE);
+  
+  g_option_context_add_main_entries (option_context, gtk_args, NULL);
+
+  g_option_context_parse (option_context, argc, argv, NULL);
+  g_option_context_free (option_context);
+
+  do_post_parse_initialization (argc, argv);
   
   return TRUE;
 }
