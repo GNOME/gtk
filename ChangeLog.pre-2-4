@@ -1,3 +1,8 @@
+2003-01-02  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwindow.c (gtk_window_get_focus): Document that it may
+	return NULL.  (#102069)
+
 2003-01-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/fnmatch.c (FNMATCH_TEST_CASES): #undef, since having
