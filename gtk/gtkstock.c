@@ -335,8 +335,8 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_UNDERLINE, N_("_Underline"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_UNDO, N_("_Undo"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_YES, N_("_Yes"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_ZOOM_100, N_("Zoom _100%"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_ZOOM_FIT, N_("Zoom to _Fit"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_ZOOM_100, N_("_Normal Size"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_ZOOM_FIT, N_("Best _Fit"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_ZOOM_IN, N_("Zoom _In"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_ZOOM_OUT, N_("Zoom _Out"), 0, 0, GETTEXT_PACKAGE }
 };
