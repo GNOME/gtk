@@ -1131,13 +1131,6 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 
 	      gtk_widget_realize (menu->tearoff_window);
 	      
-	      gdk_window_set_decorations (menu->tearoff_window->window, 
-					  GDK_DECOR_ALL |
-					  GDK_DECOR_RESIZEH |
-					  GDK_DECOR_MINIMIZE |
-					  GDK_DECOR_MAXIMIZE);
-	      gtk_window_set_resizable (GTK_WINDOW (menu->tearoff_window), FALSE);
-
 	      menu->tearoff_hbox = gtk_hbox_new (FALSE, FALSE);
 	      gtk_container_add (GTK_CONTAINER (menu->tearoff_window), menu->tearoff_hbox);
 
@@ -1833,7 +1826,7 @@ gtk_menu_key_press (GtkWidget	*widget,
       menu_shell->active_menu_item &&
       GTK_BIN (menu_shell->active_menu_item)->child &&			/* no seperators */
       GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL &&	/* no submenus */
-      (delete || gtk_accelerator_valid (event->keyval, event->state)))
+      (delete || gtk_accelerator_valid (accel_key, accel_mods)))
     {
       GtkWidget *menu_item = menu_shell->active_menu_item;
       gboolean locked, replace_accels = TRUE;

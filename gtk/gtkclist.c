@@ -7683,7 +7683,7 @@ gtk_clist_drag_data_received (GtkWidget        *widget,
       gtk_drag_get_source_widget (context) == widget &&
       selection_data->target ==
       gdk_atom_intern ("gtk-clist-drag-reorder", FALSE) &&
-      selection_data->format == GTK_TYPE_POINTER &&
+      selection_data->format == 8 &&
       selection_data->length == sizeof (GtkCListCellInfo))
     {
       GtkCListCellInfo *source_info;
@@ -7733,12 +7733,9 @@ gtk_clist_drag_data_get (GtkWidget        *widget,
 	  ret_info.column = info->column;
 
 	  gtk_selection_data_set (selection_data, selection_data->target,
-				  GTK_TYPE_POINTER, (guchar *) &ret_info,
+				  8, (guchar *) &ret_info,
 				  sizeof (GtkCListCellInfo));
 	}
-      else
-	gtk_selection_data_set (selection_data, selection_data->target,
-				GTK_TYPE_POINTER, NULL,	0);
     }
 }
 

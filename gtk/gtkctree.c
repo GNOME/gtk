@@ -6053,7 +6053,7 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
       gtk_drag_get_source_widget (context) == widget &&
       selection_data->target ==
       gdk_atom_intern ("gtk-clist-drag-reorder", FALSE) &&
-      selection_data->format == GTK_TYPE_POINTER &&
+      selection_data->format == 8 &&
       selection_data->length == sizeof (GtkCListCellInfo))
     {
       GtkCListCellInfo *source_info;
