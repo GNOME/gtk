@@ -1,27 +1,41 @@
-.TH GTK "11 May 1998" Version 1.0.1
+.TH GTK+ 1 "11 May 1998" Version 1.0.2
 .SH NAME
-gtk-config - script to perform various Gtk+ functions
+gtk-config - script to get information about the installed version of GTK+
 .SH SYNOPSIS
 .B gtk-config
 [\-\-prefix\fI[=DIR]\fP] [\-\-exec\-prefix\fI[=DIR]\fP] [\-\-version] [\-\-libs] [\-\-cflags]
 .SH DESCRIPTION
 .PP
-\fIgtk-config\fP is a tool that is used by programs that need to know
-what libraries and include-paths \fIGtk+\fP was compiled with. .m4
-macros for use with GNU autoconf are also included, to make detection
-of these libraries et cetera easy for the upstream maintainer.
+\fIgtk-config\fP is a tool that is used to configure to determine
+the compiler and linker flags that should be used to compile
+and link programs that use \fIGTK+\fP. It is also used internally
+to the .m4 macros for GNU autoconf that are included with \fIGTK+\fP.
+.
 .SH OPTIONS
 .l
 \fIgtk-config\fP accepts the following options:
 .TP 8
 .B  \-\-version
-Display the currently installed version of Gtk+.
+Print the currently installed version of \fIGTK+\fP on the standard output.
 .TP 8
 .B  \-\-libs
-Display the libraries Gtk+ was linked with at compile-time.
+Print the linker flags that are necessary to link a \fIGTK+\fP program.
 .TP 8
 .B  \-\-cflags
-Display the flags that were passed to the compiler when Gtk+ was compiled.
+Print the compiler flags that are necessary to compile a \fIGTK+\fP program.
+.TP 8
+.B  \-\-prefix=PREFIX
+If specified, use PREFIX instead of the installation prefix that \fIGTK+\fP
+was built with when computing the output for the \-\-cflags and
+\-\-libs options. This option is also used for the exec prefix
+if \-\-exec\-prefix was not specified. This option must be specified
+before any \-\-libs or \-\-cflags options.
+.TP 8
+.B  \-\-exec\-prefix=PREFIX
+If specified, use PREFIX instead of the installation exec prefix that
+\fIGTK+\fP was built with when computing the output for the \-\-cflags
+and \-\-libs options.  This option must be specified before any
+\-\-libs or \-\-cflags options.
 .SH SEE ALSO
 .BR gimp (1),
 .BR gimptool (1)
