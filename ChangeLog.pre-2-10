@@ -1,3 +1,8 @@
+2004-03-08  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtkfilesystemmodel.c (gtk_file_system_model_get_flags): 
+	If max_depth is 0 then we have a list.
+
 2004-03-08  Morten Welinder  <terra@gnome.org>
 
 	* gtk/gtkpathbar.c (_gtk_path_bar_set_path): If we fail, leave

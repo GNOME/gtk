@@ -315,7 +315,7 @@ gtk_file_system_model_get_flags (GtkTreeModel *tree_model)
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
   GtkTreeModelFlags flags = GTK_TREE_MODEL_ITERS_PERSIST;
 
-  if (model->max_depth == 1)
+  if (model->max_depth == 0)
     flags |= GTK_TREE_MODEL_LIST_ONLY;
 
   return flags;
