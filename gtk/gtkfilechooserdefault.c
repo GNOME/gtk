@@ -1049,13 +1049,16 @@ button_new (GtkFileChooserDefault *impl,
   GtkWidget *button;
   GtkWidget *hbox;
   GtkWidget *widget;
+  GtkWidget *align;
 
   button = gtk_button_new ();
-
   hbox = gtk_hbox_new (FALSE, 2);
-  gtk_container_add (GTK_CONTAINER (button), hbox);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
 
+  gtk_container_add (GTK_CONTAINER (button), align);
+  gtk_container_add (GTK_CONTAINER (align), hbox);
   widget = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
+
   gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 
   widget = gtk_label_new (text);
@@ -1064,7 +1067,7 @@ button_new (GtkFileChooserDefault *impl,
   gtk_widget_set_sensitive (button, sensitive);
   g_signal_connect (button, "clicked", callback, impl);
 
-  gtk_widget_show_all (hbox);
+  gtk_widget_show_all (align);
 
   if (show)
     gtk_widget_show (button);
@@ -1426,7 +1429,8 @@ shortcuts_tree_create (GtkFileChooserDefault *impl)
 
 /* Creates the widgets for the shortcuts/bookmarks pane */
 static GtkWidget *
-shortcuts_pane_create (GtkFileChooserDefault *impl)
+shortcuts_pane_create (GtkFileChooserDefault *impl,
+		       GtkSizeGroup          *size_group)
 {
   GtkWidget *vbox;
   GtkWidget *hbox;
@@ -1443,6 +1447,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl)
   /* Box for buttons */
 
   hbox = gtk_hbox_new (TRUE, 6);
+  gtk_size_group_add_widget (size_group, hbox);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_widget_show (hbox);
 
@@ -1550,9 +1555,27 @@ create_file_list (GtkFileChooserDefault *impl)
   return impl->list_scrollwin;
 }
 
+static GtkWidget *
+create_filename_entry_and_filter_combo (GtkFileChooserDefault *impl)
+{
+  GtkWidget *hbox;
+  GtkWidget *widget;
+
+  hbox = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (hbox);
+
+  /* Filter combo */
+
+  widget = filter_create (impl);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+
+  return hbox;
+}
+
 /* Creates the widgets for the files/folders pane */
 static GtkWidget *
-file_pane_create (GtkFileChooserDefault *impl)
+file_pane_create (GtkFileChooserDefault *impl,
+		  GtkSizeGroup          *size_group)
 {
   GtkWidget *vbox;
   GtkWidget *hbox;
@@ -1602,26 +1625,16 @@ file_pane_create (GtkFileChooserDefault *impl)
   gtk_box_pack_start (GTK_BOX (hbox), impl->preview_frame, FALSE, FALSE, 0);
   /* Don't show preview frame initially */
 
-  return vbox;
-}
-
-static GtkWidget *
-create_filename_entry_and_filter_combo (GtkFileChooserDefault *impl)
-{
-  GtkWidget *hbox;
-  GtkWidget *widget;
-
-  hbox = gtk_hbox_new (FALSE, 12);
+  /* Filename entry and filter combo */
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_size_group_add_widget (size_group, hbox);
+  widget = create_filename_entry_and_filter_combo (impl);
+  gtk_box_pack_end (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_widget_show (hbox);
 
-  /* Filter combo */
-
-  widget = filter_create (impl);
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-
-  return hbox;
+  return vbox;
 }
-
 /* Callback used when the "Browse for more folders" expander is toggled */
 static void
 expander_activate_cb (GtkExpander           *expander,
@@ -1708,7 +1721,10 @@ main_paned_create (GtkFileChooserDefault *impl)
 {
   GtkWidget *hpaned;
   GtkWidget *widget;
-  GtkWidget *entry_widget;
+  GtkSizeGroup *size_group;
+
+  /* size group is used by the [+][-] buttons, as well as the filter. */
+  size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
 
   /* Paned widget */
 
@@ -1717,18 +1733,13 @@ main_paned_create (GtkFileChooserDefault *impl)
 
   /* Shortcuts pane */
 
-  widget = shortcuts_pane_create (impl);
+  widget = shortcuts_pane_create (impl, size_group);
   gtk_paned_pack1 (GTK_PANED (hpaned), widget, FALSE, FALSE);
 
   /* File/folder pane */
 
-  widget = file_pane_create (impl);
+  widget = file_pane_create (impl, size_group);
   gtk_paned_pack2 (GTK_PANED (hpaned), widget, TRUE, FALSE);
-
-  /* Filename entry and filter combo */
-
-  entry_widget = create_filename_entry_and_filter_combo (impl);
-  gtk_box_pack_start (GTK_BOX (impl), entry_widget, FALSE, FALSE, 0);
 
   return hpaned;
 }

@@ -1,3 +1,9 @@
+Mon Feb 23 17:52:43 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (main_paned_create): use a size
+	group when allocating space for the buttons at the bottom just in
+	case.  Also, move the filter to below the file list.
+
 Mon Feb 23 16:52:12 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c
