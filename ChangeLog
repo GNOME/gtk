@@ -1,3 +1,9 @@
+Sat Dec  5 21:07:09 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkaspectframe.c (gtk_aspect_frame_size_allocate): Fixed
+	long-standing typo in aspect ratio computation code.
+	(pointed out by Sebastian Rittau <srittau@jroger.in-berlin.de>)
+
 Fri Dec  4 01:20:06 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_button_release): call toggle_row with

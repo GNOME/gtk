@@ -301,9 +301,8 @@ gtk_aspect_frame_size_allocate (GtkWidget     *widget,
 		bin->child->requisition.height;
 	      if (ratio < MIN_RATIO) ratio = MIN_RATIO;
 	    }
-	  else
-	    if (bin->child->requisition.height != 0)
-	      ratio = MAX_RATIO;
+	  else if (bin->child->requisition.width != 0)
+	    ratio = MAX_RATIO;
 	  else
 	    ratio = 1.0;
 	}
