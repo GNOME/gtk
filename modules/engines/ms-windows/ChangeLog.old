@@ -1,3 +1,7 @@
+2003-09-16  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/xp_theme.c: Ignore cliprect for now
+	
 2003-09-15  Raymond Penners  <raymond@dotsphinx.com>
 
 	* === Released 0.4.1 ===
