@@ -107,6 +107,10 @@ gboolean            gtk_entry_completion_get_inline_completion  (GtkEntryComplet
 void                gtk_entry_completion_set_popup_completion   (GtkEntryCompletion          *completion,
                                                                  gboolean popup_completion);
 gboolean            gtk_entry_completion_get_popup_completion   (GtkEntryCompletion          *completion);
+void                gtk_entry_completion_set_popup_set_width    (GtkEntryCompletion          *completion,
+                                                                 gboolean popup_set_width);
+gboolean            gtk_entry_completion_get_popup_set_width    (GtkEntryCompletion          *completion);
+
 
 /* convenience */
 void                gtk_entry_completion_set_text_column        (GtkEntryCompletion          *completion,

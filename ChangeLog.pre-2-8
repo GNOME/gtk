@@ -1,5 +1,18 @@
 2005-04-04  Matthias Clasen  <mclasen@redhat.com>
 
+	Allow completion popups to be wider than the entry. (#131916, 
+	Ross Burton)
+	
+	* gtk/gtkentrycompletion.[hc]: Add a boolean popup-set-width property.
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
+	Don't force the popup to have the same width as the entry if 
+	popup-set-width is FALSE.
+
+	* gtk/gtk.symbols: Add new functions.
+
+2005-04-04  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel): 
 	Use gtk_accel_map_change_entry(), so that reusing the same
 	action name works.  (#170727, Paolo Borelli)

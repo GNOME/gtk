@@ -1,3 +1,7 @@
+2005-04-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add new functions.
+
 2005-04-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkselection.sgml: Move docs inline.

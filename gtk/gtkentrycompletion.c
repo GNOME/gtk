@@ -58,7 +58,8 @@ enum
   PROP_MINIMUM_KEY_LENGTH,
   PROP_TEXT_COLUMN,
   PROP_INLINE_COMPLETION,
-  PROP_POPUP_COMPLETION
+  PROP_POPUP_COMPLETION,
+  PROP_POPUP_SET_WIDTH
 };
 
 #define GTK_ENTRY_COMPLETION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ENTRY_COMPLETION, GtkEntryCompletionPrivate))
@@ -334,6 +335,22 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
  							 TRUE,
  							 GTK_PARAM_READWRITE));
 
+  /**
+   * GtkEntryCompletion:popup-set-width:
+   * 
+   * Determines whether the completions popup window will be
+   * resized to the width of the entry.
+   *
+   * Since: 2.8
+   */
+  g_object_class_install_property (object_class,
+				   PROP_POPUP_SET_WIDTH,
+				   g_param_spec_boolean ("popup-set-width",
+ 							 P_("Popup set width"),
+ 							 P_("If TRUE, the popup window will have the same size as the entry"),
+ 							 TRUE,
+ 							 GTK_PARAM_READWRITE));
+
   g_type_class_add_private (object_class, sizeof (GtkEntryCompletionPrivate));
 }
 
@@ -365,6 +382,7 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   priv->has_completion = FALSE;
   priv->inline_completion = FALSE;
   priv->popup_completion = TRUE;
+  priv->popup_set_width = TRUE;
 
   /* completions */
   priv->filter_model = NULL;
@@ -494,6 +512,10 @@ gtk_entry_completion_set_property (GObject      *object,
 	priv->popup_completion = g_value_get_boolean (value);
         break;
 
+      case PROP_POPUP_SET_WIDTH:
+	priv->popup_set_width = g_value_get_boolean (value);
+        break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -529,6 +551,10 @@ gtk_entry_completion_get_property (GObject    *object,
 
       case PROP_POPUP_COMPLETION:
         g_value_set_boolean (value, gtk_entry_completion_get_popup_completion (completion));
+        break;
+
+      case PROP_POPUP_SET_WIDTH:
+        g_value_set_boolean (value, gtk_entry_completion_get_popup_set_width (completion));
         break;
 
       default:
@@ -1293,7 +1319,12 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 						  GTK_WIDGET (completion->priv->entry)->window);
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
-  width = MIN (completion->priv->entry->allocation.width, monitor.width) - 2 * x_border;
+  if (completion->priv->popup_set_width)
+    width = MIN (completion->priv->entry->allocation.width, monitor.width) - 2 * x_border;
+  else
+    width = -1;
+
+  gtk_tree_view_columns_autosize (completion->priv->tree_view);
   gtk_widget_set_size_request (completion->priv->tree_view, width, items * height);
 
   /* default on no match */
@@ -1609,6 +1640,53 @@ gtk_entry_completion_get_popup_completion (GtkEntryCompletion *completion)
   
   return completion->priv->popup_completion;
 }
+
+/**
+ * gtk_entry_completion_set_popup_set_width:
+ * @completion: a #GtkEntryCompletion
+ * @popup_set_width: %TRUE to make the width of the popup the same as the entry
+ *
+ * Sets whether the completion popup window will be resized to be the same
+ * width as the entry.
+ *
+ * Since: 2.8
+ */
+void 
+gtk_entry_completion_set_popup_set_width (GtkEntryCompletion *completion,
+					  gboolean            popup_set_width)
+{
+  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
+  
+  popup_set_width = popup_set_width != FALSE;
+
+  if (completion->priv->popup_set_width != popup_set_width)
+    {
+      completion->priv->popup_set_width = popup_set_width;
+
+      g_object_notify (G_OBJECT (completion), "popup-set-width");
+    }
+}
+
+/**
+ * gtk_entry_completion_get_popup_set_width:
+ * @completion: a #GtkEntryCompletion
+ * 
+ * Returns whether the  completion popup window will be resized to the 
+ * width of the entry.
+ * 
+ * Return value: %TRUE if the popup window will be resized to the width of 
+ *   the entry
+ * 
+ * Since: 2.8
+ **/
+gboolean
+gtk_entry_completion_get_popup_set_width (GtkEntryCompletion *completion)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY_COMPLETION (completion), TRUE);
+  
+  return completion->priv->popup_set_width;
+}
+
 
 #define __GTK_ENTRY_COMPLETION_C__
 #include "gtkaliasdef.c"
