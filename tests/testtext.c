@@ -20,6 +20,7 @@ struct _Buffer
   GtkTextBuffer *buffer;
   char *filename;
   gint untitled_serial;
+  GtkTextTag *invisible_tag;
   GtkTextTag *not_editable_tag;
   GtkTextTag *found_text_tag;
   GtkTextTag *custom_tabs_tag;
@@ -905,6 +906,32 @@ do_apply_editable (gpointer callback_data,
     }
 }
 
+static void
+do_apply_invisible (gpointer callback_data,
+                    guint callback_action,
+                    GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkTextIter start;
+  GtkTextIter end;
+  
+  if (gtk_text_buffer_get_selection_bounds (view->buffer->buffer,
+                                            &start, &end))
+    {
+      if (callback_action)
+        {
+          gtk_text_buffer_remove_tag (view->buffer->buffer,
+                                      view->buffer->invisible_tag,
+                                      &start, &end);
+        }
+      else
+        {
+          gtk_text_buffer_apply_tag (view->buffer->buffer,
+                                     view->buffer->invisible_tag,
+                                     &start, &end);
+        }
+    }
+}
 
 static void
 do_apply_tabs (gpointer callback_data,
@@ -1087,6 +1114,8 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Attributes",   	  NULL,         0,                0, "<Branch>" },
   { "/Attributes/Editable",   	  NULL,         do_apply_editable, TRUE, NULL },
   { "/Attributes/Not editable",   	  NULL,         do_apply_editable, FALSE, NULL },
+  { "/Attributes/Invisible",   	  NULL,         do_apply_invisible, FALSE, NULL },
+  { "/Attributes/Visible",   	  NULL,         do_apply_invisible, TRUE, NULL },
   { "/Attributes/Custom tabs",   	  NULL,         do_apply_tabs, FALSE, NULL },
   { "/Attributes/Default tabs",   	  NULL,         do_apply_tabs, TRUE, NULL },
   { "/_Test",   	 NULL,         0,           0, "<Branch>" },
@@ -1254,6 +1283,11 @@ create_buffer (void)
   buffer->filename = NULL;
   buffer->untitled_serial = -1;
 
+  buffer->invisible_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
+  gtk_object_set (GTK_OBJECT (buffer->invisible_tag),
+                  "invisible", TRUE,
+                  NULL);
+  
   buffer->not_editable_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
   gtk_object_set (GTK_OBJECT (buffer->not_editable_tag),
                   "editable", FALSE,

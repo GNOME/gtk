@@ -1,12 +1,21 @@
 2000-11-08  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtktexttag.c (gtk_text_tag_class_init): Add visible and
+	visible_set args, don't know where these had gone, I thought they
+	used to be there
+
+	* gtk/testtext.c: Add a menu item to apply invisibility tag;
+	now we can test the feature and see that it's totally broken.
+
+2000-11-08  Havoc Pennington  <hp@pobox.com>
+
         Make DND copy pixbufs and tags when source and target share a 
 	tag table.
 	
 	* gtk/gtktextview.c (gtk_text_view_drag_data_get): provide the
 	in-process GTK_TEXT_BUFFER_CONTENTS target
 	(gtk_text_view_drag_data_received): Paste from
-	GTK_TEXT_BUFFER_CONTENTS if we receive it.	
+	GTK_TEXT_BUFFER_CONTENTS if we receive it.
 
 2000-11-08  Alexander Larsson  <alexl@redhat.com>
 

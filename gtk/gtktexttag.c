@@ -92,7 +92,8 @@ enum {
   ARG_BG_FULL_HEIGHT,
   ARG_LANGUAGE,
   ARG_TABS,
-
+  ARG_INVISIBLE,
+  
   /* Whether-a-style-arg-is-set args */
   ARG_BACKGROUND_SET,
   ARG_FOREGROUND_SET,
@@ -116,6 +117,7 @@ enum {
   ARG_BG_FULL_HEIGHT_SET,
   ARG_LANGUAGE_SET,
   ARG_TABS_SET,
+  ARG_INVISIBLE_SET,
 
   LAST_ARG
 };
@@ -223,7 +225,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_WRAP_MODE);
   gtk_object_add_arg_type ("GtkTextTag::tabs", GTK_TYPE_POINTER,
                            GTK_ARG_READWRITE, ARG_TABS);
-
+  gtk_object_add_arg_type ("GtkTextTag::invisible", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_INVISIBLE);
+  
   /* Style args are set or not */
   gtk_object_add_arg_type ("GtkTextTag::background_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_BACKGROUND_SET);
@@ -269,7 +273,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_WRAP_MODE_SET);
   gtk_object_add_arg_type ("GtkTextTag::tabs_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_TABS_SET);
-
+  gtk_object_add_arg_type ("GtkTextTag::invisible_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_INVISIBLE_SET);
+  
 
   signals[EVENT] =
     gtk_signal_new ("event",
@@ -610,6 +616,12 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       size_changed = TRUE;
       break;
 
+    case ARG_INVISIBLE:
+      text_tag->invisible_set = TRUE;
+      text_tag->values->invisible = GTK_VALUE_BOOL (*arg);
+      size_changed = TRUE;
+      break;
+      
       /* Whether the value should be used... */
 
     case ARG_BACKGROUND_SET:
@@ -706,6 +718,11 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       size_changed = TRUE;
       break;
 
+    case ARG_INVISIBLE_SET:
+      text_tag->invisible_set = GTK_VALUE_BOOL (*arg);
+      size_changed = TRUE;
+      break;
+      
     default:
       g_assert_not_reached ();
       break;
