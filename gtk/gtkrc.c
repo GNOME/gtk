@@ -826,9 +826,9 @@ gtk_rc_style_finalize (GObject *object)
     if (rc_style->bg_pixmap_name[i])
       g_free (rc_style->bg_pixmap_name[i]);
   
-      /* Now remove all references to this rc_style from
-       * realized_style_ht
-       */
+  /* Now remove all references to this rc_style from
+   * realized_style_ht
+   */
   tmp_list1 = rc_style->rc_style_lists;
   while (tmp_list1)
     {
