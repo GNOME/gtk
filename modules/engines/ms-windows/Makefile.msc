@@ -8,7 +8,7 @@
 
 ##
 # Target
-TARGET=libms-windows-engine.dll
+TARGET=libwimp.dll
 
 OBJS = \
 	msw_style.obj \

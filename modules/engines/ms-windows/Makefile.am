@@ -6,9 +6,9 @@ INCLUDES=$(MSW_CFLAGS)
 
 enginedir=$(libdir)/gtk-2.0/$(GTK_VERSION)/engines
 
-engine_LTLIBRARIES = libms-windows-engine.la
+engine_LTLIBRARIES = libwimp.la
 
-libms_windows_engine_la_SOURCES = \
+libwimp_la_SOURCES = \
 	msw_rc_style.c		\
 	msw_rc_style.h		\
 	msw_style.c		\
@@ -18,8 +18,8 @@ libms_windows_engine_la_SOURCES = \
 	xp_theme_defs.h		\
 	xp_theme.h
 
-libms_windows_engine_la_LDFLAGS = \
+libwimp_la_LDFLAGS = \
 	-avoid-version -module -no-undefined -export-dynamic
 
-libms_windows_engine_la_LIBADD= $(MSW_LIBS)
+libwimp_la_LIBADD= $(MSW_LIBS)
 

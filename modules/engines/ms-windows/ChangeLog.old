@@ -2,6 +2,9 @@
 
 	* src/Theme/gtk-2.0/gtkrc: Better icon sizes
 	* src/msw_theme_main.c: Enable XP theme switching
+	* src/Makefile.am:
+	* src/Makefile.msc:
+	* src/Theme/gtk-2.0/gtkrc: Rename DLL back to "wimp"
 	
 2004-03-20  Raymond Penners  <raymond@dotsphinx.com>
 

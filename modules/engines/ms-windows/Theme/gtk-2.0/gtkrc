@@ -14,7 +14,7 @@ style "msw-default"
   GtkTreeView::allow-rules = 0
   GtkTreeView::expander_size = 11
   
-  engine "ms-windows-engine" 
+  engine "wimp" 
   {
   }
 }
