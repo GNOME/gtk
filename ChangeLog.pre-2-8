@@ -1,3 +1,13 @@
+2002-01-17  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): change
+	GTK_MOVEMENT_PARAGRAPHS to go to start/end of paragraph before it
+	starts to go up/down paragraphs. This makes Ctrl+Up/Ctrl+Down work
+	as in the keynav spec, though it makes the interpretation of
+	GTK_MOVEMENT_PARAGRAPHS different from the interpretation of some
+	of the other GTK_MOVEMENT_ thingies, maybe, as if that enum makes
+	any sense anyhow.
+
 Thu Jan 17 16:34:55 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_select_cursor_row): For

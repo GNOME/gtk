@@ -4457,8 +4457,28 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       break;
 
     case GTK_MOVEMENT_PARAGRAPHS:
-      gtk_text_iter_forward_lines (&newplace, count);
-      gtk_text_iter_set_line_offset (&newplace, 0);
+      if (count > 0)
+        {
+          if (!gtk_text_iter_ends_line (&newplace))
+            {
+              gtk_text_iter_forward_to_line_end (&newplace);
+              --count;
+            }
+        }
+      else if (count < 0)
+        {
+          if (gtk_text_iter_get_line_offset (&newplace) > 0)
+            {
+              gtk_text_iter_set_line_offset (&newplace, 0);
+              ++count;
+            }
+        }
+
+      if (count != 0)
+        {
+          gtk_text_iter_forward_lines (&newplace, count);
+          gtk_text_iter_set_line_offset (&newplace, 0);
+        }
       break;
 
     case GTK_MOVEMENT_PARAGRAPH_ENDS:
