@@ -7,27 +7,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-04 18:45+0000\n"
-"PO-Revision-Date: 2003-11-04 18:59+0000\n"
+"POT-Creation-Date: 2003-11-19 17:22+0000\n"
+"PO-Revision-Date: 2003-11-19 17:22+0000\n"
 "Last-Translator: Dafydd Harries <daf@parnassus.ath.cx>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:712
-#: gdk-pixbuf/gdk-pixbuf-io.c:845 tests/testfilechooser.c:183
+#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Methu agor y ffeil '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:722
+#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Mae'r ffeil delwedd '%s' yn cynnwys dim data"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:756
-#: gdk-pixbuf/gdk-pixbuf-io.c:882 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:781
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -43,12 +41,12 @@ msgstr ""
 "Methu llwytho animeiddiad '%s': rheswm anhysbys, ffeil llygredig mwy na "
 "thebyg"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:377
+#: gdk-pixbuf/gdk-pixbuf-io.c:410
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Methu llwytho modiwl llwytho delweddau: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:392
+#: gdk-pixbuf/gdk-pixbuf-io.c:425
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -57,37 +55,37 @@ msgstr ""
 "Nid yw'r modiwl llwytho delweddau %s yn darparu'r rhyngwyneb cywir; efallai "
 "mae e o fersiwn arall o GTK"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:539 gdk-pixbuf/gdk-pixbuf-io.c:587
+#: gdk-pixbuf/gdk-pixbuf-io.c:564 gdk-pixbuf/gdk-pixbuf-io.c:612
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Ni chynhelir y math delwedd '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:619
+#: gdk-pixbuf/gdk-pixbuf-io.c:644
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Methu canfod fformat delwedd y ffeil '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:625
+#: gdk-pixbuf/gdk-pixbuf-io.c:650
 msgid "Unrecognized image file format"
 msgstr "Fformat delwedd anhysbys"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:767
+#: gdk-pixbuf/gdk-pixbuf-io.c:792
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Methu llwytho delwedd '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:993
+#: gdk-pixbuf/gdk-pixbuf-io.c:900
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Nid yw'r gosodiad yma o gdk-pixbuf yn cynnal arbed y fformat delwedd: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1104
+#: gdk-pixbuf/gdk-pixbuf-io.c:1008
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Methu agor '%s' er mwyn ysgrifennu: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1125
+#: gdk-pixbuf/gdk-pixbuf-io.c:1029
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -173,7 +171,7 @@ msgstr "Y fformat delwedd BMP"
 msgid "Failure reading GIF: %s"
 msgstr "Methiant wrth ddarllen GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1442 gdk-pixbuf/io-gif.c:1603
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1431 gdk-pixbuf/io-gif.c:1592
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "Roedd gan y ffeil GIF ddata ar goll (efallai gorffenodd yn rhy fuan rhywsut?)"
@@ -199,25 +197,30 @@ msgstr "Canfodwyd côd gwael"
 msgid "Circular table entry in GIF file"
 msgstr "Cofnod cylchol mewn tabl ffeil GIF"
 
-#: gdk-pixbuf/io-gif.c:869 gdk-pixbuf/io-gif.c:1430 gdk-pixbuf/io-gif.c:1476
-#: gdk-pixbuf/io-gif.c:1591
+#: gdk-pixbuf/io-gif.c:826 gdk-pixbuf/io-gif.c:1419 gdk-pixbuf/io-gif.c:1465
+#: gdk-pixbuf/io-gif.c:1580
 msgid "Not enough memory to load GIF file"
 msgstr "Dim digon o gôf er mwyn llwytho ffeil GIF"
 
-#: gdk-pixbuf/io-gif.c:1095
+#: gdk-pixbuf/io-gif.c:1074
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Mae'r ddelwedd GIF yn llygredig (cywasgiad LZW anghywir)"
 
-#: gdk-pixbuf/io-gif.c:1145
+#: gdk-pixbuf/io-gif.c:1124
 msgid "File does not appear to be a GIF file"
 msgstr "Mae'n ymddangos mai nid ffeil GIF yw'r ffeil hwn"
 
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1136
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Ni chynhelir fersiwn %s y fformat delwedd GIF"
 
-#: gdk-pixbuf/io-gif.c:1266
+#: gdk-pixbuf/io-gif.c:1211
+msgid "GIF image contained a frame appearing outside the image bounds."
+msgstr ""
+"Roedd gan y ddelwedd GIF ffrâm yn ymddangos y tu allan i ffiniau'r ddelwedd."
+
+#: gdk-pixbuf/io-gif.c:1255
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -225,57 +228,44 @@ msgstr ""
 "Doedd dim map lliwiau gan y delwedd GIF, ond roedd e'n cynnwys ffrâm heb fap "
 "lliwiau lleol"
 
-#: gdk-pixbuf/io-gif.c:1498
+#: gdk-pixbuf/io-gif.c:1487
 msgid "GIF image was truncated or incomplete."
 msgstr "Roedd y ddelwedd GIF yn anghyflawn neu wedi gorffen yn rhy fuan"
 
-#: gdk-pixbuf/io-gif.c:1650
+#: gdk-pixbuf/io-gif.c:1639
 msgid "The GIF image format"
 msgstr "Y fformat delwedd GIF"
 
-#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:270 gdk-pixbuf/io-ico.c:331
-#: gdk-pixbuf/io-ico.c:394 gdk-pixbuf/io-ico.c:411
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:330
+#: gdk-pixbuf/io-ico.c:393 gdk-pixbuf/io-ico.c:410
 msgid "Not enough memory to load icon"
 msgstr "Dim digon o gof er mwyn llwytho'r eicon"
 
-#: gdk-pixbuf/io-ico.c:255
+#: gdk-pixbuf/io-ico.c:254
 msgid "Invalid header in icon"
 msgstr "Pennawd annilys mewn eicon"
 
-#: gdk-pixbuf/io-ico.c:292
+#: gdk-pixbuf/io-ico.c:291
 msgid "Icon has zero width"
 msgstr "Mae gan yr eicon lled sero"
 
-#: gdk-pixbuf/io-ico.c:302
+#: gdk-pixbuf/io-ico.c:301
 msgid "Icon has zero height"
 msgstr "Mae gan yr eicon hyd sero"
 
-#: gdk-pixbuf/io-ico.c:346
+#: gdk-pixbuf/io-ico.c:345
 msgid "Compressed icons are not supported"
 msgstr "Ni chynhelir eiconau wedi eu cywasgu"
 
-#: gdk-pixbuf/io-ico.c:379
+#: gdk-pixbuf/io-ico.c:378
 msgid "Unsupported icon type"
 msgstr "Math eicon ni gynhelir"
 
-#: gdk-pixbuf/io-ico.c:459
+#: gdk-pixbuf/io-ico.c:458
 msgid "Not enough memory to load ICO file"
 msgstr "Dim digon o gof er mwyn llwytho'r ffeil ICO"
 
-#: gdk-pixbuf/io-ico.c:921
-msgid "Image too large to be saved as ICO"
-msgstr "Mae'r delwedd yn rhy fawr i gael ei arbed fel ICO"
-
-#: gdk-pixbuf/io-ico.c:932
-msgid "Cursor hotspot outside image"
-msgstr "Man poeth cyrchydd tu fas i'r delwedd"
-
-#: gdk-pixbuf/io-ico.c:955
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Dyfnder ni gynhelir ar gyfer ffeil ICO: %d"
-
-#: gdk-pixbuf/io-ico.c:1184
+#: gdk-pixbuf/io-ico.c:868
 msgid "The ICO image format"
 msgstr "Y fformat delwedd ICO"
 
@@ -321,55 +311,6 @@ msgstr ""
 #: gdk-pixbuf/io-jpeg.c:940
 msgid "The JPEG image format"
 msgstr "Y fformat delwedd JPEG"
-
-#: gdk-pixbuf/io-pcx.c:190
-msgid "Couldn't allocate memory for header"
-msgstr "Methwyd dyrannu cof ar gyfer pennawd"
-
-#: gdk-pixbuf/io-pcx.c:205 gdk-pixbuf/io-pcx.c:565
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Methwyd dyrannu cof ar gyfer strwythur cyd-destun"
-
-#: gdk-pixbuf/io-pcx.c:606
-msgid "Image has invalid width and/or height"
-msgstr "Mae gan y delwedd hyd a/neu led annilys"
-
-#: gdk-pixbuf/io-pcx.c:614 gdk-pixbuf/io-pcx.c:675
-msgid "Image has unsupported bpp"
-msgstr "Mae gan y ddelwedd ddyfnder picsel ni gynhelir"
-
-#: gdk-pixbuf/io-pcx.c:619
-msgid "Image has unsupported number of 1-bit planes"
-msgstr "Mae gan y ddelwedd nifer o blaenau 1 did ni gynhelir"
-
-#: gdk-pixbuf/io-pcx.c:627
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "Mae gan y ddelwedd nifer o blarnau %d did ni gynhelir"
-
-#: gdk-pixbuf/io-pcx.c:643
-msgid "Couldn't create new pixbuf"
-msgstr "Methwyd creu pixbuf newydd"
-
-#: gdk-pixbuf/io-pcx.c:651
-msgid "Couldn't allocate memory for line data"
-msgstr "Methwyd dyrannu cof ar gyfer data llinell"
-
-#: gdk-pixbuf/io-pcx.c:658
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Methwyd dyrannu cof ar gyfer data paletig"
-
-#: gdk-pixbuf/io-pcx.c:705
-msgid "Didn't get all lines of PCX image"
-msgstr "Ni gafywd pob llinell delwedd PCX"
-
-#: gdk-pixbuf/io-pcx.c:712
-msgid "No palette found at end of PCX data"
-msgstr "Ni chanfodwyd palet ar ddiwedd data PCX"
-
-#: gdk-pixbuf/io-pcx.c:753
-msgid "The PCX image format"
-msgstr "Y fformat delwedd PCX"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
@@ -552,44 +493,96 @@ msgstr "Methu defnyddio realloc() ar gyfer data IOBuffer"
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "Methu dyrannu data IOBuffer dros dro"
 
-#: gdk-pixbuf/io-tga.c:341
+#: gdk-pixbuf/io-tga.c:281
+msgid "fread() failed -- premature end-of-file probably encountered"
+msgstr "Methodd fread() - diwedd ffeil rhy buan, mwy na thebyg"
+
+#: gdk-pixbuf/io-tga.c:291
+msgid "fseek() failed -- premature end-of-file probably encountered"
+msgstr "Methodd fseek() - diwedd ffeil rhy buan, mwy na thebyg"
+
+#: gdk-pixbuf/io-tga.c:324
 msgid "Can't allocate new pixbuf"
 msgstr "Methu dyrannu pixbuf newydd"
 
-#: gdk-pixbuf/io-tga.c:680
+#: gdk-pixbuf/io-tga.c:637
 msgid "Can't allocate colormap structure"
 msgstr "Methu dyrannu strwythur map lliwiau"
 
-#: gdk-pixbuf/io-tga.c:687
+#: gdk-pixbuf/io-tga.c:644
 msgid "Can't allocate colormap entries"
 msgstr "Methu dyrannu cofnodion map lliwiau"
 
-#: gdk-pixbuf/io-tga.c:709
+#: gdk-pixbuf/io-tga.c:666
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Did-ddyfnder annisgwyl ar gyfer cofnodion map lliwiau"
 
-#: gdk-pixbuf/io-tga.c:727
+#: gdk-pixbuf/io-tga.c:684
 msgid "Can't allocate TGA header memory"
 msgstr "Methu dyrannu cof pennawd TGA"
 
-#: gdk-pixbuf/io-tga.c:760
+#: gdk-pixbuf/io-tga.c:717
 msgid "TGA image has invalid dimensions"
 msgstr "Mae gan y delwedd TGA ddimensiynau annilys"
 
-#: gdk-pixbuf/io-tga.c:766 gdk-pixbuf/io-tga.c:775 gdk-pixbuf/io-tga.c:785
-#: gdk-pixbuf/io-tga.c:795 gdk-pixbuf/io-tga.c:802
+#: gdk-pixbuf/io-tga.c:723
+msgid "TGA image comment length is too long"
+msgstr "Mae sylw y delwedd TGA yn rhy hir"
+
+#: gdk-pixbuf/io-tga.c:732 gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:751
+#: gdk-pixbuf/io-tga.c:761 gdk-pixbuf/io-tga.c:768
 msgid "TGA image type not supported"
 msgstr "Ni chynhelir math y delwedd TGA"
 
-#: gdk-pixbuf/io-tga.c:849
+#: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
 msgstr "Methu dyrannu cof ar gyfer strwythur cyd-destun delwedd TGA"
 
-#: gdk-pixbuf/io-tga.c:913
+#: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
 msgstr "Gormodedd o ddata mewn ffeil"
 
-#: gdk-pixbuf/io-tga.c:982
+#: gdk-pixbuf/io-tga.c:924
+msgid "Can't allocate memory for TGA header"
+msgstr "Methwyd dyrannu cof ar gyfer pennawd TGA"
+
+#: gdk-pixbuf/io-tga.c:934
+msgid "Too big value in the infolen field of TGA header."
+msgstr "Gwerth rhy fawr ym maes infolen pennawd delwedd TGA."
+
+#: gdk-pixbuf/io-tga.c:958
+msgid "Can't allocate memory for TGA cmap temporary buffer"
+msgstr "Methu dyrannu cof ar gyfer byffer dros dro cmap TGA"
+
+#: gdk-pixbuf/io-tga.c:970
+msgid "Can't allocate memory for TGA colormap struct"
+msgstr "Methu dyrannu cof ar gyfer strwythur map lliw delwedd TGA"
+
+#: gdk-pixbuf/io-tga.c:979
+msgid "Can't allocate memory for TGA colormap entries"
+msgstr "Methu dyrannu cof ar gyfer cofnodion map lliw delwedd TGA"
+
+#: gdk-pixbuf/io-tga.c:989
+msgid "Unexpected bitdepth for TGA colormap"
+msgstr "Did-ddyfnder annisgwyl ar gyfer map lliw delwedd TGA"
+
+#: gdk-pixbuf/io-tga.c:1030
+msgid "Pseudo-Color image without colormap"
+msgstr "Delwedd ffug-liw heb fap lliwiau"
+
+#: gdk-pixbuf/io-tga.c:1037
+msgid "Can't seek to image offset -- end-of-file probably encountered"
+msgstr "Methu symud at atred delwedd -- canfodwyd diwedd ffeil mwy na thebyg"
+
+#: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
+msgid "Can't allocate pixbuf"
+msgstr "Methu dyrannu pixbuf"
+
+#: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
+msgid "Unsupported TGA image type"
+msgstr "Math delwedd TGA ni gynhelir"
+
+#: gdk-pixbuf/io-tga.c:1368
 msgid "The Targa image format"
 msgstr "Y fformat delwedd Targa"
 
@@ -709,11 +702,11 @@ msgstr "Methu ysgrifennu at ffeil dros dro wrth lwytho delwedd XPM"
 msgid "The XPM image format"
 msgstr "Y fformat delwedd XPM"
 
-#: gdk/gdkdisplaymanager.c:126
+#: gdk/gdkdisplaymanager.c:117
 msgid "Default Display"
 msgstr "Dangosydd Rhagosodedig"
 
-#: gdk/gdkdisplaymanager.c:127
+#: gdk/gdkdisplaymanager.c:118
 msgid "The default display for GDK"
 msgstr "Sgrîn rhagosodedig GDK"
 
@@ -760,96 +753,11 @@ msgstr "Teclyn Cyflymu"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Y teclyn i'w fonitro am newidiadau i'r cyflymydd"
 
-#: gtk/gtkaction.c:185 gtk/gtkactiongroup.c:117
-msgid "Name"
-msgstr "Enw"
-
-#: gtk/gtkaction.c:186
-msgid "A unique name for the action."
-msgstr "Enw unigryw ar gyfer y weithred."
-
-#: gtk/gtkaction.c:193 gtk/gtkbutton.c:190 gtk/gtkexpander.c:200
-#: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
-msgid "Label"
-msgstr "Label"
-
-#: gtk/gtkaction.c:194
-msgid "The label used for menu items and buttons that activate this action."
-msgstr ""
-"Y label a ddefnyddir ar gyfer eitemau dewislen a botymau sy'n gweithredu'r "
-"gweithred hwn."
-
-#: gtk/gtkaction.c:200
-msgid "Short label"
-msgstr "Label byr"
-
-#: gtk/gtkaction.c:201
-msgid "A shorter label that may be used on toolbar buttons."
-msgstr "Label byrrach gellir defnyddio ar botymau barau offer."
-
-#: gtk/gtkaction.c:207
-msgid "Tooltip"
-msgstr "Brysgymorth"
-
-#: gtk/gtkaction.c:208
-msgid "A tooltip for this action."
-msgstr "Brysgymorth ar gyfer y weithred hon."
-
-#: gtk/gtkaction.c:214
-msgid "Stock Icon"
-msgstr "Eicon Stoc"
-
-#: gtk/gtkaction.c:215
-msgid "The stock icon displayed in widgets representing this action."
-msgstr ""
-"Yr eicon stoc a ddangosir mewn teclynnau yn cynreichioli'r gweithred hwn."
-
-#: gtk/gtkaction.c:221 gtk/gtktoolitem.c:168
-msgid "Is important"
-msgstr "Yn bwysig"
-
-#: gtk/gtkaction.c:222
-msgid ""
-"Whether the action is considered important. When TRUE, toolitem proxies for "
-"this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr ""
-"A ydi'r weithred yn bwysig ai peidio. Pan yn TRUE, mae dirprwyon toolitem ar "
-"gyfer y weithred hon yn dangos testun yn y modd GTK_TOOLBAT_BOTH_HORIZ."
-
-#: gtk/gtkaction.c:228
-msgid "Hide if empty"
-msgstr "Cuddio os yn wag"
-
-#: gtk/gtkaction.c:229
-msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr "Pan yn TRUE, cuddir dirprwyon dewislen gwag ar gyfer y weithred hon."
-
-#: gtk/gtkaction.c:235 gtk/gtkwidget.c:442
-msgid "Sensitive"
-msgstr "Yn ymateb"
-
-#: gtk/gtkaction.c:236
-msgid "Whether the action is enabled."
-msgstr "A ydy'r weithred wedi ei alluogi"
-
-#: gtk/gtkaction.c:242 gtk/gtktreeview.c:545 gtk/gtktreeviewcolumn.c:219
-#: gtk/gtkwidget.c:435
-msgid "Visible"
-msgstr "Gweladwy"
-
-#: gtk/gtkaction.c:243
-msgid "Whether the action is visible."
-msgstr "A ydy'r weithred yn weladwy."
-
-#: gtk/gtkactiongroup.c:118
-msgid "A name for the action group."
-msgstr "Enw ar gyfer y grŵp gweithred."
-
-#: gtk/gtkalignment.c:116
+#: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
 msgstr "Cyfuniad llorweddol"
 
-#: gtk/gtkalignment.c:117
+#: gtk/gtkalignment.c:103
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -857,11 +765,11 @@ msgstr ""
 "Safle llorweddol y plentyn o fewn y lle sydd ar gael. Mae 0.0 ar y chwith a "
 "1.0 ar y dde."
 
-#: gtk/gtkalignment.c:126
+#: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
 msgstr "Cyfuniad fertigol"
 
-#: gtk/gtkalignment.c:127
+#: gtk/gtkalignment.c:113
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -869,11 +777,11 @@ msgstr ""
 "Safle fertigol y plentyn o fewn y lle sydd ar gael. Mae 0.0 ar y brig a 1.0 "
 "ar y gwaelod."
 
-#: gtk/gtkalignment.c:135
+#: gtk/gtkalignment.c:121
 msgid "Horizontal scale"
 msgstr "Graddfa llorweddol"
 
-#: gtk/gtkalignment.c:136
+#: gtk/gtkalignment.c:122
 msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
@@ -882,11 +790,11 @@ msgstr ""
 "faint ohoni i'w ddefnyddio ar gyfer y plentyn. Mae 0.0 yn golygu dim. Mae "
 "1.0 yn golgu popeth."
 
-#: gtk/gtkalignment.c:144
+#: gtk/gtkalignment.c:130
 msgid "Vertical scale"
 msgstr "Graddfa fertigol"
 
-#: gtk/gtkalignment.c:145
+#: gtk/gtkalignment.c:131
 msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
@@ -894,38 +802,6 @@ msgstr ""
 "Os mae'r gofod fertigol sydd ar gael yn fwy na sydd angen gan y plentyn, "
 "faint ohoni i'w ddefnyddio ar gyfer y plentyn. Mae 0.0 yn golygu dim. Mae "
 "1.0 yn golgu popeth."
-
-#: gtk/gtkalignment.c:162
-msgid "Top Padding"
-msgstr "Bylchu Pen"
-
-#: gtk/gtkalignment.c:163
-msgid "The padding to insert at the top of the widget."
-msgstr "Y bylchu i fewnosod ar ben y teclyn."
-
-#: gtk/gtkalignment.c:179
-msgid "Bottom Padding"
-msgstr "Bylchu Gwaelod"
-
-#: gtk/gtkalignment.c:180
-msgid "The padding to insert at the bottom of the widget."
-msgstr "Y bylchu i fewnosod ar waelod y teclyn."
-
-#: gtk/gtkalignment.c:196
-msgid "Left Padding"
-msgstr "Bylchu Chwith"
-
-#: gtk/gtkalignment.c:197
-msgid "The padding to insert at the left of the widget."
-msgstr "Y bylchu i fewnosod ar ochr chwith y teclyn."
-
-#: gtk/gtkalignment.c:213
-msgid "Right Padding"
-msgstr "Bylchu De"
-
-#: gtk/gtkalignment.c:214
-msgid "The padding to insert at the right of the widget."
-msgstr "Y bylchu i fewnosod ar ochr de y teclyn."
 
 #: gtk/gtkarrow.c:98
 msgid "Arrow direction"
@@ -1031,7 +907,7 @@ msgstr ""
 "Os TRUE, fe fydd y plentyn yn ymddangos mewn grwp eilaidd o blant, yn addas "
 "ar gyfer, e.e., botymau cymorth"
 
-#: gtk/gtkbox.c:128 gtk/gtkexpander.c:216
+#: gtk/gtkbox.c:128
 msgid "Spacing"
 msgstr "Bylchu"
 
@@ -1039,7 +915,7 @@ msgstr "Bylchu"
 msgid "The amount of space between children"
 msgstr "Faint o le sydd rhwng plant"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:469
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:450
 msgid "Homogeneous"
 msgstr "Cydryw"
 
@@ -1047,8 +923,7 @@ msgstr "Cydryw"
 msgid "Whether the children should all be the same size"
 msgstr "A ddylai'r plant fod o'r un maint"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:461
-#: gtk/gtktreeviewcolumn.c:291
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132
 msgid "Expand"
 msgstr "Ehangu"
 
@@ -1080,7 +955,7 @@ msgstr "Gofod ychwannegol i'w rhoi rhwng y plentyn a'i gymdogion, mewn picseli"
 msgid "Pack type"
 msgstr "Math pacio"
 
-#: gtk/gtkbox.c:168 gtk/gtknotebook.c:512
+#: gtk/gtkbox.c:168 gtk/gtknotebook.c:494
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -1088,28 +963,31 @@ msgstr ""
 "Gwerth GtkPackType yn dynodi a ydi'r plentyn i'w bacio ar ddechrau neu ar "
 "ddiwedd ei rhiant"
 
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:490 gtk/gtkpaned.c:236
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:472 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
 msgid "Position"
 msgstr "Safle"
 
-#: gtk/gtkbox.c:175 gtk/gtknotebook.c:491
+#: gtk/gtkbox.c:175 gtk/gtknotebook.c:473
 msgid "The index of the child in the parent"
 msgstr "Mynegai'r plentyn o fewn y rhiant"
 
-#: gtk/gtkbutton.c:191
+#: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:290
+msgid "Label"
+msgstr "Label"
+
+#: gtk/gtkbutton.c:190
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr ""
 "Testun y teclyn label o fewn y botwm, os mae'r botwm yn cynnwys teclyn label"
 
-#: gtk/gtkbutton.c:198 gtk/gtkexpander.c:208 gtk/gtklabel.c:311
-#: gtk/gtktoolbutton.c:186
+#: gtk/gtkbutton.c:197 gtk/gtklabel.c:311
 msgid "Use underline"
 msgstr "Defnyddio tanlinellu"
 
-#: gtk/gtkbutton.c:199 gtk/gtkexpander.c:209 gtk/gtklabel.c:312
+#: gtk/gtkbutton.c:198 gtk/gtklabel.c:312
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1117,44 +995,36 @@ msgstr ""
 "A ddylid defnyddio tanlinellu yn y testun er mwyn dynodi y dylid defnyddio'r "
 "nod nesaf fel coflythyren bysell cyflymu"
 
-#: gtk/gtkbutton.c:206
+#: gtk/gtkbutton.c:205
 msgid "Use stock"
 msgstr "Defnyddio stoc"
 
-#: gtk/gtkbutton.c:207
+#: gtk/gtkbutton.c:206
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "A dylir defyddio'r label er mwyn dewis eitem stoc yn lle ei ddangos"
 
-#: gtk/gtkbutton.c:214
-msgid "Focus on click"
-msgstr "Ffocysu pan mae clic"
-
-#: gtk/gtkbutton.c:215
-msgid "Whether the button grabs focus when it is clicked with the mouse"
-msgstr "A ydy'r botwm yn dwyn y ffocws pan gaiff ei glicio efo'r llygoden"
-
-#: gtk/gtkbutton.c:222
+#: gtk/gtkbutton.c:213
 msgid "Border relief"
 msgstr "Esgyniad border"
 
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:214
 msgid "The border relief style"
 msgstr "Arddull esgyniad y border"
 
-#: gtk/gtkbutton.c:280
+#: gtk/gtkbutton.c:271
 msgid "Default Spacing"
 msgstr "Rhgosodiad Bylchu"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:272
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Gofod ychwannegol i'w ychwannegu ar gyfer botymau CAN_DEFAULT"
 
-#: gtk/gtkbutton.c:287
+#: gtk/gtkbutton.c:278
 msgid "Default Outside Spacing"
 msgstr "Gofod Allanol Rhagosodiedig"
 
-#: gtk/gtkbutton.c:288
+#: gtk/gtkbutton.c:279
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -1162,107 +1032,25 @@ msgstr ""
 "Lle ychwanegol ar gyfer botymau CAN_DEFAULT sydd wastad wedi ei lunio y tu "
 "allan i'r border"
 
-#: gtk/gtkbutton.c:293
+#: gtk/gtkbutton.c:284
 msgid "Child X Displacement"
 msgstr "Dadleoliad X y Plentyn"
 
-#: gtk/gtkbutton.c:294
+#: gtk/gtkbutton.c:285
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Pa mor bell ar hyd yr echelin x i symud y plentyn pan caiff y botwm ei wasgu"
 
-#: gtk/gtkbutton.c:301
+#: gtk/gtkbutton.c:292
 msgid "Child Y Displacement"
 msgstr "Dadleoliad Y y Plentyn"
 
-#: gtk/gtkbutton.c:302
+#: gtk/gtkbutton.c:293
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Pa mor bell ar hyd yr echelin y i symud y plaentyn pan caiff y botwm ei wasgu"
-
-#: gtk/gtkcalendar.c:464
-msgid "Year"
-msgstr "Blwyddyn"
-
-#: gtk/gtkcalendar.c:465
-msgid "The selected year"
-msgstr "Y blwyddyn sydd wedi ei ddewis"
-
-#: gtk/gtkcalendar.c:471
-msgid "Month"
-msgstr "Mis"
-
-#: gtk/gtkcalendar.c:472
-msgid "The selected month (as a number between 0 and 11)"
-msgstr "Y mis sydd wedi ei ddewis (fel rhif rhwng 0 ac 11)"
-
-#: gtk/gtkcalendar.c:478
-msgid "Day"
-msgstr "Diwrnod"
-
-#: gtk/gtkcalendar.c:479
-msgid ""
-"The selected day (as a number between 1 and 31, or 0 to unselect the "
-"currently selected day)"
-msgstr ""
-"Y diwrnod sydd wedi ei ddewis (fel rhif rhwng 1 a 31, neu 0 er mwyn "
-"datddewis y diwrnod sydd wedi ei ddewis eisioes)"
-
-#: gtk/gtkcalendar.c:493
-msgid "Show Heading"
-msgstr "Dangos Pennawd"
-
-#: gtk/gtkcalendar.c:494
-msgid "If TRUE, a heading is displayed"
-msgstr "Os yn wir, dangosir pennawd"
-
-#: gtk/gtkcalendar.c:508
-msgid "Show Day Names"
-msgstr "Dangos Enwau Diwrnodau"
-
-#: gtk/gtkcalendar.c:509
-msgid "If TRUE, day names are displayed"
-msgstr "Os yn wir, dangosir enwau diwrnodau"
-
-#: gtk/gtkcalendar.c:522
-msgid "No Month Change"
-msgstr "Dim Newid Mis"
-
-#: gtk/gtkcalendar.c:523
-msgid "If TRUE, the selected month can not be changed"
-msgstr "Os yn wir, ni ellir newid y mis dewisiedig"
-
-#: gtk/gtkcalendar.c:537
-msgid "Show Week Numbers"
-msgstr "Dangos Rhifau Wythnosau"
-
-#: gtk/gtkcalendar.c:538
-msgid "If TRUE, week numbers are displayed"
-msgstr "Os yn wir, dangosir rhifau wythnosau"
-
-#. Translate to calendar:YM if you want years to be displayed
-#. * before months; otherwise translate to calendar:MY.
-#. * Do *not* translate it to anything else, if it
-#. * it isn't calendar:YM or calendar:MY it will not work.
-#. *
-#. * Note that this flipping is in top the text direction flipping,
-#. * so if you have a default text direction of RTL and YM, then
-#. * the year will appear on the right.
-#.
-#: gtk/gtkcalendar.c:709
-msgid "calendar:MY"
-msgstr "calendar:MY"
-
-#. Translate to calendar:week_start:1 if you want Monday to be the
-#. * first day of the week; otherwise translate to calendar:week_start:0.
-#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
-#. * or calendar:week_start:0 it will not work.
-#.
-#: gtk/gtkcalendar.c:720
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
 
 #: gtk/gtkcellrenderer.c:116
 msgid "mode"
@@ -1400,7 +1188,7 @@ msgstr "ID Stoc"
 msgid "The stock ID of the stock icon to render"
 msgstr "ID stoc yr eicon stoc i'w lunio"
 
-#: gtk/gtkcellrendererpixbuf.c:167 gtk/gtkfilechooserdefault.c:1082
+#: gtk/gtkcellrendererpixbuf.c:167
 msgid "Size"
 msgstr "Maint"
 
@@ -1416,7 +1204,7 @@ msgstr "Manylder"
 msgid "Render detail to pass to the theme engine"
 msgstr "Y manylder llunio i'w basio i'r peiriant thema"
 
-#: gtk/gtkcellrenderertext.c:175 gtk/gtkentry.c:534 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:175 gtk/gtkentry.c:527 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Testun"
 
@@ -1441,19 +1229,19 @@ msgstr "Priodowddau"
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "Rhestr o briodweddau arddull i'w cymhwyso at destun y lluniwr"
 
-#: gtk/gtkcellrenderertext.c:199 gtk/gtkcellview.c:174 gtk/gtktexttag.c:205
+#: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:205
 msgid "Background color name"
 msgstr "Enw lliw'r cefndir"
 
-#: gtk/gtkcellrenderertext.c:200 gtk/gtkcellview.c:175 gtk/gtktexttag.c:206
+#: gtk/gtkcellrenderertext.c:200 gtk/gtktexttag.c:206
 msgid "Background color as a string"
 msgstr "Lliw'r cefndir fel llinyn"
 
-#: gtk/gtkcellrenderertext.c:207 gtk/gtkcellview.c:181 gtk/gtktexttag.c:213
+#: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:213
 msgid "Background color"
 msgstr "Lliw'r cefndir"
 
-#: gtk/gtkcellrenderertext.c:208 gtk/gtkcellview.c:182
+#: gtk/gtkcellrenderertext.c:208
 msgid "Background color as a GdkColor"
 msgstr "Lliw'r cefndir fel GdkColor"
 
@@ -1473,18 +1261,17 @@ msgstr "Lliw'r blaendir"
 msgid "Foreground color as a GdkColor"
 msgstr "Lliw'r blaendir fel GdkColor"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:585
+#: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Golygadwy"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:586
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "A chaiff y defnyddiwr olygu'r testun"
 
 #: gtk/gtkcellrenderertext.c:240 gtk/gtkcellrenderertext.c:248
-#: gtk/gtkfontbutton.c:806 gtk/gtkfontsel.c:217 gtk/gtktexttag.c:281
-#: gtk/gtktexttag.c:289
+#: gtk/gtkfontsel.c:217 gtk/gtktexttag.c:281 gtk/gtktexttag.c:289
 msgid "Font"
 msgstr "Ffont"
 
@@ -1572,11 +1359,11 @@ msgstr "Tanlinelliad"
 msgid "Style of underline for this text"
 msgstr "Arddull tanlinellu'r testun"
 
-#: gtk/gtkcellrenderertext.c:362 gtk/gtkcellview.c:189 gtk/gtktexttag.c:508
+#: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:508
 msgid "Background set"
 msgstr "Gosod cefndir"
 
-#: gtk/gtkcellrenderertext.c:363 gtk/gtkcellview.c:190 gtk/gtktexttag.c:509
+#: gtk/gtkcellrenderertext.c:363 gtk/gtktexttag.c:509
 msgid "Whether this tag affects the background color"
 msgstr "A ydy'r tag hwn yn affeithio ar liw y cefndir"
 
@@ -1708,7 +1495,7 @@ msgstr "Cyflwr radio"
 msgid "Draw the toggle button as a radio button"
 msgstr "Arlunio'r botwm toglu fel botwm radio"
 
-#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:199
+#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:197
 msgid "Indicator Size"
 msgstr "Maint Dangosydd"
 
@@ -1716,7 +1503,7 @@ msgstr "Maint Dangosydd"
 msgid "Size of check or radio indicator"
 msgstr "Maint y dangosydd gwirio neu radio"
 
-#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:242 gtk/gtkoptionmenu.c:205
+#: gtk/gtkcheckbutton.c:106 gtk/gtkoptionmenu.c:203
 msgid "Indicator Spacing"
 msgstr "Bylchu Dangosydd"
 
@@ -1724,71 +1511,22 @@ msgstr "Bylchu Dangosydd"
 msgid "Spacing around check or radio indicator"
 msgstr "Bylchu o amgylch y dangosydd gwirio neu radio"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:132
+#: gtk/gtkcheckmenuitem.c:117 gtk/gtktogglebutton.c:132
 msgid "Active"
 msgstr "Gweithredol"
 
 # TRWSIO
-#: gtk/gtkcheckmenuitem.c:119
+#: gtk/gtkcheckmenuitem.c:118
 msgid "Whether the menu item is checked"
 msgstr "A ydy'r eitem dewislen wedi ei ..."
 
-#: gtk/gtkcheckmenuitem.c:126 gtk/gtktogglebutton.c:140
+#: gtk/gtkcheckmenuitem.c:125 gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
 msgstr "Anghyson"
 
-#: gtk/gtkcheckmenuitem.c:127
+#: gtk/gtkcheckmenuitem.c:126
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "A ddylir dangos cyflwr \"anghyson\""
-
-#: gtk/gtkcheckmenuitem.c:134
-msgid "Draw as radio menu item"
-msgstr "Ardlunio fel eitem dewislen radio"
-
-#: gtk/gtkcheckmenuitem.c:135
-msgid "Whether the menu item looks like a radio menu item"
-msgstr "A ydy'r eitem dewislen yn edrych fel eitem dewislen radio"
-
-#: gtk/gtkcolorbutton.c:202
-msgid "Use alpha"
-msgstr "Defnyddio alffa"
-
-#: gtk/gtkcolorbutton.c:203
-msgid "Whether or not to give the color an alpha value"
-msgstr "A ddylid rhoi gwerth alffa i'r lliw ai peidio"
-
-#: gtk/gtkcolorbutton.c:217 gtk/gtkfontbutton.c:175
-#: gtk/gtktreeviewcolumn.c:283
-msgid "Title"
-msgstr "Teitl"
-
-#: gtk/gtkcolorbutton.c:218
-msgid "The title of the color selection dialog"
-msgstr "Teitl y deialog dewis lliw"
-
-#: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
-msgid "Pick a color"
-msgstr "Dewiswch liw"
-
-#: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1770
-msgid "Current Color"
-msgstr "Y Lliw Cyfredol"
-
-#: gtk/gtkcolorbutton.c:233
-msgid "The selected color"
-msgstr "Y lliw dewisiedig"
-
-#: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1777
-msgid "Current Alpha"
-msgstr "Yr Alffa Cyfredol"
-
-#: gtk/gtkcolorbutton.c:248
-msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "Y gwerth tryloywder dewisiedig (0 cwbl tryloyw, 65535 cwbl afloyw)"
-
-#: gtk/gtkcolorbutton.c:465
-msgid "Received invalid color data\n"
-msgstr "Derbyniwyd data lliw annilys\n"
 
 #: gtk/gtkcolorsel.c:561
 msgid ""
@@ -1837,9 +1575,17 @@ msgstr "Biau Palet"
 msgid "Whether a palette should be used"
 msgstr "A dylai darparu palet"
 
+#: gtk/gtkcolorsel.c:1770
+msgid "Current Color"
+msgstr "Y Lliw Cyfredol"
+
 #: gtk/gtkcolorsel.c:1771
 msgid "The current color"
 msgstr "Y lliw cyfredol"
+
+#: gtk/gtkcolorsel.c:1777
+msgid "Current Alpha"
+msgstr "Yr Alffa Cyfredol"
 
 #: gtk/gtkcolorsel.c:1778
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
@@ -1877,59 +1623,59 @@ msgstr "_Arlliw:"
 msgid "Position on the color wheel."
 msgstr "Lleoliad ar yr olwyn lliw."
 
-#: gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorsel.c:1870
 msgid "_Saturation:"
 msgstr "_Dirlawnder:"
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1871
 msgid "\"Deepness\" of the color."
 msgstr "\"Dyfnder\" y lliw."
 
-#: gtk/gtkcolorsel.c:1873
+#: gtk/gtkcolorsel.c:1872
 msgid "_Value:"
 msgstr "_Gwerth:"
 
-#: gtk/gtkcolorsel.c:1874
+#: gtk/gtkcolorsel.c:1873
 msgid "Brightness of the color."
 msgstr "Gloywder y lliw."
 
-#: gtk/gtkcolorsel.c:1875
+#: gtk/gtkcolorsel.c:1874
 msgid "_Red:"
 msgstr "_Coch:"
 
-#: gtk/gtkcolorsel.c:1876
+#: gtk/gtkcolorsel.c:1875
 msgid "Amount of red light in the color."
 msgstr "Faint o olau coch sydd yn y lliw."
 
-#: gtk/gtkcolorsel.c:1877
+#: gtk/gtkcolorsel.c:1876
 msgid "_Green:"
 msgstr "G_wyrdd:"
 
-#: gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorsel.c:1877
 msgid "Amount of green light in the color."
 msgstr "Faint o olau gwyrdd sydd yn y lliw."
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1878
 msgid "_Blue:"
 msgstr "G_las:"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:1879
 msgid "Amount of blue light in the color."
 msgstr "Faint o olau glas sydd yn y lliw."
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1882
 msgid "_Opacity:"
 msgstr "_Didreiddedd:"
 
-#: gtk/gtkcolorsel.c:1891
+#: gtk/gtkcolorsel.c:1890 gtk/gtkcolorsel.c:1901
 msgid "Transparency of the currently-selected color."
 msgstr "Tryloywder y lliw sydd wedi ei ddewis ar hyn o bryd"
 
-#: gtk/gtkcolorsel.c:1906
+#: gtk/gtkcolorsel.c:1908
 msgid "Color _Name:"
 msgstr "_Enw'r Lliw"
 
-#: gtk/gtkcolorsel.c:1921
+#: gtk/gtkcolorsel.c:1923
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1937,13 +1683,9 @@ msgstr ""
 "Fe allwch benodi gwerth lliw hecsadegol, yn yr un modd a defnyddir yn HTML, "
 "new enw lliw megis 'oren' yma."
 
-#: gtk/gtkcolorsel.c:1940
+#: gtk/gtkcolorsel.c:1942
 msgid "_Palette"
 msgstr "_Palet"
-
-#: gtk/gtkcolorseldialog.c:115
-msgid "Color Selection"
-msgstr "Dewis Lliw"
 
 #: gtk/gtkcombo.c:143
 msgid "Enable arrow keys"
@@ -1989,83 +1731,27 @@ msgstr "Gwerth yn y rhestr"
 msgid "Whether entered values must already be present in the list"
 msgstr "Oes rhaid i werth y maes fod yn y rhestr yn barod"
 
-#: gtk/gtkcombobox.c:335
-msgid "ComboBox model"
-msgstr "Model ComboBox"
-
-#: gtk/gtkcombobox.c:336
-msgid "The model for the combo box"
-msgstr "Y model ar gyfer y blwch combo"
-
-#: gtk/gtkcombobox.c:343
-msgid "Wrap width"
-msgstr "Lled amlapio"
-
-#: gtk/gtkcombobox.c:344
-msgid "Wrap width for layouting the items in a grid"
-msgstr "Lled amlapio ar gyfer gosod eitemau mewn grid"
-
-#: gtk/gtkcombobox.c:353
-msgid "Row span column"
-msgstr "Colofn rhychwant rhes"
-
-#: gtk/gtkcombobox.c:354
-msgid "TreeModel column containing the row span values"
-msgstr "Colofn TreeModel yn cynnwys y gwerthoedd rhychwant rhes"
-
-#: gtk/gtkcombobox.c:363
-msgid "Column span column"
-msgstr "Colofn rhychwant colofn"
-
-#: gtk/gtkcombobox.c:364
-msgid "TreeModel column containing the column span values"
-msgstr "Colodn TreeModel yn cynnwyd y gwerthoedd rhychwant colofn"
-
-#: gtk/gtkcombobox.c:373
-msgid "Active item"
-msgstr "Eitem gweithredol"
-
-#: gtk/gtkcombobox.c:374
-msgid "The item which is currently active"
-msgstr "Yr eitem sydd yn weithredol yn gyfredol"
-
-#: gtk/gtkcombobox.c:382
-msgid "ComboBox appareance"
-msgstr "Ymddangosiad ComboBox"
-
-#: gtk/gtkcombobox.c:383
-msgid "ComboBox appearance, where TRUE means Windows-style."
-msgstr "Ymddangosiad ComboBOX, lle mae gwir yn golygu tebyg i Windows."
-
-#: gtk/gtkcomboboxentry.c:106
-msgid "Text Column"
-msgstr "Colofn Testun"
-
-#: gtk/gtkcomboboxentry.c:107
-msgid "A column in the data source model to get the strings from"
-msgstr "Colofn yn y model ffynhonell data i gyrchu'r llinynau ohoni"
-
-#: gtk/gtkcontainer.c:203
+#: gtk/gtkcontainer.c:202
 msgid "Resize mode"
 msgstr "Modd newid maint"
 
-#: gtk/gtkcontainer.c:204
+#: gtk/gtkcontainer.c:203
 msgid "Specify how resize events are handled"
 msgstr "Penodi sut caiff digwyddiadau newid maint eu trin"
 
-#: gtk/gtkcontainer.c:211
+#: gtk/gtkcontainer.c:210
 msgid "Border width"
 msgstr "Lled border"
 
-#: gtk/gtkcontainer.c:212
+#: gtk/gtkcontainer.c:211
 msgid "The width of the empty border outside the containers children"
 msgstr "Lled y border gwag y tu fas i blant y cynhwysydd"
 
-#: gtk/gtkcontainer.c:220
+#: gtk/gtkcontainer.c:219
 msgid "Child"
 msgstr "Plentyn"
 
-#: gtk/gtkcontainer.c:221
+#: gtk/gtkcontainer.c:220
 msgid "Can be used to add a new child to the container"
 msgstr "Gellir ei ddefnyddio er mwyn ychwanegu plentyn i'r cynhwysydd"
 
@@ -2141,68 +1827,68 @@ msgstr "Border yr ardal gweithred"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Lled yr ymylon o amgylch yr ardal botymau ar waelod y deialog"
 
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:368
+#: gtk/gtkentry.c:439 gtk/gtklabel.c:368
 msgid "Cursor Position"
 msgstr "Safle'r Cyrchydd"
 
-#: gtk/gtkentry.c:447 gtk/gtklabel.c:369
+#: gtk/gtkentry.c:440 gtk/gtklabel.c:369
 msgid "The current position of the insertion cursor in chars"
 msgstr "Safle cyfredol y cyrchydd mewnosod mewn nodau"
 
-#: gtk/gtkentry.c:456 gtk/gtklabel.c:378
+#: gtk/gtkentry.c:449 gtk/gtklabel.c:378
 msgid "Selection Bound"
 msgstr "Cyfwng y Dewis"
 
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:379
+#: gtk/gtkentry.c:450 gtk/gtklabel.c:379
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Safle ochr pell y dewis o'r cyrchydd mewn nodau"
 
-#: gtk/gtkentry.c:467
+#: gtk/gtkentry.c:460
 msgid "Whether the entry contents can be edited"
 msgstr "A gellir newid cynnwys y cofnod"
 
-#: gtk/gtkentry.c:474
+#: gtk/gtkentry.c:467
 msgid "Maximum length"
 msgstr "Hyd mwyaf"
 
-#: gtk/gtkentry.c:475
+#: gtk/gtkentry.c:468
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Y nifer mwyaf o nodau ar gyfer y cofnod hn. Sero os oes dim cyfwng uchaf"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:476
 msgid "Visibility"
 msgstr "Gwelededd"
 
-#: gtk/gtkentry.c:484
+#: gtk/gtkentry.c:477
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 "Mae FALSE yn dangos y \"nod anweladwy\" yn lle'r gwir destun (modd cyfrinair)"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:484
 msgid "Has Frame"
 msgstr "Efo Ffrâm"
 
-#: gtk/gtkentry.c:492
+#: gtk/gtkentry.c:485
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE yn tynnu'r befal allanol o'r cofnod"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:492
 msgid "Invisible character"
 msgstr "Nod anweladwy"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:493
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Y nod i'w ddefnyddio wrth guddio testun y teclyn (\"modd cyfrinair\")"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:500
 msgid "Activates default"
 msgstr "Gweithredu'r rhagosodiad"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:501
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2210,379 +1896,92 @@ msgstr ""
 "A ddylid gweithredu'r teclyn rhagosodedig (e.e. y botwm rhagosodedig mewn "
 "deialog) pan gwasgir Enter"
 
-#: gtk/gtkentry.c:514
+#: gtk/gtkentry.c:507
 msgid "Width in chars"
 msgstr "Lled mewn nodau"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:508
 msgid "Number of characters to leave space for in the entry"
 msgstr "Y nifer o nodau i greu lle ar eu cyfer"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:517
 msgid "Scroll offset"
 msgstr "Atred sgrolio"
 
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:518
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Nifer picseli'r cofnod wedi eu sgrolio bant o'r sgrîn i'r chwith"
 
-#: gtk/gtkentry.c:535
+#: gtk/gtkentry.c:528
 msgid "The contents of the entry"
 msgstr "Cynnwys y cofnod"
 
-#: gtk/gtkentry.c:766
+#: gtk/gtkentry.c:759
 msgid "Select on focus"
 msgstr "Dewis wrth ffocysu"
 
-#: gtk/gtkentry.c:767
+#: gtk/gtkentry.c:760
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "A ddyld dewis cynnwys cofnod pan ffocysir ef"
 
-#: gtk/gtkentry.c:4079 gtk/gtktextview.c:6875
-msgid "Select _All"
-msgstr "Dewis _Popeth"
-
-#: gtk/gtkentry.c:4089 gtk/gtktextview.c:6885
-msgid "Input _Methods"
-msgstr "Moddau _Mewnbwn"
-
-#: gtk/gtkentry.c:4099 gtk/gtktextview.c:6896
-msgid "_Insert Unicode Control Character"
-msgstr "_Mewnosod Nod Rheoli Unicode"
-
-#: gtk/gtkentrycompletion.c:193
-msgid "Completion Model"
-msgstr "Model Cyflawni"
-
-# EFALLAI (golwg?)
-#: gtk/gtkentrycompletion.c:194
-msgid "The model to find matches in"
-msgstr "Y model i ganfod cydweddiadau ynddi"
-
-#: gtk/gtkentrycompletion.c:200
-msgid "Minimum Key Length"
-msgstr "Hyd Allwedd Lleiaf"
-
-#: gtk/gtkentrycompletion.c:201
-msgid "Minimum length of the search key in order to look up matches"
-msgstr "Hyd lleiaf y llinyn chwilio er mwyn edrych am gydweddiadau"
-
-#: gtk/gtkeventbox.c:119
-msgid "Visible Window"
-msgstr "Ffenest Gweladwy"
-
-#: gtk/gtkeventbox.c:120
-msgid ""
-"Whether the event box is visible, as opposed to invisible and only used to "
-"trap events."
-msgstr ""
-"A ydy'r blwch digwyddiad yn weladwy, yn hytrach na'n anweladwy ac yn cael ei "
-"ddefnyddio er mwyn dal digwyddiadau'n unig."
-
-#: gtk/gtkeventbox.c:126
-msgid "Above child"
-msgstr "Uwchben y plentyn"
-
-#: gtk/gtkeventbox.c:127
-msgid ""
-"Whether the event-trapping window of the eventbox is above the window of the "
-"child widget as opposed to below it."
-msgstr ""
-"A ydy ffenest dal digwyddiadau y blwch digwyddiadau uwchben ffenest y teclyn "
-"plentyn yn hytrach nac o dani."
-
-#: gtk/gtkexpander.c:192
-msgid "Expanded"
-msgstr "Wedi Ehangu"
-
-#: gtk/gtkexpander.c:193
-msgid "Whether the expander has been opened to reveal the child widget"
-msgstr "A ydy'r ehangydd wedi ei agor er mwyn dangos y teclyn plentyn"
-
-#: gtk/gtkexpander.c:201
-msgid "Text of the expander's label"
-msgstr "Testun label yr ehangydd"
-
-#: gtk/gtkexpander.c:217
-msgid "Space to put between the label and the child"
-msgstr "Gofod i'w rhoi rhwng y label a'r plentyn"
-
-#: gtk/gtkexpander.c:226 gtk/gtkframe.c:169 gtk/gtktoolbutton.c:193
-msgid "Label widget"
-msgstr "Teclyn label"
-
-#: gtk/gtkexpander.c:227
-msgid "A widget to display in place of the usual expander label"
-msgstr "Teclyn i'w ddangos yn lle y label ehangydd arferol"
-
-#: gtk/gtkexpander.c:233 gtk/gtktreeview.c:607
-msgid "Expander Size"
-msgstr "Maint yr Ehangwr"
-
-#: gtk/gtkexpander.c:234 gtk/gtktreeview.c:608
-msgid "Size of the expander arrow"
-msgstr "Maint y saeth ehangu"
-
-#: gtk/gtkexpander.c:243
-msgid "Spacing around expander arrow"
-msgstr "Bylchu o amgylch y saeth ehangu"
-
-#: gtk/gtkfilechooser.c:92
-msgid "Action"
-msgstr "Gweithred"
-
-#: gtk/gtkfilechooser.c:93
-msgid "The type of operation that the file selector is performing"
-msgstr "Y math o weithred mae'r dewisydd ffeil yn ei gyflawni"
-
-#: gtk/gtkfilechooser.c:99
-msgid "File System"
-msgstr "System Ffeiliau"
-
-#: gtk/gtkfilechooser.c:100
-msgid "File system object to use"
-msgstr "Y gwrthrydd system ffeiliau i'w ddefnyddio"
-
-#: gtk/gtkfilechooser.c:105
-msgid "Filter"
-msgstr "Hidl"
-
-#: gtk/gtkfilechooser.c:106
-msgid "The current filter for selecting which files are displayed"
-msgstr "Y hidl gyfredol ar gyfer dewis pa ffeiliau a ddangosir"
-
-#: gtk/gtkfilechooser.c:111
-msgid "Folder Mode"
-msgstr "Modd Plygell"
-
-#: gtk/gtkfilechooser.c:112
-msgid "Whether to select folders rather than files"
-msgstr "A ddylid dewis plygellau yn hytrach na ffeiliau"
-
-#: gtk/gtkfilechooser.c:117
-msgid "Local Only"
-msgstr "Lleol yn Unig"
-
-#: gtk/gtkfilechooser.c:118
-msgid "Whether the selected file(s) should be limited to local file: URLs"
-msgstr "A ddylid ffeiliau a ddewisir gael eu cyfyngu ar LAUau file: lleol"
-
-#: gtk/gtkfilechooser.c:123
-msgid "Preview widget"
-msgstr "Teclyn rhagolwg"
-
-#: gtk/gtkfilechooser.c:124
-msgid "Application supplied widget for custom previews."
-msgstr "Teclyn a ddarparwyd gan y rhaglen ar gyfer rhagolygon addasiedig."
-
-#: gtk/gtkfilechooser.c:129
-msgid "Preview Widget Active"
-msgstr "Teclyn Rhagolwg yn Weithredol"
-
-#: gtk/gtkfilechooser.c:130
-msgid ""
-"Whether the application supplied widget for custom previews should be shown."
-msgstr ""
-"A ddylid dangos y teclyn a ddarparwyd gan y rhaglen ar gyfer rhagolygon "
-"addasiedig."
-
-#: gtk/gtkfilechooser.c:135
-msgid "Extra widget"
-msgstr "Teclyn ychwanegol"
-
-#: gtk/gtkfilechooser.c:136
-msgid "Application supplied widget for extra options."
-msgstr "Teclyn a ddarparwyd gan y rhaglen ar gyfer opsiynnau ychwanegol."
-
-#: gtk/gtkfilechooser.c:141
-msgid "Select Multiple"
-msgstr "Amlddewis"
-
-#: gtk/gtkfilechooser.c:142 gtk/gtkfilesel.c:575
-msgid "Whether to allow multiple files to be selected"
-msgstr "A ddylid caniatau dewis mwy nag un ffeil"
-
-#: gtk/gtkfilechooser.c:148
-msgid "Show Hidden"
-msgstr "Dangos Cudd"
-
-#: gtk/gtkfilechooser.c:149
-msgid "Whether the hidden files and folders should be displayed"
-msgstr "A ddylid dangos ffeiliau a phlygellau cudd"
-
-#: gtk/gtkfilechooser.c:1442 gtk/gtkfilechooser.c:1486
-#: gtk/gtkfilechooser.c:1561 gtk/gtkfilechooser.c:1605
-#, c-format
-msgid "Invalid filename: %s"
-msgstr "Enw ffeil annilys: %s"
-
-#: gtk/gtkfilechooserdefault.c:513
-#, c-format
-msgid ""
-"Could not retrieve information about %s:\n"
-"%s"
-msgstr ""
-"Methwyd cyrchu gwybodaeth ynghylch %s:\n"
-"%s"
-
-#: gtk/gtkfilechooserdefault.c:528
-#, c-format
-msgid "%s's Home"
-msgstr "Cartref %s"
-
-#. FIXME: What is the Right Way of finding the desktop directory?
-#: gtk/gtkfilechooserdefault.c:552
-msgid "Desktop"
-msgstr "Penbwrdd"
-
-#: gtk/gtkfilechooserdefault.c:692
-#, c-format
-msgid ""
-"Could not go to the parent folder of %s:\n"
-"%s"
-msgstr ""
-"Methwyd mynd at blygell rhiant %s:\n"
-"%s"
-
-#: gtk/gtkfilechooserdefault.c:760
-msgid "Files of _type:"
-msgstr "Ffeiliau o'r _math:"
-
-#: gtk/gtkfilechooserdefault.c:816 gtk/gtkfilechooserdefault.c:1064
-msgid "File name"
-msgstr "Enw ffeil"
-
-#: gtk/gtkfilechooserdefault.c:835
-#, c-format
-msgid ""
-"Could not add bookmark for %s:\n"
-"%s"
-msgstr ""
-"Methwyd ychwanegu llyfrnod ar gyfer %s:\n"
-"%s"
-
-#: gtk/gtkfilechooserdefault.c:860
-#, c-format
-msgid ""
-"Could not remove bookmark for %s:\n"
-"%s"
-msgstr ""
-"Methwyd dileu'r llyfrnod ar gyfer %s:\n"
-"%s"
-
-#: gtk/gtkfilechooserdefault.c:976
-msgid "Folder"
-msgstr "Plygell"
-
-#: gtk/gtkfilechooserdefault.c:1006
-msgid "Add bookmark"
-msgstr "Ychwanegu llyfrnod"
-
-#: gtk/gtkfilechooserdefault.c:1094
-msgid "Modified"
-msgstr "Wedi newid"
-
-#: gtk/gtkfilechooserdefault.c:1115
-msgid "_Location:"
-msgstr "_Lleoliad: "
-
-#. Preview
-#: gtk/gtkfilechooserdefault.c:1218
-msgid "Preview"
-msgstr "Rhagolwg"
-
-#: gtk/gtkfilechooserdefault.c:1969
-#, c-format
-msgid "shortcut %s does not exist"
-msgstr "nid oes byrlwybr %s yn bodoli"
-
-#: gtk/gtkfilechooserdefault.c:2319
-#, c-format
-msgid ""
-"Could not build file name from '%s' and '%s':\n"
-"%s"
-msgstr ""
-"Methwyd adeiladu enw ffeil o '%s' a '%s':\n"
-"%s"
-
-#: gtk/gtkfilechooserdefault.c:2457
-#, c-format
-msgid "%d bytes"
-msgstr "%d beit"
-
-#: gtk/gtkfilechooserdefault.c:2459
-#, c-format
-msgid "%.1f K"
-msgstr "%.1f C"
-
-#: gtk/gtkfilechooserdefault.c:2461
-#, c-format
-msgid "%.1f M"
-msgstr "%.1f M"
-
-#: gtk/gtkfilechooserdefault.c:2463
-#, c-format
-msgid "%.1f G"
-msgstr "%.1f G"
-
-#: gtk/gtkfilechooserdefault.c:2503
-msgid "Today"
-msgstr "Heddiw"
-
-#: gtk/gtkfilechooserdefault.c:2523
-msgid "Yesterday"
-msgstr "Ddoe"
-
-#: gtk/gtkfilechooserdefault.c:2526 gtk/gtkfilechooserdefault.c:2537
-msgid "Unknown"
-msgstr "Anhysbys"
-
-#: gtk/gtkfilechooserdefault.c:2536
-msgid "%d/%b/%Y"
-msgstr "%d/%b/%Y"
-
-#: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
+msgid "Select All"
+msgstr "Dewis Popeth"
+
+#: gtk/gtkentry.c:4003 gtk/gtklabel.c:3232
+msgid "Input Methods"
+msgstr "Moddau Mewnbwn"
+
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
+msgid "_Insert Unicode control character"
+msgstr "_Mewnosod nod rheoli Unicode"
+
+#: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Enw Ffeil"
 
-#: gtk/gtkfilesel.c:560
+#: gtk/gtkfilesel.c:557
 msgid "The currently selected filename"
 msgstr "Y ffeil sydd wedi ei ddewis"
 
-#: gtk/gtkfilesel.c:566
+#: gtk/gtkfilesel.c:563
 msgid "Show file operations"
 msgstr "Dangos gweithredau ffeil"
 
-#: gtk/gtkfilesel.c:567
+#: gtk/gtkfilesel.c:564
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Dylai dangos y botymau er mwyn creu a trin ffeiliau"
 
-#: gtk/gtkfilesel.c:574
+#: gtk/gtkfilesel.c:571
 msgid "Select multiple"
 msgstr "Amlddewis"
 
-#: gtk/gtkfilesel.c:730
+#: gtk/gtkfilesel.c:572
+msgid "Whether to allow multiple files to be selected"
+msgstr "A ddylid caniatau dewis mwy nag un ffeil"
+
+#: gtk/gtkfilesel.c:727
 msgid "Folders"
 msgstr "Plygellau"
 
-#: gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:731
 msgid "Fol_ders"
 msgstr "_Plygellau"
 
-#: gtk/gtkfilesel.c:766
+#: gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "Ffeiliau"
 
-#: gtk/gtkfilesel.c:770
+#: gtk/gtkfilesel.c:767
 msgid "_Files"
 msgstr "_Ffeiliau"
 
-#: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
+#: gtk/gtkfilesel.c:850 gtk/gtkfilesel.c:2240
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Plygell annarllenadwy: %s"
 
-#: gtk/gtkfilesel.c:984
+#: gtk/gtkfilesel.c:981
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2593,19 +1992,19 @@ msgstr ""
 "gael i'r rhaglen hwn.\n"
 "Ydych chi'n siwr eich bod chi eisiau ei ddewis?"
 
-#: gtk/gtkfilesel.c:1115
+#: gtk/gtkfilesel.c:1112
 msgid "_New Folder"
 msgstr "_Plygell Newydd"
 
-#: gtk/gtkfilesel.c:1126
+#: gtk/gtkfilesel.c:1123
 msgid "De_lete File"
 msgstr "_Dileu Ffeil"
 
-#: gtk/gtkfilesel.c:1137
+#: gtk/gtkfilesel.c:1134
 msgid "_Rename File"
 msgstr "_Ailenwi Ffeil"
 
-#: gtk/gtkfilesel.c:1439
+#: gtk/gtkfilesel.c:1436
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
@@ -2613,7 +2012,7 @@ msgstr ""
 "Mae'r enw plygell \"%s\" yn cynnwys symbolau ni chaniateir mewn enwau "
 "ffeiliau"
 
-#: gtk/gtkfilesel.c:1441
+#: gtk/gtkfilesel.c:1438
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2622,36 +2021,36 @@ msgstr ""
 "Gwall wrth greu plygell \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
+#: gtk/gtkfilesel.c:1439 gtk/gtkfilesel.c:1675
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 "Mae'n debyg yr ydych wedi defnyddio symbolau ni chaniateir tu fewn enwau "
 "ffeiliau."
 
-#: gtk/gtkfilesel.c:1450
+#: gtk/gtkfilesel.c:1447
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Gwall wrth greu'r plygell \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1484
+#: gtk/gtkfilesel.c:1481
 msgid "New Folder"
 msgstr "Plygell Newydd"
 
-#: gtk/gtkfilesel.c:1499
+#: gtk/gtkfilesel.c:1496
 msgid "_Folder name:"
 msgstr "_Enw'r plygell:"
 
-#: gtk/gtkfilesel.c:1523
+#: gtk/gtkfilesel.c:1520
 msgid "C_reate"
 msgstr "_Creu"
 
-#: gtk/gtkfilesel.c:1566
+#: gtk/gtkfilesel.c:1563
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Mae'r enw ffeil \"%s\" yn cynnwys symbolau ni chaniateir mewn enwau ffeiliau"
 
-#: gtk/gtkfilesel.c:1569
+#: gtk/gtkfilesel.c:1566
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2660,33 +2059,33 @@ msgstr ""
 "Gwall wrth ddileu'r ffeil \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1571 gtk/gtkfilesel.c:1692
+#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1689
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 "Mwy na thebyg mae'n cynnwys symbolau ni chaniateir mewn enwau ffeiliau."
 
-#: gtk/gtkfilesel.c:1580
+#: gtk/gtkfilesel.c:1577
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Gwall wrth ddileu'r ffeil \"%s\": %s"
 
 # EFALLAI (llond ceg... y... sgrîn)
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1620
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Ydych chi'n sicr eich bod chi eisiau dileu'r ffeil \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1628
+#: gtk/gtkfilesel.c:1625
 msgid "Delete File"
 msgstr "Dileu Ffeil"
 
-#: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
+#: gtk/gtkfilesel.c:1671 gtk/gtkfilesel.c:1685
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Mae'r enw ffeil \"%s\" yn cynnwys symbolau ni chaniateir mewn enwau ffeiliau"
 
-#: gtk/gtkfilesel.c:1676
+#: gtk/gtkfilesel.c:1673
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2695,7 +2094,7 @@ msgstr ""
 "Gwall wrth ailenwi ffeil i \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1690
+#: gtk/gtkfilesel.c:1687
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2704,29 +2103,29 @@ msgstr ""
 "Gwall wrth ailenwi ffeil \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1700
+#: gtk/gtkfilesel.c:1697
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Gwall wrth ailenwi'r ffeil \"%s\" at \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1747
+#: gtk/gtkfilesel.c:1744
 msgid "Rename File"
 msgstr "Ailenwi Ffeil"
 
-#: gtk/gtkfilesel.c:1762
+#: gtk/gtkfilesel.c:1759
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Ailenwi Ffeil \"%s\" i:"
 
-#: gtk/gtkfilesel.c:1791
+#: gtk/gtkfilesel.c:1788
 msgid "_Rename"
 msgstr "_Ailenwi"
 
-#: gtk/gtkfilesel.c:2223
+#: gtk/gtkfilesel.c:2220
 msgid "_Selection: "
 msgstr "_Dewis: "
 
-#: gtk/gtkfilesel.c:3139
+#: gtk/gtkfilesel.c:3136
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2735,35 +2134,17 @@ msgstr ""
 "Ni ellir trosi'r enw ffeil \"%s\" at UTF-8 (ceisiwch osod y newidyn "
 "amgylchol G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3142
-msgid "Invalid UTF-8"
-msgstr "UTF-8 Annilys"
+#: gtk/gtkfilesel.c:3139
+msgid "Invalid Utf-8"
+msgstr "Utf-8 Annilys"
 
-#: gtk/gtkfilesel.c:4019
+#: gtk/gtkfilesel.c:4016
 msgid "Name too long"
 msgstr "Mae'r enw yn rhy hir"
 
-#: gtk/gtkfilesel.c:4021
+#: gtk/gtkfilesel.c:4018
 msgid "Couldn't convert filename"
 msgstr "Methu trawsnewid enw y ffeil"
-
-#: gtk/gtkfilesystemmodel.c:1017
-msgid "(Empty)"
-msgstr "(Gwag)"
-
-#: gtk/gtkfilesystemunix.c:299
-#,  c-format
-msgid "error creating directory '%s': %s"
-msgstr "gwall wrth greu plygell '%s': %s"
-
-#: gtk/gtkfilesystemunix.c:557 gtk/gtkfilesystemunix.c:570
-msgid "This file system does not support bookmarks"
-msgstr "Nid yw'r system ffeiliau yma yn cynnal llyfrnodau"
-
-#: gtk/gtkfilesystemunix.c:741
-#, c-format
-msgid "error getting information for '%s': %s"
-msgstr "gwall wrth gyrchu gwybodaeth ar gyfer '%s': %s"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
@@ -2781,68 +2162,15 @@ msgstr "Safle Y"
 msgid "Y position of child widget"
 msgstr "Safle Y y teclyn plentyn"
 
-#: gtk/gtkfontbutton.c:176
-msgid "The title of the font selection dialog"
-msgstr "Teitl y deialog dewis ffont"
-
-#: gtk/gtkfontbutton.c:177
-msgid "Pick a font"
-msgstr "Dewiswch ffont"
-
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:210
-msgid "Font name"
-msgstr "Enw ffont"
-
-#: gtk/gtkfontbutton.c:192
-msgid "The name of the selected font"
-msgstr "Enw y ffont dewisiedig"
-
-#. Initialize fields
-#: gtk/gtkfontbutton.c:193 gtk/gtkfontbutton.c:288
-msgid "Sans 12"
-msgstr "Sans 12"
-
-#: gtk/gtkfontbutton.c:207
-msgid "Use font in label"
-msgstr "Defnyddio'r ffont yn y label"
-
-#: gtk/gtkfontbutton.c:208
-msgid "Whether the label is drawn in the selected font"
-msgstr "A gaiff y label ei arlunio yn y ffont dewisiedig"
-
-#: gtk/gtkfontbutton.c:223
-msgid "Use size in label"
-msgstr "Defnyddio'r maint yn y label"
-
-#: gtk/gtkfontbutton.c:224
-msgid "Whether the label is drawn with the selected font size"
-msgstr "A gaiff y label ei arlunio yn y maint ffont dewisiedig"
-
-#: gtk/gtkfontbutton.c:240
-msgid "Show style"
-msgstr "Dangos arddull"
-
-#: gtk/gtkfontbutton.c:241
-msgid "Whether the selected font style is shown in the label"
-msgstr "A ddangosir yr arddull ffont dewisiedig yn y label"
-
-#: gtk/gtkfontbutton.c:256
-msgid "Show size"
-msgstr "Dangos maint"
-
-#: gtk/gtkfontbutton.c:257
-msgid "Whether selected font size is shown in the label"
-msgstr "A ddangosir y maint ffont dewisiedig yn y label"
-
-#: gtk/gtkfontbutton.c:294
-msgid "Pick a Font"
-msgstr "Dewiswch Ffont"
-
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:68
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcchdddefffgnghi"
+
+#: gtk/gtkfontsel.c:210
+msgid "Font name"
+msgstr "Enw ffont"
 
 #: gtk/gtkfontsel.c:211
 msgid "The X string that represents this font"
@@ -2913,6 +2241,10 @@ msgstr "Cysgod ffrâm"
 msgid "Appearance of the frame border"
 msgstr "Ymddangosiad border y ffrâm"
 
+#: gtk/gtkframe.c:169
+msgid "Label widget"
+msgstr "Teclyn label"
+
 #: gtk/gtkframe.c:170
 msgid "A widget to display in place of the usual frame label"
 msgstr "Teclyn i'w ddangos yn lle y label arferol"
@@ -2925,8 +2257,8 @@ msgstr "Gamma"
 msgid "_Gamma value"
 msgstr "_Gwerth Gamma"
 
-#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:510 gtk/gtkviewport.c:150
+#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
+#: gtk/gtktoolbar.c:284 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Math cysgod"
 
@@ -2972,15 +2304,10 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1547
+#: gtk/gtkiconfactory.c:1693
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Gwall wrth lwytho eicon: %s"
-
-#: gtk/gtkicontheme.c:1195
-#, c-format
-msgid "Icon '%s' not present in theme"
-msgstr "Nid yw'r eicon '%s' yn bresennol yn y thema"
 
 # EFALLAI
 #: gtk/gtkimage.c:135
@@ -3067,86 +2394,86 @@ msgstr "Teclyn plentyn i ymddangos nesaf i destun y dewislen"
 msgid "Default"
 msgstr "Rhagosodiad"
 
-#: gtk/gtkinputdialog.c:233
+#: gtk/gtkinputdialog.c:230
 msgid "Input"
 msgstr "Mewnbwn"
 
-#: gtk/gtkinputdialog.c:242
+#: gtk/gtkinputdialog.c:239
 msgid "No input devices"
 msgstr "Dim dyfeisiau mewnbwn"
 
-#: gtk/gtkinputdialog.c:254
+#: gtk/gtkinputdialog.c:251
 msgid "_Device:"
 msgstr "_Dyfais:"
 
-#: gtk/gtkinputdialog.c:271
+#: gtk/gtkinputdialog.c:268
 msgid "Disabled"
 msgstr "Analluogwyd"
 
-#: gtk/gtkinputdialog.c:278 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:540
+#: gtk/gtkinputdialog.c:275 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:552
 msgid "Screen"
 msgstr "Sgrin"
 
-#: gtk/gtkinputdialog.c:285
+#: gtk/gtkinputdialog.c:282
 msgid "Window"
 msgstr "Ffenestr"
 
-#: gtk/gtkinputdialog.c:292
+#: gtk/gtkinputdialog.c:289
 msgid "_Mode: "
 msgstr "_Modd:"
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:323
+#: gtk/gtkinputdialog.c:320
 msgid "_Axes"
 msgstr "_Echeli"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:340
+#: gtk/gtkinputdialog.c:337
 msgid "_Keys"
 msgstr "_Bysellau"
 
-#: gtk/gtkinputdialog.c:560
+#: gtk/gtkinputdialog.c:557
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:561
+#: gtk/gtkinputdialog.c:558
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:562
+#: gtk/gtkinputdialog.c:559
 msgid "Pressure"
 msgstr "Pwysedd"
 
-#: gtk/gtkinputdialog.c:563
+#: gtk/gtkinputdialog.c:560
 msgid "X Tilt"
 msgstr "Osgo X"
 
-#: gtk/gtkinputdialog.c:564
+#: gtk/gtkinputdialog.c:561
 msgid "Y Tilt"
 msgstr "Osgo Y"
 
-#: gtk/gtkinputdialog.c:565
+#: gtk/gtkinputdialog.c:562
 msgid "Wheel"
 msgstr "Olwyn"
 
-#: gtk/gtkinputdialog.c:605
+#: gtk/gtkinputdialog.c:602
 msgid "none"
 msgstr "dim"
 
-#: gtk/gtkinputdialog.c:641 gtk/gtkinputdialog.c:677
+#: gtk/gtkinputdialog.c:638 gtk/gtkinputdialog.c:674
 msgid "(disabled)"
 msgstr "(analluogwyd)"
 
-#: gtk/gtkinputdialog.c:670
+#: gtk/gtkinputdialog.c:667
 msgid "(unknown)"
 msgstr "(anhysbys)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:757
+#: gtk/gtkinputdialog.c:754
 msgid "clear"
 msgstr "clir"
 
-#: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:541
+#: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:553
 msgid "The screen where this window will be displayed"
 msgstr "Y sgrîn lle caiff y ffenest yma ei ddangos"
 
@@ -3166,7 +2493,7 @@ msgstr "Defnyddio tagiau"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Mae testun y label yn cynnwys tagiau XML. Gweler pango_parse_markup()"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:602
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Unioni"
 
@@ -3228,14 +2555,6 @@ msgstr "Teclyn coflythyren"
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Y teclyn i'w weithredu pan gwasgir bysell coflythren y label"
 
-#: gtk/gtklabel.c:3224
-msgid "Select All"
-msgstr "Dewis Popeth"
-
-#: gtk/gtklabel.c:3234
-msgid "Input Methods"
-msgstr "Moddau Mewnbwn"
-
 #: gtk/gtklayout.c:631 gtk/gtkviewport.c:134
 msgid "Horizontal adjustment"
 msgstr "Addasiad llorweddol"
@@ -3252,7 +2571,7 @@ msgstr "Addasiad fertigol"
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Y GtkAdjustment ar gyfer y safle fertigol"
 
-#: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:235
+#: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:201
 msgid "Width"
 msgstr "Lled"
 
@@ -3273,15 +2592,15 @@ msgstr "Hyd y llunwedd"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:840
+#: gtk/gtkmain.c:806
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:344
+#: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
 msgstr "Teitl Rhwygun"
 
-#: gtk/gtkmenu.c:345
+#: gtk/gtkmenu.c:264
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -3289,96 +2608,32 @@ msgstr ""
 "Teitl a all gael ei ddangos gan y rheolwr ffenestri pan rhwygir y dewislen "
 "hwn"
 
-#: gtk/gtkmenu.c:351
-msgid "Vertical Padding"
-msgstr "Bylchu Fertigol"
-
-#: gtk/gtkmenu.c:352
-msgid "Extra space at the top and bottom of the menu"
-msgstr "Gofod ychwannegol ar ben a gwaelod y dewislen"
-
-#: gtk/gtkmenu.c:360
-msgid "Vertical Offset"
-msgstr "Atred Fertigol"
-
-#: gtk/gtkmenu.c:361
-msgid ""
-"When the menu is a submenu, position it this number of pixels offset "
-"vertically"
-msgstr ""
-"Pan mae'r dewislen yn isddewislen, ei leoli e y nifer yma o bicseli yn is yn "
-"fertigol"
-
-#: gtk/gtkmenu.c:369
-msgid "Horizontal Offset"
-msgstr "Atred Llorweddol"
-
-#: gtk/gtkmenu.c:370
-msgid ""
-"When the menu is a submenu, position it this number of pixels offset "
-"horizontally"
-msgstr ""
-"Pan mae'r dewislen yn isddewislen, ei leoli e y nifer yma o bicseli ar draws "
-"yn llorweddol"
-
-#: gtk/gtkmenu.c:380
-msgid "Left Attach"
-msgstr "Clymiad Chwith"
-
-#: gtk/gtkmenu.c:381 gtk/gtktable.c:203
-msgid "The column number to attach the left side of the child to"
-msgstr "Rhif y golofn i glymu ochr chwith y plentyn iddi"
-
-#: gtk/gtkmenu.c:388
-msgid "Right Attach"
-msgstr "Clymiad De"
-
-#: gtk/gtkmenu.c:389
-msgid "The column number to attach the right side of the child to"
-msgstr "Rhif y golofn i glymu ochr chwith y plentyn iddi"
-
-#: gtk/gtkmenu.c:396
-msgid "Top Attach"
-msgstr "Clwm Pen"
-
-#: gtk/gtkmenu.c:397
-msgid "The row number to attach the top of the child to"
-msgstr "Rhif y rhes i glymu pen y plentyn iddi"
-
-#: gtk/gtkmenu.c:404
-msgid "Bottom Attach"
-msgstr "Clwm Gwaelod"
-
-#: gtk/gtkmenu.c:405 gtk/gtktable.c:224
-msgid "The row number to attach the bottom of the child to"
-msgstr "Rhif y rhes i glymu gwaelod y plentyn iddi"
-
-#: gtk/gtkmenu.c:492
+#: gtk/gtkmenu.c:379
 msgid "Can change accelerators"
 msgstr "Gellir newid cyflymwyr"
 
-#: gtk/gtkmenu.c:493
+#: gtk/gtkmenu.c:380
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "A ellir newis cyflymwyr dewislenni gan wasgu bysell dross yr eitem dewislen"
 
-#: gtk/gtkmenu.c:498
+#: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
 msgstr "Saib cyn mae is-ddewislenni yn ymddangos"
 
-#: gtk/gtkmenu.c:499
+#: gtk/gtkmenu.c:386
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Yr amser lleiaf rhaid i'r pwyntydd aros dros eitem dewislen cyn i'r is-"
 "ddewislen ymddangos"
 
-#: gtk/gtkmenu.c:506
+#: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
 msgstr "Saib cyn cuddio is-ddewislen"
 
-#: gtk/gtkmenu.c:507
+#: gtk/gtkmenu.c:394
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3390,7 +2645,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Arddull y befel o amgylch y bar dewislen"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:486
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:258
 msgid "Internal padding"
 msgstr "Bylchu mewnol"
 
@@ -3464,76 +2719,76 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Faint o le i'w ychwanegu at frig a waelod y teclyn, mewn picseli"
 
-#: gtk/gtknotebook.c:396
+#: gtk/gtknotebook.c:378
 msgid "Page"
 msgstr "Tudalen"
 
 # EFALLAI
-#: gtk/gtknotebook.c:397
+#: gtk/gtknotebook.c:379
 msgid "The index of the current page"
 msgstr "Mynegrif y dudalen gyfredol"
 
-#: gtk/gtknotebook.c:405
+#: gtk/gtknotebook.c:387
 msgid "Tab Position"
 msgstr "Safle Tabiau"
 
-#: gtk/gtknotebook.c:406
+#: gtk/gtknotebook.c:388
 msgid "Which side of the notebook holds the tabs"
 msgstr "Pa ochr o'r nodlyfr sy'n dal y tabiau"
 
-#: gtk/gtknotebook.c:413
+#: gtk/gtknotebook.c:395
 msgid "Tab Border"
 msgstr "Border Tabiau"
 
-#: gtk/gtknotebook.c:414
+#: gtk/gtknotebook.c:396
 msgid "Width of the border around the tab labels"
 msgstr "Lled y border o amgylch labeli'r tabiau"
 
-#: gtk/gtknotebook.c:422
+#: gtk/gtknotebook.c:404
 msgid "Horizontal Tab Border"
 msgstr "Border Llorweddol Tabiau"
 
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:405
 msgid "Width of the horizontal border of tab labels"
 msgstr "Lled border llorweddol labeli tabiau"
 
-#: gtk/gtknotebook.c:431
+#: gtk/gtknotebook.c:413
 msgid "Vertical Tab Border"
 msgstr "Border Fertigol Tabiau"
 
-#: gtk/gtknotebook.c:432
+#: gtk/gtknotebook.c:414
 msgid "Width of the vertical border of tab labels"
 msgstr "Lled border fertigol labeli tabiau"
 
-#: gtk/gtknotebook.c:440
+#: gtk/gtknotebook.c:422
 msgid "Show Tabs"
 msgstr "Dangos Tabiau"
 
-#: gtk/gtknotebook.c:441
+#: gtk/gtknotebook.c:423
 msgid "Whether tabs should be shown or not"
 msgstr "A ddylid dangos tabiau ai peidio"
 
-#: gtk/gtknotebook.c:447
+#: gtk/gtknotebook.c:429
 msgid "Show Border"
 msgstr "Dangos Border"
 
-#: gtk/gtknotebook.c:448
+#: gtk/gtknotebook.c:430
 msgid "Whether the border should be shown or not"
 msgstr "A ddylid dangos y border ai peidio"
 
-#: gtk/gtknotebook.c:454
+#: gtk/gtknotebook.c:436
 msgid "Scrollable"
 msgstr "Graddadwy"
 
-#: gtk/gtknotebook.c:455
+#: gtk/gtknotebook.c:437
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "Os TRUE, ychwannegir saethau sgrolio os mae gormod o dabiau i ffitio"
 
-#: gtk/gtknotebook.c:461
+#: gtk/gtknotebook.c:443
 msgid "Enable Popup"
 msgstr "Galluogi Bryslen"
 
-#: gtk/gtknotebook.c:462
+#: gtk/gtknotebook.c:444
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3541,140 +2796,89 @@ msgstr ""
 "Os TRUE, bydd gwasgu botwn de'r llygoden ar y nodlyfr yn dangos bryslen "
 "gallwch ddefnyddio er mwyn mynd at dudalen"
 
-#: gtk/gtknotebook.c:469
+#: gtk/gtknotebook.c:451
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "A ddylai tabiau gael yr un maint"
 
-#: gtk/gtknotebook.c:476
+#: gtk/gtknotebook.c:458
 msgid "Tab label"
 msgstr "Label tab"
 
-#: gtk/gtknotebook.c:477
+#: gtk/gtknotebook.c:459
 msgid "The string displayed on the childs tab label"
 msgstr "Y llinyn a ddangosir ar label tab y plentyn"
 
-#: gtk/gtknotebook.c:483
+#: gtk/gtknotebook.c:465
 msgid "Menu label"
 msgstr "Label dewislen"
 
-#: gtk/gtknotebook.c:484
+#: gtk/gtknotebook.c:466
 msgid "The string displayed in the childs menu entry"
 msgstr "Y llinyn a ddangosir yng nghofnod dewislen y plentyn"
 
-#: gtk/gtknotebook.c:497
+#: gtk/gtknotebook.c:479
 msgid "Tab expand"
 msgstr "Ehangu'r tab"
 
-#: gtk/gtknotebook.c:498
+#: gtk/gtknotebook.c:480
 msgid "Whether to expand the childs tab or not"
 msgstr "A ddylid ehangu tab y plentyn ai peidio"
 
 # EFALLAI
-#: gtk/gtknotebook.c:504
+#: gtk/gtknotebook.c:486
 msgid "Tab fill"
 msgstr "Tab yn llenwi"
 
-#: gtk/gtknotebook.c:505
+#: gtk/gtknotebook.c:487
 msgid "Wheather the childs tab should fill the allocated area or not"
 msgstr "A ddylai tab y plentyn lenwi'r lle fe ddarparwyd ai peidio"
 
-#: gtk/gtknotebook.c:511
+#: gtk/gtknotebook.c:493
 msgid "Tab pack type"
 msgstr "Math pacio tabiau"
 
-#: gtk/gtknotebook.c:527 gtk/gtkscrollbar.c:113
-msgid "Secondary backward stepper"
-msgstr "Camydd tuag yn ôl eilaidd"
-
-#: gtk/gtknotebook.c:528
-msgid ""
-"Display a second backward arrow button on the opposite end of the tab area"
-msgstr "Dangos saeth eilaidd tuag yn ôl ar ochr cyferbyn y maes tab"
-
-#: gtk/gtknotebook.c:544 gtk/gtkscrollbar.c:121
-msgid "Secondary forward stepper"
-msgstr "Camydd eilaidd tuag ymalen"
-
-#: gtk/gtknotebook.c:545
-msgid ""
-"Display a second forward arrow button on the opposite end of the tab area"
-msgstr ""
-"Dangos botwm eilaidd tuag ymlaen eilaidd ar ochr cyferbyn y bar sgrolio"
-
-#: gtk/gtknotebook.c:560 gtk/gtkscrollbar.c:97
-msgid "Backward stepper"
-msgstr "Camydd tuag yn ôl"
-
-#: gtk/gtknotebook.c:561 gtk/gtkscrollbar.c:98
-msgid "Display the standard backward arrow button"
-msgstr "Dangos y botwm safonol saeth tuag yn ôl"
-
-#: gtk/gtknotebook.c:576 gtk/gtkscrollbar.c:105
-msgid "Forward stepper"
-msgstr "Camydd tuag ymalen"
-
-#: gtk/gtknotebook.c:577 gtk/gtkscrollbar.c:106
-msgid "Display the standard forward arrow button"
-msgstr "Dangod y saeth tuag ymlaen safonol"
-
-#: gtk/gtknotebook.c:2645 gtk/gtknotebook.c:4971
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "Tudalen %u"
 
-#: gtk/gtkoptionmenu.c:192
+#: gtk/gtkoptionmenu.c:190
 msgid "Menu"
 msgstr "Dewislen"
 
-#: gtk/gtkoptionmenu.c:193
+#: gtk/gtkoptionmenu.c:191
 msgid "The menu of options"
 msgstr "Y dewislen opsiynnau"
 
 # EFALLAI
-#: gtk/gtkoptionmenu.c:200
+#: gtk/gtkoptionmenu.c:198
 msgid "Size of dropdown indicator"
 msgstr "Maint y dangosydd gostwng"
 
-#: gtk/gtkoptionmenu.c:206
+#: gtk/gtkoptionmenu.c:204
 msgid "Spacing around indicator"
 msgstr "Bylchu o amgylch y dangosydd"
 
-#: gtk/gtkpaned.c:237
+#: gtk/gtkpaned.c:219
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr "Safle y gwahannwr chwarel mewn picseli (0 yn golygu y chwith/brig)"
 
-#: gtk/gtkpaned.c:245
+#: gtk/gtkpaned.c:227
 msgid "Position Set"
 msgstr "Gosod Safle"
 
-#: gtk/gtkpaned.c:246
+#: gtk/gtkpaned.c:228
 msgid "TRUE if the Position property should be used"
 msgstr "TRUE os dylid defnyddio'r priodwedd Safle"
 
-#: gtk/gtkpaned.c:252
+#: gtk/gtkpaned.c:234
 msgid "Handle Size"
 msgstr "Maint y Ddolen"
 
-#: gtk/gtkpaned.c:253
+#: gtk/gtkpaned.c:235
 msgid "Width of handle"
 msgstr "Lled y ddolen"
-
-#: gtk/gtkpaned.c:270
-msgid "Resize"
-msgstr "Ailfeintio"
-
-#: gtk/gtkpaned.c:271
-msgid "If TRUE, the child expands and shrinks along with the paned widget"
-msgstr "Os yn wir, mae'r plentyn yn ehangu a crebachu gyda'r teclyn chwarelog"
-
-#: gtk/gtkpaned.c:286
-msgid "Shrink"
-msgstr "Lleihau"
-
-#: gtk/gtkpaned.c:287
-msgid "If TRUE, the child can be made smaller than its requisition"
-msgstr "Os yn wir, gellir gweneud y plentyn yn llai na'i ofynniad"
 
 #: gtk/gtkpreview.c:133
 msgid ""
@@ -3735,7 +2939,7 @@ msgstr "Addasiad"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "Y GtkAdjustment wedi ei gysylltu i'r bar cynnydd (Anghymeradwyir)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:435
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:231
 msgid "Orientation"
 msgstr "Gogwydd"
 
@@ -3805,18 +3009,6 @@ msgstr "Ffracsiwn yr holl gynydd i symud y bloc sboncio pan mae pwls"
 #: gtk/gtkprogressbar.c:219
 msgid "Text to be displayed in the progress bar"
 msgstr "Y testun i'w ddangos yn y bar cynydd"
-
-#: gtk/gtkradioaction.c:137
-msgid "The value"
-msgstr "Y gwerth"
-
-#: gtk/gtkradioaction.c:138
-msgid ""
-"The value returned by gtk_radio_action_get_current_value() when this action "
-"is the current action of its group."
-msgstr ""
-"Y gwerth a ddychwelir gan gtk_radio_action_get_current_value() pan mae'r "
-"weithred hon yn weithred cyfredol ei grŵp."
 
 #: gtk/gtkradiobutton.c:109
 msgid "Group"
@@ -4006,21 +3198,45 @@ msgstr "Maint llithrwr gosodedig"
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr "Peidio newid maint y llithrwr ond ei gloi at y hyd lleiaf"
 
+#: gtk/gtkscrollbar.c:97
+msgid "Backward stepper"
+msgstr "Camydd tuag yn ôl"
+
+#: gtk/gtkscrollbar.c:98
+msgid "Display the standard backward arrow button"
+msgstr "Dangos y botwm safonol saeth tuag yn ôl"
+
+#: gtk/gtkscrollbar.c:105
+msgid "Forward stepper"
+msgstr "Camydd tuag ymalen"
+
+#: gtk/gtkscrollbar.c:106
+msgid "Display the standard forward arrow button"
+msgstr "Dangod y saeth tuag ymlaen safonol"
+
+#: gtk/gtkscrollbar.c:113
+msgid "Secondary backward stepper"
+msgstr "Camydd tuag yn ôl eilaidd"
+
 #: gtk/gtkscrollbar.c:114
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr "Dangos botwn tuag yn ôl eilaidd ar ochr cyferbyn y bar sgrolio"
+
+#: gtk/gtkscrollbar.c:121
+msgid "Secondary forward stepper"
+msgstr "Camydd eilaidd tuag ymalen"
 
 #: gtk/gtkscrollbar.c:122
 msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Dangos botwm tuag ymlaen eilaidd ar ochr cyferbyn y bar sgrolio"
 
-#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:529
+#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:528
 msgid "Horizontal Adjustment"
 msgstr "Addasydd Llorweddol"
 
-#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:537
+#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:536
 msgid "Vertical Adjustment"
 msgstr "Addasydd Fertigol"
 
@@ -4065,19 +3281,11 @@ msgstr "Bylchu bar sgrolio"
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Y nifer o bicseli rhwng y bariau sgrolio a'r ffenest wedi sgrolio"
 
-#: gtk/gtkseparatortoolitem.c:159
-msgid "Draw"
-msgstr "Arlunio"
-
-#: gtk/gtkseparatortoolitem.c:160
-msgid "Whether the separator is drawn, or just blank"
-msgstr "A arlunir y gwahanydd, neu lle wag"
-
-#: gtk/gtksettings.c:169
+#: gtk/gtksettings.c:168
 msgid "Double Click Time"
 msgstr "Amser Clic Ddwbl"
 
-#: gtk/gtksettings.c:170
+#: gtk/gtksettings.c:169
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -4085,28 +3293,28 @@ msgstr ""
 "Yr amser hiraf rhwng dau glic er mwyn eu cysudro'n glic ddwbl (mewn milfedau "
 "eiliadau)"
 
-#: gtk/gtksettings.c:177
+#: gtk/gtksettings.c:176
 msgid "Cursor Blink"
 msgstr "Chwincio'r Cyrchydd"
 
-#: gtk/gtksettings.c:178
+#: gtk/gtksettings.c:177
 msgid "Whether the cursor should blink"
 msgstr "A ddylai'r cyrchydd chwincio"
 
-#: gtk/gtksettings.c:185
+#: gtk/gtksettings.c:184
 msgid "Cursor Blink Time"
 msgstr "Amser Chwincio'r Cyrchydd"
 
-#: gtk/gtksettings.c:186
+#: gtk/gtksettings.c:185
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Hyd cylchdro chwincio'r cyrchydd, mewn milfedau eiliad"
 
-#: gtk/gtksettings.c:193
+#: gtk/gtksettings.c:192
 msgid "Split Cursor"
 msgstr "Cyrchydd Hollt"
 
 # EFALLAI
-#: gtk/gtksettings.c:194
+#: gtk/gtksettings.c:193
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -4114,61 +3322,53 @@ msgstr ""
 "A ddylid dangos dau gyrchydd ar gyfer testun cymysg chwith-i-dde a de-i-"
 "chwith"
 
-#: gtk/gtksettings.c:201
+#: gtk/gtksettings.c:200
 msgid "Theme Name"
 msgstr "Enw Thema"
 
-#: gtk/gtksettings.c:202
+#: gtk/gtksettings.c:201
 msgid "Name of theme RC file to load"
 msgstr "Enw'r ffeil RC thema i'w lwytho"
 
-#: gtk/gtksettings.c:209
-msgid "Icon Theme Name"
-msgstr "Enw Thema Eicon"
-
-#: gtk/gtksettings.c:210
-msgid "Name of icon theme to use"
-msgstr "Enw'r thema eicon i'w ddefnyddio"
-
-#: gtk/gtksettings.c:217
+#: gtk/gtksettings.c:208
 msgid "Key Theme Name"
 msgstr "Enw'r Thema Allweddol"
 
 # EFALLAI
-#: gtk/gtksettings.c:218
+#: gtk/gtksettings.c:209
 msgid "Name of key theme RC file to load"
 msgstr "Enw ffeil RC thema allweddol i'w lwytho"
 
-#: gtk/gtksettings.c:226
+#: gtk/gtksettings.c:217
 msgid "Menu bar accelerator"
 msgstr "Cyflymydd bar dewislen"
 
-#: gtk/gtksettings.c:227
+#: gtk/gtksettings.c:218
 msgid "Keybinding to activate the menu bar"
 msgstr "Bysellrwymiad er mwyn gweithredu'r bar dewislen"
 
-#: gtk/gtksettings.c:235
+#: gtk/gtksettings.c:226
 msgid "Drag threshold"
 msgstr "Trothwy llusgo"
 
-#: gtk/gtksettings.c:236
+#: gtk/gtksettings.c:227
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Y nifer o bicseli gall y cyrchydd symud cyn llusgo"
 
-#: gtk/gtksettings.c:244
+#: gtk/gtksettings.c:235
 msgid "Font Name"
 msgstr "Enw Ffont"
 
-#: gtk/gtksettings.c:245
+#: gtk/gtksettings.c:236
 msgid "Name of default font to use"
 msgstr "Enw'r ffont rhagosodedig i'w ddefnyddio"
 
-#: gtk/gtksettings.c:253
+#: gtk/gtksettings.c:244
 msgid "Icon Sizes"
 msgstr "Meintiau Eiconau"
 
 # TRWSIO
-#: gtk/gtksettings.c:254
+#: gtk/gtksettings.c:245
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "Rhestr meintiau eiconau (gtk-menu=16,16;gtk-button=20,20..."
 
@@ -4250,19 +3450,7 @@ msgstr "Gwerth"
 msgid "Reads the current value, or sets a new value"
 msgstr "Darllen y gwerth cyfredol, neu osod gwerth newydd"
 
-#: gtk/gtkspinbutton.c:311
-msgid "Style of bevel around the spin button"
-msgstr "Arddull y befel o amgylch y botwm troelli"
-
-#: gtk/gtkstatusbar.c:167
-msgid "Has Resize Grip"
-msgstr "Efo Dolen Ailfentio"
-
-#: gtk/gtkstatusbar.c:168
-msgid "Whether the statusbar has a grip for resizing the toplevel"
-msgstr "A oes gan y bar statws ddolen ar gyfer ailfentio'r lefel dop"
-
-#: gtk/gtkstatusbar.c:195
+#: gtk/gtkstatusbar.c:162
 msgid "Style of bevel around the statusbar text"
 msgstr "Arddull y befel o amgylch testun y bar statws"
 
@@ -4586,12 +3774,16 @@ msgstr "Os yn wir mae hyn yn golygu fod celloedd y tabl oll yr un lled/ucher"
 msgid "Left attachment"
 msgstr "Clymiad chwith"
 
+#: gtk/gtktable.c:203
+msgid "The column number to attach the left side of the child to"
+msgstr "Rhif y golofn i glymu ochr chwith y plentyn iddi"
+
 #: gtk/gtktable.c:209
 msgid "Right attachment"
 msgstr "Clymiad de"
 
 #: gtk/gtktable.c:210
-msgid "The column number to attach the right side of a child widget to"
+msgid "the column number to attach the right side of a child widget to"
 msgstr "Rhif y golofn i glymu ochr de y teclyn plentyn iddi"
 
 #: gtk/gtktable.c:216
@@ -4605,6 +3797,10 @@ msgstr "Rhif y rhes i glymu pen y teclyn plentyn iddi"
 #: gtk/gtktable.c:223
 msgid "Bottom attachment"
 msgstr "Clymiad gwaelod"
+
+#: gtk/gtktable.c:224
+msgid "The row number to attach the bottom of the child to"
+msgstr "Rhif y rhes i glymu gwaelod y plentyn iddi"
 
 #: gtk/gtktable.c:230
 msgid "Horizontal options"
@@ -4773,7 +3969,7 @@ msgstr ""
 "Mae hyn yn addasu'n gywir i newidiadau mewn thema a.y.y.b, felly argymellir "
 "hyn. Mae Pango yn diffinio rhai graddfeydd megis PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Unioni chwith, de, neu canolig"
 
@@ -4797,7 +3993,7 @@ msgid "Left margin"
 msgstr "Ymyl chwith"
 
 # EFALLAI
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Lled yr ymyl chwith mewn picseli"
 
@@ -4807,15 +4003,15 @@ msgid "Right margin"
 msgstr "Ymyl de"
 
 # EFALLAI
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Lled yr ymyl de mewn picseli"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Mewnoli"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Faint i fewnoli'r parafraff, mewn picseli"
 
@@ -4831,7 +4027,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Picseli uwchben llinellau"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:556
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Picseli o le gwag uwchben paragraffau"
 
@@ -4839,7 +4035,7 @@ msgstr "Picseli o le gwag uwchben paragraffau"
 msgid "Pixels below lines"
 msgstr "Picseli islaw llinellau"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:566
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Picseli o le gwag islaw paragraffau"
 
@@ -4847,7 +4043,7 @@ msgstr "Picseli o le gwag islaw paragraffau"
 msgid "Pixels inside wrap"
 msgstr "Picseli o fewn amlap"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:576
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Picseli o le gwag rhwng llinellau wedi eu amlapio o fewn paragraff"
 
@@ -4855,17 +4051,17 @@ msgstr "Picseli o le gwag rhwng llinellau wedi eu amlapio o fewn paragraff"
 msgid "Wrap mode"
 msgstr "Modd amlapio"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "A ddylid amlapio llneallau erioed, ger ffiniau geiriau, neu ger ffiniau nodau"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:641
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabiau"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:642
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Tabiau addasiedig ar gyfer y testun yma"
 
@@ -5036,61 +4232,41 @@ msgstr "ZWJ Ym_unydd lled sero"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "JWNJ _Nid-ymunyddi lled sero"
 
-#: gtk/gtktextview.c:555
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "Picseli Uwchben Llinellau"
 
-#: gtk/gtktextview.c:565
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "Picseli Islaw Llinellau"
 
-#: gtk/gtktextview.c:575
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "Picseli o Fewn Amlap"
 
-#: gtk/gtktextview.c:593
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "Modd Amlapio"
 
-#: gtk/gtktextview.c:611
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "Ymyl Chwith"
 
-#: gtk/gtktextview.c:621
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "Ymyl De"
 
-#: gtk/gtktextview.c:649
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "Cyrchydd Gweladwy"
 
-#: gtk/gtktextview.c:650
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "Dagngos y cyrchydd mewnosod"
 
-#: gtk/gtktextview.c:657
-msgid "Buffer"
-msgstr "Byffer"
-
-#: gtk/gtktextview.c:658
-msgid "The buffer which is displayed"
-msgstr "Y byffer a ddangosir"
-
-#: gtk/gtktextview.c:665
-msgid "Overwrite mode"
-msgstr "Modd trosysgrifo"
-
-#: gtk/gtktextview.c:666
-msgid "Whether entered text overwrites existing contents"
-msgstr "A ydy'r testun a rhoddir yn trosysgrifo cynnwys sy'n bodoli eisioes"
-
-#: gtk/gtktextview.c:673
-msgid "Accepts tab"
-msgstr "Yn derbyn tab"
-
-#: gtk/gtktextview.c:674
-msgid "Whether Tab will result in a tab character being entered"
-msgstr "A fydd gwasgu Tab yn mewnosod nod tab"
+#: gtk/gtktextview.c:6633
+msgid "Input _Methods"
+msgstr "Moddau _Mewnbwn"
 
 #: gtk/gtkthemes.c:69
 #, c-format
@@ -5100,15 +4276,6 @@ msgstr "Methu canfod peiriant thema yn module_path: \"%s\","
 #: gtk/gtktipsquery.c:184
 msgid "--- No Tip ---"
 msgstr "--- Dim Cyngor ---"
-
-#: gtk/gtktoggleaction.c:129
-msgid "Create the same proxies as a radio action"
-msgstr "Creu'r un dirprwyon a gweithred radio"
-
-#: gtk/gtktoggleaction.c:130
-msgid "Whether the proxies for this action look like radio action proxies"
-msgstr ""
-"A ydy dirprwyon y gweithred hwn yn edrych fel dirprwyon gweithred radio"
 
 #: gtk/gtktogglebutton.c:133
 msgid "If the toggle button should be pressed in or not"
@@ -5126,147 +4293,68 @@ msgstr "Arlunio Dangosydd"
 msgid "If the toggle part of the button is displayed"
 msgstr "A chaiff rhan togl y botwm ei ddangos"
 
-#: gtk/gtktoolbar.c:436
+#: gtk/gtktoolbar.c:232
 msgid "The orientation of the toolbar"
 msgstr "Gogwydd y bar offer"
 
-#: gtk/gtktoolbar.c:444
+#: gtk/gtktoolbar.c:240
 msgid "Toolbar Style"
 msgstr "Arddull Bar Offer"
 
-#: gtk/gtktoolbar.c:445
+#: gtk/gtktoolbar.c:241
 msgid "How to draw the toolbar"
 msgstr "Sut i arlunio'r bar offer"
 
-#: gtk/gtktoolbar.c:452
-msgid "Show Arrow"
-msgstr "Dangos Saeth"
-
-#: gtk/gtktoolbar.c:453
-msgid "If an arrow should be shown if the toolbar doesn't fit"
-msgstr "Os y dylir dangos saeth os nad yw'r bar offer yn ffitio"
-
-#: gtk/gtktoolbar.c:462
-msgid "Whether the item should receive extra space when the toolbar grows"
-msgstr "A ddylai'r eitem dderbyn lle ychwanegol pan mae'r bar offer yn tyfu"
-
-#: gtk/gtktoolbar.c:470
-msgid "Whether the item should be the same size as other homogeneous items"
-msgstr "A ddylai'r eitem fod o'r un maint a eitemau cydryw eraill"
-
-#: gtk/gtktoolbar.c:477
+#: gtk/gtktoolbar.c:249
 msgid "Spacer size"
 msgstr "Maint bylchydd"
 
-#: gtk/gtktoolbar.c:478
+#: gtk/gtktoolbar.c:250
 msgid "Size of spacers"
 msgstr "Maint y bylchwyr"
 
-#: gtk/gtktoolbar.c:487
+#: gtk/gtktoolbar.c:259
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Faint o le border rhwng cysgod y bar offer a'r botymau"
 
-#: gtk/gtktoolbar.c:495
+#: gtk/gtktoolbar.c:267
 msgid "Space style"
 msgstr "Arddull bylchu"
 
-#: gtk/gtktoolbar.c:496
+#: gtk/gtktoolbar.c:268
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "A ydy bylchwyr yn linellau fertigon neu'n wag"
 
-#: gtk/gtktoolbar.c:503
+#: gtk/gtktoolbar.c:276
 msgid "Button relief"
 msgstr "Esgyniad y botwm"
 
-#: gtk/gtktoolbar.c:504
+#: gtk/gtktoolbar.c:277
 msgid "Type of bevel around toolbar buttons"
 msgstr "Math y befel o amgylch botymau bar offer"
 
-#: gtk/gtktoolbar.c:511
+#: gtk/gtktoolbar.c:285
 msgid "Style of bevel around the toolbar"
 msgstr "Arddull y befel o amgylch y bar offer"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:291
 msgid "Toolbar style"
 msgstr "Arddull bar offer"
 
-#: gtk/gtktoolbar.c:518
+#: gtk/gtktoolbar.c:292
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "A oes gan fariau offer rhagosodedig destun yn uynig, testun ac eiconau, "
 "eiconau'n unig, a.y.y.b."
 
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:298
 msgid "Toolbar icon size"
 msgstr "Maint eiconau bar offer"
 
-#: gtk/gtktoolbar.c:525
+#: gtk/gtktoolbar.c:299
 msgid "Size of icons in default toolbars"
 msgstr "<aomt eiconau mewn bariau offer rhagosodedig"
-
-#: gtk/gtktoolbutton.c:180
-msgid "Text to show in the item."
-msgstr "Y testun i ddangos yn yr eitem."
-
-#: gtk/gtktoolbutton.c:187
-msgid ""
-"If set, an underline in the label property indicates that the next character "
-"should be used for the mnemonic accelerator key in the overflow menu"
-msgstr ""
-"Os wedi ei osod, bydd tanlinell yn y priodwedd label yn dynodi dylid "
-"defnyddio'r nod nesaf ar gyfer y bysell cyflymydd mnemonig yn y dewislen "
-"gorlif"
-
-#: gtk/gtktoolbutton.c:194
-msgid "Widget to use as the item label"
-msgstr "Y teclyn i ddefnyddio fel label yr eitem"
-
-#: gtk/gtktoolbutton.c:200
-msgid "Stock Id"
-msgstr "ID Stoc"
-
-#: gtk/gtktoolbutton.c:201
-msgid "The stock icon displayed on the item"
-msgstr "Yr eicon stoc a ddangosir ar yr eitem"
-
-#: gtk/gtktoolbutton.c:207
-msgid "Icon widget"
-msgstr "Teclyn eicon"
-
-#: gtk/gtktoolbutton.c:208
-msgid "Icon widget to display in the item"
-msgstr "Y teclyn eicon i'w ddangos yn yr eitem"
-
-#: gtk/gtktoolitem.c:154
-msgid "Visible when horizontal"
-msgstr "Gweladwy tra'n llorweddol"
-
-#: gtk/gtktoolitem.c:155
-msgid ""
-"Whether the toolbar item is visible when the toolbar is in a horizontal "
-"orientation."
-msgstr ""
-"A ydy'r eitem bar offer yn weladwy pan mae'r bar offer ar ogwydd llorweddol."
-
-#: gtk/gtktoolitem.c:161
-msgid "Visible when vertical"
-msgstr "Gweladwy tra'n fertigol"
-
-#: gtk/gtktoolitem.c:162
-msgid ""
-"Whether the toolbar item is visible when the toolbar is in a vertical "
-"orientation."
-msgstr ""
-"A ydy'r eitem bar offer yn weladwy pan mae'r bar offer ar ogwydd fertigol."
-
-#: gtk/gtktoolitem.c:169
-msgid ""
-"Whether the toolbar item is considered important. When TRUE, toolbar buttons "
-"show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr ""
-"A ydy'r eitem bar offer yn bwysig. Pan yn wir, mae botymau bar offer yn "
-"dangos testun yn y modd GTK_TOOLBAR_BOTH_HORIZ"
 
 #: gtk/gtktreemodelsort.c:306
 msgid "TreeModelSort Model"
@@ -5276,276 +4364,253 @@ msgstr "Model TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Y model i'r TreeSortModel ei drefnu"
 
-#: gtk/gtktreeview.c:521
+#: gtk/gtktreeview.c:520
 msgid "TreeView Model"
 msgstr "Model TreeView"
 
 # EFALLAI (golwg?)
-#: gtk/gtktreeview.c:522
+#: gtk/gtktreeview.c:521
 msgid "The model for the tree view"
 msgstr "Y model ar gyfer y golwg coeden"
 
 # EFALLAI
-#: gtk/gtktreeview.c:530
+#: gtk/gtktreeview.c:529
 msgid "Horizontal Adjustment for the widget"
 msgstr "Addasydd Llorweddol ar gyfer y teclyn"
 
 # EFALLAI
-#: gtk/gtktreeview.c:538
+#: gtk/gtktreeview.c:537
 msgid "Vertical Adjustment for the widget"
 msgstr "Addasydd Llorweddol ar gyfer y teclyn"
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:505
+msgid "Visible"
+msgstr "Gweladwy"
+
+#: gtk/gtktreeview.c:545
 msgid "Show the column header buttons"
 msgstr "Dangod botymau pennawd colofnau"
 
-#: gtk/gtktreeview.c:553
+#: gtk/gtktreeview.c:552
 msgid "Headers Clickable"
 msgstr "Pennawdau Gellir Eu Clicio"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:553
 msgid "Column headers respond to click events"
 msgstr "Mae pennawdau colofnau yn ymateb i ddigwyddiadau clicio"
 
-#: gtk/gtktreeview.c:561
+#: gtk/gtktreeview.c:560
 msgid "Expander Column"
 msgstr "Colofn Ehangu"
 
-#: gtk/gtktreeview.c:562
+#: gtk/gtktreeview.c:561
 msgid "Set the column for the expander column"
 msgstr "Gosod y colofn ar gyfer y colofn ehangu"
 
-#: gtk/gtktreeview.c:569 gtk/gtktreeviewcolumn.c:326
+#: gtk/gtktreeview.c:568 gtk/gtktreeviewcolumn.c:284
 msgid "Reorderable"
 msgstr "Gellir Aildrefnu"
 
 # EFALLAI (golwg?)
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:569
 msgid "View is reorderable"
 msgstr "Gellir aildrefnu'r golwg"
 
 # EFALLAI
-#: gtk/gtktreeview.c:577
+#: gtk/gtktreeview.c:576
 msgid "Rules Hint"
 msgstr "Awgrym Rheolau"
 
 # EFALLAI
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:577
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Gosod awgrym i'r peiriant thema er mwyn arlunio rhesi mewn lliw gwahanol bob "
 "yn ail"
 
-#: gtk/gtktreeview.c:585
+#: gtk/gtktreeview.c:584
 msgid "Enable Search"
 msgstr "Galluogi Chwilio"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:585
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "Mae'r golwg yn caniatau i'r defnyddiwr chwilio drwy colofnau yn rhyngweithiol"
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:592
 msgid "Search Column"
 msgstr "Colofn Chwilio"
 
 # EFALLAI
 # msgstr "Colofn y model i'w chwilio drwodd tra'n chwilio drwy côd"
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:593
 msgid "Model column to search through when searching through code"
 msgstr "Y colofn i chwilio drwodd tra'n chwilio yn rhyngweithiol"
 
-#: gtk/gtktreeview.c:616
+#: gtk/gtktreeview.c:606
+msgid "Expander Size"
+msgstr "Maint yr Ehangwr"
+
+#: gtk/gtktreeview.c:607
+msgid "Size of the expander arrow"
+msgstr "Maint y saeth ehangu"
+
+#: gtk/gtktreeview.c:615
 msgid "Vertical Separator Width"
 msgstr "Maint Gwahanydd Fertigol"
 
-#: gtk/gtktreeview.c:617
+#: gtk/gtktreeview.c:616
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Gofod fertigol rhwng celloedd. Rhaid ei fod yn rhif eilaidd."
 
-#: gtk/gtktreeview.c:625
+#: gtk/gtktreeview.c:624
 msgid "Horizontal Separator Width"
 msgstr "Lled Gwahanydd Llorweddol"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:625
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Gofod llorweddol rhwng celloed. Rhaid ei fod yn rhif eilaidd."
 
 # EFALLAI
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:633
 msgid "Allow Rules"
 msgstr "Caniatau Rheolau"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:634
 msgid "Allow drawing of alternating color rows"
 msgstr "Caniatau arlunio rhesi gyda lliwiau gwahanol bob yn ail"
 
-#: gtk/gtktreeview.c:641
+#: gtk/gtktreeview.c:640
 msgid "Indent Expanders"
 msgstr "Mewnoli Ehangwyr"
 
-#: gtk/gtktreeview.c:642
+#: gtk/gtktreeview.c:641
 msgid "Make the expanders indented"
 msgstr "Mewnoli ehangwyr"
 
-#: gtk/gtktreeview.c:648
+#: gtk/gtktreeview.c:647
 msgid "Even Row Color"
 msgstr "Lliw Rhesi Eilrifol"
 
-#: gtk/gtktreeview.c:649
+#: gtk/gtktreeview.c:648
 msgid "Color to use for even rows"
 msgstr "Y lliw i'w ddefnyddio ar gyfer rhesi eilrifol"
 
-#: gtk/gtktreeview.c:655
+#: gtk/gtktreeview.c:654
 msgid "Odd Row Color"
 msgstr "Lliw Rhesi Odrifol"
 
-#: gtk/gtktreeview.c:656
+#: gtk/gtktreeview.c:655
 msgid "Color to use for odd rows"
 msgstr "Y lliw i'w ddefnyddio ar gyfer rhesi odrifol"
 
-#: gtk/gtktreeviewcolumn.c:220
+#: gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
 msgstr "A ddylid dangos y colofn"
 
 # EFALLAI
-#: gtk/gtktreeviewcolumn.c:227 gtk/gtkwindow.c:479
+#: gtk/gtktreeviewcolumn.c:193 gtk/gtkwindow.c:491
 msgid "Resizable"
 msgstr "Ailfeintadwy"
 
 # EFALLAI
-#: gtk/gtktreeviewcolumn.c:228
+#: gtk/gtktreeviewcolumn.c:194
 msgid "Column is user-resizable"
 msgstr "Gall y defnyddiwr ailfeintio'r golofn"
 
-#: gtk/gtktreeviewcolumn.c:236
+#: gtk/gtktreeviewcolumn.c:202
 msgid "Current width of the column"
 msgstr "Lled cyfredol y colofn"
 
 # EFALLAI
-#: gtk/gtktreeviewcolumn.c:244
+#: gtk/gtktreeviewcolumn.c:210
 msgid "Sizing"
 msgstr "Meintio"
 
 # EFALLAI
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:211
 msgid "Resize mode of the column"
 msgstr "Modd ailfeintio'r golofn"
 
-#: gtk/gtktreeviewcolumn.c:253
+#: gtk/gtktreeviewcolumn.c:219
 msgid "Fixed Width"
 msgstr "Lled Penodedig"
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:220
 msgid "Current fixed width of the column"
 msgstr "Lled penodedig cyfredol y colofn"
 
-#: gtk/gtktreeviewcolumn.c:263
+#: gtk/gtktreeviewcolumn.c:229
 msgid "Minimum Width"
 msgstr "Lled Lleiaf"
 
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:230
 msgid "Minimum allowed width of the column"
 msgstr "Y lled lleiaf caniateir i'r golofn"
 
-#: gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeviewcolumn.c:239
 msgid "Maximum Width"
 msgstr "Lled Mwyaf"
 
 # EFALLAI
-#: gtk/gtktreeviewcolumn.c:274
+#: gtk/gtktreeviewcolumn.c:240
 msgid "Maximum allowed width of the column"
 msgstr "Y lled mwyaf caniateir i'r golofn"
 
-#: gtk/gtktreeviewcolumn.c:284
+#: gtk/gtktreeviewcolumn.c:249
+msgid "Title"
+msgstr "Teitl"
+
+#: gtk/gtktreeviewcolumn.c:250
 msgid "Title to appear in column header"
 msgstr "Y teitl i ymddangos ym mhenawd y colofn"
 
-#: gtk/gtktreeviewcolumn.c:292
-msgid "Column gets share of extra width allocated to the widget"
-msgstr "Mae'r colofn yn derbyn rhan o'r lled ychwanegol a rhoddir i'r teclyn"
-
 # EFALLAI
-#: gtk/gtktreeviewcolumn.c:299
+#: gtk/gtktreeviewcolumn.c:257
 msgid "Clickable"
 msgstr "Clicadwy"
 
-#: gtk/gtktreeviewcolumn.c:300
+#: gtk/gtktreeviewcolumn.c:258
 msgid "Whether the header can be clicked"
 msgstr "A ellir clicio'r pennawd"
 
-#: gtk/gtktreeviewcolumn.c:308
+#: gtk/gtktreeviewcolumn.c:266
 msgid "Widget"
 msgstr "Teclyn"
 
-#: gtk/gtktreeviewcolumn.c:309
+#: gtk/gtktreeviewcolumn.c:267
 msgid "Widget to put in column header button instead of column title"
 msgstr "Y teclyn i'w roi ym motwm pennawd y colofn yn lle teitl y golofn"
 
-#: gtk/gtktreeviewcolumn.c:316
+#: gtk/gtktreeviewcolumn.c:274
 msgid "Alignment"
 msgstr "Cyfuniad"
 
-#: gtk/gtktreeviewcolumn.c:317
+#: gtk/gtktreeviewcolumn.c:275
 msgid "X Alignment of the column header text or widget"
 msgstr "Cyfuniad X teclyn neu destun pennawd y golofn"
 
 # EFALLAI
-#: gtk/gtktreeviewcolumn.c:327
+#: gtk/gtktreeviewcolumn.c:285
 msgid "Whether the column can be reordered around the headers"
 msgstr "A ellir ail-drefnu'r colof o amgylch y pennawdau"
 
-#: gtk/gtktreeviewcolumn.c:334
+#: gtk/gtktreeviewcolumn.c:292
 msgid "Sort indicator"
 msgstr "Dangosydd trefnu"
 
-#: gtk/gtktreeviewcolumn.c:335
+#: gtk/gtktreeviewcolumn.c:293
 msgid "Whether to show a sort indicator"
 msgstr "A ddylid dangos dangosydd trefnu"
 
 # EFALLAI
-#: gtk/gtktreeviewcolumn.c:342
+#: gtk/gtktreeviewcolumn.c:300
 msgid "Sort order"
 msgstr "Cyfeiriad trefnu"
 
-#: gtk/gtktreeviewcolumn.c:343
+#: gtk/gtktreeviewcolumn.c:301
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Y cyfeiriad trefnu dylai'r dangosydd trefnu ddangos"
-
-#: gtk/gtkuimanager.c:213
-msgid "Add tearoffs to menus"
-msgstr "Ychwannegu rhwygynnau at ddewislenni"
-
-#: gtk/gtkuimanager.c:214
-msgid "Whether tearoff menu items should be added to menus"
-msgstr "A ddylid ychwanegu eitemau dewislen rhwygo at ddewislenni"
-
-#: gtk/gtkuimanager.c:221
-msgid "Merged UI definition"
-msgstr "Diffiniad rhyngwyneb cyfuniedig"
-
-#: gtk/gtkuimanager.c:222
-msgid "An XML string describing the merged UI"
-msgstr "Llinyn XML yn disgrifio'r rhyngwyneg cyfuniedig"
-
-#: gtk/gtkuimanager.c:865
-#, c-format
-msgid "Unknown attribute '%s' on line %d char %d"
-msgstr "Priodwedd '%s' anhysbys ar linell %d nod %d"
-
-#: gtk/gtkuimanager.c:1074
-#, c-format
-msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr "Tag cychwyn '%s' annisgwyl ar linell %d nod %d"
-
-#: gtk/gtkuimanager.c:1158
-#, c-format
-msgid "Unexpected character data on line %d char %d"
-msgstr "Data nod annisgwyl ar linell %d nod %d"
-
-#: gtk/gtkuimanager.c:1916
-msgid "Empty"
-msgstr "Gwag"
 
 #: gtk/gtkviewport.c:135
 msgid ""
@@ -5567,29 +4632,29 @@ msgstr ""
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Penodi sut arlunir y box cysgodig o gwmpas y porth golwg"
 
-#: gtk/gtkwidget.c:402
+#: gtk/gtkwidget.c:472
 msgid "Widget name"
 msgstr "Enw'r teclyn"
 
-#: gtk/gtkwidget.c:403
+#: gtk/gtkwidget.c:473
 msgid "The name of the widget"
 msgstr "Enw'r teclyn"
 
-#: gtk/gtkwidget.c:409
+#: gtk/gtkwidget.c:479
 msgid "Parent widget"
 msgstr "Teclyn rhiant"
 
 # EFALLAI
-#: gtk/gtkwidget.c:410
+#: gtk/gtkwidget.c:480
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Teclyn rhiant y teclyn hwn. Rhaid iddo fod yn declyn Cynhwysydd"
 
-#: gtk/gtkwidget.c:417
+#: gtk/gtkwidget.c:487
 msgid "Width request"
 msgstr "Ymofyniad lled"
 
 # EFALLAI
-#: gtk/gtkwidget.c:418
+#: gtk/gtkwidget.c:488
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -5597,11 +4662,11 @@ msgstr ""
 "Gwrthweithred ar gyfer gofynniad lled y teclyn, neu -1 os dylid defnyddio'r "
 "gofynniad gwreiddiol"
 
-#: gtk/gtkwidget.c:426
+#: gtk/gtkwidget.c:496
 msgid "Height request"
 msgstr "Ymofyniad uchder"
 
-#: gtk/gtkwidget.c:427
+#: gtk/gtkwidget.c:497
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -5609,85 +4674,89 @@ msgstr ""
 "Gwrthweithred ar gyfer gofynniad uchder y teclyn, neu -1 os dylid "
 "defnyddio'r gofynniad gwreiddiol"
 
-#: gtk/gtkwidget.c:436
+#: gtk/gtkwidget.c:506
 msgid "Whether the widget is visible"
 msgstr "A ydy'r teclyn yn weladwy"
 
-#: gtk/gtkwidget.c:443
+#: gtk/gtkwidget.c:512
+msgid "Sensitive"
+msgstr "Yn ymateb"
+
+#: gtk/gtkwidget.c:513
 msgid "Whether the widget responds to input"
 msgstr "A ydy'r teclynm yn ymateb i fewnbwn"
 
-#: gtk/gtkwidget.c:449
+#: gtk/gtkwidget.c:519
 msgid "Application paintable"
 msgstr "Peintadwy gan y rhaglen"
 
-#: gtk/gtkwidget.c:450
+#: gtk/gtkwidget.c:520
 msgid "Whether the application will paint directly on the widget"
 msgstr "A ydy'r rhaglen yn gallu peintio ar y teclyn yn uniongyrchol"
 
-#: gtk/gtkwidget.c:456
+#: gtk/gtkwidget.c:526
 msgid "Can focus"
 msgstr "Gallu foocysu"
 
-#: gtk/gtkwidget.c:457
+#: gtk/gtkwidget.c:527
 msgid "Whether the widget can accept the input focus"
 msgstr "A ydy'r teclyn yn gallu derbyn y ffocws mewnbwn"
 
-#: gtk/gtkwidget.c:463
+#: gtk/gtkwidget.c:533
 msgid "Has focus"
 msgstr "Efo ffocws"
 
-#: gtk/gtkwidget.c:464
+#: gtk/gtkwidget.c:534
 msgid "Whether the widget has the input focus"
 msgstr "A oes gan y teclyn y ffocws mewnbwn"
 
-#: gtk/gtkwidget.c:470
+#: gtk/gtkwidget.c:540
 msgid "Is focus"
 msgstr "Yw'r ffocws"
 
-#: gtk/gtkwidget.c:471
+#: gtk/gtkwidget.c:541
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "A ydy'r teclyn y teclyn ffocws o fewn y lefel dop"
 
-#: gtk/gtkwidget.c:477
+#: gtk/gtkwidget.c:547
 msgid "Can default"
 msgstr "Gall fod yn rhagosodiad"
 
-#: gtk/gtkwidget.c:478
+#: gtk/gtkwidget.c:548
 msgid "Whether the widget can be the default widget"
 msgstr "A all y teclyn fod y teclyn rhagosodedig"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:554
 msgid "Has default"
 msgstr "Efo'r rhagosodiad"
 
-#: gtk/gtkwidget.c:485
+#: gtk/gtkwidget.c:555
 msgid "Whether the widget is the default widget"
 msgstr "Ai'r teclyn yw'r teclyn rhagosodedig"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:561
 msgid "Receives default"
 msgstr "Yn derbyn y rhagosodiad"
 
 # EFALLAI
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:562
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Os TRUE, fe fydd y teclyn yn derbyn y gweithred rhagosodedig pan ffocysir ef"
 
-#: gtk/gtkwidget.c:498
+#: gtk/gtkwidget.c:568
 msgid "Composite child"
 msgstr "Plentyn cyfansoddyn"
 
-#: gtk/gtkwidget.c:499
+#: gtk/gtkwidget.c:569
 msgid "Whether the widget is part of a composite widget"
 msgstr "A ydy'r teclyn yn rhan o declyn cyfansawdd"
 
-#: gtk/gtkwidget.c:505
+#: gtk/gtkwidget.c:575
 msgid "Style"
 msgstr "Arddull"
 
-#: gtk/gtkwidget.c:506
+#: gtk/gtkwidget.c:576
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -5695,77 +4764,69 @@ msgstr ""
 "Arddull y teclyn, sy'n cynnwys gwybodaeth ynghylch sut fe fydd yn edrych "
 "(lliwiau a.y.y.b.)"
 
-#: gtk/gtkwidget.c:512
+#: gtk/gtkwidget.c:582
 msgid "Events"
 msgstr "Digwyddiadau"
 
-#: gtk/gtkwidget.c:513
+#: gtk/gtkwidget.c:583
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Y masg digwyddiadau sy'n penderfynu pa fath o GdkEvent fe fydd y teclyn "
 "yma'n derbyn"
 
-#: gtk/gtkwidget.c:520
+#: gtk/gtkwidget.c:590
 msgid "Extension events"
 msgstr "Digwyddiadau estyniad"
 
-#: gtk/gtkwidget.c:521
+#: gtk/gtkwidget.c:591
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "Y masg sy'n penderfynu pa fath o ddigwyddiad"
 
-#: gtk/gtkwidget.c:528
-msgid "No show all"
-msgstr "Dim \"dangos popeth\""
-
-#: gtk/gtkwidget.c:529
-msgid "Whether gtk_widget_show_all() should not affect this widget"
-msgstr "A ddylai gtk_widget_show_all() beidio a effeithio a'r teclyn hwn"
-
-#: gtk/gtkwidget.c:1338
+#: gtk/gtkwidget.c:1170
 msgid "Interior Focus"
 msgstr "Ffocws Mewnol"
 
-#: gtk/gtkwidget.c:1339
+#: gtk/gtkwidget.c:1171
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "A ddylid arlinio'r dangosydd ffocws o fewn teclynau"
 
-#: gtk/gtkwidget.c:1345
+#: gtk/gtkwidget.c:1177
 msgid "Focus linewidth"
 msgstr "Lled y llinell ffocws"
 
-#: gtk/gtkwidget.c:1346
+#: gtk/gtkwidget.c:1178
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Lled, mewn picseli, y llinell dangos ffocws"
 
-#: gtk/gtkwidget.c:1352
+#: gtk/gtkwidget.c:1184
 msgid "Focus line dash pattern"
 msgstr "Patrwm llinell ffocws"
 
-#: gtk/gtkwidget.c:1353
+#: gtk/gtkwidget.c:1185
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Y patrwm i'w ddefnyddio er mwyn arlunio y dangosydd ffocws"
 
-#: gtk/gtkwidget.c:1358
+#: gtk/gtkwidget.c:1190
 msgid "Focus padding"
 msgstr "Padio ffocws"
 
-#: gtk/gtkwidget.c:1359
+#: gtk/gtkwidget.c:1191
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Lled, mewn picsel, rhwng y dangosydd ffocws a 'bocs' y teclyn"
 
-#: gtk/gtkwidget.c:1364
+#: gtk/gtkwidget.c:1196
 msgid "Cursor color"
 msgstr "Lliw y cyrchydd"
 
-#: gtk/gtkwidget.c:1365
+#: gtk/gtkwidget.c:1197
 msgid "Color with which to draw insertion cursor"
 msgstr "Pa liw i arlunio'r cyrchydd mewnosod efo"
 
-#: gtk/gtkwidget.c:1370
+#: gtk/gtkwidget.c:1202
 msgid "Secondary cursor color"
 msgstr "Lliw y cyrchydd eilaidd"
 
-#: gtk/gtkwidget.c:1371
+#: gtk/gtkwidget.c:1203
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -5773,44 +4834,35 @@ msgstr ""
 "Y lliw i'w ddefnyddio er mwyn arlunio y cyrchydd mewnosod eilaidd tra'n "
 "golygu testun chwith-i'r-de a de-i'r-chwith cymysg"
 
-#: gtk/gtkwidget.c:1376
+#: gtk/gtkwidget.c:1208
 msgid "Cursor line aspect ratio"
 msgstr "Cymhareb agwedd linell cyrchydd"
 
-#: gtk/gtkwidget.c:1377
+#: gtk/gtkwidget.c:1209
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Cymhareb agwedd er mwyn arlunio'r cyrchydd mewnosod"
 
-#: gtk/gtkwindow.c:437
+#: gtk/gtkwindow.c:456
 msgid "Window Type"
 msgstr "Math y Ffenestr"
 
-#: gtk/gtkwindow.c:438
+#: gtk/gtkwindow.c:457
 msgid "The type of the window"
 msgstr "Math y ffenestr"
 
-#: gtk/gtkwindow.c:446
+#: gtk/gtkwindow.c:466
 msgid "Window Title"
 msgstr "Teitl y Ffenest"
 
-#: gtk/gtkwindow.c:447
+#: gtk/gtkwindow.c:467
 msgid "The title of the window"
 msgstr "Teitl y ffenest"
 
-#: gtk/gtkwindow.c:454
-msgid "Window Role"
-msgstr "Rôl y Ffenest"
-
-#: gtk/gtkwindow.c:455
-msgid "Unique identifier for the window to be used when restoring a session"
-msgstr ""
-"Adnabyddydd unigryw ar gyfer y ffenest i'w ddefnyddio wrth adfer sesiwn"
-
-#: gtk/gtkwindow.c:462
+#: gtk/gtkwindow.c:474
 msgid "Allow Shrink"
 msgstr "Caniatau Crebachu"
 
-#: gtk/gtkwindow.c:464
+#: gtk/gtkwindow.c:476
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -5820,23 +4872,23 @@ msgstr ""
 "syniad gwael 99% o'r amser"
 
 # EFALLAI
-#: gtk/gtkwindow.c:471
+#: gtk/gtkwindow.c:483
 msgid "Allow Grow"
 msgstr "Caniatau Tyfiant"
 
-#: gtk/gtkwindow.c:472
+#: gtk/gtkwindow.c:484
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "Os GWIT, gall ddefnyddwyr ehangu'r ffenest y tu hwnt i'w faint lleiaf"
 
-#: gtk/gtkwindow.c:480
+#: gtk/gtkwindow.c:492
 msgid "If TRUE, users can resize the window"
 msgstr "Os TRUE, gall ddefnyddwyr newid maint y ffenest"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:499
 msgid "Modal"
 msgstr "Moddol"
 
-#: gtk/gtkwindow.c:488
+#: gtk/gtkwindow.c:500
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -5844,71 +4896,71 @@ msgstr ""
 "Os TRUE, mae'r ffened yn foddol (ni ellir defnyddio ffenestri eraill tra "
 "mae'r ffenest yma i fyny)"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:507
 msgid "Window Position"
 msgstr "Safle'r Ffenest"
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:508
 msgid "The initial position of the window"
 msgstr "Safle cychwynnol y ffenest"
 
-#: gtk/gtkwindow.c:504
+#: gtk/gtkwindow.c:516
 msgid "Default Width"
 msgstr "Lled Rhagosodedig"
 
-#: gtk/gtkwindow.c:505
+#: gtk/gtkwindow.c:517
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Lled rhagosodedig y ffenest, a ddefnyddir wrth ffenest yn gychwynol"
 
-#: gtk/gtkwindow.c:514
+#: gtk/gtkwindow.c:526
 msgid "Default Height"
 msgstr "Uchder Rhagosodedig"
 
-#: gtk/gtkwindow.c:515
+#: gtk/gtkwindow.c:527
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "Uchder rhagosodedig y ffenest, a ddefnyddir wrth ffenest yn gychwynol"
 
-#: gtk/gtkwindow.c:524
+#: gtk/gtkwindow.c:536
 msgid "Destroy with Parent"
 msgstr "Dinistrio efo'r Rhiant"
 
-#: gtk/gtkwindow.c:525
+#: gtk/gtkwindow.c:537
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "A ddylid dinistri'r ffenest yma pan dinistrir y rhiant"
 
-#: gtk/gtkwindow.c:532
+#: gtk/gtkwindow.c:544
 msgid "Icon"
 msgstr "Eicon"
 
-#: gtk/gtkwindow.c:533
+#: gtk/gtkwindow.c:545
 msgid "Icon for this window"
 msgstr "Eicon ar gyfer y ffenest hwn"
 
-#: gtk/gtkwindow.c:548
+#: gtk/gtkwindow.c:560
 msgid "Is Active"
 msgstr "Yn Weithredol"
 
 # EFALLAI
-#: gtk/gtkwindow.c:549
+#: gtk/gtkwindow.c:561
 msgid "Whether the toplevel is the current active window"
 msgstr "Ai'r lefel dop yw'r ffenest weithredol gyfredol"
 
 # EFALLAI
-#: gtk/gtkwindow.c:556
+#: gtk/gtkwindow.c:568
 msgid "Focus in Toplevel"
 msgstr "Ffocws yn y Lefel Dop"
 
-#: gtk/gtkwindow.c:557
+#: gtk/gtkwindow.c:569
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "A ydy'r ffocws mewnbwn o fewn y GtkWindow yma"
 
-#: gtk/gtkwindow.c:564
+#: gtk/gtkwindow.c:576
 msgid "Type hint"
 msgstr "Awgrym math"
 
 # EFALLAI
-#: gtk/gtkwindow.c:565
+#: gtk/gtkwindow.c:577
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -5917,55 +4969,23 @@ msgstr ""
 "a sut i ymdrin ag ef."
 
 # EFALLAI
-#: gtk/gtkwindow.c:573
+#: gtk/gtkwindow.c:585
 msgid "Skip taskbar"
 msgstr "Sgipio'r bar tasgau"
 
 # EFALLAI
-#: gtk/gtkwindow.c:574
+#: gtk/gtkwindow.c:586
 msgid "TRUE if the window should not be in the task bar."
 msgstr "TRUE os na ddylau'r ffenest fod yn y bar tasgau."
 
 # EFALLAI
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:593
 msgid "Skip pager"
 msgstr "Sgipio'r dalenydd"
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:594
 msgid "TRUE if the window should not be in the pager."
 msgstr "Gwir os na ddylai'r ffenest fod yn y dalenydd."
-
-#: gtk/gtkwindow.c:596
-msgid "Decorated"
-msgstr "Wedi Addurno"
-
-#: gtk/gtkwindow.c:597
-msgid "Whether the window should be decorated by the window manager"
-msgstr "A ddylai'r ffenest gael ei addurno gan y rheolwr ffenestri"
-
-#: gtk/gtkwindow.c:612
-msgid "Gravity"
-msgstr "Disgyrchiant"
-
-#: gtk/gtkwindow.c:613
-msgid "The window gravity of the window"
-msgstr "Disgyrchiant ffenestr y ffenest"
-
-#: modules/input/gtkimcontextxim.c:325
-msgid "IM Preedit style"
-msgstr "Arddull Cynolygu modd mewnbwn"
-
-#: modules/input/gtkimcontextxim.c:326
-msgid "How to draw the input method preedit string"
-msgstr "Sut i arlunio llinyn cynolygu'r modd mewnbwn"
-
-#: modules/input/gtkimcontextxim.c:334
-msgid "IM Status style"
-msgstr "Arddull statws modd mewnbwn"
-
-#: modules/input/gtkimcontextxim.c:335
-msgid "How to draw the input method statusbar"
-msgstr "Sut i arlunio'r bar statws modd mewnbwn"
 
 # TRWSIO
 #. ID
@@ -6020,58 +5040,783 @@ msgstr "Fietnameg (VIQR)"
 msgid "X Input Method"
 msgstr "Modd Mewnbwn X"
 
-#: tests/testfilechooser.c:170
-#, c-format
-msgid "Could not get information for file '%s': %s"
-msgstr "Methwyd cyrchu gwybodaeth ar gyfer y ffeil '%s': %s"
+#: modules/input/gtkimcontextxim.c:321
+msgid "IM Preedit style"
+msgstr "Arddull Cynolygu modd mewnbwn"
+
+#: modules/input/gtkimcontextxim.c:322
+msgid "How to draw the input method preedit string"
+msgstr "Sut i arlunio llinyn cynolygu'r modd mewnbwn"
+
+#: modules/input/gtkimcontextxim.c:330
+msgid "IM Status style"
+msgstr "Arddull statws modd mewnbwn"
+
+#: modules/input/gtkimcontextxim.c:331
+msgid "How to draw the input method statusbar"
+msgstr "Sut i arlunio'r bar statws modd mewnbwn"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Mae'r delwedd yn rhy fawr i gael ei arbed fel ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Man poeth cyrchydd tu fas i'r delwedd"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Dyfnder ni gynhelir ar gyfer ffeil ICO: %d"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Methwyd dyrannu cof ar gyfer strwythur cyd-destun"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Mae gan y delwedd hyd a/neu led annilys"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "Mae gan y ddelwedd ddyfnder picsel ni gynhelir"
+
+#~ msgid "Image has unsupported number of 1-bit planes"
+#~ msgstr "Mae gan y ddelwedd nifer o blaenau 1 did ni gynhelir"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "Mae gan y ddelwedd nifer o blarnau %d did ni gynhelir"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Methwyd creu pixbuf newydd"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Methwyd dyrannu cof ar gyfer data llinell"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Methwyd dyrannu cof ar gyfer data paletig"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Ni gafywd pob llinell delwedd PCX"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Ni chanfodwyd palet ar ddiwedd data PCX"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Y fformat delwedd PCX"
+
+#~ msgid "Name"
+#~ msgstr "Enw"
+
+#~ msgid "A unique name for the action."
+#~ msgstr "Enw unigryw ar gyfer y weithred."
+
+#~ msgid "The label used for menu items and buttons that activate this action."
+#~ msgstr ""
+#~ "Y label a ddefnyddir ar gyfer eitemau dewislen a botymau sy'n "
+#~ "gweithredu'r gweithred hwn."
+
+#~ msgid "Short label"
+#~ msgstr "Label byr"
+
+#~ msgid "A shorter label that may be used on toolbar buttons."
+#~ msgstr "Label byrrach gellir defnyddio ar botymau barau offer."
+
+#~ msgid "Tooltip"
+#~ msgstr "Brysgymorth"
+
+#~ msgid "A tooltip for this action."
+#~ msgstr "Brysgymorth ar gyfer y weithred hon."
+
+#~ msgid "Stock Icon"
+#~ msgstr "Eicon Stoc"
+
+#~ msgid "The stock icon displayed in widgets representing this action."
+#~ msgstr ""
+#~ "Yr eicon stoc a ddangosir mewn teclynnau yn cynreichioli'r gweithred hwn."
+
+#~ msgid "Is important"
+#~ msgstr "Yn bwysig"
+
+#~ msgid ""
+#~ "Whether the action is considered important. When TRUE, toolitem proxies "
+#~ "for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
+#~ msgstr ""
+#~ "A ydi'r weithred yn bwysig ai peidio. Pan yn TRUE, mae dirprwyon toolitem "
+#~ "ar gyfer y weithred hon yn dangos testun yn y modd GTK_TOOLBAT_BOTH_HORIZ."
+
+#~ msgid "Hide if empty"
+#~ msgstr "Cuddio os yn wag"
+
+#~ msgid "When TRUE, empty menu proxies for this action are hidden."
+#~ msgstr ""
+#~ "Pan yn TRUE, cuddir dirprwyon dewislen gwag ar gyfer y weithred hon."
+
+#~ msgid "Whether the action is enabled."
+#~ msgstr "A ydy'r weithred wedi ei alluogi"
+
+#~ msgid "Whether the action is visible."
+#~ msgstr "A ydy'r weithred yn weladwy."
+
+#~ msgid "A name for the action group."
+#~ msgstr "Enw ar gyfer y grŵp gweithred."
+
+#~ msgid "Top Padding"
+#~ msgstr "Bylchu Pen"
+
+#~ msgid "The padding to insert at the top of the widget."
+#~ msgstr "Y bylchu i fewnosod ar ben y teclyn."
+
+#~ msgid "Bottom Padding"
+#~ msgstr "Bylchu Gwaelod"
+
+#~ msgid "The padding to insert at the bottom of the widget."
+#~ msgstr "Y bylchu i fewnosod ar waelod y teclyn."
+
+#~ msgid "Left Padding"
+#~ msgstr "Bylchu Chwith"
+
+#~ msgid "The padding to insert at the left of the widget."
+#~ msgstr "Y bylchu i fewnosod ar ochr chwith y teclyn."
+
+#~ msgid "Right Padding"
+#~ msgstr "Bylchu De"
+
+#~ msgid "The padding to insert at the right of the widget."
+#~ msgstr "Y bylchu i fewnosod ar ochr de y teclyn."
+
+#~ msgid "Focus on click"
+#~ msgstr "Ffocysu pan mae clic"
+
+#~ msgid "Whether the button grabs focus when it is clicked with the mouse"
+#~ msgstr "A ydy'r botwm yn dwyn y ffocws pan gaiff ei glicio efo'r llygoden"
+
+#~ msgid "Year"
+#~ msgstr "Blwyddyn"
+
+#~ msgid "The selected year"
+#~ msgstr "Y blwyddyn sydd wedi ei ddewis"
+
+#~ msgid "Month"
+#~ msgstr "Mis"
+
+#~ msgid "The selected month (as a number between 0 and 11)"
+#~ msgstr "Y mis sydd wedi ei ddewis (fel rhif rhwng 0 ac 11)"
+
+#~ msgid "Day"
+#~ msgstr "Diwrnod"
+
+#~ msgid ""
+#~ "The selected day (as a number between 1 and 31, or 0 to unselect the "
+#~ "currently selected day)"
+#~ msgstr ""
+#~ "Y diwrnod sydd wedi ei ddewis (fel rhif rhwng 1 a 31, neu 0 er mwyn "
+#~ "datddewis y diwrnod sydd wedi ei ddewis eisioes)"
+
+#~ msgid "Show Heading"
+#~ msgstr "Dangos Pennawd"
+
+#~ msgid "If TRUE, a heading is displayed"
+#~ msgstr "Os yn wir, dangosir pennawd"
+
+#~ msgid "Show Day Names"
+#~ msgstr "Dangos Enwau Diwrnodau"
+
+#~ msgid "If TRUE, day names are displayed"
+#~ msgstr "Os yn wir, dangosir enwau diwrnodau"
+
+#~ msgid "No Month Change"
+#~ msgstr "Dim Newid Mis"
+
+#~ msgid "If TRUE, the selected month can not be changed"
+#~ msgstr "Os yn wir, ni ellir newid y mis dewisiedig"
+
+#~ msgid "Show Week Numbers"
+#~ msgstr "Dangos Rhifau Wythnosau"
+
+#~ msgid "If TRUE, week numbers are displayed"
+#~ msgstr "Os yn wir, dangosir rhifau wythnosau"
+
+#~ msgid "calendar:MY"
+#~ msgstr "calendar:MY"
+
+#~ msgid "calendar:week_start:0"
+#~ msgstr "calendar:week_start:1"
+
+#~ msgid "Draw as radio menu item"
+#~ msgstr "Ardlunio fel eitem dewislen radio"
+
+#~ msgid "Whether the menu item looks like a radio menu item"
+#~ msgstr "A ydy'r eitem dewislen yn edrych fel eitem dewislen radio"
+
+#~ msgid "Use alpha"
+#~ msgstr "Defnyddio alffa"
+
+#~ msgid "Whether or not to give the color an alpha value"
+#~ msgstr "A ddylid rhoi gwerth alffa i'r lliw ai peidio"
+
+#~ msgid "The title of the color selection dialog"
+#~ msgstr "Teitl y deialog dewis lliw"
+
+#~ msgid "Pick a color"
+#~ msgstr "Dewiswch liw"
+
+#~ msgid "The selected color"
+#~ msgstr "Y lliw dewisiedig"
+
+#~ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
+#~ msgstr "Y gwerth tryloywder dewisiedig (0 cwbl tryloyw, 65535 cwbl afloyw)"
+
+#~ msgid "Received invalid color data\n"
+#~ msgstr "Derbyniwyd data lliw annilys\n"
+
+#~ msgid "Color Selection"
+#~ msgstr "Dewis Lliw"
+
+#~ msgid "ComboBox model"
+#~ msgstr "Model ComboBox"
+
+#~ msgid "The model for the combo box"
+#~ msgstr "Y model ar gyfer y blwch combo"
+
+#~ msgid "Wrap width"
+#~ msgstr "Lled amlapio"
+
+#~ msgid "Wrap width for layouting the items in a grid"
+#~ msgstr "Lled amlapio ar gyfer gosod eitemau mewn grid"
+
+#~ msgid "Row span column"
+#~ msgstr "Colofn rhychwant rhes"
+
+#~ msgid "TreeModel column containing the row span values"
+#~ msgstr "Colofn TreeModel yn cynnwys y gwerthoedd rhychwant rhes"
+
+#~ msgid "Column span column"
+#~ msgstr "Colofn rhychwant colofn"
+
+#~ msgid "TreeModel column containing the column span values"
+#~ msgstr "Colodn TreeModel yn cynnwyd y gwerthoedd rhychwant colofn"
+
+#~ msgid "Active item"
+#~ msgstr "Eitem gweithredol"
+
+#~ msgid "The item which is currently active"
+#~ msgstr "Yr eitem sydd yn weithredol yn gyfredol"
+
+#~ msgid "ComboBox appareance"
+#~ msgstr "Ymddangosiad ComboBox"
+
+#~ msgid "ComboBox appearance, where TRUE means Windows-style."
+#~ msgstr "Ymddangosiad ComboBOX, lle mae gwir yn golygu tebyg i Windows."
+
+#~ msgid "Text Column"
+#~ msgstr "Colofn Testun"
+
+#~ msgid "A column in the data source model to get the strings from"
+#~ msgstr "Colofn yn y model ffynhonell data i gyrchu'r llinynau ohoni"
+
+#~ msgid "Select _All"
+#~ msgstr "Dewis _Popeth"
+
+#~ msgid "Completion Model"
+#~ msgstr "Model Cyflawni"
+
+# EFALLAI (golwg?)
+#~ msgid "The model to find matches in"
+#~ msgstr "Y model i ganfod cydweddiadau ynddi"
+
+#~ msgid "Minimum Key Length"
+#~ msgstr "Hyd Allwedd Lleiaf"
+
+#~ msgid "Minimum length of the search key in order to look up matches"
+#~ msgstr "Hyd lleiaf y llinyn chwilio er mwyn edrych am gydweddiadau"
+
+#~ msgid "Visible Window"
+#~ msgstr "Ffenest Gweladwy"
+
+#~ msgid ""
+#~ "Whether the event box is visible, as opposed to invisible and only used "
+#~ "to trap events."
+#~ msgstr ""
+#~ "A ydy'r blwch digwyddiad yn weladwy, yn hytrach na'n anweladwy ac yn cael "
+#~ "ei ddefnyddio er mwyn dal digwyddiadau'n unig."
+
+#~ msgid "Above child"
+#~ msgstr "Uwchben y plentyn"
+
+#~ msgid ""
+#~ "Whether the event-trapping window of the eventbox is above the window of "
+#~ "the child widget as opposed to below it."
+#~ msgstr ""
+#~ "A ydy ffenest dal digwyddiadau y blwch digwyddiadau uwchben ffenest y "
+#~ "teclyn plentyn yn hytrach nac o dani."
+
+#~ msgid "Expanded"
+#~ msgstr "Wedi Ehangu"
+
+#~ msgid "Whether the expander has been opened to reveal the child widget"
+#~ msgstr "A ydy'r ehangydd wedi ei agor er mwyn dangos y teclyn plentyn"
+
+#~ msgid "Text of the expander's label"
+#~ msgstr "Testun label yr ehangydd"
+
+#~ msgid "Space to put between the label and the child"
+#~ msgstr "Gofod i'w rhoi rhwng y label a'r plentyn"
+
+#~ msgid "A widget to display in place of the usual expander label"
+#~ msgstr "Teclyn i'w ddangos yn lle y label ehangydd arferol"
+
+#~ msgid "Spacing around expander arrow"
+#~ msgstr "Bylchu o amgylch y saeth ehangu"
+
+#~ msgid "Action"
+#~ msgstr "Gweithred"
+
+#~ msgid "The type of operation that the file selector is performing"
+#~ msgstr "Y math o weithred mae'r dewisydd ffeil yn ei gyflawni"
+
+#~ msgid "File System"
+#~ msgstr "System Ffeiliau"
+
+#~ msgid "File system object to use"
+#~ msgstr "Y gwrthrydd system ffeiliau i'w ddefnyddio"
+
+#~ msgid "Filter"
+#~ msgstr "Hidl"
+
+#~ msgid "The current filter for selecting which files are displayed"
+#~ msgstr "Y hidl gyfredol ar gyfer dewis pa ffeiliau a ddangosir"
+
+#~ msgid "Folder Mode"
+#~ msgstr "Modd Plygell"
+
+#~ msgid "Whether to select folders rather than files"
+#~ msgstr "A ddylid dewis plygellau yn hytrach na ffeiliau"
+
+#~ msgid "Local Only"
+#~ msgstr "Lleol yn Unig"
+
+#~ msgid "Whether the selected file(s) should be limited to local file: URLs"
+#~ msgstr "A ddylid ffeiliau a ddewisir gael eu cyfyngu ar LAUau file: lleol"
+
+#~ msgid "Preview widget"
+#~ msgstr "Teclyn rhagolwg"
+
+#~ msgid "Application supplied widget for custom previews."
+#~ msgstr "Teclyn a ddarparwyd gan y rhaglen ar gyfer rhagolygon addasiedig."
+
+#~ msgid "Preview Widget Active"
+#~ msgstr "Teclyn Rhagolwg yn Weithredol"
+
+#~ msgid ""
+#~ "Whether the application supplied widget for custom previews should be "
+#~ "shown."
+#~ msgstr ""
+#~ "A ddylid dangos y teclyn a ddarparwyd gan y rhaglen ar gyfer rhagolygon "
+#~ "addasiedig."
+
+#~ msgid "Extra widget"
+#~ msgstr "Teclyn ychwanegol"
+
+#~ msgid "Application supplied widget for extra options."
+#~ msgstr "Teclyn a ddarparwyd gan y rhaglen ar gyfer opsiynnau ychwanegol."
+
+#~ msgid "Select Multiple"
+#~ msgstr "Amlddewis"
+
+#~ msgid "Show Hidden"
+#~ msgstr "Dangos Cudd"
+
+#~ msgid "Whether the hidden files and folders should be displayed"
+#~ msgstr "A ddylid dangos ffeiliau a phlygellau cudd"
+
+#~ msgid "Invalid filename: %s"
+#~ msgstr "Enw ffeil annilys: %s"
+
+#~ msgid ""
+#~ "Could not retrieve information about %s:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Methwyd cyrchu gwybodaeth ynghylch %s:\n"
+#~ "%s"
+
+#~ msgid "%s's Home"
+#~ msgstr "Cartref %s"
+
+#~ msgid "Desktop"
+#~ msgstr "Penbwrdd"
+
+#~ msgid ""
+#~ "Could not go to the parent folder of %s:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Methwyd mynd at blygell rhiant %s:\n"
+#~ "%s"
+
+#~ msgid "Files of _type:"
+#~ msgstr "Ffeiliau o'r _math:"
+
+#~ msgid "File name"
+#~ msgstr "Enw ffeil"
+
+#~ msgid ""
+#~ "Could not add bookmark for %s:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Methwyd ychwanegu llyfrnod ar gyfer %s:\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Could not remove bookmark for %s:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Methwyd dileu'r llyfrnod ar gyfer %s:\n"
+#~ "%s"
+
+#~ msgid "Folder"
+#~ msgstr "Plygell"
+
+#~ msgid "Add bookmark"
+#~ msgstr "Ychwanegu llyfrnod"
+
+#~ msgid "Modified"
+#~ msgstr "Wedi newid"
+
+#~ msgid "_Location:"
+#~ msgstr "_Lleoliad: "
+
+#~ msgid "Preview"
+#~ msgstr "Rhagolwg"
+
+#~ msgid "shortcut %s does not exist"
+#~ msgstr "nid oes byrlwybr %s yn bodoli"
+
+#~ msgid ""
+#~ "Could not build file name from '%s' and '%s':\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Methwyd adeiladu enw ffeil o '%s' a '%s':\n"
+#~ "%s"
+
+#~ msgid "%d bytes"
+#~ msgstr "%d beit"
+
+#~ msgid "%.1f K"
+#~ msgstr "%.1f C"
+
+#~ msgid "%.1f M"
+#~ msgstr "%.1f M"
+
+#~ msgid "%.1f G"
+#~ msgstr "%.1f G"
+
+#~ msgid "Today"
+#~ msgstr "Heddiw"
+
+#~ msgid "Yesterday"
+#~ msgstr "Ddoe"
+
+#~ msgid "Unknown"
+#~ msgstr "Anhysbys"
+
+#~ msgid "%d/%b/%Y"
+#~ msgstr "%d/%b/%Y"
+
+#~ msgid "(Empty)"
+#~ msgstr "(Gwag)"
+
+#~ msgid "error creating directory '%s': %s"
+#~ msgstr "gwall wrth greu plygell '%s': %s"
+
+#~ msgid "This file system does not support bookmarks"
+#~ msgstr "Nid yw'r system ffeiliau yma yn cynnal llyfrnodau"
+
+#~ msgid "error getting information for '%s': %s"
+#~ msgstr "gwall wrth gyrchu gwybodaeth ar gyfer '%s': %s"
+
+#~ msgid "The title of the font selection dialog"
+#~ msgstr "Teitl y deialog dewis ffont"
+
+#~ msgid "Pick a font"
+#~ msgstr "Dewiswch ffont"
+
+#~ msgid "The name of the selected font"
+#~ msgstr "Enw y ffont dewisiedig"
+
+#~ msgid "Sans 12"
+#~ msgstr "Sans 12"
+
+#~ msgid "Use font in label"
+#~ msgstr "Defnyddio'r ffont yn y label"
+
+#~ msgid "Whether the label is drawn in the selected font"
+#~ msgstr "A gaiff y label ei arlunio yn y ffont dewisiedig"
+
+#~ msgid "Use size in label"
+#~ msgstr "Defnyddio'r maint yn y label"
+
+#~ msgid "Whether the label is drawn with the selected font size"
+#~ msgstr "A gaiff y label ei arlunio yn y maint ffont dewisiedig"
+
+#~ msgid "Show style"
+#~ msgstr "Dangos arddull"
+
+#~ msgid "Whether the selected font style is shown in the label"
+#~ msgstr "A ddangosir yr arddull ffont dewisiedig yn y label"
+
+#~ msgid "Show size"
+#~ msgstr "Dangos maint"
+
+#~ msgid "Whether selected font size is shown in the label"
+#~ msgstr "A ddangosir y maint ffont dewisiedig yn y label"
+
+#~ msgid "Pick a Font"
+#~ msgstr "Dewiswch Ffont"
+
+#~ msgid "Icon '%s' not present in theme"
+#~ msgstr "Nid yw'r eicon '%s' yn bresennol yn y thema"
+
+#~ msgid "Vertical Padding"
+#~ msgstr "Bylchu Fertigol"
+
+#~ msgid "Extra space at the top and bottom of the menu"
+#~ msgstr "Gofod ychwannegol ar ben a gwaelod y dewislen"
+
+#~ msgid "Vertical Offset"
+#~ msgstr "Atred Fertigol"
+
+#~ msgid ""
+#~ "When the menu is a submenu, position it this number of pixels offset "
+#~ "vertically"
+#~ msgstr ""
+#~ "Pan mae'r dewislen yn isddewislen, ei leoli e y nifer yma o bicseli yn is "
+#~ "yn fertigol"
+
+#~ msgid "Horizontal Offset"
+#~ msgstr "Atred Llorweddol"
+
+#~ msgid ""
+#~ "When the menu is a submenu, position it this number of pixels offset "
+#~ "horizontally"
+#~ msgstr ""
+#~ "Pan mae'r dewislen yn isddewislen, ei leoli e y nifer yma o bicseli ar "
+#~ "draws yn llorweddol"
+
+#~ msgid "Left Attach"
+#~ msgstr "Clymiad Chwith"
+
+#~ msgid "Right Attach"
+#~ msgstr "Clymiad De"
+
+#~ msgid "The column number to attach the right side of the child to"
+#~ msgstr "Rhif y golofn i glymu ochr chwith y plentyn iddi"
+
+#~ msgid "Top Attach"
+#~ msgstr "Clwm Pen"
+
+#~ msgid "The row number to attach the top of the child to"
+#~ msgstr "Rhif y rhes i glymu pen y plentyn iddi"
+
+#~ msgid "Bottom Attach"
+#~ msgstr "Clwm Gwaelod"
+
+#~ msgid ""
+#~ "Display a second backward arrow button on the opposite end of the tab area"
+#~ msgstr "Dangos saeth eilaidd tuag yn ôl ar ochr cyferbyn y maes tab"
+
+#~ msgid ""
+#~ "Display a second forward arrow button on the opposite end of the tab area"
+#~ msgstr ""
+#~ "Dangos botwm eilaidd tuag ymlaen eilaidd ar ochr cyferbyn y bar sgrolio"
+
+#~ msgid "Resize"
+#~ msgstr "Ailfeintio"
+
+#~ msgid "If TRUE, the child expands and shrinks along with the paned widget"
+#~ msgstr ""
+#~ "Os yn wir, mae'r plentyn yn ehangu a crebachu gyda'r teclyn chwarelog"
+
+#~ msgid "Shrink"
+#~ msgstr "Lleihau"
+
+#~ msgid "If TRUE, the child can be made smaller than its requisition"
+#~ msgstr "Os yn wir, gellir gweneud y plentyn yn llai na'i ofynniad"
+
+#~ msgid "The value"
+#~ msgstr "Y gwerth"
+
+#~ msgid ""
+#~ "The value returned by gtk_radio_action_get_current_value() when this "
+#~ "action is the current action of its group."
+#~ msgstr ""
+#~ "Y gwerth a ddychwelir gan gtk_radio_action_get_current_value() pan mae'r "
+#~ "weithred hon yn weithred cyfredol ei grŵp."
+
+#~ msgid "Draw"
+#~ msgstr "Arlunio"
+
+#~ msgid "Whether the separator is drawn, or just blank"
+#~ msgstr "A arlunir y gwahanydd, neu lle wag"
+
+#~ msgid "Icon Theme Name"
+#~ msgstr "Enw Thema Eicon"
+
+#~ msgid "Name of icon theme to use"
+#~ msgstr "Enw'r thema eicon i'w ddefnyddio"
+
+#~ msgid "Style of bevel around the spin button"
+#~ msgstr "Arddull y befel o amgylch y botwm troelli"
+
+#~ msgid "Has Resize Grip"
+#~ msgstr "Efo Dolen Ailfentio"
+
+#~ msgid "Whether the statusbar has a grip for resizing the toplevel"
+#~ msgstr "A oes gan y bar statws ddolen ar gyfer ailfentio'r lefel dop"
+
+#~ msgid "Buffer"
+#~ msgstr "Byffer"
+
+#~ msgid "The buffer which is displayed"
+#~ msgstr "Y byffer a ddangosir"
+
+#~ msgid "Overwrite mode"
+#~ msgstr "Modd trosysgrifo"
+
+#~ msgid "Whether entered text overwrites existing contents"
+#~ msgstr "A ydy'r testun a rhoddir yn trosysgrifo cynnwys sy'n bodoli eisioes"
+
+#~ msgid "Accepts tab"
+#~ msgstr "Yn derbyn tab"
+
+#~ msgid "Whether Tab will result in a tab character being entered"
+#~ msgstr "A fydd gwasgu Tab yn mewnosod nod tab"
+
+#~ msgid "Create the same proxies as a radio action"
+#~ msgstr "Creu'r un dirprwyon a gweithred radio"
+
+#~ msgid "Whether the proxies for this action look like radio action proxies"
+#~ msgstr ""
+#~ "A ydy dirprwyon y gweithred hwn yn edrych fel dirprwyon gweithred radio"
+
+#~ msgid "Show Arrow"
+#~ msgstr "Dangos Saeth"
+
+#~ msgid "If an arrow should be shown if the toolbar doesn't fit"
+#~ msgstr "Os y dylir dangos saeth os nad yw'r bar offer yn ffitio"
+
+#~ msgid "Whether the item should receive extra space when the toolbar grows"
+#~ msgstr "A ddylai'r eitem dderbyn lle ychwanegol pan mae'r bar offer yn tyfu"
+
+#~ msgid "Whether the item should be the same size as other homogeneous items"
+#~ msgstr "A ddylai'r eitem fod o'r un maint a eitemau cydryw eraill"
+
+#~ msgid "Text to show in the item."
+#~ msgstr "Y testun i ddangos yn yr eitem."
+
+#~ msgid ""
+#~ "If set, an underline in the label property indicates that the next "
+#~ "character should be used for the mnemonic accelerator key in the overflow "
+#~ "menu"
+#~ msgstr ""
+#~ "Os wedi ei osod, bydd tanlinell yn y priodwedd label yn dynodi dylid "
+#~ "defnyddio'r nod nesaf ar gyfer y bysell cyflymydd mnemonig yn y dewislen "
+#~ "gorlif"
+
+#~ msgid "Widget to use as the item label"
+#~ msgstr "Y teclyn i ddefnyddio fel label yr eitem"
+
+#~ msgid "Stock Id"
+#~ msgstr "ID Stoc"
+
+#~ msgid "The stock icon displayed on the item"
+#~ msgstr "Yr eicon stoc a ddangosir ar yr eitem"
+
+#~ msgid "Icon widget"
+#~ msgstr "Teclyn eicon"
+
+#~ msgid "Icon widget to display in the item"
+#~ msgstr "Y teclyn eicon i'w ddangos yn yr eitem"
+
+#~ msgid "Visible when horizontal"
+#~ msgstr "Gweladwy tra'n llorweddol"
+
+#~ msgid ""
+#~ "Whether the toolbar item is visible when the toolbar is in a horizontal "
+#~ "orientation."
+#~ msgstr ""
+#~ "A ydy'r eitem bar offer yn weladwy pan mae'r bar offer ar ogwydd "
+#~ "llorweddol."
+
+#~ msgid "Visible when vertical"
+#~ msgstr "Gweladwy tra'n fertigol"
+
+#~ msgid ""
+#~ "Whether the toolbar item is visible when the toolbar is in a vertical "
+#~ "orientation."
+#~ msgstr ""
+#~ "A ydy'r eitem bar offer yn weladwy pan mae'r bar offer ar ogwydd fertigol."
+
+#~ msgid ""
+#~ "Whether the toolbar item is considered important. When TRUE, toolbar "
+#~ "buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"
+#~ msgstr ""
+#~ "A ydy'r eitem bar offer yn bwysig. Pan yn wir, mae botymau bar offer yn "
+#~ "dangos testun yn y modd GTK_TOOLBAR_BOTH_HORIZ"
+
+#~ msgid "Column gets share of extra width allocated to the widget"
+#~ msgstr ""
+#~ "Mae'r colofn yn derbyn rhan o'r lled ychwanegol a rhoddir i'r teclyn"
+
+#~ msgid "Add tearoffs to menus"
+#~ msgstr "Ychwannegu rhwygynnau at ddewislenni"
+
+#~ msgid "Whether tearoff menu items should be added to menus"
+#~ msgstr "A ddylid ychwanegu eitemau dewislen rhwygo at ddewislenni"
+
+#~ msgid "Merged UI definition"
+#~ msgstr "Diffiniad rhyngwyneb cyfuniedig"
+
+#~ msgid "An XML string describing the merged UI"
+#~ msgstr "Llinyn XML yn disgrifio'r rhyngwyneg cyfuniedig"
+
+#~ msgid "Unknown attribute '%s' on line %d char %d"
+#~ msgstr "Priodwedd '%s' anhysbys ar linell %d nod %d"
+
+#~ msgid "Unexpected start tag '%s' on line %d char %d"
+#~ msgstr "Tag cychwyn '%s' annisgwyl ar linell %d nod %d"
+
+#~ msgid "Unexpected character data on line %d char %d"
+#~ msgstr "Data nod annisgwyl ar linell %d nod %d"
+
+#~ msgid "Empty"
+#~ msgstr "Gwag"
+
+#~ msgid "No show all"
+#~ msgstr "Dim \"dangos popeth\""
+
+#~ msgid "Whether gtk_widget_show_all() should not affect this widget"
+#~ msgstr "A ddylai gtk_widget_show_all() beidio a effeithio a'r teclyn hwn"
+
+#~ msgid "Window Role"
+#~ msgstr "Rôl y Ffenest"
+
+#~ msgid "Unique identifier for the window to be used when restoring a session"
+#~ msgstr ""
+#~ "Adnabyddydd unigryw ar gyfer y ffenest i'w ddefnyddio wrth adfer sesiwn"
+
+#~ msgid "Decorated"
+#~ msgstr "Wedi Addurno"
+
+#~ msgid "Whether the window should be decorated by the window manager"
+#~ msgstr "A ddylai'r ffenest gael ei addurno gan y rheolwr ffenestri"
+
+#~ msgid "Gravity"
+#~ msgstr "Disgyrchiant"
+
+#~ msgid "The window gravity of the window"
+#~ msgstr "Disgyrchiant ffenestr y ffenest"
+
+#~ msgid "Could not get information for file '%s': %s"
+#~ msgstr "Methwyd cyrchu gwybodaeth ar gyfer y ffeil '%s': %s"
 
 #~ msgid "Pack End"
 #~ msgstr "Pacio Diwedd"
 
 #~ msgid "Whether the item is positioned at the end of the toolbar"
 #~ msgstr "A ydy'r eitem yn cael ei leoli ar ddiwedd y bar offer"
-
-#~ msgid "GIF image contained a frame appearing outside the image bounds."
-#~ msgstr ""
-#~ "Roedd gan y ddelwedd GIF ffrâm yn ymddangos y tu allan i ffiniau'r "
-#~ "ddelwedd."
-
-#~ msgid "fread() failed -- premature end-of-file probably encountered"
-#~ msgstr "Methodd fread() - diwedd ffeil rhy buan, mwy na thebyg"
-
-#~ msgid "fseek() failed -- premature end-of-file probably encountered"
-#~ msgstr "Methodd fseek() - diwedd ffeil rhy buan, mwy na thebyg"
-
-#~ msgid "TGA image comment length is too long"
-#~ msgstr "Mae sylw y delwedd TGA yn rhy hir"
-
-#~ msgid "Too big value in the infolen field of TGA header."
-#~ msgstr "Gwerth rhy fawr ym maes infolen pennawd delwedd TGA."
-
-#~ msgid "Can't allocate memory for TGA cmap temporary buffer"
-#~ msgstr "Methu dyrannu cof ar gyfer byffer dros dro cmap TGA"
-
-#~ msgid "Can't allocate memory for TGA colormap struct"
-#~ msgstr "Methu dyrannu cof ar gyfer strwythur map lliw delwedd TGA"
-
-#~ msgid "Can't allocate memory for TGA colormap entries"
-#~ msgstr "Methu dyrannu cof ar gyfer cofnodion map lliw delwedd TGA"
-
-#~ msgid "Unexpected bitdepth for TGA colormap"
-#~ msgstr "Did-ddyfnder annisgwyl ar gyfer map lliw delwedd TGA"
-
-#~ msgid "Pseudo-Color image without colormap"
-#~ msgstr "Delwedd ffug-liw heb fap lliwiau"
-
-#~ msgid "Can't seek to image offset -- end-of-file probably encountered"
-#~ msgstr ""
-#~ "Methu symud at atred delwedd -- canfodwyd diwedd ffeil mwy na thebyg"
-
-#~ msgid "Can't allocate pixbuf"
-#~ msgstr "Methu dyrannu pixbuf"
-
-#~ msgid "Unsupported TGA image type"
-#~ msgstr "Math delwedd TGA ni gynhelir"
 
 #~ msgid "GIF image contained a frame with height or width 0."
 #~ msgstr "Roedd gan y ddelwedd GIF ffrâm gyda hyd neu led sero."
