@@ -191,6 +191,12 @@ gtk_socket_class_init (GtkSocketClass *class)
   widget_class->key_press_event = gtk_socket_key_event;
   widget_class->key_release_event = gtk_socket_key_event;
   widget_class->focus = gtk_socket_focus;
+
+  /* We don't want to show_all/hide_all the in-process
+   * plug, if any.
+   */
+  widget_class->show_all = gtk_widget_show;
+  widget_class->hide_all = gtk_widget_hide;
   
   container_class->remove = gtk_socket_remove;
   container_class->forall = gtk_socket_forall;

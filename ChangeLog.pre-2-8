@@ -1,3 +1,18 @@
+Thu Mar  4 16:54:30 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_check_pixmap_dir): Don't
+	open/close the file, just check for existence
+	with g_file_test(). This is considerably cheaper,
+	and lack-of-permissions for pixmap dirs is 
+	pathological.
+
+Wed Mar  3 17:53:21 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksocket.c (gtk_socket_class_init): Overide
+	show_all/hide_all to be gtk_widget_show/gtk_widget_hide,
+	since we don't want to propagate to the in-process
+	plug, if any. (#122949, Michael Meeks)
+
 Thu Mar  4 15:20:55 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (update_appearance): show the 'New

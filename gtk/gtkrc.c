@@ -2973,13 +2973,9 @@ gtk_rc_check_pixmap_dir (const gchar *dir, const gchar *pixmap_file)
   gint fd;
 
   buf = g_build_filename (dir, pixmap_file, NULL);
-  
-  fd = open (buf, O_RDONLY);
-  if (fd >= 0)
-    {
-      close (fd);
-      return buf;
-    }
+
+  if (g_file_test (buf, G_FILE_TEST_EXISTS))
+    return buf;
    
   g_free (buf);
  
