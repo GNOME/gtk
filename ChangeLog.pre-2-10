@@ -1,3 +1,35 @@
+Sun Sep  5 08:48:51 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_modify_style): Ref the
+	  RC style that is passed in. The lack of the ref
+	  before was a bug. If people worked around this
+	  bug, this will introduce a slight memory leak
+	  in their code. The code should typically look like:
+
+	    rc_style = gtk_rc_style_new ();
+	    [...]
+	    gtk_widget_modify_style (widget, rc_style);
+	    gtk_rc_style_unref (rc_style);
+
+	* gtk/gtkwidget.c (gtk_widget_modify_style): Reset
+	  the style if it was already set.
+
+	* gtk/gtkwidget.c (gtk_widget_set_name): Only set the
+	  style if it was set before.
+
+Sun Sep  5 08:10:53 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkfont.c (gdk_font_hash_insert): Add
+	  name => font and name => fontset hashes. The 
+	  name => fontset hash is a _big_ win since we
+	  weren't previously caching fontsets at all and loading
+	  fontsets is expensive. The name => font hash
+	  is less of a win, but it does save us from doing
+	  repeated XQueryFont calls on the same font.
+
+	* gdk/gdkprivate.h (struct _GdkFontPrivate): Add a names
+	  list so we can remove font/fontset from hash.
+
 Thu Sep  2 19:02:37 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkproperty.c (gdk_atom_intern): Remove useless
