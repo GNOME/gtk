@@ -25,6 +25,68 @@
 #include "gdk-pixbuf-io.h"
 #include "gdk-pixbuf-private.h"
 
+static void gdk_pixbuf_animation_class_init (GdkPixbufAnimationClass *klass);
+static void gdk_pixbuf_animation_finalize   (GObject        *object);
+
+
+
+static gpointer parent_class;
+
+GType
+gdk_pixbuf_animation_get_type (void)
+{
+        static GType object_type = 0;
+
+        if (!object_type) {
+                static const GTypeInfo object_info = {
+                        sizeof (GdkPixbufAnimationClass),
+                        (GBaseInitFunc) NULL,
+                        (GBaseFinalizeFunc) NULL,
+                        (GClassInitFunc) gdk_pixbuf_animation_class_init,
+                        NULL,           /* class_finalize */
+                        NULL,           /* class_data */
+                        sizeof (GdkPixbufAnimation),
+                        0,              /* n_preallocs */
+                        (GInstanceInitFunc) NULL,
+                };
+      
+                object_type = g_type_register_static (G_TYPE_OBJECT,
+                                                      "GdkPixbufAnimation",
+                                                      &object_info);
+        }
+  
+        return object_type;
+}
+
+static void
+gdk_pixbuf_animation_class_init (GdkPixbufAnimationClass *klass)
+{
+        GObjectClass *object_class = G_OBJECT_CLASS (klass);
+        
+        parent_class = g_type_class_peek_parent (klass);
+        
+        object_class->finalize = gdk_pixbuf_animation_finalize;
+}
+
+static void
+gdk_pixbuf_animation_finalize (GObject *object)
+{
+        GdkPixbufAnimation *animation = GDK_PIXBUF_ANIMATION (object);
+
+        GList *l;
+        GdkPixbufFrame *frame;
+        
+        for (l = animation->frames; l; l = l->next) {
+                frame = l->data;
+                gdk_pixbuf_unref (frame->pixbuf);
+                g_free (frame);
+        }
+        
+        g_list_free (animation->frames);
+        
+        G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 
 
 /**
@@ -87,10 +149,8 @@ gdk_pixbuf_animation_new_from_file (const char *filename)
 		pixbuf = (* image_module->load) (f);
 		fclose (f);
 
-		if (pixbuf)
-			g_assert (pixbuf->ref_count > 0);
-		else
-			return NULL;
+		if (pixbuf == NULL)
+                        return NULL;
 
 		frame = g_new (GdkPixbufFrame, 1);
 		frame->pixbuf = pixbuf;
@@ -99,8 +159,8 @@ gdk_pixbuf_animation_new_from_file (const char *filename)
 		frame->delay_time = -1;
 		frame->action = GDK_PIXBUF_FRAME_RETAIN;
 
-		animation = g_new0 (GdkPixbufAnimation, 1);
-		animation->ref_count = 1;
+		animation = GDK_PIXBUF_ANIMATION (g_type_create_instance (GDK_TYPE_PIXBUF_ANIMATION));
+
 		animation->n_frames = 1;
 		animation->frames = g_list_prepend (NULL, frame);
 		animation->width = gdk_pixbuf_get_width (pixbuf);
@@ -118,50 +178,28 @@ gdk_pixbuf_animation_new_from_file (const char *filename)
  * gdk_pixbuf_animation_ref:
  * @animation: An animation.
  *
- * Adds a reference to an animation.  It must be released afterwards using
- * gdk_pixbuf_animation_unref().
+ * Adds a reference to an animation. Deprecated; use
+ * g_object_ref(). The reference must be released afterwards using
+ * g_object_unref().
  *
  * Return value: The same as the @animation argument.
  **/
 GdkPixbufAnimation *
 gdk_pixbuf_animation_ref (GdkPixbufAnimation *animation)
 {
-	g_return_val_if_fail (animation != NULL, NULL);
-	g_return_val_if_fail (animation->ref_count > 0, NULL);
-
-	animation->ref_count++;
-	return animation;
+        return (GdkPixbufAnimation*) g_object_ref (G_OBJECT (animation));
 }
 
 /**
  * gdk_pixbuf_animation_unref:
  * @animation: An animation.
  * 
- * Removes a reference from an animation.  It will be destroyed when the
- * reference count drops to zero.  At that point, all the frames in the
- * animation will be freed and their corresponding pixbufs will be unreferenced.
+ * Removes a reference from an animation. Deprecated; use g_object_unref().
  **/
 void
 gdk_pixbuf_animation_unref (GdkPixbufAnimation *animation)
 {
-	g_return_if_fail (animation != NULL);
-	g_return_if_fail (animation->ref_count > 0);
-
-	animation->ref_count--;
-
-	if (animation->ref_count == 0) {
-		GList *l;
-		GdkPixbufFrame *frame;
-
-		for (l = animation->frames; l; l = l->next) {
-			frame = l->data;
-			gdk_pixbuf_unref (frame->pixbuf);
-			g_free (frame);
-		}
-
-		g_list_free (animation->frames);
-		g_free (animation);
-	}
+        g_object_unref (G_OBJECT (animation));
 }
 
 /**

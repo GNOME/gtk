@@ -1,3 +1,11 @@
+2000-06-21  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/gdkwindow.c (_gdk_window_destroy_hierarchy): Fix bug where
+	we didn't check window->bg_pixmap != GDK_NO_BG.
+
+	* gtk/gdk-pixbuf-loader.c: Change to reflect GObject-ification of
+	gdk-pixbuf
+
 Thu Jun 22 14:02:19 BST 2000  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgm: Move file to here.

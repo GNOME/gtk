@@ -288,7 +288,9 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	  _gdk_window_clear_update_area (window);
 	  gdk_window_free_paint_stack (window);
 	  
-	  if (private->bg_pixmap && private->bg_pixmap != GDK_PARENT_RELATIVE_BG)
+	  if (private->bg_pixmap &&
+              private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
+              private->bg_pixmap != GDK_NO_BG)
 	    {
 	      gdk_pixmap_unref (private->bg_pixmap);
 	      private->bg_pixmap = NULL;

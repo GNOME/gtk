@@ -32,6 +32,7 @@ extern "C" {
 
 #include <glib.h>
 #include <gdk-pixbuf/gdk-pixbuf-features.h>
+#include <gobject/gobject.h>
 
 
 
@@ -42,27 +43,29 @@ typedef enum {
 
 /* All of these are opaque structures */
 typedef struct _GdkPixbuf GdkPixbuf;
-typedef struct _GdkPixbufFrame GdkPixbufFrame;
 typedef struct _GdkPixbufAnimation GdkPixbufAnimation;
+typedef struct _GdkPixbufFrame GdkPixbufFrame;
+
+#define GDK_TYPE_PIXBUF              (gdk_pixbuf_get_type ())
+#define GDK_PIXBUF(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXBUF, GdkPixbuf))
+#define GDK_IS_PIXBUF(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXBUF))
+
+#define GDK_TYPE_PIXBUF_ANIMATION              (gdk_pixbuf_animation_get_type ())
+#define GDK_PIXBUF_ANIMATION(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXBUF_ANIMATION, GdkPixbufAnimation))
+#define GDK_IS_PIXBUF_ANIMATION(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXBUF_ANIMATION))
+
 
 /* Handler that must free the pixel array */
 typedef void (* GdkPixbufDestroyNotify) (guchar *pixels, gpointer data);
 
-/* Handler for the last unref operation */
-typedef void (* GdkPixbufLastUnref) (GdkPixbuf *pixbuf, gpointer data);
-
 
+
+GType gdk_pixbuf_get_type (void);
 
 /* Reference counting */
 
 GdkPixbuf *gdk_pixbuf_ref      (GdkPixbuf *pixbuf);
 void       gdk_pixbuf_unref    (GdkPixbuf *pixbuf);
-
-void       gdk_pixbuf_set_last_unref_handler (GdkPixbuf          *pixbuf,
-					      GdkPixbufLastUnref  last_unref_fn,
-					      gpointer            last_unref_fn_data);
-
-void       gdk_pixbuf_finalize (GdkPixbuf *pixbuf);
 
 /* GdkPixbuf accessors */
 
@@ -192,6 +195,8 @@ typedef enum {
 	GDK_PIXBUF_FRAME_REVERT
 } GdkPixbufFrameAction;
 
+GType               gdk_pixbuf_animation_get_type        (void);
+
 GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file   (const char         *filename);
 
 GdkPixbufAnimation *gdk_pixbuf_animation_ref             (GdkPixbufAnimation *animation);
@@ -214,6 +219,8 @@ GdkPixbufFrameAction gdk_pixbuf_frame_get_action     (GdkPixbufFrame *frame);
 /* General (presently empty) initialization hooks, primarily for gnome-libs */
 void gdk_pixbuf_preinit  (gpointer app, gpointer modinfo);
 void gdk_pixbuf_postinit (gpointer app, gpointer modinfo);
+/* A more user-friendly init function */
+void gdk_pixbuf_init     (void);
 
 
 

@@ -1,3 +1,19 @@
+2000-06-21  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf.c: Convert GdkPixbuf to GObject, leaving it opaque
+	(i.e. derivation is not allowed, and there are no virtual methods
+	anyway).
+	(gdk_pixbuf_preinit): Call g_type_init() here.
+	(gdk_pixbuf_init): Add a user-friendly init function, for users
+	of standalone gdk-pixbuf
+
+	* gdk-pixbuf-animation.c: Convert to GObject, in the same
+	way GdkPixbufAnimation was done.
+	
+	* gdk-pixbuf.h: Remove gdk_pixbuf_set_unref_handler() and
+	gdk_pixbuf_finalize() from API, since these are broken and don't
+	make sense with new GObject stuff.
+
 Wed Jun 21 16:02:48 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_load_module): Add feature to

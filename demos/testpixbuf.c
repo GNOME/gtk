@@ -495,7 +495,7 @@ main (int argc, char **argv)
 	GdkPixbufLoader *pixbuf_loader;
 
 	pixbuf_init ();
-	
+
 	gtk_init (&argc, &argv);
 
 	gdk_rgb_set_verbose (TRUE);

@@ -451,9 +451,6 @@ gdk_pixbuf_new_from_file (const char *filename)
 	pixbuf = (* image_module->load) (f);
 	fclose (f);
 
-	if (pixbuf)
-		g_assert (pixbuf->ref_count > 0);
-
 	return pixbuf;
 }
 

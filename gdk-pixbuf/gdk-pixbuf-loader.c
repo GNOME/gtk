@@ -270,9 +270,9 @@ gdk_pixbuf_loader_frame_done (GdkPixbufFrame *frame, gpointer loader)
 	priv->pixbuf = NULL;
 
 	if (priv->animation == NULL) {
-		priv->animation = g_new0 (GdkPixbufAnimation, 1);
+		priv->animation = GDK_PIXBUF_ANIMATION (g_type_create_instance (GDK_TYPE_PIXBUF_ANIMATION));
+		
 		priv->animation->n_frames = 0;
-		priv->animation->ref_count = 1;
 		priv->animation->width  = gdk_pixbuf_get_width  (frame->pixbuf) + frame->x_offset;
 		priv->animation->height = gdk_pixbuf_get_height (frame->pixbuf) + frame->y_offset;
 	} else {
