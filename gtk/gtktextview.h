@@ -53,6 +53,8 @@ typedef enum
   GTK_TEXT_WINDOW_BOTTOM
 } GtkTextWindowType;
 
+#define GTK_TEXT_VIEW_PRIORITY_VALIDATE (GDK_PRIORITY_REDRAW + 5)
+
 typedef struct _GtkTextView GtkTextView;
 typedef struct _GtkTextViewClass GtkTextViewClass;
 

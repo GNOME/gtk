@@ -2554,7 +2554,7 @@ invalidated_handler (GtkTextLayout *layout,
     text_view->first_validate_idle = g_idle_add_full (GTK_PRIORITY_RESIZE - 1, first_validate_callback, text_view, NULL);
 
   if (!text_view->incremental_validate_idle)
-    text_view->incremental_validate_idle = g_idle_add_full (GDK_PRIORITY_REDRAW + 1, incremental_validate_callback, text_view, NULL);
+    text_view->incremental_validate_idle = g_idle_add_full (GTK_TEXT_VIEW_PRIORITY_VALIDATE, incremental_validate_callback, text_view, NULL);
 }
 
 static void

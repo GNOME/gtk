@@ -1,5 +1,15 @@
 2001-03-07  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (invalidated_handler): use PRIORITY_VALIDATE
+
+	* gtk/gtktextview.h (GTK_TEXT_VIEW_PRIORITY_VALIDATE): add this
+	here, bug #50368; changed to be GDK_PRIORITY_REDRAW + 5, instead
+	of GDK_PRIORITY_REDRAW + 1, so you can insert stuff in between the
+	validation and the redraw which is higher priority than the
+	validation.
+
+2001-03-07  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkentry.c (gtk_entry_get_property): remove trailer
 	(gtk_entry_set_property): remove trailer
 
