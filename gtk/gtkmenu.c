@@ -952,6 +952,8 @@ gtk_menu_popup (GtkMenu		    *menu,
 
       gdk_event_free (current_event);
     }
+  else
+    menu_shell->ignore_enter = TRUE;
 
   if (menu->torn_off)
     {

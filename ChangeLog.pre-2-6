@@ -1,3 +1,8 @@
+2003-11-12  Padraig O'Briain  <padraig.obriain@sun.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): Do not let pointer position
+	affect window menu position when popped from keyboard. (#102660)
+
 Thu Nov  6 20:46:03 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkstyle.c (gtk_style_attach):  Fix doc comment.
