@@ -1072,10 +1072,20 @@ gdk_event_translate (GdkDisplay *display,
 	    case NotifyNonlinear:
 	    case NotifyVirtual:
 	    case NotifyNonlinearVirtual:
-	      window_impl->has_focus = TRUE;
+	      /* We pretend that the focus moves to the grab
+	       * window, so we pay attention to NotifyGrab
+	       * NotifyUngrab, and ignore NotifyWhileGrabbed
+	       */
+	      if (xevent->xfocus.mode != NotifyWhileGrabbed)
+		window_impl->has_focus = TRUE;
 	      break;
 	    case NotifyPointer:
-	      window_impl->has_pointer_focus = TRUE;
+	      /* The X server sends NotifyPointer/NotifyGrab,
+	       * but the pointer focus is ignored while a
+	       * grab is in effect
+	       */
+	      if (xevent->xfocus.mode != NotifyGrab)
+		window_impl->has_pointer_focus = TRUE;
 	      break;
 	    case NotifyInferior:
 	    case NotifyPointerRoot:
@@ -1101,10 +1111,12 @@ gdk_event_translate (GdkDisplay *display,
 	    case NotifyNonlinear:
 	    case NotifyVirtual:
 	    case NotifyNonlinearVirtual:
-	      window_impl->has_focus = FALSE;
+	      if (xevent->xfocus.mode != NotifyWhileGrabbed)
+		window_impl->has_focus = FALSE;
 	      break;
 	    case NotifyPointer:
-	      window_impl->has_pointer_focus = FALSE;
+	      if (xevent->xfocus.mode != NotifyUngrab)
+		window_impl->has_pointer_focus = FALSE;
 	    break;
 	    case NotifyInferior:
 	    case NotifyPointerRoot:
