@@ -465,8 +465,8 @@ gdk_window_new (GdkWindow     *parent,
 
   draw_impl->xid = XCreateWindow (GDK_WINDOW_XDISPLAY (parent),
                                   xparent,
-                                  x, y,
-                                  impl->width, impl->height,
+                                  impl->position_info.x, impl->position_info.y,
+                                  impl->position_info.width, impl->position_info.height,
                                   0, depth, class, xvisual,
                                   xattributes_mask, &xattributes);
 

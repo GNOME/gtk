@@ -172,112 +172,96 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /* Style args */
   gtk_object_add_arg_type ("GtkTextTag::background", GTK_TYPE_STRING,
                            GTK_ARG_WRITABLE, ARG_BACKGROUND);
-  gtk_object_add_arg_type ("GtkTextTag::foreground", GTK_TYPE_STRING,
-                           GTK_ARG_WRITABLE, ARG_FOREGROUND);
   gtk_object_add_arg_type ("GtkTextTag::background_gdk", GTK_TYPE_GDK_COLOR,
                            GTK_ARG_READWRITE, ARG_BACKGROUND_GDK);
-  gtk_object_add_arg_type ("GtkTextTag::foreground_gdk", GTK_TYPE_GDK_COLOR,
-                           GTK_ARG_READWRITE, ARG_FOREGROUND_GDK);
+  gtk_object_add_arg_type ("GtkTextTag::background_full_height", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_BG_FULL_HEIGHT);
   gtk_object_add_arg_type ("GtkTextTag::background_stipple",
                            GDK_TYPE_PIXMAP,
                            GTK_ARG_READWRITE, ARG_BACKGROUND_STIPPLE);
-  gtk_object_add_arg_type ("GtkTextTag::foreground_stipple",
-                           GDK_TYPE_PIXMAP,
-                           GTK_ARG_READWRITE, ARG_FOREGROUND_STIPPLE);
+  gtk_object_add_arg_type ("GtkTextTag::direction", GTK_TYPE_ENUM,
+                           GTK_ARG_READWRITE, ARG_DIRECTION);
+  gtk_object_add_arg_type ("GtkTextTag::editable", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_EDITABLE);
   gtk_object_add_arg_type ("GtkTextTag::font", GTK_TYPE_STRING,
                            GTK_ARG_READWRITE, ARG_FONT);
   gtk_object_add_arg_type ("GtkTextTag::font_desc", GTK_TYPE_BOXED,
                            GTK_ARG_READWRITE, ARG_FONT_DESC);
-  gtk_object_add_arg_type ("GtkTextTag::pixels_above_lines", GTK_TYPE_INT,
-                           GTK_ARG_READWRITE, ARG_PIXELS_ABOVE_LINES);
-  gtk_object_add_arg_type ("GtkTextTag::pixels_below_lines", GTK_TYPE_INT,
-                           GTK_ARG_READWRITE, ARG_PIXELS_BELOW_LINES);
-  gtk_object_add_arg_type ("GtkTextTag::pixels_inside_wrap", GTK_TYPE_INT,
-                           GTK_ARG_READWRITE, ARG_PIXELS_INSIDE_WRAP);
-  gtk_object_add_arg_type ("GtkTextTag::editable", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_EDITABLE);
-  gtk_object_add_arg_type ("GtkTextTag::wrap_mode", GTK_TYPE_ENUM,
-                           GTK_ARG_READWRITE, ARG_WRAP_MODE);
+  gtk_object_add_arg_type ("GtkTextTag::foreground", GTK_TYPE_STRING,
+                           GTK_ARG_WRITABLE, ARG_FOREGROUND);
+  gtk_object_add_arg_type ("GtkTextTag::foreground_gdk", GTK_TYPE_GDK_COLOR,
+                           GTK_ARG_READWRITE, ARG_FOREGROUND_GDK);
+  gtk_object_add_arg_type ("GtkTextTag::foreground_stipple",
+                           GDK_TYPE_PIXMAP,
+                           GTK_ARG_READWRITE, ARG_FOREGROUND_STIPPLE);
   gtk_object_add_arg_type ("GtkTextTag::justify", GTK_TYPE_ENUM,
                            GTK_ARG_READWRITE, ARG_JUSTIFY);
-  gtk_object_add_arg_type ("GtkTextTag::direction", GTK_TYPE_ENUM,
-                           GTK_ARG_READWRITE, ARG_DIRECTION);
+  gtk_object_add_arg_type ("GtkTextTag::language", GTK_TYPE_STRING,
+                           GTK_ARG_READWRITE, ARG_LANGUAGE);
   gtk_object_add_arg_type ("GtkTextTag::left_margin", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_LEFT_MARGIN);
   gtk_object_add_arg_type ("GtkTextTag::left_wrapped_line_margin", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_LEFT_WRAPPED_LINE_MARGIN);
+  gtk_object_add_arg_type ("GtkTextTag::offset", GTK_TYPE_INT,
+                           GTK_ARG_READWRITE, ARG_OFFSET);
   gtk_object_add_arg_type ("GtkTextTag::overstrike", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_OVERSTRIKE);
-  gtk_object_add_arg_type ("GtkTextTag::right_margin", GTK_TYPE_INT,
-                           GTK_ARG_READWRITE, ARG_RIGHT_MARGIN);
   gtk_object_add_arg_type ("GtkTextTag::pixels_above_lines", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_PIXELS_ABOVE_LINES);
   gtk_object_add_arg_type ("GtkTextTag::pixels_below_lines", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_PIXELS_BELOW_LINES);
   gtk_object_add_arg_type ("GtkTextTag::pixels_inside_wrap", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_PIXELS_INSIDE_WRAP);
+  gtk_object_add_arg_type ("GtkTextTag::right_margin", GTK_TYPE_INT,
+                           GTK_ARG_READWRITE, ARG_RIGHT_MARGIN);
   gtk_object_add_arg_type ("GtkTextTag::underline", GTK_TYPE_ENUM,
                            GTK_ARG_READWRITE, ARG_UNDERLINE);
   gtk_object_add_arg_type ("GtkTextTag::wrap_mode", GTK_TYPE_ENUM,
                            GTK_ARG_READWRITE, ARG_WRAP_MODE);
-  gtk_object_add_arg_type ("GtkTextTag::offset", GTK_TYPE_INT,
-                           GTK_ARG_READWRITE, ARG_OFFSET);
-  gtk_object_add_arg_type ("GtkTextTag::background_full_height", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_BG_FULL_HEIGHT);
-  gtk_object_add_arg_type ("GtkTextTag::language", GTK_TYPE_STRING,
-                           GTK_ARG_READWRITE, ARG_LANGUAGE);
   
   /* Style args are set or not */
   gtk_object_add_arg_type ("GtkTextTag::background_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_BACKGROUND_SET);
-  gtk_object_add_arg_type ("GtkTextTag::foreground_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_FOREGROUND_SET);
+  gtk_object_add_arg_type ("GtkTextTag::background_full_height_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_BG_FULL_HEIGHT_SET);
   gtk_object_add_arg_type ("GtkTextTag::background_gdk_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_BACKGROUND_GDK_SET);
-  gtk_object_add_arg_type ("GtkTextTag::foreground_gdk_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_FOREGROUND_GDK_SET);
   gtk_object_add_arg_type ("GtkTextTag::background_stipple_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_BACKGROUND_STIPPLE_SET);
-  gtk_object_add_arg_type ("GtkTextTag::foreground_stipple_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_FOREGROUND_STIPPLE_SET);
-  gtk_object_add_arg_type ("GtkTextTag::font_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_FONT_SET);
-  gtk_object_add_arg_type ("GtkTextTag::pixels_above_lines_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_PIXELS_ABOVE_LINES_SET);
-  gtk_object_add_arg_type ("GtkTextTag::pixels_below_lines_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_PIXELS_BELOW_LINES_SET);
-  gtk_object_add_arg_type ("GtkTextTag::pixels_inside_wrap_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_PIXELS_INSIDE_WRAP_SET);
   gtk_object_add_arg_type ("GtkTextTag::editable_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_EDITABLE_SET);
-  gtk_object_add_arg_type ("GtkTextTag::wrap_mode_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_WRAP_MODE_SET);
+  gtk_object_add_arg_type ("GtkTextTag::font_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_FONT_SET);
+  gtk_object_add_arg_type ("GtkTextTag::foreground_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_FOREGROUND_SET);
+  gtk_object_add_arg_type ("GtkTextTag::foreground_gdk_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_FOREGROUND_GDK_SET);
+  gtk_object_add_arg_type ("GtkTextTag::foreground_stipple_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_FOREGROUND_STIPPLE_SET);
   gtk_object_add_arg_type ("GtkTextTag::justify_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_JUSTIFY_SET);
+  gtk_object_add_arg_type ("GtkTextTag::language_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_LANGUAGE_SET);
   gtk_object_add_arg_type ("GtkTextTag::left_margin_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_LEFT_MARGIN_SET);
   gtk_object_add_arg_type ("GtkTextTag::left_wrapped_line_margin_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_LEFT_WRAPPED_LINE_MARGIN_SET);
+  gtk_object_add_arg_type ("GtkTextTag::offset_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_OFFSET_SET);  
   gtk_object_add_arg_type ("GtkTextTag::overstrike_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_OVERSTRIKE_SET);
-  gtk_object_add_arg_type ("GtkTextTag::right_margin_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_RIGHT_MARGIN_SET);
   gtk_object_add_arg_type ("GtkTextTag::pixels_above_lines_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_PIXELS_ABOVE_LINES_SET);
   gtk_object_add_arg_type ("GtkTextTag::pixels_below_lines_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_PIXELS_BELOW_LINES_SET);
   gtk_object_add_arg_type ("GtkTextTag::pixels_inside_wrap_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_PIXELS_INSIDE_WRAP_SET);
+  gtk_object_add_arg_type ("GtkTextTag::right_margin_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_RIGHT_MARGIN_SET);
   gtk_object_add_arg_type ("GtkTextTag::underline_set", GTK_TYPE_ENUM,
                            GTK_ARG_READWRITE, ARG_UNDERLINE_SET);
   gtk_object_add_arg_type ("GtkTextTag::wrap_mode_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_WRAP_MODE_SET);
-  gtk_object_add_arg_type ("GtkTextTag::offset_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_OFFSET_SET);  
-  gtk_object_add_arg_type ("GtkTextTag::background_full_height_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_BG_FULL_HEIGHT_SET);
-  gtk_object_add_arg_type ("GtkTextTag::language_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_LANGUAGE_SET);
   
   signals[EVENT] =
     gtk_signal_new ("event",

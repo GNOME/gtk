@@ -1351,7 +1351,7 @@ gtk_spin_button_default_input (GtkSpinButton *spin_button,
 
   *new_val = strtod (gtk_entry_get_text (GTK_ENTRY (spin_button)), &err);
   if (*err)
-    return INPUT_ERROR;
+    return GTK_INPUT_ERROR;
   else
     return FALSE;
 }
@@ -1656,9 +1656,9 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
   if (return_val == FALSE)
     {
       return_val = gtk_spin_button_default_input (spin_button, &val);
-      error = (return_val == INPUT_ERROR);
+      error = (return_val == GTK_INPUT_ERROR);
     }
-  else if (return_val == INPUT_ERROR)
+  else if (return_val == GTK_INPUT_ERROR)
     error = 1;
 
   if (spin_button->update_policy == GTK_UPDATE_ALWAYS)

@@ -2997,7 +2997,7 @@ spin_button_month_input_func (GtkSpinButton *spin_button,
   if (!found)
     {
       *new_val = 0.0;
-      return INPUT_ERROR;
+      return GTK_INPUT_ERROR;
     }
   *new_val = (gfloat) i;
   return TRUE;
@@ -3032,7 +3032,7 @@ spin_button_hex_input_func (GtkSpinButton *spin_button,
   res = (gfloat)(strtol(buf, &err, 16));
   *new_val = res;
   if (*err)
-    return INPUT_ERROR;
+    return GTK_INPUT_ERROR;
   else
     return TRUE;
 }

@@ -58,12 +58,14 @@
 #include "gtkhseparator.h"
 #include "gtkintl.h"
 
+/* Number of elements in the custom palatte */
+#define GTK_CUSTOM_PALETTE_WIDTH 10
+#define GTK_CUSTOM_PALETTE_HEIGHT 2
+
 enum {
   COLOR_CHANGED,
   LAST_SIGNAL
 };
-
-
 
 enum {
   COLORSEL_RED = 0,
@@ -1504,7 +1506,6 @@ gtk_color_selection_destroy (GtkObject *object)
 
 /**
  * gtk_color_selection_new:
- * @void: 
  * 
  * Creates a new GtkColorSelection.
  * 

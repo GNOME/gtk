@@ -75,7 +75,10 @@
 #include <gtk/gtkhscrollbar.h>
 #include <gtk/gtkhseparator.h>
 #include <gtk/gtkimage.h>
+#include <gtk/gtkimcontext.h>
+#include <gtk/gtkimmulticontext.h>
 #include <gtk/gtkinputdialog.h>
+#include <gtk/gtkinvisible.h>
 #include <gtk/gtkitem.h>
 #include <gtk/gtkitemfactory.h>
 #include <gtk/gtklabel.h>

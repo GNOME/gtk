@@ -44,7 +44,7 @@ enum {
 
 #define SCROLL_TIME  100
 
-/** GtkList Methods **/
+/*** GtkList Methods ***/
 static void gtk_list_class_init	     (GtkListClass   *klass);
 static void gtk_list_init	     (GtkList	     *list);
 static void gtk_list_set_arg         (GtkObject      *object,
@@ -53,10 +53,10 @@ static void gtk_list_set_arg         (GtkObject      *object,
 static void gtk_list_get_arg         (GtkObject      *object,
 				      GtkArg         *arg,
 				      guint           arg_id);
-/** GtkObject Methods **/
+/*** GtkObject Methods ***/
 static void gtk_list_shutdown	     (GObject	     *object);
 
-/** GtkWidget Methods **/
+/*** GtkWidget Methods ***/
 static void gtk_list_size_request    (GtkWidget	     *widget,
 				      GtkRequisition *requisition);
 static void gtk_list_size_allocate   (GtkWidget	     *widget,
@@ -77,7 +77,7 @@ static gint gtk_list_button_press    (GtkWidget      *widget,
 static gint gtk_list_button_release  (GtkWidget	     *widget,
 				      GdkEventButton *event);
 
-/** GtkContainer Methods **/
+/*** GtkContainer Methods ***/
 static void gtk_list_add	     (GtkContainer     *container,
 				      GtkWidget        *widget);
 static void gtk_list_remove	     (GtkContainer     *container,
@@ -92,7 +92,7 @@ static void gtk_list_set_focus_child (GtkContainer     *container,
 static gint gtk_list_focus           (GtkContainer     *container,
 				      GtkDirectionType  direction);
 
-/** GtkList Private Functions **/
+/*** GtkList Private Functions ***/
 static void gtk_list_move_focus_child      (GtkList       *list,
 					    GtkScrollType  scroll_type,
 					    gfloat         position);
@@ -102,13 +102,13 @@ static void gtk_list_remove_items_internal (GtkList       *list,
 					    GList         *items,
 					    gboolean       no_unref);
 
-/** GtkList Selection Methods **/
+/*** GtkList Selection Methods ***/
 static void gtk_real_list_select_child	        (GtkList   *list,
 						 GtkWidget *child);
 static void gtk_real_list_unselect_child        (GtkList   *list,
 						 GtkWidget *child);
 
-/** GtkList Selection Functions **/
+/*** GtkList Selection Functions ***/
 static void gtk_list_set_anchor                 (GtkList   *list,
 					         gboolean   add_mode,
 					         gint       anchor,
@@ -121,7 +121,7 @@ static void gtk_list_update_extended_selection  (GtkList   *list,
 					         gint       row);
 static void gtk_list_reset_extended_selection   (GtkList   *list);
 
-/** GtkListItem Signal Functions **/
+/*** GtkListItem Signal Functions ***/
 static void gtk_list_signal_drag_begin         (GtkWidget      *widget,
 						GdkDragContext *context,
 						GtkList        *list);

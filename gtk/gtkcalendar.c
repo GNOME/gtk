@@ -160,7 +160,7 @@ dates_difference(N_int year1, N_int mm1, N_int dd1,
   return( calc_days(year2, mm2, dd2) - calc_days(year1, mm1, dd1) );
 }
 
-/** END OF lib_date routines ************************************************/
+/*** END OF lib_date routines ********************************************/
 
 #define CALENDAR_MARGIN		 0
 #define CALENDAR_YSEP		 4

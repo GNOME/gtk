@@ -62,7 +62,7 @@ struct _GtkAspectFrame
 
 struct _GtkAspectFrameClass
 {
-  GtkBinClass parent_class;
+  GtkFrameClass parent_class;
 };
 
 

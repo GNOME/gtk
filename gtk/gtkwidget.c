@@ -3247,7 +3247,7 @@ gtk_widget_modify_base (GtkWidget  *widget,
 /**
  * gtk_widget_modify_font:
  * @widget: a #GtkWidget
- * @font: the font description to use
+ * @font_desc: the font description to use
  * 
  * Set the font to use for a widget.  All other style values are left
  * untouched. See also gtk_widget_modify_style().

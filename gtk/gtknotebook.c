@@ -78,11 +78,11 @@ enum {
   CHILD_ARG_TAB_PACK
 };
 
-/** GtkNotebook Methods **/
+/*** GtkNotebook Methods ***/
 static void gtk_notebook_class_init          (GtkNotebookClass *klass);
 static void gtk_notebook_init                (GtkNotebook      *notebook);
 
-/** GtkObject Methods **/
+/*** GtkObject Methods ***/
 static void gtk_notebook_destroy             (GtkObject        *object);
 static void gtk_notebook_set_arg             (GtkObject        *object,
 				              GtkArg           *arg,
@@ -91,7 +91,7 @@ static void gtk_notebook_get_arg	     (GtkObject        *object,
 					      GtkArg           *arg,
 					      guint             arg_id);
 
-/** GtkWidget Methods **/
+/*** GtkWidget Methods ***/
 static void gtk_notebook_map                 (GtkWidget        *widget);
 static void gtk_notebook_unmap               (GtkWidget        *widget);
 static void gtk_notebook_realize             (GtkWidget        *widget);
@@ -124,7 +124,7 @@ static void gtk_notebook_draw_focus          (GtkWidget        *widget);
 static void gtk_notebook_style_set           (GtkWidget        *widget,
 					      GtkStyle         *previous_style);
 
-/** GtkContainer Methods **/
+/*** GtkContainer Methods ***/
 static void gtk_notebook_set_child_arg	     (GtkContainer     *container,
 					      GtkWidget        *child,
 					      GtkArg           *arg,
@@ -147,7 +147,7 @@ static void gtk_notebook_forall              (GtkContainer     *container,
 					      GtkCallback       callback,
 					      gpointer          callback_data);
 
-/** GtkNotebook Private Functions **/
+/*** GtkNotebook Private Functions ***/
 static void gtk_notebook_panel_realize       (GtkNotebook      *notebook);
 static void gtk_notebook_expose_tabs         (GtkNotebook      *notebook);
 static void gtk_notebook_focus_changed       (GtkNotebook      *notebook,
@@ -165,7 +165,7 @@ static GList * gtk_notebook_search_page      (GtkNotebook      *notebook,
 					      gint              direction,
 					      gboolean          find_visible);
 
-/** GtkNotebook Drawing Functions **/
+/*** GtkNotebook Drawing Functions ***/
 static void gtk_notebook_paint               (GtkWidget        *widget,
 					      GdkRectangle     *area);
 static void gtk_notebook_draw_tab            (GtkNotebook      *notebook,
@@ -175,7 +175,7 @@ static void gtk_notebook_draw_arrow          (GtkNotebook      *notebook,
 					      guint             arrow);
 static void gtk_notebook_set_shape           (GtkNotebook      *notebook);
 
-/** GtkNotebook Size Allocate Functions **/
+/*** GtkNotebook Size Allocate Functions ***/
 static void gtk_notebook_pages_allocate      (GtkNotebook      *notebook,
 					      GtkAllocation    *allocation);
 static void gtk_notebook_page_allocate       (GtkNotebook      *notebook,
@@ -187,12 +187,12 @@ static void gtk_notebook_calc_tabs           (GtkNotebook      *notebook,
 					      gint             *tab_space,
 					      guint             direction);
 
-/** GtkNotebook Page Switch Methods **/
+/*** GtkNotebook Page Switch Methods ***/
 static void gtk_notebook_real_switch_page    (GtkNotebook      *notebook,
 					      GtkNotebookPage  *page,
 					      guint             page_num);
 
-/** GtkNotebook Page Switch Functions **/
+/*** GtkNotebook Page Switch Functions ***/
 static void gtk_notebook_switch_page         (GtkNotebook      *notebook,
 					      GtkNotebookPage  *page,
 					      gint              page_num);
@@ -202,7 +202,7 @@ static void gtk_notebook_switch_focus_tab    (GtkNotebook      *notebook,
 static void gtk_notebook_menu_switch_page    (GtkWidget        *widget,
 					      GtkNotebookPage  *page);
 
-/** GtkNotebook Menu Functions **/
+/*** GtkNotebook Menu Functions ***/
 static void gtk_notebook_menu_item_create    (GtkNotebook      *notebook,
 					      GList            *list);
 static void gtk_notebook_menu_label_unparent (GtkWidget        *widget,

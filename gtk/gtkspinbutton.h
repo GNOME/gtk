@@ -48,7 +48,7 @@ extern "C" {
 #define GTK_IS_SPIN_BUTTON_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SPIN_BUTTON))
 #define GTK_SPIN_BUTTON_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_SPIN_BUTTON, GtkSpinButtonClass))
 
-#define INPUT_ERROR -1
+#define GTK_INPUT_ERROR -1
 
 typedef enum
 {

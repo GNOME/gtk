@@ -75,7 +75,7 @@ void       gtk_frame_set_label        (GtkFrame      *frame,
 /* Temporarily commented out until memory management behavior is figured out */
 /* gchar *    gtk_frame_get_label        (GtkFrame      *frame); */
 void       gtk_frame_set_label_widget (GtkFrame      *frame,
-				       GtkWidget     *title_widget);
+				       GtkWidget     *label_widget);
 void       gtk_frame_set_label_align  (GtkFrame      *frame,
 				       gfloat         xalign,
 				       gfloat         yalign);

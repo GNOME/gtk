@@ -123,8 +123,8 @@ gboolean gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer,
 
 /* Delete from the buffer */
 void     gtk_text_buffer_delete             (GtkTextBuffer *buffer,
-                                             GtkTextIter   *start_iter,
-                                             GtkTextIter   *end_iter);
+                                             GtkTextIter   *start,
+                                             GtkTextIter   *end);
 gboolean gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
                                              GtkTextIter   *start_iter,
                                              GtkTextIter   *end_iter,
@@ -134,13 +134,13 @@ gboolean gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
 
 /* Obtain strings from the buffer */
 gchar          *gtk_text_buffer_get_text            (GtkTextBuffer     *buffer,
-                                                     const GtkTextIter *start_iter,
-                                                     const GtkTextIter *end_iter,
+                                                     const GtkTextIter *start,
+                                                     const GtkTextIter *end,
                                                      gboolean           include_hidden_chars);
 
 gchar          *gtk_text_buffer_get_slice           (GtkTextBuffer     *buffer,
-                                                     const GtkTextIter *start_iter,
-                                                     const GtkTextIter *end_iter,
+                                                     const GtkTextIter *start,
+                                                     const GtkTextIter *end,
                                                      gboolean           include_hidden_chars);
 
 /* Insert a pixmap */

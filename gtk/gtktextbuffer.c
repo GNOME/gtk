@@ -478,7 +478,7 @@ gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer,
  * @iter: a position in @buffer
  * @text: some UTF-8 text
  * @len: length of text in bytes, or -1
- * @editable_by_default: default editability of buffer
+ * @default_editable: default editability of buffer
  * 
  * Like gtk_text_buffer_insert(), but the insertion will not occur if
  * @iter is at a non-editable location in the buffer.  Usually you
@@ -492,12 +492,12 @@ gtk_text_buffer_insert_interactive(GtkTextBuffer *buffer,
                                    GtkTextIter   *iter,
                                    const gchar   *text,
                                    gint           len,
-                                   gboolean       editable_by_default)
+                                   gboolean       default_editable)
 {
   g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), FALSE);
   g_return_val_if_fail(text != NULL, FALSE);
   
-  if (gtk_text_iter_editable (iter, editable_by_default))
+  if (gtk_text_iter_editable (iter, default_editable))
     {
       gtk_text_buffer_emit_insert (buffer, iter, text, len, TRUE);
       return TRUE;

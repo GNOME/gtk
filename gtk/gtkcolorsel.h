@@ -43,10 +43,6 @@ extern "C" {
 #define GTK_COLOR_SELECTION_GET_CLASS(obj)              (GTK_CHECK_GET_CLAS ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
 
 
-/* Number of elements in the custom palatte */
-#define GTK_CUSTOM_PALETTE_WIDTH 10
-#define GTK_CUSTOM_PALETTE_HEIGHT 2
-
 typedef struct _GtkColorSelection       GtkColorSelection;
 typedef struct _GtkColorSelectionClass  GtkColorSelectionClass;
 

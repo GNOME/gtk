@@ -187,7 +187,9 @@ gtk_semipublic_h_sources = @STRIP_BEGIN@ \
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources = @STRIP_BEGIN@ \
+	gtktexttagprivate.h	\
 @STRIP_END@
+
 # GTK+ C sources to build the library from
 gtk_c_sources = @STRIP_BEGIN@ \
 	gtkaccelgroup.c		\
@@ -295,7 +297,6 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtktextmarkprivate.h	\
 	gtktextsegment.c	\
 	gtktexttag.c		\
-	gtktexttagprivate.h	\
 	gtktexttagtable.c	\
 	gtktexttypes.c		\
 	gtktextview.c		\

@@ -189,7 +189,7 @@ gtk_im_context_get_preedit_string (GtkIMContext   *context,
 /**
  * gtk_im_context_filter_keypress:
  * @context: a #GtkIMContext
- * @key: the key event
+ * @event: the key event
  * 
  * Allow an input method to internally handle a key press event.
  * if this function returns %TRUE, then no further processing

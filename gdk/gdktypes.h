@@ -55,8 +55,6 @@
 #define GDK_CURRENT_TIME     0L
 #define GDK_PARENT_RELATIVE  1L
 
-/* special deviceid for core pointer events */
-#define GDK_CORE_POINTER 0xfedc
 
 
 #ifdef __cplusplus

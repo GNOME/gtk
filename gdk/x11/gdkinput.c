@@ -327,7 +327,7 @@ gdk_input_exit (void)
 
 /**
  * gdk_device_get_axis:
- * @axis: a #GdkDevice
+ * @device: a #GdkDevice
  * @axes: pointer to an array of axes
  * @use: the use to look for
  * @value: location to store the found value.

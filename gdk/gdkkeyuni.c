@@ -800,7 +800,7 @@ static struct {
 
 /**
  * gdk_keyval_to_unicode:
- * @keysym: a GDK key symbol 
+ * @keyval: a GDK key symbol 
  * 
  * Convert from a GDK key symbol to the corresponding ISO10646 (Unicode)
  * character.
@@ -809,28 +809,28 @@ static struct {
  *               is no corresponding character.
  **/
 guint32
-gdk_keyval_to_unicode (guint keysym)
+gdk_keyval_to_unicode (guint keyval)
 {
   int min = 0;
   int max = G_N_ELEMENTS (gdk_keysym_to_unicode_tab) - 1;
   int mid;
 
   /* First check for Latin-1 characters (1:1 mapping) */
-  if ((keysym >= 0x0020 && keysym <= 0x007e) ||
-      (keysym >= 0x00a0 && keysym <= 0x00ff))
-    return keysym;
+  if ((keyval >= 0x0020 && keyval <= 0x007e) ||
+      (keyval >= 0x00a0 && keyval <= 0x00ff))
+    return keyval;
 
   /* Also check for directly encoded 24-bit UCS characters:
    */
-  if ((keysym & 0xff000000) == 0x01000000)
-    return keysym & 0x00ffffff;
+  if ((keyval & 0xff000000) == 0x01000000)
+    return keyval & 0x00ffffff;
 
   /* binary search in table */
   while (max >= min) {
     mid = (min + max) / 2;
-    if (gdk_keysym_to_unicode_tab[mid].keysym < keysym)
+    if (gdk_keysym_to_unicode_tab[mid].keysym < keyval)
       min = mid + 1;
-    else if (gdk_keysym_to_unicode_tab[mid].keysym > keysym)
+    else if (gdk_keysym_to_unicode_tab[mid].keysym > keyval)
       max = mid - 1;
     else {
       /* found it */
