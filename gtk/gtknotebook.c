@@ -2389,7 +2389,10 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   page = list->data;
 
   if (page->last_focus_child)
-    g_object_remove_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
+    {
+      g_object_remove_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
+      page->last_focus_child = NULL;
+    }
   
   if (GTK_WIDGET_VISIBLE (page->child) && GTK_WIDGET_VISIBLE (notebook))
     need_resize = TRUE;
