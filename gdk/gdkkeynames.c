@@ -29,9 +29,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gdkalias.h"
 #include "gdkkeysyms.h"
 #include "gdkinternals.h"
+#include "gdkalias.h"
 
 /* Key handling not part of the keymap */
 
@@ -1430,3 +1430,5 @@ gdk_keyval_from_name (const gchar *keyval_name)
     return GDK_VoidSymbol;
 }
 
+#define __GDK_KEYNAMES_C__
+#include "gdkaliasdef.c"

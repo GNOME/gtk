@@ -26,11 +26,11 @@
 
 #include <config.h>
 
-#include "gdkalias.h"
 #include "gdkgc.h"
 #include "gdkprivate-x11.h"
 #include "gdkregion-generic.h"
 #include "gdkx.h"
+#include "gdkalias.h"
 
 #include <string.h>
 
@@ -1302,3 +1302,6 @@ _gdk_windowing_gc_get_foreground (GdkGC    *gc,
   else
     g_warning ("No colormap in _gdk_windowing_gc_get_foreground");
 }
+
+#define __GDK_GC_X11_C__
+#include "gdkaliasdef.c"

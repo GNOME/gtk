@@ -36,12 +36,12 @@
 
 #define ENABLE_GRAYSCALE
 
-#include "gdkalias.h"
 #include "gdkprivate.h"
 #include "gdkinternals.h"	/* _gdk_windowing_get_bits_for_depth() */
 
 #include "gdkrgb.h"
 #include "gdkscreen.h"
+#include "gdkalias.h"
 #include <glib/gprintf.h>
 
 typedef struct _GdkRgbInfo     GdkRgbInfo;
@@ -3695,3 +3695,6 @@ gdk_rgb_get_visual (void)
 {
   return gdk_screen_get_rgb_visual (gdk_screen_get_default ());
 }
+
+#define __GDK_RGB_C__
+#include "gdkaliasdef.c"

@@ -130,7 +130,6 @@
  */
 
 #include <config.h>
-#include "gdkalias.h"
 #include "gdk.h"		/* For gdk_rectangle_intersect */
 #include "gdkprivate-x11.h"
 #include "gdkx.h"
@@ -139,6 +138,7 @@
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkwindow-x11.h"
+#include "gdkalias.h"
 
 typedef struct _GdkWindowQueueItem GdkWindowQueueItem;
 typedef struct _GdkWindowParentPos GdkWindowParentPos;
@@ -1102,3 +1102,6 @@ gdk_window_clip_changed (GdkWindow *window, GdkRectangle *old_clip, GdkRectangle
   gdk_region_destroy (new_clip_region);
   gdk_region_destroy (old_clip_region);
 }
+
+#define __GDK_GEOMETRY_X11_C__
+#include "gdkaliasdef.c"

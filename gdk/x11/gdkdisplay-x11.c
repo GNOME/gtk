@@ -30,7 +30,6 @@
 #include <unistd.h>
 
 #include <glib.h>
-#include "gdkalias.h"
 #include "gdkx.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
@@ -39,6 +38,7 @@
 #include "gdkinternals.h"
 #include "gdkinputprivate.h"
 #include "xsettings-client.h"
+#include "gdkalias.h"
 
 #include <X11/Xatom.h>
 
@@ -1190,3 +1190,6 @@ gdk_x11_display_get_user_time_libgtk_only (GdkDisplay *display)
 {
   return GDK_DISPLAY_X11 (display)->user_time;
 }
+
+#define __GDK_DISPLAY_X11_C__
+#include "gdkaliasdef.c"

@@ -26,7 +26,6 @@
 
 #include <config.h>
 
-#include "gdkalias.h"
 #include "gdk.h"
 #include "gdkprivate-x11.h"
 #include "gdkinternals.h"
@@ -42,6 +41,8 @@
 #include <string.h>
 
 #include "gdkinputprivate.h"
+
+#include "gdkalias.h"
 
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>
@@ -2933,3 +2934,6 @@ gdk_xsettings_watch_cb (Window   window,
       g_object_unref (gdkwin);
     }
 }
+
+#define __GDK_EVENTS_X11_C__
+#include "gdkaliasdef.c"

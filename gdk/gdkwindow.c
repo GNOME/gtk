@@ -25,7 +25,6 @@
  */
 
 #include <config.h>
-#include "gdkalias.h"
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdk.h"		/* For gdk_rectangle_union() */
@@ -33,6 +32,7 @@
 #include "gdkdrawable.h"
 #include "gdkpixmap.h"
 #include "gdkscreen.h"
+#include "gdkalias.h"
 
 #define USE_BACKING_STORE	/* Appears to work on Win32, too, now. */
 
@@ -2859,3 +2859,5 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   return gdk_window_foreign_new_for_display (gdk_display_get_default (), anid);
 }
 
+#define __GDK_WINDOW_C__
+#include "gdkaliasdef.c"

@@ -32,7 +32,6 @@
 #include <netinet/in.h>
 #include <unistd.h>
 
-#include "gdkalias.h"
 #include "gdk.h"
 
 #include "gdkwindow.h"
@@ -44,6 +43,7 @@
 #include "gdkinternals.h"
 #include "MwmUtil.h"
 #include "gdkwindow-x11.h"
+#include "gdkalias.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -5854,3 +5854,6 @@ gdk_window_configure_finished (GdkWindow *window)
     }
 #endif
 }
+
+#define __GDK_WINDOW_X11_C__
+#include "gdkaliasdef.c"

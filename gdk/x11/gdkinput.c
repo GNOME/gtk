@@ -30,13 +30,13 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-#include "gdkalias.h"
 #include "gdkx.h"
 #include "gdkinput.h"
 #include "gdkprivate.h"
 #include "gdkinputprivate.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
+#include "gdkalias.h"
 
 static GdkDeviceAxis gdk_input_core_axes[] = {
   { GDK_AXIS_X, 0, 0 },
@@ -445,3 +445,6 @@ gdk_device_get_axis (GdkDevice  *device,
   
   return FALSE;
 }
+
+#define __GDK_INPUT_C__
+#include "gdkaliasdef.c"

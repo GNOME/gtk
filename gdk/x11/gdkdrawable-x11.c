@@ -26,7 +26,6 @@
 
 #include <config.h>
 
-#include "gdkalias.h"
 #include "gdkx.h"
 #include "gdkregion-generic.h"
 
@@ -48,6 +47,8 @@
 #include "gdkpixmap-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
+
+#include "gdkalias.h"
 
 static void gdk_x11_draw_rectangle (GdkDrawable    *drawable,
 				    GdkGC          *gc,
@@ -1705,3 +1706,6 @@ _gdk_x11_drawable_draw_xft_glyphs (GdkDrawable      *drawable,
       XftDrawGlyphSpec (draw, &color, xft_font, glyphs, n_glyphs);
     }
 }
+
+#define __GDK_DRAWABLE_X11_C__
+#include "gdkaliasdef.c"

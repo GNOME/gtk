@@ -47,10 +47,10 @@ SOFTWARE.
 #define SMALL_COORDINATE -LARGE_COORDINATE
 
 #include <config.h>
-#include "gdkalias.h"
 #include <gdkregion.h>
 #include "gdkregion-generic.h"
 #include "gdkpoly-generic.h"
+#include "gdkalias.h"
 
 /*
  *     InsertEdgeInET
@@ -618,3 +618,6 @@ gdk_region_polygon(GdkPoint *Pts, gint Count, GdkFillRule rule)
     g_free (pETEs);
     return(region);
 }
+
+#define __GDK_POLYREG_GENERIC_C__
+#include "gdkaliasdef.c"

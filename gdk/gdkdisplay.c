@@ -23,12 +23,12 @@
 
 #include <config.h>
 #include <glib.h>
-#include "gdkalias.h"
 #include "gdk.h"		/* gdk_event_send_client_message() */
 #include "gdkdisplay.h"
 #include "gdkinternals.h"
 #include "gdkmarshalers.h"
 #include "gdkscreen.h"
+#include "gdkalias.h"
 
 enum {
   CLOSED,
@@ -647,4 +647,5 @@ gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)
   return (GdkPointerHooks *)result;
 }
 
-
+#define __GDK_DISPLAY_C__
+#include "gdkaliasdef.c"

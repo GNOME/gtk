@@ -29,7 +29,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "gdkalias.h"
 #include "gdk.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
@@ -37,6 +36,7 @@
 #ifndef HAVE_XCONVERTCASE
 #include "gdkkeysyms.h"
 #endif
+#include "gdkalias.h"
 
 typedef struct _GdkPredicate  GdkPredicate;
 
@@ -455,3 +455,6 @@ gdk_set_program_class (const char *program_class)
 
   gdk_progclass = g_strdup (program_class);
 }
+
+#define __GDK_C__
+#include "gdkaliasdef.c"

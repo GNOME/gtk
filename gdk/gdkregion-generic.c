@@ -71,9 +71,9 @@ SOFTWARE.
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
-#include "gdkalias.h"
 #include <gdkregion.h>
 #include "gdkregion-generic.h"
+#include "gdkalias.h"
 
 #ifdef DEBUG
 #include <stdio.h>
@@ -1776,3 +1776,6 @@ gdk_region_spans_intersect_foreach (GdkRegion  *region,
       pbox++;
     }
 }
+
+#define __GDK_REGION_GENERIC_C__
+#include "gdkaliasdef.c"

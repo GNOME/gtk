@@ -32,7 +32,6 @@
 #include <unistd.h>
 #include <X11/Xlib.h>
 
-#include "gdkalias.h"
 #include "gdkx.h"
 
 #include "gdkpixmap-x11.h"
@@ -41,6 +40,7 @@
 #include "gdkdisplay-x11.h"
 
 #include <gdk/gdkinternals.h>
+#include "gdkalias.h"
 
 typedef struct
 {
@@ -430,3 +430,6 @@ gdk_pixmap_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   return (GdkPixmap*) gdk_xid_table_lookup_for_display (display, anid);
 }
+
+#define __GDK_PIXMAP_X11_C__
+#include  "gdkaliasdef.c"

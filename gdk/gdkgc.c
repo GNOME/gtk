@@ -27,10 +27,10 @@
 #include <config.h>
 #include <string.h>
 
-#include "gdkalias.h"
 #include "gdkgc.h"
 #include "gdkrgb.h"
 #include "gdkprivate.h"
+#include "gdkalias.h"
 
 static void gdk_gc_class_init (GObjectClass *class);
 static void gdk_gc_finalize   (GObject      *object);
@@ -723,3 +723,6 @@ gdk_gc_set_rgb_bg_color (GdkGC          *gc,
   gdk_rgb_find_color (cmap, &tmp_color);
   gdk_gc_set_background (gc, &tmp_color);
 }
+
+#define __GDK_GC_C__
+#include "gdkaliasdef.c"

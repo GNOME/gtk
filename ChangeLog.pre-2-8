@@ -1,5 +1,20 @@
 2005-03-15  Matthias Clasen  <mclasen@redhat.com>
 
+	Make PLT-reduction work with gcc4, and don't include
+	everything in gdkalias.h:
+	
+	* gdk/gdk.symbols: Group symbols by header and source file.
+	* gdk/makegdkalias.pl: Protect definitions by the same 
+	preprocessor symbols used to guard the headers. Move
+	the alias declarations to a separate file which is 
+	produced when calling makegdkalias.pl -def
+	* gdk/Makefile.am (gdkaliasdef.c): Add a rule to generate this
+	file.
+	* gdk/*.c, gdk/x11/*.c: Include gdkalias.h after the other
+	headers, include gdkaliasdef.c at the bottom.
+
+2005-03-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_class_init): 
 	Document that inline completion requires text-column to be set.
 	(gtk_entry_completion_compute_prefix): Return NULL if text-column

@@ -22,11 +22,11 @@
 #include <config.h>
 #include <string.h>
 
-#include "gdkalias.h"
 #include "gdkspawn.h"
 
 #include <glib.h>
 #include <gdk/gdk.h>
+#include "gdkalias.h"
 
 extern char **environ;
 
@@ -248,3 +248,6 @@ gdk_spawn_command_line_on_screen (GdkScreen    *screen,
 
   return retval;
 }
+
+#define __GDK_SPAWN_X11_C__
+#include "gdkaliasdef.c"

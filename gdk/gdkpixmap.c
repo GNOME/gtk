@@ -25,11 +25,11 @@
  */
 
 #include <config.h>
-#include "gdkalias.h"
 #include "gdkpixmap.h"
 #include "gdkinternals.h"
 #include "gdkpixbuf.h"
 #include "gdkscreen.h"
+#include "gdkalias.h"
 
 static GdkGC *gdk_pixmap_create_gc      (GdkDrawable     *drawable,
                                          GdkGCValues     *values,
@@ -671,3 +671,6 @@ gdk_pixmap_real_get_screen (GdkDrawable *drawable)
 {
     return gdk_drawable_get_screen (GDK_PIXMAP_OBJECT (drawable)->impl);
 }
+
+#define __GDK_PIXMAP_C__
+#include "gdkaliasdef.c"

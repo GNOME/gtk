@@ -27,12 +27,12 @@
 #include <config.h>
 #include <time.h>
 
-#include "gdkalias.h"
 #include "gdkcolor.h"
 #include "gdkinternals.h"
 #include "gdkx.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
+#include "gdkalias.h"
 
 typedef struct _GdkColormapPrivateX11  GdkColormapPrivateX11;
 
@@ -1526,3 +1526,6 @@ gdk_colormap_get_screen (GdkColormap *cmap)
 
   return  GDK_COLORMAP_PRIVATE_DATA (cmap)->screen;
 }
+
+#define __GDK_COLOR_X11_C__
+#include "gdkaliasdef.c"

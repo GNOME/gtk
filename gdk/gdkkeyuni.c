@@ -1,6 +1,6 @@
 #include <config.h>
-#include "gdkalias.h"
 #include "gdk.h"
+#include "gdkalias.h"
 
 /* Thanks to Markus G. Kuhn <mkuhn@acm.org> for the ksysym<->Unicode
  * mapping functions, from the xterm sources.
@@ -1669,3 +1669,6 @@ gdk_unicode_to_keyval (guint32 wc)
    */
   return wc | 0x01000000;
 }
+
+#define __GDK_KEYUNI_C__
+#include "gdkaliasdef.c"

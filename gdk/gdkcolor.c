@@ -27,10 +27,10 @@
 #include <config.h>
 #include <time.h>
 
-#include "gdkalias.h"
 #include "gdkscreen.h"
 #include "gdkcolor.h"
 #include "gdkinternals.h"
+#include "gdkalias.h"
 
 /**
  * gdk_colormap_ref:
@@ -371,3 +371,5 @@ gdk_colormap_get_system (void)
   return gdk_screen_get_system_colormap (gdk_screen_get_default ());
 }
 
+#define __GDK_COLOR_C__
+#include "gdkaliasdef.c"

@@ -26,13 +26,13 @@
 
 #include <config.h>
 #include <math.h>
-#include "gdkalias.h"
 #include "gdkdrawable.h"
 #include "gdkinternals.h"
 #include "gdkwindow.h"
 #include "gdkscreen.h"
 #include "gdk-pixbuf-private.h"
 #include "gdkpixbuf.h"
+#include "gdkalias.h"
 
 static GdkImage*    gdk_drawable_real_get_image (GdkDrawable     *drawable,
 						 gint             x,
@@ -1942,3 +1942,6 @@ _gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
       return screen->normal_gcs[depth];
     }
 }
+
+#define __GDK_DRAW_C__
+#include "gdkaliasdef.c"

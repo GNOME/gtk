@@ -33,7 +33,6 @@
 #include <limits.h>
 #include <errno.h>
 
-#include "gdkalias.h"
 #include "gdk.h"
 #include "gdkx.h"
 
@@ -41,6 +40,7 @@
 #include "gdkinternals.h"
 #include "gdkdisplay-x11.h"
 #include "gdkkeysyms.h"
+#include "gdkalias.h"
 
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>
@@ -1446,3 +1446,6 @@ _gdk_x11_get_group_for_state (GdkDisplay      *display,
       return (state & keymap_impl->group_switch_mask) ? 1 : 0;
     }
 }
+
+#define __GDK_KEYS_X11_C__
+#include "gdkaliasdef.c"

@@ -25,9 +25,10 @@
  */
 
 #include <config.h>
-#include "gdkalias.h"
+#include "gdkx.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
+#include "gdkalias.h"
 #include <stdio.h>
 
 static guint     gdk_xid_hash  (XID *xid);
@@ -124,3 +125,6 @@ gdk_xid_equal (XID *a,
 {
   return (*a == *b);
 }
+
+#define __GDK_XID_C__
+#include "gdkaliasdef.c"

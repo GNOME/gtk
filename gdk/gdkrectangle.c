@@ -25,8 +25,8 @@
  */
 
 #include <config.h>
-#include "gdkalias.h"
 #include <gdk/gdk.h>
+#include "gdkalias.h"
 
 void
 gdk_rectangle_union (GdkRectangle *src1,
@@ -105,3 +105,6 @@ gdk_rectangle_get_type (void)
   return our_type;
 }
 
+
+#define __GDK_RECTANGLE_C__
+#include "gdkaliasdef.c"

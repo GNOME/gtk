@@ -19,13 +19,13 @@
 
 #include <config.h>
 #include <math.h>
-#include "gdkalias.h"
 #include "gdkcolor.h"
 #include "gdkgc.h"
 #include "gdkpango.h"
 #include "gdkrgb.h"
 #include "gdkprivate.h"
 #include "gdkscreen.h"
+#include "gdkalias.h"
 
 /* This is for P_() ... a bit non-kosher, but works fine */
 #include "gtk/gtkintl.h"
@@ -1418,3 +1418,6 @@ gdk_pango_context_get (void)
 {
   return gdk_pango_context_get_for_screen (gdk_screen_get_default ());
 }
+
+#define __GDK_PANGO_C__
+#include "gdkaliasdef.c"

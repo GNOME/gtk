@@ -31,13 +31,13 @@
 #include <X11/Xcursor/Xcursor.h>
 #endif
 
-#include "gdkalias.h"
 #include "gdkprivate-x11.h"
 #include "gdkcursor.h"
 #include "gdkpixmap-x11.h"
 #include "gdkx.h"
 #include <gdk/gdkpixmap.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include "gdkalias.h"
 
 
 /**
@@ -605,3 +605,5 @@ gdk_display_get_maximal_cursor_size (GdkDisplay *display,
 		    128, 128, width, height);
 }
 
+#define __GDK_CURSOR_X11_C__
+#include "gdkaliasdef.c"
