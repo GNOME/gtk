@@ -1,3 +1,9 @@
+2005-02-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (save_folder_combo_create): 
+	Unset "focus-on-click" for the save folder combo.  (#168688,
+	Sven Neumann)
+
 2005-02-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* demos/testpixbuf.c (main): Remove a C++ comment.  (#168531, 

@@ -3451,7 +3451,10 @@ save_folder_combo_create (GtkFileChooserDefault *impl)
   GtkWidget *combo;
   GtkCellRenderer *cell;
 
-  combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (impl->shortcuts_model));
+  combo = g_object_new (GTK_TYPE_COMBO_BOX,
+			"model", impl->shortcuts_model,
+			"focus-on-click", FALSE,
+                        NULL);
   gtk_widget_show (combo);
 
   cell = gtk_cell_renderer_pixbuf_new ();
