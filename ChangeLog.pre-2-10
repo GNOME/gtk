@@ -1,5 +1,8 @@
 2005-01-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkbutton.c (gtk_button_set_image): Fix docs.  (#165180,
+	Jeff Franks)
+
 	* gdk/x11/gdkwindow-x11.c (gdk_window_configure_finished): Fix 
 	docs.  (#165163, Jeff Franks)
 	
