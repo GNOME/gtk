@@ -898,9 +898,6 @@ draw_expander(GtkStyle      *style,
         (window, style->fg_gc[state], FALSE, x, y,
          expander_size - 1, expander_size - 1);
 
-      if (success)
-        gdk_gc_set_foreground (style->fg_gc[state], &values.foreground);
-
       gdk_draw_line
         (window, style->fg_gc[state], x + 2, y + expander_semi_size,
          x + expander_size - 2, y + expander_semi_size);
@@ -914,6 +911,9 @@ draw_expander(GtkStyle      *style,
              x + expander_semi_size, y + expander_size - 2);
           break;
         }
+
+      if (success)
+        gdk_gc_set_foreground (style->fg_gc[state], &values.foreground);
     }
 
   if (area)

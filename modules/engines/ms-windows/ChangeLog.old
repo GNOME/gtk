@@ -1,3 +1,8 @@
+2003-12-01  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Fix coloration for the expander's +/- part. Was
+	the wrong color when selected or selected+insensitive
+	
 2003-11-26  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/wimp_style.c: Fix coloration for several GIMP widgets,
