@@ -1,5 +1,20 @@
 1999-09-17  Federico Mena Quintero  <federico@redhat.com>
 
+	* src/io-bmp.c (image_load): Set the initial ref_count to 1.
+
+	* src/io-gif.c (image_load): Likewise.
+
+	* src/io-jpeg.c (image_load): Likewise.
+
+	* src/io-png.c (image_load): Likewise.
+
+	* src/io-tiff.c (image_load): Likewise.
+
+	* src/io-xpm.c (_pixbuf_create_from_xpm): Likewise.
+
+	* src/gdk-pixbuf-io.c (gdk_pixbuf_load_image): Added an assertion
+	for the ref_count to be != 0.
+
 	* src/gdk-pixbuf.c (gdk_pixbuf_ref): Be more paranoid with sanity
 	checking.
 	(gdk_pixbuf_unref): Fix incorrect sanity check and comparison.

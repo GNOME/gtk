@@ -194,6 +194,7 @@ gdk_pixbuf_load_image (const char *file)
 			fseek(f, 0, SEEK_SET);
 			pixbuf = (*file_formats [i].load)(f);
 			fclose (f);
+			g_assert (pixbuf->ref_count != 0);
 			return pixbuf;
 		}
 	}

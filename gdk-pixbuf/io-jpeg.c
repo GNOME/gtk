@@ -121,7 +121,7 @@ GdkPixBuf *image_load(FILE *f)
 		g_free(pixbuf);
 		return NULL;
 	}
-	pixbuf->ref_count = 0;
+	pixbuf->ref_count = 1;
 	pixbuf->unref_func = NULL;
 
 	return pixbuf;

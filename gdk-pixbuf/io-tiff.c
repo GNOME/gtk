@@ -94,7 +94,7 @@ GdkPixBuf *image_load(FILE * f)
     /* Ok, I'm anal...shoot me */
     if (!(pixbuf->art_pixbuf))
 	return NULL;
-    pixbuf->ref_count = 0;
+    pixbuf->ref_count = 1;
     pixbuf->unref_func = NULL;
 
     return pixbuf;

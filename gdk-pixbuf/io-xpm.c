@@ -417,7 +417,7 @@ static GdkPixBuf *
         return NULL;
     }
 
-    pixbuf->ref_count = 0;
+    pixbuf->ref_count = 1;
     pixbuf->unref_func = NULL;
 
     return pixbuf;
