@@ -126,6 +126,7 @@ HTML_IMAGES = \
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 content_files = 		\
+	version.xml		\
 	running.sgml		\
 	building.sgml		\
 	changes-1.2.sgml	\
@@ -141,7 +142,7 @@ content_files = 		\
 	x11.sgml
 
 # Other files to distribute
-extra_files =
+extra_files = version.xml.in
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed
 # if $(DOC_MODULE).types is non-empty.

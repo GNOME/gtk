@@ -156,11 +156,12 @@
 <!ENTITY gtk-Questions SYSTEM "question_index.sgml">
 <!ENTITY gtk-Changes-1-2 SYSTEM "changes-1.2.sgml">
 <!ENTITY gtk-Changes-2-0 SYSTEM "changes-2.0.sgml">
-
+<!ENTITY version SYSTEM "version.xml">
 ]>
 <book id="index">
   <bookinfo>
     <title>GTK+ Reference Manual</title>
+    <releaseinfo>for GTK+ &version;</releaseinfo>
   </bookinfo>
 
   <part id="gtk">

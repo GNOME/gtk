@@ -29,11 +29,13 @@
 <!ENTITY gdk-Display SYSTEM "xml/gdkdisplay.xml">
 <!ENTITY gdk-DisplayManager SYSTEM "xml/gdkdisplaymanager.xml">
 <!ENTITY gdk-Multihead SYSTEM "multihead.sgml">
+<!ENTITY version SYSTEM "version.xml">
 ]>
 
 <book id="index">
   <bookinfo>
     <title>GDK Reference Manual</title>
+    <releaseinfo>for GDK &version;</releaseinfo>
   </bookinfo>
 
   <reference id="reference">

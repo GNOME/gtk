@@ -1,6 +1,22 @@
 2002-11-21  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/tmpl/gtkcombo.sgml: Fix typo in example code.  (#99078)
+	* gdk/Makefile.am (extra_files): 
+	* gdk-pixbuf/Makefile.am (extra_files): 
+	* gtk/Makefile.am (extra_files): Add version.xml.in.
+
+	* gdk/Makefile.am (content_files): 
+	* gdk-pixbuf/Makefile.am (content_files): 
+	* gtk/Makefile.am (content_files): Add version.xml.
+
+	* gdk/version.xml.in: 
+	* gdk-pixbuf/version.xml.in: 
+	* gtk/version.xml.in: New files to let configure dump the version in.
+
+	* gdk/gdk-docs.sgml:
+	* gdk-pixbuf/gdk-pixbuf.sgml: 
+	* gtk/gtk-docs.sgml: Add version information.
+
+ 	* gtk/tmpl/gtkcombo.sgml: Fix typo in example code.  (#99078)
 
 Sun Nov 17 15:42:08 2002  Jonathan Blandford  <jrb@gnome.org>
 

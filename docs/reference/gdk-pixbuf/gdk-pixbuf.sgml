@@ -24,12 +24,13 @@
 
 <!ENTITY gdk-pixbuf "<application>gdk-pixbuf</application>">
 <!ENTITY Imlib "<application>Imlib</application>">
+<!ENTITY version SYSTEM "version.xml">
 ]>
 
 <book id="index">
   <bookinfo>
     <title>The &gdk-pixbuf; Library</title>
-
+    <releaseinfo>Version &version;</releaseinfo>
     <authorgroup>
       <author>
 	<firstname>Federico</firstname>

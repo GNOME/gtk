@@ -615,10 +615,23 @@ AC_MSG_RESULT($gdk_working_wctype)
 AC_SUBST(GDK_WLIBS)
 
 
-
 ##################################################
 # Checks for gdk-pixbuf
 ##################################################
+
+dnl ********************************************************
+dnl * See whether we need to load our modules as .la files *
+dnl ********************************************************
+
+use_la_modules=false
+case $host in
+  *-aix*) use_la_modules=true
+esac
+
+if $use_la_modules ; then
+   AC_DEFINE(USE_LA_MODULES, 1, [Whether to load modules via .la files rather than directly])
+fi
+
 
 AC_MSG_CHECKING(whether to build gmodulized gdk-pixbuf)
 
@@ -1575,8 +1588,11 @@ tests/Makefile
 docs/Makefile
 docs/reference/Makefile
 docs/reference/gdk-pixbuf/Makefile
+docs/reference/gdk-pixbuf/version.xml
 docs/reference/gdk/Makefile
+docs/reference/gdk/version.xml
 docs/reference/gtk/Makefile
+docs/reference/gtk/version.xml
 docs/faq/Makefile
 docs/tutorial/Makefile
 gdk-pixbuf/Makefile
