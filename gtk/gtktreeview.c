@@ -10629,11 +10629,22 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
       retval = TRUE;
       if (editable_widget != NULL)
 	{
+	  gint left, right;
+	  GdkRectangle area;
+	  GtkCellRenderer *cell;
+
+	  area = cell_area;
+	  cell = _gtk_tree_view_column_get_editable_cell (tree_view->priv->focus_column);
+	  _gtk_tree_view_column_get_neighbor_sizes (tree_view->priv->focus_column, cell, &left, &right);
+
+	  area.x += left;
+	  area.width -= right + left;
+
 	  gtk_tree_view_real_start_editing (tree_view,
 					    tree_view->priv->focus_column,
 					    cursor_path,
 					    editable_widget,
-					    &cell_area,
+					    &area,
 					    NULL,
 					    flags);
 	}

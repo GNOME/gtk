@@ -1,3 +1,12 @@
+Tue May  7 00:18:45 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_start_editing): add neighbor
+	size hack to align editable widget.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_pack_end): use g_new0
+	here instead of g_new (this triggered some bad crash),
+	(gtk_tree_view_column_cell_is_visible): add missing assert
+
 2002-05-07  Matthias Clasen  <maclas@gmx.de>
 
 	Fix for #79248, merged from HEAD:

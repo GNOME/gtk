@@ -1222,7 +1222,7 @@ gtk_tree_view_column_pack_end (GtkTreeViewColumn  *tree_column,
   g_object_ref (G_OBJECT (cell));
   gtk_object_sink (GTK_OBJECT (cell));
 
-  cell_info = g_new (GtkTreeViewColumnCellInfo, 1);
+  cell_info = g_new0 (GtkTreeViewColumnCellInfo, 1);
   cell_info->cell = cell;
   cell_info->expand = expand ? TRUE : FALSE;
   cell_info->pack = GTK_PACK_END;
@@ -2694,6 +2694,8 @@ gboolean
 gtk_tree_view_column_cell_is_visible (GtkTreeViewColumn *tree_column)
 {
   GList *list;
+
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), FALSE);
 
   for (list = tree_column->cell_list; list; list = list->next)
     {
