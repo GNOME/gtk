@@ -1,3 +1,8 @@
+2003-01-03  Havoc Pennington  <hp@pobox.com>
+
+	* docs/text_widget_internals.txt: add a file documenting some of
+	the text widget internals
+
 2003-01-02  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwindow.c (gtk_window_get_focus): Document that it may
