@@ -3372,8 +3372,15 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 		  column->resized_width -= 2;
 		  if (column->resized_width < 0)
 		    column->resized_width = 0;
-		  column->resized_width = MAX (column->min_width,
-					       column->resized_width);
+
+		  if (column->min_width == -1)
+		    column->resized_width = MAX (column->button->requisition.width, column->resized_width);
+		  else
+		    column->resized_width = MAX (column->min_width, column->resized_width);
+
+		  if (column->max_width != -1)
+		    column->resized_width = MIN (column->resized_width, column->max_width);
+
 		  column->use_resized_width = TRUE;
 		  gtk_widget_queue_resize (widget);
 		  return TRUE;
@@ -3383,6 +3390,10 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 		  column->resized_width = MAX (column->resized_width,
 					       column->width);
 		  column->resized_width += 2;
+
+		  if (column->max_width != -1)
+		    column->resized_width = MIN (column->resized_width, column->max_width);
+
 		  column->use_resized_width = TRUE;
 		  gtk_widget_queue_resize (widget);
 		  return TRUE;

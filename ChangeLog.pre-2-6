@@ -1,3 +1,8 @@
+Sat Feb 23 03:10:20 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): honor min_width and
+	max_width while resizing columns (pointed out by Jorn Baayen)
+
 Fri Feb 22 19:17:46 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Patch from Matthias Clasen (#54488)
