@@ -1,3 +1,17 @@
+Mon Mar  9 13:36:53 GMT 1998 Tony Gale  <gale@gimp.org>
+
+        * docs/gtkfaq.sgml:
+
+        - Use 'diff -ru' for patches
+        - Explained patch application/rejection
+        - Added information on CVS
+        - New question on right justified menus with menufactory
+
+        From Nathan:
+
+        - Information on Objective-C bindings
+        - Add missing variable in colour example.
+  
 Mon Mar  9 11:44:33 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_update_history_menu): reverted

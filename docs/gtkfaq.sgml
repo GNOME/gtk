@@ -8,7 +8,7 @@
 
 <!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
 <author>Nathan Froyd, Tony Gale, Shawn T. Amundson.
-<date>February 25th 1998
+<date>March 9th 1998
 <abstract>
 This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just
@@ -280,16 +280,57 @@ before version 1.0 is repleased. Not including bugs, this includes:
 </itemize>
 
 <!-- ----------------------------------------------------------------- -->
+<sect1>Whats this CVS thing that everyone keeps talking about, and how do I access it?
+<p>
+CVS is the Concurent Version System and is a very popular mean of 
+version control for software projects. It is designed to allow multiple 
+authors to be able to simultanously operate on the same source tree. 
+This source tree is centrally maintained, but each developer has a
+local mirror of this repository that they make there changes to.
+
+The GTK+ developers use a CVS repository to store the master copy of
+the current development version of GTK+. As such, people wishing to
+contribute patches to GTK+ should generate them against the CVS version.
+Normal people should use the packaged releases.
+
+The CVS toolset is available as RPM packages from the usual RedHat sites.
+The latest version is available at 
+<htmlurl url="http://download.cyclic.com/pub/" 
+name="&lt;http://download.cyclic.com/pub/&gt;">
+
+Anyone can download the latest CVS version of GTK+ by using anonymous access
+using the following steps:
+<itemize>
+<item> In a bourne shell descendant (e.g. bash) type:
+<verb>
+export CVSROOT=':pserver:anonymous@cvs.gimp.org:/debian/home/gnomecvs'
+</verb>
+<item>Next, the first time the source tree is checked out, a cvs login 
+is needed. 
+<verb>
+cvs login
+</verb>
+This will ask you for a password. There is no password for cvs.gimp.org, 
+so just enter a carriage return. 
+<item>To get the tree and place it in a subdir of your current working directory, issue the command: 
+<verb>
+cvs -z9 get gtk+
+</verb>
+</itemize>
+<!-- ----------------------------------------------------------------- -->
 <sect1>How can I contribute to GTK+?
 <p>
 It's simple.  If something doesn't work like you think it should in a program,
-check the documentation to make sure you're not missing something.  If it is a true
-bug, track it down in the GTK+ source, change it, and then upload the patchfile to:
+check the documentation to make sure you're not missing something.  If it is a
+true bug or missing feature, track it down in the GTK+ source, change it, 
+and then generate a patch in the form of a 'context diff'. This can be done
+using a command such as <tt/diff -ru &lt;oldfile&gt; &lt;newfile&gt;/. 
+Then upload the patchfile to:
 <verb>
 ftp://ftp.gimp.org/incoming
 </verb>
 along with a README file.  Make sure you follow the naming conventions or your
-will just be deleted! The filenames should be of this form:
+patch will just be deleted! The filenames should be of this form:
 <verb>
 gtk-<username>-<date yymmdd-n>.patch.gz
 gtk-<username>-<date yymmdd-n>.patch.README
@@ -304,6 +345,20 @@ gtk-gale-982701-0.patch.gz
 gtk-gale-982701-0.patch.README
 </verb>
 Once you upload <em>anything</em>, send the README to ftp-admin@gimp.org
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I know if my patch got applied, and if not, why not?
+<p>
+Uploaded patches will be moved to <tt>ftp://ftp.gimp.org/pub/gtk/patches</tt>
+where one of the GTK+ development team will pick them up. If applied, they
+will be moved to <tt>/pub/gtk/patches/old</tt>.
+
+Patches that aren't applied, for whatever reason, are moved to 
+<tt>/pub/gtk/patches/unapplied</tt> or <tt>/pub/gtk/patches/outdated</tt>.
+At this point you can ask on the <tt/gtk-list/ mailing list why your patch
+wasn't applied. There are many possible reasons why patches may not be
+applied, ranging from it doesn't apply cleanly, to it isn't right. Don't
+be put off if your patch didn't make it first time round.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>What is the policy on incorporating new widgets into the library?
@@ -328,6 +383,25 @@ ftp://ftp.gimp.org/pub/gtk/gtk--/
 </verb>
 <p>
 
+<item>There are two Objective-c bindings currently in development:
+
+ <itemize>
+
+ <item>The <htmlurl url="http://www.gnome.org/" name="GNOME project's"> package
+ of choice is obgtk. Objgtk is based on the Object class and is maintained by
+ <htmlurl url="mailto:sopwith@cuc.edu" name="Elliot Lee">. Apparently, objgtk
+ is being accepted as the `standard' Objective-C binding for GTK+.
+
+ <item>If you are more inclined towards the 
+ <htmlurl url="http://www.gnustep.org/" name="GNUstep project">,
+ you may want to check out GTKKit by 
+ <htmlurl url="mailto:helge@mdlink.de" name="Helge Heszlig">.
+ The intention is to setup a GTK+ binding using the FoundationKit. 
+ GTKKit includes nicities like writing a XML-type template file to 
+ construct a GTK+ interface.
+
+ </itemize> 
+<p>               
 <item>Perl bindings
 <verb>
 ftp://ftp.gimp.org/pub/gtk/perl
@@ -689,6 +763,16 @@ gtk_menu_append(GTK_MENU(menu), menuitem);
 gtk_widget_show(menuitem);
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
+<sect1>How can I right justify a menu, such as Help, when using the MenuFactory? 
+<p>
+Use something like the following:
+
+<tscreen><verb>
+menu_path = gtk_menu_factory_find (factory,  "<MyApp>/Help");
+gtk_menu_item_right_justify(menu_path->widget);
+</verb></tscreen>
+
 <!-- ***************************************************************** -->
 <sect>About gdk
 <!-- ***************************************************************** -->
@@ -696,26 +780,28 @@ gtk_widget_show(menuitem);
 <!-- ----------------------------------------------------------------- -->
 <sect1>What is gdk?
 <p>
-gdk is basically a wrapper around the standard Xlib functions calls. If you are
-at all familiar with Xlib, a lot of the functions in gdk will require little or no
-getting used to. All functions are written to provide an easy way to access Xlib
-functions in an easier an slightly more intuitive manner. In addition, since gdk
-uses glib (see below), it will be more portable and safer to use on multiple platforms.
+gdk is basically a wrapper around the standard Xlib function calls. If you are
+at all familiar with Xlib, a lot of the functions in gdk will require little 
+or no getting used to. All functions are written to provide an easy way 
+to access Xlib functions in an easier an slightly more intuitive manner. 
+In addition, since gdk uses glib (see below), it will be more portable 
+and safer to use on multiple platforms.
 
 <!-- Examples, anybody? I've been mulling some over. NF -->
    
 <sect1>How do I use color allocation?
 <p>
-One of the nice things about GDK is that it's based on top of Xlib; this is also
-a problem, especially in the area of color management. If you want to use color
-in your program (drawing a rectangle or such, your code should look something like
-this:
+One of the nice things about GDK is that it's based on top of Xlib; this is 
+also a problem, especially in the area of color management. If you want 
+to use color in your program (drawing a rectangle or such, your code 
+should look something like this:
 <tscreen>
 <verb>
 {
   GdkColor *color;
   int width, height;
   GtkWidget *widget;
+  GdkGC *gc;
 
   ...
   
@@ -730,7 +816,7 @@ this:
   
   /* red, green, and blue are passed values, indicating the RGB triple
    * of the color we want to draw. Note that the values of the RGB components
-   * within the GdkColor are taken from 0 to 65535, not  0 to 255.
+   * within the GdkColor are taken from 0 to 65535, not 0 to 255.
    */
   color->red = red * (65535/255);
   color->green = green * (65535/255);
