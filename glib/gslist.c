@@ -303,6 +303,42 @@ g_slist_find (GSList   *list,
   return list;
 }
 
+gint
+g_slist_position (GSList *list,
+		  GSList *link)
+{
+  gint i;
+
+  i = 0;
+  while (list)
+    {
+      if (list == link)
+	return i;
+      i++;
+      list = list->next;
+    }
+
+  return -1;
+}
+
+gint
+g_slist_index (GSList   *list,
+	       gpointer data)
+{
+  gint i;
+
+  i = 0;
+  while (list)
+    {
+      if (list->data == data)
+	return i;
+      i++;
+      list = list->next;
+    }
+
+  return -1;
+}
+
 GSList*
 g_slist_last (GSList *list)
 {

@@ -2,7 +2,7 @@
  * Copyright (C) 1995-1997  Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * GScanner: Flexible lexical scanner for general purpose.
- * Copyright (C) 1997 Tim Janik
+ * Copyright (C) 1997, 1998 Tim Janik
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,9 +22,12 @@
 #define		__gscanner_c__
 
 #include	<stdlib.h>
+#include	<stdarg.h>
 #include	<string.h>
+#include	<stdio.h>
 #include	<unistd.h>
 #include	<errno.h>
+#include	<sys/stat.h>
 #include	"glib.h"
 
 
@@ -32,9 +35,9 @@
 /* --- defines --- */
 #define	to_lower(c)				( \
 	(guchar) (							\
-	  ( (((guchar)(c))>='A' && ((guchar)(c))<='Z') * ('a'-'A') ) +	\
-	  ( (((guchar)(c))>=192 && ((guchar)(c))<=214) * (224-192) ) +	\
-	  ( (((guchar)(c))>=216 && ((guchar)(c))<=222) * (248-216) ) +	\
+	  ( (((guchar)(c))>='A' && ((guchar)(c))<='Z') * ('a'-'A') ) |	\
+	  ( (((guchar)(c))>=192 && ((guchar)(c))<=214) * (224-192) ) |	\
+	  ( (((guchar)(c))>=216 && ((guchar)(c))<=222) * (248-216) ) |	\
 	  ((guchar)(c))							\
 	)								\
 )
@@ -96,6 +99,7 @@ static	GScannerConfig	g_scanner_config_template =
 
 
 /* --- prototypes --- */
+extern char* g_vsprintf (gchar *fmt, va_list *args, va_list *args2);
 static	GScannerHashVal* g_scanner_lookup_internal (GScanner	*scanner,
 						    const gchar	*symbol);
 static	void	g_scanner_get_token_ll	(GScanner	*scanner,
@@ -118,6 +122,9 @@ static	guchar	g_scanner_peek_next_char(GScanner	*scanner);
 static	guchar	g_scanner_get_char	(GScanner	*scanner,
 					 guint		*line_p,
 					 guint		*position_p);
+static  void	g_scanner_msg_handler	(GScanner	*scanner,
+					 gchar		*message,
+					 gint		 is_error);
 
 
 /* --- functions --- */
@@ -154,6 +161,7 @@ g_scanner_new (GScannerConfig	*config_templ)
   scanner->input_name = NULL;
   scanner->parse_errors	= 0;
   scanner->max_parse_errors = 0;
+  scanner->msg_handler = g_scanner_msg_handler;
   
   scanner->config = g_new0 (GScannerConfig, 1);
   
@@ -224,6 +232,75 @@ g_scanner_destroy (GScanner	*scanner)
   g_free (scanner);
 }
 
+static void
+g_scanner_msg_handler (GScanner	        *scanner,
+		       gchar		*message,
+		       gint		 is_error)
+{
+  g_return_if_fail (scanner != NULL);
+
+  fprintf (stdout, "%s:%d: ", scanner->input_name, scanner->line);
+  if (is_error)
+    fprintf (stdout, "error: ");
+  fprintf (stdout, "%s", message);
+}
+
+void
+g_scanner_error (GScanner       *scanner,
+		 const gchar    *format,
+		 ...)
+{
+  g_return_if_fail (scanner != NULL);
+  g_return_if_fail (format != NULL);
+
+  scanner->parse_errors++;
+
+  if (scanner->msg_handler)
+    {
+      va_list args, args2;
+      gchar *string;
+      
+      va_start (args, format);
+      va_start (args2, format);
+      string = g_vsprintf ((gchar*) format, &args, &args2);
+      va_end (args);
+      va_end (args2);
+
+      string = g_strdup (string);
+
+      scanner->msg_handler (scanner, string, TRUE);
+	  
+      g_free (string);
+    }
+}
+
+void
+g_scanner_warn (GScanner       *scanner,
+		const gchar    *format,
+		...)
+{
+  g_return_if_fail (scanner != NULL);
+  g_return_if_fail (format != NULL);
+  
+  if (scanner->msg_handler)
+    {
+      va_list args, args2;
+      gchar *string;
+      
+      va_start (args, format);
+      va_start (args2, format);
+      string = g_vsprintf ((gchar*) format, &args, &args2);
+      va_end (args);
+      va_end (args2);
+      
+      string = g_strdup (string);
+      
+      scanner->msg_handler (scanner, string, FALSE);
+      
+      g_free (string);
+    }
+}
+
 void
 g_scanner_input_file (GScanner	*scanner,
 		      gint	input_fd)
@@ -245,7 +322,7 @@ g_scanner_input_file (GScanner	*scanner,
 void
 g_scanner_input_text (GScanner	     *scanner,
 		      const  gchar   *text,
-		      guint	     text_len)
+		      guint	      text_len)
 {
   g_return_if_fail (text != NULL);
   
@@ -528,6 +605,274 @@ g_scanner_get_char (GScanner	*scanner,
     }
   
   return fchar;
+}
+
+void
+g_scanner_unexp_token (GScanner		*scanner,
+		       GTokenType	 expected_token,
+		       const gchar	*identifier_spec,
+		       const gchar	*symbol_spec,
+		       const gchar	*symbol_name,
+		       const gchar	*message,
+		       gint		 is_error)
+{
+  register gchar	*token_string;
+  register guint	token_string_len;
+  register gchar	*expected_string;
+  register guint	expected_string_len;
+  register gchar	*message_prefix;
+  register gboolean	print_unexp;
+  void (*msg_handler) (GScanner*, const gchar*, ...);
+  
+  g_return_if_fail (scanner != NULL);
+
+  if (is_error)
+    msg_handler = g_scanner_error;
+  else
+    msg_handler = g_scanner_warn;
+  
+  token_string_len = 56;
+  token_string = g_new (gchar, token_string_len + 1);
+  expected_string_len = 64;
+  expected_string = g_new (gchar, expected_string_len + 1);
+  print_unexp = TRUE;
+  
+  switch (scanner->token)
+    {
+      
+    case  G_TOKEN_EOF:
+      snprintf (token_string, token_string_len, "end of file");
+      break;
+      
+    default:  /* 1 ... 255 */
+      if (scanner->token >= 1 && scanner->token <= 255)
+	{
+	  if ((scanner->token >= ' ' && scanner->token <= '~') ||
+	      strchr (scanner->config->cset_identifier_first, scanner->token) ||
+	      strchr (scanner->config->cset_identifier_nth, scanner->token))
+	    snprintf (token_string, expected_string_len, "character `%c'", scanner->token);
+	  else
+	    snprintf (token_string, expected_string_len, "character `\\%o'", scanner->token);
+	}
+      else
+	snprintf (token_string, token_string_len, "(unknown) token <%d>", scanner->token);
+      break;
+      
+    case  G_TOKEN_ERROR:
+      print_unexp = FALSE;
+      expected_token = G_TOKEN_NONE;
+      switch (scanner->value.v_error)
+	{
+	case  G_ERR_UNEXP_EOF:
+	  snprintf (token_string, token_string_len, "scanner: unexpected end of file");
+	  break;
+	  
+	case  G_ERR_UNEXP_EOF_IN_STRING:
+	  snprintf (token_string, token_string_len, "scanner: unterminated string constant");
+	  break;
+	  
+	case  G_ERR_UNEXP_EOF_IN_COMMENT:
+	  snprintf (token_string, token_string_len, "scanner: unterminated comment");
+	  break;
+	  
+	case  G_ERR_NON_DIGIT_IN_CONST:
+	  snprintf (token_string, token_string_len, "scanner: non digit in constant");
+	  break;
+	  
+	case  G_ERR_FLOAT_RADIX:
+	  snprintf (token_string, token_string_len, "scanner: invalid radix for floating constant");
+	  break;
+	  
+	case  G_ERR_FLOAT_MALFORMED:
+	  snprintf (token_string, token_string_len, "scanner: malformed floating constant");
+	  break;
+	  
+	case  G_ERR_DIGIT_RADIX:
+	  snprintf (token_string, token_string_len, "scanner: digit is beyond radix");
+	  break;
+	  
+	case  G_ERR_UNKNOWN:
+	default:
+	  snprintf (token_string, token_string_len, "scanner: unknown error");
+	  break;
+	}
+      break;
+      
+    case  G_TOKEN_CHAR:
+      snprintf (token_string, token_string_len, "character `%c'", scanner->value.v_char);
+      break;
+      
+    case  G_TOKEN_SYMBOL:
+      if (expected_token == G_TOKEN_SYMBOL)
+	print_unexp = FALSE;
+      if (symbol_name)
+	snprintf (token_string,
+		  token_string_len,
+		  "%s%s `%s'",
+		  print_unexp ? "" : "invalid ",
+		  symbol_spec,
+		  symbol_name);
+      else
+	snprintf (token_string,
+		  token_string_len,
+		  "%s%s",
+		  print_unexp ? "" : "invalid ",
+		  symbol_spec);
+      break;
+      
+    case  G_TOKEN_IDENTIFIER:
+      if (expected_token == G_TOKEN_IDENTIFIER)
+	print_unexp = FALSE;
+      snprintf (token_string,
+		token_string_len,
+		"%s%s `%s'",
+		print_unexp ? "" : "invalid ",
+		identifier_spec,
+		scanner->value.v_string);
+      break;
+      
+    case  G_TOKEN_BINARY:
+    case  G_TOKEN_OCTAL:
+    case  G_TOKEN_INT:
+    case  G_TOKEN_HEX:
+      snprintf (token_string, token_string_len, "number `%ld'", scanner->value.v_int);
+      break;
+      
+    case  G_TOKEN_FLOAT:
+      snprintf (token_string, token_string_len, "number `%.3f'", scanner->value.v_float);
+      break;
+      
+    case  G_TOKEN_STRING:
+      snprintf (token_string,
+		token_string_len,
+		"%sstring constant \"%s\"",
+		scanner->value.v_string[0] == 0 ? "empty " : "",
+		scanner->value.v_string);
+      token_string[token_string_len - 2] = '"';
+      token_string[token_string_len - 1] = 0;
+      break;
+      
+    case  G_TOKEN_COMMENT_SINGLE:
+    case  G_TOKEN_COMMENT_MULTI:
+      snprintf (token_string, token_string_len, "comment");
+      break;
+      
+    case  G_TOKEN_NONE:
+      g_assert_not_reached ();
+      break;
+    }
+  
+  
+  switch (expected_token)
+    {
+    default: /* 1 ... 255 */
+      if (expected_token >= 1 && expected_token <= 255)
+	{
+	  if ((expected_token >= ' ' && expected_token <= '~') ||
+	      strchr (scanner->config->cset_identifier_first, expected_token) ||
+	      strchr (scanner->config->cset_identifier_nth, expected_token))
+	    snprintf (expected_string, expected_string_len, "character `%c'", expected_token);
+	  else
+	    snprintf (expected_string, expected_string_len, "character `\\%o'", expected_token);
+	}
+      else
+	snprintf (expected_string, expected_string_len, "(unknown) token <%d>", expected_token);
+      break;
+      
+    case  G_TOKEN_INT:
+      snprintf (expected_string, expected_string_len, "number (integer)");
+      break;
+      
+    case  G_TOKEN_FLOAT:
+      snprintf (expected_string, expected_string_len, "number (float)");
+      break;
+      
+    case  G_TOKEN_STRING:
+      snprintf (expected_string, expected_string_len, "string constant");
+      break;
+      
+    case  G_TOKEN_SYMBOL:
+      snprintf (expected_string,
+		expected_string_len,
+		"%s%s",
+		scanner->token == G_TOKEN_SYMBOL ? "valid " : "",
+		symbol_spec);
+      break;
+      
+    case  G_TOKEN_IDENTIFIER:
+      snprintf (expected_string,
+		expected_string_len,
+		"%s%s",
+		scanner->token == G_TOKEN_IDENTIFIER ? "valid " : "",
+		identifier_spec);
+      break;
+      
+    case  G_TOKEN_NONE:
+      break;
+    }
+  
+  if (message && message[0] != 0)
+    message_prefix = " - ";
+  else
+    {
+      message_prefix = "";
+      message = "";
+    }
+  
+  if (expected_token != G_TOKEN_NONE)
+    {
+      if (print_unexp)
+	msg_handler (scanner,
+		     "unexpected %s, expected %s%s%s",
+		     token_string,
+		     expected_string,
+		     message_prefix,
+		     message);
+      else
+	msg_handler (scanner,
+		     "%s, expected %s%s%s",
+		     token_string,
+		     expected_string,
+		     message_prefix,
+		     message);
+    }
+  else
+    {
+      if (print_unexp)
+	msg_handler (scanner,
+		     "unexpected %s%s%s",
+		     token_string,
+		     message_prefix,
+		     message);
+      else
+	msg_handler (scanner,
+		     "%s%s%s",
+		     token_string,
+		     message_prefix,
+		     message);
+    }
+  
+  va_end (args);
+  
+  g_free (token_string);
+  g_free (expected_string);
+}
+
+gint
+g_scanner_stat_mode (const gchar *filename)
+{
+  struct stat  *stat_buf;
+  gint          st_mode;
+
+  stat_buf = g_new0 (struct stat, 1);
+
+  stat (filename, stat_buf);
+
+  st_mode = stat_buf->st_mode;
+
+  g_free (stat_buf);
+
+  return st_mode;
 }
 
 static void

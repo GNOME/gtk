@@ -854,11 +854,44 @@ g_snprintf (gchar       *str,
 #endif
 }
 
+void
+g_strdown (gchar  *string)
+{
+  register gchar *s;
+
+  g_return_if_fail (string != NULL);
+
+  s = string;
+
+  while (*s)
+    {
+      *s = tolower (*s);
+      s++;
+    }
+}
+
+void
+g_strup (gchar  *string)
+{
+  register gchar *s;
+
+  g_return_if_fail (string != NULL);
+
+  s = string;
+
+  while (*s)
+    {
+      *s = toupper (*s);
+      s++;
+    }
+}
+
 gint
-g_strcasecmp (const gchar *s1, const gchar *s2)
+g_strcasecmp (const gchar *s1,
+	      const gchar *s2)
 {
 #ifdef HAVE_STRCASECMP
-  return strcasecmp(s1, s2);
+  return strcasecmp (s1, s2);
 #else
   gint c1, c2;
 
@@ -876,6 +909,25 @@ g_strcasecmp (const gchar *s1, const gchar *s2)
 
   return (((gint)(guchar) *s1) - ((gint)(guchar) *s2));
 #endif
+}
+
+void
+g_strdelimit (gchar       *string,
+	      const gchar *delimiters,
+	      gchar        new_delim)
+{
+  register gchar *c;
+
+  g_return_if_fail (string != NULL);
+
+  if (!delimiters)
+    delimiters = G_STR_DELIMITERS;
+
+  for (c = string; *c; c++)
+    {
+      if (strchr (delimiters, *c))
+	*c = new_delim;
+    }
 }
 
 guint        

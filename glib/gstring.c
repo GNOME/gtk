@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 
 typedef struct _GRealStringChunk GRealStringChunk;
@@ -101,6 +102,8 @@ g_string_chunk_free (GStringChunk *fchunk)
   GRealStringChunk *chunk = (GRealStringChunk*) fchunk;
   GSList *tmp_list;
 
+  g_return_if_fail (chunk != NULL);
+
   if (chunk->storage_list)
     {
       GListAllocator *tmp_allocator = g_slist_set_allocator (NULL);
@@ -126,6 +129,8 @@ g_string_chunk_insert (GStringChunk *fchunk,
   GRealStringChunk *chunk = (GRealStringChunk*) fchunk;
   gint len = strlen (string);
   char* pos;
+
+  g_return_val_if_fail (chunk != NULL, NULL);
 
   if ((chunk->storage_next + len + 1) > chunk->this_size)
     {
@@ -159,6 +164,8 @@ g_string_chunk_insert_const (GStringChunk *fchunk,
 {
   GRealStringChunk *chunk = (GRealStringChunk*) fchunk;
   char* lookup;
+
+  g_return_val_if_fail (chunk != NULL, NULL);
 
   if (!chunk->const_table)
     chunk->const_table = g_hash_table_new (g_str_hash, g_str_equal);
@@ -198,7 +205,7 @@ g_string_maybe_expand (GRealString* string, gint len)
 }
 
 GString*
-g_string_new (gchar *init)
+g_string_new (const gchar *init)
 {
   GRealString *string;
 
@@ -220,8 +227,11 @@ g_string_new (gchar *init)
 }
 
 void
-g_string_free (GString *string, gint free_segment)
+g_string_free (GString *string,
+	       gint free_segment)
 {
+  g_return_if_fail (string != NULL);
+
   if (free_segment)
     g_free (string->str);
 
@@ -230,7 +240,7 @@ g_string_free (GString *string, gint free_segment)
 
 GString*
 g_string_assign (GString *lval,
-		 char *rval)
+		 const gchar *rval)
 {
   g_string_truncate (lval, 0);
   g_string_append (lval, rval);
@@ -239,9 +249,12 @@ g_string_assign (GString *lval,
 }
 
 GString*
-g_string_truncate (GString* fstring, gint len)
+g_string_truncate (GString* fstring,
+		   gint len)
 {
   GRealString *string = (GRealString*)fstring;
+
+  g_return_val_if_fail (string != NULL, NULL);
 
   string->len = len;
 
@@ -251,11 +264,13 @@ g_string_truncate (GString* fstring, gint len)
 }
 
 GString*
-g_string_append (GString *fstring, gchar *val)
+g_string_append (GString *fstring,
+		 const gchar *val)
 {
   GRealString *string = (GRealString*)fstring;
   int len;
 
+  g_return_val_if_fail (string != NULL, NULL);
   g_return_val_if_fail (val != NULL, fstring);
   
   len = strlen (val);
@@ -269,10 +284,12 @@ g_string_append (GString *fstring, gchar *val)
 }
 
 GString*
-g_string_append_c (GString *fstring, char c)
+g_string_append_c (GString *fstring,
+		   gchar c)
 {
   GRealString *string = (GRealString*)fstring;
 
+  g_return_val_if_fail (string != NULL, NULL);
   g_string_maybe_expand (string, 1);
 
   string->str[string->len++] = c;
@@ -282,11 +299,13 @@ g_string_append_c (GString *fstring, char c)
 }
 
 GString*
-g_string_prepend (GString *fstring, gchar *val)
+g_string_prepend (GString *fstring,
+		  const gchar *val)
 {
   GRealString *string = (GRealString*)fstring;
   gint len;
 
+  g_return_val_if_fail (string != NULL, NULL);
   g_return_val_if_fail (val != NULL, fstring);
 
   len = strlen (val);
@@ -304,10 +323,12 @@ g_string_prepend (GString *fstring, gchar *val)
 }
 
 GString*
-g_string_prepend_c (GString *fstring, char c)
+g_string_prepend_c (GString *fstring,
+		    gchar    c)
 {
   GRealString *string = (GRealString*)fstring;
 
+  g_return_val_if_fail (string != NULL, NULL);
   g_string_maybe_expand (string, 1);
 
   g_memmove (string->str + 1, string->str, string->len);
@@ -321,12 +342,15 @@ g_string_prepend_c (GString *fstring, char c)
   return fstring;
 }
 
-GString *
-g_string_insert (GString *fstring, gint pos, gchar *val)
+GString*
+g_string_insert (GString     *fstring,
+		 gint         pos,
+		 const gchar *val)
 {
   GRealString *string = (GRealString*)fstring;
   gint len;
 
+  g_return_val_if_fail (string != NULL, NULL);
   g_return_val_if_fail (val != NULL, fstring);
   g_return_val_if_fail (pos >= 0, fstring);
   g_return_val_if_fail (pos <= string->len, fstring);
@@ -346,10 +370,13 @@ g_string_insert (GString *fstring, gint pos, gchar *val)
 }
 
 GString *
-g_string_insert_c (GString *fstring, gint pos, gchar c)
+g_string_insert_c (GString *fstring,
+		   gint     pos,
+		   gchar    c)
 {
   GRealString *string = (GRealString*)fstring;
 
+  g_return_val_if_fail (string != NULL, NULL);
   g_return_val_if_fail (pos <= string->len, fstring);
 
   g_string_maybe_expand (string, 1);
@@ -365,11 +392,14 @@ g_string_insert_c (GString *fstring, gint pos, gchar c)
   return fstring;
 }
 
-GString *
-g_string_erase (GString *fstring, gint pos, gint len)
+GString*
+g_string_erase (GString *fstring,
+		gint pos,
+		gint len)
 {
   GRealString *string = (GRealString*)fstring;
 
+  g_return_val_if_fail (string != NULL, NULL);
   g_return_val_if_fail (len >= 0, fstring);
   g_return_val_if_fail (pos >= 0, fstring);
   g_return_val_if_fail (pos <= string->len, fstring);
@@ -381,6 +411,44 @@ g_string_erase (GString *fstring, gint pos, gint len)
   string->len -= len;
   
   string->str[string->len] = 0;
+
+  return fstring;
+}
+
+GString*
+g_string_down (GString *fstring)
+{
+  GRealString *string = (GRealString*)fstring;
+  gchar *s;
+
+  g_return_val_if_fail (string != NULL, NULL);
+
+  s = string->str;
+
+  while (*s)
+    {
+      *s = tolower (*s);
+      s++;
+    }
+
+  return fstring;
+}
+
+GString*
+g_string_up (GString *fstring)
+{
+  GRealString *string = (GRealString*)fstring;
+  gchar *s;
+
+  g_return_val_if_fail (string != NULL, NULL);
+
+  s = string->str;
+
+  while (*s)
+    {
+      *s = toupper (*s);
+      s++;
+    }
 
   return fstring;
 }
@@ -524,7 +592,7 @@ g_vsprintf (const gchar *fmt,
 
 static void
 g_string_sprintfa_int (GString *string,
-		       gchar *fmt,
+		       const gchar *fmt,
 		       va_list *args,
 		       va_list *args2)
 {
@@ -532,7 +600,9 @@ g_string_sprintfa_int (GString *string,
 }
 
 void
-g_string_sprintf (GString *string, gchar *fmt, ...)
+g_string_sprintf (GString *string,
+		  const gchar *fmt,
+		  ...)
 {
   va_list args, args2;
 
@@ -548,7 +618,9 @@ g_string_sprintf (GString *string, gchar *fmt, ...)
 }
 
 void
-g_string_sprintfa (GString *string, gchar *fmt, ...)
+g_string_sprintfa (GString *string,
+		   const gchar *fmt,
+		   ...)
 {
   va_list args, args2;
 

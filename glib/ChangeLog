@@ -1,3 +1,32 @@
+Thu May  7 08:17:28 1998  Tim Janik  <timj@gtk.org>
+
+	* glib.h (G_GNUC_PRINTF):
+	(G_GNUC_SCANF): macros to facilitate the printf/scanf format argument
+	checking of gcc.
+
+	* gstring.c: const corrections, string!=NULL checks at function entry.
+	(g_string_down): new function for tolower(3) conversion.
+	(g_string_up): new function for toupper(3) conversion.
+
+	* gutils.c: const corrections.
+	(g_strdown): g_string_down() counterpart.
+	(g_strup): g_string_up() counterpart.
+
+	* gscanner.c (g_scanner_unexp_token):
+ 	(g_scanner_error):
+	(g_scanner_warn): new functions to let a scanner put out warnings
+ 	or errors, especially to react on unexpected tokens.
+
+	* gslist.c:
+ 	(g_slist_index): find out about about the position of a
+	certain data pointer.
+ 	(g_slist_position): find out about about the position of a
+	certain node.
+
+	* glist.c:
+ 	(g_list_index): find out about about the position of a
+	certain data pointer.
+
 Thu May  7 05:14:19 1998  Tim Janik  <timj@gtk.org>
 
 	* ltmain.sh: added a new commandline flag -postfix similar to -release,
