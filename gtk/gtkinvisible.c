@@ -33,7 +33,7 @@ gtk_invisible_get_type (void)
 
   if (!invisible_type)
     {
-      GtkTypeInfo invisible_info =
+      static const GtkTypeInfo invisible_info =
       {
 	"GtkInvisible",
 	sizeof (GtkInvisible),

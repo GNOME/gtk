@@ -57,7 +57,7 @@ gtk_accel_label_get_type (void)
   
   if (!accel_label_type)
     {
-      GtkTypeInfo accel_label_info =
+      static const GtkTypeInfo accel_label_info =
       {
 	"GtkAccelLabel",
 	sizeof (GtkAccelLabel),

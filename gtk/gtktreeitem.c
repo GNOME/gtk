@@ -99,7 +99,7 @@ gtk_tree_item_get_type (void)
 
   if (!tree_item_type)
     {
-      GtkTypeInfo tree_item_info =
+      static const GtkTypeInfo tree_item_info =
       {
 	"GtkTreeItem",
 	sizeof (GtkTreeItem),

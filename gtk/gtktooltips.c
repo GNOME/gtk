@@ -58,7 +58,7 @@ gtk_tooltips_get_type (void)
 
   if (!tooltips_type)
     {
-      GtkTypeInfo tooltips_info =
+      static const GtkTypeInfo tooltips_info =
       {
 	"GtkTooltips",
 	sizeof (GtkTooltips),

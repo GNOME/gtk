@@ -34,7 +34,7 @@ gtk_hbox_get_type (void)
 
   if (!hbox_type)
     {
-      GtkTypeInfo hbox_info =
+      static const GtkTypeInfo hbox_info =
       {
 	"GtkHBox",
 	sizeof (GtkHBox),

@@ -1,3 +1,11 @@
+1998-11-30  Elliot Lee  <sopwith@cuc.ml.org>
+
+	* {gdk,gtk}/*.c: Make read-only data structures "static const" to
+	allow them to be shared, mainly including (but not limited to) the
+	GtkTypeInfo structures for each class.
+
+	* gtk/gtkfilesel.c: Add /net to the "leave me alone" directory listing.
+
 Mon Nov 30 12:17:10 1998  Jeff Garzik  <jgarzik@pobox.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_reorder_child):

@@ -93,7 +93,7 @@
 /* These are what we use as the standard font sizes, for the size clist.
    Note that when using points we still show these integer point values but
    we work internally in decipoints (and decipoint values can be typed in). */
-static guint16 font_sizes[] = {
+static const guint16 font_sizes[] = {
   8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 22, 24, 26, 28,
   32, 36, 40, 48, 56, 64, 72
 };
@@ -198,7 +198,7 @@ typedef enum
 } FontField;
 
 /* These are the names of the fields, used on the info & filter page. */
-static gchar* xlfd_field_names[GTK_XLFD_NUM_FIELDS] = {
+static const gchar* xlfd_field_names[GTK_XLFD_NUM_FIELDS] = {
   "Foundry:",
   "Family:",
   "Weight:",
@@ -228,7 +228,7 @@ typedef enum
 
 /* This is used to look up a field in a fontname given one of the above
    property indices. */
-static FontField xlfd_index[GTK_NUM_FONT_PROPERTIES] = {
+static const FontField xlfd_index[GTK_NUM_FONT_PROPERTIES] = {
   XLFD_WEIGHT,
   XLFD_SLANT,
   XLFD_SET_WIDTH,
@@ -238,10 +238,10 @@ static FontField xlfd_index[GTK_NUM_FONT_PROPERTIES] = {
 };
 
 /* These are the positions of the properties in the filter table - x, y. */
-static gint filter_positions[GTK_NUM_FONT_PROPERTIES][2] = {
+static const gint filter_positions[GTK_NUM_FONT_PROPERTIES][2] = {
   { 1, 0 }, { 0, 2 }, { 1, 2 }, { 2, 2 }, { 2, 0 }, { 0, 0 }
 };
-static gint filter_heights[GTK_NUM_FONT_PROPERTIES] = {
+static const gint filter_heights[GTK_NUM_FONT_PROPERTIES] = {
   100, 70, 70, 40, 100, 100
 };
 
@@ -396,7 +396,7 @@ gtk_font_selection_get_type()
   
   if(!font_selection_type)
     {
-      GtkTypeInfo fontsel_type_info =
+      static const GtkTypeInfo fontsel_type_info =
       {
 	"GtkFontSelection",
 	sizeof (GtkFontSelection),

@@ -58,7 +58,7 @@ enum
     NUM_XPMS
   };
 
-static char *xpm[][27] =
+static const char *xpm[][27] =
   {
     /* spline: */
     {
@@ -209,7 +209,7 @@ gtk_gamma_curve_get_type (void)
 
   if (!gamma_curve_type)
     {
-      GtkTypeInfo gamma_curve_info =
+      static const GtkTypeInfo gamma_curve_info =
       {
 	"GtkGammaCurve",
 	sizeof (GtkGammaCurve),

@@ -100,7 +100,7 @@ gtk_table_get_type (void)
   
   if (!table_type)
     {
-      GtkTypeInfo table_info =
+      static const GtkTypeInfo table_info =
       {
 	"GtkTable",
 	sizeof (GtkTable),

@@ -99,7 +99,7 @@ gtk_range_get_type (void)
 
   if (!range_type)
     {
-      GtkTypeInfo range_info =
+      static const GtkTypeInfo range_info =
       {
 	"GtkRange",
 	sizeof (GtkRange),

@@ -53,7 +53,7 @@ gtk_radio_button_get_type (void)
 
   if (!radio_button_type)
     {
-      GtkTypeInfo radio_button_info =
+      static const GtkTypeInfo radio_button_info =
       {
 	"GtkRadioButton",
 	sizeof (GtkRadioButton),

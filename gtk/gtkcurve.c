@@ -58,7 +58,7 @@ gtk_curve_get_type (void)
 
   if (!curve_type)
     {
-      GtkTypeInfo curve_info =
+      static const GtkTypeInfo curve_info =
       {
 	"GtkCurve",
 	sizeof (GtkCurve),

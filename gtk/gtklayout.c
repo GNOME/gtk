@@ -305,7 +305,7 @@ gtk_layout_get_type (void)
 
   if (!layout_type)
     {
-      GtkTypeInfo layout_info =
+      static const GtkTypeInfo layout_info =
       {
 	"GtkLayout",
 	sizeof (GtkLayout),

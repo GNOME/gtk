@@ -58,7 +58,7 @@ gtk_vscrollbar_get_type (void)
   
   if (!vscrollbar_type)
     {
-      GtkTypeInfo vscrollbar_info =
+      static const GtkTypeInfo vscrollbar_info =
       {
         "GtkVScrollbar",
         sizeof (GtkVScrollbar),

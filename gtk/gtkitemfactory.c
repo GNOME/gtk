@@ -158,7 +158,7 @@ gtk_item_factory_get_type (void)
   
   if (!item_factory_type)
     {
-      GtkTypeInfo item_factory_info =
+      static const GtkTypeInfo item_factory_info =
       {
 	"GtkItemFactory",
 	sizeof (GtkItemFactory),

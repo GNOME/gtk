@@ -72,7 +72,7 @@ gtk_viewport_get_type (void)
 
   if (!viewport_type)
     {
-      GtkTypeInfo viewport_info =
+      static const GtkTypeInfo viewport_info =
       {
 	"GtkViewport",
 	sizeof (GtkViewport),

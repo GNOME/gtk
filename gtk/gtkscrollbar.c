@@ -28,7 +28,7 @@ gtk_scrollbar_get_type (void)
 
   if (!scrollbar_type)
     {
-      GtkTypeInfo scrollbar_info =
+      static const GtkTypeInfo scrollbar_info =
       {
 	"GtkScrollbar",
 	sizeof (GtkScrollbar),

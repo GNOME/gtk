@@ -34,7 +34,7 @@ gtk_radio_menu_item_get_type (void)
 
   if (!radio_menu_item_type)
     {
-      GtkTypeInfo radio_menu_item_info =
+      static const GtkTypeInfo radio_menu_item_info =
       {
         "GtkRadioMenuItem",
         sizeof (GtkRadioMenuItem),

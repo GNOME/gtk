@@ -162,7 +162,7 @@ gtk_type_set_chunk_alloc (GtkType      type,
 static GtkType
 gtk_type_create (GtkType      parent_type,
 		 gchar	      *type_name,
-		 GtkTypeInfo *type_info)
+		 const GtkTypeInfo *type_info)
 {
   GtkTypeNode *new_node;
   GtkTypeNode *parent;
@@ -230,7 +230,7 @@ gtk_type_create (GtkType      parent_type,
 
 GtkType
 gtk_type_unique (GtkType      parent_type,
-		 GtkTypeInfo *type_info)
+		 const GtkTypeInfo *type_info)
 {
   GtkType new_type;
   gchar *type_name;
@@ -915,7 +915,7 @@ gtk_type_init_builtin_types (void)
    * gtk_type_unique is 1, which is GTK_TYPE_NONE.  And so on.
    */
   
-  struct {
+  static const struct {
     GtkType type_id;
     gchar *name;
   } fundamental_info[] = {
@@ -941,7 +941,7 @@ gtk_type_init_builtin_types (void)
     { GTK_TYPE_C_CALLBACK,	"GtkCCallback" },
     { GTK_TYPE_FOREIGN,		"GtkForeign" },
   };
-  struct {
+  static struct {
     gchar *type_name;
     GtkType *type_id;
     GtkType parent;

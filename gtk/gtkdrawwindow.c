@@ -33,7 +33,7 @@ gtk_draw_window_get_type (void)
 
   if (!draw_window_type)
     {
-      GtkTypeInfo draw_window_info =
+      static const GtkTypeInfo draw_window_info =
       {
 	"GtkDrawWindow",
 	sizeof (GtkDrawWindow),

@@ -702,7 +702,7 @@ gboolean
 gtk_accelerator_valid (guint		  keyval,
 		       GdkModifierType	  modifiers)
 {
-  guint invalid_accelerator_vals[] = {
+  static const guint invalid_accelerator_vals[] = {
     GDK_BackSpace, GDK_Delete, GDK_KP_Delete,
     GDK_Shift_L, GDK_Shift_R, GDK_Shift_Lock, GDK_Caps_Lock, GDK_ISO_Lock,
     GDK_Control_L, GDK_Control_R, GDK_Meta_L, GDK_Meta_R,
@@ -880,7 +880,7 @@ gtk_accelerator_parse (const gchar    *accelerator,
 	    }
 	  else if (len >= 6 && is_modx (accelerator))
 	    {
-	      guint mod_vals[] = {
+	      static const guint mod_vals[] = {
 		GDK_MOD1_MASK, GDK_MOD2_MASK, GDK_MOD3_MASK,
 		GDK_MOD4_MASK, GDK_MOD5_MASK
 	      };

@@ -59,7 +59,7 @@ gtk_menu_bar_get_type (void)
 
   if (!menu_bar_type)
     {
-      GtkTypeInfo menu_bar_info =
+      static const GtkTypeInfo menu_bar_info =
       {
 	"GtkMenuBar",
 	sizeof (GtkMenuBar),

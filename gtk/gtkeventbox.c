@@ -40,7 +40,7 @@ gtk_event_box_get_type (void)
 
   if (!event_box_type)
     {
-      GtkTypeInfo event_box_info =
+      static const GtkTypeInfo event_box_info =
       {
 	"GtkEventBox",
 	sizeof (GtkEventBox),

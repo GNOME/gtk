@@ -39,7 +39,7 @@ gtk_data_get_type (void)
 
   if (!data_type)
     {
-      GtkTypeInfo data_info =
+      static const GtkTypeInfo data_info =
       {
 	"GtkData",
 	sizeof (GtkData),

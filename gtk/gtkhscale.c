@@ -70,7 +70,7 @@ gtk_hscale_get_type (void)
   
   if (!hscale_type)
     {
-      GtkTypeInfo hscale_info =
+      static const GtkTypeInfo hscale_info =
       {
         "GtkHScale",
         sizeof (GtkHScale),

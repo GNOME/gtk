@@ -107,7 +107,7 @@ gtk_window_get_type (void)
 
   if (!window_type)
     {
-      GtkTypeInfo window_info =
+      static const GtkTypeInfo window_info =
       {
 	"GtkWindow",
 	sizeof (GtkWindow),

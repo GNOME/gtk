@@ -43,13 +43,13 @@ typedef enum { false = FALSE , true = TRUE } boolean;
 #define and	    &&	    /* logical (boolean) operators: lower case */
 #define or	    ||
 
-static N_int month_length[2][13] =
+static const N_int month_length[2][13] =
 {
   { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
   { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 };
 
-static N_int days_in_months[2][14] =
+static const N_int days_in_months[2][14] =
 {
   { 0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 },
   { 0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
@@ -313,7 +313,7 @@ gtk_calendar_get_type (void)
   
   if (!calendar_type)
     {
-      GtkTypeInfo calendar_info =
+      static const GtkTypeInfo calendar_info =
       {
 	"GtkCalendar",
 	sizeof (GtkCalendar),

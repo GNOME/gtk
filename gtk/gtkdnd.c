@@ -302,10 +302,10 @@ static struct {
   { 0              ,  action_none_bits, action_none_mask_bits, NULL },
 };
 
-static gint n_drag_cursors = sizeof(drag_cursors) / sizeof(drag_cursors[0]);
+static const gint n_drag_cursors = sizeof(drag_cursors) / sizeof(drag_cursors[0]);
 
 /* XPM */
-static char * drag_default_xpm[] = {
+static const char * drag_default_xpm[] = {
 "32 32 3 1",
 " 	c None",
 ".	c #000000",

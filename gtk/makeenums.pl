@@ -204,7 +204,7 @@ while (<>) {
             $valuename =~ s/([A-Z][A-Z])([A-Z][0-9a-z])/$1_$2/g;
             $valuename = lc($valuename);
 
-	    print "static GtkEnumValue _${valuename}_values[] = {\n";
+	    print "static const GtkEnumValue _${valuename}_values[] = {\n";
 	    for (@entries) {
 		my ($name,$nick) = @{$_};
 		print qq(  { $name, "$name", "$nick" },\n);

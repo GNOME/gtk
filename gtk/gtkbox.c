@@ -76,7 +76,7 @@ gtk_box_get_type (void)
 
   if (!box_type)
     {
-      GtkTypeInfo box_info =
+      static const GtkTypeInfo box_info =
       {
 	"GtkBox",
 	sizeof (GtkBox),

@@ -61,7 +61,7 @@ gtk_frame_get_type (void)
 
   if (!frame_type)
     {
-      GtkTypeInfo frame_info =
+      static const GtkTypeInfo frame_info =
       {
 	"GtkFrame",
 	sizeof (GtkFrame),

@@ -38,9 +38,9 @@ static GdkDevicePrivate *gdk_input_find_device (guint32 id);
 
 /* Incorporate the specific routines depending on compilation options */
 
-static GdkAxisUse gdk_input_core_axes[] = { GDK_AXIS_X, GDK_AXIS_Y };
+static const GdkAxisUse gdk_input_core_axes[] = { GDK_AXIS_X, GDK_AXIS_Y };
 
-static GdkDeviceInfo gdk_input_core_info =
+static const GdkDeviceInfo gdk_input_core_info =
 {
   GDK_CORE_POINTER,
   "Core Pointer",

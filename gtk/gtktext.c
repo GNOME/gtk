@@ -432,7 +432,7 @@ static GMemChunk  *text_property_chunk = NULL;
 static GtkWidgetClass *parent_class = NULL;
 
 
-static GtkTextFunction control_keys[26] =
+static const GtkTextFunction control_keys[26] =
 {
   (GtkTextFunction)gtk_text_move_beginning_of_line,    /* a */
   (GtkTextFunction)gtk_text_move_backward_character,   /* b */
@@ -462,7 +462,7 @@ static GtkTextFunction control_keys[26] =
   NULL,                                                /* z */
 };
 
-static GtkTextFunction alt_keys[26] =
+static const GtkTextFunction alt_keys[26] =
 {
   NULL,                                                /* a */
   (GtkTextFunction)gtk_text_move_backward_word,        /* b */
@@ -504,7 +504,7 @@ gtk_text_get_type (void)
   
   if (!text_type)
     {
-      GtkTypeInfo text_info =
+      static const GtkTypeInfo text_info =
       {
 	"GtkText",
 	sizeof (GtkText),

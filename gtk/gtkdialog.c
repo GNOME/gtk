@@ -34,7 +34,7 @@ gtk_dialog_get_type (void)
 
   if (!dialog_type)
     {
-      GtkTypeInfo dialog_info =
+      static const GtkTypeInfo dialog_info =
       {
 	"GtkDialog",
 	sizeof (GtkDialog),

@@ -33,8 +33,7 @@
 #include <X11/extensions/shape.h>
 #endif
 
-int nevent_masks = 20;
-int event_mask_table[20] =
+const int event_mask_table[20] =
 {
   ExposureMask,
   PointerMotionMask,
@@ -57,6 +56,7 @@ int event_mask_table[20] =
   0,				/* PROXIMTY_OUT */
   SubstructureNotifyMask
 };
+const int nevent_masks = sizeof(event_mask_table)/sizeof(int);
 
 static gboolean gdk_window_have_shape_ext (void);
 

@@ -34,7 +34,7 @@ gtk_vbox_get_type (void)
 
   if (!vbox_type)
     {
-      GtkTypeInfo vbox_info =
+      static const GtkTypeInfo vbox_info =
       {
 	"GtkVBox",
 	sizeof (GtkVBox),

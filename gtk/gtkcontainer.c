@@ -112,7 +112,7 @@ gtk_container_get_type (void)
 
   if (!container_type)
     {
-      GtkTypeInfo container_info =
+      static const GtkTypeInfo container_info =
       {
 	"GtkContainer",
 	sizeof (GtkContainer),

@@ -329,7 +329,7 @@ gtk_file_selection_get_type (void)
 
   if (!file_selection_type)
     {
-      GtkTypeInfo filesel_info =
+      static const GtkTypeInfo filesel_info =
       {
 	"GtkFileSelection",
 	sizeof (GtkFileSelection),
@@ -369,8 +369,8 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   GtkWidget *pulldown_hbox;
   GtkWidget *scrolled_win;
 
-  char *dir_title [] = { "Directories", };
-  char *file_title [] = { "Files", };
+  static const char *dir_title [] = { "Directories", NULL };
+  static const char *file_title [] = { "Files", NULL };
   
   filesel->cmpl_state = cmpl_init_state ();
 
@@ -2026,15 +2026,16 @@ check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
    * expensive.
    */
 
-  static struct {
+  static const struct {
     gchar *name;
     gboolean present;
     struct stat statbuf;
   } no_stat_dirs[] = {
     { "/afs", FALSE, { 0 } },
+    { "/net", FALSE, { 0 } }
   };
 
-  static gint n_no_stat_dirs = sizeof(no_stat_dirs) / sizeof(no_stat_dirs[0]);
+  static const gint n_no_stat_dirs = sizeof(no_stat_dirs) / sizeof(no_stat_dirs[0]);
   static gboolean initialized = FALSE;
 
   gint i;

@@ -218,7 +218,7 @@ gtk_widget_get_type (void)
   
   if (!widget_type)
     {
-      GtkTypeInfo widget_info =
+      static const GtkTypeInfo widget_info =
       {
 	"GtkWidget",
 	sizeof (GtkWidget),

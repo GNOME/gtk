@@ -70,7 +70,7 @@ gtk_vscale_get_type (void)
   
   if (!vscale_type)
     {
-      GtkTypeInfo vscale_info =
+      static const GtkTypeInfo vscale_info =
       {
         "GtkVScale",
         sizeof (GtkVScale),

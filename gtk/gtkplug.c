@@ -44,7 +44,7 @@ gtk_plug_get_type ()
 
   if (!plug_type)
     {
-      GtkTypeInfo plug_info =
+      static const GtkTypeInfo plug_info =
       {
 	"GtkPlug",
 	sizeof (GtkPlug),

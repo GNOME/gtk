@@ -51,7 +51,7 @@ gtk_preview_get_type (void)
 
   if (!preview_type)
     {
-      GtkTypeInfo preview_info =
+      static const GtkTypeInfo preview_info =
       {
         "GtkPreview",
         sizeof (GtkPreview),

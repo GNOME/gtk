@@ -43,7 +43,7 @@ gtk_tearoff_menu_item_get_type (void)
 
   if (!tearoff_menu_item_type)
     {
-      GtkTypeInfo tearoff_menu_item_info =
+      static const GtkTypeInfo tearoff_menu_item_info =
       {
         "GtkTearoffMenuItem",
         sizeof (GtkTearoffMenuItem),

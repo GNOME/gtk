@@ -48,7 +48,7 @@ gtk_bin_get_type (void)
 
   if (!bin_type)
     {
-      GtkTypeInfo bin_info =
+      static const GtkTypeInfo bin_info =
       {
 	"GtkBin",
 	sizeof (GtkBin),

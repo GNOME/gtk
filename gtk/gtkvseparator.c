@@ -32,7 +32,7 @@ gtk_vseparator_get_type (void)
 
   if (!vseparator_type)
     {
-      GtkTypeInfo vseparator_info =
+      static const GtkTypeInfo vseparator_info =
       {
 	"GtkVSeparator",
 	sizeof (GtkVSeparator),

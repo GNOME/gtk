@@ -43,7 +43,7 @@ gtk_hpaned_get_type (void)
 
   if (!hpaned_type)
     {
-      GtkTypeInfo hpaned_info =
+      static const GtkTypeInfo hpaned_info =
       {
 	"GtkHPaned",
 	sizeof (GtkHPaned),

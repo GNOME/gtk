@@ -71,7 +71,7 @@ gtk_toggle_button_get_type (void)
 
   if (!toggle_button_type)
     {
-      GtkTypeInfo toggle_button_info =
+      static const GtkTypeInfo toggle_button_info =
       {
 	"GtkToggleButton",
 	sizeof (GtkToggleButton),

@@ -147,7 +147,7 @@ gtk_menu_shell_get_type (void)
 
   if (!menu_shell_type)
     {
-      GtkTypeInfo menu_shell_info =
+      static const GtkTypeInfo menu_shell_info =
       {
 	"GtkMenuShell",
 	sizeof (GtkMenuShell),

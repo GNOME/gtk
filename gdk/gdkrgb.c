@@ -304,7 +304,7 @@ gdk_rgb_try_colormap (gint nr, gint ng, gint nb)
 static gboolean
 gdk_rgb_do_colormaps (void)
 {
-  const gint sizes[][3] = {
+  static const gint sizes[][3] = {
     /*    { 6, 7, 6 }, */
     { 6, 6, 6 }, 
     { 6, 6, 5 }, 
@@ -316,7 +316,7 @@ gdk_rgb_do_colormaps (void)
     { 3, 3, 3 }, 
     { 2, 2, 2 }
   };
-  const gint n_sizes = sizeof(sizes) / (3 * sizeof(gint));
+  static const gint n_sizes = sizeof(sizes) / (3 * sizeof(gint));
   gint i;
 
   for (i = 0; i < n_sizes; i++)
@@ -387,7 +387,7 @@ static guint32
 gdk_rgb_score_visual (GdkVisual *visual)
 {
   guint32 quality, speed, sys, pseudo;
-  gchar* visual_names[] =
+  static const gchar* visual_names[] =
   {
     "static gray",
     "grayscale",
@@ -535,7 +535,7 @@ void
 gdk_rgb_init (void)
 {
   gint i;
-  gint byte_order[1] = { 1 };
+  static const gint byte_order[1] = { 1 };
 
   /* check endian sanity */
 #if G_BYTE_ORDER == G_BIG_ENDIAN
@@ -982,7 +982,7 @@ static const guchar DM[128][128] =
 #define DM_WIDTH 8
 #define DM_WIDTH_SHIFT 3
 #define DM_HEIGHT 8
-static guchar DM[8][8] =
+static const guchar DM[8][8] =
 {
   { 0,  32, 8,  40, 2,  34, 10, 42 },
   { 48, 16, 56, 24, 50, 18, 58, 26 },

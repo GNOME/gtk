@@ -33,7 +33,7 @@ gtk_image_get_type (void)
 
   if (!image_type)
     {
-      GtkTypeInfo image_info =
+      static const GtkTypeInfo image_info =
       {
 	"GtkImage",
 	sizeof (GtkImage),

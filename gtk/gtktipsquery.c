@@ -79,7 +79,7 @@ gtk_tips_query_get_type (void)
 
   if (!tips_query_type)
     {
-      GtkTypeInfo tips_query_info =
+      static const GtkTypeInfo tips_query_info =
       {
 	"GtkTipsQuery",
 	sizeof (GtkTipsQuery),

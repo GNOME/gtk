@@ -43,7 +43,7 @@ gtk_vpaned_get_type (void)
 
   if (!vpaned_type)
     {
-      GtkTypeInfo vpaned_info =
+      static const GtkTypeInfo vpaned_info =
       {
 	"GtkVPaned",
 	sizeof (GtkVPaned),

@@ -50,7 +50,7 @@ gtk_alignment_get_type (void)
 
   if (!alignment_type)
     {
-      GtkTypeInfo alignment_info =
+      static const GtkTypeInfo alignment_info =
       {
 	"GtkAlignment",
 	sizeof (GtkAlignment),

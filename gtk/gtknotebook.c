@@ -210,7 +210,7 @@ gtk_notebook_get_type (void)
 
   if (!notebook_type)
     {
-      GtkTypeInfo notebook_info =
+      static const GtkTypeInfo notebook_info =
       {
 	"GtkNotebook",
 	sizeof (GtkNotebook),

@@ -77,7 +77,7 @@ gtk_menu_item_get_type (void)
 
   if (!menu_item_type)
     {
-      GtkTypeInfo menu_item_info =
+      static const GtkTypeInfo menu_item_info =
       {
 	"GtkMenuItem",
 	sizeof (GtkMenuItem),

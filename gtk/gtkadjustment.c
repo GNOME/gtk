@@ -41,7 +41,7 @@ gtk_adjustment_get_type (void)
 
   if (!adjustment_type)
     {
-      GtkTypeInfo adjustment_info =
+      static const GtkTypeInfo adjustment_info =
       {
 	"GtkAdjustment",
 	sizeof (GtkAdjustment),

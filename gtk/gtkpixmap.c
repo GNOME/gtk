@@ -39,7 +39,7 @@ gtk_pixmap_get_type (void)
 
   if (!pixmap_type)
     {
-      GtkTypeInfo pixmap_info =
+      static const GtkTypeInfo pixmap_info =
       {
 	"GtkPixmap",
 	sizeof (GtkPixmap),

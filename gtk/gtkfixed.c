@@ -54,7 +54,7 @@ gtk_fixed_get_type (void)
 
   if (!fixed_type)
     {
-      GtkTypeInfo fixed_info =
+      static const GtkTypeInfo fixed_info =
       {
 	"GtkFixed",
 	sizeof (GtkFixed),

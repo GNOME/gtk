@@ -196,7 +196,7 @@ static const gchar	*value_index_key = "gtk-value-index";
 #define SF GtkSignalFunc
 
 
-scale_val_type scale_vals[NUM_CHANNELS] =
+static const scale_val_type scale_vals[NUM_CHANNELS] =
 {
   {"Hue:",        0.0, 360.0, 1.00, 10.00, (SF) gtk_color_selection_hsv_updater},
   {"Saturation:", 0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_hsv_updater},
@@ -214,7 +214,7 @@ gtk_color_selection_get_type (void)
 
   if (!color_selection_type)
     {
-      GtkTypeInfo colorsel_info =
+      static const GtkTypeInfo colorsel_info =
       {
 	"GtkColorSelection",
 	sizeof (GtkColorSelection),
@@ -517,7 +517,7 @@ gtk_color_selection_realize (GtkWidget         *widget)
 {
   GtkColorSelection *colorsel;
 
-  GtkTargetEntry targets[] = {
+  static const GtkTargetEntry targets[] = {
     { "application/x-color", 0 }
   };
 

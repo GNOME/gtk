@@ -34,7 +34,7 @@ gtk_drawing_area_get_type (void)
 
   if (!drawing_area_type)
     {
-      GtkTypeInfo drawing_area_info =
+      static const GtkTypeInfo drawing_area_info =
       {
 	"GtkDrawingArea",
 	sizeof (GtkDrawingArea),

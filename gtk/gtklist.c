@@ -154,7 +154,7 @@ gtk_list_get_type (void)
 
   if (!list_type)
     {
-      GtkTypeInfo list_info =
+      static const GtkTypeInfo list_info =
       {
 	"GtkList",
 	sizeof (GtkList),

@@ -52,7 +52,7 @@ gtk_check_button_get_type (void)
 
   if (!check_button_type)
     {
-      GtkTypeInfo check_button_info =
+      static const GtkTypeInfo check_button_info =
       {
 	"GtkCheckButton",
 	sizeof (GtkCheckButton),

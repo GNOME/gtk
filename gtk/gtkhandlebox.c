@@ -92,7 +92,7 @@ gtk_handle_box_get_type (void)
 
   if (!handle_box_type)
     {
-      GtkTypeInfo handle_box_info =
+      static const GtkTypeInfo handle_box_info =
       {
 	"GtkHandleBox",
 	sizeof (GtkHandleBox),

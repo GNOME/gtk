@@ -96,8 +96,8 @@ gtk_object_debug (void)
 void
 gtk_object_init_type (void)
 {
-  GtkType object_type = 0;
-  GtkTypeInfo object_info =
+  static GtkType object_type = 0;
+  static const GtkTypeInfo object_info =
   {
     "GtkObject",
     sizeof (GtkObject),

@@ -74,7 +74,7 @@ gtk_option_menu_get_type (void)
 
   if (!option_menu_type)
     {
-      GtkTypeInfo option_menu_info =
+      static const GtkTypeInfo option_menu_info =
       {
 	"GtkOptionMenu",
 	sizeof (GtkOptionMenu),

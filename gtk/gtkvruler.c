@@ -45,7 +45,7 @@ gtk_vruler_get_type (void)
 
   if (!vruler_type)
     {
-      GtkTypeInfo vruler_info =
+      static const GtkTypeInfo vruler_info =
       {
 	"GtkVRuler",
 	sizeof (GtkVRuler),

@@ -67,7 +67,7 @@ gtk_socket_get_type ()
 
   if (!socket_type)
     {
-      GtkTypeInfo socket_info =
+      static const GtkTypeInfo socket_info =
       {
 	"GtkSocket",
 	sizeof (GtkSocket),

@@ -47,7 +47,7 @@ gtk_arrow_get_type (void)
 
   if (!arrow_type)
     {
-      GtkTypeInfo arrow_info =
+      static const GtkTypeInfo arrow_info =
       {
 	"GtkArrow",
 	sizeof (GtkArrow),

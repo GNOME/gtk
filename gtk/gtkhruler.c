@@ -45,7 +45,7 @@ gtk_hruler_get_type (void)
 
   if (!hruler_type)
     {
-      GtkTypeInfo hruler_info =
+      static const GtkTypeInfo hruler_info =
       {
 	"GtkHRuler",
 	sizeof (GtkHRuler),

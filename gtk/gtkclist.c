@@ -396,7 +396,7 @@ gtk_clist_get_type (void)
 
   if (!clist_type)
     {
-      GtkTypeInfo clist_info =
+      static const GtkTypeInfo clist_info =
       {
 	"GtkCList",
 	sizeof (GtkCList),

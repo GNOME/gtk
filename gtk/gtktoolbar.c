@@ -74,7 +74,7 @@ gtk_toolbar_get_type (void)
 
   if (!toolbar_type)
     {
-      GtkTypeInfo toolbar_info =
+      static const GtkTypeInfo toolbar_info =
       {
 	"GtkToolbar",
 	sizeof (GtkToolbar),

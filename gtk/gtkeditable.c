@@ -109,7 +109,7 @@ gtk_editable_get_type (void)
 
   if (!editable_type)
     {
-      GtkTypeInfo editable_info =
+      static const GtkTypeInfo editable_info =
       {
 	"GtkEditable",
 	sizeof (GtkEditable),
@@ -371,12 +371,12 @@ gtk_editable_get_arg (GtkObject      *object,
 static void
 gtk_editable_init (GtkEditable *editable)
 {
-  static GtkTargetEntry targets[] = {
+  static const GtkTargetEntry targets[] = {
     { "STRING", TARGET_STRING },
     { "TEXT",   TARGET_TEXT }, 
     { "COMPOUND_TEXT", TARGET_COMPOUND_TEXT }
   };
-  static gint n_targets = sizeof(targets) / sizeof(targets[0]);
+  static const gint n_targets = sizeof(targets) / sizeof(targets[0]);
   
   GTK_WIDGET_SET_FLAGS (editable, GTK_CAN_FOCUS);
 

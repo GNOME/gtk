@@ -100,7 +100,7 @@ gtk_button_get_type (void)
 
   if (!button_type)
     {
-      GtkTypeInfo button_info =
+      static const GtkTypeInfo button_info =
       {
 	"GtkButton",
 	sizeof (GtkButton),

@@ -73,7 +73,7 @@ gtk_tree_get_type (void)
   
   if (!tree_type)
     {
-      GtkTypeInfo tree_info =
+      static const GtkTypeInfo tree_info =
       {
 	"GtkTree",
 	sizeof (GtkTree),

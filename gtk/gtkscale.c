@@ -42,7 +42,7 @@ gtk_scale_get_type (void)
 
   if (!scale_type)
     {
-      GtkTypeInfo scale_info =
+      static const GtkTypeInfo scale_info =
       {
 	"GtkScale",
 	sizeof (GtkScale),

@@ -44,7 +44,7 @@ gtk_aspect_frame_get_type (void)
 
   if (!aspect_frame_type)
     {
-      GtkTypeInfo aspect_frame_info =
+      static const GtkTypeInfo aspect_frame_info =
       {
 	"GtkAspectFrame",
 	sizeof (GtkAspectFrame),

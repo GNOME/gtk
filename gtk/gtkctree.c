@@ -298,7 +298,7 @@ gtk_ctree_get_type (void)
 
   if (!ctree_type)
     {
-      GtkTypeInfo ctree_info =
+      static const GtkTypeInfo ctree_info =
       {
 	"GtkCTree",
 	sizeof (GtkCTree),

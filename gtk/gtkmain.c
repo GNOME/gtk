@@ -216,7 +216,7 @@ static GdkColormap *gtk_colormap;	   /* The colormap to be used in creating new
 guint gtk_debug_flags = 0;		   /* Global GTK debug flag */
 
 #ifdef G_ENABLE_DEBUG
-static GDebugKey gtk_debug_keys[] = {
+static const GDebugKey gtk_debug_keys[] = {
   {"objects", GTK_DEBUG_OBJECTS},
   {"misc", GTK_DEBUG_MISC},
   {"signals", GTK_DEBUG_SIGNALS},

@@ -62,7 +62,7 @@ gtk_progress_get_type (void)
 
   if (!progress_type)
     {
-      GtkTypeInfo progress_info =
+      static const GtkTypeInfo progress_info =
       {
 	"GtkProgress",
 	sizeof (GtkProgress),

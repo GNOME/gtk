@@ -114,7 +114,7 @@ gtk_input_dialog_get_type (void)
 
   if (!input_dialog_type)
     {
-      GtkTypeInfo input_dialog_info =
+      static const GtkTypeInfo input_dialog_info =
       {
 	"GtkInputDialog",
 	sizeof (GtkInputDialog),
@@ -484,7 +484,7 @@ gtk_input_dialog_set_axis(GtkWidget *widget, gpointer data)
 static void
 gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDeviceInfo *info)
 {
-  static char *axis_use_strings[GDK_AXIS_LAST] =
+  static const char *axis_use_strings[GDK_AXIS_LAST] =
   {
     "",
     "X",

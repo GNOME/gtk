@@ -32,7 +32,7 @@ static void gtk_ruler_make_pixmap   (GtkRuler       *ruler);
 
 static GtkWidgetClass *parent_class;
 
-static GtkRulerMetric ruler_metrics[] =
+static const GtkRulerMetric ruler_metrics[] =
 {
   {"Pixels", "Pi", 1.0, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
   {"Inches", "In", 72.0, { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 }, { 1, 2, 4, 8, 16 }},
@@ -47,7 +47,7 @@ gtk_ruler_get_type (void)
 
   if (!ruler_type)
     {
-      GtkTypeInfo ruler_info =
+      static const GtkTypeInfo ruler_info =
       {
 	"GtkRuler",
 	sizeof (GtkRuler),

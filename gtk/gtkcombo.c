@@ -725,7 +725,7 @@ gtk_combo_get_type (void)
 
   if (!combo_type)
     {
-      GtkTypeInfo combo_info =
+      static const GtkTypeInfo combo_info =
       {
 	"GtkCombo",
 	sizeof (GtkCombo),

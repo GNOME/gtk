@@ -61,7 +61,7 @@ gtk_progress_bar_get_type (void)
 
   if (!progress_bar_type)
     {
-      GtkTypeInfo progress_bar_info =
+      static const GtkTypeInfo progress_bar_info =
       {
 	"GtkProgressBar",
 	sizeof (GtkProgressBar),

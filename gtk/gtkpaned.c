@@ -48,7 +48,7 @@ gtk_paned_get_type (void)
   
   if (!paned_type)
     {
-      GtkTypeInfo paned_info =
+      static const GtkTypeInfo paned_info =
       {
 	"GtkPaned",
 	sizeof (GtkPaned),

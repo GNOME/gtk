@@ -229,7 +229,7 @@ static gulong base_id;
 static gint autorepeat;
 
 #ifdef G_ENABLE_DEBUG
-static GDebugKey gdk_debug_keys[] = {
+static const GDebugKey gdk_debug_keys[] = {
   {"events",	    GDK_DEBUG_EVENTS},
   {"misc",	    GDK_DEBUG_MISC},
   {"dnd",	    GDK_DEBUG_DND},
@@ -1504,8 +1504,8 @@ gdk_pointer_grab (GdkWindow *	  window,
 		  guint32	  time)
 {
   /*  From gdkwindow.c	*/
-  extern int nevent_masks;
-  extern int event_mask_table[];
+  extern const int nevent_masks;
+  extern const int event_mask_table[];
   
   gint return_val;
   GdkWindowPrivate *window_private;

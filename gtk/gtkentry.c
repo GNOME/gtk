@@ -153,7 +153,7 @@ static void gtk_entry_set_position_from_editable (GtkEditable *editable,
 static GtkWidgetClass *parent_class = NULL;
 static GdkAtom ctext_atom = GDK_NONE;
 
-static GtkTextFunction control_keys[26] =
+static const GtkTextFunction control_keys[26] =
 {
   (GtkTextFunction)gtk_move_beginning_of_line,    /* a */
   (GtkTextFunction)gtk_move_backward_character,   /* b */
@@ -183,7 +183,7 @@ static GtkTextFunction control_keys[26] =
   NULL,                                           /* z */
 };
 
-static GtkTextFunction alt_keys[26] =
+static const GtkTextFunction alt_keys[26] =
 {
   NULL,                                           /* a */
   (GtkTextFunction)gtk_move_backward_word,        /* b */
@@ -221,7 +221,7 @@ gtk_entry_get_type (void)
 
   if (!entry_type)
     {
-      GtkTypeInfo entry_info =
+      static const GtkTypeInfo entry_info =
       {
 	"GtkEntry",
 	sizeof (GtkEntry),

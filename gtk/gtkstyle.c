@@ -287,7 +287,7 @@ static void rgb_to_hls (gdouble *r, gdouble *g, gdouble *b);
 static void hls_to_rgb (gdouble *h, gdouble *l, gdouble *s);
 
 
-GtkStyleClass default_class =
+static const GtkStyleClass default_class =
 {
    2,
    2,

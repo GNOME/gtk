@@ -119,7 +119,7 @@ gtk_spin_button_get_type (void)
 
   if (!spin_button_type)
     {
-      GtkTypeInfo spin_button_info =
+      static const GtkTypeInfo spin_button_info =
       {
 	"GtkSpinButton",
 	sizeof (GtkSpinButton),

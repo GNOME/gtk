@@ -49,7 +49,7 @@ gtk_statusbar_get_type (void)
 
   if (!statusbar_type)
     {
-      GtkTypeInfo statusbar_info =
+      static const GtkTypeInfo statusbar_info =
       {
         "GtkStatusbar",
         sizeof (GtkStatusbar),

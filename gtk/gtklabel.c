@@ -64,7 +64,7 @@ gtk_label_get_type (void)
   
   if (!label_type)
     {
-      GtkTypeInfo label_info =
+      static const GtkTypeInfo label_info =
       {
 	"GtkLabel",
 	sizeof (GtkLabel),

@@ -58,7 +58,7 @@ gtk_hscrollbar_get_type (void)
   
   if (!hscrollbar_type)
     {
-      GtkTypeInfo hscrollbar_info =
+      static const GtkTypeInfo hscrollbar_info =
       {
         "GtkHScrollbar",
         sizeof (GtkHScrollbar),

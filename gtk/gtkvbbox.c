@@ -36,7 +36,7 @@ gtk_vbutton_box_get_type (void)
 
   if (!vbutton_box_type)
     {
-      GtkTypeInfo vbutton_box_info =
+      static const GtkTypeInfo vbutton_box_info =
       {
 	"GtkVButtonBox",
 	sizeof (GtkVButtonBox),

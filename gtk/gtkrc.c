@@ -97,7 +97,7 @@ static void        gtk_rc_append_default_module_path (void);
 static void        gtk_rc_append_pixmap_path         (gchar *dir);
 
 
-static	GScannerConfig	gtk_rc_scanner_config =
+static const GScannerConfig	gtk_rc_scanner_config =
 {
   (
    " \t\n"
@@ -138,7 +138,7 @@ static	GScannerConfig	gtk_rc_scanner_config =
   FALSE			/* scope_0_fallback */,
 };
 
-static struct
+static const struct
 {
   gchar *name;
   guint token;
@@ -172,7 +172,7 @@ static struct
   { "module_path", GTK_RC_TOKEN_MODULE_PATH },
 };
 
-static guint n_symbols = sizeof (symbols) / sizeof (symbols[0]);
+static const guint n_symbols = sizeof (symbols) / sizeof (symbols[0]);
 
 static GHashTable *rc_style_ht = NULL;
 static GHashTable *realized_style_ht = NULL;

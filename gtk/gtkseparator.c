@@ -30,7 +30,7 @@ gtk_separator_get_type (void)
 
   if (!separator_type)
     {
-      GtkTypeInfo separator_info =
+      static const GtkTypeInfo separator_info =
       {
 	"GtkSeparator",
 	sizeof (GtkSeparator),

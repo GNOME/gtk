@@ -74,7 +74,7 @@ gtk_list_item_get_type (void)
 
   if (!list_item_type)
     {
-      GtkTypeInfo list_item_info =
+      static const GtkTypeInfo list_item_info =
       {
 	"GtkListItem",
 	sizeof (GtkListItem),

@@ -46,7 +46,7 @@ gtk_misc_get_type (void)
 
   if (!misc_type)
     {
-      GtkTypeInfo misc_info =
+      static const GtkTypeInfo misc_info =
       {
 	"GtkMisc",
 	sizeof (GtkMisc),

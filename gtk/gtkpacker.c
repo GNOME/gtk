@@ -161,7 +161,7 @@ gtk_packer_get_type (void)
 
   if (!packer_type)
     {
-      GtkTypeInfo packer_info =
+      static const GtkTypeInfo packer_info =
       {
         "GtkPacker",
         sizeof (GtkPacker),

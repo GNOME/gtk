@@ -36,7 +36,7 @@ gtk_button_box_get_type (void)
 
   if (!button_box_type)
     {
-      GtkTypeInfo button_box_info =
+      static const GtkTypeInfo button_box_info =
       {
 	"GtkButtonBox",
 	sizeof (GtkButtonBox),

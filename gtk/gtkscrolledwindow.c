@@ -74,7 +74,7 @@ gtk_scrolled_window_get_type (void)
 
   if (!scrolled_window_type)
     {
-      GtkTypeInfo scrolled_window_info =
+      static const GtkTypeInfo scrolled_window_info =
       {
 	"GtkScrolledWindow",
 	sizeof (GtkScrolledWindow),

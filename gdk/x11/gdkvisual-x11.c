@@ -44,7 +44,7 @@ static gint navailable_types;
 
 #ifdef G_ENABLE_DEBUG
 
-static gchar* visual_names[] =
+static const gchar* visual_names[] =
 {
   "static gray",
   "grayscale",
@@ -61,8 +61,8 @@ static GHashTable *visual_hash = NULL;
 void
 gdk_visual_init (void)
 {
-  static gint possible_depths[7] = { 32, 24, 16, 15, 8, 4, 1 };
-  static GdkVisualType possible_types[6] =
+  static const gint possible_depths[7] = { 32, 24, 16, 15, 8, 4, 1 };
+  static const GdkVisualType possible_types[6] =
     {
       GDK_VISUAL_DIRECT_COLOR,
       GDK_VISUAL_TRUE_COLOR,
@@ -72,8 +72,8 @@ gdk_visual_init (void)
       GDK_VISUAL_STATIC_GRAY
     };
 
-  static gint npossible_depths = 7;
-  static gint npossible_types = 6;
+  static const gint npossible_depths = sizeof(possible_depths)/sizeof(gint);
+  static const gint npossible_types = sizeof(possible_types)/sizeof(GdkVisualType);
 
   XVisualInfo *visual_list;
   XVisualInfo visual_template;

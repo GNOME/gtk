@@ -49,7 +49,7 @@ gtk_item_get_type (void)
 
   if (!item_type)
     {
-      GtkTypeInfo item_info =
+      static const GtkTypeInfo item_info =
       {
 	"GtkItem",
 	sizeof (GtkItem),
