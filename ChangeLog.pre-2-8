@@ -1,3 +1,8 @@
+2004-06-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfontbutton.c (gtk_font_button_update_font_info): Avoid
+	a crash if the font doesn't exist.  (#144967, Yevgen Muntyan) 
+
 Fri Jun 25 00:32:15 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreestore.c (gtk_tree_store_swap): Commit the change

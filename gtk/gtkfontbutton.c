@@ -878,9 +878,10 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
       gint n_families, n_faces, i;
 
       n_families = 0;
-      n_faces = 0;
       pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (font_button)),
                                    &families, &n_families);
+      n_faces = 0;
+      faces = NULL;
       for (i = 0; i < n_families; i++) 
         {
           const gchar *name = pango_font_family_get_name (families[i]);
