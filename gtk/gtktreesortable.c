@@ -130,4 +130,35 @@ gtk_tree_sortable_set_sort_func (GtkTreeSortable        *sortable,
   (* iface->set_sort_func) (sortable, sort_column_id, func, data, destroy);
 }
 
+void
+gtk_tree_sortable_set_default_sort_func (GtkTreeSortable        *sortable,
+					 GtkTreeIterCompareFunc  func,
+					 gpointer                data,
+					 GtkDestroyNotify        destroy)
+{
+  GtkTreeSortableIface *iface;
 
+  g_return_if_fail (GTK_IS_TREE_SORTABLE (sortable));
+
+  iface = GTK_TREE_SORTABLE_GET_IFACE (sortable);
+
+  g_return_if_fail (iface != NULL);
+  g_return_if_fail (iface->set_default_sort_func != NULL);
+  
+  (* iface->set_default_sort_func) (sortable, func, data, destroy);
+}
+
+gboolean
+gtk_tree_sortable_has_default_sort_func (GtkTreeSortable *sortable)
+{
+  GtkTreeSortableIface *iface;
+
+  g_return_if_fail (GTK_IS_TREE_SORTABLE (sortable));
+
+  iface = GTK_TREE_SORTABLE_GET_IFACE (sortable);
+
+  g_return_if_fail (iface != NULL);
+  g_return_if_fail (iface->has_default_sort_func != NULL);
+  
+  (* iface->has_default_sort_func) (sortable);
+}

@@ -98,12 +98,16 @@ static gboolean gtk_tree_store_get_sort_column_id      (GtkTreeSortable        *
 static void     gtk_tree_store_set_sort_column_id      (GtkTreeSortable        *sortable,
 							gint                    sort_column_id,
 							GtkSortType             order);
-static void     gtk_tree_store_set_sort_func (GtkTreeSortable        *sortable,
+static void     gtk_tree_store_set_sort_func           (GtkTreeSortable        *sortable,
 							gint                    sort_column_id,
 							GtkTreeIterCompareFunc  func,
 							gpointer                data,
 							GtkDestroyNotify        destroy);
-
+static void     gtk_tree_store_set_default_sort_func   (GtkTreeSortable        *sortable,
+							GtkTreeIterCompareFunc  func,
+							gpointer                data,
+							GtkDestroyNotify        destroy);
+static gboolean gtk_tree_store_has_default_sort_func   (GtkTreeSortable        *sortable);
 
 static void     validate_gnode                    (GNode *node);
 
@@ -232,6 +236,8 @@ gtk_tree_store_sortable_init (GtkTreeSortableIface *iface)
   iface->get_sort_column_id = gtk_tree_store_get_sort_column_id;
   iface->set_sort_column_id = gtk_tree_store_set_sort_column_id;
   iface->set_sort_func = gtk_tree_store_set_sort_func;
+  iface->set_default_sort_func = gtk_tree_store_set_default_sort_func;
+  iface->has_default_sort_func = gtk_tree_store_has_default_sort_func;
 }
 
 static void
@@ -1465,18 +1471,33 @@ gtk_tree_store_compare_func (gconstpointer a,
 			     gpointer      user_data)
 {
   GtkTreeStore *tree_store = user_data;
-  GtkTreeDataSortHeader *header = NULL;
   GNode *node_a;
   GNode *node_b;
+  GtkTreeIterCompareFunc func;
+  gpointer data;
+
   GtkTreeIter iter_a;
   GtkTreeIter iter_b;
   gint retval;
 
-  header = _gtk_tree_data_list_get_header (tree_store->sort_list,
-					   tree_store->sort_column_id);
+  if (tree_store->sort_column_id != -1)
+    {
+      GtkTreeDataSortHeader *header;
 
-  g_return_val_if_fail (header != NULL, 0);
-  g_return_val_if_fail (header->func != NULL, 0);
+      header = _gtk_tree_data_list_get_header (tree_store->sort_list,
+					       tree_store->sort_column_id);
+      g_return_val_if_fail (header != NULL, 0);
+      g_return_val_if_fail (header->func != NULL, 0);
+
+      func = header->func;
+      data = header->data;
+    }
+  else
+    {
+      g_return_val_if_fail (tree_store->default_sort_func != NULL, 0);
+      func = tree_store->default_sort_func;
+      data = tree_store->default_sort_data;
+    }
 
   node_a = ((SortTuple *) a)->node;
   node_b = ((SortTuple *) b)->node;
@@ -1486,9 +1507,7 @@ gtk_tree_store_compare_func (gconstpointer a,
   iter_b.stamp = tree_store->stamp;
   iter_b.user_data = node_b;
 
-  retval = (* header->func) (GTK_TREE_MODEL (user_data),
-			     &iter_a, &iter_b,
-			     header->data);
+  retval = (* func) (GTK_TREE_MODEL (user_data), &iter_a, &iter_b, data);
 
   if (tree_store->order == GTK_SORT_DESCENDING)
     {
@@ -1505,7 +1524,6 @@ gtk_tree_store_sort_helper (GtkTreeStore *tree_store,
 			    GNode        *parent,
 			    gboolean      recurse)
 {
-  GtkTreeDataSortHeader *header = NULL;
   GtkTreeIter iter;
   GArray *sort_array;
   GNode *node;
@@ -1520,12 +1538,6 @@ gtk_tree_store_sort_helper (GtkTreeStore *tree_store,
     return;
 
   g_assert (GTK_TREE_STORE_IS_SORTED (tree_store));
-
-  header = _gtk_tree_data_list_get_header (tree_store->sort_list, tree_store->sort_column_id);
-
-  /* We want to make sure that we have a function */
-  g_return_if_fail (header != NULL);
-  g_return_if_fail (header->func != NULL);
 
   list_length = 0;
   for (tmp_node = node; tmp_node; tmp_node = tmp_node->next)
@@ -1584,6 +1596,21 @@ gtk_tree_store_sort_helper (GtkTreeStore *tree_store,
 static void
 gtk_tree_store_sort (GtkTreeStore *tree_store)
 {
+  if (tree_store->sort_column_id != -1)
+    {
+      GtkTreeDataSortHeader *header = NULL;
+
+      header = _gtk_tree_data_list_get_header (tree_store->sort_list, tree_store->sort_column_id);
+
+      /* We want to make sure that we have a function */
+      g_return_if_fail (header != NULL);
+      g_return_if_fail (header->func != NULL);
+    }
+  else
+    {
+      g_return_if_fail (tree_store->default_sort_func != NULL);
+    }
+
   gtk_tree_store_sort_helper (tree_store, G_NODE (tree_store->root), TRUE);
 }
 
@@ -1592,7 +1619,6 @@ gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
 				  GtkTreeIter  *iter,
 				  gint          column)
 {
-  GtkTreeDataSortHeader *header;
   GNode *prev = NULL;
   GNode *next = NULL;
   GNode *node;
@@ -1605,18 +1631,31 @@ gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
   gint new_location;
   gint *new_order;
   gint length;
+  GtkTreeIterCompareFunc func;
+  gpointer data;
 
   g_return_if_fail (G_NODE (iter->user_data)->parent != NULL);
 
-
   tmp_iter.stamp = tree_store->stamp;
-  header = _gtk_tree_data_list_get_header (tree_store->sort_list,
-					   tree_store->sort_column_id);
-  g_return_if_fail (header != NULL);
-  g_return_if_fail (header->func != NULL);
+  if (tree_store->sort_column_id != -1)
+    {
+      GtkTreeDataSortHeader *header;
+      header = _gtk_tree_data_list_get_header (tree_store->sort_list,
+					       tree_store->sort_column_id);
+      g_return_if_fail (header != NULL);
+      g_return_if_fail (header->func != NULL);
+      func = header->func;
+      data = header->data;
+    }
+  else
+    {
+      g_return_if_fail (tree_store->default_sort_func != NULL);
+      func = tree_store->default_sort_func;
+      data = tree_store->default_sort_data;
+    }
 
   /* If it's the built in function, we don't sort. */
-  if (header->func == gtk_tree_data_list_compare_func &&
+  if (func == gtk_tree_data_list_compare_func &&
       tree_store->sort_column_id != column)
     return;
 
@@ -1639,17 +1678,13 @@ gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
   if (prev != NULL)
     {
       tmp_iter.user_data = prev;
-      cmp_a = (* header->func) (GTK_TREE_MODEL (tree_store),
-				&tmp_iter, iter,
-				header->data);
+      cmp_a = (* func) (GTK_TREE_MODEL (tree_store), &tmp_iter, iter, data);
     }
 
   if (next != NULL)
     {
       tmp_iter.user_data = next;
-      cmp_b = (* header->func) (GTK_TREE_MODEL (tree_store),
-				iter, &tmp_iter,
-				header->data);
+      cmp_b = (* func) (GTK_TREE_MODEL (tree_store), iter, &tmp_iter, data);
     }
 
 
@@ -1693,11 +1728,9 @@ gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
   new_location = 0;
   tmp_iter.user_data = node;
   if (tree_store->order == GTK_SORT_DESCENDING)
-    cmp_a = (* header->func) (GTK_TREE_MODEL (tree_store),
-			      &tmp_iter, iter, header->data);
+    cmp_a = (* func) (GTK_TREE_MODEL (tree_store), &tmp_iter, iter, data);
   else
-    cmp_a = (* header->func) (GTK_TREE_MODEL (tree_store),
-			      iter, &tmp_iter, header->data);
+    cmp_a = (* func) (GTK_TREE_MODEL (tree_store), iter, &tmp_iter, data);
 
   while ((node->next) && (cmp_a > 0))
     {
@@ -1706,11 +1739,9 @@ gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
       new_location++;
       tmp_iter.user_data = node;
       if (tree_store->order == GTK_SORT_DESCENDING)
-	cmp_a = (* header->func) (GTK_TREE_MODEL (tree_store),
-				  &tmp_iter, iter, header->data);
+	cmp_a = (* func) (GTK_TREE_MODEL (tree_store), &tmp_iter, iter, data);
       else
-	cmp_a = (* header->func) (GTK_TREE_MODEL (tree_store),
-				  iter, &tmp_iter, header->data);
+	cmp_a = (* func) (GTK_TREE_MODEL (tree_store), iter, &tmp_iter, data);
     }
 
   if ((!node->next) && (cmp_a > 0))
@@ -1797,27 +1828,33 @@ gtk_tree_store_set_sort_column_id (GtkTreeSortable  *sortable,
 				   GtkSortType       order)
 {
   GtkTreeStore *tree_store = (GtkTreeStore *) sortable;
-  GList *list;
 
   g_return_if_fail (GTK_IS_TREE_STORE (sortable));
 
-  for (list = tree_store->sort_list; list; list = list->next)
-    {
-      GtkTreeDataSortHeader *header = (GtkTreeDataSortHeader*) list->data;
-      if (header->sort_column_id == sort_column_id)
-	break;
-    }
-  g_return_if_fail (list != NULL);
-
+  
   if ((tree_store->sort_column_id == sort_column_id) &&
       (tree_store->order == order))
     return;
 
+  if (sort_column_id != -1)
+    {
+      GtkTreeDataSortHeader *header = NULL;
+
+      header = _gtk_tree_data_list_get_header (tree_store->sort_list, sort_column_id);
+
+      /* We want to make sure that we have a function */
+      g_return_if_fail (header != NULL);
+      g_return_if_fail (header->func != NULL);
+    }
+  else
+    {
+      g_return_if_fail (tree_store->default_sort_func != NULL);
+    }
+
   tree_store->sort_column_id = sort_column_id;
   tree_store->order = order;
 
-  if (tree_store->sort_column_id >= 0)
-    gtk_tree_store_sort (tree_store);
+  gtk_tree_store_sort (tree_store);
 
   gtk_tree_sortable_sort_column_changed (sortable);
 }
@@ -1857,6 +1894,34 @@ gtk_tree_store_set_sort_func (GtkTreeSortable        *sortable,
   header->data = data;
   header->destroy = destroy;
 
+}
+
+static void
+gtk_tree_store_set_default_sort_func (GtkTreeSortable        *sortable,
+				      GtkTreeIterCompareFunc  func,
+				      gpointer                data,
+				      GtkDestroyNotify        destroy)
+{
+  GtkTreeStore *tree_store = (GtkTreeStore *) sortable;
+
+  g_return_if_fail (GTK_IS_TREE_STORE (sortable));
+
+  if (tree_store->default_sort_destroy)
+    (* tree_store->default_sort_destroy) (tree_store->default_sort_data);
+
+  tree_store->default_sort_func = func;
+  tree_store->default_sort_data = data;
+  tree_store->default_sort_destroy = destroy;
+}
+
+static gboolean
+gtk_tree_store_has_default_sort_func (GtkTreeSortable *sortable)
+{
+  GtkTreeStore *tree_store = (GtkTreeStore *) sortable;
+
+  g_return_val_if_fail (GTK_IS_TREE_STORE (sortable), FALSE);
+
+  return (tree_store->default_sort_func != NULL);
 }
 
 static void

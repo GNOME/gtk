@@ -1,3 +1,16 @@
+Mon Sep  3 18:03:56 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_set_default_sort_func):
+	handle default sort feature
+
+	* gtk/gtktreesortable.c (gtk_tree_sortable_set_default_sort_func):
+	new function to handle default sort.
+	(gtk_tree_sortable_has_default_sort_func): check if default sort
+	is set.
+
+	* gtk/gtkliststore.c (gtk_list_store_set_default_sort_func): 
+	handle default sort feature
+
 Sun Sep  2 20:32:36 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_scroll_to_cell): patch from
