@@ -137,11 +137,11 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, insert_text),
-                    gtk_marshal_VOID__POINTER_POINTER_INT_BOOLEAN,
+                    gtk_marshal_VOID__BOXED_BOXED_INT_BOOLEAN,
                     GTK_TYPE_NONE,
                     4,
-                    GTK_TYPE_POINTER,
-                    GTK_TYPE_POINTER,
+                    GTK_TYPE_TEXT_ITER,
+                    GTK_TYPE_TEXT_ITER,
                     GTK_TYPE_INT,
                     GTK_TYPE_BOOL);
 
@@ -150,11 +150,11 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, delete_text),
-                    gtk_marshal_VOID__POINTER_POINTER_BOOLEAN,
+                    gtk_marshal_VOID__BOXED_BOXED_BOOLEAN,
                     GTK_TYPE_NONE,
                     3,
-                    GTK_TYPE_POINTER,
-                    GTK_TYPE_POINTER,
+                    GTK_TYPE_TEXT_ITER,
+                    GTK_TYPE_TEXT_ITER,
                     GTK_TYPE_BOOL);
 
   signals[CHANGED] =
@@ -180,45 +180,45 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, mark_set),
-                    gtk_marshal_VOID__POINTER_POINTER,
+                    gtk_marshal_VOID__BOXED_OBJECT,
                     GTK_TYPE_NONE,
                     2,
-                    GTK_TYPE_POINTER,
-                    GTK_TYPE_POINTER);
+                    GTK_TYPE_TEXT_ITER,
+                    G_TYPE_OBJECT);
 
   signals[MARK_DELETED] =
     gtk_signal_new ("mark_deleted",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, mark_deleted),
-                    gtk_marshal_VOID__POINTER,
+                    gtk_marshal_VOID__OBJECT,
                     GTK_TYPE_NONE,
                     1,
-                    GTK_TYPE_POINTER);
+                    G_TYPE_OBJECT);
 
   signals[APPLY_TAG] =
     gtk_signal_new ("apply_tag",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, apply_tag),
-                    gtk_marshal_VOID__POINTER_POINTER_POINTER,
+                    gtk_marshal_VOID__OBJECT_BOXED_BOXED,
                     GTK_TYPE_NONE,
                     3,
-                    GTK_TYPE_POINTER,
-                    GTK_TYPE_POINTER,
-                    GTK_TYPE_POINTER);
+                    G_TYPE_OBJECT,
+                    GTK_TYPE_TEXT_ITER,
+                    GTK_TYPE_TEXT_ITER);
 
   signals[REMOVE_TAG] =
     gtk_signal_new ("remove_tag",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, remove_tag),
-                    gtk_marshal_VOID__POINTER_POINTER_POINTER,
+                    gtk_marshal_VOID__OBJECT_BOXED_BOXED,
                     GTK_TYPE_NONE,
                     3,
-                    GTK_TYPE_POINTER,
-                    GTK_TYPE_POINTER,
-                    GTK_TYPE_POINTER);
+                    G_TYPE_OBJECT,
+                    GTK_TYPE_TEXT_ITER,
+                    GTK_TYPE_TEXT_ITER);
 
   gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
 

@@ -1280,6 +1280,12 @@
   ((GtkText text)
    (uint nchars)))
 
+;; TextView
+
+(define-boxed GtkTextIter
+  gtk_text_iter_copy
+  gtk_text_iter_free)
+
 ;; Alignment
 
 (define-object GtkAlignment (GtkBin))

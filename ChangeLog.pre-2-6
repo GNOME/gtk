@@ -1,3 +1,17 @@
+2000-11-01  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): Use 
+	GTK_TYPE_TEXT_ITER and BOXED marshallers
+
+	* gtk/gtktexttagtable.c (gtk_text_tag_table_class_init): ditto
+
+	* gtk/gtktexttag.c (gtk_text_tag_class_init): ditto
+	
+	* gtk/gtk-boxed.defs: add GtkTextIter
+
+	* gtk/gtkmarshal.list: Add marshallers for text widget that 
+	properly use OBJECT and BOXED
+
 2000-11-01  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/testgtk.c (create_labels): Test set_markup_with_accel()

@@ -63,10 +63,10 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextTagTableClass, tag_changed),
-                    gtk_marshal_VOID__POINTER_BOOLEAN,
+                    gtk_marshal_VOID__OBJECT_BOOLEAN,
                     GTK_TYPE_NONE,
                     2,
-                    GTK_TYPE_OBJECT,
+                    G_TYPE_OBJECT,
                     GTK_TYPE_BOOL);
 
   signals[TAG_ADDED] =
@@ -74,20 +74,20 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextTagTableClass, tag_added),
-                    gtk_marshal_VOID__POINTER,
+                    gtk_marshal_VOID__OBJECT,
                     GTK_TYPE_NONE,
                     1,
-                    GTK_TYPE_OBJECT);
+                    G_TYPE_OBJECT);
 
   signals[TAG_REMOVED] =
     gtk_signal_new ("tag_removed",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextTagTableClass, tag_removed),
-                    gtk_marshal_VOID__POINTER,
+                    gtk_marshal_VOID__OBJECT,
                     GTK_TYPE_NONE,
                     1,
-                    GTK_TYPE_OBJECT);
+                    G_TYPE_OBJECT);
 
 
   gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);

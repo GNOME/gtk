@@ -276,12 +276,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextTagClass, event),
-                    gtk_marshal_INT__OBJECT_BOXED_POINTER,
+                    gtk_marshal_INT__OBJECT_BOXED_BOXED,
                     GTK_TYPE_INT,
                     3,
-                    GTK_TYPE_OBJECT,
+                    G_TYPE_OBJECT,
                     GTK_TYPE_GDK_EVENT,
-                    GTK_TYPE_POINTER);
+                    GTK_TYPE_TEXT_ITER);
 
   gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
 
