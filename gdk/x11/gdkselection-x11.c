@@ -29,13 +29,17 @@ gdk_selection_owner_set (GdkWindow *owner,
 			 guint32    time,
 			 gint       send_event)
 {
-  GdkWindowPrivate *private;
   Display *xdisplay;
   Window xwindow;
 
   if (owner)
     {
+      GdkWindowPrivate *private;
+
       private = (GdkWindowPrivate*) owner;
+      if (private->destroyed)
+	return FALSE;
+
       xdisplay = private->xdisplay;
       xwindow = private->xwindow;
     }
@@ -73,6 +77,8 @@ gdk_selection_convert (GdkWindow *requestor,
   g_return_if_fail (requestor != NULL);
 
   private = (GdkWindowPrivate*) requestor;
+  if (private->destroyed)
+    return;
 
   XConvertSelection (private->xdisplay, selection, target,
 		     gdk_selection_property, private->xwindow, time);
@@ -99,6 +105,8 @@ gdk_selection_property_get (GdkWindow  *requestor,
      moderate length, to avoid two round trips to the server */
 
   private = (GdkWindowPrivate*) requestor;
+  if (private->destroyed)
+    return 0;
 
   XGetWindowProperty (private->xdisplay, private->xwindow,
 		      gdk_selection_property, 0, 0, False,

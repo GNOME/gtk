@@ -118,14 +118,20 @@ gdk_input_motion_events (GdkWindow *window,
 			 guint32 stop,
 			 gint *nevents_return)
 {
+  GdkWindowPrivate *window_private;
   XTimeCoord *xcoords;
   GdkTimeCoord *coords;
   int i;
 
+  g_return_val_if_fail (window != NULL, NULL);
+  window_private = (GdkWindowPrivate *) window;
+  if (window_private->destroyed)
+    return NULL;
+
   if (deviceid == GDK_CORE_POINTER)
     {
       xcoords = XGetMotionEvents (gdk_display,
-				  ((GdkWindowPrivate *)window)->xwindow,
+				  window_private->xwindow,
 				  start, stop, nevents_return);
       if (xcoords)
 	{
@@ -204,10 +210,14 @@ void
 gdk_input_set_extension_events (GdkWindow *window, gint mask,
 				GdkExtensionMode mode)
 {
+  GdkWindowPrivate *window_private;
   GList *tmp_list;
   GdkInputWindow *iw;
 
   g_return_if_fail (window != NULL);
+  window_private = (GdkWindowPrivate*) window;
+  if (window_private->destroyed)
+    return;
 
   if (mode == GDK_EXTENSION_EVENTS_NONE)
     mask = 0;
@@ -224,7 +234,7 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
       iw->grabbed = FALSE;
 
       gdk_input_windows = g_list_append(gdk_input_windows,iw);
-      ((GdkWindowPrivate *)window)->extension_events = mask;
+      window_private->extension_events = mask;
 
       /* Add enter window events to the event mask */
       /* FIXME, this is not needed for XINPUT_NONE */
@@ -241,7 +251,7 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
 	  g_free(iw);
 	}
 
-      ((GdkWindowPrivate *)window)->extension_events = 0;
+      window_private->extension_events = 0;
     }
 
   for (tmp_list = gdk_input_devices; tmp_list; tmp_list = tmp_list->next)

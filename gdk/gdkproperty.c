@@ -67,7 +67,6 @@ gdk_property_get (GdkWindow   *window,
 		  gint        *actual_length,
 		  guchar     **data)
 {
-  GdkWindowPrivate *private;
   Display *xdisplay;
   Window xwindow;
   Atom ret_prop_type;
@@ -79,7 +78,12 @@ gdk_property_get (GdkWindow   *window,
 
   if (window)
     {
+      GdkWindowPrivate *private;
+
       private = (GdkWindowPrivate*) window;
+      if (private->destroyed)
+	return FALSE;
+
       xdisplay = private->xdisplay;
       xwindow = private->xwindow;
     }
@@ -156,13 +160,17 @@ gdk_property_change (GdkWindow   *window,
 		     guchar      *data,
 		     gint         nelements)
 {
-  GdkWindowPrivate *private;
   Display *xdisplay;
   Window xwindow;
 
   if (window)
     {
+      GdkWindowPrivate *private;
+
       private = (GdkWindowPrivate*) window;
+      if (private->destroyed)
+	return;
+
       xdisplay = private->xdisplay;
       xwindow = private->xwindow;
     }
@@ -180,13 +188,17 @@ void
 gdk_property_delete (GdkWindow *window,
 		     GdkAtom    property)
 {
-  GdkWindowPrivate *private;
   Display *xdisplay;
   Window xwindow;
 
   if (window)
     {
+      GdkWindowPrivate *private;
+
       private = (GdkWindowPrivate*) window;
+      if (private->destroyed)
+	return;
+
       xdisplay = private->xdisplay;
       xwindow = private->xwindow;
     }

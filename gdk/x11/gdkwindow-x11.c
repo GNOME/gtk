@@ -103,6 +103,9 @@ gdk_window_new (GdkWindow     *parent,
     parent = (GdkWindow*) &gdk_root_parent;
 
   parent_private = (GdkWindowPrivate*) parent;
+  if (parent_private->destroyed)
+    return NULL;
+
   xparent = parent_private->xwindow;
   parent_display = parent_private->xdisplay;
 
@@ -508,12 +511,15 @@ gdk_window_move (GdkWindow *window,
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowPrivate*) window;
-  XMoveWindow (private->xdisplay, private->xwindow, x, y);
-
-  if (private->window_type == GDK_WINDOW_CHILD)
+  if (!private->destroyed)
     {
-      private->x = x;
-      private->y = y;
+      XMoveWindow (private->xdisplay, private->xwindow, x, y);
+      
+      if (private->window_type == GDK_WINDOW_CHILD)
+	{
+	  private->x = x;
+	  private->y = y;
+	}
     }
 }
 
@@ -566,15 +572,17 @@ gdk_window_move_resize (GdkWindow *window,
     height = 1;
 
   private = (GdkWindowPrivate*) window;
-  XMoveResizeWindow (private->xdisplay, private->xwindow, x, y, width, height);
-
-  if (!private->destroyed &&
-      (private->window_type == GDK_WINDOW_CHILD))
+  if (!private->destroyed)
     {
-      private->x = x;
-      private->y = y;
-      private->width = width;
-      private->height = height;
+      XMoveResizeWindow (private->xdisplay, private->xwindow, x, y, width, height);
+      
+      if (private->window_type == GDK_WINDOW_CHILD)
+	{
+	  private->x = x;
+	  private->y = y;
+	  private->width = width;
+	  private->height = height;
+	}
     }
 }
 
@@ -595,10 +603,11 @@ gdk_window_reparent (GdkWindow *window,
   window_private = (GdkWindowPrivate*) window;
   parent_private = (GdkWindowPrivate*) new_parent;
 
-  XReparentWindow (window_private->xdisplay,
-		   window_private->xwindow,
-		   parent_private->xwindow,
-		   x, y);
+  if (!window_private->destroyed && !parent_private->destroyed)
+    XReparentWindow (window_private->xdisplay,
+		     window_private->xwindow,
+		     parent_private->xwindow,
+		     x, y);
 }
 
 void
@@ -610,7 +619,8 @@ gdk_window_clear (GdkWindow *window)
 
   private = (GdkWindowPrivate*) window;
 
-  XClearWindow (private->xdisplay, private->xwindow);
+  if (!private->destroyed)
+    XClearWindow (private->xdisplay, private->xwindow);
 }
 
 void
@@ -621,11 +631,11 @@ gdk_window_clear_area (GdkWindow *window,
 		       gint       height)
 {
   GdkWindowPrivate *private;
-
+  
   g_return_if_fail (window != NULL);
-
+  
   private = (GdkWindowPrivate*) window;
-
+  
   if (!private->destroyed)
     XClearArea (private->xdisplay, private->xwindow,
 		x, y, width, height, False);
@@ -641,9 +651,9 @@ gdk_window_clear_area_e (GdkWindow *window,
   GdkWindowPrivate *private;
 
   g_return_if_fail (window != NULL);
-
+  
   private = (GdkWindowPrivate*) window;
-
+  
   if (!private->destroyed)
     XClearArea (private->xdisplay, private->xwindow,
 		x, y, width, height, True);
@@ -735,6 +745,9 @@ gdk_window_set_hints (GdkWindow *window,
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowPrivate*) window;
+  if (private->destroyed)
+    return;
+
   size_hints.flags = 0;
 
   if (flags & GDK_HINT_POS)
@@ -771,8 +784,9 @@ gdk_window_set_title (GdkWindow   *window,
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowPrivate*) window;
-  XmbSetWMProperties (private->xdisplay, private->xwindow,
-                      title, title, NULL, 0, NULL, NULL, NULL);
+  if (!private->destroyed)
+    XmbSetWMProperties (private->xdisplay, private->xwindow,
+			title, title, NULL, 0, NULL, NULL, NULL);
 }
 
 void
@@ -784,7 +798,8 @@ gdk_window_set_background (GdkWindow *window,
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowPrivate*) window;
-  XSetWindowBackground (private->xdisplay, private->xwindow, color->pixel);
+  if (!private->destroyed)
+    XSetWindowBackground (private->xdisplay, private->xwindow, color->pixel);
 }
 
 void
@@ -809,7 +824,8 @@ gdk_window_set_back_pixmap (GdkWindow *window,
   if (parent_relative)
     xpixmap = ParentRelative;
 
-  XSetWindowBackgroundPixmap (window_private->xdisplay, window_private->xwindow, xpixmap);
+  if (!window_private->destroyed)
+    XSetWindowBackgroundPixmap (window_private->xdisplay, window_private->xwindow, xpixmap);
 }
 
 void
@@ -830,7 +846,8 @@ gdk_window_set_cursor (GdkWindow *window,
   else
     xcursor = cursor_private->xcursor;
 
-  XDefineCursor (window_private->xdisplay, window_private->xwindow, xcursor);
+  if (!window_private->destroyed)
+    XDefineCursor (window_private->xdisplay, window_private->xwindow, xcursor);
 }
 
 void
@@ -846,12 +863,15 @@ gdk_window_set_colormap (GdkWindow   *window,
   window_private = (GdkWindowPrivate*) window;
   colormap_private = (GdkColormapPrivate*) colormap;
 
-  XSetWindowColormap (window_private->xdisplay,
-		      window_private->xwindow,
-		      colormap_private->xcolormap);
-
-  if (window_private->window_type != GDK_WINDOW_TOPLEVEL)
-    gdk_window_add_colormap_windows (window);
+  if (!window_private->destroyed)
+    {
+      XSetWindowColormap (window_private->xdisplay,
+			  window_private->xwindow,
+			  colormap_private->xcolormap);
+      
+      if (window_private->window_type != GDK_WINDOW_TOPLEVEL)
+	gdk_window_add_colormap_windows (window);
+    }
 }
 
 void
@@ -885,19 +905,22 @@ gdk_window_get_geometry (GdkWindow *window,
 
   window_private = (GdkWindowPrivate*) window;
 
-  XGetGeometry (window_private->xdisplay, window_private->xwindow,
-		&root, &tx, &ty, &twidth, &theight, &tborder_width, &tdepth);
-
-  if (x)
-    *x = tx;
-  if (y)
-    *y = ty;
-  if (width)
-    *width = twidth;
-  if (height)
-    *height = theight;
-  if (depth)
-    *depth = tdepth;
+  if (!window_private->destroyed)
+    {
+      XGetGeometry (window_private->xdisplay, window_private->xwindow,
+		    &root, &tx, &ty, &twidth, &theight, &tborder_width, &tdepth);
+      
+      if (x)
+	*x = tx;
+      if (y)
+	*y = ty;
+      if (width)
+	*width = twidth;
+      if (height)
+	*height = theight;
+      if (depth)
+	*depth = tdepth;
+    }
 }
 
 void
@@ -947,7 +970,7 @@ gdk_window_get_visual (GdkWindow *window)
   while (window_private && (window_private->window_type == GDK_WINDOW_PIXMAP))
     window_private = (GdkWindowPrivate*) window_private->parent;
 
-  if (window_private)
+  if (window_private && !window_private->destroyed)
     {
       XGetWindowAttributes (window_private->xdisplay,
 			    window_private->xwindow,
@@ -969,11 +992,16 @@ gdk_window_get_colormap (GdkWindow *window)
 
   window_private = (GdkWindowPrivate*) window;
 
-  XGetWindowAttributes (window_private->xdisplay,
-			window_private->xwindow,
-			&window_attributes);
+  if (!window_private->destroyed)
+    {
+      XGetWindowAttributes (window_private->xdisplay,
+			    window_private->xwindow,
+			    &window_attributes);
+      
+      return gdk_colormap_lookup (window_attributes.colormap);
+    }
 
-  return gdk_colormap_lookup (window_attributes.colormap);
+  return NULL;
 }
 
 GdkWindowType
@@ -1001,17 +1029,22 @@ gdk_window_get_origin (GdkWindow *window,
 
   private = (GdkWindowPrivate*) window;
 
-  return_val = XTranslateCoordinates (private->xdisplay,
-				      private->xwindow,
-				      gdk_root_window,
-				      0, 0, &tx, &ty,
-				      &child);
-
-  if (x)
-    *x = tx;
-  if (y)
-    *y = ty;
-
+  if (!private->destroyed)
+    {
+      return_val = XTranslateCoordinates (private->xdisplay,
+					  private->xwindow,
+					  gdk_root_window,
+					  0, 0, &tx, &ty,
+					  &child);
+      
+      if (x)
+	*x = tx;
+      if (y)
+	*y = ty;
+    }
+  else
+    return_val = 0;
+  
   return return_val;
 }
 
@@ -1035,17 +1068,18 @@ gdk_window_get_pointer (GdkWindow       *window,
   private = (GdkWindowPrivate*) window;
 
   return_val = NULL;
-  if (XQueryPointer (private->xdisplay, private->xwindow, &root, &child,
+  if (!private->destroyed &&
+      XQueryPointer (private->xdisplay, private->xwindow, &root, &child,
 		     &rootx, &rooty, &winx, &winy, &xmask))
     {
       if (x) *x = winx;
       if (y) *y = winy;
       if (mask) *mask = xmask;
-
+      
       if (child)
 	return_val = gdk_window_lookup (child);
     }
-
+  
   return return_val;
 }
 
@@ -1090,6 +1124,8 @@ gdk_window_get_children (GdkWindow *window)
   g_return_val_if_fail (window != NULL, NULL);
 
   private = (GdkWindowPrivate*) window;
+  if (private->destroyed)
+    return NULL;
 
   XQueryTree (private->xdisplay, private->xwindow,
 	      &root, &parent, &xchildren, &nchildren);
@@ -1114,11 +1150,18 @@ gdk_window_get_children (GdkWindow *window)
 GdkEventMask  
 gdk_window_get_events      (GdkWindow       *window)
 {
+  GdkWindowPrivate *private;
   XWindowAttributes attrs;
   GdkEventMask event_mask;
   int i;
 
-  XGetWindowAttributes (gdk_display, ((GdkWindowPrivate *)window)->xwindow, 
+  g_return_val_if_fail (window != NULL, 0);
+
+  private = (GdkWindowPrivate*) window;
+  if (private->destroyed)
+    return 0;
+
+  XGetWindowAttributes (gdk_display, private->xwindow, 
 			&attrs);
 
   event_mask = 0;
@@ -1135,8 +1178,15 @@ void
 gdk_window_set_events      (GdkWindow       *window,
 			    GdkEventMask     event_mask)
 {
+  GdkWindowPrivate *private;
   long xevent_mask;
   int i;
+
+  g_return_if_fail (window != NULL);
+
+  private = (GdkWindowPrivate*) window;
+  if (private->destroyed)
+    return;
 
   xevent_mask = StructureNotifyMask;
   for (i = 0; i < nevent_masks; i++)
@@ -1145,7 +1195,7 @@ gdk_window_set_events      (GdkWindow       *window,
 	xevent_mask |= event_mask_table[i];
     }
   
-  XSelectInput (gdk_display, ((GdkWindowPrivate *)window)->xwindow, 
+  XSelectInput (gdk_display, private->xwindow, 
 		xevent_mask);
 }
 
@@ -1164,6 +1214,8 @@ gdk_window_add_colormap_windows (GdkWindow *window)
   toplevel = gdk_window_get_toplevel (window);
   toplevel_private = (GdkWindowPrivate*) toplevel;
   window_private = (GdkWindowPrivate*) window;
+  if (window_private->destroyed)
+    return;
 
   if (!XGetWMColormapWindows (toplevel_private->xdisplay,
 			      toplevel_private->xwindow,
@@ -1211,6 +1263,8 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 
   window_private = (GdkWindowPrivate*) window;
   pixmap_private = (GdkWindowPrivate*) mask;
+  if (window_private->destroyed)
+    return;
 	
   XShapeCombineMask  (window_private->xdisplay,
 		      window_private->xwindow,
@@ -1228,6 +1282,8 @@ gdk_dnd_drag_addwindow (GdkWindow *window)
   g_return_if_fail (window != NULL);
   
   window_private = (GdkWindowPrivate *) window;
+  if (window_private->destroyed)
+    return;
   
   if (window_private->dnd_drag_enabled == 1 && gdk_dnd.drag_really == 0)
     {
@@ -1253,6 +1309,8 @@ gdk_window_dnd_drag_set (GdkWindow   *window,
   
   g_return_if_fail (window != NULL);
   window_private = (GdkWindowPrivate *) window;
+  if (window_private->destroyed)
+    return;
   
   window_private->dnd_drag_enabled = drag_enable ? 1 : 0;
   
@@ -1309,8 +1367,9 @@ gdk_window_dnd_drop_set (GdkWindow   *window,
   int i;
   
   g_return_if_fail (window != NULL);
-  
   window_private = (GdkWindowPrivate *) window;
+  if (window_private->destroyed)
+    return;
   
   window_private->dnd_drop_enabled = drop_enable ? 1 : 0;
   if (drop_enable)
@@ -1357,6 +1416,8 @@ gdk_window_dnd_data_set (GdkWindow       *window,
   
   window_private = (GdkWindowPrivate *) window;
   g_return_if_fail (window_private->dnd_drag_accepted != 0);    
+  if (window_private->destroyed)
+    return;
   
   /* We set the property on our window... */
   gdk_property_change (window, window_private->dnd_drag_data_type,
@@ -1405,7 +1466,11 @@ gdk_window_add_filter     (GdkWindow     *window,
   GList *tmp_list;
   GdkEventFilter *filter;
 
-  private = (GdkWindowPrivate *)window;
+  g_return_if_fail (window != NULL);
+
+  private = (GdkWindowPrivate*) window;
+  if (private->destroyed)
+    return;
 
   tmp_list = private->filters;
   while (tmp_list)
@@ -1432,7 +1497,8 @@ gdk_window_remove_filter  (GdkWindow     *window,
   GList *tmp_list;
   GdkEventFilter *filter;
 
-  private = (GdkWindowPrivate *)window;
+  g_return_if_fail (window != NULL);
+  private = (GdkWindowPrivate*) window;
 
   tmp_list = private->filters;
   while (tmp_list)
@@ -1455,7 +1521,14 @@ void
 gdk_window_set_override_redirect(GdkWindow *window,
 				 gboolean override_redirect)
 {
+  GdkWindowPrivate *private;
   XSetWindowAttributes attr;
+
+  g_return_if_fail (window != NULL);
+  private = (GdkWindowPrivate*) window;
+  if (private->destroyed)
+    return;
+
   attr.override_redirect = (override_redirect == FALSE)?False:True;
   XChangeWindowAttributes(gdk_display,
 			  ((GdkWindowPrivate *)window)->xwindow,

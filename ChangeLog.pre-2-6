@@ -1,3 +1,15 @@
+Mon Jan 26 02:15:29 1998  Tim Janik  <timj@gimp.org>
+
+	* gdk/gdkdraw.c:
+	* gdk/gdkgc.c:
+	* gdk/gdkimage.c:
+	* gdk/gdkinput.c:
+	* gdk/gdkpixmap.c:
+	* gdk/gdkproperty.c:
+	* gdk/gdkselection.c:
+	* gdk/gdkwindow.c: added a bunch of checks for window != NULL and
+	  private->destroyed.
+
 Sun Jan 25 19:15:32 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkwidget.h (enum): added new widget flag GTK_LEAVE_PENDING.

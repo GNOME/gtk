@@ -32,17 +32,24 @@ gdk_gc_new_with_values (GdkWindow       *window,
 			GdkGCValues     *values,
 			GdkGCValuesMask  values_mask)
 {
+  GdkWindowPrivate *window_private;
   GdkGC *gc;
   GdkGCPrivate *private;
   Window xwindow;
   XGCValues xvalues;
   unsigned long xvalues_mask;
 
+  g_return_val_if_fail (window != NULL, NULL);
+
+  window_private = (GdkWindowPrivate*) window;
+  if (window_private->destroyed)
+    return NULL;
+
   private = g_new (GdkGCPrivate, 1);
   gc = (GdkGC*) private;
 
-  xwindow = ((GdkWindowPrivate*) window)->xwindow;
-  private->xdisplay = ((GdkWindowPrivate*) window)->xdisplay;
+  xwindow = window_private->xwindow;
+  private->xdisplay = window_private->xdisplay;
 
   xvalues.function = GXcopy;
   xvalues.fill_style = FillSolid;
@@ -512,15 +519,22 @@ gdk_gc_set_clip_mask (GdkGC     *gc,
 {
   GdkGCPrivate *private;
   Pixmap xmask;
-
+  
   g_return_if_fail (gc != NULL);
-
-  private = (GdkGCPrivate*) gc;
-
+  
   if (mask)
-    xmask = ((GdkWindowPrivate*) mask)->xwindow;
+    {
+      GdkWindowPrivate *mask_private;
+      
+      mask_private = (GdkWindowPrivate*) mask;
+      if (mask_private->destroyed)
+	return;
+      xmask = mask_private->xwindow;
+    }
   else
     xmask = None;
+  
+  private = (GdkGCPrivate*) gc;
 
   XSetClipMask (private->xdisplay, private->xgc, xmask);
 }
