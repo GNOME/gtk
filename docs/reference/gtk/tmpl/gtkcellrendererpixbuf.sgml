@@ -6,7 +6,21 @@ Renders a pixbuf in a cell
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+A #GtkCellRendererPixbuf can be used to render an image in a cell. It allows to render 
+either a given #GdkPixbuf (set via the <link linkend="GtkCellRendererPixbuf--pixbuf">pixbuf</link>
+property) or a stock icon (set via the <link linkend="GtkCellRendererPixbuf--stock-id">stock-id</link>
+property).
+</para>
 
+<para>
+To support the tree view, #GtkCellRendererPixbuf also supports rendering two alternative pixbufs,
+when the <link linkend="GtkCellRenderer--is-expander">is-expander</link> property is %TRUE.
+If the <link linkend="GtkCellRenderer--is-expander">is-expander</link> property is %TRUE and
+the <link linkend="GtkCellRendererPixbuf--pixbuf-expander-open">pixbuf-expander-open</link> property
+is set to a pixbuf, it renders that pixbuf, if the 
+<link linkend="GtkCellRenderer--is-expander">is-expander</link> property is %FALSE and
+the <link linkend="GtkCellRendererPixbuf--pixbuf-expander-closed">pixbuf-expander-closed</link> property
+is set to a pixbuf, it renders that one. 
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

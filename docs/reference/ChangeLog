@@ -1,5 +1,7 @@
 2004-11-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkcellrendererpixbuf.sgml: Add an intro.
+
 	* gtk/tmpl/gtkfilechooserbutton.sgml: Move some docs inline.
 
 	* gtk/tmpl/gtkaboutdialog.sgml: Small update.
