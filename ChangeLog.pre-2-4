@@ -2,6 +2,8 @@ Mon Nov 23 03:21:17 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktext.c (gtk_text_destroy): disconnect hadj & vadj, not
 	2 * hadj.
+	(gtk_text_finalize): only unref the current_font if we have
+	been realized.
 
 Sat Nov 21 18:41:13 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 

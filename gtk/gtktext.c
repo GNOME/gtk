@@ -1178,7 +1178,8 @@ gtk_text_finalize (GtkObject *object)
       tmp_list = tmp_list->next;
     }
 
-  text_font_unref (text->current_font);
+  if (text->current_font)
+    text_font_unref (text->current_font);
   
   g_list_free (text->text_properties);
   
