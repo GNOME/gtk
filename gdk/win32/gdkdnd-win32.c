@@ -65,7 +65,7 @@ typedef enum {
 #ifdef OLE2_DND
 
 #define PRINT_GUID(guid) \
-  g_print ("guid = %.08x-%.04x-%.04x-%.02x%.02x-%.02x%.02x%.02x%.02x%.02x%.02x", \
+  g_print ("guid = %.08lx-%.04x-%.04x-%.02x%.02x-%.02x%.02x%.02x%.02x%.02x%.02x", \
 	   ((gulong *)  guid)[0], \
 	   ((gushort *) guid)[2], \
 	   ((gushort *) guid)[3], \
@@ -88,6 +88,9 @@ static int nformats;
  * this is used on both source and destination sides.
  */
 struct _GdkDragContextPrivateWin32 {
+#ifdef OLE2_DND
+  gint    ref_count;
+#endif
   guint16 last_x;		/* Coordinates from last event */
   guint16 last_y;
   HWND    dest_xid;
@@ -139,6 +142,9 @@ gdk_drag_context_init (GdkDragContext *dragcontext)
   GdkDragContextPrivateWin32 *private = g_new0 (GdkDragContextPrivateWin32, 1);
 
   dragcontext->windowing_data = private;
+#ifdef OLE2_DND
+  private->ref_count = 1;
+#endif
 
   contexts = g_list_prepend (contexts, dragcontext);
 }
@@ -668,7 +674,7 @@ ienumformatetc_next (LPENUMFORMATETC This,
   enum_formats *en = (enum_formats *) This;
   int i, n;
 
-  GDK_NOTE (DND, g_print ("ienumformatetc_next %p %d %d\n", This, en->ix, celt));
+  GDK_NOTE (DND, g_print ("ienumformatetc_next %p %d %ld\n", This, en->ix, celt));
 
   n = 0;
   for (i = 0; i < celt; i++)
@@ -694,7 +700,7 @@ ienumformatetc_skip (LPENUMFORMATETC This,
 {
   enum_formats *en = (enum_formats *) This;
 
-  GDK_NOTE (DND, g_print ("ienumformatetc_skip %p %d %d\n", This, en->ix, celt));
+  GDK_NOTE (DND, g_print ("ienumformatetc_skip %p %d %ld\n", This, en->ix, celt));
   en->ix += celt;
 
   return S_OK;
@@ -1244,7 +1250,6 @@ gdk_drag_begin (GdkWindow *window,
   HRESULT hResult;
   DWORD dwEffect;
   HGLOBAL global;
-  FORMATETC format;
   STGMEDIUM medium;
 
   g_return_val_if_fail (window != NULL, NULL);
@@ -1285,7 +1290,7 @@ gdk_drag_begin (GdkWindow *window,
 			  (hResult == DRAGDROP_S_DROP ? "DRAGDROP_S_DROP" :
 			   (hResult == DRAGDROP_S_CANCEL ? "DRAGDROP_S_CANCEL" :
 			    (hResult == E_UNEXPECTED ? "E_UNEXPECTED" :
-			     g_strdup_printf ("%#.8x", hResult))))));
+			     g_strdup_printf ("%#.8lx", hResult))))));
 
   dobj->ido.lpVtbl->Release (&dobj->ido);
   ctx->ids.lpVtbl->Release (&ctx->ids);
