@@ -1,3 +1,16 @@
+Thu Feb 26 22:20:44 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcomboboxentry.h:
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_new_text): New
+	convenience API to construct simple text combos, implemented by
+	Damon Chaplin.
+
+	* tests/testcombo.c: Use gtk_combo_box_entry_new_text.
+
+Thu Feb 26 22:19:29 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_new_text): Improve the docs.
+
 Thu Feb 26 15:43:43 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.[ch]: Export insertion cursor drawing functionality

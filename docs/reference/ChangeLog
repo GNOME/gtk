@@ -1,3 +1,7 @@
+Thu Feb 26 22:18:21 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_combo_box_entry_new_text.
+
 Thu Feb 26 21:41:25 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_rc_reset_styles.

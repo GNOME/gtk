@@ -2842,9 +2842,10 @@ gtk_combo_box_get_model (GtkComboBox *combo_box)
  *
  * Convenience function which constructs a new text combo box, which is a
  * #GtkComboBox just displaying strings. If you use this function to create
- * a text combo box, you only want to manipulate it's data source with the
+ * a text combo box, you should only manipulate its data source with the
  * following convenience functions: gtk_combo_box_append_text(),
- * gtk_combo_box_insert_text() and gtk_combo_box_prepend_text().
+ * gtk_combo_box_insert_text(), gtk_combo_box_prepend_text() and
+ * gtk_combo_box_remove_text().
  *
  * Return value: A new text combo box.
  *

@@ -65,6 +65,9 @@ void        gtk_combo_box_entry_set_text_column (GtkComboBoxEntry *entry_box,
                                                  gint              text_column);
 gint        gtk_combo_box_entry_get_text_column (GtkComboBoxEntry *entry_box);
 
+/* convenience -- text */
+GtkWidget  *gtk_combo_box_entry_new_text        (void);
+
 
 G_END_DECLS
 

@@ -337,3 +337,33 @@ gtk_combo_box_entry_mnemonic_activate (GtkWidget *widget,
 
   return TRUE;
 }
+
+
+/* convenience API for simple text combos */
+
+/**
+ * gtk_combo_box_entry_new_text:
+ *
+ * Convenience function which constructs a new editable text combo box, which 
+ * is a #GtkComboBoxEntry just displaying strings. If you use this function to
+ * create a text combo box, you should only manipulate its data source with
+ * the following convenience functions: gtk_combo_box_append_text(),
+ * gtk_combo_box_insert_text(), gtk_combo_box_prepend_text() and
+ * gtk_combo_box_remove_text().
+ *
+ * Return value: A new text #GtkComboBoxEntry.
+ *
+ * Since: 2.4
+ */
+GtkWidget *
+gtk_combo_box_entry_new_text (void)
+{
+  GtkWidget *entry_box;
+  GtkListStore *store;
+
+  store = gtk_list_store_new (1, G_TYPE_STRING);
+
+  entry_box = gtk_combo_box_entry_new_with_model (GTK_TREE_MODEL (store), 0);
+
+  return entry_box;
+}

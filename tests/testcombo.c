@@ -165,33 +165,21 @@ create_blaat ()
         return GTK_TREE_MODEL (store);
 }
 
-static GtkTreeModel *
-create_text_store ()
+static void
+setup_combo_entry (GtkWidget *entry_box)
 {
-        GtkTreeIter iter;
-        GtkListStore *store;
-
-        store = GTK_LIST_STORE (gtk_list_store_new (1, G_TYPE_STRING));
-
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, "dum de dum", -1);
-
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, "la la la", -1);
-
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, "la la la dum de dum la la la la la la boom de da la la", -1);
-
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, "bloop", -1);
-
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, "bleep", -1);
-
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, "klaas", -1);
-
-        return GTK_TREE_MODEL (store);
+	gtk_combo_box_append_text (GTK_COMBO_BOX (entry_box),
+				   "dum de dum");
+	gtk_combo_box_append_text (GTK_COMBO_BOX (entry_box),
+				   "la la la");
+	gtk_combo_box_append_text (GTK_COMBO_BOX (entry_box),
+				   "la la la dum de dum la la la la la la boom de da la la");
+	gtk_combo_box_append_text (GTK_COMBO_BOX (entry_box),
+				   "bloop");
+	gtk_combo_box_append_text (GTK_COMBO_BOX (entry_box),
+				   "bleep");
+	gtk_combo_box_append_text (GTK_COMBO_BOX (entry_box),
+				   "klaas");
 }
 
 int
@@ -302,7 +290,8 @@ main (int argc, char **argv)
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
-        comboboxtext = gtk_combo_box_entry_new_with_model (create_text_store (), 0);
+        comboboxtext = gtk_combo_box_entry_new_text ();
+	setup_combo_entry (comboboxtext);
         gtk_container_add (GTK_CONTAINER (boom), comboboxtext);
 
         /* done */
