@@ -53,7 +53,8 @@ enum
 enum 
 {
   PROP_0,
-  PROP_VALUE
+  PROP_VALUE,
+  PROP_GROUP
 };
 
 static void gtk_radio_action_init         (GtkRadioAction *action);
@@ -140,6 +141,21 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
 						     G_MAXINT,
 						     0,
 						     G_PARAM_READWRITE));
+
+  /**
+   * GtkRadioAction:group:
+   *
+   * Sets a new group for a radio action.
+   *
+   * Since: 2.4
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_GROUP,
+				   g_param_spec_object ("group",
+							_("Group"),
+							_("The radio action whose group this action belongs."),
+							GTK_TYPE_RADIO_ACTION,
+							G_PARAM_WRITABLE));
 
   /**
    * GtkRadioAction::changed:
@@ -246,6 +262,20 @@ gtk_radio_action_set_property (GObject         *object,
     {
     case PROP_VALUE:
       radio_action->private_data->value = g_value_get_int (value);
+      break;
+    case PROP_GROUP: 
+      {
+	GtkRadioAction *arg;
+	GSList *slist = NULL;
+	
+	if (G_VALUE_HOLDS_OBJECT (value)) 
+	  {
+	    arg = GTK_RADIO_ACTION (g_value_get_object (value));
+	    if (arg)
+	      slist = gtk_radio_action_get_group (arg);
+	    gtk_radio_action_set_group (radio_action, slist);
+	  }
+      }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
