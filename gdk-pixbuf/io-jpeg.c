@@ -872,6 +872,7 @@ real_save_jpeg (GdkPixbuf          *pixbuf,
        int i, j;
        int w, h = 0;
        int rowstride = 0;
+       int n_channels;
        struct error_handler_data jerr;
        ToFunctionDestinationManager to_callback_destmgr;
 
@@ -922,6 +923,7 @@ real_save_jpeg (GdkPixbuf          *pixbuf,
        }
        
        rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+       n_channels = gdk_pixbuf_get_n_channels (pixbuf);
 
        w = gdk_pixbuf_get_width (pixbuf);
        h = gdk_pixbuf_get_height (pixbuf);
@@ -994,7 +996,7 @@ real_save_jpeg (GdkPixbuf          *pixbuf,
        while (cinfo.next_scanline < cinfo.image_height) {
                /* convert scanline from ARGB to RGB packed */
                for (j = 0; j < w; j++)
-                       memcpy (&(buf[j*3]), &(ptr[i*rowstride + j*3]), 3);
+                       memcpy (&(buf[j*3]), &(ptr[i*rowstride + j*n_channels]), 3);
 
                /* write scanline */
                jbuf = (JSAMPROW *)(&buf);
