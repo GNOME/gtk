@@ -29,8 +29,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-12-11 14:39-0500\n"
-"PO-Revision-Date: 2002-11-30 17:19+0100\n"
+"POT-Creation-Date: 2002-12-15 16:57+0100\n"
+"PO-Revision-Date: 2002-12-15 16:57+0100\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -1512,7 +1512,6 @@ msgid "Inconsistent state"
 msgstr "Inkonsistent tilstand"
 
 #: gtk/gtkcellrenderertoggle.c:142
-#, fuzzy
 msgid "The inconsistent state of the button"
 msgstr "Den inkonsistente tilstand for knappen"
 
@@ -1831,35 +1830,35 @@ msgstr "Største y"
 msgid "Maximum possible value for Y"
 msgstr "Største mulige værdi for y"
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:136
 msgid "Has separator"
 msgstr "Med adskillelseslinje"
 
-#: gtk/gtkdialog.c:128
+#: gtk/gtkdialog.c:137
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Om vinduet har en adskillelseslinje over dets knapper"
 
-#: gtk/gtkdialog.c:153
+#: gtk/gtkdialog.c:162
 msgid "Content area border"
 msgstr "Indholdsområdekant"
 
-#: gtk/gtkdialog.c:154
+#: gtk/gtkdialog.c:163
 msgid "Width of border around the main dialog area"
 msgstr "Bredde på kanten omkring hovedområdet i vinduet"
 
-#: gtk/gtkdialog.c:161
+#: gtk/gtkdialog.c:170
 msgid "Button spacing"
 msgstr "Knapmellemrum"
 
-#: gtk/gtkdialog.c:162
+#: gtk/gtkdialog.c:171
 msgid "Spacing between buttons"
 msgstr "Mellemrum mellem knapper"
 
-#: gtk/gtkdialog.c:170
+#: gtk/gtkdialog.c:179
 msgid "Action area border"
 msgstr "Handlingsområdekant"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:180
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Bredde på kanten omkring knapområdet nederst i vinduet"
 
@@ -1975,56 +1974,56 @@ msgstr "Markér alt"
 msgid "Input Methods"
 msgstr "Indtastningsmetoder"
 
-#: gtk/gtkentry.c:3970 gtk/gtktextview.c:6483
+#: gtk/gtkentry.c:3970 gtk/gtktextview.c:6484
 msgid "_Insert Unicode control character"
 msgstr "_Indsæt Unicode-kontroltegn"
 
-#: gtk/gtkfilesel.c:516 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:512 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Filnavn"
 
-#: gtk/gtkfilesel.c:517
+#: gtk/gtkfilesel.c:513
 msgid "The currently selected filename"
 msgstr "Navnet på den aktuelt valgte fil"
 
-#: gtk/gtkfilesel.c:523
+#: gtk/gtkfilesel.c:519
 msgid "Show file operations"
 msgstr "Vis filhandlingsknapper"
 
-#: gtk/gtkfilesel.c:524
+#: gtk/gtkfilesel.c:520
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Om knapper til oprettelse/manipulering af filer skal vises"
 
-#: gtk/gtkfilesel.c:531
+#: gtk/gtkfilesel.c:527
 msgid "Select multiple"
 msgstr "Markér flere"
 
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:528
 msgid "Whether to allow multiple files to be selected"
 msgstr "Om det er muligt at vælge mere end én fil"
 
-#: gtk/gtkfilesel.c:687
+#: gtk/gtkfilesel.c:683
 msgid "Folders"
 msgstr "Mapper"
 
-#: gtk/gtkfilesel.c:691
+#: gtk/gtkfilesel.c:687
 msgid "Fol_ders"
 msgstr "_Mapper"
 
-#: gtk/gtkfilesel.c:723
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:727
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "_Filer"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2208
+#: gtk/gtkfilesel.c:806 gtk/gtkfilesel.c:2204
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Mappen kan ikke læses: %s"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:937
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2035,25 +2034,25 @@ msgstr ""
 "tilgængelig for dette program.\n"
 "Er du sikker på at du vil vælge den?"
 
-#: gtk/gtkfilesel.c:1072
+#: gtk/gtkfilesel.c:1068
 msgid "_New Folder"
 msgstr "_Ny mappe"
 
-#: gtk/gtkfilesel.c:1083
+#: gtk/gtkfilesel.c:1079
 msgid "De_lete File"
 msgstr "S_let fil"
 
-#: gtk/gtkfilesel.c:1094
+#: gtk/gtkfilesel.c:1090
 msgid "_Rename File"
 msgstr "_Omdøb fil"
 
-#: gtk/gtkfilesel.c:1390
+#: gtk/gtkfilesel.c:1386
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappenavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
 
-#: gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1388
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2062,33 +2061,33 @@ msgstr ""
 "Fejl ved oprettelse af mappen \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1393 gtk/gtkfilesel.c:1634
+#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1630
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Du har sandsynligvis brug symboler der ikke er tilladate i filnavne."
 
-#: gtk/gtkfilesel.c:1401
+#: gtk/gtkfilesel.c:1397
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Fejl ved oprettelse af mappen \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1435
+#: gtk/gtkfilesel.c:1431
 msgid "New Folder"
 msgstr "Ny mappe"
 
-#: gtk/gtkfilesel.c:1450
+#: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
 msgstr "_Mappenavn:"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1472
 msgid "C_reate"
 msgstr "O_pret"
 
-#: gtk/gtkfilesel.c:1522
+#: gtk/gtkfilesel.c:1518
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
 
-#: gtk/gtkfilesel.c:1525
+#: gtk/gtkfilesel.c:1521
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2097,31 +2096,31 @@ msgstr ""
 "Fejl ved sletning af filen \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1648
+#: gtk/gtkfilesel.c:1523 gtk/gtkfilesel.c:1644
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 "Navnet indeholder sandsynligvis symboler der ikke er tilladate i filnavne."
 
-#: gtk/gtkfilesel.c:1536
+#: gtk/gtkfilesel.c:1532
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Fejl ved sletning af filen \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1579
+#: gtk/gtkfilesel.c:1575
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Vil du virkelig slette filen \"%s\"?"
 
-#: gtk/gtkfilesel.c:1584
+#: gtk/gtkfilesel.c:1580
 msgid "Delete File"
 msgstr "Slet fil"
 
-#: gtk/gtkfilesel.c:1630 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:1626 gtk/gtkfilesel.c:1640
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
 
-#: gtk/gtkfilesel.c:1632
+#: gtk/gtkfilesel.c:1628
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2130,7 +2129,7 @@ msgstr ""
 "Fejl ved ændring af navn til \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1646
+#: gtk/gtkfilesel.c:1642
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2139,29 +2138,29 @@ msgstr ""
 "Fejl ved omdøbelse af filen \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1656
+#: gtk/gtkfilesel.c:1652
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Fejl ved omdøbelse af filen \"%s\" til \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1703
+#: gtk/gtkfilesel.c:1699
 msgid "Rename File"
 msgstr "Omdøb fil"
 
-#: gtk/gtkfilesel.c:1718
+#: gtk/gtkfilesel.c:1714
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Omdøb filen \"%s\" til:"
 
-#: gtk/gtkfilesel.c:1749
+#: gtk/gtkfilesel.c:1745
 msgid "_Rename"
 msgstr "_Omdøb"
 
-#: gtk/gtkfilesel.c:2188
+#: gtk/gtkfilesel.c:2184
 msgid "_Selection: "
 msgstr "_Valg: "
 
-#: gtk/gtkfilesel.c:3075
+#: gtk/gtkfilesel.c:3077
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2170,15 +2169,15 @@ msgstr ""
 "Filnavnet \"%s\" kunne ikke konverteres til UTF-8 (prøv at sætte "
 "miljøvariablen G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3078
+#: gtk/gtkfilesel.c:3080
 msgid "Invalid Utf-8"
 msgstr "Ugyldig UTF-8"
 
-#: gtk/gtkfilesel.c:3945
+#: gtk/gtkfilesel.c:3948
 msgid "Name too long"
 msgstr "Navnet er for langt"
 
-#: gtk/gtkfilesel.c:3947
+#: gtk/gtkfilesel.c:3950
 msgid "Couldn't convert filename"
 msgstr "Kunne ikke konvertere filnavnet"
 
@@ -2266,7 +2265,7 @@ msgstr "Lodret etiketjustering"
 msgid "The vertical alignment of the label"
 msgstr "Den lodrette justering for etiketten"
 
-#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:187
+#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Forældet egenskab, brug shadow_type i stedet"
 
@@ -2294,28 +2293,28 @@ msgstr "Gamma"
 msgid "_Gamma value"
 msgstr "_Gammaværdi"
 
-#: gtk/gtkhandlebox.c:194 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
+#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
 #: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Skyggetype"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:203
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Udseendet af den skygge der omgiver beholderen"
 
-#: gtk/gtkhandlebox.c:203
+#: gtk/gtkhandlebox.c:211
 msgid "Handle position"
 msgstr "Placering af håndtag"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:212
 msgid "Position of the handle relative to the child widget"
 msgstr "Håndtagets placering i forhold til barnekontrollen"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
 msgstr "Fastgørelseskant"
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:221
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -2323,11 +2322,11 @@ msgstr ""
 "Den side af håndtagsboksen som skal anbringes ved dokkepunktet for at "
 "anbringe håndtagsboksen i dokken"
 
-#: gtk/gtkhandlebox.c:221
+#: gtk/gtkhandlebox.c:229
 msgid "Snap edge set"
 msgstr "Fastgørelseskant sat"
 
-#: gtk/gtkhandlebox.c:222
+#: gtk/gtkhandlebox.c:230
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2624,42 +2623,42 @@ msgstr "Højden af layoutet"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:243
+#: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
 msgstr "Afrivningstitel"
 
-#: gtk/gtkmenu.c:244
+#: gtk/gtkmenu.c:264
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 "En titel som vindueshåndteringen kan vise når denne menu bliver revet af"
 
-#: gtk/gtkmenu.c:319
+#: gtk/gtkmenu.c:379
 msgid "Can change accelerators"
 msgstr "Kan ændre genveje"
 
-#: gtk/gtkmenu.c:320
+#: gtk/gtkmenu.c:380
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "Om menugenveje kan ændres ved at trykke på en tast over menupunktet"
 
-#: gtk/gtkmenu.c:325
+#: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
 msgstr "Ventetid før undermenuer dukker op"
 
-#: gtk/gtkmenu.c:326
+#: gtk/gtkmenu.c:386
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Det mindste tidsrum markøren skal befinde sig over et menupunkt før "
 "undermenuen dukker op"
 
-#: gtk/gtkmenu.c:333
+#: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
 msgstr "Ventetid før en undermenu skjules"
 
-#: gtk/gtkmenu.c:334
+#: gtk/gtkmenu.c:394
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4258,7 +4257,7 @@ msgstr "Markør synlig"
 msgid "If the insertion cursor is shown"
 msgstr "Vis indsætningsmarkøren"
 
-#: gtk/gtktextview.c:6474
+#: gtk/gtktextview.c:6475
 msgid "Input _Methods"
 msgstr "Indtastnings_metoder"
 
