@@ -3,12 +3,21 @@
 
 #include <gtk/gtk.h>
 
+
+typedef enum
+{
+  SMALL,
+  MEDIUM,
+  LARGE
+} WidgetSize;
+
 typedef struct WidgetInfo
 {
   GtkWidget *window;
   gchar *name;
   gboolean no_focus;
   gboolean include_decorations;
+  WidgetSize size;
 } WidgetInfo;
 
 GList *get_all_widgets (void);

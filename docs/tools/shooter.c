@@ -212,6 +212,7 @@ int main (int argc, char **argv)
 	  gtk_main_iteration ();
 	}
       sleep (1);
+
       while (gtk_events_pending ())
 	{
 	  gtk_main_iteration ();

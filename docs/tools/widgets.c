@@ -1,12 +1,91 @@
 #include <gdk/gdkkeysyms.h>
+#include <X11/Xatom.h>
+#include <gdkx.h>
 #include "widgets.h"
 
-typedef enum
+
+#define SMALL_WIDTH  240
+#define SMALL_HEIGHT 75
+#define MEDIUM_WIDTH 240
+#define MEDIUM_HEIGHT 165
+#define LARGE_WIDTH 240
+#define LARGE_HEIGHT 240
+
+static Window
+find_toplevel_window (Window xid)
 {
-  SMALL,
-  MEDIUM,
-  LARGE
-} WidgetSize;
+  Window root, parent, *children;
+  int nchildren;
+
+  do
+    {
+      if (XQueryTree (GDK_DISPLAY (), xid, &root,
+		      &parent, &children, &nchildren) == 0)
+	{
+	  g_warning ("Couldn't find window manager window");
+	  return None;
+	}
+
+      if (root == parent)
+	return xid;
+
+      xid = parent;
+    }
+  while (TRUE);
+}
+
+
+static gboolean
+adjust_size_callback (WidgetInfo *info)
+{
+  Window toplevel;
+  Window root;
+  gint tx;
+  gint ty;
+  guint twidth;
+  guint theight;
+  guint tborder_width;
+  guint tdepth;
+  gint target_width = 0;
+  gint target_height = 0;
+
+  toplevel = find_toplevel_window (GDK_WINDOW_XID (info->window->window));
+  XGetGeometry (GDK_WINDOW_XDISPLAY (info->window->window),
+		toplevel,
+		&root, &tx, &ty, &twidth, &theight, &tborder_width, &tdepth);
+
+  switch (info->size)
+    {
+    case SMALL:
+      target_width = SMALL_WIDTH;
+      target_height = SMALL_HEIGHT;
+      break;
+    case MEDIUM:
+      target_width = MEDIUM_WIDTH;
+      target_height = MEDIUM_HEIGHT;
+      break;
+    case LARGE:
+      target_width = LARGE_WIDTH;
+      target_height = LARGE_HEIGHT;
+      break;
+    }
+
+  if (twidth > target_width ||
+      theight > target_height)
+    {
+      gtk_widget_set_size_request (info->window,
+				   2 + target_width - (twidth - target_width), /* Dunno why I need the +2 fudge factor; */
+				   2 + target_height - (theight - target_height));
+    }
+  return FALSE;
+}
+
+static void
+realize_callback (GtkWidget  *widget,
+		  WidgetInfo *info)
+{
+  g_timeout_add (500, (GSourceFunc)adjust_size_callback, info);
+}
 
 static WidgetInfo *
 new_widget_info (const char *name,
@@ -17,10 +96,13 @@ new_widget_info (const char *name,
 
   info = g_new0 (WidgetInfo, 1);
   info->name = g_strdup (name);
+  info->size = size;
   if (GTK_IS_WINDOW (widget))
     {
       info->window = widget;
+      gtk_window_set_resizable (GTK_WINDOW (info->window), FALSE);
       info->include_decorations = TRUE;
+      g_signal_connect (info->window, "realize", G_CALLBACK (realize_callback), info);
     }
   else
     {
@@ -454,8 +536,7 @@ create_window (void)
   WidgetInfo *info;
   GtkWidget *widget;
 
-  widget = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_NONE);
+  widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   info = new_widget_info ("window", widget, MEDIUM);
   info->include_decorations = TRUE;
   gtk_window_set_title (GTK_WINDOW (info->window), "Window");
@@ -525,7 +606,7 @@ create_message_dialog (void)
 				   GTK_BUTTONS_OK,
 				   NULL);
   gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (widget),
-				 "<b>Message Dialog</b>");
+				 "<b>Message Dialog</b>\n\nWith secondary text");
   return new_widget_info ("messagedialog", widget, MEDIUM);
 }
 
@@ -602,23 +683,28 @@ create_spinbutton (void)
 static WidgetInfo *
 create_statusbar (void)
 {
+  WidgetInfo *info;
   GtkWidget *widget;
   GtkWidget *vbox, *align;
 
+  vbox = gtk_vbox_new (FALSE, 0);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), gtk_label_new ("Status Bar"));
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      align,
+		      TRUE, TRUE, 0);
   widget = gtk_statusbar_new ();
+  align = gtk_alignment_new (0.5, 1.0, 1.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
   gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (widget), TRUE);
   gtk_statusbar_push (GTK_STATUSBAR (widget), 0, "Hold on...");
-  gtk_widget_set_size_request (widget, 220, -1);
 
-  vbox = gtk_vbox_new (FALSE, 3);
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-  gtk_container_add (GTK_CONTAINER (align), widget);
-  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox),
-		      gtk_label_new ("Status Bar"),
-		      FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (vbox), align, FALSE, FALSE, 0);
 
-  return new_widget_info ("statusbar", vbox, SMALL);
+  info = new_widget_info ("statusbar", vbox, SMALL);
+  gtk_container_set_border_width (GTK_CONTAINER (info->window), 0);
+
+  return info;
 }
 
 static WidgetInfo *
@@ -669,34 +755,34 @@ get_all_widgets (void)
 {
   GList *retval = NULL;
 
-  retval = g_list_prepend (retval, create_button ());
-  retval = g_list_prepend (retval, create_toggle_button ());
-  retval = g_list_prepend (retval, create_check_button ());
-  retval = g_list_prepend (retval, create_entry ());
-  retval = g_list_prepend (retval, create_radio ());
-  retval = g_list_prepend (retval, create_label ());
-  retval = g_list_prepend (retval, create_combo_box_entry ());
-  retval = g_list_prepend (retval, create_text_view ());
-  retval = g_list_prepend (retval, create_tree_view ());
-  retval = g_list_prepend (retval, create_color_button ());
-  retval = g_list_prepend (retval, create_font_button ());
-  retval = g_list_prepend (retval, create_separator ());
-  retval = g_list_prepend (retval, create_panes ());
-  retval = g_list_prepend (retval, create_frame ());
-  retval = g_list_prepend (retval, create_window ());
   retval = g_list_prepend (retval, create_accel_label ());
+  retval = g_list_prepend (retval, create_button ());
+  retval = g_list_prepend (retval, create_check_button ());
+  retval = g_list_prepend (retval, create_color_button ());
+  retval = g_list_prepend (retval, create_combo_box_entry ());
+  retval = g_list_prepend (retval, create_entry ());
   retval = g_list_prepend (retval, create_file_button ());
+  retval = g_list_prepend (retval, create_font_button ());
+  retval = g_list_prepend (retval, create_frame ());
   retval = g_list_prepend (retval, create_icon_view ());
-  retval = g_list_prepend (retval, create_toolbar ());
+  retval = g_list_prepend (retval, create_image ());
+  retval = g_list_prepend (retval, create_label ());
   retval = g_list_prepend (retval, create_menubar ());
-  retval = g_list_prepend (retval, create_notebook ());
   retval = g_list_prepend (retval, create_message_dialog ());
+  retval = g_list_prepend (retval, create_notebook ());
+  retval = g_list_prepend (retval, create_panes ());
   retval = g_list_prepend (retval, create_progressbar ());
+  retval = g_list_prepend (retval, create_radio ());
+  retval = g_list_prepend (retval, create_scales ());
   retval = g_list_prepend (retval, create_scrolledwindow ());
+  retval = g_list_prepend (retval, create_separator ());
   retval = g_list_prepend (retval, create_spinbutton ());
   retval = g_list_prepend (retval, create_statusbar ());
-  retval = g_list_prepend (retval, create_scales ());
-  retval = g_list_prepend (retval, create_image ());
+  retval = g_list_prepend (retval, create_text_view ());
+  retval = g_list_prepend (retval, create_toggle_button ());
+  retval = g_list_prepend (retval, create_toolbar ());
+  retval = g_list_prepend (retval, create_tree_view ());
+  retval = g_list_prepend (retval, create_window ());
 
   return retval;
 }
