@@ -1,3 +1,7 @@
+Wed Apr 25 12:33:03 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtktreeitem.sgml: Add note about GTK_ENABLE_BROKEN.
+
 Tue Apr 17 10:59:13 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (GTKDOC_CFLAGS): Remove -DGTK_DISABLE_COMPAT

@@ -6,7 +6,13 @@ GtkTreeItem
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+<warning>
+<para>
+#GtkTree is deprecated and unsupported. It is known to be
+buggy. To use it, you must define the symbol %GTK_ENABLE_BROKEN
+prior to including the GTK+ header files. Use #GtkTreeView intead.
+</para>
+</warning>
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
