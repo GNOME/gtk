@@ -12179,7 +12179,7 @@ gtk_tree_view_get_enable_search (GtkTreeView *tree_view)
 gint
 gtk_tree_view_get_search_column (GtkTreeView *tree_view)
 {
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), 0);
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
 
   return (tree_view->priv->search_column);
 }
@@ -12198,7 +12198,7 @@ gtk_tree_view_set_search_column (GtkTreeView *tree_view,
 				 gint         column)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (column >= 0);
+  g_return_if_fail (column >= -1);
 
   if (tree_view->priv->search_column == column)
     return;

@@ -1,5 +1,10 @@
 2005-01-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_set_search_column): Allow to
+	reset the property to its default value -1. 
+	(gtk_tree_view_get_search_column): Return the default value in
+	the g_return_val_if_fail() check.  (#163864, Richard Hult)
+
 	* gtk/gtkcellrendererprogress.c (gtk_cell_renderer_progress_set_value): 
 	Add a translator hint.  (#163889)
 
