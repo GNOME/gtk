@@ -1,5 +1,8 @@
 2005-03-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkliststore.c (gtk_list_store_insert_with_valuesv): 
+	Fix a doc typo.  (#169873, Johan Dahlin)
+
 	* gtk/gtkdialog.c (gtk_dialog_map): Don't
 	try to focus the default_widget if there is 
 	none.  (#169881, Thomas Leonard)

@@ -1985,7 +1985,7 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
  * @values: an array of GValues 
  * @n_values: the length of the @columns and @values arrays
  * 
- * A variant of gtk_list_Store_insert_with_values() which
+ * A variant of gtk_list_store_insert_with_values() which
  * takes the columns and values as two arrays, instead of
  * varargs. This function is mainly intended for 
  * language-bindings.
