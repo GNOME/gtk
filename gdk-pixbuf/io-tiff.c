@@ -119,15 +119,19 @@ tiff_set_error (GError    **error,
         /* Take the error message from libtiff and merge it with
          * some context we provide.
          */
-        g_set_error (error,
-                     GDK_PIXBUF_ERROR,
-                     error_code,
-                     "%s%s%s",
-                     msg, global_error ? ": " : "", global_error);
-
         if (global_error) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             error_code,
+                             "%s%s%s", msg, ": ", global_error);
+
                 g_free (global_error);
                 global_error = NULL;
+        }
+        else {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             error_code, msg);
         }
 }
 
@@ -256,6 +260,14 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 return NULL;
         }
 
+        if (img.put.any == NULL) {
+                tiff_set_error (error,
+                                GDK_PIXBUF_ERROR_FAILED,
+                                _("Unsupported TIFF variant"));
+                g_object_unref (pixbuf);
+                return NULL;                
+        }
+        
         if (img.isContig) {
                 tiff_put_contig = img.put.contig;
                 img.put.contig = put_contig;
@@ -476,15 +488,19 @@ gdk_pixbuf__tiff_image_stop_load (gpointer data,
                 if (pixbuf)
                         g_object_unref (pixbuf);
                 retval = pixbuf != NULL;
-                TIFFClose (tiff);
                 if (global_error)
                         {
                                 tiff_set_error (error,
                                                 GDK_PIXBUF_ERROR_FAILED,
                                                 _("Failed to load TIFF image"));
+                                tiff_pop_handlers ();
+
                                 retval = FALSE;
                         }
         }
+
+        if (tiff)
+                TIFFClose (tiff);
 
         g_assert (!global_error);
         
