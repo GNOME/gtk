@@ -1087,6 +1087,7 @@ build/Makefile
 build/win32/Makefile
 demos/Makefile
 demos/gtk-demo/Makefile
+tests/Makefile
 docs/Makefile
 docs/reference/Makefile
 docs/reference/gdk-pixbuf/Makefile

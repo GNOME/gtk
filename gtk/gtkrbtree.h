@@ -40,8 +40,8 @@ typedef struct _GtkRBNode GtkRBNode;
 typedef struct _GtkRBTreeView GtkRBTreeView;
 
 typedef void (*GtkRBTreeTraverseFunc) (GtkRBTree  *tree,
-				     GtkRBNode  *node,
-				     gpointer  data);
+                                       GtkRBNode  *node,
+                                       gpointer  data);
 
 struct _GtkRBTree
 {

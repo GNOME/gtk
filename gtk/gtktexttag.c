@@ -1337,6 +1337,10 @@ gtk_text_tag_get_property (GObject      *object,
         g_value_set_boxed (value, tag->values->tabs);
       break;
 
+    case PROP_INVISIBLE:
+      g_value_set_boolean (value, tag->values->invisible);
+      break;
+      
     case PROP_BACKGROUND_SET:
     case PROP_BACKGROUND_GDK_SET:
       g_value_set_boolean (value, tag->bg_color_set);
@@ -1439,8 +1443,13 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boolean (value, tag->tabs_set);
       break;
 
+    case PROP_INVISIBLE_SET:
+      g_value_set_boolean (value, tag->invisible_set);
+      break;
+      
     case PROP_BACKGROUND:
     case PROP_FOREGROUND:
+      g_warning ("'foreground' and 'background' properties are not readable, use 'foreground_gdk' and 'background_gdk'");
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;

@@ -1,3 +1,17 @@
+2000-12-20  Havoc Pennington  <hp@redhat.com>
+
+	* tests: new directory to contain tests, gtk/test* should move
+	here sometime (with appropriate on-cvs-server hackery)
+
+	* tests/testtreeview.c, tests/Makefile.am: a test
+	
+	* configure.in (AC_OUTPUT): add tests/Makefile
+
+	* gtk/gtktexttag.c (gtk_text_tag_get_property): Add "invisible"
+	and "invisible_set" which were missing
+
+	* gtk/gtkrbtree.h: some cheesy indentation fix
+	
 2000-12-20  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkinvisible.c (gtk_invisible_realize):
