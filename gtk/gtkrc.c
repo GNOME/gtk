@@ -247,7 +247,7 @@ gtk_rc_get_module_dir(void)
   if (var)
     path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
   else
-    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
+    path = g_strdup_printf("%s%s", GTK_LIBDIR, "/gtk/themes/engines");
 
   return path;
 }
@@ -289,7 +289,7 @@ gtk_rc_append_default_module_path(void)
   if (var)
     path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
   else
-    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
+    path = g_strdup_printf("%s%s", GTK_LIBDIR, "/gtk/themes/engines");
   module_path[n++] = g_strdup(path);
   g_free(path);
 

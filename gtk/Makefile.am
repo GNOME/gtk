@@ -3,7 +3,7 @@
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_DISABLE_COMPAT_H				\
-	-DGTK_EXE_PREFIX=\"$(exec_prefix)\"		\
+	-DGTK_LIBDIR=\"$(libdir)\"	     	        \
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\

@@ -1,3 +1,8 @@
+Fri Feb  2 12:02:23 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c Makefile.am: Use $(libdir), not $(exe_prefix),
+	since some people set $(libdir) separately. (#1290, David Kaelbling)
+
 Thu Feb  1 20:32:49 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.c: Improve warnings a bit in a fashion similar
