@@ -136,6 +136,7 @@ void            gdk_drag_drop        (GdkDragContext *context,
 				      guint32         time_);
 void            gdk_drag_abort       (GdkDragContext *context,
 				      guint32         time_);
+gboolean        gdk_drag_drop_succeeded (GdkDragContext *context);
 
 #ifdef __cplusplus
 }

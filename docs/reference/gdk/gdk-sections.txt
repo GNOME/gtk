@@ -1142,6 +1142,7 @@ gdk_drag_context_unref
 GdkDragContext
 GdkDragAction
 gdk_drag_status
+gdk_drag_drop_succeeded
 
 <SUBSECTION Standard>
 GDK_DRAG_CONTEXT

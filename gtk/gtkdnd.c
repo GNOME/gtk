@@ -901,7 +901,10 @@ gtk_drag_dest_set   (GtkWidget            *widget,
 
   site->flags = flags;
   site->have_drag = FALSE;
-  site->target_list = NULL;
+  if (targets)
+    site->target_list = gtk_target_list_new (targets, n_targets);
+  else
+    site->target_list = NULL;
   site->actions = actions;
   site->do_proxy = FALSE;
   site->proxy_window = NULL;
@@ -2092,7 +2095,10 @@ gtk_drag_source_set (GtkWidget            *widget,
 
   site->start_button_mask = start_button_mask;
 
-  site->target_list = gtk_target_list_new (targets, n_targets);
+  if (targets)
+    site->target_list = gtk_target_list_new (targets, n_targets);
+  else
+    site->target_list = NULL;
 
   site->actions = actions;
 }

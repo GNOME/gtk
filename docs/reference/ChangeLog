@@ -1,3 +1,7 @@
+2004-08-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdk-sections.txt: Add gdk_drag_drop_succeeded.
+
 2004-08-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_file_chooser_[sg]et_show_hidden.

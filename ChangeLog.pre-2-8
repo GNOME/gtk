@@ -1,3 +1,28 @@
+2004-08-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_dest_set, gtk_drag_source_set): Really
+	fix the initialization of the target list.
+
+	Support XDND v5. (#10220, Owen Taylor)
+	
+	* gdk/x11/gdkdnd-x11.c: Record the XDND version and whether the
+	drop was successful in the GdkDragContextPrivateX11 struct.
+	(xdnd_finished_filter): Store the success status of the drop
+	for an XDND version 5 interaction. For other versions, always
+	assume the drop was successful.
+	(xdnd_check_dest): Return the protocol version.
+	(_gdk_drag_get_protocol_for_display): Return the protocol version.
+	(gdk_drag_find_window_for_screen): Store the used protocol version
+	in the GdkDragContext.
+	(xdnd_send_enter): Send the used protocol version from the context,
+	instead of hardwiring 3.
+	(xdnd_enter_filter): Accept protocol versions >= 3 and store the
+	used protocol version in the context.
+
+	* gdk/gdkdnd.h: 
+	* gdk/x11/gdkdnd-x11.c (gdk_drag_drop_succeeded): New function
+	to find out whether a drop was successful.
+
 2004-07-28  Robert Ögren  <gtk@roboros.com>
 
 	* gdk/win32/gdkinput-win32.c (_gdk_input_other_event): Set x_root

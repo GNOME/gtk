@@ -80,9 +80,12 @@ struct _GdkDragContextPrivateX11 {
   Window drop_xid;            /* The (non-proxied) window that is receiving drops */
   guint xdnd_targets_set : 1;   /* Whether we've already set XdndTypeList */
   guint xdnd_actions_set : 1;   /* Whether we've already set XdndActionList */
-  guint xdnd_have_actions : 1; /* Whether an XdndActionList was provided */
+  guint xdnd_have_actions : 1;  /* Whether an XdndActionList was provided */
   guint motif_targets_set : 1;  /* Whether we've already set motif initiator info */
   guint drag_status : 4;	/* current status of drag */
+  
+  guint drop_failed : 1;        /* Whether the drop was unsuccessful */
+  guint version;                /* Xdnd protocol version */
 
   GSList *window_caches;
 };
@@ -1997,6 +2000,7 @@ xdnd_finished_filter (GdkXEvent *xev,
   XEvent *xevent = (XEvent *)xev;
   guint32 dest_window = xevent->xclient.data.l[0];
   GdkDragContext *context;
+  GdkDragContextPrivateX11 *private;
 
   if (!event->any.window ||
       gdk_window_get_window_type (event->any.window) == GDK_WINDOW_FOREIGN)
@@ -2010,6 +2014,10 @@ xdnd_finished_filter (GdkXEvent *xev,
   
   if (context)
     {
+      private = PRIVATE_DATA (context);
+      if (private->version == 5)
+	private->drop_failed = xevent->xclient.data.l[1] == 0;
+      
       event->dnd.type = GDK_DROP_FINISHED;
       event->dnd.context = context;
       g_object_ref (context);
@@ -2230,11 +2238,14 @@ xdnd_send_enter (GdkDragContext *context)
                            private->drop_xid : 
                            GDK_DRAWABLE_XID (context->dest_window);
   xev.xclient.data.l[0] = GDK_DRAWABLE_XID (context->source_window);
-  xev.xclient.data.l[1] = (3 << 24); /* version */
+  xev.xclient.data.l[1] = (private->version << 24); /* version */
   xev.xclient.data.l[2] = 0;
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
+  GDK_NOTE(DND,
+	   g_message ("Sending enter source window %#lx XDND protocol version %d\n",
+		      GDK_DRAWABLE_XID (context->source_window), private->version));
   if (g_list_length (context->targets) > 3)
     {
       if (!private->xdnd_targets_set)
@@ -2364,7 +2375,8 @@ xdnd_send_motion (GdkDragContext *context,
 
 static guint32
 xdnd_check_dest (GdkDisplay *display,
-		 Window      win)
+		 Window      win,
+		 gint       *xdnd_version)
 {
   gboolean retval = FALSE;
   Atom type = None;
@@ -2411,10 +2423,13 @@ xdnd_check_dest (GdkDisplay *display,
 	    {
 	      if (*version >= 3)
 		retval = TRUE;
+	      if (xdnd_version)
+		*xdnd_version = *version;
 	    }
 	  else
 	    GDK_NOTE (DND, 
-		      g_warning ("Invalid XdndAware property on window %ld\n", win));
+		      g_warning ("Invalid XdndAware "
+				 "property on window %ld\n", win));
 	  
 	  XFree (version);
 	}
@@ -2651,7 +2666,7 @@ xdnd_enter_filter (GdkXEvent *xev,
 	    g_message ("XdndEnter: source_window: %#x, version: %#x",
 		       source_window, version));
 
-  if (version != 3)
+  if (version < 3)
     {
       /* Old source ignore */
       GDK_NOTE (DND, g_message ("Ignored old XdndEnter message"));
@@ -2666,7 +2681,7 @@ xdnd_enter_filter (GdkXEvent *xev,
 
   new_context = gdk_drag_context_new ();
   new_context->protocol = GDK_DRAG_PROTO_XDND;
-  new_context->is_source = FALSE;
+  PRIVATE_DATA(new_context)->version = version;
 
   new_context->source_window = gdk_window_lookup_for_display (display, source_window);
   if (new_context->source_window)
@@ -2956,23 +2971,12 @@ gdk_drag_begin (GdkWindow     *window,
   return new_context;
 }
 
-/**
- * gdk_drag_get_protocol_for_display:
- * @display: the #GdkDisplay where the destination window resides
- * @xid: the X id of the destination window.
- * @protocol: location where the supported DND protocol is returned.
- * @returns: the X id of the window where the drop should happen. This 
- *     may be @xid or the X id of a proxy window, or None if @xid doesn't
- *     support Drag and Drop.
- *
- * Finds out the DND protocol supported by a window.
- *
- * Since: 2.2
- */ 
-guint32
-gdk_drag_get_protocol_for_display (GdkDisplay      *display,
-				   guint32          xid,
-				   GdkDragProtocol *protocol)
+static guint32
+_gdk_drag_get_protocol_for_display (GdkDisplay      *display,
+				    guint32          xid,
+				    GdkDragProtocol *protocol,
+				    gint            *version)
+
 {
   GdkWindow *window;
   guint32 retval;
@@ -2989,6 +2993,7 @@ gdk_drag_get_protocol_for_display (GdkDisplay      *display,
       if (g_object_get_data (G_OBJECT (window), "gdk-dnd-registered") != NULL)
 	{
 	  *protocol = GDK_DRAG_PROTO_XDND;
+	  *version = 5;
 	  xdnd_precache_atoms (display);
 	  GDK_NOTE (DND, g_message ("Entering local Xdnd window %#x\n", xid));
 	  return xid;
@@ -2997,7 +3002,7 @@ gdk_drag_get_protocol_for_display (GdkDisplay      *display,
 	return None;
     }
   
-  if ((retval = xdnd_check_dest (display, xid)))
+  if ((retval = xdnd_check_dest (display, xid, version)))
     {
       *protocol = GDK_DRAG_PROTO_XDND;
       xdnd_precache_atoms (display);
@@ -3065,6 +3070,27 @@ gdk_drag_get_protocol_for_display (GdkDisplay      *display,
 
   *protocol = GDK_DRAG_PROTO_NONE;
   return None;
+}
+
+/**
+ * gdk_drag_get_protocol_for_display:
+ * @display: the #GdkDisplay where the destination window resides
+ * @xid: the X id of the destination window.
+ * @protocol: location where the supported DND protocol is returned.
+ * @returns: the X id of the window where the drop should happen. This 
+ *     may be @xid or the X id of a proxy window, or None if @xid doesn't
+ *     support Drag and Drop.
+ *
+ * Finds out the DND protocol supported by a window.
+ *
+ * Since: 2.2
+ */ 
+guint32
+gdk_drag_get_protocol_for_display (GdkDisplay      *display,
+				   guint32          xid,
+				   GdkDragProtocol *protocol)
+{
+  return _gdk_drag_get_protocol_for_display (display, xid, protocol, NULL);
 }
 
 static GdkWindowCache *
@@ -3145,7 +3171,8 @@ gdk_drag_find_window_for_screen (GdkDragContext  *context,
        * two are passed explicitely, the third implicitly through
        * protocol->dest_xid.
        */
-      if ((recipient = gdk_drag_get_protocol_for_display (display, dest, protocol)))
+      if ((recipient = _gdk_drag_get_protocol_for_display (display, dest, 
+							   protocol, &private->version)))
 	{
 	  *dest_window = gdk_window_lookup_for_display (display, recipient);
 	  if (*dest_window)
@@ -3626,8 +3653,19 @@ gdk_drop_finish (GdkDragContext   *context,
       xev.xclient.window = GDK_DRAWABLE_XID (context->source_window);
       
       xev.xclient.data.l[0] = GDK_DRAWABLE_XID (context->dest_window);
-      xev.xclient.data.l[1] = 0;
-      xev.xclient.data.l[2] = 0;
+      if (success)
+	{
+	  g_print ("sending back success status; version %d\n", 
+		   PRIVATE_DATA (context)->version);
+	  xev.xclient.data.l[1] = 1;
+	  xev.xclient.data.l[2] = xdnd_action_to_atom (display, 
+						       context->action);
+	}
+      else
+	{
+	  xev.xclient.data.l[1] = 0;
+	  xev.xclient.data.l[2] = None;
+	}
       xev.xclient.data.l[3] = 0;
       xev.xclient.data.l[4] = 0;
 
@@ -3643,7 +3681,7 @@ gdk_drop_finish (GdkDragContext   *context,
 void            
 gdk_window_register_dnd (GdkWindow      *window)
 {
-  static gulong xdnd_version = 3;
+  static gulong xdnd_version = 5;
   MotifDragReceiverInfo info;
   Atom motif_drag_receiver_info_atom;
   GdkDisplay *display = gdk_drawable_get_display (window);
@@ -3707,3 +3745,25 @@ gdk_drag_get_selection (GdkDragContext *context)
     return GDK_NONE;
 }
 
+/**
+ * gdk_drag_drop_succeeded:
+ * @context: a #GdkDragContext
+ * 
+ * Returns wether the dropped data has been successfully 
+ * transferred. This function is intended to be used while 
+ * handling a %GDK_DROP_FINISHED event, its return value is
+ * meaningless at other times.
+ * 
+ * Return value: %TRUE if the drop was successful.
+ *
+ * Since: 2.6
+ **/
+gboolean 
+gdk_drag_drop_succeeded (GdkDragContext *context)
+{
+  g_return_val_if_fail (context != NULL, FALSE);
+
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
+
+  return !private->drop_failed;
+}
