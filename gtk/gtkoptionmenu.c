@@ -1021,6 +1021,7 @@ gtk_option_menu_scroll_event (GtkWidget          *widget,
 	  if (GTK_WIDGET_VISIBLE (item) && GTK_WIDGET_IS_SENSITIVE (item))
 	    {
 	      gtk_option_menu_set_history (option_menu, index);
+	      gtk_menu_item_activate (GTK_MENU_ITEM (item));
 	      break;
 	    }
 	      

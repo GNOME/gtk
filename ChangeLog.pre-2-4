@@ -1,3 +1,8 @@
+2002-07-10  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_scroll_event): activate the
+	menu item so old apps work properly
+
 Wed Jul 10 14:27:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/gtkimcontextxim.c gtk/gtkcolorsel.c 
