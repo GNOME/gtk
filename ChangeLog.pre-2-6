@@ -1,3 +1,29 @@
+Thu Jan 29 21:36:14 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtksignal.c (gtk_signal_query): new function to gather
+ 	  information about a certain signal.
+
+	* gtk/gtksignal.c (gtk_signal_newv): new function similar to
+ 	  gtk_signal_new().
+
+	* gtk/gtksignal.c (gtk_signal_real_emit): check for function_offset
+	  == 0.
+
+	* gtk/gtksignal.c (gtk_signal_connect_by_type): perform a signal
+	  id lookup on the parent as well.
+
+	* gtk/gtkobject.c (gtk_object_class_add_user_signal): new
+	  function for implementation of user defined signals.
+	* gtk/gtkobject.c (gtk_object_class_add_signals): free old
+	  signal id array.
+
+	* gtk/gtkobject.h: this holds the typedefs for GtkSignalFunc and
+	  GtkSignalMarshaller now, because they are used for
+	  gtk_object_class_add_user_signal.
+
+	* gtk/gtktypeutils.c (gtk_type_class_init): reset object_class->signals
+	  and object_class->nsignals for new object classes.
+
 Tue Jan 27 15:52:48 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
 
 	* gtk/gtkhandlebox.c (gtk_handle_box_realize): The auto_shrink
