@@ -1985,9 +1985,6 @@ gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn     *tree_column)
   return tree_column->sort_order;
 }
 
-
-
-
 /**
  * gtk_tree_view_column_cell_set_cell_data:
  * @tree_column: A #GtkTreeViewColumn.

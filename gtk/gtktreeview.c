@@ -260,7 +260,8 @@ static void gtk_tree_view_reordered                       (GtkTreeModel    *mode
 
 
 /* Internal functions */
-
+static gboolean gtk_tree_view_is_expander_column   (GtkTreeView      *tree_view,
+						    GtkTreeViewColumn*column);
 static void     gtk_tree_view_add_move_binding     (GtkBindingSet    *binding_set,
 						    guint             keyval,
 						    guint             modmask,
@@ -488,13 +489,11 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   g_object_class_install_property (o_class,
                                    PROP_EXPANDER_COLUMN,
-                                   g_param_spec_uint ("expander_column",
-						      _("Expand Column"),
-						      _("Set the column number for the expander column"),
-						      0,
-						      G_MAXINT,
-						      0,
-						      G_PARAM_READWRITE));
+                                   g_param_spec_object ("expander_column",
+							_("Expander Column"),
+							_("Set the column for the expander column"),
+							GTK_TYPE_TREE_VIEW_COLUMN,
+							G_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_REORDERABLE,
@@ -871,7 +870,7 @@ gtk_tree_view_set_property (GObject         *object,
       gtk_tree_view_set_headers_clickable (tree_view, g_value_get_boolean (value));
       break;
     case PROP_EXPANDER_COLUMN:
-      gtk_tree_view_set_expander_column (tree_view, g_value_get_uint (value));
+      gtk_tree_view_set_expander_column (tree_view, GTK_TREE_VIEW_COLUMN (g_value_get_object (value)));
       break;
     case PROP_REORDERABLE:
       gtk_tree_view_set_reorderable (tree_view, g_value_get_boolean (value));
@@ -909,7 +908,7 @@ gtk_tree_view_get_property (GObject         *object,
       g_value_set_boolean (value, gtk_tree_view_get_headers_visible (tree_view));
       break;
     case PROP_EXPANDER_COLUMN:
-      g_value_set_uint (value, tree_view->priv->expander_column);
+      g_value_set_object (value, G_OBJECT (tree_view->priv->expander_column));
       break;
     case PROP_REORDERABLE:
       g_value_set_boolean (value, tree_view->priv->reorderable);
@@ -1502,7 +1501,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       background_area.x = 0;
 
       /* Let the column have a chance at selecting it. */
-      for (i = 0, list = tree_view->priv->columns; i < tree_view->priv->n_columns; i++, list = list->next)
+      for (list = tree_view->priv->columns; list; list = list->next)
 	{
 	  GtkTreeIter iter;
 
@@ -1512,7 +1511,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	    continue;
 
 	  background_area.width = column->displayed_width;
-	  if (i == tree_view->priv->expander_column &&
+	  if (gtk_tree_view_is_expander_column (tree_view, column) &&
               TREE_VIEW_DRAW_EXPANDERS(tree_view))
 	    {
 	      cell_area = background_area;
@@ -2396,7 +2395,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   GtkTreeIter iter;
   gint new_y;
   gint y_offset, x_offset, cell_offset;
-  gint i, max_height;
+  gint max_height;
   gint depth;
   GdkRectangle background_area;
   GdkRectangle cell_area;
@@ -2496,7 +2495,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
       parity = _gtk_rbtree_node_find_parity (tree, node);
       
-      for (i = 0, list = tree_view->priv->columns; i < tree_view->priv->n_columns; i++, list = list->next)
+      for (list = tree_view->priv->columns; list; list = list->next)
 	{
 	  GtkTreeViewColumn *column = list->data;
 	  const gchar *detail = NULL;
@@ -2586,7 +2585,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
                               background_area.width,
                               background_area.height);
 
-	  if (i == tree_view->priv->expander_column &&
+	  if (gtk_tree_view_is_expander_column(tree_view, column) &&
               TREE_VIEW_DRAW_EXPANDERS(tree_view))
 	    {
 	      cell_area.x += depth*tree_view->priv->tab_offset;
@@ -4587,7 +4586,6 @@ gtk_tree_view_get_cell_xrange (GtkTreeView       *tree_view,
   GtkTreeViewColumn *tmp_column = NULL;
   gint total_width;
   GList *list;
-  gint i;
 
   if (x1)
     *x1 = 0;
@@ -4595,7 +4593,6 @@ gtk_tree_view_get_cell_xrange (GtkTreeView       *tree_view,
   if (x2)
     *x2 = 0;
 
-  i = 0;
   total_width = 0;
   for (list = tree_view->priv->columns; list; list = list->next)
     {
@@ -4606,8 +4603,6 @@ gtk_tree_view_get_cell_xrange (GtkTreeView       *tree_view,
 
       if (tmp_column->visible)
         total_width += tmp_column->width;
-
-      ++i;
     }
 
   if (tmp_column != column)
@@ -4620,7 +4615,7 @@ gtk_tree_view_get_cell_xrange (GtkTreeView       *tree_view,
    * to the cell renderer.
    */
 
-  if (i == tree_view->priv->expander_column)
+  if (gtk_tree_view_is_expander_column (tree_view, column))
     total_width += tree_view->priv->tab_offset * _gtk_rbtree_get_depth (tree);
 
   if (x1)
@@ -4644,15 +4639,13 @@ gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
   GList *list;
   GtkTreeViewColumn *tmp_column = NULL;
   gint total_width;
-  gint i;
 
-  i = 0;
   total_width = 0;
   for (list = tree_view->priv->columns; list; list = list->next)
     {
       tmp_column = list->data;
 
-      if (i == tree_view->priv->expander_column)
+      if (gtk_tree_view_is_expander_column (tree_view, tmp_column))
         {
           x_offset = total_width;
           break;
@@ -4660,8 +4653,6 @@ gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
 
       if (tmp_column->visible)
         total_width += tmp_column->width;
-
-      ++i;
     }
 
   if (x1)
@@ -4742,10 +4733,7 @@ gtk_tree_view_insert_iter_height (GtkTreeView *tree_view,
   GtkTreeViewColumn *column;
   GList *list;
   gint max_height = 0;
-  gint i;
   gint vertical_separator;
-
-  i = 0;
 
   gtk_widget_style_get (GTK_WIDGET (tree_view), "vertical_separator", &vertical_separator, NULL);
   /* do stuff with node */
@@ -4758,25 +4746,20 @@ gtk_tree_view_insert_iter_height (GtkTreeView *tree_view,
 	continue;
 
       if (column->column_type == GTK_TREE_VIEW_COLUMN_FIXED)
-        {
-          ++i;
-          continue;
-        }
+        continue;
 
       gtk_tree_view_column_cell_set_cell_data (column, tree_view->priv->model, iter);
 
       gtk_tree_view_column_cell_get_size (column, NULL, NULL, NULL, &width, &height);
       max_height = MAX (max_height, vertical_separator + height);
 
-      if (i == tree_view->priv->expander_column &&
+      if (gtk_tree_view_is_expander_column (tree_view, column) &&
           TREE_VIEW_DRAW_EXPANDERS (tree_view))
 	_gtk_tree_view_column_set_width (column,
                                         MAX (column->width, depth * tree_view->priv->tab_offset + width));
       else
         _gtk_tree_view_column_set_width (column,
                                         MAX (column->width, width));
-
-      ++i;
     }
   return max_height;
 }
@@ -4837,7 +4820,6 @@ gtk_tree_view_calc_size (GtkTreeView *tree_view,
   GtkTreeViewColumn *column;
   gint max_height;
   gint vertical_separator;
-  gint i;
 
   TREE_VIEW_INTERNAL_ASSERT_VOID (tree != NULL);
 
@@ -4851,7 +4833,7 @@ gtk_tree_view_calc_size (GtkTreeView *tree_view,
     {
       max_height = 0;
       /* Do stuff with node */
-      for (list = tree_view->priv->columns, i = 0; i < tree_view->priv->n_columns; list = list->next, i++)
+      for (list = tree_view->priv->columns; list; list = list->next)
 	{
 	  gint height = 0, width = 0;
 	  column = list->data;
@@ -4871,7 +4853,7 @@ gtk_tree_view_calc_size (GtkTreeView *tree_view,
 	    {
 	      continue;
 	    }
-	  if (i == tree_view->priv->expander_column &&
+	  if (gtk_tree_view_is_expander_column (tree_view, column) &&
               TREE_VIEW_DRAW_EXPANDERS (tree_view))
             _gtk_tree_view_column_set_width (column,
                                             MAX (column->width, depth * tree_view->priv->tab_offset + width));
@@ -4897,14 +4879,13 @@ gtk_tree_view_discover_dirty_iter (GtkTreeView *tree_view,
 {
   GtkTreeViewColumn *column;
   GList *list;
-  gint i;
   gboolean retval = FALSE;
   gint tmpheight;
 
   if (height)
     *height = 0;
 
-  for (i = 0, list = tree_view->priv->columns; list; list = list->next, i++)
+  for (list = tree_view->priv->columns; list; list = list->next)
     {
       gint width;
       column = list->data;
@@ -4928,7 +4909,7 @@ gtk_tree_view_discover_dirty_iter (GtkTreeView *tree_view,
 					      NULL, NULL, NULL,
 					      &width, NULL);
 	}
-      if (i == tree_view->priv->expander_column &&
+      if (gtk_tree_view_is_expander_column (tree_view, column) &&
           TREE_VIEW_DRAW_EXPANDERS (tree_view))
 	{
 	  if (depth * tree_view->priv->tab_offset + width > column->width)
@@ -5163,6 +5144,26 @@ _gtk_tree_view_find_node (GtkTreeView  *tree_view,
       tmptree = tmpnode->children;
     }
   while (1);
+}
+
+static gboolean
+gtk_tree_view_is_expander_column (GtkTreeView       *tree_view,
+				  GtkTreeViewColumn *column)
+{
+  GList *list;
+
+  if (tree_view->priv->expander_column == column)
+    return TRUE;
+
+  if (column != NULL)
+    return FALSE;
+
+  for (list = tree_view->priv->columns; list; list = list->next)
+    if (((GtkTreeViewColumn *)list->data)->visible)
+      break;
+  if (list && list->data == column)
+    return TRUE;
+  return FALSE;
 }
 
 static void
@@ -6752,37 +6753,50 @@ gtk_tree_view_move_column_after (GtkTreeView       *tree_view,
 /**
  * gtk_tree_view_set_expander_column:
  * @tree_view: A #GtkTreeView
- * @col: The column to draw the expander arrow at.
- *
- * Sets the column offset to draw the expander arrow at.
+ * @column: NULL, or the column to draw the expander arrow at.
+ * 
+ * Sets the column to draw the expander arrow at. It must be in @tree_view.  If
+ * @column is %NULL, then the expander arrow is fixed at the first column.
  **/
 void
-gtk_tree_view_set_expander_column (GtkTreeView *tree_view,
-                                   gint         col)
+gtk_tree_view_set_expander_column (GtkTreeView       *tree_view,
+                                   GtkTreeViewColumn *column)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  if (column != NULL)
+    g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
 
-  if (tree_view->priv->expander_column != col)
+  if (tree_view->priv->expander_column != column)
     {
-      tree_view->priv->expander_column = col;
+      GList *list;
 
+      if (column)
+	{
+	  /* Confirm that column is in tree_view */
+	  for (list = tree_view->priv->columns; list; list = list->next)
+	    if (list->data == column)
+	      break;
+	  g_return_if_fail (list != NULL);
+	}
+
+      tree_view->priv->expander_column = column;
       g_object_notify (G_OBJECT (tree_view), "expander_column");
     }
 }
 
 /**
  * gtk_tree_view_get_expander_column:
- * @tree_view:
+ * @tree_view: A #GtkTreeView
  *
- * Returns the offset of the column that is the current expander column.  This
+ * Returns the column that is the current expander column.  This
  * column has the expander arrow drawn next to it.
  *
- * Return value: The offset of the expander column.
+ * Return value: The expander column.
  **/
-gint
+GtkTreeViewColumn *
 gtk_tree_view_get_expander_column (GtkTreeView *tree_view)
 {
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
 
   return tree_view->priv->expander_column;
 }
@@ -8083,7 +8097,6 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   GtkTreeIter   iter;
   GtkRBTree    *tree;
   GtkRBNode    *node;
-  gint i;
   gint cell_offset;
   GList *list;
   GdkRectangle background_area;
@@ -8138,7 +8151,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
                       bin_window_width + 1,
                       background_area.height + 1);
 
-  for (i = 0, list = tree_view->priv->columns; i < tree_view->priv->n_columns; i++, list = list->next)
+  for (list = tree_view->priv->columns; list; list = list->next)
     {
       GtkTreeViewColumn *column = list->data;
       GdkRectangle cell_area;
@@ -8158,7 +8171,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
       cell_area.y += vertical_separator / 2;
       cell_area.height -= vertical_separator;
 
-      if (i == tree_view->priv->expander_column &&
+      if (gtk_tree_view_is_expander_column (tree_view, column) &&
           TREE_VIEW_DRAW_EXPANDERS(tree_view))
         {
           cell_area.x += depth * tree_view->priv->tab_offset;

@@ -101,7 +101,7 @@ struct _GtkTreeViewPrivate
   GtkTreeViewColumn *drag_column;
   gint drag_column_x;
 
-  gint expander_column;
+  GtkTreeViewColumn *expander_column;
 
   /* Focus code */
   GtkTreeViewColumn *focus_column;

@@ -1,3 +1,14 @@
+Fri Jun  8 18:52:10 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.[hc]: Patch Thomas Broyer from
+	<tbroyer@ltgt.net>. Expander arrows are now attached to a specific
+	column and follow it when draged, rather than a location in the
+	view. "expander_column" property and drawing functions changed
+	accordingly.  Fixes bug #55942.
+
+	(gtk_tree_view_{set,get}_expander_column): Now works with a
+	GtkTreeViewColumn* instead of int.
+
 Thu Jun 28 22:53:18 2001  Owen Taylor  <otaylor@redhat.com>
 
 	*  gdk/gdk.c gtk/gtktypeutils.c: Fix args to g_type_init(). 
