@@ -277,7 +277,7 @@ gdk_init_check (int    *argc,
   
   if (gdk_initialized)
     return TRUE;
-  
+
   if (g_thread_supported ())
     gdk_threads_mutex = g_mutex_new ();
   
@@ -321,6 +321,8 @@ gdk_init_check (int    *argc,
   
   GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
 
+  g_type_init ();
+  
   result = _gdk_windowing_init_check (argc_orig, argv_orig);
 
   for (i = 0; i < argc_orig; i++)
@@ -425,6 +427,8 @@ gdk_exit_func (void)
       gdk_image_exit ();
       gdk_input_exit ();
       gdk_key_repeat_restore ();
+
+      gdk_windowing_exit ();
       
       gdk_initialized = 0;
     }

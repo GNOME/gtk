@@ -563,6 +563,8 @@ gdk_beep (void)
 void
 gdk_windowing_exit (void)
 {
+  pango_x_shutdown_display (gdk_display);
+  
   XCloseDisplay (gdk_display);
 }
 

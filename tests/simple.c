@@ -19,6 +19,7 @@ main (int argc, char *argv[])
 
   window = gtk_widget_new (gtk_window_get_type (),
 			   "GtkObject::user_data", NULL,
+			   "GtkObject::signal::destroy", gtk_main_quit, NULL,
 			   "GtkWindow::type", GTK_WINDOW_TOPLEVEL,
 			   "GtkWindow::title", "hello world",
 			   "GtkWindow::allow_grow", FALSE,

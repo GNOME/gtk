@@ -5,7 +5,7 @@ Makefile.in
 _libs
 .libs
 libgtk-1.1.la
-testcalender
+testcalendar
 testgtk
 testinput
 testrgb
