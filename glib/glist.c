@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -23,7 +23,7 @@ typedef struct _GRealListAllocator GRealListAllocator;
 struct _GRealListAllocator
 {
   GMemChunk *list_mem_chunk;
-  GList     *free_list;
+  GList	    *free_list;
 };
 
 
@@ -35,10 +35,10 @@ GListAllocator*
 g_list_allocator_new ()
 {
   GRealListAllocator* allocator = g_new (GRealListAllocator, 1);
-
+  
   allocator->list_mem_chunk = NULL;
   allocator->free_list = NULL;
-
+  
   return (GListAllocator*) allocator;
 }
 
@@ -46,7 +46,7 @@ void
 g_list_allocator_free (GListAllocator* fallocator)
 {
   GRealListAllocator* allocator = (GRealListAllocator *) fallocator;
-
+  
   if (allocator && allocator->list_mem_chunk)
     g_mem_chunk_destroy (allocator->list_mem_chunk);
   if (allocator)
@@ -58,7 +58,7 @@ g_list_set_allocator (GListAllocator* fallocator)
 {
   GRealListAllocator* allocator = (GRealListAllocator *) fallocator;
   GRealListAllocator* old_allocator = current_allocator;
-
+  
   if (allocator)
     current_allocator = allocator;
   else
@@ -67,13 +67,13 @@ g_list_set_allocator (GListAllocator* fallocator)
 	default_allocator = (GRealListAllocator*) g_list_allocator_new ();
       current_allocator = default_allocator;
     }
-
+  
   if (!current_allocator->list_mem_chunk)
     current_allocator->list_mem_chunk = g_mem_chunk_new ("list mem chunk",
 							 sizeof (GList),
 							 1024,
 							 G_ALLOC_ONLY);
-
+  
   return (GListAllocator*) (old_allocator == default_allocator ? NULL : old_allocator);
 }
 
@@ -82,7 +82,7 @@ GList*
 g_list_alloc ()
 {
   GList *new_list;
-
+  
   g_list_set_allocator (NULL);
   if (current_allocator->free_list)
     {
@@ -93,11 +93,11 @@ g_list_alloc ()
     {
       new_list = g_chunk_new (GList, current_allocator->list_mem_chunk);
     }
-
+  
   new_list->data = NULL;
   new_list->next = NULL;
   new_list->prev = NULL;
-
+  
   return new_list;
 }
 
@@ -105,7 +105,7 @@ void
 g_list_free (GList *list)
 {
   GList *last;
-
+  
   if (list)
     {
       last = g_list_last (list);
@@ -125,88 +125,90 @@ g_list_free_1 (GList *list)
 }
 
 GList*
-g_list_append (GList    *list,
-	       gpointer  data)
+g_list_append (GList	*list,
+	       gpointer	 data)
 {
   GList *new_list;
   GList *last;
-
+  
   new_list = g_list_alloc ();
   new_list->data = data;
-
-  if (!list)
-    {
-      list = new_list;
-    }
-  else
+  
+  if (list)
     {
       last = g_list_last (list);
-      g_assert (last != NULL);
+      /* g_assert (last != NULL); */
       last->next = new_list;
       new_list->prev = last;
-    }
 
-  return list;
+      return list;
+    }
+  else
+    return new_list;
 }
 
 GList*
-g_list_prepend (GList    *list,
+g_list_prepend (GList	 *list,
 		gpointer  data)
 {
   GList *new_list;
-
+  
   new_list = g_list_alloc ();
   new_list->data = data;
-
+  
   if (list)
     {
       if (list->prev)
-	list->prev->next = new_list;
-      new_list->prev = list->prev;
+	{
+	  list->prev->next = new_list;
+	  new_list->prev = list->prev;
+	}
       list->prev = new_list;
+      new_list->next = list;
     }
-  new_list->next = list;
-
+  
   return new_list;
 }
 
 GList*
-g_list_insert (GList    *list,
-	       gpointer  data,
-	       gint      position)
+g_list_insert (GList	*list,
+	       gpointer	 data,
+	       gint	 position)
 {
   GList *new_list;
   GList *tmp_list;
-
+  
   if (position < 0)
     return g_list_append (list, data);
   else if (position == 0)
     return g_list_prepend (list, data);
-
+  
   tmp_list = g_list_nth (list, position);
   if (!tmp_list)
     return g_list_append (list, data);
-
+  
   new_list = g_list_alloc ();
   new_list->data = data;
-
+  
   if (tmp_list->prev)
-    tmp_list->prev->next = new_list;
+    {
+      tmp_list->prev->next = new_list;
+      new_list->prev = tmp_list->prev;
+    }
   new_list->next = tmp_list;
-  new_list->prev = tmp_list->prev;
   tmp_list->prev = new_list;
-
+  
   if (tmp_list == list)
-    list = new_list;
-
-  return list;
+    return new_list;
+  else
+    return list;
 }
 
 GList *
 g_list_concat (GList *list1, GList *list2)
 {
   GList *tmp_list;
-
+  
   if (list2)
     {
       tmp_list = g_list_last (list1);
@@ -216,37 +218,35 @@ g_list_concat (GList *list1, GList *list2)
 	list1 = list2;
       list2->prev = tmp_list;
     }
-
+  
   return list1;
 }
 
 GList*
-g_list_remove (GList    *list,
-	       gpointer  data)
+g_list_remove (GList	*list,
+	       gpointer	 data)
 {
   GList *tmp;
-
+  
   tmp = list;
   while (tmp)
     {
-      if (tmp->data == data)
+      if (tmp->data != data)
+	tmp = tmp->next;
+      else
 	{
 	  if (tmp->prev)
 	    tmp->prev->next = tmp->next;
 	  if (tmp->next)
 	    tmp->next->prev = tmp->prev;
-
+	  
 	  if (list == tmp)
 	    list = list->next;
-
-	  tmp->next = NULL;
-	  tmp->prev = NULL;
-	  g_list_free (tmp);
-
+	  
+	  g_list_free_1 (tmp);
+	  
 	  break;
 	}
-
-      tmp = tmp->next;
     }
   return list;
 }
@@ -261,33 +261,31 @@ g_list_remove_link (GList *list,
 	link->prev->next = link->next;
       if (link->next)
 	link->next->prev = link->prev;
-
+      
       if (link == list)
 	list = list->next;
-
+      
       link->next = NULL;
       link->prev = NULL;
     }
-
+  
   return list;
 }
 
 GList*
 g_list_reverse (GList *list)
 {
-  GList *tmp;
   GList *last;
-
+  
   last = NULL;
   while (list)
     {
       last = list;
-      tmp = list->next;
-      list->next = list->prev;
-      list->prev = tmp;
-      list = tmp;
+      list = last->next;
+      last->next = last->prev;
+      last->prev = list;
     }
-
+  
   return last;
 }
 
@@ -297,7 +295,7 @@ g_list_nth (GList *list,
 {
   while ((n-- > 0) && list)
     list = list->next;
-
+  
   return list;
 }
 
@@ -311,7 +309,7 @@ g_list_find (GList    *list,
 	break;
       list = list->next;
     }
-
+  
   return list;
 }
 
@@ -323,7 +321,7 @@ g_list_last (GList *list)
       while (list->next)
 	list = list->next;
     }
-
+  
   return list;
 }
 
@@ -333,9 +331,9 @@ g_list_first (GList *list)
   if (list)
     {
       while (list->prev)
-        list = list->prev;
+	list = list->prev;
     }
-
+  
   return list;
 }
 
@@ -343,20 +341,20 @@ gint
 g_list_length (GList *list)
 {
   gint length;
-
+  
   length = 0;
   while (list)
     {
       length++;
       list = list->next;
     }
-
+  
   return length;
 }
 
 void
-g_list_foreach (GList    *list,
-                GFunc     func,
+g_list_foreach (GList	 *list,
+		GFunc	  func,
 		gpointer  user_data)
 {
   while (list)

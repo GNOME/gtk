@@ -1,3 +1,17 @@
+Mon Dec 15 19:33:58 1997  Tim Janik  <timj@psynet.net>
+
+	* glist.c: minor optimizations:
+ 	(g_list_append): `if' optimized for common code path, commented out
+ 	unneccessary `assert', saved one variable assignment.
+	(g_list_prepend): saved two (conditioned) variable assignment.
+	(g_list_insert): saved one  (conditioned) variable assignment,
+	saved one variable assignment.
+	(g_list_remove): `if' optimized for common code path, saved two
+	variable assignments by using `g_list_free_1' (which is even
+ 	faster) instead of `g_list_free'.
+	(g_list_reverse): saved allocation of one variable, saved one
+	variable assignment.
+
 Wed Dec 10 23:27:20 1997  Tim Janik  <timj@psynet.net>
 
 	* glib_pre1.h: 
