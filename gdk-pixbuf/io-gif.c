@@ -1135,6 +1135,17 @@ gif_get_frame_info (GifContext *context)
 	context->x_offset = LM_to_uint (buf[0], buf[1]);
 	context->y_offset = LM_to_uint (buf[2], buf[3]);
 
+        if ((context->frame_height == 0) || (context->frame_len == 0)) {
+		context->state = GIF_DONE;
+
+                g_set_error (context->error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("GIF image contained a frame with height or width 0."));
+                
+		return -2;
+        }
+            
 	if (((context->frame_height + context->y_offset) > context->height) ||
             ((context->frame_len + context->x_offset) > context->width)) {
 		/* All frames must fit in the image bounds */

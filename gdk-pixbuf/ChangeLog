@@ -1,3 +1,7 @@
+2002-03-15  Matthias Clasen  <maclas@gmx.de>
+
+	* io-gif.c (gif_get_frame_info): Catch invalid frame dimensions.
+
 2002-03-13  Matthias Clasen  <maclas@gmx.de>
 
 	* test-images.h: Add valid_ras_test and invalid_bmp_1.
