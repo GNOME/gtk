@@ -1,3 +1,9 @@
+Sat Dec 12 17:46:55 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtklayout.c (gtk_layout_unrealize): Mark
+	child->window as destroyed so we don't destroy
+	it again.
+
 Sat Dec 12 17:18:32 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkfont.c (gdk_text_extents): Corrections

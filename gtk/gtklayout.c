@@ -503,6 +503,7 @@ gtk_layout_unrealize (GtkWidget *widget)
 	{
 	  gdk_window_set_user_data (child->window, NULL);
 	  gdk_window_destroy (child->window);
+	  child->window = NULL;
 	}
 	
       tmp_list = tmp_list->next;

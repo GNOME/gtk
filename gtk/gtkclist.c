@@ -5804,7 +5804,7 @@ draw_rows (GtkCList     *clist,
     }
 
   /* this is a small special case which exposes the bottom cell line
-   * on the last row -- it might go away if I change the wall the cell
+   * on the last row -- it might go away if I change the way the cell
    * spacings are drawn
    */
   if (clist->rows == first_row)
