@@ -553,13 +553,13 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
  * @action_group: the action group 
  * @action: the action to add 
  * @accelerator: the accelerator for the action, in
- *   the format understood by gtk_accelerator_parse(), or %NULL to use the
- *   stock accelerator 
+ *   the format understood by gtk_accelerator_parse(), or "" for no accelerator, or 
+ *   %NULL to use the stock accelerator 
  *
  * Adds an action object to the action group and sets up the accelerator.
  *
  * If @accelerator is %NULL, attempts to use the accelerator associated 
- * with the stock_id of the action.
+ * with the stock_id of the action. 
  *
  * Accel paths are set to
  * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.
@@ -585,10 +585,15 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
 
   if (accelerator)
     {
-    gtk_accelerator_parse (accelerator, &accel_key, &accel_mods);
-      if (accel_key == 0)
-	g_warning ("Unable to parse accelerator '%s' for action '%s'",
-		   accelerator, name);
+      if (accelerator[0] == 0) 
+	accel_key = 0;
+      else
+	{
+	  gtk_accelerator_parse (accelerator, &accel_key, &accel_mods);
+	  if (accel_key == 0)
+	    g_warning ("Unable to parse accelerator '%s' for action '%s'",
+		       accelerator, name);
+	}
     }
   else if (stock_id && gtk_stock_lookup (stock_id, &stock_item))
     {
