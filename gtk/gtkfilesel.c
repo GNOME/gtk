@@ -50,6 +50,16 @@
 #define FILE_LIST_WIDTH  180
 #define FILE_LIST_HEIGHT 180
 
+/* I've put this here so it doesn't get confused with the 
+ * file completion interface */
+typedef struct _HistoryCallbackArg HistoryCallbackArg;
+
+struct _HistoryCallbackArg
+{
+  gchar *directory;
+  GtkWidget *menu_item;
+};
+
 
 typedef struct _CompletionState    CompletionState;
 typedef struct _CompletionDir      CompletionDir;
@@ -561,12 +571,27 @@ static void
 gtk_file_selection_destroy (GtkObject *object)
 {
   GtkFileSelection *filesel;
+  GList *list;
+  HistoryCallbackArg *callback_arg;
 
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (object));
 
   filesel = GTK_FILE_SELECTION (object);
-
+  
+  if (filesel->fileop_dialog)
+	  gtk_widget_destroy (filesel->fileop_dialog);
+  
+  if (filesel->history_list) {
+    list = filesel->history_list;
+    while (list) {
+      callback_arg = list->data;
+      g_free (callback_arg->directory);
+      list = list->next;
+    }
+    g_list_free (filesel->history_list);
+  }
+  
   cmpl_free_state (filesel->cmpl_state);
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
@@ -957,13 +982,6 @@ gtk_file_selection_key_press (GtkWidget   *widget,
   return FALSE;
 }
 
-typedef struct _HistoryCallbackArg HistoryCallbackArg;
-
-struct _HistoryCallbackArg
-{
-  gchar *directory;
-  GtkWidget *menu_item;
-};
 
 static void
 gtk_file_selection_history_callback (GtkWidget *widget, gpointer data)
