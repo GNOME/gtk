@@ -237,6 +237,16 @@ the #GtkCellRendererText allows to edit its text using an entry.
 
 </para>
 
+<!-- ##### ARG GtkCellRendererText:wrap-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:wrap-width ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_cell_renderer_text_new ##### -->
 <para>
 

@@ -28,6 +28,7 @@ endif
 
 noinst_PROGRAMS =			\
 	simple				\
+	testcairo			\
 	testcalendar			\
 	testcombo			\
 	testcombochange			\
@@ -72,6 +73,7 @@ noinst_PROGRAMS =			\
 simple_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
+testcairo_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
 testcombochange_DEPENDENCIES = $(TEST_DEPS)
@@ -106,6 +108,7 @@ testmerge_DEPENDENCIES = $(TEST_DEPS)
 testactions_DEPENDENCIES = $(TEST_DEPS)
 
 simple_LDADD = $(LDADDS)
+testcairo_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
 testcombo_LDADD = $(LDADDS)
 testcombochange_LDADD = $(LDADDS)

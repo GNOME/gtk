@@ -278,6 +278,17 @@ Applications should never have any reason to use this facility
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_display_warp_pointer ##### -->
+<para>
+
+</para>
+
+@display: 
+@screen: 
+@x: 
+@y: 
+
+
 <!-- ##### FUNCTION gdk_display_supports_cursor_color ##### -->
 <para>
 

@@ -1221,6 +1221,29 @@ gdk_drawable_real_get_visible_region (GdkDrawable *drawable)
   return gdk_region_rectangle (&rect);
 }
 
+/**
+ * gdk_drawable_set_cairo_target:
+ * @drawable: a #GdkDrawable
+ * @cr: a cairo context
+ * 
+ * Sets the given drawable as the target surface for a Cairo context.
+ * Note that when @drawable is a window and gdk_window_begin_paint()
+ * has been called, the target surface will be set to the temporary
+ * backing pixmap, so you can only use the Cairo context until
+ * the matching call to gdk_window_end_paint().
+ *
+ * Since: 2.10
+ **/
+void
+gdk_drawable_set_cairo_target (GdkDrawable *drawable,
+			       cairo_t     *cr)
+{
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_if_fail (cr != NULL);
+
+  return GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_target (drawable, cr);
+}
+
 static void
 composite (guchar *src_buf,
 	   gint    src_rowstride,

@@ -157,6 +157,9 @@ static GdkImage* gdk_window_copy_to_image (GdkDrawable *drawable,
 					   gint         width,
 					   gint         height);
 
+static void gdk_window_set_cairo_target (GdkDrawable *drawable,
+					 cairo_t     *cr);
+
 static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
                                          gint            *height);
@@ -263,6 +266,7 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->get_colormap = gdk_window_real_get_colormap;
   drawable_class->get_visual = gdk_window_real_get_visual;
   drawable_class->_copy_to_image = gdk_window_copy_to_image;
+  drawable_class->set_cairo_target = gdk_window_set_cairo_target;
   drawable_class->get_clip_region = gdk_window_get_clip_region;
   drawable_class->get_visible_region = gdk_window_get_visible_region;
   drawable_class->get_composite_drawable = gdk_window_get_composite_drawable;
@@ -2089,6 +2093,26 @@ gdk_window_copy_to_image (GdkDrawable     *drawable,
 				     src_y - y_offset,
 				     dest_x, dest_y,
 				     width, height);
+}
+
+static void
+gdk_window_set_cairo_target (GdkDrawable *drawable,
+			     cairo_t     *cr)
+{
+  GdkWindowObject *private = (GdkWindowObject*) drawable;
+  gint x_offset, y_offset;
+  
+  gdk_window_get_offsets (GDK_WINDOW (drawable), &x_offset, &y_offset);
+
+  if (private->paint_stack)
+    {
+      GdkWindowPaint *paint = private->paint_stack->data;
+      gdk_drawable_set_cairo_target (paint->pixmap, cr);
+    }
+  else
+    gdk_drawable_set_cairo_target (private->impl, cr);
+
+  cairo_translate (cr, - x_offset, - y_offset);
 }
 
 /* Code for dirty-region queueing

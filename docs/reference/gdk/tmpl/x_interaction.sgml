@@ -440,6 +440,15 @@ Since: 2.2
 @timestamp: 
 
 
+<!-- ##### FUNCTION gdk_x11_display_get_user_time ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_x11_colormap_foreign_new ##### -->
 <para>
 

@@ -36,6 +36,11 @@ property is set to a pixbuf, it renders that one.
 </para>
 
 
+<!-- ##### ARG GtkCellRendererPixbuf:follow-state ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRendererPixbuf:pixbuf ##### -->
 <para>
 

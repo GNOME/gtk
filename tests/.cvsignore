@@ -14,6 +14,7 @@ pixbuf-threads
 simple
 stresstest-toolbar
 testactions
+testcairo
 testcalendar
 testcombo
 testcombochange

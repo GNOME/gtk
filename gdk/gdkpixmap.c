@@ -144,6 +144,9 @@ static GdkImage* gdk_pixmap_copy_to_image (GdkDrawable *drawable,
 					   gint         width,
 					   gint         height);
 
+static void gdk_pixmap_set_cairo_target (GdkDrawable *drawable,
+					 cairo_t     *cr);
+
 static GdkVisual*   gdk_pixmap_real_get_visual   (GdkDrawable *drawable);
 static gint         gdk_pixmap_real_get_depth    (GdkDrawable *drawable);
 static void         gdk_pixmap_real_set_colormap (GdkDrawable *drawable,
@@ -224,6 +227,7 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->get_colormap = gdk_pixmap_real_get_colormap;
   drawable_class->get_visual = gdk_pixmap_real_get_visual;
   drawable_class->_copy_to_image = gdk_pixmap_copy_to_image;
+  drawable_class->set_cairo_target = gdk_pixmap_set_cairo_target;
 }
 
 static void
@@ -515,6 +519,14 @@ gdk_pixmap_copy_to_image (GdkDrawable     *drawable,
 				     image,
 				     src_x, src_y, dest_x, dest_y,
 				     width, height);
+}
+
+static void
+gdk_pixmap_set_cairo_target (GdkDrawable *drawable,
+			     cairo_t     *cr)
+{
+  gdk_drawable_set_cairo_target (((GdkPixmapObject*)drawable)->impl,
+				 cr);
 }
 
 static GdkBitmap *

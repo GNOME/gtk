@@ -96,6 +96,17 @@ used for right-to-left locales.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_stock_set_translate_func ##### -->
+<para>
+
+</para>
+
+@domain: 
+@func: 
+@data: 
+@notify: 
+
+
 <!-- ##### MACRO GTK_STOCK_ABOUT ##### -->
 <para>
 The "About" item.

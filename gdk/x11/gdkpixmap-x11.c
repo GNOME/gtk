@@ -135,6 +135,12 @@ gdk_pixmap_impl_x11_finalize (GObject *object)
       if (draw_impl->xft_draw)
 	XftDrawDestroy (draw_impl->xft_draw);
 
+      if (draw_impl->cairo_surface)
+	{
+	  cairo_surface_destroy (draw_impl->cairo_surface);
+	  draw_impl->cairo_surface = NULL;
+	}
+
       if (!impl->is_foreign)
 	XFreePixmap (GDK_DISPLAY_XDISPLAY (display), GDK_PIXMAP_XID (wrapper));
     }

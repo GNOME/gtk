@@ -1144,7 +1144,16 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
     
   if (draw_impl->xft_draw)
-    XftDrawDestroy (draw_impl->xft_draw);
+    {
+      XftDrawDestroy (draw_impl->xft_draw);
+      draw_impl->xft_draw = NULL;
+    }
+
+  if (draw_impl->cairo_surface)
+    {
+      cairo_surface_destroy (draw_impl->cairo_surface);
+      draw_impl->cairo_surface = NULL;
+    }
 
   if (!recursing && !foreign_destroy)
     {

@@ -2,7 +2,7 @@
 #include <gtk/gtk.h>
 
 GtkTreeModel *model = NULL;
-static GRand *rand = NULL;
+static GRand *grand = NULL;
 GtkTreeSelection *selection = NULL;
 enum
 {
@@ -32,12 +32,12 @@ initialize_model (void)
   GtkTreeIter iter;
 
   model = (GtkTreeModel *) gtk_list_store_new (NUM_COLUMNS, G_TYPE_STRING);
-  rand = g_rand_new ();
+  grand = g_rand_new ();
   for (i = 0; i < NUM_ROWS; i++)
     {
       gtk_list_store_append (GTK_LIST_STORE (model), &iter);
       gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-			  TEXT_COLUMN, words[g_rand_int_range (rand, 0, NUM_WORDS)],
+			  TEXT_COLUMN, words[g_rand_int_range (grand, 0, NUM_WORDS)],
 			  -1);
     }
 }
@@ -50,7 +50,7 @@ futz_row (void)
   GtkTreeIter iter;
   GtkTreeIter iter2;
 
-  i = g_rand_int_range (rand, 0,
+  i = g_rand_int_range (grand, 0,
 			gtk_tree_model_iter_n_children (model, NULL));
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, i);
@@ -59,14 +59,14 @@ futz_row (void)
 
   if (gtk_tree_selection_iter_is_selected (selection, &iter))
     return;
-  switch (g_rand_int_range (rand, 0, 3))
+  switch (g_rand_int_range (grand, 0, 3))
     {
     case 0:
       /* insert */
             gtk_list_store_insert_after (GTK_LIST_STORE (model),
             				   &iter2, &iter);
             gtk_list_store_set (GTK_LIST_STORE (model), &iter2,
-            			  TEXT_COLUMN, words[g_rand_int_range (rand, 0, NUM_WORDS)],
+            			  TEXT_COLUMN, words[g_rand_int_range (grand, 0, NUM_WORDS)],
             			  -1);
       break;
     case 1:
@@ -81,7 +81,7 @@ futz_row (void)
       if (gtk_tree_model_iter_n_children (model, NULL) == 0)
 	return;
       gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-      			  TEXT_COLUMN, words[g_rand_int_range (rand, 0, NUM_WORDS)],
+      			  TEXT_COLUMN, words[g_rand_int_range (grand, 0, NUM_WORDS)],
       			  -1);
       break;
     }

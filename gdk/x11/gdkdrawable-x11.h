@@ -71,6 +71,7 @@ struct _GdkDrawableImplX11
   GdkScreen *screen;
 
   XftDraw *xft_draw;
+  cairo_surface_t *cairo_surface;
 };
  
 struct _GdkDrawableImplX11Class 

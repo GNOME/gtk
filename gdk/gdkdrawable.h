@@ -6,6 +6,8 @@
 #include <gdk/gdkrgb.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
+#include <cairo.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -168,8 +170,10 @@ struct _GdkDrawableClass
 				   GdkTrapezoid     *trapezoids,
 				   gint              n_trapezoids);
 
+  void (*set_cairo_target)        (GdkDrawable      *drawable,
+				   cairo_t          *cr);
+
   /* Padding for future expansion */
-  void         (*_gdk_reserved3)  (void);
   void         (*_gdk_reserved4)  (void);
   void         (*_gdk_reserved5)  (void);
   void         (*_gdk_reserved6)  (void);
@@ -387,6 +391,9 @@ GdkImage *gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 
 GdkRegion *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 GdkRegion *gdk_drawable_get_visible_region (GdkDrawable *drawable);
+
+void       gdk_drawable_set_cairo_target (GdkDrawable *drawable,
+					  cairo_t     *cr);
 
 gboolean gdk_draw_rectangle_alpha_libgtk_only (GdkDrawable *drawable,
 					       gint         x,

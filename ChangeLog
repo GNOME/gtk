@@ -1,3 +1,18 @@
+2005-02-03  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdrawable.[ch] gdkpixmap.c gdkwindow.c: Add
+	gdk_drawable_set_cairo_target().
+
+	* tests/testtreeflow.c (enum): Use grand not rand as a variable
+	name because one of the cairo headers is pulling in stdlib.h.
+
+	* tests/testcairo.c tests/Makefile.am: Add a simple cairo based
+	example.
+
+	* configure.in: Bump release to 2.7.0, gtk_binary_version to 2.7.0.
+
+ 	* Require libpangocairo for all backends.
+
 2005-02-03  Tor Lillqvist  <tml@novell.com>
 
 	* modules/input/gtkimcontextime.c (get_pango_attr_list): Use the

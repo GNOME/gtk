@@ -11,11 +11,11 @@ AC_PREREQ(2.54)
 # set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
 
 m4_define([gtk_major_version], [2])
-m4_define([gtk_minor_version], [6])
-m4_define([gtk_micro_version], [2])
+m4_define([gtk_minor_version], [7])
+m4_define([gtk_micro_version], [0])
 m4_define([gtk_version],
           [gtk_major_version.gtk_minor_version.gtk_micro_version])
-m4_define([gtk_interface_age], [2])
+m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
 # This is the X.Y used in -lgtk-FOO-X.Y
@@ -26,7 +26,7 @@ m4_define([gtk_api_version], [2.0])
 # locations. (Should this be backwards-compat instead?)
 #
 #GTK_BINARY_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$LT_CURRENT
-m4_define([gtk_binary_version], [2.4.0])
+m4_define([gtk_binary_version], [2.7.0])
 
 # required versions of other packages
 m4_define([glib_required_version], [2.6.0])
@@ -1403,7 +1403,7 @@ fi
 #
 
 if test "x$gdktarget" = "xx11"; then
-        PANGO_PACKAGES=pangoxft
+        PANGO_PACKAGES="pangoxft pangocairo"
 	
         # We no longer use pangox, but if we find it, we link to it 
 	# for binary compatibility.
@@ -1411,11 +1411,11 @@ if test "x$gdktarget" = "xx11"; then
 		PANGO_PACKAGES="$PANGO_PACKAGES pangox"
 	fi
 elif test "x$gdktarget" = "xwin32"; then
-        PANGO_PACKAGES=pangowin32
+        PANGO_PACKAGES="pangowin32 pangocairo"
 elif test "x$gdktarget" = "xlinux-fb"; then
-        PANGO_PACKAGES=pangoft2
+        PANGO_PACKAGES="pangoft2 pangocairo"
 else
-        PANGO_PACKAGES=pango
+        PANGO_PACKAGES="pango pangocairo"
 fi
 
 # Check for Pango flags
@@ -1428,10 +1428,8 @@ if $PKG_CONFIG --exists $PANGO_PACKAGES ; then
         AC_MSG_RESULT($PANGO_CFLAGS $PANGO_LIBS)
 else
         AC_MSG_ERROR([
-*** Pango not found. Pango is required to build GTK+.
-*** See http://www.pango.org for Pango information.
-*** For the framebuffer target, you will need to build 
-*** Pango with freetype support.
+*** Pango not found. Pango built with Cairo support is required
+*** to build GTK+. See http://www.pango.org for Pango information.
 ])
 fi
 
