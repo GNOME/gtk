@@ -5,6 +5,17 @@ Sat Mar 14 14:36:40 PST 1998 Shawn T. Amundson <amundson@gimp.org>
 	* gdk/gtk_tut.sgml:
 	* gdk/gtk_tut_it.sgml: fixed Ian Main's e-mail address
 
+Sat Mar 14 17:48:42 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/Makefile.am: Don't refer to current directory as 
+	$(top_builddir)/gtk to avoid confusing non-gmakes. Made
+	Emacs-dependent maintainer-oonly
+
+Sat Mar 14 17:47:12 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkwindow.c: (gdk_window_set_group): Fixed use of
+	   unitialized variable.
+
 Sat Mar 14 13:26:09 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkentry.c gtk/gtktext.c: Some cleanups of signedness

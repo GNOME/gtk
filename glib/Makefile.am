@@ -30,7 +30,7 @@ libglib_la_LDFLAGS = -version-info 1:0:0
 INCLUDES = -I$(top_srcdir)
 
 noinst_PROGRAMS = testglib
-testglib_LDADD = $(top_builddir)/libglib.la
+testglib_LDADD = libglib.la
 
 .PHONY: files release
 

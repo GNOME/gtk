@@ -191,10 +191,10 @@ gtkinclude_HEADERS = \
 	gtkwindow.h             \
 	gtktypebuiltins.h
 
-../gtk/gtktypebuiltins.h: gtk.defs gentypeinfo.el
+$(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el idmac $< $@
 
-gtktypebuiltins.c: gtk.defs gentypeinfo.el
+$(srcdir)/gtktypebuiltins.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
 
 libgtk_la_LDFLAGS = -version-info 1:0:0
@@ -254,7 +254,7 @@ simple_LDADD = \
 	-lm
 
 DEPS = \
-	$(top_builddir)/gtk/libgtk.la		\
+	libgtk.la		                \
 	$(top_builddir)/gdk/libgdk.la		\
 	$(top_builddir)/glib/libglib.la
 

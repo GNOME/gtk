@@ -1818,7 +1818,7 @@ gdk_window_set_group   (GdkWindow *window,
     return;
 
   private = (GdkWindowPrivate *)leader;
-  wm_hints.flags |= WindowGroupHint;
+  wm_hints.flags = WindowGroupHint;
   wm_hints.window_group = private->xwindow;
 
   XSetWMHints (window_private->xdisplay, window_private->xwindow, &wm_hints);

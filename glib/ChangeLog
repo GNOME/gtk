@@ -1,3 +1,8 @@
+Sat Mar 14 17:47:43 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* Makefile.am: Don't refer to current directory as $(top_builddir)
+	to avoid confusing non-gmakes
+
 Sat Mar 14 01:37:35 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* Makefile.am (configincludedir): Moved glibconfig.h to
