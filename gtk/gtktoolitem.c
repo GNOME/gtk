@@ -762,7 +762,7 @@ gtk_tool_item_get_homogeneous (GtkToolItem *tool_item)
  * @tool_item: a #GtkToolItem
  * 
  * Returns whether @tool_item is considered important. See
- * gtk_tool_item_set_ismportant()
+ * gtk_tool_item_set_is_important()
  * 
  * Return value: %TRUE if @tool_item is considered important.
  * 
@@ -784,7 +784,7 @@ gtk_tool_item_get_is_important (GtkToolItem *tool_item)
  * Sets whether @tool_item should be considered important. The #GtkToolButton
  * class uses this property to determine whether to show or hide its label
  * when the toolbar style is %GTK_TOOLBAR_BOTH_HORIZ. The result is that
- * only tool buttons with the "is_important" property set have labels, and
+ * only tool buttons with the "is_important" property set have labels, an
  * effect known as "priority text"
  * 
  * Since: 2.4
@@ -913,7 +913,7 @@ gtk_tool_item_get_use_drag_window (GtkToolItem *toolitem)
  * @toolitem: a #GtkToolItem
  * @visible_horizontal: Whether @toolitem is visible when in horizontal mode
  * 
- * Sets whether @toolitem is visible when 
+ * Sets whether @toolitem is visible when the toolbar is docked horizontally.
  * 
  * Since: 2.4
  **/
@@ -940,7 +940,7 @@ gtk_tool_item_set_visible_horizontal (GtkToolItem *toolitem,
  * @toolitem: a #GtkToolItem 
  * 
  * Returns whether the @toolitem is visible on toolbars that are
- * docked horizontally
+ * docked horizontally.
  * 
  * Return value: %TRUE if @toolitem is visible on toolbars that are
  * docked horizontally.
