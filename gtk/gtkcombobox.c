@@ -1872,22 +1872,20 @@ gtk_combo_box_relayout (GtkComboBox *combo_box)
   GList *list, *j;
   GtkWidget *menu;
 
-  /* do nothing unless we are in menu style */
-  if (combo_box->priv->tree_view)
-    return;
-
   menu = combo_box->priv->popup_widget;
-
+  
+  /* do nothing unless we are in menu style and realized */
+  if (combo_box->priv->tree_view || !GTK_IS_MENU_SHELL (menu))
+    return;
+  
   /* get rid of all children */
-  g_return_if_fail (GTK_IS_MENU_SHELL (menu));
-
   list = gtk_container_get_children (GTK_CONTAINER (menu));
-
+  
   for (j = g_list_last (list); j; j = j->prev)
     gtk_container_remove (GTK_CONTAINER (menu), j->data);
-
+  
   g_list_free (list);
-
+      
   /* and relayout */
   gtk_combo_box_menu_fill (combo_box);
 }

@@ -1,3 +1,9 @@
+2004-04-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_relayout): Don't spit 
+	out warnings if called before the combo box is 
+	realized.  (#139742, Philip Langdale)
+
 Wed Apr 14 03:45:39 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_expose): propagate expose
