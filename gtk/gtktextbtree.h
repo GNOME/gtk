@@ -276,6 +276,9 @@ void _gtk_change_node_toggle_count  (GtkTextBTreeNode   *node,
                                      GtkTextTagInfo     *info,
                                      gint                delta);
 
+/* for gtktextmark.c */
+void _gtk_text_btree_release_mark_segment (GtkTextBTree       *tree,
+                                           GtkTextLineSegment *segment);
 
 #ifdef __cplusplus
 }

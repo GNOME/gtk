@@ -481,16 +481,6 @@ _gtk_text_btree_ref (GtkTextBTree *tree)
   tree->refcount += 1;
 }
 
-static void
-mark_destroy_foreach (gpointer key, gpointer value, gpointer user_data)
-{
-  GtkTextLineSegment *seg = value;
-
-  g_return_if_fail (seg->body.mark.tree == NULL);
-
-  g_object_unref (G_OBJECT (seg->body.mark.obj));
-}
-
 void
 _gtk_text_btree_unref (GtkTextBTree *tree)
 {
@@ -503,9 +493,7 @@ _gtk_text_btree_unref (GtkTextBTree *tree)
     {
       gtk_text_btree_node_destroy (tree, tree->root_node);
 
-      g_hash_table_foreach (tree->mark_table,
-                            mark_destroy_foreach,
-                            NULL);
+      g_assert (g_hash_table_size (tree->mark_table) == 0);
       g_hash_table_destroy (tree->mark_table);
 
       g_object_unref (G_OBJECT (tree->insert_mark));
@@ -757,7 +745,7 @@ _gtk_text_btree_delete (GtkTextIter *start,
       next = seg->next;
       char_count = seg->char_count;
 
-      if ((*seg->type->deleteFunc)(seg, curline, 0) != 0)
+      if ((*seg->type->deleteFunc)(seg, curline, FALSE) != 0)
         {
           /*
            * This segment refuses to die.  Move it to prev_seg and
@@ -2689,8 +2677,25 @@ _gtk_text_btree_remove_mark_by_name (GtkTextBTree *tree,
 }
 
 void
+_gtk_text_btree_release_mark_segment (GtkTextBTree       *tree,
+                                      GtkTextLineSegment *segment)
+{
+
+  if (segment->body.mark.name)
+    g_hash_table_remove (tree->mark_table, segment->body.mark.name);
+
+  segment->body.mark.tree = NULL;
+  segment->body.mark.line = NULL;
+  
+  /* Remove the ref on the mark, which frees segment as a side effect
+   * if this is the last reference.
+   */
+  g_object_unref (G_OBJECT (segment->body.mark.obj));
+}
+
+void
 _gtk_text_btree_remove_mark (GtkTextBTree *tree,
-                            GtkTextMark *mark)
+                             GtkTextMark *mark)
 {
   GtkTextLineSegment *segment;
 
@@ -2707,34 +2712,27 @@ _gtk_text_btree_remove_mark (GtkTextBTree *tree,
 
   /* This calls cleanup_line and segments_changed */
   gtk_text_btree_unlink_segment (tree, segment, segment->body.mark.line);
-
-  if (segment->body.mark.name)
-    g_hash_table_remove (tree->mark_table, segment->body.mark.name);
-
-  /* Remove the ref on the mark that belonged to the segment. */
-  g_object_unref (G_OBJECT (mark));
-
-  segment->body.mark.tree = NULL;
-  segment->body.mark.line = NULL;
+  
+  _gtk_text_btree_release_mark_segment (tree, segment);
 }
 
 gboolean
 _gtk_text_btree_mark_is_insert (GtkTextBTree *tree,
-                               GtkTextMark *segment)
+                                GtkTextMark *segment)
 {
   return segment == tree->insert_mark;
 }
 
 gboolean
 _gtk_text_btree_mark_is_selection_bound (GtkTextBTree *tree,
-                                        GtkTextMark *segment)
+                                         GtkTextMark *segment)
 {
   return segment == tree->selection_bound_mark;
 }
 
 GtkTextMark*
 _gtk_text_btree_get_mark_by_name (GtkTextBTree *tree,
-                                 const gchar *name)
+                                  const gchar *name)
 {
   GtkTextLineSegment *seg;
 
@@ -5123,14 +5121,7 @@ gtk_text_btree_node_destroy (GtkTextBTree *tree, GtkTextBTreeNode *node)
               seg = line->segments;
               line->segments = seg->next;
 
-              if (GTK_IS_TEXT_MARK_SEGMENT (seg))
-                {
-                  /* Set the mark as deleted */
-                  seg->body.mark.tree = NULL;
-                  seg->body.mark.line = NULL;
-                }
-
-              (*seg->type->deleteFunc) (seg, line, 1);
+              (*seg->type->deleteFunc) (seg, line, TRUE);
             }
           gtk_text_line_destroy (tree, line);
         }
