@@ -3994,7 +3994,9 @@ gdk_event_translate (GdkEvent *event,
       if (!(GDK_WINDOW_WIN32DATA(window)->event_mask & GDK_STRUCTURE_MASK))
 	break;
 
-      if (GDK_DRAWABLE_TYPE (window) != GDK_WINDOW_CHILD)
+      if (GDK_DRAWABLE_TYPE (window) != GDK_WINDOW_CHILD
+	  && !IsIconic(xevent->hwnd)
+          && IsWindowVisible(xevent->hwnd))
 	{
 	  event->configure.type = GDK_CONFIGURE;
 	  event->configure.window = window;
