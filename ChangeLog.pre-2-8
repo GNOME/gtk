@@ -1,3 +1,8 @@
+Sat Jul 10 22:19:08 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_select_range): Update 
+	clipboards.  (#142805, Mikael Hallendal)
+
 2004-07-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version number.
