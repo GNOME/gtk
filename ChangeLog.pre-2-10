@@ -1,5 +1,13 @@
 2003-08-30  Matthias Clasen  <maclas@gmx.de>
 
+	* tests/testmerge.c (add_widget): Connect to "destroy" on toolbar,
+	rather than to "remove" on handlebox. 
+
+	* gtk/gtkuimanager.[hc] (gtk_ui_manager_activate): New method to
+	activate an action found by following a path.  (#120658)
+
+	* tests/testmerge.c: Add a button to test gtk_ui_manager_activate().
+
 	* tests/testmerge.c (add_widget): Put toolbars in handleboxes.
 
 	* gtk/gtkuimanager.[hc]: Add a boolean property, "add_tearoffs" with 
@@ -12,11 +20,12 @@
 
 2003-08-29  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkactiongroup.c (gtk_action_group_add_radio_actions_full): Actually 
-	group the actions together rather than putting each in its own group.
+	* gtk/gtkactiongroup.c (gtk_action_group_add_radio_actions_full): 
+	Actually group the actions together rather than putting each in its 
+	own group.
 
-	* gtk/gtkradioaction.c (create_menu_item): Set "draw_as_radio" on proxy 
-	menu items for radio actions.
+	* gtk/gtkradioaction.c (create_menu_item): Set "draw_as_radio" on 
+	proxy menu items for radio actions.
 
 	* gtk/gtkgamma.c (gamma_ok_callback): Use g_strtod instead of strtod.
 
@@ -31,8 +40,9 @@ Fri Aug 29 21:40:01 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2003-08-29  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_class_init): Install "draw_as_radio"
-	as a separate property, not as an alias of "inconsistent".
+	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_class_init): Install 
+	"draw_as_radio" as a separate property, not as an alias of 
+	"inconsistent".
 	(gtk_check_menu_item_get_property): 
 	(gtk_check_menu_item_set_property): Also support "draw_as_radio".
 
@@ -80,13 +90,14 @@ Fri Aug 29 20:32:07 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 	verb attribute is replaced by action,
 	name defaults to action or the element name. 
 
-	* gtk/gtkactiongroup.[hc]: Replace GtkActionGroupEntry by GtkActionEntry
-	and GtkRadioActionEntry. GtkActionEntry is simplified by removing 
-	the user_data, entry_type and extra_data fields, GtkRadioActionEntry is
-	further simplified by removing the callback. The user_data can now be
-	specified as an argument to gtk_action_group_add_actions(). There is
-	a new method gtk_action_group_add_radio_actions(), which is similar
-	to gtk_action_group_add_actions(), but takes GtkRadioActionEntrys
+	* gtk/gtkactiongroup.[hc]: Replace GtkActionGroupEntry by 
+	GtkActionEntry and GtkRadioActionEntry. GtkActionEntry is simplified 
+	by removing the user_data, entry_type and extra_data fields, 
+	GtkRadioActionEntry is further simplified by removing the callback. 
+	The user_data can now be specified as an argument to 
+	gtk_action_group_add_actions(). There is a new method 
+	gtk_action_group_add_radio_actions(), which is similar to 
+	gtk_action_group_add_actions(), but takes GtkRadioActionEntrys
 	and a callback parameter in addition to the user_data. The callback
 	is connected to the ::changed signal of the first group member.
 	There are _full() variants taking a GDestroyNotify of 

@@ -508,6 +508,8 @@ gtk_ui_manager_get_widget (GtkUIManager *self,
 {
   GNode *node;
 
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
+
   /* ensure that there are no pending updates before we get the
    * widget */
   gtk_ui_manager_ensure_update (self);
@@ -1849,4 +1851,33 @@ gtk_ui_manager_get_ui (GtkUIManager   *self)
   print_node (self, self->private_data->root_node, 0, buffer);  
 
   return g_string_free (buffer, FALSE);
+}
+
+/**
+ * gtk_ui_manager_activate:
+ * @self: a #GtkUIManager
+ * @path: a path
+ * 
+ * Activates the action whose proxy is found by following the given path. 
+ * 
+ * Since: 2.4
+ **/
+void           
+gtk_ui_manager_activate (GtkUIManager   *self,
+			 const gchar    *path)
+{
+  GNode *node;
+
+  g_return_if_fail (GTK_IS_UI_MANAGER (self));
+  
+  /* ensure that there are no pending updates before we activate
+   * the action */
+  gtk_ui_manager_ensure_update (self);
+  
+  node = gtk_ui_manager_get_node (self, path, GTK_UI_MANAGER_UNDECIDED, FALSE);
+
+  if (node == NULL || NODE_INFO (node)->action == NULL)
+    return;
+
+  gtk_action_activate (NODE_INFO (node)->action);
 }

@@ -110,5 +110,7 @@ void           gtk_ui_manager_remove_ui           (GtkUIManager   *self,
 
 gchar         *gtk_ui_manager_get_ui              (GtkUIManager   *self);
 
+void           gtk_ui_manager_activate            (GtkUIManager   *self,
+					           const gchar    *path);
 
 #endif /* __GTK_UI_MANAGER_H__ */

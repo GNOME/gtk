@@ -111,7 +111,8 @@ add_widget (GtkUIManager *merge,
       gtk_widget_show (handle_box);
       gtk_container_add (GTK_CONTAINER (handle_box), widget);
       gtk_box_pack_start (box, handle_box, FALSE, FALSE, 0);
-      g_signal_connect (handle_box, "remove", gtk_widget_destroy, 0);
+      g_signal_connect_swapped (widget, "destroy", 
+				G_CALLBACK (gtk_widget_destroy), handle_box);
     }
   else
     gtk_box_pack_start (box, widget, FALSE, FALSE, 0);
@@ -366,20 +367,28 @@ area_press (GtkWidget      *drawing_area,
   
 }
 
+static void
+activate_path (GtkWidget      *button,
+	       GtkUIManager   *merge)
+{
+  gtk_ui_manager_activate (merge, "/menubar/HelpMenu/About");
+}
+
 int
 main (int argc, char **argv)
 {
   GtkActionGroup *action_group;
   GtkUIManager *merge;
-  GtkWidget *window, *table, *frame, *menu_box, *vbox, *view, *area;
-  GtkWidget *button;
+  GtkWidget *window, *table, *frame, *menu_box, *vbox, *view;
+  GtkWidget *button, *area;
   gint i;
   
   gtk_init (&argc, &argv);
 
   action_group = gtk_action_group_new ("TestActions");
   gtk_action_group_add_actions (action_group, entries, n_entries, NULL);
-  gtk_action_group_add_radio_actions (action_group, radio_entries, n_radio_entries, 
+  gtk_action_group_add_radio_actions (action_group, 
+				      radio_entries, n_radio_entries, 
 				      G_CALLBACK (radio_action_changed), NULL);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -438,7 +447,11 @@ main (int argc, char **argv)
   g_signal_connect (button, "clicked", G_CALLBACK (toggle_tearoffs), merge);
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  button = gtk_button_new_with_mnemonic ("_Dump Tree");
+  button = gtk_button_new_with_label ("Activate path");
+  g_signal_connect (button, "clicked", G_CALLBACK (activate_path), merge);
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Dump Tree");
   g_signal_connect (button, "clicked", G_CALLBACK (dump_tree), merge);
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
