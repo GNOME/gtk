@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.2\n"
-"POT-Creation-Date: 2002-06-16 00:04-0400\n"
-"PO-Revision-Date: 2002-06-05 13:19+0400\n"
+"POT-Creation-Date: 2002-07-10 08:43+0400\n"
+"PO-Revision-Date: 2002-07-10 08:45+0400\n"
 "Last-Translator: Dmitry Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -158,17 +158,17 @@ msgid "failed to allocate image buffer of %u bytes"
 msgstr "Сбой при распределении памяти для буфера изображения в размере %u байт"
 
 # gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
-#: gdk-pixbuf/io-bmp.c:266 gdk-pixbuf/io-bmp.c:366
+#: gdk-pixbuf/io-bmp.c:261 gdk-pixbuf/io-bmp.c:374
 msgid "Not enough memory to load bitmap image"
 msgstr "Недостаточно памяти для загрузки изображения"
 
 # gdk-pixbuf/io-bmp.c:275
-#: gdk-pixbuf/io-bmp.c:292
+#: gdk-pixbuf/io-bmp.c:300
 msgid "BMP image has unsupported header size"
 msgstr "Изображение формата BMP имеет неподдерживаемый размер заголовка"
 
 # gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
-#: gdk-pixbuf/io-bmp.c:317 gdk-pixbuf/io-bmp.c:340 gdk-pixbuf/io-bmp.c:399
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
 msgid "BMP image has bogus header data"
 msgstr "Изображение формата BMP имеет неправильные данные в заголовке"
 
@@ -665,46 +665,51 @@ msgid "Unsupported TGA image type"
 msgstr "Неподдерживаемый тип изображения TGA"
 
 # gdk-pixbuf/io-tiff.c:152
-#: gdk-pixbuf/io-tiff.c:187
+#: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Не удалось получить ширину изображения (испорченный файл формата TIFF)"
 
 # gdk-pixbuf/io-tiff.c:159
-#: gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:198
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Не удалось получить высоту изображения (испорченный файл формата TIFF)"
 
 # gdk-pixbuf/io-tiff.c:169
-#: gdk-pixbuf/io-tiff.c:202
+#: gdk-pixbuf/io-tiff.c:206
 msgid "Width or height of TIFF image is zero"
 msgstr "Ширина или высота изображения формата TIFF равна 0"
 
-#: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
+#: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
 msgstr ""
 
 # gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:485
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
+#: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:552
 msgid "Insufficient memory to open TIFF file"
 msgstr "Недостаточно памяти, чтобы открыть файл формата TIFF"
 
 # gdk-pixbuf/io-tiff.c:203
-#: gdk-pixbuf/io-tiff.c:254
+#: gdk-pixbuf/io-tiff.c:258
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Сбой при загрузке RGB-данных из файла формата TIFF"
 
+# gdk-pixbuf/io-tga.c:1308 gdk-pixbuf/io-tga.c:1337
+#: gdk-pixbuf/io-tiff.c:266
+msgid "Unsupported TIFF variant"
+msgstr "Неподдерживаемый тип изображения формата TIFF"
+
 # gdk-pixbuf/io-tiff.c:273
-#: gdk-pixbuf/io-tiff.c:324
+#: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
 msgstr "Сбой при открытии изображения в формате TIFF"
 
 # gdk-pixbuf/io-tiff.c:286
-#: gdk-pixbuf/io-tiff.c:337
+#: gdk-pixbuf/io-tiff.c:349
 msgid "TIFFClose operation failed"
 msgstr "Сбой операции TIFFClose"
 
 # gdk-pixbuf/io-tiff.c:419 gdk-pixbuf/io-tiff.c:433
-#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
+#: gdk-pixbuf/io-tiff.c:482 gdk-pixbuf/io-tiff.c:495
 msgid "Failed to load TIFF image"
 msgstr "Сбой при загрузке изображения в формате TIFF"
 
