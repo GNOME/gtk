@@ -1,5 +1,14 @@
 2002-07-02  Matthias Clasen  <maclas@gmx.de>
 
+	Support for compressed ras images (#84994):
+	
+	* io-ras.c (RAS2State): Error on unsupported ras variations.
+	(OneLine8): Fix colormap indexing.
+	(OneLine): Call updated_func with proper region.
+	(DoCompressed): New function, handles compressed ras data.
+	(gdk_pixbuf__ras_image_load_increment): Handle compressed ras
+	images.
+
 	Better colorspace support for the jpeg loader (#61211):
 	
 	* io-jpeg.c (convert_cmyk_to_rgb): New function.

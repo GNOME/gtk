@@ -85,7 +85,7 @@ struct ras_progressive_state {
 				   8 = 8 bit colormapped
 				   1  = 1 bit bitonal 
 				 */
-
+	gint DecoderState;        
 
 	struct rasterfile Header;	/* Decoded (BE->CPU) header */
 
@@ -181,6 +181,14 @@ static gboolean RAS2State(struct rasterfile *RAS,
 		return FALSE;
 	}
 
+	if (State->Header.type > 2 || State->Header.maptype > 1) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("unsupported RAS image variation")); 
+		return FALSE;
+	}
+
 	/* Now pad the line to be a multiple of 16 bits */
 	if ((State->LineWidth & 1) != 0)
 		State->LineWidth++;
@@ -266,7 +274,8 @@ gdk_pixbuf__ras_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 	context->Lines = 0;
 
 	context->RasType = 0;
-
+	context->DecoderState = 0;
+	
 	memset(&context->Header, 0, sizeof(struct rasterfile));
 
 
@@ -349,6 +358,7 @@ static void OneLine8(struct ras_progressive_state *context)
 {
 	gint X;
 	guchar *Pixels;
+	int offset = context->Header.maplength / 3;
 
 	X = 0;
 	Pixels = context->pixbuf->pixels + context->pixbuf->rowstride * context->Lines;
@@ -357,9 +367,9 @@ static void OneLine8(struct ras_progressive_state *context)
 		Pixels[X * 3 + 0] =
 		    context->HeaderBuf[context->LineBuf[X] + 32];
 		Pixels[X * 3 + 1] =
-		    context->HeaderBuf[context->LineBuf[X] + 256 + 32];
+		    context->HeaderBuf[context->LineBuf[X] + offset + 32];
 		Pixels[X * 3 + 2] =
-		    context->HeaderBuf[context->LineBuf[X] + 512 + 32];
+		    context->HeaderBuf[context->LineBuf[X] + 2*offset + 32];
 		X++;
 	}
 }
@@ -410,10 +420,48 @@ static void OneLine(struct ras_progressive_state *context)
 					  0,
 					  context->Lines,
 					  context->Header.width,
-					  context->Header.height,
+					  1,
 					  context->user_data);
 
 	}
+}
+
+static gboolean
+DoCompressed (gpointer data,
+	      const guchar * buf, guint size,
+	      GError **error)
+{
+	int i;
+	struct ras_progressive_state *context =
+	    (struct ras_progressive_state *) data;
+
+	for (i = 0; i < size; i++) {
+		switch (context->DecoderState) {
+		    case 0:
+			    if (buf[i] == 0x80)
+				    context->DecoderState = 1;
+			    else
+				    context->LineBuf[context->LineDone++] = buf[i];
+			    break;
+		    case 1:
+			    if (buf[i] == 0) {
+				    context->LineBuf[context->LineDone++] = 0x80;
+				    context->DecoderState = 0;
+			    }
+			    else
+				    context->DecoderState = buf[i] + 1;
+			    break;
+		    default:
+			    for (; context->DecoderState; context->DecoderState--) {
+				    context->LineBuf[context->LineDone++] = buf[i];
+				    if ((context->LineDone >= context->LineWidth) && (context->LineWidth > 0))
+					    OneLine(context);
+			    }
+		}
+		if ((context->LineDone >= context->LineWidth) && (context->LineWidth > 0))
+			OneLine(context);
+	}
+	return TRUE;
 }
 
 /*
@@ -448,8 +496,13 @@ gdk_pixbuf__ras_image_load_increment(gpointer data,
 			buf += BytesToCopy;
 			context->HeaderDone += BytesToCopy;
 
-		} else {
-			/* Pixeldata only */
+		} else if (context->Header.type == 2) {
+			if (!DoCompressed (context, buf, size, error)) {
+				return FALSE;
+			}
+			size = 0;
+		}
+		else {
 			BytesToCopy =
 			    context->LineWidth - context->LineDone;
 			if (BytesToCopy > size)
