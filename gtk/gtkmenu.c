@@ -1680,35 +1680,6 @@ gtk_menu_paint (GtkWidget      *widget,
 			   MENU_SCROLL_ARROW_HEIGHT - 2 * border_y - 2);
 	}
     }
-  else if (event->window == menu->view_window)
-    {
-      gint menu_height;
-      gint top_pos;
-      
-      if (menu->scroll_offset < 0)
-	gtk_paint_box (widget->style,
-		       menu->view_window,
-		       GTK_STATE_ACTIVE,
-		       GTK_SHADOW_IN,
-		       NULL, widget, "menu",
-		       0, 0,
-		       -1,
-		       -menu->scroll_offset);
-
-      menu_height = widget->requisition.height - 2*border_y;
-      top_pos = height - 2*border_y - (menu->upper_arrow_visible ? MENU_SCROLL_ARROW_HEIGHT : 0);
-
-      if (menu_height - menu->scroll_offset < top_pos)
-	gtk_paint_box (widget->style,
-		       menu->view_window,
-		       GTK_STATE_ACTIVE,
-		       GTK_SHADOW_IN,
-		       NULL, widget, "menu",
-		       0,
-		       menu_height - menu->scroll_offset,
-		       -1,
-		       top_pos - (menu_height - menu->scroll_offset));
-    }
 }
 
 static gboolean

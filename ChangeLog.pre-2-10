@@ -1,3 +1,10 @@
+2002-05-16  Ettore Perazzoli  <ettore@ximian.com>
+
+	* gtk/gtkmenu.c (gtk_menu_paint): If the menu is scrolled down or
+	up, and some of the widget area is empty, don't fill it in with
+	GTK_SHADOW_IN rectangles that make it looks strange.  Fixes
+	#72695.
+
 Wed May 15 18:15:45 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (_gtk_drag_source_handle_event): Don't
