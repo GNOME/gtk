@@ -1,3 +1,8 @@
+Tue Jan 25 16:46:23 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* cs.po: Tiny update from  Stanislav Brabec <utx@k332.feld.cvut.cz>
+	(closes Bug #2406)
+
 2000-01-04  Kjartan Maraas  <kmaraas@online.no>
 
 	* update.sh: A little script that lets people
