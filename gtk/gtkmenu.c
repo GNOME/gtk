@@ -1426,7 +1426,7 @@ gtk_menu_real_can_activate_accel (GtkWidget *widget,
   /* menu items chain here to figure whether they can activate their accelerators.
    * despite ordinary widgets, menus allow accel activation even if invisible
    * since that's the usual case for submenus/popup-menus. however, the state
-   * of the attch widget affects "activeness" of the menu.
+   * of the attach widget affects "activeness" of the menu.
    */
   GtkWidget *awidget = gtk_menu_get_attach_widget (GTK_MENU (widget));
   return awidget ? gtk_widget_can_activate_accel (awidget, signal_id) : GTK_WIDGET_IS_SENSITIVE (widget);
