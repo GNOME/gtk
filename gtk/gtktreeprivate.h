@@ -311,7 +311,10 @@ gboolean _gtk_tree_view_column_cell_event   (GtkTreeViewColumn  *tree_column,
 void _gtk_tree_view_column_start_editing (GtkTreeViewColumn *tree_column,
 					  GtkCellEditable   *editable_widget);
 void _gtk_tree_view_column_stop_editing  (GtkTreeViewColumn *tree_column);
-void _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view);					 
+void _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view);
+void             _gtk_tree_view_column_autosize          (GtkTreeView       *tree_view,
+							  GtkTreeViewColumn *column);
+
 gboolean         _gtk_tree_view_column_has_editable_cell (GtkTreeViewColumn *column);
 GtkCellRenderer *_gtk_tree_view_column_get_editable_cell (GtkTreeViewColumn *column);
 
