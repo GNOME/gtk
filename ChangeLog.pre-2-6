@@ -1,5 +1,9 @@
 2004-12-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c: Apply a patch to reset the 
+	filter if an otherwise invisible file is selected via the 
+	location popup.  (#159896, Carlos Garnacho Parro)
+
 	Fix #145463, reported by Michael Natterer.
 	
 	* gtk/gtkcellrenderer.h (struct _GtkCellRenderer): Add an

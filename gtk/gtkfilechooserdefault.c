@@ -3994,21 +3994,13 @@ gtk_file_chooser_default_screen_changed (GtkWidget *widget,
 }
 
 static gboolean
-list_model_filter_func (GtkFileSystemModel *model,
-			GtkFilePath        *path,
-			const GtkFileInfo  *file_info,
-			gpointer            user_data)
+get_is_file_filtered (GtkFileChooserDefault *impl,
+		      GtkFilePath           *path,
+		      GtkFileInfo           *file_info)
 {
-  GtkFileChooserDefault *impl = user_data;
   GtkFileFilterInfo filter_info;
   GtkFileFilterFlags needed;
   gboolean result;
-
-  if (!impl->current_filter)
-    return TRUE;
-
-  if (gtk_file_info_get_is_folder (file_info))
-    return TRUE;
 
   filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME | GTK_FILE_FILTER_MIME_TYPE;
 
@@ -4042,18 +4034,48 @@ list_model_filter_func (GtkFileSystemModel *model,
   if (filter_info.uri)
     g_free ((gchar *)filter_info.uri);
 
-  return result;
+  return !result;
+}
+
+static gboolean
+list_model_filter_func (GtkFileSystemModel *model,
+			GtkFilePath        *path,
+			const GtkFileInfo  *file_info,
+			gpointer            user_data)
+{
+  GtkFileChooserDefault *impl = user_data;
+
+  if (!impl->current_filter)
+    return TRUE;
+
+  if (gtk_file_info_get_is_folder (file_info))
+    return TRUE;
+
+  return !get_is_file_filtered (impl, path, (GtkFileInfo *) file_info);
 }
 
 static void
 install_list_model_filter (GtkFileChooserDefault *impl)
 {
+  GtkFileSystemModelFilter filter;
+  gpointer data;
+
   g_assert (impl->browse_files_model != NULL);
 
   if (impl->current_filter)
-    _gtk_file_system_model_set_filter (impl->browse_files_model,
-				       list_model_filter_func,
-				       impl);
+    {
+      filter = list_model_filter_func;
+      data   = impl;
+    }
+  else
+    {
+      filter = NULL;
+      data   = NULL;
+    }
+  
+  _gtk_file_system_model_set_filter (impl->browse_files_model,
+				     filter,
+				     data);
 }
 
 #define COMPARE_DIRECTORIES										       \
@@ -4535,7 +4557,7 @@ gtk_file_chooser_default_select_path (GtkFileChooser    *chooser,
       gboolean result;
       GtkFileFolder *folder;
       GtkFileInfo *info;
-      gboolean is_hidden;
+      gboolean is_hidden, is_filtered;
 
       result = _gtk_file_chooser_set_current_folder_path (chooser, parent_path, error);
 
@@ -4557,11 +4579,15 @@ gtk_file_chooser_default_select_path (GtkFileChooser    *chooser,
       if (!info)
 	return FALSE;
 
-      is_hidden = gtk_file_info_get_is_hidden (info);
+      is_hidden   = gtk_file_info_get_is_hidden (info);
+      is_filtered = get_is_file_filtered (impl, (GtkFilePath *) path, info);
       gtk_file_info_free (info);
 
       if (is_hidden)
 	g_object_set (impl, "show-hidden", TRUE, NULL);
+
+      if (is_filtered)
+	set_current_filter (impl, NULL);
 
       pending_op_queue (impl, PENDING_OP_SELECT_PATH, path);
       return TRUE;
@@ -5285,10 +5311,10 @@ set_current_filter (GtkFileChooserDefault *impl,
     {
       int filter_index;
 
-      /* If we have filters, new filter must be one of them
+      /* NULL filters are allowed to reset to non-filtered status
        */
       filter_index = g_slist_index (impl->filters, filter);
-      if (impl->filters && filter_index < 0)
+      if (impl->filters && filter && filter_index < 0)
 	return;
 
       if (impl->current_filter)
