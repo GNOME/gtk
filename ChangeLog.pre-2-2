@@ -1,3 +1,7 @@
+Sat Dec 19 18:45:30 PST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* configure.in: added sv to ALL_LIGNUAS
+
 Sat Dec 19 22:49:40 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.c (gtk_type_query): eek, fixed an embarrasing bug
