@@ -42,6 +42,13 @@ the button does not have a label.
 </varlistentry>
 
 <varlistentry>
+<term>#GtkMenuToolButton</term>
+<listitem><para>A subclass of #GtkToolButton that displays on 
+    the toolbar a button with an additional dropdown
+    menu</para></listitem>
+</varlistentry>
+
+<varlistentry>
 <term>#GtkToggleToolButton</term>
 <listitem><para>A subclass of #GtkToolButton that displays toggle
     buttons on the toolbar</para></listitem>

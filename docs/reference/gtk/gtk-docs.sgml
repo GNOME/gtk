@@ -72,6 +72,7 @@
 <!ENTITY GtkMenuBar SYSTEM "xml/gtkmenubar.xml">
 <!ENTITY GtkMenuItem SYSTEM "xml/gtkmenuitem.xml">
 <!ENTITY GtkMenuShell SYSTEM "xml/gtkmenushell.xml">
+<!ENTITY GtkMenuToolButton SYSTEM "xml/gtkmenutoolbutton.xml">
 <!ENTITY GtkMessageDialog SYSTEM "xml/gtkmessagedialog.xml">
 <!ENTITY GtkMisc SYSTEM "xml/gtkmisc.xml">
 <!ENTITY GtkNotebook SYSTEM "xml/gtknotebook.xml">
@@ -422,6 +423,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkToolItem;
         &GtkSeparatorToolItem;
         &GtkToolButton;
+	&GtkMenuToolButton;
         &GtkToggleToolButton;
         &GtkRadioToolButton;
     </chapter>

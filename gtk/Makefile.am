@@ -201,6 +201,7 @@ gtk_public_h_sources =          \
 	gtkmenubar.h		\
 	gtkmenuitem.h		\
 	gtkmenushell.h		\
+	gtkmenutoolbutton.h	\
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
 	gtkmodules.h		\
@@ -421,6 +422,7 @@ gtk_c_sources =                 \
 	gtkmenubar.c		\
 	gtkmenuitem.c		\
 	gtkmenushell.c		\
+	gtkmenutoolbutton.c	\
 	gtkmessagedialog.c	\
 	gtkmisc.c		\
 	gtkmodules.c		\

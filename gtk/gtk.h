@@ -116,6 +116,7 @@
 #include <gtk/gtkmenubar.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenushell.h>
+#include <gtk/gtkmenutoolbutton.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkmisc.h>
 #include <gtk/gtkmodules.h>

@@ -1,3 +1,16 @@
+2004-09-27  Paolo Borelli  <pborelli@katamail.com>
+
+	* gtk/Makefile.am:
+	* gtk/gtk.h:
+	* gtk/gtkmenutoolbutton.[ch]: add the GtkMenuToolButton widget
+	discussed in bug #151441.
+
+	* docs/reference/gtk/gtk-docs.sgml:
+	* docs/reference/gtk/gtk-sections.txt:
+	* docs/reference/gtk/gtk.types:
+	* docs/reference/gtk/tmpl/gtkmenutoolbutton.sgml: docs for the
+	new widget.
+
 2004-09-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystemunix.c (gtk_file_folder_unix_list_children): 
