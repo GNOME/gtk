@@ -944,6 +944,7 @@ gtk_get_current_event_state
 gtk_get_current_event_time
 gtk_get_default_language
 gtk_get_event_widget
+gtk_get_option_group
 gtk_grab_add
 gtk_grab_get_current
 gtk_grab_remove
@@ -1151,6 +1152,7 @@ gtk_init_check
 #ifdef G_OS_WIN32
 gtk_init_check_abi_check
 #endif
+gtk_init_with_args
 gtk_input_add_full
 gtk_input_dialog_get_type
 gtk_input_dialog_new

@@ -1,4 +1,5 @@
 gdk_add_client_message_filter
+gdk_add_option_entries_libgtk_only
 gdk_atom_intern
 gdk_atom_name
 gdk_axis_use_get_type
@@ -325,6 +326,7 @@ gdk_pointer_grab
 gdk_pointer_grab_info_libgtk_only
 gdk_pointer_is_grabbed
 gdk_pointer_ungrab
+gdk_pre_parse_libgtk_only
 gdk_property_change
 gdk_property_delete
 gdk_property_get
