@@ -195,7 +195,7 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 return NULL;
 	}
         
-	if (!TIFFReadRGBAImage (tiff, w, h, rast, 0) || global_error) {
+	if (!TIFFReadRGBAImage (tiff, w, h, rast, 1) || global_error) {
                 tiff_set_error (error,
                                 GDK_PIXBUF_ERROR_FAILED,
                                 _("Failed to load RGB data from TIFF file"));
