@@ -1,3 +1,8 @@
+Mon Aug 23 00:51:20 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* pixops/pixops.c (pixops_scale_nearest): Make it 
+	compile.  (#150761, Jon-Kare Hellan)
+
 Sun Aug 22 03:24:38 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* pixops/pixops.c (pixops_scale_nearest): Fix a mixup in 
