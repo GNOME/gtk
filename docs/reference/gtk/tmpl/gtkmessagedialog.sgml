@@ -79,6 +79,11 @@ You might do a non-modal #GtkMessageDialog as follows:
 
 </para>
 
+<!-- ##### ARG GtkMessageDialog:use-separator ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM GtkMessageType ##### -->
 <para>
 The type of message being displayed in the dialog.

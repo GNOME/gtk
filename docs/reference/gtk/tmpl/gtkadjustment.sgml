@@ -94,6 +94,36 @@ Emitted when the #GtkAdjustment value field has been changed.
 
 @adjustment: the object which received the signal.
 
+<!-- ##### ARG GtkAdjustment:lower ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAdjustment:page-increment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAdjustment:page-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAdjustment:step-increment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAdjustment:upper ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAdjustment:value ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_adjustment_new ##### -->
 <para>
 Creates a new #GtkAdjustment.

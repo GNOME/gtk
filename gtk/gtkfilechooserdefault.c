@@ -1455,11 +1455,12 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Filename column */
 
   impl->list_name_column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_expand (impl->list_name_column, TRUE);
   gtk_tree_view_column_set_title (impl->list_name_column, _("File name"));
   gtk_tree_view_column_set_sort_column_id (impl->list_name_column, FILE_LIST_COL_NAME);
 
   renderer = gtk_cell_renderer_pixbuf_new ();
-  gtk_tree_view_column_pack_start (impl->list_name_column, renderer, TRUE);
+  gtk_tree_view_column_pack_start (impl->list_name_column, renderer, FALSE);
   gtk_tree_view_column_set_cell_data_func (impl->list_name_column, renderer,
 					   list_icon_data_func, impl, NULL);
 

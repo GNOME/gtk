@@ -14,6 +14,22 @@ Loadable keyboard accelerator specifications
 
 </para>
 
+<!-- ##### STRUCT GtkAccelMap ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkAccelMap::changed ##### -->
+<para>
+
+</para>
+
+@accelmap: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
 <!-- ##### USER_FUNCTION GtkAccelMapForeach ##### -->
 <para>
 
@@ -122,5 +138,13 @@ Loadable keyboard accelerator specifications
 
 @data: 
 @foreach_func: 
+
+
+<!-- ##### FUNCTION gtk_accel_map_get ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 
