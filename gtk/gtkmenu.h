@@ -89,6 +89,7 @@ void       gtk_menu_set_accelerator_table (GtkMenu             *menu,
 void	   gtk_menu_attach_to_widget	  (GtkMenu	       *menu,
 					   GtkWidget	       *attach_widget,
 					   GtkMenuDetachFunc	detacher);
+GtkWidget* gtk_menu_get_attach_widget	  (GtkMenu	       *menu);
 void	   gtk_menu_detach		  (GtkMenu	       *menu);
 
 

@@ -207,6 +207,20 @@ gtk_menu_attach_to_widget (GtkMenu             *menu,
    */
 }
 
+GtkWidget*
+gtk_menu_get_attach_widget (GtkMenu             *menu)
+{
+  GtkMenuAttachData *data;
+
+  g_return_val_if_fail (menu != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
+
+  data = gtk_object_get_data (GTK_OBJECT (menu), attach_data_key);
+  if (data)
+    return data->attach_widget;
+  return NULL;
+}
+
 void
 gtk_menu_detach (GtkMenu             *menu)
 {

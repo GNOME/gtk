@@ -1,3 +1,8 @@
+Sun Feb  8 07:06:54 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkmenu.c (gtk_menu_get_attach_widget): new fundtion to return
+ 	  the widget that the menu is attached to.
+
 Sat Feb  7 11:33:08 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gdk/gdkgc.c (gdk_gc_copy): use a mask of 0xffffffff
