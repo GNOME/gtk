@@ -43,6 +43,7 @@ HTML_IMAGES =
 content_files =				\
 	version.xml			\
 	gdk-pixbuf-from-drawables.sgml	\
+	gdk-pixbuf-rendering.sgml	\
 	gdk-pixbuf.sgml			\
 	porting-from-imlib.sgml
 

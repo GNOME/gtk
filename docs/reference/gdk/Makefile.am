@@ -121,7 +121,7 @@ HTML_IMAGES =				\
 	images/xterm.png 
 
 # Extra SGML files that are included by DOC_MAIN_SGML_FILE
-content_files =
+content_files = multihead.sgml
 
 # Other files to distribute
 extra_files =
