@@ -1,3 +1,10 @@
+1998-09-18  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gtk/Makefile.am (gdk_headers): 
+	Remove references to $(top_srcdir). 
+	(gtk.defs, gtktypebuiltins{.h,_vars.c,_ids.c,_evals.c}): Simplify.
+	* gtk/makeenums.pl (parse_entries): Don't look for $srcdir.
+
 Fri Sep 18 19:58:24 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkobject.h (struct _GtkObject): changed gpointer object_data; to
