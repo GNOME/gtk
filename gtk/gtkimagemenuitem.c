@@ -220,16 +220,19 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 
   if (image_menu_item->image && show_image (image_menu_item))
     {
-      guint image_width = image_menu_item->image->requisition.width;
+      GtkRequisition image_requisition;
 
-      if (image_width > 0)
+      gtk_widget_get_child_requisition (image_menu_item->image,
+                                        &image_requisition);
+
+      if (image_requisition.width > 0)
 	{
 	  guint toggle_spacing;
 	  gtk_widget_style_get (GTK_WIDGET (menu_item),
 				"toggle_spacing", &toggle_spacing,
 				NULL);
-	  
-	  *requisition = image_width + toggle_spacing;
+
+	  *requisition = image_requisition.width + toggle_spacing;
 	}
     }
 }
@@ -281,7 +284,8 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
 
   if (image_menu_item->image && show_image (image_menu_item))
     {
-      gint width, height, x, y, offset;
+      gint x, y, offset;
+      GtkRequisition child_requisition;
       GtkAllocation child_allocation;
       guint horizontal_padding, toggle_spacing;
 
@@ -293,9 +297,10 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
       /* Man this is lame hardcoding action, but I can't
        * come up with a solution that's really better.
        */
-      
-      width = image_menu_item->image->requisition.width;
-      height = image_menu_item->image->requisition.height;
+
+      gtk_widget_get_child_requisition (image_menu_item->image,
+                                        &child_requisition);
+
       offset = GTK_CONTAINER (image_menu_item)->border_width +
 	widget->style->xthickness;
 
@@ -303,20 +308,20 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
 	{
 	  x = offset + horizontal_padding +
 	      (GTK_MENU_ITEM (image_menu_item)->toggle_size -
-	       toggle_spacing - width) / 2;
+	       toggle_spacing - child_requisition.width) / 2;
 	}
       else
 	{
 	  x = widget->allocation.width - offset - horizontal_padding -
 	      GTK_MENU_ITEM (image_menu_item)->toggle_size + toggle_spacing +
 	      (GTK_MENU_ITEM (image_menu_item)->toggle_size -
-	       toggle_spacing - width) / 2;
+	       toggle_spacing - child_requisition.width) / 2;
 	}
 
-      y = (widget->allocation.height - height) / 2;
+      y = (widget->allocation.height - child_requisition.height) / 2;
 
-      child_allocation.width = width;
-      child_allocation.height = height;
+      child_allocation.width = child_requisition.width;
+      child_allocation.height = child_requisition.height;
       child_allocation.x = widget->allocation.x + MAX (x, 0);
       child_allocation.y = widget->allocation.y + MAX (y, 0);
 

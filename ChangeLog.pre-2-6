@@ -1,3 +1,10 @@
+2004-06-03  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtkimagemenuitem.c: use gtk_widget_get_child_requisition()
+	instead of accessing item->image->allocation.width/height
+	directly. Makes widgets which only have a requisition set using
+	gtk_widget_set_size_request() work and fixes bug #142789.
+
 Thu Jun  3 08:07:59 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenu.c: Revert previous commit. It caused the problem
