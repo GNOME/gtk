@@ -1,3 +1,7 @@
+2004-03-22  Guntupalli Karunakar  <karunakar@freedomink.org>
+
+        * configure.in: Added "pa" (Punjabi) to ALL_LINGUAS.
+
 2004-03-21  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkfilesystemwin32.c
