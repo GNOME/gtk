@@ -677,7 +677,6 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
 				    gpointer      data)
 {
   int i;
-  int len;
   SortElt *elt;
   SortLevel *level;
   
@@ -686,47 +685,25 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
 
   GtkTreeModelSort *tree_model_sort = GTK_TREE_MODEL_SORT (data);
   
-  g_return_if_fail (s_path != NULL && s_iter != NULL);
+  g_return_if_fail (s_iter != NULL);
   g_return_if_fail (new_order != NULL);
 
-  if (!gtk_tree_path_get_indices (s_path))
-    len = gtk_tree_model_iter_n_children (s_model, NULL);
-  else
-    len = gtk_tree_model_iter_n_children (s_model, s_iter);
-
-  if (len < 2)
+  if (s_path == NULL || gtk_tree_path_get_indices (s_path) == NULL)
     {
-      return;
+      if (tree_model_sort->root == NULL)
+	return;
+      level = SORT_LEVEL (tree_model_sort->root);
     }
-
-  /** get correct sort level **/
-
-  if (!gtk_tree_path_get_indices (s_path))
-    level = SORT_LEVEL (tree_model_sort->root);
   else
     {
-      path = gtk_tree_model_sort_convert_child_path_to_path (tree_model_sort,
-							     s_path);
-      
-      if (!path)
-	{
-	  return;
-	}
-
-      if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path))
-	{
-	  /* no iter for me */
-	  gtk_tree_path_free (path);
-	  return;
-	}
-      
-      level = SORT_LEVEL (iter.user_data);
-      elt = SORT_ELT (iter.user_data2);
+      path = gtk_real_tree_model_sort_convert_child_path_to_path (tree_model_sort, s_path, FALSE);
+      if (path == NULL)
+	return;
+      gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
       gtk_tree_path_free (path);
 
-      /* FIXME: is this needed ? */
-      if (!s_iter)
-	gtk_tree_model_get_iter (s_model, s_iter, s_path);
+      level = SORT_LEVEL (iter.user_data);
+      elt = SORT_ELT (iter.user_data2);
 
       if (!elt->children)
 	return;
@@ -734,18 +711,8 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
       level = elt->children;
     }
 
-  if (!level)
-    {
-      /* ignore signal */
-      return;
-    }
-
-  if (len != level->array->len)
-    {
-      /* length mismatch, pretty bad, shouldn't happen */
-      
-      return;
-    }
+  if (level->array->len < 2)
+    return;
   
   /** unsorted: set offsets, resort without reordered emission **/
   if (tree_model_sort->sort_column_id == -1)
@@ -800,7 +767,6 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
       new_order[g_array_index (level->array, SortElt, i).offset];
 
   gtk_tree_model_sort_increment_stamp (tree_model_sort);
-
 }
 
 /* Fulfill our model requirements */

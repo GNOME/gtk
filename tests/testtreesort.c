@@ -98,7 +98,9 @@ main (int argc, char *argv[])
   for (i = 0; data[i].word_1 != NULL; i++)
     {
       gint k;
-      
+      GtkTreeIter child_iter;
+
+
       gtk_tree_store_prepend (GTK_TREE_STORE (model), &iter, NULL);
       gtk_tree_store_set (GTK_TREE_STORE (model), &iter,
 			  WORD_COLUMN_1, data[i].word_1,
@@ -106,11 +108,16 @@ main (int argc, char *argv[])
 			  WORD_COLUMN_3, data[i].word_3,
 			  WORD_COLUMN_4, data[i].word_4,
 			  -1);
-      
+
+      gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
+      gtk_tree_store_set (GTK_TREE_STORE (model), &child_iter,
+			  WORD_COLUMN_1, data[i].word_1,
+			  WORD_COLUMN_2, data[i].word_2,
+			  WORD_COLUMN_3, data[i].word_3,
+			  WORD_COLUMN_4, data[i].word_4,
+			  -1);
       for (k = 0; childdata[k].word_1 != NULL; k++)
 	{
-	  GtkTreeIter child_iter;
-	  
 	  gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
 	  gtk_tree_store_set (GTK_TREE_STORE (model), &child_iter,
 			      WORD_COLUMN_1, childdata[k].word_1,
@@ -305,7 +312,7 @@ main (int argc, char *argv[])
       gtk_window_set_default_size (GTK_WINDOW (window3), 400, 400);
       gtk_widget_show_all (window3);
     }
-  
+#if 0  
   for (i = 0; data[i].word_1 != NULL; i++)
     {
       gint k;
@@ -330,7 +337,7 @@ main (int argc, char *argv[])
 			      -1);
 	}
     }
-  
+#endif  
   gtk_main ();
   
   return 0;
