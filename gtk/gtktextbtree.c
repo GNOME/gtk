@@ -554,6 +554,174 @@ _gtk_text_btree_segments_changed (GtkTextBTree *tree)
  * Indexable segment mutation
  */
 
+/*
+ *  The following function is responsible for resolving the bidi direction
+ *  for the lines between start and end. But it also calculates any
+ *  dependent bidi direction for surrounding lines that change as a result
+ *  of the bidi direction decisions within the range. The function is
+ *  trying to do as little propagation as is needed.
+ */
+static void
+gtk_text_btree_resolve_bidi (GtkTextIter *start,
+			     GtkTextIter *end)
+{
+  GtkTextBTree *tree = _gtk_text_iter_get_btree (start);
+  GtkTextLine *start_line, *end_line, *start_line_prev, *end_line_next, *line;
+  PangoDirection last_strong, dir_above_propagated, dir_below_propagated;
+
+  /* Resolve the strong bidi direction for all lines between
+   * start and end.
+  */
+  start_line = _gtk_text_iter_get_text_line (start);
+  start_line_prev = _gtk_text_line_previous (start_line);
+  end_line = _gtk_text_iter_get_text_line (end);
+  end_line_next = _gtk_text_line_next (end_line);
+  
+  line = start_line;
+  while (line && line != end_line_next)
+    {
+      /* Loop through the segments and search for a strong character
+       */
+      GtkTextLineSegment *seg = line->segments;
+      line->dir_strong = PANGO_DIRECTION_NEUTRAL;
+      
+      while (seg)
+        {
+          if (seg->byte_count > 0)
+            {
+	      PangoDirection pango_dir;
+
+              pango_dir = pango_find_base_dir (seg->body.chars,
+					       seg->byte_count);
+	      
+              if (pango_dir != PANGO_DIRECTION_NEUTRAL)
+                {
+                  line->dir_strong = pango_dir;
+                  break;
+                }
+            }
+          seg = seg->next;
+        }
+
+      line = _gtk_text_line_next (line);
+    }
+
+  /* Sweep forward */
+
+  /* The variable dir_above_propagated contains the forward propagated
+   * direction before start. It is neutral if start is in the beginning
+   * of the buffer.
+   */
+  dir_above_propagated = PANGO_DIRECTION_NEUTRAL;
+  if (start_line_prev)
+    dir_above_propagated = start_line_prev->dir_propagated_forward;
+
+  /* Loop forward and propagate the direction of each paragraph 
+   * to all neutral lines.
+   */
+  line = start_line;
+  last_strong = dir_above_propagated;
+  while (line != end_line_next)
+    {
+      if (line->dir_strong != PANGO_DIRECTION_NEUTRAL)
+        last_strong = line->dir_strong;
+      
+      line->dir_propagated_forward = last_strong;
+      
+      line = _gtk_text_line_next (line);
+    }
+
+  /* Continue propagating as long as the previous resolved forward
+   * is different from last_strong.
+   */
+  {
+    GtkTextIter end_propagate;
+    
+    while (line &&
+	   line->dir_strong == PANGO_DIRECTION_NEUTRAL &&
+	   line->dir_propagated_forward != last_strong)
+      {
+        GtkTextLine *prev = line;
+        line->dir_propagated_forward = last_strong;
+        
+        line = _gtk_text_line_next(line);
+        if (!line)
+          {
+            line = prev;
+            break;
+          }
+      }
+
+    /* The last line to invalidate is the last line before the
+     * line with the strong character. Or in case of the end of the
+     * buffer, the last line of the buffer. (There seems to be an
+     * extra "virtual" last line in the buffer that must not be used
+     * calling _gtk_text_btree_get_iter_at_line (causes crash). Thus the
+     * _gtk_text_line_previous is ok in that case as well.)
+     */
+    line = _gtk_text_line_previous (line);
+    _gtk_text_btree_get_iter_at_line (tree, &end_propagate, line, 0);
+    _gtk_text_btree_invalidate_region (tree, end, &end_propagate);
+  }
+  
+  /* Sweep backward */
+
+  /* The variable dir_below_propagated contains the backward propagated
+   * direction after end. It is neutral if end is at the end of
+   * the buffer.
+  */
+  dir_below_propagated = PANGO_DIRECTION_NEUTRAL;
+  if (end_line_next)
+    dir_below_propagated = end_line_next->dir_propagated_back;
+
+  /* Loop backward and propagate the direction of each paragraph 
+   * to all neutral lines.
+   */
+  line = end_line;
+  last_strong = dir_below_propagated;
+  while (line != start_line_prev)
+    {
+      if (line->dir_strong != PANGO_DIRECTION_NEUTRAL)
+        last_strong = line->dir_strong;
+
+      line->dir_propagated_back = last_strong;
+
+      line = _gtk_text_line_previous (line);
+    }
+
+  /* Continue propagating as long as the resolved backward dir
+   * is different from last_strong.
+   */
+  {
+    GtkTextIter start_propagate;
+
+    while (line &&
+	   line->dir_strong == PANGO_DIRECTION_NEUTRAL &&
+	   line->dir_propagated_back != last_strong)
+      {
+        GtkTextLine *prev = line;
+        line->dir_propagated_back = last_strong;
+
+        line = _gtk_text_line_previous (line);
+        if (!line)
+          {
+            line = prev;
+            break;
+          }
+      }
+
+    /* We only need to invalidate for backwards propagation if the
+     * line we ended up on didn't get a direction from forwards
+     * propagation.
+     */
+    if (line && line->dir_propagated_forward == PANGO_DIRECTION_NEUTRAL)
+      {
+        _gtk_text_btree_get_iter_at_line (tree, &start_propagate, line, 0);
+        _gtk_text_btree_invalidate_region(tree, &start_propagate, start);
+      }
+  }
+}
+
 void
 _gtk_text_btree_delete (GtkTextIter *start,
                         GtkTextIter *end)
@@ -884,6 +1052,8 @@ _gtk_text_btree_delete (GtkTextIter *start,
   /* Re-initialize our iterators */
   _gtk_text_btree_get_iter_at_line (tree, start, start_line, start_byte_offset);
   *end = *start;
+  
+  _gtk_text_btree_resolve_bidi (start, end);
 }
 
 void
@@ -1050,6 +1220,8 @@ _gtk_text_btree_insert (GtkTextIter *iter,
 
     /* Convenience for the user */
     *iter = end;
+    
+    _gtk_text_btree_resolve_bidi (&start, &end);
   }
 }
 
@@ -4498,6 +4670,9 @@ gtk_text_line_new (void)
   GtkTextLine *line;
 
   line = g_new0(GtkTextLine, 1);
+  line->dir_strong = PANGO_DIRECTION_NEUTRAL;
+  line->dir_propagated_forward = PANGO_DIRECTION_NEUTRAL;
+  line->dir_propagated_back = PANGO_DIRECTION_NEUTRAL;
 
   return line;
 }

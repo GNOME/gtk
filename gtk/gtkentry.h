@@ -93,6 +93,7 @@ struct _GtkEntry
   
   guint        select_words : 1;
   guint        select_lines : 1;
+  guint        resolved_dir : 4; /* PangoDirection */
   guint   button;
   guint   blink_timeout;
   guint   recompute_idle;

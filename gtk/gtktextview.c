@@ -5620,26 +5620,28 @@ gtk_text_view_check_keymap_direction (GtkTextView *text_view)
 {
   if (text_view->layout)
     {
-      gboolean split_cursor;
-      GtkTextDirection new_dir;
       GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
-  
+      GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)));
+      GtkTextDirection new_cursor_dir;
+      GtkTextDirection new_keyboard_dir;
+      gboolean split_cursor;
+
       g_object_get (settings,
 		    "gtk-split-cursor", &split_cursor,
 		    NULL);
-      if (split_cursor)
-	{
-	  new_dir = GTK_TEXT_DIR_NONE;
-	}
-      else
-	{
-	  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)));
-	  new_dir = (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR) ?
-	    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
-	}
       
-      if (text_view->layout->cursor_direction != new_dir)
-	gtk_text_layout_set_cursor_direction (text_view->layout, new_dir);
+      if (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR)
+	new_keyboard_dir = GTK_TEXT_DIR_LTR;
+      else
+	new_keyboard_dir  = GTK_TEXT_DIR_RTL;
+  
+      if (split_cursor)
+	new_cursor_dir = GTK_TEXT_DIR_NONE;
+      else
+	new_cursor_dir = new_keyboard_dir;
+      
+      gtk_text_layout_set_cursor_direction (text_view->layout, new_cursor_dir);
+      gtk_text_layout_set_keyboard_direction (text_view->layout, new_keyboard_dir);
     }
 }
 

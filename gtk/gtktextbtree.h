@@ -216,6 +216,9 @@ struct _GtkTextLine {
   GtkTextLineSegment *segments; /* First in ordered list of segments
                                  * that make up the line. */
   GtkTextLineData *views;      /* data stored here by views */
+  guchar dir_strong;                /* BiDi algo dir of line */
+  guchar dir_propagated_back;       /* BiDi algo dir of next line */
+  guchar dir_propagated_forward;    /* BiDi algo dir of prev line */
 };
 
 

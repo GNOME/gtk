@@ -1,6 +1,19 @@
+Mon Mar  1 10:41:27 2004  Owen Taylor  <otaylor@redhat.com>
+
+	Patch from Dov Grobgeld to implement auto-bidi-direction
+	for GtkTextView (#118543)
+
+	* gtk/gtktextbtree.[ch]: Resolve bidi base direction
+	for each line by propagating backwards/forwards as
+	necessary.
+
+	* gtk/gtktextlayout.[ch] gtk/gtktextview.c: Set the 
+	bidi base direction for the ;ine with the cursor from 
+	the keyboard direction. Add gtk_text_layout_set_keyboard_direction().
+	
 Mon Mar  1 10:31:11 2004  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/gtkentry.c: Implement auto-bidi-direction,
+	* gtk/gtkentry.[ch]: Implement auto-bidi-direction,
 	based on a patch from Dov Grobgeld. (#118540)
 
 Sun Feb 29 22:01:49 2004  Owen Taylor  <otaylor@redhat.com>

@@ -165,6 +165,11 @@ struct _GtkTextLayout
    */
   guint cursor_direction : 2;
 
+  /* The keyboard direction is used to default the alignment when
+     there are no strong characters.
+  */
+  guint keyboard_direction : 2;
+
   /* The preedit string and attributes, if any */
 
   gchar *preedit_string;
@@ -265,7 +270,9 @@ void               gtk_text_layout_set_contexts          (GtkTextLayout     *lay
 							  PangoContext      *ltr_context,
 							  PangoContext      *rtl_context);
 void               gtk_text_layout_set_cursor_direction  (GtkTextLayout     *layout,
-							  GtkTextDirection   direction);
+                                                          GtkTextDirection   direction);
+void               gtk_text_layout_set_keyboard_direction (GtkTextLayout     *layout,
+							   GtkTextDirection keyboard_dir);
 void               gtk_text_layout_default_style_changed (GtkTextLayout     *layout);
 
 void gtk_text_layout_set_screen_width       (GtkTextLayout     *layout,
