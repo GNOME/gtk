@@ -1,3 +1,12 @@
+2004-09-27  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix #153082:
+	
+	* gtk/gtkmain.c (do_pre_parse_initialization): Don't call gdk_parse_args()
+	here, we don't want to parse args twice.
+	(gtk_init_with_args): Add the ugid check here as well.
+	(gtk_parse_args): Add the gdk options to the main option group as well.
+
 2004-09-27  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/Makefile.am:

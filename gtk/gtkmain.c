@@ -437,7 +437,7 @@ do_pre_parse_initialization (int    *argc,
 	g_warning ("Locale not supported by C library.\n\tUsing the fallback 'C' locale.");
     }
 
-  gdk_parse_args (argc, argv);
+  gdk_pre_parse_libgtk_only ();
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
   
 #ifdef G_ENABLE_DEBUG
@@ -567,9 +567,12 @@ gtk_init_with_args (int            *argc,
   GOptionContext *context;
   GOptionGroup *gtk_group;
   gboolean retval;
-  
+
   if (gtk_initialized)
     return TRUE;
+
+  if (!check_setugid ())
+    return FALSE;
 
   gtk_group = gtk_get_option_group (TRUE);
   
@@ -578,7 +581,6 @@ gtk_init_with_args (int            *argc,
   
   if (entries)
     g_option_context_add_main_entries (context, entries, translation_domain);
-
   retval = g_option_context_parse (context, argc, argv, error);
 
   g_option_context_free (context);
@@ -623,6 +625,7 @@ gtk_parse_args (int    *argc,
   g_option_context_set_help_enabled (option_context, FALSE);
   
   g_option_context_add_main_entries (option_context, gtk_args, GETTEXT_PACKAGE);
+  gdk_add_option_entries_libgtk_only (g_option_context_get_main_group (option_context));
 
   g_option_context_parse (option_context, argc, argv, NULL);
   g_option_context_free (option_context);
