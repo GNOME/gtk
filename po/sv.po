@@ -1,15 +1,15 @@
 # Swedish messages for GTK+.
-# Copyright (C) 1999, 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
 # Tomas Ögren <stric@ing.umu.se>, 1999.
-# Christian Rose <menthos@menthos.com>, 2000, 2001.
+# Christian Rose <menthos@menthos.com>, 2000, 2001, 2002.
 #
 # $Id$
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-01-29 22:58-0500\n"
-"PO-Revision-Date: 2001-12-19 21:21+0100\n"
+"POT-Creation-Date: 2002-01-31 13:59+0100\n"
+"PO-Revision-Date: 2002-01-31 13:59+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1384,35 +1384,35 @@ msgstr "Största Y"
 msgid "Maximum possible value for Y"
 msgstr "Största möjliga värde för Y"
 
-#: gtk/gtkdialog.c:126
+#: gtk/gtkdialog.c:128
 msgid "Has separator"
 msgstr "Har avskiljare"
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:129
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Dialogen har en avskiljarrad ovanför dess knappar"
 
-#: gtk/gtkdialog.c:150
+#: gtk/gtkdialog.c:152
 msgid "Content area border"
 msgstr "Kant för innehållsutrymme"
 
-#: gtk/gtkdialog.c:151
+#: gtk/gtkdialog.c:153
 msgid "Width of border around the main dialog area"
 msgstr "Bredd på kanten runt huvuddialogutrymmet"
 
-#: gtk/gtkdialog.c:158
+#: gtk/gtkdialog.c:160
 msgid "Button spacing"
 msgstr "Knappmellanrum"
 
-#: gtk/gtkdialog.c:159
+#: gtk/gtkdialog.c:161
 msgid "Spacing between buttons"
 msgstr "Mellanrum mellan knappar"
 
-#: gtk/gtkdialog.c:167
+#: gtk/gtkdialog.c:169
 msgid "Action area border"
 msgstr "Kant på åtgärdsutrymme"
 
-#: gtk/gtkdialog.c:168
+#: gtk/gtkdialog.c:170
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Bredd på kanten runt knapputrymmet runt nederkanten på dialogen"
 
@@ -1549,18 +1549,16 @@ msgid "Directories"
 msgstr "Kataloger"
 
 #: gtk/gtkfilesel.c:660
-#, fuzzy
 msgid "_Directories"
-msgstr "Kataloger"
+msgstr "_Kataloger"
 
 #: gtk/gtkfilesel.c:688
 msgid "Files"
 msgstr "Filer"
 
 #: gtk/gtkfilesel.c:692
-#, fuzzy
 msgid "_Files"
-msgstr "Filer"
+msgstr "_Filer"
 
 #: gtk/gtkfilesel.c:768 gtk/gtkfilesel.c:2105
 #, c-format
@@ -1579,19 +1577,16 @@ msgstr ""
 "Är du säker på att du vill välja den?"
 
 #: gtk/gtkfilesel.c:1022
-#, fuzzy
 msgid "Crea_te Dir"
-msgstr "Skapa katalog"
+msgstr "Ska_pa katalog"
 
 #: gtk/gtkfilesel.c:1033
-#, fuzzy
 msgid "De_lete File"
-msgstr "Ta bort fil"
+msgstr "_Ta bort fil"
 
 #: gtk/gtkfilesel.c:1044
-#, fuzzy
 msgid "_Rename File"
-msgstr "Byt namn på fil"
+msgstr "_Byt namn på fil"
 
 #: gtk/gtkfilesel.c:1292
 #, c-format
@@ -1757,9 +1752,8 @@ msgstr "S_torlek:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:453
-#, fuzzy
 msgid "_Preview:"
-msgstr "Förhandsgranskning:"
+msgstr "_Förhandsgranskning:"
 
 #: gtk/gtkfontsel.c:1204
 msgid "Font Selection"
