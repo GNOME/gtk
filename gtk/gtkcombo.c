@@ -308,29 +308,41 @@ static GtkListItem *
 gtk_combo_find (GtkCombo * combo)
 {
   const gchar *text;
+  GtkListItem *found = NULL;
   gchar *ltext;
+  gchar *compare_text;
   GList *clist;
-  int (*string_compare) (const char *, const char *);
-
-  if (combo->case_sensitive)
-    string_compare = strcmp;
-  else
-    string_compare = g_strcasecmp;
 
   text = gtk_entry_get_text (GTK_ENTRY (combo->entry));
+  if (combo->case_sensitive)
+    compare_text = (gchar *)text;
+  else
+    compare_text = g_utf8_casefold (text, -1);
+  
   clist = GTK_LIST (combo->list)->children;
 
-  while (clist && clist->data)
+  while (!found && clist && clist->data)
     {
       ltext = gtk_combo_func (GTK_LIST_ITEM (clist->data));
       if (!ltext)
 	continue;
-      if (!(*string_compare) (ltext, text))
-	return (GtkListItem *) clist->data;
+
+      if (!combo->case_sensitive)
+	ltext = g_utf8_casefold (ltext, -1);
+
+      if (strcmp (ltext, compare_text) == 0)
+	found = clist->data;
+
+      if (!combo->case_sensitive)
+	g_free (ltext);
+
       clist = clist->next;
     }
 
-  return NULL;
+  if (!combo->case_sensitive)
+    g_free (compare_text);
+
+  return found;
 }
 
 static gchar *

@@ -635,7 +635,7 @@ gtk_font_selection_show_available_fonts (GtkFontSelection *fontsel)
 			  FAMILY_NAME_COLUMN, name,
 			  -1);
       
-      if (i == 0 || !g_strcasecmp (name, "sans"))
+      if (i == 0 || !g_ascii_strcasecmp (name, "sans"))
 	{
 	  match_family = families[i];
 	  match_row = iter;

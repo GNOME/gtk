@@ -1,3 +1,25 @@
+Wed Feb 27 12:34:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkiconfactory.c: Register all stock icons
+	"unscaled" so that we don't have icons only available
+	at some sizes. (#68896)
+
+Wed Feb 27 11:59:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Some ASCII vs. locale fixes from Darin Adler (#55837)
+
+	* gtk/gtkcombo.c (gtk_combo_find): Implement real
+	case-insensitive comparison using g_utf8_casefold().
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_refetch): Fix
+	assignment of gunichar to char by replacing g_unichar_totitle
+	with g_ascii_toupper ... the contents would only be ascii
+	here anyways.
+
+	* gdk/x11/gdkim-x11.c (_gdk_x11_initialize_locale) 
+	* gtk/gtkfontsel.c (gtk_font_selection_show_available_fonts): 
+	Replace a calls to g_strcasecmp() with g_ascii_strcasecmp().
+
 2002-02-27  Hans Breuer  <hans@breuer.org>
 
 	* demos/gtk-demo/makefile.msc.in : new file

@@ -542,7 +542,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 	      
 	      tmp = gtk_accelerator_name (key->accel_key, 0);
 	      if (tmp[0] != 0 && tmp[1] == 0)
-		tmp[0] = g_unichar_totitle (tmp[0]);
+		tmp[0] = g_ascii_toupper (tmp[0]);
 	      g_string_append (gstring, tmp);
 	      g_free (tmp);
 	    }
