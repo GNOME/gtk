@@ -1,3 +1,10 @@
+2002-10-22  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkstatusbar.c (gtk_statusbar_get_type): 
+	(gtk_statusbar_class_init): It is called GtkStatusbar, not
+	GtkStatusBar. This was changed accidentally during deprecation
+	cleanup and caused links in the API docs to break.  (#96390)
+
 Mon Oct 21 14:04:39 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_get_public_chars): Return

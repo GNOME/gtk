@@ -94,7 +94,7 @@ gtk_statusbar_get_type (void)
         (GInstanceInitFunc) gtk_statusbar_init,
       };
 
-      statusbar_type = g_type_register_static (GTK_TYPE_HBOX, "GtkStatusBar",
+      statusbar_type = g_type_register_static (GTK_TYPE_HBOX, "GtkStatusbar",
 					       &statusbar_info, 0);
     }
 
@@ -127,7 +127,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   widget_class->size_request = gtk_statusbar_size_request;
   widget_class->size_allocate = gtk_statusbar_size_allocate;
   
-  class->messages_mem_chunk = g_mem_chunk_new ("GtkStatusBar messages mem chunk",
+  class->messages_mem_chunk = g_mem_chunk_new ("GtkStatusbar messages mem chunk",
 					       sizeof (GtkStatusbarMsg),
 					       sizeof (GtkStatusbarMsg) * 64,
 					       G_ALLOC_AND_FREE);
