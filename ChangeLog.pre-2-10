@@ -1,3 +1,8 @@
+Fri Oct 26 18:27:11 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* demos/gtk-demo/list_store.c (create_model): Anders
+	Carlsson suggested to use G_N_ELEMENTS here
+
 2001-10-26  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkbutton.[ch]

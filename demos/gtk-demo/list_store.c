@@ -45,7 +45,6 @@ static Bug data[] =
   { TRUE,  50939, "Normal",     "Add shift clicking to GtkTextView" },
   { FALSE, 6112,  "Enhancement","netscape-like collapsable toolbars" },
   { FALSE, 1,     "Normal",     "First bug :=)" },
-  { 0, 0, NULL, NULL }
 };
 
 static GtkTreeModel *
@@ -63,7 +62,7 @@ create_model (void)
 			      G_TYPE_STRING);
 
   /* add data to the list store */
-  while (data[i].number)
+  for (i = 0; i < G_N_ELEMENTS (data); i++)
     {
       gtk_list_store_append (store, &iter);
       gtk_list_store_set (store, &iter,
@@ -72,7 +71,6 @@ create_model (void)
 			  COLUMN_SEVERITY, data[i].severity,
 			  COLUMN_DESCRIPTION, data[i].description,
 			  -1);
-      i++;
     }
 
   return GTK_TREE_MODEL (store);
