@@ -710,7 +710,20 @@ gtk_tree_remove_items (GtkTree *tree,
   g_print("+ gtk_tree_remove_items [ tree %#x items list %#x ]\n", (int)tree, (int)items);
 #endif /* TREE_DEBUG */
 
-  root_tree = GTK_TREE(GTK_TREE_ROOT_TREE(tree));
+  /* We may not yet be mapped, so we actively have to find our
+   * root tree
+   */
+  if (tree->root_tree)
+    root_tree = tree->root_tree;
+  else
+    {
+      GtkWidget *tmp = GTK_WIDGET (tree);
+      while (tmp->parent && GTK_IS_TREE (tmp->parent))
+	tmp = tmp->parent;
+
+      root_tree = GTK_TREE (tmp);
+    }
+	     
   tmp_list = items;
   selected_widgets = NULL;
   sorted_list = NULL;
@@ -779,9 +792,9 @@ gtk_tree_remove_items (GtkTree *tree,
 #endif /* TREE_DEBUG */
 	}
 
-      /* remove this item of his real parent */
+      /* remove this item from its real parent */
 #ifdef TREE_DEBUG
-      g_print("* remove widget of his owner tree\n");
+      g_print("* remove widget from its owner tree\n");
 #endif /* TREE_DEBUG */
       real_tree->children = g_list_remove (real_tree->children, widget);
 

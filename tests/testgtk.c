@@ -51,6 +51,7 @@ typedef struct sTreeButtons {
   guint nb_item_add;
   GtkWidget* add_button;
   GtkWidget* remove_button;
+  GtkWidget* subtree_button;
 } sTreeButtons;
 /* end of tree section */
 
@@ -1066,6 +1067,22 @@ cb_remove_item(GtkWidget*w, GtkTree* tree)
 }
 
 static void
+cb_remove_subtree(GtkWidget*w, GtkTree* tree)
+{
+  GList* selected_list;
+  GtkTreeItem *item;
+  
+  selected_list = GTK_TREE_SELECTION(tree);
+
+  if (selected_list)
+    {
+      item = GTK_TREE_ITEM (selected_list->data);
+      if (item->subtree)
+	gtk_tree_item_remove_subtree (item);
+    }
+}
+
+static void
 cb_tree_changed(GtkTree* tree)
 {
   sTreeButtons* tree_buttons;
@@ -1084,11 +1101,13 @@ cb_tree_changed(GtkTree* tree)
       else
 	gtk_widget_set_sensitive(tree_buttons->add_button, FALSE);
       gtk_widget_set_sensitive(tree_buttons->remove_button, FALSE);
+      gtk_widget_set_sensitive(tree_buttons->subtree_button, FALSE);
     } 
   else 
     {
       gtk_widget_set_sensitive(tree_buttons->remove_button, TRUE);
       gtk_widget_set_sensitive(tree_buttons->add_button, (nb_selected == 1));
+      gtk_widget_set_sensitive(tree_buttons->subtree_button, (nb_selected == 1));
     }  
 }
 
@@ -1227,6 +1246,15 @@ create_tree_sample(guint selection_mode,
   gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
   gtk_widget_show(button);
   tree_buttons->remove_button = button;
+
+  button = gtk_button_new_with_label("Remove Subtree");
+  gtk_widget_set_sensitive(button, FALSE);
+  gtk_signal_connect(GTK_OBJECT (button), "clicked",
+		     (GtkSignalFunc) cb_remove_subtree, 
+		     (gpointer)root_tree);
+  gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
+  gtk_widget_show(button);
+  tree_buttons->subtree_button = button;
 
   /* create separator */
   separator = gtk_hseparator_new();
