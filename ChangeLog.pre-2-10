@@ -1,3 +1,8 @@
+2004-11-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter): Don't crash on
+	broken ClientMessage events.  (#157056, Owen Taylor)
+
 2004-10-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
