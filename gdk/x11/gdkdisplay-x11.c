@@ -41,10 +41,10 @@
 #include <X11/XKBlib.h>
 #endif
 
-#ifdef HAS_SOLARIS_XINERAMA
+#ifdef HAVE_SOLARIS_XINERAMA
 #include <X11/extensions/xinerama.h>
 #endif
-#ifdef HAS_XFREE_XINERAMA
+#ifdef HAVE_XFREE_XINERAMA
 #include <X11/extensions/Xinerama.h>
 #endif
 
@@ -101,11 +101,11 @@ gdk_display_x11_class_init (GdkDisplayX11Class * class)
   parent_class = g_type_class_peek_parent (class);
 }
 
-#ifdef HAS_XINERAMA
+#ifdef HAVE_XINERAMA
 static gboolean
 check_solaris_xinerama (GdkScreen *screen)
 {
-#ifdef HAS_SOLARIS_XINERAMA
+#ifdef HAVE_SOLARIS_XINERAMA
   if (XineramaGetState (GDK_SCREEN_XDISPLAY (screen),
 			gdk_screen_get_number (screen)))
     {
@@ -139,7 +139,7 @@ check_solaris_xinerama (GdkScreen *screen)
 	  return TRUE;
 	}
     }
-#endif /* HAS_SOLARIS_XINERAMA */
+#endif /* HAVE_SOLARIS_XINERAMA */
   
   return FALSE;
 }
@@ -147,7 +147,7 @@ check_solaris_xinerama (GdkScreen *screen)
 static gboolean
 check_xfree_xinerama (GdkScreen *screen)
 {
-#ifdef HAS_XFREE_XINERAMA
+#ifdef HAVE_XFREE_XINERAMA
   if (XineramaIsActive (GDK_SCREEN_XDISPLAY (screen)))
     {
       XineramaScreenInfo *monitors = XineramaQueryScreens (GDK_SCREEN_XDISPLAY (screen),
@@ -178,18 +178,18 @@ check_xfree_xinerama (GdkScreen *screen)
 	  return TRUE;
 	}
     }
-#endif /* HAS_XFREE_XINERAMA */
+#endif /* HAVE_XFREE_XINERAMA */
   
   return FALSE;
 }
-#endif /* HAS_XINERAMA */
+#endif /* HAVE_XINERAMA */
 
 static void
 init_xinerama_support (GdkScreen * screen)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
   
-#ifdef HAS_XINERAMA
+#ifdef HAVE_XINERAMA
   int opcode, firstevent, firsterror;
   gint result;
   
@@ -200,7 +200,7 @@ init_xinerama_support (GdkScreen * screen)
 	  check_xfree_xinerama (screen))
 	return;
     }
-#endif /* HAS_XINERAMA */
+#endif /* HAVE_XINERAMA */
 
   /* No Xinerama
    */

@@ -145,12 +145,10 @@ void          gdk_x11_ungrab_server  ();
 
 GdkDisplay   *gdk_x11_lookup_xdisplay (Display *xdisplay);
 
-GList *gdk_list_visuals_for_screen (GdkScreen *screen);
-
 
 /* Functions to get the X Atom equivalent to the GdkAtom */
 Atom	              gdk_x11_atom_to_xatom_for_display (GdkDisplay  *display,
-							 GdkAtom      virtual_atom);
+							 GdkAtom      atom);
 GdkAtom		      gdk_x11_xatom_to_atom_for_display (GdkDisplay  *display,
 							 Atom	      xatom);
 Atom		      gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,

@@ -2097,7 +2097,7 @@ struct _NetWmSupportedAtoms
  * a way that impacts persistent application state. A common bug
  * is that your application can start up before the window manager
  * does when the user logs in, and before the window manager starts
- * gdk_net_wm_supports() will return %FALSE for every property.
+ * gdk_x11_screen_supports_net_wm_hint() will return %FALSE for every property.
  * 
  * Return value: %TRUE if the window manager supports @property
  **/
@@ -2197,7 +2197,6 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
 
 /**
  * gdk_net_wm_supports:
- * @screen : the relevant #GdkScreen.
  * @property: a property atom.
  * 
  * This function is specific to the X11 backend of GDK, and indicates

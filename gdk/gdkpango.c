@@ -275,7 +275,7 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
               tmp.green = foreground->green;
             }
           
-          fg_gc = gdk_pango_get_gc (drawable, context, fg_set ? &tmp : NULL,
+          fg_gc = gdk_pango_get_gc (drawable, context, (fg_set || foreground) ? &tmp : NULL,
                                     stipple, gc);
         }
       else

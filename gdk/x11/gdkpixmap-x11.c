@@ -311,7 +311,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 
 /**
  * gdk_pixmap_foreign_new_for_display:
- * @screen : The #GdkScreen the @anid is located.
+ * @display: The #GdkDisplay where @anid is located.
  * @anid: a native pixmap handle.
  * 
  * Wraps a native window in a #GdkPixmap.

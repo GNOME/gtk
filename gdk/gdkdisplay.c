@@ -230,7 +230,6 @@ gdk_list_displays (void)
 /**
  * gdk_display_get_event:
  * @display: a #GdkDisplay
- * @event: a #GdkEvent
  * 
  * Gets the next #GdkEvent to be processed for @display, fetching events from the
  * windowing system if necessary.
@@ -249,7 +248,7 @@ gdk_display_get_event (GdkDisplay *display)
 
 /**
  * gdk_display_peek_event:
- * @void: 
+ * @display: a #GdkDisplay 
  * 
  * Gets a copy of the first #GdkEvent in the @display's event queue, without
  * removing the event from the queue.  (Note that this function will

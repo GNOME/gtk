@@ -1019,6 +1019,43 @@ if test "x$gdktarget" = "xx11"; then
   # Don't ever pull in the pangoxft libraries for gdk-pixbuf-x11
   GDK_PIXBUF_XLIB_EXTRA_LIBS="$x_extra_libs `$PKG_CONFIG --libs pangox`"
 
+  # Check for Xinerama extension (Solaris impl or Xfree impl)
+
+  case "$host" in
+      *-*-solaris*)
+          # Check for solaris
+	  use_solaris_xinerama=yes
+	  AC_CHECK_LIB(Xext, XineramaGetInfo,
+			use_solaris_xinerama=yes, use_solaris_xinerama=no)
+	  if test "x$use_solaris_xinerama" == "xyes"; then
+	      AC_CHECK_HEADER(X11/extensions/xinerama.h,
+		if test -z "`echo $x_extra_libs $x_libs | grep "\-lXext" 2> /dev/null`"; then
+		    x_extra_libs="-lXext $x_extra_libs"
+		fi
+		AC_DEFINE(HAVE_SOLARIS_XINERAMA)
+		AC_DEFINE(HAVE_XINERAMA), use_solaris_xinerama=no)
+	  fi	
+	  AC_MSG_CHECKING(for Xinerama support on Solaris)
+	  AC_MSG_RESULT($use_solaris_xinerama);
+	  ;;
+      *)
+	  # Check for XFree
+	  use_xfree_xinerama=yes
+	  AC_CHECK_LIB(Xinerama, XineramaQueryExtension,
+	      [AC_CHECK_HEADER(extensions/Xinerama.h, 
+		  x_extra_libs="-lXinerama $x_extra_libs"   
+		  if test -z "`echo $x_extra_libs $x_libs | grep "\-lXext" 2> /dev/null`"; then
+		      x_extra_libs="-lXext $x_extra_libs"
+		  fi
+		  AC_DEFINE(HAVE_XFREE_XINERAMA)
+		  AC_DEFINE(HAVE_XINERAMA), 
+		  use_xfree_xinerama=no)],
+	      use_xfree_xinerama=no)
+	  AC_MSG_CHECKING(for Xinerama support on XFree86)
+	  AC_MSG_RESULT($use_xfree_xinerama);	    
+          ;;
+  esac
+
   # Check for shaped window extension
 
   AC_CHECK_LIB(Xext, XShapeCombineMask,
