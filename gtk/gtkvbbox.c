@@ -243,7 +243,7 @@ gtk_vbutton_box_size_allocate (GtkWidget     *widget,
     break;
   case GTK_BUTTONBOX_END:
     childspacing = spacing;
-    y = allocation->x + allocation->height - child_height * nvis_children
+    y = allocation->y + allocation->height - child_height * nvis_children
 	    - spacing * (nvis_children-1)
 	    - GTK_CONTAINER (box)->border_width;
     break;
