@@ -1,3 +1,13 @@
+2000-10-15  Robert Brady  <robert@suse.co.uk>
+
+	* fa.po: s/utf-8/UTF-8/, so it works on Red Hat 7.0.
+	(well, it doesn't actually work, you need to patch
+	gtkmain.c, to have
+	   bind_textdomain_codeset("gtk20", "UTF-8")
+	in it somewhere.
+
+	But apart from that it works.
+
 2000-10-15  Tor Lillqvist  <tml@iki.fi>
 
 	* ChangeLog: Remove leftover CVS conflict indicator lines (>>>>>>>).
