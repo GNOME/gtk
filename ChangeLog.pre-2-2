@@ -1,3 +1,9 @@
+Wed Feb  2 11:58:05 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_selection_received): Add some sanity
+	checks if the widget passed to gtk_drag_get_data() was not the
+	dest widget.
+
 2000-01-31  Yuan-Chung Cheng <platin@linux.org.tw>
 
         * configure.in: Added "zh_CN.GB2312" to ALL_LINGUAS.

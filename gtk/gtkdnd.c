@@ -1141,7 +1141,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
 
       site = gtk_object_get_data (GTK_OBJECT (drop_widget), "gtk-drag-dest");
 
-      if (site->target_list)
+      if (site && site->target_list)
 	{
 	  guint target_info;
 
@@ -1166,7 +1166,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
 				   selection_data, 0, time);
 	}
       
-      if (site->flags & GTK_DEST_DEFAULT_DROP)
+      if (site && site->flags & GTK_DEST_DEFAULT_DROP)
 	{
 
 	  gtk_drag_finish (context, 
