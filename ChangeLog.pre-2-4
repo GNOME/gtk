@@ -1,3 +1,8 @@
+Sat Mar 15 18:49:27 2003  Manish Singh  <yosh@gimp.org>
+                                                                                
+        * gtk/gtkradiomenuitem.h: use GTK_DISABLE_DEPRECATED instead of
+        G_DISABLE_DEPRECATED.
+
 2003-03-14  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c: Use the signed GET_X_LPARAM() and
