@@ -1,3 +1,8 @@
+2002-03-01 Alexey Malyshev <maa@sparc.spb.su>
+	
+        * gtk+/gtk/gtkitemfactory.c
+	fixed a little type in docs for gtk_notebook_set_show_border()
+	
 Fri Mar  1 09:05:19 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_delete_entries):
