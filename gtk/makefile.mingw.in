@@ -179,7 +179,6 @@ gtk_OBJECTS =			\
 	gtktreedatalist.o	\
 	gtktreednd.o		\
 	gtktreemodel.o		\
-	gtktreemodelsimple.o	\
 	gtktreemodelsort.o	\
 	gtktreeselection.o	\
 	gtktreestore.o		\
@@ -323,7 +322,6 @@ gtk_public_h_sources =		\
 	gtktreednd.h		\
 	gtktreeitem.h		\
 	gtktreemodel.h		\
-	gtktreemodelsimple.h	\
 	gtktreemodelsort.h	\
 	gtktreeselection.h	\
 	gtktreesortable.h	\

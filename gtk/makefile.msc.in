@@ -208,7 +208,6 @@ gtk_public_h_sources =		\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
 	gtkcombo.h		\
-	gtkcompat.h		\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
@@ -263,14 +262,12 @@ gtk_public_h_sources =		\
 	gtkmenushell.h		\
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
-	gtkmodelsimple.h	\
 	gtknotebook.h		\
 	gtkoldeditable.h	\
 	gtkobject.h		\
 	gtkoptionmenu.h		\
 	gtkpacker.h		\
 	gtkpaned.h		\
-	gdk-pixbuf-loader.h	\
 	gtkpixmap.h		\
 	gtkplug.h		\
 	gtkpreview.h		\
@@ -310,10 +307,12 @@ gtk_public_h_sources =		\
 	gtktoolbar.h		\
 	gtktooltips.h		\
 	gtktree.h		\
+	gtktreednd.h		\
 	gtktreeitem.h		\
 	gtktreemodel.h		\
 	gtktreemodelsort.h	\
 	gtktreeselection.h	\
+	gtktreesortable.h	\
 	gtktreestore.h		\
 	gtktreeview.h		\
 	gtktreeviewcolumn.h	\
@@ -331,7 +330,6 @@ gtk_public_h_sources =		\
 
 # More headers to use when autogenerating.
 gdk_headers =			\
-	..\gdk\gdkcc.h		\
 	..\gdk\gdkcolor.h	\
 	..\gdk\gdkcursor.h     	\
 	..\gdk\gdkdnd.h		\

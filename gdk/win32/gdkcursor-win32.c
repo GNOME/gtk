@@ -25,86 +25,62 @@
 #include "gdkpixmap-win32.h"
 #include "gdkprivate-win32.h"
 
-static const struct { const char *name; int type; } cursors[] = {
-  { "x_cursor", 0 },
-  { "arrow", 2 },
-  { "based_arrow_down", 4 },
-  { "based_arrow_up", 6 },
-  { "boat", 8 },
-  { "bogosity", 10 },
-  { "bottom_left_corner", 12 },
-  { "bottom_right_corner", 14 },
-  { "bottom_side", 16 },
-  { "bottom_tee", 18 },
-  { "box_spiral", 20 },
-  { "center_ptr", 22 },
-  { "circle", 24 },
-  { "clock", 26 },
-  { "coffee_mug", 28 },
-  { "cross", 30 },
-  { "cross_reverse", 32 },
-  { "crosshair", 34 },
-  { "diamond_cross", 36 },
-  { "dot", 38 },
-  { "dotbox", 40 },
-  { "double_arrow", 42 },
-  { "draft_large", 44 },
-  { "draft_small", 46 },
-  { "draped_box", 48 },
-  { "exchange", 50 },
-  { "fleur", 52 },
-  { "gobbler", 54 },
-  { "gumby", 56 },
-  { "hand1", 58 },
-  { "hand2", 60 },
-  { "heart", 62 },
-  { "icon", 64 },
-  { "iron_cross", 66 },
-  { "left_ptr", 68 },
-  { "left_side", 70 },
-  { "left_tee", 72 },
-  { "leftbutton", 74 },
-  { "ll_angle", 76 },
-  { "lr_angle", 78 },
-  { "man", 80 },
-  { "middlebutton", 82 },
-  { "mouse", 84 },
-  { "pencil", 86 },
-  { "pirate", 88 },
-  { "plus", 90 },
-  { "question_arrow", 92 },
-  { "right_ptr", 94 },
-  { "right_side", 96 },
-  { "right_tee", 98 },
-  { "rightbutton", 100 },
-  { "rtl_logo", 102 },
-  { "sailboat", 104 },
-  { "sb_down_arrow", 106 },
-  { "sb_h_double_arrow", 108 },
-  { "sb_left_arrow", 110 },
-  { "sb_right_arrow", 112 },
-  { "sb_up_arrow", 114 },
-  { "sb_v_double_arrow", 116 },
-  { "shuttle", 118 },
-  { "sizing", 120 },
-  { "spider", 122 },
-  { "spraycan", 124 },
-  { "star", 126 },
-  { "target", 128 },
-  { "tcross", 130 },
-  { "top_left_arrow", 132 },
-  { "top_left_corner", 134 },
-  { "top_right_corner", 136 },
-  { "top_side", 138 },
-  { "top_tee", 140 },
-  { "trek", 142 },
-  { "ul_angle", 144 },
-  { "umbrella", 146 },
-  { "ur_angle", 148 },
-  { "watch", 150 },
-  { "xterm", 152 },
-  { NULL, 0 }
-};  
+#include "xcursors.h"
+
+static HCURSOR
+_gdk_win32_data_to_wcursor (GdkCursorType cursor_type)
+{
+  gint i, j, x, y, ofs;
+  HCURSOR rv = NULL;
+  gint w, h;
+  guchar *ANDplane, *XORplane;
+
+  for (i = 0; i < G_N_ELEMENTS (cursors); i++)
+    if (cursors[i].type == cursor_type)
+      break;
+
+  if (i >= G_N_ELEMENTS (cursors) || !cursors[i].name)
+    return NULL;
+
+  w = GetSystemMetrics (SM_CXCURSOR);
+  h = GetSystemMetrics (SM_CYCURSOR);
+
+  ANDplane = g_malloc ((w/8) * h);
+  memset (ANDplane, 0xff, (w/8) * h);
+  XORplane = g_malloc ((w/8) * h);
+  memset (XORplane, 0, (w/8) * h);
+
+#define SET_BIT(v,b)  (v |= (1 << b))
+#define RESET_BIT(v,b)  (v &= ~(1 << b))
+
+  for (j = 0, y = 0; y < cursors[i].height && y < h ; y++)
+    {
+      ofs = (y * w) / 8;
+      j = y * cursors[i].width;
+
+      for (x = 0; x < cursors[i].width && x < w ; x++, j++)
+      {
+        gint pofs = ofs + x / 8;
+        guchar data = (cursors[i].data[j/4] & (0xc0 >> (2 * (j%4)))) >> (2 * (3 - (j%4)));
+        gint bit = 7 - (j % cursors[i].width) % 8;
+
+        if (data)
+          {
+            RESET_BIT (ANDplane[pofs], bit);
+            if (data == 1)
+              SET_BIT (XORplane[pofs], bit);
+          }
+      }
+    }
+
+#undef SET_BIT
+#undef RESET_BIT
+
+  rv = CreateCursor (gdk_app_hmodule, cursors[i].hotx, cursors[i].hoty,
+		     w, h, ANDplane, XORplane);
+  
+  return rv;
+}
 
 GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
@@ -112,24 +88,14 @@ gdk_cursor_new (GdkCursorType cursor_type)
   GdkCursorPrivate *private;
   GdkCursor *cursor;
   HCURSOR hcursor;
-  int i;
 
-  for (i = 0; cursors[i].name != NULL && cursors[i].type != cursor_type; i++)
-    ;
-  if (cursors[i].name != NULL)
-    {
-      hcursor = LoadCursor (gdk_dll_hinstance, cursors[i].name);
-      if (hcursor == NULL)
-	WIN32_API_FAILED ("LoadCursor");
-      GDK_NOTE (MISC, g_print ("gdk_cursor_new: %#x %d\n",
-			       (guint) hcursor, cursor_type));
-    }
+  hcursor = _gdk_win32_data_to_wcursor (cursor_type);
+
+  if (hcursor == NULL)
+    g_warning ("gdk_cursor_new: no cursor %d found", cursor_type);
   else
-    {
-      g_warning ("gdk_cursor_new: no cursor %d found",
-		 cursor_type);
-      hcursor = NULL;
-    }
+    GDK_NOTE (MISC, g_print ("gdk_cursor_new: %d: %#x\n",
+			     cursor_type, (guint) hcursor));
 
   private = g_new (GdkCursorPrivate, 1);
   private->hcursor = hcursor;
@@ -295,9 +261,8 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   GDK_NOTE (MISC, g_print ("_gdk_cursor_destroy: %#x\n",
 			   (cursor->type == GDK_CURSOR_IS_PIXMAP) ? (guint) private->hcursor : 0));
 
-  if (cursor->type == GDK_CURSOR_IS_PIXMAP)
-    if (!DestroyCursor (private->hcursor))
-      WIN32_API_FAILED ("DestroyCursor");
+  if (!DestroyCursor (private->hcursor))
+    WIN32_API_FAILED ("DestroyCursor");
 
   g_free (private);
 }

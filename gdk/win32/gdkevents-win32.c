@@ -2362,28 +2362,31 @@ gdk_event_translate (GdkEvent *event,
       if (!propagate (&window, msg,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_button_release))
-	  goto maybe_ungrab;
-      ASSIGN_WINDOW (window);
+	{
+	}
+      else
+	{
+	  ASSIGN_WINDOW (window);
 
-      event->button.window = window;
-      event->button.time = msg->time;
-      if (window != orig_window)
-	translate_mouse_coords (orig_window, window, msg);
-      event->button.x = (gint16) LOWORD (msg->lParam);
-      event->button.y = (gint16) HIWORD (msg->lParam);
-      event->button.x_root = msg->pt.x;
-      event->button.y_root = msg->pt.y;
-      event->button.axes = NULL;
-      event->button.state = build_pointer_event_state (msg);
-      event->button.button = button;
-      event->button.device = gdk_core_pointer;
+	  event->button.window = window;
+	  event->button.time = msg->time;
+	  if (window != orig_window)
+	    translate_mouse_coords (orig_window, window, msg);
+	  event->button.x = (gint16) LOWORD (msg->lParam);
+	  event->button.y = (gint16) HIWORD (msg->lParam);
+	  event->button.x_root = msg->pt.x;
+	  event->button.y_root = msg->pt.y;
+	  event->button.axes = NULL;
+	  event->button.state = build_pointer_event_state (msg);
+	  event->button.button = button;
+	  event->button.device = gdk_core_pointer;
+	  
+	  return_val = !GDK_WINDOW_DESTROYED (window);
+	}
 
-      return_val = !GDK_WINDOW_DESTROYED (window);
-
-    maybe_ungrab:
       if (p_grab_window != NULL
 	  && p_grab_automatic
-	  && (event->button.state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) == 0)
+	  && (msg->wParam & (MK_LBUTTON | MK_MBUTTON | MK_RBUTTON)) == 0)
 	gdk_pointer_ungrab (0);
       break;
 

@@ -1566,8 +1566,7 @@ gdk_window_set_cursor (GdkWindow *window,
 	  GDK_NOTE (MISC, g_print ("...CopyCursor (%#x) = %#x\n",
 				   (guint) hcursor, (guint) impl->hcursor));
 
-	  GetCursorPos (&pt);
-	  if (ChildWindowFromPoint (GDK_WINDOW_HWND (window), pt) == GDK_WINDOW_HWND (window))
+	  if (hprevcursor != NULL && GetCursor () == hprevcursor)
 	    SetCursor (impl->hcursor);
 
 	  if (hprevcursor != NULL)
@@ -1577,7 +1576,6 @@ gdk_window_set_cursor (GdkWindow *window,
 	  
 	      if (!DestroyCursor (hprevcursor))
 		WIN32_API_FAILED ("DestroyCursor");
-	      impl->hcursor = NULL;
 	    }
 	}
     }

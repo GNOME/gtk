@@ -3,6 +3,8 @@ SUBDIRS=rc
 EXTRA_DIST = \
 	makefile.mingw \
 	makefile.msc \
+	bdfcursor.c \
+	xcursors.h \
 	gdkcolor-win32.c \
 	gdkcursor-win32.c \
 	gdkdnd-win32.c \
