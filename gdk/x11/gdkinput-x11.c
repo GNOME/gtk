@@ -395,7 +395,7 @@ _gdk_input_common_init (GdkDisplay *display,
 		       &ignore, &event_base, &ignore))
     {
       gdk_x11_register_standard_event_type (display,
-					    event_base, 9 /* Number of events */);
+					    event_base, 15 /* Number of events */);
 
       devices = XListInputDevices(display_x11->xdisplay, &num_devices);
   

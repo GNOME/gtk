@@ -1,3 +1,9 @@
+2004-03-01  Simon Budig  <simon@gimp.org>
+
+	* gdk/x11/gdkinput-x11.c: X11 R6.4 specifies 15 events
+	for the XInput extension. We want to see them all.
+	We now get Proximity Out events again. Fixes bug #135320.
+
 Tue Mar  2 00:47:21 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkimmodule.c (match_locale): Use case-insensitive
