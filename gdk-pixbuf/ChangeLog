@@ -1,3 +1,7 @@
+2004-09-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-core.h: Align argument names with source.
+
 Thu Aug 26 01:23:16 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-core.h: 
