@@ -176,22 +176,33 @@ void
 gtk_tree_selection_set_mode (GtkTreeSelection *selection,
 			     GtkSelectionMode  type)
 {
+  GtkTreeSelectionFunc tmp_func;
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
 
   if (selection->type == type)
     return;
 
-  if (type == GTK_SELECTION_SINGLE ||
-      type == GTK_SELECTION_BROWSE)
+  
+  if (type == GTK_SELECTION_NONE)
+    {
+      gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
+      /* We do this so that we unconditionally unset all rows
+       */
+      tmp_func = selection->user_func;
+      selection->user_func = NULL;
+      gtk_tree_selection_unselect_all (selection);
+      selection->user_func = tmp_func;
+    }
+  else if (type == GTK_SELECTION_SINGLE ||
+	   type == GTK_SELECTION_BROWSE)
     {
       GtkRBTree *tree = NULL;
       GtkRBNode *node = NULL;
       gint selected = FALSE;
+      GtkTreePath *anchor_path = NULL;
 
       if (selection->tree_view->priv->anchor)
 	{
-          GtkTreePath *anchor_path;
-
           anchor_path = gtk_tree_row_reference_get_path (selection->tree_view->priv->anchor);
 
           if (anchor_path)
@@ -203,19 +214,25 @@ gtk_tree_selection_set_mode (GtkTreeSelection *selection,
 
               if (node && GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
                 selected = TRUE;
-
-              gtk_tree_path_free (anchor_path);
             }
 	}
-      /* FIXME: if user_func is set, then it needs to unconditionally unselect
-       * all.
-       */
-      gtk_tree_selection_unselect_all (selection);
 
-      /* FIXME are we properly emitting the selection_changed signal here? */
+      /* We do this so that we unconditionally unset all rows
+       */
+      tmp_func = selection->user_func;
+      selection->user_func = NULL;
+      gtk_tree_selection_unselect_all (selection);
+      selection->user_func = tmp_func;
+
       if (node && selected)
-	GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SELECTED);
+	_gtk_tree_selection_internal_select_node (selection,
+						  node,
+						  tree,
+						  anchor_path,
+						  0);
+      gtk_tree_path_free (anchor_path);
     }
+
   selection->type = type;
 }
 
@@ -955,6 +972,8 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
   gint dirty = FALSE;
   GtkTreePath *anchor_path = NULL;
 
+  if (selection->type == GTK_SELECTION_NONE)
+    return;
 
   if (selection->tree_view->priv->anchor)
     anchor_path = gtk_tree_row_reference_get_path (selection->tree_view->priv->anchor);

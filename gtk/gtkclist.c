@@ -1276,6 +1276,7 @@ gtk_clist_set_selection_mode (GtkCList         *clist,
 			      GtkSelectionMode  mode)
 {
   g_return_if_fail (GTK_IS_CLIST (clist));
+  g_return_if_fail (mode != GTK_SELECTION_NONE);
 
   if (mode == clist->selection_mode)
     return;
@@ -1299,6 +1300,9 @@ gtk_clist_set_selection_mode (GtkCList         *clist,
     case GTK_SELECTION_SINGLE:
       gtk_clist_unselect_all (clist);
       break;
+    default:
+      /* Someone set it by hand */
+      g_assert_not_reached ();
     }
 }
 
@@ -3594,6 +3598,8 @@ toggle_row (GtkCList *clist,
       gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW],
 		       row, column, event);
       break;
+    default:
+      g_assert_not_reached ();
     }
 }
 
@@ -3814,6 +3820,8 @@ real_select_all (GtkCList *clist)
       update_extended_selection (clist, clist->rows);
       GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
       return;
+    default:
+      g_assert_not_reached ();
     }
 }
 
@@ -7390,6 +7398,8 @@ gtk_clist_drag_begin (GtkWidget	     *widget,
       clist->anchor = -1;
     case GTK_SELECTION_BROWSE:
       break;
+    default:
+      g_assert_not_reached ();
     }
 
   info = g_dataset_get_data (context, "gtk-clist-drag-source");

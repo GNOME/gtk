@@ -317,6 +317,7 @@ typedef enum
 /* list selection modes */
 typedef enum
 {
+  GTK_SELECTION_NONE,                             /* Nothing can be selected */
   GTK_SELECTION_SINGLE,
   GTK_SELECTION_BROWSE,
   GTK_SELECTION_MULTIPLE,

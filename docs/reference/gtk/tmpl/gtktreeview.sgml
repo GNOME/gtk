@@ -735,6 +735,13 @@ GtkTreeView
 
 @treeview: the object which received the signal.
 
+<!-- ##### SIGNAL GtkTreeView::cursor-changed ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+
 <!-- ##### SIGNAL GtkTreeView::expand-collapse-cursor-row ##### -->
 <para>
 

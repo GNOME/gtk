@@ -279,6 +279,7 @@ contains grayscale or red-green-blue data.
 
 </para>
 
+@GTK_SELECTION_NONE: 
 @GTK_SELECTION_SINGLE: 
 @GTK_SELECTION_BROWSE: 
 @GTK_SELECTION_MULTIPLE: 

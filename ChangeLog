@@ -1,3 +1,19 @@
+Wed Oct 31 14:45:08 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkenums.h (enum): Add GTK_SELECTION_NONE enum, #61695
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_set_mode): Handle new
+	GTK_SELECTION_NONE enum.
+	(_gtk_tree_selection_internal_select_node): ditto
+
+	* gtk/gtkcellrenderer.h (struct _GtkCellRendererClass): add
+	constness.
+
+	* gtk/gtkcellrenderertoggle.c: more yummy constness.
+
+	* gtk/gtkclist.c (gtk_clist_set_selection_mode): g_return_if_fail
+	if mode == GTK_SELECTION_NONE
+
 Wed Oct 31 14:05:17 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): Added a

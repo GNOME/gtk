@@ -93,7 +93,7 @@ struct _GtkCellRendererClass
   gboolean         (* activate)      (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
 				      GtkWidget            *widget,
-				      gchar                *path,
+				      const gchar          *path,
 				      GdkRectangle         *background_area,
 				      GdkRectangle         *cell_area,
 				      GtkCellRendererState  flags);
