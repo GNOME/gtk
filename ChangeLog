@@ -1,3 +1,12 @@
+Sat Feb 28 01:39:01 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_wrap_width): Support
+	switching back to non-gridded mode.  (#135169)
+
+Fri Feb 27 22:29:46 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c (gtk_widget_can_activate_accel): Add "Since: 2.4".
+
 Fri Feb 27 18:52:19 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkfilechooserdialog.c (gtk_file_chooser_dialog_style_set):
@@ -35,6 +44,7 @@ Fri Feb 27 18:46:27 2004  Jonathan Blandford  <jrb@redhat.com>
 	For now, use gtk_file_system_insert_bookmark() with -1 for the
 	position.  DnD will come next.
 
+>>>>>>> 1.5045
 Fri Feb 27 21:42:28 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_relayout): 

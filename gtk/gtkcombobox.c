@@ -2579,13 +2579,14 @@ gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
                               gint         width)
 {
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-  g_return_if_fail (width > 0);
+  g_return_if_fail (width >= 0);
 
   if (width != combo_box->priv->wrap_width)
     {
       combo_box->priv->wrap_width = width;
       
       gtk_combo_box_relayout (combo_box);
+      gtk_combo_box_style_set (combo_box, NULL, NULL);
       
       g_object_notify (G_OBJECT (combo_box), "wrap_width");
     }
@@ -2744,7 +2745,7 @@ gtk_combo_box_set_active (GtkComboBox *combo_box,
  * @combo_box: A #GtkComboBox
  * @iter: The uninitialized #GtkTreeIter.
  * 
- * Set @iter to point to the current active item, if it exists.
+ * Sets @iter to point to the current active item, if it exists.
  * 
  * Return value: %TRUE, if @iter was set
  *

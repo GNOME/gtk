@@ -2942,12 +2942,14 @@ gtk_widget_real_can_activate_accel (GtkWidget *widget,
  * Determines whether an accelerator that activates the signal
  * identified by @signal_id can currently be activated.
  * This is done by emitting the GtkWidget::can-activate-accel
- * signal on @widget; if the signal isn't overriden by a
+ * signal on @widget; if the signal isn't overridden by a
  * handler or in a derived widget, then the default check is
  * that the widget must be sensitive, and the widget and all
- * its parents mapped.
+ * its ancestors mapped.
  *
  * Return value: %TRUE if the accelerator can be activated.
+ *
+ * Since: 2.4
  **/
 gboolean
 gtk_widget_can_activate_accel (GtkWidget *widget,
