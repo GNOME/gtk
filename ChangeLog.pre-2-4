@@ -1,3 +1,8 @@
+Thu Nov  1 20:09:31 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c: Patch from George Lebl to 
+	fix division by zero for full scroll bars. (#62114)
+
 Thu Nov  1 19:56:40 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (gtk_main_do_event): ref/unref
