@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-07 03:55+0200\n"
-"PO-Revision-Date: 2004-04-07 13:23+0200\n"
+"POT-Creation-Date: 2004-04-15 15:20+0200\n"
+"PO-Revision-Date: 2004-04-15 16:20+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -786,7 +786,7 @@ msgstr "Vyberte barvu"
 msgid "Received invalid color data\n"
 msgstr "Přijata neplatná data barvy\n"
 
-#: gtk/gtkcolorsel.c:562
+#: gtk/gtkcolorsel.c:567
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -796,7 +796,7 @@ msgstr ""
 "barvu můžete přetáhnout do položky palety nebo vybrat jako aktuální "
 "přetažením na ukazatel druhé barvy."
 
-#: gtk/gtkcolorsel.c:567
+#: gtk/gtkcolorsel.c:572
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -804,11 +804,11 @@ msgstr ""
 "Barva, kterou jste vybrali. Tuto barvu můžete přetáhnout do položky palety a "
 "tím ji uložit pro budoucí použití."
 
-#: gtk/gtkcolorsel.c:928
+#: gtk/gtkcolorsel.c:933
 msgid "_Save color here"
 msgstr "_Uložit barvu zde"
 
-#: gtk/gtkcolorsel.c:1133
+#: gtk/gtkcolorsel.c:1138
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -817,7 +817,7 @@ msgstr ""
 "palety změnit, přetáhněte na její místo jinou barvu, nebo klikněte pravým "
 "tlačítkem myši a vyberte \"Uložit barvu zde\"."
 
-#: gtk/gtkcolorsel.c:1840
+#: gtk/gtkcolorsel.c:1846
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -825,73 +825,73 @@ msgstr ""
 "Vyberte požadovanou barvu z vnějšího kruhu. Tmavost nebo světlost barvy "
 "vyberte pomocí vnitřního trojúhelníku."
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1871
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr "Klikněte na kapátko, pak vyberte barvu kliknutím kdekoli na obrazovce."
 
-#: gtk/gtkcolorsel.c:1874
+#: gtk/gtkcolorsel.c:1880
 msgid "_Hue:"
 msgstr "_Odstín:"
 
-#: gtk/gtkcolorsel.c:1875
+#: gtk/gtkcolorsel.c:1881
 msgid "Position on the color wheel."
 msgstr "Pozice na barevném kotouči."
 
-#: gtk/gtkcolorsel.c:1877
+#: gtk/gtkcolorsel.c:1883
 msgid "_Saturation:"
 msgstr "_Sytost:"
 
-#: gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorsel.c:1884
 msgid "\"Deepness\" of the color."
 msgstr "\"Hloubka\" barvy."
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1885
 msgid "_Value:"
 msgstr "_Hodnota:"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:1886
 msgid "Brightness of the color."
 msgstr "Jas barvy."
 
-#: gtk/gtkcolorsel.c:1881
+#: gtk/gtkcolorsel.c:1887
 msgid "_Red:"
 msgstr "Če_rvená:"
 
-#: gtk/gtkcolorsel.c:1882
+#: gtk/gtkcolorsel.c:1888
 msgid "Amount of red light in the color."
 msgstr "Množství červeného světla v barvě."
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1889
 msgid "_Green:"
 msgstr "_Zelená:"
 
-#: gtk/gtkcolorsel.c:1884
+#: gtk/gtkcolorsel.c:1890
 msgid "Amount of green light in the color."
 msgstr "Množství zeleného světla v barvě."
 
-#: gtk/gtkcolorsel.c:1885
+#: gtk/gtkcolorsel.c:1891
 msgid "_Blue:"
 msgstr "_Modrá:"
 
-#: gtk/gtkcolorsel.c:1886
+#: gtk/gtkcolorsel.c:1892
 msgid "Amount of blue light in the color."
 msgstr "Množství modrého světla v barvě."
 
-#: gtk/gtkcolorsel.c:1889
+#: gtk/gtkcolorsel.c:1895
 msgid "_Opacity:"
 msgstr "Stup_eň krytí:"
 
-#: gtk/gtkcolorsel.c:1897 gtk/gtkcolorsel.c:1908
+#: gtk/gtkcolorsel.c:1903 gtk/gtkcolorsel.c:1914
 msgid "Transparency of the color."
 msgstr "Průhlednost barvy."
 
-#: gtk/gtkcolorsel.c:1915
+#: gtk/gtkcolorsel.c:1921
 msgid "Color _Name:"
 msgstr "_Název barvy: "
 
-#: gtk/gtkcolorsel.c:1930
+#: gtk/gtkcolorsel.c:1936
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -899,28 +899,32 @@ msgstr ""
 "Můžete sem zadat hexadecimální hodnotu barvy ve stylu HTML nebo prostě název "
 "barvy, například 'orange'."
 
-#: gtk/gtkcolorsel.c:1949
+#: gtk/gtkcolorsel.c:1955
 msgid "_Palette"
 msgstr "_Paleta"
+
+#: gtk/gtkcolorsel.c:1987
+msgid "Color Wheel"
+msgstr "Barevné kolo"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Color Selection"
 msgstr "Výběr barvy"
 
-#: gtk/gtkentry.c:4214 gtk/gtktextview.c:6907
+#: gtk/gtkentry.c:4215 gtk/gtktextview.c:6907
 msgid "Select _All"
 msgstr "Vybrat _vše"
 
-#: gtk/gtkentry.c:4224 gtk/gtktextview.c:6917
+#: gtk/gtkentry.c:4225 gtk/gtktextview.c:6917
 msgid "Input _Methods"
 msgstr "Vstupní _metody"
 
-#: gtk/gtkentry.c:4234 gtk/gtktextview.c:6928
+#: gtk/gtkentry.c:4235 gtk/gtktextview.c:6928
 msgid "_Insert Unicode Control Character"
 msgstr "_Vložit řídící znak Unicode"
 
-#: gtk/gtkfilechooser.c:1501 gtk/gtkfilechooser.c:1545
-#: gtk/gtkfilechooser.c:1620 gtk/gtkfilechooser.c:1664
+#: gtk/gtkfilechooser.c:1583 gtk/gtkfilechooser.c:1627
+#: gtk/gtkfilechooser.c:1702 gtk/gtkfilechooser.c:1746
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Neplatný název souboru: %s"
@@ -961,11 +965,11 @@ msgstr ""
 "Nemohu změnit aktuální adresář na %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1047 gtk/gtkpathbar.c:845
+#: gtk/gtkfilechooserdefault.c:1047 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "Domov"
 
-#: gtk/gtkfilechooserdefault.c:1065 gtk/gtkpathbar.c:847
+#: gtk/gtkfilechooserdefault.c:1065 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
@@ -1313,44 +1317,46 @@ msgstr "Nemohu převést název souboru"
 msgid "(Empty)"
 msgstr "(Prázdný)"
 
-#: gtk/gtkfilesystemunix.c:417 gtk/gtkfilesystemwin32.c:380
+#: gtk/gtkfilesystemunix.c:418 gtk/gtkfilesystemwin32.c:380
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:424 gtk/gtkfilesystemunix.c:615
-#: gtk/gtkfilesystemunix.c:1678 gtk/gtkfilesystemwin32.c:387
+#: gtk/gtkfilesystemunix.c:425 gtk/gtkfilesystemunix.c:616
+#: gtk/gtkfilesystemunix.c:1734 gtk/gtkfilesystemwin32.c:387
 #: gtk/gtkfilesystemwin32.c:1269
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "chyba při získávání informací o '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:488 gtk/gtkfilesystemwin32.c:428
+#: gtk/gtkfilesystemunix.c:489 gtk/gtkfilesystemwin32.c:428
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "chyba při vytváření adresáře '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:568 gtk/gtkfilesystemwin32.c:488
+#: gtk/gtkfilesystemunix.c:569 gtk/gtkfilesystemwin32.c:488
 msgid "This file system does not support mounting"
 msgstr "Tento systém souborů nepodporuje připojování"
 
-#: gtk/gtkfilesystemunix.c:576
+#: gtk/gtkfilesystemunix.c:577
 msgid "Filesystem"
 msgstr "Systém souborů"
 
-#: gtk/gtkfilesystemunix.c:777
+#: gtk/gtkfilesystemunix.c:778
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr "Název \"%s\" není platný, protože obsahuje znak \"%s\". Použijte prosím jiný název."
+msgstr ""
+"Název \"%s\" není platný, protože obsahuje znak \"%s\". Použijte prosím jiný "
+"název."
 
-#: gtk/gtkfilesystemunix.c:1272 gtk/gtkfilesystemwin32.c:875
+#: gtk/gtkfilesystemunix.c:1328 gtk/gtkfilesystemwin32.c:875
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Ukládání záložek selhalo (%s)"
 
-#: gtk/gtkfilesystemunix.c:1568
+#: gtk/gtkfilesystemunix.c:1624
 #, c-format
 msgid "error getting information for '%s'"
 msgstr "chyba při získávání informací o '%s'"
@@ -1887,22 +1893,22 @@ msgstr "Nemohu nalézt knihovnu pro témata v module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Bez rady ---"
 
-#: gtk/gtkuimanager.c:1075
+#: gtk/gtkuimanager.c:1077
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Neznámý atribut '%s' na řádku %d znak %d"
 
-#: gtk/gtkuimanager.c:1284
+#: gtk/gtkuimanager.c:1295
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Neočekávaný počáteční tag '%s' na řádku %d znak %d"
 
-#: gtk/gtkuimanager.c:1369
+#: gtk/gtkuimanager.c:1380
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Neočekávaná data znaků na řádku %d znak %d"
 
-#: gtk/gtkuimanager.c:2146
+#: gtk/gtkuimanager.c:2157
 msgid "Empty"
 msgstr "Prázdný"
 
