@@ -1,3 +1,8 @@
+2003-08-20  Noah Levitt  <nlevitt@columbia.edu>
+
+	* gtk/queryimmodules.c: Don't look at the same directory twice (in
+	simple cases). (#120342)
+
 Wed Aug 20 22:04:47 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gdk/gdkwindow.c: Make the layers in the paint stack have their
