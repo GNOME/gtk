@@ -2845,6 +2845,62 @@ create_resize_grips (GtkWidget *widget)
       hbox = gtk_hbox_new (FALSE, 0);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
 
+      /* North west */
+      area = gtk_drawing_area_new ();
+      gtk_widget_add_events (area, GDK_BUTTON_PRESS_MASK);
+      gtk_box_pack_start (GTK_BOX (hbox), area, TRUE, TRUE, 0);
+      g_signal_connect (area, "expose_event", G_CALLBACK (grippy_expose),
+			GINT_TO_POINTER (GDK_WINDOW_EDGE_NORTH_WEST));
+      g_signal_connect (area, "button_press_event", G_CALLBACK (grippy_button_press),
+			GINT_TO_POINTER (GDK_WINDOW_EDGE_NORTH_WEST));
+      
+      /* North */
+      area = gtk_drawing_area_new ();
+      gtk_widget_add_events (area, GDK_BUTTON_PRESS_MASK);
+      gtk_box_pack_start (GTK_BOX (hbox), area, TRUE, TRUE, 0);
+      g_signal_connect (area, "expose_event", G_CALLBACK (grippy_expose),
+			GINT_TO_POINTER (GDK_WINDOW_EDGE_NORTH));
+      g_signal_connect (area, "button_press_event", G_CALLBACK (grippy_button_press),
+			GINT_TO_POINTER (GDK_WINDOW_EDGE_NORTH));
+
+      /* North east */
+      area = gtk_drawing_area_new ();
+      gtk_widget_add_events (area, GDK_BUTTON_PRESS_MASK);
+      gtk_box_pack_start (GTK_BOX (hbox), area, TRUE, TRUE, 0);
+      g_signal_connect (area, "expose_event", G_CALLBACK (grippy_expose),
+			GINT_TO_POINTER (GDK_WINDOW_EDGE_NORTH_EAST));
+      g_signal_connect (area, "button_press_event", G_CALLBACK (grippy_button_press),
+			GINT_TO_POINTER (GDK_WINDOW_EDGE_NORTH_EAST));
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+
+      /* West */
+      area = gtk_drawing_area_new ();
+      gtk_widget_add_events (area, GDK_BUTTON_PRESS_MASK);
+      gtk_box_pack_start (GTK_BOX (hbox), area, TRUE, TRUE, 0);
+      g_signal_connect (area, "expose_event", G_CALLBACK (grippy_expose),
+			GINT_TO_POINTER (GDK_WINDOW_EDGE_WEST));
+      g_signal_connect (area, "button_press_event", G_CALLBACK (grippy_button_press),
+			GINT_TO_POINTER (GDK_WINDOW_EDGE_WEST));
+
+      /* Middle */
+      area = gtk_drawing_area_new ();
+      gtk_box_pack_start (GTK_BOX (hbox), area, TRUE, TRUE, 0);
+
+      /* East */
+      area = gtk_drawing_area_new ();
+      gtk_widget_add_events (area, GDK_BUTTON_PRESS_MASK);
+      gtk_box_pack_start (GTK_BOX (hbox), area, TRUE, TRUE, 0);
+      g_signal_connect (area, "expose_event", G_CALLBACK (grippy_expose),
+			GINT_TO_POINTER (GDK_WINDOW_EDGE_EAST));
+      g_signal_connect (area, "button_press_event", G_CALLBACK (grippy_button_press),
+			GINT_TO_POINTER (GDK_WINDOW_EDGE_EAST));
+
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+
       /* South west */
       area = gtk_drawing_area_new ();
       gtk_widget_add_events (area, GDK_BUTTON_PRESS_MASK);

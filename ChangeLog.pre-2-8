@@ -1,5 +1,7 @@
 2002-11-09  Matthias Clasen  <maclas@gmx.de>
 
+	* tests/testgtk.c (create_resize_grips): Draw grips in all edges.
+
 	* gdk/x11/gdkfont-x11.c (gdk_text_extents_wc): 
 	(gdk_text_extents): 
 	* gdk/gdkfont.c (gdk_string_extents): Reformulate doc comments to
