@@ -51,6 +51,7 @@
 
 typedef unsigned char CMap[3][MAXCOLORMAPSIZE];
 
+
 /* Possible states we can be in. */
 enum {
 	GIF_START = 1,
@@ -293,7 +294,7 @@ gif_set_get_extension (GifContext *context)
 {
 	context->state = GIF_GET_EXTENTION;
 	context->extension_flag = TRUE;
-	context->extension_label = '\000';
+	context->extension_label = 0;
 	context->block_count = 0;
 	context->block_ptr = 0;
 }
@@ -305,8 +306,10 @@ gif_get_extension (GifContext *context)
 	gint empty_block = FALSE;
 
 	if (context->extension_flag) {
-		if (!context->extension_label) {
-			if (!ReadOK (context, &context->extension_label , 1)) {
+		if (context->extension_label == 0) {
+			/* I guess bad things can happen if we have an extension of 0 )-: */
+			/* I should look into this sometime */
+			if (!ReadOK (context, & context->extension_label , 1)) {
 				return -1;
 			}
 		}
@@ -336,12 +339,12 @@ gif_get_extension (GifContext *context)
 			break;
 		}
 	}
-	/* read all blocks, until I get an empty block */
-	/* not sure why, but it makes it work.  -jrb */
+	/* read all blocks, until I get an empty block, in case there was an extension I didn't know about. */
 	do {
 		retval = get_data_block (context, (unsigned char *) context->block_buf, &empty_block);
 		if (retval != 0)
 			return retval;
+		context->block_count = 0;
 	} while (!empty_block);
 
 	return 0;
@@ -864,7 +867,7 @@ gif_get_next_step (GifContext *context)
 		if (c == '!') {
 			/* Check the extention */
 			gif_set_get_extension (context);
-			continue;
+			return 0;
 		}
 
 		/* look for frame */
