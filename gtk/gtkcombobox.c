@@ -375,9 +375,6 @@ static void     gtk_combo_box_menu_row_changed     (GtkTreeModel     *model,
 static gboolean gtk_combo_box_menu_key_press       (GtkWidget        *widget,
 						    GdkEventKey      *event,
 						    gpointer          data);
-static void     gtk_combo_box_menu_state_changed   (GtkWidget        *widget,
-			                            GtkStateType      previous,
-						    gpointer          data);
 static void     gtk_combo_box_menu_popup           (GtkComboBox      *combo_box,
 						    guint             button, 
 						    guint32           activate_time);
@@ -909,7 +906,7 @@ gtk_combo_box_remove (GtkContainer *container,
 
 
   if (appears_as_list)
-    gtk_combo_box_list_setup (combo_box);
+    gtk_combo_box_list_setup (combo_box); 
   else
     gtk_combo_box_menu_setup (combo_box, TRUE);
 
@@ -1934,6 +1931,7 @@ gtk_combo_box_forall (GtkContainer *container,
 	(* callback) (combo_box->priv->cell_view_frame, callback_data);
     }
 
+  g_print ("combo box forall\n");
   if (GTK_BIN (container)->child)
     (* callback) (GTK_BIN (container)->child, callback_data);
 }
@@ -2284,9 +2282,6 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   g_signal_connect (combo_box->priv->button, "button_press_event",
                     G_CALLBACK (gtk_combo_box_menu_button_press),
                     combo_box);
-  g_signal_connect (combo_box->priv->button, "state_changed",
-		    G_CALLBACK (gtk_combo_box_menu_state_changed), 
-		    combo_box);
 
   /* create our funky menu */
   menu = gtk_menu_new ();
@@ -2437,10 +2432,6 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
                                         G_SIGNAL_MATCH_DATA,
                                         0, 0, NULL,
                                         gtk_combo_box_menu_button_press, NULL);
-  g_signal_handlers_disconnect_matched (combo_box->priv->button,
-                                        G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL,
-                                        gtk_combo_box_menu_state_changed, NULL);
 
   /* unparent will remove our latest ref */
   gtk_widget_unparent (combo_box->priv->button);
@@ -2590,22 +2581,6 @@ gtk_combo_box_menu_button_press (GtkWidget      *widget,
     }
 
   return FALSE;
-}
-
-static void
-gtk_combo_box_menu_state_changed (GtkWidget    *widget,
-				  GtkStateType  previous,
-				  gpointer      user_data)
-{
-  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
-
-  if (combo_box->priv->cell_view)
-    {
-      gtk_widget_set_state (combo_box->priv->cell_view, 
-			    GTK_WIDGET_STATE (widget));
-      
-      gtk_widget_queue_draw (combo_box->priv->cell_view);
-    }
 }
 
 static void

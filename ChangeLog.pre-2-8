@@ -1,5 +1,8 @@
 2004-08-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c: Make re-sensitivation work
+	in menu mode.
+
 	* gtk/gtkaction.c (gtk_action_new): Fix the docs.
 
 Fri Aug 13 01:06:56 2004  Matthias Clasen  <maclas@gmx.de>
