@@ -1,3 +1,10 @@
+2001-01-17  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkprogressbar.c, gtk/gtkprogressbar.h: Add "getters" for
+	all the non-deprecated set_foo functions. Added missing object
+	properties, and added g_object_notify() to setters. 
+	Wrote docs.
+	
 2001-01-18  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkmain.c

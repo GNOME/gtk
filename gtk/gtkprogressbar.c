@@ -47,14 +47,19 @@
 
 enum {
   ARG_0,
-  ARG_ADJUSTMENT,
+
+  /* Supported args */
+  ARG_FRACTION,
+  ARG_PULSE_STEP,
   ARG_ORIENTATION,
+  ARG_TEXT,
+  
+  /* Deprecated args */
+  ARG_ADJUSTMENT,
   ARG_BAR_STYLE,
   ARG_ACTIVITY_STEP,
   ARG_ACTIVITY_BLOCKS,
-  ARG_DISCRETE_BLOCKS,
-  ARG_FRACTION,
-  ARG_PULSE_STEP
+  ARG_DISCRETE_BLOCKS
 };
 
 static void gtk_progress_bar_class_init    (GtkProgressBarClass *klass);
@@ -140,6 +145,10 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 			   GTK_TYPE_FLOAT,
 			   GTK_ARG_READWRITE,
 			   ARG_PULSE_STEP);
+  gtk_object_add_arg_type ("GtkProgressBar::text",
+			   GTK_TYPE_STRING,
+			   GTK_ARG_READWRITE,
+			   ARG_TEXT);
   
   object_class->set_arg = gtk_progress_bar_set_arg;
   object_class->get_arg = gtk_progress_bar_get_arg;
@@ -200,6 +209,9 @@ gtk_progress_bar_set_arg (GtkObject           *object,
     case ARG_PULSE_STEP:
       gtk_progress_bar_set_pulse_step (pbar, GTK_VALUE_FLOAT (*arg));
       break;
+    case ARG_TEXT:
+      gtk_progress_bar_set_text (pbar, GTK_VALUE_STRING (*arg));
+      break;
     default:
       break;
     }
@@ -239,6 +251,9 @@ gtk_progress_bar_get_arg (GtkObject           *object,
       break;
     case ARG_PULSE_STEP:
       GTK_VALUE_FLOAT (*arg) = pbar->pulse_fraction;
+      break;
+    case ARG_TEXT:
+      GTK_VALUE_STRING (*arg) = gtk_progress_bar_get_text (pbar);
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -777,6 +792,16 @@ gtk_progress_bar_paint (GtkProgress *progress)
 
 /*******************************************************************/
 
+/**
+ * gtk_progress_bar_set_fraction:
+ * @pbar: a #GtkProgressBar
+ * @fraction: fraction of the task that's been completed
+ * 
+ * Causes the progress bar to "fill in" the given fraction
+ * of the bar. The fraction should be between 0.0 and 1.0,
+ * inclusive.
+ * 
+ **/
 void
 gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
                                gfloat          fraction)
@@ -792,8 +817,20 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
    * we can clean up all this code.
    */
   gtk_progress_set_percentage (GTK_PROGRESS (pbar), fraction);
+
+  g_object_notify (G_OBJECT (pbar), "fraction");
 }
 
+/**
+ * gtk_progress_bar_pulse:
+ * @pbar: a #GtkProgressBar
+ * 
+ * Indicates that some progress is made, but you don't know how much.
+ * Causes the progress bar to enter "activity mode," where a block
+ * bounces back and forth. Each call to gtk_progress_bar_pulse()
+ * causes the block to move by a little bit (the amount of movement
+ * per pulse is determined by gtk_progress_bar_set_pulse_step()).
+ **/
 void
 gtk_progress_bar_pulse (GtkProgressBar *pbar)
 {  
@@ -807,9 +844,16 @@ gtk_progress_bar_pulse (GtkProgressBar *pbar)
   gtk_progress_bar_real_update (GTK_PROGRESS (pbar));
 }
 
+/**
+ * gtk_progress_bar_set_text:
+ * @pbar: a #GtkProgressBar
+ * @text: a UTF-8 string
+ * 
+ * Causes the given @text to appear superimposed on the progress bar.
+ **/
 void
 gtk_progress_bar_set_text (GtkProgressBar *pbar,
-                           const gchar *text)
+                           const gchar    *text)
 {
   g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
@@ -827,8 +871,18 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
       gtk_progress_set_show_text (GTK_PROGRESS (pbar), FALSE);
       gtk_progress_set_format_string (GTK_PROGRESS (pbar), "");
     }
+
+  g_object_notify (G_OBJECT (pbar), "text");
 }
 
+/**
+ * gtk_progress_bar_set_pulse_step:
+ * @pbar: a #GtkProgressBar
+ * @fraction: fraction between 0.0 and 1.0
+ * 
+ * Sets the fraction of total progress bar length to move the
+ * bouncing block for each call to gtk_progress_bar_pulse().
+ **/
 void
 gtk_progress_bar_set_pulse_step   (GtkProgressBar *pbar,
                                    gfloat          fraction)
@@ -837,6 +891,8 @@ gtk_progress_bar_set_pulse_step   (GtkProgressBar *pbar,
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
   
   pbar->pulse_fraction = fraction;
+
+  g_object_notify (G_OBJECT (pbar), "pulse_step");
 }
 
 void
@@ -853,6 +909,14 @@ gtk_progress_bar_update (GtkProgressBar *pbar,
   gtk_progress_set_percentage (GTK_PROGRESS (pbar), percentage);
 }
 
+/**
+ * gtk_progress_bar_set_orientation:
+ * @pbar: a #GtkProgressBar
+ * @orientation: orientation of the progress bar
+ * 
+ * Causes the progress bar to switch to a different orientation
+ * (left-to-right, right-to-left, top-to-bottom, or bottom-to-top). 
+ **/
 void
 gtk_progress_bar_set_orientation (GtkProgressBar           *pbar,
 				  GtkProgressBarOrientation orientation)
@@ -867,6 +931,75 @@ gtk_progress_bar_set_orientation (GtkProgressBar           *pbar,
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
 	gtk_widget_queue_resize (GTK_WIDGET (pbar));
     }
+
+  g_object_notify (G_OBJECT (pbar), "orientation");
+}
+
+/**
+ * gtk_progress_bar_get_text:
+ * @pbar: a #GtkProgressBar
+ * 
+ * Retrieves the text displayed superimposed on the progress bar.
+ * 
+ * Return value: a string which must be freed, or %NULL
+ **/
+gchar*
+gtk_progress_bar_get_text (GtkProgressBar *pbar)
+{
+  g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), NULL);
+
+  if (GTK_PROGRESS (pbar)->use_text_format)
+    return NULL;
+  else
+    return g_strdup (GTK_PROGRESS (pbar)->format);
+}
+
+/**
+ * gtk_progress_bar_get_fraction:
+ * @pbar: a #GtkProgressBar
+ * 
+ * Returns the current fraction of the task that's been completed.
+ * 
+ * Return value: a fraction from 0.0 to 1.0
+ **/
+gfloat
+gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
+{
+  g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), 0);
+
+  return gtk_progress_get_current_percentage (GTK_PROGRESS (pbar));
+}
+
+/**
+ * gtk_progress_bar_get_pulse_step:
+ * @pbar: a #GtkProgressBar
+ * 
+ * Retrieves the pulse step set with gtk_progress_bar_set_pulse_step()
+ * 
+ * Return value: a fraction from 0.0 to 1.0
+ **/
+gfloat
+gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar)
+{
+  g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), 0);
+
+  return pbar->pulse_fraction;
+}
+
+/**
+ * gtk_progress_bar_get_orientation:
+ * @pbar: a #GtkProgressBar
+ * 
+ * Retrieves the current progress bar orientation.
+ * 
+ * Return value: orientation of the progress bar
+ **/
+GtkProgressBarOrientation
+gtk_progress_bar_get_orientation (GtkProgressBar *pbar)
+{
+  g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), 0);
+
+  return pbar->orientation;
 }
 
 void

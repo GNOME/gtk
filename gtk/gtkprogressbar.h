@@ -128,6 +128,13 @@ void       gtk_progress_bar_set_pulse_step       (GtkProgressBar *pbar,
 void       gtk_progress_bar_set_orientation      (GtkProgressBar *pbar,
 						  GtkProgressBarOrientation orientation);
 
+gchar* gtk_progress_bar_get_text       (GtkProgressBar *pbar);
+gfloat gtk_progress_bar_get_fraction   (GtkProgressBar *pbar);
+gfloat gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar);
+
+GtkProgressBarOrientation gtk_progress_bar_get_orientation (GtkProgressBar *pbar);
+
+
 /* Everything below here is deprecated */
 GtkWidget* gtk_progress_bar_new_with_adjustment  (GtkAdjustment  *adjustment);
 void       gtk_progress_bar_set_bar_style        (GtkProgressBar *pbar,
