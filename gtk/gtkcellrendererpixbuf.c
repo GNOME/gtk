@@ -164,10 +164,11 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_STOCK_SIZE,
-				   g_param_spec_enum ("stock_size",
+				   g_param_spec_uint ("stock_size",
 						      P_("Size"),
-						      P_("The size of the rendered icon"),
-						      GTK_TYPE_ICON_SIZE,
+						      P_("The GtkIconSize value that specifies the size of the rendered icon"),
+						      0,
+						      G_MAXUINT,
 						      GTK_ICON_SIZE_MENU,
 						      G_PARAM_READWRITE));
 
@@ -231,7 +232,7 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
       g_value_set_string (value, priv->stock_id);
       break;
     case PROP_STOCK_SIZE:
-      g_value_set_enum (value, priv->stock_size);
+      g_value_set_uint (value, priv->stock_size);
       break;
     case PROP_STOCK_DETAIL:
       g_value_set_string (value, priv->stock_detail);
@@ -294,7 +295,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       priv->stock_id = g_strdup (g_value_get_string (value));
       break;
     case PROP_STOCK_SIZE:
-      priv->stock_size = g_value_get_enum (value);
+      priv->stock_size = g_value_get_uint (value);
       break;
     case PROP_STOCK_DETAIL:
       if (priv->stock_detail)

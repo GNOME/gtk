@@ -1,3 +1,9 @@
+Sun Feb 15 00:49:59 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_class_init): 
+	Make stock_size an uint property, to allow custom icon 
+	sizes. Also clarify the blurb.  (#130047, Erik Grinaker)
+
 Sat Feb 14 11:05:26 2004  Manish Singh  <yosh@gimp.org>
 
         * configure.in: Remove unnecessary STRIP_* definitions, and GNU
