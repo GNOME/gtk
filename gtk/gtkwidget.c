@@ -200,6 +200,7 @@ static const char *visual_key = "visual";
 static const char *event_key = "event_mask";
 static const char *resize_widgets_key = "resize_widgets";
 static const char *extension_event_key = "extension_event_mode";
+static const char *parent_window_key = "parent_window";
 static const char *redraw_handler_key = "redraw_handler_tag";
 static const char *resize_handler_key = "resize_handler_tag";
 static const char *shape_info_key = "shape_info";
@@ -1801,19 +1802,18 @@ static void
 gtk_widget_reparent_container_child(GtkWidget *widget,
                                    gpointer   client_data)
 {
-  GtkWidget *new_parent = GTK_WIDGET (client_data);
-
   g_return_if_fail (widget != NULL);
   g_return_if_fail (client_data != NULL);
 
   if (!GTK_WIDGET_NO_WINDOW (widget))
-    gdk_window_reparent (widget->window, new_parent->window, 0, 0);
+    gdk_window_reparent (widget->window, 
+			 (GdkWindow *)client_data, 0, 0);
   else if (GTK_IS_CONTAINER (widget))
     gtk_container_foreach (GTK_CONTAINER (widget),
 			   gtk_widget_reparent_container_child,
-			   new_parent);
+			   client_data);
   else
-    widget->window = new_parent->window;
+    widget->window = (GdkWindow *)client_data;
 }
 
 
@@ -1841,12 +1841,12 @@ gtk_widget_reparent (GtkWidget *widget,
 		  if (GTK_IS_CONTAINER (widget))
 		    gtk_container_foreach (GTK_CONTAINER(widget),
 					   gtk_widget_reparent_container_child,
-					   new_parent);
+					   gtk_widget_get_parent_window (widget));
 		  else
-		    widget->window = widget->parent->window;
+		    widget->window = gtk_widget_get_parent_window (widget);
 		}
 	      else
-		gdk_window_reparent (widget->window, widget->parent->window, 0, 0);
+		gdk_window_reparent (widget->window, gtk_widget_get_parent_window (widget), 0, 0);
 	    }
 	  else
 	    gtk_widget_unrealize (widget);
@@ -2213,6 +2213,64 @@ gtk_widget_set_parent (GtkWidget *widget,
 			       NULL);
     }
 }
+
+/*************************************************************
+ * gtk_widget_set_parent_window:
+ *     Set a non default parent window for widget
+ *
+ *   arguments:
+ *     widget:
+ *     parent_window 
+ *     
+ *   results:
+ *************************************************************/
+
+void
+gtk_widget_set_parent_window   (GtkWidget           *widget,
+				GdkWindow           *parent_window)
+{
+  GdkWindow *old_parent_window;
+
+  g_return_if_fail (widget != NULL);
+  
+  old_parent_window = gtk_object_get_data (GTK_OBJECT (widget),
+					   parent_window_key);
+
+  if (parent_window != old_parent_window)
+    {
+      gtk_object_set_data (GTK_OBJECT (widget), parent_window_key, 
+			   parent_window);
+      if (old_parent_window)
+	gdk_window_unref (old_parent_window);
+      if (parent_window)
+	gdk_window_ref (parent_window);
+    }
+}
+
+/*************************************************************
+ * gtk_widget_get_parent_window:
+ *     Get widget's parent window
+ *
+ *   arguments:
+ *     widget:
+ *     
+ *   results:
+ *     parent window
+ *************************************************************/
+
+GdkWindow *
+gtk_widget_get_parent_window   (GtkWidget           *widget)
+{
+  GdkWindow *parent_window;
+
+  g_return_val_if_fail (widget != NULL, NULL);
+  
+  parent_window = gtk_object_get_data (GTK_OBJECT (widget),
+				       parent_window_key);
+
+  return (parent_window != NULL) ? parent_window : widget->parent->window;
+}
+
 
 /*****************************************
  * gtk_widget_set_style:
@@ -3115,7 +3173,7 @@ gtk_real_widget_realize (GtkWidget *widget)
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   if(widget->parent)
-    widget->window = widget->parent->window;
+    widget->window = gtk_widget_get_parent_window (widget);
   widget->style = gtk_style_attach (widget->style, widget->window);
 }
 

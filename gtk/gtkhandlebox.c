@@ -231,7 +231,7 @@ gtk_handle_box_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  hb->steady_window = gdk_window_new (widget->parent->window, &attributes, attributes_mask);
+  hb->steady_window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (hb->steady_window, widget);
 
   attributes.x = 0;
@@ -601,10 +601,13 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	      hb->is_onroot = TRUE;
 
 	      gdk_pointer_ungrab (GDK_CURRENT_TIME);
-	      gtk_widget_show (hb->float_window);
+
+	      if (!GTK_WIDGET_REALIZED (hb->float_window))
+		gtk_widget_realize (hb->float_window);
+
 	      gtk_widget_set_uposition (hb->float_window, newx, newy);
-	      
 	      gdk_window_reparent (widget->window, hb->float_window->window, 0, 0);
+	      gtk_widget_show (hb->float_window);
 
 	      while (gdk_pointer_grab (widget->window,
 				       FALSE,
@@ -628,10 +631,10 @@ gtk_handle_box_delete_float (GtkWidget *widget,
 {
   GtkHandleBox *hb;
 
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (event != NULL);
-  g_return_if_fail (data != NULL);
-  g_return_if_fail (GTK_IS_HANDLE_BOX (data));
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+  g_return_val_if_fail (data != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_HANDLE_BOX (data), FALSE);
 
   hb = GTK_HANDLE_BOX (data);
 

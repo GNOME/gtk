@@ -676,7 +676,7 @@ gtk_preview_realize (GtkWidget *widget)
   attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  widget->window = gdk_window_new (widget->parent->window, &attributes, attributes_mask);
+  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);
 
   widget->style = gtk_style_attach (widget->style, widget->window);

@@ -1,3 +1,27 @@
+Sun Jan 18 09:57:00 1998  Owen Taylor  <owt1@cornell.edu>
+	* gtkbutton.c gtkclist.c gtkdrawingarea.c gtkentry.c gtkeventbox.c
+ 	  gtkfixed.c gtkhandlebox.c gtkhscale.c gtkhscrollbar.c gtkitem.c
+	  gtklist.c gtkmenushell.c gtkmisc.c gtknotebook.c gtkpaned.c
+	  gtkpreview.c gtkprogressbar.c gtkruler.c gtktext.c gtktree.c
+	  gtkviewport.c gtkvscale.c gtkvscrollbar.c gtkwidget.{c,h}
+
+	Added gtk_widget_set_parent and gtk_widget_get_parent. All
+	widgets should use:
+	
+	   gtk_widget_get_parent() instead of widget->parent->window.
+
+	Any widget that wants to have children not in the parent window,
+	should use gtk_widget_set_parent () in their realize() and
+	add () routines. 
+
+	CList and Viewport widgets changed to do this. (Viewport
+	widget using code from gtk-fortier-980117-0.patch.)
+
+Sat Jan 17 23:56:02 1998  Owen Taylor  <owt1@cornell.edu>
+	* gtk/gtkobject.c:
+	   renamed g_string_equal => g_str_equal
+	   renamed g_string_hash => g_str_hash
+
 Sun Jan 18 03:57:52 1998  Tim Janik  <timj@psynet.net>
 
 	* gtk/gtkframe.c: gtk_*_get_arg() and gtk_*_set_arg() implementations.

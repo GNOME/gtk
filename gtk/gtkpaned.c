@@ -168,12 +168,12 @@ gtk_paned_realize (GtkWidget *widget)
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP |
     GDK_WA_CURSOR;
 
-  paned->handle = gdk_window_new (widget->parent->window, &attributes, attributes_mask);
+  paned->handle = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (paned->handle, widget);
   gdk_window_show (paned->handle);
   gdk_window_raise (paned->handle);
 
-  widget->window = widget->parent->window;
+  widget->window = gtk_widget_get_parent_window (widget);
   widget->style = gtk_style_attach (widget->style, widget->window);
 
   gtk_style_set_background (widget->style, paned->handle, GTK_STATE_NORMAL);

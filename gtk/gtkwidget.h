@@ -423,6 +423,9 @@ void       gtk_widget_set_sensitive       (GtkWidget           *widget,
 					   gint                 sensitive);
 void       gtk_widget_set_parent          (GtkWidget           *widget,
 					   GtkWidget           *parent);
+void       gtk_widget_set_parent_window   (GtkWidget           *widget,
+					   GdkWindow           *parent_window);
+GdkWindow *gtk_widget_get_parent_window   (GtkWidget           *widget);
 void       gtk_widget_set_style           (GtkWidget           *widget,
 					   GtkStyle            *style);
 void       gtk_widget_set_uposition       (GtkWidget           *widget,

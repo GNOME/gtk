@@ -173,8 +173,6 @@ static void gtk_clist_foreach (GtkContainer * container,
 
 
 /* Buttons */
-static void gtk_clist_column_button_realize (GtkWidget * widget,
-					     gpointer data);
 static void gtk_clist_column_button_clicked (GtkWidget * widget,
 					     gpointer data);
 
@@ -427,11 +425,6 @@ gtk_clist_new (int columns,
     {
       clist->column[i].button = gtk_button_new ();
       gtk_widget_set_parent (clist->column[i].button, GTK_WIDGET (clist));
-
-      gtk_signal_connect_after (GTK_OBJECT (clist->column[i].button),
-				"realize",
-				(GtkSignalFunc) gtk_clist_column_button_realize,
-				(gpointer) clist);
 
       gtk_signal_connect (GTK_OBJECT (clist->column[i].button),
 			  "clicked",
@@ -1283,6 +1276,7 @@ gtk_clist_realize (GtkWidget * widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkGCValues values;
+  gint i;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CLIST (widget));
@@ -1308,7 +1302,7 @@ gtk_clist_realize (GtkWidget * widget)
 
 
   /* main window */
-  widget->window = gdk_window_new (widget->parent->window, &attributes, attributes_mask);
+  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, clist);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
@@ -1321,6 +1315,10 @@ gtk_clist_realize (GtkWidget * widget)
 
   gtk_style_set_background (widget->style, clist->title_window, GTK_STATE_SELECTED);
   gdk_window_show (clist->title_window);
+
+  /* set things up so column buttons are drawn in title window */
+  for (i = 0; i < clist->columns; i++)
+    gtk_widget_set_parent_window (clist->column[i].button, clist->title_window);
 
   /* clist-window */
   clist->clist_window = gdk_window_new (widget->window, &attributes, attributes_mask);
@@ -2351,21 +2349,6 @@ gtk_clist_foreach (GtkContainer * container,
 }
 
 /* BUTTONS */
-static void
-gtk_clist_column_button_realize (GtkWidget * widget,
-				 gpointer data)
-{
-  GtkCList *clist;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_CLIST (data));
-
-  clist = GTK_CLIST (data);
-
-  if (widget->window && clist->title_window)
-    gdk_window_reparent (widget->window, clist->title_window,
-			 widget->allocation.x, 0);
-}
 
 static void
 gtk_clist_column_button_clicked (GtkWidget * widget,

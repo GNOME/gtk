@@ -139,7 +139,7 @@ gtk_vscale_realize (GtkWidget *widget)
   attributes.colormap = gtk_widget_get_colormap (widget);
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  widget->window = gdk_window_new (widget->parent->window, &attributes, attributes_mask);
+  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
 
   gtk_vscale_pos_trough (GTK_VSCALE (widget), &x, &y, &w, &h);
   attributes.x = x;

@@ -585,7 +585,7 @@ gtk_entry_realize (GtkWidget *widget)
 			    GDK_KEY_PRESS_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  widget->window = gdk_window_new (widget->parent->window, &attributes, attributes_mask);
+  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, entry);
 
   attributes.x = widget->style->klass->xthickness + INNER_BORDER;
