@@ -393,6 +393,8 @@ gtk_message_dialog_add_buttons (GtkMessageDialog* message_dialog,
       g_warning ("Unknown GtkButtonsType");
       break;
     } 
+
+  g_object_notify (G_OBJECT (message_dialog), "buttons");
 }
 
 static void

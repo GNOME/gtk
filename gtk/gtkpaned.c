@@ -286,7 +286,7 @@ static void
 gtk_paned_map (GtkWidget *widget)
 {
   GtkPaned *paned = GTK_PANED (widget);
-  
+
   g_return_if_fail (GTK_IS_PANED (widget));
 
   gdk_window_show (paned->handle);

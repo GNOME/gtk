@@ -264,22 +264,22 @@ gtk_alignment_set (GtkAlignment *alignment,
       if (alignment->xalign != xalign)
         {
            alignment->xalign = xalign;
-           g_object_notify (G_OBJECT(alignment), "xalign");
+           g_object_notify (G_OBJECT (alignment), "xalign");
         }
       if (alignment->yalign != yalign)
         {
            alignment->yalign = yalign;
-           g_object_notify (G_OBJECT(alignment), "yalign");
+           g_object_notify (G_OBJECT (alignment), "yalign");
         }
       if (alignment->xscale != xscale)
         {
            alignment->xscale = xscale;
-           g_object_notify (G_OBJECT(alignment), "xscale");
+           g_object_notify (G_OBJECT (alignment), "xscale");
         }
       if (alignment->yscale != yscale)
         {
            alignment->yscale = yscale;
-           g_object_notify (G_OBJECT(alignment), "yscale");
+           g_object_notify (G_OBJECT (alignment), "yscale");
         }
       g_object_thaw_notify (G_OBJECT (alignment));
 

@@ -9123,7 +9123,13 @@ gtk_tree_view_set_enable_search (GtkTreeView *tree_view,
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
-  tree_view->priv->enable_search = !!enable_search;
+  enable_search = !!enable_search;
+  
+  if (tree_view->priv->enable_search != enable_search)
+    {
+       tree_view->priv->enable_search = enable_search;
+       g_object_notify (G_OBJECT (tree_view), "enable_search");
+    }
 }
 
 /**
@@ -9178,7 +9184,7 @@ gtk_tree_view_set_search_column (GtkTreeView *tree_view,
     return;
 
   tree_view->priv->search_column = column;
-
+  g_object_notify (G_OBJECT (tree_view), "search_column");
 }
 
 /**

@@ -135,7 +135,7 @@ gtk_event_box_realize (GtkWidget *widget)
 
 static void
 gtk_event_box_size_request (GtkWidget      *widget,
-			GtkRequisition *requisition)
+			    GtkRequisition *requisition)
 {
   GtkBin *bin;
 

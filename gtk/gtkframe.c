@@ -417,6 +417,7 @@ gtk_frame_set_label_align (GtkFrame *frame,
   xalign = CLAMP (xalign, 0.0, 1.0);
   yalign = CLAMP (yalign, 0.0, 1.0);
 
+  g_object_freeze_notify (G_OBJECT (frame));
   if (xalign != frame->label_xalign)
     {
       frame->label_xalign = xalign;
@@ -429,6 +430,7 @@ gtk_frame_set_label_align (GtkFrame *frame,
       g_object_notify (G_OBJECT (frame), "label_yalign");
     }
 
+  g_object_thaw_notify (G_OBJECT (frame));
   gtk_widget_queue_resize (GTK_WIDGET (frame));
 }
 

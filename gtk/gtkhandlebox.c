@@ -945,7 +945,7 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
   GtkHandleBox *hb;
   gboolean event_handled;
   GdkCursor *fleur;
-  
+
   g_return_val_if_fail (GTK_IS_HANDLE_BOX (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 

@@ -173,7 +173,6 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       if (cellpixbuf->pixbuf)
 	g_object_unref (G_OBJECT (cellpixbuf->pixbuf));
       cellpixbuf->pixbuf = pixbuf;
-      g_object_notify (object, "pixbuf");
       break;
     case PROP_PIXBUF_EXPANDER_OPEN:
       pixbuf = (GdkPixbuf*) g_value_get_object (value);
@@ -182,7 +181,6 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       if (cellpixbuf->pixbuf_expander_open)
 	g_object_unref (G_OBJECT (cellpixbuf->pixbuf_expander_open));
       cellpixbuf->pixbuf_expander_open = pixbuf;
-      g_object_notify (object, "pixbuf_expander_open");
       break;
     case PROP_PIXBUF_EXPANDER_CLOSED:
       pixbuf = (GdkPixbuf*) g_value_get_object (value);
@@ -191,7 +189,6 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       if (cellpixbuf->pixbuf_expander_closed)
 	g_object_unref (G_OBJECT (cellpixbuf->pixbuf_expander_closed));
       cellpixbuf->pixbuf_expander_closed = pixbuf;
-      g_object_notify (object, "pixbuf_expander_closed");
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);

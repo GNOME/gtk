@@ -277,7 +277,7 @@ gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
         }
       g_object_thaw_notify (G_OBJECT (aspect_frame));
 
-      gtk_widget_queue_resize (GTK_WIDGET(aspect_frame));
+      gtk_widget_queue_resize (GTK_WIDGET (aspect_frame));
     }
 }
 

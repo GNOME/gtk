@@ -878,7 +878,7 @@ gtk_range_expose (GtkWidget      *widget,
   GtkStateType state;
   GdkRectangle expose_area;	/* Relative to widget->allocation */
   GdkRectangle area;
-  
+
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 

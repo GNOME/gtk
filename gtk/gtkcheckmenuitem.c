@@ -115,7 +115,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          _("Active"),
                                                          _("Whether the menu item is checked."),
                                                          FALSE,
-                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                         G_PARAM_READWRITE));
   
   g_object_class_install_property (G_OBJECT_CLASS (object_class),
                                    PROP_INCONSISTENT,
@@ -123,7 +123,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          _("Inconsistent"),
                                                          _("Whether to display an \"inconsistent\" state."),
                                                          FALSE,
-                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                         G_PARAM_READWRITE));
   
   widget_class->expose_event = gtk_check_menu_item_expose;
   
@@ -333,7 +333,7 @@ gtk_check_menu_item_activate (GtkMenuItem *menu_item)
   gtk_check_menu_item_toggled (check_menu_item);
   gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
 
-  g_object_notify (G_OBJECT(check_menu_item), "active");
+  g_object_notify (G_OBJECT (check_menu_item), "active");
 }
 
 static void

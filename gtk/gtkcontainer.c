@@ -934,7 +934,6 @@ gtk_container_set_resize_mode (GtkContainer  *container,
       resize_mode == GTK_RESIZE_PARENT)
     {
       resize_mode = GTK_RESIZE_QUEUE;
-      g_object_notify (G_OBJECT (container), "resize_mode");
     }
   
   if (container->resize_mode != resize_mode)

@@ -2887,7 +2887,7 @@ static void
 gtk_window_destroy (GtkObject *object)
 {
   GtkWindow *window;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (object));
 
   window = GTK_WINDOW (object);
@@ -3117,9 +3117,9 @@ gtk_window_unmap (GtkWidget *widget)
 {
   GtkWindow *window;
   GtkWindowGeometryInfo *info;    
-
+ 
   window = GTK_WINDOW (widget);
-  
+
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
   if (window->frame)
     gdk_window_withdraw (window->frame);

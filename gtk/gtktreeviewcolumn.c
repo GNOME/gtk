@@ -1550,6 +1550,8 @@ gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
     {
       gtk_widget_queue_resize (tree_column->tree_view);
     }
+
+  g_object_notify (G_OBJECT (tree_column), "fixed_width");
 }
 
 /**
@@ -1596,12 +1598,14 @@ gtk_tree_view_column_set_min_width (GtkTreeViewColumn *tree_column,
     }
 
   tree_column->min_width = min_width;
+  g_object_freeze_notify (G_OBJECT (tree_column));
   if (tree_column->max_width != -1 && tree_column->max_width < min_width)
     {
       tree_column->max_width = min_width;
       g_object_notify (G_OBJECT (tree_column), "max_width");
     }
   g_object_notify (G_OBJECT (tree_column), "min_width");
+  g_object_thaw_notify (G_OBJECT (tree_column));
 }
 
 /**
@@ -1650,12 +1654,14 @@ gtk_tree_view_column_set_max_width (GtkTreeViewColumn *tree_column,
     }
 
   tree_column->max_width = max_width;
+  g_object_freeze_notify (G_OBJECT (tree_column));
   if (max_width != -1 && max_width < tree_column->min_width)
     {
       tree_column->min_width = max_width;
       g_object_notify (G_OBJECT (tree_column), "min_width");
     }
   g_object_notify (G_OBJECT (tree_column), "max_width");
+  g_object_thaw_notify (G_OBJECT (tree_column));
 }
 
 /**

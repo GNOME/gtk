@@ -590,7 +590,7 @@ gtk_spin_button_size_request (GtkWidget      *widget,
   GtkEntry *entry;
   GtkSpinButton *spin_button;
   gint arrow_size;
-  
+
   g_return_if_fail (requisition != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
 
@@ -1336,7 +1336,7 @@ gtk_spin_button_key_release (GtkWidget   *widget,
   GtkSpinButton *spin;
 
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  
+
   spin = GTK_SPIN_BUTTON (widget);
   
   spin->ev_time = event->time;
@@ -1943,9 +1943,13 @@ gtk_spin_button_set_numeric (GtkSpinButton  *spin_button,
 {
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
-  spin_button->numeric = (numeric != 0);
+  numeric = numeric != FALSE;
 
-  g_object_notify (G_OBJECT (spin_button), "numeric");
+  if (spin_button->numeric != numeric)
+    {
+       spin_button->numeric = numeric;
+       g_object_notify (G_OBJECT (spin_button), "numeric");
+    }
 }
 
 /**
@@ -1979,9 +1983,14 @@ gtk_spin_button_set_wrap (GtkSpinButton  *spin_button,
 {
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
-  spin_button->wrap = (wrap != 0);
+  wrap = wrap != FALSE; 
+
+  if (spin_button->wrap != wrap)
+    {
+       spin_button->wrap = (wrap != 0);
   
-  g_object_notify (G_OBJECT (spin_button), "wrap");
+       g_object_notify (G_OBJECT (spin_button), "wrap");
+    }
 }
 
 /**

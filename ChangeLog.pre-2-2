@@ -1,3 +1,13 @@
+2002-01-28  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/{gtkalignment.c,gtkaspectframe.c,gtkbutton.c,
+        gtkcellrenderer.c,gtkcellrendererpixbuf.c,gtkcombo.c,
+        gtkcontainer.c,gtkcurve.c,gtkframe.c,gtklabel.c,
+        gtkmessagedialog.c,gtknotebook.c,gtkspinbutton.c,gtktable.c,
+        gtktext.c,gtktextview.c,gtktreeview.c,gtktreeviewcolumn.c,
+        gtkviewport.c,gtkwidget.c}: General property notification 
+	cleanup. (#69066)
+
 2002-01-28  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkaccelgroup.c (gtk_accel_groups_activate): & with the

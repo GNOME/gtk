@@ -4340,7 +4340,11 @@ gtk_notebook_set_tab_border (GtkNotebook *notebook,
   if (GTK_WIDGET_VISIBLE (notebook) && notebook->show_tabs)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
 
+  g_object_freeze_notify (G_OBJECT (notebook));
   g_object_notify (G_OBJECT (notebook), "tab_hborder");
+  g_object_notify (G_OBJECT (notebook), "tab_vborder");
+  g_object_thaw_notify (G_OBJECT (notebook));
+
 }
 
 /**
@@ -4364,7 +4368,7 @@ gtk_notebook_set_tab_hborder (GtkNotebook *notebook,
   if (GTK_WIDGET_VISIBLE (notebook) && notebook->show_tabs)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
 
-  g_object_notify (G_OBJECT (notebook), "tab_vborder");
+  g_object_notify (G_OBJECT (notebook), "tab_hborder");
 }
 
 /**
@@ -4387,6 +4391,8 @@ gtk_notebook_set_tab_vborder (GtkNotebook *notebook,
 
   if (GTK_WIDGET_VISIBLE (notebook) && notebook->show_tabs)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
+
+  g_object_notify (G_OBJECT (notebook), "tab_vborder");
 }
 
 /**

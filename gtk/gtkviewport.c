@@ -398,7 +398,7 @@ gtk_viewport_set_vadjustment (GtkViewport   *viewport,
       gtk_viewport_adjustment_changed (adjustment, viewport);
     }
 
-  g_object_notify (G_OBJECT (viewport), "vadjustment");
+    g_object_notify (G_OBJECT (viewport), "vadjustment");
 }
 
 static void
@@ -434,9 +434,9 @@ gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 	  gtk_widget_size_allocate (GTK_WIDGET (viewport), &(GTK_WIDGET (viewport)->allocation));
 	  gtk_widget_queue_draw (GTK_WIDGET (viewport));
 	}
-    }
 
-  g_object_notify (G_OBJECT (viewport), "shadow_type");
+      g_object_notify (G_OBJECT (viewport), "shadow_type");
+    }
 }
 
 /**

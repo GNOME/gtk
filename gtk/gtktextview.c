@@ -1934,6 +1934,7 @@ gtk_text_view_set_editable (GtkTextView *text_view,
                             gboolean     setting)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  setting = setting != FALSE;
 
   if (text_view->editable != setting)
     {
@@ -1944,9 +1945,9 @@ gtk_text_view_set_editable (GtkTextView *text_view,
           text_view->layout->default_style->editable = text_view->editable;
           gtk_text_layout_default_style_changed (text_view->layout);
         }
-    }
 
-  g_object_notify (G_OBJECT (text_view), "editable");
+      g_object_notify (G_OBJECT (text_view), "editable");
+    }
 }
 
 /**
@@ -1990,9 +1991,9 @@ gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
           text_view->layout->default_style->pixels_above_lines = pixels_above_lines;
           gtk_text_layout_default_style_changed (text_view->layout);
         }
-    }
 
-  g_object_notify (G_OBJECT (text_view), "pixels_above_lines");
+      g_object_notify (G_OBJECT (text_view), "pixels_above_lines");
+    }
 }
 
 /**
@@ -2036,9 +2037,9 @@ gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
           text_view->layout->default_style->pixels_below_lines = pixels_below_lines;
           gtk_text_layout_default_style_changed (text_view->layout);
         }
-    }
 
-  g_object_notify (G_OBJECT (text_view), "pixels_below_lines");
+      g_object_notify (G_OBJECT (text_view), "pixels_below_lines");
+    }
 }
 
 /**
@@ -2082,8 +2083,9 @@ gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
           text_view->layout->default_style->pixels_inside_wrap = pixels_inside_wrap;
           gtk_text_layout_default_style_changed (text_view->layout);
         }
+
+      g_object_notify (G_OBJECT (text_view), "pixels_inside_wrap");
     }
-  g_object_notify (G_OBJECT (text_view), "pixels_inside_wrap");
 }
 
 /**
@@ -2126,9 +2128,9 @@ gtk_text_view_set_justification (GtkTextView     *text_view,
           text_view->layout->default_style->justification = justification;
           gtk_text_layout_default_style_changed (text_view->layout);
         }
-    }
 
-  g_object_notify (G_OBJECT (text_view), "justification");
+      g_object_notify (G_OBJECT (text_view), "justification");
+    }
 }
 
 /**
@@ -2172,9 +2174,9 @@ gtk_text_view_set_left_margin (GtkTextView *text_view,
           text_view->layout->default_style->left_margin = left_margin;
           gtk_text_layout_default_style_changed (text_view->layout);
         }
-    }
 
-  g_object_notify (G_OBJECT (text_view), "left_margin");
+      g_object_notify (G_OBJECT (text_view), "left_margin");
+    }
 }
 
 /**
@@ -2218,9 +2220,9 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
           text_view->layout->default_style->right_margin = right_margin;
           gtk_text_layout_default_style_changed (text_view->layout);
         }
-    }
 
-  g_object_notify (G_OBJECT (text_view), "right_margin");
+      g_object_notify (G_OBJECT (text_view), "right_margin");
+    }
 }
 
 /**
@@ -2264,8 +2266,9 @@ gtk_text_view_set_indent (GtkTextView *text_view,
           text_view->layout->default_style->indent = indent;
           gtk_text_layout_default_style_changed (text_view->layout);
         }
+
+      g_object_notify (G_OBJECT (text_view), "indent");
     }
-  g_object_notify (G_OBJECT (text_view), "indent");
 }
 
 /**
@@ -2369,9 +2372,9 @@ gtk_text_view_set_cursor_visible    (GtkTextView   *text_view,
 	      gtk_text_view_check_cursor_blink (text_view);
             }
         }
-    }
 
-  g_object_notify (G_OBJECT (text_view), "cursor_visible");
+      g_object_notify (G_OBJECT (text_view), "cursor_visible");
+    }
 }
 
 /**

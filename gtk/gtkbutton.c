@@ -570,9 +570,12 @@ gtk_button_set_relief (GtkButton *button,
 {
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  button->relief = newrelief;
-  g_object_notify(G_OBJECT(button), "relief");
-  gtk_widget_queue_draw (GTK_WIDGET (button));
+  if (newrelief != button->relief) 
+    {
+       button->relief = newrelief;
+       g_object_notify (G_OBJECT (button), "relief");
+       gtk_widget_queue_draw (GTK_WIDGET (button));
+    }
 }
 
 GtkReliefStyle

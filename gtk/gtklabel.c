@@ -757,6 +757,8 @@ gtk_label_set_mnemonic_widget (GtkLabel  *label,
   label->mnemonic_widget = widget;
   if (label->mnemonic_widget)
     gtk_widget_ref (label->mnemonic_widget);
+  
+  g_object_notify (G_OBJECT (label), "mnemonic_widget");
 }
 
 /**
