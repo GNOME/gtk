@@ -162,7 +162,7 @@ font and foreground color &mdash use standard
 functions such as 
 <link linkend="gtk-widget-modify-font">gtk_widget_modify_font()</link>
 or 
-<link linkend="gtk-widget-modify-fg">gtk_widget_modify_fg()</link>.
+<link linkend="gtk-widget-modify-fg">gtk_widget_modify_text()</link>.
 For other attributes there are dedicated methods on 
 <link linkend="GtkTextView">GtkTextView</link> such as 
 <link linkend="gtk-text-view-set-tabs">gtk_text_view_set_tabs()</link>.

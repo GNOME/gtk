@@ -1,3 +1,8 @@
+2002-04-23  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c (gtk_text_view_buffer_to_window_coords): 
+	(gtk_text_view_window_to_buffer_coords): Improve docs.  (#62359)
+
 Tue Apr 23 18:35:34 2002  Kristian Rietveld  <kris@gtk.org>
 
 	This commit adds a cell_background property for cell renderers. With

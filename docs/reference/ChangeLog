@@ -1,3 +1,15 @@
+2002-04-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/tmpl/gdk-pixbuf-loader.sgml: Updates.  (#79001)
+
+2002-04-23  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtksocket.sgml: Add link to XEmbed draft.  (#67818)
+
+	* gtk/tmpl/gtkdrawingarea.sgml: Fix a typo.
+
+	* gtk/text_widget.sgml: Complete the fix for #79080.
+
 2002-04-22  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tree_widget.sgml: Fix typo in "Simple Example".  (#78661)

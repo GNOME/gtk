@@ -10,7 +10,8 @@ Application-driven progressive image loading.
     process of loading an image, by letting them send the image data
     directly to the loader instead of having the loader read the data
     from a file.  Applications can use this functionality instead of
-    gdk_pixbuf_new_from_file() when they need to parse image data in
+    gdk_pixbuf_new_from_file() or gdk_pixbuf_animation_new_from_file() 
+    when they need to parse image data in
     small chunks.  For example, it should be used when reading an
     image from a (potentially) slow network connection, or when
     loading an extremely large file.
@@ -47,31 +48,18 @@ Application-driven progressive image loading.
     <title>Loading an animation</title>
 
     <para>
-      Loading an animation is a little more complex then loading an
-      image.  In addition to the above signals, there is also a "<link
-      linkend="GdkPixbufLoader-frame-done">frame_done</link>" signal,
-      as well as an "<link
-      linkend="GdkPixbufLoader-animation-done">animation_done</link>"
-      signal.  The first lets the application know that it is dealing
-      with an animation, instead of a static image.  It also passes a
-      #GdkPixbufFrame in the signal.  As before, if you want to keep
-      the frame, you need to ref it.  Once the first "<link
-      linkend="GdkPixbufLoader-frame-done">frame_done</link>" signal
+      Loading an animation is almost as easy as loading an
+      image.  Once the first "<link
+      linkend="GdkPixbufLoader-area-prepared">area_prepared</link>" signal
       has been emitted, you can call gdk_pixbuf_loader_get_animation()
-      to get the #GdkPixbufAnimation struct.  Each subsequent frame
-      goes through a similar lifecycle.  For example "<link
-      linkend="GdkPixbufLoader-area-prepared">area_prepared</link>" is
-      re-emitted.  Then "<link
-      linkend="GdkPixbufLoader-area-updated">area_updated</link>" is
-      emitted as many times as necessary.  Finally, "<link
-      linkend="GdkPixbufLoader-animation-done">animation_done</link>"
-      is emitted as soon as all frames are done.
+      to get the #GdkPixbufAnimation struct and gdk_pixbuf_animation_get_iter()
+      to get an #GdkPixbufAnimationIter for displaying it. 
     </para>
   </refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
   <para>
-    gdk_pixbuf_new_from_file()
+    gdk_pixbuf_new_from_file(), gdk_pixbuf_animation_new_from_file()
   </para>
 
 <!-- ##### FUNCTION gdk_pixbuf_loader_new ##### -->

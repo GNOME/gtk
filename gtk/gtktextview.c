@@ -6845,14 +6845,17 @@ buffer_to_text_window (GtkTextView   *text_view,
 /**
  * gtk_text_view_buffer_to_window_coords:
  * @text_view: a #GtkTextView
- * @win: a #GtkTextWindowType
+ * @win: a #GtkTextWindowType except #GTK_TEXT_WINDOW_PRIVATE
  * @buffer_x: buffer x coordinate
  * @buffer_y: buffer y coordinate
  * @window_x: window x coordinate return location
  * @window_y: window y coordinate return location
  *
  * Converts coordinate (@buffer_x, @buffer_y) to coordinates for the window
- * @win, and stores the result in (@window_x, @window_y).
+ * @win, and stores the result in (@window_x, @window_y). 
+ *
+ * Note that you can't convert coordinates for a nonexisting window (see 
+ * gtk_text_view_set_border_window_size()).
  **/
 void
 gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
@@ -6982,7 +6985,7 @@ text_window_to_buffer (GtkTextView   *text_view,
 /**
  * gtk_text_view_window_to_buffer_coords:
  * @text_view: a #GtkTextView
- * @win: a #GtkTextWindowType
+ * @win: a #GtkTextWindowType except #GTK_TEXT_WINDOW_PRIVATE
  * @window_x: window x coordinate
  * @window_y: window y coordinate
  * @buffer_x: buffer x coordinate return location
@@ -6990,6 +6993,9 @@ text_window_to_buffer (GtkTextView   *text_view,
  *
  * Converts coordinates on the window identified by @win to buffer
  * coordinates, storing the result in (@buffer_x,@buffer_y).
+ *
+ * Note that you can't convert coordinates for a nonexisting window (see 
+ * gtk_text_view_set_border_window_size()).
  **/
 void
 gtk_text_view_window_to_buffer_coords (GtkTextView      *text_view,

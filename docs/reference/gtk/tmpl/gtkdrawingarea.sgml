@@ -53,7 +53,7 @@ that drawing is implicitly clipped to the exposed area.
 <title>Simple <structname>GtkDrawingArea</structname> usage.</title>
 <programlisting>
 gboolean
-expose_event_callback (GdkWidget *widget, GdkEventExpose *event, gpointer data)
+expose_event_callback (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
   gdk_draw_arc (widget->window,
                 widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
