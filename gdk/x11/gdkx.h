@@ -54,8 +54,8 @@ gint     gdk_x11_get_default_screen       (void);
 
 #define GDK_COLORMAP_XDISPLAY(cmap)   (gdk_x11_colormap_get_xdisplay (cmap))
 #define GDK_COLORMAP_XCOLORMAP(cmap)  (gdk_x11_colormap_get_xcolormap (cmap))
-#define GDK_CURSOR_XDISPLAY(win)      (gdk_x11_cursor_get_xdisplay (win))
-#define GDK_CURSOR_XCURSOR(win)       (gdk_x11_cursor_get_xid (win))
+#define GDK_CURSOR_XDISPLAY(cursor)   (gdk_x11_cursor_get_xdisplay (cursor))
+#define GDK_CURSOR_XCURSOR(cursor)    (gdk_x11_cursor_get_xcursor (cursor))
 #define GDK_DISPLAY()                 gdk_display
 #define GDK_IMAGE_XDISPLAY(image)     (gdk_x11_image_get_xdisplay (image))
 #define GDK_IMAGE_XIMAGE(image)       (gdk_x11_image_get_ximage (image))

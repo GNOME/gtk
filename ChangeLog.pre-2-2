@@ -1,3 +1,9 @@
+2001-10-06  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/x11/gdkx.h (GDK_CURSOR_XCURSOR): Replace reference to 
+	non-existent function gdk_x11_cursor_get_xid 
+	by gdk_x11_cursor_get_xcursor.
+
 Fri Oct  5 20:50:00 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_iter_has_child): improve
