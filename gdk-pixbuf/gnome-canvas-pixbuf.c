@@ -522,6 +522,8 @@ compute_render_affine (GnomeCanvasPixbuf *gcp, double *render_affine, double *i2
 
 	sj_len *= h / priv->pixbuf->art_pixbuf->height;
 
+	/* Calculate translation offsets */
+
 	if (priv->x_pixels) {
 		if (i_len > GNOME_CANVAS_EPSILON)
 			ti_len = 1.0 / i_len;

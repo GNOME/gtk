@@ -39,13 +39,13 @@
 
 1999-11-03  Larry Ewing  <lewing@gimp.org>
 
-	* src/gnome-canvas-pixbuf.c (compute_render_affine): adjust 
+	* src/gnome-canvas-pixbuf.c (compute_render_affine): adjust
 	render_affine calculation for x,y offsets.
 	(gnome_canvas_pixbuf_set_arg): add x,y args.
 	(gnome_canvas_pixbuf_get_arg): add x,y args.
 	(recompute_bounding_box): simply code using ArtDrect and the
 	render_affine.  Removed compute_xform_vectors as it was no longer
-	needed.	
+	needed.
 
 1999-11-03  Federico Mena Quintero  <federico@redhat.com>
 
@@ -118,7 +118,7 @@
 	render function.
 	(gnome_canvas_pixbuf_class_init): add gnome_canvas_pixbuf_render
 	to class.
-	
+
 1999-11-02  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/gnome-canvas-pixbuf.c (compute_render_affine): Moved the
@@ -209,11 +209,11 @@
 1999-10-28  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/gdk-pixbuf.h: turned convenience macros into convenience
-	functions so some error checking could be added. 
+	functions so some error checking could be added.
 
 	* src/io-tiff.c (image_load_increment): started work on the tiff
 	non-incremental loader.
-	(image_begin_load): Finished the incremental loader. 
+	(image_begin_load): Finished the incremental loader.
 
 	* src/io-gif.c (image_load_increment): started work on the gif
 	incremental loader.
@@ -237,28 +237,28 @@
 
 	* src/testpixbuf.c (main): Display the progressive load
 
-	* src/io-png.c (setup_png_transformations): Break transformation 
+	* src/io-png.c (setup_png_transformations): Break transformation
 	code into separate function
 	(png_info_callback): Use setup_png_transformations
-	
+
 1999-10-27  Havoc Pennington  <hp@pobox.com>
 
 	* src/gdk-pixbuf-io.c (gdk_pixbuf_new_from_xpm_data): Check
 	properly whether the XPM module has already been loaded
-	(gdk_pixbuf_new_from_file): Check properly if loader module 
+	(gdk_pixbuf_new_from_file): Check properly if loader module
 	was already loaded (was checking if load symbol was present
 	in order to decide whether to re-load; should check module !=
-	NULL, then load != NULL)	
-	(image_handler_load): Check in present working directory, 
+	NULL, then load != NULL)
+	(image_handler_load): Check in present working directory,
 	makes it easier to debug for now
-	(file_formats): This array initializer was seriously on crack, 
+	(file_formats): This array initializer was seriously on crack,
 	was assigning a function pointer to a GModule*
 
 	* src/testpixbuf.c (main): Change type of pixbuf_loader to GdkPixbufLoader*
-	
+
 1999-10-27  Havoc Pennington  <hp@pobox.com>
 
-	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_finalize): 
+	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_finalize):
 	Fix typo that prevented compilation
 	(gdk_pixbuf_loader_destroy): ditto
 
@@ -298,10 +298,10 @@
 
 1999-10-26  Havoc Pennington  <hp@pobox.com>
 
-	* src/gdk-pixbuf-loader.h: fix signals 
+	* src/gdk-pixbuf-loader.h: fix signals
 
 	* src/gdk-pixbuf-io.h: add new vtable fields
-	
+
 
 1999-10-26  Jonathan Blandford  <jrb@redhat.com>
 
@@ -321,7 +321,7 @@
 	* src/testpixbuf.c: Add XPM data tests.
 
 	* src/io-xpm.c: Make the XPM data buffer const, fix const
-	correctness throughout the code.	
+	correctness throughout the code.
 
 1999-10-22  Havoc Pennington  <hp@pobox.com>
 
@@ -329,13 +329,13 @@
 
 1999-10-22  Havoc Pennington  <hp@pobox.com>
 
-	* src/io-xpm.c (image_load_xpm_data): Export this symbol for 
+	* src/io-xpm.c (image_load_xpm_data): Export this symbol for
 	loading an XPM from memory.
 
 	* src/gdk-pixbuf-io.c (gdk_pixbuf_new_from_xpm_data): New
 	function, loads pixbuf from xpm data
 	(image_handler_load): Add g_return_if_fail() to ensure the same
-	module isn't loaded twice. Add g_module_symbol() to scan for XPM 
+	module isn't loaded twice. Add g_module_symbol() to scan for XPM
 	loader function.
 
 1999-10-22  Federico Mena Quintero  <federico@redhat.com>
@@ -517,7 +517,7 @@ Sat Jul 31 19:19:47 CEST 1999
 
 	* src/gdk-pixbuf-io.c: Changed image_save function format.  Now it's
 	image_save(GdkPixBuf *p, FILE *f, ...)
-	
+
 
 1999-07-26  Michael Zucchi  <mzucchi@denr.sa.gov.au>
 
@@ -525,7 +525,7 @@ Sat Jul 31 19:19:47 CEST 1999
 	require extra libraries if we actually have those libraries.
 
 1999-07-23  Richard Hestilow  <hestgray@ionet.net>
-	
+
 	* src/gdk-pixbuf.h: Include glib.h as it uses g* datatypes
 	* gdk_pixbufConf.sh.in: Added for gnome-config
 	* Makefile.am:
@@ -544,10 +544,10 @@ Sat Jul 31 19:19:47 CEST 1999
 	* src/io-jpeg.c: Fix a few memory leaks in the, most of them in
 	error cases but one or two in the common case.  There are probably
 	a few small ones left.
-	
+
 1999-07-18  Mark Crichton  <crichton@gimp.org>
 
-	* configure.in: removed version.h. 
+	* configure.in: removed version.h.
 
 	* src/gdk-pixbuf-io.c (pixbuf_check_tiff): Minor readability
 	improvements.
@@ -569,7 +569,7 @@ Sat Jul 31 19:19:47 CEST 1999
 	semantics.
 
 	* src/gdk-pixbuf-io.c: added a couple of warnings to the module
-	loading code so that poeple can diagnose problems better. 
+	loading code so that poeple can diagnose problems better.
 
 	* src/gdk-pixbuf.c (gdk_pixbux_scale): fix the borkedness, also it
 	no longer allocates a new pixbuf, which make things nicer for the
@@ -596,7 +596,7 @@ Sat Jul 31 19:19:47 CEST 1999
 
 1999-07-14  Larry Ewing  <lewing@gimp.org>
 
-	* src/testpixbuf.c (expose_func): added an almost proper expose 
+	* src/testpixbuf.c (expose_func): added an almost proper expose
 	handler for testpixbuf
 
 1999-07-13  Mark Crichton  <crichton@gimp.org>
