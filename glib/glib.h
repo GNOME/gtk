@@ -804,30 +804,30 @@ struct	_GScannerConfig
   
   /* Should symbol lookup work case sensitive?
    */
-  guint32	case_sensitive : 1;
+  guint		case_sensitive : 1;
   
   /* Boolean values to be adjusted "on the fly"
    * to configure scanning behaviour.
    */
-  guint32	skip_comment_multi : 1;		/* C like comment */
-  guint32	skip_comment_single : 1;	/* single line comment */
-  guint32	scan_comment_multi : 1;		/* scan multi line comments? */
-  guint32	scan_identifier : 1;
-  guint32	scan_identifier_1char : 1;
-  guint32	scan_identifier_NULL : 1;
-  guint32	scan_symbols : 1;
-  guint32	scan_binary : 1;
-  guint32	scan_octal : 1;
-  guint32	scan_float : 1;
-  guint32	scan_hex : 1;			/* `0x0ff0' */
-  guint32	scan_hex_dollar : 1;		/* `$0ff0' */
-  guint32	scan_string_sq : 1;		/* string: 'anything' */
-  guint32	scan_string_dq : 1;		/* string: "\\-escapes!\n" */
-  guint32	numbers_2_int : 1;		/* bin, octal, hex => int */
-  guint32	int_2_float : 1;		/* int => G_TOKEN_FLOAT? */
-  guint32	identifier_2_string : 1;
-  guint32	char_2_token : 1;		/* return G_TOKEN_CHAR? */
-  guint32	symbol_2_token : 1;
+  guint		skip_comment_multi : 1;		/* C like comment */
+  guint		skip_comment_single : 1;	/* single line comment */
+  guint		scan_comment_multi : 1;		/* scan multi line comments? */
+  guint		scan_identifier : 1;
+  guint		scan_identifier_1char : 1;
+  guint		scan_identifier_NULL : 1;
+  guint		scan_symbols : 1;
+  guint		scan_binary : 1;
+  guint		scan_octal : 1;
+  guint		scan_float : 1;
+  guint		scan_hex : 1;			/* `0x0ff0' */
+  guint		scan_hex_dollar : 1;		/* `$0ff0' */
+  guint		scan_string_sq : 1;		/* string: 'anything' */
+  guint		scan_string_dq : 1;		/* string: "\\-escapes!\n" */
+  guint		numbers_2_int : 1;		/* bin, octal, hex => int */
+  guint		int_2_float : 1;		/* int => G_TOKEN_FLOAT? */
+  guint		identifier_2_string : 1;
+  guint		char_2_token : 1;		/* return G_TOKEN_CHAR? */
+  guint		symbol_2_token : 1;
 };
 
 struct	_GScanner
