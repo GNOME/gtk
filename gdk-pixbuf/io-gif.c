@@ -216,7 +216,7 @@ myInputFunc (GifFileType *type, GifByteType *byte, int length)
 {
 	GifData *context;
 
-	context = (GifData *) type->UserData;
+	context = (GifData *) (type->UserData);
 	g_print ("in myInputFunc\nSize requested is %d\n", length);
 
 	if (length > context->size - context->ptr) {

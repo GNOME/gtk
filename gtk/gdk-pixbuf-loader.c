@@ -292,7 +292,7 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader, guchar *buf, size_t count)
 				 * to send the rest of the buffer.
 				 */
 
-				if (retval && (priv->buf_offset + count) >= 128) {
+				if (retval && (priv->buf_offset + count) > 128) {
 					retval = (* priv->image_module->load_increment) (
 						priv->context,
 						buf,

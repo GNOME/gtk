@@ -168,9 +168,9 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 	/* Sigh, GdkRGB does not have gdk_draw_rgb_32_image_dithalign(), so we
 	 * have to pack the buffer first.
 	 */
-	if (apb->has_alpha)
-		buf = remove_alpha (apb, src_x, src_y, width, height, &rowstride);
-	else {
+	if (apb->has_alpha) {
+//		buf = remove_alpha (apb, src_x, src_y, width, height, &rowstride);
+	} else {
 		buf = apb->pixels + src_y * apb->rowstride + src_x * 3;
 		rowstride = apb->rowstride;
 	}
