@@ -1,3 +1,8 @@
+Tue Jun 29 15:59:25 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (LIBS): Look for libgmodule in the
+	right location.
+
 Mon Jun 28 09:29:52 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c: add ::default_width and ::default_height arguments.
