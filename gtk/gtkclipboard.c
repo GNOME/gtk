@@ -1245,7 +1245,9 @@ clipboard_image_received_func (GtkClipboard *clipboard,
 {
   WaitResults *results = data;
 
-  results->data = g_object_ref (pixbuf);
+  if (pixbuf)
+    results->data = g_object_ref (pixbuf);
+
   g_main_loop_quit (results->loop);
 }
 

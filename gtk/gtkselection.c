@@ -1266,11 +1266,8 @@ gtk_selection_data_set_pixbuf (GtkSelectionData *selection_data,
 	    {
 	      str = NULL;
 	      type = gdk_pixbuf_format_get_name (fmt),
-	      result = gdk_pixbuf_save_to_buffer (pixbuf,
-						  &str,
-						  &len,
-						  type,
-						  NULL);
+	      result = gdk_pixbuf_save_to_buffer (pixbuf, &str, &len,
+						  type, NULL, NULL);
 	      if (result) 
 		gtk_selection_data_set (selection_data,
 					atom, 8, (guchar *)str, len);
@@ -1310,20 +1307,23 @@ gtk_selection_data_get_pixbuf (GtkSelectionData *selection_data)
   GdkPixbufLoader *loader;
   GdkPixbuf *result = NULL;
 
-  loader = gdk_pixbuf_loader_new ();
-  
-  if (gdk_pixbuf_loader_write (loader, 
-			       selection_data->data,
-			       selection_data->length,
-			       NULL))
-    result = gdk_pixbuf_loader_get_pixbuf (loader);
-  
-  if (result)
-    g_object_ref (result);
+  if (selection_data->length > 0)
+    {
+      loader = gdk_pixbuf_loader_new ();
+      
+      if (gdk_pixbuf_loader_write (loader, 
+				   selection_data->data,
+				   selection_data->length,
+				   NULL))
+	result = gdk_pixbuf_loader_get_pixbuf (loader);
+      
+      if (result)
+	g_object_ref (result);
+      
+      gdk_pixbuf_loader_close (loader, NULL);
+      g_object_unref (loader);
+    }
 
-  gdk_pixbuf_loader_close (loader, NULL);
-  g_object_unref (loader);
-  
   return result;
 }
 

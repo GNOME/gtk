@@ -1,5 +1,19 @@
 2004-12-27  Matthias Clasen  <mclasen@redhat.com>
 
+	Make the clipboard image API more robust (#162357, 
+	Torsten Schoenfeld):
+	
+	* gtk/gtkclipboard.c (clipboard_image_received_func): Don't
+	ref the pixbuf if it is NULL.
+
+	* gtk/gtkselection.c (gtk_selection_data_set_pixbuf): 
+	NULL-terminate the varargs in the call to 
+	gdk_pixbuf_save_to_buffer(). 
+	(gtk_selection_data_get_pixbuf): Only use a pixbuf loader 
+	if there is data to load.
+
+2004-12-27  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/x11/gdkinput-x11.c (_gdk_input_common_other_event): 
 	Set x_root and y_root in button and motion events from 
 	extended input devices.  (#148715, Robert Ögren)
