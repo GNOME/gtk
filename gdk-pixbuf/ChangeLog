@@ -1,3 +1,8 @@
+1999-11-10  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/gdk-pixbuf-io.c (gdk_pixbuf_load_module): removed spurious
+	print statements.
+
 1999-11-10  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/gdk-pixbuf-io.c (gdk_pixbuf_new_from_xpm_data): Added

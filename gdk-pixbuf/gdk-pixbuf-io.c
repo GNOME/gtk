@@ -195,12 +195,9 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
                         g_free (module_name);
                         g_free(path);
                         return;
-                } else {
-                  printf("loaded module `%s'\n", module_name);
                 }
                 g_free(path);
 	} else {
-                printf("loaded module `%s'\n", path);
                 g_free (path);
         }
 
