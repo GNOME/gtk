@@ -1,3 +1,9 @@
+1999-12-16  Federico Mena Quintero  <federico@redhat.com>
+
+	* doc/tmpl/rendering.sgml: Added notice about initializing GdkRGB
+	before using the GdkPixbuf rendering functions.  Thanks to Joe
+	Shaw <joe@off.net> for pointing this out.
+
 1999-12-13  Federico Mena Quintero  <federico@redhat.com>
 
 	* gdk-pixbuf/gnome-canvas-pixbuf.c
