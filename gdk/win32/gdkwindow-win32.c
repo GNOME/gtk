@@ -126,6 +126,124 @@ gdk_window_init (void)
   gdk_xid_table_insert (&gdk_root_window, &gdk_root_parent);
 }
 
+/* RegisterGdkClass
+ *   is a wrapper function for RegisterWindowClassEx.
+ *   It creates at least one unique class for every 
+ *   GdkWindowType. If support for single window-specific icons
+ *   is ever needed (e.g Dialog specific), every such window should
+ *   get its own class
+ */
+ATOM
+RegisterGdkClass(GdkWindowType wtype)
+{
+  static ATOM klassTOPLEVEL = 0;
+  static ATOM klassDIALOG   = 0;
+  static ATOM klassCHILD    = 0;
+  static ATOM klassTEMP     = 0;
+  static HICON hAppIcon = NULL;
+  static WNDCLASSEX wcl; 
+  ATOM klass = 0;
+
+#ifdef MULTIPLE_WINDOW_CLASSES
+Error: Not yet implemented!
+#endif
+
+  wcl.cbSize = sizeof(WNDCLASSEX);     
+  wcl.style = 0; /* DON'T set CS_<H,V>REDRAW. It causes total redraw
+                  * on WM_SIZE and WM_MOVE. Flicker, Performance!
+                  */
+  wcl.lpfnWndProc = gdk_WindowProc;
+  wcl.cbClsExtra = 0;
+  wcl.cbWndExtra = 0;
+  wcl.hInstance = gdk_ProgInstance;
+  wcl.hIcon = 0;
+  /* initialize once! */
+  if (0 == hAppIcon)
+    {
+      gchar sLoc [_MAX_PATH+1];
+      HINSTANCE hInst = GetModuleHandle(NULL);
+
+      if (0 != GetModuleFileName(hInst, sLoc, _MAX_PATH))
+	{
+	  hAppIcon = ExtractIcon(hInst, sLoc, 0);
+	  if (0 == hAppIcon)
+	    {
+	      char *gdklibname = g_strdup_printf ("gdk-%s.dll", GDK_VERSION);
+
+	      hAppIcon = ExtractIcon(hInst, gdklibname, 0);
+	      g_free (gdklibname);
+	    }
+	  
+	  if (0 == hAppIcon) 
+	    hAppIcon = LoadIcon (NULL, IDI_APPLICATION);
+	}
+    }
+
+  wcl.lpszMenuName = NULL;
+  wcl.hIconSm = 0;
+
+  /* initialize once per class */
+#define ONCE_PER_CLASS() \
+  wcl.hIcon = CopyIcon (hAppIcon); \
+  wcl.hIconSm = CopyIcon (hAppIcon); \
+  wcl.hbrBackground = CreateSolidBrush( RGB(0,0,0)); \
+  wcl.hCursor = LoadCursor (NULL, IDC_ARROW); 
+  
+  switch (wtype)
+  {
+    case GDK_WINDOW_TOPLEVEL:
+      if (0 == klassTOPLEVEL)
+      {
+	wcl.lpszClassName = "gdkWindowToplevel";
+
+	ONCE_PER_CLASS();
+	klassTOPLEVEL = RegisterClassEx(&wcl);
+      }
+      klass = klassTOPLEVEL;
+      break;
+    case GDK_WINDOW_CHILD:
+      if (0 == klassCHILD)
+      {
+	wcl.lpszClassName = "gdkWindowChild";
+
+        wcl.style |= CS_PARENTDC; /* MSDN: ... enhances system performance. */
+	ONCE_PER_CLASS();
+	klassCHILD = RegisterClassEx(&wcl);
+      }
+      klass = klassCHILD;
+      break;
+    case GDK_WINDOW_DIALOG:
+      if (0 == klassDIALOG)
+      {
+	wcl.lpszClassName = "gdkWindowDialog";
+        wcl.style |= CS_SAVEBITS;
+	ONCE_PER_CLASS();
+	klassDIALOG = RegisterClassEx(&wcl);
+      }
+      klass = klassDIALOG;
+      break;
+    case GDK_WINDOW_TEMP:
+      if (0 == klassTEMP)
+      {
+	wcl.lpszClassName = "gdkWindowTemp";
+        wcl.style |= CS_SAVEBITS;
+	ONCE_PER_CLASS();
+	klassTEMP = RegisterClassEx(&wcl);
+      }
+      klass = klassTEMP;
+      break;
+    case GDK_WINDOW_ROOT:
+      g_error ("cannot make windows of type GDK_WINDOW_ROOT");
+      break;
+    case GDK_WINDOW_PIXMAP:
+      g_error ("cannot make windows of type GDK_WINDOW_PIXMAP (use gdk_pixmap_new)");
+      break;
+  }
+
+  return klass;
+} /* RegisterGdkClass */
+
+
 GdkWindow*
 gdk_window_new (GdkWindow     *parent,
 		GdkWindowAttr *attributes,
@@ -137,16 +255,7 @@ gdk_window_new (GdkWindow     *parent,
   GdkVisual *visual;
   HANDLE xparent;
   Visual *xvisual;
-#ifdef MULTIPLE_WINDOW_CLASSES
-  WNDCLASSEX wcl; 
-  ATOM klass;
-  char wcl_name_buf[20];
-  static int wcl_cnt = 0;
-#else
-  static WNDCLASSEX wcl; 
-  static ATOM klass = 0;
-#endif
-  static HICON hAppIcon = NULL;
+  ATOM klass = 0;
   DWORD dwStyle, dwExStyle;
   RECT rect;
   int width, height;
@@ -203,68 +312,7 @@ gdk_window_new (GdkWindow     *parent,
   private->event_mask = GDK_STRUCTURE_MASK | attributes->event_mask;
   private->bg_type = GDK_WIN32_BG_NORMAL;
   private->hint_flags = 0;
-  
-#ifndef MULTIPLE_WINDOW_CLASSES
-  if (klass == 0)
-    {
-#endif
-  wcl.cbSize = sizeof (WNDCLASSEX);
-#if 1
-  wcl.style = CS_HREDRAW | CS_VREDRAW;
-#else
-  wcl.style = 0;
-#endif
-  wcl.lpfnWndProc = gdk_WindowProc;
-  wcl.cbClsExtra = 0;
-  wcl.cbWndExtra = 0;
-  wcl.hInstance = gdk_ProgInstance;
-  wcl.hCursor = LoadCursor (NULL, IDC_ARROW);
-
-#if 0 /* tml: orig -> generates SetClassLong errors in set background */
-  wcl.hIcon = LoadIcon (NULL, IDI_APPLICATION);
-  wcl.hbrBackground = NULL;
-#else
-  /* initialize once! */
-  if (0 == hAppIcon)
-    {
-      gchar sLoc [_MAX_PATH+1];
-      HINSTANCE hInst = GetModuleHandle(NULL);
-
-      if (0 != GetModuleFileName(hInst, sLoc, _MAX_PATH))
-	{
-	  hAppIcon = ExtractIcon(hInst, sLoc, 0);
-	  if (0 == hAppIcon)
-	    {
-	      char *gdklibname = g_strdup_printf ("gdk-%s.dll", GDK_VERSION);
-
-	      hAppIcon = ExtractIcon(hInst, gdklibname, 0);
-	      g_free (gdklibname);
-	    }
-	  
-	  if (0 == hAppIcon) 
-	    hAppIcon = LoadIcon (NULL, IDI_APPLICATION);
-	}
-    }
-  wcl.hIcon = CopyIcon (hAppIcon);
-  wcl.hIconSm = CopyIcon (hAppIcon);
-  /* HB: starting with black to have something to release ... */
-  wcl.hbrBackground = CreateSolidBrush( RGB(0,0,0));
-#endif
-
-  wcl.lpszMenuName = NULL;
-#ifdef MULTIPLE_WINDOW_CLASSES
-  sprintf (wcl_name_buf, "gdk-wcl-%d", wcl_cnt++);
-  wcl.lpszClassName = g_strdup (wcl_name_buf);
-  /* wcl.hIconSm = LoadIcon (NULL, IDI_APPLICATION); */
-#else
-  wcl.lpszClassName = "GDK-window-class";
-  klass = RegisterClassEx (&wcl);
-  if (!klass)
-    g_error ("RegisterClassEx failed");
-    }
-
   private->xcursor = NULL;
-#endif
       
   if (parent_private && parent_private->guffaw_gravity)
     {
@@ -313,13 +361,11 @@ gdk_window_new (GdkWindow     *parent,
       break;
     case GDK_WINDOW_DIALOG:
       dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
+      dwExStyle |= WS_EX_TOPMOST; /* //HB: want this? */
       xparent = gdk_root_window;
       break;
     case GDK_WINDOW_TEMP:
       dwStyle = WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-#ifdef MULTIPLE_WINDOW_CLASSES
-      wcl.style |= CS_SAVEBITS;
-#endif
       dwExStyle |= WS_EX_TOOLWINDOW;
       break;
     case GDK_WINDOW_ROOT:
@@ -330,11 +376,9 @@ gdk_window_new (GdkWindow     *parent,
       break;
     }
 
-#ifdef MULTIPLE_WINDOW_CLASSES
-  klass = RegisterClassEx (&wcl);
+  klass = RegisterGdkClass (private->window_type);
   if (!klass)
     g_error ("RegisterClassEx failed");
-#endif
 
   if (private->window_type != GDK_WINDOW_CHILD)
     {
@@ -371,7 +415,7 @@ gdk_window_new (GdkWindow     *parent,
 
   private->xwindow =
     CreateWindowEx (dwExStyle,
-		    wcl.lpszClassName,
+		    MAKEINTRESOURCE(klass),
 		    title,
 		    dwStyle,
 		    x, y, 

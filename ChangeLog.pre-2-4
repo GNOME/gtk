@@ -1,3 +1,16 @@
+1999-08-21  Tor Lillqvist  <tml@iki.fi>
+
+	Improvements by Hans Breuer: 
+
+	* gdk/win32/gdkwindow.c (RegisterGdkClass): New function
+
+	* gdk/win32/gdkwindow.c (gdk_window_new): Use it. Don't set the
+	CS_?REDRAW flags as they cause lots of (late) redraws when "show
+	window contents while dragging" is turned on. Allocate at least
+	one unique class for every GdkWindowType. If support for single
+	window-specific icons is ever needed (eg. Dialog specific), every
+	such window should get its own class.
+
 1999-08-19  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkgc.c (gdk_gc_new_with_values): Fix a cut&paste
