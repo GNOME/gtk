@@ -1,3 +1,8 @@
+2004-07-02  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): 
+	Make sure we check for a NULL model first.
+
 2004-07-01  J. Ali Harlow  <ali@juiblex.co.uk>
 
 	* gdk/win32/gdkinput-win32.c (_gdk_input_ungrab_pointer): Fix
