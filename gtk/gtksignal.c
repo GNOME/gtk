@@ -402,27 +402,38 @@ gtk_signal_lookup (const gchar *name,
 		   GtkType	object_type)
 {
   GtkSignalHash hash;
-  
+  GtkType lookup_type;
+  gpointer class = NULL;
+
   g_return_val_if_fail (name != NULL, 0);
   g_return_val_if_fail (gtk_type_is_a (object_type, GTK_TYPE_OBJECT), 0);
   
+ relookup:
+
+  lookup_type = object_type;
   hash.quark = g_quark_try_string (name);
   if (hash.quark)
     {
-      while (object_type)
+      while (lookup_type)
 	{
 	  guint signal_id;
 	  
-	  hash.object_type = object_type;
+	  hash.object_type = lookup_type;
 	  
 	  signal_id = GPOINTER_TO_UINT (g_hash_table_lookup (gtk_signal_hash_table, &hash));
 	  if (signal_id)
 	    return signal_id;
 	  
-	  object_type = gtk_type_parent (object_type);
+	  lookup_type = gtk_type_parent (lookup_type);
 	}
     }
-  
+
+  if (!class)
+    {
+      class = gtk_type_class (object_type);
+      goto relookup;
+    }
+
   return 0;
 }
 

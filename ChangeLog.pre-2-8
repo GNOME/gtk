@@ -1,3 +1,9 @@
+1999-01-10  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c (gtk_signal_lookup): if the lookup failed, try
+	to initialize the object class and reattempt the lookup, reported
+	by Paolo Molaro <lupus@lettere.unipd.it>.
+
 Sat Jan  9 17:36:20 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (ALL_LINGUAS): Added cs to ALL_LINGUAS.
