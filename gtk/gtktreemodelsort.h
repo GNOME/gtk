@@ -23,9 +23,7 @@
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreesortable.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GTK_TYPE_TREE_MODEL_SORT			(gtk_tree_model_sort_get_type ())
 #define GTK_TREE_MODEL_SORT(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_TREE_MODEL_SORT, GtkTreeModelSort))
@@ -44,14 +42,19 @@ struct _GtkTreeModelSort
   /* < private > */
   gpointer root;
   gint stamp;
-  guint flags;
+  guint child_flags;
   GtkTreeModel *child_model;
-  gboolean cache_child_iters;
+  gint zero_ref_count;
 
   /* sort information */
   GList *sort_list;
   gint sort_column_id;
   GtkSortType order;
+
+  /* default sort */
+  GtkTreeIterCompareFunc default_sort_func;
+  gpointer default_sort_data;
+  GtkDestroyNotify default_sort_destroy;
 
   /* signal ids */
   guint changed_id;
@@ -59,11 +62,6 @@ struct _GtkTreeModelSort
   guint has_child_toggled_id;
   guint deleted_id;
   guint reordered_id;
-
-  /* default sort */
-  GtkTreeIterCompareFunc default_sort_func;
-  gpointer default_sort_data;
-  GtkDestroyNotify default_sort_destroy;
 };
 
 struct _GtkTreeModelSortClass
@@ -72,21 +70,24 @@ struct _GtkTreeModelSortClass
 };
 
 
-GtkType       gtk_tree_model_sort_get_type       (void);
-GtkTreeModel *gtk_tree_model_sort_new            (void);
-GtkTreeModel *gtk_tree_model_sort_new_with_model (GtkTreeModel      *child_model);
-void          gtk_tree_model_sort_set_model      (GtkTreeModelSort  *tree_model_sort,
-						  GtkTreeModel      *child_model);
-GtkTreeModel *gtk_tree_model_sort_get_model      (GtkTreeModelSort  *tree_model);
-GtkTreePath  *gtk_tree_model_sort_convert_path   (GtkTreeModelSort  *tree_model_sort,
-						  GtkTreePath       *child_path);
-void          gtk_tree_model_sort_convert_iter    (GtkTreeModelSort  *tree_model_sort,
-                                                   GtkTreeIter       *sort_iter,
-                                                   GtkTreeIter       *child_iter);
+GType         gtk_tree_model_sort_get_type                   (void) G_GNUC_CONST;
+GtkTreeModel *gtk_tree_model_sort_new_with_model             (GtkTreeModel     *child_model);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+GtkTreeModel *gtk_tree_model_sort_get_model                  (GtkTreeModelSort *tree_model);
+GtkTreePath  *gtk_tree_model_sort_convert_child_path_to_path (GtkTreeModelSort *tree_model_sort,
+							      GtkTreePath      *child_path);
+void          gtk_tree_model_sort_convert_child_iter_to_iter (GtkTreeModelSort *tree_model_sort,
+							      GtkTreeIter      *sort_iter,
+							      GtkTreeIter      *child_iter);
+GtkTreePath  *gtk_tree_model_sort_convert_path_to_child_path (GtkTreeModelSort *tree_model_sort,
+							      GtkTreePath      *sorted_path);
+void          gtk_tree_model_sort_convert_iter_to_child_iter (GtkTreeModelSort *tree_model_sort,
+							      GtkTreeIter      *child_iter,
+							      GtkTreeIter      *sorted_iter);
+void          gtk_tree_model_sort_reset_default_sort_func    (GtkTreeModelSort *tree_model_sort);
+void          gtk_tree_model_sort_clear_cache                (GtkTreeModelSort *tree_model_sort);
 
+
+G_END_DECLS
 
 #endif /* __GTK_TREE_MODEL_SORT_H__ */
