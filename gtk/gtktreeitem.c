@@ -471,7 +471,7 @@ gtk_tree_item_size_allocate (GtkWidget     *widget,
       child_allocation.x = border_width + GTK_TREE(widget->parent)->current_indent;
       child_allocation.y = GTK_CONTAINER (widget)->border_width;
 
-#ifdef 0
+#if 0
       child_allocation.height = allocation->height - child_allocation.y * 2;
       child_allocation.width = item->pixmaps_box->requisition.width;
 

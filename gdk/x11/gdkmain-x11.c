@@ -19,6 +19,9 @@
 
 /* #define DEBUG_DND 1 */ /* Shouldn't be needed much these days */
 
+/* If you don't want to use gdk's signal handlers define this */
+/* #define I_NEED_TO_ACTUALLY_DEBUG_MY_PROGRAMS 1 */
+
 #include <X11/Xlocale.h>
 #include <ctype.h>
 #include <signal.h>
@@ -261,6 +264,7 @@ gdk_init (int    *argc,
 
   X_GETTIMEOFDAY (&start);
 
+#ifndef I_NEED_TO_ACTUALLY_DEBUG_MY_PROGRAMS
   signal (SIGHUP, gdk_signal);
   signal (SIGINT, gdk_signal);
   signal (SIGQUIT, gdk_signal);
@@ -268,6 +272,7 @@ gdk_init (int    *argc,
   signal (SIGSEGV, gdk_signal);
   signal (SIGPIPE, gdk_signal);
   signal (SIGTERM, gdk_signal);
+#endif
 
   gdk_display_name = NULL;
 
