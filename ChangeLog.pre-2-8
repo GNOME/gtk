@@ -1,3 +1,29 @@
+Mon Mar  4 12:43:48 2002  Owen Taylor  <otaylor@redhat.com>
+
+        Fixes for non XKB operation. (#73103)
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state):
+	Fix problem where GDK_Tab was converted to GDK_ISO_Left_Tab
+	always, not just if Shift was pressed.
+	
+	* gdk/x11/gdkkeys-x11.c gdk/x11/gdkprivate-x11.c 
+	gdk/x11/gdkevents-x11.c: Move determination of group
+	to _gdk_x11_get_group_for_state(), fix to handle non-XKB.
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state): Only
+	add in SHIFT_MASK | LOCK_MASK to consumed_modifiers if the shifted
+	and unshifted keysyms are different. Only add in group_switch_mask
+	if the group-switched and non-group-switched keysyms are diferent.
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state): 
+	When calling XKeycodeToKeysym, use group * keysyms_per_keycode / 2
+	not group * keysyms_per_keycode. (Tor Lillquist)
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state):
+	Remove the hack to fudge the return value for GDK_Tab + Shift
+	since that didn't work -- it didn't affect the reverse mapping.
+	Instead fudge the non-XKB keymap instead.
+
 Mon Mar  4 11:02:18 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_get_selections): Fix

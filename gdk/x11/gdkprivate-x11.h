@@ -160,6 +160,7 @@ void     _gdk_moveresize_handle_event      (XEvent *event);
 void     _gdk_moveresize_configure_done    (void);
 
 void     _gdk_keymap_state_changed         (void);
+gint     _gdk_x11_get_group_for_state      (GdkModifierType state);
 
 GC _gdk_x11_gc_flush (GdkGC *gc);
 

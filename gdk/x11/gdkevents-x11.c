@@ -619,10 +619,6 @@ gdk_event_translate (GdkEvent *event,
 	}
 #endif /* G_ENABLE_DEBUG */
 
-      /* bits 13 and 14 in the "state" field are the keyboard group */
-#define KEYBOARD_GROUP_SHIFT 13
-#define KEYBOARD_GROUP_MASK ((1 << 13) | (1 << 14))
-      
       event->key.type = GDK_KEY_PRESS;
       event->key.window = window;
       event->key.time = xevent->xkey.time;
@@ -630,7 +626,11 @@ gdk_event_translate (GdkEvent *event,
       event->key.string = g_strdup (buf);
       event->key.length = charcount;
 
-      event->key.group = (xevent->xkey.state & KEYBOARD_GROUP_MASK) >> KEYBOARD_GROUP_SHIFT;
+      /* bits 13 and 14 in the "state" field are the keyboard group */
+#define KEYBOARD_GROUP_SHIFT 13
+#define KEYBOARD_GROUP_MASK ((1 << 13) | (1 << 14))
+      
+      event->key.group = _gdk_x11_get_group_for_state (xevent->xkey.state);
       
       break;
       
