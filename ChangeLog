@@ -1,3 +1,11 @@
+Thu May 29 17:12:19 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_cursor_on_cell): cancel
+	the current editing, if it exists. (Fixes #108956, reported by
+	Michael Natterer).
+
 Thu May 29 17:06:09 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.

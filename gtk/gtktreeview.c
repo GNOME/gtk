@@ -9910,6 +9910,11 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
       g_return_if_fail (GTK_IS_CELL_RENDERER (focus_cell));
     }
 
+  /* cancel the current editing, if it exists */
+  if (tree_view->priv->edited_column &&
+      tree_view->priv->edited_column->editable_widget)
+    gtk_tree_view_stop_editing (tree_view, TRUE);
+
   gtk_tree_view_real_set_cursor (tree_view, path, TRUE, TRUE);
 
   if (focus_column && focus_column->visible)
