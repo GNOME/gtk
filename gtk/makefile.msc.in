@@ -376,12 +376,11 @@ gtktypebuiltins_ids.c: gtk.defs maketypes.awk
 gtktypebuiltins_evals.c: makeenums.pl gtk.defs
 	$(PERL) makeenums.pl arrays $(gtk_public_h_sources) $(gdk_headers) >gtktypebuiltins_evals.c
 
-gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
-	$(PERL) genmarshal.pl gtkmarshal.list s-gmh s-gmc
-	del gtkmarshal.c
-	rename s-gmc gtkmarshal.c
-	del gtkmarshal.h
-	rename s-gmh gtkmarshal.h
+gtkmarshal.h : gtkmarshal.list
+	glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --header >gtkmarshal.h
+
+gtkmarshal.c : gtkmarshal.list
+	glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --body >gtkmarshal.c
 
 #
 # Linking:
