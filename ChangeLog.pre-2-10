@@ -135,7 +135,6 @@ Tue Oct  5 17:06:26 2004  Tim Janik  <timj@gtk.org>
 	call layout_clear_attributes, and also delegate calls to dependent
 	cell layouts.  (#154191, Martyn Russell)
 
->>>>>>> 1.5869
 2004-10-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/input/iminuktitut.c: Fix the spelling of Inuktitut
