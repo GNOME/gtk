@@ -701,7 +701,7 @@ gtk_window_expose_event (GtkWidget      *widget,
   if (GTK_WIDGET_DRAWABLE (widget))
     if (GTK_WIDGET_CLASS (parent_class)->expose_event)
       return (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
-
+  
   return FALSE;
 }
 
@@ -711,35 +711,35 @@ gtk_window_configure_event (GtkWidget         *widget,
 {
   GtkWindow *window;
   GtkAllocation allocation;
-
+  
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
-
+  
   /* If the window was merely moved, do nothing */
   if ((widget->allocation.width == event->width) &&
       (widget->allocation.height == event->height))
     return FALSE;
-
+  
   window = GTK_WINDOW (widget);
   window->handling_resize = TRUE;
-
+  
   allocation.x = 0;
   allocation.y = 0;
   allocation.width = event->width;
   allocation.height = event->height;
-
+  
   gtk_widget_size_allocate (widget, &allocation);
-
+  
   if (window->bin.child &&
       GTK_WIDGET_VISIBLE (window->bin.child) &&
       !GTK_WIDGET_MAPPED (window->bin.child))
     gtk_widget_map (window->bin.child);
-
+  
   if (window->resize_count > 0)
     {
       window->resize_count -= 1;
-
+      
       if ((window->resize_count == 0) &&
 	  ((event->width != widget->requisition.width) ||
 	   (event->height != widget->requisition.height)))
@@ -748,13 +748,6 @@ gtk_window_configure_event (GtkWidget         *widget,
 	  gdk_window_resize (widget->window,
 			     widget->requisition.width,
 			     widget->requisition.height);
-	  /*
-	  printf ("configure-event resize:  %d!=%d (%d) %d!=%d (%d)\n",
-		  event->width, widget->requisition.width,
-		  event->width != widget->requisition.width,
-		  event->height, widget->requisition.height,
-		  event->height != widget->requisition.height);
-		  */
 	}
     }
   
@@ -1036,7 +1029,7 @@ gtk_window_need_resize (GtkContainer *container)
       return_val = gtk_window_move_resize (GTK_WIDGET (window));
       window->need_resize = FALSE;
     }
-
+  
   return return_val;
 }
 
@@ -1048,33 +1041,25 @@ gtk_real_window_move_resize (GtkWindow *window,
 			     gint       height)
 {
   GtkWidget *widget;
-  GtkWidget *resize_container, *child;
-  GSList *resize_containers;
-  GSList *tmp_list;
-  gint return_val;
-
+  
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
   g_return_val_if_fail ((x != NULL) || (y != NULL), FALSE);
-
-  return_val = FALSE;
-
+  
   widget = GTK_WIDGET (window);
-
+  
   if ((*x != -1) && (*y != -1))
     gdk_window_move (widget->window, *x, *y);
-
+  
   if ((widget->requisition.width == 0) ||
       (widget->requisition.height == 0))
     {
       widget->requisition.width = 200;
       widget->requisition.height = 200;
     }
-
+  
   gdk_window_get_geometry (widget->window, NULL, NULL, &width, &height, NULL);
-
-  resize_containers = NULL;
-
+  
   if ((window->auto_shrink &&
        ((width != widget->requisition.width) ||
 	(height != widget->requisition.height))) ||
@@ -1087,11 +1072,6 @@ gtk_real_window_move_resize (GtkWindow *window,
 	  gdk_window_resize (widget->window,
 			     widget->requisition.width,
 			     widget->requisition.height);
-	  /*
-	  printf ("move-resize resize: %d %d\n",
-		  width != widget->requisition.width,
-		  height != widget->requisition.height);
-		  */
 	}
     }
   else
@@ -1107,74 +1087,77 @@ gtk_real_window_move_resize (GtkWindow *window,
        *  list. GTK_RESIZE_NEEDED is used for flagging those
        *  parents inside this function.
        */
-      GSList *resize_widgets, *node;
-
+      GSList *resize_widgets;
+      GSList *resize_containers;
+      GSList *node;
+      
       resize_widgets = GTK_CONTAINER (window)->resize_widgets;
       GTK_CONTAINER (window)->resize_widgets = NULL;
-
+      
       for (node = resize_widgets; node; node = node->next)
 	{
-	  child = (GtkWidget *)node->data;
-
-	  GTK_PRIVATE_UNSET_FLAG (child, GTK_RESIZE_NEEDED);
-
-	  widget = child->parent;
-	  while (widget &&
+	  widget = node->data;
+	  
+	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
+	  
+	  while (widget && widget->parent &&
 		 ((widget->allocation.width < widget->requisition.width) ||
 		  (widget->allocation.height < widget->requisition.height)))
 	    widget = widget->parent;
-
-	  if (widget)
-	    GTK_PRIVATE_SET_FLAG (widget, GTK_RESIZE_NEEDED);
+	  
+	  GTK_PRIVATE_SET_FLAG (widget, GTK_RESIZE_NEEDED);
+	  node->data = widget;
 	}
-
+      
+      resize_containers = NULL;
+      
       for (node = resize_widgets; node; node = node->next)
 	{
-	  child = (GtkWidget *)node->data;
-
-	  resize_container = child->parent;
-	  while (resize_container &&
-		 !GTK_WIDGET_RESIZE_NEEDED (resize_container))
-	    resize_container = resize_container->parent;
-
+	  GtkWidget *resize_container;
+	  
+	  widget = node->data;
+	  
+	  if (!GTK_WIDGET_RESIZE_NEEDED (widget))
+	    continue;
+	  
+	  resize_container = widget->parent;
+	  
 	  if (resize_container)
-	    widget = resize_container->parent;
-	  else
-	    widget = NULL;
-
-	  while (widget)
 	    {
-	      if (GTK_WIDGET_RESIZE_NEEDED (widget))
+	      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
+	      widget = resize_container->parent;
+	      
+	      while (widget)
 		{
-		  GTK_PRIVATE_UNSET_FLAG (resize_container, GTK_RESIZE_NEEDED);
-		  resize_container = widget;
+		  if (GTK_WIDGET_RESIZE_NEEDED (widget))
+		    {
+		      GTK_PRIVATE_UNSET_FLAG (resize_container, GTK_RESIZE_NEEDED);
+		      resize_container = widget;
+		    }
+		  widget = widget->parent;
 		}
-	      widget = widget->parent;
 	    }
-
-	  if (resize_container &&
-	      !g_slist_find (resize_containers, resize_container))
+	  else
+	    resize_container = widget;
+	  
+	  if (!g_slist_find (resize_containers, resize_container))
 	    resize_containers = g_slist_prepend (resize_containers,
 						 resize_container);
 	}
-
       g_slist_free (resize_widgets);
-
-      tmp_list = resize_containers;
-      while (tmp_list)
-       {
-         widget = tmp_list->data;
-         tmp_list = tmp_list->next;
-
-	 GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
-         gtk_widget_size_allocate (widget, &widget->allocation);
-         gtk_widget_queue_draw (widget);
-       }
-
+      
+      for (node = resize_containers; node; node = node->next)
+	{
+	  widget = node->data;
+	  
+	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
+	  gtk_widget_size_allocate (widget, &widget->allocation);
+	  gtk_widget_queue_draw (widget);
+	}
       g_slist_free (resize_containers);
     }
-
-  return return_val;
+  
+  return FALSE;
 }
 
 static gint

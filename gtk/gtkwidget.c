@@ -176,7 +176,6 @@ static void gtk_widget_real_unrealize		 (GtkWidget	    *widget);
 static void gtk_widget_real_draw		 (GtkWidget	    *widget,
 						  GdkRectangle	    *area);
 static gint gtk_widget_real_queue_draw		 (GtkWidget	    *widget);
-static gint gtk_widget_real_queue_resize	 (GtkWidget	    *widget);
 static void gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
 						  GtkAllocation	    *allocation);
 
@@ -1452,15 +1451,24 @@ gtk_widget_queue_draw (GtkWidget *widget)
 static gint
 gtk_widget_idle_sizer (void *data)
 {
-  GSList *node;
+  GSList *slist, *free_slist;
 
-  node = gtk_widget_resize_queue;
+  free_slist = gtk_widget_resize_queue;
   gtk_widget_resize_queue = NULL;
-  while (node)
+  slist = free_slist;
+  while (slist)
     {
-      gtk_widget_real_queue_resize ((GtkWidget *)node->data);
-      node = node->next;
+      GtkWidget *widget;
+      
+      widget = slist->data;
+      
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
+      if (gtk_container_need_resize (GTK_CONTAINER (widget)))
+	gtk_widget_queue_resize (widget);
+      
+      slist = slist->next;
     }
+  g_slist_free (free_slist);
 
   return gtk_widget_resize_queue != NULL;
 }
@@ -3440,26 +3448,6 @@ gtk_widget_real_queue_draw (GtkWidget *widget)
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
   gtk_widget_draw (widget, NULL);
   
-  return FALSE;
-}
-
-/*****************************************
- * gtk_widget_real_queue_resize:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static gint
-gtk_widget_real_queue_resize (GtkWidget *widget)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
-  gtk_container_need_resize (GTK_CONTAINER (widget));
-
   return FALSE;
 }
 

@@ -2,6 +2,8 @@ TODO BEFORE GTK 1.0
 -------------------
 
 Bugs:
+ * gtk_list_clear_items: free start_list
+ 
  * Vertical scrollbar: the expose event looks hosed and is causing 
    quite a bit of flickering
 
