@@ -1,4 +1,7 @@
-Mon May 20 11:38:21 2002  Owen Taylor  <otaylor@redhat.com>
+Mon May 20 11:47:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkplug.c: Undo an accidental revert of
+	fixes of May 16. (Caught by Padraig O'Briain)
 
 	* gtk/gtkctree.c (cell_size_request): Fix bug where
 	size request for text cells was being overwritten.
