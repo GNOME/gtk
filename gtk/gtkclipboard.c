@@ -24,7 +24,6 @@
 #include "gtkclipboard.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
-#include "gtksignal.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -116,7 +115,8 @@ gtk_clipboard_get_type (void)
 	(GInstanceInitFunc) NULL,
       };
       
-      clipboard_type = g_type_register_static (G_TYPE_OBJECT, "GtkClipboard", &clipboard_info, 0);
+      clipboard_type = g_type_register_static (G_TYPE_OBJECT, "GtkClipboard",
+					       &clipboard_info, 0);
     }
   
   return clipboard_type;
@@ -283,18 +283,18 @@ make_clipboard_widget (GdkDisplay *display,
 {
   GtkWidget *widget = gtk_invisible_new_for_screen (gdk_display_get_default_screen (display));
 
-  gtk_signal_connect (GTK_OBJECT (widget), "selection_received",
-		      GTK_SIGNAL_FUNC (selection_received), NULL);
+  g_signal_connect (widget, "selection_received",
+		    G_CALLBACK (selection_received), NULL);
 
   if (provider)
     {
       /* We need this for gdk_x11_get_server_time() */
       gtk_widget_add_events (widget, GDK_PROPERTY_CHANGE_MASK);
       
-      gtk_signal_connect (GTK_OBJECT (widget), "selection_get",
-			  GTK_SIGNAL_FUNC (selection_get_cb), NULL);
-      gtk_signal_connect (GTK_OBJECT (widget), "selection_clear_event",
-			  GTK_SIGNAL_FUNC (selection_clear_event_cb), NULL);
+      g_signal_connect (widget, "selection_get",
+			G_CALLBACK (selection_get_cb), NULL);
+      g_signal_connect (widget, "selection_clear_event",
+			G_CALLBACK (selection_clear_event_cb), NULL);
     }
 
   return widget;
@@ -682,9 +682,7 @@ set_request_contents_info (GtkWidget           *widget,
   if (!request_contents_key_id)
     request_contents_key_id = g_quark_from_static_string (request_contents_key);
 
-  gtk_object_set_data_by_id (GTK_OBJECT (widget),
-			     request_contents_key_id,
-			     info);
+  g_object_set_qdata (G_OBJECT (widget), request_contents_key_id, info);
 }
 
 static RequestContentsInfo *
@@ -693,8 +691,7 @@ get_request_contents_info (GtkWidget *widget)
   if (!request_contents_key_id)
     return NULL;
   else
-    return gtk_object_get_data_by_id (GTK_OBJECT (widget),
-				      request_contents_key_id);
+    return g_object_get_qdata (G_OBJECT (widget), request_contents_key_id);
 }
 
 static void 
@@ -851,7 +848,7 @@ clipboard_received_func (GtkClipboard     *clipboard,
   if (selection_data->length >= 0)
     results->data = gtk_selection_data_copy (selection_data);
   
-  g_main_quit (results->loop);
+  g_main_loop_quit (results->loop);
 }
 
 /**
@@ -879,20 +876,20 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
   g_return_val_if_fail (target != GDK_NONE, NULL);
   
   results.data = NULL;
-  results.loop = g_main_new (TRUE);
+  results.loop = g_main_loop_new (NULL, TRUE);
 
   gtk_clipboard_request_contents (clipboard, target, 
 				  clipboard_received_func,
 				  &results);
 
-  if (g_main_is_running (results.loop))
+  if (g_main_loop_is_running (results.loop))
     {
       GDK_THREADS_LEAVE ();
-      g_main_run (results.loop);
+      g_main_loop_run (results.loop);
       GDK_THREADS_ENTER ();
     }
 
-  g_main_destroy (results.loop);
+  g_main_loop_unref (results.loop);
 
   return results.data;
 }
@@ -905,7 +902,7 @@ clipboard_text_received_func (GtkClipboard *clipboard,
   WaitResults *results = data;
 
   results->data = g_strdup (text);
-  g_main_quit (results->loop);
+  g_main_loop_quit (results->loop);
 }
 
 
@@ -934,20 +931,20 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
   g_return_val_if_fail (clipboard != NULL, NULL);
   
   results.data = NULL;
-  results.loop = g_main_new (TRUE);
+  results.loop = g_main_loop_new (NULL, TRUE);
 
   gtk_clipboard_request_text (clipboard,
 			      clipboard_text_received_func,
 			      &results);
 
-  if (g_main_is_running (results.loop))
+  if (g_main_loop_is_running (results.loop))
     {
       GDK_THREADS_LEAVE ();
-      g_main_run (results.loop);
+      g_main_loop_run (results.loop);
       GDK_THREADS_ENTER ();
     }
 
-  g_main_destroy (results.loop);
+  g_main_loop_unref (results.loop);
 
   return results.data;
 }

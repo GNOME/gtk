@@ -28,16 +28,15 @@
 
 #include "gtkeditable.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 
 
 static void   gtk_editable_base_init             (gpointer g_class);
 
 
-GtkType
+GType
 gtk_editable_get_type (void)
 {
-  static GtkType editable_type = 0;
+  static GType editable_type = 0;
 
   if (!editable_type)
     {
@@ -48,7 +47,8 @@ gtk_editable_get_type (void)
 	NULL,			    /* base_finalize */
       };
 
-      editable_type = g_type_register_static (G_TYPE_INTERFACE, "GtkEditable", &editable_info, 0);
+      editable_type = g_type_register_static (G_TYPE_INTERFACE, "GtkEditable",
+					      &editable_info, 0);
     }
 
   return editable_type;
@@ -68,25 +68,25 @@ gtk_editable_base_init (gpointer g_class)
 		    NULL, NULL,
 		    _gtk_marshal_VOID__STRING_INT_POINTER,
 		    G_TYPE_NONE, 3,
-		    GTK_TYPE_STRING,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_POINTER);
+		    G_TYPE_STRING,
+		    G_TYPE_INT,
+		    G_TYPE_POINTER);
       g_signal_new ("delete_text",
 		    GTK_TYPE_EDITABLE,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkEditableClass, delete_text),
 		    NULL, NULL,
 		    _gtk_marshal_VOID__INT_INT,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_INT);
+		    G_TYPE_NONE, 2,
+		    G_TYPE_INT,
+		    G_TYPE_INT);
       g_signal_new ("changed",
 		    GTK_TYPE_EDITABLE,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkEditableClass, changed),
 		    NULL, NULL,
 		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+		    G_TYPE_NONE, 0);
 
       initialized = TRUE;
     }
@@ -190,7 +190,7 @@ gtk_editable_cut_clipboard (GtkEditable *editable)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
-  gtk_signal_emit_by_name (GTK_OBJECT (editable), "cut_clipboard");
+  g_signal_emit_by_name (editable, "cut_clipboard");
 }
 
 void
@@ -198,7 +198,7 @@ gtk_editable_copy_clipboard (GtkEditable *editable)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
-  gtk_signal_emit_by_name (GTK_OBJECT (editable), "copy_clipboard");
+  g_signal_emit_by_name (editable, "copy_clipboard");
 }
 
 void
@@ -206,7 +206,7 @@ gtk_editable_paste_clipboard (GtkEditable *editable)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
-  gtk_signal_emit_by_name (GTK_OBJECT (editable), "paste_clipboard");
+  g_signal_emit_by_name (editable, "paste_clipboard");
 }
 
 void
@@ -215,9 +215,9 @@ gtk_editable_set_editable (GtkEditable    *editable,
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
-  gtk_object_set (GTK_OBJECT (editable),
-		  "editable", is_editable != FALSE,
-		  NULL);
+  g_object_set (G_OBJECT (editable),
+		"editable", is_editable != FALSE,
+		NULL);
 }
 
 /**
@@ -236,7 +236,7 @@ gtk_editable_get_editable (GtkEditable *editable)
 
   g_return_val_if_fail (GTK_IS_EDITABLE (editable), FALSE);
 
-  gtk_object_get (GTK_OBJECT (editable), "editable", &value, NULL);
+  g_object_get (G_OBJECT (editable), "editable", &value, NULL);
 
   return value;
 }

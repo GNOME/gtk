@@ -21,7 +21,6 @@
 #include "gtkcontainer.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtksignal.h"
 #include "gtksizegroup.h"
 
 enum {
@@ -256,10 +255,10 @@ gtk_size_group_init (GtkSizeGroup *size_group)
   size_group->have_height = 0;
 }
 
-GtkType
+GType
 gtk_size_group_get_type (void)
 {
-  static GtkType size_group_type = 0;
+  static GType size_group_type = 0;
 
   if (!size_group_type)
     {
@@ -276,7 +275,8 @@ gtk_size_group_get_type (void)
 	(GInstanceInitFunc) gtk_size_group_init,
       };
 
-      size_group_type = g_type_register_static (G_TYPE_OBJECT, "GtkSizeGroup", &size_group_info, 0);
+      size_group_type = g_type_register_static (G_TYPE_OBJECT, "GtkSizeGroup",
+						&size_group_info, 0);
     }
 
   return size_group_type;
@@ -420,10 +420,11 @@ gtk_size_group_add_widget (GtkSizeGroup     *size_group,
 
       size_group->widgets = g_slist_prepend (size_group->widgets, widget);
 
-      gtk_signal_connect (GTK_OBJECT (widget), "destroy",
-			  GTK_SIGNAL_FUNC (gtk_size_group_widget_destroyed), size_group);
+      g_signal_connect (widget, "destroy",
+			G_CALLBACK (gtk_size_group_widget_destroyed),
+			size_group);
 
-      g_object_ref (G_OBJECT (size_group));
+      g_object_ref (size_group);
     }
   
   queue_resize_on_group (size_group);
@@ -446,8 +447,9 @@ gtk_size_group_remove_widget (GtkSizeGroup     *size_group,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (g_slist_find (size_group->widgets, widget));
 
-  gtk_signal_disconnect_by_func (GTK_OBJECT (widget), 
-				 GTK_SIGNAL_FUNC (gtk_size_group_widget_destroyed), size_group);
+  g_signal_handlers_disconnect_by_func (widget,
+					gtk_size_group_widget_destroyed,
+					size_group);
   
   groups = get_size_groups (widget);
   groups = g_slist_remove (groups, size_group);
@@ -457,7 +459,7 @@ gtk_size_group_remove_widget (GtkSizeGroup     *size_group,
   queue_resize_on_group (size_group);
   gtk_widget_queue_resize (widget);
 
-  g_object_unref (G_OBJECT (size_group));
+  g_object_unref (size_group);
 }
 
 static gint
@@ -488,7 +490,9 @@ do_size_request (GtkWidget *widget)
   if (GTK_WIDGET_REQUEST_NEEDED (widget))
     {
       gtk_widget_ensure_style (widget);
-      gtk_signal_emit_by_name (GTK_OBJECT (widget), "size_request", &widget->requisition);
+      g_signal_emit_by_name (widget,
+			     "size_request",
+			     &widget->requisition);
       
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_REQUEST_NEEDED);
     }

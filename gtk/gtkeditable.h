@@ -83,7 +83,7 @@ struct _GtkEditableClass
   gint (* get_position)             (GtkEditable    *editable);
 };
 
-GtkType  gtk_editable_get_type             (void) G_GNUC_CONST;
+GType    gtk_editable_get_type             (void) G_GNUC_CONST;
 void     gtk_editable_select_region        (GtkEditable *editable,
 					    gint         start,
 					    gint         end);

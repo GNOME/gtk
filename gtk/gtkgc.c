@@ -100,7 +100,7 @@ static void
 free_gc_drawable (gpointer data)
 {
   GtkGCDrawable *drawable = data;
-  g_object_unref (G_OBJECT (drawable->drawable));
+  g_object_unref (drawable->drawable);
   g_free (drawable);
 }
 
@@ -189,7 +189,7 @@ gtk_gc_new (gpointer key)
 static void
 gtk_gc_destroy (gpointer value)
 {
-  gdk_gc_destroy ((GdkGC*) value);
+  g_object_unref (value);
 }
 
 static guint

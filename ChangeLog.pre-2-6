@@ -1,3 +1,9 @@
+Wed Oct  9 16:52:53 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkclipboard.[ch] gtk/gtkeditable.[ch] gtk/gtkgc.c
+	gtk/gtkoptionmenu.[ch] gtk/gtkselection.c gtk/gtksizegroup.[ch]:
+	Deprecation cleanup
+
 Wed Oct  9 15:23:48 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkadjustment.[ch] gtk/gtkalignment.[ch] gtk/gtkentry.[ch]

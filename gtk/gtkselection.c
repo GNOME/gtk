@@ -57,7 +57,6 @@
 
 #include "gtkmain.h"
 #include "gtkselection.h"
-#include "gtksignal.h"
 
 /* #define DEBUG_SELECTION */
 
@@ -458,7 +457,7 @@ gtk_selection_target_list_get (GtkWidget    *widget,
   GList *tmp_list;
   GList *lists;
 
-  lists = gtk_object_get_data (GTK_OBJECT (widget), gtk_selection_handler_key);
+  lists = g_object_get_data (G_OBJECT (widget), gtk_selection_handler_key);
   
   tmp_list = lists;
   while (tmp_list)
@@ -474,7 +473,7 @@ gtk_selection_target_list_get (GtkWidget    *widget,
   sellist->list = gtk_target_list_new (NULL, 0);
 
   lists = g_list_prepend (lists, sellist);
-  gtk_object_set_data (GTK_OBJECT (widget), gtk_selection_handler_key, lists);
+  g_object_set_data (G_OBJECT (widget), gtk_selection_handler_key, lists);
 
   return sellist->list;
 }
@@ -486,7 +485,7 @@ gtk_selection_target_list_remove (GtkWidget    *widget)
   GList *tmp_list;
   GList *lists;
 
-  lists = gtk_object_get_data (GTK_OBJECT (widget), gtk_selection_handler_key);
+  lists = g_object_get_data (G_OBJECT (widget), gtk_selection_handler_key);
   
   tmp_list = lists;
   while (tmp_list)
@@ -500,7 +499,7 @@ gtk_selection_target_list_remove (GtkWidget    *widget)
     }
 
   g_list_free (lists);
-  gtk_object_set_data (GTK_OBJECT (widget), gtk_selection_handler_key, NULL);
+  g_object_set_data (G_OBJECT (widget), gtk_selection_handler_key, NULL);
 }
 
 /**
@@ -519,7 +518,7 @@ gtk_selection_clear_targets (GtkWidget *widget,
   GList *tmp_list;
   GList *lists;
 
-  lists = gtk_object_get_data (GTK_OBJECT (widget), gtk_selection_handler_key);
+  lists = g_object_get_data (G_OBJECT (widget), gtk_selection_handler_key);
   
   tmp_list = lists;
   while (tmp_list)
@@ -537,7 +536,7 @@ gtk_selection_clear_targets (GtkWidget *widget,
       tmp_list = tmp_list->next;
     }
   
-  gtk_object_set_data (GTK_OBJECT (widget), gtk_selection_handler_key, lists);
+  g_object_set_data (G_OBJECT (widget), gtk_selection_handler_key, lists);
 }
 
 void 
@@ -1734,9 +1733,9 @@ gtk_selection_retrieval_report (GtkRetrievalInfo *info,
   data.data = buffer;
   data.display = gtk_widget_get_display (info->widget);
   
-  gtk_signal_emit_by_name (GTK_OBJECT(info->widget),
-			   "selection_received", 
-			   &data, time);
+  g_signal_emit_by_name (info->widget,
+			 "selection_received", 
+			 &data, time);
 }
 
 /*************************************************************
@@ -1769,10 +1768,10 @@ gtk_selection_invoke_handler (GtkWidget	       *widget,
   if (target_list && 
       gtk_target_list_find (target_list, data->target, &info))
     {
-      gtk_signal_emit_by_name (GTK_OBJECT (widget), 
-			       "selection_get",
-			       data,
-			       info, time);
+      g_signal_emit_by_name (widget,
+			     "selection_get",
+			     data,
+			     info, time);
     }
   else
     gtk_selection_default_handler (widget, data);

@@ -29,7 +29,6 @@
 #include "gtkmenuitem.h"
 #include "gtkoptionmenu.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 #include "gdk/gdkkeysyms.h"
 
 
@@ -94,7 +93,7 @@ static void gtk_option_menu_show_all        (GtkWidget          *widget);
 static void gtk_option_menu_hide_all        (GtkWidget          *widget);
 static gboolean gtk_option_menu_mnemonic_activate (GtkWidget    *widget,
 						   gboolean      group_cycling);
-static GtkType gtk_option_menu_child_type   (GtkContainer       *container);
+static GType gtk_option_menu_child_type   (GtkContainer       *container);
 static gint gtk_option_menu_scroll_event    (GtkWidget          *widget,
 					     GdkEventScroll     *event);
 
@@ -115,26 +114,29 @@ static GtkButtonClass *parent_class = NULL;
 static guint           signals[LAST_SIGNAL] = { 0 };
 
 
-GtkType
+GType
 gtk_option_menu_get_type (void)
 {
-  static GtkType option_menu_type = 0;
+  static GType option_menu_type = 0;
 
   if (!option_menu_type)
     {
-      static const GtkTypeInfo option_menu_info =
+      static const GTypeInfo option_menu_info =
       {
-	"GtkOptionMenu",
-	sizeof (GtkOptionMenu),
 	sizeof (GtkOptionMenuClass),
-	(GtkClassInitFunc) gtk_option_menu_class_init,
-	(GtkObjectInitFunc) gtk_option_menu_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_option_menu_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkOptionMenu),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_option_menu_init,
       };
 
-      option_menu_type = gtk_type_unique (gtk_button_get_type (), &option_menu_info);
+      option_menu_type =
+	g_type_register_static (GTK_TYPE_BUTTON, "GtkOptionMenu",
+				&option_menu_info, 0);
     }
 
   return option_menu_type;
@@ -155,7 +157,7 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   button_class = (GtkButtonClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  parent_class = gtk_type_class (gtk_button_get_type ());
+  parent_class = g_type_class_peek_parent (class);
 
   signals[CHANGED] =
     g_signal_new ("changed",
@@ -204,10 +206,10 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
 							       G_PARAM_READABLE));
 }
 
-static GtkType
+static GType
 gtk_option_menu_child_type (GtkContainer       *container)
 {
-  return GTK_TYPE_NONE;
+  return G_TYPE_NONE;
 }
 
 static void
@@ -225,7 +227,7 @@ gtk_option_menu_init (GtkOptionMenu *option_menu)
 GtkWidget*
 gtk_option_menu_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_option_menu_get_type ()));
+  return g_object_new (GTK_TYPE_OPTION_MENU, NULL);
 }
 
 GtkWidget*
@@ -248,8 +250,12 @@ gtk_option_menu_detacher (GtkWidget     *widget,
   g_return_if_fail (option_menu->menu == (GtkWidget*) menu);
 
   gtk_option_menu_remove_contents (option_menu);
-  gtk_signal_disconnect_by_data (GTK_OBJECT (option_menu->menu),
-				 option_menu);
+  g_signal_handlers_disconnect_by_func (option_menu->menu,
+					gtk_option_menu_selection_done,
+					option_menu);
+  g_signal_handlers_disconnect_by_func (option_menu->menu,
+					gtk_option_menu_calc_size,
+					option_menu);
   
   option_menu->menu = NULL;
   g_object_notify (G_OBJECT (option_menu), "menu");
@@ -273,12 +279,12 @@ gtk_option_menu_set_menu (GtkOptionMenu *option_menu,
 
       gtk_option_menu_calc_size (option_menu);
 
-      gtk_signal_connect_after (GTK_OBJECT (option_menu->menu), "selection_done",
-				G_CALLBACK (gtk_option_menu_selection_done),
+      g_signal_connect_after (option_menu->menu, "selection_done",
+			      G_CALLBACK (gtk_option_menu_selection_done),
+			      option_menu);
+      g_signal_connect_swapped (option_menu->menu, "size_request",
+				G_CALLBACK (gtk_option_menu_calc_size),
 				option_menu);
-      gtk_signal_connect_object (GTK_OBJECT (option_menu->menu), "size_request",
-				 (GtkSignalFunc) gtk_option_menu_calc_size,
-				 GTK_OBJECT (option_menu));
 
       if (GTK_WIDGET (option_menu)->parent)
 	gtk_widget_queue_resize (GTK_WIDGET (option_menu));
@@ -710,7 +716,7 @@ gtk_option_menu_changed (GtkOptionMenu *option_menu)
 {
   g_return_if_fail (GTK_IS_OPTION_MENU (option_menu));
 
-  g_signal_emit (G_OBJECT (option_menu), signals[CHANGED], 0);
+  g_signal_emit (option_menu, signals[CHANGED], 0);
 }
 
 static void
@@ -754,10 +760,10 @@ gtk_option_menu_item_destroy_cb (GtkWidget     *widget,
 
   if (child)
     {
-      gtk_widget_ref (child);
+      g_object_ref (child);
       gtk_option_menu_remove_contents (option_menu);
       gtk_widget_destroy (child);
-      gtk_widget_unref (child);
+      g_object_unref (child);
 
       gtk_option_menu_select_first_sensitive (option_menu);
     }
@@ -780,7 +786,7 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
       option_menu->menu_item = gtk_menu_get_active (GTK_MENU (option_menu->menu));
       if (option_menu->menu_item)
 	{
-	  gtk_widget_ref (option_menu->menu_item);
+	  g_object_ref (option_menu->menu_item);
 	  child = GTK_BIN (option_menu->menu_item)->child;
 	  if (child)
 	    {
@@ -789,10 +795,10 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 	      gtk_widget_reparent (child, GTK_WIDGET (option_menu));
 	    }
 
-	  gtk_signal_connect (GTK_OBJECT (option_menu->menu_item), "state_changed",
-			      GTK_SIGNAL_FUNC (gtk_option_menu_item_state_changed_cb), option_menu);
-	  gtk_signal_connect (GTK_OBJECT (option_menu->menu_item), "destroy",
-			      GTK_SIGNAL_FUNC (gtk_option_menu_item_destroy_cb), option_menu);
+	  g_signal_connect (option_menu->menu_item, "state_changed",
+			    G_CALLBACK (gtk_option_menu_item_state_changed_cb), option_menu);
+	  g_signal_connect (option_menu->menu_item, "destroy",
+			    G_CALLBACK (gtk_option_menu_item_destroy_cb), option_menu);
 
 	  gtk_widget_size_request (child, &child_requisition);
 	  gtk_widget_size_allocate (GTK_WIDGET (option_menu),
@@ -824,14 +830,14 @@ gtk_option_menu_remove_contents (GtkOptionMenu *option_menu)
 	  gtk_widget_reparent (child, option_menu->menu_item);
 	}
 
-      gtk_signal_disconnect_by_func (GTK_OBJECT (option_menu->menu_item),
-				     GTK_SIGNAL_FUNC (gtk_option_menu_item_state_changed_cb),
-				     option_menu);				     
-      gtk_signal_disconnect_by_func (GTK_OBJECT (option_menu->menu_item),
-				     GTK_SIGNAL_FUNC (gtk_option_menu_item_destroy_cb),
-				     option_menu);   
+      g_signal_handlers_disconnect_by_func (option_menu->menu_item,
+					    gtk_option_menu_item_state_changed_cb,
+					    option_menu);				     
+      g_signal_handlers_disconnect_by_func (option_menu->menu_item,
+					    gtk_option_menu_item_destroy_cb,
+					    option_menu);   
       
-      gtk_widget_unref (option_menu->menu_item);
+      g_object_unref (option_menu->menu_item);
       option_menu->menu_item = NULL;
     }
 }
