@@ -708,7 +708,6 @@ gtk_image_set_from_file   (GtkImage    *image,
   GdkPixbufAnimation *anim;
   
   g_return_if_fail (GTK_IS_IMAGE (image));
-  g_return_if_fail (filename != NULL);
 
   g_object_freeze_notify (G_OBJECT (image));
   

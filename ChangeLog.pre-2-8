@@ -1,3 +1,8 @@
+Sat Mar  9 18:23:25 2002  Richard Hestilow  <hestilow@ximian.com>
+
+	* gtk/gtkimage.c (gtk_image_set_from_filename): Allow NULL
+	filenames.
+	
 Tue Mar 12 10:50:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_filter_keypress):
