@@ -1,3 +1,10 @@
+Wed Mar 10 23:40:15 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popup): Set the background
+	on the action view cell renderer here, not in init, so that a) we catch 
+	style changes, and b) we get the real style, not the default one. 
+	Partial fix for #127648, reported by Dave Bordoley.
+
 2004-03-10  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (build_key_event_state): Set also

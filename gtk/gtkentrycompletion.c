@@ -284,9 +284,6 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   gtk_tree_selection_unselect_all (sel);
 
   cell = gtk_cell_renderer_text_new ();
-  g_object_set (cell, "cell_background_gdk",
-                &priv->tree_view->style->bg[GTK_STATE_NORMAL],
-                NULL);
   gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (priv->action_view),
                                               0, "",
                                               cell,
@@ -1119,9 +1116,19 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   gint monitor_num;
   GdkRectangle monitor;
   GtkRequisition popup_req;
+  GtkTreeViewColumn *column;
+  GList *renderers;
 
   if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
     return;
+
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
+  renderers = gtk_tree_view_column_get_cell_renderers (column);
+  gtk_widget_ensure_style (completion->priv->tree_view);
+  g_object_set (GTK_CELL_RENDERER (renderers->data), "cell_background_gdk",
+                &completion->priv->tree_view->style->bg[GTK_STATE_NORMAL],
+                NULL);
+  g_list_free (renderers);
 
   gtk_widget_show_all (completion->priv->vbox);
 
