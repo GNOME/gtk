@@ -95,6 +95,7 @@ struct _GdkPixbufModule {
                            gchar    **param_values,
                            GError   **error);
   
+  /*< private >*/
 	void (*_reserved1) (void); 
 	void (*_reserved2) (void); 
 	void (*_reserved3) (void); 

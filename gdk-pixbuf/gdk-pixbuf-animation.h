@@ -50,6 +50,8 @@ struct _GdkPixbufAnimation {
 struct _GdkPixbufAnimationClass {
         GObjectClass parent_class;
 
+        /*< public >*/
+
         gboolean                (*is_static_image)  (GdkPixbufAnimation *anim);
 
         GdkPixbuf*              (*get_static_image) (GdkPixbufAnimation *anim);
@@ -78,6 +80,8 @@ struct _GdkPixbufAnimationIter {
 
 struct _GdkPixbufAnimationIterClass {
         GObjectClass parent_class;
+
+        /*< public >*/
 
         int        (*get_delay_time)   (GdkPixbufAnimationIter *iter);
 

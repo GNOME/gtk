@@ -1,3 +1,8 @@
+2002-12-08  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-animation.h: 
+	* gdk-pixbuf-io.h: Add /*< public|private >*/ markers.
+
 Sat Dec  7 10:14:05 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (gdk-pixbuf.loaders): Make gdk-pixbuf.loaders

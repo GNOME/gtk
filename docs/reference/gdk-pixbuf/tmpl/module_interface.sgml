@@ -132,25 +132,27 @@ They are not covered by the same stability guarantees as the regular
 <!-- ##### STRUCT GdkPixbufFormat ##### -->
 <para>
 A #GdkPixbufFormat contains information about the image format accepted by a
-module. Only modules should access the fields directly.
+module. Only modules should access the fields directly, applications should
+use the <function>gdk_pixbuf_format_*</function> functions.
 </para>
 
-@name: the name of the image format
-@signature: the signature of the module
-@domain: the message domain for the @description
-@description: a description of the image format
+@name: the name of the image format.
+@signature: the signature of the module.
+@domain: the message domain for the @description.
+@description: a description of the image format.
 @mime_types: a %NULL-terminated array of MIME types for the image format.
 @extensions: a %NULL-terminated array of typical filename extensions for the
 image format.
-@flags: 
+@flags: a combination of #GdkPixbufFormatFlags.
 @Since: 2.2
 
 <!-- ##### ENUM GdkPixbufFormatFlags ##### -->
 <para>
-
+Flags which allow a module to specify further details about the supported
+operations.
 </para>
 
-@GDK_PIXBUF_FORMAT_WRITABLE: 
+@GDK_PIXBUF_FORMAT_WRITABLE: the module can write out images in the format.
 @Since: 2.2
 
 <!-- ##### STRUCT GdkPixbufModulePattern ##### -->
@@ -174,7 +176,6 @@ The signature of a module is stored as an array of
 @relevance: relevance of this pattern
 @Since: 2.2
 
-
 <!-- ##### USER_FUNCTION GdkPixbufModuleFillVtableFunc ##### -->
 <para>
 Defines the type of the function used to set the vtable of a 
@@ -185,7 +186,6 @@ Defines the type of the function used to set the vtable of a
 @Since: 2.2
 
 
-
 <!-- ##### USER_FUNCTION GdkPixbufModuleFillInfoFunc ##### -->
 <para>
 Defines the type of the function used to fill a 
@@ -194,7 +194,6 @@ Defines the type of the function used to fill a
 
 @info: a #GdkPixbufFormat.
 @Since: 2.2
-
 
 
 <!-- ##### USER_FUNCTION GdkPixbufModuleSizeFunc ##### -->
@@ -216,7 +215,6 @@ then perform the required scaling on the completely loaded image.
 @Since: 2.2
 
 
-
 <!-- ##### USER_FUNCTION GdkPixbufModulePreparedFunc ##### -->
 <para>
 Defines the type of the function that gets called once the initial 
@@ -232,7 +230,6 @@ signal.
 @anim: if an animation is being loaded, the #GdkPixbufAnimation, else %NULL.
 @user_data: the loader.
 @Since: 2.2
-
 
 
 <!-- ##### USER_FUNCTION GdkPixbufModuleUpdatedFunc ##### -->
@@ -253,7 +250,6 @@ signal.
 @height: the height of the updated area.
 @user_data: the loader.
 @Since: 2.2
-
 
 
 <!-- ##### STRUCT GdkPixbufModule ##### -->
@@ -280,22 +276,31 @@ is loaded and must set the function pointers of the #GdkPixbufModule.
 @load_increment: continues an incremental load.
 @load_animation: loads an animation from a file.
 @save: saves a #GdkPixbuf to a file.
-@_reserved1: 
-@_reserved2: 
-@_reserved3: 
-@_reserved4: 
-@_reserved5: 
-@_reserved6: 
 
 <!-- ##### STRUCT GdkPixbufAnimationClass ##### -->
 <para>
-
+Modules supporting animations must derive a type from 
+#GdkPixbufAnimation, providing suitable implementations of the 
+virtual functions.
 </para>
 
+@is_static_image: returns whether the given animation is just a static image.
+@get_static_image: returns a static image representing the given animation.
+@get_size: fills @width and @height with the frame size of the animation.
+@get_iter: returns an iterator for the given animation.
 
 <!-- ##### STRUCT GdkPixbufAnimationIterClass ##### -->
 <para>
-
+Modules supporting animations must derive a type from 
+#GdkPixbufAnimationIter, providing suitable implementations of the 
+virtual functions.
 </para>
 
+@get_delay_time: returns the time in milliseconds that the current frame 
+  should be shown.
+@get_pixbuf: returns the current frame.
+@on_currently_loading_frame: returns whether the current frame of @iter is 
+being loaded.
+@advance: advances the iterator to @current_time, possibly changing the 
+current frame.
 
