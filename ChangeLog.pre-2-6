@@ -1,5 +1,8 @@
 2004-12-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c (gtk_label_class_init): Fix a property
+	nick typo. 
+
 	* gtk/gtkfilechooserdefault.c: Apply a patch to reset the 
 	filter if an otherwise invisible file is selected via the 
 	location popup.  (#159896, Carlos Garnacho Parro)

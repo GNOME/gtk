@@ -446,7 +446,7 @@ gtk_label_class_init (GtkLabelClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_WIDTH_CHARS,
                                    g_param_spec_int ("width_chars",
-                                                     P_("Width In Chararacters"),
+                                                     P_("Width In Characters"),
                                                      P_("The desired width of the label, in characters"),
                                                      -1,
                                                      G_MAXINT,
