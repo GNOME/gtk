@@ -1285,15 +1285,15 @@ gtk_file_selection_populate (GtkFileSelection *fs,
                   strcmp (filename, "../") != 0)
 		{
 		  row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
-		  gtk_clist_set_row_data (GTK_CLIST (fs->dir_list), row, 
-					  filename);
+		  gtk_clist_set_row_data_full (GTK_CLIST (fs->dir_list), row,
+					       filename, (GtkDestroyNotify) g_free);
  		}
 	    }
           else
 	    {
 	      row = gtk_clist_append (GTK_CLIST (fs->file_list), text);
-	      gtk_clist_set_row_data (GTK_CLIST (fs->file_list), row, 
-				      filename);
+	      gtk_clist_set_row_data_full (GTK_CLIST (fs->file_list), row,
+					   filename ,(GtkDestroyNotify) g_free);
             }
 	}
 

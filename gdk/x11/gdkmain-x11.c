@@ -264,11 +264,11 @@ gdk_init (int    *argc,
 	  char ***argv)
 {
   XKeyboardState keyboard_state;
-  int synchronize;
-  int i, j, k;
+  gint synchronize;
+  gint i, j, k;
   XClassHint *class_hint;
-  int argc_orig = *argc;
-  char **argv_orig;
+  gint argc_orig = *argc;
+  gchar **argv_orig;
 
   argv_orig = g_malloc ((argc_orig + 1) * sizeof (char*));
   for (i = 0; i < argc_orig; i++)
@@ -500,7 +500,11 @@ gdk_init (int    *argc,
   XSetClassHint(gdk_display, gdk_leader_window, class_hint);
   XSetCommand(gdk_display, gdk_leader_window, argv_orig, argc_orig);
   XFree (class_hint);
-
+  
+  for (i = 0; i < argc_orig; i++)
+    g_free(argv_orig[i]);
+  g_free(argv_orig);
+  
   gdk_wm_delete_window = XInternAtom (gdk_display, "WM_DELETE_WINDOW", True);
   gdk_wm_take_focus = XInternAtom (gdk_display, "WM_TAKE_FOCUS", True);
   gdk_wm_protocols = XInternAtom (gdk_display, "WM_PROTOCOLS", True);

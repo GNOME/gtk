@@ -1341,17 +1341,15 @@ void
 gtk_clist_clear (GtkCList * clist)
 {
   GList *list;
-  GtkCListRow *clist_row;
 
   g_return_if_fail (clist != NULL);
 
   /* remove all the rows */
-  list = clist->row_list;
-  while (list)
+  for (list = clist->row_list; list; list = list->next)
     {
-      clist_row = list->data;
-      list = list->next;
+      GtkCListRow *clist_row;
 
+      clist_row = list->data;
       row_delete (clist, clist_row);
     }
   g_list_free (clist->row_list);
@@ -1384,6 +1382,15 @@ gtk_clist_set_row_data (GtkCList * clist,
 			gint row,
 			gpointer data)
 {
+  gtk_clist_set_row_data_full (clist, row, data, NULL);
+}
+
+void
+gtk_clist_set_row_data_full (GtkCList * clist,
+			     gint row,
+			     gpointer data,
+			     GtkDestroyNotify destroy)
+{
   GtkCListRow *clist_row;
 
   g_return_if_fail (clist != NULL);
@@ -1393,6 +1400,7 @@ gtk_clist_set_row_data (GtkCList * clist,
 
   clist_row = (g_list_nth (clist->row_list, row))->data;
   clist_row->data = data;
+  clist_row->destroy = destroy;
 
   /*
    * re-send the selected signal if data is changed/added
@@ -3563,6 +3571,7 @@ row_new (GtkCList * clist)
   clist_row->bg_set = FALSE;
   clist_row->state = GTK_STATE_NORMAL;
   clist_row->data = NULL;
+  clist_row->destroy = NULL;
 
   return clist_row;
 }
@@ -3575,6 +3584,9 @@ row_delete (GtkCList * clist,
 
   for (i = 0; i < clist->columns; i++)
     cell_empty (clist, clist_row, i);
+
+  if (clist_row->destroy)
+    clist_row->destroy (clist_row->data);
 
   g_mem_chunk_free (clist->cell_mem_chunk, clist_row->cell);
   g_mem_chunk_free (clist->row_mem_chunk, clist_row);

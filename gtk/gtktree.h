@@ -85,8 +85,6 @@ void       gtk_tree_prepend            (GtkTree          *tree,
 void       gtk_tree_insert             (GtkTree          *tree,
 				        GtkWidget        *child,
 				        gint              position);
-void       gtk_tree_remove_item        (GtkTree          *tree,
-				        GtkWidget        *child);
 void       gtk_tree_remove_items       (GtkTree          *tree,
 				        GList            *items);
 void       gtk_tree_clear_items        (GtkTree          *tree,
@@ -108,6 +106,13 @@ void       gtk_tree_set_view_mode      (GtkTree          *tree,
 				        GtkTreeViewMode   mode); 
 void       gtk_tree_set_view_lines     (GtkTree          *tree,
 					guint            flag);
+
+/* deprecated function, use gtk_container_remove instead.
+ */
+void       gtk_tree_remove_item        (GtkTree          *tree,
+				        GtkWidget        *child);
+
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

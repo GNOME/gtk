@@ -1,3 +1,19 @@
+Sun Mar  8 04:22:36 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkfilesel.c: applied gtk-gronlund-980307.patch.gz which
+	  fixes a memory leak by making use of gtk_clist_set_row_data_full.
+
+	* gtk/gtkclist.c: applied gtk-gronlund-980307.patch.gz which ads a
+	  gtk_clist_set_row_data_full () function. slightly modified to
+	  always invoke the destroy function regardless of the value of
+	  the row_data.
+	
+	* docs/gtk.texi: applied gtk-draco-980305-1.patch.gz, spelling fixes.
+	
+	* gdk/gdk.c (gdk_init):
+	  cleared up a tiny memory leak from not destroying a temporary copy
+	  of argv (gtk-gronlund-980307-02.patch.gz).
+
 Sun Mar  8 03:00:17 1998  Tim Janik  <timj@gimp.org>
 
 	* configure.in: define the version variables in config.h.
@@ -23,9 +39,9 @@ Sat Mar  7 20:20:53 1998  Tim Janik  <timj@gimp.org>
 	* gtk/gtkobject.c:
  	(gtk_object_check_cast):
 	(gtk_object_check_class_cast): 
- 	made the object/class cast checks much more descriptive, based on
- 	gtk-draco-980305-2.patch.gz and gtk-draco-980306-1.patch.gz but
-	optimized for common code path.
+ 	  made the object/class cast checks much more descriptive, based on
+ 	  gtk-draco-980305-2.patch.gz and gtk-draco-980306-1.patch.gz but
+	  optimized for common code path.
 
 	* gtk/gtkpreview.c: added a few extra checks for the visual
  	(gtk-draco-980305-0.patch.gz).

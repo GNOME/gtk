@@ -9,16 +9,11 @@ Bugs:
    quite a bit of flickering
    Actually this affects both scrollbar implementation, you can best
    tell if you run the application with --sync (timj)
-   
- * remove gtk_tree_item_idle_hack from gtktreeitem.c.
 
  * signal parameters don't seem to get refreshed on recursive invokations
    of GTK_NO_RECURSE signals, which causes the restarted emissions to loose
    their actual point, i.e. parameter changes on the restarted emission,
    needs further investigation.
-
- * the GtkText widget needs to be fixed, that means no segfaults, full editing
-   facilities, omit the background pixmap for now.
 
  * Widget redrawing when the window resizes sometimes messes up.
    GtkLabels sometimes redraw without clearing up the underlying background on
@@ -70,9 +65,9 @@ Additions:
  * widgets which are redrawn because of a gtk_widget_draw(,NULL) should
    be removed from the redraw queue.
    
- * it might be good to ues stdio and getch() instead of 1-character reads.
-   so one can take advantage of buffering. Currently each read() takes a separate
-   syscall.
+ * GScanner: it might be good to ues stdio and getch() instead of 1-character
+   reads. so one can take advantage of buffering. Currently each read() takes
+   a separate syscall.
    
  * implement gtk_default_draw_oval
  
@@ -86,7 +81,7 @@ Additions:
 
  * GtkToolTips:
    allocate GtkTooltipsData from memchunks
-   look into incorporation of old/gtk-dairiki-971208-[01].patch.gz
+   look into incorporation of outdated/gtk-dairiki-971208-[01].patch.gz
                           
  * Make widget attributes configurable after the widget is created (timj).
 
@@ -115,7 +110,7 @@ TODO AFTER GTK 1.0
  * Entry should have a password mode (and it should show stars
    for user feedback).
 
- * More dialogs? Print, GtkFontSelector, maybe others...
+ * More dialogs: Print, GtkFontSelector, maybe others...
 
  * Multiple document interface (MDI)?
 
