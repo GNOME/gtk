@@ -1,4 +1,4 @@
-# gtk+.po
+# French translation of gtk+ 2.0.
 # Copyright (C) 1998-2002 Free Software Foundation, Inc.
 # Vincent Renardias <vincent@debian.org>, 1998-1999.
 # maintainer: Christophe Merlet (RedFox) <christophe@merlet.net>, 2000-2002.
@@ -6,9 +6,9 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.0.5\n"
-"POT-Creation-Date: 2002-07-31 16:57-0400\n"
-"PO-Revision-Date: 2002-07-21 12:04+0200\n"
+"Project-Id-Version: gtk+ 2.0.6\n"
+"POT-Creation-Date: 2002-08-15 11:36+0200\n"
+"PO-Revision-Date: 2002-08-15 11:00+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <christophe@merlet.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -432,9 +432,8 @@ msgid "RAS image has unknown type"
 msgstr "L'image RAS a un type inconnu"
 
 #: gdk-pixbuf/io-ras.c:188
-#, fuzzy
 msgid "unsupported RAS image variation"
-msgstr "Type d'image TGA non supporté"
+msgstr "Variante d'image RAS non supportée"
 
 #: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
@@ -993,19 +992,19 @@ msgstr "La hauteur fixé."
 
 #: gtk/gtkcellrenderer.c:188
 msgid "Is Expander"
-msgstr ""
+msgstr "Est un étendeur"
 
 #: gtk/gtkcellrenderer.c:189
 msgid "Row has children."
-msgstr ""
+msgstr "La rangée a des fils."
 
 #: gtk/gtkcellrenderer.c:198
 msgid "Is Expanded"
-msgstr ""
+msgstr "Est étendu."
 
 #: gtk/gtkcellrenderer.c:199
 msgid "Row is an expander row, and is expanded"
-msgstr ""
+msgstr "La rangée est une rangée d'extension, et est étendu"
 
 #: gtk/gtkcellrendererpixbuf.c:104
 msgid "Pixbuf Object"
@@ -1016,23 +1015,20 @@ msgid "The pixbuf to render."
 msgstr "Le pixbuf à rendre."
 
 #: gtk/gtkcellrendererpixbuf.c:113
-#, fuzzy
 msgid "Pixbuf Expander Open"
-msgstr "xpad pixbuf"
+msgstr "Pixbuf de l'étendeur ouvert"
 
 #: gtk/gtkcellrendererpixbuf.c:114
-#, fuzzy
 msgid "Pixbuf for open expander."
-msgstr "Le pixbuf à rendre."
+msgstr "Pixbuf pour l'étendeur ouvert."
 
 #: gtk/gtkcellrendererpixbuf.c:122
-#, fuzzy
 msgid "Pixbuf Expander Closed"
-msgstr "xpad pixbuf"
+msgstr "Pixbuf de l'étendeur fermé"
 
 #: gtk/gtkcellrendererpixbuf.c:123
 msgid "Pixbuf for closed expander."
-msgstr ""
+msgstr "Pixbuf pour l'étendeur fermé."
 
 #: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
@@ -1203,9 +1199,8 @@ msgid "Whether this tag affects the foreground color"
 msgstr "Indique si cette balise modifie la couleur d'avant-plan"
 
 #: gtk/gtkcellrenderertext.c:368 gtk/gtktexttag.c:532
-#, fuzzy
 msgid "Editability set"
-msgstr "Éditable"
+msgstr "Éditabilité défini"
 
 #: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:533
 msgid "Whether this tag affects text editability"
@@ -1687,9 +1682,8 @@ msgstr ""
 "passe)"
 
 #: gtk/gtkentry.c:480
-#, fuzzy
 msgid "Has Frame"
-msgstr "Palette personnelle"
+msgstr "A une frame"
 
 #: gtk/gtkentry.c:481
 msgid "FALSE removes outside bevel from entry."
@@ -1723,11 +1717,11 @@ msgstr "Largeur en caractères"
 
 #: gtk/gtkentry.c:504
 msgid "Number of characters to leave space for in the entry."
-msgstr ""
+msgstr "Nombre de caractères d'espace a laisser pour cette entrée."
 
 #: gtk/gtkentry.c:513
 msgid "Scroll offset"
-msgstr ""
+msgstr "Décalage du défilement"
 
 #: gtk/gtkentry.c:514
 msgid "Number of pixels of the entry scrolled off the screen to the left"
@@ -1738,9 +1732,8 @@ msgid "The contents of the entry"
 msgstr "Le contenu de l'entrée"
 
 #: gtk/gtkentry.c:739
-#, fuzzy
 msgid "Select on focus"
-msgstr "Sélection :"
+msgstr "Sélection sur le focus"
 
 #: gtk/gtkentry.c:740
 msgid "Whether to select the contents of an entry when it is focused."
@@ -1750,13 +1743,13 @@ msgstr ""
 
 #: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
 msgid "Select All"
-msgstr "Sélectionner tout"
+msgstr "Tout sélectionner"
 
 #: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "Méthodes de saisie"
 
-#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6425
 msgid "_Insert Unicode control character"
 msgstr "_Insérer un caractère de contrôle Unicode"
 
@@ -2240,7 +2233,7 @@ msgstr "_Axes"
 #. Keys listbox
 #: gtk/gtkinputdialog.c:309
 msgid "_Keys"
-msgstr "_Clefs"
+msgstr "_Clés"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X"
@@ -2847,9 +2840,8 @@ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "L'élément de chemin de pixmap « %s » doit être absolu, %s, ligne %d"
 
 #: gtk/gtkruler.c:118
-#, fuzzy
 msgid "Lower"
-msgstr "autre"
+msgstr "Inférieur"
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
@@ -3187,11 +3179,11 @@ msgstr "Question"
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr "_Ajouter"
+msgstr "A_jouter"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
-msgstr "_Appliquer"
+msgstr "A_ppliquer"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
@@ -3199,7 +3191,7 @@ msgstr "_Gras"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
-msgstr "_Annuler"
+msgstr "A_nnuler"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
@@ -3231,7 +3223,7 @@ msgstr "_Supprimer"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr "_Exécuter"
+msgstr "E_xécuter"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
@@ -3295,7 +3287,7 @@ msgstr "_Italique"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr "_Aller à"
+msgstr "A_ller à"
 
 #: gtk/gtkstock.c:303
 msgid "_Center"
@@ -3427,7 +3419,7 @@ msgstr "Zoom _100%"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr "_Ajuster"
+msgstr "A_juster"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
@@ -3822,7 +3814,7 @@ msgstr "Curseur visible"
 msgid "If the insertion cursor is shown"
 msgstr "Si le curseur d'insertion est affiché"
 
-#: gtk/gtktextview.c:6386
+#: gtk/gtktextview.c:6416
 msgid "Input _Methods"
 msgstr "_Méthode d'entrées"
 
