@@ -289,12 +289,7 @@ gtk_cell_view_finalize (GObject *object)
 {
   GtkCellView *cellview = GTK_CELL_VIEW (object);
 
-  if (cellview->priv->cell_list)
-    {
-      g_list_foreach (cellview->priv->cell_list, (GFunc)g_free, NULL);
-      g_list_free (cellview->priv->cell_list);
-    }
-  cellview->priv->cell_list = NULL;
+  gtk_cell_view_cell_layout_clear (GTK_CELL_LAYOUT (object));
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
     (* G_OBJECT_CLASS (parent_class)->finalize) (object);
