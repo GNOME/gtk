@@ -324,8 +324,6 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 {
   GTK_WIDGET_SET_FLAGS (scrolled_window, GTK_NO_WINDOW | GTK_CAN_FOCUS);
 
-  gtk_container_set_resize_mode (GTK_CONTAINER (scrolled_window), GTK_RESIZE_QUEUE);
-
   scrolled_window->hscrollbar = NULL;
   scrolled_window->vscrollbar = NULL;
   scrolled_window->hscrollbar_policy = GTK_POLICY_ALWAYS;
