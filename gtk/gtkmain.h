@@ -78,13 +78,17 @@ gchar* gtk_check_version (guint	required_major,
 
 /* Initialization, exit, mainloop and miscellaneous routines
  */
-void	   gtk_init		 (int	       *argc,
-				  char	     ***argv);
-gboolean   gtk_init_check        (int	       *argc,
-				  char	     ***argv);
-void	   gtk_exit		 (gint		error_code);
-gchar*	   gtk_set_locale	 (void);
-gint	   gtk_events_pending	 (void);
+
+void     gtk_init                 (int    *argc,
+                                   char ***argv);
+gboolean gtk_init_check           (int    *argc,
+                                   char ***argv);
+void     gtk_exit                 (gint    error_code);
+gchar*   gtk_set_locale           (void);
+gchar*   gtk_get_default_language (void);
+gint     gtk_events_pending       (void);
+
+
 
 /* The following is the event func GTK+ registers with GDK
  * we expose it mainly to allow filtering of events between

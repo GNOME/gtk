@@ -189,7 +189,7 @@ free_style_cache (GtkTextLayout *text_layout)
 {
   if (text_layout->one_style_cache)
     {
-      gtk_text_view_style_values_unref (text_layout->one_style_cache);
+      gtk_text_style_values_unref (text_layout->one_style_cache);
       text_layout->one_style_cache = NULL;
     }
 }
@@ -204,7 +204,7 @@ gtk_text_layout_destroy (GtkObject *object)
   gtk_text_layout_set_buffer (layout, NULL);  
 
   if (layout->default_style)
-    gtk_text_view_style_values_unref (layout->default_style);
+    gtk_text_style_values_unref (layout->default_style);
   layout->default_style = NULL;
 
   if (layout->ltr_context)
@@ -280,10 +280,10 @@ gtk_text_layout_set_default_style (GtkTextLayout *layout,
   if (values == layout->default_style)
     return;
 
-  gtk_text_view_style_values_ref (values);
+  gtk_text_style_values_ref (values);
   
   if (layout->default_style)
-    gtk_text_view_style_values_unref (layout->default_style);
+    gtk_text_style_values_unref (layout->default_style);
 
   layout->default_style = values;
 
@@ -784,7 +784,7 @@ get_style (GtkTextLayout *layout,
   */
   if (layout->one_style_cache != NULL)
     {
-      gtk_text_view_style_values_ref (layout->one_style_cache);
+      gtk_text_style_values_ref (layout->one_style_cache);
       return layout->one_style_cache;
     }
 
@@ -798,8 +798,8 @@ get_style (GtkTextLayout *layout,
     {
       /* One ref for the return value, one ref for the
          layout->one_style_cache reference */
-      gtk_text_view_style_values_ref (layout->default_style);
-      gtk_text_view_style_values_ref (layout->default_style);
+      gtk_text_style_values_ref (layout->default_style);
+      gtk_text_style_values_ref (layout->default_style);
       layout->one_style_cache = layout->default_style;
 
       if (tags)
@@ -811,14 +811,14 @@ get_style (GtkTextLayout *layout,
   /* Sort tags in ascending order of priority */
   gtk_text_tag_array_sort (tags, tag_count);
   
-  style = gtk_text_view_style_values_new ();
+  style = gtk_text_style_values_new ();
   
-  gtk_text_view_style_values_copy (layout->default_style,
-				   style);
+  gtk_text_style_values_copy (layout->default_style,
+                              style);
 
-  gtk_text_view_style_values_fill_from_tags (style,
-					     tags,
-					     tag_count);
+  gtk_text_style_values_fill_from_tags (style,
+                                        tags,
+                                        tag_count);
 
   g_free (tags);
 
@@ -826,7 +826,7 @@ get_style (GtkTextLayout *layout,
 
   /* Leave this style as the last one seen */
   g_assert (layout->one_style_cache == NULL);
-  gtk_text_view_style_values_ref (style); /* ref held by layout->one_style_cache */
+  gtk_text_style_values_ref (style); /* ref held by layout->one_style_cache */
   layout->one_style_cache = style;
   
   /* Returning yet another refcount */
@@ -840,7 +840,7 @@ release_style (GtkTextLayout *layout,
   g_return_if_fail (style != NULL);
   g_return_if_fail (style->refcount > 0);
 
-  gtk_text_view_style_values_unref (style);
+  gtk_text_style_values_unref (style);
 }
 
 /*

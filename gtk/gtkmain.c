@@ -487,6 +487,23 @@ gtk_set_locale (void)
   return gdk_set_locale ();
 }
 
+gchar*
+gtk_get_default_language (void)
+{
+  gchar *lang;
+  gchar *p;
+  
+  lang = g_strdup (setlocale (LC_CTYPE, NULL));
+  p = strchr (lang, '.');
+  if (p)
+    *p = '\0';
+  p = strchr (lang, '@');
+  if (p)
+    *p = '\0';
+
+  return lang;
+}
+
 void
 gtk_main (void)
 {

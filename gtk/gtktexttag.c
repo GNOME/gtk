@@ -87,6 +87,7 @@ enum {
   ARG_UNDERLINE,
   ARG_OFFSET,
   ARG_BG_FULL_HEIGHT,
+  ARG_LANGUAGE,
   
   /* Whether-a-style-arg-is-set args */
   ARG_BACKGROUND_SET,
@@ -109,6 +110,7 @@ enum {
   ARG_UNDERLINE_SET,
   ARG_OFFSET_SET,
   ARG_BG_FULL_HEIGHT_SET,
+  ARG_LANGUAGE_SET,
   
   LAST_ARG
 };
@@ -220,7 +222,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_OFFSET);
   gtk_object_add_arg_type ("GtkTextTag::background_full_height", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_BG_FULL_HEIGHT);
-
+  gtk_object_add_arg_type ("GtkTextTag::language", GTK_TYPE_STRING,
+                           GTK_ARG_READWRITE, ARG_LANGUAGE);
+  
   /* Style args are set or not */
   gtk_object_add_arg_type ("GtkTextTag::background_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_BACKGROUND_SET);
@@ -270,6 +274,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_OFFSET_SET);  
   gtk_object_add_arg_type ("GtkTextTag::background_full_height_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_BG_FULL_HEIGHT_SET);
+  gtk_object_add_arg_type ("GtkTextTag::language_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_LANGUAGE_SET);
   
   signals[EVENT] =
     gtk_signal_new ("event",
@@ -309,7 +315,7 @@ gtk_text_tag_new (const gchar *name)
 
   tag->name = g_strdup(name);
 
-  tag->values = gtk_text_view_style_values_new();
+  tag->values = gtk_text_style_values_new();
   
   return tag;
 }
@@ -328,9 +334,9 @@ gtk_text_tag_destroy (GtkObject *object)
 
   g_assert(tkxt_tag->table == NULL);
   
-  gtk_text_view_style_values_unref(tkxt_tag->values);
+  gtk_text_style_values_unref(tkxt_tag->values);
   tkxt_tag->values = NULL;
-
+  
   (* GTK_OBJECT_CLASS(parent_class)->destroy) (object);
 }
 
@@ -584,6 +590,10 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       tkxt_tag->values->bg_full_height = GTK_VALUE_BOOL(*arg);
       break;
 
+    case ARG_LANGUAGE:
+      tkxt_tag->language_set = TRUE;
+      tkxt_tag->values->language = g_strdup (GTK_VALUE_STRING(*arg));
+      break;
       
       /* Whether the value should be used... */
       
@@ -668,8 +678,12 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       break;
 
     case ARG_BG_FULL_HEIGHT_SET:
-      tkxt_tag->bg_full_height_set = TRUE;
-      tkxt_tag->values->bg_full_height = GTK_VALUE_BOOL(*arg);
+      tkxt_tag->bg_full_height_set = GTK_VALUE_BOOL(*arg);
+      break;
+
+    case ARG_LANGUAGE_SET:
+      tkxt_tag->language_set = GTK_VALUE_BOOL(*arg);
+      size_changed = TRUE;
       break;
       
     default:
@@ -796,6 +810,10 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
     case ARG_BG_FULL_HEIGHT:
       GTK_VALUE_BOOL(*arg) = tag->values->bg_full_height;
       break;
+
+    case ARG_LANGUAGE:
+      GTK_VALUE_STRING(*arg) = g_strdup (tag->values->language);
+      break;
       
     case ARG_BACKGROUND_SET:
     case ARG_BACKGROUND_GDK_SET:
@@ -869,6 +887,10 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
     case ARG_BG_FULL_HEIGHT_SET:
       GTK_VALUE_BOOL(*arg) = tag->bg_full_height_set;
+      break;
+
+    case ARG_LANGUAGE_SET:
+      GTK_VALUE_BOOL(*arg) = tag->language_set;
       break;
       
     case ARG_BACKGROUND:
@@ -1020,7 +1042,7 @@ gtk_text_tag_array_sort(GtkTextTag** tag_array_p,
  */
 
 GtkTextStyleValues*
-gtk_text_view_style_values_new(void)
+gtk_text_style_values_new(void)
 {
   GtkTextStyleValues *values;
 
@@ -1029,13 +1051,15 @@ gtk_text_view_style_values_new(void)
   /* 0 is a valid value for most of the struct */
 
   values->refcount = 1;
+
+  values->language = gtk_get_default_language ();
   
   return values;
 }
 
 void
-gtk_text_view_style_values_copy(GtkTextStyleValues *src,
-				GtkTextStyleValues *dest)
+gtk_text_style_values_copy(GtkTextStyleValues *src,
+                           GtkTextStyleValues *dest)
 {
   guint orig_refcount;
 
@@ -1072,13 +1096,14 @@ gtk_text_view_style_values_copy(GtkTextStyleValues *src,
   *dest = *src;
 
   dest->font_desc = pango_font_description_copy (src->font_desc);
-
+  dest->language = g_strdup (src->language);
+  
   dest->refcount = orig_refcount;
   dest->realized = FALSE;
 }
 
 void
-gtk_text_view_style_values_ref(GtkTextStyleValues *values)
+gtk_text_style_values_ref(GtkTextStyleValues *values)
 {
   g_return_if_fail(values != NULL);
 
@@ -1086,7 +1111,7 @@ gtk_text_view_style_values_ref(GtkTextStyleValues *values)
 }
 
 void
-gtk_text_view_style_values_unref(GtkTextStyleValues *values)
+gtk_text_style_values_unref(GtkTextStyleValues *values)
 {
   g_return_if_fail(values != NULL);
   g_return_if_fail(values->refcount > 0);
@@ -1108,15 +1133,18 @@ gtk_text_view_style_values_unref(GtkTextStyleValues *values)
 
       if (values->tab_array)
         gtk_text_view_tab_array_unref(values->tab_array);
+
+      if (values->language)
+        g_free (values->language);
       
       g_free(values);
     }
 }
 
 void
-gtk_text_view_style_values_realize(GtkTextStyleValues *values,
-				   GdkColormap *cmap,
-				   GdkVisual *visual)
+gtk_text_style_values_realize(GtkTextStyleValues *values,
+                              GdkColormap *cmap,
+                              GdkVisual *visual)
 {
   g_return_if_fail(values != NULL);
   g_return_if_fail(values->refcount > 0);
@@ -1135,9 +1163,9 @@ gtk_text_view_style_values_realize(GtkTextStyleValues *values,
 }
 
 void
-gtk_text_view_style_values_unrealize(GtkTextStyleValues *values,
-				     GdkColormap *cmap,
-				     GdkVisual *visual)
+gtk_text_style_values_unrealize(GtkTextStyleValues *values,
+                                GdkColormap *cmap,
+                                GdkVisual *visual)
 {
   g_return_if_fail(values != NULL);
   g_return_if_fail(values->refcount > 0);
@@ -1157,9 +1185,9 @@ gtk_text_view_style_values_unrealize(GtkTextStyleValues *values,
 }
 
 void
-gtk_text_view_style_values_fill_from_tags(GtkTextStyleValues *dest,
-					  GtkTextTag**        tags,
-					  guint               n_tags)
+gtk_text_style_values_fill_from_tags(GtkTextStyleValues *dest,
+                                     GtkTextTag**        tags,
+                                     guint               n_tags)
 {
   guint n = 0;
 
@@ -1266,6 +1294,12 @@ gtk_text_view_style_values_fill_from_tags(GtkTextStyleValues *dest,
 
       if (tag->bg_full_height_set)
         dest->bg_full_height = vals->bg_full_height;
+
+      if (tag->language_set)
+        {
+          g_free (dest->language);
+          dest->language = g_strdup (vals->language);
+        }
       
       ++n;
     }

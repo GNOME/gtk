@@ -7,11 +7,11 @@
  * the defaults with settings in the given tags, which should be sorted in
  * ascending order of priority
 */
-void gtk_text_view_style_values_fill_from_tags (GtkTextStyleValues  *values,
-						GtkTextTag         **tags,
-						guint                n_tags);
-void gtk_text_tag_array_sort                   (GtkTextTag         **tag_array_p,
-						guint                len);
+void gtk_text_style_values_fill_from_tags (GtkTextStyleValues  *values,
+                                           GtkTextTag         **tags,
+                                           guint                n_tags);
+void gtk_text_tag_array_sort              (GtkTextTag         **tag_array_p,
+                                           guint                len);
 
 /*
  * Style object created by folding a set of tags together
@@ -79,6 +79,8 @@ struct _GtkTextStyleValues
 				 * GTK_WRAPMODE_NONE, GTK_WRAPMODE_WORD
                                  */
 
+  gchar *language;
+  
   /* hide the text  */
   guint elide : 1;
 
@@ -98,20 +100,20 @@ struct _GtkTextStyleValues
   guint pad4 : 1;
 };
 
-GtkTextStyleValues *gtk_text_view_style_values_new       (void);
-void                gtk_text_view_style_values_copy      (GtkTextStyleValues *src,
-							  GtkTextStyleValues *dest);
-void                gtk_text_view_style_values_unref     (GtkTextStyleValues *values);
-void                gtk_text_view_style_values_ref       (GtkTextStyleValues *values);
+GtkTextStyleValues *gtk_text_style_values_new       (void);
+void                gtk_text_style_values_copy      (GtkTextStyleValues *src,
+                                                     GtkTextStyleValues *dest);
+void                gtk_text_style_values_unref     (GtkTextStyleValues *values);
+void                gtk_text_style_values_ref       (GtkTextStyleValues *values);
 
 /* ensure colors are allocated, etc. for drawing */
-void                gtk_text_view_style_values_realize   (GtkTextStyleValues *values,
-							  GdkColormap        *cmap,
-							  GdkVisual          *visual);
+void                gtk_text_style_values_realize   (GtkTextStyleValues *values,
+                                                     GdkColormap        *cmap,
+                                                     GdkVisual          *visual);
 
 /* free the stuff again */
-void                gtk_text_view_style_values_unrealize (GtkTextStyleValues *values,
-							  GdkColormap        *cmap,
-							  GdkVisual          *visual);
+void                gtk_text_style_values_unrealize (GtkTextStyleValues *values,
+                                                     GdkColormap        *cmap,
+                                                     GdkVisual          *visual);
 
 #endif

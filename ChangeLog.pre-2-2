@@ -1,5 +1,22 @@
 2000-06-21  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkwidget.c (gtk_widget_create_pango_context): Use
+	gtk_get_default_language
+
+	* gtk/gtkmain.h, gtk/gtkmain.c (gtk_get_default_language): 
+	new function to get the default language
+
+	* gtk/gtktexttagprivate.h, gtk/gtktexttag.c, gtktextview.c: 
+	s/gtk_text_view_style_values/gtk_text_style_values/
+
+	* gtk/gtktexttag.c, gtk/gtktexttag.h, gtk/gtktexttagprivate.h:
+	Add a "language" field to tags.
+
+	(gtk_text_tag_set_arg): Fix bug in setting
+	"bg_full_height_set" tag.
+
+2000-06-21  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextiter.h: Use gunichar instead of gint when appropriate
 	in the interfaces
 

@@ -2406,7 +2406,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       g_object_unref (G_OBJECT (ltr_context));
       g_object_unref (G_OBJECT (rtl_context));
 
-      style = gtk_text_view_style_values_new ();
+      style = gtk_text_style_values_new ();
 
       gtk_widget_ensure_style (widget);
       gtk_text_view_set_values_from_style (text_view, style, widget->style);
@@ -2421,7 +2421,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       
       gtk_text_layout_set_default_style (text_view->layout, style);
       
-      gtk_text_view_style_values_unref (style);
+      gtk_text_style_values_unref (style);
     }
 }
 

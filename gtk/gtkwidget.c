@@ -3204,7 +3204,7 @@ PangoContext *
 gtk_widget_create_pango_context (GtkWidget *widget)
 {
   PangoContext *context;
-  char *lang, *p;
+  char *lang;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
@@ -3216,14 +3216,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
 			        PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
   pango_context_set_font_description (context, widget->style->font_desc);
 
-  lang = g_strdup (setlocale (LC_CTYPE, NULL));
-  p = strchr (lang, '.');
-  if (p)
-    *p = '\0';
-  p = strchr (lang, '@');
-  if (p)
-    *p = '\0';
-  
+  lang = gtk_get_default_language ();  
   pango_context_set_lang (context, lang);
   g_free (lang);
 

@@ -79,10 +79,10 @@ struct _GtkTextTag {
   guint bg_full_height_set : 1;
   guint elide_set : 1;
   guint editable_set : 1;
+  guint language_set : 1;
   guint pad1 : 1;
   guint pad2 : 1;
   guint pad3 : 1;
-  guint pad4 : 1;
 };
 
 struct _GtkTextTagClass {
