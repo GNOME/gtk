@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>June 25th 2003</date>
+  <date>August 26th 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -838,7 +838,7 @@ way is to use the libglade library which directly loads
 the XML user interface description files that Glade
 generates into a running program.</para>
 
-Experienced GTK+ programmers generally strongly recommend
+<para>Experienced GTK+ programmers generally strongly recommend
 using libglade; you don't have to worry about the interaction
 between Glade generating the source and you editing it,
 and its been shown to be a method that works better

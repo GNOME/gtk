@@ -1,3 +1,7 @@
+Tue Aug 26 19:44:02 BST 2003  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: Fix missing tag (#120713)
+
 Tue Aug 26 10:01:18 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.2.3 ===
