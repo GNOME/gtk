@@ -1,3 +1,12 @@
+Wed May  9 09:08:44 2001  Jonathan Blandford  <jrb@webwynk.net>
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): New
+	"columns_changed" signal.
+	(gtk_tree_view_motion_draw_column_motion_arrow): Change column
+	motion code to draw arrows to the side if indicator is outside the
+	widget.
+	(gtk_tree_view_map_expanded_rows): Implement.
+
 2001-05-07  Alexander Larsson  <alexl@redhat.com>
 
 	* demos/testpixbuf-save.c: 

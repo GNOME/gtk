@@ -94,6 +94,7 @@ enum
   ROW_ACTIVATED,
   EXPAND_ROW,
   COLLAPSE_ROW,
+  COLUMNS_CHANGED,
   LAST_SIGNAL
 };
 
@@ -468,6 +469,15 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		   G_TYPE_BOOLEAN, 2,
 		   GTK_TYPE_TREE_ITER,
 		   GTK_TYPE_TREE_PATH);
+
+  tree_view_signals[COLUMNS_CHANGED] =
+    g_signal_newc ("columns_changed",
+		   G_TYPE_FROM_CLASS (object_class),
+		   G_SIGNAL_RUN_LAST,
+		   G_STRUCT_OFFSET (GtkTreeViewClass, columns_changed),
+		   NULL, NULL,
+		   gtk_marshal_NONE__NONE,
+		   G_TYPE_NONE, 0);
 
 /* the width of the column resize windows */
 #define _TREE_VIEW_EXPANDER_WIDTH 14
@@ -1065,16 +1075,13 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
-
-      gdk_window_move_resize (tree_view->priv->header_window,
-			      0, 0,
-			      MAX (tree_view->priv->width, allocation->width),
-			      tree_view->priv->header_height);
-
+      gdk_window_resize (tree_view->priv->header_window,
+			 MAX (tree_view->priv->width, allocation->width),
+			 tree_view->priv->header_height);
       if (tree_view->priv->width < allocation->width)
-	gdk_window_resize (tree_view->priv->bin_window,
-			   allocation->width,
-			   tree_view->priv->height + TREE_VIEW_HEADER_HEIGHT (tree_view));
+	  gdk_window_resize (tree_view->priv->bin_window,
+			     allocation->width,
+			     tree_view->priv->height + TREE_VIEW_HEADER_HEIGHT (tree_view));
 
       _gtk_tree_view_update_col_width (tree_view);
     }
@@ -1337,6 +1344,9 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
   tree_view->priv->column_drag_info = NULL;
 
   gdk_window_hide (tree_view->priv->drag_highlight_window);
+
+  /* Reset our flags */
+  tree_view->priv->drag_column_window_state = DRAG_COLUMN_WINDOW_STATE_UNSET;
   GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG);
 
   return TRUE;
@@ -1567,7 +1577,7 @@ ensure_unprelighted (GtkTreeView *tree_view)
 
 
 /* Our motion arrow is either a box (in the case of the original spot)
- * or an arrow.
+ * or an arrow.  It is expander_width wide.
  */
 /*
  * 11111111111111
@@ -1599,44 +1609,85 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
   gint y;
   gint width;
   gint height;
+  gint arrow_type = DRAG_COLUMN_WINDOW_STATE_UNSET;
+  GdkWindowAttr attributes;
+  guint attributes_mask;
 
-  /* We want to draw the rectangle over the initial location. */
   if (!reorder ||
       reorder->left_column == tree_view->priv->drag_column ||
       reorder->right_column == tree_view->priv->drag_column)
+    arrow_type = DRAG_COLUMN_WINDOW_STATE_ORIGINAL;
+  else if (reorder->left_column || reorder->right_column)
+    {
+      GdkRectangle visible_rect;
+      gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
+      if (reorder->left_column)
+	x = reorder->left_column->button->allocation.x + reorder->left_column->button->allocation.width;
+      else
+	x = reorder->right_column->button->allocation.x;
+      if (x < visible_rect.x)
+	arrow_type = DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT;
+      else if (x > visible_rect.x + visible_rect.width)
+	arrow_type = DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT;
+      else
+        arrow_type = DRAG_COLUMN_WINDOW_STATE_ARROW;
+    }
+
+  /* We want to draw the rectangle over the initial location. */
+  if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ORIGINAL)
     {
       GdkGC *gc;
       GdkColor col;
 
-      gdk_window_get_origin (tree_view->priv->header_window, &x, &y);
+      if (tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ORIGINAL)
+	{
 
-      x += tree_view->priv->drag_column_x;
-      width = tree_view->priv->drag_column->button->allocation.width;
-      height = tree_view->priv->drag_column->button->allocation.height;
+	  if (tree_view->priv->drag_highlight_window)
+	    gdk_window_destroy (tree_view->priv->drag_highlight_window);
 
+	  attributes.window_type = GDK_WINDOW_CHILD;
+	  attributes.wclass = GDK_INPUT_OUTPUT;
+	  attributes.visual = gtk_widget_get_visual (GTK_WIDGET (tree_view));
+	  attributes.colormap = gtk_widget_get_colormap (GTK_WIDGET (tree_view));
+	  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK;
+	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+	  tree_view->priv->drag_highlight_window = gdk_window_new (tree_view->priv->header_window, &attributes, attributes_mask);
+	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
-      mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
-      gc = gdk_gc_new (mask);
-      col.pixel = 1;
-      gdk_gc_set_foreground (gc, &col);
-      gdk_draw_rectangle (mask, gc, TRUE, 0, 0, width, height);
-      col.pixel = 0;
-      gdk_gc_set_foreground(gc, &col);
-      gdk_draw_rectangle (mask, gc, TRUE, 2, 2, width - 4, height - 4);
-      gdk_gc_destroy (gc);
+	  width = tree_view->priv->drag_column->button->allocation.width;
+	  height = tree_view->priv->drag_column->button->allocation.height;
+	  gdk_window_move_resize (tree_view->priv->drag_highlight_window,
+				  tree_view->priv->drag_column_x, 0, width, height);
+      
+	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
+	  gc = gdk_gc_new (mask);
+	  col.pixel = 1;
+	  gdk_gc_set_foreground (gc, &col);
+	  gdk_draw_rectangle (mask, gc, TRUE, 0, 0, width, height);
+	  col.pixel = 0;
+	  gdk_gc_set_foreground(gc, &col);
+	  gdk_draw_rectangle (mask, gc, TRUE, 2, 2, width - 4, height - 4);
+	  gdk_gc_destroy (gc);
+
+	  gdk_window_shape_combine_mask (tree_view->priv->drag_highlight_window,
+					 mask, 0, 0);
+	  if (mask) gdk_pixmap_unref (mask);
+	  tree_view->priv->drag_column_window_state = DRAG_COLUMN_WINDOW_STATE_ORIGINAL;
+	}
     }
-  else if (reorder->left_column || reorder->right_column)
+  else if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW)
     {
-      gint expander_height;
       gint i, j = 1;
       GdkGC *gc;
       GdkColor col;
+      gint expander_width;
 
       gtk_widget_style_get (widget,
-			    "expander_width", &width,
-			    "expander_height", &expander_height,
+			    "expander_height", &width,
+			    "expander_width", &expander_width,
 			    NULL);
 
+      /* Get x, y, width, height of arrow */
       if (reorder->left_column)
 	{
 	  gdk_window_get_origin (reorder->left_column->button->window, &x, &y);
@@ -1649,42 +1700,136 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  x -= width/2;
 	  height = reorder->right_column->button->allocation.height;
 	}
-      height += expander_height;
-      y -= expander_height/2;
-      mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
-      gc = gdk_gc_new (mask);
-      col.pixel = 1;
-      gdk_gc_set_foreground (gc, &col);
-      gdk_draw_rectangle (mask, gc, TRUE, 0, 0, width, height);
+      y -= expander_width/2; /* The arrow takes up only half the space */
+      height += expander_width;
 
-      /* Draw the 2 arrows as per above */
-      col.pixel = 0;
-      gdk_gc_set_foreground(gc, &col);
-      for (i = 0; i < width; i ++)
+      /* Create the new window */
+      if (tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ARROW)
 	{
-	  if (i == (width/2 - 1))
-	    continue;
-	  gdk_draw_line (mask, gc, i, j, i, height - j);
-	  if (i < (width/2 - 1))
-	    j++;
-	  else
-	    j--;
+	  if (tree_view->priv->drag_highlight_window)
+	    gdk_window_destroy (tree_view->priv->drag_highlight_window);
+
+	  attributes.window_type = GDK_WINDOW_TEMP;
+	  attributes.wclass = GDK_INPUT_OUTPUT;
+	  attributes.visual = gtk_widget_get_visual (GTK_WIDGET (tree_view));
+	  attributes.colormap = gtk_widget_get_colormap (GTK_WIDGET (tree_view));
+	  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK;
+	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+	  attributes.width = width;
+	  attributes.height = height;
+	  tree_view->priv->drag_highlight_window = gdk_window_new (NULL, &attributes, attributes_mask);
+	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
+
+	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
+	  gc = gdk_gc_new (mask);
+	  col.pixel = 1;
+	  gdk_gc_set_foreground (gc, &col);
+	  gdk_draw_rectangle (mask, gc, TRUE, 0, 0, width, height);
+
+	  /* Draw the 2 arrows as per above */
+	  col.pixel = 0;
+	  gdk_gc_set_foreground (gc, &col);
+	  for (i = 0; i < width; i ++)
+	    {
+	      if (i == (width/2 - 1))
+		continue;
+	      gdk_draw_line (mask, gc, i, j, i, height - j);
+	      if (i < (width/2 - 1))
+		j++;
+	      else
+		j--;
+	    }
+	  gdk_gc_destroy (gc);
+	  gdk_window_shape_combine_mask (tree_view->priv->drag_highlight_window,
+					 mask, 0, 0);
+	  if (mask) gdk_pixmap_unref (mask);
 	}
-      gdk_gc_destroy (gc);
+
+      tree_view->priv->drag_column_window_state = DRAG_COLUMN_WINDOW_STATE_ARROW;
+      gdk_window_move (tree_view->priv->drag_highlight_window, x, y);
     }
+  else if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT ||
+	   arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
+    {
+      gint i, j = 1;
+      GdkGC *gc;
+      GdkColor col;
+      gint expander_height;
+
+      gtk_widget_style_get (widget,
+			    "expander_height", &expander_height,
+			    "expander_width", &width,
+			    NULL);
+
+      /* Get x, y, width, height of arrow */
+      width = width/2; /* remember, the arrow only takes half the available width */
+      gdk_window_get_origin (widget->window, &x, &y);
+      if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
+	x += widget->allocation.width - width;
+
+      if (reorder->left_column)
+	height = reorder->left_column->button->allocation.height;
+      else
+	height = reorder->right_column->button->allocation.height;
+
+      y -= expander_height;
+      height += 2*expander_height;
+
+      /* Create the new window */
+      if (tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT &&
+	  tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
+	{
+	  if (tree_view->priv->drag_highlight_window)
+	    gdk_window_destroy (tree_view->priv->drag_highlight_window);
+
+	  attributes.window_type = GDK_WINDOW_TEMP;
+	  attributes.wclass = GDK_INPUT_OUTPUT;
+	  attributes.visual = gtk_widget_get_visual (GTK_WIDGET (tree_view));
+	  attributes.colormap = gtk_widget_get_colormap (GTK_WIDGET (tree_view));
+	  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK;
+	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+	  attributes.width = width;
+	  attributes.height = height;
+	  tree_view->priv->drag_highlight_window = gdk_window_new (NULL, &attributes, attributes_mask);
+	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
+
+	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
+	  gc = gdk_gc_new (mask);
+	  col.pixel = 1;
+	  gdk_gc_set_foreground (gc, &col);
+	  gdk_draw_rectangle (mask, gc, TRUE, 0, 0, width, height);
+
+	  /* Draw the 2 arrows as per above */
+	  col.pixel = 0;
+	  gdk_gc_set_foreground (gc, &col);
+	  j = expander_height;
+	  for (i = 0; i < width; i ++)
+	    {
+	      gint k;
+	      if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT)
+		k = width - i - 1;
+	      else
+		k = i;
+	      gdk_draw_line (mask, gc, k, j, k, height - j);
+	      gdk_draw_line (mask, gc, k, 0, k, expander_height - j);
+	      gdk_draw_line (mask, gc, k, height, k, height - expander_height + j);
+	      j--;
+	    }
+	  gdk_gc_destroy (gc);
+	  gdk_window_shape_combine_mask (tree_view->priv->drag_highlight_window,
+					 mask, 0, 0);
+	  if (mask) gdk_pixmap_unref (mask);
+	}
+
+      tree_view->priv->drag_column_window_state = arrow_type;
+      gdk_window_move (tree_view->priv->drag_highlight_window, x, y); 
+   }
   else
     {
       g_warning (G_STRLOC"Invalid GtkTreeViewColumnReorder struct");
       gdk_window_hide (tree_view->priv->drag_highlight_window);
       return;
     }
-
-  gdk_window_move_resize (tree_view->priv->drag_highlight_window,
-			  x, y, width, height);
-  gdk_window_shape_combine_mask (tree_view->priv->drag_highlight_window,
-				 mask, 0, 0);
-  if (mask)
-    gdk_pixmap_unref (mask);
 
   gdk_window_show (tree_view->priv->drag_highlight_window);
   gdk_window_raise (tree_view->priv->drag_highlight_window);
@@ -5035,10 +5180,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 						     &attributes,
 						     attributes_mask);
       gdk_window_set_user_data (tree_view->priv->drag_window, GTK_WIDGET (tree_view));
-
-      attributes.window_type = GDK_WINDOW_TEMP;
-      tree_view->priv->drag_highlight_window = gdk_window_new (NULL, &attributes, attributes_mask);
-      gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
     }
 
   gdk_pointer_ungrab (GDK_CURRENT_TIME);
@@ -5082,13 +5223,13 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   gtk_widget_size_allocate (column->button, &allocation);
   gtk_widget_set_parent_window (column->button, tree_view->priv->drag_window);
 
-
   tree_view->priv->drag_column = column;
   gdk_window_show (tree_view->priv->drag_window);
 
   gdk_window_get_origin (tree_view->priv->header_window, &x, &y);
   gdk_window_get_size (tree_view->priv->header_window, &width, &height);
 
+  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
   while (gtk_events_pending ())
     gtk_main_iteration ();
 
@@ -5339,7 +5480,7 @@ gtk_tree_view_ensure_scroll_timeout (GtkTreeView *tree_view, GFunc func)
 /* Callbacks */
 static void
 gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
-				  GtkTreeView     *tree_view)
+				  GtkTreeView   *tree_view)
 {
   if (GTK_WIDGET_REALIZED (tree_view))
     {
@@ -5840,7 +5981,7 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
 
-
+  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[COLUMNS_CHANGED], 0);
   return tree_view->priv->n_columns;
 }
 
@@ -5893,6 +6034,8 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
 	}
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
+
+  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[COLUMNS_CHANGED], 0);
 
   return tree_view->priv->n_columns;
 }
@@ -6040,7 +6183,13 @@ gtk_tree_view_move_column_after (GtkTreeView       *tree_view,
     }
 
   if (GTK_WIDGET_REALIZED (tree_view))
-    _gtk_tree_view_update_size (GTK_TREE_VIEW (tree_view));
+    {
+      //gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+      _gtk_tree_view_update_size (tree_view);
+      gtk_tree_view_size_allocate_buttons (GTK_WIDGET (tree_view));
+    }
+
+  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[COLUMNS_CHANGED], 0);
 }
 
 /**
@@ -6438,9 +6587,46 @@ gtk_tree_view_collapse_row (GtkTreeView *tree_view,
   return TRUE;
 }
 
+static void
+gtk_tree_view_map_expanded_rows_helper (GtkTreeView            *tree_view,
+					GtkRBTree              *tree,
+					GtkTreePath            *path,
+					GtkTreeViewMappingFunc  func,
+					gpointer                user_data)
+{
+  GtkRBNode *node;
+  gint *indices;
+  gint depth;
+  gint i = 0;
+
+  if (tree == NULL || tree->root == NULL)
+    return;
+
+  node = tree->root;
+
+  indices = gtk_tree_path_get_indices (path);
+  depth = gtk_tree_path_get_depth (path);
+
+  while (node && node->left != tree->nil)
+    node = node->left;
+  
+  while (node)
+    {
+      if (node->children)
+	{
+	  gtk_tree_path_append_index (path, 0);
+	  gtk_tree_view_map_expanded_rows_helper (tree_view, node->children, path, func, user_data);
+	  gtk_tree_path_up (path);
+	  (* func) (tree_view, path, user_data);
+	}
+      i++;
+      indices[depth -1] = i;
+      node = _gtk_rbtree_next (tree, node);
+    }
+}
 
 /**
- * gtk_tree_view_map_expanded_row:
+ * gtk_tree_view_map_expanded_rows:
  * @tree_view: A #GtkTreeView
  * @func: A function to be called
  * @data: User data to be passed to the function.
@@ -6450,13 +6636,20 @@ gtk_tree_view_collapse_row (GtkTreeView *tree_view,
 void
 gtk_tree_view_map_expanded_rows (GtkTreeView            *tree_view,
 				 GtkTreeViewMappingFunc  func,
-				 gpointer                data)
+				 gpointer                user_data)
 {
+  GtkTreePath *path;
+
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (func != NULL);
 
-  /* FIXME: actually implement this function */
-  g_warning ("FIXME: actually implement this function");
+  path = gtk_tree_path_new_root ();
+
+  gtk_tree_view_map_expanded_rows_helper (tree_view,
+					  tree_view->priv->tree,
+					  path, func, user_data);
+
+  gtk_tree_path_free (path);
 }
 
 

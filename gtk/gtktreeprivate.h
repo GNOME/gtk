@@ -45,6 +45,15 @@ typedef enum
   GTK_TREE_VIEW_IN_COLUMN_DRAG = 1 << 7,
 } GtkTreeViewFlags;
 
+enum
+{
+  DRAG_COLUMN_WINDOW_STATE_UNSET = 0,
+  DRAG_COLUMN_WINDOW_STATE_ORIGINAL = 1,
+  DRAG_COLUMN_WINDOW_STATE_ARROW = 2,
+  DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT = 3,
+  DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT = 4,
+  
+};
 #define GTK_TREE_VIEW_SET_FLAG(tree_view, flag)   G_STMT_START{ (tree_view->priv->flags|=flag); }G_STMT_END
 #define GTK_TREE_VIEW_UNSET_FLAG(tree_view, flag) G_STMT_START{ (tree_view->priv->flags&=~(flag)); }G_STMT_END
 #define GTK_TREE_VIEW_FLAG_SET(tree_view, flag)   ((tree_view->priv->flags&flag)==flag)
@@ -95,7 +104,6 @@ struct _GtkTreeViewPrivate
   gint expander_column;
 
   /* Focus code */
-  gboolean header_has_focus;
   GtkTreeViewColumn *focus_column;
   GtkTreeViewColumn *scroll_column;
 
@@ -143,6 +151,8 @@ struct _GtkTreeViewPrivate
   gfloat scroll_to_row_align;
   gfloat scroll_to_col_align;
 
+  guint header_has_focus : 1;
+  guint drag_column_window_state : 3;
   /* hint to display rows in alternating colors */
   guint has_rules : 1;
 };

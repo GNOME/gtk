@@ -75,6 +75,7 @@ struct _GtkTreeViewClass
   gboolean (* collapse_row)           (GtkTreeView       *tree_view,
 				       GtkTreeIter       *iter,
 				       GtkTreePath       *path);
+  void     (* columns_changed)        (GtkTreeView       *tree_view);
 };
 
 
