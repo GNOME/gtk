@@ -1459,8 +1459,7 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
 				    GtkWidget        *child)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
-  if (child)
-    g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
   if (child != container->focus_child)
     {
@@ -1476,21 +1475,35 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
    */
   if (container->focus_child)
     {
-      GtkAdjustment *adjustment;
-      
-      adjustment = g_object_get_qdata (G_OBJECT (container), vadjustment_key_id);
-      if (adjustment)
-	gtk_adjustment_clamp_page (adjustment,
-				   container->focus_child->allocation.y,
-				   (container->focus_child->allocation.y +
-				    container->focus_child->allocation.height));
+      GtkAdjustment *hadj;
+      GtkAdjustment *vadj;
+      GtkWidget *focus_child;
+      gint x, y;
 
-      adjustment = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);
-      if (adjustment)
-	gtk_adjustment_clamp_page (adjustment,
-				   container->focus_child->allocation.x,
-				   (container->focus_child->allocation.x +
-				    container->focus_child->allocation.width));
+      hadj = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);   
+      vadj = g_object_get_qdata (G_OBJECT (container), vadjustment_key_id);
+      if (hadj || vadj) 
+	{
+
+	  focus_child = container->focus_child;
+	  while (GTK_IS_CONTAINER (focus_child) && 
+		 GTK_CONTAINER (focus_child)->focus_child)
+	    {
+	      focus_child = GTK_CONTAINER (focus_child)->focus_child;
+	    }
+	  
+	  gtk_widget_translate_coordinates (focus_child, container->focus_child, 
+					    0, 0, &x, &y);
+
+	   x += container->focus_child->allocation.x;
+	   y += container->focus_child->allocation.y;
+	  
+	  if (vadj)
+	    gtk_adjustment_clamp_page (vadj, y, y + focus_child->allocation.height);
+	  
+	  if (hadj)
+	    gtk_adjustment_clamp_page (hadj, x, x + focus_child->allocation.width);
+	}
     }
 }
 
