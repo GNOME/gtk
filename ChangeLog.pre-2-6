@@ -1,3 +1,8 @@
+Sat Feb  9 13:27:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbindings.h: Add prototype for
+	_gtk_binding_reset_parsed().
+
 Sat Feb  9 13:19:20 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in gtk/Makefile.am gtk/theme-bits/*: Add

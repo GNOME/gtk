@@ -136,6 +136,8 @@ void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
 guint	 gtk_binding_parse_binding	(GScanner	*scanner);
 
 
+void     _gtk_binding_reset_parsed      (void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
