@@ -557,8 +557,9 @@ gtk_frame_paint (GtkWidget    *widget,
 	    xalign = 1 - frame->label_xalign;
 
 	  height_extra = MAX (0, child_requisition.height - widget->style->ythickness);
-	  y -= height_extra * (1 - frame->label_yalign);
-	  height += height_extra * (1 - frame->label_yalign);
+	  height_extra *= (1 - frame->label_yalign);
+	  y -= height_extra;
+	  height += height_extra;
 	  
 	  x2 = widget->style->xthickness + (frame->child_allocation.width - child_requisition.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_SIDE_PAD;
 

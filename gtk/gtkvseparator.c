@@ -91,7 +91,7 @@ gtk_vseparator_expose (GtkWidget      *widget,
 		       GdkEventExpose *event)
 {
   if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_paint_vline (widget->style, widget->window, GTK_STATE_NORMAL,
+    gtk_paint_vline (widget->style, widget->window, GTK_WIDGET_STATE (widget),
 		     &event->area, widget, "vseparator",
 		     widget->allocation.y,
 		     widget->allocation.y + widget->allocation.height - 1,

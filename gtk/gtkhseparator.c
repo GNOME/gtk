@@ -91,7 +91,7 @@ gtk_hseparator_expose (GtkWidget      *widget,
 		       GdkEventExpose *event)
 {
   if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_paint_hline (widget->style, widget->window, GTK_STATE_NORMAL,
+    gtk_paint_hline (widget->style, widget->window, GTK_WIDGET_STATE (widget),
 		     &event->area, widget, "hseparator",
 		     widget->allocation.x,
 		     widget->allocation.x + widget->allocation.width - 1,
