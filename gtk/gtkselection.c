@@ -1124,11 +1124,6 @@ _gtk_selection_request (GtkWidget *widget,
   if (initialize)
     gtk_selection_init ();
   
-#if defined DEBUG_SELECTION && !defined GDK_WINDOWING_X11
-  g_message ("max request sizes %ld %ld\n", 
-	     XMaxRequestSize(GDK_DISPLAY_XDISPLAY(display)),
-	     XExtendedMaxRequestSize(GDK_DISPLAY_XDISPLAY(display)));
-#endif
   selection_max_size = GTK_SELECTION_MAX_SIZE (display);
 
   /* Check if we own selection */

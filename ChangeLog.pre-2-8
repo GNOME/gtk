@@ -1,3 +1,8 @@
+Wed Jun  2 00:47:11 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkselection.c (_gtk_selection_request): Remove leftover
+	debug code.
+
 Wed Jun  2 00:13:57 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_select_range): Don't
