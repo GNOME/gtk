@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2001.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -27,6 +27,7 @@
 #include "gtkcheckmenuitem.h"
 #include "gtkaccellabel.h"
 #include "gtksignal.h"
+#include "gtkintl.h"
 
 #define CHECK_TOGGLE_SIZE 12
 
@@ -35,6 +36,11 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  PROP_0,
+  PROP_ACTIVE,
+  PROP_INCONSISTENT
+};
 
 static void gtk_check_menu_item_class_init           (GtkCheckMenuItemClass *klass);
 static void gtk_check_menu_item_init                 (GtkCheckMenuItem      *check_menu_item);
@@ -47,6 +53,14 @@ static void gtk_check_menu_item_draw_indicator       (GtkCheckMenuItem      *che
 						      GdkRectangle          *area);
 static void gtk_real_check_menu_item_draw_indicator  (GtkCheckMenuItem      *check_menu_item,
 						      GdkRectangle          *area);
+static void gtk_check_menu_item_set_property (GObject         *object,
+					      guint            prop_id,
+					      const GValue    *value,
+					      GParamSpec      *pspec);
+static void gtk_check_menu_item_get_property (GObject         *object,
+					      guint            prop_id,
+					      GValue          *value,
+					      GParamSpec      *pspec);
 
 
 static GtkMenuItemClass *parent_class = NULL;
@@ -90,6 +104,25 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   menu_item_class = (GtkMenuItemClass*) klass;
   
   parent_class = gtk_type_class (GTK_TYPE_MENU_ITEM);
+
+  G_OBJECT_CLASS(object_class)->set_property = gtk_check_menu_item_set_property;
+  G_OBJECT_CLASS(object_class)->get_property = gtk_check_menu_item_get_property;
+
+  g_object_class_install_property (G_OBJECT_CLASS (object_class),
+                                   PROP_ACTIVE,
+                                   g_param_spec_boolean ("active",
+                                                         _("Active"),
+                                                         _("Whether the menu item is checked."),
+                                                         FALSE,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (G_OBJECT_CLASS (object_class),
+                                   PROP_ACTIVE,
+                                   g_param_spec_boolean ("inconsistent",
+                                                         _("Inconsistent"),
+                                                         _("Whether to display an \"inconsistent\" state."),
+                                                         FALSE,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   widget_class->expose_event = gtk_check_menu_item_expose;
   
@@ -142,7 +175,10 @@ gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
   is_active = is_active != 0;
 
   if (check_menu_item->active != is_active)
-    gtk_menu_item_activate (GTK_MENU_ITEM (check_menu_item));
+     {
+	gtk_menu_item_activate (GTK_MENU_ITEM (check_menu_item));
+	g_object_notify (G_OBJECT(check_menu_item), "active");
+     }
 }
 
 static void
@@ -200,6 +236,7 @@ gtk_check_menu_item_set_inconsistent (GtkCheckMenuItem *check_menu_item,
     {
       check_menu_item->inconsistent = setting;
       gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
+      g_object_notify (G_OBJECT (check_menu_item), "inconsistent");
     }
 }
 
@@ -324,5 +361,51 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 			   area, widget, "check",
 			   x, y, width, height);
 	}
+    }
+}
+
+
+static void
+gtk_check_menu_item_get_property (GObject     *object,
+				  guint        prop_id,
+				  GValue      *value,
+				  GParamSpec  *pspec)
+{
+  GtkCheckMenuItem *checkitem = GTK_CHECK_MENU_ITEM (object);
+  
+  switch (prop_id)
+    {
+    case PROP_ACTIVE:
+      g_value_set_boolean (value, checkitem->active);
+      break;
+    case PROP_INCONSISTENT:
+      g_value_set_boolean (value, checkitem->inconsistent);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+
+static void
+gtk_check_menu_item_set_property (GObject      *object,
+				  guint         prop_id,
+				  const GValue *value,
+				  GParamSpec   *pspec)
+{
+  GtkCheckMenuItem *checkitem = GTK_CHECK_MENU_ITEM (object);
+  
+  switch (prop_id)
+    {
+    case PROP_ACTIVE:
+      gtk_check_menu_item_set_active (checkitem, g_value_get_boolean (value));
+      break;
+    case PROP_INCONSISTENT:
+      gtk_check_menu_item_set_inconsistent (checkitem, g_value_get_boolean (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }

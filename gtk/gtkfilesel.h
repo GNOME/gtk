@@ -93,7 +93,7 @@ void       gtk_file_selection_set_filename        (GtkFileSelection *filesel,
  * The returned string points to a statically allocated buffer and
  * should be copied away.
  */
-gchar*     gtk_file_selection_get_filename        (GtkFileSelection *filesel);
+G_CONST_RETURN gchar* gtk_file_selection_get_filename        (GtkFileSelection *filesel);
 
 void	   gtk_file_selection_complete		  (GtkFileSelection *filesel,
 						   const gchar	    *pattern);

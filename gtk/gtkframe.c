@@ -27,27 +27,31 @@
 #include <string.h>
 #include "gtkframe.h"
 #include "gtklabel.h"
+#include "gtkintl.h"
 
 #define LABEL_PAD 1
 #define LABEL_SIDE_PAD 2
 
 enum {
-  ARG_0,
-  ARG_LABEL,
-  ARG_LABEL_XALIGN,
-  ARG_LABEL_YALIGN,
-  ARG_SHADOW
+  PROP_0,
+  PROP_LABEL,
+  PROP_LABEL_XALIGN,
+  PROP_LABEL_YALIGN,
+  PROP_SHADOW,
+  PROP_LABEL_WIDGET
 };
 
 
 static void gtk_frame_class_init    (GtkFrameClass  *klass);
 static void gtk_frame_init          (GtkFrame       *frame);
-static void gtk_frame_set_arg       (GtkObject      *object,
-				     GtkArg         *arg,
-				     guint           arg_id);
-static void gtk_frame_get_arg       (GtkObject      *object,
-				     GtkArg         *arg,
-				     guint           arg_id);
+static void gtk_frame_set_property (GObject      *object,
+				    guint         param_id,
+				    const GValue *value,
+				    GParamSpec   *pspec);
+static void gtk_frame_get_property (GObject     *object,
+				    guint        param_id,
+				    GValue      *value,
+				    GParamSpec  *pspec);
 static void gtk_frame_paint         (GtkWidget      *widget,
 				     GdkRectangle   *area);
 static gint gtk_frame_expose        (GtkWidget      *widget,
@@ -101,24 +105,66 @@ gtk_frame_get_type (void)
 static void
 gtk_frame_class_init (GtkFrameClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
+  gobject_class = (GObjectClass*) class;
   object_class = GTK_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
   container_class = GTK_CONTAINER_CLASS (class);
 
   parent_class = gtk_type_class (gtk_bin_get_type ());
 
-  gtk_object_add_arg_type ("GtkFrame::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
-  gtk_object_add_arg_type ("GtkFrame::label_xalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_LABEL_XALIGN);
-  gtk_object_add_arg_type ("GtkFrame::label_yalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_LABEL_YALIGN);
-  gtk_object_add_arg_type ("GtkFrame::shadow", GTK_TYPE_SHADOW_TYPE, GTK_ARG_READWRITE, ARG_SHADOW);
+  gobject_class->set_property = gtk_frame_set_property;
+  gobject_class->get_property = gtk_frame_get_property;
 
-  object_class->set_arg = gtk_frame_set_arg;
-  object_class->get_arg = gtk_frame_get_arg;
+  g_object_class_install_property (gobject_class,
+                                   PROP_LABEL,
+                                   g_param_spec_string ("label",
+                                                        _("Label"),
+                                                        _("Text of the frame's label."),
+                                                        NULL,
+                                                        G_PARAM_READABLE |
+							G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+				   PROP_LABEL_XALIGN,
+				   g_param_spec_double ("label_xalign",
+                                                        _("Label xalign"),
+                                                        _("The horizontal alignment of the label."),
+                                                        0.0,
+                                                        1.0,
+                                                        0.5,
+                                                        G_PARAM_READABLE |
+                                                        G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+				   PROP_LABEL_YALIGN,
+				   g_param_spec_double ("label_yalign",
+                                                        _("Label yalign"),
+                                                        _("The vertical alignment of the label."),
+                                                        0.0,
+                                                        1.0,
+                                                        0.5,
+                                                        G_PARAM_READABLE |
+                                                        G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHADOW,
+                                   g_param_spec_enum ("shadow",
+                                                      _("Frame shadow"),
+                                                      _("Appearance of the frame border."),
+						      GTK_TYPE_SHADOW_TYPE,
+						      GTK_SHADOW_ETCHED_IN,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_LABEL_WIDGET,
+                                   g_param_spec_object ("label_widget",
+                                                        _("Label widget"),
+                                                        _("A widget to display in place of the usual frame label."),
+                                                        GTK_TYPE_WIDGET,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
   widget_class->expose_event = gtk_frame_expose;
   widget_class->size_request = gtk_frame_size_request;
   widget_class->size_allocate = gtk_frame_size_allocate;
@@ -140,59 +186,72 @@ gtk_frame_init (GtkFrame *frame)
   frame->label_yalign = 0.5;
 }
 
-static void
-gtk_frame_set_arg (GtkObject      *object,
-		   GtkArg         *arg,
-		   guint           arg_id)
+static void 
+gtk_frame_set_property (GObject         *object,
+			guint            prop_id,
+			const GValue    *value,
+			GParamSpec      *pspec)
 {
   GtkFrame *frame;
 
   frame = GTK_FRAME (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_LABEL:
-      gtk_frame_set_label (frame, GTK_VALUE_STRING (*arg));
+    case PROP_LABEL:
+      gtk_frame_set_label (frame, g_value_get_string (value));
       break;
-    case ARG_LABEL_XALIGN:
-      gtk_frame_set_label_align (frame, GTK_VALUE_FLOAT (*arg), frame->label_yalign);
+    case PROP_LABEL_XALIGN:
+      gtk_frame_set_label_align (frame, g_value_get_double (value), 
+				 frame->label_yalign);
       break;
-    case ARG_LABEL_YALIGN:
-      gtk_frame_set_label_align (frame, frame->label_xalign, GTK_VALUE_FLOAT (*arg));
+    case PROP_LABEL_YALIGN:
+      gtk_frame_set_label_align (frame, frame->label_xalign, 
+				 g_value_get_double (value));
       break;
-    case ARG_SHADOW:
-      gtk_frame_set_shadow_type (frame, GTK_VALUE_ENUM (*arg));
+    case PROP_SHADOW:
+      gtk_frame_set_shadow_type (frame, g_value_get_enum (value));
       break;
-    default:
+    case PROP_LABEL_WIDGET:
+      gtk_frame_set_label_widget (frame, g_value_get_object (value));
+      break;
+    default:      
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
-static void
-gtk_frame_get_arg (GtkObject      *object,
-		   GtkArg         *arg,
-		   guint           arg_id)
+static void 
+gtk_frame_get_property (GObject         *object,
+			guint            prop_id,
+			GValue          *value,
+			GParamSpec      *pspec)
 {
   GtkFrame *frame;
 
   frame = GTK_FRAME (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_LABEL:
-      GTK_VALUE_STRING (*arg) = gtk_frame_get_label (frame);
+    case PROP_LABEL:
+      g_value_set_string (value, gtk_frame_get_label (frame));
       break;
-    case ARG_LABEL_XALIGN:
-      GTK_VALUE_FLOAT (*arg) = frame->label_xalign;
+    case PROP_LABEL_XALIGN:
+      g_value_set_double (value, frame->label_xalign);
       break;
-    case ARG_LABEL_YALIGN:
-      GTK_VALUE_FLOAT (*arg) = frame->label_yalign;
+    case PROP_LABEL_YALIGN:
+      g_value_set_double (value, frame->label_yalign);
       break;
-    case ARG_SHADOW:
-      GTK_VALUE_ENUM (*arg) = frame->shadow_type;
+    case PROP_SHADOW:
+      g_value_set_enum (value, frame->shadow_type);
+      break;
+    case PROP_LABEL_WIDGET:
+      g_value_set_object (value,
+                          frame->label_widget ?
+                          G_OBJECT (frame->label_widget) : NULL);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -255,6 +314,8 @@ gtk_frame_set_label (GtkFrame *frame,
 
       gtk_frame_set_label_widget (frame, child);
     }
+
+  g_object_notify (G_OBJECT (frame), "label");
 }
 
 /**
@@ -319,9 +380,11 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
       gtk_widget_set_parent (label_widget, GTK_WIDGET (frame));
       need_resize |= GTK_WIDGET_VISIBLE (label_widget);
     }
-
+  
   if (GTK_WIDGET_VISIBLE (frame) && need_resize)
     gtk_widget_queue_resize (GTK_WIDGET (frame));
+
+  g_object_notify (G_OBJECT (frame), "label_widget");
 }
 
 void
@@ -335,13 +398,19 @@ gtk_frame_set_label_align (GtkFrame *frame,
   xalign = CLAMP (xalign, 0.0, 1.0);
   yalign = CLAMP (yalign, 0.0, 1.0);
 
-  if ((xalign != frame->label_xalign) || (yalign != frame->label_yalign))
+  if (xalign != frame->label_xalign)
     {
       frame->label_xalign = xalign;
-      frame->label_yalign = yalign;
-
-      gtk_widget_queue_resize (GTK_WIDGET (frame));
+      g_object_notify (G_OBJECT (frame), "label_xalign");
     }
+
+  if (yalign != frame->label_yalign)
+    {
+      frame->label_yalign = yalign;
+      g_object_notify (G_OBJECT (frame), "label_yalign");
+    }
+
+  gtk_widget_queue_resize (GTK_WIDGET (frame));
 }
 
 void
@@ -354,11 +423,13 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
   if ((GtkShadowType) frame->shadow_type != type)
     {
       frame->shadow_type = type;
+      g_object_notify (G_OBJECT (frame), "shadow");
 
       if (GTK_WIDGET_DRAWABLE (frame))
 	{
 	  gtk_widget_queue_clear (GTK_WIDGET (frame));
 	}
+      
       gtk_widget_queue_resize (GTK_WIDGET (frame));
     }
 }

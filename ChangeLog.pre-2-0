@@ -1,5 +1,20 @@
 2001-03-23  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkhandlebox.c: Apply property patch from Lee Mallabone
+
+	* gtk/gtkbox.c: Apply property patch from Lee Mallabone
+
+	* gtk/gtkcheckmenuitem.c: Apply property patch from Lee Mallabone,
+	and deprecated gtk_check_menu_item_set_show_toggle().
+	
+	* gtk/gtkbutton.c: Apply property patch from Lee Mallabone
+
+	* gtk/gtkfilesel.c: Apply property patch from Lee Mallabone
+
+	* gtk/gtkframe.c: Apply property patch from Lee Mallabone
+
+2001-03-23  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktoolbar.c, gtk/gtkimcontext.c, gtk/gtklabel.c: fix up
 	some docs
 

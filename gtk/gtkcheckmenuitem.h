@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2001.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -72,14 +72,16 @@ GtkWidget* gtk_check_menu_item_new	       (void);
 GtkWidget* gtk_check_menu_item_new_with_label  (const gchar	 *label);
 void	   gtk_check_menu_item_set_active      (GtkCheckMenuItem *check_menu_item,
 						gboolean	  is_active);
-void	   gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,
-						gboolean	  always);
 void	   gtk_check_menu_item_toggled	       (GtkCheckMenuItem *check_menu_item);
 
 void       gtk_check_menu_item_set_inconsistent (GtkCheckMenuItem *check_menu_item,
                                                  gboolean          setting);
 gboolean   gtk_check_menu_item_get_inconsistent (GtkCheckMenuItem *check_menu_item);
 
+#ifndef GTK_DISABLE_DEPRECATED
+void	   gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,
+						gboolean	  always);
+#endif
 
 #ifdef __cplusplus
 }

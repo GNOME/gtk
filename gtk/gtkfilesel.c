@@ -225,6 +225,11 @@ struct _CompletionState
   struct _CompletionUserDir *user_directories;
 };
 
+enum {
+  PROP_0,
+  PROP_SHOW_FILEOPS,
+  PROP_FILENAME
+};
 
 /* File completion functions which would be external, were they used
  * outside of this file.
@@ -339,6 +344,14 @@ static void update_cmpl(PossibleCompletion* poss,
 			CompletionState* cmpl_state);
 
 static void gtk_file_selection_class_init    (GtkFileSelectionClass *klass);
+static void gtk_file_selection_set_property  (GObject         *object,
+					      guint            prop_id,
+					      const GValue    *value,
+					      GParamSpec      *pspec);
+static void gtk_file_selection_get_property  (GObject         *object,
+					      guint            prop_id,
+					      GValue          *value,
+					      GParamSpec      *pspec);
 static void gtk_file_selection_init          (GtkFileSelection      *filesel);
 static void gtk_file_selection_destroy       (GtkObject             *object);
 static gint gtk_file_selection_key_press     (GtkWidget             *widget,
@@ -472,14 +485,93 @@ gtk_file_selection_get_type (void)
 static void
 gtk_file_selection_class_init (GtkFileSelectionClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
 
+  gobject_class = (GObjectClass*) class;
   object_class = (GtkObjectClass*) class;
 
   parent_class = gtk_type_class (GTK_TYPE_DIALOG);
 
+  gobject_class->set_property = gtk_file_selection_set_property;
+  gobject_class->get_property = gtk_file_selection_get_property;
+   
+  g_object_class_install_property (gobject_class,
+                                   PROP_FILENAME,
+                                   g_param_spec_string ("filename",
+                                                        _("Filename"),
+                                                        _("The currently selected filename."),
+                                                        NULL,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+				   PROP_SHOW_FILEOPS,
+				   g_param_spec_boolean ("show_fileops",
+							 _("Show file operations"),
+							 _("Whether buttons for creating/manipulating files should be displayed."),
+							 FALSE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
   object_class->destroy = gtk_file_selection_destroy;
 }
+
+static void gtk_file_selection_set_property (GObject         *object,
+					     guint            prop_id,
+					     const GValue    *value,
+					     GParamSpec      *pspec)
+{
+  GtkFileSelection *filesel;
+
+  filesel = GTK_FILE_SELECTION (object);
+
+  switch (prop_id)
+    {
+    case PROP_FILENAME:
+      gtk_file_selection_set_filename (filesel,
+                                       g_value_get_string (value));
+      break;
+      
+    case PROP_SHOW_FILEOPS:
+      if (g_value_get_boolean (value))
+	 gtk_file_selection_show_fileop_buttons (filesel);
+      else
+	 gtk_file_selection_hide_fileop_buttons (filesel);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void gtk_file_selection_get_property (GObject         *object,
+					     guint            prop_id,
+					     GValue          *value,
+					     GParamSpec      *pspec)
+{
+  GtkFileSelection *filesel;
+
+  filesel = GTK_FILE_SELECTION (object);
+
+  switch (prop_id)
+    {
+    case PROP_FILENAME:
+      g_value_set_string (value,
+                          gtk_file_selection_get_filename(filesel));
+      break;
+
+    case PROP_SHOW_FILEOPS:
+      /* This is a little bit hacky, but doing otherwise would require
+       * adding a field to the object.
+       */
+      g_value_set_boolean (value, (filesel->fileop_c_dir && 
+				   filesel->fileop_del_file &&
+				   filesel->fileop_ren_file));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
 
 static void
 gtk_file_selection_init (GtkFileSelection *filesel)
@@ -681,7 +773,7 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
 			  filesel->fileop_ren_file, TRUE, TRUE, 0);
       gtk_widget_show (filesel->fileop_ren_file);
     }
-
+  g_object_notify (G_OBJECT (filesel), "show_fileops");
   gtk_widget_queue_resize (GTK_WIDGET (filesel));
 }
 
@@ -708,6 +800,7 @@ gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel)
       gtk_widget_destroy (filesel->fileop_c_dir);
       filesel->fileop_c_dir = NULL;
     }
+  g_object_notify (G_OBJECT (filesel), "show_fileops");
 }
 
 
@@ -742,9 +835,22 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
   if (filesel->selection_entry)
     gtk_entry_set_text (GTK_ENTRY (filesel->selection_entry), name);
   g_free (buf);
+  g_object_notify (G_OBJECT (filesel), "filename");
 }
 
-gchar*
+/**
+ * gtk_file_selection_get_filename:
+ * @filesel: a #GtkFileSelection
+ * 
+ * This function returns the selected filename in the C runtime's
+ * multibyte string encoding, which may or may not be the same as that
+ * used by GTK+ (UTF-8). To convert to UTF-8, call g_filename_to_utf8().
+ * The returned string points to a statically allocated buffer and
+ * should be copied if you plan to keep it around.
+ * 
+ * Return value: currently-selected filename in locale's encoding
+ **/
+G_CONST_RETURN gchar*
 gtk_file_selection_get_filename (GtkFileSelection *filesel)
 {
   static gchar nothing[2] = "";

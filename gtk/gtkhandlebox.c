@@ -30,12 +30,13 @@
 #include "gtkmain.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
+#include "gtkintl.h"
 
 enum {
-  ARG_0,
-  ARG_SHADOW,
-  ARG_HANDLE_POSITION,
-  ARG_SNAP_EDGE
+  PROP_0,
+  PROP_SHADOW,
+  PROP_HANDLE_POSITION,
+  PROP_SNAP_EDGE
 };
 
 #define DRAG_HANDLE_SIZE 10
@@ -91,12 +92,14 @@ enum {
 
 static void gtk_handle_box_class_init     (GtkHandleBoxClass *klass);
 static void gtk_handle_box_init           (GtkHandleBox      *handle_box);
-static void gtk_handle_box_set_arg        (GtkObject         *object,
-					   GtkArg            *arg,
-					   guint              arg_id);
-static void gtk_handle_box_get_arg        (GtkObject         *object,
-					   GtkArg            *arg,
-					   guint              arg_id);
+static void gtk_handle_box_set_property   (GObject      *object,
+					   guint         param_id,
+					   const GValue *value,
+					   GParamSpec   *pspec);
+static void gtk_handle_box_get_property   (GObject     *object,
+					   guint        param_id,
+					   GValue      *value,
+					   GParamSpec  *pspec);
 static void gtk_handle_box_destroy        (GtkObject         *object);
 static void gtk_handle_box_map            (GtkWidget         *widget);
 static void gtk_handle_box_unmap          (GtkWidget         *widget);
@@ -159,24 +162,47 @@ gtk_handle_box_get_type (void)
 static void
 gtk_handle_box_class_init (GtkHandleBoxClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
+  gobject_class = (GObjectClass *) class;
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
   parent_class = gtk_type_class (GTK_TYPE_BIN);
-  
-  gtk_object_add_arg_type ("GtkHandleBox::shadow", GTK_TYPE_SHADOW_TYPE, GTK_ARG_READWRITE, ARG_SHADOW);
-  gtk_object_add_arg_type ("GtkHandleBox::handle_position", GTK_TYPE_POSITION_TYPE, GTK_ARG_READWRITE, ARG_HANDLE_POSITION);
-  gtk_object_add_arg_type ("GtkHandleBox::snap_edge", GTK_TYPE_POSITION_TYPE, GTK_ARG_READWRITE, ARG_SNAP_EDGE);
 
-  object_class->set_arg = gtk_handle_box_set_arg;
-  object_class->get_arg = gtk_handle_box_get_arg;
+  gobject_class->set_property = gtk_handle_box_set_property;
+  gobject_class->get_property = gtk_handle_box_get_property;
   
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHADOW,
+                                   g_param_spec_enum ("shadow",
+                                                      _("Shadow type"),
+                                                      _("Appearance of the shadow that surrounds the container."),
+						      GTK_TYPE_SHADOW_TYPE,
+						      GTK_SHADOW_ETCHED_OUT,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
   
+  g_object_class_install_property (gobject_class,
+                                   PROP_HANDLE_POSITION,
+                                   g_param_spec_enum ("handle_position",
+                                                      _("Handle position"),
+                                                      _("Position of the handle relative to the child widget."),
+						      GTK_TYPE_POSITION_TYPE,
+						      GTK_POS_LEFT,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_SNAP_EDGE,
+                                   g_param_spec_enum ("snap_edge",
+                                                      _("Snap edge"),
+                                                      _("Side of the handlebox that's lined up with the docking point to dock the handlebox."),
+						      GTK_TYPE_POSITION_TYPE,
+						      GTK_POS_LEFT,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
   object_class->destroy = gtk_handle_box_destroy;
 
   widget_class->map = gtk_handle_box_map;
@@ -232,47 +258,52 @@ gtk_handle_box_init (GtkHandleBox *handle_box)
   handle_box->snap_edge = -1;
 }
 
-static void
-gtk_handle_box_set_arg (GtkObject *object,
-			GtkArg    *arg,
-			guint      arg_id)
+static void 
+gtk_handle_box_set_property (GObject         *object,
+			     guint            prop_id,
+			     const GValue    *value,
+			     GParamSpec      *pspec)
 {
   GtkHandleBox *handle_box = GTK_HANDLE_BOX (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_SHADOW:
-      gtk_handle_box_set_shadow_type (handle_box, GTK_VALUE_ENUM (*arg));
+    case PROP_SHADOW:
+      gtk_handle_box_set_shadow_type (handle_box, g_value_get_enum (value));
       break;
-    case ARG_HANDLE_POSITION:
-      gtk_handle_box_set_handle_position (handle_box, GTK_VALUE_ENUM (*arg));
+    case PROP_HANDLE_POSITION:
+      gtk_handle_box_set_handle_position (handle_box, g_value_get_enum (value));
       break;
-    case ARG_SNAP_EDGE:
-      gtk_handle_box_set_snap_edge (handle_box, GTK_VALUE_ENUM (*arg));
+    case PROP_SNAP_EDGE:
+      gtk_handle_box_set_snap_edge (handle_box, g_value_get_enum (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
-static void
-gtk_handle_box_get_arg (GtkObject *object,
-			GtkArg    *arg,
-			guint      arg_id)
+static void 
+gtk_handle_box_get_property (GObject         *object,
+			     guint            prop_id,
+			     GValue          *value,
+			     GParamSpec      *pspec)
 {
   GtkHandleBox *handle_box = GTK_HANDLE_BOX (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_SHADOW:
-      GTK_VALUE_ENUM (*arg) = handle_box->shadow_type;
+    case PROP_SHADOW:
+      g_value_set_enum (value, handle_box->shadow_type);
       break;
-    case ARG_HANDLE_POSITION:
-      GTK_VALUE_ENUM (*arg) = handle_box->handle_position;
+    case PROP_HANDLE_POSITION:
+      g_value_set_enum (value, handle_box->handle_position);
       break;
-    case ARG_SNAP_EDGE:
-      GTK_VALUE_ENUM (*arg) = handle_box->snap_edge;
+    case PROP_SNAP_EDGE:
+      g_value_set_enum (value, handle_box->snap_edge);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -712,6 +743,7 @@ gtk_handle_box_set_shadow_type (GtkHandleBox  *handle_box,
   if ((GtkShadowType) handle_box->shadow_type != type)
     {
       handle_box->shadow_type = type;
+      g_object_notify (G_OBJECT (handle_box), "shadow");
       gtk_widget_queue_resize (GTK_WIDGET (handle_box));
     }
 }
@@ -723,6 +755,7 @@ gtk_handle_box_set_handle_position  (GtkHandleBox    *handle_box,
   if ((GtkPositionType) handle_box->handle_position != position)
     {
       handle_box->handle_position = position;
+      g_object_notify (G_OBJECT (handle_box), "handle_position");
       gtk_widget_queue_resize (GTK_WIDGET (handle_box));
     }
 }
@@ -734,7 +767,11 @@ gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
   g_return_if_fail (handle_box != NULL);
   g_return_if_fail (GTK_IS_HANDLE_BOX (handle_box));
 
-  handle_box->snap_edge = edge;
+  if (handle_box->snap_edge != edge)
+    {
+      handle_box->snap_edge = edge;
+      g_object_notify (G_OBJECT (handle_box), "snap_edge");
+    }
 }
 
 static void

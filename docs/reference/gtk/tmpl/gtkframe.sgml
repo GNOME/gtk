@@ -107,3 +107,8 @@ Set the shadow type for the Frame widget.
 
 </para>
 
+<!-- ##### ARG GtkFrame:label-widget ##### -->
+<para>
+
+</para>
+

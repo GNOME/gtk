@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2001.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -33,6 +33,7 @@
 #include "gtkhbox.h"
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
+#include "gtkintl.h"
 
 #define CHILD_SPACING     1
 #define DEFAULT_LEFT_POS  4
@@ -55,19 +56,21 @@ enum {
 };
 
 enum {
-  ARG_0,
-  ARG_LABEL,
-  ARG_RELIEF
+  PROP_0,
+  PROP_LABEL,
+  PROP_RELIEF
 };
 
 static void gtk_button_class_init     (GtkButtonClass   *klass);
 static void gtk_button_init           (GtkButton        *button);
-static void gtk_button_set_arg        (GtkObject        *object,
-				       GtkArg           *arg,
-				       guint		 arg_id);
-static void gtk_button_get_arg        (GtkObject        *object,
-				       GtkArg           *arg,
-				       guint		 arg_id);
+static void gtk_button_set_property   (GObject         *object,
+                                       guint            prop_id,
+                                       const GValue    *value,
+                                       GParamSpec      *pspec);
+static void gtk_button_get_property   (GObject         *object,
+                                       guint            prop_id,
+                                       GValue          *value,
+                                       GParamSpec      *pspec);
 static void gtk_button_realize        (GtkWidget        *widget);
 static void gtk_button_unrealize      (GtkWidget        *widget);
 static void gtk_button_size_request   (GtkWidget        *widget,
@@ -145,8 +148,8 @@ gtk_button_class_init (GtkButtonClass *klass)
   
   parent_class = g_type_class_peek_parent (klass);
 
-  object_class->set_arg = gtk_button_set_arg;
-  object_class->get_arg = gtk_button_get_arg;
+  G_OBJECT_CLASS(object_class)->set_property = gtk_button_set_property;
+  G_OBJECT_CLASS(object_class)->get_property = gtk_button_get_property;
 
   widget_class->realize = gtk_button_realize;
   widget_class->unrealize = gtk_button_unrealize;
@@ -170,8 +173,22 @@ gtk_button_class_init (GtkButtonClass *klass)
   klass->leave = gtk_real_button_leave;
   klass->activate = gtk_real_button_activate;
 
-  gtk_object_add_arg_type ("GtkButton::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
-  gtk_object_add_arg_type ("GtkButton::relief", GTK_TYPE_RELIEF_STYLE, GTK_ARG_READWRITE, ARG_RELIEF);
+  g_object_class_install_property (G_OBJECT_CLASS(object_class),
+                                   PROP_LABEL,
+                                   g_param_spec_string ("label",
+                                                        _("Label"),
+                                                        _("Text of the label widget inside the button, if the button contains a label widget."),
+                                                        NULL,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (G_OBJECT_CLASS(object_class),
+                                   PROP_RELIEF,
+                                   g_param_spec_enum ("relief",
+                                                      _("Border relief"),
+                                                      _("The border relief style."),
+                                                      GTK_TYPE_RELIEF_STYLE,
+                                                      GTK_RELIEF_NORMAL,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   button_signals[PRESSED] =
     gtk_signal_new ("pressed",
@@ -240,19 +257,20 @@ gtk_button_child_type  (GtkContainer     *container)
 }
 
 static void
-gtk_button_set_arg (GtkObject *object,
-		    GtkArg    *arg,
-		    guint      arg_id)
+gtk_button_set_property (GObject         *object,
+                         guint            prop_id,
+                         const GValue    *value,
+                         GParamSpec      *pspec)
 {
   GtkButton *button;
 
   button = GTK_BUTTON (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
       GtkWidget *child;
 
-    case ARG_LABEL:
+    case PROP_LABEL:
       child = GTK_BIN (button)->child;
       if (!child)
 	child = gtk_widget_new (GTK_TYPE_LABEL,
@@ -260,39 +278,43 @@ gtk_button_set_arg (GtkObject *object,
 				"parent", button,
 				NULL);
       if (GTK_IS_LABEL (child))
-	gtk_label_set_text (GTK_LABEL (child),
-		       GTK_VALUE_STRING (*arg) ? GTK_VALUE_STRING (*arg) : "");
+        {
+          gtk_label_set_text (GTK_LABEL (child),
+                              g_value_get_string (value) ? g_value_get_string (value) : "");
+        }
       break;
-    case ARG_RELIEF:
-      gtk_button_set_relief (button, GTK_VALUE_ENUM (*arg));
+    case PROP_RELIEF:
+      gtk_button_set_relief (button, g_value_get_enum (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_button_get_arg (GtkObject *object,
-		    GtkArg    *arg,
-		    guint      arg_id)
+gtk_button_get_property (GObject         *object,
+                         guint            prop_id,
+                         GValue          *value,
+                         GParamSpec      *pspec)
 {
   GtkButton *button;
 
   button = GTK_BUTTON (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_LABEL:
+    case PROP_LABEL:
       if (GTK_BIN (button)->child && GTK_IS_LABEL (GTK_BIN (button)->child))
-	GTK_VALUE_STRING (*arg) = g_strdup (GTK_LABEL (GTK_BIN (button)->child)->label);
+	 g_value_set_string(value, g_strdup (GTK_LABEL (GTK_BIN (button)->child)->label)); 
       else
-	GTK_VALUE_STRING (*arg) = NULL;
+	 g_value_set_string(value, NULL);
       break;
-    case ARG_RELIEF:
-      GTK_VALUE_ENUM (*arg) = gtk_button_get_relief (button);
+    case PROP_RELIEF:
+      g_value_set_enum(value, gtk_button_get_relief (button));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -445,6 +467,7 @@ gtk_button_set_relief (GtkButton *button,
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   button->relief = newrelief;
+  g_object_notify(G_OBJECT(button), "relief");
   gtk_widget_queue_draw (GTK_WIDGET (button));
 }
 

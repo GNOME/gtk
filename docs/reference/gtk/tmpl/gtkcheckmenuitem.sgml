@@ -124,3 +124,8 @@ field of the #GtkCheckMenuItem-struct struct to discover the new state.
 
 @checkmenuitem: the object which received the signal.
 
+<!-- ##### ARG GtkCheckMenuItem:active ##### -->
+<para>
+
+</para>
+

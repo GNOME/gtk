@@ -25,11 +25,12 @@
  */
 
 #include "gtkbox.h"
+#include "gtkintl.h"
 
 enum {
-  ARG_0,
-  ARG_SPACING,
-  ARG_HOMOGENEOUS
+  PROP_0,
+  PROP_SPACING,
+  PROP_HOMOGENEOUS
 };
 
 enum {
@@ -43,12 +44,14 @@ enum {
 
 static void gtk_box_class_init (GtkBoxClass    *klass);
 static void gtk_box_init       (GtkBox         *box);
-static void gtk_box_get_arg    (GtkObject      *object,
-				GtkArg         *arg,
-				guint           arg_id);
-static void gtk_box_set_arg    (GtkObject      *object,
-				GtkArg         *arg,
-				guint           arg_id);
+static void gtk_box_set_property (GObject         *object,
+				  guint            prop_id,
+				  const GValue    *value,
+				  GParamSpec      *pspec);
+static void gtk_box_get_property (GObject         *object,
+				  guint            prop_id,
+				  GValue          *value,
+				  GParamSpec      *pspec);
 static void gtk_box_map        (GtkWidget      *widget);
 static void gtk_box_unmap      (GtkWidget      *widget);
 static void gtk_box_add        (GtkContainer   *container,
@@ -101,26 +104,44 @@ gtk_box_get_type (void)
 static void
 gtk_box_class_init (GtkBoxClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
+  gobject_class = (GObjectClass*) class;
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
-  gtk_object_add_arg_type ("GtkBox::spacing", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_SPACING);
-  gtk_object_add_arg_type ("GtkBox::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);
+  gobject_class->set_property = gtk_box_set_property;
+  gobject_class->get_property = gtk_box_get_property;
+   
+  g_object_class_install_property (gobject_class,
+                                   PROP_SPACING,
+                                   g_param_spec_int ("spacing",
+                                                     _("Spacing"),
+                                                     _("The amount of space between children."),
+                                                     0,
+                                                     G_MAXINT,
+                                                     0,
+                                                     G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_HOMOGENEOUS,
+                                   g_param_spec_boolean ("homogeneous",
+							 _("Homogeneous"),
+							 _("Whether the children should all be the same size."),
+							 FALSE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+
   gtk_container_add_child_arg_type ("GtkBox::expand", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_EXPAND);
   gtk_container_add_child_arg_type ("GtkBox::fill", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_FILL);
   gtk_container_add_child_arg_type ("GtkBox::padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_PADDING);
   gtk_container_add_child_arg_type ("GtkBox::pack_type", GTK_TYPE_PACK_TYPE, GTK_ARG_READWRITE, CHILD_ARG_PACK_TYPE);
   gtk_container_add_child_arg_type ("GtkBox::position", GTK_TYPE_INT, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
-
-  object_class->set_arg = gtk_box_set_arg;
-  object_class->get_arg = gtk_box_get_arg;
 
   widget_class->map = gtk_box_map;
   widget_class->unmap = gtk_box_unmap;
@@ -143,47 +164,49 @@ gtk_box_init (GtkBox *box)
   box->homogeneous = FALSE;
 }
 
-static void
-gtk_box_set_arg (GtkObject    *object,
-		 GtkArg       *arg,
-		 guint         arg_id)
+static void 
+gtk_box_set_property (GObject         *object,
+		      guint            prop_id,
+		      const GValue    *value,
+		      GParamSpec      *pspec)
 {
   GtkBox *box;
 
   box = GTK_BOX (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_SPACING:
-      gtk_box_set_spacing (box, GTK_VALUE_INT (*arg));
+    case PROP_SPACING:
+      gtk_box_set_spacing (box, g_value_get_int (value));
       break;
-    case ARG_HOMOGENEOUS:
-      gtk_box_set_homogeneous (box, GTK_VALUE_BOOL (*arg));
+    case PROP_HOMOGENEOUS:
+      gtk_box_set_homogeneous (box, g_value_get_boolean (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
-static void
-gtk_box_get_arg (GtkObject    *object,
-		 GtkArg       *arg,
-		 guint         arg_id)
+static void gtk_box_get_property (GObject         *object,
+				  guint            prop_id,
+				  GValue          *value,
+				  GParamSpec      *pspec)
 {
   GtkBox *box;
 
   box = GTK_BOX (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_SPACING:
-      GTK_VALUE_INT (*arg) = box->spacing;
+    case PROP_SPACING:
+      g_value_set_int (value, box->spacing);
       break;
-    case ARG_HOMOGENEOUS:
-      GTK_VALUE_BOOL (*arg) = box->homogeneous;
+    case PROP_HOMOGENEOUS:
+      g_value_set_boolean (value, box->homogeneous);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -417,6 +440,7 @@ gtk_box_set_homogeneous (GtkBox  *box,
   if ((homogeneous ? TRUE : FALSE) != box->homogeneous)
     {
       box->homogeneous = homogeneous ? TRUE : FALSE;
+      g_object_notify (G_OBJECT (box), "homogeneous");
       gtk_widget_queue_resize (GTK_WIDGET (box));
     }
 }
@@ -431,6 +455,7 @@ gtk_box_set_spacing (GtkBox *box,
   if (spacing != box->spacing)
     {
       box->spacing = spacing;
+      g_object_notify (G_OBJECT (box), "spacing");
       gtk_widget_queue_resize (GTK_WIDGET (box));
     }
 }

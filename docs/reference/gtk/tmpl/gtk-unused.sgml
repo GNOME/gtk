@@ -534,6 +534,12 @@ gtk_font_selection_set_filter().
 @GTK_FONT_SCALABLE_BITMAP: scaled bitmap fonts.
 @GTK_FONT_ALL: a bitwise combination of all of the above.
 
+<!-- ##### ARG GtkFrame:shadow-type ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### STRUCT GtkIMContextSimple ##### -->
 <para>
 
