@@ -165,11 +165,11 @@ gdk_drag_context_finalize (GObject *object)
 
   if (context->source_window)
     {
-      gdk_window_unref (context->source_window);
+      g_object_unref (context->source_window);
     }
   
   if (context->dest_window)
-    gdk_window_unref (context->dest_window);
+    g_object_unref (context->dest_window);
   
   contexts = g_list_remove (contexts, context);
 
@@ -268,7 +268,7 @@ idroptarget_addref (LPDROPTARGET This)
   int ref_count = ++private->ref_count;
 
   gdk_drag_context_ref (ctx->context);
-  GDK_NOTE (DND, g_print ("idroptarget_addref %#x %d\n", This, ref_count));
+  GDK_NOTE (DND, g_print ("idroptarget_addref %p %d\n", This, ref_count));
   
   return ref_count;
 }
@@ -278,7 +278,7 @@ idroptarget_queryinterface (LPDROPTARGET This,
 			    REFIID       riid,
 			    LPVOID      *ppvObject)
 {
-  GDK_NOTE (DND, g_print ("idroptarget_queryinterface %#x\n", This));
+  GDK_NOTE (DND, g_print ("idroptarget_queryinterface %p\n", This));
 
   *ppvObject = NULL;
 
@@ -313,7 +313,7 @@ idroptarget_release (LPDROPTARGET This)
   int ref_count = --private->ref_count;
 
   gdk_drag_context_unref (ctx->context);
-  GDK_NOTE (DND, g_print ("idroptarget_release %#x %d\n", This, ref_count));
+  GDK_NOTE (DND, g_print ("idroptarget_release %p %d\n", This, ref_count));
 
   if (ref_count == 0)
     g_free (This);
@@ -328,7 +328,7 @@ idroptarget_dragenter (LPDROPTARGET This,
 		       POINTL       pt,
 		       LPDWORD      pdwEffect)
 {
-  GDK_NOTE (DND, g_print ("idroptarget_dragenter %#x\n", This));
+  GDK_NOTE (DND, g_print ("idroptarget_dragenter %p\n", This));
 
   return E_UNEXPECTED;
 }
@@ -339,7 +339,7 @@ idroptarget_dragover (LPDROPTARGET This,
 		      POINTL       pt,
 		      LPDWORD      pdwEffect)
 {
-  GDK_NOTE (DND, g_print ("idroptarget_dragover %#x\n", This));
+  GDK_NOTE (DND, g_print ("idroptarget_dragover %p\n", This));
 
   return E_UNEXPECTED;
 }
@@ -347,7 +347,7 @@ idroptarget_dragover (LPDROPTARGET This,
 static HRESULT STDMETHODCALLTYPE
 idroptarget_dragleave (LPDROPTARGET This)
 {
-  GDK_NOTE (DND, g_print ("idroptarget_dragleave %#x\n", This));
+  GDK_NOTE (DND, g_print ("idroptarget_dragleave %p\n", This));
 
   return E_UNEXPECTED;
 }
@@ -359,7 +359,7 @@ idroptarget_drop (LPDROPTARGET This,
 		  POINTL       pt,
 		  LPDWORD      pdwEffect)
 {
-  GDK_NOTE (DND, g_print ("idroptarget_drop %#x\n", This));
+  GDK_NOTE (DND, g_print ("idroptarget_drop %p\n", This));
 
   return E_UNEXPECTED;
 }
@@ -371,7 +371,7 @@ idropsource_addref (LPDROPSOURCE This)
   GdkDragContextPrivateWin32 *private = GDK_DRAG_CONTEXT_PRIVATE_DATA (ctx->context);
 
   gdk_drag_context_ref (ctx->context);
-  GDK_NOTE (DND, g_print ("idropsource_addref %#x %d\n",
+  GDK_NOTE (DND, g_print ("idropsource_addref %p %d\n",
 			  This, private->ref_count));
   
   return private->ref_count;
@@ -382,7 +382,7 @@ idropsource_queryinterface (LPDROPSOURCE This,
 			    REFIID       riid,
 			    LPVOID      *ppvObject)
 {
-  GDK_NOTE (DND, g_print ("idropsource_queryinterface %#x\n", This));
+  GDK_NOTE (DND, g_print ("idropsource_queryinterface %p\n", This));
 
   *ppvObject = NULL;
 
@@ -416,7 +416,7 @@ idropsource_release (LPDROPSOURCE This)
   int ref_count = --private->ref_count;
 
   gdk_drag_context_unref (ctx->context);
-  GDK_NOTE (DND, g_print ("idropsource_release %#x %d\n", This, ref_count));
+  GDK_NOTE (DND, g_print ("idropsource_release %p %d\n", This, ref_count));
 
   if (ref_count == 0)
     g_free (This);
@@ -429,7 +429,7 @@ idropsource_querycontinuedrag (LPDROPSOURCE This,
 			       BOOL         fEscapePressed,
 			       DWORD        grfKeyState)
 {
-  GDK_NOTE (DND, g_print ("idropsource_querycontinuedrag %#x\n", This));
+  GDK_NOTE (DND, g_print ("idropsource_querycontinuedrag %p\n", This));
 
   return E_UNEXPECTED;
 }
@@ -438,7 +438,7 @@ static HRESULT STDMETHODCALLTYPE
 idropsource_givefeedback (LPDROPSOURCE This,
 			  DWORD        dwEffect)
 {
-  GDK_NOTE (DND, g_print ("idropsource_givefeedback %#x\n", This));
+  GDK_NOTE (DND, g_print ("idropsource_givefeedback %p\n", This));
 
   return E_UNEXPECTED;
 }
@@ -449,7 +449,7 @@ idataobject_addref (LPDATAOBJECT This)
   data_object *dobj = (data_object *) This;
   int ref_count = ++dobj->ref_count;
 
-  GDK_NOTE (DND, g_print ("idataobject_addref %#x %d\n", This, ref_count));
+  GDK_NOTE (DND, g_print ("idataobject_addref %p %d\n", This, ref_count));
 
   return ref_count;
 }
@@ -459,7 +459,7 @@ idataobject_queryinterface (LPDATAOBJECT This,
 			    REFIID       riid,
 			    LPVOID      *ppvObject)
 {
-  GDK_NOTE (DND, g_print ("idataobject_queryinterface %#x\n", This));
+  GDK_NOTE (DND, g_print ("idataobject_queryinterface %p\n", This));
 
   *ppvObject = NULL;
 
@@ -491,7 +491,7 @@ idataobject_release (LPDATAOBJECT This)
   data_object *dobj = (data_object *) This;
   int ref_count = --dobj->ref_count;
 
-  GDK_NOTE (DND, g_print ("idataobject_release %#x %d\n", This, ref_count));
+  GDK_NOTE (DND, g_print ("idataobject_release %p %d\n", This, ref_count));
 
   if (ref_count == 0)
     g_free (This);
@@ -504,7 +504,7 @@ idataobject_getdata (LPDATAOBJECT This,
 		     LPFORMATETC  pFormatEtc,
 		     LPSTGMEDIUM  pMedium)
 {
-  GDK_NOTE (DND, g_print ("idataobject_getdata %#x\n", This));
+  GDK_NOTE (DND, g_print ("idataobject_getdata %p\n", This));
 
   return E_UNEXPECTED;
 }
@@ -514,7 +514,7 @@ idataobject_getdatahere (LPDATAOBJECT This,
 			 LPFORMATETC  pFormatEtc,
 			 LPSTGMEDIUM  pMedium)
 {
-  GDK_NOTE (DND, g_print ("idataobject_getdatahere %#x\n", This));
+  GDK_NOTE (DND, g_print ("idataobject_getdatahere %p\n", This));
 
   return E_UNEXPECTED;
 }
@@ -525,7 +525,7 @@ idataobject_querygetdata (LPDATAOBJECT This,
 {
   int i;
 
-  GDK_NOTE (DND, g_print ("idataobject_querygetdata %#x %#x", This, pFormatEtc->cfFormat));
+  GDK_NOTE (DND, g_print ("idataobject_querygetdata %p %#x", This, pFormatEtc->cfFormat));
 
   for (i = 0; i < nformats; i++)
     if (pFormatEtc->cfFormat == formats[i].cfFormat)
@@ -543,7 +543,7 @@ idataobject_getcanonicalformatetc (LPDATAOBJECT This,
 				   LPFORMATETC  pFormatEtcIn,
 				   LPFORMATETC  pFormatEtcOut)
 {
-  GDK_NOTE (DND, g_print ("idataobject_getcanonicalformatetc %#x\n", This));
+  GDK_NOTE (DND, g_print ("idataobject_getcanonicalformatetc %p\n", This));
 
   return E_FAIL;
 }
@@ -554,7 +554,7 @@ idataobject_setdata (LPDATAOBJECT This,
 		     LPSTGMEDIUM  pMedium,
 		     BOOL         fRelease)
 {
-  GDK_NOTE (DND, g_print ("idataobject_setdata %#x\n", This));
+  GDK_NOTE (DND, g_print ("idataobject_setdata %p\n", This));
 
   return E_UNEXPECTED;
 }
@@ -564,7 +564,7 @@ idataobject_enumformatetc (LPDATAOBJECT     This,
 			   DWORD            dwDirection,
 			   LPENUMFORMATETC *ppEnumFormatEtc)
 {
-  GDK_NOTE (DND, g_print ("idataobject_enumformatetc %#x\n", This));
+  GDK_NOTE (DND, g_print ("idataobject_enumformatetc %p\n", This));
 
   if (dwDirection != DATADIR_GET)
     return E_NOTIMPL;
@@ -580,7 +580,7 @@ idataobject_dadvise (LPDATAOBJECT This,
 		     LPADVISESINK pAdvSink,
 		     DWORD       *pdwConnection)
 {
-  GDK_NOTE (DND, g_print ("idataobject_dadvise %#x\n", This));
+  GDK_NOTE (DND, g_print ("idataobject_dadvise %p\n", This));
 
   return E_FAIL;
 }
@@ -589,7 +589,7 @@ static HRESULT STDMETHODCALLTYPE
 idataobject_dunadvise (LPDATAOBJECT This,
 		       DWORD         dwConnection)
 {
-  GDK_NOTE (DND, g_print ("idataobject_dunadvise %#x\n", This));
+  GDK_NOTE (DND, g_print ("idataobject_dunadvise %p\n", This));
 
   return E_FAIL;
 }
@@ -598,7 +598,7 @@ static HRESULT STDMETHODCALLTYPE
 idataobject_enumdadvise (LPDATAOBJECT    This,
 			 LPENUMSTATDATA *ppenumAdvise)
 {
-  GDK_NOTE (DND, g_print ("idataobject_enumdadvise %#x\n", This));
+  GDK_NOTE (DND, g_print ("idataobject_enumdadvise %p\n", This));
 
   return E_FAIL;
 }
@@ -609,7 +609,7 @@ ienumformatetc_addref (LPENUMFORMATETC This)
   enum_formats *en = (enum_formats *) This;
   int ref_count = ++en->ref_count;
 
-  GDK_NOTE (DND, g_print ("ienumformatetc_addref %#x %d\n", This, ref_count));
+  GDK_NOTE (DND, g_print ("ienumformatetc_addref %p %d\n", This, ref_count));
 
   return ref_count;
 }
@@ -619,7 +619,7 @@ ienumformatetc_queryinterface (LPENUMFORMATETC This,
 			       REFIID          riid,
 			       LPVOID         *ppvObject)
 {
-  GDK_NOTE (DND, g_print ("ienumformatetc_queryinterface %#x\n", This));
+  GDK_NOTE (DND, g_print ("ienumformatetc_queryinterface %p\n", This));
 
   *ppvObject = NULL;
 
@@ -651,7 +651,7 @@ ienumformatetc_release (LPENUMFORMATETC This)
   enum_formats *en = (enum_formats *) This;
   int ref_count = --en->ref_count;
 
-  GDK_NOTE (DND, g_print ("ienumformatetc_release %#x %d\n", This, ref_count));
+  GDK_NOTE (DND, g_print ("ienumformatetc_release %p %d\n", This, ref_count));
 
   if (ref_count == 0)
     g_free (This);
@@ -668,7 +668,7 @@ ienumformatetc_next (LPENUMFORMATETC This,
   enum_formats *en = (enum_formats *) This;
   int i, n;
 
-  GDK_NOTE (DND, g_print ("ienumformatetc_next %#x %d %d\n", This, en->ix, celt));
+  GDK_NOTE (DND, g_print ("ienumformatetc_next %p %d %d\n", This, en->ix, celt));
 
   n = 0;
   for (i = 0; i < celt; i++)
@@ -694,7 +694,7 @@ ienumformatetc_skip (LPENUMFORMATETC This,
 {
   enum_formats *en = (enum_formats *) This;
 
-  GDK_NOTE (DND, g_print ("ienumformatetc_skip %#x %d %d\n", This, en->ix, celt));
+  GDK_NOTE (DND, g_print ("ienumformatetc_skip %p %d %d\n", This, en->ix, celt));
   en->ix += celt;
 
   return S_OK;
@@ -705,7 +705,7 @@ ienumformatetc_reset (LPENUMFORMATETC This)
 {
   enum_formats *en = (enum_formats *) This;
 
-  GDK_NOTE (DND, g_print ("ienumformatetc_reset %#x\n", This));
+  GDK_NOTE (DND, g_print ("ienumformatetc_reset %p\n", This));
 
   en->ix = 0;
 
@@ -719,7 +719,7 @@ ienumformatetc_clone (LPENUMFORMATETC  This,
   enum_formats *en = (enum_formats *) This;
   enum_formats *new;
 
-  GDK_NOTE (DND, g_print ("ienumformatetc_clone %#x\n", This));
+  GDK_NOTE (DND, g_print ("ienumformatetc_clone %p\n", This));
 
   new = enum_formats_new ();
 
@@ -773,7 +773,6 @@ static IEnumFORMATETCVtbl ief_vtbl = {
   ienumformatetc_clone
 };
 
-#endif /* OLE2_DND */
 
 static target_drag_context *
 target_context_new (void)
@@ -782,9 +781,7 @@ target_context_new (void)
 
   result = g_new0 (target_drag_context, 1);
 
-#ifdef OLE2_DND
   result->idt.lpVtbl = &idt_vtbl;
-#endif
 
   result->context = gdk_drag_context_new ();
   result->context->is_source = FALSE;
@@ -801,9 +798,7 @@ source_context_new (void)
 
   result = g_new0 (source_drag_context, 1);
 
-#ifdef OLE2_DND
   result->ids.lpVtbl = &ids_vtbl;
-#endif
 
   result->context = gdk_drag_context_new ();
   result->context->is_source = TRUE;
@@ -813,7 +808,6 @@ source_context_new (void)
   return result;
 }
 
-#ifdef OLE2_DND
 static data_object *
 data_object_new (void)
 {
@@ -824,7 +818,7 @@ data_object_new (void)
   result->ido.lpVtbl = &ido_vtbl;
   result->ref_count = 1;
 
-  GDK_NOTE (DND, g_print ("data_object_new: %#x\n", result));
+  GDK_NOTE (DND, g_print ("data_object_new: %p\n", result));
 
   return result;
 }
@@ -841,7 +835,7 @@ enum_formats_new (void)
   result->ref_count = 1;
   result->ix = 0;
 
-  GDK_NOTE (DND, g_print ("enum_formats_new: %#x\n", result));
+  GDK_NOTE (DND, g_print ("enum_formats_new: %p\n", result));
 
   return result;
 }
@@ -953,16 +947,16 @@ gdk_dropfiles_filter (GdkXEvent *xev,
   
   if (msg->message == WM_DROPFILES)
     {
-      GDK_NOTE (DND, g_print ("WM_DROPFILES: %#x\n", (guint) msg->hwnd));
+      GDK_NOTE (DND, g_print ("WM_DROPFILES: %p\n", msg->hwnd));
 
       context = gdk_drag_context_new ();
       private = GDK_DRAG_CONTEXT_PRIVATE_DATA (context);
       context->protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
       context->is_source = FALSE;
       context->source_window = _gdk_parent_root;
-      gdk_drawable_ref (context->source_window);
+      g_object_ref (context->source_window);
       context->dest_window = event->any.window;
-      gdk_drawable_ref (context->dest_window);
+      g_object_ref (context->dest_window);
       /* WM_DROPFILES drops are always file names */
       context->targets =
 	g_list_append (NULL, GUINT_TO_POINTER (_text_uri_list));
@@ -1108,9 +1102,9 @@ local_send_enter (GdkDragContext *context,
   new_context->is_source = FALSE;
 
   new_context->source_window = context->source_window;
-  gdk_window_ref (new_context->source_window);
+  g_object_ref (new_context->source_window);
   new_context->dest_window = context->dest_window;
-  gdk_window_ref (new_context->dest_window);
+  g_object_ref (new_context->dest_window);
 
   new_context->targets = g_list_copy (context->targets);
 
@@ -1208,7 +1202,7 @@ gdk_drag_do_leave (GdkDragContext *context,
 	  break;
 	}
 
-      gdk_drawable_unref (context->dest_window);
+      g_object_unref (context->dest_window);
       context->dest_window = NULL;
     }
 }
@@ -1226,7 +1220,7 @@ gdk_drag_begin (GdkWindow *window,
   new_context = gdk_drag_context_new ();
   new_context->is_source = TRUE;
   new_context->source_window = window;
-  gdk_window_ref (window);
+  g_object_ref (window);
 
   tmp_list = g_list_last (targets);
   new_context->targets = NULL;
@@ -1257,7 +1251,7 @@ gdk_drag_begin (GdkWindow *window,
   ctx = source_context_new ();
   ctx->context->protocol = GDK_DRAG_PROTO_OLE2;
   ctx->context->source_window = window;
-  gdk_drawable_ref (window);
+  g_object_ref (window);
 
   tmp_list = g_list_last (targets);
   ctx->context->targets = NULL;
@@ -1317,6 +1311,43 @@ gdk_drag_get_protocol_for_display (GdkDisplay      *display,
   return 0;
 }
 
+typedef struct {
+  gint x;
+  gint y;
+  HWND ignore;
+  HWND result;
+} find_window_enum_arg;
+
+static BOOL CALLBACK
+find_window_enum_proc (HWND   hwnd,
+		       LPARAM lparam)
+{
+  RECT rect;
+  POINT tl, br;
+  find_window_enum_arg *a = (find_window_enum_arg *) lparam;
+
+  if (hwnd == a->ignore)
+    return TRUE;
+
+  if (!IsWindowVisible (hwnd))
+    return TRUE;
+
+  tl.x = tl.y = 0;
+  ClientToScreen (hwnd, &tl);
+  GetClientRect (hwnd, &rect);
+  br.x = rect.right;
+  br.y = rect.bottom;
+  ClientToScreen (hwnd, &br);
+
+  if (a->x >= tl.x && a->y >= tl.y && a->x < br.x && a->y < br.y)
+    {
+      a->result = hwnd;
+      return FALSE;
+    }
+  else
+    return TRUE;
+}
+
 void
 gdk_drag_find_window_for_screen (GdkDragContext  *context,
 				 GdkWindow       *drag_window,
@@ -1326,21 +1357,24 @@ gdk_drag_find_window_for_screen (GdkDragContext  *context,
 				 GdkWindow      **dest_window,
 				 GdkDragProtocol *protocol)
 {
-  HWND recipient;
-  POINT pt;
+  find_window_enum_arg a;
 
-  pt.x = x_root;
-  pt.y = y_root;
-  recipient = WindowFromPoint (pt);
-  if (recipient == NULL)
+  a.x = x_root;
+  a.y = y_root;
+  a.ignore = drag_window ? GDK_WINDOW_HWND (drag_window) : NULL;
+  a.result = NULL;
+
+  EnumWindows (find_window_enum_proc, (LPARAM) &a);
+
+  if (a.result == NULL)
     *dest_window = NULL;
   else
     {
-      *dest_window = gdk_win32_handle_table_lookup (GPOINTER_TO_UINT(recipient));
+      *dest_window = gdk_win32_handle_table_lookup (GPOINTER_TO_UINT (a.result));
       if (*dest_window)
 	{
 	  *dest_window = gdk_window_get_toplevel (*dest_window);
-	  gdk_drawable_ref (*dest_window);
+	  g_object_ref (*dest_window);
 	}
 
       if (context->source_window)
@@ -1349,9 +1383,13 @@ gdk_drag_find_window_for_screen (GdkDragContext  *context,
         *protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
     }
 
-  GDK_NOTE (DND, g_print ("gdk_drag_find_window: %#x +%d+%d Protocol: %d\n",
-			  (drag_window ? (guint) GDK_WINDOW_HWND (drag_window) : 0),
-			  x_root, y_root, *protocol));
+  GDK_NOTE (DND,
+	    g_print ("gdk_drag_find_window: %p +%d+%d: %p: %p %d\n",
+		     (drag_window ? GDK_WINDOW_HWND (drag_window) : NULL),
+		     x_root, y_root,
+		     a.result,
+		     (*dest_window ? GDK_WINDOW_HWND (*dest_window) : NULL),
+		     *protocol));
 }
 
 gboolean
@@ -1384,7 +1422,7 @@ gdk_drag_motion (GdkDragContext *context,
       if (dest_window)
 	{
 	  context->dest_window = dest_window;
-	  gdk_window_ref (context->dest_window);
+	  g_object_ref (context->dest_window);
 	  context->protocol = protocol;
 
 	  switch (protocol)
@@ -1507,6 +1545,8 @@ gdk_drag_status (GdkDragContext *context,
 
   private = GDK_DRAG_CONTEXT_PRIVATE_DATA (context);
 
+  context->action = action;
+
   src_context = gdk_drag_context_find (TRUE,
 				       context->source_window,
 				       context->dest_window);
@@ -1598,7 +1638,7 @@ gdk_destroy_filter (GdkXEvent *xev,
     {
       IDropTarget *idtp = (IDropTarget *) data;
 
-      GDK_NOTE (DND, g_print ("gdk_destroy_filter: WM_DESTROY: %#x\n", msg->hwnd));
+      GDK_NOTE (DND, g_print ("gdk_destroy_filter: WM_DESTROY: %p\n", msg->hwnd));
 #if 0
       idtp->lpVtbl->Release (idtp);
 #endif
@@ -1624,8 +1664,8 @@ gdk_window_register_dnd (GdkWindow *window)
 
   gdk_drawable_set_data (window, "gdk-dnd-registered", GINT_TO_POINTER(TRUE), NULL);
 
-  GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %#x\n",
-			  (guint) GDK_WINDOW_HWND (window)));
+  GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %p\n",
+			  GDK_WINDOW_HWND (window)));
 
   /* We always claim to accept dropped files, but in fact we might not,
    * of course. This function is called in such a way that it cannot know

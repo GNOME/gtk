@@ -1,3 +1,17 @@
+2003-06-30  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdnd-win32.c (find_window_enum_proc): New function,
+	callback proc for EnumWindows().
+	(gdk_drag_find_window_for_screen): Actually take the drag_window
+	argument into account: Instead of using WindowFromPoint(), use
+	EnumWindows(), to be able to skip the drag_window. (#116320, Tony
+	M Brown, Herman Bloggs)
+
+	* gdk/win32/*.c: Replace gdk_drawable_ref()/unref() and
+	gdk_window_ref()/unref() calls with g_object_ref()/unref().
+	Consistently use %p format in debugging output of pointers and
+	HANDLEs.
+
 2003-06-30  Mark McLoughlin  <mark@skynet.ie>
 
 	* gtk/gtkexpander.h: kill some stray characters
