@@ -81,8 +81,9 @@ Release notes
   the GTK+ developers consider that having filenames whose interpretation
   depends on the current locale is fundamentally a bad idea.
 
-  If you have filenames encoded in the encoding of your locale, then
-  you may want to set the G_FILENAME_ENCODING environment variable:
+  On Unix, if you have filenames encoded in the encoding of your
+  locale, then you may want to set the G_FILENAME_ENCODING environment
+  variable:
   
    G_FILENAME_ENCODING=@local
    export G_FILENAME_ENCODING
@@ -92,6 +93,18 @@ Release notes
   is still supported, but G_FILENAME_ENCODING is preferred.)
   Best integration of GTK+ 2.6 with the environment is achieved by 
   using a UTF-8 locale.
+
+  On Windows, filenames passed to GTK+ should always be in UTF-8, like
+  in GLib 2.6. This is different than in previous versions of GTK+
+  where the system codepage was used. Like in GLib, for DLL ABI
+  stability, applications built against previous versions of GTK+ will
+  use entry points providing the old semantics.
+
+  When compiling against GTK+ 2.6, applications intended to be
+  portable to Windows must take the UTF-8 file name encoding into
+  consideration, and for instance use the gstdio wrappers to access
+  files whose names have been constructed from strings returned from
+  GTK+ or GLib.
 
 How to report bugs
 ==================
