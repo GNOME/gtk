@@ -1,4 +1,4 @@
-/* gtkmodelsimple.h
+/* gtktreemodelsimple.h
  * Copyright (C) 2000  Red Hat, Inc.,  Jonathan Blandford <jrb@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,8 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GTK_MODEL_SIMPLE_H__
-#define __GTK_MODEL_SIMPLE_H__
+#ifndef __GTK_TREE_MODEL_SIMPLE_H__
+#define __GTK_TREE_MODEL_SIMPLE_H__
 
 #include <gtk/gtktreemodel.h>
 
@@ -27,23 +27,23 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_TYPE_MODEL_SIMPLE			(gtk_model_simple_get_type ())
-#define GTK_MODEL_SIMPLE(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_MODEL_SIMPLE, GtkModelSimple))
-#define GTK_MODEL_SIMPLE_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MODEL_SIMPLE, GtkModelSimpleClass))
+#define GTK_TYPE_MODEL_SIMPLE			(gtk_tree_model_simple_get_type ())
+#define GTK_TREE_MODEL_SIMPLE(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_MODEL_SIMPLE, GtkTreeModelSimple))
+#define GTK_TREE_MODEL_SIMPLE_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MODEL_SIMPLE, GtkTreeModelSimpleClass))
 #define GTK_IS_MODEL_SIMPLE(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_MODEL_SIMPLE))
 #define GTK_IS_MODEL_SIMPLE_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_MODEL_SIMPLE))
 
-typedef struct _GtkModelSimple       GtkModelSimple;
-typedef struct _GtkModelSimpleClass  GtkModelSimpleClass;
+typedef struct _GtkTreeModelSimple       GtkTreeModelSimple;
+typedef struct _GtkTreeModelSimpleClass  GtkTreeModelSimpleClass;
 
-struct _GtkModelSimple
+struct _GtkTreeModelSimple
 {
   GtkObject parent;
 
   gint stamp;
 };
 
-struct _GtkModelSimpleClass
+struct _GtkTreeModelSimpleClass
 {
   GtkObjectClass parent_class;
 
@@ -96,22 +96,20 @@ struct _GtkModelSimpleClass
 				    GtkTreePath  *path);
 };
 
-
-GtkType         gtk_model_simple_get_type      (void);
-GtkModelSimple *gtk_model_simple_new           (void);
-void            gtk_model_simple_changed       (GtkModelSimple *simple,
-						GtkTreePath    *path,
-						GtkTreeIter    *iter);
-void            gtk_model_simple_inserted      (GtkModelSimple *simple,
-						GtkTreePath    *path,
-						GtkTreeIter    *iter);
-void            gtk_model_simple_child_toggled (GtkModelSimple *simple,
-						GtkTreePath    *path,
-						GtkTreeIter    *iter);
-void            gtk_model_simple_deleted       (GtkModelSimple *simple,
-						GtkTreePath    *path,
-						GtkTreeIter    *iter);
-
+GtkType             gtk_tree_model_simple_get_type      (void);
+GtkTreeModelSimple *gtk_tree_model_simple_new           (void);
+void                gtk_tree_model_simple_changed       (GtkTreeModelSimple *simple,
+                                                         GtkTreePath        *path,
+                                                         GtkTreeIter        *iter);
+void                gtk_tree_model_simple_inserted      (GtkTreeModelSimple *simple,
+                                                         GtkTreePath        *path,
+                                                         GtkTreeIter        *iter);
+void                gtk_tree_model_simple_child_toggled (GtkTreeModelSimple *simple,
+                                                         GtkTreePath        *path,
+                                                         GtkTreeIter        *iter);
+void                gtk_tree_model_simple_deleted       (GtkTreeModelSimple *simple,
+                                                         GtkTreePath        *path,
+                                                         GtkTreeIter        *iter);
 
 
 #ifdef __cplusplus
@@ -119,4 +117,4 @@ void            gtk_model_simple_deleted       (GtkModelSimple *simple,
 #endif /* __cplusplus */
 
 
-#endif /* __GTK_MODEL_SIMPLE_H__ */
+#endif /* __GTK_TREE_MODEL_SIMPLE_H__ */

@@ -401,15 +401,15 @@ gtk_tree_view_column_get_visible (GtkTreeViewColumn *tree_column)
 }
 
 /**
- * gtk_tree_view_column_set_col_type:
+ * gtk_tree_view_column_set_sizing:
  * @tree_column: A #GtkTreeViewColumn.
- * @type: The #GtkTreeViewColumnType.
+ * @type: The #GtkTreeViewColumnSizing.
  * 
  * Sets the growth behavior of @tree_column to @type.
  **/
 void
-gtk_tree_view_column_set_col_type (GtkTreeViewColumn     *tree_column,
-				   GtkTreeViewColumnType  type)
+gtk_tree_view_column_set_sizing (GtkTreeViewColumn     *tree_column,
+				   GtkTreeViewColumnSizing  type)
 {
   g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
@@ -473,7 +473,7 @@ gtk_tree_view_column_get_size (GtkTreeViewColumn *tree_column)
 }
 
 /**
- * gtk_tree_view_column_set_size:
+ * gtk_tree_view_column_set_width:
  * @tree_column: A #GtkTreeViewColumn.
  * @size: The size to set the @tree_column to.
  * 
@@ -482,7 +482,7 @@ gtk_tree_view_column_get_size (GtkTreeViewColumn *tree_column)
  * size of the column is based on the calculated width of the column.
  **/
 void
-gtk_tree_view_column_set_size (GtkTreeViewColumn *tree_column,
+gtk_tree_view_column_set_width (GtkTreeViewColumn *tree_column,
 			       gint               size)
 {
   g_return_if_fail (tree_column != NULL);
@@ -681,7 +681,7 @@ gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
 }
 
 /**
- * gtk_tree_view_column_set_header_active:
+ * gtk_tree_view_column_set_header_clickable:
  * @tree_column: A #GtkTreeViewColumn.
  * @active: TRUE if the header is active.
  * 
@@ -689,7 +689,7 @@ gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
  * then it can take keyboard focus, and can be clicked.
  **/
 void
-gtk_tree_view_column_set_header_active (GtkTreeViewColumn *tree_column,
+gtk_tree_view_column_set_header_clickable (GtkTreeViewColumn *tree_column,
 					gboolean           active)
 {
   g_return_if_fail (tree_column != NULL);

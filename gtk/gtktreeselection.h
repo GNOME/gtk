@@ -38,7 +38,7 @@ typedef enum
 {
   GTK_TREE_SELECTION_SINGLE,
   GTK_TREE_SELECTION_MULTI
-} GtkTreeSelectionType;
+} GtkTreeSelectionMode;
 
 typedef gboolean (* GtkTreeSelectionFunc)    (GtkTreeSelection  *selection,
 					      GtkTreeModel      *model,
@@ -55,7 +55,7 @@ struct _GtkTreeSelection
   /*< private >*/
   
   GtkTreeView *tree_view;
-  GtkTreeSelectionType type;
+  GtkTreeSelectionMode type;
   GtkTreeSelectionFunc user_func;
   gpointer user_data;
 };
@@ -70,8 +70,8 @@ struct _GtkTreeSelectionClass
 
 GtkType          gtk_tree_selection_get_type            (void);
 
-void             gtk_tree_selection_set_type            (GtkTreeSelection            *selection,
-							 GtkTreeSelectionType         type);
+void             gtk_tree_selection_set_mode            (GtkTreeSelection            *selection,
+							 GtkTreeSelectionMode         type);
 void             gtk_tree_selection_set_select_function (GtkTreeSelection            *selection,
 							 GtkTreeSelectionFunc         func,
 							 gpointer                     data);

@@ -943,7 +943,7 @@ gtk_tree_view_motion (GtkWidget *widget,
       new_width = gtk_tree_view_new_column_width (GTK_TREE_VIEW (widget), tree_view->priv->drag_pos, &x);
       if (x != tree_view->priv->x_drag)
 	{
-	  gtk_tree_view_column_set_size (gtk_tree_view_get_column (GTK_TREE_VIEW (widget), tree_view->priv->drag_pos), new_width);
+	  gtk_tree_view_column_set_width (gtk_tree_view_get_column (GTK_TREE_VIEW (widget), tree_view->priv->drag_pos), new_width);
 	}
 
       /* FIXME: Do we need to scroll */
@@ -1306,7 +1306,7 @@ gtk_tree_view_button_release (GtkWidget      *widget,
       gdk_pointer_ungrab (event->time);
 
       width = gtk_tree_view_new_column_width (GTK_TREE_VIEW (widget), i, &x);
-      gtk_tree_view_column_set_size (gtk_tree_view_get_column (GTK_TREE_VIEW (widget), i), width);
+      gtk_tree_view_column_set_width (gtk_tree_view_get_column (GTK_TREE_VIEW (widget), i), width);
       return FALSE;
     }
 
@@ -3290,7 +3290,7 @@ gtk_tree_view_set_headers_active (GtkTreeView *tree_view,
   g_return_if_fail (tree_view->priv->model != NULL);
 
   for (list = tree_view->priv->columns; list; list = list->next)
-    gtk_tree_view_column_set_header_active (GTK_TREE_VIEW_COLUMN (list->data), active);
+    gtk_tree_view_column_set_header_clickable (GTK_TREE_VIEW_COLUMN (list->data), active);
 }
 
 /**

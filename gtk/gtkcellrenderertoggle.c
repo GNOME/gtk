@@ -20,11 +20,7 @@
 #include <stdlib.h>
 #include <gtk/gtkcellrenderertoggle.h>
 #include <gtk/gtksignal.h>
-
-#ifndef _
-#define _(x) x
-#endif
-
+#include "gtkintl.h"
 
 static void gtk_cell_renderer_toggle_get_property  (GObject                    *object,
 						    guint                       param_id,
@@ -65,7 +61,7 @@ enum {
 
 enum {
   PROP_ZERO,
-  PROP_STATE,
+  PROP_ACTIVE,
   PROP_RADIO
 };
 
@@ -104,7 +100,7 @@ gtk_cell_renderer_toggle_get_type (void)
 static void
 gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)
 {
-  celltoggle->state = FALSE;
+  celltoggle->active = FALSE;
   celltoggle->radio = FALSE;
   GTK_CELL_RENDERER (celltoggle)->xpad = 2;
   GTK_CELL_RENDERER (celltoggle)->ypad = 2;
@@ -124,10 +120,10 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
   cell_class->event = gtk_cell_renderer_toggle_event;
   
   g_object_class_install_property (object_class,
-				   PROP_STATE,
-				   g_param_spec_boolean ("state",
+				   PROP_ACTIVE,
+				   g_param_spec_boolean ("active",
 							 _("Toggle state"),
-							 _("The toggle-state of the button."),
+							 _("The toggle state of the button"),
 							 FALSE,
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
@@ -136,7 +132,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 				   PROP_RADIO,
 				   g_param_spec_boolean ("radio",
 							 _("Radio state"),
-							 _("Draw the toggle button as a radio button."),
+							 _("Draw the toggle button as a radio button"),
 							 FALSE,
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
@@ -163,8 +159,8 @@ gtk_cell_renderer_toggle_get_property (GObject     *object,
   
   switch (param_id)
     {
-    case PROP_STATE:
-      g_value_set_boolean (value, celltoggle->state);
+    case PROP_ACTIVE:
+      g_value_set_boolean (value, celltoggle->active);
       break;
     case PROP_RADIO:
       g_value_set_boolean (value, celltoggle->radio);
@@ -187,8 +183,8 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
   
   switch (param_id)
     {
-    case PROP_STATE:
-      celltoggle->state = g_value_get_boolean (value);
+    case PROP_ACTIVE:
+      gtk_cell_renderer_toggle_set_active (celltoggle, g_value_get_boolean (value));
       break;
     case PROP_RADIO:
       celltoggle->radio = g_value_get_boolean (value);
@@ -252,7 +248,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
 			  cell_area->x + real_xoffset,
 			  cell_area->y + real_yoffset,
 			  width, height);
-      if (celltoggle->state)
+      if (celltoggle->active)
 	{
 	  gdk_draw_line (window,
 			 widget->style->black_gc,
@@ -278,7 +274,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
 		    width,
 		    height,
 		    0, 360*64);
-      if (celltoggle->state)
+      if (celltoggle->active)
 	{
 	  gdk_draw_arc (window,
 			widget->style->black_gc,
@@ -316,4 +312,27 @@ gtk_cell_renderer_toggle_set_radio (GtkCellRendererToggle *toggle,
   g_return_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle));
 
   toggle->radio = radio;
+}
+
+gboolean
+gtk_cell_renderer_toggle_get_active (GtkCellRendererToggle *toggle)
+{
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle), FALSE);
+
+  return toggle->active;
+}
+
+void
+gtk_cell_renderer_toggle_set_active (GtkCellRendererToggle *toggle,
+                                     gboolean               setting)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle));
+
+  setting = !! setting;
+
+  if (toggle->active != setting)
+    {
+      toggle->active = setting;
+      g_object_notify (G_OBJECT (toggle), "active");
+    }
 }

@@ -1,4 +1,4 @@
-/* gtkmodelsimple.c
+/* gtktreemodelsimple.c
  * Copyright (C) 2000  Red Hat, Inc.,  Jonathan Blandford <jrb@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gtkmodelsimple.h"
+#include "gtktreemodelsimple.h"
 #include "gtksignal.h"
 enum {
   CHANGED,
@@ -41,9 +41,9 @@ enum {
   LAST_SIGNAL
 };
 
-static void         gtk_model_simple_init                 (GtkModelSimple      *model_simple);
-static void         gtk_model_simple_class_init           (GtkModelSimpleClass *class);
-static void         gtk_model_simple_tree_model_init      (GtkTreeModelIface   *iface);
+static void         gtk_tree_model_simple_init                 (GtkTreeModelSimple      *model_simple);
+static void         gtk_tree_model_simple_class_init           (GtkTreeModelSimpleClass *class);
+static void         gtk_tree_model_simple_tree_model_init      (GtkTreeModelIface   *iface);
 static gint         gtk_real_model_simple_get_n_columns   (GtkTreeModel        *tree_model);
 static GType        gtk_real_model_simple_get_column_type (GtkTreeModel        *tree_model,
 							   gint                 index);
@@ -82,7 +82,7 @@ static guint model_simple_signals[LAST_SIGNAL] = { 0 };
 
 
 GtkType
-gtk_model_simple_get_type (void)
+gtk_tree_model_simple_get_type (void)
 {
   static GtkType model_simple_type = 0;
 
@@ -90,25 +90,25 @@ gtk_model_simple_get_type (void)
     {
       static const GTypeInfo model_simple_info =
       {
-        sizeof (GtkModelSimpleClass),
+        sizeof (GtkTreeModelSimpleClass),
 	NULL,		/* base_init */
 	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_model_simple_class_init,
+        (GClassInitFunc) gtk_tree_model_simple_class_init,
 	NULL,		/* class_finalize */
 	NULL,		/* class_data */
-        sizeof (GtkModelSimple),
+        sizeof (GtkTreeModelSimple),
 	0,
-        (GInstanceInitFunc) gtk_model_simple_init
+        (GInstanceInitFunc) gtk_tree_model_simple_init
       };
 
       static const GInterfaceInfo tree_model_info =
       {
-	(GInterfaceInitFunc) gtk_model_simple_tree_model_init,
+	(GInterfaceInitFunc) gtk_tree_model_simple_tree_model_init,
 	NULL,
 	NULL
       };
 
-      model_simple_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkModelSimple", &model_simple_info, 0);
+      model_simple_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeModelSimple", &model_simple_info, 0);
       g_type_add_interface_static (model_simple_type,
 				   GTK_TYPE_TREE_MODEL,
 				   &tree_model_info);
@@ -117,18 +117,18 @@ gtk_model_simple_get_type (void)
   return model_simple_type;
 }
 
-GtkModelSimple *
-gtk_model_simple_new (void)
+GtkTreeModelSimple *
+gtk_tree_model_simple_new (void)
 {
-  GtkModelSimple *retval;
+  GtkTreeModelSimple *retval;
 
-  retval = GTK_MODEL_SIMPLE (gtk_type_new (GTK_TYPE_MODEL_SIMPLE));
+  retval = GTK_TREE_MODEL_SIMPLE (gtk_type_new (GTK_TYPE_MODEL_SIMPLE));
 
   return retval;
 }
 
 static void
-gtk_model_simple_class_init (GtkModelSimpleClass *class)
+gtk_tree_model_simple_class_init (GtkTreeModelSimpleClass *class)
 {
   GtkObjectClass *object_class;
 
@@ -138,7 +138,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("changed",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, changed),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, changed),
                     gtk_marshal_VOID__BOXED_BOXED,
                     G_TYPE_NONE, 2,
 		    G_TYPE_POINTER,
@@ -147,7 +147,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("inserted",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, inserted),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, inserted),
                     gtk_marshal_VOID__BOXED_BOXED,
                     G_TYPE_NONE, 2,
 		    G_TYPE_POINTER,
@@ -156,7 +156,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("child_toggled",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, child_toggled),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, child_toggled),
                     gtk_marshal_VOID__BOXED_BOXED,
                     G_TYPE_NONE, 2,
 		    G_TYPE_POINTER,
@@ -165,7 +165,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("deleted",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, deleted),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, deleted),
                     gtk_marshal_VOID__BOXED,
                     G_TYPE_NONE, 1,
 		    G_TYPE_POINTER);
@@ -174,14 +174,14 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("get_n_columns",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, get_n_columns),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, get_n_columns),
                     gtk_marshal_INT__VOID,
                     G_TYPE_INT, 0);
   model_simple_signals[GET_COLUMN_TYPE] =
     gtk_signal_new ("get_column_type",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, get_column_type),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, get_column_type),
                     gtk_marshal_INT__INT,
                     G_TYPE_INT, 1,
 		    G_TYPE_INT);
@@ -189,7 +189,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("get_iter",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, get_iter),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, get_iter),
                     gtk_marshal_BOOLEAN__BOXED_BOXED,
                     G_TYPE_BOOLEAN, 2,
 		    G_TYPE_POINTER,
@@ -198,7 +198,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("get_path",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, get_path),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, get_path),
                     gtk_marshal_BOXED__BOXED,
                     G_TYPE_POINTER, 1,
 		    G_TYPE_POINTER);
@@ -206,7 +206,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("get_value",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, get_value),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, get_value),
                     gtk_marshal_VOID__BOXED_INT_POINTER,
                     G_TYPE_NONE, 3,
 		    G_TYPE_POINTER,
@@ -216,7 +216,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("iter_next",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, iter_next),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, iter_next),
                     gtk_marshal_BOOLEAN__BOXED,
                     G_TYPE_BOOLEAN, 1,
 		    G_TYPE_POINTER);
@@ -224,7 +224,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("iter_children",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, iter_children),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, iter_children),
                     gtk_marshal_BOOLEAN__BOXED_BOXED,
                     G_TYPE_BOOLEAN, 2,
 		    G_TYPE_POINTER,
@@ -233,7 +233,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("iter_has_child",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, iter_has_child),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, iter_has_child),
                     gtk_marshal_BOOLEAN__BOXED,
                     G_TYPE_BOOLEAN, 1,
 		    G_TYPE_POINTER);
@@ -241,7 +241,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("iter_n_children",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, iter_n_children),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, iter_n_children),
                     gtk_marshal_INT__BOXED,
                     G_TYPE_INT, 1,
 		    G_TYPE_POINTER);
@@ -249,7 +249,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("iter_nth_child",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, iter_nth_child),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, iter_nth_child),
                     gtk_marshal_BOOLEAN__BOXED_BOXED_INT,
                     GTK_TYPE_BOOL, 3,
 		    G_TYPE_POINTER,
@@ -259,7 +259,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("iter_parent",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, iter_parent),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, iter_parent),
                     gtk_marshal_BOOLEAN__BOXED_BOXED,
                     G_TYPE_BOOLEAN, 2,
 		    G_TYPE_POINTER,
@@ -268,7 +268,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("ref_iter",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, ref_iter),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, ref_iter),
                     gtk_marshal_NONE__BOXED,
                     G_TYPE_NONE, 1,
 		    G_TYPE_POINTER);
@@ -276,14 +276,14 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
     gtk_signal_new ("unref_iter",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, unref_iter),
+                    GTK_SIGNAL_OFFSET (GtkTreeModelSimpleClass, unref_iter),
                     gtk_marshal_NONE__BOXED,
                     G_TYPE_NONE, 1,
 		    G_TYPE_POINTER);
 }
 
 static void
-gtk_model_simple_tree_model_init (GtkTreeModelIface *iface)
+gtk_tree_model_simple_tree_model_init (GtkTreeModelIface *iface)
 {
   iface->get_n_columns = gtk_real_model_simple_get_n_columns;
   iface->get_column_type = gtk_real_model_simple_get_column_type;
@@ -302,7 +302,7 @@ gtk_model_simple_tree_model_init (GtkTreeModelIface *iface)
 
 
 static void
-gtk_model_simple_init (GtkModelSimple *model_simple)
+gtk_tree_model_simple_init (GtkTreeModelSimple *model_simple)
 {
   model_simple->stamp = 1;
 }
@@ -446,7 +446,7 @@ gtk_real_model_simple_unref_iter (GtkTreeModel *tree_model,
 
 /* Public functions */
 void
-gtk_model_simple_changed (GtkModelSimple *simple,
+gtk_tree_model_simple_changed (GtkTreeModelSimple *simple,
 			  GtkTreePath    *path,
 			  GtkTreeIter    *iter)
 {
@@ -458,7 +458,7 @@ gtk_model_simple_changed (GtkModelSimple *simple,
 }
 
 void
-gtk_model_simple_inserted (GtkModelSimple *simple,
+gtk_tree_model_simple_inserted (GtkTreeModelSimple *simple,
 			   GtkTreePath    *path,
 			   GtkTreeIter    *iter)
 {
@@ -470,7 +470,7 @@ gtk_model_simple_inserted (GtkModelSimple *simple,
 }
 
 void
-gtk_model_simple_child_toggled (GtkModelSimple *simple,
+gtk_tree_model_simple_child_toggled (GtkTreeModelSimple *simple,
 				GtkTreePath    *path,
 				GtkTreeIter    *iter)
 {
@@ -482,7 +482,7 @@ gtk_model_simple_child_toggled (GtkModelSimple *simple,
 }
 
 void
-gtk_model_simple_iter_deleted (GtkModelSimple *simple,
+gtk_tree_model_simple_iter_deleted (GtkTreeModelSimple *simple,
 			       GtkTreePath    *path,
 			       GtkTreeIter    *iter)
 {

@@ -30,10 +30,10 @@ extern "C" {
 
 typedef enum
 {
-  GTK_CELL_RENDERER_SELECTED = 1 << 0,
-  GTK_CELL_RENDERER_PRELIT = 1 << 1,
+  GTK_CELL_RENDERER_SELECTED    = 1 << 0,
+  GTK_CELL_RENDERER_PRELIT      = 1 << 1,
   GTK_CELL_RENDERER_INSENSITIVE = 1 << 2
-} GtkCellRendererType;
+} GtkCellRendererState;
 
 #define GTK_TYPE_CELL_RENDERER		  (gtk_cell_renderer_get_type ())
 #define GTK_CELL_RENDERER(obj)		  (GTK_CHECK_CAST ((obj), GTK_TYPE_CELL_RENDERER, GtkCellRenderer))

@@ -238,7 +238,7 @@ make_window (gboolean use_sort)
     }
 
   selection = GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)));
-  gtk_tree_selection_set_type (GTK_TREE_SELECTION (selection), GTK_TREE_SELECTION_SINGLE);
+  gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection), GTK_TREE_SELECTION_SINGLE);
 
   /* Put them together */
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);

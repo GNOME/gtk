@@ -125,7 +125,6 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkmenushell.h		\
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
-	gtkmodelsimple.h	\
 	gtknotebook.h		\
 	gtkoldeditable.h	\
 	gtkobject.h		\
@@ -174,6 +173,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtktree.h		\
 	gtktreeitem.h		\
 	gtktreemodel.h		\
+	gtktreemodelsimple.h	\
 	gtktreemodelsort.h	\
 	gtktreeselection.h	\
 	gtktreestore.h		\
@@ -282,7 +282,6 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkmenushell.c		\
 	gtkmessagedialog.c	\
 	gtkmisc.c		\
-	gtkmodelsimple.c	\
 	gtknotebook.c		\
 	gtkobject.c		\
 	gtkoldeditable.c	\
@@ -337,6 +336,7 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtktreeitem.c		\
 	gtktreedatalist.c	\
 	gtktreemodel.c		\
+	gtktreemodelsimple.c	\
 	gtktreemodelsort.c	\
 	gtktreeselection.c	\
 	gtktreestore.c		\

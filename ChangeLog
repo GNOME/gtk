@@ -1,3 +1,33 @@
+2001-01-04  Havoc Pennington  <hp@redhat.com>
+
+        Rename some stuff:
+	
+	s/gtk_tree_view_column_set_size/gtk_tree_view_column_set_width/g;
+
+	s/GtkModelSimple/GtkTreeModelSimple/g;
+	s/GTK_MODEL_SIMPLE/GTK_TREE_MODEL_SIMPLE/g;
+	s/gtk_model_simple/gtk_tree_model_simple/g;
+	s/gtkmodelsimple/gtktreemodelsimple/g;
+
+	s/gtk_tree_view_column_set_header_active/gtk_tree_view_column_set_header_clickable/g;
+
+	s/GtkTreeViewColumnType/GtkTreeViewColumnSizing/g;
+	s/column_set_col_type/column_set_sizing/g;
+
+	s/GtkTreeSelectionType/GtkTreeSelectionMode/g;
+	s/gtk_tree_selection_set_type/gtk_tree_selection_set_mode/g;
+
+	s/GtkCellRendererType/GtkCellRendererState/g;
+	
+	* gtk/gtkcellrenderertoggle.c: remove _ macro, include gtkintl.h
+	(gtk_cell_renderer_toggle_class_init): change "state" property to
+	"active", to match GtkToggleButton
+	(gtk_cell_renderer_toggle_get_active): new function, bug
+	40269
+	(gtk_cell_renderer_toggle_set_active): new function
+	(gtk_cell_renderer_toggle_set_property): route changes to toggle
+	state through gtk_cell_renderer_set_active
+
 Thu Jan  4 15:46:18 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkmodelsimple.c: Changed a bunch of boxed types to pointers

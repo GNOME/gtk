@@ -101,7 +101,6 @@
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkmisc.h>
-#include <gtk/gtkmodelsimple.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkobject.h>
 #include <gtk/gtkoldeditable.h>
@@ -141,6 +140,7 @@
 #include <gtk/gtktree.h>
 #include <gtk/gtktreeitem.h>
 #include <gtk/gtktreemodel.h>
+#include <gtk/gtktreemodelsimple.h>
 #include <gtk/gtktreemodelsort.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreestore.h>

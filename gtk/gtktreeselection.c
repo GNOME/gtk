@@ -154,7 +154,7 @@ _gtk_tree_selection_set_tree_view (GtkTreeSelection *selection,
 
 /* FIXME explain what the anchor is */
 /**
- * gtk_tree_selection_set_type:
+ * gtk_tree_selection_set_mode:
  * @selection: A #GtkTreeSelection.
  * @type: The selection type.
  * 
@@ -163,8 +163,8 @@ _gtk_tree_selection_set_tree_view (GtkTreeSelection *selection,
  * the anchor is kept selected, if it was previously selected.
  **/
 void
-gtk_tree_selection_set_type (GtkTreeSelection     *selection,
-			     GtkTreeSelectionType  type)
+gtk_tree_selection_set_mode (GtkTreeSelection     *selection,
+			     GtkTreeSelectionMode  type)
 {
   g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
