@@ -19,11 +19,8 @@ EXTRA_DIST =			\
 	config.h.win32		\
 	gtk-zip.sh		\
 	sanitize-la.sh		\
-	po/README.tools		\
 	po/README.translators	\
-	po/desk.pl		\
 	po/makefile.mingw	\
-	po/update.pl		\
 	po/po2tbl.sed.in	\
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
