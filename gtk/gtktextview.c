@@ -6447,7 +6447,7 @@ popup_targets_received (GtkClipboard     *clipboard,
 	  gtk_menu_popup (GTK_MENU (text_view->popup_menu), NULL, NULL,
 			  popup_position_func, text_view,
 			  0, gtk_get_current_event_time ());
-	  _gtk_menu_shell_select_first (GTK_MENU_SHELL (text_view->popup_menu));
+	  _gtk_menu_shell_select_first (GTK_MENU_SHELL (text_view->popup_menu), FALSE);
 	}
     }
 

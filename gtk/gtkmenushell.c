@@ -994,12 +994,19 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
 /**
  * _gtk_menu_shell_select_first:
  * @menu_shell: a #GtkMenuShell
+ * @search_sensitive: if %TRUE, search for the first selectable
+ *                    menu item, otherwise select nothing if
+ *                    the first item isn't sensitive. This
+ *                    should be %FALSE if the menu is being
+ *                    popped up initially.
  * 
- * Select the first visible child of the menu shell, unless
- * it's a tearoff item.
+ * Select the first visible or selectable child of the menu shell;
+ * don't select tearoff items unless the only item is a tearoff
+ * item.
  **/
 void
-_gtk_menu_shell_select_first (GtkMenuShell *menu_shell)
+_gtk_menu_shell_select_first (GtkMenuShell *menu_shell,
+			      gboolean      search_sensitive)
 {
   GtkWidget *to_select = NULL;
   GList *tmp_list;
@@ -1009,7 +1016,8 @@ _gtk_menu_shell_select_first (GtkMenuShell *menu_shell)
     {
       GtkWidget *child = tmp_list->data;
       
-      if (GTK_WIDGET_VISIBLE (child))
+      if ((!search_sensitive && GTK_WIDGET_VISIBLE (child)) ||
+	  _gtk_menu_item_is_selectable (child))
 	{
 	  to_select = child;
 	  if (!GTK_IS_TEAROFF_MENU_ITEM (child))
@@ -1024,6 +1032,33 @@ _gtk_menu_shell_select_first (GtkMenuShell *menu_shell)
 }
 
 static void
+gtk_menu_shell_select_last (GtkMenuShell *menu_shell,
+			    gboolean      search_sensitive)
+{
+  GtkWidget *to_select = NULL;
+  GList *tmp_list;
+
+  tmp_list = g_list_last (menu_shell->children);
+  while (tmp_list)
+    {
+      GtkWidget *child = tmp_list->data;
+      
+      if ((!search_sensitive && GTK_WIDGET_VISIBLE (child)) ||
+	  _gtk_menu_item_is_selectable (child))
+	{
+	  to_select = child;
+	  if (!GTK_IS_TEAROFF_MENU_ITEM (child))
+	    break;
+	}
+      
+      tmp_list = tmp_list->prev;
+    }
+
+  if (to_select)
+    gtk_menu_shell_select_item (menu_shell, to_select);
+}
+
+static void
 gtk_menu_shell_select_submenu_first (GtkMenuShell     *menu_shell)
 {
   GtkMenuItem *menu_item;
@@ -1031,7 +1066,7 @@ gtk_menu_shell_select_submenu_first (GtkMenuShell     *menu_shell)
   menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item); 
   
   if (menu_item->submenu)
-    _gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu));
+    _gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu), TRUE);
 }
 
 static void
@@ -1097,14 +1132,14 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
       if (!had_selection &&
 	  !menu_shell->active_menu_item &&
 	  menu_shell->children)
-	gtk_menu_shell_select_item (menu_shell, g_list_last (menu_shell->children)->data);
+	gtk_menu_shell_select_last (menu_shell, TRUE);
       break;
     case GTK_MENU_DIR_NEXT:
       gtk_menu_shell_move_selected (menu_shell, 1);
       if (!had_selection &&
 	  !menu_shell->active_menu_item &&
 	  menu_shell->children)
-	gtk_menu_shell_select_item (menu_shell, menu_shell->children->data);
+	_gtk_menu_shell_select_first (menu_shell, TRUE);
       break;
     }
   
