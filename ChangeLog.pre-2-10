@@ -1,3 +1,8 @@
+Sat Dec  8 20:57:24 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtkliststore.c (gtk_list_store_remove): nuke the stamp++,
+	per jrb's request
+
 2001-12-08  Anders Carlsson  <andersca@gnu.org>
 
 	* tests/testgtk.c (layout_expose_handler): Don't return TRUE

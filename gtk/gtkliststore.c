@@ -964,7 +964,6 @@ gtk_list_store_remove (GtkListStore *list_store,
 
   validate_list_store (list_store);
 
-  list_store->stamp ++;
   gtk_tree_model_row_deleted (GTK_TREE_MODEL (list_store), path);
   gtk_tree_path_free (path);
 
