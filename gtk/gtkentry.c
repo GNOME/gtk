@@ -997,7 +997,7 @@ gtk_entry_unrealize (GtkWidget *widget)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
 
-  gtk_im_context_set_client_window (entry->im_context, entry->text_area);
+  gtk_im_context_set_client_window (entry->im_context, NULL);
   
   if (entry->text_area)
     {
