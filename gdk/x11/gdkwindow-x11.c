@@ -263,7 +263,7 @@ gdk_window_new (GdkWindow     *parent,
       xattributes_mask |= CWBorderPixel | CWBackPixel;
       
 #ifdef USE_GRAVITY
-      xattributes.bit_gravity = StaticGravity;
+      xattributes.bit_gravity = NorthWestGravity;
       xattributes_mask |= CWBitGravity;
 #endif  
   
@@ -2214,17 +2214,18 @@ static void
 gdk_window_set_static_bit_gravity (GdkWindow *window, gboolean on)
 {
   XSetWindowAttributes xattributes;
+  guint xattributes_mask = 0;
   
   g_return_if_fail (window != NULL);
   
-#ifndef USE_GRAVITY
+  //#ifndef USE_GRAVITY
   xattributes.bit_gravity = StaticGravity;
   xattributes_mask |= CWBitGravity;
   xattributes.bit_gravity = on ? StaticGravity : ForgetGravity;
   XChangeWindowAttributes (GDK_DRAWABLE_XDISPLAY (window),
 			   GDK_DRAWABLE_XID (window),
 			   CWBitGravity,  &xattributes);
-#endif /* !USE_GRAVITY */
+  //#endif /* !USE_GRAVITY */
 }
 
 static void

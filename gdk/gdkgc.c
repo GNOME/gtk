@@ -40,6 +40,8 @@ gdk_gc_alloc (void)
   private->klass_data = NULL;
   private->clip_x_origin = 0;
   private->clip_y_origin = 0;
+  private->ts_x_origin = 0;
+  private->ts_y_origin = 0;
 
   return (GdkGC *)private;
 }
@@ -77,6 +79,10 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
     private->clip_x_origin = values->clip_x_origin;
   if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
     private->clip_y_origin = values->clip_y_origin;
+  if (values_mask & GDK_GC_TS_X_ORIGIN)
+    private->ts_x_origin = values->ts_x_origin;
+  if (values_mask & GDK_GC_TS_Y_ORIGIN)
+    private->ts_y_origin = values->ts_y_origin;
 
   return gc;
 }
@@ -103,7 +109,10 @@ gdk_gc_unref (GdkGC *gc)
   private->ref_count--;
 
   if (private->ref_count == 0)
-    private->klass->destroy (gc);
+    {
+      private->klass->destroy (gc);
+      g_free (private);
+    }
 }
 
 void
@@ -130,6 +139,10 @@ gdk_gc_set_values (GdkGC           *gc,
     private->clip_x_origin = values->clip_x_origin;
   if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
     private->clip_y_origin = values->clip_y_origin;
+  if (values_mask & GDK_GC_TS_X_ORIGIN)
+    private->ts_x_origin = values->ts_x_origin;
+  if (values_mask & GDK_GC_TS_Y_ORIGIN)
+    private->ts_y_origin = values->ts_y_origin;
   
   private->klass->set_values (gc, values, values_mask);
 }
@@ -231,7 +244,7 @@ gdk_gc_set_ts_origin (GdkGC *gc,
   g_return_if_fail (gc != NULL);
 
   values.ts_x_origin = x;
-  values.ts_x_origin = y;
+  values.ts_y_origin = y;
   
   gdk_gc_set_values (gc, &values,
 		     GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN);

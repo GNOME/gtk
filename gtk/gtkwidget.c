@@ -2262,9 +2262,6 @@ gtk_widget_event (GtkWidget *widget,
   g_return_val_if_fail (widget != NULL, TRUE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
 
-  if (event->type == GDK_EXPOSE && event->any.window)
-    gdk_window_begin_paint_rect (event->any.window, &event->expose.area);
-  
   gtk_widget_ref (widget);
   return_val = FALSE;
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT], event,
@@ -2365,10 +2362,6 @@ gtk_widget_event (GtkWidget *widget,
   return_val |= GTK_OBJECT_DESTROYED (widget);
 
  out:
-
-  if (event->type == GDK_EXPOSE && event->any.window)
-    gdk_window_end_paint (event->any.window);
-  
   gtk_widget_unref (widget);
 
   return return_val;
@@ -4105,29 +4098,14 @@ gtk_widget_real_draw (GtkWidget	   *widget,
   
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      gboolean return_val = FALSE;
-  
       event.type = GDK_EXPOSE;
       event.send_event = TRUE;
       event.window = widget->window;
       event.area = *area;
       event.count = 0;
-
-      gdk_window_ref (event.window);
-      gtk_widget_ref (widget);
-
-      /* FIXME: We emit the signals here directly instead of calling gtk_widget_event,
-       * because we don't want to trigger the begin_paint() in gtk_widget_event(),
-       * but maybe that begin_paint() should be moved somewhere else.
-       */
-      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT],
-		       &event, &return_val);
       
-      if (!GTK_OBJECT_DESTROYED (widget) && !return_val)
-	gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EXPOSE_EVENT],
-			 &event, &return_val);
-
-      gtk_widget_unref (widget);
+      gdk_window_ref (event.window);
+      gtk_widget_event (widget, (GdkEvent*) &event);
       gdk_window_unref (event.window);
     }
 }

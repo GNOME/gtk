@@ -143,6 +143,8 @@ struct _GdkGCPrivate
 
   gint clip_x_origin;
   gint clip_y_origin;
+  gint ts_x_origin;
+  gint ts_y_origin;
 };
 
 typedef enum {
