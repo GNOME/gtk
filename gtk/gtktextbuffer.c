@@ -135,6 +135,14 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 
   parent_class = gtk_type_class (GTK_TYPE_OBJECT);
 
+  gobject_class->finalize = gtk_text_buffer_finalize;
+
+  klass->insert_text = gtk_text_buffer_real_insert_text;
+  klass->delete_text = gtk_text_buffer_real_delete_text;
+  klass->apply_tag = gtk_text_buffer_real_apply_tag;
+  klass->remove_tag = gtk_text_buffer_real_remove_tag;
+  klass->changed = gtk_text_buffer_real_changed;
+
   signals[INSERT_TEXT] =
     gtk_signal_new ("insert_text",
                     GTK_RUN_LAST,
@@ -222,16 +230,6 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     G_TYPE_OBJECT,
                     GTK_TYPE_TEXT_ITER,
                     GTK_TYPE_TEXT_ITER);
-
-  gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
-
-  gobject_class->finalize = gtk_text_buffer_finalize;
-
-  klass->insert_text = gtk_text_buffer_real_insert_text;
-  klass->delete_text = gtk_text_buffer_real_delete_text;
-  klass->apply_tag = gtk_text_buffer_real_apply_tag;
-  klass->remove_tag = gtk_text_buffer_real_remove_tag;
-  klass->changed = gtk_text_buffer_real_changed;
 }
 
 void

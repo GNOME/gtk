@@ -439,11 +439,6 @@ struct _GtkCell
 
 GtkType gtk_clist_get_type (void) G_GNUC_CONST;
 
-/* constructors useful for gtk-- wrappers */
-void gtk_clist_construct (GtkCList *clist,
-			  gint      columns,
-			  gchar    *titles[]);
-
 /* create a new GtkCList */
 GtkWidget* gtk_clist_new             (gint   columns);
 GtkWidget* gtk_clist_new_with_titles (gint   columns,

@@ -74,6 +74,9 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 
   object_class = (GtkObjectClass*) class;
 
+  class->changed = NULL;
+  class->value_changed = NULL;
+
   adjustment_signals[CHANGED] =
     gtk_signal_new ("changed",
                     GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
@@ -88,11 +91,6 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                     GTK_SIGNAL_OFFSET (GtkAdjustmentClass, value_changed),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (object_class, adjustment_signals, LAST_SIGNAL);
-
-  class->changed = NULL;
-  class->value_changed = NULL;
 }
 
 static void

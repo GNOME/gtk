@@ -110,6 +110,29 @@ gtk_tree_class_init (GtkTreeClass *class)
   
   parent_class = gtk_type_class (gtk_container_get_type ());
   
+  
+  object_class->destroy = gtk_tree_destroy;
+  
+  widget_class->map = gtk_tree_map;
+  widget_class->unmap = gtk_tree_unmap;
+  widget_class->realize = gtk_tree_realize;
+  widget_class->expose_event = gtk_tree_expose;
+  widget_class->motion_notify_event = gtk_tree_motion_notify;
+  widget_class->button_press_event = gtk_tree_button_press;
+  widget_class->button_release_event = gtk_tree_button_release;
+  widget_class->size_request = gtk_tree_size_request;
+  widget_class->size_allocate = gtk_tree_size_allocate;
+  
+  container_class->add = gtk_tree_add;
+  container_class->remove = 
+    (void (*)(GtkContainer *, GtkWidget *)) gtk_tree_remove_item;
+  container_class->forall = gtk_tree_forall;
+  container_class->child_type = gtk_tree_child_type;
+  
+  class->selection_changed = NULL;
+  class->select_child = gtk_real_tree_select_child;
+  class->unselect_child = gtk_real_tree_unselect_child;
+
   tree_signals[SELECTION_CHANGED] =
     gtk_signal_new ("selection_changed",
 		    GTK_RUN_FIRST,
@@ -133,30 +156,6 @@ gtk_tree_class_init (GtkTreeClass *class)
 		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
-  
-  gtk_object_class_add_signals (object_class, tree_signals, LAST_SIGNAL);
-  
-  object_class->destroy = gtk_tree_destroy;
-  
-  widget_class->map = gtk_tree_map;
-  widget_class->unmap = gtk_tree_unmap;
-  widget_class->realize = gtk_tree_realize;
-  widget_class->expose_event = gtk_tree_expose;
-  widget_class->motion_notify_event = gtk_tree_motion_notify;
-  widget_class->button_press_event = gtk_tree_button_press;
-  widget_class->button_release_event = gtk_tree_button_release;
-  widget_class->size_request = gtk_tree_size_request;
-  widget_class->size_allocate = gtk_tree_size_allocate;
-  
-  container_class->add = gtk_tree_add;
-  container_class->remove = 
-    (void (*)(GtkContainer *, GtkWidget *)) gtk_tree_remove_item;
-  container_class->forall = gtk_tree_forall;
-  container_class->child_type = gtk_tree_child_type;
-  
-  class->selection_changed = NULL;
-  class->select_child = gtk_real_tree_select_child;
-  class->unselect_child = gtk_real_tree_unselect_child;
 }
 
 static GtkType

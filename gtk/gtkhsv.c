@@ -145,14 +145,6 @@ gtk_hsv_class_init (GtkHSVClass *class)
   
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
   
-  hsv_signals[CHANGED] =
-    gtk_signal_new ("changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkHSVClass, changed),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  gtk_object_class_add_signals (object_class, hsv_signals, LAST_SIGNAL);
   
   object_class->destroy = gtk_hsv_destroy;
   
@@ -166,6 +158,14 @@ gtk_hsv_class_init (GtkHSVClass *class)
   widget_class->button_release_event = gtk_hsv_button_release;
   widget_class->motion_notify_event = gtk_hsv_motion;
   widget_class->expose_event = gtk_hsv_expose;
+
+  hsv_signals[CHANGED] =
+    gtk_signal_new ("changed",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkHSVClass, changed),
+		    gtk_marshal_VOID__VOID,
+		    GTK_TYPE_NONE, 0);
 }
 
 /* Object initialization function for the HSV color selector */

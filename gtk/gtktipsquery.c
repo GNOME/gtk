@@ -117,6 +117,18 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 
   parent_class = gtk_type_class (gtk_label_get_type ());
 
+
+  object_class->set_arg = gtk_tips_query_set_arg;
+  object_class->get_arg = gtk_tips_query_get_arg;
+  object_class->destroy = gtk_tips_query_destroy;
+
+  widget_class->event = gtk_tips_query_event;
+
+  class->start_query = gtk_tips_query_real_start_query;
+  class->stop_query = gtk_tips_query_real_stop_query;
+  class->widget_entered = gtk_tips_query_widget_entered;
+  class->widget_selected = NULL;
+
   gtk_object_add_arg_type ("GtkTipsQuery::emit_always", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EMIT_ALWAYS);
   gtk_object_add_arg_type ("GtkTipsQuery::caller", GTK_TYPE_WIDGET, GTK_ARG_READWRITE, ARG_CALLER);
   gtk_object_add_arg_type ("GtkTipsQuery::label_inactive", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL_INACTIVE);
@@ -157,18 +169,6 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 		    GTK_TYPE_STRING,
 		    GTK_TYPE_STRING,
 		    GTK_TYPE_GDK_EVENT);
-  gtk_object_class_add_signals (object_class, tips_query_signals, SIGNAL_LAST);
-
-  object_class->set_arg = gtk_tips_query_set_arg;
-  object_class->get_arg = gtk_tips_query_get_arg;
-  object_class->destroy = gtk_tips_query_destroy;
-
-  widget_class->event = gtk_tips_query_event;
-
-  class->start_query = gtk_tips_query_real_start_query;
-  class->stop_query = gtk_tips_query_real_stop_query;
-  class->widget_entered = gtk_tips_query_widget_entered;
-  class->widget_selected = NULL;
 }
 
 static void

@@ -73,6 +73,8 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
   object_class = (GtkObjectClass*) class;
   parent_class = g_type_class_peek_parent (class);
 
+  class->selection_changed = NULL;
+
   tree_selection_signals[SELECTION_CHANGED] =
     gtk_signal_new ("selection_changed",
 		    GTK_RUN_FIRST,
@@ -80,10 +82,6 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
 		    GTK_SIGNAL_OFFSET (GtkTreeSelectionClass, selection_changed),
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (object_class, tree_selection_signals, LAST_SIGNAL);
-
-  class->selection_changed = NULL;
 }
 
 static void

@@ -181,6 +181,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
   parent_class = gtk_type_class (GTK_TYPE_OBJECT);
 
+  object_class->set_arg = gtk_text_tag_set_arg;
+  object_class->get_arg = gtk_text_tag_get_arg;
+
+  object_class->destroy = gtk_text_tag_destroy;
+  gobject_class->finalize = gtk_text_tag_finalize;
+
   /* Construct */
   gtk_object_add_arg_type ("GtkTextTag::name", GTK_TYPE_STRING,
                            GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
@@ -324,14 +330,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                     G_TYPE_OBJECT,
                     GTK_TYPE_GDK_EVENT,
                     GTK_TYPE_TEXT_ITER);
-
-  gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
-
-  object_class->set_arg = gtk_text_tag_set_arg;
-  object_class->get_arg = gtk_text_tag_get_arg;
-
-  object_class->destroy = gtk_text_tag_destroy;
-  gobject_class->finalize = gtk_text_tag_finalize;
 }
 
 void

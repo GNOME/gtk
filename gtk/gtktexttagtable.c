@@ -58,6 +58,12 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
 
   parent_class = gtk_type_class (GTK_TYPE_OBJECT);
 
+  object_class->set_arg = gtk_text_tag_table_set_arg;
+  object_class->get_arg = gtk_text_tag_table_get_arg;
+
+  object_class->destroy = gtk_text_tag_table_destroy;
+  gobject_class->finalize = gtk_text_tag_table_finalize;
+
   signals[TAG_CHANGED] =
     gtk_signal_new ("tag_changed",
                     GTK_RUN_LAST,
@@ -88,15 +94,6 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                     GTK_TYPE_NONE,
                     1,
                     G_TYPE_OBJECT);
-
-
-  gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
-
-  object_class->set_arg = gtk_text_tag_table_set_arg;
-  object_class->get_arg = gtk_text_tag_table_get_arg;
-
-  object_class->destroy = gtk_text_tag_table_destroy;
-  gobject_class->finalize = gtk_text_tag_table_finalize;
 }
 
 void

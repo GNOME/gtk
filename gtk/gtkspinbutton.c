@@ -245,8 +245,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 		    GTK_SIGNAL_OFFSET (GtkSpinButtonClass, output),
 		    gtk_marshal_BOOLEAN__VOID,
 		    GTK_TYPE_BOOL, 0);
-
-  gtk_object_class_add_signals (object_class, spinbutton_signals, LAST_SIGNAL);
 }
 
 static void

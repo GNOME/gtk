@@ -192,6 +192,28 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
+  widget_class->map = gtk_menu_shell_map;
+  widget_class->realize = gtk_menu_shell_realize;
+  widget_class->button_press_event = gtk_menu_shell_button_press;
+  widget_class->button_release_event = gtk_menu_shell_button_release;
+  widget_class->key_press_event = gtk_menu_shell_key_press;
+  widget_class->enter_notify_event = gtk_menu_shell_enter_notify;
+  widget_class->leave_notify_event = gtk_menu_shell_leave_notify;
+
+  container_class->add = gtk_menu_shell_add;
+  container_class->remove = gtk_menu_shell_remove;
+  container_class->forall = gtk_menu_shell_forall;
+  container_class->child_type = gtk_menu_shell_child_type;
+
+  klass->submenu_placement = GTK_TOP_BOTTOM;
+  klass->deactivate = gtk_real_menu_shell_deactivate;
+  klass->selection_done = NULL;
+  klass->move_current = gtk_real_menu_shell_move_current;
+  klass->activate_current = gtk_real_menu_shell_activate_current;
+  klass->cancel = gtk_real_menu_shell_cancel;
+  klass->select_item = gtk_menu_shell_real_select_item;
+  klass->insert = gtk_menu_shell_real_insert;
+
   menu_shell_signals[DEACTIVATE] =
     gtk_signal_new ("deactivate",
                     GTK_RUN_FIRST,
@@ -229,30 +251,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                     GTK_SIGNAL_OFFSET (GtkMenuShellClass, cancel),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-  
-  gtk_object_class_add_signals (object_class, menu_shell_signals, LAST_SIGNAL);
-
-  widget_class->map = gtk_menu_shell_map;
-  widget_class->realize = gtk_menu_shell_realize;
-  widget_class->button_press_event = gtk_menu_shell_button_press;
-  widget_class->button_release_event = gtk_menu_shell_button_release;
-  widget_class->key_press_event = gtk_menu_shell_key_press;
-  widget_class->enter_notify_event = gtk_menu_shell_enter_notify;
-  widget_class->leave_notify_event = gtk_menu_shell_leave_notify;
-
-  container_class->add = gtk_menu_shell_add;
-  container_class->remove = gtk_menu_shell_remove;
-  container_class->forall = gtk_menu_shell_forall;
-  container_class->child_type = gtk_menu_shell_child_type;
-
-  klass->submenu_placement = GTK_TOP_BOTTOM;
-  klass->deactivate = gtk_real_menu_shell_deactivate;
-  klass->selection_done = NULL;
-  klass->move_current = gtk_real_menu_shell_move_current;
-  klass->activate_current = gtk_real_menu_shell_activate_current;
-  klass->cancel = gtk_real_menu_shell_cancel;
-  klass->select_item = gtk_menu_shell_real_select_item;
-  klass->insert = gtk_menu_shell_real_insert;
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set,

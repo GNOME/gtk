@@ -376,6 +376,55 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
+  /* Default handlers and virtual methods
+   */
+  object_class->set_arg = gtk_text_view_set_arg;
+  object_class->get_arg = gtk_text_view_get_arg;
+
+  object_class->destroy = gtk_text_view_destroy;
+  gobject_class->finalize = gtk_text_view_finalize;
+
+  widget_class->realize = gtk_text_view_realize;
+  widget_class->unrealize = gtk_text_view_unrealize;
+  widget_class->style_set = gtk_text_view_style_set;
+  widget_class->direction_changed = gtk_text_view_direction_changed;
+  widget_class->size_request = gtk_text_view_size_request;
+  widget_class->size_allocate = gtk_text_view_size_allocate;
+  widget_class->event = gtk_text_view_event;
+  widget_class->key_press_event = gtk_text_view_key_press_event;
+  widget_class->key_release_event = gtk_text_view_key_release_event;
+  widget_class->button_press_event = gtk_text_view_button_press_event;
+  widget_class->button_release_event = gtk_text_view_button_release_event;
+  widget_class->focus_in_event = gtk_text_view_focus_in_event;
+  widget_class->focus_out_event = gtk_text_view_focus_out_event;
+  widget_class->motion_notify_event = gtk_text_view_motion_event;
+  widget_class->expose_event = gtk_text_view_expose_event;
+  widget_class->draw_focus = gtk_text_view_draw_focus;
+
+  widget_class->drag_begin = gtk_text_view_drag_begin;
+  widget_class->drag_end = gtk_text_view_drag_end;
+  widget_class->drag_data_get = gtk_text_view_drag_data_get;
+  widget_class->drag_data_delete = gtk_text_view_drag_data_delete;
+
+  widget_class->drag_leave = gtk_text_view_drag_leave;
+  widget_class->drag_motion = gtk_text_view_drag_motion;
+  widget_class->drag_drop = gtk_text_view_drag_drop;
+  widget_class->drag_data_received = gtk_text_view_drag_data_received;
+
+  container_class->add = gtk_text_view_add;
+  container_class->remove = gtk_text_view_remove;
+  container_class->forall = gtk_text_view_forall;
+
+  klass->move_cursor = gtk_text_view_move_cursor;
+  klass->set_anchor = gtk_text_view_set_anchor;
+  klass->insert_at_cursor = gtk_text_view_insert_at_cursor;
+  klass->delete_from_cursor = gtk_text_view_delete_from_cursor;
+  klass->cut_clipboard = gtk_text_view_cut_clipboard;
+  klass->copy_clipboard = gtk_text_view_copy_clipboard;
+  klass->paste_clipboard = gtk_text_view_paste_clipboard;
+  klass->toggle_overwrite = gtk_text_view_toggle_overwrite;
+  klass->set_scroll_adjustments = gtk_text_view_set_scroll_adjustments;
+
   /*
    * Arguments
    */
@@ -472,15 +521,14 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
-  signals[SET_SCROLL_ADJUSTMENTS] = widget_class->set_scroll_adjustments_signal =
+  signals[SET_SCROLL_ADJUSTMENTS] =
     gtk_signal_new ("set_scroll_adjustments",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextViewClass, set_scroll_adjustments),
                     gtk_marshal_VOID__POINTER_POINTER,
                     GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
-
-  gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
+  widget_class->set_scroll_adjustments_signal = signals[SET_SCROLL_ADJUSTMENTS];
 
   /*
    * Key bindings
@@ -629,56 +677,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   /* Overwrite */
   gtk_binding_entry_add_signal (binding_set, GDK_Insert, 0,
                                 "toggle_overwrite", 0);
-
-  /*
-   * Default handlers and virtual methods
-   */
-  object_class->set_arg = gtk_text_view_set_arg;
-  object_class->get_arg = gtk_text_view_get_arg;
-
-  object_class->destroy = gtk_text_view_destroy;
-  gobject_class->finalize = gtk_text_view_finalize;
-
-  widget_class->realize = gtk_text_view_realize;
-  widget_class->unrealize = gtk_text_view_unrealize;
-  widget_class->style_set = gtk_text_view_style_set;
-  widget_class->direction_changed = gtk_text_view_direction_changed;
-  widget_class->size_request = gtk_text_view_size_request;
-  widget_class->size_allocate = gtk_text_view_size_allocate;
-  widget_class->event = gtk_text_view_event;
-  widget_class->key_press_event = gtk_text_view_key_press_event;
-  widget_class->key_release_event = gtk_text_view_key_release_event;
-  widget_class->button_press_event = gtk_text_view_button_press_event;
-  widget_class->button_release_event = gtk_text_view_button_release_event;
-  widget_class->focus_in_event = gtk_text_view_focus_in_event;
-  widget_class->focus_out_event = gtk_text_view_focus_out_event;
-  widget_class->motion_notify_event = gtk_text_view_motion_event;
-  widget_class->expose_event = gtk_text_view_expose_event;
-  widget_class->draw_focus = gtk_text_view_draw_focus;
-
-  widget_class->drag_begin = gtk_text_view_drag_begin;
-  widget_class->drag_end = gtk_text_view_drag_end;
-  widget_class->drag_data_get = gtk_text_view_drag_data_get;
-  widget_class->drag_data_delete = gtk_text_view_drag_data_delete;
-
-  widget_class->drag_leave = gtk_text_view_drag_leave;
-  widget_class->drag_motion = gtk_text_view_drag_motion;
-  widget_class->drag_drop = gtk_text_view_drag_drop;
-  widget_class->drag_data_received = gtk_text_view_drag_data_received;
-
-  container_class->add = gtk_text_view_add;
-  container_class->remove = gtk_text_view_remove;
-  container_class->forall = gtk_text_view_forall;
-
-  klass->move_cursor = gtk_text_view_move_cursor;
-  klass->set_anchor = gtk_text_view_set_anchor;
-  klass->insert_at_cursor = gtk_text_view_insert_at_cursor;
-  klass->delete_from_cursor = gtk_text_view_delete_from_cursor;
-  klass->cut_clipboard = gtk_text_view_cut_clipboard;
-  klass->copy_clipboard = gtk_text_view_copy_clipboard;
-  klass->paste_clipboard = gtk_text_view_paste_clipboard;
-  klass->toggle_overwrite = gtk_text_view_toggle_overwrite;
-  klass->set_scroll_adjustments = gtk_text_view_set_scroll_adjustments;
 }
 
 void

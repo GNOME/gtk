@@ -58,6 +58,8 @@ struct _GtkArgInfo
 
 /* Non-public methods */
 
+#define	GTK_ARG_MASK 0x1f
+
 GtkArg*		gtk_arg_new		 (GtkType	arg_type);
 GtkArg*		gtk_arg_copy		 (GtkArg       *src_arg,
 					  GtkArg       *dest_arg);

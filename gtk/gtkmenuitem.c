@@ -129,6 +129,27 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 
   parent_class = gtk_type_class (gtk_item_get_type ());
 
+
+  object_class->destroy = gtk_menu_item_destroy;
+
+  widget_class->size_request = gtk_menu_item_size_request;
+  widget_class->size_allocate = gtk_menu_item_size_allocate;
+  widget_class->expose_event = gtk_menu_item_expose;
+  widget_class->show_all = gtk_menu_item_show_all;
+  widget_class->hide_all = gtk_menu_item_hide_all;
+
+  container_class->forall = gtk_menu_item_forall;
+
+  item_class->select = gtk_real_menu_item_select;
+  item_class->deselect = gtk_real_menu_item_deselect;
+
+  klass->activate = NULL;
+  klass->activate_item = gtk_real_menu_item_activate_item;
+  klass->toggle_size_request = gtk_real_menu_item_toggle_size_request;
+  klass->toggle_size_allocate = gtk_real_menu_item_toggle_size_allocate;
+
+  klass->hide_on_activate = TRUE;
+
   menu_item_signals[ACTIVATE] =
     gtk_signal_new ("activate",
                     GTK_RUN_FIRST | GTK_RUN_ACTION,
@@ -136,6 +157,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                     GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
+  widget_class->activate_signal = menu_item_signals[ACTIVATE];
 
   menu_item_signals[ACTIVATE_ITEM] =
     gtk_signal_new ("activate_item",
@@ -162,29 +184,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                     gtk_marshal_NONE__UINT,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_UINT);
-
-  gtk_object_class_add_signals (object_class, menu_item_signals, LAST_SIGNAL);
-
-  object_class->destroy = gtk_menu_item_destroy;
-
-  widget_class->activate_signal = menu_item_signals[ACTIVATE];
-  widget_class->size_request = gtk_menu_item_size_request;
-  widget_class->size_allocate = gtk_menu_item_size_allocate;
-  widget_class->expose_event = gtk_menu_item_expose;
-  widget_class->show_all = gtk_menu_item_show_all;
-  widget_class->hide_all = gtk_menu_item_hide_all;
-
-  container_class->forall = gtk_menu_item_forall;
-
-  item_class->select = gtk_real_menu_item_select;
-  item_class->deselect = gtk_real_menu_item_deselect;
-
-  klass->activate = NULL;
-  klass->activate_item = gtk_real_menu_item_activate_item;
-  klass->toggle_size_request = gtk_real_menu_item_toggle_size_request;
-  klass->toggle_size_allocate = gtk_real_menu_item_toggle_size_allocate;
-
-  klass->hide_on_activate = TRUE;
 }
 
 static void

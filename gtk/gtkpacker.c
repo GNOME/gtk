@@ -215,7 +215,7 @@ gtk_packer_class_init (GtkPackerClass *klass)
   gtk_container_add_child_arg_type ("GtkPacker::pad_y", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_PAD_Y);
   gtk_container_add_child_arg_type ("GtkPacker::ipad_x", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_I_PAD_X);
   gtk_container_add_child_arg_type ("GtkPacker::ipad_y", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_I_PAD_Y);
-  gtk_container_add_child_arg_type ("GtkPacker::position", GTK_TYPE_LONG, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
+  gtk_container_add_child_arg_type ("GtkPacker::position", GTK_TYPE_INT, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
 
   object_class->set_arg = gtk_packer_set_arg;
   object_class->get_arg = gtk_packer_get_arg;
@@ -398,7 +398,7 @@ gtk_packer_set_child_arg (GtkContainer   *container,
     case CHILD_ARG_POSITION:
       gtk_packer_reorder_child (packer,
 				child,
-				GTK_VALUE_LONG (*arg));
+				GTK_VALUE_INT (*arg));
       break;
     default:
       break;
@@ -476,16 +476,16 @@ gtk_packer_get_child_arg (GtkContainer   *container,
       GTK_VALUE_UINT (*arg) = child_info->i_pad_y;
       break;
     case CHILD_ARG_POSITION:
-      GTK_VALUE_LONG (*arg) = 0;
+      GTK_VALUE_INT (*arg) = 0;
       for (list = packer->children; list; list = list->next)
 	{
 	  child_info = list->data;
 	  if (child_info->widget == child)
 	    break;
-	  GTK_VALUE_LONG (*arg)++;
+	  GTK_VALUE_INT (*arg)++;
 	}
       if (!list)
-	GTK_VALUE_LONG (*arg) = -1;
+	GTK_VALUE_INT (*arg) = -1;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;

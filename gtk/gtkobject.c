@@ -36,12 +36,8 @@ enum {
   LAST_SIGNAL
 };
 enum {
-  ARG_0,
-  ARG_USER_DATA,
-  ARG_SIGNAL,
-  ARG_SIGNAL_AFTER,
-  ARG_OBJECT_SIGNAL,
-  ARG_OBJECT_SIGNAL_AFTER
+  PROP_0,
+  PROP_USER_DATA,
 };
 
 
@@ -51,12 +47,16 @@ static void       gtk_object_base_class_finalize (GtkObjectClass *class);
 static void       gtk_object_class_init          (GtkObjectClass *klass);
 static void       gtk_object_init                (GtkObject      *object,
 						  GtkObjectClass *klass);
-static void       gtk_object_set_arg             (GtkObject      *object,
-						  GtkArg         *arg,
-						  guint		  arg_id);
-static void       gtk_object_get_arg             (GtkObject      *object,
-						  GtkArg         *arg,
-						  guint		  arg_id);
+static void	  gtk_object_set_property	 (GObject	 *object,
+						  guint           property_id,
+						  const GValue   *value,
+						  GParamSpec     *pspec,
+						  const gchar    *trailer);
+static void	  gtk_object_get_property	 (GObject	 *object,
+						  guint           property_id,
+						  GValue         *value,
+						  GParamSpec     *pspec,
+						  const gchar    *trailer);
 static void       gtk_object_shutdown            (GObject        *object);
 static void       gtk_object_real_destroy        (GtkObject      *object);
 static void       gtk_object_finalize            (GObject        *object);
@@ -64,10 +64,8 @@ static void       gtk_object_notify_weaks        (GtkObject      *object);
 
 static gpointer    parent_class = NULL;
 static guint       object_signals[LAST_SIGNAL] = { 0 };
-static GHashTable *object_arg_info_ht = NULL;
 static GQuark      quark_user_data = 0;
 static GQuark      quark_weakrefs = 0;
-static GQuark      quark_carg_history = 0;
 
 
 /****************************************************
@@ -104,12 +102,6 @@ gtk_object_get_type (void)
 static void
 gtk_object_base_class_init (GtkObjectClass *class)
 {
-  /* reset instance specific fields that don't get inherited */
-  class->signals = NULL;
-  class->nsignals = 0;
-  class->n_args = 0;
-  class->construct_args = NULL;
-
   /* reset instance specifc methods that don't get inherited */
   class->get_arg = NULL;
   class->set_arg = NULL;
@@ -118,8 +110,201 @@ gtk_object_base_class_init (GtkObjectClass *class)
 static void
 gtk_object_base_class_finalize (GtkObjectClass *class)
 {
-  g_free (class->signals);
-  g_return_if_fail (class->construct_args == NULL);
+}
+
+static inline gboolean
+gtk_arg_set_from_value (GtkArg       *arg,
+			const GValue *value,
+			gboolean      copy_string)
+{
+  switch (G_TYPE_FUNDAMENTAL (arg->type))
+    {
+    case G_TYPE_CHAR:           GTK_VALUE_CHAR (*arg) = g_value_get_char (value);       break;
+    case G_TYPE_UCHAR:          GTK_VALUE_UCHAR (*arg) = g_value_get_uchar (value);     break;
+    case G_TYPE_BOOLEAN:        GTK_VALUE_BOOL (*arg) = g_value_get_boolean (value);    break;
+    case G_TYPE_INT:            GTK_VALUE_INT (*arg) = g_value_get_int (value);         break;
+    case G_TYPE_UINT:           GTK_VALUE_UINT (*arg) = g_value_get_uint (value);       break;
+    case G_TYPE_LONG:           GTK_VALUE_LONG (*arg) = g_value_get_long (value);       break;
+    case G_TYPE_ULONG:          GTK_VALUE_ULONG (*arg) = g_value_get_ulong (value);     break;
+    case G_TYPE_ENUM:           GTK_VALUE_ENUM (*arg) = g_value_get_enum (value);       break;
+    case G_TYPE_FLAGS:          GTK_VALUE_FLAGS (*arg) = g_value_get_flags (value);     break;
+    case G_TYPE_FLOAT:          GTK_VALUE_FLOAT (*arg) = g_value_get_float (value);     break;
+    case G_TYPE_DOUBLE:         GTK_VALUE_DOUBLE (*arg) = g_value_get_double (value);   break;
+    case G_TYPE_BOXED:          GTK_VALUE_BOXED (*arg) = g_value_get_boxed (value);     break;
+    case G_TYPE_POINTER:        GTK_VALUE_POINTER (*arg) = g_value_get_pointer (value); break;
+    case G_TYPE_OBJECT:         GTK_VALUE_POINTER (*arg) = g_value_get_object (value);  break;
+    case G_TYPE_STRING:         if (copy_string)
+      GTK_VALUE_STRING (*arg) = g_value_dup_string (value);
+    else
+      GTK_VALUE_STRING (*arg) = g_value_get_string (value);
+    break;
+    default:
+      return FALSE;
+    }
+  return TRUE;
+}
+
+static inline gboolean
+gtk_arg_to_value (GtkArg *arg,
+		  GValue *value)
+{
+  switch (G_TYPE_FUNDAMENTAL (arg->type))
+    {
+    case G_TYPE_CHAR:           g_value_set_char (value, GTK_VALUE_CHAR (*arg));        break;
+    case G_TYPE_UCHAR:          g_value_set_uchar (value, GTK_VALUE_UCHAR (*arg));      break;
+    case G_TYPE_BOOLEAN:        g_value_set_boolean (value, GTK_VALUE_BOOL (*arg));     break;
+    case G_TYPE_INT:            g_value_set_int (value, GTK_VALUE_INT (*arg));          break;
+    case G_TYPE_UINT:           g_value_set_uint (value, GTK_VALUE_UINT (*arg));        break;
+    case G_TYPE_LONG:           g_value_set_long (value, GTK_VALUE_LONG (*arg));        break;
+    case G_TYPE_ULONG:          g_value_set_ulong (value, GTK_VALUE_ULONG (*arg));      break;
+    case G_TYPE_ENUM:           g_value_set_enum (value, GTK_VALUE_ENUM (*arg));        break;
+    case G_TYPE_FLAGS:          g_value_set_flags (value, GTK_VALUE_FLAGS (*arg));      break;
+    case G_TYPE_FLOAT:          g_value_set_float (value, GTK_VALUE_FLOAT (*arg));      break;
+    case G_TYPE_DOUBLE:         g_value_set_double (value, GTK_VALUE_DOUBLE (*arg));    break;
+    case G_TYPE_STRING:         g_value_set_string (value, GTK_VALUE_STRING (*arg));    break;
+    case G_TYPE_BOXED:          g_value_set_boxed (value, GTK_VALUE_BOXED (*arg));      break;
+    case G_TYPE_POINTER:        g_value_set_pointer (value, GTK_VALUE_POINTER (*arg));  break;
+    case G_TYPE_OBJECT:         g_value_set_object (value, GTK_VALUE_POINTER (*arg));   break;
+    default:
+      return FALSE;
+    }
+  return TRUE;
+}
+
+static void
+gtk_arg_proxy_set_property (GObject      *object,
+			    guint         property_id,
+			    const GValue *value,
+			    GParamSpec   *pspec,
+			    const gchar  *trailer)
+{
+  GtkObjectClass *class = g_type_class_peek (pspec->owner_type);
+  GtkArg arg = { 0, };
+
+  g_return_if_fail (class->set_arg != NULL);
+
+  arg.type = G_VALUE_TYPE (value);
+  gtk_arg_set_from_value (&arg, value, FALSE);
+  arg.name = pspec->name;
+  class->set_arg (GTK_OBJECT (object), &arg, property_id);
+}
+
+static void
+gtk_arg_proxy_get_property (GObject     *object,
+			    guint        property_id,
+			    GValue      *value,
+			    GParamSpec  *pspec,
+			    const gchar *trailer)
+{
+  GtkObjectClass *class = g_type_class_peek (pspec->owner_type);
+  GtkArg arg = { 0, };
+
+  g_return_if_fail (class->get_arg != NULL);
+
+  arg.type = G_VALUE_TYPE (value);
+  arg.name = pspec->name;
+  class->get_arg (GTK_OBJECT (object), &arg, property_id);
+  gtk_arg_to_value (&arg, value);
+}
+
+void
+gtk_object_add_arg_type (const gchar *arg_name,
+			 GtkType      arg_type,
+			 guint        arg_flags,
+			 guint        arg_id)
+{
+  GObjectClass *oclass;
+  GParamSpec *pspec;
+  gchar *type_name, *pname;
+  GType type;
+  
+  g_return_if_fail (arg_name != NULL);
+  g_return_if_fail (arg_type > G_TYPE_NONE);
+  g_return_if_fail (arg_id > 0);
+  g_return_if_fail (arg_flags & GTK_ARG_READWRITE);
+  if (arg_flags & G_PARAM_CONSTRUCT)
+    g_return_if_fail ((arg_flags & G_PARAM_CONSTRUCT_ONLY) == 0);
+  if (arg_flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
+    g_return_if_fail (arg_flags & G_PARAM_WRITABLE);
+  g_return_if_fail ((arg_flags & ~(GTK_ARG_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY)) == 0);
+
+  pname = strchr (arg_name, ':');
+  g_return_if_fail (pname && pname[1] == ':');
+
+  type_name = g_strndup (arg_name, pname - arg_name);
+  pname += 2;
+  type = g_type_from_name (type_name);
+  g_free (type_name);
+  g_return_if_fail (G_TYPE_IS_OBJECT (type));
+
+  oclass = gtk_type_class (type);
+  if (arg_flags & GTK_ARG_READABLE)
+    {
+      if (oclass->get_property && oclass->get_property != gtk_arg_proxy_get_property)
+	{
+	  g_warning (G_STRLOC ": GtkArg compatibility code can't be mixed with customized %s.get_property() implementation",
+		     g_type_name (type));
+	  return;
+	}
+      oclass->get_property = gtk_arg_proxy_get_property;
+    }
+  if (arg_flags & GTK_ARG_WRITABLE)
+    {
+      if (oclass->set_property && oclass->set_property != gtk_arg_proxy_set_property)
+	{
+	  g_warning (G_STRLOC ": GtkArg compatibility code can't be mixed with customized %s.set_property() implementation",
+		     g_type_name (type));
+	  return;
+	}
+      oclass->set_property = gtk_arg_proxy_set_property;
+    }
+  switch (G_TYPE_FUNDAMENTAL (arg_type))
+    {
+    case G_TYPE_ENUM:
+      pspec = g_param_spec_enum (pname, NULL, NULL, arg_type, 0, arg_flags);
+      break;
+    case G_TYPE_FLAGS:
+      pspec = g_param_spec_flags (pname, NULL, NULL, arg_type, 0, arg_flags);
+      break;
+    case G_TYPE_CHAR:
+      pspec = g_param_spec_char (pname, NULL, NULL, -128, 127, 0, arg_flags);
+      break;
+    case G_TYPE_UCHAR:
+      pspec = g_param_spec_uchar (pname, NULL, NULL, 0, 255, 0, arg_flags);
+      break;
+    case G_TYPE_BOOLEAN:
+      pspec = g_param_spec_boolean (pname, NULL, NULL, FALSE, arg_flags);
+      break;
+    case G_TYPE_INT:
+      pspec = g_param_spec_int (pname, NULL, NULL, -2147483647, 2147483647, 0, arg_flags);
+      break;
+    case G_TYPE_UINT:
+      pspec = g_param_spec_uint (pname, NULL, NULL, 0, 4294967295U, 0, arg_flags);
+      break;
+    case G_TYPE_FLOAT:
+      pspec = g_param_spec_float (pname, NULL, NULL, -1E+37, 1E+37, 0, arg_flags);
+      break;
+    case G_TYPE_DOUBLE:
+      pspec = g_param_spec_double (pname, NULL, NULL, -1E+307, 1E+307, 0, arg_flags);
+      break;
+    case G_TYPE_STRING:
+      pspec = g_param_spec_string (pname, NULL, NULL, NULL, arg_flags);
+      break;
+    case G_TYPE_OBJECT:
+      pspec = g_param_spec_object (pname, NULL, NULL, arg_type, arg_flags);
+      break;
+    case G_TYPE_BOXED:
+      if (!G_TYPE_IS_FUNDAMENTAL (arg_type))
+	{
+	  pspec = g_param_spec_boxed (pname, NULL, NULL, arg_type, arg_flags);
+	  break;
+	}
+    default:
+      g_warning (G_STRLOC ": Property type `%s' is not supported by the GtkArg compatibility code",
+		 g_type_name (arg_type));
+      return;
+    }
+  g_object_class_install_property (oclass, arg_id, pspec);
 }
 
 static void
@@ -129,36 +314,18 @@ gtk_object_class_init (GtkObjectClass *class)
 
   parent_class = g_type_class_ref (G_TYPE_OBJECT);
 
+  gobject_class->set_property = gtk_object_set_property;
+  gobject_class->get_property = gtk_object_get_property;
   gobject_class->shutdown = gtk_object_shutdown;
   gobject_class->finalize = gtk_object_finalize;
 
-  class->get_arg = gtk_object_get_arg;
-  class->set_arg = gtk_object_set_arg;
   class->destroy = gtk_object_real_destroy;
 
-  quark_carg_history = g_quark_from_static_string ("gtk-construct-arg-history");
-
-  gtk_object_add_arg_type ("GtkObject::user_data",
-			   GTK_TYPE_POINTER,
-			   GTK_ARG_READWRITE,
-			   ARG_USER_DATA);
-  gtk_object_add_arg_type ("GtkObject::signal",
-			   GTK_TYPE_SIGNAL,
-			   GTK_ARG_WRITABLE,
-			   ARG_SIGNAL);
-  gtk_object_add_arg_type ("GtkObject::signal_after",
-			   GTK_TYPE_SIGNAL,
-			   GTK_ARG_WRITABLE,
-			   ARG_SIGNAL_AFTER);
-  gtk_object_add_arg_type ("GtkObject::object_signal",
-			   GTK_TYPE_SIGNAL,
-			   GTK_ARG_WRITABLE,
-			   ARG_OBJECT_SIGNAL);
-  gtk_object_add_arg_type ("GtkObject::object_signal_after",
-			   GTK_TYPE_SIGNAL,
-			   GTK_ARG_WRITABLE,
-			   ARG_OBJECT_SIGNAL_AFTER);
-
+  g_object_class_install_property (gobject_class,
+				   PROP_USER_DATA,
+				   g_param_spec_pointer ("user_data", "User Data",
+							 "Anonymous User Data Pointer",
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
   object_signals[DESTROY] =
     gtk_signal_new ("destroy",
                     G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | GTK_RUN_NO_HOOKS,
@@ -166,25 +333,13 @@ gtk_object_class_init (GtkObjectClass *class)
                     GTK_SIGNAL_OFFSET (GtkObjectClass, destroy),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (class, object_signals, LAST_SIGNAL);
 }
 
 static void
 gtk_object_init (GtkObject      *object,
 		 GtkObjectClass *klass)
 {
-  gboolean needs_construction = FALSE;
-
   GTK_OBJECT_FLAGS (object) = GTK_FLOATING;
-  do
-    {
-      needs_construction |= klass->construct_args != NULL;
-      klass = g_type_class_peek_parent (klass);
-    }
-  while (klass && GTK_IS_OBJECT_CLASS (klass) && !needs_construction);
-  if (!needs_construction)
-    GTK_OBJECT_FLAGS (object) |= GTK_CONSTRUCTED;
 }
 
 /********************************************
@@ -196,7 +351,6 @@ gtk_object_destroy (GtkObject *object)
 {
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
-  g_return_if_fail (GTK_OBJECT_CONSTRUCTED (object));
   
   if (!GTK_OBJECT_DESTROYED (object))
     {
@@ -251,168 +405,41 @@ gtk_object_finalize (GObject *gobject)
  *****************************************/
 
 static void
-gtk_object_set_arg (GtkObject *object,
-		    GtkArg    *arg,
-		    guint      arg_id)
+gtk_object_set_property (GObject      *object,
+			 guint         property_id,
+			 const GValue *value,
+			 GParamSpec   *pspec,
+			 const gchar  *trailer)
 {
-  guint n = 0;
-
-  switch (arg_id)
+  switch (property_id)
     {
-      gchar *arg_name;
-
-    case ARG_USER_DATA:
-      gtk_object_set_user_data (object, GTK_VALUE_POINTER (*arg));
-      break;
-    case ARG_OBJECT_SIGNAL_AFTER:
-      n += 6;
-    case ARG_OBJECT_SIGNAL:
-      n += 1;
-    case ARG_SIGNAL_AFTER:
-      n += 6;
-    case ARG_SIGNAL:
-      n += 6;
-      arg_name = gtk_arg_name_strip_type (arg->name);
-      if (arg_name &&
-	  arg_name[n] == ':' &&
-	  arg_name[n + 1] == ':' &&
-	  arg_name[n + 2] != 0)
-	{
-	  gtk_signal_connect_full (object,
-				   arg_name + n + 2,
-				   GTK_VALUE_SIGNAL (*arg).f, NULL,
-				   GTK_VALUE_SIGNAL (*arg).d,
-				   NULL,
-				   (arg_id == ARG_OBJECT_SIGNAL ||
-				    arg_id == ARG_OBJECT_SIGNAL_AFTER),
-				   (arg_id == ARG_OBJECT_SIGNAL_AFTER ||
-				    arg_id == ARG_SIGNAL_AFTER));
-	}
-      else
-	g_warning ("gtk_object_set_arg(): invalid signal argument: \"%s\"\n", arg->name);
+    case PROP_USER_DATA:
+      gtk_object_set_user_data (GTK_OBJECT (object), g_value_get_pointer (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
     }
 }
 
 static void
-gtk_object_get_arg (GtkObject *object,
-		    GtkArg    *arg,
-		    guint      arg_id)
+gtk_object_get_property (GObject     *object,
+			 guint        property_id,
+			 GValue      *value,
+			 GParamSpec  *pspec,
+			 const gchar *trailer)
 {
-  switch (arg_id)
+  switch (property_id)
     {
-    case ARG_USER_DATA:
-      GTK_VALUE_POINTER (*arg) = gtk_object_get_user_data (object);
+    case PROP_USER_DATA:
+      g_return_if_fail (trailer != NULL);
+
+      g_value_set_pointer (value, gtk_object_get_user_data (GTK_OBJECT (object)));
       break;
-    case ARG_SIGNAL:
-    case ARG_OBJECT_SIGNAL:
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
     }
-}
-
-/*****************************************
- * gtk_object_class_add_signals:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_object_class_add_signals (GtkObjectClass *class,
-			      guint          *signals,
-			      guint           nsignals)
-{
-  g_return_if_fail (GTK_IS_OBJECT_CLASS (class));
-  if (!nsignals)
-    return;
-  g_return_if_fail (signals != NULL);
-  
-  class->signals = g_renew (guint, class->signals, class->nsignals + nsignals);
-  memcpy (class->signals + class->nsignals, signals, nsignals * sizeof (guint));
-  class->nsignals += nsignals;
-}
-
-guint
-gtk_object_class_user_signal_new (GtkObjectClass     *class,
-				  const gchar        *name,
-				  GtkSignalRunType    signal_flags,
-				  GtkSignalMarshaller marshaller,
-				  GtkType             return_val,
-				  guint               nparams,
-				  ...)
-{
-  GtkType *params;
-  guint i;
-  va_list args;
-  guint signal_id;
-
-  g_return_val_if_fail (class != NULL, 0);
-
-  if (nparams > 0)
-    {
-      params = g_new (GtkType, nparams);
-
-      va_start (args, nparams);
-
-      for (i = 0; i < nparams; i++)
-	params[i] = va_arg (args, GtkType);
-
-      va_end (args);
-    }
-  else
-    params = NULL;
-
-  signal_id = gtk_signal_newv (name,
-			       signal_flags,
-			       GTK_CLASS_TYPE (class),
-			       0,
-			       marshaller,
-			       return_val,
-			       nparams,
-			       params);
-
-  g_free (params);
-
-  if (signal_id)
-    gtk_object_class_add_signals (class, &signal_id, 1);
-
-  return signal_id;
-}
-
-guint
-gtk_object_class_user_signal_newv (GtkObjectClass     *class,
-				   const gchar        *name,
-				   GtkSignalRunType    signal_flags,
-				   GtkSignalMarshaller marshaller,
-				   GtkType             return_val,
-				   guint               nparams,
-				   GtkType	      *params)
-{
-  guint signal_id;
-
-  g_return_val_if_fail (class != NULL, 0);
-
-  if (nparams > 0)
-    g_return_val_if_fail (params != NULL, 0);
-
-  signal_id = gtk_signal_newv (name,
-			       signal_flags,
-			       GTK_CLASS_TYPE (class),
-			       0,
-			       marshaller,
-			       return_val,
-			       nparams,
-			       params);
-
-  if (signal_id)
-    gtk_object_class_add_signals (class, &signal_id, 1);
-
-  return signal_id;
 }
 
 /*****************************************
@@ -533,453 +560,49 @@ gtk_object_notify_weaks (GtkObject *object)
     }
 }
 
-/****************************************************
- * GtkObject argument mechanism and object creation
- *
- ****************************************************/
-
 GtkObject*
 gtk_object_new (GtkType      object_type,
-		const gchar *first_arg_name,
+		const gchar *first_property_name,
 		...)
 {
   GtkObject *object;
   va_list var_args;
-  GSList *arg_list = NULL;
-  GSList *info_list = NULL;
-  gchar *error;
 
   g_return_val_if_fail (GTK_TYPE_IS_OBJECT (object_type), NULL);
 
-  object = gtk_type_new (object_type);
-
-  va_start (var_args, first_arg_name);
-  error = gtk_object_args_collect (GTK_OBJECT_TYPE (object),
-				   &arg_list,
-				   &info_list,
-				   first_arg_name,
-				   var_args);
+  va_start (var_args, first_property_name);
+  object = g_object_new_valist (object_type, first_property_name, var_args);
   va_end (var_args);
-  
-  if (error)
-    {
-      g_warning ("gtk_object_new(): %s", error);
-      g_free (error);
-    }
-  else
-    {
-      GSList *slist_arg;
-      GSList *slist_info;
-      
-      slist_arg = arg_list;
-      slist_info = info_list;
-      while (slist_arg)
-	{
-	  gtk_object_arg_set (object, slist_arg->data, slist_info->data);
-	  slist_arg = slist_arg->next;
-	  slist_info = slist_info->next;
-	}
-      gtk_args_collect_cleanup (arg_list, info_list);
-    }
-
-  if (!GTK_OBJECT_CONSTRUCTED (object))
-    gtk_object_default_construct (object);
 
   return object;
-}
-
-GtkObject*
-gtk_object_newv (GtkType  object_type,
-		 guint    n_args,
-		 GtkArg  *args)
-{
-  GtkObject *object;
-  GtkArg *max_args;
-  
-  g_return_val_if_fail (GTK_TYPE_IS_OBJECT (object_type), NULL);
-  if (n_args)
-    g_return_val_if_fail (args != NULL, NULL);
-  
-  object = gtk_type_new (object_type);
-  
-  for (max_args = args + n_args; args < max_args; args++)
-    gtk_object_arg_set (object, args, NULL);
-  
-  if (!GTK_OBJECT_CONSTRUCTED (object))
-    gtk_object_default_construct (object);
-
-  return object;
-}
-
-void
-gtk_object_setv (GtkObject *object,
-		 guint      n_args,
-		 GtkArg    *args)
-{
-  GtkArg *max_args;
-  
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-  if (n_args)
-    g_return_if_fail (args != NULL);
-
-  for (max_args = args + n_args; args < max_args; args++)
-    gtk_object_arg_set (object, args, NULL);
-}
-
-void
-gtk_object_getv (GtkObject           *object,
-		 guint		      n_args,
-		 GtkArg              *args)
-{
-  GtkArg *max_args;
-  
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-  if (n_args)
-    g_return_if_fail (args != NULL);
-  
-  for (max_args = args + n_args; args < max_args; args++)
-    gtk_object_arg_get (object, args, NULL);
 }
 
 void
 gtk_object_get (GtkObject   *object,
-		const gchar *first_arg_name,
+		const gchar *first_property_name,
 		...)
 {
   va_list var_args;
-  gchar *name;
   
   g_return_if_fail (GTK_IS_OBJECT (object));
   
-  va_start (var_args, first_arg_name);
-
-  name = (gchar*) first_arg_name;
-  while (name)
-    {
-      gpointer value_pointer = va_arg (var_args, gpointer);
-
-      if (value_pointer)
-	{
-	  GtkArgInfo *info;
-	  gchar *error;
-	  GtkArg arg;
-	  
-	  error = gtk_arg_get_info (GTK_OBJECT_TYPE (object),
-				    object_arg_info_ht,
-				    name,
-				    &info);
-	  if (error)
-	    {
-	      g_warning ("gtk_object_get(): %s", error);
-	      g_free (error);
-	      return;
-	    }
-	  
-	  arg.name = name;
-	  gtk_object_arg_get (object, &arg, info);
-	  gtk_arg_to_valueloc (&arg, value_pointer);
-	}
-
-      name = va_arg (var_args, gchar*);
-    }
-}
-
-void
-gtk_object_set (GtkObject *object,
-		const gchar    *first_arg_name,
-		...)
-{
-  va_list var_args;
-  GSList *arg_list = NULL;
-  GSList *info_list = NULL;
-  gchar *error;
-  
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-  
-  va_start (var_args, first_arg_name);
-  error = gtk_object_args_collect (GTK_OBJECT_TYPE (object),
-				   &arg_list,
-				   &info_list,
-				   first_arg_name,
-				   var_args);
+  va_start (var_args, first_property_name);
+  g_object_get_valist (G_OBJECT (object), first_property_name, var_args);
   va_end (var_args);
-  
-  if (error)
-    {
-      g_warning ("gtk_object_set(): %s", error);
-      g_free (error);
-    }
-  else
-    {
-      GSList *slist_arg;
-      GSList *slist_info;
-      
-      slist_arg = arg_list;
-      slist_info = info_list;
-      while (slist_arg)
-	{
-	  gtk_object_arg_set (object, slist_arg->data, slist_info->data);
-	  slist_arg = slist_arg->next;
-	  slist_info = slist_info->next;
-	}
-      gtk_args_collect_cleanup (arg_list, info_list);
-    }
 }
 
 void
-gtk_object_arg_set (GtkObject  *object,
-		    GtkArg     *arg,
-		    GtkArgInfo *info)
+gtk_object_set (GtkObject   *object,
+		const gchar *first_property_name,
+		...)
 {
-  GtkObjectClass *oclass;
-
-  g_return_if_fail (object != NULL);
+  va_list var_args;
+  
   g_return_if_fail (GTK_IS_OBJECT (object));
-  g_return_if_fail (arg != NULL);
-
-  if (!info)
-    {
-      gchar *error;
-
-      error = gtk_arg_get_info (GTK_OBJECT_TYPE (object),
-				object_arg_info_ht,
-				arg->name,
-				&info);
-      if (error)
-	{
-	  g_warning ("gtk_object_arg_set(): %s", error);
-	  g_free (error);
-	  return;
-	}
-    }
-
-  if (info->arg_flags & GTK_ARG_CONSTRUCT_ONLY &&
-      GTK_OBJECT_CONSTRUCTED (object))
-    {
-      g_warning ("gtk_object_arg_set(): cannot set argument \"%s\" for constructed object",
-		 info->full_name);
-      return;
-    }
-  if (!(info->arg_flags & GTK_ARG_WRITABLE))
-    {
-      g_warning ("gtk_object_arg_set(): argument \"%s\" is not writable",
-		 info->full_name);
-      return;
-    }
-  if (info->type != arg->type)
-    {
-      g_warning ("gtk_object_arg_set(): argument \"%s\" has invalid type `%s'",
-		 info->full_name,
-		 gtk_type_name (arg->type));
-      return;
-    }
   
-  oclass = gtk_type_class (info->class_type);
-  g_assert (oclass->set_arg != NULL);
-  oclass->set_arg (object, arg, info->arg_id);
-  if (!GTK_OBJECT_CONSTRUCTED (object) &&
-      (info->arg_flags & GTK_ARG_CONSTRUCT_ONLY ||
-       info->arg_flags & GTK_ARG_CONSTRUCT))
-    {
-      GSList *slist;
-
-      slist = gtk_object_get_data_by_id (object, quark_carg_history);
-      gtk_object_set_data_by_id (object,
-				 quark_carg_history,
-				 g_slist_prepend (slist, info));
-    }
-}
-
-void
-gtk_object_arg_get (GtkObject  *object,
-		    GtkArg     *arg,
-		    GtkArgInfo *info)
-{
-  GtkObjectClass *oclass;
-  
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-  g_return_if_fail (arg != NULL);
-
-  if (!info)
-    {
-      gchar *error;
-
-      error = gtk_arg_get_info (GTK_OBJECT_TYPE (object),
-				object_arg_info_ht,
-				arg->name,
-				&info);
-      if (error)
-	{
-	  g_warning ("gtk_object_arg_get(): %s", error);
-	  g_free (error);
-	  arg->type = GTK_TYPE_INVALID;
-	  return;
-	}
-    }
-  
-  if (! (info->arg_flags & GTK_ARG_READABLE))
-    {
-      g_warning ("gtk_object_arg_get(): argument \"%s\" is not readable",
-		 info->full_name);
-      arg->type = GTK_TYPE_INVALID;
-      return;
-    }
-  
-  oclass = gtk_type_class (info->class_type);
-  g_assert (oclass->get_arg != NULL);
-  arg->type = info->type;
-  oclass->get_arg (object, arg, info->arg_id);
-}
-
-void
-gtk_object_default_construct (GtkObject *object)
-{
-  GSList *slist;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-
-  if (!GTK_OBJECT_CONSTRUCTED (object))
-    {
-      for (slist = GTK_OBJECT_GET_CLASS (object)->construct_args;
-	   slist && !GTK_OBJECT_CONSTRUCTED (object);
-	   slist = slist->next)
-	{
-	  GSList *history;
-	  GtkArgInfo *info;
-	  
-	  info = slist->data;
-	  history = gtk_object_get_data_by_id (object, quark_carg_history);
-	  if (!g_slist_find (history, info))
-	    {
-	      GtkArg arg;
-	      
-	      /* default application */
-	      arg.type = info->type;
-	      arg.name = info->name;
-	      switch (G_TYPE_FUNDAMENTAL (arg.type))
-		{
-		case GTK_TYPE_FLOAT:
-		  GTK_VALUE_FLOAT (arg) = 0.0;
-		  break;
-		case GTK_TYPE_DOUBLE:
-		  GTK_VALUE_DOUBLE (arg) = 0.0;
-		  break;
-		case GTK_TYPE_BOXED:
-		case GTK_TYPE_STRING:
-		case GTK_TYPE_POINTER:
-		case G_TYPE_OBJECT:
-		  GTK_VALUE_POINTER (arg) = NULL;
-		  break;
-		default:
-		  memset (&arg.d, 0, sizeof (arg.d));
-		  break;
-		}
-	      gtk_object_arg_set (object, &arg, info);
-	    }
-	}
-
-      if (!GTK_OBJECT_CONSTRUCTED (object))
-	gtk_object_constructed (object);
-    }
-}
-
-void
-gtk_object_constructed (GtkObject *object)
-{
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-  g_return_if_fail (GTK_OBJECT_CONSTRUCTED (object) == FALSE);
-  
-  g_slist_free (gtk_object_get_data_by_id (object, quark_carg_history));
-  gtk_object_set_data_by_id (object, quark_carg_history, NULL);
-  GTK_OBJECT_FLAGS (object) |= GTK_CONSTRUCTED;
-}
-
-void
-gtk_object_add_arg_type (const char *arg_name,
-			 GtkType     arg_type,
-			 guint	     arg_flags,
-			 guint	     arg_id)
-{
-  GtkArgInfo *info;
-
-  g_return_if_fail (arg_name != NULL);
-  g_return_if_fail (arg_type > GTK_TYPE_NONE);
-  g_return_if_fail (arg_id > 0);
-  g_return_if_fail ((arg_flags & GTK_ARG_CHILD_ARG) == 0);
-  if (arg_flags & GTK_ARG_CONSTRUCT)
-    g_return_if_fail ((arg_flags & GTK_ARG_READWRITE) == GTK_ARG_READWRITE);
-  else
-    g_return_if_fail ((arg_flags & GTK_ARG_READWRITE) != 0);
-  if (arg_flags & GTK_ARG_CONSTRUCT_ONLY)
-    g_return_if_fail ((arg_flags & GTK_ARG_WRITABLE) == GTK_ARG_WRITABLE);
-    
-  if (!object_arg_info_ht)
-    object_arg_info_ht = g_hash_table_new (gtk_arg_info_hash,
-					   gtk_arg_info_equal);
-
-  info = gtk_arg_type_new_static (GTK_TYPE_OBJECT,
-				  arg_name,
-				  GTK_STRUCT_OFFSET (GtkObjectClass, n_args),
-				  object_arg_info_ht,
-				  arg_type,
-				  arg_flags,
-				  arg_id);
-  if (info &&
-      (info->arg_flags & GTK_ARG_CONSTRUCT ||
-       info->arg_flags & GTK_ARG_CONSTRUCT_ONLY))
-    {
-      GtkObjectClass *class;
-
-      class = gtk_type_class (info->class_type);
-      if (info->arg_flags & GTK_ARG_CONSTRUCT_ONLY)
-	class->construct_args = g_slist_prepend (class->construct_args, info);
-      else
-	class->construct_args = g_slist_append (class->construct_args, info);
-    }
-}
-
-gchar*
-gtk_object_args_collect (GtkType      object_type,
-			 GSList      **arg_list_p,
-			 GSList      **info_list_p,
-			 const gchar  *first_arg_name,
-			 va_list       var_args)
-{
-  return gtk_args_collect (object_type,
-			   object_arg_info_ht,
-			   arg_list_p,
-			   info_list_p,
-			   first_arg_name,
-			   var_args);
-}
-
-gchar*
-gtk_object_arg_get_info (GtkType      object_type,
-			 const gchar *arg_name,
-			 GtkArgInfo **info_p)
-{
-  return gtk_arg_get_info (object_type,
-			   object_arg_info_ht,
-			   arg_name,
-			   info_p);
-}
-
-GtkArg*
-gtk_object_query_args (GtkType        class_type,
-		       guint32      **arg_flags,
-		       guint         *n_args)
-{
-  g_return_val_if_fail (n_args != NULL, NULL);
-  *n_args = 0;
-  g_return_val_if_fail (GTK_TYPE_IS_OBJECT (class_type), NULL);
-
-  return gtk_args_query (class_type, object_arg_info_ht, arg_flags, n_args);
+  va_start (var_args, first_property_name);
+  g_object_set_valist (G_OBJECT (object), first_property_name, var_args);
+  va_end (var_args);
 }
 
 /*****************************************

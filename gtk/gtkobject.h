@@ -64,8 +64,8 @@ typedef enum
 {
   GTK_DESTROYED		= 1 << 0,
   GTK_FLOATING		= 1 << 1,
-  GTK_RESERVED		= 1 << 2,
-  GTK_CONSTRUCTED	= 1 << 3
+  GTK_RESERVED_1	= 1 << 2,
+  GTK_RESERVED_2	= 1 << 3
 } GtkObjectFlags;
 
 /* Macros for extracting the object_flags from GtkObject.
@@ -74,28 +74,11 @@ typedef enum
 #define GTK_OBJECT_DESTROYED(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_DESTROYED) != 0)
 #define GTK_OBJECT_FLOATING(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_FLOATING) != 0)
 #define GTK_OBJECT_CONNECTED(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_CONNECTED) != 0)
-#define GTK_OBJECT_CONSTRUCTED(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_CONSTRUCTED) != 0)
 
 /* Macros for setting and clearing bits in the object_flags field of GtkObject.
  */
 #define GTK_OBJECT_SET_FLAGS(obj,flag)	  G_STMT_START{ (GTK_OBJECT_FLAGS (obj) |= (flag)); }G_STMT_END
 #define GTK_OBJECT_UNSET_FLAGS(obj,flag)  G_STMT_START{ (GTK_OBJECT_FLAGS (obj) &= ~(flag)); }G_STMT_END
-
-/* GtkArg flag bits for gtk_object_add_arg_type
- */
-typedef enum
-{
-  GTK_ARG_READABLE	 = 1 << 0,
-  GTK_ARG_WRITABLE	 = 1 << 1,
-  GTK_ARG_CONSTRUCT	 = 1 << 2,
-  GTK_ARG_CONSTRUCT_ONLY = 1 << 3,
-  GTK_ARG_CHILD_ARG	 = 1 << 4,
-  GTK_ARG_MASK		 = 0x1f,
-  
-  /* aliases
-   */
-  GTK_ARG_READWRITE	 = GTK_ARG_READABLE | GTK_ARG_WRITABLE
-} GtkArgFlags;
 
 typedef struct _GtkObjectClass	GtkObjectClass;
 
@@ -121,26 +104,10 @@ struct _GtkObject
  * it ``inherits'' from the GtkTypeClass by mirroring its fields, which
  * must always be kept in sync completely. The GtkObjectClass defines
  * the basic necessities for the object inheritance mechanism to work.
- * Namely, the `signals' and `nsignals' fields as well as the function
- * pointers, required to end an object's lifetime.
  */
 struct _GtkObjectClass
 {
   GObjectClass parent_class;
-  
-  /* The signals this object class handles. "signals" is an
-   *  array of signal ID's.
-   */
-  guint *signals;
-  
-  /* The number of signals listed in "signals".
-   */
-  guint nsignals;
-  
-  /* The number of arguments per class.
-   */
-  guint n_args;
-  GSList *construct_args;
   
   /* Non overridable class methods to set and get per class arguments */
   void (*set_arg) (GtkObject *object,
@@ -158,7 +125,7 @@ struct _GtkObjectClass
    *  own cleanup. (See the destroy function for GtkWidget for
    *  an example of how to do this).
    */
-  void (* destroy)  (GtkObject *object);
+  void (*destroy)  (GtkObject *object);
 };
 
 
@@ -167,31 +134,11 @@ struct _GtkObjectClass
 
 GtkType	gtk_object_get_type		(void) G_GNUC_CONST;
 
-/* Append a user defined signal without default handler to a class. */
-guint	gtk_object_class_user_signal_new  (GtkObjectClass     *klass,
-					   const gchar	      *name,
-					   GtkSignalRunType    signal_flags,
-					   GtkSignalMarshaller marshaller,
-					   GtkType	       return_val,
-					   guint	       nparams,
-					   ...);
-guint	gtk_object_class_user_signal_newv (GtkObjectClass     *klass,
-					   const gchar	      *name,
-					   GtkSignalRunType    signal_flags,
-					   GtkSignalMarshaller marshaller,
-					   GtkType	       return_val,
-					   guint	       nparams,
-					   GtkType	      *params);
 GtkObject*	gtk_object_new		  (GtkType	       type,
-					   const gchar	      *first_arg_name,
+					   const gchar	      *first_property_name,
 					   ...);
-GtkObject*	gtk_object_newv		  (GtkType	       object_type,
-					   guint	       n_args,
-					   GtkArg	      *args);
 GtkObject*	gtk_object_ref		  (GtkObject	      *object);
 void		gtk_object_unref	  (GtkObject	      *object);
-void gtk_object_default_construct         (GtkObject	      *object);
-void gtk_object_constructed		  (GtkObject	      *object);
 void gtk_object_sink	  (GtkObject	    *object);
 void gtk_object_weakref	  (GtkObject	    *object,
 			   GtkDestroyNotify  notify,
@@ -201,46 +148,6 @@ void gtk_object_weakunref (GtkObject	    *object,
 			   gpointer	     data);
 void gtk_object_destroy	  (GtkObject *object);
 
-/* gtk_object_getv() sets an arguments type and value, or just
- * its type to GTK_TYPE_INVALID.
- * if GTK_FUNDAMENTAL_TYPE (arg->type) == GTK_TYPE_STRING, it's
- * the callers response to do a g_free (GTK_VALUE_STRING (arg));
- */
-void	gtk_object_getv		(GtkObject	*object,
-				 guint		n_args,
-				 GtkArg		*args);
-/* gtk_object_get() sets the variable values pointed to by the adresses
- * passed after the argument names according to the arguments value.
- * if GTK_FUNDAMENTAL_TYPE (arg->type) == GTK_TYPE_STRING, it's
- * the callers response to do a g_free (retrived_value);
- */
-void	gtk_object_get		(GtkObject	*object,
-				 const gchar	*first_arg_name,
-				 ...);
-
-/* gtk_object_set() takes a variable argument list of the form:
- * (..., gchar *arg_name, ARG_VALUES, [repeatedly name/value pairs,] NULL)
- * where ARG_VALUES type depend on the argument and can consist of
- * more than one c-function argument.
- */
-void	gtk_object_set		(GtkObject	*object,
-				 const gchar	*first_arg_name,
-				 ...);
-void	gtk_object_setv		(GtkObject	*object,
-				 guint		n_args,
-				 GtkArg		*args);
-
-/* Allocate a GtkArg array of size nargs that hold the
- * names and types of the args that can be used with
- * gtk_object_set/gtk_object_get. if (arg_flags!=NULL),
- * (*arg_flags) will be set to point to a newly allocated
- * guint array that holds the flags of the args.
- * It is the callers response to do a
- * g_free (returned_args); g_free (*arg_flags).
- */
-GtkArg* gtk_object_query_args	(GtkType	  class_type,
-				 guint32	**arg_flags,
-				 guint		 *n_args);
 
 /* Set 'data' to the "object_data" field of the object. The
  *  data is indexed by the "key". If there is already data
@@ -280,16 +187,6 @@ gpointer gtk_object_get_user_data (GtkObject	*object);
 
 /* Object-level methods */
 
-/* Append "signals" to those already defined in "class". */
-void	gtk_object_class_add_signals	(GtkObjectClass	*klass,
-					 guint		*signals,
-					 guint		 nsignals);
-/* the `arg_name' argument needs to be a const static string */
-void	gtk_object_add_arg_type		(const gchar	*arg_name,
-					 GtkType	 arg_type,
-					 guint		 arg_flags,
-					 guint		 arg_id);
-
 /* Object data method variants that operate on key ids. */
 void gtk_object_set_data_by_id		(GtkObject	 *object,
 					 GQuark		  data_id,
@@ -310,25 +207,28 @@ void  gtk_object_remove_no_notify_by_id	(GtkObject	 *object,
 
 /* Non-public methods */
 
-void	gtk_object_arg_set	(GtkObject   *object,
-				 GtkArg	     *arg,
-				 GtkArgInfo  *info);
-void	gtk_object_arg_get	(GtkObject   *object,
-				 GtkArg	     *arg,
-				 GtkArgInfo  *info);
-gchar*	gtk_object_args_collect (GtkType      object_type,
-				 GSList	    **arg_list_p,
-				 GSList	    **info_list_p,
-				 const gchar *first_arg_name,
-				 va_list      var_args);
-gchar*	gtk_object_arg_get_info (GtkType      object_type,
-				 const gchar *arg_name,
-				 GtkArgInfo **info_p);
 
-
-
-
-
+/* GtkArg flag bits for gtk_object_add_arg_type
+ */
+typedef enum
+{
+  GTK_ARG_READABLE	 = G_PARAM_READABLE,
+  GTK_ARG_WRITABLE	 = G_PARAM_WRITABLE,
+  GTK_ARG_CONSTRUCT	 = G_PARAM_CONSTRUCT,
+  GTK_ARG_CONSTRUCT_ONLY = G_PARAM_CONSTRUCT_ONLY,
+  GTK_ARG_CHILD_ARG	 = 1 << 4,
+} GtkArgFlags;
+#define	GTK_ARG_READWRITE	(GTK_ARG_READABLE | GTK_ARG_WRITABLE)
+void	gtk_object_get		(GtkObject	*object,
+				 const gchar	*first_property_name,
+				 ...);
+void	gtk_object_set		(GtkObject	*object,
+				 const gchar	*first_property_name,
+				 ...);
+void	gtk_object_add_arg_type		(const gchar	*arg_name,
+					 GtkType	 arg_type,
+					 guint		 arg_flags,
+					 guint		 arg_id);
 
 
 #ifdef __cplusplus

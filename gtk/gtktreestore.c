@@ -146,8 +146,6 @@ gtk_tree_store_class_init (GtkTreeStoreClass *tree_store_class)
                     gtk_marshal_VOID__BOXED,
                     G_TYPE_NONE, 1,
 		    GTK_TYPE_TREE_PATH);
-
-  gtk_object_class_add_signals (object_class, tree_store_signals, LAST_SIGNAL);
 }
 
 static void

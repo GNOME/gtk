@@ -260,8 +260,6 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
                     G_TYPE_BOOLEAN, 2,
 		    GTK_TYPE_TREE_ITER,
 		    GTK_TYPE_TREE_ITER);
-
-  gtk_object_class_add_signals (object_class, model_simple_signals, LAST_SIGNAL);
 }
 
 static void

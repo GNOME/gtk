@@ -9,12 +9,10 @@ creating
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### FUNCTION gdk_pixbuf_new ##### -->
 <para>
@@ -64,6 +62,19 @@ creating
 @copy_pixels: 
 @length: 
 @error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_subpixbuf ##### -->
+<para>
+
+</para>
+
+@src_pixbuf: 
+@src_x: 
+@src_y: 
+@width: 
+@height: 
 @Returns: 
 
 

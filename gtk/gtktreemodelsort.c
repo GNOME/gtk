@@ -173,6 +173,8 @@ gtk_tree_model_sort_class_init (GtkTreeModelSortClass *tree_model_sort_class)
 
   object_class = (GObjectClass *) tree_model_sort_class;
 
+  object_class->finalize = gtk_tree_model_sort_finalize;
+
   tree_model_sort_signals[CHANGED] =
     gtk_signal_new ("changed",
                     GTK_RUN_FIRST,
@@ -208,10 +210,6 @@ gtk_tree_model_sort_class_init (GtkTreeModelSortClass *tree_model_sort_class)
                     gtk_marshal_VOID__POINTER,
                     GTK_TYPE_NONE, 1,
 		    GTK_TYPE_POINTER);
-
-  object_class->finalize = gtk_tree_model_sort_finalize;
-
-  gtk_object_class_add_signals (GTK_OBJECT_CLASS (object_class), tree_model_sort_signals, LAST_SIGNAL);
 }
 
 static void

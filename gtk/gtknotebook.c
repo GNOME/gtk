@@ -280,34 +280,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   container_class = (GtkContainerClass*) class;
   parent_class = gtk_type_class (gtk_container_get_type ());
 
-  gtk_object_add_arg_type ("GtkNotebook::page", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_PAGE);
-  gtk_object_add_arg_type ("GtkNotebook::tab_pos", GTK_TYPE_POSITION_TYPE, GTK_ARG_READWRITE, ARG_TAB_POS);
-  gtk_object_add_arg_type ("GtkNotebook::tab_border", GTK_TYPE_UINT, GTK_ARG_WRITABLE, ARG_TAB_BORDER);
-  gtk_object_add_arg_type ("GtkNotebook::tab_hborder", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_TAB_HBORDER);
-  gtk_object_add_arg_type ("GtkNotebook::tab_vborder", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_TAB_VBORDER);
-  gtk_object_add_arg_type ("GtkNotebook::show_tabs", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SHOW_TABS);
-  gtk_object_add_arg_type ("GtkNotebook::show_border", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SHOW_BORDER);
-  gtk_object_add_arg_type ("GtkNotebook::scrollable", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SCROLLABLE);
-  gtk_object_add_arg_type ("GtkNotebook::enable_popup", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ENABLE_POPUP);
-  gtk_object_add_arg_type ("GtkNotebook::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);
-
-  gtk_container_add_child_arg_type ("GtkNotebook::tab_label", GTK_TYPE_STRING, GTK_ARG_READWRITE, CHILD_ARG_TAB_LABEL);
-  gtk_container_add_child_arg_type ("GtkNotebook::menu_label", GTK_TYPE_STRING, GTK_ARG_READWRITE, CHILD_ARG_MENU_LABEL);
-  gtk_container_add_child_arg_type ("GtkNotebook::position", GTK_TYPE_INT, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
-  gtk_container_add_child_arg_type ("GtkNotebook::tab_fill", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_TAB_FILL);
-  gtk_container_add_child_arg_type ("GtkNotebook::tab_pack", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_TAB_PACK);
-
-  notebook_signals[SWITCH_PAGE] =
-    gtk_signal_new ("switch_page",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkNotebookClass, switch_page),
-		    gtk_marshal_VOID__POINTER_UINT,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_UINT);
-
-  gtk_object_class_add_signals (object_class, notebook_signals, LAST_SIGNAL);
 
   object_class->set_arg = gtk_notebook_set_arg;
   object_class->get_arg = gtk_notebook_get_arg;
@@ -341,6 +313,33 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   container_class->child_type = gtk_notebook_child_type;
 
   class->switch_page = gtk_notebook_real_switch_page;
+
+  gtk_object_add_arg_type ("GtkNotebook::page", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_PAGE);
+  gtk_object_add_arg_type ("GtkNotebook::tab_pos", GTK_TYPE_POSITION_TYPE, GTK_ARG_READWRITE, ARG_TAB_POS);
+  gtk_object_add_arg_type ("GtkNotebook::tab_border", GTK_TYPE_UINT, GTK_ARG_WRITABLE, ARG_TAB_BORDER);
+  gtk_object_add_arg_type ("GtkNotebook::tab_hborder", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_TAB_HBORDER);
+  gtk_object_add_arg_type ("GtkNotebook::tab_vborder", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_TAB_VBORDER);
+  gtk_object_add_arg_type ("GtkNotebook::show_tabs", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SHOW_TABS);
+  gtk_object_add_arg_type ("GtkNotebook::show_border", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SHOW_BORDER);
+  gtk_object_add_arg_type ("GtkNotebook::scrollable", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SCROLLABLE);
+  gtk_object_add_arg_type ("GtkNotebook::enable_popup", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ENABLE_POPUP);
+  gtk_object_add_arg_type ("GtkNotebook::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);
+
+  gtk_container_add_child_arg_type ("GtkNotebook::tab_label", GTK_TYPE_STRING, GTK_ARG_READWRITE, CHILD_ARG_TAB_LABEL);
+  gtk_container_add_child_arg_type ("GtkNotebook::menu_label", GTK_TYPE_STRING, GTK_ARG_READWRITE, CHILD_ARG_MENU_LABEL);
+  gtk_container_add_child_arg_type ("GtkNotebook::position", GTK_TYPE_INT, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
+  gtk_container_add_child_arg_type ("GtkNotebook::tab_fill", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_TAB_FILL);
+  gtk_container_add_child_arg_type ("GtkNotebook::tab_pack", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_TAB_PACK);
+
+  notebook_signals[SWITCH_PAGE] =
+    gtk_signal_new ("switch_page",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkNotebookClass, switch_page),
+		    gtk_marshal_VOID__POINTER_UINT,
+		    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_POINTER,
+		    GTK_TYPE_UINT);
 }
 
 static void

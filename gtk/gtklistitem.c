@@ -113,6 +113,31 @@ gtk_list_item_class_init (GtkListItemClass *class)
 
   parent_class = gtk_type_class (gtk_item_get_type ());
 
+  widget_class->realize = gtk_list_item_realize;
+  widget_class->size_request = gtk_list_item_size_request;
+  widget_class->size_allocate = gtk_list_item_size_allocate;
+  widget_class->style_set = gtk_list_item_style_set;
+  widget_class->draw_focus = gtk_list_item_draw_focus;
+  widget_class->button_press_event = gtk_list_item_button_press;
+  widget_class->expose_event = gtk_list_item_expose;
+  widget_class->focus_in_event = gtk_list_item_focus_in;
+  widget_class->focus_out_event = gtk_list_item_focus_out;
+
+  item_class->select = gtk_real_list_item_select;
+  item_class->deselect = gtk_real_list_item_deselect;
+  item_class->toggle = gtk_real_list_item_toggle;
+
+  class->toggle_focus_row = NULL;
+  class->select_all = NULL;
+  class->unselect_all = NULL;
+  class->undo_selection = NULL;
+  class->start_selection = NULL;
+  class->end_selection = NULL;
+  class->extend_selection = NULL;
+  class->scroll_horizontal = NULL;
+  class->scroll_vertical = NULL;
+  class->toggle_add_mode = NULL;
+
   list_item_signals[TOGGLE_FOCUS_ROW] =
     gtk_signal_new ("toggle_focus_row",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
@@ -184,34 +209,6 @@ gtk_list_item_class_init (GtkListItemClass *class)
                     GTK_SIGNAL_OFFSET (GtkListItemClass, scroll_horizontal),
                     gtk_marshal_VOID__ENUM_FLOAT,
                     GTK_TYPE_NONE, 2, GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT);
-
-  gtk_object_class_add_signals (object_class, list_item_signals, LAST_SIGNAL);
-
-  widget_class->realize = gtk_list_item_realize;
-  widget_class->size_request = gtk_list_item_size_request;
-  widget_class->size_allocate = gtk_list_item_size_allocate;
-  widget_class->style_set = gtk_list_item_style_set;
-  widget_class->draw_focus = gtk_list_item_draw_focus;
-  widget_class->button_press_event = gtk_list_item_button_press;
-  widget_class->expose_event = gtk_list_item_expose;
-  widget_class->focus_in_event = gtk_list_item_focus_in;
-  widget_class->focus_out_event = gtk_list_item_focus_out;
-
-  item_class->select = gtk_real_list_item_select;
-  item_class->deselect = gtk_real_list_item_deselect;
-  item_class->toggle = gtk_real_list_item_toggle;
-
-  class->toggle_focus_row = NULL;
-  class->select_all = NULL;
-  class->unselect_all = NULL;
-  class->undo_selection = NULL;
-  class->start_selection = NULL;
-  class->end_selection = NULL;
-  class->extend_selection = NULL;
-  class->scroll_horizontal = NULL;
-  class->scroll_vertical = NULL;
-  class->toggle_add_mode = NULL;
-
 
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set, GDK_Up, 0,

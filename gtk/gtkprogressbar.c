@@ -139,7 +139,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   gtk_object_add_arg_type ("GtkProgressBar::pulse_step",
 			   GTK_TYPE_FLOAT,
 			   GTK_ARG_READWRITE,
-			   ARG_FRACTION);
+			   ARG_PULSE_STEP);
   
   object_class->set_arg = gtk_progress_bar_set_arg;
   object_class->get_arg = gtk_progress_bar_get_arg;

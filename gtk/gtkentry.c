@@ -271,7 +271,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
-
   GtkBindingSet *binding_set;
 
   object_class = (GtkObjectClass*) class;
@@ -279,6 +278,35 @@ gtk_entry_class_init (GtkEntryClass *class)
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
 
   gobject_class->finalize = gtk_entry_finalize;
+  
+  object_class->set_arg = gtk_entry_set_arg;
+  object_class->get_arg = gtk_entry_get_arg;
+
+  widget_class->realize = gtk_entry_realize;
+  widget_class->unrealize = gtk_entry_unrealize;
+  widget_class->draw_focus = gtk_entry_draw_focus;
+  widget_class->size_request = gtk_entry_size_request;
+  widget_class->size_allocate = gtk_entry_size_allocate;
+  widget_class->expose_event = gtk_entry_expose;
+  widget_class->button_press_event = gtk_entry_button_press;
+  widget_class->button_release_event = gtk_entry_button_release;
+  widget_class->motion_notify_event = gtk_entry_motion_notify;
+  widget_class->key_press_event = gtk_entry_key_press;
+  widget_class->focus_in_event = gtk_entry_focus_in;
+  widget_class->focus_out_event = gtk_entry_focus_out;
+  widget_class->style_set = gtk_entry_style_set;
+  widget_class->direction_changed = gtk_entry_direction_changed;
+  widget_class->state_changed = gtk_entry_state_changed;
+
+  class->insert_text = gtk_entry_real_insert_text;
+  class->delete_text = gtk_entry_real_delete_text;
+  class->move_cursor = gtk_entry_move_cursor;
+  class->insert_at_cursor = gtk_entry_insert_at_cursor;
+  class->delete_from_cursor = gtk_entry_delete_from_cursor;
+  class->cut_clipboard = gtk_entry_cut_clipboard;
+  class->copy_clipboard = gtk_entry_copy_clipboard;
+  class->paste_clipboard = gtk_entry_paste_clipboard;
+  class->toggle_overwrite = gtk_entry_toggle_overwrite;
 
   gtk_object_add_arg_type ("GtkEntry::text_position", GTK_TYPE_INT,  GTK_ARG_READWRITE, ARG_TEXT_POSITION);
   gtk_object_add_arg_type ("GtkEntry::editable",      GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EDITABLE);
@@ -326,7 +354,6 @@ gtk_entry_class_init (GtkEntryClass *class)
 		    GTK_SIGNAL_OFFSET (GtkEntryClass, activate),
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-
   widget_class->activate_signal = signals[ACTIVATE];
 
   signals[MOVE_CURSOR] = 
@@ -384,8 +411,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                     GTK_SIGNAL_OFFSET (GtkEntryClass, toggle_overwrite),
                     gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
 
   /*
    * Key bindings
@@ -510,35 +535,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   /* Overwrite */
   gtk_binding_entry_add_signal (binding_set, GDK_Insert, 0,
 				"toggle_overwrite", 0);
-  
-  object_class->set_arg = gtk_entry_set_arg;
-  object_class->get_arg = gtk_entry_get_arg;
-
-  widget_class->realize = gtk_entry_realize;
-  widget_class->unrealize = gtk_entry_unrealize;
-  widget_class->draw_focus = gtk_entry_draw_focus;
-  widget_class->size_request = gtk_entry_size_request;
-  widget_class->size_allocate = gtk_entry_size_allocate;
-  widget_class->expose_event = gtk_entry_expose;
-  widget_class->button_press_event = gtk_entry_button_press;
-  widget_class->button_release_event = gtk_entry_button_release;
-  widget_class->motion_notify_event = gtk_entry_motion_notify;
-  widget_class->key_press_event = gtk_entry_key_press;
-  widget_class->focus_in_event = gtk_entry_focus_in;
-  widget_class->focus_out_event = gtk_entry_focus_out;
-  widget_class->style_set = gtk_entry_style_set;
-  widget_class->direction_changed = gtk_entry_direction_changed;
-  widget_class->state_changed = gtk_entry_state_changed;
-
-  class->insert_text = gtk_entry_real_insert_text;
-  class->delete_text = gtk_entry_real_delete_text;
-  class->move_cursor = gtk_entry_move_cursor;
-  class->insert_at_cursor = gtk_entry_insert_at_cursor;
-  class->delete_from_cursor = gtk_entry_delete_from_cursor;
-  class->cut_clipboard = gtk_entry_cut_clipboard;
-  class->copy_clipboard = gtk_entry_copy_clipboard;
-  class->paste_clipboard = gtk_entry_paste_clipboard;
-  class->toggle_overwrite = gtk_entry_toggle_overwrite;
 }
 
 static void

@@ -218,28 +218,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   gobject_class->shutdown = gtk_window_shutdown;
   gobject_class->finalize = gtk_window_finalize;
 
-  gtk_object_add_arg_type ("GtkWindow::type", GTK_TYPE_WINDOW_TYPE, GTK_ARG_READWRITE, ARG_TYPE);
-  gtk_object_add_arg_type ("GtkWindow::title", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_TITLE);
-  gtk_object_add_arg_type ("GtkWindow::auto_shrink", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_AUTO_SHRINK);
-  gtk_object_add_arg_type ("GtkWindow::allow_shrink", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_SHRINK);
-  gtk_object_add_arg_type ("GtkWindow::allow_grow", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_GROW);
-  gtk_object_add_arg_type ("GtkWindow::modal", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_MODAL);
-  gtk_object_add_arg_type ("GtkWindow::window_position", GTK_TYPE_WINDOW_POSITION, GTK_ARG_READWRITE, ARG_WIN_POS);
-  gtk_object_add_arg_type ("GtkWindow::default_width", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_DEFAULT_WIDTH);
-  gtk_object_add_arg_type ("GtkWindow::default_height", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_DEFAULT_HEIGHT);
-  gtk_object_add_arg_type ("GtkWindow::destroy_with_parent", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_DESTROY_WITH_PARENT);
-  
-  window_signals[SET_FOCUS] =
-    gtk_signal_new ("set_focus",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkWindowClass, set_focus),
-                    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-                    GTK_TYPE_WIDGET);
-
-  gtk_object_class_add_signals (object_class, window_signals, LAST_SIGNAL);
-
   object_class->set_arg = gtk_window_set_arg;
   object_class->get_arg = gtk_window_get_arg;
   object_class->destroy = gtk_window_destroy;
@@ -266,6 +244,26 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class->focus = gtk_window_focus;
 
   klass->set_focus = gtk_window_real_set_focus;
+
+  gtk_object_add_arg_type ("GtkWindow::type", GTK_TYPE_WINDOW_TYPE, GTK_ARG_READWRITE, ARG_TYPE);
+  gtk_object_add_arg_type ("GtkWindow::title", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_TITLE);
+  gtk_object_add_arg_type ("GtkWindow::auto_shrink", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_AUTO_SHRINK);
+  gtk_object_add_arg_type ("GtkWindow::allow_shrink", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_SHRINK);
+  gtk_object_add_arg_type ("GtkWindow::allow_grow", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_GROW);
+  gtk_object_add_arg_type ("GtkWindow::modal", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_MODAL);
+  gtk_object_add_arg_type ("GtkWindow::window_position", GTK_TYPE_WINDOW_POSITION, GTK_ARG_READWRITE, ARG_WIN_POS);
+  gtk_object_add_arg_type ("GtkWindow::default_width", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_DEFAULT_WIDTH);
+  gtk_object_add_arg_type ("GtkWindow::default_height", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_DEFAULT_HEIGHT);
+  gtk_object_add_arg_type ("GtkWindow::destroy_with_parent", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_DESTROY_WITH_PARENT);
+  
+  window_signals[SET_FOCUS] =
+    gtk_signal_new ("set_focus",
+                    GTK_RUN_LAST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkWindowClass, set_focus),
+                    gtk_marshal_VOID__POINTER,
+		    GTK_TYPE_NONE, 1,
+                    GTK_TYPE_WIDGET);
 }
 
 static void

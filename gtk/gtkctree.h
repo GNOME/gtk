@@ -171,10 +171,6 @@ struct _GtkCTreeNode {
  ***********************************************************/
 
 GtkType gtk_ctree_get_type                       (void) G_GNUC_CONST;
-void gtk_ctree_construct                         (GtkCTree     *ctree,
-						  gint          columns, 
-						  gint          tree_column,
-						  gchar        *titles[]);
 GtkWidget * gtk_ctree_new_with_titles            (gint          columns, 
 						  gint          tree_column,
 						  gchar        *titles[]);

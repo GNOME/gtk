@@ -94,7 +94,7 @@ gtk_type_new (GtkType type)
 
   g_return_val_if_fail (GTK_TYPE_IS_OBJECT (type), NULL);
 
-  object = g_type_create_instance (type);
+  object = g_object_new (type, NULL);
 
   return object;
 }

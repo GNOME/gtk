@@ -214,31 +214,6 @@ gtk_list_class_init (GtkListClass *class)
 
   gobject_class->shutdown = gtk_list_shutdown;
 
-  list_signals[SELECTION_CHANGED] =
-    gtk_signal_new ("selection_changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkListClass, selection_changed),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  list_signals[SELECT_CHILD] =
-    gtk_signal_new ("select_child",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkListClass, select_child),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
-  list_signals[UNSELECT_CHILD] =
-    gtk_signal_new ("unselect_child",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkListClass, unselect_child),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
-
-  gtk_object_class_add_signals (object_class, list_signals, LAST_SIGNAL);
 
   object_class->set_arg = gtk_list_set_arg;
   object_class->get_arg = gtk_list_get_arg;
@@ -265,6 +240,30 @@ gtk_list_class_init (GtkListClass *class)
   class->selection_changed = NULL;
   class->select_child = gtk_real_list_select_child;
   class->unselect_child = gtk_real_list_unselect_child;
+
+  list_signals[SELECTION_CHANGED] =
+    gtk_signal_new ("selection_changed",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkListClass, selection_changed),
+		    gtk_marshal_VOID__VOID,
+		    GTK_TYPE_NONE, 0);
+  list_signals[SELECT_CHILD] =
+    gtk_signal_new ("select_child",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkListClass, select_child),
+		    gtk_marshal_VOID__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
+  list_signals[UNSELECT_CHILD] =
+    gtk_signal_new ("unselect_child",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkListClass, unselect_child),
+		    gtk_marshal_VOID__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
   
   gtk_object_add_arg_type ("GtkList::selection_mode",
 			   GTK_TYPE_SELECTION_MODE, GTK_ARG_READWRITE,

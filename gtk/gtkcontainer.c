@@ -165,7 +165,24 @@ gtk_container_class_init (GtkContainerClass *class)
   vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
   
-  gtk_object_add_arg_type ("GtkContainer::border_width", GTK_TYPE_ULONG, GTK_ARG_READWRITE, ARG_BORDER_WIDTH);
+
+  object_class->get_arg = gtk_container_get_arg;
+  object_class->set_arg = gtk_container_set_arg;
+  object_class->destroy = gtk_container_destroy;
+
+  widget_class->show_all = gtk_container_show_all;
+  widget_class->hide_all = gtk_container_hide_all;
+  
+  class->add = gtk_container_add_unimplemented;
+  class->remove = gtk_container_remove_unimplemented;
+  class->check_resize = gtk_container_real_check_resize;
+  class->forall = NULL;
+  class->focus = gtk_container_real_focus;
+  class->set_focus_child = gtk_container_real_set_focus_child;
+  class->child_type = NULL;
+  class->composite_name = gtk_container_child_default_composite_name;
+
+  gtk_object_add_arg_type ("GtkContainer::border_width", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_BORDER_WIDTH);
   gtk_object_add_arg_type ("GtkContainer::resize_mode", GTK_TYPE_RESIZE_MODE, GTK_ARG_READWRITE, ARG_RESIZE_MODE);
   gtk_object_add_arg_type ("GtkContainer::child", GTK_TYPE_WIDGET, GTK_ARG_WRITABLE, ARG_CHILD);
   gtk_object_add_arg_type ("GtkContainer::reallocate_redraws", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_REALLOCATE_REDRAWS);
@@ -209,23 +226,6 @@ gtk_container_class_init (GtkContainerClass *class)
                     gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
-  gtk_object_class_add_signals (object_class, container_signals, LAST_SIGNAL);
-
-  object_class->get_arg = gtk_container_get_arg;
-  object_class->set_arg = gtk_container_set_arg;
-  object_class->destroy = gtk_container_destroy;
-
-  widget_class->show_all = gtk_container_show_all;
-  widget_class->hide_all = gtk_container_hide_all;
-  
-  class->add = gtk_container_add_unimplemented;
-  class->remove = gtk_container_remove_unimplemented;
-  class->check_resize = gtk_container_real_check_resize;
-  class->forall = NULL;
-  class->focus = gtk_container_real_focus;
-  class->set_focus_child = gtk_container_real_set_focus_child;
-  class->child_type = NULL;
-  class->composite_name = gtk_container_child_default_composite_name;
 }
 
 GtkType
@@ -266,8 +266,6 @@ gtk_container_add_with_args (GtkContainer      *container,
   gtk_widget_ref (GTK_WIDGET (container));
   gtk_widget_ref (widget);
 
-  if (!GTK_OBJECT_CONSTRUCTED (widget))
-    gtk_object_default_construct (GTK_OBJECT (widget));
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
   
   if (widget->parent)
@@ -326,8 +324,6 @@ gtk_container_addv (GtkContainer      *container,
   gtk_widget_ref (GTK_WIDGET (container));
   gtk_widget_ref (widget);
 
-  if (!GTK_OBJECT_CONSTRUCTED (widget))
-    gtk_object_default_construct (GTK_OBJECT (widget));
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
   
   if (widget->parent)
@@ -646,7 +642,7 @@ gtk_container_set_arg (GtkObject    *object,
   switch (arg_id)
     {
     case ARG_BORDER_WIDTH:
-      gtk_container_set_border_width (container, GTK_VALUE_ULONG (*arg));
+      gtk_container_set_border_width (container, GTK_VALUE_UINT (*arg));
       break;
     case ARG_RESIZE_MODE:
       gtk_container_set_resize_mode (container, GTK_VALUE_ENUM (*arg));
@@ -674,7 +670,7 @@ gtk_container_get_arg (GtkObject    *object,
   switch (arg_id)
     {
     case ARG_BORDER_WIDTH:
-      GTK_VALUE_ULONG (*arg) = container->border_width;
+      GTK_VALUE_UINT (*arg) = container->border_width;
       break;
     case ARG_RESIZE_MODE:
       GTK_VALUE_ENUM (*arg) = container->resize_mode;
@@ -714,8 +710,6 @@ gtk_container_add (GtkContainer *container,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->parent == NULL);
 
-  if (!GTK_OBJECT_CONSTRUCTED (widget))
-    gtk_object_default_construct (GTK_OBJECT (widget));
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
 }
 

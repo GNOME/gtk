@@ -110,6 +110,9 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
   
   parent_class = gtk_type_class (GTK_TYPE_OBJECT);
   
+  object_class->destroy = gdk_pixbuf_loader_destroy;
+  gobject_class->finalize = gdk_pixbuf_loader_finalize;
+
   pixbuf_loader_signals[AREA_PREPARED] =
     gtk_signal_new ("area_prepared",
 		    GTK_RUN_LAST,
@@ -154,11 +157,6 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
 		    GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, closed),
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-  
-  gtk_object_class_add_signals (object_class, pixbuf_loader_signals, LAST_SIGNAL);
-  
-  object_class->destroy = gdk_pixbuf_loader_destroy;
-  gobject_class->finalize = gdk_pixbuf_loader_finalize;
 }
 
 static void

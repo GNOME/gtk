@@ -163,6 +163,13 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
 
   parent_class = gtk_type_class (GTK_TYPE_OBJECT);
 
+  object_class->destroy = gtk_text_layout_destroy;
+  gobject_class->finalize = gtk_text_layout_finalize;
+
+  klass->wrap = gtk_text_layout_real_wrap;
+  klass->invalidate = gtk_text_layout_real_invalidate;
+  klass->free_line_data = gtk_text_layout_real_free_line_data;
+
   signals[INVALIDATED] =
     gtk_signal_new ("invalidated",
                     GTK_RUN_LAST,
@@ -195,15 +202,6 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                     GTK_TYPE_OBJECT,
                     GTK_TYPE_INT,
                     GTK_TYPE_INT);
-  
-  gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
-
-  object_class->destroy = gtk_text_layout_destroy;
-  gobject_class->finalize = gtk_text_layout_finalize;
-
-  klass->wrap = gtk_text_layout_real_wrap;
-  klass->invalidate = gtk_text_layout_real_invalidate;
-  klass->free_line_data = gtk_text_layout_real_free_line_data;
 }
 
 void

@@ -72,6 +72,9 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
   
   object_class = (GtkObjectClass*) klass;
 
+  klass->get_preedit_string = gtk_im_context_real_get_preedit_string;
+  klass->filter_keypress = gtk_im_context_real_filter_keypress;
+
   im_context_signals[PREEDIT_START] =
     gtk_signal_new ("preedit_start",
 		    GTK_RUN_LAST,
@@ -104,11 +107,6 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_STRING);
-
-  klass->get_preedit_string = gtk_im_context_real_get_preedit_string;
-  klass->filter_keypress = gtk_im_context_real_filter_keypress;
-  
-  gtk_object_class_add_signals (object_class, im_context_signals, LAST_SIGNAL);
 }
 
 static void

@@ -138,25 +138,6 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
   
-  toolbar_signals[ORIENTATION_CHANGED] =
-    gtk_signal_new ("orientation_changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkToolbarClass, orientation_changed),
-		    gtk_marshal_VOID__INT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_INT);
-  toolbar_signals[STYLE_CHANGED] =
-    gtk_signal_new ("style_changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkToolbarClass, style_changed),
-		    gtk_marshal_VOID__INT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_INT);
-
-  gtk_object_class_add_signals (object_class, toolbar_signals, LAST_SIGNAL);
-
   object_class->destroy = gtk_toolbar_destroy;
   object_class->set_arg = gtk_toolbar_set_arg;
   object_class->get_arg = gtk_toolbar_get_arg;
@@ -174,6 +155,23 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   
   class->orientation_changed = gtk_real_toolbar_orientation_changed;
   class->style_changed = gtk_real_toolbar_style_changed;
+
+  toolbar_signals[ORIENTATION_CHANGED] =
+    gtk_signal_new ("orientation_changed",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkToolbarClass, orientation_changed),
+		    gtk_marshal_VOID__INT,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_INT);
+  toolbar_signals[STYLE_CHANGED] =
+    gtk_signal_new ("style_changed",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkToolbarClass, style_changed),
+		    gtk_marshal_VOID__INT,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_INT);
   
   gtk_object_add_arg_type ("GtkToolbar::orientation", GTK_TYPE_ORIENTATION,
 			   GTK_ARG_READWRITE, ARG_ORIENTATION);

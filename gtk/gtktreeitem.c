@@ -133,29 +133,12 @@ gtk_tree_item_class_init (GtkTreeItemClass *class)
   GtkContainerClass *container_class;
   GtkItemClass *item_class;
 
+  parent_class = gtk_type_class (GTK_TYPE_ITEM);
+  
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   item_class = (GtkItemClass*) class;
   container_class = (GtkContainerClass*) class;
-
-  parent_class = gtk_type_class (gtk_item_get_type ());
-  
-  tree_item_signals[EXPAND_TREE] =
-    gtk_signal_new ("expand",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, expand),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  tree_item_signals[COLLAPSE_TREE] =
-    gtk_signal_new ("collapse",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, collapse),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (object_class, tree_item_signals, LAST_SIGNAL);
 
   object_class->destroy = gtk_tree_item_destroy;
 
@@ -178,6 +161,21 @@ gtk_tree_item_class_init (GtkTreeItemClass *class)
 
   class->expand = gtk_real_tree_item_expand;
   class->collapse = gtk_real_tree_item_collapse;
+
+  tree_item_signals[EXPAND_TREE] =
+    gtk_signal_new ("expand",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, expand),
+		    gtk_marshal_VOID__VOID,
+		    GTK_TYPE_NONE, 0);
+  tree_item_signals[COLLAPSE_TREE] =
+    gtk_signal_new ("collapse",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, collapse),
+		    gtk_marshal_VOID__VOID,
+		    GTK_TYPE_NONE, 0);
 }
 
 /* callback for event box mouse event */

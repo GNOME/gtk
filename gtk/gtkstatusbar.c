@@ -114,7 +114,6 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_UINT,
 		    GTK_TYPE_STRING);
-  gtk_object_class_add_signals (object_class, statusbar_signals, SIGNAL_LAST);
 }
 
 static void

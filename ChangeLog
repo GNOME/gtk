@@ -1,3 +1,62 @@
+Tue Dec 12 23:46:44 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/stock-icons/Makefile.am: doh, this was broken beyond believe.
+
+	* gtk/gtkbox.c: change property types from (u)long to (u)int for
+	::position and ::padding.
+
+	* gtk/gtkcontainer.c: make ::border_width an INT property.
+
+	* gtk/gtkpacker.c: make ::position an INT property.
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_adjustment_changed):
+	guard against NULL h/v scrollbars, since this is used at construction
+	time.
+
+	* gtk/gtkclist.[hc]: nuked gtk_clist_construct(), implemented
+	internal gtk_clist_constructor().
+
+	* gtk/gtkctree.[hc]: nuked gtk_ctree_construct(), implemented
+	gtk_ctree_constructor().
+
+	* gtk/gtkprogressbar.c (gtk_progress_bar_class_init): property
+	::pulse_step should use ARG_PULSE_STEP, not ARG_FRACTION.
+
+	* docs/reference/Makefile.am: fun stuff, disabled docs generation
+	again, gtk-scan.c needs to introspec paramspecs, not GtkAgs.
+
+	* gtk/gtkwidget.[hc]:
+	removed gtk_widget_setv(), gtk_widget_getv(), gtk_widget_newv()
+	and gtk_widget_get().
+	(gtk_widget_new): use g_object_new_valist().
+	(gtk_widget_set): use g_object_set_valist().
+
+	* gtk/gtkobject.[hc]:
+	removed gtk_object_arg_get_info(), gtk_object_getv(),
+	gtk_object_query_args(), gtk_object_newv(),
+	gtk_object_class_add_signals(),
+	gtk_object_class_user_signal_new(),
+	gtk_object_class_user_signal_newv(),
+	gtk_object_arg_set(), gtk_object_arg_get(),
+	gtk_object_args_collect(),
+	gtk_object_default_construct(),
+	gtk_object_constructed(),
+	GTK_CONSTRUCTED and GTK_OBJECT_CONSTRUCTED().
+	removed nsignals, signals and n_args members from GtkObjectClass.
+	(gtk_object_new): use g_object_new_valist().
+	(gtk_object_set): use g_object_set_valist().
+	(gtk_object_get): use g_object_get_valist().
+	
+	* gtk/gtkcompat.h: define gtk_object_default_construct().
+	
+	* gtk/gtktypeutils.c (gtk_type_new): create constructed objects via
+	g_object_new().
+
+	* gtk/*.c: removed gtk_object_class_add_signals() from class_init()
+	fucntions, cleaned up method assignments (make sure your structures
+	are setup properly before calling out). removed all GTK_CONSTRUCTED
+	hacks ;)
+
 Tue Dec 12 11:52:16 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c (gtk_clist_optimal_column_width): Fix 

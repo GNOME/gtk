@@ -76,6 +76,8 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 
   parent_class = g_type_class_peek_parent (class);
 
+  class->clicked = gtk_real_tree_column_clicked;
+
   tree_column_signals[CLICKED] =
     gtk_signal_new ("clicked",
 		    GTK_RUN_FIRST,
@@ -83,10 +85,6 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 		    GTK_SIGNAL_OFFSET (GtkTreeViewColumnClass, clicked),
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (object_class, tree_column_signals, LAST_SIGNAL);
-
-  class->clicked = gtk_real_tree_column_clicked;
 }
 
 static void

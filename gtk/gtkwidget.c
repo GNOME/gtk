@@ -783,8 +783,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_STRING);
-
-  gtk_object_class_add_signals (object_class, widget_signals, LAST_SIGNAL);
 }
 
 static void
@@ -1038,7 +1036,7 @@ gtk_widget_init (GtkWidget *widget)
 /**
  * gtk_widget_new:
  * @type: type ID of the widget to create
- * @first_arg_name: name of first property to set
+ * @first_property_name: name of first property to set
  * @Varargs: value of first property, followed by more properties, NULL-terminated
  * 
  * This is a convenience function for creating a widget and setting
@@ -1052,192 +1050,42 @@ gtk_widget_init (GtkWidget *widget)
  **/
 GtkWidget*
 gtk_widget_new (GtkType      type,
-		const gchar *first_arg_name,
+		const gchar *first_property_name,
 		...)
 {
-  GtkObject *object;
+  GtkWidget *widget;
   va_list var_args;
-  GSList *arg_list = NULL;
-  GSList *info_list = NULL;
-  gchar *error;
   
   g_return_val_if_fail (gtk_type_is_a (type, GTK_TYPE_WIDGET), NULL);
   
-  object = gtk_type_new (type);
-  
-  va_start (var_args, first_arg_name);
-  error = gtk_object_args_collect (GTK_OBJECT_TYPE (object),
-				   &arg_list,
-				   &info_list,
-				   first_arg_name,
-				   var_args);
+  va_start (var_args, first_property_name);
+  widget = g_object_new_valist (type, first_property_name, var_args);
   va_end (var_args);
-  
-  if (error)
-    {
-      g_warning ("gtk_widget_new(): %s", error);
-      g_free (error);
-    }
-  else
-    {
-      GSList *slist_arg;
-      GSList *slist_info;
-      
-      slist_arg = arg_list;
-      slist_info = info_list;
-      while (slist_arg)
-	{
-	  gtk_object_arg_set (object, slist_arg->data, slist_info->data);
-	  slist_arg = slist_arg->next;
-	  slist_info = slist_info->next;
-	}
-      gtk_args_collect_cleanup (arg_list, info_list);
-    }
-  
-  if (!GTK_OBJECT_CONSTRUCTED (object))
-    gtk_object_default_construct (object);
 
-  return GTK_WIDGET (object);
-}
-
-/**
- * gtk_widget_newv:
- * @type: a #GtkType for the widget to create
- * @nargs: number of args in @args
- * @args: array of args specifying widget properties
- *
- * Same as gtk_widget_new(), but takes an array instead of using
- * varargs. This version is only useful if you need to construct
- * the args programmatically. Equivalent to gtk_object_newv(), but
- * returns a #GtkWidget so you don't have to case the object yourself.
- * 
- * Return value: a #GtkWidget
- **/
-GtkWidget*
-gtk_widget_newv (GtkType type,
-		 guint	 nargs,
-		 GtkArg *args)
-{
-  g_return_val_if_fail (gtk_type_is_a (type, GTK_TYPE_WIDGET), NULL);
-  
-  return GTK_WIDGET (gtk_object_newv (type, nargs, args));
-}
-
-/**
- * gtk_widget_get:
- * @widget: a #GtkWidget
- * @arg: single #GtkArg with the argument name filled in
- * 
- * Queries the value of @arg, storing it in @arg.
- **/
-void
-gtk_widget_get (GtkWidget	*widget,
-		GtkArg		*arg)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (arg != NULL);
-  
-  gtk_object_getv (GTK_OBJECT (widget), 1, arg);
-}
-
-/**
- * gtk_widget_getv:
- * @widget: a #GtkWidget
- * @nargs: number of args in @args
- * @args: array of #GtkArg
- * 
- * Like calling gtk_widget_get() on each arg in @args.
- **/
-void
-gtk_widget_getv (GtkWidget	*widget,
-		 guint           nargs,
-		 GtkArg         *args)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_object_getv (GTK_OBJECT (widget), nargs, args);
+  return widget;
 }
 
 /**
  * gtk_widget_set:
  * @widget: a #GtkWidget
- * @first_arg_name: name of first arg to set
- * @Varargs: value of first arg, then more name-value pairs, and %NULL-terminated
+ * @first_property_name: name of first property to set
+ * @Varargs: value of first property, followed by more properties, NULL-terminated
  * 
  * Like gtk_object_set() - there's no reason to use this instead of
  * gtk_object_set().
  **/
 void
 gtk_widget_set (GtkWidget   *widget,
-		const gchar *first_arg_name,
+		const gchar *first_property_name,
 		...)
 {
-  GtkObject *object;
   va_list var_args;
-  GSList *arg_list = NULL;
-  GSList *info_list = NULL;
-  gchar *error;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  object = GTK_OBJECT (widget);
-
-  va_start (var_args, first_arg_name);
-  error = gtk_object_args_collect (GTK_OBJECT_TYPE (object),
-				   &arg_list,
-				   &info_list,
-				   first_arg_name,
-				   var_args);
+  va_start (var_args, first_property_name);
+  g_object_set_valist (G_OBJECT (widget), first_property_name, var_args);
   va_end (var_args);
-
-  if (error)
-    {
-      g_warning ("gtk_widget_set(): %s", error);
-      g_free (error);
-    }
-  else
-    {
-      GSList *slist_arg;
-      GSList *slist_info;
-
-      slist_arg = arg_list;
-      slist_info = info_list;
-      while (slist_arg)
-	{
-	  gtk_object_arg_set (object, slist_arg->data, slist_info->data);
-	  slist_arg = slist_arg->next;
-	  slist_info = slist_info->next;
-	}
-      gtk_args_collect_cleanup (arg_list, info_list);
-    }
-}
-
-/**
- * gtk_widget_setv:
- * @widget: a #GtkWidget
- * @nargs: args in @args
- * @args: array of args to set on the widget
- * 
- * Each arg in @args should have its name and value filled in. The
- * corresponding properties will be set on the
- * widget. gtk_object_set() is a more convenient version of this
- * function, since it takes varargs in place of the array. You may
- * need the array version to construct the list of args to set at
- * runtime.
- * 
- **/
-void
-gtk_widget_setv (GtkWidget *widget,
-		 guint	    nargs,
-		 GtkArg	   *args)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_object_setv (GTK_OBJECT (widget), nargs, args);
 }
 
 static inline void	   
@@ -1416,7 +1264,6 @@ gtk_widget_destroy (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_OBJECT_CONSTRUCTED (widget));
 
   gtk_object_destroy ((GtkObject*) widget);
 }
@@ -2872,7 +2719,7 @@ gtk_widget_is_focus (GtkWidget *widget)
 {
   GtkWidget *toplevel;
 
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   toplevel = gtk_widget_get_toplevel (widget);
   

@@ -1337,6 +1337,8 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
   
   parent_class = gtk_type_class (GTK_TYPE_VBOX);
   
+  object_class->destroy = gtk_color_selection_destroy;
+
   color_selection_signals[COLOR_CHANGED] =
     gtk_signal_new ("color_changed",
                     GTK_RUN_FIRST,
@@ -1344,11 +1346,6 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                     GTK_SIGNAL_OFFSET (GtkColorSelectionClass, color_changed),
                     gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
-  
-  
-  gtk_object_class_add_signals (object_class, color_selection_signals, LAST_SIGNAL);
-  
-  object_class->destroy = gtk_color_selection_destroy;
 }
 
 /* widget functions */

@@ -174,6 +174,38 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
   widget_class = (GtkWidgetClass*) class;
 
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
+    
+  object_class->set_arg = gtk_old_editable_set_arg;
+  object_class->get_arg = gtk_old_editable_get_arg;
+
+  widget_class->selection_clear_event = gtk_old_editable_selection_clear;
+  widget_class->selection_received = gtk_old_editable_selection_received;
+  widget_class->selection_get = gtk_old_editable_selection_get;
+
+  class->insert_text = NULL;
+  class->delete_text = NULL;
+
+  class->activate = NULL;
+  class->set_editable = gtk_old_editable_real_set_editable;
+
+  class->move_cursor = NULL;
+  class->move_word = NULL;
+  class->move_page = NULL;
+  class->move_to_row = NULL;
+  class->move_to_column = NULL;
+
+  class->kill_char = NULL;
+  class->kill_word = NULL;
+  class->kill_line = NULL;
+
+  class->cut_clipboard = gtk_old_editable_real_cut_clipboard;
+  class->copy_clipboard = gtk_old_editable_real_copy_clipboard;
+  class->paste_clipboard = gtk_old_editable_real_paste_clipboard;
+
+  class->update_text = NULL;
+  class->get_chars = NULL;
+  class->set_selection = NULL;
+  class->set_position = NULL;
 
   editable_signals[CHANGED] =
     gtk_signal_new ("changed",
@@ -322,42 +354,8 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
-  gtk_object_class_add_signals (object_class, editable_signals, LAST_SIGNAL);
-
   gtk_object_add_arg_type ("GtkOldEditable::text_position", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_TEXT_POSITION);
   gtk_object_add_arg_type ("GtkOldEditable::editable", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EDITABLE);
-    
-  object_class->set_arg = gtk_old_editable_set_arg;
-  object_class->get_arg = gtk_old_editable_get_arg;
-
-  widget_class->selection_clear_event = gtk_old_editable_selection_clear;
-  widget_class->selection_received = gtk_old_editable_selection_received;
-  widget_class->selection_get = gtk_old_editable_selection_get;
-
-  class->insert_text = NULL;
-  class->delete_text = NULL;
-
-  class->activate = NULL;
-  class->set_editable = gtk_old_editable_real_set_editable;
-
-  class->move_cursor = NULL;
-  class->move_word = NULL;
-  class->move_page = NULL;
-  class->move_to_row = NULL;
-  class->move_to_column = NULL;
-
-  class->kill_char = NULL;
-  class->kill_word = NULL;
-  class->kill_line = NULL;
-
-  class->cut_clipboard = gtk_old_editable_real_cut_clipboard;
-  class->copy_clipboard = gtk_old_editable_real_copy_clipboard;
-  class->paste_clipboard = gtk_old_editable_real_paste_clipboard;
-
-  class->update_text = NULL;
-  class->get_chars = NULL;
-  class->set_selection = NULL;
-  class->set_position = NULL;
 }
 
 static void

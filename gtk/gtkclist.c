@@ -175,8 +175,11 @@ enum {
 };
 
 /* GtkCList Methods */
-static void gtk_clist_class_init (GtkCListClass *klass);
-static void gtk_clist_init       (GtkCList      *clist);
+static void     gtk_clist_class_init  (GtkCListClass         *klass);
+static void     gtk_clist_init        (GtkCList              *clist);
+static GObject* gtk_clist_constructor (GType                  type,
+				       guint                  n_construct_properties,
+				       GObjectConstructParam *construct_params);
 
 /* GtkObject Methods */
 static void gtk_clist_destroy  (GtkObject *object);
@@ -493,6 +496,8 @@ gtk_clist_class_init (GtkCListClass *klass)
   GtkContainerClass *container_class;
   GtkBindingSet *binding_set;
 
+  gobject_class->constructor = gtk_clist_constructor;
+
   object_class = (GtkObjectClass *) klass;
   widget_class = (GtkWidgetClass *) klass;
   container_class = (GtkContainerClass *) klass;
@@ -505,6 +510,66 @@ gtk_clist_class_init (GtkCListClass *klass)
   object_class->get_arg = gtk_clist_get_arg;
   object_class->destroy = gtk_clist_destroy;
   
+
+  widget_class->realize = gtk_clist_realize;
+  widget_class->unrealize = gtk_clist_unrealize;
+  widget_class->map = gtk_clist_map;
+  widget_class->unmap = gtk_clist_unmap;
+  widget_class->button_press_event = gtk_clist_button_press;
+  widget_class->button_release_event = gtk_clist_button_release;
+  widget_class->motion_notify_event = gtk_clist_motion;
+  widget_class->expose_event = gtk_clist_expose;
+  widget_class->size_request = gtk_clist_size_request;
+  widget_class->size_allocate = gtk_clist_size_allocate;
+  widget_class->focus_in_event = gtk_clist_focus_in;
+  widget_class->focus_out_event = gtk_clist_focus_out;
+  widget_class->draw_focus = gtk_clist_draw_focus;
+  widget_class->style_set = gtk_clist_style_set;
+  widget_class->drag_begin = gtk_clist_drag_begin;
+  widget_class->drag_end = gtk_clist_drag_end;
+  widget_class->drag_motion = gtk_clist_drag_motion;
+  widget_class->drag_leave = gtk_clist_drag_leave;
+  widget_class->drag_drop = gtk_clist_drag_drop;
+  widget_class->drag_data_get = gtk_clist_drag_data_get;
+  widget_class->drag_data_received = gtk_clist_drag_data_received;
+
+  /* container_class->add = NULL; use the default GtkContainerClass warning */
+  /* container_class->remove=NULL; use the default GtkContainerClass warning */
+
+  container_class->forall = gtk_clist_forall;
+  container_class->focus = gtk_clist_focus;
+  container_class->set_focus_child = gtk_clist_set_focus_child;
+
+  klass->set_scroll_adjustments = gtk_clist_set_scroll_adjustments;
+  klass->refresh = clist_refresh;
+  klass->select_row = real_select_row;
+  klass->unselect_row = real_unselect_row;
+  klass->row_move = real_row_move;
+  klass->undo_selection = real_undo_selection;
+  klass->resync_selection = resync_selection;
+  klass->selection_find = selection_find;
+  klass->click_column = NULL;
+  klass->resize_column = real_resize_column;
+  klass->draw_row = draw_row;
+  klass->draw_drag_highlight = draw_drag_highlight;
+  klass->insert_row = real_insert_row;
+  klass->remove_row = real_remove_row;
+  klass->clear = real_clear;
+  klass->sort_list = real_sort_list;
+  klass->select_all = real_select_all;
+  klass->unselect_all = real_unselect_all;
+  klass->fake_unselect_all = fake_unselect_all;
+  klass->scroll_horizontal = scroll_horizontal;
+  klass->scroll_vertical = scroll_vertical;
+  klass->extend_selection = extend_selection;
+  klass->toggle_focus_row = toggle_focus_row;
+  klass->toggle_add_mode = toggle_add_mode;
+  klass->start_selection = start_selection;
+  klass->end_selection = end_selection;
+  klass->abort_column_resize = abort_column_resize;
+  klass->set_cell_contents = set_cell_contents;
+  klass->cell_size_request = cell_size_request;
+
   gtk_object_add_arg_type ("GtkCList::n_columns",
 			   GTK_TYPE_UINT,
 			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
@@ -664,66 +729,6 @@ gtk_clist_class_init (GtkCListClass *klass)
                     GTK_SIGNAL_OFFSET (GtkCListClass, abort_column_resize),
                     gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
-  gtk_object_class_add_signals (object_class, clist_signals, LAST_SIGNAL);
-
-  widget_class->realize = gtk_clist_realize;
-  widget_class->unrealize = gtk_clist_unrealize;
-  widget_class->map = gtk_clist_map;
-  widget_class->unmap = gtk_clist_unmap;
-  widget_class->button_press_event = gtk_clist_button_press;
-  widget_class->button_release_event = gtk_clist_button_release;
-  widget_class->motion_notify_event = gtk_clist_motion;
-  widget_class->expose_event = gtk_clist_expose;
-  widget_class->size_request = gtk_clist_size_request;
-  widget_class->size_allocate = gtk_clist_size_allocate;
-  widget_class->focus_in_event = gtk_clist_focus_in;
-  widget_class->focus_out_event = gtk_clist_focus_out;
-  widget_class->draw_focus = gtk_clist_draw_focus;
-  widget_class->style_set = gtk_clist_style_set;
-  widget_class->drag_begin = gtk_clist_drag_begin;
-  widget_class->drag_end = gtk_clist_drag_end;
-  widget_class->drag_motion = gtk_clist_drag_motion;
-  widget_class->drag_leave = gtk_clist_drag_leave;
-  widget_class->drag_drop = gtk_clist_drag_drop;
-  widget_class->drag_data_get = gtk_clist_drag_data_get;
-  widget_class->drag_data_received = gtk_clist_drag_data_received;
-
-  /* container_class->add = NULL; use the default GtkContainerClass warning */
-  /* container_class->remove=NULL; use the default GtkContainerClass warning */
-
-  container_class->forall = gtk_clist_forall;
-  container_class->focus = gtk_clist_focus;
-  container_class->set_focus_child = gtk_clist_set_focus_child;
-
-  klass->set_scroll_adjustments = gtk_clist_set_scroll_adjustments;
-  klass->refresh = clist_refresh;
-  klass->select_row = real_select_row;
-  klass->unselect_row = real_unselect_row;
-  klass->row_move = real_row_move;
-  klass->undo_selection = real_undo_selection;
-  klass->resync_selection = resync_selection;
-  klass->selection_find = selection_find;
-  klass->click_column = NULL;
-  klass->resize_column = real_resize_column;
-  klass->draw_row = draw_row;
-  klass->draw_drag_highlight = draw_drag_highlight;
-  klass->insert_row = real_insert_row;
-  klass->remove_row = real_remove_row;
-  klass->clear = real_clear;
-  klass->sort_list = real_sort_list;
-  klass->select_all = real_select_all;
-  klass->unselect_all = real_unselect_all;
-  klass->fake_unselect_all = fake_unselect_all;
-  klass->scroll_horizontal = scroll_horizontal;
-  klass->scroll_vertical = scroll_vertical;
-  klass->extend_selection = extend_selection;
-  klass->toggle_focus_row = toggle_focus_row;
-  klass->toggle_add_mode = toggle_add_mode;
-  klass->start_selection = start_selection;
-  klass->end_selection = end_selection;
-  klass->abort_column_resize = abort_column_resize;
-  klass->set_cell_contents = set_cell_contents;
-  klass->cell_size_request = cell_size_request;
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_Up, 0,
@@ -834,8 +839,8 @@ gtk_clist_set_arg (GtkObject      *object,
 
   switch (arg_id)
     {
-    case ARG_N_COLUMNS: /* construct-only arg, only set when !GTK_CONSTRUCTED */
-      gtk_clist_construct (clist, MAX (1, GTK_VALUE_UINT (*arg)), NULL);
+    case ARG_N_COLUMNS: /* only set at construction time */
+      clist->columns = MAX (1, GTK_VALUE_UINT (*arg));
       break;
     case ARG_SHADOW_TYPE:
       gtk_clist_set_shadow_type (clist, GTK_VALUE_ENUM (*arg));
@@ -989,20 +994,17 @@ gtk_clist_init (GtkCList *clist)
   clist->sort_column = 0;
 }
 
-/* Constructors */
-void
-gtk_clist_construct (GtkCList *clist,
-		     gint      columns,
-		     gchar    *titles[])
+/* Constructor */
+static GObject*
+gtk_clist_constructor (GType                  type,
+		       guint                  n_construct_properties,
+		       GObjectConstructParam *construct_properties)
 {
-  g_return_if_fail (clist != NULL);
-  g_return_if_fail (GTK_IS_CLIST (clist));
-  g_return_if_fail (columns > 0);
-  g_return_if_fail (GTK_OBJECT_CONSTRUCTED (clist) == FALSE);
-
-  /* mark the object as constructed */
-  gtk_object_constructed (GTK_OBJECT (clist));
-
+  GObject *object = G_OBJECT_CLASS (parent_class)->constructor (type,
+								n_construct_properties,
+								construct_properties);
+  GtkCList *clist = GTK_CLIST (object);
+  
   /* initalize memory chunks, if this has not been done by any
    * possibly derived widget
    */
@@ -1012,35 +1014,24 @@ gtk_clist_construct (GtkCList *clist,
 					    sizeof (GtkCListRow) *
 					    CLIST_OPTIMUM_SIZE, 
 					    G_ALLOC_AND_FREE);
-
+  
   if (!clist->cell_mem_chunk)
     clist->cell_mem_chunk = g_mem_chunk_new ("clist cell mem chunk",
-					     sizeof (GtkCell) * columns,
-					     sizeof (GtkCell) * columns *
+					     sizeof (GtkCell) * clist->columns,
+					     sizeof (GtkCell) * clist->columns *
 					     CLIST_OPTIMUM_SIZE, 
 					     G_ALLOC_AND_FREE);
-
-  /* set number of columns, allocate memory */
-  clist->columns = columns;
+  
+  /* allocate memory for columns */
   clist->column = columns_new (clist);
-
+  
   /* there needs to be at least one column button 
    * because there is alot of code that will break if it
-   * isn't there*/
+   * isn't there
+   */
   column_button_create (clist, 0);
-
-  if (titles)
-    {
-      guint i;
-      
-      GTK_CLIST_SET_FLAG (clist, CLIST_SHOW_TITLES);
-      for (i = 0; i < columns; i++)
-	gtk_clist_set_column_title (clist, i, titles[i]);
-    }
-  else
-    {
-      GTK_CLIST_UNSET_FLAG (clist, CLIST_SHOW_TITLES);
-    }
+  
+  return object;
 }
 
 /* GTKCLIST PUBLIC INTERFACE
@@ -1065,12 +1056,23 @@ GtkWidget*
 gtk_clist_new_with_titles (gint   columns,
 			   gchar *titles[])
 {
-  GtkWidget *widget;
+  GtkCList *clist;
 
-  widget = gtk_type_new (GTK_TYPE_CLIST);
-  gtk_clist_construct (GTK_CLIST (widget), columns, titles);
+  clist = g_object_new (GTK_TYPE_CLIST,
+			"n_columns", columns,
+			NULL);
+  if (titles)
+    {
+      guint i;
 
-  return widget;
+      for (i = 0; i < clist->columns; i++)
+	gtk_clist_set_column_title (clist, i, titles[i]);
+      gtk_clist_column_titles_show (clist);
+    }
+  else
+    gtk_clist_column_titles_hide (clist);
+  
+  return GTK_WIDGET (clist);
 }
 
 void

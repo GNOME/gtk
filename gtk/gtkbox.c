@@ -117,9 +117,9 @@ gtk_box_class_init (GtkBoxClass *class)
   gtk_object_add_arg_type ("GtkBox::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);
   gtk_container_add_child_arg_type ("GtkBox::expand", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_EXPAND);
   gtk_container_add_child_arg_type ("GtkBox::fill", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_FILL);
-  gtk_container_add_child_arg_type ("GtkBox::padding", GTK_TYPE_ULONG, GTK_ARG_READWRITE, CHILD_ARG_PADDING);
+  gtk_container_add_child_arg_type ("GtkBox::padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_PADDING);
   gtk_container_add_child_arg_type ("GtkBox::pack_type", GTK_TYPE_PACK_TYPE, GTK_ARG_READWRITE, CHILD_ARG_PACK_TYPE);
-  gtk_container_add_child_arg_type ("GtkBox::position", GTK_TYPE_LONG, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
+  gtk_container_add_child_arg_type ("GtkBox::position", GTK_TYPE_INT, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
 
   object_class->set_arg = gtk_box_set_arg;
   object_class->get_arg = gtk_box_get_arg;
@@ -239,7 +239,7 @@ gtk_box_set_child_arg (GtkContainer   *container,
 				 child,
 				 expand,
 				 fill,
-				 GTK_VALUE_ULONG (*arg),
+				 GTK_VALUE_UINT (*arg),
 				 pack_type);
       break;
     case CHILD_ARG_PACK_TYPE:
@@ -253,7 +253,7 @@ gtk_box_set_child_arg (GtkContainer   *container,
     case CHILD_ARG_POSITION:
       gtk_box_reorder_child (GTK_BOX (container),
 			     child,
-			     GTK_VALUE_LONG (*arg));
+			     GTK_VALUE_INT (*arg));
       break;
     default:
       break;
@@ -289,13 +289,13 @@ gtk_box_get_child_arg (GtkContainer   *container,
       GTK_VALUE_BOOL (*arg) = fill;
       break;
     case CHILD_ARG_PADDING:
-      GTK_VALUE_ULONG (*arg) = padding;
+      GTK_VALUE_UINT (*arg) = padding;
       break;
     case CHILD_ARG_PACK_TYPE:
       GTK_VALUE_ENUM (*arg) = pack_type;
       break;
     case CHILD_ARG_POSITION:
-      GTK_VALUE_LONG (*arg) = 0;
+      GTK_VALUE_INT (*arg) = 0;
       for (list = GTK_BOX (container)->children; list; list = list->next)
 	{
 	  GtkBoxChild *child_entry;
@@ -303,10 +303,10 @@ gtk_box_get_child_arg (GtkContainer   *container,
 	  child_entry = list->data;
 	  if (child_entry->widget == child)
 	    break;
-	  GTK_VALUE_LONG (*arg)++;
+	  GTK_VALUE_INT (*arg)++;
 	}
       if (!list)
-	GTK_VALUE_LONG (*arg) = -1;
+	GTK_VALUE_INT (*arg) = -1;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;

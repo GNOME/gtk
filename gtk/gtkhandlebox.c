@@ -176,23 +176,6 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   object_class->set_arg = gtk_handle_box_set_arg;
   object_class->get_arg = gtk_handle_box_get_arg;
   
-  handle_box_signals[SIGNAL_CHILD_ATTACHED] =
-    gtk_signal_new ("child_attached",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_attached),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
-  handle_box_signals[SIGNAL_CHILD_DETACHED] =
-    gtk_signal_new ("child_detached",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_detached),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
-  gtk_object_class_add_signals (object_class, handle_box_signals, SIGNAL_LAST);
   
   object_class->destroy = gtk_handle_box_destroy;
 
@@ -214,6 +197,23 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 
   class->child_attached = NULL;
   class->child_detached = NULL;
+
+  handle_box_signals[SIGNAL_CHILD_ATTACHED] =
+    gtk_signal_new ("child_attached",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_attached),
+		    gtk_marshal_VOID__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
+  handle_box_signals[SIGNAL_CHILD_DETACHED] =
+    gtk_signal_new ("child_detached",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_detached),
+		    gtk_marshal_VOID__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
 }
 
 static void

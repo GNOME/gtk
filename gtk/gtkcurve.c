@@ -115,7 +115,6 @@ gtk_curve_class_init (GtkCurveClass *class)
     gtk_signal_new ("curve_type_changed", GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCurveClass, curve_type_changed),
 		    gtk_marshal_VOID__VOID, GTK_TYPE_NONE, 0);
-  gtk_object_class_add_signals (object_class, &curve_type_changed_signal, 1);
   
   gtk_object_add_arg_type ("GtkCurve::curve_type", GTK_TYPE_CURVE_TYPE,
 			   GTK_ARG_READWRITE, ARG_CURVE_TYPE);

@@ -91,6 +91,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
 
   parent_class = g_type_class_peek_parent (class);
   
+  widget_class->key_press_event = gtk_dialog_key_press;
+
   dialog_signals[RESPONSE] =
     gtk_signal_new ("response",
                     GTK_RUN_LAST,
@@ -99,10 +101,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
                     gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_INT);
-
-  gtk_object_class_add_signals (object_class, dialog_signals, LAST_SIGNAL);
-
-  widget_class->key_press_event = gtk_dialog_key_press;
 }
 
 static void

@@ -142,6 +142,33 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   parent_class = gtk_type_class (GTK_TYPE_BIN);
 
+
+  object_class->set_arg = gtk_button_set_arg;
+  object_class->get_arg = gtk_button_get_arg;
+
+  widget_class->realize = gtk_button_realize;
+  widget_class->draw_focus = gtk_button_draw_focus;
+  widget_class->draw_default = gtk_button_draw_default;
+  widget_class->size_request = gtk_button_size_request;
+  widget_class->size_allocate = gtk_button_size_allocate;
+  widget_class->expose_event = gtk_button_expose;
+  widget_class->button_press_event = gtk_button_button_press;
+  widget_class->button_release_event = gtk_button_button_release;
+  widget_class->enter_notify_event = gtk_button_enter_notify;
+  widget_class->leave_notify_event = gtk_button_leave_notify;
+  widget_class->focus_in_event = gtk_button_focus_in;
+  widget_class->focus_out_event = gtk_button_focus_out;
+
+  container_class->add = gtk_button_add;
+  container_class->remove = gtk_button_remove;
+  container_class->child_type = gtk_button_child_type;
+
+  klass->pressed = gtk_real_button_pressed;
+  klass->released = gtk_real_button_released;
+  klass->clicked = NULL;
+  klass->enter = gtk_real_button_enter;
+  klass->leave = gtk_real_button_leave;
+
   gtk_object_add_arg_type ("GtkButton::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
   gtk_object_add_arg_type ("GtkButton::relief", GTK_TYPE_RELIEF_STYLE, GTK_ARG_READWRITE, ARG_RELIEF);
 
@@ -166,6 +193,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                     GTK_SIGNAL_OFFSET (GtkButtonClass, clicked),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
+  widget_class->activate_signal = button_signals[CLICKED];
   button_signals[ENTER] =
     gtk_signal_new ("enter",
                     GTK_RUN_FIRST,
@@ -180,35 +208,6 @@ gtk_button_class_init (GtkButtonClass *klass)
                     GTK_SIGNAL_OFFSET (GtkButtonClass, leave),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (object_class, button_signals, LAST_SIGNAL);
-
-  object_class->set_arg = gtk_button_set_arg;
-  object_class->get_arg = gtk_button_get_arg;
-
-  widget_class->activate_signal = button_signals[CLICKED];
-  widget_class->realize = gtk_button_realize;
-  widget_class->draw_focus = gtk_button_draw_focus;
-  widget_class->draw_default = gtk_button_draw_default;
-  widget_class->size_request = gtk_button_size_request;
-  widget_class->size_allocate = gtk_button_size_allocate;
-  widget_class->expose_event = gtk_button_expose;
-  widget_class->button_press_event = gtk_button_button_press;
-  widget_class->button_release_event = gtk_button_button_release;
-  widget_class->enter_notify_event = gtk_button_enter_notify;
-  widget_class->leave_notify_event = gtk_button_leave_notify;
-  widget_class->focus_in_event = gtk_button_focus_in;
-  widget_class->focus_out_event = gtk_button_focus_out;
-
-  container_class->add = gtk_button_add;
-  container_class->remove = gtk_button_remove;
-  container_class->child_type = gtk_button_child_type;
-
-  klass->pressed = gtk_real_button_pressed;
-  klass->released = gtk_real_button_released;
-  klass->clicked = NULL;
-  klass->enter = gtk_real_button_enter;
-  klass->leave = gtk_real_button_leave;
 }
 
 static void

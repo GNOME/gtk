@@ -150,8 +150,6 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_POINTER);
-
-  gtk_object_class_add_signals (GTK_OBJECT_CLASS (object_class), toggle_cell_signals, LAST_SIGNAL);
 }
 
 static void

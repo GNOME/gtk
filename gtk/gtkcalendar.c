@@ -353,6 +353,8 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
   
+  object_class->destroy = gtk_calendar_destroy;
+
   widget_class->realize = gtk_calendar_realize;
   widget_class->unrealize = gtk_calendar_unrealize;
   widget_class->expose_event = gtk_calendar_expose;
@@ -368,8 +370,15 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->focus_out_event = gtk_calendar_focus_out;
   widget_class->style_set = gtk_calendar_style_set;
   widget_class->state_changed = gtk_calendar_state_changed;
-  object_class->destroy = gtk_calendar_destroy;
   
+  class->month_changed = NULL;
+  class->day_selected = NULL;
+  class->day_selected_double_click = NULL;
+  class->prev_month = NULL;
+  class->next_month = NULL;
+  class->prev_year = NULL;
+  class->next_year = NULL;
+
   gtk_calendar_signals[MONTH_CHANGED_SIGNAL] =
     gtk_signal_new ("month_changed",
 		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
@@ -405,16 +414,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCalendarClass, next_year),
 		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
-  
-  gtk_object_class_add_signals (object_class, gtk_calendar_signals, LAST_SIGNAL);
-  
-  class->month_changed = NULL;
-  class->day_selected = NULL;
-  class->day_selected_double_click = NULL;
-  class->prev_month = NULL;
-  class->next_month = NULL;
-  class->prev_year = NULL;
-  class->next_year = NULL;
 }
 
 static void

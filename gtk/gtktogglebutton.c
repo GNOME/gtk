@@ -114,18 +114,6 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 
   parent_class = gtk_type_class (GTK_TYPE_BUTTON);
 
-  gtk_object_add_arg_type ("GtkToggleButton::active", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ACTIVE);
-  gtk_object_add_arg_type ("GtkToggleButton::draw_indicator", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_DRAW_INDICATOR);
-
-  toggle_button_signals[TOGGLED] =
-    gtk_signal_new ("toggled",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkToggleButtonClass, toggled),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (object_class, toggle_button_signals, LAST_SIGNAL);
 
   object_class->set_arg = gtk_toggle_button_set_arg;
   object_class->get_arg = gtk_toggle_button_get_arg;
@@ -144,6 +132,17 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   button_class->leave = gtk_toggle_button_leave;
 
   class->toggled = NULL;
+
+  gtk_object_add_arg_type ("GtkToggleButton::active", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ACTIVE);
+  gtk_object_add_arg_type ("GtkToggleButton::draw_indicator", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_DRAW_INDICATOR);
+
+  toggle_button_signals[TOGGLED] =
+    gtk_signal_new ("toggled",
+                    GTK_RUN_FIRST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkToggleButtonClass, toggled),
+                    gtk_marshal_VOID__VOID,
+		    GTK_TYPE_NONE, 0);
 }
 
 static void

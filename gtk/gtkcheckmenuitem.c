@@ -107,7 +107,6 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                     GTK_SIGNAL_OFFSET (GtkCheckMenuItemClass, toggled),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-  gtk_object_class_add_signals (object_class, check_menu_item_signals, LAST_SIGNAL);
 }
 
 GtkWidget*

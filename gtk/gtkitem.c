@@ -84,6 +84,17 @@ gtk_item_class_init (GtkItemClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
+
+  widget_class->map = gtk_item_map;
+  widget_class->unmap = gtk_item_unmap;
+  widget_class->realize = gtk_item_realize;
+  widget_class->enter_notify_event = gtk_item_enter;
+  widget_class->leave_notify_event = gtk_item_leave;
+
+  class->select = NULL;
+  class->deselect = NULL;
+  class->toggle = NULL;
+
   item_signals[SELECT] =
     gtk_signal_new ("select",
                     GTK_RUN_FIRST,
@@ -105,19 +116,7 @@ gtk_item_class_init (GtkItemClass *class)
                     GTK_SIGNAL_OFFSET (GtkItemClass, toggle),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (object_class, item_signals, LAST_SIGNAL);
-
   widget_class->activate_signal = item_signals[TOGGLE];
-  widget_class->map = gtk_item_map;
-  widget_class->unmap = gtk_item_unmap;
-  widget_class->realize = gtk_item_realize;
-  widget_class->enter_notify_event = gtk_item_enter;
-  widget_class->leave_notify_event = gtk_item_leave;
-
-  class->select = NULL;
-  class->deselect = NULL;
-  class->toggle = NULL;
 }
 
 static void

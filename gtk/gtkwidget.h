@@ -398,27 +398,16 @@ struct _GtkWidgetShapeInfo
 
 GtkType	   gtk_widget_get_type		  (void) G_GNUC_CONST;
 GtkWidget* gtk_widget_new		  (GtkType		type,
-					   const gchar	       *first_arg_name,
+					   const gchar	       *first_property_name,
 					   ...);
-GtkWidget* gtk_widget_newv		  (GtkType		type,
-					   guint		nargs,
-					   GtkArg	       *args);
 GtkWidget* gtk_widget_ref		  (GtkWidget	       *widget);
 void	   gtk_widget_unref		  (GtkWidget	       *widget);
 void	   gtk_widget_destroy		  (GtkWidget	       *widget);
 void	   gtk_widget_destroyed		  (GtkWidget	       *widget,
 					   GtkWidget	      **widget_pointer);
-void	   gtk_widget_get		  (GtkWidget	       *widget,
-					   GtkArg	       *arg);
-void	   gtk_widget_getv		  (GtkWidget	       *widget,
-					   guint		nargs,
-					   GtkArg	       *args);
 void	   gtk_widget_set		  (GtkWidget	       *widget,
-					   const gchar         *first_arg_name,
+					   const gchar         *first_property_name,
 					   ...);
-void	   gtk_widget_setv		  (GtkWidget	       *widget,
-					   guint		nargs,
-					   GtkArg	       *args);
 void	   gtk_widget_unparent		  (GtkWidget	       *widget);
 void	   gtk_widget_show		  (GtkWidget	       *widget);
 void       gtk_widget_show_now            (GtkWidget           *widget);
@@ -656,7 +645,6 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 #  define gtk_widget_ref gtk_object_ref
 #  define gtk_widget_unref gtk_object_unref
 #endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
-
 
 
 #ifdef __cplusplus

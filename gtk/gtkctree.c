@@ -90,8 +90,11 @@ enum {
 };
 
 
-static void gtk_ctree_class_init        (GtkCTreeClass  *klass);
-static void gtk_ctree_init              (GtkCTree       *ctree);
+static void     gtk_ctree_class_init    (GtkCTreeClass         *klass);
+static void     gtk_ctree_init          (GtkCTree              *ctree);
+static GObject* gtk_ctree_constructor   (GType                  type,
+				         guint                  n_construct_properties,
+				         GObjectConstructParam *construct_params);
 static void gtk_ctree_set_arg		(GtkObject      *object,
 					 GtkArg         *arg,
 					 guint           arg_id);
@@ -342,10 +345,13 @@ gtk_ctree_get_type (void)
 static void
 gtk_ctree_class_init (GtkCTreeClass *klass)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkCListClass *clist_class;
   GtkBindingSet *binding_set;
+
+  gobject_class->constructor = gtk_ctree_constructor;
 
   object_class = (GtkObjectClass *) klass;
   widget_class = (GtkWidgetClass *) klass;
@@ -355,7 +361,44 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
   parent_class = gtk_type_class (GTK_TYPE_CLIST);
   container_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
-  gtk_object_add_arg_type ("GtkCTree::n_columns",
+  object_class->set_arg = gtk_ctree_set_arg;
+  object_class->get_arg = gtk_ctree_get_arg;
+
+  widget_class->realize = gtk_ctree_realize;
+  widget_class->unrealize = gtk_ctree_unrealize;
+  widget_class->button_press_event = gtk_ctree_button_press;
+
+  widget_class->drag_begin = gtk_ctree_drag_begin;
+  widget_class->drag_motion = gtk_ctree_drag_motion;
+  widget_class->drag_data_received = gtk_ctree_drag_data_received;
+
+  clist_class->select_row = real_select_row;
+  clist_class->unselect_row = real_unselect_row;
+  clist_class->row_move = real_row_move;
+  clist_class->undo_selection = real_undo_selection;
+  clist_class->resync_selection = resync_selection;
+  clist_class->selection_find = selection_find;
+  clist_class->click_column = NULL;
+  clist_class->draw_row = draw_row;
+  clist_class->draw_drag_highlight = draw_drag_highlight;
+  clist_class->clear = real_clear;
+  clist_class->select_all = real_select_all;
+  clist_class->unselect_all = real_unselect_all;
+  clist_class->fake_unselect_all = fake_unselect_all;
+  clist_class->insert_row = real_insert_row;
+  clist_class->remove_row = real_remove_row;
+  clist_class->sort_list = real_sort_list;
+  clist_class->set_cell_contents = set_cell_contents;
+  clist_class->cell_size_request = cell_size_request;
+
+  klass->tree_select_row = real_tree_select;
+  klass->tree_unselect_row = real_tree_unselect;
+  klass->tree_expand = real_tree_expand;
+  klass->tree_collapse = real_tree_collapse;
+  klass->tree_move = real_tree_move;
+  klass->change_focus_row_expansion = change_focus_row_expansion;
+
+  gtk_object_add_arg_type ("GtkCTree::n_columns", /* overrides GtkCList::n_columns!! */
 			   GTK_TYPE_UINT,
 			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
 			   ARG_N_COLUMNS);
@@ -383,8 +426,6 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 			   GTK_TYPE_CTREE_EXPANDER_STYLE,
 			   GTK_ARG_READWRITE,
 			   ARG_EXPANDER_STYLE);
-  object_class->set_arg = gtk_ctree_set_arg;
-  object_class->get_arg = gtk_ctree_get_arg;
 
   ctree_signals[TREE_SELECT_ROW] =
     gtk_signal_new ("tree_select_row",
@@ -430,41 +471,6 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 				       change_focus_row_expansion),
 		    gtk_marshal_VOID__ENUM,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_EXPANSION_TYPE);
-  gtk_object_class_add_signals (object_class, ctree_signals, LAST_SIGNAL);
-
-  widget_class->realize = gtk_ctree_realize;
-  widget_class->unrealize = gtk_ctree_unrealize;
-  widget_class->button_press_event = gtk_ctree_button_press;
-
-  widget_class->drag_begin = gtk_ctree_drag_begin;
-  widget_class->drag_motion = gtk_ctree_drag_motion;
-  widget_class->drag_data_received = gtk_ctree_drag_data_received;
-
-  clist_class->select_row = real_select_row;
-  clist_class->unselect_row = real_unselect_row;
-  clist_class->row_move = real_row_move;
-  clist_class->undo_selection = real_undo_selection;
-  clist_class->resync_selection = resync_selection;
-  clist_class->selection_find = selection_find;
-  clist_class->click_column = NULL;
-  clist_class->draw_row = draw_row;
-  clist_class->draw_drag_highlight = draw_drag_highlight;
-  clist_class->clear = real_clear;
-  clist_class->select_all = real_select_all;
-  clist_class->unselect_all = real_unselect_all;
-  clist_class->fake_unselect_all = fake_unselect_all;
-  clist_class->insert_row = real_insert_row;
-  clist_class->remove_row = real_remove_row;
-  clist_class->sort_list = real_sort_list;
-  clist_class->set_cell_contents = set_cell_contents;
-  clist_class->cell_size_request = cell_size_request;
-
-  klass->tree_select_row = real_tree_select;
-  klass->tree_unselect_row = real_tree_unselect;
-  klass->tree_expand = real_tree_expand;
-  klass->tree_collapse = real_tree_collapse;
-  klass->tree_move = real_tree_move;
-  klass->change_focus_row_expansion = change_focus_row_expansion;
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set,
@@ -514,27 +520,32 @@ gtk_ctree_set_arg (GtkObject      *object,
 		   guint           arg_id)
 {
   GtkCTree *ctree;
+  GtkCList *clist;
 
   ctree = GTK_CTREE (object);
+  clist = GTK_CLIST (ctree);
 
   switch (arg_id)
     {
-    case ARG_N_COLUMNS: /* construct-only arg, only set when !GTK_CONSTRUCTED */
-      if (ctree->tree_column)
-	gtk_ctree_construct (ctree,
-			     MAX (1, GTK_VALUE_UINT (*arg)),
-			     ctree->tree_column, NULL);
-      else
-	GTK_CLIST (ctree)->columns = MAX (1, GTK_VALUE_UINT (*arg));
+    case ARG_N_COLUMNS: /* construct-only arg, only set at construction time */
+      g_return_if_fail (clist->row_mem_chunk == NULL);
+      clist->columns = MAX (1, GTK_VALUE_UINT (*arg));
+      clist->row_mem_chunk = g_mem_chunk_new ("ctree row mem chunk",
+					      sizeof (GtkCTreeRow),
+					      sizeof (GtkCTreeRow)
+					      * CLIST_OPTIMUM_SIZE,
+					      G_ALLOC_AND_FREE);
+      clist->cell_mem_chunk = g_mem_chunk_new ("ctree cell mem chunk",
+					       sizeof (GtkCell) * clist->columns,
+					       sizeof (GtkCell) * clist->columns
+					       * CLIST_OPTIMUM_SIZE,
+					       G_ALLOC_AND_FREE);
+      ctree->tree_column = CLAMP (ctree->tree_column, 0, clist->columns);
       break;
-    case ARG_TREE_COLUMN: /* construct-only arg, only set when !GTK_CONSTRUCTED */
-      if (GTK_CLIST (ctree)->columns)
-	gtk_ctree_construct (ctree,
-			     GTK_CLIST (ctree)->columns,
-			     MAX (1, GTK_VALUE_UINT (*arg)),
-			     NULL);
-      else
-	ctree->tree_column = MAX (1, GTK_VALUE_UINT (*arg));
+    case ARG_TREE_COLUMN: /* construct-only arg, only set at construction time */
+      ctree->tree_column = GTK_VALUE_UINT (*arg);
+      if (clist->row_mem_chunk)
+	ctree->tree_column = CLAMP (ctree->tree_column, 0, clist->columns);
       break;
     case ARG_INDENT:
       gtk_ctree_set_indent (ctree, GTK_VALUE_UINT (*arg));
@@ -3539,38 +3550,19 @@ ctree_is_hot_spot (GtkCTree     *ctree,
  *           Creation, insertion, deletion                 *
  ***********************************************************/
 
-void
-gtk_ctree_construct (GtkCTree    *ctree,
-		     gint         columns, 
-		     gint         tree_column,
-		     gchar       *titles[])
+static GObject*
+gtk_ctree_constructor (GType                  type,
+		       guint                  n_construct_properties,
+		       GObjectConstructParam *construct_properties)
 {
-  GtkCList *clist;
+  GObject *object = G_OBJECT_CLASS (parent_class)->constructor (type,
+								n_construct_properties,
+								construct_properties);
 
-  g_return_if_fail (ctree != NULL);
-  g_return_if_fail (GTK_IS_CTREE (ctree));
-  g_return_if_fail (GTK_OBJECT_CONSTRUCTED (ctree) == FALSE);
-
-  clist = GTK_CLIST (ctree);
-
-  clist->row_mem_chunk = g_mem_chunk_new ("ctree row mem chunk",
-					  sizeof (GtkCTreeRow),
-					  sizeof (GtkCTreeRow)
-					  * CLIST_OPTIMUM_SIZE, 
-					  G_ALLOC_AND_FREE);
-
-  clist->cell_mem_chunk = g_mem_chunk_new ("ctree cell mem chunk",
-					   sizeof (GtkCell) * columns,
-					   sizeof (GtkCell) * columns
-					   * CLIST_OPTIMUM_SIZE, 
-					   G_ALLOC_AND_FREE);
-
-  ctree->tree_column = tree_column;
-
-  gtk_clist_construct (clist, columns, titles);
+  return object;
 }
 
-GtkWidget *
+GtkWidget*
 gtk_ctree_new_with_titles (gint         columns, 
 			   gint         tree_column,
 			   gchar       *titles[])
@@ -3580,8 +3572,19 @@ gtk_ctree_new_with_titles (gint         columns,
   g_return_val_if_fail (columns > 0, NULL);
   g_return_val_if_fail (tree_column >= 0 && tree_column < columns, NULL);
 
-  widget = gtk_type_new (GTK_TYPE_CTREE);
-  gtk_ctree_construct (GTK_CTREE (widget), columns, tree_column, titles);
+  widget = gtk_widget_new (GTK_TYPE_CTREE,
+			   "n_columns", columns,
+			   "tree_column", tree_column,
+			   NULL);
+  if (titles)
+    {
+      GtkCList *clist = GTK_CLIST (widget);
+      guint i;
+
+      for (i = 0; i < columns; i++)
+	gtk_clist_set_column_title (clist, i, titles[i]);
+      gtk_clist_column_titles_show (clist);
+    }
 
   return widget;
 }

@@ -79,7 +79,5 @@ gtk_data_class_init (GtkDataClass *class)
                     GTK_SIGNAL_OFFSET (GtkDataClass, disconnect),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (object_class, data_signals, LAST_SIGNAL);
 }
 
