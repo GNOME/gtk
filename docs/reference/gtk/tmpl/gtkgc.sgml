@@ -10,7 +10,7 @@ These functions provide access to a shared pool of #GdkGC objects.
 When a new #GdkGC is needed, gtk_gc_get() is called with the required depth,
 colormap and #GdkGCValues. If a #GdkGC with the required properties already
 exists then that is returned. If not, a new #GdkGC is created.
-When the #GdkGC is no longer needed, gtk_gc_release() is called.
+When the #GdkGC is no longer needed, gtk_gc_release() should be called.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
