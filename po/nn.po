@@ -27,7 +27,7 @@ msgstr "Verdi:"
 
 #: gtk/gtkcolorsel.c:224
 msgid "Red:"
-msgstr "Rød:"
+msgstr "Raud:"
 
 #: gtk/gtkcolorsel.c:225
 msgid "Green:"
@@ -39,7 +39,7 @@ msgstr "Blå:"
 
 #: gtk/gtkcolorsel.c:227
 msgid "Opacity:"
-msgstr "Ugjennomsiktighet:"
+msgstr "Ugjennomsynlegheit:"
 
 #. The OK button
 #: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:481 gtk/gtkfontsel.c:3501
@@ -61,7 +61,7 @@ msgstr "Hjelp"
 #. The directories clist
 #: gtk/gtkfilesel.c:430
 msgid "Directories"
-msgstr "Kataloger"
+msgstr "Katalogar"
 
 #. The files clist
 #: gtk/gtkfilesel.c:449
@@ -83,7 +83,7 @@ msgstr "Slett fil"
 
 #: gtk/gtkfilesel.c:573 gtk/gtkfilesel.c:1041
 msgid "Rename File"
-msgstr "Gi fila nytt navn"
+msgstr "Gje fila nytt namn"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -105,7 +105,7 @@ msgstr "Lag katalog"
 
 #: gtk/gtkfilesel.c:846
 msgid "Directory name:"
-msgstr "Katalognavn:"
+msgstr "Katalognamn:"
 
 #. buttons
 #: gtk/gtkfilesel.c:859
@@ -120,11 +120,11 @@ msgstr "Slett"
 #. buttons
 #: gtk/gtkfilesel.c:1074
 msgid "Rename"
-msgstr "Gi nytt navn"
+msgstr "Gje nytt namn"
 
 #: gtk/gtkfilesel.c:1457
 msgid "Selection: "
-msgstr "Valg:"
+msgstr "Val:"
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
@@ -136,7 +136,7 @@ msgstr "Familie:"
 
 #: gtk/gtkfontsel.c:212
 msgid "Weight:"
-msgstr "Tyngde:"
+msgstr "Tyngd:"
 
 #: gtk/gtkfontsel.c:213
 msgid "Slant:"
@@ -144,7 +144,7 @@ msgstr "Helling:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr "Sett bredde:"
+msgstr "Sett breidd:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
@@ -160,11 +160,11 @@ msgstr "Punktstorleik:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr "Oppløsning X:"
+msgstr "Oppløysing X:"
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr "Oppløsning Y:"
+msgstr "Oppløysing Y:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
@@ -172,21 +172,21 @@ msgstr "Mellomrom:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr "Gjennomsnittleg bredde:"
+msgstr "Gjennomsnittleg breidd:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
-msgstr "Tegnsett:"
+msgstr "Teiknsett:"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:459
 msgid "Font Property"
-msgstr "Egenskaper for skrifttype"
+msgstr "Eigenskapar for skrifttype"
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
-msgstr "Etterspørd verdi"
+msgstr "Etterspurd verdi"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
@@ -214,20 +214,20 @@ msgstr "Nullstill filter"
 
 #: gtk/gtkfontsel.c:660
 msgid "Metric:"
-msgstr "Tyngde:"
+msgstr "Tyngd:"
 
 #: gtk/gtkfontsel.c:664
 msgid "Points"
-msgstr "Punkter"
+msgstr "Punkt"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr "Piksler"
+msgstr "Pikslar"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
 msgid "Preview:"
-msgstr "Forhåndsvisning:"
+msgstr "Førehandsyning:"
 
 #: gtk/gtkfontsel.c:716
 msgid "Font Information"
@@ -235,16 +235,16 @@ msgstr "Informasjon om skrifttype"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr "Etterspørd navn på skrifttype:"
+msgstr "Etterspurd namn på skrifttype:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr "Verkeleg navn på skrifttype:"
+msgstr "Verkeleg namn på skrifttype:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr "%i skrifttyper tilgjengeleg med totalt %i stiler."
+msgstr "%i skrifttypar tilgjengeleg med totalt %i stilar."
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
@@ -252,11 +252,11 @@ msgstr "Filter"
 
 #: gtk/gtkfontsel.c:799
 msgid "Font Types:"
-msgstr "Skrifttyper:"
+msgstr "Skrifttypar:"
 
 #: gtk/gtkfontsel.c:807
 msgid "Bitmap"
-msgstr "Bilde"
+msgstr "Bilete"
 
 #: gtk/gtkfontsel.c:813
 msgid "Scalable"
@@ -264,7 +264,7 @@ msgstr "Skalerbart"
 
 #: gtk/gtkfontsel.c:819
 msgid "Scaled Bitmap"
-msgstr "Skalert bilde"
+msgstr "Skalert bilete"
 
 #: gtk/gtkfontsel.c:890
 msgid "*"
@@ -285,7 +285,7 @@ msgstr "kursiv"
 
 #: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1973
 msgid "oblique"
-msgstr "hellende"
+msgstr "hellande"
 
 #: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1974
 msgid "reverse italic"
@@ -293,7 +293,7 @@ msgstr "omvendt kursiv"
 
 #: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1975
 msgid "reverse oblique"
-msgstr "omvendt hellende"
+msgstr "omvendt hellande"
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1976
 msgid "other"
@@ -309,15 +309,15 @@ msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1792
 msgid "The selected font is not available."
-msgstr "Den velgte skrifttypen er ikkje tilgjengelig."
+msgstr "Den valde skrifttypen er ikkje tilgjengeleg."
 
 #: gtk/gtkfontsel.c:1798
 msgid "The selected font is not a valid font."
-msgstr "Den velgte skrifttypen er ikkje en gyldig skrifttype."
+msgstr "Den valde skrifttypen er ugyldig."
 
 #: gtk/gtkfontsel.c:1856
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Dette er ein 2-byte skrifttype og vil kanskje ikkje vises riktig."
+msgstr "Dette er ein 2-byte skrifttype og vil kanskje ikkje synast korrekt."
 
 #: gtk/gtkfontsel.c:1960 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
@@ -333,11 +333,11 @@ msgstr "proporsjonal"
 
 #: gtk/gtkfontsel.c:1984
 msgid "monospaced"
-msgstr "med lik bredde"
+msgstr "med lik breidd"
 
 #: gtk/gtkfontsel.c:1985
 msgid "char cell"
-msgstr "tegncelle"
+msgstr "teikncelle"
 
 #: gtk/gtkfontsel.c:2185
 msgid "Font: (Filter Applied)"
@@ -345,7 +345,7 @@ msgstr "Skrifttype: (med filter på)"
 
 #: gtk/gtkfontsel.c:2661
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS oversteget. Nokon skrifttyper mangler kanskje."
+msgstr "MAX_FONTS er passert. Nokre skrifttypar manglar kanskje."
 
 #: gtk/gtkfontsel.c:3508
 msgid "Apply"
@@ -353,7 +353,7 @@ msgstr "Bruk"
 
 #: gtk/gtkfontsel.c:3530
 msgid "Font Selection"
-msgstr "Valg av skrifttype"
+msgstr "Val av skrifttype"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
@@ -370,11 +370,11 @@ msgstr "Inndata"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
-msgstr "Ingen innenheter"
+msgstr "Ingen inn-einingar"
 
 #: gtk/gtkinputdialog.c:237
 msgid "Device:"
-msgstr "Enhet:"
+msgstr "Eining:"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
@@ -386,7 +386,7 @@ msgstr "Skjerm"
 
 #: gtk/gtkinputdialog.c:269
 msgid "Window"
-msgstr "Vindu"
+msgstr "Vindauge"
 
 #: gtk/gtkinputdialog.c:277
 msgid "Mode: "
@@ -395,12 +395,12 @@ msgstr "Modus: "
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
 msgid "Axes"
-msgstr "Akser"
+msgstr "Aksar"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:323
 msgid "Keys"
-msgstr "Taster"
+msgstr "Tastar"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
@@ -449,18 +449,19 @@ msgstr "Side %u"
 #: gtk/gtkrc.c:1703
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Kunne ikkje finne bildefila i pixmap_patg: \"%s\" linje %d"
+msgstr "Kunne ikkje finne biletefila i pixmap_patg: \"%s\" linje %d"
 
 #: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kunne ikkje finne bildefila i pixmap_path: \"%s\""
+msgstr "Kunne ikkje finne biletefila i pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Kunne ikke finne lesbar modul i module_path: \"%s\","
+msgstr "Kunne ikkje finne lesbar modul i module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Ingen tips ---"
+
