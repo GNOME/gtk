@@ -15,7 +15,7 @@
 
 
 /* Other stuff */
-#undef G_COMPILED_WITH_DEBUGGING
+#undef GTK_COMPILED_WITH_DEBUGGING
 
 #undef HAVE_IPC_H
 #undef HAVE_SHM_H

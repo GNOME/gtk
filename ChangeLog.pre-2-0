@@ -1,5 +1,8 @@
 1998-06-10  Raja R Harinath  <harinath@cs.umn.edu>
 
+	* acconfig.h (GTK_COMPILED_WITH_DEBUGGING): Renamed from
+	G_COMPILED_WITH_DEBUGGING.
+
 	* configure.in (fd_set): Explain check better.
 
 	* acinclude.m4: New file.  Contains `libtool.m4' from libtool-1.2,
