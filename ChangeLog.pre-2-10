@@ -1,3 +1,7 @@
+Thu Apr 24 19:12:05 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* autogen.sh (have_libtool): Accept libtool-1.5. (#111480)
+
 2003-04-23  Abel Cheung  <maddog@linux.org.hk>
 
 	* configure.in: Added "am" "mk" "ta" to ALL_LINGUAS.
