@@ -223,6 +223,9 @@ void	 gdk_xid_table_insert (XID	*xid,
 void	 gdk_xid_table_remove (XID	 xid);
 gpointer gdk_xid_table_lookup (XID	 xid);
 
+gint gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
+		      XEvent *event_send);
+
 /* If you pass x = y = -1, it queries the pointer
    to find out where it currently is.
    If you pass x = y = -2, it does anything necessary

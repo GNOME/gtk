@@ -88,6 +88,9 @@ Additions:
  * Change gtk_widget_propagate_default_style() mechanism to
    void gtk_rc_string_export (const gchar *rc_additions,
                               gboolean     override_rc_styles);
+
+ * Configure events for windows that no longer exist fail in
+   XTranslateCoordinates
  
 TODO AFTER GTK 1.0
 ------------------
@@ -220,6 +223,11 @@ TODO AFTER GTK 1.0
 
   - Disable pasting compound text
 
+  - When showing background pixmap (not editable) actually set
+    the background pixmap as the windows bg pixmap, to improve
+    appearance on exposes. But this would require using another
+    window to get the origins.
+
  ? Allow moving the separator for paned widgets by dragging 
    it directly instead of using the handle. 
 
@@ -243,3 +251,7 @@ TODO AFTER GTK 1.0
     gtk_widget_dnd_data_set (should be guchar * with a copy?
                              shouldn't be there at all...)
     ??? GtkDrawingarea.draw_data
+ 
+ * gtk_rc_add_[name/class]_style are broken for bg pixmaps, because
+   styles are broken for bg pixmaps, and RC styles only hack around
+   that.

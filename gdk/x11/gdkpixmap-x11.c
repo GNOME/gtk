@@ -351,15 +351,15 @@ gdk_pixmap_extract_color (gchar *buffer)
 
 
 GdkPixmap*
-gdk_pixmap_create_from_xpm (GdkWindow  *window,
-			    GdkBitmap **mask,
-			    GdkColor   *transparent_color,
-			    const gchar *filename)
+gdk_pixmap_colormap_create_from_xpm (GdkWindow   *window,
+				     GdkColormap *colormap,
+				     GdkBitmap  **mask,
+				     GdkColor    *transparent_color,
+				     const gchar *filename)
 {
   FILE *infile = NULL;
   GdkPixmap *pixmap = NULL;
   GdkImage *image = NULL;
-  GdkColormap *colormap;
   GdkVisual *visual;
   GdkGC *gc;
   GdkColor tmp_color;
@@ -369,7 +369,19 @@ gdk_pixmap_create_from_xpm (GdkWindow  *window,
   _GdkPixmapColor *colors = NULL, *color = NULL;
   gulong index;
 
-  g_return_val_if_fail (window != NULL, NULL);
+  if ((window == NULL) && (colormap == NULL))
+    g_warning ("Creating pixmap from xpm with NULL window and colormap");
+
+  if (window == NULL)
+    window = (GdkWindow *)&gdk_root_parent;
+
+  if (colormap == NULL)
+    {
+      colormap = gdk_window_get_colormap (window);
+      visual = gdk_window_get_visual (window);
+    }
+  else
+    visual = ((GdkColormapPrivate *)colormap)->visual;
 
   infile = fopen (filename, "rb");
   if (infile != NULL)
@@ -385,9 +397,6 @@ gdk_pixmap_create_from_xpm (GdkWindow  *window,
               sscanf (buffer,"%d %d %d %d", &width, &height, &num_cols, &cpp);
 
               colors = g_new(_GdkPixmapColor, num_cols);
-
-              colormap = gdk_window_get_colormap (window);
-              visual = gdk_window_get_visual (window);
 
 	      if (transparent_color == NULL) 
 		{
@@ -514,14 +523,25 @@ gdk_pixmap_create_from_xpm (GdkWindow  *window,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
-			      GdkBitmap **mask,
-			      GdkColor   *transparent_color,
-			      gchar     **data)
+gdk_pixmap_create_from_xpm (GdkWindow  *window,
+			    GdkBitmap **mask,
+			    GdkColor   *transparent_color,
+			    const gchar *filename)
+{
+  return gdk_pixmap_colormap_create_from_xpm (window, NULL, mask, 
+				       transparent_color, filename);
+}
+
+
+GdkPixmap*
+gdk_pixmap_colormap_create_from_xpm_d (GdkWindow  *window,
+				       GdkColormap *colormap,
+				       GdkBitmap **mask,
+				       GdkColor   *transparent_color,
+				       gchar     **data)
 {
   GdkPixmap *pixmap = NULL;
   GdkImage *image = NULL;
-  GdkColormap *colormap;
   GdkVisual *visual;
   GdkGC *gc;
   GdkColor tmp_color;
@@ -530,16 +550,25 @@ gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
   _GdkPixmapColor *colors = NULL, *color = NULL;
   gulong index;
 
-  g_return_val_if_fail (window != NULL, NULL);
+  if ((window == NULL) && (colormap == NULL))
+    g_warning ("Creating pixmap from xpm with NULL window and colormap");
+
+  if (window == NULL)
+    window = (GdkWindow *)&gdk_root_parent;
+
+  if (colormap == NULL)
+    {
+      colormap = gdk_window_get_colormap (window);
+      visual = gdk_window_get_visual (window);
+    }
+  else
+    visual = ((GdkColormapPrivate *)colormap)->visual;
 
   i = 0;
   buffer = data[i++];
   sscanf (buffer,"%d %d %d %d", &width, &height, &num_cols, &cpp);
 
   colors = g_new(_GdkPixmapColor, num_cols);
-
-  colormap = gdk_window_get_colormap (window);
-  visual = gdk_window_get_visual (window);
 
   if (transparent_color == NULL) 
     {
@@ -655,6 +684,16 @@ gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
     }
 
   return pixmap;
+}
+
+GdkPixmap*
+gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
+			      GdkBitmap **mask,
+			      GdkColor   *transparent_color,
+			      gchar     **data)
+{
+  return gdk_pixmap_colormap_create_from_xpm_d (window, NULL, mask,
+						transparent_color, data);
 }
 
 GdkPixmap*

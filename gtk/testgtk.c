@@ -2949,6 +2949,8 @@ create_clist ()
 			    GTK_POLICY_AUTOMATIC,
 			    GTK_POLICY_AUTOMATIC);
 
+      gtk_clist_set_policy (GTK_CLIST (clist), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
       gtk_clist_set_column_justification (GTK_CLIST (clist), 1, GTK_JUSTIFY_RIGHT);
       gtk_clist_set_column_justification (GTK_CLIST (clist), 2, GTK_JUSTIFY_CENTER);
       
@@ -3476,7 +3478,7 @@ create_text ()
 	  while (1)
 	    {
 	      nchars = fread(buffer, 1, 1024, infile);
-	      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black,
+	      gtk_text_insert (GTK_TEXT (text), NULL, NULL,
 			       NULL, buffer, nchars);
 	      
 	      if (nchars < 1024)

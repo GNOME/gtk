@@ -1551,9 +1551,12 @@ gdk_window_dnd_data_set (GdkWindow       *window,
     sev.xclient.data.l[3] = 0;
   
   sev.xclient.data.l[4] = 0;
-  
-  XSendEvent (gdk_display, event->dragrequest.requestor, False,
-	      NoEventMask, &sev);
+
+  if (!gdk_send_xevent (event->dragrequest.requestor, False,
+		       NoEventMask, &sev))
+    GDK_NOTE (DND, g_print("Sending XdeDataAvailable to %#x failed\n",
+			   event->dragrequest.requestor));
+
 }
 
 void          

@@ -60,15 +60,22 @@ enum {
 
 typedef struct _GtkRcStyle  GtkRcStyle;
 typedef struct _GtkRcSet    GtkRcSet;
+typedef struct _GtkRcNode   GtkRcNode;
+
+struct _GtkRcNode
+{
+  GdkColormap *cmap;
+  GtkStyle *style;
+};
 
 struct _GtkRcStyle
 {
-  int initialize;
   char *name;
   char *font_name;
   char *fontset_name;
   char *bg_pixmap_name[5];
-  GtkStyle *style;
+  GtkStyle *proto_style;
+  GList *styles;
 };
 
 struct _GtkRcSet
@@ -86,7 +93,8 @@ static GtkRcStyle* gtk_rc_styles_match		   (GSList       *sets,
 						    const char	 *path);
 static gint	   gtk_rc_style_match		   (const char   *set,
 						    const char   *path);
-static void	   gtk_rc_style_init		   (GtkRcStyle   *rc_style);
+static GtkStyle*   gtk_rc_style_init		   (GtkRcStyle   *rc_style,
+						    GdkColormap  *cmap);
 static void	   gtk_rc_parse_any		   (const gchar  *input_name,
 						    gint	  input_fd,
 						    const gchar  *input_string);
@@ -99,6 +107,8 @@ static gint	   gtk_rc_parse_base		   (GScanner	 *scanner,
 static gint	   gtk_rc_parse_bg		   (GScanner	 *scanner,
 						    GtkStyle	 *style);
 static gint	   gtk_rc_parse_fg		   (GScanner	 *scanner,
+						    GtkStyle	 *style);
+static gint	   gtk_rc_parse_text		   (GScanner	 *scanner,
 						    GtkStyle	 *style);
 static gint	   gtk_rc_parse_bg_pixmap	   (GScanner	 *scanner,
 						    GtkRcStyle	 *rc_style);
@@ -244,8 +254,8 @@ gtk_rc_get_style (GtkWidget *widget)
 	  
 	  if (rc_style)
 	    {
-	      gtk_rc_style_init (rc_style);
-	      return rc_style->style;
+	      return gtk_rc_style_init (rc_style,
+					gtk_widget_get_colormap (widget));
 	    }
 	}
     }
@@ -260,8 +270,8 @@ gtk_rc_get_style (GtkWidget *widget)
 	  
 	  if (rc_style)
 	    {
-	      gtk_rc_style_init (rc_style);
-	      return rc_style->style;
+	      return gtk_rc_style_init (rc_style,
+					gtk_widget_get_colormap (widget));
 	    }
 	}
     }
@@ -280,7 +290,6 @@ gtk_rc_add_widget_name_style (GtkStyle	 *style,
   gtk_style_ref (style);
   
   rc_style = g_new (GtkRcStyle, 1);
-  rc_style->initialize = FALSE;
   rc_style->name = NULL;
   rc_style->font_name = NULL;
   rc_style->fontset_name = NULL;
@@ -288,7 +297,7 @@ gtk_rc_add_widget_name_style (GtkStyle	 *style,
   for (i = 0; i < 5; i++)
     rc_style->bg_pixmap_name[i] = NULL;
   
-  rc_style->style = style;
+  rc_style->styles = g_list_append (NULL, style);
   
   rc_set = g_new (GtkRcSet, 1);
   rc_set->set = g_strdup (pattern);
@@ -308,7 +317,6 @@ gtk_rc_add_widget_class_style (GtkStyle *style,
   gtk_style_ref (style);
   
   rc_style = g_new (GtkRcStyle, 1);
-  rc_style->initialize = FALSE;
   rc_style->name = NULL;
   rc_style->font_name = NULL;
   rc_style->fontset_name = NULL;
@@ -316,7 +324,7 @@ gtk_rc_add_widget_class_style (GtkStyle *style,
   for (i = 0; i < 5; i++)
     rc_style->bg_pixmap_name[i] = NULL;
   
-  rc_style->style = style;
+  rc_style->styles = g_list_append (NULL, style);
   
   rc_set = g_new (GtkRcSet, 1);
   rc_set->set = g_strdup (pattern);
@@ -471,46 +479,72 @@ gtk_rc_style_match (const char *set,
   return TRUE;
 }
 
-static void
-gtk_rc_style_init (GtkRcStyle *rc_style)
+static GtkStyle *
+gtk_rc_style_init (GtkRcStyle *rc_style, GdkColormap *cmap)
 {
   GdkFont *old_font;
   gint i;
-  
-  if (rc_style->initialize)
+
+  GList *tmp_list;
+  GtkStyle *style = NULL;
+
+  tmp_list = rc_style->styles;
+
+  while (tmp_list)
     {
-      rc_style->initialize = FALSE;
+      GtkRcNode *node = (GtkRcNode *)tmp_list->data;
+
+      if (node->cmap == cmap)
+	style = node->style;
+
+      tmp_list = tmp_list->next;
+    }
+  
+  if (!style)
+    {
+      style = gtk_style_copy (rc_style->proto_style);
       
       if (rc_style->fontset_name)
 	{
-	  old_font = rc_style->style->font;
-	  rc_style->style->font = gdk_fontset_load (rc_style->fontset_name);
-	  if (rc_style->style->font)
+	  old_font = style->font;
+	  style->font = gdk_fontset_load (rc_style->fontset_name);
+	  if (style->font)
 	    gdk_font_unref (old_font);
 	  else
-	    rc_style->style->font = old_font;
+	    style->font = old_font;
 	}
       else if (rc_style->font_name)
 	{
-	  old_font = rc_style->style->font;
-	  rc_style->style->font = gdk_font_load (rc_style->font_name);
-	  if (rc_style->style->font)
+	  old_font = style->font;
+	  style->font = gdk_font_load (rc_style->font_name);
+	  if (style->font)
 	    gdk_font_unref (old_font);
 	  else
-	    rc_style->style->font = old_font;
+	    style->font = old_font;
 	}
       
       for (i = 0; i < 5; i++)
 	if (rc_style->bg_pixmap_name[i])
 	  {
 	    if (strcmp (rc_style->bg_pixmap_name[i], "<parent>") == 0)
-	      rc_style->style->bg_pixmap[i] = (GdkPixmap*) GDK_PARENT_RELATIVE;
+	      style->bg_pixmap[i] = (GdkPixmap*) GDK_PARENT_RELATIVE;
 	    else
-	      rc_style->style->bg_pixmap[i] = gdk_pixmap_create_from_xpm (NULL, NULL,
-									  &rc_style->style->bg[i],
-									  rc_style->bg_pixmap_name[i]);
+	      style->bg_pixmap[i] = 
+		gdk_pixmap_colormap_create_from_xpm (NULL, cmap,
+						     NULL,
+						     &style->bg[i],
+						     rc_style->bg_pixmap_name[i]);
 	  }
+
+      rc_style->styles = g_list_append (rc_style->styles, style);
+
+      /* FIXME, this leaks colormaps, but if we don't do this, then we'll
+       * be screwed, because we identify colormaps by address equality
+       */
+      gdk_colormap_ref (cmap);
     }
+
+  return style;
 }
 
 static gint
@@ -571,16 +605,15 @@ gtk_rc_parse_style (GScanner *scanner)
     {
       insert = TRUE;
       rc_style = g_new (GtkRcStyle, 1);
-      rc_style->initialize = TRUE;
       rc_style->name = g_strdup (scanner->value.v_string);
       rc_style->font_name = NULL;
       rc_style->fontset_name = NULL;
       
       for (i = 0; i < 5; i++)
 	rc_style->bg_pixmap_name[i] = NULL;
-      
-      rc_style->style = gtk_style_new ();
-      gtk_style_ref (rc_style->style);
+
+      rc_style->proto_style = gtk_style_new();
+      rc_style->styles = NULL;
     }
   
   token = g_scanner_peek_next_token (scanner);
@@ -593,7 +626,7 @@ gtk_rc_parse_style (GScanner *scanner)
 	{
 	  if (insert)
 	    {
-	      gtk_style_unref (rc_style->style);
+	      gtk_style_unref (rc_style->proto_style);
 	      g_free (rc_style);
 	    }
 	  return PARSE_ERROR;
@@ -604,17 +637,17 @@ gtk_rc_parse_style (GScanner *scanner)
 	{
 	  for (i = 0; i < 5; i++)
 	    {
-	      rc_style->style->fg[i] = parent_style->style->fg[i];
-	      rc_style->style->bg[i] = parent_style->style->bg[i];
-	      rc_style->style->light[i] = parent_style->style->light[i];
-	      rc_style->style->dark[i] = parent_style->style->dark[i];
-	      rc_style->style->mid[i] = parent_style->style->mid[i];
-	      rc_style->style->text[i] = parent_style->style->text[i];
-	      rc_style->style->base[i] = parent_style->style->base[i];
+	      rc_style->proto_style->fg[i] = parent_style->proto_style->fg[i];
+	      rc_style->proto_style->bg[i] = parent_style->proto_style->bg[i];
+	      rc_style->proto_style->light[i] = parent_style->proto_style->light[i];
+	      rc_style->proto_style->dark[i] = parent_style->proto_style->dark[i];
+	      rc_style->proto_style->mid[i] = parent_style->proto_style->mid[i];
+	      rc_style->proto_style->text[i] = parent_style->proto_style->text[i];
+	      rc_style->proto_style->base[i] = parent_style->proto_style->base[i];
 	    }
 	  
-	  rc_style->style->black = parent_style->style->black;
-	  rc_style->style->white = parent_style->style->white;
+	  rc_style->proto_style->black = parent_style->proto_style->black;
+	  rc_style->proto_style->white = parent_style->proto_style->white;
 	  
 	  if (rc_style->fontset_name)
 	    {
@@ -641,7 +674,7 @@ gtk_rc_parse_style (GScanner *scanner)
     {
       if (insert)
 	{
-	  gtk_style_unref (rc_style->style);
+	  gtk_style_unref (rc_style->proto_style);
 	  g_free (rc_style);
 	}
       return PARSE_ERROR;
@@ -656,7 +689,7 @@ gtk_rc_parse_style (GScanner *scanner)
 	{
 	  if (insert)
 	    {
-	      gtk_style_unref (rc_style->style);
+	      gtk_style_unref (rc_style->proto_style);
 	      g_free (rc_style);
 	    }
 	  return error;
@@ -677,7 +710,7 @@ gtk_rc_parse_style (GScanner *scanner)
 	    if (rc_style->bg_pixmap_name[i])
 	      g_free (rc_style->bg_pixmap_name[i]);
 	  
-	  gtk_style_unref (rc_style->style);
+	  gtk_style_unref (rc_style->proto_style);
 	  g_free (rc_style);
 	}
       return PARSE_ERROR;
@@ -700,15 +733,19 @@ gtk_rc_parse_style_option (GScanner   *scanner,
   if (token == G_TOKEN_EOF || token == G_TOKEN_ERROR)
     return PARSE_ERROR;
   
-  error = gtk_rc_parse_base (scanner, rc_style->style);
+  error = gtk_rc_parse_base (scanner, rc_style->proto_style);
   if (error != PARSE_SYNTAX)
     return error;
   
-  error = gtk_rc_parse_bg (scanner, rc_style->style);
+  error = gtk_rc_parse_bg (scanner, rc_style->proto_style);
   if (error != PARSE_SYNTAX)
     return error;
   
-  error = gtk_rc_parse_fg (scanner, rc_style->style);
+  error = gtk_rc_parse_fg (scanner, rc_style->proto_style);
+  if (error != PARSE_SYNTAX)
+    return error;
+  
+  error = gtk_rc_parse_text (scanner, rc_style->proto_style);
   if (error != PARSE_SYNTAX)
     return error;
   
@@ -805,6 +842,34 @@ gtk_rc_parse_fg (GScanner *scanner,
     return PARSE_ERROR;
   
   error = gtk_rc_parse_color (scanner, &style->fg[state]);
+  
+  return error;
+}
+
+static gint
+gtk_rc_parse_text (GScanner *scanner,
+		   GtkStyle *style)
+{
+  GtkStateType state;
+  gint token;
+  gint error;
+  
+  token = g_scanner_peek_next_token (scanner);
+  if (token == G_TOKEN_EOF || token == G_TOKEN_ERROR)
+    return PARSE_ERROR;
+  if (token != TOKEN_TEXT)
+    return PARSE_SYNTAX;
+  token = g_scanner_get_next_token (scanner);
+  
+  error = gtk_rc_parse_state (scanner, &state);
+  if (error != PARSE_OK)
+    return error;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_EQUAL_SIGN)
+    return PARSE_ERROR;
+  
+  error = gtk_rc_parse_color (scanner, &style->text[state]);
   
   return error;
 }

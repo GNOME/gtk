@@ -2714,8 +2714,10 @@ gdk_event_translate (GdkEvent *event,
 	      replyev.xclient.data.l[2] = replyev.xclient.data.l[3] = 0;
 	      replyev.xclient.data.l[4] = reptype;
 
-	      XSendEvent (gdk_display, replyev.xclient.window,
-			  False, NoEventMask, &replyev);
+	      if (!gdk_send_xevent (replyev.xclient.window, False, 
+				    NoEventMask, &replyev))
+		GDK_NOTE (DND, g_print("Sending XdeRequest to %#lx failed\n",
+				       replyev.xclient.window));
 
 	      event->any.type = GDK_DROP_ENTER;
 	      event->any.window = window;
@@ -3176,7 +3178,9 @@ gdk_dnd_drag_enter (Window dest)
 	    }
 	  else
 	    sev.xclient.data.l[3] = sev.xclient.data.l[4] = None;
-	  XSendEvent (gdk_display, dest, False, NoEventMask, &sev);
+	  if (!gdk_send_xevent (dest, False, NoEventMask, &sev))
+		GDK_NOTE (DND, g_print("Sending XdeEnter to %#lx failed\n",
+				       dest));
 	}
 
     }
@@ -3731,7 +3735,9 @@ gdk_dnd_drag_leave (Window dest)
     {
       wp = (GdkWindowPrivate *) gdk_dnd.drag_startwindows[i];
       sev.xclient.data.l[0] = wp->xwindow;
-      XSendEvent(gdk_display, dest, False, NoEventMask, &sev);
+      if (!gdk_send_xevent (dest, False, NoEventMask, &sev))
+	GDK_NOTE (DND, g_print("Sending XdeLeave to %#lx failed\n",
+			       dest));
       wp->dnd_drag_accepted = 0;
     }
 }
@@ -3990,7 +3996,9 @@ gdk_event_send_clientmessage_toall(GdkEvent *event)
   for(i = 0; i < ret_nchildren; i++) {
     curwin = gdk_get_client_window(gdk_display, ret_children[i]);
     sev.xclient.window = curwin;
-    XSendEvent(gdk_display, curwin, False, NoEventMask, &sev);
+    if (!gdk_send_xevent (curwin, False, NoEventMask, &sev))
+      GDK_NOTE (MISC, g_print("Sending client message %ld to %#lx failed\n",
+			     event->client.message_type, curwin));
   }
 
   XFree(ret_children);
@@ -4000,4 +4008,20 @@ gchar *
 gdk_get_display(void)
 {
   return (gchar *)XDisplayName (gdk_display_name);
+}
+
+gint 
+gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
+		 XEvent *event_send)
+{
+  Status result;
+  
+  gdk_error_code = 0;
+  
+  gdk_error_warnings = 0;
+  result = XSendEvent (gdk_display, window, propagate, event_mask, event_send);
+  XSync (gdk_display, False);
+  gdk_error_warnings = 1;
+    
+  return result && (gdk_error_code != -1);
 }

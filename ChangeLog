@@ -1,3 +1,36 @@
+Sun Mar  8 15:53:33 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c: 
+
+	- Show selection correctly when starting selection with arrows
+
+	- Display pixmap background only when not editable
+
+	- Redraw focus area more carefully to prevent flashing (and
+	  make style of drawing consistent with Entry)
+
+	* gtk/gtktreeitem.c: ref colormaps for pixmap by colormap
+	  storage.
+	
+	* gtk/gtkrc.c: Store a separate style for each RcStyle for
+	  each colormap, so we can handle background pixmaps 
+	  correctly, which need to be per-colormap. (Leaks
+	  colormaps...)
+
+	  Parse text color style entries correctly.
+
+	* gtk/testgtk.c: insert text without fg color
+	  gtk/testgtkrc: move "*" after rest, so the other class styles
+	                 take effect
+
+        * gdk/gdkwindow.c gdk/gdk.c gdk/gdkprivate.h: Send DND events
+	  safely, in case drop window disappears. (Performance hit
+	  because XSync()'s are necessary)
+
+	* gdk/gdk.h gdk/gdkpixmap.c: Added 
+	  gdk_pixmap_colormap_create_from_xpm[_d] to allow creating
+	  pixmaps from xpm's before you have a GdkWindow.
+	
 Sun Mar  8 12:33:38 PST 1998 Jay Painter <jpaint@serv.net>
 	
 	* gtk/gtkclist.c: the GList clist->selection now contains row indexes
