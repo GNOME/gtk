@@ -3158,7 +3158,7 @@ gtk_widget_real_focus (GtkWidget         *widget,
   if (!GTK_WIDGET_CAN_FOCUS (widget))
     return FALSE;
   
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
+  if (!gtk_widget_is_focus (widget))
     {
       gtk_widget_grab_focus (widget);
       return TRUE;
@@ -5382,7 +5382,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       GTK_WIDGET_STATE (widget) = GTK_STATE_INSENSITIVE;
     }
 
-  if (GTK_WIDGET_HAS_FOCUS (widget) && !GTK_WIDGET_IS_SENSITIVE (widget))
+  if (gtk_widget_is_focus (widget) && !GTK_WIDGET_IS_SENSITIVE (widget))
     {
       GtkWidget *window;
 

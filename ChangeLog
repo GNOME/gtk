@@ -1,3 +1,8 @@
+Thu Jul 12 16:51:34 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c: Replace a couple of inappropriate calls to 
+	GTK_WIDGET_HAS_FOCUS() with gtk_widget_is_focus(). (#57067)
+
 Thu Jul 12 14:06:19 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenubar.c (gtk_menu_bar_hierarchy_changed): Add
