@@ -4,7 +4,8 @@ lib_LTLIBRARIES = 		\
 	libpixbuf-png.la	\
 	libpixbuf-jpeg.la	\
 	libpixbuf-gif.la	\
-	libpixbuf-xpm.la
+	libpixbuf-xpm.la	\
+	libpixbuf-tiff.la
 
 #
 # The GdkPixBuf library
@@ -42,3 +43,8 @@ libpixbuf_xpm_la_SOURCES =	\
 libpixbuf_gif_la_SOURCES =	\
 	io-gif.c
 
+#
+# The TIFF loader
+#
+libpixbuf_gif_la_SOURCES=	\
+	io-tiff.c
