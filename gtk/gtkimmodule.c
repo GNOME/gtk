@@ -227,7 +227,7 @@ gtk_im_module_init ()
 {
   GString *line_buf = g_string_new (NULL);
   GString *tmp_buf = g_string_new (NULL);
-  const gchar *filename = gtk_rc_get_im_module_file();
+  gchar *filename = gtk_rc_get_im_module_file();
   FILE *file;
   gboolean have_error = FALSE;
 

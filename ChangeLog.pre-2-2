@@ -1,3 +1,18 @@
+Sat Mar  3 13:32:47 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimmodule.c (gtk_im_module_init): Remove spurious
+	const.
+
+	* gdk-pixbuf-2.0.pc.in gtk+-2.0.pc.in: Fix include path.
+
+	* gtk/gtkdialog.c (gtk_dialog_set_default_response): If there
+	is no focus widget for the dialog currently, grab the focus as well
+	as the default.
+
+	* gtk/gtkdialog.c (gtk_dialog_set_default_response): Get
+	the action area's children to iterate through, not the
+	dialog's children.
+
 Sat Mar  3 13:21:27 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/Makefile.am tests/testsocket.c tests/testsocket_child.c:

@@ -8,4 +8,4 @@ Description: Image loading and scaling
 Version: @VERSION@
 Requires: gobject-2.0,gmodule-2.0
 Libs: -L${libdir} -lgdk_pixbuf-1.3 @INTLLIBS@ @MATH_LIB@
-Cflags: -I${includedir}
+Cflags: -I${includedir}/gtk-2.0.
