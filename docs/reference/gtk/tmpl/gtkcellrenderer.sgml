@@ -2,36 +2,61 @@
 GtkCellRenderer
 
 <!-- ##### SECTION Short_Description ##### -->
-
+An object for rendering a single cell on a #GdkDrawable
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The #GtkCellRenderer is a base class of a set of objects used for
+rendering a cell to a #GdkDrawable.  These objects are used primarily by
+the #GtkTreeView widget, though they aren't tied to them in any
+specific way.  It is worth noting that #GtkCellRenderer is not a
+#GtkWidget and cannot be treated as such.
 </para>
 
+<para>
+The primary use of a #GtkCellRenderer is for drawing a certain graphical
+elements on a #GdkDrawable.  Typically, one cell renderer is used to
+draw many cells on the screen.  To this extent, it isn't expected that a
+CellRenderer keep any permanent state around.  Instead, any state is set
+just prior to use using #GObject<!-- -->s property system.  Then, the
+cell is measured using @gtk_cell_renderer_get_size.  Finally, the cell
+is rendered in the correct location using @gtk_cell_renderer_render.
+</para>
+
+<para>
+There are a number of rules that must be followed when writing a new
+#GtkCellRenderer.  First and formost, it's important that a certain set
+of properties will always yield a cell renderer of the same size,
+barring a #GtkStyle change.  The #GtkCellRenderer also has a number of
+generic properties that are expected to be honored by all children.
+</para>
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkCellRendererText,#GtkCellRendererPixbuf,#GtkCellRendererToggle
 </para>
 
 <!-- ##### ENUM GtkCellRendererState ##### -->
 <para>
-
+Tells how a cell is to be rendererd.
 </para>
 
-@GTK_CELL_RENDERER_SELECTED: 
-@GTK_CELL_RENDERER_PRELIT: 
-@GTK_CELL_RENDERER_INSENSITIVE: 
-@GTK_CELL_RENDERER_SORTED: 
+@GTK_CELL_RENDERER_SELECTED: The cell is currently selected, and
+probably has a selection colored background to render to.
+@GTK_CELL_RENDERER_PRELIT: The mouse is hovering over the cell.
+@GTK_CELL_RENDERER_INSENSITIVE: The cell is drawn in an insensitive manner
+@GTK_CELL_RENDERER_SORTED: The cell is in a sorted row
 
 <!-- ##### ENUM GtkCellRendererMode ##### -->
 <para>
-
+Identifies how the user can interact with a particular cell.
 </para>
 
-@GTK_CELL_RENDERER_MODE_INERT: 
-@GTK_CELL_RENDERER_MODE_ACTIVATABLE: 
-@GTK_CELL_RENDERER_MODE_EDITABLE: 
+@GTK_CELL_RENDERER_MODE_INERT: The cell is just for display
+and cannot be interacted with.  Note that this doesn't mean that eg. the
+row being drawn can't be selected -- just that a particular element of
+it cannot be individually modified.
+@GTK_CELL_RENDERER_MODE_ACTIVATABLE: The cell can be clicked.
+@GTK_CELL_RENDERER_MODE_EDITABLE: The cell can be edited or otherwise modified.
 
 <!-- ##### STRUCT GtkCellRenderer ##### -->
 <para>
@@ -117,6 +142,56 @@ GtkCellRenderer
 @height: 
 
 
+<!-- ##### ARG GtkCellRenderer:mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:xpad ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:ypad ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:is-expander ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:is-expanded ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRenderer:cell-background ##### -->
 <para>
 
@@ -128,56 +203,6 @@ GtkCellRenderer
 </para>
 
 <!-- ##### ARG GtkCellRenderer:cell-background-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:height ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:is-expanded ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:is-expander ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:mode ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:visible ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:xalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:xpad ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:yalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:ypad ##### -->
 <para>
 
 </para>
