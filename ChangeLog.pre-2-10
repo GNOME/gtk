@@ -1,3 +1,16 @@
+Thu Aug 14 18:25:39 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_populate):
+	Don't reposition the cursor when we aren't trying
+	to complete. (Fixes problems with selection on
+	startup, #108433, reported by Mark Finlay.)
+
+	* gtk/gtkfilesel.c (gtk_file_selection_populate): Remove
+	code that tried to position the cursor after the common
+	prefix when there was one, it wasn't working, and
+	would be hard to fix. Just always put the cursor
+	at the end when completing.
+
 Thu Aug 14 17:58:23 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (get_current_dir_utf8): If getting
