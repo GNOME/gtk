@@ -1,3 +1,9 @@
+Thu Mar 28 18:38:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk[hv]paned.c (gtk_[hv]paned_size_allocate): 
+	Don't show the window unless the widget is mapped.
+	(#76742, Dennis Björklund, Soeren Sandmann)
+
 2002-03-29  Hans Breuer  <hans@breuer.org>
 
 	Fixed dashed line issues (#74441) to an IMO reasonable extend. 
