@@ -1221,6 +1221,7 @@ update_wm_hints (GdkWindow *window,
   XWMHints wm_hints;
 
   if (!force &&
+      !toplevel->is_leader &&
       private->state & GDK_WINDOW_STATE_WITHDRAWN)
     return;
 
@@ -4460,6 +4461,7 @@ gdk_window_set_group (GdkWindow *window,
       if (toplevel->group_leader)
 	g_object_unref (toplevel->group_leader);
       toplevel->group_leader = g_object_ref (leader);
+      (_gdk_x11_window_get_toplevel (leader))->is_leader = TRUE;      
     }
 
   update_wm_hints (window, FALSE);

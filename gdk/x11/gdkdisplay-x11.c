@@ -198,6 +198,8 @@ gdk_display_open (const gchar *display_name)
 
   display_x11->leader_gdk_window = gdk_window_new (GDK_SCREEN_X11 (display_x11->default_screen)->root_window, 
 						   &attr, GDK_WA_X | GDK_WA_Y);
+  (_gdk_x11_window_get_toplevel (display_x11->leader_gdk_window))->is_leader = TRUE;
+
   display_x11->leader_window = GDK_WINDOW_XID (display_x11->leader_gdk_window);
 
   display_x11->leader_window_title_set = FALSE;

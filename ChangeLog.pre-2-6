@@ -1,3 +1,20 @@
+2004-10-18  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix #155658, Sebastian Bacher:
+	
+	* gdk/x11/gdkwindow-x11.h (struct _GdkToplevelX11): Add a new 
+	is_leader flag.
+
+	* gdk/x11/gdkwindow-x11.c (update_wm_hints): Set wm hints on
+	leader windows even if they are withdrawn.
+	(gdk_window_set_group): Mark the new leader window as such. We 
+	never remove the flag again, but that should a) be vanishingly
+	rare and b) not a problem, since the flag just turns off an
+	optimization.
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Mark the default
+	leader window as such.
+
 2004-10-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_new): Destroy secondary
@@ -10,6 +27,11 @@
 
 	* gtk/gtkhsv.c (gtk_hsv_expose): Fix redraw issues with the
 	focus on the ring. 
+
+2004-10-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/makegdkalias.pl: Include linux-fb/gdkfb.h when building
+	the framebuffer backend.  (#155486, Olexiy Avramchenko)
 
 2004-10-15  Matthias Clasen  <mclasen@redhat.com>
 

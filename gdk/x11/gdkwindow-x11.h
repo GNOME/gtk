@@ -113,6 +113,8 @@ struct _GdkToplevelX11
   guint have_maxhorz : 1;       /* _NET_WM_STATE_MAXIMIZED_HORZ */
   guint have_fullscreen : 1;    /* _NET_WM_STATE_FULLSCREEN */
 
+  guint is_leader : 1;
+  
   gulong map_serial;	/* Serial of last transition from unmapped */
   
   GdkPixmap *icon_pixmap;
