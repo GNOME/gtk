@@ -615,9 +615,9 @@ void	     gtk_widget_pop_colormap	     (void);
 
 /* widget style properties
  */
-void gtk_widget_class_install_style_property        (GtkWidgetClass     *class,
+void gtk_widget_class_install_style_property        (GtkWidgetClass     *klass,
 						     GParamSpec         *pspec);
-void gtk_widget_class_install_style_property_parser (GtkWidgetClass     *class,
+void gtk_widget_class_install_style_property_parser (GtkWidgetClass     *klass,
 						     GParamSpec         *pspec,
 						     GtkRcPropertyParser parser);
 void gtk_widget_style_get_property (GtkWidget	     *widget,

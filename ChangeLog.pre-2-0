@@ -1,3 +1,7 @@
+Wed Mar 28 21:12:37 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.h: c++ fixes.
+
 Sun Mar 25 15:51:28 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksettings.c (gtk_settings_init): Fix use of uninitialized
