@@ -449,24 +449,9 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
      display_x11->keyboard_xgrab_window = NULL;
 }
 
-/**
- * gdk_display_set_sm_client_id:
- * @display: a #GdkDisplay
- * @sm_client_id: the client id assigned by the session manager when the
- *    connection was opened, or %NULL to remove the property.
- * 
- * Sets the <literal>SM_CLIENT_ID</literal> property on the application's leader window
- * so that the window manager can save the application's state using the X11R6 ICCCM
- * session management protocol.
- *
- * See the X Session Management Library documentation for more information on
- * session management and the Inter-Client Communication Conventions Manual
- * (ICCCM) for information on the <literal>WM_CLIENT_LEADER</literal> property. 
- * (Both documents are part of the X Window System distribution.)
- **/
 void
-gdk_display_set_sm_client_id (GdkDisplay  *display,
-			      const gchar *sm_client_id)
+_gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
+					 const gchar *sm_client_id)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
 

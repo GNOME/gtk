@@ -1227,31 +1227,9 @@ gdk_screen_get_height_mm (GdkScreen *screen)
   return 0.5 + gdk_screen_height () * (25.4 / 72.);
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_display_set_sm_client_id
- *
- *   Set the SM_CLIENT_ID property on the WM_CLIENT_LEADER window
- *   so that the window manager can save our state using the
- *   X11R6 ICCCM session management protocol. A NULL value should 
- *   be set following disconnection from the session manager to
- *   remove the SM_CLIENT_ID property.
- *
- * Arguments:
- * 
- *   "sm_client_id" specifies the client id assigned to us by the
- *   session manager or NULL to remove the property.
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
 void
-gdk_display_set_sm_client_id (GdkDisplay*  display,
-			      const gchar* sm_client_id)
+_gdk_windowing_display_set_sm_client_id (GdkDisplay*  display,
+					 const gchar* sm_client_id)
 {
 }
 

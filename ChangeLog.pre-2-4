@@ -1,3 +1,13 @@
+Mon Sep 30 15:31:57 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdisplay.c gdk/x11/gdkdisplay-x11.c 
+	gdk/gdkinternals.h: Set the client ID on all
+	displays. (#85713)
+
+	* gdk/gdkdisplay.h gkd/gdkinternals.h
+	 gdk/{linux-fb,win32,x11}/gdkmain-{fb,win32,x11}.c
+	Privatize gdk_display_set_sm_client_id().
+
 Mon Sep 30 14:46:49 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkbindings.c (gtk_binding_set_new): Initialize

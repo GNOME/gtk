@@ -41,6 +41,7 @@ static void gdk_display_finalize   (GObject         *object);
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static GObjectClass *parent_class;
+static char *gdk_sm_client_id;
 
 GType
 gdk_display_get_type (void)
@@ -353,6 +354,28 @@ gdk_display_get_core_pointer (GdkDisplay *display)
 void
 gdk_set_sm_client_id (const gchar* sm_client_id)
 {
-  gdk_display_set_sm_client_id (gdk_display_get_default (), sm_client_id);
+  GSList *displays, *tmp_list;
+  
+  g_free (gdk_sm_client_id);
+  gdk_sm_client_id = g_strdup (sm_client_id);
+
+  displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+  for (tmp_list = displays; tmp_list; tmp_list = tmp_list->next)
+    _gdk_windowing_display_set_sm_client_id (tmp_list->data, sm_client_id);
+
+  g_slist_free (displays);
 }
 
+/**
+ * _gdk_get_sm_client_id:
+ * 
+ * Gets the client ID set with gdk_set_sm_client_id(), if any.
+ * 
+ * Return value: Session ID, or %NULL if gdk_set_sm_client_id()
+ *               has never been called.
+ **/
+const char *
+_gdk_get_sm_client_id (void)
+{
+  return gdk_sm_client_id;
+}

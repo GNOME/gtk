@@ -108,6 +108,7 @@ gdk_display_open (const gchar *display_name)
   GdkDisplayX11 *display_x11;
   gint argc;
   gchar **argv;
+  const char *sm_client_id;
   
   XClassHint *class_hint;
   XKeyboardState keyboard_state;
@@ -159,6 +160,10 @@ gdk_display_open (const gchar *display_name)
 		      NULL, NULL, argv, argc, NULL, NULL,
 		      class_hint);
   XFree (class_hint);
+
+  sm_client_id = _gdk_get_sm_client_id ();
+  if (sm_client_id)
+    _gdk_windowing_display_set_sm_client_id (display, sm_client_id);
 
   pid = getpid ();
   XChangeProperty (display_x11->xdisplay,
