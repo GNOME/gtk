@@ -71,9 +71,9 @@ static GdkInputWindow *gdk_input_window_find_within (GdkWindow *window);
 
 static GdkDevicePrivate *gdk_input_find_dev_from_ctx (HCTX hctx,
 						      UINT id);
-static GList     *wintab_contexts;
+static GList     *wintab_contexts = NULL;
 
-static GdkWindow *wintab_window;
+static GdkWindow *wintab_window = NULL;
 
 #endif /* HAVE_WINTAB */
 
@@ -204,9 +204,10 @@ print_lc(LOGCONTEXT *lc)
 
 #endif
 
-static void
-gdk_input_wintab_init (void)
+void
+_gdk_input_wintab_init_check (void)
 {
+  static gboolean wintab_initialized = FALSE;
   GdkDevicePrivate *gdkdev;
   GdkWindowAttr wa;
   WORD specversion;
@@ -219,7 +220,11 @@ gdk_input_wintab_init (void)
   int devix, cursorix;
   char devname[100], csrname[100];
 
-  _gdk_input_devices = NULL;
+  if (wintab_initialized)
+    return;
+  
+  wintab_initialized = TRUE;
+  
   wintab_contexts = NULL;
 
   if (!_gdk_input_ignore_wintab &&
@@ -1276,7 +1281,13 @@ _gdk_input_init (GdkDisplay *display)
 
   _gdk_init_input_core (display);
 #ifdef HAVE_WINTAB
-  gdk_input_wintab_init ();
+#ifdef WINTAB_NO_LAZY_INIT
+  /* Normally, Wintab is only initialized when the application performs
+   * an action that requires it, such as enabling extended input events
+   * for a window or enumerating the devices.
+   */
+  _gdk_input_wintab_init_check ();
+#endif /* WINTAB_NO_LAZY_INIT */
 #endif /* HAVE_WINTAB */
 
   _gdk_input_devices = g_list_append (_gdk_input_devices, display->core_pointer);
