@@ -18,7 +18,7 @@
  */
 
 #ifndef __GTK_STATUSBAR_H__
-#define __GTK_STATUSBAR_H_
+#define __GTK_STATUSBAR_H__
 
 #include <gtk/gtkhbox.h>
 
@@ -88,4 +88,4 @@ void       gtk_statusbar_remove        	(GtkStatusbar *statusbar,
 #ifdef __cplusplus
 } 
 #endif /* __cplusplus */
-#endif /* __GTK_STATUSBAR_H_ */
+#endif /* __GTK_STATUSBAR_H__ */
