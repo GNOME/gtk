@@ -1,3 +1,9 @@
+Fri Jan 31 17:33:00 2003  Manish Singh  <yosh@gimp.org>
+                                                                                
+        * gtk/gtknotebook.c (gtk_notebook_remove_tab_label): set_state
+        on the tab_label before unparenting it, in case the unparent
+        drops the refcount to 0.
+
 2003-02-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkiconfactory.h: Use GDK_MULTIHEAD_SAFE like all other gtk
