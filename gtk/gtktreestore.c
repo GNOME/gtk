@@ -90,7 +90,7 @@ gtk_tree_store_get_type (void)
 	NULL
       };
 
-      tree_store_type = g_type_register_static (GTK_TYPE_TREE_MODEL, "GtkTreeStore", &tree_store_info);
+      tree_store_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeStore", &tree_store_info);
       g_type_add_interface_static (tree_store_type,
 				   GTK_TYPE_TREE_MODEL,
 				   &tree_model_info);
