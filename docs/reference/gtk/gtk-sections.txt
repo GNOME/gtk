@@ -3545,9 +3545,6 @@ gtk_drag_check_threshold
 gtk_drag_source_set
 gtk_drag_source_set_icon
 gtk_drag_source_unset
-<SUBSECTION Internals>
-gtk_drag_source_handle_event
-gtk_drag_dest_handle_event
 </SECTION>
 
 

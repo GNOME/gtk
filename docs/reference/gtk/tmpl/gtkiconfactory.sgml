@@ -62,6 +62,7 @@ looking up the icon to use for a given stock ID.
 @GTK_ICON_SIZE_SMALL_TOOLBAR: 
 @GTK_ICON_SIZE_LARGE_TOOLBAR: 
 @GTK_ICON_SIZE_BUTTON: 
+@GTK_ICON_SIZE_DND: 
 @GTK_ICON_SIZE_DIALOG: 
 
 <!-- ##### FUNCTION gtk_icon_source_copy ##### -->

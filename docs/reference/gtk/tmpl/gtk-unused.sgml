@@ -1394,6 +1394,22 @@ This function is not usually used by users.
 @tree_column: 
 @titles: 
 
+<!-- ##### FUNCTION gtk_drag_dest_handle_event ##### -->
+<para>
+Internal function.
+</para>
+
+@toplevel: 
+@event: 
+
+<!-- ##### FUNCTION gtk_drag_source_handle_event ##### -->
+<para>
+Internal function.
+</para>
+
+@widget: 
+@event: 
+
 <!-- ##### FUNCTION gtk_editable_changed ##### -->
 <para>
 Causes the "changed" signal to be emitted.
@@ -1941,6 +1957,15 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 
 @first: 
 @second: 
+
+<!-- ##### FUNCTION gtk_text_view_set_text_window_size ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@width: 
+@height: 
 
 <!-- ##### FUNCTION gtk_trace_referencing ##### -->
 <para>

@@ -946,13 +946,13 @@ gtk_main_do_event (GdkEvent *event)
       
     case GDK_DRAG_STATUS:
     case GDK_DROP_FINISHED:
-      gtk_drag_source_handle_event (event_widget, event);
+      _gtk_drag_source_handle_event (event_widget, event);
       break;
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      gtk_drag_dest_handle_event (event_widget, event);
+      _gtk_drag_dest_handle_event (event_widget, event);
       break;
     default:
       g_assert_not_reached ();

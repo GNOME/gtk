@@ -39,9 +39,11 @@
 #include "gdk/gdkkeysyms.h"
 
 #include "gtkdnd.h"
+#include "gtkimage.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
+#include "gtkstock.h"
 #include "gtkwindow.h"
 
 static GSList *drag_widgets = NULL;
@@ -67,9 +69,17 @@ struct _GtkDragSourceSite
   GdkModifierType    start_button_mask;
   GtkTargetList     *target_list;        /* Targets for drag data */
   GdkDragAction      actions;            /* Possible actions */
+
+  /* Drag icon */
+  GtkImageType icon_type;
+  union
+  {
+    GtkImagePixmapData pixmap;
+    GtkImagePixbufData pixbuf;
+    GtkImageStockData stock;
+  } icon_data;
+
   GdkColormap       *colormap;	         /* Colormap for drag icon */
-  GdkPixmap         *pixmap;             /* Icon for drag data */
-  GdkBitmap         *mask;
 
   /* Stored button press information to detect drag beginning */
   gint               state;
@@ -348,45 +358,6 @@ static struct {
 };
 
 static const gint n_drag_cursors = sizeof (drag_cursors) / sizeof (drag_cursors[0]);
-
-/* XPM */
-static const char *drag_default_xpm[] = {
-"32 32 3 1",
-" 	c None",
-".	c #000000",
-"+	c #FFFFFF",
-"                                ",
-"                                ",
-"                ..              ",
-"              ..+.              ",
-"             ..++..             ",
-"           ...++++.             ",
-"         ...++++++..            ",
-"       ...+++++++++.            ",
-"     ...+++++++++++..           ",
-"    ..+.++++++++++++..          ",
-"     .++.++++++++++++..         ",
-"     .+++.++++++++++++..        ",
-"     .++++.++++++++++++.        ",
-"     .+++.+++++++++++++..       ",
-"     .++.+++++++++++++++..      ",
-"     .+.+++++++++++++++++..     ",
-"     ..+++++++++++++++++++..    ",
-"     ..++++++++++++++++++++.    ",
-"     .++++++++++++++++++++..    ",
-"     ..+++++++++++++++++..      ",
-"      .++++++++++++++++..       ",
-"      ..+++++++++++++...        ",
-"       .++++++++++++..          ",
-"       ..+++++++++..            ",
-"        .++++++++..             ",
-"        ..++++++..              ",
-"         .+++++..               ",
-"          .++..                 ",
-"           ...                  ",
-"           ..                   ",
-"                                ",
-"                                "};
 
 /*********************
  * Utility functions *
@@ -983,7 +954,7 @@ gtk_drag_dest_set_target_list (GtkWidget      *widget,
     }
 
   if (target_list)
-    gtk_target_list_ref (site->target_list);
+    gtk_target_list_ref (target_list);
   
   if (site->target_list)
     gtk_target_list_unref (site->target_list);
@@ -993,7 +964,7 @@ gtk_drag_dest_set_target_list (GtkWidget      *widget,
 
 
 /*************************************************************
- * gtk_drag_dest_handle_event:
+ * _gtk_drag_dest_handle_event:
  *     Called from widget event handling code on Drag events
  *     for destinations.
  *
@@ -1004,7 +975,7 @@ gtk_drag_dest_set_target_list (GtkWidget      *widget,
  *************************************************************/
 
 void
-gtk_drag_dest_handle_event (GtkWidget *toplevel,
+_gtk_drag_dest_handle_event (GtkWidget *toplevel,
 			    GdkEvent  *event)
 {
   GtkDragDestInfo *info;
@@ -1894,6 +1865,8 @@ gtk_drag_source_set (GtkWidget            *widget,
   else
     {
       site = g_new0 (GtkDragSourceSite, 1);
+
+      site->icon_type = GTK_IMAGE_EMPTY;
       
       gtk_signal_connect (GTK_OBJECT (widget), "button_press_event",
 			  GTK_SIGNAL_FUNC (gtk_drag_source_event_cb),
@@ -1942,16 +1915,48 @@ gtk_drag_source_unset (GtkWidget        *widget)
     }
 }
 
-/*************************************************************
- * gtk_drag_source_set_icon:
- *     Set an icon for drags from this source.
- *   arguments:
- *     colormap: Colormap for this icon
- *     pixmap:
- *     mask
- *   results:
- *************************************************************/
+static void
+gtk_drag_source_unset_icon (GtkDragSourceSite *site)
+{
+  switch (site->icon_type)
+    {
+    case GTK_IMAGE_EMPTY:
+      break;
+    case GTK_IMAGE_PIXMAP:
+      if (site->icon_data.pixmap.pixmap)
+	gdk_pixmap_unref (site->icon_data.pixmap.pixmap);
+      if (site->icon_data.pixmap.mask)
+	gdk_pixmap_unref (site->icon_data.pixmap.mask);
+      break;
+    case GTK_IMAGE_PIXBUF:
+      g_object_unref (G_OBJECT (site->icon_data.pixbuf.pixbuf));
+      break;
+    case GTK_IMAGE_STOCK:
+      g_free (G_OBJECT (site->icon_data.stock.stock_id));
+      break;
+    default:
+      g_assert_not_reached();
+      break;
+    }
+  site->icon_type = GTK_IMAGE_EMPTY;
+  
+  if (site->colormap)
+    gdk_colormap_unref (site->colormap);
+  site->colormap = NULL;
+}
 
+/**
+ * gtk_drag_source_set_icon:
+ * @widget: a #GtkWidget
+ * @colormap: the colormap of the icon
+ * @pixmap: the image data for the icon
+ * @mask: the transparency mask for an image.
+ * 
+ * Sets the icon that will be used for drags from a particular widget
+ * from a pixmap/mask. GTK+ retains a reference count for the
+ * arguments, and will release them when they are no longer needed.
+ * Use gtk_drag_source_set_icon_pixbuf() instead.
+ **/
 void 
 gtk_drag_source_set_icon (GtkWidget     *widget,
 			  GdkColormap   *colormap,
@@ -1961,40 +1966,81 @@ gtk_drag_source_set_icon (GtkWidget     *widget,
   GtkDragSourceSite *site;
 
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+  g_return_if_fail (GDK_IS_PIXMAP (pixmap));
+  g_return_if_fail (!mask || GDK_IS_PIXMAP (mask));
 
   site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
   g_return_if_fail (site != NULL);
   
-  if (site->colormap)
-    gdk_colormap_unref (site->colormap);
-  if (site->pixmap)
-    gdk_pixmap_unref (site->pixmap);
-  if (site->mask)
-    gdk_pixmap_unref (site->mask);
-
-  site->colormap = colormap;
-  if (colormap)
-    gdk_colormap_ref (colormap);
-
-  site->pixmap = pixmap;
-  if (pixmap)
-    gdk_pixmap_ref (pixmap);
-
-  site->mask = mask;
+  gdk_colormap_ref (colormap);
+  gdk_pixmap_ref (pixmap);
   if (mask)
     gdk_pixmap_ref (mask);
+
+  gtk_drag_source_unset_icon (site);
+
+  site->icon_type = GTK_IMAGE_PIXMAP;
+  
+  site->icon_data.pixmap.pixmap = pixmap;
+  site->icon_data.pixmap.mask = mask;
+  site->colormap = colormap;
 }
 
-/*************************************************************
- * gtk_drag_set_icon_window:
- *     Set a widget as the icon for a drag.
- *   arguments:
- *     context:
- *     widget:
- *     hot_x:    Hot spot
- *     hot_y:
- *   results:
- *************************************************************/
+/**
+ * gtk_drag_source_set_icon_pixbuf:
+ * @widget: a #GtkWidget
+ * @pixbuf: the #GdkPixbuf for the drag icon
+ * 
+ * Sets the icon that will be used for drags from a particular widget
+ * from a #GdkPixbuf. GTK+ retains a reference count @pixbuf.
+ * and will release it when it is no longer needed.
+ **/
+void 
+gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
+				 GdkPixbuf   *pixbuf)
+{
+  GtkDragSourceSite *site;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+
+  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
+  g_return_if_fail (site != NULL);
+  
+  gdk_pixbuf_ref (pixbuf);
+
+  gtk_drag_source_unset_icon (site);
+
+  site->icon_type = GTK_IMAGE_PIXBUF;
+  site->icon_data.pixbuf.pixbuf = pixbuf;
+}
+
+/**
+ * gtk_drag_source_set_icon_stock:
+ * @widget: a #GtkWidget
+ * @stock: the ID of the stock icon to use..
+ * @size: size at which to render the stock icon
+ *
+ * Sets the icon that will be used for drags from a particular to
+ * a stock icon. 
+ **/
+void 
+gtk_drag_source_set_icon_stock (GtkWidget   *widget,
+				const gchar *stock_id)
+{
+  GtkDragSourceSite *site;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (stock_id != NULL);
+
+  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
+  g_return_if_fail (site != NULL);
+  
+  gtk_drag_source_unset_icon (site);
+
+  site->icon_data.stock.stock_id = g_strdup (stock_id);
+}
 
 static void 
 gtk_drag_set_icon_window (GdkDragContext *context,
@@ -2028,17 +2074,19 @@ gtk_drag_set_icon_window (GdkDragContext *context,
   info->destroy_icon = destroy_on_release;
 }
 
-/*************************************************************
+/**
  * gtk_drag_set_icon_widget:
- *     Set a widget as the icon for a drag.
- *   arguments:
- *     context:
- *     widget:
- *     hot_x:    Hot spot
- *     hot_y:
- *   results:
- *************************************************************/
-
+ * @context: the context for a drag. (This must be called 
+          with a  context for the source side of a drag)
+ * @widget: a toplevel window to use as an icon.
+ * @hot_x: the X offset within @widget of the hotspot.
+ * @hot_y: the Y offset within @widget of the hotspot.
+ * 
+ * Changes the icon for a widget to a given widget. GTK+
+ * will not destroy the icon, so if you don't want
+ * it to persist, you should connect to the "drag_end" 
+ * signal and destroy it yourself.
+ **/
 void 
 gtk_drag_set_icon_widget (GdkDragContext    *context,
 			  GtkWidget         *widget,
@@ -2051,19 +2099,123 @@ gtk_drag_set_icon_widget (GdkDragContext    *context,
   gtk_drag_set_icon_window (context, widget, hot_x, hot_y, FALSE);
 }
 
-/*************************************************************
- * gtk_drag_set_icon_pixmap:
- *     Set a widget as the icon for a drag.
- *   arguments:
- *     context:
- *     colormap: Colormap for the icon window.
- *     pixmap:   
- *     mask:
- *     hot_x:    Hot spot
- *     hot_y:
- *   results:
- *************************************************************/
+static void
+set_icon_stock_pixbuf (GdkDragContext    *context,
+		       const gchar       *stock_id,
+		       GdkPixbuf         *pixbuf,
+		       gint               hot_x,
+		       gint               hot_y)
+{
+  GtkWidget *window;
+  gint width, height;
+  GdkPixmap *pixmap;
+  GdkPixmap *mask;
+  
+  g_return_if_fail (context != NULL);
+  g_return_if_fail (pixbuf != NULL || stock_id != NULL);
+  g_return_if_fail (pixbuf == NULL || stock_id == NULL);
 
+  gtk_widget_push_colormap (gdk_rgb_get_colormap ());
+  window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_widget_pop_colormap ();
+
+  gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
+  gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
+  
+  if (stock_id)
+    {
+      pixbuf = gtk_widget_render_icon (window, stock_id,
+				       GTK_ICON_SIZE_DND, NULL);
+
+      if (!pixbuf)
+	{
+	  g_warning ("Cannot load drag icon from stock_id %s", stock_id);
+	  gtk_widget_destroy (window);
+	  return;
+	}
+
+    }
+  
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_width (pixbuf);
+
+  gtk_widget_set_usize (window,
+			gdk_pixbuf_get_width (pixbuf),
+			gdk_pixbuf_get_height (pixbuf));
+  gtk_widget_realize (window);
+
+  gdk_pixbuf_render_pixmap_and_mask (pixbuf, &pixmap, &mask, 128);
+  
+  gdk_window_set_back_pixmap (window->window, pixmap, FALSE);
+  
+  if (mask)
+    gtk_widget_shape_combine_mask (window, mask, 0, 0);
+
+  g_object_unref (G_OBJECT (pixmap));
+  g_object_unref (G_OBJECT (mask));
+
+  gtk_drag_set_icon_window (context, window, hot_x, hot_y, TRUE);
+}
+
+/**
+ * gtk_drag_set_icon_pixbuf:
+ * @context: the context for a drag. (This must be called 
+ *            with a  context for the source side of a drag)
+ * @pixbuf: the #GdkPixbuf to use as the drag icon.
+ * @hot_x: the X offset within @widget of the hotspot.
+ * @hot_y: the Y offset within @widget of the hotspot.
+ * 
+ * Sets @pixbuf as the icon for a given drag.
+ **/
+void 
+gtk_drag_set_icon_pixbuf  (GdkDragContext *context,
+			   GdkPixbuf      *pixbuf,
+			   gint            hot_x,
+			   gint            hot_y)
+{
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+  
+  set_icon_stock_pixbuf (context, NULL, pixbuf, hot_x, hot_y);
+}
+
+/**
+ * gtk_drag_set_icon_pixbuf:
+ * @context: the context for a drag. (This must be called 
+ *            with a  context for the source side of a drag)
+ * @stock: the ID of the stock icon to use for the drag.
+ * @hot_x: the X offset within the icon of the hotspot.
+ * @hot_y: the Y offset within the icon of the hotspot.
+ * 
+ * Sets the the icon for a given drag from a stock ID.
+ **/
+void 
+gtk_drag_set_icon_stock  (GdkDragContext *context,
+			  const gchar    *stock_id,
+			  gint            hot_x,
+			  gint            hot_y)
+{
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (stock_id != NULL);
+  
+  set_icon_stock_pixbuf (context, stock_id, NULL, hot_x, hot_y);
+}
+
+/**
+ * gtk_drag_set_icon_pixmap:
+ * @context: the context for a drag. (This must be called 
+ *            with a  context for the source side of a drag)
+ * @colormap: the colormap of the icon 
+ * @pixmap: the image data for the icon 
+ * @mask: the transparency mask for the icon
+ * @hot_x: the X offset within @pixmap of the hotspot.
+ * @hot_y: the Y offset within @pixmap of the hotspot.
+ * 
+ * Sets @pixmap as the icon for a given drag. GTK+ retains a
+ * reference count for the arguments, and will release them when
+ * they are no longer needed. In general, gtk_drag_set_icon_pixbuf()
+ * will be more convenient to use.
+ **/
 void 
 gtk_drag_set_icon_pixmap (GdkDragContext    *context,
 			  GdkColormap       *colormap,
@@ -2100,51 +2252,43 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
   gtk_drag_set_icon_window (context, window, hot_x, hot_y, TRUE);
 }
 
-/*************************************************************
+/**
  * gtk_drag_set_icon_default:
- *     Set the icon for a drag to the default icon.
- *   arguments:
- *     context:
- *   results:
- *************************************************************/
-
+ * @context: the context for a drag. (This must be called 
+             with a  context for the source side of a drag)
+ * 
+ * Sets the icon for a particular drag to the default
+ * icon.
+ **/
 void 
 gtk_drag_set_icon_default (GdkDragContext    *context)
 {
   g_return_if_fail (context != NULL);
 
   if (!default_icon_pixmap)
-    {
-      default_icon_colormap = gdk_colormap_get_system ();
-      default_icon_pixmap = 
-	gdk_pixmap_colormap_create_from_xpm_d (NULL,
-					       default_icon_colormap,
-					       &default_icon_mask,
-					       NULL, (gchar **)drag_default_xpm);
-      default_icon_hot_x = -2;
-      default_icon_hot_y = -2;
-    }
-
-  gtk_drag_set_icon_pixmap (context, 
-			    default_icon_colormap, 
-			    default_icon_pixmap, 
-			    default_icon_mask,
-			    default_icon_hot_x,
-			    default_icon_hot_y);
+    gtk_drag_set_icon_stock (context, GTK_STOCK_DND, -2, -2);
+  else
+    gtk_drag_set_icon_pixmap (context, 
+			      default_icon_colormap, 
+			      default_icon_pixmap, 
+			      default_icon_mask,
+			      default_icon_hot_x,
+			      default_icon_hot_y);
 }
 
-/*************************************************************
+/**
  * gtk_drag_set_default_icon:
- *     Set a default icon for all drags as a pixmap.
- *   arguments:
- *     colormap: Colormap for the icon window.
- *     pixmap:   
- *     mask:
- *     hot_x:    Hot spot
- *     hot_y:
- *   results:
- *************************************************************/
-
+ * @colormap: the colormap of the icon
+ * @pixmap: the image data for the icon
+ * @mask: the transparency mask for an image.
+ * @hot_x: The X offset within @widget of the hotspot.
+ * @hot_y: The Y offset within @widget of the hotspot.
+ * 
+ * Changes the default drag icon. GTK+ retains a reference count for the
+ * arguments, and will release them when they are no longer needed.
+ * This function is obsolete. The default icon should now be changed
+ * via the stock system by changing the stock pixbuf for GTK_STOCK_DND.
+ **/
 void 
 gtk_drag_set_default_icon (GdkColormap   *colormap,
 			   GdkPixmap     *pixmap,
@@ -2178,7 +2322,7 @@ gtk_drag_set_default_icon (GdkColormap   *colormap,
 
 
 /*************************************************************
- * gtk_drag_source_handle_event:
+ * _gtk_drag_source_handle_event:
  *     Called from widget event handling code on Drag events
  *     for drag sources.
  *
@@ -2189,8 +2333,8 @@ gtk_drag_set_default_icon (GdkColormap   *colormap,
  *************************************************************/
 
 void
-gtk_drag_source_handle_event (GtkWidget *widget,
-			      GdkEvent  *event)
+_gtk_drag_source_handle_event (GtkWidget *widget,
+			       GdkEvent  *event)
 {
   GtkDragSourceInfo *info;
   GdkDragContext *context;
@@ -2477,16 +2621,12 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 	  site->state |= (GDK_BUTTON1_MASK << (event->button.button - 1));
 	  site->x = event->button.x;
 	  site->y = event->button.y;
-	  retval = TRUE;
 	}
       break;
       
     case GDK_BUTTON_RELEASE:
       if ((GDK_BUTTON1_MASK << (event->button.button - 1)) & site->start_button_mask)
-	{
-	  site->state &= ~(GDK_BUTTON1_MASK << (event->button.button - 1));
-	  retval = TRUE;
-	}
+	site->state &= ~(GDK_BUTTON1_MASK << (event->button.button - 1));
       break;
       
     case GDK_MOTION_NOTIFY:
@@ -2518,13 +2658,32 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 
 	      if (!info->icon_window)
 		{
-		  if (site->pixmap)
-		    gtk_drag_set_icon_pixmap (context,
-					      site->colormap,
-					      site->pixmap,
-					      site->mask, -2, -2);
-		  else
-		    gtk_drag_set_icon_default (context);
+		  switch (site->icon_type)
+		    {
+		    case GTK_IMAGE_EMPTY:
+		      gtk_drag_set_icon_default (context);
+		      break;
+		    case GTK_IMAGE_PIXMAP:
+		      gtk_drag_set_icon_pixmap (context,
+						site->colormap,
+						site->icon_data.pixmap.pixmap,
+						site->icon_data.pixmap.mask,
+						-2, -2);
+		      break;
+		    case GTK_IMAGE_PIXBUF:
+		      gtk_drag_set_icon_pixbuf (context,
+						site->icon_data.pixbuf.pixbuf,
+						-2, -2);
+		      break;
+		    case GTK_IMAGE_STOCK:
+		      gtk_drag_set_icon_stock (context,
+					       site->icon_data.stock.stock_id,
+					       -2, -2);
+		      break;
+		    default:
+		      g_assert_not_reached();
+		      break;
+		    }
 		}
 
 	      retval = TRUE;
@@ -2547,12 +2706,7 @@ gtk_drag_source_site_destroy (gpointer data)
   if (site->target_list)
     gtk_target_list_unref (site->target_list);
 
-  if (site->pixmap)
-    gdk_pixmap_unref (site->pixmap);
-  
-  if (site->mask)
-    gdk_pixmap_unref (site->mask);
-  
+  gtk_drag_source_unset_icon (site);
   g_free (site);
 }
 

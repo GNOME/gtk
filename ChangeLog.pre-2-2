@@ -1,3 +1,37 @@
+Sun Jun 24 21:34:32 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkenums.h gtk/gtkiconfactory.c: Add a special size for
+	drag-and-drop GTK_ICON_SIZE_DND (Default to 32x32)
+
+	* gtk/gtkdnd.c (gtk_drag_dest_set_target_list): Fix problem
+	with un'reffing wrong list reported by Jeff Franks.
+
+	* gtk/gtkdnd.[ch] (_gtk_drag_{source,}dest_handle_event): _prefix.
+
+	* gtk/gtkdnd.c (gtk_drag_set_icon_default): Use GTK_STOCK_DND
+	for the default icon. Remove inline XPM.
+
+	* gtk/gtkstock.h gtk/gtkiconfactory.c:
+	Add GTK_STOCK_DND GTK_STOCK_DND_MULTIPLE (Currently, stock_new
+	is used for GTK_STOCK_DND, but it is a bit too small.)
+
+	* gtk/stock-icons/stock_dnd_multiple.png
+	gtk/stock-icons/Makefile.am: New stock icon moved from gnome-libs.
+
+	* gtk/gtkdnd.c (gtk_drag_source_event_cb): Only return
+	TRUE when starting a drag. In other cases, we are
+	just observing. (#52995)
+
+	* gtk/gtkdnd.[ch] (gtk_drag_set_icon_{stock,pixbuf}): Add 
+	function to set the icon for a drag from a GdkPixbuf
+	or stock ID.
+
+	* gtk/gtkdnd.[ch] (gtk_drag_source_set_icon_{stock,pixbuf}): 
+	Likewise, for drag sources.
+
+	* gtk/gtkdnd.h: Deprecate gtk_drag_set_default_icon.
+	(Now should be done using the stock system.)
+
 Sun Jun 24 12:06:47 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.[ch] (gtk_text_view_set_text_window_size): 

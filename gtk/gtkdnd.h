@@ -96,10 +96,14 @@ void gtk_drag_source_set  (GtkWidget            *widget,
 
 void gtk_drag_source_unset (GtkWidget        *widget);
 
-void gtk_drag_source_set_icon (GtkWidget     *widget,
-			       GdkColormap   *colormap,
-			       GdkPixmap     *pixmap,
-			       GdkBitmap     *mask);
+void gtk_drag_source_set_icon        (GtkWidget   *widget,
+				      GdkColormap *colormap,
+				      GdkPixmap   *pixmap,
+				      GdkBitmap   *mask);
+void gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
+				      GdkPixbuf   *pixbuf);
+void gtk_drag_source_set_icon_stock  (GtkWidget   *widget,
+				      const gchar *stock_id);
 
 /* There probably should be functions for setting the targets
  * as a GtkTargetList
@@ -113,26 +117,26 @@ GdkDragContext *gtk_drag_begin (GtkWidget         *widget,
 
 /* Set the image being dragged around
  */
-void gtk_drag_set_icon_widget  (GdkDragContext    *context,
-				GtkWidget         *widget,
-				gint               hot_x,
-				gint               hot_y);
-
-void gtk_drag_set_icon_pixmap  (GdkDragContext    *context,
-				GdkColormap       *colormap,
-				GdkPixmap         *pixmap,
-				GdkBitmap         *mask,
-				gint               hot_x,
-				gint               hot_y);
+void gtk_drag_set_icon_widget (GdkDragContext *context,
+			       GtkWidget      *widget,
+			       gint            hot_x,
+			       gint            hot_y);
+void gtk_drag_set_icon_pixmap (GdkDragContext *context,
+			       GdkColormap    *colormap,
+			       GdkPixmap      *pixmap,
+			       GdkBitmap      *mask,
+			       gint            hot_x,
+			       gint            hot_y);
+void gtk_drag_set_icon_pixbuf (GdkDragContext *context,
+			       GdkPixbuf      *pixbuf,
+			       gint            hot_x,
+			       gint            hot_y);
+void gtk_drag_set_icon_stock  (GdkDragContext *context,
+			       const gchar    *stock_id,
+			       gint            hot_x,
+			       gint            hot_y);
 
 void gtk_drag_set_icon_default (GdkDragContext    *context);
-
-void gtk_drag_set_default_icon (GdkColormap   *colormap,
-				GdkPixmap     *pixmap,
-				GdkBitmap     *mask,
-			        gint           hot_x,
-			        gint           hot_y);
-
 
 gboolean gtk_drag_check_threshold (GtkWidget *widget,
 				   gint       start_x,
@@ -141,10 +145,18 @@ gboolean gtk_drag_check_threshold (GtkWidget *widget,
 				   gint       current_y);
 
 /* Internal functions */
-void gtk_drag_source_handle_event (GtkWidget *widget,
-				   GdkEvent  *event);
-void gtk_drag_dest_handle_event (GtkWidget *toplevel,
-				 GdkEvent  *event);
+void _gtk_drag_source_handle_event (GtkWidget *widget,
+				    GdkEvent  *event);
+void _gtk_drag_dest_handle_event (GtkWidget *toplevel,
+				  GdkEvent  *event);
+
+#ifndef GTK_DISABLE_DEPRECATED
+void gtk_drag_set_default_icon (GdkColormap   *colormap,
+				GdkPixmap     *pixmap,
+				GdkBitmap     *mask,
+			        gint           hot_x,
+			        gint           hot_y);
+#endif /* !GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

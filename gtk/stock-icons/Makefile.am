@@ -24,6 +24,7 @@ IMAGES = @STRIP_BEGIN@ 			\
 	stock_convert.png 		\
 	stock_copy.png 			\
 	stock_cut.png 			\
+	stock_dnd_multiple.png		\
 	stock_down_arrow.png 		\
 	stock_exec.png 			\
 	stock_exit.png			\
@@ -85,6 +86,7 @@ VARIABLES = @STRIP_BEGIN@ 									\
 		stock_button_apply 		$(srcdir)/stock_button_apply.png  		\
 		stock_button_cancel     	$(srcdir)/stock_button_cancel.png 		\
 		stock_button_close      	$(srcdir)/stock_button_close.png  		\
+		stock_dnd_multiple              $(srcdir)/stock_dnd_multiple.png 		\
 		stock_button_no         	$(srcdir)/stock_button_no.png  			\
 		stock_button_ok     		$(srcdir)/stock_button_ok.png  			\
 		stock_button_yes		$(srcdir)/stock_button_yes.png  		\
