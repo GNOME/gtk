@@ -5312,6 +5312,9 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
                               gint            width,
                               gint            height)
 {
+  GdkPoint points[4];
+  gint i, j, skip;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (window != NULL);
   
@@ -5322,42 +5325,35 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
       gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
     }
   
+  skip = -1;
   switch (edge)
     {
     case GDK_WINDOW_EDGE_NORTH_WEST:
       /* make it square */
       if (width < height)
-	{
-	  height = width;
-	}
+	height = width;
       else if (height < width)
-	{
-	  width = height;
-	}
+	width = height;
+      skip = 2;
       break;
     case GDK_WINDOW_EDGE_NORTH:
       if (width < height)
-	{
-	  height = width;
-	}
+	height = width;
       break;
     case GDK_WINDOW_EDGE_NORTH_EAST:
       /* make it square, aligning to top right */
       if (width < height)
-	{
-	  height = width;
-	}
+	height = width;
       else if (height < width)
 	{
 	  x += (width - height);
 	  width = height;
 	}
+      skip = 3;
       break;
     case GDK_WINDOW_EDGE_WEST:
       if (height < width)
-	{
-	   width = height;
-	}
+	width = height;
       break;
     case GDK_WINDOW_EDGE_EAST:
       /* aligning to right */
@@ -5375,9 +5371,8 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
 	  height = width;
 	}
       else if (height < width)
-	{
-	  width = height;
-	}
+	width = height;
+      skip = 1;
       break;
     case GDK_WINDOW_EDGE_SOUTH:
       /* align to bottom */
@@ -5399,15 +5394,26 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
 	  x += (width - height);
 	  width = height;
 	}
+      skip = 0;
       break;
     default:
       g_assert_not_reached ();
     }
   /* Clear background */
-  gtk_style_apply_default_background (style, window, FALSE,
-				      state_type, area,
-				      x, y, width, height);   
-
+  j = 0;
+  for (i = 0; i < 4; i++)
+    {
+      if (skip != i)
+	{
+	  points[j].x = (i == 0 || i == 3) ? x : x + width;
+	  points[j].y = (i < 2) ? y : y + height;
+	  j++;
+	}
+    }
+  
+  gdk_draw_polygon (window, style->bg_gc[state_type], TRUE, 
+		    points, skip < 0 ? 4 : 3);
+  
   switch (edge)
     {
     case GDK_WINDOW_EDGE_WEST:

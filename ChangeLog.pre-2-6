@@ -1,5 +1,9 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstyle.c (gtk_default_draw_resize_grip): Only
+	clear the triangle below the grip to the background,
+	not the full area.
+
 	* gtk/gtklabel.c (draw_insertion_cursor, gtk_label_expose): 
 	Clip when drawing the cursor. This prevents bits of a
 	selectable label leaking out from underneath the resize
