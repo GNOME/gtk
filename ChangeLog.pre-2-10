@@ -1,3 +1,34 @@
+Tue Oct 20 13:07:54 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_read_rcfiles): Look
+	for "gtk-embedded" data currently set by 
+	GtkSocket, and use that to forward client message
+	on to embedded windows. Only reset our own toplevel -
+	the others will handle themselves. (Now that
+	GtkMenus live in GtkWindows)
+
+Tue Oct 20 12:57:10 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_send_clientmessage_to_all): Hunt
+	the window tree more comprehensively, so that we find
+	client windows hidden under non-toplevels.
+
+Tue Oct 20 12:43:04 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkselection.c (gtk_selection_data_set): 
+	Maintain the null-termintation guarantee, even when 
+	data = NULL, length = 0. (Warn on data = NULL, 
+	length > 0)
+
+Mon Oct 19 08:31:36 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_selection_received): Fixed
+	typo - look for right atom on transfer failures.
+
+Tue, 20 Oct 1998 11:33:10 +0200 Paolo Molaro <lupus@debian.org>
+
+	* gtk/gtkdnd.h,gtk/gtkdnd.c: delete is a reserved word in c++.
+
 Tue Oct 20 11:55:24 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.c (gdk_event_translate): Handle DestroyNotify
@@ -209,7 +240,6 @@ Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
 Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
 	* made gtkrc scanner append dir that gtkrc is read from to pixmap path.
 
-=======
 Sun Oct 18 20:52:22 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkwidget.c gtkmarshal.list: Change signal 

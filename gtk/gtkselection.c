@@ -686,7 +686,14 @@ gtk_selection_data_set (GtkSelectionData *selection_data,
       selection_data->data[length] = 0;
     }
   else
-    selection_data->data = NULL;
+    {
+      g_return_if_fail (length <= 0);
+      
+      if (length < 0)
+	selection_data->data = NULL;
+      else
+	selection_data->data = g_strdup("");
+    }
   
   selection_data->length = length;
 }

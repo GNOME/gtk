@@ -538,14 +538,14 @@ gtk_drag_get_data (GtkWidget      *widget,
 void 
 gtk_drag_finish (GdkDragContext *context,
 		 gboolean        success,
-		 gboolean        delete,
+		 gboolean        del,
 		 guint32         time)
 {
   GdkAtom target = GDK_NONE;
 
   g_return_if_fail (context != NULL);
 
-  if (success && delete)
+  if (success && del)
     {
       target = gdk_atom_intern ("DELETE", FALSE);
     }
@@ -574,7 +574,7 @@ gtk_drag_finish (GdkDragContext *context,
 			     time);
     }
   
-  if (!delete)
+  if (!del)
     gdk_drop_finish (context, success, time);
 }
 
@@ -1181,15 +1181,16 @@ gtk_drag_dest_leave (GtkWidget      *widget,
       
       return;
     }
-  else if (site->have_drag)
+  else
     {
-      site->have_drag = FALSE;
-      
       if (site->flags & GTK_DEST_DEFAULT_HIGHLIGHT)
 	gtk_drag_unhighlight (widget);
 
-      gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_leave",
-			       context, time);
+      if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag)
+	gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_leave",
+				 context, time);
+      
+      site->have_drag = FALSE;
     }
 }
 
