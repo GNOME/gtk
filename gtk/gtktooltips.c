@@ -39,6 +39,7 @@ static void gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
                                             GtkWidget   *widget);
 static gint gtk_tooltips_widget_visible    (GtkWidget   *widget);
 static gint gtk_tooltips_timeout           (gpointer     data);
+static void gtk_tooltips_create_window     (GtkTooltips *tooltips);
 static void gtk_tooltips_draw_tips         (GtkTooltips *tooltips);
 
 
@@ -101,7 +102,6 @@ gtk_tooltips_destroy_data (GtkTooltips     *tooltips,
     g_list_free (tooltipsdata->row);
   gtk_signal_disconnect_by_data (GTK_OBJECT (tooltipsdata->widget),
 				 (gpointer) tooltips);
-  gtk_widget_set_events(tooltipsdata->widget,tooltipsdata->old_event_mask);
   g_free (tooltipsdata);
 }
 
@@ -147,18 +147,28 @@ gtk_tooltips_destroy (GtkTooltips *tooltips)
 }
 
 static void
+gtk_tooltips_create_window (GtkTooltips *tooltips)
+{
+  tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
+  gtk_widget_realize (tooltips->tip_window);
+}
+
+static void
 gtk_tooltips_layout_text (GtkTooltips *tooltips, GtkTooltipsData *data)
 {
-  GtkStyle *style = gtk_widget_get_default_style ();
   gchar *row_end, *text, *row_text, *break_pos;
   gint i, row_width, window_width = 0;
   size_t len;
+
+  if (tooltips->tip_window == NULL)
+    gtk_tooltips_create_window (tooltips);
 
   g_list_foreach (data->row, gtk_tooltips_free_string, 0);
   if (data->row)
     g_list_free (data->row);
   data->row = 0;
-  data->font = style->font;
+  data->font = tooltips->tip_window->style->font;
   data->width = 0;
 
   text = data->tips_text;
@@ -311,7 +321,6 @@ gtk_tooltips_set_tips (GtkTooltips *tooltips,
       tooltips->widget_list = g_list_append (tooltips->widget_list,
                                              tooltipsdata);
       tooltips->numwidgets++;
-      tooltipsdata->old_event_mask = gtk_widget_get_events (widget);
 
       gtk_signal_connect_after(GTK_OBJECT (widget), "event",
                                (GtkSignalFunc) gtk_tooltips_event_handler,
@@ -351,19 +360,20 @@ static void
 gtk_tooltips_draw_tips (GtkTooltips * tooltips)
 {
   GtkWidget *widget;
-  GtkStyle *style = gtk_widget_get_default_style ();
+  GtkStyle *style;
   gint gap, x, y, w, h, scr_w, scr_h, baseline_skip;
   GtkTooltipsData *data;
   GList *el;
 
   if (tooltips->tip_window == NULL)
     {
-      tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
-      gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
+      gtk_tooltips_create_window (tooltips);
     }
   else
     gtk_widget_hide (tooltips->tip_window);
 
+  style = tooltips->tip_window->style;
+  
   widget = tooltips->active_widget->widget;
 
   scr_w = gdk_screen_width ();
@@ -622,7 +632,6 @@ gtk_tooltips_widget_remove (GtkWidget *widget,
       g_list_foreach (tooltipsdata->row, gtk_tooltips_free_string, 0);
       g_list_free (tooltipsdata->row);
       gtk_signal_disconnect_by_data (GTK_OBJECT (tooltipsdata->widget), (gpointer) tooltips);
-      gtk_widget_set_events (tooltipsdata->widget,tooltipsdata->old_event_mask);
       g_free (tooltipsdata);
 
       tooltips->widget_list = g_list_remove (tooltips->widget_list, tooltipsdata);

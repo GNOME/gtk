@@ -33,7 +33,6 @@ typedef struct
   GdkFont *font;
   gint width;
   GList *row;
-  gint old_event_mask;
 } GtkTooltipsData;
 
 typedef struct
