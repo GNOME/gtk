@@ -99,6 +99,8 @@ struct _GtkEntry
   gint drag_start_y;
   
   gunichar invisible_char;
+
+  gint width_chars;
 };
 
 struct _GtkEntryClass
@@ -151,6 +153,10 @@ void       gtk_entry_set_max_length 		(GtkEntry      *entry,
 void       gtk_entry_set_activates_default      (GtkEntry      *entry,
                                                  gboolean       setting);
 gboolean   gtk_entry_get_activates_default      (GtkEntry      *entry);
+
+void       gtk_entry_set_width_chars            (GtkEntry      *entry,
+                                                 gint           n_chars);
+gint       gtk_entry_get_width_chars            (GtkEntry      *entry);
 
 /* Somewhat more convenient than the GtkEditable generic functions
  */

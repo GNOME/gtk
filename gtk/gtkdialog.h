@@ -39,9 +39,9 @@ extern "C" {
 /* Parameters for dialog construction */
 typedef enum
 {
-  GTK_DIALOG_MODAL,              /* call gtk_window_set_modal (win, TRUE) */
-  GTK_DIALOG_DESTROY_WITH_PARENT /* call gtk_window_set_destroy_with_parent () */
-
+  GTK_DIALOG_MODAL,               /* call gtk_window_set_modal (win, TRUE) */
+  GTK_DIALOG_DESTROY_WITH_PARENT, /* call gtk_window_set_destroy_with_parent () */
+  GTK_DIALOG_NO_SEPARATOR         /* no separator bar above buttons */
 } GtkDialogFlags;
 
 /* Convenience enum to use for response_id's.  Positive values are
@@ -99,6 +99,9 @@ struct _GtkDialog
 
   GtkWidget *vbox;
   GtkWidget *action_area;
+
+  /*< private >*/
+  GtkWidget *separator;
 };
 
 struct _GtkDialogClass
@@ -133,6 +136,10 @@ void gtk_dialog_set_response_sensitive (GtkDialog *dialog,
                                         gboolean   setting);
 void gtk_dialog_set_default_response   (GtkDialog *dialog,
                                         gint       response_id);
+
+void     gtk_dialog_set_has_separator (GtkDialog *dialog,
+                                       gboolean   setting);
+gboolean gtk_dialog_get_has_separator (GtkDialog *dialog);
 
 /* Emit response signal */
 void gtk_dialog_response           (GtkDialog *dialog,

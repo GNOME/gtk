@@ -482,14 +482,21 @@ static void
 gtk_spin_button_size_request (GtkWidget      *widget,
 			      GtkRequisition *requisition)
 {
+  GtkEntry *entry;
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (requisition != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
 
-  GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
+  entry = GTK_ENTRY (widget);
   
-  requisition->width = MIN_SPIN_BUTTON_WIDTH + ARROW_SIZE 
-    + 2 * widget->style->xthickness;
+  GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
+
+  if (entry->width_chars < 0)
+    requisition->width = MIN_SPIN_BUTTON_WIDTH + ARROW_SIZE +
+      2 * widget->style->xthickness;
+  else
+    requisition->width += ARROW_SIZE + 2 * widget->style->xthickness;
 }
 
 static void

@@ -6138,6 +6138,22 @@ label_toggle (GtkWidget  *widget,
     gtk_widget_destroy (*label);
 }
 
+#define RESPONSE_TOGGLE_SEPARATOR 1
+
+static void
+print_response (GtkWidget *dialog,
+                gint       response_id,
+                gpointer   data)
+{
+  g_print ("response signal received (%d)\n", response_id);
+
+  if (response_id == RESPONSE_TOGGLE_SEPARATOR)
+    {
+      gtk_dialog_set_has_separator (GTK_DIALOG (dialog),
+                                    !gtk_dialog_get_has_separator (GTK_DIALOG (dialog)));
+    }
+}
+
 static void
 create_dialog (void)
 {
@@ -6146,15 +6162,24 @@ create_dialog (void)
 
   if (!dialog_window)
     {
+      /* This is a terrible example; it's much simpler to create
+       * dialogs than this. Don't use testgtk for example code,
+       * use gtk-demo ;-)
+       */
+      
       dialog_window = gtk_dialog_new ();
 
+      gtk_signal_connect (GTK_OBJECT (dialog_window),
+                          "response",
+                          GTK_SIGNAL_FUNC (print_response),
+                          NULL);
+      
       gtk_signal_connect (GTK_OBJECT (dialog_window), "destroy",
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
 			  &dialog_window);
 
       gtk_window_set_title (GTK_WINDOW (dialog_window), "GtkDialog");
       gtk_container_set_border_width (GTK_CONTAINER (dialog_window), 0);
-      gtk_widget_set_usize (dialog_window, 200, 110);
 
       button = gtk_button_new_with_label ("OK");
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -6173,6 +6198,15 @@ create_dialog (void)
       gtk_widget_show (button);
 
       label = NULL;
+      
+      button = gtk_button_new_with_label ("Separator");
+
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+
+      gtk_dialog_add_action_widget (GTK_DIALOG (dialog_window),
+                                    button,
+                                    RESPONSE_TOGGLE_SEPARATOR);
+      gtk_widget_show (button);
     }
 
   if (!GTK_WIDGET_VISIBLE (dialog_window))

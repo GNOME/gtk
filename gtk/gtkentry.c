@@ -75,7 +75,8 @@ enum {
   PROP_MAX_LENGTH,
   PROP_VISIBILITY,
   PROP_INVISIBLE_CHAR,
-  PROP_ACTIVATES_DEFAULT
+  PROP_ACTIVATES_DEFAULT,
+  PROP_WIDTH_CHARS
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -101,13 +102,11 @@ static void   gtk_entry_init                 (GtkEntry         *entry);
 static void   gtk_entry_set_property (GObject         *object,
 				      guint            prop_id,
 				      const GValue    *value,
-				      GParamSpec      *pspec,
-				      const gchar     *trailer);
+				      GParamSpec      *pspec);
 static void   gtk_entry_get_property (GObject         *object,
 				      guint            prop_id,
 				      GValue          *value,
-				      GParamSpec      *pspec,
-				      const gchar     *trailer);
+				      GParamSpec      *pspec);
 static void   gtk_entry_finalize             (GObject          *object);
 
 /* GtkWidget methods
@@ -412,6 +411,16 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 _("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed."),
                                                          FALSE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_WIDTH_CHARS,
+                                   g_param_spec_int ("width_chars",
+                                                     _("Width in chars"),
+                                                     _("Number of characters to leave space for in the entry."),
+                                                     -1,
+                                                     G_MAXINT,
+                                                     
+                                                     -1,
+                                                     G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   signals[INSERT_TEXT] =
     gtk_signal_new ("insert_text",
@@ -648,11 +657,11 @@ gtk_entry_editable_init (GtkEditableClass *iface)
   iface->get_position = gtk_entry_get_position;
 }
 
-static void   gtk_entry_set_property (GObject         *object,
-				      guint            prop_id,
-				      const GValue    *value,
-				      GParamSpec      *pspec,
-				      const gchar     *trailer)
+static void
+gtk_entry_set_property (GObject         *object,
+                        guint            prop_id,
+                        const GValue    *value,
+                        GParamSpec      *pspec)
 {
   GtkEntry *entry = GTK_ENTRY (object);
 
@@ -690,6 +699,10 @@ static void   gtk_entry_set_property (GObject         *object,
     case PROP_ACTIVATES_DEFAULT:
       gtk_entry_set_activates_default (entry, g_value_get_boolean (value));
       break;
+
+    case PROP_WIDTH_CHARS:
+      gtk_entry_set_width_chars (entry, g_value_get_int (value));
+      break;
       
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -697,11 +710,11 @@ static void   gtk_entry_set_property (GObject         *object,
     }
 }
 
-static void   gtk_entry_get_property (GObject         *object,
-				      guint            prop_id,
-				      GValue          *value,
-				      GParamSpec      *pspec,
-				      const gchar     *trailer)
+static void
+gtk_entry_get_property (GObject         *object,
+                        guint            prop_id,
+                        GValue          *value,
+                        GParamSpec      *pspec)
 {
   GtkEntry *entry;
 
@@ -727,6 +740,10 @@ static void   gtk_entry_get_property (GObject         *object,
     case PROP_ACTIVATES_DEFAULT:
       g_value_set_boolean (value, entry->activates_default);
       break;
+    case PROP_WIDTH_CHARS:
+      g_value_set_int (value, entry->width_chars);
+      break;
+      
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -746,7 +763,8 @@ gtk_entry_init (GtkEntry *entry)
   entry->visible = TRUE;
   entry->invisible_char = '*';
   entry->dnd_position = -1;
-
+  entry->width_chars = -1;
+  
   entry->has_frame = TRUE;
   
   gtk_drag_dest_set (GTK_WIDGET (entry),
@@ -935,8 +953,16 @@ gtk_entry_size_request (GtkWidget      *widget,
       xborder += 1;
       yborder += 1;
     }
-      
-  requisition->width = MIN_ENTRY_WIDTH + xborder * 2;
+
+  if (entry->width_chars < 0)
+    requisition->width = MIN_ENTRY_WIDTH + xborder * 2;
+  else
+    {
+      requisition->width =
+        PANGO_PIXELS (metrics.approximate_char_width) * entry->width_chars +
+        xborder * 2;
+    }
+    
   requisition->height = ((metrics.ascent + metrics.descent) / PANGO_SCALE + 
                          yborder * 2);
 }
@@ -2953,6 +2979,46 @@ gtk_entry_get_activates_default (GtkEntry *entry)
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
   return entry->activates_default;
+}
+
+/**
+ * gtk_entry_set_width_chars:
+ * @entry: a #GtkEntry
+ * @n_chars: width in chars
+ *
+ * Changes the size request of the entry to be about the right size
+ * for @n_chars characters. Note that it changes the size
+ * <emphasize>request</emphasize>, the size can still be affected by
+ * how you pack the widget into containers. If @n_chars is -1, the
+ * size reverts to the default entry size.
+ * 
+ **/
+void
+gtk_entry_set_width_chars (GtkEntry *entry,
+                           gint      n_chars)
+{
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  if (entry->width_chars != n_chars)
+    {
+      entry->width_chars = n_chars;
+      g_object_notify (G_OBJECT (entry), "width_chars");
+      gtk_widget_queue_resize (GTK_WIDGET (entry));
+    }
+}
+
+/**
+ * gtk_entry_get_width_chars:
+ * @entry: a #GtkEntry
+ * 
+ * Gets the value set by gtk_entry_set_width_chars().
+ * 
+ * Return value: number of chars to request space for, or negative if unset
+ **/
+gint
+gtk_entry_get_width_chars (GtkEntry *entry)
+{
+  return entry->width_chars;
 }
 
 /**

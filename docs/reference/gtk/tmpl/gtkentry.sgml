@@ -300,3 +300,8 @@ are visible or not. See gtk_entry_set_visibility().
 
 </para>
 
+<!-- ##### ARG GtkEntry:width-chars ##### -->
+<para>
+
+</para>
+

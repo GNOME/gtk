@@ -1,5 +1,25 @@
 2001-03-07  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkentry.c (gtk_entry_get_property): remove trailer
+	(gtk_entry_set_property): remove trailer
+
+	* gtk/gtkentry.c (gtk_entry_set_width_chars): 
+	(gtk_entry_get_width_chars): new functions, to set size request to 
+	a given number of characters
+
+	* gtk/testgtk.c (create_dialog): beef up the dialog test slightly
+
+	* gtk/gtkdialog.c (gtk_dialog_set_has_separator): new function
+	(gtk_dialog_get_has_separator): new function
+        (run_delete_handler): fix to not emit "response" signal
+	because we already did in the delete event handler installed
+	at dialog creation time.
+	
+	* gtk/gtkdialog.h: add a has_separator property,
+	add GTK_DIALOG_NO_SEPARATOR flag
+
+2001-03-07  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkwindow.c (gtk_window_set_decorated): new function, turns
 	off decorations for a window.
 

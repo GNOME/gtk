@@ -144,6 +144,7 @@ gtk_window_set_title(). See the #GtkWindow section for more).
 
 @GTK_DIALOG_MODAL: 
 @GTK_DIALOG_DESTROY_WITH_PARENT: 
+@GTK_DIALOG_NO_SEPARATOR: 
 
 <!-- ##### ENUM GtkResponseType ##### -->
 <para>
@@ -245,4 +246,9 @@ was clicked.
 
 @dialog: the object which received the signal.
 @arg1: the response ID
+
+<!-- ##### ARG GtkDialog:has-separator ##### -->
+<para>
+
+</para>
 

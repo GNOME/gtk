@@ -32,6 +32,7 @@
 #include "gtksignal.h"
 #include "gdkkeysyms.h"
 #include "gtkmain.h"
+#include "gtkintl.h"
 
 static void gtk_dialog_class_init (GtkDialogClass *klass);
 static void gtk_dialog_init       (GtkDialog      *dialog);
@@ -46,6 +47,19 @@ static gint gtk_dialog_delete_event_handler (GtkWidget   *widget,
                                              GdkEventAny *event,
                                              gpointer     user_data);
 
+static void gtk_dialog_set_property      (GObject          *object,
+                                          guint             prop_id,
+                                          const GValue     *value,
+                                          GParamSpec       *pspec);
+static void gtk_dialog_get_property      (GObject          *object,
+                                          guint             prop_id,
+                                          GValue           *value,
+                                          GParamSpec       *pspec);
+
+enum {
+  PROP_0,
+  PROP_HAS_SEPARATOR
+};
 
 enum {
   RESPONSE,
@@ -83,16 +97,29 @@ gtk_dialog_get_type (void)
 static void
 gtk_dialog_class_init (GtkDialogClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
-  
-  object_class = (GtkObjectClass*) class;
-  widget_class = (GtkWidgetClass*) class;
+
+  gobject_class = G_OBJECT_CLASS (class);
+  object_class = GTK_OBJECT_CLASS (class);
+  widget_class = GTK_WIDGET_CLASS (class);
 
   parent_class = g_type_class_peek_parent (class);
+
+  gobject_class->set_property = gtk_dialog_set_property;
+  gobject_class->get_property = gtk_dialog_get_property;
   
   widget_class->key_press_event = gtk_dialog_key_press;
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_HAS_SEPARATOR,
+                                   g_param_spec_boolean ("has_separator",
+							 _("Has separator"),
+							 _("The dialog has a separator bar above its buttons"),
+                                                         TRUE,
+                                                         G_PARAM_READWRITE));
+  
   dialog_signals[RESPONSE] =
     gtk_signal_new ("response",
                     GTK_RUN_LAST,
@@ -106,8 +133,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
 static void
 gtk_dialog_init (GtkDialog *dialog)
 {
-  GtkWidget *separator;
-
   /* To avoid breaking old code that prevents destroy on delete event
    * by connecting a handler, we have to have the FIRST signal
    * connection on the dialog.
@@ -136,12 +161,57 @@ gtk_dialog_init (GtkDialog *dialog)
                     FALSE, TRUE, 0);
   gtk_widget_show (dialog->action_area);
 
-  separator = gtk_hseparator_new ();
-  gtk_box_pack_end (GTK_BOX (dialog->vbox), separator, FALSE, TRUE, 0);
-  gtk_widget_show (separator);
+  dialog->separator = gtk_hseparator_new ();
+  gtk_box_pack_end (GTK_BOX (dialog->vbox), dialog->separator, FALSE, TRUE, 0);
+  gtk_widget_show (dialog->separator);
 
   gtk_window_set_type_hint (GTK_WINDOW (dialog),
 			    GDK_WINDOW_TYPE_HINT_DIALOG);
+}
+
+
+static void 
+gtk_dialog_set_property (GObject      *object,
+                         guint         prop_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
+{
+  GtkDialog *dialog;
+  
+  dialog = GTK_DIALOG (object);
+  
+  switch (prop_id)
+    {
+    case PROP_HAS_SEPARATOR:
+      gtk_dialog_set_has_separator (dialog, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void 
+gtk_dialog_get_property (GObject     *object,
+                         guint        prop_id,
+                         GValue      *value,
+                         GParamSpec  *pspec)
+{
+  GtkDialog *dialog;
+  
+  dialog = GTK_DIALOG (object);
+  
+  switch (prop_id)
+    {
+    case PROP_HAS_SEPARATOR:
+      g_value_set_boolean (value, dialog->separator != NULL);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static gint
@@ -172,7 +242,7 @@ gtk_dialog_key_press (GtkWidget   *widget,
   if (key->keyval != GDK_Escape)
     return FALSE;
 
-  /* Synthesize delete_event on key press. */
+  /* Synthesize delete_event to close dialog. */
   g_object_ref (G_OBJECT (event.window));
   
   gtk_main_do_event ((GdkEvent*)&event);
@@ -209,6 +279,9 @@ gtk_dialog_new_empty (const gchar     *title,
   if (flags & GTK_DIALOG_DESTROY_WITH_PARENT)
     gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 
+  if (flags & GTK_DIALOG_NO_SEPARATOR)
+    gtk_dialog_set_has_separator (dialog, FALSE);
+  
   return GTK_WIDGET (dialog);
 }
 
@@ -233,7 +306,7 @@ gtk_dialog_new_empty (const gchar     *title,
  * enumeration. If the user clicks one of these dialog buttons,
  * #GtkDialog will emit the "response" signal with the corresponding
  * response ID. If a #GtkDialog receives the "delete_event" signal, it
- * will emit "response" with a response ID of GTK_RESPONSE_NONE.
+ * will emit "response" with a response ID of GTK_RESPONSE_DELETE_EVENT.
  * However, destroying a dialog does not emit the "response" signal;
  * so be careful relying on "response" when using
  * the GTK_DIALOG_DESTROY_WITH_PARENT flag. Buttons are from left to right,
@@ -544,6 +617,43 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
   g_list_free (children);
 }
 
+void
+gtk_dialog_set_has_separator (GtkDialog *dialog,
+                              gboolean   setting)
+{
+  g_return_if_fail (GTK_IS_DIALOG (dialog));
+
+  /* this might fail if we get called before _init() somehow */
+  g_assert (dialog->vbox != NULL);
+  
+  if (setting && dialog->separator == NULL)
+    {
+      dialog->separator = gtk_hseparator_new ();
+      gtk_box_pack_end (GTK_BOX (dialog->vbox), dialog->separator, FALSE, TRUE, 0);
+
+      /* The app programmer could screw this up, but, their own fault.
+       * Moves the separator just above the action area.
+       */
+      gtk_box_reorder_child (GTK_BOX (dialog->vbox), dialog->separator, 1);
+      gtk_widget_show (dialog->separator);
+    }
+  else if (!setting && dialog->separator != NULL)
+    {
+      gtk_widget_destroy (dialog->separator);
+      dialog->separator = NULL;
+    }
+
+  g_object_notify (G_OBJECT (dialog), "has_separator");
+}
+
+gboolean
+gtk_dialog_get_has_separator (GtkDialog *dialog)
+{
+  g_return_val_if_fail (GTK_IS_DIALOG (dialog), FALSE);
+
+  return dialog->separator != NULL;
+}
+
 /**
  * gtk_dialog_response:
  * @dialog: a #GtkDialog
@@ -610,9 +720,6 @@ run_delete_handler (GtkDialog *dialog,
   RunInfo *ri = data;
     
   shutdown_loop (ri);
-
-  /* emit response signal */
-  gtk_dialog_response (dialog, GTK_RESPONSE_NONE);
   
   return TRUE; /* Do not destroy */
 }
