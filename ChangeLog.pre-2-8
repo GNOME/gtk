@@ -1,3 +1,8 @@
+Mon Oct 29 19:18:35 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkseparatormenuitem.c: Code cleanup.
+	(gtk_separator_menu_item_class_init): Fix bugs in this code.
+
 2001-10-29  jacob berkman  <jacob@ximian.com>
 
 	* gdk/Makefile.am (LDFLAGS): 

@@ -21,49 +21,49 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "gtkseparatormenuitem.h"
 
-static void gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *klass);
+static void gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *class);
 
-static GtkMenuItemClass *parent_class;
-
-GtkType
+GType
 gtk_separator_menu_item_get_type (void)
 {
-  static GtkType separator_menu_item_type = 0;
+  static GType separator_menu_item_type = 0;
 
   if (!separator_menu_item_type)
     {
       static const GTypeInfo separator_menu_item_info =
       {
-	sizeof (GtkSeparatorMenuItemClass),
-	NULL,           /* base_init */
-	NULL,           /* base_finalize */
-	(GClassInitFunc) gtk_separator_menu_item_class_init,
-	NULL,           /* class_finalize */
-	NULL,           /* class_data */
-	sizeof (GtkSeparatorMenuItem),
-	16,             /* n_preallocs */
-	(GInstanceInitFunc) NULL,
+        sizeof (GtkSeparatorMenuItemClass),
+        NULL, /* base_init */
+        NULL, /* base_finalize */
+        (GClassInitFunc) gtk_separator_menu_item_class_init,
+        NULL, /* class_finalize */
+        NULL, /* class_data */
+        sizeof (GtkSeparatorMenuItem),
+        0,    /* n_preallocs */
+        NULL, /* instance_init */
       };
 
-      separator_menu_item_type = g_type_register_static (GTK_TYPE_MENU_ITEM, "GtkSeparatorMenuItem", &separator_menu_item_info, 0);
+      separator_menu_item_type =
+	g_type_register_static (GTK_TYPE_MENU_ITEM, "GtkSeparatorMenuItem",
+				&separator_menu_item_info, 0);
     }
 
   return separator_menu_item_type;
 }
 
 static void
-gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *klass)
+gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *class)
 {
-  parent_class = gtk_type_class (gtk_menu_item_get_type ());
+  GTK_CONTAINER_CLASS (class)->child_type = NULL;
 }
 
-GtkWidget*
+GtkWidget *
 gtk_separator_menu_item_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_separator_menu_item_get_type ()));
+  return g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM, NULL);
 }
