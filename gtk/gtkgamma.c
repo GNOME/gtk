@@ -262,7 +262,7 @@ gtk_gamma_curve_init (GtkGammaCurve *curve)
     {
       curve->button[i] = gtk_toggle_button_new ();
       gtk_object_set_data (GTK_OBJECT (curve->button[i]), "_GtkGammaCurveIndex",
-			   (gpointer) (long) i);
+			   GINT_TO_POINTER (i));
       gtk_container_add (GTK_CONTAINER (vbox), curve->button[i]);
       gtk_signal_connect (GTK_OBJECT (curve->button[i]), "realize",
 			  (GtkSignalFunc) button_realize_callback, 0);
@@ -276,7 +276,7 @@ gtk_gamma_curve_init (GtkGammaCurve *curve)
     {
       curve->button[i] = gtk_button_new ();
       gtk_object_set_data (GTK_OBJECT (curve->button[i]), "_GtkGammaCurveIndex",
-			   (gpointer) (long) i);
+			   GINT_TO_POINTER (i));
       gtk_container_add (GTK_CONTAINER (vbox), curve->button[i]);
       gtk_signal_connect (GTK_OBJECT (curve->button[i]), "realize",
 			  (GtkSignalFunc) button_realize_callback, 0);
@@ -298,7 +298,7 @@ button_realize_callback (GtkWidget *w)
   GdkPixmap *pm;
   int i;
 
-  i = (long) gtk_object_get_data (GTK_OBJECT (w), "_GtkGammaCurveIndex");
+  i = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (w), "_GtkGammaCurveIndex"));
   pm = gdk_pixmap_create_from_xpm_d (w->window, &mask,
 				     &w->style->bg[GTK_STATE_NORMAL], xpm[i]);
 
@@ -320,7 +320,7 @@ button_toggled_callback (GtkWidget *w, gpointer data)
   if (!GTK_TOGGLE_BUTTON (w)->active)
     return;
 
-  active = (long) gtk_object_get_data (GTK_OBJECT (w), "_GtkGammaCurveIndex");
+  active = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (w), "_GtkGammaCurveIndex"));
 
   for (i = 0; i < 3; ++i)
     if ((i != active) && GTK_TOGGLE_BUTTON (c->button[i])->active)
@@ -371,7 +371,7 @@ button_clicked_callback (GtkWidget *w, gpointer data)
   GtkGammaCurve *c = data;
   int active;
 
-  active = (long) gtk_object_get_data (GTK_OBJECT (w), "_GtkGammaCurveIndex");
+  active = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (w), "_GtkGammaCurveIndex"));
   if (active == 3)
     {
       /* set gamma */

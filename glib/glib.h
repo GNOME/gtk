@@ -361,6 +361,28 @@ typedef signed long	gint32;
 typedef unsigned long	guint32;
 #endif /* SIZEOF_INT */
 
+/* Define macros for storing integers inside pointers */
+
+#if (SIZEOF_INT == SIZEOF_VOID_P)
+
+#define GPOINTER_TO_INT(p) ((gint)(p))
+#define GPOINTER_TO_UINT(p) ((guint)(p))
+
+#define GINT_TO_POINTER(i) ((gpointer)(i))
+#define GUINT_TO_POINTER(u) ((gpointer)(u))
+
+#elif (SIZEOF_LONG == SIZEOF_VOID_P)
+
+#define GPOINTER_TO_INT(p) ((gint)(glong)(p))
+#define GPOINTER_TO_UINT(p) ((guint)(gulong)(p))
+
+#define GINT_TO_POINTER(i) ((gpointer)(glong)(i))
+#define GUINT_TO_POINTER(u) ((gpointer)(gulong)(u))
+
+#else
+#error "No integer type of the same size as a pointer"
+#endif
+
 
 typedef struct _GList		GList;
 typedef struct _GSList		GSList;

@@ -300,7 +300,7 @@ gtk_rc_parse_file (const gchar *filename, gboolean reload)
 	}
     }
 
-  if (!stat (rc_file->canonical_name, &statbuf))
+  if (!lstat (rc_file->canonical_name, &statbuf))
     {
       gint fd;
 
@@ -561,7 +561,7 @@ gtk_rc_parse_any (const gchar  *input_name,
     }
   
   for (i = 0; i < nsymbols; i++)
-    g_scanner_add_symbol (scanner, symbols[i].name, (gpointer) symbols[i].token);
+    g_scanner_add_symbol (scanner, symbols[i].name, GINT_TO_POINTER (symbols[i].token));
   
   done = FALSE;
   while (!done)

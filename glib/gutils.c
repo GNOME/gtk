@@ -823,6 +823,6 @@ g_parse_debug_string  (const gchar *string,
 guint
 g_direct_hash(gpointer key)
 {
-  return (guint) key;
+  return GPOINTER_TO_UINT (key);
 }
 

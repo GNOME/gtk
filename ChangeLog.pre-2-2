@@ -1,3 +1,20 @@
+Tue May 12 19:37:55 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkrc.c (gtk_rc_parse_file): Fixed up a stat()
+	that Sopwith missed when changing stat => lstat.
+
+Tue May 12 19:19:29 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkinputdialog.c gtk/gtkgamma.c gtk/gtkrc.c
+	  gtk/gtkcolorsel.c gtk/gtkclist.c gtk/testgtk.c: Use
+	GPOINTER_TO_INT/GINT_TO_POINTER macros where appropriate.
+
+	* gdk/gdk.c: Print sizeof() results
+	as g_print("%ld", (glong)sizeof(foo)), to deal with
+	sizeof() being long on Alpha's.
+
+	* gtk/testgtk.c: include <string.h> for strlen
+
 Tue May 12 16:56:35 1998  Owen Taylor  <otaylor@gtk.org>
 	(James A <jamesa@demon.net> : gtk-jamesa-980511-4.patch)
 	

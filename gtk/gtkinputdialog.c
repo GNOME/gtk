@@ -236,7 +236,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 	    gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
 	    gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
 				(GtkSignalFunc) gtk_input_dialog_set_device,
-				(gpointer)((long)info->deviceid));
+				GUINT_TO_POINTER(info->deviceid));
 	  }
       }
 
@@ -265,7 +265,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       gtk_widget_show(menuitem);
       gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
 			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
-			  (gpointer)((long)GDK_MODE_DISABLED));
+			  GINT_TO_POINTER (GDK_MODE_DISABLED));
 
       menuitem = gtk_menu_item_new_with_label("Screen");
       gtk_menu_append(GTK_MENU(mapping_menu),menuitem);
@@ -273,7 +273,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       gtk_widget_show(menuitem);
       gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
 			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
-			  (gpointer)((long)GDK_MODE_SCREEN));
+			  GINT_TO_POINTER (GDK_MODE_SCREEN));
 
       menuitem = gtk_menu_item_new_with_label("Window");
       gtk_menu_append(GTK_MENU(mapping_menu),menuitem);
@@ -281,7 +281,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       gtk_widget_show(menuitem);
       gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
 			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
-			  (gpointer)((long)GDK_MODE_WINDOW));
+			  GINT_TO_POINTER (GDK_MODE_WINDOW));
 
       label = gtk_label_new("Mode: ");
       gtk_box_pack_start (GTK_BOX (util_box), label, FALSE, FALSE, 2);
@@ -344,8 +344,8 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
       /* ...set_device expects to get input dialog from widget user data */
       gtk_object_set_user_data (GTK_OBJECT (inputd), inputd);
-      gtk_input_dialog_set_device(GTK_WIDGET(inputd), (gpointer)((long)
-			      ((GdkDeviceInfo *)device_info->data)->deviceid));
+      gtk_input_dialog_set_device(GTK_WIDGET(inputd), 
+          GUINT_TO_POINTER (((GdkDeviceInfo *)device_info->data)->deviceid));
 
     }
 
@@ -385,14 +385,14 @@ gtk_input_dialog_new (void)
 static void
 gtk_input_dialog_set_device(GtkWidget *widget, gpointer data)
 {
-  guint32 deviceid = (guint32)data;
+  guint32 deviceid = GPOINTER_TO_UINT(data);
   GdkDeviceInfo *info;
 
   GtkInputDialog *inputd = GTK_INPUT_DIALOG(
                 gtk_object_get_user_data(GTK_OBJECT(widget)));
 
   inputd->current_device = deviceid;
-  info = gtk_input_dialog_get_device_info((guint32)data);
+  info = gtk_input_dialog_get_device_info (deviceid);
 
   gtk_input_dialog_fill_axes(inputd, info);
   gtk_input_dialog_fill_keys(inputd, info);
@@ -419,7 +419,7 @@ gtk_input_dialog_set_mapping_mode(GtkWidget *w,
                 gtk_object_get_user_data(GTK_OBJECT(w)));
   GdkDeviceInfo *info = gtk_input_dialog_get_device_info (inputd->current_device);
   GdkInputMode old_mode = info->mode;
-  GdkInputMode mode = (GdkInputMode)data;
+  GdkInputMode mode = GPOINTER_TO_INT (data);
 
   if (mode != old_mode)
     {
@@ -445,13 +445,13 @@ gtk_input_dialog_set_mapping_mode(GtkWidget *w,
 static void
 gtk_input_dialog_set_axis(GtkWidget *widget, gpointer data)
 {
-  GdkAxisUse use = (GdkAxisUse)data & 0xFFFF;
+  GdkAxisUse use = GPOINTER_TO_INT(data) & 0xFFFF;
   GdkAxisUse old_use;
   GdkAxisUse *new_axes;
   GtkInputDialog *inputd = GTK_INPUT_DIALOG (gtk_object_get_user_data (GTK_OBJECT (widget)));
   GdkDeviceInfo *info = gtk_input_dialog_get_device_info (inputd->current_device);
 
-  gint axis = ((gint)data >> 16) - 1;
+  gint axis = (GPOINTER_TO_INT(data) >> 16) - 1;
   gint old_axis;
   int i;
 
@@ -558,7 +558,7 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDeviceInfo *info)
 	  gtk_object_set_user_data (GTK_OBJECT (menu_item), inputd);
 	  gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
 			      (GtkSignalFunc) gtk_input_dialog_set_axis,
-			      (gpointer) ((long) (0x10000 * (j + 1) + i)));
+			      GINT_TO_POINTER (0x10000 * (j + 1) + i));
 	  gtk_widget_show (menu_item);
 	  gtk_menu_append (GTK_MENU (menu), menu_item);
 	}
