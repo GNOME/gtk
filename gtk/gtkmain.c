@@ -401,7 +401,18 @@ gtk_init_check (int	 *argc,
     }
 
 #ifdef ENABLE_NLS
+#ifndef NATIVE_WIN32
   bindtextdomain("gtk+", GTK_LOCALEDIR);
+#else
+  {
+    /* GTk+ locale dir is %WinDir%\gtk\locale */
+    extern char *get_gtk_sysconf_directory ();
+    bindtextdomain ("gtk+", g_strconcat (get_gtk_sysconf_directory (),
+					 G_DIR_SEPARATOR_S,
+					 "locale",
+					 NULL));
+  }
+#endif
 #endif  
 
   /* Initialize the default visual and colormap to be

@@ -381,7 +381,7 @@ gdk_window_new (GdkWindow     *parent,
 		    gdk_ProgInstance,
 		    NULL);
   GDK_NOTE (MISC,
-	    g_print ("gdk_window_create: %s %s %#x %dx%d@+%d+%d %#x = %#x\n",
+	    g_print ("gdk_window_create: %s %s %#x %#x %dx%d@+%d+%d %#x = %#x\n",
 		     (private->window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
 		      (private->window_type == GDK_WINDOW_CHILD ? "CHILD" :
 		       (private->window_type == GDK_WINDOW_DIALOG ? "DIALOG" :
@@ -389,6 +389,7 @@ gdk_window_new (GdkWindow     *parent,
 			 "???")))),
 		     title,
 		     dwStyle,
+		     private->event_mask,
 		     width, height, (x == CW_USEDEFAULT ? -9999 : x), y, 
 		     xparent,
 		     private->xwindow));
@@ -2006,7 +2007,6 @@ GdkEventMask
 gdk_window_get_events (GdkWindow *window)
 {
   GdkWindowPrivate *private;
-  GdkEventMask event_mask;
 
   g_return_val_if_fail (window != NULL, 0);
 
@@ -2014,11 +2014,7 @@ gdk_window_get_events (GdkWindow *window)
   if (private->destroyed)
     return 0;
 
-  event_mask = 0;
-
-  event_mask = private->event_mask;
-
-  return event_mask;
+  return private->event_mask;
 }
 
 void          

@@ -56,12 +56,12 @@
 #define STDC_HEADERS 1
 
 /* Other stuff */
-/* #undef ENABLE_NLS */
+#define ENABLE_NLS 1
 #define GTK_COMPILED_WITH_DEBUGGING "minimum"
 
 /* #undef HAVE_CATGETS */
 /* #undef HAVE_DIRENT_H */
-/* #undef HAVE_GETTEXT */
+#define HAVE_GETTEXT 1
 /* #undef HAVE_IPC_H */
 /* #undef HAVE_LC_MESSAGES */
 /* #undef HAVE_PWD_H */
@@ -178,7 +178,7 @@
 /* #undef HAVE_LIBI */
 
 /* Define if you have the intl library (-lintl).  */
-/* #undef HAVE_LIBINTL */
+#define HAVE_LIBINTL 1
 
 /* define if compiled symbols have a leading underscore */
 /* #undef WITH_SYMBOL_UNDERSCORE */

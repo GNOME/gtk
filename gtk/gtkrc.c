@@ -232,7 +232,7 @@ static GtkImageLoader image_loader = NULL;
 
 #ifdef NATIVE_WIN32
 
-static gchar *
+gchar *
 get_gtk_sysconf_directory ()
 {
   static gchar gtk_sysconf_dir[200];

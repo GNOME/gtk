@@ -27,21 +27,21 @@
 
 #include "config.h"
 
-#define INITGUID
-
 #include <string.h>
 
+#define INITGUID
+
+#include "gdkx.h"
 #ifdef OLE2_DND
 #include <ole2.h>
 #endif
 
-#ifdef _MSC_VER
+#ifdef _MSC_VER			/* These aren't in mingw32 */
 #include <shlobj.h>
 #include <shlguid.h>
 #endif
 
 #include <gdk/gdk.h>
-#include "gdkx.h"
 
 typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
 

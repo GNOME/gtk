@@ -1347,7 +1347,7 @@ gdk_event_translate (GdkEvent *event,
 	{
 	  /* Keyboard is grabbed with owner_events FALSE */
 	  GDK_NOTE (EVENTS,
-		    g_print ("grabbed, owner_events FALSE, "
+		    g_print ("...grabbed, owner_events FALSE, "
 			     "sending to %#x\n", k_grab_window->xwindow));
 	  event->key.window = (GdkWindow *) k_grab_window;
 	}
@@ -1365,7 +1365,7 @@ gdk_event_translate (GdkEvent *event,
 	    {
 	      /* Keyboard is grabbed with owner_events TRUE */
 	      GDK_NOTE (EVENTS,
-			g_print ("grabbed, owner_events TRUE, doesn't want it, "
+			g_print ("...grabbed, owner_events TRUE, doesn't want it, "
 				 "sending to %#x\n", k_grab_window->xwindow));
 	      event->key.window = (GdkWindow *) k_grab_window;
 	    }
@@ -1380,9 +1380,8 @@ gdk_event_translate (GdkEvent *event,
 	      window = window_private->parent;
 	      gdk_window_ref (window);
 	      window_private = (GdkWindowPrivate *) window;
-	      GDK_NOTE (EVENTS,
-			g_print ("not wanted, not grabbed, "
-				 "sending to %#x\n", window_private->xwindow));
+	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
+					 window_private->xwindow));
 	      goto keyup_or_down;
 	    }
 	}
@@ -1589,7 +1588,7 @@ gdk_event_translate (GdkEvent *event,
 	{
 	  /* Keyboard is grabbed with owner_events FALSE */
 	  GDK_NOTE (EVENTS,
-		    g_print ("grabbed, owner_events FALSE, "
+		    g_print ("...grabbed, owner_events FALSE, "
 			     "sending to %#x\n", k_grab_window->xwindow));
 	  event->key.window = (GdkWindow *) k_grab_window;
 	}
@@ -1602,7 +1601,7 @@ gdk_event_translate (GdkEvent *event,
 	    {
 	      /* Keyboard is grabbed with owner_events TRUE */
 	      GDK_NOTE (EVENTS,
-			g_print ("grabbed, owner_events TRUE, doesn't want it, "
+			g_print ("...grabbed, owner_events TRUE, doesn't want it, "
 				 "sending to %#x\n", k_grab_window->xwindow));
 	      event->key.window = (GdkWindow *) k_grab_window;
 	    }
@@ -1618,9 +1617,8 @@ gdk_event_translate (GdkEvent *event,
 	      window = window_private->parent;
 	      gdk_window_ref (window);
 	      window_private = (GdkWindowPrivate *) window;
-	      GDK_NOTE (EVENTS,
-			g_print ("not wanted, not grabbed, sending to %#x\n",
-				 window_private->xwindow));
+	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
+					 window_private->xwindow));
 	      goto wm_char;
 	    }
 	}
@@ -1726,8 +1724,6 @@ gdk_event_translate (GdkEvent *event,
     case WM_RBUTTONDOWN:
       button = 3;
 
-      /* Print debugging info.
-       */
     buttondown0:
       GDK_NOTE (EVENTS, 
 		g_print ("WM_%cBUTTONDOWN: %#x  x,y: %d %d  button: %d\n",
@@ -1740,12 +1736,12 @@ gdk_event_translate (GdkEvent *event,
 	  && (window_private->extension_events != 0)
 	  && gdk_input_ignore_core)
 	{
-	  GDK_NOTE (EVENTS, g_print ("... ignored\n"));
+	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
 	  break;
 	}
 
-    buttondown:
       event->button.type = GDK_BUTTON_PRESS;
+    buttondown:
       event->button.window = window;
       if (window_private)
 	mask = window_private->event_mask;
@@ -1756,14 +1752,14 @@ gdk_event_translate (GdkEvent *event,
 	   && !p_grab_owner_events)
 	{
 	  /* Pointer is grabbed with owner_events FALSE */
-	  GDK_NOTE (EVENTS, g_print ("grabbed, owner_events FALSE\n"));
+	  GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events FALSE\n"));
 	  mask = p_grab_event_mask;
 	  if (!(mask & GDK_BUTTON_PRESS_MASK))
 	    /* Grabber doesn't want it */
 	    break;
 	  else
 	    event->button.window = (GdkWindow *) p_grab_window;
-	  GDK_NOTE (EVENTS, g_print ("sending to %#x\n",
+	  GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
 				     p_grab_window->xwindow));
 	}
       else if (window_private
@@ -1774,14 +1770,14 @@ gdk_event_translate (GdkEvent *event,
 	      && p_grab_owner_events)
 	    {
 	      /* Pointer is grabbed wíth owner_events TRUE */ 
-	      GDK_NOTE (EVENTS, g_print ("grabbed, owner_events TRUE, doesn't want it\n"));
+	      GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events TRUE, doesn't want it\n"));
 	      mask = p_grab_event_mask;
 	      if (!(mask & GDK_BUTTON_PRESS_MASK))
 		/* Grabber doesn't want it either */
 		break;
 	      else
 		event->button.window = (GdkWindow *) p_grab_window;
-	      GDK_NOTE (EVENTS, g_print ("sending to %#x\n",
+	      GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
 					 p_grab_window->xwindow));
 	    }
 	  else
@@ -1801,6 +1797,8 @@ gdk_event_translate (GdkEvent *event,
 	      window_private = (GdkWindowPrivate *) window;
 	      ScreenToClient (window_private->xwindow, &pt);
 	      xevent->lParam = MAKELPARAM (pt.x, pt.y);
+	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
+					 window_private->xwindow));
 	      goto buttondown; /* What did Dijkstra say? */
 	    }
 	}
@@ -1809,7 +1807,7 @@ gdk_event_translate (GdkEvent *event,
       if (!p_grab_window)
 	{
 	  /* No explicit active grab, let's start one automatically */
-	  GDK_NOTE (EVENTS, g_print ("automatic grab started\n"));
+	  GDK_NOTE (EVENTS, g_print ("...automatic grab started\n"));
 	  gdk_pointer_grab (window, TRUE, window_private->event_mask,
 			    NULL, NULL, 0);
 	  p_grab_automatic = TRUE;
@@ -1893,7 +1891,7 @@ gdk_event_translate (GdkEvent *event,
 	  ScreenToClient (p_grab_window->xwindow, &pt);
 	  event->button.x = pt.x;
 	  event->button.y = pt.y;
-	  GDK_NOTE (EVENTS, g_print ("New coords are +%d+%d\n", pt.x, pt.y));
+	  GDK_NOTE (EVENTS, g_print ("...new coords are +%d+%d\n", pt.x, pt.y));
 	}
       break;
 
@@ -1906,8 +1904,6 @@ gdk_event_translate (GdkEvent *event,
     case WM_RBUTTONUP:
       button = 3;
 
-      /* Print debugging info.
-       */
     buttonup0:
       GDK_NOTE (EVENTS, 
 		g_print ("WM_%cBUTTONUP: %#x  x,y: %d %d  button: %d\n",
@@ -1920,12 +1916,12 @@ gdk_event_translate (GdkEvent *event,
 	  && (window_private->extension_events != 0)
 	  && gdk_input_ignore_core)
 	{
-	  GDK_NOTE (EVENTS, g_print ("... ignored\n"));
+	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
 	  break;
 	}
 
-    buttonup:
       event->button.type = GDK_BUTTON_RELEASE;
+    buttonup:
       event->button.window = window;
       if (window_private)
 	mask = window_private->event_mask;
@@ -1936,14 +1932,14 @@ gdk_event_translate (GdkEvent *event,
 	   && !p_grab_owner_events)
 	{
 	  /* Pointer is grabbed with owner_events FALSE */
-	  GDK_NOTE (EVENTS, g_print ("grabbed, owner_events FALSE\n"));
+	  GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events FALSE\n"));
 	  mask = p_grab_event_mask;
 	  if (!(mask & GDK_BUTTON_RELEASE_MASK))
 	    /* Grabber doesn't want it */
 	    break;
 	  else
 	    event->button.window = (GdkWindow *) p_grab_window;
-	  GDK_NOTE (EVENTS, g_print ("sending to %#x\n",
+	  GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
 				     p_grab_window->xwindow));
 	}
       else if (window_private
@@ -1954,14 +1950,14 @@ gdk_event_translate (GdkEvent *event,
 	      && p_grab_owner_events)
 	    {
 	      /* Pointer is grabbed wíth owner_events TRUE */
-	      GDK_NOTE (EVENTS, g_print ("grabbed, owner_events TRUE, doesn't want it\n"));
+	      GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events TRUE, doesn't want it\n"));
 	      mask = p_grab_event_mask;
 	      if (!(mask & GDK_BUTTON_RELEASE_MASK))
 		/* Grabber doesn't want it */
 		break;
 	      else
 		event->button.window = (GdkWindow *) p_grab_window;
-	      GDK_NOTE (EVENTS, g_print ("sending to %#x\n",
+	      GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
 					 p_grab_window->xwindow));
 	    }
 	  else
@@ -1980,6 +1976,8 @@ gdk_event_translate (GdkEvent *event,
 	      window_private = (GdkWindowPrivate *) window;
 	      ScreenToClient (window_private->xwindow, &pt);
 	      xevent->lParam = MAKELPARAM (pt.x, pt.y);
+	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
+					 window_private->xwindow));
 	      goto buttonup;
 	    }
 	}
@@ -2022,7 +2020,7 @@ gdk_event_translate (GdkEvent *event,
 	  ScreenToClient (p_grab_window->xwindow, &pt);
 	  event->button.x = pt.x;
 	  event->button.y = pt.y;
-	  GDK_NOTE (EVENTS, g_print ("New coords are +%d+%d\n", pt.x, pt.y));
+	  GDK_NOTE (EVENTS, g_print ("...new coords are +%d+%d\n", pt.x, pt.y));
 	}
       if (p_grab_window != NULL
 	  && p_grab_automatic
@@ -2031,8 +2029,6 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_MOUSEMOVE:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_print ("WM_MOUSEMOVE: %#x  %#x +%d+%d\n",
 			 xevent->hwnd, xevent->wParam,
@@ -2072,7 +2068,7 @@ gdk_event_translate (GdkEvent *event,
 	  && (window_private->extension_events != 0)
 	  && gdk_input_ignore_core)
 	{
-	  GDK_NOTE (EVENTS, g_print ("... ignored\n"));
+	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
 	  break;
 	}
 
@@ -2089,7 +2085,7 @@ gdk_event_translate (GdkEvent *event,
 	{
 	  /* Pointer is grabbed with owner_events FALSE */
 	  GDK_NOTE (EVENTS,
-		    g_print ("grabbed, owner_events FALSE\n"));
+		    g_print ("...grabbed, owner_events FALSE\n"));
 	  mask = p_grab_event_mask;
 	  if (!((mask & GDK_POINTER_MOTION_MASK)
 		|| ((xevent->wParam & (MK_LBUTTON|MK_MBUTTON|MK_RBUTTON))
@@ -2103,7 +2099,7 @@ gdk_event_translate (GdkEvent *event,
 	    break;
 	  else
 	    event->motion.window = (GdkWindow *) p_grab_window;
-	  GDK_NOTE (EVENTS, g_print ("sending to %#x\n",
+	  GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
 				     p_grab_window->xwindow));
 	}
       else if (window_private
@@ -2122,7 +2118,7 @@ gdk_event_translate (GdkEvent *event,
 	      && p_grab_owner_events)
 	    {
 	      /* Pointer is grabbed wíth owner_events TRUE */
-	      GDK_NOTE (EVENTS, g_print ("grabbed, owner_events TRUE, doesn't want it\n"));
+	      GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events TRUE, doesn't want it\n"));
 	      mask = p_grab_event_mask;
 	      if (!((p_grab_event_mask & GDK_POINTER_MOTION_MASK)
 		    || ((xevent->wParam & (MK_LBUTTON|MK_MBUTTON|MK_RBUTTON))
@@ -2137,7 +2133,7 @@ gdk_event_translate (GdkEvent *event,
 		break;
 	      else
 		event->motion.window = (GdkWindow *) p_grab_window;
-	      GDK_NOTE (EVENTS, g_print ("sending to %#x\n",
+	      GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
 					 p_grab_window->xwindow));
 	    }
 	  else
@@ -2156,7 +2152,7 @@ gdk_event_translate (GdkEvent *event,
 	      window_private = (GdkWindowPrivate *) window;
 	      ScreenToClient (window_private->xwindow, &pt);
 	      xevent->lParam = MAKELPARAM (pt.x, pt.y);
-	      GDK_NOTE (EVENTS, g_print ("propagating to %#x\n",
+	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
 					 window_private->xwindow));
 	      goto mousemotion;
 	    }
@@ -2203,12 +2199,11 @@ gdk_event_translate (GdkEvent *event,
 	  ScreenToClient (p_grab_window->xwindow, &pt);
 	  event->motion.x = pt.x;
 	  event->motion.y = pt.y;
-	  GDK_NOTE (EVENTS, g_print ("New coords are +%d+%d\n", pt.x, pt.y));
+	  GDK_NOTE (EVENTS, g_print ("...new coords are +%d+%d\n", pt.x, pt.y));
 	}
       break;
 
     case WM_NCMOUSEMOVE:
-      /* Print debugging info.  */
       GDK_NOTE (EVENTS,
 		g_print ("WM_NCMOUSEMOVE: %#x  x,y: %d %d\n",
 			 xevent->hwnd,
@@ -2221,7 +2216,7 @@ gdk_event_translate (GdkEvent *event,
       if (curWnd != NULL
 	  && (curWnd_private->event_mask & GDK_LEAVE_NOTIFY_MASK))
 	{
-	  GDK_NOTE (EVENTS, g_print ("synthesizing LEAVE_NOTIFY event\n"));
+	  GDK_NOTE (EVENTS, g_print ("...synthesizing LEAVE_NOTIFY event\n"));
 
 	  event->crossing.type = GDK_LEAVE_NOTIFY;
 	  event->crossing.window = curWnd;
@@ -2311,7 +2306,7 @@ gdk_event_translate (GdkEvent *event,
       if (window_private->bg_type == GDK_WIN32_BG_PIXEL)
 	{
 	  COLORREF bg;
-	  GDK_NOTE (EVENTS, g_print ("... BG_PIXEL %s\n",
+	  GDK_NOTE (EVENTS, g_print ("...BG_PIXEL %s\n",
 				     gdk_color_to_string (&window_private->bg_pixel)));
 	  GetClipBox (hdc, &rect);
 #ifdef MULTIPLE_WINDOW_CLASSES
@@ -2323,7 +2318,7 @@ gdk_event_translate (GdkEvent *event,
 #endif
 	  hbr = CreateSolidBrush (bg);
 #if 0
-	  g_print ("... CreateSolidBrush (%.08x) = %.08x\n", bg, hbr);
+	  g_print ("...CreateSolidBrush (%.08x) = %.08x\n", bg, hbr);
 #endif
 	  if (!FillRect (hdc, &rect, hbr))
 	    g_warning ("WM_ERASEBKGND: FillRect failed");
@@ -2397,7 +2392,7 @@ gdk_event_translate (GdkEvent *event,
 	}
       else
 	{
-	  GDK_NOTE (EVENTS, g_print ("... BLACK_BRUSH (?)\n"));
+	  GDK_NOTE (EVENTS, g_print ("...BLACK_BRUSH (?)\n"));
 #ifdef MULTIPLE_WINDOW_CLASSES
 	  hbr = (HBRUSH) GetClassLong (window_private->xwindow,
 				       GCL_HBRBACKGROUND);
@@ -2411,13 +2406,10 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_PAINT:
-      GDK_NOTE (EVENTS, g_print ("WM_PAINT: %#x\n", xevent->hwnd));
       hdc = BeginPaint (xevent->hwnd, &paintstruct);
 
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
-		g_print ("...WM_PAINT: %#x  %dx%d@+%d+%d %s dc %#x\n",
+		g_print ("WM_PAINT: %#x  %dx%d@+%d+%d %s dc %#x\n",
 			 xevent->hwnd,
 			 paintstruct.rcPaint.right - paintstruct.rcPaint.left,
 			 paintstruct.rcPaint.bottom - paintstruct.rcPaint.top,
@@ -2482,8 +2474,6 @@ gdk_event_translate (GdkEvent *event,
 
 #if 1
     case WM_SHOWWINDOW:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS, g_print ("WM_SHOWWINDOW: %#x  %d\n",
 				 xevent->hwnd,
 				 xevent->wParam));
@@ -2507,8 +2497,6 @@ gdk_event_translate (GdkEvent *event,
       break;
 #endif
     case WM_SIZE:
-      /* Print debugging info.
-       */
       GDK_NOTE (EVENTS,
 		g_print ("WM_SIZE: %#x  %s %dx%d\n",
 			 xevent->hwnd,

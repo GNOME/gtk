@@ -4,10 +4,10 @@ port, see http://www.gimp.org/tml/gimp/win32/ or
 http://www.iki.fi/tml/gimp/win32/ .
 
 To build GTk+ on Win32, you need either Microsoft compiler and tools,
-or egcs-1.1.2 running under cygwin-b20.1. Before compiling, check the
-BIN definition in gdk\win32\makefile.msc (or makefile.cygwin) and
-gtk\makefile.msc (or makefile.cygwin). Compile in gdk\win32 and gtk
-with `nmake -f makefile.msc` or `make -f makefile.cygwin`.
+or egcs-1.1.2 running under cygwin-b20.1. Compile in gdk\win32 and gtk
+with `nmake -f makefile.msc` or `make -f makefile.cygwin`. Before
+doing a install, check the BIN definition in gdk\win32\makefile.msc
+(or makefile.cygwin) and gtk\makefile.msc (or makefile.cygwin).
 
 See the README.win32 file in the GLib distribution for preparations to
 build with egcs on cygwin.
@@ -15,3 +15,9 @@ build with egcs on cygwin.
 The tablet support uses the Wintab API. The Wintab development kit can
 be downloaded from http://www.pointing.com.
 
+GTk+ wants to be built with the GNU gettext library for
+internationalisation (i18n). Get the version ported to Win32 (not a
+very big deal) from tml's web site mentioned above. If you don't want
+any i18n stuff, undefine ENABLE_NLS, HAVE_GETTEXT and HAVE_LIBINTL in
+the config.h.win32 file, and remove references to the gnu-intl library
+from the makefiles.

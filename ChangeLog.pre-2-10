@@ -1,3 +1,14 @@
+1999-06-15  Tor Lillqvist  <tml@iki.fi>
+y
+	* README.win32: Mention using GNU gettext.
+	* config.h.win32: Enable NLS stuff.
+	* gtk/makefile.msc: Use GNU gettext.
+	* gdk/win32/gdkdnd.c: Minor header reorg.
+	* gdk/win32/{gdkevents,gdkwindow}.c: No semantic changes, mainly
+	cosmetics.
+	* gtk/gtkrc.c (Win32): Make get_gtk_sysconf_directory() public.
+	* gtk/gtkmain.c (Win32): Use it in bindtextdomain() call.
+
 Wed Jun  2 11:44:25 PDT 1999 Manish Singh <yosh@gimp.org>
 
 	* acinclude.m4
