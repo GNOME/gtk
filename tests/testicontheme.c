@@ -1,5 +1,4 @@
-#include <config.h>
-#include <gtk/gtkicontheme.h>
+#include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
@@ -9,7 +8,10 @@ usage (void)
 {
   g_print ("usage: test-icon-theme lookup <theme name> <icon name> [size]]\n"
 	   " or\n"
-	   "usage: test-icon-theme list <theme name> [context]\n");
+	   "usage: test-icon-theme list <theme name> [context]\n"
+	   " or\n"
+	   "usage: test-icon-theme display <theme name> <icon name> [size]\n"
+	   );
 }
 
 
@@ -28,8 +30,7 @@ main (int argc, char *argv[])
   int size = 48;
   int i;
   
-  g_type_init ();
-  setlocale (LC_ALL, "");
+  gtk_init (&argc, &argv);
 
   if (argc < 3)
     {
@@ -43,7 +44,37 @@ main (int argc, char *argv[])
   
   gtk_icon_theme_set_custom_theme (icon_theme, themename);
 
-  if (strcmp (argv[1], "list") == 0)
+  if (strcmp (argv[1], "display") == 0)
+    {
+      GtkWidget *window, *image;
+      GtkIconSize size;
+      GdkPixbuf *pixbuf;
+
+      if (argc < 4)
+	{
+	  g_object_unref (icon_theme);
+	  usage ();
+	  return 1;
+	}
+      
+      if (argc >= 5)
+	size = atoi (argv[4]);
+      else 
+	size = GTK_ICON_SIZE_BUTTON;
+      
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+#if 1
+      pixbuf = gtk_icon_theme_load_icon (icon_theme, argv[3], size, 0, NULL);
+      image = gtk_image_new_from_pixbuf (pixbuf);
+#else
+      image = gtk_image_new_from_icon_name (argv[3], size); 
+#endif
+      gtk_container_add (GTK_CONTAINER (window), image);
+      gtk_widget_show_all (window);
+      
+      gtk_main ();
+    }
+  else if (strcmp (argv[1], "list") == 0)
     {
       if (argc >= 4)
 	context = argv[3];

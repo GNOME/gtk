@@ -24,6 +24,8 @@
 	* gtk/gtkiconcache.c: The glue code to mmap an icon cache
 	file and manage the information it contains.
 
+	* tests/testicontheme.c: Add a "display" option.
+
 2004-10-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/testicontheme.c: Set the locale, tidy up output.
