@@ -31,6 +31,16 @@
 #include "gtkiconfactory.h"
 #include "gtkimage.h"
 
+typedef struct _GtkImageMenuItemPrivate GtkImageMenuItemPrivate;
+
+struct _GtkImageMenuItemPrivate 
+{
+  GtkSettings *settings;
+  guint        show_image_connection;
+};
+
+#define GTK_IMAGE_MENU_ITEM_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_IMAGE_MENU_ITEM, GtkImageMenuItemPrivate))
+
 static void gtk_image_menu_item_class_init           (GtkImageMenuItemClass *klass);
 static void gtk_image_menu_item_init                 (GtkImageMenuItem      *image_menu_item);
 static void gtk_image_menu_item_size_request         (GtkWidget        *widget,
@@ -55,6 +65,8 @@ static void gtk_image_menu_item_get_property (GObject         *object,
                                               guint            prop_id,
                                               GValue          *value,
                                               GParamSpec      *pspec);
+static void gtk_image_menu_item_screen_changed (GtkWidget        *widget,
+						GdkScreen        *previous_screen);
 
 
 enum {
@@ -107,6 +119,7 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
   
   parent_class = g_type_class_peek_parent (klass);
   
+  widget_class->screen_changed = gtk_image_menu_item_screen_changed;
   widget_class->size_request = gtk_image_menu_item_size_request;
   widget_class->size_allocate = gtk_image_menu_item_size_allocate;
 
@@ -125,6 +138,14 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
                                                         P_("Child widget to appear next to the menu text"),
                                                         GTK_TYPE_WIDGET,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+  gtk_settings_install_property (g_param_spec_boolean ("gtk-menu-images",
+						       P_("Show menu images"),
+						       P_("Whether images should be shown in menus"),
+						       TRUE,
+						       G_PARAM_READWRITE));
+
+  g_type_class_add_private (gobject_class, sizeof (GtkImageMenuItemPrivate));  
 }
 
 static void
@@ -177,6 +198,16 @@ gtk_image_menu_item_get_property (GObject         *object,
     }
 }
 
+static gboolean
+show_image (GtkImageMenuItem *image_menu_item)
+{
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (image_menu_item));
+  gboolean show;
+
+  g_object_get (settings, "gtk-menu-images", &show, NULL);
+
+  return show;
+}
 
 static void
 gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
@@ -186,7 +217,7 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 
   *requisition = 0;
 
-  if (image_menu_item->image)
+  if (image_menu_item->image && show_image (image_menu_item))
     {
       guint image_width = image_menu_item->image->requisition.width;
 
@@ -212,7 +243,9 @@ gtk_image_menu_item_size_request (GtkWidget      *widget,
   
   image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
   
-  if (image_menu_item->image && GTK_WIDGET_VISIBLE (image_menu_item->image))
+  if (image_menu_item->image && 
+      GTK_WIDGET_VISIBLE (image_menu_item->image) && 
+      show_image (image_menu_item))
     {
       GtkRequisition child_requisition;
       
@@ -245,7 +278,7 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
   
   (* GTK_WIDGET_CLASS (parent_class)->size_allocate) (widget, allocation);
 
-  if (image_menu_item->image)
+  if (image_menu_item->image && show_image (image_menu_item))
     {
       gint width, height, x, y, offset;
       GtkAllocation child_allocation;
@@ -456,6 +489,10 @@ gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
     return;
 
   gtk_widget_set_parent (image, GTK_WIDGET (image_menu_item));
+  g_object_set (image, 
+		"visible", show_image (image_menu_item),
+		"no_show_all", TRUE,
+		NULL);
 
   g_object_notify (G_OBJECT (image_menu_item), "image");
 }
@@ -504,4 +541,47 @@ gtk_image_menu_item_remove (GtkContainer *container,
     }
 }
 
+static void 
+show_image_change_notify (GtkImageMenuItem *image_menu_item)
+{
+  if (image_menu_item->image) 
+    g_object_set (image_menu_item->image, "visible", show_image (image_menu_item), NULL);
+}
 
+static void
+gtk_image_menu_item_screen_changed (GtkWidget *widget,
+				    GdkScreen *previous_screen)
+{
+  GtkImageMenuItemPrivate *priv = GTK_IMAGE_MENU_ITEM_GET_PRIVATE (widget);
+  GtkSettings *settings;
+
+  if (gtk_widget_has_screen (widget))
+    settings = gtk_widget_get_settings (widget);
+  else
+    settings = NULL;
+
+  if (settings == priv->settings)
+    return;
+
+  if (priv->settings)
+    {
+      g_signal_handler_disconnect (priv->settings, priv->show_image_connection);
+      g_object_unref (priv->settings);
+    }
+
+  if (settings)
+    {
+      priv->show_image_connection =
+	g_signal_connect_swapped (settings,
+				  "notify::gtk-menu-images",
+				  G_CALLBACK (show_image_change_notify),
+				  widget);
+
+      g_object_ref (settings);
+      priv->settings = settings;
+    }
+  else
+    priv->settings = NULL;
+
+  show_image_change_notify (GTK_IMAGE_MENU_ITEM (widget));
+}

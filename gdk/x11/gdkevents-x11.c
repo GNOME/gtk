@@ -2627,6 +2627,8 @@ static struct
   { "Net/CursorBlinkTime", "gtk-cursor-blink-time" },
   { "Net/ThemeName", "gtk-theme-name" },
   { "Net/IconThemeName", "gtk-icon-theme-name" },
+  { "Gtk/ButtonImages", "gtk-button-images" },
+  { "Gtk/MenuImages", "gtk-menu-images" },
 };
 
 static void

@@ -41,7 +41,7 @@
 static const GtkBorder default_default_border = { 1, 1, 1, 1 };
 static const GtkBorder default_default_outside_border = { 0, 0, 0, 0 };
 
-/* Time out before giving up on getting a key release when animatng
+/* Time out before giving up on getting a key release when animating
  * the close button.
  */
 #define ACTIVATE_TIMEOUT 250
@@ -72,8 +72,11 @@ typedef struct _GtkButtonPrivate GtkButtonPrivate;
 
 struct _GtkButtonPrivate
 {
-  gfloat xalign;
-  gfloat yalign;
+  gfloat       xalign;
+  gfloat       yalign;
+  GtkSettings *settings;
+  guint        show_image_connection;
+  GtkWidget   *image;
 };
 
 static void gtk_button_class_init     (GtkButtonClass   *klass);
@@ -87,6 +90,8 @@ static void gtk_button_get_property   (GObject         *object,
                                        guint            prop_id,
                                        GValue          *value,
                                        GParamSpec      *pspec);
+static void gtk_button_screen_changed (GtkWidget        *widget,
+				       GdkScreen        *previous_screen);
 static void gtk_button_realize        (GtkWidget        *widget);
 static void gtk_button_unrealize      (GtkWidget        *widget);
 static void gtk_button_map            (GtkWidget        *widget);
@@ -120,7 +125,7 @@ static void gtk_button_finish_activate (GtkButton *button,
 static GObject*	gtk_button_constructor     (GType                  type,
 					    guint                  n_construct_properties,
 					    GObjectConstructParam *construct_params);
-static void     gtk_button_construct_child (GtkButton             *button);
+static void gtk_button_construct_child (GtkButton             *button);
 
 
 static GtkBinClass *parent_class = NULL;
@@ -175,6 +180,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   object_class->destroy = gtk_button_destroy;
 
+  widget_class->screen_changed = gtk_button_screen_changed;
   widget_class->realize = gtk_button_realize;
   widget_class->unrealize = gtk_button_unrealize;
   widget_class->map = gtk_button_map;
@@ -365,6 +371,12 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     0,
 							     G_PARAM_READABLE));
 
+  gtk_settings_install_property (g_param_spec_boolean ("gtk-button-images",
+						       P_("Show button images"),
+						       P_("Whether stock icons should be shown in buttons"),
+						       TRUE,
+						       G_PARAM_READWRITE));
+  
   g_type_class_add_private (gobject_class, sizeof (GtkButtonPrivate));  
 }
 
@@ -547,15 +559,25 @@ gtk_button_new (void)
   return g_object_new (GTK_TYPE_BUTTON, NULL);
 }
 
+static gboolean
+show_image (GtkButton *button)
+{
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (button));  
+  gboolean show;
+
+  g_object_get (settings, "gtk-button-images", &show, NULL);
+
+  return show;
+}
+
 static void
 gtk_button_construct_child (GtkButton *button)
 {
+  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
   GtkStockItem item;
   GtkWidget *label;
-  GtkWidget *image;
   GtkWidget *hbox;
   GtkWidget *align;
-  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
   
   if (!button->constructed)
     return;
@@ -574,12 +596,16 @@ gtk_button_construct_child (GtkButton *button)
 
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (button));
       
-      image = gtk_image_new_from_stock (button->label_text, GTK_ICON_SIZE_BUTTON);
+      priv->image = gtk_image_new_from_stock (button->label_text, GTK_ICON_SIZE_BUTTON);
+      g_object_set (priv->image, 
+		    "visible", show_image (button),
+		    "no_show_all", TRUE,
+		    NULL);
       hbox = gtk_hbox_new (FALSE, 2);
 
       align = gtk_alignment_new (priv->xalign, priv->yalign, 0.0, 0.0);
       
-      gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->image, FALSE, FALSE, 0);
       gtk_box_pack_end (GTK_BOX (hbox), label, FALSE, FALSE, 0);
       
       gtk_container_add (GTK_CONTAINER (button), align);
@@ -657,6 +683,7 @@ gtk_button_pressed (GtkButton *button)
 {
   g_return_if_fail (GTK_IS_BUTTON (button));
 
+  
   g_signal_emit (button, button_signals[PRESSED], 0);
 }
 
@@ -1512,4 +1539,51 @@ gtk_button_update_state (GtkButton *button)
 
   _gtk_button_set_depressed (button, depressed); 
   gtk_widget_set_state (GTK_WIDGET (button), new_state);
+}
+
+static void 
+show_image_change_notify (GtkButton *button)
+{
+  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
+
+  if (priv->image) 
+    g_object_set (priv->image, "visible", show_image (button), NULL);
+}
+
+static void
+gtk_button_screen_changed (GtkWidget *widget,
+			   GdkScreen *previous_screen)
+{
+  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (widget);
+  GtkSettings *settings;
+
+  if (gtk_widget_has_screen (widget))
+    settings = gtk_widget_get_settings (widget);
+  else
+    settings = NULL;
+
+  if (settings == priv->settings)
+    return;
+
+  if (priv->settings)
+    {
+      g_signal_handler_disconnect (priv->settings, priv->show_image_connection);
+      g_object_unref (priv->settings);
+    }
+
+  if (settings)
+    {
+      priv->show_image_connection =
+	g_signal_connect_swapped (settings,
+				  "notify::gtk-button-images",
+				  G_CALLBACK (show_image_change_notify),
+				  widget);
+
+      g_object_ref (settings);
+      priv->settings = settings;
+    }
+  else
+    priv->settings = NULL;
+
+  show_image_change_notify (GTK_BUTTON (widget));
 }
