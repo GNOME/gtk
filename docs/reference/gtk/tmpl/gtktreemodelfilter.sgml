@@ -67,6 +67,10 @@ A function which calculates display values from raw values in the model.
 It must fill @value with the display value for the column @column in the 
 row indicated by @iter. 
 </para>
+<para>
+Since this function is called for each data access, it's not a
+particularly efficient operation.
+</para>
 
 @model: the #GtkTreeModelFilter
 @iter: a #GtkTreeIter pointing to the row whose display values are determined

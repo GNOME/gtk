@@ -1,3 +1,8 @@
+Fri Mar  5 23:52:34 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_set_modify_func): 
+	Improve the docs.  (#127727, Murray Cumming)
+
 Fri Mar  5 23:37:16 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_reorderable): Clarify the

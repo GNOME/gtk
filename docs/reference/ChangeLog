@@ -1,3 +1,7 @@
+Fri Mar  5 23:58:01 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtktreemodelfilter.sgml: A little addition.
+
 Fri Mar  5 23:45:06 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkinvisible.sgml: Remove "internally-used"
