@@ -921,7 +921,7 @@ gtk_init (int *argc, char ***argv)
     }
 }
 
-#ifdef G_OS_WIN32
+#ifdef G_PLATFORM_WIN32
 
 static void
 check_sizeof_GtkWindow (size_t sizeof_GtkWindow)
@@ -931,8 +931,9 @@ check_sizeof_GtkWindow (size_t sizeof_GtkWindow)
 	     "The code using GTK+ thinks GtkWindow is of different\n"
              "size than it actually is in this build of GTK+.\n"
 	     "On Windows, this probably means that you have compiled\n"
-	     "your code with gcc without the -fnative-struct switch,\n"
-	     "or that you are using an unsupported compiler.");
+	     "your code with gcc without the -fnative-struct\n"
+	     "(or -mms-bitfields) switch, or that you are using\n"
+	     "an unsupported compiler.");
 }
 
 /* In GTK+ 2.0 the GtkWindow struct actually is the same size in
@@ -949,8 +950,9 @@ check_sizeof_GtkBox (size_t sizeof_GtkBox)
 	     "The code using GTK+ thinks GtkBox is of different\n"
              "size than it actually is in this build of GTK+.\n"
 	     "On Windows, this probably means that you have compiled\n"
-	     "your code with gcc without the -fnative-struct switch,\n"
-	     "or that you are using an unsupported compiler.");
+	     "your code with gcc without the -fnative-struct\n"
+	     "(or -mms-bitfields) switch, or that you are using\n"
+	     "an unsupported compiler.");
 }
 
 /* These two functions might get more checks added later, thus pass
