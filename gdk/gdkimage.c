@@ -25,9 +25,6 @@
 #ifndef _XOPEN_SOURCE
 #  define _XOPEN_SOURCE 1
 #endif
-#ifdef HAVE_FEATURES_H
-#  include <features.h>
-#endif
 
 #include <stdlib.h>
 #include <sys/types.h>

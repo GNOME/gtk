@@ -122,6 +122,8 @@ gdk_drag_context_new        (void)
 void            
 gdk_drag_context_ref (GdkDragContext *context)
 {
+  g_return_if_fail (context != NULL);
+
   ((GdkDragContextPrivate *)context)->ref_count++;
 }
 
@@ -131,6 +133,8 @@ gdk_drag_context_unref (GdkDragContext *context)
   GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
   private->ref_count--;
   
+  g_return_if_fail (context != NULL);
+
   if (private->ref_count == 0)
     {
       g_dataset_destroy (private);
@@ -157,10 +161,11 @@ gdk_drag_context_find (gboolean is_source,
 		       Window   dest_xid)
 {
   GList *tmp_list = contexts;
+  GdkDragContext *context;
 
   while (tmp_list)
     {
-      GdkDragContext *context = (GdkDragContext *)tmp_list->data;
+      context = (GdkDragContext *)tmp_list->data;
 
       if ((!context->is_source == !is_source) &&
 	  ((source_xid == None) || (context->source_window &&
@@ -458,7 +463,7 @@ get_client_window_at_coords_recurse (Window  win,
     return None;
 }
 
-Window 
+static Window 
 get_client_window_at_coords (GdkWindowCache *cache,
 			     Window          ignore,
 			     gint            x_root,
@@ -550,7 +555,7 @@ get_client_window_at_coords_recurse (Window  win,
     return None;
 }
 
-Window 
+static Window 
 get_client_window_at_coords (Window  ignore,
 			     gint    x_root,
 			     gint    y_root)
@@ -2550,6 +2555,8 @@ gdk_drag_find_window (GdkDragContext  *context,
   GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
   Window dest;
 
+  g_return_if_fail (context != NULL);
+
   if (!private->window_cache)
     private->window_cache = gdk_window_cache_new();
 
@@ -2595,6 +2602,8 @@ gdk_drag_motion (GdkDragContext *context,
 		 guint32         time)
 {
   GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+
+  g_return_val_if_fail (context != NULL, FALSE);
 
   if (context->dest_window != dest_window)
     {
@@ -2707,6 +2716,8 @@ void
 gdk_drag_drop (GdkDragContext *context,
 	       guint32         time)
 {
+  g_return_if_fail (context != NULL);
+
   if (context->dest_window)
     {
       switch (context->protocol)
@@ -2731,6 +2742,8 @@ void
 gdk_drag_abort (GdkDragContext *context,
 		guint32         time)
 {
+  g_return_if_fail (context != NULL);
+
   gdk_drag_do_leave (context, time);
 }
 
@@ -2744,7 +2757,7 @@ gdk_drag_status (GdkDragContext   *context,
   GdkDragContextPrivate *private;
   XEvent xev;
 
-  g_return_if_fail (context != 0);
+  g_return_if_fail (context != NULL);
 
   private = (GdkDragContextPrivate *)context;
 
@@ -2837,7 +2850,7 @@ gdk_drop_reply (GdkDragContext   *context,
 {
   GdkDragContextPrivate *private;
 
-  g_return_if_fail (context != 0);
+  g_return_if_fail (context != NULL);
 
   private = (GdkDragContextPrivate *)context;
   
@@ -2874,6 +2887,8 @@ gdk_drop_finish (GdkDragContext   *context,
 		 gboolean          success,
 		 guint32           time)
 {
+  g_return_if_fail (context != NULL);
+
   if (context->protocol == GDK_DRAG_PROTO_XDND)
     {
       XEvent xev;
@@ -2902,8 +2917,9 @@ void
 gdk_window_register_dnd (GdkWindow      *window)
 {
   static guint32 xdnd_version = 3;
-  
   MotifDragReceiverInfo info;
+
+  g_return_if_fail (window != NULL);
 
   /* Set Motif drag receiver information property */
 

@@ -315,8 +315,6 @@ AC_SUBST(x_ldflags)
 AC_SUBST(x_libs)
 AC_SUBST(xinput_progs)
 
-AC_CHECK_HEADERS(features.h)
-
 if test "x$enable_shm" = "xyes"; then
   # Check for shared memory
   AC_CHECK_HEADER(sys/ipc.h, AC_DEFINE(HAVE_IPC_H), no_sys_ipc=yes)

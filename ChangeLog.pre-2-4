@@ -1,3 +1,11 @@
+1999-01-02  Jeff Garzik  <jgarzik@pobox.com>
+
+	* configure.in, config.h.in, gdk/gdkimage.c:
+	Removed features.h test.
+
+	* gdk/gdkdnd.c:
+	Guard public functions against NULL pointer derefs.
+
 Fri Jan  1 18:41:09 PST 1999 Manish Singh <yosh@gimp.org>
 
 	* gdk/gdk.c
