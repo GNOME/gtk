@@ -712,19 +712,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->other_event = NULL;
 
   klass->debug_msg = gtk_widget_debug_msg;
-
-  /* bindings test
-   */
-  {
-    GtkBindingSet *binding_set;
-
-    binding_set = gtk_binding_set_by_class (klass);
-    gtk_binding_entry_add_signal (binding_set,
-				  '9', GDK_CONTROL_MASK | GDK_RELEASE_MASK,
-				  "debug_msg",
-				  1,
-				  GTK_TYPE_STRING, "GtkWidgetClass test");
-  }
 }
 
 static void

@@ -152,6 +152,7 @@ void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
 					 guint		 modifiers,
 					 const gchar	*signal_name,
 					 GSList		*binding_args);
+guint	 gtk_binding_parse_binding	(GScanner	*scanner);
 
 
 

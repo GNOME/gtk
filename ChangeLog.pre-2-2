@@ -1,3 +1,30 @@
+Thu Jul 23 00:11:39 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtkrc: introduce testbindings on C-1 for buttons,
+ 	to check out binding priorities. someone should really write
+	gtkrc-mode for emacs.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): remove ugly bindings test.
+	* gtk/testgtk.c (main): and move it here ;). this test says something
+	on release of C-9. (this works only if the mouse pointer is on a
+	spinbutton and there is no focus widget).
+
+	* gtk/gtkrc.h:
+	* gtk/gtkrc.c:
+	export gtk_rc_parse_color, gtk_rc_parse_state and a new function
+	gtk_rc_parse_priority to parse path priority types.
+	export rc tokens.
+	feature binding parsing.
+
+Wed Jul 22 23:41:17 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbindings.h: 
+	* gtk/gtkbindings.c: new function gtk_binding_parse_binding() to
+	feature binding parsing in rc files.
+	* gtk/gtkbindings.c (gtk_binding_set_new): bug fix.
+	* gtk/gtkbindings.c (gtk_binding_pattern_compare): bug fix, we used to
+	order the bindings with lowest priority first.
+
 Wed Jul 22 15:21:08 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gdk/gdkrgb.c: actually builds and runs properly on big

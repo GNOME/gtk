@@ -299,6 +299,37 @@
    (bottom-to-top GTK_PROGRESS_BOTTOM_TO_TOP)
    (top-to-bottom GTK_PROGRESS_TOP_TO_BOTTOM))
 
+; enumerations from "./gtkrc.h"
+
+(define-enum GtkRcTokenType
+   (invalid GTK_RC_TOKEN_INVALID)
+   (include GTK_RC_TOKEN_INCLUDE)
+   (normal GTK_RC_TOKEN_NORMAL)
+   (active GTK_RC_TOKEN_ACTIVE)
+   (prelight GTK_RC_TOKEN_PRELIGHT)
+   (selected GTK_RC_TOKEN_SELECTED)
+   (insensitive GTK_RC_TOKEN_INSENSITIVE)
+   (fg GTK_RC_TOKEN_FG)
+   (bg GTK_RC_TOKEN_BG)
+   (base GTK_RC_TOKEN_BASE)
+   (text GTK_RC_TOKEN_TEXT)
+   (font GTK_RC_TOKEN_FONT)
+   (fontset GTK_RC_TOKEN_FONTSET)
+   (bg-pixmap GTK_RC_TOKEN_BG_PIXMAP)
+   (pixmap-path GTK_RC_TOKEN_PIXMAP_PATH)
+   (style GTK_RC_TOKEN_STYLE)
+   (binding GTK_RC_TOKEN_BINDING)
+   (bind GTK_RC_TOKEN_BIND)
+   (widget GTK_RC_TOKEN_WIDGET)
+   (widget-class GTK_RC_TOKEN_WIDGET_CLASS)
+   (class GTK_RC_TOKEN_CLASS)
+   (lowest GTK_RC_TOKEN_LOWEST)
+   (gtk GTK_RC_TOKEN_GTK)
+   (application GTK_RC_TOKEN_APPLICATION)
+   (rc GTK_RC_TOKEN_RC)
+   (highest GTK_RC_TOKEN_HIGHEST)
+   (last GTK_RC_TOKEN_LAST))
+
 ; enumerations from "./gtkspinbutton.h"
 
 (define-enum GtkSpinButtonUpdatePolicy

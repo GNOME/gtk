@@ -326,6 +326,36 @@ static GtkEnumValue _gtk_progress_bar_orientation_values[] = {
   { GTK_PROGRESS_TOP_TO_BOTTOM, "GTK_PROGRESS_TOP_TO_BOTTOM", "top-to-bottom" },
   { 0, NULL, NULL }
 };
+static GtkEnumValue _gtk_rc_token_type_values[] = {
+  { GTK_RC_TOKEN_INVALID, "GTK_RC_TOKEN_INVALID", "invalid" },
+  { GTK_RC_TOKEN_INCLUDE, "GTK_RC_TOKEN_INCLUDE", "include" },
+  { GTK_RC_TOKEN_NORMAL, "GTK_RC_TOKEN_NORMAL", "normal" },
+  { GTK_RC_TOKEN_ACTIVE, "GTK_RC_TOKEN_ACTIVE", "active" },
+  { GTK_RC_TOKEN_PRELIGHT, "GTK_RC_TOKEN_PRELIGHT", "prelight" },
+  { GTK_RC_TOKEN_SELECTED, "GTK_RC_TOKEN_SELECTED", "selected" },
+  { GTK_RC_TOKEN_INSENSITIVE, "GTK_RC_TOKEN_INSENSITIVE", "insensitive" },
+  { GTK_RC_TOKEN_FG, "GTK_RC_TOKEN_FG", "fg" },
+  { GTK_RC_TOKEN_BG, "GTK_RC_TOKEN_BG", "bg" },
+  { GTK_RC_TOKEN_BASE, "GTK_RC_TOKEN_BASE", "base" },
+  { GTK_RC_TOKEN_TEXT, "GTK_RC_TOKEN_TEXT", "text" },
+  { GTK_RC_TOKEN_FONT, "GTK_RC_TOKEN_FONT", "font" },
+  { GTK_RC_TOKEN_FONTSET, "GTK_RC_TOKEN_FONTSET", "fontset" },
+  { GTK_RC_TOKEN_BG_PIXMAP, "GTK_RC_TOKEN_BG_PIXMAP", "bg-pixmap" },
+  { GTK_RC_TOKEN_PIXMAP_PATH, "GTK_RC_TOKEN_PIXMAP_PATH", "pixmap-path" },
+  { GTK_RC_TOKEN_STYLE, "GTK_RC_TOKEN_STYLE", "style" },
+  { GTK_RC_TOKEN_BINDING, "GTK_RC_TOKEN_BINDING", "binding" },
+  { GTK_RC_TOKEN_BIND, "GTK_RC_TOKEN_BIND", "bind" },
+  { GTK_RC_TOKEN_WIDGET, "GTK_RC_TOKEN_WIDGET", "widget" },
+  { GTK_RC_TOKEN_WIDGET_CLASS, "GTK_RC_TOKEN_WIDGET_CLASS", "widget-class" },
+  { GTK_RC_TOKEN_CLASS, "GTK_RC_TOKEN_CLASS", "class" },
+  { GTK_RC_TOKEN_LOWEST, "GTK_RC_TOKEN_LOWEST", "lowest" },
+  { GTK_RC_TOKEN_GTK, "GTK_RC_TOKEN_GTK", "gtk" },
+  { GTK_RC_TOKEN_APPLICATION, "GTK_RC_TOKEN_APPLICATION", "application" },
+  { GTK_RC_TOKEN_RC, "GTK_RC_TOKEN_RC", "rc" },
+  { GTK_RC_TOKEN_HIGHEST, "GTK_RC_TOKEN_HIGHEST", "highest" },
+  { GTK_RC_TOKEN_LAST, "GTK_RC_TOKEN_LAST", "last" },
+  { 0, NULL, NULL }
+};
 static GtkEnumValue _gtk_spin_button_update_policy_values[] = {
   { GTK_UPDATE_ALWAYS, "GTK_UPDATE_ALWAYS", "always" },
   { GTK_UPDATE_IF_VALID, "GTK_UPDATE_IF_VALID", "if-valid" },

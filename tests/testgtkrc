@@ -100,3 +100,28 @@ widget_class "*GtkButton*" style "button"
 widget_class "*Ruler" style "ruler"
 widget_class "*GtkText" style "text"
 widget "*GtkCurve" style "curve"
+
+binding "test1"
+{
+  bind "<ctrl>1" {
+    "debug-msg" ("hallo and") 
+    "debug-msg" ("huhu")
+  }
+}
+
+binding "test2"
+{
+  bind "<ctrl>1" {
+    "debug-msg" ("jup!") 
+  }
+}
+
+# possible priorities are (in ascending order):
+# lowest
+# gtk         (used by gtk for internal class bindings)
+# application (for hard coded bindings on application basis)
+# rc          (used implicitel by rc files)
+# highest
+class "GtkButton" binding "test1"           # implicit : rc
+class "GtkButton" binding : highest "test2" # override "rc" priority
+

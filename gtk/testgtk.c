@@ -7477,6 +7477,8 @@ create_main_window (void)
 int
 main (int argc, char *argv[])
 {
+  GtkBindingSet *binding_set;
+
   srand (time (NULL));
 
   gtk_set_locale ();
@@ -7486,6 +7488,15 @@ main (int argc, char *argv[])
 #ifdef HAVE_LIBGLE
   gle_init (&argc, &argv);
 #endif /* !HAVE_LIBGLE */
+
+  /* bindings test
+   */
+  binding_set = gtk_binding_set_by_class (gtk_type_class (GTK_TYPE_WIDGET));
+  gtk_binding_entry_add_signal (binding_set,
+				'9', GDK_CONTROL_MASK | GDK_RELEASE_MASK,
+				"debug_msg",
+				1,
+				GTK_TYPE_STRING, "GtkWidgetClass <ctrl><release>9 test");
 
   gtk_rc_parse ("testgtkrc");
 

@@ -94,10 +94,6 @@ static guint	   gtk_rc_parse_font		   (GScanner	 *scanner,
 						    GtkRcStyle	 *rc_style);
 static guint	   gtk_rc_parse_fontset		   (GScanner	 *scanner,
 						    GtkRcStyle	 *rc_style);
-static guint	   gtk_rc_parse_state		   (GScanner	 *scanner,
-						    GtkStateType *state);
-static guint	   gtk_rc_parse_color		   (GScanner	 *scanner,
-						    GdkColor	 *color);
 static guint	   gtk_rc_parse_pixmap_path	   (GScanner	 *scanner);
 static void	   gtk_rc_parse_pixmap_path_string (gchar *pix_path);
 static char*	   gtk_rc_find_pixmap_in_path	   (GScanner	 *scanner,
@@ -122,10 +118,8 @@ static	GScannerConfig	gtk_rc_scanner_config =
    )			/* cset_identifier_first */,
   (
    G_CSET_a_2_z
-   "_0123456789"
+   "_-0123456789"
    G_CSET_A_2_Z
-   G_CSET_LATINS
-   G_CSET_LATINC
    )			/* cset_identifier_nth */,
   ( "#\n" )		/* cpair_comment_single */,
   
@@ -147,33 +141,10 @@ static	GScannerConfig	gtk_rc_scanner_config =
   TRUE			/* scan_string_dq */,
   TRUE			/* numbers_2_int */,
   FALSE			/* int_2_float */,
-  TRUE			/* identifier_2_string */,
+  FALSE			/* identifier_2_string */,
   TRUE			/* char_2_token */,
   TRUE			/* symbol_2_token */,
-};
-
-enum {
-  TOKEN_INVALID = G_TOKEN_LAST,
-  TOKEN_INCLUDE,
-  TOKEN_NORMAL,
-  TOKEN_ACTIVE,
-  TOKEN_PRELIGHT,
-  TOKEN_SELECTED,
-  TOKEN_INSENSITIVE,
-  TOKEN_FG,
-  TOKEN_BG,
-  TOKEN_BASE,
-  TOKEN_TEXT,
-  TOKEN_FONT,
-  TOKEN_FONTSET,
-  TOKEN_BG_PIXMAP,
-  TOKEN_PIXMAP_PATH,
-  TOKEN_STYLE,
-  TOKEN_BINDING,
-  TOKEN_WIDGET,
-  TOKEN_WIDGET_CLASS,
-  TOKEN_CLASS,
-  TOKEN_LAST
+  FALSE			/* scope_0_fallback */,
 };
 
 static struct
@@ -181,27 +152,34 @@ static struct
   gchar *name;
   guint token;
 } symbols[] = {
-  { "include", TOKEN_INCLUDE },
-  { "NORMAL", TOKEN_NORMAL },
-  { "ACTIVE", TOKEN_ACTIVE },
-  { "PRELIGHT", TOKEN_PRELIGHT },
-  { "SELECTED", TOKEN_SELECTED },
-  { "INSENSITIVE", TOKEN_INSENSITIVE },
-  { "fg", TOKEN_FG },
-  { "bg", TOKEN_BG },
-  { "base", TOKEN_BASE },
-  { "text", TOKEN_TEXT },
-  { "font", TOKEN_FONT },
-  { "fontset", TOKEN_FONTSET },
-  { "bg_pixmap", TOKEN_BG_PIXMAP },
-  { "pixmap_path", TOKEN_PIXMAP_PATH },
-  { "style", TOKEN_STYLE },
-  { "binding", TOKEN_BINDING },
-  { "widget", TOKEN_WIDGET },
-  { "widget_class", TOKEN_WIDGET_CLASS },
-  { "class", TOKEN_CLASS },
+  { "include", GTK_RC_TOKEN_INCLUDE },
+  { "NORMAL", GTK_RC_TOKEN_NORMAL },
+  { "ACTIVE", GTK_RC_TOKEN_ACTIVE },
+  { "PRELIGHT", GTK_RC_TOKEN_PRELIGHT },
+  { "SELECTED", GTK_RC_TOKEN_SELECTED },
+  { "INSENSITIVE", GTK_RC_TOKEN_INSENSITIVE },
+  { "fg", GTK_RC_TOKEN_FG },
+  { "bg", GTK_RC_TOKEN_BG },
+  { "base", GTK_RC_TOKEN_BASE },
+  { "text", GTK_RC_TOKEN_TEXT },
+  { "font", GTK_RC_TOKEN_FONT },
+  { "fontset", GTK_RC_TOKEN_FONTSET },
+  { "bg_pixmap", GTK_RC_TOKEN_BG_PIXMAP },
+  { "pixmap_path", GTK_RC_TOKEN_PIXMAP_PATH },
+  { "style", GTK_RC_TOKEN_STYLE },
+  { "binding", GTK_RC_TOKEN_BINDING },
+  { "bind", GTK_RC_TOKEN_BIND },
+  { "widget", GTK_RC_TOKEN_WIDGET },
+  { "widget_class", GTK_RC_TOKEN_WIDGET_CLASS },
+  { "class", GTK_RC_TOKEN_CLASS },
+  { "lowest", GTK_RC_TOKEN_LOWEST },
+  { "gtk", GTK_RC_TOKEN_GTK },
+  { "application", GTK_RC_TOKEN_APPLICATION },
+  { "rc", GTK_RC_TOKEN_RC },
+  { "highest", GTK_RC_TOKEN_HIGHEST },
 };
-static guint nsymbols = sizeof (symbols) / sizeof (symbols[0]);
+
+static guint n_symbols = sizeof (symbols) / sizeof (symbols[0]);
 
 static GHashTable *rc_style_ht = NULL;
 static GSList *gtk_rc_sets_widget = NULL;
@@ -592,9 +570,9 @@ gtk_rc_parse_any (const gchar  *input_name,
       g_scanner_input_text (scanner, input_string, strlen (input_string));
     }
   scanner->input_name = input_name;
-  
+
   g_scanner_freeze_symbol_table (scanner);
-  for (i = 0; i < nsymbols; i++)
+  for (i = 0; i < n_symbols; i++)
     g_scanner_add_symbol (scanner, symbols[i].name, GINT_TO_POINTER (symbols[i].token));
   g_scanner_thaw_symbol_table (scanner);
   
@@ -615,25 +593,32 @@ gtk_rc_parse_any (const gchar  *input_name,
 	      gchar *msg;
 	      
 	      msg = NULL;
-	      if (expected_token > TOKEN_INVALID &&
-		  expected_token < TOKEN_LAST)
+	      symbol_name = NULL;
+	      if (scanner->scope_id == 0)
 		{
-		  for (i = 0; i < nsymbols; i++)
-		    if (symbols[i].token == expected_token)
-		      msg = symbols[i].name;
-		  if (msg)
-		    msg = g_strconcat ("e.g. `", msg, "'", NULL);
+		  /* if we are in scope 0, we know the symbol names
+		   * that are associated with certaintoken values.
+		   * so we look them up to make the error messages
+		   * more readable.
+		   */
+		  if (expected_token > GTK_RC_TOKEN_INVALID &&
+		      expected_token < GTK_RC_TOKEN_LAST)
+		    {
+		      for (i = 0; i < n_symbols; i++)
+			if (symbols[i].token == expected_token)
+			  msg = symbols[i].name;
+		      if (msg)
+			msg = g_strconcat ("e.g. `", msg, "'", NULL);
+		    }
+		  if (scanner->token > GTK_RC_TOKEN_INVALID &&
+		      scanner->token < GTK_RC_TOKEN_LAST)
+		    {
+		      symbol_name = "???";
+		      for (i = 0; i < n_symbols; i++)
+			if (symbols[i].token == scanner->token)
+			  symbol_name = symbols[i].name;
+		    }
 		}
-	      if (scanner->token > TOKEN_INVALID &&
-		  scanner->token < TOKEN_LAST)
-		{
-		  symbol_name = "???";
-		  for (i = 0; i < nsymbols; i++)
-		    if (symbols[i].token == scanner->token)
-		      symbol_name = symbols[i].name;
-		}
-	      else
-		symbol_name = NULL;
 	      g_scanner_unexp_token (scanner,
 				     expected_token,
 				     NULL,
@@ -776,10 +761,10 @@ gtk_rc_parse_statement (GScanner *scanner)
 
   switch (token)
     {
-    case TOKEN_INCLUDE:
+    case GTK_RC_TOKEN_INCLUDE:
       token = g_scanner_get_next_token (scanner);
-      if (token != TOKEN_INCLUDE)
-	return TOKEN_INCLUDE;
+      if (token != GTK_RC_TOKEN_INCLUDE)
+	return GTK_RC_TOKEN_INCLUDE;
 
       token = g_scanner_get_next_token (scanner);
       if (token != G_TOKEN_STRING)
@@ -788,24 +773,27 @@ gtk_rc_parse_statement (GScanner *scanner)
       gtk_rc_parse_file (scanner->value.v_string, FALSE);
       return G_TOKEN_NONE;
 
-    case TOKEN_STYLE:
+    case GTK_RC_TOKEN_STYLE:
       return gtk_rc_parse_style (scanner);
 
-    case TOKEN_PIXMAP_PATH:
+    case GTK_RC_TOKEN_BINDING:
+      return gtk_binding_parse_binding (scanner);
+
+    case GTK_RC_TOKEN_PIXMAP_PATH:
       return gtk_rc_parse_pixmap_path (scanner);
 
-    case TOKEN_WIDGET:
+    case GTK_RC_TOKEN_WIDGET:
       return gtk_rc_parse_path_pattern (scanner);
 
-    case TOKEN_WIDGET_CLASS:
+    case GTK_RC_TOKEN_WIDGET_CLASS:
       return gtk_rc_parse_path_pattern (scanner);
 
-    case TOKEN_CLASS:
+    case GTK_RC_TOKEN_CLASS:
       return gtk_rc_parse_path_pattern (scanner);
 
     default:
       g_scanner_get_next_token (scanner);
-      return /* G_TOKEN_SYMBOL */ TOKEN_STYLE;
+      return /* G_TOKEN_SYMBOL */ GTK_RC_TOKEN_STYLE;
     }
 }
 
@@ -819,8 +807,8 @@ gtk_rc_parse_style (GScanner *scanner)
   gint i;
   
   token = g_scanner_get_next_token (scanner);
-  if (token != TOKEN_STYLE)
-    return TOKEN_STYLE;
+  if (token != GTK_RC_TOKEN_STYLE)
+    return GTK_RC_TOKEN_STYLE;
   
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_STRING)
@@ -913,25 +901,25 @@ gtk_rc_parse_style (GScanner *scanner)
     {
       switch (token)
 	{
-	case TOKEN_BASE:
+	case GTK_RC_TOKEN_BASE:
 	  token = gtk_rc_parse_base (scanner, rc_style->proto_style);
 	  break;
-	case TOKEN_BG:
+	case GTK_RC_TOKEN_BG:
 	  token = gtk_rc_parse_bg (scanner, rc_style->proto_style);
 	  break;
-	case TOKEN_FG:
+	case GTK_RC_TOKEN_FG:
 	  token = gtk_rc_parse_fg (scanner, rc_style->proto_style);
 	  break;
-	case TOKEN_TEXT:
+	case GTK_RC_TOKEN_TEXT:
 	  token = gtk_rc_parse_text (scanner, rc_style->proto_style);
 	  break;
-	case TOKEN_BG_PIXMAP:
+	case GTK_RC_TOKEN_BG_PIXMAP:
 	  token = gtk_rc_parse_bg_pixmap (scanner, rc_style);
 	  break;
-	case TOKEN_FONT:
+	case GTK_RC_TOKEN_FONT:
 	  token = gtk_rc_parse_font (scanner, rc_style);
 	  break;
-	case TOKEN_FONTSET:
+	case GTK_RC_TOKEN_FONTSET:
 	  token = gtk_rc_parse_fontset (scanner, rc_style);
 	  break;
 	default:
@@ -993,8 +981,8 @@ gtk_rc_parse_base (GScanner *scanner,
   guint token;
   
   token = g_scanner_get_next_token (scanner);
-  if (token != TOKEN_BASE)
-    return TOKEN_BASE;
+  if (token != GTK_RC_TOKEN_BASE)
+    return GTK_RC_TOKEN_BASE;
   
   token = gtk_rc_parse_state (scanner, &state);
   if (token != G_TOKEN_NONE)
@@ -1015,8 +1003,8 @@ gtk_rc_parse_bg (GScanner *scanner,
   guint token;
   
   token = g_scanner_get_next_token (scanner);
-  if (token != TOKEN_BG)
-    return TOKEN_BG;
+  if (token != GTK_RC_TOKEN_BG)
+    return GTK_RC_TOKEN_BG;
   
   token = gtk_rc_parse_state (scanner, &state);
   if (token != G_TOKEN_NONE)
@@ -1037,8 +1025,8 @@ gtk_rc_parse_fg (GScanner *scanner,
   guint token;
   
   token = g_scanner_get_next_token (scanner);
-  if (token != TOKEN_FG)
-    return TOKEN_FG;
+  if (token != GTK_RC_TOKEN_FG)
+    return GTK_RC_TOKEN_FG;
   
   token = gtk_rc_parse_state (scanner, &state);
   if (token != G_TOKEN_NONE)
@@ -1059,8 +1047,8 @@ gtk_rc_parse_text (GScanner *scanner,
   guint token;
   
   token = g_scanner_get_next_token (scanner);
-  if (token != TOKEN_TEXT)
-    return TOKEN_TEXT;
+  if (token != GTK_RC_TOKEN_TEXT)
+    return GTK_RC_TOKEN_TEXT;
   
   token = gtk_rc_parse_state (scanner, &state);
   if (token != G_TOKEN_NONE)
@@ -1082,8 +1070,8 @@ gtk_rc_parse_bg_pixmap (GScanner   *scanner,
   gchar *pixmap_file;
   
   token = g_scanner_get_next_token (scanner);
-  if (token != TOKEN_BG_PIXMAP)
-    return TOKEN_BG_PIXMAP;
+  if (token != GTK_RC_TOKEN_BG_PIXMAP)
+    return GTK_RC_TOKEN_BG_PIXMAP;
   
   token = gtk_rc_parse_state (scanner, &state);
   if (token != G_TOKEN_NONE)
@@ -1148,8 +1136,8 @@ gtk_rc_parse_font (GScanner   *scanner,
   guint token;
   
   token = g_scanner_get_next_token (scanner);
-  if (token != TOKEN_FONT)
-    return TOKEN_FONT;
+  if (token != GTK_RC_TOKEN_FONT)
+    return GTK_RC_TOKEN_FONT;
   
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_EQUAL_SIGN)
@@ -1173,8 +1161,8 @@ gtk_rc_parse_fontset (GScanner	 *scanner,
   guint token;
   
   token = g_scanner_get_next_token (scanner);
-  if (token != TOKEN_FONTSET)
-    return TOKEN_FONTSET;
+  if (token != GTK_RC_TOKEN_FONTSET)
+    return GTK_RC_TOKEN_FONTSET;
   
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_EQUAL_SIGN)
@@ -1191,11 +1179,21 @@ gtk_rc_parse_fontset (GScanner	 *scanner,
   return G_TOKEN_NONE;
 }
 
-static guint
+guint
 gtk_rc_parse_state (GScanner	 *scanner,
 		    GtkStateType *state)
 {
+  guint old_scope;
   guint token;
+
+  g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
+  g_return_val_if_fail (state != NULL, G_TOKEN_ERROR);
+  
+  /* we don't know where we got called from, so we reset the scope here.
+   * if we bail out due to errors, we *don't* reset the scope, so the
+   * error messaging code can make sense of our tokens.
+   */
+  old_scope = g_scanner_set_scope (scanner, 0);
   
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_LEFT_BRACE)
@@ -1204,37 +1202,92 @@ gtk_rc_parse_state (GScanner	 *scanner,
   token = g_scanner_get_next_token (scanner);
   switch (token)
     {
-    case TOKEN_ACTIVE:
+    case GTK_RC_TOKEN_ACTIVE:
       *state = GTK_STATE_ACTIVE;
       break;
-    case TOKEN_INSENSITIVE:
+    case GTK_RC_TOKEN_INSENSITIVE:
       *state = GTK_STATE_INSENSITIVE;
       break;
-    case TOKEN_NORMAL:
+    case GTK_RC_TOKEN_NORMAL:
       *state = GTK_STATE_NORMAL;
       break;
-    case TOKEN_PRELIGHT:
+    case GTK_RC_TOKEN_PRELIGHT:
       *state = GTK_STATE_PRELIGHT;
       break;
-    case TOKEN_SELECTED:
+    case GTK_RC_TOKEN_SELECTED:
       *state = GTK_STATE_SELECTED;
       break;
     default:
-      return /* G_TOKEN_SYMBOL */ TOKEN_NORMAL;
+      return /* G_TOKEN_SYMBOL */ GTK_RC_TOKEN_NORMAL;
     }
   
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_RIGHT_BRACE)
     return G_TOKEN_RIGHT_BRACE;
   
+  g_scanner_set_scope (scanner, old_scope);
+
   return G_TOKEN_NONE;
 }
 
-static guint
+guint
+gtk_rc_parse_priority (GScanner	           *scanner,
+		       GtkPathPriorityType *priority)
+{
+  guint old_scope;
+  guint token;
+
+  g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
+  g_return_val_if_fail (priority != NULL, G_TOKEN_ERROR);
+
+  /* we don't know where we got called from, so we reset the scope here.
+   * if we bail out due to errors, we *don't* reset the scope, so the
+   * error messaging code can make sense of our tokens.
+   */
+  old_scope = g_scanner_set_scope (scanner, 0);
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != ':')
+    return ':';
+  
+  token = g_scanner_get_next_token (scanner);
+  switch (token)
+    {
+    case GTK_RC_TOKEN_LOWEST:
+      *priority = GTK_PATH_PRIO_LOWEST;
+      break;
+    case GTK_RC_TOKEN_GTK:
+      *priority = GTK_PATH_PRIO_GTK;
+      break;
+    case GTK_RC_TOKEN_APPLICATION:
+      *priority = GTK_PATH_PRIO_APPLICATION;
+      break;
+    case GTK_RC_TOKEN_RC:
+      *priority = GTK_PATH_PRIO_RC;
+      break;
+    case GTK_RC_TOKEN_HIGHEST:
+      *priority = GTK_PATH_PRIO_HIGHEST;
+      break;
+    default:
+      return /* G_TOKEN_SYMBOL */ GTK_RC_TOKEN_APPLICATION;
+    }
+  
+  g_scanner_set_scope (scanner, old_scope);
+
+  return G_TOKEN_NONE;
+}
+
+guint
 gtk_rc_parse_color (GScanner *scanner,
 		    GdkColor *color)
 {
   guint token;
+
+  g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
+
+  /* we don't need to set our own scop here, because
+   * we don't need own symbols
+   */
   
   token = g_scanner_get_next_token (scanner);
   switch (token)
@@ -1347,8 +1400,8 @@ gtk_rc_parse_pixmap_path (GScanner *scanner)
   guint token;
   
   token = g_scanner_get_next_token (scanner);
-  if (token != TOKEN_PIXMAP_PATH)
-    return TOKEN_PIXMAP_PATH;
+  if (token != GTK_RC_TOKEN_PIXMAP_PATH)
+    return GTK_RC_TOKEN_PIXMAP_PATH;
   
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_STRING)
@@ -1403,21 +1456,22 @@ gtk_rc_parse_path_pattern (GScanner   *scanner)
   GtkPathType path_type;
   gchar *pattern;
   gboolean is_binding;
+  GtkPathPriorityType priority = GTK_PATH_PRIO_RC;
   
   token = g_scanner_get_next_token (scanner);
   switch (token)
     {
-    case TOKEN_WIDGET:
+    case GTK_RC_TOKEN_WIDGET:
       path_type = GTK_PATH_WIDGET;
       break;
-    case TOKEN_WIDGET_CLASS:
+    case GTK_RC_TOKEN_WIDGET_CLASS:
       path_type = GTK_PATH_WIDGET_CLASS;
       break;
-    case TOKEN_CLASS:
+    case GTK_RC_TOKEN_CLASS:
       path_type = GTK_PATH_CLASS;
       break;
     default:
-      return TOKEN_WIDGET_CLASS;
+      return GTK_RC_TOKEN_WIDGET_CLASS;
     }
   
   token = g_scanner_get_next_token (scanner);
@@ -1427,14 +1481,25 @@ gtk_rc_parse_path_pattern (GScanner   *scanner)
   pattern = g_strdup (scanner->value.v_string);
 
   token = g_scanner_get_next_token (scanner);
-  if (token == TOKEN_STYLE)
+  if (token == GTK_RC_TOKEN_STYLE)
     is_binding = FALSE;
-  else if (token == TOKEN_BINDING)
-    is_binding = TRUE;
+  else if (token == GTK_RC_TOKEN_BINDING)
+    {
+      is_binding = TRUE;
+      if (g_scanner_peek_next_token (scanner) == ':')
+	{
+	  token = gtk_rc_parse_priority (scanner, &priority);
+	  if (token != G_TOKEN_NONE)
+	    {
+	      g_free (pattern);
+	      return token;
+	    }
+	}
+    }
   else
     {
       g_free (pattern);
-      return TOKEN_STYLE;
+      return GTK_RC_TOKEN_STYLE;
     }
   
   token = g_scanner_get_next_token (scanner);
@@ -1454,7 +1519,7 @@ gtk_rc_parse_path_pattern (GScanner   *scanner)
 	  g_free (pattern);
 	  return G_TOKEN_STRING;
 	}
-      gtk_binding_set_add_path (binding, path_type, pattern, GTK_PATH_PRIO_RC);
+      gtk_binding_set_add_path (binding, path_type, pattern, priority);
     }
   else
     {

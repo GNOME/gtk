@@ -92,6 +92,8 @@
     GTK_TYPE_ENUM, _gtk_progress_bar_style_values },
   { "GtkProgressBarOrientation", &GTK_TYPE_PROGRESS_BAR_ORIENTATION,
     GTK_TYPE_ENUM, _gtk_progress_bar_orientation_values },
+  { "GtkRcTokenType", &GTK_TYPE_RC_TOKEN_TYPE,
+    GTK_TYPE_ENUM, _gtk_rc_token_type_values },
   { "GtkSpinButtonUpdatePolicy", &GTK_TYPE_SPIN_BUTTON_UPDATE_POLICY,
     GTK_TYPE_ENUM, _gtk_spin_button_update_policy_values },
   { "GtkSpinType", &GTK_TYPE_SPIN_TYPE,
