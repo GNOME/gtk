@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-11 20:42+0200\n"
-"PO-Revision-Date: 2004-07-12 05:14+0200\n"
+"POT-Creation-Date: 2004-07-18 04:24+0200\n"
+"PO-Revision-Date: 2004-07-18 10:52+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -963,7 +963,7 @@ msgstr ""
 "Kon geen favoriet toevoegen voor %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5332
+#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5351
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1024,115 +1024,123 @@ msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 "Kon geen favoriet toevoegen voor %s omdat het een ongeldige pad-naam is."
 
-#: gtk/gtkfilechooserdefault.c:2578
+#: gtk/gtkfilechooserdefault.c:2525
+msgid "Shortcuts"
+msgstr "Sneltoetsen"
+
+#: gtk/gtkfilechooserdefault.c:2579
 msgid "Folder"
 msgstr "Map"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2625 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2626 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "_Toevoegen"
 
-#: gtk/gtkfilechooserdefault.c:2635 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2636 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_Verwijderen"
 
-#: gtk/gtkfilechooserdefault.c:2714
+#: gtk/gtkfilechooserdefault.c:2715
 msgid "Show _Hidden Files"
 msgstr "Ver_borgen bestanden tonen"
 
-#: gtk/gtkfilechooserdefault.c:2855
+#: gtk/gtkfilechooserdefault.c:2830 gtk/gtkfilesel.c:766
+msgid "Files"
+msgstr "Bestanden"
+
+#: gtk/gtkfilechooserdefault.c:2857
 msgid "Name"
 msgstr "Naam"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2879
 msgid "Size"
 msgstr "Afmeting"
 
-#: gtk/gtkfilechooserdefault.c:2889
+#: gtk/gtkfilechooserdefault.c:2891
 msgid "Modified"
 msgstr "Aangepast"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2934
+#: gtk/gtkfilechooserdefault.c:2936
 msgid "Create Fo_lder"
 msgstr "_Map aanmaken"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3044
+#: gtk/gtkfilechooserdefault.c:3046
 msgid "_Name:"
 msgstr "_Naam:"
 
-#: gtk/gtkfilechooserdefault.c:3086
+#: gtk/gtkfilechooserdefault.c:3088
 msgid "_Browse for other folders"
 msgstr "_Bladeren naar andere mappen"
 
-#: gtk/gtkfilechooserdefault.c:3323
+#: gtk/gtkfilechooserdefault.c:3325
 msgid "Save in _folder:"
 msgstr "Opslaan in _map:"
 
-#: gtk/gtkfilechooserdefault.c:3325
+#: gtk/gtkfilechooserdefault.c:3327
 msgid "Create in _folder:"
 msgstr "Aanmaken in _map:"
 
-#: gtk/gtkfilechooserdefault.c:3969
+#: gtk/gtkfilechooserdefault.c:3971
 msgid "Can't change to folder because it isn't local"
 msgstr "Kan niet naar de map gaan omdat deze niet locaal is"
 
-#: gtk/gtkfilechooserdefault.c:4107
+#: gtk/gtkfilechooserdefault.c:4109
 msgid "Could not find the path"
 msgstr "Kon het pad niet vinden"
 
-#: gtk/gtkfilechooserdefault.c:4458
+#: gtk/gtkfilechooserdefault.c:4460
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "Snelkoppeling %s bestaat niet"
 
-#: gtk/gtkfilechooserdefault.c:5105
+#: gtk/gtkfilechooserdefault.c:5124
 msgid "Type name of new folder"
 msgstr "Geef de naam van de nieuwe map"
 
-#: gtk/gtkfilechooserdefault.c:5134
+#: gtk/gtkfilechooserdefault.c:5153
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:5136
+#: gtk/gtkfilechooserdefault.c:5155
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5138
+#: gtk/gtkfilechooserdefault.c:5157
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5140
+#: gtk/gtkfilechooserdefault.c:5159
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5185
+#: gtk/gtkfilechooserdefault.c:5204
 msgid "Today"
 msgstr "Vandaag"
 
-#: gtk/gtkfilechooserdefault.c:5187
+#: gtk/gtkfilechooserdefault.c:5206
 msgid "Yesterday"
 msgstr "Gisteren"
 
-#: gtk/gtkfilechooserdefault.c:5198
+#: gtk/gtkfilechooserdefault.c:5217
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: gtk/gtkfilechooserdefault.c:5293
+#: gtk/gtkfilechooserdefault.c:5312
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Kan niet naar de map gaan die u opgaf omdat het een ongeldig pad is."
 
-#: gtk/gtkfilechooserdefault.c:5370
+#: gtk/gtkfilechooserdefault.c:5389
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1141,15 +1149,15 @@ msgstr ""
 "Kon %s niet selecteren:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5409
+#: gtk/gtkfilechooserdefault.c:5428
 msgid "Open Location"
 msgstr "Locatie openen"
 
-#: gtk/gtkfilechooserdefault.c:5416
+#: gtk/gtkfilechooserdefault.c:5435
 msgid "Save in Location"
 msgstr "Opslaan in locatie"
 
-#: gtk/gtkfilechooserdefault.c:5435
+#: gtk/gtkfilechooserdefault.c:5454
 msgid "_Location:"
 msgstr "_Locatie:"
 
@@ -1160,10 +1168,6 @@ msgstr "Mappen"
 #: gtk/gtkfilesel.c:734
 msgid "Fol_ders"
 msgstr "_Mappen"
-
-#: gtk/gtkfilesel.c:766
-msgid "Files"
-msgstr "Bestanden"
 
 #: gtk/gtkfilesel.c:770
 msgid "_Files"
@@ -1383,7 +1387,9 @@ msgstr "Kon geen standaard pictogram verkrijgen voor %s"
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr "De naam \"%s\" is ongeldig omdat deze het teken \"%s\" bevat. Gebruik een andere naam."
+msgstr ""
+"De naam \"%s\" is ongeldig omdat deze het teken \"%s\" bevat. Gebruik een "
+"andere naam."
 
 #: gtk/gtkfilesystemunix.c:1434 gtk/gtkfilesystemwin32.c:923
 #, c-format
@@ -1586,17 +1592,17 @@ msgstr "Groep"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "De radioknop wiens groep deze knop toebehoort."
 
-#: gtk/gtkrc.c:2390
+#: gtk/gtkrc.c:2391
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan invoegbestand \"%s\" niet vinden"
 
-#: gtk/gtkrc.c:3029 gtk/gtkrc.c:3032
+#: gtk/gtkrc.c:3030 gtk/gtkrc.c:3033
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan afbeelding in pixmap_pad: \"%s\" niet vinden"
 
-#: gtk/gtkrc.c:3467
+#: gtk/gtkrc.c:3468
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Pixmap pad-element: \"%s\" moet absoluut zijn, %s, lijn %d"
