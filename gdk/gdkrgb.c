@@ -146,7 +146,7 @@ static gboolean gdk_rgb_verbose = FALSE;
 static gint
 gdk_rgb_cmap_fail (const char *msg, GdkColormap *cmap, gulong *pixels)
 {
-  gulong free_pixels[256];
+  GdkColor free_colors[256];
   gint n_free;
   gint i;
 
@@ -156,9 +156,9 @@ gdk_rgb_cmap_fail (const char *msg, GdkColormap *cmap, gulong *pixels)
   n_free = 0;
   for (i = 0; i < 256; i++)
     if (pixels[i] < 256)
-      free_pixels[n_free++] = pixels[i];
+      free_colors[n_free++].pixel = pixels[i];
   if (n_free)
-    gdk_colors_free (cmap, free_pixels, n_free, 0);
+    gdk_colormap_free_colors (cmap, free_colors, n_free);
   return 0;
 }
 
@@ -257,18 +257,22 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
 	b0 = bi * 255 / (nb - 1);
 	idx = ((ri * nr) + gi) * nb + bi;
 	d2 = (r - r0) * (r - r0) + (g - g0) * (g - g0) + (b - b0) * (b - b0);
-	if (d2 < best[idx]) {
-	  if (pixels[idx] < 256)
-	    gdk_colors_free (cmap, pixels + idx, 1, 0);
-	  else
-	    colors_needed--;
-	  color = cmap->colors[i];
-	  if (!gdk_colormap_alloc_color (cmap, &color, FALSE, FALSE))
-	    return gdk_rgb_cmap_fail ("error allocating system color\n",
-				      cmap, pixels);
-	  pixels[idx] = color.pixel; /* which is almost certainly i */
-	  best[idx] = d2;
-	}
+	if (d2 < best[idx])
+	  {
+	    if (pixels[idx] < 256)
+	      {
+		color.pixel = pixels[idx];
+		gdk_colormap_free_colors (cmap, &color, 1);
+	      }
+	    else
+	      colors_needed--;
+	    color = cmap->colors[i];
+	    if (!gdk_colormap_alloc_color (cmap, &color, FALSE, FALSE))
+	      return gdk_rgb_cmap_fail ("error allocating system color\n",
+					cmap, pixels);
+	    pixels[idx] = color.pixel; /* which is almost certainly i */
+	    best[idx] = d2;
+	  }
       }
 #endif
 
@@ -3108,15 +3112,7 @@ gdk_draw_rgb_image_core (GdkRgbInfo *image_info,
   if (image_info->bitmap)
     {
       if (image_info->own_gc == NULL)
-	{
-	  GdkColor color;
-
-	  image_info->own_gc = gdk_gc_new (drawable);
-	  gdk_color_white (image_info->cmap, &color);
-	  gdk_gc_set_foreground (image_info->own_gc, &color);
-	  gdk_color_black (image_info->cmap, &color);
-	  gdk_gc_set_background (image_info->own_gc, &color);
-	}
+	image_info->own_gc = gdk_gc_new (drawable);
       gc = image_info->own_gc;
     }
   for (y0 = 0; y0 < height; y0 += GDK_SCRATCH_IMAGE_HEIGHT)

@@ -353,7 +353,7 @@ gtk_tips_query_real_start_query (GtkTipsQuery *tips_query)
 			      GDK_CURRENT_TIME);
   if (failure)
     {
-      gdk_cursor_destroy (tips_query->query_cursor);
+      gdk_cursor_unref (tips_query->query_cursor);
       tips_query->query_cursor = NULL;
     }
   gtk_grab_add (GTK_WIDGET (tips_query));
@@ -369,7 +369,7 @@ gtk_tips_query_real_stop_query (GtkTipsQuery *tips_query)
     {
       gdk_display_pointer_ungrab (gtk_widget_get_display (GTK_WIDGET (tips_query)),
 				  GDK_CURRENT_TIME);
-      gdk_cursor_destroy (tips_query->query_cursor);
+      gdk_cursor_unref (tips_query->query_cursor);
       tips_query->query_cursor = NULL;
     }
   if (tips_query->last_crossed)

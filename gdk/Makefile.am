@@ -14,14 +14,15 @@ EXTRA_DIST =			\
 
 common_includes = @STRIP_BEGIN@ 	\
 	-DG_LOG_DOMAIN=\"Gdk\"		\
+	-DGDK_COMPILATION		\
 	-I$(top_srcdir)			\
 	-I$(top_builddir)/gdk		\
 	-I$(top_srcdir)/gdk-pixbuf 	\
 	-DG_DISABLE_DEPRECATED		\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
+	-DGDK_DISABLE_DEPRECATED	\
 	@GTK_DEBUG_FLAGS@ 		\
 	@GDK_DEP_CFLAGS@		\
-	-DGDK_COMPILATION		\
 @STRIP_END@
 
 INCLUDES = $(common_includes)

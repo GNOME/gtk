@@ -27,6 +27,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#undef GDK_DISABLE_DEPRECATED
+
 #include <math.h>
 #include "gtkcontainer.h"
 #include "gtkpixmap.h"

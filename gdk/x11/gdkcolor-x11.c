@@ -1072,26 +1072,6 @@ gint
 gdk_colormap_alloc_colors (GdkColormap *colormap,
 			   GdkColor    *colors,
 			   gint         ncolors,
-/**
- * gdk_colormap_alloc_colors:
- * @colormap: a #GdkColormap.
- * @colors: The color values to allocate. On return, the pixel
- *    values for allocated colors will be filled in.
- * @ncolors: The number of colors in @colors.
- * @writeable: If %TRUE, the colors are allocated writeable
- *    (their values can later be changed using gdk_color_change()).
- *    Writeable colors cannot be shared between applications.
- * @best_match: If %TRUE, GDK will attempt to do matching against
- *    existing colors if the colors cannot be allocated as requested.
- * @success: An array of length @ncolors. On return, this
- *   indicates whether the corresponding color in @colors was
- *   sucessfully allocated or not.
- * 
- * Allocates colors from a colormap.
- * 
- * Return value: The number of colors that were not sucessfully 
- * allocated.
- **/
 			   gboolean     writeable,
 			   gboolean     best_match,
 			   gboolean    *success)

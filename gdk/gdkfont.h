@@ -1,4 +1,4 @@
-#ifndef GDK_DISABLE_DEPRECATED
+#if !defined(GDK_DISABLE_DEPRECATED) || defined(GDK_COMPILATION) || defined(GTK_COMPILATION)
 
 #ifndef __GDK_FONT_H__
 #define __GDK_FONT_H__
@@ -31,11 +31,11 @@ struct _GdkFont
 
 GType    gdk_font_get_type  (void);
 
-#ifndef GDK_MULTIHEAD_SAFE
-GdkFont* gdk_font_load             (const gchar          *font_name);
-GdkFont* gdk_fontset_load          (const gchar          *fontset_name);
-GdkFont* gdk_font_from_description (PangoFontDescription *font_desc);
-#endif
+GdkFont* gdk_font_ref	    (GdkFont        *font);
+void	 gdk_font_unref	    (GdkFont        *font);
+gint	 gdk_font_id	    (const GdkFont  *font);
+gboolean gdk_font_equal	    (const GdkFont  *fonta,
+			     const GdkFont  *fontb);
 
 GdkFont *gdk_font_load_for_display             (GdkDisplay           *display,
 						const gchar          *font_name);
@@ -44,11 +44,13 @@ GdkFont *gdk_fontset_load_for_display          (GdkDisplay           *display,
 GdkFont *gdk_font_from_description_for_display (GdkDisplay           *display,
 						PangoFontDescription *font_desc);
 
-GdkFont* gdk_font_ref	    (GdkFont        *font);
-void	 gdk_font_unref	    (GdkFont        *font);
-gint	 gdk_font_id	    (const GdkFont  *font);
-gboolean gdk_font_equal	    (const GdkFont  *fonta,
-			     const GdkFont  *fontb);
+#ifndef GDK_DISABLE_DEPRECATED
+
+#ifndef GDK_MULTIHEAD_SAFE
+GdkFont* gdk_font_load             (const gchar          *font_name);
+GdkFont* gdk_fontset_load          (const gchar          *fontset_name);
+GdkFont* gdk_font_from_description (PangoFontDescription *font_desc);
+#endif
 
 gint	 gdk_string_width   (GdkFont        *font,
 			     const gchar    *string);
@@ -103,10 +105,12 @@ void     gdk_string_extents (GdkFont     *font,
 
 GdkDisplay * gdk_font_get_display (GdkFont *font);
 
+#endif /* GDK_DISABLE_DEPRECATED */
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
 #endif /* __GDK_FONT_H__ */
 
-#endif /* GDK_DISABLE_DEPRECATED */
+#endif /* !GDK_DISABLE_DEPRECATED || GDK_COMPILATION || GTK_COMPILATION */

@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#undef GDK_DISABLE_DEPRECATED
+
 #include <ctype.h>
 #include <string.h>
 #include "gdk/gdkkeysyms.h"

@@ -170,7 +170,7 @@ gdk_color_white (GdkColormap *colormap,
       color->green = 65535;
       color->blue = 65535;
 
-      return_val = gdk_color_alloc (colormap, color);
+      return_val = gdk_colormap_alloc_color (colormap, color, FALSE, TRUE);
     }
   else
     return_val = FALSE;
@@ -202,7 +202,7 @@ gdk_color_black (GdkColormap *colormap,
       color->green = 0;
       color->blue = 0;
 
-      return_val = gdk_color_alloc (colormap, color);
+      return_val = gdk_colormap_alloc_color (colormap, color, FALSE, TRUE);
     }
   else
     return_val = FALSE;

@@ -382,7 +382,7 @@ gtk_tree_item_add_pixmaps (GtkTreeItem *tree_item)
       pixmap_node = g_new (GtkTreePixmaps, 1);
 
       pixmap_node->colormap = colormap;
-      gdk_colormap_ref (colormap);
+      g_object_ref (colormap);
 
       pixmap_node->refcount = 1;
 
@@ -422,11 +422,11 @@ gtk_tree_item_remove_pixmaps (GtkTreeItem *tree_item)
       
       if (--pixmap_node->refcount == 0)
 	{
-	  gdk_colormap_unref (pixmap_node->colormap);
-	  gdk_pixmap_unref (pixmap_node->pixmap_plus);
-	  gdk_bitmap_unref (pixmap_node->mask_plus);
-	  gdk_pixmap_unref (pixmap_node->pixmap_minus);
-	  gdk_bitmap_unref (pixmap_node->mask_minus);
+	  g_object_unref (pixmap_node->colormap);
+	  g_object_unref (pixmap_node->pixmap_plus);
+	  g_object_unref (pixmap_node->mask_plus);
+	  g_object_unref (pixmap_node->pixmap_minus);
+	  g_object_unref (pixmap_node->mask_minus);
 	  
 	  pixmaps = g_list_remove_link (pixmaps, tree_item->pixmaps);
 	  g_list_free_1 (tree_item->pixmaps);

@@ -73,7 +73,7 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_DISPLAY()                 gdk_display
 #endif
 
-#ifdef INSIDE_GDK_X11
+#ifdef GDK_COMPILATION
 
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
@@ -95,7 +95,7 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_GC_GET_XGC(gc)	      (GDK_GC_X11(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : ((GdkGCX11 *)(gc))->xgc)
 #define GDK_WINDOW_XWINDOW	      GDK_DRAWABLE_XID
 
-#else /* INSIDE_GDK_X11 */
+#else /* GDK_COMPILATION */
 
 #ifndef GDK_MULTIHEAD_SAFE
 #define GDK_ROOT_WINDOW()             (gdk_x11_get_default_root_xwindow ())
@@ -117,7 +117,7 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_SCREEN_XNUMBER(screen)    (gdk_x11_screen_get_screen_number (screen))
 #define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
 
-#endif /* INSIDE_GDK_X11 */
+#endif /* GDK_COMPILATION */
 
 GdkVisual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
 					 VisualID   xvisualid);
@@ -172,22 +172,27 @@ G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
 void	    gdk_x11_display_grab	      (GdkDisplay *display);
 void	    gdk_x11_display_ungrab	      (GdkDisplay *display);
 
+#if !defined(GDK_DISABLE_DEPRECATED) || defined(GDK_COMPILATION)
+
+gpointer             gdk_x11_font_get_xfont    (GdkFont *font);
+#define GDK_FONT_XFONT(font)          (gdk_x11_font_get_xfont (font))
+
+#define gdk_font_lookup_for_display(display, xid) ((GdkFont*) gdk_xid_table_lookup_for_display (display, xid))
+
+#endif /* !GDK_DISABLE_DEPRECATED || GDK_COMPILATION */
+
 #ifndef GDK_DISABLE_DEPRECATED
 
 Display *            gdk_x11_font_get_xdisplay (GdkFont *font);
-gpointer             gdk_x11_font_get_xfont    (GdkFont *font);
 G_CONST_RETURN char *gdk_x11_font_get_name     (GdkFont *font);
 
 #define GDK_FONT_XDISPLAY(font)       (gdk_x11_font_get_xdisplay (font))
-#define GDK_FONT_XFONT(font)          (gdk_x11_font_get_xfont (font))
 
 #ifndef GDK_MULTIHEAD_SAFE
 
 #define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
 
 #endif /* GDK_MULTIHEAD_SAFE */
-#define gdk_font_lookup_for_display(display, xid) ((GdkFont*) gdk_xid_table_lookup_for_display (display, xid))
-
 #endif /* GDK_DISABLE_DEPRECATED */
 
 G_END_DECLS

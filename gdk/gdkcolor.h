@@ -74,7 +74,10 @@ GdkScreen *gdk_colormap_get_screen (GdkColormap *cmap);
 
 #ifndef GDK_DISABLE_DEPRECATED
 gint gdk_colormap_get_system_size  (void);
+#endif
 
+#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
+/* Used by gdk_colors_store () */
 void gdk_colormap_change (GdkColormap	*colormap,
 			  gint		 ncolors);
 #endif 
@@ -113,6 +116,18 @@ GType     gdk_color_get_type (void);
 void gdk_colors_store	 (GdkColormap	*colormap,
 			  GdkColor	*colors,
 			  gint		 ncolors);
+gint gdk_color_white	 (GdkColormap	*colormap,
+			  GdkColor	*color);
+gint gdk_color_black	 (GdkColormap	*colormap,
+			  GdkColor	*color);
+gint gdk_color_alloc	 (GdkColormap	*colormap,
+			  GdkColor	*color);
+gint gdk_color_change	 (GdkColormap	*colormap,
+			  GdkColor	*color);
+#endif /* GDK_DISABLE_DEPRECATED */
+
+#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
+/* Used by gdk_rgb_try_colormap () */
 gint gdk_colors_alloc	 (GdkColormap	*colormap,
 			  gboolean	 contiguous,
 			  gulong	*planes,
@@ -123,15 +138,7 @@ void gdk_colors_free	 (GdkColormap	*colormap,
 			  gulong	*pixels,
 			  gint		 npixels,
 			  gulong	 planes);
-gint gdk_color_white	 (GdkColormap	*colormap,
-			  GdkColor	*color);
-gint gdk_color_black	 (GdkColormap	*colormap,
-			  GdkColor	*color);
-gint gdk_color_alloc	 (GdkColormap	*colormap,
-			  GdkColor	*color);
-gint gdk_color_change	 (GdkColormap	*colormap,
-			  GdkColor	*color);
-#endif /* GDK_DISABLE_DEPRECATED */
+#endif /* !GDK_DISABLE_DEPRECATED || GDK_COMPILATION */
 
 #ifdef __cplusplus
 }

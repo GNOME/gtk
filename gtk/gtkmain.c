@@ -966,9 +966,7 @@ gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof
 void
 gtk_exit (gint errorcode)
 {
-  /* Only if "gtk" has been initialized should we de-initialize.
-   */
-  gdk_exit (errorcode);
+  exit (errorcode);
 }
 
 

@@ -449,7 +449,8 @@ gint	      gdk_window_get_origin	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);
 
-#ifndef GDK_DISABLE_DEPRECATED
+#if !defined (GDK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
+/* Used by gtk_handle_box_button_changed () */
 gboolean      gdk_window_get_deskrelative_origin (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);

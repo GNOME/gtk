@@ -1094,6 +1094,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
   gint snap_edge;
   gboolean is_snapped = FALSE;
   gint handle_position;
+  GdkGeometry geometry;
 
   hb = GTK_HANDLE_BOX (widget);
   if (!hb->in_drag)
@@ -1260,7 +1261,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	  
 	  gdk_window_move_resize (hb->float_window, new_x, new_y, width, height);
 	  gdk_window_reparent (hb->bin_window, hb->float_window, 0, 0);
-	  gdk_window_set_hints (hb->float_window, new_x, new_y, 0, 0, 0, 0, GDK_HINT_POS);
+	  gdk_window_set_geometry_hints (hb->float_window, &geometry, GDK_HINT_POS);
 	  gdk_window_show (hb->float_window);
 	  hb->float_window_mapped = TRUE;
 #if	0
