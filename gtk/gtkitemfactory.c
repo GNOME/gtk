@@ -1430,45 +1430,42 @@ gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
 				  guint			 mouse_button,
 				  guint32		 time)
 {
+  MenuPos *mpos;
+
   g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (GTK_IS_MENU (ifactory->widget));
-
-  if (!GTK_WIDGET_VISIBLE (ifactory->widget))
+  
+  mpos = gtk_object_get_data_by_id (GTK_OBJECT (ifactory->widget), quark_if_menu_pos);
+  
+  if (!mpos)
     {
-      MenuPos *mpos;
-
-      mpos = gtk_object_get_data_by_id (GTK_OBJECT (ifactory->widget), quark_if_menu_pos);
-
-      if (!mpos)
-	{
-	  mpos = g_new0 (MenuPos, 1);
-	  gtk_object_set_data_by_id_full (GTK_OBJECT (ifactory->widget),
-					  quark_if_menu_pos,
-					  mpos,
-					  g_free);
-	}
-
-      mpos->x = x;
-      mpos->y = y;
-
-      if (popup_data != NULL)
-	{
-	  gtk_object_set_data_by_id_full (GTK_OBJECT (ifactory),
-					  quark_popup_data,
-					  popup_data,
-					  destroy);
-	  gtk_signal_connect (GTK_OBJECT (ifactory->widget),
-			      "selection-done",
-			      GTK_SIGNAL_FUNC (ifactory_delete_popup_data),
-			      ifactory);
-	}
-
-      gtk_menu_popup (GTK_MENU (ifactory->widget),
-		      NULL, NULL,
-		      gtk_item_factory_menu_pos, mpos,
-		      mouse_button, time);
+      mpos = g_new0 (MenuPos, 1);
+      gtk_object_set_data_by_id_full (GTK_OBJECT (ifactory->widget),
+				      quark_if_menu_pos,
+				      mpos,
+				      g_free);
     }
+  
+  mpos->x = x;
+  mpos->y = y;
+  
+  if (popup_data != NULL)
+    {
+      gtk_object_set_data_by_id_full (GTK_OBJECT (ifactory),
+				      quark_popup_data,
+				      popup_data,
+				      destroy);
+      gtk_signal_connect (GTK_OBJECT (ifactory->widget),
+			  "selection-done",
+			  GTK_SIGNAL_FUNC (ifactory_delete_popup_data),
+			  ifactory);
+    }
+  
+  gtk_menu_popup (GTK_MENU (ifactory->widget),
+		  NULL, NULL,
+		  gtk_item_factory_menu_pos, mpos,
+		  mouse_button, time);
 }
 
 static guint
