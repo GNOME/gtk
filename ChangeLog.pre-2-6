@@ -1,3 +1,18 @@
+Fri Jul  9 23:26:09 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gdk/x11/gdkwindow-x11.h (struct _GdkWindowImplX11): Add an
+	"override_redirect" bit.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): Set it here.
+	
+	* gdk/x11/gdkwindow-x11.c (gdk_window_move, gdk_window_resize,
+	gdk_window_move_resize): 
+	Update the local size/position cache
+	immediately for override redirect windows.
+
+	* gdk/x11/gdkwindow-x11.c (show_window_internal): Invalidate
+	newly mapped child and override redirect windows.
+
 2004-07-09  Federico Mena Quintero  <federico@ximian.com>
 
 	Fixes #137031:

@@ -608,6 +608,8 @@ gdk_window_new (GdkWindow     *parent,
   else
     xattributes.override_redirect = False;
 
+  impl->override_redirect = xattributes.override_redirect;
+  
   if (private->parent && private->parent->guffaw_gravity)
     {
       xattributes.win_gravity = StaticGravity;
@@ -683,6 +685,8 @@ gdk_window_new (GdkWindow     *parent,
 	  xattributes.override_redirect = True;
 	  xattributes.cursor = None;
 	  xattributes_mask |= CWSaveUnder | CWOverrideRedirect;
+
+	  impl->override_redirect = TRUE;
 	}
     }
   else
@@ -1215,7 +1219,17 @@ show_window_internal (GdkWindow *window,
       g_assert (GDK_WINDOW_IS_MAPPED (window));
 
       if (impl->position_info.mapped)
-        XMapWindow (xdisplay, xwindow);
+	{
+	  XMapWindow (xdisplay, xwindow);
+
+	  if (!private->input_only &&
+	      (private->window_type == GDK_WINDOW_CHILD ||
+	       impl->override_redirect) &&
+	      gdk_window_is_viewable (window))
+	    {
+	      gdk_window_invalidate_rect (window, NULL, TRUE);
+	    }
+	}
     }
 }
 
@@ -1379,17 +1393,25 @@ gdk_window_move (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
-
+	  
   if (!GDK_WINDOW_DESTROYED (window))
     {
       if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
-	_gdk_window_move_resize_child (window, x, y,
-				       impl->width, impl->height);
+	{
+	  _gdk_window_move_resize_child (window, x, y,
+					 impl->width, impl->height);
+	}
       else
 	{
 	  XMoveWindow (GDK_WINDOW_XDISPLAY (window),
 		       GDK_WINDOW_XID (window),
 		       x, y);
+
+	  if (impl->override_redirect)
+	    {
+	      private->x = x;
+	      private->y = y;
+	    }
 	}
     }
 }
@@ -1429,18 +1451,28 @@ gdk_window_resize (GdkWindow *window,
   if (!GDK_WINDOW_DESTROYED (window))
     {
       if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
-	_gdk_window_move_resize_child (window, private->x, private->y,
-				       width, height);
+	{
+	  _gdk_window_move_resize_child (window, private->x, private->y,
+					 width, height);
+	}
       else
 	{
 	  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
-	  
-	  if (width != impl->width || height != impl->height)
-	    private->resize_count += 1;
 
 	  XResizeWindow (GDK_WINDOW_XDISPLAY (window),
 			 GDK_WINDOW_XID (window),
 			 width, height);
+
+	  if (impl->override_redirect)
+	    {
+	      impl->width = width;
+	      impl->height = height;
+	    }
+	  else
+	    {
+	      if (width != impl->width || height != impl->height)
+		private->resize_count += 1;
+	    }
 	}
     }
 }
@@ -1480,17 +1512,28 @@ gdk_window_move_resize (GdkWindow *window,
   if (!GDK_WINDOW_DESTROYED (window))
     {
       if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
-	_gdk_window_move_resize_child (window, x, y, width, height);
+	{
+	  _gdk_window_move_resize_child (window, x, y, width, height);
+	}
       else
 	{
 	  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
-	  
-	  if (width != impl->width || height != impl->height)
-	    private->resize_count += 1;
-	  
+
 	  XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
 			     GDK_WINDOW_XID (window),
 			     x, y, width, height);
+	  if (impl->override_redirect)
+	    {
+	      private->x = x;
+	      private->y = y;
+	      impl->width = width;
+	      impl->height = height;
+	    }
+	  else
+	    {
+	      if (width != impl->width || height != impl->height)
+		private->resize_count += 1;
+	    }
 	}
     }
 }
@@ -3286,11 +3329,16 @@ gdk_window_set_override_redirect (GdkWindow *window,
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
-      attr.override_redirect = (override_redirect == FALSE)?False:True;
+      GdkWindowObject *private = (GdkWindowObject *)window;
+      GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
+
+      attr.override_redirect = (override_redirect? True : False);
       XChangeWindowAttributes (GDK_WINDOW_XDISPLAY (window),
 			       GDK_WINDOW_XID (window),
 			       CWOverrideRedirect,
 			       &attr);
+
+      impl->override_redirect = attr.override_redirect;
     }
 }
 
