@@ -4114,6 +4114,9 @@ scroll_sync_handler (GtkTreeView *tree_view)
 static void
 install_scroll_sync_handler (GtkTreeView *tree_view)
 {
+  if (! GTK_WIDGET_REALIZED (tree_view))
+    return;
+
   if (!tree_view->priv->scroll_sync_timer)
     {
       tree_view->priv->scroll_sync_timer =
