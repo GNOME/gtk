@@ -1,3 +1,9 @@
+2003-02-02  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: 
+	* gtk/question_index.sgml: # doesn't work here, add links
+	manually.  (#104991)
+
 2003-02-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/compiling.sgml: Mention xxx_DISABLE_DEPRECATED and

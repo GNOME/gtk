@@ -330,8 +330,7 @@ number of problems that are best avoided.
 <para>
 If you only have a small amount of text, <link
 linkend="GtkLabel">GtkLabel</link> may also be appropriate of course.
-It can be made selectable with <link
-                                     linkend="gtk-label-set-selectable">
+It can be made selectable with <link linkend="gtk-label-set-selectable">
 gtk_label_set_selectable()</link>. For a single-line text entry, 
 see <link linkend="GtkEntry">GtkEntry</link>.
 </para>
@@ -485,15 +484,16 @@ See the <link linkend="TreeWidget">tree widget overview</link>.
 
 <qandaentry>
 <question><para>
-What's the #GtkTreeView equivalent of gtk_clist_find_row_from_data()?
+What's the <link linkend="GtkTreeView">GtkTreeView</link> equivalent of 
+<link linkend="gtk-clist-find-row-from-data">gtk_clist_find_row_from_data()</link>?
 </para></question>
 
 <answer>
 <para>
-As there is no separate data column in the #GtkTreeModel, there's no
+As there is no separate data column in the <link linkend="GtkTreeModel">GtkTreeModel</link>, there's no
 built in function to find the iter from data.  You can write a custom
 searching function to walk the tree and find the data, or use
-gtk_tree_model_foreach().
+<link linkend="gtk-tree-model-foreach">gtk_tree_model_foreach()</link>.
 </para>
 </answer>
 </qandaentry>

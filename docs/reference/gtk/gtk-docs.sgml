@@ -142,6 +142,7 @@
 <!ENTITY gtk-Settings SYSTEM "xml/gtksettings.xml">
 
 <!ENTITY index-Object-Tree SYSTEM "xml/tree_index.sgml">
+<!ENTITY graphic-tree SYSTEM "xml/tree_map.sgml">
 
 <!ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml">
 <!ENTITY gtk-TextWidget SYSTEM "text_widget.sgml">
@@ -195,8 +196,11 @@ string utilities, file utilities, a main loop abstraction, and so on.
 <listitem><para>
 
 Pango is a library for internationalized text handling. It centers
-around the #PangoLayout object, representing a paragraph of text.
-Pango provides the engine for #GtkTextView, #GtkLabel, #GtkEntry, and
+around the <link linkend="PangoLayout">PangoLayout</link> object, representing
+a paragraph of text. 
+Pango provides the engine for <link linkend="GtkTextView">GtkTextView</link>, 
+<link linkend="GtkLabel">GtkLabel</link>, 
+<link linkend="GtkEntry">GtkEntry</link>, and
 other widgets that display text.
 
 </para></listitem>
@@ -219,9 +223,9 @@ framework.
 <varlistentry>
 <term>GdkPixbuf</term>
 <listitem><para>
-This is a small library which allows you to create #GdkPixbuf
+This is a small library which allows you to create <link linkend="GdkPixbuf">GdkPixbuf</link>
 ("pixel buffer") objects from image data or image files. 
-Use a #GdkPixbuf in combination with #GtkImage to display images.
+Use a <link linkend="GdkPixbuf">GdkPixbuf</link> in combination with <link linkend="GtkImage">GtkImage</link> to display images.
 </para></listitem>
 </varlistentry>
 
@@ -239,13 +243,15 @@ on X11, Windows, and the Linux framebuffer device.
 <listitem><para>
 
 The GTK+ library itself contains <firstterm>widgets</firstterm>, 
-that is, GUI components such as #GtkButton or #GtkTextView.
+that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or 
+<link linkend="GtkTextView">GtkTextView</link>.
 
 </para></listitem>
 </varlistentry>
 </variablelist>
     </para>
 </partintro>
+    &graphic-tree;     
     &gtk-Building;
     &gtk-Compiling;
     &gtk-Running;
