@@ -11,13 +11,14 @@ void get_targets( GtkWidget *widget,
                   gpointer data )
 {
   static GdkAtom targets_atom = GDK_NONE;
+  GtkWidget *window = (GtkWidget *)data;	
 
   /* Get the atom corresponding to the string "TARGETS" */
   if (targets_atom == GDK_NONE)
     targets_atom = gdk_atom_intern ("TARGETS", FALSE);
 
   /* And request the "TARGETS" target for the primary selection */
-  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY, targets_atom,
+  gtk_selection_convert (window, GDK_SELECTION_PRIMARY, targets_atom,
 			 GDK_CURRENT_TIME);
 }
 
@@ -82,9 +83,9 @@ int main( int   argc,
   button = gtk_button_new_with_label ("Get Targets");
   gtk_container_add (GTK_CONTAINER (window), button);
 
-  g_signal_connect (G_OBJECT(button), "clicked",
-		    G_CALLBACK (get_targets), NULL);
-  g_signal_connect (G_OBJECT(button), "selection_received",
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (get_targets), (gpointer) window);
+  g_signal_connect (G_OBJECT (window), "selection_received",
 		    G_CALLBACK (selection_received), NULL);
 
   gtk_widget_show (button);

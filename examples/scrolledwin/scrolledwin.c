@@ -73,7 +73,7 @@ int main( int   argc,
     button = gtk_button_new_with_label ("close");
     g_signal_connect_swapped (G_OBJECT (button), "clicked",
 			      G_CALLBACK (gtk_widget_destroy),
-			      window);
+			      G_OBJECT (window));
     
     /* this makes it so the button is the default. */
     

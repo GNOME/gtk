@@ -9,8 +9,7 @@
 #            o Jadetex
 
 TARGET=`pwd`/gtk-tut.sgml
-JPGS="`pwd`/*.jpg"
-EPSS="`pwd`/*.eps"
+IMAGES="`pwd`/images"
 EXAMPLES=`pwd`/../../examples
 
 PATH=`pwd`:$PATH
@@ -35,8 +34,7 @@ if ! cd gtk-tutorial.$DATE; then
 fi
 
 cp $TARGET .
-cp $JPGS .
-cp $EPSS .
+cp -R $IMAGES .
 
 # SGML Format
 echo -n "Copy SGML and images.... "
@@ -48,7 +46,7 @@ if [ ! -d sgml ]; then
   mkdir sgml
 fi
 
-(cd sgml ; cp $TARGET . ; cp $JPGS .)
+(cd sgml ; cp $TARGET . ; cp -R $IMAGES . ; rm -rf images/CVS)
 echo "done"
 
 # HTML Format
@@ -61,11 +59,12 @@ if [ ! -d html ]; then
   mkdir html
 fi
 
-(db2html gtk-tut.sgml ; mv gtk-tut/* html ; cp $JPGS html ; rm -rf gtk-tut) > /dev/null
+(db2html gtk-tut.sgml ; mv gtk-tut/* html ; cp -R $IMAGES html ; rm -rf gtk-tut) > /dev/null
+(cd html ; ln -s book1.html index.html ; rm -rf images/CVS)
 echo "done"
 
-# Text, PS and DVI Format
-echo -n "Formatting into Text, PS and DVI.... "
+# PS, PDF and DVI Format
+echo -n "Formatting into PS, DVI and PDF.... "
 if [ ! -d ps ]; then
   if [ -e ps ]; then
     echo "ERROR: ps is not a directory"
@@ -74,22 +73,6 @@ if [ ! -d ps ]; then
   mkdir ps
 fi
 
-if [ ! -d txt ]; then
-  if [ -e txt ]; then
-    echo "ERROR: ps is not a directory"
-    exit
-  fi
-  mkdir txt
-fi
-
-sed 's/gtk_tut_packbox1.jpg/gtk_tut_packbox1.eps/ ; s/gtk_tut_packbox2.jpg/gtk_tut_packbox2.eps/ ; s/gtk_tut_table.jpg/gtk_tut_table.eps/' gtk-tut.sgml > ps/gtk-tut.sgml
-(cd ps ; db2ps gtk-tut.sgml ; ps2pdf gtk-tut.ps gtk-tut.pdf ; pdftotext gtk-tut.pdf ; mv gtk-tut.txt ../txt ; rm -f *) > /dev/null 2>&1
-sed 's/gtk_tut_packbox1.jpg/gtk_tut_packbox1.eps/ ; s/gtk_tut_packbox2.jpg/gtk_tut_packbox2.eps/ ; s/gtk_tut_table.jpg/gtk_tut_table.eps/' gtk-tut.sgml > ps/gtk-tut.sgml
-(cp *.eps ps ; cd ps ; db2ps gtk-tut.sgml ; rm gtk-tut.aux gtk-tut.log gtk-tut.sgml gtk-tut.tex *.eps) > /dev/null 2>&1
-echo "done"
-
-# PDF Format
-echo -n "Formatting into PDF.... "
 if [ ! -d pdf ]; then
   if [ -e pdf ]; then
     echo "ERROR: pdf is not a directory"
@@ -98,16 +81,51 @@ if [ ! -d pdf ]; then
   mkdir pdf
 fi
 
-(db2pdf gtk-tut.sgml ; mv gtk-tut.pdf pdf) > /dev/null
+#sed 's/gtk_tut_packbox1.jpg/gtk_tut_packbox1.eps/ ; s/gtk_tut_packbox2.jpg/gtk_tut_packbox2.eps/ ; s/gtk_tut_table.jpg/gtk_tut_table.eps/' gtk-tut.sgml > ps/gtk-tut.sgml
+sed "s/images\/\(.*\)\.png/images\/\1.eps/g" gtk-tut.sgml > ps/gtk-tut.sgml
+cp -R ../images ps
+(cd ps ; db2dvi gtk-tut.sgml ; dvips gtk-tut.dvi -o gtk-tut.ps ; dvipdf gtk-tut.dvi ../pdf/gtk-tut.pdf) > /dev/null 2>&1
+#sed 's/gtk_tut_packbox1.jpg/gtk_tut_packbox1.eps/ ; s/gtk_tut_packbox2.jpg/gtk_tut_packbox2.eps/ ; s/gtk_tut_table.jpg/gtk_tut_table.eps/' gtk-tut.sgml > ps/gtk-tut.sgml
+#sed "s/images\/\(.*\)\.png/images\/\1.eps/g" gtk-tut.sgml > ps/gtk-tut.sgml
+#cp -R images ps
+(cd ps ; rm gtk-tut.aux gtk-tut.log gtk-tut.sgml gtk-tut.tex ; rm -Rf images) > /dev/null 2>&1
+echo "done"
+
+# PDF Format
+#echo -n "Formatting into PDF.... "
+#if [ ! -d pdf ]; then
+#  if [ -e pdf ]; then
+#    echo "ERROR: pdf is not a directory"
+#    exit
+#  fi
+#  mkdir pdf
+#fi
+
+#(db2pdf gtk-tut.sgml ; mv gtk-tut.pdf pdf) > /dev/null
+#echo "done"
+
+# RTF Format
+echo -n "Formatting into RTF.... "
+if [ ! -d rtf ]; then
+  if [ -e rtf ]; then
+    echo "ERROR: rtf is not a directory"
+    exit
+  fi
+  mkdir rtf
+fi
+
+(db2rtf gtk-tut.sgml ; mv gtk-tut.rtf rtf) > /dev/null
+cp -R $IMAGES rtf
 echo "done"
 
 # Copy examples
 echo -n "Copying examples"
 cp -R $EXAMPLES .
-(cd examples ; make clean ; rm -rf CVS */CVS)
+(cd examples ; make clean ; rm -rf CVS */CVS */.cvsignore README.1ST extract.awk extract.sh find-examples.sh)
 echo "done"
 
 rm -f *
+rm -rf images
 
 # Package it all up
 echo -n "Creating packages.... "

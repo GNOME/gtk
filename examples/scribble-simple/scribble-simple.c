@@ -18,6 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <stdlib.h>
 #include <gtk/gtk.h>
 
 /* Backing pixmap for drawing area */
@@ -169,7 +170,7 @@ int main( int   argc,
 
   g_signal_connect_swapped (G_OBJECT (button), "clicked",
 			    G_CALLBACK (gtk_widget_destroy),
-			    window);
+			    G_OBJECT (window));
   gtk_widget_show (button);
 
   gtk_widget_show (window);

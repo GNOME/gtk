@@ -96,7 +96,7 @@ tictactoe_init (Tictactoe *ttt)
 	gtk_table_attach_defaults (GTK_TABLE (table), ttt->buttons[i][j], 
 				   i, i+1, j, j+1);
 	g_signal_connect (G_OBJECT (ttt->buttons[i][j]), "toggled",
-			  G_CALLBACK (tictactoe_toggle), ttt);
+			  G_CALLBACK (tictactoe_toggle), (gpointer) ttt);
 	gtk_widget_set_size_request (ttt->buttons[i][j], 20, 20);
 	gtk_widget_show (ttt->buttons[i][j]);
       }

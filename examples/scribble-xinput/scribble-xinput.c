@@ -158,11 +158,11 @@ create_input_dialog ()
       inputd = gtk_input_dialog_new();
 
       g_signal_connect (G_OBJECT (inputd), "destroy",
-                        G_CALLBACK (input_dialog_destroy), &inputd);
+                        G_CALLBACK (input_dialog_destroy), (gpointer) &inputd);
       g_signal_connect_swapped (G_OBJECT (GTK_INPUT_DIALOG (inputd)->close_button),
                                 "clicked",
                                 G_CALLBACK (gtk_widget_hide),
-                                inputd);
+                                G_OBJECT (inputd));
       gtk_widget_hide (GTK_INPUT_DIALOG (inputd)->save_button);
 
       gtk_widget_show (inputd);
@@ -248,7 +248,7 @@ main (int argc, char *argv[])
 
   g_signal_connect_swapped (G_OBJECT (button), "clicked",
                             G_CALLBACK (gtk_widget_destroy),
-                            window);
+                            G_OBJECT (window));
   gtk_widget_show (button);
 
   gtk_widget_show (window);

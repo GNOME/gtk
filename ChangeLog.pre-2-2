@@ -1,3 +1,11 @@
+Sun Aug 25 11:58:27 BST 2002  Tony Gale <gale@gtk.org>
+
+	* docs/tutorial/package-db-tutorial.sh:
+	update packaging script for current tutorial
+
+	* docs/tutorial/images/*.eps: New Files
+	EPS versions of the tutorial images
+
 2002-08-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkmain.h: Include gtkbox.h and gtkwindow.h on Win32, as the
