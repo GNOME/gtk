@@ -433,12 +433,16 @@ install-data-local: install-ms-lib install-libtool-import-lib
 	  echo "***" ; \
 	fi
 
+if CROSS_COMPILING
+else
 all-local: gdk-pixbuf.loaders
+endif
 
 gdk-pixbuf.loaders: $(loader_LTLIBRARIES) gdk-pixbuf-query-loaders
-	if find . -name 'libpixbufloader-*.@SOEXT@' | grep '@SOEXT@' > /dev/null ; then \
+	LOADERS=`echo libpixbufloader-*.la` ; \
+	if test "x$$LOADERS" != 'xlibpixbufloader-*.la' ; then \
           echo "Writing a gdk-pixbuf.loader file to use when running examples before installing gdk-pixbuf."; \
-	  GDK_PIXBUF_MODULEDIR=.libs $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders > ./gdk-pixbuf.loaders ;\
+	  $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders $$LOADERS > ./gdk-pixbuf.loaders ;\
 	else \
           echo "No dynamic modules found; will use only static modules for uninstalled example programs."; \
 	  touch gdk-pixbuf.loaders; \

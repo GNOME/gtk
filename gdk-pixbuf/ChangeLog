@@ -1,3 +1,12 @@
+Mon Jan 27 17:10:30 2003  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* Makefile.am (gdk-pixbuf.loaders): Rewrite to run
+ 	on the .la files rather than looking for .so files.
+ 	(#102142, Martin Gansser)
+ 
+ 	* Makefile.am: Don't build gdk-pixbuf.loaders when
+ 	cross-compiling.
+ 
 2003-01-05  Tor Lillqvist  <tml@iki.fi>
 
 	* Makefile.am (gdk-pixbuf.loaders): Use @SOEXT@ in the find command.
