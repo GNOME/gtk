@@ -1,3 +1,8 @@
+Mon Feb  4 10:06:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c: gtk-double-click-time,
+	not gtk-double-click-timeout. (#70501)
+
 2002-02-04  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtksignal.c (gtk_signal_connect_while_alive): 
