@@ -1,3 +1,8 @@
+2003-01-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): Make
+	move bindings viewport-based when the cursor is invisible.  (#78669)
+
 2003-01-23  Daniel Elstner  <daniel.elstner@gmx.net>
 
 	Merge from HEAD.

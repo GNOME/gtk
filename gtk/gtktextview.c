@@ -4553,6 +4553,32 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       return;
     }
 
+  if (!text_view->cursor_visible) 
+    {
+      GtkAdjustment *adj;
+
+      switch (step) 
+	{
+	case GTK_MOVEMENT_LOGICAL_POSITIONS:
+        case GTK_MOVEMENT_VISUAL_POSITIONS:
+        case GTK_MOVEMENT_WORDS:
+	  adj = get_hadjustment (text_view);
+	  break;
+        case GTK_MOVEMENT_DISPLAY_LINES:
+        case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+        case GTK_MOVEMENT_PARAGRAPHS:
+	  adj = get_vadjustment (text_view);
+	  break;
+	}
+      
+      if (count > 0)
+	set_adjustment_clamped (adj, adj->value + adj->step_increment);
+      else
+	set_adjustment_clamped (adj, adj->value - adj->step_increment);
+
+      return;
+    }
+
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &insert,
                                     gtk_text_buffer_get_mark (get_buffer (text_view),
                                                               "insert"));
