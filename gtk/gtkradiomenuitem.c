@@ -25,6 +25,7 @@
  */
 
 #include "gtkaccellabel.h"
+#include "gtkmarshalers.h"
 #include "gtkradiomenuitem.h"
 
 
@@ -34,6 +35,8 @@ static void gtk_radio_menu_item_destroy        (GtkObject             *object);
 static void gtk_radio_menu_item_activate       (GtkMenuItem           *menu_item);
 
 static GtkCheckMenuItemClass *parent_class = NULL;
+
+static guint group_changed_signal = 0;
 
 GType
 gtk_radio_menu_item_get_type (void)
@@ -79,15 +82,21 @@ void
 gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
 			       GSList           *group)
 {
+  GtkWidget *old_group_singleton = NULL;
+  GtkWidget *new_group_singleton = NULL;
+  
   g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (radio_menu_item));
   g_return_if_fail (!g_slist_find (group, radio_menu_item));
-  
+
   if (radio_menu_item->group)
     {
       GSList *slist;
-      
+
       radio_menu_item->group = g_slist_remove (radio_menu_item->group, radio_menu_item);
       
+      if (radio_menu_item->group && !radio_menu_item->group->next)
+	old_group_singleton = g_object_ref (radio_menu_item->group->data);
+	  
       for (slist = radio_menu_item->group; slist; slist = slist->next)
 	{
 	  GtkRadioMenuItem *tmp_item;
@@ -97,6 +106,9 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
 	  tmp_item->group = radio_menu_item->group;
 	}
     }
+  
+  if (group && !group->next)
+    new_group_singleton = g_object_ref (group->data);
   
   radio_menu_item->group = g_slist_prepend (group, radio_menu_item);
   
@@ -119,6 +131,22 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
       /* gtk_widget_set_state (GTK_WIDGET (radio_menu_item), GTK_STATE_ACTIVE);
        */
     }
+
+  g_object_ref (radio_menu_item);
+
+  g_signal_emit (radio_menu_item, group_changed_signal, 0);
+  if (old_group_singleton)
+    {
+      g_signal_emit (old_group_singleton, group_changed_signal, 0);
+      g_object_unref (old_group_singleton);
+    }
+  if (new_group_singleton)
+    {
+      g_signal_emit (new_group_singleton, group_changed_signal, 0);
+      g_object_unref (new_group_singleton);
+    }
+
+  g_object_unref (radio_menu_item);
 }
 
 GtkWidget*
@@ -271,6 +299,25 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
   object_class->destroy = gtk_radio_menu_item_destroy;
 
   menu_item_class->activate = gtk_radio_menu_item_activate;
+
+  /**
+   * GtkStyle::group-changed:
+   * @style: the object which received the signal
+   *
+   * Emitted when the group of radio menu items that a radio menu item belongs
+   * to changes. This is emitted when a radio menu item switches from
+   * being alone to being part of a group of 2 or more menu items, or
+   * vice-versa, and when a buttton is moved from one group of 2 or
+   * more menu items to a different one, but not when the composition
+   * of the group that a menu item belongs to changes.
+   */
+  group_changed_signal = g_signal_new ("group-changed",
+				       G_OBJECT_CLASS_TYPE (object_class),
+				       G_SIGNAL_RUN_FIRST,
+				       G_STRUCT_OFFSET (GtkRadioMenuItemClass, group_changed),
+				       NULL, NULL,
+				       _gtk_marshal_VOID__VOID,
+				       G_TYPE_NONE, 0);
 }
 
 static void
@@ -283,16 +330,23 @@ gtk_radio_menu_item_init (GtkRadioMenuItem *radio_menu_item)
 static void
 gtk_radio_menu_item_destroy (GtkObject *object)
 {
+  GtkWidget *old_group_singleton = NULL;
   GtkRadioMenuItem *radio_menu_item;
   GtkRadioMenuItem *tmp_menu_item;
   GSList *tmp_list;
+  gboolean was_in_group;
 
   g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (object));
 
   radio_menu_item = GTK_RADIO_MENU_ITEM (object);
 
+  was_in_group = radio_menu_item->group && radio_menu_item->group->next;
+  
   radio_menu_item->group = g_slist_remove (radio_menu_item->group,
 					   radio_menu_item);
+  if (radio_menu_item->group && !radio_menu_item->group->next)
+    old_group_singleton = radio_menu_item->group->data;
+
   tmp_list = radio_menu_item->group;
 
   while (tmp_list)
@@ -305,6 +359,11 @@ gtk_radio_menu_item_destroy (GtkObject *object)
 
   /* this radio menu item is no longer in the group */
   radio_menu_item->group = NULL;
+  
+  if (old_group_singleton)
+    g_signal_emit (old_group_singleton, group_changed_signal, 0);
+  if (was_in_group)
+    g_signal_emit (radio_menu_item, group_changed_signal, 0);
   
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
