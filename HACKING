@@ -11,20 +11,40 @@ These should be available by ftp from prep.ai.mit.edu or any of the
 fine GNU mirrors.  Beta software can be found at alpha.gnu.org.
 
 If you are accessing gtk+ via CVS, then you will need to take several
-steps to get it to compile.  These are:
+steps to get it to compile.  You can do all these steps at once
+by running:
 
-	cvsroot/gtk+# aclocal; automake; autoconf
+        cvsroot/gtk+# ./autogen.sh
+   
+Basically this does the following for you:
+
+  	cvsroot/gtk+# aclocal; automake; autoconf
         cvsroot/gtk+/glib# aclocal; automake; autoconf
 
-The "configure" scripts will not exist until you take these steps.
-you only need to call "configure" i cvsroot/gtk+ as the one in
-glib will be invoked automatically.
+        The above commands create the "configure" script.  Now you
+	can run the configure script in cvsroot/gtk+ to create all
+	the Makefiles.  You only need to call "configure" in cvsroot/gtk+ 
+	as the one in glib will be invoked automatically.
 
-Before running configure, make sure you have libtool in your path
+Before running autogen.sh or configure, make sure you have libtool 
+in your path.  
+
+Note that autogen.sh runs configure for you.  If you wish to pass
+options like --prefix=/usr to configure you can give those options
+to autogen.sh and they will be passed on to configure.
+
+If at all possible, please use CVS to get the latest development version of
+gtk+.  You can do the following to get gtk+ from cvs:
+
+   $ export CVSROOT=':pserver:anonymous@cvs.gimp.org:/debian/home/gnomecvs'
+   $ cvs login
+     (there is no password, just hit return)
+   $ cvs -z9 checkout gtk+
 
 Please submit patches to the gtk-list@redhat.com mailing list (you must
 subscribe before you post, e-mail gtk-list-request@redhat.com with a
-subject of "subscribe"). All kinds of contributions are accepted. If at
-all possible, please use CVS to get the latest development version of
-gtk+; the README file has the CVSROOT information. 
+subject of "subscribe"). All kinds of contributions are accepted.
+Patches that you wish to go into the distribution should also be uploaded 
+to ftp://ftp.gimp.org/incoming.  Follow the rules there for naming your
+patches. 
 
