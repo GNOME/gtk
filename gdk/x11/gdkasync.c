@@ -56,9 +56,6 @@ struct _SetInputFocusState
   _XAsyncHandler async;
   gulong set_input_focus_req;
   gulong get_input_focus_req;
-  gboolean have_error;
-  GdkSendXEventCallback callback;
-  gpointer data;
 };
 
 static Bool

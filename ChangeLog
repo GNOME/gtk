@@ -1,3 +1,8 @@
+Fri Jul  4 22:05:09 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkasync.c (struct _SetInputFocusState): Fix
+	some leftover fields.
+
 Fri Jul  4 15:57:52 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter):
