@@ -36,6 +36,7 @@
 #include <gtk/gtkcolorsel.h>
 #include <gtk/gtkcombo.h>
 #include <gtk/gtkcontainer.h>
+#include <gtk/gtkctree.h>
 #include <gtk/gtkcurve.h>
 #include <gtk/gtkdata.h>
 #include <gtk/gtkdialog.h>

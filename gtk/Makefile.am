@@ -20,6 +20,7 @@ libgtk_la_SOURCES = \
 	gtkcolorsel.c		\
 	gtkcombo.c		\
 	gtkcontainer.c		\
+	gtkctree.c		\
 	gtkcurve.c		\
 	gtkdata.c		\
 	gtkdialog.c		\
@@ -113,6 +114,7 @@ gtkinclude_HEADERS = \
 	gtkcolorsel.h		\
 	gtkcombo.h		\
 	gtkcontainer.h		\
+	gtkctree.h		\
 	gtkcurve.h		\
 	gtkdata.h		\
 	gtkdebug.h              \

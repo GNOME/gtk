@@ -3392,6 +3392,815 @@ create_clist ()
 
 }
 
+
+/*
+ * GtkCTree
+ */
+
+static char * book_open_xpm[] = {
+"16 16 4 1",
+"       c None s None",
+".      c black",
+"X      c #808080",
+"o      c white",
+"                ",
+"  ..            ",
+" .Xo.    ...    ",
+" .Xoo. ..oo.    ",
+" .Xooo.Xooo...  ",
+" .Xooo.oooo.X.  ",
+" .Xooo.Xooo.X.  ",
+" .Xooo.oooo.X.  ",
+" .Xooo.Xooo.X.  ",
+" .Xooo.oooo.X.  ",
+"  .Xoo.Xoo..X.  ",
+"   .Xo.o..ooX.  ",
+"    .X..XXXXX.  ",
+"    ..X.......  ",
+"     ..         ",
+"                "};
+
+static char * book_closed_xpm[] = {
+"16 16 6 1",
+"       c None s None",
+".      c black",
+"X      c red",
+"o      c yellow",
+"O      c #808080",
+"#      c white",
+"                ",
+"       ..       ",
+"     ..XX.      ",
+"   ..XXXXX.     ",
+" ..XXXXXXXX.    ",
+".ooXXXXXXXXX.   ",
+"..ooXXXXXXXXX.  ",
+".X.ooXXXXXXXXX. ",
+".XX.ooXXXXXX..  ",
+" .XX.ooXXX..#O  ",
+"  .XX.oo..##OO. ",
+"   .XX..##OO..  ",
+"    .X.#OO..    ",
+"     ..O..      ",
+"      ..        ",
+"                "};
+
+static char * mini_page_xpm[] = {
+"16 16 4 1",
+"       c None s None",
+".      c black",
+"X      c white",
+"o      c #808080",
+"                ",
+"   .......      ",
+"   .XXXXX..     ",
+"   .XoooX.X.    ",
+"   .XXXXX....   ",
+"   .XooooXoo.o  ",
+"   .XXXXXXXX.o  ",
+"   .XooooooX.o  ",
+"   .XXXXXXXX.o  ",
+"   .XooooooX.o  ",
+"   .XXXXXXXX.o  ",
+"   .XooooooX.o  ",
+"   .XXXXXXXX.o  ",
+"   ..........o  ",
+"    oooooooooo  ",
+"                "};
+
+GdkPixmap *pixmap1;
+GdkPixmap *pixmap2;
+GdkPixmap *pixmap3;
+GdkBitmap *mask1;
+GdkBitmap *mask2;
+GdkBitmap *mask3;
+
+static gint books = 0;
+static gint pages = 0;
+
+static GtkWidget *book_label;
+static GtkWidget *page_label;
+static GtkWidget *sel_label;
+static GtkWidget *vis_label;
+static GtkWidget *omenu;
+static GtkWidget *omenu2;
+static GtkWidget *omenu3;
+static GtkWidget *spin1;
+static GtkWidget *spin2;
+static GtkWidget *spin3;
+
+#define RADIOMENUTOGGLED(_rmi_, __i) { \
+  GSList * __g; \
+  __i = 0; \
+  __g = gtk_radio_menu_item_group(_rmi_); \
+  while( __g  && !((GtkCheckMenuItem *)(__g->data))->active) { \
+    __g = __g->next; \
+    __i++; \
+  }\
+}
+
+#define RADIOBUTTONTOGGLED(_rb_, __i) { \
+  GSList * __g; \
+  __i = 0; \
+  __g = gtk_radio_button_group(_rb_); \
+  while( __g  && !((GtkToggleButton *)(__g->data))->active) { \
+    __g = __g->next; \
+    __i++; \
+  }\
+}
+
+void after_press (GtkCTree *ctree, gpointer data)
+{
+  char buf[80];
+
+  sprintf (buf, "%d", g_list_length (GTK_CLIST (ctree)->selection));
+  gtk_label_set (GTK_LABEL (sel_label), buf);
+
+  sprintf (buf, "%d", g_list_length (GTK_CLIST (ctree)->row_list));
+  gtk_label_set (GTK_LABEL (vis_label), buf);
+
+  sprintf (buf, "%d", books);
+  gtk_label_set (GTK_LABEL (book_label), buf);
+
+  sprintf (buf, "%d", pages);
+  gtk_label_set (GTK_LABEL (page_label), buf);
+}
+
+void after_move (GtkCTree *ctree, GList *child, GList *parent, 
+		 GList *sibling, gpointer data)
+{
+  char *source;
+  char *target1;
+  char *target2;
+
+  gtk_ctree_get_pixtext (ctree, child, 0, &source, NULL, NULL, NULL);
+  if (parent)
+    gtk_ctree_get_pixtext (ctree, parent, 0, &target1, NULL, NULL, NULL);
+  if (sibling)
+    gtk_ctree_get_pixtext (ctree, sibling, 0, &target2, NULL, NULL, NULL);
+
+  g_print ("Moving \"%s\" to \"%s\" with sibling \"%s\".\n", source,
+	   (parent) ? target1 : "nil", (sibling) ? target2 : "nil");
+}
+
+gint button_press (GtkCTree *ctree, GdkEventButton *event, gpointer data)
+{
+  gint row;
+  gint column;
+  GList *work;
+  gint res;
+  
+  res = gtk_clist_get_selection_info (GTK_CLIST (ctree), event->x, event->y, 
+				      &row, &column);
+  if (!res && event->button != 3)
+    return FALSE;
+
+  work = g_list_nth (GTK_CLIST (ctree)->row_list, row);
+
+  switch (event->button)
+    {
+    case 1:
+      if (GTK_CLIST (ctree)->selection_mode == GTK_SELECTION_MULTIPLE &&
+	  event->state & GDK_SHIFT_MASK)
+	gtk_signal_emit_stop_by_name (GTK_OBJECT (ctree),"button_press_event");
+      break;
+    case  2:
+      if (GTK_CTREE_ROW (work)->children && 
+	  gtk_ctree_is_hot_spot (ctree, event->x, event->y))
+	{
+	  gtk_clist_freeze (GTK_CLIST (ctree));
+	  if (GTK_CTREE_ROW (work)->expanded)
+	    gtk_ctree_collapse_recursive (ctree, work);
+	  else
+	    gtk_ctree_expand_recursive (ctree, work);
+	  gtk_clist_thaw (GTK_CLIST (ctree));
+	  after_press (ctree, NULL);
+	  gtk_signal_emit_stop_by_name (GTK_OBJECT (ctree), 
+					"button_press_event");
+	}
+      break;
+    default:
+      break;
+    }
+  return FALSE;
+}
+
+gint button_release (GtkCTree *ctree, GdkEventButton *event, gpointer data)
+{
+  gint row;
+  gint column;
+  GList *work;
+  gint res;
+  
+  res = gtk_clist_get_selection_info (GTK_CLIST (ctree), event->x, event->y, 
+				      &row, &column);
+  if (!res || event->button != 1)
+    return FALSE;
+
+  work = g_list_nth (GTK_CLIST (ctree)->row_list, row);
+
+  if (GTK_CLIST (ctree)->selection_mode == GTK_SELECTION_MULTIPLE &&
+      event->state & GDK_SHIFT_MASK)
+    {
+      gtk_clist_freeze (GTK_CLIST (ctree));
+      if (GTK_CTREE_ROW (work)->row.state == GTK_STATE_SELECTED) 
+	    gtk_ctree_unselect_recursive (ctree, work);
+      else
+	gtk_ctree_select_recursive (ctree, work);
+      gtk_clist_thaw (GTK_CLIST (ctree));
+      after_press (ctree, NULL);
+      gtk_signal_emit_stop_by_name (GTK_OBJECT (ctree), 
+				    "button_release_event");
+    }
+  return FALSE;
+}
+
+void count_items (GtkCTree *ctree, GList *list)
+{
+  if (GTK_CTREE_ROW (list)->is_leaf)
+    pages--;
+  else
+    books--;
+}
+
+void expand_all (GtkWidget *widget, GtkCTree *ctree)
+{
+  gtk_clist_freeze (GTK_CLIST (ctree));
+  gtk_ctree_expand_recursive (ctree, NULL);
+  gtk_clist_thaw (GTK_CLIST (ctree));
+  after_press (ctree, NULL);
+}
+
+void collapse_all (GtkWidget *widget, GtkCTree *ctree)
+{
+  gtk_clist_freeze (GTK_CLIST (ctree));
+  gtk_ctree_collapse_recursive (ctree, NULL);
+  gtk_clist_thaw (GTK_CLIST (ctree));
+  after_press (ctree, NULL);
+}
+
+void select_all (GtkWidget *widget, GtkCTree *ctree)
+{
+  if (GTK_CLIST (ctree)->selection_mode != GTK_SELECTION_MULTIPLE)
+    return;
+  gtk_clist_freeze (GTK_CLIST (ctree));
+  gtk_ctree_select_recursive (ctree, NULL);
+  gtk_clist_thaw (GTK_CLIST (ctree));
+  after_press (ctree, NULL);
+}
+
+void unselect_all (GtkWidget *widget, GtkCTree *ctree)
+{
+  if (GTK_CLIST (ctree)->selection_mode != GTK_SELECTION_MULTIPLE)
+    return;
+  gtk_clist_freeze (GTK_CLIST (ctree));
+  gtk_ctree_unselect_recursive (ctree, NULL);
+  gtk_clist_thaw (GTK_CLIST (ctree));
+  after_press (ctree, NULL);
+}
+
+void remove_selection (GtkWidget *widget, GtkCTree *ctree)
+{
+  GList *work;
+  GList *selection;
+  GList *new_sel;
+
+  selection = GTK_CLIST (ctree)->selection;
+  new_sel = NULL;
+
+  gtk_clist_freeze (GTK_CLIST (ctree));
+
+  while (selection)
+    {
+      work = selection->data;
+      if (GTK_CTREE_ROW (work)->is_leaf)
+	pages--;
+      else
+	gtk_ctree_post_recursive (ctree, work, 
+				  (GtkCTreeFunc) count_items, NULL);
+
+      if (GTK_CLIST (ctree)->selection_mode == GTK_SELECTION_BROWSE)
+	{
+	  if (GTK_CTREE_ROW (work)->children)
+	    {
+	      new_sel = GTK_CTREE_ROW (work)->sibling;
+	      if (!new_sel)
+		new_sel = work->prev;
+	    }
+	  else
+	    {
+	      if (work->next)
+		new_sel = work->next;
+	      else
+		new_sel = work->prev;
+	    }
+	}
+
+      gtk_ctree_remove (ctree, work);
+      selection = GTK_CLIST (ctree)->selection;
+    }
+
+  if (new_sel)
+    gtk_ctree_select (ctree, new_sel);
+
+  gtk_clist_thaw (GTK_CLIST (ctree));
+  after_press (ctree, NULL);
+}
+
+void sort_all (GtkWidget *widget, GtkCTree *ctree)
+{
+  gtk_clist_freeze (GTK_CLIST (ctree));
+  gtk_ctree_sort_recursive (ctree, NULL);
+  gtk_clist_thaw (GTK_CLIST (ctree));
+}
+
+void change_indent (GtkWidget *widget, GtkCTree *ctree)
+{
+  gtk_ctree_set_indent (ctree, GTK_ADJUSTMENT (widget)->value);
+}
+
+void toggle_reorderable (GtkWidget *widget, GtkCTree *ctree)
+{
+  gtk_ctree_set_reorderable (ctree, GTK_TOGGLE_BUTTON (widget)->active);
+}
+
+void toggle_line_style (GtkWidget *widget, GtkCTree *ctree)
+{
+  gint i;
+
+
+  if (!GTK_WIDGET_MAPPED (widget))
+    return;
+
+  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
+		    (((GtkOptionMenu *)omenu2)->menu_item),i);
+
+  gtk_ctree_set_line_style (ctree, (GtkCTreeLineStyle) (2-i));
+}
+
+void toggle_justify (GtkWidget *widget, GtkCTree *ctree)
+{
+  gint i;
+
+  if (!GTK_WIDGET_MAPPED (widget))
+    return;
+
+  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
+		    (((GtkOptionMenu *)omenu3)->menu_item),i);
+
+  gtk_clist_set_column_justification (GTK_CLIST (ctree), 0, 
+				      (GtkJustification) (1-i));
+}
+
+void toggle_sel_mode (GtkWidget *widget, GtkCTree *ctree)
+{
+  gint i;
+
+  if (!GTK_WIDGET_MAPPED (widget))
+    return;
+
+  RADIOMENUTOGGLED ((GtkRadioMenuItem *)
+		    (((GtkOptionMenu *)omenu)->menu_item), i);
+
+  gtk_ctree_set_selection_mode (ctree, (GtkSelectionMode) (3-i));
+  after_press (ctree, NULL);
+}
+
+
+void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth, 
+		      gint num_books, gint num_pages, GList *parent)
+{
+  gchar *text [2];
+  gchar buf1[60];
+  gchar buf2[60];
+  GList *sibling;
+  gint i;
+  
+  text[0] = buf1;
+  text[1] = buf2;
+  sibling = NULL;
+
+  for (i = num_pages + num_books; i > num_books; i--)
+    {
+      pages++;
+      sprintf (buf1, "Page %02ld", random() % 100);
+      sprintf (buf2, "Item %d-%d", cur_depth, i);
+      sibling = gtk_ctree_insert (ctree, parent, sibling, text, 5, pixmap3,
+				  mask3, NULL, NULL, TRUE, FALSE);
+    }
+
+  if (cur_depth == depth)
+    return;
+
+  for (i = num_books; i > 0; i--)
+    {
+      books++;
+      sprintf (buf1, "Book %02ld", random() % 100);
+      sprintf (buf2, "Item %d-%d", cur_depth, i);
+      sibling = gtk_ctree_insert (ctree, parent, sibling, text, 5, pixmap1,
+				  mask1, pixmap2, mask2, FALSE, FALSE);
+      build_recursive (ctree, cur_depth + 1, depth, num_books, num_pages, sibling);
+    }
+}
+
+void rebuild_tree (GtkWidget *widget, GtkCTree *ctree)
+{
+  gchar *text [2];
+  gchar label1[] = "Root";
+  gchar label2[] = "";
+  GList *parent;
+  guint b, d, p, n;
+
+  text[0] = label1;
+  text[1] = label2;
+  
+  d = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (spin1)); 
+  b = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (spin2));
+  p = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (spin3));
+
+  n = ((pow (b, d) - 1) / (b - 1)) * (p + 1);
+
+  if (n > 200000)
+    {
+      g_print ("%d total items? Try less\n",n);
+      return;
+    }
+
+  gtk_clist_freeze (GTK_CLIST (ctree));
+  gtk_ctree_clear (ctree);
+
+  books = 1;
+  pages = 0;
+
+  parent = gtk_ctree_insert (ctree, NULL, NULL, text, 5, pixmap1,
+			     mask1, pixmap2, mask2, FALSE, TRUE);
+
+  build_recursive (ctree, 1, d, b, p, parent);
+  gtk_clist_thaw (GTK_CLIST (ctree));
+  after_press (ctree, NULL);
+}
+
+void create_ctree ()
+{
+  static GtkWidget *window = NULL;
+  GtkTooltips *tooltips;
+  GtkCTree *ctree;
+  GtkWidget *vbox;
+  GtkWidget *hbox;
+  GtkWidget *hbox2;
+  GtkWidget *frame;
+  GtkWidget *label;
+  GtkWidget *button;
+  GtkWidget *menu_item;
+  GtkWidget *menu;
+  GtkWidget *submenu;
+  GtkWidget *check;
+  GtkAdjustment *adj;
+  GtkWidget *spinner;
+  GSList *group;
+  GdkColor transparent;
+
+  char *title[] = { "Tree" , "Info" };
+  char buf[80];
+
+  if (!window)
+    {
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  &window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "GtkCTree");
+      gtk_container_border_width (GTK_CONTAINER (window), 0);
+
+      tooltips = gtk_tooltips_new ();
+      gtk_object_ref (GTK_OBJECT (tooltips));
+      gtk_object_sink (GTK_OBJECT (tooltips));
+
+      gtk_object_set_data_full (GTK_OBJECT (window),
+				"tooltips",
+				tooltips,
+				(GtkDestroyNotify) gtk_object_unref);
+
+      vbox = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (window), vbox);
+
+      hbox = gtk_hbox_new (FALSE, 5);
+      gtk_container_border_width (GTK_CONTAINER (hbox), 5);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
+      
+      label = gtk_label_new ("Depth :");
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+      
+      adj = (GtkAdjustment *) gtk_adjustment_new (4, 1, 10, 1, 5, 0);
+      spin1 = gtk_spin_button_new (adj, 0, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), spin1, FALSE, TRUE, 5);
+  
+      label = gtk_label_new ("Books :");
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+      
+      adj = (GtkAdjustment *) gtk_adjustment_new (3, 1, 20, 1, 5, 0);
+      spin2 = gtk_spin_button_new (adj, 0, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), spin2, FALSE, TRUE, 5);
+
+      label = gtk_label_new ("Pages :");
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+      
+      adj = (GtkAdjustment *) gtk_adjustment_new (5, 1, 20, 1, 5, 0);
+      spin3 = gtk_spin_button_new (adj, 0, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), spin3, FALSE, TRUE, 5);
+
+      button = gtk_button_new_with_label ("Close");
+      gtk_box_pack_end (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+
+      gtk_signal_connect_object(GTK_OBJECT (button), "clicked",
+				(GtkSignalFunc) gtk_widget_destroy, 
+				GTK_OBJECT(window));
+
+      button = gtk_button_new_with_label ("Rebuild tree");
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+      
+      ctree = GTK_CTREE (gtk_ctree_new_with_titles (2, 0, title));
+      gtk_ctree_set_line_style (ctree, GTK_CTREE_LINES_DOTTED);
+      gtk_ctree_set_reorderable (ctree, TRUE);
+      gtk_signal_connect (GTK_OBJECT (ctree), "button_press_event",
+			  GTK_SIGNAL_FUNC (button_press), NULL);
+      gtk_signal_connect_after (GTK_OBJECT (ctree), "button_press_event",
+				GTK_SIGNAL_FUNC (after_press), NULL);
+      gtk_signal_connect (GTK_OBJECT (ctree), "button_release_event",
+			  GTK_SIGNAL_FUNC (button_release), NULL);
+      gtk_signal_connect_after (GTK_OBJECT (ctree), "button_release_event",
+				GTK_SIGNAL_FUNC (after_press), NULL);
+      gtk_signal_connect_after (GTK_OBJECT (ctree), "tree_move",
+				GTK_SIGNAL_FUNC (after_move), NULL);
+      gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (ctree), TRUE, TRUE, 0);
+      gtk_clist_column_titles_passive (GTK_CLIST (ctree));
+      gtk_clist_set_column_justification (GTK_CLIST (ctree), 2, GTK_JUSTIFY_RIGHT);
+      gtk_clist_set_selection_mode (GTK_CLIST (ctree), GTK_SELECTION_MULTIPLE);
+      gtk_clist_set_policy (GTK_CLIST (ctree), GTK_POLICY_ALWAYS, 
+			    GTK_POLICY_AUTOMATIC);
+      gtk_clist_set_column_width (GTK_CLIST (ctree), 0, 200);
+      gtk_clist_set_column_width (GTK_CLIST (ctree), 1, 200);
+
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (rebuild_tree), ctree);
+      
+      hbox = gtk_hbox_new (FALSE, 5);
+      gtk_container_border_width (GTK_CONTAINER (hbox), 5);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
+
+      button = gtk_button_new_with_label ("Expand all");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (expand_all), ctree);
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+
+      button = gtk_button_new_with_label ("Collapse all");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (collapse_all), ctree);
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+
+      button = gtk_button_new_with_label ("Sort tree");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (sort_all), ctree);
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+
+      hbox = gtk_hbox_new (FALSE, 5);
+      gtk_container_border_width (GTK_CONTAINER (hbox), 5);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
+
+      button = gtk_button_new_with_label ("Select all");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (select_all), ctree);
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+
+      button = gtk_button_new_with_label ("Unselect all");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (unselect_all), ctree);
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+
+      button = gtk_button_new_with_label ("Remove selection");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (remove_selection), ctree);
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+
+      hbox = gtk_hbox_new (TRUE, 5);
+      gtk_container_border_width (GTK_CONTAINER (hbox), 5);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
+      
+      hbox2 = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), hbox2, FALSE, TRUE, 0);
+      
+      label = gtk_label_new ("Indent :");
+      gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 0);
+      
+      adj = (GtkAdjustment *) gtk_adjustment_new (20, 0, 60, 1, 10, 0);
+      spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_tooltips_set_tip (tooltips, spinner, "Tree indentation.", NULL);
+      gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+			  GTK_SIGNAL_FUNC (change_indent), ctree);
+      gtk_box_pack_start (GTK_BOX (hbox2), spinner, FALSE, TRUE, 5);
+      
+      check = gtk_check_button_new_with_label ("Reorderable");
+      gtk_tooltips_set_tip (tooltips, check,
+			    "Tree items can be reordered by dragging.", NULL);
+      gtk_signal_connect (GTK_OBJECT (check), "clicked",
+			  GTK_SIGNAL_FUNC (toggle_reorderable), ctree);
+      gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, TRUE, 0);
+      gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (check), TRUE);
+      
+      omenu2 = gtk_option_menu_new ();
+      gtk_tooltips_set_tip (tooltips, omenu2, "The tree's line style.", NULL);
+      
+      menu = gtk_menu_new ();
+      submenu = NULL;
+      group = NULL;
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Solid");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_line_style), ctree);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Dotted");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_line_style), ctree);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
+      gtk_widget_show (menu_item);
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "No lines");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_line_style), ctree);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+      
+      gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu2), menu);
+      gtk_box_pack_start (GTK_BOX (hbox), omenu2, FALSE, TRUE, 0);
+      
+      gtk_option_menu_set_history (GTK_OPTION_MENU (omenu2), 1);
+      
+      omenu3 = gtk_option_menu_new ();
+      gtk_tooltips_set_tip (tooltips, omenu3, "The tree's justification.", NULL);
+      
+      menu = gtk_menu_new ();
+      submenu = NULL;
+      group = NULL;
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Left");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_justify), ctree);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
+      gtk_widget_show (menu_item);
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Right");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_justify), ctree);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+      
+      gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu3), menu);
+      gtk_box_pack_start (GTK_BOX (hbox), omenu3, FALSE, TRUE, 0);
+      
+      gtk_option_menu_set_history (GTK_OPTION_MENU (omenu3), 0);
+      
+      omenu = gtk_option_menu_new ();
+      gtk_tooltips_set_tip (tooltips, omenu, "The list's selection mode.", NULL);
+      
+      menu = gtk_menu_new ();
+      submenu = NULL;
+      group = NULL;
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Single");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_sel_mode), ctree);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Browse");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_sel_mode), ctree);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Multiple");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+                      GTK_SIGNAL_FUNC (toggle_sel_mode), ctree);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
+      gtk_widget_show (menu_item);
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Extended");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_sel_mode), ctree);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+      
+      gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
+      gtk_box_pack_start (GTK_BOX (hbox), omenu, FALSE, TRUE, 0);
+      
+      gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), 2);
+      
+      gtk_widget_realize (window);
+      
+      pixmap1 = gdk_pixmap_create_from_xpm_d (window->window, &mask1, 
+					      &transparent, book_closed_xpm);
+      pixmap2 = gdk_pixmap_create_from_xpm_d (window->window, &mask2, 
+					      &transparent, book_open_xpm);
+      pixmap3 = gdk_pixmap_create_from_xpm_d (window->window, &mask3,
+					      &transparent, mini_page_xpm);
+      
+      gtk_widget_set_usize (GTK_WIDGET (ctree), 0, 300);
+      
+      frame = gtk_frame_new (NULL);
+      gtk_container_border_width (GTK_CONTAINER (frame), 0);
+      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, TRUE, 0);
+      
+      hbox = gtk_hbox_new (TRUE, 2);
+      gtk_container_border_width (GTK_CONTAINER (hbox), 2);
+      gtk_container_add (GTK_CONTAINER (frame), hbox);
+      
+      frame = gtk_frame_new (NULL);
+      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
+      gtk_box_pack_start (GTK_BOX (hbox), frame, FALSE, TRUE, 0);
+      
+      hbox2 = gtk_hbox_new (FALSE, 0);
+      gtk_container_border_width (GTK_CONTAINER (hbox2), 2);
+      gtk_container_add (GTK_CONTAINER (frame), hbox2);
+      
+      label = gtk_label_new ("Books :");
+      gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 0);
+      
+      sprintf (buf, "%d", books);
+      book_label = gtk_label_new (buf);
+      gtk_box_pack_end (GTK_BOX (hbox2), book_label, FALSE, TRUE, 5);
+      
+      frame = gtk_frame_new (NULL);
+      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
+      gtk_box_pack_start (GTK_BOX (hbox), frame, FALSE, TRUE, 0);
+      
+      hbox2 = gtk_hbox_new (FALSE, 0);
+      gtk_container_border_width (GTK_CONTAINER (hbox2), 2);
+      gtk_container_add (GTK_CONTAINER (frame), hbox2);
+      
+      label = gtk_label_new ("Pages :");
+      gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 0);
+      
+      sprintf (buf, "%d", pages);
+      page_label = gtk_label_new (buf);
+      gtk_box_pack_end (GTK_BOX (hbox2), page_label, FALSE, TRUE, 5);
+      
+      frame = gtk_frame_new (NULL);
+      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
+      gtk_box_pack_start (GTK_BOX (hbox), frame, FALSE, TRUE, 0);
+      
+      hbox2 = gtk_hbox_new (FALSE, 0);
+      gtk_container_border_width (GTK_CONTAINER (hbox2), 2);
+      gtk_container_add (GTK_CONTAINER (frame), hbox2);
+      
+      label = gtk_label_new ("Selected :");
+      gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 0);
+      
+      sprintf (buf, "%d", g_list_length (GTK_CLIST (ctree)->selection));
+      sel_label = gtk_label_new (buf);
+      gtk_box_pack_end (GTK_BOX (hbox2), sel_label, FALSE, TRUE, 5);
+      
+      frame = gtk_frame_new (NULL);
+      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
+      gtk_box_pack_start (GTK_BOX (hbox), frame, FALSE, TRUE, 0);
+      
+      hbox2 = gtk_hbox_new (FALSE, 0);
+      gtk_container_border_width (GTK_CONTAINER (hbox2), 2);
+      gtk_container_add (GTK_CONTAINER (frame), hbox2);
+      
+      label = gtk_label_new ("Visible :");
+      gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 0);
+      
+      sprintf (buf, "%d", g_list_length (GTK_CLIST (ctree)->row_list));
+      vis_label = gtk_label_new (buf);
+      gtk_box_pack_end (GTK_BOX (hbox2), vis_label, FALSE, TRUE, 5);
+
+      rebuild_tree (NULL, ctree);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+
 /*
  * GtkColorSelect
  */
@@ -3930,53 +4739,6 @@ GdkPixmap *book_closed;
 GdkBitmap *book_open_mask;
 GdkBitmap *book_closed_mask;
 
-static char * book_open_xpm[] = {
-"16 16 4 1",
-"       c None s None",
-".      c black",
-"X      c #808080",
-"o      c white",
-"                ",
-"  ..            ",
-" .Xo.    ...    ",
-" .Xoo. ..oo.    ",
-" .Xooo.Xooo...  ",
-" .Xooo.oooo.X.  ",
-" .Xooo.Xooo.X.  ",
-" .Xooo.oooo.X.  ",
-" .Xooo.Xooo.X.  ",
-" .Xooo.oooo.X.  ",
-"  .Xoo.Xoo..X.  ",
-"   .Xo.o..ooX.  ",
-"    .X..XXXXX.  ",
-"    ..X.......  ",
-"     ..         ",
-"                "};
-
-static char * book_closed_xpm[] = {
-"16 16 6 1",
-"       c None s None",
-".      c black",
-"X      c red",
-"o      c yellow",
-"O      c #808080",
-"#      c white",
-"                ",
-"       ..       ",
-"     ..XX.      ",
-"   ..XXXXX.     ",
-" ..XXXXXXXX.    ",
-".ooXXXXXXXXX.   ",
-"..ooXXXXXXXXX.  ",
-".X.ooXXXXXXXXX. ",
-".XX.ooXXXXXX..  ",
-" .XX.ooXXX..#O  ",
-"  .XX.oo..##OO. ",
-"   .XX..##OO..  ",
-"    .X.#OO..    ",
-"     ..O..      ",
-"      ..        ",
-"                "};
 
 static void
 notebook_reparent (GtkWidget *widget, GtkWidget *scrollwin)
@@ -5769,6 +6531,7 @@ create_main_window ()
       { "check buttons", create_check_buttons },
       { "clist", create_clist},
       { "color selection", create_color_selection },
+      { "ctree", create_ctree },
       { "cursors", create_cursors },
       { "dialog", create_dialog },
       { "dnd", create_dnd },

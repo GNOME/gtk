@@ -112,6 +112,7 @@ static int
 gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * combo)
 {
   GList *li;
+
   /* completion? */
   /*if ( event->keyval == GDK_Tab ) {
      gtk_signal_emit_stop_by_name (GTK_OBJECT (entry), "key_press_event");
@@ -546,6 +547,7 @@ gtk_combo_init (GtkCombo * combo)
   gtk_container_add (GTK_CONTAINER (combo->button), arrow);
   gtk_box_pack_start (GTK_BOX (combo), combo->entry, TRUE, TRUE, 0);
   gtk_box_pack_end (GTK_BOX (combo), combo->button, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (combo->button, GTK_CAN_FOCUS);
   gtk_widget_show (combo->entry);
   gtk_widget_show (combo->button);
   combo->entry_change_id = gtk_signal_connect (GTK_OBJECT (combo->entry), "changed",
@@ -585,14 +587,18 @@ gtk_combo_init (GtkCombo * combo)
 
   combo->popup = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (combo->popup),
-				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  GTK_WIDGET_UNSET_FLAGS (GTK_SCROLLED_WINDOW (combo->popup)->hscrollbar, GTK_CAN_FOCUS);
+  GTK_WIDGET_UNSET_FLAGS (GTK_SCROLLED_WINDOW (combo->popup)->vscrollbar, GTK_CAN_FOCUS);
+  gtk_container_add (GTK_CONTAINER (frame), combo->popup);
+  gtk_widget_show (combo->popup);
 
   combo->list = gtk_list_new ();
   gtk_list_set_selection_mode(GTK_LIST(combo->list), GTK_SELECTION_BROWSE);
-  gtk_container_add (GTK_CONTAINER (frame), combo->popup);
   gtk_container_add (GTK_CONTAINER (combo->popup), combo->list);
+  gtk_container_set_focus_vadjustment (GTK_CONTAINER (combo->list),
+				       gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (combo->popup)));
   gtk_widget_show (combo->list);
-  gtk_widget_show (combo->popup);
 
   combo->list_change_id = gtk_signal_connect (GTK_OBJECT (combo->list), "selection_changed",
 			     (GtkSignalFunc) gtk_combo_update_entry, combo);

@@ -37,6 +37,7 @@ typedef void (*GtkListSignal) (GtkObject *object,
 
 static void gtk_list_class_init	     (GtkListClass   *klass);
 static void gtk_list_init	     (GtkList	     *list);
+static void gtk_list_shutdown	     (GtkObject	     *object);
 static void gtk_list_destroy	     (GtkObject	     *object);
 static void gtk_list_map	     (GtkWidget	     *widget);
 static void gtk_list_unmap	     (GtkWidget	     *widget);
@@ -141,6 +142,7 @@ gtk_list_class_init (GtkListClass *class)
 
   gtk_object_class_add_signals (object_class, list_signals, LAST_SIGNAL);
 
+  object_class->shutdown = gtk_list_shutdown;
   object_class->destroy = gtk_list_destroy;
 
   widget_class->map = gtk_list_map;
@@ -183,6 +185,14 @@ gtk_list_new ()
 }
 
 static void
+gtk_list_shutdown (GtkObject *object)
+{
+  gtk_list_clear_items (GTK_LIST (object), 0, -1);
+
+  GTK_OBJECT_CLASS (parent_class)->shutdown (object);
+}
+
+static void
 gtk_list_destroy (GtkObject *object)
 {
   GList *node;
@@ -216,6 +226,20 @@ gtk_list_destroy (GtkObject *object)
     (*GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
+static void
+gtk_list_ungrab (GtkList *list)
+{
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (GTK_IS_LIST (list));
+
+  if (list->button)
+    {
+      list->button = 0;
+      gtk_grab_remove (GTK_WIDGET (list));
+      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+    }
+}
+
 void
 gtk_list_insert_items (GtkList *list,
 		       GList   *items,
@@ -231,6 +255,8 @@ gtk_list_insert_items (GtkList *list,
 
   if (!items)
     return;
+
+  gtk_list_ungrab (list);
 
   tmp_list = items;
   while (tmp_list)
@@ -326,6 +352,11 @@ gtk_list_remove_items_internal (GtkList	 *list,
   
   g_return_if_fail (list != NULL);
   g_return_if_fail (GTK_IS_LIST (list));
+
+  if (!items)
+    return;
+
+  gtk_list_ungrab (list);
   
   tmp_list = items;
   selected_widgets = NULL;
@@ -336,17 +367,15 @@ gtk_list_remove_items_internal (GtkList	 *list,
       widget = tmp_list->data;
       tmp_list = tmp_list->next;
       
-      if (widget->state == GTK_STATE_SELECTED)
-	selected_widgets = g_list_prepend (selected_widgets, widget);
-      
-      list->children = g_list_remove (list->children, widget);
-      
-      if (GTK_WIDGET_MAPPED (widget))
-	gtk_widget_unmap (widget);
-      
       if (no_unref)
 	gtk_widget_ref (widget);
-      gtk_widget_unparent (widget);
+
+      list->children = g_list_remove (list->children, widget);
+
+      if (widget->state == GTK_STATE_SELECTED)
+	selected_widgets = g_list_prepend (selected_widgets, widget);
+      else
+	gtk_widget_unparent (widget);
     }
   
   if (selected_widgets)
@@ -358,6 +387,8 @@ gtk_list_remove_items_internal (GtkList	 *list,
 	  tmp_list = tmp_list->next;
 	  
 	  gtk_list_unselect_child (list, widget);
+
+	  gtk_widget_unparent (widget);
 	}
       
       gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
@@ -400,7 +431,6 @@ gtk_list_clear_items (GtkList *list,
   GList *end_list;
   GList *tmp_list;
   guint nchildren;
-  gboolean selection_changed;
 
   g_return_if_fail (list != NULL);
   g_return_if_fail (GTK_IS_LIST (list));
@@ -409,6 +439,8 @@ gtk_list_clear_items (GtkList *list,
 
   if (nchildren > 0)
     {
+      gboolean selection_changed;
+
       if ((end < 0) || (end > nchildren))
 	end = nchildren;
 
@@ -417,6 +449,8 @@ gtk_list_clear_items (GtkList *list,
 
       start_list = g_list_nth (list->children, start);
       end_list = g_list_nth (list->children, end);
+
+      gtk_list_ungrab (list);
 
       if (start_list->prev)
 	start_list->prev->next = end_list;
@@ -438,9 +472,8 @@ gtk_list_clear_items (GtkList *list,
 
 	  if (widget->state == GTK_STATE_SELECTED)
 	    {
+	      gtk_list_unselect_child (list, widget);
 	      selection_changed = TRUE;
-	      list->selection = g_list_remove (list->selection, widget);
-	      gtk_widget_unref (widget);
 	    }
 
 	  gtk_widget_unparent (widget);
@@ -454,8 +487,7 @@ gtk_list_clear_items (GtkList *list,
 	  widget = list->children->data;
 	  gtk_list_select_child (list, widget);
 	}
-
-      if (selection_changed)
+      else if (selection_changed)
 	gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
 
       gtk_widget_queue_resize (GTK_WIDGET (list));
@@ -719,20 +751,22 @@ gtk_list_button_press (GtkWidget      *widget,
 
   if (list->button && (list->button != event->button))
     return FALSE;
-  list->button = event->button;
   
   while (item && !GTK_IS_LIST_ITEM (item))
     item = item->parent;
 
-  if (item && (item->parent == widget))
-    gtk_list_select_child (list, item);
-
+  list->button = event->button;
   gdk_pointer_grab (widget->window, TRUE,
 		    GDK_BUTTON_PRESS_MASK | 
 		    GDK_BUTTON_RELEASE_MASK,
 		    NULL, NULL, event->time);
   gtk_grab_add (widget);
 
+  /* note: gtk_list_select_child() may cause the grab to be removed again!
+   */
+  if (item && (item->parent == widget))
+    gtk_list_select_child (list, item);
+  
   return FALSE;
 }
 
@@ -750,12 +784,8 @@ gtk_list_button_release (GtkWidget	*widget,
   list = GTK_LIST (widget);
   item = gtk_get_event_widget ((GdkEvent*) event);
 
-  if (list->button != event->button)
-    return FALSE;
-  list->button = 0;
-  
-  gtk_grab_remove (widget);
-  gdk_pointer_ungrab (event->time);
+  if (list->button == event->button)
+    gtk_list_ungrab (list);
 
   return FALSE;
 }
@@ -848,34 +878,17 @@ static void
 gtk_list_add (GtkContainer *container,
 	      GtkWidget	   *widget)
 {
-  GtkList *list;
+  GList *item_list;
 
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_LIST (container));
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_LIST_ITEM (widget));
 
-  list = GTK_LIST (container);
-
-  gtk_widget_set_parent (widget, GTK_WIDGET (container));
-  if (GTK_WIDGET_VISIBLE (widget->parent))
-    {
-      if (GTK_WIDGET_REALIZED (widget->parent) &&
-	  !GTK_WIDGET_REALIZED (widget))
-	gtk_widget_realize (widget);
-
-      if (GTK_WIDGET_MAPPED (widget->parent) &&
-	  !GTK_WIDGET_MAPPED (widget))
-	gtk_widget_map (widget);
-    }
-
-  list->children = g_list_append (list->children, widget);
-
-  if (!list->selection && (list->selection_mode == GTK_SELECTION_BROWSE))
-    gtk_list_select_child (list, widget);
-
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
-    gtk_widget_queue_resize (widget);
+  item_list = g_list_alloc ();
+  item_list->data = widget;
+  
+  gtk_list_append_items (GTK_LIST (container), item_list);
 }
 
 static void
@@ -948,15 +961,14 @@ gtk_real_list_select_child (GtkList   *list,
 
 	  if (tmp_item != child)
 	    {
-	      gtk_list_item_deselect (GTK_LIST_ITEM (tmp_item));
-	      
 	      tmp_list = selection;
 	      selection = selection->next;
 
 	      list->selection = g_list_remove_link (list->selection, tmp_list);
-	      gtk_widget_unref (GTK_WIDGET (tmp_item));
-
 	      g_list_free (tmp_list);
+
+	      gtk_list_item_deselect (GTK_LIST_ITEM (tmp_item));
+	      gtk_widget_unref (GTK_WIDGET (tmp_item));
 	    }
 	  else
 	    selection = selection->next;
@@ -964,14 +976,14 @@ gtk_real_list_select_child (GtkList   *list,
 
       if (child->state == GTK_STATE_NORMAL)
 	{
-	  gtk_list_item_select (GTK_LIST_ITEM (child));
 	  list->selection = g_list_prepend (list->selection, child);
 	  gtk_widget_ref (child);
+	  gtk_list_item_select (GTK_LIST_ITEM (child));
 	}
       else if (child->state == GTK_STATE_SELECTED)
 	{
-	  gtk_list_item_deselect (GTK_LIST_ITEM (child));
 	  list->selection = g_list_remove (list->selection, child);
+	  gtk_list_item_deselect (GTK_LIST_ITEM (child));
 	  gtk_widget_unref (child);
 	}
 
@@ -987,15 +999,14 @@ gtk_real_list_select_child (GtkList   *list,
 
 	  if (tmp_item != child)
 	    {
-	      gtk_list_item_deselect (GTK_LIST_ITEM (tmp_item));
-	      
 	      tmp_list = selection;
 	      selection = selection->next;
 
 	      list->selection = g_list_remove_link (list->selection, tmp_list);
-	      gtk_widget_unref (GTK_WIDGET (tmp_item));
-
 	      g_list_free (tmp_list);
+
+	      gtk_list_item_deselect (GTK_LIST_ITEM (tmp_item));
+	      gtk_widget_unref (GTK_WIDGET (tmp_item));
 	    }
 	  else
 	    selection = selection->next;
@@ -1003,9 +1014,9 @@ gtk_real_list_select_child (GtkList   *list,
 
       if (child->state == GTK_STATE_NORMAL)
 	{
-	  gtk_list_item_select (GTK_LIST_ITEM (child));
 	  list->selection = g_list_prepend (list->selection, child);
 	  gtk_widget_ref (child);
+	  gtk_list_item_select (GTK_LIST_ITEM (child));
 	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
 	}
       break;
@@ -1013,15 +1024,15 @@ gtk_real_list_select_child (GtkList   *list,
     case GTK_SELECTION_MULTIPLE:
       if (child->state == GTK_STATE_NORMAL)
 	{
-	  gtk_list_item_select (GTK_LIST_ITEM (child));
 	  list->selection = g_list_prepend (list->selection, child);
 	  gtk_widget_ref (child);
+	  gtk_list_item_select (GTK_LIST_ITEM (child));
 	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
 	}
       else if (child->state == GTK_STATE_SELECTED)
 	{
-	  gtk_list_item_deselect (GTK_LIST_ITEM (child));
 	  list->selection = g_list_remove (list->selection, child);
+	  gtk_list_item_deselect (GTK_LIST_ITEM (child));
 	  gtk_widget_unref (child);
 	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
 	}
@@ -1048,8 +1059,8 @@ gtk_real_list_unselect_child (GtkList	*list,
     case GTK_SELECTION_BROWSE:
       if (child->state == GTK_STATE_SELECTED)
 	{
-	  gtk_list_item_deselect (GTK_LIST_ITEM (child));
 	  list->selection = g_list_remove (list->selection, child);
+	  gtk_list_item_deselect (GTK_LIST_ITEM (child));
 	  gtk_widget_unref (child);
 	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
 	}

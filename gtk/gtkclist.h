@@ -36,10 +36,11 @@ extern "C"
 /* clist flags */
 enum                    
 {
-  CLIST_FROZEN          = 1 << 0,                                     
-  CLIST_IN_DRAG         = 1 << 1,                                        
-  CLIST_ROW_HEIGHT_SET  = 1 << 2,
-  CLIST_SHOW_TITLES     = 1 << 3
+  GTK_CLIST_FROZEN          = 1 << 0,                                     
+  GTK_CLIST_IN_DRAG         = 1 << 1,                                        
+  GTK_CLIST_ROW_HEIGHT_SET  = 1 << 2,
+  GTK_CLIST_SHOW_TITLES     = 1 << 3,
+  GTK_CLIST_CONSTRUCTED	    = 1 << 4
 }; 
 
 /* cell types */
@@ -52,18 +53,19 @@ typedef enum
   GTK_CELL_WIDGET
 } GtkCellType;
 
-#define GTK_CLIST(obj)          GTK_CHECK_CAST (obj, gtk_clist_get_type (), GtkCList)
-#define GTK_CLIST_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_clist_get_type (), GtkCListClass)
-#define GTK_IS_CLIST(obj)       GTK_CHECK_TYPE (obj, gtk_clist_get_type ())
+#define GTK_CLIST(obj)          (GTK_CHECK_CAST ((obj), gtk_clist_get_type (), GtkCList))
+#define GTK_CLIST_CLASS(klass)  (GTK_CHECK_CLASS_CAST ((klass), gtk_clist_get_type (), GtkCListClass))
+#define GTK_IS_CLIST(obj)       (GTK_CHECK_TYPE ((obj), gtk_clist_get_type ()))
 
-#define GTK_CLIST_FLAGS(clist)             (GTK_CLIST (clist)->flags)
-#define GTK_CLIST_SET_FLAGS(clist,flag)    (GTK_CLIST_FLAGS (clist) |= (flag))
-#define GTK_CLIST_UNSET_FLAGS(clist,flag)  (GTK_CLIST_FLAGS (clist) &= ~(flag))
+#define GTK_CLIST_FLAGS(clist)            (GTK_CLIST (clist)->flags)
+#define GTK_CLIST_SET_FLAG(clist,flag)    (GTK_CLIST_FLAGS (clist) |= (GTK_ ## flag))
+#define GTK_CLIST_UNSET_FLAG(clist,flag)  (GTK_CLIST_FLAGS (clist) &= ~(GTK_ ## flag))
 
-#define GTK_CLIST_FROZEN(clist)            (GTK_CLIST_FLAGS (clist) & CLIST_FROZEN)
-#define GTK_CLIST_IN_DRAG(clist)           (GTK_CLIST_FLAGS (clist) & CLIST_IN_DRAG)
-#define GTK_CLIST_ROW_HEIGHT_SET(clist)    (GTK_CLIST_FLAGS (clist) & CLIST_ROW_HEIGHT_SET)
-#define GTK_CLIST_SHOW_TITLES(clist)       (GTK_CLIST_FLAGS (clist) & CLIST_SHOW_TITLES)
+#define GTK_CLIST_FROZEN(clist)            (GTK_CLIST_FLAGS (clist) & GTK_CLIST_FROZEN)
+#define GTK_CLIST_IN_DRAG(clist)           (GTK_CLIST_FLAGS (clist) & GTK_CLIST_IN_DRAG)
+#define GTK_CLIST_ROW_HEIGHT_SET(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ROW_HEIGHT_SET)
+#define GTK_CLIST_SHOW_TITLES(clist)       (GTK_CLIST_FLAGS (clist) & GTK_CLIST_SHOW_TITLES)
+#define GTK_CLIST_CONSTRUCTED(clist)       (GTK_CLIST_FLAGS (clist) & GTK_CLIST_CONSTRUCTED)
 
 /* pointer casting for cells */
 #define GTK_CELL_TEXT(cell)     (((GtkCellText *) &(cell)))
@@ -164,7 +166,10 @@ struct _GtkCListClass
 			GdkEventButton * event);
   void (*click_column) (GtkCList * clist,
 			gint column);
-
+  void (*draw_row) (GtkCList * clist,
+		    GdkRectangle * area,
+		    gint row,
+		    GtkCListRow * clist_row);
   gint scrollbar_spacing;
 };
 
@@ -268,7 +273,7 @@ struct _GtkCell
   } u;
 };
 
-guint gtk_clist_get_type (void);
+GtkType gtk_clist_get_type (void);
 
 /* constructers useful for gtk-- wrappers */
 void gtk_clist_construct (GtkCList * clist,

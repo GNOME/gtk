@@ -1,10 +1,52 @@
+Fri May  1 13:57:36 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.h:
+	* gtk/gtkclist.c: prefixed all clist flags with GTK_ to avoid name
+ 	clashes. redefined GTK_CLIST_SET_FLAGS and GTK_CLIST_UNSET_FLAGS as
+	GTK_CLIST_SET_FLAG and GTK_CLIST_UNSET_FLAG to automatically add
+	the GTK_ prefix (this solution involved less changes in the
+ 	gtkclist.c code). added a GTK_CLIST_CONSTRUCTED flag to substitute
+	the mem_chunk==NULL test in gtk_clist_construct. merged in changes
+	from lars & stefan to support the derivation of GtkCtree.
+
+	* gtkctree.h:
+	* gtkctree.c:
+	initial import of a tree widget derived from gtkclist, courtesy
+	of Lars Hamann <lars@gtk.org> and Stefan Jeske <jeske@gtk.org>,
+	it just damn rocks!
+
+Fri May  1 10:05:44 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtklist.c (gtk_list_add): let gtk_list_append_items do the work
+	for us.
+	(gtk_list_insert_items):
+	(gtk_list_remove_items_internal): 
+	(gtk_list_clear_items): 
+ 	remove a possible pointer grab, we might get thrown into a loop
+	otherwise.
+	(gtk_list_button_press): grab the pointer *before* selecting the child,
+	because selection of items may cause the lists children to change,
+ 	resulting in a grab release.
+	(gtk_list_clear_items): use gtk_list_unselect_child() for unselection of
+	children.
+	(gtk_list_shutdown): remove all children from the list.
+	(gtk_real_list_unselect_child): 
+	(gtk_real_list_select_child): *always* put our internal structures into
+ 	sane state *before* signal emisions (i.e. list->selection updates prior
+ 	to gtk_list_item_[de]select() calls).
+
+	* gtk/gtkcombo.c (gtk_combo_init): adjust the scrollbar if the lists
+	focused child walks out of the window.
+	removed CAN_FOCUS for the combo arrow's button since it doesn't react
+	to keyboard events ("clicked" connection is missing).
+
 Fri May  1 00:42:25 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gdk/gdkwindow.c (gdk_window_get_colormap): Fix up
 	getting colormap for FOREIGN windows to go along with
 	Raster's fix for visuals.
 
-erges from gtk-1-0
+Merges from gtk-1-0
 ===================
 	
 Thu Apr 30 23:32:51 1998  Owen Taylor  <otaylor@gtk.org>
