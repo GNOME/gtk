@@ -2666,7 +2666,8 @@ logfont_to_xlfd (const LOGFONT *lfp,
   int point_size;
   static int logpixelsy = 0;
   gchar facename[LF_FACESIZE*3];
-  gchar *p, *q;
+  gchar *p;
+  const gchar *q;
 
   if (logpixelsy == 0)
     {
@@ -3575,6 +3576,9 @@ gtk_font_selection_get_xlfd_field (const gchar *fontname,
 {
   const gchar *t1, *t2;
   gint countdown, len, num_dashes;
+#ifdef GDK_WINDOWING_WIN32
+  gchar *p;
+#endif
   
   if (!fontname)
     return NULL;
@@ -3605,6 +3609,23 @@ gtk_font_selection_get_xlfd_field (const gchar *fontname,
 #ifdef GDK_WINDOWING_X11
       /* Convert to lower case. */
       g_strdown (buffer);
+#elif defined (GDK_WINDOWING_WIN32)
+      /* Check for hex escapes in font family */
+      if (field_num == XLFD_FAMILY)
+	{
+	  p = buffer;
+	  while (*p)
+	    {
+	      if (*p == '%' && isxdigit (p[1]) && isxdigit (p[2]))
+		{
+		  guint c;
+		  sscanf (p+1, "%2x", &c);
+		  *p = c;
+		  strcpy (p+1, p+3);
+		}
+	      p++;
+	    }
+	}
 #endif
     }
   else
@@ -3630,7 +3651,11 @@ gtk_font_selection_create_xlfd (gint		  size,
 {
   gchar buffer[16];
   gchar *pixel_size = "*", *point_size = "*", *fontname;
-  
+  gchar *fam = family;
+#ifdef GDK_WINDOWING_WIN32 
+  gchar *p, *q;
+#endif
+
   if (size <= 0)
     return NULL;
   
@@ -3640,10 +3665,27 @@ gtk_font_selection_create_xlfd (gint		  size,
   else
     point_size = buffer;
   
+#ifdef GDK_WINDOWING_WIN32
+  fam = g_malloc (strlen (family) * 3 + 1);
+  p = fam;
+  q = family;
+  while (*q)
+    {
+      if (*q == '-' || *q == '*' || *q == '?' || *q == '%')
+	p += sprintf (p, "%%%.02x", *q);
+      else
+	*p++ = *q;
+      q++;
+    }
+  *p = '\0';
+#endif
   fontname = g_strdup_printf ("-%s-%s-%s-%s-%s-*-%s-%s-*-*-%s-*-%s",
-			      foundry, family, weight, slant,
+			      foundry, fam, weight, slant,
 			      set_width, pixel_size, point_size,
 			      spacing, charset);
+#ifdef GDK_WINDOWING_WIN32
+  g_free (fam);
+#endif
   return fontname;
 }
 

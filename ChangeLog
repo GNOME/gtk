@@ -1,3 +1,11 @@
+1999-09-30  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_get_xlfd_field): On Win32,
+	expand possible hex escapes in the font family (put there by
+	logfont_to_xlfd if the font name isn't a legal XLFD font family,
+	mainly if it contains slashes). (gtk_font_selection_create_xlfd):
+	On Win32, add hex escapes here, too.
+
 Wed Sep 29 19:55:35 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* */*.[ch]: Changed from #if GDK_WINDOWING == GDK_WINDOWING_X11
