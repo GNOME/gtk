@@ -2,6 +2,8 @@
 
 	* gtk/gtkfilechooserdefault.c (selection_check_foreach_cb): Don't use
 	bitops on booleans.
+	(gtk_file_chooser_default_should_respond): Make it easier to 
+	select folders in SELECT_FOLDER mode.
 
 Wed Sep 22 00:54:34 2004  Matthias Clasen  <mclasen@redhat.com>
 
