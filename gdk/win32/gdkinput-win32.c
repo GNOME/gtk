@@ -156,7 +156,7 @@ static GList     *wintab_contexts;
 
 static gint gdk_input_root_width;
 static gint gdk_input_root_height;
-static GdkWindow *wintab_window;
+static GdkWindow *wintab_window = NULL;
 static guint32 last_moved_cursor_id;
 #endif
 
@@ -970,6 +970,7 @@ gdk_input_find_dev_from_ctx (HCTX hctx,
     }
   return NULL;
 }
+
 static gint 
 gdk_input_win32_other_event (GdkEvent  *event,
 			     MSG       *xevent)
@@ -1587,8 +1588,11 @@ gdk_input_exit (void)
   g_list_free (gdk_input_windows);
   gdk_input_windows = NULL;
 
-  gdk_window_unref (wintab_window);
-  wintab_window = NULL;
+  if (wintab_window != NULL)
+    {
+      gdk_window_unref (wintab_window);
+      wintab_window = NULL;
+    }
 
 #if 1
   for (tmp_list = wintab_contexts; tmp_list; tmp_list = tmp_list->next)

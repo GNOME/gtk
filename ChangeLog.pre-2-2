@@ -1,3 +1,9 @@
+2002-12-21  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkinput-win32.c: Initialise wintab_window as NULL.
+	(gdk_input_exit): Don't unref wintab_window if it is
+	NULL. (#101005, Katsuhiro Okuno)
+
 2002-12-19  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_get_geometry): Umm, I
