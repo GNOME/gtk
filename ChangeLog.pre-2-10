@@ -1,3 +1,10 @@
+2004-07-04  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/Makefile.am:
+	* gtk/gtkiconview.c
+	* gtk/gtkiconview.h:
+	Add GtkIconView to the build, remove debugging output.
+	
 Sun Jul  4 01:29:35 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcalendar.c (gtk_calendar_drag_data_get): 

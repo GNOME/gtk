@@ -1,4 +1,4 @@
-/* eggiconlist.h
+/* gtkiconview.h
  * Copyright (C) 2002, 2004  Anders Carlsson <andersca@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -16,100 +16,96 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#ifndef __EGG_ICON_LIST_H__
-#define __EGG_ICON_LIST_H__
+#ifndef __GTK_ICON_VIEW_H__
+#define __GTK_ICON_VIEW_H__
 
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtktreemodel.h>
 
 G_BEGIN_DECLS
 
-#define EGG_TYPE_ICON_LIST		(egg_icon_list_get_type ())
-#define EGG_ICON_LIST(obj)		(GTK_CHECK_CAST ((obj), EGG_TYPE_ICON_LIST, EggIconList))
-#define EGG_ICON_LIST_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), EGG_TYPE_ICON_LIST, EggIconListClass))
-#define EGG_IS_ICON_LIST(obj)		(GTK_CHECK_TYPE ((obj), EGG_TYPE_ICON_LIST))
-#define EGG_IS_ICON_LIST_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), EGG_TYPE_ICON_LIST))
-#define EGG_ICON_LIST_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), EGG_TYPE_ICON_LIST, EggIconListClass))
+#define GTK_TYPE_ICON_VIEW		(gtk_icon_view_get_type ())
+#define GTK_ICON_VIEW(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_ICON_VIEW, GtkIconView))
+#define GTK_ICON_VIEW_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ICON_VIEW, GtkIconViewClass))
+#define GTK_IS_ICON_VIEW(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_ICON_VIEW))
+#define GTK_IS_ICON_VIEW_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ICON_VIEW))
+#define GTK_ICON_VIEW_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_ICON_VIEW, GtkIconViewClass))
 
-typedef struct _EggIconList           EggIconList;
-typedef struct _EggIconListClass      EggIconListClass;
-typedef struct _EggIconListPrivate    EggIconListPrivate;
-typedef struct _EggIconListItem       EggIconListItem;
+typedef struct _GtkIconView           GtkIconView;
+typedef struct _GtkIconViewClass      GtkIconViewClass;
+typedef struct _GtkIconViewPrivate    GtkIconViewPrivate;
 
-typedef void (* EggIconListForeachFunc)     (EggIconList      *icon_list,
+typedef void (* GtkIconViewForeachFunc)     (GtkIconView      *icon_view,
 					     GtkTreePath      *path,
 					     gpointer          data);
 
-struct _EggIconList
+struct _GtkIconView
 {
   GtkContainer parent;
 
-  EggIconListPrivate *priv;
+  GtkIconViewPrivate *priv;
 };
 
-struct _EggIconListClass
+struct _GtkIconViewClass
 {
   GtkContainerClass parent_class;
 
-  void    (* set_scroll_adjustments) (EggIconList      *icon_list,
+  void    (* set_scroll_adjustments) (GtkIconView      *icon_view,
 				      GtkAdjustment    *hadjustment,
 				      GtkAdjustment    *vadjustment);
   
-  void    (* item_activated)         (EggIconList      *icon_list,
+  void    (* item_activated)         (GtkIconView      *icon_view,
 				      GtkTreePath      *path);
-  void    (* selection_changed)      (EggIconList      *icon_list);
+  void    (* selection_changed)      (GtkIconView      *icon_view);
 
   /* Key binding signals */
-  void    (* select_all)             (EggIconList      *icon_list);
-  void    (* unselect_all)           (EggIconList      *icon_list);
-  void    (* select_cursor_item)     (EggIconList      *icon_list);
-  void    (* toggle_cursor_item)     (EggIconList      *icon_list);
-  gboolean (* move_cursor)           (EggIconList      *icon_list,
+  void    (* select_all)             (GtkIconView      *icon_view);
+  void    (* unselect_all)           (GtkIconView      *icon_view);
+  void    (* select_cursor_item)     (GtkIconView      *icon_view);
+  void    (* toggle_cursor_item)     (GtkIconView      *icon_view);
+  gboolean (* move_cursor)           (GtkIconView      *icon_view,
 				      GtkMovementStep   step,
 				      gint              count);
 };
 
-GType      egg_icon_list_get_type       (void);
-GtkWidget *egg_icon_list_new            (void);
-GtkWidget *egg_icon_list_new_with_model (GtkTreeModel *model);
+GType      gtk_icon_view_get_type       (void);
+GtkWidget *gtk_icon_view_new            (void);
+GtkWidget *gtk_icon_view_new_with_model (GtkTreeModel *model);
 
-void          egg_icon_list_set_model         (EggIconList  *icon_list,
+void          gtk_icon_view_set_model         (GtkIconView  *icon_view,
 					       GtkTreeModel *model);
-GtkTreeModel *egg_icon_list_get_model         (EggIconList  *icon_list);
-void          egg_icon_list_set_text_column   (EggIconList  *icon_list,
+GtkTreeModel *gtk_icon_view_get_model         (GtkIconView  *icon_view);
+void          gtk_icon_view_set_text_column   (GtkIconView  *icon_view,
 					       gint          column);
-gint          egg_icon_list_get_text_column   (EggIconList  *icon_list);
-void          egg_icon_list_set_markup_column (EggIconList  *icon_list,
+gint          gtk_icon_view_get_text_column   (GtkIconView  *icon_view);
+void          gtk_icon_view_set_markup_column (GtkIconView  *icon_view,
 					       int           column);
-gint          egg_icon_list_get_markup_column (EggIconList  *icon_list);
-void          egg_icon_list_set_pixbuf_column (EggIconList  *icon_list,
+gint          gtk_icon_view_get_markup_column (GtkIconView  *icon_view);
+void          gtk_icon_view_set_pixbuf_column (GtkIconView  *icon_view,
 					       gint          column);
-gint          egg_icon_list_get_pixbuf_column (EggIconList  *icon_list);
+gint          gtk_icon_view_get_pixbuf_column (GtkIconView  *icon_view);
 
 
-GtkTreePath *    egg_icon_list_get_path_at_pos    (EggIconList            *icon_list,
+GtkTreePath *    gtk_icon_view_get_path_at_pos    (GtkIconView            *icon_view,
 						   gint                    x,
 						   gint                    y);
-void             egg_icon_list_selected_foreach   (EggIconList            *icon_list,
-						   EggIconListForeachFunc  func,
+void             gtk_icon_view_selected_foreach   (GtkIconView            *icon_view,
+						   GtkIconViewForeachFunc  func,
 						   gpointer                data);
-void             egg_icon_list_set_selection_mode (EggIconList            *icon_list,
+void             gtk_icon_view_set_selection_mode (GtkIconView            *icon_view,
 						   GtkSelectionMode        mode);
-GtkSelectionMode egg_icon_list_get_selection_mode (EggIconList            *icon_list);
-void             egg_icon_list_select_path        (EggIconList            *icon_list,
+GtkSelectionMode gtk_icon_view_get_selection_mode (GtkIconView            *icon_view);
+void             gtk_icon_view_select_path        (GtkIconView            *icon_view,
 						   GtkTreePath            *path);
-void             egg_icon_list_unselect_path      (EggIconList            *icon_list,
+void             gtk_icon_view_unselect_path      (GtkIconView            *icon_view,
 						   GtkTreePath            *path);
-gboolean         egg_icon_list_path_is_selected   (EggIconList            *icon_list,
+gboolean         gtk_icon_view_path_is_selected   (GtkIconView            *icon_view,
 						   GtkTreePath            *path);
-GList           *egg_icon_list_get_selected_items (EggIconList            *icon_list);
-void             egg_icon_list_select_all         (EggIconList            *icon_list);
-void             egg_icon_list_unselect_all       (EggIconList            *icon_list);
-void             egg_icon_list_item_activated     (EggIconList            *icon_list,
+GList           *gtk_icon_view_get_selected_items (GtkIconView            *icon_view);
+void             gtk_icon_view_select_all         (GtkIconView            *icon_view);
+void             gtk_icon_view_unselect_all       (GtkIconView            *icon_view);
+void             gtk_icon_view_item_activated     (GtkIconView            *icon_view,
 						   GtkTreePath            *path);
-
-
-
 G_END_DECLS
 
-#endif /* __EGG_ICON_LIST_H__ */
+#endif /* __GTK_ICON_VIEW_H__ */

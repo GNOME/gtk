@@ -166,6 +166,7 @@ gtk_public_h_sources =          \
 	gtkhseparator.h		\
 	gtkiconfactory.h	\
 	gtkicontheme.h		\
+	gtkiconview.h		\
 	gtkimage.h		\
 	gtkimagemenuitem.h	\
 	gtkimcontext.h		\
@@ -380,6 +381,7 @@ gtk_c_sources =                 \
 	gtkicontheme.c		\
 	gtkiconthemeparser.c	\
 	gtkiconthemeparser.h	\
+	gtkiconview.c		\
 	gtkimage.c		\
 	gtkimagemenuitem.c	\
 	gtkimcontext.c		\
