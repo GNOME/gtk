@@ -48,7 +48,7 @@ TESTAPPS = \
 	testicontheme testinput \
 	testmenus testmerge testmultidisplay testmultiscreen \
 	testrgb \
-	testselection \
+	testselection testspinbutton \
 	testtext testtextbuffer testtoolbar \
 	testtreecolumns testtreeedit testtreeflow testtreefocus \
 	testtreesort testtreeview treestoretest \

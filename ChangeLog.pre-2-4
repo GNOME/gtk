@@ -1,3 +1,12 @@
+2004-03-14  Hans Breuer  <hans@breuer.org>
+
+	gtk/gtkcombobox.c : prototype cell_view_sync_cells() before 
+	first usage
+
+	gtk/makefile.msc.in : updated 'gtk_public_h_sources'
+
+	tests/makefile.msc : added testspinbutton
+
 Sun Mar 14 01:01:18 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcellview.c (gtk_cell_view_set_cell_data): Align

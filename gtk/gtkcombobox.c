@@ -361,6 +361,8 @@ static void     gtk_combo_box_cell_layout_reorder            (GtkCellLayout     
 static gboolean gtk_combo_box_mnemonic_activate              (GtkWidget    *widget,
 							      gboolean      group_cycling);
 
+static void     cell_view_sync_cells (GtkComboBox *combo_box,
+                                      GtkCellView *cell_view);
 
 GType
 gtk_combo_box_get_type (void)
