@@ -177,7 +177,7 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
       tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
       gtk_widget_set_app_paintable (tooltips->tip_window, TRUE);
       gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
-
+      gtk_widget_set_name (tooltips->tip_window, "gtk-tooltips");
       gtk_signal_connect_object (GTK_OBJECT (tooltips->tip_window), 
 				 "expose_event",
 				 GTK_SIGNAL_FUNC (gtk_tooltips_expose), 

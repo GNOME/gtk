@@ -1,3 +1,9 @@
+Sat Jan  9 14:02:08 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_force_window): Set
+	name "gtk-tooltips" on tip window so that a style
+	can be set for tooltips.
+
 Fri Jan  8 19:00:17 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdnd.c (gdk_window_cache_filter): Fixed
