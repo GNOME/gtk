@@ -1,3 +1,9 @@
+2002-11-21 15:43:54 2002 Dan Mills  <thunder@ximian.com>
+
+	* configure.in: replace gtk-doc version check with an all-sh
+	version that works better,
+	also up the required gtk-doc version to 0.10 (#99216).
+
 2002-11-21  Matthias Clasen  <maclas@gmx.de>
 
 	* configure.in: Generate docs/reference/*/version.xml.
