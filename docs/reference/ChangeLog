@@ -1,6 +1,10 @@
+2002-12-18  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkcontainer.sgml: Add docs.
+
 2002-12-17  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/tmpl/gtkrc.sgml: Link to style properties.
+	* gtk/tmpl/gtkrc.sgml: Link to style properties. 
 
 	* gtk/tmpl/gtkcontainer.sgml: Add bits about child properties.
 

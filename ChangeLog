@@ -1,3 +1,7 @@
+2002-12-18  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c: Add docs.
+
 Wed Dec 18 12:05:33 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* NEWS: Various name fixes.

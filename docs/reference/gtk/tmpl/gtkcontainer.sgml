@@ -15,13 +15,16 @@ which is contained in a #GtkBox.</para>
 Use gtk_container_class_install_child_property() to install child properties 
 for a container class and gtk_container_class_find_child_property() or
 gtk_container_class_list_child_properties() to get information about existing
-child properties. To set the value of a child property, use
-gtk_container_child_set_property(), gtk_container_child_set() or
-gtk_container_child_set_valist(). To obtain the value of a child property,
-use gtk_container_child_get_property(), gtk_container_child_get() or
-gtk_container_child_get_valist(). 
+child properties.
 </para>
-
+<para>
+To set the value of a child property, use gtk_container_child_set_property(), 
+gtk_container_child_set() or gtk_container_child_set_valist(). 
+To obtain the value of a child property, use 
+gtk_container_child_get_property(), gtk_container_child_get() or
+gtk_container_child_get_valist(). To emit notification about child property 
+changes, use gtk_widget_child_notify().
+</para>
 <!-- ##### SECTION See_Also ##### -->
 <para>
 

@@ -1361,6 +1361,15 @@ gtk_widget_dispatch_child_properties_changed (GtkWidget   *widget,
     g_signal_emit (widget, widget_signals[CHILD_NOTIFY], g_quark_from_string (pspecs[i]->name), pspecs[i]);
 }
 
+/**
+ * gtk_widget_freeze_child_notify:
+ * @widget: a #GtkWidget
+ * 
+ * Stops emission of "child-notify" signals on @widget. The signals are
+ * queued until gtk_widget_thaw_child_notify() is called on @widget. 
+ *
+ * This is the analogue of g_object_freeze_notify() for child properties.
+ **/
 void
 gtk_widget_freeze_child_notify (GtkWidget *widget)
 {
@@ -1374,6 +1383,18 @@ gtk_widget_freeze_child_notify (GtkWidget *widget)
   g_object_unref (widget);
 }
 
+/**
+ * gtk_widget_child_notify:
+ * @widget: a #GtkWidget
+ * @child_property: the name of a child property installed on the 
+ *                  class of @widget<!-- -->'s parent.
+ * 
+ * Emits a "child-notify" signal for the 
+ * <link linkend="child-properties">child property</link> @child_property 
+ * on @widget.
+ *
+ * This is the analogue of g_object_notify() for child properties.
+ **/
 void
 gtk_widget_child_notify (GtkWidget    *widget,
 			 const gchar  *child_property)
@@ -1410,6 +1431,7 @@ gtk_widget_child_notify (GtkWidget    *widget,
  * @widget: a #GtkWidget
  *
  * Reverts the effect of a previous call to gtk_widget_freeze_child_notify().
+ * This causes all queued "child-notify" signals on @widget to be emitted.
  */ 
 void
 gtk_widget_thaw_child_notify (GtkWidget *widget)
