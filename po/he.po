@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: Tzafrir Cohen <tzafrir@technion.ac.il>\n"
 "Language-Team: LANGUAGE <he@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/io-gif.c:426
