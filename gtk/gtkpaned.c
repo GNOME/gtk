@@ -28,32 +28,36 @@
 #include "gtkpaned.h"
 
 enum {
-  ARG_0,
+  PROP_0,
+  PROP_POSITION,
+  PROP_POSITION_SET
 };
 
-static void    gtk_paned_class_init (GtkPanedClass  *klass);
-static void    gtk_paned_init       (GtkPaned       *paned);
-static void    gtk_paned_set_arg    (GtkObject      *object,
-				     GtkArg         *arg,
-				     guint           arg_id);
-static void    gtk_paned_get_arg    (GtkObject      *object,
-				     GtkArg         *arg,
-				     guint           arg_id);
-static void    gtk_paned_realize    (GtkWidget      *widget);
-static void    gtk_paned_map        (GtkWidget      *widget);
-static void    gtk_paned_unmap      (GtkWidget      *widget);
-static void    gtk_paned_unrealize  (GtkWidget      *widget);
-static gint    gtk_paned_expose     (GtkWidget      *widget,
-				     GdkEventExpose *event);
-static void    gtk_paned_add        (GtkContainer   *container,
-				     GtkWidget      *widget);
-static void    gtk_paned_remove     (GtkContainer   *container,
-				     GtkWidget      *widget);
-static void    gtk_paned_forall     (GtkContainer   *container,
-				     gboolean        include_internals,
-				     GtkCallback     callback,
-				     gpointer        callback_data);
-static GtkType gtk_paned_child_type (GtkContainer   *container);
+static void    gtk_paned_class_init   (GtkPanedClass  *klass);
+static void    gtk_paned_init         (GtkPaned       *paned);
+static void    gtk_paned_set_property (GObject        *object,
+				       guint           prop_id,
+				       const GValue   *value,
+				       GParamSpec     *pspec);
+static void    gtk_paned_get_property (GObject        *object,
+				       guint           prop_id,
+				       GValue         *value,
+				       GParamSpec     *pspec);
+static void    gtk_paned_realize      (GtkWidget      *widget);
+static void    gtk_paned_map          (GtkWidget      *widget);
+static void    gtk_paned_unmap        (GtkWidget      *widget);
+static void    gtk_paned_unrealize    (GtkWidget      *widget);
+static gint    gtk_paned_expose       (GtkWidget      *widget,
+				       GdkEventExpose *event);
+static void    gtk_paned_add          (GtkContainer   *container,
+				       GtkWidget      *widget);
+static void    gtk_paned_remove       (GtkContainer   *container,
+				       GtkWidget      *widget);
+static void    gtk_paned_forall       (GtkContainer   *container,
+				       gboolean        include_internals,
+				       GtkCallback     callback,
+				       gpointer        callback_data);
+static GtkType gtk_paned_child_type   (GtkContainer   *container);
 
 static GtkContainerClass *parent_class = NULL;
 
@@ -86,18 +90,18 @@ gtk_paned_get_type (void)
 static void
 gtk_paned_class_init (GtkPanedClass *class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
-  object_class = (GtkObjectClass *) class;
+  object_class = (GObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
-  object_class->set_arg = gtk_paned_set_arg;
-  object_class->get_arg = gtk_paned_get_arg;
+  object_class->set_property = gtk_paned_set_property;
+  object_class->get_property = gtk_paned_get_property;
 
   widget_class->realize = gtk_paned_realize;
   widget_class->map = gtk_paned_map;
@@ -110,6 +114,23 @@ gtk_paned_class_init (GtkPanedClass *class)
   container_class->forall = gtk_paned_forall;
   container_class->child_type = gtk_paned_child_type;
 
+  g_object_class_install_property (object_class,
+				   PROP_POSITION,
+				   g_param_spec_int ("position",
+						     _("Position"),
+						     _("Position of paned separator in pixels(0 means all the way to the left/top)"),
+						     0,
+						     G_MAXINT,
+						     0,
+						     G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (object_class,
+				   PROP_POSITION_SET,
+				   g_param_spec_boolean ("position_set",
+							 _("Position Set"),
+							 _("TRUE if the Position property should be used"),
+							 FALSE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+				   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("handle_size",
 							     _("Handle Size"),
@@ -151,26 +172,46 @@ gtk_paned_init (GtkPaned *paned)
 }
 
 static void
-gtk_paned_set_arg (GtkObject *object,
-		   GtkArg    *arg,
-		   guint      arg_id)
+gtk_paned_set_property (GObject        *object,
+			guint           prop_id,
+			const GValue   *value,
+			GParamSpec     *pspec)
 {
-  switch (arg_id)
+  GtkPaned *paned = GTK_PANED (object);
+  
+  switch (prop_id)
     {
+    case PROP_POSITION:
+      gtk_paned_set_position (paned, g_value_get_int (value));
+      break;
+    case PROP_POSITION_SET:
+      paned->position_set = g_value_get_boolean (value);
+      gtk_widget_queue_resize (GTK_WIDGET (paned));
+      break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_paned_get_arg (GtkObject *object,
-		   GtkArg    *arg,
-		   guint      arg_id)
+gtk_paned_get_property (GObject        *object,
+			guint           prop_id,
+			GValue         *value,
+			GParamSpec     *pspec)
 {
-  switch (arg_id)
+  GtkPaned *paned = GTK_PANED (object);
+  
+  switch (prop_id)
     {
+    case PROP_POSITION:
+      g_value_set_int (value, paned->child1_size);
+      break;
+    case PROP_POSITION_SET:
+      g_value_set_boolean (value, paned->position_set);
+      break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -482,7 +523,8 @@ gtk_paned_get_position (GtkPaned  *paned)
 /**
  * gtk_paned_set_position:
  * @paned: a #GtkPaned widget
- * @position: pixel position of divider
+ * @position: pixel position of divider, a negative value means that the position
+ *            is unset.
  * 
  * Sets the position of the divider between the two panes.
  **/
@@ -490,9 +532,13 @@ void
 gtk_paned_set_position (GtkPaned *paned,
 			gint      position)
 {
+  GObject *object;
+  
   g_return_if_fail (paned != NULL);
   g_return_if_fail (GTK_IS_PANED (paned));
 
+  object = G_OBJECT (paned);
+  
   if (position >= 0)
     {
       /* We don't clamp here - the assumption is that
@@ -501,6 +547,7 @@ gtk_paned_set_position (GtkPaned *paned,
        * to the new total size. If only the position changes,
        * then clamping will occur in gtk_paned_compute_position()
        */
+
       paned->child1_size = position;
       paned->position_set = TRUE;
     }
@@ -508,6 +555,11 @@ gtk_paned_set_position (GtkPaned *paned,
     {
       paned->position_set = FALSE;
     }
+
+  g_object_freeze_notify (object);
+  g_object_notify (object, "position");
+  g_object_notify (object, "position_set");
+  g_object_thaw_notify (object);
 
   gtk_widget_queue_resize (GTK_WIDGET (paned));
 }
@@ -518,8 +570,12 @@ gtk_paned_compute_position(GtkPaned *paned,
 			   gint      child1_req,
 			   gint      child2_req)
 {
+  gint old_position;
+  
   g_return_if_fail (paned != NULL);
   g_return_if_fail (GTK_IS_PANED (paned));
+
+  old_position = paned->child1_size;
 
   paned->min_position = paned->child1_shrink ? 0 : child1_req;
 
@@ -555,6 +611,9 @@ gtk_paned_compute_position(GtkPaned *paned,
   paned->child1_size = CLAMP (paned->child1_size,
 			      paned->min_position,
 			      paned->max_position);
+
+  if (paned->child1_size != old_position)
+    g_object_notify (G_OBJECT (paned), "position");
 
   paned->last_allocation = allocation;
 }

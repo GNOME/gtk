@@ -150,7 +150,7 @@ col_clicked_cb (GtkTreeViewColumn *col, gpointer data)
 {
   GtkWindow *win;
 
-  win = GTK_WINDOW (create_prop_editor (G_OBJECT (col)));
+  win = GTK_WINDOW (create_prop_editor (G_OBJECT (col), GTK_TYPE_TREE_VIEW_COLUMN));
 
   gtk_window_set_title (win, gtk_tree_view_column_get_title (col));
 }

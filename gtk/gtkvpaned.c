@@ -339,12 +339,8 @@ static gboolean
 gtk_vpaned_button_release (GtkWidget      *widget,
 			   GdkEventButton *event)
 {
-  GtkPaned *paned;
-
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_PANED (widget), FALSE);
-
-  paned = GTK_PANED (widget);
+  GtkPaned *paned = GTK_PANED (widget);
+  GObject *object = G_OBJECT (widget);
 
   if (paned->in_drag && (event->button == 1))
     {
@@ -353,6 +349,10 @@ gtk_vpaned_button_release (GtkWidget      *widget,
       paned->position_set = TRUE;
       gdk_pointer_ungrab (event->time);
       gtk_widget_queue_resize (GTK_WIDGET (paned));
+      g_object_freeze_notify (object);
+      g_object_notify (object, "position");
+      g_object_notify (object, "position_set");
+      g_object_thaw_notify (object);
 
       return TRUE;
     }

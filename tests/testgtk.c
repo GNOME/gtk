@@ -3530,7 +3530,7 @@ static void
 entry_props_clicked (GtkWidget *button,
 		     GObject   *entry)
 {
-  GtkWidget *window = create_prop_editor (entry);
+  GtkWidget *window = create_prop_editor (entry, GTK_TYPE_ENTRY);
 
   gtk_window_set_title (GTK_WINDOW (window), "Entry Properties");
 }
@@ -3763,7 +3763,7 @@ static gint
 spin_button_hex_input_func (GtkSpinButton *spin_button,
 			    gdouble       *new_val)
 {
-  gchar *buf;
+  const gchar *buf;
   gchar *err;
   gdouble res;
 
@@ -7317,8 +7317,17 @@ toggle_shrink (GtkWidget *widget, GtkWidget *child)
   gtk_widget_unref (child);
 }
 
+static void
+paned_props_clicked (GtkWidget *button,
+		     GObject   *paned)
+{
+  GtkWidget *window = create_prop_editor (paned, GTK_TYPE_PANED);
+
+  gtk_window_set_title (GTK_WINDOW (window), "Paned Properties");
+}
+
 GtkWidget *
-create_pane_options (GtkPaned *paned,
+create_pane_options (GtkPaned    *paned,
 		     const gchar *frame_label,
 		     const gchar *label1,
 		     const gchar *label2)
@@ -7326,12 +7335,13 @@ create_pane_options (GtkPaned *paned,
   GtkWidget *frame;
   GtkWidget *table;
   GtkWidget *label;
+  GtkWidget *button;
   GtkWidget *check_button;
   
   frame = gtk_frame_new (frame_label);
   gtk_container_set_border_width (GTK_CONTAINER (frame), 4);
   
-  table = gtk_table_new (3, 2, 4);
+  table = gtk_table_new (4, 2, 4);
   gtk_container_add (GTK_CONTAINER (frame), table);
   
   label = gtk_label_new (label1);
@@ -7375,6 +7385,13 @@ create_pane_options (GtkPaned *paned,
   gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
 		      GTK_SIGNAL_FUNC (toggle_shrink),
 		      paned->child2);
+
+  button = gtk_button_new_with_mnemonic ("_Properties");
+  gtk_table_attach_defaults (GTK_TABLE (table), button,
+			     0, 2, 3, 4);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      GTK_SIGNAL_FUNC (paned_props_clicked),
+		      paned);
 
   return frame;
 }

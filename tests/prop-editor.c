@@ -24,13 +24,19 @@
 #include "prop-editor.h"
 
 static void
-get_param_specs (GObject      *object,
+get_param_specs (GType         type,
                  GParamSpec ***specs,
                  gint         *n_specs)
 {
+  GObjectClass *class = g_type_class_peek (type);
+
+  /* We count on the fact we have an instance, or else we'd have
+   * to use g_type_class_ref ();
+   */
+  
   /* Use private interface for now, fix later */
-  *specs = G_OBJECT_GET_CLASS (object)->property_specs;
-  *n_specs = G_OBJECT_GET_CLASS (object)->n_property_specs;
+  *specs = class->property_specs;
+  *n_specs = class->n_property_specs;
 }
 
 typedef struct
@@ -93,6 +99,7 @@ typedef struct
 {
   GObject *obj;
   gchar *prop;
+  gint modified_id;
 } ObjectProperty;
 
 static void
@@ -115,9 +122,26 @@ connect_controller (GObject *controller,
   p->obj = model;
   p->prop = g_strdup (prop_name);
 
-  g_signal_connect_data (controller, signal, func, p,
-                         (GClosureNotify)free_object_property,
-                         FALSE, FALSE);
+  p->modified_id = g_signal_connect_data (controller, signal, func, p,
+					  (GClosureNotify)free_object_property,
+					  FALSE, FALSE);
+  g_object_set_data (controller, "object-property", p);
+}
+
+static void
+block_controller (GObject *controller)
+{
+  ObjectProperty *p = g_object_get_data (controller, "object-property");
+
+  g_signal_handler_block (controller, p->modified_id);
+}
+
+static void
+unblock_controller (GObject *controller)
+{
+  ObjectProperty *p = g_object_get_data (controller, "object-property");
+
+  g_signal_handler_unblock (controller, p->modified_id);
 }
 
 static void
@@ -138,7 +162,11 @@ int_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_object_get_property (object, pspec->name, &val);
 
   if (g_value_get_int (&val) != (int)adj->value)
-    gtk_adjustment_set_value (adj, g_value_get_int (&val));
+    {
+      block_controller (G_OBJECT (adj));
+      gtk_adjustment_set_value (adj, g_value_get_int (&val));
+      unblock_controller (G_OBJECT (adj));
+    }
 
   g_value_unset (&val);
 }
@@ -161,7 +189,11 @@ float_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_object_get_property (object, pspec->name, &val);
 
   if (g_value_get_float (&val) != (float) adj->value)
-    gtk_adjustment_set_value (adj, g_value_get_float (&val));
+    {
+      block_controller (G_OBJECT (adj));
+      gtk_adjustment_set_value (adj, g_value_get_float (&val));
+      unblock_controller (G_OBJECT (adj));
+    }
 
   g_value_unset (&val);
 }
@@ -194,7 +226,11 @@ string_changed (GObject *object, GParamSpec *pspec, gpointer data)
   text = gtk_entry_get_text (entry);
 
   if (strcmp (str, text) != 0)
-    gtk_entry_set_text (entry, str);
+    {
+      block_controller (G_OBJECT (entry));
+      gtk_entry_set_text (entry, str);
+      unblock_controller (G_OBJECT (entry));
+    }
   
   g_value_unset (&val);
 }
@@ -217,7 +253,11 @@ bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_object_get_property (object, pspec->name, &val);
 
   if (g_value_get_boolean (&val) != tb->active)
-    gtk_toggle_button_set_active (tb, g_value_get_boolean (&val));
+    {
+      block_controller (G_OBJECT (tb));
+      gtk_toggle_button_set_active (tb, g_value_get_boolean (&val));
+      unblock_controller (G_OBJECT (tb));
+    }
 
   gtk_label_set_text (GTK_LABEL (GTK_BIN (tb)->child), g_value_get_boolean (&val) ?
                       "TRUE" : "FALSE");
@@ -266,7 +306,11 @@ enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
     }
   
   if (gtk_option_menu_get_history (om) != i)
-    gtk_option_menu_set_history (om, i);
+    {
+      block_controller (G_OBJECT (om));
+      gtk_option_menu_set_history (om, i);
+      unblock_controller (G_OBJECT (om));
+    }
   
   g_value_unset (&val);
 
@@ -312,7 +356,9 @@ unichar_changed (GObject *object, GParamSpec *pspec, gpointer data)
       
       buf[len] = '\0';
       
+      block_controller (G_OBJECT (entry));
       gtk_entry_set_text (entry, buf);
+      unblock_controller (G_OBJECT (entry));
     }
 }
 
@@ -330,7 +376,8 @@ window_destroy (gpointer data)
 }
 
 GtkWidget*
-create_prop_editor (GObject *object)
+create_prop_editor (GObject *object,
+		    GType    type)
 {
   GtkWidget *win;
   GtkWidget *vbox;
@@ -363,7 +410,7 @@ create_prop_editor (GObject *object)
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), vbox);
   gtk_container_add (GTK_CONTAINER (win), sw);
   
-  get_param_specs (object, &specs, &n_specs);
+  get_param_specs (type, &specs, &n_specs);
   
   i = 0;
   while (i < n_specs)
