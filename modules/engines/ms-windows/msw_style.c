@@ -121,9 +121,9 @@ get_system_font(XpThemeClass klazz, XpThemeFont type, LOGFONT *out_lf)
 {
 #if 0
   /* TODO: this crashes. need to figure out why and how to fix it */
-  if (xp_theme_get_system_font(klazz, type, out_lf)) {
-	  return TRUE;
-  } else
+  if (xp_theme_get_system_font(klazz, type, out_lf))
+    return TRUE;
+  else
 #endif
   {
 	  NONCLIENTMETRICS ncm;
@@ -436,17 +436,12 @@ sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char * buf, size_t
 #define XP_THEME_CLASS_TEXT XP_THEME_CLASS_BUTTON
 
 static void
-setup_menu_settings (void)
+setup_menu_settings (GtkSettings * settings)
 {
   int menu_delay;
   gboolean win95 = FALSE;
-
-  GtkSettings * settings;
   OSVERSIONINFOEX osvi;
-
-  settings = gtk_settings_get_default ();
-  if (!settings)
-    return;
+  GObjectClass * klazz = G_OBJECT_GET_CLASS(G_OBJECT(settings));
 
   ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
   osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -458,10 +453,14 @@ setup_menu_settings (void)
     if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
       win95 = TRUE;
 
+  if (klazz) {
+    if (g_object_class_find_property (klazz, "gtk-button-images")) {
+      g_object_set (G_OBJECT (settings), "gtk-button-images", 0, NULL);
+    }
+  }
+
   if (!win95) {
     if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0)) {
-      GObjectClass * klazz = G_OBJECT_GET_CLASS(G_OBJECT(settings));
-
       if (klazz) {
 	if (g_object_class_find_property (klazz, "gtk-menu-bar-popup-delay")) {
 	  g_object_set (G_OBJECT (settings), "gtk-menu-bar-popup-delay",
@@ -505,7 +504,7 @@ msw_style_setup_system_settings (void)
   g_object_set (G_OBJECT (settings), "gtk-dnd-drag-threshold",
 		GetSystemMetrics(SM_CXDRAG), NULL);
 
-  setup_menu_settings ();
+  setup_menu_settings (settings);
 
   /*
      http://developer.gnome.org/doc/API/2.0/gtk/GtkSettings.html
@@ -524,9 +523,8 @@ setup_system_font(GtkStyle *style)
                                      buf, sizeof (buf))) != NULL)
     {
       if (style->font_desc)
-        {
-          pango_font_description_free (style->font_desc);
-        }
+	pango_font_description_free (style->font_desc);
+
       style->font_desc = pango_font_description_from_string(font);
     }
 }
@@ -890,13 +888,10 @@ draw_check(GtkStyle      *style,
     }
   else
     {
-      if (xp_theme_draw(window, shadow == GTK_SHADOW_IN
-                        ? XP_THEME_ELEMENT_PRESSED_CHECKBOX
-                        : XP_THEME_ELEMENT_CHECKBOX,
-                        style, x, y, width, height, state, area))
-        {
-        }
-      else
+      if (!xp_theme_draw(window, shadow == GTK_SHADOW_IN
+			 ? XP_THEME_ELEMENT_PRESSED_CHECKBOX
+			 : XP_THEME_ELEMENT_CHECKBOX,
+			 style, x, y, width, height, state, area))
         {
           draw_part (window, style->black_gc, area, x, y, CHECK_BLACK);
           draw_part (window, style->dark_gc[state], area, x, y, CHECK_DARK);
@@ -1076,21 +1071,12 @@ draw_varrow (GdkWindow     *window,
       y_increment = -1;
     }
 
-#if 0
-  for (i = 0; i < extra; i++)
-    {
-      gdk_draw_line (window, gc,
-		     x,              y_start + i * y_increment,
-		     x + width - 1,  y_start + i * y_increment);
-    }
-#endif
   for (i = extra; i < height; i++)
     {
       gdk_draw_line (window, gc,
 		     x + (i - extra),              y_start + i * y_increment,
 		     x + width - (i - extra) - 1,  y_start + i * y_increment);
     }
-
 
   if (area)
     gdk_gc_set_clip_rectangle (gc, NULL);
@@ -1657,7 +1643,7 @@ draw_extension(GtkStyle *style,
           height += XP_EDGE_SIZE;
 
 #if 0
-	/* FIXME: pos != TOP to be implemented */
+      /* FIXME: pos != TOP to be implemented */
       else if (pos_type == GTK_POS_BOTTOM)
 	y -= XP_EDGE_SIZE;
       else if (pos_type == GTK_POS_RIGHT)

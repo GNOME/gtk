@@ -1,5 +1,9 @@
 2004-06-02  Dom Lachowicz <cinamod@hotmail.com>
 
+	* src/msw_style.c: Disable icons in buttons
+
+2004-06-02  Dom Lachowicz <cinamod@hotmail.com>
+
 	* configure.in: Bump version number (0.6.1)
 	* src/msw_theme_main.c: Lower GTK+ requirements. We'll work fine on 2.0.x or better
 	* src/xp_theme_defs.h: Remove HAVE_LINES junk
