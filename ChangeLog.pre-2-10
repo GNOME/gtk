@@ -1,3 +1,7 @@
+Mon Aug 10 23:03:55 1998  The Rasterman <raster@redhat.com>
+	* Fixed minor problem in gtkhandlebox.c with drawing, and some
+	  notebook stuff. Also pixmap theme is now "clean" again.
+	  
 Mon Aug 10 23:03:55 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_clip_rect): Fixed up 

@@ -647,11 +647,19 @@ gtk_handle_box_paint (GtkWidget      *widget,
 			   area->width,
 			   area->height);
 */
+  if (!event)
    gtk_paint_box(widget->style,
 		 hb->bin_window,
 		 GTK_WIDGET_STATE (widget),
 		 GTK_SHADOW_OUT,
 		 area, widget, "handlebox_bin",
+		 0,0,-1,-1);
+  else
+   gtk_paint_box(widget->style,
+		 hb->bin_window,
+		 GTK_WIDGET_STATE (widget),
+		 GTK_SHADOW_OUT,
+		 &event->area, widget, "handlebox_bin",
 		 0,0,-1,-1);
 /*		 
 		 hb->handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : 0,
