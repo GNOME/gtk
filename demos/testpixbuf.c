@@ -310,6 +310,11 @@ expose_func (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 
 	pixbuf = (GdkPixbuf *)gtk_object_get_data(GTK_OBJECT(drawing_area), "pixbuf");
 
+	if (!pixbuf->art_pixbuf) {
+		g_warning ("art_pixbuf is NULL in expose_func!!\n");
+		return;
+	}
+
 	if (pixbuf->art_pixbuf->has_alpha) {
 		gdk_draw_rgb_32_image (drawing_area->window,
 				       drawing_area->style->black_gc,
@@ -352,7 +357,7 @@ config_func (GtkWidget *drawing_area, GdkEventConfigure *event, gpointer data)
 }
 
 static GtkWidget*
-new_testrgb_window (GdkPixbuf *pixbuf)
+new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 {
 	GtkWidget *window;
 	GtkWidget *vbox;
@@ -374,10 +379,14 @@ new_testrgb_window (GdkPixbuf *pixbuf)
 
 	vbox = gtk_vbox_new (FALSE, 0);
 
+	if (title)
+		gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new (title),
+				    TRUE, TRUE, 0);
+
 	drawing_area = gtk_drawing_area_new ();
 
 	gtk_drawing_area_size (GTK_DRAWING_AREA(drawing_area), w, h);
-	gtk_box_pack_start (GTK_BOX (vbox), drawing_area, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), drawing_area, FALSE, TRUE, 0);
 
 	gtk_signal_connect (GTK_OBJECT(drawing_area), "expose_event",
 			    GTK_SIGNAL_FUNC(expose_func), NULL);
@@ -397,7 +406,7 @@ new_testrgb_window (GdkPixbuf *pixbuf)
 	gtk_widget_show (button);
 
 	gtk_container_add (GTK_CONTAINER (window), vbox);
-	gtk_widget_show (vbox);
+	gtk_widget_show_all (vbox);
 
 	gtk_widget_show (window);
 
@@ -424,7 +433,8 @@ progressive_prepared_callback(GdkPixbufLoader* loader, gpointer data)
         g_assert(pixbuf != NULL);
 
         gdk_pixbuf_ref(pixbuf); /* for the RGB window */
-        *retloc = new_testrgb_window(pixbuf);
+
+        *retloc = new_testrgb_window(pixbuf, "Progressive");
 
         return;
 }
@@ -457,25 +467,26 @@ main (int argc, char **argv)
 		pixbuf = gdk_pixbuf_new_from_data ((guchar *) default_image, ART_PIX_RGB, FALSE,
 						   DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_WIDTH * 3,
 						   NULL, NULL);
-		new_testrgb_window (pixbuf);
+		new_testrgb_window (pixbuf, NULL);
 
                 xpmp = xpms;
                 while (*xpmp) {
                         pixbuf = gdk_pixbuf_new_from_xpm_data (*xpmp);
-                        new_testrgb_window (pixbuf);
+                        new_testrgb_window (pixbuf, NULL);
                         ++xpmp;
                 }
                 
 		found_valid = TRUE;
 	} else {
 		for (i = 1; i < argc; i++) {
+
 			pixbuf = gdk_pixbuf_new_from_file (argv[i]);
 #if 0
 			pixbuf = gdk_pixbuf_rotate(pixbuf, 10.0);
 #endif
 
 			if (pixbuf) {
-				new_testrgb_window (pixbuf);
+				new_testrgb_window (pixbuf, "File");
 				found_valid = TRUE;
 			}
 		}
@@ -483,7 +494,7 @@ main (int argc, char **argv)
                 {
                         GtkWidget* rgb_window = NULL;
                         guint timeout;
-                        
+
                         pixbuf_loader = gdk_pixbuf_loader_new ();
 
                         gtk_signal_connect(GTK_OBJECT(pixbuf_loader),
@@ -495,7 +506,7 @@ main (int argc, char **argv)
                         
                         file = fopen (argv[1], "r");
                         g_assert (file != NULL);
-                        
+
                         while (TRUE) {
                                 val = fgetc (file);
                                 if (val == EOF)
@@ -514,9 +525,9 @@ main (int argc, char **argv)
                                         gtk_main_iteration();
 
                         }
-                        gtk_timeout_remove(timeout);
+			gtk_timeout_remove (timeout);
                         gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (pixbuf_loader));
-                        gtk_object_destroy (GTK_OBJECT(pixbuf_loader));
+			gtk_object_destroy (GTK_OBJECT(pixbuf_loader));
                         fclose (file);
 
                         if (rgb_window != NULL)
