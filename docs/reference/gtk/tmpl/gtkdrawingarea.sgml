@@ -91,7 +91,7 @@ should be accessed using the functions below.
 Create a new drawing area.
 </para>
 
-@Returns: 
+@Returns: a new #GtkDrawingArea
 
 
 <!-- ##### FUNCTION gtk_drawing_area_size ##### -->

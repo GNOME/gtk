@@ -167,12 +167,12 @@ Used for justifying the text inside a #GtkLabel widget. (See also
 
 <!-- ##### ENUM GtkPackType ##### -->
 <para>
-Used for packing widgets into #GtkBox widgets. (See also: #GtkVBox,
+Represents the packing location #GtkBox children. (See: #GtkVBox,
 #GtkHBox, and #GtkButtonBox).
 </para>
 
-@GTK_PACK_START: The
-@GTK_PACK_END: 
+@GTK_PACK_START: The child is packed into the start of the box
+@GTK_PACK_END: The child is packed into the end of the box
 
 <!-- ##### ENUM GtkPathPriorityType ##### -->
 <para>
@@ -314,13 +314,16 @@ Indicates the direction a sub-menu will appear.
 
 <!-- ##### ENUM GtkToolbarStyle ##### -->
 <para>
-Used to customize the appearance of a #GtkToolbar.
+Used to customize the appearance of a #GtkToolbar. Note that 
+setting the toolbar style overrides the user's preferences
+for the default toolbar style.
 </para>
 
-@GTK_TOOLBAR_ICONS: Buttons should display only icons in the toolbar.
-@GTK_TOOLBAR_TEXT: Buttons should display only text labels in the toolbar.
-@GTK_TOOLBAR_BOTH: Buttons should display text and icons in the toolbar.
-@GTK_TOOLBAR_BOTH_HORIZ: 
+@GTK_TOOLBAR_ICONS: Buttons display only icons in the toolbar.
+@GTK_TOOLBAR_TEXT: Buttons display only text labels in the toolbar.
+@GTK_TOOLBAR_BOTH: Buttons display text and icons in the toolbar.
+@GTK_TOOLBAR_BOTH_HORIZ: Buttons display icons and text alongside each
+other, rather than vertically stacked
 
 <!-- ##### ENUM GtkTroughType ##### -->
 <para>
@@ -358,22 +361,29 @@ Window placement can be influenced using this enumeration.
 @GTK_WIN_POS_NONE: No influence is made on placement.
 @GTK_WIN_POS_CENTER: Windows should be placed in the center of the screen.
 @GTK_WIN_POS_MOUSE: Windows should be placed at the current mouse position.
-@GTK_WIN_POS_CENTER_ALWAYS: 
-@GTK_WIN_POS_CENTER_ON_PARENT: 
+@GTK_WIN_POS_CENTER_ALWAYS: Keep window centered as it changes size, etc.
+@GTK_WIN_POS_CENTER_ON_PARENT: Center the window on its transient
+parent (see gtk_window_set_transient_for()).
 
 <!-- ##### ENUM GtkWindowType ##### -->
 <para>
-A #GtkWindow can be of these types. A toplevel window has standard window
-decorations by default. A dialog may have fewer decorations and obey a
-different placement policy. A popup window will have no decorations.
-</para>
-<para>
-It should be noted that such decorations can often be over-ridden by modern
-window managers.
+A #GtkWindow can be one of these types. Most things you'd consider a
+"window" should have type #GTK_WINDOW_TOPLEVEL; windows with this type
+are managed by the window manager and have a frame by default (call
+gtk_window_set_decorated() to toggle the frame).  Windows with type
+#GTK_WINDOW_POPUP are ignored by the window manager; window manager
+keybindings won't work on them, the window manager won't decorate the
+window with a frame, many GTK+ features that rely on the window
+manager will not work (e.g. resize grips and
+maximization/minimization). #GTK_WINDOW_POPUP is used to implement
+widgets such as #GtkMenu or tooltips that you normally don't think of 
+as windows per se. Nearly all windows should be #GTK_WINDOW_TOPLEVEL.
+In particular, do not use #GTK_WINDOW_POPUP just to turn off
+the window borders; use gtk_window_set_decorated() for that.
 </para>
 
-@GTK_WINDOW_TOPLEVEL: A window for a typical application.
-@GTK_WINDOW_POPUP: A window for popups.
+@GTK_WINDOW_TOPLEVEL: A regular window, such as a dialog.
+@GTK_WINDOW_POPUP: A special window such as a tooltip.
 
 <!-- ##### ENUM GtkSortType ##### -->
 <para>

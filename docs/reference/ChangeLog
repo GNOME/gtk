@@ -1,3 +1,20 @@
+2001-05-11  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/tmpl/gtkvruler.sgml, 
+	gtk/tmpl/gtkhruler.sgml: fix bug #54431
+
+	* gtk/tmpl/gtkdrawingarea.sgml: fix bug #54331
+
+	* gtk/tmpl/gtkenums.sgml: fix bug #54329, and 
+	update some other random things
+
+	* gtk/gtk-sections.txt: updates
+
+	* gtk/tmpl/gtkmenuitem.sgml: fix bug #54277
+
+	* gtk/tmpl/gtkradiomenuitem.sgml: fix bug #54323,
+	#54324, #54325 
+
 2001-04-26  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/tmpl/gtkimage.sgml: document GtkImageType

@@ -40,6 +40,6 @@ with the functions below.
 Creates a new horizontal ruler.
 </para>
 
-@Returns: the new GTKHRuler.
+@Returns: a new #GtkHRuler.
 
 

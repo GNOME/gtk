@@ -393,6 +393,16 @@ types related to the text widget and how they work together.
 @end_index: 
 
 
+<!-- ##### FUNCTION gtk_text_buffer_remove_all_tags ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@start: 
+@end: 
+
+
 <!-- ##### FUNCTION gtk_text_buffer_create_tag ##### -->
 <para>
 

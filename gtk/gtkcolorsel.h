@@ -74,10 +74,10 @@ void       gtk_color_selection_set_update_policy       (GtkColorSelection *color
 							GtkUpdateType      policy);
 gboolean   gtk_color_selection_get_has_opacity_control (GtkColorSelection *colorsel);
 void       gtk_color_selection_set_has_opacity_control (GtkColorSelection *colorsel,
-							gboolean           use_opacity);
+							gboolean           has_opacity);
 gboolean   gtk_color_selection_get_has_palette         (GtkColorSelection *colorsel);
 void       gtk_color_selection_set_has_palette         (GtkColorSelection *colorsel,
-							gboolean           use_palette);
+							gboolean           has_palette);
 
 
 void     gtk_color_selection_set_current_color   (GtkColorSelection *colorsel,

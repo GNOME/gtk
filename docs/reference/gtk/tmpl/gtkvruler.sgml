@@ -40,6 +40,6 @@ using the functions below.
 Creates a new vertical ruler
 </para>
 
-@Returns: the new GTKVRuler.
+@Returns: a new #GtkVRuler.
 
 

@@ -1,3 +1,11 @@
+2001-05-11  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkimage.c (gtk_image_new_from_stock): docs, fixes bug
+	#54144
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_new): docs, fixes
+	bug #54330
+
 Fri May 11 02:53:57 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktogglebutton.c (gtk_toggle_button_expose): don't

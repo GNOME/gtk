@@ -46,7 +46,7 @@ for(i = 0; i < 5; i++)
 
 <!-- ##### STRUCT GtkRadioMenuItem ##### -->
 <para>
-The structure contains only provate data that must be accessed through
+The structure contains only private data that must be accessed through
 the interface functions.
 </para>
 
@@ -56,8 +56,8 @@ the interface functions.
 Creates a new #GtkRadioMenuItem.
 </para>
 
-@group: the group to wich the radio menu item is to be attached
-@Returns: the newly created radio menu item
+@group: the group to which the radio menu item is to be attached
+@Returns: a new #GtkRadioMenuItem
 
 
 <!-- ##### FUNCTION gtk_radio_menu_item_new_with_label ##### -->
@@ -65,9 +65,9 @@ Creates a new #GtkRadioMenuItem.
 Creates a new #GtkRadioMenuItem whose child is a simple #GtlLabel.
 </para>
 
-@group: the group to wich the radio menu item is to be attached
+@group: the group to which the radio menu item is to be attached
 @label: the text for the label
-@Returns: the newly created radio menu item
+@Returns: a new #GtkRadioMenuItem
 
 
 <!-- ##### FUNCTION gtk_radio_menu_item_group ##### -->

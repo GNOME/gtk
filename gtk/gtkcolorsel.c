@@ -1875,7 +1875,7 @@ gtk_color_selection_finalize (GObject *object)
  * 
  * Creates a new GtkColorSelection.
  * 
- * Return value: The new GtkColorSelection.
+ * Return value: a new #GtkColorSelection
  **/
 GtkWidget *
 gtk_color_selection_new (void)

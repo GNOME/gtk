@@ -49,7 +49,7 @@ Creates a new #GtkMenuItem.
 
 <!-- ##### FUNCTION gtk_menu_item_new_with_label ##### -->
 <para>
-Creates a new #GtkMenuItem whose child is a simple #GtlLabel.
+Creates a new #GtkMenuItem whose child is a #GtkLabel.
 </para>
 
 @label: the text for the label

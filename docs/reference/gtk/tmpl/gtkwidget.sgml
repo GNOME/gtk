@@ -1322,6 +1322,15 @@ GtkWidget
 @var_args: 
 
 
+<!-- ##### FUNCTION gtk_widget_get_accessible ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_requisition_copy ##### -->
 <para>
 

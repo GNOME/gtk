@@ -230,9 +230,11 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
  * @size: a stock icon size
  * 
  * Creates a #GtkImage displaying a stock icon. Sample stock icon
- * names are #GTK_STOCK_ICON_OPEN, #GTK_STOCK_ICON_EXIT. Sample stock sizes
+ * names are #GTK_STOCK_OPEN, #GTK_STOCK_EXIT. Sample stock sizes
  * are #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_SMALL_TOOLBAR. If the stock
  * icon name isn't known, a "broken image" icon will be displayed instead.
+ * You can register your own stock icon names, see
+ * gtk_icon_factory_add_default() and gtk_icon_factory_add().
  * 
  * Return value: a new #GtkImage displaying the stock icon
  **/

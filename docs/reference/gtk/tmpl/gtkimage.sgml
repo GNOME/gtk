@@ -95,6 +95,15 @@ return %NULL values.
 @size: 
 
 
+<!-- ##### FUNCTION gtk_image_get_animation ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_image_get_storage_type ##### -->
 <para>
 
@@ -162,6 +171,15 @@ return %NULL values.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_image_new_from_animation ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_image_set_from_file ##### -->
 <para>
 
@@ -218,6 +236,15 @@ return %NULL values.
 @image: 
 @stock_id: 
 @size: 
+
+
+<!-- ##### FUNCTION gtk_image_set_from_animation ##### -->
+<para>
+
+</para>
+
+@image: 
+@animation: 
 
 
 <!-- ##### FUNCTION gtk_image_new ##### -->
