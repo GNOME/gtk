@@ -1,3 +1,11 @@
+Fri Jun 19 18:47:05 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkspinbutton.c:
+ 	- Bug fix for precision problem causing occasional double emission
+ 	  of "value_changed" signal (hopefully works now).
+	- Fixed casting of GtkAdjustment* to GtkWidget* in
+          gtk_spin_button_value_changed.
+
 Fri Jun 12 21:20:42 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_expose): Removed
