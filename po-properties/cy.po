@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-11 09:20-0400\n"
+"POT-Creation-Date: 2004-07-10 00:22-0400\n"
 "PO-Revision-Date: 2004-03-18 18:57+0000\n"
 "Last-Translator: Dafydd Harries <daf@muse.19inch.net>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -17,68 +17,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n == 2);\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:100
+#: gdk-pixbuf/gdk-pixbuf.c:101
 msgid "Number of Channels"
 msgstr "Nifer o Sianeli"
 
-#: gdk-pixbuf/gdk-pixbuf.c:101
+#: gdk-pixbuf/gdk-pixbuf.c:102
 msgid "The number of samples per pixel"
 msgstr "Y nifer o samplau i bob picsel"
 
-#: gdk-pixbuf/gdk-pixbuf.c:111
+#: gdk-pixbuf/gdk-pixbuf.c:112
 msgid "Colorspace"
 msgstr "Gofod lliw"
 
-#: gdk-pixbuf/gdk-pixbuf.c:112
+#: gdk-pixbuf/gdk-pixbuf.c:113
 msgid "The colorspace in which the samples are interpreted"
 msgstr "Y gofod lliw mae'r samplau yn cael eu dehongli ynddo"
 
-#: gdk-pixbuf/gdk-pixbuf.c:122
+#: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "Has Alpha"
 msgstr "Defnyddio Alffa"
 
-#: gdk-pixbuf/gdk-pixbuf.c:123
+#: gdk-pixbuf/gdk-pixbuf.c:124
 msgid "Whether the pixbuf has an alpha channel"
 msgstr "A oes sianel alffa gan y pixbuf"
 
-#: gdk-pixbuf/gdk-pixbuf.c:131
+#: gdk-pixbuf/gdk-pixbuf.c:132
 msgid "Bits per Sample"
 msgstr "Didau bob Sampl"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132
+#: gdk-pixbuf/gdk-pixbuf.c:133
 msgid "The number of bits per sample"
 msgstr "Y nifer o ddidau ym mhob sampl"
 
-#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
+#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
 msgid "Width"
 msgstr "Lled"
 
-#: gdk-pixbuf/gdk-pixbuf.c:143
+#: gdk-pixbuf/gdk-pixbuf.c:144
 msgid "The number of columns of the pixbuf"
 msgstr "Y nifer o golofnau yn y pixbuf"
 
-#: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:657
+#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:657
 msgid "Height"
 msgstr "Uchder"
 
-#: gdk-pixbuf/gdk-pixbuf.c:154
+#: gdk-pixbuf/gdk-pixbuf.c:155
 msgid "The number of rows of the pixbuf"
 msgstr "Y nifer o rhesi yn y pixbuf"
 
-#: gdk-pixbuf/gdk-pixbuf.c:164
+#: gdk-pixbuf/gdk-pixbuf.c:165
 msgid "Rowstride"
 msgstr "Cam rhes"
 
-#: gdk-pixbuf/gdk-pixbuf.c:165
+#: gdk-pixbuf/gdk-pixbuf.c:166
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr "Y nifer o feitiau rhwng dechrau rhes a dechrau'r rhes nesaf"
 
-#: gdk-pixbuf/gdk-pixbuf.c:175
+#: gdk-pixbuf/gdk-pixbuf.c:176
 msgid "Pixels"
 msgstr "Picseli"
 
-#: gdk-pixbuf/gdk-pixbuf.c:176
+#: gdk-pixbuf/gdk-pixbuf.c:177
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr "Pwyntydd at ddata picsel y pixbuf"
 
@@ -846,7 +846,7 @@ msgstr "Manylder"
 msgid "Render detail to pass to the theme engine"
 msgstr "Y manylder llunio i'w basio i'r peiriant thema"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:545 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Testun"
 
@@ -911,7 +911,7 @@ msgstr "Lliw'r blaendir"
 msgid "Foreground color as a GdkColor"
 msgstr "Lliw'r blaendir fel GdkColor"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:477 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "Golygadwy"
@@ -1472,68 +1472,68 @@ msgstr "Border yr ardal gweithred"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Lled yr ymylon o amgylch yr ardal botymau ar waelod y deialog"
 
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "Safle'r Cyrchydd"
 
-#: gtk/gtkentry.c:458 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "Safle cyfredol y cyrchydd mewnosod mewn nodau"
 
-#: gtk/gtkentry.c:467 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "Cyfwng y Dewis"
 
-#: gtk/gtkentry.c:468 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Safle ochr pell y dewis o'r cyrchydd mewn nodau"
 
-#: gtk/gtkentry.c:478
+#: gtk/gtkentry.c:483
 msgid "Whether the entry contents can be edited"
 msgstr "A gellir newid cynnwys y cofnod"
 
-#: gtk/gtkentry.c:485
+#: gtk/gtkentry.c:490
 msgid "Maximum length"
 msgstr "Hyd mwyaf"
 
-#: gtk/gtkentry.c:486
+#: gtk/gtkentry.c:491
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Y nifer fwyaf o nodau ar gyfer y cofnod hwn. Sero os nad oes cyfwng uchaf"
 
-#: gtk/gtkentry.c:494
+#: gtk/gtkentry.c:499
 msgid "Visibility"
 msgstr "Gwelededd"
 
-#: gtk/gtkentry.c:495
+#: gtk/gtkentry.c:500
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 "Mae FALSE yn dangos y \"nod anweladwy\" yn lle'r gwir destun (modd cyfrinair)"
 
-#: gtk/gtkentry.c:502
+#: gtk/gtkentry.c:507
 msgid "Has Frame"
 msgstr "Efo Ffrâm"
 
-#: gtk/gtkentry.c:503
+#: gtk/gtkentry.c:508
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE yn tynnu'r befal allanol o'r cofnod"
 
-#: gtk/gtkentry.c:510
+#: gtk/gtkentry.c:515
 msgid "Invisible character"
 msgstr "Nod anweladwy"
 
-#: gtk/gtkentry.c:511
+#: gtk/gtkentry.c:516
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Y nod i'w ddefnyddio wrth guddio testun y teclyn (\"modd cyfrinair\")"
 
-#: gtk/gtkentry.c:518
+#: gtk/gtkentry.c:523
 msgid "Activates default"
 msgstr "Gweithredu'r rhagosodiad"
 
-#: gtk/gtkentry.c:519
+#: gtk/gtkentry.c:524
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1541,31 +1541,31 @@ msgstr ""
 "A ddylid gweithredu'r teclyn rhagosodedig (e.e. y botwm rhagosodedig mewn "
 "deialog) pan gwasgir Enter"
 
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:530
 msgid "Width in chars"
 msgstr "Lled mewn nodau"
 
-#: gtk/gtkentry.c:526
+#: gtk/gtkentry.c:531
 msgid "Number of characters to leave space for in the entry"
 msgstr "Y nifer o nodau i greu lle ar eu cyfer"
 
-#: gtk/gtkentry.c:535
+#: gtk/gtkentry.c:540
 msgid "Scroll offset"
 msgstr "Atred sgrolio"
 
-#: gtk/gtkentry.c:536
+#: gtk/gtkentry.c:541
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Nifer picseli'r cofnod wedi eu sgrolio bant o'r sgrîn i'r chwith"
 
-#: gtk/gtkentry.c:546
+#: gtk/gtkentry.c:551
 msgid "The contents of the entry"
 msgstr "Cynnwys y cofnod"
 
-#: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "Cyfuniad X"
 
-#: gtk/gtkentry.c:554 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
@@ -1573,11 +1573,11 @@ msgstr ""
 "Y cyfuniad llorweddol, o 0 (chwith) i 1 (de). Gwrthdroir ar gyfer llunwedd "
 "dde-at-chwith."
 
-#: gtk/gtkentry.c:787
+#: gtk/gtkentry.c:792
 msgid "Select on focus"
 msgstr "Dewis wrth ffocysu"
 
-#: gtk/gtkentry.c:788
+#: gtk/gtkentry.c:793
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "A ddyld dewis cynnwys cofnod pan ffocysir ef"
 
@@ -1749,11 +1749,11 @@ msgstr "Dangos Cudd"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "A ddylid dangos ffeiliau a phlygellau cudd"
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:563
 msgid "Default file chooser backend"
 msgstr "Ochr gefn rhagosod y dewisydd ffeil"
 
-#: gtk/gtkfilechooserdefault.c:561
+#: gtk/gtkfilechooserdefault.c:564
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Enw'r ochr gefn GtkFileChooser i'w ddefnyddio'n rhagosod"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-11 09:20-0400\n"
+"POT-Creation-Date: 2004-07-10 00:22-0400\n"
 "PO-Revision-Date: 2004-03-18 10:45+0600\n"
 "Last-Translator: Progga <progga@BengaLinux.Org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -16,68 +16,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:100
+#: gdk-pixbuf/gdk-pixbuf.c:101
 msgid "Number of Channels"
 msgstr "চ্যানেল সংখ্যা"
 
-#: gdk-pixbuf/gdk-pixbuf.c:101
+#: gdk-pixbuf/gdk-pixbuf.c:102
 msgid "The number of samples per pixel"
 msgstr "পিক্সেল প্রতি নমুনার সংখ্যা"
 
-#: gdk-pixbuf/gdk-pixbuf.c:111
+#: gdk-pixbuf/gdk-pixbuf.c:112
 msgid "Colorspace"
 msgstr "কালারস্পেস"
 
-#: gdk-pixbuf/gdk-pixbuf.c:112
+#: gdk-pixbuf/gdk-pixbuf.c:113
 msgid "The colorspace in which the samples are interpreted"
 msgstr "যে কালারস্পেসে নমুনাগুলোকে রূপায়িত (?) করা হয়"
 
-#: gdk-pixbuf/gdk-pixbuf.c:122
+#: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "Has Alpha"
 msgstr "আলফা আছে"
 
-#: gdk-pixbuf/gdk-pixbuf.c:123
+#: gdk-pixbuf/gdk-pixbuf.c:124
 msgid "Whether the pixbuf has an alpha channel"
 msgstr "pixbuf-এ কোন আলফা চ্যানেল আছে কিনা"
 
-#: gdk-pixbuf/gdk-pixbuf.c:131
+#: gdk-pixbuf/gdk-pixbuf.c:132
 msgid "Bits per Sample"
 msgstr "নমুনা প্রতি বিট"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132
+#: gdk-pixbuf/gdk-pixbuf.c:133
 msgid "The number of bits per sample"
 msgstr "নমুনা প্রতি বিট সংখ্যা"
 
-#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
+#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
 msgid "Width"
 msgstr "প্রস্থ"
 
-#: gdk-pixbuf/gdk-pixbuf.c:143
+#: gdk-pixbuf/gdk-pixbuf.c:144
 msgid "The number of columns of the pixbuf"
 msgstr "pixbuf-এর কলাম সংখ্যা"
 
-#: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:657
+#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:657
 msgid "Height"
 msgstr "উচ্চতা"
 
-#: gdk-pixbuf/gdk-pixbuf.c:154
+#: gdk-pixbuf/gdk-pixbuf.c:155
 msgid "The number of rows of the pixbuf"
 msgstr "pixbuf-এর সারি সংখ্যা"
 
-#: gdk-pixbuf/gdk-pixbuf.c:164
+#: gdk-pixbuf/gdk-pixbuf.c:165
 msgid "Rowstride"
 msgstr "রোস্ট্রাইড"
 
-#: gdk-pixbuf/gdk-pixbuf.c:165
+#: gdk-pixbuf/gdk-pixbuf.c:166
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr "কোন সারির আরম্ভ ও পরবর্তী সারির আরম্ভের মধ্যবর্তী বাইট সংখ্যা"
 
-#: gdk-pixbuf/gdk-pixbuf.c:175
+#: gdk-pixbuf/gdk-pixbuf.c:176
 msgid "Pixels"
 msgstr "পিক্সেল"
 
-#: gdk-pixbuf/gdk-pixbuf.c:176
+#: gdk-pixbuf/gdk-pixbuf.c:177
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr "pixbuf-এর পিক্সেল তথ্য নির্দেশক একটি পয়েন্টার"
 
@@ -841,7 +841,7 @@ msgstr "বিস্তারিত"
 msgid "Render detail to pass to the theme engine"
 msgstr "থিম ইঞ্জিনের নিকট অঙ্কন সম্পর্কিত যে বিস্তারিত তথ্য প্রেরণ করা হবে"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:545 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "টেক্সট"
 
@@ -905,7 +905,7 @@ msgstr "পুরোভূমির রং"
 msgid "Foreground color as a GdkColor"
 msgstr "GdkColor হিসেবে পুরোভূমির রং"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:477 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "সম্পাদনযোগ্য"
@@ -1467,40 +1467,40 @@ msgstr "কর্মক্ষেত্রের (Action area) প্রান্
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "ডায়ালগের নিচের দিকে অবস্থিত বাটনের চারপাশের প্রস্থ"
 
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "কার্সারের অবস্থান"
 
-#: gtk/gtkentry.c:458 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "অক্ষর হিসেবে লেখা ঢোকানোর (Insertion) কার্সারের অবস্থান"
 
-#: gtk/gtkentry.c:467 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "চিহ্নিত করার সীমানা"
 
-#: gtk/gtkentry.c:468 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "অক্ষর হিসেবে চিহ্নিত অংশের বিপরীত প্রান্তের অবস্থান"
 
-#: gtk/gtkentry.c:478
+#: gtk/gtkentry.c:483
 msgid "Whether the entry contents can be edited"
 msgstr "অন্তর্ভুক্তির (Entry) অভ্যন্তরীণ বস্তু (Content) এডিট করা যাবে কিনা"
 
-#: gtk/gtkentry.c:485
+#: gtk/gtkentry.c:490
 msgid "Maximum length"
 msgstr "সর্বোচ্চ দৈর্ঘ্য"
 
-#: gtk/gtkentry.c:486
+#: gtk/gtkentry.c:491
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "এই অন্তর্ভুক্তির জন্য সর্বোচ্চ সংখ্যক অক্ষর। এর মান শূণ্য হতে পারবেন না"
 
-#: gtk/gtkentry.c:494
+#: gtk/gtkentry.c:499
 msgid "Visibility"
 msgstr "দৃষ্টিগ্রাহ্যতা"
 
-#: gtk/gtkentry.c:495
+#: gtk/gtkentry.c:500
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1508,69 +1508,69 @@ msgstr ""
 "যদি FALSE হয় তবে প্রকৃত টেক্সটের পরিবর্তে \"অদৃশ্য অক্ষর\" দেখা যায় (পাসওয়ার্ডের "
 "ক্ষেত্রে প্রযোজ্য)"
 
-#: gtk/gtkentry.c:502
+#: gtk/gtkentry.c:507
 msgid "Has Frame"
 msgstr "ফ্রেম আছে"
 
-#: gtk/gtkentry.c:503
+#: gtk/gtkentry.c:508
 msgid "FALSE removes outside bevel from entry"
 msgstr "FASLE তালিকা থেকে বহিঃস্থ বেভেলকে অপসারণ করে"
 
-#: gtk/gtkentry.c:510
+#: gtk/gtkentry.c:515
 msgid "Invisible character"
 msgstr "অদৃশ্য অক্ষর"
 
-#: gtk/gtkentry.c:511
+#: gtk/gtkentry.c:516
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "অন্তর্ভুক্তির (Entry) বিষয়বস্তু আড়াল করার জন্য ব্যবহৃত অক্ষর (\"পাসওয়ার্ড মোড\" এ ব্যবহৃত)"
 
-#: gtk/gtkentry.c:518
+#: gtk/gtkentry.c:523
 msgid "Activates default"
 msgstr "ডিফল্টকে সক্রিয় করে"
 
-#: gtk/gtkentry.c:519
+#: gtk/gtkentry.c:524
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
 "Enter বাটন চাপলে ডিফল্টকে সক্রিয় করা হবে কিনা (যেমন কোন ডায়ালগের ডিফল্ট বাটন)"
 
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:530
 msgid "Width in chars"
 msgstr "অক্ষরের প্রস্থ"
 
-#: gtk/gtkentry.c:526
+#: gtk/gtkentry.c:531
 msgid "Number of characters to leave space for in the entry"
 msgstr "প্রতি অন্তর্ভুক্তিতে যত অক্ষর ফাঁকা রাখা হবে"
 
-#: gtk/gtkentry.c:535
+#: gtk/gtkentry.c:540
 msgid "Scroll offset"
 msgstr "স্ক্রল অফসেট"
 
-#: gtk/gtkentry.c:536
+#: gtk/gtkentry.c:541
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "অন্তর্ভুক্তির (Entry) যে সংখ্যক পিক্সেলকে পর্দার বামে সরিয়ে নিয়ে যাওয়া হয়েছে"
 
-#: gtk/gtkentry.c:546
+#: gtk/gtkentry.c:551
 msgid "The contents of the entry"
 msgstr "অন্তর্ভুক্তির (Entry) অভ্যন্তরীণ বস্তু"
 
-#: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "এক্স অক্ষ"
 
-#: gtk/gtkentry.c:554 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "অনুভূমিক অ্যালাইনমেন্ট, ০ (বাম) থেকে ১ (ডান)।  RTL-এর জন্য উল্টা"
 
-#: gtk/gtkentry.c:787
+#: gtk/gtkentry.c:792
 msgid "Select on focus"
 msgstr "ফোকাস করলে চিহ্নিত হবে"
 
-#: gtk/gtkentry.c:788
+#: gtk/gtkentry.c:793
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "কোন অন্তর্ভুক্তির (Entry) অভ্যন্তরীণ বস্তুকে ফোকাস করলে তা চিহ্নিত হবে কিনা"
 
@@ -1743,11 +1743,11 @@ msgstr "লুক্কায়িত জিনিষ প্রদর্শন ক
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "লুক্কায়িত ফাইল ও ফোল্ডার প্রদর্শন করা হবে কিনা"
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:563
 msgid "Default file chooser backend"
 msgstr "স্বাভাবিক অবস্থায় ব্যবহৃত ফাইল বাছাইকারী ব্যাকএন্ড"
 
-#: gtk/gtkfilechooserdefault.c:561
+#: gtk/gtkfilechooserdefault.c:564
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "স্বাভাবিক অবস্থায় যে GtkFileChooser ব্যাকএন্ড ব্যবহার করা হবে তার নাম"
 

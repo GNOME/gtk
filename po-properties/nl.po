@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-11 09:20-0400\n"
+"POT-Creation-Date: 2004-07-10 00:22-0400\n"
 "PO-Revision-Date: 2004-03-03 11:48+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -28,70 +28,70 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:100
+#: gdk-pixbuf/gdk-pixbuf.c:101
 msgid "Number of Channels"
 msgstr "Aantal kanalen"
 
-#: gdk-pixbuf/gdk-pixbuf.c:101
+#: gdk-pixbuf/gdk-pixbuf.c:102
 msgid "The number of samples per pixel"
 msgstr "Het aantal samples per beeldpunt"
 
-#: gdk-pixbuf/gdk-pixbuf.c:111
+#: gdk-pixbuf/gdk-pixbuf.c:112
 msgid "Colorspace"
 msgstr "Kleurenruimte"
 
-#: gdk-pixbuf/gdk-pixbuf.c:112
+#: gdk-pixbuf/gdk-pixbuf.c:113
 msgid "The colorspace in which the samples are interpreted"
 msgstr "De kleurenruimte waarin de samples worden geïnterpreteerd"
 
-#: gdk-pixbuf/gdk-pixbuf.c:122
+#: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "Has Alpha"
 msgstr "Heeft alpha"
 
-#: gdk-pixbuf/gdk-pixbuf.c:123
+#: gdk-pixbuf/gdk-pixbuf.c:124
 msgid "Whether the pixbuf has an alpha channel"
 msgstr "Of de pixbuf een alpha-kanaal heeft"
 
-#: gdk-pixbuf/gdk-pixbuf.c:131
+#: gdk-pixbuf/gdk-pixbuf.c:132
 msgid "Bits per Sample"
 msgstr "Bits per sample"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132
+#: gdk-pixbuf/gdk-pixbuf.c:133
 msgid "The number of bits per sample"
 msgstr "Het aantal bits per sample"
 
-#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
+#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
 msgid "Width"
 msgstr "Breedte"
 
 # in de pixbuf?
-#: gdk-pixbuf/gdk-pixbuf.c:143
+#: gdk-pixbuf/gdk-pixbuf.c:144
 msgid "The number of columns of the pixbuf"
 msgstr "Het aantal kolommen van de pixbuf"
 
-#: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:657
+#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:657
 msgid "Height"
 msgstr "Hoogte"
 
-#: gdk-pixbuf/gdk-pixbuf.c:154
+#: gdk-pixbuf/gdk-pixbuf.c:155
 msgid "The number of rows of the pixbuf"
 msgstr "Het aantal rijen van de pixbuf"
 
-#: gdk-pixbuf/gdk-pixbuf.c:164
+#: gdk-pixbuf/gdk-pixbuf.c:165
 msgid "Rowstride"
 msgstr "Rijomvang"
 
-#: gdk-pixbuf/gdk-pixbuf.c:165
+#: gdk-pixbuf/gdk-pixbuf.c:166
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr ""
 "Het aantal byte tussen het begin van een rij en het begin van de volgende rij"
 
-#: gdk-pixbuf/gdk-pixbuf.c:175
+#: gdk-pixbuf/gdk-pixbuf.c:176
 msgid "Pixels"
 msgstr "Beeldpunten"
 
-#: gdk-pixbuf/gdk-pixbuf.c:176
+#: gdk-pixbuf/gdk-pixbuf.c:177
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr "Een pointer naar de beeldpuntdata van de pixbuf"
 
@@ -871,7 +871,7 @@ msgstr "Detail"
 msgid "Render detail to pass to the theme engine"
 msgstr "Weergavedetail door te geven aan de thema-motor"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:545 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Tekst"
 
@@ -938,7 +938,7 @@ msgstr "Voorgrondkleur"
 msgid "Foreground color as a GdkColor"
 msgstr "Voorgrondkleur als een GdkColor"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:477 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "Wijzigbaar"
@@ -1503,42 +1503,42 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Breedte van het kader rondom de knoppenbalk onderaan het dialoogvenster"
 
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "Cursorpositie"
 
-#: gtk/gtkentry.c:458 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "De huidige positie van de invoegcurser, in lettertekens"
 
-#: gtk/gtkentry.c:467 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "Selectie begrensd"
 
-#: gtk/gtkentry.c:468 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 "De positie van de tegenoverstaande zijde van de selectie vanaf de cursor in "
 "lettertekens"
 
-#: gtk/gtkentry.c:478
+#: gtk/gtkentry.c:483
 msgid "Whether the entry contents can be edited"
 msgstr "Of de inhoud van het veld bewerkt mag worden"
 
-#: gtk/gtkentry.c:485
+#: gtk/gtkentry.c:490
 msgid "Maximum length"
 msgstr "Maximumlengte"
 
-#: gtk/gtkentry.c:486
+#: gtk/gtkentry.c:491
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Maximum aantal tekens voor dit veld. Nul als er geen maximum is"
 
-#: gtk/gtkentry.c:494
+#: gtk/gtkentry.c:499
 msgid "Visibility"
 msgstr "Zichtbaarheid"
 
-#: gtk/gtkentry.c:495
+#: gtk/gtkentry.c:500
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1546,29 +1546,29 @@ msgstr ""
 "FALSE geeft het \"onzichtbaar teken\" in plaats van de werkelijke tekst "
 "(wachtwoordmodus)"
 
-#: gtk/gtkentry.c:502
+#: gtk/gtkentry.c:507
 msgid "Has Frame"
 msgstr "Heeft kader"
 
-#: gtk/gtkentry.c:503
+#: gtk/gtkentry.c:508
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE verwijdert de buitenrand van het veld"
 
-#: gtk/gtkentry.c:510
+#: gtk/gtkentry.c:515
 msgid "Invisible character"
 msgstr "Onzichtbaar teken"
 
-#: gtk/gtkentry.c:511
+#: gtk/gtkentry.c:516
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Het te gebruiken teken om de inhoud van een veld te maskeren (in "
 "\"wachtwoordmodus\")"
 
-#: gtk/gtkentry.c:518
+#: gtk/gtkentry.c:523
 msgid "Activates default"
 msgstr "Activeert de standaard"
 
-#: gtk/gtkentry.c:519
+#: gtk/gtkentry.c:524
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1576,35 +1576,35 @@ msgstr ""
 "Of het standaardwidget geactiveerd moet worden (zoals de standaardknop in "
 "een dialoogvenster) wanneer op Enter wordt gedrukt"
 
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:530
 msgid "Width in chars"
 msgstr "Breedte, in lettertekens"
 
-#: gtk/gtkentry.c:526
+#: gtk/gtkentry.c:531
 msgid "Number of characters to leave space for in the entry"
 msgstr "Het aantal gereserveerde lettertekens in een veld"
 
-#: gtk/gtkentry.c:535
+#: gtk/gtkentry.c:540
 msgid "Scroll offset"
 msgstr "Schuifafstand"
 
-#: gtk/gtkentry.c:536
+#: gtk/gtkentry.c:541
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Aantal beeldpunten van het veld dat aan de linkerkant van het scherm is "
 "afgeschoven."
 
-#: gtk/gtkentry.c:546
+#: gtk/gtkentry.c:551
 msgid "The contents of the entry"
 msgstr "De inhoud van het veld"
 
-#: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "X-uitlijning"
 
 # RTL right to left
 # misschien omzetten naar RNL?
-#: gtk/gtkentry.c:554 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
@@ -1612,11 +1612,11 @@ msgstr ""
 "De horizontale uitlijning, van 0 (links) naar 1 (rechts). Omgekeerd voor RTL "
 "indelingen"
 
-#: gtk/gtkentry.c:787
+#: gtk/gtkentry.c:792
 msgid "Select on focus"
 msgstr "Selecteren bij aandacht"
 
-#: gtk/gtkentry.c:788
+#: gtk/gtkentry.c:793
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Of de inhoud van een veld wordt geselecteerd als het veld de aandacht krijgt"
@@ -1792,11 +1792,11 @@ msgstr "Verborgen tonen"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Of verborgen bestanden en mappen moeten worden weergegeven"
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:563
 msgid "Default file chooser backend"
 msgstr "Standaard backend bestandkiezer"
 
-#: gtk/gtkfilechooserdefault.c:561
+#: gtk/gtkfilechooserdefault.c:564
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Naam van de gebruikte backend voor de bestandkiezer"
 

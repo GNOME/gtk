@@ -3,6 +3,7 @@ Overview of Changes from GTK+ 2.4.3 to GTK+ 2.4.4
 * GtkFileChooser
  - Use Save button in save mode. [Federico Mena Quintero]
  - Check for errors when opening folders [Federico]
+ - Fall back to stock icons if icon theme is not found [Federico]
  - Bug fixes [Federico, Alex Roitman, Owen Taylor]
 * GtkComboBox
  - Make it work without a model [Mariano Suarez-Alvarez, Christian Persch]

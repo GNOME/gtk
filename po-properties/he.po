@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-11 09:20-0400\n"
+"POT-Creation-Date: 2004-07-10 00:22-0400\n"
 "PO-Revision-Date: 2002-12-07 10:05+0200\n"
 "Last-Translator: Gil 'Dolfin' Osher <dolfin@rpg.org.il>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -28,75 +28,75 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.0\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:100
+#: gdk-pixbuf/gdk-pixbuf.c:101
 msgid "Number of Channels"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:101
+#: gdk-pixbuf/gdk-pixbuf.c:102
 #, fuzzy
 msgid "The number of samples per pixel"
 msgstr "לקובץ XPM יש מספר לא תקני של תוים לפיקסלים"
 
-#: gdk-pixbuf/gdk-pixbuf.c:111
+#: gdk-pixbuf/gdk-pixbuf.c:112
 #, fuzzy
 msgid "Colorspace"
 msgstr "סגירה"
 
-#: gdk-pixbuf/gdk-pixbuf.c:112
+#: gdk-pixbuf/gdk-pixbuf.c:113
 msgid "The colorspace in which the samples are interpreted"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:122
+#: gdk-pixbuf/gdk-pixbuf.c:123
 #, fuzzy
 msgid "Has Alpha"
 msgstr "השתמש בסימון"
 
-#: gdk-pixbuf/gdk-pixbuf.c:123
+#: gdk-pixbuf/gdk-pixbuf.c:124
 msgid "Whether the pixbuf has an alpha channel"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:131
+#: gdk-pixbuf/gdk-pixbuf.c:132
 msgid "Bits per Sample"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:132
+#: gdk-pixbuf/gdk-pixbuf.c:133
 #, fuzzy
 msgid "The number of bits per sample"
 msgstr "מספר העמודות בטבלה"
 
-#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
+#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
 msgid "Width"
 msgstr "רוחב"
 
-#: gdk-pixbuf/gdk-pixbuf.c:143
+#: gdk-pixbuf/gdk-pixbuf.c:144
 #, fuzzy
 msgid "The number of columns of the pixbuf"
 msgstr "מספר השורות בטבלה"
 
-#: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:657
+#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:657
 msgid "Height"
 msgstr "גובה"
 
-#: gdk-pixbuf/gdk-pixbuf.c:154
+#: gdk-pixbuf/gdk-pixbuf.c:155
 #, fuzzy
 msgid "The number of rows of the pixbuf"
 msgstr "מספר העמודות בטבלה"
 
-#: gdk-pixbuf/gdk-pixbuf.c:164
+#: gdk-pixbuf/gdk-pixbuf.c:165
 #, fuzzy
 msgid "Rowstride"
 msgstr "עמודות"
 
-#: gdk-pixbuf/gdk-pixbuf.c:165
+#: gdk-pixbuf/gdk-pixbuf.c:166
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:175
+#: gdk-pixbuf/gdk-pixbuf.c:176
 msgid "Pixels"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:176
+#: gdk-pixbuf/gdk-pixbuf.c:177
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr ""
 
@@ -868,7 +868,7 @@ msgstr "פירוט"
 msgid "Render detail to pass to the theme engine"
 msgstr "חולל פירוט להעברה למנוע ערכת הנושא"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:545 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "מלל"
 
@@ -932,7 +932,7 @@ msgstr "צבע קדמה"
 msgid "Foreground color as a GdkColor"
 msgstr "צבע קדמה כ GdkColor"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:477 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "ניתן לעריכה"
@@ -1493,107 +1493,107 @@ msgstr ""
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "מיקום הסמן"
 
-#: gtk/gtkentry.c:458 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr ""
 
-#: gtk/gtkentry.c:467 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr ""
 
-#: gtk/gtkentry.c:468 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 
-#: gtk/gtkentry.c:478
+#: gtk/gtkentry.c:483
 msgid "Whether the entry contents can be edited"
 msgstr ""
 
-#: gtk/gtkentry.c:485
+#: gtk/gtkentry.c:490
 msgid "Maximum length"
 msgstr "אורך מקסימלי"
 
-#: gtk/gtkentry.c:486
+#: gtk/gtkentry.c:491
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "מספר מקסימלי של תוים לערך זה. אפס אם אין מקסימום."
 
-#: gtk/gtkentry.c:494
+#: gtk/gtkentry.c:499
 msgid "Visibility"
 msgstr "נראה"
 
-#: gtk/gtkentry.c:495
+#: gtk/gtkentry.c:500
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr "שלישי מציג את \"התו הבלתי נראה\" במקום המלל האמיתי (מצב סיסמה)"
 
-#: gtk/gtkentry.c:502
+#: gtk/gtkentry.c:507
 msgid "Has Frame"
 msgstr "יש מסגרת"
 
-#: gtk/gtkentry.c:503
+#: gtk/gtkentry.c:508
 msgid "FALSE removes outside bevel from entry"
 msgstr ""
 
-#: gtk/gtkentry.c:510
+#: gtk/gtkentry.c:515
 msgid "Invisible character"
 msgstr "תו בלתי נראה"
 
-#: gtk/gtkentry.c:511
+#: gtk/gtkentry.c:516
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "התו לשימוש כשאר מסתירים ערך (ב\"מצב סיסמה\")"
 
-#: gtk/gtkentry.c:518
+#: gtk/gtkentry.c:523
 msgid "Activates default"
 msgstr ""
 
-#: gtk/gtkentry.c:519
+#: gtk/gtkentry.c:524
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
 
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:530
 msgid "Width in chars"
 msgstr "רוחב בתוים"
 
-#: gtk/gtkentry.c:526
+#: gtk/gtkentry.c:531
 msgid "Number of characters to leave space for in the entry"
 msgstr "מספר התוים כדי להשאיר להם רווח בערך"
 
-#: gtk/gtkentry.c:535
+#: gtk/gtkentry.c:540
 msgid "Scroll offset"
 msgstr ""
 
-#: gtk/gtkentry.c:536
+#: gtk/gtkentry.c:541
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 
-#: gtk/gtkentry.c:546
+#: gtk/gtkentry.c:551
 msgid "The contents of the entry"
 msgstr "התכנים של הערך"
 
-#: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "יישור X"
 
-#: gtk/gtkentry.c:554 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "היישור האופקי, מ 0 (שמאל) ל 1 (ימין)"
 
-#: gtk/gtkentry.c:787
+#: gtk/gtkentry.c:792
 msgid "Select on focus"
 msgstr ""
 
-#: gtk/gtkentry.c:788
+#: gtk/gtkentry.c:793
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 
@@ -1782,11 +1782,11 @@ msgstr "הצג מלל"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "האם כפתורים ליצירת/שינוי קבצים צריכים להיות מוצגים"
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:563
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:561
+#: gtk/gtkfilechooserdefault.c:564
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "שם גופן ברירת המחדל לשימוש"

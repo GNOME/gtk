@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-11 09:20-0400\n"
+"POT-Creation-Date: 2004-07-10 00:22-0400\n"
 "PO-Revision-Date: 2004-03-13 14:59+0530\n"
 "Last-Translator: Jitendra Shah <jitendras@vsnl.com>\n"
 "Language-Team:  Marathi <www.indictrans.org>\n"
@@ -16,84 +16,84 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.0.2\n"
 
-#: gdk-pixbuf/gdk-pixbuf.c:100
+#: gdk-pixbuf/gdk-pixbuf.c:101
 msgid "Number of Channels"
 msgstr ""
 
 # gdk-pixbuf/io-xpm.c:1267
-#: gdk-pixbuf/gdk-pixbuf.c:101
+#: gdk-pixbuf/gdk-pixbuf.c:102
 #, fuzzy
 msgid "The number of samples per pixel"
 msgstr "XPM फाइलमध्ये प्रति ओळीतील अक्षर संख्या अवैध आहे "
 
 # gtk/gtkcolorsel.c:1858
-#: gdk-pixbuf/gdk-pixbuf.c:111
+#: gdk-pixbuf/gdk-pixbuf.c:112
 #, fuzzy
 msgid "Colorspace"
 msgstr "रंगाचे नाव(_N):"
 
-#: gdk-pixbuf/gdk-pixbuf.c:112
+#: gdk-pixbuf/gdk-pixbuf.c:113
 msgid "The colorspace in which the samples are interpreted"
 msgstr ""
 
 # gtk/gtkcolorsel.c:1711
-#: gdk-pixbuf/gdk-pixbuf.c:122
+#: gdk-pixbuf/gdk-pixbuf.c:123
 #, fuzzy
 msgid "Has Alpha"
 msgstr "रंगफळी आहे"
 
-#: gdk-pixbuf/gdk-pixbuf.c:123
+#: gdk-pixbuf/gdk-pixbuf.c:124
 msgid "Whether the pixbuf has an alpha channel"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:131
+#: gdk-pixbuf/gdk-pixbuf.c:132
 msgid "Bits per Sample"
 msgstr ""
 
 # gtk/gtktable.c:157
-#: gdk-pixbuf/gdk-pixbuf.c:132
+#: gdk-pixbuf/gdk-pixbuf.c:133
 #, fuzzy
 msgid "The number of bits per sample"
 msgstr "टेबलमधील ओळींची संख्या"
 
 # gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:190
-#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
+#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
 msgid "Width"
 msgstr "रुंदी"
 
 # gtk/gtktable.c:166
-#: gdk-pixbuf/gdk-pixbuf.c:143
+#: gdk-pixbuf/gdk-pixbuf.c:144
 #, fuzzy
 msgid "The number of columns of the pixbuf"
 msgstr "टेबलमधील स्तंभ संख्या"
 
 # gtk/gtklayout.c:642
-#: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:657
+#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:657
 msgid "Height"
 msgstr "ऊंची"
 
 # gtk/gtktable.c:157
-#: gdk-pixbuf/gdk-pixbuf.c:154
+#: gdk-pixbuf/gdk-pixbuf.c:155
 #, fuzzy
 msgid "The number of rows of the pixbuf"
 msgstr "टेबलमधील ओळींची संख्या"
 
 # gtk/gtktable.c:156
-#: gdk-pixbuf/gdk-pixbuf.c:164
+#: gdk-pixbuf/gdk-pixbuf.c:165
 #, fuzzy
 msgid "Rowstride"
 msgstr "ओळी"
 
-#: gdk-pixbuf/gdk-pixbuf.c:165
+#: gdk-pixbuf/gdk-pixbuf.c:166
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:175
+#: gdk-pixbuf/gdk-pixbuf.c:176
 msgid "Pixels"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf.c:176
+#: gdk-pixbuf/gdk-pixbuf.c:177
 msgid "A pointer to the pixel data of the pixbuf"
 msgstr ""
 
@@ -1030,7 +1030,7 @@ msgid "Render detail to pass to the theme engine"
 msgstr ""
 
 # gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:545 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "लिखाण"
 
@@ -1110,7 +1110,7 @@ msgstr "Gdk रंगाप्रमाणे पार्श्वरंग"
 
 # gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 # gtk/gtktextview.c:568
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:477 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "संपादनयोग्य"
@@ -1806,51 +1806,51 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "ह्या मजकुराच्या तळभागातील बटणाभोवती असणाऱ्या जागेची रुंदी"
 
 # gtk/gtkentry.c:435 gtk/gtklabel.c:358
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "कर्सरचे स्थान"
 
 # gtk/gtkentry.c:436 gtk/gtklabel.c:359
-#: gtk/gtkentry.c:458 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
 #, fuzzy
 msgid "The current position of the insertion cursor in chars"
 msgstr "अक्षरामध्ये असणारी कर्सरची वर्तमान स्थिती."
 
 # gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#: gtk/gtkentry.c:467 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "निर्बंधित निवड"
 
 # gtk/gtkentry.c:446 gtk/gtklabel.c:369
-#: gtk/gtkentry.c:468 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
 #, fuzzy
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "कर्सरद्वारे निवडलेल्या अक्षरांची दूसऱ्या बाजुची स्थिती."
 
 # gtk/gtkentry.c:456
-#: gtk/gtkentry.c:478
+#: gtk/gtkentry.c:483
 msgid "Whether the entry contents can be edited"
 msgstr "मजकुरातील नोंदी संपादित किंवा सुधारणा करता येतील का"
 
 # gtk/gtkentry.c:463
-#: gtk/gtkentry.c:485
+#: gtk/gtkentry.c:490
 msgid "Maximum length"
 msgstr "कमाल लांबी"
 
 # gtk/gtkentry.c:464
-#: gtk/gtkentry.c:486
+#: gtk/gtkentry.c:491
 #, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "ह्या नोंदीकरीता कमाल अक्षरसंख्या, कमाल नसेल तर शुन्य"
 
 # gtk/gtkentry.c:472
-#: gtk/gtkentry.c:494
+#: gtk/gtkentry.c:499
 msgid "Visibility"
 msgstr "दर्शनियता"
 
 # gtk/gtkentry.c:473
-#: gtk/gtkentry.c:495
+#: gtk/gtkentry.c:500
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1859,33 +1859,33 @@ msgstr ""
 "प्रदर्शित होते "
 
 # gtk/gtkentry.c:480
-#: gtk/gtkentry.c:502
+#: gtk/gtkentry.c:507
 msgid "Has Frame"
 msgstr "चौकट आहे"
 
 # gtk/gtkentry.c:481
-#: gtk/gtkentry.c:503
+#: gtk/gtkentry.c:508
 #, fuzzy
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE चा प्रयोग केल्यावर हे नोंदणीपासूनचा बाहेरील उठाव हटवतो."
 
 # gtk/gtkentry.c:488
-#: gtk/gtkentry.c:510
+#: gtk/gtkentry.c:515
 msgid "Invisible character"
 msgstr "अद्रुश्य अक्षर"
 
 # gtk/gtkentry.c:489
-#: gtk/gtkentry.c:511
+#: gtk/gtkentry.c:516
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "मजकुर झाकण्यासाठी वापरण्याचे अक्षर (\"पासवर्ड मोड\")"
 
 # gtk/gtkentry.c:496
-#: gtk/gtkentry.c:518
+#: gtk/gtkentry.c:523
 msgid "Activates default"
 msgstr "सर्वसाधारण हा भाग कार्यान्वित होतो"
 
 # gtk/gtkentry.c:497
-#: gtk/gtkentry.c:519
+#: gtk/gtkentry.c:524
 #, fuzzy
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
@@ -1893,38 +1893,38 @@ msgid ""
 msgstr "Enter बटण दाबून सर्वसाधारण विडगेट कार्यान्वित करायचे का"
 
 # gtk/gtkentry.c:503
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:530
 msgid "Width in chars"
 msgstr "अक्षरमालेची लांबी"
 
 # gtk/gtkentry.c:504
-#: gtk/gtkentry.c:526
+#: gtk/gtkentry.c:531
 #, fuzzy
 msgid "Number of characters to leave space for in the entry"
 msgstr "ह्या नोंदीमधील किती अक्षरांसाठी रिकामी जागा सोडायला हवी"
 
 # gtk/gtkentry.c:513
-#: gtk/gtkentry.c:535
+#: gtk/gtkentry.c:540
 msgid "Scroll offset"
 msgstr "स्क्रोल ओफसेट"
 
 # gtk/gtkentry.c:514
-#: gtk/gtkentry.c:536
+#: gtk/gtkentry.c:541
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "ह्या नोंदी मध्ये किती  पिक्सल्स पडद्याच्या डावीकडे स्क्रोल करतो "
 
 # gtk/gtkentry.c:524
-#: gtk/gtkentry.c:546
+#: gtk/gtkentry.c:551
 msgid "The contents of the entry"
 msgstr "नोंदीचा मजकूर"
 
 # gtk/gtkmisc.c:97
-#: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "Xची दिशा"
 
 # gtk/gtkmisc.c:98
-#: gtk/gtkentry.c:554 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
@@ -1932,12 +1932,12 @@ msgid ""
 msgstr "क्षितिज ओळींची दिशा ० (डावीकडून) १ (उजवीकडे)"
 
 # gtk/gtkentry.c:728
-#: gtk/gtkentry.c:787
+#: gtk/gtkentry.c:792
 msgid "Select on focus"
 msgstr "दृश्यमान करा"
 
 # gtk/gtkentry.c:729
-#: gtk/gtkentry.c:788
+#: gtk/gtkentry.c:793
 #, fuzzy
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "मजकुरातील एखादी द्रुश्यमान झालेली नोंद तुम्हाला निवडायची आहे काय."
@@ -2150,11 +2150,11 @@ msgstr "सीमा दाखवा"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "फाइली निर्माण/अदलाबदल करण्याची बटणे प्रदर्शित करावित का"
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:563
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:561
+#: gtk/gtkfilechooserdefault.c:564
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+/po\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-04 21:16+0200\n"
+"POT-Creation-Date: 2004-07-10 00:22-0400\n"
 "PO-Revision-Date: 2004-04-17 12:23+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -916,15 +916,15 @@ msgstr "Rrethi i ngjyrave"
 msgid "Color Selection"
 msgstr "Zgjedhja e ngjyrës"
 
-#: gtk/gtkentry.c:4226 gtk/gtktextview.c:6925
+#: gtk/gtkentry.c:4300 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr "Zgjidh _gjithçka"
 
-#: gtk/gtkentry.c:4236 gtk/gtktextview.c:6935
+#: gtk/gtkentry.c:4310 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "_Metodat e Dhënies"
 
-#: gtk/gtkentry.c:4246 gtk/gtktextview.c:6946
+#: gtk/gtkentry.c:4320 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr "_Shkruaj simbolin Unicode të kontrollit"
 
@@ -952,7 +952,7 @@ msgstr ""
 "I pamundur shtimi i një libërshënuesi për %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5262
+#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5332
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -970,15 +970,15 @@ msgstr ""
 "I pamundur ndryshimi i kartelës aktuale në %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1058 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1072 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "Shtëpia"
 
-#: gtk/gtkfilechooserdefault.c:1076 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1090 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "Hapësira e Punës"
 
-#: gtk/gtkfilechooserdefault.c:1517
+#: gtk/gtkfilechooserdefault.c:1534
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -987,13 +987,13 @@ msgstr ""
 "I pamundur krijimi i kartelës %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1700
+#: gtk/gtkfilechooserdefault.c:1717
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr ""
 "I pamundur shtimi i një libërshënuesi për %s pasi nuk është një kartelë."
 
-#: gtk/gtkfilechooserdefault.c:1778
+#: gtk/gtkfilechooserdefault.c:1795
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1002,124 +1002,124 @@ msgstr ""
 "E pamundur fshirja e libërshënuesit për %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2372
+#: gtk/gtkfilechooserdefault.c:2387
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 "I pamundur krijimi i një libërshënuesi për %s pasi është një emër pozicioni "
 "jo korrekt."
 
-#: gtk/gtkfilechooserdefault.c:2563
+#: gtk/gtkfilechooserdefault.c:2578
 msgid "Folder"
 msgstr "Kartelë"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2610 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2625 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "_Shto"
 
-#: gtk/gtkfilechooserdefault.c:2620 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2635 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_Hiqe"
 
-#: gtk/gtkfilechooserdefault.c:2699
+#: gtk/gtkfilechooserdefault.c:2714
 msgid "Show _Hidden Files"
 msgstr "Shfaq Files e _Padukshëm"
 
-#: gtk/gtkfilechooserdefault.c:2811
+#: gtk/gtkfilechooserdefault.c:2855
 msgid "Name"
 msgstr "Emri"
 
-#: gtk/gtkfilechooserdefault.c:2833
+#: gtk/gtkfilechooserdefault.c:2877
 msgid "Size"
 msgstr "Madhësia"
 
-#: gtk/gtkfilechooserdefault.c:2845
+#: gtk/gtkfilechooserdefault.c:2889
 msgid "Modified"
 msgstr "Ndryshuar"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2890
+#: gtk/gtkfilechooserdefault.c:2934
 msgid "Create Fo_lder"
 msgstr "Krijo Karte_lë"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3000
+#: gtk/gtkfilechooserdefault.c:3044
 msgid "_Name:"
 msgstr "_Emri:"
 
-#: gtk/gtkfilechooserdefault.c:3042
+#: gtk/gtkfilechooserdefault.c:3086
 msgid "_Browse for other folders"
 msgstr "_Shfleto për kartelat e tjera"
 
-#: gtk/gtkfilechooserdefault.c:3279
+#: gtk/gtkfilechooserdefault.c:3323
 msgid "Save in _folder:"
 msgstr "Ruaje tek _kartela:"
 
-#: gtk/gtkfilechooserdefault.c:3281
+#: gtk/gtkfilechooserdefault.c:3325
 msgid "Create in _folder:"
 msgstr "Krijoje tek _kartela:"
 
-#: gtk/gtkfilechooserdefault.c:3906
+#: gtk/gtkfilechooserdefault.c:3969
 msgid "Can't change to folder because it isn't local"
 msgstr "I pamundur kalimi tek kartela pasi nuk është lokale"
 
-#: gtk/gtkfilechooserdefault.c:4041
+#: gtk/gtkfilechooserdefault.c:4107
 msgid "Could not find the path"
 msgstr "E pamundur gjetja e pozicionit"
 
-#: gtk/gtkfilechooserdefault.c:4389
+#: gtk/gtkfilechooserdefault.c:4458
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "shtegu %s nuk ekziston"
 
-#: gtk/gtkfilechooserdefault.c:5035
+#: gtk/gtkfilechooserdefault.c:5105
 msgid "Type name of new folder"
 msgstr "Shkruaj emrin e kartelës së re"
 
-#: gtk/gtkfilechooserdefault.c:5064
+#: gtk/gtkfilechooserdefault.c:5134
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:5066
+#: gtk/gtkfilechooserdefault.c:5136
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5068
+#: gtk/gtkfilechooserdefault.c:5138
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5070
+#: gtk/gtkfilechooserdefault.c:5140
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5115
+#: gtk/gtkfilechooserdefault.c:5185
 msgid "Today"
 msgstr "Sot"
 
-#: gtk/gtkfilechooserdefault.c:5117
+#: gtk/gtkfilechooserdefault.c:5187
 msgid "Yesterday"
 msgstr "Dje"
 
-#: gtk/gtkfilechooserdefault.c:5128
+#: gtk/gtkfilechooserdefault.c:5198
 msgid "Unknown"
 msgstr "Nuk njihet"
 
-#: gtk/gtkfilechooserdefault.c:5223
+#: gtk/gtkfilechooserdefault.c:5293
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "E pamundur lëvizja për tek kartela e dhënë nga ju pasi pozicioni i saj nuk "
 "është korrekt."
 
-#: gtk/gtkfilechooserdefault.c:5300
+#: gtk/gtkfilechooserdefault.c:5370
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1128,15 +1128,15 @@ msgstr ""
 "E pamundur zgjedhja e %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5339
+#: gtk/gtkfilechooserdefault.c:5409
 msgid "Open Location"
 msgstr "Hap pozicionin"
 
-#: gtk/gtkfilechooserdefault.c:5346
+#: gtk/gtkfilechooserdefault.c:5416
 msgid "Save in Location"
 msgstr "Ruaje tek Pozicioni"
 
-#: gtk/gtkfilechooserdefault.c:5365
+#: gtk/gtkfilechooserdefault.c:5435
 msgid "_Location:"
 msgstr "_Pozicioni:"
 
@@ -1318,36 +1318,40 @@ msgstr "Emër tepër i gjatë"
 msgid "Couldn't convert filename"
 msgstr "I pamundur konvertimi i emrit të file"
 
-#: gtk/gtkfilesystemmodel.c:1272
+#: gtk/gtkfilesystemmodel.c:1266
 msgid "(Empty)"
 msgstr "(Bosh)"
 
-#: gtk/gtkfilesystemunix.c:418 gtk/gtkfilesystemwin32.c:386
+#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemwin32.c:386
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:425 gtk/gtkfilesystemunix.c:616
-#: gtk/gtkfilesystemunix.c:1741 gtk/gtkfilesystemwin32.c:393
-#: gtk/gtkfilesystemwin32.c:1357
+#: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:617
+#: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1357
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "gabim gjatë marrjes së informacioneve për \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:489 gtk/gtkfilesystemwin32.c:434
+#: gtk/gtkfilesystemunix.c:490 gtk/gtkfilesystemwin32.c:434
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "Gabim gjatë krijimit të directory \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:569 gtk/gtkfilesystemwin32.c:494
+#: gtk/gtkfilesystemunix.c:570 gtk/gtkfilesystemwin32.c:494
 msgid "This file system does not support mounting"
 msgstr "Ky file sistemi nuk suporton montimin"
 
-#: gtk/gtkfilesystemunix.c:577
+#: gtk/gtkfilesystemunix.c:578
 msgid "Filesystem"
 msgstr "File i sistemit"
 
-#: gtk/gtkfilesystemunix.c:778
+#: gtk/gtkfilesystemunix.c:731
+#, fuzzy, c-format
+msgid "Could not get a stock icon for %s"
+msgstr "E pamundur marrja e informacioneve për file '%s': %s"
+
+#: gtk/gtkfilesystemunix.c:826
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1356,12 +1360,12 @@ msgstr ""
 "Emri \"%s\" është i pavlefshëm pasi përmban simbolin \"%s\". Ju lutem "
 "përdorni një emër tjetër."
 
-#: gtk/gtkfilesystemunix.c:1335 gtk/gtkfilesystemwin32.c:923
+#: gtk/gtkfilesystemunix.c:1434 gtk/gtkfilesystemwin32.c:923
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Ruajtja e libërshënuesit dështoi (%s)"
 
-#: gtk/gtkfilesystemunix.c:1631
+#: gtk/gtkfilesystemunix.c:1730
 #, c-format
 msgid "error getting information for '%s'"
 msgstr "gabim gjatë marrjes së informacioneve për '%s'"
@@ -1421,7 +1425,7 @@ msgstr "Vlera _gamma"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1564
+#: gtk/gtkiconfactory.c:1572
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Gabim gjatë ngarkimit të ikonës: %s"
@@ -1658,7 +1662,6 @@ msgstr "_I pari"
 msgid "_Last"
 msgstr "_I fundit"
 
-#. GRUT modified this item
 #: gtk/gtkstock.c:311
 msgid "_Top"
 msgstr "_Në fillim"

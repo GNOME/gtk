@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-4.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-06 04:44+0200\n"
+"POT-Creation-Date: 2004-07-10 00:22-0400\n"
 "PO-Revision-Date: 2004-07-06 23:06+0300\n"
 "Last-Translator: Gil Osher <dolfin@rpg.org.il>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -48,7 +48,8 @@ msgstr "התמונה '%s' לא מכילה מידע"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "נכשל בפתיחת התמונה '%s': הסיבה איננה ידועה, כנראה קובץ תמונה פגום"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:239
@@ -68,7 +69,8 @@ msgstr "לא מצליח לטעון את מודל טעינת התמונה: %s %s"
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr "מודל טעינת התמונות %s אינו מייצא את הממשק הנכון; אולי הוא מגירסה שונה של GTK?"
+msgstr ""
+"מודל טעינת התמונות %s אינו מייצא את הממשק הנכון; אולי הוא מגירסה שונה של GTK?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:625
 #, c-format
@@ -138,8 +140,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"שגיאה פנימית: מודל טעינת התמונה '%s' נכשל בתחילת טעינת תמונה, אך לא נתן "
-"סיבה לכישלון זה"
+"שגיאה פנימית: מודל טעינת התמונה '%s' נכשל בתחילת טעינת תמונה, אך לא נתן סיבה "
+"לכישלון זה"
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
@@ -319,7 +321,8 @@ msgstr "שגיאה בפענוח קובץ תמונת JPEG (%s)"
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr "אין מספיק זיכרון לטעינת התמונה, נסה לסגור מספר יישומים כדי לפנות זיכרון"
+msgstr ""
+"אין מספיק זיכרון לטעינת התמונה, נסה לסגור מספר יישומים כדי לפנות זיכרון"
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
@@ -336,11 +339,13 @@ msgstr "לא ניתן להקצות זיכרון לטעינת קובץ JPEG"
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr "איכות קובץ JPEG חייבת להיות בין 0 ל 100, הערך '%s' לא יכול להיות מפורש."
+msgstr ""
+"איכות קובץ JPEG חייבת להיות בין 0 ל 100, הערך '%s' לא יכול להיות מפורש."
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "איכות קובץ JPEG חייבת להיות בין 0 ל 100, הערך '%d' אינו מורשה."
 
 #: gdk-pixbuf/io-jpeg.c:1069
@@ -440,7 +445,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "שגיאה חמורה בקריאת קובץ PNG: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "מפתחות של גושי טקסט PNG מוכרחים להיות בני 1 עד 79 תווים."
 
 #: gdk-pixbuf/io-png.c:821
@@ -449,7 +455,8 @@ msgstr "מפתחות של גושי טקסט PNG מוכרחים להיות תוו
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr "לא ניתן להמיר את הערך עבור גוש טקסט PNG %s לקידוד ISO-8859-1."
 
 #: gdk-pixbuf/io-png.c:994
@@ -787,7 +794,8 @@ msgstr ""
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr "הצבע שבחרת. אתה יכול לגרור צבע זה לערך פלטה כדי לשמור אותו לשימוש בעתיד."
+msgstr ""
+"הצבע שבחרת. אתה יכול לגרור צבע זה לערך פלטה כדי לשמור אותו לשימוש בעתיד."
 
 #: gtk/gtkcolorsel.c:933
 msgid "_Save color here"
@@ -895,15 +903,15 @@ msgstr "גלגל צבעים"
 msgid "Color Selection"
 msgstr "בחירת צבע"
 
-#: gtk/gtkentry.c:4226 gtk/gtktextview.c:6925
+#: gtk/gtkentry.c:4300 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr "בחר ה_כל"
 
-#: gtk/gtkentry.c:4236 gtk/gtktextview.c:6935
+#: gtk/gtkentry.c:4310 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "_שיטות קלט"
 
-#: gtk/gtkentry.c:4246 gtk/gtktextview.c:6946
+#: gtk/gtkentry.c:4320 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr "_הזן תו בקרה יוניקוד"
 
@@ -931,7 +939,7 @@ msgstr ""
 "לא ניתן להוסיף סימנייה ל %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5262
+#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5332
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -949,15 +957,15 @@ msgstr ""
 "לא ניתן לשנות את התיקייה הנוכחית ל %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1058 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1072 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "בית"
 
-#: gtk/gtkfilechooserdefault.c:1076 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1090 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "שולחן עבודה"
 
-#: gtk/gtkfilechooserdefault.c:1517
+#: gtk/gtkfilechooserdefault.c:1534
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -966,12 +974,12 @@ msgstr ""
 "לא ניתן ליצור תיקייה %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1700
+#: gtk/gtkfilechooserdefault.c:1717
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "לא ניתן להוסיף סימנייה ל %s כיוון שהוא לא תיקייה."
 
-#: gtk/gtkfilechooserdefault.c:1778
+#: gtk/gtkfilechooserdefault.c:1795
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -980,122 +988,122 @@ msgstr ""
 "לא ניתן להסיר את הסימנייה ל %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2372
+#: gtk/gtkfilechooserdefault.c:2387
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "לא ניתן להוסיף סימנייה ל %s כיוון שזהו שם נתיב לא תקני."
 
 # hebrew note: "תיקיה" is "folder", but there is no better word for
 # "directory"
-#: gtk/gtkfilechooserdefault.c:2563
+#: gtk/gtkfilechooserdefault.c:2578
 msgid "Folder"
 msgstr "תיקייה"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2610 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2625 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "_הוסף"
 
-#: gtk/gtkfilechooserdefault.c:2620 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2635 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_הסר"
 
-#: gtk/gtkfilechooserdefault.c:2699
+#: gtk/gtkfilechooserdefault.c:2714
 msgid "Show _Hidden Files"
 msgstr "הראה קבצים _מוסתרים"
 
-#: gtk/gtkfilechooserdefault.c:2811
+#: gtk/gtkfilechooserdefault.c:2855
 msgid "Name"
 msgstr "שם"
 
-#: gtk/gtkfilechooserdefault.c:2833
+#: gtk/gtkfilechooserdefault.c:2877
 msgid "Size"
 msgstr "גודל"
 
-#: gtk/gtkfilechooserdefault.c:2845
+#: gtk/gtkfilechooserdefault.c:2889
 msgid "Modified"
 msgstr "שונה"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2890
+#: gtk/gtkfilechooserdefault.c:2934
 msgid "Create Fo_lder"
 msgstr "צור _תיקייה"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3000
+#: gtk/gtkfilechooserdefault.c:3044
 msgid "_Name:"
 msgstr "_שם:"
 
-#: gtk/gtkfilechooserdefault.c:3042
+#: gtk/gtkfilechooserdefault.c:3086
 msgid "_Browse for other folders"
 msgstr "_דפדף לתיקיות אחרות"
 
-#: gtk/gtkfilechooserdefault.c:3279
+#: gtk/gtkfilechooserdefault.c:3323
 msgid "Save in _folder:"
 msgstr "שמור ב_תיקייה:"
 
-#: gtk/gtkfilechooserdefault.c:3281
+#: gtk/gtkfilechooserdefault.c:3325
 msgid "Create in _folder:"
 msgstr "צור ב_תיקייה:"
 
-#: gtk/gtkfilechooserdefault.c:3906
+#: gtk/gtkfilechooserdefault.c:3969
 msgid "Can't change to folder because it isn't local"
 msgstr "לא ניתן לשנות תיקייה כיוון שהיא איננה מקומית"
 
-#: gtk/gtkfilechooserdefault.c:4041
+#: gtk/gtkfilechooserdefault.c:4107
 msgid "Could not find the path"
 msgstr "לא ניתן למצוא את הנתיב"
 
-#: gtk/gtkfilechooserdefault.c:4389
+#: gtk/gtkfilechooserdefault.c:4458
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "הקיצור %s אינו קיים"
 
-#: gtk/gtkfilechooserdefault.c:5035
+#: gtk/gtkfilechooserdefault.c:5105
 msgid "Type name of new folder"
 msgstr "כתוב שם לתיקייה החדשה"
 
-#: gtk/gtkfilechooserdefault.c:5064
+#: gtk/gtkfilechooserdefault.c:5134
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "בית אחד"
 msgstr[1] "   בתים     %d"
 
-#: gtk/gtkfilechooserdefault.c:5066
+#: gtk/gtkfilechooserdefault.c:5136
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5068
+#: gtk/gtkfilechooserdefault.c:5138
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5070
+#: gtk/gtkfilechooserdefault.c:5140
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5115
+#: gtk/gtkfilechooserdefault.c:5185
 msgid "Today"
 msgstr "היום"
 
-#: gtk/gtkfilechooserdefault.c:5117
+#: gtk/gtkfilechooserdefault.c:5187
 msgid "Yesterday"
 msgstr "אתמול"
 
-#: gtk/gtkfilechooserdefault.c:5128
+#: gtk/gtkfilechooserdefault.c:5198
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: gtk/gtkfilechooserdefault.c:5223
+#: gtk/gtkfilechooserdefault.c:5293
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "לא ניתן לשנות לתיקייה שבחרת כיוון שיש לה נתיב לא תקני."
 
-#: gtk/gtkfilechooserdefault.c:5300
+#: gtk/gtkfilechooserdefault.c:5370
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1104,15 +1112,15 @@ msgstr ""
 "לא ניתן לבחור את %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5339
+#: gtk/gtkfilechooserdefault.c:5409
 msgid "Open Location"
 msgstr "פתח מיקום"
 
-#: gtk/gtkfilechooserdefault.c:5346
+#: gtk/gtkfilechooserdefault.c:5416
 msgid "Save in Location"
 msgstr "שמור במיקום"
 
-#: gtk/gtkfilechooserdefault.c:5365
+#: gtk/gtkfilechooserdefault.c:5435
 msgid "_Location:"
 msgstr "_מיקום:"
 
@@ -1169,7 +1177,8 @@ msgstr "_שנה שם קובץ"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "התיקייה בשם \"%s\" מכילה סמלים שאינם מותרים בשמות קבצים"
 
 #: gtk/gtkfilesel.c:1441
@@ -1300,52 +1309,54 @@ msgstr "שם ארוך מידי"
 msgid "Couldn't convert filename"
 msgstr "לא ניתן להמיר את שם הקובץ"
 
-#: gtk/gtkfilesystemmodel.c:1272
+#: gtk/gtkfilesystemmodel.c:1266
 msgid "(Empty)"
 msgstr "(ריק)"
 
-#: gtk/gtkfilesystemunix.c:418 gtk/gtkfilesystemwin32.c:386
+#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemwin32.c:386
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:425 gtk/gtkfilesystemunix.c:616
-#: gtk/gtkfilesystemunix.c:1741 gtk/gtkfilesystemwin32.c:393
-#: gtk/gtkfilesystemwin32.c:1357
+#: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:617
+#: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1357
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "שגיאה בקבלת מידע בעבור '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:489 gtk/gtkfilesystemwin32.c:434
+#: gtk/gtkfilesystemunix.c:490 gtk/gtkfilesystemwin32.c:434
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "שגיאה ביצירת התיקייה '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:569 gtk/gtkfilesystemwin32.c:494
+#: gtk/gtkfilesystemunix.c:570 gtk/gtkfilesystemwin32.c:494
 msgid "This file system does not support mounting"
 msgstr "מערכת הקבצים הזו אינה תומכת בחיבורים"
 
 # hebrew note: "תיקיה" is "folder", but there is no better word for
 # "directory"
-#: gtk/gtkfilesystemunix.c:577
+#: gtk/gtkfilesystemunix.c:578
 msgid "Filesystem"
 msgstr "מערכת קבצים"
 
-#: gtk/gtkfilesystemunix.c:778
+#: gtk/gtkfilesystemunix.c:731
+#, fuzzy, c-format
+msgid "Could not get a stock icon for %s"
+msgstr "לא ניתן לקבל מידע על הקובץ '%s': %s"
+
+#: gtk/gtkfilesystemunix.c:826
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr ""
-"השם \"%s\" אינו תקני מאחר והוא מכיל את התו \"%s\". "
-"אנא השתמש בשם אחר."
+msgstr "השם \"%s\" אינו תקני מאחר והוא מכיל את התו \"%s\". אנא השתמש בשם אחר."
 
-#: gtk/gtkfilesystemunix.c:1335 gtk/gtkfilesystemwin32.c:923
+#: gtk/gtkfilesystemunix.c:1434 gtk/gtkfilesystemwin32.c:923
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "שמירת סימנייה נכשלה (%s)"
 
-#: gtk/gtkfilesystemunix.c:1631
+#: gtk/gtkfilesystemunix.c:1730
 #, c-format
 msgid "error getting information for '%s'"
 msgstr "שגיאה בקבלת מידע בעבור '%s'"
@@ -1405,7 +1416,7 @@ msgstr "ערכי _גאמא"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1564
+#: gtk/gtkiconfactory.c:1572
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "שגיאה בטעינת סמל: %s"
@@ -1956,4 +1967,3 @@ msgstr "שיטת הקלט של X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "לא ניתן לקבל מידע על הקובץ '%s': %s"
-

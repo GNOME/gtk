@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-18 04:16+0200\n"
+"POT-Creation-Date: 2004-07-10 00:22-0400\n"
 "PO-Revision-Date: 2004-06-18 13:32+0200\n"
 "Last-Translator: Laszlo Dvornik <dvornik@invitel.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
@@ -32,8 +32,10 @@ msgstr "A(z) '%s' képfájl nem tartalmaz adatokat"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Nem sikerült betölteni a(z) '%s' képet: ok ismeretlen, talán sérült a képfájl"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Nem sikerült betölteni a(z) '%s' képet: ok ismeretlen, talán sérült a képfájl"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:239
 #, c-format
@@ -328,7 +330,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) '%d' érték nem "
 "megengedett."
@@ -428,7 +431,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Végzetes hiba a PNG képfájl olvasásakor: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:821
@@ -437,7 +441,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:994
@@ -890,15 +895,15 @@ msgstr "Színkerék"
 msgid "Color Selection"
 msgstr "Szín kiválasztása"
 
-#: gtk/gtkentry.c:4226 gtk/gtktextview.c:6925
+#: gtk/gtkentry.c:4300 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr "_Mindent kijelöl"
 
-#: gtk/gtkentry.c:4236 gtk/gtktextview.c:6935
+#: gtk/gtkentry.c:4310 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "Beviteli _módok"
 
-#: gtk/gtkentry.c:4246 gtk/gtktextview.c:6946
+#: gtk/gtkentry.c:4320 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode vezérlőkarakter _beszúrása"
 
@@ -926,7 +931,7 @@ msgstr ""
 "Nem adható könyvjelző ehhez: %s\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5262
+#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5332
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -944,15 +949,15 @@ msgstr ""
 "Nem lehet a jelenlegi mappát átváltani erre: %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1058 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1072 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "Saját mappa"
 
-#: gtk/gtkfilechooserdefault.c:1076 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1090 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "Munkaasztal"
 
-#: gtk/gtkfilechooserdefault.c:1517
+#: gtk/gtkfilechooserdefault.c:1534
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -961,12 +966,12 @@ msgstr ""
 "Nem lehet létrehozni a(z) %s mappát:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1700
+#: gtk/gtkfilechooserdefault.c:1717
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Nem lehet könyvjelzőt adni ehhez: %s, mivel ez nem mappa."
 
-#: gtk/gtkfilechooserdefault.c:1778
+#: gtk/gtkfilechooserdefault.c:1795
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -975,122 +980,122 @@ msgstr ""
 "Nem lehet eltávolítani a könyvjelzőt ehhez: %s\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2372
+#: gtk/gtkfilechooserdefault.c:2387
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "%s érvénytelen útvonalnév, nem hozható létre könyvjelző."
 
-#: gtk/gtkfilechooserdefault.c:2563
+#: gtk/gtkfilechooserdefault.c:2578
 msgid "Folder"
 msgstr "Mappa"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2610 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2625 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "Hozzá_adás"
 
-#: gtk/gtkfilechooserdefault.c:2620 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2635 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_Eltávolítás"
 
-#: gtk/gtkfilechooserdefault.c:2699
+#: gtk/gtkfilechooserdefault.c:2714
 msgid "Show _Hidden Files"
 msgstr "Re_jtett fájlok megjelenítése"
 
-#: gtk/gtkfilechooserdefault.c:2811
+#: gtk/gtkfilechooserdefault.c:2855
 msgid "Name"
 msgstr "Név"
 
-#: gtk/gtkfilechooserdefault.c:2833
+#: gtk/gtkfilechooserdefault.c:2877
 msgid "Size"
 msgstr "Méret"
 
-#: gtk/gtkfilechooserdefault.c:2845
+#: gtk/gtkfilechooserdefault.c:2889
 msgid "Modified"
 msgstr "Módosítva"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2890
+#: gtk/gtkfilechooserdefault.c:2934
 msgid "Create Fo_lder"
 msgstr "Mappa _létrehozása"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3000
+#: gtk/gtkfilechooserdefault.c:3044
 msgid "_Name:"
 msgstr "_Név:"
 
-#: gtk/gtkfilechooserdefault.c:3042
+#: gtk/gtkfilechooserdefault.c:3086
 msgid "_Browse for other folders"
 msgstr "Más mappák _tallózása"
 
-#: gtk/gtkfilechooserdefault.c:3279
+#: gtk/gtkfilechooserdefault.c:3323
 msgid "Save in _folder:"
 msgstr "Mentés _mappába:"
 
-#: gtk/gtkfilechooserdefault.c:3281
+#: gtk/gtkfilechooserdefault.c:3325
 msgid "Create in _folder:"
 msgstr "Létrehozás _mappában:"
 
-#: gtk/gtkfilechooserdefault.c:3906
+#: gtk/gtkfilechooserdefault.c:3969
 msgid "Can't change to folder because it isn't local"
 msgstr "Nem lehet megváltoztatni a mappát, mert az nem helyi"
 
-#: gtk/gtkfilechooserdefault.c:4041
+#: gtk/gtkfilechooserdefault.c:4107
 msgid "Could not find the path"
 msgstr "Az útvonal nem található"
 
-#: gtk/gtkfilechooserdefault.c:4389
+#: gtk/gtkfilechooserdefault.c:4458
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "%s gyorsbillentyű nem létezik"
 
-#: gtk/gtkfilechooserdefault.c:5035
+#: gtk/gtkfilechooserdefault.c:5105
 msgid "Type name of new folder"
 msgstr "Új mappa típusának neve"
 
-#: gtk/gtkfilechooserdefault.c:5064
+#: gtk/gtkfilechooserdefault.c:5134
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d bájt"
 msgstr[1] "%d bájt"
 
-#: gtk/gtkfilechooserdefault.c:5066
+#: gtk/gtkfilechooserdefault.c:5136
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5068
+#: gtk/gtkfilechooserdefault.c:5138
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5070
+#: gtk/gtkfilechooserdefault.c:5140
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5115
+#: gtk/gtkfilechooserdefault.c:5185
 msgid "Today"
 msgstr "Ma"
 
-#: gtk/gtkfilechooserdefault.c:5117
+#: gtk/gtkfilechooserdefault.c:5187
 msgid "Yesterday"
 msgstr "Tegnap"
 
-#: gtk/gtkfilechooserdefault.c:5128
+#: gtk/gtkfilechooserdefault.c:5198
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: gtk/gtkfilechooserdefault.c:5223
+#: gtk/gtkfilechooserdefault.c:5293
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Nem lehet az ön által megadott mappába lépni mivel az egy érvénytelen "
 "útvonal."
 
-#: gtk/gtkfilechooserdefault.c:5300
+#: gtk/gtkfilechooserdefault.c:5370
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1099,15 +1104,15 @@ msgstr ""
 "Nem lehet kijelölni a(z) %s-t:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5338
+#: gtk/gtkfilechooserdefault.c:5409
 msgid "Open Location"
 msgstr "Hely megnyitása"
 
-#: gtk/gtkfilechooserdefault.c:5344
+#: gtk/gtkfilechooserdefault.c:5416
 msgid "Save in Location"
 msgstr "Mentés helye"
 
-#: gtk/gtkfilechooserdefault.c:5362
+#: gtk/gtkfilechooserdefault.c:5435
 msgid "_Location:"
 msgstr "He_ly:"
 
@@ -1157,8 +1162,10 @@ msgstr "Fájl át_nevezése"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) \"%s\" mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"A(z) \"%s\" mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: gtk/gtkfilesel.c:1441
 #, c-format
@@ -1193,7 +1200,8 @@ msgstr "Lét_rehozás"
 #: gtk/gtkfilesel.c:1566
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) \"%s\" fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgstr ""
+"A(z) \"%s\" fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: gtk/gtkfilesel.c:1569
 #, c-format
@@ -1225,7 +1233,8 @@ msgstr "Fájl törlése"
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) \"%s\" fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgstr ""
+"A(z) \"%s\" fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: gtk/gtkfilesel.c:1676
 #, c-format
@@ -1288,48 +1297,52 @@ msgstr "Túl hosszú a név"
 msgid "Couldn't convert filename"
 msgstr "Nem lehet konvertálni a fájlnevet"
 
-#: gtk/gtkfilesystemmodel.c:1272
+#: gtk/gtkfilesystemmodel.c:1266
 msgid "(Empty)"
 msgstr "(Üres)"
 
-#: gtk/gtkfilesystemunix.c:418 gtk/gtkfilesystemwin32.c:386
+#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemwin32.c:386
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:425 gtk/gtkfilesystemunix.c:616
-#: gtk/gtkfilesystemunix.c:1734 gtk/gtkfilesystemwin32.c:393
-#: gtk/gtkfilesystemwin32.c:1357
+#: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:617
+#: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1357
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:489 gtk/gtkfilesystemwin32.c:434
+#: gtk/gtkfilesystemunix.c:490 gtk/gtkfilesystemwin32.c:434
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "hiba a(z) '%s' könyvtár létrehozásakor: %s"
 
-#: gtk/gtkfilesystemunix.c:569 gtk/gtkfilesystemwin32.c:494
+#: gtk/gtkfilesystemunix.c:570 gtk/gtkfilesystemwin32.c:494
 msgid "This file system does not support mounting"
 msgstr "A fájlrendszer nem támogatja a csatlakoztatást"
 
-#: gtk/gtkfilesystemunix.c:577
+#: gtk/gtkfilesystemunix.c:578
 msgid "Filesystem"
 msgstr "Fájlrendszer"
 
-#: gtk/gtkfilesystemunix.c:778
+#: gtk/gtkfilesystemunix.c:731
+#, fuzzy, c-format
+msgid "Could not get a stock icon for %s"
+msgstr "Nem lehet információt szerezni a(z) '%s' fájlról: %s"
+
+#: gtk/gtkfilesystemunix.c:826
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:1328 gtk/gtkfilesystemwin32.c:923
+#: gtk/gtkfilesystemunix.c:1434 gtk/gtkfilesystemwin32.c:923
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Sikertelen könyvjelzőmentés (%s)"
 
-#: gtk/gtkfilesystemunix.c:1624
+#: gtk/gtkfilesystemunix.c:1730
 #, c-format
 msgid "error getting information for '%s'"
 msgstr ""
@@ -1389,7 +1402,7 @@ msgstr "_Gamma érték"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1564
+#: gtk/gtkiconfactory.c:1572
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Hiba az ikon betöltésekor: %s"
