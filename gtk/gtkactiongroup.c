@@ -1067,7 +1067,7 @@ gtk_action_group_translate_string (GtkActionGroup *action_group,
   GtkTranslateFunc translate_func;
   gpointer translate_data;
 
-  g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+  g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), string);
 
   translate_func = action_group->private_data->translate_func;
   translate_data = action_group->private_data->translate_data;

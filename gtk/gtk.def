@@ -77,6 +77,7 @@ EXPORTS
 	gtk_action_group_set_translate_func
 	gtk_action_group_set_translation_domain
 	gtk_action_group_set_visible
+	gtk_action_group_translate_string
 	gtk_action_is_sensitive
 	gtk_action_is_visible
 	gtk_action_new
@@ -388,8 +389,11 @@ EXPORTS
 	gtk_combo_box_entry_set_text_column
 	gtk_combo_box_get_active
 	gtk_combo_box_get_active_iter
+	gtk_combo_box_get_column_span_column
 	gtk_combo_box_get_model
+	gtk_combo_box_get_row_span_column
 	gtk_combo_box_get_type
+	gtk_combo_box_get_wrap_width
 	gtk_combo_box_insert_text
 	gtk_combo_box_new
 	gtk_combo_box_new_text
@@ -2611,6 +2615,7 @@ EXPORTS
 	gtk_window_get_default_size
 	gtk_window_get_destroy_with_parent
 	gtk_window_get_focus
+	gtk_window_get_focus_on_map
 	gtk_window_get_frame_dimensions
 	gtk_window_get_gravity
 	gtk_window_get_has_frame
@@ -2660,6 +2665,7 @@ EXPORTS
 	gtk_window_set_default_size
 	gtk_window_set_destroy_with_parent
 	gtk_window_set_focus
+	gtk_window_set_focus_on_map
 	gtk_window_set_frame_dimensions
 	gtk_window_set_geometry_hints
 	gtk_window_set_gravity

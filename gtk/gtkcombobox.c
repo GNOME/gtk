@@ -3468,8 +3468,8 @@ gtk_combo_box_get_active_text (GtkComboBox *combo_box)
   GtkTreeIter iter;
   gchar *text = NULL;
 
-  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-  g_return_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model));
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
+  g_return_val_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model), NULL);
 
   if (gtk_combo_box_get_active_iter (combo_box, &iter))
     gtk_tree_model_get (combo_box->priv->model, &iter, 

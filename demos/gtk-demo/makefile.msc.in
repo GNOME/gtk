@@ -39,19 +39,23 @@ DEMOS = \
 	appwindow.c	\
 	button_box.c	\
 	colorsel.c	\
-	dialog.c	\
+	dialog.c		\
 	drawingarea.c	\
-	editable_cells.c \
-	images.c	\
-	item_factory.c	\
+	editable_cells.c	\
+	entry_completion.c	\
+	expander.c	\
+	hypertext.c	\
+	images.c		\
 	list_store.c	\
 	menus.c		\
 	panes.c		\
-	pixbufs.c	\
+	pixbufs.c		\
 	sizegroup.c	\
 	stock_browser.c	\
 	textview.c	\
 	tree_store.c	\
+	ui_manager.c	\
+
 
 demos.h: $(DEMOS) geninclude.pl
 	$(PERL) geninclude.pl $(DEMOS) > demos.h
@@ -59,12 +63,15 @@ demos.h: $(DEMOS) geninclude.pl
 OBJECTS = \
 	appwindow.obj	\
 	button_box.obj	\
+	changedisplay.obj	\
 	colorsel.obj	\
 	dialog.obj	\
 	drawingarea.obj	\
-	editable_cells.obj \
+	editable_cells.obj	\
+	entry_completion.obj	\
+	expander.obj	\
+	hypertext.obj	\
 	images.obj	\
-	item_factory.obj	\
 	list_store.obj	\
 	menus.obj		\
 	panes.obj		\
@@ -73,6 +80,7 @@ OBJECTS = \
 	stock_browser.obj	\
 	textview.obj	\
 	tree_store.obj	\
+	ui_manager.obj	\
 	main.obj \
 
 gtk-demo.exe : demos.h $(OBJECTS)

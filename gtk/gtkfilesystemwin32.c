@@ -1,6 +1,7 @@
 /* GTK - The GIMP Toolkit
  * gtkfilesystemwin32.c: Default implementation of GtkFileSystem for Windows
  * Copyright (C) 2003, Red Hat, Inc.
+ * Copyright (C) 2004, Hans Breuer
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -933,53 +934,91 @@ extract_icon (const char* filename)
   GdkPixbuf *pixbuf = NULL;
   WORD iicon;
   HICON hicon;
+  char filename_copy[MAX_PATH];
   
   if (!filename || !filename[0])
     return NULL;
 
-  hicon = ExtractAssociatedIcon (GetModuleHandle (NULL), filename, &iicon);
+  /* the ugly ExtractAssociatedIcon modifies filename in place - at least on win98 */
+  strcpy(filename_copy, filename);
+  hicon = ExtractAssociatedIcon (GetModuleHandle (NULL), filename_copy, &iicon);
   if (hicon > (HICON)1)
     {
       ICONINFO ii;
 
       if (GetIconInfo (hicon, &ii))
         {
-          SIZE   size;
-          GdkPixmap *pixmap;
-          GdkGC *gc;
-          HDC    hdc;
+	  struct
+	  {
+	    BITMAPINFOHEADER bi;
+	    RGBQUAD colors[2];
+	  } bmi;
+	  HDC hdc;
 
-          if (!GetBitmapDimensionEx (ii.hbmColor, &size))
-            g_warning ("GetBitmapDimensionEx failed.");
+	  memset (&bmi, 0, sizeof (bmi));
+	  bmi.bi.biSize = sizeof (bmi.bi);
+	  hdc = CreateCompatibleDC (NULL);
 
-	  if (size.cx < 1) size.cx = 32;
-	  if (size.cy < 1) size.cy = 32;
-	    
-          pixmap = gdk_pixmap_new (NULL, size.cx, size.cy, 
-	                           gdk_screen_get_system_visual (gdk_screen_get_default ())->depth);
-          gc = gdk_gc_new (pixmap);
-          hdc = gdk_win32_hdc_get (GDK_DRAWABLE (pixmap), gc, 0);
+          if (GetDIBits (hdc, ii.hbmColor, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
+	    {
+		gchar *pixels, *bits;
+		gint    rowstride, x, y, w = bmi.bi.biWidth, h = bmi.bi.biHeight;
 
-          if (!DrawIcon (hdc, 0, 0, hicon))
-            g_warning ("DrawIcon failed");
+		bmi.bi.biBitCount = 24;
+		bmi.bi.biCompression = BI_RGB;
+		bmi.bi.biHeight = -h;
+		pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
+		bits = g_malloc (4 * w * h);
 
-          gdk_win32_hdc_release (GDK_DRAWABLE (pixmap), gc, 0);
+		/* color data */
+		if (!GetDIBits (hdc, ii.hbmColor, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
+		  g_warning(G_STRLOC ": Failed to get dibits");
 
-          pixbuf = gdk_pixbuf_get_from_drawable (
-		     NULL, pixmap, 
-		     gdk_screen_get_system_colormap (gdk_screen_get_default ()),
-		     0, 0, 0, 0, size.cx, size.cy);
-          g_object_unref (pixmap);
-          g_object_unref (gc);
+		pixels = gdk_pixbuf_get_pixels (pixbuf);
+		rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+		for (y = 0; y < h; y++)
+		  {
+		    for (x = 0; x < w; x++)
+		      {
+			  pixels[2] = bits[(x+y*w) * 3];
+			  pixels[1] = bits[(x+y*w) * 3 + 1];
+			  pixels[0] = bits[(x+y*w) * 3 + 2];
+			  pixels += 4;
+		      }
+		    pixels += (w * 4 - rowstride);
+		  }
+		/* transparency */
+		if (!GetDIBits (hdc, ii.hbmMask, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS))
+		  g_warning(G_STRLOC ": Failed to get dibits");
+		pixels = gdk_pixbuf_get_pixels (pixbuf);
+		for (y = 0; y < h; y++)
+		  {
+		    for (x = 0; x < w; x++)
+		      {
+			  pixels[3] = 255 - bits[(x + y * w) * 3];
+			  pixels += 4;
+		      }
+		    pixels += (w * 4 - rowstride);
+		  }
+		
+		/* release temporary resources */
+		g_free (bits);
+		if (!DeleteObject (ii.hbmColor) || !DeleteObject (ii.hbmMask))
+		  g_warning(G_STRLOC ": Leaking Icon Bitmaps ?");
+	    }
+	  else
+	    g_warning(G_STRLOC ": GetDIBits () failed, %s", g_win32_error_message (GetLastError ()));
+
+	  DeleteDC (hdc);
         }
       else
-        g_print ("GetIconInfo failed: %s\n", g_win32_error_message (GetLastError ())); 
+        g_warning(G_STRLOC ": GetIconInfo failed: %s\n", g_win32_error_message (GetLastError ())); 
 
       if (!DestroyIcon (hicon))
-        g_warning ("DestroyIcon failed");
+        g_warning(G_STRLOC ": DestroyIcon failed");
     }
   else
-    g_print ("ExtractAssociatedIcon failed: %s\n", g_win32_error_message (GetLastError ()));
+    g_print ("ExtractAssociatedIcon(%s) failed: %s\n", filename, g_win32_error_message (GetLastError ()));
 
   return pixbuf;
 }
@@ -1048,7 +1087,7 @@ gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
         case DRIVE_CDROM :
           icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_CDROM);
           break;
-        case DRIVE_FIXED : /* need a hard disk icon */
+        case DRIVE_FIXED :
           icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HARDDISK);
           break;
         default :

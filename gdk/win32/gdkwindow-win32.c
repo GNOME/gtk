@@ -1,6 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 1998-2002 Tor Lillqvist
+ * Copyright (C) 1998-2004 Tor Lillqvist
+ * Copyright (C) 2001-2004 Hans Breuer
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -953,7 +954,8 @@ show_window_internal (GdkWindow *window,
 {
   GdkWindowObject *private;
   HWND old_active_window;
-  
+  gboolean focus_on_map = TRUE;
+
   private = (GdkWindowObject *) window;
 
   if (private->destroyed)
@@ -996,9 +998,12 @@ show_window_internal (GdkWindow *window,
   /* Other cases */
   
   if (!GDK_WINDOW_IS_MAPPED (window))
-    gdk_synthesize_window_state (window,
-				 GDK_WINDOW_STATE_WITHDRAWN,
-				 0);
+    {
+      gdk_synthesize_window_state (window,
+				   GDK_WINDOW_STATE_WITHDRAWN,
+				   0);
+      focus_on_map = private->focus_on_map;
+    }
 
   /* Use SetWindowPos to show transparent windows so automatic redraws
    * in other windows can be suppressed.
@@ -1008,7 +1013,7 @@ show_window_internal (GdkWindow *window,
       UINT flags = SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE;
       if (!raise)
 	flags |= SWP_NOZORDER;
-      if (!raise || GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
+      if (!raise || GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
 	flags |= SWP_NOACTIVATE;
 
       SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOP, 0, 0, 0, 0, flags);
@@ -1036,7 +1041,7 @@ show_window_internal (GdkWindow *window,
     ShowWindow (GDK_WINDOW_HWND (window), SW_MAXIMIZE);
   else if (private->state & GDK_WINDOW_STATE_ICONIFIED)
     ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
-  else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
+  else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
     ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
   else
     ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);

@@ -531,6 +531,7 @@ EXPORTS
 	gdk_window_set_debug_updates
 	gdk_window_set_decorations
 	gdk_window_set_events
+	gdk_window_set_focus_on_map
 	gdk_window_set_functions
 	gdk_window_set_geometry_hints
 	gdk_window_set_group
