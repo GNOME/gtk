@@ -2305,7 +2305,7 @@ xdnd_check_dest (Window win)
 	{
 	  if ((format == 32) && (nitems == 1))
 	    {
-	      if (*version == 3)
+	      if (*version >= 3)
 		retval = TRUE;
 	    }
 	  else

@@ -1,3 +1,12 @@
+Thu Dec  2 10:59:14 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdnd.c (xdnd_check_dest): Allow version >= 3,
+	not just version == 3. We implement all 3 + most of 4 - 
+	(we don't support matching text/plain;charset=iso-8859-1
+	to a dest that expects text/plain). We'll still advertise
+	3 to be safe, but any client implementing version >= 3
+	must interoperate with 3.
+	
 Tue Nov 16 10:15:54 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_parse_path):
