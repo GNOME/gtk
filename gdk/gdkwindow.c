@@ -55,7 +55,8 @@ int event_mask_table[19] =
 
 /* internal function created for and used by gdk_window_xid_at_coords */
 Window
-gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y)
+gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y, 
+		  GList *excludes, gboolean excl_child)
 {
    GdkWindow *window;
    GdkWindowPrivate *private;
@@ -79,11 +80,13 @@ gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y)
      {
 	for (i=num-1;;i--)
 	  {
-	     if ((child=gdk_window_xid_at(list[i],wx,wy,x,y))!=0)
+	     if ((!excl_child)||(!g_list_find(excludes,(gpointer *)list[i])))
 	       {
-		  printf("-> %x\n",child);
-		  XFree(list);
-		  return child;
+		  if ((child=gdk_window_xid_at(list[i],wx,wy,x,y,excludes,excl_child))!=0)
+		    {
+		       XFree(list);
+		       return child;
+		    }
 	       }
 	     if (!i) break;
 	  }
@@ -106,7 +109,7 @@ gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y)
  * those X,Y co-ordinates.
  */
 Window
-gdk_window_xid_at_coords(gint x, gint y, GList *excludes)
+gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_child)
 {
    GdkWindow *window;
    GdkWindowPrivate *private;
@@ -122,40 +125,31 @@ gdk_window_xid_at_coords(gint x, gint y, GList *excludes)
    root=private->xwindow;
    XGrabServer(disp);
    num=g_list_length(excludes);
-   printf("coords %i %i\n",x,y);
-   for(i=0;i<num;i++)
-     {
-	gl=g_list_nth(excludes,i);
-	printf("excludes %x\n",gl->data);
-     }
    if (!XQueryTree(disp,root,&root_win,&parent_win,&list,&num))
-     {
-	printf("Mouse in %x\n",root);
 	return root;
-     }
    if (list)
      {
 	for (i=num-1;;i--)
 	  {
-	     if ((child=gdk_window_xid_at(list[i],0,0,x,y))!=0)
+	     if ((!excl_child)||(!g_list_find(excludes,(gpointer *)list[i])))
 	       {
-		  printf("%x\n",child);
-		  if (excludes)
+		  if ((child=gdk_window_xid_at(list[i],0,0,x,y,excludes,excl_child))!=0)
 		    {
-		       if (!g_list_find(excludes,(gpointer)child))
+		       if (excludes)
+			 {
+			    if (!g_list_find(excludes,(gpointer *)child))
+			      {
+				 XFree(list);
+				 XUngrabServer(disp);
+				 return child;
+			      }
+			 }
+		       else
 			 {
 			    XFree(list);
 			    XUngrabServer(disp);
-			    printf("Mouse in %x\n",child);
 			    return child;
 			 }
-		    }
-		  else
-		    {
-		       XFree(list);
-		       XUngrabServer(disp);
-		       printf("Mouse in %x\n",child);
-		       return child;
 		    }
 	       }
 	     if (!i) break;
@@ -163,7 +157,6 @@ gdk_window_xid_at_coords(gint x, gint y, GList *excludes)
 	XFree(list);
      }
    XUngrabServer(disp);
-   printf("Mouse in %x\n",root);
    return root;
 }
 

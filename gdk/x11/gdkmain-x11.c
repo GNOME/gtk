@@ -2089,7 +2089,7 @@ gdk_event_translate (GdkEvent *event,
 #if 1
 	  curwin = gdk_window_xid_at_coords(xevent->xmotion.x_root,
 					    xevent->xmotion.y_root,
-					    gdk_dnd.c->xids);
+					    gdk_dnd.c->xids,TRUE);
 	  XTranslateCoordinates(gdk_display, gdk_root_window, curwin,
 				x, y, &x, &y, &childwin);
 #else
