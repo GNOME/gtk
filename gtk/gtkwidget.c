@@ -3730,21 +3730,27 @@ gtk_widget_reparent_subwindows (GtkWidget *widget,
     }
   else
    {
-     GdkWindow *parent = gdk_window_get_parent (widget->window);
+     GdkWindow *parent;
+     GList *tmp_list, *children;
 
-     GList *children = gdk_window_get_children (parent);
-     GList *tmp_list;
-     for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
+     parent = gdk_window_get_parent (widget->window);
+
+     if (parent)
        {
-	 GtkWidget *child;
-	 GdkWindow *window = tmp_list->data;
-
-	 gdk_window_get_user_data (window, (void **)&child);
-	 if (child == widget)
-	   gdk_window_reparent (window, new_window, 0, 0);
+	 children = gdk_window_get_children (parent);
+	 
+	 for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
+	   {
+	     GtkWidget *child;
+	     GdkWindow *window = tmp_list->data;
+	     
+	     gdk_window_get_user_data (window, (void **)&child);
+	     if (child == widget)
+	       gdk_window_reparent (window, new_window, 0, 0);
+	   }
+	 
+	 g_list_free (children);
        }
-
-      g_list_free (children);
    }
 }
 
