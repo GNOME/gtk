@@ -89,38 +89,76 @@
 
 
 /* Provide definitions for some commonly used macros.
- *  These are only provided if they haven't already
- *  been defined. It is assumed that if they are already
- *  defined then the current definition is correct.
  */
 
-#ifndef FALSE
-#define FALSE 0
-#endif /* FALSE */
-
-#ifndef TRUE
-#define TRUE 1
-#endif /* TRUE */
-
-#ifndef NULL
+#undef	NULL
 #define NULL ((void*) 0)
-#endif /* NULL */
 
-#ifndef MAX
+#undef	FALSE
+#define FALSE	0
+
+#undef	TRUE
+#define TRUE	1
+
+#undef	MAX
 #define MAX(a, b)  (((a) > (b)) ? (a) : (b))
-#endif /* MAX */
 
-#ifndef MIN
+#undef	MIN
 #define MIN(a, b)  (((a) < (b)) ? (a) : (b))
-#endif /* MIN */
 
-#ifndef ABS
+#undef	ABS
 #define ABS(a)	   (((a) < 0) ? -(a) : (a))
-#endif /* ABS */
 
-#ifndef CLAMP
+#undef	CLAMP
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
-#endif /* CLAMP */
+
+/* Provide simple macro statement wrappers (adapted from Pearl):
+ *  G_STMT_START { statements; } G_STMT_END;
+ *  can be used as a single statement, as in
+ *  if (x) G_STMT_START { ... } G_STMT_END; else ...
+ *
+ *  For gcc we will wrap the statements within `({' and `})' braces.
+ *  For SunOS they will be wrapped within `if (1)' and `else (void)0',
+ *  and otherwise within `do' and `while (0)'.
+ */
+#if !(defined (G_STMT_START) && defined (G_STMT_END))
+#  if defined (__GNUC__) && !defined (__STRICT_ANSI__) && !defined (__cplusplus)
+#    define G_STMT_START	(void)(
+#    define G_STMT_END		)
+#  else
+#    if (defined (sun) || defined (__sun__))
+#      define G_STMT_START	if (1)
+#      define G_STMT_END	else (void)0
+#    else
+#      define G_STMT_START	do
+#      define G_STMT_END	while (0)
+#    endif
+#  endif
+#endif
+
+/* Provide macros to feature the GCC printf format function attribute.
+ */
+#if	__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
+#define G_GNUC_PRINTF( format_idx, arg_idx )	\
+  __attribute__((format (printf, format_idx, arg_idx)))
+#define G_GNUC_SCANF( format_idx, arg_idx )	\
+  __attribute__((format (scanf, format_idx, arg_idx)))
+#else   /* !__GNUC__ */
+#define G_GNUC_PRINTF( format_idx, arg_idx )
+#define G_GNUC_SCANF( format_idx, arg_idx )
+#endif  /* !__GNUC__ */
+
+/* Wrap the __PRETTY_FUNCTION__ and __FUNCTION__ variables with macros,
+ * so we can refer to them as strings unconditionally.
+ */
+#ifdef  __GNUC__
+#define G_GNUC_FUNCTION         (__FUNCTION__)
+#define G_GNUC_PRETTY_FUNCTION  (__PRETTY_FUNCTION__)
+#else   /* !__GNUC__ */
+#define G_GNUC_FUNCTION         ("")
+#define G_GNUC_PRETTY_FUNCTION  ("")
+#endif  /* !__GNUC__ */
+
 
 #ifndef ATEXIT
 #  ifdef HAVE_ATEXIT
@@ -156,29 +194,6 @@
 #define g_string(x) #x
 
 
-/* Provide simple macro statement wrappers (adapted from Pearl):
- *  G_STMT_START { statements; } G_STMT_END;
- *  can be used as a single statement, as in
- *  if (x) G_STMT_START { ... } G_STMT_END; else ...
- *
- *  For gcc we will wrap the statements within `({' and `})' braces.
- *  For SunOS they will be wrapped within `if (1)' and `else (void)0',
- *  and otherwise within `do' and `while (0)'.
- */
-#if !(defined (G_STMT_START) && defined (G_STMT_END))
-#  if defined (__GNUC__) && !defined (__STRICT_ANSI__) && !defined (__cplusplus)
-#    define G_STMT_START	(void)(
-#    define G_STMT_END		)
-#  else
-#    if (defined (sun) || defined (__sun__))
-#      define G_STMT_START	if (1)
-#      define G_STMT_END	else (void)0
-#    else
-#      define G_STMT_START	do
-#      define G_STMT_END	while (0)
-#    endif
-#  endif
-#endif
 
 
 /* Provide macros for error handling. The "assert" macros will
@@ -285,17 +300,6 @@
 
 #endif /* G_DISABLE_CHECKS */
 
-/* Provide macros to feature the GCC printf format function attribute.
- */
-#if	__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
-#define G_GNUC_PRINTF( format_idx, arg_idx )	\
-  __attribute__((format (printf, format_idx, arg_idx)))
-#define G_GNUC_SCANF( format_idx, arg_idx )	\
-  __attribute__((format (scanf, format_idx, arg_idx)))
-#else   /* !__GNUC__ */
-#define G_GNUC_PRINTF( format_idx, arg_idx )
-#define G_GNUC_SCANF( format_idx, arg_idx )
-#endif  /* !__GNUC__ */
 
 
 #ifdef __cplusplus
@@ -966,7 +970,6 @@ struct	_GScanner
   guint			max_parse_errors;
   
   /* maintained/used by the g_scanner_*() functions */
-  GScannerMsgFunc	msg_handler;
   GScannerConfig	*config;
   GTokenType		token;
   GValue		value;
@@ -983,6 +986,8 @@ struct	_GScanner
   guint			text_len;
   gint			input_fd;
   gint			peeked_char;
+
+  GScannerMsgFunc	msg_handler;
 };
 
 GScanner*	g_scanner_new			(GScannerConfig *config_templ);

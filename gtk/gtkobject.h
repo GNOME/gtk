@@ -358,15 +358,15 @@ GtkObject* gtk_object_check_cast (GtkObject *obj,
 GtkObjectClass* gtk_object_check_class_cast (GtkObjectClass *klass,
 					     GtkType	     cast_type);
 
-void	gtk_trace_referencing	(gpointer    *object,
+void	gtk_trace_referencing	(GtkObject   *object,
 				 const gchar *func,
-				 guint	      local_frame,
+				 guint	      dummy,
 				 guint	      line,
 				 gboolean     do_ref);
 
-#if G_ENABLE_DEBUG && defined (__GNUC__)
-#  define gtk_object_ref(o)   G_STMT_START{static guint f=0;gtk_trace_referencing((gpointer)o,__PRETTY_FUNCTION__,++f,__LINE__, 1);f--;}G_STMT_END
-#  define gtk_object_unref(o) G_STMT_START{static guint f=0;gtk_trace_referencing((gpointer)o,__PRETTY_FUNCTION__,++f,__LINE__, 0);f--;}G_STMT_END
+#if G_ENABLE_DEBUG
+#  define gtk_object_ref(o)   G_STMT_START{gtk_trace_referencing((o),G_GNUC_PRETTY_FUNCTION,0,__LINE__,1);}G_STMT_END
+#  define gtk_object_unref(o) G_STMT_START{gtk_trace_referencing((o),G_GNUC_PRETTY_FUNCTION,0,__LINE__,0);}G_STMT_END
 #endif	/* G_ENABLE_DEBUG && __GNUC__ */
 
 

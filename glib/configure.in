@@ -52,7 +52,7 @@ AC_ARG_ENABLE(ansi, [  --enable-ansi           turn on strict ansi [default=no]]
 		    , enable_ansi=no)
 
 if test "x$enable_debug" = "xyes"; then
-  test "$cflags_set" = set || CFLAGS="-g"
+  test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
   CFLAGS="$CFLAGS -DG_ENABLE_DEBUG"
 else
   if test "x$enable_debug" = "xno"; then

@@ -1,3 +1,17 @@
+Mon May 11 09:53:43 1998  Tim Janik  <timj@gtk.org>
+
+	* configure.in: preserve automake CFLAGS.
+
+	* Makefile.am: fully rename the created library to libglib-1.1.la.
+	this means we need to change certain portions of the Makefile.am on
+	major/minor version bumps.
+
+	* ltmain.sh: the -release option is not required anymore.
+
+        * glib.h: provide G_GNUC_FUNCTION and G_GNUC_PRETTY_FUNCTION to
+	avoid conditionals. unconditionally define NULL, TRUE, FALSE, MAX,
+	MIN, ABS and CLAMP, these macros might be screwed from other headers.
+
 Mon May 11 01:44:10 1998  Tim Janik  <timj@gtk.org>
 
 	* gdataset.c: new file, gdatasets implement the object data

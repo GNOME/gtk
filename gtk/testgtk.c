@@ -3768,7 +3768,7 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
   for (i = num_pages + num_books; i > num_books; i--)
     {
       pages++;
-      sprintf (buf1, "Page %02d", random() % 100);
+      sprintf (buf1, "Page %02d", (gint) random() % 100);
       sprintf (buf2, "Item %d-%d", cur_depth, i);
       sibling = gtk_ctree_insert (ctree, parent, sibling, text, 5, pixmap3,
 				  mask3, NULL, NULL, TRUE, FALSE);
@@ -3780,7 +3780,7 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
   for (i = num_books; i > 0; i--)
     {
       books++;
-      sprintf (buf1, "Book %02d", random() % 100);
+      sprintf (buf1, "Book %02d", (gint) random() % 100);
       sprintf (buf2, "Item %d-%d", cur_depth, i);
       sibling = gtk_ctree_insert (ctree, parent, sibling, text, 5, pixmap1,
 				  mask1, pixmap2, mask2, FALSE, FALSE);

@@ -161,7 +161,6 @@ g_scanner_new (GScannerConfig	*config_templ)
   scanner->input_name = NULL;
   scanner->parse_errors	= 0;
   scanner->max_parse_errors = 0;
-  scanner->msg_handler = g_scanner_msg_handler;
   
   scanner->config = g_new0 (GScannerConfig, 1);
   
@@ -205,6 +204,8 @@ g_scanner_new (GScannerConfig	*config_templ)
   scanner->text_len = 0;
   scanner->input_fd = -1;
   scanner->peeked_char = -1;
+
+  scanner->msg_handler = g_scanner_msg_handler;
   
   return scanner;
 }
@@ -622,7 +623,7 @@ g_scanner_unexp_token (GScanner		*scanner,
   register guint	expected_string_len;
   register gchar	*message_prefix;
   register gboolean	print_unexp;
-  void (*msg_handler) (GScanner*, const gchar*, ...);
+  void (*msg_handler)   (GScanner*, const gchar*, ...);
   
   g_return_if_fail (scanner != NULL);
 

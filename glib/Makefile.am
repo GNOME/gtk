@@ -2,9 +2,9 @@
 
 configincludedir = $(pkglibdir)/include
 
-lib_LTLIBRARIES = libglib.la
+lib_LTLIBRARIES = libglib-1.1.la
 
-libglib_la_SOURCES = \
+libglib_1_1_la_SOURCES = \
 		garray.c	\
 		gcache.c	\
 		gdataset.c	\
@@ -26,12 +26,12 @@ include_HEADERS = \
 configinclude_DATA = \
 		glibconfig.h
 
-libglib_la_LDFLAGS = -postfix $(LT_RELEASE) -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
+libglib_1_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
 INCLUDES = -I$(top_srcdir)
 
 noinst_PROGRAMS = testglib
-testglib_LDADD = libglib.la
+testglib_LDADD = libglib-@LT_RELEASE@.la
 
 .PHONY: files release
 

@@ -75,10 +75,6 @@ extern GtkType gtk_type_builtins[];
 #define GTK_FUNDAMENTAL_TYPE(type)	 	((GtkFundamentalType) ((type) & 0xFF))
 #define GTK_TYPE_SEQNO(type)	 	((type) > 0xFF ? (type) >> 8 : (type))
 
-/* deprecated
- */
-#define GTK_TYPE_IS_A			gtk_type_is_a
-
 typedef struct _GtkArg	       GtkArg;
 typedef struct _GtkObject      GtkObject;   /* forward declaration of object type */
 typedef struct _GtkTypeInfo    GtkTypeInfo;
