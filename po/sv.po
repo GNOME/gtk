@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-07-06 21:51+0200\n"
-"PO-Revision-Date: 2002-07-06 21:52+0200\n"
+"POT-Creation-Date: 2002-07-17 10:43+0200\n"
+"PO-Revision-Date: 2002-07-17 10:44+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -428,7 +428,11 @@ msgstr "RAS-bilden har felaktig huvuddata"
 msgid "RAS image has unknown type"
 msgstr "RAS-bilden har okänd typ"
 
-#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#: gdk-pixbuf/io-ras.c:188
+msgid "unsupported RAS image variation"
+msgstr "RAS-bildvariationen stöds inte"
+
+#: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
 msgstr "Inte tillräckligt med minne för att läsa in RAS-bilden"
 
