@@ -1,3 +1,11 @@
+Tue Jan 29 17:16:17 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklayout.c: Patch from Jacob Berkman to fix problem
+	when the height/width of a layout was set before the
+	adjustments were added. (#66294)
+
+	* gtk/gtktreeview.c: Warning cleanups.
+
 Tue Jan 29 16:35:04 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkhandlebox.c (gtk_handle_box_motion): Small

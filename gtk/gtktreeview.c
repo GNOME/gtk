@@ -264,7 +264,6 @@ static gboolean validate_rows_handler    (GtkTreeView *tree_view);
 static gboolean presize_handler_callback (gpointer     data);
 static void     install_presize_handler  (GtkTreeView *tree_view);
 static void	gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view);
-static void	gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view);
 
 
 /* Internal functions */
@@ -3077,7 +3076,6 @@ static gboolean
 gtk_tree_view_leave_notify (GtkWidget        *widget,
 			    GdkEventCrossing *event)
 {
-  GtkWidget *search_dialog;
   GtkTreeView *tree_view;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
@@ -3225,8 +3223,6 @@ validate_visible_area (GtkTreeView *tree_view)
   gint y, height, offset;
   gboolean validated_area = FALSE;
   gboolean size_changed = FALSE;
-  gint height_above;
-  gint height_below;
   
   if (tree_view->priv->tree == NULL)
     return;
@@ -3492,21 +3488,6 @@ gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view)
   path = _gtk_tree_view_find_path (tree_view, tree, node);
   tree_view->priv->top_row = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
   gtk_tree_path_free (path);
-}
-
-static void
-gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
-{
-  GtkTreePath *path;
-  GtkRBTree *tree;
-  GtkRBNode *node;
-
-  path = gtk_tree_row_reference_get_path (tree_view->priv->top_row);
-  if (_gtk_tree_view_find_node (tree_view, path, &tree, &node) &&
-      tree != NULL)
-    {
-      
-    }
 }
 
 void
@@ -9255,7 +9236,7 @@ static void
 gtk_tree_view_search_dialog_destroy (GtkWidget   *search_dialog,
 				     GtkTreeView *tree_view)
 {
-  GtkEntry *entry = (GtkWidget *)(gtk_container_get_children (GTK_CONTAINER (search_dialog)))->data;
+  GtkEntry *entry = (GtkEntry *)(gtk_container_get_children (GTK_CONTAINER (search_dialog)))->data;
   gint *selected_iter;
 
   if (entry)
@@ -9264,7 +9245,7 @@ gtk_tree_view_search_dialog_destroy (GtkWidget   *search_dialog,
 
       focus_event.type = GDK_FOCUS_CHANGE;
       focus_event.in = FALSE;
-      gtk_widget_event (entry, (GdkEvent *) &focus_event);
+      gtk_widget_event (GTK_WIDGET (entry), (GdkEvent *) &focus_event);
     }
 
   /* remove data from tree_view */
