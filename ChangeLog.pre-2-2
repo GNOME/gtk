@@ -1,3 +1,11 @@
+Tue Jun  4 17:39:34 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: If we have xft .pc file, use that
+	when checking for Xft/Xrender. (Still need to separate
+	out HAVE_XFT, HAVE_RENDER)
+
+	* configure.in: Make sure Xft cflags come before X cflags.
+
 2002-06-04  Daniel Elstner  <daniel.elstner@gmx.net>
 
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render):
