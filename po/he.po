@@ -1,0 +1,286 @@
+# Hebrew Translation for GTK+ - תרגום עברי ל-
+# Copyright (C) 2000 Free Software Foundation, Inc.
+# Tzafrir Cohen <tzafrir@technion.ac.il>, 2000.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2000-07-26 16:26-0400\n"
+"PO-Revision-Date: 2000-07-26 HO:MI+ZONE\n"
+"Last-Translator: Tzafrir Cohen <tzafrir@technion.ac.il>\n"
+"Language-Team: LANGUAGE <he@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gtk/gtkcolorsel.c:1415
+msgid "Hue:"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1416
+msgid "Saturation:"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1417
+msgid "Value:"
+msgstr "ערך:"
+
+#: gtk/gtkcolorsel.c:1418
+msgid "Red:"
+msgstr "אדום:"
+
+#: gtk/gtkcolorsel.c:1419
+msgid "Green:"
+msgstr "אדום:"
+
+#: gtk/gtkcolorsel.c:1420
+msgid "Blue:"
+msgstr "כחול:"
+
+#: gtk/gtkcolorsel.c:1423
+msgid "Opacity:"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1438
+msgid "Hex Value:"
+msgstr "ערך הקס':"
+
+#: gtk/gtkcolorsel.c:1459
+msgid "Custom Palette"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1464
+msgid "Set Color"
+msgstr ""
+
+#. The OK button
+#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
+#: gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "אישור"
+
+#. The Cancel button
+#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
+#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
+#: gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "ביטול"
+
+#: gtk/gtkcolorseldialog.c:116
+msgid "Help"
+msgstr "עזרה"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:514
+msgid "Directories"
+msgstr "תיקיות"
+# hebrew note: "תיקיה" is "folder", but there is no better word for
+# "directory"
+
+#. The files clist
+#: gtk/gtkfilesel.c:534
+msgid "Files"
+msgstr "קבצים"
+
+#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "תיקיה לא קריאה: %s"
+
+#: gtk/gtkfilesel.c:637
+msgid "Create Dir"
+msgstr "יצירת תיקיה"
+
+#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
+msgid "Delete File"
+msgstr "מחיקת קובץ"
+
+#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
+msgid "Rename File"
+msgstr "שינוי שם קובץ"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:828
+msgid "Error"
+msgstr "שגיאה"
+
+#. close button
+#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
+msgid "Close"
+msgstr "סגירה"
+
+#: gtk/gtkfilesel.c:927
+msgid "Create Directory"
+msgstr "יצירת תיקיב"
+
+#: gtk/gtkfilesel.c:941
+msgid "Directory name:"
+msgstr "שם תיקיה:"
+
+#. buttons
+#: gtk/gtkfilesel.c:954
+msgid "Create"
+msgstr "יצירה"
+
+#. buttons
+#: gtk/gtkfilesel.c:1058
+msgid "Delete"
+msgstr "מחיקה"
+
+#. buttons
+#: gtk/gtkfilesel.c:1173
+msgid "Rename"
+msgstr "שינוי שם"
+
+#: gtk/gtkfilesel.c:1600
+msgid "Selection: "
+msgstr "בחירה:"
+
+#: gtk/gtkfontsel.c:189
+msgid "Family:"
+msgstr "משפחה:"
+
+#: gtk/gtkfontsel.c:194
+msgid "Style:"
+msgstr "סגנון:"
+
+#: gtk/gtkfontsel.c:199
+msgid "Size:"
+msgstr "גודל:"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:309
+msgid "Preview:"
+msgstr "מבט מקדים"
+
+#: gtk/gtkfontsel.c:959
+msgid "Apply"
+msgstr "יישום"
+
+#: gtk/gtkfontsel.c:981
+msgid "Font Selection"
+msgstr "בחירת גופן"
+
+#: gtk/gtkgamma.c:395
+msgid "Gamma"
+msgstr "גאמה"
+
+#: gtk/gtkgamma.c:402
+msgid "Gamma value"
+msgstr "ערכי גאמה"
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:185
+msgid "Input"
+msgstr "קלט"
+
+#: gtk/gtkinputdialog.c:193
+msgid "No input devices"
+msgstr "אין התקני קלט"
+
+#: gtk/gtkinputdialog.c:222
+msgid "Device:"
+msgstr "התקן:"
+
+#: gtk/gtkinputdialog.c:238
+msgid "Disabled"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:246
+msgid "Screen"
+msgstr "צג"
+
+#: gtk/gtkinputdialog.c:254
+msgid "Window"
+msgstr "חלון"
+
+#: gtk/gtkinputdialog.c:262
+msgid "Mode: "
+msgstr "מצב:"
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:292
+msgid "Axes"
+msgstr "צירים"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:308
+msgid "Keys"
+msgstr "מקשים"
+# hebrew note: note that "key" has a different meaning - "מפתח"
+
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:329
+msgid "Save"
+msgstr "שמירה"
+
+#: gtk/gtkinputdialog.c:471
+msgid "X"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:472
+msgid "Y"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:473
+msgid "Pressure"
+msgstr "לחץ"
+
+#: gtk/gtkinputdialog.c:474
+msgid "X Tilt"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:475
+msgid "Y Tilt"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:476
+msgid "Wheel"
+msgstr "גלגל"
+
+#: gtk/gtkinputdialog.c:516
+msgid "none"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
+msgid "(disabled)"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:579
+msgid "(unknown)"
+msgstr "(לא ידוע)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:664
+msgid "clear"
+msgstr ""
+
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#, c-format
+msgid "Page %u"
+msgstr "דף %u"
+
+#: gtk/gtkrc.c:1875
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr "לא מצליח לאתר את קובץ התמונה ב-pixmap_path: \"%s\" שורה %d"
+
+#: gtk/gtkrc.c:1878
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "לא מצליח לאתר את קובץ התמונה ב-pixmap_path: \"%s\""
+
+#: gtk/gtkthemes.c:103
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "לא מצליח לאתר את המודול הנטען ב-module_path: \"%s\","
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "--- אין טיפ ---"
