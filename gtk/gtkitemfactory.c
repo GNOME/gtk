@@ -684,6 +684,9 @@ gtk_item_factory_finalize (GtkObject		  *object)
   g_free (ifactory->path);
   g_assert (ifactory->widget == NULL);
 
+  if (ifactory->translate_data && ifactory->translate_notify)
+    ifactory->translate_notify (ifactory->translate_data);
+  
   parent_class->finalize (object);
 }
 
@@ -893,11 +896,13 @@ gtk_item_factory_get_widget_by_action (GtkItemFactory   *ifactory,
 }
 
 static gboolean
-gtk_item_factory_parse_path (gchar  *str,
-			     gchar **path,
-			     gchar **parent_path,
-			     gchar **item)
+gtk_item_factory_parse_path (GtkItemFactory *ifactory,
+			     gchar          *str,
+			     gchar         **path,
+			     gchar         **parent_path,
+			     gchar         **item)
 {
+  gchar *translation;
   gchar *p, *q;
 
   *path = g_strdup (str);
@@ -922,7 +927,12 @@ gtk_item_factory_parse_path (gchar  *str,
     }
   *p = 0;
 
-  p = strrchr (str, '/');
+  if (ifactory->translate_func)
+    translation = ifactory->translate_func (str, ifactory->translate_data);
+  else
+    translation = str;
+			      
+  p = strrchr (translation, '/');
   p++;
 
   *item = g_strdup (p);
@@ -1006,7 +1016,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 	}
     }
 
-  if (!gtk_item_factory_parse_path (entry->path, 
+  if (!gtk_item_factory_parse_path (ifactory, entry->path, 
 				    &path, &parent_path, &name))
     return;
 
@@ -1598,4 +1608,20 @@ gtk_item_factory_parse_rc (const gchar	  *file_name)
   g_scanner_destroy (scanner);
 
   close (fd);
+}
+
+void
+gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,
+				     GtkTranslateFunc     func,
+				     gpointer             data,
+				     GtkDestroyNotify     notify)
+{
+  g_return_if_fail (ifactory != NULL);
+  
+  if (ifactory->translate_data && ifactory->translate_notify)
+    ifactory->translate_notify (ifactory->translate_data);
+      
+  ifactory->translate_func = func;
+  ifactory->translate_data = data;
+  ifactory->translate_notify = notify;
 }

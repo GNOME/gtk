@@ -16,6 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+#include <X11/Xlocale.h>	/* so we get the right setlocale */
 #include <ctype.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -24,6 +25,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "gtkrc.h"
 #include "gtkbindings.h"
 #include "gtkthemes.h"
@@ -333,11 +335,12 @@ gtk_rc_add_initial_default_files (void)
 	  gtk_rc_add_default_file (files[i]);
 	  i++;
 	}
+      g_strfreev (files);
     }
   else
     {
-      str = g_malloc (strlen(GTK_SYSCONFDIR) + strlen("/gtkrc") + 1);
-      sprintf (str, "%s%s", GTK_SYSCONFDIR, "/gtkrc");
+      str = g_malloc (strlen(GTK_SYSCONFDIR) + strlen("/gtk/gtkrc") + 1);
+      sprintf (str, "%s%s", GTK_SYSCONFDIR, "/gtk/gtkrc");
       gtk_rc_add_default_file (str);
 
       var = g_get_home_dir ();
@@ -398,7 +401,12 @@ gtk_rc_get_default_files (void)
 void
 gtk_rc_init (void)
 {
-  guint i;
+  gchar *locale_suffixes[3];
+  gint n_locale_suffixes = 0;
+  gint i, j;
+  char *locale = setlocale (LC_MESSAGES, NULL);
+  guint length;
+  char *p;
 
   rc_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_style_hash,
 				  (GCompareFunc) gtk_rc_style_compare);
@@ -409,13 +417,50 @@ gtk_rc_init (void)
 
   gtk_rc_add_initial_default_files ();
 
+  if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
+    {
+      /* Determine locale-specific suffixes for RC files
+       */
+      p = strchr (locale, '@');
+      length = p ? (p -locale) : strlen (locale);
+      
+      p = strchr (locale, '.');
+      if (p)
+	{
+	  locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+	  length = p - locale;
+	}
+      
+      p = strchr (locale, '_');
+      if (p)
+	{
+	  locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+	  length = p - locale;
+	}
+
+      locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+    }
+  
   i = 0;
   while (gtk_rc_default_files[i] != NULL)
     {
+      /* Try to find a locale specific RC file corresponding to
+       * to parse before the default file.
+       */
+      for (j=n_locale_suffixes-1; j>=0; j--)
+	{
+	  struct stat statbuf;
+	  gchar *name = g_strconcat (gtk_rc_default_files[i],
+				     ".",
+				     locale_suffixes[j],
+				     NULL);
+	  gtk_rc_parse (name);
+	}
+
       gtk_rc_parse (gtk_rc_default_files[i]);
       i++;
     }
-}
+ }
 
 void
 gtk_rc_parse_string (const gchar *rc_string)

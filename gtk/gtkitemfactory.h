@@ -35,6 +35,8 @@ extern "C" {
 
 typedef void	(*GtkPrintFunc)		   (gpointer		 func_data,
 					    gchar		*str);
+typedef gchar * (*GtkTranslateFunc)	   (const gchar		*path,
+					    gpointer             func_data);
 typedef	void	(*GtkItemFactoryCallback)  ();
 typedef	void	(*GtkItemFactoryCallback1) (gpointer		 callback_data,
 					    guint		 callback_action,
@@ -63,6 +65,10 @@ struct _GtkItemFactory
   GtkAccelGroup		*accel_group;
   GtkWidget		*widget;
   GSList		*widgets_by_action;
+
+  GtkTranslateFunc       translate_func;
+  gpointer               translate_data;
+  GtkDestroyNotify       translate_notify;   
 };
 
 struct _GtkItemFactoryClass
@@ -185,6 +191,10 @@ void	gtk_item_factory_popup_with_data(GtkItemFactory		*ifactory,
 					 guint32		 time);
 gpointer gtk_item_factory_popup_data	(GtkItemFactory		*ifactory);
 gpointer gtk_item_factory_popup_data_from_widget (GtkWidget	*widget);
+void   gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,
+					    GtkTranslateFunc     func,
+					    gpointer             data,
+					    GtkDestroyNotify     notify);
 
 /* Compatibility functions for deprecated GtkMenuFactory code
  */

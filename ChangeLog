@@ -1,3 +1,18 @@
+Mon Dec 14 16:10:05 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_init): Append locale-specific
+	suffixes to default rc file names, and look these
+	up in addition to the base filename, to facilitate
+	having the correct fontset per-locale.
+
+	move $(sysconfdir)/gtkrc to $(sysconfdir)/gtk/gtkrc
+
+	* gtk/gtkitemfactory.[ch] (gtk_item_factory_set_translate_func):
+	New function to set a function to translate menu paths.
+
+	* gtk/gtkrc.c (gtk_rc_add_initial_default_files): Free
+	results of g_strsplit().
+
 1998-12-14  Nuno Ferreira  <nmrf@rnl.ist.utl.pt>
 
 	* configure.in (ALL_LINGUAS): Added 'pt'.
