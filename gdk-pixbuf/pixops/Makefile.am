@@ -29,6 +29,4 @@ libpixops_la_SOURCES =  		\
 
 EXTRA_DIST =				\
 	DETAILS				\
-	makefile.mingw			\
-	makefile.mingw.in			\
 	makefile.msc
