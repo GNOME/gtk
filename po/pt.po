@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
-"POT-Creation-Date: 2002-05-23 17:08-0400\n"
-"PO-Revision-Date: 2002-04-01 23:40+0000\n"
+"POT-Creation-Date: 2002-05-28 02:36+0100\n"
+"PO-Revision-Date: 2002-05-28 02:40+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -560,7 +560,7 @@ msgstr "Largura ou altura de imagem TIFF é zero"
 
 #: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
 msgid "Dimensions of TIFF image too large"
-msgstr ""
+msgstr "Dimensões da imagem TIFF demasiado grandes"
 
 #: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
 msgid "Insufficient memory to open TIFF file"
@@ -1811,13 +1811,13 @@ msgid "Folder unreadable: %s"
 msgstr "Pasta ilegível: %s"
 
 #: gtk/gtkfilesel.c:946
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"O ficheiro \"%s\" emcontra-se noutra máquia (chamada %s) e poderá não estar "
+"O ficheiro \"%s\" encontra-se noutra máquina (chamada %s) e poderá não estar "
 "disponível para esta aplicação.\n"
 "Tem a certeza que o deseja seleccionar?"
 
@@ -4260,9 +4260,8 @@ msgid "Composite child"
 msgstr "Filho composto"
 
 #: gtk/gtkwidget.c:480
-#, fuzzy
 msgid "Whether the widget is part of a composite widget"
-msgstr "Se o widget é ou não composto por outros widgets"
+msgstr "Se o widget é ou não parte de um widget composto"
 
 #: gtk/gtkwidget.c:486
 msgid "Style"
