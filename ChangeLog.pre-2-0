@@ -1,3 +1,8 @@
+Fri Jun  4 00:08:59 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* TODO: Added entry about menu keyboard navigation, removed
+	some finished items.
+
 Tue Jun  1 23:38:38 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c: Removed ill-thought-out part of last
@@ -27,7 +32,7 @@ Tue Jun  1 23:30:09 1999  Owen Taylor  <otaylor@redhat.com>
 	
 Mon May 31 00:11:24 1999  Owen Taylor  <otaylor@redhat.com>
 
-	* acinclude.m4 (LIBM): Standardize on func_dgettext
+	* acinclude.m4: Standardize on func_dgettext
 	not func_gettext, so that the checks for dgettext
 	actually are paid attention to.
 
