@@ -3719,8 +3719,8 @@ gtk_text_view_paint (GtkWidget      *widget,
   
   if (!text_view->onscreen_validated)
     {
+      g_warning (G_STRLOC ": somehow some text lines were modified or scrolling occurred since the last validation of lines on the screen - this is a known bug, no need to report.");
       G_BREAKPOINT ();
-      g_warning (G_STRLOC ": somehow some text lines were modified or scrolling occurred since the last validation of lines on the screen");
     }
   
 #if 0

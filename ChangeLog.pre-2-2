@@ -1,3 +1,14 @@
+2001-11-28  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_paint): put the warning
+	explaining the validation error in front of the G_BREAKPOINT
+
+	* gtk/gtkrange.c (gtk_range_adjustment_value_changed): call
+	process updates with include_children = FALSE instead of TRUE, so
+	we redraw the range only, not the whole darn window.  Making
+	GtkRange a NO_WINDOW widget had weirdly caused the text widget
+	Trace/breakpoint trap bug to become much easier to trigger.
+
 Wed Nov 28 14:12:03 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/Makefile.am (gdk_public_h_sources): Remove reference

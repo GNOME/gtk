@@ -1446,7 +1446,7 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
   gtk_widget_queue_draw (GTK_WIDGET (range));
   /* This is so we don't lag the widget being scrolled. */
   if (GTK_WIDGET_REALIZED (range))
-    gdk_window_process_updates (GTK_WIDGET (range)->window, TRUE);
+    gdk_window_process_updates (GTK_WIDGET (range)->window, FALSE);
   
   /* Note that we don't round off to range->round_digits here.
    * that's because it's really broken to change a value
