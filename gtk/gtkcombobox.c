@@ -761,7 +761,7 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
 
           combo_box->priv->popup_frame = gtk_frame_new (NULL);
           gtk_frame_set_shadow_type (GTK_FRAME (combo_box->priv->popup_frame),
-                                     GTK_SHADOW_NONE);
+                                     GTK_SHADOW_ETCHED_IN);
           gtk_container_add (GTK_CONTAINER (combo_box->priv->popup_window),
                              combo_box->priv->popup_frame);
 
@@ -821,11 +821,13 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
   GdkScreen *screen;
   gint monitor_num;
   GdkRectangle monitor;
+  GtkRequisition popup_req;
   
   sample = GTK_BIN (combo_box)->child;
 
   *width = sample->allocation.width;
-  *height = sample->allocation.height;
+  gtk_widget_size_request (combo_box->priv->popup_window, &popup_req);
+  *height = popup_req.height;
 
   gdk_window_get_origin (sample->window, x, y);
 
@@ -852,6 +854,11 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
     *x = monitor.x;
   else if (*x + *width > monitor.x + monitor.width)
     *x = monitor.x + monitor.width - *width;
+  
+  if (*y + sample->allocation.height + *height <= monitor.y + monitor.height)
+    *y += sample->allocation.height;
+  else
+    *y -= *height;
 } 
 
 /**
@@ -894,13 +901,14 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
       return;
     }
 
+  gtk_widget_show_all (combo_box->priv->popup_frame);
   gtk_combo_box_list_position (combo_box, &x, &y, &width, &height);
 
   gtk_widget_set_size_request (combo_box->priv->popup_window, width, -1);  
-  gtk_window_move (GTK_WINDOW (combo_box->priv->popup_window), x, y + height);
+  gtk_window_move (GTK_WINDOW (combo_box->priv->popup_window), x, y);
 
   /* popup */
-  gtk_widget_show_all (combo_box->priv->popup_window);
+  gtk_widget_show (combo_box->priv->popup_window);
 
   gtk_widget_grab_focus (combo_box->priv->popup_window);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (combo_box->priv->button),

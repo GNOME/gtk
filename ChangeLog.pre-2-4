@@ -1,3 +1,19 @@
+Tue Mar  2 19:54:53 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_list_position): Position
+	the popup above the sample if there is not enough room below.
+	Part of #135543.
+
+Tue Mar  2 19:53:36 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_popup_widget): Make the 
+	frame for the list mode etched in, to give the popup a slightly
+	less flat appearance. 
+
+Tue Mar  2 17:55:31 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk.def: Add gtk_combo_box_entry_new_text().  
+
 2004-03-02  Morten Welinder  <terra@gnome.org>
 
 	* tests/testfilechooser.c (size_prepared_cb): Don't scale images
