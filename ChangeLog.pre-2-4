@@ -1,3 +1,8 @@
+Fri Feb 20 16:44:57 GMT 1998 Tony Gale <gale@gimp.org>
+
+	* docs/gtkfaq.sgml: added to list of GTK apps, added permissions notice
+		new GDK section - needs some Q&A's added
+
 Fri Feb 20 06:40:00 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtktipsquery.h: 
