@@ -61,8 +61,6 @@ static void  gtk_type_init_builtin_types	(void);
 static GtkTypeNode *type_nodes = NULL;
 static guint        n_type_nodes = 0;
 static GHashTable  *type_name_2_type_ht = NULL;
-static const gchar *key_enum_vals = "gtk-type-enum-values";
-static guint        key_id_enum_vals = 0;
 
 
 static GtkTypeNode*
@@ -518,46 +516,6 @@ gtk_arg_copy (GtkArg         *src_arg,
   return dest_arg;
 }
 
-GtkEnumValue*
-gtk_type_enum_get_values (GtkType      enum_type)
-{
-  if (gtk_type_is_a (enum_type, GTK_TYPE_ENUM) ||
-      gtk_type_is_a (enum_type, GTK_TYPE_FLAGS))
-    return g_dataset_id_get_data (gtk_type_name (enum_type), key_id_enum_vals);
-
-  g_warning ("gtk_type_enum_get_values(): type `%s' is not derived from `enum' or `flags'",
-	     gtk_type_name (enum_type));
-
-  return NULL;
-}
-
-void
-gtk_type_enum_set_values (GtkType       enum_type,
-			  GtkEnumValue *values)
-{
-  if (!key_id_enum_vals)
-    key_id_enum_vals = g_dataset_force_id (key_enum_vals);
-    
-  if (gtk_type_is_a (enum_type, GTK_TYPE_ENUM) ||
-      gtk_type_is_a (enum_type, GTK_TYPE_FLAGS))
-    {
-      gchar *type_name;
-
-      type_name = gtk_type_name (enum_type);
-      if (g_dataset_id_get_data (type_name, key_id_enum_vals))
-	g_warning ("gtk_type_enum_set_values(): enum values for `%s' are already set",
-		   type_name);
-      else
-	g_dataset_id_set_data (type_name,
-			       key_id_enum_vals,
-			       values);
-      return;
-    }
-
-  g_warning ("gtk_type_enum_set_values(): type `%s' is not derived from `enum' or `flags'",
-	     gtk_type_name (enum_type));
-}
-
 static void
 gtk_type_class_init (GtkTypeNode *node)
 {
@@ -592,10 +550,120 @@ gtk_type_class_init (GtkTypeNode *node)
 	  object_class->nsignals = 0;
 	  object_class->n_args = 0;
 	}
-      
+
+      /* class_init_func is used as data pointer for
+       * class_size==0 types
+       */
       if (node->type_info.class_init_func)
 	(* node->type_info.class_init_func) (node->klass);
     }
+}
+
+GtkEnumValue*
+gtk_type_enum_get_values (GtkType      enum_type)
+{
+  if (GTK_FUNDAMENTAL_TYPE (enum_type) == GTK_TYPE_ENUM ||
+      GTK_FUNDAMENTAL_TYPE (enum_type) == GTK_TYPE_FLAGS)
+    {
+      GtkTypeNode *node;
+
+      LOOKUP_TYPE_NODE (node, enum_type);
+      if (node)
+	return (GtkEnumValue*) node->type_info.class_init_func;
+    }
+
+  g_warning ("gtk_type_enum_get_values(): type `%s' is not derived from `enum' or `flags'",
+	     gtk_type_name (enum_type));
+
+  return NULL;
+}
+
+GtkFlagValue*
+gtk_type_flags_get_values (GtkType        flags_type)
+{
+  return gtk_type_enum_get_values (flags_type);
+}
+
+static inline GtkType
+gtk_type_register_intern (gchar        *name,
+			  GtkType       parent,
+			  GtkEnumValue *values)
+{
+  GtkType type_id;
+  GtkTypeInfo info;
+
+  info.type_name = name;
+  info.object_size = 0;
+  info.class_size = 0;
+  info.class_init_func = (void*) values;
+  info.object_init_func = NULL;
+  info.arg_set_func = NULL;
+  info.arg_get_func = NULL;
+
+  /* relookup pointers afterwards.
+   */
+  type_id = gtk_type_create (parent, name, &info);
+
+  if (type_id && values)
+    {
+      guint i;
+
+      /* check for proper type consistency and NULL termination
+       * of value array
+       */
+      g_assert (GTK_FUNDAMENTAL_TYPE (type_id) == GTK_TYPE_ENUM ||
+		GTK_FUNDAMENTAL_TYPE (type_id) == GTK_TYPE_FLAGS);
+
+      i = 0;
+      while (values[i].value_name)
+	i++;
+
+      g_assert (values[i].value_name == NULL && values[i].value_nick == NULL);
+    }
+
+  return type_id;
+}
+
+GtkType
+gtk_type_register_enum (const gchar    *type_name,
+			GtkEnumValue   *values)
+{
+  GtkType type_id;
+  gchar *name;
+
+  g_return_val_if_fail (type_name != NULL, 0);
+
+  name = g_strdup (type_name);
+
+  /* relookup pointers afterwards.
+   */
+  type_id = gtk_type_register_intern (name, GTK_TYPE_ENUM, values);
+
+  if (!type_id)
+    g_free (name);
+
+  return type_id;
+}
+
+GtkType
+gtk_type_register_flags (const gchar    *type_name,
+			 GtkFlagValue   *values)
+{
+  GtkType type_id;
+  gchar *name;
+
+  g_return_val_if_fail (type_name != NULL, 0);
+
+  name = g_strdup (type_name);
+
+  /* relookup pointers afterwards.
+   */
+  type_id = gtk_type_register_intern (name, GTK_TYPE_FLAGS, values);
+
+  if (!type_id)
+    g_free (name);
+
+  return type_id;
 }
 
 static guint
@@ -615,22 +683,6 @@ gtk_type_name_compare (const char *a,
 		       const char *b)
 {
   return (strcmp (a, b) == 0);
-}
-
-static inline GtkType
-gtk_type_register_builtin (gchar   *name,
-			   GtkType parent)
-{
-  GtkTypeInfo info;
-
-  info.type_name = name;
-  info.object_size = info.class_size = 0;
-  info.class_init_func = NULL;
-  info.object_init_func = NULL;
-  info.arg_set_func = NULL;
-  info.arg_get_func = NULL;
-
-  return gtk_type_create (parent, name, &info);
 }
 
 extern void gtk_object_init_type (void);
@@ -690,8 +742,9 @@ gtk_type_init_builtin_types (void)
     {
       GtkType type_id;
 
-      type_id = gtk_type_register_builtin (fundamental_info[i].name,
-				      GTK_TYPE_INVALID);
+      /* relookup pointers afterwards.
+       */
+      type_id = gtk_type_register_intern (fundamental_info[i].name, GTK_TYPE_INVALID, NULL);
 
       g_assert (type_id == fundamental_info[i].type_id);
     }
@@ -704,20 +757,14 @@ gtk_type_init_builtin_types (void)
 
       g_assert (builtin_info[i].type_name != NULL);
 
-      type_id =
-	gtk_type_register_builtin (builtin_info[i].type_name,
-				   builtin_info[i].parent);
+      /* relookup pointers afterwards.
+       */
+      type_id = gtk_type_register_intern (builtin_info[i].type_name,
+					  builtin_info[i].parent,
+					  builtin_info[i].values);
 
       g_assert (type_id != GTK_TYPE_INVALID);
 
       (*builtin_info[i].type_id) = type_id;
-
-      if (builtin_info[i].values)
-	{
-	  g_assert (gtk_type_is_a (type_id, GTK_TYPE_ENUM) ||
-		    gtk_type_is_a (type_id, GTK_TYPE_FLAGS));
-
-	  gtk_type_enum_set_values (type_id, builtin_info[i].values);
-	}
     }
 }

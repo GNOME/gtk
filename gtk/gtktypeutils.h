@@ -187,37 +187,40 @@ struct _GtkEnumValue
 };
 
 
-void	 gtk_type_init		    (void);
-GtkType	 gtk_type_unique	    (guint	  parent_type,
-				     GtkTypeInfo *type_info);
-void	 gtk_type_set_chunk_alloc   (GtkType	  type,
-				     guint        n_chunks);
-gchar*	 gtk_type_name		    (guint	  type);
-GtkType	 gtk_type_from_name	    (const gchar *name);
-GtkType	 gtk_type_parent	    (GtkType	  type);
-gpointer gtk_type_class		    (GtkType	  type);
-gpointer gtk_type_parent_class	    (GtkType	  type);
-gpointer gtk_type_new		    (GtkType	  type);
-void	 gtk_type_free		    (GtkType	  type,
-				     gpointer     mem);
-void	 gtk_type_describe_heritage (GtkType	  type);
-void	 gtk_type_describe_tree	    (GtkType	  type,
-				     gint	  show_size);
-gint	 gtk_type_is_a		    (GtkType	  type,
-				     GtkType	  is_a_type);
-void	 gtk_type_get_arg	    (GtkObject	 *object,
-				     GtkType	  type,
-				     GtkArg	 *arg,
-				     guint	  arg_id);
-void	 gtk_type_set_arg	    (GtkObject	 *object,
-				     GtkType	  type,
-				     GtkArg	 *arg,
-				     guint	  arg_id);
-GtkArg*	 gtk_arg_copy		    (GtkArg	 *src_arg,
-				     GtkArg	 *dest_arg);
-GtkEnumValue *gtk_type_enum_get_values   (GtkType	  enum_type);
-void	      gtk_type_enum_set_values   (GtkType	  enum_type,
-					  GtkEnumValue   *values);
+void		gtk_type_init		    	(void);
+GtkType		gtk_type_unique	    		(GtkType	 parent_type,
+						 GtkTypeInfo	*type_info);
+void		gtk_type_set_chunk_alloc   	(GtkType	 type,
+						 guint		 n_chunks);
+gchar*		gtk_type_name		    	(guint		 type);
+GtkType		gtk_type_from_name	    	(const gchar	*name);
+GtkType		gtk_type_parent	    		(GtkType	 type);
+gpointer	gtk_type_class		    	(GtkType	 type);
+gpointer	gtk_type_parent_class	    	(GtkType	 type);
+gpointer	gtk_type_new		    	(GtkType	 type);
+void		gtk_type_free		    	(GtkType	 type,
+						 gpointer	 mem);
+void		gtk_type_describe_heritage 	(GtkType	 type);
+void		gtk_type_describe_tree	    	(GtkType	 type,
+						 gboolean	 show_size);
+gint		gtk_type_is_a		    	(GtkType	 type,
+						 GtkType	 is_a_type);
+void		gtk_type_get_arg	    	(GtkObject	*object,
+						 GtkType	 type,
+						 GtkArg		*arg,
+						 guint		 arg_id);
+void		gtk_type_set_arg	    	(GtkObject	*object,
+						 GtkType	 type,
+						 GtkArg		*arg,
+						 guint		 arg_id);
+GtkArg*		gtk_arg_copy		    	(GtkArg		*src_arg,
+						 GtkArg		*dest_arg);
+GtkType		gtk_type_register_enum     	(const gchar	*type_name,
+						 GtkEnumValue	*values);
+GtkType		gtk_type_register_flags		(const gchar	*type_name,
+						 GtkFlagValue	*values);
+GtkEnumValue*	gtk_type_enum_get_values	(GtkType	enum_type);
+GtkFlagValue*	gtk_type_flags_get_values	(GtkType	flags_type);
 
 
 #ifdef __cplusplus

@@ -1,3 +1,12 @@
+Wed Jun 10 06:25:17 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.h: 
+	* gtk/gtktypeutils.c: enum and flags type creation can now be done
+	through gtk_type_register_enum() and gtk_type_register_flags(),
+	which allow to specify the enum value arrays directly.
+	the NULL terminated value arrays can be retrived through
+	gtk_type_enum_get_values() and gtk_type_flags_get_values();
+
 1998-06-09  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* gtk/Makefile.am (gtkmarshal.c gtkmarshal.h): Pass $srcdir in
