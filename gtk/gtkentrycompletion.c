@@ -1468,7 +1468,6 @@ gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
     {
       gint key_len;
       gint prefix_len;
-      gint pos;
       const gchar *key;
 
       prefix_len = g_utf8_strlen (prefix, -1);
@@ -1478,6 +1477,7 @@ gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
 
       if (prefix_len > key_len)
 	{
+	  gint pos = prefix_len;
 	  gtk_editable_insert_text (GTK_EDITABLE (completion->priv->entry),
 				    prefix + key_len, -1, &pos);
 	  gtk_editable_select_region (GTK_EDITABLE (completion->priv->entry),

@@ -1,3 +1,9 @@
+2005-03-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_real_insert_prefix): 
+	Make inline completion insert the prefix at the
+	right spot.  (#170146, Doug Quale)
+
 2005-03-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprogressbar.c (gtk_progress_bar_get_ellipsize): 
