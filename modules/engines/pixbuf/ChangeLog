@@ -1,3 +1,7 @@
+Thu May  3 05:36:06 2001  Owen Taylor  <otaylor@redhat.com>
+
+        * pixbuf.h: Fix trailing comma on enumeration. (#54071)
+
 2001-03-05  Michael Natterer  <mitch@gimp.org>
 
 	* src/pixbuf-draw.c: made the "parent_class" pointer static.
