@@ -33,6 +33,7 @@
 #include "gtktoggleaction.h"
 #include "gtktoggleactionprivate.h"
 #include "gtktoggletoolbutton.h"
+#include "gtktogglebutton.h"
 #include "gtkcheckmenuitem.h"
 
 enum 
@@ -152,6 +153,9 @@ gtk_toggle_action_real_toggled (GtkToggleAction *action)
       else if (GTK_IS_TOGGLE_TOOL_BUTTON (proxy))
 	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (proxy),
 					   action->private_data->active);
+      else if (GTK_IS_TOGGLE_BUTTON (proxy))
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (proxy),
+				      action->private_data->active);
       else {
 	g_warning ("Don't know how to toggle `%s' widgets",
 		   G_OBJECT_TYPE_NAME (proxy));
@@ -175,6 +179,9 @@ connect_proxy (GtkAction *action,
   else if (GTK_IS_TOGGLE_TOOL_BUTTON (proxy))
     gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (proxy),
 				       toggle_action->private_data->active);
+  else if (GTK_IS_TOGGLE_BUTTON (proxy))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (proxy),
+				  toggle_action->private_data->active);
 
   (* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
 }

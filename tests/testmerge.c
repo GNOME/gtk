@@ -96,7 +96,7 @@ toggle_action (GtkAction *action)
   const gchar *name = gtk_action_get_name (action);
   const gchar *typename = G_OBJECT_TYPE_NAME (action);
 
-  g_message ("Action %s (type=%s) activated (active=%d)", name, typename,
+  g_message ("ToggleAction %s (type=%s) toggled (active=%d)", name, typename,
 	     gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
 }
 
@@ -104,7 +104,7 @@ toggle_action (GtkAction *action)
 static void
 radio_action_changed (GtkAction *action, GtkRadioAction *current)
 {
-  g_message ("Action %s (type=%s) activated (active=%d) (value %d)", 
+  g_message ("RadioAction %s (type=%s) activated (active=%d) (value %d)", 
 	     gtk_action_get_name (GTK_ACTION (current)), 
 	     G_OBJECT_TYPE_NAME (GTK_ACTION (current)),
 	     gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (current)),
@@ -118,14 +118,15 @@ static GtkActionEntry entries[] = {
   { "JustifyMenuAction", NULL, "_Justify" },
   { "Test", NULL, "Test" },
 
-  { "QuitAction",  GTK_STOCK_QUIT,  NULL, "<control>q", NULL, G_CALLBACK (gtk_main_quit) },
-  { "NewAction",   GTK_STOCK_NEW,   NULL, "<control>n", NULL, G_CALLBACK (activate_action) },
-  { "New2Action",  GTK_STOCK_NEW,   NULL, "<control>m", NULL, G_CALLBACK (activate_action) },
-  { "OpenAction",  GTK_STOCK_OPEN,  NULL, "<control>o", NULL, G_CALLBACK (activate_action) },
-  { "CutAction",   GTK_STOCK_CUT,   NULL, "<control>x", NULL, G_CALLBACK (activate_action) },
-  { "CopyAction",  GTK_STOCK_COPY,  NULL, "<control>c", NULL, G_CALLBACK (activate_action) },
-  { "PasteAction", GTK_STOCK_PASTE, NULL, "<control>v", NULL, G_CALLBACK (activate_action) },
-  { "AboutAction", NULL,            "_About", NULL,     NULL, G_CALLBACK (activate_action) },
+  { "QuitAction",  GTK_STOCK_QUIT,  NULL,     "<control>q", NULL, G_CALLBACK (gtk_main_quit) },
+  { "NewAction",   GTK_STOCK_NEW,   NULL,     "<control>n", NULL, G_CALLBACK (activate_action) },
+  { "New2Action",  GTK_STOCK_NEW,   NULL,     "<control>m", NULL, G_CALLBACK (activate_action) },
+  { "OpenAction",  GTK_STOCK_OPEN,  NULL,     "<control>o", NULL, G_CALLBACK (activate_action) },
+  { "CutAction",   GTK_STOCK_CUT,   NULL,     "<control>x", NULL, G_CALLBACK (activate_action) },
+  { "CopyAction",  GTK_STOCK_COPY,  NULL,     "<control>c", NULL, G_CALLBACK (activate_action) },
+  { "PasteAction", GTK_STOCK_PASTE, NULL,     "<control>v", NULL, G_CALLBACK (activate_action) },
+  { "AboutAction", NULL,            "_About", NULL,         NULL, G_CALLBACK (activate_action) },
+  { "BoldAction",  GTK_STOCK_BOLD,  "_Bold",  "<control>b", NULL, G_CALLBACK (toggle_action), TRUE },
 };
 static guint n_entries = G_N_ELEMENTS (entries);
 
@@ -470,6 +471,18 @@ main (int argc, char **argv)
   gtk_box_pack_end (GTK_BOX (menu_box), area, FALSE, FALSE, 0);
   gtk_widget_show (area);
 
+  button = gtk_button_new ();
+  gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE, 0);
+  gtk_action_connect_proxy (gtk_action_group_get_action (action_group, "AboutAction"), 
+			    button);
+  gtk_widget_show (button);
+  merge = gtk_ui_manager_new ();
+
+  button = gtk_check_button_new ();
+  gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE, 0);
+  gtk_action_connect_proxy (gtk_action_group_get_action (action_group, "BoldAction"), 
+			    button);
+  gtk_widget_show (button);
   merge = gtk_ui_manager_new ();
 
   g_signal_connect (area, "button_press_event",

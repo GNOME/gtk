@@ -1,5 +1,14 @@
 2003-09-04  Matthias Clasen  <maclas@gmx.de>
 
+	* tests/testmerge.c: Test buttons and toggle buttons as proxies.
+
+	* gtk/gtktoggleaction.c (connect_proxy): 
+	(gtk_toggle_action_real_toggled): Support toggle buttons as proxies. Note 
+	that a "draw_as_radio" property is needed for check buttons similar to 
+	check menu items, in order to fully support button proxies for radio actions.
+
+	* gtk/gtkaction.c (connect_proxy): Allow buttons as proxies.
+
 	* tests/testmerge.c (toggle_dynamic): Test gtk_ui_manager_add_ui(). 
 
 	* gtk/gtkuimanager.h: Add GtkUIManagerItemType enum which is needed for the

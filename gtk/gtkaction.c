@@ -31,6 +31,7 @@
 #include <config.h>
 
 #include "gtkaction.h"
+#include "gtkbutton.h"
 #include "gtktoolbutton.h"
 #include "gtkmenuitem.h"
 #include "gtkimagemenuitem.h"
@@ -629,6 +630,23 @@ connect_proxy (GtkAction *action,
 			       G_CALLBACK (gtk_action_create_menu_proxy),
 			       action, 0);
 
+      g_signal_connect_object (proxy, "clicked",
+			       G_CALLBACK (gtk_action_activate), action,
+			       G_CONNECT_SWAPPED);
+    }
+  else if (GTK_IS_BUTTON (proxy))
+    {
+      /* button specific synchronisers ... */
+
+      /* synchronise the label */
+      g_object_set (G_OBJECT (proxy),
+		    "label", action->private_data->short_label,
+		    "use_underline", TRUE,
+		    NULL);
+      g_signal_connect_object (action, "notify::short_label",
+			       G_CALLBACK (gtk_action_sync_short_label),
+			       proxy, 0);
+      
       g_signal_connect_object (proxy, "clicked",
 			       G_CALLBACK (gtk_action_activate), action,
 			       G_CONNECT_SWAPPED);
