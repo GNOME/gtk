@@ -348,7 +348,7 @@ gtk_rc_get_im_module_path (void)
 gchar *
 gtk_rc_get_im_module_file (void)
 {
-  gchar *result = g_getenv ("GTK_IM_MODULE_FILE");
+  gchar *result = g_strdup (g_getenv ("GTK_IM_MODULE_FILE"));
 
   if (!result)
     {

@@ -1,3 +1,12 @@
+Wed Nov 15 02:18:01 2000  Robert Brady  <robert@suse.co.uk>
+
+	* gtk/gtkrc.c (gtk_rc_get_im_module_file): The return 
+	value of g_getenv() isn't freeable, so g_strdup it.
+
+	* modules/input/inuktitut.c: Inuktitut input method.
+
+	* modules/input/Makefile.am: Build this.
+	
 2000-11-14  Elliot Lee  <sopwith@redhat.com>
 
 	* gtk/Makefile.am: Install gtk.immodules, needed for operation
