@@ -1343,6 +1343,7 @@ gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc
 gtk/stock-icons/Makefile
+gtk/theme-bits/Makefile
 modules/Makefile
 modules/input/Makefile
 contrib/Makefile

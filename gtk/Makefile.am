@@ -1,6 +1,6 @@
 # Makefile.am for gtk+/gtk
 
-SUBDIRS=stock-icons
+SUBDIRS=stock-icons theme-bits
 
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gtk\"				\
