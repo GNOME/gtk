@@ -1174,20 +1174,49 @@ gtk_object_get_user_data (GtkObject *object)
  *   results:
  *****************************************/
 
+static gchar*
+gtk_object_descriptive_type_name (GtkType type)
+{
+  gchar *name;
+
+  name = gtk_type_name (type);
+  if (!name)
+    name = "(unknown)";
+
+  return name;
+}
+
 GtkObject*
 gtk_object_check_cast (GtkObject *obj,
 		       GtkType    cast_type)
 {
-  if (obj && obj->klass && !gtk_type_is_a (obj->klass->type, cast_type))
+  if (!obj)
     {
-      gchar *from_name = gtk_type_name (obj->klass->type);
-      gchar *to_name = gtk_type_name (cast_type);
-
-      g_warning ("invalid cast from \"%s\" to \"%s\"",
-		 from_name ? from_name : "(unknown)",
-		 to_name ? to_name : "(unknown)");
+      g_warning ("invalid cast from (NULL) pointer to `%s'",
+		 gtk_object_descriptive_type_name (cast_type));
+      return obj;
     }
-
+  if (!obj->klass)
+    {
+      g_warning ("invalid unclassed pointer in cast to `%s'",
+		 gtk_object_descriptive_type_name (cast_type));
+      return obj;
+    }
+  if (obj->klass->type < GTK_TYPE_OBJECT)
+    {
+      g_warning ("invalid class type `%s' in cast to `%s'",
+		 gtk_object_descriptive_type_name (obj->klass->type),
+		 gtk_object_descriptive_type_name (cast_type));
+      return obj;
+    }
+  if (!gtk_type_is_a (obj->klass->type, cast_type))
+    {
+      g_warning ("invalid cast from `%s' to `%s'",
+		 gtk_object_descriptive_type_name (obj->klass->type),
+		 gtk_object_descriptive_type_name (cast_type));
+      return obj;
+    }
+  
   return obj;
 }
 
@@ -1203,10 +1232,26 @@ GtkObjectClass*
 gtk_object_check_class_cast (GtkObjectClass *klass,
 			     GtkType         cast_type)
 {
-  if (klass && !gtk_type_is_a (klass->type, cast_type))
-    g_warning ("invalid cast from \"%sClass\" to \"%sClass\"",
-	       gtk_type_name (klass->type),
-	       gtk_type_name (cast_type));
+  if (!klass)
+    {
+      g_warning ("invalid class cast from (NULL) pointer to `%s'",
+		 gtk_object_descriptive_type_name (cast_type));
+      return klass;
+    }
+  if (klass->type < GTK_TYPE_OBJECT)
+    {
+      g_warning ("invalid class type `%s' in class cast to `%s'",
+		 gtk_object_descriptive_type_name (klass->type),
+		 gtk_object_descriptive_type_name (cast_type));
+      return klass;
+    }
+  if (!gtk_type_is_a (klass->type, cast_type))
+    {
+      g_warning ("invalid class cast from `%s' to `%s'",
+		 gtk_object_descriptive_type_name (klass->type),
+		 gtk_object_descriptive_type_name (cast_type));
+      return klass;
+    }
 
   return klass;
 }

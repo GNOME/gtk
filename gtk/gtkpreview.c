@@ -222,7 +222,7 @@ gtk_preview_uninit ()
   GtkPreviewProp *prop;
   GdkAtom property;
 
-  if (preview_class && !install_cmap &&
+  if (preview_class && !install_cmap && preview_class->info.visual &&
       (preview_class->info.visual->type != GDK_VISUAL_TRUE_COLOR) &&
       (preview_class->info.visual->type != GDK_VISUAL_DIRECT_COLOR))
     {
@@ -489,7 +489,8 @@ gtk_preview_draw_row (GtkPreview *preview,
   g_return_if_fail (preview != NULL);
   g_return_if_fail (GTK_IS_PREVIEW (preview));
   g_return_if_fail (data != NULL);
-
+  g_return_if_fail (preview_class->info.visual != NULL);
+  
   if ((w <= 0) || (y < 0))
     return;
 
@@ -934,7 +935,7 @@ gtk_preview_dither_init (GtkPreviewClass *klass)
     { 63, 31, 55, 23, 61, 29, 53, 21 }
   };
 
-  if (klass->info.visual->type != GDK_VISUAL_PSEUDO_COLOR)
+  if (!klass->info.visual || klass->info.visual->type != GDK_VISUAL_PSEUDO_COLOR)
     return;
 
   shades_r = klass->info.nred_shades;

@@ -42,17 +42,17 @@ extern "C" {
 #else /* !GTK_NO_CHECK_CASTS */
 
 #define GTK_CHECK_CAST(obj,cast_type,cast) \
-  ((cast*) gtk_object_check_cast ((GtkObject*) (obj), cast_type))
+  ((cast*) gtk_object_check_cast ((GtkObject*) (obj), (cast_type)))
 
 #define GTK_CHECK_CLASS_CAST(klass,cast_type,cast) \
-  ((cast*) gtk_object_check_class_cast ((GtkObjectClass*) (klass), cast_type))
+  ((cast*) gtk_object_check_class_cast ((GtkObjectClass*) (klass), (cast_type)))
 
 #endif /* GTK_NO_CHECK_CASTS */
 
 
 /* Determines whether 'obj' is a type of 'otype'.
  */
-#define GTK_CHECK_TYPE(obj,otype)  (gtk_type_is_a (((GtkObject*) (obj))->klass->type, otype))
+#define GTK_CHECK_TYPE(obj,otype)  (gtk_type_is_a (((GtkObject*) (obj))->klass->type, (otype)))
 
 
 /* Macro for casting a pointer to a GtkObject pointer.

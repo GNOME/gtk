@@ -3116,7 +3116,11 @@ gdk_signal (int sig_num)
     }
 
   g_print ("\n** ERROR **: %s caught\n", sig);
+#ifdef G_ENABLE_DEBUG
+  abort ();
+#else /* !G_ENABLE_DEBUG */
   gdk_exit (1);
+#endif /* !G_ENABLE_DEBUG */
 }
 
 static void

@@ -1,3 +1,18 @@
+Sat Mar  7 20:20:53 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkobject.c:
+ 	(gtk_object_check_cast):
+	(gtk_object_check_class_cast): 
+ 	made the object/class cast checks much more descriptive, based on
+ 	gtk-draco-980305-2.patch.gz and gtk-draco-980306-1.patch.gz but
+	optimized for common code path.
+
+	* gtk/gtkpreview.c: added a few extra checks for the visual
+ 	(gtk-draco-980305-0.patch.gz).
+
+	* gdk/gdk.c (gdk_signal): abort() on a signal if G_ENABLE_DEBUG
+ 	  is defined, so we dump core (gtk-draco-980305-0.patch.gz).
+
 Sat Mar  7 01:07:24 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkrange.c (gtk_range_expose): Fixed the vscrollbar

@@ -29,9 +29,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_CONTAINER(obj)          GTK_CHECK_CAST (obj, gtk_container_get_type (), GtkContainer)
-#define GTK_CONTAINER_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_container_get_type, GtkContainerClass)
-#define GTK_IS_CONTAINER(obj)       GTK_CHECK_TYPE (obj, gtk_container_get_type ())
+#define GTK_CONTAINER(obj)          (GTK_CHECK_CAST ((obj), gtk_container_get_type (), GtkContainer))
+#define GTK_CONTAINER_CLASS(klass)  (GTK_CHECK_CLASS_CAST ((klass), gtk_container_get_type, GtkContainerClass))
+#define GTK_IS_CONTAINER(obj)       (GTK_CHECK_TYPE ((obj), gtk_container_get_type ()))
 
 #define GTK_TYPE_CONTAINER          (gtk_container_get_type ())
 
