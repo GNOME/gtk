@@ -1,3 +1,8 @@
+2001-11-20  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/tmpl/gtkwindow.sgml: fix docs for gtk_window_set_policy() to
+	reflect existence of gtk_window_set_resizable()
+
 2001-11-20  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk/tmpl/event_structs.sgml: Small fixes.

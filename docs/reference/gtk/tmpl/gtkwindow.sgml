@@ -74,11 +74,10 @@ be resized by users.
 <para>
 The basic ugly truth of this function is that it should be simply:
 <programlisting>
- void gtk_window_set_user_resizeable(GtkWidget* window, gboolean setting);
+ void gtk_window_set_resizable(GtkWidget* window, gboolean setting);
 </programlisting>
-So, pretend it is like that, and only use the two policies mentioned above.
-GTK+ 1.4 may replace gtk_window_set_policy() with a nicer function like
-gtk_window_set_user_resizeable().
+...which is why GTK+ 2.0 introduces gtk_window_set_resizable(), which you 
+should use instead of gtk_window_set_policy().
 </para>
 
 <para>
