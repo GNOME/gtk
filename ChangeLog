@@ -1,5 +1,8 @@
 2005-03-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (theme_lookup_icon): Make 
+	icon data caching work again.  (#168851, Alexander Larsson)
+
 	* gdk-pixbuf/gdk-pixbuf.c:
 	* gdk-pixbuf/gdk-pixbuf-features.h.in:
 	Revert the previous change, since it breaks
