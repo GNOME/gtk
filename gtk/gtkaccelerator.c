@@ -39,12 +39,17 @@ static void gtk_accelerator_table_clean (GtkAcceleratorTable *table);
 static GtkAcceleratorTable *default_table = NULL;
 static GSList *tables = NULL;
 static guint8 gtk_accelerator_table_default_mod_mask = (guint8) ~0;
+static const gchar *actable_key = "gtk-accelerator-tables";
+static guint        actable_key_id = 0;
 
 
 GtkAcceleratorTable*
 gtk_accelerator_table_new ()
 {
   GtkAcceleratorTable *table;
+
+  if (!actable_key_id)
+    actable_key_id = gtk_object_data_force_id (actable_key);
 
   table = g_new (GtkAcceleratorTable, 1);
   gtk_accelerator_table_init (table);
@@ -109,9 +114,10 @@ void
 gtk_accelerator_table_unref (GtkAcceleratorTable *table)
 {
   g_return_if_fail (table != NULL);
+  g_return_if_fail (table->ref_count > 0);
 
   table->ref_count -= 1;
-  if (table->ref_count <= 0)
+  if (table->ref_count == 0)
     {
       tables = g_slist_remove (tables, table);
       gtk_accelerator_table_clean (table);
@@ -154,6 +160,12 @@ gtk_accelerator_table_install (GtkAcceleratorTable *table,
       if ((entry->modifiers & table->modifier_mask) ==
           (accelerator_mods & table->modifier_mask))
 	{
+	  gtk_object_set_data_by_id (entry->object,
+				     actable_key_id,
+				     g_slist_remove (gtk_object_get_data_by_id (entry->object,
+										actable_key_id),
+						     table));
+
 	  if (GTK_IS_WIDGET (entry->object))
 	    {
 	      signame = gtk_signal_name (entry->signal_id);
@@ -165,6 +177,12 @@ gtk_accelerator_table_install (GtkAcceleratorTable *table,
 	  entry->modifiers = accelerator_mods;
 	  entry->object = object;
 	  entry->signal_id = signal_id;
+	  gtk_object_set_data_by_id (entry->object,
+				     actable_key_id,
+				     g_slist_prepend (gtk_object_get_data_by_id (entry->object,
+										 actable_key_id),
+						      table));
+	  
 	  return;
 	}
 
@@ -175,7 +193,13 @@ gtk_accelerator_table_install (GtkAcceleratorTable *table,
   entry->modifiers = accelerator_mods;
   entry->object = object;
   entry->signal_id = signal_id;
-
+  gtk_object_set_data_by_id (entry->object,
+			     actable_key_id,
+			     g_slist_prepend (gtk_object_get_data_by_id (entry->object,
+									 actable_key_id),
+					      table));
+  gtk_accelerator_table_ref (table);
+  
   table->entries[hash] = g_list_prepend (table->entries[hash], entry);
 }
 
@@ -225,7 +249,14 @@ gtk_accelerator_table_remove (GtkAcceleratorTable *table,
 	      temp_list->next = NULL;
 	      temp_list->prev = NULL;
 	      g_list_free (temp_list);
-
+	      
+	      gtk_object_set_data_by_id (object,
+					 actable_key_id,
+					 g_slist_remove (gtk_object_get_data_by_id (object,
+										    actable_key_id),
+							 table));
+	      gtk_accelerator_table_unref (table);
+	      
 	      return;
 	    }
 
@@ -332,6 +363,9 @@ gtk_accelerator_table_clean (GtkAcceleratorTable *table)
   for (i = 0; i < 256; i++)
     {
       entries = table->entries[i];
+      if (entries)
+	g_warning ("stale object reference in accelerator table (%d)", i);
+
       while (entries)
 	{
 	  entry = entries->data;
@@ -342,5 +376,50 @@ gtk_accelerator_table_clean (GtkAcceleratorTable *table)
 
       g_list_free (table->entries[i]);
       table->entries[i] = NULL;
+    }
+}
+
+void
+gtk_accelerator_tables_delete (GtkObject           *object)
+{
+  GSList *slist;
+
+  g_return_if_fail (object != NULL);
+
+  slist = gtk_object_get_data_by_id (object, actable_key_id);
+  if (slist)
+    {
+      for (; slist; slist = slist->next)
+	{
+	  GtkAcceleratorTable *table;
+	  guint i;
+	  
+	  table = slist->data;
+	  
+	  for (i = 0; i < 256; i++)
+	    {
+	      GList *entries;
+	      
+	      entries = table->entries[i];
+	      
+	      while (entries)
+		{
+		  GtkAcceleratorEntry *entry;
+		  
+		  entry = entries->data;
+		  entries = entries->next;
+		  
+		  if (entry->object == object)
+		    {
+		      table->entries[i] = g_list_remove (table->entries[i], entry);
+		      g_free (entry);
+		    }
+		}
+	    }
+	  
+	  gtk_accelerator_table_unref (table);
+	}
+
+      gtk_object_remove_data_by_id (object, actable_key_id);
     }
 }

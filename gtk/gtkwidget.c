@@ -419,7 +419,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_TYPE_BOXED);
   widget_signals[INSTALL_ACCELERATOR] =
     gtk_signal_new ("install_accelerator",
-		    GTK_RUN_FIRST,
+		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, install_accelerator),
 		    gtk_widget_marshal_signal_2,
@@ -3490,12 +3490,13 @@ gtk_widget_real_destroy (GtkObject *object)
 
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
-
-  saved_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id);
+  gtk_accelerator_tables_delete (object);
+  
+  saved_style = gtk_object_get_data_by_id (object, saved_default_style_key_id);
   if (saved_style)
     {
       gtk_style_unref (saved_style);
-      gtk_object_remove_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id);
+      gtk_object_remove_data_by_id (object, saved_default_style_key_id);
     }
 
   gtk_style_unref (widget->style);
