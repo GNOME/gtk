@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 0\n"
-"POT-Creation-Date: 2004-03-21 09:13+0100\n"
-"PO-Revision-Date: 2004-03-21 09:13+CET\n"
+"POT-Creation-Date: 2004-03-21 18:11+0100\n"
+"PO-Revision-Date: 2004-03-21 18:11+CET\n"
 "Last-Translator: auto\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "MIME-Version: 1.0\n"
@@ -138,9 +138,9 @@ msgstr "Oštećeni podaci o točkama slike"
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "sam uspio dodijeliti medjuspremnik slike od %u bajta"
-msgstr[1] "sam uspio dodijeliti medjuspremnik slike od %u bajta"
-msgstr[2] "sam uspio dodijeliti medjuspremnik slike od %u bajtova"
+msgstr[0] "Nisam uspio dodijeliti međuspremnik slike veličine %u bajta"
+msgstr[1] "Nisam uspio dodijeliti međuspremnik slike veličine %u bajta"
+msgstr[2] "Nisam uspio dodijeliti međuspremnik slike veličine %u bajtova"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -1015,7 +1015,7 @@ msgstr "Spremi u _mapu:"
 msgid "Create in _folder:"
 msgstr "Stvori u _mapi:"
 
-#: gtk/gtkfilechooserdefault.c:3697
+#: gtk/gtkfilechooserdefault.c:3693
 msgid "Can't change to folder because it isn't local"
 msgstr "Ne mogu se premjestiti u mapu jer nije na lokalnom disku"
 
@@ -1267,7 +1267,7 @@ msgid "%s: %s"
 msgstr "%s: %s"
 
 #: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:613
-#: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1176
+#: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1206
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "Greška kod dohvaćanja informacije za '%s': %s"
@@ -1285,7 +1285,7 @@ msgstr "Ovaj datotečni sustav ne podržava montiranje."
 msgid "Filesystem"
 msgstr "Datotečni sustav"
 
-#: gtk/gtkfilesystemunix.c:1258 gtk/gtkfilesystemwin32.c:794
+#: gtk/gtkfilesystemunix.c:1258 gtk/gtkfilesystemwin32.c:814
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Nije uspjelo spremanje knjižnih oznaka (%s)"
@@ -1294,7 +1294,7 @@ msgstr "Nije uspjelo spremanje knjižnih oznaka (%s)"
 msgid "error getting information for '%s'"
 msgstr "greška kod preuzimanja informacija za \"%s\""
 
-#: gtk/gtkfilesystemwin32.c:950
+#: gtk/gtkfilesystemwin32.c:970
 msgid "This file system does not support icons for everything"
 msgstr "Ovaj datotečni sustav ne podržava sličice za sve"
 
