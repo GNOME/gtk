@@ -447,6 +447,13 @@ gtk_file_system_base_init (gpointer g_class)
     {
       GType iface_type = G_TYPE_FROM_INTERFACE (g_class);
 
+      g_signal_new ("volumes-changed",
+		    iface_type,
+		    G_SIGNAL_RUN_LAST,
+		    G_STRUCT_OFFSET (GtkFileSystemIface, volumes_changed),
+		    NULL, NULL,
+		    g_cclosure_marshal_VOID__VOID,
+		    G_TYPE_NONE, 0);
       g_signal_new ("roots-changed",
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
@@ -464,6 +471,14 @@ gtk_file_system_base_init (gpointer g_class)
 
       initialized = TRUE;
     }
+}
+
+GSList *
+gtk_file_system_list_volumes (GtkFileSystem  *file_system)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->list_volumes (file_system);
 }
 
 GSList *
@@ -510,6 +525,142 @@ gtk_file_system_create_folder(GtkFileSystem     *file_system,
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->create_folder (file_system, path, error);
+}
+
+/**
+ * gtk_file_system_volume_free:
+ * @file_system: a #GtkFileSystem
+ * @volume: a #GtkFileSystemVolume
+ * 
+ * Frees a #GtkFileSystemVolume structure as returned by
+ * gtk_file_system_list_volumes().
+ **/
+void
+gtk_file_system_volume_free (GtkFileSystem       *file_system,
+			     GtkFileSystemVolume *volume)
+{
+  g_return_if_fail (GTK_IS_FILE_SYSTEM (file_system));
+  g_return_if_fail (volume != NULL);
+
+  GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_free (file_system, volume);
+}
+
+/**
+ * gtk_file_system_volume_get_base_path:
+ * @file_system: a #GtkFileSystem
+ * @volume: a #GtkFileSystemVolume
+ * 
+ * Queries the base path for a volume.  For example, a CD-ROM device may yield a
+ * path of "/mnt/cdrom".
+ * 
+ * Return value: a #GtkFilePath with the base mount path of the specified
+ * @volume.
+ **/
+GtkFilePath *
+gtk_file_system_volume_get_base_path (GtkFileSystem       *file_system,
+				      GtkFileSystemVolume *volume)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (volume != NULL, NULL);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_get_base_path (file_system, volume);
+}
+
+/**
+ * gtk_file_system_volume_get_is_mounted:
+ * @file_system: a #GtkFileSystem
+ * @volume: a #GtkFileSystemVolume
+ * 
+ * Queries whether a #GtkFileSystemVolume is mounted or not.  If it is not, it
+ * can be mounted with gtk_file_system_volume_mount().
+ * 
+ * Return value: TRUE if the @volume is mounted, FALSE otherwise.
+ **/
+gboolean
+gtk_file_system_volume_get_is_mounted (GtkFileSystem       *file_system,
+				       GtkFileSystemVolume *volume)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
+  g_return_val_if_fail (volume != NULL, FALSE);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_get_is_mounted (file_system, volume);
+}
+
+/**
+ * gtk_file_system_volume_mount:
+ * @file_system: a #GtkFileSystem
+ * @volume: a #GtkFileSystemVolume
+ * @error: location to store error, or %NULL
+ * 
+ * Tries to mount an unmounted volume.  This may cause the "volumes-changed"
+ * signal in the @file_system to be emitted.
+ * 
+ * Return value: TRUE if the @volume was mounted successfully, FALSE otherwise.
+ **/
+gboolean
+gtk_file_system_volume_mount (GtkFileSystem        *file_system, 
+			      GtkFileSystemVolume  *volume,
+			      GError              **error)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
+  g_return_val_if_fail (volume != NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_mount (file_system, volume, error);
+}
+
+/**
+ * gtk_file_system_volume_get_display_name:
+ * @file_system: a #GtkFileSystem
+ * @volume: a #GtkFileSystemVolume
+ * 
+ * Queries the human-readable name for a @volume.  This string can be displayed
+ * in a list of volumes that can be accessed, for example.
+ * 
+ * Return value: A string with the human-readable name for a #GtkFileSystemVolume.
+ **/
+char *
+gtk_file_system_volume_get_display_name (GtkFileSystem        *file_system, 
+					 GtkFileSystemVolume  *volume)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (volume != NULL, NULL);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_get_display_name (file_system, volume);
+}
+
+/**
+ * gtk_file_system_volume_render_icon:
+ * @file_system: a #GtkFileSystem
+ * @volume: a #GtkFileSystemVolume
+ * @widget: Reference widget to render icons.
+ * @pixel_size: Size of the icon.
+ * @error: location to store error, or %NULL
+ * 
+ * Renders an icon suitable for a file #GtkFileSystemVolume.
+ * 
+ * Return value: A #GdkPixbuf containing an icon, or NULL if the icon could not
+ * be rendered.  In the latter case, the @error value will be set as
+ * appropriate.
+ **/
+GdkPixbuf *
+gtk_file_system_volume_render_icon (GtkFileSystem        *file_system,
+				    GtkFileSystemVolume  *volume,
+				    GtkWidget            *widget,
+				    gint                  pixel_size,
+				    GError              **error)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (volume != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (pixel_size > 0, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_render_icon (file_system,
+								      volume,
+								      widget,
+								      pixel_size,
+								      error);
 }
 
 /**
@@ -680,7 +831,7 @@ gtk_file_system_render_icon (GtkFileSystem      *file_system,
 {
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
   g_return_val_if_fail (path != NULL, NULL);
-  g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (pixel_size > 0, NULL);
 
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->render_icon (file_system, path, widget, pixel_size, error);

@@ -47,6 +47,11 @@ struct _GtkFileSystemUnix
   GObject parent_instance;
 };
 
+/* Simple stub for our returned volumes */
+typedef struct {
+  int dummy;
+} Volume;
+
 #define GTK_TYPE_FILE_FOLDER_UNIX             (gtk_file_folder_unix_get_type ())
 #define GTK_FILE_FOLDER_UNIX(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_FOLDER_UNIX, GtkFileFolderUnix))
 #define GTK_IS_FILE_FOLDER_UNIX(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_FOLDER_UNIX))
@@ -78,6 +83,7 @@ static void gtk_file_system_unix_iface_init   (GtkFileSystemIface     *iface);
 static void gtk_file_system_unix_init         (GtkFileSystemUnix      *impl);
 static void gtk_file_system_unix_finalize     (GObject                *object);
 
+static GSList *       gtk_file_system_unix_list_volumes  (GtkFileSystem      *file_system);
 static GSList *       gtk_file_system_unix_list_roots    (GtkFileSystem      *file_system);
 static GtkFileInfo *  gtk_file_system_unix_get_root_info (GtkFileSystem      *file_system,
 							  const GtkFilePath  *path,
@@ -90,6 +96,24 @@ static GtkFileFolder *gtk_file_system_unix_get_folder    (GtkFileSystem      *fi
 static gboolean       gtk_file_system_unix_create_folder (GtkFileSystem      *file_system,
 							  const GtkFilePath  *path,
 							  GError            **error);
+
+static void         gtk_file_system_unix_volume_free             (GtkFileSystem       *file_system,
+								  GtkFileSystemVolume *volume);
+static GtkFilePath *gtk_file_system_unix_volume_get_base_path    (GtkFileSystem       *file_system,
+								  GtkFileSystemVolume *volume);
+static gboolean     gtk_file_system_unix_volume_get_is_mounted   (GtkFileSystem       *file_system,
+								  GtkFileSystemVolume *volume);
+static gboolean     gtk_file_system_unix_volume_mount            (GtkFileSystem       *file_system,
+								  GtkFileSystemVolume *volume,
+								  GError             **error);
+static gchar *      gtk_file_system_unix_volume_get_display_name (GtkFileSystem       *file_system,
+								  GtkFileSystemVolume *volume);
+static GdkPixbuf *  gtk_file_system_unix_volume_render_icon      (GtkFileSystem        *file_system,
+								  GtkFileSystemVolume  *volume,
+								  GtkWidget            *widget,
+								  gint                  pixel_size,
+								  GError              **error);
+
 static gboolean       gtk_file_system_unix_get_parent    (GtkFileSystem      *file_system,
 							  const GtkFilePath  *path,
 							  GtkFilePath       **parent,
@@ -218,10 +242,17 @@ gtk_file_system_unix_class_init (GtkFileSystemUnixClass *class)
 static void
 gtk_file_system_unix_iface_init   (GtkFileSystemIface *iface)
 {
+  iface->list_volumes = gtk_file_system_unix_list_volumes;
   iface->list_roots = gtk_file_system_unix_list_roots;
   iface->get_folder = gtk_file_system_unix_get_folder;
   iface->get_root_info = gtk_file_system_unix_get_root_info;
   iface->create_folder = gtk_file_system_unix_create_folder;
+  iface->volume_free = gtk_file_system_unix_volume_free;
+  iface->volume_get_base_path = gtk_file_system_unix_volume_get_base_path;
+  iface->volume_get_is_mounted = gtk_file_system_unix_volume_get_is_mounted;
+  iface->volume_mount = gtk_file_system_unix_volume_mount;
+  iface->volume_get_display_name = gtk_file_system_unix_volume_get_display_name;
+  iface->volume_render_icon = gtk_file_system_unix_volume_render_icon;
   iface->get_parent = gtk_file_system_unix_get_parent;
   iface->make_path = gtk_file_system_unix_make_path;
   iface->parse = gtk_file_system_unix_parse;
@@ -244,6 +275,12 @@ static void
 gtk_file_system_unix_finalize (GObject *object)
 {
   system_parent_class->finalize (object);
+}
+
+static GSList *
+gtk_file_system_unix_list_volumes (GtkFileSystem *file_system)
+{
+  return g_slist_append (NULL, gtk_file_path_new_dup ("/"));
 }
 
 static GSList *
@@ -312,6 +349,59 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
   g_free (filename);
   
   return result;
+}
+
+static void
+gtk_file_system_unix_volume_free (GtkFileSystem        *file_system,
+				  GtkFileSystemVolume  *volume)
+{
+  GtkFilePath *path;
+
+  path = (GtkFilePath *) volume;
+  gtk_file_path_free (path);
+}
+
+static GtkFilePath *
+gtk_file_system_unix_volume_get_base_path (GtkFileSystem        *file_system,
+					   GtkFileSystemVolume  *volume)
+{
+  return gtk_file_path_new_dup ("/");
+}
+
+static gboolean
+gtk_file_system_unix_volume_get_is_mounted (GtkFileSystem        *file_system,
+					    GtkFileSystemVolume  *volume)
+{
+  return TRUE;
+}
+
+static gboolean
+gtk_file_system_unix_volume_mount (GtkFileSystem        *file_system, 
+				   GtkFileSystemVolume  *volume,
+				   GError              **error)
+{
+  g_set_error (error,
+	       GTK_FILE_SYSTEM_ERROR,
+	       GTK_FILE_SYSTEM_ERROR_FAILED,
+	       _("This file system does not support mounting"));
+  return FALSE;
+}
+
+static gchar *
+gtk_file_system_unix_volume_get_display_name (GtkFileSystem       *file_system,
+					      GtkFileSystemVolume *volume)
+{
+  return g_strdup (_("Filesystem")); /* Same as Nautilus */
+}
+
+static GdkPixbuf *
+gtk_file_system_unix_volume_render_icon (GtkFileSystem        *file_system,
+					 GtkFileSystemVolume  *volume,
+					 GtkWidget            *widget,
+					 gint                  pixel_size,
+					 GError              **error)
+{
+  return NULL; /* FIXME: We need a hard disk icon or something */
 }
 
 static gboolean

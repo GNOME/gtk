@@ -36,11 +36,12 @@ G_BEGIN_DECLS
 
 typedef gint64 GtkFileTime;
 
-typedef struct _GtkFileFolder      GtkFileFolder;
-typedef struct _GtkFileFolderIface GtkFileFolderIface;
-typedef struct _GtkFileInfo        GtkFileInfo;
-typedef struct _GtkFileSystem      GtkFileSystem;
-typedef struct _GtkFileSystemIface GtkFileSystemIface;
+typedef struct _GtkFileFolder       GtkFileFolder;
+typedef struct _GtkFileFolderIface  GtkFileFolderIface;
+typedef struct _GtkFileInfo         GtkFileInfo;
+typedef struct _GtkFileSystem       GtkFileSystem;
+typedef struct _GtkFileSystemIface  GtkFileSystemIface;
+typedef struct _GtkFileSystemVolume GtkFileSystemVolume;
 
 typedef struct _GtkFilePath        GtkFilePath;
 
@@ -143,6 +144,7 @@ struct _GtkFileSystemIface
 
   /* Methods
    */
+  GSList *           (*list_volumes)   (GtkFileSystem     *file_system);
   GSList *           (*list_roots)     (GtkFileSystem     *file_system);
 
   GtkFileInfo *      (*get_root_info)  (GtkFileSystem     *file_system,
@@ -157,6 +159,26 @@ struct _GtkFileSystemIface
   gboolean           (*create_folder)  (GtkFileSystem     *file_system,
 					const GtkFilePath *path,
 			                GError           **error);
+
+  /* Volumes
+   */
+
+  void          (*volume_free)             (GtkFileSystem        *file_system,
+					    GtkFileSystemVolume  *volume);
+  GtkFilePath * (*volume_get_base_path)    (GtkFileSystem        *file_system,
+					    GtkFileSystemVolume  *volume);
+  gboolean      (*volume_get_is_mounted)   (GtkFileSystem        *file_system,
+					    GtkFileSystemVolume  *volume);
+  gboolean      (*volume_mount)            (GtkFileSystem        *file_system, 
+					    GtkFileSystemVolume  *volume,
+					    GError              **error);
+  char *        (*volume_get_display_name) (GtkFileSystem        *file_system, 
+					    GtkFileSystemVolume  *volume);
+  GdkPixbuf *   (*volume_render_icon)      (GtkFileSystem        *file_system,
+					    GtkFileSystemVolume  *volume,
+					    GtkWidget            *widget,
+					    gint                  pixel_size,
+					    GError              **error);
 
   /* Path Manipulation
    */
@@ -203,17 +225,36 @@ struct _GtkFileSystemIface
 
   /* Signals
    */
+  void (*volumes_changed)   (GtkFileSystem *file_system);
   void (*roots_changed)     (GtkFileSystem *file_system);
   void (*bookmarks_changed) (GtkFileSystem *file_system);
 };
 
 GType             gtk_file_system_get_type       (void);
 
+GSList *          gtk_file_system_list_volumes   (GtkFileSystem     *file_system);
 GSList *          gtk_file_system_list_roots     (GtkFileSystem     *file_system);
 GtkFileInfo *     gtk_file_system_get_root_info  (GtkFileSystem     *file_system,
 						  const GtkFilePath *path,
 						  GtkFileInfoType    types,
 						  GError           **error);
+
+void              gtk_file_system_volume_free             (GtkFileSystem        *file_system,
+							   GtkFileSystemVolume  *volume);
+GtkFilePath *     gtk_file_system_volume_get_base_path    (GtkFileSystem        *file_system,
+							   GtkFileSystemVolume  *volume);
+gboolean          gtk_file_system_volume_get_is_mounted   (GtkFileSystem        *file_system,
+							   GtkFileSystemVolume  *volume);
+gboolean          gtk_file_system_volume_mount            (GtkFileSystem        *file_system, 
+							   GtkFileSystemVolume  *volume,
+							   GError              **error);
+char *            gtk_file_system_volume_get_display_name (GtkFileSystem        *file_system, 
+							   GtkFileSystemVolume  *volume);
+GdkPixbuf *       gtk_file_system_volume_render_icon      (GtkFileSystem        *file_system,
+							   GtkFileSystemVolume  *volume,
+							   GtkWidget            *widget,
+							   gint                  pixel_size,
+							   GError              **error);
 
 gboolean          gtk_file_system_get_parent     (GtkFileSystem     *file_system,
 						  const GtkFilePath *path,

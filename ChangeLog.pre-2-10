@@ -1,3 +1,68 @@
+2003-12-16  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilesystem.h (struct _GtkFileSystemIface): Added a
+	"volumes-changed" signal.  Added the following methods:
+		list_volumes
+		volume_free
+		volume_get_base_path
+		volume_get_is_mounted
+		volume_mount
+		volume_get_display_name
+		volume_render_icon
+
+	* gtk/gtkfilesystem.c (gtk_file_system_base_init): Create the
+	"volumes-changed" signal.
+	(gtk_file_system_list_volumes): New function.
+	(gtk_file_system_volume_free): New function.
+	(gtk_file_system_volume_get_base_path): New function.
+	(gtk_file_system_volume_get_is_mounted): New function.
+	(gtk_file_system_volume_mount): New function.
+	(gtk_file_system_volume_get_display_name): New function.
+	(gtk_file_system_volume_render_icon): New function.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_volume_free): Implement.
+	(gtk_file_system_unix_volume_get_base_path): Implement.
+	(gtk_file_system_unix_volume_get_is_mounted): Implement.
+	(gtk_file_system_unix_volume_mount): Implement.
+	(gtk_file_system_unix_volume_get_display_name): Implement.
+	(gtk_file_system_unix_volume_render_icon): Implement.
+
+	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault):
+	Added a field for the "volumes-changed" signal connection.
+	(gtk_file_chooser_default_set_property): Connect to
+	"volumes-changed" on the file system.
+	(gtk_file_chooser_default_finalize): Disconnect from
+	"volumes-changed".
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_remove_rows): New helper
+	function.
+	(shortcuts_get_index): New helper function.
+	(shortcuts_insert_path): Can now insert volumes as well as paths.
+	(shortcuts_append_paths): Don't take is_file_system_root.
+	(shortcuts_add_volumes): New function.
+	(shortcuts_append_file_system_roots): Removed.
+	(create_shortcuts_model): Use shortcuts_add_volumes().
+	(remove_bookmark_button_clicked_cb): Check that the index is
+	within range.
+	(bookmarks_check_add_sensitivity): Take volumes into account.
+	(shortcuts_get_selected_index): New helper function.
+	(remove_bookmark_button_clicked_cb): Use
+	shortcuts_get_selected_index().
+	(bookmarks_check_remove_sensitivity): Likewise.
+	(shortcuts_select_func): Likewise.
+	(shortcuts_row_activated_cb): Handle volumes as well as normal
+	paths.
+	(shortcuts_activate_volume): New function.
+	(struct _GtkFileChooserDefault): Removed the bookmarks_set and
+	bookmarks_iter fields.
+	(shortcuts_append_bookmarks): Use shortcuts_remove_rows().
+	(bookmarks_changed_cb): Use shortcuts_add_bookmarks().
+	(remove_bookmark_rows): Removed.
+	(shortcuts_add_bookmarks): New function; moved most of the code
+	over from shortcuts_append_bookmarks().
+	(shortcuts_append_bookmarks): Add the separator node here, and
+	then call shortcuts_add_bookmarks().
+
 Tue Dec 16 15:01:10 2003  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkfilechooserwidget.c: fix preprocessor conditional confusion.
