@@ -9990,9 +9990,11 @@ main (int argc, char *argv[])
     {
       while (g_main_pending ())
 	g_main_iteration (FALSE);
+#if 0
       sleep (1);
       while (g_main_pending ())
 	g_main_iteration (FALSE);
+#endif
     }
 
   return 0;

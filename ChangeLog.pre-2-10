@@ -1,3 +1,12 @@
+2001-03-24  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkhsv.c (gtk_hsv_move): make motion around the ring much
+	slower but finer-grained
+	(gtk_hsv_focus): get initial focus on the ring or triangle 
+	according to tab direction
+
+	* gtk/testgtk.c (main): get rid of weird sleep(1) on exit
+
 2001-03-23  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkhsv.c: make this somewhat key-navigable

@@ -1363,6 +1363,11 @@ gtk_hsv_focus (GtkContainer    *container,
 
   if (!GTK_WIDGET_HAS_FOCUS (hsv))
     {
+      if (dir == GTK_DIR_TAB_BACKWARD)
+        priv->focus_on_ring = FALSE;
+      else
+        priv->focus_on_ring = TRUE;
+
       gtk_widget_grab_focus (GTK_WIDGET (hsv));
       return TRUE;
     }
@@ -1663,12 +1668,13 @@ gtk_hsv_move (GtkHSV          *hsv,
 
   x = floor (sx + (vx - sx) * priv->v + (hx - vx) * priv->s * priv->v + 0.5);
   y = floor (sy + (vy - sy) * priv->v + (hy - vy) * priv->s * priv->v + 0.5);
-  
+
+#define HUE_DELTA 0.002
   switch (dir)
     {
     case GTK_DIR_UP:
       if (priv->focus_on_ring)
-        hue += 0.02;
+        hue += HUE_DELTA;
       else
         {
           y -= 1;
@@ -1678,7 +1684,7 @@ gtk_hsv_move (GtkHSV          *hsv,
 
     case GTK_DIR_DOWN:
       if (priv->focus_on_ring)
-        hue -= 0.02;
+        hue -= HUE_DELTA;
       else
         {
           y += 1;
@@ -1688,7 +1694,7 @@ gtk_hsv_move (GtkHSV          *hsv,
 
     case GTK_DIR_LEFT:
       if (priv->focus_on_ring)
-        hue += 0.02;
+        hue += HUE_DELTA;
       else
         {
           x -= 1;
@@ -1698,7 +1704,8 @@ gtk_hsv_move (GtkHSV          *hsv,
 
     case GTK_DIR_RIGHT:
       if (priv->focus_on_ring)
-        hue -= 0.02;
+        hue -= HUE_DELTA
+          ;
       else
         {
           x += 1;
@@ -1719,3 +1726,4 @@ gtk_hsv_move (GtkHSV          *hsv,
   
   gtk_hsv_set_color (hsv, hue, sat, val);
 }
+
