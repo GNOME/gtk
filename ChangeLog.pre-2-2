@@ -1,3 +1,9 @@
+Sat Dec  8 10:04:54 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_debug_spew): Add debug spew to lots
+	of places, so that people with crashy trees can just run their
+	program with GTK_DEBUG=TREE.
+
 Sat Dec  8 20:57:24 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtkliststore.c (gtk_list_store_remove): nuke the stamp++,
@@ -8,7 +14,7 @@ Sat Dec  8 20:57:24 2001  Kristian Rietveld  <kristian@planet.nl>
 	* tests/testgtk.c (layout_expose_handler): Don't return TRUE
 	since then the default GtkLayout expose handler won't be called.
 
-Fri Dec  7 23:42:50 2001  Jonathan Blandford  <jrb@webwynk.net>
+Fri Dec  7 23:42:50 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (validate_rows_handler): remove
 	g_return_if_fail.
@@ -6117,7 +6123,7 @@ Fri Jun 29 22:13:28 2001  Jonathan Blandford  <jrb@redhat.com>
 	s/g_signal_newc/g_signal_new/,
 	s/g_signal_disconnect_by_func/g_signal_handlers_disconnect_by_func/)
 
-Fri Jun 29 03:14:16 2001  Jonathan Blandford  <jrb@webwynk.net>
+Fri Jun 29 03:14:16 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach):
 	add path argument to selection callbacks.
