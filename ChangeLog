@@ -1,3 +1,8 @@
+2005-01-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_remove_shortcut_folder): 
+	Don't add a shortcut here.  (#162752, Tor Lillqvist)
+
 2005-01-02  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/Makefile.am (libgtk_target_ldflags): Add -lole32, needed for

@@ -534,7 +534,7 @@ gtk_file_chooser_button_remove_shortcut_folder (GtkFileChooser     *chooser,
   delegate = g_object_get_qdata (G_OBJECT (chooser),
 				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
 
-  retval = _gtk_file_chooser_add_shortcut_folder (delegate, path, error);
+  retval = _gtk_file_chooser_remove_shortcut_folder (delegate, path, error);
 
   if (retval)
     {
