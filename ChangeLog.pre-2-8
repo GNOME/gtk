@@ -1,3 +1,15 @@
+2004-12-08  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from HEAD: 
+	
+	* gtk/gtkaccelmap.c (internal_change_entry): Remove all 
+	entries for the same key, not just the first one.  (#159498, 
+	Christian Persch)
+
+	* gtk/gtktreeview.c (_gtk_tree_view_column_start_drag): Use
+	button->event_window for the fake leave event, otherwise
+	the button ignores it.  
+
 2004-12-05  Tor Lillqvist  <tml@iki.fi>
 
 	* demos/gtk-demo/images.c (progressive_timeout): Open png file in
