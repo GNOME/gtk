@@ -1,10 +1,31 @@
 /* Menus
  *
- * GTK+ includes a number of widgets for menus of actions.
- * GtkMenu is a drop-down menu, GtkMenuBar a horizontal menu bar.
- * Each of these widgets can hold various types of menuitem.
- * As well as the base type, GtkMenuItem, there are GtkCheckMenuItem,
- * GtkRadioMenuItem and GtkTearoffMenuItem.
+ * There are several widgets involved in displaying menus. The
+ * GtkMenuBar widget is a horizontal menu bar, which normally appears
+ * at the top of an application. The GtkMenu widget is the actual menu
+ * that pops up. Both GtkMenuBar and GtkMenu are subclasses of
+ * GtkMenuShell; a GtkMenuShell contains menu items
+ * (GtkMenuItem). Each menu item contains text and/or images and can
+ * be selected by the user.
+ *
+ * There are several kinds of menu item, including plain GtkMenuItem,
+ * GtkCheckMenuItem which can be checked/unchecked, GtkRadioMenuItem
+ * which is a check menu item that's in a mutually exclusive group,
+ * GtkSeparatorMenuItem which is a separator bar, GtkTearoffMenuItem
+ * which allows a GtkMenu to be torn off, and GtkImageMenuItem which
+ * can place a GtkImage or other widget next to the menu text.
+ *
+ * A GtkMenuItem can have a submenu, which is simply a GtkMenu to pop
+ * up when the menu item is selected. Typically, all menu items in a menu bar
+ * have submenus.
+ *
+ * The GtkOptionMenu widget is a button that pops up a GtkMenu when clicked.
+ * It's used inside dialogs and such.
+ *
+ * GtkItemFactory provides a higher-level interface for creating menu bars
+ * and menus; while you can construct menus manually, most people don't
+ * do that. There's a separate demo for GtkItemFactory.
+ * 
  */
 
 #include <stdio.h>
@@ -39,8 +60,7 @@ create_menu (gint depth, gboolean tearoff)
       sprintf (buf, "item %2d - %d", depth, j);
       menuitem = gtk_radio_menu_item_new_with_label (group, buf);
       group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menuitem));
-      if (depth % 2)
-	gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
+
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       if (i == 3)

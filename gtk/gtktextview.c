@@ -4970,6 +4970,8 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
   GtkWidget *menuitem;
   GtkWidget *submenu;
   gboolean have_selection;
+  gboolean can_insert;
+  GtkTextIter iter;
   
   if (text_view->popup_menu)
     gtk_widget_destroy (text_view->popup_menu);
@@ -4982,13 +4984,20 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
 
   have_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
                                                          NULL, NULL);
+
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
+                                    &iter,
+                                    gtk_text_buffer_get_insert (get_buffer (text_view)));
+  
+  can_insert = gtk_text_iter_editable (&iter, text_view->editable);
   
   append_action_signal (text_view, text_view->popup_menu, _("Cut"), "cut_clipboard",
                         have_selection);
   append_action_signal (text_view, text_view->popup_menu, _("Copy"), "copy_clipboard",
                         have_selection);
+
   append_action_signal (text_view, text_view->popup_menu, _("Paste"), "paste_clipboard",
-                        TRUE);
+                        can_insert);
 
   menuitem = gtk_separator_menu_item_new ();
   gtk_widget_show (menuitem);

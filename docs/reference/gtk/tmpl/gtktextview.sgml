@@ -660,6 +660,16 @@ types related to the text widget and how they work together.
 
 </para>
 
+<!-- ##### ARG GtkTextView:wrap-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:justify ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTextView:left-margin ##### -->
 <para>
 

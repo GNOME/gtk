@@ -723,18 +723,6 @@ produce superscript and subscript.
 </para>
 
 
-<!-- ##### ARG GtkTextView:justify ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkTextView:wrap-mode ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### SIGNAL GtkWidget::activate-mnemonic ##### -->
 <para>
 

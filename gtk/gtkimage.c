@@ -934,12 +934,8 @@ static void
 gtk_image_reset (GtkImage *image)
 {
   gtk_image_clear (image);
-  
-  GTK_WIDGET (image)->requisition.width = 0;
-  GTK_WIDGET (image)->requisition.height = 0;
-  
-  if (GTK_WIDGET_VISIBLE (image))
-    gtk_widget_queue_resize (GTK_WIDGET (image));
+
+  gtk_image_update_size (image, 0, 0);
 }
 
 static void
@@ -951,6 +947,12 @@ gtk_image_size_request (GtkWidget      *widget,
   
   image = GTK_IMAGE (widget);
 
+  /* We update stock/icon set on every size request, because
+   * the theme could have affected the size; for other kinds of
+   * image, we just update the requisition when the image data
+   * is set.
+   */
+  
   switch (image->storage_type)
     {
     case GTK_IMAGE_STOCK:
@@ -976,9 +978,9 @@ gtk_image_size_request (GtkWidget      *widget,
 
   if (pixbuf)
     {
-      gtk_image_update_size (image,
-                             gdk_pixbuf_get_width (pixbuf),
-                             gdk_pixbuf_get_height (pixbuf));
+      GTK_WIDGET (image)->requisition.width = gdk_pixbuf_get_width (pixbuf) + GTK_MISC (image)->xpad * 2;
+      GTK_WIDGET (image)->requisition.height = gdk_pixbuf_get_height (pixbuf) + GTK_MISC (image)->ypad * 2;
+
       g_object_unref (G_OBJECT (pixbuf));
     }
 
@@ -993,6 +995,9 @@ gtk_image_update_size (GtkImage *image,
 {
   GTK_WIDGET (image)->requisition.width = image_width + GTK_MISC (image)->xpad * 2;
   GTK_WIDGET (image)->requisition.height = image_height + GTK_MISC (image)->ypad * 2;
+
+  if (GTK_WIDGET_VISIBLE (image))
+    gtk_widget_queue_resize (GTK_WIDGET (image));
 }
 
 

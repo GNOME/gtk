@@ -1,3 +1,8 @@
+2001-04-18  Havoc Pennington  <hp@redhat.com>
+
+	* gdk-pixbuf.c (gdk_pixbuf_fill): Function to fill pixbuf with a
+	given color.
+
 Wed Apr  4 01:41:02 2001  Tim Janik  <timj@gtk.org>
 
 	* pixops/Makefile.am (noinst_LTLIBRARIES): include $top_srcdir

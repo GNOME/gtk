@@ -145,6 +145,9 @@ GdkPixbuf *gdk_pixbuf_new_from_inline   (const guchar *inline_pixbuf,
                                          int           length,
                                          GError      **error);
 
+/* Mutations */
+void       gdk_pixbuf_fill              (GdkPixbuf    *pixbuf,
+                                         guint32       pixel);
 
 /* Saving */
 

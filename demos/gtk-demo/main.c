@@ -299,16 +299,18 @@ button_press_event_cb (GtkTreeView    *tree_view,
   return FALSE;
 }
 
-gboolean
+void
 row_activated_cb (GtkTreeView       *tree_view,
-		  GtkTreePath       *path,
-		  GtkTreeViewColumn *column,
-		  GtkTreeModel      *model)
+                  GtkTreePath       *path,
+		  GtkTreeViewColumn *column)
 {
   GtkTreeIter iter;
   gboolean italic;
   GDoDemoFunc func;
   GtkWidget *window;
+  GtkTreeModel *model;
+
+  model = gtk_tree_view_get_model (tree_view);
   
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_model_get (GTK_TREE_MODEL (model),
@@ -321,6 +323,7 @@ row_activated_cb (GtkTreeView       *tree_view,
 		      ITALIC_COLUMN, !italic,
 		      -1);
   window = (func) ();
+
   if (window != NULL)
     {
       CallbackData *cbdata;
@@ -333,10 +336,6 @@ row_activated_cb (GtkTreeView       *tree_view,
 			  "destroy",
 			  window_closed_cb,
 			  cbdata);
-    }
-  else
-    {
-      gtk_tree_path_free (path);
     }
 }
 
@@ -385,9 +384,20 @@ create_text (GtkTextBuffer **buffer,
       font_desc = pango_font_description_from_string ("Courier 10");
       gtk_widget_modify_font (text_view, font_desc);
       pango_font_description_free (font_desc);
+
+      gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text_view),
+                                   GTK_WRAP_NONE);
     }
-  
-  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text_view), !is_source);
+  else
+    {
+      /* Make it a bit nicer for text. */
+      gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text_view),
+                                   GTK_WRAP_WORD);
+      gtk_text_view_set_pixels_above_lines (GTK_TEXT_VIEW (text_view),
+                                            2);
+      gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (text_view),
+                                            2);
+    }
   
   return scrolled_window;
 }
@@ -458,6 +468,7 @@ main (int argc, char **argv)
   gtk_init (&argc, &argv);
   
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "GTK+ Code Demos");
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
 

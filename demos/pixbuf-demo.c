@@ -49,13 +49,13 @@ static GdkPixbuf *frame;
 
 /* Background image */
 static GdkPixbuf *background;
-int back_width, back_height;
+static int back_width, back_height;
 
 /* Images */
 static GdkPixbuf *images[N_IMAGES];
 
 /* Widgets */
-GtkWidget *da;
+static GtkWidget *da;
 
 
 

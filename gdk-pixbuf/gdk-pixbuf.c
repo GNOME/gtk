@@ -409,6 +409,64 @@ gdk_pixbuf_error_quark (void)
   return q;
 }
 
+/**
+ * gdk_pixbuf_fill:
+ * @pixbuf: a #GdkPixbuf
+ * @pixel: RGBA pixel to clear to (0xffffff00 is opaque white, 0x000000ff transparent black)
+ *
+ * Clears a pixbuf to the given RGBA value, converting the RGBA value into
+ * the pixbuf's pixel format. The alpha will be ignored if the pixbuf
+ * doesn't have an alpha channel.
+ * 
+ **/
+void
+gdk_pixbuf_fill (GdkPixbuf *pixbuf,
+                 guint32    pixel)
+{
+        guchar *pixels;
+        gboolean all_the_same = FALSE;
+        guint r, g, b, a;
+        
+        g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+
+        pixels = pixbuf->pixels;
+
+        r = (pixel & 0xff000000) >> 24;
+        g = (pixel & 0x00ff0000) >> 16;
+        b = (pixel & 0x0000ff00) >> 8;
+        a = (pixel & 0x000000ff);
+
+        if (r == g && g == b) {
+                if (!pixbuf->has_alpha)
+                        all_the_same = TRUE;
+                else
+                        all_the_same = (r == a);
+        }
+        
+        if (all_the_same) {
+                memset (pixels, r,
+                        pixbuf->rowstride * pixbuf->height);
+        } else {
+                guchar *p;
+                guchar *end;
+
+                /* feel free to optimize this */
+                
+                p = pixels;
+                end = pixels + pixbuf->rowstride * pixbuf->height;
+                end -= (pixbuf->rowstride - pixbuf->width);
+                
+                while (p < end) {
+                        *p++ = r;
+                        *p++ = g;
+                        *p++ = b;
+                        if (pixbuf->has_alpha)
+                                *p++ = a;
+                }
+        }
+}
+
+
 /* Include the marshallers */
 #include <glib-object.h>
 #include "gdk-pixbuf-marshal.c"

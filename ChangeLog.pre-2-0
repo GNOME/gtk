@@ -1,3 +1,17 @@
+2001-04-18  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkimage.c: fix to properly queue resizes when the image is
+	set
+
+	* gtk/gtktextview.c (gtk_text_view_do_popup): desensitize Paste
+	if the insertion point isn't editable
+
+	* demos/gtk-demo/images.c: Added a GtkImage demo
+
+	* demos/gtk-demo/drawingarea.c: drawing area demo
+	
+	* demos/gtk-demo/menus.c (create_menu): cleanups
+
 Wed Apr 18 12:15:52 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c gdk/x11/gdkwindow-x11.h 

@@ -2,12 +2,17 @@
 
 democodedir=$(datadir)/gtk-2.0/demo
 
+## These should be in the order you want them to appear in the 
+## demo app, which means alphabetized by demo title, not filename
 demos = @STRIP_BEGIN@	\
 	button_box.c	\
+	dialog.c	\
+	drawingarea.c	\
+	images.c	\
 	item_factory.c	\
 	menus.c		\
 	panes.c		\
-	dialog.c	\
+	pixbufs.c	\
 	textview.c	\
 @STRIP_END@
 
@@ -63,4 +68,17 @@ gtk_demo_SOURCES = 		\
 gtk_demo_DEPENDENCIES = $(DEPS)
 gtk_demo_LDADD = $(LDADDS)
 
-democode_DATA = $(demos)
+IMAGEFILES=	apple-red.png		\
+		background.jpg		\
+		gnome-applets.png	\
+		gnome-calendar.png	\
+		gnome-foot.png		\
+		gnome-gimp.png		\
+		gnome-gmush.png		\
+		gnome-gsame.png		\
+		gnu-keys.png		\
+		gtk-logo-rgb.gif
+
+democode_DATA = $(demos) $(IMAGEFILES)
+
+EXTRA_DIST = $(IMAGEFILES)
