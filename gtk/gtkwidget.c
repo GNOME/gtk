@@ -3400,9 +3400,12 @@ gtk_widget_real_show_help (GtkWidget        *widget,
                            GtkWidgetHelpType help_type)
 {
   if (help_type == GTK_WIDGET_HELP_TOOLTIP)
-     return _gtk_tooltips_show_tip (widget);
+    {
+      _gtk_tooltips_toggle_keyboard_mode (widget);
+      return TRUE;
+    }
   else
-     return FALSE;
+    return FALSE;
 }
 
 static gboolean

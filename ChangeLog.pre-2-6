@@ -1,3 +1,11 @@
+Wed Feb 13 15:42:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.[ch] gtkwidget.c: Implement Control-F1
+	as toggle-tooltips-mode.
+
+	* gtk/gtktooltips.c: Remove parsing of tooltips style
+	string from here ... now in gtkrc.c.
+
 Wed Feb 13 12:41:44 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (gtk_init_check): g_warning() if setting
