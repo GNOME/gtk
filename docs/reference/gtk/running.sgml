@@ -229,7 +229,7 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
   </para>
 </formalpara>
 
-<formalpara>
+<formalpara id="im-module-path">
   <title><envar>GTK_IM_MODULE_PATH</envar></title>
 
   <para>
@@ -242,7 +242,7 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
   </para>
 </formalpara>
  
-<formalpara>
+<formalpara id="im-module-file">
   <title><envar>GTK_IM_MODULE_FILE</envar></title>
 
   <para>
