@@ -44,6 +44,7 @@
 #include "gtktreestore.h"
 #include "gtktreedatalist.h"
 #include "gtkintl.h"
+#include "gtktreednd.h"
 
 typedef struct _SortElt SortElt;
 typedef struct _SortLevel SortLevel;
@@ -108,6 +109,7 @@ static void gtk_tree_model_sort_init                  (GtkTreeModelSort      *tr
 static void gtk_tree_model_sort_class_init            (GtkTreeModelSortClass *tree_model_sort_class);
 static void gtk_tree_model_sort_tree_model_init       (GtkTreeModelIface     *iface);
 static void gtk_tree_model_sort_tree_sortable_init    (GtkTreeSortableIface  *iface);
+static void gtk_tree_model_sort_drag_source_init      (GtkTreeDragSourceIface*iface);
 static void gtk_tree_model_sort_finalize              (GObject               *object);
 static void gtk_tree_model_sort_set_property          (GObject               *object,
 						       guint                  prop_id,
@@ -177,6 +179,15 @@ static void         gtk_tree_model_sort_real_unref_node    (GtkTreeModel        
 							    gboolean               propagate_unref);
 static void         gtk_tree_model_sort_unref_node         (GtkTreeModel          *tree_model,
                                                             GtkTreeIter           *iter);
+
+/* TreeDragSource interface */
+static gboolean     gtk_tree_model_sort_row_draggable         (GtkTreeDragSource      *drag_source,
+                                                               GtkTreePath            *path);
+static gboolean     gtk_tree_model_sort_drag_data_get         (GtkTreeDragSource      *drag_source,
+                                                               GtkTreePath            *path,
+							       GtkSelectionData       *selection_data);
+static gboolean     gtk_tree_model_sort_drag_data_delete      (GtkTreeDragSource      *drag_source,
+                                                               GtkTreePath            *path);
 
 /* TreeSortable interface */
 static gboolean     gtk_tree_model_sort_get_sort_column_id    (GtkTreeSortable        *sortable,
@@ -260,6 +271,13 @@ gtk_tree_model_sort_get_type (void)
         NULL
       };
 
+      static const GInterfaceInfo drag_source_info =
+      {
+        (GInterfaceInitFunc) gtk_tree_model_sort_drag_source_init,
+        NULL,
+        NULL
+      };
+
       tree_model_sort_type =
 	g_type_register_static (G_TYPE_OBJECT, "GtkTreeModelSort",
 				&tree_model_sort_info, 0);
@@ -271,6 +289,10 @@ gtk_tree_model_sort_get_type (void)
       g_type_add_interface_static (tree_model_sort_type,
                                    GTK_TYPE_TREE_SORTABLE,
                                    &sortable_info);
+
+      g_type_add_interface_static (tree_model_sort_type,
+                                   GTK_TYPE_TREE_DRAG_SOURCE,
+                                   &drag_source_info);
     }
 
   return tree_model_sort_type;
@@ -336,6 +358,14 @@ gtk_tree_model_sort_tree_sortable_init (GtkTreeSortableIface *iface)
   iface->set_sort_func = gtk_tree_model_sort_set_sort_func;
   iface->set_default_sort_func = gtk_tree_model_sort_set_default_sort_func;
   iface->has_default_sort_func = gtk_tree_model_sort_has_default_sort_func;
+}
+
+static void
+gtk_tree_model_sort_drag_source_init (GtkTreeDragSourceIface *iface)
+{
+  iface->row_draggable = gtk_tree_model_sort_row_draggable;
+  iface->drag_data_delete = gtk_tree_model_sort_drag_data_delete;
+  iface->drag_data_get = gtk_tree_model_sort_drag_data_get;
 }
 
 /**
@@ -1425,6 +1455,65 @@ gtk_tree_model_sort_has_default_sort_func (GtkTreeSortable *sortable)
   g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT (sortable), FALSE);
 
   return (tree_model_sort->default_sort_func != NULL);
+}
+
+/* DragSource interface */
+static gboolean
+gtk_tree_model_sort_row_draggable (GtkTreeDragSource *drag_source,
+                                   GtkTreePath       *path)
+{
+  GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *)drag_source;
+  GtkTreePath *child_path;
+  gboolean draggable;
+
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT (drag_source), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  child_path = gtk_tree_model_sort_convert_path_to_child_path (tree_model_sort,
+                                                               path);
+  draggable = gtk_tree_drag_source_row_draggable (GTK_TREE_DRAG_SOURCE (tree_model_sort->child_model), child_path);
+  gtk_tree_path_free (child_path);
+
+  return draggable;
+}
+
+static gboolean
+gtk_tree_model_sort_drag_data_get (GtkTreeDragSource *drag_source,
+                                   GtkTreePath       *path,
+                                   GtkSelectionData  *selection_data)
+{
+  GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *)drag_source;
+  GtkTreePath *child_path;
+  gboolean gotten;
+
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT (drag_source), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  child_path = gtk_tree_model_sort_convert_path_to_child_path (tree_model_sort,
+                                                               path);
+  gotten = gtk_tree_drag_source_drag_data_get (GTK_TREE_DRAG_SOURCE (tree_model_sort->child_model), child_path, selection_data);
+  gtk_tree_path_free (child_path);
+
+  return gotten;
+}
+
+static gboolean
+gtk_tree_model_sort_drag_data_delete (GtkTreeDragSource *drag_source,
+                                      GtkTreePath       *path)
+{
+  GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *)drag_source;
+  GtkTreePath *child_path;
+  gboolean deleted;
+
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT (drag_source), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  child_path = gtk_tree_model_sort_convert_path_to_child_path (tree_model_sort,
+                                                               path);
+  deleted = gtk_tree_drag_source_drag_data_delete (GTK_TREE_DRAG_SOURCE (tree_model_sort->child_model), child_path);
+  gtk_tree_path_free (child_path);
+
+  return deleted;
 }
 
 /* sorting code - private */

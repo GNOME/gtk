@@ -20,6 +20,7 @@
 
 #include "gtktreemodelfilter.h"
 #include "gtkintl.h"
+#include "gtktreednd.h"
 #include <string.h>
 
 /* ITER FORMAT:
@@ -110,6 +111,7 @@ enum
 static void         gtk_tree_model_filter_init                            (GtkTreeModelFilter      *filter);
 static void         gtk_tree_model_filter_class_init                      (GtkTreeModelFilterClass *filter_class);
 static void         gtk_tree_model_filter_tree_model_init                 (GtkTreeModelIface       *iface);
+static void         gtk_tree_model_filter_drag_source_init                (GtkTreeDragSourceIface  *iface);
 static void         gtk_tree_model_filter_finalize                        (GObject                 *object);
 static void         gtk_tree_model_filter_set_property                    (GObject                 *object,
                                                                            guint                    prop_id,
@@ -177,6 +179,14 @@ static void         gtk_tree_model_filter_ref_node                        (GtkTr
 static void         gtk_tree_model_filter_unref_node                      (GtkTreeModel           *model,
                                                                            GtkTreeIter            *iter);
 
+/* TreeDragSource interface */
+static gboolean    gtk_tree_model_filter_row_draggable                    (GtkTreeDragSource      *drag_source,
+                                                                           GtkTreePath            *path);
+static gboolean    gtk_tree_model_filter_drag_data_get                    (GtkTreeDragSource      *drag_source,
+                                                                           GtkTreePath            *path,
+                                                                           GtkSelectionData       *selection_data);
+static gboolean    gtk_tree_model_filter_drag_data_delete                 (GtkTreeDragSource      *drag_source,
+                                                                           GtkTreePath            *path);
 
 /* private functions */
 static void        gtk_tree_model_filter_build_level                      (GtkTreeModelFilter     *filter,
@@ -259,6 +269,13 @@ gtk_tree_model_filter_get_type (void)
           NULL
         };
 
+      static const GInterfaceInfo drag_source_info =
+        {
+          (GInterfaceInitFunc) gtk_tree_model_filter_drag_source_init,
+          NULL,
+          NULL
+        };
+
       tree_model_filter_type = g_type_register_static (G_TYPE_OBJECT,
                                                        "GtkTreeModelFilter",
                                                        &tree_model_filter_info, 0);
@@ -266,6 +283,10 @@ gtk_tree_model_filter_get_type (void)
       g_type_add_interface_static (tree_model_filter_type,
                                    GTK_TYPE_TREE_MODEL,
                                    &tree_model_info);
+
+      g_type_add_interface_static (tree_model_filter_type,
+                                   GTK_TYPE_TREE_DRAG_SOURCE,
+                                   &drag_source_info);
     }
 
   return tree_model_filter_type;
@@ -334,6 +355,14 @@ gtk_tree_model_filter_tree_model_init (GtkTreeModelIface *iface)
   iface->iter_parent = gtk_tree_model_filter_iter_parent;
   iface->ref_node = gtk_tree_model_filter_ref_node;
   iface->unref_node = gtk_tree_model_filter_unref_node;
+}
+
+static void
+gtk_tree_model_filter_drag_source_init (GtkTreeDragSourceIface *iface)
+{
+  iface->row_draggable = gtk_tree_model_filter_row_draggable;
+  iface->drag_data_delete = gtk_tree_model_filter_drag_data_delete;
+  iface->drag_data_get = gtk_tree_model_filter_drag_data_get;
 }
 
 
@@ -2228,6 +2257,62 @@ gtk_tree_model_filter_real_unref_node (GtkTreeModel *model,
         }
       filter->priv->zero_ref_count++;
     }
+}
+
+/* TreeDragSource interface implementation */
+static gboolean
+gtk_tree_model_filter_row_draggable (GtkTreeDragSource *drag_source,
+                                     GtkTreePath       *path)
+{
+  GtkTreeModelFilter *tree_model_filter = (GtkTreeModelFilter *)drag_source;
+  GtkTreePath *child_path;
+  gboolean draggable;
+
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (drag_source), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  child_path = gtk_tree_model_filter_convert_path_to_child_path (tree_model_filter, path);
+  draggable = gtk_tree_drag_source_row_draggable (GTK_TREE_DRAG_SOURCE (tree_model_filter->priv->child_model), child_path);
+  gtk_tree_path_free (child_path);
+
+  return draggable;
+}
+
+static gboolean
+gtk_tree_model_filter_drag_data_get (GtkTreeDragSource *drag_source,
+                                     GtkTreePath       *path,
+                                     GtkSelectionData  *selection_data)
+{
+  GtkTreeModelFilter *tree_model_filter = (GtkTreeModelFilter *)drag_source;
+  GtkTreePath *child_path;
+  gboolean gotten;
+
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (drag_source), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  child_path = gtk_tree_model_filter_convert_path_to_child_path (tree_model_filter, path);
+  gotten = gtk_tree_drag_source_drag_data_get (GTK_TREE_DRAG_SOURCE (tree_model_filter->priv->child_model), child_path, selection_data);
+  gtk_tree_path_free (child_path);
+
+  return gotten;
+}
+
+static gboolean
+gtk_tree_model_filter_drag_data_delete (GtkTreeDragSource *drag_source,
+                                        GtkTreePath       *path)
+{
+  GtkTreeModelFilter *tree_model_filter = (GtkTreeModelFilter *)drag_source;
+  GtkTreePath *child_path;
+  gboolean deleted;
+
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (drag_source), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  child_path = gtk_tree_model_filter_convert_path_to_child_path (tree_model_filter, path);
+  deleted = gtk_tree_drag_source_drag_data_delete (GTK_TREE_DRAG_SOURCE (tree_model_filter->priv->child_model), child_path);
+  gtk_tree_path_free (child_path);
+
+  return deleted;
 }
 
 /* bits and pieces */

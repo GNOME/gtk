@@ -1,3 +1,19 @@
+Thu Dec 18 19:13:12 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #110249, reworked patch from Joshua N Pritikin.
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_get_type),
+	(gtk_tree_model_sort_tree_drag_source_init),
+	(gtk_tree_model_sort_row_draggable),
+	(gtk_tree_model_sort_drag_data_get),
+	(gtk_tree_model_sort_drag_data_delete): implement GtkTreeDragSource.
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_get_type),
+	(gtk_tree_model_filter_tree_drag_source_init),
+	(gtk_tree_model_filter_row_draggable),
+	(gtk_tree_model_filter_drag_data_get),
+	(gtk_tree_model_filter_drag_data_delete): ditto.
+
 Thu Dec 18 18:01:01 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): add key bindings
