@@ -1,3 +1,8 @@
+Tue Aug 28 21:00:44 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkprogressbar.c (gtk_progress_bar_set_text): Move the setting
+	of use_text_format to the end of the function. (#56447)
+
 Tue Aug 28 20:06:07 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* demos/testpixbuf.c (update_timeout): Use gdk_pixbuf_loader_get_pixbuf
