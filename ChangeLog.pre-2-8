@@ -1,4 +1,41 @@
-Wed, 14 Oct 1998 10:17:13 +0200 Paolo Molaro <lupus@debian.org>
+Fri Oct 16 15:59:02 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/testgtk.c (insert_row_clist) (create_clist): change a few cell
+	styles of inserted row
+	(change_style): change style of focus_row
+
+	* gtk/gtkclist.c (gtk_clist_get_row_style) (gtk_clist_set_row_style)
+	(gtk_clist_get_cell_style) (gtk_clist_set_cell_style): new functions
+	to set/get row/cell styles.
+	(gtk_clist_realize): attach row and cell style, allocate row colors.
+	(gtk_clist_unrealize): detach row and cell styles.
+	(get_cell_style): new function. get correct cell style.
+	(draw_cell_pixmap): new function. 
+	(draw_row): draw cells with row or cell styles.
+	(row_new): set cell and row styles to NULL.
+	(row_delete): detach & unref cell and row styles.
+
+	* gtk/gtkctree.c (ctree_detach_styles) (ctree_attach_styles): 
+	new functions to attach/detach styles and allocate colors.
+	(gtk_ctree_realize) (gtk_ctree_unrealize): attach/detach cell and row
+	styles of invisible nodes.
+	(draw_cell_pixmap): new function. 
+	(get_cell_style):  new function. get correct cell style.
+	(gtk_ctree_draw_expander): new function. draw tree expander.
+	(gtk_ctree_draw_lines): new function.draw tree lines.
+	(draw_row): draw cells with row or cell styles.
+	(row_new): set cell and row styles to NULL.
+	(row_delete): detach & unref cell and row styles.
+	(gtk_ctree_node_get_row_style) (gtk_ctree_node_set_row_style) 
+	(gtk_ctree_node_get_cell_style) (gtk_ctree_node_set_cell_style): 
+	Analogons of GtkCList functions	
+	(gtk_ctree_set_spacing): new function. set spacing between
+	tree expander and cell contents
+	(gtk_ctree_set_expander_style): new function. set expander style
+	of ctree.
+	(ctree_is_hot_spot): few changes due to draw_row modifications.
+
+Wed 14 Oct 1998 10:17:13 +0200 Paolo Molaro <lupus@debian.org>
 
 	* gtk/gtkcombo.c: try completion on MOD1-TAB.
 	Handle case when the combo->list is empty.

@@ -278,6 +278,8 @@ struct _GtkCListRow
   GdkColor foreground;
   GdkColor background;
   
+  GtkStyle *style;
+
   gpointer data;
   GtkDestroyNotify destroy;
   
@@ -291,9 +293,11 @@ struct _GtkCellText
 {
   GtkCellType type;
   
-  gint vertical;
-  gint horizontal;
+  gint16 vertical;
+  gint16 horizontal;
   
+  GtkStyle *style;
+
   gchar *text;
 };
 
@@ -301,9 +305,11 @@ struct _GtkCellPixmap
 {
   GtkCellType type;
   
-  gint vertical;
-  gint horizontal;
+  gint16 vertical;
+  gint16 horizontal;
   
+  GtkStyle *style;
+
   GdkPixmap *pixmap;
   GdkBitmap *mask;
 };
@@ -312,9 +318,11 @@ struct _GtkCellPixText
 {
   GtkCellType type;
   
-  gint vertical;
-  gint horizontal;
+  gint16 vertical;
+  gint16 horizontal;
   
+  GtkStyle *style;
+
   gchar *text;
   guint8 spacing;
   GdkPixmap *pixmap;
@@ -325,9 +333,11 @@ struct _GtkCellWidget
 {
   GtkCellType type;
   
-  gint vertical;
-  gint horizontal;
+  gint16 vertical;
+  gint16 horizontal;
   
+  GtkStyle *style;
+
   GtkWidget *widget;
 };
 
@@ -335,9 +345,11 @@ struct _GtkCell
 {
   GtkCellType type;
   
-  gint vertical;
-  gint horizontal;
+  gint16 vertical;
+  gint16 horizontal;
   
+  GtkStyle *style;
+
   union {
     gchar *text;
     
@@ -531,6 +543,23 @@ void gtk_clist_set_foreground (GtkCList *clist,
 void gtk_clist_set_background (GtkCList *clist,
 			       gint      row,
 			       GdkColor *color);
+
+/* set / get cell styles */
+void gtk_clist_set_cell_style (GtkCList *clist,
+			       gint row,
+			       gint column,
+			       GtkStyle *style);
+
+GtkStyle *gtk_clist_get_cell_style (GtkCList *clist,
+				    gint row,
+				    gint column);
+
+void gtk_clist_set_row_style (GtkCList *clist,
+			      gint row,
+			      GtkStyle *style);
+
+GtkStyle *gtk_clist_get_row_style (GtkCList *clist,
+				   gint row);
 
 /* this sets a horizontal and vertical shift for drawing
  * the contents of a cell; it can be positive or negitive;
