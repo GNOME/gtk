@@ -86,8 +86,7 @@ GdkPixmap*	gtk_rc_load_image		(GdkColormap 	*colormap,
 						 const gchar 	*filename);
 gchar*		gtk_rc_find_pixmap_in_path	(GScanner    	*scanner,
 						 const gchar	*pixmap_file);
-gchar*		gtk_rc_find_module_in_path	(GScanner	*scanner,
-						 const gchar 	*module_file);
+gchar*		gtk_rc_find_module_in_path	(const gchar 	*module_file);
 gchar*		gtk_rc_get_theme_dir		(void);
 gchar*		gtk_rc_get_module_dir		(void);
 

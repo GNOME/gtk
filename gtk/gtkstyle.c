@@ -286,9 +286,6 @@ static void gtk_style_shade (GdkColor *a, GdkColor *b, gdouble k);
 static void rgb_to_hls (gdouble *r, gdouble *g, gdouble *b);
 static void hls_to_rgb (gdouble *h, gdouble *l, gdouble *s);
 
-static void gtk_reset_window_and_children(GtkWidget *widget, 
-					  GdkWindow *window);
-
 
 GtkStyleClass default_class =
 {
@@ -329,44 +326,6 @@ static GdkColor gtk_default_active_bg =      { 0, 0xc350, 0xc350, 0xc350 };
 static GdkColor gtk_default_prelight_bg =    { 0, 0xea60, 0xea60, 0xea60 };
 static GdkColor gtk_default_selected_bg =    { 0,      0,      0, 0x9c40 };
 static GdkColor gtk_default_insensitive_bg = { 0, 0xd6d6, 0xd6d6, 0xd6d6 };
-
-static void
-gtk_reset_window_and_children(GtkWidget *widget, GdkWindow *window)
-{
-  GdkWindowPrivate *private;
-  guint i, num;
-  GList *list;
-  gpointer data;
-  
-  g_return_if_fail (window != NULL);
-  
-  private = (GdkWindowPrivate *)window;
-
-  if (private->destroyed)
-    return;
-  gdk_window_get_user_data(window, &data);
-  if ((data) && (data != widget))
-    return;
-  gdk_window_shape_combine_mask(window, NULL, 0, 0);
-  if (private->children)
-    {
-      num = g_list_length(private->children);
-      for(i = 0; i < num; i++)
-	{
-	  list = g_list_nth(private->children, i);
-	  gtk_reset_window_and_children(widget, (GdkWindow *)list->data);
-	}
-    }
-}
-
-void
-gtk_reset_widget_shapes(GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-
-  if (!GTK_WIDGET_HAS_SHAPE_MASK(GTK_OBJECT(widget)))
-    gtk_reset_window_and_children(widget, widget->window);
-}
 
 GtkStyle*
 gtk_style_copy (GtkStyle     *style)

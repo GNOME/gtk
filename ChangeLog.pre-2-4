@@ -1,3 +1,50 @@
+Sat Nov 28 03:13:42 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkscrolledwindow.h: 
+	* gtk/gtkscrolledwindow.c: changed scrolled window inheritance,
+	it inherits from GtkBin now.
+
+	* gtk/gtkbin.c (gtk_bin_unmap): removed superfluous check for
+	visibility of child.
+	(gtk_bin_draw): removed superfluous check for GTK_WIDGET_DRAWABLE().
+	added check so a child gets only drawn if it's visible.
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: removed gtk_widget_draw_children().
+
+	* gtk/gtkstyle.h: 
+	* gtk/gtkstyle.c: rmoved gtk_reset_widget_shapes.
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: removed crufty relict: gtk_widget_is_child().
+	added internal function gtk_widget_reset_shapes() from gtkstyle.c.
+
+	* gtk/gtkrc.h:
+	* gtk/gtkrc.c: (gtk_rc_find_pixmap_in_path): removed bogus gscanner
+	argument, changed callers.
+
+	* gtk/gtkmenufactory.c: GtkMenuFactory is deprecated for a long time,
+	it will issue a warning now.
+
+	* gtk/gtkcompat.h: new file to #define aliases for historic
+ 	function names.
+
+	* changed 8 function names for consistency and provided aliases to keep
+	source compatibility in gtkcompat.h:
+	(gtk_accel_label_get_accel_width): renamed from gtk_accel_label_accelerator_width
+	(gtk_container_set_border_width): renamed from gtk_container_border_width
+	(gtk_notebook_get_current_page): renamed from gtk_notebook_current_page
+	(gtk_packer_configure): renamed from gtk_packer_set_child_packing
+	(gtk_paned_set_gutter_size): renamed from gtk_paned_gutter_size
+	(gtk_paned_set_handle_size): renamed from gtk_paned_handle_size
+	(gtk_scale_get_value_width): renamed from gtk_scale_value_width
+	(gtk_window_set_position): renamed from gtk_window_position
+
+	* renamed a few recently added funtions for consistency:
+	(gtk_notebook_get_tab_label): renamed from gtk_notebook_query_tab_label.
+	(gtk_notebook_get_menu_label): renamed from gtk_notebook_query_menu_label.
+        (gtk_progress_configure): renamed from gtk_progress_reconfigure.
+
 Fri Nov 27 18:57:20 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_add_with_viewport):

@@ -376,7 +376,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
 
   /* The dialog-sized vertical box  */
   filesel->main_vbox = gtk_vbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (filesel), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (filesel), 10);
   gtk_container_add (GTK_CONTAINER (filesel), filesel->main_vbox);
   gtk_widget_show (filesel->main_vbox);
 
@@ -418,7 +418,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->dir_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-  gtk_container_border_width (GTK_CONTAINER (scrolled_win), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
   gtk_box_pack_start (GTK_BOX (list_hbox), scrolled_win, TRUE, TRUE, 0);
   gtk_widget_show (filesel->dir_list);
   gtk_widget_show (scrolled_win);
@@ -435,7 +435,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->file_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-  gtk_container_border_width (GTK_CONTAINER (scrolled_win), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
   gtk_box_pack_start (GTK_BOX (list_hbox), scrolled_win, TRUE, TRUE, 0);
   gtk_widget_show (filesel->file_list);
   gtk_widget_show (scrolled_win);
@@ -708,10 +708,10 @@ gtk_file_selection_fileop_error (gchar *error_message)
 		      (gpointer) fs);
   */
   gtk_window_set_title (GTK_WINDOW (dialog), "Error");
-  gtk_window_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+  gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
   
   vbox = gtk_vbox_new(FALSE, 0);
-  gtk_container_border_width(GTK_CONTAINER(vbox), 8);
+  gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
   gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
 		     FALSE, FALSE, 0);
   gtk_widget_show(vbox);
@@ -801,7 +801,7 @@ gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
 		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
 		      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), "Create Directory");
-  gtk_window_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+  gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
 
   /* If file dialog is grabbed, grab option dialog */
   /* When option dialog is closed, file dialog will be grabbed again */
@@ -809,7 +809,7 @@ gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
       gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
 
   vbox = gtk_vbox_new(FALSE, 0);
-  gtk_container_border_width(GTK_CONTAINER(vbox), 8);
+  gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
   gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
 		     FALSE, FALSE, 0);
   gtk_widget_show(vbox);
@@ -906,7 +906,7 @@ gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
 		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
 		      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), "Delete File");
-  gtk_window_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+  gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
 
   /* If file dialog is grabbed, grab option dialog */
   /* When option dialog is closed, file dialog will be grabbed again */
@@ -914,7 +914,7 @@ gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
       gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
   
   vbox = gtk_vbox_new(FALSE, 0);
-  gtk_container_border_width(GTK_CONTAINER(vbox), 8);
+  gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
   gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
 		     FALSE, FALSE, 0);
   gtk_widget_show(vbox);
@@ -1010,7 +1010,7 @@ gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
 		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
 		      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), "Rename File");
-  gtk_window_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+  gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
 
   /* If file dialog is grabbed, grab option dialog */
   /* When option dialog  closed, file dialog will be grabbed again */
@@ -1018,7 +1018,7 @@ gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
     gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
   
   vbox = gtk_vbox_new(FALSE, 0);
-  gtk_container_border_width(GTK_CONTAINER(vbox), 8);
+  gtk_container_set_border_width (GTK_CONTAINER(vbox), 8);
   gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
 		     FALSE, FALSE, 0);
   gtk_widget_show(vbox);

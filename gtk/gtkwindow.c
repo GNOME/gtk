@@ -246,7 +246,7 @@ gtk_window_set_arg (GtkObject  *object,
       gtk_window_set_hints (GTK_WIDGET (window), &GTK_WIDGET (window)->requisition);
       break;
     case ARG_WIN_POS:
-      gtk_window_position (window, GTK_VALUE_ENUM (*arg));
+      gtk_window_set_position (window, GTK_VALUE_ENUM (*arg));
       break;
     default:
       break;
@@ -407,8 +407,8 @@ gtk_window_remove_accel_group (GtkWindow       *window,
 }
 
 void
-gtk_window_position (GtkWindow         *window,
-		     GtkWindowPosition  position)
+gtk_window_set_position (GtkWindow         *window,
+			 GtkWindowPosition  position)
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));

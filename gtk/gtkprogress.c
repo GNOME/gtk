@@ -475,10 +475,10 @@ gtk_progress_set_adjustment (GtkProgress   *progress,
 }
 
 void
-gtk_progress_reconfigure (GtkProgress *progress,
-			  gfloat value,
-			  gfloat min,
-			  gfloat max)
+gtk_progress_configure (GtkProgress *progress,
+			gfloat value,
+			gfloat min,
+			gfloat max)
 {
   GtkAdjustment *adj;
   gboolean changed = FALSE;

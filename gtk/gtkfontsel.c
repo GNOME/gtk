@@ -473,7 +473,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   /* Create the main notebook page. */
   fontsel->main_vbox = gtk_vbox_new (FALSE, 4);
   gtk_widget_show (fontsel->main_vbox);
-  gtk_container_border_width (GTK_CONTAINER (fontsel->main_vbox), 6);
+  gtk_container_set_border_width (GTK_CONTAINER (fontsel->main_vbox), 6);
   label = gtk_label_new("Font");
   gtk_widget_set_usize (label, 120, -1);
   gtk_notebook_append_page (GTK_NOTEBOOK (fontsel),
@@ -671,7 +671,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   text_box = gtk_hbox_new (FALSE, 0);
   gtk_widget_show (text_box);
   gtk_container_add (GTK_CONTAINER (text_frame), text_box);
-  gtk_container_border_width (GTK_CONTAINER (text_box), 4);
+  gtk_container_set_border_width (GTK_CONTAINER (text_box), 4);
   
   fontsel->preview_entry = gtk_entry_new ();
   gtk_widget_show (fontsel->preview_entry);
@@ -689,7 +689,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   /* Create the font info page */
   fontsel->info_vbox = gtk_vbox_new (FALSE, 4);
   gtk_widget_show (fontsel->info_vbox);
-  gtk_container_border_width (GTK_CONTAINER (fontsel->info_vbox), 2);
+  gtk_container_set_border_width (GTK_CONTAINER (fontsel->info_vbox), 2);
   label = gtk_label_new("Font Information");
   gtk_widget_set_usize (label, 120, -1);
   gtk_notebook_append_page (GTK_NOTEBOOK (fontsel),
@@ -760,7 +760,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   /* Create the Filter page. */
   fontsel->filter_vbox = gtk_vbox_new (FALSE, 4);
   gtk_widget_show (fontsel->filter_vbox);
-  gtk_container_border_width (GTK_CONTAINER (fontsel->filter_vbox), 2);
+  gtk_container_set_border_width (GTK_CONTAINER (fontsel->filter_vbox), 2);
   label = gtk_label_new("Filter");
   gtk_widget_set_usize (label, 120, -1);
   gtk_notebook_append_page (GTK_NOTEBOOK (fontsel),
@@ -3401,7 +3401,7 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 		      (GtkSignalFunc) gtk_font_selection_dialog_on_configure,
 		      fontseldiag);
   
-  gtk_container_border_width (GTK_CONTAINER (fontseldiag), 4);
+  gtk_container_set_border_width (GTK_CONTAINER (fontseldiag), 4);
   gtk_window_set_policy(GTK_WINDOW(fontseldiag), FALSE, TRUE, TRUE);
   
   fontseldiag->main_vbox = gtk_vbox_new (FALSE, 4);

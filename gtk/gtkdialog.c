@@ -67,7 +67,7 @@ gtk_dialog_init (GtkDialog *dialog)
   gtk_widget_show (dialog->vbox);
 
   dialog->action_area = gtk_hbox_new (TRUE, 5);
-  gtk_container_border_width (GTK_CONTAINER (dialog->action_area), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 10);
   gtk_box_pack_end (GTK_BOX (dialog->vbox), dialog->action_area, FALSE, TRUE, 0);
   gtk_widget_show (dialog->action_area);
 

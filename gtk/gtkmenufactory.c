@@ -53,6 +53,8 @@ GtkMenuFactory*
 gtk_menu_factory_new (GtkMenuFactoryType type)
 {
   GtkMenuFactory *factory;
+
+  g_warning ("gtk_menu_factory_new(): GtkMenuFactory is deprecated and will shortly vanish");
   
   factory = g_new (GtkMenuFactory, 1);
   factory->path = NULL;

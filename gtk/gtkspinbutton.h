@@ -141,11 +141,6 @@ void		gtk_spin_button_set_shadow_type	   (GtkSpinButton  *spin_button,
 
 void		gtk_spin_button_set_snap_to_ticks  (GtkSpinButton  *spin_button,
 						    gboolean	    snap_to_ticks);
-
-void		gtk_spin_button_configure	   (GtkSpinButton  *spin_button,
-						    GtkAdjustment  *adjustment,
-						    gfloat	    climb_rate,
-						    guint	    digits);
 /* deprecated */
 void		gtk_spin_button_construct	   (GtkSpinButton  *spin_button,
 						    GtkAdjustment  *adjustment,

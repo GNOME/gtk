@@ -91,7 +91,7 @@ void       gtk_window_add_accel_group          (GtkWindow           *window,
 						GtkAccelGroup	    *accel_group);
 void       gtk_window_remove_accel_group       (GtkWindow           *window,
 						GtkAccelGroup	    *accel_group);
-void       gtk_window_position                 (GtkWindow           *window,
+void       gtk_window_set_position             (GtkWindow           *window,
 						GtkWindowPosition    position);
 gint	   gtk_window_activate_focus	       (GtkWindow           *window);
 gint	   gtk_window_activate_default	       (GtkWindow           *window);

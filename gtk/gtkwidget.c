@@ -162,8 +162,6 @@ static void gtk_widget_reparent_container_child  (GtkWidget     *widget,
 						  gpointer       client_data);
 static void gtk_widget_propagate_state		 (GtkWidget	*widget,
 						  GtkStateData 	*data);
-static void gtk_widget_draw_children_recurse	 (GtkWidget	*widget,
-						  gpointer	 client_data);
 static void gtk_widget_set_style_internal	 (GtkWidget	*widget,
 						  GtkStyle	*style,
 						  gboolean	 initial_emission);
@@ -2217,26 +2215,6 @@ gtk_widget_draw_default (GtkWidget *widget)
 }
 
 /*****************************************
- * gtk_widget_draw_children:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_widget_draw_children (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-			  gtk_widget_draw_children_recurse,
-			  NULL);
-}
-
-/*****************************************
  * gtk_widget_size_request:
  *
  *   arguments:
@@ -3250,9 +3228,10 @@ gtk_widget_set_style_internal (GtkWidget *widget,
       GtkStyle *previous_style;
 
       if (GTK_WIDGET_REALIZED (widget))
-	gtk_reset_widget_shapes(widget);
-      if (GTK_WIDGET_REALIZED (widget))
-	gtk_style_detach (widget->style);
+	{
+	  gtk_widget_reset_shapes (widget);
+	  gtk_style_detach (widget->style);
+	}
       
       previous_style = widget->style;
       widget->style = style;
@@ -3834,26 +3813,6 @@ gtk_widget_is_ancestor (GtkWidget *widget,
 }
 
 /*****************************************
- * gtk_widget_is_child:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-gint
-gtk_widget_is_child (GtkWidget *widget,
-		     GtkWidget *child)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (child != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
-  
-  return (child->parent == widget);
-}
-
-/*****************************************
  * gtk_widget_push_colormap:
  *
  *   arguments:
@@ -4432,22 +4391,6 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 }
 
 /*****************************************
- * gtk_widget_draw_children_recurse:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_widget_draw_children_recurse (GtkWidget *widget,
-				  gpointer   client_data)
-{
-  gtk_widget_draw (widget, NULL);
-  gtk_widget_draw_children (widget);
-}
-
-/*****************************************
  * gtk_widget_aux_info_new:
  *
  *   arguments:
@@ -4546,6 +4489,38 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
 	gdk_window_shape_combine_mask (widget->window, shape_mask,
 				       offset_x, offset_y);
     }
+}
+
+static void
+gtk_reset_shapes_recurse (GtkWidget *widget,
+			  GdkWindow *window)
+{
+  GdkWindowPrivate *private;
+  gpointer data;
+  GList *list;
+
+  private = (GdkWindowPrivate*) window;
+
+  if (private->destroyed)
+    return;
+  gdk_window_get_user_data (window, &data);
+  if (data != widget)
+    return;
+
+  gdk_window_shape_combine_mask (window, NULL, 0, 0);
+  for (list = private->children; list; list = list->next)
+    gtk_reset_shapes_recurse (widget, list->data);
+}
+
+void
+gtk_widget_reset_shapes (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_WIDGET_REALIZED (widget));
+
+  if (!GTK_WIDGET_HAS_SHAPE_MASK (widget))
+    gtk_reset_shapes_recurse (widget, widget->window);
 }
 
 void

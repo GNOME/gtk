@@ -43,9 +43,8 @@ typedef struct _GtkScrolledWindowClass  GtkScrolledWindowClass;
 
 struct _GtkScrolledWindow
 {
-  GtkContainer container;
+  GtkBin container;
 
-  GtkWidget *child;
   GtkWidget *hscrollbar;
   GtkWidget *vscrollbar;
 
@@ -58,7 +57,7 @@ struct _GtkScrolledWindow
 
 struct _GtkScrolledWindowClass
 {
-  GtkContainerClass parent_class;
+  GtkBinClass parent_class;
   
   gint scrollbar_spacing;
 };

@@ -132,13 +132,13 @@ void gtk_notebook_remove_page       (GtkNotebook *notebook,
  *            query, set current NoteebookPage             *
  ***********************************************************/
 
-gint gtk_notebook_current_page (GtkNotebook *notebook);
-gint gtk_notebook_page_num     (GtkNotebook *notebook,
-				GtkWidget   *child);
-void gtk_notebook_set_page     (GtkNotebook *notebook,
-				gint         page_num);
-void gtk_notebook_next_page    (GtkNotebook *notebook);
-void gtk_notebook_prev_page    (GtkNotebook *notebook);
+gint gtk_notebook_get_current_page (GtkNotebook *notebook);
+gint gtk_notebook_page_num         (GtkNotebook *notebook,
+				    GtkWidget   *child);
+void gtk_notebook_set_page         (GtkNotebook *notebook,
+				    gint         page_num);
+void gtk_notebook_next_page        (GtkNotebook *notebook);
+void gtk_notebook_prev_page        (GtkNotebook *notebook);
 
 /***********************************************************
  *            set Notebook, NotebookTab style              *
@@ -172,7 +172,7 @@ void gtk_notebook_popup_disable (GtkNotebook *notebook);
  *             query/set NotebookPage Properties           *
  ***********************************************************/
 
-GtkWidget * gtk_notebook_query_tab_label  (GtkNotebook *notebook,
+GtkWidget * gtk_notebook_get_tab_label    (GtkNotebook *notebook,
 					   GtkWidget   *child);
 void gtk_notebook_set_tab_label           (GtkNotebook *notebook,
 					   GtkWidget   *child,
@@ -180,7 +180,7 @@ void gtk_notebook_set_tab_label           (GtkNotebook *notebook,
 void gtk_notebook_set_tab_label_text      (GtkNotebook *notebook,
 					   GtkWidget   *child,
 					   const gchar *tab_text);
-GtkWidget * gtk_notebook_query_menu_label (GtkNotebook *notebook,
+GtkWidget * gtk_notebook_get_menu_label   (GtkNotebook *notebook,
 					   GtkWidget   *child);
 void gtk_notebook_set_menu_label          (GtkNotebook *notebook,
 					   GtkWidget   *child,

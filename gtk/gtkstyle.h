@@ -523,26 +523,6 @@ void gtk_draw_handle  (GtkStyle      *style,
 		       gint           height,
 		       GtkOrientation orientation);
 
-/*
- * NEW API CALLS
- * 
- * NEW API CALLS
- * 
- * NEW API CALLS
- * 
- * NEW API CALLS
- * 
- * NEW API CALLS
- * 
- * NEW API CALLS
- * 
- * NEW API CALLS
- * 
- * NEW API CALLS
- * 
- */
-   
-   
 void gtk_paint_hline   (GtkStyle      *style,
 			GdkWindow     *window,
 			GtkStateType   state_type,
@@ -777,8 +757,6 @@ void gtk_paint_handle  (GtkStyle      *style,
 			gint           width,
 			gint           height,
 			GtkOrientation orientation);
-
-void gtk_reset_widget_shapes(GtkWidget *widget);
       
 #ifdef __cplusplus
 }

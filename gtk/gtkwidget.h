@@ -444,7 +444,6 @@ void	   gtk_widget_draw		  (GtkWidget	       *widget,
 					   GdkRectangle	       *area);
 void	   gtk_widget_draw_focus	  (GtkWidget	       *widget);
 void	   gtk_widget_draw_default	  (GtkWidget	       *widget);
-void	   gtk_widget_draw_children	  (GtkWidget	       *widget);
 void	   gtk_widget_size_request	  (GtkWidget	       *widget,
 					   GtkRequisition      *requisition);
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
@@ -526,8 +525,6 @@ void	     gtk_widget_get_pointer	(GtkWidget	*widget,
 
 gint	     gtk_widget_is_ancestor	(GtkWidget	*widget,
 					 GtkWidget	*ancestor);
-gint	     gtk_widget_is_child	(GtkWidget	*widget,
-					 GtkWidget	*child);
 
 /* Hide widget and return TRUE.
  */
@@ -576,6 +573,9 @@ void	     gtk_widget_shape_combine_mask (GtkWidget *widget,
 					    GdkBitmap *shape_mask,
 					    gint       offset_x,
 					    gint       offset_y);
+
+/* internal function */
+void	     gtk_widget_reset_shapes	   (GtkWidget *widget);
 
 /* Compute a widget's path in the form "GtkWindow.MyLabel", and
  * return newly alocated strings.

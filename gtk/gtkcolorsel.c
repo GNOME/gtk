@@ -288,7 +288,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   colorsel->policy = GTK_UPDATE_CONTINUOUS;
 
   hbox = gtk_hbox_new (FALSE, 5);
-  gtk_container_border_width (GTK_CONTAINER (hbox), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_container_add (GTK_CONTAINER (colorsel), hbox);
 
   vbox = gtk_vbox_new (FALSE, 5);
@@ -324,7 +324,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-  gtk_container_border_width (GTK_CONTAINER (frame), 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame), 0);
   gtk_box_pack_start (GTK_BOX (hbox2), frame, FALSE, TRUE, 0);
   gtk_widget_show (frame);
 
@@ -1609,7 +1609,7 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   GtkWidget *action_area, *frame;
 
   colorseldiag->main_vbox = gtk_vbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (colorseldiag), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (colorseldiag), 10);
   gtk_container_add (GTK_CONTAINER (colorseldiag), colorseldiag->main_vbox);
   gtk_widget_show (colorseldiag->main_vbox);
 

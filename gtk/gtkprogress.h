@@ -76,7 +76,7 @@ void       gtk_progress_set_format_string   (GtkProgress   *progress,
 					     gchar         *format);
 void       gtk_progress_set_adjustment      (GtkProgress   *progress,
 					     GtkAdjustment *adjustment);
-void       gtk_progress_reconfigure         (GtkProgress   *progress,
+void       gtk_progress_configure           (GtkProgress   *progress,
 					     gfloat         value,
 					     gfloat         min,
 					     gfloat         max);

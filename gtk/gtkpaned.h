@@ -68,15 +68,15 @@ struct _GtkPanedClass
 };
 
 
-GtkType gtk_paned_get_type    (void);
-void    gtk_paned_add1        (GtkPaned  *paned,
-			       GtkWidget *child);
-void    gtk_paned_add2        (GtkPaned  *paned,
-			       GtkWidget *child);
-void    gtk_paned_handle_size (GtkPaned *paned,
-			       guint16   size);
-void    gtk_paned_gutter_size (GtkPaned *paned,
-			       guint16   size);
+GtkType gtk_paned_get_type        (void);
+void    gtk_paned_add1            (GtkPaned  *paned,
+				   GtkWidget *child);
+void    gtk_paned_add2            (GtkPaned  *paned,
+				   GtkWidget *child);
+void    gtk_paned_set_handle_size (GtkPaned *paned,
+				   guint16   size);
+void    gtk_paned_set_gutter_size (GtkPaned *paned,
+				   guint16   size);
 
 #ifdef __cplusplus
 }

@@ -133,7 +133,7 @@ void       gtk_packer_add		       (GtkPacker       *packer,
 						guint		 pad_y,
 						guint		 i_pad_x,
 						guint		 i_pad_y);
-void       gtk_packer_configure		       (GtkPacker	*packer, 
+void       gtk_packer_set_child_packing	       (GtkPacker	*packer, 
 						GtkWidget       *child,
 						GtkSideType      side,
 						GtkAnchorType    anchor,

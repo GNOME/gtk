@@ -206,7 +206,7 @@ gtk_accel_label_finalize (GtkObject *object)
 }
 
 guint
-gtk_accel_label_accelerator_width (GtkAccelLabel *accel_label)
+gtk_accel_label_get_accel_width (GtkAccelLabel *accel_label)
 {
   g_return_val_if_fail (accel_label != NULL, 0);
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), 0);
@@ -252,7 +252,7 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
     {
       guint ac_width;
       
-      ac_width = gtk_accel_label_accelerator_width (accel_label);
+      ac_width = gtk_accel_label_get_accel_width (accel_label);
       
       if (widget->allocation.width >= widget->requisition.width + ac_width)
 	{

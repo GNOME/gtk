@@ -445,7 +445,7 @@ popup_cb (gpointer data)
 	  int i, j;
 	  
 	  popup_window = gtk_window_new (GTK_WINDOW_POPUP);
-	  gtk_window_position (GTK_WINDOW (popup_window), GTK_WIN_POS_MOUSE);
+	  gtk_window_set_position (GTK_WINDOW (popup_window), GTK_WIN_POS_MOUSE);
 
 	  table = gtk_table_new (3,3, FALSE);
 

@@ -1815,7 +1815,7 @@ gtk_print (gchar *str)
       
       
       box2 = gtk_vbox_new (FALSE, 10);
-      gtk_container_border_width (GTK_CONTAINER (box2), 10);
+      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
       gtk_widget_show (box2);
       
@@ -1848,7 +1848,7 @@ gtk_print (gchar *str)
       
       
       box2 = gtk_vbox_new (FALSE, 10);
-      gtk_container_border_width (GTK_CONTAINER (box2), 10);
+      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
       gtk_widget_show (box2);
       

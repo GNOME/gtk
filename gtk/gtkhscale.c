@@ -321,7 +321,7 @@ gtk_hscale_size_request (GtkWidget      *widget,
   
   if (scale->draw_value)
     {
-      value_width = gtk_scale_value_width (scale);
+      value_width = gtk_scale_get_value_width (scale);
       
       if ((scale->value_pos == GTK_POS_LEFT) ||
           (scale->value_pos == GTK_POS_RIGHT))
@@ -397,12 +397,12 @@ gtk_hscale_pos_trough (GtkHScale *hscale,
       switch (scale->value_pos)
         {
         case GTK_POS_LEFT:
-          *x += gtk_scale_value_width (scale) + SCALE_CLASS (scale)->value_spacing;
+          *x += gtk_scale_get_value_width (scale) + SCALE_CLASS (scale)->value_spacing;
           *y = (widget->allocation.height - *h) / 2;
           *w -= *x;
           break;
         case GTK_POS_RIGHT:
-          *w -= gtk_scale_value_width (scale) + SCALE_CLASS (scale)->value_spacing;
+          *w -= gtk_scale_get_value_width (scale) + SCALE_CLASS (scale)->value_spacing;
           *y = (widget->allocation.height - *h) / 2;
           break;
         case GTK_POS_TOP:

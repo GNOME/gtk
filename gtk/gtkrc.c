@@ -1391,8 +1391,7 @@ gtk_rc_find_pixmap_in_path (GScanner *scanner,
 }
 
 gchar*
-gtk_rc_find_module_in_path (GScanner    *scanner,
-			    const gchar *module_file)
+gtk_rc_find_module_in_path (const gchar *module_file)
 {
   gint i;
   gint fd;
@@ -1412,13 +1411,6 @@ gtk_rc_find_module_in_path (GScanner    *scanner,
       
       g_free (buf);
     }
-  
-  if (scanner)
-    g_warning ("Unable to locate loadable module in module_path: \"%s\" line %d",
-	       module_file, scanner->line);
-  else
-    g_warning ("Unable to locate loadable module in module_path: \"%s\",",
-	       module_file);
     
   return NULL;
 }

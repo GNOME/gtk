@@ -412,8 +412,8 @@ gtk_paned_forall (GtkContainer *container,
 }
 
 void
-gtk_paned_handle_size (GtkPaned *paned,
-		       guint16   size)
+gtk_paned_set_handle_size (GtkPaned *paned,
+			   guint16   size)
 {
   gint x,y;
   
@@ -432,8 +432,8 @@ gtk_paned_handle_size (GtkPaned *paned,
 }
 
 void
-gtk_paned_gutter_size (GtkPaned *paned,
-		       guint16   size)
+gtk_paned_set_gutter_size (GtkPaned *paned,
+			   guint16   size)
 {
   g_return_if_fail (paned != NULL);
   g_return_if_fail (GTK_IS_PANED (paned));

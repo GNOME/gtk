@@ -176,7 +176,7 @@ gtk_scale_set_value_pos (GtkScale        *scale,
 }
 
 gint
-gtk_scale_value_width (GtkScale *scale)
+gtk_scale_get_value_width (GtkScale *scale)
 {
   GtkRange *range;
   gchar buffer[128];

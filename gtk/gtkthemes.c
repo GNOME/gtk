@@ -45,8 +45,8 @@ struct _GtkThemeEnginePrivate {
 
 static GHashTable *engine_hash = NULL;
 
-GtkThemeEngine *
-gtk_theme_engine_get (gchar          *name)
+GtkThemeEngine*
+gtk_theme_engine_get (gchar *name)
 {
   GtkThemeEnginePrivate *result;
   
@@ -64,10 +64,15 @@ gtk_theme_engine_get (gchar          *name)
        GModule *library;
       
        g_snprintf (fullname, 1024, "lib%s.so", name);
-       engine_path = gtk_rc_find_module_in_path(NULL, fullname);
+       engine_path = gtk_rc_find_module_in_path (fullname);
 
        if (!engine_path)
-	 return NULL;
+	 {
+	   g_warning ("Unable to locate loadable module in module_path: \"%s\",",
+		      fullname);
+	   
+	   return NULL;
+	 }
        
        /* load the lib */
        

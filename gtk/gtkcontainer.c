@@ -629,7 +629,7 @@ gtk_container_set_arg (GtkObject    *object,
   switch (arg_id)
     {
     case ARG_BORDER_WIDTH:
-      gtk_container_border_width (container, GTK_VALUE_ULONG (*arg));
+      gtk_container_set_border_width (container, GTK_VALUE_ULONG (*arg));
       break;
     case ARG_RESIZE_MODE:
       gtk_container_set_resize_mode (container, GTK_VALUE_ENUM (*arg));
@@ -666,8 +666,8 @@ gtk_container_get_arg (GtkObject    *object,
 }
 
 void
-gtk_container_border_width (GtkContainer *container,
-			    guint         border_width)
+gtk_container_set_border_width (GtkContainer *container,
+				guint         border_width)
 {
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));

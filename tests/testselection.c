@@ -396,13 +396,13 @@ main (int argc, char *argv[])
 
   dialog = gtk_dialog_new ();
   gtk_widget_set_name (dialog, "Test Input");
-  gtk_container_border_width (GTK_CONTAINER(dialog), 0);
+  gtk_container_set_border_width (GTK_CONTAINER(dialog), 0);
 
   gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
 		      GTK_SIGNAL_FUNC (quit), NULL);
 
   table = gtk_table_new (4, 2, FALSE);
-  gtk_container_border_width (GTK_CONTAINER(table), 10);
+  gtk_container_set_border_width (GTK_CONTAINER(table), 10);
 
   gtk_table_set_row_spacing (GTK_TABLE (table), 0, 5);
   gtk_table_set_row_spacing (GTK_TABLE (table), 1, 2);

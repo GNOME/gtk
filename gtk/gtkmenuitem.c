@@ -303,7 +303,7 @@ gtk_menu_item_accel_width_foreach (GtkWidget *widget,
     {
       guint w;
 
-      w = gtk_accel_label_accelerator_width (GTK_ACCEL_LABEL (widget));
+      w = gtk_accel_label_get_accel_width (GTK_ACCEL_LABEL (widget));
       *width = MAX (*width, w);
     }
   else if (GTK_IS_CONTAINER (widget))

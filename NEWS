@@ -1,3 +1,11 @@
+What is new in GTK+ 1.1.6:
+
+* GtkScrolledWindow inherits from GtkBin now.
+* Lots of API clean ups.
+* Incremental freezing abilities.
+* Integrated widgets from the GNOME tree: GtkLayout, GtkPlug and GtkSocket.
+* Read doc/Changes-1.2 to properly adapt your code.
+
 What is new in GTK+ 1.1.5:
 
 * Theme integration

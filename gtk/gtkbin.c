@@ -146,9 +146,7 @@ gtk_bin_unmap (GtkWidget *widget)
   else
     gdk_window_hide (widget->window);
 
-  if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
-      GTK_WIDGET_MAPPED (bin->child))
+  if (bin->child && GTK_WIDGET_MAPPED (bin->child))
     gtk_widget_unmap (bin->child);
 }
 
@@ -162,14 +160,11 @@ gtk_bin_draw (GtkWidget    *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_BIN (widget));
 
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
-    {
-      bin = GTK_BIN (widget);
-
-      if (bin->child &&
-	  gtk_widget_intersect (bin->child, area, &child_area))
-        gtk_widget_draw (bin->child, &child_area);
-    }
+  bin = GTK_BIN (widget);
+  
+  if (bin->child && GTK_WIDGET_VISIBLE (bin->child) &&
+      gtk_widget_intersect (bin->child, area, &child_area))
+    gtk_widget_draw (bin->child, &child_area);
 }
 
 static gint

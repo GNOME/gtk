@@ -699,16 +699,16 @@ gtk_packer_add (GtkPacker       *packer,
 }
 
 void
-gtk_packer_configure (GtkPacker       *packer,
-                      GtkWidget       *child,
-                      GtkSideType      side,
-                      GtkAnchorType    anchor,
-                      GtkPackerOptions options,
-                      guint            border_width,
-                      guint            pad_x,
-                      guint            pad_y,
-                      guint            i_pad_x,
-                      guint            i_pad_y)
+gtk_packer_set_child_packing (GtkPacker       *packer,
+			      GtkWidget       *child,
+			      GtkSideType      side,
+			      GtkAnchorType    anchor,
+			      GtkPackerOptions options,
+			      guint            border_width,
+			      guint            pad_x,
+			      guint            pad_y,
+			      guint            i_pad_x,
+			      guint            i_pad_y)
 {
   GList *list;
   GtkPackerChild *pchild;
@@ -742,8 +742,7 @@ gtk_packer_configure (GtkPacker       *packer,
       list = g_list_next(list);
     }
 
-  g_warning ("gtk_packer_configure(): couldn't find child `%s' amongst the packer's children", gtk_type_name (GTK_OBJECT_TYPE (child)));
-
+  g_warning ("couldn't find child `%s' amongst the packer's children", gtk_type_name (GTK_OBJECT_TYPE (child)));
 }
 
 void

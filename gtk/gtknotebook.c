@@ -427,7 +427,7 @@ gtk_notebook_get_arg (GtkObject *object,
       GTK_VALUE_BOOL (*arg) = notebook->menu != NULL;
       break;
     case ARG_PAGE:
-      GTK_VALUE_INT (*arg) = gtk_notebook_current_page (notebook);
+      GTK_VALUE_INT (*arg) = gtk_notebook_get_current_page (notebook);
       break;
     case ARG_TAB_POS:
       GTK_VALUE_ENUM (*arg) = notebook->tab_pos;
@@ -1427,7 +1427,7 @@ gtk_notebook_get_child_arg (GtkContainer     *container,
   switch (arg_id)
     {
     case CHILD_ARG_TAB_LABEL:
-      label = gtk_notebook_query_tab_label (notebook, child);
+      label = gtk_notebook_get_tab_label (notebook, child);
 
       if (label && GTK_IS_LABEL (label))
 	GTK_VALUE_STRING (*arg) = g_strdup (GTK_LABEL (label)->label);
@@ -1435,7 +1435,7 @@ gtk_notebook_get_child_arg (GtkContainer     *container,
 	GTK_VALUE_STRING (*arg) = NULL;
       break;
     case CHILD_ARG_MENU_LABEL:
-      label = gtk_notebook_query_menu_label (notebook, child);
+      label = gtk_notebook_get_menu_label (notebook, child);
 
       if (label && GTK_IS_LABEL (label))
 	GTK_VALUE_STRING (*arg) = g_strdup (GTK_LABEL (label)->label);
@@ -3333,7 +3333,7 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
 
   gtk_widget_show (page->menu_label);
   menu_item = gtk_menu_item_new ();
-  gtk_widget_freeze_accelerators (menu_item);
+  gtk_widget_lock_accelerators (menu_item);
   gtk_container_add (GTK_CONTAINER (menu_item), page->menu_label);
   gtk_menu_insert (GTK_MENU (notebook->menu), menu_item,
 		   gtk_notebook_real_page_position (notebook, list));
@@ -3547,14 +3547,14 @@ gtk_notebook_remove_page (GtkNotebook *notebook,
 }
 
 /* Public GtkNotebook Page Switch Methods :
- * gtk_notebook_current_page
+ * gtk_notebook_get_current_page
  * gtk_notebook_page_num
  * gtk_notebook_set_page
  * gtk_notebook_next_page
  * gtk_notebook_prev_page
  */
 gint
-gtk_notebook_current_page (GtkNotebook *notebook)
+gtk_notebook_get_current_page (GtkNotebook *notebook)
 {
   g_return_val_if_fail (notebook != NULL, -1);
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), -1);
@@ -3873,18 +3873,18 @@ gtk_notebook_popup_disable  (GtkNotebook *notebook)
 
 /* Public GtkNotebook Page Properties Functions:
  *
- * gtk_notebook_query_tab_label
+ * gtk_notebook_get_tab_label
  * gtk_notebook_set_tab_label
  * gtk_notebook_set_tab_label_text
- * gtk_notebook_query_menu_label
+ * gtk_notebook_get_menu_label
  * gtk_notebook_set_menu_label
  * gtk_notebook_set_menu_label_text
  * gtk_notebook_set_tab_label_packing
  * gtk_notebook_query_tab_label_packing
  */
 GtkWidget *
-gtk_notebook_query_tab_label (GtkNotebook *notebook,
-			      GtkWidget   *child)
+gtk_notebook_get_tab_label (GtkNotebook *notebook,
+			    GtkWidget   *child)
 {
   GList *list;
 
@@ -3967,9 +3967,9 @@ gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
   gtk_notebook_set_tab_label (notebook, child, tab_label);
 }
 
-GtkWidget *
-gtk_notebook_query_menu_label (GtkNotebook *notebook,
-			       GtkWidget   *child)
+GtkWidget*
+gtk_notebook_get_menu_label (GtkNotebook *notebook,
+			     GtkWidget   *child)
 {
   GList *list;
 

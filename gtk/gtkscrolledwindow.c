@@ -86,7 +86,7 @@ gtk_scrolled_window_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      scrolled_window_type = gtk_type_unique (GTK_TYPE_CONTAINER, &scrolled_window_info);
+      scrolled_window_type = gtk_type_unique (GTK_TYPE_BIN, &scrolled_window_info);
     }
 
   return scrolled_window_type;
@@ -102,7 +102,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
-  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
+  parent_class = gtk_type_class (GTK_TYPE_BIN);
 
   gtk_object_add_arg_type ("GtkScrolledWindow::hadjustment",
 			   GTK_TYPE_ADJUSTMENT,
@@ -218,7 +218,6 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 
   gtk_container_set_resize_mode (GTK_CONTAINER (scrolled_window), GTK_RESIZE_QUEUE);
 
-  scrolled_window->child = NULL;
   scrolled_window->hscrollbar = NULL;
   scrolled_window->vscrollbar = NULL;
   scrolled_window->hscrollbar_policy = GTK_POLICY_ALWAYS;
@@ -263,12 +262,16 @@ void
 gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
 				     GtkAdjustment     *hadjustment)
 {
+  GtkBin *bin;
+
   g_return_if_fail (scrolled_window != NULL);
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
   if (hadjustment)
     g_return_if_fail (GTK_IS_ADJUSTMENT (hadjustment));
   else
     hadjustment = (GtkAdjustment*) gtk_object_new (GTK_TYPE_ADJUSTMENT, NULL);
+
+  bin = GTK_BIN (scrolled_window);
 
   if (!scrolled_window->hscrollbar)
     {
@@ -301,8 +304,8 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
 		      scrolled_window);
   gtk_scrolled_window_adjustment_changed (hadjustment, scrolled_window);
   
-  if (scrolled_window->child)
-    gtk_widget_scroll_adjustements (scrolled_window->child,
+  if (bin->child)
+    gtk_widget_scroll_adjustements (bin->child,
 				    gtk_range_get_adjustment (GTK_RANGE (scrolled_window->hscrollbar)),
 				    gtk_range_get_adjustment (GTK_RANGE (scrolled_window->vscrollbar)));
 }
@@ -311,12 +314,16 @@ void
 gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
 				     GtkAdjustment     *vadjustment)
 {
+  GtkBin *bin;
+
   g_return_if_fail (scrolled_window != NULL);
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
   if (vadjustment)
     g_return_if_fail (GTK_IS_ADJUSTMENT (vadjustment));
   else
     vadjustment = (GtkAdjustment*) gtk_object_new (GTK_TYPE_ADJUSTMENT, NULL);
+
+  bin = GTK_BIN (scrolled_window);
 
   if (!scrolled_window->vscrollbar)
     {
@@ -349,8 +356,8 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
 		      scrolled_window);
   gtk_scrolled_window_adjustment_changed (vadjustment, scrolled_window);
 
-  if (scrolled_window->child)
-    gtk_widget_scroll_adjustements (scrolled_window->child,
+  if (bin->child)
+    gtk_widget_scroll_adjustements (bin->child,
 				    gtk_range_get_adjustment (GTK_RANGE (scrolled_window->hscrollbar)),
 				    gtk_range_get_adjustment (GTK_RANGE (scrolled_window->vscrollbar)));
 }
@@ -425,8 +432,7 @@ gtk_scrolled_window_destroy (GtkObject *object)
   gtk_widget_destroy (scrolled_window->hscrollbar);
   gtk_widget_destroy (scrolled_window->vscrollbar);
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static void
@@ -445,88 +451,71 @@ gtk_scrolled_window_finalize (GtkObject *object)
 static void
 gtk_scrolled_window_map (GtkWidget *widget)
 {
+  GtkScrolledWindow *scrolled_window;
+
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (widget));
 
-  if (!GTK_WIDGET_MAPPED (widget))
-    {
-      GtkScrolledWindow *scrolled_window;
+  scrolled_window = GTK_SCROLLED_WINDOW (widget);
 
-      scrolled_window = GTK_SCROLLED_WINDOW (widget);
-      GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-
-      if (scrolled_window->child &&
-	  GTK_WIDGET_VISIBLE (scrolled_window->child) &&
-	  !GTK_WIDGET_MAPPED (scrolled_window->child))
-	gtk_widget_map (scrolled_window->child);
-
-      if (GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar) &&
-	  !GTK_WIDGET_MAPPED (scrolled_window->hscrollbar))
-	gtk_widget_map (scrolled_window->hscrollbar);
-
-      if (GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar) &&
-	  !GTK_WIDGET_MAPPED (scrolled_window->vscrollbar))
-	gtk_widget_map (scrolled_window->vscrollbar);
-
-      gtk_widget_queue_draw (widget);
-    }
+  /* chain parent class handler to map self and child */
+  GTK_WIDGET_CLASS (parent_class)->map (widget);
+  
+  if (GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar) &&
+      !GTK_WIDGET_MAPPED (scrolled_window->hscrollbar))
+    gtk_widget_map (scrolled_window->hscrollbar);
+  
+  if (GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar) &&
+      !GTK_WIDGET_MAPPED (scrolled_window->vscrollbar))
+    gtk_widget_map (scrolled_window->vscrollbar);
 }
 
 static void
 gtk_scrolled_window_unmap (GtkWidget *widget)
 {
+  GtkScrolledWindow *scrolled_window;
+
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (widget));
 
-  if (GTK_WIDGET_MAPPED (widget))
-    {
-      GtkScrolledWindow *scrolled_window;
+  scrolled_window = GTK_SCROLLED_WINDOW (widget);
 
-      scrolled_window = GTK_SCROLLED_WINDOW (widget);
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-
-      if (scrolled_window->child &&
-	  GTK_WIDGET_VISIBLE (scrolled_window->child) &&
-	  GTK_WIDGET_MAPPED (scrolled_window->child))
-	gtk_widget_unmap (scrolled_window->child);
-
-      if (GTK_WIDGET_MAPPED (scrolled_window->hscrollbar))
-	gtk_widget_unmap (scrolled_window->hscrollbar);
-
-      if (GTK_WIDGET_MAPPED (scrolled_window->vscrollbar))
-	gtk_widget_unmap (scrolled_window->vscrollbar);
-
-      gtk_widget_queue_clear (widget);
-    }
+  /* chain parent class handler to unmap self and child */
+  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+  
+  if (GTK_WIDGET_MAPPED (scrolled_window->hscrollbar))
+    gtk_widget_unmap (scrolled_window->hscrollbar);
+  
+  if (GTK_WIDGET_MAPPED (scrolled_window->vscrollbar))
+    gtk_widget_unmap (scrolled_window->vscrollbar);
 }
 
 static void
 gtk_scrolled_window_draw (GtkWidget    *widget,
 			  GdkRectangle *area)
 {
+  GtkScrolledWindow *scrolled_window;
+  GtkBin *bin;
+  GdkRectangle child_area;
+
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (widget));
   g_return_if_fail (area != NULL);
   
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      GtkScrolledWindow *scrolled_window;
-      GdkRectangle child_area;
-      
-      scrolled_window = GTK_SCROLLED_WINDOW (widget);
-      
-      if (scrolled_window->child && GTK_WIDGET_VISIBLE (scrolled_window->child) &&
-	  gtk_widget_intersect (scrolled_window->child, area, &child_area))
-	gtk_widget_draw (scrolled_window->child, &child_area);
+  scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  bin = GTK_BIN (widget);
 
-      if (GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar) &&
-	  gtk_widget_intersect (scrolled_window->hscrollbar, area, &child_area))
-	gtk_widget_draw (scrolled_window->hscrollbar, &child_area);
-
-      if (GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar) &&
-	  gtk_widget_intersect (scrolled_window->vscrollbar, area, &child_area))
-	gtk_widget_draw (scrolled_window->vscrollbar, &child_area);
-    }
+  if (bin->child && GTK_WIDGET_VISIBLE (bin->child) &&
+      gtk_widget_intersect (bin->child, area, &child_area))
+    gtk_widget_draw (bin->child, &child_area);
+  
+  if (GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar) &&
+      gtk_widget_intersect (scrolled_window->hscrollbar, area, &child_area))
+    gtk_widget_draw (scrolled_window->hscrollbar, &child_area);
+  
+  if (GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar) &&
+      gtk_widget_intersect (scrolled_window->vscrollbar, area, &child_area))
+    gtk_widget_draw (scrolled_window->vscrollbar, &child_area);
 }
 
 static void
@@ -535,18 +524,20 @@ gtk_scrolled_window_forall (GtkContainer *container,
 			    GtkCallback   callback,
 			    gpointer      callback_data)
 {
-  GtkScrolledWindow *scrolled_window;
-
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (container));
   g_return_if_fail (callback != NULL);
 
-  scrolled_window = GTK_SCROLLED_WINDOW (container);
-
-  if (scrolled_window->child)
-    callback (scrolled_window->child, callback_data);
+  GTK_CONTAINER_CLASS (parent_class)->forall (container,
+					      include_internals,
+					      callback,
+					      callback_data);
   if (include_internals)
     {
+      GtkScrolledWindow *scrolled_window;
+
+      scrolled_window = GTK_SCROLLED_WINDOW (container);
+      
       if (scrolled_window->vscrollbar)
 	callback (scrolled_window->vscrollbar, callback_data);
       if (scrolled_window->hscrollbar)
@@ -559,6 +550,7 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
 				  GtkRequisition *requisition)
 {
   GtkScrolledWindow *scrolled_window;
+  GtkBin *bin;
   gint extra_height;
   gint extra_width;
 
@@ -567,16 +559,17 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
   g_return_if_fail (requisition != NULL);
 
   scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  bin = GTK_BIN (scrolled_window);
 
   requisition->width = 0;
   requisition->height = 0;
 
-  if (scrolled_window->child && GTK_WIDGET_VISIBLE (scrolled_window->child))
+  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      gtk_widget_size_request (scrolled_window->child, &scrolled_window->child->requisition);
+      gtk_widget_size_request (bin->child, &bin->child->requisition);
 
-      requisition->width += scrolled_window->child->requisition.width;
-      requisition->height += scrolled_window->child->requisition.height;
+      requisition->width += bin->child->requisition.width;
+      requisition->height += bin->child->requisition.height;
     }
 
   extra_width = 0;
@@ -651,6 +644,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 				   GtkAllocation *allocation)
 {
   GtkScrolledWindow *scrolled_window;
+  GtkBin *bin;
   GtkAllocation relative_allocation;
   GtkAllocation child_allocation;
   
@@ -659,6 +653,8 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   g_return_if_fail (allocation != NULL);
 
   scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  bin = GTK_BIN (scrolled_window);
+
   widget->allocation = *allocation;
 
   if (scrolled_window->hscrollbar_policy == GTK_POLICY_ALWAYS)
@@ -666,7 +662,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   if (scrolled_window->vscrollbar_policy == GTK_POLICY_ALWAYS)
     scrolled_window->vscrollbar_visible = TRUE;
 
-  if (scrolled_window->child && GTK_WIDGET_VISIBLE (scrolled_window->child))
+  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
       gboolean previous_hvis;
       gboolean previous_vvis;
@@ -684,7 +680,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	  previous_hvis = scrolled_window->hscrollbar_visible;
 	  previous_vvis = scrolled_window->vscrollbar_visible;
 	  
-	  gtk_widget_size_allocate (scrolled_window->child, &child_allocation);
+	  gtk_widget_size_allocate (bin->child, &child_allocation);
 
 	  /* If, after the first iteration, the hscrollbar and the
 	   * vscrollbar flip visiblity, then we need both.
@@ -804,12 +800,15 @@ gtk_scrolled_window_add (GtkContainer *container,
 			 GtkWidget    *child)
 {
   GtkScrolledWindow *scrolled_window;
+  GtkBin *bin;
+
+  bin = GTK_BIN (container);
+  g_return_if_fail (bin->child == NULL);
 
   scrolled_window = GTK_SCROLLED_WINDOW (container);
-  g_return_if_fail (scrolled_window->child == NULL);
 
-  gtk_widget_set_parent (child, GTK_WIDGET (container));
-  scrolled_window->child = child;
+  gtk_widget_set_parent (child, GTK_WIDGET (bin));
+  bin->child = child;
 
   /* this is a temporary message */
   if (!gtk_widget_scroll_adjustements (child,
@@ -818,18 +817,18 @@ gtk_scrolled_window_add (GtkContainer *container,
     g_message ("gtk_scrolled_window_add(): cannot add non scrollable widget "
 	       "use gtk_scrolled_window_add_with_viewport() instead");
 
-  if (GTK_WIDGET_VISIBLE (scrolled_window))
+  if (GTK_WIDGET_VISIBLE (child->parent))
     {
-      if (GTK_WIDGET_REALIZED (scrolled_window) &&
+      if (GTK_WIDGET_REALIZED (child->parent) &&
 	  !GTK_WIDGET_REALIZED (child))
 	gtk_widget_realize (child);
 
-      if (GTK_WIDGET_MAPPED (scrolled_window) &&
+      if (GTK_WIDGET_MAPPED (child->parent) &&
 	  !GTK_WIDGET_MAPPED (child))
 	gtk_widget_map (child);
     }
-  
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (scrolled_window))
+
+  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (container))
     gtk_widget_queue_resize (child);
 }
 
@@ -837,30 +836,22 @@ static void
 gtk_scrolled_window_remove (GtkContainer *container,
 			    GtkWidget    *child)
 {
-  GtkScrolledWindow *scrolled_window;
-  gboolean widget_was_visible;
-  
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (container));
   g_return_if_fail (child != NULL);
-
-  scrolled_window = GTK_SCROLLED_WINDOW (container);
-  g_return_if_fail (scrolled_window->child == child);
-  
-  widget_was_visible = GTK_WIDGET_VISIBLE (child);
+  g_return_if_fail (GTK_BIN (container)->child == child);
   
   gtk_widget_scroll_adjustements (child, NULL, NULL);
-  gtk_widget_unparent (child);
-  scrolled_window->child = NULL;
-  
-  if (widget_was_visible)
-    gtk_widget_queue_resize (GTK_WIDGET (container));
+
+  /* chain parent class handler to remove child */
+  GTK_CONTAINER_CLASS (parent_class)->remove (container, child);
 }
 
 void
 gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
 				       GtkWidget         *child)
 {
+  GtkBin *bin;
   GtkWidget *viewport;
 
   g_return_if_fail (scrolled_window != NULL);
@@ -869,12 +860,14 @@ gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (child->parent == NULL);
 
-  if (scrolled_window->child != NULL)
-    {
-      g_return_if_fail (GTK_IS_VIEWPORT (scrolled_window->child));
-      g_return_if_fail (GTK_BIN (scrolled_window->child)->child == NULL);
+  bin = GTK_BIN (scrolled_window);
 
-      viewport = scrolled_window->child;
+  if (bin->child != NULL)
+    {
+      g_return_if_fail (GTK_IS_VIEWPORT (bin->child));
+      g_return_if_fail (GTK_BIN (bin->child)->child == NULL);
+
+      viewport = bin->child;
     }
   else
     {
