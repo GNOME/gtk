@@ -463,7 +463,7 @@ gdk_window_foreign_new (guint32 anid)
     parent_private->children = g_list_prepend (parent_private->children, window);
   
   GDK_DRAWABLE_XDATA (window)->xid = anid;
-  GDK_DRAWABLE_XDATA (window)->xdisplay = GDK_DRAWABLE_XDISPLAY (private->parent);
+  GDK_DRAWABLE_XDATA (window)->xdisplay = gdk_display;
 
   private->x = attrs.x;
   private->y = attrs.y;
@@ -1348,12 +1348,15 @@ gdk_window_get_pointer (GdkWindow       *window,
   int winx = 0;
   int winy = 0;
   unsigned int xmask = 0;
+  gint xoffset, yoffset;
 
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   
   if (!window)
     window = gdk_parent_root;
   
+  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+
   return_val = NULL;
   if (!GDK_DRAWABLE_DESTROYED (window) &&
       XQueryPointer (GDK_DRAWABLE_XDISPLAY (window),
@@ -1365,9 +1368,9 @@ gdk_window_get_pointer (GdkWindow       *window,
     }
   
   if (x)
-    *x = winx;
+    *x = winx + xoffset;
   if (y)
-    *y = winy;
+    *y = winy + yoffset;
   if (mask)
     *mask = xmask;
   

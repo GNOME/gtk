@@ -591,7 +591,7 @@ gtk_text_iter_get_char(const GtkTextIter *iter)
   /* FIXME probably want to special-case the end iterator
      and either have an error or return 0 */
   
-  if (real->segment->type == &gtk_text_view_char_type)
+  if (real->segment->type == &gtk_text_char_type)
     {
       GtkTextUniChar ch;
 
@@ -717,14 +717,14 @@ gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
     {
       if (toggled_on)
         {
-          if (seg->type == &gtk_text_view_toggle_on_type)
+          if (seg->type == &gtk_text_toggle_on_type)
             {
               retval = g_slist_prepend(retval, seg->body.toggle.info->tag);
             }
         }
       else
         {
-          if (seg->type == &gtk_text_view_toggle_off_type)
+          if (seg->type == &gtk_text_toggle_off_type)
             {
               retval = g_slist_prepend(retval, seg->body.toggle.info->tag);
             }
@@ -757,7 +757,7 @@ gtk_text_iter_begins_tag    (const GtkTextIter  *iter,
   seg = real->any_segment;
   while (seg != real->segment)
     {
-      if (seg->type == &gtk_text_view_toggle_on_type)
+      if (seg->type == &gtk_text_toggle_on_type)
         {
           if (tag == NULL ||
               seg->body.toggle.info->tag == tag)
@@ -789,7 +789,7 @@ gtk_text_iter_ends_tag   (const GtkTextIter  *iter,
   seg = real->any_segment;
   while (seg != real->segment)
     {
-      if (seg->type == &gtk_text_view_toggle_off_type)
+      if (seg->type == &gtk_text_toggle_off_type)
         {
           if (tag == NULL ||
               seg->body.toggle.info->tag == tag)
@@ -821,8 +821,8 @@ gtk_text_iter_toggles_tag       (const GtkTextIter  *iter,
   seg = real->any_segment;
   while (seg != real->segment)
     {
-      if ( (seg->type == &gtk_text_view_toggle_off_type ||
-            seg->type == &gtk_text_view_toggle_on_type) &&
+      if ( (seg->type == &gtk_text_toggle_off_type ||
+            seg->type == &gtk_text_toggle_on_type) &&
            (tag == NULL ||
             seg->body.toggle.info->tag == tag) )
         return TRUE;
@@ -983,7 +983,7 @@ forward_line_leaving_caches_unmodified(GtkTextRealIter *real)
       if (real->segments_changed_stamp ==
           gtk_text_btree_get_segments_changed_stamp(real->tree))
         {
-          g_assert(real->segment->type == &gtk_text_view_char_type);
+          g_assert(real->segment->type == &gtk_text_char_type);
           g_assert(real->segment->char_count == 1);
         }
       /* We leave real->line as-is */
@@ -1012,7 +1012,7 @@ forward_char(GtkTextRealIter *real)
       /* Just moving within a segment. Keep byte count
          up-to-date, if it was already up-to-date. */
 
-      g_assert(real->segment->type == &gtk_text_view_char_type);
+      g_assert(real->segment->type == &gtk_text_char_type);
       
       if (real->line_byte_offset >= 0)
         {
@@ -1266,7 +1266,7 @@ gtk_text_iter_backward_chars(GtkTextIter *iter, gint count)
     {
       /* Optimize the within-segment case */      
       g_assert(real->segment->char_count > 0);
-      g_assert(real->segment->type == &gtk_text_view_char_type);
+      g_assert(real->segment->type == &gtk_text_char_type);
 
       real->segment_char_offset -= count;
       g_assert(real->segment_char_offset >= 0);
@@ -2176,8 +2176,8 @@ gtk_text_btree_get_iter_at_mark (GtkTextBTree *tree,
 {
   g_return_if_fail(iter != NULL);
   g_return_if_fail(tree != NULL);
-  g_return_if_fail(mark->type == &gtk_text_view_left_mark_type ||
-                   mark->type == &gtk_text_view_right_mark_type);
+  g_return_if_fail(mark->type == &gtk_text_left_mark_type ||
+                   mark->type == &gtk_text_right_mark_type);
   
   iter_init_from_segment(iter, tree, mark->body.mark.line, mark);
   g_assert(mark->body.mark.line == gtk_text_iter_get_line(iter));
@@ -2330,7 +2330,7 @@ gtk_text_iter_check(const GtkTextIter *iter)
 
       /* Make sure the segment offsets are equivalent, if it's a char
          segment. */
-      if (char_segment->type == &gtk_text_view_char_type)
+      if (char_segment->type == &gtk_text_char_type)
         {
           gint byte_offset = 0;
           gint char_offset = 0;

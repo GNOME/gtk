@@ -44,9 +44,9 @@ mark_segment_new(GtkTextBTree *tree,
   mark->body.mark.name = g_strdup(name);
 
   if (left_gravity)
-    mark->type = &gtk_text_view_left_mark_type;
+    mark->type = &gtk_text_left_mark_type;
   else
-    mark->type = &gtk_text_view_right_mark_type;
+    mark->type = &gtk_text_right_mark_type;
 
   mark->byte_count = 0;
   mark->char_count = 0;
@@ -66,8 +66,8 @@ void
 mark_segment_ref(GtkTextLineSegment *mark)
 {
   g_return_if_fail(mark != NULL);
-  g_return_if_fail(mark->type == &gtk_text_view_right_mark_type ||
-                   mark->type == &gtk_text_view_left_mark_type);
+  g_return_if_fail(mark->type == &gtk_text_right_mark_type ||
+                   mark->type == &gtk_text_left_mark_type);
   g_return_if_fail(mark->body.mark.refcount > 0);
   
   mark->body.mark.refcount += 1;
@@ -77,8 +77,8 @@ void
 mark_segment_unref(GtkTextLineSegment *mark)
 {
   g_return_if_fail(mark != NULL);
-  g_return_if_fail(mark->type == &gtk_text_view_right_mark_type ||
-                   mark->type == &gtk_text_view_left_mark_type);
+  g_return_if_fail(mark->type == &gtk_text_right_mark_type ||
+                   mark->type == &gtk_text_left_mark_type);
   g_return_if_fail(mark->body.mark.refcount > 0);
 
   mark->body.mark.refcount -= 1;
@@ -110,7 +110,7 @@ static void             mark_segment_check_func   (GtkTextLineSegment   *segPtr,
  * their gravity property.
  */
 
-GtkTextLineSegmentClass gtk_text_view_right_mark_type = {
+GtkTextLineSegmentClass gtk_text_right_mark_type = {
     "mark",					/* name */
     FALSE,						/* leftGravity */
     (GtkTextLineSegmentSplitFunc) NULL,			/* splitFunc */
@@ -120,7 +120,7 @@ GtkTextLineSegmentClass gtk_text_view_right_mark_type = {
     mark_segment_check_func				/* checkFunc */
 };
 
-GtkTextLineSegmentClass gtk_text_view_left_mark_type = {
+GtkTextLineSegmentClass gtk_text_left_mark_type = {
     "mark",					/* name */
     TRUE,						/* leftGravity */
     (GtkTextLineSegmentSplitFunc) NULL,			/* splitFunc */

@@ -1,3 +1,58 @@
+Sun Apr 23 23:39:18 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_process_updates_internal): Gracefully
+	handle the case where updates are queued during processing of
+	updates.
+
+	* gtk/gtkentry.c gtk/gtktextdisplay.c: Don't handle selections as
+	attributes - that doesn't handle partial-glyph selection
+	properly. Instead use new pango_layout_line_get_x_ranges()
+	functionality to draw the selection.
+
+	* gtk/gtkentry.c: Simplify code since pango_layout_line_index_to_x()
+	now properly handles out-of-range coordinates.
+
+	* gtk/gtktextbuffer.c: Emit "mark_set" when the cursor is moved.
+
+	* gtk/gtktextiter.h gtk/gtktextiterprivate.h: Make gtk_text_iter_get_line_byte()
+	public.
+
+	* gtk/gtktextlayout.[ch]: Properly set the direction in the PangoContext
+	for paragraphs opposite to the base direction of the widget.
+
+	* gtk/gtktextlayout.[ch] gtk/gtktextdisplay.c: Fixes for alignment.
+
+	* gtk/gtktextlayout.c: Don't split segments on marks, since that
+	causes Arabic words to reshape as you cursor through.
+
+	* gtk/gtktextlayout.[ch] gtk/gtktextview.[ch]: Implement virtual
+	cursor position when moving vertically with the arrow keys and
+	scrolling with page-up/page-down. (Arrow keys save only the X,
+	scrolling saves both X and Y.)
+
+	This means you can line-up / line-down or page-up / page-down
+	without losing your place, and also that moving vertically
+	with the cursor keys keeps the same X position, not the same
+	character count:
+
+	* gtk/gtktextlayout.[ch] gtk/gtktextview.[ch]: Make vertical
+	arrow keys move by display lines, not paragraphs.
+
+Tue Apr 18 14:16:50 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklayout.c: Make sure that the bin window is at least
+	as big as the allocation. (Should we also make sure that the
+	bin window is big enough to completely cover widget->window?)
+
+	* gtk/gtktextview.c (gtk_text_view_get_visible_rect): Add
+	function to get the onscreen rectangle.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_foreign_new): We already assume
+	window is on gdk_display - use that instead of segfaulting.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_pointer): Correctly account
+	for offsets in window coordinates.
+
 Sun Apr 16 16:13:27 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_get_cursor_locations): Fix index/offset

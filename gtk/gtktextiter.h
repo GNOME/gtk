@@ -49,7 +49,7 @@ void         gtk_text_iter_free     (GtkTextIter       *iter);
 gint     gtk_text_iter_get_char_index  (const GtkTextIter *iter);
 gint     gtk_text_iter_get_line_number (const GtkTextIter *iter);
 gint     gtk_text_iter_get_line_char   (const GtkTextIter *iter);
-
+gint     gtk_text_iter_get_line_byte   (const GtkTextIter *iter);
 
 /*
  * "Dereference" operators

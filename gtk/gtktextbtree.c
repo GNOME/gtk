@@ -1658,8 +1658,8 @@ gtk_text_btree_tag (const GtkTextIter *start_orig,
           g_assert(indexable_seg != NULL);
           g_assert(seg != indexable_seg);
       
-          if ( (seg->type == &gtk_text_view_toggle_on_type ||
-                seg->type == &gtk_text_view_toggle_off_type) && 
+          if ( (seg->type == &gtk_text_toggle_on_type ||
+                seg->type == &gtk_text_toggle_off_type) && 
                (seg->body.toggle.info == info) )
             break;
           else
@@ -1676,14 +1676,14 @@ gtk_text_btree_tag (const GtkTextIter *start_orig,
 
       /* If this happens, when previously tagging we didn't merge
          overlapping tags. */
-      g_assert( (toggled_on && seg->type == &gtk_text_view_toggle_off_type) ||
-                (!toggled_on && seg->type == &gtk_text_view_toggle_on_type) );
+      g_assert( (toggled_on && seg->type == &gtk_text_toggle_off_type) ||
+                (!toggled_on && seg->type == &gtk_text_toggle_on_type) );
       
       toggled_on = !toggled_on;
 
 #if 0
       printf("deleting %s toggle\n",
-             seg->type == &gtk_text_view_toggle_on_type ? "on" : "off");
+             seg->type == &gtk_text_toggle_on_type ? "on" : "off");
 #endif 
       /* Remove toggle segment from the list. */
       if (prev == seg)
@@ -1966,8 +1966,8 @@ gtk_text_btree_get_tags (const GtkTextIter *iter,
        (index + seg->byte_count) <= byte_index;
        index += seg->byte_count, seg = seg->next)
     {
-      if ((seg->type == &gtk_text_view_toggle_on_type)
-          || (seg->type == &gtk_text_view_toggle_off_type))
+      if ((seg->type == &gtk_text_toggle_on_type)
+          || (seg->type == &gtk_text_toggle_off_type))
         {
           inc_count(seg->body.toggle.info->tag, 1, &tagInfo);
         }
@@ -1985,8 +1985,8 @@ gtk_text_btree_get_tags (const GtkTextIter *iter,
       for (seg = siblingline->segments; seg != NULL;
            seg = seg->next)
         {
-          if ((seg->type == &gtk_text_view_toggle_on_type)
-              || (seg->type == &gtk_text_view_toggle_off_type))
+          if ((seg->type == &gtk_text_toggle_on_type)
+              || (seg->type == &gtk_text_toggle_off_type))
             {
               inc_count(seg->body.toggle.info->tag, 1, &tagInfo);
             }
@@ -2061,7 +2061,7 @@ copy_segment(GString *string,
   seg = gtk_text_iter_get_indexable_segment(start);
   end_seg = gtk_text_iter_get_indexable_segment(end);
   
-  if (seg->type == &gtk_text_view_char_type)
+  if (seg->type == &gtk_text_char_type)
     {
       gboolean copy = TRUE;
       gint copy_bytes = 0;
@@ -2238,8 +2238,8 @@ gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
        (index + seg->byte_count) <= byte_index; /* segfault here means invalid index */
        index += seg->byte_count, seg = seg->next)
     {    
-      if ((seg->type == &gtk_text_view_toggle_on_type)
-          || (seg->type == &gtk_text_view_toggle_off_type))
+      if ((seg->type == &gtk_text_toggle_on_type)
+          || (seg->type == &gtk_text_toggle_off_type))
         {
           tag = seg->body.toggle.info->tag;
           if (tag->elide_set && tag->values->elide)
@@ -2262,8 +2262,8 @@ gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
       for (seg = siblingline->segments; seg != NULL;
            seg = seg->next)
         {
-          if ((seg->type == &gtk_text_view_toggle_on_type)
-              || (seg->type == &gtk_text_view_toggle_off_type))
+          if ((seg->type == &gtk_text_toggle_on_type)
+              || (seg->type == &gtk_text_toggle_off_type))
             {
               tag = seg->body.toggle.info->tag;
               if (tag->elide_set && tag->values->elide)
@@ -2777,8 +2777,8 @@ find_toggle_segment_before_char(GtkTextLine *line,
   seg = line->segments;
   while ( (index + seg->char_count) <= char_in_line )
     {
-      if (((seg->type == &gtk_text_view_toggle_on_type)
-           || (seg->type == &gtk_text_view_toggle_off_type))
+      if (((seg->type == &gtk_text_toggle_on_type)
+           || (seg->type == &gtk_text_toggle_off_type))
           && (seg->body.toggle.info->tag == tag))
         toggle_seg = seg;
 
@@ -2803,8 +2803,8 @@ find_toggle_segment_before_byte(GtkTextLine *line,
   seg = line->segments;
   while ( (index + seg->byte_count) <= byte_in_line )
     {
-      if (((seg->type == &gtk_text_view_toggle_on_type)
-           || (seg->type == &gtk_text_view_toggle_off_type))
+      if (((seg->type == &gtk_text_toggle_on_type)
+           || (seg->type == &gtk_text_toggle_off_type))
           && (seg->body.toggle.info->tag == tag))
         toggle_seg = seg;
 
@@ -2839,8 +2839,8 @@ find_toggle_outside_current_line(GtkTextLine *line,
       seg = sibling_line->segments;
       while (seg != NULL)
         {
-          if (((seg->type == &gtk_text_view_toggle_on_type)
-               || (seg->type == &gtk_text_view_toggle_off_type))
+          if (((seg->type == &gtk_text_toggle_on_type)
+               || (seg->type == &gtk_text_toggle_off_type))
               && (seg->body.toggle.info->tag == tag))
             toggle_seg = seg;
 
@@ -2851,7 +2851,7 @@ find_toggle_outside_current_line(GtkTextLine *line,
     }
 
   if (toggle_seg != NULL)
-    return (toggle_seg->type == &gtk_text_view_toggle_on_type);
+    return (toggle_seg->type == &gtk_text_toggle_on_type);
   
   /*
    * No toggle in this GtkTextBTreeNode.  Scan upwards through the ancestors of
@@ -2921,7 +2921,7 @@ gtk_text_line_char_has_tag (GtkTextLine *line,
   toggle_seg = find_toggle_segment_before_char(line, char_in_line, tag);
   
   if (toggle_seg != NULL)
-    return (toggle_seg->type == &gtk_text_view_toggle_on_type);
+    return (toggle_seg->type == &gtk_text_toggle_on_type);
   else
     return find_toggle_outside_current_line(line, tree, tag);
 }
@@ -2945,7 +2945,7 @@ gtk_text_line_byte_has_tag (GtkTextLine *line,
   toggle_seg = find_toggle_segment_before_byte(line, byte_in_line, tag);
   
   if (toggle_seg != NULL)
-    return (toggle_seg->type == &gtk_text_view_toggle_on_type);
+    return (toggle_seg->type == &gtk_text_toggle_on_type);
   else
     return find_toggle_outside_current_line(line, tree, tag);
 }
@@ -3389,7 +3389,7 @@ gtk_text_line_byte_to_char (GtkTextLine *line,
     return char_offset + byte_offset;
   else
     {
-      if (seg->type == &gtk_text_view_char_type)
+      if (seg->type == &gtk_text_char_type)
         return char_offset + gtk_text_view_num_utf_chars(seg->body.chars, byte_offset);
       else
         {
@@ -3613,7 +3613,7 @@ gtk_text_line_byte_to_char_offsets(GtkTextLine *line,
   /* offset is now the number of bytes into the current segment we
      want to go. Count chars into the current segment. */
 
-  if (seg->type == &gtk_text_view_char_type)
+  if (seg->type == &gtk_text_char_type)
     {
       *seg_char_offset = gtk_text_view_num_utf_chars(seg->body.chars,
                                                      offset);
@@ -3659,7 +3659,7 @@ gtk_text_line_char_to_byte_offsets(GtkTextLine *line,
   /* offset is now the number of chars into the current segment we
      want to go. Count bytes into the current segment. */
 
-  if (seg->type == &gtk_text_view_char_type)
+  if (seg->type == &gtk_text_char_type)
     {
       *seg_byte_offset = 0;
       while (offset > 0)
@@ -4815,8 +4815,8 @@ recompute_level_zero_tag_counts(GtkTextBTreeNode *node)
 
           node->num_chars += seg->char_count;
         
-          if (((seg->type != &gtk_text_view_toggle_on_type)
-               && (seg->type != &gtk_text_view_toggle_off_type))
+          if (((seg->type != &gtk_text_toggle_on_type)
+               && (seg->type != &gtk_text_toggle_off_type))
               || !(seg->body.toggle.inNodeCounts))
             {
               ; /* nothing */
@@ -5425,7 +5425,7 @@ gtk_text_btree_node_check_consistency(GtkTextBTreeNode *node)
                   g_error("gtk_text_btree_node_check_consistency: wrong segment order for gravity");
                 }
               if ((segPtr->next == NULL)
-                  && (segPtr->type != &gtk_text_view_char_type))
+                  && (segPtr->type != &gtk_text_char_type))
                 {
                   g_error("gtk_text_btree_node_check_consistency: line ended with wrong type");
                 }
@@ -5512,8 +5512,8 @@ gtk_text_btree_node_check_consistency(GtkTextBTreeNode *node)
               for (segPtr = line->segments; segPtr != NULL;
                    segPtr = segPtr->next)
                 {
-                  if ((segPtr->type != &gtk_text_view_toggle_on_type)
-                      && (segPtr->type != &gtk_text_view_toggle_off_type))
+                  if ((segPtr->type != &gtk_text_toggle_on_type)
+                      && (segPtr->type != &gtk_text_toggle_off_type))
                     {
                       continue;
                     }
@@ -5650,8 +5650,8 @@ gtk_text_btree_check (GtkTextBTree *tree)
                   for (seg = line->segments; seg != NULL;
                        seg = seg->next)
                     {
-                      if ((seg->type == &gtk_text_view_toggle_on_type ||
-                           seg->type == &gtk_text_view_toggle_off_type) &&
+                      if ((seg->type == &gtk_text_toggle_on_type ||
+                           seg->type == &gtk_text_toggle_off_type) &&
                           seg->body.toggle.info->tag == tag)
                         {
                           count++;
@@ -5704,9 +5704,9 @@ gtk_text_btree_check (GtkTextBTree *tree)
       line = line->next;
     }
   seg = line->segments;
-  while ((seg->type == &gtk_text_view_toggle_off_type)
-         || (seg->type == &gtk_text_view_right_mark_type)
-         || (seg->type == &gtk_text_view_left_mark_type))
+  while ((seg->type == &gtk_text_toggle_off_type)
+         || (seg->type == &gtk_text_right_mark_type)
+         || (seg->type == &gtk_text_left_mark_type))
     {
       /*
        * It's OK to toggle a tag off in the last line, but
@@ -5716,7 +5716,7 @@ gtk_text_btree_check (GtkTextBTree *tree)
 
       seg = seg->next;
     }
-  if (seg->type != &gtk_text_view_char_type)
+  if (seg->type != &gtk_text_char_type)
     {
       g_error("gtk_text_btree_check: last line has bogus segment type");
     }

@@ -702,6 +702,27 @@ gtk_text_buffer_insert_pixmap_at_char (GtkTextBuffer      *buffer,
  * Mark manipulation
  */
 
+static void
+gtk_text_buffer_mark_set (GtkTextBuffer     *buffer,
+			  const GtkTextIter *location,
+			  const char        *mark_name)
+{
+  /* IMO this should NOT work like insert_text and delete_text,
+     where the real action happens in the default handler.
+
+     The reason is that the default handler would be _required_,
+     i.e. the whole widget would start breaking and segfaulting
+     if the default handler didn't get run. So you can't really
+     override the default handler or stop the emission; that is,
+     this signal is purely for notification, and not to allow users
+     to modify the default behavior. */
+  gtk_signal_emit(GTK_OBJECT(buffer),
+                  signals[MARK_SET],
+                  &location,
+                  mark_name);
+
+}
+
 static GtkTextMark*
 gtk_text_buffer_set_mark(GtkTextBuffer *buffer,
                          const gchar *mark_name,
@@ -730,19 +751,7 @@ gtk_text_buffer_set_mark(GtkTextBuffer *buffer,
                                   &location,
                                   mark);
 
-  /* IMO this should NOT work like insert_text and delete_text,
-     where the real action happens in the default handler.
-
-     The reason is that the default handler would be _required_,
-     i.e. the whole widget would start breaking and segfaulting
-     if the default handler didn't get run. So you can't really
-     override the default handler or stop the emission; that is,
-     this signal is purely for notification, and not to allow users
-     to modify the default behavior. */
-  gtk_signal_emit(GTK_OBJECT(buffer),
-                  signals[MARK_SET],
-                  &location,
-                  mark_name);
+  gtk_text_buffer_mark_set (buffer, &location, mark_name);
 
   return (GtkTextMark*)mark;
 }
@@ -814,12 +823,14 @@ gtk_text_buffer_get_mark (GtkTextBuffer      *buffer,
 }
 
 void
-gtk_text_buffer_place_cursor           (GtkTextBuffer      *buffer,
-                                        const GtkTextIter *where)
+gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
+                              const GtkTextIter *where)
 {
   g_return_if_fail(GTK_IS_TEXT_VIEW_BUFFER(buffer));
   
   gtk_text_btree_place_cursor(buffer->tree, where);
+  gtk_text_buffer_mark_set (buffer, where, "insert");
+  gtk_text_buffer_mark_set (buffer, where, "selection_bound");
 }
 
 /*

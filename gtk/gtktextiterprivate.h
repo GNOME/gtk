@@ -12,8 +12,6 @@ GtkTextLineSegment *gtk_text_iter_get_any_segment(const GtkTextIter *iter);
 
 GtkTextLine *gtk_text_iter_get_line(const GtkTextIter *iter);
 
-gint     gtk_text_iter_get_line_byte   (const GtkTextIter *iter);
-
 GtkTextBTree *gtk_text_iter_get_btree(const GtkTextIter *iter);
 
 gboolean gtk_text_iter_forward_indexable_segment(GtkTextIter *iter);

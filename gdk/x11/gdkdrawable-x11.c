@@ -495,7 +495,7 @@ gdk_x11_draw_glyphs (GdkDrawable      *drawable,
 {
   pango_x_render (GDK_DRAWABLE_XDISPLAY (drawable),
 		  GDK_DRAWABLE_XID (drawable),
-		  GDK_GC_XGC (gc),
+		  GDK_GC_GET_XGC (gc),
 		  font, glyphs, x, y);
 }
 
@@ -508,6 +508,6 @@ gdk_x11_draw_layout (GdkDrawable *drawable,
 {
   pango_x_render_layout (GDK_DRAWABLE_XDISPLAY (drawable),
 			 GDK_DRAWABLE_XID (drawable),
-			 GDK_GC_XGC (gc),
+			 GDK_GC_GET_XGC (gc),
 			 layout, x, y);
 }

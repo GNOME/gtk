@@ -2845,7 +2845,7 @@ create_entry (void)
       gtk_widget_show (box2);
 
       entry = gtk_entry_new ();
-      gtk_entry_set_text (GTK_ENTRY (entry), "hello world");
+      gtk_entry_set_text (GTK_ENTRY (entry), "hello world السلام عليكم");
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, 5);
       gtk_box_pack_start (GTK_BOX (box2), entry, TRUE, TRUE, 0);
       gtk_widget_show (entry);

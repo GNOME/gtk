@@ -115,13 +115,13 @@ void              gtk_text_view_tab_array_unref (GtkTextTabArray *tab_array);
  */
 
 /* In gtktextbtree.c */
-extern GtkTextLineSegmentClass gtk_text_view_char_type;
-extern GtkTextLineSegmentClass gtk_text_view_toggle_on_type;
-extern GtkTextLineSegmentClass gtk_text_view_toggle_off_type;
+extern GtkTextLineSegmentClass gtk_text_char_type;
+extern GtkTextLineSegmentClass gtk_text_toggle_on_type;
+extern GtkTextLineSegmentClass gtk_text_toggle_off_type;
 
 /* In gtktextmark.c */
-extern GtkTextLineSegmentClass gtk_text_view_left_mark_type;
-extern GtkTextLineSegmentClass gtk_text_view_right_mark_type;
+extern GtkTextLineSegmentClass gtk_text_left_mark_type;
+extern GtkTextLineSegmentClass gtk_text_right_mark_type;
 
 /* In gtktextchild.c */
 extern GtkTextLineSegmentClass gtk_text_pixmap_type;

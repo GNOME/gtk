@@ -9,6 +9,7 @@ extern "C" {
 
 typedef enum {
   GTK_TEXT_MOVEMENT_CHAR,       /* move by forw/back chars */
+  GTK_TEXT_MOVEMENT_POSITIONS,  /* move by left/right chars */
   GTK_TEXT_MOVEMENT_WORD,       /* move by forward/back words */
   GTK_TEXT_MOVEMENT_LINE,       /* move up/down lines (wrapped lines) */
   GTK_TEXT_MOVEMENT_PARAGRAPH,  /* move up/down paragraphs (newline-ended lines) */
@@ -50,7 +51,6 @@ struct _GtkTextView {
   GtkLayout parent_instance;
 
   struct _GtkTextLayout *layout;
-  guint need_repaint_handler;
   GtkTextBuffer *buffer;
 
   guint selection_drag_handler;
@@ -59,15 +59,17 @@ struct _GtkTextView {
 
   gboolean overwrite_mode;
 
-  /* When the cursor is moved vertically onto a line beyond the last
-   * character in the line, virtual_cursor_mark is set to the end
-   * of the line and virtual_cursor_x is set to the previous x
-   * coordinate for the cursor. If the cursor is subsequently placed
-   * moved from that position, the virtual_cursor_x is used instead
-   * of the physical x for the cursor.
+  /* The virtual cursor position is normally the same as the
+   * actual (strong) cursor position, except in two circumstances:
+   *
+   * a) When the cursor is moved vertically with the keyboard
+   * b) When the text view is scrolled with the keyboard
+   *
+   * In case a), virtual_cursor_x is preserved, but not virtual_cursor_y
+   * In case b), both virtual_cursor_x and virtual_cursor_y are preserved.
    */
-  GtkTextMark *virtual_cursor_mark;
-  gint virtual_cursor_x;
+  gint virtual_cursor_x;	/* -1 means use actual cursor position */
+  gint virtual_cursor_y;	/* -1 means use actual cursor position */
 
   GtkTextMark *dnd_mark;
   guint blink_timeout;
@@ -79,42 +81,40 @@ struct _GtkTextViewClass {
   /* These are all RUN_ACTION signals for keybindings */
 
   /* move insertion point */
-  void (* move_insert) (GtkTextView *tkxt, GtkTextViewMovementStep step, gint count, gboolean extend_selection);
+  void (* move_insert) (GtkTextView *text_view, GtkTextViewMovementStep step, gint count, gboolean extend_selection);
   /* move the "anchor" (what Emacs calls the mark) to the cursor position */
-  void (* set_anchor)  (GtkTextView *tkxt);
+  void (* set_anchor)  (GtkTextView *text_view);
   /* Scroll */
-  void (* scroll_text) (GtkTextView *tkxt, GtkTextViewScrollType type);
+  void (* scroll_text) (GtkTextView *text_view, GtkTextViewScrollType type);
   /* Deletions */
-  void (* delete_text) (GtkTextView *tkxt, GtkTextViewDeleteType type, gint count);
+  void (* delete_text) (GtkTextView *text_view, GtkTextViewDeleteType type, gint count);
   /* cut copy paste */
-  void (* cut_text)    (GtkTextView *tkxt);
-  void (* copy_text)    (GtkTextView *tkxt);
-  void (* paste_text)    (GtkTextView *tkxt);
+  void (* cut_text)    (GtkTextView *text_view);
+  void (* copy_text)    (GtkTextView *text_view);
+  void (* paste_text)    (GtkTextView *text_view);
   /* overwrite */
-  void (* toggle_overwrite) (GtkTextView *tkxt);
+  void (* toggle_overwrite) (GtkTextView *text_view);
 };
 
-GtkType gtk_text_view_get_type(void);
+GtkType        gtk_text_view_get_type              (void);
+GtkWidget *    gtk_text_view_new                   (void);
+GtkWidget *    gtk_text_view_new_with_buffer       (GtkTextBuffer *buffer);
+void           gtk_text_view_set_buffer            (GtkTextView   *text_view,
+						    GtkTextBuffer *buffer);
+GtkTextBuffer *gtk_text_view_get_buffer            (GtkTextView   *text_view);
+void           gtk_text_view_get_iter_at_pixel     (GtkTextView   *text_view,
+						    GtkTextIter   *iter,
+						    gint           x,
+						    gint           y);
+gboolean       gtk_text_view_scroll_to_mark        (GtkTextView   *text_view,
+						    const gchar   *mark_name,
+						    gint           mark_within_margin);
+gboolean       gtk_text_view_move_mark_onscreen    (GtkTextView   *text_view,
+						    const gchar   *mark_name);
+gboolean       gtk_text_view_place_cursor_onscreen (GtkTextView   *text_view);
 
-GtkWidget *gtk_text_view_new(void);
-GtkWidget *gtk_text_view_new_with_buffer(GtkTextBuffer *buffer);
-void       gtk_text_view_set_buffer(GtkTextView *tkxt,
-                                GtkTextBuffer *buffer);
-
-GtkTextBuffer *gtk_text_view_get_buffer(GtkTextView *tkxt);
-
-void       gtk_text_view_get_iter_at_pixel(GtkTextView *tkxt,
-                                       GtkTextIter *iter,
-                                       gint x, gint y);
-
-gboolean   gtk_text_view_scroll_to_mark (GtkTextView *tkxt,
-                                     const gchar *mark_name,
-                                     gint mark_within_margin);
-
-gboolean   gtk_text_view_move_mark_onscreen(GtkTextView *tkxt,
-                                        const gchar *mark_name);
-
-gboolean   gtk_text_view_place_cursor_onscreen(GtkTextView *tkxt);
+void           gtk_text_view_get_visible_rect      (GtkTextView   *text_view,
+						    GdkRectangle  *visible_rect);
 
 #ifdef __cplusplus
 }

@@ -62,21 +62,31 @@ struct _GtkTextRenderState
   GtkTextAppearance *last_appearance;
   GdkGC *fg_gc;
   GdkGC *bg_gc;
+  GdkRectangle clip_rect;
 };
 
-void get_item_properties (PangoItem          *item,
-			  GtkTextAppearance **appearance);
-
+static void       get_item_properties (PangoItem           *item,
+				       GtkTextAppearance  **appearance);
+static GdkRegion *get_selected_clip   (GtkTextRenderState  *render_state,
+				       PangoLayout         *layout,
+				       PangoLayoutLine     *line,
+				       int                  x,
+				       int                  y,
+				       int                  height,
+				       int                  start_index,
+				       int                  end_index);
 
 static GtkTextRenderState *
-gtk_text_render_state_new (GtkWidget   *widget,
-			   GdkDrawable *drawable)
+gtk_text_render_state_new (GtkWidget    *widget,
+			   GdkDrawable  *drawable,
+			   GdkRectangle *clip_rect)
 {
   GtkTextRenderState *state = g_new0 (GtkTextRenderState, 1);
 
   state->widget = widget;
   state->fg_gc = gdk_gc_new (drawable);
   state->bg_gc = gdk_gc_new (drawable);
+  state->clip_rect = *clip_rect;
 
   return state;
 }
@@ -103,24 +113,6 @@ static void
 gtk_text_render_state_update (GtkTextRenderState *state,
 			      GtkTextAppearance  *new_appearance)
 {
-  /* If the new_appearance is inside the selection, we actually modify its
-   * foreground, background, and stipples accordingly. This is pretty
-   * gross, but since we own the appearance attribute, safe, and it's simpler than
-   * the alternatives
-   */
-  if (new_appearance->inside_selection)
-    {
-      if (new_appearance->bg_stipple)
-	{
-	  gdk_drawable_unref (new_appearance->bg_stipple);
-	  new_appearance->bg_stipple = NULL;
-	}
-
-      new_appearance->fg_color = state->widget->style->fg[GTK_STATE_SELECTED];
-      new_appearance->bg_color = state->widget->style->bg[GTK_STATE_SELECTED];
-      new_appearance->draw_bg = TRUE;
-    }
-  
   if (!state->last_appearance ||
       !gdk_color_equal (&new_appearance->fg_color, &state->last_appearance->fg_color))
     gtk_text_render_state_set_color (state, state->fg_gc, &new_appearance->fg_color);
@@ -168,17 +160,18 @@ render_layout_line (GdkDrawable        *drawable,
 		    GtkTextRenderState *render_state,
 		    PangoLayoutLine    *line,
 		    int                 x, 
-		    int                 y)
+		    int                 y,
+		    gboolean            selected)
 {
   GSList *tmp_list = line->runs;
   PangoRectangle overall_rect;
   PangoRectangle logical_rect;
   PangoRectangle ink_rect;
   
-  int x_off = 0;
+  gint x_off = 0;
 
-  pango_layout_line_get_extents (line,NULL, &overall_rect);
-  
+  pango_layout_line_get_extents (line, NULL, &overall_rect);
+
   while (tmp_list)
     {
       PangoLayoutRun *run = tmp_list->data;
@@ -190,7 +183,18 @@ render_layout_line (GdkDrawable        *drawable,
 
       if (appearance)		/* A text segment */
 	{
-	  gtk_text_render_state_update (render_state, appearance);
+	  GdkGC *fg_gc;
+	  
+	  if (selected)
+	    {
+	      fg_gc = render_state->widget->style->fg_gc[GTK_STATE_SELECTED];
+	    }
+	  else
+	    {
+	      gtk_text_render_state_update (render_state, appearance);
+
+	      fg_gc = render_state->fg_gc;
+	    }
 	  
 	  if (appearance->underline == PANGO_UNDERLINE_NONE && !appearance->overstrike)
 	    pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
@@ -199,14 +203,14 @@ render_layout_line (GdkDrawable        *drawable,
 	    pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
 					&ink_rect, &logical_rect);
 
-	  if (appearance->draw_bg)
+	  if (appearance->draw_bg && !selected)
 	    gdk_draw_rectangle (drawable, render_state->bg_gc, TRUE,
 				x + (x_off + logical_rect.x) / PANGO_SCALE,
-				y + overall_rect.y / PANGO_SCALE,
+				y + logical_rect.y / PANGO_SCALE,
 				logical_rect.width / PANGO_SCALE,
-				overall_rect.height / PANGO_SCALE);
+				logical_rect.height / PANGO_SCALE);
 
-	  gdk_draw_glyphs (drawable, render_state->fg_gc,
+	  gdk_draw_glyphs (drawable, fg_gc,
 			   run->item->analysis.font, 
 			   x + x_off / PANGO_SCALE, y, run->glyphs);
 
@@ -215,17 +219,17 @@ render_layout_line (GdkDrawable        *drawable,
 	    case PANGO_UNDERLINE_NONE:
 	      break;
 	    case PANGO_UNDERLINE_DOUBLE:
-	      gdk_draw_line (drawable, render_state->fg_gc,
+	      gdk_draw_line (drawable, fg_gc,
 			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + 4,
 			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + 4);
 	      /* Fall through */
 	    case PANGO_UNDERLINE_SINGLE:
-	      gdk_draw_line (drawable, render_state->fg_gc,
+	      gdk_draw_line (drawable, fg_gc,
 			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + 2,
 			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + 2);
 	      break;
 	    case PANGO_UNDERLINE_LOW:
-	      gdk_draw_line (drawable, render_state->fg_gc,
+	      gdk_draw_line (drawable, fg_gc,
 			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2,
 			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2);
 	      break;
@@ -234,7 +238,7 @@ render_layout_line (GdkDrawable        *drawable,
 	  if (appearance->overstrike)
 	    {
 	      gint overstrike_y = y + (0.3 * logical_rect.y) / PANGO_SCALE;
-	      gdk_draw_line (drawable, render_state->fg_gc,
+	      gdk_draw_line (drawable, fg_gc,
 			     x + (x_off + ink_rect.x) / PANGO_SCALE - 1, overstrike_y,
 			     x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, overstrike_y);
 	    }
@@ -245,47 +249,54 @@ render_layout_line (GdkDrawable        *drawable,
 }
 
 static void 
-render_layout (GdkDrawable        *drawable,
-	       GtkTextRenderState *render_state,
-	       PangoLayout        *layout,
-	       int                 x, 
-	       int                 y)
+render_para (GdkDrawable        *drawable,
+	     GtkTextRenderState *render_state,
+	     GtkTextLineDisplay *line_display,
+	     int                 x, 
+	     int                 y,
+	     int                 selection_start_index,
+	     int                 selection_end_index)
 {
   PangoRectangle logical_rect;
   GSList *tmp_list;
   PangoAlignment align;
+  PangoLayout *layout = line_display->layout;
   int indent;
-  int width;
+  int total_width;
   int y_offset = 0;
+  int byte_offset = 0; 
 
-  gboolean first = FALSE;
+  gboolean first = TRUE;
   
-  g_return_if_fail (layout != NULL);
-
   indent = pango_layout_get_indent (layout);
-  width = pango_layout_get_width (layout);
+  total_width = pango_layout_get_width (layout);
   align = pango_layout_get_alignment (layout);
 
-  if (width == -1 && align != PANGO_ALIGN_LEFT)
-    {
-      pango_layout_get_extents (layout, NULL, &logical_rect);
-      width = logical_rect.width;
-    }
-  
+  if (total_width < 0)
+    total_width = line_display->total_width * PANGO_SCALE;
+
   tmp_list = pango_layout_get_lines (layout);
   while (tmp_list)
     {
       PangoLayoutLine *line = tmp_list->data;
       int x_offset;
+      int selection_y, selection_height;
       
       pango_layout_line_get_extents (line, NULL, &logical_rect);
 
-      if (width != 1 && align == PANGO_ALIGN_RIGHT)
-	x_offset = width - logical_rect.width;
-      else if (width != 1 && align == PANGO_ALIGN_CENTER)
-	x_offset = (width - logical_rect.width) / 2;
-      else
-	x_offset = 0;
+      x_offset = line_display->x_offset * PANGO_SCALE;
+
+      switch (align)
+	{
+	case PANGO_ALIGN_RIGHT:
+	  x_offset += total_width - logical_rect.width;
+	  break;
+	case PANGO_ALIGN_CENTER:
+	  x_offset += (total_width - logical_rect.width) / 2;
+	  break;
+	default:
+	  break;
+	}
 
       if (first)
 	{
@@ -296,8 +307,6 @@ render_layout (GdkDrawable        *drawable,
 	      else
 		x_offset -= indent;
 	    }
-
-	  first = FALSE;
 	}
       else
 	{
@@ -309,16 +318,141 @@ render_layout (GdkDrawable        *drawable,
 		x_offset += indent;
 	    }
 	}
-	  
-      render_layout_line (drawable, render_state,
-			  line, x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE);
 
+      selection_y = y + y_offset / PANGO_SCALE;
+      selection_height = logical_rect.height / PANGO_SCALE;
+
+      if (first)
+	{
+	  selection_y -= line_display->top_margin;
+	  selection_height += line_display->top_margin;
+	}
+      if (!tmp_list->next)
+	selection_height += line_display->bottom_margin;
+
+      first = FALSE;
+      
+      if (selection_start_index < byte_offset &&
+	  selection_end_index > line->length + byte_offset) /* All selected */
+	{
+	  gdk_draw_rectangle (drawable,
+			      render_state->widget->style->bg_gc[GTK_STATE_SELECTED],
+			      TRUE,
+			      x + line_display->left_margin, selection_y,
+			      total_width / PANGO_SCALE, selection_height);
+	  render_layout_line (drawable, render_state,
+			      line, x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
+			      TRUE);
+	}
+      else
+	{
+	  render_layout_line (drawable, render_state,
+			      line, x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
+			      FALSE);
+
+	  if (selection_start_index < byte_offset + line->length &&
+	      selection_end_index > byte_offset) /* Some selected */
+	    {
+	      GdkRegion *clip_region = get_selected_clip (render_state, layout, line,
+							  x + line_display->x_offset,
+							  selection_y, selection_height,
+							  selection_start_index, selection_end_index);
+
+	      gdk_gc_set_clip_region (render_state->widget->style->fg_gc [GTK_STATE_SELECTED], clip_region);
+	      gdk_gc_set_clip_region (render_state->widget->style->bg_gc [GTK_STATE_SELECTED], clip_region);
+
+	      gdk_draw_rectangle (drawable,
+				  render_state->widget->style->bg_gc[GTK_STATE_SELECTED],
+				  TRUE,
+				  x + x_offset / PANGO_SCALE, selection_y,
+				  logical_rect.width / PANGO_SCALE,
+				  selection_height);
+	      
+	      render_layout_line (drawable, render_state,
+				  line, x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
+				  TRUE);
+
+	      gdk_gc_set_clip_region (render_state->widget->style->fg_gc [GTK_STATE_SELECTED], NULL);
+	      gdk_gc_set_clip_region (render_state->widget->style->bg_gc [GTK_STATE_SELECTED], NULL);
+
+	      gdk_region_destroy (clip_region);
+
+	      /* Paint in the ends of the line */
+	      if (x_offset > line_display->left_margin * PANGO_SCALE &&
+		  ((line_display->direction == GTK_TEXT_DIR_LTR && selection_start_index < byte_offset) ||
+		   (line_display->direction == GTK_TEXT_DIR_RTL && selection_end_index > byte_offset + line->length)))
+		{
+		  gdk_draw_rectangle (drawable,
+				      render_state->widget->style->bg_gc[GTK_STATE_SELECTED],
+				      TRUE,
+				      x + line_display->left_margin, selection_y,
+				      x + x_offset / PANGO_SCALE - line_display->left_margin,
+				      selection_height);
+		}
+
+	      if (x_offset + logical_rect.width < line_display->left_margin * PANGO_SCALE + total_width &&
+		  ((line_display->direction == GTK_TEXT_DIR_LTR && selection_end_index > byte_offset + line->length) ||
+		   (line_display->direction == GTK_TEXT_DIR_RTL && selection_start_index < byte_offset)))
+		{
+		  
+		  
+		  gdk_draw_rectangle (drawable,
+				      render_state->widget->style->bg_gc[GTK_STATE_SELECTED],
+				      TRUE,
+				      x + (x_offset + logical_rect.width) / PANGO_SCALE,
+				      selection_y,
+				      x + (line_display->left_margin * PANGO_SCALE + total_width - x_offset - logical_rect.width) / PANGO_SCALE,
+				      selection_height);
+		}
+	    }
+	}
+
+      byte_offset += line->length;
       y_offset += logical_rect.height;
       tmp_list = tmp_list->next;
     }
 }
 
-void
+static GdkRegion *
+get_selected_clip (GtkTextRenderState *render_state,
+		   PangoLayout        *layout,
+		   PangoLayoutLine    *line,
+		   int                 x,
+		   int                 y,
+		   int                 height,
+		   int                 start_index,
+		   int                 end_index)
+{
+  gint *ranges;
+  gint n_ranges, i;
+  GdkRegion *clip_region = gdk_region_new ();
+  GdkRegion *tmp_region;
+  PangoRectangle logical_rect;
+
+  pango_layout_line_get_extents (line, NULL, &logical_rect);
+  pango_layout_line_get_x_ranges (line, start_index, end_index, &ranges, &n_ranges);
+
+  for (i=0; i < n_ranges; i++)
+    {
+      GdkRectangle rect;
+
+      rect.x = x + ranges[2*i] / PANGO_SCALE;
+      rect.y = y;
+      rect.width = (ranges[2*i + 1] - ranges[2*i]) / PANGO_SCALE;
+      rect.height = height;
+	      
+      gdk_region_union_with_rect (clip_region, &rect);
+    }
+
+  tmp_region = gdk_region_rectangle (&render_state->clip_rect);
+  gdk_region_intersect (clip_region, tmp_region);
+  gdk_region_destroy (tmp_region);
+
+  g_free (ranges);
+  return clip_region;
+}
+
+static void
 get_item_properties (PangoItem          *item,
 		     GtkTextAppearance **appearance)
 {
@@ -359,6 +493,8 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   GSList *tmp_list;
   GSList *cursor_list;
   GtkTextRenderState *render_state;
+  GtkTextIter selection_start, selection_end;
+  gboolean have_selection = FALSE;
   
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->default_style != NULL);
@@ -398,23 +534,58 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   clip.width = width;
   clip.height = height;
 
-  render_state = gtk_text_render_state_new (widget, drawable);
+  render_state = gtk_text_render_state_new (widget, drawable, &clip);
 
   gdk_gc_set_clip_rectangle (render_state->fg_gc, &clip);
   gdk_gc_set_clip_rectangle (render_state->bg_gc, &clip);
 
   gtk_text_layout_wrap_loop_start (layout);
   
+  if (gtk_text_buffer_get_selection_bounds (layout->buffer,
+					    &selection_start,
+					    &selection_end))
+    have_selection = TRUE;
+  
   tmp_list = line_list;
   while (tmp_list != NULL)
     {
       GtkTextLineDisplay *line_display;
-      
-      line_display = gtk_text_layout_get_line_display (layout, tmp_list->data);
+      gint selection_start_index = -1;
+      gint selection_end_index = -1;
 
-      render_layout (drawable, render_state, line_display->layout,
-		     line_display->x_offset,
-		     current_y + line_display->top_margin);
+      GtkTextLine *line = tmp_list->data;
+     
+      line_display = gtk_text_layout_get_line_display (layout, line);
+
+      if (have_selection)
+	{
+	  GtkTextIter line_start, line_end;
+	  gint byte_count = gtk_text_line_byte_count (line);
+	  
+	  gtk_text_btree_get_iter_at_line (layout->buffer->tree, &line_start,
+					   line, 0);
+	  gtk_text_btree_get_iter_at_line (layout->buffer->tree, &line_end,
+					   line, byte_count - 1);
+
+	  if (gtk_text_iter_compare (&selection_start, &line_end) < 0 &&
+	      gtk_text_iter_compare (&selection_end, &line_start) > 0)
+	    {
+	      if (gtk_text_iter_compare (&selection_start, &line_start) >= 0)
+		selection_start_index = gtk_text_iter_get_line_byte (&selection_start);
+	      else
+		selection_start_index = -1;
+
+	      if (gtk_text_iter_compare (&selection_end, &line_end) <= 0)
+		selection_end_index = gtk_text_iter_get_line_byte (&selection_end);
+	      else
+		selection_end_index = byte_count;
+	    }
+	}
+  
+      render_para (drawable, render_state, line_display,
+		   0,
+		   current_y + line_display->top_margin,
+		   selection_start_index, selection_end_index);
 
       
       /* We paint the cursors last, because they overlap another chunk
@@ -425,12 +596,12 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 	{
 	  GtkTextCursorDisplay *cursor = cursor_list->data;
 	  GdkGC *gc;
-
+	  
 	  if (cursor->is_strong)
 	    gc = widget->style->bg_gc[GTK_STATE_SELECTED];
 	  else
 	    gc = widget->style->fg_gc[GTK_STATE_NORMAL];
-
+	  
 	  gdk_draw_line (drawable, gc,
 			 line_display->x_offset + cursor->x,
 			 current_y + line_display->top_margin + cursor->y,
@@ -441,7 +612,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 	}
 
       current_y += line_display->height;
-      gtk_text_layout_free_line_display (layout, tmp_list->data, line_display);
+      gtk_text_layout_free_line_display (layout, line, line_display);
       
       tmp_list = g_slist_next (tmp_list);
     }

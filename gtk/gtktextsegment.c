@@ -192,7 +192,7 @@ char_segment_new(const gchar *text, guint len)
   g_assert(gtk_text_byte_begins_utf8_char(text));
   
   seg = g_malloc(CSEG_SIZE(len));
-  seg->type = &gtk_text_view_char_type;
+  seg->type = &gtk_text_char_type;
   seg->next = NULL;
   seg->byte_count = len;
   memcpy(seg->body.chars, text, len);
@@ -218,7 +218,7 @@ char_segment_new_from_two_strings(const gchar *text1, guint len1,
   g_assert(gtk_text_byte_begins_utf8_char(text2));
   
   seg = g_malloc(CSEG_SIZE(len1+len2));
-  seg->type = &gtk_text_view_char_type;
+  seg->type = &gtk_text_char_type;
   seg->next = NULL;
   seg->byte_count = len1 + len2;
   memcpy(seg->body.chars, text1, len1);
@@ -322,7 +322,7 @@ char_segment_cleanup_func(segPtr, line)
     }
   
   segPtr2 = segPtr->next;
-  if ((segPtr2 == NULL) || (segPtr2->type != &gtk_text_view_char_type))
+  if ((segPtr2 == NULL) || (segPtr2->type != &gtk_text_char_type))
     {
       return segPtr;
     }
@@ -406,7 +406,7 @@ char_segment_check_func(segPtr, line)
     }
   else
     {
-      if (segPtr->next->type == &gtk_text_view_char_type)
+      if (segPtr->next->type == &gtk_text_char_type)
         {
           g_error("char_segment_check_func: adjacent character segments weren't merged");
         }
@@ -420,7 +420,7 @@ toggle_segment_new(GtkTextTagInfo *info, gboolean on)
 
   seg = g_malloc(TSEG_SIZE);
 
-  seg->type = on ? &gtk_text_view_toggle_on_type : &gtk_text_view_toggle_off_type;
+  seg->type = on ? &gtk_text_toggle_on_type : &gtk_text_toggle_off_type;
 
   seg->next = NULL;
 
@@ -521,13 +521,13 @@ toggle_segment_cleanup_func(segPtr, line)
    * toggles cancel each other;  remove them both.
    */
 
-  if (segPtr->type == &gtk_text_view_toggle_off_type)
+  if (segPtr->type == &gtk_text_toggle_off_type)
     {
       for (prevPtr = segPtr, segPtr2 = prevPtr->next;
            (segPtr2 != NULL) && (segPtr2->byte_count == 0);
            prevPtr = segPtr2, segPtr2 = prevPtr->next)
         {
-          if (segPtr2->type != &gtk_text_view_toggle_on_type)
+          if (segPtr2->type != &gtk_text_toggle_on_type)
             {
               continue;
             }
@@ -594,7 +594,7 @@ toggle_segment_line_change_func(segPtr, line)
  */
 
 
-GtkTextLineSegmentClass gtk_text_view_char_type = {
+GtkTextLineSegmentClass gtk_text_char_type = {
   "character",                          /* name */
   0,                                            /* leftGravity */
   char_segment_split_func,                              /* splitFunc */
@@ -609,7 +609,7 @@ GtkTextLineSegmentClass gtk_text_view_char_type = {
  * range:
  */
 
-GtkTextLineSegmentClass gtk_text_view_toggle_on_type = {
+GtkTextLineSegmentClass gtk_text_toggle_on_type = {
   "toggleOn",                                   /* name */
   0,                                            /* leftGravity */
   NULL,                 /* splitFunc */
@@ -624,7 +624,7 @@ GtkTextLineSegmentClass gtk_text_view_toggle_on_type = {
  * range:
  */
 
-GtkTextLineSegmentClass gtk_text_view_toggle_off_type = {
+GtkTextLineSegmentClass gtk_text_toggle_off_type = {
   "toggleOff",				/* name */
   1,						/* leftGravity */
   NULL,			/* splitFunc */

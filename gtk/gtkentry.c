@@ -1191,48 +1191,7 @@ gtk_entry_ensure_layout (GtkEntry *entry)
 static PangoAttrList *
 gtk_entry_get_attr_list (GtkEntry *entry)
 {
-  GtkEditable *editable = GTK_EDITABLE (entry);
-  GtkWidget *widget = GTK_WIDGET (entry);
-  PangoAttribute *attr;
-  PangoAttrList *result;
-  
-  gint start_index = unicode_offset_to_index (entry->text, editable->selection_start_pos);
-  gint end_index = unicode_offset_to_index (entry->text, editable->selection_end_pos);
-
-  result = pango_attr_list_new ();
-
-  if (start_index != end_index)
-    {
-      gint tmp;
-      GtkStateType selected_state = GTK_STATE_SELECTED;
-      if (!editable->has_selection)
-	selected_state = GTK_STATE_ACTIVE;
-
-      if (end_index < start_index)
-	{
-	  tmp = end_index;
-	  end_index = start_index;
-	  start_index = tmp;
-	}
-
-      attr = pango_attr_background_new (widget->style->bg[selected_state].red,
-					widget->style->bg[selected_state].green,
-					widget->style->bg[selected_state].blue);
-      attr->start_index = start_index;
-      attr->end_index = end_index;
-
-      pango_attr_list_insert (result, attr);
-
-      attr = pango_attr_foreground_new (widget->style->fg[selected_state].red,
-					widget->style->fg[selected_state].green,
-					widget->style->fg[selected_state].blue);
-      attr->start_index = start_index;
-      attr->end_index = end_index;
-      
-      pango_attr_list_insert (result, attr);
-    }
-
-  return result;
+  return pango_attr_list_new ();
 }
 
 static void
@@ -1252,6 +1211,7 @@ gtk_entry_draw_text (GtkEntry *entry)
 {
   GtkWidget *widget;
   PangoLayoutLine *line;
+  GtkEditable *editable = GTK_EDITABLE (entry);
   
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
@@ -1266,11 +1226,50 @@ gtk_entry_draw_text (GtkEntry *entry)
 
       line = pango_layout_get_lines (entry->layout)->data;
       pango_layout_line_get_extents (line, NULL, &logical_rect);
-      
+
       gdk_draw_layout (entry->text_area, widget->style->text_gc [widget->state], 
 		       INNER_BORDER - entry->scroll_offset,
 		       INNER_BORDER + (entry->ascent + logical_rect.y) / PANGO_SCALE,
 		       entry->layout);
+
+      if (editable->selection_start_pos != editable->selection_end_pos)
+	{
+	  gint *ranges;
+	  gint n_ranges, i;
+	  gint start_index = unicode_offset_to_index (entry->text,
+						      MIN (editable->selection_start_pos, editable->selection_end_pos));
+	  gint end_index = unicode_offset_to_index (entry->text,
+						    MAX (editable->selection_start_pos, editable->selection_end_pos));
+	  GtkStateType selected_state = editable->has_selection ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE;
+	  GdkRegion *clip_region = gdk_region_new ();
+
+	  pango_layout_line_get_x_ranges (line, start_index, end_index, &ranges, &n_ranges);
+
+	  for (i=0; i < n_ranges; i++)
+	    {
+	      GdkRectangle rect;
+
+	      rect.x = INNER_BORDER - entry->scroll_offset + ranges[2*i] / PANGO_SCALE;
+	      rect.y = INNER_BORDER + (entry->ascent + logical_rect.y) / PANGO_SCALE;
+	      rect.width = (ranges[2*i + 1] - ranges[2*i]) / PANGO_SCALE;
+	      rect.height = logical_rect.height / PANGO_SCALE;
+	      
+	      gdk_draw_rectangle (entry->text_area, widget->style->bg_gc [selected_state], TRUE,
+				  rect.x, rect.y, rect.width, rect.height);
+
+	      gdk_region_union_with_rect (clip_region, &rect);
+	    }
+
+	  gdk_gc_set_clip_region (widget->style->fg_gc [selected_state], clip_region);
+	  gdk_draw_layout (entry->text_area, widget->style->fg_gc [selected_state], 
+			   INNER_BORDER - entry->scroll_offset,
+			   INNER_BORDER + (entry->ascent + logical_rect.y) / PANGO_SCALE,
+			   entry->layout);
+	  gdk_gc_set_clip_region (widget->style->fg_gc [selected_state], NULL);
+	  
+	  gdk_region_destroy (clip_region);
+	  g_free (ranges);
+	}
     }
 }
 
@@ -1352,13 +1351,7 @@ gtk_entry_find_position (GtkEntry *entry,
   gtk_entry_ensure_layout (entry);
 
   line = pango_layout_get_lines (entry->layout)->data;
-
-  if (x < 0)
-    return gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_LTR ? 0 : entry->text_length;
-  else if (pango_layout_line_x_to_index (line, x * PANGO_SCALE, &index, &trailing))
-    return unicode_index_to_offset (entry->text, index + trailing);
-  else
-    return gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_LTR ? entry->text_length : 0;
+  pango_layout_line_x_to_index (line, x * PANGO_SCALE, &index, &trailing);
 }
 
 static void
