@@ -76,6 +76,8 @@ struct _GdkPixbufGifAnim {
         guchar bg_red;
         guchar bg_green;
         guchar bg_blue;
+        
+        int loop;
 };
 
 struct _GdkPixbufGifAnimClass {

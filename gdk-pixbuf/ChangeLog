@@ -1,3 +1,16 @@
+2002-10-21  Matthias Clasen  <maclas@gmx.de>
+
+	Support the Netscape application extension for gif animations 
+	(#95060):
+	
+	* io-gif-animation.h: 
+	* io-gif-animation.c (gdk_pixbuf_gif_anim_iter_advance): 
+	Add loop count to GdkPixbufGifAnim and use it in the advance
+	method of GdkPixbufGifAnimIter.
+	
+	* io-gif.c (gif_get_extension): Parse Netscape application
+	extension block and set the animation loop count. 
+
 2002-10-11  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_get_format): Remove

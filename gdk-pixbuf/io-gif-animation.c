@@ -260,6 +260,7 @@ gdk_pixbuf_gif_anim_iter_advance (GdkPixbufAnimationIter *anim_iter,
 {
         GdkPixbufGifAnimIter *iter;
         gint elapsed;
+        gint loop;
         GList *tmp;
         GList *old;
         
@@ -285,12 +286,17 @@ gdk_pixbuf_gif_anim_iter_advance (GdkPixbufAnimationIter *anim_iter,
         /* See how many times we've already played the full animation,
          * and subtract time for that.
          */
+
+        loop = elapsed / iter->gif_anim->total_time;
         elapsed = elapsed % iter->gif_anim->total_time;
 
         iter->position = elapsed;
-        
+
         /* Now move to the proper frame */
-        tmp = iter->gif_anim->frames;
+        if (iter->gif_anim->loop == 0 || loop < iter->gif_anim->loop) 
+                tmp = iter->gif_anim->frames;
+        else 
+                tmp = NULL;
         while (tmp != NULL) {
                 GdkPixbufFrame *frame = tmp->data;
                 
@@ -525,7 +531,7 @@ gdk_pixbuf_gif_anim_iter_get_pixbuf (GdkPixbufAnimationIter *anim_iter)
         
         iter = GDK_PIXBUF_GIF_ANIM_ITER (anim_iter);
 
-        frame = iter->current_frame ? iter->current_frame->data : NULL;
+        frame = iter->current_frame ? iter->current_frame->data : g_list_last (iter->gif_anim->frames)->data;
 
 #if 0
         if (FALSE && frame)

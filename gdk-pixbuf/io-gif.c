@@ -83,7 +83,7 @@ enum {
 	GIF_GET_COLORMAP,
 	GIF_GET_NEXT_STEP,
 	GIF_GET_FRAME_INFO,
-	GIF_GET_EXTENTION,
+	GIF_GET_EXTENSION,
 	GIF_GET_COLORMAP2,
 	GIF_PREPARE_LZW,
 	GIF_LZW_FILL_BUFFER,
@@ -149,6 +149,7 @@ struct _GifContext
 	/* extension context */
 	guchar extension_label;
 	guchar extension_flag;
+        gboolean in_loop_extension;
 
 	/* get block context */
 	guchar block_count;
@@ -353,7 +354,7 @@ get_data_block (GifContext *context,
 static void
 gif_set_get_extension (GifContext *context)
 {
-	context->state = GIF_GET_EXTENTION;
+	context->state = GIF_GET_EXTENSION;
 	context->extension_flag = TRUE;
 	context->extension_label = 0;
 	context->block_count = 0;
@@ -376,8 +377,8 @@ gif_get_extension (GifContext *context)
 		}
 
 		switch (context->extension_label) {
-		case 0xf9:			/* Graphic Control Extension */
-			retval = get_data_block (context, (unsigned char *) context->block_buf, NULL);
+                case 0xf9:			/* Graphic Control Extension */
+                        retval = get_data_block (context, (unsigned char *) context->block_buf, NULL);
 			if (retval != 0)
 				return retval;
 
@@ -399,6 +400,36 @@ gif_get_extension (GifContext *context)
 			/* Now we've successfully loaded this one, we continue on our way */
 			context->block_count = 0;
 			context->extension_flag = FALSE;
+			break;
+                case 0xff: /* application extension */
+                        if (!context->in_loop_extension) { 
+                                retval = get_data_block (context, (unsigned char *) context->block_buf, NULL);
+                                if (retval != 0)
+                                        return retval;
+                                if (!strncmp (context->block_buf, "NETSCAPE2.0", 11) ||
+                                    !strncmp (context->block_buf, "ANIMEXTS1.0", 11)) {
+                                        context->in_loop_extension = TRUE;
+                                        context->block_count = 0;
+                                }
+                        }
+                        if (context->in_loop_extension) {
+                                do {
+                                        retval = get_data_block (context, (unsigned char *) context->block_buf, &empty_block);
+                                        if (retval != 0)
+                                                return retval;
+                                        if (context->block_buf[0] == 0x01) {
+                                                context->animation->loop = context->block_buf[1] + (context->block_buf[2] << 8);
+                                                if (context->animation->loop != 0) 
+                                                        context->animation->loop++;
+                                        }
+                                        context->block_count = 0;
+                                }
+                                while (!empty_block);
+                                context->in_loop_extension = FALSE;
+                                context->extension_flag = FALSE;
+                                return 0;
+                        }
+			break;                          
 		default:
 			/* Unhandled extension */
 			break;
@@ -1280,7 +1311,7 @@ gif_main_loop (GifContext *context)
 			retval = gif_get_frame_info (context);
 			break;
 
-		case GIF_GET_EXTENTION:
+		case GIF_GET_EXTENSION:
                         LOG("get_extension\n");
 			retval = gif_get_extension (context);
 			if (retval == 0)
@@ -1349,6 +1380,8 @@ new_context (void)
 	context->gif89.delay_time = -1;
 	context->gif89.input_flag = -1;
 	context->gif89.disposal = -1;
+        context->animation->loop = 1;
+        context->in_loop_extension = FALSE;
 
 	return context;
 }
