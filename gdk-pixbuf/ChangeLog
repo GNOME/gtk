@@ -1,5 +1,8 @@
 2005-03-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* io-xpm.c (pixbuf_create_from_xpm): Check the number
+	of scanned items.  (#168906, Morten Welinder)
+
 	Make the gif loader handle oom when loading 
 	animations.  (#168857, Tommi Komulainen)
 	
