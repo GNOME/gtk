@@ -155,7 +155,7 @@ main (int argc, char *argv[])
   entry = gtk_widget_new (gtk_entry_get_type (),
 			  "GtkWidget::visible", TRUE, NULL);
   entry2 = gtk_widget_new (gtk_entry_get_type (),
-			   "screen", scr2, "GtkWidget::visible", TRUE, NULL);
+			   "GtkWidget::visible", TRUE, NULL);
 
   /* for default display */
   make_selection_dialog (NULL, entry2, entry);

@@ -513,6 +513,7 @@ gtk_menu_popup (GtkMenu		    *menu,
   GtkWidget *parent;
   GdkEvent *current_event;
   GtkMenuShell *menu_shell;
+  GtkMenuAttachData *attach_data;
 
   g_return_if_fail (GTK_IS_MENU (menu));
   
@@ -522,6 +523,17 @@ gtk_menu_popup (GtkMenu		    *menu,
   menu_shell->parent_menu_shell = parent_menu_shell;
   menu_shell->active = TRUE;
   menu_shell->button = button;
+
+  attach_data = gtk_object_get_data (GTK_OBJECT (menu), attach_data_key);
+  if (!attach_data)
+  {
+      g_warning ("gtk_menu_popup No GtkMenuAttachData present\n\
+		  impossible to determine which screen to display on\n");
+      return;
+  }
+  
+  gtk_window_set_screen (GTK_WINDOW (menu->toplevel), 
+			 gtk_widget_get_screen (attach_data->attach_widget));
 
   /* If we are popping up the menu from something other than, a button
    * press then, as a heuristic, we ignore enter events for the menu
@@ -999,6 +1011,8 @@ gtk_menu_realize (GtkWidget *widget)
   menu = GTK_MENU (widget);
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  
+
   
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;

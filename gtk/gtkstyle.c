@@ -379,7 +379,7 @@ static char radio_text_bits[] = {
 
 static struct {
   char      *bits;
-  GdkBitmap *bmap;
+  GList	    *bmap_screen_list; /* list of GdkBitmap */
 } indicator_parts[] = {
   { check_aa_bits, NULL },
   { check_base_bits, NULL },
@@ -1774,6 +1774,26 @@ sanitize_size (GdkWindow *window,
   return set_bg;
 }
 
+static GdkBitmap * 
+get_indicator_for_screen (GdkScreen	*screen,
+			  IndicatorPart  part,
+			  GdkDrawable   *drawable)
+{
+    GdkBitmap * new_bmap;
+    GList *tmp_list = indicator_parts[part].bmap_screen_list;
+    while (tmp_list)
+    {
+	if (gdk_drawable_get_screen ((GdkBitmap *)tmp_list->data) == screen)
+		return (GdkBitmap *)tmp_list->data;
+	tmp_list = tmp_list->next;
+    }
+    new_bmap = gdk_bitmap_create_from_data (drawable,
+					    indicator_parts[part].bits,
+					    INDICATOR_PART_SIZE, INDICATOR_PART_SIZE);
+    g_list_append (indicator_parts[part].bmap_screen_list, (gpointer) new_bmap);
+    return new_bmap;
+}
+
 static void
 draw_part (GdkDrawable  *drawable,
 	   GdkGC        *gc,
@@ -1782,16 +1802,15 @@ draw_part (GdkDrawable  *drawable,
 	   gint          y,
 	   IndicatorPart part)
 {
+  GdkBitmap *indicator_bmap;
   if (area)
     gdk_gc_set_clip_rectangle (gc, area);
   
-  if (!indicator_parts[part].bmap)
-    indicator_parts[part].bmap = gdk_bitmap_create_from_data (drawable,
-							      indicator_parts[part].bits,
-							      INDICATOR_PART_SIZE, INDICATOR_PART_SIZE);
+  indicator_bmap = get_indicator_for_screen (gdk_drawable_get_screen (drawable),
+					     part, drawable);
 
   gdk_gc_set_ts_origin (gc, x, y);
-  gdk_gc_set_stipple (gc, indicator_parts[part].bmap);
+  gdk_gc_set_stipple (gc, indicator_bmap);
   gdk_gc_set_fill (gc, GDK_STIPPLED);
 
   gdk_draw_rectangle (drawable, gc, TRUE, x, y, INDICATOR_PART_SIZE, INDICATOR_PART_SIZE);
