@@ -1,3 +1,9 @@
+2001-10-22  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_class_init): rip out
+	"height_lines" and "width_columns" properties, it doesn't make
+	sense to set the size request on a text view really. #62103
+
 Mon Oct 22 15:17:05 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_iter_depth): Realized

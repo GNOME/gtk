@@ -116,8 +116,6 @@ enum
 enum
 {
   PROP_0,
-  PROP_HEIGHT_LINES,
-  PROP_WIDTH_COLUMNS,
   PROP_PIXELS_ABOVE_LINES,
   PROP_PIXELS_BELOW_LINES,
   PROP_PIXELS_INSIDE_WRAP,
@@ -496,25 +494,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   /*
    * Properties
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_HEIGHT_LINES,
-                                   g_param_spec_int ("height_lines",
-						     _("Line Height"),
-						     _("The height of a line"),
-						     0,
-						     G_MAXINT,
-						     0,
-						     G_PARAM_READWRITE));
- 
-  g_object_class_install_property (gobject_class,
-                                   PROP_WIDTH_COLUMNS,
-                                   g_param_spec_int ("width_columns",
-						     _("Column Width"),
-						     _("The width of a column"),
-						     0,
-						     G_MAXINT,
-						     0,
-						     G_PARAM_READWRITE));
  
   g_object_class_install_property (gobject_class,
                                    PROP_PIXELS_ABOVE_LINES,
@@ -2219,14 +2198,6 @@ gtk_text_view_set_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_HEIGHT_LINES:
-      g_warning ("FIXME");
-      break;
-
-    case PROP_WIDTH_COLUMNS:
-      g_warning ("FIXME");
-      break;
-
     case PROP_PIXELS_ABOVE_LINES:
       gtk_text_view_set_pixels_above_lines (text_view, g_value_get_int (value));
       break;
@@ -2289,14 +2260,6 @@ gtk_text_view_get_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_HEIGHT_LINES:
-      g_warning ("FIXME");
-      break;
-
-    case PROP_WIDTH_COLUMNS:
-      g_warning ("FIXME");
-      break;
-
     case PROP_PIXELS_ABOVE_LINES:
       g_value_set_int (value, text_view->pixels_above_lines);
       break;
