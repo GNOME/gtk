@@ -543,7 +543,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
  
   g_object_class_install_property (gobject_class,
                                    PROP_PIXELS_ABOVE_LINES,
-                                   g_param_spec_int ("pixels_above_lines",
+                                   g_param_spec_int ("pixels-above-lines",
 						     P_("Pixels Above Lines"),
 						     P_("Pixels of blank space above paragraphs"),
 						     0,
@@ -553,7 +553,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
  
   g_object_class_install_property (gobject_class,
                                    PROP_PIXELS_BELOW_LINES,
-                                   g_param_spec_int ("pixels_below_lines",
+                                   g_param_spec_int ("pixels-below-lines",
 						     P_("Pixels Below Lines"),
 						     P_("Pixels of blank space below paragraphs"),
 						     0,
@@ -563,7 +563,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
  
   g_object_class_install_property (gobject_class,
                                    PROP_PIXELS_INSIDE_WRAP,
-                                   g_param_spec_int ("pixels_inside_wrap",
+                                   g_param_spec_int ("pixels-inside-wrap",
 						     P_("Pixels Inside Wrap"),
 						     P_("Pixels of blank space between wrapped lines in a paragraph"),
 						     0,
@@ -581,7 +581,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   g_object_class_install_property (gobject_class,
                                    PROP_WRAP_MODE,
-                                   g_param_spec_enum ("wrap_mode",
+                                   g_param_spec_enum ("wrap-mode",
 						      P_("Wrap Mode"),
 						      P_("Whether to wrap lines never, at word boundaries, or at character boundaries"),
 						      GTK_TYPE_WRAP_MODE,
@@ -599,7 +599,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
  
   g_object_class_install_property (gobject_class,
                                    PROP_LEFT_MARGIN,
-                                   g_param_spec_int ("left_margin",
+                                   g_param_spec_int ("left-margin",
 						     P_("Left Margin"),
 						     P_("Width of the left margin in pixels"),
 						     0,
@@ -609,7 +609,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   g_object_class_install_property (gobject_class,
                                    PROP_RIGHT_MARGIN,
-                                   g_param_spec_int ("right_margin",
+                                   g_param_spec_int ("right-margin",
 						     P_("Right Margin"),
 						     P_("Width of the right margin in pixels"),
 						     0,
@@ -637,7 +637,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   g_object_class_install_property (gobject_class,
                                    PROP_CURSOR_VISIBLE,
-                                   g_param_spec_boolean ("cursor_visible",
+                                   g_param_spec_boolean ("cursor-visible",
 							 P_("Cursor Visible"),
 							 P_("If the insertion cursor is shown"),
 							 TRUE,
@@ -661,7 +661,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   g_object_class_install_property (gobject_class,
                                    PROP_ACCEPTS_TAB,
-                                   g_param_spec_boolean ("accepts_tab",
+                                   g_param_spec_boolean ("accepts-tab",
 							 P_("Accepts tab"),
 							 P_("Whether Tab will result in a tab character being entered"),
 							 TRUE,

@@ -165,7 +165,7 @@ gtk_box_class_init (GtkBoxClass *class)
 								 G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_PACK_TYPE,
-					      g_param_spec_enum ("pack_type", 
+					      g_param_spec_enum ("pack-type", 
 								 P_("Pack type"), 
 								 P_("A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"),
 								 GTK_TYPE_PACK_TYPE, GTK_PACK_START,

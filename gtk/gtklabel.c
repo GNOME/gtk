@@ -330,14 +330,14 @@ gtk_label_class_init (GtkLabelClass *class)
 						       G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_USE_MARKUP,
-                                   g_param_spec_boolean ("use_markup",
+                                   g_param_spec_boolean ("use-markup",
 							 P_("Use markup"),
 							 P_("The text of the label includes XML markup. See pango_parse_markup()"),
                                                         FALSE,
                                                         G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_USE_UNDERLINE,
-                                   g_param_spec_boolean ("use_underline",
+                                   g_param_spec_boolean ("use-underline",
 							 P_("Use underline"),
 							 P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
                                                         FALSE,
@@ -376,7 +376,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                                         G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_MNEMONIC_KEYVAL,
-                                   g_param_spec_uint ("mnemonic_keyval",
+                                   g_param_spec_uint ("mnemonic-keyval",
 						      P_("Mnemonic key"),
 						      P_("The mnemonic accelerator key for this label"),
 						      0,
@@ -385,7 +385,7 @@ gtk_label_class_init (GtkLabelClass *class)
 						      G_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_MNEMONIC_WIDGET,
-                                   g_param_spec_object ("mnemonic_widget",
+                                   g_param_spec_object ("mnemonic-widget",
 							P_("Mnemonic widget"),
 							P_("The widget to be activated when the label's mnemonic "
 							  "key is pressed"),
@@ -394,7 +394,7 @@ gtk_label_class_init (GtkLabelClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_CURSOR_POSITION,
-                                   g_param_spec_int ("cursor_position",
+                                   g_param_spec_int ("cursor-position",
                                                      P_("Cursor Position"),
                                                      P_("The current position of the insertion cursor in chars"),
                                                      0,
@@ -404,7 +404,7 @@ gtk_label_class_init (GtkLabelClass *class)
   
   g_object_class_install_property (gobject_class,
                                    PROP_SELECTION_BOUND,
-                                   g_param_spec_int ("selection_bound",
+                                   g_param_spec_int ("selection-bound",
                                                      P_("Selection Bound"),
                                                      P_("The position of the opposite end of the selection from the cursor in chars"),
                                                      0,
@@ -449,7 +449,7 @@ gtk_label_class_init (GtkLabelClass *class)
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_WIDTH_CHARS,
-                                   g_param_spec_int ("width_chars",
+                                   g_param_spec_int ("width-chars",
                                                      P_("Width In Characters"),
                                                      P_("The desired width of the label, in characters"),
                                                      -1,
@@ -509,7 +509,7 @@ gtk_label_class_init (GtkLabelClass *class)
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_MAX_WIDTH_CHARS,
-                                   g_param_spec_int ("max_width_chars",
+                                   g_param_spec_int ("max-width-chars",
                                                      P_("Maximum Width In Characters"),
                                                      P_("The desired maximum width of the label, in characters"),
                                                      -1,

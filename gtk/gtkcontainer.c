@@ -201,7 +201,7 @@ gtk_container_class_init (GtkContainerClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_RESIZE_MODE,
-                                   g_param_spec_enum ("resize_mode",
+                                   g_param_spec_enum ("resize-mode",
                                                       P_("Resize mode"),
                                                       P_("Specify how resize events are handled"),
                                                       GTK_TYPE_RESIZE_MODE,
@@ -209,7 +209,7 @@ gtk_container_class_init (GtkContainerClass *class)
                                                       G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_BORDER_WIDTH,
-                                   g_param_spec_uint ("border_width",
+                                   g_param_spec_uint ("border-width",
                                                       P_("Border width"),
                                                       P_("The width of the empty border outside the containers children"),
 						      0,

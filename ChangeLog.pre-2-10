@@ -1,5 +1,29 @@
 2005-03-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): 
+	* gtk/gtkrange.c (gtk_range_class_init): 
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_class_init): 
+	* gtk/gtktexttag.c (gtk_text_tag_class_init): 
+	* gtk/gtktextview.c (gtk_text_view_class_init): 
+	* gtk/gtkscrollbar.c (gtk_scrollbar_class_init): 
+	* gtk/gtknotebook.c (gtk_notebook_class_init): 
+	* gtk/gtkentry.c (gtk_entry_class_init): 
+	* gtk/gtkexpander.c (gtk_expander_class_init): 
+	* gtk/gtkarrow.c (gtk_arrow_class_init): 
+	* gtk/gtkalignment.c (gtk_alignment_class_init): 
+	* gtk/gtkbutton.c (gtk_button_class_init): 
+	* gtk/gtklabel.c (gtk_label_class_init): 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_class_init): 
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init): x
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_class_init): 
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): 
+	* gtk/gtkbox.c (gtk_box_class_init): 
+	* gtk/gtkwindow.c (gtk_window_class_init, gtk_window_class_init): 
+	* gtk/gtkcontainer.c (gtk_container_class_init): 
+	* gtk/gtkwidget.c (gtk_widget_class_init): 
+	* gtk/gtkobject.c (gtk_object_class_init): Use canonical names
+	when registering param specs.
+
 	* demos/gtk-demo/editable_cells.c: Use GtkCellRendererCombo
 	(#169607, Mark McLoughlin)
 	

@@ -292,7 +292,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_IS_EXPANDER,
-				   g_param_spec_boolean ("is_expander",
+				   g_param_spec_boolean ("is-expander",
 							 P_("Is Expander"),
 							 P_("Row has children"),
 							 FALSE,
@@ -302,7 +302,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_IS_EXPANDED,
-				   g_param_spec_boolean ("is_expanded",
+				   g_param_spec_boolean ("is-expanded",
 							 P_("Is Expanded"),
 							 P_("Row is an expander row, and is expanded"),
 							 FALSE,
@@ -311,7 +311,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_CELL_BACKGROUND,
-				   g_param_spec_string ("cell_background",
+				   g_param_spec_string ("cell-background",
 							P_("Cell background color name"),
 							P_("Cell background color as a string"),
 							NULL,
@@ -319,7 +319,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_CELL_BACKGROUND_GDK,
-				   g_param_spec_boxed ("cell_background_gdk",
+				   g_param_spec_boxed ("cell-background-gdk",
 						       P_("Cell background color"),
 						       P_("Cell background color as a GdkColor"),
 						       GDK_TYPE_COLOR,
@@ -328,7 +328,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READABLE | G_PARAM_WRITABLE))
 
-  ADD_SET_PROP ("cell_background_set", PROP_CELL_BACKGROUND_SET,
+  ADD_SET_PROP ("cell-background-set", PROP_CELL_BACKGROUND_SET,
                 P_("Cell background set"),
                 P_("Whether this tag affects the cell background color"));
 

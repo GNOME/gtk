@@ -328,7 +328,7 @@ gtk_object_class_init (GtkObjectClass *class)
 
   g_object_class_install_property (gobject_class,
 				   PROP_USER_DATA,
-				   g_param_spec_pointer ("user_data", "User Data",
+				   g_param_spec_pointer ("user-data", "User Data",
 							 "Anonymous User Data Pointer",
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
   object_signals[DESTROY] =

@@ -160,7 +160,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  */
   g_object_class_install_property (gobject_class,
                                    PROP_TOP_PADDING,
-                                   g_param_spec_uint("top_padding",
+                                   g_param_spec_uint("top-padding",
                                                       P_("Top Padding"),
                                                       P_("The padding to insert at the top of the widget."),
                                                       0,
@@ -177,7 +177,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  */
   g_object_class_install_property (gobject_class,
                                    PROP_BOTTOM_PADDING,
-                                   g_param_spec_uint("bottom_padding",
+                                   g_param_spec_uint("bottom-padding",
                                                       P_("Bottom Padding"),
                                                       P_("The padding to insert at the bottom of the widget."),
                                                       0,
@@ -194,7 +194,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  */
   g_object_class_install_property (gobject_class,
                                    PROP_LEFT_PADDING,
-                                   g_param_spec_uint("left_padding",
+                                   g_param_spec_uint("left-padding",
                                                       P_("Left Padding"),
                                                       P_("The padding to insert at the left of the widget."),
                                                       0,
@@ -211,7 +211,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  */
   g_object_class_install_property (gobject_class,
                                    PROP_RIGHT_PADDING,
-                                   g_param_spec_uint("right_padding",
+                                   g_param_spec_uint("right-padding",
                                                       P_("Right Padding"),
                                                       P_("The padding to insert at the right of the widget."),
                                                       0,

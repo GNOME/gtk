@@ -248,7 +248,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 							G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   g_object_class_install_property (gobject_class,
                                    PROP_HSCROLLBAR_POLICY,
-                                   g_param_spec_enum ("hscrollbar_policy",
+                                   g_param_spec_enum ("hscrollbar-policy",
                                                       P_("Horizontal Scrollbar Policy"),
                                                       P_("When the horizontal scrollbar is displayed"),
 						      GTK_TYPE_POLICY_TYPE,
@@ -256,7 +256,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_VSCROLLBAR_POLICY,
-                                   g_param_spec_enum ("vscrollbar_policy",
+                                   g_param_spec_enum ("vscrollbar-policy",
                                                       P_("Vertical Scrollbar Policy"),
                                                       P_("When the vertical scrollbar is displayed"),
 						      GTK_TYPE_POLICY_TYPE,
@@ -265,7 +265,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_WINDOW_PLACEMENT,
-                                   g_param_spec_enum ("window_placement",
+                                   g_param_spec_enum ("window-placement",
                                                       P_("Window Placement"),
                                                       P_("Where the contents are located with respect to the scrollbars"),
 						      GTK_TYPE_CORNER_TYPE,
@@ -273,7 +273,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
-                                   g_param_spec_enum ("shadow_type",
+                                   g_param_spec_enum ("shadow-type",
                                                       P_("Shadow Type"),
                                                       P_("Style of bevel around the contents"),
 						      GTK_TYPE_SHADOW_TYPE,
@@ -281,7 +281,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("scrollbar_spacing",
+					   g_param_spec_int ("scrollbar-spacing",
 							     P_("Scrollbar spacing"),
 							     P_("Number of pixels between the scrollbars and the scrolled window"),
 							     0,

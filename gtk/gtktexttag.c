@@ -211,7 +211,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND_GDK,
-                                   g_param_spec_boxed ("background_gdk",
+                                   g_param_spec_boxed ("background-gdk",
                                                        P_("Background color"),
                                                        P_("Background color as a (possibly unallocated) GdkColor"),
                                                        GDK_TYPE_COLOR,
@@ -219,7 +219,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND_FULL_HEIGHT,
-                                   g_param_spec_boolean ("background_full_height",
+                                   g_param_spec_boolean ("background-full-height",
                                                          P_("Background full height"),
                                                          P_("Whether the background color fills the entire line height or only the height of the tagged characters"),
                                                          FALSE,
@@ -228,7 +228,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND_STIPPLE,
-                                   g_param_spec_object ("background_stipple",
+                                   g_param_spec_object ("background-stipple",
                                                         P_("Background stipple mask"),
                                                         P_("Bitmap to use as a mask when drawing the text background"),
                                                         GDK_TYPE_PIXMAP,
@@ -245,7 +245,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_FOREGROUND_GDK,
-                                   g_param_spec_boxed ("foreground_gdk",
+                                   g_param_spec_boxed ("foreground-gdk",
                                                        P_("Foreground color"),
                                                        P_("Foreground color as a (possibly unallocated) GdkColor"),
                                                        GDK_TYPE_COLOR,
@@ -254,7 +254,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   
   g_object_class_install_property (object_class,
                                    PROP_FOREGROUND_STIPPLE,
-                                   g_param_spec_object ("foreground_stipple",
+                                   g_param_spec_object ("foreground-stipple",
                                                         P_("Foreground stipple mask"),
                                                         P_("Bitmap to use as a mask when drawing the text foreground"),
                                                         GDK_TYPE_PIXMAP,
@@ -287,7 +287,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_FONT_DESC,
-                                   g_param_spec_boxed ("font_desc",
+                                   g_param_spec_boxed ("font-desc",
                                                        P_("Font"),
                                                        P_("Font description as a PangoFontDescription struct"),
                                                        PANGO_TYPE_FONT_DESCRIPTION,
@@ -362,7 +362,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   
   g_object_class_install_property (object_class,
                                    PROP_SIZE_POINTS,
-                                   g_param_spec_double ("size_points",
+                                   g_param_spec_double ("size-points",
                                                         P_("Font points"),
                                                         P_("Font size in points"),
                                                         0.0,
@@ -389,7 +389,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_LEFT_MARGIN,
-                                   g_param_spec_int ("left_margin",
+                                   g_param_spec_int ("left-margin",
                                                      P_("Left margin"),
                                                      P_("Width of the left margin in pixels"),
                                                      0,
@@ -399,7 +399,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_RIGHT_MARGIN,
-                                   g_param_spec_int ("right_margin",
+                                   g_param_spec_int ("right-margin",
                                                      P_("Right margin"),
                                                      P_("Width of the right margin in pixels"),
                                                      0,
@@ -431,7 +431,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_PIXELS_ABOVE_LINES,
-                                   g_param_spec_int ("pixels_above_lines",
+                                   g_param_spec_int ("pixels-above-lines",
                                                      P_("Pixels above lines"),
                                                      P_("Pixels of blank space above paragraphs"),
                                                      0,
@@ -441,7 +441,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   
   g_object_class_install_property (object_class,
                                    PROP_PIXELS_BELOW_LINES,
-                                   g_param_spec_int ("pixels_below_lines",
+                                   g_param_spec_int ("pixels-below-lines",
                                                      P_("Pixels below lines"),
                                                      P_("Pixels of blank space below paragraphs"),
                                                      0,
@@ -451,7 +451,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_PIXELS_INSIDE_WRAP,
-                                   g_param_spec_int ("pixels_inside_wrap",
+                                   g_param_spec_int ("pixels-inside-wrap",
                                                      P_("Pixels inside wrap"),
                                                      P_("Pixels of blank space between wrapped lines in a paragraph"),
                                                      0,
@@ -478,7 +478,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   
   g_object_class_install_property (object_class,
                                    PROP_WRAP_MODE,
-                                   g_param_spec_enum ("wrap_mode",
+                                   g_param_spec_enum ("wrap-mode",
                                                      P_("Wrap mode"),
                                                      P_("Whether to wrap lines never, at word boundaries, or at character boundaries"),
                                                       GTK_TYPE_WRAP_MODE,
@@ -506,111 +506,111 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READABLE | G_PARAM_WRITABLE))
 
-  ADD_SET_PROP ("background_set", PROP_BACKGROUND_SET,
+  ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET,
                 P_("Background set"),
                 P_("Whether this tag affects the background color"));
   
-  ADD_SET_PROP ("background_full_height_set", PROP_BACKGROUND_FULL_HEIGHT_SET,
+  ADD_SET_PROP ("background-full-height-set", PROP_BACKGROUND_FULL_HEIGHT_SET,
                 P_("Background full height set"),
                 P_("Whether this tag affects background height"));
 
-  ADD_SET_PROP ("background_stipple_set", PROP_BACKGROUND_STIPPLE_SET,
+  ADD_SET_PROP ("background-stipple-set", PROP_BACKGROUND_STIPPLE_SET,
                 P_("Background stipple set"),
                 P_("Whether this tag affects the background stipple"));  
 
-  ADD_SET_PROP ("foreground_set", PROP_FOREGROUND_SET,
+  ADD_SET_PROP ("foreground-set", PROP_FOREGROUND_SET,
                 P_("Foreground set"),
                 P_("Whether this tag affects the foreground color"));
 
-  ADD_SET_PROP ("foreground_stipple_set", PROP_FOREGROUND_STIPPLE_SET,
+  ADD_SET_PROP ("foreground-stipple-set", PROP_FOREGROUND_STIPPLE_SET,
                 P_("Foreground stipple set"),
                 P_("Whether this tag affects the foreground stipple"));
   
-  ADD_SET_PROP ("editable_set", PROP_EDITABLE_SET,
+  ADD_SET_PROP ("editable-set", PROP_EDITABLE_SET,
                 P_("Editability set"),
                 P_("Whether this tag affects text editability"));
 
-  ADD_SET_PROP ("family_set", PROP_FAMILY_SET,
+  ADD_SET_PROP ("family-set", PROP_FAMILY_SET,
                 P_("Font family set"),
                 P_("Whether this tag affects the font family"));  
 
-  ADD_SET_PROP ("style_set", PROP_STYLE_SET,
+  ADD_SET_PROP ("style-set", PROP_STYLE_SET,
                 P_("Font style set"),
                 P_("Whether this tag affects the font style"));
 
-  ADD_SET_PROP ("variant_set", PROP_VARIANT_SET,
+  ADD_SET_PROP ("variant-set", PROP_VARIANT_SET,
                 P_("Font variant set"),
                 P_("Whether this tag affects the font variant"));
 
-  ADD_SET_PROP ("weight_set", PROP_WEIGHT_SET,
+  ADD_SET_PROP ("weight-set", PROP_WEIGHT_SET,
                 P_("Font weight set"),
                 P_("Whether this tag affects the font weight"));
 
-  ADD_SET_PROP ("stretch_set", PROP_STRETCH_SET,
+  ADD_SET_PROP ("stretch-set", PROP_STRETCH_SET,
                 P_("Font stretch set"),
                 P_("Whether this tag affects the font stretch"));
 
-  ADD_SET_PROP ("size_set", PROP_SIZE_SET,
+  ADD_SET_PROP ("size-set", PROP_SIZE_SET,
                 P_("Font size set"),
                 P_("Whether this tag affects the font size"));
 
-  ADD_SET_PROP ("scale_set", PROP_SCALE_SET,
+  ADD_SET_PROP ("scale-set", PROP_SCALE_SET,
                 P_("Font scale set"),
                 P_("Whether this tag scales the font size by a factor"));
   
-  ADD_SET_PROP ("justification_set", PROP_JUSTIFICATION_SET,
+  ADD_SET_PROP ("justification-set", PROP_JUSTIFICATION_SET,
                 P_("Justification set"),
                 P_("Whether this tag affects paragraph justification"));
   
-  ADD_SET_PROP ("language_set", PROP_LANGUAGE_SET,
+  ADD_SET_PROP ("language-set", PROP_LANGUAGE_SET,
                 P_("Language set"),
                 P_("Whether this tag affects the language the text is rendered as"));
 
-  ADD_SET_PROP ("left_margin_set", PROP_LEFT_MARGIN_SET,
+  ADD_SET_PROP ("left-margin-set", PROP_LEFT_MARGIN_SET,
                 P_("Left margin set"),
                 P_("Whether this tag affects the left margin"));
 
-  ADD_SET_PROP ("indent_set", PROP_INDENT_SET,
+  ADD_SET_PROP ("indent-set", PROP_INDENT_SET,
                 P_("Indent set"),
                 P_("Whether this tag affects indentation"));
 
-  ADD_SET_PROP ("rise_set", PROP_RISE_SET,
+  ADD_SET_PROP ("rise-set", PROP_RISE_SET,
                 P_("Rise set"),
                 P_("Whether this tag affects the rise"));
 
-  ADD_SET_PROP ("pixels_above_lines_set", PROP_PIXELS_ABOVE_LINES_SET,
+  ADD_SET_PROP ("pixels-above-lines-set", PROP_PIXELS_ABOVE_LINES_SET,
                 P_("Pixels above lines set"),
                 P_("Whether this tag affects the number of pixels above lines"));
 
-  ADD_SET_PROP ("pixels_below_lines_set", PROP_PIXELS_BELOW_LINES_SET,
+  ADD_SET_PROP ("pixels-below-lines-set", PROP_PIXELS_BELOW_LINES_SET,
                 P_("Pixels below lines set"),
                 P_("Whether this tag affects the number of pixels above lines"));
 
-  ADD_SET_PROP ("pixels_inside_wrap_set", PROP_PIXELS_INSIDE_WRAP_SET,
+  ADD_SET_PROP ("pixels-inside-wrap-set", PROP_PIXELS_INSIDE_WRAP_SET,
                 P_("Pixels inside wrap set"),
                 P_("Whether this tag affects the number of pixels between wrapped lines"));
 
-  ADD_SET_PROP ("strikethrough_set", PROP_STRIKETHROUGH_SET,
+  ADD_SET_PROP ("strikethrough-set", PROP_STRIKETHROUGH_SET,
                 P_("Strikethrough set"),
                 P_("Whether this tag affects strikethrough"));
   
-  ADD_SET_PROP ("right_margin_set", PROP_RIGHT_MARGIN_SET,
+  ADD_SET_PROP ("right-margin-set", PROP_RIGHT_MARGIN_SET,
                 P_("Right margin set"),
                 P_("Whether this tag affects the right margin"));
 
-  ADD_SET_PROP ("underline_set", PROP_UNDERLINE_SET,
+  ADD_SET_PROP ("underline-set", PROP_UNDERLINE_SET,
                 P_("Underline set"),
                 P_("Whether this tag affects underlining"));
 
-  ADD_SET_PROP ("wrap_mode_set", PROP_WRAP_MODE_SET,
+  ADD_SET_PROP ("wrap-mode-set", PROP_WRAP_MODE_SET,
                 P_("Wrap mode set"),
                 P_("Whether this tag affects line wrap mode"));
 
-  ADD_SET_PROP ("tabs_set", PROP_TABS_SET,
+  ADD_SET_PROP ("tabs-set", PROP_TABS_SET,
                 P_("Tabs set"),
                 P_("Whether this tag affects tabs"));
 
-  ADD_SET_PROP ("invisible_set", PROP_INVISIBLE_SET,
+  ADD_SET_PROP ("invisible-set", PROP_INVISIBLE_SET,
                 P_("Invisible set"),
                 P_("Whether this tag affects text visibility"));
 

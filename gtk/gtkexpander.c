@@ -210,7 +210,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 
   g_object_class_install_property (gobject_class,
 				   PROP_USE_UNDERLINE,
-				   g_param_spec_boolean ("use_underline",
+				   g_param_spec_boolean ("use-underline",
 							 P_("Use underline"),
 							 P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
 							 FALSE,
@@ -218,7 +218,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 
   g_object_class_install_property (gobject_class,
 				   PROP_USE_MARKUP,
-				   g_param_spec_boolean ("use_markup",
+				   g_param_spec_boolean ("use-markup",
 							 P_("Use markup"),
 							 P_("The text of the label includes XML markup. See pango_parse_markup()"),
 							 FALSE,
@@ -236,7 +236,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 
   g_object_class_install_property (gobject_class,
 				   PROP_LABEL_WIDGET,
-				   g_param_spec_object ("label_widget",
+				   g_param_spec_object ("label-widget",
 							P_("Label widget"),
 							P_("A widget to display in place of the usual expander label"),
 							GTK_TYPE_WIDGET,

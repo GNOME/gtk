@@ -406,7 +406,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  						     G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_TAB_POS,
-				   g_param_spec_enum ("tab_pos",
+				   g_param_spec_enum ("tab-pos",
  						      P_("Tab Position"),
  						      P_("Which side of the notebook holds the tabs"),
  						      GTK_TYPE_POSITION_TYPE,
@@ -414,7 +414,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  						      G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_TAB_BORDER,
-				   g_param_spec_uint ("tab_border",
+				   g_param_spec_uint ("tab-border",
  						      P_("Tab Border"),
  						      P_("Width of the border around the tab labels"),
  						      0,
@@ -423,7 +423,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  						      G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
 				   PROP_TAB_HBORDER,
-				   g_param_spec_uint ("tab_hborder",
+				   g_param_spec_uint ("tab-hborder",
  						      P_("Horizontal Tab Border"),
  						      P_("Width of the horizontal border of tab labels"),
  						      0,
@@ -432,7 +432,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  						      G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_TAB_VBORDER,
-				   g_param_spec_uint ("tab_vborder",
+				   g_param_spec_uint ("tab-vborder",
  						      P_("Vertical Tab Border"),
  						      P_("Width of the vertical border of tab labels"),
  						      0,
@@ -441,14 +441,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  						      G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_TABS,
-				   g_param_spec_boolean ("show_tabs",
+				   g_param_spec_boolean ("show-tabs",
  							 P_("Show Tabs"),
  							 P_("Whether tabs should be shown or not"),
  							 TRUE,
  							 G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_BORDER,
-				   g_param_spec_boolean ("show_border",
+				   g_param_spec_boolean ("show-border",
  							 P_("Show Border"),
  							 P_("Whether the border should be shown or not"),
  							 TRUE,
@@ -462,7 +462,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  							 G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_ENABLE_POPUP,
-				   g_param_spec_boolean ("enable_popup",
+				   g_param_spec_boolean ("enable-popup",
  							 P_("Enable Popup"),
  							 P_("If TRUE, pressing the right mouse button on the notebook pops up a menu that you can use to go to a page"),
  							 FALSE,
@@ -477,14 +477,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_LABEL,
-					      g_param_spec_string ("tab_label", 
+					      g_param_spec_string ("tab-label", 
 								   P_("Tab label"),
 								   P_("The string displayed on the child's tab label"),
 								   NULL,
 								   G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_MENU_LABEL,
-					      g_param_spec_string ("menu_label", 
+					      g_param_spec_string ("menu-label", 
 								   P_("Menu label"), 
 								   P_("The string displayed in the child's menu entry"),
 								   NULL,
@@ -498,21 +498,21 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 								G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_EXPAND,
-					      g_param_spec_boolean ("tab_expand", 
+					      g_param_spec_boolean ("tab-expand", 
 								    P_("Tab expand"), 
 								    P_("Whether to expand the child's tab or not"),
 								    TRUE,
 								    G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_FILL,
-					      g_param_spec_boolean ("tab_fill", 
+					      g_param_spec_boolean ("tab-fill", 
 								    P_("Tab fill"), 
 								    P_("Whether the child's tab should fill the allocated area or not"),
 								    TRUE,
 								    G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_PACK,
-					      g_param_spec_enum ("tab_pack", 
+					      g_param_spec_enum ("tab-pack", 
 								 P_("Tab pack type"),
 								 P_("A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"),
 								 GTK_TYPE_PACK_TYPE, GTK_PACK_START,
@@ -528,7 +528,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  * Since: 2.4
  */  
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("has_secondary_backward_stepper",
+					   g_param_spec_boolean ("has-secondary-backward-stepper",
 								 P_("Secondary backward stepper"),
 								 P_("Display a second backward arrow button on the opposite end of the tab area"),
 								 FALSE,
@@ -545,7 +545,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  * Since: 2.4
  */  
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("has_secondary_forward_stepper",
+					   g_param_spec_boolean ("has-secondary-forward-stepper",
 								 P_("Secondary forward stepper"),
 								 P_("Display a second forward arrow button on the opposite end of the tab area"),
 								 FALSE,
@@ -561,7 +561,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  * Since: 2.4
  */  
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("has_backward_stepper",
+					   g_param_spec_boolean ("has-backward-stepper",
 								 P_("Backward stepper"),
 								 P_("Display the standard backward arrow button"),
 								 TRUE,
@@ -577,7 +577,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  * Since: 2.4
  */  
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("has_forward_stepper",
+					   g_param_spec_boolean ("has-forward-stepper",
 								 P_("Forward stepper"),
 								 P_("Display the standard forward arrow button"),
 								 TRUE,

@@ -481,7 +481,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   
   g_object_class_install_property (gobject_class,
                                    PROP_CURSOR_POSITION,
-                                   g_param_spec_int ("cursor_position",
+                                   g_param_spec_int ("cursor-position",
                                                      P_("Cursor Position"),
                                                      P_("The current position of the insertion cursor in chars"),
                                                      0,
@@ -491,7 +491,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   
   g_object_class_install_property (gobject_class,
                                    PROP_SELECTION_BOUND,
-                                   g_param_spec_int ("selection_bound",
+                                   g_param_spec_int ("selection-bound",
                                                      P_("Selection Bound"),
                                                      P_("The position of the opposite end of the selection from the cursor in chars"),
                                                      0,
@@ -509,7 +509,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   
   g_object_class_install_property (gobject_class,
                                    PROP_MAX_LENGTH,
-                                   g_param_spec_int ("max_length",
+                                   g_param_spec_int ("max-length",
                                                      P_("Maximum length"),
                                                      P_("Maximum number of characters for this entry. Zero if no maximum"),
                                                      0,
@@ -526,7 +526,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_FRAME,
-                                   g_param_spec_boolean ("has_frame",
+                                   g_param_spec_boolean ("has-frame",
 							 P_("Has Frame"),
 							 P_("FALSE removes outside bevel from entry"),
                                                          TRUE,
@@ -534,7 +534,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_INVISIBLE_CHAR,
-                                   g_param_spec_unichar ("invisible_char",
+                                   g_param_spec_unichar ("invisible-char",
 							 P_("Invisible character"),
 							 P_("The character to use when masking entry contents (in \"password mode\")"),
 							 '*',
@@ -542,14 +542,14 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVATES_DEFAULT,
-                                   g_param_spec_boolean ("activates_default",
+                                   g_param_spec_boolean ("activates-default",
 							 P_("Activates default"),
 							 P_("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"),
                                                          FALSE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_WIDTH_CHARS,
-                                   g_param_spec_int ("width_chars",
+                                   g_param_spec_int ("width-chars",
                                                      P_("Width in chars"),
                                                      P_("Number of characters to leave space for in the entry"),
                                                      -1,
@@ -559,7 +559,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_SCROLL_OFFSET,
-                                   g_param_spec_int ("scroll_offset",
+                                   g_param_spec_int ("scroll-offset",
                                                      P_("Scroll offset"),
                                                      P_("Number of pixels of the entry scrolled off the screen to the left"),
                                                      0,

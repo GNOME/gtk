@@ -224,7 +224,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   
   g_object_class_install_property (gobject_class,
                                    PROP_USE_UNDERLINE,
-                                   g_param_spec_boolean ("use_underline",
+                                   g_param_spec_boolean ("use-underline",
 							 P_("Use underline"),
 							 P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
                                                         FALSE,
@@ -232,7 +232,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   
   g_object_class_install_property (gobject_class,
                                    PROP_USE_STOCK,
-                                   g_param_spec_boolean ("use_stock",
+                                   g_param_spec_boolean ("use-stock",
 							 P_("Use stock"),
 							 P_("If set, the label is used to pick a stock item instead of being displayed"),
                                                         FALSE,
@@ -240,7 +240,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   
   g_object_class_install_property (gobject_class,
                                    PROP_FOCUS_ON_CLICK,
-                                   g_param_spec_boolean ("focus_on_click",
+                                   g_param_spec_boolean ("focus-on-click",
 							 P_("Focus on click"),
 							 P_("Whether the button grabs focus when it is clicked with the mouse"),
 							 TRUE,
@@ -369,20 +369,20 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->activate_signal = button_signals[ACTIVATE];
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boxed ("default_border",
+					   g_param_spec_boxed ("default-border",
 							       P_("Default Spacing"),
 							       P_("Extra space to add for CAN_DEFAULT buttons"),
 							       GTK_TYPE_BORDER,
 							       G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boxed ("default_outside_border",
+					   g_param_spec_boxed ("default-outside-border",
 							       P_("Default Outside Spacing"),
 							       P_("Extra space to add for CAN_DEFAULT buttons that is always drawn outside the border"),
 							       GTK_TYPE_BORDER,
 							       G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("child_displacement_x",
+					   g_param_spec_int ("child-displacement-x",
 							     P_("Child X Displacement"),
 							     P_("How far in the x direction to move the child when the button is depressed"),
 							     G_MININT,
@@ -390,7 +390,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     0,
 							     G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("child_displacement_y",
+					   g_param_spec_int ("child-displacement-y",
 							     P_("Child Y Displacement"),
 							     P_("How far in the y direction to move the child when the button is depressed"),
 							     G_MININT,
