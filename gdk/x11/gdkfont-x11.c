@@ -26,6 +26,7 @@ gdk_font_load (const gchar *font_name)
 {
   GdkFont *font;
   GdkFontPrivate *private;
+  static Atom font_atom = None;
 
   private = g_new (GdkFontPrivate, 1);
   font = (GdkFont*) private;
@@ -33,6 +34,7 @@ gdk_font_load (const gchar *font_name)
   private->xdisplay = gdk_display;
   private->xfont = XLoadQueryFont (private->xdisplay, font_name);
   private->ref_count = 1;
+  font->name = NULL;
 
   if (!private->xfont)
     {
@@ -41,9 +43,23 @@ gdk_font_load (const gchar *font_name)
     }
   else
     {
+      gchar* xfd = NULL;
+      unsigned long value;
       font->type = GDK_FONT_FONT;
       font->ascent =  ((XFontStruct *) private->xfont)->ascent;
       font->descent = ((XFontStruct *) private->xfont)->descent;
+      if ( font_atom != None )
+	font_atom = XInternAtom(private->xdisplay, "FONT", True);
+      if ( font_atom != None ) {
+	if (XGetFontProperty(private->xfont, font_atom, &value))
+	  xfd = XGetAtomName(private->xdisplay, value);
+	if (xfd) {
+	  font->name = g_strdup(xfd);
+	  XFree(xfd);
+	}
+      }
+      if ( font->name == NULL )
+      	font->name = g_strdup(font_name);
     }
 
   gdk_xid_table_insert (&((XFontStruct *) private->xfont)->fid, font);
@@ -103,6 +119,7 @@ gdk_fontset_load (gchar *fontset_name)
 	  font->ascent = MAX (font->ascent, font_structs[i]->ascent);
 	  font->descent = MAX (font->descent, font_structs[i]->descent);
 	}
+      font->name = g_strdup(fontset_name);
     }
   return font;
 }
@@ -144,6 +161,7 @@ gdk_font_unref (GdkFont *font)
 	  g_error ("unknown font type.");
 	  break;
 	}
+      g_free(font->name);
       g_free (font);
     }
 }

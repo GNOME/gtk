@@ -12,6 +12,7 @@ libgdk_la_SOURCES = \
 	gdkcursor.c	\
 	gdkdnd.c	\
 	gdkdraw.c	\
+	gdkdrawable.c	\
 	gdkfont.c	\
 	gdkgc.c		\
 	gdkglobals.c	\
@@ -24,6 +25,7 @@ libgdk_la_SOURCES = \
 	gdkinputxfree.h	\
 	gdkpixmap.c	\
 	gdkproperty.c	\
+	gdkps.c	\
 	gdkrgb.c	\
 	gdkrectangle.c	\
 	gdkregion.c	\
@@ -47,6 +49,7 @@ gdkinclude_HEADERS = \
  	gdki18n.h	\
 	gdkkeysyms.h	\
 	gdkprivate.h	\
+	gdkps.h	\
 	gdktypes.h	\
 	gdkx.h
 
@@ -69,7 +72,7 @@ gxid_LDADD = \
 
 BUILT_SOURCES = gdkcursors.h gdkkeysyms.h
 
-EXTRA_DIST = makecursors.awk makekeysyms.awk
+EXTRA_DIST = makecursors.awk makekeysyms.awk PolyReg.c Region.c region.c region.h
 
 gdkcursors.h:
 	awk -f $(srcdir)/makecursors.awk @x_includes@/X11/cursorfont.h > $@

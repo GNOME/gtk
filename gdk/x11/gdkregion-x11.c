@@ -22,8 +22,16 @@
 #include "gdk.h"
 #include "gdkprivate.h"
 
+#define Xmalloc g_malloc
+#define Xfree g_free
+#define Xrealloc g_realloc
 
+#include "Region.c"
+#include "PolyReg.c"
 
+#undef Xmalloc
+#undef Xfree
+#undef Xrealloc
 
 GdkRegion*
 gdk_region_new (void)
@@ -32,7 +40,7 @@ gdk_region_new (void)
   GdkRegion *region;
   Region xregion;
 
-  xregion = XCreateRegion();
+  xregion = GXCreateRegion();
   private = g_new (GdkRegionPrivate, 1);
   private->xregion = xregion;
   region = (GdkRegion*) private;
@@ -49,7 +57,7 @@ gdk_region_destroy (GdkRegion *region)
   g_return_if_fail (region != NULL);
 
   private = (GdkRegionPrivate *) region;
-  XDestroyRegion (private->xregion);
+  GXDestroyRegion (private->xregion);
 
   g_free (private);
 }
@@ -63,7 +71,7 @@ gdk_region_empty (GdkRegion      *region)
 
   private = (GdkRegionPrivate *) region;
   
-  return XEmptyRegion (private->xregion);
+  return GXEmptyRegion (private->xregion);
 }
 
 gboolean
@@ -79,7 +87,7 @@ gdk_region_equal (GdkRegion      *region1,
   private1 = (GdkRegionPrivate *) region1;
   private2 = (GdkRegionPrivate *) region2;
   
-  return XEqualRegion (private1->xregion, private2->xregion);
+  return GXEqualRegion (private1->xregion, private2->xregion);
 }
 
 void
@@ -93,7 +101,7 @@ gdk_region_get_clipbox(GdkRegion    *region,
 	g_return_if_fail(rectangle != NULL);
 
 	rp = (GdkRegionPrivate *)region;
-	XClipBox(rp->xregion, &r);
+	GXClipBox(rp->xregion, &r);
 
 	rectangle->x = r.x;
 	rectangle->y = r.y;	
@@ -112,7 +120,7 @@ gdk_region_point_in (GdkRegion      *region,
 
   private = (GdkRegionPrivate *) region;
   
-  return XPointInRegion (private->xregion, x, y);
+  return GXPointInRegion (private->xregion, x, y);
 }
 
 GdkOverlapType
@@ -126,7 +134,7 @@ gdk_region_rect_in (GdkRegion      *region,
 
   private = (GdkRegionPrivate *) region;
   
-  res = XRectInRegion (private->xregion, rect->x, rect->y, rect->width, rect->height);
+  res = GXRectInRegion (private->xregion, rect->x, rect->y, rect->width, rect->height);
   
   switch (res)
   {
@@ -162,7 +170,7 @@ gdk_region_polygon (GdkPoint    *points,
       break;
     }
 
-  xregion = XPolygonRegion ((XPoint *) points, npoints, xfill_rule);
+  xregion = GXPolygonRegion ((XPoint *) points, npoints, xfill_rule);
   private = g_new (GdkRegionPrivate, 1);
   private->xregion = xregion;
   region = (GdkRegion *) private;
@@ -182,7 +190,7 @@ gdk_region_offset (GdkRegion      *region,
 
   private = (GdkRegionPrivate *) region;
   
-  XOffsetRegion (private->xregion, dx, dy);
+  GXOffsetRegion (private->xregion, dx, dy);
 }
 
 void
@@ -196,7 +204,7 @@ gdk_region_shrink (GdkRegion      *region,
 
   private = (GdkRegionPrivate *) region;
   
-  XShrinkRegion (private->xregion, dx, dy);
+  GXShrinkRegion (private->xregion, dx, dy);
 }
 
 GdkRegion*    
@@ -220,7 +228,7 @@ gdk_region_union_with_rect (GdkRegion      *region,
   res = gdk_region_new ();
   res_private = (GdkRegionPrivate *) res;
   
-  XUnionRectWithRegion (&xrect, private->xregion, res_private->xregion);
+  GXUnionRectWithRegion (&xrect, private->xregion, res_private->xregion);
   
   return res;
 }
@@ -243,7 +251,7 @@ gdk_regions_intersect (GdkRegion      *source1,
   res = gdk_region_new ();
   res_private = (GdkRegionPrivate *) res;
   
-  XIntersectRegion (private1->xregion, private2->xregion, res_private->xregion);
+  GXIntersectRegion (private1->xregion, private2->xregion, res_private->xregion);
   
   return res;
 }
@@ -266,7 +274,7 @@ gdk_regions_union (GdkRegion      *source1,
   res = gdk_region_new ();
   res_private = (GdkRegionPrivate *) res;
   
-  XUnionRegion (private1->xregion, private2->xregion, res_private->xregion);
+  GXUnionRegion (private1->xregion, private2->xregion, res_private->xregion);
   
   return res;
 }
@@ -289,7 +297,7 @@ gdk_regions_subtract (GdkRegion      *source1,
   res = gdk_region_new ();
   res_private = (GdkRegionPrivate *) res;
   
-  XSubtractRegion (private1->xregion, private2->xregion, res_private->xregion);
+  GXSubtractRegion (private1->xregion, private2->xregion, res_private->xregion);
   
   return res;
 }
@@ -312,10 +320,36 @@ gdk_regions_xor (GdkRegion      *source1,
   res = gdk_region_new ();
   res_private = (GdkRegionPrivate *) res;
   
-  XXorRegion (private1->xregion, private2->xregion, res_private->xregion);
+  GXXorRegion (private1->xregion, private2->xregion, res_private->xregion);
   
   return res;
 }
 
 
+GdkRectangle*
+gdk_region_get_rectangles(GdkRegion *region, gint *nrects) 
+{
+  GdkRectangle *result;
+  GdkRegionPrivate *private;
+  struct _XRegion *r;
+  gint i;
+
+  g_return_val_if_fail (region != NULL, NULL);
+
+  private = (GdkRegionPrivate *) region;
+  r = (struct _XRegion*) private->xregion;
+
+  if (nrects)
+    *nrects = r->numRects;
+  if (!r->numRects)
+  	return NULL;
+  result = g_new(GdkRectangle, r->numRects);
+  for ( i=0; i < r->numRects; ++i ) {
+    result[i].x = r->rects[i].x1;
+    result[i].y = r->rects[i].y1;
+    result[i].width = r->rects[i].x2 - r->rects[i].x1;
+    result[i].height = r->rects[i].y2 - r->rects[i].y1;
+  }
+  return result;
+}
 

@@ -374,6 +374,9 @@ gdk_window_new (GdkWindow     *parent,
 	case GDK_WINDOW_PIXMAP:
 	  g_error ("cannot make windows of type GDK_WINDOW_PIXMAP (use gdk_pixmap_new)");
 	  break;
+	case GDK_WINDOW_DRAWABLE:
+	  g_error ("cannot make windows of type GDK_WINDOW_DRAWABLE (use the drawable-specific functions)");
+	  break;
 	}
     }
   else
@@ -649,6 +652,11 @@ gdk_window_internal_destroy (GdkWindow *window, gboolean xdestroy,
 
     case GDK_WINDOW_PIXMAP:
       g_error ("called gdk_window_destroy on a pixmap (use gdk_pixmap_unref)");
+      break;
+
+    case GDK_WINDOW_DRAWABLE:
+      if (private->engine->destroy)
+        private->engine->destroy(window);
       break;
     }
 }

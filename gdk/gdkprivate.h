@@ -85,6 +85,7 @@ struct _GdkWindowPrivate
   GList *filters;
   GdkColormap *colormap;
   GList *children;
+  GdkDrawableClass *engine;
 };
 
 struct _GdkImagePrivate
@@ -111,6 +112,14 @@ struct _GdkGCPrivate
   GC xgc;
   Display *xdisplay;
   guint ref_count;
+  guint nrects;
+  GdkRectangle* rects;
+  /* FIXME: need to store here the dashes as well */
+  GdkColor fg;
+  GdkColor bg;
+  gint dash_offset;
+  gint dash_num;
+  gchar *dash_list;
 };
 
 typedef enum {

@@ -1,3 +1,27 @@
+Tue, 20 Oct 1998 12:03:46 +0200 Paolo Molaro <lupus@debian.org>
+
+	* gdk/gdkprivate.h: GdkGCPrivate now stores complete info
+	about color, clip-rectangles (not for bitmaps yet) and
+	dashes. 
+	GdkWindowPrivate now has a GdkDrawableClass member to allow
+	for customized draw operations.
+	* gdk/gdktypes.h: GdkFont now has a name member; new 
+	GDK_WINDOW_DRAWABLE type for GdkWindow; new structure
+	GdkDrawableClass.
+	* gdk/gdkdraw.c: use engine-specific functions to draw.
+	* gdk/gdkwindow.c: handle destroy of GDK_WINDOW_DRAWABLE.
+	* gdk/gdkps.[ch]: postscript drawable engine.
+	* gdk/gdkdrawable.c: drawable engine registration.
+	* gdk/gdk.h: include drawable engine headers and declare
+	engine registration function.
+	New function: gdk_region_get_rectangles().
+	* gdk/gdkfont.c: store the name of the font loaded (needs
+	work for fontset).
+	* gdk/gdkgc.c: handle changes to GdkGCPrivate.
+	* gdk/gdkregion.c: use our own functions for Region handling
+	(stolen from X 6.3: Region.c region.h poly.h PolyReg.c).
+	* gtk/testps.c: test postscript backend.
+
 Tue, 20 Oct 1998 11:33:10 +0200 Paolo Molaro <lupus@debian.org>
 
 	* gtk/gtkdnd.h,gtk/gtkdnd.c: delete is a reserved word in c++.

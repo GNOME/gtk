@@ -52,6 +52,10 @@ gdk_gc_new_with_values (GdkWindow	*window,
   xwindow = window_private->xwindow;
   private->xdisplay = window_private->xdisplay;
   private->ref_count = 1;
+  private->nrects = 0;
+  private->rects = NULL;
+  private->dash_list = NULL;
+  private->dash_num = private->dash_offset = 0;
 
   xvalues.function = GXcopy;
   xvalues.fill_style = FillSolid;
@@ -64,12 +68,16 @@ gdk_gc_new_with_values (GdkWindow	*window,
     {
       xvalues.foreground = values->foreground.pixel;
       xvalues_mask |= GCForeground;
-    }
+      private->fg = values->foreground;
+    } else
+      private->fg.pixel = 0; /* FIXME */
   if (values_mask & GDK_GC_BACKGROUND)
     {
       xvalues.background = values->background.pixel;
       xvalues_mask |= GCBackground;
-    }
+      private->bg = values->background;
+    } else
+      private->bg.pixel = 0; /* FIXME */
   if ((values_mask & GDK_GC_FONT) && (values->font->type == GDK_FONT_FONT))
     {
       xvalues.font = ((XFontStruct *) ((GdkFontPrivate*) values->font)->xfont)->fid;
@@ -160,6 +168,7 @@ gdk_gc_new_with_values (GdkWindow	*window,
     {
       xvalues.clip_mask = ((GdkPixmapPrivate*) values->clip_mask)->xwindow;
       xvalues_mask |= GCClipMask;
+      /* FIXME: set clip rects... */
     }
   if (values_mask & GDK_GC_SUBWINDOW)
     {
@@ -284,6 +293,8 @@ gdk_gc_unref (GdkGC *gc)
   else
     {
       XFreeGC (private->xdisplay, private->xgc);
+      g_free(private->rects);
+      g_free(private->dash_list);
       memset (gc, 0, sizeof (GdkGCPrivate));
       g_free (gc);
     }
@@ -310,8 +321,8 @@ gdk_gc_get_values (GdkGC       *gc,
 		    GCLineWidth | GCLineStyle | GCCapStyle |
 		    GCFillStyle | GCJoinStyle, &xvalues))
     {
-      values->foreground.pixel = xvalues.foreground;
-      values->background.pixel = xvalues.background;
+      values->foreground = private->fg;
+      values->background = private->bg;
       values->font = gdk_font_lookup (xvalues.font);
 
       switch (xvalues.function)
@@ -449,6 +460,7 @@ gdk_gc_set_foreground (GdkGC	*gc,
 
   private = (GdkGCPrivate*) gc;
   XSetForeground (private->xdisplay, private->xgc, color->pixel);
+  private->fg = *color;
 }
 
 void
@@ -462,6 +474,7 @@ gdk_gc_set_background (GdkGC	*gc,
 
   private = (GdkGCPrivate*) gc;
   XSetBackground (private->xdisplay, private->xgc, color->pixel);
+  private->bg = *color;
 }
 
 void
@@ -667,6 +680,10 @@ gdk_gc_set_clip_mask (GdkGC	*gc,
   private = (GdkGCPrivate*) gc;
 
   XSetClipMask (private->xdisplay, private->xgc, xmask);
+  /* FIXME: set clip rects... */
+  g_free(private->rects);
+  private->rects = NULL;
+  private->nrects = 0;
 }
 
 
@@ -681,12 +698,20 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
 
   private = (GdkGCPrivate*) gc;
 
+  g_free(private->rects);
+  private->rects = NULL;
+  private->nrects = 0;
+
   if (rectangle)
     {
       xrectangle.x = rectangle->x; 
       xrectangle.y = rectangle->y;
       xrectangle.width = rectangle->width;
       xrectangle.height = rectangle->height;
+
+      private->nrects = 1;
+      private->rects = g_new(GdkRectangle, 1);
+      private->rects[0] = *rectangle;
       
       XSetClipRectangles (private->xdisplay, private->xgc, 0, 0,
 			  &xrectangle, 1, Unsorted);
@@ -705,12 +730,17 @@ gdk_gc_set_clip_region (GdkGC		 *gc,
 
   private = (GdkGCPrivate*) gc;
 
+  g_free(private->rects);
+  private->rects = NULL;
+  private->nrects = 0;
+
   if (region)
     {
-      GdkRegionPrivate *region_private;
-
-      region_private = (GdkRegionPrivate*) region;
-      XSetRegion (private->xdisplay, private->xgc, region_private->xregion);
+      private->rects = gdk_region_get_rectangles(region, &private->nrects);
+      /* FIXME: handle GdkRectangle ~= Rectangle? */
+      if ( private->rects )
+        XSetClipRectangles (private->xdisplay, private->xgc, 0, 0,
+			  private->rects, private->nrects, YXBanded);
     }
   else
     XSetClipMask (private->xdisplay, private->xgc, None);
@@ -824,6 +854,15 @@ gdk_gc_set_dashes (GdkGC *gc,
   private = (GdkGCPrivate*) gc;
 
   XSetDashes (private->xdisplay, private->xgc, dash_offset, dash_list, n);
+
+  g_free(private->dash_list);
+  private->dash_list = NULL;
+  private->dash_num = n;
+  private->dash_offset = dash_offset;
+  if ( n ) {
+    private->dash_list = g_new(gchar, n);
+    memcpy(private->dash_list, dash_list, n);
+  }
 }
 
 void
@@ -836,4 +875,23 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
 
   XCopyGC (src_private->xdisplay, src_private->xgc, ~((~1) << GCLastBit),
 	   dst_private->xgc);
+  g_free(dst_private->rects);
+  dst_private->nrects = src_private->nrects;
+  if ( dst_private->nrects ) {
+    dst_private->rects = g_new(GdkRectangle, dst_private->nrects);
+    memcpy(dst_private->rects, src_private->rects, sizeof(GdkRectangle)*dst_private->nrects);
+  } else
+    dst_private->rects = NULL;
+
+  dst_private->fg = src_private->fg;
+  dst_private->bg = src_private->bg;
+  
+  g_free(dst_private->dash_list);
+  dst_private->dash_list = NULL;
+  dst_private->dash_num = src_private->dash_num;
+  dst_private->dash_offset = src_private->dash_offset;
+  if ( src_private->dash_num ) {
+    dst_private->dash_list = g_new(gchar, src_private->dash_num);
+    memcpy(dst_private->dash_list, src_private->dash_list, src_private->dash_num);
+  }
 }

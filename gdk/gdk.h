@@ -849,6 +849,9 @@ void	       gdk_region_destroy   (GdkRegion	   *region);
 void	       gdk_region_get_clipbox(GdkRegion    *region,
 				      GdkRectangle *rectangle);
 
+GdkRectangle*  gdk_region_get_rectangles(GdkRegion    *region,
+				         gint         *nrects);
+
 gboolean       gdk_region_empty	    (GdkRegion	   *region);
 gboolean       gdk_region_equal	    (GdkRegion	   *region1,
 				     GdkRegion	   *region2);
@@ -904,7 +907,9 @@ guint    gdk_keyval_to_lower		  (guint	keyval);
 gboolean gdk_keyval_is_upper		  (guint	keyval);
 gboolean gdk_keyval_is_lower		  (guint	keyval);
 
+void gdk_drawable_register (GdkDrawableClass* draw_class);
 
+#include <gdk/gdkps.h>
 #include <gdk/gdkrgb.h>
 
 #ifdef __cplusplus

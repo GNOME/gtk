@@ -85,6 +85,7 @@ typedef struct _GdkDeviceKey	    GdkDeviceKey;
 typedef struct _GdkDeviceInfo	    GdkDeviceInfo;
 typedef struct _GdkTimeCoord	    GdkTimeCoord;
 typedef struct _GdkRegion	    GdkRegion;
+typedef struct _GdkDrawableClass    GdkDrawableClass;
 typedef gint (*GdkEventFunc) (GdkEvent *event,
 			      gpointer	data);
 
@@ -111,6 +112,8 @@ typedef void*			  GdkIM;
  *	     pixmap to any procedure which accepts a window with the
  *	     exception of the drawing functions).
  *   Foreign: A window that actually belongs to another application
+ *   Drawable: A drawable window with custom draw operations such as
+ *       GdkMetaFile and GdkPsDrawable.
  */
 typedef enum
 {
@@ -120,7 +123,8 @@ typedef enum
   GDK_WINDOW_DIALOG,
   GDK_WINDOW_TEMP,
   GDK_WINDOW_PIXMAP,
-  GDK_WINDOW_FOREIGN
+  GDK_WINDOW_FOREIGN,
+  GDK_WINDOW_DRAWABLE
 } GdkWindowType;
 
 /* Classes of windows.
@@ -840,6 +844,7 @@ struct _GdkFont
   GdkFontType type;
   gint ascent;
   gint descent;
+  gchar *name;
 };
 
 struct _GdkCursor
@@ -1163,6 +1168,30 @@ struct _GdkRegion
   gpointer user_data;
 };
 
+
+struct _GdkDrawableClass 
+{
+  guint	   type;
+  gchar*   name;
+  gchar*   description;
+  gpointer user_data;
+  /*
+  GList* functions;
+  int  (*function)(GdkDrawable* d, gchar* format, ...);
+  */
+  void (*destroy)        (GdkDrawable* d);
+  void (*draw_point)     (GdkDrawable* d, GdkGC* gc, gint x, gint y);
+  void (*draw_line)      (GdkDrawable* d, GdkGC* gc, gint x1, gint y1, gint x2, gint y2);
+  void (*draw_rectangle) (GdkDrawable* d, GdkGC* gc, gint filled, gint x, gint y, gint width, gint height);
+  void (*draw_arc)       (GdkDrawable* d, GdkGC* gc, gint filled, gint x, gint y, gint width, gint height, gint angle1, gint angle2);
+  void (*draw_polygon)   (GdkDrawable* d, GdkGC* gc, gint filled, GdkPoint* points, gint npoints);
+  void (*draw_text)      (GdkDrawable* d, GdkFont* font, GdkGC* gc, gint x, gint y, const gchar* text, gint length);
+  void (*draw_pixmap)    (GdkDrawable* d, GdkGC* gc, GdkDrawable* src, gint xsrc, gint ysrc, gint xdest, gint ydest, gint width, gint height);
+  void (*draw_image)     (GdkDrawable* d, GdkGC* gc, GdkImage* src, gint xsrc, gint ysrc, gint xdest, gint ydest, gint width, gint height);
+  void (*draw_points)    (GdkDrawable* d, GdkGC* gc, GdkPoint* points, gint npoints);
+  void (*draw_segments)  (GdkDrawable* d, GdkGC* gc, GdkSegment* segs, gint nsegs);
+  void (*draw_lines)     (GdkDrawable* d, GdkGC* gc, GdkPoint* points, gint npoints);
+};
 
 
 #ifdef __cplusplus
