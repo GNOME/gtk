@@ -6418,7 +6418,7 @@ static void
 select_all_cb (GtkWidget   *menuitem,
 	       GtkTextView *text_view)
 {
-  gtk_text_view_select_all (text_view, TRUE);
+  gtk_text_view_select_all (GTK_WIDGET (text_view), TRUE);
 }
 
 static void
