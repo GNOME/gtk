@@ -689,6 +689,9 @@ gtk_ui_manager_get_accel_group (GtkUIManager *self)
  * separated by '/'. Elements which don't have a name or action attribute in 
  * the XML (e.g. &lt;popup&gt;) can be addressed by their XML element name 
  * (e.g. "popup"). The root element ("/ui") can be omitted in the path.
+ *
+ * Note that the widget found by following a path that ends in a &lt;menu&gt;
+ * element is the menuitem to which the menu is attached, not the menu itself.
  * 
  * Return value: the widget found by following the path, or %NULL if no widget
  *   was found.
@@ -715,14 +718,7 @@ gtk_ui_manager_get_widget (GtkUIManager *self,
   if (node == NULL)
     return NULL;
 
-  if (NODE_INFO (node)->type == NODE_TYPE_MENU)
-    {
-      GtkWidget *proxy = NODE_INFO (node)->proxy;
-
-      return gtk_menu_item_get_submenu (GTK_MENU_ITEM (proxy));
-    }
-  else
-    return NODE_INFO (node)->proxy;
+  return NODE_INFO (node)->proxy;
 }
 
 static void
