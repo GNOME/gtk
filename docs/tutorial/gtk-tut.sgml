@@ -11215,7 +11215,7 @@ struct _GTypeInfo
 
 <para>The important fields of this structure are pretty self-explanatory.
 We'll ignore the <literal>base_init</literal> and
- <literal>base_finalize</literal> as well as the <literal>vlaue_table</literal>
+ <literal>base_finalize</literal> as well as the <literal>value_table</literal>
 fields here. Once Glib has a correctly filled in copy of
 this structure, it knows how to create objects of a particular type. </para>
 
@@ -11284,11 +11284,11 @@ to. (It will also apply to that objects descendants.)</simpara>
                                                                                 
 <listitem><simpara> <literal>signal_flags</literal>: Whether the default handler runs before or after
 user handlers and other flags. Usually this will be one of
-<literal>G_SIGNAL_RUN_FIRST</literal>, or <literal>G_SIGNAL_RUN_LAST</literal>,
+<literal>G_SIGNAL_RUN_FIRST</literal> or <literal>G_SIGNAL_RUN_LAST</literal>,
 although there are other possibilities. The flag
 <literal>G_SIGNAL_ACTION</literal> specifies that no extra code needs to
 run that performs special pre or post emission adjustments. This means that
-ther signal can also be emitted from object external code.</simpara>
+the signal can also be emitted from object external code.</simpara>
 </listitem>
 
 <listitem><simpara> <literal>class_offset</literal>: The offset within the class structure of
@@ -11401,7 +11401,7 @@ functions are specific to the Tictactoe widget. </para>
 
 <para><literal>tictactoe_clear()</literal> is a public function that resets all the
 buttons in the widget to the up position. Note the use of
-<literal>g_signal_handlers_block_matches()</literal> to keep our signal handler for
+<literal>g_signal_handlers_block_matched()</literal> to keep our signal handler for
 button toggles from being triggered unnecessarily.</para>
 
 <para><literal>tictactoe_toggle()</literal> is the signal handler that is invoked when the

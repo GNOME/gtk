@@ -1,3 +1,8 @@
+2003-01-24  Sebastian Rittau  <srittau@jroger.in-berlin.de>
+
+	* docs/tutorial/gtk-tut.sgml: Fix a few typos, introduced by my last
+	patch.
+
 Fri Jan 24 17:06:41 GMT 2003  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml: Remove duplicate copy of tictactoe.h
