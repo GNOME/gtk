@@ -225,9 +225,6 @@ static void     gtk_combo_box_style_set            (GtkWidget       *widget,
                                                     GtkStyle        *previous);
 static void     gtk_combo_box_button_toggled       (GtkWidget       *widget,
                                                     gpointer         data);
-static void     gtk_combo_box_button_state_changed (GtkWidget       *widget,
-			                            GtkStateType     previous,
-						    gpointer         data);
 static void     gtk_combo_box_add                  (GtkContainer    *container,
                                                     GtkWidget       *widget);
 static void     gtk_combo_box_remove               (GtkContainer    *container,
@@ -776,23 +773,6 @@ gtk_combo_box_state_changed (GtkWidget    *widget,
       if (combo_box->priv->tree_view && combo_box->priv->cell_view)
 	gtk_cell_view_set_background_color (GTK_CELL_VIEW (combo_box->priv->cell_view), 
 					    &widget->style->base[GTK_WIDGET_STATE (widget)]);
-    }
-
-  gtk_widget_queue_draw (widget);
-}
-
-static void
-gtk_combo_box_button_state_changed (GtkWidget    *widget,
-				    GtkStateType  previous,
-				    gpointer      data)
-{
-  GtkComboBox *combo_box = GTK_COMBO_BOX (data);
-
-  if (GTK_WIDGET_REALIZED (widget))
-    {
-      if (!combo_box->priv->tree_view && combo_box->priv->cell_view)
-	gtk_widget_set_state (combo_box->priv->cell_view, 
-			      GTK_WIDGET_STATE (widget));
     }
 
   gtk_widget_queue_draw (widget);
@@ -2321,9 +2301,6 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   g_signal_connect (combo_box->priv->button, "button_press_event",
                     G_CALLBACK (gtk_combo_box_menu_button_press),
                     combo_box);
-  g_signal_connect (combo_box->priv->button, "state_changed",
-		    G_CALLBACK (gtk_combo_box_button_state_changed), 
-		    combo_box);
 
   /* create our funky menu */
   menu = gtk_menu_new ();
@@ -2474,10 +2451,6 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
                                         G_SIGNAL_MATCH_DATA,
                                         0, 0, NULL,
                                         gtk_combo_box_menu_button_press, NULL);
-  g_signal_handlers_disconnect_matched (combo_box->priv->button,
-                                        G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL,
-                                        gtk_combo_box_button_state_changed, combo_box);
 
   /* unparent will remove our latest ref */
   gtk_widget_unparent (combo_box->priv->button);

@@ -1,5 +1,8 @@
 2004-11-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_button_state_changed):
+	Remove this unneeded function, as it breaks state propagation.
+
 	* gtk/gtktearoffmenuitem.c (gtk_tearoff_menu_item_activate): 
 	Queue the resize before setting the tearoff state, to 
 	make sure the torn-off menu picks up the size increase due
