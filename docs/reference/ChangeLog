@@ -1,3 +1,8 @@
+Sun May 28 12:16:01 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkaspectframe.sgml: Fix typo
+	pointed out by Gregory McLean.
+
 2000-05-28  Damon Chaplin  <damon@helixcode.com>
 
 	* gdk/tmpl/event_structs.sgml: typo.
