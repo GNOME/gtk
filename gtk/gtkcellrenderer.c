@@ -277,10 +277,10 @@ gtk_cell_renderer_get_property (GObject     *object,
       g_value_set_int (value, cell->height);
       break;
     case PROP_IS_EXPANDER:
-      g_value_set_int (value, cell->is_expander);
+      g_value_set_boolean (value, cell->is_expander);
       break;
     case PROP_IS_EXPANDED:
-      g_value_set_int (value, cell->is_expanded);
+      g_value_set_boolean (value, cell->is_expanded);
       break;
     case PROP_CELL_BACKGROUND_GDK:
       {

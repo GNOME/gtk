@@ -1,3 +1,8 @@
+2003-07-27  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_get_property): is-expander and is-expanded are 
+	boolean properties, not ints.  (#118359, Josh Parsons)
+
 Sat Jul 26 15:21:27 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkimagemenuitem.c
