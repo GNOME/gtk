@@ -152,13 +152,11 @@ cell_edited (GtkCellRendererText *cell,
   GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
   GtkTreeIter iter;
 
-  gint *column;
-
-  column = g_object_get_data (G_OBJECT (cell), "column");
+  gint column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
 
   gtk_tree_model_get_iter (model, &iter, path);
 
-  switch (GPOINTER_TO_INT (column))
+  switch (column)
     {
     case COLUMN_NUMBER:
       {

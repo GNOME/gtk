@@ -1,3 +1,10 @@
+Sat Jul 12 16:08:32 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* demos/gtk-demo/editable_cells.c (cell_edited): fixup bad
+	code (#115784, Owen Taylor).
+
 Sat Jul 12 16:01:03 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.
