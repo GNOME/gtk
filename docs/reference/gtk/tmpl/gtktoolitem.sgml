@@ -281,3 +281,11 @@ accessed through the functions described below.
 @menu_item: 
 
 
+<!-- ##### FUNCTION gtk_tool_item_rebuild_menu ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+
+

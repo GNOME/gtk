@@ -7,12 +7,12 @@ File chooser interface used by GtkFileChooserWidget and GtkFileChooserDialog
 <!-- ##### SECTION Long_Description ##### -->
     <para>
       #GtkFileChooser is an interface that can be implemented by file
-      selection widgets.  In GTK+, the main objects that implement
-      this interface are #GtkFileChooserWidget and
-      #GtkFileChooserDialog.  You do not need to write an object that
-      implements the #GtkFileChooser interface unless you are trying
-      to adapt an existing file selector to expose a standard
-      programming interface.
+      selection widgets.  In GTK+, the main objects that implement this
+      interface are #GtkFileChooserWidget, #GtkFileChooserDialog, and
+      #GtkFileChooserButton.  You do not need to write an object that
+      implements the #GtkFileChooser interface unless you are trying to
+      adapt an existing file selector to expose a standard programming
+      interface.
     </para>
 
     <refsect2 id="gtkfilechooser-encodings">
@@ -365,7 +365,7 @@ class "GtkFileChooserDefault" binding "my-own-gtkfilechooser-bindings"
 
 <!-- ##### SECTION See_Also ##### -->
     <para>
-      #GtkFileChooserDialog, #GtkFileChooserWidget
+      #GtkFileChooserDialog, #GtkFileChooserWidget, #GtkFileChooserButton
     </para>
 
 <!-- ##### STRUCT GtkFileChooser ##### -->

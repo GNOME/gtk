@@ -17,7 +17,7 @@
   <link linkend="GtkEntry">
     <inlinegraphic fileref="entry.png" format="PNG"></inlinegraphic>
   </link>
-  <link linkend="gtk-GtkFileChooserButton">
+  <link linkend="GtkFileChooserButton">
     <inlinegraphic fileref="file-button.png" format="PNG"></inlinegraphic>
   </link>
   <link linkend="GtkFontButton">

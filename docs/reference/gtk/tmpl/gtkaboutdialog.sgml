@@ -31,7 +31,71 @@ The <structname>GtkAboutDialog</structname> struct contains
 only private fields and should not be directly accessed.
 </para>
 
-@parent_instance: 
+
+<!-- ##### ARG GtkAboutDialog:artists ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAboutDialog:authors ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAboutDialog:comments ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAboutDialog:copyright ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAboutDialog:documenters ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAboutDialog:license ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAboutDialog:logo ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAboutDialog:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAboutDialog:translator-credits ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAboutDialog:version ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAboutDialog:website ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAboutDialog:website-label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAboutDialog:link-color ##### -->
+<para>
+
+</para>
 
 <!-- ##### FUNCTION gtk_about_dialog_new ##### -->
 <para>

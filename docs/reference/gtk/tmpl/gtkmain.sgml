@@ -136,6 +136,29 @@ functions such as g_signal_connect().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_init_with_args ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+@parameter_string: 
+@entries: 
+@translation_domain: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_get_option_group ##### -->
+<para>
+
+</para>
+
+@open_default_display: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_exit ##### -->
 <para>
 Terminates the program and returns the given exit code to the caller. 

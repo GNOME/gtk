@@ -203,33 +203,34 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_media_record_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_media_rewind_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_media_stop_24.png		\
-	$(srcdir)/images/font-button.png				\
+	$(srcdir)/images/accel-label.png				\
 	$(srcdir)/images/button.png					\
 	$(srcdir)/images/check-button.png				\
 	$(srcdir)/images/color-button.png				\
 	$(srcdir)/images/combo-box-entry.png				\
 	$(srcdir)/images/entry.png					\
+	$(srcdir)/images/file-button.png				\
+	$(srcdir)/images/font-button.png				\
 	$(srcdir)/images/frame.png					\
+	$(srcdir)/images/icon-view.png					\
+	$(srcdir)/images/image.png					\
 	$(srcdir)/images/label.png					\
 	$(srcdir)/images/list-and-tree.png				\
-	$(srcdir)/images/multiline-text.png				\
-	$(srcdir)/images/panes.png					\
-	$(srcdir)/images/radio-group.png				\
-	$(srcdir)/images/separator.png					\
-	$(srcdir)/images/toggle-button.png				\
-	$(srcdir)/images/window.png					\
-	$(srcdir)/images/accel-label.png				\
-	$(srcdir)/images/file-button.png				\
-	$(srcdir)/images/icon-view.png					\
-	$(srcdir)/images/toolbar.png					\
 	$(srcdir)/images/menubar.png					\
+	$(srcdir)/images/messagedialog.png				\
+	$(srcdir)/images/multiline-text.png				\
 	$(srcdir)/images/notebook.png					\
+	$(srcdir)/images/panes.png					\
 	$(srcdir)/images/progressbar.png				\
+	$(srcdir)/images/radio-group.png				\
+	$(srcdir)/images/scales.png					\
 	$(srcdir)/images/scrolledwindow.png				\
+	$(srcdir)/images/separator.png					\
 	$(srcdir)/images/spinbutton.png					\
 	$(srcdir)/images/statusbar.png					\
-	$(srcdir)/images/image.png					\
-	$(srcdir)/images/messagedialog.png
+	$(srcdir)/images/toggle-button.png				\
+	$(srcdir)/images/toolbar.png					\
+	$(srcdir)/images/window.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html

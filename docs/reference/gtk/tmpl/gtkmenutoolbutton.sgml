@@ -90,3 +90,14 @@ A GtkToolItem containing a button with an additional dropdown menu
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_menu_tool_button_set_arrow_tooltip ##### -->
+<para>
+
+</para>
+
+@button: 
+@tooltips: 
+@tip_text: 
+@tip_private: 
+
+

@@ -145,6 +145,22 @@ notification of drags.
 @widget: 
 
 
+<!-- ##### FUNCTION gtk_drag_dest_add_image_targets ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_drag_dest_add_uri_targets ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
 <!-- ##### FUNCTION gtk_drag_finish ##### -->
 <para>
 Informs the drag source that the drop is finished, and

@@ -295,6 +295,18 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_text_buffer_backspace ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@interactive: 
+@default_editable: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_buffer_set_text ##### -->
 <para>
 

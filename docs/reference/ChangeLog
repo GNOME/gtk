@@ -1,3 +1,16 @@
+Sun Oct 24 02:54:36 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtk.types: Add GtkAboutDialog and GtkFileChooserButton
+
+	* gtk/tmpl/GtkFileChooserButton.sgml: Write docs
+
+	* gtk/tmpl/GtkListStore.sgml: Update performance comment now that
+	we use GSequence.
+
+	* gtk/visual_index.xml: Fix up a couple of errors.
+
+	* gtk/images/*png: update
+
 2004-10-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add new DND functions.

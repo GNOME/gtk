@@ -327,21 +327,44 @@ static WidgetInfo *
 create_file_button (void)
 {
   GtkWidget *vbox;
+  GtkWidget *vbox2;
   GtkWidget *picker;
   GtkWidget *align;
 
-  vbox = gtk_vbox_new (FALSE, 3);
+  vbox = gtk_vbox_new (FALSE, 12);
+  vbox2 = gtk_vbox_new (FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-  picker = gtk_file_chooser_button_new ("File Button");
+  picker = gtk_file_chooser_button_new ("File Chooser Button");
   gtk_widget_set_size_request (picker, 150, -1);
   gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (picker), "/etc/yum.conf");
   gtk_container_add (GTK_CONTAINER (align), picker);
-  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox),
-		      gtk_label_new ("File Button"),
+  gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox2),
+		      gtk_label_new ("File Button (Open)"),
 		      FALSE, FALSE, 0);
 
-  return new_widget_info ("file-button", vbox, SMALL);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      vbox2, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_hseparator_new (),
+		      FALSE, FALSE, 0);
+
+  vbox2 = gtk_vbox_new (FALSE, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  picker = gtk_file_chooser_button_new ("File Chooser Button");
+  gtk_file_chooser_set_action (GTK_FILE_CHOOSER (picker),
+			       GTK_FILE_CHOOSER_ACTION_SAVE);
+  gtk_widget_set_size_request (picker, 150, -1);
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (picker), "/etc/yum.conf");
+  gtk_container_add (GTK_CONTAINER (align), picker);
+  gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox2),
+		      gtk_label_new ("File Button (Save)"),
+		      FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      vbox2, TRUE, TRUE, 0);
+
+  return new_widget_info ("file-button", vbox, MEDIUM);
 }
 
 static WidgetInfo *
