@@ -24,6 +24,7 @@
 #include <ctype.h>		/* For tolower() */
 #include "glib.h"
 
+extern char* g_vsprintf (const gchar *fmt, va_list *args, va_list *args2);
 
 gchar*
 g_strdup (const gchar *str)

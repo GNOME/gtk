@@ -187,7 +187,7 @@ fi
 # Threads
 
 if test "x$with_threads" = "xposix" || test "x$with_threads" = "xyes"; then
-  AC_CHECK_LIB(pthread, pthread_create, 
+  AC_CHECK_LIB(pthread, pthread_attr_init, 
     AC_DEFINE(USE_PTHREADS)
     x_libs="$x_libs -lpthread"
     CFLAGS="$CFLAGS -D_REENTRANT") 

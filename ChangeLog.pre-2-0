@@ -1,3 +1,8 @@
+Tue May 19 23:41:04 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* configure.in: Use pthread_attr_init() as a test function,
+	since most of the rest of -lpthread is macros on DU4.
+
 Tue, 19 May 1998 09:03:03 +0200  Paolo Molaro <lupus@debian.org>
 
 	* gtk/gtkcombo.c: implemented completion in the entry.

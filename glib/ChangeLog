@@ -1,3 +1,8 @@
+Mon May 18 22:14:39 1998  Owen Taylor  <otaylor@gtk.org>
+(Yasuhiro SHIRASAKI <joke@awa.tohoku.ac.jp> : gtk-joke-980517-0.patch)
+	
+	* gutils.c: Restored a missing prototype for g_vsprintf.
+
 Wed May 20 05:02:26 1998  Tim Janik  <timj@gtk.org>
 
         * glib.h: conditionally define NULL, FALSE and TRUE.
