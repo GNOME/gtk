@@ -1,3 +1,12 @@
+2004-01-28  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (synthesize_leave_event,
+	synthesize_enter_event): Don' generate enter or leave events if
+	the pointer is grabbed with owner_events off, and the grab event
+	mask doesn't ask for them. (#129242)
+
+	(gdk_event_translate): Ditto for focus change events.
+
 2004-01-27  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #132314.

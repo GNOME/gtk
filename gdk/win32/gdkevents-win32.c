@@ -1264,6 +1264,9 @@ synthesize_leave_event (GdkWindow      *window,
 {
   POINT pt;
 
+  if (p_grab_window != NULL && !p_grab_owner_events && !(p_grab_mask & GDK_LEAVE_NOTIFY_MASK))
+    return;
+
   if (!(((GdkWindowObject *) window)->event_mask & GDK_LEAVE_NOTIFY_MASK))
     return;
 
@@ -1294,6 +1297,9 @@ synthesize_enter_event (GdkWindow      *window,
 			GdkNotifyType   detail)
 {
   POINT pt;
+
+  if (p_grab_window != NULL && !p_grab_owner_events && !(p_grab_mask & GDK_ENTER_NOTIFY_MASK))
+    return;
 
   if (!(((GdkWindowObject *) window)->event_mask & GDK_ENTER_NOTIFY_MASK))
     return;
@@ -2793,6 +2799,9 @@ gdk_event_translate (GdkDisplay *display,
 
     case WM_SETFOCUS:
     case WM_KILLFOCUS:
+      if (p_grab_window != NULL && !p_grab_owner_events && !(p_grab_mask & GDK_FOCUS_CHANGE_MASK))
+	break;
+
       if (!(((GdkWindowObject *) window)->event_mask & GDK_FOCUS_CHANGE_MASK))
 	break;
 
