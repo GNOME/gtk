@@ -29,4 +29,5 @@ libpixops_la_SOURCES =  		\
 
 EXTRA_DIST =				\
 	DETAILS				\
+	pixbuf-transform-math.ltx	\
 	makefile.msc

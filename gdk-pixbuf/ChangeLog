@@ -1,3 +1,13 @@
+Tue Apr  1 15:33:51 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/pixops.c (make_weights): Exploit the fact that all
+	our filters are separable to simplify the calculation of
+	the weight tables. (Based on a patch from Brian Cameron.)
+
+	* pixops/Makefile.am pixbuf-transform-math.ltx: 
+	Add a short article describing how the math in pixops.c
+	works.
+
 2003-03-21  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-animation.c (gdk_pixbuf_non_anim_get_type): Add
