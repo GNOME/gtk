@@ -6249,7 +6249,8 @@ gtk_requisition_free (GtkRequisition *requisition)
   g_free (requisition);
 }
 
-AtkObject* gtk_widget_get_accessible (GtkWidget *widget)
+AtkObject* 
+gtk_widget_get_accessible (GtkWidget *widget)
 {
   GtkWidgetClass *klass;
 
@@ -6262,7 +6263,8 @@ AtkObject* gtk_widget_get_accessible (GtkWidget *widget)
   return klass->get_accessible (widget);
 }
 
-AtkObject* gtk_widget_real_get_accessible (GtkWidget *widget)
+static AtkObject* 
+gtk_widget_real_get_accessible (GtkWidget *widget)
 {
   AtkObject* accessible;
 

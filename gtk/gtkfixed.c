@@ -545,7 +545,7 @@ gtk_fixed_set_has_window (GtkFixed *fixed,
 gboolean
 gtk_fixed_get_has_window (GtkFixed *fixed)
 {
-  g_return_if_fail (GTK_IS_FIXED (fixed));
+  g_return_val_if_fail (GTK_IS_FIXED (fixed), FALSE);
 
   return !GTK_WIDGET_NO_WINDOW (fixed);
 }

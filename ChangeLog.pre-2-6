@@ -1,3 +1,20 @@
+2001-11-23  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkfont-win32.c (gdk_font_from_description) : 
+	reflect Pango API change
+
+	* gtk/gtk.def : updated externals
+
+	* gtk/gtkfixed.c (gtk_fixed_get_has_window) : use 
+	g_return_val_if_fail() to avoid 'function must return a value'
+
+	* gtk/gtkrc.c : added spaces to fix small coding style issues
+	* gtk/gtkwidget.c : ... and linebreaks. Also a static for
+	'static correctness'
+
+	* gtk/makefile.msc.in : temporary(?) disable gtk<plug|socket>
+	because they only can be build on win32 after applying my patch
+
 Wed Nov 21 22:55:37 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkbutton.c (gtk_button_map): raise event window afte

@@ -343,7 +343,7 @@ gtk_rc_get_im_module_file (void)
 }
 
 gchar *
-gtk_rc_get_theme_dir(void)
+gtk_rc_get_theme_dir (void)
 {
   gchar *var, *path;
 
@@ -357,7 +357,7 @@ gtk_rc_get_theme_dir(void)
 }
 
 gchar *
-gtk_rc_get_module_dir(void)
+gtk_rc_get_module_dir (void)
 {
   return gtk_rc_make_default_dir ("engines");
 }

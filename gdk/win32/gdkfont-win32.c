@@ -31,6 +31,7 @@
 #include <pango/pangowin32.h>
 
 #include "gdkfont.h"
+#include "gdkpango.h" /* gdk_pango_context_get() */
 #include "gdkprivate-win32.h"
 
 static GHashTable *font_name_hash = NULL;
@@ -1578,7 +1579,7 @@ gdk_font_from_description (PangoFontDescription *font_desc)
   g_return_val_if_fail (font_desc != NULL, NULL);
 
   font_map = pango_win32_font_map_for_display ();
-  font = pango_font_map_load_font (font_map, font_desc);
+  font = pango_font_map_load_font (font_map, gdk_pango_context_get (), font_desc);
 
   if (font)
     {

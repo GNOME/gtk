@@ -88,7 +88,9 @@ EXPORTS
 	GTK_TYPE_WRAP_MODE
 
 	gtk_accel_group_connect
+	gtk_accel_group_connect_by_path
 	gtk_accel_group_disconnect
+	gtk_accel_group_disconnect_key
 	gtk_accel_group_find
 	gtk_accel_group_from_accel_closure
 	gtk_accel_group_get_type
@@ -97,8 +99,7 @@ EXPORTS
 	gtk_accel_group_query
 	gtk_accel_group_unlock
 	gtk_accel_groups_activate
-	gtk_accel_groups_disconnect_closure
-	gtk_accel_groups_from_acceleratable
+	gtk_accel_groups_from_object
 	gtk_accel_label_get_accel_widget
 	gtk_accel_label_get_accel_width
 	gtk_accel_label_get_type
@@ -108,7 +109,6 @@ EXPORTS
 	gtk_accel_label_set_accel_widget
 	gtk_accel_map_add_entry
 	gtk_accel_map_add_filter
-	gtk_accel_map_add_notifer
 	gtk_accel_map_change_entry
 	gtk_accel_map_foreach
 	gtk_accel_map_foreach_unfiltered
@@ -116,7 +116,6 @@ EXPORTS
 	gtk_accel_map_load_fd
 	gtk_accel_map_load_scanner
 	gtk_accel_map_lookup_entry
-	gtk_accel_map_remove_notifer
 	gtk_accel_map_save
 	gtk_accel_map_save_fd
 	gtk_accelerator_get_default_mod_mask
@@ -589,10 +588,12 @@ EXPORTS
 	gtk_file_selection_new
 	gtk_file_selection_set_filename
 	gtk_file_selection_show_fileop_buttons
+	gtk_fixed_get_has_window
 	gtk_fixed_get_type
 	gtk_fixed_move
 	gtk_fixed_new
 	gtk_fixed_put
+	gtk_fixed_set_has_window
 	gtk_font_selection_dialog_get_font
 	gtk_font_selection_dialog_get_font_name
 	gtk_font_selection_dialog_get_preview_text
@@ -1846,6 +1847,7 @@ EXPORTS
 	gtk_tree_view_column_get_max_width
 	gtk_tree_view_column_get_min_width
 	gtk_tree_view_column_get_reorderable
+	gtk_tree_view_column_get_resizable
 	gtk_tree_view_column_get_sizing
 	gtk_tree_view_column_get_sort_column_id
 	gtk_tree_view_column_get_sort_indicator
@@ -1868,6 +1870,7 @@ EXPORTS
 	gtk_tree_view_column_set_max_width
 	gtk_tree_view_column_set_min_width
 	gtk_tree_view_column_set_reorderable
+	gtk_tree_view_column_set_resizable
 	gtk_tree_view_column_set_sizing
 	gtk_tree_view_column_set_sort_column_id
 	gtk_tree_view_column_set_sort_indicator
@@ -2020,6 +2023,7 @@ EXPORTS
 	gtk_widget_intersect
 	gtk_widget_is_ancestor
 	gtk_widget_is_focus
+	gtk_widget_list_accel_closures
 	gtk_widget_map
 	gtk_widget_mnemonic_activate
 	gtk_widget_modify_base
