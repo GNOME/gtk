@@ -51,7 +51,7 @@ static GtkUnicodeMenuEntry bidi_menu_entries[] = {
   { N_("RLO Right-to-left o_verride"), 0x202E },
   { N_("PDF _Pop directional formatting"), 0x202C },
   { N_("ZWS _Zero width space"), 0x200B },
-  { N_("ZWN Zero width _joiner"), 0x200D },
+  { N_("ZWJ Zero width _joiner"), 0x200D },
   { N_("ZWNJ Zero width _non-joiner"), 0x200C }
 };
 
