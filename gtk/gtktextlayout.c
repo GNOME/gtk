@@ -2752,12 +2752,17 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
     {
       line_byte = layout_line->start_index + layout_line->length;
     }
-  
+
   if (line_byte < layout_line->length || !tmp_list->next) /* first line of paragraph */
     {
       GtkTextLine *prev_line;
 
       prev_line = _gtk_text_line_previous (line);
+
+      /* first line of the whole buffer, do not move the iter and return FALSE */
+      if (prev_line == NULL)
+        goto out;
+
       while (prev_line)
         {
           gtk_text_layout_free_line_display (layout, display);
@@ -2776,9 +2781,6 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
 
           prev_line = _gtk_text_line_previous (prev_line);
         }
-
-      if (prev_line == NULL)
- 	line_display_index_to_iter (layout, display, iter, 0, 0);
     }
   else
     {

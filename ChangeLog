@@ -1,5 +1,17 @@
 2004-11-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_move_iter_by_lines): Return
+	a boolean indicating whether we could do the requested move.
+	(gtk_text_view_move_cursor_internal): For GTK_MOVEMENT_DISPLAY_LINES,
+	move to the beginning/end of the line if we're on the first/last
+	line.  (#155891, Paolo Borelli)
+
+	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_to_previous_line): 
+	Don't move the iter and return FALSE if trying to move up from
+	the first line.
+
+2004-11-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkaction.c (closure_accel_activate): Don't claim to have
 	handled the accelerator if the action is insensitive.  (#151541,
 	Jody Goldberg)

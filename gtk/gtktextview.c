@@ -4532,22 +4532,26 @@ gtk_text_view_pend_cursor_blink(GtkTextView *text_view)
  * Key binding handlers
  */
 
-static void
+static gboolean
 gtk_text_view_move_iter_by_lines (GtkTextView *text_view,
                                   GtkTextIter *newplace,
                                   gint         count)
 {
+  gboolean ret = TRUE;
+
   while (count < 0)
     {
-      gtk_text_layout_move_iter_to_previous_line (text_view->layout, newplace);
+      ret = gtk_text_layout_move_iter_to_previous_line (text_view->layout, newplace);
       count++;
     }
 
   while (count > 0)
     {
-      gtk_text_layout_move_iter_to_next_line (text_view->layout, newplace);
+      ret = gtk_text_layout_move_iter_to_next_line (text_view->layout, newplace);
       count--;
     }
+
+  return ret;
 }
 
 static void
@@ -4658,8 +4662,21 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       break;
 
     case GTK_MOVEMENT_DISPLAY_LINES:
-      gtk_text_view_move_iter_by_lines (text_view, &newplace, count);
-      gtk_text_layout_move_iter_to_x (text_view->layout, &newplace, cursor_x_pos);
+      if (count < 0)
+      {
+        if (gtk_text_view_move_iter_by_lines (text_view, &newplace, count))
+          gtk_text_layout_move_iter_to_x (text_view->layout, &newplace, cursor_x_pos);
+        else
+          /* we currently do not have a backward_to_start, use offset */
+          gtk_text_iter_set_offset (&newplace, 0);
+      }
+      if (count > 0)
+      {
+        if (gtk_text_view_move_iter_by_lines (text_view, &newplace, count))
+          gtk_text_layout_move_iter_to_x (text_view->layout, &newplace, cursor_x_pos);
+        else
+          gtk_text_iter_forward_to_end (&newplace);
+      }
       break;
 
     case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
