@@ -1,3 +1,8 @@
+Tue Jan 22 16:58:37 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): Fix sizing bug
+	I introduced accidentally, #69358
+
 2002-01-22 Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_iter_children):

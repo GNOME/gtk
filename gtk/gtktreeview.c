@@ -261,6 +261,8 @@ static void     validate_visible_area    (GtkTreeView *tree_view);
 static gboolean validate_rows_handler    (GtkTreeView *tree_view);
 static gboolean presize_handler_callback (gpointer     data);
 static void     install_presize_handler  (GtkTreeView *tree_view);
+static void	gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view);
+static void	gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view);
 
 
 /* Internal functions */
@@ -1583,12 +1585,14 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
-      gdk_window_resize (tree_view->priv->header_window,
-			 MAX (tree_view->priv->width, allocation->width),
-			 tree_view->priv->header_height);
-      gdk_window_resize (tree_view->priv->bin_window,
-			 MAX (tree_view->priv->width, allocation->width),
-			 allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view));
+      gdk_window_move_resize (tree_view->priv->header_window,
+			      0, 0,
+			      MAX (tree_view->priv->width, allocation->width),
+			      tree_view->priv->header_height);
+      gdk_window_move_resize (tree_view->priv->bin_window,
+			      0, tree_view->priv->header_height,
+			      MAX (tree_view->priv->width, allocation->width),
+			      allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view));
     }
 
   gtk_tree_view_size_allocate_columns (widget);
@@ -2608,8 +2612,9 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
     return TRUE;
 
   validate_visible_area (tree_view);
-  
+
   new_y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, event->area.y);
+
   if (new_y < 0)
     new_y = 0;
   y_offset = -_gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
@@ -3445,6 +3450,38 @@ install_presize_handler (GtkTreeView *tree_view)
     }
 }
 
+static void
+gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view)
+{
+  GtkTreePath *path;
+  GtkRBTree *tree;
+  GtkRBNode *node;
+
+  gtk_tree_row_reference_free (tree_view->priv->top_row);
+  tree_view->priv->top_row_dy = _gtk_rbtree_find_offset (tree_view->priv->tree,
+							 tree_view->priv->dy,
+							 &tree, &node);
+  g_assert (tree != NULL);
+      
+  path = _gtk_tree_view_find_path (tree_view, tree, node);
+  tree_view->priv->top_row = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
+  gtk_tree_path_free (path);
+}
+
+static void
+gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
+{
+  GtkTreePath *path;
+  GtkRBTree *tree;
+  GtkRBNode *node;
+
+  path = gtk_tree_row_reference_get_path (tree_view->priv->top_row);
+  if (_gtk_tree_view_find_node (tree_view, path, &tree, &node) &&
+      tree != NULL)
+    {
+      
+    }
+}
 
 void
 _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view)
@@ -6510,9 +6547,6 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
   if (GTK_WIDGET_REALIZED (tree_view))
     {
       gint dy;
-      GtkTreePath *path;
-      GtkRBTree *tree;
-      GtkRBNode *node;
 	
       gdk_window_move (tree_view->priv->bin_window,
 		       - tree_view->priv->hadjustment->value,
@@ -6525,16 +6559,7 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 
       /* update our dy and top_row */
       tree_view->priv->dy = (int) tree_view->priv->vadjustment->value;
-      tree_view->priv->top_row_dy = _gtk_rbtree_find_offset (tree_view->priv->tree,
-							     tree_view->priv->dy,
-							     &tree, &node);
-      g_return_if_fail (tree != NULL);
-
-      path = _gtk_tree_view_find_path (tree_view, tree, node);
-      gtk_tree_row_reference_free (tree_view->priv->top_row);
-      tree_view->priv->top_row = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
-      gtk_tree_path_free (path);
-
+      gtk_tree_view_dy_to_top_row (tree_view);
       gdk_window_process_updates (tree_view->priv->bin_window, TRUE);
       gdk_window_process_updates (tree_view->priv->header_window, TRUE);
     }
