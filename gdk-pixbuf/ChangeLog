@@ -1,3 +1,20 @@
+2002-10-04  Matthias Clasen  <maclas@gmx.de>
+
+	* Makefile.am gdk-pixbuf-animation.c gdk-pixbuf-data.c 
+	gdk-pixbuf-io.c gdk-pixbuf-io.h gdk-pixbuf-loader.c 
+	gdk-pixbuf-loader.h gdk-pixbuf-private.h gdk-pixbuf.h 
+	gdk-pixdata.c io-ani-animation.h io-ani.c io-bmp.c 
+	io-gif-animation.c io-gif-animation.h io-gif.c io-ico.c 
+	io-jpeg.c io-png.c io-pnm.c io-ras.c io-tga.c io-tiff.c 
+	io-wbmp.c io-xbm.c io-xpm.c pixbufloader_ani.def 
+	pixbufloader_bmp.def pixbufloader_gif.def pixbufloader_ico.def 
+	pixbufloader_jpeg.def pixbufloader_png.def 
+	pixbufloader_pnm.def pixbufloader_ras.def pixbufloader_tga.def 
+	pixbufloader_tiff.def pixbufloader_wbmp.def 
+	pixbufloader_xbm.def pixbufloader_xpm.def test-gdk-pixbuf.c 
+	gdk-pixbuf-animation.h queryloaders.c: Support for separately
+	installed loaders.  (#77486)
+
 Thu Oct  3 18:25:57 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* io-jpeg.c (gdk_pixbuf__jpeg_image_save): 

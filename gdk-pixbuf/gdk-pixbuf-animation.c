@@ -24,8 +24,10 @@
 
 #include <config.h>
 #include <errno.h>
-#include "gdk-pixbuf-io.h"
 #include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf-io.h"
+#include "gdk-pixbuf-i18n.h"
+#include "gdk-pixbuf-animation.h"
 
 typedef struct _GdkPixbufNonAnim GdkPixbufNonAnim;
 typedef struct _GdkPixbufNonAnimClass GdkPixbufNonAnimClass;

@@ -47,8 +47,8 @@
 typedef struct _TiffContext TiffContext;
 struct _TiffContext
 {
-	ModulePreparedNotifyFunc prepare_func;
-	ModuleUpdatedNotifyFunc update_func;
+	GdkPixbufModulePreparedFunc prepare_func;
+	GdkPixbufModuleUpdatedFunc update_func;
 	gpointer user_data;
         
         guchar *buffer;
@@ -361,9 +361,9 @@ gdk_pixbuf__tiff_image_load (FILE *f, GError **error)
 /* Progressive loader */
 
 static gpointer
-gdk_pixbuf__tiff_image_begin_load (ModuleSizeFunc size_func,
-                                   ModulePreparedNotifyFunc prepare_func,
-				   ModuleUpdatedNotifyFunc update_func,
+gdk_pixbuf__tiff_image_begin_load (GdkPixbufModuleSizeFunc size_func,
+                                   GdkPixbufModulePreparedFunc prepare_func,
+				   GdkPixbufModuleUpdatedFunc update_func,
 				   gpointer user_data,
                                    GError **error)
 {
@@ -560,10 +560,36 @@ gdk_pixbuf__tiff_image_load_increment (gpointer data, const guchar *buf,
 }
 
 void
-gdk_pixbuf__tiff_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (tiff, fill_vtable) (GdkPixbufModule *module)
 {
         module->load = gdk_pixbuf__tiff_image_load;
         module->begin_load = gdk_pixbuf__tiff_image_begin_load;
         module->stop_load = gdk_pixbuf__tiff_image_stop_load;
         module->load_increment = gdk_pixbuf__tiff_image_load_increment;
+}
+
+void
+MODULE_ENTRY (tiff, fill_info) (GdkPixbufFormat *info)
+{
+        static GdkPixbufModulePattern signature[] = {
+                { "MM \x2a", "  z ", 100 },
+                { "II\x2a ", "   z", 100 },
+                { NULL, NULL, 0 }
+        };
+	static gchar * mime_types[] = {
+		"image/tiff",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"tiff",
+		"tif",
+		NULL
+	};
+
+	info->name = "tiff";
+        info->signature = signature;
+	info->description = N_("The TIFF image format");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = 0;
 }

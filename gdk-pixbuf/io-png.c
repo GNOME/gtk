@@ -358,8 +358,8 @@ struct _LoadContext {
         png_structp png_read_ptr;
         png_infop   png_info_ptr;
 
-        ModulePreparedNotifyFunc prepare_func;
-        ModuleUpdatedNotifyFunc update_func;
+        GdkPixbufModulePreparedFunc prepare_func;
+        GdkPixbufModuleUpdatedFunc update_func;
         gpointer notify_user_data;
 
         GdkPixbuf* pixbuf;
@@ -386,9 +386,9 @@ struct _LoadContext {
 };
 
 static gpointer
-gdk_pixbuf__png_image_begin_load (ModuleSizeFunc size_func,
-                                  ModulePreparedNotifyFunc prepare_func,
-				  ModuleUpdatedNotifyFunc update_func,
+gdk_pixbuf__png_image_begin_load (GdkPixbufModuleSizeFunc size_func,
+                                  GdkPixbufModulePreparedFunc prepare_func,
+				  GdkPixbufModuleUpdatedFunc update_func,
 				  gpointer user_data,
                                   GError **error)
 {
@@ -888,14 +888,36 @@ cleanup:
        return success;
 }
 
-
+void
+MODULE_ENTRY (png, fill_vtable) (GdkPixbufModule *module)
+{
+        module->load = gdk_pixbuf__png_image_load;
+        module->begin_load = gdk_pixbuf__png_image_begin_load;
+        module->stop_load = gdk_pixbuf__png_image_stop_load;
+        module->load_increment = gdk_pixbuf__png_image_load_increment;
+        module->save = gdk_pixbuf__png_image_save;
+}
 
 void
-gdk_pixbuf__png_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (png, fill_info) (GdkPixbufFormat *info)
 {
-  module->load = gdk_pixbuf__png_image_load;
-  module->begin_load = gdk_pixbuf__png_image_begin_load;
-  module->stop_load = gdk_pixbuf__png_image_stop_load;
-  module->load_increment = gdk_pixbuf__png_image_load_increment;
-  module->save = gdk_pixbuf__png_image_save;
+        static GdkPixbufModulePattern signature[] = {
+                { "\x89PNG\r\n\x1a\x0a", NULL, 100 },
+                { NULL, NULL, 0 }
+        };
+	static gchar * mime_types[] = {
+		"image/png",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"png",
+		NULL
+	};
+
+	info->name = "png";
+        info->signature = signature;
+	info->description = N_("The PNG image format");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = GDK_PIXBUF_FORMAT_WRITABLE;
 }

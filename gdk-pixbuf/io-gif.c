@@ -138,8 +138,8 @@ struct _GifContext
 	FILE *file;
 
 	/* progressive read, only. */
-	ModulePreparedNotifyFunc prepare_func;
-	ModuleUpdatedNotifyFunc update_func;
+	GdkPixbufModulePreparedFunc prepare_func;
+	GdkPixbufModuleUpdatedFunc update_func;
 	gpointer user_data;
         guchar *buf;
 	guint ptr;
@@ -1396,9 +1396,9 @@ gdk_pixbuf__gif_image_load (FILE *file, GError **error)
 }
 
 static gpointer
-gdk_pixbuf__gif_image_begin_load (ModuleSizeFunc size_func,
-                                  ModulePreparedNotifyFunc prepare_func,
-				  ModuleUpdatedNotifyFunc update_func,
+gdk_pixbuf__gif_image_begin_load (GdkPixbufModuleSizeFunc size_func,
+                                  GdkPixbufModulePreparedFunc prepare_func,
+				  GdkPixbufModuleUpdatedFunc update_func,
 				  gpointer user_data,
                                   GError **error)
 {
@@ -1560,11 +1560,35 @@ gdk_pixbuf__gif_image_load_animation (FILE *file,
 }
 
 void
-gdk_pixbuf__gif_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (gif, fill_vtable) (GdkPixbufModule *module)
 {
-  module->load = gdk_pixbuf__gif_image_load;
-  module->begin_load = gdk_pixbuf__gif_image_begin_load;
-  module->stop_load = gdk_pixbuf__gif_image_stop_load;
-  module->load_increment = gdk_pixbuf__gif_image_load_increment;
-  module->load_animation = gdk_pixbuf__gif_image_load_animation;
+        module->load = gdk_pixbuf__gif_image_load;
+        module->begin_load = gdk_pixbuf__gif_image_begin_load;
+        module->stop_load = gdk_pixbuf__gif_image_stop_load;
+        module->load_increment = gdk_pixbuf__gif_image_load_increment;
+        module->load_animation = gdk_pixbuf__gif_image_load_animation;
+}
+
+void
+MODULE_ENTRY (gif, fill_info) (GdkPixbufFormat *info)
+{
+        static GdkPixbufModulePattern signature[] = {
+                { "GIF8", NULL, 100 },
+                { NULL, NULL, 0 }
+        };
+	static gchar * mime_types[] = {
+		"image/gif",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"gif",
+		NULL
+	};
+
+	info->name = "gif";
+        info->signature = signature;
+	info->description = N_("The GIF image format");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = 0;
 }

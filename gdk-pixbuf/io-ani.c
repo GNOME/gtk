@@ -60,8 +60,8 @@ typedef struct _AniLoaderContext
         guint   n_bytes;
         guint   buffer_size;
         
-        ModulePreparedNotifyFunc prepared_func;
-        ModuleUpdatedNotifyFunc updated_func;
+        GdkPixbufModulePreparedFunc prepared_func;
+        GdkPixbufModuleUpdatedFunc updated_func;
         gpointer user_data;
         
         guint32 data_size;
@@ -556,9 +556,9 @@ gdk_pixbuf__ani_image_load_increment (gpointer data,
 }
 
 static gpointer
-gdk_pixbuf__ani_image_begin_load (ModuleSizeFunc size_func, 
-                                  ModulePreparedNotifyFunc prepared_func, 
-				  ModuleUpdatedNotifyFunc  updated_func,
+gdk_pixbuf__ani_image_begin_load (GdkPixbufModuleSizeFunc size_func, 
+                                  GdkPixbufModulePreparedFunc prepared_func, 
+				  GdkPixbufModuleUpdatedFunc  updated_func,
 				  gpointer user_data,
 				  GError **error)
 {
@@ -647,10 +647,38 @@ gdk_pixbuf__ani_image_load_animation (FILE *f, GError **error)
 }
 
 void
-gdk_pixbuf__ani_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (ani, fill_vtable) (GdkPixbufModule *module)
 {
         module->load_animation = gdk_pixbuf__ani_image_load_animation;
         module->begin_load = gdk_pixbuf__ani_image_begin_load;
         module->stop_load = gdk_pixbuf__ani_image_stop_load;
         module->load_increment = gdk_pixbuf__ani_image_load_increment;
 }
+
+void
+MODULE_ENTRY (ani, fill_info) (GdkPixbufFormat *info)
+{
+	static GdkPixbufModulePattern signature[] = {
+		{ "RIFF    ACON", "    xxxx    ", 100 },
+		{ NULL, NULL, 0 }
+	};
+	static gchar * mime_types[] = {
+		"application/x-navi-animation",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"ani",
+		NULL
+	};
+	
+	info->name = "ani";
+	info->signature = signature;
+	info->description = N_("The ANI image format");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = 0;
+}
+
+
+
+

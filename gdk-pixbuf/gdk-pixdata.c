@@ -19,7 +19,6 @@
 #include "gdk-pixdata.h"
 
 #include "gdk-pixbuf-private.h"
-#include "gdk-pixbuf-i18n.h"
 #include <string.h>
 
 #define APPEND g_string_append_printf

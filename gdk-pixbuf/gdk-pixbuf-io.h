@@ -1,5 +1,6 @@
-/* GdkPixbuf library - Io handling.  This is an internal header for gdk-pixbuf.
- * You should never use it unless you are doing developement for gdkpixbuf itself.
+/* GdkPixbuf library - Io handling.  This is an internal header for 
+ * GdkPixbuf. You should never use it unless you are doing development for 
+ * GdkPixbuf itself.
  *
  * Copyright (C) 1999 The Free Software Foundation
  *
@@ -28,43 +29,53 @@
 #ifndef GDK_PIXBUF_IO_H
 #define GDK_PIXBUF_IO_H
 
+#include "gdk-pixbuf/gdk-pixbuf.h"
 #include <gmodule.h>
 #include <stdio.h>
-#include "gdk-pixbuf.h"
-#include "gdk-pixbuf-i18n.h"
 
 G_BEGIN_DECLS
 
+#ifdef GDK_PIXBUF_ENABLE_BACKEND
+
 
 
-typedef void (* ModuleSizeFunc)           (gint *width, 
-				           gint *height, 
-				           gpointer user_data);
+typedef void (* GdkPixbufModuleSizeFunc)           (gint *width, 
+						    gint *height, 
+						    gpointer user_data);
 
-typedef void (* ModulePreparedNotifyFunc) (GdkPixbuf          *pixbuf,
-                                           GdkPixbufAnimation *anim,
-                                           gpointer            user_data);
-typedef void (* ModuleUpdatedNotifyFunc)  (GdkPixbuf *pixbuf,
-                                           int        x,
-                                           int        y,
-                                           int        width,
-                                           int        height,
-                                           gpointer   user_data);
+typedef void (* GdkPixbufModulePreparedFunc) (GdkPixbuf          *pixbuf,
+					      GdkPixbufAnimation *anim,
+					      gpointer            user_data);
+typedef void (* GdkPixbufModuleUpdatedFunc)  (GdkPixbuf *pixbuf,
+					      int        x,
+					      int        y,
+					      int        width,
+					      int        height,
+					      gpointer   user_data);
+
+typedef struct _GdkPixbufModulePattern GdkPixbufModulePattern;
+struct _GdkPixbufModulePattern {
+	unsigned char *prefix;
+	unsigned char *mask;
+	int relevance;
+};
 
 typedef struct _GdkPixbufModule GdkPixbufModule;
 struct _GdkPixbufModule {
 	char *module_name;
-	gboolean (* format_check) (guchar *buffer, int size);
+	char *module_path;
 	GModule *module;
+	GdkPixbufFormat *info;
+	
         GdkPixbuf *(* load) (FILE    *f,
                              GError **error);
         GdkPixbuf *(* load_xpm_data) (const char **data);
 
         /* Incremental loading */
 
-        gpointer (* begin_load)     (ModuleSizeFunc size_func,
-                                     ModulePreparedNotifyFunc prepare_func,
-                                     ModuleUpdatedNotifyFunc update_func,
+        gpointer (* begin_load)     (GdkPixbufModuleSizeFunc size_func,
+                                     GdkPixbufModulePreparedFunc prepare_func,
+                                     GdkPixbufModuleUpdatedFunc update_func,
                                      gpointer user_data,
                                      GError **error);
         gboolean (* stop_load)      (gpointer context,
@@ -83,24 +94,44 @@ struct _GdkPixbufModule {
                            gchar    **param_keys,
                            gchar    **param_values,
                            GError   **error);
+  
+	void (*_reserved1) (void); 
+	void (*_reserved2) (void); 
+	void (*_reserved3) (void); 
+	void (*_reserved4) (void); 
+	void (*_reserved5) (void); 
+	void (*_reserved6) (void); 
+
 };
 
-typedef void (* ModuleFillVtableFunc) (GdkPixbufModule *module);
+typedef void (* GdkPixbufModuleFillVtableFunc) (GdkPixbufModule *module);
+typedef void (* GdkPixbufModuleFillInfoFunc) (GdkPixbufFormat *info);
+typedef const GdkPixbufModulePattern *(* GdkPixbufModuleGetSignatureFunc) (void);
 
-GdkPixbufModule *_gdk_pixbuf_get_module (guchar *buffer, guint size,
-                                         const gchar *filename,
-                                         GError **error);
-GdkPixbufModule *_gdk_pixbuf_get_named_module (const char *name,
-                                               GError **error);
-gboolean _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
-                                  GError **error);
+/*  key/value pairs that can be attached by the pixbuf loader  */
 
-GdkPixbuf *_gdk_pixbuf_generic_image_load (GdkPixbufModule *image_module,
-					   FILE *f,
-					   GError **error);
+gboolean gdk_pixbuf_set_option  (GdkPixbuf   *pixbuf,
+                                 const gchar *key,
+                                 const gchar *value);
 
-
+typedef enum /*< skip >*/
+{
+  GDK_PIXBUF_FORMAT_WRITABLE = 1 << 0
+} GdkPixbufFormatFlags;
+
+struct _GdkPixbufFormat {
+  gchar *name;
+  GdkPixbufModulePattern *signature;
+  gchar *domain;
+  gchar *description;
+  gchar **mime_types;
+  gchar **extensions;
+  guint32 flags;
+};
+
+
+#endif /* GDK_PIXBUF_ENABLE_BACKEND */
 
 G_END_DECLS
 
-#endif
+#endif /* GDK_PIXBUF_IO_H */

@@ -287,7 +287,16 @@ G_CONST_RETURN gchar * gdk_pixbuf_get_option (GdkPixbuf   *pixbuf,
                                               const gchar *key);
 
 
+
+typedef struct _GdkPixbufFormat GdkPixbufFormat;
  
+GSList    *gdk_pixbuf_get_formats (void);
+gchar     *gdk_pixbuf_format_get_name        (GdkPixbufFormat *format);
+gchar     *gdk_pixbuf_format_get_description (GdkPixbufFormat *format);
+gchar    **gdk_pixbuf_format_get_mime_types  (GdkPixbufFormat *format);
+gchar    **gdk_pixbuf_format_get_extensions  (GdkPixbufFormat *format);
+gboolean   gdk_pixbuf_format_is_writable     (GdkPixbufFormat *format);
+
 G_END_DECLS
 
 #include <gdk-pixbuf/gdk-pixbuf-loader.h>

@@ -65,10 +65,10 @@ struct error_handler_data {
 
 /* progressive loader context */
 typedef struct {
-        ModuleSizeFunc           size_func;
-	ModuleUpdatedNotifyFunc  updated_func;
-	ModulePreparedNotifyFunc prepared_func;
-	gpointer                 user_data;
+        GdkPixbufModuleSizeFunc     size_func;
+	GdkPixbufModuleUpdatedFunc  updated_func;
+	GdkPixbufModulePreparedFunc prepared_func;
+	gpointer                    user_data;
 	
 	GdkPixbuf                *pixbuf;
 	guchar                   *dptr;   /* current position in pixbuf */
@@ -82,9 +82,9 @@ typedef struct {
 } JpegProgContext;
 
 static GdkPixbuf *gdk_pixbuf__jpeg_image_load (FILE *f, GError **error);
-static gpointer gdk_pixbuf__jpeg_image_begin_load (ModuleSizeFunc           func0,
-                                                   ModulePreparedNotifyFunc func1, 
-                                                   ModuleUpdatedNotifyFunc func2,
+static gpointer gdk_pixbuf__jpeg_image_begin_load (GdkPixbufModuleSizeFunc           func0,
+                                                   GdkPixbufModulePreparedFunc func1, 
+                                                   GdkPixbufModuleUpdatedFunc func2,
                                                    gpointer user_data,
                                                    GError **error);
 static gboolean gdk_pixbuf__jpeg_image_stop_load (gpointer context, GError **error);
@@ -450,9 +450,9 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
  */
 
 gpointer
-gdk_pixbuf__jpeg_image_begin_load (ModuleSizeFunc size_func,
-				   ModulePreparedNotifyFunc prepared_func, 
-				   ModuleUpdatedNotifyFunc updated_func,
+gdk_pixbuf__jpeg_image_begin_load (GdkPixbufModuleSizeFunc size_func,
+				   GdkPixbufModulePreparedFunc prepared_func, 
+				   GdkPixbufModuleUpdatedFunc updated_func,
 				   gpointer user_data,
                                    GError **error)
 {
@@ -908,11 +908,37 @@ gdk_pixbuf__jpeg_image_save (FILE          *f,
 }
 
 void
-gdk_pixbuf__jpeg_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (jpeg, fill_vtable) (GdkPixbufModule *module)
 {
-  module->load = gdk_pixbuf__jpeg_image_load;
-  module->begin_load = gdk_pixbuf__jpeg_image_begin_load;
-  module->stop_load = gdk_pixbuf__jpeg_image_stop_load;
-  module->load_increment = gdk_pixbuf__jpeg_image_load_increment;
-  module->save = gdk_pixbuf__jpeg_image_save;
+	module->load = gdk_pixbuf__jpeg_image_load;
+	module->begin_load = gdk_pixbuf__jpeg_image_begin_load;
+	module->stop_load = gdk_pixbuf__jpeg_image_stop_load;
+	module->load_increment = gdk_pixbuf__jpeg_image_load_increment;
+	module->save = gdk_pixbuf__jpeg_image_save;
+}
+
+void
+MODULE_ENTRY (jpeg, fill_info) (GdkPixbufFormat *info)
+{
+	static GdkPixbufModulePattern signature[] = {
+		{ "\xff\xd8", NULL, 100 },
+		{ NULL, NULL, 0 }
+	};
+	static gchar * mime_types[] = {
+		"image/jpeg",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"jpeg",
+		"jpe",
+		"jpg",
+		NULL
+	};
+
+	info->name = "jpeg";
+	info->signature = signature;
+	info->description = N_("The JPEG image format");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = GDK_PIXBUF_FORMAT_WRITABLE;
 }

@@ -23,6 +23,8 @@
  */
 
 #include <config.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <glib.h>
 #include <errno.h>
@@ -35,250 +37,298 @@
 #undef STRICT
 #endif
 
-
-
-static gboolean
-pixbuf_check_png (guchar *buffer, int size)
+static gint 
+format_check (GdkPixbufModule *module, guchar *buffer, int size)
 {
-	if (size < 28)
-		return FALSE;
+	int j;
+	gchar m;
+	GdkPixbufModulePattern *pattern;
 
-	if (buffer [0] != 0x89 ||
-	    buffer [1] != 'P' ||
-	    buffer [2] != 'N' ||
-	    buffer [3] != 'G' ||
-	    buffer [4] != 0x0d ||
-	    buffer [5] != 0x0a ||
-	    buffer [6] != 0x1a ||
-	    buffer [7] != 0x0a)
-		return FALSE;
-
-	return TRUE;
-}
-
-static gboolean
-pixbuf_check_jpeg (guchar *buffer, int size)
-{
-	if (size < 10)
-		return FALSE;
-
-	if (buffer [0] != 0xff || buffer [1] != 0xd8)
-		return FALSE;
-
-	return TRUE;
-}
-
-static gboolean
-pixbuf_check_tiff (guchar *buffer, int size)
-{
-	if (size < 10)
-		return FALSE;
-
-	if (buffer [0] == 'M' &&
-	    buffer [1] == 'M' &&
-	    buffer [2] == 0   &&
-	    buffer [3] == 0x2a)
-		return TRUE;
-
-	if (buffer [0] == 'I' &&
-	    buffer [1] == 'I' &&
-	    buffer [2] == 0x2a &&
-	    buffer [3] == 0)
-		return TRUE;
-
-	return FALSE;
-}
-
-static gboolean
-pixbuf_check_gif (guchar *buffer, int size)
-{
-	if (size < 20)
-		return FALSE;
-
-	if (strncmp (buffer, "GIF8", 4) == 0)
-		return TRUE;
-
-	return FALSE;
-}
-
-static gboolean
-pixbuf_check_xpm (guchar *buffer, int size)
-{
-	if (size < 20)
-		return FALSE;
-
-	if (strncmp (buffer, "/* XPM */", 9) == 0)
-		return TRUE;
-
-	return FALSE;
-}
-
-static gboolean
-pixbuf_check_pnm (guchar *buffer, int size)
-{
-	if (size < 20)
-		return FALSE;
-
-	if (buffer [0] == 'P') {
-		if (buffer [1] == '1' ||
-		    buffer [1] == '2' ||
-		    buffer [1] == '3' ||
-		    buffer [1] == '4' ||
-		    buffer [1] == '5' ||
-		    buffer [1] == '6')
-			return TRUE;
+	for (pattern = module->info->signature; pattern->prefix; pattern++) {
+		for (j = 0; j < size && pattern->prefix[j] != 0; j++) {
+			m = pattern->mask ? pattern->mask[j] : ' ';
+			if (m == ' ') {
+				if (buffer[j] != pattern->prefix[j])
+					break;
+			}
+			else if (m == '!') {
+				if (buffer[j] == pattern->prefix[j])
+					break;
+			}
+			else if (m == 'z') {
+				if (buffer[j] != 0)
+					break;
+			}
+			else if (m == 'n') {
+				if (buffer[j] == 0)
+					break;
+			}
+		} 
+		if (pattern->prefix[j] == 0) 
+			return pattern->relevance;
 	}
-	return FALSE;
+	return 0;
 }
-static gboolean
-pixbuf_check_sunras (guchar *buffer, int size)
+
+static GSList *file_formats = NULL;
+
+static void gdk_pixbuf_io_init ();
+
+static GSList *
+get_file_formats ()
 {
-	if (size < 32)
-		return FALSE;
-
-	if (buffer [0] != 0x59 ||
-	    buffer [1] != 0xA6 ||
-	    buffer [2] != 0x6A ||
-	    buffer [3] != 0x95)
-		return FALSE;
-
-	return TRUE;
+	if (file_formats == NULL)
+		gdk_pixbuf_io_init ();
+	
+	return file_formats;
 }
 
-static gboolean
-pixbuf_check_ico (guchar *buffer, int size)
-{
-	/* Note that this may cause false positives, but .ico's don't
-	   have a magic number.*/
-	if (size < 6)
-		return FALSE;
-	if (buffer [0] != 0x0 ||
-	    buffer [1] != 0x0 ||
-	    ((buffer [2] != 0x1)&&(buffer[2]!=0x2)) ||
-	    buffer [3] != 0x0 ||
-	    buffer [4] == 0x0 || 
-	    buffer [5] != 0x0 )
-		return FALSE;
-
-	return TRUE;
-}
-
-static gboolean
-pixbuf_check_ani (guchar *buffer, int size)
-{
-        if (size < 12)
-                return FALSE;
-
-	if (buffer [0] != 'R' ||
-	    buffer [1] != 'I' ||
-	    buffer [2] != 'F' ||
-	    buffer [3] != 'F' ||
-	    buffer [8] != 'A' ||
-	    buffer [9] != 'C' ||
-	    buffer[10] != 'O' ||
-	    buffer[11] != 'N')
-		return FALSE;
-
-        return TRUE;
-}
-
-
-static gboolean
-pixbuf_check_bmp (guchar *buffer, int size)
-{
-	if (size < 20)
-		return FALSE;
-
-	if (buffer [0] != 'B' || buffer [1] != 'M')
-		return FALSE;
-
-	return TRUE;
-}
-
-static gboolean
-pixbuf_check_wbmp (guchar *buffer, int size)
-{
-  if(size < 10) /* at least */
-    return FALSE;
-
-  if(buffer[0] == '\0' /* We only handle type 0 wbmp's for now */)
-    return TRUE;
-
-  return FALSE;
-}
-
-
-static gboolean
-pixbuf_check_xbm (guchar *buffer, int size)
-{
-	if (size < 20)
-		return FALSE;
-
-	if (buffer [0] == '#'
-	    && buffer [1] == 'd'
-	    && buffer [2] == 'e'
-	    && buffer [3] == 'f'
-	    && buffer [4] == 'i'
-	    && buffer [5] == 'n'
-	    && buffer [6] == 'e'
-	    && buffer [7] == ' ')
-		return TRUE;
-
-	/* Note that this requires xpm to be checked before xbm. */
-	if (buffer [0] == '/'
-	    && buffer [1] != '*')
-		return TRUE;
-
-	return FALSE;
-}
-
-static gboolean
-pixbuf_check_tga (guchar *buffer, int size)
-{
-        if (size < 18)
-                return FALSE;
-        /* buffer[1] is a boolean telling if in the file a colormap is
-           present, while buffer[2] is the byte which specifies the image
-           type. (GrayScale/PseudoColor/TrueColor/RLE) */
-        if ((buffer[2] == 1) || (buffer[2] == 9)) {
-                if (buffer[1] != 1)
-                        return FALSE;
-        } else {
-                if (buffer[1] != 0)
-			return FALSE;
-        }
-        return TRUE;
-}
-
-static GdkPixbufModule file_formats [] = {
-	{ "png",  pixbuf_check_png, NULL,  NULL, NULL, NULL, NULL, NULL, NULL, },
-	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "gif",  pixbuf_check_gif, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
-#define XPM_FILE_FORMAT_INDEX 4
-	{ "xpm",  pixbuf_check_xpm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "pnm",  pixbuf_check_pnm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "ras",  pixbuf_check_sunras, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "xbm",  pixbuf_check_xbm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },	
-	{ "ani",  pixbuf_check_ani, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },	
-	{ "tga", pixbuf_check_tga, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "wbmp", pixbuf_check_wbmp, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
-	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
-};
 
 #ifdef USE_GMODULE 
-static gboolean
-pixbuf_module_symbol (GModule *module, const char *module_name, const char *symbol_name, gpointer *symbol)
-{
-	char *full_symbol_name = g_strconcat ("gdk_pixbuf__", module_name, "_", symbol_name, NULL);
-	gboolean return_value;
 
-	return_value = g_module_symbol (module, full_symbol_name, symbol);
-	g_free (full_symbol_name);
+static gboolean
+scan_string (const char **pos, GString *out)
+{
+	const char *p = *pos, *q = *pos;
+	char *tmp, *tmp2;
+	gboolean quoted;
 	
-	return return_value;
+	while (g_ascii_isspace (*p))
+		p++;
+	
+	if (!*p)
+		return FALSE;
+	else if (*p == '"') {
+		p++;
+		quoted = FALSE;
+		for (q = p; (*q != '"') || quoted; q++) {
+			if (!*q)
+				return FALSE;
+			quoted = (*q == '\\') && !quoted;
+		}
+		
+		tmp = g_strndup (p, q - p);
+		tmp2 = g_strcompress (tmp);
+		g_string_truncate (out, 0);
+		g_string_append (out, tmp2);
+		g_free (tmp);
+		g_free (tmp2);
+	}
+	
+	q++;
+	*pos = q;
+	
+	return TRUE;
+}
+
+static gboolean
+scan_int (const char **pos, int *out)
+{
+	int i = 0;
+	char buf[32];
+	const char *p = *pos;
+	
+	while (g_ascii_isspace (*p))
+		p++;
+	
+	if (*p < '0' || *p > '9')
+		return FALSE;
+	
+	while ((*p >= '0') && (*p <= '9') && i < sizeof (buf)) {
+		buf[i] = *p;
+		i++;
+		p++;
+	}
+	
+	if (i == sizeof (buf))
+  		return FALSE;
+	else
+		buf[i] = '\0';
+	
+	*out = atoi (buf);
+	
+	*pos = p;
+
+	return TRUE;
+}
+
+static gboolean
+skip_space (const char **pos)
+{
+	const char *p = *pos;
+	
+	while (g_ascii_isspace (*p))
+		p++;
+  
+	*pos = p;
+	
+	return !(*p == '\0');
+}
+  
+static gchar *
+gdk_pixbuf_get_module_file (void)
+{
+  gchar *result = g_strdup (g_getenv ("GDK_PIXBUF_MODULE_FILE"));
+
+  if (!result)
+	  result = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gdk-pixbuf.loaders", NULL);
+
+  return result;
+}
+
+static void 
+gdk_pixbuf_io_init ()
+{
+	GIOChannel *channel;
+	gchar *line_buf;
+	gsize term;
+	GString *tmp_buf = g_string_new (NULL);
+	gboolean have_error = FALSE;
+	GdkPixbufModule *module = NULL;
+	gchar *filename = gdk_pixbuf_get_module_file ();
+	int flags;
+	int n_patterns = 0;
+	GdkPixbufModulePattern *pattern;
+	GError *error = NULL;
+
+	channel = g_io_channel_new_file (filename, "r",  &error);
+	if (!channel) {
+		g_warning ("Can not open pixbuf loader module file '%s': %s",
+			   filename, error->message);
+		return;
+	}
+	
+	while (!have_error && g_io_channel_read_line (channel, &line_buf, NULL, &term, NULL) == G_IO_STATUS_NORMAL) {
+		const char *p;
+		
+		p = line_buf;
+
+		line_buf[term] = 0;
+
+		if (!skip_space (&p)) {
+				/* Blank line marking the end of a module
+				 */
+			if (module && *p != '#') {
+				file_formats = g_slist_prepend (file_formats, module);
+				module = NULL;
+			}
+			
+			goto next_line;
+		}
+
+		if (*p == '#') 
+			goto next_line;
+		
+		if (!module) {
+				/* Read a module location
+				 */
+			module = g_new0 (GdkPixbufModule, 1);
+			n_patterns = 0;
+			
+			if (!scan_string (&p, tmp_buf)) {
+				g_warning ("Error parsing loader info in '%s'\n  %s", 
+					   filename, line_buf);
+				have_error = TRUE;
+			}
+			module->module_path = g_strdup (tmp_buf->str);
+		}
+		else if (!module->module_name) {
+			module->info = g_new0 (GdkPixbufFormat, 1);
+			if (!scan_string (&p, tmp_buf)) {
+				g_warning ("Error parsing loader info in '%s'\n  %s", 
+					   filename, line_buf);
+				have_error = TRUE;
+			}
+			module->info->name =  g_strdup (tmp_buf->str);
+			module->module_name = module->info->name;
+
+			if (!scan_int (&p, &flags)) {
+				g_warning ("Error parsing loader info in '%s'\n  %s", 
+					   filename, line_buf);
+				have_error = TRUE;
+			}
+			module->info->flags = flags;
+			
+			if (!scan_string (&p, tmp_buf)) {
+				g_warning ("Error parsing loader info in '%s'\n  %s", 
+					   filename, line_buf);
+				have_error = TRUE;
+			}			
+			if (tmp_buf->str[0] != 0)
+				module->info->domain = g_strdup (tmp_buf->str);
+
+			if (!scan_string (&p, tmp_buf)) {
+				g_warning ("Error parsing loader info in '%s'\n  %s", 
+					   filename, line_buf);
+				have_error = TRUE;
+			}			
+			module->info->description = g_strdup (tmp_buf->str);
+		}
+		else if (!module->info->mime_types) {
+			int n = 1;
+			module->info->mime_types = g_new0 (gchar*, 1);
+			while (scan_string (&p, tmp_buf)) {
+				if (tmp_buf->str[0] != 0) {
+					module->info->mime_types =
+						g_realloc (module->info->mime_types, (n + 1) * sizeof (gchar*));
+					module->info->mime_types[n - 1] = g_strdup (tmp_buf->str);
+					module->info->mime_types[n] = 0;
+					n++;
+				}
+			}
+		}
+		else if (!module->info->extensions) {
+			int n = 1;
+			module->info->extensions = g_new0 (gchar*, 1);
+			while (scan_string (&p, tmp_buf)) {
+				if (tmp_buf->str[0] != 0) {
+					module->info->extensions =
+						g_realloc (module->info->extensions, (n + 1) * sizeof (gchar*));
+					module->info->extensions[n - 1] = g_strdup (tmp_buf->str);
+					module->info->extensions[n] = 0;
+					n++;
+				}
+			}
+		}
+		else {
+			n_patterns++;
+			module->info->signature = (GdkPixbufModulePattern *)
+				g_realloc (module->info->signature, (n_patterns + 1) * sizeof (GdkPixbufModulePattern));
+			pattern = module->info->signature + n_patterns;
+			pattern->prefix = NULL;
+			pattern->mask = NULL;
+			pattern->relevance = 0;
+			pattern--;
+			if (!scan_string (&p, tmp_buf))
+				goto context_error;
+			pattern->prefix = g_strdup (tmp_buf->str);
+			
+			if (!scan_string (&p, tmp_buf))
+				goto context_error;
+			if (*tmp_buf->str)
+				pattern->mask = g_strdup (tmp_buf->str);
+			else
+				pattern->mask = NULL;
+			
+			if (!scan_int (&p, &pattern->relevance))
+				goto context_error;
+			
+			goto next_line;
+
+		context_error:
+			g_free (pattern->prefix);
+			g_free (pattern->mask);
+			g_free (pattern);
+			g_warning ("Error parsing loader info in '%s'\n  %s", 
+				   filename, line_buf);
+			have_error = TRUE;
+		}
+	next_line:
+		g_free (line_buf);
+	}
+	g_string_free (tmp_buf, TRUE);
+	g_io_channel_unref (channel);
+	g_free (filename);
 }
 
 #ifdef G_OS_WIN32
@@ -304,31 +354,6 @@ get_libdir (void)
 
 #endif
 
-/* Like g_module_path, but use .la as the suffix
- */
-static gchar*
-module_build_la_path (const gchar *directory,
-		      const gchar *module_name)
-{
-	gchar *filename;
-	gchar *result;
-	
-	if (strncmp (module_name, "lib", 3) == 0)
-		filename = (gchar *)module_name;
-	else
-		filename =  g_strconcat ("lib", module_name, ".la", NULL);
-
-	if (directory && *directory)
-		result = g_build_filename (directory, filename, NULL);
-	else
-		result = g_strdup (filename);
-
-	if (filename != module_name)
-		g_free (filename);
-
-	return result;
-}
-
 /* actually load the image handler - gdk_pixbuf_get_module only get a */
 /* reference to the module to load, it doesn't actually load it       */
 /* perhaps these actions should be combined in one function           */
@@ -336,98 +361,66 @@ gboolean
 _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
                          GError         **error)
 {
-	char *module_name;
 	char *path;
 	GModule *module;
 	gpointer sym;
-	char *name;
-        gboolean retval;
-        const char *dir;
 	
         g_return_val_if_fail (image_module->module == NULL, FALSE);
 
-	name = image_module->module_name;
-	
-	module_name = g_strconcat ("pixbufloader-", name, NULL);
-
-        /* This would be an exploit in an suid binary using gdk-pixbuf,
-         * but see http://www.gtk.org/setuid.html or the BugTraq
-         * archives for why you should report this as a bug against
-         * setuid apps using this library rather than the library
-         * itself.
-         */
-        dir = g_getenv ("GDK_PIXBUF_MODULEDIR");
-        if (dir == NULL || *dir == '\0')
-		dir = PIXBUF_LIBDIR;
-
-	path = g_module_build_path (dir, module_name);
+	path = image_module->module_path;
 	module = g_module_open (path, G_MODULE_BIND_LAZY);
 
-	if (!module) {
-		g_free (path);
-		path = module_build_la_path (dir, module_name);
-		module = g_module_open (path, G_MODULE_BIND_LAZY);
-	}
-	
         if (!module) {
-		g_free (path);
-		path = g_module_build_path (dir, module_name);
-		
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_FAILED,
                              _("Unable to load image-loading module: %s: %s"),
                              path, g_module_error ());
-                g_free (module_name);
-                g_free (path);
                 return FALSE;
         }
 
-        g_free (module_name);
-
 	image_module->module = module;        
         
-        if (pixbuf_module_symbol (module, name, "fill_vtable", &sym)) {
-                ModuleFillVtableFunc func = (ModuleFillVtableFunc) sym;
+        if (g_module_symbol (module, "fill_vtable", &sym)) {
+                GdkPixbufModuleFillVtableFunc func = (GdkPixbufModuleFillVtableFunc) sym;
                 (* func) (image_module);
-                retval = TRUE;
+                return TRUE;
         } else {
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_FAILED,
                              _("Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"),
                              path);
-                retval = FALSE;
+                return FALSE;
         }
-
-        g_free (path);
-
-        return retval;
 }
 #else
 
-#define mname(type,fn) gdk_pixbuf__ ## type ## _ ##fn
-#define m_fill_vtable(type) extern void mname(type,fill_vtable) (GdkPixbufModule *module)
+#define module(type) \
+  extern void MODULE_ENTRY (type, fill_info)   (GdkPixbufFormat *info);   \
+  extern void MODULE_ENTRY (type, fill_vtable) (GdkPixbufModule *module)
 
-m_fill_vtable (png);
-m_fill_vtable (bmp);
-m_fill_vtable (wbmp);
-m_fill_vtable (gif);
-m_fill_vtable (ico);
-m_fill_vtable (ani);
-m_fill_vtable (jpeg);
-m_fill_vtable (pnm);
-m_fill_vtable (ras);
-m_fill_vtable (tiff);
-m_fill_vtable (xpm);
-m_fill_vtable (xbm);
-m_fill_vtable (tga);
+module (png);
+module (bmp);
+module (wbmp);
+module (gif);
+module (ico);
+module (ani);
+module (jpeg);
+module (pnm);
+module (ras);
+module (tiff);
+module (xpm);
+module (xbm);
+module (tga);
 
 gboolean
 _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
                          GError         **error)
 {
-        ModuleFillVtableFunc fill_vtable = NULL;
+	GdkPixbufModuleFillInfoFunc fill_info = NULL;
+        GdkPixbufModuleFillVtableFunc fill_vtable = NULL;
+
 	image_module->module = (void *) 1;
 
         if (FALSE) {
@@ -435,85 +428,101 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
         }
         
 #ifdef INCLUDE_png	
-	else if (strcmp (image_module->module_name, "png") == 0){
-                fill_vtable = mname (png, fill_vtable);
+	else if (strcmp (image_module->module_name, "png") == 0) {
+                fill_info = MODULE_ENTRY (png, fill_info);
+                fill_vtable = MODULE_ENTRY (png, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_bmp	
-	else if (strcmp (image_module->module_name, "bmp") == 0){
-                fill_vtable = mname (bmp, fill_vtable);
+	else if (strcmp (image_module->module_name, "bmp") == 0) {
+                fill_info = MODULE_ENTRY (bmp, fill_info);
+                fill_vtable = MODULE_ENTRY (bmp, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_wbmp
-	else if (strcmp (image_module->module_name, "wbmp") == 0){
-                fill_vtable = mname (wbmp, fill_vtable);
+	else if (strcmp (image_module->module_name, "wbmp") == 0) {
+                fill_info = MODULE_ENTRY (wbmp, fill_info);
+                fill_vtable = MODULE_ENTRY (wbmp, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_gif
-	else if (strcmp (image_module->module_name, "gif") == 0){
-                fill_vtable = mname (gif, fill_vtable);
+	else if (strcmp (image_module->module_name, "gif") == 0) {
+                fill_info = MODULE_ENTRY (gif, fill_info);
+                fill_vtable = MODULE_ENTRY (gif, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_ico
-	else if (strcmp (image_module->module_name, "ico") == 0){
-                fill_vtable = mname (ico, fill_vtable);
+	else if (strcmp (image_module->module_name, "ico") == 0) {
+                fill_info = MODULE_ENTRY (ico, fill_info);
+                fill_vtable = MODULE_ENTRY (ico, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_ani
-	else if (strcmp (image_module->module_name, "ani") == 0){
-                fill_vtable = mname (ani, fill_vtable);
+	else if (strcmp (image_module->module_name, "ani") == 0) {
+                fill_info = MODULE_ENTRY (ani, fill_info);
+                fill_vtable = MODULE_ENTRY (ani, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_jpeg
-	else if (strcmp (image_module->module_name, "jpeg") == 0){
-                fill_vtable = mname (jpeg, fill_vtable);
+	else if (strcmp (image_module->module_name, "jpeg") == 0) {
+                fill_info = MODULE_ENTRY (jpeg, fill_info);
+                fill_vtable = MODULE_ENTRY (jpeg, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_pnm
-	else if (strcmp (image_module->module_name, "pnm") == 0){
-                fill_vtable = mname (pnm, fill_vtable);
+	else if (strcmp (image_module->module_name, "pnm") == 0) {
+                fill_info = MODULE_ENTRY (pnm, fill_info);
+                fill_vtable = MODULE_ENTRY (pnm, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_ras
-	else if (strcmp (image_module->module_name, "ras") == 0){
-                fill_vtable = mname (ras, fill_vtable);
+	else if (strcmp (image_module->module_name, "ras") == 0) {
+                fill_info = MODULE_ENTRY (ras, fill_info);
+                fill_vtable = MODULE_ENTRY (ras, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_tiff
-	else if (strcmp (image_module->module_name, "tiff") == 0){
-                fill_vtable = mname (tiff, fill_vtable);
+	else if (strcmp (image_module->module_name, "tiff") == 0) {
+                fill_info = MODULE_ENTRY (tiff, fill_info);
+                fill_vtable = MODULE_ENTRY (tiff, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_xpm
-	else if (strcmp (image_module->module_name, "xpm") == 0){
-                fill_vtable = mname (xpm, fill_vtable);
+	else if (strcmp (image_module->module_name, "xpm") == 0) {
+                fill_info = MODULE_ENTRY (xpm, fill_info);
+                fill_vtable = MODULE_ENTRY (xpm, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_xbm
-	else if (strcmp (image_module->module_name, "xbm") == 0){
-                fill_vtable = mname (xbm, fill_vtable);
+	else if (strcmp (image_module->module_name, "xbm") == 0) {
+                fill_info = MODULE_ENTRY (xbm, fill_info);
+                fill_vtable = MODULE_ENTRY (xbm, fill_vtable);
 	}
 #endif
 
 #ifdef INCLUDE_tga
-	else if (strcmp (image_module->module_name, "tga") == 0){
-		fill_vtable = mname (tga, fill_vtable);
+	else if (strcmp (image_module->module_name, "tga") == 0) {
+                fill_info = MODULE_ENTRY (tga, fill_info);
+		fill_vtable = MODULE_ENTRY (tga, fill_vtable);
 	}
 #endif
         
         if (fill_vtable) {
                 (* fill_vtable) (image_module);
+		image_module->info = g_new0 (GdkPixbufFormat, 1);
+		(* fill_info) (image_module->info);
+
                 return TRUE;
         } else {
                 g_set_error (error,
@@ -526,6 +535,27 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
         }
 }
 
+static void 
+gdk_pixbuf_io_init ()
+{
+	gchar *included_formats[] = { 
+		"ani", "png", "bmp", "wbmp", "gif", 
+		"ico", "jpeg", "pnm", "ras", "tiff", 
+		"xpm", "xbm", "tga", 
+		NULL
+	};
+	gchar **name;
+	GdkPixbufModule *module = NULL;
+	
+	for (name = included_formats; *name; name++) {
+		module = g_new0 (GdkPixbufModule, 1);
+		module->module_name = *name;
+		if (_gdk_pixbuf_load_module (module, NULL))
+			file_formats = g_slist_prepend (file_formats, module);
+		else
+			g_free (module);
+	}
+}
 
 #endif
 
@@ -535,11 +565,12 @@ GdkPixbufModule *
 _gdk_pixbuf_get_named_module (const char *name,
                               GError **error)
 {
-	int i;
+	GSList *modules;
 
-	for (i = 0; file_formats [i].module_name; i++) {
-		if (!strcmp(name, file_formats[i].module_name))
-			return &(file_formats[i]);
+	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
+		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
+		if (!strcmp (name, module->module_name))
+			return module;
 	}
 
         g_set_error (error,
@@ -556,12 +587,22 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
                         const gchar *filename,
                         GError **error)
 {
-	int i;
+	GSList *modules;
 
-	for (i = 0; file_formats [i].module_name; i++) {
-		if ((* file_formats [i].format_check) (buffer, size))
-			return &(file_formats[i]);
+	gint score, best = 0;
+	GdkPixbufModule *selected = NULL;
+	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
+		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
+		score = format_check (module, buffer, size);
+		if (score > best) {
+			best = score; 
+			selected = module;
+		}
+		if (score >= 100) 
+			break;
 	}
+	if (selected != NULL)
+		return selected;
 
         if (filename)
                 g_set_error (error,
@@ -738,23 +779,24 @@ gdk_pixbuf_new_from_xpm_data (const char **data)
 	GdkPixbuf *(* load_xpm_data) (const char **data);
 	GdkPixbuf *pixbuf;
         GError *error = NULL;
+	GdkPixbufModule *xpm_module = _gdk_pixbuf_get_named_module ("xpm", NULL);
 
-	if (file_formats[XPM_FILE_FORMAT_INDEX].module == NULL) {
-                if (!_gdk_pixbuf_load_module (&file_formats[XPM_FILE_FORMAT_INDEX], &error)) {
+	if (xpm_module->module == NULL) {
+                if (!_gdk_pixbuf_load_module (xpm_module, &error)) {
                         g_warning ("Error loading XPM image loader: %s", error->message);
                         g_error_free (error);
                         return FALSE;
                 }
         }
           
-	if (file_formats[XPM_FILE_FORMAT_INDEX].module == NULL) {
+	if (xpm_module->module == NULL) {
 		g_warning ("Can't find gdk-pixbuf module for parsing inline XPM data");
 		return NULL;
-	} else if (file_formats[XPM_FILE_FORMAT_INDEX].load_xpm_data == NULL) {
+	} else if (xpm_module->load_xpm_data == NULL) {
 		g_warning ("gdk-pixbuf XPM module lacks XPM data capability");
 		return NULL;
 	} else
-		load_xpm_data = file_formats[XPM_FILE_FORMAT_INDEX].load_xpm_data;
+		load_xpm_data = xpm_module->load_xpm_data;
 
 	pixbuf = (* load_xpm_data) (data);
 	return pixbuf;
@@ -952,3 +994,130 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
        
        return TRUE;
 }
+
+/**
+ * gdk_pixbuf_format_get_name:
+ * @format: a #GdkPixbufFormat
+ *
+ * Returns the name of the format.
+ * 
+ * Return value: the name of the format. 
+ */
+gchar *
+gdk_pixbuf_format_get_name (GdkPixbufFormat *format)
+{
+	g_return_val_if_fail (format != NULL, NULL);
+
+	return g_strdup (format->name);
+}
+
+/**
+ * gdk_pixbuf_format_get_description:
+ * @format: a #GdkPixbufFormat
+ *
+ * Returns a description of the format.
+ * 
+ * Return value: a description of the format. 
+ */
+gchar *
+gdk_pixbuf_format_get_description (GdkPixbufFormat *format)
+{
+	gchar *domain;
+	gchar *description;
+	g_return_val_if_fail (format != NULL, NULL);
+
+	if (format->domain != NULL) 
+		domain = format->domain;
+	else 
+		domain = GETTEXT_PACKAGE;
+	description = dgettext (domain, format->description);
+
+	return g_strdup (description);
+}
+
+/**
+ * gdk_pixbuf_format_get_mime_types:
+ * @format: a #GdkPixbufFormat
+ *
+ * Returns the mime types supported by the format.
+ * 
+ * Return value: a %NULL-terminated array of mime types.
+ */
+gchar **
+gdk_pixbuf_format_get_mime_types (GdkPixbufFormat *format)
+{
+	g_return_val_if_fail (format != NULL, NULL);
+
+	return g_strdupv (format->mime_types);
+}
+
+/**
+ * gdk_pixbuf_format_get_extensions:
+ * @format: a #GdkPixbufFormat
+ *
+ * Returns the filename extensions typically used for files in the given format.
+ * 
+ * Return value: a %NULL-terminated array of filename extensions.
+ */
+gchar **
+gdk_pixbuf_format_get_extensions (GdkPixbufFormat *format)
+{
+	g_return_val_if_fail (format != NULL, NULL);
+
+	return g_strdupv (format->extensions);
+}
+
+/**
+ * gdk_pixbuf_format_is_writable:
+ * @format: a #GdkPixbufFormat
+ *
+ * Returns whether pixbufs can be saved in the given format.
+ * 
+ * Return value: whether pixbufs can be saved in the given format.
+ */
+gboolean
+gdk_pixbuf_format_is_writable (GdkPixbufFormat *format)
+{
+	g_return_val_if_fail (format != NULL, FALSE);
+
+	return (format->flags & GDK_PIXBUF_FORMAT_WRITABLE) != 0;
+}
+
+GdkPixbufFormat *
+_gdk_pixbuf_get_format (GdkPixbufModule *module)
+{
+	g_return_val_if_fail (module != NULL, NULL);
+
+	return module->info;
+}
+
+/**
+ * gdk_pixbuf_get_formats:
+ *
+ * Obtains the available information about the image formats supported
+ * by GdkPixbuf.
+ *
+ * Returns: A list of #GdkPixbufFormat<!-- -->s describing the supported 
+ * image formats.  The list should be freed when it is no longer needed, 
+ * but the structures themselves are owned by #GdkPixbuf and should not be 
+ * freed.  
+ */
+GSList *
+gdk_pixbuf_get_formats (void)
+{
+	GSList *result = NULL;
+	GSList *modules;
+
+	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
+		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
+		GdkPixbufFormat *info = _gdk_pixbuf_get_format (module);
+		result = g_slist_prepend (result, info);
+	}
+
+	return result;
+}
+
+
+
+
+

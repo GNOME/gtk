@@ -1,3 +1,4 @@
+/* -*- mode: C; c-file-style: "linux" -*- */
 /* 
  * GdkPixbuf library - TGA image loader
  * Copyright (C) 1999 Nicola Girardi <nikke@swlibero.org>
@@ -38,9 +39,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "gdk-pixbuf.h"
-#include "gdk-pixbuf-io.h"
 #include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf-io.h"
 
 #undef DEBUG_TGA
 
@@ -139,8 +139,8 @@ struct _TGAContext {
 	gboolean prepared;
 	gboolean done;
 
-	ModulePreparedNotifyFunc pfunc;
-	ModuleUpdatedNotifyFunc ufunc;
+	GdkPixbufModulePreparedFunc pfunc;
+	GdkPixbufModuleUpdatedFunc ufunc;
 	gpointer udata;
 };
 
@@ -802,9 +802,9 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 	return TRUE;
 }
 
-static gpointer gdk_pixbuf__tga_begin_load(ModuleSizeFunc f0,
-                                           ModulePreparedNotifyFunc f1,
-					   ModuleUpdatedNotifyFunc f2,
+static gpointer gdk_pixbuf__tga_begin_load(GdkPixbufModuleSizeFunc f0,
+                                           GdkPixbufModulePreparedFunc f1,
+					   GdkPixbufModuleUpdatedFunc f2,
 					   gpointer udata, GError **err)
 {
 	TGAContext *ctx;
@@ -1335,10 +1335,40 @@ static GdkPixbuf *gdk_pixbuf__tga_load(FILE *f, GError **err)
 }
 
 void
-gdk_pixbuf__tga_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (tga, fill_vtable) (GdkPixbufModule *module)
 {
 	module->load = gdk_pixbuf__tga_load;
 	module->begin_load = gdk_pixbuf__tga_begin_load;
 	module->stop_load = gdk_pixbuf__tga_stop_load;
 	module->load_increment = gdk_pixbuf__tga_load_increment;
+}
+
+void
+MODULE_ENTRY (tga, fill_info) (GdkPixbufFormat *info)
+{
+	static GdkPixbufModulePattern signature[] = {
+		{ " \x1\x1", "x  ", 100 },
+		{ " \x1\x9", "x  ", 100 },
+		{ "  \x2", "xz ",  99 }, /* only 99 since .CUR also matches this */
+		{ "  \x3", "xz ", 100 },
+		{ "  \xa", "xz ", 100 },
+		{ "  \xb", "xz ", 100 },
+		{ NULL, NULL, 0 }
+	};
+	static gchar * mime_types[] = {
+		"image/x-tga",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"tga",
+		"targa",
+		NULL
+	};
+
+	info->name = "tga";
+	info->signature = signature;
+	info->description = N_("The Targa image format");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = 0;
 }

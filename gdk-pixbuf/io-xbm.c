@@ -1,3 +1,4 @@
+/* -*- mode: C; c-file-style: "linux" -*- */
 /* GdkPixbuf library - XBM image loader
  *
  * Copyright (C) 1999 Mark Crichton
@@ -42,8 +43,8 @@
 typedef struct _XBMData XBMData;
 struct _XBMData
 {
-	ModulePreparedNotifyFunc prepare_func;
-	ModuleUpdatedNotifyFunc update_func;
+	GdkPixbufModulePreparedFunc prepare_func;
+	GdkPixbufModuleUpdatedFunc update_func;
 	gpointer user_data;
 
 	gchar *tempname;
@@ -361,9 +362,9 @@ gdk_pixbuf__xbm_image_load (FILE *f, GError **error)
  */
 
 static gpointer
-gdk_pixbuf__xbm_image_begin_load (ModuleSizeFunc size_func,
-                                  ModulePreparedNotifyFunc prepare_func,
-				  ModuleUpdatedNotifyFunc update_func,
+gdk_pixbuf__xbm_image_begin_load (GdkPixbufModuleSizeFunc size_func,
+                                  GdkPixbufModulePreparedFunc prepare_func,
+				  GdkPixbufModuleUpdatedFunc update_func,
 				  gpointer user_data,
 				  GError **error)
 {
@@ -443,10 +444,35 @@ gdk_pixbuf__xbm_image_load_increment (gpointer data,
 }
 
 void
-gdk_pixbuf__xbm_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (xbm, fill_vtable) (GdkPixbufModule *module)
 {
-  module->load = gdk_pixbuf__xbm_image_load;
-  module->begin_load = gdk_pixbuf__xbm_image_begin_load;
-  module->stop_load = gdk_pixbuf__xbm_image_stop_load;
-  module->load_increment = gdk_pixbuf__xbm_image_load_increment;
+	module->load = gdk_pixbuf__xbm_image_load;
+	module->begin_load = gdk_pixbuf__xbm_image_begin_load;
+	module->stop_load = gdk_pixbuf__xbm_image_stop_load;
+	module->load_increment = gdk_pixbuf__xbm_image_load_increment;
+}
+
+void
+MODULE_ENTRY (xbm, fill_info) (GdkPixbufFormat *info)
+{
+	static GdkPixbufModulePattern signature[] = {
+		{ "#define ", NULL, 100 },
+		{ "/*", NULL, 50 },
+		{ NULL, NULL, 0 }
+	};
+	static gchar * mime_types[] = {
+		"image/x-xbitmap",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"xbm",
+		NULL
+	};
+
+	info->name = "xbm";
+	info->signature = signature;
+	info->description = N_("The XBM image format");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = 0;
 }

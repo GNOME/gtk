@@ -1,2 +1,3 @@
 EXPORTS
-	gdk_pixbuf__xpm_fill_vtable
+	fill_vtable
+	fill_info

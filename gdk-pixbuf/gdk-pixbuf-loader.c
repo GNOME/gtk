@@ -26,8 +26,9 @@
 #include <string.h>
 
 #include "gdk-pixbuf-private.h"
-#include "gdk-pixbuf-loader.h"
+#include "gdk-pixbuf-animation.h"
 #include "gdk-pixbuf-io.h"
+#include "gdk-pixbuf-loader.h"
 #include "gdk-pixbuf-marshal.h"
 
 enum {
@@ -645,7 +646,32 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
   return retval;
 }
 
+/**
+ * gdk_pixbuf_loader_get_format:
+ * @loader: A pixbuf loader.
+ *
+ * Obtains the available information about the format of the 
+ * currently loading image file.
+ *
+ * Returns: A #GdkPixbufFormat or %NULL. The return value is owned 
+ * by GdkPixbuf and should not be freed.
+ */
+GdkPixbufFormat *
+gdk_pixbuf_loader_get_format (GdkPixbufLoader *loader)
+{
+  GdkPixbufLoaderPrivate *priv;
+  gboolean retval = TRUE;
+  
+  g_return_val_if_fail (loader != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), NULL);
+  
+  priv = loader->priv;
 
+  if (priv->image_module)
+    return _gdk_pixbuf_get_format (priv->image_module);
+  else
+    return NULL;
+}
 
 
 

@@ -1409,8 +1409,8 @@ gdk_pixbuf__xpm_image_load_xpm_data (const gchar **data)
 typedef struct _XPMContext XPMContext;
 struct _XPMContext
 {
-       ModulePreparedNotifyFunc prepare_func;
-       ModuleUpdatedNotifyFunc update_func;
+       GdkPixbufModulePreparedFunc prepare_func;
+       GdkPixbufModuleUpdatedFunc update_func;
        gpointer user_data;
 
        gchar *tempname;
@@ -1425,9 +1425,9 @@ struct _XPMContext
  * in the future.
  */
 static gpointer
-gdk_pixbuf__xpm_image_begin_load (ModuleSizeFunc size_func,
-                                  ModulePreparedNotifyFunc prepare_func,
-                                  ModuleUpdatedNotifyFunc update_func,
+gdk_pixbuf__xpm_image_begin_load (GdkPixbufModuleSizeFunc size_func,
+                                  GdkPixbufModulePreparedFunc prepare_func,
+                                  GdkPixbufModuleUpdatedFunc update_func,
                                   gpointer user_data,
                                   GError **error)
 {
@@ -1513,11 +1513,35 @@ gdk_pixbuf__xpm_image_load_increment (gpointer data,
 }
 
 void
-gdk_pixbuf__xpm_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (xpm, fill_vtable) (GdkPixbufModule *module)
 {
-  module->load = gdk_pixbuf__xpm_image_load;
-  module->load_xpm_data = gdk_pixbuf__xpm_image_load_xpm_data;
-  module->begin_load = gdk_pixbuf__xpm_image_begin_load;
-  module->stop_load = gdk_pixbuf__xpm_image_stop_load;
-  module->load_increment = gdk_pixbuf__xpm_image_load_increment;
+	module->load = gdk_pixbuf__xpm_image_load;
+	module->load_xpm_data = gdk_pixbuf__xpm_image_load_xpm_data;
+	module->begin_load = gdk_pixbuf__xpm_image_begin_load;
+	module->stop_load = gdk_pixbuf__xpm_image_stop_load;
+	module->load_increment = gdk_pixbuf__xpm_image_load_increment;
+}
+
+void
+MODULE_ENTRY (xpm, fill_info) (GdkPixbufFormat *info)
+{
+	static GdkPixbufModulePattern signature[] = {
+		{ "/* XPM */", NULL, 100 },
+		{ NULL, NULL, 0 }
+	};
+	static gchar * mime_types[] = {
+		"image/x-xpixmap",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"xpm",
+		NULL
+	};
+
+	info->name = "xpm";
+	info->signature = signature;
+	info->description = N_("The XPM image format");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = 0;
 }

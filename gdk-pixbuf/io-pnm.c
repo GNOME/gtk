@@ -53,8 +53,8 @@ typedef struct {
 } PnmIOBuffer;
 
 typedef struct {
-	ModuleUpdatedNotifyFunc updated_func;
-	ModulePreparedNotifyFunc prepared_func;
+	GdkPixbufModuleUpdatedFunc updated_func;
+	GdkPixbufModulePreparedFunc prepared_func;
 	gpointer user_data;
 	
 	GdkPixbuf *pixbuf;
@@ -81,9 +81,9 @@ typedef struct {
 } PnmLoaderContext;
 
 static GdkPixbuf   *gdk_pixbuf__pnm_image_load          (FILE *f, GError **error);
-static gpointer    gdk_pixbuf__pnm_image_begin_load     (ModuleSizeFunc size_func, 
-                                                         ModulePreparedNotifyFunc func, 
-							 ModuleUpdatedNotifyFunc func2,
+static gpointer    gdk_pixbuf__pnm_image_begin_load     (GdkPixbufModuleSizeFunc size_func, 
+                                                         GdkPixbufModulePreparedFunc func, 
+							 GdkPixbufModuleUpdatedFunc func2,
 							 gpointer user_data,
 							 GError **error);
 static gboolean    gdk_pixbuf__pnm_image_stop_load      (gpointer context, GError **error);
@@ -804,9 +804,9 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
  */
 
 static gpointer
-gdk_pixbuf__pnm_image_begin_load (ModuleSizeFunc size_func, 
-                                  ModulePreparedNotifyFunc prepared_func, 
-				  ModuleUpdatedNotifyFunc  updated_func,
+gdk_pixbuf__pnm_image_begin_load (GdkPixbufModuleSizeFunc size_func, 
+                                  GdkPixbufModulePreparedFunc prepared_func, 
+				  GdkPixbufModuleUpdatedFunc  updated_func,
 				  gpointer user_data,
 				  GError **error)
 {
@@ -1030,10 +1030,45 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 }
 
 void
-gdk_pixbuf__pnm_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (pnm, fill_vtable) (GdkPixbufModule *module)
 {
-  module->load = gdk_pixbuf__pnm_image_load;
-  module->begin_load = gdk_pixbuf__pnm_image_begin_load;
-  module->stop_load = gdk_pixbuf__pnm_image_stop_load;
-  module->load_increment = gdk_pixbuf__pnm_image_load_increment;
+	module->load = gdk_pixbuf__pnm_image_load;
+	module->begin_load = gdk_pixbuf__pnm_image_begin_load;
+	module->stop_load = gdk_pixbuf__pnm_image_stop_load;
+	module->load_increment = gdk_pixbuf__pnm_image_load_increment;
+}
+
+void
+MODULE_ENTRY (pnm, fill_info) (GdkPixbufFormat *info)
+{
+	static GdkPixbufModulePattern signature[] = {
+		{ "P1", NULL, 100 },
+		{ "P2", NULL, 100 },
+		{ "P3", NULL, 100 },
+		{ "P4", NULL, 100 },
+		{ "P5", NULL, 100 },
+		{ "P6", NULL, 100 },
+		{ NULL, NULL, 0 }
+	};
+	static gchar * mime_types[] = {
+		"image/x-portable-anymap",
+		"image/x-portable-bitmap",
+		"image/x-portable-graymap",
+		"image/x-portable-pixmap",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"pnm",
+		"pbm",
+		"pgm",
+		"ppm",
+		NULL
+	};
+
+	info->name = "pnm";
+	info->signature = signature;
+	info->description = N_("The PNM/PBM/PGM/PPM image format family");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = 0;
 }

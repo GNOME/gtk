@@ -24,7 +24,6 @@
 
 #include <config.h>
 #include <errno.h>
-#include "gdk-pixbuf-io.h"
 #include "gdk-pixbuf-private.h"
 #include "io-gif-animation.h"
 

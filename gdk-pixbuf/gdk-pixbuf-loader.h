@@ -81,7 +81,7 @@ GdkPixbuf *          gdk_pixbuf_loader_get_pixbuf    (GdkPixbufLoader *loader);
 GdkPixbufAnimation * gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader);
 gboolean             gdk_pixbuf_loader_close         (GdkPixbufLoader *loader,
                                                       GError         **error);
-
+GdkPixbufFormat     *gdk_pixbuf_loader_get_format    (GdkPixbufLoader *loader);
 
 G_END_DECLS
 

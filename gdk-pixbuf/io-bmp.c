@@ -1,3 +1,4 @@
+/* -*- mode: C; c-file-style: "linux" -*- */
 /* GdkPixbuf library - Windows Bitmap image loader
  *
  * Copyright (C) 1999 The Free Software Foundation
@@ -143,8 +144,8 @@ struct bmp_compression_state {
 /* Progressive loading */
 
 struct bmp_progressive_state {
-	ModulePreparedNotifyFunc prepared_func;
-	ModuleUpdatedNotifyFunc updated_func;
+	GdkPixbufModulePreparedFunc prepared_func;
+	GdkPixbufModuleUpdatedFunc updated_func;
 	gpointer user_data;
 
 	ReadState read_state;
@@ -181,9 +182,9 @@ struct bmp_progressive_state {
 };
 
 static gpointer
-gdk_pixbuf__bmp_image_begin_load(ModuleSizeFunc size_func,
-                                 ModulePreparedNotifyFunc prepared_func,
-				 ModuleUpdatedNotifyFunc updated_func,
+gdk_pixbuf__bmp_image_begin_load(GdkPixbufModuleSizeFunc size_func,
+                                 GdkPixbufModulePreparedFunc prepared_func,
+				 GdkPixbufModuleUpdatedFunc updated_func,
                                  gpointer user_data,
                                  GError **error);
 
@@ -475,9 +476,9 @@ decode_bitmasks (guchar *buf,
  */
 
 static gpointer
-gdk_pixbuf__bmp_image_begin_load(ModuleSizeFunc size_func,
-                                 ModulePreparedNotifyFunc prepared_func,
-				 ModuleUpdatedNotifyFunc updated_func,
+gdk_pixbuf__bmp_image_begin_load(GdkPixbufModuleSizeFunc size_func,
+                                 GdkPixbufModulePreparedFunc prepared_func,
+				 GdkPixbufModuleUpdatedFunc updated_func,
                                  gpointer user_data,
                                  GError **error)
 {
@@ -1045,9 +1046,36 @@ gdk_pixbuf__bmp_image_load_increment(gpointer data,
 }
 
 void
-gdk_pixbuf__bmp_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (bmp, fill_vtable) (GdkPixbufModule *module)
 {
-  module->begin_load = gdk_pixbuf__bmp_image_begin_load;
-  module->stop_load = gdk_pixbuf__bmp_image_stop_load;
-  module->load_increment = gdk_pixbuf__bmp_image_load_increment;
+	module->begin_load = gdk_pixbuf__bmp_image_begin_load;
+	module->stop_load = gdk_pixbuf__bmp_image_stop_load;
+	module->load_increment = gdk_pixbuf__bmp_image_load_increment;
 }
+
+void
+MODULE_ENTRY (bmp, fill_info) (GdkPixbufFormat *info)
+{
+	static GdkPixbufModulePattern signature[] = {
+		{ "BM", NULL, 100 },
+		{ NULL, NULL, 0 }
+	};
+	static gchar * mime_types[] = {
+		"image/bmp",
+		"image/x-bmp",
+		"image/x-MS-bmp",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"bmp",
+		NULL
+	};
+
+	info->name = "bmp";
+	info->signature = signature;
+	info->description = N_("The BMP image format");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = 0;
+}
+

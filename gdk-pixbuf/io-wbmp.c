@@ -1,3 +1,4 @@
+/* -*- mode: C; c-file-style: "linux" -*- */
 /* GdkPixbuf library - Wireless Bitmap image loader
  *
  * Copyright (C) 2000 Red Hat, Inc.
@@ -42,8 +43,8 @@ Known bugs:
 /* Progressive loading */
 
 struct wbmp_progressive_state {
-  ModulePreparedNotifyFunc prepared_func;
-  ModuleUpdatedNotifyFunc updated_func;
+  GdkPixbufModulePreparedFunc prepared_func;
+  GdkPixbufModuleUpdatedFunc updated_func;
   gpointer user_data;
 
   gboolean need_type : 1;
@@ -63,9 +64,9 @@ struct wbmp_progressive_state {
 };
 
 static gpointer
-gdk_pixbuf__wbmp_image_begin_load(ModuleSizeFunc size_func, 
-                                  ModulePreparedNotifyFunc prepared_func,
-				  ModuleUpdatedNotifyFunc updated_func,
+gdk_pixbuf__wbmp_image_begin_load(GdkPixbufModuleSizeFunc size_func, 
+                                  GdkPixbufModulePreparedFunc prepared_func,
+				  GdkPixbufModuleUpdatedFunc updated_func,
                                   gpointer user_data,
                                   GError **error);
 
@@ -82,9 +83,9 @@ static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
  */
 
 static gpointer
-gdk_pixbuf__wbmp_image_begin_load(ModuleSizeFunc size_func, 
-                                  ModulePreparedNotifyFunc prepared_func,
-                                  ModuleUpdatedNotifyFunc updated_func,
+gdk_pixbuf__wbmp_image_begin_load(GdkPixbufModuleSizeFunc size_func, 
+                                  GdkPixbufModulePreparedFunc prepared_func,
+                                  GdkPixbufModuleUpdatedFunc updated_func,
                                   gpointer user_data,
                                   GError **error)
 {
@@ -339,9 +340,33 @@ static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
 }
 
 void
-gdk_pixbuf__wbmp_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (wbmp, fill_vtable) (GdkPixbufModule *module)
 {
-  module->begin_load = gdk_pixbuf__wbmp_image_begin_load;
-  module->stop_load = gdk_pixbuf__wbmp_image_stop_load;
-  module->load_increment = gdk_pixbuf__wbmp_image_load_increment;
+	module->begin_load = gdk_pixbuf__wbmp_image_begin_load;
+	module->stop_load = gdk_pixbuf__wbmp_image_stop_load;
+	module->load_increment = gdk_pixbuf__wbmp_image_load_increment;
+}
+
+void
+MODULE_ENTRY (wbmp, fill_info) (GdkPixbufFormat *info)
+{
+	static GdkPixbufModulePattern signature[] = {
+		{ " ", "z", 1 }, 
+		{ NULL, NULL, 0 }
+	};
+	static gchar * mime_types[] = {
+		"image/vnd.wap.wbmp",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"wbmp",
+		NULL
+	};
+
+	info->name = "wbmp";
+	info->signature = signature;
+	info->description = N_("The WBMP image format");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = 0;
 }

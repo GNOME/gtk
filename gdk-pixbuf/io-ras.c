@@ -1,3 +1,4 @@
+/* -*- mode: C; c-file-style: "linux" -*- */
 /* GdkPixbuf library - SUNRAS image loader
  *
  * Copyright (C) 1999 The Free Software Foundation
@@ -67,8 +68,8 @@ struct rasterfile {
 /* Progressive loading */
 
 struct ras_progressive_state {
-	ModulePreparedNotifyFunc prepared_func;
-	ModuleUpdatedNotifyFunc updated_func;
+	GdkPixbufModulePreparedFunc prepared_func;
+	GdkPixbufModuleUpdatedFunc updated_func;
 	gpointer user_data;
 
 	gint HeaderSize;	/* The size of the header-part (incl colormap) */
@@ -94,9 +95,9 @@ struct ras_progressive_state {
 };
 
 static gpointer
-gdk_pixbuf__ras_image_begin_load(ModuleSizeFunc size_func,
-                                 ModulePreparedNotifyFunc prepared_func,
-				 ModuleUpdatedNotifyFunc updated_func,
+gdk_pixbuf__ras_image_begin_load(GdkPixbufModuleSizeFunc size_func,
+                                 GdkPixbufModulePreparedFunc prepared_func,
+				 GdkPixbufModuleUpdatedFunc updated_func,
 				 gpointer user_data,
                                  GError **error);
 static gboolean gdk_pixbuf__ras_image_stop_load(gpointer data, GError **error);
@@ -217,9 +218,9 @@ static gboolean RAS2State(struct rasterfile *RAS,
  */
 
 static gpointer
-gdk_pixbuf__ras_image_begin_load(ModuleSizeFunc size_func, 
-                                 ModulePreparedNotifyFunc prepared_func,
-				 ModuleUpdatedNotifyFunc updated_func,
+gdk_pixbuf__ras_image_begin_load(GdkPixbufModuleSizeFunc size_func, 
+                                 GdkPixbufModulePreparedFunc prepared_func,
+				 GdkPixbufModuleUpdatedFunc updated_func,
 				 gpointer user_data,
                                  GError **error)
 {
@@ -502,10 +503,35 @@ gdk_pixbuf__ras_image_load_increment(gpointer data,
 }
 
 void
-gdk_pixbuf__ras_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (ras, fill_vtable) (GdkPixbufModule *module)
 {
-  module->begin_load = gdk_pixbuf__ras_image_begin_load;
-  module->stop_load = gdk_pixbuf__ras_image_stop_load;
-  module->load_increment = gdk_pixbuf__ras_image_load_increment;
+	module->begin_load = gdk_pixbuf__ras_image_begin_load;
+	module->stop_load = gdk_pixbuf__ras_image_stop_load;
+	module->load_increment = gdk_pixbuf__ras_image_load_increment;
+}
+
+void
+MODULE_ENTRY (ras, fill_info) (GdkPixbufFormat *info)
+{
+	static GdkPixbufModulePattern signature[] = {
+		{ "\x59\xa6\x6a\x95", NULL, 100 },
+		{ NULL, NULL, 0 }
+	};
+	static gchar * mime_types[] = {
+		"image/x-cmu-raster",
+		"image/x-sun-raster",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"ras",
+		NULL
+	};
+
+	info->name = "ras";
+	info->signature = signature;
+	info->description = N_("The Sun raster image format");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = 0;
 }
 

@@ -23,7 +23,6 @@
 #include <config.h>
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-private.h"
-#include "gdk-pixbuf-i18n.h"
 #include <stdlib.h>
 #include <string.h>
 

@@ -27,7 +27,7 @@
 #ifndef GDK_PIXBUF_GIF_H
 #define GDK_PIXBUF_GIF_H
 
-#include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf-animation.h"
 
 typedef enum {
         /* Keep this frame and composite next frame over it */

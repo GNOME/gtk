@@ -243,6 +243,7 @@ INCLUDES = @STRIP_BEGIN@ 			\
 	-I$(top_srcdir) -I$(top_builddir) 	\
 	-I$(top_srcdir)/gdk-pixbuf 		\
 	-I$(top_builddir)/gdk-pixbuf 		\
+	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"	\
 	-DGTK_VERSION=\"@GTK_VERSION@\"		\
 	-DGTK_BINARY_VERSION=\"@GTK_BINARY_VERSION@\"	\
 	-DG_DISABLE_DEPRECATED			\
@@ -250,6 +251,7 @@ INCLUDES = @STRIP_BEGIN@ 			\
 	@INCLUDED_LOADER_DEFINE@ 		\
 	@GTK_DEBUG_FLAGS@			\
 	@GDK_PIXBUF_DEP_CFLAGS@			\
+	-DGDK_PIXBUF_ENABLE_BACKEND		\
 @STRIP_END@
 
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(loaderdir)\"" "-DBUILT_MODULES_DIR=\"$(srcdir)/.libs\""
@@ -258,9 +260,15 @@ LDADDS = libgdk_pixbuf-$(GTK_API_VERSION).la
 noinst_PROGRAMS = test-gdk-pixbuf
 test_gdk_pixbuf_LDADD = $(LDADDS)
 
-bin_PROGRAMS = gdk-pixbuf-csource
+bin_PROGRAMS = gdk-pixbuf-csource gdk-pixbuf-query-loaders
 gdk_pixbuf_csource_SOURCES = gdk-pixbuf-csource.c
 gdk_pixbuf_csource_LDADD = $(LDADDS)
+
+gdk_pixbuf_query_loaders_DEPENDENCIES = $(DEPS)
+gdk_pixbuf_query_loaders_LDADD = $(LDADDS)
+
+gdk_pixbuf_query_loaders_SOURCES = queryloaders.c
+
 
 #
 # manual pages to install
@@ -296,6 +304,8 @@ libgdk_pixbuf_2_0_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pi
 
 gdk_pixbuf_headers = 			\
 	gdk-pixbuf.h			\
+	gdk-pixbuf-io.h			\
+	gdk-pixbuf-animation.h		\
 	gdk-pixbuf-loader.h
 
 libgdk_pixbufinclude_HEADERS =  	\
@@ -305,7 +315,6 @@ libgdk_pixbufinclude_HEADERS =  	\
 	gdk-pixdata.h
 
 noinst_HEADERS = 		\
-	gdk-pixbuf-io.h		\
 	gdk-pixbuf-private.h
 
 gdk_pixbuf_built_headers = gdk-pixbuf-enum-types.h gdk-pixbuf-marshal.h
@@ -405,6 +414,37 @@ EXTRA_DIST =			\
 	pixbufloader_xbm.def		\
 	pixbufloader_tga.def
 
+if CROSS_COMPILING
+RUN_QUERY_LOADER_TEST=false
+else
+RUN_QUERY_LOADER_TEST=test -z "$(DESTDIR)"
+endif
+
+# Running this if cross compiling or if DESTDIR is set is going to
+# not work at all, so skip it
 install-data-local: install-ms-lib install-libtool-import-lib
+	@if $(RUN_QUERY_LOADER_TEST) ; then \
+	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
+	  $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders > $(DESTDIR)$(sysconfdir)/gtk-2.0/gdk-pixbuf.loaders ; \
+	else \
+	  echo "***" ; \
+	  echo "*** Warning: gdk-pixbuf.loaders not built" ; \
+	  echo "***" ; \
+	  echo "*** Generate this file manually on on host" ; \
+	  echo "*** system using gdk-pixbuf-query-loaders" ; \
+	  echo "***" ; \
+	fi
+
+all-local: gdk-pixbuf.loaders
+
+gdk-pixbuf.loaders:
+	if find . -name 'libpixbufloader-*.so' | grep 'so' > /dev/null ; then \
+          echo "Writing a gdk-pixbuf.loader file to use when running examples before installing gdk-pixbuf."; \
+	  GDK_PIXBUF_MODULEDIR=.libs $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders > ./gdk-pixbuf.loaders ;\
+	else \
+          echo "No dynamic modules found; will use only static modules for uninstalled example programs."; \
+	  touch gdk-pixbuf.loaders; \
+	fi
 
 uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
+

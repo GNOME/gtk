@@ -1,3 +1,4 @@
+/* -*- mode: C; c-file-style: "linux" -*- */
 /* GdkPixbuf library - Windows Icon/Cursor image loader
  *
  * Copyright (C) 1999 The Free Software Foundation
@@ -23,7 +24,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#undef DUMPBIH
+#define DUMPBIH
 /*
 
 Icons are just like BMP's, except for the header.
@@ -124,8 +125,8 @@ struct headerpair {
 };
 
 struct ico_progressive_state {
-	ModulePreparedNotifyFunc prepared_func;
-	ModuleUpdatedNotifyFunc updated_func;
+	GdkPixbufModulePreparedFunc prepared_func;
+	GdkPixbufModuleUpdatedFunc updated_func;
 	gpointer user_data;
 
 	gint HeaderSize;	/* The size of the header-part (incl colormap) */
@@ -160,9 +161,9 @@ struct ico_progressive_state {
 };
 
 static gpointer
-gdk_pixbuf__ico_image_begin_load(ModuleSizeFunc size_func,
-                                 ModulePreparedNotifyFunc prepared_func,
-				 ModuleUpdatedNotifyFunc updated_func,
+gdk_pixbuf__ico_image_begin_load(GdkPixbufModuleSizeFunc size_func,
+                                 GdkPixbufModulePreparedFunc prepared_func,
+				 GdkPixbufModuleUpdatedFunc updated_func,
 				 gpointer user_data,
                                  GError **error);
 static gboolean gdk_pixbuf__ico_image_stop_load(gpointer data, GError **error);
@@ -442,9 +443,9 @@ static void DecodeHeader(guchar *Data, gint Bytes,
  */
 
 static gpointer
-gdk_pixbuf__ico_image_begin_load(ModuleSizeFunc size_func,
-                                 ModulePreparedNotifyFunc prepared_func,
-				 ModuleUpdatedNotifyFunc updated_func,
+gdk_pixbuf__ico_image_begin_load(GdkPixbufModuleSizeFunc size_func,
+                                 GdkPixbufModulePreparedFunc prepared_func,
+				 GdkPixbufModuleUpdatedFunc updated_func,
 				 gpointer user_data,
                                  GError **error)
 {
@@ -840,9 +841,39 @@ gdk_pixbuf__ico_image_load_increment(gpointer data,
 }
 
 void
-gdk_pixbuf__ico_fill_vtable (GdkPixbufModule *module)
+MODULE_ENTRY (ico, fill_vtable) (GdkPixbufModule *module)
 {
-  module->begin_load = gdk_pixbuf__ico_image_begin_load;
-  module->stop_load = gdk_pixbuf__ico_image_stop_load;
-  module->load_increment = gdk_pixbuf__ico_image_load_increment;
+	module->begin_load = gdk_pixbuf__ico_image_begin_load;
+	module->stop_load = gdk_pixbuf__ico_image_stop_load;
+	module->load_increment = gdk_pixbuf__ico_image_load_increment;
 }
+
+void
+MODULE_ENTRY (ico, fill_info) (GdkPixbufFormat *info)
+{
+	static GdkPixbufModulePattern signature[] = {
+		{ "  \x1   ", "zz znz", 100 }, 
+		{ "  \x2   ", "zz znz", 100 },
+		{ NULL, NULL, 0 }
+	};
+	static gchar * mime_types[] = {
+		"image/x-icon",
+		NULL
+	};
+	static gchar * extensions[] = {
+		"ico",
+		"cur",
+		NULL
+	};
+
+	info->name = "ico";
+	info->signature = signature;
+	info->description = N_("The ICO image format");
+	info->mime_types = mime_types;
+	info->extensions = extensions;
+	info->flags = 0;
+}
+
+
+
+

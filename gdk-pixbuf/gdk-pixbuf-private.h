@@ -28,6 +28,9 @@
 #define GDK_PIXBUF_PRIVATE_H
 
 #include "gdk-pixbuf.h"
+#include "gdk-pixbuf-io.h"
+#include "gdk-pixbuf-i18n.h"
+#include <stdio.h>
 
 
 
@@ -74,70 +77,30 @@ struct _GdkPixbufClass {
 
 };
 
-typedef struct _GdkPixbufAnimationClass GdkPixbufAnimationClass;
+#ifdef GDK_PIXBUF_ENABLE_BACKEND
 
-#define GDK_PIXBUF_ANIMATION_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXBUF_ANIMATION, GdkPixbufAnimationClass))
-#define GDK_IS_PIXBUF_ANIMATION_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXBUF_ANIMATION))
-#define GDK_PIXBUF_ANIMATION_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_PIXBUF_ANIMATION, GdkPixbufAnimationClass))
+GdkPixbufModule *_gdk_pixbuf_get_module (guchar *buffer, guint size,
+                                         const gchar *filename,
+                                         GError **error);
+GdkPixbufModule *_gdk_pixbuf_get_named_module (const char *name,
+                                               GError **error);
+gboolean _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
+                                  GError **error);
 
-/* Private part of the GdkPixbufAnimation structure */
-struct _GdkPixbufAnimation {
-        GObject parent_instance;
+GdkPixbuf *_gdk_pixbuf_generic_image_load (GdkPixbufModule *image_module,
+					   FILE *f,
+					   GError **error);
 
-};
+GdkPixbufFormat *_gdk_pixbuf_get_format (GdkPixbufModule *image_module);
 
-struct _GdkPixbufAnimationClass {
-        GObjectClass parent_class;
-
-        gboolean                (*is_static_image)  (GdkPixbufAnimation *anim);
-
-        GdkPixbuf*              (*get_static_image) (GdkPixbufAnimation *anim);
-        
-        void                    (*get_size) (GdkPixbufAnimation *anim,
-                                             int                 *width,
-                                             int                 *height);
-        
-        GdkPixbufAnimationIter* (*get_iter) (GdkPixbufAnimation *anim,
-                                             const GTimeVal     *start_time);
-
-};
-
-
-
-typedef struct _GdkPixbufAnimationIterClass GdkPixbufAnimationIterClass;
-
-#define GDK_PIXBUF_ANIMATION_ITER_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXBUF_ANIMATION_ITER, GdkPixbufAnimationIterClass))
-#define GDK_IS_PIXBUF_ANIMATION_ITER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXBUF_ANIMATION_ITER))
-#define GDK_PIXBUF_ANIMATION_ITER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_PIXBUF_ANIMATION_ITER, GdkPixbufAnimationIterClass))
-
-struct _GdkPixbufAnimationIter {
-        GObject parent_instance;
-
-};
-
-struct _GdkPixbufAnimationIterClass {
-        GObjectClass parent_class;
-
-        int        (*get_delay_time)   (GdkPixbufAnimationIter *iter);
-
-        GdkPixbuf* (*get_pixbuf)       (GdkPixbufAnimationIter *iter);
-
-        gboolean (*on_currently_loading_frame) (GdkPixbufAnimationIter *iter);
-
-        gboolean (*advance)            (GdkPixbufAnimationIter *iter,
-                                        const GTimeVal         *current_time);
-};
-      
-
-GdkPixbufAnimation* gdk_pixbuf_non_anim_new (GdkPixbuf *pixbuf);
-
-
-
-/*  key/value pairs that can be attached by the pixbuf loader  */
-
-gboolean gdk_pixbuf_set_option  (GdkPixbuf   *pixbuf,
-                                 const gchar *key,
-                                 const gchar *value);
-
-
+#ifdef USE_GMODULE
+#define MODULE_ENTRY(type,function) function
+#else
+#define MODULE_ENTRY(type,function) _gdk_pixbuf__ ## type ## _ ## function
 #endif
+
+#endif /* GDK_PIXBUF_ENABLE_BACKEND */
+
+#endif /* GDK_PIXBUF_PRIVATE_H */
+
+
