@@ -1,3 +1,18 @@
+2005-03-21  Tor Lillqvist  <tml@novell.com>
+
+	* modules/engines/ms-windows/*.c: Silence gcc warnings (unused
+	variables, unhandled enum value in switch). Use g_object_unref()
+	instead of deprecated gdk_gc_unref() and gdk_drawable_unref().
+
+	* modules/engines/ms-windows/xp_theme.c (xp_theme_map_gtk_state): 
+	Add missing "case" keyword.
+
+	* modules/engines/ms-windows/Makefile.am: Link with -lgdi32
+	explicitly.
+
+	* gdk/win32/gdkim-win32.c: Remove bogus empty doc comment. Remove
+	unused variables. Add some casts to silence gcc.
+
 2005-03-20  Matthias Clasen  <mclasen@redhat.com>
 
 	Make PLT-reduction work with gcc4, and don't include
