@@ -2500,6 +2500,20 @@ gdk_window_set_icon_name (GdkWindow   *window,
   API_CALL (SetWindowText, (GDK_WINDOW_HWND (window), name));
 }
 
+GdkWindow *
+gdk_window_get_group (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD, NULL);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+  
+  g_warning ("gdk_window_get_group not yet implemented");
+
+  return NULL;
+}
+
 void          
 gdk_window_set_group (GdkWindow *window, 
 		      GdkWindow *leader)

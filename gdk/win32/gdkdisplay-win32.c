@@ -224,3 +224,12 @@ gdk_display_get_default_screen (GdkDisplay *display)
   return _gdk_screen;
 }
 
+GdkWindow *
+gdk_display_get_default_group (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  g_warning ("gdk_display_get_default_group not yet implemented");
+
+  return NULL;
+}

@@ -1709,3 +1709,9 @@ gdk_text_extents_wc (GdkFont        *font,
   if (descent)
     *descent = font->descent + 1;
 }
+
+GdkDisplay* 
+gdk_font_get_display (GdkFont* font)
+{
+  return _gdk_display;
+}

@@ -1,3 +1,32 @@
+2004-03-05  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdk.def: Add missing entries, thanks to J. Ali Harlow.
+
+	* gdk/win32/gdkcursor-win32.c (color_is_white): const-correctness.
+
+	(gdk_cursor_new_from_pixbuf): Copy of the non-Xcursor X11
+	implementation.
+
+	(gdk_display_supports_cursor_alpha,
+	gdk_display_supports_cursor_color): Dummy implementations.
+
+	(gdk_display_get_default_cursor_size,
+	gdk_display_get_maximal_cursor_size): Implement.
+
+	* gdk/win32/gdkdisplay-win32.c (gdk_display_get_default_group):
+	Dummy implementation.
+
+	* gdk/win32/gdkevents-win32.c (gdk_net_wm_supports): Dummy
+	implementation.
+
+	* gdk/win32/gdkfont-win32.c (gdk_font_get_display): Implement.
+
+	* gdk/win32/gdkinput-win32.c (gdk_input_motion_events): Remove,
+	not in API.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_get_group): Dummy
+	implementation.
+
 Fri Mar  5 18:00:36 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (new_folder_button_clicked): scroll

@@ -42,6 +42,7 @@ EXPORTS
 	gdk_cursor_get_type
 	gdk_cursor_new
 	gdk_cursor_new_for_display
+	gdk_cursor_new_from_pixbuf
 	gdk_cursor_new_from_pixmap
 	gdk_cursor_ref
 	gdk_cursor_type_get_type
@@ -63,8 +64,11 @@ EXPORTS
 	gdk_display_flush
 	gdk_display_get_core_pointer
 	gdk_display_get_default
+	gdk_display_get_default_cursor_size
+	gdk_display_get_default_group
 	gdk_display_get_default_screen
 	gdk_display_get_event
+	gdk_display_get_maximal_cursor_size
 	gdk_display_get_n_screens
 	gdk_display_get_name
 	gdk_display_get_pointer
@@ -87,6 +91,8 @@ EXPORTS
 	gdk_display_set_double_click_distance
 	gdk_display_set_double_click_time
 	gdk_display_set_pointer_hooks
+	gdk_display_supports_cursor_alpha
+	gdk_display_supports_cursor_color
 	gdk_display_sync
 	gdk_drag_abort
 	gdk_drag_action_get_type
@@ -129,6 +135,7 @@ EXPORTS
 	gdk_draw_string
 	gdk_draw_text
 	gdk_draw_text_wc
+	gdk_drawable_copy_to_image
 	gdk_drawable_get_clip_region
 	gdk_drawable_get_colormap
 	gdk_drawable_get_data
@@ -180,6 +187,7 @@ EXPORTS
 	gdk_font_equal
 	gdk_font_from_description
 	gdk_font_from_description_for_display
+	gdk_font_get_display
 	gdk_font_get_type
 	gdk_font_id
 	gdk_font_load
@@ -248,7 +256,6 @@ EXPORTS
 	gdk_input_add_full
 	gdk_input_condition_get_type
 	gdk_input_mode_get_type
-	gdk_input_motion_events
 	gdk_input_remove
 	gdk_input_set_extension_events
 	gdk_input_source_get_type
@@ -276,6 +283,7 @@ EXPORTS
 	gdk_list_visuals
 	gdk_mbstowcs
 	gdk_modifier_type_get_type
+	gdk_net_wm_supports
 	gdk_notify_startup_complete
 	gdk_notify_type_get_type
 	gdk_overlap_type_get_type
@@ -399,6 +407,9 @@ EXPORTS
 	gdk_set_use_xshm
 	gdk_setting_action_get_type
 	gdk_setting_get
+	gdk_spawn_command_line_on_screen
+	gdk_spawn_on_screen
+	gdk_spawn_on_screen_with_pipes
 	gdk_status_get_type
 	gdk_string_extents
 	gdk_string_height
@@ -421,7 +432,10 @@ EXPORTS
 	gdk_threads_enter
 	gdk_threads_init
 	gdk_threads_leave
+	gdk_threads_lock
 	gdk_threads_mutex
+	gdk_threads_set_lock_functions
+	gdk_threads_unlock
 	gdk_unicode_to_keyval
 	gdk_utf8_to_compound_text
 	gdk_utf8_to_compound_text_for_display
@@ -470,6 +484,7 @@ EXPORTS
 	gdk_window_get_events
 	gdk_window_get_frame_extents
 	gdk_window_get_geometry
+	gdk_window_get_group
 	gdk_window_get_internal_paint_info
 	gdk_window_get_origin
 	gdk_window_get_parent

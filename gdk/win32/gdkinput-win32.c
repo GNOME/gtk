@@ -639,21 +639,6 @@ gdk_input_get_root_relative_geometry (HWND w,
     *y_ret = rect.top;
 }
 
-GdkTimeCoord *
-gdk_input_motion_events (GdkWindow *window,
-			 guint32    deviceid,
-			 guint32    start,
-			 guint32    stop,
-			 gint      *nevents_return)
-{
-  g_return_val_if_fail (window != NULL, NULL);
-  if (GDK_WINDOW_DESTROYED (window))
-    return NULL;
-
-  *nevents_return = 0;
-  return NULL;		/* ??? */
-}
-
 void
 _gdk_input_configure_event (GdkWindow         *window)
 {

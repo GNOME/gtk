@@ -3446,3 +3446,9 @@ gdk_display_flush (GdkDisplay * display)
 
   /* Nothing */
 }
+
+gboolean
+gdk_net_wm_supports (GdkAtom property)
+{
+  return FALSE;
+}
