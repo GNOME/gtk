@@ -1,3 +1,9 @@
+Thu Feb 25 11:27:36 1999  Tim Janik  <timj@gtk.org>
+
+	* TODO: updates, i left the text widget related portions in there,
+	to serve as a guide line for things to watch out for when it gets
+	reimplemented.
+
 Thu Feb 25 09:50:38 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_request): don't add
