@@ -274,11 +274,11 @@ msgstr "Bitmap al schåle"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
-msgstr "normå"
+msgstr "normåles"
 
 #: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1945
 msgid "italic"
-msgstr "clintcheye"
+msgstr "clintcheyes"
 
 #: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1946
 msgid "oblique"
@@ -308,10 +308,10 @@ msgid "(nil)"
 msgstr "(nole)"
 
 msgid "heavy"
-msgstr ""
+msgstr "pezantes"
 
 msgid "extrabold"
-msgstr ""
+msgstr "foirt cråsses"
 
 msgid "bold"
 msgstr "cråsses"
@@ -323,19 +323,19 @@ msgid "medium"
 msgstr ""
 
 msgid "normal"
-msgstr "normå"
+msgstr "miernuwes"
 
 msgid "light"
-msgstr ""
+msgstr "ledjîres"
 
 msgid "extralight"
-msgstr ""
+msgstr "foirt ledjîres"
 
 msgid "thin"
-msgstr ""
+msgstr "tenès"
 
 msgid "regular"
-msgstr ""
+msgstr "normåles"
 
 #: gtk/gtkfontsel.c:1777
 msgid "The selected font is not available."
@@ -400,11 +400,11 @@ msgstr "Intreye"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
-msgstr "Nole usteye d' intreye"
+msgstr "Nole éndjin d' intreye"
 
 #: gtk/gtkinputdialog.c:237
 msgid "Device:"
-msgstr "Usteye:"
+msgstr "Éndjin:"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
