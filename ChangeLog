@@ -1,3 +1,10 @@
+Thu Feb 25 13:38:38 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_request): still
+	request the extra width or height if the corresponding scrollbar is
+	already visible (the change from 09:50 needs to apply to policy ==
+	GTK_POLICY_AUTOMATIC only).
+
 Thu Feb 25 11:27:36 1999  Tim Janik  <timj@gtk.org>
 
 	* TODO: updates, i left the text widget related portions in there,

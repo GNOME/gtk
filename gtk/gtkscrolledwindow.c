@@ -652,19 +652,19 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
 	}
     }
 
-  if ((scrolled_window->hscrollbar_policy == GTK_POLICY_AUTOMATIC) ||
+  if (scrolled_window->hscrollbar_policy == GTK_POLICY_AUTOMATIC ||
       GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar))
     {
       requisition->width = MAX (requisition->width, hscrollbar_requisition.width);
-      if (!extra_height)
+      if (!extra_height || GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar))
 	extra_height = SCROLLBAR_SPACING (scrolled_window) + hscrollbar_requisition.height;
     }
 
-  if ((scrolled_window->vscrollbar_policy == GTK_POLICY_AUTOMATIC) ||
+  if (scrolled_window->vscrollbar_policy == GTK_POLICY_AUTOMATIC ||
       GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar))
     {
       requisition->height = MAX (requisition->height, vscrollbar_requisition.height);
-      if (!extra_width)
+      if (!extra_width || GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar))
 	extra_width = SCROLLBAR_SPACING (scrolled_window) + vscrollbar_requisition.width;
     }
 
