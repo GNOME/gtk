@@ -1726,10 +1726,11 @@ gtk_widget_real_hide (GtkWidget *widget)
  * 
  * Utility function; intended to be connected to the "delete_event"
  * signal on a #GtkWindow. The function calls gtk_widget_hide() on its
- * argument, then returns %TRUE. If connected to "delete_event",
- * the result is that clicking the window manager close button for
- * will hide but not destroy the window. By default, GTK+ destroys
- * windows when "delete_event" is received.
+ * argument, then returns %TRUE. If connected to "delete_event", the
+ * result is that clicking the close button for a window (on the
+ * window frame, top right corner usually) will hide but not destroy
+ * the window. By default, GTK+ destroys windows when "delete_event"
+ * is received.
  * 
  * Return value: %TRUE
  **/

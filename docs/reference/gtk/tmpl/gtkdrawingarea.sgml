@@ -81,16 +81,27 @@ then get an expose event for the invalid region.
 </para>
 
 <para>
+The available routines for drawing are documented on the <link
+linkend="gdk-Drawing-Primitives">GDK Drawing Primitives</link> page.
+See also gdk_pixbuf_render_to_drawable() for drawing a #GdkPixbuf.
+</para>
+
+<para>
 To receive mouse events on a drawing area, you will need to enable
-them with gtk_widget_add_events(). To receive keyboard events, 
-you will need to set the #GTK_CAN_FOCUS flag on the drawing area, and
+them with gtk_widget_add_events(). To receive keyboard events, you
+will need to set the #GTK_CAN_FOCUS flag on the drawing area, and
 should probably draw some user-visible indication that the drawing
-area is focused. See gtk_paint_focus() for one way to draw focus.
+area is focused. Use the GTK_HAS_FOCUS() macro in your expose event
+handler to decide whether to draw the focus indicator. See
+gtk_paint_focus() for one way to draw focus.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+Sometimes #GtkImage is a useful alternative to a drawing area. 
+You can put a #GdkPixmap in the #GtkImage and draw to the #GdkPixmap, 
+calling gtk_widget_queue_draw() on the #GtkImage when you want to 
+refresh to the screen.
 </para>
 
 <!-- ##### STRUCT GtkDrawingArea ##### -->
@@ -110,6 +121,7 @@ Creates a new drawing area.
 
 <!-- ##### FUNCTION gtk_drawing_area_size ##### -->
 <para>
+(Use gtk_widget_set_size_request() instead.)
 Sets the size that the drawing area will request
 in response to a "size_request" signal. The 
 drawing area may actually be allocated a size

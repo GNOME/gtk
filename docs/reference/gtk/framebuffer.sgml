@@ -1,6 +1,6 @@
 <refentry id="gtk-framebuffer" revision="1 Jan 2002">
 <refmeta>
-<refentrytitle>Framebuffer</refentrytitle>
+<refentrytitle>Using GTK+ on the Framebuffer</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
@@ -8,7 +8,7 @@
 <refnamediv>
 <refname>Using GTK+ on the Framebuffer</refname>
 <refpurpose>
-Using embedded GTK+ on the Linux framebuffer
+Linux framebuffer aspects of using GTK+
 </refpurpose>
 </refnamediv>
 

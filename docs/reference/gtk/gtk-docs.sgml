@@ -153,6 +153,7 @@
 <!entity gtk-Resources SYSTEM "resources.sgml">
 <!entity gtk-Windows SYSTEM "windows.sgml">
 <!entity gtk-Framebuffer SYSTEM "framebuffer.sgml">
+<!entity gtk-X11 SYSTEM "x11.sgml">
 <!entity gtk-Questions SYSTEM "question_index.sgml">
 <!entity gtk-Changes-1-2 SYSTEM "changes-1.2.sgml">
 <!entity gtk-Changes-2-0 SYSTEM "changes-2.0.sgml">
@@ -249,6 +250,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     &gtk-Running;
     &gtk-Windows;
     &gtk-Framebuffer;
+    &gtk-X11;
     &gtk-Changes-1-2;
     &gtk-Changes-2-0;
     &gtk-Resources;
