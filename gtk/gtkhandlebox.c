@@ -47,9 +47,9 @@ static void gtk_handle_box_init           (GtkHandleBox      *handle_box);
 static void gtk_handle_box_set_arg        (GtkObject         *object,
 					   GtkArg            *arg,
 					   guint              arg_id);
-static void gtk_handle_box_get_arg       (GtkObject          *object,
-					  GtkArg             *arg,
-					  guint               arg_id);
+static void gtk_handle_box_get_arg        (GtkObject         *object,
+					   GtkArg            *arg,
+					   guint              arg_id);
 static void gtk_handle_box_destroy        (GtkObject         *object);
 static void gtk_handle_box_map            (GtkWidget         *widget);
 static void gtk_handle_box_unmap          (GtkWidget         *widget);
