@@ -1,5 +1,7 @@
 2004-12-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* gtk/gtkmenushell.c (gtk_menu_shell_select_submenu_first) 
 	(gtk_real_menu_shell_activate_current): Use 
 	_gtk_menu_item_popup_submenu() to make keynav into submenus work

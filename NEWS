@@ -45,9 +45,7 @@ Overview of Changes from GTK+ 2.4.x to GTK+ 2.6.0
   - Selection ownerchip change notification
   - API to handle text, image and file targets
   - Support text/plain target
-  - Support clipboard persistency. 
-    A sample clipboard manager implementation can be found at 
-    http://people.imendio.com/andersca/archives/clipboard-manager-0.3.tar.gz
+  - Support clipboard persistency
   - Support xdnd v5
   - Reduce clipboard timeout to 30 seconds
 
@@ -119,11 +117,10 @@ Overview of Changes from GTK+ 2.5.6 to GTK+ 2.6.0
 * Bug fixes [Kazuki IWAMOTO, Damon Chaplin, Matthias, Christian, 
   Michael Natterer, Jonathan Blandford, Manish Singh, John Finlay, 
   Robert Ögren, Mariano Suárez-Alvarez, Marco Pesenti Gritti,
-  Tommi Komulainen]
+  Tommi Komulainen, R. McFarland]
 * Documentation improvements [Matthias, Jay Camp, Paolo Borelli,
   David Lodge]
 * New and improved translations (bg,nb,no,nso,pt_BR,zh_CN)
-Bugs fixed: 160437,160376,159640, 160679,159498,111031,160826,160063,145463,159896,160911,101309,160936,161109,161050,160500,155944,161142,160838,160496,161172,160711,88532,161195,152483
 
 Overview of Changes from GTK+ 2.5.5 to GTK+ 2.5.6
 =================================================
