@@ -1,3 +1,9 @@
+Fri Oct 30 05:24:43 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/Makefile.am: cause the built sources to be rebuild when possible,
+ 	even with --include-deps:
+	$(libgtk_la_SOURCES): $(BUILT_SOURCES)
+
 Fri Oct 30 01:56:08 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkobject.c (gtk_object_remove_no_notify): renamed from

@@ -231,6 +231,9 @@ BUILT_SOURCES = \
 	gtkmarshal.c 			\
         gtkmarshal.h 
 
+# cause the built sources to be rebuild when possible, even with --include-deps
+$(libgtk_la_SOURCES): $(BUILT_SOURCES)
+
 # More headers to use when autogenerating.
 gdk_headers = \
 	../gdk/gdktypes.h \
@@ -270,10 +273,6 @@ gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl gtk.defs
 
 gtkmarshal.c gtkmarshal.h: @REBUILD@ gtkmarshal.list genmarshal.pl
 	srcdir=$(srcdir) INDENT=$(INDENT) $(PERL) $(srcdir)/genmarshal.pl
-
-# ???
-# special remake rules
-# makeenums.h: @REBUILD@ gtk.h gtkprivate.h
 
 libgtk_la_LDFLAGS = \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -release $(LT_RELEASE)
