@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
-"POT-Creation-Date: 2002-03-08 14:45-0500\n"
+"POT-Creation-Date: 2002-03-07 12:30+0100\n"
 "PO-Revision-Date: 2002-02-26 00:23+0100\n"
 "Last-Translator: Andra¾ Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: slovenian <sl@li.org>\n"
@@ -1728,28 +1728,28 @@ msgstr "Izbira veè datotek"
 msgid "Whether to allow multiple files to be selected."
 msgstr "Ali naj bo mo¾no izbrati veè datotek hrkrati."
 
-#: gtk/gtkfilesel.c:707
+#: gtk/gtkfilesel.c:695
 msgid "Folders"
 msgstr "Mape"
 
-#: gtk/gtkfilesel.c:711
+#: gtk/gtkfilesel.c:699
 msgid "Fol_ders"
 msgstr "_Mape"
 
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Datoteke"
 
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:734
 msgid "_Files"
 msgstr "_Datoteke"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
+#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2112
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Neberljiv imenik: %s"
 
-#: gtk/gtkfilesel.c:946
+#: gtk/gtkfilesel.c:934
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1760,25 +1760,25 @@ msgstr ""
 "voljo temu programu.\n"
 "Ste preprièani, da jo ¾elite izbrati."
 
-#: gtk/gtkfilesel.c:1076
+#: gtk/gtkfilesel.c:1064
 msgid "_New Folder"
 msgstr "_Nova mapa"
 
-#: gtk/gtkfilesel.c:1087
+#: gtk/gtkfilesel.c:1075
 msgid "De_lete File"
 msgstr "_Zbri¹i datoteko"
 
-#: gtk/gtkfilesel.c:1098
+#: gtk/gtkfilesel.c:1086
 msgid "_Rename File"
 msgstr "P_reimenuj datoteko"
 
-#: gtk/gtkfilesel.c:1358
+#: gtk/gtkfilesel.c:1346
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Ime mape \"%s\" vsebuje simbole, ki v imenih map niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilesel.c:1348
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1787,34 +1787,34 @@ msgstr ""
 "Napaka ob ustvarjanju mape \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1349 gtk/gtkfilesel.c:1585
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Verjetno ste uporabili simbole, ki niso dovoljeni v imenih datotek"
 
-#: gtk/gtkfilesel.c:1369
+#: gtk/gtkfilesel.c:1357
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Napaka ob ustvarjanju mape: \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1403
+#: gtk/gtkfilesel.c:1391
 msgid "New Folder"
 msgstr "Nova mapa"
 
-#: gtk/gtkfilesel.c:1418
+#: gtk/gtkfilesel.c:1406
 msgid "_Folder name:"
 msgstr "Ime _mape:"
 
-#: gtk/gtkfilesel.c:1444
+#: gtk/gtkfilesel.c:1432
 msgid "Create"
 msgstr "Ustvari"
 
-#: gtk/gtkfilesel.c:1485
+#: gtk/gtkfilesel.c:1473
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Ime datoteke \"%s\" vsebuje simbole, ki v imenih datotek niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1488
+#: gtk/gtkfilesel.c:1476
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1823,31 +1823,31 @@ msgstr ""
 "Napaka ob brisanju datoteke \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
+#: gtk/gtkfilesel.c:1478 gtk/gtkfilesel.c:1599
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Verjetno vsebuje simbole, ki v imenih datotek niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1499
+#: gtk/gtkfilesel.c:1487
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Napaka ob brisanju datoteke \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1542
+#: gtk/gtkfilesel.c:1530
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Resnièno zbri¹i datoteko \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1547
+#: gtk/gtkfilesel.c:1535
 msgid "Delete File"
 msgstr "Zbri¹i datoteko"
 
-#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1595
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Ime datoteke \"%s\" vsebuje simbole, ki v imenih datotek niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1583
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1856,7 +1856,7 @@ msgstr ""
 "Napaka ob preimenovanju datoteke v \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1609
+#: gtk/gtkfilesel.c:1597
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1865,29 +1865,29 @@ msgstr ""
 "Napaka ob preimenovanju datoteke \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1619
+#: gtk/gtkfilesel.c:1607
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Napaka ob preimenovanju datoteke \"%s\" v \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1654
 msgid "Rename File"
 msgstr "Preimenuj datoteko"
 
-#: gtk/gtkfilesel.c:1681
+#: gtk/gtkfilesel.c:1669
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Preimenuj datoteko \"%s\" v:"
 
-#: gtk/gtkfilesel.c:1712
+#: gtk/gtkfilesel.c:1700
 msgid "Rename"
 msgstr "Preimenuj"
 
-#: gtk/gtkfilesel.c:2103
+#: gtk/gtkfilesel.c:2091
 msgid "Selection: "
 msgstr "Izbira: "
 
-#: gtk/gtkfilesel.c:2981
+#: gtk/gtkfilesel.c:2969
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
@@ -1896,11 +1896,11 @@ msgstr ""
 "Imena datoteke %s ni bilo moè pretvoriti v UTF-8. Poskusite nastaviti "
 "okoljsko spremenljivko G_BROKEN__FILENAMES."
 
-#: gtk/gtkfilesel.c:3845
+#: gtk/gtkfilesel.c:3833
 msgid "Name too long"
 msgstr "Ime je predolgo"
 
-#: gtk/gtkfilesel.c:3847
+#: gtk/gtkfilesel.c:3835
 msgid "Couldn't convert filename"
 msgstr "Nisem mogel pretvoriti imena datoteke"
 
@@ -2503,7 +2503,7 @@ msgstr "Èe je RESNIÈNO, se ob pritisku na desni mi¹kin gumb prika¾e men"
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Ali naj imajo vsi uhlji enako velikost"
 
-#: gtk/gtknotebook.c:2436 gtk/gtknotebook.c:4692
+#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
 #, c-format
 msgid "Page %u"
 msgstr "Stran %u"
@@ -2886,11 +2886,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Ka¾i gumb za drugotni korak naprej na drugem koncu drsnika"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:519
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
 msgid "Horizontal Adjustment"
 msgstr "Vodoravna prilagoditev"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:527
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
 msgid "Vertical Adjustment"
 msgstr "Navpièna prilagoditev"
 
@@ -3199,7 +3199,7 @@ msgstr "_Kazalo"
 
 #: gtk/gtkstock.c:301
 msgid "_Italic"
-msgstr "Kur_zivna"
+msgstr "Po¹ev_na"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
@@ -3821,115 +3821,115 @@ msgstr "Naèin TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Naèin po katerem naj ureja TreeModelSort"
 
-#: gtk/gtktreeview.c:511
+#: gtk/gtktreeview.c:514
 msgid "TreeView Model"
 msgstr "Naèin TreeView"
 
-#: gtk/gtktreeview.c:512
+#: gtk/gtktreeview.c:515
 msgid "The model for the tree view"
 msgstr "Naèin za drevesni pogled"
 
-#: gtk/gtktreeview.c:520
+#: gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment for the widget"
 msgstr "Vodoravna prilagoditev za gradnik"
 
-#: gtk/gtktreeview.c:528
+#: gtk/gtktreeview.c:531
 msgid "Vertical Adjustment for the widget"
 msgstr "Navpièna prilagoditev za gradnik"
 
-#: gtk/gtktreeview.c:535 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Viden"
 
-#: gtk/gtktreeview.c:536
+#: gtk/gtktreeview.c:539
 msgid "Show the column header buttons"
 msgstr "Ka¾i gumbe glave stolpca"
 
-#: gtk/gtktreeview.c:543
+#: gtk/gtktreeview.c:546
 msgid "Headers Clickable"
 msgstr "Klikabilne glave"
 
-#: gtk/gtktreeview.c:544
+#: gtk/gtktreeview.c:547
 msgid "Column headers respond to click events"
 msgstr "Glave stolpcev se odzivajo na dogodke klikov"
 
-#: gtk/gtktreeview.c:551
+#: gtk/gtktreeview.c:554
 msgid "Expander Column"
 msgstr "Stolpec raz¹iritve"
 
-#: gtk/gtktreeview.c:552
+#: gtk/gtktreeview.c:555
 msgid "Set the column for the expander column"
 msgstr "Nastavi stolpec raz¹iritvenega stolpca"
 
-#: gtk/gtktreeview.c:559 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
 msgid "Reorderable"
 msgstr "Vnoviè uredljiv"
 
-#: gtk/gtktreeview.c:560
+#: gtk/gtktreeview.c:563
 msgid "View is reorderable"
 msgstr "Pogled je vnoviè uredljiv"
 
-#: gtk/gtktreeview.c:567
+#: gtk/gtktreeview.c:570
 msgid "Rules Hint"
 msgstr "Namig ravnil"
 
-#: gtk/gtktreeview.c:568
+#: gtk/gtktreeview.c:571
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Nastavi namig struju tem, da ri¹e vrstice izmenljivih barv"
 
-#: gtk/gtktreeview.c:575
+#: gtk/gtktreeview.c:578
 msgid "Enable Search"
 msgstr "Vkljuèi iskanje"
 
-#: gtk/gtktreeview.c:576
+#: gtk/gtktreeview.c:579
 msgid "View allows user to search through columns interactively"
 msgstr "Pogled dovoli uporabniku, da interaktivno i¹èe po stolpcih"
 
-#: gtk/gtktreeview.c:583
+#: gtk/gtktreeview.c:586
 msgid "Search Column"
 msgstr "I¹èi stolpec"
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:587
 msgid "Model column to search through when searching through code"
 msgstr "Stolpec skozi katerega naj se i¹èe ob iskanju skozi kodo"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:600
 msgid "Expander Size"
 msgstr "Velikost raz¹iritvene pu¹èice"
 
-#: gtk/gtktreeview.c:598
+#: gtk/gtktreeview.c:601
 msgid "Size of the expander arrow."
 msgstr "Velikost raz¹iritvene pu¹èice."
 
-#: gtk/gtktreeview.c:606
+#: gtk/gtktreeview.c:609
 msgid "Vertical Separator Width"
 msgstr "©irina navpiène loènice"
 
-#: gtk/gtktreeview.c:607
+#: gtk/gtktreeview.c:610
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "Navpièni prostor med celicami.  Mora biti sodo ¹tevilo."
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:618
 msgid "Horizontal Separator Width"
 msgstr "©irina vodoravne loènice"
 
-#: gtk/gtktreeview.c:616
+#: gtk/gtktreeview.c:619
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Vodoravni prostor med celicami.  Mora biti sodo ¹tevilo."
 
-#: gtk/gtktreeview.c:624
+#: gtk/gtktreeview.c:627
 msgid "Allow Rules"
 msgstr "Dovoli ravnila"
 
-#: gtk/gtktreeview.c:625
+#: gtk/gtktreeview.c:628
 msgid "Allow drawing of alternating color rows."
 msgstr "Dovoli risanje izmeniènih barv vrstic"
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:634
 msgid "Indent Expanders"
 msgstr "Zamakni raz¹irilnike"
 
-#: gtk/gtktreeview.c:632
+#: gtk/gtktreeview.c:635
 msgid "Make the expanders indented."
 msgstr "Naredi raz¹irilnike zamaknjene"
 
@@ -4237,8 +4237,7 @@ msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
 msgstr ""
-"Barva s katero se nari¹e drugotni kazalec vstavljanja, kadar se ureja me¹ano "
-"besedilo - skupaj desno-proti-levi in levo-proti desni."
+"Barva s katero se nari¹e drugotni kazalec vstavljanja, kadar se ureja me¹ano besedilo - skupaj desno-proti-levi in levo-proti desni."
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"
@@ -4468,7 +4467,7 @@ msgstr "Vnosni naèin X"
 #~ msgstr "nagnjena"
 
 #~ msgid "reverse italic"
-#~ msgstr "obratno kurzivna"
+#~ msgstr "obratno po¹evna"
 
 #~ msgid "reverse oblique"
 #~ msgstr "obratno nagnjena"
