@@ -286,6 +286,8 @@ gdk_event_is_allocated (GdkEvent *event)
 {
   if (event_hash)
     return g_hash_table_lookup (event_hash, event) != NULL;
+
+  return FALSE;
 }
  
 /**
@@ -414,7 +416,7 @@ gdk_event_free (GdkEvent *event)
       break;
     }
 
-  g_hash_table_remove (event_chunk, event);
+  g_hash_table_remove (event_hash, event);
   g_mem_chunk_free (event_chunk, event);
 }
 

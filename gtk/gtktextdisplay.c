@@ -395,16 +395,16 @@ render_layout_line (GdkDrawable        *drawable,
                                               pixbuf_rect.x, pixbuf_rect.y);
                     }
 
-                  gdk_pixbuf_render_to_drawable (pixbuf,
-                                                 drawable,
-                                                 render_state->fg_gc,
-                                                 draw_rect.x - pixbuf_rect.x,
-                                                 draw_rect.y - pixbuf_rect.y,
-                                                 draw_rect.x, draw_rect.y,
-                                                 draw_rect.width,
-                                                 draw_rect.height,
-                                                 GDK_RGB_DITHER_NORMAL,
-                                                 0, 0);
+                  gdk_draw_pixbuf (drawable,
+				   render_state->fg_gc,
+				   pixbuf,
+				   draw_rect.x - pixbuf_rect.x,
+				   draw_rect.y - pixbuf_rect.y,
+				   draw_rect.x, draw_rect.y,
+				   draw_rect.width,
+				   draw_rect.height,
+				   GDK_RGB_DITHER_NORMAL,
+				   0, 0);
 
                   if (mask)
                     {

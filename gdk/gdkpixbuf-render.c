@@ -22,7 +22,6 @@
 
 #include <config.h>
 #include <gdk/gdk.h>
-#include "gdkinternals.h" /* _gdk_draw_pixbuf() */
 #include "gdk-pixbuf-private.h"
 #include "gdkpixbuf.h"
 #include "gdkscreen.h"
@@ -164,6 +163,8 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
  * base position change, as in scrolling.  The dither matrix has to be shifted
  * for consistent visual results.  If you do not have any of these cases, the
  * dither offsets can be both zero.
+ *
+ * This function is obsolete. Use gdk_draw_pixbuf() instead.
  **/
 void
 gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
@@ -175,28 +176,9 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
 			       GdkRgbDither dither,
 			       int x_dither, int y_dither)
 {
-  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
-  g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
-  g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
-  g_return_if_fail (pixbuf->bits_per_sample == 8);
-
-  g_return_if_fail (drawable != NULL);
-
-  if (width == -1) 
-    width = pixbuf->width;
-  if (height == -1)
-    height = pixbuf->height;
-
-  g_return_if_fail (width >= 0 && height >= 0);
-  g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
-  g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
-
-  if (width == 0 || height == 0)
-    return;
-
-  _gdk_draw_pixbuf (drawable, gc, pixbuf,
-		    src_x, src_y, dest_x, dest_y, width, height,
-		    dither, x_dither, y_dither);
+  gdk_draw_pixbuf (drawable, gc, pixbuf,
+		   src_x, src_y, dest_x, dest_y, width, height,
+		   dither, x_dither, y_dither);
 }
 
 
@@ -224,6 +206,8 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
  *
  * On older X servers, rendering pixbufs with an alpha channel involves round trips
  * to the X server, and may be somewhat slow.
+ *
+ * This function is obsolete. Use gdk_draw_pixbuf() instead.
  **/
 void
 gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
@@ -236,9 +220,9 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
 				     GdkRgbDither       dither,
 				     int x_dither, int y_dither)
 {
-  _gdk_draw_pixbuf (drawable, NULL, pixbuf,
-		    src_x, src_y, dest_x, dest_y, width, height,
-		    dither, x_dither, y_dither);
+  gdk_draw_pixbuf (drawable, NULL, pixbuf,
+		   src_x, src_y, dest_x, dest_y, width, height,
+		   dither, x_dither, y_dither);
 }
 
 /**

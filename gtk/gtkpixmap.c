@@ -287,14 +287,14 @@ build_insensitive_pixmap (GtkPixmap *gtkpixmap)
   
   insensitive = gdk_pixmap_new (GTK_WIDGET (gtkpixmap)->window, w, h, -1);
 
-  gdk_pixbuf_render_to_drawable (stated,
-                                 insensitive,
-                                 GTK_WIDGET (gtkpixmap)->style->white_gc,
-                                 0, 0,
-                                 0, 0,
-                                 w, h,
-                                 GDK_RGB_DITHER_NORMAL,
-                                 0, 0);
+  gdk_draw_pixbuf (insensitive,
+		   GTK_WIDGET (gtkpixmap)->style->white_gc,
+		   stated,
+		   0, 0,
+		   0, 0,
+		   w, h,
+		   GDK_RGB_DITHER_NORMAL,
+		   0, 0);
 
   gtkpixmap->pixmap_insensitive = insensitive;
 

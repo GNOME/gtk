@@ -240,7 +240,7 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_lines = gdk_window_draw_lines;
   drawable_class->draw_glyphs = gdk_window_draw_glyphs;
   drawable_class->draw_image = gdk_window_draw_image;
-  drawable_class->_draw_pixbuf = gdk_window_draw_pixbuf;
+  drawable_class->draw_pixbuf = gdk_window_draw_pixbuf;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
   drawable_class->get_size = gdk_window_real_get_size;
@@ -1945,16 +1945,16 @@ gdk_window_draw_pixbuf (GdkDrawable     *drawable,
       if (private->paint_stack)
 	{
 	  GdkWindowPaint *paint = private->paint_stack->data;
-	  _gdk_draw_pixbuf (paint->pixmap, gc, pixbuf, src_x, src_y,
-			    dest_x - x_offset, dest_y - y_offset,
-			    width, height,
-			    dither, x_dither - x_offset, y_dither - y_offset);
+	  gdk_draw_pixbuf (paint->pixmap, gc, pixbuf, src_x, src_y,
+			   dest_x - x_offset, dest_y - y_offset,
+			   width, height,
+			   dither, x_dither - x_offset, y_dither - y_offset);
 	}
       else
-	_gdk_draw_pixbuf (private->impl, gc, pixbuf, src_x, src_y,
-			  dest_x - x_offset, dest_y - y_offset,
-			  width, height,
-			  dither, x_dither, y_dither);
+	gdk_draw_pixbuf (private->impl, gc, pixbuf, src_x, src_y,
+			 dest_x - x_offset, dest_y - y_offset,
+			 width, height,
+			 dither, x_dither, y_dither);
       
       RESTORE_GC (gc);
     }
@@ -1966,16 +1966,16 @@ gdk_window_draw_pixbuf (GdkDrawable     *drawable,
       if (private->paint_stack)
 	{
 	  GdkWindowPaint *paint = private->paint_stack->data;
-	  _gdk_draw_pixbuf (paint->pixmap, gc, pixbuf, src_x, src_y,
-			    dest_x - x_offset, dest_y - y_offset,
-			    width, height,
+	  gdk_draw_pixbuf (paint->pixmap, gc, pixbuf, src_x, src_y,
+			   dest_x - x_offset, dest_y - y_offset,
+			   width, height,
 			    dither, x_dither - x_offset, y_dither - y_offset);
 	}
       else
-	_gdk_draw_pixbuf (private->impl, gc, pixbuf, src_x, src_y,
-			  dest_x - x_offset, dest_y - y_offset,
-			  width, height,
-			  dither, x_dither, y_dither);
+	gdk_draw_pixbuf (private->impl, gc, pixbuf, src_x, src_y,
+			 dest_x - x_offset, dest_y - y_offset,
+			 width, height,
+			 dither, x_dither, y_dither);
     }
 }
 

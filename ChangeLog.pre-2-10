@@ -1,3 +1,29 @@
+Wed Oct  2 17:46:53 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdrawable.h gdk/gdkinternals.h gdk/gdkdraw.c
+	gdk/gdkwindow.c gdk/gdkdrawable.c: Export _gdk_draw_pixbuf
+	as gdk_draw_pixbuf(), rename the _draw_pixbuf virtual
+	function to draw_pixbuf. (#60582)
+
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_to_drawable[_alpha]):
+	Note that these functions are obsolete in the docs.
+
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_to_drawable): 
+	Remove all the sanity checks now we make it clear
+	that it is obsolete name for gdk_draw_pixbuf().
+
+	* gdk/gdkpixmap.c gtk/gtkcellrendererpixbuf.c gtk/gtkimage.c
+	  gtk/gtkpixmap.c demos/testpixbuf-scale.c demos/testpixbuf.c
+	  tests/testrgb.c: Use gdk_draw_pixbuf() everywhere.
+
+	* gtk/gtklabel.c (gtk_label_set_mnemonic_widget): Fix
+	some warnings.
+
+	* gdk/gdkinternals.h (struct _GdkEventPrivate): Fix missed
+	bit from last gdk_event_get_screen() change.
+
+	* gdk/gdkevents.c: Couple of small fixes.
+
 Wed Oct  2 17:36:42 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkevents.[ch] gdk/x11/gdkevents-x11.c: Add

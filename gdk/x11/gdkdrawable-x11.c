@@ -202,7 +202,7 @@ gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->draw_glyphs = gdk_x11_draw_glyphs;
   drawable_class->draw_image = gdk_x11_draw_image;
 #ifdef HAVE_XFT  
-  drawable_class->_draw_pixbuf = gdk_x11_draw_pixbuf;
+  drawable_class->draw_pixbuf = gdk_x11_draw_pixbuf;
 #endif /* HAVE_XFT */
   
   drawable_class->set_colormap = gdk_x11_set_colormap;
@@ -1339,10 +1339,10 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
       (dither == GDK_RGB_DITHER_MAX && gdk_drawable_get_depth (drawable) != 24))
     {
       GdkDrawable *wrapper = GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper;
-      GDK_DRAWABLE_CLASS (parent_class)->_draw_pixbuf (wrapper, gc, pixbuf,
-						       src_x, src_y, dest_x, dest_y,
-						       width, height,
-						       dither, x_dither, y_dither);
+      GDK_DRAWABLE_CLASS (parent_class)->draw_pixbuf (wrapper, gc, pixbuf,
+						      src_x, src_y, dest_x, dest_y,
+						      width, height,
+						      dither, x_dither, y_dither);
       return;
     }
 

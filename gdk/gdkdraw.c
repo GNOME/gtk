@@ -96,7 +96,7 @@ gdk_drawable_class_init (GdkDrawableClass *klass)
   /* Default implementation for clip and visible region is the same */
   klass->get_clip_region = gdk_drawable_real_get_visible_region;
   klass->get_visible_region = gdk_drawable_real_get_visible_region;
-  klass->_draw_pixbuf = gdk_drawable_real_draw_pixbuf;
+  klass->draw_pixbuf = gdk_drawable_real_draw_pixbuf;
 }
 
 /* Manipulation of drawables
@@ -584,7 +584,7 @@ gdk_draw_image (GdkDrawable *drawable,
 }
 
 /**
- * _gdk_draw_pixbuf:
+ * gdk_draw_pixbuf:
  * @drawable: Destination drawable.
  * @gc: a #GdkGC, used for clipping, or %NULL
  * @pixbuf: a #GdkPixbuf
@@ -607,7 +607,7 @@ gdk_draw_image (GdkDrawable *drawable,
  * to the X server, and may be somewhat slow.
  **/
 void
-_gdk_draw_pixbuf (GdkDrawable     *drawable,
+gdk_draw_pixbuf (GdkDrawable     *drawable,
 		  GdkGC           *gc,
 		  GdkPixbuf       *pixbuf,
 		  gint             src_x,
@@ -629,9 +629,9 @@ _gdk_draw_pixbuf (GdkDrawable     *drawable,
   if (height == -1)
     height = gdk_pixbuf_get_height (pixbuf);
 
-  GDK_DRAWABLE_GET_CLASS (drawable)->_draw_pixbuf (drawable, gc, pixbuf,
-						   src_x, src_y, dest_x, dest_y, width, height,
-						   dither, x_dither, y_dither);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_pixbuf (drawable, gc, pixbuf,
+						  src_x, src_y, dest_x, dest_y, width, height,
+						  dither, x_dither, y_dither);
 }
 
 void

@@ -155,8 +155,9 @@ typedef enum
 
 struct _GdkEventPrivate
 {
-  GdkEvent event;
-  guint    flags;
+  GdkEvent   event;
+  guint      flags;
+  GdkScreen *screen;
 };
 
 extern GdkEventFunc   _gdk_event_func;    /* Callback for events */
@@ -202,20 +203,6 @@ GdkImage *_gdk_image_get_scratch (GdkScreen *screen,
 				  gint	    *x,
 				  gint	    *y);
 
-/* Will most likely be exported in the future
- */
-void _gdk_draw_pixbuf            (GdkDrawable  *drawable,
-				  GdkGC        *gc,
-				  GdkPixbuf    *pixbuf,
-				  gint          src_x,
-				  gint          src_y,
-				  gint          dest_x,
-				  gint          dest_y,
-				  gint          width,
-				  gint          height,
-				  GdkRgbDither  dither,
-				  gint          x_dither,
-				  gint          y_dither);
 GdkImage *_gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 				       GdkImage     *image,
 				       gint          src_x,

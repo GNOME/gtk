@@ -151,12 +151,11 @@ testrgb_rgb_test (GtkWidget *drawing_area)
 	  pixbuf = gdk_pixbuf_new_from_data (buf + offset, GDK_COLORSPACE_RGB, TRUE,
 					     8, WIDTH, HEIGHT, WIDTH * 4,
 					     NULL, NULL);
-	  gdk_pixbuf_render_to_drawable_alpha (pixbuf, drawing_area->window,
-					       0, 0, 0, 0, WIDTH, HEIGHT,
-					       GDK_PIXBUF_ALPHA_FULL, /* ignored */
-					       0x80, /* ignored */
-					       GDK_RGB_DITHER_NORMAL,
-					       0, 0);
+	  gdk_draw_pixbuf (drawing_area->window, drawing_area->style->black_gc,
+			   pixbuf,
+			   0, 0, 0, 0, WIDTH, HEIGHT,
+			   GDK_RGB_DITHER_NORMAL,
+			   0, 0);
 	  gdk_pixbuf_unref (pixbuf);
 	}
       gdk_flush ();

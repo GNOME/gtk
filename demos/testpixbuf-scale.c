@@ -42,10 +42,10 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 			      interp_type, overall_alpha,
 			      event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
 
-  gdk_pixbuf_render_to_drawable (dest, widget->window, widget->style->fg_gc[GTK_STATE_NORMAL],
-				 0, 0, event->area.x, event->area.y,
-				 event->area.width, event->area.height,
-				 GDK_RGB_DITHER_NORMAL, event->area.x, event->area.y);
+  gdk_draw_pixbuf (widget->window, widget->style->fg_gc[GTK_STATE_NORMAL], dest,
+		   0, 0, event->area.x, event->area.y,
+		   event->area.width, event->area.height,
+		   GDK_RGB_DITHER_NORMAL, event->area.x, event->area.y);
   
   g_object_unref (dest);
   

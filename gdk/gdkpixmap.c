@@ -200,7 +200,7 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->draw_lines = gdk_pixmap_draw_lines;
   drawable_class->draw_glyphs = gdk_pixmap_draw_glyphs;
   drawable_class->draw_image = gdk_pixmap_draw_image;
-  drawable_class->_draw_pixbuf = gdk_pixmap_draw_pixbuf;
+  drawable_class->draw_pixbuf = gdk_pixmap_draw_pixbuf;
   drawable_class->get_depth = gdk_pixmap_real_get_depth;
   drawable_class->get_screen = gdk_pixmap_real_get_screen;
   drawable_class->get_size = gdk_pixmap_real_get_size;
@@ -402,9 +402,9 @@ gdk_pixmap_draw_pixbuf (GdkDrawable     *drawable,
 {
   GdkPixmapObject *private = (GdkPixmapObject *)drawable;
 
-  _gdk_draw_pixbuf (private->impl, gc, pixbuf,
-		    src_x, src_y, dest_x, dest_y, width, height,
-		    dither, x_dither, y_dither);
+  gdk_draw_pixbuf (private->impl, gc, pixbuf,
+		   src_x, src_y, dest_x, dest_y, width, height,
+		   dither, x_dither, y_dither);
 }
 
 static void
@@ -528,10 +528,10 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
     render_pixbuf = pixbuf;
 
   tmp_gc = gdk_gc_new (pixmap);
-  gdk_pixbuf_render_to_drawable (render_pixbuf, pixmap, tmp_gc, 0, 0, 0, 0,
-				 gdk_pixbuf_get_width (render_pixbuf),
-				 gdk_pixbuf_get_height (render_pixbuf),
-				 GDK_RGB_DITHER_NORMAL, 0, 0);
+  gdk_draw_pixbuf (pixmap, tmp_gc, render_pixbuf, 0, 0, 0, 0,
+		   gdk_pixbuf_get_width (render_pixbuf),
+		   gdk_pixbuf_get_height (render_pixbuf),
+		   GDK_RGB_DITHER_NORMAL, 0, 0);
   g_object_unref (tmp_gc);
 
   if (render_pixbuf != pixbuf)

@@ -1424,17 +1424,17 @@ gtk_image_expose (GtkWidget      *widget,
 
               if (pixbuf)
                 {
-                  gdk_pixbuf_render_to_drawable (pixbuf,
-						 widget->window,
-						 widget->style->black_gc,						 
-						 image_bound.x - x,
-						 image_bound.y - y,
-						 image_bound.x,
-						 image_bound.y,
-						 image_bound.width,
-						 image_bound.height,
-						 GDK_RGB_DITHER_NORMAL,
-						 0, 0);
+                  gdk_draw_pixbuf (widget->window,
+				   widget->style->black_gc,
+				   pixbuf,
+				   image_bound.x - x,
+				   image_bound.y - y,
+				   image_bound.x,
+				   image_bound.y,
+				   image_bound.width,
+				   image_bound.height,
+				   GDK_RGB_DITHER_NORMAL,
+				   0, 0);
 
                   g_object_unref (G_OBJECT (pixbuf));
                   pixbuf = NULL;

@@ -446,17 +446,16 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer    *cell,
   pix_rect.height -= cell->ypad * 2;
 
   if (gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
-    gdk_pixbuf_render_to_drawable_alpha (pixbuf,
-                                         window,
-                                         /* pixbuf 0, 0 is at pix_rect.x, pix_rect.y */
-                                         draw_rect.x - pix_rect.x,
-                                         draw_rect.y - pix_rect.y,
-                                         draw_rect.x,
-                                         draw_rect.y,
-                                         draw_rect.width,
-                                         draw_rect.height,
-                                         GDK_PIXBUF_ALPHA_FULL,
-                                         0,
-                                         GDK_RGB_DITHER_NORMAL,
-                                         0, 0);
+    gdk_draw_pixbuf (window,
+		     widget->style->black_gc,
+		     pixbuf,
+		     /* pixbuf 0, 0 is at pix_rect.x, pix_rect.y */
+		     draw_rect.x - pix_rect.x,
+		     draw_rect.y - pix_rect.y,
+		     draw_rect.x,
+		     draw_rect.y,
+		     draw_rect.width,
+		     draw_rect.height,
+		     GDK_RGB_DITHER_NORMAL,
+		     0, 0);
 }
