@@ -83,7 +83,7 @@ msgstr "Ta bort fil"
 
 #: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
 msgid "Rename File"
-msgstr "Döp om fil"
+msgstr "Ändra filnamn"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -120,7 +120,7 @@ msgstr "Ta bort"
 #. buttons
 #: gtk/gtkfilesel.c:1062
 msgid "Rename"
-msgstr "Döp om"
+msgstr "Ändra namn"
 
 #: gtk/gtkfilesel.c:1445
 msgid "Selection: "
