@@ -1,3 +1,12 @@
+1998-03-05  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gdk/gdkprivate.h: Changed the name of default_filters to
+	gdk_default_filters to avoid namespace pollution.  Yes, it just
+	happened to me.
+	* gdk/gdk.c (gdk_event_translate):
+	* gdk/gdkglobals.c: 
+	* gdk/gdkwindow.c (gdk_window_add_filter gdk_window_remove_filter): Likewise.
+
 Thu Mar  5 12:32:06 1998  Marc Ewing  <marc@redhat.com>
 
 	* gtk/gtkclist.c (select_row): emit UNselect on rows

@@ -49,4 +49,4 @@ gchar            *gdk_progclass = NULL;
 gint              gdk_error_code;
 gint              gdk_error_warnings = TRUE;
 gint              gdk_null_window_warnings = TRUE;
-GList            *default_filters = NULL;
+GList            *gdk_default_filters = NULL;

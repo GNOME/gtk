@@ -1713,7 +1713,7 @@ gdk_event_translate (GdkEvent *event,
     result = gdk_event_apply_filters (xevent, event,
 				      window_private
 				      ?window_private->filters
-				      :default_filters);
+				      :gdk_default_filters);
     
     if (result != GDK_FILTER_CONTINUE)
       {

@@ -251,7 +251,7 @@ extern gchar		*gdk_progclass;
 extern gint		 gdk_error_code;
 extern gint		 gdk_error_warnings;
 extern gint              gdk_null_window_warnings;
-extern GList            *default_filters;
+extern GList            *gdk_default_filters;
 
 /* Debugging support */
 

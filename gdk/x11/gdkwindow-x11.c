@@ -1482,7 +1482,7 @@ gdk_window_add_filter     (GdkWindow     *window,
   if(private)
     tmp_list = private->filters;
   else
-    tmp_list = default_filters;
+    tmp_list = gdk_default_filters;
 
   while (tmp_list)
     {
@@ -1499,7 +1499,7 @@ gdk_window_add_filter     (GdkWindow     *window,
   if(private)
     private->filters = g_list_append (private->filters, filter);
   else
-    default_filters = g_list_append (default_filters, filter);
+    gdk_default_filters = g_list_append (gdk_default_filters, filter);
 }
 
 void
@@ -1516,7 +1516,7 @@ gdk_window_remove_filter  (GdkWindow     *window,
   if(private)
     tmp_list = private->filters;
   else
-    tmp_list = default_filters;
+    tmp_list = gdk_default_filters;
 
   while (tmp_list)
     {
@@ -1528,7 +1528,7 @@ gdk_window_remove_filter  (GdkWindow     *window,
 	  if(private)
 	    private->filters = g_list_remove_link (private->filters, tmp_list);
 	  else
-	    default_filters = g_list_remove_link (default_filters, tmp_list);
+	    gdk_default_filters = g_list_remove_link (gdk_default_filters, tmp_list);
 	  g_list_free_1 (tmp_list);
 	  g_free (filter);
 	  
