@@ -15,7 +15,7 @@ typedef enum
 } GdkPropMode;
 
 GdkAtom gdk_atom_intern	    (const gchar *atom_name,
-			     gint	  only_if_exists);
+			     gboolean	  only_if_exists);
 gchar*	gdk_atom_name	    (GdkAtom atom);
 gboolean gdk_property_get   (GdkWindow	 *window,
 			     GdkAtom	  property,

@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_ARROW_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ARROW, GtkArrowClass))
 #define GTK_IS_ARROW(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_ARROW))
 #define GTK_IS_ARROW_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ARROW))
+#define GTK_ARROW_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_ARROW, GtkArrowClass))
 
 
 typedef struct _GtkArrow       GtkArrow;

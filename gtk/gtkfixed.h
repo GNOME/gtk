@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_FIXED_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FIXED, GtkFixedClass))
 #define GTK_IS_FIXED(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_FIXED))
 #define GTK_IS_FIXED_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FIXED))
+#define GTK_FIXED_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_FIXED, GtkFixedClass))
 
 
 typedef struct _GtkFixed        GtkFixed;

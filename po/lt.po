@@ -1,0 +1,503 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2000 Free Software Foundation, Inc.
+# Kæstutis Kruþikas <DrKestas@takas.lt>, 2000
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.3.0\n"
+"POT-Creation-Date: 2000-02-04 16:50+0100\n"
+"PO-Revision-Date: 2000-01-28 15:19+0100\n"
+"Last-Translator: Kæstutis Kruþikas <DrKestas@takas.lt>\n"
+"Language-Team: Lithuanian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-13\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gtk/gtkcolorsel.c:221
+msgid "Hue:"
+msgstr "Atspalvis:"
+
+#: gtk/gtkcolorsel.c:222
+msgid "Saturation:"
+msgstr "Tirðtumas:"
+
+#: gtk/gtkcolorsel.c:223
+msgid "Value:"
+msgstr "Pasirinkimas"
+
+#: gtk/gtkcolorsel.c:224
+msgid "Red:"
+msgstr "Raudona"
+
+#: gtk/gtkcolorsel.c:225
+msgid "Green:"
+msgstr "Þalia"
+
+#: gtk/gtkcolorsel.c:226
+msgid "Blue:"
+msgstr "Mëlyna"
+
+#: gtk/gtkcolorsel.c:227
+msgid "Opacity:"
+msgstr "Permatomumas:"
+
+#. The OK button
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:3763
+#: gtk/gtkgamma.c:416
+msgid "OK"
+msgstr "Gerai"
+
+#. The Cancel button
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:956
+#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3776
+#: gtk/gtkgamma.c:424
+msgid "Cancel"
+msgstr "Nutraukti"
+
+#: gtk/gtkcolorsel.c:1738
+msgid "Help"
+msgstr "Pagalba"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:514
+msgid "Directories"
+msgstr "Direktorijos"
+
+#. The files clist
+#: gtk/gtkfilesel.c:533
+msgid "Files"
+msgstr "Bylos"
+
+#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1639
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "Direktorija neprieinama: %s"
+
+#: gtk/gtkfilesel.c:635
+msgid "Create Dir"
+msgstr "Sukurti Dir"
+
+#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1029
+msgid "Delete File"
+msgstr "Iðtrinti bylà"
+
+#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1133
+msgid "Rename File"
+msgstr "Pervardinti bylà"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:822
+msgid "Error"
+msgstr "Klaida"
+
+#. close button
+#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
+msgid "Close"
+msgstr "Uþdaryti"
+
+#: gtk/gtkfilesel.c:920
+msgid "Create Directory"
+msgstr "Sukurti direktorijà"
+
+#: gtk/gtkfilesel.c:934
+msgid "Directory name:"
+msgstr "Direktorijos pav.:"
+
+#. buttons
+#: gtk/gtkfilesel.c:947
+msgid "Create"
+msgstr "Sukurti"
+
+#. buttons
+#: gtk/gtkfilesel.c:1051
+msgid "Delete"
+msgstr "Iðtrinti"
+
+#. buttons
+#: gtk/gtkfilesel.c:1166
+msgid "Rename"
+msgstr "Pervardinti"
+
+#: gtk/gtkfilesel.c:1618
+msgid "Selection: "
+msgstr "Pasirinkimas:"
+
+#: gtk/gtkfontsel.c:216
+msgid "Foundry:"
+msgstr "Iðlietas:"
+
+#: gtk/gtkfontsel.c:217
+msgid "Family:"
+msgstr "Rûðis"
+
+#: gtk/gtkfontsel.c:218
+msgid "Weight:"
+msgstr "Plotis"
+
+#: gtk/gtkfontsel.c:219
+msgid "Slant:"
+msgstr "Nuoþulnumas:"
+
+#: gtk/gtkfontsel.c:220
+msgid "Set Width:"
+msgstr "Nustatyti plotá:"
+
+#: gtk/gtkfontsel.c:221
+msgid "Add Style:"
+msgstr "Pridëti stiliø"
+
+#: gtk/gtkfontsel.c:222
+msgid "Pixel Size:"
+msgstr "Pikselio dydis:"
+
+#: gtk/gtkfontsel.c:223
+msgid "Point Size:"
+msgstr "Taðko dydis:"
+
+#: gtk/gtkfontsel.c:224
+msgid "Resolution X:"
+msgstr "Skir. geba X:"
+
+#: gtk/gtkfontsel.c:225
+msgid "Resolution Y:"
+msgstr "Skir. geba Y:"
+
+#: gtk/gtkfontsel.c:226
+msgid "Spacing:"
+msgstr "Tarpai:"
+
+#: gtk/gtkfontsel.c:227
+msgid "Average Width:"
+msgstr "Vidurkio plotis:"
+
+#: gtk/gtkfontsel.c:228
+msgid "Charset:"
+msgstr "Simboliø rûðis:"
+
+#. Number of internationalized titles here must match number
+#. of NULL initializers above
+#: gtk/gtkfontsel.c:472
+msgid "Font Property"
+msgstr "Ðriftø savybës"
+
+#: gtk/gtkfontsel.c:473
+msgid "Requested Value"
+msgstr "Reikalingas dydis"
+
+#: gtk/gtkfontsel.c:474
+msgid "Actual Value"
+msgstr "Esamas dydis"
+
+#: gtk/gtkfontsel.c:507
+msgid "Font"
+msgstr "Ðriftas"
+
+#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2209 gtk/gtkfontsel.c:2439
+msgid "Font:"
+msgstr "Ðriftas:"
+
+#: gtk/gtkfontsel.c:522
+msgid "Font Style:"
+msgstr "Ðrifto stilius:"
+
+#: gtk/gtkfontsel.c:527
+msgid "Size:"
+msgstr "Dydis:"
+
+#: gtk/gtkfontsel.c:659 gtk/gtkfontsel.c:881
+msgid "Reset Filter"
+msgstr "Nuimti filtrà:"
+
+#: gtk/gtkfontsel.c:673
+msgid "Metric:"
+msgstr "Metrinis:"
+
+#: gtk/gtkfontsel.c:677
+msgid "Points"
+msgstr "Taðkai"
+
+#: gtk/gtkfontsel.c:684
+msgid "Pixels"
+msgstr "Pikseliai"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:700
+msgid "Preview:"
+msgstr "Perþiûra:"
+
+#: gtk/gtkfontsel.c:729
+msgid "Font Information"
+msgstr "Informacija apie ðriftà"
+
+#: gtk/gtkfontsel.c:762
+msgid "Requested Font Name:"
+msgstr "Reikalingas ðrifto pav.:"
+
+#: gtk/gtkfontsel.c:773
+msgid "Actual Font Name:"
+msgstr "Esamas ðrifto pav.:"
+
+#: gtk/gtkfontsel.c:784
+#, c-format
+msgid "%i fonts available with a total of %i styles."
+msgstr "%i ðriftø prieinama, bendrai %i stiliuose."
+
+#: gtk/gtkfontsel.c:799
+msgid "Filter"
+msgstr "Filtras"
+
+#: gtk/gtkfontsel.c:812
+msgid "Font Types:"
+msgstr "Ðriftø tipai:"
+
+#: gtk/gtkfontsel.c:820
+msgid "Bitmap"
+msgstr "Pieðti"
+
+#: gtk/gtkfontsel.c:826
+msgid "Scalable"
+msgstr "Kintami"
+
+#: gtk/gtkfontsel.c:832
+msgid "Scaled Bitmap"
+msgstr "Kintami pieð."
+
+#: gtk/gtkfontsel.c:903
+msgid "*"
+msgstr "*"
+
+#. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1228
+msgid "(nil)"
+msgstr "(nil)"
+
+#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2708
+msgid "regular"
+msgstr "nustatytas"
+
+#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:2001
+msgid "italic"
+msgstr "italiðkas"
+
+#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:2002
+msgid "oblique"
+msgstr "áþambus"
+
+#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:2003
+msgid "reverse italic"
+msgstr "iðkreiptas italiðkas"
+
+#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:2004
+msgid "reverse oblique"
+msgstr "iðkreiptas áþambus"
+
+#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:2005
+msgid "other"
+msgstr "kita"
+
+#: gtk/gtkfontsel.c:1244
+msgid "[M]"
+msgstr "[M]"
+
+#: gtk/gtkfontsel.c:1245
+msgid "[C]"
+msgstr "[C]"
+
+#: gtk/gtkfontsel.c:1800
+msgid "The selected font is not available."
+msgstr "Pasirinktas ðriftas neprieinamas."
+
+#: gtk/gtkfontsel.c:1806
+msgid "The selected font is not a valid font."
+msgstr "Pasirinktas ðriftas negaliojantis"
+
+#: gtk/gtkfontsel.c:1867
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr "Èia yra 2 bitø ðriftas, kuris gali bûti blogai matomas."
+
+#: gtk/gtkfontsel.c:1989 gtk/gtkinputdialog.c:607
+msgid "(unknown)"
+msgstr "(neþinoma)"
+
+#: gtk/gtkfontsel.c:2000
+msgid "roman"
+msgstr "romaniðkas"
+
+#: gtk/gtkfontsel.c:2012
+msgid "proportional"
+msgstr "proporcinis"
+
+#: gtk/gtkfontsel.c:2013
+msgid "monospaced"
+msgstr "tarpinis"
+
+#: gtk/gtkfontsel.c:2014
+msgid "char cell"
+msgstr "simboliø laukai"
+
+#: gtk/gtkfontsel.c:2214
+msgid "Font: (Filter Applied)"
+msgstr "Ðriftas: (Prit. filtras)"
+
+#: gtk/gtkfontsel.c:2688
+msgid "heavy"
+msgstr ""
+
+#: gtk/gtkfontsel.c:2690
+msgid "extrabold"
+msgstr ""
+
+#: gtk/gtkfontsel.c:2692
+msgid "bold"
+msgstr ""
+
+#: gtk/gtkfontsel.c:2695
+msgid "demibold"
+msgstr ""
+
+#: gtk/gtkfontsel.c:2698
+msgid "medium"
+msgstr ""
+
+#: gtk/gtkfontsel.c:2700
+msgid "normal"
+msgstr ""
+
+#: gtk/gtkfontsel.c:2702
+#, fuzzy
+msgid "light"
+msgstr "Plotis"
+
+#: gtk/gtkfontsel.c:2704
+msgid "extralight"
+msgstr ""
+
+#: gtk/gtkfontsel.c:2706
+msgid "thin"
+msgstr ""
+
+#: gtk/gtkfontsel.c:2883
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "MAX_FONTS virðytas. Kai kuriø ðriftø gali nebûti"
+
+#: gtk/gtkfontsel.c:3770
+msgid "Apply"
+msgstr "Pritaikyti"
+
+#: gtk/gtkfontsel.c:3792
+msgid "Font Selection"
+msgstr "Ðriftø pasirinkimas"
+
+#: gtk/gtkgamma.c:396
+msgid "Gamma"
+msgstr "Gama"
+
+#: gtk/gtkgamma.c:403
+msgid "Gamma value"
+msgstr "Gama lygis"
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:200
+msgid "Input"
+msgstr "Ávedimas"
+
+#: gtk/gtkinputdialog.c:208
+msgid "No input devices"
+msgstr "Nera ávedimo árenginiø"
+
+#: gtk/gtkinputdialog.c:237
+msgid "Device:"
+msgstr "Árenginys:"
+
+#: gtk/gtkinputdialog.c:253
+msgid "Disabled"
+msgstr "Atjungtas"
+
+#: gtk/gtkinputdialog.c:261
+msgid "Screen"
+msgstr "Ekranas"
+
+#: gtk/gtkinputdialog.c:269
+msgid "Window"
+msgstr "Langas"
+
+#: gtk/gtkinputdialog.c:277
+msgid "Mode: "
+msgstr "Bûsena:"
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:307
+msgid "Axes"
+msgstr "Aðys"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:323
+msgid "Keys"
+msgstr "Raktai"
+
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:345
+msgid "Save"
+msgstr "Iðsaugoti"
+
+#: gtk/gtkinputdialog.c:500
+msgid "X"
+msgstr "X"
+
+#: gtk/gtkinputdialog.c:501
+msgid "Y"
+msgstr "Y"
+
+#: gtk/gtkinputdialog.c:502
+msgid "Pressure"
+msgstr "Matavimas"
+
+#: gtk/gtkinputdialog.c:503
+msgid "X Tilt"
+msgstr "X tilt"
+
+#: gtk/gtkinputdialog.c:504
+msgid "Y Tilt"
+msgstr "Y tilt"
+
+#: gtk/gtkinputdialog.c:544
+msgid "none"
+msgstr "nëra"
+
+#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+msgid "(disabled)"
+msgstr "(atjungta)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:692
+msgid "clear"
+msgstr "iðvalyti"
+
+#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
+#, c-format
+msgid "Page %u"
+msgstr "Puslapis %u"
+
+#: gtk/gtkrc.c:1785
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr "Neámanoma surasti pieðinio pixmap_nuorodoje: \"%s\" linija %d"
+
+#: gtk/gtkrc.c:1788
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Neámanoma rasti pieðinio pixmap_nuorodoje: \"%s\""
+
+#: gtk/gtkthemes.c:103
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "Neámanoma rasti uþkraunamo modulio modulio_nuorodoje: \"%s\","
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "-Nëra pagalbos-"

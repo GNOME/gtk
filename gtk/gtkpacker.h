@@ -42,7 +42,7 @@ extern "C" {
 #define GTK_PACKER_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PACKER, GtkPackerClass))
 #define GTK_IS_PACKER(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_PACKER))
 #define GTK_IS_PACKER_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PACKER))
-
+#define GTK_PACKER_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_PACKER, GtkPackerClass))
 
 
 typedef struct _GtkPacker           GtkPacker;

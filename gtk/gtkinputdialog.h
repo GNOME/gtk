@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_INPUT_DIALOG_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_INPUT_DIALOG, GtkInputDialogClass))
 #define GTK_IS_INPUT_DIALOG(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_INPUT_DIALOG))
 #define GTK_IS_INPUT_DIALOG_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_INPUT_DIALOG))
+#define GTK_INPUT_DIALOG_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_INPUT_DIALOG, GtkInputDialogClass))
 
 
 typedef struct _GtkInputDialog       GtkInputDialog;

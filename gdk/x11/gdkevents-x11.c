@@ -800,6 +800,14 @@ gdk_event_translate (GdkEvent *event,
 		g_message ("graphics expose:\tdrawable: %ld",
 			   xevent->xgraphicsexpose.drawable));
       
+      event->expose.type = GDK_EXPOSE;
+      event->expose.window = window;
+      event->expose.area.x = xevent->xgraphicsexpose.x;
+      event->expose.area.y = xevent->xgraphicsexpose.y;
+      event->expose.area.width = xevent->xgraphicsexpose.width;
+      event->expose.area.height = xevent->xgraphicsexpose.height;
+      event->expose.count = xevent->xexpose.count;
+      
       {
 	GdkRectangle expose_rect;
 
@@ -812,7 +820,6 @@ gdk_event_translate (GdkEvent *event,
 
 	return_val = FALSE;
       }
-
       break;
       
     case NoExpose:

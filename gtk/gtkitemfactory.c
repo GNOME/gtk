@@ -778,8 +778,8 @@ gtk_item_factory_dump_items (GtkPatternSpec	 *path_pspec,
 }
 
 void
-gtk_item_factory_print_func (gpointer FILE_pointer,
-			     gchar   *string)
+gtk_item_factory_print_func (gpointer     FILE_pointer,
+			     const gchar *string)
 {
   FILE *f_out = FILE_pointer;
 

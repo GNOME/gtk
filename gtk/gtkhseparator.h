@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_HSEPARATOR_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSEPARATOR, GtkHSeparatorClass))
 #define GTK_IS_HSEPARATOR(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_HSEPARATOR))
 #define GTK_IS_HSEPARATOR_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HSEPARATOR))
+#define GTK_HSEPARATOR_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_HSEPARATOR, GtkHSeparatorClass))
 
 
 typedef struct _GtkHSeparator       GtkHSeparator;

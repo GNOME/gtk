@@ -42,7 +42,7 @@ extern "C" {
 
 
 typedef void	(*GtkPrintFunc)		   (gpointer		 func_data,
-					    gchar		*str);
+					    const gchar		*str);
 typedef gchar * (*GtkTranslateFunc)	   (const gchar		*path,
 					    gpointer             func_data);
 typedef	void	(*GtkItemFactoryCallback)  ();
@@ -50,11 +50,12 @@ typedef	void	(*GtkItemFactoryCallback1) (gpointer		 callback_data,
 					    guint		 callback_action,
 					    GtkWidget		*widget);
 
-#define	GTK_TYPE_ITEM_FACTORY		 (gtk_item_factory_get_type ())
-#define	GTK_ITEM_FACTORY(object)	 (GTK_CHECK_CAST (object, GTK_TYPE_ITEM_FACTORY, GtkItemFactory))
-#define	GTK_ITEM_FACTORY_CLASS(klass)	 (GTK_CHECK_CLASS_CAST (klass, GTK_TYPE_ITEM_FACTORY, GtkItemFactoryClass))
-#define	GTK_IS_ITEM_FACTORY(object)	 (GTK_CHECK_TYPE (object, GTK_TYPE_ITEM_FACTORY))
-#define	GTK_IS_ITEM_FACTORY_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ITEM_FACTORY))
+#define GTK_TYPE_ITEM_FACTORY            (gtk_item_factory_get_type ())
+#define GTK_ITEM_FACTORY(object)         (GTK_CHECK_CAST ((object), GTK_TYPE_ITEM_FACTORY, GtkItemFactory))
+#define GTK_ITEM_FACTORY_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ITEM_FACTORY, GtkItemFactoryClass))
+#define GTK_IS_ITEM_FACTORY(object)      (GTK_CHECK_TYPE ((object), GTK_TYPE_ITEM_FACTORY))
+#define GTK_IS_ITEM_FACTORY_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ITEM_FACTORY))
+#define GTK_ITEM_FACTORY_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_ITEM_FACTORY, GtkItemFactoryClass))
 
 
 typedef	struct	_GtkItemFactory			GtkItemFactory;
@@ -172,7 +173,7 @@ void	gtk_item_factory_dump_rc	(const gchar		*file_name,
 					 GtkPatternSpec		*path_pspec,
 					 gboolean		 modified_only);
 void	gtk_item_factory_print_func	(gpointer		 FILE_pointer,
-					 gchar			*string);
+					 const gchar		*string);
 void	gtk_item_factory_create_item	(GtkItemFactory		*ifactory,
 					 GtkItemFactoryEntry	*entry,
 					 gpointer		 callback_data,

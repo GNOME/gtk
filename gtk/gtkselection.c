@@ -53,7 +53,14 @@
 
 #include <stdarg.h>
 #include <string.h>
-#include "gdkx.h"		/* For gdk_window_lookup() */
+#include "gdk.h"
+
+#if defined (GDK_WINDOWING_X11)
+#include "x11/gdkx.h"		/* For gdk_window_lookup() */
+#elif defined (GDK_WINDOWING_WIN32)
+#include "win32/gdkwin32.h"	/* For gdk_window_lookup() */
+#endif
+
 #include "gtkmain.h"
 #include "gtkselection.h"
 #include "gtksignal.h"

@@ -60,6 +60,9 @@ libgdk_x11_la_SOURCES =    \
 	gxid_lib.c	   \
 	gxid_lib.h	   \
 	gxid_proto.h	   \
+	gdkx.h		   \
+	gdkprivate-x11.h   \
+	gdkinputprivate.h  \
 	$(xinput_sources)
 
 EXTRA_PROGRAMS = gxid

@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_VBOX_CLASS(klass)	 (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VBOX, GtkVBoxClass))
 #define GTK_IS_VBOX(obj)	 (GTK_CHECK_TYPE ((obj), GTK_TYPE_VBOX))
 #define GTK_IS_VBOX_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VBOX))
+#define GTK_VBOX_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_VBOX, GtkVBoxClass))
 
 
 typedef struct _GtkVBox	      GtkVBox;

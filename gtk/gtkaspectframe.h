@@ -42,7 +42,7 @@ extern "C" {
 #define GTK_ASPECT_FRAME_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ASPECT_FRAME, GtkAspectFrameClass))
 #define GTK_IS_ASPECT_FRAME(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_ASPECT_FRAME))
 #define GTK_IS_ASPECT_FRAME_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ASPECT_FRAME))
-
+#define GTK_ASPECT_FRAME_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_ASPECT_FRAME, GtkAspectFrameClass))
 
 
 typedef struct _GtkAspectFrame       GtkAspectFrame;

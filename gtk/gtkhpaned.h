@@ -37,9 +37,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_HPANED(obj)          GTK_CHECK_CAST (obj, gtk_hpaned_get_type (), GtkHPaned)
-#define GTK_HPANED_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_hpaned_get_type (), GtkHPanedClass)
-#define GTK_IS_HPANED(obj)       GTK_CHECK_TYPE (obj, gtk_hpaned_get_type ())
+#define GTK_TYPE_HPANED		   (gtk_hpaned_get_type ())
+#define GTK_HPANED(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_HPANED, GtkHPaned))
+#define GTK_HPANED_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HPANED, GtkHPanedClass))
+#define GTK_IS_HPANED(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_HPANED))
+#define GTK_IS_HPANED_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HPANED))
+#define GTK_HPANED_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_HPANED, GtkHPanedClass))
 
 
 typedef struct _GtkHPaned       GtkHPaned;

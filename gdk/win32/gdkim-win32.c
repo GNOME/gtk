@@ -240,7 +240,7 @@ gdk_wcstombs (const GdkWChar *src)
  * must be null-terminated. If the conversion is failed, it returns
  * -1.
  *
- * On Win32, thr string is assumed to be in UTF-8.  Also note that
+ * On Win32, the string is assumed to be in UTF-8.  Also note that
  * GdkWChar is 32 bits, while wchar_t, and the wide characters the
  * Windows API uses, are 16 bits!
  */
@@ -391,4 +391,3 @@ gdk_nmbstowchar_ts (wchar_t     *dest,
 
   return n;
 }
-

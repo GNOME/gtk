@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_SCALE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_SCALE, GtkScaleClass))
 #define GTK_IS_SCALE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_SCALE))
 #define GTK_IS_SCALE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SCALE))
+#define GTK_SCALE_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_SCALE, GtkScaleClass))
 
 
 typedef struct _GtkScale        GtkScale;

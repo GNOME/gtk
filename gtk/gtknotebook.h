@@ -42,6 +42,8 @@ extern "C" {
 #define GTK_NOTEBOOK_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_NOTEBOOK, GtkNotebookClass))
 #define GTK_IS_NOTEBOOK(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_NOTEBOOK))
 #define GTK_IS_NOTEBOOK_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_NOTEBOOK))
+#define GTK_NOTEBOOK_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_NOTEBOOK, GtkNotebookClass))
+
 
 #define GTK_NOTEBOOK_PAGE(_glist_)         ((GtkNotebookPage *)((GList *)(_glist_))->data)
 

@@ -13,9 +13,6 @@ OPTIMIZE = -g -O
 
 CC = gcc -mno-cygwin -mpentium -fnative-struct
 
-CP = cp
-LD = ld
-
 GLIB_VER=1.3
 GTK_VER=1.3
 
@@ -52,13 +49,23 @@ gdk_win32_OBJECTS = \
 	gdkwindow-win32.o
 
 ../../config.h : ../../config.h.win32
-	$(CP) ../../config.h.win32 ../../config.h
+	cp ../../config.h.win32 ../../config.h
 
 ../gdkconfig.h : ../gdkconfig.h.win32
-	$(CP) ../gdkconfig.h.win32 ../gdkconfig.h
+	cp ../gdkconfig.h.win32 ../gdkconfig.h
 
-gdk-win32res.o : rc/gdk.rc
-	windres --include-dir rc rc/gdk.rc gdk-win32res.o
+# Kludge to get the path to the win32 headers
+WIN32APIHEADERS = $(shell echo "\#include <winver.h>" | $(CC) -M -E - | tail -1 | sed -e 's!/winver.h!!')
+
+gdk-win32res.o : rc/gdk.rc gdk-build.tmp
+	m4 -DBUILDNUMBER=`cat gdk-build.tmp` <rc/gdk.rc >gdk-win32res.rc
+	windres --include-dir rc --include-dir $(WIN32APIHEADERS) gdk-win32res.rc gdk-win32res.o
+	rm gdk-build.tmp gdk-win32res.rc
+
+# Magic to bump the build number
+gdk-build.tmp :
+	bash -c "read number && echo $$[number+1]" <gdk-build.stamp >gdk-build.tmp
+	cp gdk-build.tmp gdk-build.stamp
 
 libgdk-win32.a : $(gdk_win32_OBJECTS) 
 	-rm -f $@

@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_FILE_SELECTION_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_SELECTION, GtkFileSelectionClass))
 #define GTK_IS_FILE_SELECTION(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_FILE_SELECTION))
 #define GTK_IS_FILE_SELECTION_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_SELECTION))
+#define GTK_FILE_SELECTION_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_FILE_SELECTION, GtkFileSelectionClass))
 
 
 typedef struct _GtkFileSelection       GtkFileSelection;
@@ -86,7 +87,14 @@ GtkType    gtk_file_selection_get_type            (void);
 GtkWidget* gtk_file_selection_new                 (const gchar      *title);
 void       gtk_file_selection_set_filename        (GtkFileSelection *filesel,
 						   const gchar      *filename);
+/* This function returns the selected filename in the C runtime's
+ * multibyte string encoding, which may or may not be the same as that
+ * used by GDK (UTF-8). To convert to UTF-8, call g_filename_to_utf8().
+ * The returned string points to a statically allocated buffer and
+ * should be copied away.
+ */
 gchar*     gtk_file_selection_get_filename        (GtkFileSelection *filesel);
+
 void	   gtk_file_selection_complete		  (GtkFileSelection *filesel,
 						   const gchar	    *pattern);
 void       gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel);

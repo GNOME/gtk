@@ -215,7 +215,7 @@ GtkType
 gtk_gamma_curve_get_type (void)
 {
   static GtkType gamma_curve_type = 0;
-
+  
   if (!gamma_curve_type)
     {
       static const GtkTypeInfo gamma_curve_info =
@@ -229,9 +229,8 @@ gtk_gamma_curve_get_type (void)
         /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
-
-      gamma_curve_type =
-	gtk_type_unique (gtk_vbox_get_type (), &gamma_curve_info);
+      
+      gamma_curve_type = gtk_type_unique (GTK_TYPE_VBOX, &gamma_curve_info);
     }
   return gamma_curve_type;
 }
@@ -241,7 +240,7 @@ gtk_gamma_curve_class_init (GtkGammaCurveClass *class)
 {
   GtkObjectClass *object_class;
 
-  parent_class = gtk_type_class (gtk_vbox_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_VBOX);
 
   object_class = (GtkObjectClass *) class;
   object_class->destroy = gtk_gamma_curve_destroy;
@@ -458,7 +457,7 @@ curve_type_changed_callback (GtkWidget *w, gpointer data)
 GtkWidget*
 gtk_gamma_curve_new (void)
 {
-  return gtk_type_new (gtk_gamma_curve_get_type ());
+  return gtk_type_new (GTK_TYPE_GAMMA_CURVE);
 }
 
 static void

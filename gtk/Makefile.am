@@ -40,7 +40,9 @@ libgtk_la_LDFLAGS = @STRIP_BEGIN@ \
 #
 # setup source file variables
 #
-# GTK+ header files for public installation (non-generated)
+# GTK+ header files for public installation (non-generated, or generated
+# by configure)
+
 gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtk.h			\
 	gtkaccelgroup.h		\
@@ -61,6 +63,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkclist.h		\
 	gtkcolorsel.h		\
 	gtkcombo.h		\
+	gtkcompat.h		\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\

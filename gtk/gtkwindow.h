@@ -40,10 +40,11 @@ extern "C" {
 
 
 #define GTK_TYPE_WINDOW			(gtk_window_get_type ())
-#define GTK_WINDOW(obj)			(GTK_CHECK_CAST (obj, GTK_TYPE_WINDOW, GtkWindow))
-#define GTK_WINDOW_CLASS(klass)		(GTK_CHECK_CLASS_CAST (klass, GTK_TYPE_WINDOW, GtkWindowClass))
-#define GTK_IS_WINDOW(obj)		(GTK_CHECK_TYPE (obj, GTK_TYPE_WINDOW))
-#define GTK_IS_WINDOW_CLASS(klass)	(GTK_CHECK_CLASS_TYPE (klass, GTK_TYPE_WINDOW))
+#define GTK_WINDOW(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_WINDOW, GtkWindow))
+#define GTK_WINDOW_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_WINDOW, GtkWindowClass))
+#define GTK_IS_WINDOW(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_WINDOW))
+#define GTK_IS_WINDOW_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WINDOW))
+#define GTK_WINDOW_GET_CLASS(obj)       (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_WINDOW, GtkWindowClass))
 
 
 typedef struct _GtkWindow       GtkWindow;

@@ -23,6 +23,359 @@ Wed Nov 17 18:36:05 1999  Owen Taylor  <otaylor@redhat.com>
 Wed Nov 17 15:58:44 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkregion-x11.c (gdk_region_get_clipbox): Indentation fix.
+	
+2000-02-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkdraw.c (gdk_draw_segments): Move the test for no segments
+	before the assertion for non-NULL segment list.
+
+	* gdk/win32/gdkgc-win32.c: (gdk_win32_gc_values_to_win32values):
+	Seems that pattern brushes *must* be 8x8 pixels! At least on my
+	machine, but it might be display driver dependent. Sigh, so make
+	sure the stipple is that size. Does Windows suck or what?
+
+	* gdk/win32/gdkdrawable-win32.c: Improve error handling in a few
+	places.
+
+2000-02-13  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/x11/gdkcursor-x11.c (gdk_cursor_new_from_pixmap): init
+	refcount to 1
+	(gdk_cursor_new): init refcount to 1
+
+	* gdk/win32/gdkcursor-win32.c (gdk_cursor_new): init refcount to 1
+
+2000-02-13  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc-win32.c (gdk_gc_predraw): Add an extra parameter
+	so that we don't have to do unnecessary settings to the HDC.
+
+	* gdk/win32/gdkdrawable-win32.c
+	* gdk/win32/gdkimage-win32.c: Corresponding changes to the calls of
+	gdk_gc_predraw.
+
+	* gdk/win32/gdkdrawable-win32.c: Special-casing for GdkGCs where
+	the fill style is GDK_OPAQUE_STIPPLED. In those cases we construct
+	GDI paths, call WidenPath to get the outline of the stroken path,
+	and then fill the outline (with the brush that was built from the
+	stipple).
+
+	* gdk/win32/gdkgc-win32.c: Factor out common code from
+	_gdk_win32_gc_new and gdk_win32_gc_set_values into
+	gdk_win32_gc_values_to_win32values. Use correct colour for
+	SetBkColor() (Until now the code actually used a random colour in
+	the call to SetBkColor()... but that didn't show up as not many
+	GDI APIs use the background colour. Pattern (opaque stippled)
+	brushes do.)
+
+	* gdk/win32/gdkmain-win32.c (gdk_win32_last_error_string,
+	gdk_win32_api_failed): New functions for error logging.
+
+	* gdk/win32/gdkprivate-win32.h: Declare them, and define a macro
+	WIN32_API_FAILED to call them, passing function or file name and
+	line number.
+
+	* gdk/win32/*.c: Use the WIN32_API_FAILED macro.
+
+	* gdk/win32/gdkprivate-win32.h: Store just the pixel values from
+	GdkColor for foreground and background in GdkGCWin32Data.
+
+	* gdk/makefile.cygwin: Link in the resource object separately.
+
+	* gdk/win32/rc/gdk.rc
+	* gtk/gtk.rc (New file)
+	* gdk/win32/makefile.cygwin
+	* gtk/makefile.cygwin: Update build number in DLLs automatically,
+	as in GLib.
+
+Sun Feb 13 08:54:45 2000  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkcursor.h (struct _GdkCursor): s/refcount/ref_count/.
+	* gdk/x11/gdkcursor-x11.c (gdk_cursor_new_from_pixmap): 
+	* gdk/x11/gdkcursor-x11.c (_gdk_cursor_destroy): 
+	* gdk/gdkcursor.c (gdk_cursor_ref): insert assertments for the
+	parameters given and cursor->ref_count. coding style fixups.
+
+	* gtk/gtksocket.c (gtk_socket_class_init): parent class is GtkContainer,
+	not GtkWidget.
+	
+	* gtk/*.h: applied patch from Mathieu Lacage <lacage@email.enst.fr> to
+	fix up widget macros and add _GET_CLASS() variant.
+	
+	* gtk/*.c: some GtkType fixups.
+
+2000-02-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkproperty-win32.c
+	* gdk/x11/gdkproperty-x11.c: The assertions for GDK_IS_WINDOW
+	were reversed.
+
+2000-02-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkfont-win32.c (logfont_to_xlfd): Use
+	g_filename_to_utf8 to convert the font names Windows gives us from
+	whatever is the default codepage to UTF-8.
+	(gdk_font_load_internal) Use g_filename_from_utf8 for conversion
+	in the other direction.
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_set_values): Fix cut&paste
+	error in debugging output.
+
+2000-02-02  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_clear): Pass zero width
+	and height parameters to gdk_window_clear_area(). Not minus one.
+
+Wed Feb  2 11:58:05 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_selection_received): Add some sanity
+	checks if the widget passed to gtk_drag_get_data() was not the
+	dest widget.
+
+2000-02-01  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkfilesel.c: Use the g_filename_to_utf8 and
+	g_filename_from_utf8 functions (which were added a moment ago to
+	GLib). Some cleanups: Use gbooleans. Use GStrings instead of fixed
+	size buffers.
+
+	gtk_file_selection_get_filename returns the filename in the C
+	runtime encoding. It calls g_filename_from_utf8, but copies the
+	returned string to a static buffer, which is returned. I think
+	this is better than returning the result from g_filename_from_utf8
+	directly, which would mean all apps that use it would have to free
+	the return value. Or should this function care about this issue at
+	all? Maybe a new function with clearly defined semantics.
+
+	* gtk/gtkfilesel.h: Add comment about
+	gtk_file_selection_get_filename returning the filename in the C
+	runtime's encoding.
+
+	* README.win32
+	* gdk/gdk.def
+	* gdk/makefile.{cygwin,msc}
+	* gtk/gtk.def: Updates.
+
+	* gdk/gdkcursor-win32.c: Initialise refcount.
+
+2000-01-31  Yuan-Chung Cheng <platin@linux.org.tw>
+
+        * configure.in: Added "zh_CN.GB2312" to ALL_LINGUAS.
+
+2000-01-30  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/testgtk.c (set_cursor): use gdk_cursor_unref instead of
+	destroy
+
+	* gdk/gdkimage.c (gdk_image_ref): image wasn't being returned
+
+	* gdk/gdkprivate.h: declare _gdk_cursor_destroy which is then 
+	implemented in platform-specific code
+
+	* gdk/Makefile.am (gdk_c_sources): add gdkcursor.c
+
+	* gdk/x11/gdkcursor-x11.c (gdk_cursor_destroy): rename with an
+	underscore in front
+
+	* gdk/win32/gdkcursor-win32.c (gdk_cursor_destroy):
+	put an underscore in front
+
+	* gdk/gdkcursor.c: new file, implements
+	gdk_cursor_ref/gdk_cursor_unref
+
+	* gdk/gdkcursor.h: Refcount GdkCursor
+
+	* gdk/gdkcompat.h (gdk_cursor_destroy): compat
+
+2000-01-29  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkwindow.h
+	* gdk/gdkpixmap.h: Remove prototypes for renamed functions.
+
+Tue Jan 25 11:43:21 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkinvisible.h (struct _GtkInvisible[Class]): Fix
+	structures to properly inherit from GtkWidget not GtkBin.
+
+Sun Jan 23 20:28:24 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk+.spec.in: Added lib/gtk+/include/* to %files
+	(bug #5178 - Peter Wainright)
+	
+	* gtk/Makefile.am (gtk_public_h_sources): Add gtkcompat.h
+	so that it will be installed.
+	(bug #4889 - "david d `zoo' zuhn" <zoo@mnnr.org>)
+
+Fri Jan 21 16:29:28 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.[ch] docs/Changes-1.4.txt: Make the @detail argument
+	for the GtkStyleClass vtable const.
+
+	* gtk/gtkitemfactory.[ch] docs/Changes-1.4.txt: Make GtkPrintFunc
+	take a const string argument like GtkTranslateFunc. This will
+	require changes in use code.
+
+2000-01-19  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_clear_area): The correct
+	semantics (to mimic the X11 backend, which just calls XClearArea)
+	is to check for zero width (and height), and in that case use the
+	window's width minus x (height minus y). This fixes for instance
+	some redraw problems with gtkclist, which were easily noticeable
+	in the gtk file selection widget.
+
+	(gdk_window_new): Don't set WS_EX_TOPMOST for dialog
+	windows.
+
+2000-01-13  Tor Lillqvist  <tml@iki.fi>
+
+	* configure.in
+	* gdk/Makefile.am
+	* gdk/x11/Makefile.am
+	* gdk/win32/Makefile.am: Small fixes, thanks to Peter Wainwright
+	(bug #5177).
+	* gdk/win32/gdkcc-win32.c: Reintroduce, to be thrown
+	out later.
+
+2000-01-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Ignore
+	WM_MOVE for iconified or invisible windows. This fixes various
+	problems when minimising windows. Thanks to Bernd Herd.
+
+2000-01-05  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkdraw.c (gdk_draw_lines): Fix copy&paste error: Call the
+	backend's draw_lines method, not draw_points.
+
+2000-01-02  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c: Clean up some more leftovers from
+	before Owen's reorganisation: Don't have queued_events and
+	queued_tail statics in this file, but use gdk_queued_events and
+	gdk_queued_tail. This makes exposure event compression work again.
+
+	(gdk_WindowProc): Comment out a posting of gdk_ping_msg, doesn't
+	seem to be needed?
+
+1999-12-30  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdk.c: If we don't HAVE_XCONVERTCASE we must #include
+	gdkkeysyms.h to get the GDK_* keysym constants that are needed by
+	gdk_keyval_convert_case(). Otherwise, gdk_keyval_convert_case()
+	doesn't do anything.
+
+	* gdk/gdk.def: Add gdk_xid_table_insert.
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkevents-win32.c
+	* gdk/win32/gdkinput-win32.c
+	
+	* gdk/win32/gdkwindow-win32.c: Remove the superfluous
+	extension_events field in the GdkWindowWin32Data struct. Use only
+	the extension_events field in GdkWindowPrivate. Previously one was
+	set, and the other one tested, which broke tablet
+	functionality. Thanks to Keishi Suenaga for pointing this out.
+
+1999-12-18  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkfont-win32.c (gdk_text_size, gdk_text_extents):
+	When handling a single character (text length == 1), don't handle
+	it as if it was UTF-8.
+
+1999-12-11  Tor Lillqvist  <tml@iki.fi>
+
+	* Makefile.am: Distribute README.win32.
+	
+	* gdk/Makefile.am
+	* gdk/win32/Makefile.am: Distribute Win32 files.
+
+	* gdk/makefile.msc: New file.
+
+	* gdk/gdk.c (gdk_arg_context_parse): Fix gccism (no statement
+	after label).
+
+	* gdk/gdkprivate.h: Must mark also gdk_error_warnings and
+	gdk_error_code as GDKVAR, as they are referred outside GDK.
+
+	* gdk/win32/makefile.msc: Update.
+
+	* gdk/win32/gdkfont-win32.c (check_unicode_subranges): More
+	tweaks. Check only if at least one of those Unicode subrange bits
+	we care for is set. If no code page bits are set, guess (wildly)
+	based on the charset.
+
+	* gdk/win32/gdkinput-win32.c: Remove debugging leftover.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new): Assure title is
+	non-NULL.
+
+	* gtk/gtkdnd.c
+	* gtk/gtklayout.c
+	* gtk/gtkplug.c
+	* gtk/gtkselection.c
+	* gtk/gtksocket.c
+	* gtk/gtkwindow.c: Include x11/gdkx.h *or* win32/gdkwin32.c as
+	appropriate. There must be a cleaner way to handle this?
+
+	* gtk/gtkrc.c: Must include windows.h on Win32.
+
+	* gtk/testgtk.c: No need to include gdkx.h.
+
+	* gtk/makefile.cygwin: Correct invokation of genmarshal.pl.
+
+1999-12-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkfont-win32.c: Fix string measurement code. For now,
+	the rbearing is set to the same as the width, but this should be
+	fixed.
+
+1999-12-06  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkfont-win32.c (check_unicode_subranges): New
+	function. If Windows doesn't tell us what Unicode subranges a font
+	covers, guesstimate based on the codepages it covers. This will
+	hopefully help those Windows versions or fonts that don't give us
+	any useful Unicode subrange information with GetTextCharsetInfo.
+	Call this function in gdk_font_load_internal.
+
+	* gdk/win32/{gdkdnd,gdkimage,gdkpixmap,gdkprivate}-win32.c: Misc
+	minor changes.
+
+Fri Dec  3 14:09:50 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkoptionmenu.[ch] (gtk_option_menu_get_history):
+	New function, long needed.
+
+Wed Dec  1 22:35:43 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkproperty.h x11/gdkproperty.c: Change 
+	only_if_exists argument of gdk_atom_intern to
+	bool.
+
+1999-11-25  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkgc.c (gdk_gc_set_ts_origin, gdk_gc_set_clip_origin): 
+	Fix two copy&paste errors.
+
+	* gdk/makefile.cygwin: Also rebuild DLL when the static archive in
+	win32 has changed.
+
+	* gdk/win32/gdkprivate-win32.h: Don't need CPINFO in the
+	GdkWin32SingleFont struct.
+
+	* gdk/win32/gdkfont-win32.c: Some more debugging: Print Unicode
+	subranges of loaded fonts. Clear font signature first, in case
+	GetTextCharsetInfo fails. Pretend SYMBOL_CHARSET fonts have
+	ASCII+Basic Latin (i.e. 0x40--0xFF) as they are single-byte.
+
+	* gdk/win32/gdkgc-win32.c: Improved logging. (gdk_gc_postdraw):
+	Unoffset clip region.
+
+1999-11-23  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): set
+	event->any.window before calling filter functions.
 
 Fri Nov 19 10:34:41 1999  Owen Taylor  <otaylor@redhat.com>
 

@@ -65,7 +65,7 @@ gtk_vruler_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      vruler_type = gtk_type_unique (gtk_ruler_get_type (), &vruler_info);
+      vruler_type = gtk_type_unique (GTK_TYPE_RULER, &vruler_info);
     }
 
   return vruler_type;
@@ -99,7 +99,7 @@ gtk_vruler_init (GtkVRuler *vruler)
 GtkWidget*
 gtk_vruler_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_vruler_get_type ()));
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_VRULER));
 }
 
 

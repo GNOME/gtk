@@ -13,6 +13,12 @@ gtk\makefile.msc (or makefile.cygwin).
 See the README.win32 file in the GLib distribution for instructions
 how to build with gcc.
 
+To use GTk+ on Win32, you also need either of the above mentioned
+compilers. Other compilers might work, but don't count on it.  The
+same instructions on how to set up a correct version of gcc should
+also be followed if you want to build applications that use GTk+ with
+gcc.
+
 The tablet support uses the Wintab API. The Wintab development kit can
 be downloaded from http://www.pointing.com. If you don't care for
 that, undefine HAVE_WINTAB in config.h.win32 and remove references to

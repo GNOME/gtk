@@ -53,12 +53,6 @@ GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d
 					 GdkBitmap  **mask,
 					 GdkColor    *transparent_color,
 					 gchar     **data);
-GdkPixmap *gdk_pixmap_ref		(GdkPixmap  *pixmap);
-void	   gdk_pixmap_unref		(GdkPixmap  *pixmap);
-
-GdkBitmap *gdk_bitmap_ref		(GdkBitmap  *pixmap);
-void	   gdk_bitmap_unref		(GdkBitmap  *pixmap);
-
 
 #ifdef __cplusplus
 }

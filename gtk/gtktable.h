@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_TABLE_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TABLE, GtkTableClass))
 #define GTK_IS_TABLE(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_TABLE))
 #define GTK_IS_TABLE_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TABLE))
+#define GTK_TABLE_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TABLE, GtkTableClass))
 
 
 typedef struct _GtkTable	GtkTable;

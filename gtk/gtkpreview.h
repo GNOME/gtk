@@ -41,6 +41,7 @@ extern "C" {
 #define GTK_PREVIEW_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PREVIEW, GtkPreviewClass))
 #define GTK_IS_PREVIEW(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_PREVIEW))
 #define GTK_IS_PREVIEW_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PREVIEW))
+#define GTK_PREVIEW_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_PREVIEW, GtkPreviewClass))
 
 
 typedef struct _GtkPreview       GtkPreview;

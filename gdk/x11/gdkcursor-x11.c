@@ -43,19 +43,29 @@ gdk_cursor_new (GdkCursorType cursor_type)
   private->xcursor = xcursor;
   cursor = (GdkCursor*) private;
   cursor->type = cursor_type;
-
+  cursor->ref_count = 1;
+  
   return cursor;
 }
 
 GdkCursor*
-gdk_cursor_new_from_pixmap (GdkPixmap *source, GdkPixmap *mask, GdkColor *fg, GdkColor *bg, gint x, gint y)
+gdk_cursor_new_from_pixmap (GdkPixmap *source,
+			    GdkPixmap *mask,
+			    GdkColor  *fg,
+			    GdkColor  *bg,
+			    gint       x,
+			    gint       y)
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;
   Pixmap source_pixmap, mask_pixmap;
   Cursor xcursor;
   XColor xfg, xbg;
-  
+
+  g_return_val_if_fail (source != NULL, NULL);
+  g_return_val_if_fail (fg != NULL, NULL);
+  g_return_val_if_fail (bg != NULL, NULL);
+
   source_pixmap = GDK_DRAWABLE_XID (source);
   mask_pixmap   = GDK_DRAWABLE_XID (mask);
 
@@ -74,16 +84,18 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source, GdkPixmap *mask, GdkColor *fg, Gd
   private->xcursor = xcursor;
   cursor = (GdkCursor *) private;
   cursor->type = GDK_CURSOR_IS_PIXMAP;
-
+  cursor->ref_count = 1;
+  
   return cursor;
 }
 
 void
-gdk_cursor_destroy (GdkCursor *cursor)
+_gdk_cursor_destroy (GdkCursor *cursor)
 {
   GdkCursorPrivate *private;
 
   g_return_if_fail (cursor != NULL);
+  g_return_if_fail (cursor->ref_count == 0);
 
   private = (GdkCursorPrivate *) cursor;
   XFreeCursor (private->xdisplay, private->xcursor);

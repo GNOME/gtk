@@ -37,9 +37,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_VPANED(obj)          GTK_CHECK_CAST (obj, gtk_vpaned_get_type (), GtkVPaned)
-#define GTK_VPANED_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_vpaned_get_type (), GtkVPanedClass)
-#define GTK_IS_VPANED(obj)       GTK_CHECK_TYPE (obj, gtk_vpaned_get_type ())
+#define GTK_TYPE_VPANED            (gtk_vpaned_get_type ())
+#define GTK_VPANED(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_VPANED, GtkVPaned))
+#define GTK_VPANED_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VPANED, GtkVPanedClass))
+#define GTK_IS_VPANED(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_VPANED))
+#define GTK_IS_VPANED_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VPANED))
+#define GTK_VPANED_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_VPANED, GtkVPanedClass))
 
 
 typedef struct _GtkVPaned       GtkVPaned;

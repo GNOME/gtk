@@ -133,12 +133,6 @@ static HCURSOR p_grab_cursor;
 
 static GList *client_filters;	            /* Filters for client messages */
 
-/* FIFO's for event queue, and for events put back using
- * gdk_event_put().
- */
-static GList *queued_events = NULL;
-static GList *queued_tail = NULL;
-
 static GSourceFuncs event_funcs = {
   gdk_event_prepare,
   gdk_event_check,
@@ -197,7 +191,7 @@ gdk_WindowProc (HWND hWnd,
       if (event.any.type == GDK_CONFIGURE)
 	{
 	  /* Compress configure events */
-	  GList *list = queued_events;
+	  GList *list = gdk_queued_events;
 
 	  while (list != NULL
 		 && (((GdkEvent *)list->data)->any.type != GDK_CONFIGURE
@@ -205,6 +199,8 @@ gdk_WindowProc (HWND hWnd,
 	    list = list->next;
 	  if (list != NULL)
 	    {
+	      GDK_NOTE (EVENTS, g_print ("... compressing an CONFIGURE event\n"));
+
 	      *((GdkEvent *)list->data) = event;
 	      gdk_window_unref (event.any.window);
 	      /* Wake up WaitMessage */
@@ -215,7 +211,7 @@ gdk_WindowProc (HWND hWnd,
       else if (event.any.type == GDK_EXPOSE)
 	{
 	  /* Compress expose events */
-	  GList *list = queued_events;
+	  GList *list = gdk_queued_events;
 
 	  while (list != NULL
 		 && (((GdkEvent *)list->data)->any.type != GDK_EXPOSE
@@ -225,13 +221,16 @@ gdk_WindowProc (HWND hWnd,
 	    {
 	      GdkRectangle u;
 
+	      GDK_NOTE (EVENTS, g_print ("... compressing an EXPOSE event\n"));
 	      gdk_rectangle_union (&event.expose.area,
 				   &((GdkEvent *)list->data)->expose.area,
 				   &u);
 	      ((GdkEvent *)list->data)->expose.area = u;
 	      gdk_window_unref (event.any.window);
+#if 0
 	      /* Wake up WaitMessage */
 	      PostMessage (NULL, gdk_ping_msg, 0, 0);
+#endif
 	      return FALSE;
 	    }
 	}
@@ -2972,6 +2971,7 @@ gdk_event_translate (GdkEvent *event,
     {
       /* Check for filters for this window */
       GdkFilterReturn result;
+      event->any.window = window;
       result = gdk_event_apply_filters
 	(xevent, event, ((GdkWindowPrivate *) window)->filters);
       
@@ -3040,6 +3040,7 @@ gdk_event_translate (GdkEvent *event,
 	  if (filter->type == xevent->message)
 	    {
 	      GDK_NOTE (EVENTS, g_print ("client filter matched\n"));
+	      event->any.window = window;
 	      result = (*filter->function) (xevent, event, filter->data);
 	      switch (result)
 		{
@@ -3421,7 +3422,7 @@ gdk_event_translate (GdkEvent *event,
 			 xevent->hwnd,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
-      if (GDK_WINDOW_WIN32DATA(window)->extension_events != 0
+      if (((GdkWindowPrivate *) window)->extension_events != 0
 	  && gdk_input_ignore_core)
 	{
 	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
@@ -3691,9 +3692,9 @@ gdk_event_translate (GdkEvent *event,
 
 	  if (SelectPalette (hdc,  colormap_private->xcolormap->palette,
 			     FALSE) == NULL)
-	    g_warning ("WM_ERASEBKGND: SelectPalette failed");
+	    WIN32_API_FAILED ("SelectPalette");
 	  if ((k = RealizePalette (hdc)) == GDI_ERROR)
-	    g_warning ("WM_ERASEBKGND: RealizePalette failed");
+	    WIN32_API_FAILED ("RealizePalette");
 #if 0
 	  g_print ("WM_ERASEBKGND: selected %#x, realized %d colors\n",
 		   colormap_private->xcolormap->palette, k);
@@ -3739,7 +3740,7 @@ gdk_event_translate (GdkEvent *event,
 	  g_print ("...CreateSolidBrush (%.08x) = %.08x\n", bg, hbr);
 #endif
 	  if (!FillRect (hdc, &rect, hbr))
-	    g_warning ("WM_ERASEBKGND: FillRect failed");
+	    WIN32_API_FAILED ("FillRect");
 	  DeleteObject (hbr);
 	}
       else if (GDK_WINDOW_WIN32DATA(window)->bg_type == GDK_WIN32_BG_PIXMAP)
@@ -3754,7 +3755,7 @@ gdk_event_translate (GdkEvent *event,
 	      GDK_NOTE (EVENTS, g_print ("...small pixmap, using brush\n"));
 	      hbr = CreatePatternBrush (GDK_DRAWABLE_XID (pixmap));
 	      if (!FillRect (hdc, &rect, hbr))
-		g_warning ("WM_ERASEBKGND: FillRect failed");
+		WIN32_API_FAILED ("FillRect");
 	      DeleteObject (hbr);
 	    }
 	  else
@@ -3770,12 +3771,12 @@ gdk_event_translate (GdkEvent *event,
 
 	      if (!(bgdc = CreateCompatibleDC (hdc)))
 		{
-		  g_warning ("WM_ERASEBKGND: CreateCompatibleDC failed");
+		  WIN32_API_FAILED ("CreateCompatibleDC");
 		  break;
 		}
 	      if (!(oldbitmap = SelectObject (bgdc, GDK_DRAWABLE_XID (pixmap))))
 		{
-		  g_warning ("WM_ERASEBKGND: SelectObject failed");
+		  WIN32_API_FAILED ("SelectObject");
 		  DeleteDC (bgdc);
 		  break;
 		}
@@ -3792,7 +3793,7 @@ gdk_event_translate (GdkEvent *event,
 				       pixmap_private->width, pixmap_private->height,
 				       bgdc, 0, 0, SRCCOPY))
 			    {
-			      g_warning ("WM_ERASEBKGND: BitBlt failed");
+			      WIN32_API_FAILED (" BitBlt");
 			      goto loopexit;
 			    }
 			}
@@ -3811,7 +3812,7 @@ gdk_event_translate (GdkEvent *event,
 	  hbr = GetStockObject (BLACK_BRUSH);
 	  GetClipBox (hdc, &rect);
 	  if (!FillRect (hdc, &rect, hbr))
-	    g_warning ("WM_ERASEBKGND: FillRect failed");
+	    WIN32_API_FAILED ("FillRect");
 	}
       break;
 
@@ -3843,7 +3844,7 @@ gdk_event_translate (GdkEvent *event,
       return_val = !GDK_DRAWABLE_DESTROYED (window);
       if (return_val)
 	{
-	  GList *list = queued_events;
+	  GList *list = gdk_queued_events;
 	  while (list != NULL )
 	    {
 	      if ((((GdkEvent *)list->data)->any.type == GDK_EXPOSE) &&
@@ -3993,7 +3994,9 @@ gdk_event_translate (GdkEvent *event,
       if (!(GDK_WINDOW_WIN32DATA(window)->event_mask & GDK_STRUCTURE_MASK))
 	break;
 
-      if (GDK_DRAWABLE_TYPE (window) != GDK_WINDOW_CHILD)
+      if (GDK_DRAWABLE_TYPE (window) != GDK_WINDOW_CHILD
+	  && !IsIconic(xevent->hwnd)
+          && IsWindowVisible(xevent->hwnd))
 	{
 	  event->configure.type = GDK_CONFIGURE;
 	  event->configure.window = window;
@@ -4070,7 +4073,7 @@ gdk_event_translate (GdkEvent *event,
 	strcpy (ptr, "Huhhaa");
 	GlobalUnlock (hdata);
 	if (!SetClipboardData (CF_TEXT, hdata))
-	  g_print ("SetClipboardData failed: %d\n", GetLastError ());
+	  WIN32_API_FAILED ("SetClipboardData");
       }
       *ret_valp = 0;
       *ret_val_flagp = TRUE;
@@ -4195,7 +4198,7 @@ gdk_events_queue (void)
       ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
       gdk_event_queue_append (event);
-      node = queued_tail;
+      node = gdk_queued_tail;
 
       if (gdk_event_translate (event, &msg, NULL, NULL))
 	((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;

@@ -28,7 +28,13 @@
 #include <limits.h>
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
-#include "gdkx.h"		/* For gdk_progclass */
+
+#if defined (GDK_WINDOWING_X11)
+#include "x11/gdkx.h"
+#elif defined (GDK_WINDOWING_WIN32)
+#include "win32/gdkwin32.h"
+#endif
+
 #include "gtkprivate.h"
 #include "gtkrc.h"
 #include "gtksignal.h"

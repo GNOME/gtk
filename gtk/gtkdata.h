@@ -37,12 +37,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_TYPE_DATA		 (gtk_data_get_type ())
-#define GTK_DATA(obj)		 (GTK_CHECK_CAST ((obj), GTK_TYPE_DATA, GtkData))
-#define GTK_DATA_CLASS(klass)	 (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_DATA, GtkDataClass))
-#define GTK_IS_DATA(obj)	 (GTK_CHECK_TYPE ((obj), GTK_TYPE_DATA))
+#define GTK_TYPE_DATA            (gtk_data_get_type ())
+#define GTK_DATA(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_DATA, GtkData))
+#define GTK_DATA_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_DATA, GtkDataClass))
+#define GTK_IS_DATA(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_DATA))
 #define GTK_IS_DATA_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_DATA))
-
+#define GTK_DATA_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_DATA, GtkDataClass))
 
 
 typedef struct _GtkData       GtkData;

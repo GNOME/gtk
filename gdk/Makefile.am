@@ -1,6 +1,12 @@
 ## Makefile.am for gtk+/gdk
 
-SUBDIRS=x11
+SUBDIRS=x11 win32
+
+EXTRA_DIST =	\
+	gdkconfig.h.win32 \
+	gdk.def \
+	makefile.cygwin \
+	makefile.msc
 
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gdk\"	\
@@ -70,6 +76,7 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 gdk_c_sources = @STRIP_BEGIN@ \
 	gdk.c		\
 	gdkcolor.c	\
+	gdkcursor.c	\
 	gdkdraw.c	\
 	gdkevents.c     \
 	gdkfont.c	\
@@ -79,7 +86,6 @@ gdk_c_sources = @STRIP_BEGIN@ \
 	gdkrgb.c	\
 	gdkrectangle.c	\
 	gdkwindow.c	\
-	MwmUtil.h       \
 @STRIP_END@
 
 #

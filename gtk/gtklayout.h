@@ -39,11 +39,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
+
 #define GTK_TYPE_LAYOUT            (gtk_layout_get_type ())
 #define GTK_LAYOUT(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_LAYOUT, GtkLayout))
 #define GTK_LAYOUT_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_LAYOUT, GtkLayoutClass))
 #define GTK_IS_LAYOUT(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_LAYOUT))
 #define GTK_IS_LAYOUT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LAYOUT))
+#define GTK_LAYOUT_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_LAYOUT, GtkLayoutClass))
+
 
 typedef struct _GtkLayout        GtkLayout;
 typedef struct _GtkLayoutClass   GtkLayoutClass;

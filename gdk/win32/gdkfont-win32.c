@@ -134,7 +134,8 @@ logfont_to_xlfd (const LOGFONT *lfp,
   const gchar *registry, *encoding;
   int point_size;
   static int logpixelsy = 0;
-  gchar facename[LF_FACESIZE*3];
+  gchar facename[LF_FACESIZE*5];
+  gchar *utf8_facename;
   gchar *p;
   const gchar *q;
 
@@ -218,9 +219,14 @@ logfont_to_xlfd (const LOGFONT *lfp,
   if (res == -1)
     res = logpixelsy;
 
-  /* Replace illegal characters with hex escapes. */
+  /* Convert the facename Windows fives us from the locale-dependent
+   * codepage to UTF-8.
+   */
+  utf8_facename = g_filename_to_utf8 (lfp->lfFaceName);
+
+  /* Replace characters illegal in an XLFD with hex escapes. */
   p = facename;
-  q = lfp->lfFaceName;
+  q = utf8_facename;
   while (*q)
     {
       if (*q == '-' || *q == '*' || *q == '?' || *q == '%')
@@ -230,8 +236,9 @@ logfont_to_xlfd (const LOGFONT *lfp,
       q++;
     }
   *p = '\0';
+  g_free (utf8_facename);
 
-  return  g_strdup_printf
+  return g_strdup_printf
     ("-%s-%s-%s-%s-%s-%s-%d-%d-%d-%d-%s-%d-%s-%s",
      "unknown", 
      facename,
@@ -259,6 +266,7 @@ gdk_font_full_name_get (GdkFont *font)
   GSList *list;
   GString *string;
   gchar *result;
+  gchar *xlfd;
   LOGFONT logfont;
 
   g_return_val_if_fail (font != NULL, NULL);
@@ -274,13 +282,13 @@ gdk_font_full_name_get (GdkFont *font)
 
       if (GetObject (singlefont->xfont, sizeof (LOGFONT), &logfont) == 0)
 	{
-	  g_warning ("gdk_font_full_name_get: GetObject failed");
+	  WIN32_API_FAILED ("GetObject");
 	  return NULL;
 	}
 
-      string =
-	g_string_append (string,
-			 logfont_to_xlfd (&logfont, logfont.lfHeight, -1, 0));
+      xlfd = logfont_to_xlfd (&logfont, logfont.lfHeight, -1, 0);
+      string = g_string_append (string, xlfd);
+      g_free (xlfd);
       list = list->next;
       if (list)
 	string = g_string_append_c (string, ',');
@@ -438,6 +446,682 @@ gdk_font_list_free (gchar **font_list)
   g_strfreev (font_list);
 }
 
+/* This table classifies Unicode characters according to the Microsoft
+ * Unicode subset numbering. This is from the table in "Developing
+ * International Software for Windows 95 and Windows NT". This is almost,
+ * but not quite, the same as the official Unicode block table in
+ * Blocks.txt from ftp.unicode.org. The bit number field is the bitfield
+ * number as in the FONTSIGNATURE struct's fsUsb field.
+ */
+
+typedef enum
+{
+  U_BASIC_LATIN = 0,
+  U_LATIN_1_SUPPLEMENT = 1,
+  U_LATIN_EXTENDED_A = 2,
+  U_LATIN_EXTENDED_B = 3,
+  U_IPA_EXTENSIONS = 4,
+  U_SPACING_MODIFIER_LETTERS = 5,
+  U_COMBINING_DIACRITICAL_MARKS = 6,
+  U_BASIC_GREEK = 7,
+  U_GREEK_SYMBOLS_AND_COPTIC = 8,
+  U_CYRILLIC = 9,
+  U_ARMENIAN = 10,
+  U_HEBREW_EXTENDED = 12,
+  U_BASIC_HEBREW = 11,
+  U_BASIC_ARABIC = 13,
+  U_ARABIC_EXTENDED = 14,
+  U_DEVANAGARI = 15,
+  U_BENGALI = 16,
+  U_GURMUKHI = 17,
+  U_GUJARATI = 18,
+  U_ORIYA = 19,
+  U_TAMIL = 20,
+  U_TELUGU = 21,
+  U_KANNADA = 22,
+  U_MALAYALAM = 23,
+  U_THAI = 24,
+  U_LAO = 25,
+  U_GEORGIAN_EXTENDED = 27,
+  U_BASIC_GEORGIAN = 26,
+  U_HANGUL_JAMO = 28,
+  U_LATIN_EXTENDED_ADDITIONAL = 29,
+  U_GREEK_EXTENDED = 30,
+  U_GENERAL_PUNCTUATION = 31,
+  U_SUPERSCRIPTS_AND_SUBSCRIPTS = 32,
+  U_CURRENCY_SYMBOLS = 33,
+  U_COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS = 34,
+  U_LETTERLIKE_SYMBOLS = 35,
+  U_NUMBER_FORMS = 36,
+  U_ARROWS = 37,
+  U_MATHEMATICAL_OPERATORS = 38,
+  U_MISCELLANEOUS_TECHNICAL = 39,
+  U_CONTROL_PICTURES = 40,
+  U_OPTICAL_CHARACTER_RECOGNITION = 41,
+  U_ENCLOSED_ALPHANUMERICS = 42,
+  U_BOX_DRAWING = 43,
+  U_BLOCK_ELEMENTS = 44,
+  U_GEOMETRIC_SHAPES = 45,
+  U_MISCELLANEOUS_SYMBOLS = 46,
+  U_DINGBATS = 47,
+  U_CJK_SYMBOLS_AND_PUNCTUATION = 48,
+  U_HIRAGANA = 49,
+  U_KATAKANA = 50,
+  U_BOPOMOFO = 51,
+  U_HANGUL_COMPATIBILITY_JAMO = 52,
+  U_CJK_MISCELLANEOUS = 53,
+  U_ENCLOSED_CJK = 54,
+  U_CJK_COMPATIBILITY = 55,
+  U_HANGUL = 56,
+  U_HANGUL_SUPPLEMENTARY_A = 57,
+  U_HANGUL_SUPPLEMENTARY_B = 58,
+  U_CJK_UNIFIED_IDEOGRAPHS = 59,
+  U_PRIVATE_USE_AREA = 60,
+  U_CJK_COMPATIBILITY_IDEOGRAPHS = 61,
+  U_ALPHABETIC_PRESENTATION_FORMS = 62,
+  U_ARABIC_PRESENTATION_FORMS_A = 63,
+  U_COMBINING_HALF_MARKS = 64,
+  U_CJK_COMPATIBILITY_FORMS = 65,
+  U_SMALL_FORM_VARIANTS = 66,
+  U_ARABIC_PRESENTATION_FORMS_B = 67,
+  U_SPECIALS = 69,
+  U_HALFWIDTH_AND_FULLWIDTH_FORMS = 68,
+  U_LAST_PLUS_ONE
+} unicode_subset;
+
+static struct {
+  wchar_t low, high;
+  unicode_subset bit; 
+  gchar *name;
+} utab[] =
+{
+  { 0x0000, 0x007E,
+    U_BASIC_LATIN, "Basic Latin" },
+  { 0x00A0, 0x00FF,
+    U_LATIN_1_SUPPLEMENT, "Latin-1 Supplement" },
+  { 0x0100, 0x017F,
+    U_LATIN_EXTENDED_A, "Latin Extended-A" },
+  { 0x0180, 0x024F,
+    U_LATIN_EXTENDED_B, "Latin Extended-B" },
+  { 0x0250, 0x02AF,
+    U_IPA_EXTENSIONS, "IPA Extensions" },
+  { 0x02B0, 0x02FF,
+    U_SPACING_MODIFIER_LETTERS, "Spacing Modifier Letters" },
+  { 0x0300, 0x036F,
+    U_COMBINING_DIACRITICAL_MARKS, "Combining Diacritical Marks" },
+  { 0x0370, 0x03CF,
+    U_BASIC_GREEK, "Basic Greek" },
+  { 0x03D0, 0x03FF,
+    U_GREEK_SYMBOLS_AND_COPTIC, "Greek Symbols and Coptic" },
+  { 0x0400, 0x04FF,
+    U_CYRILLIC, "Cyrillic" },
+  { 0x0530, 0x058F,
+    U_ARMENIAN, "Armenian" },
+  { 0x0590, 0x05CF,
+    U_HEBREW_EXTENDED, "Hebrew Extended" },
+  { 0x05D0, 0x05FF,
+    U_BASIC_HEBREW, "Basic Hebrew" },
+  { 0x0600, 0x0652,
+    U_BASIC_ARABIC, "Basic Arabic" },
+  { 0x0653, 0x06FF,
+    U_ARABIC_EXTENDED, "Arabic Extended" },
+  { 0x0900, 0x097F,
+    U_DEVANAGARI, "Devanagari" },
+  { 0x0980, 0x09FF,
+    U_BENGALI, "Bengali" },
+  { 0x0A00, 0x0A7F,
+    U_GURMUKHI, "Gurmukhi" },
+  { 0x0A80, 0x0AFF,
+    U_GUJARATI, "Gujarati" },
+  { 0x0B00, 0x0B7F,
+    U_ORIYA, "Oriya" },
+  { 0x0B80, 0x0BFF,
+    U_TAMIL, "Tamil" },
+  { 0x0C00, 0x0C7F,
+    U_TELUGU, "Telugu" },
+  { 0x0C80, 0x0CFF,
+    U_KANNADA, "Kannada" },
+  { 0x0D00, 0x0D7F,
+    U_MALAYALAM, "Malayalam" },
+  { 0x0E00, 0x0E7F,
+    U_THAI, "Thai" },
+  { 0x0E80, 0x0EFF,
+    U_LAO, "Lao" },
+  { 0x10A0, 0x10CF,
+    U_GEORGIAN_EXTENDED, "Georgian Extended" },
+  { 0x10D0, 0x10FF,
+    U_BASIC_GEORGIAN, "Basic Georgian" },
+  { 0x1100, 0x11FF,
+    U_HANGUL_JAMO, "Hangul Jamo" },
+  { 0x1E00, 0x1EFF,
+    U_LATIN_EXTENDED_ADDITIONAL, "Latin Extended Additional" },
+  { 0x1F00, 0x1FFF,
+    U_GREEK_EXTENDED, "Greek Extended" },
+  { 0x2000, 0x206F,
+    U_GENERAL_PUNCTUATION, "General Punctuation" },
+  { 0x2070, 0x209F,
+    U_SUPERSCRIPTS_AND_SUBSCRIPTS, "Superscripts and Subscripts" },
+  { 0x20A0, 0x20CF,
+    U_CURRENCY_SYMBOLS, "Currency Symbols" },
+  { 0x20D0, 0x20FF,
+    U_COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS, "Combining Diacritical Marks for Symbols" },
+  { 0x2100, 0x214F,
+    U_LETTERLIKE_SYMBOLS, "Letterlike Symbols" },
+  { 0x2150, 0x218F,
+    U_NUMBER_FORMS, "Number Forms" },
+  { 0x2190, 0x21FF,
+    U_ARROWS, "Arrows" },
+  { 0x2200, 0x22FF,
+    U_MATHEMATICAL_OPERATORS, "Mathematical Operators" },
+  { 0x2300, 0x23FF,
+    U_MISCELLANEOUS_TECHNICAL, "Miscellaneous Technical" },
+  { 0x2400, 0x243F,
+    U_CONTROL_PICTURES, "Control Pictures" },
+  { 0x2440, 0x245F,
+    U_OPTICAL_CHARACTER_RECOGNITION, "Optical Character Recognition" },
+  { 0x2460, 0x24FF,
+    U_ENCLOSED_ALPHANUMERICS, "Enclosed Alphanumerics" },
+  { 0x2500, 0x257F,
+    U_BOX_DRAWING, "Box Drawing" },
+  { 0x2580, 0x259F,
+    U_BLOCK_ELEMENTS, "Block Elements" },
+  { 0x25A0, 0x25FF,
+    U_GEOMETRIC_SHAPES, "Geometric Shapes" },
+  { 0x2600, 0x26FF,
+    U_MISCELLANEOUS_SYMBOLS, "Miscellaneous Symbols" },
+  { 0x2700, 0x27BF,
+    U_DINGBATS, "Dingbats" },
+  { 0x3000, 0x303F,
+    U_CJK_SYMBOLS_AND_PUNCTUATION, "CJK Symbols and Punctuation" },
+  { 0x3040, 0x309F,
+    U_HIRAGANA, "Hiragana" },
+  { 0x30A0, 0x30FF,
+    U_KATAKANA, "Katakana" },
+  { 0x3100, 0x312F,
+    U_BOPOMOFO, "Bopomofo" },
+  { 0x3130, 0x318F,
+    U_HANGUL_COMPATIBILITY_JAMO, "Hangul Compatibility Jamo" },
+  { 0x3190, 0x319F,
+    U_CJK_MISCELLANEOUS, "CJK Miscellaneous" },
+  { 0x3200, 0x32FF,
+    U_ENCLOSED_CJK, "Enclosed CJK" },
+  { 0x3300, 0x33FF,
+    U_CJK_COMPATIBILITY, "CJK Compatibility" },
+  { 0x3400, 0x3D2D,
+    U_HANGUL, "Hangul" },
+  { 0x3D2E, 0x44B7,
+    U_HANGUL_SUPPLEMENTARY_A, "Hangul Supplementary-A" },
+  { 0x44B8, 0x4DFF,
+    U_HANGUL_SUPPLEMENTARY_B, "Hangul Supplementary-B" },
+  { 0x4E00, 0x9FFF,
+    U_CJK_UNIFIED_IDEOGRAPHS, "CJK Unified Ideographs" },
+  { 0xE000, 0xF8FF,
+    U_PRIVATE_USE_AREA, "Private Use Area" },
+  { 0xF900, 0xFAFF,
+    U_CJK_COMPATIBILITY_IDEOGRAPHS, "CJK Compatibility Ideographs" },
+  { 0xFB00, 0xFB4F,
+    U_ALPHABETIC_PRESENTATION_FORMS, "Alphabetic Presentation Forms" },
+  { 0xFB50, 0xFDFF,
+    U_ARABIC_PRESENTATION_FORMS_A, "Arabic Presentation Forms-A" },
+  { 0xFE20, 0xFE2F,
+    U_COMBINING_HALF_MARKS, "Combining Half Marks" },
+  { 0xFE30, 0xFE4F,
+    U_CJK_COMPATIBILITY_FORMS, "CJK Compatibility Forms" },
+  { 0xFE50, 0xFE6F,
+    U_SMALL_FORM_VARIANTS, "Small Form Variants" },
+  { 0xFE70, 0xFEFE,
+    U_ARABIC_PRESENTATION_FORMS_B, "Arabic Presentation Forms-B" },
+  { 0xFEFF, 0xFEFF,
+    U_SPECIALS, "Specials" },
+  { 0xFF00, 0xFFEF,
+    U_HALFWIDTH_AND_FULLWIDTH_FORMS, "Halfwidth and Fullwidth Forms" },
+  { 0xFFF0, 0xFFFD,
+    U_SPECIALS, "Specials" }
+};
+
+static void
+print_unicode_subranges (FONTSIGNATURE *fsp)
+{
+  int i;
+  gboolean checked[sizeof (utab) / sizeof (utab[0])];
+  gboolean need_comma = FALSE;
+
+  memset (checked, 0, sizeof (checked));
+
+  for (i = 0; i < sizeof (utab) / sizeof (utab[0]); i++)
+    if (!checked[i]
+	&& (fsp->fsUsb[utab[i].bit/32] & (1 << (utab[i].bit % 32))))
+      {
+	g_print ("%s %s", (need_comma ? "," : ""), utab[i].name);
+	need_comma = TRUE;
+	checked[i] = TRUE;
+      }
+  if (!need_comma)
+    g_print (" none!");
+  g_print ("\n");
+}
+
+static gboolean
+check_unicode_subranges (UINT           charset,
+			 FONTSIGNATURE *fsp)
+{
+  gint i;
+  gboolean retval = FALSE;
+
+  /* If the fsUsb bit array has at least one of the bits set, trust it */
+  for (i = 0; i < U_LAST_PLUS_ONE; i++)
+    if (i != U_PRIVATE_USE_AREA && (fsp->fsUsb[i/32] & (1 << (i % 32))))
+      return FALSE;
+
+  /* Otherwise, guess what subranges there should be in the font */
+  fsp->fsUsb[0] = fsp->fsUsb[1] = fsp->fsUsb[2] = fsp->fsUsb[3] = 0;
+
+#define set_bit(bitno) (fsp->fsUsb[(bitno)/32] |= (1 << ((bitno) % 32)))
+
+  /* Set Unicode subrange bits based on code pages supported.
+   * This is mostly just guesswork.
+   */
+
+#define check_cp(bit) (fsp->fsCsb[0] & (bit))
+
+  if (check_cp(FS_LATIN1))
+    {
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_CURRENCY_SYMBOLS);
+      retval = TRUE;
+    }
+  if (check_cp (FS_LATIN2))
+    {
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_LATIN_EXTENDED_A);
+      set_bit (U_CURRENCY_SYMBOLS);
+      retval = TRUE;
+    }
+  if (check_cp (FS_CYRILLIC))
+    {
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_CYRILLIC);
+      retval = TRUE;
+    }
+  if (check_cp (FS_GREEK))
+    {
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_BASIC_GREEK);
+      retval = TRUE;
+    }
+  if (check_cp (FS_TURKISH))
+    {
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_LATIN_EXTENDED_A);
+      set_bit (U_CURRENCY_SYMBOLS);
+      retval = TRUE;
+    }
+  if (check_cp (FS_HEBREW))
+    {
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_CURRENCY_SYMBOLS);
+      set_bit (U_BASIC_HEBREW);
+      set_bit (U_HEBREW_EXTENDED);
+      retval = TRUE;
+    }
+  if (check_cp (FS_ARABIC))
+    {
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_CURRENCY_SYMBOLS);
+      set_bit (U_BASIC_ARABIC);
+      set_bit (U_ARABIC_EXTENDED);
+      retval = TRUE;
+    }
+  if (check_cp (FS_BALTIC))
+    {
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_CURRENCY_SYMBOLS);
+      set_bit (U_LATIN_EXTENDED_A);
+      set_bit (U_LATIN_EXTENDED_B);
+      retval = TRUE;
+    }
+  if (check_cp (FS_VIETNAMESE))
+    {
+      /* ??? */
+      set_bit (U_BASIC_LATIN);
+      retval = TRUE;
+    }
+  if (check_cp (FS_THAI))
+    {
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_THAI);
+      retval = TRUE;
+    }
+  if (check_cp (FS_JISJAPAN))
+    {
+      /* Based on MS Gothic */
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_CJK_SYMBOLS_AND_PUNCTUATION);
+      set_bit (U_HIRAGANA);
+      set_bit (U_KATAKANA);
+      set_bit (U_CJK_UNIFIED_IDEOGRAPHS);
+      set_bit (U_HALFWIDTH_AND_FULLWIDTH_FORMS);
+      retval = TRUE;
+    }
+  if (check_cp (FS_CHINESESIMP))
+    {
+      /* Based on MS Hei */
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_HIRAGANA);
+      set_bit (U_KATAKANA);
+      set_bit (U_BOPOMOFO);
+      set_bit (U_CJK_UNIFIED_IDEOGRAPHS);
+      retval = TRUE;
+    }
+  if (check_cp (FS_WANSUNG)
+      || check_cp (FS_JOHAB))	/* ??? */
+    {
+      /* Based on GulimChe. I wonder if all Korean fonts
+       * really support this large range of Unicode subranges?
+       */
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_LATIN_EXTENDED_A);
+      set_bit (U_SPACING_MODIFIER_LETTERS);
+      set_bit (U_BASIC_GREEK);
+      set_bit (U_CYRILLIC);
+      set_bit (U_GENERAL_PUNCTUATION);
+      set_bit (U_SUPERSCRIPTS_AND_SUBSCRIPTS);
+      set_bit (U_CURRENCY_SYMBOLS);
+      set_bit (U_LETTERLIKE_SYMBOLS);
+      set_bit (U_NUMBER_FORMS);
+      set_bit (U_ARROWS);
+      set_bit (U_MATHEMATICAL_OPERATORS);
+      set_bit (U_MISCELLANEOUS_TECHNICAL);
+      set_bit (U_ENCLOSED_ALPHANUMERICS);
+      set_bit (U_BOX_DRAWING);
+      set_bit (U_BLOCK_ELEMENTS);
+      set_bit (U_GEOMETRIC_SHAPES);
+      set_bit (U_MISCELLANEOUS_SYMBOLS);
+      set_bit (U_CJK_SYMBOLS_AND_PUNCTUATION);
+      set_bit (U_HIRAGANA);
+      set_bit (U_KATAKANA);
+      set_bit (U_HANGUL_COMPATIBILITY_JAMO);
+      set_bit (U_ENCLOSED_CJK);
+      set_bit (U_CJK_COMPATIBILITY_FORMS);
+      set_bit (U_HANGUL);
+      set_bit (U_CJK_UNIFIED_IDEOGRAPHS);
+      set_bit (U_CJK_COMPATIBILITY_IDEOGRAPHS);
+      set_bit (U_HALFWIDTH_AND_FULLWIDTH_FORMS);
+      retval = TRUE;
+    }
+  if (check_cp (FS_CHINESETRAD))
+    {
+      /* Based on MingLiU */
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_GENERAL_PUNCTUATION);
+      set_bit (U_BOX_DRAWING);
+      set_bit (U_BLOCK_ELEMENTS);
+      set_bit (U_CJK_SYMBOLS_AND_PUNCTUATION);
+      set_bit (U_BOPOMOFO);
+      set_bit (U_CJK_UNIFIED_IDEOGRAPHS);
+      set_bit (U_CJK_COMPATIBILITY_IDEOGRAPHS);
+      set_bit (U_SMALL_FORM_VARIANTS);
+      set_bit (U_HALFWIDTH_AND_FULLWIDTH_FORMS);
+      retval = TRUE;
+    }
+  if (check_cp (FS_SYMBOL) || charset == MAC_CHARSET)
+    {
+      /* Non-Unicode encoding, I guess. Pretend it covers
+       * the single-byte range of values.
+       */
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      retval = TRUE;
+    }
+
+  if (retval)
+    return TRUE;
+
+  GDK_NOTE (MISC, g_print ("... No code page bits set!\n"));
+
+  /* Sigh. Not even any code page bits were set. Guess based on
+   * charset, then. These somewhat optimistic guesses are based on the
+   * table in Appendix M in the book "Developing ..."  mentioned
+   * above.
+   */
+  switch (charset)
+    {
+    case ANSI_CHARSET:
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_LATIN_EXTENDED_A);
+      set_bit (U_LATIN_EXTENDED_B);
+      set_bit (U_SPACING_MODIFIER_LETTERS);
+      set_bit (U_COMBINING_DIACRITICAL_MARKS);
+      set_bit (U_GENERAL_PUNCTUATION);
+      set_bit (U_SUPERSCRIPTS_AND_SUBSCRIPTS);
+      set_bit (U_CURRENCY_SYMBOLS);
+#if 0 /* I find this too hard to believe... */
+      set_bit (U_BASIC_GREEK);
+      set_bit (U_CYRILLIC);
+      set_bit (U_BASIC_HEBREW);
+      set_bit (U_HEBREW_EXTENDED);
+      set_bit (U_BASIC_ARABIC);
+      set_bit (U_ARABIC_EXTENDED);
+      set_bit (U_LETTERLIKE_SYMBOLS);
+      set_bit (U_NUMBER_FORMS);
+      set_bit (U_ARROWS);
+      set_bit (U_MATHEMATICAL_OPERATORS);
+      set_bit (U_MISCELLANEOUS_TECHNICAL);
+      set_bit (U_ENCLOSED_ALPHANUMERICS);
+      set_bit (U_BOX_DRAWING);
+      set_bit (U_BLOCK_ELEMENTS);
+      set_bit (U_GEOMETRIC_SHAPES);
+      set_bit (U_MISCELLANEOUS_SYMBOLS);
+      set_bit (U_HIRAGANA);
+      set_bit (U_KATAKANA);
+      set_bit (U_BOPOMOFO);
+      set_bit (U_HANGUL_COMPATIBILITY_JAMO);
+      set_bit (U_CJK_MISCELLANEOUS);
+      set_bit (U_CJK_COMPATIBILITY);
+      set_bit (U_HANGUL);
+      set_bit (U_HANGUL_SUPPLEMENTARY_A);
+      set_bit (U_CJK_COMPATIBILITY_IDEOGRAPHS);
+      set_bit (U_ALPHABETIC_PRESENTATION_FORMS);
+      set_bit (U_SMALL_FORM_VARIANTS);
+      set_bit (U_ARABIC_PRESENTATION_FORMS_B);
+      set_bit (U_HALFWIDTH_AND_FULLWIDTH_FORMS);
+      set_bit (U_SPECIALS);
+#endif
+      retval = TRUE;
+      break;
+    case SYMBOL_CHARSET:
+      /* Unggh */
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      retval = TRUE;
+      break;
+    case SHIFTJIS_CHARSET:
+    case HANGEUL_CHARSET:
+    case GB2312_CHARSET:
+    case CHINESEBIG5_CHARSET:
+    case JOHAB_CHARSET:
+      /* The table really does claim these "locales" (it doesn't
+       * talk about charsets per se) cover the same Unicode
+       * subranges
+       */
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_LATIN_EXTENDED_A);
+      set_bit (U_LATIN_EXTENDED_B);
+      set_bit (U_SPACING_MODIFIER_LETTERS);
+      set_bit (U_COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS);
+      set_bit (U_BASIC_GREEK);
+      set_bit (U_CYRILLIC);
+      set_bit (U_GENERAL_PUNCTUATION);
+      set_bit (U_SUPERSCRIPTS_AND_SUBSCRIPTS);
+      set_bit (U_CURRENCY_SYMBOLS);
+      set_bit (U_LETTERLIKE_SYMBOLS);
+      set_bit (U_NUMBER_FORMS);
+      set_bit (U_ARROWS);
+      set_bit (U_MATHEMATICAL_OPERATORS);
+      set_bit (U_MISCELLANEOUS_TECHNICAL);
+      set_bit (U_ENCLOSED_ALPHANUMERICS);
+      set_bit (U_BOX_DRAWING);
+      set_bit (U_BLOCK_ELEMENTS);
+      set_bit (U_GEOMETRIC_SHAPES);
+      set_bit (U_MISCELLANEOUS_SYMBOLS);
+      set_bit (U_CJK_SYMBOLS_AND_PUNCTUATION);
+      set_bit (U_HIRAGANA);
+      set_bit (U_KATAKANA);
+      set_bit (U_BOPOMOFO);
+      set_bit (U_HANGUL_COMPATIBILITY_JAMO);
+      set_bit (U_CJK_MISCELLANEOUS);
+      set_bit (U_CJK_COMPATIBILITY);
+      set_bit (U_HANGUL);
+      set_bit (U_HANGUL_SUPPLEMENTARY_A);
+      set_bit (U_CJK_UNIFIED_IDEOGRAPHS);
+      set_bit (U_CJK_COMPATIBILITY_IDEOGRAPHS);
+      set_bit (U_ALPHABETIC_PRESENTATION_FORMS);
+      set_bit (U_SMALL_FORM_VARIANTS);
+      set_bit (U_ARABIC_PRESENTATION_FORMS_B);
+      set_bit (U_SPECIALS);
+      retval = TRUE;
+      break;
+    case HEBREW_CHARSET:
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_LATIN_EXTENDED_B);
+      set_bit (U_SPACING_MODIFIER_LETTERS);
+      set_bit (U_BASIC_HEBREW);
+      set_bit (U_HEBREW_EXTENDED);
+      set_bit (U_GENERAL_PUNCTUATION);
+      set_bit (U_LETTERLIKE_SYMBOLS);
+      retval = TRUE; 
+      break;
+    case ARABIC_CHARSET:
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_LATIN_EXTENDED_A);
+      set_bit (U_LATIN_EXTENDED_B);
+      set_bit (U_SPACING_MODIFIER_LETTERS);
+      set_bit (U_BASIC_GREEK);
+      set_bit (U_BASIC_ARABIC);
+      set_bit (U_ARABIC_EXTENDED);
+      set_bit (U_GENERAL_PUNCTUATION);
+      set_bit (U_LETTERLIKE_SYMBOLS);
+      set_bit (U_ARROWS);
+      set_bit (U_MATHEMATICAL_OPERATORS);
+      set_bit (U_MISCELLANEOUS_TECHNICAL);
+      set_bit (U_BOX_DRAWING);
+      set_bit (U_BLOCK_ELEMENTS);
+      set_bit (U_GEOMETRIC_SHAPES);
+      set_bit (U_MISCELLANEOUS_SYMBOLS);
+      set_bit (U_HALFWIDTH_AND_FULLWIDTH_FORMS);
+      retval = TRUE;
+      break;
+    case GREEK_CHARSET:
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_LATIN_EXTENDED_B);
+      set_bit (U_BASIC_GREEK);
+      set_bit (U_GENERAL_PUNCTUATION);
+      set_bit (U_SUPERSCRIPTS_AND_SUBSCRIPTS);
+      set_bit (U_LETTERLIKE_SYMBOLS);
+      set_bit (U_ARROWS);
+      set_bit (U_MATHEMATICAL_OPERATORS);
+      set_bit (U_MISCELLANEOUS_TECHNICAL);
+      set_bit (U_BOX_DRAWING);
+      set_bit (U_BLOCK_ELEMENTS);
+      set_bit (U_GEOMETRIC_SHAPES);
+      set_bit (U_MISCELLANEOUS_SYMBOLS);
+      retval = TRUE;
+      break;
+    case TURKISH_CHARSET:
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_LATIN_EXTENDED_A);
+      set_bit (U_LATIN_EXTENDED_B);
+      set_bit (U_SPACING_MODIFIER_LETTERS);
+      set_bit (U_BASIC_GREEK);
+      set_bit (U_GENERAL_PUNCTUATION);
+      set_bit (U_SUPERSCRIPTS_AND_SUBSCRIPTS);
+      set_bit (U_CURRENCY_SYMBOLS);
+      set_bit (U_LETTERLIKE_SYMBOLS);
+      set_bit (U_ARROWS);
+      set_bit (U_MATHEMATICAL_OPERATORS);
+      set_bit (U_MISCELLANEOUS_TECHNICAL);
+      set_bit (U_BOX_DRAWING);
+      set_bit (U_BLOCK_ELEMENTS);
+      set_bit (U_GEOMETRIC_SHAPES);
+      set_bit (U_MISCELLANEOUS_SYMBOLS);
+      retval = TRUE;
+      break;
+    case VIETNAMESE_CHARSET:
+    case THAI_CHARSET:
+      /* These are not in the table, so I have no idea */
+      break;
+    case BALTIC_CHARSET:
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_LATIN_EXTENDED_A);
+      set_bit (U_LATIN_EXTENDED_B);
+      set_bit (U_SPACING_MODIFIER_LETTERS);
+      set_bit (U_BASIC_GREEK);
+      set_bit (U_GENERAL_PUNCTUATION);
+      set_bit (U_SUPERSCRIPTS_AND_SUBSCRIPTS);
+      set_bit (U_CURRENCY_SYMBOLS);
+      set_bit (U_LETTERLIKE_SYMBOLS);
+      set_bit (U_ARROWS);
+      set_bit (U_MATHEMATICAL_OPERATORS);
+      set_bit (U_MISCELLANEOUS_TECHNICAL);
+      set_bit (U_BOX_DRAWING);
+      set_bit (U_BLOCK_ELEMENTS);
+      set_bit (U_GEOMETRIC_SHAPES);
+      set_bit (U_MISCELLANEOUS_SYMBOLS);
+      retval = TRUE;
+      break;
+    case EASTEUROPE_CHARSET:
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_LATIN_EXTENDED_A);
+      set_bit (U_LATIN_EXTENDED_B);
+      set_bit (U_SPACING_MODIFIER_LETTERS);
+      set_bit (U_BASIC_GREEK);
+      set_bit (U_GENERAL_PUNCTUATION);
+      set_bit (U_SUPERSCRIPTS_AND_SUBSCRIPTS);
+      set_bit (U_CURRENCY_SYMBOLS);
+      set_bit (U_LETTERLIKE_SYMBOLS);
+      set_bit (U_ARROWS);
+      set_bit (U_MATHEMATICAL_OPERATORS);
+      set_bit (U_MISCELLANEOUS_TECHNICAL);
+      set_bit (U_BOX_DRAWING);
+      set_bit (U_BLOCK_ELEMENTS);
+      set_bit (U_GEOMETRIC_SHAPES);
+      set_bit (U_MISCELLANEOUS_SYMBOLS);
+      retval = TRUE;
+      break;
+    case RUSSIAN_CHARSET:
+      set_bit (U_BASIC_LATIN);
+      set_bit (U_LATIN_1_SUPPLEMENT);
+      set_bit (U_CYRILLIC);
+      set_bit (U_GENERAL_PUNCTUATION);
+      set_bit (U_LETTERLIKE_SYMBOLS);
+      set_bit (U_ARROWS);
+      set_bit (U_MATHEMATICAL_OPERATORS);
+      set_bit (U_MISCELLANEOUS_TECHNICAL);
+      set_bit (U_BOX_DRAWING);
+      set_bit (U_BLOCK_ELEMENTS);
+      set_bit (U_GEOMETRIC_SHAPES);
+      set_bit (U_MISCELLANEOUS_SYMBOLS);
+      retval = TRUE;
+      break;
+    }
+
+#undef set_bit
+  return retval;
+}
+
 GdkWin32SingleFont*
 gdk_font_load_internal (const gchar *font_name)
 {
@@ -447,7 +1131,9 @@ gdk_font_load_internal (const gchar *font_name)
   CHARSETINFO csi;
   DWORD fdwItalic, fdwUnderline, fdwStrikeOut, fdwCharSet,
     fdwOutputPrecision, fdwClipPrecision, fdwQuality, fdwPitchAndFamily;
-  const char *lpszFace;
+  HGDIOBJ oldfont;
+  char *lpszFace;
+  gchar face[100];
 
   int numfields, n1, n2, tries;
   char foundry[32], family[100], weight[32], slant[32], set_width[32],
@@ -486,7 +1172,7 @@ gdk_font_load_internal (const gchar *font_name)
       fdwClipPrecision = CLIP_DEFAULT_PRECIS;
       fdwQuality = PROOF_QUALITY;
       fdwPitchAndFamily = DEFAULT_PITCH;
-      lpszFace = font_name;
+      lpszFace = g_filename_from_utf8 (font_name);
     }
   else if (numfields != 5)
     {
@@ -498,7 +1184,7 @@ gdk_font_load_internal (const gchar *font_name)
       /* It must be a XLFD name */
 
       /* Check for hex escapes in the font family,
-       * put in there by gtkfontsel.
+       * put in there by logfont_to_xlfd. Convert them in-place.
        */
       p = family;
       while (*p)
@@ -673,7 +1359,7 @@ gdk_font_load_internal (const gchar *font_name)
 	fdwPitchAndFamily = VARIABLE_PITCH;
       else 
 	fdwPitchAndFamily = DEFAULT_PITCH;
-      lpszFace = family;
+      lpszFace = g_filename_from_utf8 (family);
     }
 
   for (tries = 0; ; tries++)
@@ -686,15 +1372,20 @@ gdk_font_load_internal (const gchar *font_name)
 			       fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
 			       fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
 			       fdwQuality, fdwPitchAndFamily, lpszFace));
-      if ((hfont =
-	   CreateFont (nHeight, nWidth, nEscapement, nOrientation,
-		       fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
-		       fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
-		       fdwQuality, fdwPitchAndFamily, lpszFace)) != NULL)
+      hfont = CreateFont (nHeight, nWidth, nEscapement, nOrientation,
+			  fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
+			  fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
+			  fdwQuality, fdwPitchAndFamily, lpszFace);
+      /* After the first try lpszFace contains a return value
+       * from g_filename_from_utf8(), so free it.
+       */
+      if (tries == 0)
+	g_free (lpszFace);
+
+      if (hfont != NULL)
 	break;
 
       /* If we fail, try some similar fonts often found on Windows. */
-
       if (tries == 0)
 	{
 	  if (g_strcasecmp (family, "helvetica") == 0)
@@ -745,9 +1436,27 @@ gdk_font_load_internal (const gchar *font_name)
   singlefont = g_new (GdkWin32SingleFont, 1);
   singlefont->xfont = hfont;
   GetObject (singlefont->xfont, sizeof (logfont), &logfont);
-  TranslateCharsetInfo ((DWORD *) singlefont->charset, &csi, TCI_SRCCHARSET);
-  singlefont->codepage = csi.ciACP;
-  GetCPInfo (singlefont->codepage, &singlefont->cpinfo);
+  oldfont = SelectObject (gdk_DC, singlefont->xfont);
+  memset (&singlefont->fs, 0, sizeof (singlefont->fs));
+  singlefont->charset = GetTextCharsetInfo (gdk_DC, &singlefont->fs, 0);
+  GetTextFace (gdk_DC, sizeof (face), face);
+  SelectObject (gdk_DC, oldfont);
+  if (TranslateCharsetInfo ((DWORD *) singlefont->charset, &csi,
+			    TCI_SRCCHARSET)
+      && singlefont->charset != MAC_CHARSET)
+    singlefont->codepage = csi.ciACP;
+  else
+    singlefont->codepage = 0;
+
+  GDK_NOTE (MISC, (g_print ("... = %#x %s cs %s cp%d ",
+			    singlefont->xfont, face,
+			    charset_name (singlefont->charset),
+			    singlefont->codepage),
+		   g_print ("... Unicode subranges:"),
+		   print_unicode_subranges (&singlefont->fs)));
+  if (check_unicode_subranges (singlefont->charset, &singlefont->fs))
+    GDK_NOTE (MISC, (g_print ("... Guesstimated Unicode subranges:"),
+		     print_unicode_subranges (&singlefont->fs)));
 
   return singlefont;
 }
@@ -784,16 +1493,11 @@ gdk_font_load (const gchar *font_name)
   font->type = GDK_FONT_FONTSET;
   oldfont = SelectObject (gdk_DC, singlefont->xfont);
   GetTextMetrics (gdk_DC, &textmetric);
-  singlefont->charset = GetTextCharsetInfo (gdk_DC, &singlefont->fs, 0);
   SelectObject (gdk_DC, oldfont);
   font->ascent = textmetric.tmAscent;
   font->descent = textmetric.tmDescent;
 
-  GDK_NOTE (MISC, g_print ("... = %#x charset %s codepage %d "
-			   "asc %d desc %d\n",
-			   singlefont->xfont,
-			   charset_name (singlefont->charset),
-			   singlefont->codepage,
+  GDK_NOTE (MISC, g_print ("... asc %d desc %d\n",
 			   font->ascent, font->descent));
 
   gdk_font_hash_insert (GDK_FONT_FONTSET, font, font_name);
@@ -850,16 +1554,9 @@ gdk_fontset_load (gchar *fontset_name)
       singlefont = gdk_font_load_internal (s);
       if (singlefont)
 	{
-	  GDK_NOTE
-	    (MISC, g_print ("... = %#x charset %s codepage %d\n",
-			    singlefont->xfont,
-			    charset_name (singlefont->charset),
-			    singlefont->codepage));
 	  private->fonts = g_slist_append (private->fonts, singlefont);
 	  oldfont = SelectObject (gdk_DC, singlefont->xfont);
 	  GetTextMetrics (gdk_DC, &textmetric);
-	  singlefont->charset =
-	    GetTextCharsetInfo (gdk_DC, &singlefont->fs, 0);
 	  SelectObject (gdk_DC, oldfont);
 	  font->ascent = MAX (font->ascent, textmetric.tmAscent);
 	  font->descent = MAX (font->descent, textmetric.tmDescent);
@@ -980,92 +1677,6 @@ gdk_font_equal (const GdkFont *fonta,
     return 0;
 }
 
-/* This table classifies Unicode characters according to the Microsoft
- * Unicode subset numbering. This is from the table in "Developing
- * International Software for Windows 95 and Windows NT". This is almost,
- * but not quite, the same as the official Unicode block table in
- * Blocks.txt from ftp.unicode.org. The bit number field is the bitfield
- * number as in the FONTSIGNATURE struct's fsUsb field.
- */
-static struct {
-  wchar_t low, high;
-  guint bit; 
-  gchar *name;
-} utab[] =
-{
-  { 0x0000, 0x007E, 0, "Basic Latin" },
-  { 0x00A0, 0x00FF, 1, "Latin-1 Supplement" },
-  { 0x0100, 0x017F, 2, "Latin Extended-A" },
-  { 0x0180, 0x024F, 3, "Latin Extended-B" },
-  { 0x0250, 0x02AF, 4, "IPA Extensions" },
-  { 0x02B0, 0x02FF, 5, "Spacing Modifier Letters" },
-  { 0x0300, 0x036F, 6, "Combining Diacritical Marks" },
-  { 0x0370, 0x03CF, 7, "Basic Greek" },
-  { 0x03D0, 0x03FF, 8, "Greek Symbols and Coptic" },
-  { 0x0400, 0x04FF, 9, "Cyrillic" },
-  { 0x0530, 0x058F, 10, "Armenian" },
-  { 0x0590, 0x05CF, 12, "Hebrew Extended" },
-  { 0x05D0, 0x05FF, 11, "Basic Hebrew" },
-  { 0x0600, 0x0652, 13, "Basic Arabic" },
-  { 0x0653, 0x06FF, 14, "Arabic Extended" },
-  { 0x0900, 0x097F, 15, "Devanagari" },
-  { 0x0980, 0x09FF, 16, "Bengali" },
-  { 0x0A00, 0x0A7F, 17, "Gurmukhi" },
-  { 0x0A80, 0x0AFF, 18, "Gujarati" },
-  { 0x0B00, 0x0B7F, 19, "Oriya" },
-  { 0x0B80, 0x0BFF, 20, "Tamil" },
-  { 0x0C00, 0x0C7F, 21, "Telugu" },
-  { 0x0C80, 0x0CFF, 22, "Kannada" },
-  { 0x0D00, 0x0D7F, 23, "Malayalam" },
-  { 0x0E00, 0x0E7F, 24, "Thai" },
-  { 0x0E80, 0x0EFF, 25, "Lao" },
-  { 0x10A0, 0x10CF, 27, "Georgian Extended" },
-  { 0x10D0, 0x10FF, 26, "Basic Georgian" },
-  { 0x1100, 0x11FF, 28, "Hangul Jamo" },
-  { 0x1E00, 0x1EFF, 29, "Latin Extended Additional" },
-  { 0x1F00, 0x1FFF, 30, "Greek Extended" },
-  { 0x2000, 0x206F, 31, "General Punctuation" },
-  { 0x2070, 0x209F, 32, "Superscripts and Subscripts" },
-  { 0x20A0, 0x20CF, 33, "Currency Symbols" },
-  { 0x20D0, 0x20FF, 34, "Combining Diacritical Marks for Symbols" },
-  { 0x2100, 0x214F, 35, "Letterlike Symbols" },
-  { 0x2150, 0x218F, 36, "Number Forms" },
-  { 0x2190, 0x21FF, 37, "Arrows" },
-  { 0x2200, 0x22FF, 38, "Mathematical Operators" },
-  { 0x2300, 0x23FF, 39, "Miscellaneous Technical" },
-  { 0x2400, 0x243F, 40, "Control Pictures" },
-  { 0x2440, 0x245F, 41, "Optical Character Recognition" },
-  { 0x2460, 0x24FF, 42, "Enclosed Alphanumerics" },
-  { 0x2500, 0x257F, 43, "Box Drawing" },
-  { 0x2580, 0x259F, 44, "Block Elements" },
-  { 0x25A0, 0x25FF, 45, "Geometric Shapes" },
-  { 0x2600, 0x26FF, 46, "Miscellaneous Symbols" },
-  { 0x2700, 0x27BF, 47, "Dingbats" },
-  { 0x3000, 0x303F, 48, "CJK Symbols and Punctuation" },
-  { 0x3040, 0x309F, 49, "Hiragana" },
-  { 0x30A0, 0x30FF, 50, "Katakana" },
-  { 0x3100, 0x312F, 51, "Bopomofo" },
-  { 0x3130, 0x318F, 52, "Hangul Compatibility Jamo" },
-  { 0x3190, 0x319F, 53, "CJK Miscellaneous" },
-  { 0x3200, 0x32FF, 54, "Enclosed CJK" },
-  { 0x3300, 0x33FF, 55, "CJK Compatibility" },
-  { 0x3400, 0x3D2D, 56, "Hangul" },
-  { 0x3D2E, 0x44B7, 57, "Hangul Supplementary-A" },
-  { 0x44B8, 0x4DFF, 58, "Hangul Supplementary-B" },
-  { 0x4E00, 0x9FFF, 59, "CJK Unified Ideographs" },
-  { 0xE000, 0xF8FF, 60, "Private Use Area" },
-  { 0xF900, 0xFAFF, 61, "CJK Compatibility Ideographs" },
-  { 0xFB00, 0xFB4F, 62, "Alphabetic Presentation Forms" },
-  { 0xFB50, 0xFDFF, 63, "Arabic Presentation Forms-A" },
-  { 0xFE20, 0xFE2F, 64, "Combining Half Marks" },
-  { 0xFE30, 0xFE4F, 65, "CJK Compatibility Forms" },
-  { 0xFE50, 0xFE6F, 66, "Small Form Variants" },
-  { 0xFE70, 0xFEFE, 67, "Arabic Presentation Forms-B" },
-  { 0xFEFF, 0xFEFF, 69, "Specials" },
-  { 0xFF00, 0xFFEF, 68, "Halfwidth and Fullwidth Forms" },
-  { 0xFFF0, 0xFFFD, 69, "Specials" }
-};
-
 /* Return the Unicode Subset bitfield number for a Unicode character */
 
 static int
@@ -1143,7 +1754,6 @@ gdk_wchar_text_handle (GdkFont       *font,
 typedef struct
 {
   SIZE total;
-  SIZE max;
 } gdk_text_size_arg;
 
 static void
@@ -1161,16 +1771,14 @@ gdk_text_size_handler (GdkWin32SingleFont *singlefont,
 
   if ((oldfont = SelectObject (gdk_DC, singlefont->xfont)) == NULL)
     {
-      g_warning ("gdk_text_size_handler: SelectObject failed");
+      WIN32_API_FAILED ("SelectObject");
       return;
     }
   GetTextExtentPoint32W (gdk_DC, wcstr, wclen, &this_size);
   SelectObject (gdk_DC, oldfont);
 
   arg->total.cx += this_size.cx;
-  arg->total.cy += this_size.cy;
-  arg->max.cx = MAX (this_size.cx, arg->max.cx);
-  arg->max.cy = MAX (this_size.cy, arg->max.cy);
+  arg->total.cy = MAX (arg->total.cy, this_size.cy);
 }
 
 static gboolean
@@ -1191,10 +1799,20 @@ gdk_text_size (GdkFont           *font,
   g_assert (font->type == GDK_FONT_FONT || font->type == GDK_FONT_FONTSET);
 
   wcstr = g_new (wchar_t, text_length);
-  if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-    g_warning ("gdk_text_size: gdk_nmbstowchar_ts failed");
+  if (text_length == 1)
+    {
+      /* For single characters, don't try to interpret as UTF-8.
+       */
+      wcstr[0] = (guchar) text[0];
+      gdk_wchar_text_handle (font, wcstr, 1, gdk_text_size_handler, arg);
+    }
   else
-    gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, arg);
+    {
+      if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
+	g_warning ("gdk_text_size: gdk_nmbstowchar_ts failed");
+      else
+	gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, arg);
+    }
 
   g_free (wcstr);
 
@@ -1209,7 +1827,6 @@ gdk_text_width (GdkFont      *font,
   gdk_text_size_arg arg;
 
   arg.total.cx = arg.total.cy = 0;
-  arg.max.cx = arg.max.cy = 0;
 
   if (!gdk_text_size (font, text, text_length, &arg))
     return -1;
@@ -1244,7 +1861,6 @@ gdk_text_width_wc (GdkFont	  *font,
     wcstr = (wchar_t *) text;
 
   arg.total.cx = arg.total.cy = 0;
-  arg.max.cx = arg.max.cy = 0;
 
   gdk_wchar_text_handle (font, wcstr, text_length,
 			 gdk_text_size_handler, &arg);
@@ -1290,13 +1906,20 @@ gdk_text_extents (GdkFont     *font,
   g_assert (font->type == GDK_FONT_FONT || font->type == GDK_FONT_FONTSET);
 
   arg.total.cx = arg.total.cy = 0;
-  arg.max.cx = arg.max.cy = 0;
 
   wcstr = g_new (wchar_t, text_length);
-  if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-    g_warning ("gdk_text_extents: gdk_nmbstowchar_ts failed");
+  if (text_length == 1)
+    {
+      wcstr[0] = (guchar) text[0];
+      gdk_wchar_text_handle (font, wcstr, 1, gdk_text_size_handler, &arg);
+    }
   else
-    gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, &arg);
+    {
+      if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
+	g_warning ("gdk_text_extents: gdk_nmbstowchar_ts failed");
+      else
+	gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, &arg);
+    }
 
   g_free (wcstr);
 
@@ -1304,11 +1927,12 @@ gdk_text_extents (GdkFont     *font,
   if (lbearing)
     *lbearing = 0;
   if (rbearing)
-    *rbearing = 0;
+    *rbearing = arg.total.cx;
+  /* What should be the difference between width and rbearing? */
   if (width)
     *width = arg.total.cx;
   if (ascent)
-    *ascent = arg.max.cy + 1;
+    *ascent = arg.total.cy + 1;
   if (descent)
     *descent = font->descent + 1;
 }
@@ -1357,7 +1981,6 @@ gdk_text_extents_wc (GdkFont        *font,
     wcstr = (wchar_t *) text;
 
   arg.total.cx = arg.total.cy = 0;
-  arg.max.cx = arg.max.cy = 0;
 
   gdk_wchar_text_handle (font, wcstr, text_length,
 			 gdk_text_size_handler, &arg);
@@ -1369,11 +1992,11 @@ gdk_text_extents_wc (GdkFont        *font,
   if (lbearing)
     *lbearing = 0;
   if (rbearing)
-    *rbearing = 0;
+    *rbearing = arg.total.cx;
   if (width)
     *width = arg.total.cx;
   if (ascent)
-    *ascent = arg.max.cy + 1;
+    *ascent = arg.total.cy + 1;
   if (descent)
     *descent = font->descent + 1;
 }

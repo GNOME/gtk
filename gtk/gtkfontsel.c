@@ -2922,17 +2922,8 @@ gtk_font_selection_get_fonts (void)
   fontsel_info->nfonts = 0;
   for (i = 0; i < num_fonts; i++)
     {
-#ifdef FONTSEL_DEBUG
-      g_message("%s\n", xfontnames[i]);
-#endif
       if (gtk_font_selection_is_xlfd_font_name (xfontnames[i]))
 	gtk_font_selection_insert_font (fontnames, &fontsel_info->nfonts, xfontnames[i]);
-      else
-	{
-#ifdef FONTSEL_DEBUG
-	  g_warning("Skipping invalid font: %s", xfontnames[i]);
-#endif
-	}
     }
   
   

@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_TOGGLE_BUTTON_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOGGLE_BUTTON, GtkToggleButtonClass))
 #define GTK_IS_TOGGLE_BUTTON(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TOGGLE_BUTTON))
 #define GTK_IS_TOGGLE_BUTTON_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOGGLE_BUTTON))
+#define GTK_TOGGLE_BUTTON_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TOGGLE_BUTTON, GtkToggleButtonClass))
 
 
 typedef struct _GtkToggleButton       GtkToggleButton;

@@ -26,6 +26,9 @@
 
 #include "config.h"
 
+#include "glib.h"
+#include "gdkconfig.h"
+
 #ifdef GDK_WINDOWING_X11
 #include <X11/Xlocale.h>	/* so we get the right setlocale */
 #else
@@ -49,6 +52,7 @@
 #endif
 
 #ifdef G_OS_WIN32
+#include <windows.h>		/* For GetWindowsDirectory */
 #include <io.h>
 #endif
 

@@ -44,6 +44,8 @@ extern "C" {
 #define GTK_SCROLLED_WINDOW_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_SCROLLED_WINDOW, GtkScrolledWindowClass))
 #define GTK_IS_SCROLLED_WINDOW(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_SCROLLED_WINDOW))
 #define GTK_IS_SCROLLED_WINDOW_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SCROLLED_WINDOW))
+#define GTK_SCROLLED_WINDOW_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_SCROLLED_WINDOW, GtkScrolledWindowClass))
+
 
 
 typedef struct _GtkScrolledWindow       GtkScrolledWindow;

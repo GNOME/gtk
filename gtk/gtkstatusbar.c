@@ -68,7 +68,7 @@ gtk_statusbar_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      statusbar_type = gtk_type_unique (gtk_hbox_get_type (), &statusbar_info);
+      statusbar_type = gtk_type_unique (GTK_TYPE_HBOX, &statusbar_info);
     }
 
   return statusbar_type;
@@ -85,7 +85,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
-  parent_class = gtk_type_class (gtk_hbox_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_HBOX);
 
   statusbar_signals[SIGNAL_TEXT_PUSHED] =
     gtk_signal_new ("text_pushed",
@@ -148,7 +148,7 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
 GtkWidget* 
 gtk_statusbar_new (void)
 {
-  return gtk_type_new (gtk_statusbar_get_type ());
+  return gtk_type_new (GTK_TYPE_STATUSBAR);
 }
 
 static void

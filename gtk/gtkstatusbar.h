@@ -34,9 +34,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GTK_STATUSBAR(obj)          GTK_CHECK_CAST (obj, gtk_statusbar_get_type (), GtkStatusbar)
-#define GTK_STATUSBAR_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_statusbar_get_type (), GtkStatusbarClass)
-#define GTK_IS_STATUSBAR(obj)       GTK_CHECK_TYPE (obj, gtk_statusbar_get_type ())
+
+#define GTK_TYPE_STATUSBAR            (gtk_statusbar_get_type ())
+#define GTK_STATUSBAR(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_STATUSBAR, GtkStatusbar))
+#define GTK_STATUSBAR_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_STATUSBAR, GtkStatusbarClass))
+#define GTK_IS_STATUSBAR(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_STATUSBAR))
+#define GTK_IS_STATUSBAR_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STATUSBAR))
+#define GTK_STATUSBAR_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_STATUSBAR, GtkStatusbarClass))
+
 
 typedef struct _GtkStatusbar      GtkStatusbar;
 typedef struct _GtkStatusbarClass GtkStatusbarClass;

@@ -24,7 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gdkx.h"
+#include "gdkconfig.h"
+
+#if defined (GDK_WINDOWING_X11)
+#include "x11/gdkx.h"
+#elif defined (GDK_WINDOWING_WIN32)
+#include "win32/gdkwin32.h"
+#endif
+
 #include "gdk/gdkkeysyms.h"
 
 #include "gtkdnd.h"
@@ -1134,7 +1141,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
 
       site = gtk_object_get_data (GTK_OBJECT (drop_widget), "gtk-drag-dest");
 
-      if (site->target_list)
+      if (site && site->target_list)
 	{
 	  guint target_info;
 
@@ -1159,7 +1166,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
 				   selection_data, 0, time);
 	}
       
-      if (site->flags & GTK_DEST_DEFAULT_DROP)
+      if (site && site->flags & GTK_DEST_DEFAULT_DROP)
 	{
 
 	  gtk_drag_finish (context, 

@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_RADIO_BUTTON_CLASS(klass)	       (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_RADIO_BUTTON, GtkRadioButtonClass))
 #define GTK_IS_RADIO_BUTTON(obj)	       (GTK_CHECK_TYPE ((obj), GTK_TYPE_RADIO_BUTTON))
 #define GTK_IS_RADIO_BUTTON_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RADIO_BUTTON))
+#define GTK_RADIO_BUTTON_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_RADIO_BUTTON, GtkRadioButtonClass))
 
 
 typedef struct _GtkRadioButton	     GtkRadioButton;

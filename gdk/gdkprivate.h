@@ -265,8 +265,8 @@ extern gint		 gdk_debug_level;
 extern gboolean		 gdk_show_events;
 extern gint		 gdk_screen;
 GDKVAR GdkWindow  	*gdk_parent_root;
-extern gint		 gdk_error_code;
-extern gint		 gdk_error_warnings;
+GDKVAR gint		 gdk_error_code;
+GDKVAR gint		 gdk_error_warnings;
 extern GList            *gdk_default_filters;
 
 GdkWindow* _gdk_window_alloc (void);
@@ -276,6 +276,8 @@ gint _gdk_font_strlen (GdkFont *font, const char *str);
 void _gdk_font_destroy (GdkFont *font);
 
 void _gdk_colormap_real_destroy (GdkColormap *colormap);
+
+void _gdk_cursor_destroy (GdkCursor *cursor);
 
 /* Initialization */
 

@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_PANED_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PANED, GtkPanedClass))
 #define GTK_IS_PANED(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_PANED))
 #define GTK_IS_PANED_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PANED))
+#define GTK_PANED_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_PANED, GtkPanedClass))
 
 
 typedef struct _GtkPaned       GtkPaned;

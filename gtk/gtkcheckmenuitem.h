@@ -37,11 +37,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_TYPE_CHECK_MENU_ITEM	    (gtk_check_menu_item_get_type ())
-#define GTK_CHECK_MENU_ITEM(obj)	    (GTK_CHECK_CAST ((obj), GTK_TYPE_CHECK_MENU_ITEM, GtkCheckMenuItem))
+#define GTK_TYPE_CHECK_MENU_ITEM            (gtk_check_menu_item_get_type ())
+#define GTK_CHECK_MENU_ITEM(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_CHECK_MENU_ITEM, GtkCheckMenuItem))
 #define GTK_CHECK_MENU_ITEM_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CHECK_MENU_ITEM, GtkCheckMenuItemClass))
-#define GTK_IS_CHECK_MENU_ITEM(obj)	    (GTK_CHECK_TYPE ((obj), GTK_TYPE_CHECK_MENU_ITEM))
+#define GTK_IS_CHECK_MENU_ITEM(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_CHECK_MENU_ITEM))
 #define GTK_IS_CHECK_MENU_ITEM_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CHECK_MENU_ITEM))
+#define GTK_CHECK_MENU_ITEM_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CHECK_MENU_ITEM, GtkCheckMenuItemClass))
 
 
 typedef struct _GtkCheckMenuItem       GtkCheckMenuItem;

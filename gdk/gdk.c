@@ -32,6 +32,10 @@
 #include "gdk.h"
 #include "gdkprivate.h"
 
+#ifndef HAVE_XCONVERTCASE
+#include "gdkkeysyms.h"
+#endif
+
 typedef struct _GdkPredicate  GdkPredicate;
 typedef struct _GdkErrorTrap  GdkErrorTrap;
 
@@ -168,6 +172,7 @@ gdk_arg_context_parse (GdkArgContext *context, gint *argc, gchar ***argv)
 				(*table[k].callback)(table[k].name, value, context->cb_data);
 				break;
 			      default:
+				;
 			      }
 
 			    goto next_arg;
@@ -187,6 +192,7 @@ gdk_arg_context_parse (GdkArgContext *context, gint *argc, gchar ***argv)
 		}
 	    }
 	next_arg:
+	  ;
 	}
 	  
       for (i = 1; i < *argc; i++)

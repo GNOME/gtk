@@ -52,13 +52,13 @@ typedef struct
 static void
 gdk_win32_pixmap_destroy (GdkPixmap *pixmap)
 {
-  GdkDrawablePrivate *private = (GdkDrawablePrivate *)pixmap;
+  GdkDrawablePrivate *private = (GdkDrawablePrivate *) pixmap;
 
   GDK_NOTE (MISC, g_print ("gdk_win32_pixmap_destroy: %#x\n",
 			   GDK_DRAWABLE_XID (pixmap)));
 
   if (!DeleteObject (GDK_DRAWABLE_XID (pixmap)))
-    g_warning ("gdk_win32_pixmap_destroy: DeleteObject failed");
+    WIN32_API_FAILED ("DeleteObject");
 
   gdk_xid_table_remove (GDK_DRAWABLE_XID (pixmap));
 
@@ -137,7 +137,7 @@ gdk_pixmap_new (GdkWindow *window,
 
   if ((hdc = GetDC (GDK_DRAWABLE_XID (window))) == NULL)
     {
-      g_warning ("gdk_pixmap_new: GetDC failed");
+      WIN32_API_FAILED ("GetDC");
       g_free (private);
       return NULL;
     }
@@ -172,7 +172,7 @@ gdk_pixmap_new (GdkWindow *window,
 
       bmi.u.bmiColors[1].rgbBlue =
 	bmi.u.bmiColors[1].rgbGreen =
-      bmi.u.bmiColors[1].rgbRed = 0xFF;
+	bmi.u.bmiColors[1].rgbRed = 0xFF;
       bmi.u.bmiColors[1].rgbReserved = 0x00;
       private->colormap = NULL;
     }
@@ -207,7 +207,7 @@ gdk_pixmap_new (GdkWindow *window,
        CreateDIBSection (hdc, (BITMAPINFO *) &bmi,
 			 iUsage, (PVOID *) &bits, NULL, 0)) == NULL)
     {
-      g_warning ("gdk_pixmap_new: CreateDIBSection failed: %d", GetLastError ());
+      WIN32_API_FAILED ("CreateDIBSection");
       ReleaseDC (GDK_DRAWABLE_XID (window), hdc);
       g_free (pixmap);
       return NULL;
@@ -334,6 +334,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
   for (i = 0; i < height; i++)
     for (j = 0; j < bpl; j++)
       bits[i*aligned_bpl + j] = mirror[(guchar) data[i*bpl + j]];
+
   GDK_DRAWABLE_WIN32DATA (pixmap)->xid =
     CreateBitmap (width, height, 1, 1, bits);
 
@@ -766,14 +767,14 @@ _gdk_pixmap_create_from_xpm (GdkWindow   *window,
 	  strncpy (pixel_str, &buffer[n], cpp);
 	  pixel_str[cpp] = 0;
 	  ns = 0;
-	
+	  
 	  color = g_hash_table_lookup (color_hash, pixel_str);
-	
+	  
 	  if (!color) /* screwed up XPM file */
 	    color = fallbackcolor;
-	
+	  
 	  gdk_image_put_pixel (image, xcnt, ycnt, color->color.pixel);
-	
+	  
 	  if (mask && color->transparent)
 	    {
 	      if (cnt < xcnt)

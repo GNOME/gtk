@@ -1,0 +1,30 @@
+#include <winver.h>
+
+VS_VERSION_INFO VERSIONINFO
+  FILEVERSION 1,3,0,BUILDNUMBER
+  PRODUCTVERSION 1,3,0,0
+  FILEFLAGSMASK 0
+  FILEFLAGS 0
+  FILEOS VOS__WINDOWS32
+  FILETYPE VFT_DLL
+  FILESUBTYPE VFT2_UNKNOWN
+  BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+      BLOCK "040904B0"
+      BEGIN
+	VALUE "CompanyName", "The GTk+ developer community"
+	VALUE "FileDescription", "GIMP Toolkit"
+	VALUE "FileVersion", "1.3.0.BUILDNUMBER"
+	VALUE "InternalName", "gtk-1.3"
+	VALUE "LegalCopyright", "Copyright © 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald. Modified by the GTK+ Team and others 1997-2000."
+	VALUE "OriginalFilename", "gtk-1.3.dll"
+	VALUE "ProductName", "GTk+"
+	VALUE "ProductVersion", "1.3.0"
+      END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+      VALUE "Translation", 0x409, 1200
+    END
+  END

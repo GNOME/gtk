@@ -42,6 +42,7 @@ extern "C" {
 #define GTK_CTREE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CTREE, GtkCTreeClass))
 #define GTK_IS_CTREE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_CTREE))
 #define GTK_IS_CTREE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CTREE))
+#define GTK_CTREE_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CTREE, GtkCTreeClass))
 
 #define GTK_CTREE_ROW(_node_) ((GtkCTreeRow *)(((GList *)(_node_))->data))
 #define GTK_CTREE_NODE(_node_) ((GtkCTreeNode *)((_node_)))

@@ -39,11 +39,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_TYPE_CALENDAR		   (gtk_calendar_get_type ())
-#define GTK_CALENDAR(obj)		   (GTK_CHECK_CAST ((obj), GTK_TYPE_CALENDAR, GtkCalendar))
-#define GTK_CALENDAR_CLASS(klass)	   (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CALENDAR, GtkCalendarClass))
-#define GTK_IS_CALENDAR(obj)		   (GTK_CHECK_TYPE ((obj), GTK_TYPE_CALENDAR))
-#define GTK_IS_CALENDAR_CLASS(klass)	   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CALENDAR))
+#define GTK_TYPE_CALENDAR                  (gtk_calendar_get_type ())
+#define GTK_CALENDAR(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_CALENDAR, GtkCalendar))
+#define GTK_CALENDAR_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CALENDAR, GtkCalendarClass))
+#define GTK_IS_CALENDAR(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_CALENDAR))
+#define GTK_IS_CALENDAR_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CALENDAR))
+#define GTK_CALENDAR_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CALENDAR, GtkCalendarClass))
 
 
 typedef struct _GtkCalendar	       GtkCalendar;
