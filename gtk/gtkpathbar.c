@@ -965,7 +965,6 @@ make_directory_button (GtkPathBar  *path_bar,
       label_alignment = gtk_alignment_new (0.5, 0.5, 0., 0.);
       gtk_container_add (GTK_CONTAINER (label_alignment), button_data->label);
       child = label_alignment;
-      gtk_box_pack_start (GTK_BOX (child), label_alignment, FALSE, FALSE, 0);
       button_data->image = NULL;
     }
 

@@ -1,8 +1,13 @@
+Wed Apr 14 03:32:58 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkpathbar.c (make_directory_button): remove spurious
+	gtk_box_pack_start.
+
 Tue Apr 13 16:19:23 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkpathbar.c (make_directory_button): patch from Owen to
 	make the buttons sized by a bold label.  This makes the text
-	'swim' a little, but stops the buttons from resizign, #137210
+	'swim' a little, but stops the buttons from resizing, #137210
 
 2004-04-13  Matthias Clasen  <mclasen@redhat.com>
 
