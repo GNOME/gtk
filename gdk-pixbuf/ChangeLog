@@ -1,5 +1,3 @@
-Tue Aug 28 20:10:31 2001  Matthias Clasen  <matthiasc@poet.de>
-
 Tue Aug 28 20:03:43 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* test-loaders.c (test_loader): Catch errors at close time. 
