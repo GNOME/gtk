@@ -1,3 +1,16 @@
+1999-11-01  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/gnome-canvas-pixbuf.c: Start of the pixbuf canvas item.
+	Drawing affines seem to work.  Bounding box is fubared.  ::point()
+	is not implemented.  This is a work in progress.
+
+	* src/Makefile.am: Added gnome-canvas-pixbuf.[ch] to the list of
+	sources.
+
+	* configure.in: Sigh.  We need to link in libgnomeui for the
+	canvas stuff.  This mess will disappear when gdk-pixbuf gets
+	folded into gnome-libs.
+
 1999-10-30    <jrb@redhat.com>
 
 	* src/io-gif.c: Some more work.  Now it generates a gdk_pixbuf of

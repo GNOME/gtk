@@ -23,9 +23,18 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
+#ifndef GDK_PIXBUF_IO_H
+#define GDK_PIXBUF_IO_H
+
 #include <gmodule.h>
 #include "gdk-pixbuf.h"
 #include <stdio.h>
+
+#ifdef __cplusplus
+extern "C" {
+#pragma }
+#endif
 
 
 
@@ -49,3 +58,10 @@ struct _GdkPixbufModule {
 GdkPixbufModule *gdk_pixbuf_get_module (gchar *buffer, gint size);
 void gdk_pixbuf_load_module (GdkPixbufModule *image_module);
 
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

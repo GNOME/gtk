@@ -37,7 +37,7 @@ AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 
 LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS)
 
-testpixbuf_LDADD = $(LDADDS) $(GTK_LIBS)
+testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS)
 
 #
 # The GdkPixBuf library
@@ -49,13 +49,15 @@ libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf-data.c	\
 	gdk-pixbuf-io.c		\
 	gdk-pixbuf-loader.c	\
-	gdk-pixbuf-render.c
+	gdk-pixbuf-render.c	\
+	gnome-canvas-pixbuf.c
 
 libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0
 
 libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h		\
-	gdk-pixbuf-loader.h
+	gdk-pixbuf-loader.h	\
+	gnome-canvas-pixbuf.h
 
 noinst_HEADERS = \
 	gdk-pixbuf-io.h

@@ -22,7 +22,6 @@
 
 #include <config.h>
 #include <math.h>
-#include <libart_lgpl/art_rgb_affine_private.h>
 #include "gdk-pixbuf.h"
 #include "gnome-canvas-pixbuf.h"
 
@@ -213,7 +212,7 @@ gnome_canvas_pixbuf_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 		pixbuf = GTK_VALUE_POINTER (*arg);
 		if (pixbuf != priv->pixbuf) {
 			if (pixbuf) {
-				g_return_if_fail (pixbuf->art_pixbuf->format != ART_PIX_RGB);
+				g_return_if_fail (pixbuf->art_pixbuf->format == ART_PIX_RGB);
 				g_return_if_fail (pixbuf->art_pixbuf->n_channels == 3
 						  || pixbuf->art_pixbuf->n_channels == 4);
 				g_return_if_fail (pixbuf->art_pixbuf->bits_per_sample == 8);
@@ -327,6 +326,36 @@ gnome_canvas_pixbuf_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
 /* Bounds and utilities */
 
+/* Computes the amount by which the unit horizontal and vertical vectors will be
+ * scaled by an affine transformation.
+ */
+static void
+compute_xform_scaling (double *affine, ArtPoint *i_c, ArtPoint *j_c)
+{
+	ArtPoint orig, orig_c;
+	ArtPoint i, j;
+
+	/* Origin */
+
+	orig.x = 0.0;
+	orig.y = 0.0;
+	art_affine_point (&orig_c, &orig, affine);
+
+	/* Horizontal and vertical vectors */
+
+	i.x = 1.0;
+	i.y = 0.0;
+	art_affine_point (i_c, &i, affine);
+	i_c->x -= orig_c.x;
+	i_c->y -= orig_c.y;
+
+	j.x = 0.0;
+	j.y = 1.0;
+	art_affine_point (j_c, &j, affine);
+	j_c->x -= orig_c.x;
+	j_c->y -= orig_c.y;
+}
+
 /* Computes horizontal and vertical scaling vectors for the final transformation
  * to canvas pixel coordinates of a pixbuf canvas item.  The horizontal and
  * vertical dimensions may be specified in units or pixels, separately, so we
@@ -336,31 +365,11 @@ static void
 compute_xform_vectors (GnomeCanvasPixbuf *gcp, double *i2c, ArtPoint *i_c, ArtPoint *j_c)
 {
 	PixbufPrivate *priv;
-	ArtPoint orig, orig_c;
-	ArtPoint i, j;
 	double length;
 
 	priv = gcp->priv;
 
-	/* Our origin */
-
-	orig.x = 0.0;
-	orig.y = 0.0;
-	art_affine_point (&orig_c, &orig, i2c);
-
-	/* Horizontal and vertical vectors */
-
-	i.x = 1.0;
-	i.y = 0.0;
-	art_affine_point (&i_c, &i, i2c);
-	i_c.x -= orig_c.x;
-	i_c.y -= orig_c.y;
-
-	j.x = 0.0;
-	j.y = 1.0;
-	art_affine_point (&j_c, &j, i2c);
-	j_c.x -= orig_c.x;
-	j_c.y -= orig_c.y;
+	compute_xform_scaling (i2c, i_c, j_c);
 
 	/* Compute the scaling vectors.  If a dimension is specified in pixels,
 	 * we normalize the base vector first so that it will represent the size
@@ -368,7 +377,7 @@ compute_xform_vectors (GnomeCanvasPixbuf *gcp, double *i2c, ArtPoint *i_c, ArtPo
 	 */
 
 	if (priv->width_pixels) {
-		length = sqrt (i_c.x * i_c.x + i_c.y * i_c.y);
+		length = sqrt (i_c->x * i_c->x + i_c->y * i_c->y);
 
 		if (length > GNOME_CANVAS_EPSILON) {
 			i_c->x /= length;
@@ -378,7 +387,7 @@ compute_xform_vectors (GnomeCanvasPixbuf *gcp, double *i2c, ArtPoint *i_c, ArtPo
 	}
 
 	if (priv->height_pixels) {
-		length = sqrt (j_c.x * j_c.x + j_c.y * j_c.y);
+		length = sqrt (j_c->x * j_c->x + j_c->y * j_c->y);
 
 		if (length > GNOME_CANVAS_EPSILON) {
 			j_c->x /= length;
@@ -401,7 +410,6 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 	ArtPoint orig, orig_c;
 	ArtPoint i_c, j_c;
 	double w, h;
-	double length;
 	double x1, y1, x2, y2, x3, y3, x4, y4;
 	double mx1, my1, mx2, my2;
 
@@ -485,6 +493,9 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 		item->y1 = my2;
 		item->y2 = my1;
 	}
+
+	item->x2++;
+	item->y2++;
 }
 
 
@@ -509,7 +520,7 @@ gnome_canvas_pixbuf_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_
 	    || (flags & GNOME_CANVAS_UPDATE_AFFINE)
 	    || priv->need_pixbuf_update
 	    || priv->need_size_update)
-		gnome_canvas_request_redraw (item, item->x1, item->y1, item->x2, item->y2);
+		gnome_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2, item->y2);
 
 	/* If we need a pixbuf update, or if the item changed visibility to
 	 * shown, recompute the bounding box.
@@ -517,26 +528,30 @@ gnome_canvas_pixbuf_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_
 	if (priv->need_pixbuf_update
 	    || priv->need_size_update
 	    || ((flags & GNOME_CANVAS_UPDATE_VISIBILITY)
-		&& (GTK_OBJECT_FLAGS (ii) & GNOME_CANVAS_ITEM_VISIBLE))
+		&& (GTK_OBJECT_FLAGS (gcp) & GNOME_CANVAS_ITEM_VISIBLE))
 	    || (flags & GNOME_CANVAS_UPDATE_AFFINE)) {
 		recompute_bounding_box (gcp);
 		gnome_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2, item->y2);
 		priv->need_pixbuf_update = FALSE;
 		priv->need_size_update = FALSE;
 	}
-	
+
 }
 
 
 
 /* Rendering */
 
+/* This is private to libart, but we need it.  Sigh. */
+extern void art_rgb_affine_run (int *p_x0, int *p_x1, int y, int src_width, int src_height,
+				const double affine[6]);
+
 /* Fills the specified buffer with the transformed version of a pixbuf */
 static void
 transform_pixbuf (guchar *dest, int x, int y, int width, int height, int rowstride,
 		  GdkPixbuf *pixbuf, double *affine)
 {
-	ArtPixbuf *apb;
+	ArtPixBuf *apb;
 	int xx, yy;
 	double inv[6];
 	guchar *src, *d;
@@ -553,26 +568,26 @@ transform_pixbuf (guchar *dest, int x, int y, int width, int height, int rowstri
 		dest_p.y = y + yy + 0.5;
 
 		run_x1 = x;
-		run_x1 = x + width;
-		art_affine_run (&run_x1, &run_x2, yy + y,
-				apb->width, apb->height,
-				inv);
+		run_x2 = x + width;
+		art_rgb_affine_run (&run_x1, &run_x2, yy + y,
+				    apb->width, apb->height,
+				    inv);
 
 		d = dest + yy * rowstride + (run_x1 - x) * 4;
 
-		for (xx = run_x0; xx < run-x1; xx++) {
-			dest_p.x = x + 0.5;
+		for (xx = run_x1; xx < run_x2; xx++) {
+			dest_p.x = xx + 0.5;
 			art_affine_point (&src_p, &dest_p, inv);
-			src_x = floor (src_p.x + 0.5);
-			src_y = floor (src_p.y + 0.5);
+			src_x = floor (src_p.x);
+			src_y = floor (src_p.y);
 
-			src = apb->pixels + src_y * apb->rowstride + src_x * apb->num_channels;
+			src = apb->pixels + src_y * apb->rowstride + src_x * apb->n_channels;
 
-			for (i = 0; i < apb->num_channels; i++)
+			for (i = 0; i < apb->n_channels; i++)
 				*d++ = *src++;
 
 			if (!apb->has_alpha)
-				d++; /* It is already zeroed */
+				*d++ = 255; /* opaque */
 		}
 	}
 }
@@ -588,6 +603,7 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 	ArtPoint i_c, j_c;
 	double i_len, j_len;
 	double scale[6], final[6];
+	double w, h;
 	guchar *buf;
 	GdkPixbuf *pixbuf;
 
@@ -600,13 +616,71 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 	/* Compute scaling factors and build the final affine */
 
 	gnome_canvas_item_i2c_affine (item, i2c);
+	compute_xform_scaling (i2c, &i_c, &j_c);
+
+	i_len = sqrt (i_c.x * i_c.x + i_c.y * i_c.y);
+	j_len = sqrt (j_c.x * j_c.x + j_c.y * j_c.y);
+
+	if (priv->width_set)
+		w = priv->width;
+	else
+		w = priv->pixbuf->art_pixbuf->width;
+
+	if (priv->height_set)
+		h = priv->height;
+	else
+		h = priv->pixbuf->art_pixbuf->height;
+
+	/* Convert i_len and j_len into scaling factors */
+
+	if (priv->width_pixels) {
+		if (i_len > GNOME_CANVAS_EPSILON)
+			i_len = 1.0 / i_len;
+		else
+			i_len = 0.0;
+	} else
+		i_len = 1.0;
+
+	i_len *= w / priv->pixbuf->art_pixbuf->width;
+
+	if (priv->height_pixels) {
+		if (j_len > GNOME_CANVAS_EPSILON)
+			j_len = 1.0 / j_len;
+		else
+			j_len = 0.0;
+	} else
+		j_len = 1.0;
+
+	j_len *= h / priv->pixbuf->art_pixbuf->height;
+
+	/* Compute the final affine */
+
+	art_affine_scale (scale, i_len, j_len);
+	art_affine_multiply (final, scale, i2c);
+
+#if 0
 	compute_xform_vectors (gcp, i2c, &i_c, &j_c);
 
 	i_len = sqrt (i_c.x * i_c.x + i_c.y * i_c.y);
 	j_len = sqrt (j_c.x * j_c.x + j_c.y * j_c.y);
 
+	if (priv->width_set)
+		i_len *= priv->width;
+	else
+		i_len *= priv->pixbuf->art_pixbuf->width;
+
+	i_len /= priv->pixbuf->art_pixbuf->width;
+
+	if (priv->height_set)
+		j_len *= priv->height;
+	else
+		j_len *= priv->pixbuf->art_pixbuf->height;
+
+	j_len /= priv->pixbuf->art_pixbuf->height;
+
 	art_affine_scale (scale, i_len, j_len);
 	art_affine_multiply (final, i2c, scale);
+#endif
 
 	buf = g_new0 (guchar, width * height * 4);
 	transform_pixbuf (buf, x, y, width, height, width * 4, priv->pixbuf, final);
@@ -641,5 +715,15 @@ gnome_canvas_pixbuf_point (GnomeCanvasItem *item, double x, double y, int cx, in
 	gcp = GNOME_CANVAS_PIXBUF (item);
 	priv = gcp->priv;
 
-	
+	*actual_item = item;
+
+	return 2 * item->canvas->close_enough;
+}
+
+
+
+/* Bounds handler for the pixbuf canvas item */
+static void
+gnome_canvas_pixbuf_bounds (GnomeCanvasItem *item, double *x1, double *y1, double *x2, double *y2)
+{
 }
