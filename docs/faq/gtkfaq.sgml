@@ -8,7 +8,7 @@
 
 <!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
 <author>Nathan Froyd, Tony Gale, Shawn T. Amundson.
-<date>April 6nd 1998
+<date>May 11th 1998
 <abstract>
 This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just
@@ -168,7 +168,7 @@ there.
 <p> 
 
 Ask on gtk-list for suggestions. There are at least four IRC
-clients already under development
+clients already under development.
 
 <itemize>
 <item>girc. (Included with GNOME)
@@ -275,35 +275,33 @@ flags to ./configure when compiling GTK+. It defaults to
 $prefix, (specified with --prefix), which in turn defaults
 to /usr/local/.
 
-<p> This was done because "glibconfig.h" includes architecture
+This was done because "glibconfig.h" includes architecture
 dependent information, and the rest of the include files
 are put in $prefix/include, which can be shared between different
 architectures. 
 
-<p> GTK+ includes a shell script, <tt/gtk-config/, that
+GTK+ includes a shell script, <tt/gtk-config/, that
 makes it easy to find out the correct include paths.
 The GTK+ tutorial includes an example of using <tt/gtk-config/
 for simple compilation from the command line. For information
 about more complicated configuration, see the file
 docs/gtk-config.txt in the GTK+ distribution.
 
-<p> If you are trying to compile an old program, you may
+If you are trying to compile an old program, you may
 be able to work around the problem by configuring it
 with a command line like: 
 
 <tscreen><verb>
-CPPFLAGS="-I/usr/local/include/glib/include ./configure
+CPPFLAGS="-I/usr/local/include/glib/include" ./configure
 </verb></tscreen>
 
-<p>
 for Bourne-compatible shells like bash, or for csh variants:
 
 <tscreen><verb>
-setenv CPPFLAGS "-I/usr/local/include/glib/include 
+setenv CPPFLAGS "-I/usr/local/include/glib/include" 
 ./configure
 </verb></tscreen>
 
-<p>
 (Substitute the appropriate value of $exec_prefix for /usr/local.)
 
 <!-- ----------------------------------------------------------------- -->
@@ -436,13 +434,11 @@ gladly be included.
 Yes. There is 
 <itemize>
 <item>a C++ wrapper for GTK+ called gtk--. You can find the home page at:
-<verb>
-http://www.cs.tut.fi/~p150650/gtk/gtk--.html
-</verb>
-The FTP site is:
-<verb>
-ftp://ftp.gtk.org/pub/gtk/gtk--/
-</verb>
+<htmlurl url="http://www.cs.tut.fi/~p150650/gtk/gtk--.html"
+name="http://www.cs.tut.fi/~p150650/gtk/gtk--.html">. 
+The FTP site is 
+<htmlurl url="ftp://ftp.gtk.org/pub/gtk/gtk--"
+name="ftp://ftp.gtk.org/pub/gtk/gtk--">.
 <p>
 
 <item>There are two Objective-c bindings currently in development:
@@ -465,14 +461,12 @@ ftp://ftp.gtk.org/pub/gtk/gtk--/
  </itemize> 
 <p>               
 <item>Perl bindings
-<verb>
-ftp://ftp.gtk.org/pub/gtk/perl
-</verb>
-   
-<item>Guile bindings. The home page is at:
-<verb>
-http://www.ping.de/sites/zagadka/guile-gtk/
-</verb>
+<htmlurl url="ftp://ftp.gtk.org/pub/gtk/perl"
+name="ftp://ftp.gtk.org/pub/gtk/perl">
+<P>
+<item>Guile bindings. The home page is at
+<htmlurl url="http://www.ping.de/sites/zagadka/guile-gtk"
+name="http://www.ping.de/sites/zagadka/guile-gtk">.
 By the way, Guile is the GNU Project's implemention of R4RS Scheme (the
 standard). If you like Scheme, you may want to take a look at this.
 <p>
@@ -482,24 +476,28 @@ standard). If you like Scheme, you may want to take a look at this.
 The basics of the system, including callbacks, work fine.
 
 The current development is in
-http://www.ens-lyon.fr/~dmonniau/arcs/
+<htmlurl url="http://www.ens-lyon.fr/~dmonniau/arcs"
+name="http://www.ens-lyon.fr/~dmonniau/arcs">
 </quote>
 
 <item>
-Several python-gtk interfaces have been done. python-gtk is at:
-<verb>
-http://www.acs.ucalgary.cs/~nashceme/python-gtk/
-</verb>
-If you try python-gtk and don't like it, there's also pygtk located at:
-<verb>
-ftp://ftp.gtk.org/pub/gtk/python/
-</verb>
-
+Several python bindings have been done:
+<p>
+<itemize>
+<item>pygtk is at 
+<htmlurl url="http://www.daa.com.au/~james/pygtk" 
+name="http://www.daa.com.au/~james/pygtk"> and 
+<htmlurl url="ftp://ftp.gtk.org/pub/gtk/python"
+name="ftp://ftp.gtk.org/pub/gtk/python">
+<item>python-gtk is at
+<htmlurl url="http://www.ucalgary.ca/~nascheme/python-gtk" 
+name="http://www.ucalgary.ca/~nascheme/python-gtk">
+</itemize>
+<p>
 <item>
-There's a OpenGL/Mesa widget available for GTK+. Grab it at:
-<verb>
-http://www.sakuranet.or.jp/~aozasa/shige/doc/comp/gtk/gtkGL/files-en.html
-</verb>
+There's a OpenGL/Mesa widget available for GTK+. Grab it at
+<htmlurl url="http://www.sakuranet.or.jp/~aozasa/shige/doc/comp/gtk/gtkGL/files-en.html" 
+name="http://www.sakuranet.or.jp/~aozasa/shige/doc/comp/gtk/gtkGL/files-en.html">
 
 </itemize>
 
@@ -609,6 +607,58 @@ The GTK+ Tutorial lists the following widgets:
 </verb>
 
 <!-- ----------------------------------------------------------------- -->
+<sect1>Is GTK+ thread safe? How do I write multi-threaded GTK+ applications?
+<p>
+Although GTK+, like many X toolkits, isn't thread safe, this does
+not prohibit the development of multi-threaded applications with
+GTK+. 
+
+Rob Browning (rlb@cs.utexas.edu) describes threading techniques for
+use with GTK+ (slightly edited): 
+
+There are basically two main approaches, the first is simple, and the
+second complicated. In the first, you just make sure that all GTK+ (or
+X) interactions are handled by one, and
+only one, thread. Any other thread that wants to draw something has
+to somehow notify the "GTK+" thread, and let it handle the
+actual work. 
+
+The second approach allows you to call GTK+ (or X) functions from any
+thread, but it requires some careful synchronization. The
+basic idea is that you create an X protection mutex, and no one may
+make any X calls without first acquiring this mutex. 
+
+Note that this is a little effort, but it allows you to be
+potentially more efficient than a completely thread safe GTK+. You
+get to decide the granularity of the thread locking. You also have to
+make sure that the thread that calls gtk_main is holding the lock when
+it calls gtk_main.
+
+The next thing to worry about is that since you were holding the
+global mutex when you entered gtk_main, all callbacks will also be
+holding it. This means that the callback must release it if it's
+going to call any other code that might reacquire it. Otherwise
+you'll get deadlock. Also, you must be holding the mutex when you
+finally return from the callback. 
+
+In order to allow threads other than the one calling gtk_main to
+get access to the mutex, we also need to register a work function
+with GTK that allows us to release the mutex periodically.
+
+Why can't GTK+ be thread safe by default?                           
+
+Complexity, overhead, and manpower.  The proportion of threaded
+programs is still reasonably small, and getting thread safety right is
+both quite difficult and takes valuable time away from the main work
+of getting a good graphics library finished.  It would be nice to have
+GTK+ thread safe "out of the box", but that's not practical right now,
+and it also might make GTK+ substantially less efficient if not handled
+carefully.
+
+Regardless, it's especially not a priority since relatively good
+workarounds exist.
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>How can I prevent redrawing and resizing while I change multiple widgets?
 <p> 
 Use gtk_container_disable_resize and gtk_container_enable_resize around the 
@@ -616,7 +666,7 @@ code where you are changing a lot of stuff. This will result in much faster
 speed since it will prevent resizing of the entire widget hierarchy. 
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>How do I catch a double click event in a list widget?
+<sect1>How do I catch a double click event (in a list widget, for example)?
 <p>
 Tim Janik wrote to gtk-list (slightly modified):
 
@@ -659,7 +709,15 @@ And connect the handler to your object:
   /* something else */
 }
 </verb></tscreen>
-                          
+
+and, Owen Taylor wrote:
+
+Note that a single button press will be received beforehand, and
+if you are doing this for a button, you will therefore also get a
+"clicked" signal for the button. (This is going to be true for
+any toolkit, since computers aren't good at reading one's
+mind.)
+                                       
 <!-- ----------------------------------------------------------------- -->
 <sect1>How do I find out about the selection of a GtkList?
 <p>
