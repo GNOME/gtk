@@ -1286,9 +1286,6 @@ gtk_tree_view_realize (GtkWidget *widget)
     _gtk_tree_view_column_realize_button (GTK_TREE_VIEW_COLUMN (tmp_list->data));
 
   install_presize_handler (tree_view); 
-
-  if (GTK_WIDGET_CLASS (parent_class)->map)
-    (* GTK_WIDGET_CLASS (parent_class)->map) (widget);
 }
 
 static void
