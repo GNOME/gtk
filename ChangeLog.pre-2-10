@@ -1,3 +1,8 @@
+Sun Sep 14 16:59:52 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_init): Name the arrow 
+	"gtk-toolbar-arrow" so themes can special-case it.
+
 Sun Sep 14 16:07:49 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/Makefile.am (gtk_c_sources): sort the list of files.

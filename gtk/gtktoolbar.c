@@ -556,6 +556,8 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   GTK_WIDGET_SET_FLAGS (toolbar, GTK_NO_WINDOW);
 
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+
+  gtk_widget_set_redraw_on_allocate (toolbar, FALSE);
   
   toolbar->orientation = GTK_ORIENTATION_HORIZONTAL;
   toolbar->style = DEFAULT_TOOLBAR_STYLE;
@@ -577,6 +579,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   gtk_button_set_focus_on_click (GTK_BUTTON (priv->arrow_button), FALSE);
   
   priv->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
+  gtk_widget_set_name (priv->arrow, "gtk-toolbar-arrow");
   gtk_widget_show (priv->arrow);
   gtk_container_add (GTK_CONTAINER (priv->arrow_button), priv->arrow);
   
@@ -1026,6 +1029,36 @@ get_item_size (GtkToolbar *toolbar,
 }
 
 static void
+invalidate_border (GtkToolbar *toolbar)
+{
+  GtkWidget *widget = GTK_WIDGET (toolbar);
+  
+  if (get_shadow_type (toolbar) != GTK_SHADOW_NONE)
+    {
+      GdkRegion *invalid;
+      GdkRectangle inner_rect;
+      GdkRegion *inner_region;
+      gint xborder = widget->style->xthickness + GTK_CONTAINER (widget)->border_width;
+      gint yborder = widget->style->ythickness + GTK_CONTAINER (widget)->border_width;
+
+      inner_rect.x = widget->allocation.x + xborder;
+      inner_rect.y = widget->allocation.y + yborder;
+      inner_rect.width = widget->allocation.width - 2 * xborder;
+      inner_rect.height = widget->allocation.height - 2 * yborder;
+
+      inner_region = gdk_region_rectangle (&inner_rect);
+
+      invalid = gdk_region_rectangle (&(widget->allocation));
+      gdk_region_subtract (invalid, inner_region);
+      
+      gdk_window_invalidate_region (widget->window, invalid, FALSE);
+
+      gdk_region_destroy (invalid);
+      gdk_region_destroy (inner_region);
+    }
+}
+
+static void
 gtk_toolbar_size_allocate (GtkWidget     *widget,
 			   GtkAllocation *allocation)
 {
@@ -1046,8 +1079,14 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   GList *items;
   GtkRequisition arrow_requisition;
 
+  if (GTK_WIDGET_REALIZED (toolbar))
+    invalidate_border (toolbar);
+  
   widget->allocation = *allocation;
 
+  if (GTK_WIDGET_REALIZED (toolbar))
+    invalidate_border (toolbar);
+  
   border_width = GTK_CONTAINER (toolbar)->border_width;
 
   if (GTK_WIDGET_REALIZED (widget))
