@@ -14,8 +14,8 @@
 
 /* private function */
 
-static ArtPixBuf *
-art_pixbuf_from_drawable_core (GdkWindow *window,
+static GdkPixBuf *
+gdk_pixbuf_from_drawable_core (GdkWindow *window,
 			       gint x, gint y,
 			       gint width, gint height,
 			       gint with_alpha)
@@ -113,24 +113,26 @@ art_pixbuf_from_drawable_core (GdkWindow *window,
 		g_error ("art_pixbuf_from_drawable_core (): Unknown depth.");
 	}
 
-	return with_alpha ? art_pixbuf_new_rgba (buff, width, height, rowstride) :
+	art_pixbuf = with_alpha ? art_pixbuf_new_rgba (buff, width,  height, rowstride) :
 		art_pixbuf_new_rgb (buff, width, height, rowstride);
+
+	return gdk_pixbuf_new(art_pixbuf, NULL);
 }
 
 /* Public functions */
 
-ArtPixBuf *
-art_pixbuf_rgb_from_drawable  (GdkWindow *window,
+GdkPixBuf *
+gdk_pixbuf_rgb_from_drawable  (GdkWindow *window,
 			      gint x, gint y,
 			      gint width, gint height)
 {
-	return art_pixbuf_from_drawable_core  (window, x, y, width, height, 0);
+	return gdk_pixbuf_from_drawable_core  (window, x, y, width, height, 0);
 }
           
-ArtPixBuf *
-art_pixbuf_rgba_from_drawable  (GdkWindow *window,
+GdkPixBuf *
+gdk_pixbuf_rgba_from_drawable  (GdkWindow *window,
 			       gint x, gint y,
 			       gint width, gint height)
 {
-	return art_pixbuf_from_drawable_core  (window, x, y, width, height, 1);
+	return gdk_pixbuf_from_drawable_core  (window, x, y, width, height, 1);
 }

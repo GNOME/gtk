@@ -11,6 +11,9 @@
 	* src/gdk-pixbuf-drawable.c: Added #include "gdk-pixbuf-drawable.h"
 	to fix compilation.
 
+	* src/gdk-pixbuf-drawable.[ch]: Changed functions to return
+	GdkPixBuf* instead of ArtPixBuf*.
+
 1999-09-22  Michael Meeks  <michael@nuclecu.unam.mx>
 
 	* src/gdk-pixbuf.c (gdk_pixbuf_new): created.
