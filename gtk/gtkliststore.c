@@ -2095,7 +2095,8 @@ gtk_list_store_sort (GtkListStore *list_store)
   if (list_store->length <= 1)
     return;
 
-  g_assert (GTK_LIST_STORE_IS_SORTED (list_store));
+  if (!GTK_LIST_STORE_IS_SORTED (list_store))
+    return;
 
   list = G_SLIST (list_store->root);
 
@@ -2353,19 +2354,22 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
       (list_store->order == order))
     return;
 
-  if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
+  if (sort_column_id != -2)
     {
-      GtkTreeDataSortHeader *header = NULL;
-
-      header = _gtk_tree_data_list_get_header (list_store->sort_list, sort_column_id);
-
-      /* We want to make sure that we have a function */
-      g_return_if_fail (header != NULL);
-      g_return_if_fail (header->func != NULL);
-    }
-  else
-    {
-      g_return_if_fail (list_store->default_sort_func != NULL);
+      if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
+	{
+	  GtkTreeDataSortHeader *header = NULL;
+	  
+	  header = _gtk_tree_data_list_get_header (list_store->sort_list, sort_column_id);
+	  
+	  /* We want to make sure that we have a function */
+	  g_return_if_fail (header != NULL);
+	  g_return_if_fail (header->func != NULL);
+	}
+      else
+	{
+	  g_return_if_fail (list_store->default_sort_func != NULL);
+	}
     }
 
 

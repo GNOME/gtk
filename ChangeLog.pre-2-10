@@ -1,5 +1,11 @@
 2004-09-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkliststore.c: Allow to disable sorting. This is meant
+	to be internal functionality in 2.4. The new API necessary to
+	use this functionality appears in 2.6. 
+
+2004-09-27  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilesystemunix.c (gtk_file_folder_unix_list_children): 
 	Emit GtkFileFolder::finished-loading.
 
