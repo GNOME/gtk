@@ -1,3 +1,15 @@
+Thu Jul 12 14:06:19 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_hierarchy_changed): Add
+	missing case.
+
+	* gtk/gtkcontainer.c (gtk_container_get_focus_chain): Fix
+	NULL/FALSE return value confusion.
+
+	* gtk/gtkrange.c (coord_to_value): Fix division-by-zero
+	problem when scrollbar completely fills range. (Patch
+	from  Matthias Clasen, #57047)
+
 Thu Jul 12 13:53:28 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Properly

@@ -1021,11 +1021,17 @@ coord_to_value (GtkRange *range,
   gdouble value;
   
   if (range->orientation == GTK_ORIENTATION_VERTICAL)
-    frac = ((coord - range->layout->trough.y) /
-            (gdouble) (range->layout->trough.height - range->layout->slider.height));
+    if (range->layout->trough.height == range->layout->slider.height)
+      frac = 1.0;
+    else 
+      frac = ((coord - range->layout->trough.y) /
+	      (gdouble) (range->layout->trough.height - range->layout->slider.height));
   else
-    frac = ((coord - range->layout->trough.x) /
-            (gdouble) (range->layout->trough.width - range->layout->slider.width));
+    if (range->layout->trough.width == range->layout->slider.width)
+      frac = 1.0;
+    else
+      frac = ((coord - range->layout->trough.x) /
+	      (gdouble) (range->layout->trough.width - range->layout->slider.width));
 
   if (should_invert (range))
     frac = 1.0 - frac;

@@ -2126,7 +2126,7 @@ gboolean
 gtk_container_get_focus_chain (GtkContainer *container,
 			       GList       **focus_chain)
 {
-  g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
+  g_return_val_if_fail (GTK_IS_CONTAINER (container), FALSE);
 
   if (focus_chain)
     {
