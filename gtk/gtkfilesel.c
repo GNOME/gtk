@@ -2456,8 +2456,7 @@ maybe_clear_entry:
  *
  * Retrieves the list of file selections the user has made in the dialog box.
  * This function is intended for use when the user can select multiple files
- * in the file list. The first file in the list is equivalent to what
- * gtk_file_selection_get_filename() would return.
+ * in the file list. 
  *
  * The filenames are in the encoding of g_filename_from_utf8(), which may or 
  * may not be the same as that used by GTK+ (UTF-8). To convert to UTF-8, call
@@ -2499,6 +2498,15 @@ gtk_file_selection_get_selections (GtkFileSelection *filesel)
   if (names != NULL)
     {
       dirname = g_path_get_dirname (filename);
+
+      if ((names->len >= 1) && 
+	  (strcmp (gtk_entry_get_text (GTK_ENTRY (filesel->selection_entry)), "") == 0))
+	{ /* multiple files are selected and last selection was removed via ctrl click */
+	  g_free (dirname);
+	  dirname = g_strdup (filename); /* as gtk_file_selection_get_filename returns dir 
+					    if no file is selected */
+	  unselected_entry = FALSE;
+	}
 
       for (i = 0; i < names->len; i++)
 	{

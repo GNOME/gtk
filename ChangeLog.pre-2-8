@@ -1,3 +1,7 @@
+2004-11-15 Erwann Chenede - <erwann.chenede@sun.com>
+      
+	* gtk/gtkfilesel.c: fix unselect in multiple selection (#156805)
+
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c: Include gtkdnd.h  (#158243, Kazuki IWAMOTO)
