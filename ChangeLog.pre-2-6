@@ -1,5 +1,7 @@
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/engines/Makefile.am (SUBDIRS): Add pixbuf.
+
 	* gtk/gtkbutton.c: 
 	* gtk/gtkimagemenuitem.c: Don't use one signal handler per
 	instance to track changes to the gtk-menu-images and

@@ -2,4 +2,4 @@ if PLATFORM_WIN32
 wimp = ms-windows
 endif
 
-SUBDIRS = $(wimp)
+SUBDIRS = $(wimp) pixbuf
