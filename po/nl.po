@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-01 11:34-0500\n"
-"PO-Revision-Date: 2005-01-19 13:02+0100\n"
+"POT-Creation-Date: 2005-03-05 22:07+0100\n"
+"PO-Revision-Date: 2005-03-06 16:09+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -221,7 +221,7 @@ msgstr "Het BMP-bestandsformaat"
 msgid "Failure reading GIF: %s"
 msgstr "Lezen van GIF mislukt: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1435 gdk-pixbuf/io-gif.c:1596
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "Er ontbrak data in het GIF-bestand (misschien was het afgebroken?)"
 
@@ -252,25 +252,30 @@ msgstr "Foutieve code ontdekt"
 msgid "Circular table entry in GIF file"
 msgstr "Circulair tabelveld in GIF-bestand"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1423 gdk-pixbuf/io-gif.c:1469
-#: gdk-pixbuf/io-gif.c:1584
+#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
+#: gdk-pixbuf/io-gif.c:1612
 msgid "Not enough memory to load GIF file"
 msgstr "Onvoldoende geheugen om GIF-bestand te laden"
 
-#: gdk-pixbuf/io-gif.c:1088
+# composite a frame?
+#: gdk-pixbuf/io-gif.c:947
+msgid "Not enough memory to composite a frame in GIF file"
+msgstr "Onvoldoende geheugen om een frame samen te stellen in GIF-bestand"
+
+#: gdk-pixbuf/io-gif.c:1116
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF-bestand is beschadigd (incorrecte LZW-compressie)"
 
-#: gdk-pixbuf/io-gif.c:1138
+#: gdk-pixbuf/io-gif.c:1166
 msgid "File does not appear to be a GIF file"
 msgstr "Bestand lijkt geen GIF-bestand te zijn"
 
-#: gdk-pixbuf/io-gif.c:1150
+#: gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Versie %s van het GIF-bestandsformaat wordt niet ondersteund"
 
-#: gdk-pixbuf/io-gif.c:1259
+#: gdk-pixbuf/io-gif.c:1287
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -278,11 +283,11 @@ msgstr ""
 "GIF-bestand heeft geen algemeen kleurenpalet, en een kader daarbinnen heeft "
 "geen lokaal kleurenpalet"
 
-#: gdk-pixbuf/io-gif.c:1491
+#: gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-bestand is afgebroken of onvolledig"
 
-#: gdk-pixbuf/io-gif.c:1643
+#: gdk-pixbuf/io-gif.c:1671
 msgid "The GIF image format"
 msgstr "Het GIF-bestandsformaat"
 
@@ -730,38 +735,42 @@ msgstr "Het XBM-bestandsformaat"
 msgid "No XPM header found"
 msgstr "Geen XPM-header gevonden"
 
+#: gdk-pixbuf/io-xpm.c:1238
+msgid "Invalid XPM header"
+msgstr "Ongeldig XPM-header"
+
 # afbeelding ipv bestand gebruikt.
-#: gdk-pixbuf/io-xpm.c:1237
+#: gdk-pixbuf/io-xpm.c:1246
 msgid "XPM file has image width <= 0"
 msgstr "XPM-afbeelding heeft breedte <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1245
+#: gdk-pixbuf/io-xpm.c:1254
 msgid "XPM file has image height <= 0"
 msgstr "XPM-afbeelding heeft hoogte <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1253
+#: gdk-pixbuf/io-xpm.c:1262
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM heeft ongeldig aantal tekens per beeldpunt"
 
-#: gdk-pixbuf/io-xpm.c:1260
+#: gdk-pixbuf/io-xpm.c:1269
 msgid "XPM file has invalid number of colors"
 msgstr "XPM-bestand heeft ongeldig aantal kleuren"
 
-#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
+#: gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1290 gdk-pixbuf/io-xpm.c:1342
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Kan geen geheugenruimte reserveren voor het laden van XPM-afbeelding"
 
-#: gdk-pixbuf/io-xpm.c:1295
+#: gdk-pixbuf/io-xpm.c:1304
 msgid "Cannot read XPM colormap"
 msgstr "Kan XPM-kleurenkaart niet lezen"
 
-#: gdk-pixbuf/io-xpm.c:1524
+#: gdk-pixbuf/io-xpm.c:1533
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr ""
 "Niet mogelijk om naar tijdelijk bestand te schrijven bij het laden van XPM-"
 "afbeelding"
 
-#: gdk-pixbuf/io-xpm.c:1559
+#: gdk-pixbuf/io-xpm.c:1568
 msgid "The XPM image format"
 msgstr "Het XPM-bestandsformaat"
 
@@ -1999,11 +2008,11 @@ msgstr "Minder inspringen"
 msgid "_Index"
 msgstr "_Index"
 
-# schuin/schuingedrukt
-# _u / _i
+# _schuin/_schuingedrukt/_cursief
+# voorzover ik kan zien alleen in gucharmap gebruikt.
 #: gtk/gtkstock.c:325
 msgid "_Italic"
-msgstr "Schu_ingedrukt"
+msgstr "_Schuingedrukt"
 
 # ga naar
 #: gtk/gtkstock.c:326
