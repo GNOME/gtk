@@ -155,11 +155,11 @@ on_reorder (void)
   for (i = 0; i < contents->len; i++)
     shuffle_array[i] = i;
 
-  for (i = 0; i < contents->len - 1; i++)
+  for (i = 0; i + 1 < contents->len; i++)
     {
       gint pos = g_random_int_range (i, contents->len);
       gint tmp;
-      
+
       tmp = shuffle_array[i];
       shuffle_array[i] = shuffle_array[pos];
       shuffle_array[pos] = tmp;
@@ -177,6 +177,37 @@ on_reorder (void)
   log ("Reordered array");
     
   g_free (shuffle_array);
+}
+
+static int n_animations = 0;
+static int timer = 0;
+
+static gint
+animation_timer (gpointer data)
+{
+  switch (g_random_int_range (0, 3)) 
+    {
+    case 0: 
+      on_insert ();
+      break;
+    case 1:
+      on_delete ();
+      break;
+    case 2:
+      on_reorder ();
+      break;
+    }
+
+  n_animations--;
+  return n_animations > 0;
+}
+
+static void
+on_animate (void)
+{
+  n_animations += 20;
+ 
+  timer = g_timeout_add (1000, (GSourceFunc) animation_timer, NULL);
 }
 
 int
@@ -261,6 +292,10 @@ main (int argc, char **argv)
   button = align_button_new ("Reorder");
   gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE, 0);
   g_signal_connect (button, "clicked", G_CALLBACK (on_reorder), NULL);
+
+  button = align_button_new ("Animate");
+  gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE, 0);
+  g_signal_connect (button, "clicked", G_CALLBACK (on_animate), NULL);
 
   gtk_widget_show_all (dialog);
   gtk_dialog_run (GTK_DIALOG (dialog));

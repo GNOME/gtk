@@ -1,3 +1,9 @@
+Wed Mar  3 00:28:59 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testcombochange.c: Add an animation mode, to test 
+	how the combobox behaves if the model changes while it is popped
+	up.
+
 Tue Mar  2 17:06:05 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.3.5 ===
