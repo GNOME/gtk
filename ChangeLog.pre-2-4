@@ -1,7 +1,8 @@
 2002-04-22  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkentry.c (gtk_entry_drag_data_get): Use 
-	gtk_entry_get_public_chars. Fixes #79532.
+	gtk_entry_get_public_chars. 
+	Fixes #79532 (Reported by Ovidiu Gheorghioiu).
 
 Mon Apr 22 19:24:29 2002  Kristian Rietveld  <kris@gtk.org>
 
