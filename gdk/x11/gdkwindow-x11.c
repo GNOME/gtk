@@ -2526,7 +2526,9 @@ gdk_window_is_viewable (GdkWindow *window)
 
   g_return_val_if_fail (window != NULL, FALSE);
 
-  while (private && (private != &gdk_root_parent))
+  while (private && 
+	 (private != &gdk_root_parent) &&
+	 (private->window_type != GDK_WINDOW_FOREIGN))
     {
       if (!private->mapped)
 	return FALSE;

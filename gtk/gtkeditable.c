@@ -370,9 +370,9 @@ static void
 gtk_editable_init (GtkEditable *editable)
 {
   static const GtkTargetEntry targets[] = {
-    { "STRING", TARGET_STRING },
-    { "TEXT",   TARGET_TEXT }, 
-    { "COMPOUND_TEXT", TARGET_COMPOUND_TEXT }
+    { "STRING", 0, TARGET_STRING },
+    { "TEXT",   0, TARGET_TEXT }, 
+    { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT }
   };
   static const gint n_targets = sizeof(targets) / sizeof(targets[0]);
   

@@ -1,3 +1,35 @@
+Sat Jan 23 11:15:39 1999  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkdnd.c (gdk_window_register_dnd): X expects
+	 longs, not uint32 for XChangeProperty, when 
+	 format == 32.
+
+	* gdk/gdkdnd.c (motif_read_initiator_info): Byte-swap
+	 the MotifInitiatorInfo structure if necessary.
+
+ 	* gdk/gdkdnd.c: When extracting and constructing
+         Motif DND messages, don't use data.s[], data.l[]
+	 since on 64bit architectures, these won't necessarily
+	 be in the same place with data.b[]. 
+
+ 	* gtk/testdnd.c (target_drag_drop): Return TRUE for
+	 drag_drop within the drop zone.
+ 
+	* gtk/gtkdnd.c (gtk_drag_dest_handle_event): Only send
+	 a XmTRANSFER_FAILURE if no drop site is found, not
+	 on every drop!
+
+Fri Jan 22 19:22:39 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkeditable.c: Add flags field to 
+	 GtkTargetEntry table.
+	
+	* gdk/gdkwindow.c (gdk_window_is_viewable): Treat foreign
+	 windows as always viewable, since we can't track their
+	 map-state reliably without speed problems. (Fixes
+	 problem where updating didn't occur properly within
+	 GtkPlug)
+
 Sat Jan 23 13:41:00 1999  Jeff Garzik  <jgarzik@pobox.com>
 
 	* gtk/gtkctree.c
