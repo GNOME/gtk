@@ -30,7 +30,7 @@
 #include <stdlib.h>
 
 #include "gdk.h"
-#include "gdkprivate.h"
+#include "gdkinternals.h"
 
 #ifndef HAVE_XCONVERTCASE
 #include "gdkkeysyms.h"

@@ -14,6 +14,7 @@ testtree
 gtkcompat.h
 testthreads
 libgtk.la
+gtkfeatures.h
 gtkmarshal.h
 gtktypebuiltins.h
 gtkmarshal.c

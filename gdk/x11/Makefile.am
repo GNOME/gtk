@@ -67,6 +67,9 @@ libgdk_x11_la_SOURCES =    	\
 	gdkinputprivate.h  	\
 	$(xinput_sources)
 
+INCLUDE_HEADERS = 		\
+	gdkx.h
+
 EXTRA_PROGRAMS = gxid
 bin_PROGRAMS = @xinput_progs@
 

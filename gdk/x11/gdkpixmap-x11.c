@@ -33,8 +33,7 @@
 #include <X11/Xlib.h>
 
 #include "gdkpixmap.h"
-#include "gdkprivate.h"
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
 
 typedef struct
 {

@@ -31,8 +31,8 @@
 #include "gdk.h"          /* For gdk_flush() */
 #include "gdkdnd.h"
 #include "gdkproperty.h"
-#include "gdkprivate.h"
-#include "gdkx.h"
+#include "gdkinternals.h"
+#include "gdkprivate-x11.h"
 
 typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
 

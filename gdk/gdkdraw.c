@@ -351,17 +351,6 @@ gdk_draw_drawable (GdkDrawable *drawable,
 							  width, height);
 }
 
-extern void
-_gdk_window_draw_image (GdkDrawable *drawable,
-			GdkGC       *gc,
-			GdkImage    *image,
-			gint         xsrc,
-			gint         ysrc,
-			gint         xdest,
-			gint         ydest,
-			gint         width,
-			gint         height);
-
 void
 gdk_draw_image (GdkDrawable *drawable,
 		GdkGC       *gc,

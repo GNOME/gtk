@@ -68,6 +68,7 @@
 #include "gdkcc.h"
 #include "gdkcolor.h"
 #include "gdkx.h"
+#include "gdkinternals.h"
 
 #define MAX_IMAGE_COLORS 256
 

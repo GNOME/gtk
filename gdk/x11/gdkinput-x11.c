@@ -25,6 +25,7 @@
  */
 
 #include "gdkinputprivate.h"
+#include "gdkinternals.h"
 #include "gdkx.h"
 
 /* Forward declarations */

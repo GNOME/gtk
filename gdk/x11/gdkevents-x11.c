@@ -25,7 +25,8 @@
  */
 
 #include "gdk.h"
-#include "gdkprivate.h"
+#include "gdkprivate-x11.h"
+#include "gdkinternals.h"
 #include "gdkx.h"
 
 #include "gdkkeysyms.h"

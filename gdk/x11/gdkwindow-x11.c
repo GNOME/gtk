@@ -34,7 +34,7 @@
 #include "gdkwindow.h"
 #include "gdkinputprivate.h"
 #include "gdkprivate-x11.h"
-#include "gdkx.h"
+#include "gdkinternals.h"
 #include "MwmUtil.h"
 
 #include <stdlib.h>

@@ -25,7 +25,7 @@
  */
 
 #include "gdkwindow.h"
-#include "gdkprivate.h"
+#include "gdkinternals.h"
 #include "gdk.h"		/* For gdk_rectangle_union() */
 #include "gdkpixmap.h"
 
@@ -971,7 +971,7 @@ gdk_window_clear_area_e (GdkWindow *window,
   _gdk_windowing_window_clear_area_e (window, x, y, width, height);
 }
 
-extern void
+void
 _gdk_window_draw_image (GdkDrawable *drawable,
 			GdkGC       *gc,
 			GdkImage    *image,

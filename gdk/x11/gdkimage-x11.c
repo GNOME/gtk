@@ -56,7 +56,7 @@
 #include "gdk.h"		/* For gdk_error_trap_* / gdk_flush_* */
 #include "gdkimage.h"
 #include "gdkprivate.h"
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
 
 static void gdk_x11_image_destroy (GdkImage    *image);
 static void gdk_image_put_normal  (GdkImage    *image,
