@@ -1,3 +1,8 @@
+Wed Feb 25 09:46:34 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_style_finalize): Free 
+	style->icon_factories (#130128)
+
 Wed Feb 25 03:52:58 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkpathbar.c: use gtk_widget_push/pop_composite_child around

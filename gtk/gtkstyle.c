@@ -687,6 +687,19 @@ gtk_style_finalize (GObject *object)
         }
     }
 
+  if (style->icon_factories)
+    {
+      GSList *tmp_list = style->icon_factories;
+
+      while (tmp_list)
+	{
+	  g_object_unref (tmp_list->data);
+	  tmp_list = tmp_list->next;
+	}
+
+      g_slist_free (style->icon_factories);
+    }
+
   pango_font_description_free (style->font_desc);
   
   if (style->private_font)
