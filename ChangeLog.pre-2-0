@@ -1,3 +1,13 @@
+Sat May 29 11:17:29 PDT 1999 Manish Singh <yosh@gimp.org>
+
+	* docs/Makefile.am: add Changes-1.2.txt to EXTRA_DIST
+
+	* acinclude.m4
+	* config.guess
+	* config.sub
+	* ltconfig
+	* ltmain.sh: upgrade to libtool 1.3
+	
 Tue May 25 13:13:12 1999  Owen Taylor  <otaylor@redhat.com>
 
         Fixes for invisible XOR lines (Frank Loemker

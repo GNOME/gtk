@@ -102,6 +102,7 @@ FAQ_FILES=html/gtkfaq.html		\
 	text/gtkfaq.txt
 
 EXTRA_DIST =	\
+	Changes-1.2.txt		\
 	gtk-config.1.in		\
 	texinfo.tex 		\
 	macros.texi		\
