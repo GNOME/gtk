@@ -354,6 +354,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 	guint       num_left, num_copy;
 	guint       last_bytes_left;
 	guint       spinguard;
+	gboolean    first;
 	guchar *bufhd;
 
 	g_return_val_if_fail (context != NULL, FALSE);
@@ -384,10 +385,13 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 		bufhd = buf;
 	}
 
+	if (num_left == 0)
+		return TRUE;
 
 	last_bytes_left = 0;
 	spinguard = 0;
-	while (src->pub.bytes_in_buffer != 0 || num_left != 0) {
+	first = TRUE;
+	while (TRUE) {
 
 		/* handle any data from caller we haven't processed yet */
 		if (num_left > 0) {
@@ -410,9 +414,10 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 			num_left -= num_copy;
 		} else {
 		/* did anything change from last pass, if not return */
-			if (last_bytes_left == 0)
+			if (first) {
 				last_bytes_left = src->pub.bytes_in_buffer;
-			else if (src->pub.bytes_in_buffer == last_bytes_left)
+				first = FALSE;
+			} else if (src->pub.bytes_in_buffer == last_bytes_left)
 				spinguard++;
 			else
 				last_bytes_left = src->pub.bytes_in_buffer;
@@ -434,12 +439,13 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 
 			context->got_header = TRUE;
 
+#if 0
 			if (jpeg_has_multiple_scans (cinfo)) {
 				g_print ("io-jpeg.c: Does not currently "
 					 "support progressive jpeg files.\n");
 				return FALSE;
 			}
-
+#endif
 			context->pixbuf = gdk_pixbuf_new(ART_PIX_RGB, 
 							 /*have_alpha*/ FALSE,
 							 8, 
@@ -471,6 +477,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 
 			context->did_prescan = TRUE;
 		} else {
+
 			/* we're decompressing so feed jpeg lib scanlines */
 			guchar *lines[4];
 			guchar **lptr;
@@ -488,11 +495,6 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 					rowptr += context->pixbuf->art_pixbuf->rowstride;;
 				}
 
-#ifdef IO_JPEG_DEBUG_GREY
-				for (p=lines[0],i=0; i< context->pixbuf->art_pixbuf->rowstride;i++, p++)
-					*p = 0;
-				
-#endif
 				nlines = jpeg_read_scanlines (cinfo, lines,
 							      cinfo->rec_outbuf_height);
 				if (nlines == 0)

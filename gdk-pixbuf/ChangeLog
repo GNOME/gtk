@@ -2,6 +2,14 @@
 
 	* src/io-pnm.c : Finished progressive PNM loading code. Should handle
 	all types of PNM files now.
+
+	* src/io-jpeg.c (image_load_increment): Figured out problem with
+	loading Progressive JPEG's progressively (say that 10 times fast).
+	Currently for Progressive JPEG's the entire image is loaded before
+	it is displayed. libjpeg supports a fancier mechanism which I may
+	implement later.
+
+	With these changes all JPEG formats appear to load properly for me.
 	
 1999-11-08  Jonathan Blandford  <jrb@redhat.com>
 
