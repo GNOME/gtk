@@ -672,7 +672,8 @@ struct _GdkColor
  */
 struct _GdkColormap
 {
-  GdkColor colors[256];
+  gint      size;
+  GdkColor *colors;
 };
 
 /* The visual type.
