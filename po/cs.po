@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-21 18:36+0100\n"
+"POT-Creation-Date: 2004-01-23 04:53+0100\n"
+"PO-Revision-Date: 2004-01-23 17:31+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1366,19 +1366,18 @@ msgstr "Hodnota _gama"
 msgid "Error loading icon: %s"
 msgstr "Chyba při načítání ikony: %s"
 
-# FIXME: split sentence
 #: gtk/gtkicontheme.c:1182
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
 "was not found either, perhaps you need to install it.\n"
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
-"'\n"
+"Nemohu najít ikonu '%s'. Téma '%s'\n"
 "také nebylo nalezeno, možná byste je měli nainstalovat.\n"
 "Můžete ji získat z:\n"
-"\thttp://freedesktop.org/Software/icon-theme/releases"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1247
 #, c-format
@@ -1911,7 +1910,3 @@ msgstr "Metoda vstupu X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nemohu získat ifnrmace o soubour '%s': %s"
-
-# FIXME: split sentence
-#~ msgid "Could not find the icon '%s'.  The '"
-#~ msgstr "Nemohu najít ikonu '%s'. Téma '"
