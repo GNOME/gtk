@@ -1,5 +1,10 @@
 2004-07-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c: Don't forget to destroy the row separator
+	function user data when the combo box is destroyed.
+
+2004-07-30  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcombobox.h: 
 	* gtk/gtkcombobox.c: Change the api for separators to use a 
 	separator function instead of a boolean column.

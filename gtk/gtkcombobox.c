@@ -4120,6 +4120,13 @@ gtk_combo_box_destroy (GtkObject *object)
 
   gtk_combo_box_popdown (combo_box);
 
+  if (combo_box->priv->row_separator_destroy)
+    (* combo_box->priv->row_separator_destroy) (combo_box->priv->row_separator_data);
+
+  combo_box->priv->row_separator_func = NULL;
+  combo_box->priv->row_separator_data = NULL;
+  combo_box->priv->row_separator_destroy = NULL;
+
   combo_box->priv->destroying = 1;
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
