@@ -955,7 +955,7 @@ if test "x$gdktarget" = "xx11"; then
       CPPFLAGS="$gtk_save_cppflags"
 
       if $have_xft ; then
-        x_libs="-lXft -lXrender -lXext $X_LIBS $FREETYPE_LIBS $X_EXTRA_LIBS"
+        x_libs="$X_LIBS -lXft -lXrender -lXext -lX11 $FREETYPE_LIBS $X_EXTRA_LIBS"
       else
         AC_MSG_ERROR([pangoxft Pango backend found, but Xft not found])
       fi
