@@ -27,7 +27,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xos.h>
 #include "gdkfont.h"
-#include "gdkprivate.h"
+#include "gdkx.h"
 
 static GHashTable *font_name_hash = NULL;
 static GHashTable *fontset_name_hash = NULL;
@@ -35,7 +35,7 @@ static GHashTable *fontset_name_hash = NULL;
 static void
 gdk_font_hash_insert (GdkFontType type, GdkFont *font, const gchar *font_name)
 {
-  GdkFontPrivate *private = (GdkFontPrivate *)font;
+  GdkFontPrivateX *private = (GdkFontPrivateX *)font;
   GHashTable **hashp = (type == GDK_FONT_FONT) ?
     &font_name_hash : &fontset_name_hash;
 
@@ -49,7 +49,7 @@ gdk_font_hash_insert (GdkFontType type, GdkFont *font, const gchar *font_name)
 static void
 gdk_font_hash_remove (GdkFontType type, GdkFont *font)
 {
-  GdkFontPrivate *private = (GdkFontPrivate *)font;
+  GdkFontPrivateX *private = (GdkFontPrivateX *)font;
   GSList *tmp_list;
   GHashTable *hash = (type == GDK_FONT_FONT) ?
     font_name_hash : fontset_name_hash;
@@ -90,7 +90,7 @@ GdkFont*
 gdk_font_load (const gchar *font_name)
 {
   GdkFont *font;
-  GdkFontPrivate *private;
+  GdkFontPrivateX *private;
   XFontStruct *xfont;
 
   g_return_val_if_fail (font_name != NULL, NULL);
@@ -106,7 +106,7 @@ gdk_font_load (const gchar *font_name)
   font = gdk_font_lookup (xfont->fid);
   if (font != NULL)
     {
-      private = (GdkFontPrivate *) font;
+      private = (GdkFontPrivateX *) font;
       if (xfont != private->xfont)
 	XFreeFont (gdk_display, xfont);
 
@@ -114,10 +114,10 @@ gdk_font_load (const gchar *font_name)
     }
   else
     {
-      private = g_new (GdkFontPrivate, 1);
+      private = g_new (GdkFontPrivateX, 1);
       private->xdisplay = gdk_display;
       private->xfont = xfont;
-      private->ref_count = 1;
+      private->base.ref_count = 1;
       private->names = NULL;
  
       font = (GdkFont*) private;
@@ -137,7 +137,7 @@ GdkFont*
 gdk_fontset_load (gchar *fontset_name)
 {
   GdkFont *font;
-  GdkFontPrivate *private;
+  GdkFontPrivateX *private;
   XFontSet fontset;
   gint  missing_charset_count;
   gchar **missing_charset_list;
@@ -147,7 +147,7 @@ gdk_fontset_load (gchar *fontset_name)
   if (font)
     return font;
 
-  private = g_new (GdkFontPrivate, 1);
+  private = g_new (GdkFontPrivateX, 1);
   font = (GdkFont*) private;
 
   private->xdisplay = gdk_display;
@@ -164,7 +164,7 @@ gdk_fontset_load (gchar *fontset_name)
       XFreeStringList (missing_charset_list);
     }
 
-  private->ref_count = 1;
+  private->base.ref_count = 1;
 
   if (!fontset)
     {
@@ -197,57 +197,74 @@ gdk_fontset_load (gchar *fontset_name)
     }
 }
 
-GdkFont*
-gdk_font_ref (GdkFont *font)
+void
+_gdk_font_destroy (GdkFont *font)
 {
-  GdkFontPrivate *private;
-
-  g_return_val_if_fail (font != NULL, NULL);
-
-  private = (GdkFontPrivate*) font;
-  private->ref_count += 1;
-  return font;
+  GdkFontPrivateX *private = (GdkFontPrivateX *)font;
+  
+  gdk_font_hash_remove (font->type, font);
+      
+  switch (font->type)
+    {
+    case GDK_FONT_FONT:
+      gdk_xid_table_remove (((XFontStruct *) private->xfont)->fid);
+      XFreeFont (private->xdisplay, (XFontStruct *) private->xfont);
+      break;
+    case GDK_FONT_FONTSET:
+      XFreeFontSet (private->xdisplay, (XFontSet) private->xfont);
+      break;
+    default:
+      g_error ("unknown font type.");
+      break;
+    }
+  g_free (font);
 }
 
-void
-gdk_font_unref (GdkFont *font)
+gint
+_gdk_font_strlen (GdkFont     *font,
+		  const gchar *str)
 {
-  GdkFontPrivate *private;
-  private = (GdkFontPrivate*) font;
+  GdkFontPrivateX *font_private;
+  gint length = 0;
 
-  g_return_if_fail (font != NULL);
-  g_return_if_fail (private->ref_count > 0);
+  g_return_val_if_fail (font != NULL, -1);
+  g_return_val_if_fail (str != NULL, -1);
 
-  private->ref_count -= 1;
-  if (private->ref_count == 0)
+  font_private = (GdkFontPrivateX*) font;
+
+  if (font->type == GDK_FONT_FONT)
     {
-      gdk_font_hash_remove (font->type, font);
-      
-      switch (font->type)
+      XFontStruct *xfont = (XFontStruct *) font_private->xfont;
+      if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
 	{
-	case GDK_FONT_FONT:
-	  gdk_xid_table_remove (((XFontStruct *) private->xfont)->fid);
-	  XFreeFont (private->xdisplay, (XFontStruct *) private->xfont);
-	  break;
-	case GDK_FONT_FONTSET:
-	  XFreeFontSet (private->xdisplay, (XFontSet) private->xfont);
-	  break;
-	default:
-	  g_error ("unknown font type.");
-	  break;
+	  length = strlen (str);
 	}
-      g_free (font);
+      else
+	{
+	  guint16 *string_2b = (guint16 *)str;
+	    
+	  while (*(string_2b++))
+	    length++;
+	}
     }
+  else if (font->type == GDK_FONT_FONTSET)
+    {
+      length = strlen (str);
+    }
+  else
+    g_error("undefined font type\n");
+
+  return length;
 }
 
 gint
 gdk_font_id (const GdkFont *font)
 {
-  const GdkFontPrivate *font_private;
+  const GdkFontPrivateX *font_private;
 
   g_return_val_if_fail (font != NULL, 0);
 
-  font_private = (const GdkFontPrivate*) font;
+  font_private = (const GdkFontPrivateX*) font;
 
   if (font->type == GDK_FONT_FONT)
     {
@@ -263,14 +280,14 @@ gint
 gdk_font_equal (const GdkFont *fonta,
                 const GdkFont *fontb)
 {
-  const GdkFontPrivate *privatea;
-  const GdkFontPrivate *privateb;
+  const GdkFontPrivateX *privatea;
+  const GdkFontPrivateX *privateb;
 
   g_return_val_if_fail (fonta != NULL, FALSE);
   g_return_val_if_fail (fontb != NULL, FALSE);
 
-  privatea = (const GdkFontPrivate*) fonta;
-  privateb = (const GdkFontPrivate*) fontb;
+  privatea = (const GdkFontPrivateX*) fonta;
+  privateb = (const GdkFontPrivateX*) fontb;
 
   if (fonta->type == GDK_FONT_FONT && fontb->type == GDK_FONT_FONT)
     {
@@ -292,49 +309,11 @@ gdk_font_equal (const GdkFont *fonta,
 }
 
 gint
-gdk_string_width (GdkFont     *font,
-		  const gchar *string)
-{
-  GdkFontPrivate *font_private;
-  gint width;
-  XFontStruct *xfont;
-  XFontSet fontset;
-
-  g_return_val_if_fail (font != NULL, -1);
-  g_return_val_if_fail (string != NULL, -1);
-
-  font_private = (GdkFontPrivate*) font;
-
-  switch (font->type)
-    {
-    case GDK_FONT_FONT:
-      xfont = (XFontStruct *) font_private->xfont;
-      if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
-	{
-	  width = XTextWidth (xfont, string, strlen (string));
-	}
-      else
-	{
-	  width = XTextWidth16 (xfont, (XChar2b *) string, strlen (string) / 2);
-	}
-      break;
-    case GDK_FONT_FONTSET:
-      fontset = (XFontSet) font_private->xfont;
-      width = XmbTextEscapement (fontset, string, strlen(string));
-      break;
-    default:
-      width = 0;
-    }
-
-  return width;
-}
-
-gint
 gdk_text_width (GdkFont      *font,
 		const gchar  *text,
 		gint          text_length)
 {
-  GdkFontPrivate *private;
+  GdkFontPrivateX *private;
   gint width;
   XFontStruct *xfont;
   XFontSet fontset;
@@ -342,7 +321,7 @@ gdk_text_width (GdkFont      *font,
   g_return_val_if_fail (font != NULL, -1);
   g_return_val_if_fail (text != NULL, -1);
 
-  private = (GdkFontPrivate*) font;
+  private = (GdkFontPrivateX*) font;
 
   switch (font->type)
     {
@@ -372,7 +351,7 @@ gdk_text_width_wc (GdkFont	  *font,
 		   const GdkWChar *text,
 		   gint		   text_length)
 {
-  GdkFontPrivate *private;
+  GdkFontPrivateX *private;
   gint width;
   XFontStruct *xfont;
   XFontSet fontset;
@@ -380,7 +359,7 @@ gdk_text_width_wc (GdkFont	  *font,
   g_return_val_if_fail (font != NULL, -1);
   g_return_val_if_fail (text != NULL, -1);
 
-  private = (GdkFontPrivate*) font;
+  private = (GdkFontPrivateX*) font;
 
   switch (font->type)
     {
@@ -423,113 +402,6 @@ gdk_text_width_wc (GdkFont	  *font,
   return width;
 }
 
-/* Problem: What if a character is a 16 bits character ?? */
-gint
-gdk_char_width (GdkFont *font,
-		gchar    character)
-{
-  GdkFontPrivate *private;
-  XCharStruct *chars;
-  gint width;
-  guint ch = character & 0xff;  /* get rid of sign-extension */
-  XFontStruct *xfont;
-  XFontSet fontset;
-
-  g_return_val_if_fail (font != NULL, -1);
-
-  private = (GdkFontPrivate*) font;
-
-  switch (font->type)
-    {
-    case GDK_FONT_FONT:
-      /* only 8 bits characters are considered here */
-      xfont = (XFontStruct *) private->xfont;
-      if ((xfont->min_byte1 == 0) &&
-	  (xfont->max_byte1 == 0) &&
-	  (ch >= xfont->min_char_or_byte2) &&
-	  (ch <= xfont->max_char_or_byte2))
-	{
-	  chars = xfont->per_char;
-	  if (chars)
-	    width = chars[ch - xfont->min_char_or_byte2].width;
-	  else
-	    width = xfont->min_bounds.width;
-	}
-      else
-	{
-	  width = XTextWidth (xfont, &character, 1);
-	}
-      break;
-    case GDK_FONT_FONTSET:
-      fontset = (XFontSet) private->xfont;
-      width = XmbTextEscapement (fontset, &character, 1) ;
-      break;
-    default:
-      width = 0;
-    }
-  return width;
-}
-
-gint
-gdk_char_width_wc (GdkFont *font,
-		   GdkWChar character)
-{
-  GdkFontPrivate *private;
-  XCharStruct *chars;
-  gint width;
-  guint ch = character & 0xff;  /* get rid of sign-extension */
-  XFontStruct *xfont;
-  XFontSet fontset;
-
-  g_return_val_if_fail (font != NULL, -1);
-
-  private = (GdkFontPrivate*) font;
-
-  switch (font->type)
-    {
-    case GDK_FONT_FONT:
-      /* only 8 bits characters are considered here */
-      xfont = (XFontStruct *) private->xfont;
-      if ((xfont->min_byte1 == 0) &&
-          (xfont->max_byte1 == 0) &&
-          (ch >= xfont->min_char_or_byte2) &&
-          (ch <= xfont->max_char_or_byte2))
-        {
-          chars = xfont->per_char;
-          if (chars)
-            width = chars[ch - xfont->min_char_or_byte2].width;
-          else
-            width = xfont->min_bounds.width;
-        }
-      else
-        {
-          char ch2 = character;
-          width = XTextWidth (xfont, &ch2, 1);
-        }
-      break;
-    case GDK_FONT_FONTSET:
-      fontset = (XFontSet) private->xfont;
-      {
-	wchar_t char_wc = character;
-        width = XwcTextEscapement (fontset, &char_wc, 1) ;
-      }
-      break;
-    default:
-      width = 0;
-    }
-  return width;
-}
-
-gint
-gdk_string_measure (GdkFont     *font,
-                    const gchar *string)
-{
-  g_return_val_if_fail (font != NULL, -1);
-  g_return_val_if_fail (string != NULL, -1);
-
-  return gdk_text_measure (font, string, strlen (string));
-}
-
 void
 gdk_text_extents (GdkFont     *font,
                   const gchar *text,
@@ -540,7 +412,7 @@ gdk_text_extents (GdkFont     *font,
 		  gint        *ascent,
 		  gint        *descent)
 {
-  GdkFontPrivate *private;
+  GdkFontPrivateX *private;
   XCharStruct overall;
   XFontStruct *xfont;
   XFontSet    fontset;
@@ -552,7 +424,7 @@ gdk_text_extents (GdkFont     *font,
   g_return_if_fail (font != NULL);
   g_return_if_fail (text != NULL);
 
-  private = (GdkFontPrivate*) font;
+  private = (GdkFontPrivateX*) font;
 
   switch (font->type)
     {
@@ -609,7 +481,7 @@ gdk_text_extents_wc (GdkFont        *font,
 		     gint           *ascent,
 		     gint           *descent)
 {
-  GdkFontPrivate *private;
+  GdkFontPrivateX *private;
   XCharStruct overall;
   XFontStruct *xfont;
   XFontSet    fontset;
@@ -621,7 +493,7 @@ gdk_text_extents_wc (GdkFont        *font,
   g_return_if_fail (font != NULL);
   g_return_if_fail (text != NULL);
 
-  private = (GdkFontPrivate*) font;
+  private = (GdkFontPrivateX*) font;
 
   switch (font->type)
     {
@@ -683,147 +555,4 @@ gdk_text_extents_wc (GdkFont        *font,
       break;
     }
 
-}
-
-void
-gdk_string_extents (GdkFont     *font,
-		    const gchar *string,
-		    gint        *lbearing,
-		    gint        *rbearing,
-		    gint        *width,
-		    gint        *ascent,
-		    gint        *descent)
-{
-  g_return_if_fail (font != NULL);
-  g_return_if_fail (string != NULL);
-
-  gdk_text_extents (font, string, strlen (string),
-		    lbearing, rbearing, width, ascent, descent);
-}
-
-
-gint
-gdk_text_measure (GdkFont     *font,
-                  const gchar *text,
-                  gint         text_length)
-{
-  GdkFontPrivate *private;
-  XCharStruct overall;
-  XFontStruct *xfont;
-  XFontSet    fontset;
-  XRectangle  ink, log;
-  int direction;
-  int font_ascent;
-  int font_descent;
-  gint width;
-
-  g_return_val_if_fail (font != NULL, -1);
-  g_return_val_if_fail (text != NULL, -1);
-
-  private = (GdkFontPrivate*) font;
-
-  switch (font->type)
-    {
-    case GDK_FONT_FONT:
-      xfont = (XFontStruct *) private->xfont;
-      if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
-	{
-	  XTextExtents (xfont, text, text_length,
-			&direction, &font_ascent, &font_descent,
-			&overall);
-	}
-      else
-	{
-	  XTextExtents16 (xfont, (XChar2b *) text, text_length / 2,
-			  &direction, &font_ascent, &font_descent,
-			  &overall);
-	}
-      width = overall.rbearing;
-      break;
-    case GDK_FONT_FONTSET:
-      fontset = (XFontSet) private->xfont;
-      XmbTextExtents (fontset, text, text_length, &ink, &log);
-      width = ink.x + ink.width;
-      break;
-    default:
-      width = 0;
-    }
-  return width;
-}
-
-gint
-gdk_char_measure (GdkFont *font,
-                  gchar    character)
-{
-  g_return_val_if_fail (font != NULL, -1);
-
-  return gdk_text_measure (font, &character, 1);
-}
-
-gint
-gdk_string_height (GdkFont     *font,
-		   const gchar *string)
-{
-  g_return_val_if_fail (font != NULL, -1);
-  g_return_val_if_fail (string != NULL, -1);
-
-  return gdk_text_height (font, string, strlen (string));
-}
-
-gint
-gdk_text_height (GdkFont     *font,
-		 const gchar *text,
-		 gint         text_length)
-{
-  GdkFontPrivate *private;
-  XCharStruct overall;
-  XFontStruct *xfont;
-  XFontSet    fontset;
-  XRectangle  ink, log;
-  int direction;
-  int font_ascent;
-  int font_descent;
-  gint height;
-
-  g_return_val_if_fail (font != NULL, -1);
-  g_return_val_if_fail (text != NULL, -1);
-
-  private = (GdkFontPrivate*) font;
-
-  switch (font->type)
-    {
-    case GDK_FONT_FONT:
-      xfont = (XFontStruct *) private->xfont;
-      if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
-	{
-	  XTextExtents (xfont, text, text_length,
-			&direction, &font_ascent, &font_descent,
-			&overall);
-	}
-      else
-	{
-	  XTextExtents16 (xfont, (XChar2b *) text, text_length / 2,
-			  &direction, &font_ascent, &font_descent,
-			  &overall);
-	}
-      height = overall.ascent + overall.descent;
-      break;
-    case GDK_FONT_FONTSET:
-      fontset = (XFontSet) private->xfont;
-      XmbTextExtents (fontset, text, text_length, &ink, &log);
-      height = log.height;
-      break;
-    default:
-      height = 0;
-    }
-  return height;
-}
-
-gint
-gdk_char_height (GdkFont *font,
-		 gchar    character)
-{
-  g_return_val_if_fail (font != NULL, -1);
-
-  return gdk_text_height (font, &character, 1);
 }

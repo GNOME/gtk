@@ -27,26 +27,25 @@
 #ifndef __GDK_X_H__
 #define __GDK_X_H__
 
-#include <gdk/gdkprivate.h>
-
+#include <gdk/x11/gdkprivate-x11.h>
 
 #define GDK_ROOT_WINDOW()             gdk_root_window
-#define GDK_ROOT_PARENT()             ((GdkWindow *)&gdk_root_parent)
+#define GDK_ROOT_PARENT()             ((GdkWindow *)&gdk_parent_root)
 #define GDK_DISPLAY()                 gdk_display
-#define GDK_DRAWABLE_XDISPLAY(win)    (((GdkDrawablePrivate*) win)->xdisplay)
-#define GDK_DRAWABLE_XID(win)         (((GdkDrawablePrivate*) win)->xwindow)
-#define GDK_WINDOW_XDISPLAY           GDK_DRAWABLE_XDISPLAY
-#define GDK_WINDOW_XWINDOW            GDK_DRAWABLE_XID
+#define GDK_DRAWABLE_XDISPLAY(win)    (GDK_DRAWABLE_XDATA(win)->xdisplay)
+#define GDK_DRAWABLE_XID(win)         (GDK_DRAWABLE_XDATA(win)->xid)
 #define GDK_IMAGE_XDISPLAY(image)     (((GdkImagePrivate*) image)->xdisplay)
 #define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivate*) image)->ximage)
-#define GDK_GC_XDISPLAY(gc)           (((GdkGCPrivate*) gc)->xdisplay)
-#define GDK_GC_XGC(gc)                (((GdkGCPrivate*) gc)->xgc)
-#define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivate*) cmap)->xdisplay)
-#define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivate*) cmap)->xcolormap)
+#define GDK_GC_XDISPLAY(gc)           (GDK_GC_XDATA(gc)->xdisplay)
+#define GDK_GC_XGC(gc)                (GDK_GC_XDATA(gc)->xgc)
+#define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivateX *)cmap)->xdisplay)
+#define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivateX *)cmap)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate*) vis)->xvisual)
 #define GDK_FONT_XDISPLAY(font)       (((GdkFontPrivate*) font)->xdisplay)
-#define GDK_FONT_XFONT(font)          (((GdkFontPrivate*) font)->xfont)
+#define GDK_FONT_XFONT(font)          (((GdkFontPrivateX *)font)->xfont)
 
+#define GDK_WINDOW_XWINDOW            GDK_DRAWABLE_XID
+#define GDK_WINDOW_XDISPLAY           GDK_DRAWABLE_XDISPLAY
 
 GdkVisual*   gdkx_visual_get   (VisualID xvisualid);
 /* XXX: Do not use this function until it is fixed. An X Colormap
@@ -58,7 +57,7 @@ Window        gdk_get_client_window      (Display  *dpy,
                                           Window    win);
 
 /* Functions to create pixmaps and windows from their X equivalents */
-GdkPixmap    *gdk_pixmap_foreign_new (guint32     anid);
-GdkWindow    *gdk_window_foreign_new (guint32	     anid);
+GdkPixmap    *gdk_pixmap_foreign_new (guint32 anid);
+GdkWindow    *gdk_window_foreign_new (guint32 anid);
 
 #endif /* __GDK_X_H__ */

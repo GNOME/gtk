@@ -25,247 +25,48 @@
  */
 
 #include <string.h>
-#include <X11/Xlib.h>
 
 #include "gdkgc.h"
 #include "gdkprivate.h"
-#include "gdkx.h"
 
 GdkGC*
-gdk_gc_new (GdkWindow *window)
+gdk_gc_alloc (void)
 {
-  return gdk_gc_new_with_values (window, NULL, 0);
+  GdkGCPrivate *private;
+
+  private = g_new (GdkGCPrivate, 1);
+  private->ref_count = 1;
+  private->klass = NULL;
+  private->klass = NULL;
+  private->klass_data = NULL;
+
+  return (GdkGC *)private;
 }
 
 GdkGC*
-gdk_gc_new_with_values (GdkWindow	*window,
+gdk_gc_new (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (drawable != NULL, NULL);
+
+  if (GDK_DRAWABLE_DESTROYED (drawable))
+    return NULL;
+
+  return gdk_gc_new_with_values (drawable, NULL, 0);
+}
+
+GdkGC*
+gdk_gc_new_with_values (GdkDrawable	*drawable,
 			GdkGCValues	*values,
 			GdkGCValuesMask	 values_mask)
 {
-  GdkGC *gc;
-  GdkGCPrivate *private;
-  Window xwindow;
-  XGCValues xvalues;
-  unsigned long xvalues_mask;
+  g_return_val_if_fail (drawable != NULL, NULL);
 
-  g_return_val_if_fail (window != NULL, NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (window))
+  if (GDK_DRAWABLE_DESTROYED (drawable))
     return NULL;
 
-  private = g_new (GdkGCPrivate, 1);
-  gc = (GdkGC*) private;
-
-  xwindow = GDK_DRAWABLE_XID (window);
-  private->xdisplay = GDK_DRAWABLE_XDISPLAY (window);
-  private->ref_count = 1;
-
-  xvalues.function = GXcopy;
-  xvalues.fill_style = FillSolid;
-  xvalues.arc_mode = ArcPieSlice;
-  xvalues.subwindow_mode = ClipByChildren;
-  xvalues.graphics_exposures = True;
-  xvalues_mask = GCFunction | GCFillStyle | GCArcMode | GCSubwindowMode | GCGraphicsExposures;
-
-  if (values_mask & GDK_GC_FOREGROUND)
-    {
-      xvalues.foreground = values->foreground.pixel;
-      xvalues_mask |= GCForeground;
-    }
-  if (values_mask & GDK_GC_BACKGROUND)
-    {
-      xvalues.background = values->background.pixel;
-      xvalues_mask |= GCBackground;
-    }
-  if ((values_mask & GDK_GC_FONT) && (values->font->type == GDK_FONT_FONT))
-    {
-      xvalues.font = ((XFontStruct *) ((GdkFontPrivate*) values->font)->xfont)->fid;
-      xvalues_mask |= GCFont;
-    }
-  if (values_mask & GDK_GC_FUNCTION)
-    {
-      switch (values->function)
-	{
-	case GDK_COPY:
-	  xvalues.function = GXcopy;
-	  break;
-	case GDK_INVERT:
-	  xvalues.function = GXinvert;
-	  break;
-	case GDK_XOR:
-	  xvalues.function = GXxor;
-	  break;
-	case GDK_CLEAR:
-	  xvalues.function = GXclear;
-	  break;
-	case GDK_AND:
-	  xvalues.function = GXand;
-	  break;
-	case GDK_AND_REVERSE:
-	  xvalues.function = GXandReverse;
-	  break;
-	case GDK_AND_INVERT:
-	  xvalues.function = GXandInverted;
-	  break;
-	case GDK_NOOP:
-	  xvalues.function = GXnoop;
-	  break;
-	case GDK_OR:
-	  xvalues.function = GXor;
-	  break;
-	case GDK_EQUIV:
-	  xvalues.function = GXequiv;
-	  break;
-	case GDK_OR_REVERSE:
-	  xvalues.function = GXorReverse;
-	  break;
-	case GDK_COPY_INVERT:
-	  xvalues.function = GXcopyInverted;
-	  break;
-	case GDK_OR_INVERT:
-	  xvalues.function = GXorInverted;
-	  break;
-	case GDK_NAND:
-	  xvalues.function = GXnand;
-	  break;
-	case GDK_SET:
-	  xvalues.function = GXset;
-	  break;
-	}
-      xvalues_mask |= GCFunction;
-    }
-  if (values_mask & GDK_GC_FILL)
-    {
-      switch (values->fill)
-	{
-	case GDK_SOLID:
-	  xvalues.fill_style = FillSolid;
-	  break;
-	case GDK_TILED:
-	  xvalues.fill_style = FillTiled;
-	  break;
-	case GDK_STIPPLED:
-	  xvalues.fill_style = FillStippled;
-	  break;
-	case GDK_OPAQUE_STIPPLED:
-	  xvalues.fill_style = FillOpaqueStippled;
-	  break;
-	}
-      xvalues_mask |= GCFillStyle;
-    }
-  if (values_mask & GDK_GC_TILE)
-    {
-      xvalues.tile = GDK_DRAWABLE_XID (values->tile);
-      xvalues_mask |= GCTile;
-    }
-  if (values_mask & GDK_GC_STIPPLE)
-    {
-      xvalues.stipple = GDK_DRAWABLE_XID (values->stipple);
-      xvalues_mask |= GCStipple;
-    }
-  if (values_mask & GDK_GC_CLIP_MASK)
-    {
-      xvalues.clip_mask = GDK_DRAWABLE_XID (values->clip_mask);
-      xvalues_mask |= GCClipMask;
-    }
-  if (values_mask & GDK_GC_SUBWINDOW)
-    {
-      xvalues.subwindow_mode = values->subwindow_mode;
-      xvalues_mask |= GCSubwindowMode;
-    }
-  if (values_mask & GDK_GC_TS_X_ORIGIN)
-    {
-      xvalues.ts_x_origin = values->ts_x_origin;
-      xvalues_mask |= GCTileStipXOrigin;
-    }
-  if (values_mask & GDK_GC_TS_Y_ORIGIN)
-    {
-      xvalues.ts_y_origin = values->ts_y_origin;
-      xvalues_mask |= GCTileStipYOrigin;
-    }
-  if (values_mask & GDK_GC_CLIP_X_ORIGIN)
-    {
-      xvalues.clip_x_origin = values->clip_x_origin;
-      xvalues_mask |= GCClipXOrigin;
-    }
-  if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
-    {
-      xvalues.clip_y_origin = values->clip_y_origin;
-      xvalues_mask |= GCClipYOrigin;
-    }
- 
-  if (values_mask & GDK_GC_EXPOSURES)
-    xvalues.graphics_exposures = values->graphics_exposures;
-  else
-    xvalues.graphics_exposures = False;
-  xvalues_mask |= GCGraphicsExposures;
-
-  if (values_mask & GDK_GC_LINE_WIDTH)
-    {
-      xvalues.line_width = values->line_width;
-      xvalues_mask |= GCLineWidth;
-    }
-  if (values_mask & GDK_GC_LINE_STYLE)
-    {
-      switch (values->line_style)
-	{
-	case GDK_LINE_SOLID:
-	  xvalues.line_style = LineSolid;
-	  break;
-	case GDK_LINE_ON_OFF_DASH:
-	  xvalues.line_style = LineOnOffDash;
-	  break;
-	case GDK_LINE_DOUBLE_DASH:
-	  xvalues.line_style = LineDoubleDash;
-	  break;
-	}
-      xvalues_mask |= GCLineStyle;
-    }
-  if (values_mask & GDK_GC_CAP_STYLE)
-    {
-      switch (values->cap_style)
-	{
-	case GDK_CAP_NOT_LAST:
-	  xvalues.cap_style = CapNotLast;
-	  break;
-	case GDK_CAP_BUTT:
-	  xvalues.cap_style = CapButt;
-	  break;
-	case GDK_CAP_ROUND:
-	  xvalues.cap_style = CapRound;
-	  break;
-	case GDK_CAP_PROJECTING:
-	  xvalues.cap_style = CapProjecting;
-	  break;
-	}
-      xvalues_mask |= GCCapStyle;
-    }
-  if (values_mask & GDK_GC_JOIN_STYLE)
-    {
-      switch (values->join_style)
-	{
-	case GDK_JOIN_MITER:
-	  xvalues.join_style = JoinMiter;
-	  break;
-	case GDK_JOIN_ROUND:
-	  xvalues.join_style = JoinRound;
-	  break;
-	case GDK_JOIN_BEVEL:
-	  xvalues.join_style = JoinBevel;
-	  break;
-	}
-      xvalues_mask |= GCJoinStyle;
-    }
-
-  private->xgc = XCreateGC (private->xdisplay, xwindow, xvalues_mask, &xvalues);
-
-  return gc;
-}
-
-void
-gdk_gc_destroy (GdkGC *gc)
-{
-  gdk_gc_unref (gc);
+  return ((GdkDrawablePrivate *)drawable)->klass->create_gc (drawable,
+							     values,
+							     values_mask);
 }
 
 GdkGC *
@@ -287,332 +88,118 @@ gdk_gc_unref (GdkGC *gc)
   g_return_if_fail (gc != NULL);
   g_return_if_fail (private->ref_count > 0);
   
-  if (private->ref_count > 1)
-    private->ref_count -= 1;
-  else
-    {
-      XFreeGC (private->xdisplay, private->xgc);
-      memset (gc, 0, sizeof (GdkGCPrivate));
-      g_free (gc);
-    }
+  private->ref_count--;
+
+  if (private->ref_count == 0)
+    private->klass->destroy (gc);
 }
 
 void
 gdk_gc_get_values (GdkGC       *gc,
 		   GdkGCValues *values)
 {
-  GdkGCPrivate *private;
-  XGCValues xvalues;
-
   g_return_if_fail (gc != NULL);
   g_return_if_fail (values != NULL);
 
-  private = (GdkGCPrivate*) gc;
+  ((GdkGCPrivate *)gc)->klass->get_values (gc, values);
+}
 
-  if (XGetGCValues (private->xdisplay, private->xgc,
-		    GCForeground | GCBackground | GCFont |
-		    GCFunction | GCTile | GCStipple | /* GCClipMask | */
-		    GCSubwindowMode | GCGraphicsExposures |
-		    GCTileStipXOrigin | GCTileStipYOrigin |
-		    GCClipXOrigin | GCClipYOrigin |
-		    GCLineWidth | GCLineStyle | GCCapStyle |
-		    GCFillStyle | GCJoinStyle, &xvalues))
-    {
-      values->foreground.pixel = xvalues.foreground;
-      values->background.pixel = xvalues.background;
-      values->font = gdk_font_lookup (xvalues.font);
+void
+gdk_gc_set_values (GdkGC           *gc,
+		   GdkGCValues	   *values,
+		   GdkGCValuesMask  values_mask)
+{
+  g_return_if_fail (gc != NULL);
+  g_return_if_fail (values != NULL);
 
-      switch (xvalues.function)
-	{
-	case GXcopy:
-	  values->function = GDK_COPY;
-	  break;
-	case GXinvert:
-	  values->function = GDK_INVERT;
-	  break;
-	case GXxor:
-	  values->function = GDK_XOR;
-	  break;
-	case GXclear:
-	  values->function = GDK_CLEAR;
-	  break;
-	case GXand:
-	  values->function = GDK_AND;
-	  break;
-	case GXandReverse:
-	  values->function = GDK_AND_REVERSE;
-	  break;
-	case GXandInverted:
-	  values->function = GDK_AND_INVERT;
-	  break;
-	case GXnoop:
-	  values->function = GDK_NOOP;
-	  break;
-	case GXor:
-	  values->function = GDK_OR;
-	  break;
-	case GXequiv:
-	  values->function = GDK_EQUIV;
-	  break;
-	case GXorReverse:
-	  values->function = GDK_OR_REVERSE;
-	  break;
-	case GXcopyInverted:
-	  values->function =GDK_COPY_INVERT;
-	  break;
-	case GXorInverted:
-	  values->function = GDK_OR_INVERT;
-	  break;
-	case GXnand:
-	  values->function = GDK_NAND;
-	  break;
-	case GXset:
-	  values->function = GDK_SET;
-	  break;
-	}
-
-      switch (xvalues.fill_style)
-	{
-	case FillSolid:
-	  values->fill = GDK_SOLID;
-	  break;
-	case FillTiled:
-	  values->fill = GDK_TILED;
-	  break;
-	case FillStippled:
-	  values->fill = GDK_STIPPLED;
-	  break;
-	case FillOpaqueStippled:
-	  values->fill = GDK_OPAQUE_STIPPLED;
-	  break;
-	}
-
-      values->tile = gdk_pixmap_lookup (xvalues.tile);
-      values->stipple = gdk_pixmap_lookup (xvalues.stipple);
-      values->clip_mask = NULL;
-      values->subwindow_mode = xvalues.subwindow_mode;
-      values->ts_x_origin = xvalues.ts_x_origin;
-      values->ts_y_origin = xvalues.ts_y_origin;
-      values->clip_x_origin = xvalues.clip_x_origin;
-      values->clip_y_origin = xvalues.clip_y_origin;
-      values->graphics_exposures = xvalues.graphics_exposures;
-      values->line_width = xvalues.line_width;
-
-      switch (xvalues.line_style)
-	{
-	case LineSolid:
-	  values->line_style = GDK_LINE_SOLID;
-	  break;
-	case LineOnOffDash:
-	  values->line_style = GDK_LINE_ON_OFF_DASH;
-	  break;
-	case LineDoubleDash:
-	  values->line_style = GDK_LINE_DOUBLE_DASH;
-	  break;
-	}
-
-      switch (xvalues.cap_style)
-	{
-	case CapNotLast:
-	  values->cap_style = GDK_CAP_NOT_LAST;
-	  break;
-	case CapButt:
-	  values->cap_style = GDK_CAP_BUTT;
-	  break;
-	case CapRound:
-	  values->cap_style = GDK_CAP_ROUND;
-	  break;
-	case CapProjecting:
-	  values->cap_style = GDK_CAP_PROJECTING;
-	  break;
-	}
-
-      switch (xvalues.join_style)
-	{
-	case JoinMiter:
-	  values->join_style = GDK_JOIN_MITER;
-	  break;
-	case JoinRound:
-	  values->join_style = GDK_JOIN_ROUND;
-	  break;
-	case JoinBevel:
-	  values->join_style = GDK_JOIN_BEVEL;
-	  break;
-	}
-    }
-  else
-    {
-      memset (values, 0, sizeof (GdkGCValues));
-    }
+  ((GdkGCPrivate *)gc)->klass->set_values (gc, values, values_mask);
 }
 
 void
 gdk_gc_set_foreground (GdkGC	*gc,
 		       GdkColor *color)
 {
-  GdkGCPrivate *private;
+  GdkGCValues values;
 
   g_return_if_fail (gc != NULL);
   g_return_if_fail (color != NULL);
 
-  private = (GdkGCPrivate*) gc;
-  XSetForeground (private->xdisplay, private->xgc, color->pixel);
+  values.foreground = *color;
+  gdk_gc_set_values (gc, &values, GDK_GC_FOREGROUND);
 }
 
 void
 gdk_gc_set_background (GdkGC	*gc,
 		       GdkColor *color)
 {
-  GdkGCPrivate *private;
+  GdkGCValues values;
 
   g_return_if_fail (gc != NULL);
   g_return_if_fail (color != NULL);
 
-  private = (GdkGCPrivate*) gc;
-  XSetBackground (private->xdisplay, private->xgc, color->pixel);
+  values.background = *color;
+  gdk_gc_set_values (gc, &values, GDK_GC_BACKGROUND);
 }
 
 void
 gdk_gc_set_font (GdkGC	 *gc,
 		 GdkFont *font)
 {
-  GdkGCPrivate *gc_private;
-  GdkFontPrivate *font_private;
+  GdkGCValues values;
 
   g_return_if_fail (gc != NULL);
   g_return_if_fail (font != NULL);
 
-  if (font->type == GDK_FONT_FONT)
-    {
-      gc_private = (GdkGCPrivate*) gc;
-      font_private = (GdkFontPrivate*) font;
-      
-      XSetFont (gc_private->xdisplay, gc_private->xgc,
-		((XFontStruct *) font_private->xfont)->fid);
-    }
+  values.font = font;
+  gdk_gc_set_values (gc, &values, GDK_GC_FONT);
 }
 
 void
 gdk_gc_set_function (GdkGC	 *gc,
 		     GdkFunction  function)
 {
-  GdkGCPrivate *private;
+  GdkGCValues values;
 
   g_return_if_fail (gc != NULL);
 
-  private = (GdkGCPrivate*) gc;
-
-  switch (function)
-    {
-    case GDK_COPY:
-      XSetFunction (private->xdisplay, private->xgc, GXcopy);
-      break;
-    case GDK_INVERT:
-      XSetFunction (private->xdisplay, private->xgc, GXinvert);
-      break;
-    case GDK_XOR:
-      XSetFunction (private->xdisplay, private->xgc, GXxor);
-      break;
-    case GDK_CLEAR:
-      XSetFunction (private->xdisplay, private->xgc, GXclear);
-      break;
-    case GDK_AND:
-      XSetFunction (private->xdisplay, private->xgc, GXand);
-      break;
-    case GDK_AND_REVERSE:
-      XSetFunction (private->xdisplay, private->xgc, GXandReverse);
-      break;
-    case GDK_AND_INVERT:
-      XSetFunction (private->xdisplay, private->xgc, GXandInverted);
-      break;
-    case GDK_NOOP:
-      XSetFunction (private->xdisplay, private->xgc, GXnoop);
-      break;
-    case GDK_OR:
-      XSetFunction (private->xdisplay, private->xgc, GXor);
-      break;
-    case GDK_EQUIV:
-      XSetFunction (private->xdisplay, private->xgc, GXequiv);
-      break;
-    case GDK_OR_REVERSE:
-      XSetFunction (private->xdisplay, private->xgc, GXorReverse);
-      break;
-    case GDK_COPY_INVERT:
-      XSetFunction (private->xdisplay, private->xgc, GXcopyInverted);
-      break;
-    case GDK_OR_INVERT:
-      XSetFunction (private->xdisplay, private->xgc, GXorInverted);
-      break;
-    case GDK_NAND:
-      XSetFunction (private->xdisplay, private->xgc, GXnand);
-      break;
-    case GDK_SET:
-      XSetFunction (private->xdisplay, private->xgc, GXset);
-      break;
-    }
+  values.function = function;
+  gdk_gc_set_values (gc, &values, GDK_GC_FUNCTION);
 }
 
 void
 gdk_gc_set_fill (GdkGC	 *gc,
 		 GdkFill  fill)
 {
-  GdkGCPrivate *private;
+  GdkGCValues values;
 
   g_return_if_fail (gc != NULL);
 
-  private = (GdkGCPrivate*) gc;
-
-  switch (fill)
-    {
-    case GDK_SOLID:
-      XSetFillStyle (private->xdisplay, private->xgc, FillSolid);
-      break;
-    case GDK_TILED:
-      XSetFillStyle (private->xdisplay, private->xgc, FillTiled);
-      break;
-    case GDK_STIPPLED:
-      XSetFillStyle (private->xdisplay, private->xgc, FillStippled);
-      break;
-    case GDK_OPAQUE_STIPPLED:
-      XSetFillStyle (private->xdisplay, private->xgc, FillOpaqueStippled);
-      break;
-    }
+  values.fill = fill;
+  gdk_gc_set_values (gc, &values, GDK_GC_FILL);
 }
 
 void
 gdk_gc_set_tile (GdkGC	   *gc,
 		 GdkPixmap *tile)
 {
-  GdkGCPrivate *private;
-  Pixmap pixmap;
+  GdkGCValues values;
 
   g_return_if_fail (gc != NULL);
 
-  private = (GdkGCPrivate*) gc;
-
-  pixmap = None;
-  if (tile)
-    pixmap = GDK_DRAWABLE_XID (tile);
-
-  XSetTile (private->xdisplay, private->xgc, pixmap);
+  values.tile = tile;
+  gdk_gc_set_values (gc, &values, GDK_GC_TILE);
 }
 
 void
 gdk_gc_set_stipple (GdkGC     *gc,
 		    GdkPixmap *stipple)
 {
-  GdkGCPrivate *private;
-  Pixmap pixmap;
+  GdkGCValues values;
 
   g_return_if_fail (gc != NULL);
 
-  private = (GdkGCPrivate*) gc;
-
-  pixmap = None;
-  if (stipple)
-    pixmap = GDK_DRAWABLE_XID (stipple);
-
-  XSetStipple (private->xdisplay, private->xgc, pixmap);
+  values.stipple = stipple;
+  gdk_gc_set_values (gc, &values, GDK_GC_STIPPLE);
 }
 
 void
@@ -620,13 +207,15 @@ gdk_gc_set_ts_origin (GdkGC *gc,
 		      gint   x,
 		      gint   y)
 {
-  GdkGCPrivate *private;
+  GdkGCValues values;
 
   g_return_if_fail (gc != NULL);
 
-  private = (GdkGCPrivate*) gc;
-
-  XSetTSOrigin (private->xdisplay, private->xgc, x, y);
+  values.ts_x_origin = x;
+  values.ts_x_origin = y;
+  
+  gdk_gc_set_values (gc, &values,
+		     GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN);
 }
 
 void
@@ -634,105 +223,52 @@ gdk_gc_set_clip_origin (GdkGC *gc,
 			gint   x,
 			gint   y)
 {
-  GdkGCPrivate *private;
+  GdkGCValues values;
 
   g_return_if_fail (gc != NULL);
 
-  private = (GdkGCPrivate*) gc;
-
-  XSetClipOrigin (private->xdisplay, private->xgc, x, y);
+  values.clip_x_origin = x;
+  values.clip_x_origin = y;
+  
+  gdk_gc_set_values (gc, &values,
+		     GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN);
 }
 
 void
 gdk_gc_set_clip_mask (GdkGC	*gc,
 		      GdkBitmap *mask)
 {
-  GdkGCPrivate *private;
-  Pixmap xmask;
+  GdkGCValues values;
   
   g_return_if_fail (gc != NULL);
   
-  if (mask)
-    xmask = GDK_DRAWABLE_XID (mask);
-  else
-    xmask = None;
-  
-  private = (GdkGCPrivate*) gc;
-
-  XSetClipMask (private->xdisplay, private->xgc, xmask);
+  values.clip_mask = mask;
+  gdk_gc_set_values (gc, &values, GDK_GC_CLIP_MASK);
 }
 
-
-void
-gdk_gc_set_clip_rectangle (GdkGC	*gc,
-			   GdkRectangle *rectangle)
-{
-  GdkGCPrivate *private;
-  XRectangle xrectangle;
-   
-  g_return_if_fail (gc != NULL);
-
-  private = (GdkGCPrivate*) gc;
-
-  if (rectangle)
-    {
-      xrectangle.x = rectangle->x; 
-      xrectangle.y = rectangle->y;
-      xrectangle.width = rectangle->width;
-      xrectangle.height = rectangle->height;
-      
-      XSetClipRectangles (private->xdisplay, private->xgc, 0, 0,
-			  &xrectangle, 1, Unsorted);
-    }
-  else
-    XSetClipMask (private->xdisplay, private->xgc, None);
-} 
-
-void
-gdk_gc_set_clip_region (GdkGC		 *gc,
-			GdkRegion	 *region)
-{
-  GdkGCPrivate *private;
-
-  g_return_if_fail (gc != NULL);
-
-  private = (GdkGCPrivate*) gc;
-
-  if (region)
-    {
-      GdkRegionPrivate *region_private;
-
-      region_private = (GdkRegionPrivate*) region;
-      XSetRegion (private->xdisplay, private->xgc, region_private->xregion);
-    }
-  else
-    XSetClipMask (private->xdisplay, private->xgc, None);
-}
 
 void
 gdk_gc_set_subwindow (GdkGC	       *gc,
 		      GdkSubwindowMode	mode)
 {
-  GdkGCPrivate *private;
+  GdkGCValues values;
 
   g_return_if_fail (gc != NULL);
 
-  private = (GdkGCPrivate*) gc;
-
-  XSetSubwindowMode (private->xdisplay, private->xgc, mode);
+  values.subwindow_mode = mode;
+  gdk_gc_set_values (gc, &values, GDK_GC_SUBWINDOW);
 }
 
 void
-gdk_gc_set_exposures (GdkGC *gc,
-		      gint   exposures)
+gdk_gc_set_exposures (GdkGC     *gc,
+		      gboolean   exposures)
 {
-  GdkGCPrivate *private;
+  GdkGCValues values;
 
   g_return_if_fail (gc != NULL);
 
-  private = (GdkGCPrivate*) gc;
-
-  XSetGraphicsExposures (private->xdisplay, private->xgc, exposures);
+  values.graphics_exposures = exposures;
+  gdk_gc_set_values (gc, &values, GDK_GC_EXPOSURES);
 }
 
 void
@@ -742,65 +278,18 @@ gdk_gc_set_line_attributes (GdkGC	*gc,
 			    GdkCapStyle	 cap_style,
 			    GdkJoinStyle join_style)
 {
-  GdkGCPrivate *private;
-  int xline_style;
-  int xcap_style;
-  int xjoin_style;
+  GdkGCValues values;
 
-  g_return_if_fail (gc != NULL);
+  values.line_width = line_width;
+  values.line_style = line_style;
+  values.cap_style = cap_style;
+  values.join_style = join_style;
 
-  private = (GdkGCPrivate*) gc;
-
-  switch (line_style)
-    {
-    case GDK_LINE_SOLID:
-      xline_style = LineSolid;
-      break;
-    case GDK_LINE_ON_OFF_DASH:
-      xline_style = LineOnOffDash;
-      break;
-    case GDK_LINE_DOUBLE_DASH:
-      xline_style = LineDoubleDash;
-      break;
-    default:
-      xline_style = None;
-    }
-
-  switch (cap_style)
-    {
-    case GDK_CAP_NOT_LAST:
-      xcap_style = CapNotLast;
-      break;
-    case GDK_CAP_BUTT:
-      xcap_style = CapButt;
-      break;
-    case GDK_CAP_ROUND:
-      xcap_style = CapRound;
-      break;
-    case GDK_CAP_PROJECTING:
-      xcap_style = CapProjecting;
-      break;
-    default:
-      xcap_style = None;
-    }
-
-  switch (join_style)
-    {
-    case GDK_JOIN_MITER:
-      xjoin_style = JoinMiter;
-      break;
-    case GDK_JOIN_ROUND:
-      xjoin_style = JoinRound;
-      break;
-    case GDK_JOIN_BEVEL:
-      xjoin_style = JoinBevel;
-      break;
-    default:
-      xjoin_style = None;
-    }
-
-  XSetLineAttributes (private->xdisplay, private->xgc, line_width,
-		      xline_style, xcap_style, xjoin_style);
+  gdk_gc_set_values (gc, &values,
+		     GDK_GC_LINE_WIDTH |
+		     GDK_GC_LINE_STYLE |
+		     GDK_GC_CAP_STYLE |
+		     GDK_GC_JOIN_STYLE);
 }
 
 void
@@ -809,24 +298,8 @@ gdk_gc_set_dashes (GdkGC *gc,
 		   gchar  dash_list[],
 		   gint   n)
 {
-  GdkGCPrivate *private;
-
   g_return_if_fail (gc != NULL);
   g_return_if_fail (dash_list != NULL);
 
-  private = (GdkGCPrivate*) gc;
-
-  XSetDashes (private->xdisplay, private->xgc, dash_offset, dash_list, n);
-}
-
-void
-gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
-{
-  GdkGCPrivate *dst_private, *src_private;
-
-  src_private = (GdkGCPrivate *) src_gc;
-  dst_private = (GdkGCPrivate *) dst_gc;
-
-  XCopyGC (src_private->xdisplay, src_private->xgc, ~((~1) << GCLastBit),
-	   dst_private->xgc);
+  ((GdkGCPrivate *)gc)->klass->set_dashes (gc, dash_offset, dash_list, n);
 }

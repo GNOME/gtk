@@ -14,7 +14,8 @@ main (int argc, char *argv[])
   GtkWidget *window;
   GtkWidget *button;
 
-  gdk_progclass = g_strdup ("XTerm");
+  /* FIXME: This is not allowable - what is this supposed to be? */
+  /*  gdk_progclass = g_strdup ("XTerm"); */
   gtk_init (&argc, &argv);
 
   window = gtk_widget_new (gtk_window_get_type (),

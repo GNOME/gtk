@@ -5137,6 +5137,46 @@ gdk_synthesize_click (GdkEvent *event,
   gdk_event_put (&temp_event);
 }
 
+void
+gdk_event_button_generate (GdkEvent *event)
+{
+  if ((event->button.time < (button_click_time[1] + TRIPLE_CLICK_TIME)) &&
+      (event->button.window == button_window[1]) &&
+      (event->button.button == button_number[1]))
+    {
+      gdk_synthesize_click (event, 3);
+      
+      button_click_time[1] = 0;
+      button_click_time[0] = 0;
+      button_window[1] = NULL;
+      button_window[0] = 0;
+      button_number[1] = -1;
+      button_number[0] = -1;
+    }
+  else if ((event->button.time < (button_click_time[0] + DOUBLE_CLICK_TIME)) &&
+	   (event->button.window == button_window[0]) &&
+	   (event->button.button == button_number[0]))
+    {
+      gdk_synthesize_click (event, 2);
+      
+      button_click_time[1] = button_click_time[0];
+      button_click_time[0] = event->button.time;
+      button_window[1] = button_window[0];
+      button_window[0] = event->button.window;
+      button_number[1] = button_number[0];
+      button_number[0] = event->button.button;
+    }
+  else
+    {
+      button_click_time[1] = 0;
+      button_click_time[0] = event->button.time;
+      button_window[1] = NULL;
+      button_window[0] = event->button.window;
+      button_number[1] = -1;
+      button_number[0] = event->button.button;
+    }
+}
+
 /* Sends a ClientMessage to all toplevel client windows */
 gboolean
 gdk_event_send_client_message (GdkEvent *event, guint32 xid)

@@ -27,13 +27,7 @@
 #ifndef __GDK_PRIVATE_H__
 #define __GDK_PRIVATE_H__
 
-
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-
 #include <gdk/gdktypes.h>
-
-#include <gdk/gdkcursor.h>
 #include <gdk/gdkevents.h>
 #include <gdk/gdkfont.h>
 #include <gdk/gdkgc.h>
@@ -60,20 +54,20 @@ extern "C" {
 typedef struct _GdkDrawablePrivate     GdkDrawablePrivate;
 /* typedef struct _GdkDrawablePrivate     GdkPixmapPrivate; */
 typedef struct _GdkWindowPrivate       GdkWindowPrivate;
+typedef struct _GdkImageClass	       GdkImageClass;
 typedef struct _GdkImagePrivate	       GdkImagePrivate;
 typedef struct _GdkGCPrivate	       GdkGCPrivate;
 typedef struct _GdkColormapPrivate     GdkColormapPrivate;
 typedef struct _GdkColorInfo           GdkColorInfo;
-typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 typedef struct _GdkFontPrivate	       GdkFontPrivate;
-typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 typedef struct _GdkEventFilter	       GdkEventFilter;
 typedef struct _GdkClientFilter	       GdkClientFilter;
-typedef struct _GdkRegionPrivate       GdkRegionPrivate;
 
 struct _GdkDrawablePrivate
 {
   GdkDrawable drawable;
+  GdkDrawableClass *klass;
+  gpointer klass_data;
 
   guint8 window_type;
   guint ref_count;
@@ -81,8 +75,6 @@ struct _GdkDrawablePrivate
   guint16 width;
   guint16 height;
 
-  Window xwindow;
-  Display *xdisplay;
   GdkColormap *colormap;
 
   guint destroyed : 2;
@@ -92,7 +84,6 @@ struct _GdkWindowPrivate
 {
   GdkDrawablePrivate drawable;
   
-  GdkWindow window;
   GdkWindow *parent;
   gint16 x;
   gint16 y;
@@ -103,20 +94,15 @@ struct _GdkWindowPrivate
   gint extension_events;
 
   GList *filters;
-  GdkColormap *colormap;
   GList *children;
 };
 
-struct _GdkImagePrivate
+struct _GdkImageClass 
 {
-  GdkImage image;
-  XImage *ximage;
-  Display *xdisplay;
-  gpointer x_shm_info;
-
-  void (*image_put) (GdkDrawable *window,
+  void (*destroy)   (GdkImage    *image);
+  void (*image_put) (GdkImage	 *image,
+		     GdkDrawable *window,
 		     GdkGC	 *gc,
-		     GdkImage	 *image,
 		     gint	  xsrc,
 		     gint	  ysrc,
 		     gint	  xdest,
@@ -125,12 +111,25 @@ struct _GdkImagePrivate
 		     gint	  height);
 };
 
+struct _GdkImagePrivate
+{
+  GdkImage image;
+
+  guint ref_count;
+  GdkImageClass *klass;
+};
+
+struct _GdkFontPrivate
+{
+  GdkFont font;
+  guint ref_count;
+};
+
 struct _GdkGCPrivate
 {
-  GdkGC gc;
-  GC xgc;
-  Display *xdisplay;
   guint ref_count;
+  GdkGCClass *klass;
+  gpointer klass_data;
 };
 
 typedef enum {
@@ -146,70 +145,10 @@ struct _GdkColorInfo
 struct _GdkColormapPrivate
 {
   GdkColormap colormap;
-  Colormap xcolormap;
-  Display *xdisplay;
   GdkVisual *visual;
-  gint private_val;
 
-  GHashTable *hash;
-  GdkColorInfo *info;
-  time_t last_sync_time;
-  
   guint ref_count;
 };
-
-struct _GdkVisualPrivate
-{
-  GdkVisual visual;
-  Visual *xvisual;
-};
-
-struct _GdkFontPrivate
-{
-  GdkFont font;
-  /* XFontStruct *xfont; */
-  /* generic pointer point to XFontStruct or XFontSet */
-  gpointer xfont;
-  Display *xdisplay;
-  guint ref_count;
-
-  GSList *names;
-};
-
-struct _GdkCursorPrivate
-{
-  GdkCursor cursor;
-  Cursor xcursor;
-  Display *xdisplay;
-};
-
-struct _GdkDndCursorInfo {
-  Cursor	  gdk_cursor_dragdefault, gdk_cursor_dragok;
-  GdkWindow	 *drag_pm_default, *drag_pm_ok;
-  GdkPoint	  default_hotspot, ok_hotspot;
-  GList *xids;
-};
-typedef struct _GdkDndCursorInfo GdkDndCursorInfo;
-
-struct _GdkDndGlobals {
-  GdkAtom	     gdk_XdeEnter, gdk_XdeLeave, gdk_XdeRequest;
-  GdkAtom	     gdk_XdeDataAvailable, gdk_XdeDataShow, gdk_XdeCancel;
-  GdkAtom	     gdk_XdeTypelist;
-
-  GdkDndCursorInfo  *c;
-  GdkWindow	**drag_startwindows;
-  guint		  drag_numwindows;
-  gboolean	  drag_really, drag_perhaps, dnd_grabbed;
-  Window	  dnd_drag_target;
-  GdkPoint	  drag_dropcoords;
-
-  GdkPoint dnd_drag_start, dnd_drag_oldpos;
-  GdkRectangle dnd_drag_dropzone;
-  GdkWindowPrivate *real_sw;
-  Window dnd_drag_curwin;
-  Time last_drop_time; /* An incredible hack, sosumi miguel */
-};
-typedef struct _GdkDndGlobals GdkDndGlobals;
 
 struct _GdkEventFilter {
   GdkFilterFunc function;
@@ -222,24 +161,35 @@ struct _GdkClientFilter {
   gpointer      data;
 };
 
-#ifdef USE_XIM
-
-typedef struct _GdkICPrivate GdkICPrivate;
-
-struct _GdkICPrivate
+typedef enum 
 {
-  XIC xic;
-  GdkICAttr *attr;
-  GdkICAttributesType mask;
+  GDK_ARG_STRING,
+  GDK_ARG_INT,
+  GDK_ARG_BOOL,
+  GDK_ARG_NOBOOL,
+  GDK_ARG_CALLBACK
+} GdkArgType;
+
+
+typedef struct _GdkArgContext GdkArgContext;
+typedef struct _GdkArgDesc GdkArgDesc;
+
+typedef void (*GdkArgFunc) (const char *name, const char *arg, gpointer data);
+
+struct _GdkArgContext
+{
+  GPtrArray *tables;
+  gpointer cb_data;
 };
 
-#endif /* USE_XIM */
-
-struct _GdkRegionPrivate
+struct _GdkArgDesc
 {
-  GdkRegion region;
-  Region xregion;
+  const char *name;
+  GdkArgType type;
+  gpointer location;
+  GdkArgFunc callback;
 };
+
 
 typedef enum {
   GDK_DEBUG_MISC          = 1 << 0,
@@ -249,27 +199,42 @@ typedef enum {
   GDK_DEBUG_XIM           = 1 << 4
 } GdkDebugFlag;
 
-void gdk_events_init (void);
+void gdk_event_button_generate (GdkEvent *event);
+
+/* FIFO's for event queue, and for events put back using
+ * gdk_event_put().
+ */
+extern GList *gdk_queued_events;
+extern GList *gdk_queued_tail;
+
+extern GdkEventFunc   gdk_event_func;    /* Callback for events */
+extern gpointer       gdk_event_data;
+extern GDestroyNotify gdk_event_notify;
+
+GdkEvent* gdk_event_new (void);
+
+void      gdk_events_init   (void);
+void      gdk_events_queue  (void);
+GdkEvent* gdk_event_unqueue (void);
+
+GList* gdk_event_queue_find_first  (void);
+void   gdk_event_queue_remove_link (GList    *node);
+void   gdk_event_queue_append      (GdkEvent *event);
+
 void gdk_window_init (void);
 void gdk_visual_init (void);
 void gdk_dnd_init    (void);
 
 void gdk_image_init  (void);
-void gdk_image_exit (void);
+void gdk_image_exit  (void);
 
-GdkColormap* gdk_colormap_lookup (Colormap  xcolormap);
-GdkVisual*   gdk_visual_lookup	 (Visual   *xvisual);
+void gdk_input_init  (void);
+void gdk_input_exit  (void);
+
+void gdk_windowing_exit (void);
 
 void gdk_window_add_colormap_windows (GdkWindow *window);
 void gdk_window_destroy_notify	     (GdkWindow *window);
-
-void	 gdk_xid_table_insert (XID	*xid,
-			       gpointer	 data);
-void	 gdk_xid_table_remove (XID	 xid);
-gpointer gdk_xid_table_lookup (XID	 xid);
-
-gint gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
-		      XEvent *event_send);
 
 /* If you pass x = y = -1, it queries the pointer
    to find out where it currently is.
@@ -281,47 +246,32 @@ void gdk_dnd_display_drag_cursor(gint x,
 				 gboolean drag_ok,
 				 gboolean change_made);
 
-/* Please see gdkwindow.c for comments on how to use */ 
-Window gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y, GList *excludes, gboolean excl_child);
-Window gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_child);
-
 extern gint		 gdk_debug_level;
-extern gint		 gdk_show_events;
-extern gint		 gdk_use_xshm;
-extern gint		 gdk_stack_trace;
-extern gchar		*gdk_display_name;
-extern Display		*gdk_display;
+extern gboolean		 gdk_show_events;
 extern gint		 gdk_screen;
-extern Window		 gdk_root_window;
-extern Window		 gdk_leader_window;
-extern GdkWindowPrivate	 gdk_root_parent;
-extern Atom		 gdk_wm_delete_window;
-extern Atom		 gdk_wm_take_focus;
-extern Atom		 gdk_wm_protocols;
-extern Atom		 gdk_wm_window_protocols[];
-extern Atom		 gdk_selection_property;
-extern GdkDndGlobals	 gdk_dnd;
-extern GdkWindow	*selection_owner[];
-extern gchar		*gdk_progclass;
+extern GdkWindow  	*gdk_parent_root;
 extern gint		 gdk_error_code;
 extern gint		 gdk_error_warnings;
-extern gint              gdk_null_window_warnings;
 extern GList            *gdk_default_filters;
-extern const int         gdk_nevent_masks;
-extern const int         gdk_event_mask_table[];
 
-extern GdkWindowPrivate *gdk_xgrab_window;  /* Window that currently holds the
-					     * x pointer grab
-					     */
+GdkWindow* _gdk_window_alloc (void);
+
+/* Font/string functions implemented in module-specific code */
+gint _gdk_font_strlen (GdkFont *font, const char *str);
+void _gdk_font_destroy (GdkFont *font);
+
+void _gdk_colormap_real_destroy (GdkColormap *colormap);
+
+/* Initialization */
+
+extern GdkArgDesc _gdk_windowing_args[];
+gboolean _gdk_windowing_init_check (int argc, char **argv);
 
 #ifdef USE_XIM
 /* XIM support */
 gint   gdk_im_open		 (void);
 void   gdk_im_close		 (void);
 void   gdk_ic_cleanup		 (void);
-
-extern GdkICPrivate *gdk_xim_ic;		/* currently using IC */
-extern GdkWindow *gdk_xim_window;	        /* currently using Window */
 #endif /* USE_XIM */
 
 /* Debugging support */

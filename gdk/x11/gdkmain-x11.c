@@ -77,14 +77,9 @@ static void	 gdkx_XConvertCase	(KeySym	       symbol,
 #define XConvertCase gdkx_XConvertCase
 #endif
 
-static void	    gdk_exit_func		 (void);
 static int	    gdk_x_error			 (Display     *display, 
 						  XErrorEvent *error);
 static int	    gdk_x_io_error		 (Display     *display);
-
-GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
-					 GdkEvent  *event,
-					 gpointer   data);
 
 /* Private variable declarations
  */
@@ -93,9 +88,7 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 						     */
 
 static gint autorepeat;
-
-static GSList *gdk_error_traps = NULL;               /* List of error traps */
-static GSList *gdk_error_trap_free_list = NULL;      /* Free list */
+static gboolean gdk_synchronize = FALSE;
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
@@ -110,258 +103,60 @@ static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
 
 #endif /* G_ENABLE_DEBUG */
 
-/*
- *--------------------------------------------------------------
- * gdk_init_heck
- *
- *   Initialize the library for use.
- *
- * Arguments:
- *   "argc" is the number of arguments.
- *   "argv" is an array of strings.
- *
- * Results:
- *   "argc" and "argv" are modified to reflect any arguments
- *   which were not handled. (Such arguments should either
- *   be handled by the application or dismissed). If initialization
- *   fails, returns FALSE, otherwise TRUE.
- *
- * Side effects:
- *   The library is initialized.
- *
- *--------------------------------------------------------------
- */
+static void
+gdk_arg_xim_preedit_cb (const gchar *arg, const gchar *value, gpointer cb_data)
+{
+  if (strcmp ("none", value) == 0)
+    gdk_im_set_best_style (GDK_IM_PREEDIT_NONE);
+  else if (strcmp ("nothing", value) == 0)
+    gdk_im_set_best_style (GDK_IM_PREEDIT_NOTHING);
+  else if (strcmp ("area", value) == 0)
+    gdk_im_set_best_style (GDK_IM_PREEDIT_AREA);
+  else if (strcmp ("position", value) == 0)
+    gdk_im_set_best_style (GDK_IM_PREEDIT_POSITION);
+  else if (strcmp ("callbacks", value) == 0)
+    gdk_im_set_best_style (GDK_IM_PREEDIT_CALLBACKS);
+}
+
+static void
+gdk_arg_xim_status_cb (const gchar *arg, const gchar *value, gpointer cb_data)
+{
+  if (strcmp ("none", value) == 0)
+    gdk_im_set_best_style (GDK_IM_STATUS_NONE);
+  else if (strcmp ("nothing", value) == 0)
+    gdk_im_set_best_style (GDK_IM_STATUS_NOTHING);
+  else if (strcmp ("area", value) == 0)
+    gdk_im_set_best_style (GDK_IM_STATUS_AREA);
+  else if (strcmp ("callbacks", value) == 0)
+    gdk_im_set_best_style (GDK_IM_STATUS_CALLBACKS);
+}
+
+GdkArgDesc _gdk_windowing_args[] = {
+  { "display",     GDK_ARG_STRING,   &gdk_display_name,    (GdkArgFunc)NULL   },
+  { "sync",        GDK_ARG_BOOL,     &gdk_synchronize,     (GdkArgFunc)NULL   },
+  { "no-xshm",     GDK_ARG_NOBOOL,   &gdk_use_xshm,        (GdkArgFunc)NULL   },
+  { "class",       GDK_ARG_STRING,   &gdk_progclass,       (GdkArgFunc)NULL   },
+  { "gxid-host",   GDK_ARG_STRING,   &gdk_input_gxid_host, (GdkArgFunc)NULL   },
+  { "gxid-port",   GDK_ARG_INT,      &gdk_input_gxid_port, (GdkArgFunc)NULL   },
+  { "xim-preedit", GDK_ARG_CALLBACK, NULL,                 gdk_arg_xim_preedit_cb },
+  { "xim-status",  GDK_ARG_CALLBACK, NULL,                 gdk_arg_xim_status_cb  },
+  { NULL }
+};
 
 gboolean
-gdk_init_check (int	 *argc,
-		char ***argv)
+_gdk_windowing_init_check (int argc, char **argv)
 {
   XKeyboardState keyboard_state;
-  gint synchronize;
-  gint i, j, k;
   XClassHint *class_hint;
-  gchar **argv_orig = NULL;
-  gint argc_orig = 0;
-  
-  if (gdk_initialized)
-    return TRUE;
-  
-  if (g_thread_supported ())
-    gdk_threads_mutex = g_mutex_new ();
-  
-  if (argc && argv)
-    {
-      argc_orig = *argc;
-      
-      argv_orig = g_malloc ((argc_orig + 1) * sizeof (char*));
-      for (i = 0; i < argc_orig; i++)
-	argv_orig[i] = g_strdup ((*argv)[i]);
-      argv_orig[argc_orig] = NULL;
-    }
-  
-  gdk_display_name = NULL;
   
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
-  
-  synchronize = FALSE;
-  
-#ifdef G_ENABLE_DEBUG
-  {
-    gchar *debug_string = getenv("GDK_DEBUG");
-    if (debug_string != NULL)
-      gdk_debug_flags = g_parse_debug_string (debug_string,
-					      (GDebugKey *) gdk_debug_keys,
-					      gdk_ndebug_keys);
-  }
-#endif	/* G_ENABLE_DEBUG */
-  
-  if (argc && argv)
-    {
-      if (*argc > 0)
-	{
-	  gchar *d;
-	  
-	  d = strrchr((*argv)[0],'/');
-	  if (d != NULL)
-	    g_set_prgname (d + 1);
-	  else
-	    g_set_prgname ((*argv)[0]);
-	}
-      
-      for (i = 1; i < *argc;)
-	{
-#ifdef G_ENABLE_DEBUG	  
-	  if ((strcmp ("--gdk-debug", (*argv)[i]) == 0) ||
-	      (strncmp ("--gdk-debug=", (*argv)[i], 12) == 0))
-	    {
-	      gchar *equal_pos = strchr ((*argv)[i], '=');
-	      
-	      if (equal_pos != NULL)
-		{
-		  gdk_debug_flags |= g_parse_debug_string (equal_pos+1,
-							   (GDebugKey *) gdk_debug_keys,
-							   gdk_ndebug_keys);
-		}
-	      else if ((i + 1) < *argc && (*argv)[i + 1])
-		{
-		  gdk_debug_flags |= g_parse_debug_string ((*argv)[i+1],
-							   (GDebugKey *) gdk_debug_keys,
-							   gdk_ndebug_keys);
-		  (*argv)[i] = NULL;
-		  i += 1;
-		}
-	      (*argv)[i] = NULL;
-	    }
-	  else if ((strcmp ("--gdk-no-debug", (*argv)[i]) == 0) ||
-		   (strncmp ("--gdk-no-debug=", (*argv)[i], 15) == 0))
-	    {
-	      gchar *equal_pos = strchr ((*argv)[i], '=');
-	      
-	      if (equal_pos != NULL)
-		{
-		  gdk_debug_flags &= ~g_parse_debug_string (equal_pos+1,
-							    (GDebugKey *) gdk_debug_keys,
-							    gdk_ndebug_keys);
-		}
-	      else if ((i + 1) < *argc && (*argv)[i + 1])
-		{
-		  gdk_debug_flags &= ~g_parse_debug_string ((*argv)[i+1],
-							    (GDebugKey *) gdk_debug_keys,
-							    gdk_ndebug_keys);
-		  (*argv)[i] = NULL;
-		  i += 1;
-		}
-	      (*argv)[i] = NULL;
-	    }
-	  else 
-#endif /* G_ENABLE_DEBUG */
-	    if (strcmp ("--display", (*argv)[i]) == 0)
-	      {
-		(*argv)[i] = NULL;
-		
-		if ((i + 1) < *argc && (*argv)[i + 1])
-		  {
-		    gdk_display_name = g_strdup ((*argv)[i + 1]);
-		    (*argv)[i + 1] = NULL;
-		    i += 1;
-		  }
-	      }
-	    else if (strcmp ("--sync", (*argv)[i]) == 0)
-	      {
-		(*argv)[i] = NULL;
-		synchronize = TRUE;
-	      }
-	    else if (strcmp ("--no-xshm", (*argv)[i]) == 0)
-	      {
-		(*argv)[i] = NULL;
-		gdk_use_xshm = FALSE;
-	      }
-	    else if (strcmp ("--name", (*argv)[i]) == 0)
-	      {
-		if ((i + 1) < *argc && (*argv)[i + 1])
-		  {
-		    (*argv)[i++] = NULL;
-		    g_set_prgname ((*argv)[i]);
-		    (*argv)[i] = NULL;
-		  }
-	      }
-	    else if (strcmp ("--class", (*argv)[i]) == 0)
-	      {
-		if ((i + 1) < *argc && (*argv)[i + 1])
-		  {
-		    (*argv)[i++] = NULL;
-		    gdk_progclass = (*argv)[i];
-		    (*argv)[i] = NULL;
-		  }
-	      }
-#ifdef XINPUT_GXI
-	    else if (strcmp ("--gxid_host", (*argv)[i]) == 0)
-	      {
-		if ((i + 1) < *argc && (*argv)[i + 1])
-		  {
-		    (*argv)[i++] = NULL;
-		    gdk_input_gxid_host = ((*argv)[i]);
-		    (*argv)[i] = NULL;
-		  }
-	      }
-	    else if (strcmp ("--gxid_port", (*argv)[i]) == 0)
-	      {
-		if ((i + 1) < *argc && (*argv)[i + 1])
-		  {
-		    (*argv)[i++] = NULL;
-		    gdk_input_gxid_port = atoi ((*argv)[i]);
-		    (*argv)[i] = NULL;
-		  }
-	      }
-#endif
-#ifdef USE_XIM
-	    else if (strcmp ("--xim-preedit", (*argv)[i]) == 0)
-	      {
-		if ((i + 1) < *argc && (*argv)[i + 1])
-		  {
-		    (*argv)[i++] = NULL;
-		    if (strcmp ("none", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GDK_IM_PREEDIT_NONE);
-		    else if (strcmp ("nothing", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GDK_IM_PREEDIT_NOTHING);
-		    else if (strcmp ("area", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GDK_IM_PREEDIT_AREA);
-		    else if (strcmp ("position", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GDK_IM_PREEDIT_POSITION);
-		    else if (strcmp ("callbacks", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GDK_IM_PREEDIT_CALLBACKS);
-		    (*argv)[i] = NULL;
-		  }
-	      }
-	    else if (strcmp ("--xim-status", (*argv)[i]) == 0)
-	      {
-		if ((i + 1) < *argc && (*argv)[i + 1])
-		  {
-		    (*argv)[i++] = NULL;
-		    if (strcmp ("none", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GDK_IM_STATUS_NONE);
-		    else if (strcmp ("nothing", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GDK_IM_STATUS_NOTHING);
-		    else if (strcmp ("area", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GDK_IM_STATUS_AREA);
-		    else if (strcmp ("callbacks", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GDK_IM_STATUS_CALLBACKS);
-		    (*argv)[i] = NULL;
-		  }
-	      }
-#endif
-	  
-	  i += 1;
-	}
-      
-      for (i = 1; i < *argc; i++)
-	{
-	  for (k = i; k < *argc; k++)
-	    if ((*argv)[k] != NULL)
-	      break;
-	  
-	  if (k > i)
-	    {
-	      k -= i;
-	      for (j = i + k; j < *argc; j++)
-		(*argv)[j-k] = (*argv)[j];
-	      *argc -= k;
-	    }
-	}
-    }
-  else
-    {
-      g_set_prgname ("<unknown>");
-    }
-  
-  GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
   
   gdk_display = XOpenDisplay (gdk_display_name);
   if (!gdk_display)
     return FALSE;
   
-  if (synchronize)
+  if (gdk_synchronize)
     XSynchronize (gdk_display, True);
   
   gdk_screen = DefaultScreen (gdk_display);
@@ -378,13 +173,9 @@ gdk_init_check (int	 *argc,
     }
   class_hint->res_class = gdk_progclass;
   XmbSetWMProperties (gdk_display, gdk_leader_window,
-                      NULL, NULL, argv_orig, argc_orig, 
+                      NULL, NULL, argv, argc, 
                       NULL, NULL, class_hint);
   XFree (class_hint);
-  
-  for (i = 0; i < argc_orig; i++)
-    g_free(argv_orig[i]);
-  g_free(argv_orig);
   
   gdk_wm_delete_window = XInternAtom (gdk_display, "WM_DELETE_WINDOW", False);
   gdk_wm_take_focus = XInternAtom (gdk_display, "WM_TAKE_FOCUS", False);
@@ -396,59 +187,7 @@ gdk_init_check (int	 *argc,
   XGetKeyboardControl (gdk_display, &keyboard_state);
   autorepeat = keyboard_state.global_auto_repeat;
   
-  g_atexit (gdk_exit_func);
-  
-  gdk_events_init ();
-  gdk_visual_init ();
-  gdk_window_init ();
-  gdk_image_init ();
-  gdk_input_init ();
-  gdk_dnd_init ();
-
-#ifdef USE_XIM
-  gdk_im_open ();
-#endif
-  
-  gdk_initialized = 1;
-
   return TRUE;
-}
-
-void
-gdk_init (int *argc, char ***argv)
-{
-  if (!gdk_init_check (argc, argv))
-    {
-      g_warning ("cannot open display: %s", gdk_get_display ());
-      exit(1);
-    }
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_exit
- *
- *   Restores the library to an un-itialized state and exits
- *   the program using the "exit" system call.
- *
- * Arguments:
- *   "errorcode" is the error value to pass to "exit".
- *
- * Results:
- *   Allocated structures are freed and the program exits
- *   cleanly.
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-void
-gdk_exit (gint errorcode)
-{
-  /* de-initialisation is done by the gdk_exit_funct(),
-     no need to do this here (Alex J.) */
-  exit (errorcode);
 }
 
 void
@@ -822,50 +561,10 @@ gdk_beep (void)
   XBell(gdk_display, 0);
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_exit_func
- *
- *   This is the "atexit" function that makes sure the
- *   library gets a chance to cleanup.
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *   The library is un-initialized and the program exits.
- *
- *--------------------------------------------------------------
- */
-
-static void
-gdk_exit_func (void)
+void
+gdk_windowing_exit (void)
 {
-  static gboolean in_gdk_exit_func = FALSE;
-  
-  /* This is to avoid an infinite loop if a program segfaults in
-     an atexit() handler (and yes, it does happen, especially if a program
-     has trounced over memory too badly for even g_message to work) */
-  if (in_gdk_exit_func == TRUE)
-    return;
-  in_gdk_exit_func = TRUE;
-  
-  if (gdk_initialized)
-    {
-#ifdef USE_XIM
-      /* cleanup IC */
-      gdk_ic_cleanup ();
-      /* close IM */
-      gdk_im_close ();
-#endif
-      gdk_image_exit ();
-      gdk_input_exit ();
-      gdk_key_repeat_restore ();
-      
-      XCloseDisplay (gdk_display);
-      gdk_initialized = 0;
-    }
+  XCloseDisplay (gdk_display);
 }
 
 /*
@@ -977,77 +676,6 @@ gdk_get_display (void)
   return (gchar *)XDisplayName (gdk_display_name);
 }
 
-/*************************************************************
- * gdk_error_trap_push:
- *     Push an error trap. X errors will be trapped until
- *     the corresponding gdk_error_pop(), which will return
- *     the error code, if any.
- *   arguments:
- *     
- *   results:
- *************************************************************/
-
-void
-gdk_error_trap_push (void)
-{
-  GSList *node;
-  GdkErrorTrap *trap;
-
-  if (gdk_error_trap_free_list)
-    {
-      node = gdk_error_trap_free_list;
-      gdk_error_trap_free_list = gdk_error_trap_free_list->next;
-    }
-  else
-    {
-      node = g_slist_alloc ();
-      node->data = g_new (GdkErrorTrap, 1);
-    }
-
-  node->next = gdk_error_traps;
-  gdk_error_traps = node;
-  
-  trap = node->data;
-  trap->error_code = gdk_error_code;
-  trap->error_warnings = gdk_error_warnings;
-
-  gdk_error_code = 0;
-  gdk_error_warnings = 0;
-}
-
-/*************************************************************
- * gdk_error_trap_pop:
- *     Pop an error trap added with gdk_error_push()
- *   arguments:
- *     
- *   results:
- *     0, if no error occured, otherwise the error code.
- *************************************************************/
-
-gint
-gdk_error_trap_pop (void)
-{
-  GSList *node;
-  GdkErrorTrap *trap;
-  gint result;
-
-  g_return_val_if_fail (gdk_error_traps != NULL, 0);
-
-  node = gdk_error_traps;
-  gdk_error_traps = gdk_error_traps->next;
-
-  node->next = gdk_error_trap_free_list;
-  gdk_error_trap_free_list = node;
-  
-  result = gdk_error_code;
-  
-  trap = node->data;
-  gdk_error_code = trap->error_code;
-  gdk_error_warnings = trap->error_warnings;
-  
-  return result;
-}
-
 gint 
 gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
 		 XEvent *event_send)
@@ -1065,138 +693,6 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
   return result && !gdk_error_code;
 }
 
-#ifndef HAVE_XCONVERTCASE
-/* compatibility function from X11R6.3, since XConvertCase is not
- * supplied by X11R5.
- */
-static void
-gdkx_XConvertCase (KeySym symbol,
-		   KeySym *lower,
-		   KeySym *upper)
-{
-  register KeySym sym = symbol;
-  
-  g_return_if_fail (lower != NULL);
-  g_return_if_fail (upper != NULL);
-  
-  *lower = sym;
-  *upper = sym;
-  
-  switch (sym >> 8)
-    {
-#if	defined (GDK_A) && defined (GDK_Ooblique)
-    case 0: /* Latin 1 */
-      if ((sym >= GDK_A) && (sym <= GDK_Z))
-	*lower += (GDK_a - GDK_A);
-      else if ((sym >= GDK_a) && (sym <= GDK_z))
-	*upper -= (GDK_a - GDK_A);
-      else if ((sym >= GDK_Agrave) && (sym <= GDK_Odiaeresis))
-	*lower += (GDK_agrave - GDK_Agrave);
-      else if ((sym >= GDK_agrave) && (sym <= GDK_odiaeresis))
-	*upper -= (GDK_agrave - GDK_Agrave);
-      else if ((sym >= GDK_Ooblique) && (sym <= GDK_Thorn))
-	*lower += (GDK_oslash - GDK_Ooblique);
-      else if ((sym >= GDK_oslash) && (sym <= GDK_thorn))
-	*upper -= (GDK_oslash - GDK_Ooblique);
-      break;
-#endif	/* LATIN1 */
-      
-#if	defined (GDK_Aogonek) && defined (GDK_tcedilla)
-    case 1: /* Latin 2 */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (sym == GDK_Aogonek)
-	*lower = GDK_aogonek;
-      else if (sym >= GDK_Lstroke && sym <= GDK_Sacute)
-	*lower += (GDK_lstroke - GDK_Lstroke);
-      else if (sym >= GDK_Scaron && sym <= GDK_Zacute)
-	*lower += (GDK_scaron - GDK_Scaron);
-      else if (sym >= GDK_Zcaron && sym <= GDK_Zabovedot)
-	*lower += (GDK_zcaron - GDK_Zcaron);
-      else if (sym == GDK_aogonek)
-	*upper = GDK_Aogonek;
-      else if (sym >= GDK_lstroke && sym <= GDK_sacute)
-	*upper -= (GDK_lstroke - GDK_Lstroke);
-      else if (sym >= GDK_scaron && sym <= GDK_zacute)
-	*upper -= (GDK_scaron - GDK_Scaron);
-      else if (sym >= GDK_zcaron && sym <= GDK_zabovedot)
-	*upper -= (GDK_zcaron - GDK_Zcaron);
-      else if (sym >= GDK_Racute && sym <= GDK_Tcedilla)
-	*lower += (GDK_racute - GDK_Racute);
-      else if (sym >= GDK_racute && sym <= GDK_tcedilla)
-	*upper -= (GDK_racute - GDK_Racute);
-      break;
-#endif	/* LATIN2 */
-      
-#if	defined (GDK_Hstroke) && defined (GDK_Cabovedot)
-    case 2: /* Latin 3 */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (sym >= GDK_Hstroke && sym <= GDK_Hcircumflex)
-	*lower += (GDK_hstroke - GDK_Hstroke);
-      else if (sym >= GDK_Gbreve && sym <= GDK_Jcircumflex)
-	*lower += (GDK_gbreve - GDK_Gbreve);
-      else if (sym >= GDK_hstroke && sym <= GDK_hcircumflex)
-	*upper -= (GDK_hstroke - GDK_Hstroke);
-      else if (sym >= GDK_gbreve && sym <= GDK_jcircumflex)
-	*upper -= (GDK_gbreve - GDK_Gbreve);
-      else if (sym >= GDK_Cabovedot && sym <= GDK_Scircumflex)
-	*lower += (GDK_cabovedot - GDK_Cabovedot);
-      else if (sym >= GDK_cabovedot && sym <= GDK_scircumflex)
-	*upper -= (GDK_cabovedot - GDK_Cabovedot);
-      break;
-#endif	/* LATIN3 */
-      
-#if	defined (GDK_Rcedilla) && defined (GDK_Amacron)
-    case 3: /* Latin 4 */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (sym >= GDK_Rcedilla && sym <= GDK_Tslash)
-	*lower += (GDK_rcedilla - GDK_Rcedilla);
-      else if (sym >= GDK_rcedilla && sym <= GDK_tslash)
-	*upper -= (GDK_rcedilla - GDK_Rcedilla);
-      else if (sym == GDK_ENG)
-	*lower = GDK_eng;
-      else if (sym == GDK_eng)
-	*upper = GDK_ENG;
-      else if (sym >= GDK_Amacron && sym <= GDK_Umacron)
-	*lower += (GDK_amacron - GDK_Amacron);
-      else if (sym >= GDK_amacron && sym <= GDK_umacron)
-	*upper -= (GDK_amacron - GDK_Amacron);
-      break;
-#endif	/* LATIN4 */
-      
-#if	defined (GDK_Serbian_DJE) && defined (GDK_Cyrillic_yu)
-    case 6: /* Cyrillic */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (sym >= GDK_Serbian_DJE && sym <= GDK_Serbian_DZE)
-	*lower -= (GDK_Serbian_DJE - GDK_Serbian_dje);
-      else if (sym >= GDK_Serbian_dje && sym <= GDK_Serbian_dze)
-	*upper += (GDK_Serbian_DJE - GDK_Serbian_dje);
-      else if (sym >= GDK_Cyrillic_YU && sym <= GDK_Cyrillic_HARDSIGN)
-	*lower -= (GDK_Cyrillic_YU - GDK_Cyrillic_yu);
-      else if (sym >= GDK_Cyrillic_yu && sym <= GDK_Cyrillic_hardsign)
-	*upper += (GDK_Cyrillic_YU - GDK_Cyrillic_yu);
-      break;
-#endif	/* CYRILLIC */
-      
-#if	defined (GDK_Greek_ALPHAaccent) && defined (GDK_Greek_finalsmallsigma)
-    case 7: /* Greek */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (sym >= GDK_Greek_ALPHAaccent && sym <= GDK_Greek_OMEGAaccent)
-	*lower += (GDK_Greek_alphaaccent - GDK_Greek_ALPHAaccent);
-      else if (sym >= GDK_Greek_alphaaccent && sym <= GDK_Greek_omegaaccent &&
-	       sym != GDK_Greek_iotaaccentdieresis &&
-	       sym != GDK_Greek_upsilonaccentdieresis)
-	*upper -= (GDK_Greek_alphaaccent - GDK_Greek_ALPHAaccent);
-      else if (sym >= GDK_Greek_ALPHA && sym <= GDK_Greek_OMEGA)
-	*lower += (GDK_Greek_alpha - GDK_Greek_ALPHA);
-      else if (sym >= GDK_Greek_alpha && sym <= GDK_Greek_omega &&
-	       sym != GDK_Greek_finalsmallsigma)
-	*upper -= (GDK_Greek_alpha - GDK_Greek_ALPHA);
-      break;
-#endif	/* GREEK */
-    }
-}
-#endif
-
 gchar*
 gdk_keyval_name (guint	      keyval)
 {
@@ -1211,71 +707,21 @@ gdk_keyval_from_name (const gchar *keyval_name)
   return XStringToKeysym (keyval_name);
 }
 
-guint
-gdk_keyval_to_upper (guint	  keyval)
-{
-  if (keyval)
-    {
-      KeySym lower_val = 0;
-      KeySym upper_val = 0;
-      
-      XConvertCase (keyval, &lower_val, &upper_val);
-      return upper_val;
-    }
-  return 0;
-}
-
-guint
-gdk_keyval_to_lower (guint	  keyval)
-{
-  if (keyval)
-    {
-      KeySym lower_val = 0;
-      KeySym upper_val = 0;
-      
-      XConvertCase (keyval, &lower_val, &upper_val);
-      return lower_val;
-    }
-  return 0;
-}
-
-gboolean
-gdk_keyval_is_upper (guint	  keyval)
-{
-  if (keyval)
-    {
-      KeySym lower_val = 0;
-      KeySym upper_val = 0;
-      
-      XConvertCase (keyval, &lower_val, &upper_val);
-      return upper_val == keyval;
-    }
-  return TRUE;
-}
-
-gboolean
-gdk_keyval_is_lower (guint	  keyval)
-{
-  if (keyval)
-    {
-      KeySym lower_val = 0;
-      KeySym upper_val = 0;
-      
-      XConvertCase (keyval, &lower_val, &upper_val);
-      return lower_val == keyval;
-    }
-  return TRUE;
-}
-
+#ifdef HAVE_XCONVERTCASE
 void
-gdk_threads_enter ()
+gdk_keyval_convert_case (guint symbol,
+			 guint *lower,
+			 guint *upper)
 {
-  GDK_THREADS_ENTER ();
-}
+  KeySym xlower = 0;
+  KeySym xupper = 0;
 
-void
-gdk_threads_leave ()
-{
-  GDK_THREADS_LEAVE ();
-}
+  if (symbol)
+    XConvertCase (symbol, &xlower, &xupper);
 
+  if (lower)
+    *lower = xlower;
+  if (upper)
+    *upper = xupper;
+}  
+#endif HAVE_XCONVERTCASE

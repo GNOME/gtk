@@ -42,7 +42,6 @@ struct _GdkImage
   gpointer	mem;
 };
 
-
 GdkImage* gdk_image_new_bitmap(GdkVisual     *visual,
 				gpointer      data,
 				gint          width,
@@ -56,12 +55,17 @@ GdkImage*  gdk_image_bitmap_new(GdkImageType  type,
 				GdkVisual    *visual,
 				gint	      width,
 				gint	      height);
+
 #endif
 GdkImage*  gdk_image_get       (GdkDrawable  *drawable,
 				gint	      x,
 				gint	      y,
 				gint	      width,
 				gint	      height);
+
+GdkImage * gdk_image_ref       (GdkImage     *image);
+void       gdk_image_unref     (GdkImage     *image);
+
 void	   gdk_image_put_pixel (GdkImage     *image,
 				gint	      x,
 				gint	      y,
@@ -69,7 +73,6 @@ void	   gdk_image_put_pixel (GdkImage     *image,
 guint32	   gdk_image_get_pixel (GdkImage     *image,
 				gint	      x,
 				gint	      y);
-void	   gdk_image_destroy   (GdkImage     *image);
 
 
 #ifdef __cplusplus

@@ -418,6 +418,7 @@ INCLUDES = \
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
+	-I$(top_srcdir)/gdk/x11				\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_XIM_FLAGS@					\
 	@GTK_LOCALE_FLAGS@				\

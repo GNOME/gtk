@@ -39,6 +39,8 @@ gdk_atom_intern (const gchar *atom_name,
   GdkAtom retval;
   static GHashTable *atom_hash = NULL;
   
+  g_return_val_if_fail (atom_name != NULL, GDK_NONE);
+
   if (!atom_hash)
     atom_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -110,13 +112,16 @@ gdk_property_get (GdkWindow   *window,
   gulong ret_length;
   guchar *ret_data;
 
+  g_return_val_if_fail (window != NULL, FALSE);
+  g_return_val_if_fail (!GDK_IS_WINDOW (window), FALSE);
+
   if (window)
     {
       if (GDK_DRAWABLE_DESTROYED (window))
 	return FALSE;
 
-      xdisplay = GDK_WINDOW_XDISPLAY (window);
-      xwindow = GDK_WINDOW_XWINDOW (window);
+      xdisplay = GDK_DRAWABLE_XDISPLAY (window);
+      xwindow = GDK_DRAWABLE_XID (window);
     }
   else
     {
@@ -196,13 +201,16 @@ gdk_property_change (GdkWindow   *window,
   Display *xdisplay;
   Window xwindow;
 
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (!GDK_IS_WINDOW (window));
+
   if (window)
     {
       if (GDK_DRAWABLE_DESTROYED (window))
 	return;
 
-      xdisplay = GDK_WINDOW_XDISPLAY (window);
-      xwindow = GDK_WINDOW_XWINDOW (window);
+      xdisplay = GDK_DRAWABLE_XDISPLAY (window);
+      xwindow = GDK_DRAWABLE_XID (window);
     }
   else
     {
@@ -221,13 +229,16 @@ gdk_property_delete (GdkWindow *window,
   Display *xdisplay;
   Window xwindow;
 
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (!GDK_IS_WINDOW (window));
+
   if (window)
     {
       if (GDK_DRAWABLE_DESTROYED (window))
 	return;
 
-      xdisplay = GDK_WINDOW_XDISPLAY (window);
-      xwindow = GDK_WINDOW_XWINDOW (window);
+      xdisplay = GDK_DRAWABLE_XDISPLAY (window);
+      xwindow = GDK_DRAWABLE_XID (window);
     }
   else
     {

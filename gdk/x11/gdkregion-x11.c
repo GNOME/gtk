@@ -26,11 +26,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include "gdk.h"
-#include "gdkprivate.h"
-
-
-
+#include "gdkprivate-x11.h"
 
 GdkRegion*
 gdk_region_new (void)

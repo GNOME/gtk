@@ -136,12 +136,16 @@ gboolean gdk_event_send_client_message (GdkEvent    *event,
 
 /* Key values
  */
-gchar*   gdk_keyval_name		  (guint	keyval);
-guint    gdk_keyval_from_name		  (const gchar *keyval_name);
-guint    gdk_keyval_to_upper		  (guint	keyval);
-guint    gdk_keyval_to_lower		  (guint	keyval);
-gboolean gdk_keyval_is_upper		  (guint	keyval);
-gboolean gdk_keyval_is_lower		  (guint	keyval);
+gchar*   gdk_keyval_name         (guint        keyval);
+guint    gdk_keyval_from_name    (const gchar *keyval_name);
+void     gdk_keyval_convert_case (guint        symbol,
+				  guint       *lower,
+				  guint       *upper);
+guint    gdk_keyval_to_upper     (guint        keyval);
+guint    gdk_keyval_to_lower     (guint        keyval);
+gboolean gdk_keyval_is_upper     (guint        keyval);
+gboolean gdk_keyval_is_lower     (guint        keyval);
+
 
 /* Threading
  */

@@ -73,6 +73,16 @@ typedef void (*GdkRgbConvFunc) (GdkImage *image,
 				gint x_align, gint y_align,
 				GdkRgbCmap *cmap);
 
+static const gchar* visual_names[] =
+{
+  "static gray",
+  "grayscale",
+  "static color",
+  "pseudo color",
+  "true color",
+  "direct color",
+};
+
 /* Some of these fields should go, as they're not being used at all.
    Globals should generally migrate into here - it's very likely that
    we'll want to run more than one GdkRgbInfo context at the same time
@@ -405,16 +415,6 @@ static guint32
 gdk_rgb_score_visual (GdkVisual *visual)
 {
   guint32 quality, speed, sys, pseudo;
-  static const gchar* visual_names[] =
-  {
-    "static gray",
-    "grayscale",
-    "static color",
-    "pseudo color",
-    "true color",
-    "direct color",
-  };
-
 
   quality = 0;
   speed = 1;
@@ -466,8 +466,7 @@ gdk_rgb_score_visual (GdkVisual *visual)
   pseudo = (visual->type == GDK_VISUAL_PSEUDO_COLOR || visual->type == GDK_VISUAL_TRUE_COLOR);
 
   if (gdk_rgb_verbose)
-    g_print ("Visual 0x%x, type = %s, depth = %d, %x:%x:%x%s; score=%x\n",
-	     (gint)(((GdkVisualPrivate *)visual)->xvisual->visualid),
+    g_print ("Visual type = %s, depth = %d, %x:%x:%x%s; score=%x\n",
 	     visual_names[visual->type],
 	     visual->depth,
 	     visual->red_mask,
@@ -2681,16 +2680,19 @@ gdk_rgb_select_conv (GdkImage *image)
   gboolean mask_rgb, mask_bgr;
 
   depth = image_info->visual->depth;
-#if defined (GDK_RGB_STANDALONE) || defined (GDK_WINDOWING_X11)
-  bpp = ((GdkImagePrivate *)image)->ximage->bits_per_pixel;
-#elif defined (GDK_WINDOWING_WIN32)
-  bpp = ((GdkVisualPrivate *) gdk_visual_get_system())->xvisual->bitspixel;
-#endif
+
+  /* FIXME: save the bpp in the image; this is hack that works for
+   *        common visuals, not otherwise.
+   */
+  if (depth <= 8)
+    bpp = depth;
+  else
+    bpp = 8 * image->bpp;
 
   byte_order = image->byte_order;
   if (gdk_rgb_verbose)
-    g_print ("Chose visual 0x%x, image bpp=%d, %s first\n",
-	     (gint)(((GdkVisualPrivate *)image_info->visual)->xvisual->visualid),
+    g_print ("Chose visual type=%s depth=%d, image bpp=%d, %s first\n",
+	     visual_names[image_info->visual->type], image_info->visual->depth,
 	     bpp, byte_order == GDK_LSB_FIRST ? "lsb" : "msb");
 
 #if G_BYTE_ORDER == G_BIG_ENDIAN

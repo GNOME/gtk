@@ -2,10 +2,13 @@
 #define __GDK_DRAWABLE_H__
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdkgc.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+typedef struct _GdkDrawableClass GdkDrawableClass;
 
 /* Types of windows.
  *   Root: There is only 1 root window and it is initialized
@@ -42,9 +45,75 @@ struct _GdkDrawable
 {
   gpointer user_data;
 };
+ 
+struct _GdkDrawableClass 
+{
+  void  (*destroy)       (GdkDrawable    *drawable);
+  GdkGC *(*create_gc)    (GdkDrawable    *drawable,
+		          GdkGCValues    *values,
+		          GdkGCValuesMask mask);
+  void (*draw_rectangle) (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  gint		filled,
+			  gint		x,
+			  gint		y,
+			  gint		width,
+			  gint		height);
+  void (*draw_arc)       (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  gint		filled,
+			  gint		x,
+			  gint		y,
+			  gint		width,
+			  gint		height,
+			  gint		angle1,
+			  gint		angle2);
+  void (*draw_polygon)   (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  gint		filled,
+			  GdkPoint     *points,
+			  gint		npoints);
+  void (*draw_text)      (GdkDrawable  *drawable,
+			  GdkFont      *font,
+			  GdkGC	       *gc,
+			  gint		x,
+			  gint		y,
+			  const gchar  *text,
+			  gint		text_length);
+  void (*draw_text_wc)   (GdkDrawable	 *drawable,
+			  GdkFont	 *font,
+			  GdkGC		 *gc,
+			  gint		  x,
+			  gint		  y,
+			  const GdkWChar *text,
+			  gint		  text_length);
+  void (*draw_drawable)  (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  GdkDrawable  *src,
+			  gint		xsrc,
+			  gint		ysrc,
+			  gint		xdest,
+			  gint		ydest,
+			  gint		width,
+			  gint		height);
+  void (*draw_points)	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  GdkPoint     *points,
+			  gint		npoints);
+  void (*draw_segments)	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  GdkSegment   *segs,
+			  gint		nsegs);
+  void (*draw_lines)     (GdkDrawable  *drawable,
+			  GdkGC        *gc,
+			  GdkPoint     *points,
+			  gint          npoints);
+};
 
 /* Manipulation of drawables
  */
+GdkDrawable *   gdk_drawable_alloc        (void);
+
 GdkDrawableType gdk_drawable_get_type     (GdkDrawable	  *window);
 
 void            gdk_drawable_set_data     (GdkDrawable    *drawable,
@@ -61,6 +130,8 @@ void	        gdk_drawable_set_colormap (GdkDrawable	  *drawable,
 					   GdkColormap	  *colormap);
 GdkColormap*    gdk_drawable_get_colormap (GdkDrawable	  *drawable);
 GdkVisual*      gdk_drawable_get_visual   (GdkDrawable	  *drawable);
+GdkDrawable*    gdk_drawable_ref          (GdkDrawable    *drawable);
+void            gdk_drawable_unref        (GdkDrawable    *drawable);
 
 /* Drawing
  */
@@ -115,16 +186,7 @@ void gdk_draw_text_wc	 (GdkDrawable	 *drawable,
 			  gint		  y,
 			  const GdkWChar *text,
 			  gint		  text_length);
-void gdk_draw_pixmap	 (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  GdkDrawable  *src,
-			  gint		xsrc,
-			  gint		ysrc,
-			  gint		xdest,
-			  gint		ydest,
-			  gint		width,
-			  gint		height);
-void gdk_draw_bitmap	 (GdkDrawable  *drawable,
+void gdk_draw_drawable	 (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
 			  GdkDrawable  *src,
 			  gint		xsrc,

@@ -44,6 +44,7 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdk.h		\
 	gdkcc.h		\
 	gdkcolor.h	\
+	gdkcompat.h	\
 	gdkcursor.h     \
 	gdkcursors.h	\
 	gdkdnd.h	\
@@ -65,36 +66,19 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdktypes.h	\
 	gdkvisual.h	\
 	gdkwindow.h	\
-	gdkx.h		\
 @STRIP_END@
 gdk_c_sources = @STRIP_BEGIN@ \
 	gdk.c		\
-	gdkcc.c		\
 	gdkcolor.c	\
-	gdkcursor.c	\
-	gdkdnd.c	\
 	gdkdraw.c	\
 	gdkevents.c     \
 	gdkfont.c	\
 	gdkgc.c		\
 	gdkglobals.c	\
-	gdkim.c		\
 	gdkimage.c	\
-	gdkinput.c	\
-	gdkinput.h	\
-	gdkinputnone.h  \
-	gdkinputcommon.h\
-	gdkinputgxi.h	\
-	gdkinputxfree.h	\
-	gdkpixmap.c	\
-	gdkproperty.c	\
 	gdkrgb.c	\
 	gdkrectangle.c	\
-	gdkregion.c	\
-	gdkselection.c	\
-	gdkvisual.c	\
 	gdkwindow.c	\
-	gdkxid.c 	\
 	MwmUtil.h       \
 @STRIP_END@
 

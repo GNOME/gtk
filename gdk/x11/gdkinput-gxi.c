@@ -24,8 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifdef XINPUT_GXI
-
 /* #define DEBUG_SWITCHING */
 
 #include <gxid_lib.h>
@@ -645,5 +643,3 @@ gdk_input_gxi_ungrab_pointer (guint32 time)
       tmp_list = tmp_list->next;
     }
 }
-
-#endif /* XINPUT_GXI */

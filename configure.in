@@ -406,6 +406,9 @@ else
   AC_DEFINE(XINPUT_NONE)
 fi
 
+AM_CONDITIONAL(XINPUT_GXI, test x$with_xinput = xgxi)
+AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree)
+
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 

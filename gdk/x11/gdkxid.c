@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gdkprivate.h"
+#include "gdkprivate-x11.h"
 #include <stdio.h>
 
 static guint gdk_xid_hash    (XID *xid);

@@ -24,22 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#if defined(XINPUT_GXI) || defined(XINPUT_XFREE)
+#include "gdkinputprivate.h"
+#include "gdkx.h"
 
 /* Forward declarations */
-static void gdk_input_get_root_relative_geometry (Display *dpy, Window w, 
-						  int *x_ret, int *y_ret,
-						  int *width_ret, 
-						  int *height_ret);
 static GdkDevicePrivate *gdk_input_device_new(XDeviceInfo *device, 
 					      gint include_core);
-static void gdk_input_common_find_events(GdkWindow *window,
-					 GdkDevicePrivate *gdkdev,
-					 gint mask,
-					 XEventClass *classes,
-					 int *num_classes);
-static void gdk_input_common_select_events(GdkWindow *window,
-					   GdkDevicePrivate *gdkdev);
 static void gdk_input_translate_coordinates(GdkDevicePrivate *gdkdev,
 					    GdkInputWindow *input_window,
 					    gint *axis_data,
@@ -47,34 +37,21 @@ static void gdk_input_translate_coordinates(GdkDevicePrivate *gdkdev,
 					    gdouble *pressure,
 					    gdouble *xtilt, gdouble *ytilt);
 static guint gdk_input_translate_state(guint state, guint device_state);
-static gint gdk_input_common_init(gint include_core);
-static gint  gdk_input_common_other_event (GdkEvent *event, 
-					   XEvent *xevent, 
-					   GdkInputWindow *input_window,
-					   GdkDevicePrivate *gdkdev);
-static void gdk_input_common_set_axes (guint32 deviceid, GdkAxisUse *axes);
-static GdkTimeCoord * gdk_input_common_motion_events (GdkWindow *window,
-						      guint32 deviceid,
-						      guint32 start,
-						      guint32 stop,
-						      gint *nevents_return);
-static void  gdk_input_common_get_pointer     (GdkWindow       *window,
-					       guint32	   deviceid,
-					       gdouble         *x,
-					       gdouble         *y,
-					       gdouble         *pressure,
-					       gdouble         *xtilt,
-					       gdouble         *ytilt,
-					       GdkModifierType *mask);
-
-#define GDK_MAX_DEVICE_CLASSES 13
+void  gdk_input_common_get_pointer     (GdkWindow       *window,
+					guint32	   deviceid,
+					gdouble         *x,
+					gdouble         *y,
+					gdouble         *pressure,
+					gdouble         *xtilt,
+					gdouble         *ytilt,
+					GdkModifierType *mask);
 
 /* Global variables */
 
 static gint gdk_input_root_width;
 static gint gdk_input_root_height;
 
-static void
+void
 gdk_input_get_root_relative_geometry(Display *dpy, Window w, int *x_ret, int *y_ret,
 			       int *width_ret, int *height_ret)
 {
@@ -301,7 +278,7 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
   return gdkdev;
 }
 
-static void
+void
 gdk_input_common_find_events(GdkWindow *window,
 			     GdkDevicePrivate *gdkdev,
 			     gint mask,
@@ -403,7 +380,7 @@ gdk_input_common_find_events(GdkWindow *window,
   *num_classes = i;
 }
 
-static void
+void
 gdk_input_common_select_events(GdkWindow *window,
 			       GdkDevicePrivate *gdkdev)
 {
@@ -460,7 +437,7 @@ gdk_input_common_init(gint include_core)
       XFreeDeviceList(devices);
     }
 
-  gdk_input_devices = g_list_append (gdk_input_devices, &gdk_input_core_info);
+  gdk_input_devices = g_list_append (gdk_input_devices, (gpointer)&gdk_input_core_info);
 
   return TRUE;
 }
@@ -581,10 +558,11 @@ gdk_input_translate_state(guint state, guint device_state)
   return device_state | (state & 0xFF);
 }
 
-static gint 
-gdk_input_common_other_event (GdkEvent *event, 
-			      XEvent *xevent, 
-			      GdkInputWindow *input_window,
+
+gint 
+gdk_input_common_other_event (GdkEvent         *event,
+			      XEvent           *xevent,
+			      GdkInputWindow   *input_window,
 			      GdkDevicePrivate *gdkdev)
 {
   if ((xevent->type == gdkdev->buttonpress_type) ||
@@ -736,7 +714,7 @@ gdk_input_common_other_event (GdkEvent *event,
   return -1;			/* wasn't one of our event types */
 }
 
-static void
+void
 gdk_input_common_set_axes (guint32 deviceid, GdkAxisUse *axes)
 {
   int i;
@@ -755,10 +733,11 @@ gdk_input_common_set_axes (guint32 deviceid, GdkAxisUse *axes)
     }
 }
 
-void gdk_input_common_set_key (guint32 deviceid,
-			       guint   index,
-			       guint   keyval,
-			       GdkModifierType modifiers)
+void 
+gdk_input_common_set_key (guint32 deviceid,
+			  guint   index,
+			  guint   keyval,
+			  GdkModifierType modifiers)
 {
   GdkDevicePrivate *gdkdev = gdk_input_find_device(deviceid);
   
@@ -770,7 +749,7 @@ void gdk_input_common_set_key (guint32 deviceid,
   gdkdev->info.keys[index].modifiers = modifiers;
 }
 
-static GdkTimeCoord *
+GdkTimeCoord *
 gdk_input_common_motion_events (GdkWindow *window,
 				guint32 deviceid,
 				guint32 start,
@@ -819,7 +798,7 @@ gdk_input_common_motion_events (GdkWindow *window,
     return NULL;
 }
 
-static void 
+void 
 gdk_input_common_get_pointer     (GdkWindow       *window,
 				  guint32	   deviceid,
 				  gdouble         *x,
@@ -888,5 +867,3 @@ gdk_input_common_get_pointer     (GdkWindow       *window,
 	}
     }
 }
-
-#endif

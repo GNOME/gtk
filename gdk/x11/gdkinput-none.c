@@ -24,8 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifdef XINPUT_NONE
-
 static void gdk_input_none_get_pointer (GdkWindow       *window,
 					guint32	  deviceid,
 					gdouble         *x,
@@ -77,5 +75,3 @@ gdk_input_none_get_pointer (GdkWindow       *window,
   if (xtilt) *xtilt = 0;
   if (ytilt) *ytilt = 0;
 }
-
-#endif /* XINPUT_NONE */

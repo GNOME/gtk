@@ -34,21 +34,9 @@
 #include "gdkprivate.h"
 #include "gdkinputprivate.h"
 
-/* Forward declarations */
-
-static gint gdk_input_enable_window (GdkWindow *window,
-				     GdkDevicePrivate *gdkdev);
-static gint gdk_input_disable_window (GdkWindow *window,
-				      GdkDevicePrivate *gdkdev);
-static GdkInputWindow *gdk_input_window_find (GdkWindow *window);
-static GdkDevicePrivate *gdk_input_find_device (guint32 id);
-
-
-/* Incorporate the specific routines depending on compilation options */
-
 static const GdkAxisUse gdk_input_core_axes[] = { GDK_AXIS_X, GDK_AXIS_Y };
 
-static const GdkDeviceInfo gdk_input_core_info =
+const GdkDeviceInfo gdk_input_core_info =
 {
   GDK_CORE_POINTER,
   "Core Pointer",
@@ -67,15 +55,8 @@ gchar            *gdk_input_gxid_host;
 gint              gdk_input_gxid_port;
 gint              gdk_input_ignore_core;
 
-/* Local variables */
-
-static GList            *gdk_input_devices;
-static GList            *gdk_input_windows;
-
-#include "gdkinputnone.h"
-#include "gdkinputcommon.h"
-#include "gdkinputxfree.h"
-#include "gdkinputgxi.h"
+GList            *gdk_input_devices;
+GList            *gdk_input_windows;
 
 GList *
 gdk_input_list_devices (void)
@@ -178,7 +159,7 @@ gdk_input_motion_events (GdkWindow *window,
     }
 }
 
-static gint
+gint
 gdk_input_enable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 {
   if (gdk_input_vtable.enable_window)
@@ -187,7 +168,7 @@ gdk_input_enable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
     return TRUE;
 }
 
-static gint
+gint
 gdk_input_disable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 {
   if (gdk_input_vtable.disable_window)
@@ -197,7 +178,7 @@ gdk_input_disable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 }
 
 
-static GdkInputWindow *
+GdkInputWindow *
 gdk_input_window_find(GdkWindow *window)
 {
   GList *tmp_list;
@@ -324,7 +305,7 @@ gdk_input_exit (void)
   g_list_free(gdk_input_windows);
 }
 
-static GdkDevicePrivate *
+GdkDevicePrivate *
 gdk_input_find_device(guint32 id)
 {
   GList *tmp_list = gdk_input_devices;

@@ -4,6 +4,10 @@ General
 - gdk_pointer_grab() and gdk_keyboard_grab() are logically member
   functions of GdkWindow.
 
+X specific Functions that need to be moved out of the common header files
+=========================================================================
+
+
 Dir structure for ports
 =======================
 
@@ -55,6 +59,119 @@ And a Makefile.am that takes care of distributing the
 files in the directory, and also for building any
 X-specific utilities. (Such as the gxid daemon).
 
+
+Port Status for Files
+=====================
+
+gdk
+
+ Much of the contents have been moved to x11/gtkmain.c. 
+ I've added a little argument-parsing abstraction.
+ (Currently called gdk_arg_context_*) that allows 
+ arguments from multiple places to be combined - that
+ probably needs to be either fixed up and moved into
+ GLib or replaced with some existing solution like
+ popt.
+
+gdkcc
+
+ This will be removed for GTK+-1.4. Right now, it has been moved
+ completely into the x11/ directory to avoid having to port it.
+
+gdkcolor
+
+ There are a few common utility functions, and the rest
+ is in the port-specific files.
+
+gdkcursor
+
+ No shared code - completely port-specific.
+
+gdkdnd
+
+ No shared code - completely arch-specific. It's possible that some
+ common code for handling GdkDragContext could exist, but the
+ GdkDragContextPrivate will be different on each port.
+
+gdkdrawable
+
+ Pretty much done. GdkDrawable is completely virtualized.
+
+gdkevents
+
+ There are a few common utility functions, and the rest
+ is in the port-specific files.
+
+gdkfont
+
+ Pretty much done for now - gdkfont.c contains a number of functions
+ reimplemented as utility functions, and the rest is
+ ports-specific. It will be obsoleted by pango before 1.4.
+
+gdkgc
+
+ GdkGC is virtualized to go along with GdkDrawable. There are
+ a couple of functions I punted on for now and moved into the
+ port-specific files - the clipmask functions (because gdkregion
+ is not finalized) and also gdk_gc_copy, which I'm not sure
+ I like enough to put into the vtable.
+
+gdkim
+
+ All in the port-specific directories. The abstraction here probably
+ will be changed at some point to something more convenient and
+ more Unicode-based.
+
+gdkimage
+
+ GdkImage is virtualized - all of the code except for ref/unref
+ is in the port-specific files.
+
+gdkinput
+
+ Right now all the code is port-specific. It should be possible 
+ to share the code in gdkinputnone.c, but probably not worth it; 
+ I'd like to get rid of the gdk_input_vtable in X11 code - 
+ it doesn't make sense since you can't switch the type of input
+ on the fly.
+
+gdkpixmap
+
+ All moved into the port-specific file for now. The xpm loader
+ should be changed to render with GdkRGB, and thus be 
+ windowing-system independent, but that requires
+ first making GdkRGB able to render onto any arbitrary visual.
+
+gdkproperty
+
+ All port-specific. Possibly should be X-specific with a higher-level
+ clipboard API on top of it.
+
+gdkregion
+
+ Right now punted to being port-specific, but that probably needs
+ to change with the virtualized drawables and GC's.
+
+gdkrgb
+
+ With a few changes to debugging code, it was already port-independent.
+
+gdkselection
+
+ Completely port specific. (In fact, really doesn't make sense
+ on anything other than X; a higher-level clipboard facility
+ should be provided somewhere, though.)
+
+gdkvisual
+ 
+ Completely port-specific. (The concepts are rather X-specific)
+
+gdkwindow
+
+ The window-private data is split between windowing-system independent
+ parts and windowing system dependent parts. There are a few
+ functions in gdk/gdkwindow.c and the rest is moved off
+ into x11/gdkwindow-x11.c
 
 Virtualization
 ==============

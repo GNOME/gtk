@@ -1,3 +1,65 @@
+Mon Nov  8 14:47:04 1999  Owen Taylor  <otaylor@redhat.com>
+
+	Move all X specific code into the x11/ directory.
+	Aside from shuffling things around, did the following:
+
+       * gdk/gdkprivate.h gdk/gdk.h gdk/x11/gdkmain-x11.h: Add
+	 gdk_arg_context_* - a simple argument parsing system
+	 in the style of popt.
+
+       * gdk/gdkdrawable.[ch] gdk/gdkprivate.h gdk/gdkwindow.[ch]
+	 gdk/x11/gdkprivate-x11.h:
+	 Remove X specific stuff from GdkDrawable and GdkWindowPrivate - 
+	 add ->klass and ->klass_data fields. The klass_data
+	 field points to an auxilliary structure that is
+	 windowing system dependent.
+
+       * gdk/gdkfont.c: Make most of the measurement functions
+	 simply wrappers around gdk_text_extents().
+
+       * gdk/gdkfont.c gdk/gdkprivate.h gdk/x11/gdkfont-x11.c: Add a 
+	 _gdk_font_strlen() function that hides the weird
+	 behavior in gtk+-1.[02] where a string is interpreted
+	 differently for 8-bit and 16-bit fonts.
+
+       * gdk/gdkevents.c: Add a new function gdk_event_button_generate()
+	 to store common code for synthesizing double/triple
+	 press events.
+	
+       * gdk/gdkgc.[ch]: Virtualize in the same way as gdkdrawable.h.
+	 Make all the function that modify an existing GC
+	 simply wrappers around gdk_gc_set_values().
+	 
+       * gdk/gdkcc.[ch]: Moved into x11/ directory in preparation
+	 for throwing out later.
+
+       * gdk/gdkfont.c gdk/gdkimage.c gdk/gdkcolor.c: Change GdkFontPrivate,
+	 GdkImagePrivate and GdkColormapPrivate to have a
+	 windowing system dependent part (GdkFontPrivateX etc.)
+	 that "derives" from the system-independent part.
+
+       * configure.in gdk/x11/Makefile.in gdk/x11/gdkinput*.c:
+	 Got rid of the included-source-files for XInput in
+	 favor of automake conditionals. (Which didn't exist
+	 when XInput support was originally added.)
+
+       * gdk/gdkrgb.c: Remove the visual id from the debugging
+	 statements since that is X11 specific; print out
+	 type/depth info instead.
+	 
+
+Wed Nov  3 18:14:49 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkfont-x11.c (gdk_font_load): Ref fonts when
+	loading duplicates of hashed fonts.
+
+	* gdk/gdk.c (gdk_keysym_convert_case): rename
+	gdk_XConvertCase to gdk_keysym_convert_case, allow
+	results to be NULL in the GTK+ style.
+
+	* gdk/gdkcompat.h: Started compatibility header
+	for renames.
+
 1999-11-07  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkprivate.h: New font private structures, related to

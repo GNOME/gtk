@@ -17,14 +17,15 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "gdkinputprivate.h"
+#include "gdkx.h"
+
 /*
  * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
-
-#ifdef XINPUT_XFREE
 
 /* forward declarations */
 
@@ -42,10 +43,10 @@ static gint gdk_input_xfree_enable_window(GdkWindow *window,
 static gint gdk_input_xfree_disable_window(GdkWindow *window,
 					   GdkDevicePrivate *gdkdev);
 static gint gdk_input_xfree_grab_pointer (GdkWindow *     window,
-					gint            owner_events,
-					GdkEventMask    event_mask,
-					GdkWindow *     confine_to,
-					guint32         time);
+					  gint            owner_events,
+					  GdkEventMask    event_mask,
+					  GdkWindow *     confine_to,
+					  guint32         time);
 static void gdk_input_xfree_ungrab_pointer (guint32 time);
 
 void 
@@ -370,5 +371,3 @@ gdk_input_xfree_ungrab_pointer (guint32 time)
 	}
     }
 }
-
-#endif /* XINPUT_XFREE */

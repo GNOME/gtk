@@ -27,6 +27,10 @@
 #ifndef __GDK_INPUTPRIVATE_H__
 #define __GDK_INPUTPRIVATE_H__
 
+#include "config.h"
+#include "gdkinput.h"
+#include "gdkevents.h"
+
 #ifndef XINPUT_NONE
 #include <X11/extensions/XInput.h>
 #endif
@@ -147,6 +151,10 @@ struct _GdkInputWindow
 
 /* Global data */
 
+extern const GdkDeviceInfo gdk_input_core_info;
+extern GList *gdk_input_devices;
+extern GList *gdk_input_windows;
+
 extern GdkInputVTable gdk_input_vtable;
 /* information about network port and host for gxid daemon */
 extern gchar           *gdk_input_gxid_host;
@@ -155,8 +163,63 @@ extern gint             gdk_input_ignore_core;
 
 /* Function declarations */
 
+GdkDevicePrivate * gdk_input_find_device    (guint32           id);
+GdkInputWindow *   gdk_input_window_find    (GdkWindow        *window);
+void               gdk_input_window_destroy (GdkWindow        *window);
+void               gdk_input_init           (void);
+void               gdk_input_exit           (void);
+gint               gdk_input_enable_window  (GdkWindow        *window,
+					     GdkDevicePrivate *gdkdev);
+gint               gdk_input_disable_window (GdkWindow        *window,
+					     GdkDevicePrivate *gdkdev);
+
+#ifndef XINPUT_NONE
+
+#define GDK_MAX_DEVICE_CLASSES 13
+
+gint           gdk_input_common_init                (gint              include_core);
+void           gdk_input_get_root_relative_geometry (Display          *dpy,
+						     Window            w,
+						     int              *x_ret,
+						     int              *y_ret,
+						     int              *width_ret,
+						     int              *height_ret);
+void           gdk_input_common_find_events         (GdkWindow        *window,
+						     GdkDevicePrivate *gdkdev,
+						     gint              mask,
+						     XEventClass      *classes,
+						     int              *num_classes);
+void           gdk_input_common_select_events       (GdkWindow        *window,
+						     GdkDevicePrivate *gdkdev);
+gint           gdk_input_common_other_event         (GdkEvent         *event,
+						     XEvent           *xevent,
+						     GdkInputWindow   *input_window,
+						     GdkDevicePrivate *gdkdev);
+void           gdk_input_common_get_pointer         (GdkWindow        *window,
+						     guint32           deviceid,
+						     gdouble          *x,
+						     gdouble          *y,
+						     gdouble          *pressure,
+						     gdouble          *xtilt,
+						     gdouble          *ytilt,
+						     GdkModifierType  *mask);
+void           gdk_input_common_set_key             (guint32           deviceid,
+						     guint             index,
+						     guint             keyval,
+						     GdkModifierType   modifiers);
+void           gdk_input_common_set_axes            (guint32           deviceid,
+						     GdkAxisUse       *axes);
+GdkTimeCoord * gdk_input_common_motion_events       (GdkWindow        *window,
+						     guint32           deviceid,
+						     guint32           start,
+						     guint32           stop,
+						     gint             *nevents_return);
+
+#endif /* !XINPUT_NONE */
+
+GdkDevicePrivate *gdk_input_find_device (guint32 id);
+GdkInputWindow *gdk_input_window_find (GdkWindow *window);
 void gdk_input_window_destroy (GdkWindow *window);
-void gdk_input_init           (void);
 void gdk_input_exit           (void);
 
 #endif /* __GDK_INPUTPRIVATE_H__ */

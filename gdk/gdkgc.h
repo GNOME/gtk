@@ -9,6 +9,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 typedef struct _GdkGCValues	      GdkGCValues;
+typedef struct _GdkGCClass	      GdkGCClass;
 
 /* GC cap styles
  *  CapNotLast:
@@ -154,13 +155,31 @@ struct _GdkGC
   gint dummy_var;
 };
 
-GdkGC* gdk_gc_new		  (GdkWindow	    *window);
-GdkGC* gdk_gc_new_with_values	  (GdkWindow	    *window,
+struct _GdkGCClass 
+{
+  void (*destroy)        (GdkGC          *gc);
+  void (*get_values)     (GdkGC          *gc,
+			  GdkGCValues    *values);
+  void (*set_values)     (GdkGC          *gc,
+			  GdkGCValues    *values,
+			  GdkGCValuesMask mask);
+  void (*set_dashes)     (GdkGC          *gc,
+			  gint	          dash_offset,
+			  gchar           dash_list[],
+			  gint            n);
+};
+
+
+GdkGC *gdk_gc_new		  (GdkDrawable	    *drawable);
+GdkGC *gdk_gc_alloc		  (void);
+
+GdkGC *gdk_gc_new_with_values	  (GdkDrawable	    *drawable,
 				   GdkGCValues	    *values,
 				   GdkGCValuesMask   values_mask);
-GdkGC* gdk_gc_ref		  (GdkGC	    *gc);
+void   gdk_gc_init                (GdkGC            *gc,
+				   GdkGCClass       *klass);
+GdkGC *gdk_gc_ref		  (GdkGC	    *gc);
 void   gdk_gc_unref		  (GdkGC	    *gc);
-void   gdk_gc_destroy		  (GdkGC	    *gc);
 void   gdk_gc_get_values	  (GdkGC	    *gc,
 				   GdkGCValues	    *values);
 void   gdk_gc_set_foreground	  (GdkGC	    *gc,
@@ -192,7 +211,7 @@ void   gdk_gc_set_clip_region	  (GdkGC	    *gc,
 void   gdk_gc_set_subwindow	  (GdkGC	    *gc,
 				   GdkSubwindowMode  mode);
 void   gdk_gc_set_exposures	  (GdkGC	    *gc,
-				   gint		     exposures);
+				   gboolean	     exposures);
 void   gdk_gc_set_line_attributes (GdkGC	    *gc,
 				   gint		     line_width,
 				   GdkLineStyle	     line_style,

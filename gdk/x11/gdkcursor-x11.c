@@ -29,8 +29,6 @@
 
 #include "gdkx.h"
 #include "gdkcursor.h"
-#include "gdkprivate.h"
-
 
 GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
