@@ -1,3 +1,11 @@
+Wed Jan  7 01:56:33 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/tmpl/file-saving.sgml: Document GdkPixbufSaveFunc.
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add GdkPixbufSaveFunc,
+	gdk_pixbuf_save_to_callback, gdk_pixbuf_save_to_callbackv,
+	gdk_pixbuf_save_to_buffer and gdk_pixbuf_save_to_bufferv.
+
 Wed Jan  7 01:27:23 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/tmpl/module_interface.sgml: Document expected

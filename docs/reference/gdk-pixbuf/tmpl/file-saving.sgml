@@ -41,3 +41,19 @@ Saving a pixbuf to a file.
 @Returns: 
 
 
+<!-- ##### USER_FUNCTION GdkPixbufSaveFunc ##### -->
+<para>
+Specifies the type of the function passed to
+gdk_pixbuf_save_to_callback().  It is called once for each block of
+bytes that is "written" by gdk_pixbuf_save_to_callback().  If
+successful it should return %TRUE.  If an error occurs it should set
+@error and return %FALSE, in which case gdk_pixbuf_save_to_callback()
+will fail with the same error.
+</para>
+
+@buf: bytes to be written.
+@count: number of bytes in @buf.
+@error: A location to return an error.
+@data: user data passed to gdk_pixbuf_save_to_callback().
+@Returns: %TRUE if successful, %FALSE (with @error set) if failed.
+@Since: 2.4

@@ -64,6 +64,11 @@ gdk_pixbuf_get_file_info
 <FILE>file-saving</FILE>
 gdk_pixbuf_savev
 gdk_pixbuf_save
+GdkPixbufSaveFunc
+gdk_pixbuf_save_to_callback
+gdk_pixbuf_save_to_callbackv
+gdk_pixbuf_save_to_buffer
+gdk_pixbuf_save_to_bufferv
 </SECTION>
 
 <SECTION>
