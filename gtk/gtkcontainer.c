@@ -264,6 +264,8 @@ gtk_container_add_with_args (GtkContainer      *container,
   gtk_widget_ref (GTK_WIDGET (container));
   gtk_widget_ref (widget);
 
+  if (!GTK_OBJECT_CONSTRUCTED (widget))
+    gtk_object_default_construct (GTK_OBJECT (widget));
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
   
   if (widget->parent)
@@ -322,6 +324,8 @@ gtk_container_addv (GtkContainer      *container,
   gtk_widget_ref (GTK_WIDGET (container));
   gtk_widget_ref (widget);
 
+  if (!GTK_OBJECT_CONSTRUCTED (widget))
+    gtk_object_default_construct (GTK_OBJECT (widget));
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
   
   if (widget->parent)
@@ -703,6 +707,8 @@ gtk_container_add (GtkContainer *container,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->parent == NULL);
 
+  if (!GTK_OBJECT_CONSTRUCTED (widget))
+    gtk_object_default_construct (GTK_OBJECT (widget));
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
 }
 
