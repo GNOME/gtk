@@ -1,3 +1,10 @@
+1999-11-10  Michael Fulbright  <drmike@redhat.com>
+
+        * src/io-pnm.c (pnm_ascii_read_scanline): Fixed loading of ASCII PNM
+	files.
+
+	* src/testpixbuf.c: Added final queued draw when done loading image.
+	
 1999-11-10  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/gdk-pixbuf-io.c (gdk_pixbuf_load_module): removed spurious

@@ -519,7 +519,7 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 		
 		if (context->type == PNM_FORMAT_PBM) {
 			*dptr++ = data;
-			context->output_col += 8;
+			context->output_col += numval;
 		} else {
 			context->output_col++;
 		}

@@ -30,6 +30,7 @@
 typedef struct {
 	FILE             *imagefile;
 	GdkPixbufLoader  *loader;
+	GtkWidget        **rgbwin;
 	guchar           *buf;
 	guint            timeout;
 	guint            readlen;
@@ -446,6 +447,7 @@ update_timeout(gpointer data)
 	}
 
 	if (done) {
+                gtk_widget_queue_draw(*status->rgbwin);
 		gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (status->loader));
 		gtk_object_destroy (GTK_OBJECT(status->loader));
 		fclose (status->imagefile);
@@ -560,6 +562,8 @@ main (int argc, char **argv)
 
                         pixbuf_loader = gdk_pixbuf_loader_new ();
 			status.loader = pixbuf_loader;
+
+			status.rgbwin = &rgb_window;
 
 			status.buf = g_malloc (readlen);
                         gtk_signal_connect(GTK_OBJECT(pixbuf_loader),
