@@ -1,3 +1,12 @@
+2004-12-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: Add new symbols.
+
+	* gtk/gtkiconview.[hc]: Make the icon view lay out its
+	items in a grid, allocating multiple grid cells to oversized
+	items. Also convert hardwired spacing constants into 
+	properties.  (#152483)
+
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c: s/maximal/maximum/g  (#161195, David Lodge)

@@ -1,3 +1,7 @@
+2004-12-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add new iconview methods.
+
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add new label methods.
