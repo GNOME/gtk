@@ -365,7 +365,9 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
       tooltipsdata->tip_text = g_strdup (tip_text);
       tooltipsdata->tip_private = g_strdup (tip_private);
 
-      gtk_tooltips_layout_text (tooltips, tooltipsdata);
+      /* Flag data as unitialized */
+      tooltipsdata->font = NULL;
+
       tooltips->tips_data_list = g_list_append (tooltips->tips_data_list,
                                              tooltipsdata);
       gtk_signal_connect_after(GTK_OBJECT (widget), "event",
@@ -459,6 +461,7 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   else if (GTK_WIDGET_VISIBLE (tooltips->tip_window))
     gtk_widget_hide (tooltips->tip_window);
 
+  gtk_widget_ensure_style (tooltips->tip_window);
   style = tooltips->tip_window->style;
   
   widget = tooltips->active_tips_data->widget;
@@ -467,6 +470,7 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   scr_h = gdk_screen_height ();
 
   data = tooltips->active_tips_data;
+
   if (data->font != style->font)
     gtk_tooltips_layout_text (tooltips, data);
 

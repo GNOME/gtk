@@ -1,3 +1,11 @@
+Thu Sep 16 21:32:01 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_set_tip): Delay
+	the call to gtk_tooltips_layout_text() until later.
+
+	* gtk/gtktooltips.c (gtk_tooltips_draw_tips):
+	Call gtk_widget_ensure_style() before using the style.
+
 Wed Sep 15 02:52:19 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_event): Added workaround
