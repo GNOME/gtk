@@ -1,3 +1,8 @@
+2002-01-23  Damon Chaplin  <damon@ximian.com>
+
+	* gtk/Makefile.am: added SCANGOBJ_OPTIONS to set the type-init-func
+	to pass to gtkdoc-scangobj.
+
 Mon Jan 21 23:39:42 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/tmpl/gtkfixed.sgml: change guint16 to gint to reflect
