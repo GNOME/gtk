@@ -1,3 +1,10 @@
+Mon Sep 10 06:50:39 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (_gtk_style_peek_property_value): Don't
+	do a lookup immediately after creating style->property_cache,
+	since bsearch crashes on zero length for Solaris.
+	(Found by Padraig O'Briain.)
+
 2001-09-09  Alexander Larsson  <alla@lysator.liu.se> 
 
 	* gtk/gtkwidget.c (_gtk_widget_peek_colormap):

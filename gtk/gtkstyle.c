@@ -1303,15 +1303,16 @@ _gtk_style_peek_property_value (GtkStyle           *style,
   /* need value cache array */
   if (!style->property_cache)
     style->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
-
-  /* lookup, or insert value if not yet present */
-  key.widget_type = widget_type;
-  key.pspec = pspec;
-  pcache = bsearch (&key,
-		    style->property_cache->data, style->property_cache->len,
-		    sizeof (PropertyValue), style_property_values_cmp);
-  if (pcache)
-    return &pcache->value;
+  else
+    {
+      key.widget_type = widget_type;
+      key.pspec = pspec;
+      pcache = bsearch (&key,
+			style->property_cache->data, style->property_cache->len,
+			sizeof (PropertyValue), style_property_values_cmp);
+      if (pcache)
+	return &pcache->value;
+    }
 
   i = 0;
   while (i < style->property_cache->len &&
