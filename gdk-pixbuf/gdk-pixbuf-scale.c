@@ -41,11 +41,15 @@
  * @scale_y: the scale factor in the Y direction
  * @interp_type: the interpolation type for the transformation.
  * 
- * Transforms the source image @src by scaling by @scale_x and
- * @scale_y then translating by @offset_x and @offset_y, then renders
- * the rectangle (@dest_x, @dest_y, @dest_width, @dest_height) of the
- * resulting image onto the destination image replacing the
- * previous contents.
+ * Creates a transformation of the source image @src by scaling by
+ * @scale_x and @scale_y then translating by @offset_x and @offset_y,
+ * then renders the rectangle (@dest_x, @dest_y, @dest_width,
+ * @dest_height) of the resulting image onto the destination image
+ * replacing the previous contents.
+ *
+ * Try to use gdk_pixbuf_scale_simple() first, this function is
+ * the industrial-strength power tool you can fall back to if
+ * gdk_pixbuf_scale_simple() isn't powerful enough.
  **/
 void
 gdk_pixbuf_scale (const GdkPixbuf *src,
@@ -92,9 +96,9 @@ gdk_pixbuf_scale (const GdkPixbuf *src,
  * @interp_type: the interpolation type for the transformation.
  * @overall_alpha: overall alpha for source image (0..255)
  * 
- * Transforms the source image @src by scaling by @scale_x and
- * @scale_y then translating by @offset_x and @offset_y, then
- * composites the rectangle (@dest_x, @dest_y, @dest_width,
+ * Creates a transformation of the source image @src by scaling by
+ * @scale_x and @scale_y then translating by @offset_x and @offset_y,
+ * then composites the rectangle (@dest_x, @dest_y, @dest_width,
  * @dest_height) of the resulting image onto the destination image.
  **/
 void
@@ -148,11 +152,16 @@ gdk_pixbuf_composite (const GdkPixbuf *src,
  * @color1: the color of check at upper left
  * @color2: the color of the other check
  * 
- * Transforms the source image @src by scaling by @scale_x and @scale_y then
- * translating by @offset_x and @offset_y, then composites the rectangle
- * (@dest_x ,@dest_y, @dest_width, @dest_height) of the resulting image with
- * a checkboard of the colors @color1 and @color2 and renders it onto the
- * destination image.
+ * Creates a transformation of the source image @src by scaling by
+ * @scale_x and @scale_y then translating by @offset_x and @offset_y,
+ * then composites the rectangle (@dest_x ,@dest_y, @dest_width,
+ * @dest_height) of the resulting image with a checkboard of the
+ * colors @color1 and @color2 and renders it onto the destination
+ * image.
+ *
+ * See gdk_pixbuf_composite_color_simple() for a simpler variant of this
+ * function suitable for many tasks.
+ * 
  **/
 void
 gdk_pixbuf_composite_color (const GdkPixbuf *src,
@@ -198,9 +207,19 @@ gdk_pixbuf_composite_color (const GdkPixbuf *src,
  * @dest_width: the width of destination image
  * @dest_height: the height of destination image
  * @interp_type: the interpolation type for the transformation.
- * 
- * Scale the #GdkPixbuf @src to @dest_width x @dest_height and render
- * the result into a new #GdkPixbuf.
+ *
+ * Create a new #GdkPixbuf containing a copy of @src scaled to
+ * @dest_width x @dest_height. Leaves @src unaffected.  @interp_type
+ * should be #GDK_INTERP_NEAREST if you want maximum speed (but when
+ * scaling down #GDK_INTERP_NEAREST is usually unusably ugly).  The
+ * default @interp_type should be #GDK_INTERP_BILINEAR which offers
+ * reasonable quality and speed.
+ *
+ * You can scale a sub-portion of @src by creating a sub-pixbuf
+ * pointing into @src; see gdk_pixbuf_new_subpixbuf().
+ *
+ * For more complicated scaling/compositing see gdk_pixbuf_scale()
+ * and gdk_pixbuf_composite().
  * 
  * Return value: the new #GdkPixbuf, or NULL if not enough memory could be
  * allocated for it.
@@ -240,9 +259,9 @@ gdk_pixbuf_scale_simple (const GdkPixbuf *src,
  * @color1: the color of check at upper left
  * @color2: the color of the other check
  * 
- * Scale the #GdkPixbuf @src to @dest_width x @dest_height composite
- * the result with a checkboard of colors @color1 and @color2 and
- * render the result into a new #GdkPixbuf.
+ * Creates a new #GdkPixbuf by scaling @src to @dest_width x
+ * @dest_height and compositing the result with a checkboard of colors
+ * @color1 and @color2.
  * 
  * Return value: the new #GdkPixbuf, or NULL if not enough memory could be
  * allocated for it.

@@ -1,3 +1,7 @@
+2001-12-16  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf-scale.c: docs enhancements
+
 2001-12-14  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
 
 	* io-xpm.c: Use g_ascii_strcasecmp() instead of g_strcasecmp().

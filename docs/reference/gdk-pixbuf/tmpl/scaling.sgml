@@ -20,7 +20,7 @@ Scaling pixbufs and scaling and compositing pixbufs
     convenience functions are provided, gdk_pixbuf_scale_simple() and
     gdk_pixbuf_composite_color_simple() which create a new pixbuf of a
     given size, scale an original image to fit, and then return the
-    new pixmap.
+    new pixbuf.
   </para>
 
   <para>
@@ -74,7 +74,10 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 <!-- ##### ENUM GdkInterpType ##### -->
   <para>
     This enumeration describes the different interpolation modes that
-    can be used with the scaling functions.
+    can be used with the scaling functions. @GDK_INTERP_NEAREST is 
+    the fastest scaling method, but has horrible quality when 
+    scaling down. @GDK_INTERP_BILINEAR is the best choice if you 
+    aren't sure what to choose, it has a good speed/quality balance.
 
     <note>
       <para>
@@ -85,18 +88,20 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
   </para>
 
 @GDK_INTERP_NEAREST: Nearest neighbor sampling; this is the fastest
-and lowest quality mode.
+and lowest quality mode. Quality is normally unacceptable when scaling 
+down, but may be OK when scaling up.
 @GDK_INTERP_TILES: This is an accurate simulation of the PostScript
 image operator without any interpolation enabled.  Each pixel is
 rendered as a tiny parallelogram of solid color, the edges of which
 are implemented with antialiasing.  It resembles nearest neighbor for
 enlargement, and bilinear for reduction.
-@GDK_INTERP_BILINEAR: Bilinear interpolation.  For enlargement, it is
+@GDK_INTERP_BILINEAR: Best quality/speed balance; use this mode by
+default. Bilinear interpolation.  For enlargement, it is
 equivalent to point-sampling the ideal bilinear-interpolated image.
 For reduction, it is equivalent to laying down small tiles and
 integrating over the coverage area.
 @GDK_INTERP_HYPER: This is the slowest and highest quality
-reconstruction function.  It is derived from the hyperbolic filters in
+reconstruction function. It is derived from the hyperbolic filters in
 Wolberg's "Digital Image Warping", and is formally defined as the
 hyperbolic-filter sampling the ideal hyperbolic-filter interpolated
 image (the filter is designed to be idempotent for 1:1 pixel mapping).
