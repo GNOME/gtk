@@ -229,9 +229,9 @@ xp_theme_get_handle_by_element (XpThemeElement element)
       break;
 
     case XP_THEME_ELEMENT_REBAR:
-    case XP_THEME_ELEMENT_GRIPPER_H:
-    case XP_THEME_ELEMENT_GRIPPER_V:
-    case XP_THEME_ELEMENT_CHEVRON:
+    case XP_THEME_ELEMENT_REBAR_GRIPPER_H:
+    case XP_THEME_ELEMENT_REBAR_GRIPPER_V:
+    case XP_THEME_ELEMENT_REBAR_CHEVRON:
       klazz = XP_THEME_CLASS_REBAR;
       break;
 
@@ -284,8 +284,8 @@ xp_theme_get_handle_by_element (XpThemeElement element)
     case XP_THEME_ELEMENT_ARROW_DOWN:
     case XP_THEME_ELEMENT_ARROW_LEFT:
     case XP_THEME_ELEMENT_ARROW_RIGHT:
-    case XP_THEME_ELEMENT_GRIP_V:
-    case XP_THEME_ELEMENT_GRIP_H:
+    case XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_V:
+    case XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_H:
     case XP_THEME_ELEMENT_TROUGH_V:
     case XP_THEME_ELEMENT_TROUGH_H:
       klazz = XP_THEME_CLASS_SCROLLBAR;
@@ -332,8 +332,8 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
       break;
 
     case XP_THEME_ELEMENT_REBAR:
-    case XP_THEME_ELEMENT_GRIPPER_H:
-    case XP_THEME_ELEMENT_GRIPPER_V:
+    case XP_THEME_ELEMENT_REBAR_GRIPPER_H:
+    case XP_THEME_ELEMENT_REBAR_GRIPPER_V:
       ret = CHEVS_NORMAL;
       break;
 
@@ -342,7 +342,7 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 		ret = 1;
 		break;
 
-    case XP_THEME_ELEMENT_CHEVRON:
+    case XP_THEME_ELEMENT_REBAR_CHEVRON:
       switch (state)
 	{
         case GTK_STATE_PRELIGHT:
@@ -713,8 +713,8 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
   part_state = xp_theme_map_gtk_state(element, state_type);
 
 #ifdef GNATS_HACK
-  if (element == XP_THEME_ELEMENT_GRIPPER_V
-      || element == XP_THEME_ELEMENT_GRIPPER_H)
+  if (element == XP_THEME_ELEMENT_REBAR_GRIPPER_V
+      || element == XP_THEME_ELEMENT_REBAR_GRIPPER_H)
     {
       /* Hack alert: when XP draws a gripper, it does not seem to fill
          up the whole rectangle. It only fills the gripper line
@@ -764,49 +764,52 @@ xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId, LOGFONT *lf)
 
   if (get_theme_sys_font_func != NULL)
     {
-	  HTHEME theme = xp_theme_get_handle_by_class(klazz);
-	  if (!theme)
-	  	return FALSE;
+      HTHEME theme = xp_theme_get_handle_by_class(klazz);
+      if (!theme)
+        return FALSE;
 
-	switch (fontId){
-		case XP_THEME_FONT_CAPTION:
-			themeFont = TMT_CAPTIONFONT; break;
-		case XP_THEME_FONT_MENU:
-			themeFont = TMT_MENUFONT; break;
-		case XP_THEME_FONT_STATUS:
-			themeFont = TMT_STATUSFONT; break;
-		case XP_THEME_FONT_MESSAGE:
-		default:
-			themeFont = TMT_MSGBOXFONT; break;
-	}
-	  /* if theme is NULL, it will just return the GetSystemFont() value */
+      switch (fontId)
+        {
+        case XP_THEME_FONT_CAPTION:
+          themeFont = TMT_CAPTIONFONT; break;
+        case XP_THEME_FONT_MENU:
+          themeFont = TMT_MENUFONT; break;
+        case XP_THEME_FONT_STATUS:
+          themeFont = TMT_STATUSFONT; break;
+        case XP_THEME_FONT_MESSAGE:
+        default:
+          themeFont = TMT_MSGBOXFONT; break;
+        }
+      /* if theme is NULL, it will just return the GetSystemFont() value */
       return ((*get_theme_sys_font_func)(theme, themeFont, lf) == S_OK);
     }
   return FALSE;
 }
 
-gboolean xp_theme_get_system_color (XpThemeClass klazz, int colorId, DWORD * pColor)
+gboolean
+xp_theme_get_system_color (XpThemeClass klazz, int colorId, DWORD * pColor)
 {
   if (get_theme_sys_color_func != NULL)
     {
-	   HTHEME theme = xp_theme_get_handle_by_class(klazz);
+      HTHEME theme = xp_theme_get_handle_by_class(klazz);
 
-	   /* if theme is NULL, it will just return the GetSystemColor() value */
-	   *pColor = (*get_theme_sys_color_func)(theme, colorId);
-	   return TRUE;
+      /* if theme is NULL, it will just return the GetSystemColor() value */
+      *pColor = (*get_theme_sys_color_func)(theme, colorId);
+      return TRUE;
     }
   return FALSE;
 }
 
-gboolean xp_theme_get_system_metric (XpThemeClass klazz, int metricId, int * pVal)
+gboolean
+xp_theme_get_system_metric (XpThemeClass klazz, int metricId, int * pVal)
 {
   if (get_theme_sys_metric_func != NULL)
     {
-	   HTHEME theme = xp_theme_get_handle_by_class(klazz);
+      HTHEME theme = xp_theme_get_handle_by_class(klazz);
 
-	   /* if theme is NULL, it will just return the GetSystemMetrics() value */
-	   *pVal = (*get_theme_sys_metric_func)(theme, metricId);
-	   return TRUE;
+      /* if theme is NULL, it will just return the GetSystemMetrics() value */
+      *pVal = (*get_theme_sys_metric_func)(theme, metricId);
+      return TRUE;
     }
   return FALSE;
 }

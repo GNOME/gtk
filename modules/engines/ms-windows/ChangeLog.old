@@ -1,12 +1,14 @@
+2003-10-22  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/*.[ch]: Code formatting & XP constants renaming.
+
 2003-10-21  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/wimp_style.c: Use theme colors
-	Use theme metrics
-	(disabled) Use theme fonts
-	Theme menu items, menu separators
-	Draw status bar resize grips
+	* src/wimp_style.c: Use theme colors, use theme metrics
+	(disabled), use theme fonts, theme menu items, menu separators,
+	draw status bar resize grips.
 
-	* src/xp_theme.c: Ditto
+	* src/xp_theme.c: Ditto.
 	
 2003-10-20  Raymond Penners  <raymond@dotsphinx.com>
 

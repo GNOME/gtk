@@ -333,12 +333,12 @@ sys_color_to_gtk_color(XpThemeClass klazz, int id, GdkColor *pcolor)
 static int
 get_system_metric(XpThemeClass klazz, int id)
 {
-	int rval;
+  int rval;
 
-	if (!xp_theme_get_system_metric(klazz, id, &rval))
-		rval = GetSystemMetrics (id);
+  if (!xp_theme_get_system_metric(klazz, id, &rval))
+    rval = GetSystemMetrics (id);
 
-	return rval;
+  return rval;
 }
 
 static void
@@ -1044,7 +1044,7 @@ draw_arrow (GtkStyle      *style,
       /* draw the toolbar chevrons - waiting for GTK 2.4 */
 	  if (name && !strcmp (name, "gtk-toolbar-arrow"))
 	  {
-		  if (xp_theme_draw(window, XP_THEME_ELEMENT_CHEVRON, style, x, y, width, height, state, area))
+		  if (xp_theme_draw(window, XP_THEME_ELEMENT_REBAR_CHEVRON, style, x, y, width, height, state, area))
 				return;
 	  }
 
@@ -1164,8 +1164,8 @@ draw_box (GtkStyle      *style,
             {
               xp_theme_draw(window,
                             is_v
-                            ? XP_THEME_ELEMENT_GRIP_V
-                            : XP_THEME_ELEMENT_GRIP_H,
+                            ? XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_V
+                            : XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_H,
                             style, x, y, width, height, state_type, area);
               return;
             }
@@ -1569,9 +1569,9 @@ draw_handle (GtkStyle        *style,
       sanitize_size (window, &width, &height);
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
-        hndl = XP_THEME_ELEMENT_GRIPPER_V;
+        hndl = XP_THEME_ELEMENT_REBAR_GRIPPER_V;
       else
-        hndl = XP_THEME_ELEMENT_GRIPPER_H;
+        hndl = XP_THEME_ELEMENT_REBAR_GRIPPER_H;
 
       if (xp_theme_draw (window, hndl, style, x, y, width, height,
                          state_type, area))
