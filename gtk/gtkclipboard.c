@@ -94,7 +94,7 @@ static GQuark request_contents_key_id = 0;
 static const gchar *clipboards_owned_key = "gtk-clipboards-owned";
 static GQuark clipboards_owned_key_id = 0;
 
-GObjectClass *parent_class;
+static GObjectClass *parent_class;
 
 GType
 gtk_clipboard_get_type (void)

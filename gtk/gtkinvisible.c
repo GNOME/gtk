@@ -57,7 +57,7 @@ static GObject *gtk_invisible_constructor (GType                  type,
 					   guint                  n_construct_properties,
 					   GObjectConstructParam *construct_params);
 
-GObjectClass *parent_class;
+static GObjectClass *parent_class;
 
 GtkType
 gtk_invisible_get_type (void)

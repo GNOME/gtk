@@ -1,3 +1,8 @@
+2002-10-01  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkinvisible.c: 
+	* gtk/gtkclipboard.c: declare parent_class static
+
 2002-10-01  Stanislav Brabec  <sbrabec@suse.cz>
 
 	* gtk/gtkimcontextsimple.c: Fixed alphabetical order (bug #91258).
