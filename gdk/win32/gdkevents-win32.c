@@ -2181,6 +2181,7 @@ gdk_event_translate (GdkDisplay *display,
 
   static gint update_colors_counter = 0;
   gint button;
+  GdkAtom target;
 
   gchar buf[256];
   gboolean return_val = FALSE;
@@ -2386,9 +2387,7 @@ gdk_event_translate (GdkDisplay *display,
     case WM_SYSKEYDOWN:
       GDK_NOTE (EVENTS,
 		g_print (" %s ch:%.02x %s",
-			 (GetKeyNameText (msg->lParam, buf,
-					  sizeof (buf)) > 0 ?
-			  buf : ""),
+			 _gdk_win32_key_to_string (msg->lParam),
 			 msg->wParam,
 			 decode_key_lparam (msg->lParam)));
 
@@ -2414,9 +2413,7 @@ gdk_event_translate (GdkDisplay *display,
     case WM_KEYDOWN:
       GDK_NOTE (EVENTS, 
 		g_print (" %s ch:%.02x %s",
-			 (GetKeyNameText (msg->lParam, buf,
-					  sizeof (buf)) > 0 ?
-			  buf : ""),
+			 _gdk_win32_key_to_string (msg->lParam),
 			 msg->wParam,
 			 decode_key_lparam (msg->lParam)));
 
@@ -3369,7 +3366,62 @@ gdk_event_translate (GdkDisplay *display,
       else
 	return_val = TRUE;
       break;
- 
+
+    case WM_RENDERFORMAT:
+      GDK_NOTE (EVENTS, g_print (" %s", _gdk_win32_cf_to_string (msg->wParam)));
+
+      if (!(target = g_hash_table_lookup (_format_atom_table, GINT_TO_POINTER (msg->wParam))))
+	{
+	  GDK_NOTE (EVENTS, g_print (" (target not found)"));
+	  return_val = TRUE;
+	  break;
+	}
+
+      /* We need to render to clipboard immediately, don't call
+       * append_event()
+       */
+      if (_gdk_event_func)
+	{
+	  event = gdk_event_new (GDK_SELECTION_REQUEST);
+	  event->selection.window = window;
+	  event->selection.send_event = FALSE;
+	  event->selection.selection = GDK_SELECTION_CLIPBOARD;
+	  event->selection.target = target;
+	  event->selection.property = _gdk_selection_property;
+	  event->selection.requestor = (guint32) msg->hwnd;
+	  event->selection.time = msg->time;
+
+	  fixup_event (event);
+	  GDK_NOTE (EVENTS, g_print (" (calling gdk_event_func)"));
+	  GDK_NOTE (EVENTS, print_event (event));
+	  (*_gdk_event_func) (event, _gdk_event_data);
+	  gdk_event_free (event);
+
+	  /* Now the clipboard owner should have rendered */
+	  if (!_delayed_rendering_data)
+	    GDK_NOTE (EVENTS, g_print (" (no _delayed_rendering_data?)"));
+	  else
+	    {
+	      if (msg->wParam == CF_DIB)
+		{
+		  _delayed_rendering_data =
+		    _gdk_win32_selection_convert_to_dib (_delayed_rendering_data,
+							 target);
+		  if (!_delayed_rendering_data)
+		    {
+		      g_warning ("Cannot convert to DIB from delayed rendered image");
+		      break;
+		    }
+		}
+	      /* The requestor is holding the clipboard, no
+	       * OpenClipboard() is required/possible
+	       */
+	      API_CALL (SetClipboardData, (msg->wParam, _delayed_rendering_data));
+	      _delayed_rendering_data = NULL;
+	    }
+	}
+      break;
+
 #ifdef HAVE_WINTAB
     case WM_ACTIVATE:
       /* Bring any tablet contexts to the top of the overlap order when

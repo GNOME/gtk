@@ -265,7 +265,7 @@ gdk_property_change (GdkWindow    *window,
   GDK_NOTE (DND,
 	    (prop_name = gdk_atom_name (property),
 	     type_name = gdk_atom_name (type),
-	     g_print ("gdk_property_change: %p %#x (%s) %#x (%s) %s %d*%d bytes %.10s\n",
+	     g_print ("gdk_property_change: %p %#x (%s) %#x (%s) %s %d*%d bytes: %s\n",
 		      GDK_WINDOW_HWND (window),
 		      (guint) property, prop_name,
 		      (guint) type, type_name,
@@ -273,201 +273,221 @@ gdk_property_change (GdkWindow    *window,
 		       (mode == GDK_PROP_MODE_PREPEND ? "PREPEND" :
 			(mode == GDK_PROP_MODE_APPEND ? "APPEND" :
 			 "???"))),
-		      format, nelements, data),
+		      format, nelements,
+		      _gdk_win32_data_to_string (data, MIN (10, format*nelements/8))),
 	     g_free (prop_name),
 	     g_free (type_name)));
 
   if (property == _gdk_selection_property
-      && ((type == GDK_TARGET_STRING && GetACP () == 1252) ||
-	  type == _utf8_string)
       && format == 8
       && mode == GDK_PROP_MODE_REPLACE)
     {
-      if (!OpenClipboard (GDK_WINDOW_HWND (window)))
+      if ((type == GDK_TARGET_STRING && GetACP () == 1252) ||
+	  type == _utf8_string)
 	{
-	  WIN32_API_FAILED ("OpenClipboard");
-	  return;
-	}
+	  if (!OpenClipboard (GDK_WINDOW_HWND (window)))
+	    {
+	      WIN32_API_FAILED ("OpenClipboard");
+	      return;
+	    }
 
-      if (type == _utf8_string)
-	{
-	  /* Check if only ASCII */
-	  for (i = 0; i < nelements; i++)
-	    if (data[i] >= 0200)
-	      break;
-	}
-      else /* if (type == GDK_TARGET_STRING) */
-	{
-	  /* Check that no 0200..0240 chars present, as they
-	   * differ between ISO-8859-1 and CP1252.
-	   */
-	  for (i = 0; i < nelements; i++)
-	    if (data[i] >= 0200 && data[i] < 0240)
-	      break;
-	}
-      nchars = g_utf8_strlen (data, nelements);
+	  if (type == _utf8_string)
+	    {
+	      /* Check if only ASCII */
+	      for (i = 0; i < nelements; i++)
+		if (data[i] >= 0200)
+		  break;
+	    }
+	  else /* if (type == GDK_TARGET_STRING) */
+	    {
+	      /* Check that no 0200..0240 chars present, as they
+	       * differ between ISO-8859-1 and CP1252.
+	       */
+	      for (i = 0; i < nelements; i++)
+		if (data[i] >= 0200 && data[i] < 0240)
+		  break;
+	    }
+	  nchars = g_utf8_strlen (data, nelements);
 
-      if (i == nelements)
-	{
-	  /* If UTF-8 and only ASCII, or if STRING (ISO-8859-1) and
-	   * system codepage is CP1252, use CF_TEXT and the data as
-	   * such.
-	   */
-	  method = SYSTEM_CODEPAGE;
-	  size = nelements;
-	  for (i = 0; i < nelements; i++)
-	    if (data[i] == '\n')
+	  if (i == nelements)
+	    {
+	      /* If UTF-8 and only ASCII, or if STRING (ISO-8859-1)
+	       * and system codepage is CP1252, use CF_TEXT and the
+	       * data as such.
+	       */
+	      method = SYSTEM_CODEPAGE;
+	      size = nelements;
+	      for (i = 0; i < nelements; i++)
+		if (data[i] == '\n')
+		  size++;
 	      size++;
-	  size++;
-	  GDK_NOTE (DND, g_print ("...as text: %.40s\n", data));
-	}
-      else if (G_WIN32_IS_NT_BASED ())
-	{
-	  /* On NT, use CF_UNICODETEXT if any non-system codepage char
-	   * present.
-	   */
-	  method = UNICODE_TEXT;
-
-	  wcptr = g_utf8_to_utf16 (data, nelements, NULL, &wclen, NULL);
-
-	  wclen++;		/* Terminating 0 */
-	  size = wclen * 2;
-	  GDK_NOTE (DND, g_print ("...as Unicode\n"));
-	}
-      else if (find_common_locale (data, nelements, nchars, &lcid, &buf, &size))
-	{
-	  /* On Win9x, if all chars are in the default code page of
-	   * some installed locale, use CF_TEXT and CF_LOCALE.
-	   */
-	  method = SINGLE_LOCALE;
-	  GDK_NOTE (DND, g_print ("...as text in locale %#lx %d bytes\n",
-				  (gulong) lcid, size));
-	}
-      else
-	{
-	  /* On Win9x, otherwise use RTF */
-
-	  const guchar *p = data;
-
-	  method = RICH_TEXT;
-	  rtf = g_string_new ("{\\rtf1\\uc0 ");
-
-	  while (p < data + nelements)
-	    {
-	      if (*p == '{' ||
-		  *p == '\\' ||
-		  *p == '}')
-		{
-		  rtf = g_string_append_c (rtf, '\\');
-		  rtf = g_string_append_c (rtf, *p);
-		  p++;
-		}
-	      else if (*p < 0200 && *p >= ' ')
-		{
-		  rtf = g_string_append_c (rtf, *p);
-		  p++;
-		}
-	      else
-		{
-		  guchar *q;
-		  gint n;
-		  
-		  rtf = g_string_append (rtf, "\\uNNNNN ");
-		  rtf->len -= 6; /* five digits and a space */
-		  q = rtf->str + rtf->len;
-		  n = g_sprintf (q, "%d ", g_utf8_get_char (p));
-		  g_assert (n <= 6);
-		  rtf->len += n;
-		  
-		  p = g_utf8_next_char (p);
-		}
+	      GDK_NOTE (DND, g_print ("...as text: %.40s\n", data));
 	    }
-	  rtf = g_string_append (rtf, "}");
-	  size = rtf->len + 1;
-	  GDK_NOTE (DND, g_print ("...as RTF: %.40s\n", rtf->str));
-	}
-	  
-      if (!(hdata = GlobalAlloc (GMEM_MOVEABLE, size)))
-	{
-	  WIN32_API_FAILED ("GlobalAlloc");
-	  if (!CloseClipboard ())
-	    WIN32_API_FAILED ("CloseClipboard");
-	  if (buf != NULL)
-	    g_free (buf);
-	  if (rtf != NULL)
-	    g_string_free (rtf, TRUE);
-	  return;
-	}
-
-      ucptr = GlobalLock (hdata);
-
-      switch (method)
-	{
-	case SYSTEM_CODEPAGE:
-	  cf = CF_TEXT;
-	  for (i = 0; i < nelements; i++)
+	  else if (G_WIN32_IS_NT_BASED ())
 	    {
-	      if (data[i] == '\n')
-		*ucptr++ = '\r';
-	      *ucptr++ = data[i];
+	      /* On NT, use CF_UNICODETEXT if any non-system codepage
+	       * char present.
+	       */
+	      method = UNICODE_TEXT;
+
+	      wcptr = g_utf8_to_utf16 (data, nelements, NULL, &wclen, NULL);
+
+	      wclen++;		/* Terminating 0 */
+	      size = wclen * 2;
+	      GDK_NOTE (DND, g_print ("...as Unicode\n"));
 	    }
-	  *ucptr++ = '\0';
-	  break;
-
-	case UNICODE_TEXT:
-	  cf = CF_UNICODETEXT;
-	  memmove (ucptr, wcptr, size);
-	  g_free (wcptr);
-	  break;
-
-	case SINGLE_LOCALE:
-	  cf = CF_TEXT;
-	  memmove (ucptr, buf, size);
-	  g_free (buf);
-
-	  /* Set the CF_LOCALE clipboard data, too */
-	  if (!(hlcid = GlobalAlloc (GMEM_MOVEABLE, sizeof (LCID))))
-	    WIN32_API_FAILED ("GlobalAlloc"), ok = FALSE;
-	  if (ok)
+	  else if (find_common_locale (data, nelements, nchars, &lcid, &buf, &size))
 	    {
-	      lcidptr = GlobalLock (hlcid);
-	      *lcidptr = lcid;
-	      GlobalUnlock (hlcid);
-	      if (!SetClipboardData (CF_LOCALE, hlcid))
-		WIN32_API_FAILED ("SetClipboardData (CF_LOCALE)"), ok = FALSE;
+	      /* On Win9x, if all chars are in the default code page
+	       * of some installed locale, use CF_TEXT and CF_LOCALE.
+	       */
+	      method = SINGLE_LOCALE;
+	      GDK_NOTE (DND, g_print ("...as text in locale %#lx %d bytes\n",
+				      (gulong) lcid, size));
 	    }
-	  break;
-
-	case RICH_TEXT:
-	  cf = _cf_rtf;
-	  memmove (ucptr, rtf->str, size);
-	  g_string_free (rtf, TRUE);
-
-	  /* Set the UTF8_STRING clipboard data, too, for other
-	   * GTK+ apps to use (won't bother reading RTF).
-	   */
-	  if (!(hutf8 = GlobalAlloc (GMEM_MOVEABLE, nelements)))
-	    WIN32_API_FAILED ("GlobalAlloc");
 	  else
 	    {
-	      guchar *utf8ptr = GlobalLock (hutf8);
-	      memmove (utf8ptr, data, nelements);
-	      GlobalUnlock (hutf8);
-	      if (!SetClipboardData (_cf_utf8_string, hutf8))
-		WIN32_API_FAILED ("SetClipboardData (UTF8_STRING)");
+	      /* On Win9x, otherwise use RTF */
+
+	      const guchar *p = data;
+
+	      method = RICH_TEXT;
+	      rtf = g_string_new ("{\\rtf1\\uc0 ");
+
+	      while (p < data + nelements)
+		{
+		  if (*p == '{' ||
+		      *p == '\\' ||
+		      *p == '}')
+		    {
+		      rtf = g_string_append_c (rtf, '\\');
+		      rtf = g_string_append_c (rtf, *p);
+		      p++;
+		    }
+		  else if (*p < 0200 && *p >= ' ')
+		    {
+		      rtf = g_string_append_c (rtf, *p);
+		      p++;
+		    }
+		  else
+		    {
+		      guchar *q;
+		      gint n;
+		      
+		      rtf = g_string_append (rtf, "\\uNNNNN ");
+		      rtf->len -= 6; /* five digits and a space */
+		      q = rtf->str + rtf->len;
+		      n = g_sprintf (q, "%d ", g_utf8_get_char (p));
+		      g_assert (n <= 6);
+		      rtf->len += n;
+		      
+		      p = g_utf8_next_char (p);
+		    }
+		}
+	      rtf = g_string_append (rtf, "}");
+	      size = rtf->len + 1;
+	      GDK_NOTE (DND, g_print ("...as RTF: %.40s\n", rtf->str));
 	    }
-	  break;
+	      
+	  if (!(hdata = GlobalAlloc (GMEM_MOVEABLE, size)))
+	    {
+	      WIN32_API_FAILED ("GlobalAlloc");
+	      if (!CloseClipboard ())
+		WIN32_API_FAILED ("CloseClipboard");
+	      if (buf != NULL)
+		g_free (buf);
+	      if (rtf != NULL)
+		g_string_free (rtf, TRUE);
+	      return;
+	    }
 
-	default:
-	  g_assert_not_reached ();
+	  ucptr = GlobalLock (hdata);
+
+	  switch (method)
+	    {
+	    case SYSTEM_CODEPAGE:
+	      cf = CF_TEXT;
+	      for (i = 0; i < nelements; i++)
+		{
+		  if (data[i] == '\n')
+		    *ucptr++ = '\r';
+		  *ucptr++ = data[i];
+		}
+	      *ucptr++ = '\0';
+	      break;
+
+	    case UNICODE_TEXT:
+	      cf = CF_UNICODETEXT;
+	      memmove (ucptr, wcptr, size);
+	      g_free (wcptr);
+	      break;
+
+	    case SINGLE_LOCALE:
+	      cf = CF_TEXT;
+	      memmove (ucptr, buf, size);
+	      g_free (buf);
+
+	      /* Set the CF_LOCALE clipboard data, too */
+	      if (!(hlcid = GlobalAlloc (GMEM_MOVEABLE, sizeof (LCID))))
+		WIN32_API_FAILED ("GlobalAlloc"), ok = FALSE;
+	      if (ok)
+		{
+		  lcidptr = GlobalLock (hlcid);
+		  *lcidptr = lcid;
+		  GlobalUnlock (hlcid);
+		  if (!SetClipboardData (CF_LOCALE, hlcid))
+		    WIN32_API_FAILED ("SetClipboardData (CF_LOCALE)"), ok = FALSE;
+		}
+	      break;
+
+	    case RICH_TEXT:
+	      cf = _cf_rtf;
+	      memmove (ucptr, rtf->str, size);
+	      g_string_free (rtf, TRUE);
+
+	      /* Set the UTF8_STRING clipboard data, too, for other
+	       * GTK+ apps to use (won't bother reading RTF).
+	       */
+	      if (!(hutf8 = GlobalAlloc (GMEM_MOVEABLE, nelements)))
+		WIN32_API_FAILED ("GlobalAlloc");
+	      else
+		{
+		  guchar *utf8ptr = GlobalLock (hutf8);
+		  memmove (utf8ptr, data, nelements);
+		  GlobalUnlock (hutf8);
+		  if (!SetClipboardData (_cf_utf8_string, hutf8))
+		    WIN32_API_FAILED ("SetClipboardData (UTF8_STRING)");
+		}
+	      break;
+
+	    default:
+	      g_assert_not_reached ();
+	    }
+
+	  GlobalUnlock (hdata);
+	  if (ok && !SetClipboardData (cf, hdata))
+	    WIN32_API_FAILED ("SetClipboardData"), ok = FALSE;
+
+	  if (!CloseClipboard ())
+	    WIN32_API_FAILED ("CloseClipboard");
 	}
-
-      GlobalUnlock (hdata);
-      if (ok && !SetClipboardData (cf, hdata))
-	WIN32_API_FAILED ("SetClipboardData"), ok = FALSE;
-      
-      if (!CloseClipboard ())
-	WIN32_API_FAILED ("CloseClipboard");
+      else
+        {
+	  /* Delayed Rendering. We can't assign hdata to the clipboard
+	   * here as type may be "image/png", "image/jpg", etc.  In
+	   * this case there's a further conversion afterwards.
+	   */
+	  _delayed_rendering_data = NULL;
+	  if (!(hdata = GlobalAlloc (GMEM_MOVEABLE, nelements > 0 ? nelements : 1)))
+	    {
+	      WIN32_API_FAILED ("GlobalAlloc");
+	      return;
+	    }
+	  ucptr = GlobalLock (hdata);
+	  memcpy (ucptr, data, nelements);
+	  GlobalUnlock (hdata);
+	  _delayed_rendering_data = hdata;
+	}
     }
   else
     g_warning ("gdk_property_change: General case not implemented");
@@ -592,13 +612,15 @@ gdk_screen_get_setting (GdkScreen   *screen,
       ncm.cbSize = sizeof(NONCLIENTMETRICS);
       if (SystemParametersInfo (SPI_GETNONCLIENTMETRICS, ncm.cbSize, &ncm, FALSE))
         {
-          /* Pango finally uses GetDeviceCaps to scale, we use simple approximation here */
+          /* Pango finally uses GetDeviceCaps to scale, we use simple
+	   * approximation here.
+	   */
           int nHeight = (0 > ncm.lfMenuFont.lfHeight ? -3*ncm.lfMenuFont.lfHeight/4 : 10);
           if (OUT_STRING_PRECIS == ncm.lfMenuFont.lfOutPrecision)
             GDK_NOTE(MISC, g_print("gdk_screen_get_setting(%s) : ignoring bitmap font '%s'\n", 
                                    name, ncm.lfMenuFont.lfFaceName));
           else if (ncm.lfMenuFont.lfFaceName && strlen(ncm.lfMenuFont.lfFaceName) > 0 &&
-                   /* avoid issues like those described in bug #135098 */
+                   /* Avoid issues like those described in bug #135098 */
                    g_utf8_validate (ncm.lfMenuFont.lfFaceName, -1, NULL))
             {
               char* s = g_strdup_printf ("%s %d", ncm.lfMenuFont.lfFaceName, nHeight);

@@ -36,7 +36,7 @@ GdkWindow	 *_gdk_parent_root = NULL;
 gint		  _gdk_num_monitors;
 GdkRectangle     *_gdk_monitors = NULL;
 
-gint		 _gdk_offset_x, _gdk_offset_y;
+gint		  _gdk_offset_x, _gdk_offset_y;
 
 HWND              _gdk_root_window = NULL;
 HDC		  _gdk_display_hdc;
@@ -51,8 +51,10 @@ WORD  		  _cf_rtf;
 WORD		  _cf_utf8_string;
 
 GdkAtom           _utf8_string;
-GdkAtom		  _text_uri_list;
 GdkAtom		  _targets;
+
+GdkAtom		  _text_uri_list;
+GdkAtom		  _image_bmp;
 
 GdkAtom		  _local_dnd;
 GdkAtom		  _gdk_win32_dropfiles;
@@ -67,3 +69,6 @@ gint		  _gdk_max_colors = 0;
 
 gboolean	  _sizemove_in_progress = FALSE;
 gboolean	  _ignore_destroy_clipboard = FALSE;
+
+HGLOBAL           _delayed_rendering_data = NULL;
+GHashTable       *_format_atom_table = NULL;
