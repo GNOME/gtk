@@ -792,13 +792,14 @@ gtk_text_real_set_editable (GtkEditable *editable,
   g_return_if_fail (GTK_IS_TEXT (editable));
   
   text = GTK_TEXT (editable);
-  
+
   editable->editable = (is_editable != FALSE);
   
-  if (is_editable)
-    draw_cursor (text, TRUE);
-  else
-    undraw_cursor (text, TRUE);
+  if (GTK_WIDGET_REALIZED (text))
+    {
+      recompute_geometry (text);
+      gtk_widget_queue_draw (GTK_WIDGET (text));
+    }
 }
 
 void
@@ -4674,7 +4675,8 @@ find_line_params (GtkText* text,
   GdkFont *font;
   
   gdk_window_get_size (text->text_area, (gint*) &max_display_pixels, NULL);
-  max_display_pixels -= LINE_WRAP_ROOM;
+  if (GTK_EDITABLE (text)->editable || !text->word_wrap)
+    max_display_pixels -= LINE_WRAP_ROOM;
   
   lp.wraps             = 0;
   lp.tab_cont          = *tab_cont;
@@ -5064,7 +5066,10 @@ draw_line (GtkText* text,
 	  len = 1;
 	  
 	  gdk_window_get_size (text->text_area, &pixels_remaining, NULL);
-	  pixels_remaining -= (LINE_WRAP_ROOM + running_offset);
+	  if (GTK_EDITABLE (text)->editable || !text->word_wrap)
+	    pixels_remaining -= (LINE_WRAP_ROOM + running_offset);
+	  else
+	    pixels_remaining -= running_offset;
 	  
 	  space_width = MARK_CURRENT_TEXT_FONT(text, &mark)->char_widths[' '];
 	  
@@ -5096,6 +5101,9 @@ draw_line_wrap (GtkText* text, guint height /* baseline height */)
   GdkPixmap *bitmap;
   gint bitmap_width;
   gint bitmap_height;
+
+  if (!GTK_EDITABLE (text)->editable && text->word_wrap)
+    return;
   
   if (text->line_wrap)
     {

@@ -1,3 +1,8 @@
+Wed Jul 21 15:47:39 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c: Don't display wrap indicators when
+	text is not editable and word wrap is on.
+
 Wed Jul 21 08:21:40 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_create_item): special case
