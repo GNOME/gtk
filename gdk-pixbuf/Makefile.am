@@ -54,7 +54,7 @@ libexec_LTLIBRARIES =		\
 	$(PNM_LIB)	\
 	$(BMP_LIB)
 
-noinst_PROGRAMS = testpixbuf testpixbuf-drawable testanimation testpixbuf-scale testpixbuf-foo
+noinst_PROGRAMS = testpixbuf testpixbuf-drawable testanimation testpixbuf-scale
 
 DEPS = libgdk_pixbuf.la
 INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
@@ -74,7 +74,6 @@ else
 testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) $(GNOME_LIBS) -lgmodule
 testpixbuf_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)
 testpixbuf_scale_LDADD = $(LDADDS) $(GNOME_LIBS)
-testpixbuf_foo_LDADD = $(LDADDS) $(GNOME_LIBS)
 testanimation_LDADD = $(LDADDS) $(LIBART_LIBS) $(GNOME_LIBS) -lgmodule
 endif
 
