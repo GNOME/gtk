@@ -4,7 +4,7 @@
 	it is clean API and we were just conservative in not making it 
 	public initially. At the same time, get rid of GtkCellViewMenuItem,
 	which doesn't have any function which can't be served by a
-	GtkMenuItem with a GtkCellView child.
+	GtkMenuItem with a GtkCellView child.  (#136637, Padraig O'Briain)
 
 	* gtk/gtk.h: Include gtkcellview.h
 
