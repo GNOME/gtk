@@ -6,7 +6,7 @@
 Wed Aug 20 22:04:47 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gdk/gdkwindow.c: Make the layers in the paint stack have their
-	own pixmap instead of sharing one.
+	own pixmap instead of sharing one. (#118317)
 
 	* tests/testgtk.c (create_get_image): Fixes to make the window fit
 	on an 800x600 screen
