@@ -126,7 +126,7 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
   class->group_changed = NULL;
 
   /**
-   * GtkStyle::group-changed:
+   * GtkRadioButton::group-changed:
    * @style: the object which received the signal
    *
    * Emitted when the group of radio buttons that a radio button belongs
@@ -258,6 +258,7 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
 
   g_object_ref (radio_button);
   
+  g_object_notify (G_OBJECT (radio_button), "group");
   g_signal_emit (radio_button, group_changed_signal, 0);
   if (old_group_singleton)
     {

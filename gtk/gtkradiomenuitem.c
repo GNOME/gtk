@@ -28,13 +28,29 @@
 #include "gtkaccellabel.h"
 #include "gtkmarshalers.h"
 #include "gtkradiomenuitem.h"
+#include "gtkprivate.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
+
+
+enum {
+  PROP_0,
+  PROP_GROUP
+};
 
 
 static void gtk_radio_menu_item_class_init     (GtkRadioMenuItemClass *klass);
 static void gtk_radio_menu_item_init           (GtkRadioMenuItem      *radio_menu_item);
 static void gtk_radio_menu_item_destroy        (GtkObject             *object);
 static void gtk_radio_menu_item_activate       (GtkMenuItem           *menu_item);
+static void gtk_radio_menu_item_set_property   (GObject               *object,
+						guint                  prop_id,
+						const GValue          *value,
+						GParamSpec            *pspec);
+static void gtk_radio_menu_item_get_property   (GObject               *object,
+						guint                  prop_id,
+						GValue                *value,
+						GParamSpec            *pspec);
 
 static GtkCheckMenuItemClass *parent_class = NULL;
 
@@ -78,6 +94,51 @@ gtk_radio_menu_item_new (GSList *group)
   gtk_radio_menu_item_set_group (radio_menu_item, group);
 
   return GTK_WIDGET (radio_menu_item);
+}
+
+static void
+gtk_radio_menu_item_set_property (GObject      *object,
+				  guint         prop_id,
+				  const GValue *value,
+				  GParamSpec   *pspec)
+{
+  GtkRadioMenuItem *radio_menu_item;
+
+  radio_menu_item = GTK_RADIO_MENU_ITEM (object);
+
+  switch (prop_id)
+    {
+      GSList *slist;
+
+    case PROP_GROUP:
+      if (G_VALUE_HOLDS_OBJECT (value))
+	slist = gtk_radio_menu_item_get_group ((GtkRadioMenuItem*) g_value_get_object (value));
+      else
+	slist = NULL;
+      gtk_radio_menu_item_set_group (radio_menu_item, slist);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_radio_menu_item_get_property (GObject    *object,
+				  guint       prop_id,
+				  GValue     *value,
+				  GParamSpec *pspec)
+{
+  GtkRadioMenuItem *radio_menu_item;
+
+  radio_menu_item = GTK_RADIO_MENU_ITEM (object);
+
+  switch (prop_id)
+    {
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 void
@@ -136,6 +197,7 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
 
   g_object_ref (radio_menu_item);
 
+  g_object_notify (G_OBJECT (radio_menu_item), "group");
   g_signal_emit (radio_menu_item, group_changed_signal, 0);
   if (old_group_singleton)
     {
@@ -290,13 +352,26 @@ gtk_radio_menu_item_get_group (GtkRadioMenuItem *radio_menu_item)
 static void
 gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 {
+  GObjectClass *gobject_class;  
   GtkObjectClass *object_class;
   GtkMenuItemClass *menu_item_class;
 
-  object_class = (GtkObjectClass*) klass;
-  menu_item_class = (GtkMenuItemClass*) klass;
+  gobject_class = G_OBJECT_CLASS (klass);
+  object_class = GTK_OBJECT_CLASS (klass);
+  menu_item_class = GTK_MENU_ITEM_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
+
+  gobject_class->set_property = gtk_radio_menu_item_set_property;
+  gobject_class->get_property = gtk_radio_menu_item_get_property;
+
+  g_object_class_install_property (gobject_class,
+				   PROP_GROUP,
+				   g_param_spec_object ("group",
+							P_("Group"),
+							P_("The radio menu item  whose group this widget belongs to."),
+							GTK_TYPE_RADIO_MENU_ITEM,
+							GTK_PARAM_WRITABLE));
 
   object_class->destroy = gtk_radio_menu_item_destroy;
 
