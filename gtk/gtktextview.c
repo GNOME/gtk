@@ -4524,7 +4524,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
   switch (step)
     {
     case GTK_MOVEMENT_LOGICAL_POSITIONS:
-      gtk_text_iter_forward_cursor_positions (&newplace, count);
+      gtk_text_iter_forward_visible_cursor_positions (&newplace, count);
       break;
 
     case GTK_MOVEMENT_VISUAL_POSITIONS:
@@ -4534,9 +4534,9 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
 
     case GTK_MOVEMENT_WORDS:
       if (count < 0)
-        gtk_text_iter_backward_word_starts (&newplace, -count);
+        gtk_text_iter_backward_visible_word_starts (&newplace, -count);
       else if (count > 0)
-        gtk_text_iter_forward_word_ends (&newplace, count);
+        gtk_text_iter_forward_visible_word_ends (&newplace, count);
       break;
 
     case GTK_MOVEMENT_DISPLAY_LINES:
@@ -5162,10 +5162,10 @@ extend_selection (GtkTextView *text_view,
       if (gtk_text_iter_inside_word (start))
 	{
 	  if (!gtk_text_iter_starts_word (start))
-	    gtk_text_iter_backward_word_start (start);
+	    gtk_text_iter_backward_visible_word_start (start);
 	  
 	  if (!gtk_text_iter_ends_word (end))
-	    gtk_text_iter_forward_word_end (end);
+	    gtk_text_iter_forward_visible_word_end (end);
 	}
       else
 	extend = FALSE;

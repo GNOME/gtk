@@ -1,3 +1,13 @@
+2003-01-14  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): Skip
+	invisible chars for GTK_MOVEMENT_LOGICAL_POSITIONS and
+	GTK_MOVEMENT_WORDS.
+
+	* gtk/gtktextiter.c,
+	gtk/gtktextiter.h: Add some variant movement functions which
+	skip invisible chars, and do some cleanups.
+
 2003-01-12  Tor Lillqvist  <tml@iki.fi>
 
 	Merge from stable:

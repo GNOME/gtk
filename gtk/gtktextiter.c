@@ -2995,6 +2995,64 @@ find_by_log_attrs (GtkTextIter    *iter,
     }
 }
 
+static gboolean 
+find_visible_by_log_attrs (GtkTextIter    *iter,
+			   FindLogAttrFunc func,
+			   gboolean        forward,
+			   gboolean        already_moved_initially)
+{
+  GtkTextIter pos;
+
+  g_return_val_if_fail (iter != NULL, FALSE);
+  
+  pos = *iter;
+  
+  while (find_by_log_attrs (&pos, func, forward, already_moved_initially)) 
+    {
+      if (!_gtk_text_btree_char_is_invisible (&pos)) 
+	{
+	  *iter = pos;
+	  return TRUE;
+	}
+  }
+
+  return FALSE;
+}
+
+typedef gboolean (* OneStepFunc) (GtkTextIter *iter);
+typedef gboolean (* MultipleStepFunc) (GtkTextIter *iter, gint count);
+				  
+static gboolean 
+move_multiple_steps (GtkTextIter *iter, 
+		     gint count,
+		     OneStepFunc step_forward,
+		     MultipleStepFunc n_steps_backward)
+{
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  FIX_OVERFLOWS (count);
+  
+  if (count == 0)
+    return FALSE;
+  
+  if (count < 0)
+    return n_steps_backward (iter, -count);
+  
+  if (!step_forward (iter))
+    return FALSE;
+  --count;
+
+  while (count > 0)
+    {
+      if (!step_forward (iter))
+        break;
+      --count;
+    }
+  
+  return !gtk_text_iter_is_end (iter);  
+}
+	       
+
 /**
  * gtk_text_iter_forward_word_end:
  * @iter: a #GtkTextIter
@@ -3048,28 +3106,9 @@ gboolean
 gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
                                  gint              count)
 {
-  g_return_val_if_fail (iter != NULL, FALSE);
-
-  FIX_OVERFLOWS (count);
-  
-  if (count == 0)
-    return FALSE;
-
-  if (count < 0)
-    return gtk_text_iter_backward_word_starts (iter, -count);
-
-  if (!gtk_text_iter_forward_word_end (iter))
-    return FALSE;
-  --count;
-
-  while (count > 0)
-    {
-      if (!gtk_text_iter_forward_word_end (iter))
-        break;
-      --count;
-    }
-  
-  return !gtk_text_iter_is_end (iter);
+  return move_multiple_steps (iter, count, 
+			      gtk_text_iter_forward_word_end,
+			      gtk_text_iter_backward_word_starts);
 }
 
 /**
@@ -3085,25 +3124,89 @@ gboolean
 gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
                                     gint               count)
 {
-  g_return_val_if_fail (iter != NULL, FALSE);
+  return move_multiple_steps (iter, count, 
+			      gtk_text_iter_backward_word_start,
+			      gtk_text_iter_forward_word_ends);
+}
 
-  FIX_OVERFLOWS (count);
-  
-  if (count < 0)
-    return gtk_text_iter_forward_word_ends (iter, -count);
+/**
+ * gtk_text_iter_forward_visible_word_end:
+ * @iter: a #GtkTextIter
+ * 
+ * Moves forward to the next visible word end. (If @iter is currently on a
+ * word end, moves forward to the next one after that.) Word breaks
+ * are determined by Pango and should be correct for nearly any
+ * language (if not, the correct fix would be to the Pango word break
+ * algorithms).
+ * 
+ * Return value: %TRUE if @iter moved and is not the end iterator 
+ *
+ * Since: 2.4
+ **/
+gboolean
+gtk_text_iter_forward_visible_word_end (GtkTextIter *iter)
+{
+  return find_visible_by_log_attrs (iter, find_word_end_func, TRUE, FALSE);
+}
 
-  if (!gtk_text_iter_backward_word_start (iter))
-    return FALSE;
-  --count;
+/**
+ * gtk_text_iter_backward_visible_word_start:
+ * @iter: a #GtkTextIter
+ * 
+ * Moves backward to the previous visible word start. (If @iter is currently 
+ * on a word start, moves backward to the next one after that.) Word breaks
+ * are determined by Pango and should be correct for nearly any
+ * language (if not, the correct fix would be to the Pango word break
+ * algorithms).
+ * 
+ * Return value: %TRUE if @iter moved and is not the end iterator 
+ * 
+ * Since: 2.4
+ **/
+gboolean
+gtk_text_iter_backward_visible_word_start (GtkTextIter      *iter)
+{
+  return find_visible_by_log_attrs (iter, find_word_start_func, FALSE, FALSE);
+}
 
-  while (count > 0)
-    {
-      if (!gtk_text_iter_backward_word_start (iter))
-        break;
-      --count;
-    }
+/**
+ * gtk_text_iter_forward_visible_word_ends:
+ * @iter: a #GtkTextIter
+ * @count: number of times to move
+ * 
+ * Calls gtk_text_iter_forward_visible_word_end() up to @count times.
+ *
+ * Return value: %TRUE if @iter moved and is not the end iterator 
+ *
+ * Since: 2.4
+ **/
+gboolean
+gtk_text_iter_forward_visible_word_ends (GtkTextIter *iter,
+					 gint         count)
+{
+  return move_multiple_steps (iter, count, 
+			      gtk_text_iter_forward_visible_word_end,
+			      gtk_text_iter_backward_visible_word_starts);
+}
 
-  return !gtk_text_iter_is_end (iter);
+/**
+ * gtk_text_iter_backward_visible_word_starts
+ * @iter: a #GtkTextIter
+ * @count: number of times to move
+ * 
+ * Calls gtk_text_iter_backward_visible_word_start() up to @count times.
+ *
+ * Return value: %TRUE if @iter moved and is not the end iterator 
+ * 
+ * Since: 2.4
+ **/
+gboolean
+gtk_text_iter_backward_visible_word_starts (GtkTextIter *iter,
+					    gint         count)
+{
+  return move_multiple_steps (iter, count, 
+			      gtk_text_iter_backward_visible_word_start,
+			      gtk_text_iter_forward_visible_word_ends);
 }
 
 /**
@@ -3263,26 +3366,9 @@ gboolean
 gtk_text_iter_forward_sentence_ends (GtkTextIter      *iter,
                                      gint              count)
 {
-  g_return_val_if_fail (iter != NULL, FALSE);
-
-  if (count == 0)
-    return FALSE;
-
-  if (count < 0)
-    return gtk_text_iter_backward_sentence_starts (iter, -count);
-
-  if (!gtk_text_iter_forward_sentence_end (iter))
-    return FALSE;
-  --count;
-
-  while (count > 0)
-    {
-      if (!gtk_text_iter_forward_sentence_end (iter))
-        break;
-      --count;
-    }
-
-  return !gtk_text_iter_is_end (iter);
+  return move_multiple_steps (iter, count, 
+			      gtk_text_iter_forward_sentence_end,
+			      gtk_text_iter_backward_sentence_starts);
 }
 
 /**
@@ -3300,26 +3386,9 @@ gboolean
 gtk_text_iter_backward_sentence_starts (GtkTextIter      *iter,
                                         gint               count)
 {
-  g_return_val_if_fail (iter != NULL, FALSE);
-
-  if (count == 0)
-    return FALSE;
-
-  if (count < 0)
-    return gtk_text_iter_forward_sentence_ends (iter, -count);
-
-  if (!gtk_text_iter_backward_sentence_start (iter))
-    return FALSE;
-  --count;
-
-  while (count > 0)
-    {
-      if (!gtk_text_iter_backward_sentence_start (iter))
-        break;
-      --count;
-    }
-
-  return !gtk_text_iter_is_end (iter);
+  return move_multiple_steps (iter, count, 
+			      gtk_text_iter_backward_sentence_start,
+			      gtk_text_iter_forward_sentence_ends);
 }
 
 static gboolean
@@ -3422,28 +3491,9 @@ gboolean
 gtk_text_iter_forward_cursor_positions (GtkTextIter *iter,
                                         gint         count)
 {
-  g_return_val_if_fail (iter != NULL, FALSE);
-
-  FIX_OVERFLOWS (count);
-  
-  if (count == 0)
-    return FALSE;
-  
-  if (count < 0)
-    return gtk_text_iter_backward_cursor_positions (iter, -count);
-  
-  if (!gtk_text_iter_forward_cursor_position (iter))
-    return FALSE;
-  --count;
-
-  while (count > 0)
-    {
-      if (!gtk_text_iter_forward_cursor_position (iter))
-        break;
-      --count;
-    }
-  
-  return !gtk_text_iter_is_end (iter);
+  return move_multiple_steps (iter, count, 
+			      gtk_text_iter_forward_cursor_position,
+			      gtk_text_iter_backward_cursor_positions);
 }
 
 /**
@@ -3460,28 +3510,85 @@ gboolean
 gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
                                          gint         count)
 {
-  g_return_val_if_fail (iter != NULL, FALSE);
+  return move_multiple_steps (iter, count, 
+			      gtk_text_iter_backward_cursor_position,
+			      gtk_text_iter_forward_cursor_positions);
+}
 
-  FIX_OVERFLOWS (count);
-  
-  if (count == 0)
-    return FALSE;
+/**
+ * gtk_text_iter_forward_visible_cursor_position:
+ * @iter: a #GtkTextIter
+ * 
+ * Moves @iter forward to the next visible cursor position. See 
+ * gtk_text_iter_forward_cursor_position() for details.
+ * 
+ * Return value: %TRUE if we moved and the new position is dereferenceable
+ * 
+ * Since: 2.4
+ **/
+gboolean
+gtk_text_iter_forward_visible_cursor_position (GtkTextIter *iter)
+{
+  return find_visible_by_log_attrs (iter, find_forward_cursor_pos_func, TRUE, FALSE);
+}
 
-  if (count < 0)
-    return gtk_text_iter_forward_cursor_positions (iter, -count);
-  
-  if (!gtk_text_iter_backward_cursor_position (iter))
-    return FALSE;
-  --count;
+/**
+ * gtk_text_iter_backward_visible_cursor_position:
+ * @iter: a #GtkTextIter
+ * 
+ * Moves @iter forward to the previous visible cursor position. See 
+ * gtk_text_iter_backward_cursor_position() for details.
+ * 
+ * Return value: %TRUE if we moved and the new position is dereferenceable
+ * 
+ * Since: 2.4
+ **/
+gboolean
+gtk_text_iter_backward_visible_cursor_position (GtkTextIter *iter)
+{
+  return find_visible_by_log_attrs (iter, find_backward_cursor_pos_func, FALSE, FALSE);
+}
 
-  while (count > 0)
-    {
-      if (!gtk_text_iter_backward_cursor_position (iter))
-        break;
-      --count;
-    }
+/**
+ * gtk_text_iter_forward_visible_cursor_positions:
+ * @iter: a #GtkTextIter
+ * @count: number of positions to move
+ * 
+ * Moves up to @count visible cursor positions. See
+ * gtk_text_iter_forward_cursor_position() for details.
+ * 
+ * Return value: %TRUE if we moved and the new position is dereferenceable
+ * 
+ * Since: 2.4
+ **/
+gboolean
+gtk_text_iter_forward_visible_cursor_positions (GtkTextIter *iter,
+						gint         count)
+{
+  return move_multiple_steps (iter, count, 
+			      gtk_text_iter_forward_visible_cursor_position,
+			      gtk_text_iter_backward_visible_cursor_positions);
+}
 
-  return !gtk_text_iter_is_end (iter);
+/**
+ * gtk_text_iter_backward_visible_cursor_positions:
+ * @iter: a #GtkTextIter
+ * @count: number of positions to move
+ *
+ * Moves up to @count visible cursor positions. See
+ * gtk_text_iter_forward_cursor_position() for details.
+ * 
+ * Return value: %TRUE if we moved and the new position is dereferenceable
+ * 
+ * Since: 2.4
+ **/
+gboolean
+gtk_text_iter_backward_visible_cursor_positions (GtkTextIter *iter,
+						 gint         count)
+{
+  return move_multiple_steps (iter, count, 
+			      gtk_text_iter_backward_visible_cursor_position,
+			      gtk_text_iter_forward_visible_cursor_positions);
 }
 
 /**
@@ -3646,6 +3753,7 @@ gtk_text_iter_set_visible_line_index  (GtkTextIter *iter,
                                        gint         byte_on_line)
 {
   gint bytes_seen = 0;
+  gint skipped = 0;
   GtkTextIter pos;
 
   g_return_if_fail (iter != NULL);
@@ -3657,6 +3765,7 @@ gtk_text_iter_set_visible_line_index  (GtkTextIter *iter,
     {
       if (!_gtk_text_btree_char_is_invisible (&pos))
         bytes_seen += bytes_in_char (&pos);
+      else skipped++;
 
       if (!gtk_text_iter_forward_char (&pos))
         break;
@@ -4618,43 +4727,6 @@ lines_window_free (LinesWindow *win)
   g_strfreev (win->lines);
 }
 
-static gchar*
-my_strrstr (const gchar *haystack,
-            const gchar *needle)
-{
-  /* FIXME GLib should have a nice implementation in it, this
-   * is slow-ass crap.
-   */
-
-  gint haystack_len = strlen (haystack);
-  gint needle_len = strlen (needle);
-  const gchar *needle_end = needle + needle_len;
-  const gchar *haystack_rend = haystack - 1;
-  const gchar *needle_rend = needle - 1;
-  const gchar *p;
-
-  p = haystack + haystack_len;
-  while (p != haystack)
-    {
-      const gchar *n = needle_end - 1;
-      const gchar *s = p - 1;
-      while (s != haystack_rend &&
-             n != needle_rend &&
-             *s == *n)
-        {
-          --n;
-          --s;
-        }
-
-      if (n == needle_rend)
-        return (gchar*)++s;
-
-      --p;
-    }
-
-  return NULL;
-}
-
 /**
  * gtk_text_iter_backward_search:
  * @iter: a #GtkTextIter where the search begins
@@ -4750,7 +4822,7 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
        * end in '\n', so this will only match at the
        * end of the first line, which is correct.
        */
-      first_line_match = my_strrstr (*win.lines, *lines);
+      first_line_match = g_strrstr (*win.lines, *lines);
 
       if (first_line_match &&
           vectors_equal_ignoring_trailing (lines + 1, win.lines + 1))
