@@ -2792,7 +2792,10 @@ gtk_text_view_style_set (GtkWidget *widget,
       if (text_view->bottom_window)
         gdk_window_set_background (text_view->bottom_window->bin_window,
                                    &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+    }
 
+  if (text_view->layout && previous_style)
+    {
       gtk_text_view_set_attributes_from_style (text_view,
                                                text_view->layout->default_style,
                                                widget->style);

@@ -1019,6 +1019,14 @@ Get the type of GtkIdentifier.
 
 @Returns: GtkType -- the enumerated type of something.
 
+<!-- ##### FUNCTION gtk_image_menu_item_add_image ##### -->
+<para>
+
+</para>
+
+@image_menu_item: 
+@child: 
+
 <!-- ##### FUNCTION gtk_label_set_markup_with_accel ##### -->
 <para>
 

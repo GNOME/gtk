@@ -1,3 +1,10 @@
+Fri May 18 15:26:26 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_style_set): Reset 
+	style attributes even if the widget isn't realized.
+
+	* demos/gtk-demo/main.c: Use a slightly smaller font.
+
 Fri May 18 14:25:20 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcontainer.c: Remove reallocate-redraws property.
