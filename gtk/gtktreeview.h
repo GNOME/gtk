@@ -64,31 +64,32 @@ struct _GtkTreeViewClass
 {
   GtkContainerClass parent_class;
 
-  void     (* set_scroll_adjustments) (GtkTreeView       *tree_view,
-				       GtkAdjustment     *hadjustment,
-				       GtkAdjustment     *vadjustment);
-  void     (* row_activated)          (GtkTreeView       *tree_view,
-				       GtkTreePath       *path,
-				       GtkTreeViewColumn *column);
-  gboolean (* expand_row)             (GtkTreeView       *tree_view,
-				       GtkTreeIter       *iter,
-				       GtkTreePath       *path);
-  gboolean (* collapse_row)           (GtkTreeView       *tree_view,
-				       GtkTreeIter       *iter,
-				       GtkTreePath       *path);
-  void     (* columns_changed)        (GtkTreeView       *tree_view);
+  void     (* set_scroll_adjustments)     (GtkTreeView       *tree_view,
+				           GtkAdjustment     *hadjustment,
+				           GtkAdjustment     *vadjustment);
+  void     (* row_activated)              (GtkTreeView       *tree_view,
+				           GtkTreePath       *path,
+					   GtkTreeViewColumn *column);
+  gboolean (* expand_row)                 (GtkTreeView       *tree_view,
+				           GtkTreeIter       *iter,
+				           GtkTreePath       *path);
+  gboolean (* collapse_row)               (GtkTreeView       *tree_view,
+				           GtkTreeIter       *iter,
+				           GtkTreePath       *path);
+  void     (* columns_changed)            (GtkTreeView       *tree_view);
 
   /* Key Binding signals */
-  void     (* move_cursor)            (GtkTreeView       *tree_view,
-				       GtkMovementStep    step,
-				       gint               count,
-				       gboolean           extend_selection);
-  void     (* set_anchor)             (GtkTreeView       *tree_view);
-  void     (* expand_selected_row)    (GtkTreeView       *tree_view);
-  void     (* collapse_selected_row)  (GtkTreeView       *tree_view);
-  void     (* expand_all_selected_row)(GtkTreeView       *tree_view);
-  void     (* select_selected_parent) (GtkTreeView       *tree_view);
-  
+  void     (* move_cursor)                (GtkTreeView       *tree_view,
+				           GtkMovementStep    step,
+				           gint               count,
+				           gboolean           extend_selection);
+  void     (* set_anchor)                 (GtkTreeView       *tree_view);
+  void     (* toggle_cursor_row)          (GtkTreeView       *tree_view);
+  void     (* expand_collapse_cursor_row) (GtkTreeView       *tree_view,
+					   gboolean           logical,
+					   gboolean           expand,
+					   gboolean           open_all);
+  void     (* select_cursor_parent)       (GtkTreeView       *tree_view);
 };
 
 

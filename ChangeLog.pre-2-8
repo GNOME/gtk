@@ -1,3 +1,14 @@
+Wed Jun  6 20:01:38 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c
+	(gtk_tree_view_real_expand_collapse_cursor_row): Handle key
+	bindings to expand and collapse rows.
+	(gtk_tree_view_real_select_cursor_parent): New key binding.
+	(gtk_tree_view_real_toggle_cursor_row): New key binding.
+
+	* gtk/gtkmarshal.list: new
+	marshaller. (VOID__BOOLEAN_BOOLEAN_BOOLEAN)
+
 2001-06-06  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkrange.c (gtk_range_class_init): add "inverted" property
