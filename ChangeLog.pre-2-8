@@ -1,3 +1,20 @@
+Thu Sep  2 19:02:37 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkproperty.c (gdk_atom_intern): Remove useless
+	  and slightly confusing test. [ XInternAtom (,,TRUE)
+	  will never return None ].
+
+	* gtk/testgtk.c (main): Add a check to see if we
+	  are being run from the correct directory and
+	  to quit nicely if we are not.
+
+	* gtk/gtkrc.c (gtk_rc_slist_remove_all): Make function
+	  static.
+
+	* configure.in (REBUILD): Change check for perl5
+	  to check explicitely for v >= 5.002. (5.001
+	  does not work with our scripts.)
+
 Thu Sep  2 23:00:03 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkenums.h (GtkWindowPosition): added GTK_WIN_POS_CENTER_ALWAYS.

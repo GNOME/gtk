@@ -569,7 +569,7 @@ gtk_rc_style_ref (GtkRcStyle  *rc_style)
 }
 
 /* Like g_slist_remove, but remove all copies of data */
-GSList*
+static GSList*
 gtk_rc_slist_remove_all (GSList   *list,
 			 gpointer  data)
 {

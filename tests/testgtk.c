@@ -30,7 +30,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <sys/stat.h>
 #include <time.h>
+#include <unistd.h>
 #include "gtk.h"
 #include "../gdk/gdk.h"
 #include "../gdk/gdkx.h"
@@ -8349,10 +8351,21 @@ int
 main (int argc, char *argv[])
 {
   GtkBindingSet *binding_set;
+  struct stat statbuf;
 
   srand (time (NULL));
 
   gtk_set_locale ();
+
+  /* Check to see if we are being run from the correct
+   * directory.
+   */
+  if (stat("./testgtkrc", &statbuf) < 0)
+    {
+      fprintf (stderr, "*** The testgtk program must be run from within the\n"
+	               "*** gtk/ subdirectory of the GTK+ distribution.\n");
+      exit (1);
+    }
 
   gtk_rc_add_default_file ("testgtkrc");
 

@@ -159,7 +159,7 @@ AC_CHECK_PROG(INDENT, indent, indent)
 REBUILD=\#
 if test "x$enable_rebuilds" = "xyes" && \
      test -n "$PERL" && \
-     $PERL -v | grep 'version 5.' > /dev/null && \
+     $PERL -e 'exit !($] >= 5.002)' > /dev/null && \
      test -n "$AWK" ; then
   REBUILD=
 fi

@@ -1621,7 +1621,7 @@ gdk_event_translate (GdkEvent *event,
       
       return_val = window_private && !window_private->destroyed;
       
-      if(window && window_private->xwindow != GDK_ROOT_WINDOW())
+      if (window && window_private->xwindow != GDK_ROOT_WINDOW())
 	gdk_window_destroy_notify (window);
       break;
       
