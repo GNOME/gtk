@@ -1,3 +1,11 @@
+Thu Nov  5 14:31:57 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdk.c: sometimes we get a KeyRelease before a KeyPress in
+	gdk_event_translate, and the USE_XIM buffer isn't allocated yet.
+	So allocate some mem if it's not already done.
+
+	* clist scrollbar merges from HEAD
+
 Tue Nov  3 13:16:36 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/Makefile.am: remove explict -ldl, gmodule takes care of that

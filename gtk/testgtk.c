@@ -3261,7 +3261,7 @@ create_list (void)
 
       scrolled_win = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
-				      GTK_POLICY_AUTOMATIC, 
+				      GTK_POLICY_AUTOMATIC,
 				      GTK_POLICY_AUTOMATIC);
       gtk_box_pack_start (GTK_BOX (box2), scrolled_win, TRUE, TRUE, 0);
       gtk_widget_set_usize (scrolled_win, -1, 300);
@@ -3876,6 +3876,7 @@ create_clist (void)
   GtkWidget *clist;
   GtkWidget *button;
   GtkWidget *separator;
+  GtkWidget *scrolled_win;
 
   GtkWidget *undo_button;
   GtkWidget *label;
@@ -3905,6 +3906,12 @@ create_clist (void)
       /* create GtkCList here so we have a pointer to throw at the 
        * button callbacks -- more is done with it later */
       clist = gtk_clist_new_with_titles (TESTGTK_CLIST_COLUMNS, titles);
+      gtk_widget_show (clist);
+      scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
+				      GTK_POLICY_AUTOMATIC, 
+				      GTK_POLICY_AUTOMATIC);
+      gtk_container_add (GTK_CONTAINER (scrolled_win), clist);
       /*clist = gtk_clist_new (TESTGTK_CLIST_COLUMNS);*/
 
       gtk_signal_connect (GTK_OBJECT (clist), "click_column",
@@ -4014,8 +4021,6 @@ create_clist (void)
       gtk_clist_set_column_min_width (GTK_CLIST (clist), 3, 50);
 
       gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_EXTENDED);
-      gtk_clist_set_policy (GTK_CLIST (clist), GTK_POLICY_AUTOMATIC,
-			    GTK_POLICY_AUTOMATIC);
 
       gtk_clist_set_column_justification (GTK_CLIST (clist), 1,
 					  GTK_JUSTIFY_RIGHT);
@@ -4062,8 +4067,8 @@ create_clist (void)
 	    }
 	}
 
-      gtk_container_border_width (GTK_CONTAINER (clist), 5);
-      gtk_box_pack_start (GTK_BOX (box2), clist, TRUE, TRUE, 0);
+      gtk_container_border_width (GTK_CONTAINER (scrolled_win), 5);
+      gtk_box_pack_start (GTK_BOX (box2), scrolled_win, TRUE, TRUE, 0);
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
@@ -4427,6 +4432,7 @@ void export_ctree (GtkWidget *widget, GtkCTree *ctree)
   static GtkWidget *export_window = NULL;
   static GtkCTree *export_ctree;
   GtkWidget *vbox;
+  GtkWidget *scrolled_win;
   GtkWidget *button;
   GtkWidget *sep;
   GNode *gnode;
@@ -4459,12 +4465,15 @@ void export_ctree (GtkWidget *widget, GtkCTree *ctree)
       export_ctree = GTK_CTREE (gtk_ctree_new_with_titles (2, 0, title));
       gtk_ctree_set_line_style (export_ctree, GTK_CTREE_LINES_DOTTED);
 
-      gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (export_ctree),
-			  TRUE, TRUE, 0);
+      scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+      gtk_container_add (GTK_CONTAINER (scrolled_win),
+			 GTK_WIDGET (export_ctree));
+      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
+				      GTK_POLICY_AUTOMATIC,
+				      GTK_POLICY_AUTOMATIC);
+      gtk_box_pack_start (GTK_BOX (vbox), scrolled_win, TRUE, TRUE, 0);
       gtk_clist_set_selection_mode (GTK_CLIST (export_ctree),
 				    GTK_SELECTION_EXTENDED);
-      gtk_clist_set_policy (GTK_CLIST (export_ctree), GTK_POLICY_ALWAYS, 
-			    GTK_POLICY_AUTOMATIC);
       gtk_clist_set_column_width (GTK_CLIST (export_ctree), 0, 200);
       gtk_clist_set_column_width (GTK_CLIST (export_ctree), 1, 200);
       gtk_widget_set_usize (GTK_WIDGET (export_ctree), 300, 200);
@@ -4732,6 +4741,7 @@ void create_ctree (void)
   static GtkWidget *window = NULL;
   GtkTooltips *tooltips;
   GtkCTree *ctree;
+  GtkWidget *scrolled_win;
   GtkWidget *vbox;
   GtkWidget *bbox;
   GtkWidget *mbox;
@@ -4866,10 +4876,13 @@ void create_ctree (void)
       gtk_signal_connect_after (GTK_OBJECT (ctree), "scroll_vertical",
 				GTK_SIGNAL_FUNC (after_press), NULL);
       
-      gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (ctree), TRUE, TRUE, 0);
+      scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+      gtk_container_add (GTK_CONTAINER (scrolled_win), GTK_WIDGET (ctree));
+      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
+				      GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+      gtk_container_border_width (GTK_CONTAINER (scrolled_win), 5);
+      gtk_box_pack_start (GTK_BOX (vbox), scrolled_win, TRUE, TRUE, 0);
       gtk_clist_set_selection_mode (GTK_CLIST (ctree), GTK_SELECTION_EXTENDED);
-      gtk_clist_set_policy (GTK_CLIST (ctree), GTK_POLICY_ALWAYS, 
-			    GTK_POLICY_AUTOMATIC);
       gtk_clist_set_column_min_width (GTK_CLIST (ctree), 0, 50);
       gtk_clist_set_column_auto_resize (GTK_CLIST (ctree), 0, TRUE);
       gtk_clist_set_column_width (GTK_CLIST (ctree), 1, 200);
@@ -7997,7 +8010,6 @@ create_main_window (void)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
      		                  GTK_POLICY_AUTOMATIC, 
                                   GTK_POLICY_AUTOMATIC);
-  GTK_WIDGET_UNSET_FLAGS (GTK_SCROLLED_WINDOW (scrolled_window)->vscrollbar, GTK_CAN_FOCUS);
   gtk_box_pack_start (GTK_BOX (box1), scrolled_window, TRUE, TRUE, 0);
 
   box2 = gtk_vbox_new (FALSE, 0);

@@ -2193,6 +2193,13 @@ gdk_event_translate (GdkEvent *event,
     case KeyRelease:
       /* Lookup the string corresponding to the given keysym.
        */
+#ifdef USE_XIM
+      if (buf_len == 0) 
+	{
+	  buf_len = 128;
+	  buf = g_new (gchar, buf_len);
+	}
+#endif
       keysym = GDK_VoidSymbol;
       charcount = XLookupString (&xevent->xkey, buf, 16,
 				 &keysym, &compose);
