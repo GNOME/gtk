@@ -1,3 +1,9 @@
+Mon May 11 07:22:36 1998  Tim Janik  <timj@gtk.org>
+
+	* glib.h: provide G_GNUC_FUNCTION and G_GNUC_PRETTY_FUNCTION to
+	avoid conditionals. unconditionally define NULL, TRUE, FALSE, MAX,
+	MIN, ABS and CLAMP, these macros might be screwed from other headers.
+
 Thu May  7 08:17:28 1998  Tim Janik  <timj@gtk.org>
 	[1-1-0-Merge]
 

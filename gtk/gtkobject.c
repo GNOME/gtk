@@ -1576,46 +1576,40 @@ gtk_object_unref (GtkObject *object)
     }
 }
 
-
-#ifdef G_ENABLE_DEBUG
 static GtkObject *gtk_trace_object = NULL;
 void
-gtk_trace_referencing (gpointer    *o,
+gtk_trace_referencing (GtkObject   *object,
 		       const gchar *func,
-		       guint	   local_frame,
+		       guint	   dummy,
 		       guint	   line,
 		       gboolean	   do_ref)
 {
   gboolean exists;
-  GtkObject *object = (GtkObject*) o;
-
+  
   if (gtk_debug_flags & GTK_DEBUG_OBJECTS)
     {
       g_return_if_fail (object != NULL);
       g_return_if_fail (GTK_IS_OBJECT (object));
-
+      
       exists = g_hash_table_lookup (living_objs_ht, object) != NULL;
       
       if (exists &&
 	  (object == gtk_trace_object ||
 	   gtk_trace_object == (void*)42))
-	printf ("trace: object_%s: (%s:%p)->ref_count=%d%s (%s_f%02d:%d)\n",
-		do_ref ? "ref" : "unref",
-		gtk_type_name (GTK_OBJECT_TYPE (object)),
-		object,
-		object->ref_count,
-		do_ref ? " + 1" : " - 1 ",
-		func,
-		local_frame,
-		line);
-  
-      if (!exists)
-	printf ("trace: object_%s(%p): no such object! (%s_f%02d:%d)\n",
-		do_ref ? "ref" : "unref",
-		object,
-		func,
-		local_frame,
-		line);
+	fprintf (stdout, "trace: object_%s: (%s:%p)->ref_count=%d %s (%s:%d)\n",
+		 do_ref ? "ref" : "unref",
+		 gtk_type_name (GTK_OBJECT_TYPE (object)),
+		 object,
+		 object->ref_count,
+		 do_ref ? "+ 1" : "- 1",
+		 func,
+		 line);
+      else if (!exists)
+	fprintf (stdout, "trace: object_%s(%p): no such object! (%s:%d)\n",
+		 do_ref ? "ref" : "unref",
+		 object,
+		 func,
+		 line);
     }
   
   if (do_ref)
@@ -1623,5 +1617,3 @@ gtk_trace_referencing (gpointer    *o,
   else
     gtk_object_unref (object);
 }
-#endif /* G_ENABLE_DEBUG */
-

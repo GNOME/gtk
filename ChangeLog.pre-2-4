@@ -1,3 +1,12 @@
+Mon May 11 07:20:39 1998  Tim Janik  <timj@gtk.org>
+
+	* configure.in: preserve automake CFLAGS setup.
+
+	* gtk/gtkobject.h (gtk_trace_referencing): compile time check the type
+	of the first argument to be of type GtkObject. unconditionally compile
+	this function. removed __GNUC__ dependancy of the gtk_object_ref and
+	gtk_object_unref macro wrappers for this function.
+
 Sat May  9 16:30:33 BST 1998 Tony Gale  <gale@gtk.org>
 	[1-1-0-Merge]
 
