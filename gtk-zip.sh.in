@@ -5,14 +5,17 @@
 ZIP=/tmp/gtk+-@GTK_VERSION@-`date +%Y%m%d`.zip
 DEVZIP=/tmp/gtk+-dev-@GTK_VERSION@-`date +%Y%m%d`.zip
 cd @prefix@
-
 rm $ZIP
+
+DLLDIR=lib
+[ -f bin/libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll ] && DLLDIR=bin
+
 zip -r $ZIP -@ <<EOF
 COPYING.LIB-2
 etc/gtk-2.0
-lib/libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
-lib/libgdk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
-lib/libgtk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+$DLLDIR/libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+$DLLDIR/libgdk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+$DLLDIR/libgtk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 EOF
 
 zip $ZIP lib/gtk-2.0/@GTK_BINARY_VERSION@/loaders/*.dll lib/gtk-2.0/@GTK_BINARY_VERSION@/immodules/*.dll

@@ -67,13 +67,22 @@ references to the wntab32x library from the makefile before building.
 Libintl
 =======
 
-GTK wants to be built with the GNU "intl" library for
-internationalisation (i18n). Get the version ported to Win32 (not a
-very big deal) from the web site mentioned above. The "intl" library
-as gets built as a DLL called libintl-1.dll. If you don't want any
-i18n stuff, undefine ENABLE_NLS, HAVE_GETTEXT and HAVE_LIBINTL in the
-config.h.win32 file, and remove references to the intl library from
-the makefiles.
+Before building GTK+ you must also have GNU gettext. Get prebuilt
+binaries of gettext-runtime (0.12.1 or newer) from your nearest GNU
+ftp mirror. If you use gcc, you will also have to edit the libintl.h
+file from gettext a tiny bit: Change the
+
+# if __GNUC__ >= 2 && !defined __APPLE_CC__ && (defined __STDC__ || defined __cplusplus)
+
+line to
+
+# if __GNUC__ >= 2 && !defined __APPLE_CC__ && !defined __MINGW32__ && (defined __STDC__ || defined __cplusplus)
+
+around line 102.
+
+If you use libtool, you will also have to copy intl.lib to libintl.a
+so that libtool will find them. Alternatively, use pexports and
+dlltool to generate a gcc import library.
 
 ActiveIMM
 =========
