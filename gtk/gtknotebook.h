@@ -62,6 +62,7 @@ struct _GtkNotebook
   guint click_child : 2;
   guint button : 2;
   guint need_timer : 1;
+  guint child_has_focus : 1;
 };
 
 struct _GtkNotebookClass
@@ -69,7 +70,8 @@ struct _GtkNotebookClass
   GtkContainerClass parent_class;
 
   void (* switch_page)       (GtkNotebook *notebook,
-                              GtkNotebookPage *page);
+                              GtkNotebookPage *page,
+			      gint page_num);
 };
 
 struct _GtkNotebookPage

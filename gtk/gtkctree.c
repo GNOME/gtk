@@ -970,6 +970,7 @@ draw_row (GtkCList     *clist,
   gint i, offset = 0, width, height, pixmap_width = 0, string_width = 0;
   gint xsrc, ysrc, xdest = 0, ydest;
   gboolean need_redraw = TRUE;
+  gboolean draw_pixmap = FALSE;
 
   g_return_if_fail (clist != NULL);
 
@@ -1418,29 +1419,10 @@ draw_row (GtkCList     *clist,
 
 	      if (pixmap_width && xdest + pixmap_width >= rect->x && 
 		  xdest <= rect->x + rect->width)
-		{
-		  if (GTK_CELL_PIXTEXT (clist_row->cell[i])->mask)
-		    {
-		      gdk_gc_set_clip_mask 
-			(fg_gc, GTK_CELL_PIXTEXT (clist_row->cell[i])->mask);
-		      gdk_gc_set_clip_origin (fg_gc, xdest, ydest);
-		    }
-		  gdk_draw_pixmap (clist->clist_window, fg_gc,
-				   GTK_CELL_PIXTEXT 
-				   (clist_row->cell[i])->pixmap, xsrc, ysrc,
-				   xdest, ydest, pixmap_width, height);
+		draw_pixmap = TRUE;
 
-		  if (xdest + pixmap_width > 
-		      clip_rectangle.x + clip_rectangle.width)
-		    gdk_draw_rectangle (clist->clist_window, bg_gc, TRUE, 
-					rect->x + rect->width, ydest + 1, 
-					xdest + pixmap_width - 
-					(rect->x + rect->width), height - 1);
-		}
-
-	      xdest += (GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing +
-			pixmap_width);
 	      break;
+
 	    case  GTK_JUSTIFY_RIGHT:
 	      offset_x = 0;
 	  
@@ -1566,29 +1548,62 @@ draw_row (GtkCList     *clist,
 			 + clist_row->cell[i].horizontal);
 
 	      if (pixmap_width && xdest + pixmap_width >= rect->x && 
-		  xdest <= rect->x + rect->width && xdest >= clip_rectangle.x)
+		  xdest <= rect->x + rect->width)
+		draw_pixmap = TRUE;
+	      break;
+	    default :
+	      break;
+	    }
+
+	  if (draw_pixmap)
+	    {
+	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->mask)
 		{
 		  gdk_gc_set_clip_mask 
 		    (fg_gc, GTK_CELL_PIXTEXT (clist_row->cell[i])->mask);
 		  gdk_gc_set_clip_origin (fg_gc, xdest, ydest);
-		  gdk_draw_pixmap (clist->clist_window, fg_gc,
-				   GTK_CELL_PIXTEXT 
-				   (clist_row->cell[i])->pixmap,
-				   xsrc, ysrc, xdest, ydest, 
-				   pixmap_width, height);
 		}
 	      
-	      xdest -= (GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing +
-			string_width);
-	      break;
-	    default :
-	      break;
+	      if (xdest < clip_rectangle.x)
+		{
+		  xsrc = clip_rectangle.x - xdest;
+		  pixmap_width -= xsrc;
+		  xdest = clip_rectangle.x;
+		}
+	      
+	      if (xdest + pixmap_width >
+		  clip_rectangle.x + clip_rectangle.width)
+		pixmap_width =
+		  (clip_rectangle.x + clip_rectangle.width) - xdest;
+	      
+	      if (ydest < clip_rectangle.y)
+		{
+		  ysrc = clip_rectangle.y - ydest;
+		  height -= ysrc;
+		  ydest = clip_rectangle.y;
+		}
+		  
+	      if (ydest + height > clip_rectangle.y + clip_rectangle.height)
+		height = (clip_rectangle.y + clip_rectangle.height) - ydest;
+
+	      gdk_draw_pixmap (clist->clist_window, fg_gc,
+			       GTK_CELL_PIXTEXT 
+			       (clist_row->cell[i])->pixmap,
+			       xsrc, ysrc, xdest, ydest, 
+			       pixmap_width, height);
 	    }
 
 	  if (string_width)
 	    { 
 	      gint delta;
 		  
+	      if (clist->column[i].justification == GTK_JUSTIFY_RIGHT)
+		xdest -= (GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing +
+			  string_width);
+	      else
+		xdest += (GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing +
+			  pixmap_width);
+
 	      delta = CELL_SPACING - (rect->y - clip_rectangle.y);
 	      if (delta > 0)
 		{
@@ -1641,6 +1656,29 @@ draw_row (GtkCList     *clist,
 					(clist_row->cell[i])->mask);
 		  gdk_gc_set_clip_origin (fg_gc, xdest, ydest);
 		}
+
+	      if (xdest < clip_rectangle.x)
+		{
+		  xsrc = clip_rectangle.x - xdest;
+		  pixmap_width -= xsrc;
+		  xdest = clip_rectangle.x;
+		}
+	      
+	      if (xdest + pixmap_width > 
+		  clip_rectangle.x + clip_rectangle.width)
+		pixmap_width = (clip_rectangle.x + clip_rectangle.width) -
+		  xdest;
+	      
+	      if (ydest < clip_rectangle.y)
+		{
+		  ysrc = clip_rectangle.y - ydest;
+		  height -= ysrc;
+		  ydest = clip_rectangle.y;
+		}
+
+	      if (ydest + height > clip_rectangle.y + clip_rectangle.height)
+		height = (clip_rectangle.y + clip_rectangle.height) - ydest;
+
 	      gdk_draw_pixmap (clist->clist_window, fg_gc,
 			       GTK_CELL_PIXMAP (clist_row->cell[i])->pixmap,
 			       xsrc, ysrc, xdest, ydest, pixmap_width, height);
@@ -1666,7 +1704,29 @@ draw_row (GtkCList     *clist,
 					(clist_row->cell[i])->mask);
 		  gdk_gc_set_clip_origin (fg_gc, xdest, ydest);
 		}
-              
+
+	      if (xdest < clip_rectangle.x)
+		{
+		  xsrc = clip_rectangle.x - xdest;
+		  pixmap_width -= xsrc;
+		  xdest = clip_rectangle.x;
+		}
+
+	      if (xdest + pixmap_width >
+		  clip_rectangle.x + clip_rectangle.width)
+		pixmap_width = (clip_rectangle.x + clip_rectangle.width)
+		  - xdest;
+
+	      if (ydest < clip_rectangle.y)
+		{
+		  ysrc = clip_rectangle.y - ydest;
+		  height -= ysrc;
+		  ydest = clip_rectangle.y;
+		}
+
+	      if (ydest + height > clip_rectangle.y + clip_rectangle.height)
+		height = (clip_rectangle.y + clip_rectangle.height) - ydest;
+
 	      gdk_draw_pixmap (clist->clist_window, fg_gc,
 			       GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap,
 			       xsrc, ysrc, xdest, ydest, pixmap_width, height);

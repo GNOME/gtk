@@ -1,3 +1,14 @@
+Wed Jun 10 22:23:27 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (draw_row): adapted clist pixmap clipping
+
+	* gtk/gtknotebook.h (struct _GtkNotebookClass):
+	* gtk/gtknotebook.c (gtk_real_notebook_switch_page): 
+	added missing argument (according to Joseph Coleman's bug report)
+
+	* gtk/gtknotebook.c (gtk_notebook_set_focus_child): new class
+	function to fix notebook focus handling
+	
 Wed Jun 10 12:57:03 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gdk/gdkcc.c glib/ghash.c glib/glib.h glib/gstring.c
