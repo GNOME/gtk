@@ -1095,7 +1095,8 @@ gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard,
   if (n_targets)
     *n_targets = 0;
       
-  targets = NULL;      
+  if (targets)
+    *targets = NULL;      
 
   data = gtk_clipboard_wait_for_contents (clipboard, gdk_atom_intern ("TARGETS", FALSE));
 

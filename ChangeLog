@@ -1,5 +1,8 @@
 2004-04-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkclipboard.c (gtk_clipboard_wait_for_targets): Correctly
+	initialize targets.  (#139883, John Finlay)
+
 	* gdk/gdkdraw.c (gdk_draw_drawable): Small doc improvement. 
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_get_selected_rows): 
