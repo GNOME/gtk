@@ -947,6 +947,8 @@ xlate_get_for_keyval (GdkFBKeyboard       *kb,
 		      gint                *n_keys)
 {
   g_warning ("xlate_get_for_keyval() NIY");
+  *keys=NULL;
+  *n_keys=0;
   return FALSE;
 }
 
@@ -958,6 +960,8 @@ xlate_get_for_keycode (GdkFBKeyboard       *kb,
 		       gint                *n_entries)
 {
   g_warning ("xlate_get_for_keycode() NIY");
+  *keys=NULL;
+  *n_entries=0;
   return FALSE;
 }
 
@@ -1458,6 +1462,8 @@ raw_get_for_keyval (GdkFBKeyboard       *kb,
 		      gint                *n_keys)
 {
   g_warning ("raw_get_for_keyval() NIY");
+  *keys=NULL;
+  *n_keys=0;
   return FALSE;
 }
 
@@ -1469,5 +1475,7 @@ raw_get_for_keycode (GdkFBKeyboard       *kb,
 		       gint                *n_entries)
 {
   g_warning ("raw_get_for_keycode() NIY");
+  *keys=NULL;
+  *n_entries=0;
   return FALSE;
 }

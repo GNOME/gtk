@@ -1,3 +1,17 @@
+2002-03-20  Alex Larsson  <alexl@redhat.com>
+
+	Patches from Carlo E. Prelz <fluido@fluido.as>
+	Now gtkfb at least compiles and mostly works. The keyboard
+	stuff needs more loving.
+	
+	* gdk/linux-fb/gdkkeyboard-fb.c (xlate_get_for_keyval,
+	xlate_get_for_keycode, raw_get_for_keyval, raw_get_for_keycode):
+	At least set the out parameters for these calls.
+
+	* gdk/linux-fb/gdkmain-fb.c:
+	(gdk_pointer_grab_info_libgtk_only, gdk_keyboard_grab_info_libgtk_only):
+	Implement new functions.
+	
 Wed Mar 20 19:00:03 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_set_text): Short-circuit
