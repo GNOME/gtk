@@ -1,3 +1,18 @@
+Fri Jun  6 11:07:33 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (event_window_still_viewable): 
+	Before delivering an event to a widget, check that
+	(if relevant), the event's window is still viewable.
+	(#105642, Dennis Björklund)
+
+	* gdk/gdkwindow.c (_gdk_window_destroy_hierarchy): 
+	NULL out private->parent, since after destruction
+	it might not be valid any more.
+
+	* gdk/gdkwindow.c (gdk_window_is_viewable): Fix some
+	accesses before g_return_val_if_fail(). Treat 
+	DESTROYED windows as unmapped.
+
 Thu Jun  5 09:28:03 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c: Recompute unconditionally in

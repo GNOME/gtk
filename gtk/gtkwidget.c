@@ -3040,11 +3040,59 @@ gtk_widget_send_expose (GtkWidget *widget,
   return gtk_widget_event_internal (widget, event);
 }
 
+static gboolean
+event_window_is_still_viewable (GdkEvent *event)
+{
+  /* Check that we think the event's window is viewable before
+   * delivering the event, to prevent suprises. We do this here
+   * at the last moment, since the event may have been queued
+   * up behind other events, held over a recursive main loop, etc.
+   */
+  switch (event->type)
+    {
+    case GDK_EXPOSE:
+    case GDK_MOTION_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_KEY_PRESS:
+    case GDK_ENTER_NOTIFY:
+    case GDK_PROXIMITY_IN:
+    case GDK_SCROLL:
+      return event->any.window && gdk_window_is_viewable (event->any.window);
+
+#if 0
+    /* The following events are the second half of paired events;
+     * we always deliver them to deal with widgets that clean up
+     * on the second half.
+     */
+    case GDK_BUTTON_RELEASE:
+    case GDK_KEY_RELEASE:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_PROXIMITY_OUT:
+#endif      
+      
+    default:
+      /* Remaining events would make sense on an not-viewable window,
+       * or don't have an associated window.
+       */
+      return TRUE;
+    }
+}
+
 static gint
 gtk_widget_event_internal (GtkWidget *widget,
 			   GdkEvent  *event)
 {
   gboolean return_val = FALSE;
+
+  /* We check only once for is-still-visible; if someone
+   * hides the window in on of the signals on the widget,
+   * they are responsible for returning TRUE to terminate
+   * handling.
+   */
+  if (!event_window_is_still_viewable (event))
+    return TRUE;
 
   g_object_ref (widget);
 
