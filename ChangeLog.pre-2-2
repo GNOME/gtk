@@ -1,3 +1,13 @@
+Sat Jan  9 17:36:20 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (ALL_LINGUAS): Added cs to ALL_LINGUAS.
+
+Sat Jan  9 17:27:49 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_populate):
+	Mark another string for internationalization.
+	[ Stanislav Brabec <utx@k332.feld.cvut.cz> ]
+
 Sat Jan  9 14:02:08 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktooltips.c (gtk_tooltips_force_window): Set

@@ -1430,10 +1430,9 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
       if (fs->selection_entry)
 	{
-	  sel_text = g_new (char, strlen (cmpl_reference_position (cmpl_state)) +
-			    sizeof ("Selection: "));
-	  strcpy (sel_text, "Selection: ");
-	  strcat (sel_text, cmpl_reference_position (cmpl_state));
+	  sel_text = g_strconcat (_("Selection: "),
+				  cmpl_reference_position (cmpl_state),
+				  NULL);
 
 	  gtk_label_set_text (GTK_LABEL (fs->selection_text), sel_text);
 	  g_free (sel_text);
