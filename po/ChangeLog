@@ -1,3 +1,8 @@
+2000-03-14  Tor Lillqvist  <tml@iki.fi>
+
+	* makefile.cygwin: Fix typo: Italian uses ISO-8859-1, not -2. Add
+	en_GB.
+
 2000-03-13  Pablo Saratxaga <pablo@mandrakesoft.com>
 	* lt.po: Updated Lithuanian file
 

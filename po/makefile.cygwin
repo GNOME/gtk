@@ -19,7 +19,7 @@ endif
 
 # uk (Ukrainian) is skipped, as native2ascii doesn't know the KOI8_U 
 # encoding, sigh. Or is it suffuciently similar to KOI8_R?
-LANGUAGES= $(basename $(basename $(wildcard $(addsuffix .po,ca cs da de el es et eu fi fr ga gl hr hu it ja ko nl no pl pt pt_BR ru sk sl sv tr wa zh_CN.GB2312 zh_TW.Big5))))
+LANGUAGES= $(basename $(basename $(wildcard $(addsuffix .po,ca cs da de el en_GB es et eu fi fr ga gl hr hu it ja ko nl no pl pt pt_BR ru sk sl sv tr wa zh_CN.GB2312 zh_TW.Big5))))
 
 ################################################################
 
@@ -52,6 +52,9 @@ de.jpo: de.po
 el.jpo: el.po
 	native2ascii -encoding 8859_7 el.po el.jpo
 
+en_GB.jpo: en_GB.po
+	native2ascii -encoding 8859_1 en_GB.po en_GB.jpo
+
 es.jpo: es.po
 	native2ascii -encoding 8859_1 es.po es.jpo
 
@@ -80,7 +83,7 @@ hu.jpo: hu.po
 	native2ascii -encoding 8859_2 hu.po hu.jpo
 
 it.jpo: it.po
-	native2ascii -encoding 8859_2 it.po it.jpo
+	native2ascii -encoding 8859_1 it.po it.jpo
 
 ja.jpo: ja.po
 	native2ascii -encoding EUC-JP ja.po ja.jpo
