@@ -1,3 +1,11 @@
+1998-04-14  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gdk/gdkwindow.c (gdk_window_xid_at): Fix the problem introduced
+	by whoever thought that randomly changing ints to unsigned int
+	without reviewing the code was a good idea.  It is, btw not
+	mentioned in the ChangeLog as usual, but I know it was not Elliot
+	the culprit this time. 
+
 Mon Apr 13 19:16:22 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.0.0

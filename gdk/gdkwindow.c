@@ -65,18 +65,18 @@ gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y,
    Display *disp;
    Window *list=NULL;
    Window child=0,parent_win=0,root_win=0;
-   int i;
-   guint num;
-   int wx,wy;
-   guint ww,wh,wb,wd;
 
+   int i;
+   unsigned int ww, wh, wb, wd, num;
+   int wx,wy;
+   
    window=(GdkWindow*)&gdk_root_parent;
    private=(GdkWindowPrivate*)window;
    disp=private->xdisplay;
    if (!XGetGeometry(disp,base,&root_win,&wx,&wy,&ww,&wh,&wb,&wd))
      return 0;
    wx+=bx;wy+=by;
-   if (!((x>=wx)&&(y>=wy)&&(x<(wx+ww))&&(y<(wy+wh))))
+   if (!((x>=wx)&&(y>=wy)&&(x<(int)(wx+ww))&&(y<(int)(wy+wh))))
      return 0;
    if (!XQueryTree(disp,base,&root_win,&parent_win,&list,&num))
      return base;
