@@ -1,12 +1,13 @@
 # This is the Czech locale definition for Gtk+.
-# Copyright (C) 1998 Free Software Foundation, Inc.
+# Copyright (C) 1999 Free Software Foundation, Inc.
 # Stanislav Brabec <utx@k332.feld.cvut.cz>, 1998.
+# Jiøí Pavlovský <pavlovsk@ff.cuni.cz>, 1998.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.12\n"
+"Project-Id-Version: gtk+ 1.2.3\n"
 "POT-Creation-Date: 1999-05-10 22:42-0500\n"
-"PO-Revision-Date: 1999-01-06 13:55+01:00\n"
+"PO-Revision-Date: 1999-05-25 00:02+02:00\n"
 "Last-Translator: Stanislav Brabec <utx@k332.feld.cvut.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -39,7 +40,7 @@ msgstr "Modrá:"
 
 #: gtk/gtkcolorsel.c:219
 msgid "Opacity:"
-msgstr "Neprùhlednost:"
+msgstr "Krytí:"
 
 #. The OK button
 #: gtk/gtkcolorsel.c:1672 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
@@ -56,7 +57,7 @@ msgstr "Zru¹it"
 
 #: gtk/gtkcolorsel.c:1683
 msgid "Help"
-msgstr "Pomoc"
+msgstr "Nápovìda"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:418
@@ -71,7 +72,7 @@ msgstr "Soubory"
 #: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1461
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Neèitelný adresáø: %s"
+msgstr "Adresáø %s je neèitelný."
 
 #: gtk/gtkfilesel.c:539
 msgid "Create Dir"
@@ -97,7 +98,7 @@ msgstr "Chyba"
 #. close button
 #: gtk/gtkfilesel.c:740 gtk/gtkinputdialog.c:354
 msgid "Close"
-msgstr "Zavøit"
+msgstr "Zavøít"
 
 #: gtk/gtkfilesel.c:815
 msgid "Create Directory"
@@ -128,7 +129,7 @@ msgstr "Výbìr: "
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
-msgstr "Tvùrce:"
+msgstr "Písmolijna:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
@@ -140,15 +141,15 @@ msgstr "Øez:"
 
 #: gtk/gtkfontsel.c:213
 msgid "Slant:"
-msgstr "Sklon:"
+msgstr "Druh sklonu:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr "Nastavte øez:"
+msgstr "Kresebná ¹íøka:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
-msgstr "Pøidejte styl:"
+msgstr "Upøesnìní stylu:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
@@ -160,19 +161,19 @@ msgstr "Velikost v bodech:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr "Rozli¹ení X:"
+msgstr "Horizontální rozli¹ení:"
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr "Rozli¹ení Y:"
+msgstr "Vertikální rozli¹ení:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
-msgstr "Rozpal:"
+msgstr "Typ dle ¹íøky:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr "Prùmìrná ¹írka:"
+msgstr "Prùmìrná ¹íøka:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
@@ -186,7 +187,7 @@ msgstr "Vlastnosti písma"
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
-msgstr "®ádaná hodnota"
+msgstr "Po¾adovaná hodnota"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
@@ -235,7 +236,7 @@ msgstr "Informace o písmu"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr "®ádané jméno písma:"
+msgstr "Po¾adované jméno písma:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
@@ -244,7 +245,7 @@ msgstr "Souèasné jméno písma:"
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr "Je dostupno %i písem ve %i stylech."
+msgstr "Poèet dostupných písem/stylù je %i/%i."
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
@@ -269,7 +270,7 @@ msgstr "Pøepoèítaná bitová mapa"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
-msgstr "normální"
+msgstr "obyèejný"
 
 #: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1950
 msgid "italic"
@@ -277,7 +278,7 @@ msgstr "kurzíva"
 
 #: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1951
 msgid "oblique"
-msgstr "tuèný"
+msgstr "sklonìný"
 
 #: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1952
 msgid "reverse italic"
@@ -285,7 +286,7 @@ msgstr "obrácená kurzíva"
 
 #: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1953
 msgid "reverse oblique"
-msgstr "obrácený tuèný"
+msgstr "obrácenì sklonìný"
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
 msgid "other"
@@ -293,31 +294,31 @@ msgstr "jiný"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
-msgstr "[M]"
+msgstr "[P©]"
 
 #: gtk/gtkfontsel.c:1232
 msgid "[C]"
-msgstr "[C]"
+msgstr "[PB]"
 
 #: gtk/gtkfontsel.c:1782
 msgid "The selected font is not available."
-msgstr "Zvolené písmo není dostupné."
+msgstr "Vybrané písmo není dostupné."
 
 #: gtk/gtkfontsel.c:1788
 msgid "The selected font is not a valid font."
-msgstr "Zvolené písmo není platným písmem."
+msgstr "Vybrané písmo není platným písmem."
 
 #: gtk/gtkfontsel.c:1846
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Toto je 2bytové písmo a nemusí být zobrazeno správnì."
+msgstr "Toto je dvoubajtové písmo a nemusí být zobrazeno správnì."
 
 #: gtk/gtkfontsel.c:1938 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
-msgstr "(neznámý)"
+msgstr "(neznámá)"
 
 #: gtk/gtkfontsel.c:1949
 msgid "roman"
-msgstr "normální"
+msgstr "stojatý"
 
 #: gtk/gtkfontsel.c:1961
 msgid "proportional"
@@ -329,11 +330,11 @@ msgstr "pevná ¹íøka"
 
 #: gtk/gtkfontsel.c:1963
 msgid "char cell"
-msgstr "znaková buòka"
+msgstr "pevný blok"
 
 #: gtk/gtkfontsel.c:2163
 msgid "Font: (Filter Applied)"
-msgstr "Písmo: (filtr pou¾it)"
+msgstr "Písmo: (pou¾it filtr)"
 
 #: gtk/gtkfontsel.c:2639
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
@@ -345,7 +346,7 @@ msgstr "Pou¾ít"
 
 #: gtk/gtkfontsel.c:3496
 msgid "Font Selection"
-msgstr "Volba písma"
+msgstr "Výbìr písma"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
@@ -414,11 +415,11 @@ msgstr "Tlak"
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
-msgstr "Sklon X"
+msgstr "Horizontální sklon"
 
 #: gtk/gtkinputdialog.c:504
 msgid "Y Tilt"
-msgstr "Sklon Y"
+msgstr "Vertikální sklon"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
@@ -441,17 +442,17 @@ msgstr "Strana %u"
 #: gtk/gtkrc.c:1531
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Nebyl nalezen obrázek v pixmap_path: \"%s\" øádek %d"
+msgstr "Obrázek \"%s\" (øádek %d) nebyl nalezen v pixmap_path."
 
 #: gtk/gtkrc.c:1534
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Nebyl nalezen obrázek v pixmap_path: \"%s\""
+msgstr "Obrázek \"%s\" nebyl nalezen v pixmap_path."
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Nebyl nalezen pøípojný modul v module_path: \"%s\","
+msgstr "Pøípojný modul \"%s\" nebyl nalezen v module_path."
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
