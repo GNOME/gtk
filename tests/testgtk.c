@@ -2472,6 +2472,8 @@ create_spins (void)
 						  5.0, 0.0);
       spinner = gtk_spin_button_new (adj, 0, 0);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+      gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
+				       GTK_SHADOW_NONE);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
 
       vbox2 = gtk_vbox_new (FALSE, 0);
@@ -2485,6 +2487,8 @@ create_spins (void)
 						  5.0, 0.0);
       spinner = gtk_spin_button_new (adj, 0, 0);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+      gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
+				       GTK_SHADOW_ETCHED_IN);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
       
       vbox2 = gtk_vbox_new (FALSE, 0);
@@ -2498,6 +2502,8 @@ create_spins (void)
 						  1.0, 100.0, 0.0);
       spinner = gtk_spin_button_new (adj, 0, 0);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+      gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
+				       GTK_SHADOW_IN);
       gtk_widget_set_usize (spinner, 55, 0);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
 

@@ -152,6 +152,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 {
   spin_button->adjustment = NULL;
   spin_button->panel = NULL;
+  spin_button->shadow_type = GTK_SHADOW_OUT;
   spin_button->timer = 0;
   spin_button->climb_rate = 0.0;
   spin_button->timer_step = 0.0;
@@ -364,11 +365,12 @@ gtk_spin_button_paint (GtkWidget    *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      gtk_draw_shadow (widget->style, spin->panel,
-		       GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-		       0, 0, ARROW_SIZE + 2 * widget->style->klass->xthickness,
-		       widget->requisition.height); 
-
+      if (spin->shadow_type != GTK_SHADOW_NONE)
+	gtk_draw_shadow (widget->style, spin->panel,
+			 GTK_STATE_NORMAL, spin->shadow_type,
+			 0, 0, 
+			 ARROW_SIZE + 2 * widget->style->klass->xthickness,
+			 widget->requisition.height); 
       gtk_spin_button_draw_arrow (spin, GTK_ARROW_UP);
       gtk_spin_button_draw_arrow (spin, GTK_ARROW_DOWN);
 
@@ -1124,10 +1126,25 @@ gtk_spin_button_insert_text (GtkEditable *editable,
 
 void
 gtk_spin_button_set_wrap (GtkSpinButton  *spin_button,
-                         gint            wrap)
+			  gint            wrap)
 {
   g_return_if_fail (spin_button != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
   spin_button->wrap = (wrap != 0);
+}
+
+void
+gtk_spin_button_set_shadow_type (GtkSpinButton *spin_button,
+				 GtkShadowType  shadow_type)
+{
+  g_return_if_fail (spin_button != NULL);
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+
+  if (shadow_type != spin_button->shadow_type)
+    {
+      spin_button->shadow_type = shadow_type;
+      if (GTK_WIDGET_DRAWABLE (spin_button))
+	gdk_window_clear (spin_button->panel);
+    }
 }
