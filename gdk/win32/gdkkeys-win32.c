@@ -370,11 +370,13 @@ update_keymap (void)
 		    }
 		  else
 		    {
+#if 0
 		      GDK_NOTE (EVENTS, g_print ("ToAsciiEx returns %d "
 						 "for vk:%02x, sc:%02x%s%s\n",
 						 k, vk, scancode,
 						 (shift&0x1 ? " shift" : ""),
 						 (shift&0x2 ? " altgr" : "")));
+#endif
 		    }
 		}
 	      if (*ksymp == 0)
@@ -642,9 +644,10 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (group < 4, FALSE);
   
+#if 0
   GDK_NOTE (EVENTS, g_print ("gdk_keymap_translate_keyboard_state: keycode=%#x state=%#x group=%d\n",
 			     hardware_keycode, state, group));
-
+#endif
   if (keyval)
     *keyval = 0;
   if (effective_group)
@@ -738,8 +741,10 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   if (keyval)
     *keyval = tmp_keyval;
 
+#if 0
   GDK_NOTE (EVENTS, g_print ("...group=%d level=%d cmods=%#x keyval=%s\n",
 			     group, shift_level, tmp_modifiers, gdk_keyval_name (tmp_keyval)));
+#endif
 
   return tmp_keyval != GDK_VoidSymbol;
 }

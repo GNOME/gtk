@@ -62,7 +62,7 @@ static void gdk_display_manager_get_property (GObject                *object,
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-GdkDisplay *default_display = NULL;
+static GdkDisplay *default_display = NULL;
 
 GType
 gdk_display_manager_get_type (void)

@@ -411,6 +411,7 @@ EXPORTS
 	gdk_text_height
 	gdk_text_measure
 	gdk_text_property_to_text_list
+	gdk_text_property_to_text_list_for_display
 	gdk_text_property_to_utf8_list
 	gdk_text_property_to_utf8_list_for_display
 	gdk_text_width

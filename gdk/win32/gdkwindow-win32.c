@@ -946,7 +946,16 @@ show_window_internal (GdkWindow *window,
    */
   if (!deiconify && !raise && IsWindowVisible (GDK_WINDOW_HWND (window)))
     return;
-
+#if 0 /* Tentative fix for bug #124144. Causes some other problems */
+  if (raise &&
+      private->window_type == GDK_WINDOW_TEMP &&
+      (GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT))
+    {
+      SetWindowPos(GDK_WINDOW_HWND (window), HWND_TOP, 0, 0, 0, 0,
+		   SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE);
+      return;
+    }
+#endif
   /* Other cases */
   
   if (!GDK_WINDOW_IS_MAPPED (window))
@@ -2747,7 +2756,8 @@ void
 gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 				  gboolean   skips_taskbar)
 {
-  LONG extended_style;
+  static GdkWindow *owner = NULL;
+  GdkWindowAttr wa;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -2755,14 +2765,32 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 			   GDK_WINDOW_HWND (window),
 			   skips_taskbar ? "TRUE" : "FALSE"));
 
-  extended_style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-
   if (skips_taskbar)
-    extended_style |= WS_EX_TOOLWINDOW;
-  else
-    extended_style &= ~WS_EX_TOOLWINDOW;
+    {
+      if (owner == NULL)
+	{
+	  wa.window_type = GDK_WINDOW_TEMP;
+	  wa.wclass = GDK_INPUT_OUTPUT;
+	  wa.width = wa.height = 1;
+	  wa.event_mask = 0;
+	  owner = gdk_window_new (NULL, &wa, 0);
+	}
 
-  SetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE, extended_style);
+      SetWindowLong (GDK_WINDOW_HWND (window), GWL_HWNDPARENT,
+		     (long) GDK_WINDOW_HWND (owner));
+
+#if 0 /* Should we also turn off the minimize and maximize buttons? */
+      SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE,
+		     GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE) & ~(WS_MINIMIZEBOX|WS_MAXIMIZEBOX|WS_SYSMENU));
+      SetWindowPos (GDK_WINDOW_HWND (window), NULL, 0, 0, 0, 0,
+		    SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE |
+		    SWP_NOREPOSITION | SWP_NOSIZE | SWP_NOZORDER);
+#endif
+    }
+  else
+    {
+      SetWindowLong (GDK_WINDOW_HWND (window), GWL_HWNDPARENT, 0);
+    }
 }
 
 void

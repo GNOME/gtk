@@ -876,6 +876,11 @@ _gdk_win32_message_to_string (UINT msg)
       CASE (WM_PENWINFIRST);
       CASE (WM_PENWINLAST);
       CASE (WM_APP);
+#ifdef HAVE_WINTAB
+      CASE (WT_PACKET);
+      CASE (WT_CSRCHANGE);
+      CASE (WT_PROXIMITY);
+#endif
 #undef CASE
     default:
       if (msg >= WM_HANDHELDFIRST && msg <= WM_HANDHELDLAST)
@@ -923,7 +928,6 @@ _gdk_win32_gdkregion_to_string (const GdkRegion *rgn)
 gchar *
 _gdk_win32_drawable_description (GdkDrawable *d)
 {
-  GdkVisual *v;
   gint width, height, depth;
 
   gdk_drawable_get_size (d, &width, &height);
