@@ -1,5 +1,10 @@
 2004-10-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaboutdialog.h: 
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_set_logo_icon_name)
+	(gtk_about_dialog_get_logo_icon_name): Support named icons as 
+	logos.  (#156378, James Henstridge)
+
 	* gtk/gtkdialog.c (gtk_dialog_set_alternative_button_order): Fix the 
 	doc formatting.
 

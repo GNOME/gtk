@@ -100,6 +100,9 @@ void                   gtk_about_dialog_set_translator_credits (GtkAboutDialog  
 GdkPixbuf             *gtk_about_dialog_get_logo               (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_logo               (GtkAboutDialog  *about,
 								GdkPixbuf       *logo);
+G_CONST_RETURN gchar  *gtk_about_dialog_get_logo_icon_name     (GtkAboutDialog  *about);
+void                   gtk_about_dialog_set_logo_icon_name     (GtkAboutDialog  *about,
+								const gchar     *icon_name);
 
 typedef void (* GtkAboutDialogActivateLinkFunc) (GtkAboutDialog *about,
 						 const gchar    *link,

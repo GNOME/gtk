@@ -102,7 +102,8 @@ enum
   PROP_DOCUMENTERS,
   PROP_TRANSLATOR_CREDITS,
   PROP_ARTISTS,
-  PROP_LOGO
+  PROP_LOGO,
+  PROP_LOGO_ICON_NAME
 };
 
 static void                 gtk_about_dialog_finalize       (GObject            *object);
@@ -271,6 +272,14 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("Logo"),
 							P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
 							GDK_TYPE_PIXBUF,
+							G_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+				   PROP_LOGO_ICON_NAME,
+				   g_param_spec_string ("logo_icon_name",
+							P_("Logo Icon Name"),
+							P_("A named icon to use as the logo for the about box."),
+							NULL,
 							G_PARAM_READWRITE));
 
   /* Style properties */
@@ -448,6 +457,9 @@ gtk_about_dialog_set_property (GObject      *object,
     case PROP_TRANSLATOR_CREDITS:
       gtk_about_dialog_set_translator_credits (about, g_value_get_string (value));
       break;
+    case PROP_LOGO_ICON_NAME:
+      gtk_about_dialog_set_logo_icon_name (about, g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -499,7 +511,21 @@ gtk_about_dialog_get_property (GObject    *object,
       g_value_set_boxed (value, priv->artists);
       break;
     case PROP_LOGO:
-      g_value_set_object (value, gtk_image_get_pixbuf (GTK_IMAGE (priv->logo_image)));
+      if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_PIXBUF)
+	g_value_set_object (value, gtk_image_get_pixbuf (GTK_IMAGE (priv->logo_image)));
+      else
+	g_value_set_object (value, NULL);
+      break;
+    case PROP_LOGO_ICON_NAME:
+      if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_ICON_NAME)
+	{
+	  gchar *icon_name;
+
+	  gtk_image_get_icon_name (GTK_IMAGE (priv->logo_image), &icon_name, NULL);
+	  g_value_set_string (value, icon_name);
+	}
+      else
+	g_value_set_string (value, NULL);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1217,7 +1243,10 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
 
   priv = (GtkAboutDialogPrivate *)about->private_data;
 
-  return gtk_image_get_pixbuf (GTK_IMAGE (priv->logo_image));
+  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_PIXBUF)
+    return gtk_image_get_pixbuf (GTK_IMAGE (priv->logo_image));
+  else
+    return NULL;
 }
 
 static GtkIconSet *
@@ -1260,6 +1289,11 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
 
   priv = (GtkAboutDialogPrivate *)about->private_data;
 
+  g_object_freeze_notify (G_OBJECT (about));
+
+  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_ICON_NAME)
+    g_object_notify (G_OBJECT (about), "logo_icon_name");
+
   if (logo != NULL) 
     gtk_image_set_from_pixbuf (GTK_IMAGE (priv->logo_image), logo);
   else 
@@ -1279,6 +1313,70 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
     }
 
   g_object_notify (G_OBJECT (about), "logo");
+
+  g_object_thaw_notify (G_OBJECT (about));
+}
+
+/**
+ * gtk_about_dialog_get_logo_icon_name:
+ * @about: a #GtkAboutDialog
+ * 
+ * Returns the icon name displayed as logo in the about dialog.
+ * 
+ * Return value: the icon name displayed as logo. The string is
+ *   owned by the about dialog. If you want to keep a reference
+ *   to it, you have to call g_strdup() on it.
+ *
+ * Since: 2.6
+ **/
+G_CONST_RETURN gchar *
+gtk_about_dialog_get_logo_icon_name (GtkAboutDialog *about)
+{
+  GtkAboutDialogPrivate *priv;
+  gchar *icon_name = NULL;
+  
+  g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
+
+  priv = (GtkAboutDialogPrivate *)about->private_data;
+
+  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_ICON_NAME)
+    gtk_image_get_icon_name (GTK_IMAGE (priv->logo_image), &icon_name, NULL);
+
+  return icon_name;
+}
+
+/**
+ * gtk_about_dialog_set_logo_icon_name:
+ * @about: a #GtkAboutDialog
+ * @icon_name: an icon name, or %NULL
+ * 
+ * Sets the pixbuf to be displayed as logo in 
+ * the about dialog. If it is %NULL, the default
+ * window icon set with gtk_window_set_default_icon()
+ * will be used.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
+				     const gchar    *icon_name)
+{
+  GtkAboutDialogPrivate *priv;
+
+  g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
+
+  priv = (GtkAboutDialogPrivate *)about->private_data;
+
+  g_object_freeze_notify (G_OBJECT (about));
+
+  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_PIXBUF)
+    g_object_notify (G_OBJECT (about), "logo");
+
+  gtk_image_set_from_icon_name (GTK_IMAGE (priv->logo_image), icon_name,
+				GTK_ICON_SIZE_DIALOG);
+  g_object_notify (G_OBJECT (about), "logo_icon_name");
+
+  g_object_thaw_notify (G_OBJECT (about));
 }
 
 static void
