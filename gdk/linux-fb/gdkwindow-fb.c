@@ -869,7 +869,8 @@ gdk_fb_window_move_resize (GdkWindow *window,
 		{
 		  GdkFBDrawingContext fbdc;
 
-		  if (gdk_fb_cursor_region_need_hide (region))
+		  if (gdk_fb_cursor_region_need_hide (old_region) ||
+		      gdk_fb_cursor_region_need_hide (new_region))
 		    {
 		      gdk_fb_cursor_hide ();
 		      handle_cursor = TRUE;
@@ -1160,8 +1161,8 @@ gdk_window_set_transient_for (GdkWindow *window,
   g_return_if_fail (parent != NULL);
   g_return_if_fail (GDK_IS_WINDOW (parent));
   
-  g_return_if_fail (private->parent == gdk_parent_root);
-  g_return_if_fail (GDK_WINDOW_OBJECT (parent)->parent == gdk_parent_root);
+  g_return_if_fail ((GdkWindow *)private->parent == gdk_parent_root);
+  g_return_if_fail ((GdkWindow *)GDK_WINDOW_OBJECT (parent)->parent == gdk_parent_root);
   
   root->children = g_list_remove (root->children, window);
 

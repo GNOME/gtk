@@ -1,3 +1,10 @@
+2000-11-28  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_fb_window_move_resize):
+	The cursor should be hidden if it is part of either the
+	source or destination region. Not only if it is in both.
+	(gdk_window_set_transient_for): Silence warnings.
+
 2000-11-28  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/mifillarc.c (miFillArcSliceSetup):
