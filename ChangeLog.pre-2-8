@@ -1,3 +1,10 @@
+2003-08-04  Tor Lillqvist  <tml@iki.fi
+
+	* gdk/win32/gdkevents-win32.c (apply_filters): Fix braino:
+	actually use the passed-in filter list. The function also needs a
+	GdkWindow parameter, as filter functions expect
+	GdkEvent::any.window to be valid. (#119034, Hans Breuer)
+
 2003-08-03  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkscreen-x11.c (gdk_screen_get_n_monitors): 
