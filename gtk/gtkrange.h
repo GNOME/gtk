@@ -132,8 +132,6 @@ void           gtk_range_default_hmotion        (GtkRange      *range,
 void           gtk_range_default_vmotion        (GtkRange      *range,
 						 gint           xdelta,
 						 gint           ydelta);
-gfloat         gtk_range_calc_value             (GtkRange      *range,
-						 gint           position);
 
 
 #ifdef __cplusplus

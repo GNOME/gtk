@@ -579,13 +579,6 @@ gtk_range_default_vmotion (GtkRange *range,
     }
 }
 
-gfloat
-gtk_range_calc_value (GtkRange *range,
-		      gint      position)
-{
-  return 0.0;
-}
-
 
 static void
 gtk_range_finalize (GtkObject *object)
