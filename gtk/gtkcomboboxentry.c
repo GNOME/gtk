@@ -135,6 +135,22 @@ gtk_combo_box_entry_contents_changed (GtkEntry *entry,
 }
 
 /* public API */
+
+/**
+ * gtk_combo_box_entry_new:
+ * @model: A #GtkTreeModel.
+ * @text_column: A column in @model to get the strings from.
+ *
+ * Creates a new #GtkComboBoxEntry which has a #GtkEntry as child and a list
+ * of strings as popup. You can get the #GtkEntry from a #GtkComboBoxEntry
+ * using GTK_ENTRY (GTK_BIN (combo_box_entry)->child). To add and remove
+ * strings from the list, just modify @model using it's data manipulation
+ * API.
+ *
+ * Return value: A new #GtkComboBoxEntry.
+ *
+ * Since: 2.4
+ */
 GtkWidget *
 gtk_combo_box_entry_new (GtkTreeModel *model,
                          gint          text_column)
@@ -170,6 +186,17 @@ gtk_combo_box_entry_new (GtkTreeModel *model,
   return ret;
 }
 
+/**
+ * gtk_combo_box_entry_get_text_column:
+ * @entry_box: A #GtkComboBoxEntry.
+ *
+ * Returns the column which @entry_box is using to get the strings from.
+ * This is the same column which got passed during construction.
+ *
+ * Return value: A column in the data source model of @entry_box.
+ *
+ * Since: 2.4
+ */
 gint
 gtk_combo_box_entry_get_text_column (GtkComboBoxEntry *entry_box)
 {

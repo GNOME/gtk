@@ -2227,6 +2227,8 @@ gtk_combo_box_cell_layout_clear_attributes (GtkCellLayout   *layout,
  * Creates a new #GtkComboBox with the model initialized to @model.
  *
  * Return value: A new #GtkComboBox.
+ *
+ * Since: 2.4
  */
 GtkWidget *
 gtk_combo_box_new (GtkTreeModel *model)
@@ -2242,6 +2244,17 @@ gtk_combo_box_new (GtkTreeModel *model)
   return GTK_WIDGET (combo_box);
 }
 
+/**
+ * gtk_combo_box_set_wrap_width:
+ * @combo_box: A #GtkComboBox.
+ * @width: Preferred number of columns.
+ *
+ * Sets the wrap width of @combo_box to be @width. The wrap width is basically
+ * the preferred number of columns when you want to the popup to be layed out
+ * in a table.
+ *
+ * Since: 2.4
+ */
 void
 gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
                               gint         width)
@@ -2254,6 +2267,17 @@ gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
   gtk_combo_box_relayout (combo_box);
 }
 
+/**
+ * gtk_combo_box_set_row_span_column:
+ * @combo_box: A #GtkComboBox.
+ * @row_span: A column in the model passed during construction.
+ *
+ * Sets the column with row span information for @combo_box to be @row_span.
+ * The row span column contains integers which indicate how many rows
+ * an item should span.
+ *
+ * Since: 2.4
+ */
 void
 gtk_combo_box_set_row_span_column (GtkComboBox *combo_box,
                                    gint         row_span)
@@ -2270,6 +2294,17 @@ gtk_combo_box_set_row_span_column (GtkComboBox *combo_box,
   gtk_combo_box_relayout (combo_box);
 }
 
+/**
+ * gtk_combo_box_set_column_span_column:
+ * @combo_box: A #GtkComboBox.
+ * @column_span: A column in the model passed during construction.
+ *
+ * Sets the column with column span information for @combo_box to be
+ * @column_span. The column span column contains integers which indicate
+ * how many columns an item should span.
+ *
+ * Since: 2.4
+ */
 void
 gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
                                       gint         column_span)
@@ -2286,6 +2321,16 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
   gtk_combo_box_relayout (combo_box);
 }
 
+/**
+ * gtk_combo_box_get_active:
+ * @combo_box: A #GtkComboBox.
+ *
+ * Returns the index of the currently active item.
+ *
+ * Return value: An integer which is the index of the currently active item.
+ *
+ * Since: 2.4
+ */
 gint
 gtk_combo_box_get_active (GtkComboBox *combo_box)
 {
@@ -2294,6 +2339,15 @@ gtk_combo_box_get_active (GtkComboBox *combo_box)
   return combo_box->priv->active_item;
 }
 
+/**
+ * gtk_combo_box_set_active:
+ * @combo_box: A #GtkComboBox.
+ * @index: An index in the model passed during construction.
+ *
+ * Sets the active item of @combo_box to be the item at @index.
+ *
+ * Since: 2.4
+ */
 void
 gtk_combo_box_set_active (GtkComboBox *combo_box,
                           gint         index)
@@ -2347,6 +2401,16 @@ gtk_combo_box_set_active (GtkComboBox *combo_box,
   g_signal_emit_by_name (combo_box, "changed", NULL, NULL);
 }
 
+/**
+ * gtk_combo_box_get_model
+ * @combo_box: A #GtkComboBox.
+ *
+ * Returns the #GtkTreeModel which is acting as data source for @combo_box.
+ *
+ * Return value: A #GtkTreeModel which was passed during construction.
+ *
+ * Since: 2.4
+ */
 GtkTreeModel *
 gtk_combo_box_get_model (GtkComboBox *combo_box)
 {
@@ -2357,6 +2421,20 @@ gtk_combo_box_get_model (GtkComboBox *combo_box)
 
 
 /* convenience API for simple text combos */
+
+/**
+ * gtk_combo_box_new_text:
+ *
+ * Convenience function which constructs a new text combo box, which is a
+ * #GtkComboBox just displaying strings. If you use this function to create
+ * a text combo box, you only want to manipulate it's data source with the
+ * following convenience functions: gtk_combo_box_append_text(),
+ * gtk_combo_box_insert_text() and gtk_combo_box_prepend_text().
+ *
+ * Return value: A new text combo box.
+ *
+ * Since: 2.4
+ */
 GtkWidget *
 gtk_combo_box_new_text (void)
 {
@@ -2377,6 +2455,17 @@ gtk_combo_box_new_text (void)
   return combo_box;
 }
 
+/**
+ * gtk_combo_box_append_text:
+ * @combo_box: A #GtkComboBox constructed using gtk_combo_box_new_text().
+ * @text: A string.
+ *
+ * Appends @string to the list of strings stored in @combo_box. Note that
+ * you can only use this function with combo boxes constructed with
+ * gtk_combo_box_new_text().
+ *
+ * Since: 2.4
+ */
 void
 gtk_combo_box_append_text (GtkComboBox *combo_box,
                            const gchar *text)
@@ -2394,6 +2483,18 @@ gtk_combo_box_append_text (GtkComboBox *combo_box,
   gtk_list_store_set (store, &iter, 0, text, -1);
 }
 
+/**
+ * gtk_combo_box_insert_text:
+ * @combo_box: A #GtkComboBox constructed using gtk_combo_box_new_text().
+ * @position: An index to insert @text.
+ * @text: A string.
+ *
+ * Inserts @string at @position in the list of strings stored in @combo_box.
+ * Note that you can only use this function with combo boxes constructed
+ * with gtk_combo_box_new_text().
+ *
+ * Since: 2.4
+ */
 void
 gtk_combo_box_insert_text (GtkComboBox *combo_box,
                            gint         position,
@@ -2413,6 +2514,17 @@ gtk_combo_box_insert_text (GtkComboBox *combo_box,
   gtk_list_store_set (store, &iter, 0, text, -1);
 }
 
+/**
+ * gtk_combo_box_prepend_text:
+ * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text().
+ * @text: A string.
+ *
+ * Prepends @string to the list of strings stored in @combo_box. Note that
+ * you can only use this function with combo boxes constructed with
+ * gtk_combo_box_new_text().
+ *
+ * Since: 2.4
+ */
 void
 gtk_combo_box_prepend_text (GtkComboBox *combo_box,
                             const gchar *text)
