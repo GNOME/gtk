@@ -1,3 +1,13 @@
+Sun Aug  5 09:48:08 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklist.c (gtk_list_clear_items): Fix
+	problem with selecting a new focus child.
+
+	* gtk/gtklist.c (gtk_list_clear_items): Clear 
+	list->undo/list_focus_child after unparenting
+	child, since unparenting the child can result
+	in list->last_focus_child being set. (#58024)
+
 Tue Jul 24 16:41:12 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in po/ta.po (ALL_LINGUAS): Remove dummy ta po - Tamil
