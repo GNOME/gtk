@@ -1547,7 +1547,7 @@ gdk_event_translate (GdkEvent *event,
 
       is_AltGr_key = FALSE;
       event->key.type = ((xevent->message == WM_KEYDOWN
-			  | xevent->message == WM_SYSKEYDOWN) ?
+			  || xevent->message == WM_SYSKEYDOWN) ?
 			 GDK_KEY_PRESS : GDK_KEY_RELEASE);
       event->key.window = window;
       event->key.time = xevent->time;

@@ -30,6 +30,24 @@
 #define STRICT			/* We want strict type checks */
 #include <windows.h>
 
+/* Make up for some minor mingw32 lossage */
+
+/* PS_JOIN_MASK is missing from the mingw32 headers */
+#ifndef PS_JOIN_MASK
+#define PS_JOIN_MASK (PS_JOIN_BEVEL|PS_JOIN_MITER|PS_JOIN_ROUND)
+#endif
+
+/* CLR_INVALID is missing */
+#ifndef CLR_INVALID
+#define CLR_INVALID CLR_NONE
+#endif
+
+/* MB_CUR_MAX is missing */
+#ifndef MB_CUR_MAX
+extern int *__imp___mb_cur_max;
+#define MB_CUR_MAX (*__imp___mb_cur_max)
+#endif
+
 #include <time.h>
 #include <gdk/gdktypes.h>
 

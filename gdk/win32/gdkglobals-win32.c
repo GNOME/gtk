@@ -31,7 +31,7 @@
 guint             gdk_debug_flags = 0;
 HWND              gdk_root_window;
 HWND              gdk_leader_window;
-GdkWindowPrivate  gdk_root_parent = { { NULL, }, NULL, };
+GDKVAR GdkWindowPrivate  gdk_root_parent = { { NULL, }, NULL, };
 HDC		  gdk_DC;
 HINSTANCE	  gdk_DLLInstance;
 HINSTANCE	  gdk_ProgInstance;

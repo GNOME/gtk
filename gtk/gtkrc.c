@@ -50,7 +50,7 @@
 #define lstat stat
 #endif
 
-#ifdef _MSC_VER
+#ifdef NATIVE_WIN32
 #include <io.h>
 #endif
 

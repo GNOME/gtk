@@ -70,7 +70,14 @@
 #include <ctype.h>
 
 #include "gdk/gdk.h"
+/* Protect against the CHARSET struct in Win32 */
+#if GDK_WINDOWING == GDK_WINDOWING_WIN32
+# define CHARSET CHARSETstruct
+#endif
 #include "gdkx.h"
+#if GDK_WINDOWING == GDK_WINDOWING_WIN32
+# undef CHARSET
+#endif
 #include "gdk/gdkkeysyms.h"
 
 #include "gtkbutton.h"

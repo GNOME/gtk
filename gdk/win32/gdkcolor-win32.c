@@ -33,10 +33,6 @@
 
 #include "gdkx.h"
 
-#ifdef _MSC_VER
-#define strcasecmp stricmp
-#endif
-
 static gint  gdk_colormap_match_color (GdkColormap *cmap,
 				       GdkColor    *color,
 				       const gchar *available);

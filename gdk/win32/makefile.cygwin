@@ -1,0 +1,89 @@
+## Makefile for building the GDK DLL with egcs on cygwin
+## Use: make -f makefile.cygwin install
+
+# Change this to wherever you want to install the DLL. This directory
+# should be in your PATH.
+BIN = bin
+
+# Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
+# We use the wntab32x.lib archive library directly (copy it as libwntab32x.a).
+WTKIT = ../../../wtkit126
+
+OPTIMIZE = -g -O
+
+################################################################
+
+# Nothing much configurable below
+
+CC = gcc -mno-cygwin -mpentium
+
+CP = cp
+LD = ld
+INSTALL = install
+
+GLIB_VER=1.3
+GTK_VER=1.3
+
+GLIB = ../../../glib
+CFLAGS = -g -I. -I../.. -I$(WTKIT)/include -I$(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\" -DNEAR= -DFAR=
+
+all: \
+	../../config.h	\
+	gdk-$(GTK_VER).dll
+
+install : all
+	$(INSTALL) gdk-$(GTK_VER).dll $(BIN)
+
+gdk_OBJECTS = \
+	gdk.o		\
+	gdkcc.o		\
+	gdkcolor.o	\
+	gdkcursor.o	\
+	gdkdnd.o	\
+	gdkdraw.o	\
+	gdkevents.o	\
+	gdkfont.o	\
+	gdkgc.o		\
+	gdkglobals.o	\
+	gdkim.o		\
+	gdkimage.o	\
+	gdkinput.o	\
+	gdkpixmap.o	\
+	gdkproperty.o	\
+	gdkrgb.o	\
+	gdkrectangle.o	\
+	gdkregion.o	\
+	gdkselection.o	\
+	gdkvisual.o	\
+	gdkwindow.o	\
+	gdkxid.o
+
+../../config.h : ../../config.h.win32
+	$(CP) ../../config.h.win32 ../../config.h
+
+gdkres.o : rc/gdk.rc
+	windres --include-dir rc rc/gdk.rc gdkres.o
+
+gdk-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def gdkres.o libwntab32x.a
+	$(GLIB)/build-dll gdk $(GTK_VER) gdk.def $(gdk_OBJECTS) -L $(GLIB) -lglib-$(GLIB_VER) -L . -lwntab32x -lgdi32 -luser32 -lshell32 -lole32 -luuid $(LDFLAGS) gdkres.o
+
+libwntab32x.a : $(WTKIT)/lib/i386/wntab32x.lib
+	cp $(WTKIT)/lib/i386/wntab32x.lib libwntab32x.a
+
+.c.o :
+	$(CC) $(CFLAGS) -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<
+
+gdkrgb.c : ../gdkrgb.c
+	$(CP) ../gdkrgb.c .
+
+gdkrectangle.c : ../gdkrectangle.c
+	$(CP) ../gdkrectangle.c .
+
+testgdk.exe : testgdk.o gdk-$(GTK_VER).dll
+	$(CC) $(CFLAGS) -o $@ testgdk.o -L . -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) $(LDFLAGS)
+
+testgdk.o : testgdk.c
+	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testgdk\" testgdk.c
+
+clean:
+	-rm *.exe *.o *.dll *.a *.exp *.base

@@ -1460,20 +1460,24 @@ gdk_input_exit (void)
       HCTX *hctx = (HCTX *) tmp_list->data;
       BOOL result;
 
+#ifdef _MSC_VER
       /* For some reason WTEnable and/or WTClose tend to crash here.
        * Protect with __try/__except to avoid a message box.
        */
       __try {
+#endif /* _MSC_VER */
 #if 0
         WTEnable (*hctx, FALSE);
 #endif
 	result = WTClose (*hctx);
+#ifdef _MSC_VER
       }
       __except (/* GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ? */
                 EXCEPTION_EXECUTE_HANDLER /*: 
                 EXCEPTION_CONTINUE_SEARCH */) {
 	result = FALSE;
       }
+#endif /* _MSC_VER */
       if (!result)
 	g_warning ("gdk_input_exit: Closing Wintab context %#x failed", *hctx);
       g_free (hctx);

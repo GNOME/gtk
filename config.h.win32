@@ -1,6 +1,6 @@
 /* config.h.win32.  Handcrafted for Microsoft C */
 
-#ifndef _MSC_VER
+#if ! (defined(_MSC_VER) || defined(__GNUC__))
 #error Unrecognized Win32 compiler, edit config.h.win32 by hand
 #endif
 
@@ -16,7 +16,11 @@
 
 /* Define if you have alloca, as a function or macro.  */
 #define HAVE_ALLOCA 1
+#ifdef _MSC_VER
 #define alloca _alloca
+#elif defined (__GNUC__)
+#define alloca __builtin_alloca
+#endif
 
 /* Define if you have <alloca.h> and it should be used (not on Ultrix).  */
 /* #undef HAVE_ALLOCA_H */
@@ -121,7 +125,7 @@
 
 /* Define if you have the strcasecmp function.  */
 #define HAVE_STRCASECMP 1
-#define strcasecmp stricmp
+#define strcasecmp _stricmp
 
 /* Define if you have the strchr function.  */
 #define HAVE_STRCHR 1
@@ -166,7 +170,9 @@
 #define HAVE_WCHAR_H 1
 
 /* Define if you have the <wctype.h> header file.  */
+#ifdef _MSC_VER
 #define HAVE_WCTYPE_H 1
+#endif /* _MSC_VER */
 
 /* Define if you have the i library (-li).  */
 /* #undef HAVE_LIBI */

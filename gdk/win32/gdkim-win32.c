@@ -26,10 +26,10 @@
 
 #if HAVE_CONFIG_H
 #  include <config.h>
-#  if STDC_HEADERS
-#    include <string.h>
-#  endif
 #endif
+
+#include <stdlib.h>
+#include <string.h>
 
 #include <gdk/gdk.h>
 #include <gdk/gdki18n.h>
@@ -172,10 +172,10 @@ gdk_wcstombs (const GdkWChar *src)
       src_alt = g_new (wchar_t, wcsl+1);
       for (i = wcsl; i >= 0; i--)
 	src_alt[i] = src[i];
-      mbsl = WideCharToMultiByte (CP_ACP, 0, src_alt, wcsl,
+      mbsl = WideCharToMultiByte (CP_OEMCP, 0, src_alt, wcsl,
 				  NULL, 0, NULL, NULL);
       mbstr = g_new (guchar, mbsl + 1);
-      if (!WideCharToMultiByte (CP_ACP, 0, src_alt, wcsl,
+      if (!WideCharToMultiByte (CP_OEMCP, 0, src_alt, wcsl,
 				mbstr, mbsl, NULL, NULL))
 	{
 	  g_warning ("gdk_wcstombs: WideCharToMultiByte failed");
@@ -219,9 +219,9 @@ gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
       gint i, wcsl;
       wchar_t *wcstr;
 
-      wcsl = MultiByteToWideChar (CP_ACP, 0, src, -1, NULL, 0);
-      wcstr = g_new (wchar_t, wcsl + 1);
-      if (!MultiByteToWideChar (CP_ACP, 0, src, -1, wcstr, wcsl))
+      wcsl = MultiByteToWideChar (CP_OEMCP, 0, src, -1, NULL, 0);
+      wcstr = g_new (wchar_t, wcsl);
+      if (!MultiByteToWideChar (CP_OEMCP, 0, src, -1, wcstr, wcsl))
 	{
 	  g_warning ("gdk_mbstowcs: MultiByteToWideChar failed");
 	  g_free (wcstr);
@@ -229,11 +229,11 @@ gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
 	}
       if (wcsl > dest_max)
 	wcsl = dest_max;
-      for (i = 0; i < wcsl; i++)
+      for (i = 0; i < wcsl && wcstr[i]; i++)
 	dest[i] = wcstr[i];
       g_free (wcstr);
 
-      return wcsl;
+      return i;
     }
   else
     {

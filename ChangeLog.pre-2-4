@@ -1,3 +1,32 @@
+1999-04-25  Tor Lillqvist  <tml@iki.fi>
+
+	Support added for building using a GNU toolchain on Win32,
+	gcc -mno-cygwin (egcs-1.1.2) on cygwin-b20.1.
+
+	* gdk/win32/makefile.cygwin gtk/makefile.cygwin: New files.
+	* config.h.win32: Changes for gcc.
+	* gdk/gdkrectangle.c: Include gdk.h as <gdk/gdk.h>.
+	* gdk/gdkcolor.c: config.h.win32 already defines strcasecmp.
+	* gdk/win32/gdkconfig.h: Only the MS compiler has wctype.h.
+	* gdk/win32/gdkdnd.c: Protect (unused) OLE2 stuff better.
+	Protect shl stuff unavaiilable with mingw32 headers.
+	* gdk/win32/gdkevents.c: Fix typo.
+	* gdk/win32/gdkglobals.c: Use GDKVAR here also for gcc.
+	* gdk/win32/gdkim.c: Use OEM code page for multibyte chars. (?)
+	* gdk/win32/gdkinput.c: Use __try __except only with the MS compiler.
+	* gdk/win32/gdkprivate.h: Make up for some stuff missing from
+	the mingw32 headers.
+	* gdk/win32/makefile.msc: Use latest Wintab kit and glib.
+	* gtk/gtkfilesel.c: Include <glib.h> early, to get stat->_stat
+	definition on Win32. Test for NATIVE_WIN32, not _MSC_VER.
+	* gtk/gtkfontsel.c: Protect CHARSET redefinition on Win32.
+	Test for NATIVE_WIN32, not _MSC_VER.
+	* gtk/gtkmain.c: No use warning about developer version on Win32,
+	there aren't any non-developer versions anyhow.
+	* gtk/gtkrc.c: Test for NATIVE_WIN32, not _MSC_VER.
+	* gtk/makefile.msc: Use pthread from another directory. Minor other
+	changes. 
+
 Wed Apr 21 14:20:22 1999  George Lebl  <jirka@5z.com>
 
         * gdk/gdkwindow.c: (gdk_window_remove_filter) correctly remove the

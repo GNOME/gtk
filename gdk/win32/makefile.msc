@@ -6,7 +6,7 @@
 BIN = C:\bin
 
 # Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
-WTKIT = ..\..\..\wtkit125
+WTKIT = ..\..\..\wtkit126
 
 # Full optimization:
 OPTIMIZE = -Ox
@@ -17,18 +17,18 @@ OPTIMIZE = -Ox
 
 # Nothing much configurable below
 
-# cl -? described the options
+# cl -? describes the options
 CC = cl -G5 -GF $(OPTIMIZE) -W3 -MD -nologo
 
 LDFLAGS = /link /machine:ix86 # /debug /debugtype:cv
 INSTALL = copy
 TOUCH = copy makefile.msc+nul
 
-GLIB_VER=1.2
+GLIB_VER=1.3
 GTK_VER=1.3
 
-GLIB = ..\..\..\glib-$(GLIB_VER)
-CFLAGS = -I. -I..\.. -I$(WTKIT)\include -I$(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\" # -DMULTIPLE_WINDOW_CLASSES
+GLIB = ..\..\..\glib
+CFLAGS = -I. -I..\.. -I$(WTKIT)\include -I$(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
 
 all: \
 	..\..\config.h	\

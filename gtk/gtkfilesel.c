@@ -26,6 +26,10 @@
 
 #include "config.h"
 
+#include <glib.h>		/* To get stat->_stat redefinition
+				 *  for mingw32
+				 */
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -71,14 +75,17 @@
 #define STRICT
 #include <windows.h>
 
-#ifdef _MSC_VER
+#ifdef NATIVE_WIN32
 #include <direct.h>
+#include <io.h>
+#define mkdir(p,m) _mkdir(p)
 #ifndef S_ISDIR
 #define S_ISDIR(mode) ((mode)&_S_IFDIR)
 #endif
-#define mkdir(path,mode) mkdir(path)
-#endif
-#endif
+
+#endif /* NATIVE_WIN32 */
+
+#endif /* WIN32 */
 
 #define DIR_LIST_WIDTH   180
 #define DIR_LIST_HEIGHT  180

@@ -31,9 +31,14 @@
 
 #include <string.h>
 
+#ifdef OLE2_DND
 #include <ole2.h>
+#endif
+
+#ifdef _MSC_VER
 #include <shlobj.h>
 #include <shlguid.h>
+#endif
 
 #include <gdk/gdk.h>
 #include "gdkx.h"
@@ -143,7 +148,7 @@ gdk_drag_context_new        (void)
   return (GdkDragContext *)result;
 }
 
-#if OLE2_DND
+#ifdef OLE2_DND
 
 typedef struct {
   IDropTarget idt;
@@ -265,7 +270,7 @@ m_drop (IDropTarget __RPC_FAR *This,
   GDK_NOTE (DND, g_print ("m_drop\n"));
   return E_UNEXPECTED;
 }
- 
+
 HRESULT STDMETHODCALLTYPE
 m_query_interface_source (IDropSource __RPC_FAR *This,
 			  /* [in] */ REFIID riid,
@@ -408,7 +413,7 @@ source_context_new (void)
 
 #endif /* OLE2_DND */
 
-void            
+void
 gdk_drag_context_ref (GdkDragContext *context)
 {
   g_return_if_fail (context != NULL);
@@ -416,7 +421,7 @@ gdk_drag_context_ref (GdkDragContext *context)
   ((GdkDragContextPrivate *)context)->ref_count++;
 }
 
-void            
+void
 gdk_drag_context_unref (GdkDragContext *context)
 {
   GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
@@ -474,6 +479,8 @@ gdk_drag_context_find (gboolean is_source,
 }
 
 #endif
+
+#ifdef _MSC_VER
 
 /* From MS Knowledge Base article Q130698 */
 
@@ -564,6 +571,12 @@ resolve_link(HWND hWnd,
   return SUCCEEDED (hres);
 }
 
+#else
+
+#define resolve_link(hWnd, lpszLinkName, lpszPath, lpszDescription) FALSE
+
+#endif
+
 static GdkFilterReturn
 gdk_dropfiles_filter (GdkXEvent *xev,
 		      GdkEvent  *event,
@@ -642,7 +655,6 @@ gdk_dropfiles_filter (GdkXEvent *xev,
   else
     return GDK_FILTER_CONTINUE;
 }
-		     
 
 /*************************************************************
  ************************** Public API ***********************
@@ -652,17 +664,20 @@ void
 gdk_dnd_init (void)
 {
   HRESULT hres;
-
+#ifdef OLE2_DND
   hres = OleInitialize (NULL);
 
   if (! SUCCEEDED (hres))
     g_error ("OleInitialize failed");
-}		      
+#endif
+}      
 
 void
 gdk_dnd_exit (void)
 {
+#ifdef OLE2_DND
   OleUninitialize ();
+#endif
 }
 
 /* Source side */
@@ -747,7 +762,7 @@ gdk_drag_find_window (GdkDragContext  *context,
     }
 }
 
-gboolean        
+gboolean
 gdk_drag_motion (GdkDragContext *context,
 		 GdkWindow      *dest_window,
 		 GdkDragProtocol protocol,
@@ -780,7 +795,7 @@ gdk_drag_abort (GdkDragContext *context,
 
 /* Destination side */
 
-void             
+void
 gdk_drag_status (GdkDragContext   *context,
 		 GdkDragAction     action,
 		 guint32           time)
@@ -795,19 +810,18 @@ gdk_drop_reply (GdkDragContext   *context,
 {
 }
 
-void             
+void
 gdk_drop_finish (GdkDragContext   *context,
 		 gboolean          success,
 		 guint32           time)
 {
 }
 
-
-void            
+void
 gdk_window_register_dnd (GdkWindow      *window)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *) window;
-#if OLE2_DND
+#ifdef OLE2_DND
   target_drag_context *context;
   HRESULT hres;
 #endif
@@ -824,7 +838,7 @@ gdk_window_register_dnd (GdkWindow      *window)
   gdk_window_add_filter (window, gdk_dropfiles_filter, NULL);
   DragAcceptFiles (private->xwindow, TRUE);
 
-#if OLE2_DND
+#ifdef OLE2_DND
   /* Register for OLE2 d&d */
   context = target_context_new ();
   hres = CoLockObjectExternal ((IUnknown *) &context->idt, TRUE, FALSE);
@@ -848,11 +862,11 @@ gdk_window_register_dnd (GdkWindow      *window)
  * gdk_drag_get_selection:
  *     Returns the selection atom for the current source window
  *   arguments:
- *     
+ *
  *   results:
  *************************************************************/
 
-GdkAtom       
+GdkAtom
 gdk_drag_get_selection (GdkDragContext *context)
 {
   if (context->protocol == GDK_DRAG_PROTO_WIN32_DROPFILES)

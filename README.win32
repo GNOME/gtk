@@ -3,12 +3,15 @@ correct as the Unix/X11 version. For more information about the Win32
 port, see http://www.gimp.org/tml/gimp/win32/ or
 http://www.iki.fi/tml/gimp/win32/ .
 
-As for now, only Microsoft C (the command-line compiler) is
-supported. Before compiling, check the BIN definition in
-gdk\win32\makefile.msc and gtk\makefile.msc. Compile in gdk\win32 and
-gtk with `nmake -f makefile.msc`. Install with `nmake -f makefile.msc
-install`. Cygwin ("mingw32", i.e. gcc -mno-cygwin) support will be
-added later.
+To build GTk+ on Win32, you need either Microsoft compiler and tools,
+or egcs-1.1.2 running under cygwin-b20.1. Before compiling, check the
+BIN definition in gdk\win32\makefile.msc (or makefile.cygwin) and
+gtk\makefile.msc (or makefile.cygwin). Compile in gdk\win32 and gtk
+with `nmake -f makefile.msc` or `make -f makefile.cygwin`.
+
+See the README.win32 file in the GLib distribution for preparations to
+build with egcs on cygwin.
 
 The tablet support uses the Wintab API. The Wintab development kit can
 be downloaded from http://www.pointing.com.
+
