@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-02-24 00:08-0500\n"
-"PO-Revision-Date: 2002-02-01 21:52+0100\n"
+"POT-Creation-Date: 2002-02-25 10:34+0100\n"
+"PO-Revision-Date: 2002-02-25 10:34+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -147,7 +147,7 @@ msgstr "Inte tillräckligt med minne för att läsa in ikonen"
 
 #: gdk-pixbuf/io-ico.c:303
 msgid "Invalid header in icon"
-msgstr ""
+msgstr "Ogiltigt huvud i ikon"
 
 #: gdk-pixbuf/io-ico.c:340
 msgid "Icon has zero width"
@@ -162,9 +162,8 @@ msgid "Compressed icons are not supported"
 msgstr "Komprimerade ikoner stöds inte"
 
 #: gdk-pixbuf/io-ico.c:428
-#, fuzzy
 msgid "Unsupported icon type"
-msgstr "TGA-bildtypen stöds inte"
+msgstr "Ikontypen stöds inte"
 
 #: gdk-pixbuf/io-ico.c:499
 msgid "Not enough memory to load ICO file"
@@ -425,11 +424,11 @@ msgstr "Kan inte allokera TGA-huvudmeny"
 
 #: gdk-pixbuf/io-tga.c:618
 msgid "TGA image has invalid dimensions"
-msgstr ""
+msgstr "TGA-bilden har ogiltiga dimensioner"
 
 #: gdk-pixbuf/io-tga.c:624
 msgid "TGA image comment length is too long"
-msgstr "TGA-bildkommentarlängd är för lång"
+msgstr "Kommentarlängden för TGA-bilden är för lång"
 
 #: gdk-pixbuf/io-tga.c:633 gdk-pixbuf/io-tga.c:647
 msgid "TGA image type not supported"
@@ -516,23 +515,20 @@ msgid "Failed to load TIFF image"
 msgstr "Misslyckades med att läsa in TIFF-bild"
 
 #: gdk-pixbuf/io-wbmp.c:278
-#, fuzzy
 msgid "Image has zero width"
-msgstr "Ikonen har ingen bredd"
+msgstr "Bilden har ingen bredd"
 
 #: gdk-pixbuf/io-wbmp.c:296
-#, fuzzy
 msgid "Image has zero height"
-msgstr "Ikonen har ingen höjd"
+msgstr "Bilden har ingen höjd"
 
 #: gdk-pixbuf/io-wbmp.c:307
-#, fuzzy
 msgid "Not enough memory to load image"
 msgstr "Inte tillräckligt med minne för att läsa in bilden"
 
 #: gdk-pixbuf/io-wbmp.c:365
 msgid "Couldn't save the rest"
-msgstr ""
+msgstr "Kunde inte spara resten"
 
 #: gdk-pixbuf/io-xbm.c:283
 msgid "Invalid XBM file"
@@ -1671,24 +1667,22 @@ msgid "The contents of the entry"
 msgstr "Innehållet i fältet"
 
 #: gtk/gtkentry.c:726
-#, fuzzy
 msgid "Select on focus"
-msgstr "Markeringsgräns"
+msgstr "Markera vid fokus"
 
 #: gtk/gtkentry.c:727
-#, fuzzy
 msgid "Whether to select the contents of an entry when it is focused."
-msgstr "Huruvida fältets innehåll kan redigeras"
+msgstr "Huruvida ett fälts innehåll markeras då fältet får fokus."
 
-#: gtk/gtkentry.c:3806 gtk/gtklabel.c:3163
+#: gtk/gtkentry.c:3809 gtk/gtklabel.c:3211
 msgid "Select All"
 msgstr "Markera allt"
 
-#: gtk/gtkentry.c:3816 gtk/gtklabel.c:3173
+#: gtk/gtkentry.c:3819 gtk/gtklabel.c:3221
 msgid "Input Methods"
 msgstr "Inmatningsmetoder"
 
-#: gtk/gtkentry.c:3826 gtk/gtktextview.c:6299
+#: gtk/gtkentry.c:3829 gtk/gtktextview.c:6360
 msgid "_Insert Unicode control character"
 msgstr "_Infoga Unicode-styrtecken"
 
@@ -1709,14 +1703,12 @@ msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "Huruvida knappar för skapande/manipulering av filer ska visas."
 
 #: gtk/gtkfilesel.c:549
-#, fuzzy
 msgid "Select multiple"
-msgstr "Markera allt"
+msgstr "Välj flera"
 
 #: gtk/gtkfilesel.c:550
-#, fuzzy
 msgid "Whether to allow multiple files to be selected."
-msgstr "Huruvida knappar för skapande/manipulering av filer ska visas."
+msgstr "Huruvida flera filer får väljas."
 
 #: gtk/gtkfilesel.c:685
 msgid "Folders"
@@ -1822,9 +1814,9 @@ msgid "Error deleting file \"%s\": %s"
 msgstr "Fel vid borttagning av filen \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1517
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr "Fel vid borttagning av filen \"%s\": %s"
+msgstr "Verkligen ta bort filen \"%s\"?"
 
 #: gtk/gtkfilesel.c:1522
 msgid "Delete File"
@@ -1863,9 +1855,9 @@ msgid "Rename File"
 msgstr "Byt namn på fil"
 
 #: gtk/gtkfilesel.c:1656
-#, fuzzy, c-format
+#, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Byt namn på fil"
+msgstr "Byt namn på filen \"%s\" till:"
 
 #: gtk/gtkfilesel.c:1687
 msgid "Rename"
@@ -2324,15 +2316,16 @@ msgid ""
 msgstr "En titel som kan visas av fönsterhanteraren då denna meny tas loss."
 
 #: gtk/gtkmenu.c:260
-#, fuzzy
 msgid "Can change accelerators"
-msgstr "Snabbtangent för menyrad"
+msgstr "Kan ändra snabbtangenter"
 
 #: gtk/gtkmenu.c:261
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu "
 "item."
 msgstr ""
+"Huruvida menysnabbtangenter kan ändras genom att en tangent trycks ovanför "
+"menyposten."
 
 #: gtk/gtkmenubar.c:151
 msgid "Style of bevel around the menubar"
@@ -2344,7 +2337,7 @@ msgstr "Intern utfyllnad"
 
 #: gtk/gtkmenubar.c:159
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr "Mängd kantutrymme mellan skuggan på menyraden och menyobjekten"
+msgstr "Mängd kantutrymme mellan skuggan på menyraden och menyposterna"
 
 #: gtk/gtkmessagedialog.c:104
 msgid "Image/label border"
@@ -2539,7 +2532,7 @@ msgstr "Bredd på handtag"
 #: gtk/gtkrc.c:2253
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr ""
+msgstr "Kan inte hitta inkluderingsfil: \"%s\""
 
 #: gtk/gtkrc.c:2895 gtk/gtkrc.c:2898
 #, c-format
@@ -2976,13 +2969,12 @@ msgid "Number of pixels the cursor can move before dragging"
 msgstr "Antalet bildpunkter markören kan flyttas innan drag"
 
 #: gtk/gtksettings.c:215
-#, fuzzy
 msgid "Font Name"
 msgstr "Typsnittsnamn"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
-msgstr ""
+msgstr "Namn på standardtypsnittet att använda"
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3698,7 +3690,7 @@ msgstr "Synlig markör"
 msgid "If the insertion cursor is shown"
 msgstr "Huruvida insättningsmarkören visas"
 
-#: gtk/gtktextview.c:6290
+#: gtk/gtktextview.c:6351
 msgid "Input _Methods"
 msgstr "Inmatnings_metoder"
 
@@ -4209,12 +4201,11 @@ msgstr "Färg att rita insättningsmarkören med"
 
 #: gtk/gtkwidget.c:1085
 msgid "Cursor line aspect ratio"
-msgstr ""
+msgstr "Proportioner för markörrad"
 
 #: gtk/gtkwidget.c:1086
-#, fuzzy
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr "Färg att rita insättningsmarkören med"
+msgstr "Proportioner att rita insättningsmarkören med"
 
 #: gtk/gtkwindow.c:399
 msgid "Window Type"
@@ -4316,7 +4307,6 @@ msgid "Mode"
 msgstr "Läge"
 
 #: gtk/gtksizegroup.c:243
-#, fuzzy
 msgid ""
 "The directions in which the size group effects the requested sizes of its "
 "component widgets."
@@ -4327,7 +4317,7 @@ msgstr ""
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "Amharisk (EZ+)"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
@@ -4352,12 +4342,12 @@ msgstr "Thailändsk (Trasig)"
 #. ID
 #: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "Tigrigna-Eritreansk (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "Tigrigna-Etiopisk (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:243
