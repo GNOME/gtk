@@ -1,3 +1,10 @@
+Wed Jun 24 08:35:45 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_spin): Added compatibility 
+	code for 1.0.x-like parameters. Changed internal interface of
+	gtk_spin_button_real_spin. Several fixes to avoid emission of
+	"value_changed" where possible.
+
 Tue Jun 23 22:21:33 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk-boxed.defs: s/GkWidget/GtkWidget/
