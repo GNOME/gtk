@@ -1,3 +1,12 @@
+Thu Nov 14 00:33:26 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (attach_widget_screen_changed): Monitor
+	the screen of the attach widget continually, rather than only 
+	setting the screen only on popup (#85710)
+
+	* gtk/gtkmenu.c (gtk_menu_set_screen): Allow %NULL to
+	go back to getting the screen from the attach widget.
+
 Wed Nov 13 17:03:19 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcombo.c: Change so that updates of selection

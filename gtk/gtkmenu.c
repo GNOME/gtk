@@ -529,6 +529,19 @@ gtk_menu_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+static void
+attach_widget_screen_changed (GtkWidget *attach_widget,
+			      GdkScreen *previous_screen,
+			      GtkMenu   *menu)
+{
+  if (gtk_widget_has_screen (attach_widget) &&
+      !g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
+    {
+      gtk_window_set_screen (GTK_WINDOW (menu->toplevel),
+			     gtk_widget_get_screen (attach_widget));
+    }
+}
+
 void
 gtk_menu_attach_to_widget (GtkMenu	       *menu,
 			   GtkWidget	       *attach_widget,
@@ -548,7 +561,7 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
     {
       g_warning ("gtk_menu_attach_to_widget(): menu already attached to %s",
 		 g_type_name (G_TYPE_FROM_INSTANCE (data->attach_widget)));
-      return;
+     return;
     }
   
   g_object_ref (menu);
@@ -556,6 +569,11 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   
   data = g_new (GtkMenuAttachData, 1);
   data->attach_widget = attach_widget;
+  
+  g_signal_connect (attach_widget, "screen_changed",
+		    G_CALLBACK (attach_widget_screen_changed), menu);
+  attach_widget_screen_changed (attach_widget, NULL, menu);
+  
   data->detacher = detacher;
   g_object_set_data (G_OBJECT (menu), attach_data_key, data);
   
@@ -600,6 +618,10 @@ gtk_menu_detach (GtkMenu *menu)
     }
   g_object_set_data (G_OBJECT (menu), attach_data_key, NULL);
   
+  g_signal_handlers_disconnect_by_func (data->attach_widget,
+					(gpointer) attach_widget_screen_changed,
+					menu);
+
   data->detacher (data->attach_widget, menu);
   
   if (GTK_WIDGET_REALIZED (menu))
@@ -758,7 +780,6 @@ gtk_menu_popup (GtkMenu		    *menu,
   GtkWidget *parent;
   GdkEvent *current_event;
   GtkMenuShell *menu_shell;
-  GtkMenuAttachData *attach_data;
 
   g_return_if_fail (GTK_IS_MENU (menu));
   
@@ -767,21 +788,6 @@ gtk_menu_popup (GtkMenu		    *menu,
   
   menu_shell->parent_menu_shell = parent_menu_shell;
   
-  if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
-    {
-      /* The screen was not set explicitly, if the menu is
-       * attached to a widget, try to get screen from its 
-       * toplevel window else go with the default
-       */
-      attach_data = g_object_get_data (G_OBJECT (menu), attach_data_key);
-      if (attach_data)
-	{
-	  if (!GTK_WIDGET_REALIZED (menu))
-	  gtk_window_set_screen (GTK_WINDOW (menu->toplevel),
-				 gtk_widget_get_screen (attach_data->attach_widget));
-	}
-    }
-
   /* Find the last viewable ancestor, and make an X grab on it
    */
   parent = GTK_WIDGET (menu);
@@ -2947,19 +2953,30 @@ gtk_menu_hide_all (GtkWidget *widget)
 /**
  * gtk_menu_set_screen:
  * @menu: a #GtkMenu.
- * @screen: a #GtkScreen.
+ * @screen: a #GtkScreen, or %NULL if the screen should be
+ *          determined by the widget the menu is attached to.
  *
  * Sets the #GtkScreen on which the GtkMenu will be displayed.
- * This function can only be called before @menu is realized.
  **/
 void
-gtk_menu_set_screen (GtkMenu *menu, 
+gtk_menu_set_screen (GtkMenu   *menu, 
 		     GdkScreen *screen)
 {
   g_return_if_fail (GTK_IS_MENU (menu));
-  gtk_window_set_screen (GTK_WINDOW (menu->toplevel), 
-			 screen);
+  g_return_if_fail (!screen || GDK_IS_SCREEN (screen));
+
   g_object_set_data (G_OBJECT (menu), "gtk-menu-explicit-screen", screen);
+
+  if (screen)
+    {
+      gtk_window_set_screen (GTK_WINDOW (menu->toplevel), screen);
+    }
+  else
+    {
+      GtkWidget *attach_widget = gtk_menu_get_attach_widget (menu);
+      if (attach_widget)
+	attach_widget_screen_changed (attach_widget, NULL, menu);
+    }
 }
 
 
