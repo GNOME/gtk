@@ -1,0 +1,3 @@
+X_CFLAGS = @x_cflags@
+X_LDFLAGS = @x_ldflags@
+X_LIBS = @x_libs@

@@ -1,0 +1,250 @@
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+#include "gtkcheckmenuitem.h"
+#include "gtklabel.h"
+#include "gtksignal.h"
+
+
+#define CHECK_MENU_ITEM_CLASS(w)  GTK_CHECK_MENU_ITEM_CLASS (GTK_OBJECT (w)->klass)
+
+
+enum {
+  TOGGLED,
+  LAST_SIGNAL
+};
+
+
+static void gtk_check_menu_item_class_init          (GtkCheckMenuItemClass *klass);
+static void gtk_check_menu_item_init                (GtkCheckMenuItem      *check_menu_item);
+static void gtk_check_menu_item_draw                (GtkWidget             *widget,
+						     GdkRectangle          *area);
+static gint gtk_check_menu_item_expose              (GtkWidget             *widget,
+						     GdkEventExpose        *event);
+static void gtk_check_menu_item_activate            (GtkMenuItem           *menu_item);
+static void gtk_check_menu_item_draw_indicator      (GtkCheckMenuItem      *check_menu_item,
+						     GdkRectangle          *area);
+static void gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem      *check_menu_item,
+						     GdkRectangle          *area);
+
+
+static GtkMenuItemClass *parent_class = NULL;
+static gint check_menu_item_signals[LAST_SIGNAL] = { 0 };
+
+
+guint
+gtk_check_menu_item_get_type ()
+{
+  static guint check_menu_item_type = 0;
+
+  if (!check_menu_item_type)
+    {
+      GtkTypeInfo check_menu_item_info =
+      {
+        "GtkCheckMenuItem",
+        sizeof (GtkCheckMenuItem),
+        sizeof (GtkCheckMenuItemClass),
+        (GtkClassInitFunc) gtk_check_menu_item_class_init,
+        (GtkObjectInitFunc) gtk_check_menu_item_init,
+        (GtkArgFunc) NULL,
+      };
+
+      check_menu_item_type = gtk_type_unique (gtk_menu_item_get_type (), &check_menu_item_info);
+    }
+
+  return check_menu_item_type;
+}
+
+GtkWidget*
+gtk_check_menu_item_new ()
+{
+  return GTK_WIDGET (gtk_type_new (gtk_check_menu_item_get_type ()));
+}
+
+GtkWidget*
+gtk_check_menu_item_new_with_label (const gchar *label)
+{
+  GtkWidget *check_menu_item;
+  GtkWidget *label_widget;
+
+  check_menu_item = gtk_check_menu_item_new ();
+  label_widget = gtk_label_new (label);
+  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
+
+  gtk_container_add (GTK_CONTAINER (check_menu_item), label_widget);
+  gtk_widget_show (label_widget);
+
+  return check_menu_item;
+}
+
+void
+gtk_check_menu_item_set_state (GtkCheckMenuItem *check_menu_item,
+			       gint              state)
+{
+  g_return_if_fail (check_menu_item != NULL);
+  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
+
+  if (check_menu_item->active != state)
+    gtk_menu_item_activate (GTK_MENU_ITEM (check_menu_item));
+}
+
+void
+gtk_check_menu_item_toggled (GtkCheckMenuItem *check_menu_item)
+{
+  gtk_signal_emit (GTK_OBJECT (check_menu_item), check_menu_item_signals[TOGGLED]);
+}
+
+
+static void
+gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
+{
+  GtkObjectClass *object_class;
+  GtkWidgetClass *widget_class;
+  GtkMenuItemClass *menu_item_class;
+
+  object_class = (GtkObjectClass*) klass;
+  widget_class = (GtkWidgetClass*) klass;
+  menu_item_class = (GtkMenuItemClass*) klass;
+
+  parent_class = gtk_type_class (gtk_menu_item_get_type ());
+
+  check_menu_item_signals[TOGGLED] =
+    gtk_signal_new ("toggled",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkCheckMenuItemClass, toggled),
+                    gtk_signal_default_marshaller,
+		    GTK_TYPE_NONE, 0);
+
+  gtk_object_class_add_signals (object_class, check_menu_item_signals, LAST_SIGNAL);
+
+  widget_class->draw = gtk_check_menu_item_draw;
+  widget_class->expose_event = gtk_check_menu_item_expose;
+
+  menu_item_class->activate = gtk_check_menu_item_activate;
+  menu_item_class->toggle_size = 12;
+
+  klass->toggled = NULL;
+  klass->draw_indicator = gtk_real_check_menu_item_draw_indicator;
+}
+
+static void
+gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
+{
+  check_menu_item->active = FALSE;
+}
+
+static void
+gtk_check_menu_item_draw (GtkWidget    *widget,
+			  GdkRectangle *area)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_CLASS (parent_class)->draw)
+    (* GTK_WIDGET_CLASS (parent_class)->draw) (widget, area);
+
+  gtk_check_menu_item_draw_indicator (GTK_CHECK_MENU_ITEM (widget), area);
+}
+
+static gint
+gtk_check_menu_item_expose (GtkWidget      *widget,
+			    GdkEventExpose *event)
+{
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CHECK_MENU_ITEM (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
+    (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+
+  gtk_check_menu_item_draw_indicator (GTK_CHECK_MENU_ITEM (widget), &event->area);
+
+  return FALSE;
+}
+
+static void
+gtk_check_menu_item_activate (GtkMenuItem *menu_item)
+{
+  GtkCheckMenuItem *check_menu_item;
+
+  g_return_if_fail (menu_item != NULL);
+  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
+
+  check_menu_item = GTK_CHECK_MENU_ITEM (menu_item);
+  check_menu_item->active = !check_menu_item->active;
+
+  gtk_check_menu_item_toggled (check_menu_item);
+  gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
+}
+
+static void
+gtk_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
+				    GdkRectangle     *area)
+{
+  g_return_if_fail (check_menu_item != NULL);
+  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
+  g_return_if_fail (CHECK_MENU_ITEM_CLASS (check_menu_item) != NULL);
+
+  if (CHECK_MENU_ITEM_CLASS (check_menu_item)->draw_indicator)
+    (* CHECK_MENU_ITEM_CLASS (check_menu_item)->draw_indicator) (check_menu_item, area);
+}
+
+static void
+gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
+					 GdkRectangle     *area)
+{
+  GtkWidget *widget;
+  GtkStateType state_type;
+  GtkShadowType shadow_type;
+  gint width, height;
+  gint x, y;
+
+  g_return_if_fail (check_menu_item != NULL);
+  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
+
+  if (GTK_WIDGET_DRAWABLE (check_menu_item))
+    {
+      widget = GTK_WIDGET (check_menu_item);
+
+      width = 8;
+      height = 8;
+      x = (GTK_CONTAINER (check_menu_item)->border_width +
+	   widget->style->klass->xthickness + 2);
+      y = (widget->allocation.height - height) / 2;
+
+      gdk_window_clear_area (widget->window, x, y, width, height);
+
+      if (check_menu_item->active ||
+	  (GTK_WIDGET_STATE (check_menu_item) == GTK_STATE_PRELIGHT))
+	{
+	  state_type = GTK_WIDGET_STATE (widget);
+
+	  shadow_type = GTK_SHADOW_IN;
+	  if (check_menu_item->active && (state_type == GTK_STATE_PRELIGHT))
+	    shadow_type = GTK_SHADOW_OUT;
+
+	  gdk_draw_rectangle (widget->window,
+			      widget->style->bg_gc[state_type],
+			      TRUE, x, y, width, height);
+	  gtk_draw_shadow (widget->style, widget->window,
+			   state_type, shadow_type,
+			   x, y, width, height);
+	}
+    }
+}

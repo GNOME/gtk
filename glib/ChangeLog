@@ -1,0 +1,10 @@
+Tue Dec 17 13:14:07 1996  Peter Mattis  <pmattis@charnley.HIP.Berkeley.EDU>
+
+	* glib.h: Changed 'g_return_if_fail' and 'g_return_val_if_fail' to
+	not call 'g_string' but to simply stringify the
+	expression. Calling 'g_string' causes the expression to be
+	expanded which is undesired.
+
+Sun Dec  1 01:30:48 1996  Peter Mattis  <pmattis@charnley.HIP.Berkeley.EDU>
+
+	* Started ChangeLog

@@ -1,0 +1,525 @@
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+#include "gtkfixed.h"
+
+
+static void gtk_fixed_class_init    (GtkFixedClass    *klass);
+static void gtk_fixed_init          (GtkFixed         *fixed);
+static void gtk_fixed_destroy       (GtkObject        *object);
+static void gtk_fixed_map           (GtkWidget        *widget);
+static void gtk_fixed_unmap         (GtkWidget        *widget);
+static void gtk_fixed_realize       (GtkWidget        *widget);
+static void gtk_fixed_unrealize     (GtkWidget        *widget);
+static void gtk_fixed_size_request  (GtkWidget        *widget,
+				     GtkRequisition   *requisition);
+static void gtk_fixed_size_allocate (GtkWidget        *widget,
+				     GtkAllocation    *allocation);
+static void gtk_fixed_paint         (GtkWidget        *widget,
+				     GdkRectangle     *area);
+static void gtk_fixed_draw          (GtkWidget        *widget,
+				     GdkRectangle     *area);
+static gint gtk_fixed_expose        (GtkWidget        *widget,
+				     GdkEventExpose   *event);
+static void gtk_fixed_add           (GtkContainer     *container,
+				     GtkWidget        *widget);
+static void gtk_fixed_remove        (GtkContainer     *container,
+				     GtkWidget        *widget);
+static void gtk_fixed_foreach       (GtkContainer     *container,
+				     GtkCallback      callback,
+				     gpointer         callback_data);
+
+
+static GtkContainerClass *parent_class = NULL;
+
+
+guint
+gtk_fixed_get_type ()
+{
+  static guint fixed_type = 0;
+
+  if (!fixed_type)
+    {
+      GtkTypeInfo fixed_info =
+      {
+	"GtkFixed",
+	sizeof (GtkFixed),
+	sizeof (GtkFixedClass),
+	(GtkClassInitFunc) gtk_fixed_class_init,
+	(GtkObjectInitFunc) gtk_fixed_init,
+	(GtkArgFunc) NULL,
+      };
+
+      fixed_type = gtk_type_unique (gtk_container_get_type (), &fixed_info);
+    }
+
+  return fixed_type;
+}
+
+static void
+gtk_fixed_class_init (GtkFixedClass *class)
+{
+  GtkObjectClass *object_class;
+  GtkWidgetClass *widget_class;
+  GtkContainerClass *container_class;
+
+  object_class = (GtkObjectClass*) class;
+  widget_class = (GtkWidgetClass*) class;
+  container_class = (GtkContainerClass*) class;
+
+  parent_class = gtk_type_class (gtk_container_get_type ());
+
+  object_class->destroy = gtk_fixed_destroy;
+
+  widget_class->map = gtk_fixed_map;
+  widget_class->unmap = gtk_fixed_unmap;
+  widget_class->realize = gtk_fixed_realize;
+  widget_class->unrealize = gtk_fixed_unrealize;
+  widget_class->size_request = gtk_fixed_size_request;
+  widget_class->size_allocate = gtk_fixed_size_allocate;
+  widget_class->draw = gtk_fixed_draw;
+  widget_class->expose_event = gtk_fixed_expose;
+
+  container_class->add = gtk_fixed_add;
+  container_class->remove = gtk_fixed_remove;
+  container_class->foreach = gtk_fixed_foreach;
+}
+
+static void
+gtk_fixed_init (GtkFixed *fixed)
+{
+  GTK_WIDGET_UNSET_FLAGS (fixed, GTK_NO_WINDOW);
+  GTK_WIDGET_SET_FLAGS (fixed, GTK_BASIC);
+ 
+  fixed->children = NULL;
+}
+
+GtkWidget*
+gtk_fixed_new ()
+{
+  GtkFixed *fixed;
+
+  fixed = gtk_type_new (gtk_fixed_get_type ());
+  return GTK_WIDGET (fixed);
+}
+
+void
+gtk_fixed_put (GtkFixed       *fixed,
+               GtkWidget      *widget,
+               gint16         x,
+               gint16         y)
+{
+  GtkFixedChild *child_info;
+
+  g_return_if_fail (fixed != NULL);
+  g_return_if_fail (GTK_IS_FIXED (fixed));
+  g_return_if_fail (widget != NULL);
+
+  child_info = g_new (GtkFixedChild, 1);
+  child_info->widget = widget;
+  child_info->x = x;
+  child_info->y = y;
+
+  gtk_widget_set_parent (widget, GTK_WIDGET (fixed));
+
+  fixed->children = g_list_append (fixed->children, child_info); 
+
+  if (GTK_WIDGET_REALIZED (fixed) && !GTK_WIDGET_REALIZED (widget))
+    gtk_widget_realize (widget);
+
+  if (GTK_WIDGET_MAPPED (fixed) && !GTK_WIDGET_MAPPED (widget))
+    gtk_widget_map (widget);
+
+  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (fixed))
+    gtk_widget_queue_resize (GTK_WIDGET (fixed));
+}
+
+void
+gtk_fixed_move (GtkFixed       *fixed,
+                GtkWidget      *widget,
+                gint16         x,
+                gint16         y)
+{
+  GtkFixedChild *child;
+  GList *children;
+
+  g_return_if_fail (fixed != NULL);
+  g_return_if_fail (GTK_IS_FIXED (fixed));
+  g_return_if_fail (widget != NULL);
+
+  children = fixed->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+
+      if (child->widget == widget)
+        {
+          child->x = x;
+          child->y = y;
+
+          if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (fixed))
+            gtk_widget_queue_resize (GTK_WIDGET (fixed));
+
+          break;
+        }
+    }
+}
+
+static void
+gtk_fixed_destroy (GtkObject *object)
+{
+  GtkFixed *fixed;
+  GtkFixedChild *child;
+  GList *children;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_FIXED (object));
+
+  fixed = GTK_FIXED (object);
+
+  children = fixed->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+
+      child->widget->parent = NULL;
+      gtk_object_unref (GTK_OBJECT (child->widget));
+      gtk_widget_destroy (child->widget);
+      g_free (child);
+    }
+
+  g_list_free (fixed->children);
+
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+}
+
+static void
+gtk_fixed_map (GtkWidget *widget)
+{
+  GtkFixed *fixed;
+  GtkFixedChild *child;
+  GList *children;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_FIXED (widget));
+
+  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  fixed = GTK_FIXED (widget);
+
+  gdk_window_show (widget->window);
+
+  children = fixed->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+
+      if (GTK_WIDGET_VISIBLE (child->widget) &&
+	  !GTK_WIDGET_MAPPED (child->widget))
+	gtk_widget_map (child->widget);
+    }
+}
+
+static void
+gtk_fixed_unmap (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_FIXED (widget));
+
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+}
+
+static void
+gtk_fixed_realize (GtkWidget *widget)
+{
+  GdkWindowAttr attributes;
+  gint attributes_mask;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_FIXED (widget));
+
+  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.x = widget->allocation.x;
+  attributes.y = widget->allocation.y;
+  attributes.width = widget->allocation.width;
+  attributes.height = widget->allocation.height;
+  attributes.wclass = GDK_INPUT_OUTPUT;
+  attributes.visual = gtk_widget_get_visual (widget);
+  attributes.colormap = gtk_widget_get_colormap (widget);
+  attributes.event_mask = gtk_widget_get_events (widget);
+  attributes.event_mask |= GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK;
+
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+
+  widget->window = gdk_window_new (widget->parent->window, &attributes, 
+				   attributes_mask);
+  gdk_window_set_user_data (widget->window, widget);
+
+  widget->style = gtk_style_attach (widget->style, widget->window);
+  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+}
+
+static void
+gtk_fixed_unrealize (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_FIXED (widget));
+
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
+
+  gtk_style_detach (widget->style);
+  gdk_window_destroy (widget->window);
+  widget->window = NULL;
+}
+
+static void
+gtk_fixed_size_request (GtkWidget      *widget,
+			GtkRequisition *requisition)
+{
+  GtkFixed *fixed;  
+  GtkFixedChild *child;
+  GList *children;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_FIXED (widget));
+  g_return_if_fail (requisition != NULL);
+
+  fixed = GTK_FIXED (widget);
+  requisition->width = 0;
+  requisition->height = 0;
+
+  children = fixed->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+
+      if (GTK_WIDGET_VISIBLE (child->widget))
+	{
+          gtk_widget_size_request (child->widget, &child->widget->requisition);
+
+          requisition->height = MAX (requisition->height,
+                                     child->y +
+                                     child->widget->requisition.height);
+          requisition->width = MAX (requisition->width,
+                                    child->x +
+                                    child->widget->requisition.width);
+	}
+    }
+
+  requisition->height += GTK_CONTAINER (fixed)->border_width * 2;
+  requisition->width += GTK_CONTAINER (fixed)->border_width * 2;
+}
+
+static void
+gtk_fixed_size_allocate (GtkWidget     *widget,
+			 GtkAllocation *allocation)
+{
+  GtkFixed *fixed;
+  GtkFixedChild *child;
+  GtkAllocation child_allocation;
+  GList *children;
+  guint16 border_width;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_FIXED(widget));
+  g_return_if_fail (allocation != NULL);
+
+  fixed = GTK_FIXED (widget);
+
+  widget->allocation = *allocation;
+  if (GTK_WIDGET_REALIZED (widget))
+    gdk_window_move_resize (widget->window,
+			    allocation->x, 
+			    allocation->y,
+			    allocation->width, 
+			    allocation->height);
+
+  border_width = GTK_CONTAINER (fixed)->border_width;
+  
+  children = fixed->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+      
+      if (GTK_WIDGET_VISIBLE (child->widget))
+	{
+	  child_allocation.x = child->x + border_width;
+	  child_allocation.y = child->y + border_width;
+	  child_allocation.width = child->widget->requisition.width;
+	  child_allocation.height = child->widget->requisition.height;
+	  gtk_widget_size_allocate (child->widget, &child_allocation);
+	}
+    }
+}
+
+static void
+gtk_fixed_paint (GtkWidget    *widget,
+		 GdkRectangle *area)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_FIXED (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+      gdk_window_clear_area (widget->window,
+			     area->x, area->y,
+			     area->width, area->height);
+}
+
+static void
+gtk_fixed_draw (GtkWidget    *widget,
+		GdkRectangle *area)
+{
+  GtkFixed *fixed;
+  GtkFixedChild *child;
+  GdkRectangle child_area;
+  GList *children;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_FIXED (widget));
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      fixed = GTK_FIXED (widget);
+      gtk_fixed_paint (widget, area);
+
+      children = fixed->children;
+      while (children)
+	{
+	  child = children->data;
+	  children = children->next;
+
+	  if (gtk_widget_intersect (child->widget, area, &child_area))
+	    gtk_widget_draw (child->widget, &child_area);
+	}
+    }
+}
+
+static gint
+gtk_fixed_expose (GtkWidget      *widget,
+		  GdkEventExpose *event)
+{
+  GtkFixed *fixed;
+  GtkFixedChild *child;
+  GdkEventExpose child_event;
+  GList *children;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_FIXED (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      fixed = GTK_FIXED (widget);
+
+      child_event = *event;
+
+      children = fixed->children;
+      while (children)
+	{
+	  child = children->data;
+	  children = children->next;
+
+	  if (GTK_WIDGET_NO_WINDOW (child->widget) &&
+	      gtk_widget_intersect (child->widget, &event->area, 
+				    &child_event.area))
+	    gtk_widget_event (child->widget, (GdkEvent*) &child_event);
+	}
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_fixed_add (GtkContainer *container,
+	       GtkWidget    *widget)
+{
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_FIXED (container));
+  g_return_if_fail (widget != NULL);
+
+  gtk_fixed_put (GTK_FIXED (container), widget, 0, 0);
+}
+
+static void
+gtk_fixed_remove (GtkContainer *container,
+		  GtkWidget    *widget)
+{
+  GtkFixed *fixed;
+  GtkFixedChild *child;
+  GList *children;
+
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_FIXED (container));
+  g_return_if_fail (widget != NULL);
+
+  fixed = GTK_FIXED (container);
+
+  children = fixed->children;
+  while (children)
+    {
+      child = children->data;
+
+      if (child->widget == widget)
+	{
+	  gtk_widget_unparent (widget);
+
+	  fixed->children = g_list_remove_link (fixed->children, children);
+	  g_list_free (children);
+	  g_free (child);
+
+	  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
+	    gtk_widget_queue_resize (GTK_WIDGET (container));
+
+	  break;
+	}
+
+      children = children->next;
+    }
+}
+
+static void
+gtk_fixed_foreach (GtkContainer *container,
+		   GtkCallback   callback,
+		   gpointer      callback_data)
+{
+  GtkFixed *fixed;
+  GtkFixedChild *child;
+  GList *children;
+
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_FIXED (container));
+  g_return_if_fail (callback != NULL);
+
+  fixed = GTK_FIXED (container);
+
+  children = fixed->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+
+      (* callback) (child->widget, callback_data);
+    }
+}

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+sed -f makecursors.sed $1 > .makecursors.tmp
+awk '{printf "%s = %s,\n", $1, $2}' .makecursors.tmp
+rm .makecursors.tmp

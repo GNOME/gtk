@@ -1,0 +1,69 @@
+# pixmap_path "<dir 1>:<dir 2>:<dir 3>:..."
+#
+# style <name> [= <name>]
+# {
+#   <option>
+# }
+#
+# widget <widget_set> style <style_name>
+# widget_class <widget_class_set> style <style_name>
+
+pixmap_path "."
+
+style "window"
+{
+#  bg_pixmap[NORMAL] = "warning.xpm"
+}
+
+style "scale"
+{
+  fg[NORMAL] = { 1.0, 0, 0 }
+  bg_pixmap[NORMAL] = "<parent>"
+}
+
+style "button"
+{
+  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
+  bg[PRELIGHT] = { 0, 0, 0.75 }
+}
+
+style "main_button" = "button"
+{
+  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
+  bg[PRELIGHT] = { 0.75, 0, 0 }
+}
+
+style "toggle_button" = "button"
+{
+  fg[NORMAL] = { 1.0, 0, 0 }
+  fg[ACTIVE] = { 1.0, 0, 0 }
+  bg_pixmap[NORMAL] = "<parent>"
+}
+
+style "text"
+{
+  bg_pixmap[NORMAL] = "marble.xpm"
+  fg[NORMAL] = { 1.0, 1.0, 1.0 }
+}
+
+style "ruler"
+{
+  font = "-adobe-helvetica-medium-r-normal--*-80-*-*-*-*-*-*"
+}
+
+style "curve"
+{
+  fg[NORMAL] = { 58000, 0, 0 }			# red
+}
+
+widget_class "GtkWindow" style "window"
+widget_class "GtkDialog" style "window"
+widget_class "GtkFileSelection" style "window"
+widget_class "*Gtk*Scale" style "scale"
+widget_class "*GtkCheckButton*" style "toggle_button"
+widget_class "*GtkRadioButton*" style "toggle_button"
+widget_class "*GtkButton*" style "button"
+widget_class "*Ruler" style "ruler"
+widget_class "*GtkText" style "text"
+widget "main window.*GtkButton*" style "main_button"
+widget "*GtkCurve" style "curve"

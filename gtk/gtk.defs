@@ -1,0 +1,810 @@
+; -*- scheme -*-
+
+;;; Gtk enums
+
+(define-enum GtkWindowType
+  (toplevel GTK_WINDOW_TOPLEVEL)
+  (dialog GTK_WINDOW_DIALOG)
+  (popup GTK_WINDOW_POPUP))
+
+(define-enum GtkStateType
+  (normal GTK_STATE_NORMAL)
+  (active GTK_STATE_ACTIVE)
+  (prelight GTK_STATE_PRELIGHT)
+  (selected GTK_STATE_SELECTED)
+  (insensitive GTK_STATE_INSENSITIVE))
+
+(define-enum GtkDirectionType
+  (tab-forward GTK_DIR_TAB_FORWARD)
+  (tab-backward GTK_DIR_TAB_BACKWARD)
+  (up GTK_DIR_UP)
+  (down GTK_DIR_DOWN)
+  (left GTK_DIR_LEFT)
+  (right GTK_DIR_RIGHT))
+
+(define-enum GtkShadowType
+  (none GTK_SHADOW_NONE)
+  (in GTK_SHADOW_IN)
+  (out GTK_SHADOW_OUT)
+  (etched-in GTK_SHADOW_ETCHED_IN)
+  (etched-out GTK_SHADOW_ETCHED_OUT))
+
+(define-enum GtkArrowType
+  (up GTK_ARROW_UP)
+  (down GTK_ARROW_DOWN)
+  (left GTK_ARROW_LEFT)
+  (right GTK_ARROW_RIGHT))
+
+(define-enum GtkPackType
+  (start GTK_PACK_START)
+  (end GTK_PACK_END))
+
+(define-enum GtkPolicyType
+  (always GTK_POLICY_ALWAYS)
+  (automatic GTK_POLICY_AUTOMATIC))
+
+(define-enum GtkUpdateType
+  (continous GTK_UPDATE_CONTINUOUS)
+  (discontinous GTK_UPDATE_DISCONTINUOUS)
+  (delayed GTK_UPDATE_DELAYED))
+
+(define-flags GtkAttachOptions
+  (expand GTK_EXPAND)
+  (shrink GTK_SHRINK)
+  (fill GTK_FILL))
+
+(define-flags GtkSignalRunType
+  (first GTK_RUN_FIRST)
+  (last GTK_RUN_LAST)
+  (both GTK_RUN_BOTH)
+  (mask GTK_RUN_MASK)
+  (no-recurse GTK_RUN_NO_RECURSE))
+
+(define-enum GtkWindowPosition
+  (none GTK_WIN_POS_NONE)
+  (center GTK_WIN_POS_CENTER)
+  (mouse GTK_WIN_POS_MOUSE))
+
+(define-enum GtkSubmenuDirection
+  (left GTK_DIRECTION_LEFT)
+  (right GTK_DIRECTION_RIGHT))
+
+(define-enum GtkSubmenuPlacement
+  (top-bottom GTK_TOP_BOTTOM)
+  (left-right GTK_LEFT_RIGHT))
+
+(define-enum GtkMenuFactoryType
+  (menu GTK_MENU_FACTORY_MENU)
+  (menu-bar GTK_MENU_FACTORY_MENU_BAR)
+  (option-menu GTK_MENU_FACTORY_OPTION_MENU))
+
+(define-enum GtkMetricType
+  (pixels GTK_PIXELS)
+  (inches GTK_INCHES)
+  (centimeters GTK_CENTIMETERS))
+
+(define-enum GtkScrollType
+  (none GTK_SCROLL_NONE)
+  (step-backward GTK_SCROLL_STEP_BACKWARD)
+  (step-forward GTK_SCROLL_STEP_FORWARD)
+  (page-backward GTK_SCROLL_PAGE_BACKWARD)
+  (page-forward GTK_SCROLL_PAGE_FORWARD))
+
+(define-enum GtkTroughType
+  (none GTK_TROUGH_NONE)
+  (start GTK_TROUGH_START)
+  (end GTK_TROUGH_END))
+
+(define-enum GtkPositionType
+  (left GTK_POS_LEFT)
+  (right GTK_POS_RIGHT)
+  (top GTK_POS_TOP)
+  (bottom GTK_POS_BOTTOM))
+
+(define-enum GtkPreviewType
+  (color GTK_PREVIEW_COLOR)
+  (grayscale GTK_PREVIEW_GRAYSCALE))
+
+(define-flags GtkWidgetFlags
+  (visible GTK_VISIBLE)
+  (mapped GTK_MAPPED)
+  (unmapped GTK_UNMAPPED)
+  (realized GTK_REALIZED)
+  (sensitive GTK_SENSITIVE)
+  (parent-sensitive GTK_PARENT_SENSITIVE)
+  (no-window GTK_NO_WINDOW)
+  (has-focus GTK_HAS_FOCUS)
+  (can-focus GTK_CAN_FOCUS)
+  (has-default GTK_HAS_DEFAULT)
+  (can-default GTK_CAN_DEFAULT)
+  (propagate-state GTK_PROPAGATE_STATE)
+  (anchored GTK_ANCHORED)
+  (basic GTK_BASIC)
+  (user-style GTK_USER_STYLE))
+
+;;; Gdk enums
+
+(define-enum GdkWindowType
+  (root GDK_WINDOW_ROOT)
+  (toplevel GDK_WINDOW_TOPLEVEL)
+  (child GDK_WINDOW_CHILD)
+  (dialog GDK_WINDOW_DIALOG)
+  (temp GDK_WINDOW_TEMP)
+  (pixmap GDK_WINDOW_PIXMAP))
+
+(define-enum GdkWindowClass
+  (input-output GDK_INPUT_OUTPUT)
+  (input-only GDK_INPUT_ONLY))
+
+(define-enum GdkImageType
+  (normal GDK_IMAGE_NORMAL)
+  (shared GDK_IMAGE_SHARED)
+  (fastest GDK_IMAGE_FASTEST))
+
+(define-enum GdkVisualType
+  (static-gray GDK_VISUAL_STATIC_GRAY)
+  (grayscale GDK_VISUAL_GRAYSCALE)
+  (static-color GDK_VISUAL_STATIC_COLOR)
+  (pseudo-color GDK_VISUAL_PSEUDO_COLOR)
+  (true-color GDK_VISUAL_TRUE_COLOR)
+  (direct-color GDK_VISUAL_DIRECT_COLOR))
+
+(define-flags GdkWindowAttributesType
+  (title GDK_WA_TITLE)
+  (x GDK_WA_X)
+  (y GDK_WA_Y)
+  (cursor GDK_WA_CURSOR)
+  (colormap GDK_WA_COLORMAP)
+  (visual GDK_WA_VISUAL))
+
+(define-flags GdkWindowHints
+  (pos GDK_HINT_POS)
+  (min-size GDK_HINT_MIN_SIZE)
+  (max-size GDK_HINT_MAX_SIZE))
+
+(define-enum GdkFunction
+  (copy GDK_COPY)
+  (invert GDK_INVERT)
+  (xor GDK_XOR))
+
+(define-enum GdkFill
+  (solid GDK_SOLID)
+  (tiled GDK_TILED)
+  (stippled GDK_STIPPLED)
+  (opaque-stippled GDK_OPAQUE_STIPPLED))
+
+(define-enum GdkLineStyle
+  (solid GDK_LINE_SOLID)
+  (on-off-dash GDK_LINE_ON_OFF_DASH)
+  (double-dash GDK_LINE_DOUBLE_DASH))
+
+(define-enum GdkCapStyle
+  (not-last GDK_CAP_NOT_LAST)
+  (butt GDK_CAP_BUTT)
+  (round GDK_CAP_ROUND)
+  (projecting GDK_CAP_PROJECTING))
+
+(define-enum GdkJoinStyle
+  (miter GDK_JOIN_MITER)
+  (round GDK_JOIN_ROUND)
+  (bevel GDK_JOIN_BEVEL))
+
+(define-enum GdkCursorType
+  (cursor GDK_LAST_CURSOR))
+
+(define-enum GdkEventType
+  (nothing GDK_NOTHING)
+  (delete GDK_DELETE)
+  (destroy GDK_DESTROY)
+  (expose GDK_EXPOSE)
+  (motion-notify GDK_MOTION_NOTIFY)
+  (button-press GDK_BUTTON_PRESS)
+  (2button-press GDK_2BUTTON_PRESS)
+  (3button-press GDK_3BUTTON_PRESS)
+  (button-release GDK_BUTTON_RELEASE)
+  (key-press GDK_KEY_PRESS)
+  (key-release GDK_KEY_RELEASE)
+  (enter-notify GDK_ENTER_NOTIFY)
+  (leave-notify GDK_LEAVE_NOTIFY)
+  (focus-change GDK_FOCUS_CHANGE)
+  (configure GDK_CONFIGURE)
+  (map GDK_MAP)
+  (unmap GDK_UNMAP)
+  (property-notify GDK_PROPERTY_NOTIFY)
+  (selection-clear GDK_SELECTION_CLEAR)
+  (selection-request GDK_SELECTION_REQUEST)
+  (selection-notify GDK_SELECTION_NOTIFY)
+  (other-event GDK_OTHER_EVENT))
+
+(define-flags GdkEventMask
+  (exposure-mask GDK_EXPOSURE_MASK)
+  (pointer-motion-mask GDK_POINTER_MOTION_MASK)
+  (pointer-motion-hint-mask GDK_POINTER_MOTION_HINT_MASK)
+  (button-motion-mask GDK_BUTTON_MOTION_MASK)
+  (button1-motion-mask GDK_BUTTON1_MOTION_MASK)
+  (button2-motion-mask GDK_BUTTON2_MOTION_MASK)
+  (button3-motion-mask GDK_BUTTON3_MOTION_MASK)
+  (button-press-mask GDK_BUTTON_PRESS_MASK)
+  (button-release-mask GDK_BUTTON_RELEASE_MASK)
+  (key-press-mask GDK_KEY_PRESS_MASK)
+  (key-release-mask GDK_KEY_RELEASE_MASK)
+  (enter-notify-mask GDK_ENTER_NOTIFY_MASK)
+  (leave-notify-mask GDK_LEAVE_NOTIFY_MASK)
+  (focus-change-mask GDK_FOCUS_CHANGE_MASK)
+  (structure-mask GDK_STRUCTURE_MASK)
+  (all-events-mask GDK_ALL_EVENTS_MASK))
+
+(define-enum GdkNotifyType
+  (ancestor GDK_NOTIFY_ANCESTOR)
+  (virtual GDK_NOTIFY_VIRTUAL)
+  (inferior GDK_NOTIFY_INFERIOR)
+  (nonlinear GDK_NOTIFY_NONLINEAR)
+  (nonlinear-virtual GDK_NOTIFY_NONLINEAR_VIRTUAL)
+  (unknown GDK_NOTIFY_UNKNOWN))
+
+(define-flags GdkModifierType
+  (shift-mask GDK_SHIFT_MASK)
+  (lock-mask GDK_LOCK_MASK)
+  (control-mask GDK_CONTROL_MASK)
+  (mod1-mask GDK_MOD1_MASK)
+  (mod2-mask GDK_MOD2_MASK)
+  (mod3-mask GDK_MOD3_MASK)
+  (mod4-mask GDK_MOD4_MASK)
+  (mod5-mask GDK_MOD5_MASK)
+  (button1-mask GDK_BUTTON1_MASK)
+  (button2-mask GDK_BUTTON2_MASK)
+  (button3-mask GDK_BUTTON3_MASK)
+  (button4-mask GDK_BUTTON4_MASK)
+  (button5-mask GDK_BUTTON5_MASK))
+
+(define-enum GdkSubwindowMode
+  (clip-by-children GDK_CLIP_BY_CHILDREN)
+  (include-inferiors GDK_INCLUDE_INFERIORS))
+
+(define-flags GdkInputCondition
+  (read GDK_INPUT_READ)
+  (write GDK_INPUT_WRITE)
+  (exception GDK_INPUT_EXCEPTION))
+
+(define-enum GdkStatus
+  (ok GDK_OK)
+  (error GDK_ERROR)
+  (error-param GDK_ERROR_PARAM)
+  (error-file GDK_ERROR_FILE)
+  (error-mem GDK_ERROR_MEM))
+
+(define-enum GdkByteOrder
+  (lsb-first GDK_LSB_FIRST)
+  (msb-first GDK_MSB_FIRST))
+
+(define-flags GdkGCValuesMask
+  (foreground GDK_GC_FOREGROUND)
+  (background GDK_GC_BACKGROUND)
+  (font GDK_GC_FONT)
+  (function GDK_GC_FUNCTION)
+  (fill GDK_GC_FILL)
+  (tile GDK_GC_TILE)
+  (stipple GDK_GC_STIPPLE)
+  (clip-mask GDK_GC_CLIP_MASK)
+  (subwindow GDK_GC_SUBWINDOW)
+  (ts-x-origin GDK_GC_TS_X_ORIGIN)
+  (ts-y-origin GDK_GC_TS_Y_ORIGIN)
+  (clip-x-origin GDK_GC_CLIP_X_ORIGIN)
+  (clip-y-origin GDK_GC_CLIP_Y_ORIGIN)
+  (exposures GDK_GC_EXPOSURES)
+  (line-width GDK_GC_LINE_WIDTH)
+  (line-style GDK_GC_LINE_STYLE)
+  (cap-style GDK_GC_CAP_STYLE)
+  (join-style GDK_GC_JOIN_STYLE))
+
+(define-enum GdkSelection
+  (primary GDK_SELECTION_PRIMARY)
+  (secondary GDK_SELECTION_SECONDARY))
+
+(define-enum GdkPropertyState
+  (new-value GDK_PROPERTY_NEW_VALUE)
+  (delete GDK_PROPERTY_DELETE))
+
+(define-enum GdkPropMode
+  (replace GDK_PROP_MODE_REPLACE)
+  (prepend GDK_PROP_MODE_PREPEND)
+  (append GDK_PROP_MODE_APPEND))
+
+;;; Gtk boxed types
+
+(define-boxed GtkAcceleratorTable
+  gtk_accelerator_table_ref
+  gtk_accelerator_table_unref)
+
+(define-boxed GtkStyle
+  gtk_style_ref
+  gtk_style_unref)
+
+;;; Gdk boxed types
+
+;(define-boxed GdkPoint
+;  gdk_point_copy
+;  gdk_point_destroy)
+
+(define-boxed GdkColormap
+  gdk_colormap_ref
+  gdk_colormap_unref)
+
+(define-boxed GdkVisual
+  gdk_visual_ref
+  gdk_visual_unref)
+
+(define-boxed GdkFont
+  gdk_font_ref
+  gdk_font_free)
+
+(define-boxed GdkWindow
+  gdk_window_ref
+  gdk_window_unref)
+
+(define-boxed GdkEvent
+  gdk_event_copy
+  gdk_event_free)
+
+;;; Functions
+
+(define-func gtk_exit
+  none
+  (int code 0))
+
+(define-func gtk_rc_parse
+  none
+  (string file))
+
+(define-func g_mem_chunk_info
+  none)
+
+;; GtkObject
+
+(define-func gtk_object_destroy
+  none
+  (GtkObject object))
+
+;; GtkWidget
+
+(define-object GtkWidget (GtkObject))
+
+(define-func GTK_WIDGET_STATE
+  GtkStateType
+  (GtkWidget widget))
+
+(define-func GTK_WIDGET_FLAGS
+  GtkWidgetFlags
+  (GtkWidget widget))
+
+(define-func GTK_WIDGET_SET_FLAGS
+  none
+  (GtkWidget widget)
+  (GtkWidgetFlags flags))
+
+(define-func GTK_WIDGET_UNSET_FLAGS
+  none
+  (GtkWidget widget)
+  (GtkWidgetFlags flags))
+
+(define-func gtk_widget_destroy
+  none
+  (GtkWidget widget))
+
+(define-func gtk_widget_unparent
+  none
+  (GtkWidget widget))
+
+(define-func gtk_widget_show
+  none
+  (GtkWidget widget))
+
+(define-func gtk_widget_hide
+  none
+  (GtkWidget widget))
+
+(define-func gtk_widget_map
+  none
+  (GtkWidget widget))
+
+(define-func gtk_widget_unmap
+  none
+  (GtkWidget widget))
+
+(define-func gtk_widget_realize
+  none
+  (GtkWidget widget))
+
+(define-func gtk_widget_unrealize
+  none
+  (GtkWidget widget))
+
+;(define-func gtk_widget_install_accelerator
+;  none
+;  (GtkWidget widget)
+;  (GtkAcceleratorTable table)
+;  (string signal_name)
+;  (char key)
+;  (...))
+
+(define-func gtk_widget_remove_accelerator
+  none
+  (GtkWidget widget)
+  (GtkAcceleratorTable table)
+  (string signal_name))
+
+;(define-func gtk_widget_event
+;  bool
+;  (GtkWidget widget)
+;  (GdkEvent event))
+
+(define-func gtk_widget_activate
+  none
+  (GtkWidget widget))
+
+(define-func gtk_widget_reparent
+  none
+  (GtkWidget widget)
+  (GtkWidget new_parent))
+
+(define-func gtk_widget_popup
+  none
+  (GtkWidget widget)
+  (int x)
+  (int y))
+
+(define-func gtk_widget_basic
+  bool
+  (GtkWidget widget))
+
+(define-func gtk_widget_grab_focus
+  none
+  (GtkWidget widget))
+
+(define-func gtk_widget_grab_default
+  none
+  (GtkWidget widget))
+
+(define-func gtk_widget_restore_state
+  none
+  (GtkWidget widget))
+
+(define-func gtk_widget_set_name
+  none
+  (GtkWidget widget)
+  (string name))
+
+(define-func gtk_widget_get_name
+  static_string
+  (GtkWidget widget))
+
+(define-func gtk_widget_set_state
+  none
+  (GtkWidget widget)
+  (GtkStateType state))
+
+(define-func gtk_widget_set_sensitive
+  none
+  (GtkWidget widget)
+  (bool sensitive))
+
+(define-func gtk_widget_set_style
+  none
+  (GtkWidget widget)
+  (GtkStyle style))
+
+(define-func gtk_widget_set_uposition
+  none
+  (GtkWidget widget)
+  (int x)
+  (int y))
+
+(define-func gtk_widget_set_usize
+  none
+  (GtkWidget widget)
+  (int height)
+  (int width))
+
+(define-func gtk_widget_set_events
+  none
+  (GtkWidget widget)
+  (GdkEventMask events))
+
+(define-func gtk_widget_set_extension_events
+  none
+  (GtkWidget widget)
+  (GdkEventMask events))
+
+(define-func gtk_widget_get_toplevel
+  GtkWidget
+  (GtkWidget widget))
+
+;(define-func gtk_widget_get_ancestor
+;  GtkWidget
+;  (GtkWidget widget)
+;  (GtkType type))
+
+(define-func gtk_widget_get_colormap
+  GdkColormap
+  (GtkWidget widget))
+
+(define-func gtk_widget_get_visual
+  GdkVisual
+  (GtkWidget widget))
+
+(define-func gtk_widget_get_style
+  GtkStyle
+  (GtkWidget widget))
+
+(define-func gtk_widget_get_events
+  GdkEventMask
+  (GtkWidget widget))
+
+(define-func gtk_widget_get_extension_events
+  GdkEventMask
+  (GtkWidget widget))
+
+(define-func gtk_widget_push_colormap
+  none
+  (GdkColormap cmap))
+
+(define-func gtk_widget_push_visual
+  none
+  (GdkVisual visual))
+
+(define-func gtk_widget_push_style
+  none
+  (GtkStyle style))
+
+(define-func gtk_widget_pop_colormap
+  none)
+
+(define-func gtk_widget_pop_visual
+  none)
+
+(define-func gtk_widget_pop_style
+  none)
+
+(define-func gtk_widget_set_default_colormap
+  none
+  (GdkColormap cmap))
+
+(define-func gtk_widget_set_default_visual
+  none
+  (GdkVisual visual))
+
+(define-func gtk_widget_set_default_style
+  none
+  (GtkStyle style))
+
+(define-func gtk_widget_get_default_colormap
+  GdkColormap)
+
+(define-func gtk_widget_get_default_visual
+  GdkVisual)
+
+(define-func gtk_widget_get_default_style
+  GtkStyle)
+
+;;; Container
+
+(define-object GtkContainer (GtkWidget))
+
+(define-func gtk_container_border_width
+  none
+  (GtkContainer container)
+  (int border_width))
+
+(define-func gtk_container_add
+  none
+  (GtkContainer container)
+  (GtkWidget widget))
+
+(define-func gtk_container_remove
+  none
+  (GtkContainer container)
+  (GtkWidget widget))
+
+(define-func gtk_container_disable_resize
+  none
+  (GtkContainer container))
+
+(define-func gtk_container_enable_resize
+  none
+  (GtkContainer container))
+
+(define-func gtk_container_block_resize
+  none
+  (GtkContainer container))
+
+(define-func gtk_container_unblock_resize
+  none
+  (GtkContainer container))
+
+(define-func gtk_container_need_resize
+  bool
+  (GtkContainer container)
+  (GtkWidget widget))
+
+(define-func gtk_container_check_resize
+  none
+  (GtkContainer container)
+  (GtkWidget widget))
+
+(define-func gtk_container_focus
+  GtkDirectionType
+  (GtkContainer container)
+  (GtkDirectionType direction))
+
+;;; Bin
+
+(define-object GtkBin (GtkContainer))
+
+;;; Window
+
+(define-object GtkWindow (GtkBin))
+
+(define-func gtk_window_new
+  GtkWidget
+  (GtkWindowType type))
+
+(define-func gtk_window_set_title
+  none
+  (GtkWindow window)
+  (string title))
+
+(define-func gtk_window_set_focus
+  none
+  (GtkWindow window)
+  (GtkWidget focus))
+
+(define-func gtk_window_set_default
+  none
+  (GtkWindow window)
+  (GtkWidget default))
+
+(define-func gtk_window_set_policy
+  none
+  (GtkWindow window)
+  (bool allow_shrink)
+  (bool allow_grow)
+  (bool auto_shrink))
+
+(define-func gtk_window_add_accelerator_table
+  none
+  (GtkWindow window)
+  (GtkAcceleratorTable table))
+
+(define-func gtk_window_remove_accelerator_table
+  none
+  (GtkWindow window)
+  (GtkAcceleratorTable table))
+
+(define-func gtk_window_position
+  none
+  (GtkWindow window)
+  (GtkWindowPosition position))
+
+;;; Box
+
+(define-object GtkBox (GtkContainer))
+
+;;; Table
+
+(define-object GtkTable (GtkContainer))
+
+;;; Button
+
+(define-object GtkButton (GtkContainer))
+
+;;; ToggleButton
+
+(define-object GtkToggleButton (GtkButton))
+
+;;; CheckButton
+
+(define-object GtkCheckButton (GtkToggleButton))
+
+;;; RadioButton
+
+(define-object GtkRadioButton (GtkCheckButton))
+
+
+;; misc
+
+
+(define-func gtk_button_new_with_label
+  GtkWidget
+  (string label))
+
+(define-func gtk_vbox_new
+  GtkWidget
+  (bool homogenous)
+  (int spacing))
+
+(define-func gtk_hbox_new
+  GtkWidget
+  (bool homogenous)
+  (int spacing))
+
+(define-func gtk_hseparator_new
+  GtkWidget)
+
+(define-func gtk_box_pack_start
+  none
+  (GtkBox box)
+  (GtkWidget child)
+  (bool expand)
+  (bool fill)
+  (int padding))
+
+(define-func gtk_table_new
+  GtkWidget
+  (int rows)
+  (int columns)
+  (bool homogenous))
+
+(define-func gtk_table_attach
+  none
+  (GtkTable table)
+  (GtkWidget child)
+  (int left_attach)
+  (int right_attach)
+  (int top_attach)
+  (int bottom_attach)
+  (GtkAttachOptions xoptions)
+  (GtkAttachOptions yoptions)
+  (int xpadding)
+  (int ypadding))
+
+(define-func gtk_table_attach_defaults
+  none
+  (GtkTable table)
+  (GtkWidget child)
+  (int left_attach)
+  (int right_attach)
+  (int top_attach)
+  (int bottom_attach))
+
+(define-func gtk_table_set_row_spacing
+  none
+  (GtkTable table)
+  (int row)
+  (int spacing))
+
+(define-func gtk_table_set_col_spacing
+  none
+  (GtkTable table)
+  (int col)
+  (int spacing))
+
+(define-func gtk_table_set_row_spacings
+  none
+  (GtkTable table)
+  (int spacing))
+
+(define-func gtk_table_set_col_spacings
+  none
+  (GtkTable table)
+  (int spacing))
+
+(define-func gtk_toggle_button_new_with_label
+  GtkWidget
+  (string label))
+
+(define-func gtk_check_button_new_with_label
+  GtkWidget
+  (string label))
+
+(define-func gtk_radio_button_new_with_label_from_widget
+  GtkWidget
+  (GtkRadioButton group)
+  (string label))
+
+(define-func gtk_label_new
+  GtkWidget
+  (string label))
+
+(define-func gtk_frame_new
+  GtkWidget
+  (string label))

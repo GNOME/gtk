@@ -1,0 +1,17 @@
+
+The official ftp site is:
+  ftp://ftp.gimp.org/pub/gtk
+
+Patches can be uploaded to:
+  ftp://ftp.gimp.org/incoming
+
+Anonymous CVS access for gtk+ (as well as 'gimp', 'gimp-data', and
+'gnome') is available via
+  CVSROOT=:pserver:anonymous@cvs.gnome.org:/home/cvs
+with an empty password.
+
+A mailing list is located at:
+  gtk-list@redhat.com
+
+To subscribe: mail -s subscribe gtk-list-request@redhat.com < /dev/null
+(Send mail to gtk-list-request@redhat.com with the subject "subscribe")

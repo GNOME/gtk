@@ -1,0 +1,18 @@
+@macro gtkstdmacros {p, q}
+
+@deftypefun Gtk\p\* GTK_\q\ (gpointer @var{obj})
+Cast a generic pointer to @code{Gtk\p\*}. @xref{Standard Macros}, for
+more info.
+@end deftypefun
+
+@deftypefun Gtk\p\Class* GTK_\q\_CLASS (gpointer @var{class})
+Cast a generic pointer to @code{Gtk\p\Class*}. @xref{Standard Macros},
+for more info.
+@end deftypefun
+
+@deftypefun gint GTK_IS_\q\ (gpointer @var{obj})
+Determine if a generic pointer refers to a @code{Gtk\p\}
+object. @xref{Standard Macros}, for more info.
+@end deftypefun
+
+@end macro

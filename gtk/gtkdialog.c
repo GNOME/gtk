@@ -1,0 +1,80 @@
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+#include "gtkbutton.h"
+#include "gtkdialog.h"
+#include "gtkhbox.h"
+#include "gtkhseparator.h"
+#include "gtkvbox.h"
+
+
+static void gtk_dialog_class_init (GtkDialogClass *klass);
+static void gtk_dialog_init       (GtkDialog      *dialog);
+
+
+guint
+gtk_dialog_get_type ()
+{
+  static guint dialog_type = 0;
+
+  if (!dialog_type)
+    {
+      GtkTypeInfo dialog_info =
+      {
+	"GtkDialog",
+	sizeof (GtkDialog),
+	sizeof (GtkDialogClass),
+	(GtkClassInitFunc) gtk_dialog_class_init,
+	(GtkObjectInitFunc) gtk_dialog_init,
+	(GtkArgFunc) NULL,
+      };
+
+      dialog_type = gtk_type_unique (gtk_window_get_type (), &dialog_info);
+    }
+
+  return dialog_type;
+}
+
+static void
+gtk_dialog_class_init (GtkDialogClass *class)
+{
+}
+
+static void
+gtk_dialog_init (GtkDialog *dialog)
+{
+  GtkWidget *separator;
+
+  dialog->vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (dialog), dialog->vbox);
+  gtk_widget_show (dialog->vbox);
+
+  dialog->action_area = gtk_hbox_new (TRUE, 5);
+  gtk_container_border_width (GTK_CONTAINER (dialog->action_area), 10);
+  gtk_box_pack_end (GTK_BOX (dialog->vbox), dialog->action_area, FALSE, TRUE, 0);
+  gtk_widget_show (dialog->action_area);
+
+  separator = gtk_hseparator_new ();
+  gtk_box_pack_end (GTK_BOX (dialog->vbox), separator, FALSE, TRUE, 0);
+  gtk_widget_show (separator);
+}
+
+GtkWidget*
+gtk_dialog_new ()
+{
+  return GTK_WIDGET (gtk_type_new (gtk_dialog_get_type ()));
+}

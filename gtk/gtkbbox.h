@@ -1,0 +1,93 @@
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+#ifndef __GTK_BUTTON_BOX_H__
+#define __GTK_BUTTON_BOX_H__
+
+#include "gtkbox.h"
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+
+#define GTK_BUTTON_BOX(obj)          GTK_CHECK_CAST (obj, gtk_button_box_get_type (), GtkButtonBox)
+#define GTK_BUTTON_BOX_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_button_box_get_type (), GtkButtonBoxClass)
+#define GTK_IS_BUTTON_BOX(obj)       GTK_CHECK_TYPE (obj, gtk_button_box_get_type ())
+
+#define GTK_BUTTONBOX_DEFAULT -1
+#define GTK_BUTTONBOX_SPREAD   1
+#define GTK_BUTTONBOX_EDGE     2
+#define GTK_BUTTONBOX_START    3
+#define GTK_BUTTONBOX_END      4
+
+typedef struct _GtkButtonBox       GtkButtonBox;
+typedef struct _GtkButtonBoxClass  GtkButtonBoxClass;
+
+struct _GtkButtonBox
+{
+  GtkBox box;
+  gint spacing;
+  gint child_min_width;
+  gint child_min_height;
+  gint child_ipad_x;
+  gint child_ipad_y;
+  gint layout_style;
+};
+
+struct _GtkButtonBoxClass
+{
+  GtkBoxClass parent_class;
+};
+
+
+guint gtk_button_box_get_type (void);
+
+void gtk_button_box_get_child_size_default (gint *min_width, gint *min_height);
+void gtk_button_box_get_child_ipadding_default (gint *ipad_x, gint *ipad_y);
+
+void gtk_button_box_set_child_size_default (gint min_width, gint min_height);
+void gtk_button_box_set_child_ipadding_default (gint ipad_x, gint ipad_y);
+
+gint gtk_button_box_get_spacing (GtkButtonBox *widget);
+gint gtk_button_box_get_layout (GtkButtonBox *widget);
+void gtk_button_box_get_child_size (GtkButtonBox *widget,
+				    gint *min_width, gint *min_height);
+void gtk_button_box_get_child_ipadding (GtkButtonBox *widget, gint *ipad_x, gint *ipad_y);
+
+void gtk_button_box_set_spacing (GtkButtonBox *widget, gint spacing);
+void gtk_button_box_set_layout (GtkButtonBox *widget, gint layout_style);
+void gtk_button_box_set_child_size (GtkButtonBox *widget,
+				    gint min_width, gint min_height);
+void gtk_button_box_set_child_ipadding (GtkButtonBox *widget, gint ipad_x, gint ipad_y);
+
+
+/* Internal method - do not use. */
+void gtk_button_box_child_requisition (GtkWidget *widget,
+				       int *nvis_children,
+				       int *width,
+				       int *height);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
+#endif /* __GTK_BUTTON_BOX_H__ */
+
+

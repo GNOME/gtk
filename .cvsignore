@@ -1,0 +1,10 @@
+*.lo
+config.log
+config.h
+libtool
+config.status
+stamp-h
+Makefile
+gtk+.xconfig
+config.cache
+

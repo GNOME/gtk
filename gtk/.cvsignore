@@ -1,0 +1,9 @@
+*.lo
+Makefile
+.deps
+_libs
+libgtk.la
+testgtk
+testinput
+testselection
+simple

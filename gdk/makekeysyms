@@ -1,0 +1,5 @@
+#!/bin/sh
+
+sed -f makekeysyms.sed $1 > .makekeysms.tmp
+awk '{printf "#define %s %s\n", $1, $2}' .makekeysms.tmp
+rm .makekeysms.tmp

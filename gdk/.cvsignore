@@ -1,0 +1,6 @@
+*.lo
+Makefile
+.deps
+_libs
+libgdk.la
+

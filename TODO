@@ -1,0 +1,36 @@
+Now
+---
+
+3. Fix focus activation of list items. Does list item activation have to be
+   completely reorganized?
+
+4. Lists should scroll to center the recently selected item if it isn't
+   visible.
+
+
+The Future
+----------
+
+-Documentation
+
+-Tree widget
+
+-Text widget (needs to be finished)
+
+-Widget redrawing when the window resizes sometimes messes up.
+
+-Make sure a widget added to a list is a list item and a widget added
+ to a menu is a menu item, etc...
+
+-More dialogs? Print, font, etc?
+
+-Multiple document interface (MDI)?
+
+-Support another widget style? Should be possible using GtkStyle's, but
+ there may be some work needed to remove any style dependencies in widget
+ code. Maybe GtkStyle's should have 'draw_push_button', 'draw_check_button',
+ etc, functions to draw the various widgets.
+
+-OffiX drag and drop support
+
+-Make all widget attributes configurable after the widget is created.
