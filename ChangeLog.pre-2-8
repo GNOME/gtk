@@ -1,3 +1,8 @@
+2002-05-24  Dave Camp  <dave@ximian.com>
+
+	* gtk/gtktreemodelsort.c: Use indices[i] >= level->array->len
+	rather than level->array->len > indices[i] in the bounds check.
+
 Thu May 23 17:19:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* Released 2.0.3.
