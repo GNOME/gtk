@@ -58,7 +58,10 @@ extern "C" {
  */
 #define GTK_HAVE_FEATURES_1_1_0				1-1-0
 
-
+/* Gtk+ 1.1.2 version tag
+ * - ctree function name changes
+ */
+#define GTK_HAVE_FEATURES_1_1_2				1-1-2
 
 #ifdef __cplusplus
 }

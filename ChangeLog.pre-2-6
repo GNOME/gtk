@@ -1,3 +1,7 @@
+Fri Aug 21 13:06:04 1998  Stuart Parmenter  <pavlov@gimp.org>
+	* gtk/gtkfeatures.h.in:  added GTK_HAVE_FEATURES_1_1_2 for changes
+	such as GtkCTree function name changes
+	
 Fri Aug 21 02:31:26 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.h:
