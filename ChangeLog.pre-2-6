@@ -1,3 +1,8 @@
+Sat Jun 27 15:44:46 1998  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdk.c (gdkx_XConvertCase): compatibility function to provide
+	XConvertCase() functionality from X11R6 on X11R5 systems.
+
 Thu Jun 25 10:50:34 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gdk/gdk.h gdk/gdkfont.c: Added functions gdk_text_height,
