@@ -145,6 +145,7 @@ static void free_buffer (guchar *pixels, gpointer data)
 	g_free (pixels);
 }
 
+#if TIFFLIB_VERSION >= 20031226
 static gboolean tifflibversion (int *major, int *minor, int *revision)
 {
         if (sscanf (TIFFGetVersion(), 
@@ -154,6 +155,7 @@ static gboolean tifflibversion (int *major, int *minor, int *revision)
 
         return TRUE;
 }
+#endif
 
 static GdkPixbuf *
 tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)

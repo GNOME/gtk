@@ -1,3 +1,14 @@
+Fri Jul  9 15:38:06 2004  Manish Singh  <yosh@gimp.org>
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_format_set_disabled): function doesn't
+	return a value, so don't use g_return_val_if_fail()
+
+	* gdk-pixbuf-scale.c (gdk_pixbuf_rotate_simple): initialize dest in
+	the can't happen case, to quiet gcc.
+
+	* io-tiff.c (tifflibversion): enclose in #if TIFFLIB_VERSION >=
+	20031226.
+
 Wed Jul  7 23:53:58 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-io.h: 

@@ -1886,7 +1886,7 @@ void
 gdk_pixbuf_format_set_disabled (GdkPixbufFormat *format,
 				gboolean         disabled)
 {
-	g_return_val_if_fail (format != NULL, FALSE);
+	g_return_if_fail (format != NULL);
 	
 	format->disabled = disabled != FALSE;
 }

@@ -392,6 +392,7 @@ gdk_pixbuf_rotate_simple (const GdkPixbuf   *src,
 	} 
       break;
     default:
+      dest = NULL;
       g_warning ("gdk_pixbuf_rotate_simple() can only rotate "
 		 "by multiples of 90 degrees");
       g_assert_not_reached ();
