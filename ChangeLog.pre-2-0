@@ -1,3 +1,8 @@
+1998-11-23  Martin Baulig  <martin@home-of-linux.org>
+
+	* gtk/gtkfeatures.h.in (GTK_HAVE_FEATURES_1_1_5): Define this so
+	we can check for latest GTK features.
+
 1998-11-23  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktoolbar.c: (gtk_toolbar_set_relief):
