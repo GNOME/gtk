@@ -127,6 +127,17 @@ has the path <literal>/ui/menubar/JustifyMenu/Left</literal> and the
 toolitem with the same name has path 
 <literal>/ui/toolbar1/JustifyToolItems/Left</literal>.
 </para>
+<refsect2 id="Smart-Separators">
+<title>Smart Separators</title>
+<para>
+The separators created by #GtkUIManager are "smart", i.e. they do not show up in the 
+UI unless they end up between two visible menu or tool items. Separators which are located 
+at the very beginning or end of the menu or toolbar containing them, or multiple separators 
+next to each other, are hidden. This is a useful feature, since the merging of UI elements
+from multiple sources can make it hard or impossible to determine in advance whether a 
+separator will end up in such an unfortunate position.
+</para>
+</refsect2>
 </refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -256,6 +267,21 @@ members and should not be accessed directly.
 @Returns: 
 
 
+<!-- ##### ENUM GtkUIManagerItemType ##### -->
+<para>
+
+</para>
+
+@GTK_UI_MANAGER_AUTO: 
+@GTK_UI_MANAGER_MENUBAR: 
+@GTK_UI_MANAGER_MENU: 
+@GTK_UI_MANAGER_TOOLBAR: 
+@GTK_UI_MANAGER_PLACEHOLDER: 
+@GTK_UI_MANAGER_POPUP: 
+@GTK_UI_MANAGER_MENUITEM: 
+@GTK_UI_MANAGER_TOOLITEM: 
+@GTK_UI_MANAGER_SEPARATOR: 
+
 <!-- ##### FUNCTION gtk_ui_manager_add_ui ##### -->
 <para>
 
@@ -266,6 +292,8 @@ members and should not be accessed directly.
 @path: 
 @name: 
 @action: 
+@type: 
+@top: 
 
 
 <!-- ##### FUNCTION gtk_ui_manager_remove_ui ##### -->

@@ -12,6 +12,7 @@
   <toolbar name="toolbar1">
     <placeholder name="ToolbarPlaceholder">
        <toolitem name="nb2" action="NewAction" />
+       <separator name="Sep1" />
     </placeholder>
     <toolitem name="NewButton" action="NewAction" />
     <toolitem name="CutButton" action="CutAction" />

@@ -1,5 +1,23 @@
 2003-09-15  Matthias Clasen  <maclas@gmx.de>
 
+	Smart separators; see 
+	http://mail.gnome.org/archives/gtk-devel-list/2003-September/msg00133.html:
+	
+	* gtk/gtkuimanager.c (update_smart_separators): New function which 
+	implements "smart" separators by iterating once over the entries of a 
+	menu, hiding and showing separators as necessary.
+	(update_node): Mark separators used as fences of placeholders as
+	hidden. Explicitly added separators are marked as smart. Call 
+	update_smart_separators after updating a menu or toolbar node. 
+	Connect update_smart_separators to "notify::visible" signal on menu
+	and tool items.
+	
+	* tests/merge-[12].ui: Test smart separators.
+
+	Changes to allow setting action state before connecting signal; see
+	the thread starting at 
+	http://mail.gnome.org/archives/gtk-devel-list/2003-September/msg00140.html:
+	
 	* gtk/gtkactiongroup.[hc]: (gtk_action_group_add_radio_actions):
 	(gtk_action_group_add_radio_actions_full): Add value parameter to allow
 	setting the currently selected group member before connecting signals.
