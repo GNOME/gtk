@@ -1,3 +1,9 @@
+2001-12-05  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkwidget.c (gtk_widget_reset_shapes): close comment.
+
+	* gtk/queryimmodules.c: g_dir_read_name() returns const.
+
 Tue Dec  4 21:46:13 2001  HideToshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* gtk/gtktreeprivate.h: restore the else case of #ifdef __GNUC__
