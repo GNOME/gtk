@@ -2275,16 +2275,19 @@ gtk_label_create_window (GtkLabel *label)
   attributes.window_type = GDK_WINDOW_TEMP;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.override_redirect = TRUE;
+  attributes.cursor = gdk_cursor_new (GDK_XTERM);
   attributes.event_mask = gtk_widget_get_events (widget) |
     GDK_BUTTON_PRESS_MASK        |
     GDK_BUTTON_RELEASE_MASK      |
     GDK_BUTTON_MOTION_MASK;
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR | GDK_WA_CURSOR;
 
   label->select_info->window = gdk_window_new (widget->window,
                                                &attributes, attributes_mask);
-  gdk_window_set_user_data (label->select_info->window, widget);  
+  gdk_window_set_user_data (label->select_info->window, widget);
+
+  gdk_cursor_unref (attributes.cursor);
 }
 
 static void

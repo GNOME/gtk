@@ -1,5 +1,8 @@
 2002-01-27  Anders Carlsson  <andersca@gnu.org>
 
+	* gtk/gtklabel.c (gtk_label_create_window): Set the cursor to
+	GDK_XTERM.
+
 	* gtk/gtktextview.h (struct _GtkTextView): add mouse_cursor_obscured.
 
 	* gtk/gtkentry.h (struct _GtkEntry): Add mouse_cursor_obscured.
