@@ -122,8 +122,7 @@ static void     gtk_font_selection_select_size           (GtkWidget        *w,
 							  GdkEventButton   *bevent,
 							  gpointer          data);
 
-static void     gtk_font_selection_expose_list           (GtkWidget        *w,
-							  GdkEventExpose   *event,
+static void     gtk_font_selection_scroll_on_map         (GtkWidget        *w,
 							  gpointer          data);
 
 static void     gtk_font_selection_preview_changed       (GtkWidget        *entry,
@@ -370,8 +369,8 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
 		      fontsel);
   GTK_WIDGET_SET_FLAGS (fontsel->font_clist, GTK_CAN_FOCUS);
 
-  gtk_signal_connect_after (GTK_OBJECT (fontsel->font_clist), "expose_event",
-			    GTK_SIGNAL_FUNC(gtk_font_selection_expose_list),
+  gtk_signal_connect_after (GTK_OBJECT (fontsel->font_clist), "map",
+			    GTK_SIGNAL_FUNC(gtk_font_selection_scroll_on_map),
 			    fontsel);
   
   gtk_font_selection_show_available_styles (fontsel);
@@ -449,12 +448,11 @@ gtk_font_selection_preview_changed (GtkWidget        *entry,
   g_object_notify (G_OBJECT (fontsel), "preview_text");
 }
 
-/* This is called when the clist is exposed. Here we scroll to the current
+/* This is called when the clist is mapped. Here we scroll to the current
    font if necessary. */
 static void
-gtk_font_selection_expose_list (GtkWidget		*widget,
-				GdkEventExpose		*event,
-				gpointer		 data)
+gtk_font_selection_scroll_on_map (GtkWidget		*widget,
+                                  gpointer		 data)
 {
   GtkFontSelection *fontsel;
   GList *selection;

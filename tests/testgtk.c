@@ -4093,7 +4093,7 @@ create_spins (void)
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-      adj = (GtkAdjustment *) gtk_adjustment_new (2, 1, 5, 1, 1, 0);
+      adj = (GtkAdjustment *) gtk_adjustment_new (2, 1, 15, 1, 1, 0);
       spinner2 = gtk_spin_button_new (adj, 0.0, 0);
       gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
 			  GTK_SIGNAL_FUNC (change_digits),

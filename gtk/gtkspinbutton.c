@@ -527,30 +527,26 @@ gtk_spin_button_unrealize (GtkWidget *widget)
 }
 
 static int
-compute_double_length (double val, double step)
+compute_double_length (double val, int digits)
 {
-  int a, b;
+  int a;
   int extra;
 
   a = 1;
   if (fabs (val) > 1.0)
-    a = floor (log10 (fabs (val))) + 1;
-  
-  b = 0;
-  if (fabs (step) < 1.0 && step != 0.0)
-    b = ceil (-log10 (fabs (step)));
+    a = floor (log10 (fabs (val))) + 1;  
 
   extra = 0;
   
   /* The dot: */
-  if (b > 0)
+  if (digits > 0)
     extra++;
 
   /* The sign: */
   if (val < 0)
     extra++;
 
-  return a + b + extra;
+  return a + digits + extra;
 }
 
 static void
@@ -591,7 +587,7 @@ gtk_spin_button_size_request (GtkWidget      *widget,
       width = MIN_SPIN_BUTTON_WIDTH;
 
       string_len = compute_double_length (spin_button->adjustment->upper,
-					  spin_button->adjustment->step_increment);
+                                          spin_button->digits);
       w = MIN (string_len, 10) * PANGO_PIXELS (metrics.approximate_digit_width);
       width = MAX (width, w);
       string_len = compute_double_length (spin_button->adjustment->lower,
@@ -1479,7 +1475,6 @@ gtk_spin_button_configure (GtkSpinButton  *spin_button,
 {
   g_return_if_fail (spin_button != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
-  g_return_if_fail (digits < 6);
 
   if (adjustment)
     gtk_spin_button_set_adjustment (spin_button, adjustment);
@@ -1510,7 +1505,6 @@ gtk_spin_button_new (GtkAdjustment *adjustment,
 
   if (adjustment)
     g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), NULL);
-  g_return_val_if_fail (digits < 6, NULL);
 
   spin = gtk_type_new (GTK_TYPE_SPIN_BUTTON);
 
@@ -1549,7 +1543,7 @@ gtk_spin_button_new_with_range (gdouble min,
 
   adj = gtk_adjustment_new (min, min, max, step, 10 * step, step);
 
-  if (fabs (step) >= 1.0)
+  if (fabs (step) >= 1.0 || step == 0.0)
     digits = 0;
   else {
     digits = abs ((gint) floor (log10 (fabs (step))));
@@ -1646,7 +1640,6 @@ gtk_spin_button_set_digits (GtkSpinButton *spin_button,
 			    guint          digits)
 {
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
-  g_return_if_fail (digits < 6);
 
   if (spin_button->digits != digits)
     {

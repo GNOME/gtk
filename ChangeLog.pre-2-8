@@ -1,5 +1,19 @@
 2001-06-04  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkspinbutton.c: Get rid of stupid g_return_if_fail on 
+	digits greater than 6. If there actually are limits (which there
+	likely aren't), should clamp to them not warn.
+	(gtk_spin_button_new_with_range): don't take log of 0
+	(gtk_spin_button_size_request): use digits to compute size
+	request, rather than step increment.
+
+	* tests/testgtk.c (create_spins): test larger values of digits
+	
+	* gtk/gtkfontsel.c (gtk_font_selection_init): scroll to selected
+	font on map not expose, so we don't get weirdness during scrolling
+
+2001-06-04  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkclist.c (vadjustment_value_changed): Apply fix from
 	Sam Solon, bug #54577, update value even if not drawable.
 
