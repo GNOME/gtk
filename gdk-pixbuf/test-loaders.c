@@ -370,7 +370,7 @@ main (int argc, char **argv)
     }
   g_random_set_seed (seed);
   
-  g_type_init (G_TYPE_DEBUG_NONE);
+  g_type_init ();
   g_log_set_fatal_mask (NULL, G_LOG_LEVEL_WARNING | G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL);
   
   putenv ("GDK_PIXBUF_MODULEDIR="BUILT_MODULES_DIR);

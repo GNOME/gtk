@@ -230,7 +230,7 @@ main (int argc, char **argv)
 
 	result = EXIT_SUCCESS;
 
-	g_type_init (G_TYPE_DEBUG_NONE);
+	g_type_init ();
 	
 	/* Run some tests. */
 	if (!simple_composite_test ()) {

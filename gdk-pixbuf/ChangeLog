@@ -1,3 +1,8 @@
+Thu Jun 28 21:54:19 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* make-inline-pixbuf.c test-gdk-pixbuf.c test-loaders.c
+	gdk-pixbuf-csource.c: Fix args to g_type_init ().
+
 2001-06-28  Havoc Pennington  <hp@pobox.com>
 
 	* gdk-pixdata.c: <string.h>
