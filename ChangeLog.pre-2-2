@@ -1,5 +1,10 @@
 2001-06-08  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkhsv.h (struct _GtkHSVClass): had GtkContainerClass as
+	parent still
+
+2001-06-08  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextbuffer.c (gtk_text_buffer_remove_all_tags): geez,
 	don't call g_list funcs on GSList
 
