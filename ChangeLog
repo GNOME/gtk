@@ -1,3 +1,12 @@
+Mon Feb 11 21:42:17 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Implements DnD scrolling and fixes #71139
+
+	* gtk/gtktreeview.c (gtk_tree_view_vertical_autoscroll): new function,
+	(scroll_row_timeout): new function,
+	(gtk_tree_view_drag_motion): create scroll_timeout, so
+	scroll_row_timeout gets called
+
 Mon Feb 11 17:54:46 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): set upper

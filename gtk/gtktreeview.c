@@ -2431,6 +2431,33 @@ gtk_tree_view_update_current_reorder (GtkTreeView *tree_view)
   gtk_tree_view_motion_draw_column_motion_arrow (tree_view);
 }
 
+static void
+gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
+{
+  GdkRectangle visible_rect;
+  gint y;
+  gint offset;
+  gfloat value;
+
+  gdk_window_get_pointer (tree_view->priv->bin_window, NULL, &y, NULL);
+  y += tree_view->priv->dy;
+
+  gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
+
+  /* see if we are near the edge. */
+  offset = y - (visible_rect.y + 2 * SCROLL_EDGE_SIZE);
+  if (offset > 0)
+    {
+      offset = y - (visible_rect.y + visible_rect.height - 2 * SCROLL_EDGE_SIZE);
+      if (offset < 0)
+	return;
+    }
+
+  value = CLAMP (tree_view->priv->vadjustment->value + offset, 0.0,
+		 tree_view->priv->vadjustment->upper - tree_view->priv->vadjustment->page_size);
+  gtk_adjustment_set_value (tree_view->priv->vadjustment, value);
+}
+
 static gboolean
 gtk_tree_view_horizontal_autoscroll (GtkTreeView *tree_view)
 {
@@ -3774,6 +3801,20 @@ open_row_timeout (gpointer data)
   return result;
 }
 
+static gint
+scroll_row_timeout (gpointer data)
+{
+  GtkTreeView *tree_view = data;
+
+  GDK_THREADS_ENTER ();
+
+  gtk_tree_view_vertical_autoscroll (tree_view);
+
+  GDK_THREADS_LEAVE ();
+
+  return TRUE;
+}
+
 /* Returns TRUE if event should not be propagated to parent widgets */
 static gboolean
 set_destination_row (GtkTreeView    *tree_view,
@@ -4162,6 +4203,11 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
           tree_view->priv->open_dest_timeout =
             gtk_timeout_add (500, open_row_timeout, tree_view);
         }
+      else if (tree_view->priv->scroll_timeout == 0)
+        {
+	  tree_view->priv->scroll_timeout =
+	    gtk_timeout_add (150, scroll_row_timeout, tree_view);
+	}
 
       if (target == gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
         {
