@@ -1,3 +1,7 @@
+2001-05-25  Hans Breuer  <hans@breuer.org>
+
+	* gdk_pixbuf.def : reflect Havoc's recent api change
+
 Sun May 20 12:53:49 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (libgdk_pixbuf_1_3_la_LDFLAGS): Remove an
